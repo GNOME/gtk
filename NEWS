@@ -1,3 +1,33 @@
+Overview of Changes
+===================
+
+* GtkEmojiChooser:
+ - Allow inserting multiple Emoji by pressing Control
+ - Update Emoji data to Unicode 13 / CLDR 37
+ - Use translations
+ - The recent-emoji setting type changed. Call
+   gsettings reset org.gtk.gtk4.Settings.EmojiChooser recent-emoji
+
+* GtkTextBuffer:
+ - Add boolean returns to some get_iter functions
+
+* GtkScale:
+ - Change the default value of the :draw-value property
+
+* Input methods:
+ - Add a 'private' input hint
+
+* GL Renderer:
+ - Fix issues with texture caching
+
+* Build:
+ - Use meson yield feature for some options
+ - Require gtk-doc 1.33
+
+* Demos:
+ - Add another column view demo
+
+
 Overview of Changes in GTK 3.99.2
 =================================
 
