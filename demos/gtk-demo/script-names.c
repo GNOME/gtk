@@ -91,7 +91,7 @@ static struct {
   { G_UNICODE_SCRIPT_LYDIAN, HB_SCRIPT_LYDIAN,  NC_("Script", "Lydian") },
   { G_UNICODE_SCRIPT_AVESTAN, HB_SCRIPT_AVESTAN,  NC_("Script", "Avestan") },
   { G_UNICODE_SCRIPT_BAMUM, HB_SCRIPT_BAMUM,  NC_("Script", "Bamum") },
-  { G_UNICODE_SCRIPT_EGYPTIAN_HIEROGLYPHS, HB_SCRIPT_EGYPTIAN_HIEROGLYPHS,  NC_("Script", "Egyptian Hieroglpyhs") },
+  { G_UNICODE_SCRIPT_EGYPTIAN_HIEROGLYPHS, HB_SCRIPT_EGYPTIAN_HIEROGLYPHS,  NC_("Script", "Egyptian Hieroglyphs") },
   { G_UNICODE_SCRIPT_IMPERIAL_ARAMAIC, HB_SCRIPT_IMPERIAL_ARAMAIC,  NC_("Script", "Imperial Aramaic") },
   { G_UNICODE_SCRIPT_INSCRIPTIONAL_PAHLAVI, HB_SCRIPT_INSCRIPTIONAL_PAHLAVI,  NC_("Script", "Inscriptional Pahlavi") },
   { G_UNICODE_SCRIPT_INSCRIPTIONAL_PARTHIAN, HB_SCRIPT_INSCRIPTIONAL_PARTHIAN,  NC_("Script", "Inscriptional Parthian") },
@@ -119,7 +119,7 @@ static struct {
   { G_UNICODE_SCRIPT_DUPLOYAN, HB_SCRIPT_DUPLOYAN,  NC_("Script", "Duployan") },
   { G_UNICODE_SCRIPT_ELBASAN, HB_SCRIPT_ELBASAN,  NC_("Script", "Elbasan") },
   { G_UNICODE_SCRIPT_GRANTHA, HB_SCRIPT_GRANTHA,  NC_("Script", "Grantha") },
-  { G_UNICODE_SCRIPT_KHOJKI, HB_SCRIPT_KHOJKI,  NC_("Script", "Kjohki") },
+  { G_UNICODE_SCRIPT_KHOJKI, HB_SCRIPT_KHOJKI,  NC_("Script", "Khojki") },
   { G_UNICODE_SCRIPT_KHUDAWADI, HB_SCRIPT_KHUDAWADI,  NC_("Script", "Khudawadi, Sindhi") },
   { G_UNICODE_SCRIPT_LINEAR_A, HB_SCRIPT_LINEAR_A,  NC_("Script", "Linear A") },
   { G_UNICODE_SCRIPT_MAHAJANI, HB_SCRIPT_MAHAJANI,  NC_("Script", "Mahajani") },
@@ -149,10 +149,40 @@ static struct {
   { G_UNICODE_SCRIPT_NEWA, HB_SCRIPT_NEWA,  NC_("Script", "Newa") },
   { G_UNICODE_SCRIPT_OSAGE, HB_SCRIPT_OSAGE,  NC_("Script", "Osage") },
   { G_UNICODE_SCRIPT_TANGUT, HB_SCRIPT_TANGUT,  NC_("Script", "Tangut") },
-  { G_UNICODE_SCRIPT_MASARAM_GONDI, HB_SCRIPT_INVALID,  NC_("Script", "Masaram Gondi") },
-  { G_UNICODE_SCRIPT_NUSHU, HB_SCRIPT_INVALID,  NC_("Script", "Nushu") },
-  { G_UNICODE_SCRIPT_SOYOMBO, HB_SCRIPT_INVALID,  NC_("Script", "Soyombo") },
-  { G_UNICODE_SCRIPT_ZANABAZAR_SQUARE, HB_SCRIPT_INVALID,  NC_("Script", "Zanabazar Square") },
+  { G_UNICODE_SCRIPT_MASARAM_GONDI, HB_SCRIPT_MASARAM_GONDI,  NC_("Script", "Masaram Gondi") },
+  { G_UNICODE_SCRIPT_NUSHU, HB_SCRIPT_NUSHU,  NC_("Script", "Nushu") },
+  { G_UNICODE_SCRIPT_SOYOMBO, HB_SCRIPT_SOYOMBO,  NC_("Script", "Soyombo") },
+  { G_UNICODE_SCRIPT_ZANABAZAR_SQUARE, HB_SCRIPT_ZANABAZAR_SQUARE,  NC_("Script", "Zanabazar Square") },
+  { G_UNICODE_SCRIPT_DOGRA, HB_SCRIPT_DOGRA, NC_("Script", "Dogra") },
+  { G_UNICODE_SCRIPT_GUNJALA_GONDI, HB_SCRIPT_GUNJALA_GONDI, NC_("Script", "Gunjala Gondi") },
+  { G_UNICODE_SCRIPT_HANIFI_ROHINGYA, HB_SCRIPT_HANIFI_ROHINGYA, NC_("Script", "Hanifi Rohingya") },
+  { G_UNICODE_SCRIPT_MAKASAR, HB_SCRIPT_MAKASAR, NC_("Script", "Makasar") },
+  { G_UNICODE_SCRIPT_MEDEFAIDRIN, HB_SCRIPT_MEDEFAIDRIN, NC_("Script", "Medefaidrin") },
+  { G_UNICODE_SCRIPT_OLD_SOGDIAN, HB_SCRIPT_OLD_SOGDIAN, NC_("Script", "Old Sogdian") },
+  { G_UNICODE_SCRIPT_SOGDIAN, HB_SCRIPT_SOGDIAN, NC_("Script", "Sogdian") },
+
+#if HB_VERSION_ATLEAST(2,4,0)
+  { G_UNICODE_SCRIPT_ELYMAIC, HB_SCRIPT_ELYMAIC, NC_("Script", "Elym") },
+  { G_UNICODE_SCRIPT_NANDINAGARI, HB_SCRIPT_NANDINAGARI, NC_("Script", "Nand") },
+  { G_UNICODE_SCRIPT_NYIAKENG_PUACHUE_HMONG, HB_SCRIPT_NYIAKENG_PUACHUE_HMONG, NC_("Script", "Rohg") },
+  { G_UNICODE_SCRIPT_WANCHO, HB_SCRIPT_WANCHO, NC_("Script", "Wcho") },
+#else
+  { G_UNICODE_SCRIPT_ELYMAIC, HB_SCRIPT_INVALID, NC_("Script", "Elym") },
+  { G_UNICODE_SCRIPT_NANDINAGARI, HB_SCRIPT_INVALID, NC_("Script", "Nand") },
+  { G_UNICODE_SCRIPT_NYIAKENG_PUACHUE_HMONG, HB_SCRIPT_INVALID, NC_("Script", "Rohg") },
+  { G_UNICODE_SCRIPT_WANCHO, HB_SCRIPT_INVALID, NC_("Script", "Wcho") },
+#endif
+#if HB_VERSION_ATLEAST(2,6,7)
+  { G_UNICODE_SCRIPT_CHORASMIAN, HB_SCRIPT_CHORASMIAN, NC_("Script", "Chorasmian") },
+  { G_UNICODE_SCRIPT_DIVES_AKURU, HB_SCRIPT_DIVES_AKURU, NC_("Script", "Dives Akuru") },
+  { G_UNICODE_SCRIPT_KHITAN_SMALL_SCRIPT, HB_SCRIPT_KHITAN_SMALL_SCRIPT, NC_("Script", "Khitan small script") },
+  { G_UNICODE_SCRIPT_YEZIDI, HB_SCRIPT_YEZIDI, NC_("Script", "Yezidi") },
+#else
+  { G_UNICODE_SCRIPT_CHORASMIAN, HB_SCRIPT_INVALID, NC_("Script", "Chorasmian") },
+  { G_UNICODE_SCRIPT_DIVES_AKURU, HB_SCRIPT_INVALID, NC_("Script", "Dives Akuru") },
+  { G_UNICODE_SCRIPT_KHITAN_SMALL_SCRIPT, HB_SCRIPT_INVALID, NC_("Script", "Khitan small script") },
+  { G_UNICODE_SCRIPT_YEZIDI, HB_SCRIPT_INVALID, NC_("Script", "Yezidi") },
+#endif
 };
 
 const char *
@@ -163,7 +193,12 @@ get_script_name (GUnicodeScript script)
   for (i = 0; i < G_N_ELEMENTS (scripts); i++)
     {
       if (scripts[i].script == script)
-        return g_dpgettext2 (GETTEXT_PACKAGE, "Script", scripts[i].name);
+        {
+          if (scripts[i].name)
+            return g_dpgettext2 (GETTEXT_PACKAGE, "Script", scripts[i].name);
+          else
+            return "";
+        }
     }
 
   return NULL;

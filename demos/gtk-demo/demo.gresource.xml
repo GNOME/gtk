@@ -184,6 +184,9 @@
   <gresource prefix="/listview_settings">
     <file>listview_settings.ui</file>
   </gresource>
+  <gresource prefix="/listview_ucd">
+    <file>ucdnames.data</file>
+  </gresource>
   <gresource prefix="/listview_weather">
     <file compressed="true">listview_weather.txt</file>
   </gresource>
@@ -281,6 +284,7 @@
     <file>listview_filebrowser.c</file>
     <file>listview_minesweeper.c</file>
     <file>listview_settings.c</file>
+    <file>listview_ucd.c</file>
     <file>listview_weather.c</file>
     <file>listview_words.c</file>
     <file>list_store.c</file>
