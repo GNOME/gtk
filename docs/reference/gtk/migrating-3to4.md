@@ -1069,6 +1069,11 @@ getter function to retrieve the buildable ID. If you are
 using gtk_buildable_get_name() you should replace it with
 gtk_buildable_get_buildable_id().
 
+### Adapt to GtkAboutDialog API changes
+
+GtkAboutDialog now directly derives from GtkWindow, the GtkDialog API can no
+longer be used on it.
+
 ## Changes to consider after the switch
 
 GTK 4 has a number of new features that you may want to take

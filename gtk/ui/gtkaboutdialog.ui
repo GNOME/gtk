@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <template class="GtkAboutDialog" parent="GtkDialog">
+  <template class="GtkAboutDialog" parent="GtkWindow">
     <property name="resizable">0</property>
-    <child internal-child="headerbar">
+    <child type="titlebar">
       <object class="GtkHeaderBar" id="headerbar1">
         <child type="title">
           <object class="GtkStackSwitcher" id="stack_switcher">
@@ -12,7 +12,7 @@
         </child>
       </object>
     </child>
-    <child internal-child="content_area">
+    <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>

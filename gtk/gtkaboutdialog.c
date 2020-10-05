@@ -34,13 +34,11 @@
 
 #include "gtkaboutdialog.h"
 #include "gtkbutton.h"
-#include "gtkdialog.h"
 #include "gtkgrid.h"
 #include "gtkbox.h"
 #include "gtkicontheme.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
-#include "gtklinkbutton.h"
 #include "gtkmarshalers.h"
 #include "gtkstack.h"
 #include "gtkorientable.h"
@@ -48,7 +46,6 @@
 #include "gtktextview.h"
 #include "gtkshow.h"
 #include "gtkmain.h"
-#include "gtkmessagedialog.h"
 #include "gtktogglebutton.h"
 #include "gtktypebuiltins.h"
 #include "gtkstack.h"
@@ -57,7 +54,6 @@
 #include "gtkheaderbar.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkdialogprivate.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkgestureclick.h"
@@ -105,11 +101,6 @@
  *                        "title", _("About ExampleCode"),
  *                        NULL);
  * ]|
- *
- * It is also possible to show a #GtkAboutDialog like any other #GtkDialog,
- * and use the #GtkDialog::response signal to catch user responses. In this
- * case, you might need to know that the “Close” button returns the
- * %GTK_RESPONSE_CANCEL response id.
  */
 
 typedef struct
@@ -153,7 +144,7 @@ typedef struct _GtkAboutDialogClass GtkAboutDialogClass;
 
 struct _GtkAboutDialog
 {
-  GtkDialog parent_instance;
+  GtkWindow parent_instance;
 
   char *name;
   char *version;
@@ -177,9 +168,6 @@ struct _GtkAboutDialog
 
   GtkWidget *stack;
   GtkWidget *stack_switcher;
-  GtkWidget *credits_button;
-  GtkWidget *license_button;
-  GtkWidget *system_button;
 
   GtkWidget *logo_image;
   GtkWidget *name_label;
@@ -204,12 +192,11 @@ struct _GtkAboutDialog
   guint hovering_over_link : 1;
   guint wrap_license : 1;
   guint in_child_changed : 1;
-  guint in_switch_page : 1;
 };
 
 struct _GtkAboutDialogClass
 {
-  GtkDialogClass parent_class;
+  GtkWindowClass parent_class;
 
   gboolean (*activate_link) (GtkAboutDialog *dialog,
                              const char     *uri);
@@ -275,10 +262,6 @@ static void                 text_view_motion                (GtkEventControllerM
                                                              double                    x,
                                                              double                    y,
 							     GtkAboutDialog           *about);
-static void                 toggle_credits                  (GtkToggleButton    *button,
-                                                             gpointer            user_data);
-static void                 toggle_license                  (GtkToggleButton    *button,
-                                                             gpointer            user_data);
 
 enum {
   ACTIVATE_LINK,
@@ -288,7 +271,7 @@ enum {
 static guint signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *props[LAST_PROP] = { NULL, };
 
-G_DEFINE_TYPE (GtkAboutDialog, gtk_about_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE (GtkAboutDialog, gtk_about_dialog, GTK_TYPE_WINDOW)
 
 static gboolean
 stack_visible_child_notify (GtkStack       *stack,
@@ -603,6 +586,12 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
+  /*
+   * Key bindings
+   */
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "window.close", NULL);
+
   /* Bind class to template
    */
   gtk_widget_class_set_template_from_resource (widget_class,
@@ -706,46 +695,6 @@ update_credits_button_visibility (GtkAboutDialog *about)
 }
 
 static void
-switch_page (GtkAboutDialog *about,
-             const char     *name)
-{
-  gtk_stack_set_visible_child_name (GTK_STACK (about->stack), name);
-
-  about->in_switch_page = TRUE;
-  if (about->credits_button)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (about->credits_button),
-                                  g_str_equal (name, "credits"));
-  if (about->license_button)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (about->license_button),
-                                  g_str_equal (name, "license"));
-  about->in_switch_page = FALSE;
-}
-
-static void
-apply_use_header_bar (GtkAboutDialog *about)
-{
-  gboolean use_header_bar;
-
-  g_object_get (about, "use-header-bar", &use_header_bar, NULL);
-  if (!use_header_bar)
-    {
-      about->credits_button = gtk_toggle_button_new_with_mnemonic (_("C_redits"));
-      g_object_bind_property (about->credits_page, "visible",
-                              about->credits_button, "visible", G_BINDING_SYNC_CREATE);
-      g_signal_connect (about->credits_button, "toggled", G_CALLBACK (toggle_credits), about);
-
-      gtk_dialog_add_action_widget (GTK_DIALOG (about), about->credits_button, GTK_RESPONSE_NONE);
-
-      about->license_button = gtk_toggle_button_new_with_mnemonic (_("_License"));
-      g_object_bind_property (about->license_page, "visible",
-                              about->license_button, "visible", G_BINDING_SYNC_CREATE);
-      g_signal_connect (about->license_button, "toggled", G_CALLBACK (toggle_license), about);
-
-      gtk_dialog_add_button (GTK_DIALOG (about), _("_Close"), GTK_RESPONSE_DELETE_EVENT);
-    }
-}
-
-static void
 gtk_about_dialog_init (GtkAboutDialog *about)
 {
   /* Data */
@@ -768,14 +717,9 @@ gtk_about_dialog_init (GtkAboutDialog *about)
 
   about->visited_links = g_ptr_array_new_with_free_func (g_free);
 
-  gtk_dialog_set_default_response (GTK_DIALOG (about), GTK_RESPONSE_CANCEL);
-
   gtk_widget_init_template (GTK_WIDGET (about));
-  gtk_dialog_set_use_header_bar_from_setting (GTK_DIALOG (about));
 
-  apply_use_header_bar (about);
-
-  switch_page (about, "main");
+  gtk_stack_set_visible_child_name (GTK_STACK (about->stack), "main");
   update_stack_switcher_visibility (about);
 
   /* force defaults */
@@ -949,34 +893,6 @@ gtk_about_dialog_get_property (GObject    *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-}
-
-static void
-toggle_credits (GtkToggleButton *button,
-                gpointer         user_data)
-{
-  GtkAboutDialog *about = user_data;
-  gboolean show_credits;
-
-  if (about->in_switch_page)
-    return;
-
-  show_credits = gtk_toggle_button_get_active (button);
-  switch_page (about, show_credits ? "credits" : "main");
-}
-
-static void
-toggle_license (GtkToggleButton *button,
-                gpointer         user_data)
-{
-  GtkAboutDialog *about = user_data;
-  gboolean show_license;
-
-  if (about->in_switch_page)
-    return;
-
-  show_license = gtk_toggle_button_get_active (button);
-  switch_page (about, show_license ? "license" : "main");
 }
 
 static gboolean
@@ -2255,17 +2171,15 @@ gtk_about_dialog_new (void)
   return g_object_new (GTK_TYPE_ABOUT_DIALOG, NULL);
 }
 
-static void
+static gboolean
 close_cb (GtkAboutDialog *about,
-          int             response_id,
           gpointer        user_data)
 {
-  if (response_id == GTK_RESPONSE_DELETE_EVENT)
-    {
-      switch_page (about, "main");
+  gtk_stack_set_visible_child_name (GTK_STACK (about->stack), "main");
 
-      gtk_widget_hide (GTK_WIDGET (about));
-    }
+  gtk_widget_hide (GTK_WIDGET (about));
+
+  return TRUE;
 }
 
 /**
@@ -2299,8 +2213,8 @@ gtk_show_about_dialog (GtkWindow   *parent,
 
       g_object_ref_sink (dialog);
 
-      /* Close dialog on user response */
-      g_signal_connect (dialog, "response",
+      /* Hide the dialog on close request */
+      g_signal_connect (dialog, "close-request",
                         G_CALLBACK (close_cb), NULL);
 
       va_start (var_args, first_property_name);
