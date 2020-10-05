@@ -193,7 +193,12 @@ get_script_name (GUnicodeScript script)
   for (i = 0; i < G_N_ELEMENTS (scripts); i++)
     {
       if (scripts[i].script == script)
-        return g_dpgettext2 (GETTEXT_PACKAGE, "Script", scripts[i].name);
+        {
+          if (scripts[i].name)
+            return g_dpgettext2 (GETTEXT_PACKAGE, "Script", scripts[i].name);
+          else
+            return "";
+        }
     }
 
   return NULL;
