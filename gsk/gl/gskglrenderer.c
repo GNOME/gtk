@@ -3828,6 +3828,7 @@ add_offscreen_ops (GskGLRenderer         *self,
   /* Check if we've already cached the drawn texture. */
   key.pointer = child_node;
   key.pointer_is_child = TRUE; /* Don't conflict with the child using the cache too */
+  key.parent_rect = *bounds;
   key.scale = ops_get_scale (builder);
   key.filter = filter;
   cached_id = gsk_gl_driver_get_texture_for_key (self->gl_driver, &key);
