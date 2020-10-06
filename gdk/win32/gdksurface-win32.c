@@ -1327,6 +1327,9 @@ gdk_win32_surface_raise (GdkSurface *window)
         API_CALL (SetWindowPos, (GDK_SURFACE_HWND (window), HWND_TOPMOST,
 	                         0, 0, 0, 0,
 				 SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER));
+         
+      else if (GDK_IS_POPUP (window))
+        ShowWindow (GDK_SURFACE_HWND (window), SW_SHOWNOACTIVATE);
       else
         /* Do not wrap this in an API_CALL macro as SetForegroundWindow might
          * fail when for example dragging a window belonging to a different
