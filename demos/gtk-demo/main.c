@@ -410,6 +410,7 @@ static struct {
   { ".gif", NULL, display_image },
   { ".jpg", NULL, display_image },
   { ".png", NULL, display_image },
+  { ".svg", NULL, display_image },
   { ".c", "c", display_text },
   { ".css", "css", display_text },
   { ".glsl", NULL, display_text },
