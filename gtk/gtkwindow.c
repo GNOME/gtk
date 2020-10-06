@@ -4729,6 +4729,22 @@ surface_size_changed (GtkWidget *widget,
 
   check_scale_changed (GTK_WINDOW (widget));
 
+  if (!(priv->state & (GDK_TOPLEVEL_STATE_FULLSCREEN |
+                       GDK_TOPLEVEL_STATE_MAXIMIZED |
+                       GDK_TOPLEVEL_STATE_TILED |
+                       GDK_TOPLEVEL_STATE_TOP_TILED |
+                       GDK_TOPLEVEL_STATE_RIGHT_TILED |
+                       GDK_TOPLEVEL_STATE_BOTTOM_TILED |
+                       GDK_TOPLEVEL_STATE_LEFT_TILED |
+                       GDK_TOPLEVEL_STATE_MINIMIZED)))
+    {
+      GtkWindowGeometryInfo *info;
+
+      info = gtk_window_get_geometry_info (GTK_WINDOW (widget), TRUE);
+      info->last.configure_request.width = width;
+      info->last.configure_request.height = height;
+    }
+
   /* priv->configure_request_count incremented for each
    * configure request, and decremented to a min of 0 for
    * each configure notify.
@@ -5490,7 +5506,6 @@ gtk_window_move_resize (GtkWindow *window)
   info->last.geometry = new_geometry;
   info->last.flags = new_flags;
   info->last.configure_request = new_request;
-
   /* need to set PPosition so the WM will look at our position,
    * but we don't want to count PPosition coming and going as a hints
    * change for future iterations. So we saved info->last prior to
