@@ -5190,17 +5190,17 @@ gtk_window_css_changed (GtkWidget         *widget,
     }
 }
 
-/**
+/*
  * _gtk_window_unset_focus_and_default:
  * @window: a #GtkWindow
  * @widget: a widget inside of @window
- * 
+ *
  * Checks whether the focus and default widgets of @window are
  * @widget or a descendent of @widget, and if so, unset them.
- **/
+ */
 void
 _gtk_window_unset_focus_and_default (GtkWindow *window,
-				     GtkWidget *widget)
+                                     GtkWidget *widget)
 
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
@@ -5211,30 +5211,31 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
   g_object_ref (window);
   g_object_ref (widget);
 
-  parent = _gtk_widget_get_parent (widget);
-  focus = gtk_root_get_focus (GTK_ROOT (window));
+  focus = priv->focus_widget;
   if (focus && (focus == widget || gtk_widget_is_ancestor (focus, widget)))
     {
+      parent = _gtk_widget_get_parent (widget);
+
       while (parent)
         {
           if (_gtk_widget_get_visible (parent))
             {
-              gtk_widget_grab_focus (parent);
+              gtk_window_set_focus (window, parent);
               break;
             }
 
           parent = gtk_widget_get_parent (parent);
         }
     }
-      
+
   child = priv->default_widget;
-      
+
   while (child && child != widget)
     child = _gtk_widget_get_parent (child);
 
   if (child == widget)
     gtk_window_set_default_widget (window, NULL);
-  
+
   g_object_unref (widget);
   g_object_unref (window);
 }
