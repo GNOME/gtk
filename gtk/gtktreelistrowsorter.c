@@ -210,6 +210,9 @@ gtk_tree_list_row_sort_keys_is_compatible (GtkSortKeys *keys,
   GtkTreeListRowSortKeys *self = (GtkTreeListRowSortKeys *) keys;
   GtkTreeListRowSortKeys *compare;
 
+  /* FIXME https://gitlab.gnome.org/GNOME/gtk/-/issues/3228 */
+  return FALSE;
+
   if (keys->klass != other->klass)
     return FALSE;
 

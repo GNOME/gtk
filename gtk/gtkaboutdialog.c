@@ -2292,8 +2292,6 @@ gtk_about_dialog_set_license_type (GtkAboutDialog *about,
           g_free (license_string);
           gtk_widget_show (about->license_label);
 
-          update_license_button_visibility (about);
-
           g_object_notify_by_pspec (G_OBJECT (about), props[PROP_WRAP_LICENSE]);
           g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LICENSE]);
         }
@@ -2301,6 +2299,8 @@ gtk_about_dialog_set_license_type (GtkAboutDialog *about,
         {
           gtk_widget_show (about->license_label);
         }
+
+      update_license_button_visibility (about);
 
       g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LICENSE_TYPE]);
 

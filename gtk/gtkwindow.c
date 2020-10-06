@@ -4220,13 +4220,13 @@ static void
 gtk_window_compute_default_size (GtkWindow *window,
                                  int        max_width,
                                  int        max_height,
-                                 int       *width,
-                                 int       *height)
+                                 int       *min_width,
+                                 int       *min_height,
+                                 int       *nat_width,
+                                 int       *nat_height)
 {
   GtkWidget *widget = GTK_WIDGET (window);
 
-  *width = max_width;
-  *height = max_height;
   if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
     {
       int minimum, natural;
@@ -4234,13 +4234,15 @@ gtk_window_compute_default_size (GtkWindow *window,
       gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, -1,
                           &minimum, &natural,
                           NULL, NULL);
-      *height = MAX (minimum, MIN (*height, natural));
+      *min_height = minimum;
+      *nat_height = MAX (minimum, MIN (max_height, natural));
 
       gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL,
-                          *height,
+                          *nat_height,
                           &minimum, &natural,
                           NULL, NULL);
-      *width = MAX (minimum, MIN (*width, natural));
+      *min_width = minimum;
+      *nat_width = MAX (minimum, MIN (max_width, natural));
     }
   else /* GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or CONSTANT_SIZE */
     {
@@ -4249,13 +4251,15 @@ gtk_window_compute_default_size (GtkWindow *window,
       gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
                           &minimum, &natural,
                           NULL, NULL);
-      *width = MAX (minimum, MIN (*width, natural));
+      *min_width = minimum;
+      *nat_width = MAX (minimum, MIN (max_width, natural));
 
       gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL,
-                          *width,
+                          *nat_width,
                           &minimum, &natural,
                           NULL, NULL);
-      *height = MAX (minimum, MIN (*height, natural));
+      *min_height = minimum;
+      *nat_height = MAX (minimum, MIN (max_height, natural));
     }
 }
 
@@ -4270,8 +4274,8 @@ toplevel_compute_size (GdkToplevel     *toplevel,
   int width, height;
   GtkBorder shadow;
   int bounds_width, bounds_height;
-  int default_width, default_height;
   int min_width, min_height;
+  int nat_width, nat_height;
 
   info = gtk_window_get_geometry_info (window, FALSE);
 
@@ -4279,7 +4283,8 @@ toplevel_compute_size (GdkToplevel     *toplevel,
 
   gtk_window_compute_default_size (window,
                                    bounds_width, bounds_height,
-                                   &default_width, &default_height);
+                                   &min_width, &min_height,
+                                   &nat_width, &nat_height);
 
   if (priv->need_default_size)
     {
@@ -4291,8 +4296,8 @@ toplevel_compute_size (GdkToplevel     *toplevel,
 
       gtk_window_get_remembered_size (window,
                                       &remembered_width, &remembered_height);
-      width = MAX (default_width, remembered_width);
-      height = MAX (default_height, remembered_height);
+      width = MAX (nat_width, remembered_width);
+      height = MAX (nat_height, remembered_height);
 
       /* Override with default size */
       if (info)
@@ -4307,9 +4312,9 @@ toplevel_compute_size (GdkToplevel     *toplevel,
                                       INCLUDE_CSD_SIZE);
 
           if (info->default_width > 0)
-            width = min_width = default_width_csd;
+            width = default_width_csd;
           if (info->default_height > 0)
-            height = min_height = default_height_csd;
+            height = default_height_csd;
         }
     }
   else
@@ -4349,8 +4354,9 @@ toplevel_compute_size (GdkToplevel     *toplevel,
 
   get_shadow_width (window, &shadow);
 
-  min_width = MIN (default_width + shadow.left + shadow.right, width);
-  min_height = MIN (default_height + shadow.top + shadow.bottom, height);
+  min_width = MIN (min_width + shadow.left + shadow.right, width);
+  min_height = MIN (min_height + shadow.top + shadow.bottom, height);
+
   gdk_toplevel_size_set_min_size (size, min_width, min_height);
 }
 
