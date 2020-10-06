@@ -4411,17 +4411,24 @@ gtk_places_sidebar_dispose (GObject *object)
   sidebar->shortcuts = NULL;
 
 #ifdef HAVE_CLOUDPROVIDERS
-  for (l = cloud_providers_collector_get_providers (sidebar->cloud_manager);
-       l != NULL; l = l->next)
-    {
-      g_signal_handlers_disconnect_by_data (l->data, sidebar);
-    }
   for (l = sidebar->unready_accounts; l != NULL; l = l->next)
     {
         g_signal_handlers_disconnect_by_data (l->data, sidebar);
     }
   g_list_free_full (sidebar->unready_accounts, g_object_unref);
   sidebar->unready_accounts = NULL;
+
+  if (sidebar->cloud_manager)
+    {
+      g_signal_handlers_disconnect_by_data (sidebar->cloud_manager, sidebar);
+      for (l = cloud_providers_collector_get_providers (sidebar->cloud_manager);
+           l != NULL; l = l->next)
+        {
+          g_signal_handlers_disconnect_by_data (l->data, sidebar);
+        }
+      g_object_unref (sidebar->cloud_manager);
+      sidebar->cloud_manager = NULL;
+    }
 #endif
 
   G_OBJECT_CLASS (gtk_places_sidebar_parent_class)->dispose (object);
@@ -4430,13 +4437,6 @@ gtk_places_sidebar_dispose (GObject *object)
 static void
 gtk_places_sidebar_finalize (GObject *object)
 {
-#ifdef HAVE_CLOUDPROVIDERS
-  GtkPlacesSidebar *sidebar;
-
-  sidebar = GTK_PLACES_SIDEBAR (object);
-  g_clear_object (&sidebar->cloud_manager);
-#endif
-
   G_OBJECT_CLASS (gtk_places_sidebar_parent_class)->finalize (object);
 }
 
