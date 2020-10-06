@@ -1578,225 +1578,6 @@ generate_button_event (GdkEventType      type,
   _gdk_win32_append_event (event);
 }
 
-/*
- * Used by the stacking functions to see if a window
- * should be always on top.
- * Restacking is only done if both windows are either ontop
- * or not ontop.
- */
-static gboolean
-should_window_be_always_on_top (GdkSurface *window)
-{
-  DWORD exstyle;
-
-  if (GDK_IS_DRAG_SURFACE (window) ||
-      (window->state & GDK_TOPLEVEL_STATE_ABOVE))
-    return TRUE;
-
-  exstyle = GetWindowLong (GDK_SURFACE_HWND (window), GWL_EXSTYLE);
-
-  if (exstyle & WS_EX_TOPMOST)
-    return TRUE;
-
-  return FALSE;
-}
-
-static void
-restack_children (GdkSurface *window)
-{
-  GList *popup;
-
-  for (popup = window->children; popup; popup = popup->next)
-    {
-      GdkSurface *child = GDK_SURFACE (popup->data);
-      /* Windows doesn't have a function to put window A *above* window B.
-       * Instead we put window A immediately *below* window B,
-       * then put window B immediately below window A.
-       * SWP_NOSENDCHANGING prevents our own handler from triggering.
-       */
-      SetWindowPos (GDK_SURFACE_HWND (child), GDK_SURFACE_HWND (window), 0, 0, 0, 0,
-                    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER | SWP_NOSENDCHANGING);
-      g_print ("Put popup %p (%p) above %p (%p)\n", child, GDK_SURFACE_HWND (child), window, GDK_SURFACE_HWND (window));
-      SetWindowPos (GDK_SURFACE_HWND (window), GDK_SURFACE_HWND (child), 0, 0, 0, 0,
-                    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER);
-    }
-}
-
-static void
-ensure_stacking_on_unminimize (MSG *msg)
-{
-  HWND rover;
-  HWND lowest_transient = NULL;
-  GdkSurface *msg_window;
-  gboolean window_ontop = FALSE;
-
-  msg_window = gdk_win32_handle_table_lookup (msg->hwnd);
-
-  if (msg_window)
-    window_ontop = should_window_be_always_on_top (msg_window);
-
-  for (rover = GetNextWindow (msg->hwnd, GW_HWNDNEXT);
-       rover;
-       rover = GetNextWindow (rover, GW_HWNDNEXT))
-    {
-      GdkSurface *rover_gdkw = gdk_win32_handle_table_lookup (rover);
-      GdkWin32Surface *rover_impl;
-      gboolean rover_ontop;
-
-      /* Checking window group not implemented yet */
-      if (rover_gdkw == NULL)
-        continue;
-
-      rover_ontop = should_window_be_always_on_top (rover_gdkw);
-      rover_impl = GDK_WIN32_SURFACE (rover_gdkw);
-
-      if (GDK_SURFACE_IS_MAPPED (rover_gdkw) &&
-           rover_impl->transient_owner != NULL &&
-           ((window_ontop && rover_ontop) || (!window_ontop && !rover_ontop)))
-        {
-          lowest_transient = rover;
-        }
-    }
-
-  if (lowest_transient != NULL)
-    {
-      GDK_NOTE (EVENTS,
-		g_print (" restacking %p below %p",
-			 msg->hwnd, lowest_transient));
-      SetWindowPos (msg->hwnd, lowest_transient, 0, 0, 0, 0,
-		    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER);
-    }
-}
-
-static gboolean
-ensure_stacking_on_window_pos_changing (MSG       *msg,
-					GdkSurface *window)
-{
-  GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
-  WINDOWPOS *windowpos = (WINDOWPOS *) msg->lParam;
-  HWND rover;
-  gboolean restacking;
-  gboolean window_ontop;
-
-  if (GetActiveWindow () != msg->hwnd ||
-      impl->transient_owner != NULL)
-    return FALSE;
-
-  /* Make sure the window stays behind any transient-type windows
-   * of the same window group.
-   *
-   * If the window is not active and being activated, we let
-   * Windows bring it to the top and rely on the WM_ACTIVATEAPP
-   * handling to bring any utility windows on top of it.
-   */
-
-  window_ontop = should_window_be_always_on_top (window);
-
-  for (rover = windowpos->hwndInsertAfter, restacking = FALSE;
-       rover;
-       rover = GetNextWindow (rover, GW_HWNDNEXT))
-    {
-      GdkSurface *rover_gdkw = gdk_win32_handle_table_lookup (rover);
-      GdkWin32Surface *rover_impl;
-      gboolean rover_ontop;
-
-      /* Checking window group not implemented yet */
-
-      if (rover_gdkw == NULL)
-	continue;
-
-      rover_ontop = should_window_be_always_on_top (rover_gdkw);
-      rover_impl = GDK_WIN32_SURFACE (rover_gdkw);
-
-      if (GDK_SURFACE_IS_MAPPED (rover_gdkw) &&
-           rover_impl->transient_owner != NULL &&
-          ((window_ontop && rover_ontop) || (!window_ontop && !rover_ontop)))
-        {
-          restacking = TRUE;
-          windowpos->hwndInsertAfter = rover;
-        }
-    }
-
-  if (restacking)
-    {
-      GDK_NOTE (EVENTS,
-		g_print (" letting Windows restack %p above %p",
-			 msg->hwnd, windowpos->hwndInsertAfter));
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static void
-ensure_stacking_on_activate_app (MSG       *msg,
-				 GdkSurface *window)
-{
-  GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
-  HWND rover;
-  gboolean window_ontop;
-
-  if (impl->transient_owner != NULL)
-    {
-      GdkSurface *child = window;
-      GdkSurface *owner = impl->transient_owner;
-
-      SetWindowPos (msg->hwnd, HWND_TOP, 0, 0, 0, 0,
-		    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER);
-      /* Bing the whole hierarchy of transients back up */
-      while (owner != NULL)
-        {
-          SetWindowPos (GDK_SURFACE_HWND (owner), GDK_SURFACE_HWND (child), 0, 0, 0, 0,
-                        SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER);
-          restack_children (owner);
-          child = owner;
-          owner = GDK_WIN32_SURFACE (owner)->transient_owner;
-        }
-      return;
-    }
-
-  if (!IsWindowVisible (msg->hwnd) ||
-      msg->hwnd != GetActiveWindow ())
-    return;
-
-
-  /* This window is not a transient-type window and it is the
-   * activated window. Make sure this window is as visible as
-   * possible, just below the lowest transient-type window of this
-   * app.
-   */
-
-  window_ontop = should_window_be_always_on_top (window);
-
-  for (rover = GetNextWindow (msg->hwnd, GW_HWNDPREV);
-       rover;
-       rover = GetNextWindow (rover, GW_HWNDPREV))
-    {
-      GdkSurface *rover_gdkw = gdk_win32_handle_table_lookup (rover);
-      GdkWin32Surface *rover_impl;
-      gboolean rover_ontop;
-
-      /* Checking window group not implemented yet */
-      if (rover_gdkw == NULL)
-        continue;
-
-      rover_ontop = should_window_be_always_on_top (rover_gdkw);
-      rover_impl = GDK_WIN32_SURFACE (rover_gdkw);
-
-      if (GDK_SURFACE_IS_MAPPED (rover_gdkw) &&
-          rover_impl->transient_owner != NULL &&
-          ((window_ontop && rover_ontop) || (!window_ontop && !rover_ontop)))
-        {
-	  GDK_NOTE (EVENTS,
-		    g_print (" restacking %p below %p",
-			     msg->hwnd, rover));
-	  SetWindowPos (msg->hwnd, rover, 0, 0, 0, 0,
-			SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER);
-          break;
-	}
-    }
-}
-
 static gboolean
 handle_wm_sysmenu (GdkSurface *window, MSG *msg, int *ret_valp)
 {
@@ -3021,7 +2802,6 @@ gdk_event_translate (MSG *msg,
 
       if (GDK_SURFACE_IS_MAPPED (window))
         {
-	  return_val = ensure_stacking_on_window_pos_changing (msg, window);
 
           impl = GDK_WIN32_SURFACE (window);
 
@@ -3101,17 +2881,6 @@ gdk_event_translate (MSG *msg,
 	  if ((old_state & GDK_TOPLEVEL_STATE_MINIMIZED) !=
 	      (new_state & GDK_TOPLEVEL_STATE_MINIMIZED))
 	    do_show_window (window, (new_state & GDK_TOPLEVEL_STATE_MINIMIZED));
-
-
-	  /* When un-minimizing, make sure we're stacked under any
-	     transient-type windows. */
-	  if (!(old_state & GDK_TOPLEVEL_STATE_MINIMIZED) &&
-	      (new_state & GDK_TOPLEVEL_STATE_MINIMIZED))
-            {
-	      ensure_stacking_on_unminimize (msg);
-	      restack_children (window);
-
-	    }
 	}
 
       /* Show, New size or position => configure event */
@@ -3314,11 +3083,6 @@ gdk_event_translate (MSG *msg,
       GDK_NOTE (EVENTS, g_print (" %s thread: %" G_GINT64_FORMAT,
 				 msg->wParam ? "YES" : "NO",
 				 (gint64) msg->lParam));
-      if (msg->wParam && GDK_SURFACE_IS_MAPPED (window))
-	{
-	  ensure_stacking_on_activate_app (msg, window);
-	  restack_children (window);
-	}
       break;
     case WM_NCHITTEST:
       /* TODO: pass all messages to DwmDefWindowProc() first! */
