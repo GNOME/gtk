@@ -1354,6 +1354,11 @@ gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
           /* Save size for next time we get 0x0 */
           _gdk_wayland_surface_save_size (surface);
         }
+      else
+        {
+          width += impl->margin_left + impl->margin_right;
+          height += impl->margin_top + impl->margin_bottom;
+        }
 
       gdk_wayland_surface_resize (surface, width, height, impl->scale);
     }
