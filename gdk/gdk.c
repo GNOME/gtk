@@ -49,11 +49,11 @@
 
 /**
  * SECTION:general
- * @Short_description: Library initialization and miscellaneous functions
+ * @Short_description: Library initialization and versioning
  * @Title: General
  *
- * This section describes the GDK initialization functions and miscellaneous
- * utility functions, as well as deprecation facilities.
+ * This section describes miscellaneous macros and utility functions
+ * related to library versioning, as well as deprecation facilities.
  *
  * The GDK and GTK headers annotate deprecated APIs in a way that produces
  * compiler warnings if these deprecated APIs are used. The warnings
