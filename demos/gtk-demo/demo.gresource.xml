@@ -204,6 +204,9 @@
     <file>demo3widget.h</file>
     <file>demo3widget.ui</file>
   </gresource>
+  <gresource prefix="/paintable_svg">
+    <file>org.gtk.gtk4.NodeEditor.Devel.svg</file>
+  </gresource>
   <gresource prefix="/shortcuts">
     <file>shortcuts.ui</file>
     <file>shortcuts-builder.ui</file>
@@ -299,6 +302,7 @@
     <file>paintable_animated.c</file>
     <file>paintable_emblem.c</file>
     <file>paintable_mediastream.c</file>
+    <file>paintable_svg.c</file>
     <file>panes.c</file>
     <file>password_entry.c</file>
     <file>peg_solitaire.c</file>

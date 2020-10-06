@@ -130,6 +130,13 @@ if os_unix
   demos += files('pagesetup.c')
 endif
 
+librsvg_dep = dependency('librsvg-2.0', version: '>= 2.46.0', required: false)
+
+if librsvg_dep.found()
+  demos += files('paintable_svg.c')
+  gtkdemo_deps += [ librsvg_dep ]
+endif
+
 gtkdemo_args = [ '-DGDK_DISABLE_DEPRECATED', '-DGTK_DISABLE_DEPRECATED', ]
 
 demos_h = custom_target('gtk4 demo header',
