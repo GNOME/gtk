@@ -2,6 +2,8 @@
  *
  * This demo shows a multi-column representation of some parts
  * of the Unicode Character Database, or UCD.
+ *
+ * The dataset used here has 33 796 items.
  */
 
 #include <gtk/gtk.h>

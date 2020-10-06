@@ -7,8 +7,8 @@ uniform vec2 u_radius;
 uniform vec2 u_center;
 
 _OUT_ vec2 center;
-_OUT_ vec4 color_stops[8];
-_OUT_ float color_offsets[8];
+_OUT_ vec4 color_stops[6];
+_OUT_ float color_offsets[6];
 _OUT_ float start;
 _OUT_ float end;
 
@@ -39,8 +39,8 @@ uniform vec2 u_radius;
 uniform float u_end;
 
 _IN_ vec2 center;
-_IN_ vec4 color_stops[8];
-_IN_ float color_offsets[8];
+_IN_ vec4 color_stops[6];
+_IN_ float color_offsets[6];
 _IN_ float start;
 _IN_ float end;
 
