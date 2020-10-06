@@ -333,7 +333,9 @@ _gdk_wayland_surface_save_size (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  if (surface->state & (GDK_TOPLEVEL_STATE_FULLSCREEN | GDK_TOPLEVEL_STATE_MAXIMIZED))
+  if (surface->state & (GDK_TOPLEVEL_STATE_FULLSCREEN |
+                        GDK_TOPLEVEL_STATE_MAXIMIZED |
+                        GDK_TOPLEVEL_STATE_TILED))
     return;
 
   impl->saved_width = surface->width - impl->margin_left - impl->margin_right;
