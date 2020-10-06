@@ -4825,7 +4825,12 @@ gdk_win32_toplevel_set_property (GObject      *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_MODAL:
-      _gdk_push_modal_window (surface);
+      GDK_SURFACE (surface)->modal_hint = g_value_get_boolean (value);
+
+      if (GDK_SURFACE (surface)->modal_hint)
+        _gdk_push_modal_window (surface);
+
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
@@ -4879,6 +4884,7 @@ gdk_win32_toplevel_get_property (GObject    *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_MODAL:
+      g_value_set_boolean (value, GDK_SURFACE (surface)->modal_hint);
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
