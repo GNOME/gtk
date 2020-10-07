@@ -298,9 +298,9 @@ gdk_toplevel_begin_resize().
 The %GDK_TOPLEVEL_STATE_ICONIFIED value of the #GdkSurfaceState enumeration
 is now %GDK_TOPLEVEL_STATE_MINIMIZED in the #GdkToplevelState enumeration.
 
-The #GdkWindow functions <function>gdk_window_iconify()</function>
-and <function>gdk_window_deiconify()</function> have been renamed to
-gdk_toplevel_minimize() and gdk_toplevel_present(), respectively.
+The #GdkWindow functions gdk_window_iconify() and gdk_window_deiconify()
+have been renamed to gdk_toplevel_minimize() and gdk_toplevel_present(),
+respectively.
 
 The behavior of the minimization and unminimization operations have
 not been changed, and they still require support from the underlying
