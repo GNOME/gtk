@@ -100,7 +100,7 @@ get_break_type_name (GUnicodeBreakType type)
 const char *
 get_combining_class_name (int cclass)
 {
-  const char *classes[255] = { 0, };
+  const char *classes[256] = { 0, };
 
   classes[0] = "Not Reordered";
   classes[1] = "Overlay";

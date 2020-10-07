@@ -291,12 +291,39 @@ remove_palette (GtkColorChooserWidget *cc)
   g_list_free (children);
 }
 
+static guint
+scale_round (double value,
+             double scale)
+{
+  value = floor (value * scale + 0.5);
+  value = MAX (value, 0);
+  value = MIN (value, scale);
+  return (guint)value;
+}
+
+static char *
+accessible_color_name (GdkRGBA *color)
+{
+  if (color->alpha < 1.0)
+    return g_strdup_printf (_("Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"),
+                            scale_round (color->red, 100),
+                            scale_round (color->green, 100),
+                            scale_round (color->blue, 100),
+                            scale_round (color->alpha, 100));
+  else
+    return g_strdup_printf (_("Red %d%%, Green %d%%, Blue %d%%"),
+                            scale_round (color->red, 100),
+                            scale_round (color->green, 100),
+                            scale_round (color->blue, 100));
+}
+
 static void
 add_palette (GtkColorChooserWidget  *cc,
              GtkOrientation          orientation,
              int                     colors_per_line,
              int                     n_colors,
-             GdkRGBA                *colors)
+             GdkRGBA                *colors,
+             const char            **names)
 {
   GtkWidget *grid;
   GtkWidget *p;
@@ -328,6 +355,26 @@ add_palette (GtkColorChooserWidget  *cc,
   for (i = 0; i < n_colors; i++)
     {
       p = gtk_color_swatch_new ();
+      if (names)
+        {
+          gtk_accessible_update_property (GTK_ACCESSIBLE (p),
+                                          GTK_ACCESSIBLE_PROPERTY_LABEL,
+                                          g_dpgettext2 (GETTEXT_PACKAGE, "Color name", names[i]),
+                                          -1);
+        }
+      else
+        {
+          char *name;
+          char *text;
+
+          name = accessible_color_name (&colors[i]);
+          text = g_strdup_printf (_("Color: %s"), name);
+          gtk_accessible_update_property (GTK_ACCESSIBLE (p),
+                                          GTK_ACCESSIBLE_PROPERTY_LABEL, text,
+                                          -1);
+          g_free (name);
+          g_free (text);
+        }
       gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (p), &colors[i]);
       connect_swatch_signals (p, cc);
 
@@ -385,8 +432,55 @@ add_default_palette (GtkColorChooserWidget *cc)
     GDK_RGBA("ffffff"), GDK_RGBA("f6f5f4"), GDK_RGBA("deddda"), GDK_RGBA("c0bfbc"), GDK_RGBA("9a9996"), /* Light */
     GDK_RGBA("77767b"), GDK_RGBA("5e5c64"), GDK_RGBA("3d3846"), GDK_RGBA("241f31"), GDK_RGBA("000000")  /* Dark */
   };
+  const char *color_names[] = {
+    NC_("Color name", "Very Light Blue"),
+    NC_("Color name", "Light Blue"),
+    NC_("Color name", "Blue"),
+    NC_("Color name", "Dark Blue"),
+    NC_("Color name", "Very Dark Blue"),
+    NC_("Color name", "Very Light Green"),
+    NC_("Color name", "Light Green"),
+    NC_("Color name", "Green"),
+    NC_("Color name", "Dark Green"),
+    NC_("Color name", "Very Dark Green"),
+    NC_("Color name", "Very Light Yellow"),
+    NC_("Color name", "Light Yellow"),
+    NC_("Color name", "Yellow"),
+    NC_("Color name", "Dark Yellow"),
+    NC_("Color name", "Very Dark Yellow"),
+    NC_("Color name", "Very Light Orange"),
+    NC_("Color name", "Light Orange"),
+    NC_("Color name", "Orange"),
+    NC_("Color name", "Dark Orange"),
+    NC_("Color name", "Very Dark Orange"),
+    NC_("Color name", "Very Light Red"),
+    NC_("Color name", "Light Red"),
+    NC_("Color name", "Red"),
+    NC_("Color name", "Dark Red"),
+    NC_("Color name", "Very Dark Red"),
+    NC_("Color name", "Very Light Purple"),
+    NC_("Color name", "Light Purple"),
+    NC_("Color name", "Purple"),
+    NC_("Color name", "Dark Purple"),
+    NC_("Color name", "Very Dark Purple"),
+    NC_("Color name", "Very Light Brown"),
+    NC_("Color name", "Light Brown"),
+    NC_("Color name", "Brown"),
+    NC_("Color name", "Dark Brown"),
+    NC_("Color name", "Very Dark Brown"),
+    NC_("Color name", "White"),
+    NC_("Color name", "Light Gray 1"),
+    NC_("Color name", "Light Gray 2"),
+    NC_("Color name", "Light Gray 3"),
+    NC_("Color name", "Light Gray 4"),
+    NC_("Color name", "Dark Gray 1"),
+    NC_("Color name", "Dark Gray 2"),
+    NC_("Color name", "Dark Gray 3"),
+    NC_("Color name", "Dark Gray 4"),
+    NC_("Color name", "Black"),
+  };
 
-  add_palette (cc, GTK_ORIENTATION_VERTICAL, 5, 9*5, colors);
+  add_palette (cc, GTK_ORIENTATION_VERTICAL, 5, 9*5, colors, color_names);
 
   cc->has_default_palette = TRUE;
 }
@@ -444,6 +538,8 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   GVariant *variant;
   GVariantIter iter;
   gboolean selected;
+  char *name;
+  char *text;
 
   cc->use_alpha = TRUE;
 
@@ -484,6 +580,15 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
       rgba.alpha = color[3];
 
       gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (p), &rgba);
+
+      name = accessible_color_name (&rgba);
+      text = g_strdup_printf (_("Custom color %d: %s"), i, name);
+      gtk_accessible_update_property (GTK_ACCESSIBLE (p),
+                                      GTK_ACCESSIBLE_PROPERTY_LABEL, text,
+                                      -1);
+      g_free (name);
+      g_free (text);
+
       gtk_color_swatch_set_can_drop (GTK_COLOR_SWATCH (p), TRUE);
       connect_custom_signals (p, cc);
       gtk_box_append (GTK_BOX (box), p);
@@ -751,7 +856,7 @@ gtk_color_chooser_widget_add_palette (GtkColorChooser *chooser,
   GtkColorChooserWidget *cc = GTK_COLOR_CHOOSER_WIDGET (chooser);
 
   remove_default_palette (cc);
-  add_palette (cc, orientation, colors_per_line, n_colors, colors);
+  add_palette (cc, orientation, colors_per_line, n_colors, colors, NULL);
 
   gtk_box_reorder_child_after (GTK_BOX (cc->palette), cc->custom_label, gtk_widget_get_last_child (cc->palette));
   gtk_box_reorder_child_after (GTK_BOX (cc->palette), cc->custom, cc->custom_label);
