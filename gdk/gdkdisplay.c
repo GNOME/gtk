@@ -131,19 +131,6 @@ gdk_display_real_opened (GdkDisplay *display)
   _gdk_display_manager_add_display (gdk_display_manager_get (), display);
 }
 
-static void
-gdk_display_real_event_data_copy (GdkDisplay     *display,
-                                  GdkEvent       *src,
-                                  GdkEvent       *dst)
-{
-}
-
-static void
-gdk_display_real_event_data_free (GdkDisplay     *display,
-                                  GdkEvent       *dst)
-{
-}
-
 static GdkSeat *
 gdk_display_real_get_default_seat (GdkDisplay *display)
 {
@@ -165,8 +152,6 @@ gdk_display_class_init (GdkDisplayClass *class)
   class->get_app_launch_context = gdk_display_real_get_app_launch_context;
   class->opened = gdk_display_real_opened;
   class->make_default = gdk_display_real_make_default;
-  class->event_data_copy = gdk_display_real_event_data_copy;
-  class->event_data_free = gdk_display_real_event_data_free;
   class->get_default_seat = gdk_display_real_get_default_seat;
 
   /**
@@ -408,13 +393,13 @@ gdk_display_is_closed  (GdkDisplay  *display)
   return display->closed;
 }
 
-/**
+/*<private>
  * gdk_display_get_event:
  * @display: a #GdkDisplay
- * 
+ *
  * Gets the next #GdkEvent to be processed for @display, fetching events from the
  * windowing system if necessary.
- * 
+ *
  * Returns: (nullable) (transfer full): the next #GdkEvent to be processed,
  *   or %NULL if no events are pending
  */
@@ -427,33 +412,6 @@ gdk_display_get_event (GdkDisplay *display)
     GDK_DISPLAY_GET_CLASS (display)->queue_events (display);
 
   return _gdk_event_unqueue (display);
-}
-
-/**
- * gdk_display_peek_event:
- * @display: a #GdkDisplay 
- * 
- * Gets a copy of the first #GdkEvent in the @display’s event queue, without
- * removing the event from the queue.  (Note that this function will
- * not get more events from the windowing system.  It only checks the events
- * that have already been moved to the GDK event queue.)
- * 
- * Returns: (nullable) (transfer full): the first #GdkEvent on the
- *   event queue
- **/
-GdkEvent *
-gdk_display_peek_event (GdkDisplay *display)
-{
-  GList *tmp_list;
-
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  tmp_list = _gdk_event_queue_find_first (display);
-  
-  if (tmp_list != NULL)
-    return gdk_event_ref (tmp_list->data);
-
-  return NULL;
 }
 
 /**
@@ -1113,23 +1071,6 @@ gdk_display_open (const char *display_name)
                                            display_name);
 }
 
-/**
- * gdk_display_has_pending:
- * @display: a #GdkDisplay
- *
- * Returns whether the display has events that are waiting
- * to be processed.
- *
- * Returns: %TRUE if there are events ready to be processed.
- */
-gboolean
-gdk_display_has_pending (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
-  return GDK_DISPLAY_GET_CLASS (display)->has_pending (display);
-}
-
 gulong
 _gdk_display_get_next_serial (GdkDisplay *display)
 {
@@ -1191,21 +1132,6 @@ _gdk_display_unpause_events (GdkDisplay *display)
   g_return_if_fail (display->event_pause_count > 0);
 
   display->event_pause_count--;
-}
-
-void
-_gdk_display_event_data_copy (GdkDisplay     *display,
-                              GdkEvent       *event,
-                              GdkEvent       *new_event)
-{
-  GDK_DISPLAY_GET_CLASS (display)->event_data_copy (display, event, new_event);
-}
-
-void
-_gdk_display_event_data_free (GdkDisplay *display,
-                              GdkEvent   *event)
-{
-  GDK_DISPLAY_GET_CLASS (display)->event_data_free (display, event);
 }
 
 GdkSurface *

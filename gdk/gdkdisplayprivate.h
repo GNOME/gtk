@@ -135,11 +135,6 @@ struct _GdkDisplayClass
                                                          const char *startup_id);
   const char *              (*get_startup_notification_id) (GdkDisplay  *display);
 
-  void                       (*event_data_copy) (GdkDisplay     *display,
-                                                 GdkEvent       *event,
-                                                 GdkEvent       *new_event);
-  void                       (*event_data_free) (GdkDisplay     *display,
-                                                 GdkEvent       *event);
   GdkSurface *               (*create_surface) (GdkDisplay     *display,
                                                 GdkSurfaceType  surface_type,
                                                 GdkSurface     *parent,
@@ -208,11 +203,6 @@ void                _gdk_display_pointer_info_foreach (GdkDisplay       *display
 gulong              _gdk_display_get_next_serial      (GdkDisplay       *display);
 void                _gdk_display_pause_events         (GdkDisplay       *display);
 void                _gdk_display_unpause_events       (GdkDisplay       *display);
-void                _gdk_display_event_data_copy      (GdkDisplay       *display,
-                                                       GdkEvent         *event,
-                                                       GdkEvent         *new_event);
-void                _gdk_display_event_data_free      (GdkDisplay       *display,
-                                                       GdkEvent         *event);
 GdkSurface *        gdk_display_create_surface        (GdkDisplay       *display,
                                                        GdkSurfaceType    surface_type,
                                                        GdkSurface       *parent,
@@ -241,8 +231,6 @@ void                gdk_display_setting_changed       (GdkDisplay       *display
                                                        const char       *name);
 
 GdkEvent *          gdk_display_get_event             (GdkDisplay       *display);
-GdkEvent *          gdk_display_peek_event            (GdkDisplay       *display);
-gboolean            gdk_display_has_pending           (GdkDisplay       *display);
 
 GdkKeymap *  gdk_display_get_keymap  (GdkDisplay *display);
 
