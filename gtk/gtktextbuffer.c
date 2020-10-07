@@ -407,7 +407,7 @@ gtk_text_buffer_serialize_text_plain (GdkContentSerializer *serializer)
 
   g_output_stream_write_all_async (gdk_content_serializer_get_output_stream (serializer),
                                    str,
-                                   strlen (str) + 1,
+                                   strlen (str),
                                    gdk_content_serializer_get_priority (serializer),
                                    gdk_content_serializer_get_cancellable (serializer),
                                    gtk_text_buffer_serialize_text_plain_finish,
