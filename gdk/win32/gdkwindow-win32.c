@@ -1474,7 +1474,7 @@ show_window_internal (GdkWindow *window,
       API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
 			       (window->state & GDK_WINDOW_STATE_ABOVE)?HWND_TOPMOST:HWND_NOTOPMOST,
 			       0, 0, 0, 0,
-			       SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOOWNERZORDER));
+			       SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE));
     }
 }
 
@@ -1834,7 +1834,7 @@ gdk_win32_window_raise (GdkWindow *window)
       else
         API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), HWND_TOP,
   			         0, 0, 0, 0,
-			         SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER));
+			         SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE));
     }
 }
 
@@ -1851,7 +1851,7 @@ gdk_win32_window_lower (GdkWindow *window)
 
       API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), HWND_BOTTOM,
 			       0, 0, 0, 0,
-			       SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER));
+			       SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE));
     }
 }
 
@@ -2910,7 +2910,7 @@ _gdk_win32_window_update_style_bits (GdkWindow *window)
   rect.right += after.right - before.right;
   rect.bottom += after.bottom - before.bottom;
 
-  flags = SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREPOSITION | SWP_NOOWNERZORDER;
+  flags = SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREPOSITION;
 
   if (will_be_topmost && !was_topmost)
     {
@@ -5372,7 +5372,7 @@ gdk_win32_window_fullscreen (GdkWindow *window)
                                y - workaround_padding,
                                width + (workaround_padding * 2),
                                height + (workaround_padding * 2),
-                               SWP_NOCOPYBITS | SWP_SHOWWINDOW | SWP_NOOWNERZORDER));
+                               SWP_NOCOPYBITS | SWP_SHOWWINDOW));
     }
 }
 
@@ -5396,7 +5396,7 @@ gdk_win32_window_unfullscreen (GdkWindow *window)
       API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), HWND_NOTOPMOST,
 			       fi->r.left, fi->r.top,
 			       fi->r.right - fi->r.left, fi->r.bottom - fi->r.top,
-			       SWP_NOCOPYBITS | SWP_SHOWWINDOW | SWP_NOOWNERZORDER));
+			       SWP_NOCOPYBITS | SWP_SHOWWINDOW));
 
       g_object_set_data (G_OBJECT (window), "fullscreen-info", NULL);
       g_free (fi);
@@ -5422,7 +5422,7 @@ gdk_win32_window_set_keep_above (GdkWindow *window,
       API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
 			       setting ? HWND_TOPMOST : HWND_NOTOPMOST,
 			       0, 0, 0, 0,
-			       SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOOWNERZORDER));
+			       SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE));
     }
 
   gdk_synthesize_window_state (window,
@@ -5448,7 +5448,7 @@ gdk_win32_window_set_keep_below (GdkWindow *window,
       API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
 			       setting ? HWND_BOTTOM : HWND_NOTOPMOST,
 			       0, 0, 0, 0,
-			       SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOOWNERZORDER));
+			       SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE));
     }
 
   gdk_synthesize_window_state (window,
