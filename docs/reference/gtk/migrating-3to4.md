@@ -277,15 +277,22 @@ with surfaces, you may have to change it to call the API in these
 interfaces, depending on whether the surface you are dealing with
 is a toplevel or a popup.
 
-As part of this reorganization, X11-only concepts such as sticky or
-keep-below have been removed. If you need to use them on your X11 windows,
-you will have to set the corresponding X11 properties (as specified in the
-EWMH) yourself. Subsurfaces are only supported with the Wayland backend,
-using gdk_wayland_surface_new_subsurface(). Native and foreign subwindows
-are no longer supported. These concepts were complicating the code and
-could not be supported across backends.
+As part of this reorganization, X11-only concepts such as sticky,
+keep-below, urgency, skip-taskbar or window groups have either been
+removed or moved to X11 backend api. If you need to use them on your
+X11 windows, you will have to use those backend apis or set the
+corresponding X11 properties (as specified in the EWMH) yourself.
 
-gdk_window_reparent() is no longer available.
+Subsurfaces are only supported with the Wayland backend, using
+gdk_wayland_surface_new_subsurface(). Native and foreign subwindows
+are no longer supported. These concepts were complicating the code
+and could not be supported across backends.
+
+A number of GdkWindow APIs are no longer available. This includes
+gdk_window_reparent(), gdk_window_set_geometry_hints(), gdk_window_raise(),
+gdk_window_restack(), gdk_window_move(), gdk_window_resize(). If
+you need to manually control the position or stacking of your X11
+windows, you you will have to use Xlib apis.
 
 A number of minor API cleanups have happened in GdkSurface
 as well. For example, gdk_surface_input_shape_combine_region()
@@ -458,6 +465,17 @@ GtkButtonBox has been removed. Use a GtkBox instead.
 
 The GtkBox pack-start and -end methods have been replaced by gtk_box_prepend()
 and gtk_box_append(). You can also reorder box children as necessary.
+
+### Adapt to GtkWindow API changes
+
+Following the GdkSurface changes, a number of GtkWindow APIs that were
+X11-specific have been removed. This includes gtk_window_set_geometry_hints(),
+gtk_window_set_gravity(), gtk_window_move(), gtk_window_parse_geometry(),
+gtk_window_set_keep_above(), gtk_window_set_keep_below(),
+gtk_window_begin_resize_drag(), gtk_window_begin_move_drag().
+Most likely, you should just stop using them. In some cases, you can
+fall back to using the underlying #GdkToplevel APIS (for example,
+gdk_toplevel_begin_resize()).
 
 ### Adapt to GtkHeaderBar and GtkActionBar API changes
 
