@@ -4828,7 +4828,10 @@ gdk_win32_toplevel_set_property (GObject      *object,
       GDK_SURFACE (surface)->modal_hint = g_value_get_boolean (value);
 
       if (GDK_SURFACE (surface)->modal_hint)
-        _gdk_push_modal_window (surface);
+        {
+          SetCapture (GDK_SURFACE_HWND (surface));
+          _gdk_push_modal_window (surface);
+        }
 
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;

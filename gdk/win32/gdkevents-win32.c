@@ -2901,7 +2901,10 @@ gdk_event_translate (MSG *msg,
 
 	  if (impl->transient_owner &&
 	      GetForegroundWindow () == GDK_SURFACE_HWND (window))
-	    SetForegroundWindow (GDK_SURFACE_HWND (impl->transient_owner));
+	    {
+	      SetForegroundWindow (GDK_SURFACE_HWND (impl->transient_owner));
+	      SetCapture (GDK_SURFACE_HWND (impl->transient_owner));
+	    }
 	}
 
       if (!(windowpos->flags & SWP_NOCLIENTSIZE))
