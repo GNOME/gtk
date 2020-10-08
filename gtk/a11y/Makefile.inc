@@ -31,6 +31,7 @@ a11y_h_sources =				\
 	a11y/gtknotebookaccessible.h		\
 	a11y/gtknotebookpageaccessible.h	\
 	a11y/gtkpanedaccessible.h		\
+	a11y/gtkplugaccessible.h		\
 	a11y/gtkpopoveraccessible.h		\
 	a11y/gtkprogressbaraccessible.h		\
 	a11y/gtkradiobuttonaccessible.h		\
@@ -40,6 +41,7 @@ a11y_h_sources =				\
 	a11y/gtkscaleaccessible.h		\
 	a11y/gtkscalebuttonaccessible.h		\
 	a11y/gtkscrolledwindowaccessible.h	\
+	a11y/gtksocketaccessible.h		\
 	a11y/gtkspinbuttonaccessible.h		\
 	a11y/gtkspinneraccessible.h		\
 	a11y/gtkstatusbaraccessible.h		\
@@ -106,6 +108,7 @@ a11y_c_sources =				\
 	a11y/gtknotebookaccessible.c		\
 	a11y/gtknotebookpageaccessible.c	\
 	a11y/gtkpanedaccessible.c		\
+	a11y/gtkplugaccessible.c		\
 	a11y/gtkpopoveraccessible.c		\
 	a11y/gtkprogressbaraccessible.c		\
 	a11y/gtkradiobuttonaccessible.c		\
@@ -115,6 +118,7 @@ a11y_c_sources =				\
 	a11y/gtkscaleaccessible.c		\
 	a11y/gtkscalebuttonaccessible.c		\
 	a11y/gtkscrolledwindowaccessible.c	\
+	a11y/gtksocketaccessible.c		\
 	a11y/gtkspinbuttonaccessible.c		\
 	a11y/gtkspinneraccessible.c		\
 	a11y/gtkstatusbaraccessible.c		\
