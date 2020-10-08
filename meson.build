@@ -34,6 +34,7 @@ graphene_req       = '>= 1.9.1'
 epoxy_req          = '>= 1.4'
 cloudproviders_req = '>= 0.3.1'
 xkbcommon_req      = '>= 0.2.0'
+sysprof_req        = '>= 3.38.0'
 
 gnome = import('gnome')
 
@@ -680,7 +681,7 @@ cdata.set('HAVE_CLOUDPROVIDERS', cloudproviders_dep.found())
 
 # libsysprof-capture support
 if not get_option('sysprof').disabled()
-  libsysprof_capture_dep = dependency('sysprof-capture-4',
+  libsysprof_capture_dep = dependency('sysprof-capture-4', version: sysprof_req,
     required: get_option('sysprof'),
     default_options: [
       'enable_examples=false',
