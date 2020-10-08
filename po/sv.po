@@ -1,4 +1,4 @@
-# Swedish messages for GTK+.
+# Swedish messages for GTK.
 # Copyright © 1999-2020 Free Software Foundation, Inc.
 # Tomas Ögren <stric@ing.umu.se>, 1999.
 # Christian Rose <menthos@menthos.com>, 2000, 2001, 2002, 2003, 2004, 2005.
@@ -8,10 +8,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+\n"
+"Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-17 20:06+0000\n"
-"PO-Revision-Date: 2020-09-18 14:48+0200\n"
+"POT-Creation-Date: 2020-10-08 19:48+0000\n"
+"PO-Revision-Date: 2020-10-08 22:22+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -1934,83 +1934,245 @@ msgstr "Röd %d%%, Grön %d%%, Blå %d%%"
 msgid "Color: %s"
 msgstr "Färg: %s"
 
-#: gtk/gtkcolorchooserwidget.c:446 gtk/gtkcolorchooserwidget.c:447
-#: gtk/gtkcolorchooserwidget.c:448 gtk/gtkcolorchooserwidget.c:449
-#: gtk/gtkcolorchooserwidget.c:450 gtk/gtkcolorchooserwidget.c:451
+#: gtk/gtkcolorchooserwidget.c:446
+msgctxt "Color name"
+msgid "Very Light Blue"
+msgstr "Mycket ljusblå"
+
+#: gtk/gtkcolorchooserwidget.c:447
+msgctxt "Color name"
+msgid "Light Blue"
+msgstr "Ljusblå"
+
+#: gtk/gtkcolorchooserwidget.c:448
 msgctxt "Color name"
 msgid "Blue"
 msgstr "Blå"
 
-#: gtk/gtkcolorchooserwidget.c:452 gtk/gtkcolorchooserwidget.c:453
-#: gtk/gtkcolorchooserwidget.c:454 gtk/gtkcolorchooserwidget.c:455
-#: gtk/gtkcolorchooserwidget.c:456 gtk/gtkcolorchooserwidget.c:457
+#: gtk/gtkcolorchooserwidget.c:449
+msgctxt "Color name"
+msgid "Dark Blue"
+msgstr "Mörkblå"
+
+#: gtk/gtkcolorchooserwidget.c:450
+msgctxt "Color name"
+msgid "Very Dark Blue"
+msgstr "Mycket mörkblå"
+
+#: gtk/gtkcolorchooserwidget.c:451
+msgctxt "Color name"
+msgid "Very Light Green"
+msgstr "Mycket ljusgrön"
+
+#: gtk/gtkcolorchooserwidget.c:452
+msgctxt "Color name"
+msgid "Light Green"
+msgstr "Ljusgrön"
+
+#: gtk/gtkcolorchooserwidget.c:453
 msgctxt "Color name"
 msgid "Green"
 msgstr "Grön"
 
-#: gtk/gtkcolorchooserwidget.c:458 gtk/gtkcolorchooserwidget.c:459
-#: gtk/gtkcolorchooserwidget.c:460 gtk/gtkcolorchooserwidget.c:461
-#: gtk/gtkcolorchooserwidget.c:462 gtk/gtkcolorchooserwidget.c:463
+#: gtk/gtkcolorchooserwidget.c:454
+msgctxt "Color name"
+msgid "Dark Green"
+msgstr "Mörkgrön"
+
+#: gtk/gtkcolorchooserwidget.c:455
+msgctxt "Color name"
+msgid "Very Dark Green"
+msgstr "Mycket mörkgrön"
+
+#: gtk/gtkcolorchooserwidget.c:456
+msgctxt "Color name"
+msgid "Very Light Yellow"
+msgstr "Mycket ljusgul"
+
+#: gtk/gtkcolorchooserwidget.c:457
+msgctxt "Color name"
+msgid "Light Yellow"
+msgstr "Ljusgul"
+
+#: gtk/gtkcolorchooserwidget.c:458
 msgctxt "Color name"
 msgid "Yellow"
 msgstr "Gul"
 
-#: gtk/gtkcolorchooserwidget.c:464 gtk/gtkcolorchooserwidget.c:465
-#: gtk/gtkcolorchooserwidget.c:466 gtk/gtkcolorchooserwidget.c:467
-#: gtk/gtkcolorchooserwidget.c:468 gtk/gtkcolorchooserwidget.c:469
+#: gtk/gtkcolorchooserwidget.c:459
+msgctxt "Color name"
+msgid "Dark Yellow"
+msgstr "Mörkgul"
+
+#: gtk/gtkcolorchooserwidget.c:460
+msgctxt "Color name"
+msgid "Very Dark Yellow"
+msgstr "Mycket mörkgul"
+
+#: gtk/gtkcolorchooserwidget.c:461
+msgctxt "Color name"
+msgid "Very Light Orange"
+msgstr "Mycket ljusorange"
+
+#: gtk/gtkcolorchooserwidget.c:462
+msgctxt "Color name"
+msgid "Light Orange"
+msgstr "Ljusorange"
+
+#: gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
 msgid "Orange"
 msgstr "Orange"
 
-#: gtk/gtkcolorchooserwidget.c:470 gtk/gtkcolorchooserwidget.c:471
-#: gtk/gtkcolorchooserwidget.c:472 gtk/gtkcolorchooserwidget.c:473
-#: gtk/gtkcolorchooserwidget.c:474
+#: gtk/gtkcolorchooserwidget.c:464
+msgctxt "Color name"
+msgid "Dark Orange"
+msgstr "Mörkorange"
+
+#: gtk/gtkcolorchooserwidget.c:465
+msgctxt "Color name"
+msgid "Very Dark Orange"
+msgstr "Mycket mörkorange"
+
+#: gtk/gtkcolorchooserwidget.c:466
+msgctxt "Color name"
+msgid "Very Light Red"
+msgstr "Mycket ljusröd"
+
+#: gtk/gtkcolorchooserwidget.c:467
+msgctxt "Color name"
+msgid "Light Red"
+msgstr "Ljusröd"
+
+#: gtk/gtkcolorchooserwidget.c:468
 msgctxt "Color name"
 msgid "Red"
 msgstr "Röd"
 
-#: gtk/gtkcolorchooserwidget.c:475 gtk/gtkcolorchooserwidget.c:476
-#: gtk/gtkcolorchooserwidget.c:477 gtk/gtkcolorchooserwidget.c:478
-#: gtk/gtkcolorchooserwidget.c:479
+#: gtk/gtkcolorchooserwidget.c:469
+msgctxt "Color name"
+msgid "Dark Red"
+msgstr "Mörkröd"
+
+#: gtk/gtkcolorchooserwidget.c:470
+msgctxt "Color name"
+msgid "Very Dark Red"
+msgstr "Mycket mörkröd"
+
+#: gtk/gtkcolorchooserwidget.c:471
+msgctxt "Color name"
+msgid "Very Light Purple"
+msgstr "Mycket ljuslila"
+
+#: gtk/gtkcolorchooserwidget.c:472
+msgctxt "Color name"
+msgid "Light Purple"
+msgstr "Ljuslila"
+
+#: gtk/gtkcolorchooserwidget.c:473
 msgctxt "Color name"
 msgid "Purple"
 msgstr "Lila"
 
-#: gtk/gtkcolorchooserwidget.c:480 gtk/gtkcolorchooserwidget.c:481
-#: gtk/gtkcolorchooserwidget.c:482 gtk/gtkcolorchooserwidget.c:483
-#: gtk/gtkcolorchooserwidget.c:484
+#: gtk/gtkcolorchooserwidget.c:474
+msgctxt "Color name"
+msgid "Dark Purple"
+msgstr "Mörklila"
+
+#: gtk/gtkcolorchooserwidget.c:475
+msgctxt "Color name"
+msgid "Very Dark Purple"
+msgstr "Mycket mörklila"
+
+#: gtk/gtkcolorchooserwidget.c:476
+msgctxt "Color name"
+msgid "Very Light Brown"
+msgstr "Mycket ljusbrun"
+
+#: gtk/gtkcolorchooserwidget.c:477
+msgctxt "Color name"
+msgid "Light Brown"
+msgstr "Ljusbrun"
+
+#: gtk/gtkcolorchooserwidget.c:478
 msgctxt "Color name"
 msgid "Brown"
 msgstr "Brun"
 
-#: gtk/gtkcolorchooserwidget.c:485 gtk/gtkcolorchooserwidget.c:486
-#: gtk/gtkcolorchooserwidget.c:487 gtk/gtkcolorchooserwidget.c:488
+#: gtk/gtkcolorchooserwidget.c:479
+msgctxt "Color name"
+msgid "Dark Brown"
+msgstr "Mörkbrun"
+
+#: gtk/gtkcolorchooserwidget.c:480
+msgctxt "Color name"
+msgid "Very Dark Brown"
+msgstr "Mycket mörkbrun"
+
+#: gtk/gtkcolorchooserwidget.c:481
+msgctxt "Color name"
+msgid "White"
+msgstr "Vit"
+
+#: gtk/gtkcolorchooserwidget.c:482
+msgctxt "Color name"
+msgid "Light Gray 1"
+msgstr "Ljusgrå 1"
+
+#: gtk/gtkcolorchooserwidget.c:483
+msgctxt "Color name"
+msgid "Light Gray 2"
+msgstr "Ljusgrå 2"
+
+#: gtk/gtkcolorchooserwidget.c:484
+msgctxt "Color name"
+msgid "Light Gray 3"
+msgstr "Ljusgrå 3"
+
+#: gtk/gtkcolorchooserwidget.c:485
+msgctxt "Color name"
+msgid "Light Gray 4"
+msgstr "Ljusgrå 4"
+
+#: gtk/gtkcolorchooserwidget.c:486
+msgctxt "Color name"
+msgid "Dark Gray 1"
+msgstr "Mörkgrå 1"
+
+#: gtk/gtkcolorchooserwidget.c:487
+msgctxt "Color name"
+msgid "Dark Gray 2"
+msgstr "Mörkgrå 2"
+
+#: gtk/gtkcolorchooserwidget.c:488
+msgctxt "Color name"
+msgid "Dark Gray 3"
+msgstr "Mörkgrå 3"
+
 #: gtk/gtkcolorchooserwidget.c:489
 msgctxt "Color name"
-msgid "Light"
-msgstr "Ljus"
+msgid "Dark Gray 4"
+msgstr "Mörkgrå 4"
 
-#: gtk/gtkcolorchooserwidget.c:490 gtk/gtkcolorchooserwidget.c:491
-#: gtk/gtkcolorchooserwidget.c:492 gtk/gtkcolorchooserwidget.c:493
-#: gtk/gtkcolorchooserwidget.c:494
+#: gtk/gtkcolorchooserwidget.c:490
 msgctxt "Color name"
-msgid "Dark"
-msgstr "Mörk"
+msgid "Black"
+msgstr "Svart"
 
 #. translators: label for the custom section in the color chooser
-#: gtk/gtkcolorchooserwidget.c:538
+#: gtk/gtkcolorchooserwidget.c:534
 msgid "Custom"
 msgstr "Anpassad"
 
-#: gtk/gtkcolorchooserwidget.c:545
+#: gtk/gtkcolorchooserwidget.c:541
 msgid "Custom color"
 msgstr "Anpassad färg"
 
-#: gtk/gtkcolorchooserwidget.c:546
+#: gtk/gtkcolorchooserwidget.c:542
 msgid "Create a custom color"
 msgstr "Skapa en anpassad färg"
 
-#: gtk/gtkcolorchooserwidget.c:565
+#: gtk/gtkcolorchooserwidget.c:561
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "Anpassad färg %d: %s"
@@ -8175,15 +8337,15 @@ msgstr "Fil"
 msgid "_Output format"
 msgstr "_Utskriftsformat"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:393
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:394
 msgid "Print to LPR"
 msgstr "Skriv ut till LPR"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:419
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:423
 msgid "Pages Per Sheet"
 msgstr "Sidor per blad"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:426
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:430
 msgid "Command Line"
 msgstr "Kommandorad"
 
@@ -8221,288 +8383,3 @@ msgstr "testutdata.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Skriv ut till testskrivare"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Scarlet Red"
-#~ msgstr "Ljus scharlakansröd"
-
-#~ msgctxt "Color name"
-#~ msgid "Scarlet Red"
-#~ msgstr "Scharlakansröd"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Scarlet Red"
-#~ msgstr "Mörk scharlakansröd"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Orange"
-#~ msgstr "Ljusorange"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Orange"
-#~ msgstr "Mörkorange"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Butter"
-#~ msgstr "Ljust smör"
-
-#~ msgctxt "Color name"
-#~ msgid "Butter"
-#~ msgstr "Smör"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Butter"
-#~ msgstr "Mörkt smör"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Chameleon"
-#~ msgstr "Ljus kameleont"
-
-#~ msgctxt "Color name"
-#~ msgid "Chameleon"
-#~ msgstr "Kameleont"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Chameleon"
-#~ msgstr "Mörk kameleont"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Sky Blue"
-#~ msgstr "Ljus himmelsblå"
-
-#~ msgctxt "Color name"
-#~ msgid "Sky Blue"
-#~ msgstr "Himmelsblå"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Sky Blue"
-#~ msgstr "Mörk himmelsblå"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Plum"
-#~ msgstr "Ljuslila"
-
-#~ msgctxt "Color name"
-#~ msgid "Plum"
-#~ msgstr "Lila"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Chocolate"
-#~ msgstr "Ljus chokladbrun"
-
-#~ msgctxt "Color name"
-#~ msgid "Chocolate"
-#~ msgstr "Chokladbrun"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Chocolate"
-#~ msgstr "Mörk chokladbrun"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Aluminum 1"
-#~ msgstr "Ljus aluminium 1"
-
-#~ msgctxt "Color name"
-#~ msgid "Aluminum 1"
-#~ msgstr "Aluminium 1"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Aluminum 1"
-#~ msgstr "Mörk aluminium 1"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Aluminum 2"
-#~ msgstr "Ljus aluminium 2"
-
-#~ msgctxt "Color name"
-#~ msgid "Aluminum 2"
-#~ msgstr "Aluminium 2"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Aluminum 2"
-#~ msgstr "Mörk aluminium 2"
-
-#~ msgctxt "Color name"
-#~ msgid "Black"
-#~ msgstr "Svart"
-
-#~ msgctxt "Color name"
-#~ msgid "Very Dark Gray"
-#~ msgstr "Mycket mörkgrå"
-
-#~ msgctxt "Color name"
-#~ msgid "Darker Gray"
-#~ msgstr "Mörkare grå"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Gray"
-#~ msgstr "Mörkgrå"
-
-#~ msgctxt "Color name"
-#~ msgid "Medium Gray"
-#~ msgstr "Medelgrå"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Gray"
-#~ msgstr "Ljusgrå"
-
-#~ msgctxt "Color name"
-#~ msgid "Lighter Gray"
-#~ msgstr "Ljusare grå"
-
-#~ msgctxt "Color name"
-#~ msgid "Very Light Gray"
-#~ msgstr "Mycket ljusgrå"
-
-#~ msgctxt "Color name"
-#~ msgid "White"
-#~ msgstr "Vit"
-
-#~ msgid "3.2 core GL profile is not available on EGL implementation"
-#~ msgstr "GL 3.2-kärnprofil är inte tillgänglig på EGL-implementation"
-
-#~ msgid "Not implemented on OS X"
-#~ msgstr "Inte implementerat för OS X"
-
-#~ msgctxt "switch"
-#~ msgid "ON"
-#~ msgstr "PÅ"
-
-#~ msgctxt "switch"
-#~ msgid "OFF"
-#~ msgstr "AV"
-
-#~ msgid "smb://"
-#~ msgstr "smb://"
-
-#~ msgid "Browse Network"
-#~ msgstr "Bläddra i nätverket"
-
-#~ msgid "Browse the contents of the network"
-#~ msgstr "Bläddra i nätverkets innehåll"
-
-#~ msgid "Could not start the search process"
-#~ msgstr "Kunde inte starta sökprocessen"
-
-#~ msgid ""
-#~ "The program was not able to create a connection to the indexer daemon. "
-#~ "Please make sure it is running."
-#~ msgstr ""
-#~ "Programmet kunde inte skapa en anslutning till indexeringsdemonen. "
-#~ "Försäkra dig om att den kör."
-
-#~ msgid "smb://foo.example.com, ssh://192.168.0.1"
-#~ msgstr "smb://foo.example.com, ssh://192.168.0.1"
-
-#~ msgid ""
-#~ "The WGL_ARB_create_context extension needed to create core profiles is "
-#~ "not available"
-#~ msgstr ""
-#~ "Tillägget WGL_ARB_create_context som krävs för att skapa kärnprofiler är "
-#~ "inte tillgängligt"
-
-#~ msgid "Change name"
-#~ msgstr "Ändra namn"
-
-#~ msgid "Change classes"
-#~ msgstr "Ändra klasser"
-
-#~ msgid "CSS properties"
-#~ msgstr "CSS-egenskaper"
-
-#~ msgid "Classes"
-#~ msgstr "Klasser"
-
-#~ msgid "Error launching preview"
-#~ msgstr "Fel vid start av förhandsvisning"
-
-#~ msgid "Changes are applied instantly, only for this selected widget."
-#~ msgstr "Ändringar tillämpas omedelbart endast för denna valda komponent."
-
-#~ msgid "Show all CSS nodes"
-#~ msgstr "Visa alla CSS-noder"
-
-#~ msgid "Show CSS properties"
-#~ msgstr "Visa CSS-egenskaper"
-
-#~ msgid "Node:"
-#~ msgstr "Nod:"
-
-#~ msgid "Hierarchy"
-#~ msgstr "Hierarki"
-
-#~ msgid ""
-#~ "The GLX_ARB_create_context_profile extension needed to create core "
-#~ "profiles is not available"
-#~ msgstr ""
-#~ "Tillägget GLX_ARB_create_context_profile som behövs för att skapa "
-#~ "kärnprofiler är inte tillgängligt"
-
-#~ msgid "New class"
-#~ msgstr "Ny klass"
-
-#~ msgid "Cancel"
-#~ msgstr "Avbryt"
-
-#~ msgid "Add a class"
-#~ msgstr "Lägg till en klass"
-
-#~ msgid "Restore defaults for this widget"
-#~ msgstr "Återställ standard för denna komponent"
-
-#~ msgid "Allocated size"
-#~ msgstr "Allokerad storlek"
-
-#~ msgid "Object Hierarchy"
-#~ msgstr "Objekthierarki"
-
-#~ msgid "Style Properties"
-#~ msgstr "Stilegenskaper"
-
-#~ msgid "_Customize"
-#~ msgstr "An_passa"
-
-#~ msgid "Address…"
-#~ msgstr "Adress…"
-
-#~ msgid "Invalid object type '%s' on line %d"
-#~ msgstr "Ogiltig objekttyp ”%s” på rad %d"
-
-#~ msgid "Invalid type function on line %d: '%s'"
-#~ msgstr "Ogiltig typfunktion på rad %d: ”%s”"
-
-#~ msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
-#~ msgstr "Duplikat objekt-id ”%s” på rad %d (tidigare på rad %d)"
-
-#~ msgid "Invalid signal '%s' for type '%s' on line %d"
-#~ msgstr "Ogiltig signal ”%s” för ”%s”-typ på rad %d"
-
-#~ msgid "Invalid root element: <%s>"
-#~ msgstr "Ogiltigt rotelement: <%s>"
-
-#~ msgid "Unhandled tag: <%s>"
-#~ msgstr "Ohanterad tagg: <%s>"
-
-#~ msgid "Yesterday at %-I:%M %P"
-#~ msgstr "Igår klockan %H:%M"
-
-#~ msgid "Devices"
-#~ msgstr "Enheter"
-
-#~ msgid "Bookmarks"
-#~ msgstr "Bokmärken"
-
-#~ msgid "Remove"
-#~ msgstr "Ta bort"
-
-#~ msgid "X display"
-#~ msgstr "X-display"
-
-#~ msgid "All Files"
-#~ msgstr "Alla filer"
-
-#~ msgid ""
-#~ "No fonts matched your search. You can revise your search and try again."
-#~ msgstr ""
-#~ "Inga typsnitt matchade din sökning. Du kan ändra din sökning och försöka "
-#~ "igen."
