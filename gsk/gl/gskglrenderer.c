@@ -4314,6 +4314,11 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
   glGenTextures (1, &texture_id);
   glBindTexture (GL_TEXTURE_2D, texture_id);
 
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
   if (gdk_gl_context_has_debug (self->gl_context))
     gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, texture_id,
                                         "Texture %s<%p> %d",
@@ -4335,18 +4340,133 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
                                         g_type_name_from_instance ((GTypeInstance *) root),
                                         root,
                                         fbo_id);
-  glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_id, 0);
-  g_assert_cmphex (glCheckFramebufferStatus (GL_FRAMEBUFFER), ==, GL_FRAMEBUFFER_COMPLETE);
+  glFramebufferTexture (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture_id, 0);
 
   /* Render the actual scene */
   gsk_gl_renderer_do_render (renderer, root, viewport, fbo_id, 1);
+
+  glDeleteFramebuffers (1, &fbo_id);
+
+  /* Render the now drawn framebuffer y-flipped so it's as GdkGLTexture expects it to be */
+  {
+    const float min_x = 0;
+    const float min_y = 0;
+    const float max_x = width;
+    const float max_y = height;
+    guint final_texture_id, final_fbo_id;
+    GskQuadVertex vertex_data[6];
+    GLuint buffer_id, vao_id;
+    float fs[16];
+    graphene_matrix_t m;
+
+    glGenFramebuffers (1, &final_fbo_id);
+    glBindFramebuffer (GL_FRAMEBUFFER, final_fbo_id);
+    glGenTextures (1, &final_texture_id);
+    glBindTexture (GL_TEXTURE_2D, final_texture_id);
+
+    if (gdk_gl_context_get_use_es (self->gl_context))
+      glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    else
+      glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    glFramebufferTexture (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, final_texture_id, 0);
+    g_assert_cmphex (glCheckFramebufferStatus (GL_FRAMEBUFFER), ==, GL_FRAMEBUFFER_COMPLETE);
+
+    glGenVertexArrays (1, &vao_id);
+    glBindVertexArray (vao_id);
+
+    glGenBuffers (1, &buffer_id);
+    glBindBuffer (GL_ARRAY_BUFFER, buffer_id);
+
+    vertex_data[0].position[0] = min_x;
+    vertex_data[0].position[1] = min_y;
+    vertex_data[0].uv[0] = 0;
+    vertex_data[0].uv[1] = 1;
+
+    vertex_data[1].position[0] = min_x;
+    vertex_data[1].position[1] = max_y;
+    vertex_data[1].uv[0] = 0;
+    vertex_data[1].uv[1] = 0;
+
+    vertex_data[2].position[0] = max_x;
+    vertex_data[2].position[1] = min_y;
+    vertex_data[2].uv[0] = 1;
+    vertex_data[2].uv[1] = 1;
+
+    vertex_data[3].position[0] = max_x;
+    vertex_data[3].position[1] = max_y;
+    vertex_data[3].uv[0] = 1;
+    vertex_data[3].uv[1] = 0;
+
+    vertex_data[4].position[0] = min_x;
+    vertex_data[4].position[1] = max_y;
+    vertex_data[4].uv[0] = 0;
+    vertex_data[4].uv[1] = 0;
+
+    vertex_data[5].position[0] = max_x;
+    vertex_data[5].position[1] = min_y;
+    vertex_data[5].uv[0] = 1;
+    vertex_data[5].uv[1] = 1;
+
+    glBufferData (GL_ARRAY_BUFFER, sizeof (vertex_data), vertex_data, GL_STATIC_DRAW);
+
+    /* 0 = position location */
+    glEnableVertexAttribArray (0);
+    glVertexAttribPointer (0, 2, GL_FLOAT, GL_FALSE,
+                           sizeof (GskQuadVertex),
+                           (void *) G_STRUCT_OFFSET (GskQuadVertex, position));
+    /* 1 = texture coord location */
+    glEnableVertexAttribArray (1);
+    glVertexAttribPointer (1, 2, GL_FLOAT, GL_FALSE,
+                           sizeof (GskQuadVertex),
+                           (void *) G_STRUCT_OFFSET (GskQuadVertex, uv));
+
+    glUseProgram (self->programs->blit_program.id);
+
+    glClearColor (0, 0, 0, 0);
+    glClear (GL_COLOR_BUFFER_BIT);
+
+    glActiveTexture (GL_TEXTURE0);
+    glBindTexture (GL_TEXTURE_2D, texture_id);
+    glUniform1i (self->programs->blit_program.source_location, 0);
+
+    graphene_matrix_init_identity (&m);
+    graphene_matrix_to_float (&m, fs);
+    glUniformMatrix4fv (self->programs->blit_program.modelview_location, 1, GL_FALSE, fs);
+
+    init_projection_matrix (&m, &GRAPHENE_RECT_INIT (0, 0, width, height));
+    graphene_matrix_scale (&m, 1, -1, 1); /* Undo the scale init_projection_matrix() does again */
+    graphene_matrix_to_float (&m, fs);
+    glUniformMatrix4fv (self->programs->blit_program.projection_location, 1, GL_FALSE, fs);
+
+    glUniform4f (self->programs->blit_program.viewport_location, 0, 0, width, height);
+    glViewport (0, 0, width, height);
+
+    glUniform4fv (self->programs->blit_program.clip_rect_location, 3,
+                  (float *)&GSK_ROUNDED_RECT_INIT (0, 0, width, height));
+    glUniform1f (self->programs->blit_program.alpha_location, 1.0f);
+
+    glDrawArrays (GL_TRIANGLES, 0, 6);
+
+    glDeleteFramebuffers (1, &final_fbo_id);
+    glDeleteVertexArrays (1, &vao_id);
+    glDeleteBuffers (1, &buffer_id);
+
+    glDeleteTextures (1, &texture_id);
+
+    texture_id = final_texture_id;
+  }
 
   texture = gdk_gl_texture_new (self->gl_context,
                                 texture_id,
                                 width, height,
                                 NULL, NULL);
 
-  glDeleteFramebuffers (1, &fbo_id);
   gsk_gl_driver_end_frame (self->gl_driver);
 
   gdk_gl_context_pop_debug_group (self->gl_context);
