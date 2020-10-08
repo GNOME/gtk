@@ -2448,13 +2448,13 @@ test_transforms (void)
   g_object_unref (builder);
 }
 
-char *
+G_MODULE_EXPORT char *
 builder_get_search (gpointer item)
 {
   return g_strdup (gtk_string_filter_get_search (item));
 }
 
-char *
+G_MODULE_EXPORT char *
 builder_copy_arg (gpointer item, const char *arg)
 {
   return g_strdup (arg);
