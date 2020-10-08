@@ -78,6 +78,7 @@ GDK_AVAILABLE_IN_ALL
 GList *        gdk_seat_get_devices             (GdkSeat             *seat,
                                                  GdkSeatCapabilities  capabilities);
 
+GDK_AVAILABLE_IN_ALL
 GList *        gdk_seat_get_tools               (GdkSeat *seat);
 
 GDK_AVAILABLE_IN_ALL
