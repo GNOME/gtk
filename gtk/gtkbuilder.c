@@ -1997,6 +1997,53 @@ gtk_builder_value_from_string (GtkBuilder   *builder,
                                              string, value, error);
 }
 
+static gboolean
+_gtk_builder_boolean_from_string (const char   *string,
+                                  gboolean     *value,
+                                  GError      **error)
+{
+  if (string[0] == '\0')
+    goto error;
+  else if (string[1] == '\0')
+    {
+      char c;
+
+      c = string[0];
+      if (c == '1' ||
+          c == 'y' || c == 't' ||
+          c == 'Y' || c == 'T')
+        *value = TRUE;
+      else if (c == '0' ||
+               c == 'n' || c == 'f' ||
+               c == 'N' || c == 'F')
+        *value = FALSE;
+      else
+        goto error;
+    }
+  else
+    {
+      if (g_ascii_strcasecmp (string, "true") == 0 ||
+          g_ascii_strcasecmp (string, "yes") == 0)
+        *value = TRUE;
+      else if (g_ascii_strcasecmp (string, "false") == 0 ||
+               g_ascii_strcasecmp (string, "no") == 0)
+        *value = FALSE;
+      else
+        goto error;
+    }
+
+  return TRUE;
+
+error:
+  g_set_error (error,
+               GTK_BUILDER_ERROR,
+               GTK_BUILDER_ERROR_INVALID_VALUE,
+               "Could not parse boolean '%s'",
+               string);
+  return FALSE;
+}
+
+
 /**
  * gtk_builder_value_from_string_type:
  * @builder: a #GtkBuilder
@@ -2566,52 +2613,6 @@ _gtk_builder_flags_from_string (GType         type,
     }
 
   return ret;
-}
-
-gboolean
-_gtk_builder_boolean_from_string (const char   *string,
-                                  gboolean     *value,
-                                  GError      **error)
-{
-  if (string[0] == '\0')
-    goto error;
-  else if (string[1] == '\0')
-    {
-      char c;
-
-      c = string[0];
-      if (c == '1' ||
-          c == 'y' || c == 't' ||
-          c == 'Y' || c == 'T')
-        *value = TRUE;
-      else if (c == '0' ||
-               c == 'n' || c == 'f' ||
-               c == 'N' || c == 'F')
-        *value = FALSE;
-      else
-        goto error;
-    }
-  else
-    {
-      if (g_ascii_strcasecmp (string, "true") == 0 ||
-          g_ascii_strcasecmp (string, "yes") == 0)
-        *value = TRUE;
-      else if (g_ascii_strcasecmp (string, "false") == 0 ||
-               g_ascii_strcasecmp (string, "no") == 0)
-        *value = FALSE;
-      else
-        goto error;
-    }
-
-  return TRUE;
-
-error:
-  g_set_error (error,
-               GTK_BUILDER_ERROR,
-               GTK_BUILDER_ERROR_INVALID_VALUE,
-               "Could not parse boolean '%s'",
-               string);
-  return FALSE;
 }
 
 /**
