@@ -4114,11 +4114,15 @@ create_moveresize_surface (MoveResizeData *mv_resize,
                           guint32         timestamp)
 {
   GdkGrabStatus status;
-  GdkRectangle rect = { -100, -100, 1, 1 };
 
   g_assert (mv_resize->moveresize_emulation_surface == NULL);
 
-  mv_resize->moveresize_emulation_surface = gdk_surface_new_temp (mv_resize->display, &rect);
+  mv_resize->moveresize_emulation_surface =
+      _gdk_x11_display_create_surface (mv_resize->display,
+                                       GDK_SURFACE_TEMP,
+                                       NULL,
+                                       -100, -100, 1, 1);
+
   gdk_x11_surface_show (mv_resize->moveresize_emulation_surface, FALSE);
 
   status = gdk_seat_grab (gdk_device_get_seat (mv_resize->device),

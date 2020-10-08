@@ -147,10 +147,6 @@ value_event_lcopy_value (const GValue *value,
 static void
 gdk_event_finalize (GdkEvent *self)
 {
-  GdkDisplay *display = gdk_event_get_display (self);
-  if (display != NULL)
-    _gdk_display_event_data_free (display, self);
-
   g_clear_object (&self->surface);
   g_clear_object (&self->device);
 

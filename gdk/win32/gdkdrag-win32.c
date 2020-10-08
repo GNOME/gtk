@@ -1700,7 +1700,10 @@ create_drag_surface (GdkDisplay *display)
 {
   GdkSurface *surface;
 
-  surface = gdk_surface_new_temp (display, &(GdkRectangle) { 0, 0, 100, 100 });
+  surface = _gdk_win32_display_create_surface (display,
+                                               GDK_SURFACE_TEMP,
+                                               NULL,
+                                               0, 0, 100, 100);
 
   return surface;
 }

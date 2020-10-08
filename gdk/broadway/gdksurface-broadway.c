@@ -1101,11 +1101,14 @@ create_moveresize_surface (MoveResizeData *mv_resize,
   GdkGrabStatus status;
   GdkSeat *seat;
   GdkDevice *pointer;
-  GdkRectangle rect = { -100, -100, 1, 1 };
 
   g_assert (mv_resize->moveresize_emulation_surface == NULL);
 
-  mv_resize->moveresize_emulation_surface = gdk_surface_new_temp (mv_resize->display, &rect);
+  mv_resize->moveresize_emulation_surface =
+      _gdk_broadway_display_create_surface (mv_resize->display,
+                                            GDK_SURFACE_TEMP,
+                                            NULL,
+                                            -100, -100, 1, 1);
 
   gdk_broadway_surface_show (mv_resize->moveresize_emulation_surface, FALSE);
 
