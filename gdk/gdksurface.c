@@ -817,29 +817,6 @@ gdk_surface_new_toplevel (GdkDisplay *display)
 }
 
 /**
- * gdk_surface_new_temp: (constructor)
- * @display: the display to create the surface on
- * @position: position of the surface on screen
- *
- * Creates a new temporary surface.
- * The surface will bypass surface management.
- *
- * Returns: (transfer full): the new #GdkSurface
- **/
-GdkSurface *
-gdk_surface_new_temp (GdkDisplay         *display,
-                      const GdkRectangle *position)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  g_return_val_if_fail (position != NULL, NULL);
-
-  return gdk_surface_new (display, GDK_SURFACE_TEMP,
-                          NULL,
-                          position->x, position->y,
-                          position->width, position->height);
-}
-
-/**
  * gdk_surface_new_popup: (constructor)
  * @parent: the parent surface to attach the surface to
  * @autohide: whether to hide the surface on outside clicks

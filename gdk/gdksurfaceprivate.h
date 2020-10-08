@@ -277,9 +277,6 @@ void       gdk_surface_enter_monitor (GdkSurface *surface,
 void       gdk_surface_leave_monitor (GdkSurface *surface,
                                       GdkMonitor *monitor);
 
-GdkSurface *   gdk_surface_new_temp             (GdkDisplay    *display,
-                                                 const GdkRectangle *position);
-
 void gdk_surface_destroy_notify       (GdkSurface *surface);
 
 void gdk_synthesize_surface_state (GdkSurface     *surface,
