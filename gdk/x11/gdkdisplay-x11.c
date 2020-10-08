@@ -1441,10 +1441,11 @@ gdk_x11_display_open (const char *display_name)
 
   gdk_event_init (display);
 
-  {
-    GdkRectangle rect = { -100, -100, 1, 1 };
-    display_x11->leader_gdk_surface = gdk_surface_new_temp (display, &rect);
-  }
+  display_x11->leader_gdk_surface =
+      _gdk_x11_display_create_surface (display,
+                                       GDK_SURFACE_TEMP,
+                                       NULL,
+                                       -100, -100, 1, 1);
 
   (_gdk_x11_surface_get_toplevel (display_x11->leader_gdk_surface))->is_leader = TRUE;
 
