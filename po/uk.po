@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-17 13:25+0000\n"
-"PO-Revision-Date: 2020-09-17 16:32+0300\n"
+"POT-Creation-Date: 2020-10-08 05:17+0000\n"
+"PO-Revision-Date: 2020-10-08 09:17+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -1935,90 +1935,313 @@ msgstr "Червоний %d%%, Зелений %d%%, Синій %d%%"
 msgid "Color: %s"
 msgstr "Колір: %s"
 
-#: gtk/gtkcolorchooserwidget.c:446 gtk/gtkcolorchooserwidget.c:447
-#: gtk/gtkcolorchooserwidget.c:448 gtk/gtkcolorchooserwidget.c:449
-#: gtk/gtkcolorchooserwidget.c:450 gtk/gtkcolorchooserwidget.c:451
-#| msgid "_Blue:"
+#: gtk/gtkcolorchooserwidget.c:446
+#| msgctxt "Color name"
+#| msgid "Very Light Gray"
+msgctxt "Color name"
+msgid "Very Light Blue"
+msgstr "Дуже світло-синій"
+
+#: gtk/gtkcolorchooserwidget.c:447
+#| msgctxt "Color name"
+#| msgid "Light Sky Blue"
+msgctxt "Color name"
+msgid "Light Blue"
+msgstr "Світло-синій"
+
+#: gtk/gtkcolorchooserwidget.c:448
 msgctxt "Color name"
 msgid "Blue"
 msgstr "Синій"
 
-#: gtk/gtkcolorchooserwidget.c:452 gtk/gtkcolorchooserwidget.c:453
-#: gtk/gtkcolorchooserwidget.c:454 gtk/gtkcolorchooserwidget.c:455
-#: gtk/gtkcolorchooserwidget.c:456 gtk/gtkcolorchooserwidget.c:457
-#| msgid "_Green:"
+#: gtk/gtkcolorchooserwidget.c:449
+#| msgctxt "Color name"
+#| msgid "Dark Sky Blue"
+msgctxt "Color name"
+msgid "Dark Blue"
+msgstr "Темно-синій"
+
+#: gtk/gtkcolorchooserwidget.c:450
+#| msgctxt "Color name"
+#| msgid "Very Dark Gray"
+msgctxt "Color name"
+msgid "Very Dark Blue"
+msgstr "Дуже темно-синій"
+
+#: gtk/gtkcolorchooserwidget.c:451
+#| msgctxt "Color name"
+#| msgid "Very Light Gray"
+msgctxt "Color name"
+msgid "Very Light Green"
+msgstr "Дуже світло-зелений"
+
+#: gtk/gtkcolorchooserwidget.c:452
+#| msgctxt "Color name"
+#| msgid "Light Gray"
+msgctxt "Color name"
+msgid "Light Green"
+msgstr "Світло-зелений"
+
+#: gtk/gtkcolorchooserwidget.c:453
 msgctxt "Color name"
 msgid "Green"
 msgstr "Зелений"
 
-#: gtk/gtkcolorchooserwidget.c:458 gtk/gtkcolorchooserwidget.c:459
-#: gtk/gtkcolorchooserwidget.c:460 gtk/gtkcolorchooserwidget.c:461
-#: gtk/gtkcolorchooserwidget.c:462 gtk/gtkcolorchooserwidget.c:463
+#: gtk/gtkcolorchooserwidget.c:454
+#| msgctxt "Color name"
+#| msgid "Dark Gray"
+msgctxt "Color name"
+msgid "Dark Green"
+msgstr "Темно-зелений"
+
+#: gtk/gtkcolorchooserwidget.c:455
+#| msgctxt "Color name"
+#| msgid "Very Dark Gray"
+msgctxt "Color name"
+msgid "Very Dark Green"
+msgstr "Дуже темно-зелений"
+
+#: gtk/gtkcolorchooserwidget.c:456
+#| msgctxt "Color name"
+#| msgid "Very Light Gray"
+msgctxt "Color name"
+msgid "Very Light Yellow"
+msgstr "Дуже світло-жовтий"
+
+#: gtk/gtkcolorchooserwidget.c:457
+#| msgctxt "Color name"
+#| msgid "Yellow"
+msgctxt "Color name"
+msgid "Light Yellow"
+msgstr "Світло-жовтий"
+
+#: gtk/gtkcolorchooserwidget.c:458
 msgctxt "Color name"
 msgid "Yellow"
 msgstr "Жовтий"
 
-#: gtk/gtkcolorchooserwidget.c:464 gtk/gtkcolorchooserwidget.c:465
-#: gtk/gtkcolorchooserwidget.c:466 gtk/gtkcolorchooserwidget.c:467
-#: gtk/gtkcolorchooserwidget.c:468 gtk/gtkcolorchooserwidget.c:469
+#: gtk/gtkcolorchooserwidget.c:459
+#| msgctxt "Color name"
+#| msgid "Yellow"
+msgctxt "Color name"
+msgid "Dark Yellow"
+msgstr "Темно-жовтий"
+
+#: gtk/gtkcolorchooserwidget.c:460
+#| msgctxt "Color name"
+#| msgid "Very Dark Gray"
+msgctxt "Color name"
+msgid "Very Dark Yellow"
+msgstr "Дуже темно-жовтий"
+
+#: gtk/gtkcolorchooserwidget.c:461
+#| msgctxt "Color name"
+#| msgid "Light Orange"
+msgctxt "Color name"
+msgid "Very Light Orange"
+msgstr "Дуже світло-жовтогарячий"
+
+#: gtk/gtkcolorchooserwidget.c:462
+msgctxt "Color name"
+msgid "Light Orange"
+msgstr "Світло-жовтогарячий"
+
+#: gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
 msgid "Orange"
 msgstr "Жовтогарячий"
 
-#: gtk/gtkcolorchooserwidget.c:470 gtk/gtkcolorchooserwidget.c:471
-#: gtk/gtkcolorchooserwidget.c:472 gtk/gtkcolorchooserwidget.c:473
-#: gtk/gtkcolorchooserwidget.c:474
-#| msgid "_Red:"
+#: gtk/gtkcolorchooserwidget.c:464
+msgctxt "Color name"
+msgid "Dark Orange"
+msgstr "Темно-жовтогарячий"
+
+#: gtk/gtkcolorchooserwidget.c:465
+#| msgctxt "Color name"
+#| msgid "Dark Orange"
+msgctxt "Color name"
+msgid "Very Dark Orange"
+msgstr "Дуже темно-жовтогарячий"
+
+#: gtk/gtkcolorchooserwidget.c:466
+#| msgctxt "Color name"
+#| msgid "Very Light Gray"
+msgctxt "Color name"
+msgid "Very Light Red"
+msgstr "Дуже світло-червоний"
+
+#: gtk/gtkcolorchooserwidget.c:467
+#| msgctxt "Color name"
+#| msgid "Light"
+msgctxt "Color name"
+msgid "Light Red"
+msgstr "Світло-червоний"
+
+#: gtk/gtkcolorchooserwidget.c:468
 msgctxt "Color name"
 msgid "Red"
 msgstr "Червоний"
 
-#: gtk/gtkcolorchooserwidget.c:475 gtk/gtkcolorchooserwidget.c:476
-#: gtk/gtkcolorchooserwidget.c:477 gtk/gtkcolorchooserwidget.c:478
-#: gtk/gtkcolorchooserwidget.c:479
+#: gtk/gtkcolorchooserwidget.c:469
+#| msgctxt "Color name"
+#| msgid "Dark Scarlet Red"
+msgctxt "Color name"
+msgid "Dark Red"
+msgstr "Темно-червоний"
+
+#: gtk/gtkcolorchooserwidget.c:470
+#| msgctxt "Color name"
+#| msgid "Very Dark Gray"
+msgctxt "Color name"
+msgid "Very Dark Red"
+msgstr "Дуже темно-червоний"
+
+#: gtk/gtkcolorchooserwidget.c:471
+#| msgctxt "Color name"
+#| msgid "Very Light Gray"
+msgctxt "Color name"
+msgid "Very Light Purple"
+msgstr "Дуже світло-пурпуровий"
+
+#: gtk/gtkcolorchooserwidget.c:472
+#| msgctxt "Color name"
+#| msgid "Light Plum"
+msgctxt "Color name"
+msgid "Light Purple"
+msgstr "Світло-пурпуровий"
+
+#: gtk/gtkcolorchooserwidget.c:473
 msgctxt "Color name"
 msgid "Purple"
 msgstr "Пурпуровий"
 
-#: gtk/gtkcolorchooserwidget.c:480 gtk/gtkcolorchooserwidget.c:481
-#: gtk/gtkcolorchooserwidget.c:482 gtk/gtkcolorchooserwidget.c:483
-#: gtk/gtkcolorchooserwidget.c:484
+#: gtk/gtkcolorchooserwidget.c:474
+#| msgctxt "Color name"
+#| msgid "Purple"
+msgctxt "Color name"
+msgid "Dark Purple"
+msgstr "Темно-пурпуровий"
+
+#: gtk/gtkcolorchooserwidget.c:475
+#| msgctxt "Color name"
+#| msgid "Very Dark Gray"
+msgctxt "Color name"
+msgid "Very Dark Purple"
+msgstr "Дуже темно-пурпуровий"
+
+#: gtk/gtkcolorchooserwidget.c:476
+#| msgctxt "Color name"
+#| msgid "Very Light Gray"
+msgctxt "Color name"
+msgid "Very Light Brown"
+msgstr "Дуже світло-коричневий"
+
+#: gtk/gtkcolorchooserwidget.c:477
+#| msgctxt "output-bin"
+#| msgid "Right Bin"
+msgctxt "Color name"
+msgid "Light Brown"
+msgstr "Світло-коричневий"
+
+#: gtk/gtkcolorchooserwidget.c:478
 msgctxt "Color name"
 msgid "Brown"
 msgstr "Коричневий"
 
-#: gtk/gtkcolorchooserwidget.c:485 gtk/gtkcolorchooserwidget.c:486
-#: gtk/gtkcolorchooserwidget.c:487 gtk/gtkcolorchooserwidget.c:488
-#: gtk/gtkcolorchooserwidget.c:489
-#| msgctxt "keyboard label"
-#| msgid "Right"
-msgctxt "Color name"
-msgid "Light"
-msgstr "Світлий"
-
-#: gtk/gtkcolorchooserwidget.c:490 gtk/gtkcolorchooserwidget.c:491
-#: gtk/gtkcolorchooserwidget.c:492 gtk/gtkcolorchooserwidget.c:493
-#: gtk/gtkcolorchooserwidget.c:494
+#: gtk/gtkcolorchooserwidget.c:479
 #| msgctxt "Color name"
-#| msgid "Dark Plum"
+#| msgid "Dark Butter"
 msgctxt "Color name"
-msgid "Dark"
-msgstr "Темний"
+msgid "Dark Brown"
+msgstr "Темно-коричневий"
+
+#: gtk/gtkcolorchooserwidget.c:480
+#| msgctxt "Color name"
+#| msgid "Very Dark Gray"
+msgctxt "Color name"
+msgid "Very Dark Brown"
+msgstr "Дуже темно-коричневий"
+
+#: gtk/gtkcolorchooserwidget.c:481
+msgctxt "Color name"
+msgid "White"
+msgstr "Білий"
+
+#: gtk/gtkcolorchooserwidget.c:482
+#| msgctxt "Color name"
+#| msgid "Light Gray"
+msgctxt "Color name"
+msgid "Light Gray 1"
+msgstr "Світло-сірий 1"
+
+#: gtk/gtkcolorchooserwidget.c:483
+#| msgctxt "Color name"
+#| msgid "Light Gray"
+msgctxt "Color name"
+msgid "Light Gray 2"
+msgstr "Світло-сірий 2"
+
+#: gtk/gtkcolorchooserwidget.c:484
+#| msgctxt "Color name"
+#| msgid "Light Gray"
+msgctxt "Color name"
+msgid "Light Gray 3"
+msgstr "Світло-сірий 3"
+
+#: gtk/gtkcolorchooserwidget.c:485
+#| msgctxt "Color name"
+#| msgid "Light Gray"
+msgctxt "Color name"
+msgid "Light Gray 4"
+msgstr "Світло-сірий 4"
+
+#: gtk/gtkcolorchooserwidget.c:486
+#| msgctxt "Color name"
+#| msgid "Dark Gray"
+msgctxt "Color name"
+msgid "Dark Gray 1"
+msgstr "Темно-сірий 1"
+
+#: gtk/gtkcolorchooserwidget.c:487
+#| msgctxt "Color name"
+#| msgid "Dark Gray"
+msgctxt "Color name"
+msgid "Dark Gray 2"
+msgstr "Темно-сірий 2"
+
+#: gtk/gtkcolorchooserwidget.c:488
+#| msgctxt "Color name"
+#| msgid "Dark Gray"
+msgctxt "Color name"
+msgid "Dark Gray 3"
+msgstr "Темно-сірий 3"
+
+#: gtk/gtkcolorchooserwidget.c:489
+#| msgctxt "Color name"
+#| msgid "Dark Gray"
+msgctxt "Color name"
+msgid "Dark Gray 4"
+msgstr "Темно-сірий 4"
+
+#: gtk/gtkcolorchooserwidget.c:490
+msgctxt "Color name"
+msgid "Black"
+msgstr "Чорний"
 
 #. translators: label for the custom section in the color chooser
-#: gtk/gtkcolorchooserwidget.c:538
+#: gtk/gtkcolorchooserwidget.c:534
 msgid "Custom"
 msgstr "Власний"
 
-#: gtk/gtkcolorchooserwidget.c:545
+#: gtk/gtkcolorchooserwidget.c:541
 msgid "Custom color"
 msgstr "Власний колір"
 
-#: gtk/gtkcolorchooserwidget.c:546
+#: gtk/gtkcolorchooserwidget.c:542
 msgid "Create a custom color"
 msgstr "Створити власний колір"
 
-#: gtk/gtkcolorchooserwidget.c:565
+#: gtk/gtkcolorchooserwidget.c:561
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "Власний колір %d: %s"
@@ -8176,15 +8399,15 @@ msgstr "Файл"
 msgid "_Output format"
 msgstr "Формат _виводу"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:393
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:394
 msgid "Print to LPR"
 msgstr "Друкувати в LPR"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:419
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:423
 msgid "Pages Per Sheet"
 msgstr "Сторінок на аркуш"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:426
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:430
 msgid "Command Line"
 msgstr "Командний рядок"
 
@@ -8223,6 +8446,12 @@ msgstr "тест-друку.%s"
 msgid "Print to Test Printer"
 msgstr "Друкувати для випробування принтера"
 
+#~| msgctxt "Color name"
+#~| msgid "Dark Plum"
+#~ msgctxt "Color name"
+#~ msgid "Dark"
+#~ msgstr "Темний"
+
 #~ msgctxt "Color name"
 #~ msgid "Light Scarlet Red"
 #~ msgstr "Світло яскраво-червоний"
@@ -8232,28 +8461,12 @@ msgstr "Друкувати для випробування принтера"
 #~ msgstr "Яскраво-червоний"
 
 #~ msgctxt "Color name"
-#~ msgid "Dark Scarlet Red"
-#~ msgstr "Темний яскраво-червоний"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Orange"
-#~ msgstr "Світло-жовтогарячий"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Orange"
-#~ msgstr "Темно-жовтогарячий"
-
-#~ msgctxt "Color name"
 #~ msgid "Light Butter"
 #~ msgstr "Світло-масляний"
 
 #~ msgctxt "Color name"
 #~ msgid "Butter"
 #~ msgstr "Масляний"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Butter"
-#~ msgstr "Темно-масляний"
 
 #~ msgctxt "Color name"
 #~ msgid "Light Chameleon"
@@ -8268,20 +8481,8 @@ msgstr "Друкувати для випробування принтера"
 #~ msgstr "Темно-хамелеоновий"
 
 #~ msgctxt "Color name"
-#~ msgid "Light Sky Blue"
-#~ msgstr "Світло-блакитний"
-
-#~ msgctxt "Color name"
 #~ msgid "Sky Blue"
 #~ msgstr "Блакитний"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Sky Blue"
-#~ msgstr "Темно-блакитний"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Plum"
-#~ msgstr "Світло-сливовий"
 
 #~ msgctxt "Color name"
 #~ msgid "Plum"
@@ -8324,37 +8525,13 @@ msgstr "Друкувати для випробування принтера"
 #~ msgstr "Темно-алюмінієвий 2"
 
 #~ msgctxt "Color name"
-#~ msgid "Black"
-#~ msgstr "Чорний"
-
-#~ msgctxt "Color name"
-#~ msgid "Very Dark Gray"
-#~ msgstr "Дуже темно-сірий"
-
-#~ msgctxt "Color name"
 #~ msgid "Darker Gray"
 #~ msgstr "Претемний сірий"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Gray"
-#~ msgstr "Темно-сірий"
 
 #~ msgctxt "Color name"
 #~ msgid "Medium Gray"
 #~ msgstr "Сірий"
 
 #~ msgctxt "Color name"
-#~ msgid "Light Gray"
-#~ msgstr "Світло-сірий"
-
-#~ msgctxt "Color name"
 #~ msgid "Lighter Gray"
 #~ msgstr "Пресвітло-сірий"
-
-#~ msgctxt "Color name"
-#~ msgid "Very Light Gray"
-#~ msgstr "Дуже світло-сірий"
-
-#~ msgctxt "Color name"
-#~ msgid "White"
-#~ msgstr "Білий"
