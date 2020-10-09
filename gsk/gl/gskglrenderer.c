@@ -430,15 +430,12 @@ load_vertex_data (GskQuadVertex    vertex_data[GL_N_VERTICES],
 }
 
 static void
-load_offscreen_vertex_data (GskQuadVertex    vertex_data[GL_N_VERTICES],
-                            GskRenderNode   *node,
-                            RenderOpBuilder *builder)
+fill_vertex_data (GskQuadVertex vertex_data[GL_N_VERTICES],
+                  const float   min_x,
+                  const float   min_y,
+                  const float   max_x,
+                  const float   max_y)
 {
-  const float min_x = builder->dx + node->bounds.origin.x;
-  const float min_y = builder->dy + node->bounds.origin.y;
-  const float max_x = min_x + node->bounds.size.width;
-  const float max_y = min_y + node->bounds.size.height;
-
   vertex_data[0].position[0] = min_x;
   vertex_data[0].position[1] = min_y;
   vertex_data[0].uv[0] = 0;
@@ -468,6 +465,21 @@ load_offscreen_vertex_data (GskQuadVertex    vertex_data[GL_N_VERTICES],
   vertex_data[5].position[1] = min_y;
   vertex_data[5].uv[0] = 1;
   vertex_data[5].uv[1] = 1;
+}
+
+static void
+load_offscreen_vertex_data (GskQuadVertex    vertex_data[GL_N_VERTICES],
+                            GskRenderNode   *node,
+                            RenderOpBuilder *builder)
+{
+  const float min_x = builder->dx + node->bounds.origin.x;
+  const float min_y = builder->dy + node->bounds.origin.y;
+  const float max_x = min_x + node->bounds.size.width;
+  const float max_y = min_y + node->bounds.size.height;
+
+  fill_vertex_data (vertex_data,
+                    min_x, min_y,
+                    max_x, max_y);
 }
 
 static void gsk_gl_renderer_setup_render_mode (GskGLRenderer   *self);
@@ -4349,10 +4361,6 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
 
   /* Render the now drawn framebuffer y-flipped so it's as GdkGLTexture expects it to be */
   {
-    const float min_x = 0;
-    const float min_y = 0;
-    const float max_x = width;
-    const float max_y = height;
     guint final_texture_id, final_fbo_id;
     GskQuadVertex vertex_data[6];
     GLuint buffer_id, vao_id;
@@ -4383,35 +4391,7 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
     glGenBuffers (1, &buffer_id);
     glBindBuffer (GL_ARRAY_BUFFER, buffer_id);
 
-    vertex_data[0].position[0] = min_x;
-    vertex_data[0].position[1] = min_y;
-    vertex_data[0].uv[0] = 0;
-    vertex_data[0].uv[1] = 1;
-
-    vertex_data[1].position[0] = min_x;
-    vertex_data[1].position[1] = max_y;
-    vertex_data[1].uv[0] = 0;
-    vertex_data[1].uv[1] = 0;
-
-    vertex_data[2].position[0] = max_x;
-    vertex_data[2].position[1] = min_y;
-    vertex_data[2].uv[0] = 1;
-    vertex_data[2].uv[1] = 1;
-
-    vertex_data[3].position[0] = max_x;
-    vertex_data[3].position[1] = max_y;
-    vertex_data[3].uv[0] = 1;
-    vertex_data[3].uv[1] = 0;
-
-    vertex_data[4].position[0] = min_x;
-    vertex_data[4].position[1] = max_y;
-    vertex_data[4].uv[0] = 0;
-    vertex_data[4].uv[1] = 0;
-
-    vertex_data[5].position[0] = max_x;
-    vertex_data[5].position[1] = min_y;
-    vertex_data[5].uv[0] = 1;
-    vertex_data[5].uv[1] = 1;
+    fill_vertex_data (vertex_data, 0, 0, width, height);
 
     glBufferData (GL_ARRAY_BUFFER, sizeof (vertex_data), vertex_data, GL_STATIC_DRAW);
 
