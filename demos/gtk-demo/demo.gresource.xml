@@ -184,7 +184,7 @@
   <gresource prefix="/listview_settings">
     <file>listview_settings.ui</file>
   </gresource>
-  <gresource prefix="/listview_ucd">
+  <gresource prefix="/listview_ucd_data/">
     <file>ucdnames.data</file>
   </gresource>
   <gresource prefix="/listview_weather">

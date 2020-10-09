@@ -5242,8 +5242,8 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
         {
           if (_gtk_widget_get_visible (parent))
             {
-              gtk_window_set_focus (window, parent);
-              break;
+              if (gtk_widget_grab_focus (parent))
+                break;
             }
 
           parent = gtk_widget_get_parent (parent);

@@ -74,7 +74,7 @@ ucd_model_new (void)
   guint u;
   char *name;
 
-  bytes = g_resources_lookup_data ("/listview_ucd/ucdnames.data", 0, NULL);
+  bytes = g_resources_lookup_data ("/listview_ucd_data/ucdnames.data", 0, NULL);
   v = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(us)"), bytes, TRUE));
 
   iter = g_variant_iter_new (v);
@@ -113,6 +113,18 @@ setup_label (GtkSignalListItemFactory *factory,
   GtkWidget *label;
   label = gtk_label_new ("");
   gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_list_item_set_child (GTK_LIST_ITEM (listitem), label);
+}
+
+static void
+setup_ellipsizing_label (GtkSignalListItemFactory *factory,
+                         GObject                  *listitem)
+{
+  GtkWidget *label;
+  label = gtk_label_new ("");
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+  gtk_label_set_width_chars (GTK_LABEL (label), 20);
   gtk_list_item_set_child (GTK_LIST_ITEM (listitem), label);
 }
 
@@ -279,21 +291,21 @@ create_ucd_view (GtkWidget *label)
   gtk_column_view_append_column (GTK_COLUMN_VIEW (cv), column);
 
   factory = gtk_signal_list_item_factory_new ();
-  g_signal_connect (factory, "setup", G_CALLBACK (setup_label), NULL);
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_ellipsizing_label), NULL);
   g_signal_connect (factory, "bind", G_CALLBACK (bind_name), NULL);
   column = gtk_column_view_column_new ("Name", factory);
   gtk_column_view_column_set_resizable (column, TRUE);
   gtk_column_view_append_column (GTK_COLUMN_VIEW (cv), column);
 
   factory = gtk_signal_list_item_factory_new ();
-  g_signal_connect (factory, "setup", G_CALLBACK (setup_label), NULL);
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_ellipsizing_label), NULL);
   g_signal_connect (factory, "bind", G_CALLBACK (bind_type), NULL);
   column = gtk_column_view_column_new ("Type", factory);
   gtk_column_view_column_set_resizable (column, TRUE);
   gtk_column_view_append_column (GTK_COLUMN_VIEW (cv), column);
 
   factory = gtk_signal_list_item_factory_new ();
-  g_signal_connect (factory, "setup", G_CALLBACK (setup_label), NULL);
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_ellipsizing_label), NULL);
   g_signal_connect (factory, "bind", G_CALLBACK (bind_break_type), NULL);
   column = gtk_column_view_column_new ("Break Type", factory);
   gtk_column_view_column_set_resizable (column, TRUE);
