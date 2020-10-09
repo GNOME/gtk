@@ -137,6 +137,68 @@ handle_accessible_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetChildAtIndex") == 0)
     {
+      GtkWidget *child = NULL;
+      int idx, real_idx = 0;
+
+      g_variant_get (parameters, "(i)", &idx);
+
+      GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+      GtkWidget *widget = GTK_WIDGET (accessible);
+
+      real_idx = 0;
+      for (child = gtk_widget_get_first_child (widget);
+           child;
+           child = gtk_widget_get_next_sibling (child))
+        {
+          if (!gtk_widget_get_visible (child))
+            continue;
+
+          if (real_idx == idx)
+            break;
+
+          real_idx += 1;
+        }
+
+      if (child == NULL)
+        {
+          g_dbus_method_invocation_return_error (invocation,
+                                                 G_IO_ERROR,
+                                                 G_IO_ERROR_INVALID_ARGUMENT,
+                                                 "No child with index %d", idx);
+          return;
+        }
+
+      GtkATContext *context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (child));
+
+      const char *name = g_dbus_connection_get_unique_name (self->connection);
+      const char *path = gtk_at_spi_context_get_context_path (GTK_AT_SPI_CONTEXT (context));
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("((so))", name, path));
+    }
+  else if (g_strcmp0 (method_name, "GetChildren") == 0)
+    {
+      GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a(so)"));
+
+      GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+      GtkWidget *widget = GTK_WIDGET (accessible);
+      GtkWidget *child;
+
+      for (child = gtk_widget_get_first_child (widget);
+           child;
+           child = gtk_widget_get_next_sibling (child))
+        {
+          if (!gtk_widget_get_visible (child))
+            continue;
+
+          GtkATContext *context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (child));
+
+          const char *name = g_dbus_connection_get_unique_name (self->connection);
+          const char *path = gtk_at_spi_context_get_context_path (GTK_AT_SPI_CONTEXT (context));
+
+          g_variant_builder_add (&builder, "(so)", name, path);
+        }
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a(so))", &builder));
     }
 }
 
@@ -193,7 +255,22 @@ handle_accessible_get_property (GDBusConnection       *connection,
         res = g_variant_new ("(so)", "", "/org/a11y/atspi/null");
     }
   else if (g_strcmp0 (property_name, "ChildCount") == 0)
-    res = g_variant_new_int32 (0);
+    {
+      int n_children = 0;
+      GtkWidget *child;
+
+      for (child = gtk_widget_get_first_child (widget);
+           child;
+           child = gtk_widget_get_next_sibling (child))
+        {
+          if (!gtk_widget_get_visible (child))
+            continue;
+
+          n_children++;
+        }
+
+      res = g_variant_new_int32 (n_children);
+    }
   else
     g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
                  "Unknown property '%s'", property_name);
