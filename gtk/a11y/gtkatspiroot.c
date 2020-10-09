@@ -281,6 +281,8 @@ handle_accessible_method (GDBusConnection       *connection,
         {
           window = g_list_model_get_item (self->toplevels, i);
 
+          g_object_unref (window);
+
           if (!gtk_widget_get_visible (window))
             continue;
 
@@ -335,6 +337,8 @@ handle_accessible_get_property (GDBusConnection       *connection,
 
           if (gtk_widget_get_visible (window))
             n_children += 1;
+
+          g_object_unref (window);
         }
 
       res = g_variant_new_int32 (n_children);
