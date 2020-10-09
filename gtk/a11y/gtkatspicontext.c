@@ -150,12 +150,12 @@ gtk_at_spi_context_constructed (GObject *gobject)
   if (self->root == NULL)
     {
       self->root = gtk_at_spi_root_new (self->bus_address);
-      self->connection = gtk_at_spi_root_get_connection (self->root);
-
       g_object_set_data_full (G_OBJECT (display), "-gtk-atspi-root",
                               self->root,
                               g_object_unref);
     }
+
+  self->connection = gtk_at_spi_root_get_connection (self->root);
 
   /* We use the application's object path to build the path of each
    * accessible object exposed on the accessibility bus; the path is
@@ -183,10 +183,22 @@ gtk_at_spi_context_constructed (GObject *gobject)
 
   self->context_path = g_strconcat (base_path, "/", uuid, NULL);
 
+  /* UUIDs use '-' as the separator, but that's not a valid character
+   * for a DBus object path
+   */
+  size_t path_len = strlen (self->context_path);
+  for (size_t i = 0; i < path_len; i++)
+    {
+      if (self->context_path[i] == '-')
+        self->context_path[i] = '_';
+    }
+
   GTK_NOTE (A11Y, g_message ("ATSPI context path: %s", self->context_path));
 
   g_free (base_path);
   g_free (uuid);
+
+  gtk_at_spi_context_register_object (self);
 
   G_OBJECT_CLASS (gtk_at_spi_context_parent_class)->constructed (gobject);
 }
@@ -390,4 +402,12 @@ gtk_at_spi_create_context (GtkAccessibleRole  accessible_role,
 #endif
 
   return NULL;
+}
+
+const char *
+gtk_at_spi_context_get_context_path (GtkAtSpiContext *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_SPI_CONTEXT (self), NULL);
+
+  return self->context_path;
 }

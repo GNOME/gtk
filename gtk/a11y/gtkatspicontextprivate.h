@@ -33,4 +33,7 @@ gtk_at_spi_create_context (GtkAccessibleRole  accessible_role,
                            GtkAccessible     *accessible,
                            GdkDisplay        *display);
 
+const char *
+gtk_at_spi_context_get_context_path (GtkAtSpiContext *self);
+
 G_END_DECLS
