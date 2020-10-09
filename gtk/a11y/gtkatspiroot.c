@@ -22,6 +22,7 @@
 
 #include "gtkatspirootprivate.h"
 
+#include "gtkatspicontextprivate.h"
 #include "gtkatspiprivate.h"
 
 #include "gtkdebug.h"
@@ -59,6 +60,8 @@ struct _GtkAtSpiRoot
   gint32 application_id;
 
   GtkAtSpiCache *cache;
+
+  GListModel *toplevels;
 };
 
 enum
@@ -217,6 +220,64 @@ handle_accessible_method (GDBusConnection       *connection,
     g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", "application"));
   else if (g_strcmp0 (method_name, "GetLocalizedRoleName") == 0)
     g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", "application"));
+  else if (g_strcmp0 (method_name, "GetState") == 0)
+    {
+      GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("(au)"));
+
+      g_variant_builder_open (&builder, G_VARIANT_TYPE ("au"));
+      g_variant_builder_add (&builder, "u", 0);
+      g_variant_builder_close (&builder);
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_builder_end (&builder));
+    }
+  else if (g_strcmp0 (method_name, "GetAttributes") == 0)
+    {
+      GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("(a{ss})"));
+
+      g_variant_builder_open (&builder, G_VARIANT_TYPE ("a{ss}"));
+      g_variant_builder_add (&builder, "{ss}", "toolkit", "GTK");
+      g_variant_builder_close (&builder);
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_builder_end (&builder));
+    }
+  else if (g_strcmp0 (method_name, "GetApplication") == 0)
+    {
+      g_dbus_method_invocation_return_value (invocation,
+                                             g_variant_new ("((so))",
+                                                            self->desktop_name,
+                                                            self->desktop_path));
+    }
+  else if (g_strcmp0 (method_name, "GetChildAtIndex") == 0)
+    {
+      int idx, real_idx = 0;
+
+      g_variant_get (parameters, "(i)", &idx);
+
+      GtkWidget *window = NULL;
+      guint n_toplevels = g_list_model_get_n_items (self->toplevels);
+      for (guint i = 0; i < n_toplevels; i++)
+        {
+          window = g_list_model_get_item (self->toplevels, i);
+
+          if (!gtk_widget_get_visible (window))
+            continue;
+
+          if (real_idx == idx)
+            break;
+
+          real_idx += 1;
+        }
+
+      if (window == NULL)
+        return;
+
+      GtkATContext *context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (window));
+
+      const char *name = g_dbus_connection_get_unique_name (self->connection);
+      const char *path = gtk_at_spi_context_get_context_path (GTK_AT_SPI_CONTEXT (context));
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("((so))", name, path));
+    }
 }
 
 static GVariant *
@@ -243,20 +304,15 @@ handle_accessible_get_property (GDBusConnection       *connection,
     res = g_variant_new ("(so)", self->desktop_name, self->desktop_path);
   else if (g_strcmp0 (property_name, "ChildCount") == 0)
     {
+      guint n_toplevels = g_list_model_get_n_items (self->toplevels);
       int n_children = 0;
 
-      if (g_strcmp0 (object_path, ATSPI_ROOT_PATH) == 0)
+      for (guint i = 0; i < n_toplevels; i++)
         {
-          GList *windows = gtk_window_list_toplevels ();
+          GtkWidget *window = g_list_model_get_item (self->toplevels, i);
 
-          /* We are only interested in the visible top levels */
-          for (GList *l = windows; l != NULL; l = l->next)
-            {
-              if (gtk_widget_is_visible (l->data))
-                n_children += 1;
-            }
-
-          g_list_free (windows);
+          if (gtk_widget_get_visible (window))
+            n_children += 1;
         }
 
       res = g_variant_new_int32 (n_children);
@@ -311,6 +367,9 @@ on_registration_reply (GObject      *gobject,
 
   /* Register the cache object */
   self->cache = gtk_at_spi_cache_new (self->connection, ATSPI_CACHE_PATH);
+
+  /* Monitor the top levels */
+  self->toplevels = gtk_window_get_toplevels ();
 }
 
 static void
