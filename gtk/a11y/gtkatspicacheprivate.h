@@ -1,4 +1,4 @@
-/* gtkatspirootprivate.h: AT-SPI root object
+/* gtkatspicacheprivate.h: AT-SPI object cache
  *
  * Copyright 2020  GNOME Foundation
  *
@@ -20,23 +20,25 @@
 
 #pragma once
 
-#include <gio/gio.h>
-
-#include "gtkatspicacheprivate.h"
+#include "gtkatcontextprivate.h"
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_AT_SPI_ROOT (gtk_at_spi_root_get_type())
+#define GTK_TYPE_AT_SPI_CACHE (gtk_at_spi_cache_get_type())
 
-G_DECLARE_FINAL_TYPE (GtkAtSpiRoot, gtk_at_spi_root, GTK, AT_SPI_ROOT, GObject)
-
-GtkAtSpiRoot *
-gtk_at_spi_root_new (const char *bus_address);
-
-GDBusConnection *
-gtk_at_spi_root_get_connection (GtkAtSpiRoot *self);
+G_DECLARE_FINAL_TYPE (GtkAtSpiCache, gtk_at_spi_cache, GTK, AT_SPI_CACHE, GObject)
 
 GtkAtSpiCache *
-gtk_at_spi_root_get_cache (GtkAtSpiRoot *self);
+gtk_at_spi_cache_new (GDBusConnection *connection,
+                      const char *cache_path);
+
+void
+gtk_at_spi_cache_add_context (GtkAtSpiCache *self,
+                              const char *path,
+                              GtkATContext *context);
+
+GtkATContext *
+gtk_at_spi_cache_get_context (GtkAtSpiCache *self,
+                              const char *path);
 
 G_END_DECLS

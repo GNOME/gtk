@@ -9,6 +9,7 @@ if gtk_a11y_backends.contains('atspi')
   subdir('atspi')
 
   gtk_a11y_src += files([
+    'gtkatspicache.c',
     'gtkatspicontext.c',
     'gtkatspiroot.c',
   ])
