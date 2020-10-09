@@ -209,8 +209,7 @@ handle_accessible_method (GDBusConnection       *connection,
                           GDBusMethodInvocation *invocation,
                           gpointer               user_data)
 {
-  g_printerr ("[Accessible] Method '%s' on interface '%s' for object '%s' from '%s'\n",
-              method_name, interface_name, object_path, sender);
+  GtkAtSpiRoot *self = user_data;
 
   if (g_strcmp0 (method_name, "GetRole") == 0)
     g_dbus_method_invocation_return_value (invocation, g_variant_new ("(u)", ATSPI_ROLE_APPLICATION));
@@ -454,4 +453,17 @@ gtk_at_spi_root_get_cache (GtkAtSpiRoot *self)
   g_return_val_if_fail (GTK_IS_AT_SPI_ROOT (self), NULL);
 
   return self->cache;
+}
+
+void
+gtk_at_spi_root_get_application (GtkAtSpiRoot *self,
+                                 const char **name,
+                                 const char **path)
+{
+  g_return_if_fail (GTK_IS_AT_SPI_ROOT (self));
+
+  if (name != NULL)
+    *name = self->desktop_name;
+  if (path != NULL)
+    *path = self->desktop_path;
 }
