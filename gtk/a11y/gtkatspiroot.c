@@ -137,7 +137,6 @@ gtk_at_spi_root_get_property (GObject    *gobject,
     }
 }
 
-
 static void
 handle_application_method (GDBusConnection       *connection,
                            const gchar           *sender,
@@ -148,6 +147,28 @@ handle_application_method (GDBusConnection       *connection,
                            GDBusMethodInvocation *invocation,
                            gpointer               user_data)
 {
+  if (g_strcmp0 (method_name, "GetLocale") == 0)
+    {
+      guint lctype;
+      const char *locale;
+
+      int types[] = {
+        LC_MESSAGES, LC_COLLATE, LC_CTYPE, LC_MONETARY, LC_NUMERIC, LC_TIME
+      };
+
+      g_variant_get (parameters, "(u)", &lctype);
+      if (lctype >= G_N_ELEMENTS (types))
+        {
+          g_dbus_method_invocation_return_error (invocation,
+                                                 G_IO_ERROR,
+                                                 G_IO_ERROR_INVALID_ARGUMENT,
+                                                 "Not a known locale facet: %u", lctype);
+          return;
+        }
+
+      locale = setlocale (types[lctype], NULL);
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", locale));
+    }
 }
 
 static GVariant *
