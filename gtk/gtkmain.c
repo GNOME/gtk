@@ -1648,8 +1648,11 @@ gtk_main_do_event (GdkEvent *event)
       break;
 
     case GDK_FOCUS_CHANGE:
-      if (!_gtk_widget_captured_event (target_widget, event, target_widget))
-        gtk_widget_event (target_widget, event, target_widget);
+      {
+        GtkWidget *root = GTK_WIDGET (gtk_widget_get_root (target_widget));
+        if (!_gtk_widget_captured_event (root, event, root))
+          gtk_widget_event (root, event, root);
+      }
       break;
 
     case GDK_KEY_PRESS:
