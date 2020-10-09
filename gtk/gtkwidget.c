@@ -8091,6 +8091,9 @@ gtk_widget_accessible_get_at_context (GtkAccessible *accessible)
   GtkWidget *self = GTK_WIDGET (accessible);
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (self);
 
+  if (priv->in_destruction)
+    return NULL;
+
   if (priv->at_context == NULL)
     {
       GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (self);
