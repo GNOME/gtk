@@ -17,13 +17,11 @@ test_style = executable(
   install_dir: testexecdir,
 )
 test('style', test_style,
-     args: [ '--tap', '-k' ],
-     protocol: 'tap',
-     env: [
-            'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-            'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
-          ],
-     suite: 'css')
+  args: [ '--tap', '-k' ],
+  protocol: 'tap',
+  env: csstest_env,
+  suite: 'css',
+)
 
 test_data = [
   'adjacent-states.css',
@@ -65,5 +63,4 @@ if get_option('install-tests')
                  install_dir: testdatadir)
 
   install_data(test_data, install_dir: testexecdir)
-
 endif

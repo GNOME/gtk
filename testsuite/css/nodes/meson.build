@@ -7,13 +7,11 @@ test_nodes = executable('test-css-nodes', 'test-css-nodes.c',
                         install_dir: testexecdir,
                         dependencies: libgtk_dep)
 test('nodes', test_nodes,
-     args: [ '--tap', '-k' ],
-     protocol: 'tap',
-     env: [
-            'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-            'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
-          ],
-     suite: 'css')
+  args: [ '--tap', '-k' ],
+  protocol: 'tap',
+  env: csstest_env,
+  suite: 'css',
+)
 
 test_data = [
   'box.ltr.nodes',
@@ -77,5 +75,4 @@ if get_option('install-tests')
                  install_dir: testdatadir)
 
   install_data(test_data, install_dir: testexecdir)
-
 endif
