@@ -24,10 +24,17 @@
 
 #include "gtkatspicacheprivate.h"
 #include "gtkatspirootprivate.h"
+#include "gtkatspiprivate.h"
+#include "gtkatspiutilsprivate.h"
+
+#include "a11y/atspi/atspi-accessible.h"
+
 #include "gtkdebug.h"
 #include "gtkwindow.h"
 
 #include <gio/gio.h>
+
+#include <locale.h>
 
 #if defined(GDK_WINDOWING_WAYLAND)
 # include <gdk/wayland/gdkwaylanddisplay.h>
@@ -69,6 +76,148 @@ enum
 static GParamSpec *obj_props[N_PROPS];
 
 G_DEFINE_TYPE (GtkAtSpiContext, gtk_at_spi_context, GTK_TYPE_AT_CONTEXT)
+
+static void
+handle_accessible_method (GDBusConnection       *connection,
+                          const gchar           *sender,
+                          const gchar           *object_path,
+                          const gchar           *interface_name,
+                          const gchar           *method_name,
+                          GVariant              *parameters,
+                          GDBusMethodInvocation *invocation,
+                          gpointer               user_data)
+{
+  GtkAtSpiContext *self = user_data;
+
+  if (g_strcmp0 (method_name, "GetRole") == 0)
+    {
+      GtkAccessibleRole role = gtk_at_context_get_accessible_role (GTK_AT_CONTEXT (self));
+      guint atspi_role = gtk_accessible_role_to_atspi_role (role);
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(u)", atspi_role));
+    }
+  else if (g_strcmp0 (method_name, "GetRoleName") == 0)
+    {
+      GtkAccessibleRole role = gtk_at_context_get_accessible_role (GTK_AT_CONTEXT (self));
+      const char *name = gtk_accessible_role_to_name (role, NULL);
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", name));
+    }
+  else if (g_strcmp0 (method_name, "GetLocalizedRoleName") == 0)
+    {
+      GtkAccessibleRole role = gtk_at_context_get_accessible_role (GTK_AT_CONTEXT (self));
+      const char *name = gtk_accessible_role_to_name (role, GETTEXT_PACKAGE);
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", name));
+    }
+  else if (g_strcmp0 (method_name, "GetState") == 0)
+    {
+      GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("(au)"));
+
+      g_variant_builder_open (&builder, G_VARIANT_TYPE ("au"));
+      g_variant_builder_add (&builder, "u", 0);
+      g_variant_builder_close (&builder);
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_builder_end (&builder));
+    }
+  else if (g_strcmp0 (method_name, "GetAttributes") == 0)
+    {
+      GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("(a{ss})"));
+
+      g_variant_builder_open (&builder, G_VARIANT_TYPE ("a{ss}"));
+      g_variant_builder_add (&builder, "{ss}", "toolkit", "GTK");
+      g_variant_builder_close (&builder);
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_builder_end (&builder));
+    }
+  else if (g_strcmp0 (method_name, "GetApplication") == 0)
+    {
+      const char *name, *path;
+
+      gtk_at_spi_root_get_application (self->root, &name, &path);
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("((so))", name, path));
+    }
+  else if (g_strcmp0 (method_name, "GetChildAtIndex") == 0)
+    {
+    }
+}
+
+static GVariant *
+handle_accessible_get_property (GDBusConnection       *connection,
+                                const gchar           *sender,
+                                const gchar           *object_path,
+                                const gchar           *interface_name,
+                                const gchar           *property_name,
+                                GError               **error,
+                                gpointer               user_data)
+{
+  GtkAtSpiContext *self = user_data;
+  GVariant *res = NULL;
+
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+  GtkWidget *widget = GTK_WIDGET (accessible);
+
+  if (g_strcmp0 (property_name, "Name") == 0)
+    res = g_variant_new_string (gtk_widget_get_name (widget));
+  else if (g_strcmp0 (property_name, "Description") == 0)
+    {
+      char *label = gtk_at_context_get_label (GTK_AT_CONTEXT (self));
+      res = g_variant_new_string (label);
+      g_free (label);
+    }
+  else if (g_strcmp0 (property_name, "Locale") == 0)
+    res = g_variant_new_string (setlocale (LC_MESSAGES, NULL));
+  else if (g_strcmp0 (property_name, "AccessibleId") == 0)
+    res = g_variant_new_string ("");
+  else if (g_strcmp0 (property_name, "Parent") == 0)
+    {
+      GtkWidget *parent = gtk_widget_get_parent (GTK_WIDGET (accessible));
+
+      if (parent == NULL)
+        {
+          const char *name, *path;
+
+          gtk_at_spi_root_get_application (self->root, &name, &path);
+          res = g_variant_new ("(so)", name, path);
+        }
+      else
+        {
+          GtkATContext *parent_context =
+            gtk_accessible_get_at_context (GTK_ACCESSIBLE (parent));
+
+          if (parent_context != NULL)
+            res = g_variant_new ("(so)",
+                                 g_dbus_connection_get_unique_name (self->connection),
+                                 GTK_AT_SPI_CONTEXT (parent_context)->context_path);
+        }
+
+      if (res == NULL)
+        res = g_variant_new ("(so)", "", "/org/a11y/atspi/null");
+    }
+  else if (g_strcmp0 (property_name, "ChildCount") == 0)
+    res = g_variant_new_int32 (0);
+  else
+    g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                 "Unknown property '%s'", property_name);
+
+  return res;
+}
+
+static const GDBusInterfaceVTable accessible_vtable = {
+  handle_accessible_method,
+  handle_accessible_get_property,
+  NULL,
+};
+
+static void
+gtk_at_spi_context_register_object (GtkAtSpiContext *self)
+{
+  g_dbus_connection_register_object (self->connection,
+                                     self->context_path,
+                                     (GDBusInterfaceInfo *) &atspi_accessible_interface,
+                                     &accessible_vtable,
+                                     self,
+                                     NULL,
+                                     NULL);
+}
 
 static void
 gtk_at_spi_context_state_change (GtkATContext                *self,
