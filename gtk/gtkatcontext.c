@@ -725,3 +725,83 @@ gtk_at_context_get_accessible_relation (GtkATContext          *self,
 
   return gtk_accessible_attribute_set_get_value (self->relations, relation);
 }
+
+/*< private >
+ * gtk_at_context_get_label:
+ * @self: a #GtkATContext
+ *
+ * Retrieves the accessible label of the #GtkATContext.
+ *
+ * This is a convenience function meant to be used by #GtkATContext implementations.
+ *
+ * Returns: (transfer full): the label of the #GtkATContext
+ */
+char *
+gtk_at_context_get_label (GtkATContext *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), NULL);
+
+  GtkAccessibleValue *value = NULL;
+
+  if (gtk_accessible_attribute_set_contains (self->states, GTK_ACCESSIBLE_STATE_HIDDEN))
+    {
+      value = gtk_accessible_attribute_set_get_value (self->states, GTK_ACCESSIBLE_STATE_HIDDEN);
+
+      if (gtk_boolean_accessible_value_get (value))
+        return g_strdup ("");
+    }
+
+  if (gtk_accessible_attribute_set_contains (self->properties, GTK_ACCESSIBLE_PROPERTY_LABEL))
+    {
+      value = gtk_accessible_attribute_set_get_value (self->properties, GTK_ACCESSIBLE_PROPERTY_LABEL);
+
+      return g_strdup (gtk_string_accessible_value_get (value));
+    }
+
+  if (gtk_accessible_attribute_set_contains (self->relations, GTK_ACCESSIBLE_RELATION_LABELLED_BY))
+    {
+      value = gtk_accessible_attribute_set_get_value (self->relations, GTK_ACCESSIBLE_RELATION_LABELLED_BY);
+
+      GtkAccessible *rel = gtk_reference_accessible_value_get (value);
+      GtkATContext *rel_context = gtk_accessible_get_at_context (rel);
+
+      return gtk_at_context_get_label (rel_context);
+    }
+
+  GtkAccessibleRole role = gtk_at_context_get_accessible_role (self);
+
+  switch ((int) role)
+    {
+    case GTK_ACCESSIBLE_ROLE_RANGE:
+      {
+        int range_attrs[] = {
+          GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT,
+          GTK_ACCESSIBLE_PROPERTY_VALUE_NOW,
+        };
+
+        for (int i = 0; i < G_N_ELEMENTS (range_attrs); i++)
+          {
+            if (gtk_accessible_attribute_set_contains (self->properties, range_attrs[i]))
+              {
+                value = gtk_accessible_attribute_set_get_value (self->properties, range_attrs[i]);
+                break;
+              }
+          }
+
+        if (value != NULL)
+          return g_strdup (gtk_string_accessible_value_get (value));
+      }
+      break;
+
+    default:
+      break;
+    }
+
+  GEnumClass *enum_class = g_type_class_peek (GTK_TYPE_ACCESSIBLE_ROLE);
+  GEnumValue *enum_value = g_enum_get_value (enum_class, role);
+
+  if (enum_value != NULL)
+    return g_strdup (enum_value->value_nick);
+
+  return g_strdup ("widget");
+}
