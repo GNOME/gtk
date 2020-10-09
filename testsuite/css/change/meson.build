@@ -9,14 +9,13 @@ test_change = executable(
   install: get_option('install-tests'),
   install_dir: testexecdir,
 )
+
 test('change', test_change,
-     args: [ '--tap', '-k' ],
-     protocol: 'tap',
-     env: [
-            'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-            'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
-          ],
-     suite: 'css')
+  args: [ '--tap', '-k' ],
+  protocol: 'tap',
+  env: csstest_env,
+  suite: 'css',
+)
 
 test_data = [
   'test1.css', 'test1.ui', 'test1.nodes',

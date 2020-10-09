@@ -450,6 +450,16 @@ xfails = [
   'label-sizing.ui',
 ]
 
+reftest_env = environment()
+reftest_env.set('GTK_TEST_ACCESSIBLE', '1')
+reftest_env.set('GSK_RENDERER', 'opengl')
+reftest_env.set('G_TEST_SRCDIR', meson.current_source_dir())
+reftest_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
+reftest_env.set('GIO_USE_VFS', 'local')
+reftest_env.set('GSETTINGS_BACKEND', 'memory')
+reftest_env.set('G_ENABLE_DIAGNOSTIC', '0')
+reftest_env.set('REFTEST_MODULE_DIR', meson.current_build_dir())
+
 foreach testname : testdata
   if testname.endswith('.ui') and not testname.endswith('.ref.ui')
     test('reftest ' + testname, gtk_reftest,
@@ -459,12 +469,7 @@ foreach testname : testdata
                  join_paths(meson.current_source_dir(), testname),
          ],
          protocol: 'tap',
-         env: [
-                'GSK_RENDERER=opengl',
-                'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-                'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
-                'REFTEST_MODULE_DIR=@0@'.format(meson.current_build_dir())
-              ],
+         env: reftest_env,
          suite: 'reftest',
          should_fail: xfails.contains(testname))
   endif

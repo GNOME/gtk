@@ -146,6 +146,15 @@ is_debug = get_option('buildtype').startswith('debug')
 
 test_cargs = []
 
+test_env = environment()
+test_env.set('GTK_TEST_ACCESSIBLE', '1')
+test_env.set('GSK_RENDERER', 'cairo')
+test_env.set('G_TEST_SRCDIR', meson.current_source_dir())
+test_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
+test_env.set('GIO_USE_VFS', 'local')
+test_env.set('GSETTINGS_BACKEND', 'memory')
+test_env.set('G_ENABLE_DIAGNOSTIC', '0')
+
 if os_unix
   # tests += [['defaultvalue']]  # disabled in Makefile.am as well
   test_cargs += ['-DHAVE_UNIX_PRINT_WIDGETS']
@@ -182,11 +191,7 @@ foreach t : tests
        args: [ '--tap', '-k' ],
        protocol: 'tap',
        timeout: test_timeout,
-       env: [
-              'GSK_RENDERER=cairo',
-              'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
-            ],
+       env: test_env,
        suite: ['gtk'] + test_extra_suites,
        should_fail: expect_fail,
   )
@@ -203,10 +208,7 @@ if add_languages('cpp', required: false)
   test('c++ keywords', test_exe,
        args: [ '--tap', '-k' ],
        #protocol: 'tap',
-       env: [
-              'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
-            ],
+       env: test_env,
        suite: 'gtk')
   if get_option('install-tests')
     conf = configuration_data()
@@ -254,10 +256,7 @@ foreach test : focus_chain_tests
   test(test[0] + ' ' + test[1], focus_chain,
        args: [ join_paths(meson.current_source_dir(), 'focus-chain', test[0] + '.ui'),
                join_paths(meson.current_source_dir(), 'focus-chain', test[0] + '.' + test[1]) ],
-       env: [
-              'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
-             ],
+       env: test_env,
        suite: [ 'gtk', 'focus' ])
 endforeach
 
@@ -282,14 +281,17 @@ endif
 
 if false and get_option ('profiler')
 
+  performance_env = test_env
+  performance_env.set('GTK_THEME', 'Empty')
+
   test('performance-layout', test_performance,
        args: [ '--mark', 'size allocation', join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory') ],
-       env: [ 'GTK_THEME=Empty' ],
+       env: performance_env,
        suite: [ 'gtk' ])
 
   test('performance-snapshot', test_performance,
        args: [ '--mark', 'widget snapshot', join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory') ],
-       env: [ 'GTK_THEME=Empty' ],
+       env: performance_end,
        suite: [ 'gtk' ])
 
 endif
