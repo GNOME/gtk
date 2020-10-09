@@ -22,6 +22,8 @@
 
 #include "gtkatspirootprivate.h"
 
+#include "gtkatspiprivate.h"
+
 #include "gtkdebug.h"
 #include "gtkwindow.h"
 
@@ -210,6 +212,12 @@ handle_accessible_method (GDBusConnection       *connection,
   g_printerr ("[Accessible] Method '%s' on interface '%s' for object '%s' from '%s'\n",
               method_name, interface_name, object_path, sender);
 
+  if (g_strcmp0 (method_name, "GetRole") == 0)
+    g_dbus_method_invocation_return_value (invocation, g_variant_new ("(u)", ATSPI_ROLE_APPLICATION));
+  else if (g_strcmp0 (method_name, "GetRoleName") == 0)
+    g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", "application"));
+  else if (g_strcmp0 (method_name, "GetLocalizedRoleName") == 0)
+    g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", "application"));
 }
 
 static GVariant *
