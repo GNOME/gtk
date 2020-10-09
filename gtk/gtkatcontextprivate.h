@@ -136,6 +136,8 @@ gboolean                gtk_at_context_has_accessible_relation  (GtkATContext   
 GtkAccessibleValue *    gtk_at_context_get_accessible_relation  (GtkATContext          *self,
                                                                  GtkAccessibleRelation  relation);
 
+char *                  gtk_at_context_get_label                (GtkATContext          *self);
+
 const char *    gtk_accessible_property_get_attribute_name      (GtkAccessibleProperty property);
 const char *    gtk_accessible_relation_get_attribute_name      (GtkAccessibleRelation relation);
 const char *    gtk_accessible_state_get_attribute_name         (GtkAccessibleState    state);
