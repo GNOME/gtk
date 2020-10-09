@@ -74,7 +74,7 @@ ucd_model_new (void)
   guint u;
   char *name;
 
-  bytes = g_resources_lookup_data ("/listview_ucd/ucdnames.data", 0, NULL);
+  bytes = g_resources_lookup_data ("/listview_ucd_data/ucdnames.data", 0, NULL);
   v = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(us)"), bytes, TRUE));
 
   iter = g_variant_iter_new (v);
