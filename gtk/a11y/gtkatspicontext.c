@@ -473,7 +473,7 @@ get_bus_address (GdkDisplay *display)
   bus_address = g_getenv ("AT_SPI_BUS_ADDRESS");
   if (bus_address != NULL && *bus_address != '\0')
     {
-      GTK_NOTE (A11Y, g_message ("Using ATSPI bus address from environment"));
+      GTK_NOTE (A11Y, g_message ("Using ATSPI bus address from environment: %s", bus_address));
       g_object_set_data_full (G_OBJECT (display), "-gtk-atspi-bus-address",
                               g_strdup (bus_address),
                               g_free);
@@ -487,6 +487,7 @@ get_bus_address (GdkDisplay *display)
         {
           char *addr = get_bus_address_dbus (display);
 
+          GTK_NOTE (A11Y, g_message ("Using ATSPI bus address from D-Bus: %s", addr));
           g_object_set_data_full (G_OBJECT (display), "-gtk-atspi-bus-address",
                                   addr,
                                   g_free);
@@ -503,7 +504,14 @@ get_bus_address (GdkDisplay *display)
           char *addr = get_bus_address_dbus (display);
 
           if (addr == NULL)
-            addr = get_bus_address_x11 (display);
+            {
+              addr = get_bus_address_x11 (display);
+              GTK_NOTE (A11Y, g_message ("Using ATSPI bus address from X11: %s", addr));
+            }
+          else
+            {
+              GTK_NOTE (A11Y, g_message ("Using ATSPI bus address from D-Bus: %s", addr));
+            }
 
           g_object_set_data_full (G_OBJECT (display), "-gtk-atspi-bus-address",
                                   addr,
