@@ -32,8 +32,11 @@
 
 #include <gio/gio.h>
 
-#define ATSPI_VERSION   "2.1"
-#define ATSPI_ROOT_PATH "/org/a11y/atspi/accessible/root"
+#define ATSPI_VERSION           "2.1"
+
+#define ATSPI_PATH_PREFIX       "/org/a11y/atspi"
+#define ATSPI_ROOT_PATH         ATSPI_PATH_PREFIX "/accessible/root"
+#define ATSPI_CACHE_PATH        ATSPI_PATH_PREFIX "/cache"
 
 struct _GtkAtSpiRoot
 {
@@ -52,6 +55,8 @@ struct _GtkAtSpiRoot
   char *desktop_path;
 
   gint32 application_id;
+
+  GtkAtSpiCache *cache;
 };
 
 enum
@@ -82,6 +87,7 @@ gtk_at_spi_root_dispose (GObject *gobject)
 {
   GtkAtSpiRoot *self = GTK_AT_SPI_ROOT (gobject);
 
+  g_clear_object (&self->cache);
   g_clear_object (&self->connection);
 
   G_OBJECT_CLASS (gtk_at_spi_root_parent_class)->dispose (gobject);
@@ -295,6 +301,9 @@ on_registration_reply (GObject      *gobject,
                                  self->desktop_name,
                                  self->desktop_path));
     }
+
+  /* Register the cache object */
+  self->cache = gtk_at_spi_cache_new (self->connection, ATSPI_CACHE_PATH);
 }
 
 static void
@@ -324,14 +333,14 @@ gtk_at_spi_root_register (GtkAtSpiRoot *self)
 
   g_dbus_connection_register_object (self->connection,
                                      self->root_path,
-                                     atspi_application_interface_info (),
+                                     (GDBusInterfaceInfo *) &atspi_application_interface,
                                      &root_application_vtable,
                                      self,
                                      NULL,
                                      NULL);
   g_dbus_connection_register_object (self->connection,
                                      self->root_path,
-                                     atspi_accessible_interface_info (),
+                                     (GDBusInterfaceInfo *) &atspi_accessible_interface,
                                      &root_accessible_vtable,
                                      self,
                                      NULL,
@@ -429,4 +438,12 @@ gtk_at_spi_root_get_connection (GtkAtSpiRoot *self)
   g_return_val_if_fail (GTK_IS_AT_SPI_ROOT (self), NULL);
 
   return self->connection;
+}
+
+GtkAtSpiCache *
+gtk_at_spi_root_get_cache (GtkAtSpiRoot *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_SPI_ROOT (self), NULL);
+
+  return self->cache;
 }
