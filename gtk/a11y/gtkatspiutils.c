@@ -273,7 +273,7 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
       break;
     }
 
-  return GTK_ACCESSIBLE_ROLE_WIDGET;
+  return ATSPI_ROLE_FILLER;
 }
 
 GVariant *
