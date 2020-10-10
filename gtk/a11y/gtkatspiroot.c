@@ -24,6 +24,7 @@
 
 #include "gtkatspicontextprivate.h"
 #include "gtkatspiprivate.h"
+#include "gtkatspiutilsprivate.h"
 
 #include "gtkdebug.h"
 #include "gtkwindow.h"
@@ -568,15 +569,21 @@ gtk_at_spi_root_get_cache (GtkAtSpiRoot *self)
   return self->cache;
 }
 
-void
-gtk_at_spi_root_get_application (GtkAtSpiRoot *self,
-                                 const char **name,
-                                 const char **path)
+/*< private >
+ * gtk_at_spi_root_to_ref:
+ * @self: a #GtkAtSpiRoot
+ *
+ * Returns an ATSPI object reference for the #GtkAtSpiRoot node.
+ *
+ * Returns: (transfer floating): a #GVariant with the root reference
+ */
+GVariant *
+gtk_at_spi_root_to_ref (GtkAtSpiRoot *self)
 {
-  g_return_if_fail (GTK_IS_AT_SPI_ROOT (self));
+  g_return_val_if_fail (GTK_IS_AT_SPI_ROOT (self), NULL);
 
-  if (name != NULL)
-    *name = self->desktop_name;
-  if (path != NULL)
-    *path = self->desktop_path;
+  if (self->desktop_path == NULL)
+    return gtk_at_spi_null_ref ();
+
+  return g_variant_new ("(so)", self->desktop_name, self->desktop_path);
 }
