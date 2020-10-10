@@ -1798,9 +1798,14 @@ blur_texture (GskGLRenderer       *self,
   g_assert (blur_radius > 0);
 
   gsk_gl_driver_create_render_target (self->gl_driver,
-                                      texture_to_blur_width, texture_to_blur_height,
+                                      MAX (texture_to_blur_width, 1), MAX (texture_to_blur_height, 1),
                                       GL_NEAREST, GL_NEAREST,
                                       &pass1_texture_id, &pass1_render_target);
+
+  if (texture_to_blur_width <= 0 || texture_to_blur_height <= 0)
+    {
+      return pass1_texture_id;
+    }
 
   gsk_gl_driver_create_render_target (self->gl_driver,
                                       texture_to_blur_width, texture_to_blur_height,
