@@ -331,6 +331,11 @@ handle_accessible_method (GDBusConnection       *connection,
     {
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(i)", -1));
     }
+  else if (g_strcmp0 (method_name, "GetRelationSet") == 0)
+    {
+      GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a(ua(so))"));
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a(ua(so)))", &builder));
+    }
   else if (g_strcmp0 (method_name, "GetInterfaces") == 0)
     {
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("as"));
