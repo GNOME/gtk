@@ -77,6 +77,156 @@ static GParamSpec *obj_props[N_PROPS];
 
 G_DEFINE_TYPE (GtkAtSpiContext, gtk_at_spi_context, GTK_TYPE_AT_CONTEXT)
 
+enum {
+  ATSPI_STATE_INVALID,
+  ATSPI_STATE_ACTIVE,
+  ATSPI_STATE_ARMED,
+  ATSPI_STATE_BUSY,
+  ATSPI_STATE_CHECKED,
+  ATSPI_STATE_COLLAPSED,
+  ATSPI_STATE_DEFUNCT,
+  ATSPI_STATE_EDITABLE,
+  ATSPI_STATE_ENABLED,
+  ATSPI_STATE_EXPANDABLE,
+  ATSPI_STATE_EXPANDED,
+  ATSPI_STATE_FOCUSABLE,
+  ATSPI_STATE_FOCUSED,
+  ATSPI_STATE_HAS_TOOLTIP,
+  ATSPI_STATE_HORIZONTAL,
+  ATSPI_STATE_ICONIFIED,
+  ATSPI_STATE_MODAL,
+  ATSPI_STATE_MULTI_LINE,
+  ATSPI_STATE_MULTISELECTABLE,
+  ATSPI_STATE_OPAQUE,
+  ATSPI_STATE_PRESSED,
+  ATSPI_STATE_RESIZABLE,
+  ATSPI_STATE_SELECTABLE,
+  ATSPI_STATE_SELECTED,
+  ATSPI_STATE_SENSITIVE,
+  ATSPI_STATE_SHOWING,
+  ATSPI_STATE_SINGLE_LINE,
+  ATSPI_STATE_STALE,
+  ATSPI_STATE_TRANSIENT,
+  ATSPI_STATE_VERTICAL,
+  ATSPI_STATE_VISIBLE,
+  ATSPI_STATE_MANAGES_DESCENDANTS,
+  ATSPI_STATE_INDETERMINATE,
+  ATSPI_STATE_REQUIRED,
+  ATSPI_STATE_TRUNCATED,
+  ATSPI_STATE_ANIMATED,
+  ATSPI_STATE_INVALID_ENTRY,
+  ATSPI_STATE_SUPPORTS_AUTOCOMPLETION,
+  ATSPI_STATE_SELECTABLE_TEXT,
+  ATSPI_STATE_IS_DEFAULT,
+  ATSPI_STATE_VISITED,
+  ATSPI_STATE_CHECKABLE,
+  ATSPI_STATE_HAS_POPUP,
+  ATSPI_STATE_READ_ONLY,
+  ATSPI_STATE_LAST_DEFINED,
+};
+
+static void
+collect_states (GtkAtSpiContext    *self,
+                GVariantBuilder *builder)
+{
+  GtkATContext *ctx = GTK_AT_CONTEXT (self);
+  GtkAccessibleValue *value;
+  guint64 state = 0;
+
+  state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_VISIBLE);
+
+  if (gtk_at_context_has_accessible_state (ctx, GTK_ACCESSIBLE_STATE_BUSY))
+    {
+      value = gtk_at_context_get_accessible_state (ctx, GTK_ACCESSIBLE_STATE_BUSY);
+      if (gtk_boolean_accessible_value_get (value))
+        state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_BUSY);
+    }
+
+  if (gtk_at_context_has_accessible_state (ctx, GTK_ACCESSIBLE_STATE_CHECKED))
+    {
+      value = gtk_at_context_get_accessible_state (ctx, GTK_ACCESSIBLE_STATE_CHECKED);
+      switch (gtk_tristate_accessible_value_get (value))
+        {
+        case GTK_ACCESSIBLE_TRISTATE_TRUE:
+          state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_CHECKED);
+          break;
+        case GTK_ACCESSIBLE_TRISTATE_MIXED:
+          state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_INDETERMINATE);
+          break;
+        case GTK_ACCESSIBLE_TRISTATE_FALSE:
+        default:
+          break;
+        }
+    }
+
+  if (gtk_at_context_has_accessible_state (ctx, GTK_ACCESSIBLE_STATE_DISABLED))
+    {
+      value = gtk_at_context_get_accessible_state (ctx, GTK_ACCESSIBLE_STATE_DISABLED);
+      if (!gtk_boolean_accessible_value_get (value))
+        state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_SENSITIVE);
+    }
+  else
+    state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_SENSITIVE);
+
+  if (gtk_at_context_has_accessible_state (ctx, GTK_ACCESSIBLE_STATE_EXPANDED))
+    {
+      value = gtk_at_context_get_accessible_state (ctx, GTK_ACCESSIBLE_STATE_EXPANDED);
+      if (value->value_class->type == GTK_ACCESSIBLE_VALUE_TYPE_BOOLEAN)
+        {
+          state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_EXPANDABLE);
+          if (gtk_boolean_accessible_value_get (value))
+            state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_EXPANDED);
+        }
+    }
+
+  if (gtk_at_context_has_accessible_state (ctx, GTK_ACCESSIBLE_STATE_INVALID))
+    {
+      value = gtk_at_context_get_accessible_state (ctx, GTK_ACCESSIBLE_STATE_INVALID);
+      switch (gtk_invalid_accessible_value_get (value))
+        {
+        case GTK_ACCESSIBLE_INVALID_TRUE:
+        case GTK_ACCESSIBLE_INVALID_GRAMMAR:
+        case GTK_ACCESSIBLE_INVALID_SPELLING:
+          state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_INVALID);
+          break;
+        case GTK_ACCESSIBLE_INVALID_FALSE:
+        default:
+          break;
+        }
+    }
+
+  if (gtk_at_context_has_accessible_state (ctx, GTK_ACCESSIBLE_STATE_PRESSED))
+    {
+      value = gtk_at_context_get_accessible_state (ctx, GTK_ACCESSIBLE_STATE_PRESSED);
+      switch (gtk_tristate_accessible_value_get (value))
+        {
+        case GTK_ACCESSIBLE_TRISTATE_TRUE:
+          state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_PRESSED);
+          break;
+        case GTK_ACCESSIBLE_TRISTATE_MIXED:
+          state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_INDETERMINATE);
+          break;
+        case GTK_ACCESSIBLE_TRISTATE_FALSE:
+        default:
+          break;
+        }
+    }
+
+  if (gtk_at_context_has_accessible_state (ctx, GTK_ACCESSIBLE_STATE_SELECTED))
+    {
+      value = gtk_at_context_get_accessible_state (ctx, GTK_ACCESSIBLE_STATE_SELECTED);
+      if (value->value_class->type == GTK_ACCESSIBLE_VALUE_TYPE_BOOLEAN)
+        {
+          state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_SELECTABLE);
+          if (gtk_boolean_accessible_value_get (value))
+            state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_SELECTED);
+        }
+    }
+
+  g_variant_builder_add (builder, "u", (guint32) (state & 0xffffffff));
+  g_variant_builder_add (builder, "u", (guint32) (state >> 32));
+}
+
 static void
 handle_accessible_method (GDBusConnection       *connection,
                           const gchar           *sender,
@@ -112,7 +262,7 @@ handle_accessible_method (GDBusConnection       *connection,
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("(au)"));
 
       g_variant_builder_open (&builder, G_VARIANT_TYPE ("au"));
-      g_variant_builder_add (&builder, "u", 0);
+      collect_states (self, &builder);
       g_variant_builder_close (&builder);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_builder_end (&builder));
