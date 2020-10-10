@@ -36,10 +36,13 @@ typedef struct _GdkMacosMonitorClass GdkMacosMonitorClass;
 #define GDK_IS_MACOS_MONITOR(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_MACOS_MONITOR))
 
 GDK_AVAILABLE_IN_ALL
-GType gdk_macos_monitor_get_type (void);
-
-void gdk_macos_monitor_get_workarea (GdkMonitor   *monitor,
-                                     GdkRectangle *geometry);
+GType gdk_macos_monitor_get_type     (void);
+GDK_AVAILABLE_IN_ALL
+void  gdk_macos_monitor_get_geometry (GdkMonitor   *self,
+                                      GdkRectangle *geometry);
+GDK_AVAILABLE_IN_ALL
+void  gdk_macos_monitor_get_workarea (GdkMonitor   *self,
+                                      GdkRectangle *geometry);
 
 G_END_DECLS
 
