@@ -762,7 +762,8 @@ gtk_at_context_get_label (GtkATContext *self)
     {
       value = gtk_accessible_attribute_set_get_value (self->relations, GTK_ACCESSIBLE_RELATION_LABELLED_BY);
 
-      GtkAccessible *rel = gtk_reference_accessible_value_get (value);
+      GList *list = gtk_reference_list_accessible_value_get (value);
+      GtkAccessible *rel = GTK_ACCESSIBLE (list->data);
       GtkATContext *rel_context = gtk_accessible_get_at_context (rel);
 
       return gtk_at_context_get_label (rel_context);
