@@ -200,6 +200,30 @@ handle_accessible_method (GDBusConnection       *connection,
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a(so))", &builder));
     }
+  else if (g_strcmp0 (method_name, "GetIndexInParent") == 0)
+    {
+      GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+      GtkWidget *widget = GTK_WIDGET (accessible);
+      GtkWidget *parent = gtk_widget_get_parent (widget);
+      GtkWidget *child;
+      int idx;
+
+      idx = 0;
+      for (child = gtk_widget_get_first_child (parent);
+           child;
+           child = gtk_widget_get_next_sibling (child))
+        {
+          if (!gtk_widget_get_visible (child))
+            continue;
+
+          if (child == widget)
+            break;
+
+          idx++;
+        }
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(i)", idx));
+    }
 }
 
 static GVariant *
