@@ -44,8 +44,8 @@
 #include "win32/gdkwin32.h"
 #endif
 
-#ifdef GDK_WINDOWING_QUARTZ
-#include "quartz/gdkquartz.h"
+#ifdef GDK_WINDOWING_MACOS
+#include "macos/gdkmacos.h"
 #endif
 
 #ifdef GDK_WINDOWING_WAYLAND
@@ -134,9 +134,9 @@ init_version (GtkInspectorGeneral *gen)
     backend = "Windows";
   else
 #endif
-#ifdef GDK_WINDOWING_QUARTZ
-  if (GDK_IS_QUARTZ_DISPLAY (gen->display))
-    backend = "Quartz";
+#ifdef GDK_WINDOWING_MACOS
+  if (GDK_IS_MACOS_DISPLAY (gen->display))
+    backend = "MacOS";
   else
 #endif
     backend = "Unknown";
@@ -565,7 +565,7 @@ populate_monitor (gpointer item,
   gtk_widget_add_css_class (GTK_WIDGET (list), "rich-list");
   gtk_list_box_set_selection_mode (list, GTK_SELECTION_NONE);
 
-  /* XXX: add monitor # here when porting to listview */ 
+  /* XXX: add monitor # here when porting to listview */
   name = g_strdup_printf ("Monitor %d", 1);
   manufacturer = gdk_monitor_get_manufacturer (monitor);
   model = gdk_monitor_get_model (monitor);

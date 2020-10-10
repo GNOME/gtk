@@ -148,6 +148,29 @@ static GActionEntry gtk_application_impl_quartz_actions[] = {
 };
 
 static void
+gtk_application_impl_quartz_set_app_menu (GtkApplicationImpl *impl,
+                                          GMenuModel         *app_menu)
+{
+  GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) impl;
+
+  /* If there are any items at all, then the first one is the app menu */
+  if (g_menu_model_get_n_items (G_MENU_MODEL (quartz->combined)))
+    g_menu_remove (quartz->combined, 0);
+
+  if (app_menu)
+    g_menu_prepend_submenu (quartz->combined, "Application", app_menu);
+  else
+    {
+      GMenu *empty;
+
+      /* We must preserve the rule that index 0 is the app menu */
+      empty = g_menu_new ();
+      g_menu_prepend_submenu (quartz->combined, "Application", G_MENU_MODEL (empty));
+      g_object_unref (empty);
+    }
+}
+
+static void
 gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
                                      gboolean            register_session)
 {
@@ -165,7 +188,7 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
       [NSApp setDelegate: quartz->delegate];
     }
 
-  quartz->muxer = gtk_action_muxer_new ();
+  quartz->muxer = gtk_action_muxer_new (NULL);
   gtk_action_muxer_set_parent (quartz->muxer, gtk_application_get_action_muxer (impl->application));
 
   /* Add the default accels */
@@ -182,7 +205,7 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
   g_object_unref (gtkinternal);
 
   /* now setup the menu */
-  app_menu = gtk_application_get_app_menu (impl->application);
+  app_menu = g_object_get_data (G_OBJECT (impl), "APP_MENU");
   if (app_menu == NULL)
     {
       GtkBuilder *builder;
@@ -193,11 +216,12 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
        * app menu at index 0 in 'combined'.
        */
       builder = gtk_builder_new_from_resource ("/org/gtk/libgtk/ui/gtkapplication-quartz.ui");
-      gtk_application_set_app_menu (impl->application, G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
+      app_menu = G_MENU (gtk_builder_get_object (builder, "app-menu"));
+      g_object_set_data_full (G_OBJECT (impl), "APP_DATA", g_object_ref (app_menu), g_object_unref);
       g_object_unref (builder);
     }
   else
-    gtk_application_impl_set_app_menu (impl, app_menu);
+    gtk_application_impl_quartz_set_app_menu (impl, app_menu);
 
   /* This may or may not add an item to 'combined' */
   gtk_application_impl_set_menubar (impl, gtk_application_get_menubar (impl->application));
@@ -236,29 +260,6 @@ gtk_application_impl_quartz_active_window_changed (GtkApplicationImpl *impl,
 
   if (G_IS_ACTION_GROUP (window))
     gtk_action_muxer_insert (quartz->muxer, "win", G_ACTION_GROUP (window));
-}
-
-static void
-gtk_application_impl_quartz_set_app_menu (GtkApplicationImpl *impl,
-                                          GMenuModel         *app_menu)
-{
-  GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) impl;
-
-  /* If there are any items at all, then the first one is the app menu */
-  if (g_menu_model_get_n_items (G_MENU_MODEL (quartz->combined)))
-    g_menu_remove (quartz->combined, 0);
-
-  if (app_menu)
-    g_menu_prepend_submenu (quartz->combined, "Application", app_menu);
-  else
-    {
-      GMenu *empty;
-
-      /* We must preserve the rule that index 0 is the app menu */
-      empty = g_menu_new ();
-      g_menu_prepend_submenu (quartz->combined, "Application", G_MENU_MODEL (empty));
-      g_object_unref (empty);
-    }
 }
 
 static void

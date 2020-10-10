@@ -19,12 +19,12 @@
 #include "config.h"
 
 #include "gtkquartz.h"
-#include <gdk/quartz/gdkquartz.h>
 
+#include <gdk/macos/gdkmacos.h>
 
 static gboolean
 _cairo_surface_extents (cairo_surface_t *surface,
-			GdkRectangle *extents)
+                        GdkRectangle    *extents)
 {
   double x1, x2, y1, y2;
   cairo_t *cr;
@@ -59,7 +59,9 @@ _cairo_surface_extents (cairo_surface_t *surface,
 }
 
 static void
-_data_provider_release_cairo_surface (void* info, const void* data, size_t size)
+_data_provider_release_cairo_surface (void       *info,
+                                      const void *data,
+                                      size_t      size)
 {
   cairo_surface_destroy ((cairo_surface_t *)info);
 }
@@ -119,212 +121,6 @@ _gtk_quartz_create_image_from_surface (cairo_surface_t *surface)
   CGImageRelease (image);
 
   return nsimage;
-}
-
-NSSet *
-_gtk_quartz_target_list_to_pasteboard_types (GtkTargetList *target_list)
-{
-  NSMutableSet *set = [[NSMutableSet alloc] init];
-  GList *list;
-
-  for (list = target_list->list; list; list = list->next)
-    {
-      GtkTargetPair *pair = list->data;
-      g_return_val_if_fail (pair->flags < 16, NULL);
-      [set addObject:gdk_quartz_atom_to_pasteboard_type_libgtk_only (pair->target)];
-    }
-
-  return set;
-}
-
-NSSet *
-_gtk_quartz_target_entries_to_pasteboard_types (const GtkTargetEntry *targets,
-						guint                 n_targets)
-{
-  NSMutableSet *set = [[NSMutableSet alloc] init];
-  int i;
-
-  for (i = 0; i < n_targets; i++)
-    {
-      [set addObject:gdk_quartz_target_to_pasteboard_type_libgtk_only (targets[i].target)];
-    }
-
-  return set;
-}
-
-GList *
-_gtk_quartz_pasteboard_types_to_atom_list (NSArray *array)
-{
-  GList *result = NULL;
-  int i;
-  int count;
-
-  count = [array count];
-
-  for (i = 0; i < count; i++) 
-    {
-      GdkAtom atom = gdk_quartz_pasteboard_type_to_atom_libgtk_only ([array objectAtIndex:i]);
-
-      result = g_list_prepend (result, GDK_ATOM_TO_POINTER (atom));
-    }
-
-  return result;
-}
-
-GtkSelectionData *
-_gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
-						GdkAtom       target,
-						GdkAtom       selection)
-{
-  GtkSelectionData *selection_data = NULL;
-
-  selection_data = g_slice_new0 (GtkSelectionData);
-  selection_data->selection = selection;
-  selection_data->target = target;
-  if (!selection_data->display)
-    selection_data->display = gdk_display_get_default ();
-  if (target == g_intern_static_string ("UTF8_STRING"))
-    {
-      NSString *s = [pasteboard stringForType:NSStringPboardType];
-
-      if (s)
-	{
-          const char *utf8_string = [s UTF8String];
-
-          gtk_selection_data_set (selection_data,
-                                  target, 8,
-                                  (guchar *)utf8_string, strlen (utf8_string));
-	}
-    }
-  else if (target == g_intern_static_string ("application/x-color"))
-    {
-      NSColor *nscolor = [[NSColor colorFromPasteboard:pasteboard]
-                          colorUsingColorSpaceName:NSDeviceRGBColorSpace];
-      
-      guint16 color[4];
-      
-      selection_data->target = target;
-
-      color[0] = 0xffff * [nscolor redComponent];
-      color[1] = 0xffff * [nscolor greenComponent];
-      color[2] = 0xffff * [nscolor blueComponent];
-      color[3] = 0xffff * [nscolor alphaComponent];
-
-      gtk_selection_data_set (selection_data, target, 16, (guchar *)color, 8);
-    }
-  else if (target == g_intern_static_string ("text/uri-list"))
-    {
-      if ([[pasteboard types] containsObject:NSFilenamesPboardType])
-        {
-           char **uris;
-           NSArray *files = [pasteboard propertyListForType:NSFilenamesPboardType];
-           int n_files = [files count];
-           int i;
-
-           selection_data->target = g_intern_static_string ("text/uri-list");
-
-           uris = (char **) g_malloc (sizeof (char *) * (n_files + 1));
-           for (i = 0; i < n_files; ++i)
-             {
-               NSString* uriString = [files objectAtIndex:i];
-               uriString = [@"file://" stringByAppendingString:uriString];
-               uriString = [uriString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-               uris[i] = (char *) [uriString cStringUsingEncoding:NSUTF8StringEncoding];
-             }
-           uris[i] = NULL;
-
-           gtk_selection_data_set_uris (selection_data, uris);
-           g_free (uris);
-         }
-      else if ([[pasteboard types] containsObject:NSURLPboardType])
-        {
-          char *uris[2];
-          NSURL *url = [NSURL URLFromPasteboard:pasteboard];
-
-          selection_data->target = g_intern_static_string ("text/uri-list");
-
-          uris[0] = (char *) [[url description] UTF8String];
-
-          uris[1] = NULL;
-          gtk_selection_data_set_uris (selection_data, uris);
-        }
-    }
-  else
-    {
-      NSData *data;
-      const char *name;
-
-      name = (const char *)target;
-
-      if (strcmp (name, "image/tiff") == 0)
-	data = [pasteboard dataForType:NSTIFFPboardType];
-      else
-	data = [pasteboard dataForType:[NSString stringWithUTF8String:name]];
-
-      if (data)
-	{
-	  gtk_selection_data_set (selection_data,
-                                  target, 8,
-                                  [data bytes], [data length]);
-	}
-    }
-
-  return selection_data;
-}
-
-void
-_gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard     *pasteboard,
-					       GtkSelectionData *selection_data)
-{
-  NSString *type;
-  GdkDisplay *display;
-  int format;
-  const guchar *data;
-  NSUInteger length;
-
-  display = gtk_selection_data_get_display (selection_data);
-  format = gtk_selection_data_get_format (selection_data);
-  data = gtk_selection_data_get_data (selection_data);
-  length = gtk_selection_data_get_length (selection_data);
-
-  type = gdk_quartz_atom_to_pasteboard_type_libgtk_only (gtk_selection_data_get_target (selection_data));
-
-  if ([type isEqualTo:NSStringPboardType]) 
-    [pasteboard setString:[NSString stringWithUTF8String:(const char *)data]
-                  forType:type];
-  else if ([type isEqualTo:NSColorPboardType])
-    {
-      guint16 *color = (guint16 *)data;
-      float red, green, blue, alpha;
-      NSColor *nscolor;
-
-      red   = (float)color[0] / 0xffff;
-      green = (float)color[1] / 0xffff;
-      blue  = (float)color[2] / 0xffff;
-      alpha = (float)color[3] / 0xffff;
-
-      nscolor = [NSColor colorWithDeviceRed:red green:green blue:blue alpha:alpha];
-      [nscolor writeToPasteboard:pasteboard];
-    }
-  else if ([type isEqualTo:NSURLPboardType])
-    {
-      char **uris;
-
-      uris = gtk_selection_data_get_uris (selection_data);
-      if (uris != NULL)
-        {
-          NSURL *url;
-
-          url = [NSURL URLWithString:[NSString stringWithUTF8String:uris[0]]];
-          [url writeToPasteboard:pasteboard];
-        }
-      g_strfreev (uris);
-    }
-  else
-    [pasteboard setData:[NSData dataWithBytesNoCopy:(void *)data
-                                             length:length
-                                       freeWhenDone:NO]
-                                            forType:type];
 }
 
 #ifdef QUARTZ_RELOCATION

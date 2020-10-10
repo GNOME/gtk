@@ -19,7 +19,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
@@ -58,8 +58,8 @@
 #include "gtkimcontextime.h"
 #endif
 
-#ifdef GDK_WINDOWING_QUARTZ
-#include "quartz/gdkquartz.h"
+#ifdef GDK_WINDOWING_MACOS
+#include "macos/gdkmacos.h"
 #include "gtkimcontextquartz.h"
 #endif
 
@@ -73,10 +73,10 @@
 /**
  * _gtk_im_module_create:
  * @context_id: the context ID for the context type to create
- * 
+ *
  * Create an IM context of a type specified by the string
  * ID @context_id.
- * 
+ *
  * Returns: a newly created input context of or @context_id, or
  *     if that could not be created, a newly created GtkIMContextSimple.
  */
@@ -132,8 +132,8 @@ match_backend (GdkDisplay *display,
 #endif
 
   if (g_strcmp0 (context_id, "quartz") == 0)
-#ifdef GDK_WINDOWING_QUARTZ
-    return GDK_IS_QUARTZ_DISPLAY (display);
+#ifdef GDK_WINDOWING_MACOS
+    return GDK_IS_MACOS_DISPLAY (display);
 #else
     return FALSE;
 #endif
@@ -175,9 +175,9 @@ lookup_immodule (GdkDisplay  *display,
  * _gtk_im_module_get_default_context_id:
  * @display: The display to look up the module for
  *
- * Return the context_id of the best IM context type 
+ * Return the context_id of the best IM context type
  * for the given window.
- * 
+ *
  * Returns: the context ID (will never be %NULL)
  */
 const char *
@@ -270,7 +270,7 @@ gtk_im_modules_init (void)
 #ifdef GDK_WINDOWING_WIN32
   g_type_ensure (gtk_im_context_ime_get_type ());
 #endif
-#ifdef GDK_WINDOWING_QUARTZ
+#ifdef GDK_WINDOWING_MACOS
   g_type_ensure (gtk_im_context_quartz_get_type ());
 #endif
 

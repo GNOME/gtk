@@ -22,7 +22,7 @@
 
 G_BEGIN_DECLS
 
-GType         gtk_im_context_quartz_get_type (void) G_GNUC_CONST;
+GType gtk_im_context_quartz_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
