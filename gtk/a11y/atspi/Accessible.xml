@@ -63,5 +63,9 @@
     <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiObjectReference"/>
   </method>
 
+  <method name="GetInterfaces">
+    <arg direction="out" type="as"/>
+  </method>
+
 </interface>
 </node>

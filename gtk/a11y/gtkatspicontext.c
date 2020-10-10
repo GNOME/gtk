@@ -28,6 +28,7 @@
 #include "gtkatspiutilsprivate.h"
 
 #include "a11y/atspi/atspi-accessible.h"
+#include "a11y/atspi/atspi-text.h"
 
 #include "gtkdebug.h"
 #include "gtkwindow.h"
@@ -371,6 +372,15 @@ handle_accessible_method (GDBusConnection       *connection,
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(i)", idx));
     }
+  else if (g_strcmp0 (method_name, "GetInterfaces") == 0)
+    {
+      GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+      GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("as"));
+
+      g_variant_builder_add (&builder, "s", "org.a11y.atspi.Accessible");
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(as)", &builder));
+    }
+
 }
 
 static GVariant *
