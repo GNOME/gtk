@@ -36,9 +36,11 @@
 #include "gtkstylecontext.h"
 #include "gtkheaderbar.h"
 #include "gtklabel.h"
+#include "gtknative.h"
 #include "gtkfilefilterprivate.h"
 
-#include "quartz/gdkquartz.h"
+#include "macos/gdkmacos.h"
+#include "macos/gdkmacossurface-private.h"
 
 typedef struct {
   GtkFileChooserNative *self;
@@ -180,7 +182,7 @@ chooser_set_current_name (FileChooserQuartzData *data,
 static void
 filechooser_quartz_data_free (FileChooserQuartzData *data)
 {
-  
+
   if (data->filters)
     {
       [data->filters release];
@@ -190,7 +192,7 @@ filechooser_quartz_data_free (FileChooserQuartzData *data)
     {
       [data->filter_names release];
     }
-  
+
   g_clear_object (&data->current_folder);
   g_clear_object (&data->current_file);
   g_free (data->current_name);
@@ -343,7 +345,7 @@ filechooser_quartz_launch (FileChooserQuartzData *data)
     }
   data->response = GTK_RESPONSE_CANCEL;
 
-  
+
   void (^handler)(NSInteger ret) = ^(NSInteger result) {
 
     if (result == NSFileHandlingPanelOKButton)
@@ -412,7 +414,7 @@ strip_mnemonic (const char *s)
     {
       return g_strdup (s);
     }
-} 
+}
 
 static gboolean
 file_filter_to_quartz (GtkFileFilter *file_filter,
@@ -467,7 +469,7 @@ gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self)
       data->filter_names = [NSMutableArray arrayWithCapacity:n_filters];
       [data->filter_names retain];
 
-      for (i = 0; i < n; i++)
+      for (i = 0; i < n_filters; i++)
         {
           GtkFileFilter *filter = g_list_model_get_item (filters, i);
           if (!file_filter_to_quartz (filter, data->filters, data->filter_names))
@@ -492,7 +494,7 @@ gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self)
 
   data->create_folders = gtk_file_chooser_get_create_folders (GTK_FILE_CHOOSER (self));
 
-  // shortcut_folder_uris support seems difficult if not impossible 
+  // shortcut_folder_uris support seems difficult if not impossible
 
   // mnemonics are not supported on macOS, so remove the underscores
   data->accept_label = strip_mnemonic (self->accept_label);
@@ -516,7 +518,7 @@ gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self)
   if (transient_for)
     {
       gtk_widget_realize (GTK_WIDGET (transient_for));
-      data->parent = gdk_quartz_surface_get_nswindow (gtk_native_get_surface (GTK_NATIVE (transient_for)));
+      data->parent = _gdk_macos_surface_get_native (gtk_native_get_surface (GTK_NATIVE (transient_for)));
 
       if (gtk_native_dialog_get_modal (GTK_NATIVE_DIALOG (self)))
         data->modal = TRUE;

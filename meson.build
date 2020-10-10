@@ -112,7 +112,6 @@ os_unix = not os_win32
 if os_darwin
   wayland_enabled = false
 else
-  quartz_enabled = false
   macos_enabled = false
 endif
 
@@ -417,7 +416,7 @@ pc_gdk_extra_libs = []
 cairo_backends = []
 foreach backend: [ ['cairo-xlib', cairo_req, x11_enabled],
                    ['cairo-win32', cairo_req, win32_enabled],
-                   ['cairo-quartz', cairo_req, quartz_enabled],
+                   ['cairo-quartz', cairo_req, macos_enabled],
                    ['cairo', cairo_req, broadway_enabled or wayland_enabled], ]
  backend_enabled = backend.get(2)
  cairo_backend_req = backend.get(1)
@@ -590,7 +589,7 @@ if broadway_enabled
   backend_immodules += ['broadway']
 endif
 
-if quartz_enabled
+if macos_enabled
   pc_gdk_extra_libs += ['-framework Cocoa', '-framework Carbon']
   backend_immodules += ['quartz']
 endif
@@ -813,7 +812,7 @@ pkgs = [ 'gtk4.pc' ]
 
 pkg_targets = ''
 display_backends = []
-foreach backend: [ 'broadway', 'quartz', 'macos', 'wayland', 'win32', 'x11', ]
+foreach backend: [ 'broadway', 'macos', 'wayland', 'win32', 'x11', ]
   if get_variable('@0@_enabled'.format(backend))
     pkgs += ['gtk4-@0@.pc'.format(backend)]
     pkg_targets += ' ' + backend

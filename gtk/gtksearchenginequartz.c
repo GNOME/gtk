@@ -16,7 +16,7 @@
  */
 
 #include <Cocoa/Cocoa.h>
-#include <quartz/gdkquartz.h>
+#include <macos/gdkmacos.h>
 
 #include "gtksearchenginequartz.h"
 
@@ -262,7 +262,7 @@ _gtk_search_engine_quartz_init (GtkSearchEngineQuartz *engine)
 GtkSearchEngine *
 _gtk_search_engine_quartz_new (void)
 {
-#ifdef GDK_WINDOWING_QUARTZ
+#ifdef GDK_WINDOWING_MACOS
   return g_object_new (GTK_TYPE_SEARCH_ENGINE_QUARTZ, NULL);
 #else
   return NULL;

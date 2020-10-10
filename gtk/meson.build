@@ -806,21 +806,21 @@ if win32_enabled
   gtk_sources += ['gtkmountoperation-stub.c']
 endif
 
-if quartz_enabled
+if macos_enabled
   gtk_sources += files([
     'gtksearchenginequartz.c',
     'gtkmountoperation-stub.c',
     'gtkapplication-quartz.c',
     'gtkapplication-quartz-menu.c',
     'gtkfilechoosernativequartz.c',
+    'gtkimcontextquartz.c',
     'gtkquartz.c',
   ])
-  gtk_sources += ['gtkimcontextquartz.c']
 
   gtk_cargs += ['-xobjective-c']  # FIXME? maybe add_languages() instead?
 endif
 
-if not (x11_enabled or win32_enabled or quartz_enabled)
+if not (x11_enabled or win32_enabled or macos_enabled)
   gtk_sources += ['gtkmountoperation-stub.c', ]
 endif
 
@@ -1039,6 +1039,14 @@ endif
 if x11_enabled or wayland_enabled
   gtk_sources += gtk_use_wayland_or_x11_c_sources
   gtk_deps += pangoft_dep
+endif
+
+if macos_enabled
+  gtk_macos_frameworks = [
+    'AppKit',
+    'Foundation',
+  ]
+  gtk_deps += [dependency('appleframeworks', modules: gtk_macos_frameworks)]
 endif
 
 gtk_deps += cloudproviders_dep

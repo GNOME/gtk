@@ -705,7 +705,7 @@ gtk_file_chooser_native_show (GtkNativeDialog *native)
     self->mode = MODE_WIN32;
 #endif
 
-#ifdef GDK_WINDOWING_QUARTZ
+#ifdef GDK_WINDOWING_MACOS
   if (gtk_file_chooser_native_quartz_show (self))
     self->mode = MODE_QUARTZ;
 #endif
@@ -734,7 +734,7 @@ gtk_file_chooser_native_hide (GtkNativeDialog *native)
 #endif
       break;
     case MODE_QUARTZ:
-#ifdef GDK_WINDOWING_QUARTZ
+#ifdef GDK_WINDOWING_MACOS
       gtk_file_chooser_native_quartz_hide (self);
 #endif
       break;
