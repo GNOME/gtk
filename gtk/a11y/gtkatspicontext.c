@@ -32,6 +32,8 @@
 
 #include "gtkdebug.h"
 #include "gtkwindow.h"
+#include "gtklabel.h"
+#include "gtkroot.h"
 
 #include <gio/gio.h>
 
@@ -224,6 +226,57 @@ collect_relations (GtkAtSpiContext *self,
     }
 }
 
+static int
+get_index_in_parent (GtkWidget *widget)
+{
+  GtkWidget *parent = gtk_widget_get_parent (widget);
+  GtkWidget *child;
+  int idx;
+
+  idx = 0;
+  for (child = gtk_widget_get_first_child (parent);
+       child;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      if (!gtk_widget_get_visible (child))
+        continue;
+
+      if (child == widget)
+        break;
+
+      idx++;
+    }
+
+  return idx;
+}
+
+static int
+get_index_in_toplevels (GtkWidget *widget)
+{
+  GListModel *toplevels = gtk_window_get_toplevels ();
+  guint n_toplevels = g_list_model_get_n_items (toplevels);
+  GtkWidget *window;
+  int idx;
+
+  idx = 0;
+  for (guint i = 0; i < n_toplevels; i++)
+    {
+      window = g_list_model_get_item (toplevels, i);
+
+      g_object_unref (window);
+
+      if (!gtk_widget_get_visible (window))
+        continue;
+
+      if (window == widget)
+        break;
+
+      idx += 1;
+    }
+
+  return idx;
+}
+
 static void
 handle_accessible_method (GDBusConnection       *connection,
                           const gchar           *sender,
@@ -347,24 +400,12 @@ handle_accessible_method (GDBusConnection       *connection,
   else if (g_strcmp0 (method_name, "GetIndexInParent") == 0)
     {
       GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
-      GtkWidget *widget = GTK_WIDGET (accessible);
-      GtkWidget *parent = gtk_widget_get_parent (widget);
-      GtkWidget *child;
       int idx;
 
-      idx = 0;
-      for (child = gtk_widget_get_first_child (parent);
-           child;
-           child = gtk_widget_get_next_sibling (child))
-        {
-          if (!gtk_widget_get_visible (child))
-            continue;
-
-          if (child == widget)
-            break;
-
-          idx++;
-        }
+      if (GTK_IS_ROOT (accessible))
+        idx = get_index_in_toplevels (GTK_WIDGET (accessible));
+      else
+        idx = get_index_in_parent (GTK_WIDGET (accessible));
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(i)", idx));
     }
