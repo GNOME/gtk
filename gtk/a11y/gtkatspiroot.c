@@ -33,6 +33,7 @@
 
 #include <locale.h>
 
+#include <glib/gi18n-lib.h>
 #include <gio/gio.h>
 
 #define ATSPI_VERSION           "2.1"
@@ -219,7 +220,7 @@ handle_accessible_method (GDBusConnection       *connection,
   else if (g_strcmp0 (method_name, "GetRoleName") == 0)
     g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", "application"));
   else if (g_strcmp0 (method_name, "GetLocalizedRoleName") == 0)
-    g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", "application"));
+    g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", C_("accessibility", "application")));
   else if (g_strcmp0 (method_name, "GetState") == 0)
     {
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("(au)"));
