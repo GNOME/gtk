@@ -74,7 +74,17 @@
 
 G_DEFINE_TYPE (GdkMacosDisplay, gdk_macos_display, GDK_TYPE_DISPLAY)
 
+#define EVENT_MAP_MAX_SIZE 10
+
+typedef struct
+{
+  GList     link;
+  GdkEvent *gdk_event;
+  NSEvent  *nsevent;
+} GdkToNSEventMap;
+
 static GSource *event_source;
+static GQueue event_map = G_QUEUE_INIT;
 
 static GdkMacosMonitor *
 get_monitor (GdkMacosDisplay *self,
@@ -388,6 +398,28 @@ gdk_macos_display_notify_startup_complete (GdkDisplay  *display,
 }
 
 static void
+push_nsevent (GdkEvent *gdk_event,
+              NSEvent  *nsevent)
+{
+  GdkToNSEventMap *map = g_slice_new0 (GdkToNSEventMap);
+
+  map->link.data = map;
+  map->gdk_event = gdk_event_ref (gdk_event);
+  map->nsevent = g_steal_pointer (&nsevent);
+
+  g_queue_push_tail_link (&event_map, &map->link);
+
+  if (event_map.length > EVENT_MAP_MAX_SIZE)
+    {
+      map = g_queue_pop_head_link (&event_map)->data;
+
+      gdk_event_unref (map->gdk_event);
+      [map->nsevent release];
+      g_slice_free (GdkToNSEventMap, map);
+    }
+}
+
+static void
 gdk_macos_display_queue_events (GdkDisplay *display)
 {
   GdkMacosDisplay *self = (GdkMacosDisplay *)display;
@@ -400,14 +432,18 @@ gdk_macos_display_queue_events (GdkDisplay *display)
       GdkEvent *event = _gdk_macos_display_translate (self, nsevent);
 
       if (event != NULL)
-        _gdk_windowing_got_event (GDK_DISPLAY (self),
-                                  _gdk_event_queue_append (GDK_DISPLAY (self), event),
-                                  event,
-                                  0);
+        {
+          push_nsevent (event, nsevent);
+          _gdk_windowing_got_event (GDK_DISPLAY (self),
+                                    _gdk_event_queue_append (GDK_DISPLAY (self), event),
+                                    event,
+                                    0);
+        }
       else
-        [NSApp sendEvent:nsevent];
-
-      [nsevent release];
+        {
+          [NSApp sendEvent:nsevent];
+          [nsevent release];
+        }
     }
 }
 
@@ -1068,4 +1104,18 @@ _gdk_macos_display_warp_pointer (GdkMacosDisplay *self,
   _gdk_macos_display_to_display_coords (self, x, y, &x, &y);
 
   CGWarpMouseCursorPosition ((CGPoint) { x, y });
+}
+
+NSEvent *
+_gdk_macos_display_get_nsevent (GdkEvent *event)
+{
+  for (const GList *iter = event_map.head; iter; iter = iter->next)
+    {
+      const GdkToNSEventMap *map = iter->data;
+
+      if (map->gdk_event == event)
+        return map->nsevent;
+    }
+
+  return NULL;
 }
