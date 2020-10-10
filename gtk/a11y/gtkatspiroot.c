@@ -346,9 +346,9 @@ handle_accessible_get_property (GDBusConnection       *connection,
   GVariant *res = NULL;
 
   if (g_strcmp0 (property_name, "Name") == 0)
-    res = g_variant_new_string (g_get_prgname ());
+    res = g_variant_new_string (g_get_prgname () ? g_get_prgname () : "Unnamed");
   else if (g_strcmp0 (property_name, "Description") == 0)
-    res = g_variant_new_string (g_get_application_name ());
+    res = g_variant_new_string (g_get_application_name () ? g_get_application_name () : "No description");
   else if (g_strcmp0 (property_name, "Locale") == 0)
     res = g_variant_new_string (setlocale (LC_MESSAGES, NULL));
   else if (g_strcmp0 (property_name, "AccessibleId") == 0)
