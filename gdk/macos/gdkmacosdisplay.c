@@ -503,7 +503,7 @@ _gdk_macos_display_surface_became_key (GdkMacosDisplay *self,
 
   seat = gdk_display_get_default_seat (GDK_DISPLAY (self));
   keyboard = gdk_seat_get_keyboard (seat);
-  event = gdk_focus_event_new (GDK_SURFACE (surface), keyboard, NULL, TRUE);
+  event = gdk_focus_event_new (GDK_SURFACE (surface), keyboard, TRUE);
   _gdk_event_queue_append (GDK_DISPLAY (self), event);
 
   /* We just became the active window.  Unlike X11, Mac OS X does
@@ -529,7 +529,7 @@ _gdk_macos_display_surface_resigned_key (GdkMacosDisplay *self,
 
       seat = gdk_display_get_default_seat (GDK_DISPLAY (self));
       keyboard = gdk_seat_get_keyboard (seat);
-      event = gdk_focus_event_new (GDK_SURFACE (surface), keyboard, NULL, FALSE);
+      event = gdk_focus_event_new (GDK_SURFACE (surface), keyboard, FALSE);
       _gdk_event_queue_append (GDK_DISPLAY (self), event);
     }
 
@@ -897,7 +897,6 @@ _gdk_macos_display_break_all_grabs (GdkMacosDisplay *self,
 
           event = gdk_grab_broken_event_new (grab->surface,
                                              device,
-                                             NULL,
                                              grab->surface,
                                              TRUE);
           node = _gdk_event_queue_append (GDK_DISPLAY (self), event);

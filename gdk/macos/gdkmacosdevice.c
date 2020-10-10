@@ -28,8 +28,9 @@
 
 #include "gdkmacoscursor-private.h"
 #include "gdkmacosdevice.h"
-#include "gdkmacosdisplay-private.h"
 #include "gdkmacosdevice-private.h"
+#include "gdkmacosdisplay-private.h"
+#include "gdkmacossurface-private.h"
 
 struct _GdkMacosDevice
 {

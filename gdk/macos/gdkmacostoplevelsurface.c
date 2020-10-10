@@ -25,6 +25,7 @@
 #include "gdktoplevelprivate.h"
 
 #include "gdkmacosdisplay-private.h"
+#include "gdkmacosmonitor-private.h"
 #include "gdkmacostoplevelsurface-private.h"
 #include "gdkmacosutils-private.h"
 
@@ -95,6 +96,7 @@ static gboolean
 _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
                                      GdkToplevelLayout *layout)
 {
+  GdkSurface *surface = GDK_SURFACE (toplevel);
   GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)toplevel;
   NSWindow *nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
   GdkDisplay *display = gdk_surface_get_display (surface);
@@ -190,9 +192,10 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
           (GDK_MACOS_SURFACE (self)->shadow_left ||
            GDK_MACOS_SURFACE (self)->shadow_top))
         {
-          GdkMonitor *monitor = _gdk_macos_surface_get_best_monitor (GDK_MACOS_SURFACE (self));
           int x = GDK_SURFACE (self)->x;
           int y = GDK_SURFACE (self)->y;
+
+          monitor = _gdk_macos_surface_get_best_monitor (GDK_MACOS_SURFACE (self));
 
           if (monitor != NULL)
             {

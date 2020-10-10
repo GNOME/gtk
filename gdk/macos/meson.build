@@ -43,6 +43,7 @@ gdk_macos_frameworks = [
   'Carbon',
   'CoreVideo',
   'CoreServices',
+  'Foundation',
   'OpenGL',
   'QuartzCore',
 ]
