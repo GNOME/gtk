@@ -39,9 +39,7 @@ gtk_at_spi_root_get_connection (GtkAtSpiRoot *self);
 GtkAtSpiCache *
 gtk_at_spi_root_get_cache (GtkAtSpiRoot *self);
 
-void
-gtk_at_spi_root_get_application (GtkAtSpiRoot *self,
-                                 const char **name,
-                                 const char **path);
+GVariant *
+gtk_at_spi_root_to_ref (GtkAtSpiRoot *self);
 
 G_END_DECLS
