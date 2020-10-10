@@ -161,6 +161,7 @@ void             _gdk_macos_display_send_button_event              (GdkMacosDisp
 void             _gdk_macos_display_warp_pointer                   (GdkMacosDisplay *self,
                                                                     int              x,
                                                                     int              y);
+NSEvent         *_gdk_macos_display_get_nsevent                    (GdkEvent        *event);
 
 G_END_DECLS
 
