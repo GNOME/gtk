@@ -250,7 +250,6 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     '-Wno-c++11-extensions',
     '-Wno-missing-include-dirs',
     '-Wno-typedef-redefinition',
-    '-Wcast-align',
     '-Wduplicated-branches',
     '-Wduplicated-cond',
     '-Wformat=2',
@@ -294,6 +293,10 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     '-Werror=vla',
     '-Werror=write-strings',
   ]
+
+  if cc.get_id() == 'gcc'
+    test_cflags += ['-Wcast-align'] # This warns too much on clang
+  endif
 else
   test_cflags = []
 endif
