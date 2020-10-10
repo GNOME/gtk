@@ -1785,7 +1785,8 @@ blur_texture (GskGLRenderer       *self,
               const TextureRegion *region,
               const int            texture_to_blur_width,
               const int            texture_to_blur_height,
-              float                blur_radius)
+              float                blur_radius_x,
+              float                blur_radius_y)
 {
   int pass1_texture_id, pass1_render_target;
   int pass2_texture_id, pass2_render_target;
@@ -1795,7 +1796,8 @@ blur_texture (GskGLRenderer       *self,
   graphene_matrix_t item_proj;
   OpBlur *op;
 
-  g_assert (blur_radius > 0);
+  g_assert (blur_radius_x > 0);
+  g_assert (blur_radius_y > 0);
 
   gsk_gl_driver_create_render_target (self->gl_driver,
                                       MAX (texture_to_blur_width, 1), MAX (texture_to_blur_height, 1),
@@ -1827,7 +1829,7 @@ blur_texture (GskGLRenderer       *self,
   op = ops_begin (builder, OP_CHANGE_BLUR);
   op->size.width = texture_to_blur_width;
   op->size.height = texture_to_blur_height;
-  op->radius = blur_radius;
+  op->radius = blur_radius_x;
   op->dir[0] = 1;
   op->dir[1] = 0;
   ops_set_texture (builder, region->texture_id);
@@ -1854,7 +1856,7 @@ blur_texture (GskGLRenderer       *self,
   op = ops_begin (builder, OP_CHANGE_BLUR);
   op->size.width = texture_to_blur_width;
   op->size.height = texture_to_blur_height;
-  op->radius = blur_radius;
+  op->radius = blur_radius_y;
   op->dir[0] = 0;
   op->dir[1] = 1;
   ops_set_texture (builder, pass1_texture_id);
@@ -1898,7 +1900,8 @@ blur_node (GskGLRenderer   *self,
            TextureRegion   *out_region,
            float           *out_vertex_data[4]) /* min, max, min, max */
 {
-  const float scale = ops_get_scale (builder);
+  const float scale_x = builder->scale_x;
+  const float scale_y = builder->scale_y;
   const float blur_extra = blur_radius * 2.0; /* 2.0 = shader radius_multiplier */
   float texture_width, texture_height;
   gboolean is_offscreen;
@@ -1922,8 +1925,9 @@ blur_node (GskGLRenderer   *self,
 
   blurred_texture_id = blur_texture (self, builder,
                                      &region,
-                                     texture_width * scale, texture_height * scale,
-                                     blur_radius * scale);
+                                     texture_width * scale_x, texture_height * scale_y,
+                                     blur_radius * scale_x,
+                                     blur_radius * scale_y);
 
   init_full_texture_region (out_region, blurred_texture_id);
 
@@ -2000,7 +2004,8 @@ render_inset_shadow_node (GskGLRenderer   *self,
                           GskRenderNode   *node,
                           RenderOpBuilder *builder)
 {
-  const float scale = ops_get_scale (builder);
+  const float scale_x = builder->scale_x;
+  const float scale_y = builder->scale_y;
   const float blur_radius = gsk_inset_shadow_node_get_blur_radius (node);
   const float blur_extra = blur_radius * 2.0; /* 2.0 = shader radius_multiplier */
   const float dx = gsk_inset_shadow_node_get_dx (node);
@@ -2013,12 +2018,12 @@ render_inset_shadow_node (GskGLRenderer   *self,
 
   g_assert (blur_radius > 0);
 
-  texture_width = ceilf ((node_outline->bounds.size.width + blur_extra) * scale);
-  texture_height = ceilf ((node_outline->bounds.size.height + blur_extra) * scale);
+  texture_width = ceilf ((node_outline->bounds.size.width + blur_extra) * scale_x);
+  texture_height = ceilf ((node_outline->bounds.size.height + blur_extra) * scale_y);
 
   key.pointer = node;
   key.pointer_is_child = FALSE;
-  key.scale = scale;
+  key.scale = MAX (scale_x, scale_y); /* TODO: Use scale_x/scale_y here? */
   key.filter = GL_NEAREST;
   blurred_texture_id = gsk_gl_driver_get_texture_for_key (self->gl_driver, &key);
   if (blurred_texture_id == 0)
@@ -2048,13 +2053,13 @@ render_inset_shadow_node (GskGLRenderer   *self,
       /* Fit to our texture */
       outline_to_blur.bounds.origin.x = 0;
       outline_to_blur.bounds.origin.y = 0;
-      outline_to_blur.bounds.size.width *= scale;
-      outline_to_blur.bounds.size.height *= scale;
+      outline_to_blur.bounds.size.width *= scale_x;
+      outline_to_blur.bounds.size.height *= scale_y;
 
       for (i = 0; i < 4; i ++)
         {
-          outline_to_blur.corner[i].width *= scale;
-          outline_to_blur.corner[i].height *= scale;
+          outline_to_blur.corner[i].width *= scale_x;
+          outline_to_blur.corner[i].height *= scale_y;
         }
 
       gsk_gl_driver_create_render_target (self->gl_driver,
@@ -2076,9 +2081,9 @@ render_inset_shadow_node (GskGLRenderer   *self,
       /* Actual inset shadow outline drawing */
       ops_set_program (builder, &self->programs->inset_shadow_program);
       ops_set_inset_shadow (builder, transform_rect (self, builder, &outline_to_blur),
-                            spread * scale,
+                            spread * MAX (scale_x, scale_y),
                             gsk_inset_shadow_node_peek_color (node),
-                            dx * scale, dy * scale);
+                            dx * scale_x, dy * scale_y);
 
       ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
         { { 0,             0              }, { 0, 1 }, },
@@ -2100,7 +2105,8 @@ render_inset_shadow_node (GskGLRenderer   *self,
                                          &(TextureRegion) { texture_id, 0, 0, 1, 1 },
                                          texture_width,
                                          texture_height,
-                                         blur_radius * scale);
+                                         blur_radius * scale_x,
+                                         blur_radius * scale_y);
     }
 
   g_assert (blurred_texture_id != 0);
@@ -2109,9 +2115,9 @@ render_inset_shadow_node (GskGLRenderer   *self,
   /* Use a clip to cut away the unwanted parts outside of the original outline */
   {
     const gboolean needs_clip = !gsk_rounded_rect_is_rectilinear (node_outline);
-    const float tx1 = blur_extra / 2.0 * scale / texture_width;
+    const float tx1 = blur_extra / 2.0 * scale_x / texture_width;
     const float tx2 = 1.0 - tx1;
-    const float ty1 = blur_extra / 2.0 * scale / texture_height;
+    const float ty1 = blur_extra / 2.0 * scale_y / texture_height;
     const float ty2 = 1.0 - ty1;
 
     gsk_gl_driver_set_texture_for_key (self->gl_driver, &key, blurred_texture_id);
@@ -2164,6 +2170,8 @@ render_outset_shadow_node (GskGLRenderer   *self,
                            RenderOpBuilder *builder)
 {
   const float scale = ops_get_scale (builder);
+  const float scale_x = builder->scale_x;
+  const float scale_y = builder->scale_y;
   const GskRoundedRect *outline = gsk_outset_shadow_node_peek_outline (node);
   const GdkRGBA *color = gsk_outset_shadow_node_peek_color (node);
   const float blur_radius = gsk_outset_shadow_node_get_blur_radius (node);
@@ -2204,8 +2212,8 @@ render_outset_shadow_node (GskGLRenderer   *self,
       do_slicing = true;
     }
 
-  texture_width  = (int)ceil ((scaled_outline.bounds.size.width  + blur_extra) * scale);
-  texture_height = (int)ceil ((scaled_outline.bounds.size.height + blur_extra) * scale);
+  texture_width  = (int)ceil ((scaled_outline.bounds.size.width  + blur_extra) * scale_x);
+  texture_height = (int)ceil ((scaled_outline.bounds.size.height + blur_extra) * scale_y);
 
   scaled_outline.bounds.origin.x = extra_blur_pixels;
   scaled_outline.bounds.origin.y = extra_blur_pixels;
@@ -2214,8 +2222,8 @@ render_outset_shadow_node (GskGLRenderer   *self,
 
   for (int i = 0; i < 4; i ++)
     {
-      scaled_outline.corner[i].width *= scale;
-      scaled_outline.corner[i].height *= scale;
+      scaled_outline.corner[i].width *= scale_x;
+      scaled_outline.corner[i].height *= scale_y;
     }
 
   cached_tid = gsk_gl_shadow_cache_get_texture_id (&self->shadow_cache,
@@ -2277,7 +2285,8 @@ render_outset_shadow_node (GskGLRenderer   *self,
                                          &(TextureRegion) { texture_id, 0, 0, 1, 1 },
                                          texture_width,
                                          texture_height,
-                                         blur_radius * scale);
+                                         blur_radius * scale_x,
+                                         blur_radius * scale_y);
 
       gsk_gl_driver_mark_texture_permanent (self->gl_driver, blurred_texture_id);
       gsk_gl_shadow_cache_commit (&self->shadow_cache,
@@ -2309,9 +2318,9 @@ render_outset_shadow_node (GskGLRenderer   *self,
       ty1 = 0; ty2 = 1;
 
       x1 = min_x;
-      x2 = min_x + texture_width / scale;
+      x2 = min_x + texture_width / scale_x;
       y1 = min_y;
-      y2 = min_y + texture_height / scale;
+      y2 = min_y + texture_height / scale_y;
 
       ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
         { { x1, y1 }, { tx1, ty2 }, },
@@ -2357,9 +2366,9 @@ render_outset_shadow_node (GskGLRenderer   *self,
     if (slice_is_visible (&slices[NINE_SLICE_TOP_LEFT]))
       {
         x1 = min_x;
-        x2 = min_x + (slices[NINE_SLICE_TOP_LEFT].width / scale);
+        x2 = min_x + (slices[NINE_SLICE_TOP_LEFT].width / scale_x);
         y1 = min_y;
-        y2 = min_y + (slices[NINE_SLICE_TOP_LEFT].height / scale);
+        y2 = min_y + (slices[NINE_SLICE_TOP_LEFT].height / scale_y);
 
         tx1 = tregs[NINE_SLICE_TOP_LEFT].x;
         tx2 = tregs[NINE_SLICE_TOP_LEFT].x2;
@@ -2380,10 +2389,10 @@ render_outset_shadow_node (GskGLRenderer   *self,
     /* Top center */
     if (slice_is_visible (&slices[NINE_SLICE_TOP_CENTER]))
       {
-        x1 = min_x + (slices[NINE_SLICE_TOP_LEFT].width / scale);
-        x2 = max_x - (slices[NINE_SLICE_TOP_RIGHT].width / scale);
+        x1 = min_x + (slices[NINE_SLICE_TOP_LEFT].width / scale_x);
+        x2 = max_x - (slices[NINE_SLICE_TOP_RIGHT].width / scale_y);
         y1 = min_y;
-        y2 = min_y + (slices[NINE_SLICE_TOP_CENTER].height / scale);
+        y2 = min_y + (slices[NINE_SLICE_TOP_CENTER].height / scale_y);
 
         tx1 = tregs[NINE_SLICE_TOP_CENTER].x;
         tx2 = tregs[NINE_SLICE_TOP_CENTER].x2;
@@ -2404,10 +2413,10 @@ render_outset_shadow_node (GskGLRenderer   *self,
     /* Top right */
     if (slice_is_visible (&slices[NINE_SLICE_TOP_RIGHT]))
       {
-        x1 = max_x - (slices[NINE_SLICE_TOP_RIGHT].width / scale);
+        x1 = max_x - (slices[NINE_SLICE_TOP_RIGHT].width / scale_x);
         x2 = max_x;
         y1 = min_y;
-        y2 = min_y + (slices[NINE_SLICE_TOP_RIGHT].height / scale);
+        y2 = min_y + (slices[NINE_SLICE_TOP_RIGHT].height / scale_y);
 
         tx1 = tregs[NINE_SLICE_TOP_RIGHT].x;
         tx2 = tregs[NINE_SLICE_TOP_RIGHT].x2;
@@ -2429,9 +2438,9 @@ render_outset_shadow_node (GskGLRenderer   *self,
     /* Bottom right */
     if (slice_is_visible (&slices[NINE_SLICE_BOTTOM_RIGHT]))
       {
-        x1 = max_x - (slices[NINE_SLICE_BOTTOM_RIGHT].width / scale);
+        x1 = max_x - (slices[NINE_SLICE_BOTTOM_RIGHT].width / scale_x);
         x2 = max_x;
-        y1 = max_y - (slices[NINE_SLICE_BOTTOM_RIGHT].height / scale);
+        y1 = max_y - (slices[NINE_SLICE_BOTTOM_RIGHT].height / scale_y);
         y2 = max_y;
         tx1 = tregs[NINE_SLICE_BOTTOM_RIGHT].x;
         tx2 = tregs[NINE_SLICE_BOTTOM_RIGHT].x2;
@@ -2453,8 +2462,8 @@ render_outset_shadow_node (GskGLRenderer   *self,
     if (slice_is_visible (&slices[NINE_SLICE_BOTTOM_LEFT]))
       {
         x1 = min_x;
-        x2 = min_x + (slices[NINE_SLICE_BOTTOM_LEFT].width / scale);
-        y1 = max_y - (slices[NINE_SLICE_BOTTOM_LEFT].height / scale);
+        x2 = min_x + (slices[NINE_SLICE_BOTTOM_LEFT].width / scale_x);
+        y1 = max_y - (slices[NINE_SLICE_BOTTOM_LEFT].height / scale_y);
         y2 = max_y;
 
         tx1 = tregs[NINE_SLICE_BOTTOM_LEFT].x;
@@ -2477,9 +2486,9 @@ render_outset_shadow_node (GskGLRenderer   *self,
     if (slice_is_visible (&slices[NINE_SLICE_LEFT_CENTER]))
       {
         x1 = min_x;
-        x2 = min_x + (slices[NINE_SLICE_LEFT_CENTER].width / scale);
-        y1 = min_y + (slices[NINE_SLICE_TOP_LEFT].height / scale);
-        y2 = max_y - (slices[NINE_SLICE_BOTTOM_LEFT].height / scale);
+        x2 = min_x + (slices[NINE_SLICE_LEFT_CENTER].width / scale_x);
+        y1 = min_y + (slices[NINE_SLICE_TOP_LEFT].height / scale_x);
+        y2 = max_y - (slices[NINE_SLICE_BOTTOM_LEFT].height / scale_y);
         tx1 = tregs[NINE_SLICE_LEFT_CENTER].x;
         tx2 = tregs[NINE_SLICE_LEFT_CENTER].x2;
         ty1 = tregs[NINE_SLICE_LEFT_CENTER].y;
@@ -2499,10 +2508,10 @@ render_outset_shadow_node (GskGLRenderer   *self,
     /* Right side */
     if (slice_is_visible (&slices[NINE_SLICE_RIGHT_CENTER]))
       {
-        x1 = max_x - (slices[NINE_SLICE_RIGHT_CENTER].width / scale);
+        x1 = max_x - (slices[NINE_SLICE_RIGHT_CENTER].width / scale_x);
         x2 = max_x;
-        y1 = min_y + (slices[NINE_SLICE_TOP_RIGHT].height / scale);
-        y2 = max_y - (slices[NINE_SLICE_BOTTOM_RIGHT].height / scale);
+        y1 = min_y + (slices[NINE_SLICE_TOP_RIGHT].height / scale_y);
+        y2 = max_y - (slices[NINE_SLICE_BOTTOM_RIGHT].height / scale_y);
 
         tx1 = tregs[NINE_SLICE_RIGHT_CENTER].x;
         tx2 = tregs[NINE_SLICE_RIGHT_CENTER].x2;
@@ -2524,9 +2533,9 @@ render_outset_shadow_node (GskGLRenderer   *self,
     /* Bottom side */
     if (slice_is_visible (&slices[NINE_SLICE_BOTTOM_CENTER]))
       {
-        x1 = min_x + (slices[NINE_SLICE_BOTTOM_LEFT].width / scale);
-        x2 = max_x - (slices[NINE_SLICE_BOTTOM_RIGHT].width / scale);
-        y1 = max_y - (slices[NINE_SLICE_BOTTOM_CENTER].height / scale);
+        x1 = min_x + (slices[NINE_SLICE_BOTTOM_LEFT].width / scale_x);
+        x2 = max_x - (slices[NINE_SLICE_BOTTOM_RIGHT].width / scale_x);
+        y1 = max_y - (slices[NINE_SLICE_BOTTOM_CENTER].height / scale_y);
         y2 = max_y;
 
         tx1 = tregs[NINE_SLICE_BOTTOM_CENTER].x;
@@ -2550,10 +2559,10 @@ render_outset_shadow_node (GskGLRenderer   *self,
     /* Middle */
     if (slice_is_visible (&slices[NINE_SLICE_CENTER]))
       {
-        x1 = min_x + (slices[NINE_SLICE_LEFT_CENTER].width / scale);
-        x2 = max_x - (slices[NINE_SLICE_RIGHT_CENTER].width / scale);
-        y1 = min_y + (slices[NINE_SLICE_TOP_CENTER].height / scale);
-        y2 = max_y - (slices[NINE_SLICE_BOTTOM_CENTER].height / scale);
+        x1 = min_x + (slices[NINE_SLICE_LEFT_CENTER].width / scale_x);
+        x2 = max_x - (slices[NINE_SLICE_RIGHT_CENTER].width / scale_x);
+        y1 = min_y + (slices[NINE_SLICE_TOP_CENTER].height / scale_y);
+        y2 = max_y - (slices[NINE_SLICE_BOTTOM_CENTER].height / scale_y);
 
         tx1 = tregs[NINE_SLICE_CENTER].x;
         tx2 = tregs[NINE_SLICE_CENTER].x2;
