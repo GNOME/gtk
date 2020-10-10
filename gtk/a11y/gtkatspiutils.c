@@ -275,3 +275,9 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
 
   return GTK_ACCESSIBLE_ROLE_WIDGET;
 }
+
+GVariant *
+gtk_at_spi_null_ref (void)
+{
+  return g_variant_new ("(so)", "", "/org/a11y/atspi/null");
+}

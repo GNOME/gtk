@@ -426,7 +426,7 @@ handle_accessible_get_property (GDBusConnection       *connection,
         }
 
       if (res == NULL)
-        res = g_variant_new ("(so)", "", "/org/a11y/atspi/null");
+        res = gtk_at_spi_null_ref ();
     }
   else if (g_strcmp0 (property_name, "ChildCount") == 0)
     {

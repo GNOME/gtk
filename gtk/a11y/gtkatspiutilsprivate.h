@@ -26,4 +26,7 @@ G_BEGIN_DECLS
 AtspiRole
 gtk_accessible_role_to_atspi_role (GtkAccessibleRole role);
 
+GVariant *
+gtk_at_spi_null_ref (void);
+
 G_END_DECLS
