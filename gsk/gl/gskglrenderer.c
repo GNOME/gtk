@@ -4358,13 +4358,13 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
 
   glDeleteFramebuffers (1, &fbo_id);
 
+
   /* Render the now drawn framebuffer y-flipped so it's as GdkGLTexture expects it to be */
   {
     guint final_texture_id, final_fbo_id;
-    GskQuadVertex vertex_data[6];
-    GLuint buffer_id, vao_id;
-    float fs[16];
     graphene_matrix_t m;
+
+    ops_reset (&self->op_builder);
 
     glGenFramebuffers (1, &final_fbo_id);
     glBindFramebuffer (GL_FRAMEBUFFER, final_fbo_id);
@@ -4384,60 +4384,32 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
     glFramebufferTexture (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, final_texture_id, 0);
     g_assert_cmphex (glCheckFramebufferStatus (GL_FRAMEBUFFER), ==, GL_FRAMEBUFFER_COMPLETE);
 
-    glGenVertexArrays (1, &vao_id);
-    glBindVertexArray (vao_id);
+    ops_set_render_target (&self->op_builder, final_fbo_id);
+    ops_push_clip (&self->op_builder, &GSK_ROUNDED_RECT_INIT (0, 0, width, height));
+    ops_set_program (&self->op_builder, &self->programs->blit_program);
 
-    glGenBuffers (1, &buffer_id);
-    glBindBuffer (GL_ARRAY_BUFFER, buffer_id);
-
-    fill_vertex_data (vertex_data, 0, 0, width, height);
-
-    glBufferData (GL_ARRAY_BUFFER, sizeof (vertex_data), vertex_data, GL_STATIC_DRAW);
-
-    /* 0 = position location */
-    glEnableVertexAttribArray (0);
-    glVertexAttribPointer (0, 2, GL_FLOAT, GL_FALSE,
-                           sizeof (GskQuadVertex),
-                           (void *) G_STRUCT_OFFSET (GskQuadVertex, position));
-    /* 1 = texture coord location */
-    glEnableVertexAttribArray (1);
-    glVertexAttribPointer (1, 2, GL_FLOAT, GL_FALSE,
-                           sizeof (GskQuadVertex),
-                           (void *) G_STRUCT_OFFSET (GskQuadVertex, uv));
-
-    glUseProgram (self->programs->blit_program.id);
-
-    glClearColor (0, 0, 0, 0);
-    glClear (GL_COLOR_BUFFER_BIT);
-
-    glActiveTexture (GL_TEXTURE0);
-    glBindTexture (GL_TEXTURE_2D, texture_id);
-    glUniform1i (self->programs->blit_program.source_location, 0);
-
-    graphene_matrix_init_identity (&m);
-    graphene_matrix_to_float (&m, fs);
-    glUniformMatrix4fv (self->programs->blit_program.modelview_location, 1, GL_FALSE, fs);
-
+    ops_begin (&self->op_builder, OP_CLEAR);
+    ops_set_texture (&self->op_builder, texture_id);
+    ops_set_modelview (&self->op_builder, NULL);
+    ops_set_viewport (&self->op_builder, &GRAPHENE_RECT_INIT (0, 0, width, height));
     init_projection_matrix (&m, &GRAPHENE_RECT_INIT (0, 0, width, height));
     graphene_matrix_scale (&m, 1, -1, 1); /* Undo the scale init_projection_matrix() does again */
-    graphene_matrix_to_float (&m, fs);
-    glUniformMatrix4fv (self->programs->blit_program.projection_location, 1, GL_FALSE, fs);
+    ops_set_projection (&self->op_builder, &m);
 
-    glUniform4f (self->programs->blit_program.viewport_location, 0, 0, width, height);
-    glViewport (0, 0, width, height);
+    ops_draw (&self->op_builder, (GskQuadVertex[GL_N_VERTICES]) {
+      { { 0,     0      }, { 0, 1 }, },
+      { { 0,     height }, { 0, 0 }, },
+      { { width, 0      }, { 1, 1 }, },
 
-    glUniform4fv (self->programs->blit_program.clip_rect_location, 3,
-                  (float *)&GSK_ROUNDED_RECT_INIT (0, 0, width, height));
-    glUniform1f (self->programs->blit_program.alpha_location, 1.0f);
+      { { width, height }, { 1, 0 }, },
+      { { 0,     height }, { 0, 0 }, },
+      { { width, 0      }, { 1, 1 }, },
+    });
 
-    glDrawArrays (GL_TRIANGLES, 0, 6);
+    ops_pop_clip (&self->op_builder);
+    gsk_gl_renderer_render_ops (self);
 
-    glDeleteFramebuffers (1, &final_fbo_id);
-    glDeleteVertexArrays (1, &vao_id);
-    glDeleteBuffers (1, &buffer_id);
-
-    glDeleteTextures (1, &texture_id);
-
+    ops_finish (&self->op_builder);
     texture_id = final_texture_id;
   }
 
