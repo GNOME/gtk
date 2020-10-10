@@ -604,15 +604,8 @@ fill_scroll_event (GdkMacosDisplay *self,
       double sx;
       double sy;
 
-      /*
-       * TODO: We probably need another event type for the
-       *       high precision scroll events since sx and dy
-       *       are in a unit we don't quite support. For now,
-       *       to slow it down multiply by .1.
-       */
-
-      sx = [nsevent scrollingDeltaX] * .1;
-      sy = [nsevent scrollingDeltaY] * .1;
+      sx = [nsevent scrollingDeltaX];
+      sy = [nsevent scrollingDeltaY];
 
       if (sx != 0.0 || dx != 0.0)
         ret = gdk_scroll_event_new (GDK_SURFACE (surface),
