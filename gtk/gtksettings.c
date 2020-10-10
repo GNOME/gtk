@@ -49,15 +49,15 @@
 #include "broadway/gdkbroadway.h"
 #endif
 
-#ifdef GDK_WINDOWING_QUARTZ
-#include "quartz/gdkquartz.h"
+#ifdef GDK_WINDOWING_MACOS
+#include "macos/gdkmacos.h"
 #endif
 
 #ifdef GDK_WINDOWING_WIN32
 #include "win32/gdkwin32.h"
 #endif
 
-#ifdef GDK_WINDOWING_QUARTZ
+#ifdef GDK_WINDOWING_MACOS
 #define PRINT_PREVIEW_COMMAND "open -b com.apple.Preview %f"
 #else
 #define PRINT_PREVIEW_COMMAND "evince --unlink-tempfile --preview --print-settings %s %f"
@@ -1095,10 +1095,9 @@ gtk_settings_create_for_display (GdkDisplay *display)
 {
   GtkSettings *settings;
 
-#ifdef GDK_WINDOWING_QUARTZ
-  if (GDK_IS_QUARTZ_DISPLAY (display))
+#ifdef GDK_WINDOWING_MACOS
+  if (GDK_IS_MACOS_DISPLAY (display))
     settings = g_object_new (GTK_TYPE_SETTINGS,
-                             "gtk-key-theme-name", "Mac",
                              "gtk-shell-shows-app-menu", TRUE,
                              "gtk-shell-shows-menubar", TRUE,
                              NULL);

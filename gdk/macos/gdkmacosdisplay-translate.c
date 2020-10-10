@@ -242,7 +242,6 @@ fill_button_event (GdkMacosDisplay *display,
                                GDK_SURFACE (surface),
                                gdk_seat_get_pointer (seat),
                                NULL,
-                               NULL,
                                get_time_from_ns_event (nsevent),
                                state,
                                get_mouse_button_from_ns_event (nsevent),
@@ -283,7 +282,6 @@ synthesize_crossing_event (GdkMacosDisplay *display,
   return gdk_crossing_event_new (event_type,
                                  GDK_SURFACE (surface),
                                  gdk_seat_get_pointer (seat),
-                                 NULL,
                                  get_time_from_ns_event (nsevent),
                                  state,
                                  x,
@@ -410,7 +408,6 @@ fill_key_event (GdkMacosDisplay *display,
   return gdk_key_event_new (type,
                             GDK_SURFACE (surface),
                             gdk_seat_get_keyboard (seat),
-                            NULL,
                             get_time_from_ns_event (nsevent),
                             [nsevent keyCode],
                             state,
@@ -526,7 +523,6 @@ fill_pinch_event (GdkMacosDisplay *display,
 
   return gdk_touchpad_event_new_pinch (GDK_SURFACE (surface),
                                        gdk_seat_get_pointer (seat),
-                                       NULL,
                                        get_time_from_ns_event (nsevent),
                                        get_keyboard_modifiers_from_ns_event (nsevent),
                                        phase,
@@ -570,7 +566,6 @@ fill_motion_event (GdkMacosDisplay *display,
   return gdk_motion_event_new (GDK_SURFACE (surface),
                                gdk_seat_get_pointer (seat),
                                NULL,
-                               NULL,
                                get_time_from_ns_event (nsevent),
                                state,
                                x,
@@ -609,20 +604,12 @@ fill_scroll_event (GdkMacosDisplay *self,
       double sx;
       double sy;
 
-      /*
-       * TODO: We probably need another event type for the
-       *       high precision scroll events since sx and dy
-       *       are in a unit we don't quite support. For now,
-       *       to slow it down multiply by .1.
-       */
-
-      sx = [nsevent scrollingDeltaX] * .1;
-      sy = [nsevent scrollingDeltaY] * .1;
+      sx = [nsevent scrollingDeltaX];
+      sy = [nsevent scrollingDeltaY];
 
       if (sx != 0.0 || dx != 0.0)
         ret = gdk_scroll_event_new (GDK_SURFACE (surface),
                                     pointer,
-                                    NULL,
                                     NULL,
                                     get_time_from_ns_event (nsevent),
                                     state,
@@ -661,7 +648,6 @@ fill_scroll_event (GdkMacosDisplay *self,
           emulated = gdk_scroll_event_new_discrete (GDK_SURFACE (surface),
                                                     pointer,
                                                     NULL,
-                                                    NULL,
                                                     get_time_from_ns_event (nsevent),
                                                     state,
                                                     direction,
@@ -674,7 +660,6 @@ fill_scroll_event (GdkMacosDisplay *self,
 
           ret = gdk_scroll_event_new (GDK_SURFACE (surface),
                                       pointer,
-                                      NULL,
                                       NULL,
                                       get_time_from_ns_event (nsevent),
                                       state,
@@ -1187,7 +1172,6 @@ _gdk_macos_display_synthesize_motion (GdkMacosDisplay *self,
 
   event = gdk_motion_event_new (GDK_SURFACE (surface),
                                 gdk_seat_get_pointer (seat),
-                                NULL,
                                 NULL,
                                 get_time_from_ns_event ([NSApp currentEvent]),
                                 state,

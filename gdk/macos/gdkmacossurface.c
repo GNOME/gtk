@@ -84,7 +84,7 @@ _gdk_macos_surface_reposition_children (GdkMacosSurface *self)
         _gdk_macos_popup_surface_reposition (GDK_MACOS_POPUP_SURFACE (child));
     }
 
-  if (GDK_IS_POPUP (self) || self->did_initial_present)
+  if (GDK_IS_POPUP (self))
     g_signal_emit_by_name (self, "popup-layout-changed");
 }
 
@@ -820,7 +820,6 @@ _gdk_macos_surface_synthesize_null_key (GdkMacosSurface *self)
   event = gdk_key_event_new (GDK_KEY_PRESS,
                              GDK_SURFACE (self),
                              gdk_seat_get_keyboard (seat),
-                             NULL,
                              GDK_CURRENT_TIME,
                              0,
                              0,

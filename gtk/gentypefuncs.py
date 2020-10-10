@@ -72,7 +72,7 @@ for f in funcs:
     file_output += ['*tp++ = {0}();'.format(f)]
     file_output += ['#endif']
   elif f.startswith('gdk_quartz'):
-    file_output += ['#ifdef GDK_WINDOWING_QUARTZ']
+    file_output += ['#ifdef GDK_WINDOWING_MACOS']
     file_output += ['*tp++ = {0}();'.format(f)]
     file_output += ['#endif']
   elif f.startswith('gsk_vulkan'):

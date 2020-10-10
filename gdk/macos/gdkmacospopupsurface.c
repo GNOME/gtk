@@ -25,6 +25,7 @@
 #include "gdkpopupprivate.h"
 
 #include "gdkmacosdisplay-private.h"
+#include "gdkmacosmonitor.h"
 #include "gdkmacospopupsurface-private.h"
 #include "gdkmacosutils-private.h"
 
@@ -60,7 +61,7 @@ gdk_macos_popup_surface_layout (GdkMacosPopupSurface *self,
       self->layout = gdk_popup_layout_ref (layout);
     }
 
-  monitor = gdk_surface_get_layout_monitor (surface, layout,
+  monitor = gdk_surface_get_layout_monitor (GDK_SURFACE (self), layout,
                                             gdk_macos_monitor_get_workarea);
   gdk_macos_monitor_get_workarea (monitor, &bounds);
 

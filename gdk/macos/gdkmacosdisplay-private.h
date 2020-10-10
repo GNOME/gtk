@@ -30,6 +30,19 @@
 
 G_BEGIN_DECLS
 
+/* Text Input Client */
+#define TIC_MARKED_TEXT      "tic-marked-text"
+#define TIC_SELECTED_POS     "tic-selected-pos"
+#define TIC_SELECTED_LEN     "tic-selected-len"
+#define TIC_INSERT_TEXT      "tic-insert-text"
+#define TIC_IN_KEY_DOWN      "tic-in-key-down"
+
+/* GtkIMContext */
+#define GIC_CURSOR_RECT      "gic-cursor-rect"
+#define GIC_FILTER_KEY       "gic-filter-key"
+#define GIC_FILTER_PASSTHRU  0
+#define GIC_FILTER_FILTERED  1
+
 struct _GdkMacosDisplay
 {
   GdkDisplay parent_instance;
@@ -148,6 +161,7 @@ void             _gdk_macos_display_send_button_event              (GdkMacosDisp
 void             _gdk_macos_display_warp_pointer                   (GdkMacosDisplay *self,
                                                                     int              x,
                                                                     int              y);
+NSEvent         *_gdk_macos_display_get_nsevent                    (GdkEvent        *event);
 
 G_END_DECLS
 

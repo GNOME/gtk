@@ -625,7 +625,7 @@ gtk_file_filter_get_attributes (GtkFileFilter *filter)
   return (const char **)filter->attributes;
 }
 
-#ifdef GDK_WINDOWING_QUARTZ
+#ifdef GDK_WINDOWING_MACOS
 
 #import <Foundation/Foundation.h>
 

@@ -28,6 +28,7 @@
 #import "GdkMacosWindow.h"
 
 #include "gdkmacosdisplay-private.h"
+#include "gdkmacosmonitor-private.h"
 #include "gdkmacossurface-private.h"
 #include "gdkmacospopupsurface-private.h"
 #include "gdkmacostoplevelsurface-private.h"
@@ -352,7 +353,7 @@
   monitor = _gdk_macos_display_get_monitor_at_display_coords ([self gdkDisplay],
                                                               currentLocation.x,
                                                               currentLocation.y);
-  gdk_macos_monitor_get_geometry (monitor, &geometry);
+  gdk_monitor_get_geometry (monitor, &geometry);
   gdk_macos_monitor_get_workarea (monitor, &workarea);
   _edge_snapping_set_monitor (&self->snapping, &geometry, &workarea);
 
