@@ -331,6 +331,14 @@ handle_accessible_method (GDBusConnection       *connection,
     {
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(i)", -1));
     }
+  else if (g_strcmp0 (method_name, "GetInterfaces") == 0)
+    {
+      GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("as"));
+
+      g_variant_builder_add (&builder, "s", "org.a11y.atspi.Accessible");
+      g_variant_builder_add (&builder, "s", "org.a11y.atspi.Application");
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(as)", &builder));
+    }
 }
 
 static GVariant *
