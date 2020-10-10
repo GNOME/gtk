@@ -8030,9 +8030,10 @@ gtk_file_chooser_widget_get_choice (GtkFileChooser  *chooser,
         return gtk_string_object_get_string (GTK_STRING_OBJECT (selected));
       return NULL;
     }
-
   else if (GTK_IS_CHECK_BUTTON (widget))
-    return gtk_check_button_get_active (GTK_CHECK_BUTTON (widget)) ? "true" : "false";
+    {
+      return gtk_check_button_get_active (GTK_CHECK_BUTTON (widget)) ? "true" : "false";
+    }
 
   return NULL;
 }
