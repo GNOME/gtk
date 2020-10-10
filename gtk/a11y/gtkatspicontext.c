@@ -181,6 +181,50 @@ collect_states (GtkAtSpiContext    *self,
 }
 
 static void
+collect_relations (GtkAtSpiContext *self,
+                   GVariantBuilder *builder)
+{
+  GtkATContext *ctx = GTK_AT_CONTEXT (self);
+  struct {
+    GtkAccessibleRelation r;
+    AtspiRelationType s;
+  } map[] = {
+    { GTK_ACCESSIBLE_RELATION_LABELLED_BY, ATSPI_RELATION_LABELLED_BY },
+    { GTK_ACCESSIBLE_RELATION_CONTROLS, ATSPI_RELATION_CONTROLLER_FOR },
+    { GTK_ACCESSIBLE_RELATION_DESCRIBED_BY, ATSPI_RELATION_DESCRIBED_BY },
+    { GTK_ACCESSIBLE_RELATION_FLOW_TO, ATSPI_RELATION_FLOWS_TO},
+  };
+  GtkAccessibleValue *value;
+  GList *list, *l;
+  GtkATContext *target_ctx;
+  const char *unique_name;
+  int i;
+
+  unique_name = g_dbus_connection_get_unique_name (self->connection);
+
+  for (i = 0; i < G_N_ELEMENTS (map); i++)
+    {
+      if (!gtk_at_context_has_accessible_relation (ctx, map[i].r))
+        continue;
+
+      GVariantBuilder b = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a(so)"));
+
+      value = gtk_at_context_get_accessible_relation (ctx, map[i].r);
+      list = gtk_reference_list_accessible_value_get (value);
+
+      for (l = list; l; l = l->next)
+        {
+          target_ctx = gtk_accessible_get_at_context (GTK_ACCESSIBLE (l->data));
+          g_variant_builder_add (&b, "(so)",
+                                 unique_name,
+                                 GTK_AT_SPI_CONTEXT (target_ctx)->context_path);
+        }
+
+      g_variant_builder_add (builder, "(ua(so))", map[i].s, &b);
+    }
+}
+
+static void
 handle_accessible_method (GDBusConnection       *connection,
                           const gchar           *sender,
                           const gchar           *object_path,
@@ -323,6 +367,12 @@ handle_accessible_method (GDBusConnection       *connection,
         }
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(i)", idx));
+    }
+  else if (g_strcmp0 (method_name, "GetRelationSet") == 0)
+    {
+      GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a(ua(so))"));
+       collect_relations (self, &builder);
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a(ua(so)))", &builder));
     }
   else if (g_strcmp0 (method_name, "GetInterfaces") == 0)
     {
