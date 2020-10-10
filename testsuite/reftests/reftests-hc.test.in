@@ -1,4 +1,4 @@
 [Test]
-Exec=/bin/sh -c "env GTK_THEME=HighContrast G_ENABLE_DIAGNOSTIC=0 @libexecdir@/installed-tests/gtk-4.0/gtk-reftest -k --verbose --tap --output $(pwd) --directory @libexecdir@/installed-tests/gtk-4.0/reftests"
+Exec=/bin/sh -c "env GTK_THEME=HighContrast GTK_TEST_ACCESSIBLE=1 G_ENABLE_DIAGNOSTIC=0 @libexecdir@/installed-tests/gtk-4.0/gtk-reftest -k --verbose --tap --output $(pwd) --directory @libexecdir@/installed-tests/gtk-4.0/reftests"
 Type=session-exclusive
 Output=TAP

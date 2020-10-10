@@ -99,6 +99,7 @@ installed-tests:
   needs: []
   variables:
     EXTRA_MESON_FLAGS: "--prefix=/usr --libdir=/usr/lib64 -Dinstall-tests=true"
+    G_TEST_ACCESSIBLE: 1
   script:
     - meson subprojects update
     - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}

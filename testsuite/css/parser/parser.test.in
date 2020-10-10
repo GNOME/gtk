@@ -1,4 +1,4 @@
 [Test]
-Exec=@libexecdir@/installed-tests/gtk-4.0/css/parser/test-css-parser --tap -k
+Exec=/bin/sh -c "env G_ENABLE_DIAGNOSTIC=0 GTK_TEST_ACCESSIBLE=1 @libexecdir@/installed-tests/gtk-4.0/css/parser/test-css-parser --tap -k"
 Type=session
 Output=TAP
