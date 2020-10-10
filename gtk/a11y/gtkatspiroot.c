@@ -248,6 +248,7 @@ handle_accessible_method (GDBusConnection       *connection,
 
       g_variant_builder_open (&builder, G_VARIANT_TYPE ("au"));
       g_variant_builder_add (&builder, "u", 0);
+      g_variant_builder_add (&builder, "u", 0);
       g_variant_builder_close (&builder);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_builder_end (&builder));
