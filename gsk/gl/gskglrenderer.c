@@ -1167,9 +1167,9 @@ compile_glshader (GskGLRenderer  *self,
 }
 
 gboolean
-gsk_gl_render_try_compile_gl_shader (GskGLRenderer    *self,
-                                     GskGLShader      *shader,
-                                     GError          **error)
+gsk_gl_renderer_try_compile_gl_shader (GskGLRenderer  *self,
+                                       GskGLShader    *shader,
+                                       GError        **error)
 {
   Program *program;
 
