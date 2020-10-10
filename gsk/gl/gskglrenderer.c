@@ -2897,7 +2897,6 @@ apply_program_op (const Program  *program,
 
 static inline void
 apply_render_target_op (GskGLRenderer        *self,
-                        const Program        *program,
                         const OpRenderTarget *op)
 {
   OP_PRINT (" -> Render Target: %d", op->render_target_id);
@@ -4034,7 +4033,7 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self)
           }
 
         case OP_CHANGE_RENDER_TARGET:
-          apply_render_target_op (self, program, ptr);
+          apply_render_target_op (self, ptr);
           break;
 
         case OP_CLEAR:
