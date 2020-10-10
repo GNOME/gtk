@@ -251,7 +251,7 @@ handle_accessible_method (GDBusConnection       *connection,
       g_variant_builder_close (&builder);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_builder_end (&builder));
-    }
+     }
   else if (g_strcmp0 (method_name, "GetAttributes") == 0)
     {
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("(a{ss})"));
@@ -324,6 +324,10 @@ handle_accessible_method (GDBusConnection       *connection,
         }
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a(so))", &builder));
+    }
+  else if (g_strcmp0 (method_name, "GetIndexInParent") == 0)
+    {
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(i)", -1));
     }
 }
 
