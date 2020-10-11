@@ -79,6 +79,12 @@ struct _GtkAtSpiContext
    * associated to the GtkATContext
    */
   GDBusConnection *connection;
+
+  /* Accerciser refuses to work unless we implement a GetInterface
+   * call that returns a list of all implemented interfaces. We
+   * collect the answer here.
+   */
+  GVariant *interfaces;
 };
 
 enum
@@ -429,24 +435,7 @@ handle_accessible_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetInterfaces") == 0)
     {
-      GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
-      GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("as"));
-
-      g_variant_builder_add (&builder, "s", "org.a11y.atspi.Accessible");
-      if (GTK_IS_LABEL (accessible) ||
-          GTK_IS_TEXT (accessible) ||
-          GTK_IS_TEXT_VIEW (accessible))
-        g_variant_builder_add (&builder, "s", "org.a11y.atspi.Text");
-
-      if (GTK_IS_LEVEL_BAR (accessible) ||
-          GTK_IS_PANED (accessible) ||
-          GTK_IS_PROGRESS_BAR (accessible) ||
-          GTK_IS_RANGE (accessible) ||
-          GTK_IS_SCALE_BUTTON (accessible) ||
-          GTK_IS_SPIN_BUTTON (accessible))
-        g_variant_builder_add (&builder, "s", "org.a11y.atspi.Value");
-
-      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(as)", &builder));
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(@as)", self->interfaces));
     }
 
 }
@@ -1279,7 +1268,9 @@ static void
 gtk_at_spi_context_register_object (GtkAtSpiContext *self)
 {
   GtkWidget *widget = GTK_WIDGET (gtk_at_context_get_accessible (GTK_AT_CONTEXT (self)));
+  GVariantBuilder interfaces = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE_STRING_ARRAY);
 
+  g_variant_builder_add (&interfaces, "s", "org.a11y.atspi.Accessible");
   g_dbus_connection_register_object (self->connection,
                                      self->context_path,
                                      (GDBusInterfaceInfo *) &atspi_accessible_interface,
@@ -1292,6 +1283,7 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
       GTK_IS_TEXT (widget) ||
       GTK_IS_TEXT_VIEW (widget))
     {
+      g_variant_builder_add (&interfaces, "s", "org.a11y.atspi.Text");
       g_dbus_connection_register_object (self->connection,
                                          self->context_path,
                                          (GDBusInterfaceInfo *) &atspi_text_interface,
@@ -1308,6 +1300,7 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
       GTK_IS_SCALE_BUTTON (widget) ||
       GTK_IS_SPIN_BUTTON (widget))
     {
+      g_variant_builder_add (&interfaces, "s", "org.a11y.atspi.Value");
       g_dbus_connection_register_object (self->connection,
                                          self->context_path,
                                          (GDBusInterfaceInfo *) &atspi_value_interface,
@@ -1316,6 +1309,8 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
                                          NULL,
                                          NULL);
     }
+
+  self->interfaces = g_variant_ref_sink (g_variant_builder_end (&interfaces));
 }
 
 static void
@@ -1336,6 +1331,7 @@ gtk_at_spi_context_finalize (GObject *gobject)
 
   g_free (self->bus_address);
   g_free (self->context_path);
+  g_clear_pointer (&self->interfaces, g_variant_unref);
 
   G_OBJECT_CLASS (gtk_at_spi_context_parent_class)->finalize (gobject);
 }
