@@ -27,19 +27,14 @@
 #include "gtkatspiprivate.h"
 #include "gtkatspiutilsprivate.h"
 #include "gtkatspitextprivate.h"
+#include "gtkatspivalueprivate.h"
 
 #include "a11y/atspi/atspi-accessible.h"
 #include "a11y/atspi/atspi-text.h"
 #include "a11y/atspi/atspi-value.h"
 
 #include "gtkdebug.h"
-#include "gtklevelbar.h"
-#include "gtkpaned.h"
-#include "gtkprogressbar.h"
-#include "gtkrange.h"
 #include "gtkroot.h"
-#include "gtkscalebutton.h"
-#include "gtkspinbutton.h"
 #include "gtkwindow.h"
 
 #include <gio/gio.h>
@@ -514,84 +509,6 @@ static const GDBusInterfaceVTable accessible_vtable = {
   NULL,
 };
 
-static GVariant *
-handle_value_get_property (GDBusConnection  *connection,
-                           const gchar      *sender,
-                           const gchar      *object_path,
-                           const gchar      *interface_name,
-                           const gchar      *property_name,
-                           GError          **error,
-                           gpointer          user_data)
-{
-  GtkATContext *ctx = GTK_AT_CONTEXT (user_data);
-  struct {
-    const char *name;
-    GtkAccessibleProperty property;
-  } properties[] = {
-    { "MinimumValue", GTK_ACCESSIBLE_PROPERTY_VALUE_MIN },
-    { "MaximumValue", GTK_ACCESSIBLE_PROPERTY_VALUE_MAX },
-    { "CurrentValue", GTK_ACCESSIBLE_PROPERTY_VALUE_NOW },
-  };
-  int i;
-
-  for (i = 0; i < G_N_ELEMENTS (properties); i++)
-    {
-      if (g_strcmp0 (property_name,  properties[i].name) == 0)
-        {
-          if (gtk_at_context_has_accessible_property (ctx, properties[i].property))
-            {
-              GtkAccessibleValue *value;
-
-              value = gtk_at_context_get_accessible_property (ctx, properties[i].property);
-              return g_variant_new_double (gtk_number_accessible_value_get (value));
-            }
-        }
-    }
-
-  /* fall back for a) MinimumIncrement b) widgets that should have the
-   * properties but don't
-   */
-  return g_variant_new_double (0.0);
-}
-
-static gboolean
-handle_value_set_property (GDBusConnection  *connection,
-                           const gchar      *sender,
-                           const gchar      *object_path,
-                           const gchar      *interface_name,
-                           const gchar      *property_name,
-                           GVariant         *value,
-                           GError          **error,
-                           gpointer          user_data)
-{
-  GtkAtSpiContext *self = user_data;
-  GtkWidget *widget = GTK_WIDGET (gtk_at_context_get_accessible (GTK_AT_CONTEXT (self)));
-
-  if (g_strcmp0 (property_name, "CurrentValue") == 0)
-    {
-      /* we only allow setting values if that is part of the user-exposed
-       * functionality of the widget.
-       */
-      if (GTK_IS_RANGE (widget))
-        gtk_range_set_value (GTK_RANGE (widget), g_variant_get_double (value));
-      else if (GTK_IS_PANED (widget))
-        gtk_paned_set_position (GTK_PANED (widget), (int)(g_variant_get_double (value) + 0.5));
-      else if (GTK_IS_SPIN_BUTTON (widget))
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), g_variant_get_double (value));
-      else if (GTK_IS_SCALE_BUTTON (widget))
-        gtk_scale_button_set_value (GTK_SCALE_BUTTON (widget), g_variant_get_double (value));
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static const GDBusInterfaceVTable value_vtable = {
-  NULL,
-  handle_value_get_property,
-  handle_value_set_property,
-};
-
 static void
 gtk_at_spi_context_register_object (GtkAtSpiContext *self)
 {
@@ -621,18 +538,14 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
                                          NULL);
     }
 
-  if (GTK_IS_LEVEL_BAR (widget) ||
-      GTK_IS_PANED (widget) ||
-      GTK_IS_PROGRESS_BAR (widget) ||
-      GTK_IS_RANGE (widget) ||
-      GTK_IS_SCALE_BUTTON (widget) ||
-      GTK_IS_SPIN_BUTTON (widget))
+  vtable = gtk_atspi_get_value_vtable (widget);
+  if (vtable)
     {
       g_variant_builder_add (&interfaces, "s", "org.a11y.atspi.Value");
       g_dbus_connection_register_object (self->connection,
                                          self->context_path,
                                          (GDBusInterfaceInfo *) &atspi_value_interface,
-                                         &value_vtable,
+                                         vtable,
                                          self,
                                          NULL,
                                          NULL);
