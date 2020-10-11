@@ -238,9 +238,10 @@ add_child (guint            position,
 static void
 populate_sidebar (GtkStackSidebar *self)
 {
-  guint i;
+  guint i, n;
 
-  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->pages)); i++)
+  n = g_list_model_get_n_items (G_LIST_MODEL (self->pages));
+  for (i = 0; i < n; i++)
     add_child (i, self);
 }
 
@@ -296,20 +297,6 @@ selection_changed_cb (GtkSelectionModel *model,
 }
 
 static void
-disconnect_stack_signals (GtkStackSidebar *self)
-{
-  g_signal_handlers_disconnect_by_func (self->pages, items_changed_cb, self);
-  g_signal_handlers_disconnect_by_func (self->pages, selection_changed_cb, self);
-}
-
-static void
-connect_stack_signals (GtkStackSidebar *self)
-{
-  g_signal_connect (self->pages, "items-changed", G_CALLBACK (items_changed_cb), self);
-  g_signal_connect (self->pages, "selection-changed", G_CALLBACK (selection_changed_cb), self);
-}
-
-static void
 set_stack (GtkStackSidebar *self,
            GtkStack        *stack)
 {
@@ -318,7 +305,8 @@ set_stack (GtkStackSidebar *self,
       self->stack = g_object_ref (stack);
       self->pages = gtk_stack_get_pages (stack);
       populate_sidebar (self);
-      connect_stack_signals (self);
+      g_signal_connect (self->pages, "items-changed", G_CALLBACK (items_changed_cb), self);
+      g_signal_connect (self->pages, "selection-changed", G_CALLBACK (selection_changed_cb), self);
     }
 }
 
@@ -327,7 +315,8 @@ unset_stack (GtkStackSidebar *self)
 {
   if (self->stack)
     {
-      disconnect_stack_signals (self);
+      g_signal_handlers_disconnect_by_func (self->pages, items_changed_cb, self);
+      g_signal_handlers_disconnect_by_func (self->pages, selection_changed_cb, self);
       clear_sidebar (self);
       g_clear_object (&self->stack);
       g_clear_object (&self->pages);
