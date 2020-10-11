@@ -42,7 +42,6 @@
 #include "gtksizegroup.h"
 #include "gtkroot.h"
 #include "gtkgestureclick.h"
-#include "gtkstylecontext.h"
 #include "prop-holder.h"
 #include "window.h"
 

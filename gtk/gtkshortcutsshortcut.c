@@ -29,7 +29,6 @@
 #include "gtkshortcutlabel.h"
 #include "gtkshortcutswindowprivate.h"
 #include "gtksizegroup.h"
-#include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
 
 /**

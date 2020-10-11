@@ -28,7 +28,6 @@
 #include "gtklistbox.h"
 #include "gtkscrolledwindow.h"
 #include "gtkseparator.h"
-#include "gtkstylecontext.h"
 #include "gtkselectionmodel.h"
 #include "gtkstack.h"
 #include "gtkprivate.h"

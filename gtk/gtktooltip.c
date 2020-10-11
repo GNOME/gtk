@@ -30,7 +30,6 @@
 #include "gtkmain.h"
 #include "gtksettings.h"
 #include "gtksizerequest.h"
-#include "gtkstylecontext.h"
 #include "gtktooltipwindowprivate.h"
 #include "gtkwindowprivate.h"
 #include "gtkwidgetprivate.h"

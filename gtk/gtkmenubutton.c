@@ -119,7 +119,6 @@
 #include "gtkpopover.h"
 #include "gtkpopovermenu.h"
 #include "gtkprivate.h"
-#include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
 #include "gtklabel.h"
 #include "gtkbox.h"

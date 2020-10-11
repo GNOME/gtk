@@ -26,7 +26,6 @@
 #include "gtklayoutchild.h"
 #include "gtkoverlay.h"
 #include "gtkprivate.h"
-#include "gtkstylecontext.h"
 #include "gtkwidgetprivate.h"
 
 #include <graphene-gobject.h>

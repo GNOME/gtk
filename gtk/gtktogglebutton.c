@@ -34,7 +34,6 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
-#include "gtkstylecontext.h"
 
 /**
  * SECTION:gtktogglebutton

@@ -43,7 +43,6 @@
 #include "gtksettings.h"
 #include "gtktypebuiltins.h"
 #include "gtksizegroup.h"
-#include "gtkstylecontext.h"
 
 /**
  * SECTION:gtkdialog

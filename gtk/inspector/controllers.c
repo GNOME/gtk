@@ -35,7 +35,6 @@
 #include "gtksizegroup.h"
 #include "gtksortlistmodel.h"
 #include "gtkstack.h"
-#include "gtkstylecontext.h"
 #include "gtkwidgetprivate.h"
 #include "window.h"
 

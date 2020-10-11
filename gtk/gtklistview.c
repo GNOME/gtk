@@ -28,7 +28,6 @@
 #include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gtkrbtreeprivate.h"
-#include "gtkstylecontext.h"
 #include "gtkwidgetprivate.h"
 
 /* Maximum number of list items created by the listview.

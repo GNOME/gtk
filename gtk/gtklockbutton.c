@@ -26,7 +26,6 @@
 #include "gtklabel.h"
 #include "gtksizegroup.h"
 #include "gtkstack.h"
-#include "gtkstylecontext.h"
 
 /**
  * SECTION:gtklockbutton

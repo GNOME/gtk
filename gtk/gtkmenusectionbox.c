@@ -29,7 +29,6 @@
 #include "gtkseparator.h"
 #include "gtksizegroup.h"
 #include "gtkstack.h"
-#include "gtkstylecontext.h"
 #include "gtkpopovermenuprivate.h"
 #include "gtkorientable.h"
 #include "gtkbuiltiniconprivate.h"

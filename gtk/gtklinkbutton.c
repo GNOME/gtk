@@ -68,7 +68,6 @@
 #include "gtkprivate.h"
 #include "gtkshow.h"
 #include "gtksizerequest.h"
-#include "gtkstylecontext.h"
 #include "gtktooltip.h"
 #include "gtkwidgetprivate.h"
 

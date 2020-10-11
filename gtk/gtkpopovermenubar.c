@@ -60,7 +60,6 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"
-#include "gtkstylecontext.h"
 #include "gtkgestureclick.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkactionmuxerprivate.h"

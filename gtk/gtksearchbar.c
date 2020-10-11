@@ -40,7 +40,6 @@
 #include "gtkrevealer.h"
 #include "gtksearchentryprivate.h"
 #include "gtksnapshot.h"
-#include "gtkstylecontext.h"
 #include "gtkwidgetprivate.h"
 
 /**

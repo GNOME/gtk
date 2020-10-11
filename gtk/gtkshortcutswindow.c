@@ -39,7 +39,6 @@
 #include "gtkshortcutsshortcutprivate.h"
 #include "gtksizegroup.h"
 #include "gtkstack.h"
-#include "gtkstylecontext.h"
 #include "gtktogglebutton.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"

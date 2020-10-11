@@ -24,7 +24,6 @@
 #include "gtkwidget.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
-#include "gtkstylecontext.h"
 #include "gtkrevealer.h"
 #include "gtkintl.h"
 #include "gtkspinner.h"

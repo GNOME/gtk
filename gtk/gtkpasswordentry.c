@@ -32,7 +32,6 @@
 #include "gtkmarshalers.h"
 #include "gtkpasswordentrybufferprivate.h"
 #include "gtkprivate.h"
-#include "gtkstylecontext.h"
 #include "gtkwidgetprivate.h"
 
 /**

@@ -33,7 +33,6 @@
 #include "gtkfilterlistmodel.h"
 #include "gtkstringfilter.h"
 #include "gtkmultifilter.h"
-#include "gtkstylecontext.h"
 #include "gtkwidgetprivate.h"
 #include "gtknative.h"
 #include "gtktogglebutton.h"

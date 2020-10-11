@@ -22,7 +22,6 @@
 #include "gtkbutton.h"
 #include "gtkentry.h"
 #include "gtkbox.h"
-#include "gtkstylecontext.h"
 #include "gtkorientable.h"
 #include "gtkmarshalers.h"
 

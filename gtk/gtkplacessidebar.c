@@ -61,7 +61,6 @@
 #include "gtknative.h"
 #include "gtkdragsource.h"
 #include "gtkdragicon.h"
-#include "gtkstylecontext.h"
 
 /*< private >
  * SECTION:gtkplacessidebar

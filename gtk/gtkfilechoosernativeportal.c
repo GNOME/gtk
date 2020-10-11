@@ -33,7 +33,6 @@
 #include "gtkintl.h"
 #include "gtksettings.h"
 #include "gtktogglebutton.h"
-#include "gtkstylecontext.h"
 #include "gtkheaderbar.h"
 #include "gtklabel.h"
 #include "gtkmain.h"

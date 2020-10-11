@@ -28,7 +28,6 @@
 #include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
 #include "gtkwindowprivate.h"
 

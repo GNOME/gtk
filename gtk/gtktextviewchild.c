@@ -21,7 +21,6 @@
 #include "gtkcssnodeprivate.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtkstylecontext.h"
 #include "gtktextview.h"
 #include "gtktextviewchildprivate.h"
 #include "gtktypebuiltins.h"

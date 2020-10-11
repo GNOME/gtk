@@ -56,7 +56,6 @@
 #include "gtkdialogprivate.h"
 #include "gtksearchbar.h"
 #include "gtksizegroup.h"
-#include "gtkstylecontext.h"
 
 #include <string.h>
 #include <glib/gi18n-lib.h>
