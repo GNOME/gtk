@@ -226,7 +226,6 @@ typedef struct
   guint    in_emit_close_request     : 1;
 
   GtkGesture *click_gesture;
-  GtkEventController *key_controller;
   GtkEventController *application_shortcut_controller;
 
   GdkSurface  *surface;
@@ -1512,13 +1511,13 @@ gtk_window_init (GtkWindow *window)
                             G_CALLBACK (gtk_window_capture_motion), window);
   gtk_widget_add_controller (widget, controller);
 
-  priv->key_controller = gtk_event_controller_key_new ();
-  gtk_event_controller_set_propagation_phase (priv->key_controller, GTK_PHASE_CAPTURE);
-  g_signal_connect_swapped (priv->key_controller, "key-pressed",
+  controller = gtk_event_controller_key_new ();
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+  g_signal_connect_swapped (controller, "key-pressed",
                             G_CALLBACK (gtk_window_key_pressed), window);
-  g_signal_connect_swapped (priv->key_controller, "key-released",
+  g_signal_connect_swapped (controller, "key-released",
                             G_CALLBACK (gtk_window_key_released), window);
-  gtk_widget_add_controller (widget, priv->key_controller);
+  gtk_widget_add_controller (widget, controller);
 
   controller = gtk_event_controller_legacy_new ();
   gtk_event_controller_set_name (controller, "gtk-window-toplevel-focus");
