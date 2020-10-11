@@ -36,6 +36,8 @@
 #include "gtklabel.h"
 #include "gtklabelprivate.h"
 #include "gtkroot.h"
+#include "gtkeditable.h"
+#include "gtktextprivate.h"
 
 #include <gio/gio.h>
 
@@ -423,7 +425,8 @@ handle_accessible_method (GDBusConnection       *connection,
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("as"));
 
       g_variant_builder_add (&builder, "s", "org.a11y.atspi.Accessible");
-      if (GTK_IS_LABEL (accessible))
+      if (GTK_IS_LABEL (accessible) ||
+          GTK_IS_TEXT (accessible))
         g_variant_builder_add (&builder, "s", "org.a11y.atspi.Text");
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(as)", &builder));
     }
@@ -527,19 +530,37 @@ handle_text_method (GDBusConnection       *connection,
     {
       int offset;
 
-      offset = _gtk_label_get_cursor_position (GTK_LABEL (widget));
+      if (GTK_IS_LABEL (widget))
+        offset = _gtk_label_get_cursor_position (GTK_LABEL (widget));
+      else if (GTK_IS_EDITABLE (widget))
+        offset = gtk_editable_get_position (GTK_EDITABLE (widget));
+
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(i)", offset));
     }
   else if (g_strcmp0 (method_name, "SetCaretOffset") == 0)
     {
       int offset;
+      gboolean ret;
 
       g_variant_get (parameters, "(i)", &offset);
 
-      if (gtk_label_get_selectable (GTK_LABEL (widget)))
-        gtk_label_select_region (GTK_LABEL (widget), offset, offset);
+      if (GTK_IS_LABEL (widget))
+        {
+          if (gtk_label_get_selectable (GTK_LABEL (widget)))
+            {
+              gtk_label_select_region (GTK_LABEL (widget), offset, offset);
+              ret = TRUE;
+            }
+          else
+            ret = FALSE;
+        }
+      else if (GTK_IS_EDITABLE (widget))
+        {
+          gtk_editable_set_position (GTK_EDITABLE (widget), offset);
+          ret = TRUE;
+        }
 
-      g_dbus_method_invocation_return_value (invocation, NULL);
+      g_dbus_method_invocation_return_value (invocation, g_variant_new_boolean (ret));
     }
   else if (g_strcmp0 (method_name, "GetText") == 0)
     {
@@ -550,7 +571,11 @@ handle_text_method (GDBusConnection       *connection,
 
       g_variant_get (parameters, "(ii)", &start, &end);
 
-      text = gtk_label_get_text (GTK_LABEL (widget));
+      if (GTK_IS_LABEL (widget))
+        text = gtk_label_get_text (GTK_LABEL (widget));
+      else if (GTK_IS_EDITABLE (widget))
+        text = gtk_editable_get_text (GTK_EDITABLE (widget));
+
       len = g_utf8_strlen (text, -1);
 
       start = CLAMP (start, 0, len);
@@ -571,39 +596,57 @@ handle_text_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetTextBeforeOffset") == 0)
     {
-      PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (widget));
+      PangoLayout *layout;
       int offset;
       AtspiTextBoundaryType boundary_type;
       char *string;
       int start, end;
 
       g_variant_get (parameters, "(iu)", &offset, &boundary_type);
+
+      if (GTK_IS_LABEL (widget))
+        layout = gtk_label_get_layout (GTK_LABEL (widget));
+      else if (GTK_IS_TEXT (widget))
+        layout = gtk_text_get_layout (GTK_TEXT (widget));
+
       string = gtk_pango_get_text_before (layout, offset, boundary_type, &start, &end);
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(sii)", string, start, end));
       g_free (string);
     }
   else if (g_strcmp0 (method_name, "GetTextAtOffset") == 0)
     {
-      PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (widget));
+      PangoLayout *layout;
       int offset;
       AtspiTextBoundaryType boundary_type;
       char *string;
       int start, end;
 
       g_variant_get (parameters, "(iu)", &offset, &boundary_type);
+
+      if (GTK_IS_LABEL (widget))
+        layout = gtk_label_get_layout (GTK_LABEL (widget));
+      else if (GTK_IS_TEXT (widget))
+        layout = gtk_text_get_layout (GTK_TEXT (widget));
+
       string = gtk_pango_get_text_at (layout, offset, boundary_type, &start, &end);
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(sii)", string, start, end));
       g_free (string);
     }
   else if (g_strcmp0 (method_name, "GetTextAfterOffset") == 0)
     {
-      PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (widget));
+      PangoLayout *layout;
       int offset;
       AtspiTextBoundaryType boundary_type;
       char *string;
       int start, end;
 
       g_variant_get (parameters, "(iu)", &offset, &boundary_type);
+
+      if (GTK_IS_LABEL (widget))
+        layout = gtk_label_get_layout (GTK_LABEL (widget));
+      else if (GTK_IS_TEXT (widget))
+        layout = gtk_text_get_layout (GTK_TEXT (widget));
+
       string = gtk_pango_get_text_after (layout, offset, boundary_type, &start, &end);
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(sii)", string, start, end));
       g_free (string);
@@ -616,7 +659,10 @@ handle_text_method (GDBusConnection       *connection,
 
       g_variant_get (parameters, "(i)", &offset);
 
-      text = gtk_label_get_text (GTK_LABEL (widget));
+      if (GTK_IS_LABEL (widget))
+        text = gtk_label_get_text (GTK_LABEL (widget));
+      else if (GTK_IS_EDITABLE (widget))
+        text = gtk_editable_get_text (GTK_EDITABLE (widget));
 
       if (0 <= offset && offset < g_utf8_strlen (text, -1))
         ch = g_utf8_get_char (g_utf8_offset_to_pointer (text, offset));
@@ -625,7 +671,7 @@ handle_text_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetStringAtOffset") == 0)
     {
-      PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (widget));
+      PangoLayout *layout;
       int offset;
       AtspiTextGranularity granularity;
       char *string;
@@ -633,18 +679,28 @@ handle_text_method (GDBusConnection       *connection,
 
       g_variant_get (parameters, "(iu)", &offset, &granularity);
 
+      if (GTK_IS_LABEL (widget))
+        layout = gtk_label_get_layout (GTK_LABEL (widget));
+      else if (GTK_IS_TEXT (widget))
+        layout = gtk_text_get_layout (GTK_TEXT (widget));
+
       string = gtk_pango_get_string_at (layout, offset, granularity, &start, &end);
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(sii)", string, start, end));
       g_free (string);
     }
   else if (g_strcmp0 (method_name, "GetAttributes") == 0)
     {
-      PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (widget));
+      PangoLayout *layout;
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int offset;
       int start, end;
 
       g_variant_get (parameters, "(i)", &offset);
+
+      if (GTK_IS_LABEL (widget))
+        layout = gtk_label_get_layout (GTK_LABEL (widget));
+      else if (GTK_IS_TEXT (widget))
+        layout = gtk_text_get_layout (GTK_TEXT (widget));
 
       gtk_pango_get_run_attributes (layout, &builder, offset, &start, &end);
 
@@ -652,7 +708,7 @@ handle_text_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetAttributeValue") == 0)
     {
-      PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (widget));
+      PangoLayout *layout;
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int offset;
       const char *name;
@@ -661,6 +717,12 @@ handle_text_method (GDBusConnection       *connection,
       const char *val;
 
       g_variant_get (parameters, "(i&s)", &offset, &name);
+
+      if (GTK_IS_LABEL (widget))
+        layout = gtk_label_get_layout (GTK_LABEL (widget));
+      else if (GTK_IS_TEXT (widget))
+        layout = gtk_text_get_layout (GTK_TEXT (widget));
+
       gtk_pango_get_run_attributes (layout, &builder, offset, &start, &end);
       attrs = g_variant_builder_end (&builder);
       if (!g_variant_lookup (attrs, name, "&s", &val))
@@ -671,13 +733,18 @@ handle_text_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetAttributeRun") == 0)
     {
-      PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (widget));
+      PangoLayout *layout;
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int offset;
       gboolean include_defaults;
       int start, end;
 
       g_variant_get (parameters, "(ib)", &offset, &include_defaults);
+
+      if (GTK_IS_LABEL (widget))
+        layout = gtk_label_get_layout (GTK_LABEL (widget));
+      else if (GTK_IS_TEXT (widget))
+        layout = gtk_text_get_layout (GTK_TEXT (widget));
 
       if (include_defaults)
         gtk_pango_get_default_attributes (layout, &builder);
@@ -688,8 +755,13 @@ handle_text_method (GDBusConnection       *connection,
   else if (g_strcmp0 (method_name, "GetDefaultAttributes") == 0 ||
            g_strcmp0 (method_name, "GetDefaultAttributeSet") == 0)
     {
-      PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (widget));
+      PangoLayout *layout;
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
+
+      if (GTK_IS_LABEL (widget))
+        layout = gtk_label_get_layout (GTK_LABEL (widget));
+      else if (GTK_IS_TEXT (widget))
+        layout = gtk_text_get_layout (GTK_TEXT (widget));
 
       gtk_pango_get_default_attributes (layout, &builder);
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a{ss})", &builder));
@@ -698,7 +770,10 @@ handle_text_method (GDBusConnection       *connection,
     {
       int n = 0;
 
-      if (gtk_label_get_selection_bounds (GTK_LABEL (widget), NULL, NULL))
+      if (GTK_IS_LABEL (widget) &&
+          gtk_label_get_selection_bounds (GTK_LABEL (widget), NULL, NULL))
+        n = 1;
+      else if (GTK_IS_EDITABLE (widget))
         n = 1;
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new_int32 (n));
@@ -707,11 +782,23 @@ handle_text_method (GDBusConnection       *connection,
     {
       int num;
       int start, end;
+      gboolean ret = TRUE;
 
       g_variant_get (parameters, "(i)", &num);
 
-      if (num != 0 ||
-          !gtk_label_get_selection_bounds (GTK_LABEL (widget), &start, &end))
+      if (num != 0)
+        ret = FALSE;
+      else
+        {
+          if (GTK_IS_LABEL (widget) &&
+              !gtk_label_get_selection_bounds (GTK_LABEL (widget), &start, &end))
+            ret = FALSE;
+          else if (GTK_IS_EDITABLE (widget) &&
+                   !gtk_editable_get_selection_bounds (GTK_EDITABLE (widget), &start, &end))
+            ret = FALSE;
+        }
+
+      if (!ret)
         g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS, "Not a valid selection: %d", num);
       else
         g_dbus_method_invocation_return_value (invocation, g_variant_new ("(ii)", start, end));
@@ -723,15 +810,30 @@ handle_text_method (GDBusConnection       *connection,
 
       g_variant_get (parameters, "(ii)", &start, &end);
 
-      if (!gtk_label_get_selectable (GTK_LABEL (widget)) ||
-          gtk_label_get_selection_bounds (GTK_LABEL (widget), NULL, NULL))
+      if (GTK_IS_LABEL (widget))
         {
-          ret = FALSE;
+          if (!gtk_label_get_selectable (GTK_LABEL (widget)) ||
+              gtk_label_get_selection_bounds (GTK_LABEL (widget), NULL, NULL))
+            {
+              ret = FALSE;
+            }
+          else
+            {
+              gtk_label_select_region (GTK_LABEL (widget), start, end);
+              ret = TRUE;
+            }
         }
-      else
+      else if (GTK_IS_EDITABLE (widget))
         {
-          gtk_label_select_region (GTK_LABEL (widget), start, end);
-          ret = TRUE;
+          if (gtk_editable_get_selection_bounds (GTK_EDITABLE (widget), NULL, NULL))
+            {
+              ret = FALSE;
+            }
+          else
+            {
+              gtk_editable_select_region (GTK_EDITABLE (widget), start, end);
+              ret = TRUE;
+            }
         }
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new_boolean (ret));
@@ -744,16 +846,35 @@ handle_text_method (GDBusConnection       *connection,
 
       g_variant_get (parameters, "(i)", &num);
 
-      if (num != 0 ||
-          !gtk_label_get_selectable (GTK_LABEL (widget)) ||
-          !gtk_label_get_selection_bounds (GTK_LABEL (widget), &start, &end))
-        {
-          ret = FALSE;
-        }
+      if (num != 0)
+        ret = FALSE;
       else
         {
-          gtk_label_select_region (GTK_LABEL (widget), end, end);
-          ret = TRUE;
+          if (GTK_IS_LABEL (widget))
+            {
+              if (!gtk_label_get_selectable (GTK_LABEL (widget)) ||
+                  !gtk_label_get_selection_bounds (GTK_LABEL (widget), &start, &end))
+                {
+                  ret = FALSE;
+                }
+              else
+                {
+                  gtk_label_select_region (GTK_LABEL (widget), end, end);
+                  ret = TRUE;
+                }
+            }
+          else if (GTK_IS_EDITABLE (widget))
+            {
+              if (!gtk_editable_get_selection_bounds (GTK_EDITABLE (widget), &start, &end))
+                {
+                  ret = FALSE;
+                }
+              else
+                {
+                  gtk_editable_select_region (GTK_EDITABLE (widget), end, end);
+                  ret = TRUE;
+                }
+            }
         }
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new_boolean (ret));
@@ -766,18 +887,36 @@ handle_text_method (GDBusConnection       *connection,
 
       g_variant_get (parameters, "(iii)", &num, &start, &end);
 
-      if (num != 0 ||
-          !gtk_label_get_selectable (GTK_LABEL (widget)) ||
-          !gtk_label_get_selection_bounds (GTK_LABEL (widget), NULL, NULL))
-        {
-          ret = FALSE;
-        }
+      if (num != 0)
+        ret = FALSE;
       else
         {
-          gtk_label_select_region (GTK_LABEL (widget), start, end);
-          ret = TRUE;
+          if (GTK_IS_LABEL (widget))
+            {
+              if (!gtk_label_get_selectable (GTK_LABEL (widget)) ||
+                  !gtk_label_get_selection_bounds (GTK_LABEL (widget), NULL, NULL))
+                {
+                  ret = FALSE;
+                }
+              else
+                {
+                  gtk_label_select_region (GTK_LABEL (widget), start, end);
+                  ret = TRUE;
+                }
+            }
+          else if (GTK_IS_EDITABLE (widget))
+            {
+              if (!gtk_editable_get_selection_bounds (GTK_EDITABLE (widget), NULL, NULL))
+                {
+                  ret = FALSE;
+                }
+              else
+                {
+                  gtk_editable_select_region (GTK_EDITABLE (widget), start, end);
+                  ret = TRUE;
+                }
+            }
         }
-
       g_dbus_method_invocation_return_value (invocation, g_variant_new_boolean (ret));
     }
   else if (g_strcmp0 (method_name, "GetCharacterExtents") == 0)
@@ -820,14 +959,25 @@ handle_text_get_property (GDBusConnection  *connection,
       const char *text;
       int len;
 
-      text = gtk_label_get_text (GTK_LABEL (widget));
+      if (GTK_IS_LABEL (widget))
+        text = gtk_label_get_text (GTK_LABEL (widget));
+      else if (GTK_IS_EDITABLE (widget))
+        text = gtk_editable_get_text (GTK_EDITABLE (widget));
+
       len = g_utf8_strlen (text, -1);
 
       return g_variant_new_int32 (len);
     }
   else if (g_strcmp0 (property_name, "CaretOffset") == 0)
     {
-      return g_variant_new_int32 (0);
+      int offset;
+
+      if (GTK_IS_LABEL (widget))
+        offset = _gtk_label_get_cursor_position (GTK_LABEL (widget));
+      else if (GTK_IS_EDITABLE (widget))
+        offset = gtk_editable_get_position (GTK_EDITABLE (widget));
+
+      return g_variant_new_int32 (offset);
     }
 
   return NULL;
@@ -842,6 +992,8 @@ static const GDBusInterfaceVTable text_vtable = {
 static void
 gtk_at_spi_context_register_object (GtkAtSpiContext *self)
 {
+  GtkWidget *widget = GTK_WIDGET (gtk_at_context_get_accessible (GTK_AT_CONTEXT (self)));
+
   g_dbus_connection_register_object (self->connection,
                                      self->context_path,
                                      (GDBusInterfaceInfo *) &atspi_accessible_interface,
@@ -850,7 +1002,8 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
                                      NULL,
                                      NULL);
 
-  if (GTK_IS_LABEL (gtk_at_context_get_accessible (GTK_AT_CONTEXT (self))))
+  if (GTK_IS_LABEL (widget) ||
+      GTK_IS_TEXT (widget))
     {
       g_dbus_connection_register_object (self->connection,
                                          self->context_path,
