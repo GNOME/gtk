@@ -34,14 +34,18 @@
 #include "a11y/atspi/atspi-value.h"
 
 #include "gtkdebug.h"
-#include "gtkwindow.h"
-#include "gtklabel.h"
-#include "gtklabelprivate.h"
-#include "gtkroot.h"
 #include "gtkeditable.h"
+#include "gtklabelprivate.h"
+#include "gtklevelbar.h"
+#include "gtkpaned.h"
+#include "gtkprogressbar.h"
+#include "gtkrange.h"
+#include "gtkroot.h"
+#include "gtkscalebutton.h"
+#include "gtkspinbutton.h"
 #include "gtktextprivate.h"
 #include "gtktextview.h"
-#include "gtkrange.h"
+#include "gtkwindow.h"
 
 #include <gio/gio.h>
 
@@ -433,7 +437,13 @@ handle_accessible_method (GDBusConnection       *connection,
           GTK_IS_TEXT (accessible) ||
           GTK_IS_TEXT_VIEW (accessible))
         g_variant_builder_add (&builder, "s", "org.a11y.atspi.Text");
-      if (GTK_IS_RANGE (accessible))
+
+      if (GTK_IS_LEVEL_BAR (accessible) ||
+          GTK_IS_PANED (accessible) ||
+          GTK_IS_PROGRESS_BAR (accessible) ||
+          GTK_IS_RANGE (accessible) ||
+          GTK_IS_SCALE_BUTTON (accessible) ||
+          GTK_IS_SPIN_BUTTON (accessible))
         g_variant_builder_add (&builder, "s", "org.a11y.atspi.Value");
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(as)", &builder));
@@ -1196,33 +1206,35 @@ handle_value_get_property (GDBusConnection  *connection,
                            GError          **error,
                            gpointer          user_data)
 {
-  GtkAtSpiContext *self = user_data;
-  GtkAccessibleValue *value;
+  GtkATContext *ctx = GTK_AT_CONTEXT (user_data);
+  struct {
+    const char *name;
+    GtkAccessibleProperty property;
+  } properties[] = {
+    { "MinimumValue", GTK_ACCESSIBLE_PROPERTY_VALUE_MIN },
+    { "MaximumValue", GTK_ACCESSIBLE_PROPERTY_VALUE_MAX },
+    { "CurrentValue", GTK_ACCESSIBLE_PROPERTY_VALUE_NOW },
+  };
+  int i;
 
-  if (g_strcmp0 (property_name, "MinimumValue") == 0)
+  for (i = 0; i < G_N_ELEMENTS (properties); i++)
     {
-      value = gtk_at_context_get_accessible_property (GTK_AT_CONTEXT (self),
-                                                      GTK_ACCESSIBLE_PROPERTY_VALUE_MIN);
-      return g_variant_new_double (gtk_number_accessible_value_get (value));
-    }
-  else if (g_strcmp0 (property_name, "MaximumValue") == 0)
-    {
-      value = gtk_at_context_get_accessible_property (GTK_AT_CONTEXT (self),
-                                                      GTK_ACCESSIBLE_PROPERTY_VALUE_MAX);
-      return g_variant_new_double (gtk_number_accessible_value_get (value));
-    }
-  else if (g_strcmp0 (property_name, "MinimumIncrement") == 0)
-    {
-      return g_variant_new_double (0.0);
-    }
-  else if (g_strcmp0 (property_name, "CurrentValue") == 0)
-    {
-      value = gtk_at_context_get_accessible_property (GTK_AT_CONTEXT (self),
-                                                      GTK_ACCESSIBLE_PROPERTY_VALUE_NOW);
-      return g_variant_new_double (gtk_number_accessible_value_get (value));
+      if (g_strcmp0 (property_name,  properties[i].name) == 0)
+        {
+          if (gtk_at_context_has_accessible_property (ctx, properties[i].property))
+            {
+              GtkAccessibleValue *value;
+
+              value = gtk_at_context_get_accessible_property (ctx, properties[i].property);
+              return g_variant_new_double (gtk_number_accessible_value_get (value));
+            }
+        }
     }
 
-  return NULL;
+  /* fall back for a) MinimumIncrement b) widgets that should have the
+   * properties but don't
+   */
+  return g_variant_new_double (0.0);
 }
 
 static gboolean
@@ -1240,7 +1252,17 @@ handle_value_set_property (GDBusConnection  *connection,
 
   if (g_strcmp0 (property_name, "CurrentValue") == 0)
     {
-      gtk_range_set_value (GTK_RANGE (widget), g_variant_get_double (value));
+      /* we only allow setting values if that is part of the user-exposed
+       * functionality of the widget.
+       */
+      if (GTK_IS_RANGE (widget))
+        gtk_range_set_value (GTK_RANGE (widget), g_variant_get_double (value));
+      else if (GTK_IS_PANED (widget))
+        gtk_paned_set_position (GTK_PANED (widget), (int)(g_variant_get_double (value) + 0.5));
+      else if (GTK_IS_SPIN_BUTTON (widget))
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), g_variant_get_double (value));
+      else if (GTK_IS_SCALE_BUTTON (widget))
+        gtk_scale_button_set_value (GTK_SCALE_BUTTON (widget), g_variant_get_double (value));
       return TRUE;
     }
 
@@ -1279,7 +1301,12 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
                                          NULL);
     }
 
-  if (GTK_IS_RANGE (widget))
+  if (GTK_IS_LEVEL_BAR (widget) ||
+      GTK_IS_PANED (widget) ||
+      GTK_IS_PROGRESS_BAR (widget) ||
+      GTK_IS_RANGE (widget) ||
+      GTK_IS_SCALE_BUTTON (widget) ||
+      GTK_IS_SPIN_BUTTON (widget))
     {
       g_dbus_connection_register_object (self->connection,
                                          self->context_path,
