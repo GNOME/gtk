@@ -19,7 +19,7 @@
 #include "config.h"
 #include "gtkatspipangoprivate.h"
 
-static const char *
+const char *
 pango_style_to_string (PangoStyle style)
 {
   switch (style)
@@ -35,7 +35,7 @@ pango_style_to_string (PangoStyle style)
     }
 }
 
-static const char *
+const char *
 pango_variant_to_string (PangoVariant variant)
 {
   switch (variant)
@@ -49,7 +49,7 @@ pango_variant_to_string (PangoVariant variant)
     }
 }
 
-static const char *
+const char *
 pango_stretch_to_string (PangoStretch stretch)
 {
   switch (stretch)
@@ -77,7 +77,7 @@ pango_stretch_to_string (PangoStretch stretch)
     }
 }
 
-static const char *
+const char *
 pango_underline_to_string (PangoUnderline value)
 {
   switch (value)
@@ -98,6 +98,43 @@ pango_underline_to_string (PangoUnderline value)
     default:
       g_assert_not_reached ();
     }
+}
+
+const char *
+pango_wrap_mode_to_string (PangoWrapMode mode)
+{
+  switch (mode)
+    {
+    case PANGO_WRAP_WORD:
+      return "word";
+    case PANGO_WRAP_CHAR:
+      return "char";
+    case PANGO_WRAP_WORD_CHAR:
+      return "word-char";
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+void
+gtk_pango_get_font_attributes (PangoFontDescription *font,
+                               GVariantBuilder      *builder)
+{
+  char buf[60];
+
+  g_variant_builder_add (builder, "{ss}", "style",
+                         pango_style_to_string (pango_font_description_get_style (font)));
+  g_variant_builder_add (builder, "{ss}", "variant",
+                         pango_variant_to_string (pango_font_description_get_variant (font)));
+  g_variant_builder_add (builder, "{ss}", "stretch",
+                         pango_stretch_to_string (pango_font_description_get_stretch (font)));
+  g_variant_builder_add (builder, "{ss}", "family-name",
+                         pango_font_description_get_family (font));
+
+  g_snprintf (buf, 60, "%d", pango_font_description_get_weight (font));
+  g_variant_builder_add (builder, "{ss}", "weight", buf);
+  g_snprintf (buf, 60, "%i", pango_font_description_get_size (font) / PANGO_SCALE);
+  g_variant_builder_add (builder, "{ss}", "size", buf);
 }
 
 /*
@@ -136,22 +173,7 @@ gtk_pango_get_default_attributes (PangoLayout     *layout,
 
       font = pango_context_get_font_description (context);
       if (font)
-        {
-          char buf[60];
-          g_variant_builder_add (builder, "{ss}", "style",
-                                 pango_style_to_string (pango_font_description_get_style (font)));
-          g_variant_builder_add (builder, "{ss}", "variant",
-                                 pango_variant_to_string (pango_font_description_get_variant (font)));
-          g_variant_builder_add (builder, "{ss}", "stretch",
-                                 pango_stretch_to_string (pango_font_description_get_stretch (font)));
-          g_variant_builder_add (builder, "{ss}", "family-name",
-                                 pango_font_description_get_family (font));
-
-          g_snprintf (buf, 60, "%d", pango_font_description_get_weight (font));
-          g_variant_builder_add (builder, "{ss}", "weight", buf);
-          g_snprintf (buf, 60, "%i", pango_font_description_get_size (font) / PANGO_SCALE);
-          g_variant_builder_add (builder, "{ss}", "size", buf);
-        }
+        gtk_pango_get_font_attributes (font, builder);
     }
   if (pango_layout_get_justify (layout))
     {
@@ -170,11 +192,8 @@ gtk_pango_get_default_attributes (PangoLayout     *layout,
   g_variant_builder_add (builder, "{ss}", "justification", val);
 
   mode = pango_layout_get_wrap (layout);
-  if (mode == PANGO_WRAP_WORD)
-    val = "word";
-  else
-    val = "char";
-  g_variant_builder_add (builder, "{ss}", "wrap-mode", val);
+  g_variant_builder_add (builder, "{ss}", "wrap-mode",
+                         pango_wrap_mode_to_string (mode));
 
   g_variant_builder_add (builder, "{ss}", "strikethrough", "false");
   g_variant_builder_add (builder, "{ss}", "underline", "false");
