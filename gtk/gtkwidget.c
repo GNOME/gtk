@@ -7450,7 +7450,7 @@ gtk_widget_adjust_baseline_request (GtkWidget *widget,
  * with g_free(), the elements are owned by GTK and must
  * not be freed.
  */
-GdkDevice **
+static GdkDevice **
 _gtk_widget_list_devices (GtkWidget *widget,
                           guint     *out_n_devices)
 {
