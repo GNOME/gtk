@@ -130,16 +130,6 @@ GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_margin           (GtkStyleContext *context,
                                              GtkBorder       *margin);
 
-GDK_AVAILABLE_IN_ALL
-void        gtk_render_insertion_cursor
-                                   (GtkStyleContext     *context,
-                                    cairo_t             *cr,
-                                    double               x,
-                                    double               y,
-                                    PangoLayout         *layout,
-                                    int                  index,
-                                    PangoDirection       direction);
-
 typedef enum {
   GTK_STYLE_CONTEXT_PRINT_NONE         = 0,
   GTK_STYLE_CONTEXT_PRINT_RECURSE      = 1 << 0,
