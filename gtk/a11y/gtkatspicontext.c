@@ -31,6 +31,7 @@
 
 #include "a11y/atspi/atspi-accessible.h"
 #include "a11y/atspi/atspi-text.h"
+#include "a11y/atspi/atspi-value.h"
 
 #include "gtkdebug.h"
 #include "gtkwindow.h"
@@ -40,6 +41,7 @@
 #include "gtkeditable.h"
 #include "gtktextprivate.h"
 #include "gtktextview.h"
+#include "gtkrange.h"
 
 #include <gio/gio.h>
 
@@ -431,6 +433,9 @@ handle_accessible_method (GDBusConnection       *connection,
           GTK_IS_TEXT (accessible) ||
           GTK_IS_TEXT_VIEW (accessible))
         g_variant_builder_add (&builder, "s", "org.a11y.atspi.Text");
+      if (GTK_IS_RANGE (accessible))
+        g_variant_builder_add (&builder, "s", "org.a11y.atspi.Value");
+
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(as)", &builder));
     }
 
@@ -1182,6 +1187,72 @@ static const GDBusInterfaceVTable text_vtable = {
   NULL,
 };
 
+static GVariant *
+handle_value_get_property (GDBusConnection  *connection,
+                           const gchar      *sender,
+                           const gchar      *object_path,
+                           const gchar      *interface_name,
+                           const gchar      *property_name,
+                           GError          **error,
+                           gpointer          user_data)
+{
+  GtkAtSpiContext *self = user_data;
+  GtkAccessibleValue *value;
+
+  if (g_strcmp0 (property_name, "MinimumValue") == 0)
+    {
+      value = gtk_at_context_get_accessible_property (GTK_AT_CONTEXT (self),
+                                                      GTK_ACCESSIBLE_PROPERTY_VALUE_MIN);
+      return g_variant_new_double (gtk_number_accessible_value_get (value));
+    }
+  else if (g_strcmp0 (property_name, "MaximumValue") == 0)
+    {
+      value = gtk_at_context_get_accessible_property (GTK_AT_CONTEXT (self),
+                                                      GTK_ACCESSIBLE_PROPERTY_VALUE_MAX);
+      return g_variant_new_double (gtk_number_accessible_value_get (value));
+    }
+  else if (g_strcmp0 (property_name, "MinimumIncrement") == 0)
+    {
+      return g_variant_new_double (0.0);
+    }
+  else if (g_strcmp0 (property_name, "CurrentValue") == 0)
+    {
+      value = gtk_at_context_get_accessible_property (GTK_AT_CONTEXT (self),
+                                                      GTK_ACCESSIBLE_PROPERTY_VALUE_NOW);
+      return g_variant_new_double (gtk_number_accessible_value_get (value));
+    }
+
+  return NULL;
+}
+
+static gboolean
+handle_value_set_property (GDBusConnection  *connection,
+                           const gchar      *sender,
+                           const gchar      *object_path,
+                           const gchar      *interface_name,
+                           const gchar      *property_name,
+                           GVariant         *value,
+                           GError          **error,
+                           gpointer          user_data)
+{
+  GtkAtSpiContext *self = user_data;
+  GtkWidget *widget = GTK_WIDGET (gtk_at_context_get_accessible (GTK_AT_CONTEXT (self)));
+
+  if (g_strcmp0 (property_name, "CurrentValue") == 0)
+    {
+      gtk_range_set_value (GTK_RANGE (widget), g_variant_get_double (value));
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static const GDBusInterfaceVTable value_vtable = {
+  NULL,
+  handle_value_get_property,
+  handle_value_set_property,
+};
+
 static void
 gtk_at_spi_context_register_object (GtkAtSpiContext *self)
 {
@@ -1203,6 +1274,17 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
                                          self->context_path,
                                          (GDBusInterfaceInfo *) &atspi_text_interface,
                                          &text_vtable,
+                                         self,
+                                         NULL,
+                                         NULL);
+    }
+
+  if (GTK_IS_RANGE (widget))
+    {
+      g_dbus_connection_register_object (self->connection,
+                                         self->context_path,
+                                         (GDBusInterfaceInfo *) &atspi_value_interface,
+                                         &value_vtable,
                                          self,
                                          NULL,
                                          NULL);
