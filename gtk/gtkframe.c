@@ -380,7 +380,6 @@ gtk_frame_set_label_widget (GtkFrame  *frame,
                             GtkWidget *label_widget)
 {
   GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
-  gboolean need_resize = FALSE;
 
   g_return_if_fail (GTK_IS_FRAME (frame));
   g_return_if_fail (label_widget == NULL || GTK_IS_WIDGET (label_widget));
@@ -390,10 +389,7 @@ gtk_frame_set_label_widget (GtkFrame  *frame,
     return;
 
   if (priv->label_widget)
-    {
-      need_resize = gtk_widget_get_visible (priv->label_widget);
-      gtk_widget_unparent (priv->label_widget);
-    }
+    gtk_widget_unparent (priv->label_widget);
 
   priv->label_widget = label_widget;
 
@@ -401,11 +397,7 @@ gtk_frame_set_label_widget (GtkFrame  *frame,
     {
       priv->label_widget = label_widget;
       gtk_widget_set_parent (label_widget, GTK_WIDGET (frame));
-      need_resize |= gtk_widget_get_visible (label_widget);
     }
-
-  if (gtk_widget_get_visible (GTK_WIDGET (frame)) && need_resize)
-    gtk_widget_queue_resize (GTK_WIDGET (frame));
 
   g_object_freeze_notify (G_OBJECT (frame));
   g_object_notify_by_pspec (G_OBJECT (frame), frame_props[PROP_LABEL_WIDGET]);
