@@ -21,9 +21,7 @@
 #include "gtkstylecontext.h"
 
 #include "gtkcssnodeprivate.h"
-#include "gtkicontheme.h"
 #include "gtkstyleproviderprivate.h"
-#include "gtkbitmaskprivate.h"
 #include "gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS
