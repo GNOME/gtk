@@ -8,7 +8,7 @@
         <property name="margin-start">50</property>
         <property name="margin-end">50</property>
         <property name="margin-top">50</property>
-        <property name="margin-end">50</property>
+        <property name="margin-bottom">50</property>
         <property name="spacing">10</property>
         <child>
           <object class="GtkButton">
