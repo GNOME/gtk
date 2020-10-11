@@ -15,6 +15,7 @@ if gtk_a11y_backends.contains('atspi')
     'gtkatspiutils.c',
     'gtkatspipango.c',
     'gtkatspitextbuffer.c',
-    'gtkatspitext.c'
+    'gtkatspitext.c',
+    'gtkatspivalue.c'
   ])
 endif
