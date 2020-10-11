@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3-24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-17 20:06+0000\n"
-"PO-Revision-Date: 2020-09-18 10:51+0200\n"
+"POT-Creation-Date: 2020-10-07 19:57+0000\n"
+"PO-Revision-Date: 2020-10-07 22:22+0200\n"
 "Last-Translator: Charles Monzat <charles.monzat@free.fr>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "Language: fr\n"
@@ -1950,90 +1950,313 @@ msgstr "Rouge %d%%, Vert %d%%, Bleu %d%%"
 msgid "Color: %s"
 msgstr "Couleur : %s"
 
-#: gtk/gtkcolorchooserwidget.c:446 gtk/gtkcolorchooserwidget.c:447
-#: gtk/gtkcolorchooserwidget.c:448 gtk/gtkcolorchooserwidget.c:449
-#: gtk/gtkcolorchooserwidget.c:450 gtk/gtkcolorchooserwidget.c:451
-#| msgid "_Blue:"
+#: gtk/gtkcolorchooserwidget.c:446
+#| msgctxt "Color name"
+#| msgid "Very Light Gray"
+msgctxt "Color name"
+msgid "Very Light Blue"
+msgstr "Bleu très clair"
+
+#: gtk/gtkcolorchooserwidget.c:447
+#| msgctxt "Color name"
+#| msgid "Light Sky Blue"
+msgctxt "Color name"
+msgid "Light Blue"
+msgstr "Bleu clair"
+
+#: gtk/gtkcolorchooserwidget.c:448
 msgctxt "Color name"
 msgid "Blue"
 msgstr "Bleu"
 
-#: gtk/gtkcolorchooserwidget.c:452 gtk/gtkcolorchooserwidget.c:453
-#: gtk/gtkcolorchooserwidget.c:454 gtk/gtkcolorchooserwidget.c:455
-#: gtk/gtkcolorchooserwidget.c:456 gtk/gtkcolorchooserwidget.c:457
-#| msgid "_Green:"
+#: gtk/gtkcolorchooserwidget.c:449
+#| msgctxt "Color name"
+#| msgid "Dark Sky Blue"
+msgctxt "Color name"
+msgid "Dark Blue"
+msgstr "Bleu foncé"
+
+#: gtk/gtkcolorchooserwidget.c:450
+#| msgctxt "Color name"
+#| msgid "Very Dark Gray"
+msgctxt "Color name"
+msgid "Very Dark Blue"
+msgstr "Bleu très foncé"
+
+#: gtk/gtkcolorchooserwidget.c:451
+#| msgctxt "Color name"
+#| msgid "Very Light Gray"
+msgctxt "Color name"
+msgid "Very Light Green"
+msgstr "Vert très clair"
+
+#: gtk/gtkcolorchooserwidget.c:452
+#| msgctxt "Color name"
+#| msgid "Light Gray"
+msgctxt "Color name"
+msgid "Light Green"
+msgstr "Vert clair"
+
+#: gtk/gtkcolorchooserwidget.c:453
 msgctxt "Color name"
 msgid "Green"
 msgstr "Vert"
 
-#: gtk/gtkcolorchooserwidget.c:458 gtk/gtkcolorchooserwidget.c:459
-#: gtk/gtkcolorchooserwidget.c:460 gtk/gtkcolorchooserwidget.c:461
-#: gtk/gtkcolorchooserwidget.c:462 gtk/gtkcolorchooserwidget.c:463
+#: gtk/gtkcolorchooserwidget.c:454
+#| msgctxt "Color name"
+#| msgid "Dark Gray"
+msgctxt "Color name"
+msgid "Dark Green"
+msgstr "Vert foncé"
+
+#: gtk/gtkcolorchooserwidget.c:455
+#| msgctxt "Color name"
+#| msgid "Very Dark Gray"
+msgctxt "Color name"
+msgid "Very Dark Green"
+msgstr "Vert très foncé"
+
+#: gtk/gtkcolorchooserwidget.c:456
+#| msgctxt "Color name"
+#| msgid "Very Light Gray"
+msgctxt "Color name"
+msgid "Very Light Yellow"
+msgstr "Jaune très clair"
+
+#: gtk/gtkcolorchooserwidget.c:457
+#| msgctxt "Color name"
+#| msgid "Yellow"
+msgctxt "Color name"
+msgid "Light Yellow"
+msgstr "Jaune clair"
+
+#: gtk/gtkcolorchooserwidget.c:458
 msgctxt "Color name"
 msgid "Yellow"
 msgstr "Jaune"
 
-#: gtk/gtkcolorchooserwidget.c:464 gtk/gtkcolorchooserwidget.c:465
-#: gtk/gtkcolorchooserwidget.c:466 gtk/gtkcolorchooserwidget.c:467
-#: gtk/gtkcolorchooserwidget.c:468 gtk/gtkcolorchooserwidget.c:469
+#: gtk/gtkcolorchooserwidget.c:459
+#| msgctxt "Color name"
+#| msgid "Yellow"
+msgctxt "Color name"
+msgid "Dark Yellow"
+msgstr "Jaune foncé"
+
+#: gtk/gtkcolorchooserwidget.c:460
+#| msgctxt "Color name"
+#| msgid "Very Dark Gray"
+msgctxt "Color name"
+msgid "Very Dark Yellow"
+msgstr "Jaune très foncé"
+
+#: gtk/gtkcolorchooserwidget.c:461
+#| msgctxt "Color name"
+#| msgid "Light Orange"
+msgctxt "Color name"
+msgid "Very Light Orange"
+msgstr "Orange très clair"
+
+#: gtk/gtkcolorchooserwidget.c:462
+msgctxt "Color name"
+msgid "Light Orange"
+msgstr "Orange clair"
+
+#: gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
 msgid "Orange"
 msgstr "Orange"
 
-#: gtk/gtkcolorchooserwidget.c:470 gtk/gtkcolorchooserwidget.c:471
-#: gtk/gtkcolorchooserwidget.c:472 gtk/gtkcolorchooserwidget.c:473
-#: gtk/gtkcolorchooserwidget.c:474
-#| msgid "_Red:"
+#: gtk/gtkcolorchooserwidget.c:464
+msgctxt "Color name"
+msgid "Dark Orange"
+msgstr "Orange foncé"
+
+#: gtk/gtkcolorchooserwidget.c:465
+#| msgctxt "Color name"
+#| msgid "Dark Orange"
+msgctxt "Color name"
+msgid "Very Dark Orange"
+msgstr "Orange très foncé"
+
+#: gtk/gtkcolorchooserwidget.c:466
+#| msgctxt "Color name"
+#| msgid "Very Light Gray"
+msgctxt "Color name"
+msgid "Very Light Red"
+msgstr "Rouge très clair"
+
+#: gtk/gtkcolorchooserwidget.c:467
+#| msgctxt "Color name"
+#| msgid "Light"
+msgctxt "Color name"
+msgid "Light Red"
+msgstr "Rouge clair"
+
+#: gtk/gtkcolorchooserwidget.c:468
 msgctxt "Color name"
 msgid "Red"
 msgstr "Rouge"
 
-#: gtk/gtkcolorchooserwidget.c:475 gtk/gtkcolorchooserwidget.c:476
-#: gtk/gtkcolorchooserwidget.c:477 gtk/gtkcolorchooserwidget.c:478
-#: gtk/gtkcolorchooserwidget.c:479
+#: gtk/gtkcolorchooserwidget.c:469
+#| msgctxt "Color name"
+#| msgid "Dark Scarlet Red"
+msgctxt "Color name"
+msgid "Dark Red"
+msgstr "Rouge foncé"
+
+#: gtk/gtkcolorchooserwidget.c:470
+#| msgctxt "Color name"
+#| msgid "Very Dark Gray"
+msgctxt "Color name"
+msgid "Very Dark Red"
+msgstr "Rouge très foncé"
+
+#: gtk/gtkcolorchooserwidget.c:471
+#| msgctxt "Color name"
+#| msgid "Very Light Gray"
+msgctxt "Color name"
+msgid "Very Light Purple"
+msgstr "Violet très clair"
+
+#: gtk/gtkcolorchooserwidget.c:472
+#| msgctxt "Color name"
+#| msgid "Light Plum"
+msgctxt "Color name"
+msgid "Light Purple"
+msgstr "Violet clair"
+
+#: gtk/gtkcolorchooserwidget.c:473
 msgctxt "Color name"
 msgid "Purple"
 msgstr "Violet"
 
-#: gtk/gtkcolorchooserwidget.c:480 gtk/gtkcolorchooserwidget.c:481
-#: gtk/gtkcolorchooserwidget.c:482 gtk/gtkcolorchooserwidget.c:483
-#: gtk/gtkcolorchooserwidget.c:484
+#: gtk/gtkcolorchooserwidget.c:474
+#| msgctxt "Color name"
+#| msgid "Purple"
+msgctxt "Color name"
+msgid "Dark Purple"
+msgstr "Violet foncé"
+
+#: gtk/gtkcolorchooserwidget.c:475
+#| msgctxt "Color name"
+#| msgid "Very Dark Gray"
+msgctxt "Color name"
+msgid "Very Dark Purple"
+msgstr "Violet très foncé"
+
+#: gtk/gtkcolorchooserwidget.c:476
+#| msgctxt "Color name"
+#| msgid "Very Light Gray"
+msgctxt "Color name"
+msgid "Very Light Brown"
+msgstr "Marron très clair"
+
+#: gtk/gtkcolorchooserwidget.c:477
+#| msgctxt "output-bin"
+#| msgid "Right Bin"
+msgctxt "Color name"
+msgid "Light Brown"
+msgstr "Marron clair"
+
+#: gtk/gtkcolorchooserwidget.c:478
 msgctxt "Color name"
 msgid "Brown"
 msgstr "Marron"
 
-#: gtk/gtkcolorchooserwidget.c:485 gtk/gtkcolorchooserwidget.c:486
-#: gtk/gtkcolorchooserwidget.c:487 gtk/gtkcolorchooserwidget.c:488
-#: gtk/gtkcolorchooserwidget.c:489
-#| msgctxt "keyboard label"
-#| msgid "Right"
-msgctxt "Color name"
-msgid "Light"
-msgstr "Clair"
-
-#: gtk/gtkcolorchooserwidget.c:490 gtk/gtkcolorchooserwidget.c:491
-#: gtk/gtkcolorchooserwidget.c:492 gtk/gtkcolorchooserwidget.c:493
-#: gtk/gtkcolorchooserwidget.c:494
+#: gtk/gtkcolorchooserwidget.c:479
 #| msgctxt "Color name"
-#| msgid "Dark Plum"
+#| msgid "Dark Butter"
 msgctxt "Color name"
-msgid "Dark"
-msgstr "Foncé"
+msgid "Dark Brown"
+msgstr "Marron foncé"
+
+#: gtk/gtkcolorchooserwidget.c:480
+#| msgctxt "Color name"
+#| msgid "Very Dark Gray"
+msgctxt "Color name"
+msgid "Very Dark Brown"
+msgstr "Marron très foncé"
+
+#: gtk/gtkcolorchooserwidget.c:481
+msgctxt "Color name"
+msgid "White"
+msgstr "Blanc"
+
+#: gtk/gtkcolorchooserwidget.c:482
+#| msgctxt "Color name"
+#| msgid "Light Gray"
+msgctxt "Color name"
+msgid "Light Gray 1"
+msgstr "Gris clair 1"
+
+#: gtk/gtkcolorchooserwidget.c:483
+#| msgctxt "Color name"
+#| msgid "Light Gray"
+msgctxt "Color name"
+msgid "Light Gray 2"
+msgstr "Gris clair 2"
+
+#: gtk/gtkcolorchooserwidget.c:484
+#| msgctxt "Color name"
+#| msgid "Light Gray"
+msgctxt "Color name"
+msgid "Light Gray 3"
+msgstr "Gris clair 3"
+
+#: gtk/gtkcolorchooserwidget.c:485
+#| msgctxt "Color name"
+#| msgid "Light Gray"
+msgctxt "Color name"
+msgid "Light Gray 4"
+msgstr "Gris clair 4"
+
+#: gtk/gtkcolorchooserwidget.c:486
+#| msgctxt "Color name"
+#| msgid "Dark Gray"
+msgctxt "Color name"
+msgid "Dark Gray 1"
+msgstr "Gris foncé 1"
+
+#: gtk/gtkcolorchooserwidget.c:487
+#| msgctxt "Color name"
+#| msgid "Dark Gray"
+msgctxt "Color name"
+msgid "Dark Gray 2"
+msgstr "Gris foncé 2"
+
+#: gtk/gtkcolorchooserwidget.c:488
+#| msgctxt "Color name"
+#| msgid "Dark Gray"
+msgctxt "Color name"
+msgid "Dark Gray 3"
+msgstr "Gris foncé 3"
+
+#: gtk/gtkcolorchooserwidget.c:489
+#| msgctxt "Color name"
+#| msgid "Dark Gray"
+msgctxt "Color name"
+msgid "Dark Gray 4"
+msgstr "Gris foncé 4"
+
+#: gtk/gtkcolorchooserwidget.c:490
+msgctxt "Color name"
+msgid "Black"
+msgstr "Noir"
 
 #. translators: label for the custom section in the color chooser
-#: gtk/gtkcolorchooserwidget.c:538
+#: gtk/gtkcolorchooserwidget.c:534
 msgid "Custom"
 msgstr "Personnalisée"
 
-#: gtk/gtkcolorchooserwidget.c:545
+#: gtk/gtkcolorchooserwidget.c:541
 msgid "Custom color"
 msgstr "Couleur personnalisée"
 
-#: gtk/gtkcolorchooserwidget.c:546
+#: gtk/gtkcolorchooserwidget.c:542
 msgid "Create a custom color"
 msgstr "Créer une couleur personnalisée"
 
-#: gtk/gtkcolorchooserwidget.c:565
+#: gtk/gtkcolorchooserwidget.c:561
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "Couleur personnalisée %d : %s"
@@ -8271,6 +8494,12 @@ msgstr "sortie-test.%s"
 msgid "Print to Test Printer"
 msgstr "Imprimer vers une imprimante test"
 
+#~| msgctxt "Color name"
+#~| msgid "Dark Plum"
+#~ msgctxt "Color name"
+#~ msgid "Dark"
+#~ msgstr "Foncé"
+
 #~ msgctxt "Color name"
 #~ msgid "Light Scarlet Red"
 #~ msgstr "Rouge écarlate clair"
@@ -8280,28 +8509,12 @@ msgstr "Imprimer vers une imprimante test"
 #~ msgstr "Rouge écarlate"
 
 #~ msgctxt "Color name"
-#~ msgid "Dark Scarlet Red"
-#~ msgstr "Rouge écarlate foncé"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Orange"
-#~ msgstr "Orange clair"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Orange"
-#~ msgstr "Orange foncé"
-
-#~ msgctxt "Color name"
 #~ msgid "Light Butter"
 #~ msgstr "Beurre clair"
 
 #~ msgctxt "Color name"
 #~ msgid "Butter"
 #~ msgstr "Beurre"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Butter"
-#~ msgstr "Beurre foncé"
 
 #~ msgctxt "Color name"
 #~ msgid "Light Chameleon"
@@ -8316,20 +8529,8 @@ msgstr "Imprimer vers une imprimante test"
 #~ msgstr "Caméléon foncé"
 
 #~ msgctxt "Color name"
-#~ msgid "Light Sky Blue"
-#~ msgstr "Bleu ciel clair"
-
-#~ msgctxt "Color name"
 #~ msgid "Sky Blue"
 #~ msgstr "Bleu ciel"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Sky Blue"
-#~ msgstr "Bleu ciel foncé"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Plum"
-#~ msgstr "Prune clair"
 
 #~ msgctxt "Color name"
 #~ msgid "Plum"
@@ -8372,40 +8573,16 @@ msgstr "Imprimer vers une imprimante test"
 #~ msgstr "Aluminium foncé 2"
 
 #~ msgctxt "Color name"
-#~ msgid "Black"
-#~ msgstr "Noir"
-
-#~ msgctxt "Color name"
-#~ msgid "Very Dark Gray"
-#~ msgstr "Gris très foncé"
-
-#~ msgctxt "Color name"
 #~ msgid "Darker Gray"
 #~ msgstr "Gris plus foncé"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Gray"
-#~ msgstr "Gris foncé"
 
 #~ msgctxt "Color name"
 #~ msgid "Medium Gray"
 #~ msgstr "Gris moyen"
 
 #~ msgctxt "Color name"
-#~ msgid "Light Gray"
-#~ msgstr "Gris clair"
-
-#~ msgctxt "Color name"
 #~ msgid "Lighter Gray"
 #~ msgstr "Gris plus clair"
-
-#~ msgctxt "Color name"
-#~ msgid "Very Light Gray"
-#~ msgstr "Gris très clair"
-
-#~ msgctxt "Color name"
-#~ msgid "White"
-#~ msgstr "Blanc"
 
 #~ msgctxt "switch"
 #~ msgid "ON"
