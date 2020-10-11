@@ -123,20 +123,6 @@ gtk_stack_sidebar_get_property (GObject    *object,
 }
 
 static void
-update_header (GtkListBoxRow *row,
-               GtkListBoxRow *before,
-               gpointer       userdata)
-{
-  GtkWidget *ret = NULL;
-
-  if (before && !gtk_list_box_row_get_header (row))
-    {
-      ret = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_list_box_row_set_header (row, ret);
-    }
-}
-
-static void
 gtk_stack_sidebar_row_selected (GtkListBox    *box,
                                 GtkListBoxRow *row,
                                 gpointer       userdata)
@@ -164,10 +150,9 @@ gtk_stack_sidebar_init (GtkStackSidebar *self)
   gtk_widget_set_parent (sw, GTK_WIDGET (self));
 
   self->list = GTK_LIST_BOX (gtk_list_box_new ());
+  gtk_list_box_set_show_separators (GTK_LIST_BOX (self->list), TRUE);
 
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), GTK_WIDGET (self->list));
-
-  gtk_list_box_set_header_func (self->list, update_header, self, NULL);
 
   g_signal_connect (self->list, "row-selected",
                     G_CALLBACK (gtk_stack_sidebar_row_selected), self);
