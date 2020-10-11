@@ -27,14 +27,18 @@
 #include "gtkatspiprivate.h"
 #include "gtkatspiutilsprivate.h"
 #include "gtkatspitextprivate.h"
+#include "gtkatspieditabletextprivate.h"
 #include "gtkatspivalueprivate.h"
 
 #include "a11y/atspi/atspi-accessible.h"
 #include "a11y/atspi/atspi-text.h"
+#include "a11y/atspi/atspi-editabletext.h"
 #include "a11y/atspi/atspi-value.h"
 
 #include "gtkdebug.h"
+#include "gtkeditable.h"
 #include "gtkroot.h"
+#include "gtktextview.h"
 #include "gtkwindow.h"
 
 #include <gio/gio.h>
@@ -93,10 +97,19 @@ collect_states (GtkAtSpiContext    *self,
                 GVariantBuilder *builder)
 {
   GtkATContext *ctx = GTK_AT_CONTEXT (self);
+  GtkWidget *widget = GTK_WIDGET (gtk_at_context_get_accessible (ctx));
   GtkAccessibleValue *value;
   guint64 state = 0;
 
   state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_VISIBLE);
+
+  if (GTK_IS_EDITABLE (widget) &&
+      gtk_editable_get_editable (GTK_EDITABLE (widget)))
+    state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_EDITABLE);
+
+  if (GTK_IS_TEXT_VIEW (widget) &&
+      gtk_text_view_get_editable (GTK_TEXT_VIEW (widget)))
+    state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_EDITABLE);
 
   if (gtk_at_context_has_accessible_state (ctx, GTK_ACCESSIBLE_STATE_BUSY))
     {
@@ -538,6 +551,18 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
                                          NULL);
     }
 
+  vtable = gtk_atspi_get_editable_text_vtable (widget);
+  if (vtable)
+    {
+      g_variant_builder_add (&interfaces, "s", "org.a11y.atspi.EditableText");
+      g_dbus_connection_register_object (self->connection,
+                                         self->context_path,
+                                         (GDBusInterfaceInfo *) &atspi_editable_text_interface,
+                                         vtable,
+                                         self,
+                                         NULL,
+                                         NULL);
+    }
   vtable = gtk_atspi_get_value_vtable (widget);
   if (vtable)
     {
