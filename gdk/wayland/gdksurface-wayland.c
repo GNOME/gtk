@@ -4033,7 +4033,7 @@ _gdk_wayland_surface_set_grab_seat (GdkSurface *surface,
 }
 
 /**
- * gdk_wayland_surface_get_wl_surface:
+ * gdk_wayland_surface_get_wl_surface: (skip)
  * @surface: (type GdkWaylandSurface): a #GdkSurface
  *
  * Returns the Wayland surface of a #GdkSurface.
