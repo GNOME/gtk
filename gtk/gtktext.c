@@ -1482,6 +1482,7 @@ gtk_text_class_init (GtkTextClass *class)
                                        "text.redo", NULL);
 
   gtk_widget_class_set_css_name (widget_class, I_("text"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_TEXT_BOX);
 }
 
 static void
@@ -5429,6 +5430,10 @@ gtk_text_set_editable (GtkText  *self,
 
       gtk_text_update_clipboard_actions (self);
       gtk_text_update_emoji_action (self);
+
+      gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                      GTK_ACCESSIBLE_PROPERTY_READ_ONLY, !priv->editable,
+                                      -1);
 
       g_object_notify (G_OBJECT (self), "editable");
     }
