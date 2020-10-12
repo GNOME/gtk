@@ -12143,6 +12143,10 @@ gtk_widget_update_orientation (GtkWidget      *widget,
       gtk_widget_add_css_class (widget, "vertical");
       gtk_widget_remove_css_class (widget, "horizontal");
     }
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (widget),
+                                  GTK_ACCESSIBLE_PROPERTY_ORIENTATION, orientation,
+                                  -1);
 }
 
 /**
