@@ -644,6 +644,7 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
                                  GtkAccessibleStateChange     changed_states,
                                  GtkAccessiblePropertyChange  changed_properties,
                                  GtkAccessibleRelationChange  changed_relations,
+                                 GtkAccessiblePlatformChange  changed_platform,
                                  GtkAccessibleAttributeSet   *states,
                                  GtkAccessibleAttributeSet   *properties,
                                  GtkAccessibleAttributeSet   *relations)

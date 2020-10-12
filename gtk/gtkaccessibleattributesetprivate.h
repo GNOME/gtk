@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "gtkaccessibleprivate.h"
+#include "gtkaccessible.h"
 #include "gtkaccessiblevalueprivate.h"
 
 G_BEGIN_DECLS

@@ -636,3 +636,16 @@ gtk_accessible_role_to_name (GtkAccessibleRole  role,
 
   return role_names[role];
 }
+
+void
+gtk_accessible_platform_changed (GtkAccessible               *self,
+                                 GtkAccessiblePlatformChange  change)
+{
+  GtkATContext *context = gtk_accessible_get_at_context (self);
+  if (context == NULL)
+    return;
+
+  gtk_at_context_platform_changed (context, change);
+  gtk_at_context_update (context);
+}
+
