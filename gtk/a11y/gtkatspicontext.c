@@ -97,19 +97,23 @@ collect_states (GtkAtSpiContext    *self,
                 GVariantBuilder *builder)
 {
   GtkATContext *ctx = GTK_AT_CONTEXT (self);
-  GtkWidget *widget = GTK_WIDGET (gtk_at_context_get_accessible (ctx));
   GtkAccessibleValue *value;
   guint64 state = 0;
 
   state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_VISIBLE);
 
-  if (GTK_IS_EDITABLE (widget) &&
-      gtk_editable_get_editable (GTK_EDITABLE (widget)))
+  if (ctx->accessible_role == GTK_ACCESSIBLE_ROLE_TEXT_BOX)
     state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_EDITABLE);
 
-  if (GTK_IS_TEXT_VIEW (widget) &&
-      gtk_text_view_get_editable (GTK_TEXT_VIEW (widget)))
-    state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_EDITABLE);
+  if (gtk_at_context_has_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_READ_ONLY))
+    {
+      value = gtk_at_context_get_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_READ_ONLY);
+      if (gtk_boolean_accessible_value_get (value))
+        {
+          state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_READ_ONLY);
+          state &= ~(G_GUINT64_CONSTANT (1) << ATSPI_STATE_EDITABLE);
+        }
+    }
 
   if (gtk_at_context_has_accessible_state (ctx, GTK_ACCESSIBLE_STATE_BUSY))
     {
