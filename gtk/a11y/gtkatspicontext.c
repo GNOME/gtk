@@ -584,7 +584,22 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
 }
 
 static void
-gtk_at_spi_context_state_change (GtkATContext                *self,
+emit_state_changed (GtkAtSpiContext *self,
+                    const char      *name,
+                    gboolean         enabled)
+{
+  g_dbus_connection_emit_signal (self->connection,
+                                 NULL,
+                                 self->context_path,
+                                 "org.a11y.atspi.Event.Object",
+                                 "StateChanged",
+                                 g_variant_new ("(siiva{sv})",
+                                                name, enabled, 0, g_variant_new_string ("0"), NULL),
+                                 NULL);
+}
+
+static void
+gtk_at_spi_context_state_change (GtkATContext                *ctx,
                                  GtkAccessibleStateChange     changed_states,
                                  GtkAccessiblePropertyChange  changed_properties,
                                  GtkAccessibleRelationChange  changed_relations,
@@ -592,6 +607,119 @@ gtk_at_spi_context_state_change (GtkATContext                *self,
                                  GtkAccessibleAttributeSet   *properties,
                                  GtkAccessibleAttributeSet   *relations)
 {
+  GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (ctx);
+  GtkAccessibleValue *value;
+
+  if (!gtk_widget_get_realized (GTK_WIDGET (gtk_at_context_get_accessible (ctx))))
+    return;
+
+  if (changed_states & GTK_ACCESSIBLE_STATE_CHANGE_BUSY)
+    {
+      value = gtk_accessible_attribute_set_get_value (states, GTK_ACCESSIBLE_STATE_BUSY);
+      emit_state_changed (self, "busy", gtk_boolean_accessible_value_get (value));
+    }
+
+  if (changed_states & GTK_ACCESSIBLE_STATE_CHANGE_CHECKED)
+    {
+      value = gtk_accessible_attribute_set_get_value (states, GTK_ACCESSIBLE_STATE_CHECKED);
+
+      switch (gtk_tristate_accessible_value_get (value))
+        {
+        case GTK_ACCESSIBLE_TRISTATE_TRUE:
+          emit_state_changed (self, "checked", TRUE);
+          emit_state_changed (self, "indeterminate", FALSE);
+          break;
+        case GTK_ACCESSIBLE_TRISTATE_MIXED:
+          emit_state_changed (self, "checked", FALSE);
+          emit_state_changed (self, "indeterminate", TRUE);
+          break;
+        case GTK_ACCESSIBLE_TRISTATE_FALSE:
+          emit_state_changed (self, "checked", FALSE);
+          emit_state_changed (self, "indeterminate", FALSE);
+        default:
+          break;
+        }
+    }
+
+  if (changed_states & GTK_ACCESSIBLE_STATE_CHANGE_DISABLED)
+    {
+      value = gtk_accessible_attribute_set_get_value (states, GTK_ACCESSIBLE_STATE_DISABLED);
+      emit_state_changed (self, "sensitive", !gtk_boolean_accessible_value_get (value));
+    }
+
+  if (changed_states & GTK_ACCESSIBLE_STATE_CHANGE_EXPANDED)
+    {
+      value = gtk_accessible_attribute_set_get_value (states, GTK_ACCESSIBLE_STATE_EXPANDED);
+      if (value->value_class->type == GTK_ACCESSIBLE_VALUE_TYPE_BOOLEAN)
+        {
+          emit_state_changed (self, "expandable", TRUE);
+          emit_state_changed (self, "expanded",gtk_boolean_accessible_value_get (value));
+        }
+      else
+        emit_state_changed (self, "expandable", FALSE);
+    }
+
+  if (changed_states & GTK_ACCESSIBLE_STATE_CHANGE_INVALID)
+    {
+      value = gtk_accessible_attribute_set_get_value (states, GTK_ACCESSIBLE_STATE_INVALID);
+      switch (gtk_invalid_accessible_value_get (value))
+        {
+        case GTK_ACCESSIBLE_INVALID_TRUE:
+        case GTK_ACCESSIBLE_INVALID_GRAMMAR:
+        case GTK_ACCESSIBLE_INVALID_SPELLING:
+          emit_state_changed (self, "invalid", TRUE);
+          break;
+        case GTK_ACCESSIBLE_INVALID_FALSE:
+          emit_state_changed (self, "invalid", FALSE);
+        default:
+          break;
+        }
+    }
+
+  if (changed_states & GTK_ACCESSIBLE_STATE_CHANGE_PRESSED)
+    {
+      value = gtk_accessible_attribute_set_get_value (states, GTK_ACCESSIBLE_STATE_PRESSED);
+      switch (gtk_tristate_accessible_value_get (value))
+        {
+        case GTK_ACCESSIBLE_TRISTATE_TRUE:
+          emit_state_changed (self, "pressed", TRUE);
+          emit_state_changed (self, "indeterminate", FALSE);
+          break;
+        case GTK_ACCESSIBLE_TRISTATE_MIXED:
+          emit_state_changed (self, "pressed", FALSE);
+          emit_state_changed (self, "indeterminate", TRUE);
+          break;
+        case GTK_ACCESSIBLE_TRISTATE_FALSE:
+          emit_state_changed (self, "pressed", FALSE);
+          emit_state_changed (self, "indeterminate", FALSE);
+        default:
+          break;
+        }
+    }
+
+  if (changed_states & GTK_ACCESSIBLE_STATE_CHANGE_SELECTED)
+    {
+      value = gtk_accessible_attribute_set_get_value (states, GTK_ACCESSIBLE_STATE_SELECTED);
+      if (value->value_class->type == GTK_ACCESSIBLE_VALUE_TYPE_BOOLEAN)
+        {
+          emit_state_changed (self, "selectable", TRUE);
+          emit_state_changed (self, "selected",gtk_boolean_accessible_value_get (value));
+        }
+      else
+        emit_state_changed (self, "selectable", FALSE);
+    }
+
+  if (changed_properties & GTK_ACCESSIBLE_PROPERTY_CHANGE_READ_ONLY)
+    {
+      gboolean readonly;
+
+      value = gtk_accessible_attribute_set_get_value (properties, GTK_ACCESSIBLE_PROPERTY_READ_ONLY);
+      readonly = gtk_boolean_accessible_value_get (value);
+
+      emit_state_changed (self, "read-only", readonly);
+      if (ctx->accessible_role == GTK_ACCESSIBLE_ROLE_TEXT_BOX)
+        emit_state_changed (self, "editable", !readonly);
+    }
 }
 
 static void
