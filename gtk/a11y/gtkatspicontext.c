@@ -81,6 +81,9 @@ struct _GtkAtSpiContext
    * collect the answer here.
    */
   GVariant *interfaces;
+
+  guint registration_ids[20];
+  guint n_registered_objects;
 };
 
 enum
@@ -585,53 +588,73 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
   const GDBusInterfaceVTable *vtable;
 
   g_variant_builder_add (&interfaces, "s", "org.a11y.atspi.Accessible");
-  g_dbus_connection_register_object (self->connection,
-                                     self->context_path,
-                                     (GDBusInterfaceInfo *) &atspi_accessible_interface,
-                                     &accessible_vtable,
-                                     self,
-                                     NULL,
-                                     NULL);
+  self->registration_ids[self->n_registered_objects] =
+      g_dbus_connection_register_object (self->connection,
+                                         self->context_path,
+                                         (GDBusInterfaceInfo *) &atspi_accessible_interface,
+                                         &accessible_vtable,
+                                         self,
+                                         NULL,
+                                         NULL);
+  self->n_registered_objects++;
 
   vtable = gtk_atspi_get_text_vtable (widget);
   if (vtable)
     {
       g_variant_builder_add (&interfaces, "s", "org.a11y.atspi.Text");
-      g_dbus_connection_register_object (self->connection,
-                                         self->context_path,
-                                         (GDBusInterfaceInfo *) &atspi_text_interface,
-                                         vtable,
-                                         self,
-                                         NULL,
-                                         NULL);
+      self->registration_ids[self->n_registered_objects] =
+          g_dbus_connection_register_object (self->connection,
+                                             self->context_path,
+                                             (GDBusInterfaceInfo *) &atspi_text_interface,
+                                             vtable,
+                                             self,
+                                             NULL,
+                                             NULL);
+      self->n_registered_objects++;
     }
 
   vtable = gtk_atspi_get_editable_text_vtable (widget);
   if (vtable)
     {
       g_variant_builder_add (&interfaces, "s", "org.a11y.atspi.EditableText");
-      g_dbus_connection_register_object (self->connection,
-                                         self->context_path,
-                                         (GDBusInterfaceInfo *) &atspi_editable_text_interface,
-                                         vtable,
-                                         self,
-                                         NULL,
-                                         NULL);
+      self->registration_ids[self->n_registered_objects] =
+          g_dbus_connection_register_object (self->connection,
+                                             self->context_path,
+                                             (GDBusInterfaceInfo *) &atspi_editable_text_interface,
+                                             vtable,
+                                             self,
+                                             NULL,
+                                             NULL);
+      self->n_registered_objects++;
     }
   vtable = gtk_atspi_get_value_vtable (widget);
   if (vtable)
     {
       g_variant_builder_add (&interfaces, "s", "org.a11y.atspi.Value");
-      g_dbus_connection_register_object (self->connection,
-                                         self->context_path,
-                                         (GDBusInterfaceInfo *) &atspi_value_interface,
-                                         vtable,
-                                         self,
-                                         NULL,
-                                         NULL);
+      self->registration_ids[self->n_registered_objects] =
+          g_dbus_connection_register_object (self->connection,
+                                             self->context_path,
+                                             (GDBusInterfaceInfo *) &atspi_value_interface,
+                                             vtable,
+                                             self,
+                                             NULL,
+                                             NULL);
+      self->n_registered_objects++;
     }
 
   self->interfaces = g_variant_ref_sink (g_variant_builder_end (&interfaces));
+}
+
+static void
+gtk_at_spi_context_unregister_object (GtkAtSpiContext *self)
+{
+  while (self->n_registered_objects > 0)
+    {
+      self->n_registered_objects--;
+      g_dbus_connection_unregister_object (self->connection,
+                                           self->registration_ids[self->n_registered_objects]);
+      self->registration_ids[self->n_registered_objects] = 0;
+    }
 }
 
 static void
@@ -833,6 +856,16 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
 }
 
 static void
+gtk_at_spi_context_dispose (GObject *gobject)
+{
+  GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (gobject);
+
+  gtk_at_spi_context_unregister_object (self);
+
+  G_OBJECT_CLASS (gtk_at_spi_context_parent_class)->dispose (gobject);
+}
+
+static void
 gtk_at_spi_context_finalize (GObject *gobject)
 {
   GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (gobject);
@@ -965,6 +998,7 @@ gtk_at_spi_context_class_init (GtkAtSpiContextClass *klass)
   gobject_class->set_property = gtk_at_spi_context_set_property;
   gobject_class->get_property = gtk_at_spi_context_get_property;
   gobject_class->finalize = gtk_at_spi_context_finalize;
+  gobject_class->dispose = gtk_at_spi_context_dispose;
 
   context_class->state_change = gtk_at_spi_context_state_change;
 
