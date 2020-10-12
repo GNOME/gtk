@@ -1154,7 +1154,7 @@ _gdk_wayland_display_update_serial (GdkWaylandDisplay *display_wayland,
 }
 
 /**
- * gdk_wayland_display_get_wl_display:
+ * gdk_wayland_display_get_wl_display: (skip)
  * @display: (type GdkWaylandDisplay): a #GdkDisplay
  *
  * Returns the Wayland wl_display of a #GdkDisplay.
@@ -1170,7 +1170,7 @@ gdk_wayland_display_get_wl_display (GdkDisplay *display)
 }
 
 /**
- * gdk_wayland_display_get_wl_compositor:
+ * gdk_wayland_display_get_wl_compositor: (skip)
  * @display: (type GdkWaylandDisplay): a #GdkDisplay
  *
  * Returns the Wayland global singleton compositor of a #GdkDisplay.

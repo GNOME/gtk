@@ -942,7 +942,7 @@ gdk_wayland_device_pad_init (GdkWaylandDevicePad *pad)
 }
 
 /**
- * gdk_wayland_device_get_wl_seat:
+ * gdk_wayland_device_get_wl_seat: (skip)
  * @device: (type GdkWaylandDevice): a #GdkDevice
  *
  * Returns the Wayland wl_seat of a #GdkDevice.
@@ -961,7 +961,7 @@ gdk_wayland_device_get_wl_seat (GdkDevice *device)
 }
 
 /**
- * gdk_wayland_device_get_wl_pointer:
+ * gdk_wayland_device_get_wl_pointer: (skip)
  * @device: (type GdkWaylandDevice): a #GdkDevice
  *
  * Returns the Wayland wl_pointer of a #GdkDevice.
@@ -980,7 +980,7 @@ gdk_wayland_device_get_wl_pointer (GdkDevice *device)
 }
 
 /**
- * gdk_wayland_device_get_wl_keyboard:
+ * gdk_wayland_device_get_wl_keyboard: (skip)
  * @device: (type GdkWaylandDevice): a #GdkDevice
  *
  * Returns the Wayland wl_keyboard of a #GdkDevice.
@@ -4971,6 +4971,12 @@ gdk_wayland_seat_set_drag (GdkSeat *seat,
   g_set_object (&wayland_seat->drag, drag);
 }
 
+/**
+ * gdk_wayland_device_get_data_device: (skip)
+ * @gdk_device: (type GdkWaylandDevice): a #GdkDevice
+ *
+ * ...
+ */
 struct wl_data_device *
 gdk_wayland_device_get_data_device (GdkDevice *gdk_device)
 {
@@ -4982,6 +4988,13 @@ gdk_wayland_device_get_data_device (GdkDevice *gdk_device)
   return seat->data_device;
 }
 
+/**
+ * gdk_wayland_device_set_selection: (skip)
+ * @gdk_device: (type GdkWaylandDevice): a #GdkDevice
+ * @source: the data source for the selection
+ *
+ * ...
+ */
 void
 gdk_wayland_device_set_selection (GdkDevice             *gdk_device,
                                   struct wl_data_source *source)
@@ -4999,8 +5012,8 @@ gdk_wayland_device_set_selection (GdkDevice             *gdk_device,
 }
 
 /**
- * gdk_wayland_seat_get_wl_seat:
- * @seat: (type GdkWaylandSeat): a #GdkSeat
+ * gdk_wayland_seat_get_wl_seat: (skip)
+ * @seat: a #GdkSeat
  *
  * Returns the Wayland wl_seat of a #GdkSeat.
  *
