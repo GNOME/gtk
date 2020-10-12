@@ -22,6 +22,8 @@
 
 #include "gtkatspicontextprivate.h"
 
+#include "gtkaccessibleprivate.h"
+
 #include "gtkatspicacheprivate.h"
 #include "gtkatspirootprivate.h"
 #include "gtkatspiprivate.h"
@@ -131,6 +133,12 @@ collect_states (GtkAtSpiContext    *self,
           unset_atspi_state (states, ATSPI_STATE_EDITABLE);
         }
     }
+
+  if (gtk_widget_get_focusable (widget))
+    set_atspi_state (states, ATSPI_STATE_FOCUSABLE);
+
+  if (gtk_widget_has_focus (widget))
+    set_atspi_state (states, ATSPI_STATE_FOCUSED);
 
   if (gtk_at_context_has_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_ORIENTATION))
     {
@@ -667,9 +675,10 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
                                  GtkAccessibleAttributeSet   *relations)
 {
   GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (ctx);
+  GtkWidget *widget = GTK_WIDGET (gtk_at_context_get_accessible (ctx));
   GtkAccessibleValue *value;
 
-  if (!gtk_widget_get_realized (GTK_WIDGET (gtk_at_context_get_accessible (ctx))))
+  if (!gtk_widget_get_realized (widget))
     return;
 
   if (changed_states & GTK_ACCESSIBLE_STATE_CHANGE_BUSY)
@@ -815,6 +824,12 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
       g_variant_unref (v);
       g_free (label);
     }
+
+  if (changed_platform & GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSABLE)
+    emit_state_changed (self, "focusable", gtk_widget_get_focusable (widget));
+
+  if (changed_platform & GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSED)
+    emit_state_changed (self, "focused", gtk_widget_has_focus (widget));
 }
 
 static void
