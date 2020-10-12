@@ -115,6 +115,29 @@ collect_states (GtkAtSpiContext    *self,
         }
     }
 
+  if (gtk_at_context_has_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_ORIENTATION))
+    {
+      value = gtk_at_context_get_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_ORIENTATION);
+      if (gtk_orientation_accessible_value_get (value) == GTK_ORIENTATION_HORIZONTAL)
+        state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_HORIZONTAL);
+      else
+        state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_VERTICAL);
+    }
+
+  if (gtk_at_context_has_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_MODAL))
+    {
+      value = gtk_at_context_get_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_MODAL);
+      if (gtk_boolean_accessible_value_get (value))
+        state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_MODAL);
+    }
+
+  if (gtk_at_context_has_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_MULTI_LINE))
+    {
+      value = gtk_at_context_get_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_MULTI_LINE);
+      if (gtk_boolean_accessible_value_get (value))
+        state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_MULTI_LINE);
+    }
+
   if (gtk_at_context_has_accessible_state (ctx, GTK_ACCESSIBLE_STATE_BUSY))
     {
       value = gtk_at_context_get_accessible_state (ctx, GTK_ACCESSIBLE_STATE_BUSY);
@@ -719,6 +742,33 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
       emit_state_changed (self, "read-only", readonly);
       if (ctx->accessible_role == GTK_ACCESSIBLE_ROLE_TEXT_BOX)
         emit_state_changed (self, "editable", !readonly);
+    }
+
+  if (changed_properties & GTK_ACCESSIBLE_PROPERTY_CHANGE_ORIENTATION)
+    {
+      value = gtk_accessible_attribute_set_get_value (properties, GTK_ACCESSIBLE_PROPERTY_ORIENTATION);
+      if (gtk_orientation_accessible_value_get (value) == GTK_ORIENTATION_HORIZONTAL)
+        {
+          emit_state_changed (self, "horizontal", TRUE);
+          emit_state_changed (self, "vertical", FALSE);
+        }
+      else
+        {
+          emit_state_changed (self, "horizontal", FALSE);
+          emit_state_changed (self, "vertical", TRUE);
+        }
+    }
+
+  if (changed_properties & GTK_ACCESSIBLE_PROPERTY_CHANGE_MODAL)
+    {
+      value = gtk_accessible_attribute_set_get_value (properties, GTK_ACCESSIBLE_PROPERTY_MODAL);
+      emit_state_changed (self, "modal", gtk_boolean_accessible_value_get (value));
+    }
+
+  if (changed_properties & GTK_ACCESSIBLE_PROPERTY_CHANGE_MULTI_LINE)
+    {
+      value = gtk_accessible_attribute_set_get_value (properties, GTK_ACCESSIBLE_PROPERTY_MULTI_LINE);
+      emit_state_changed (self, "multi-line", gtk_boolean_accessible_value_get (value));
     }
 }
 
