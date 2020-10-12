@@ -643,11 +643,28 @@ gtk_accessible_platform_changed (GtkAccessible               *self,
                                  GtkAccessiblePlatformChange  change)
 {
   GtkATContext *context = gtk_accessible_get_at_context (self);
+
+  /* propagate changes up from ignored widgets */
+  if (gtk_accessible_get_accessible_role (self) == GTK_ACCESSIBLE_ROLE_NONE)
+    {
+      if (gtk_widget_get_parent (GTK_WIDGET (self)) == NULL)
+        return;
+
+      context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (gtk_widget_get_parent (GTK_WIDGET (self))));
+    }
+
   if (context == NULL)
     return;
 
   gtk_at_context_platform_changed (context, change);
   gtk_at_context_update (context);
+}
+
+gboolean
+gtk_accessible_get_platform_state (GtkAccessible              *self,
+                                   GtkAccessiblePlatformState  state)
+{
+  return GTK_ACCESSIBLE_GET_IFACE (self)->get_platform_state (self, state);
 }
 
 gboolean

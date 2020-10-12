@@ -8124,10 +8124,26 @@ gtk_widget_accessible_get_at_context (GtkAccessible *accessible)
   return priv->at_context;
 }
 
+static gboolean
+gtk_widget_accessible_get_platform_state (GtkAccessible              *self,
+                                          GtkAccessiblePlatformState  state)
+{
+  switch (state)
+    {
+    case GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE:
+      return gtk_widget_get_focusable (GTK_WIDGET (self));
+    case GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED:
+      return gtk_widget_has_focus (GTK_WIDGET (self));
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 static void
 gtk_widget_accessible_interface_init (GtkAccessibleInterface *iface)
 {
   iface->get_at_context = gtk_widget_accessible_get_at_context;
+  iface->get_platform_state = gtk_widget_accessible_get_platform_state;
 }
 
 /*
