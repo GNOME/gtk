@@ -842,10 +842,8 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
   if (changed_properties & GTK_ACCESSIBLE_PROPERTY_CHANGE_LABEL)
     {
       char *label = gtk_at_context_get_label (GTK_AT_CONTEXT (self));
-      GVariant *v = g_variant_new_string (label);
+      GVariant *v = g_variant_new_take_string (label);
       emit_property_changed (self, "accessible-description", v);
-      g_variant_unref (v);
-      g_free (label);
     }
 
   if (changed_platform & GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSABLE)
