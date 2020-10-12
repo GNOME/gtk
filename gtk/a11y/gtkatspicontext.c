@@ -290,12 +290,12 @@ get_index_in_parent (GtkWidget *widget)
         continue;
 
       if (child == widget)
-        break;
+        return idx;
 
       idx++;
     }
 
-  return idx;
+  return -1;
 }
 
 static int
@@ -317,12 +317,12 @@ get_index_in_toplevels (GtkWidget *widget)
         continue;
 
       if (window == widget)
-        break;
+        return idx;
 
       idx += 1;
     }
 
-  return idx;
+  return -1;
 }
 
 static void
@@ -455,7 +455,10 @@ handle_accessible_method (GDBusConnection       *connection,
       else
         idx = get_index_in_parent (GTK_WIDGET (accessible));
 
-      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(i)", idx));
+      if (idx == -1)
+        g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR, G_DBUS_ERROR_FAILED, "Not found");
+      else
+        g_dbus_method_invocation_return_value (invocation, g_variant_new ("(i)", idx));
     }
   else if (g_strcmp0 (method_name, "GetRelationSet") == 0)
     {
@@ -622,6 +625,21 @@ emit_state_changed (GtkAtSpiContext *self,
 }
 
 static void
+emit_property_changed (GtkAtSpiContext *self,
+                       const char      *name,
+                       GVariant        *value)
+{
+  g_dbus_connection_emit_signal (self->connection,
+                                 NULL,
+                                 self->context_path,
+                                 "org.a11y.atspi.Event.Object",
+                                 "PropertyChange",
+                                 g_variant_new ("(siiva{sv})",
+                                                name, 0, 0, value, NULL),
+                                 NULL);
+}
+
+static void
 gtk_at_spi_context_state_change (GtkATContext                *ctx,
                                  GtkAccessibleStateChange     changed_states,
                                  GtkAccessiblePropertyChange  changed_properties,
@@ -769,6 +787,15 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
     {
       value = gtk_accessible_attribute_set_get_value (properties, GTK_ACCESSIBLE_PROPERTY_MULTI_LINE);
       emit_state_changed (self, "multi-line", gtk_boolean_accessible_value_get (value));
+    }
+
+  if (changed_properties & GTK_ACCESSIBLE_PROPERTY_CHANGE_LABEL)
+    {
+      char *label = gtk_at_context_get_label (GTK_AT_CONTEXT (self));
+      GVariant *v = g_variant_new_string (label);
+      emit_property_changed (self, "accessible-description", v);
+      g_variant_unref (v);
+      g_free (label);
     }
 }
 
