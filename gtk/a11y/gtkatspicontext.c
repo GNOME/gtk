@@ -117,10 +117,10 @@ collect_states (GtkAtSpiContext    *self,
 {
   GtkATContext *ctx = GTK_AT_CONTEXT (self);
   GtkAccessibleValue *value;
-  GtkWidget *widget;
+  GtkAccessible *accessible;
   guint64 states = 0;
 
-  widget = GTK_WIDGET (gtk_at_context_get_accessible (ctx));
+  accessible = gtk_at_context_get_accessible (ctx);
 
   set_atspi_state (&states, ATSPI_STATE_VISIBLE);
 
@@ -139,10 +139,10 @@ collect_states (GtkAtSpiContext    *self,
         }
     }
 
-  if (gtk_widget_get_focusable (widget))
+  if (gtk_accessible_get_platform_state (accessible, GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE))
     set_atspi_state (&states, ATSPI_STATE_FOCUSABLE);
 
-  if (gtk_widget_has_focus (widget))
+  if (gtk_accessible_get_platform_state (accessible, GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED))
     set_atspi_state (&states, ATSPI_STATE_FOCUSED);
 
   if (gtk_at_context_has_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_ORIENTATION))
@@ -849,10 +849,18 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
     }
 
   if (changed_platform & GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSABLE)
-    emit_state_changed (self, "focusable", gtk_widget_get_focusable (widget));
+    {
+      gboolean state = gtk_accessible_get_platform_state (GTK_ACCESSIBLE (widget),
+                                                          GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE);
+      emit_state_changed (self, "focusable", state);
+    }
 
   if (changed_platform & GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSED)
-    emit_state_changed (self, "focused", gtk_widget_has_focus (widget));
+    {
+      gboolean state = gtk_accessible_get_platform_state (GTK_ACCESSIBLE (widget),
+                                                          GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED);
+      emit_state_changed (self, "focused", state);
+    }
 }
 
 static void
