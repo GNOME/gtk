@@ -4168,13 +4168,13 @@ maybe_set_gtk_surface_dbus_properties (GdkWaylandSurface *impl)
 }
 
 void
-gdk_wayland_toplevel_set_dbus_properties_libgtk_only (GdkToplevel *toplevel,
-                                                      const char  *application_id,
-                                                      const char  *app_menu_path,
-                                                      const char  *menubar_path,
-                                                      const char  *window_object_path,
-                                                      const char  *application_object_path,
-                                                      const char *unique_bus_name)
+gdk_wayland_toplevel_set_dbus_properties (GdkToplevel *toplevel,
+                                          const char  *application_id,
+                                          const char  *app_menu_path,
+                                          const char  *menubar_path,
+                                          const char  *window_object_path,
+                                          const char  *application_object_path,
+                                          const char *unique_bus_name)
 {
   GdkWaylandSurface *impl;
 

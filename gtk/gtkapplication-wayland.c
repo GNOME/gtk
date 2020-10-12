@@ -84,9 +84,13 @@ gtk_application_impl_wayland_handle_window_realize (GtkApplicationImpl *impl,
 
   window_path = gtk_application_impl_dbus_get_window_path (dbus, window);
 
-  gdk_wayland_toplevel_set_dbus_properties_libgtk_only (GDK_TOPLEVEL (gdk_surface),
-                                                        dbus->application_id, dbus->app_menu_path, dbus->menubar_path,
-                                                        window_path, dbus->object_path, dbus->unique_name);
+  gdk_wayland_toplevel_set_dbus_properties (GDK_TOPLEVEL (gdk_surface),
+                                            dbus->application_id,
+                                            dbus->app_menu_path,
+                                            dbus->menubar_path,
+                                            window_path,
+                                            dbus->object_path,
+                                            dbus->unique_name);
 
   g_free (window_path);
 
