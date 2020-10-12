@@ -316,7 +316,7 @@ get_index_in_parent (GtkWidget *widget)
        child;
        child = gtk_widget_get_next_sibling (child))
     {
-      if (!gtk_widget_get_visible (child))
+      if (!gtk_accessible_should_present (GTK_ACCESSIBLE (child)))
         continue;
 
       if (child == widget)
@@ -425,7 +425,7 @@ handle_accessible_method (GDBusConnection       *connection,
            child;
            child = gtk_widget_get_next_sibling (child))
         {
-          if (!gtk_widget_get_visible (child))
+          if (!gtk_accessible_should_present (GTK_ACCESSIBLE (child)))
             continue;
 
           if (real_idx == idx)
@@ -462,7 +462,7 @@ handle_accessible_method (GDBusConnection       *connection,
            child;
            child = gtk_widget_get_next_sibling (child))
         {
-          if (!gtk_widget_get_visible (child))
+          if (!gtk_accessible_should_present (GTK_ACCESSIBLE (child)))
             continue;
 
           GtkATContext *context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (child));
@@ -561,7 +561,7 @@ handle_accessible_get_property (GDBusConnection       *connection,
            child;
            child = gtk_widget_get_next_sibling (child))
         {
-          if (!gtk_widget_get_visible (child))
+          if (!gtk_accessible_should_present (GTK_ACCESSIBLE (child)))
             continue;
 
           n_children++;
