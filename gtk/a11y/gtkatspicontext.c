@@ -93,25 +93,42 @@ static GParamSpec *obj_props[N_PROPS];
 G_DEFINE_TYPE (GtkAtSpiContext, gtk_at_spi_context, GTK_TYPE_AT_CONTEXT)
 
 static void
+set_atspi_state (guint64        states,
+                 AtspiStateType state)
+{
+  states |= (G_GUINT64_CONSTANT (1) << state);
+}
+
+static void
+unset_atspi_state (guint64        states,
+                   AtspiStateType state)
+{
+  states &= ~(G_GUINT64_CONSTANT (1) << state);
+}
+
+static void
 collect_states (GtkAtSpiContext    *self,
                 GVariantBuilder *builder)
 {
   GtkATContext *ctx = GTK_AT_CONTEXT (self);
   GtkAccessibleValue *value;
-  guint64 state = 0;
+  GtkWidget *widget;
+  guint64 states = 0;
 
-  state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_VISIBLE);
+  widget = GTK_WIDGET (gtk_at_context_get_accessible (ctx));
+
+  set_atspi_state (states, ATSPI_STATE_VISIBLE);
 
   if (ctx->accessible_role == GTK_ACCESSIBLE_ROLE_TEXT_BOX)
-    state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_EDITABLE);
+    set_atspi_state (states, ATSPI_STATE_EDITABLE);
 
   if (gtk_at_context_has_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_READ_ONLY))
     {
       value = gtk_at_context_get_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_READ_ONLY);
       if (gtk_boolean_accessible_value_get (value))
         {
-          state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_READ_ONLY);
-          state &= ~(G_GUINT64_CONSTANT (1) << ATSPI_STATE_EDITABLE);
+          set_atspi_state (states, ATSPI_STATE_READ_ONLY);
+          unset_atspi_state (states, ATSPI_STATE_EDITABLE);
         }
     }
 
@@ -119,30 +136,30 @@ collect_states (GtkAtSpiContext    *self,
     {
       value = gtk_at_context_get_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_ORIENTATION);
       if (gtk_orientation_accessible_value_get (value) == GTK_ORIENTATION_HORIZONTAL)
-        state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_HORIZONTAL);
+        set_atspi_state (states, ATSPI_STATE_HORIZONTAL);
       else
-        state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_VERTICAL);
+        set_atspi_state (states, ATSPI_STATE_VERTICAL);
     }
 
   if (gtk_at_context_has_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_MODAL))
     {
       value = gtk_at_context_get_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_MODAL);
       if (gtk_boolean_accessible_value_get (value))
-        state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_MODAL);
+        set_atspi_state (states, ATSPI_STATE_MODAL);
     }
 
   if (gtk_at_context_has_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_MULTI_LINE))
     {
       value = gtk_at_context_get_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_MULTI_LINE);
       if (gtk_boolean_accessible_value_get (value))
-        state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_MULTI_LINE);
+        set_atspi_state (states, ATSPI_STATE_MULTI_LINE);
     }
 
   if (gtk_at_context_has_accessible_state (ctx, GTK_ACCESSIBLE_STATE_BUSY))
     {
       value = gtk_at_context_get_accessible_state (ctx, GTK_ACCESSIBLE_STATE_BUSY);
       if (gtk_boolean_accessible_value_get (value))
-        state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_BUSY);
+        set_atspi_state (states, ATSPI_STATE_BUSY);
     }
 
   if (gtk_at_context_has_accessible_state (ctx, GTK_ACCESSIBLE_STATE_CHECKED))
@@ -151,10 +168,10 @@ collect_states (GtkAtSpiContext    *self,
       switch (gtk_tristate_accessible_value_get (value))
         {
         case GTK_ACCESSIBLE_TRISTATE_TRUE:
-          state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_CHECKED);
+          set_atspi_state (states, ATSPI_STATE_CHECKED);
           break;
         case GTK_ACCESSIBLE_TRISTATE_MIXED:
-          state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_INDETERMINATE);
+          set_atspi_state (states, ATSPI_STATE_INDETERMINATE);
           break;
         case GTK_ACCESSIBLE_TRISTATE_FALSE:
         default:
@@ -166,19 +183,19 @@ collect_states (GtkAtSpiContext    *self,
     {
       value = gtk_at_context_get_accessible_state (ctx, GTK_ACCESSIBLE_STATE_DISABLED);
       if (!gtk_boolean_accessible_value_get (value))
-        state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_SENSITIVE);
+        set_atspi_state (states, ATSPI_STATE_SENSITIVE);
     }
   else
-    state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_SENSITIVE);
+    set_atspi_state (states, ATSPI_STATE_SENSITIVE);
 
   if (gtk_at_context_has_accessible_state (ctx, GTK_ACCESSIBLE_STATE_EXPANDED))
     {
       value = gtk_at_context_get_accessible_state (ctx, GTK_ACCESSIBLE_STATE_EXPANDED);
       if (value->value_class->type == GTK_ACCESSIBLE_VALUE_TYPE_BOOLEAN)
         {
-          state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_EXPANDABLE);
+          set_atspi_state (states, ATSPI_STATE_EXPANDABLE);
           if (gtk_boolean_accessible_value_get (value))
-            state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_EXPANDED);
+            set_atspi_state (states, ATSPI_STATE_EXPANDED);
         }
     }
 
@@ -190,7 +207,7 @@ collect_states (GtkAtSpiContext    *self,
         case GTK_ACCESSIBLE_INVALID_TRUE:
         case GTK_ACCESSIBLE_INVALID_GRAMMAR:
         case GTK_ACCESSIBLE_INVALID_SPELLING:
-          state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_INVALID);
+          set_atspi_state (states, ATSPI_STATE_INVALID);
           break;
         case GTK_ACCESSIBLE_INVALID_FALSE:
         default:
@@ -204,10 +221,10 @@ collect_states (GtkAtSpiContext    *self,
       switch (gtk_tristate_accessible_value_get (value))
         {
         case GTK_ACCESSIBLE_TRISTATE_TRUE:
-          state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_PRESSED);
+          set_atspi_state (states, ATSPI_STATE_PRESSED);
           break;
         case GTK_ACCESSIBLE_TRISTATE_MIXED:
-          state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_INDETERMINATE);
+          set_atspi_state (states, ATSPI_STATE_INDETERMINATE);
           break;
         case GTK_ACCESSIBLE_TRISTATE_FALSE:
         default:
@@ -220,14 +237,14 @@ collect_states (GtkAtSpiContext    *self,
       value = gtk_at_context_get_accessible_state (ctx, GTK_ACCESSIBLE_STATE_SELECTED);
       if (value->value_class->type == GTK_ACCESSIBLE_VALUE_TYPE_BOOLEAN)
         {
-          state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_SELECTABLE);
+          set_atspi_state (states, ATSPI_STATE_SELECTABLE);
           if (gtk_boolean_accessible_value_get (value))
-            state |= (G_GUINT64_CONSTANT (1) << ATSPI_STATE_SELECTED);
+            set_atspi_state (states, ATSPI_STATE_SELECTED);
         }
     }
 
-  g_variant_builder_add (builder, "u", (guint32) (state & 0xffffffff));
-  g_variant_builder_add (builder, "u", (guint32) (state >> 32));
+  g_variant_builder_add (builder, "u", (guint32) (states & 0xffffffff));
+  g_variant_builder_add (builder, "u", (guint32) (states >> 32));
 }
 
 static void
