@@ -5029,9 +5029,10 @@ gdk_wayland_seat_get_wl_seat (GdkSeat *seat)
 
 /**
  * gdk_wayland_device_get_node_path:
- * @device: a #GdkDevice
+ * @device: (type GdkWaylandDevice): a #GdkDevice
  *
- * Returns the /dev/input/event* path of this device.
+ * Returns the `/dev/input/event*` path of this device.
+ *
  * For #GdkDevices that possibly coalesce multiple hardware
  * devices (eg. mouse, keyboard, touch,...), this function
  * will return %NULL.
@@ -5039,8 +5040,8 @@ gdk_wayland_seat_get_wl_seat (GdkSeat *seat)
  * This is most notably implemented for devices of type
  * %GDK_SOURCE_PEN, %GDK_SOURCE_TABLET_PAD.
  *
- * Returns: the /dev/input/event* path of this device
- **/
+ * Returns: (nullable) (transfer none): the `/dev/input/event*` path of this device
+ */
 const char *
 gdk_wayland_device_get_node_path (GdkDevice *device)
 {
@@ -5065,7 +5066,7 @@ gdk_wayland_device_get_node_path (GdkDevice *device)
 
 /**
  * gdk_wayland_device_pad_set_feedback:
- * @device: a %GDK_SOURCE_TABLET_PAD device
+ * @device: (type GdkWaylandDevice): a %GDK_SOURCE_TABLET_PAD device
  * @feature: Feature to set the feedback label for
  * @feature_idx: 0-indexed index of the feature to set the feedback label for
  * @label: Feedback label
