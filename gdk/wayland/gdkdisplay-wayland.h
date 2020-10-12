@@ -165,6 +165,8 @@ struct _GdkWaylandDisplayClass
   GdkDisplayClass parent_class;
 };
 
+gboolean                gdk_wayland_display_prefers_ssd         (GdkDisplay *display);
+
 G_END_DECLS
 
 #endif  /* __GDK_WAYLAND_DISPLAY__ */
