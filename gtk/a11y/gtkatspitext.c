@@ -71,7 +71,7 @@ label_handle_method (GDBusConnection       *connection,
       if (ret)
         gtk_label_select_region (GTK_LABEL (widget), offset, offset);
 
-      g_dbus_method_invocation_return_value (invocation, g_variant_new_boolean (ret));
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
     }
   else if (g_strcmp0 (method_name, "GetText") == 0)
     {
@@ -159,7 +159,7 @@ label_handle_method (GDBusConnection       *connection,
       if (0 <= offset && offset < g_utf8_strlen (text, -1))
         ch = g_utf8_get_char (g_utf8_offset_to_pointer (text, offset));
 
-      g_dbus_method_invocation_return_value (invocation, g_variant_new_int32 (ch));
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(i)", ch));
     }
   else if (g_strcmp0 (method_name, "GetStringAtOffset") == 0)
     {
@@ -244,7 +244,7 @@ label_handle_method (GDBusConnection       *connection,
       if (gtk_label_get_selection_bounds (GTK_LABEL (widget), NULL, NULL))
         n = 1;
 
-      g_dbus_method_invocation_return_value (invocation, g_variant_new_int32 (n));
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(i)", n));
     }
   else if (g_strcmp0 (method_name, "GetSelection") == 0)
     {
@@ -285,7 +285,7 @@ label_handle_method (GDBusConnection       *connection,
           ret = TRUE;
         }
 
-      g_dbus_method_invocation_return_value (invocation, g_variant_new_boolean (ret));
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
     }
   else if (g_strcmp0 (method_name, "RemoveSelection") == 0)
     {
@@ -311,7 +311,7 @@ label_handle_method (GDBusConnection       *connection,
             }
         }
 
-      g_dbus_method_invocation_return_value (invocation, g_variant_new_boolean (ret));
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
     }
   else if (g_strcmp0 (method_name, "SetSelection") == 0)
     {
@@ -336,7 +336,7 @@ label_handle_method (GDBusConnection       *connection,
               ret = TRUE;
             }
         }
-      g_dbus_method_invocation_return_value (invocation, g_variant_new_boolean (ret));
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
     }
   else if (g_strcmp0 (method_name, "GetCharacterExtents") == 0)
     {
@@ -434,7 +434,7 @@ text_handle_method (GDBusConnection       *connection,
       gtk_editable_set_position (GTK_EDITABLE (widget), offset);
       ret = TRUE;
 
-      g_dbus_method_invocation_return_value (invocation, g_variant_new_boolean (ret));
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
     }
   else if (g_strcmp0 (method_name, "GetText") == 0)
     {
@@ -521,7 +521,7 @@ text_handle_method (GDBusConnection       *connection,
       if (0 <= offset && offset < g_utf8_strlen (text, -1))
         ch = g_utf8_get_char (g_utf8_offset_to_pointer (text, offset));
 
-      g_dbus_method_invocation_return_value (invocation, g_variant_new_int32 (ch));
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(i)", ch));
     }
   else if (g_strcmp0 (method_name, "GetStringAtOffset") == 0)
     {
@@ -605,7 +605,7 @@ text_handle_method (GDBusConnection       *connection,
       if (gtk_editable_get_selection_bounds (GTK_EDITABLE (widget), NULL, NULL))
         n = 1;
 
-      g_dbus_method_invocation_return_value (invocation, g_variant_new_int32 (n));
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(i)", n));
     }
   else if (g_strcmp0 (method_name, "GetSelection") == 0)
     {
@@ -645,7 +645,7 @@ text_handle_method (GDBusConnection       *connection,
           ret = TRUE;
         }
 
-      g_dbus_method_invocation_return_value (invocation, g_variant_new_boolean (ret));
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
     }
   else if (g_strcmp0 (method_name, "RemoveSelection") == 0)
     {
@@ -670,7 +670,7 @@ text_handle_method (GDBusConnection       *connection,
             }
         }
 
-      g_dbus_method_invocation_return_value (invocation, g_variant_new_boolean (ret));
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
     }
   else if (g_strcmp0 (method_name, "SetSelection") == 0)
     {
@@ -694,7 +694,7 @@ text_handle_method (GDBusConnection       *connection,
               ret = TRUE;
             }
         }
-      g_dbus_method_invocation_return_value (invocation, g_variant_new_boolean (ret));
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
     }
   else if (g_strcmp0 (method_name, "GetCharacterExtents") == 0)
     {
@@ -799,7 +799,7 @@ text_view_handle_method (GDBusConnection       *connection,
       gtk_text_buffer_place_cursor (buffer, &iter);
       gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (widget), &iter, 0, FALSE, 0, 0);
 
-      g_dbus_method_invocation_return_value (invocation, g_variant_new_boolean (TRUE));
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", TRUE));
     }
   else if (g_strcmp0 (method_name, "GetText") == 0)
     {
@@ -880,7 +880,7 @@ text_view_handle_method (GDBusConnection       *connection,
           g_free (string);
         }
 
-      g_dbus_method_invocation_return_value (invocation, g_variant_new_int32 (ch));
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(i)", ch));
     }
   else if (g_strcmp0 (method_name, "GetStringAtOffset") == 0)
     {
@@ -963,7 +963,7 @@ text_view_handle_method (GDBusConnection       *connection,
       if (gtk_text_buffer_get_selection_bounds (gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget)), NULL, NULL))
         n = 1;
 
-      g_dbus_method_invocation_return_value (invocation, g_variant_new_int32 (n));
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(i)", n));
     }
   else if (g_strcmp0 (method_name, "GetSelection") == 0)
     {
@@ -1014,7 +1014,7 @@ text_view_handle_method (GDBusConnection       *connection,
           ret = TRUE;
         }
 
-      g_dbus_method_invocation_return_value (invocation, g_variant_new_boolean (ret));
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(i)", ret));
     }
   else if (g_strcmp0 (method_name, "RemoveSelection") == 0)
     {
@@ -1040,7 +1040,7 @@ text_view_handle_method (GDBusConnection       *connection,
             }
         }
 
-      g_dbus_method_invocation_return_value (invocation, g_variant_new_boolean (ret));
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
     }
   else if (g_strcmp0 (method_name, "SetSelection") == 0)
     {
@@ -1068,7 +1068,7 @@ text_view_handle_method (GDBusConnection       *connection,
               ret = TRUE;
             }
         }
-      g_dbus_method_invocation_return_value (invocation, g_variant_new_boolean (ret));
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
     }
   else if (g_strcmp0 (method_name, "GetCharacterExtents") == 0)
     {
