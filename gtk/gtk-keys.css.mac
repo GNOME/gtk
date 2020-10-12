@@ -59,6 +59,31 @@
   unbind "<shift><ctrl>a";
 }
 
+@binding-set gtk-mac-cmd-arrows
+{
+  bind "<meta>Left" { "move-cursor" (paragraph-ends, -1, 0) };
+  bind "<meta>KP_Left" { "move-cursor" (paragraph-ends, -1, 0) };
+  bind "<shift><meta>Left" { "move-cursor" (paragraph-ends, -1, 1) };
+  bind "<shift><meta>KP_Left" { "move-cursor" (paragraph-ends, -1, 1) };
+  bind "<meta>Right" { "move-cursor" (paragraph-ends, 1, 0) };
+  bind "<meta>KP_Right" { "move-cursor" (paragraph-ends, 1, 0) };
+  bind "<shift><meta>Right" { "move-cursor" (paragraph-ends, 1, 1) };
+  bind "<shift><meta>KP_Right" { "move-cursor" (paragraph-ends, 1, 1) };
+}
+
+@binding-set gtk-mac-emacs-like
+{
+  bind "<ctrl>a" { "move-cursor" (paragraph-ends, -1, 0) };
+  bind "<shift><ctrl>a" { "move-cursor" (paragraph-ends, -1, 1) };
+  bind "<ctrl>e" { "move-cursor" (paragraph-ends, 1, 0) };
+  bind "<shift><ctrl>e" { "move-cursor" (paragraph-ends, 1, 1) };
+
+  bind "<ctrl>b" { "move-cursor" (logical-positions, -1, 0) };
+  bind "<shift><ctrl>b" { "move-cursor" (logical-positions, -1, 1) };
+  bind "<ctrl>f" { "move-cursor" (logical-positions, 1, 0) };
+  bind "<shift><ctrl>f" { "move-cursor" (logical-positions, 1, 1) };
+}
+
 @binding-set gtk-mac-file-chooser
 {
   bind "<meta>v" { "location-popup-on-paste" () };
@@ -94,15 +119,15 @@ iconview {
 }
 
 textview {
-  -gtk-key-bindings: gtk-mac-alt-arrows, gtk-mac-alt-delete, gtk-mac-cmd-c, gtk-mac-text-view;
+  -gtk-key-bindings: gtk-mac-alt-arrows, gtk-mac-alt-delete, gtk-mac-cmd-c, gtk-mac-cmd-arrows, gtk-mac-emacs-like, gtk-mac-text-view;
 }
 
 entry {
-  -gtk-key-bindings: gtk-mac-alt-arrows, gtk-mac-alt-delete, gtk-mac-cmd-c, gtk-mac-entry;
+  -gtk-key-bindings: gtk-mac-alt-arrows, gtk-mac-alt-delete, gtk-mac-cmd-c, gtk-mac-cmd-arrows, gtk-mac-emacs-like, gtk-mac-entry;
 }
 
 label {
-  -gtk-key-bindings: gtk-mac-alt-arrows, gtk-mac-label;
+  -gtk-key-bindings: gtk-mac-alt-arrows, gtk-mac-cmd-arrows, gtk-mac-emacs-like, gtk-mac-label;
 }
 
 GtkFileChooserWidget {
