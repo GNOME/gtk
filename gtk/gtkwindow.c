@@ -88,6 +88,7 @@
 
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
+#include "wayland/gdksurface-wayland.h"
 #endif
 
 #ifdef GDK_WINDOWING_BROADWAY

@@ -62,15 +62,6 @@ GType                    gdk_wayland_popup_get_type               (void);
 GDK_AVAILABLE_IN_ALL
 struct wl_surface       *gdk_wayland_surface_get_wl_surface       (GdkSurface *surface);
 
-GDK_AVAILABLE_IN_ALL
-void                     gdk_wayland_toplevel_set_dbus_properties_libgtk_only (GdkToplevel *toplevel,
-                                                                               const char  *application_id,
-                                                                               const char  *app_menu_path,
-                                                                               const char  *menubar_path,
-                                                                               const char  *window_object_path,
-                                                                               const char  *application_object_path,
-                                                                               const char  *unique_bus_name);
-
 typedef void (*GdkWaylandToplevelExported) (GdkToplevel *toplevel,
                                             const char  *handle,
                                             gpointer     user_data);
@@ -91,11 +82,6 @@ gboolean                 gdk_wayland_toplevel_set_transient_for_exported (GdkTop
 GDK_AVAILABLE_IN_ALL
 void                     gdk_wayland_toplevel_set_application_id (GdkToplevel *toplevel,
                                                                   const char  *application_id);
-
-void                     gdk_wayland_toplevel_announce_csd       (GdkToplevel *toplevel);
-
-gboolean                 gdk_wayland_toplevel_inhibit_idle       (GdkToplevel *toplevel);
-void                     gdk_wayland_toplevel_uninhibit_idle     (GdkToplevel *toplevel);
 
 G_END_DECLS
 

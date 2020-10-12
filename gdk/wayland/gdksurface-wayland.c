@@ -17,12 +17,7 @@
 
 #include "config.h"
 
-#include <netinet/in.h>
-#include <unistd.h>
-
-#include "gdk.h"
-#include "gdkwayland.h"
-#include "gdkwaylandsurface.h"
+#include "gdksurface-wayland.h"
 
 #include "gdkdeviceprivate.h"
 #include "gdkdisplay-wayland.h"
@@ -44,6 +39,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+
+#include <netinet/in.h>
+#include <unistd.h>
 
 #define SURFACE_IS_TOPLEVEL(surface)  TRUE
 
