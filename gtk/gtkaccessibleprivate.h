@@ -37,7 +37,7 @@ GtkATContext *  gtk_accessible_get_at_context   (GtkAccessible *self);
 const char *    gtk_accessible_role_to_name     (GtkAccessibleRole  role,
                                                  const char        *domain);
 
-void gtk_accessible_platform_changed (GtkAccessible               *self,
-                                      GtkAccessiblePlatformChange  change);
+void            gtk_accessible_platform_changed (GtkAccessible               *self,
+                                                 GtkAccessiblePlatformChange  change);
 
 G_END_DECLS
