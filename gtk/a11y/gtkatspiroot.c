@@ -23,6 +23,7 @@
 #include "gtkatspirootprivate.h"
 
 #include "gtkatspicontextprivate.h"
+#include "gtkaccessibleprivate.h"
 #include "gtkatspiprivate.h"
 #include "gtkatspiutilsprivate.h"
 
