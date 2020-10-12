@@ -40,4 +40,6 @@ const char *    gtk_accessible_role_to_name     (GtkAccessibleRole  role,
 void            gtk_accessible_platform_changed (GtkAccessible               *self,
                                                  GtkAccessiblePlatformChange  change);
 
+gboolean        gtk_accessible_should_present   (GtkAccessible     *self);
+
 G_END_DECLS

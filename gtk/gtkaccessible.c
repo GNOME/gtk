@@ -47,6 +47,7 @@
 #include "gtkatcontextprivate.h"
 #include "gtkenums.h"
 #include "gtktypebuiltins.h"
+#include "gtkwidget.h"
 
 #include <glib/gi18n-lib.h>
 
@@ -649,3 +650,15 @@ gtk_accessible_platform_changed (GtkAccessible               *self,
   gtk_at_context_update (context);
 }
 
+gboolean
+gtk_accessible_should_present (GtkAccessible *self)
+{
+  if (GTK_IS_WIDGET (self) &&
+      !gtk_widget_get_visible (GTK_WIDGET (self)))
+    return FALSE;
+
+  if (gtk_accessible_get_accessible_role (self) == GTK_ACCESSIBLE_ROLE_NONE)
+    return FALSE;
+
+  return TRUE;
+}
