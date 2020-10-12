@@ -1694,6 +1694,13 @@ create_zxdg_toplevel_v6_resources (GdkSurface *surface)
                                  surface);
 }
 
+/**
+ * gdk_wayland_toplevel_set_application_id:
+ * @toplevel: (type GdkWaylandToplevel): a #GdkToplevel
+ * @application_id: the application id for the @toplevel
+ *
+ * Sets the application id on a #GdkToplevel.
+ */
 void
 gdk_wayland_toplevel_set_application_id (GdkToplevel *toplevel,
                                          const char  *application_id)
@@ -4033,7 +4040,7 @@ _gdk_wayland_surface_set_grab_seat (GdkSurface *surface,
 }
 
 /**
- * gdk_wayland_surface_get_wl_surface:
+ * gdk_wayland_surface_get_wl_surface: (skip)
  * @surface: (type GdkWaylandSurface): a #GdkSurface
  *
  * Returns the Wayland surface of a #GdkSurface.
@@ -4225,12 +4232,12 @@ static const struct zxdg_exported_v1_listener xdg_exported_listener = {
 
 /**
  * GdkWaylandToplevelExported:
- * @toplevel: the #GdkToplevel that is exported
+ * @toplevel: (type GdkWaylandToplevel): the #GdkToplevel that is exported
  * @handle: the handle
  * @user_data: user data that was passed to gdk_wayland_toplevel_export_handle()
  *
  * Callback that gets called when the handle for a surface has been
- * obtained from the Wayland compositor. The handle can be passed
+ * obtained from the Wayland compositor. The @handle can be passed
  * to other processes, for the purpose of marking surfaces as transient
  * for out-of-process surfaces.
  */
@@ -4243,7 +4250,7 @@ gdk_wayland_surface_is_exported (GdkWaylandSurface *impl)
 
 /**
  * gdk_wayland_toplevel_export_handle:
- * @toplevel: the #GdkToplevel to obtain a handle for
+ * @toplevel: (type GdkWaylandToplevel): the #GdkToplevel to obtain a handle for
  * @callback: callback to call with the handle
  * @user_data: (closure): user data for @callback
  * @destroy_func: destroy notify for @user_data
@@ -4307,7 +4314,7 @@ gdk_wayland_toplevel_export_handle (GdkToplevel                *toplevel,
 
 /**
  * gdk_wayland_toplevel_unexport_handle:
- * @toplevel: the #GdkToplevel to unexport
+ * @toplevel: (type GdkWaylandToplevel): the #GdkToplevel to unexport
  *
  * Destroys the handle that was obtained with
  * gdk_wayland_toplevel_export_handle().
@@ -4361,7 +4368,7 @@ static const struct zxdg_imported_v1_listener xdg_imported_listener = {
 
 /**
  * gdk_wayland_toplevel_set_transient_for_exported:
- * @toplevel: the #GdkToplevel to make as transient
+ * @toplevel: (type GdkWaylandToplevel): the #GdkToplevel to make as transient
  * @parent_handle_str: an exported handle for a surface
  *
  * Marks @toplevel as transient for the surface to which the given
@@ -4414,6 +4421,13 @@ gdk_wayland_surface_get_inhibitor (GdkWaylandSurface *impl,
   return g_hash_table_lookup (impl->shortcuts_inhibitors, gdk_seat);
 }
 
+/*
+ * gdk_wayland_surface_inhibit_shortcuts:
+ * @surface: (type GdkWaylandSurface): a #GdkSurface
+ * @seat: the seat to inhibit
+ *
+ * Inhibits the shortcuts coming from the given @seat.
+ */
 void
 gdk_wayland_surface_inhibit_shortcuts (GdkSurface *surface,
                                        GdkSeat    *gdk_seat)
@@ -4437,6 +4451,14 @@ gdk_wayland_surface_inhibit_shortcuts (GdkSurface *surface,
   g_hash_table_insert (impl->shortcuts_inhibitors, gdk_seat, inhibitor);
 }
 
+/*
+ * gdk_wayland_surface_restore_shortcuts:
+ * @surface: (type GdkWaylandSurface): a #GdkSurface
+ * @seat: the seat to inhibit
+ *
+ * Restores the shortcuts on the given @seat inhibited by calling
+ * gdk_wayland_surface_inhibit_shortcuts().
+ */
 void
 gdk_wayland_surface_restore_shortcuts (GdkSurface *surface,
                                        GdkSeat    *gdk_seat)

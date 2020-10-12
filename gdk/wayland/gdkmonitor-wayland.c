@@ -49,7 +49,7 @@ gdk_wayland_monitor_class_init (GdkWaylandMonitorClass *class)
 }
 
 /**
- * gdk_wayland_monitor_get_wl_output:
+ * gdk_wayland_monitor_get_wl_output: (skip)
  * @monitor: (type GdkWaylandMonitor): a #GdkMonitor
  *
  * Returns the Wayland wl_output of a #GdkMonitor.

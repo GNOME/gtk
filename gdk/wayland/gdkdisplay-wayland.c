@@ -384,6 +384,15 @@ static const struct org_kde_kwin_server_decoration_manager_listener server_decor
   .default_mode = server_decoration_manager_default_mode
 };
 
+/**
+ * gdk_wayland_display_prefers_ssd:
+ * @display: (type GdkWaylandDisplay): a #GdkDisplay
+ *
+ * Checks whether the Wayland compositor prefers to draw the window
+ * decorations or if it leaves decorations to the application.
+ *
+ * Returns: %TRUE if the compositor prefers server-side decorations
+ */
 gboolean
 gdk_wayland_display_prefers_ssd (GdkDisplay *display)
 {
@@ -859,7 +868,7 @@ gdk_wayland_display_get_next_serial (GdkDisplay *display)
 
 /**
  * gdk_wayland_display_get_startup_notification_id:
- * @display: (type GdkX11Display): a #GdkDisplay
+ * @display: (type GdkWaylandDisplay): a #GdkDisplay
  *
  * Gets the startup notification ID for a Wayland display, or %NULL
  * if no ID has been defined.
@@ -1064,10 +1073,16 @@ get_cursor_theme (GdkWaylandDisplay *display_wayland,
   return wl_cursor_theme_create ("/usr/share/icons/default/cursors", size, display_wayland->shm);
 }
 
+/**
+ * gdk_wayland_display_set_cursor_theme:
+ * @display: (type GdkWaylandDisplay): a #GdkDisplay
+ *
+ * Sets the cursor theme for the given @display.
+ */
 void
-gdk_wayland_display_set_cursor_theme (GdkDisplay  *display,
+gdk_wayland_display_set_cursor_theme (GdkDisplay *display,
                                       const char *name,
-                                      int          size)
+                                      int         size)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY(display);
   struct wl_cursor_theme *theme;
@@ -1154,7 +1169,7 @@ _gdk_wayland_display_update_serial (GdkWaylandDisplay *display_wayland,
 }
 
 /**
- * gdk_wayland_display_get_wl_display:
+ * gdk_wayland_display_get_wl_display: (skip)
  * @display: (type GdkWaylandDisplay): a #GdkDisplay
  *
  * Returns the Wayland wl_display of a #GdkDisplay.
@@ -1170,7 +1185,7 @@ gdk_wayland_display_get_wl_display (GdkDisplay *display)
 }
 
 /**
- * gdk_wayland_display_get_wl_compositor:
+ * gdk_wayland_display_get_wl_compositor: (skip)
  * @display: (type GdkWaylandDisplay): a #GdkDisplay
  *
  * Returns the Wayland global singleton compositor of a #GdkDisplay.
@@ -2617,11 +2632,11 @@ gdk_wayland_display_get_output_scale (GdkWaylandDisplay *display_wayland,
 
 /**
  * gdk_wayland_display_query_registry:
- * @display: a wayland #GdkDisplay
+ * @display: (type GdkWaylandDisplay): a #GdkDisplay
  * @global: global interface to query in the registry
  *
  * Returns %TRUE if the the interface was found in the display
- * wl_registry.global handler.
+ * `wl_registry.global` handler.
  *
  * Returns: %TRUE if the global is offered by the compositor
  **/

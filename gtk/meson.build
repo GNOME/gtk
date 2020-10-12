@@ -1165,6 +1165,23 @@ if build_gir
     gtk_dep_sources += gdk_x11_gir
   endif
 
+  if wayland_enabled
+    gdk_wayland_gir = gnome.generate_gir(libgtk,
+                                         sources: gdk_wayland_public_headers + gdk_wayland_sources,
+                                         namespace: 'GdkWayland',
+                                         nsversion: gtk_api_version,
+                                         identifier_prefix: 'Gdk',
+                                         symbol_prefix: 'gdk',
+                                         export_packages: 'gtk4-wayland',
+                                         includes: [ gdk_gir[0], ],
+                                         install: true,
+                                         dependencies: gdk_gir_dep,
+                                         header: 'gdk/gdkwayland.h',
+                                         extra_args: gir_args,
+    )
+    gtk_dep_sources += gdk_wayland_gir
+  endif
+
   gsk_gir_inc = [ gdk_gir[0] ]
 
   gsk_gir = gnome.generate_gir(libgtk,
