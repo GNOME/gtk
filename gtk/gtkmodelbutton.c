@@ -940,22 +940,6 @@ switch_menu (GtkModelButton *button)
 }
 
 static void
-close_menu (GtkModelButton *self)
-{
-  GtkWidget *popover;
-
-  popover = gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_POPOVER);
-  while (popover != NULL)
-    {
-      gtk_popover_popdown (GTK_POPOVER (popover));
-      if (GTK_IS_POPOVER_MENU (popover))
-        popover = gtk_popover_menu_get_parent_menu (GTK_POPOVER_MENU (popover));
-      else
-        popover = NULL;
-    }
-}
-
-static void
 gtk_model_button_clicked (GtkModelButton *self)
 {
   if (self->menu_name != NULL)
@@ -975,7 +959,11 @@ gtk_model_button_clicked (GtkModelButton *self)
     }
   else if (self->role == GTK_BUTTON_ROLE_NORMAL)
     {
-      close_menu (self);
+      GtkWidget *popover;
+
+      popover = gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_POPOVER);
+      if (popover)
+        gtk_popover_popdown (GTK_POPOVER (popover));
     }
 
   if (self->action_helper)

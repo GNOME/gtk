@@ -809,6 +809,9 @@ _gtk_widget_grab_notify (GtkWidget *widget,
 
       gtk_event_controller_reset (controller);
     }
+
+  if (GTK_IS_NATIVE (widget))
+    gtk_widget_hide (widget);
 }
 
 static void
