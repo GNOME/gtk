@@ -1482,7 +1482,7 @@ gtk_text_class_init (GtkTextClass *class)
                                        "text.redo", NULL);
 
   gtk_widget_class_set_css_name (widget_class, I_("text"));
-  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_TEXT_BOX);
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_NONE);
 }
 
 static void
