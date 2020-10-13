@@ -33,7 +33,10 @@
 #include "gtkdebug.h"
 #include "gtkeditable.h"
 #include "gtklabelprivate.h"
-#include "gtktextprivate.h"
+#include "gtkentryprivate.h"
+#include "gtksearchentryprivate.h"
+#include "gtkpasswordentryprivate.h"
+#include "gtkspinbuttonprivate.h"
 #include "gtktextview.h"
 
 #include <gio/gio.h>
@@ -403,18 +406,28 @@ static const GDBusInterfaceVTable label_vtable = {
 
 
 static void
-text_handle_method (GDBusConnection       *connection,
-                    const gchar           *sender,
-                    const gchar           *object_path,
-                    const gchar           *interface_name,
-                    const gchar           *method_name,
-                    GVariant              *parameters,
-                    GDBusMethodInvocation *invocation,
-                    gpointer               user_data)
+entry_handle_method (GDBusConnection       *connection,
+                     const gchar           *sender,
+                     const gchar           *object_path,
+                     const gchar           *interface_name,
+                     const gchar           *method_name,
+                     GVariant              *parameters,
+                     GDBusMethodInvocation *invocation,
+                     gpointer               user_data)
 {
   GtkATContext *self = user_data;
   GtkAccessible *accessible = gtk_at_context_get_accessible (self);
   GtkWidget *widget = GTK_WIDGET (accessible);
+  GtkText *text_widget;
+
+  if (GTK_IS_ENTRY (widget))
+    text_widget = gtk_entry_get_text_widget (GTK_ENTRY (widget));
+  else if (GTK_IS_SEARCH_ENTRY (widget))
+    text_widget = gtk_search_entry_get_text_widget (GTK_SEARCH_ENTRY (widget));
+  else if (GTK_IS_PASSWORD_ENTRY (widget))
+    text_widget = gtk_password_entry_get_text_widget (GTK_PASSWORD_ENTRY (widget));
+  else if (GTK_IS_SPIN_BUTTON (widget))
+    text_widget = gtk_spin_button_get_text_widget (GTK_SPIN_BUTTON (widget));
 
   if (g_strcmp0 (method_name, "GetCaretOffset") == 0)
     {
@@ -466,7 +479,7 @@ text_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetTextBeforeOffset") == 0)
     {
-      PangoLayout *layout = gtk_text_get_layout (GTK_TEXT (widget));
+      PangoLayout *layout = gtk_text_get_layout (text_widget);
       int offset;
       AtspiTextBoundaryType boundary_type;
       char *string;
@@ -481,7 +494,7 @@ text_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetTextAtOffset") == 0)
     {
-      PangoLayout *layout = gtk_text_get_layout (GTK_TEXT (widget));
+      PangoLayout *layout = gtk_text_get_layout (text_widget);
       int offset;
       AtspiTextBoundaryType boundary_type;
       char *string;
@@ -496,7 +509,7 @@ text_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetTextAfterOffset") == 0)
     {
-      PangoLayout *layout = gtk_text_get_layout (GTK_TEXT (widget));
+      PangoLayout *layout = gtk_text_get_layout (text_widget);
       int offset;
       AtspiTextBoundaryType boundary_type;
       char *string;
@@ -525,7 +538,7 @@ text_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetStringAtOffset") == 0)
     {
-      PangoLayout *layout = gtk_text_get_layout (GTK_TEXT (widget));
+      PangoLayout *layout = gtk_text_get_layout (text_widget);
       int offset;
       AtspiTextGranularity granularity;
       char *string;
@@ -540,7 +553,7 @@ text_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetAttributes") == 0)
     {
-      PangoLayout *layout = gtk_text_get_layout (GTK_TEXT (widget));
+      PangoLayout *layout = gtk_text_get_layout (text_widget);
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int offset;
       int start, end;
@@ -553,7 +566,7 @@ text_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetAttributeValue") == 0)
     {
-      PangoLayout *layout = gtk_text_get_layout (GTK_TEXT (widget));
+      PangoLayout *layout = gtk_text_get_layout (text_widget);
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int offset;
       const char *name;
@@ -573,7 +586,7 @@ text_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetAttributeRun") == 0)
     {
-      PangoLayout *layout = gtk_text_get_layout (GTK_TEXT (widget));
+      PangoLayout *layout = gtk_text_get_layout (text_widget);
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int offset;
       gboolean include_defaults;
@@ -591,7 +604,7 @@ text_handle_method (GDBusConnection       *connection,
   else if (g_strcmp0 (method_name, "GetDefaultAttributes") == 0 ||
            g_strcmp0 (method_name, "GetDefaultAttributeSet") == 0)
     {
-      PangoLayout *layout = gtk_text_get_layout (GTK_TEXT (widget));
+      PangoLayout *layout = gtk_text_get_layout (text_widget);
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
 
       gtk_pango_get_default_attributes (layout, &builder);
@@ -719,13 +732,13 @@ text_handle_method (GDBusConnection       *connection,
 }
 
 static GVariant *
-text_get_property (GDBusConnection  *connection,
-                   const gchar      *sender,
-                   const gchar      *object_path,
-                   const gchar      *interface_name,
-                   const gchar      *property_name,
-                   GError          **error,
-                   gpointer          user_data)
+entry_get_property (GDBusConnection  *connection,
+                    const gchar      *sender,
+                    const gchar      *object_path,
+                    const gchar      *interface_name,
+                    const gchar      *property_name,
+                    GError          **error,
+                    gpointer          user_data)
 {
   GtkATContext *self = user_data;
   GtkAccessible *accessible = gtk_at_context_get_accessible (self);
@@ -753,9 +766,9 @@ text_get_property (GDBusConnection  *connection,
   return NULL;
 }
 
-static const GDBusInterfaceVTable text_vtable = {
-  text_handle_method,
-  text_get_property,
+static const GDBusInterfaceVTable entry_vtable = {
+  entry_handle_method,
+  entry_get_property,
   NULL,
 };
 
@@ -1142,8 +1155,11 @@ gtk_atspi_get_text_vtable (GtkWidget *widget)
 {
   if (GTK_IS_LABEL (widget))
     return &label_vtable;
-  else if (GTK_IS_TEXT (widget))
-    return &text_vtable;
+  else if (GTK_IS_ENTRY (widget) ||
+           GTK_IS_SEARCH_ENTRY (widget) ||
+           GTK_IS_PASSWORD_ENTRY (widget) ||
+           GTK_IS_SPIN_BUTTON (widget))
+    return &entry_vtable;
   else if (GTK_IS_TEXT_VIEW (widget))
     return &text_view_vtable;
 
