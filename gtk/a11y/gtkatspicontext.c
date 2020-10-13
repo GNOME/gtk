@@ -939,37 +939,6 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
 }
 
 static void
-insert_text_cb (GtkEditable     *editable,
-                char            *new_text,
-                int              new_text_length,
-                int             *position,
-                GtkAtSpiContext *self)
-{
-  int length;
-
-  if (new_text_length == 0)
-    return;
-
-  length = g_utf8_strlen (new_text, new_text_length);
-  emit_text_changed (self, "insert", *position - length, length, new_text);
-}
-
-static void
-delete_text_cb (GtkEditable     *editable,
-                int              start,
-                int              end,
-                GtkAtSpiContext *self)
-{
-  char *text;
-
-  if (start == end)
-    return;
-
-  text = gtk_editable_get_chars (editable, start, end);
-  emit_text_changed (self, "delete", start, end - start, text);
-}
-
-static void
 gtk_at_spi_context_dispose (GObject *gobject)
 {
   GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (gobject);
