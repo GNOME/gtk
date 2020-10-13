@@ -471,7 +471,6 @@ gtk_at_context_create (GtkAccessibleRole  accessible_role,
       if (a11y_backends[i].name == NULL)
         break;
 
-      GTK_NOTE (A11Y, g_message ("Trying %s a11y backend", a11y_backends[i].name));
       if (a11y_backends[i].create_context != NULL)
         {
           res = a11y_backends[i].create_context (accessible_role, accessible, display);

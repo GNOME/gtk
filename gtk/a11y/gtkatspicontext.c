@@ -1064,8 +1064,6 @@ gtk_at_spi_context_constructed (GObject *gobject)
         self->context_path[i] = '_';
     }
 
-  GTK_NOTE (A11Y, g_message ("ATSPI context path: %s", self->context_path));
-
   g_free (base_path);
   g_free (uuid);
 
