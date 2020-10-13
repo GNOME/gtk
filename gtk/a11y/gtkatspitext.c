@@ -404,6 +404,20 @@ static const GDBusInterfaceVTable label_vtable = {
   NULL,
 };
 
+static GtkText *
+gtk_editable_get_text_widget (GtkWidget *widget)
+{
+  if (GTK_IS_ENTRY (widget))
+    return gtk_entry_get_text_widget (GTK_ENTRY (widget));
+  else if (GTK_IS_SEARCH_ENTRY (widget))
+    return gtk_search_entry_get_text_widget (GTK_SEARCH_ENTRY (widget));
+  else if (GTK_IS_PASSWORD_ENTRY (widget))
+    return gtk_password_entry_get_text_widget (GTK_PASSWORD_ENTRY (widget));
+  else if (GTK_IS_SPIN_BUTTON (widget))
+    return gtk_spin_button_get_text_widget (GTK_SPIN_BUTTON (widget));
+
+  return NULL;
+}
 
 static void
 entry_handle_method (GDBusConnection       *connection,
@@ -418,16 +432,7 @@ entry_handle_method (GDBusConnection       *connection,
   GtkATContext *self = user_data;
   GtkAccessible *accessible = gtk_at_context_get_accessible (self);
   GtkWidget *widget = GTK_WIDGET (accessible);
-  GtkText *text_widget;
-
-  if (GTK_IS_ENTRY (widget))
-    text_widget = gtk_entry_get_text_widget (GTK_ENTRY (widget));
-  else if (GTK_IS_SEARCH_ENTRY (widget))
-    text_widget = gtk_search_entry_get_text_widget (GTK_SEARCH_ENTRY (widget));
-  else if (GTK_IS_PASSWORD_ENTRY (widget))
-    text_widget = gtk_password_entry_get_text_widget (GTK_PASSWORD_ENTRY (widget));
-  else if (GTK_IS_SPIN_BUTTON (widget))
-    text_widget = gtk_spin_button_get_text_widget (GTK_SPIN_BUTTON (widget));
+  GtkText *text_widget = gtk_editable_get_text_widget (widget);
 
   if (g_strcmp0 (method_name, "GetCaretOffset") == 0)
     {
@@ -1164,4 +1169,282 @@ gtk_atspi_get_text_vtable (GtkWidget *widget)
     return &text_view_vtable;
 
   return NULL;
+}
+
+typedef struct {
+  void (* text_changed)      (gpointer    data,
+                              const char *kind,
+                              int         start,
+                              int         end,
+                              const char *text);
+  void (* selection_changed) (gpointer    data,
+                              const char *kind,
+                              int         cursor_position);
+
+  gpointer data;
+  GtkTextBuffer *buffer;
+  int cursor_position;
+  int selection_bound;
+} TextChanged;
+
+static void
+insert_text_cb (GtkEditable     *editable,
+                char            *new_text,
+                int              new_text_length,
+                int             *position,
+                TextChanged     *changed)
+{
+  int length;
+
+  if (new_text_length == 0)
+    return;
+
+  length = g_utf8_strlen (new_text, new_text_length);
+  changed->text_changed (changed->data, "insert", *position - length, length, new_text);
+}
+
+static void
+delete_text_cb (GtkEditable     *editable,
+                int              start,
+                int              end,
+                TextChanged     *changed)
+{
+  char *text;
+
+  if (start == end)
+    return;
+
+  text = gtk_editable_get_chars (editable, start, end);
+  changed->text_changed (changed->data, "delete", start, end - start, text);
+  g_free (text);
+}
+
+static void
+update_selection (TextChanged *changed,
+                  int          cursor_position,
+                  int          selection_bound)
+{
+  gboolean caret_moved, bound_moved;
+
+  caret_moved = cursor_position != changed->cursor_position;
+  bound_moved = selection_bound != changed->selection_bound;
+
+  if (!caret_moved && !bound_moved)
+    return;
+
+  changed->cursor_position = cursor_position;
+  changed->selection_bound = selection_bound;
+
+  if (caret_moved)
+    changed->selection_changed (changed->data, "text-caret-moved", changed->cursor_position);
+
+  if (caret_moved || bound_moved)
+    changed->selection_changed (changed->data, "text-selection-changed", 0);
+}
+
+static void
+notify_cb (GObject     *object,
+           GParamSpec  *pspec,
+           TextChanged *changed)
+{
+  if (g_strcmp0 (pspec->name, "cursor-position") == 0 ||
+      g_strcmp0 (pspec->name, "selection-bound") == 0)
+    {
+      int cursor_position, selection_bound;
+
+      gtk_editable_get_selection_bounds (GTK_EDITABLE (object), &cursor_position, &selection_bound);
+      update_selection (changed, cursor_position, selection_bound);
+    }
+}
+
+static void
+update_cursor (GtkTextBuffer *buffer,
+               TextChanged   *changed)
+{
+  GtkTextIter iter;
+  int cursor_position, selection_bound;
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert (buffer));
+  cursor_position = gtk_text_iter_get_offset (&iter);
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_selection_bound (buffer));
+
+  selection_bound = gtk_text_iter_get_offset (&iter);
+
+  update_selection (changed, cursor_position, selection_bound);
+}
+
+static void
+insert_range_cb (GtkTextBuffer *buffer,
+                 GtkTextIter   *iter,
+                 char          *text,
+                 int            len,
+                 TextChanged   *changed)
+{
+  int position;
+  int length;
+
+  position = gtk_text_iter_get_offset (iter);
+  length = g_utf8_strlen (text, len);
+
+  changed->text_changed (changed->data, "insert", position - length, length, text);
+
+  update_cursor (buffer, changed);
+}
+
+static void
+delete_range_cb (GtkTextBuffer *buffer,
+                 GtkTextIter   *start,
+                 GtkTextIter   *end,
+                 TextChanged   *changed)
+{
+  int offset, length;
+  char *text;
+
+  text = gtk_text_buffer_get_slice (buffer, start, end, FALSE);
+
+  offset = gtk_text_iter_get_offset (start);
+  length = gtk_text_iter_get_offset (end) - offset;
+
+  changed->text_changed (changed->data, "delete", offset, length, text);
+
+  g_free (text);
+}
+
+static void
+delete_range_after_cb (GtkTextBuffer *buffer,
+                       GtkTextIter   *start,
+                       GtkTextIter   *end,
+                       TextChanged   *changed)
+{
+  update_cursor (buffer, changed);
+}
+
+static void
+mark_set_cb (GtkTextBuffer *buffer,
+             GtkTextIter   *location,
+             GtkTextMark   *mark,
+             TextChanged   *changed)
+{
+  if (mark == gtk_text_buffer_get_insert (buffer) ||
+      mark == gtk_text_buffer_get_selection_bound (buffer))
+    update_cursor (buffer, changed);
+}
+
+static void
+buffer_changed (GtkWidget   *widget,
+                GParamSpec  *pspec,
+                TextChanged *changed)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter start, end;
+  char *text;
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
+
+  if (changed->buffer)
+    {
+      g_signal_handlers_disconnect_by_func (changed->buffer, insert_range_cb, changed);
+      g_signal_handlers_disconnect_by_func (changed->buffer, delete_range_cb, changed);
+      g_signal_handlers_disconnect_by_func (changed->buffer, delete_range_after_cb, changed);
+      g_signal_handlers_disconnect_by_func (changed->buffer, mark_set_cb, changed);
+
+      gtk_text_buffer_get_bounds (changed->buffer, &start, &end);
+      text = gtk_text_buffer_get_slice (changed->buffer, &start, &end, FALSE);
+      changed->text_changed (changed->data, "delete", 0, gtk_text_buffer_get_char_count (changed->buffer), text);
+      g_free (text);
+
+      update_selection (changed, 0, 0);
+
+      g_clear_object (&changed->buffer);
+    }
+
+  changed->buffer = buffer;
+
+  if (changed->buffer)
+    {
+      g_object_ref (changed->buffer);
+      g_signal_connect (changed->buffer, "insert-text", G_CALLBACK (insert_range_cb), changed);
+      g_signal_connect (changed->buffer, "delete-range", G_CALLBACK (delete_range_cb), changed);
+      g_signal_connect_after (changed->buffer, "delete-range", G_CALLBACK (delete_range_after_cb), changed);
+      g_signal_connect_after (changed->buffer, "mark-set", G_CALLBACK (mark_set_cb), changed);
+
+      gtk_text_buffer_get_bounds (changed->buffer, &start, &end);
+      text = gtk_text_buffer_get_slice (changed->buffer, &start, &end, FALSE);
+      changed->text_changed (changed->data, "insert", 0, gtk_text_buffer_get_char_count (changed->buffer), text);
+      g_free (text);
+
+      update_cursor (changed->buffer, changed);
+    }
+}
+
+void
+gtk_atspi_connect_text_signals (GtkWidget *widget,
+                                GtkAtspiTextChangedCallback text_changed,
+                                GtkAtspiSelectionChangedCallback selection_changed,
+                                gpointer   data)
+{
+  TextChanged *changed;
+
+  changed = g_new0 (TextChanged, 1);
+  changed->text_changed = text_changed;
+  changed->selection_changed = selection_changed;
+  changed->data = data;
+
+  g_object_set_data_full (G_OBJECT (widget), "accessible-text-data", changed, g_free);
+
+  if (GTK_IS_EDITABLE (widget))
+    {
+      GtkText *text = gtk_editable_get_text_widget (widget);
+
+      if (text)
+        {
+          g_signal_connect_after (text, "insert-text", G_CALLBACK (insert_text_cb), changed);
+          g_signal_connect (text, "delete-text", G_CALLBACK (delete_text_cb), changed);
+          g_signal_connect (text, "notify", G_CALLBACK (notify_cb), changed);
+
+          gtk_editable_get_selection_bounds (GTK_EDITABLE (text), &changed->cursor_position, &changed->selection_bound);
+        }
+    }
+  else if (GTK_IS_TEXT_VIEW (widget))
+    {
+      g_signal_connect (widget, "notify::buffer", G_CALLBACK (buffer_changed), changed);
+      buffer_changed (widget, NULL, changed);
+    }
+}
+
+void
+gtk_atspi_disconnect_text_signals (GtkWidget *widget)
+{
+  TextChanged *changed;
+
+  changed = g_object_get_data (G_OBJECT (widget), "accessible-text-data");
+
+  g_assert (changed != NULL);
+
+  if (GTK_IS_EDITABLE (widget))
+    {
+      GtkText *text = gtk_editable_get_text_widget (widget);
+
+      if (text)
+        {
+          g_signal_handlers_disconnect_by_func (text, insert_text_cb, changed);
+          g_signal_handlers_disconnect_by_func (text, delete_text_cb, changed);
+          g_signal_handlers_disconnect_by_func (text, notify_cb, changed);
+        }
+    }
+  else if (GTK_IS_TEXT_VIEW (widget))
+    {
+      g_signal_handlers_disconnect_by_func (widget, buffer_changed, changed);
+      if (changed->buffer)
+        {
+          g_signal_handlers_disconnect_by_func (changed->buffer, insert_range_cb, changed);
+          g_signal_handlers_disconnect_by_func (changed->buffer, delete_range_cb, changed);
+          g_signal_handlers_disconnect_by_func (changed->buffer, delete_range_after_cb, changed);
+          g_signal_handlers_disconnect_by_func (changed->buffer, mark_set_cb, changed);
+        }
+      g_clear_object (&changed->buffer);
+    }
+
+  g_object_set_data (G_OBJECT (widget), "accessible-text-data", NULL);
 }

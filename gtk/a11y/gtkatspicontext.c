@@ -39,6 +39,7 @@
 
 #include "gtkdebug.h"
 #include "gtkeditable.h"
+#include "gtkentryprivate.h"
 #include "gtkroot.h"
 #include "gtktextview.h"
 #include "gtkwindow.h"
@@ -671,6 +672,38 @@ gtk_at_spi_context_unregister_object (GtkAtSpiContext *self)
 }
 
 static void
+emit_text_changed (GtkAtSpiContext *self,
+                   const char      *kind,
+                   int              start,
+                   int              end,
+                   const char      *text)
+{
+  g_dbus_connection_emit_signal (self->connection,
+                                 NULL,
+                                 self->context_path,
+                                 "org.a11y.atspi.Event.Object",
+                                 "TextChanged",
+                                 g_variant_new ("(siiva{sv})",
+                                                kind, start, end, g_variant_new_string (text), NULL),
+                                 NULL);
+}
+
+static void
+emit_selection_changed (GtkAtSpiContext *self,
+                        const char      *kind,
+                        int              cursor_position)
+{
+  g_dbus_connection_emit_signal (self->connection,
+                                 NULL,
+                                 self->context_path,
+                                 "org.a11y.atspi.Event.Object",
+                                 "TextChanged",
+                                 g_variant_new ("(siiva{sv})",
+                                                kind, cursor_position, 0, g_variant_new_string (""), NULL),
+                                 NULL);
+}
+
+static void
 emit_state_changed (GtkAtSpiContext *self,
                     const char      *name,
                     gboolean         enabled)
@@ -875,11 +908,44 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
 }
 
 static void
+insert_text_cb (GtkEditable     *editable,
+                char            *new_text,
+                int              new_text_length,
+                int             *position,
+                GtkAtSpiContext *self)
+{
+  int length;
+
+  if (new_text_length == 0)
+    return;
+
+  length = g_utf8_strlen (new_text, new_text_length);
+  emit_text_changed (self, "insert", *position - length, length, new_text);
+}
+
+static void
+delete_text_cb (GtkEditable     *editable,
+                int              start,
+                int              end,
+                GtkAtSpiContext *self)
+{
+  char *text;
+
+  if (start == end)
+    return;
+
+  text = gtk_editable_get_chars (editable, start, end);
+  emit_text_changed (self, "delete", start, end - start, text);
+}
+
+static void
 gtk_at_spi_context_dispose (GObject *gobject)
 {
   GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (gobject);
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
 
   gtk_at_spi_context_unregister_object (self);
+  gtk_atspi_disconnect_text_signals (GTK_WIDGET (accessible));
 
   G_OBJECT_CLASS (gtk_at_spi_context_parent_class)->dispose (gobject);
 }
@@ -1002,6 +1068,11 @@ gtk_at_spi_context_constructed (GObject *gobject)
   g_free (base_path);
   g_free (uuid);
 
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+  gtk_atspi_connect_text_signals (GTK_WIDGET (accessible),
+                                  emit_text_changed,
+                                  emit_selection_changed,
+                                  self);
   gtk_at_spi_context_register_object (self);
 
   G_OBJECT_CLASS (gtk_at_spi_context_parent_class)->constructed (gobject);
