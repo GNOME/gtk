@@ -603,7 +603,7 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
   GVariantBuilder interfaces = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE_STRING_ARRAY);
   const GDBusInterfaceVTable *vtable;
 
-  g_variant_builder_add (&interfaces, "s", "org.a11y.atspi.Accessible");
+  g_variant_builder_add (&interfaces, "s", atspi_accessible_interface.name);
   self->registration_ids[self->n_registered_objects] =
       g_dbus_connection_register_object (self->connection,
                                          self->context_path,
@@ -617,7 +617,7 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
   vtable = gtk_atspi_get_text_vtable (widget);
   if (vtable)
     {
-      g_variant_builder_add (&interfaces, "s", "org.a11y.atspi.Text");
+      g_variant_builder_add (&interfaces, "s", atspi_text_interface.name);
       self->registration_ids[self->n_registered_objects] =
           g_dbus_connection_register_object (self->connection,
                                              self->context_path,
@@ -632,7 +632,7 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
   vtable = gtk_atspi_get_editable_text_vtable (widget);
   if (vtable)
     {
-      g_variant_builder_add (&interfaces, "s", "org.a11y.atspi.EditableText");
+      g_variant_builder_add (&interfaces, "s", atspi_editable_text_interface.name);
       self->registration_ids[self->n_registered_objects] =
           g_dbus_connection_register_object (self->connection,
                                              self->context_path,
@@ -646,7 +646,7 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
   vtable = gtk_atspi_get_value_vtable (widget);
   if (vtable)
     {
-      g_variant_builder_add (&interfaces, "s", "org.a11y.atspi.Value");
+      g_variant_builder_add (&interfaces, "s", atspi_value_interface.name);
       self->registration_ids[self->n_registered_objects] =
           g_dbus_connection_register_object (self->connection,
                                              self->context_path,
@@ -661,7 +661,7 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
   vtable = gtk_atspi_get_selection_vtable (widget);
   if (vtable)
     {
-      g_variant_builder_add (&interfaces, "s", "org.a11y.atspi.Selection");
+      g_variant_builder_add (&interfaces, "s", atspi_selection_interface.name);
       self->registration_ids[self->n_registered_objects] =
           g_dbus_connection_register_object (self->connection,
                                              self->context_path,
