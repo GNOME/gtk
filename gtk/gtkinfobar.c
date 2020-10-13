@@ -42,7 +42,6 @@
 #include "gtkrevealer.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtkorientable.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkbinlayout.h"
