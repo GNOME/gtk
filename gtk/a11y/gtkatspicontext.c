@@ -422,7 +422,7 @@ handle_accessible_method (GDBusConnection       *connection,
   else if (g_strcmp0 (method_name, "GetApplication") == 0)
     {
       g_dbus_method_invocation_return_value (invocation,
-                                             g_variant_new ("((so))", gtk_at_spi_root_to_ref (self->root)));
+                                             g_variant_new ("(@(so))", gtk_at_spi_root_to_ref (self->root)));
     }
   else if (g_strcmp0 (method_name, "GetChildAtIndex") == 0)
     {
