@@ -1071,11 +1071,11 @@ gtk_at_spi_context_constructed (GObject *gobject)
 
   GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
   gtk_atspi_connect_text_signals (GTK_WIDGET (accessible),
-                                  emit_text_changed,
-                                  emit_text_selection_changed,
+                                  (GtkAtspiTextChangedCallback *)emit_text_changed,
+                                  (GtkAtspiTextSelectionCallback *)emit_text_selection_changed,
                                   self);
   gtk_atspi_connect_selection_signals (GTK_WIDGET (accessible),
-                                       emit_selection_changed,
+                                       (GtkAtspiSelectionCallback *)emit_selection_changed,
                                        self);
   gtk_at_spi_context_register_object (self);
 
