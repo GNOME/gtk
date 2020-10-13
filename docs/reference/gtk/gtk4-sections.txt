@@ -6150,6 +6150,8 @@ gtk_popover_get_has_arrow
 gtk_popover_set_offset
 gtk_popover_get_offset
 gtk_popover_set_default_widget
+gtk_popover_set_cascade_popdown
+gtk_popover_get_cascade_popdown
 <SUBSECTION Standard>
 GTK_TYPE_POPOVER
 GTK_IS_POPOVER

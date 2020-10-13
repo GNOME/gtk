@@ -149,6 +149,7 @@ typedef struct {
   gboolean has_arrow;
   gboolean mnemonics_visible;
   gboolean disable_auto_mnemonics;
+  gboolean cascade_popdown;
 
   int x_offset;
   int y_offset;
@@ -181,6 +182,7 @@ enum {
   PROP_HAS_ARROW,
   PROP_MNEMONICS_VISIBLE,
   PROP_CHILD,
+  PROP_CASCADE_POPDOWN,
   NUM_PROPERTIES
 };
 
@@ -852,6 +854,7 @@ gtk_popover_init (GtkPopover *popover)
   priv->final_position = GTK_POS_BOTTOM;
   priv->autohide = TRUE;
   priv->has_arrow = TRUE;
+  priv->cascade_popdown = TRUE;
 
   controller = gtk_event_controller_key_new ();
   g_signal_connect_swapped (controller, "key-pressed", G_CALLBACK (gtk_popover_key_pressed), popover);
@@ -1479,6 +1482,10 @@ gtk_popover_set_property (GObject      *object,
       gtk_popover_set_child (popover, g_value_get_object (value));
       break;
 
+    case PROP_CASCADE_POPDOWN:
+      gtk_popover_set_cascade_popdown (popover, g_value_get_boolean (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1522,6 +1529,10 @@ gtk_popover_get_property (GObject      *object,
 
     case PROP_CHILD:
       g_value_set_object (value, gtk_popover_get_child (popover));
+      break;
+
+    case PROP_CASCADE_POPDOWN:
+      g_value_set_boolean (value, priv->cascade_popdown);
       break;
 
     default:
@@ -1673,6 +1684,13 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                            P_("The child widget"),
                            GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_CASCADE_POPDOWN] =
+      g_param_spec_boolean ("cascade-popdown",
+                            P_("Cascade popdown"),
+                            P_("Wether the popover pops down after a child popover"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
@@ -2047,6 +2065,31 @@ gtk_popover_popup (GtkPopover *popover)
   gtk_widget_show (GTK_WIDGET (popover));
 }
 
+static void
+cascade_popdown (GtkPopover *popover)
+{
+  GtkWidget *parent;
+
+  /* Do not trigger cascade close from non-modal popovers */
+  if (!gtk_popover_get_autohide (popover))
+    return;
+
+  parent = gtk_widget_get_parent (GTK_WIDGET (popover));
+
+  while (parent)
+    {
+      if (GTK_IS_POPOVER (parent))
+        {
+          if (gtk_popover_get_cascade_popdown (GTK_POPOVER (parent)))
+            gtk_widget_hide (parent);
+          else
+            break;
+        }
+
+      parent = gtk_widget_get_parent (parent);
+    }
+}
+
 /**
  * gtk_popover_popdown:
  * @popover: a #GtkPopover
@@ -2061,6 +2104,8 @@ gtk_popover_popdown (GtkPopover *popover)
   g_return_if_fail (GTK_IS_POPOVER (popover));
 
   gtk_widget_hide (GTK_WIDGET (popover));
+
+  cascade_popdown (popover);
 }
 
 GtkWidget *
@@ -2222,4 +2267,41 @@ gtk_popover_get_offset (GtkPopover *popover,
 
   if (y_offset)
     *y_offset = priv->y_offset;
+}
+
+/**
+ * gtk_popover_set_cascade_popdown:
+ * @popover: A #GtkPopover
+ * @cascade_popdown: #TRUE if the popover should follow a child closing
+ *
+ * If @cascade_popdown is #TRUE, the popover will be closed when a child
+ * modal popover is closed. If #FALSE, @popover will stay visible.
+ **/
+void
+gtk_popover_set_cascade_popdown (GtkPopover *popover,
+                                 gboolean    cascade_popdown)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  if (priv->cascade_popdown != !!cascade_popdown)
+    {
+      priv->cascade_popdown = !!cascade_popdown;
+      g_object_notify (G_OBJECT (popover), "cascade-popdown");
+    }
+}
+
+/**
+ * gtk_popover_get_cascade_popdown:
+ * @popover: a #GtkPopover
+ *
+ * Returns whether the popover will close after a modal child is closed.
+ *
+ * Returns: #TRUE if @popover will close after a modal child.
+ **/
+gboolean
+gtk_popover_get_cascade_popdown (GtkPopover *popover)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  return priv->cascade_popdown;
 }
