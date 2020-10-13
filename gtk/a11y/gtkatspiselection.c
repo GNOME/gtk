@@ -29,6 +29,7 @@
 #include "gtkaccessibleprivate.h"
 #include "gtkdebug.h"
 #include "gtklistbox.h"
+#include "gtkcombobox.h"
 
 #include <gio/gio.h>
 
@@ -209,11 +210,109 @@ static const GDBusInterfaceVTable listbox_vtable = {
   NULL
 };
 
+
+static void
+combobox_handle_method (GDBusConnection       *connection,
+                        const gchar           *sender,
+                        const gchar           *object_path,
+                        const gchar           *interface_name,
+                        const gchar           *method_name,
+                        GVariant              *parameters,
+                        GDBusMethodInvocation *invocation,
+                        gpointer               user_data)
+{
+  GtkATContext *self = user_data;
+  GtkAccessible *accessible = gtk_at_context_get_accessible (self);
+  GtkWidget *widget = GTK_WIDGET (accessible);
+
+  if (g_strcmp0 (method_name, "GetSelectedChild") == 0)
+    {
+      /* Need to figure out what to do here */
+      g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED, "");
+    }
+  else if (g_strcmp0 (method_name, "SelectChild") == 0)
+    {
+      int idx;
+
+      g_variant_get (parameters, "(i)", &idx);
+      gtk_combo_box_set_active (GTK_COMBO_BOX (widget), idx);
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", TRUE));
+    }
+  else if (g_strcmp0 (method_name, "DeselectChild") == 0)
+    {
+      int idx;
+
+      g_variant_get (parameters, "(i)", &idx);
+
+      gtk_combo_box_set_active (GTK_COMBO_BOX (widget), -1);
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", TRUE));
+    }
+  else if (g_strcmp0 (method_name, "DeselectSelectedChild") == 0)
+    {
+      int idx;
+
+      g_variant_get (parameters, "(i)", &idx);
+      if (idx == 0)
+        gtk_combo_box_set_active (GTK_COMBO_BOX (widget), -1);
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", idx == 0));
+    }
+  else if (g_strcmp0 (method_name, "IsChildSelected") == 0)
+    {
+      int idx;
+      gboolean active;
+
+      g_variant_get (parameters, "(i)", &idx);
+      active = idx = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", active));
+    }
+  else if (g_strcmp0 (method_name, "SelectAll") == 0)
+    {
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", FALSE));
+    }
+  else if (g_strcmp0 (method_name, "ClearSelection") == 0)
+    {
+      gtk_combo_box_set_active (GTK_COMBO_BOX (widget), -1);
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", TRUE));
+    }
+}
+
+static GVariant *
+combobox_get_property (GDBusConnection  *connection,
+                       const gchar      *sender,
+                       const gchar      *object_path,
+                       const gchar      *interface_name,
+                       const gchar      *property_name,
+                       GError          **error,
+                       gpointer          user_data)
+{
+  GtkATContext *self = GTK_AT_CONTEXT (user_data);
+  GtkAccessible *accessible = gtk_at_context_get_accessible (self);
+  GtkWidget *widget = GTK_WIDGET (accessible);
+
+  if (g_strcmp0 (property_name, "NSelectedChildren") == 0)
+    {
+      if (gtk_combo_box_get_active (GTK_COMBO_BOX (widget)))
+        return g_variant_new_int32 (1);
+      else
+        return g_variant_new_int32 (0);
+    }
+
+  return NULL;
+}
+
+static const GDBusInterfaceVTable combobox_vtable = {
+  combobox_handle_method,
+  combobox_get_property,
+  NULL
+};
+
 const GDBusInterfaceVTable *
 gtk_atspi_get_selection_vtable (GtkWidget *widget)
 {
-  if (GTK_IS_LIST_BOX(widget))
+  if (GTK_IS_LIST_BOX (widget))
     return &listbox_vtable;
+  else if (GTK_IS_COMBO_BOX (widget))
+    return &combobox_vtable;
 
   return NULL;
 }
@@ -239,13 +338,26 @@ gtk_atspi_connect_selection_signals (GtkWidget *widget,
       g_object_set_data_full (G_OBJECT (widget), "accessible-selection-data", changed, g_free);
 
       g_signal_connect_swapped (widget, "selected-rows-changed", G_CALLBACK (selection_changed), data);
-   }
+    }
+  else if (GTK_IS_COMBO_BOX (widget))
+    {
+      SelectionChanged *changed;
+
+      changed = g_new (SelectionChanged, 1);
+      changed->changed = selection_changed;
+      changed->data = data;
+
+      g_object_set_data_full (G_OBJECT (widget), "accessible-selection-data", changed, g_free);
+
+      g_signal_connect_swapped (widget, "changed", G_CALLBACK (selection_changed), data);
+    }
 }
 
 void
 gtk_atspi_disconnect_selection_signals (GtkWidget *widget)
 {
-  if (GTK_IS_LIST_BOX (widget))
+  if (GTK_IS_LIST_BOX (widget) ||
+      GTK_IS_COMBO_BOX (widget))
     {
       SelectionChanged *changed;
 
@@ -256,4 +368,3 @@ gtk_atspi_disconnect_selection_signals (GtkWidget *widget)
       g_object_set_data (G_OBJECT (widget), "accessible-selection-data", NULL);
     }
 }
-
