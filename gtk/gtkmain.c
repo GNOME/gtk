@@ -988,7 +988,7 @@ rewrite_event_for_surface (GdkEvent  *event,
                                    gdk_event_get_modifier_state (event),
                                    gdk_button_event_get_button (event),
                                    x, y,
-                                   axes);
+                                   g_steal_pointer (&axes));
     case GDK_MOTION_NOTIFY:
       return gdk_motion_event_new (new_surface,
                                    gdk_event_get_device (event),
@@ -996,7 +996,7 @@ rewrite_event_for_surface (GdkEvent  *event,
                                    gdk_event_get_time (event),
                                    gdk_event_get_modifier_state (event),
                                    x, y,
-                                   axes);
+                                   g_steal_pointer (&axes));
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_UPDATE:
     case GDK_TOUCH_END:
@@ -1008,7 +1008,7 @@ rewrite_event_for_surface (GdkEvent  *event,
                                   gdk_event_get_time (event),
                                   gdk_event_get_modifier_state (event),
                                   x, y,
-                                  axes,
+                                  g_steal_pointer (&axes),
                                   gdk_touch_event_get_emulating_pointer (event));
     case GDK_TOUCHPAD_SWIPE:
       gdk_touchpad_event_get_deltas (event, &dx, &dy);
@@ -1036,6 +1036,7 @@ rewrite_event_for_surface (GdkEvent  *event,
       break;
     }
 
+  g_assert (!axes);
   return NULL;
 }
 
