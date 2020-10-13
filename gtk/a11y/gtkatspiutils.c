@@ -21,6 +21,8 @@
 #include "config.h"
 
 #include "gtkatspiutilsprivate.h"
+#include "gtkenums.h"
+#include "gtkpasswordentry.h"
 
 /*< private >
  * gtk_accessible_role_to_atspi_role:
@@ -30,7 +32,7 @@
  *
  * Returns: an #AtspiRole
  */
-AtspiRole
+static AtspiRole
 gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
 {
   switch (role)
@@ -274,6 +276,28 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
     }
 
   return ATSPI_ROLE_FILLER;
+}
+
+/*<private>
+ * gtk_atspi_role_for_context:
+ * @context: a #GtkATContext
+ *
+ * Returns a suitable ATSPI role for a context, taking into account
+ * both the #GtkAccessibleRole set on the context and the type
+ * of accessible.
+ *
+ * Returns: an #AtspiRole
+ */
+AtspiRole
+gtk_atspi_role_for_context (GtkATContext *context)
+{
+  GtkAccessible *accessible = gtk_at_context_get_accessible (context);
+  GtkAccessibleRole role = gtk_at_context_get_accessible_role (context);
+
+  if (GTK_IS_PASSWORD_ENTRY (accessible))
+    return ATSPI_ROLE_PASSWORD_TEXT;
+
+  return gtk_accessible_role_to_atspi_role (role);
 }
 
 GVariant *

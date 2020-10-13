@@ -370,8 +370,8 @@ handle_accessible_method (GDBusConnection       *connection,
 
   if (g_strcmp0 (method_name, "GetRole") == 0)
     {
-      GtkAccessibleRole role = gtk_at_context_get_accessible_role (GTK_AT_CONTEXT (self));
-      guint atspi_role = gtk_accessible_role_to_atspi_role (role);
+      guint atspi_role = gtk_atspi_role_for_context (GTK_AT_CONTEXT (self));
+
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(u)", atspi_role));
     }
   else if (g_strcmp0 (method_name, "GetRoleName") == 0)

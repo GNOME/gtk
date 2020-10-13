@@ -21,12 +21,12 @@
 #pragma once
 
 #include "gtkatspiprivate.h"
-#include "gtkenums.h"
+#include "gtkatcontextprivate.h"
 
 G_BEGIN_DECLS
 
 AtspiRole
-gtk_accessible_role_to_atspi_role (GtkAccessibleRole role);
+gtk_atspi_role_for_context (GtkATContext *context);
 
 GVariant *
 gtk_at_spi_null_ref (void);
