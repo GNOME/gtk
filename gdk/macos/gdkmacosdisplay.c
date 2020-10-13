@@ -380,7 +380,8 @@ gdk_macos_display_sync (GdkDisplay *display)
 static gulong
 gdk_macos_display_get_next_serial (GdkDisplay *display)
 {
-  return 0;
+  static gulong serial = 0;
+  return ++serial;
 }
 
 static gboolean
@@ -437,7 +438,7 @@ gdk_macos_display_queue_events (GdkDisplay *display)
           _gdk_windowing_got_event (GDK_DISPLAY (self),
                                     _gdk_event_queue_append (GDK_DISPLAY (self), event),
                                     event,
-                                    0);
+                                    _gdk_display_get_next_serial (GDK_DISPLAY (self)));
         }
       else
         {
@@ -900,7 +901,8 @@ _gdk_macos_display_break_all_grabs (GdkMacosDisplay *self,
                                              grab->surface,
                                              TRUE);
           node = _gdk_event_queue_append (GDK_DISPLAY (self), event);
-          _gdk_windowing_got_event (GDK_DISPLAY (self), node, event, 0);
+          _gdk_windowing_got_event (GDK_DISPLAY (self), node, event,
+                                    _gdk_display_get_next_serial (GDK_DISPLAY (self)));
         }
     }
 }
