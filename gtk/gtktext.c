@@ -3377,7 +3377,7 @@ gtk_text_delete_selection (GtkText *self)
   int start_pos = MIN (priv->selection_bound, priv->current_pos);
   int end_pos = MAX (priv->selection_bound, priv->current_pos);
 
-  gtk_text_delete_text (self, start_pos, end_pos);
+  gtk_editable_delete_text (self, start_pos, end_pos);
 }
 
 static void
@@ -3872,7 +3872,7 @@ gtk_text_insert_at_cursor (GtkText    *self,
   if (priv->editable)
     {
       gtk_text_reset_im_context (self);
-      gtk_text_insert_text (self, str, -1, &pos);
+      gtk_editable_insert_text (GTK_EDITABLE (self), str, -1, &pos);
       gtk_text_set_selection_bounds (self, pos, pos);
     }
 }
@@ -3905,7 +3905,7 @@ gtk_text_delete_from_cursor (GtkText       *self,
     {
     case GTK_DELETE_CHARS:
       end_pos = gtk_text_move_logically (self, priv->current_pos, count);
-      gtk_text_delete_text (self, MIN (start_pos, end_pos), MAX (start_pos, end_pos));
+      gtk_editable_delete_text (GTK_EDITABLE (self), MIN (start_pos, end_pos), MAX (start_pos, end_pos));
       break;
 
     case GTK_DELETE_WORDS:
@@ -3935,21 +3935,21 @@ gtk_text_delete_from_cursor (GtkText       *self,
           count--;
         }
 
-      gtk_text_delete_text (self, start_pos, end_pos);
+      gtk_editable_delete_text (self, start_pos, end_pos);
       break;
 
     case GTK_DELETE_DISPLAY_LINE_ENDS:
     case GTK_DELETE_PARAGRAPH_ENDS:
       if (count < 0)
-        gtk_text_delete_text (self, 0, priv->current_pos);
+        gtk_editable_delete_text (self, 0, priv->current_pos);
       else
-        gtk_text_delete_text (self, priv->current_pos, -1);
+        gtk_editable_delete_text (self, priv->current_pos, -1);
 
       break;
 
     case GTK_DELETE_DISPLAY_LINES:
     case GTK_DELETE_PARAGRAPHS:
-      gtk_text_delete_text (self, 0, -1);  
+      gtk_editable_delete_text (self, 0, -1);  
       break;
 
     case GTK_DELETE_WHITESPACE:
@@ -4009,12 +4009,12 @@ gtk_text_backspace (GtkText *self)
                                               G_NORMALIZE_NFD);
           len = g_utf8_strlen (normalized_text, -1);
 
-          gtk_text_delete_text (self, prev_pos, priv->current_pos);
+          gtk_editable_delete_text (self, prev_pos, priv->current_pos);
           if (len > 1)
             {
               int pos = priv->current_pos;
 
-              gtk_text_insert_text (self, normalized_text,
+              gtk_editable_insert_text (self, normalized_text,
                                     g_utf8_offset_to_pointer (normalized_text, len - 1) - normalized_text,
                                     &pos);
               gtk_text_set_selection_bounds (self, pos, pos);
@@ -4025,7 +4025,7 @@ gtk_text_backspace (GtkText *self)
         }
       else
         {
-          gtk_text_delete_text (self, prev_pos, priv->current_pos);
+          gtk_editable_delete_text (self, prev_pos, priv->current_pos);
         }
     }
   else
@@ -4239,9 +4239,9 @@ gtk_text_delete_surrounding_cb (GtkIMContext *context,
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
   if (priv->editable)
-    gtk_text_delete_text (self,
-                          priv->current_pos + offset,
-                          priv->current_pos + offset + n_chars);
+    gtk_editable_delete_text (self,
+                              priv->current_pos + offset,
+                              priv->current_pos + offset + n_chars);
 
   return TRUE;
 }
@@ -4275,7 +4275,7 @@ gtk_text_enter_text (GtkText    *self,
     }
 
   tmp_pos = priv->current_pos;
-  gtk_text_insert_text (self, str, strlen (str), &tmp_pos);
+  gtk_editable_insert_text (self, str, strlen (str), &tmp_pos);
   gtk_text_set_selection_bounds (self, tmp_pos, tmp_pos);
 
   priv->need_im_reset = old_need_im_reset;
@@ -5166,7 +5166,7 @@ gtk_text_delete_whitespace (GtkText *self)
     end++;
 
   if (start != end)
-    gtk_text_delete_text (self, start, end);
+    gtk_editable_delete_text (self, start, end);
 }
 
 
@@ -5234,7 +5234,7 @@ paste_received (GObject      *clipboard,
     gtk_text_delete_selection (self);
 
   pos = priv->current_pos;
-  gtk_text_insert_text (self, text, length, &pos);
+  gtk_editable_insert_text (self, text, length, &pos);
   gtk_text_set_selection_bounds (self, pos, pos);
   end_change (self);
 
@@ -5459,9 +5459,9 @@ gtk_text_set_text (GtkText     *self,
 
   begin_change (self);
   g_object_freeze_notify (G_OBJECT (self));
-  gtk_text_delete_text (self, 0, -1);
+  gtk_editable_delete_text (self, 0, -1);
   tmp_pos = 0;
-  gtk_text_insert_text (self, text, strlen (text), &tmp_pos);
+  gtk_editable_insert_text (self, text, strlen (text), &tmp_pos);
   g_object_thaw_notify (G_OBJECT (self));
   end_change (self);
 
@@ -6245,7 +6245,7 @@ gtk_text_drag_drop (GtkDropTarget *dest,
       drop_position < priv->selection_bound ||
       drop_position > priv->current_pos)
     {
-      gtk_text_insert_text (self, str, length, &drop_position);
+      gtk_editable_insert_text (self, str, length, &drop_position);
     }
   else
     {
@@ -6254,7 +6254,7 @@ gtk_text_drag_drop (GtkDropTarget *dest,
       begin_change (self);
       gtk_text_delete_selection (self);
       pos = MIN (priv->selection_bound, priv->current_pos);
-      gtk_text_insert_text (self, str, length, &pos);
+      gtk_editable_insert_text (self, str, length, &pos);
       end_change (self);
     }
   
@@ -6816,7 +6816,7 @@ emoji_picked (GtkEmojiChooser *chooser,
     gtk_text_delete_selection (self);
 
   pos = priv->current_pos;
-  gtk_text_insert_text (self, text, -1, &pos);
+  gtk_editable_insert_text (self, text, -1, &pos);
   gtk_text_set_selection_bounds (self, pos, pos);
   end_change (self);
 }
