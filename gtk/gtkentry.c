@@ -334,6 +334,12 @@ G_DEFINE_TYPE_WITH_CODE (GtkEntry, gtk_entry, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_EDITABLE,
                                                 gtk_entry_cell_editable_init))
 
+/* Implement the GtkAccessible interface, in order to obtain focus
+ * state from the #GtkText widget that we are wrapping. The GtkText
+ * widget is ignored for accessibility purposes (it has role NONE),
+ * and any a11y text functionality is implemented for GtkEntry and
+ * similar wrappers (GtkPasswordEntry, GtkSpinButton, etc).
+ */
 static gboolean
 gtk_entry_accessible_get_platform_state (GtkAccessible              *self,
                                          GtkAccessiblePlatformState  state)

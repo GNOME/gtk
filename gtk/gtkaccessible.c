@@ -638,6 +638,20 @@ gtk_accessible_role_to_name (GtkAccessibleRole  role,
   return role_names[role];
 }
 
+/*<private>
+ * gtk_accessible_platform_changed:
+ * @self: a #GtkAccessible
+ * @change: the platform state change to report
+ *
+ * ARIA discriminates between author-controlled states
+ * and 'platform' states, which are not. This function
+ * can be used by widgets to inform ATs that a platform
+ * state, such as focus, has changed.
+ *
+ * Note that the state itself is not included in this API.
+ * AT backends should use gtk_accessible_get_platform_state()
+ * to obtain the actual state.
+ */
 void
 gtk_accessible_platform_changed (GtkAccessible               *self,
                                  GtkAccessiblePlatformChange  change)
@@ -660,6 +674,21 @@ gtk_accessible_platform_changed (GtkAccessible               *self,
   gtk_at_context_update (context);
 }
 
+/*<private>
+ * gtk_accessible_get_platform_state:
+ * @self: a #GtkAccessible
+ * @state: platform state to query
+ *
+ * Query a platform state, such as focus.
+ *
+ * See gtk_accessible_platform_changed().
+ *
+ * This functionality can be overridden by #GtkAccessible
+ * implementations, e.g. to get platform state from an ignored
+ * child widget, as is the case for #GtkText wrappers.
+ *
+ * Returns: the value of @state for the accessible
+ */
 gboolean
 gtk_accessible_get_platform_state (GtkAccessible              *self,
                                    GtkAccessiblePlatformState  state)
@@ -667,6 +696,19 @@ gtk_accessible_get_platform_state (GtkAccessible              *self,
   return GTK_ACCESSIBLE_GET_IFACE (self)->get_platform_state (self, state);
 }
 
+/*<private>
+ * gtk_accessible_should_present:
+ * @self: a #GtkAccessible
+ *
+ * Returns whether this accessible should be represented to ATs.
+ *
+ * By default, hidden widgets are are among these, but there can
+ * be other reasons to return %FALSE, e.g. for widgets that are
+ * purely presentations, or for widgets whose functionality is
+ * represented elsewhere, as is the case for #GtkText widgets.
+ *
+ * Returns: %TRUE if the widget should be represented
+ */
 gboolean
 gtk_accessible_should_present (GtkAccessible *self)
 {
