@@ -596,19 +596,6 @@ gtk_popover_native_check_resize (GtkNative *native)
     present_popup (popover);
 }
 
-static void
-close_menu (GtkPopover *popover)
-{
-  while (popover)
-    {
-      gtk_popover_popdown (popover);
-      if (GTK_IS_POPOVER_MENU (popover))
-        popover = (GtkPopover *)gtk_popover_menu_get_parent_menu (GTK_POPOVER_MENU (popover));
-      else
-        popover = NULL;
-    }
-}
-
 static gboolean
 gtk_popover_has_mnemonic_modifier_pressed (GtkPopover *popover)
 {
@@ -720,7 +707,7 @@ gtk_popover_key_pressed (GtkWidget       *widget,
 
   if (keyval == GDK_KEY_Escape)
     {
-      close_menu (popover);
+      gtk_popover_popdown (popover);
       return TRUE;
     }
 
