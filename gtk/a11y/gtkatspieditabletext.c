@@ -25,7 +25,11 @@
 
 #include "a11y/atspi/atspi-editabletext.h"
 
-#include "gtktext.h"
+#include "gtkeditable.h"
+#include "gtkentry.h"
+#include "gtksearchentry.h"
+#include "gtkpasswordentry.h"
+#include "gtkspinbutton.h"
 #include "gtktextview.h"
 
 #include <gio/gio.h>
@@ -53,14 +57,14 @@ text_received (GObject      *source,
 }
 
 static void
-text_handle_method (GDBusConnection       *connection,
-                    const gchar           *sender,
-                    const gchar           *object_path,
-                    const gchar           *interface_name,
-                    const gchar           *method_name,
-                    GVariant              *parameters,
-                    GDBusMethodInvocation *invocation,
-                    gpointer               user_data)
+entry_handle_method (GDBusConnection       *connection,
+                     const gchar           *sender,
+                     const gchar           *object_path,
+                     const gchar           *interface_name,
+                     const gchar           *method_name,
+                     GVariant              *parameters,
+                     GDBusMethodInvocation *invocation,
+                     gpointer               user_data)
 {
   GtkATContext *self = user_data;
   GtkAccessible *accessible = gtk_at_context_get_accessible (self);
@@ -169,8 +173,8 @@ text_handle_method (GDBusConnection       *connection,
     }
 }
 
-static const GDBusInterfaceVTable text_vtable = {
-  text_handle_method,
+static const GDBusInterfaceVTable entry_vtable = {
+  entry_handle_method,
   NULL,
 };
 
@@ -339,8 +343,11 @@ static const GDBusInterfaceVTable text_view_vtable = {
 const GDBusInterfaceVTable *
 gtk_atspi_get_editable_text_vtable (GtkWidget *widget)
 {
-  if (GTK_IS_TEXT (widget))
-    return &text_vtable;
+  if (GTK_IS_ENTRY (widget) ||
+      GTK_IS_SEARCH_ENTRY (widget) ||
+      GTK_IS_PASSWORD_ENTRY (widget) ||
+      GTK_IS_SPIN_BUTTON (widget))
+    return &entry_vtable;
   else if (GTK_IS_TEXT_VIEW (widget))
     return &text_view_vtable;
 
