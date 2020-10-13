@@ -118,21 +118,12 @@ gtk_overlay_layout_child_get_property (GObject    *gobject,
 }
 
 static void
-gtk_overlay_layout_child_finalize (GObject *gobject)
-{
-  //GtkOverlayLayoutChild *self = GTK_OVERLAY_LAYOUT_CHILD (gobject);
-
-  G_OBJECT_CLASS (gtk_overlay_layout_child_parent_class)->finalize (gobject);
-}
-
-static void
 gtk_overlay_layout_child_class_init (GtkOverlayLayoutChildClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   gobject_class->set_property = gtk_overlay_layout_child_set_property;
   gobject_class->get_property = gtk_overlay_layout_child_get_property;
-  gobject_class->finalize = gtk_overlay_layout_child_finalize;
 
   /**
    * GtkOverlayLayoutChild:measure:
