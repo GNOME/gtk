@@ -29,6 +29,7 @@
 
 #include "gtksearchentryprivate.h"
 
+#include "gtkaccessibleprivate.h"
 #include "gtkeditable.h"
 #include "gtkboxlayout.h"
 #include "gtkgestureclick.h"
@@ -135,8 +136,11 @@ struct _GtkSearchEntryClass
 };
 
 static void gtk_search_entry_editable_init (GtkEditableInterface *iface);
+static void gtk_search_entry_accessible_init (GtkAccessibleInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkSearchEntry, gtk_search_entry, GTK_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE,
+                                                gtk_search_entry_accessible_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
                                                 gtk_search_entry_editable_init))
 
@@ -436,6 +440,31 @@ static void
 gtk_search_entry_editable_init (GtkEditableInterface *iface)
 {
   iface->get_delegate = gtk_search_entry_get_delegate;
+}
+
+static gboolean
+gtk_search_entry_accessible_get_platform_state (GtkAccessible              *self,
+                                                GtkAccessiblePlatformState  state)
+{
+  GtkSearchEntry *entry = GTK_SEARCH_ENTRY (self);
+
+  switch (state)
+    {
+    case GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE:
+      return gtk_widget_get_focusable (GTK_WIDGET (entry->entry));
+    case GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED:
+      return gtk_widget_has_focus (GTK_WIDGET (entry->entry));
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static void
+gtk_search_entry_accessible_init (GtkAccessibleInterface *iface)
+{
+  GtkAccessibleInterface *parent_iface = g_type_interface_peek_parent (iface);
+  iface->get_at_context = parent_iface->get_at_context;
+  iface->get_platform_state = gtk_search_entry_accessible_get_platform_state;
 }
 
 static void
