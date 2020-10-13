@@ -125,7 +125,8 @@ collect_states (GtkAtSpiContext    *self,
   set_atspi_state (&states, ATSPI_STATE_VISIBLE);
 
   if (ctx->accessible_role == GTK_ACCESSIBLE_ROLE_TEXT_BOX ||
-      ctx->accessible_role == GTK_ACCESSIBLE_ROLE_SEARCH_BOX)
+      ctx->accessible_role == GTK_ACCESSIBLE_ROLE_SEARCH_BOX ||
+      ctx->accessible_role == GTK_ACCESSIBLE_ROLE_SPIN_BUTTON)
     set_atspi_state (&states, ATSPI_STATE_EDITABLE);
 
   if (gtk_at_context_has_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_READ_ONLY))
