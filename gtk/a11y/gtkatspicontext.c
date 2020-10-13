@@ -401,6 +401,17 @@ handle_accessible_method (GDBusConnection       *connection,
 
       g_variant_builder_open (&builder, G_VARIANT_TYPE ("a{ss}"));
       g_variant_builder_add (&builder, "{ss}", "toolkit", "GTK");
+
+      if (gtk_at_context_has_accessible_property (GTK_AT_CONTEXT (self), GTK_ACCESSIBLE_PROPERTY_PLACEHOLDER))
+        {
+          GtkAccessibleValue *value;
+
+          value = gtk_at_context_get_accessible_property (GTK_AT_CONTEXT (self), GTK_ACCESSIBLE_PROPERTY_PLACEHOLDER);
+
+          g_variant_builder_add (&builder, "{ss}",
+                                 "placeholder-text", gtk_string_accessible_value_get (value));
+        }
+
       g_variant_builder_close (&builder);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_builder_end (&builder));
