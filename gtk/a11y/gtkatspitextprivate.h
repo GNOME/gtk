@@ -32,13 +32,13 @@ typedef void (GtkAtspiTextChangedCallback) (gpointer    data,
                                             int         start,
                                             int         end,
                                             const char *text);
-typedef void (GtkAtspiSelectionChangedCallback) (gpointer    data,
-                                                 const char *kind,
-                                                 int         position);
+typedef void (GtkAtspiTextSelectionCallback) (gpointer    data,
+                                              const char *kind,
+                                              int         position);
 
 void gtk_atspi_connect_text_signals    (GtkWidget *widget,
                                         GtkAtspiTextChangedCallback text_changed,
-                                        GtkAtspiSelectionChangedCallback selection_changed,
+                                        GtkAtspiTextSelectionCallback selection_changed,
                                         gpointer   data);
 void gtk_atspi_disconnect_text_signals (GtkWidget *widget);
 

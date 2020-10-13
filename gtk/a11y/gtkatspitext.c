@@ -1188,11 +1188,11 @@ typedef struct {
 } TextChanged;
 
 static void
-insert_text_cb (GtkEditable     *editable,
-                char            *new_text,
-                int              new_text_length,
-                int             *position,
-                TextChanged     *changed)
+insert_text_cb (GtkEditable *editable,
+                char        *new_text,
+                int          new_text_length,
+                int         *position,
+                TextChanged *changed)
 {
   int length;
 
@@ -1204,10 +1204,10 @@ insert_text_cb (GtkEditable     *editable,
 }
 
 static void
-delete_text_cb (GtkEditable     *editable,
-                int              start,
-                int              end,
-                TextChanged     *changed)
+delete_text_cb (GtkEditable *editable,
+                int          start,
+                int          end,
+                TextChanged *changed)
 {
   char *text;
 
@@ -1381,10 +1381,14 @@ buffer_changed (GtkWidget   *widget,
 void
 gtk_atspi_connect_text_signals (GtkWidget *widget,
                                 GtkAtspiTextChangedCallback text_changed,
-                                GtkAtspiSelectionChangedCallback selection_changed,
+                                GtkAtspiTextSelectionCallback selection_changed,
                                 gpointer   data)
 {
   TextChanged *changed;
+
+  if (!GTK_IS_EDITABLE (widget) &&
+      !GTK_IS_TEXT_VIEW (widget))
+    return;
 
   changed = g_new0 (TextChanged, 1);
   changed->text_changed = text_changed;
@@ -1419,8 +1423,6 @@ gtk_atspi_disconnect_text_signals (GtkWidget *widget)
   TextChanged *changed;
 
   changed = g_object_get_data (G_OBJECT (widget), "accessible-text-data");
-
-  g_assert (changed != NULL);
 
   if (GTK_IS_EDITABLE (widget))
     {

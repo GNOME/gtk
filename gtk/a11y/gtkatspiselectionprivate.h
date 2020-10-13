@@ -1,6 +1,6 @@
-/* gtkatspicontextprivate.h: AT-SPI GtkATContext implementation
+/* gtkatspiselectionprivate.h: AT-SPI Selection implementation
  *
- * Copyright 2020  GNOME Foundation
+ * Copyright 2020 Red Hat, Inc.
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
  *
@@ -20,23 +20,19 @@
 
 #pragma once
 
-#include "gtkatcontextprivate.h"
+#include <gio/gio.h>
+#include "gtkwidget.h"
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_AT_SPI_CONTEXT (gtk_at_spi_context_get_type())
+const GDBusInterfaceVTable *gtk_atspi_get_selection_vtable (GtkWidget *widget);
 
-G_DECLARE_FINAL_TYPE (GtkAtSpiContext, gtk_at_spi_context, GTK, AT_SPI_CONTEXT, GtkATContext)
+typedef void (GtkAtspiSelectionCallback) (gpointer data);
 
-GtkATContext *
-gtk_at_spi_create_context (GtkAccessibleRole  accessible_role,
-                           GtkAccessible     *accessible,
-                           GdkDisplay        *display);
+void gtk_atspi_connect_selection_signals    (GtkWidget *widget,
+                                             GtkAtspiSelectionCallback selection_changed,
+                                             gpointer   data);
+void gtk_atspi_disconnect_selection_signals (GtkWidget *widget);
 
-const char *
-gtk_at_spi_context_get_context_path (GtkAtSpiContext *self);
-
-GVariant *
-gtk_at_spi_context_to_ref (GtkAtSpiContext *self);
 
 G_END_DECLS

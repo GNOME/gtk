@@ -31,11 +31,13 @@
 #include "gtkatspitextprivate.h"
 #include "gtkatspieditabletextprivate.h"
 #include "gtkatspivalueprivate.h"
+#include "gtkatspiselectionprivate.h"
 
 #include "a11y/atspi/atspi-accessible.h"
 #include "a11y/atspi/atspi-text.h"
 #include "a11y/atspi/atspi-editabletext.h"
 #include "a11y/atspi/atspi-value.h"
+#include "a11y/atspi/atspi-selection.h"
 
 #include "gtkdebug.h"
 #include "gtkeditable.h"
@@ -656,6 +658,21 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
       self->n_registered_objects++;
     }
 
+  vtable = gtk_atspi_get_selection_vtable (widget);
+  if (vtable)
+    {
+      g_variant_builder_add (&interfaces, "s", "org.a11y.atspi.Selection");
+      self->registration_ids[self->n_registered_objects] =
+          g_dbus_connection_register_object (self->connection,
+                                             self->context_path,
+                                             (GDBusInterfaceInfo *) &atspi_selection_interface,
+                                             vtable,
+                                             self,
+                                             NULL,
+                                             NULL);
+      self->n_registered_objects++;
+    }
+
   self->interfaces = g_variant_ref_sink (g_variant_builder_end (&interfaces));
 }
 
@@ -689,9 +706,9 @@ emit_text_changed (GtkAtSpiContext *self,
 }
 
 static void
-emit_selection_changed (GtkAtSpiContext *self,
-                        const char      *kind,
-                        int              cursor_position)
+emit_text_selection_changed (GtkAtSpiContext *self,
+                             const char      *kind,
+                             int              cursor_position)
 {
   g_dbus_connection_emit_signal (self->connection,
                                  NULL,
@@ -700,6 +717,20 @@ emit_selection_changed (GtkAtSpiContext *self,
                                  "TextChanged",
                                  g_variant_new ("(siiva{sv})",
                                                 kind, cursor_position, 0, g_variant_new_string (""), NULL),
+                                 NULL);
+}
+
+static void
+emit_selection_changed (GtkAtSpiContext *self,
+                        const char      *kind)
+{
+  g_dbus_connection_emit_signal (self->connection,
+                                 NULL,
+                                 self->context_path,
+                                 "org.a11y.atspi.Event.Object",
+                                 "SelectionChanged",
+                                 g_variant_new ("(siiva{sv})",
+                                                "", 0, 0, g_variant_new_string (""), NULL),
                                  NULL);
 }
 
@@ -946,6 +977,7 @@ gtk_at_spi_context_dispose (GObject *gobject)
 
   gtk_at_spi_context_unregister_object (self);
   gtk_atspi_disconnect_text_signals (GTK_WIDGET (accessible));
+  gtk_atspi_disconnect_selection_signals (GTK_WIDGET (accessible));
 
   G_OBJECT_CLASS (gtk_at_spi_context_parent_class)->dispose (gobject);
 }
@@ -1071,8 +1103,11 @@ gtk_at_spi_context_constructed (GObject *gobject)
   GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
   gtk_atspi_connect_text_signals (GTK_WIDGET (accessible),
                                   emit_text_changed,
-                                  emit_selection_changed,
+                                  emit_text_selection_changed,
                                   self);
+  gtk_atspi_connect_selection_signals (GTK_WIDGET (accessible),
+                                       emit_selection_changed,
+                                       self);
   gtk_at_spi_context_register_object (self);
 
   G_OBJECT_CLASS (gtk_at_spi_context_parent_class)->constructed (gobject);
@@ -1294,4 +1329,19 @@ gtk_at_spi_context_get_context_path (GtkAtSpiContext *self)
   g_return_val_if_fail (GTK_IS_AT_SPI_CONTEXT (self), NULL);
 
   return self->context_path;
+}
+
+/*< private >
+ * gtk_at_spi_context_to_ref:
+ * @self: a #GtkAtSpiContext
+ *
+ * Returns an ATSPI object reference for the #GtkAtSpiContext.
+ *
+ * Returns: (transfer floating): a #GVariant with the reference
+ */
+GVariant *
+gtk_at_spi_context_to_ref (GtkAtSpiContext *self)
+{
+  const char *name = g_dbus_connection_get_unique_name (self->connection);
+  return g_variant_new ("(so)", name, self->context_path);
 }
