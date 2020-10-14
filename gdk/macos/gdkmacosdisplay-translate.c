@@ -1120,10 +1120,21 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
       break;
 
     case NSEventTypeMouseExited:
-      [[NSCursor arrowCursor] set];
-      /* fallthrough */
     case NSEventTypeMouseEntered:
-      ret = synthesize_crossing_event (self, surface, nsevent, x, y);
+      {
+        GdkSeat *seat = gdk_display_get_default_seat (GDK_DISPLAY (self));
+        GdkDevice *pointer = gdk_seat_get_pointer (seat);
+        GdkDeviceGrabInfo *grab = _gdk_display_get_last_device_grab (GDK_DISPLAY (self), pointer);
+
+        if (grab == NULL)
+          {
+            if (event_type == NSEventTypeMouseExited)
+              [[NSCursor arrowCursor] set];
+
+            ret = synthesize_crossing_event (self, surface, nsevent, x, y);
+          }
+      }
+
       break;
 
     case NSEventTypeKeyDown:
