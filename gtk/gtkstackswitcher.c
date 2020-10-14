@@ -267,6 +267,14 @@ add_child (guint             position,
   selected = gtk_selection_model_is_selected (self->pages, position);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), selected);
 
+  gtk_accessible_update_state (GTK_ACCESSIBLE (button),
+                               GTK_ACCESSIBLE_STATE_SELECTED, selected,
+                               -1);
+
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (button),
+                                  GTK_ACCESSIBLE_RELATION_CONTROLS, g_list_append (NULL, page),
+                                  -1);
+
   g_signal_connect (button, "notify::active", G_CALLBACK (on_button_toggled), self);
   g_signal_connect (page, "notify", G_CALLBACK (on_page_updated), self);
 
@@ -331,6 +339,10 @@ selection_changed_cb (GtkSelectionModel *model,
         {
           selected = gtk_selection_model_is_selected (switcher->pages, i);
           gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), selected);
+
+          gtk_accessible_update_state (GTK_ACCESSIBLE (button),
+                                       GTK_ACCESSIBLE_STATE_SELECTED, selected,
+                                       -1);
         }
       g_object_unref (page);
     }
