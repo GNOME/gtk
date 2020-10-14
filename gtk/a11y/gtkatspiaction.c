@@ -29,7 +29,265 @@
 
 #include "gtkactionable.h"
 #include "gtkactionmuxerprivate.h"
+#include "gtkbutton.h"
+#include "gtkswitch.h"
 #include "gtkwidgetprivate.h"
+
+#include <glib/gi18n-lib.h>
+
+static void
+button_handle_method (GDBusConnection       *connection,
+                      const gchar           *sender,
+                      const gchar           *object_path,
+                      const gchar           *interface_name,
+                      const gchar           *method_name,
+                      GVariant              *parameters,
+                      GDBusMethodInvocation *invocation,
+                      gpointer               user_data)
+{
+  GtkAtSpiContext *self = user_data;
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+  GtkWidget *widget = GTK_WIDGET (accessible);
+
+  if (g_strcmp0 (method_name, "GetName") == 0)
+    {
+      int idx;
+
+      g_variant_get (parameters, "(i)", &idx);
+
+      if (idx == 0)
+        g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", "click"));
+      else
+        g_dbus_method_invocation_return_error (invocation,
+                                               G_IO_ERROR,
+                                               G_IO_ERROR_INVALID_ARGUMENT,
+                                               "Unknown action %d",
+                                               idx);
+    }
+  else if (g_strcmp0 (method_name, "GetLocalizedName") == 0)
+    {
+      int idx;
+
+      g_variant_get (parameters, "(i)", &idx);
+
+      if (idx == 0)
+        g_dbus_method_invocation_return_value (invocation,
+                                               g_variant_new ("(s)", C_("accessibility", "Click")));
+      else
+        g_dbus_method_invocation_return_error (invocation,
+                                               G_IO_ERROR,
+                                               G_IO_ERROR_INVALID_ARGUMENT,
+                                               "Unknown action %d",
+                                               idx);
+    }
+  else if (g_strcmp0 (method_name, "GetDescription") == 0)
+    {
+      int idx;
+
+      g_variant_get (parameters, "(i)", &idx);
+
+      if (idx == 0)
+        g_dbus_method_invocation_return_value (invocation,
+                                               g_variant_new ("(s)",
+                                                              C_("accessibility", "Clicks the button")));
+      else
+        g_dbus_method_invocation_return_error (invocation,
+                                               G_IO_ERROR,
+                                               G_IO_ERROR_INVALID_ARGUMENT,
+                                               "Unknown action %d",
+                                               idx);
+    }
+  else if (g_strcmp0 (method_name, "DoAction") == 0)
+    {
+      int idx;
+
+      g_variant_get (parameters, "(i)", &idx);
+
+      if (idx == 0)
+        {
+          gtk_widget_activate (widget);
+          g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", TRUE));
+        }
+      else
+        {
+          g_dbus_method_invocation_return_error (invocation,
+                                                 G_IO_ERROR,
+                                                 G_IO_ERROR_INVALID_ARGUMENT,
+                                                 "Unknown action %d",
+                                                 idx);
+        }
+    }
+  else if (g_strcmp0 (method_name, "GetKeyBinding") == 0)
+    {
+      int idx;
+
+      g_variant_get (parameters, "(i)", &idx);
+
+      if (idx == 0)
+        g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", "<Space>"));
+      else
+        g_dbus_method_invocation_return_error (invocation,
+                                               G_IO_ERROR,
+                                               G_IO_ERROR_INVALID_ARGUMENT,
+                                               "Unknown action %d",
+                                               idx);
+    }
+  else if (g_strcmp0 (method_name, "GetActions") == 0)
+    {
+      GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a(sss)"));
+
+      g_variant_builder_add (&builder, "(ssss)",
+                             "click",
+                             C_("accessibility", "Click"),
+                             C_("accessibility", "Activates the button"),
+                             "<Space>");
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a(ssss))", &builder));
+    }
+}
+
+static GVariant *
+button_handle_get_property (GDBusConnection  *connection,
+                            const gchar      *sender,
+                            const gchar      *object_path,
+                            const gchar      *interface_name,
+                            const gchar      *property_name,
+                            GError          **error,
+                            gpointer          user_data)
+{
+  GVariant *res = NULL;
+
+  if (g_strcmp0 (property_name, "NActions") == 0)
+    res = g_variant_new_int32 (1);
+  else
+    g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                 "Unknown property '%s'", property_name);
+
+  return res;
+}
+
+static const GDBusInterfaceVTable button_action_vtable = {
+  button_handle_method,
+  button_handle_get_property,
+  NULL,
+};
+
+static void
+switch_handle_method (GDBusConnection       *connection,
+                      const gchar           *sender,
+                      const gchar           *object_path,
+                      const gchar           *interface_name,
+                      const gchar           *method_name,
+                      GVariant              *parameters,
+                      GDBusMethodInvocation *invocation,
+                      gpointer               user_data)
+{
+  GtkAtSpiContext *self = user_data;
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+  GtkWidget *widget = GTK_WIDGET (accessible);
+
+  if (g_strcmp0 (method_name, "GetName") == 0)
+    {
+      int idx;
+
+      g_variant_get (parameters, "(i)", &idx);
+
+      if (idx == 0)
+        g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", "toggle"));
+      else
+        g_dbus_method_invocation_return_error (invocation,
+                                               G_IO_ERROR,
+                                               G_IO_ERROR_INVALID_ARGUMENT,
+                                               "Unknown action %d",
+                                               idx);
+    }
+  else if (g_strcmp0 (method_name, "GetLocalizedName") == 0)
+    {
+      int idx;
+
+      g_variant_get (parameters, "(i)", &idx);
+
+      if (idx == 0)
+        g_dbus_method_invocation_return_value (invocation,
+                                               g_variant_new ("(s)", C_("accessibility", "Toggle")));
+      else
+        g_dbus_method_invocation_return_error (invocation,
+                                               G_IO_ERROR,
+                                               G_IO_ERROR_INVALID_ARGUMENT,
+                                               "Unknown action %d",
+                                               idx);
+    }
+  else if (g_strcmp0 (method_name, "GetDescription") == 0)
+    {
+      int idx;
+
+      g_variant_get (parameters, "(i)", &idx);
+
+      if (idx == 0)
+        g_dbus_method_invocation_return_value (invocation,
+                                               g_variant_new ("(s)",
+                                                              C_("accessibility", "Toggles the switch")));
+      else
+        g_dbus_method_invocation_return_error (invocation,
+                                               G_IO_ERROR,
+                                               G_IO_ERROR_INVALID_ARGUMENT,
+                                               "Unknown action %d",
+                                               idx);
+    }
+  else if (g_strcmp0 (method_name, "DoAction") == 0)
+    {
+      int idx;
+
+      g_variant_get (parameters, "(i)", &idx);
+
+      if (idx == 0)
+        {
+          gtk_widget_activate (widget);
+          g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", TRUE));
+        }
+      else
+        {
+          g_dbus_method_invocation_return_error (invocation,
+                                                 G_IO_ERROR,
+                                                 G_IO_ERROR_INVALID_ARGUMENT,
+                                                 "Unknown action %d",
+                                                 idx);
+        }
+    }
+  else if (g_strcmp0 (method_name, "GetKeyBinding") == 0)
+    {
+      int idx;
+
+      g_variant_get (parameters, "(i)", &idx);
+
+      if (idx == 0)
+        g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", "<Space>"));
+      else
+        g_dbus_method_invocation_return_error (invocation,
+                                               G_IO_ERROR,
+                                               G_IO_ERROR_INVALID_ARGUMENT,
+                                               "Unknown action %d",
+                                               idx);
+    }
+  else if (g_strcmp0 (method_name, "GetActions") == 0)
+    {
+      GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a(sss)"));
+
+      g_variant_builder_add (&builder, "(ssss)",
+                             "click",
+                             C_("accessibility", "Click"),
+                             C_("accessibility", "Activates the button"),
+                             "<Space>");
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a(ssss))", &builder));
+    }
+}
+
+static const GDBusInterfaceVTable switch_action_vtable = {
+  switch_handle_method,
+  button_handle_get_property,
+  NULL,
+};
 
 static gboolean
 is_valid_action (GtkActionMuxer *muxer,
@@ -242,7 +500,11 @@ static const GDBusInterfaceVTable widget_action_vtable = {
 const GDBusInterfaceVTable *
 gtk_atspi_get_action_vtable (GtkAccessible *accessible)
 {
-  if (GTK_IS_WIDGET (accessible))
+  if (GTK_IS_BUTTON (accessible))
+    return &button_action_vtable;
+  else if (GTK_IS_SWITCH (accessible))
+    return &switch_action_vtable;
+  else if (GTK_IS_WIDGET (accessible))
     return &widget_action_vtable;
 
   return NULL;
