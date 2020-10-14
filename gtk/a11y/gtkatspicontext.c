@@ -24,18 +24,20 @@
 
 #include "gtkaccessibleprivate.h"
 
+#include "gtkatspiactionprivate.h"
 #include "gtkatspicacheprivate.h"
-#include "gtkatspirootprivate.h"
-#include "gtkatspiprivate.h"
-#include "gtkatspiutilsprivate.h"
-#include "gtkatspitextprivate.h"
 #include "gtkatspieditabletextprivate.h"
-#include "gtkatspivalueprivate.h"
+#include "gtkatspiprivate.h"
+#include "gtkatspirootprivate.h"
 #include "gtkatspiselectionprivate.h"
+#include "gtkatspitextprivate.h"
+#include "gtkatspiutilsprivate.h"
+#include "gtkatspivalueprivate.h"
 
 #include "a11y/atspi/atspi-accessible.h"
-#include "a11y/atspi/atspi-text.h"
+#include "a11y/atspi/atspi-action.h"
 #include "a11y/atspi/atspi-editabletext.h"
+#include "a11y/atspi/atspi-text.h"
 #include "a11y/atspi/atspi-value.h"
 #include "a11y/atspi/atspi-selection.h"
 
@@ -331,6 +333,7 @@ collect_relations (GtkAtSpiContext *self,
     }
 }
 /* }}} */
+
 /* {{{ Accessible implementation */
 static int
 get_index_in_parent (GtkWidget *widget)
@@ -696,8 +699,8 @@ static const GDBusInterfaceVTable accessible_vtable = {
   handle_accessible_get_property,
   NULL,
 };
-
 /* }}} */
+
 /* {{{ Change notification */
 static void
 emit_text_changed (GtkAtSpiContext *self,
@@ -1028,6 +1031,21 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
                                              self,
                                              NULL,
                                              NULL);
+      self->n_registered_objects++;
+    }
+
+  vtable = gtk_atspi_get_action_vtable (accessible);
+  if (vtable)
+    {
+      g_variant_builder_add (&interfaces, "s", atspi_action_interface.name);
+      self->registration_ids[self->n_registered_objects] =
+        g_dbus_connection_register_object (self->connection,
+                                           self->context_path,
+                                           (GDBusInterfaceInfo *) &atspi_action_interface,
+                                           vtable,
+                                           self,
+                                           NULL,
+                                           NULL);
       self->n_registered_objects++;
     }
 
