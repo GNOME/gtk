@@ -1,4 +1,5 @@
 /* gtkatspitextbufferprivate.h: Utilities for GtkTextBuffer and AT-SPI
+ *
  * Copyright 2020 Red Hat, Inc
  *
  * This library is free software; you can redistribute it and/or

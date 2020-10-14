@@ -1,6 +1,6 @@
-/* gtkatspicontext.c: AT-SPI Value implementation
+/* gtkatspivalue.c: AT-SPI Value implementation
  *
- * Copyright 2020  GNOME Foundation
+ * Copyright 2020 Red Hat, Inc.
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
  *
