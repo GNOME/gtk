@@ -21,18 +21,18 @@
 #pragma once
 
 #include <gio/gio.h>
-#include "gtkwidget.h"
+#include "gtkaccessible.h"
 
 G_BEGIN_DECLS
 
-const GDBusInterfaceVTable *gtk_atspi_get_selection_vtable (GtkWidget *widget);
+const GDBusInterfaceVTable *gtk_atspi_get_selection_vtable (GtkAccessible *accessible);
 
 typedef void (GtkAtspiSelectionCallback) (gpointer data);
 
-void gtk_atspi_connect_selection_signals    (GtkWidget *widget,
+void gtk_atspi_connect_selection_signals    (GtkAccessible *accessible,
                                              GtkAtspiSelectionCallback selection_changed,
                                              gpointer   data);
-void gtk_atspi_disconnect_selection_signals (GtkWidget *widget);
+void gtk_atspi_disconnect_selection_signals (GtkAccessible *accessible);
 
 
 G_END_DECLS

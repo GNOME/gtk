@@ -230,16 +230,16 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
       return ATSPI_ROLE_CHECK_BOX;
 
     case GTK_ACCESSIBLE_ROLE_TAB:
-      return ATSPI_ROLE_FILLER;
+      return ATSPI_ROLE_PAGE_TAB;
 
     case GTK_ACCESSIBLE_ROLE_TABLE:
       return ATSPI_ROLE_TABLE;
 
     case GTK_ACCESSIBLE_ROLE_TAB_LIST:
-      return ATSPI_ROLE_FILLER;
+      return ATSPI_ROLE_PAGE_TAB_LIST;
 
     case GTK_ACCESSIBLE_ROLE_TAB_PANEL:
-      return ATSPI_ROLE_FILLER;
+      return ATSPI_ROLE_PANEL;
 
     case GTK_ACCESSIBLE_ROLE_TEXT_BOX:
       return ATSPI_ROLE_TEXT;

@@ -21,10 +21,10 @@
 #pragma once
 
 #include <gio/gio.h>
-#include "gtkwidget.h"
+#include "gtkaccessible.h"
 
 G_BEGIN_DECLS
 
-const GDBusInterfaceVTable *gtk_atspi_get_value_vtable (GtkWidget *widget);
+const GDBusInterfaceVTable *gtk_atspi_get_value_vtable (GtkAccessible *accessible);
 
 G_END_DECLS

@@ -341,14 +341,14 @@ static const GDBusInterfaceVTable text_view_vtable = {
 
 
 const GDBusInterfaceVTable *
-gtk_atspi_get_editable_text_vtable (GtkWidget *widget)
+gtk_atspi_get_editable_text_vtable (GtkAccessible *accessible)
 {
-  if (GTK_IS_ENTRY (widget) ||
-      GTK_IS_SEARCH_ENTRY (widget) ||
-      GTK_IS_PASSWORD_ENTRY (widget) ||
-      GTK_IS_SPIN_BUTTON (widget))
+  if (GTK_IS_ENTRY (accessible) ||
+      GTK_IS_SEARCH_ENTRY (accessible) ||
+      GTK_IS_PASSWORD_ENTRY (accessible) ||
+      GTK_IS_SPIN_BUTTON (accessible))
     return &entry_vtable;
-  else if (GTK_IS_TEXT_VIEW (widget))
+  else if (GTK_IS_TEXT_VIEW (accessible))
     return &text_view_vtable;
 
   return NULL;

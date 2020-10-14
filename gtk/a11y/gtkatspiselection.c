@@ -460,13 +460,13 @@ static const GDBusInterfaceVTable combobox_vtable = {
 };
 
 const GDBusInterfaceVTable *
-gtk_atspi_get_selection_vtable (GtkWidget *widget)
+gtk_atspi_get_selection_vtable (GtkAccessible *accessible)
 {
-  if (GTK_IS_LIST_BOX (widget))
+  if (GTK_IS_LIST_BOX (accessible))
     return &listbox_vtable;
-  else if (GTK_IS_FLOW_BOX (widget))
+  else if (GTK_IS_FLOW_BOX (accessible))
     return &flowbox_vtable;
-  else if (GTK_IS_COMBO_BOX (widget))
+  else if (GTK_IS_COMBO_BOX (accessible))
     return &combobox_vtable;
 
   return NULL;
@@ -478,11 +478,11 @@ typedef struct {
 } SelectionChanged;
 
 void
-gtk_atspi_connect_selection_signals (GtkWidget *widget,
+gtk_atspi_connect_selection_signals (GtkAccessible *accessible,
                                      GtkAtspiSelectionCallback selection_changed,
                                      gpointer   data)
 {
-  if (GTK_IS_LIST_BOX (widget))
+  if (GTK_IS_LIST_BOX (accessible))
     {
       SelectionChanged *changed;
 
@@ -490,11 +490,11 @@ gtk_atspi_connect_selection_signals (GtkWidget *widget,
       changed->changed = selection_changed;
       changed->data = data;
 
-      g_object_set_data_full (G_OBJECT (widget), "accessible-selection-data", changed, g_free);
+      g_object_set_data_full (G_OBJECT (accessible), "accessible-selection-data", changed, g_free);
 
-      g_signal_connect_swapped (widget, "selected-rows-changed", G_CALLBACK (selection_changed), data);
+      g_signal_connect_swapped (accessible, "selected-rows-changed", G_CALLBACK (selection_changed), data);
     }
-  else if (GTK_IS_FLOW_BOX (widget))
+  else if (GTK_IS_FLOW_BOX (accessible))
     {
       SelectionChanged *changed;
 
@@ -502,11 +502,11 @@ gtk_atspi_connect_selection_signals (GtkWidget *widget,
       changed->changed = selection_changed;
       changed->data = data;
 
-      g_object_set_data_full (G_OBJECT (widget), "accessible-selection-data", changed, g_free);
+      g_object_set_data_full (G_OBJECT (accessible), "accessible-selection-data", changed, g_free);
 
-      g_signal_connect_swapped (widget, "selected-children-changed", G_CALLBACK (selection_changed), data);
+      g_signal_connect_swapped (accessible, "selected-children-changed", G_CALLBACK (selection_changed), data);
     }
-  else if (GTK_IS_COMBO_BOX (widget))
+  else if (GTK_IS_COMBO_BOX (accessible))
     {
       SelectionChanged *changed;
 
@@ -514,25 +514,25 @@ gtk_atspi_connect_selection_signals (GtkWidget *widget,
       changed->changed = selection_changed;
       changed->data = data;
 
-      g_object_set_data_full (G_OBJECT (widget), "accessible-selection-data", changed, g_free);
+      g_object_set_data_full (G_OBJECT (accessible), "accessible-selection-data", changed, g_free);
 
-      g_signal_connect_swapped (widget, "changed", G_CALLBACK (selection_changed), data);
+      g_signal_connect_swapped (accessible, "changed", G_CALLBACK (selection_changed), data);
     }
 }
 
 void
-gtk_atspi_disconnect_selection_signals (GtkWidget *widget)
+gtk_atspi_disconnect_selection_signals (GtkAccessible *accessible)
 {
-  if (GTK_IS_LIST_BOX (widget) ||
-      GTK_IS_FLOW_BOX (widget) ||
-      GTK_IS_COMBO_BOX (widget))
+  if (GTK_IS_LIST_BOX (accessible) ||
+      GTK_IS_FLOW_BOX (accessible) ||
+      GTK_IS_COMBO_BOX (accessible))
     {
       SelectionChanged *changed;
 
-      changed = g_object_get_data (G_OBJECT (widget), "accessible-selection-data");
+      changed = g_object_get_data (G_OBJECT (accessible), "accessible-selection-data");
 
-      g_signal_handlers_disconnect_by_func (widget, changed->changed, changed->data);
+      g_signal_handlers_disconnect_by_func (accessible, changed->changed, changed->data);
 
-      g_object_set_data (G_OBJECT (widget), "accessible-selection-data", NULL);
+      g_object_set_data (G_OBJECT (accessible), "accessible-selection-data", NULL);
     }
 }
