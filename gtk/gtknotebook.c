@@ -1404,13 +1404,14 @@ gtk_notebook_init (GtkNotebook *notebook)
   gtk_widget_hide (notebook->header_widget);
   gtk_widget_set_parent (notebook->header_widget, GTK_WIDGET (notebook));
 
-  notebook->tabs_widget = gtk_gizmo_new ("tabs",
-                                         gtk_notebook_measure_tabs,
-                                         gtk_notebook_allocate_tabs,
-                                         gtk_notebook_snapshot_tabs,
-                                         NULL,
-                                         (GtkGizmoFocusFunc)gtk_widget_focus_self,
-                                         (GtkGizmoGrabFocusFunc)gtk_widget_grab_focus_self);
+  notebook->tabs_widget = gtk_gizmo_new_with_role ("tabs",
+                                                   GTK_ACCESSIBLE_ROLE_TAB_LIST,
+                                                   gtk_notebook_measure_tabs,
+                                                   gtk_notebook_allocate_tabs,
+                                                   gtk_notebook_snapshot_tabs,
+                                                   NULL,
+                                                   (GtkGizmoFocusFunc)gtk_widget_focus_self,
+                                                   (GtkGizmoGrabFocusFunc)gtk_widget_grab_focus_self);
   gtk_widget_set_hexpand (notebook->tabs_widget, TRUE);
   gtk_box_append (GTK_BOX (notebook->header_widget), notebook->tabs_widget);
 
@@ -3915,6 +3916,7 @@ gtk_notebook_insert_notebook_page (GtkNotebook *notebook,
   GList *list;
   GtkWidget *sibling;
   GtkEventController *controller;
+  GtkStackPage *stack_page;
 
   nchildren = g_list_length (notebook->children);
   if ((position < 0) || (position > nchildren))
@@ -3929,7 +3931,14 @@ gtk_notebook_insert_notebook_page (GtkNotebook *notebook,
   else
   sibling = notebook->arrow_widget[ARROW_RIGHT_AFTER];
 
-  page->tab_widget = gtk_gizmo_new ("tab", measure_tab, allocate_tab, NULL, NULL, NULL, NULL);
+  page->tab_widget = gtk_gizmo_new_with_role ("tab",
+                                              GTK_ACCESSIBLE_ROLE_TAB,
+                                              measure_tab,
+                                              allocate_tab,
+                                              NULL,
+                                              NULL,
+                                              NULL,
+                                              NULL);
   g_object_set_data (G_OBJECT (page->tab_widget), "notebook", notebook);
   gtk_widget_insert_before (page->tab_widget, notebook->tabs_widget, sibling);
   controller = gtk_drop_controller_motion_new ();
@@ -3950,6 +3959,15 @@ gtk_notebook_insert_notebook_page (GtkNotebook *notebook,
       gtk_widget_set_parent (page->tab_label, page->tab_widget);
       g_object_set_data (G_OBJECT (page->tab_label), "notebook", notebook);
     }
+
+  stack_page = gtk_stack_get_page (GTK_STACK (notebook->stack_widget), page->child);
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (page->tab_widget),
+                                  GTK_ACCESSIBLE_RELATION_CONTROLS, g_list_append (NULL, stack_page),
+                                  -1);
+
+  gtk_accessible_update_state (GTK_ACCESSIBLE (page->tab_widget),
+                               GTK_ACCESSIBLE_STATE_SELECTED, FALSE,
+                               -1);
 
   gtk_notebook_update_labels (notebook);
 
@@ -5303,11 +5321,19 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
       if (focus)
         child_has_focus = gtk_widget_is_ancestor (focus, notebook->cur_page->child);
       gtk_widget_unset_state_flags (notebook->cur_page->tab_widget, GTK_STATE_FLAG_CHECKED);
+
+      gtk_accessible_update_state (GTK_ACCESSIBLE (notebook->cur_page->tab_widget),
+                                   GTK_ACCESSIBLE_STATE_SELECTED, FALSE,
+                                   -1);
     }
 
   notebook->cur_page = page;
   gtk_widget_set_state_flags (page->tab_widget, GTK_STATE_FLAG_CHECKED, FALSE);
   gtk_widget_set_visible (notebook->header_widget, notebook->show_tabs);
+
+  gtk_accessible_update_state (GTK_ACCESSIBLE (notebook->cur_page->tab_widget),
+                               GTK_ACCESSIBLE_STATE_SELECTED, TRUE,
+                               -1);
 
   if (!notebook->focus_tab ||
       notebook->focus_tab->data != (gpointer) notebook->cur_page)
