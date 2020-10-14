@@ -713,29 +713,23 @@ find_surface_under_pointer (GdkMacosDisplay *self,
                             int             *y)
 {
   GdkPointerSurfaceInfo *info;
-  GdkSurface *surface;
+  GdkMacosSurface *found;
+  GdkSurface *surface = NULL;
   GdkSeat *seat;
   int x_tmp, y_tmp;
 
   seat = gdk_display_get_default_seat (GDK_DISPLAY (self));
   info = _gdk_display_get_pointer_info (GDK_DISPLAY (self),
                                         gdk_seat_get_pointer (seat));
-  surface = info->surface_under_pointer;
 
-  if (surface == NULL)
+  if ((found = _gdk_macos_display_get_surface_at_display_coords (self,
+                                                                 screen_point.x,
+                                                                 screen_point.y,
+                                                                 &x_tmp,
+                                                                 &y_tmp)))
     {
-      GdkMacosSurface *found;
-
-      found = _gdk_macos_display_get_surface_at_display_coords (self,
-                                                                screen_point.x,
-                                                                screen_point.y,
-                                                                &x_tmp, &y_tmp);
-
-      if (found)
-        {
-          surface = GDK_SURFACE (found);
-          info->surface_under_pointer = g_object_ref (surface);
-        }
+      g_set_object (&info->surface_under_pointer, surface);
+      surface = GDK_SURFACE (found);
     }
 
   if (surface)
