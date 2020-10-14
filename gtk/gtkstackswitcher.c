@@ -248,7 +248,9 @@ add_child (guint             position,
   GtkStackPage *page;
   GtkEventController *controller;
 
-  button = gtk_toggle_button_new ();
+  button = g_object_new (GTK_TYPE_TOGGLE_BUTTON,
+                         "accessible-role", GTK_ACCESSIBLE_ROLE_TAB,
+                         NULL);
   gtk_widget_set_focus_on_click (button, FALSE);
 
   controller = gtk_drop_controller_motion_new ();
@@ -498,6 +500,7 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("stackswitcher"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_TAB_LIST);
 }
 
 /**
