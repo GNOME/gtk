@@ -238,8 +238,6 @@ gdk_macos_surface_get_device_state (GdkSurface      *surface,
   GdkDisplay *display;
   NSWindow *nswindow;
   NSPoint point;
-  int x_tmp;
-  int y_tmp;
 
   g_assert (GDK_IS_MACOS_SURFACE (surface));
   g_assert (GDK_IS_MACOS_DEVICE (device));
@@ -247,18 +245,20 @@ gdk_macos_surface_get_device_state (GdkSurface      *surface,
   g_assert (y != NULL);
   g_assert (mask != NULL);
 
+  if (GDK_SURFACE_DESTROYED (surface))
+    return FALSE;
+
   display = gdk_surface_get_display (surface);
   nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (surface));
   point = [nswindow mouseLocationOutsideOfEventStream];
 
-  _gdk_macos_display_from_display_coords (GDK_MACOS_DISPLAY (display),
-                                          point.x, point.y,
-                                          &x_tmp, &y_tmp);
+  *mask = _gdk_macos_display_get_current_keyboard_modifiers (GDK_MACOS_DISPLAY (display))
+        | _gdk_macos_display_get_current_mouse_modifiers (GDK_MACOS_DISPLAY (display));
 
-  *x = x_tmp;
-  *y = x_tmp;
+  *x = point.x;
+  *y = point.y - surface->height;
 
-  return TRUE;
+  return *x >= 0 && *y >= 0 && *x < surface->width && *y < surface->height;
 }
 
 static void

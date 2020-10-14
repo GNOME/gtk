@@ -516,8 +516,12 @@ gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self)
   transient_for = gtk_native_dialog_get_transient_for (GTK_NATIVE_DIALOG (self));
   if (transient_for)
     {
+      GtkNative *native = GTK_NATIVE (transient_for);
+      GdkSurface *surface = gtk_native_get_surface (native);
+      NSWindow *window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (surface));
+
       gtk_widget_realize (GTK_WIDGET (transient_for));
-      data->parent = _gdk_macos_surface_get_native (gtk_native_get_surface (GTK_NATIVE (transient_for)));
+      data->parent = window;
 
       if (gtk_native_dialog_get_modal (GTK_NATIVE_DIALOG (self)))
         data->modal = TRUE;

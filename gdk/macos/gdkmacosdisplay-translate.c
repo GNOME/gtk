@@ -1179,7 +1179,8 @@ _gdk_macos_display_synthesize_motion (GdkMacosDisplay *self,
                                 y,
                                 NULL);
   node = _gdk_event_queue_append (GDK_DISPLAY (self), event);
-  _gdk_windowing_got_event (GDK_DISPLAY (self), node, event, 0);
+  _gdk_windowing_got_event (GDK_DISPLAY (self), node, event,
+                            _gdk_display_get_next_serial (GDK_DISPLAY (self)));
 }
 
 void
