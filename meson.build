@@ -667,19 +667,11 @@ if win32_enabled
   endif
   pc_gdk_extra_libs += ['-lwinmm', '-ldwmapi', '-lsetupapi', '-lcfgmgr32']
 
-# Check whether libepoxy is built with EGL support on Windows
-  win32_has_egl = cc.links(
-     '''
-     #include <epoxy/egl.h>
-
-     int main(int argc, char *argv[]) {
-       return epoxy_egl_version (EGL_NO_DISPLAY);
-     }
-     ''',
-     dependencies : epoxy_dep,
-     name : 'libepoxy supports EGL on Windows'
-    )
-
+  # Check whether libepoxy is built with EGL support on Windows
+  win32_has_egl = epoxy_dep.get_variable(
+    pkgconfig: 'epoxy_has_egl',
+    internal: 'epoxy_has_egl',
+    default_value: '0') == '1'
 endif
 
 # IMModules stuff-unfortunately we need to put items here
