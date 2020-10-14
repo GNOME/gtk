@@ -246,4 +246,10 @@ typedef enum {
   ATSPI_TEXT_GRANULARITY_PARAGRAPH
 } AtspiTextGranularity;
 
+typedef enum {
+  ATSPI_COORD_TYPE_SCREEN,
+  ATSPI_COORD_TYPE_WINDOW,
+  ATSPI_COORD_TYPE_PARENT,
+} AtspiCoordType;
+
 G_END_DECLS
