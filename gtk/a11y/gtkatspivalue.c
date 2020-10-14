@@ -114,14 +114,14 @@ static const GDBusInterfaceVTable value_vtable = {
 };
 
 const GDBusInterfaceVTable *
-gtk_atspi_get_value_vtable (GtkWidget *widget)
+gtk_atspi_get_value_vtable (GtkAccessible *accessible)
 {
-  if (GTK_IS_LEVEL_BAR (widget) ||
-      GTK_IS_PANED (widget) ||
-      GTK_IS_PROGRESS_BAR (widget) ||
-      GTK_IS_RANGE (widget) ||
-      GTK_IS_SCALE_BUTTON (widget) ||
-      GTK_IS_SPIN_BUTTON (widget))
+  if (GTK_IS_LEVEL_BAR (accessible) ||
+      GTK_IS_PANED (accessible) ||
+      GTK_IS_PROGRESS_BAR (accessible) ||
+      GTK_IS_RANGE (accessible) ||
+      GTK_IS_SCALE_BUTTON (accessible) ||
+      GTK_IS_SPIN_BUTTON (accessible))
     return &value_vtable;
 
   return NULL;

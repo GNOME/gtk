@@ -1156,16 +1156,16 @@ static const GDBusInterfaceVTable text_view_vtable = {
 };
 
 const GDBusInterfaceVTable *
-gtk_atspi_get_text_vtable (GtkWidget *widget)
+gtk_atspi_get_text_vtable (GtkAccessible *accessible)
 {
-  if (GTK_IS_LABEL (widget))
+  if (GTK_IS_LABEL (accessible))
     return &label_vtable;
-  else if (GTK_IS_ENTRY (widget) ||
-           GTK_IS_SEARCH_ENTRY (widget) ||
-           GTK_IS_PASSWORD_ENTRY (widget) ||
-           GTK_IS_SPIN_BUTTON (widget))
+  else if (GTK_IS_ENTRY (accessible) ||
+           GTK_IS_SEARCH_ENTRY (accessible) ||
+           GTK_IS_PASSWORD_ENTRY (accessible) ||
+           GTK_IS_SPIN_BUTTON (accessible))
     return &entry_vtable;
-  else if (GTK_IS_TEXT_VIEW (widget))
+  else if (GTK_IS_TEXT_VIEW (accessible))
     return &text_view_vtable;
 
   return NULL;
@@ -1379,15 +1379,15 @@ buffer_changed (GtkWidget   *widget,
 }
 
 void
-gtk_atspi_connect_text_signals (GtkWidget *widget,
+gtk_atspi_connect_text_signals (GtkAccessible *accessible,
                                 GtkAtspiTextChangedCallback text_changed,
                                 GtkAtspiTextSelectionCallback selection_changed,
                                 gpointer   data)
 {
   TextChanged *changed;
 
-  if (!GTK_IS_EDITABLE (widget) &&
-      !GTK_IS_TEXT_VIEW (widget))
+  if (!GTK_IS_EDITABLE (accessible) &&
+      !GTK_IS_TEXT_VIEW (accessible))
     return;
 
   changed = g_new0 (TextChanged, 1);
@@ -1395,11 +1395,11 @@ gtk_atspi_connect_text_signals (GtkWidget *widget,
   changed->selection_changed = selection_changed;
   changed->data = data;
 
-  g_object_set_data_full (G_OBJECT (widget), "accessible-text-data", changed, g_free);
+  g_object_set_data_full (G_OBJECT (accessible), "accessible-text-data", changed, g_free);
 
-  if (GTK_IS_EDITABLE (widget))
+  if (GTK_IS_EDITABLE (accessible))
     {
-      GtkText *text = gtk_editable_get_text_widget (widget);
+      GtkText *text = gtk_editable_get_text_widget (GTK_WIDGET (accessible));
 
       if (text)
         {
@@ -1410,23 +1410,23 @@ gtk_atspi_connect_text_signals (GtkWidget *widget,
           gtk_editable_get_selection_bounds (GTK_EDITABLE (text), &changed->cursor_position, &changed->selection_bound);
         }
     }
-  else if (GTK_IS_TEXT_VIEW (widget))
+  else if (GTK_IS_TEXT_VIEW (accessible))
     {
-      g_signal_connect (widget, "notify::buffer", G_CALLBACK (buffer_changed), changed);
-      buffer_changed (widget, NULL, changed);
+      g_signal_connect (accessible, "notify::buffer", G_CALLBACK (buffer_changed), changed);
+      buffer_changed (GTK_WIDGET (accessible), NULL, changed);
     }
 }
 
 void
-gtk_atspi_disconnect_text_signals (GtkWidget *widget)
+gtk_atspi_disconnect_text_signals (GtkAccessible *accessible)
 {
   TextChanged *changed;
 
-  changed = g_object_get_data (G_OBJECT (widget), "accessible-text-data");
+  changed = g_object_get_data (G_OBJECT (accessible), "accessible-text-data");
 
-  if (GTK_IS_EDITABLE (widget))
+  if (GTK_IS_EDITABLE (accessible))
     {
-      GtkText *text = gtk_editable_get_text_widget (widget);
+      GtkText *text = gtk_editable_get_text_widget (GTK_WIDGET (accessible));
 
       if (text)
         {
@@ -1435,9 +1435,9 @@ gtk_atspi_disconnect_text_signals (GtkWidget *widget)
           g_signal_handlers_disconnect_by_func (text, notify_cb, changed);
         }
     }
-  else if (GTK_IS_TEXT_VIEW (widget))
+  else if (GTK_IS_TEXT_VIEW (accessible))
     {
-      g_signal_handlers_disconnect_by_func (widget, buffer_changed, changed);
+      g_signal_handlers_disconnect_by_func (accessible, buffer_changed, changed);
       if (changed->buffer)
         {
           g_signal_handlers_disconnect_by_func (changed->buffer, insert_range_cb, changed);
@@ -1448,5 +1448,5 @@ gtk_atspi_disconnect_text_signals (GtkWidget *widget)
       g_clear_object (&changed->buffer);
     }
 
-  g_object_set_data (G_OBJECT (widget), "accessible-text-data", NULL);
+  g_object_set_data (G_OBJECT (accessible), "accessible-text-data", NULL);
 }
