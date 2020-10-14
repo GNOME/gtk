@@ -121,8 +121,6 @@ gdk_macos_popup_surface_present (GdkPopup       *popup,
 
   gdk_macos_popup_surface_layout (self, width, height, layout);
 
-  GDK_MACOS_SURFACE (self)->did_initial_present = TRUE;
-
   if (GDK_SURFACE_IS_MAPPED (GDK_SURFACE (self)))
     return TRUE;
 
@@ -143,6 +141,8 @@ gdk_macos_popup_surface_present (GdkPopup       *popup,
     {
       show_popup (GDK_MACOS_POPUP_SURFACE (self));
     }
+
+  GDK_MACOS_SURFACE (self)->did_initial_present = TRUE;
 
   return GDK_SURFACE_IS_MAPPED (GDK_SURFACE (self));
 }
