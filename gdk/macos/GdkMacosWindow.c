@@ -126,8 +126,6 @@
       GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (gdk_surface));
       double time = ((double)[event timestamp]) * 1000.0;
 
-      _gdk_macos_display_break_all_grabs (GDK_MACOS_DISPLAY (display), time);
-
       inManualMove = NO;
       inManualResize = NO;
       inMove = NO;
@@ -139,6 +137,8 @@
        * TODO: Can we improve grab breaking to fix this?
        */
       _gdk_macos_display_send_button_event ([self gdkDisplay], event);
+
+      _gdk_macos_display_break_all_grabs (GDK_MACOS_DISPLAY (display), time);
 
       break;
     }
