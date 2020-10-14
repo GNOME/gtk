@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-17 15:39+0000\n"
-"PO-Revision-Date: 2020-09-17 22:04+0200\n"
+"POT-Creation-Date: 2020-10-13 21:38+0000\n"
+"PO-Revision-Date: 2020-10-14 23:03+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -1934,83 +1934,245 @@ msgstr "Rdeča %d%%, zelena %d%%, modra %d%%"
 msgid "Color: %s"
 msgstr "Barva: %s"
 
-#: gtk/gtkcolorchooserwidget.c:446 gtk/gtkcolorchooserwidget.c:447
-#: gtk/gtkcolorchooserwidget.c:448 gtk/gtkcolorchooserwidget.c:449
-#: gtk/gtkcolorchooserwidget.c:450 gtk/gtkcolorchooserwidget.c:451
+#: gtk/gtkcolorchooserwidget.c:446
+msgctxt "Color name"
+msgid "Very Light Blue"
+msgstr "bleda svetla siva"
+
+#: gtk/gtkcolorchooserwidget.c:447
+msgctxt "Color name"
+msgid "Light Blue"
+msgstr "svetlo modra"
+
+#: gtk/gtkcolorchooserwidget.c:448
 msgctxt "Color name"
 msgid "Blue"
-msgstr "Modra"
+msgstr "modra"
 
-#: gtk/gtkcolorchooserwidget.c:452 gtk/gtkcolorchooserwidget.c:453
-#: gtk/gtkcolorchooserwidget.c:454 gtk/gtkcolorchooserwidget.c:455
-#: gtk/gtkcolorchooserwidget.c:456 gtk/gtkcolorchooserwidget.c:457
+#: gtk/gtkcolorchooserwidget.c:449
+msgctxt "Color name"
+msgid "Dark Blue"
+msgstr "temno modra"
+
+#: gtk/gtkcolorchooserwidget.c:450
+msgctxt "Color name"
+msgid "Very Dark Blue"
+msgstr "senčno temno modra"
+
+#: gtk/gtkcolorchooserwidget.c:451
+msgctxt "Color name"
+msgid "Very Light Green"
+msgstr "bleda svetlo zelena"
+
+#: gtk/gtkcolorchooserwidget.c:452
+msgctxt "Color name"
+msgid "Light Green"
+msgstr "svetlo zelena"
+
+#: gtk/gtkcolorchooserwidget.c:453
 msgctxt "Color name"
 msgid "Green"
-msgstr "Zelena"
+msgstr "zelena"
 
-#: gtk/gtkcolorchooserwidget.c:458 gtk/gtkcolorchooserwidget.c:459
-#: gtk/gtkcolorchooserwidget.c:460 gtk/gtkcolorchooserwidget.c:461
-#: gtk/gtkcolorchooserwidget.c:462 gtk/gtkcolorchooserwidget.c:463
+#: gtk/gtkcolorchooserwidget.c:454
+msgctxt "Color name"
+msgid "Dark Green"
+msgstr "temno zelena"
+
+#: gtk/gtkcolorchooserwidget.c:455
+msgctxt "Color name"
+msgid "Very Dark Green"
+msgstr "senčno temno zelena"
+
+#: gtk/gtkcolorchooserwidget.c:456
+msgctxt "Color name"
+msgid "Very Light Yellow"
+msgstr "bledo svetlo rumena"
+
+#: gtk/gtkcolorchooserwidget.c:457
+msgctxt "Color name"
+msgid "Light Yellow"
+msgstr "svetlo rumena"
+
+#: gtk/gtkcolorchooserwidget.c:458
 msgctxt "Color name"
 msgid "Yellow"
-msgstr "Rumena"
+msgstr "rumena"
 
-#: gtk/gtkcolorchooserwidget.c:464 gtk/gtkcolorchooserwidget.c:465
-#: gtk/gtkcolorchooserwidget.c:466 gtk/gtkcolorchooserwidget.c:467
-#: gtk/gtkcolorchooserwidget.c:468 gtk/gtkcolorchooserwidget.c:469
+#: gtk/gtkcolorchooserwidget.c:459
+msgctxt "Color name"
+msgid "Dark Yellow"
+msgstr "temno rumena"
+
+#: gtk/gtkcolorchooserwidget.c:460
+msgctxt "Color name"
+msgid "Very Dark Yellow"
+msgstr "senčna temno rumena"
+
+#: gtk/gtkcolorchooserwidget.c:461
+msgctxt "Color name"
+msgid "Very Light Orange"
+msgstr "bleda svetlo oranžna"
+
+#: gtk/gtkcolorchooserwidget.c:462
+msgctxt "Color name"
+msgid "Light Orange"
+msgstr "svetlo oranžna"
+
+#: gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
 msgid "Orange"
 msgstr "oranžna"
 
-#: gtk/gtkcolorchooserwidget.c:470 gtk/gtkcolorchooserwidget.c:471
-#: gtk/gtkcolorchooserwidget.c:472 gtk/gtkcolorchooserwidget.c:473
-#: gtk/gtkcolorchooserwidget.c:474
+#: gtk/gtkcolorchooserwidget.c:464
+msgctxt "Color name"
+msgid "Dark Orange"
+msgstr "temno oranžna"
+
+#: gtk/gtkcolorchooserwidget.c:465
+msgctxt "Color name"
+msgid "Very Dark Orange"
+msgstr "senčno temno oranžna"
+
+#: gtk/gtkcolorchooserwidget.c:466
+msgctxt "Color name"
+msgid "Very Light Red"
+msgstr "bledo svetla rdeča"
+
+#: gtk/gtkcolorchooserwidget.c:467
+msgctxt "Color name"
+msgid "Light Red"
+msgstr "svetlo rdeča"
+
+#: gtk/gtkcolorchooserwidget.c:468
 msgctxt "Color name"
 msgid "Red"
-msgstr "Rdeča"
+msgstr "rdeča"
 
-#: gtk/gtkcolorchooserwidget.c:475 gtk/gtkcolorchooserwidget.c:476
-#: gtk/gtkcolorchooserwidget.c:477 gtk/gtkcolorchooserwidget.c:478
-#: gtk/gtkcolorchooserwidget.c:479
+#: gtk/gtkcolorchooserwidget.c:469
+msgctxt "Color name"
+msgid "Dark Red"
+msgstr "temno rdeča"
+
+#: gtk/gtkcolorchooserwidget.c:470
+msgctxt "Color name"
+msgid "Very Dark Red"
+msgstr "senčno temno rdeča"
+
+#: gtk/gtkcolorchooserwidget.c:471
+msgctxt "Color name"
+msgid "Very Light Purple"
+msgstr "bledo svetla škrlatna"
+
+#: gtk/gtkcolorchooserwidget.c:472
+msgctxt "Color name"
+msgid "Light Purple"
+msgstr "svetla škrlatna"
+
+#: gtk/gtkcolorchooserwidget.c:473
 msgctxt "Color name"
 msgid "Purple"
-msgstr "Škrlatna"
+msgstr "škrlatna"
 
-#: gtk/gtkcolorchooserwidget.c:480 gtk/gtkcolorchooserwidget.c:481
-#: gtk/gtkcolorchooserwidget.c:482 gtk/gtkcolorchooserwidget.c:483
-#: gtk/gtkcolorchooserwidget.c:484
+#: gtk/gtkcolorchooserwidget.c:474
+msgctxt "Color name"
+msgid "Dark Purple"
+msgstr "temno vijolična"
+
+#: gtk/gtkcolorchooserwidget.c:475
+msgctxt "Color name"
+msgid "Very Dark Purple"
+msgstr "senčno temno vijolična"
+
+#: gtk/gtkcolorchooserwidget.c:476
+msgctxt "Color name"
+msgid "Very Light Brown"
+msgstr "bleda svetlorjava"
+
+#: gtk/gtkcolorchooserwidget.c:477
+msgctxt "Color name"
+msgid "Light Brown"
+msgstr "svetlorjava"
+
+#: gtk/gtkcolorchooserwidget.c:478
 msgctxt "Color name"
 msgid "Brown"
-msgstr "Rjava"
+msgstr "rjava"
 
-#: gtk/gtkcolorchooserwidget.c:485 gtk/gtkcolorchooserwidget.c:486
-#: gtk/gtkcolorchooserwidget.c:487 gtk/gtkcolorchooserwidget.c:488
+#: gtk/gtkcolorchooserwidget.c:479
+msgctxt "Color name"
+msgid "Dark Brown"
+msgstr "temnorjava"
+
+#: gtk/gtkcolorchooserwidget.c:480
+msgctxt "Color name"
+msgid "Very Dark Brown"
+msgstr "senčno temno siva"
+
+#: gtk/gtkcolorchooserwidget.c:481
+msgctxt "Color name"
+msgid "White"
+msgstr "bela"
+
+#: gtk/gtkcolorchooserwidget.c:482
+msgctxt "Color name"
+msgid "Light Gray 1"
+msgstr "svetlosiva 1"
+
+#: gtk/gtkcolorchooserwidget.c:483
+msgctxt "Color name"
+msgid "Light Gray 2"
+msgstr "svetlosiva 2"
+
+#: gtk/gtkcolorchooserwidget.c:484
+msgctxt "Color name"
+msgid "Light Gray 3"
+msgstr "svetlosiva 3"
+
+#: gtk/gtkcolorchooserwidget.c:485
+msgctxt "Color name"
+msgid "Light Gray 4"
+msgstr "svetlosiva 4"
+
+#: gtk/gtkcolorchooserwidget.c:486
+msgctxt "Color name"
+msgid "Dark Gray 1"
+msgstr "temnosiva 1"
+
+#: gtk/gtkcolorchooserwidget.c:487
+msgctxt "Color name"
+msgid "Dark Gray 2"
+msgstr "temnosiva 2"
+
+#: gtk/gtkcolorchooserwidget.c:488
+msgctxt "Color name"
+msgid "Dark Gray 3"
+msgstr "temnosiva 3"
+
 #: gtk/gtkcolorchooserwidget.c:489
 msgctxt "Color name"
-msgid "Light"
-msgstr "Svetla"
+msgid "Dark Gray 4"
+msgstr "temnosiva 4"
 
-#: gtk/gtkcolorchooserwidget.c:490 gtk/gtkcolorchooserwidget.c:491
-#: gtk/gtkcolorchooserwidget.c:492 gtk/gtkcolorchooserwidget.c:493
-#: gtk/gtkcolorchooserwidget.c:494
+#: gtk/gtkcolorchooserwidget.c:490
 msgctxt "Color name"
-msgid "Dark"
-msgstr "Temna"
+msgid "Black"
+msgstr "črna"
 
 #. translators: label for the custom section in the color chooser
-#: gtk/gtkcolorchooserwidget.c:538
+#: gtk/gtkcolorchooserwidget.c:534
 msgid "Custom"
 msgstr "Po meri"
 
-#: gtk/gtkcolorchooserwidget.c:545
+#: gtk/gtkcolorchooserwidget.c:541
 msgid "Custom color"
 msgstr "Barva po meri"
 
-#: gtk/gtkcolorchooserwidget.c:546
+#: gtk/gtkcolorchooserwidget.c:542
 msgid "Create a custom color"
 msgstr "Ustvari barvo po meri"
 
-#: gtk/gtkcolorchooserwidget.c:565
+#: gtk/gtkcolorchooserwidget.c:561
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "Barva po meri %d: %s"
@@ -2160,7 +2322,7 @@ msgstr "(Brez)"
 
 #: gtk/gtkfilechooserbutton.c:2162
 msgid "Other…"
-msgstr "Drugo ..."
+msgstr "Drugo …"
 
 #: gtk/gtkfilechooserdialog.c:542
 msgid "_Name"
@@ -8169,15 +8331,15 @@ msgstr "Datoteka"
 msgid "_Output format"
 msgstr "_Izhodna oblika"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:393
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:394
 msgid "Print to LPR"
 msgstr "Natisni preko LPR"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:419
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:423
 msgid "Pages Per Sheet"
 msgstr "Strani na list"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:426
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:430
 msgid "Command Line"
 msgstr "Ukazna vrstica"
 
@@ -8217,6 +8379,10 @@ msgid "Print to Test Printer"
 msgstr "Natisni na preizkusnem tiskalniku"
 
 #~ msgctxt "Color name"
+#~ msgid "Dark"
+#~ msgstr "Temna"
+
+#~ msgctxt "Color name"
 #~ msgid "Light Scarlet Red"
 #~ msgstr "svetlo škrlatno rdeča"
 
@@ -8225,28 +8391,12 @@ msgstr "Natisni na preizkusnem tiskalniku"
 #~ msgstr "škrlatno rdeča"
 
 #~ msgctxt "Color name"
-#~ msgid "Dark Scarlet Red"
-#~ msgstr "temno škrlatno rdeča"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Orange"
-#~ msgstr "svetlo oranžna"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Orange"
-#~ msgstr "temno oranžna"
-
-#~ msgctxt "Color name"
 #~ msgid "Light Butter"
 #~ msgstr "svetlo maslena"
 
 #~ msgctxt "Color name"
 #~ msgid "Butter"
 #~ msgstr "maslena"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Butter"
-#~ msgstr "temno maslena"
 
 #~ msgctxt "Color name"
 #~ msgid "Light Chameleon"
@@ -8261,20 +8411,8 @@ msgstr "Natisni na preizkusnem tiskalniku"
 #~ msgstr "temna kameleonska"
 
 #~ msgctxt "Color name"
-#~ msgid "Light Sky Blue"
-#~ msgstr "svetlo nebesno modra"
-
-#~ msgctxt "Color name"
 #~ msgid "Sky Blue"
 #~ msgstr "nebesno modra"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Sky Blue"
-#~ msgstr "temno nebesno modra"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Plum"
-#~ msgstr "svetla slivno vijolična"
 
 #~ msgctxt "Color name"
 #~ msgid "Plum"
@@ -8317,40 +8455,16 @@ msgstr "Natisni na preizkusnem tiskalniku"
 #~ msgstr "svetla kovinska 2"
 
 #~ msgctxt "Color name"
-#~ msgid "Black"
-#~ msgstr "črna"
-
-#~ msgctxt "Color name"
-#~ msgid "Very Dark Gray"
-#~ msgstr "zelo temno siva"
-
-#~ msgctxt "Color name"
 #~ msgid "Darker Gray"
 #~ msgstr "temnejša siva"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Gray"
-#~ msgstr "temnosiva"
 
 #~ msgctxt "Color name"
 #~ msgid "Medium Gray"
 #~ msgstr "srednje siva"
 
 #~ msgctxt "Color name"
-#~ msgid "Light Gray"
-#~ msgstr "svetlosiva"
-
-#~ msgctxt "Color name"
 #~ msgid "Lighter Gray"
 #~ msgstr "svetlejša siva"
-
-#~ msgctxt "Color name"
-#~ msgid "Very Light Gray"
-#~ msgstr "zelo svetla siva"
-
-#~ msgctxt "Color name"
-#~ msgid "White"
-#~ msgstr "bela"
 
 #~ msgid "3.2 core GL profile is not available on EGL implementation"
 #~ msgstr "Profil jedra GL 3.2 ni na voljo v okolju EGL"
