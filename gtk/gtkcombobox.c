@@ -106,7 +106,7 @@
  *
  * # Accessibility
  *
- * GtkEntry uses the #GTK_ACCESSIBLE_ROLE_COMBO_BOX role.
+ * GtkComboBox uses the #GTK_ACCESSIBLE_ROLE_COMBO_BOX role.
  */
 
 
