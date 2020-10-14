@@ -568,9 +568,14 @@ handle_accessible_get_property (GDBusConnection       *connection,
       if (GTK_IS_WIDGET (accessible))
         res = g_variant_new_string (gtk_widget_get_name (GTK_WIDGET (accessible)));
       else if (GTK_IS_STACK_PAGE (accessible))
-        res = g_variant_new_string (gtk_stack_page_get_name (GTK_STACK_PAGE (accessible)));
+        {
+          const char *name = gtk_stack_page_get_name (GTK_STACK_PAGE (accessible));
+          if (name == NULL)
+             name = G_OBJECT_TYPE_NAME (accessible);
+          res = g_variant_new_string (name);
+        }
       else
-        res = g_variant_new_string ("Name");
+        res = g_variant_new_string (G_OBJECT_TYPE_NAME (accessible));
     }
   else if (g_strcmp0 (property_name, "Description") == 0)
     {
