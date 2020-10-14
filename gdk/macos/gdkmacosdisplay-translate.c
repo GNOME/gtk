@@ -209,11 +209,6 @@ fill_button_event (GdkMacosDisplay *display,
   g_assert (GDK_IS_MACOS_DISPLAY (display));
   g_assert (GDK_IS_MACOS_SURFACE (surface));
 
-  /* Ignore button events outside the window coords */
-  if (x < 0 || x > GDK_SURFACE (surface)->width ||
-      y < 0 || y > GDK_SURFACE (surface)->height)
-    return NULL;
-
   seat = gdk_display_get_default_seat (GDK_DISPLAY (display));
   state = get_keyboard_modifiers_from_ns_event (nsevent) |
          _gdk_macos_display_get_current_mouse_modifiers (display);
@@ -237,6 +232,14 @@ fill_button_event (GdkMacosDisplay *display,
     default:
       g_assert_not_reached ();
     }
+
+  /* Ignore button press events outside the window coords but
+   * allow for button release which can happen during grabs.
+   */
+  if (type == GDK_BUTTON_PRESS &&
+      (x < 0 || x > GDK_SURFACE (surface)->width ||
+       y < 0 || y > GDK_SURFACE (surface)->height))
+    return NULL;
 
   return gdk_button_event_new (type,
                                GDK_SURFACE (surface),
