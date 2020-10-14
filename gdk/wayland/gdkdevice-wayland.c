@@ -5013,11 +5013,11 @@ gdk_wayland_device_set_selection (GdkDevice             *gdk_device,
 
 /**
  * gdk_wayland_seat_get_wl_seat: (skip)
- * @seat: a #GdkSeat
+ * @seat: (type GdkWaylandSeat): a #GdkSeat
  *
- * Returns the Wayland wl_seat of a #GdkSeat.
+ * Returns the Wayland `wl_seat` of a #GdkSeat.
  *
- * Returns: (transfer none): a Wayland wl_seat
+ * Returns: (transfer none): a Wayland `wl_seat`
  */
 struct wl_seat *
 gdk_wayland_seat_get_wl_seat (GdkSeat *seat)
