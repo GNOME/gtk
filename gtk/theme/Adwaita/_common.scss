@@ -3460,10 +3460,11 @@ separator.sidebar {
         outline-width: 0;
         color: $selected_fg_color;
         background-color: $selected_bg_color;
+        &:hover { background-color: darken($selected_bg_color,10%); }
       }
       &:hover:not(:last-child) { /* FIXME: dirty specificity bump */
-        color: $fg_color;
-        background-color: $menu_selected_color;
+        color: $selected_fg_color;
+        background-color: darken(desaturate($selected_bg_color,100%),10%);
       }
     }
 
