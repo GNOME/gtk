@@ -33,6 +33,7 @@ typedef struct _GdkWaylandDevice GdkWaylandDevice;
 #else
 typedef GdkDevice GdkWaylandDevice;
 #endif
+
 typedef struct _GdkWaylandDeviceClass GdkWaylandDeviceClass;
 
 #define GDK_TYPE_WAYLAND_DEVICE         (gdk_wayland_device_get_type ())
@@ -51,9 +52,6 @@ GDK_AVAILABLE_IN_ALL
 struct wl_pointer   *gdk_wayland_device_get_wl_pointer      (GdkDevice *device);
 GDK_AVAILABLE_IN_ALL
 struct wl_keyboard  *gdk_wayland_device_get_wl_keyboard     (GdkDevice *device);
-
-GDK_AVAILABLE_IN_ALL
-struct wl_seat      *gdk_wayland_seat_get_wl_seat           (GdkSeat   *seat);
 
 GDK_AVAILABLE_IN_ALL
 const char          *gdk_wayland_device_get_node_path       (GdkDevice *device);
