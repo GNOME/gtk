@@ -25,9 +25,6 @@ void main() {
 }
 
 // FRAGMENT_SHADER:
-uniform float u_blur_radius;
-uniform vec2 u_blur_size;
-
 _IN_ vec2 pixel_step;
 _IN_ float pixels_per_side;
 _IN_ vec3 initial_gaussian;

@@ -233,9 +233,6 @@ GtkExpression * expression_info_construct (GtkBuilder      *builder,
                                            GError         **error);
 
 /* Internal API which might be made public at some point */
-gboolean _gtk_builder_boolean_from_string (const char   *string,
-					   gboolean     *value,
-					   GError      **error);
 gboolean _gtk_builder_enum_from_string (GType         type,
                                         const char   *string,
                                         int          *enum_value,

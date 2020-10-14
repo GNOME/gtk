@@ -24,7 +24,6 @@
 #include "gtkglarea.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
-#include "gtkstylecontext.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkrender.h"

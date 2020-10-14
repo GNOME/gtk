@@ -33,7 +33,6 @@
 #include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkprivate.h"
-#include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
 
 #include <string.h>

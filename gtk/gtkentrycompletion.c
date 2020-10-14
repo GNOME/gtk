@@ -84,7 +84,6 @@
 #include "gtkwindowprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtknative.h"
-#include "gtkstylecontext.h"
 
 #include <string.h>
 

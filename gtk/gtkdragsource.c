@@ -32,7 +32,6 @@
 #include "gtknative.h"
 #include "gtkwidgetprivate.h"
 #include "gtkintl.h"
-#include "gtkstylecontext.h"
 #include "gtkimageprivate.h"
 #include "gtkdragicon.h"
 #include "gtkprivate.h"

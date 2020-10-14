@@ -28,7 +28,6 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtksizegroup.h"
-#include "gtkstylecontext.h"
 #include "gtkboxlayout.h"
 #include "gtkwidgetprivate.h"
 #include "gdkrgbaprivate.h"

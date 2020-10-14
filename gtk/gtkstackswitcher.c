@@ -28,7 +28,6 @@
 #include "gtklabel.h"
 #include "gtkprivate.h"
 #include "gtkselectionmodel.h"
-#include "gtkstylecontext.h"
 #include "gtktogglebutton.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"

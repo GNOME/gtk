@@ -32,7 +32,6 @@
 #include "gtklabel.h"
 #include "gtkstack.h"
 #include "gtklistbox.h"
-#include "gtkstylecontext.h"
 #include "gtksizegroup.h"
 #include "gtkboxlayout.h"
 

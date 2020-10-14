@@ -28,7 +28,6 @@
 #include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
 #include "gtkwindowprivate.h"
 
@@ -108,12 +107,12 @@ static char *
 get_layout (GtkWindowControls *self)
 {
   GtkWidget *widget = GTK_WIDGET (self);
-  GtkWidget *toplevel;
+  GtkRoot *root;
   char *layout_desc, *layout_half;
   char **tokens;
 
-  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
-  if (!GTK_IS_WINDOW (toplevel))
+  root = gtk_widget_get_root (widget);
+  if (!root || !GTK_IS_WINDOW (root))
     return NULL;
 
   if (self->decoration_layout)
@@ -222,7 +221,6 @@ static void
 update_window_buttons (GtkWindowControls *self)
 {
   GtkWidget *widget = GTK_WIDGET (self);
-  GtkWidget *toplevel;
   char *layout;
   char **tokens;
   int i;
@@ -231,10 +229,11 @@ update_window_buttons (GtkWindowControls *self)
   gboolean resizable;
   gboolean deletable;
   gboolean empty = TRUE;
+  GtkRoot *root;
   GtkWindow *window = NULL;
 
-  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
-  if (!GTK_IS_WINDOW (toplevel))
+  root = gtk_widget_get_root (widget);
+  if (!root || !GTK_IS_WINDOW (root))
     {
       set_empty (self, TRUE);
 
@@ -243,23 +242,12 @@ update_window_buttons (GtkWindowControls *self)
 
   clear_controls (self);
 
-  if (GTK_IS_WINDOW (toplevel))
-    {
-      window = GTK_WINDOW (toplevel);
-
-      is_sovereign_window = !gtk_window_get_modal (window) &&
-                             gtk_window_get_transient_for (window) == NULL;
-      maximized = gtk_window_is_maximized (window);
-      resizable = gtk_window_get_resizable (window);
-      deletable = gtk_window_get_deletable (window);
-    }
-  else
-    {
-      is_sovereign_window = TRUE;
-      maximized = FALSE;
-      resizable = TRUE;
-      deletable = TRUE;
-    }
+  window = GTK_WINDOW (root);
+  is_sovereign_window = !gtk_window_get_modal (window) &&
+                         gtk_window_get_transient_for (window) == NULL;
+  maximized = gtk_window_is_maximized (window);
+  resizable = gtk_window_get_resizable (window);
+  deletable = gtk_window_get_deletable (window);
 
   layout = get_layout (self);
 
@@ -625,7 +613,7 @@ gtk_window_controls_set_side (GtkWindowControls *self,
  * Gets the decoration layout set with
  * gtk_window_controls_set_decoration_layout().
  *
- * Returns: the decoration layout
+ * Returns: (nullable): the decoration layout or %NULL if it is unset
  */
 const char *
 gtk_window_controls_get_decoration_layout (GtkWindowControls *self)
@@ -638,7 +626,7 @@ gtk_window_controls_get_decoration_layout (GtkWindowControls *self)
 /**
  * gtk_window_controls_set_decoration_layout:
  * @self: a #GtkWindowControls
- * @layout: (allow-none): a decoration layout, or %NULL to
+ * @layout: (nullable): a decoration layout, or %NULL to
  *     unset the layout
  *
  * Sets the decoration layout for the title buttons, overriding

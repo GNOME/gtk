@@ -25,7 +25,6 @@
 
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
-#include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
 

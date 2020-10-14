@@ -57,7 +57,6 @@
 #include "gtktreemodelsort.h"
 #include "gtktreemodelfilter.h"
 #include "gtkwidgetprivate.h"
-#include "gtkstylecontext.h"
 #include "gtksearchbar.h"
 #include "gtksearchentry.h"
 #include "gtkeventcontrollerkey.h"

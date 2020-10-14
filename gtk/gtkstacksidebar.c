@@ -28,7 +28,6 @@
 #include "gtklistbox.h"
 #include "gtkscrolledwindow.h"
 #include "gtkseparator.h"
-#include "gtkstylecontext.h"
 #include "gtkselectionmodel.h"
 #include "gtkstack.h"
 #include "gtkprivate.h"
@@ -124,20 +123,6 @@ gtk_stack_sidebar_get_property (GObject    *object,
 }
 
 static void
-update_header (GtkListBoxRow *row,
-               GtkListBoxRow *before,
-               gpointer       userdata)
-{
-  GtkWidget *ret = NULL;
-
-  if (before && !gtk_list_box_row_get_header (row))
-    {
-      ret = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_list_box_row_set_header (row, ret);
-    }
-}
-
-static void
 gtk_stack_sidebar_row_selected (GtkListBox    *box,
                                 GtkListBoxRow *row,
                                 gpointer       userdata)
@@ -165,10 +150,9 @@ gtk_stack_sidebar_init (GtkStackSidebar *self)
   gtk_widget_set_parent (sw, GTK_WIDGET (self));
 
   self->list = GTK_LIST_BOX (gtk_list_box_new ());
+  gtk_list_box_set_show_separators (GTK_LIST_BOX (self->list), TRUE);
 
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), GTK_WIDGET (self->list));
-
-  gtk_list_box_set_header_func (self->list, update_header, self, NULL);
 
   g_signal_connect (self->list, "row-selected",
                     G_CALLBACK (gtk_stack_sidebar_row_selected), self);
@@ -254,9 +238,10 @@ add_child (guint            position,
 static void
 populate_sidebar (GtkStackSidebar *self)
 {
-  guint i;
+  guint i, n;
 
-  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->pages)); i++)
+  n = g_list_model_get_n_items (G_LIST_MODEL (self->pages));
+  for (i = 0; i < n; i++)
     add_child (i, self);
 }
 
@@ -312,20 +297,6 @@ selection_changed_cb (GtkSelectionModel *model,
 }
 
 static void
-disconnect_stack_signals (GtkStackSidebar *self)
-{
-  g_signal_handlers_disconnect_by_func (self->pages, items_changed_cb, self);
-  g_signal_handlers_disconnect_by_func (self->pages, selection_changed_cb, self);
-}
-
-static void
-connect_stack_signals (GtkStackSidebar *self)
-{
-  g_signal_connect (self->pages, "items-changed", G_CALLBACK (items_changed_cb), self);
-  g_signal_connect (self->pages, "selection-changed", G_CALLBACK (selection_changed_cb), self);
-}
-
-static void
 set_stack (GtkStackSidebar *self,
            GtkStack        *stack)
 {
@@ -334,7 +305,8 @@ set_stack (GtkStackSidebar *self,
       self->stack = g_object_ref (stack);
       self->pages = gtk_stack_get_pages (stack);
       populate_sidebar (self);
-      connect_stack_signals (self);
+      g_signal_connect (self->pages, "items-changed", G_CALLBACK (items_changed_cb), self);
+      g_signal_connect (self->pages, "selection-changed", G_CALLBACK (selection_changed_cb), self);
     }
 }
 
@@ -343,7 +315,8 @@ unset_stack (GtkStackSidebar *self)
 {
   if (self->stack)
     {
-      disconnect_stack_signals (self);
+      g_signal_handlers_disconnect_by_func (self->pages, items_changed_cb, self);
+      g_signal_handlers_disconnect_by_func (self->pages, selection_changed_cb, self);
       clear_sidebar (self);
       g_clear_object (&self->stack);
       g_clear_object (&self->pages);

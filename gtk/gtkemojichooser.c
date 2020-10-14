@@ -33,7 +33,6 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtksearchentryprivate.h"
-#include "gtkstylecontext.h"
 #include "gtktext.h"
 #include "gtknative.h"
 #include "gtkwidgetprivate.h"

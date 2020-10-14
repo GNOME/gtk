@@ -15,7 +15,7 @@ precision highp float;
 
 struct GskRoundedRect
 {
-  vec4 bounds;
+  vec4 bounds; // Top left and bottom right
   // Look, arrays can't be in structs if you want to return the struct
   // from a function in gles or whatever. Just kill me.
   vec4 corner_points1; // xy = top left, zw = top right

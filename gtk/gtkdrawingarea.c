@@ -28,7 +28,6 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtksnapshot.h"
-#include "gtkstylecontext.h"
 #include "gtkwidgetprivate.h"
 
 typedef struct _GtkDrawingAreaPrivate GtkDrawingAreaPrivate;

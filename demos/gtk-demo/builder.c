@@ -158,7 +158,6 @@ do_builder (GtkWidget *do_widget)
       about = GTK_WIDGET (gtk_builder_get_object (builder, "aboutdialog1"));
       gtk_window_set_transient_for (GTK_WINDOW (about), GTK_WINDOW (window));
       gtk_window_set_hide_on_close (GTK_WINDOW (about), TRUE);
-      g_signal_connect (about, "response", G_CALLBACK (gtk_widget_hide), NULL);
       g_object_set_data_full (G_OBJECT (window), "about",
                               about, (GDestroyNotify)gtk_window_destroy);
 

@@ -29,7 +29,6 @@
 #include "gtkprivate.h"
 #include "gtkscrolledwindow.h"
 #include "gtksnapshot.h"
-#include "gtkstylecontext.h"
 #include "gtkwidgetprivate.h"
 
 /**

@@ -147,7 +147,7 @@ size_prepared_cb2 (GdkPixbufLoader *loader,
       height = scales[1];
     }
 
-  gdk_pixbuf_loader_set_size (loader, width, scales[1]);
+  gdk_pixbuf_loader_set_size (loader, width, height);
 }
 
 GdkPixbuf *

@@ -31,7 +31,6 @@
 #include "gtkprivate.h"
 #include "gtkrbtreeprivate.h"
 #include "gtksizegroup.h"
-#include "gtkstylecontext.h"
 #include "gtkwidgetprivate.h"
 #include "gtksorter.h"
 

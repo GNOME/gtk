@@ -34,7 +34,6 @@
 #include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtkstylecontext.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcssnumbervalueprivate.h"

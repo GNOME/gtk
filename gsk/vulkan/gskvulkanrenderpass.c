@@ -246,7 +246,6 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
                                  GskRenderNode                 *node)
 {
   GskVulkanOp op = {
-    .type = GSK_VULKAN_OP_FALLBACK,
     .render.node = node
   };
   GskVulkanPipelineType pipeline_type;

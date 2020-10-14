@@ -27,7 +27,6 @@
 #include "gtklabel.h"
 #include "gtkstack.h"
 #include "gtkstackswitcher.h"
-#include "gtkstylecontext.h"
 #include "gtkorientable.h"
 #include "gtksizegroup.h"
 #include "gtkwidget.h"

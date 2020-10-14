@@ -27,7 +27,7 @@
 #include <string.h>
 
 static const char *
-get_vertex_type_name (int type)
+get_shader_type_name (int type)
 {
   switch (type)
     {
@@ -64,7 +64,7 @@ create_shader (int         type,
       buffer = g_malloc (log_len + 1);
       glGetShaderInfoLog (shader, log_len, NULL, buffer);
 
-      g_warning ("Compile failure in %s shader:\n%s", get_vertex_type_name (type), buffer);
+      g_warning ("Compile failure in %s shader:\n%s", get_shader_type_name (type), buffer);
       g_free (buffer);
 
       glDeleteShader (shader);
@@ -328,10 +328,8 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 {
   GdkGLContext *paint_context;
   cairo_surface_t *image;
-  cairo_matrix_t matrix;
   guint framebuffer;
   int alpha_size = 0;
-  cairo_region_t *clip_region;
   GdkGLContextPaintData *paint_data;
   int major, minor, version;
   gboolean es_use_bgra = FALSE;
@@ -343,7 +341,6 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       return;
     }
 
-  clip_region = gdk_cairo_region_from_clip (cr);
   es_use_bgra = gdk_gl_context_use_es_bgra (paint_context);
 
   gdk_gl_context_make_current (paint_context);
@@ -372,8 +369,6 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       return;
     }
 
-  cairo_get_matrix (cr, &matrix);
-
   gdk_gl_context_get_version (paint_context, &major, &minor);
   version = major * 100 + minor;
 
@@ -382,7 +377,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
    */
   if (gdk_gl_context_get_use_es (paint_context) &&
       !(version >= 300 || gdk_gl_context_has_unpack_subimage (paint_context)))
-    goto out;
+    return;
 
   /* TODO: avoid reading back non-required data due to dest clip */
   image = cairo_surface_create_similar_image (cairo_get_target (cr),
@@ -424,17 +419,9 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 
   cairo_surface_mark_dirty (image);
 
-  /* Invert due to opengl having different origin */
-  cairo_scale (cr, 1, -1);
-  cairo_translate (cr, 0, -height / buffer_scale);
-
   cairo_set_source_surface (cr, image, 0, 0);
   cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
   cairo_paint (cr);
 
   cairo_surface_destroy (image);
-
-out:
-  if (clip_region)
-    cairo_region_destroy (clip_region);
 }

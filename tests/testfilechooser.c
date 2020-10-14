@@ -42,26 +42,6 @@ static GtkWidget *preview_image;
 static GtkFileChooserAction action;
 
 static void
-print_selected (GtkFileChooser *chooser)
-{
-  GListModel *files = gtk_file_chooser_get_files (chooser);
-  guint i, n;
-
-  g_print ("Selection changed :\n");
-  n = g_list_model_get_n_items (files);
-  for (i = 0; i < n; i++)
-    {
-      GFile *file = g_list_model_get_item (files, i);
-      char *uri = g_file_get_uri (file);
-      g_print ("  %s\n", uri ? uri : "(null)");
-      g_free (uri);
-      g_object_unref (files);
-    }
-  g_print ("\n");
-  g_object_unref (files);
-}
-
-static void
 response_cb (GtkDialog *dialog,
 	     int        response_id,
              gpointer   data)
@@ -324,8 +304,6 @@ main (int argc, char **argv)
     }
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
-  g_signal_connect (dialog, "selection-changed",
-		    G_CALLBACK (print_selected), NULL);
   g_signal_connect (dialog, "response",
 		    G_CALLBACK (response_cb), &done);
 

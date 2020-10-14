@@ -81,7 +81,6 @@
 #include "gtksizegroup.h"
 #include "gtksizerequest.h"
 #include "gtkstack.h"
-#include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
 
 typedef struct _GtkAssistantPageClass   GtkAssistantPageClass;

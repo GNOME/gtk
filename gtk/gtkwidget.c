@@ -1253,8 +1253,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *
    * The requested opacity of the widget. See gtk_widget_set_opacity() for
    * more details about window opacity.
-   *
-   * Before 3.8 this was only available in GtkWindow
    */
   widget_props[PROP_OPACITY] =
       g_param_spec_double ("opacity",
@@ -7455,7 +7453,7 @@ gtk_widget_adjust_baseline_request (GtkWidget *widget,
  * with g_free(), the elements are owned by GTK and must
  * not be freed.
  */
-GdkDevice **
+static GdkDevice **
 _gtk_widget_list_devices (GtkWidget *widget,
                           guint     *out_n_devices)
 {
@@ -9650,8 +9648,6 @@ gtk_widget_get_allocated_baseline (GtkWidget *widget)
  * running. See gdk_display_is_composited(). On Windows it should work
  * always, although setting a window’s opacity after the window has been
  * shown causes it to flicker once on Windows.
- *
- * For child widgets it doesn’t work if any affected widget has a native window.
  **/
 void
 gtk_widget_set_opacity (GtkWidget *widget,
