@@ -236,8 +236,6 @@ listview_handle_method (GDBusConnection       *connection,
   GtkWidget *widget = GTK_WIDGET (accessible);
   GtkSelectionModel *model = gtk_list_base_get_model (GTK_LIST_BASE (widget));
 
-  g_print ("list item %s %s\n", interface_name, method_name);
-
   if (g_strcmp0 (method_name, "GetSelectedChild") == 0)
     {
       int idx;
@@ -758,8 +756,6 @@ notebook_handle_method (GDBusConnection       *connection,
   GtkWidget *widget = GTK_WIDGET (accessible);
   GtkWidget *notebook = gtk_widget_get_parent (gtk_widget_get_parent (widget));
 
-  g_print ("notebook %s %s\n", interface_name, method_name);
-
   if (g_strcmp0 (method_name, "GetSelectedChild") == 0)
     {
       int i;
@@ -882,10 +878,7 @@ gtk_atspi_get_selection_vtable (GtkAccessible     *accessible,
     return &listbox_vtable;
   else if (GTK_IS_LIST_VIEW (accessible) ||
            GTK_IS_GRID_VIEW (accessible))
-    {
-    g_print ("using listview vtable\n");
     return &listview_vtable;
-    }
   else if (GTK_IS_FLOW_BOX (accessible))
     return &flowbox_vtable;
   else if (GTK_IS_COMBO_BOX (accessible))
