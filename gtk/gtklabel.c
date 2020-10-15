@@ -2337,7 +2337,10 @@ no_uline:
           char *text_for_accel;
 
           if (!pango_parse_markup (str_for_display, -1, 0, NULL, &text_for_accel, NULL, &error))
-            goto error_set;
+            {
+              g_free (new_text);
+              goto error_set;
+            }
 
           extract_mnemonic_keyval (text_for_accel,
                                    NULL,
