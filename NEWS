@@ -1,5 +1,8 @@
-Overview of Changes
-===================
+Overview of Changes in 3.99.3
+=============================
+
+* Accessibility:
+ - Add an initial AT-SPI backend
 
 * GtkEmojiChooser:
  - Allow inserting multiple Emoji by pressing Control
@@ -14,18 +17,44 @@ Overview of Changes
 * GtkScale:
  - Change the default value of the :draw-value property
 
+* GtkPopover:
+ - Avoid losing focus when popovers are close
+
+* GtkColorChooser:
+ - Add color names back for accessibility
+
 * Input methods:
  - Add a 'private' input hint
 
 * GL Renderer:
  - Fix issues with texture caching
+ - Fix texture flipping problems
 
 * Build:
  - Use meson yield feature for some options
  - Require gtk-doc 1.33
+ - Require sysprof 3.38
+
+* Wayland:
+ - Clean up Wayland backend api, add annotations
+ - Generate introspection for Wayland backend api
+
+* Windows:
+ - Fix modal window handling and window stacking
+
+* MacOS:
+ - Fix the build
+ - Define GDK_WINDOWING_MACOS
+ - Fix various event handling issues
 
 * Demos:
  - Add another column view demo
+ - Add an svg paintable demo
+
+* Translation updates
+ Czech
+ Lithuanian
+ Polish
 
 
 Overview of Changes in GTK 3.99.2
