@@ -115,7 +115,8 @@ next:
               break;
             }
         }
-      while (g_unichar_isalnum (g_utf8_get_char (p)) || *p == '_' || *p == ' ');
+      while (p > text &&
+             (g_unichar_isalnum (g_utf8_get_char (p)) || *p == '_' || *p == ' '));
 
       if (found_candidate)
         n_matches = populate_completion (completion, p, 0);
