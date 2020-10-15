@@ -30,6 +30,7 @@
 #include "gtkactionable.h"
 #include "gtkactionmuxerprivate.h"
 #include "gtkbutton.h"
+#include "gtkexpander.h"
 #include "gtkswitch.h"
 #include "gtkwidgetprivate.h"
 
@@ -296,6 +297,58 @@ static const GDBusInterfaceVTable switch_action_vtable = {
 
 /* }}} */
 
+/* {{{ GtkExpander */
+
+static const Action expander_actions[] = {
+  {
+    .name = "activate",
+    .localized_name = NC_("accessibility", "Activate"),
+    .description = NC_("accessibility", "Activates the expander"),
+    .keybinding = "<Space>",
+  },
+};
+
+static void
+expander_handle_method (GDBusConnection       *connection,
+                        const gchar           *sender,
+                        const gchar           *object_path,
+                        const gchar           *interface_name,
+                        const gchar           *method_name,
+                        GVariant              *parameters,
+                        GDBusMethodInvocation *invocation,
+                        gpointer               user_data)
+{
+  GtkAtSpiContext *self = user_data;
+
+  action_handle_method (self, method_name, parameters, invocation,
+                        expander_actions,
+                        G_N_ELEMENTS (expander_actions));
+}
+
+static GVariant *
+expander_handle_get_property (GDBusConnection  *connection,
+                              const gchar      *sender,
+                              const gchar      *object_path,
+                              const gchar      *interface_name,
+                              const gchar      *property_name,
+                              GError          **error,
+                              gpointer          user_data)
+{
+  GtkAtSpiContext *self = user_data;
+
+  return action_handle_get_property (self, property_name, error,
+                                     expander_actions,
+                                     G_N_ELEMENTS (expander_actions));
+}
+
+static const GDBusInterfaceVTable expander_action_vtable = {
+  expander_handle_method,
+  expander_handle_get_property,
+  NULL,
+};
+
+/* }}} */
+
 static gboolean
 is_valid_action (GtkActionMuxer *muxer,
                  const char     *action_name)
@@ -509,6 +562,8 @@ gtk_atspi_get_action_vtable (GtkAccessible *accessible)
 {
   if (GTK_IS_BUTTON (accessible))
     return &button_action_vtable;
+  else if (GTK_IS_EXPANDER (accessible))
+    return &expander_action_vtable;
   else if (GTK_IS_SWITCH (accessible))
     return &switch_action_vtable;
   else if (GTK_IS_WIDGET (accessible))
