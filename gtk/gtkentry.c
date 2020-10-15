@@ -3723,3 +3723,36 @@ gtk_entry_get_extra_menu (GtkEntry *entry)
 
   return gtk_text_get_extra_menu (GTK_TEXT (priv->text));
 }
+
+/*< private >
+ * gtk_entry_activate_icon:
+ * @entry: a #GtkEntry
+ * @pos: the icon position
+ *
+ * Emits the #GtkEntry::icon-press and #GtkEntry::icon-release signals on
+ * the @entry icon at the given @pos, if the icon is set and activatable.
+ *
+ * Returns: %TRUE if the signal was emitted
+ */
+gboolean
+gtk_entry_activate_icon (GtkEntry             *entry,
+                         GtkEntryIconPosition  pos)
+{
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+  EntryIconInfo *icon_info;
+
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
+
+  icon_info = priv->icons[pos];
+
+  if (icon_info != NULL &&
+      gtk_image_get_storage_type (GTK_IMAGE (icon_info->widget)) != GTK_IMAGE_EMPTY &&
+      !icon_info->nonactivatable)
+    {
+      g_signal_emit (entry, signals[ICON_PRESS], 0, pos);
+      g_signal_emit (entry, signals[ICON_RELEASE], 0, pos);
+      return TRUE;
+    }
+
+  return FALSE;
+}

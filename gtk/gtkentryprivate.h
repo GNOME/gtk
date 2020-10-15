@@ -106,6 +106,9 @@ GtkIMContext * _gtk_entry_get_im_context    (GtkEntry  *entry);
 GtkEventController * gtk_entry_get_key_controller (GtkEntry *entry);
 GtkText *gtk_entry_get_text_widget (GtkEntry *entry);
 
+gboolean gtk_entry_activate_icon (GtkEntry             *entry,
+                                  GtkEntryIconPosition  pos);
+
 G_END_DECLS
 
 #endif /* __GTK_ENTRY_PRIVATE_H__ */
