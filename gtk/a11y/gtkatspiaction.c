@@ -32,6 +32,7 @@
 #include "gtkbutton.h"
 #include "gtkentryprivate.h"
 #include "gtkexpander.h"
+#include "gtkpasswordentryprivate.h"
 #include "gtkswitch.h"
 #include "gtkwidgetprivate.h"
 
@@ -498,6 +499,94 @@ static const GDBusInterfaceVTable entry_action_vtable = {
 
 /* }}} */
 
+/* {{{ GtkPasswordEntry */
+
+static gboolean is_peek_enabled (GtkAtSpiContext *self);
+static gboolean activate_peek (GtkAtSpiContext *self);
+
+static const Action password_entry_actions[] = {
+  {
+    .name = "activate",
+    .localized_name = NC_("accessibility", "Activate"),
+    .description = NC_("accessibility", "Activates the entry"),
+    .keybinding = "<Return>",
+    .is_enabled = NULL,
+    .activate = NULL,
+  },
+  {
+    .name = "peek",
+    .localized_name = NC_("accessibility", "Peek"),
+    .description = NC_("accessibility", "Shows the contents of the password entry"),
+    .keybinding = "<VoidSymbol>",
+    .is_enabled = is_peek_enabled,
+    .activate = activate_peek,
+  },
+};
+
+static gboolean
+is_peek_enabled (GtkAtSpiContext *self)
+{
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+  GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (accessible);
+
+  if (!gtk_password_entry_get_show_peek_icon (entry))
+    return FALSE;
+
+  return TRUE;
+}
+
+static gboolean
+activate_peek (GtkAtSpiContext *self)
+{
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+  GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (accessible);
+
+  gtk_password_entry_toggle_peek (entry);
+
+  return TRUE;
+}
+
+static void
+password_entry_handle_method (GDBusConnection       *connection,
+                              const gchar           *sender,
+                              const gchar           *object_path,
+                              const gchar           *interface_name,
+                              const gchar           *method_name,
+                              GVariant              *parameters,
+                              GDBusMethodInvocation *invocation,
+                              gpointer               user_data)
+{
+  GtkAtSpiContext *self = user_data;
+
+  action_handle_method (self, method_name, parameters, invocation,
+                        password_entry_actions,
+                        G_N_ELEMENTS (password_entry_actions));
+}
+
+static GVariant *
+password_entry_handle_get_property (GDBusConnection  *connection,
+                                    const gchar      *sender,
+                                    const gchar      *object_path,
+                                    const gchar      *interface_name,
+                                    const gchar      *property_name,
+                                    GError          **error,
+                                    gpointer          user_data)
+{
+  GtkAtSpiContext *self = user_data;
+
+  return action_handle_get_property (self, property_name, error,
+                                     password_entry_actions,
+                                     G_N_ELEMENTS (password_entry_actions));
+}
+
+static const GDBusInterfaceVTable password_entry_action_vtable = {
+  password_entry_handle_method,
+  password_entry_handle_get_property,
+  NULL,
+};
+
+/* }}} */
+
 static gboolean
 is_valid_action (GtkActionMuxer *muxer,
                  const char     *action_name)
@@ -715,6 +804,8 @@ gtk_atspi_get_action_vtable (GtkAccessible *accessible)
     return &entry_action_vtable;
   else if (GTK_IS_EXPANDER (accessible))
     return &expander_action_vtable;
+  else if (GTK_IS_PASSWORD_ENTRY (accessible))
+    return &password_entry_action_vtable;
   else if (GTK_IS_SWITCH (accessible))
     return &switch_action_vtable;
   else if (GTK_IS_WIDGET (accessible))
