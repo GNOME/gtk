@@ -984,7 +984,10 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   g_signal_connect (spin_button->entry, "activate", G_CALLBACK (gtk_spin_button_activate), spin_button);
   gtk_widget_set_parent (spin_button->entry, GTK_WIDGET (spin_button));
 
-  spin_button->down_button = gtk_button_new_from_icon_name ("value-decrease-symbolic");
+  spin_button->down_button = g_object_new (GTK_TYPE_BUTTON,
+                                           "accessible-role", GTK_ACCESSIBLE_ROLE_NONE,
+                                           "icon-name", "value-decrease-symbolic",
+                                           NULL);
   gtk_widget_add_css_class (spin_button->down_button, "down");
   gtk_widget_set_can_focus (spin_button->down_button, FALSE);
   gtk_widget_set_parent (spin_button->down_button, GTK_WIDGET (spin_button));
@@ -998,10 +1001,12 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   g_signal_connect (gesture, "released", G_CALLBACK (button_released_cb), spin_button);
   g_signal_connect (gesture, "cancel", G_CALLBACK (button_cancel_cb), spin_button);
   gtk_widget_add_controller (GTK_WIDGET (spin_button->down_button), GTK_EVENT_CONTROLLER (gesture));
-  gtk_gesture_group (gtk_button_get_gesture (GTK_BUTTON (spin_button->down_button)),
-		     gesture);
+  gtk_gesture_group (gtk_button_get_gesture (GTK_BUTTON (spin_button->down_button)), gesture);
 
-  spin_button->up_button = gtk_button_new_from_icon_name ("value-increase-symbolic");
+  spin_button->up_button = g_object_new (GTK_TYPE_BUTTON,
+                                         "accessible-role", GTK_ACCESSIBLE_ROLE_NONE,
+                                         "icon-name", "value-increase-symbolic",
+                                         NULL);
   gtk_widget_add_css_class (spin_button->up_button, "up");
   gtk_widget_set_can_focus (spin_button->up_button, FALSE);
   gtk_widget_set_parent (spin_button->up_button, GTK_WIDGET (spin_button));

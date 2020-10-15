@@ -591,8 +591,8 @@ easter_egg_callback (GtkWidget *button,
   g_object_unref (buffer);
 
   window = gtk_window_new ();
-  gtk_window_set_transient_for (window, GTK_WINDOW (gtk_widget_get_root (button)));
-  gtk_window_set_modal (window, TRUE);
+  gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (gtk_widget_get_root (button)));
+  gtk_window_set_modal (GTK_WINDOW (window), TRUE);
   sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_AUTOMATIC,

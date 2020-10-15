@@ -81,7 +81,8 @@ void                    gtk_action_muxer_change_action_state            (GtkActi
                                                                          GVariant            *state);
 gboolean                gtk_action_muxer_has_action                     (GtkActionMuxer      *muxer,
                                                                          const char          *action_name);
-char **                 gtk_action_muxer_list_actions                   (GtkActionMuxer      *muxer);
+char **                 gtk_action_muxer_list_actions                   (GtkActionMuxer      *muxer,
+                                                                         gboolean             local_only);
 
 /* api for class actions */
 void                    gtk_action_muxer_action_enabled_changed         (GtkActionMuxer      *muxer,

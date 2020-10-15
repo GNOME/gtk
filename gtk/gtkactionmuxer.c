@@ -224,7 +224,8 @@ gtk_action_muxer_append_group_actions (const char *prefix,
 }
 
 char **
-gtk_action_muxer_list_actions (GtkActionMuxer *muxer)
+gtk_action_muxer_list_actions (GtkActionMuxer *muxer,
+                               gboolean        local_only)
 {
   GHashTable *actions;
   char **keys;
@@ -253,6 +254,9 @@ gtk_action_muxer_list_actions (GtkActionMuxer *muxer)
           while (g_hash_table_iter_next (&iter, (gpointer *)&prefix, (gpointer *)&group))
             gtk_action_muxer_append_group_actions (prefix, group, actions);
         }
+
+      if (local_only)
+        break;
     }
 
   keys = (char **)g_hash_table_get_keys_as_array (actions, NULL);
