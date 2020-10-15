@@ -51,6 +51,8 @@ Each role name is part of the #GtkAccessibleRole enumeration.
 | `DIALOG` | A dialog that prompts the user to enter information or require a response | #GtkDialog and subclasses |
 | `IMG` | An image | #GtkImage, #GtkPicture |
 | `LABEL` | A visible name or caption for a user interface component | #GtkLabel |
+| `LIST` | A list of items | #GtkListBox |
+| `LIST_ITEM` | An item in a list | #GtkListBoxRow |
 | `METER` | Represents a value within a known range | #GtkLevelBar |
 | `PROGRESS_BAR` | An element that display progress | #GtkProgressBar |
 | `RADIO` | A checkable input in a group of radio roles | #GtkCheckButton |
