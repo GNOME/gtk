@@ -90,6 +90,16 @@ typedef enum {
   GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSED   = 1 << GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED,
 } GtkAccessiblePlatformChange;
 
+typedef enum {
+  GTK_ACCESSIBLE_CHILD_STATE_ADDED,
+  GTK_ACCESSIBLE_CHILD_STATE_REMOVED
+} GtkAccessibleChildState;
+
+typedef enum {
+  GTK_ACCESSIBLE_CHILD_CHANGE_ADDED   = 1 << GTK_ACCESSIBLE_CHILD_STATE_ADDED,
+  GTK_ACCESSIBLE_CHILD_CHANGE_REMOVED = 1 << GTK_ACCESSIBLE_CHILD_STATE_REMOVED
+} GtkAccessibleChildChange;
+
 struct _GtkATContext
 {
   GObject parent_instance;
@@ -124,6 +134,10 @@ struct _GtkATContextClass
                             GtkAccessiblePlatformChange  changed_platform);
 
   void (* bounds_change) (GtkATContext                *self);
+
+  void (* child_change) (GtkATContext             *self,
+                         GtkAccessibleChildChange  changed_child,
+                         GtkAccessible            *child);
 };
 
 GdkDisplay *            gtk_at_context_get_display              (GtkATContext          *self);
@@ -158,6 +172,9 @@ char *                  gtk_at_context_get_description          (GtkATContext   
 void                    gtk_at_context_platform_changed         (GtkATContext                *self,
                                                                  GtkAccessiblePlatformChange  change);
 void                    gtk_at_context_bounds_changed           (GtkATContext                *self);
+void                    gtk_at_context_child_changed            (GtkATContext                *self,
+                                                                 GtkAccessibleChildChange     change,
+                                                                 GtkAccessible               *child);
 
 const char *    gtk_accessible_property_get_attribute_name      (GtkAccessibleProperty property);
 const char *    gtk_accessible_relation_get_attribute_name      (GtkAccessibleRelation relation);
