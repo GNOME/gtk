@@ -2051,6 +2051,9 @@ update_cursor (GdkDisplay *display,
   GdkDeviceGrabInfo *grab;
   GdkCursor *cursor;
 
+  g_assert (display);
+  g_assert (device);
+
   pointer_info = _gdk_display_get_pointer_info (display, device);
   pointer_surface = pointer_info->surface_under_pointer;
 
