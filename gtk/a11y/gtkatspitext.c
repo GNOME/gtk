@@ -41,6 +41,8 @@
 
 #include <gio/gio.h>
 
+/* {{{ GtkLabel */
+
 static void
 label_handle_method (GDBusConnection       *connection,
                      const gchar           *sender,
@@ -403,6 +405,9 @@ static const GDBusInterfaceVTable label_vtable = {
   label_get_property,
   NULL,
 };
+
+/* }}} */
+/* {{{ GtkEditable */
 
 static GtkText *
 gtk_editable_get_text_widget (GtkWidget *widget)
@@ -777,6 +782,8 @@ static const GDBusInterfaceVTable entry_vtable = {
   NULL,
 };
 
+/* }}} */
+/* {{{ GtkTextView */
 
 static void
 text_view_handle_method (GDBusConnection       *connection,
@@ -1155,6 +1162,8 @@ static const GDBusInterfaceVTable text_view_vtable = {
   NULL,
 };
 
+/* }}} */
+
 const GDBusInterfaceVTable *
 gtk_atspi_get_text_vtable (GtkAccessible *accessible)
 {
@@ -1186,6 +1195,8 @@ typedef struct {
   int cursor_position;
   int selection_bound;
 } TextChanged;
+
+/* {{{ GtkEditable notification */
 
 static void
 insert_text_cb (GtkEditable *editable,
@@ -1273,6 +1284,9 @@ update_cursor (GtkTextBuffer *buffer,
 
   update_selection (changed, cursor_position, selection_bound);
 }
+
+/* }}} */
+/* {{{ GtkTextView notification */
 
 static void
 insert_range_cb (GtkTextBuffer *buffer,
@@ -1378,6 +1392,8 @@ buffer_changed (GtkWidget   *widget,
     }
 }
 
+/* }}} */
+
 void
 gtk_atspi_connect_text_signals (GtkAccessible *accessible,
                                 GtkAtspiTextChangedCallback text_changed,
@@ -1450,3 +1466,5 @@ gtk_atspi_disconnect_text_signals (GtkAccessible *accessible)
 
   g_object_set_data (G_OBJECT (accessible), "accessible-text-data", NULL);
 }
+
+/* vim:set foldmethod=marker expandtab: */
