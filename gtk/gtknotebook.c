@@ -144,6 +144,12 @@
  * A tab node gets the .dnd style class while it is moved with drag-and-drop.
  *
  * The nodes are always arranged from left-to-right, regardless of text direction.
+ *
+ * # Accessibility
+ *
+ * GtkNotebook uses the #GTK_ACCESSIBLE_ROLE_TAB_LIST and
+ * #GTK_ACCESSIBLE_ROLE_TAB roles for its list of tabs and the
+ * #GTK_ACCESSIBLE_ROLE_TAB_PANEL for the pages.
  */
 
 

@@ -59,6 +59,11 @@
  * When circumstances require it, GtkStackSwitcher adds the
  * .needs-attention style class to the widgets representing the
  * stack pages.
+ *
+ * # Accessibility
+ *
+ * GtkStackSwitcher uses the #GTK_ACCESSIBLE_ROLE_TAB_LIST role
+ * and uses the #GTK_ACCESSIBLE_ROLE_TAB for its buttons.
  */
 
 #define TIMEOUT_EXPAND 500

@@ -80,6 +80,11 @@
  * # CSS nodes
  *
  * GtkStack has a single CSS node named stack.
+ *
+ * # Accessibility
+ *
+ * GtkStack uses the #GTK_ACCESSIBLE_ROLE_TAB_PANEL for the stack
+ * pages.
  */
 
 /**

@@ -1232,10 +1232,10 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_STRUCTURE: Unused
  * @GTK_ACCESSIBLE_ROLE_SWITCH: A type of checkbox that represents on/off values,
  *    as opposed to checked/unchecked values.
- * @GTK_ACCESSIBLE_ROLE_TAB: Unused
+ * @GTK_ACCESSIBLE_ROLE_TAB: An item in a list of tab used for switching pages.
  * @GTK_ACCESSIBLE_ROLE_TABLE: Unused
- * @GTK_ACCESSIBLE_ROLE_TAB_LIST: Unused
- * @GTK_ACCESSIBLE_ROLE_TAB_PANEL: Unused
+ * @GTK_ACCESSIBLE_ROLE_TAB_LIST: A list of tabs for switching pages.
+ * @GTK_ACCESSIBLE_ROLE_TAB_PANEL: A page in a notebook or stack.
  * @GTK_ACCESSIBLE_ROLE_TEXT_BOX: A type of input that allows free-form text
  *    as its value.
  * @GTK_ACCESSIBLE_ROLE_TIME: Unused

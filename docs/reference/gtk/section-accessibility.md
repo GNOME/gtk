@@ -63,6 +63,9 @@ Each role name is part of the #GtkAccessibleRole enumeration.
 | `SEPARATOR` | A divider that separates sections of content or groups of items | #GtkSeparator |
 | `SPIN_BUTTON` | A range control that allows seelcting among discrete choices | #GtkSpinButton |
 | `SWITCH` | A control that represents on/off values | #GtkSwitch |
+| `TAB` | A tab in a list of tabs for switching pages | #GtkStackSwitcher, #GtkNotebook |
+| `TAB_LIST` | A list of tabs for switching pages | #GtkStackSwitcher, #GtkNotebook |
+| `TAB_PANEL` | A page in a notebook or stack | #GtkStack |
 | `TEXT_BOX` | A type of input that allows free-form text as its value. | #GtkEntry, #GtkPasswordEntry, #GtkTextView |
 | `WINDOW` | An application window | #GtkWindow |
 | `...` | … |
