@@ -969,7 +969,6 @@ gdk_wayland_device_get_wl_seat
 gdk_wayland_device_get_wl_pointer
 gdk_wayland_device_get_wl_keyboard
 gdk_wayland_device_get_node_ath
-gdk_wayland_device_pad_set_feedback
 
 <SUBSECTION Monitor>
 gdk_wayland_monitor_get_wl_output

@@ -5064,7 +5064,7 @@ gdk_wayland_device_get_node_path (GdkDevice *device)
   return NULL;
 }
 
-/**
+/*<private>
  * gdk_wayland_device_pad_set_feedback:
  * @device: (type GdkWaylandDevice): a %GDK_SOURCE_TABLET_PAD device
  * @feature: Feature to set the feedback label for

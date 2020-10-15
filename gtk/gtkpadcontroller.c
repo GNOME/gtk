@@ -77,6 +77,7 @@
 
 #ifdef GDK_WINDOWING_WAYLAND
 #include <gdk/wayland/gdkwayland.h>
+#include "gdk/wayland/gdkdevice-wayland-private.h"
 #endif
 
 struct _GtkPadController {

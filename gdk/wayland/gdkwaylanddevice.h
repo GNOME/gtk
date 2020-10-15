@@ -56,12 +56,6 @@ struct wl_keyboard  *gdk_wayland_device_get_wl_keyboard     (GdkDevice *device);
 GDK_AVAILABLE_IN_ALL
 const char          *gdk_wayland_device_get_node_path       (GdkDevice *device);
 
-GDK_AVAILABLE_IN_ALL
-void                 gdk_wayland_device_pad_set_feedback (GdkDevice           *device,
-                                                          GdkDevicePadFeature  feature,
-                                                          guint                feature_idx,
-                                                          const char          *label);
-
 G_END_DECLS
 
 #endif /* __GDK_WAYLAND_DEVICE_H__ */
