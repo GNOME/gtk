@@ -1068,7 +1068,6 @@ update_font_variations (void)
   unsigned int length;
   int i;
 
-  child = gtk_widget_get_first_child (variations_grid);
   while ((child = gtk_widget_get_first_child (variations_grid)))
     gtk_grid_remove (GTK_GRID (variations_grid), child);
 
