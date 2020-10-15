@@ -2166,6 +2166,9 @@ gtk_stack_snapshot_cube (GtkWidget   *widget,
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   double progress = gtk_progress_tracker_get_progress (&priv->tracker, FALSE);
 
+  g_assert (priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_ROTATE_RIGHT ||
+            priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_ROTATE_LEFT);
+
   if (priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_ROTATE_RIGHT)
     progress = 1 - progress;
 
