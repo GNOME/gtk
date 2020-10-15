@@ -55,14 +55,15 @@ gdk_macos_popup_surface_layout (GdkMacosPopupSurface *self,
   g_assert (layout != NULL);
   g_assert (GDK_SURFACE (self)->parent);
 
-  if (layout != self->layout)
-    {
-      g_clear_pointer (&self->layout, gdk_popup_layout_unref);
-      self->layout = gdk_popup_layout_ref (layout);
-    }
+  gdk_popup_layout_ref (layout);
+  g_clear_pointer (&self->layout, gdk_popup_layout_unref);
+  self->layout = layout;
 
-  monitor = gdk_surface_get_layout_monitor (GDK_SURFACE (self), layout,
+  monitor = gdk_surface_get_layout_monitor (GDK_SURFACE (self),
+                                            self->layout,
                                             gdk_macos_monitor_get_workarea);
+  if (monitor == NULL)
+    monitor = _gdk_macos_surface_get_best_monitor (GDK_MACOS_SURFACE (self));
   gdk_macos_monitor_get_workarea (monitor, &bounds);
 
   gdk_surface_layout_popup_helper (GDK_SURFACE (self),
@@ -70,7 +71,7 @@ gdk_macos_popup_surface_layout (GdkMacosPopupSurface *self,
                                    height,
                                    monitor,
                                    &bounds,
-                                   layout,
+                                   self->layout,
                                    &final_rect);
 
   gdk_surface_get_origin (GDK_SURFACE (self)->parent, &x, &y);
@@ -120,8 +121,6 @@ gdk_macos_popup_surface_present (GdkPopup       *popup,
 
   gdk_macos_popup_surface_layout (self, width, height, layout);
 
-  GDK_MACOS_SURFACE (self)->did_initial_present = TRUE;
-
   if (GDK_SURFACE_IS_MAPPED (GDK_SURFACE (self)))
     return TRUE;
 
@@ -142,6 +141,8 @@ gdk_macos_popup_surface_present (GdkPopup       *popup,
     {
       show_popup (GDK_MACOS_POPUP_SURFACE (self));
     }
+
+  GDK_MACOS_SURFACE (self)->did_initial_present = TRUE;
 
   return GDK_SURFACE_IS_MAPPED (GDK_SURFACE (self));
 }

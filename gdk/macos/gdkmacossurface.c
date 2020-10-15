@@ -84,7 +84,7 @@ _gdk_macos_surface_reposition_children (GdkMacosSurface *self)
         _gdk_macos_popup_surface_reposition (GDK_MACOS_POPUP_SURFACE (child));
     }
 
-  if (GDK_IS_POPUP (self))
+  if (GDK_IS_POPUP (self) && self->did_initial_present)
     g_signal_emit_by_name (self, "popup-layout-changed");
 }
 
