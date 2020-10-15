@@ -545,6 +545,7 @@ recursive_attach_view (int                 depth,
     return;
 
   child_view = gtk_text_view_new_with_buffer (gtk_text_view_get_buffer (view));
+  gtk_widget_set_size_request (child_view, 260 - 20 * depth, -1);
 
   /* Frame is to add a black border around each child view */
   frame = gtk_frame_new (NULL);
@@ -590,6 +591,8 @@ easter_egg_callback (GtkWidget *button,
   g_object_unref (buffer);
 
   window = gtk_window_new ();
+  gtk_window_set_transient_for (window, GTK_WINDOW (gtk_widget_get_root (button)));
+  gtk_window_set_modal (window, TRUE);
   sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_AUTOMATIC,
