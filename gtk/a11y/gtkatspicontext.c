@@ -122,6 +122,7 @@ static GParamSpec *obj_props[N_PROPS];
 
 G_DEFINE_TYPE (GtkAtSpiContext, gtk_at_spi_context, GTK_TYPE_AT_CONTEXT)
 
+/* {{{ State handling */
 static void
 set_atspi_state (guint64        *states,
                  AtspiStateType  state)
@@ -284,7 +285,8 @@ collect_states (GtkAtSpiContext    *self,
   g_variant_builder_add (builder, "u", (guint32) (states & 0xffffffff));
   g_variant_builder_add (builder, "u", (guint32) (states >> 32));
 }
-
+/* }}} */
+/* {{{ Relation handling */
 static void
 collect_relations (GtkAtSpiContext *self,
                    GVariantBuilder *builder)
@@ -328,7 +330,8 @@ collect_relations (GtkAtSpiContext *self,
       g_variant_builder_add (builder, "(ua(so))", map[i].s, &b);
     }
 }
-
+/* }}} */
+/* {{{ Accessible implementation */
 static int
 get_index_in_parent (GtkWidget *widget)
 {
@@ -694,102 +697,8 @@ static const GDBusInterfaceVTable accessible_vtable = {
   NULL,
 };
 
-static void
-gtk_at_spi_context_register_object (GtkAtSpiContext *self)
-{
-  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
-  GVariantBuilder interfaces = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE_STRING_ARRAY);
-  const GDBusInterfaceVTable *vtable;
-
-  g_variant_builder_add (&interfaces, "s", atspi_accessible_interface.name);
-  self->registration_ids[self->n_registered_objects] =
-      g_dbus_connection_register_object (self->connection,
-                                         self->context_path,
-                                         (GDBusInterfaceInfo *) &atspi_accessible_interface,
-                                         &accessible_vtable,
-                                         self,
-                                         NULL,
-                                         NULL);
-  self->n_registered_objects++;
-
-  vtable = gtk_atspi_get_text_vtable (accessible);
-  if (vtable)
-    {
-      g_variant_builder_add (&interfaces, "s", atspi_text_interface.name);
-      self->registration_ids[self->n_registered_objects] =
-          g_dbus_connection_register_object (self->connection,
-                                             self->context_path,
-                                             (GDBusInterfaceInfo *) &atspi_text_interface,
-                                             vtable,
-                                             self,
-                                             NULL,
-                                             NULL);
-      self->n_registered_objects++;
-    }
-
-  vtable = gtk_atspi_get_editable_text_vtable (accessible);
-  if (vtable)
-    {
-      g_variant_builder_add (&interfaces, "s", atspi_editable_text_interface.name);
-      self->registration_ids[self->n_registered_objects] =
-          g_dbus_connection_register_object (self->connection,
-                                             self->context_path,
-                                             (GDBusInterfaceInfo *) &atspi_editable_text_interface,
-                                             vtable,
-                                             self,
-                                             NULL,
-                                             NULL);
-      self->n_registered_objects++;
-    }
-  vtable = gtk_atspi_get_value_vtable (accessible);
-  if (vtable)
-    {
-      g_variant_builder_add (&interfaces, "s", atspi_value_interface.name);
-      self->registration_ids[self->n_registered_objects] =
-          g_dbus_connection_register_object (self->connection,
-                                             self->context_path,
-                                             (GDBusInterfaceInfo *) &atspi_value_interface,
-                                             vtable,
-                                             self,
-                                             NULL,
-                                             NULL);
-      self->n_registered_objects++;
-    }
-
-  /* Calling gtk_accessible_get_accessible_role() in here will recurse,
-   * so pass the role in explicitly.
-   */
-  vtable = gtk_atspi_get_selection_vtable (accessible,
-                                           GTK_AT_CONTEXT (self)->accessible_role);
-  if (vtable)
-    {
-      g_variant_builder_add (&interfaces, "s", atspi_selection_interface.name);
-      self->registration_ids[self->n_registered_objects] =
-          g_dbus_connection_register_object (self->connection,
-                                             self->context_path,
-                                             (GDBusInterfaceInfo *) &atspi_selection_interface,
-                                             vtable,
-                                             self,
-                                             NULL,
-                                             NULL);
-      self->n_registered_objects++;
-    }
-
-  self->interfaces = g_variant_ref_sink (g_variant_builder_end (&interfaces));
-}
-
-static void
-gtk_at_spi_context_unregister_object (GtkAtSpiContext *self)
-{
-  while (self->n_registered_objects > 0)
-    {
-      self->n_registered_objects--;
-      g_dbus_connection_unregister_object (self->connection,
-                                           self->registration_ids[self->n_registered_objects]);
-      self->registration_ids[self->n_registered_objects] = 0;
-    }
-}
-
+/* }}} */
+/* {{{ Change notification */
 static void
 emit_text_changed (GtkAtSpiContext *self,
                    const char      *kind,
@@ -1037,6 +946,103 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
       gboolean state = gtk_accessible_get_platform_state (GTK_ACCESSIBLE (widget),
                                                           GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED);
       emit_state_changed (self, "focused", state);
+    }
+}
+/* }}} */
+
+static void
+gtk_at_spi_context_register_object (GtkAtSpiContext *self)
+{
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+  GVariantBuilder interfaces = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE_STRING_ARRAY);
+  const GDBusInterfaceVTable *vtable;
+
+  g_variant_builder_add (&interfaces, "s", atspi_accessible_interface.name);
+  self->registration_ids[self->n_registered_objects] =
+      g_dbus_connection_register_object (self->connection,
+                                         self->context_path,
+                                         (GDBusInterfaceInfo *) &atspi_accessible_interface,
+                                         &accessible_vtable,
+                                         self,
+                                         NULL,
+                                         NULL);
+  self->n_registered_objects++;
+
+  vtable = gtk_atspi_get_text_vtable (accessible);
+  if (vtable)
+    {
+      g_variant_builder_add (&interfaces, "s", atspi_text_interface.name);
+      self->registration_ids[self->n_registered_objects] =
+          g_dbus_connection_register_object (self->connection,
+                                             self->context_path,
+                                             (GDBusInterfaceInfo *) &atspi_text_interface,
+                                             vtable,
+                                             self,
+                                             NULL,
+                                             NULL);
+      self->n_registered_objects++;
+    }
+
+  vtable = gtk_atspi_get_editable_text_vtable (accessible);
+  if (vtable)
+    {
+      g_variant_builder_add (&interfaces, "s", atspi_editable_text_interface.name);
+      self->registration_ids[self->n_registered_objects] =
+          g_dbus_connection_register_object (self->connection,
+                                             self->context_path,
+                                             (GDBusInterfaceInfo *) &atspi_editable_text_interface,
+                                             vtable,
+                                             self,
+                                             NULL,
+                                             NULL);
+      self->n_registered_objects++;
+    }
+  vtable = gtk_atspi_get_value_vtable (accessible);
+  if (vtable)
+    {
+      g_variant_builder_add (&interfaces, "s", atspi_value_interface.name);
+      self->registration_ids[self->n_registered_objects] =
+          g_dbus_connection_register_object (self->connection,
+                                             self->context_path,
+                                             (GDBusInterfaceInfo *) &atspi_value_interface,
+                                             vtable,
+                                             self,
+                                             NULL,
+                                             NULL);
+      self->n_registered_objects++;
+    }
+
+  /* Calling gtk_accessible_get_accessible_role() in here will recurse,
+   * so pass the role in explicitly.
+   */
+  vtable = gtk_atspi_get_selection_vtable (accessible,
+                                           GTK_AT_CONTEXT (self)->accessible_role);
+  if (vtable)
+    {
+      g_variant_builder_add (&interfaces, "s", atspi_selection_interface.name);
+      self->registration_ids[self->n_registered_objects] =
+          g_dbus_connection_register_object (self->connection,
+                                             self->context_path,
+                                             (GDBusInterfaceInfo *) &atspi_selection_interface,
+                                             vtable,
+                                             self,
+                                             NULL,
+                                             NULL);
+      self->n_registered_objects++;
+    }
+
+  self->interfaces = g_variant_ref_sink (g_variant_builder_end (&interfaces));
+}
+
+static void
+gtk_at_spi_context_unregister_object (GtkAtSpiContext *self)
+{
+  while (self->n_registered_objects > 0)
+    {
+      self->n_registered_objects--;
+      g_dbus_connection_unregister_object (self->connection,
+                                           self->registration_ids[self->n_registered_objects]);
+      self->registration_ids[self->n_registered_objects] = 0;
     }
 }
 
@@ -1414,3 +1420,5 @@ gtk_at_spi_context_to_ref (GtkAtSpiContext *self)
   const char *name = g_dbus_connection_get_unique_name (self->connection);
   return g_variant_new ("(so)", name, self->context_path);
 }
+
+/* vim:set foldmethod=marker expandtab: */

@@ -34,6 +34,8 @@
 
 #include <gio/gio.h>
 
+/* {{{ GtkEditable */
+
 typedef struct
 {
   GtkWidget *widget;
@@ -178,6 +180,8 @@ static const GDBusInterfaceVTable entry_vtable = {
   NULL,
 };
 
+/* }}} */
+/* {{{ GtkTextView */
 
 static void
 text_view_received (GObject      *source,
@@ -339,6 +343,7 @@ static const GDBusInterfaceVTable text_view_vtable = {
   NULL,
 };
 
+/* }}} */
 
 const GDBusInterfaceVTable *
 gtk_atspi_get_editable_text_vtable (GtkAccessible *accessible)
@@ -354,3 +359,4 @@ gtk_atspi_get_editable_text_vtable (GtkAccessible *accessible)
   return NULL;
 }
 
+/* vim:set foldmethod=marker expandtab: */

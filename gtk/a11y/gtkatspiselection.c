@@ -61,6 +61,8 @@ find_nth (GtkWidget *box,
   counter->n--;
 }
 
+/* {{{ GtkListbox */
+
 static void
 listbox_handle_method (GDBusConnection       *connection,
                        const gchar           *sender,
@@ -220,6 +222,8 @@ static const GDBusInterfaceVTable listbox_vtable = {
   NULL
 };
 
+/* }}} */
+/* {{{ GtkListView */
 
 static void
 listview_handle_method (GDBusConnection       *connection,
@@ -457,6 +461,8 @@ static const GDBusInterfaceVTable listview_vtable = {
   NULL
 };
 
+/* }}} */
+/* {{{ GtkFlowBox */
 
 static void
 flowbox_handle_method (GDBusConnection       *connection,
@@ -609,6 +615,8 @@ static const GDBusInterfaceVTable flowbox_vtable = {
   NULL
 };
 
+/* }}} */
+/* {{{ GtkComboBox */
 
 static void
 combobox_handle_method (GDBusConnection       *connection,
@@ -705,6 +713,8 @@ static const GDBusInterfaceVTable combobox_vtable = {
   NULL
 };
 
+/* }}} */
+/* {{{ GtkStackSwitcher */
 
 static void
 stackswitcher_handle_method (GDBusConnection       *connection,
@@ -827,6 +837,8 @@ static const GDBusInterfaceVTable stackswitcher_vtable = {
   NULL
 };
 
+/* }}} */
+/* {{{ GtkNotebook */
 
 static void
 notebook_handle_method (GDBusConnection       *connection,
@@ -952,6 +964,8 @@ static const GDBusInterfaceVTable notebook_vtable = {
   NULL
 };
 
+/* }}} */
+
 #define IS_NOTEBOOK_TAB_LIST(s,r) \
   ((r == GTK_ACCESSIBLE_ROLE_TAB_LIST) && \
    (gtk_widget_get_parent (GTK_WIDGET (s)) != NULL) && \
@@ -977,6 +991,8 @@ gtk_atspi_get_selection_vtable (GtkAccessible     *accessible,
 
   return NULL;
 }
+
+/* {{{ GtkListView notification */
 
 typedef struct {
   GtkAtspiSelectionCallback *changed;
@@ -1020,6 +1036,8 @@ model_changed (GtkListBase  *list,
   data = (ListViewData *)g_object_get_data (G_OBJECT (list), "accessible-selection-data");
   update_model (data, gtk_list_base_get_model (list));
 }
+
+/* }}} */
 
 void
 gtk_atspi_connect_selection_signals (GtkAccessible *accessible,
@@ -1138,3 +1156,6 @@ gtk_atspi_disconnect_selection_signals (GtkAccessible *accessible)
       g_object_set_data (G_OBJECT (accessible), "accessible-selection-data", NULL);
     }
 }
+
+/* vim:set foldmethod=marker expandtab: */
+
