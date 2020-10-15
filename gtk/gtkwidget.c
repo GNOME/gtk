@@ -2404,6 +2404,10 @@ gtk_widget_unparent (GtkWidget *widget)
 
   g_object_freeze_notify (G_OBJECT (widget));
 
+  gtk_accessible_update_children (GTK_ACCESSIBLE (priv->parent),
+                                  GTK_ACCESSIBLE (widget),
+                                  GTK_ACCESSIBLE_CHILD_STATE_REMOVED);
+
   root = _gtk_widget_get_root (widget);
   if (GTK_IS_WINDOW (root))
     _gtk_window_unset_focus_and_default (GTK_WINDOW (root), widget);
@@ -5789,6 +5793,10 @@ gtk_widget_reposition_after (GtkWidget *widget,
     {
       gtk_widget_queue_compute_expand (parent);
     }
+
+  gtk_accessible_update_children (GTK_ACCESSIBLE (parent),
+                                  GTK_ACCESSIBLE (widget),
+                                  GTK_ACCESSIBLE_CHILD_STATE_ADDED);
 
   gtk_widget_pop_verify_invariants (widget);
 }
