@@ -32,6 +32,7 @@
 #include "gtkflowbox.h"
 #include "gtkcombobox.h"
 #include "gtkstackswitcher.h"
+#include "gtknotebook.h"
 
 #include <gio/gio.h>
 
@@ -575,14 +576,146 @@ stackswitcher_get_property (GDBusConnection  *connection,
 
   return NULL;
 }
+
 static const GDBusInterfaceVTable stackswitcher_vtable = {
   stackswitcher_handle_method,
   stackswitcher_get_property,
   NULL
 };
 
+
+static void
+notebook_handle_method (GDBusConnection       *connection,
+                        const gchar           *sender,
+                        const gchar           *object_path,
+                        const gchar           *interface_name,
+                        const gchar           *method_name,
+                        GVariant              *parameters,
+                        GDBusMethodInvocation *invocation,
+                        gpointer               user_data)
+{
+  GtkATContext *self = user_data;
+  GtkAccessible *accessible = gtk_at_context_get_accessible (self);
+  GtkWidget *widget = GTK_WIDGET (accessible);
+  GtkWidget *notebook = gtk_widget_get_parent (gtk_widget_get_parent (widget));
+
+  if (g_strcmp0 (method_name, "GetSelectedChild") == 0)
+    {
+      int i;
+      GtkWidget *child;
+
+      i = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+
+      for (child = gtk_widget_get_first_child (widget);
+           child;
+           child = gtk_widget_get_next_sibling (widget))
+        {
+          /* skip actions */
+          if (gtk_accessible_get_accessible_role (GTK_ACCESSIBLE (child)) != GTK_ACCESSIBLE_ROLE_TAB)
+            continue;
+
+          if (i == 0)
+            break;
+
+          i--;
+        }
+
+      if (child == NULL)
+        {
+          g_dbus_method_invocation_return_error_literal (invocation,
+                                                         G_DBUS_ERROR,
+                                                         G_DBUS_ERROR_INVALID_ARGS,
+                                                         "No selected child");
+        }
+      else
+        {
+          GtkATContext *ctx = gtk_accessible_get_at_context (GTK_ACCESSIBLE (child));
+          g_dbus_method_invocation_return_value (invocation,
+               g_variant_new ("(@(so))", gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (ctx))));
+        }
+    }
+  else if (g_strcmp0 (method_name, "SelectChild") == 0)
+    {
+      int i;
+      GtkWidget *child;
+
+      g_variant_get (parameters, "(i)", &i);
+
+      /* skip an action widget */
+      child = gtk_widget_get_first_child (widget);
+      if (gtk_accessible_get_accessible_role (GTK_ACCESSIBLE (child)) != GTK_ACCESSIBLE_ROLE_TAB)
+        i--;
+
+      gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), i);
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", TRUE));
+    }
+  else if (g_strcmp0 (method_name, "DeselectChild") == 0)
+    {
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", FALSE));
+    }
+  else if (g_strcmp0 (method_name, "DeselectSelectedChild") == 0)
+    {
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", FALSE));
+    }
+  else if (g_strcmp0 (method_name, "IsChildSelected") == 0)
+    {
+      int i;
+      gboolean active;
+      GtkWidget *child;
+
+      g_variant_get (parameters, "(i)", &i);
+
+      /* skip an action widget */
+      child = gtk_widget_get_first_child (widget);
+      if (gtk_accessible_get_accessible_role (GTK_ACCESSIBLE (child)) != GTK_ACCESSIBLE_ROLE_TAB)
+        i--;
+
+      active = i == gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", active));
+    }
+  else if (g_strcmp0 (method_name, "SelectAll") == 0)
+    {
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", FALSE));
+    }
+  else if (g_strcmp0 (method_name, "ClearSelection") == 0)
+    {
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", FALSE));
+    }
+}
+
+static GVariant *
+notebook_get_property (GDBusConnection  *connection,
+                       const gchar      *sender,
+                       const gchar      *object_path,
+                       const gchar      *interface_name,
+                       const gchar      *property_name,
+                       GError          **error,
+                       gpointer          user_data)
+{
+  if (g_strcmp0 (property_name, "NSelectedChildren") == 0)
+    {
+      return g_variant_new_int32 (1);
+    }
+
+  return NULL;
+}
+
+static const GDBusInterfaceVTable notebook_vtable = {
+  notebook_handle_method,
+  notebook_get_property,
+  NULL
+};
+
+#define IS_NOTEBOOK_TAB_LIST(s,r) \
+  ((r == GTK_ACCESSIBLE_ROLE_TAB_LIST) && \
+   (gtk_widget_get_parent (GTK_WIDGET (s)) != NULL) && \
+   GTK_IS_NOTEBOOK (gtk_widget_get_parent (gtk_widget_get_parent (GTK_WIDGET (s)))))
+
 const GDBusInterfaceVTable *
-gtk_atspi_get_selection_vtable (GtkAccessible *accessible)
+gtk_atspi_get_selection_vtable (GtkAccessible     *accessible,
+                                GtkAccessibleRole  role)
 {
   if (GTK_IS_LIST_BOX (accessible))
     return &listbox_vtable;
@@ -592,6 +725,8 @@ gtk_atspi_get_selection_vtable (GtkAccessible *accessible)
     return &combobox_vtable;
   else if (GTK_IS_STACK_SWITCHER (accessible))
     return &stackswitcher_vtable;
+  else if (IS_NOTEBOOK_TAB_LIST (accessible, role))
+    return &notebook_vtable;
 
   return NULL;
 }
@@ -654,6 +789,19 @@ gtk_atspi_connect_selection_signals (GtkAccessible *accessible,
 
       g_signal_connect_swapped (accessible, "notify::visible-child", G_CALLBACK (selection_changed), data);
     }
+  else if (IS_NOTEBOOK_TAB_LIST (accessible, GTK_AT_CONTEXT (data)->accessible_role))
+    {
+      GtkWidget *notebook = gtk_widget_get_parent (gtk_widget_get_parent (GTK_WIDGET (accessible)));
+      SelectionChanged *changed;
+
+      changed = g_new (SelectionChanged, 1);
+      changed->changed = selection_changed;
+      changed->data = data;
+
+      g_object_set_data_full (G_OBJECT (accessible), "accessible-selection-data", changed, g_free);
+
+      g_signal_connect_swapped (notebook, "notify::page", G_CALLBACK (selection_changed), data);
+    }
 }
 
 void
@@ -669,6 +817,17 @@ gtk_atspi_disconnect_selection_signals (GtkAccessible *accessible)
       changed = g_object_get_data (G_OBJECT (accessible), "accessible-selection-data");
 
       g_signal_handlers_disconnect_by_func (accessible, changed->changed, changed->data);
+
+      g_object_set_data (G_OBJECT (accessible), "accessible-selection-data", NULL);
+    }
+  else if (IS_NOTEBOOK_TAB_LIST (accessible, gtk_accessible_get_accessible_role (accessible)))
+    {
+      GtkWidget *notebook = gtk_widget_get_parent (gtk_widget_get_parent (GTK_WIDGET (accessible)));
+      SelectionChanged *changed;
+
+      changed = g_object_get_data (G_OBJECT (accessible), "accessible-selection-data");
+
+      g_signal_handlers_disconnect_by_func (notebook, changed->changed, changed->data);
 
       g_object_set_data (G_OBJECT (accessible), "accessible-selection-data", NULL);
     }

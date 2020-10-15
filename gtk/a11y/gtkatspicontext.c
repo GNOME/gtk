@@ -735,7 +735,11 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
       self->n_registered_objects++;
     }
 
-  vtable = gtk_atspi_get_selection_vtable (accessible);
+  /* Calling gtk_accessible_get_accessible_role() in here will recurse,
+   * so pass the role in explicitly.
+   */
+  vtable = gtk_atspi_get_selection_vtable (accessible,
+                                           GTK_AT_CONTEXT (self)->accessible_role);
   if (vtable)
     {
       g_variant_builder_add (&interfaces, "s", atspi_selection_interface.name);
