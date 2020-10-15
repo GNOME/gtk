@@ -17,12 +17,7 @@
 
 #include "config.h"
 
-#include <netinet/in.h>
-#include <unistd.h>
-
-#include "gdk.h"
-#include "gdkwayland.h"
-#include "gdkwaylandsurface.h"
+#include "gdksurface-wayland.h"
 
 #include "gdkdeviceprivate.h"
 #include "gdkdisplay-wayland.h"
@@ -44,6 +39,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+
+#include <netinet/in.h>
+#include <unistd.h>
 
 #define SURFACE_IS_TOPLEVEL(surface)  TRUE
 
@@ -4172,13 +4170,13 @@ maybe_set_gtk_surface_dbus_properties (GdkWaylandSurface *impl)
 }
 
 void
-gdk_wayland_toplevel_set_dbus_properties_libgtk_only (GdkToplevel *toplevel,
-                                                      const char  *application_id,
-                                                      const char  *app_menu_path,
-                                                      const char  *menubar_path,
-                                                      const char  *window_object_path,
-                                                      const char  *application_object_path,
-                                                      const char *unique_bus_name)
+gdk_wayland_toplevel_set_dbus_properties (GdkToplevel *toplevel,
+                                          const char  *application_id,
+                                          const char  *app_menu_path,
+                                          const char  *menubar_path,
+                                          const char  *window_object_path,
+                                          const char  *application_object_path,
+                                          const char *unique_bus_name)
 {
   GdkWaylandSurface *impl;
 

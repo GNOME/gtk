@@ -22,24 +22,17 @@
 
 #include "config.h"
 
-#include <gdk/gdkseatprivate.h>
+#include "gdkwaylandseat.h"
+#include "gdk/gdkseatprivate.h"
 
-#define GDK_TYPE_WAYLAND_SEAT         (gdk_wayland_seat_get_type ())
-#define GDK_WAYLAND_SEAT(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_WAYLAND_SEAT, GdkWaylandSeat))
 #define GDK_WAYLAND_SEAT_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST ((c), GDK_TYPE_WAYLAND_SEAT, GdkWaylandSeatClass))
-#define GDK_IS_WAYLAND_SEAT(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GDK_TYPE_WAYLAND_SEAT))
 #define GDK_IS_WAYLAND_SEAT_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), GDK_TYPE_WAYLAND_SEAT))
 #define GDK_WAYLAND_SEAT_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GDK_TYPE_WAYLAND_SEAT, GdkWaylandSeatClass))
-
-typedef struct _GdkWaylandSeat GdkWaylandSeat;
-typedef struct _GdkWaylandSeatClass GdkWaylandSeatClass;
 
 struct _GdkWaylandSeatClass
 {
   GdkSeatClass parent_class;
 };
-
-GType gdk_wayland_seat_get_type (void) G_GNUC_CONST;
 
 void gdk_wayland_seat_update_cursor_scale (GdkWaylandSeat *seat);
 

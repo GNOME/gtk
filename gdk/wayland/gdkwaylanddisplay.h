@@ -59,8 +59,6 @@ GDK_AVAILABLE_IN_ALL
 void                    gdk_wayland_display_set_startup_notification_id (GdkDisplay *display,
                                                                          const char *startup_id);
 
-gboolean                gdk_wayland_display_prefers_ssd         (GdkDisplay *display);
-
 GDK_AVAILABLE_IN_ALL
 gboolean                gdk_wayland_display_query_registry      (GdkDisplay  *display,
 								 const char *global);

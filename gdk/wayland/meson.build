@@ -24,7 +24,8 @@ gdk_wayland_public_headers = files([
   'gdkwaylanddisplay.h',
   'gdkwaylandglcontext.h',
   'gdkwaylandmonitor.h',
-  'gdkwaylandsurface.h'
+  'gdkwaylandseat.h',
+  'gdkwaylandsurface.h',
 ])
 
 install_headers(gdk_wayland_public_headers, 'gdkwayland.h', subdir: 'gtk-4.0/gdk/wayland/')

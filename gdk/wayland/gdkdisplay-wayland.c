@@ -384,7 +384,7 @@ static const struct org_kde_kwin_server_decoration_manager_listener server_decor
   .default_mode = server_decoration_manager_default_mode
 };
 
-/**
+/*
  * gdk_wayland_display_prefers_ssd:
  * @display: (type GdkWaylandDisplay): a #GdkDisplay
  *
