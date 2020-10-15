@@ -28,11 +28,18 @@
 #include "gtkatspicontextprivate.h"
 #include "gtkaccessibleprivate.h"
 #include "gtkdebug.h"
+#include "gtklistbase.h"
 #include "gtklistbox.h"
 #include "gtkflowbox.h"
 #include "gtkcombobox.h"
 #include "gtkstackswitcher.h"
 #include "gtknotebook.h"
+#include "gtklistview.h"
+#include "gtkgridview.h"
+#include "gtklistitem.h"
+#include "gtkbitset.h"
+#include "gtklistbaseprivate.h"
+#include "gtklistitemwidgetprivate.h"
 
 #include <gio/gio.h>
 
@@ -210,6 +217,158 @@ listbox_get_property (GDBusConnection  *connection,
 static const GDBusInterfaceVTable listbox_vtable = {
   listbox_handle_method,
   listbox_get_property,
+  NULL
+};
+
+
+static void
+listview_handle_method (GDBusConnection       *connection,
+                        const gchar           *sender,
+                        const gchar           *object_path,
+                        const gchar           *interface_name,
+                        const gchar           *method_name,
+                        GVariant              *parameters,
+                        GDBusMethodInvocation *invocation,
+                        gpointer               user_data)
+{
+  GtkATContext *self = user_data;
+  GtkAccessible *accessible = gtk_at_context_get_accessible (self);
+  GtkWidget *widget = GTK_WIDGET (accessible);
+  GtkSelectionModel *model = gtk_list_base_get_model (GTK_LIST_BASE (widget));
+
+  g_print ("list item %s %s\n", interface_name, method_name);
+
+  if (g_strcmp0 (method_name, "GetSelectedChild") == 0)
+    {
+      int idx;
+      guint pos;
+      GtkBitset *set;
+      GtkWidget *child;
+      GtkListItem *item;
+
+      g_variant_get (parameters, "(i)", &idx);
+
+      set = gtk_selection_model_get_selection (model);
+      pos = gtk_bitset_get_nth (set, idx);
+      gtk_bitset_unref (set);
+
+      for (child = gtk_widget_get_first_child (widget);
+           child;
+           child = gtk_widget_get_next_sibling (child))
+        {
+          item = gtk_list_item_widget_get_list_item (GTK_LIST_ITEM_WIDGET (child));
+          if (pos == gtk_list_item_get_position (item))
+            break;
+        }
+
+      if (child == NULL)
+        g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS, "No selected child for %d", idx);
+      else
+        {
+          GtkATContext *ctx = gtk_accessible_get_at_context (GTK_ACCESSIBLE (child));
+          g_dbus_method_invocation_return_value (invocation, g_variant_new ("(@(so))", gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (ctx))));
+        }
+    }
+  else if (g_strcmp0 (method_name, "SelectChild") == 0)
+    {
+      int idx;
+      gboolean ret;
+
+      g_variant_get (parameters, "(i)", &idx);
+
+      ret = gtk_selection_model_select_item (model, idx, FALSE);
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
+    }
+  else if (g_strcmp0 (method_name, "DeselectChild") == 0)
+    {
+      int idx;
+      gboolean ret;
+
+      g_variant_get (parameters, "(i)", &idx);
+
+      ret = gtk_selection_model_select_item (model, idx, FALSE);
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
+    }
+  else if (g_strcmp0 (method_name, "DeselectSelectedChild") == 0)
+    {
+      int idx;
+      guint pos;
+      GtkBitset *set;
+      gboolean ret;
+
+      g_variant_get (parameters, "(i)", &idx);
+
+      set = gtk_selection_model_get_selection (model);
+      pos = gtk_bitset_get_nth (set, idx);
+      gtk_bitset_unref (set);
+
+      ret = gtk_selection_model_unselect_item (model, pos);
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
+    }
+  else if (g_strcmp0 (method_name, "IsChildSelected") == 0)
+    {
+      int idx;
+      gboolean ret;
+
+      g_variant_get (parameters, "(i)", &idx);
+
+      ret = gtk_selection_model_is_selected (model, idx);
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
+    }
+  else if (g_strcmp0 (method_name, "SelectAll") == 0)
+    {
+      gboolean ret;
+
+      ret = gtk_selection_model_select_all (model);
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
+    }
+  else if (g_strcmp0 (method_name, "ClearSelection") == 0)
+    {
+      gboolean ret;
+
+      ret = gtk_selection_model_unselect_all (model);
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
+    }
+}
+
+static GVariant *
+listview_get_property (GDBusConnection  *connection,
+                       const gchar      *sender,
+                       const gchar      *object_path,
+                       const gchar      *interface_name,
+                       const gchar      *property_name,
+                       GError          **error,
+                       gpointer          user_data)
+{
+  GtkATContext *self = GTK_AT_CONTEXT (user_data);
+  GtkAccessible *accessible = gtk_at_context_get_accessible (self);
+  GtkWidget *widget = GTK_WIDGET (accessible);
+  GtkSelectionModel *model = gtk_list_base_get_model (GTK_LIST_BASE (widget));
+
+  if (g_strcmp0 (property_name, "NSelectedChildren") == 0)
+    {
+      int count = 0;
+      GtkBitset *set;
+
+      set = gtk_selection_model_get_selection (model);
+      count = gtk_bitset_get_size (set);
+      gtk_bitset_unref (set);
+
+      return g_variant_new_int32 (count);
+    }
+
+  return NULL;
+}
+
+static const GDBusInterfaceVTable listview_vtable = {
+  listview_handle_method,
+  listview_get_property,
   NULL
 };
 
@@ -599,6 +758,8 @@ notebook_handle_method (GDBusConnection       *connection,
   GtkWidget *widget = GTK_WIDGET (accessible);
   GtkWidget *notebook = gtk_widget_get_parent (gtk_widget_get_parent (widget));
 
+  g_print ("notebook %s %s\n", interface_name, method_name);
+
   if (g_strcmp0 (method_name, "GetSelectedChild") == 0)
     {
       int i;
@@ -719,6 +880,12 @@ gtk_atspi_get_selection_vtable (GtkAccessible     *accessible,
 {
   if (GTK_IS_LIST_BOX (accessible))
     return &listbox_vtable;
+  else if (GTK_IS_LIST_VIEW (accessible) ||
+           GTK_IS_GRID_VIEW (accessible))
+    {
+    g_print ("using listview vtable\n");
+    return &listview_vtable;
+    }
   else if (GTK_IS_FLOW_BOX (accessible))
     return &flowbox_vtable;
   else if (GTK_IS_COMBO_BOX (accessible))
@@ -735,6 +902,44 @@ typedef struct {
   GtkAtspiSelectionCallback *changed;
   gpointer data;
 } SelectionChanged;
+
+typedef struct {
+  GtkSelectionModel *model;
+  GtkAtspiSelectionCallback *changed;
+  gpointer data;
+} ListViewData;
+
+static void
+update_model (ListViewData      *data,
+              GtkSelectionModel *model)
+{
+  if (data->model)
+    g_signal_handlers_disconnect_by_func (data->model, data->changed, data->data);
+
+  g_set_object (&data->model, model);
+
+  if (data->model)
+    g_signal_connect_swapped (data->model, "selection-changed", G_CALLBACK (data->changed), data->data);
+}
+
+static void
+list_view_data_free (gpointer user_data)
+{
+  ListViewData *data = user_data;
+  update_model (data, NULL);
+  g_free (data);
+}
+
+static void
+model_changed (GtkListBase  *list,
+               GParamSpec   *pspec,
+               gpointer      unused)
+{
+  ListViewData *data;
+
+  data = (ListViewData *)g_object_get_data (G_OBJECT (list), "accessible-selection-data");
+  update_model (data, gtk_list_base_get_model (list));
+}
 
 void
 gtk_atspi_connect_selection_signals (GtkAccessible *accessible,
@@ -802,6 +1007,20 @@ gtk_atspi_connect_selection_signals (GtkAccessible *accessible,
 
       g_signal_connect_swapped (notebook, "notify::page", G_CALLBACK (selection_changed), data);
     }
+  else if (GTK_IS_LIST_VIEW (accessible) ||
+           GTK_IS_GRID_VIEW (accessible))
+    {
+      ListViewData *changed;
+
+      changed = g_new0 (ListViewData, 1);
+      changed->changed = selection_changed;
+      changed->data = data;
+
+      g_object_set_data_full (G_OBJECT (accessible), "accessible-selection-data", changed, list_view_data_free);
+
+      g_signal_connect (accessible, "notify::model", G_CALLBACK (model_changed), NULL);
+      model_changed (GTK_LIST_BASE (accessible), NULL, changed);
+    }
 }
 
 void
@@ -828,6 +1047,13 @@ gtk_atspi_disconnect_selection_signals (GtkAccessible *accessible)
       changed = g_object_get_data (G_OBJECT (accessible), "accessible-selection-data");
 
       g_signal_handlers_disconnect_by_func (notebook, changed->changed, changed->data);
+
+      g_object_set_data (G_OBJECT (accessible), "accessible-selection-data", NULL);
+    }
+  else if (GTK_IS_LIST_VIEW (accessible) ||
+           GTK_IS_GRID_VIEW (accessible))
+    {
+      g_signal_handlers_disconnect_by_func (accessible, model_changed, NULL);
 
       g_object_set_data (G_OBJECT (accessible), "accessible-selection-data", NULL);
     }
