@@ -48,20 +48,46 @@ get_image_paintable (GtkImage *image)
 }
 
 static void
+update_drag_icon (DemoImage   *demo,
+                  GtkDragIcon *icon)
+{
+  const char *icon_name;
+  GdkPaintable *paintable;
+  GtkWidget *image;
+
+  switch (gtk_image_get_storage_type (GTK_IMAGE (demo->image)))
+    {
+    case GTK_IMAGE_PAINTABLE:
+      paintable = gtk_image_get_paintable (GTK_IMAGE (demo->image));
+      image = gtk_image_new_from_paintable (paintable);
+      break;
+    case GTK_IMAGE_ICON_NAME:
+      icon_name = gtk_image_get_icon_name (GTK_IMAGE (demo->image));
+      image = gtk_image_new_from_icon_name (icon_name);
+      break;
+    case GTK_IMAGE_EMPTY:
+    case GTK_IMAGE_GICON:
+    default:
+      g_warning ("Image storage type %d not handled",
+                 gtk_image_get_storage_type (GTK_IMAGE (demo->image)));
+      return;
+    }
+
+  gtk_image_set_pixel_size (GTK_IMAGE (image),
+                            gtk_image_get_pixel_size (GTK_IMAGE (demo->image)));
+
+  gtk_drag_icon_set_child (icon, image);
+}
+
+static void
 drag_begin (GtkDragSource *source,
             GdkDrag       *drag,
             gpointer       data)
 {
   GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
   DemoImage *demo = DEMO_IMAGE (widget);
-  GdkPaintable *paintable;
 
-  paintable = get_image_paintable (GTK_IMAGE (demo->image));
-  if (paintable)
-    {
-      gtk_drag_icon_set_from_paintable (drag, paintable, -2, -2);
-      g_object_unref (paintable);
-    }
+  update_drag_icon (demo, GTK_DRAG_ICON (gtk_drag_icon_get_for_drag (drag)));
 }
 
 static GdkContentProvider *
