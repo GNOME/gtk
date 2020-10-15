@@ -25,7 +25,8 @@
 
 G_BEGIN_DECLS
 
-const GDBusInterfaceVTable *gtk_atspi_get_selection_vtable (GtkAccessible *accessible);
+const GDBusInterfaceVTable *gtk_atspi_get_selection_vtable (GtkAccessible     *accessible,
+                                                            GtkAccessibleRole  role);
 
 typedef void (GtkAtspiSelectionCallback) (gpointer data);
 
