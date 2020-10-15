@@ -7226,8 +7226,10 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
   data = g_object_get_qdata (G_OBJECT (gesture), quark_text_selection_data);
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-  drag_gesture_get_text_surface_coords (gesture, text_view,
-                                       &start_x, &start_y, &x, &y);
+
+  if (!drag_gesture_get_text_surface_coords (gesture, text_view,
+                                             &start_x, &start_y, &x, &y))
+    return;
 
   device = gdk_event_get_device (event);
 
@@ -7347,8 +7349,11 @@ gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
 
   priv = text_view->priv;
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-  drag_gesture_get_text_surface_coords (gesture, text_view,
-                                       &start_x, &start_y, &x, &y);
+
+  if (!drag_gesture_get_text_surface_coords (gesture, text_view,
+                                             &start_x, &start_y, &x, &y))
+    return;
+
 
   clicked_in_selection =
     g_object_get_qdata (G_OBJECT (gesture), quark_text_selection_data) == NULL;
