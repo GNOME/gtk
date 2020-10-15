@@ -1037,6 +1037,14 @@ of a #GtkIconInfo. It always returns a paintable in the requested size, and
 never fails. A number of no-longer-relevant lookup flags and API variants
 have been removed.
 
+Note that while GTK 4 is moving towards #GdkPaintable as a primary API
+for paintable content, it is meant to be a 'pure' content producer, therefore
+a #GtkIconPaintable for a symbolic icon will *not* get recolored depending
+on the context it is rendered it. To properly render a symbolic icon that
+is provided in the form of a #GtkIconPaintable (this can be checked with
+gtk_icon_paintable_is_symbolic()), you have to call
+gtk_icon_paintable_get_icon_name() and set the icon name on a #GtkImage.
+
 ### Update to GtkFileChooser API changes
 
 GtkFileChooser moved to a GFile-based API. If you need to convert a

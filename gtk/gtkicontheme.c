@@ -3670,6 +3670,9 @@ gtk_icon_paintable_get_icon_name (GtkIconPaintable *icon)
  * the file name and not the file contents for determining this.
  * This behaviour may change in the future.
  *
+ * Note that to render a symbolic #GtkIconPaintable properly (with
+ * recoloring), you have to set its icon name on a #GtkImage.
+ *
  * Returns: %TRUE if the icon is symbolic, %FALSE otherwise
  */
 gboolean
