@@ -453,12 +453,14 @@ gtk_list_item_widget_init (GtkListItemWidget *self)
 
 GtkWidget *
 gtk_list_item_widget_new (GtkListItemFactory *factory,
-                          const char         *css_name)
+                          const char         *css_name,
+                          GtkAccessibleRole   role)
 {
   g_return_val_if_fail (css_name != NULL, NULL);
 
   return g_object_new (GTK_TYPE_LIST_ITEM_WIDGET,
                        "css-name", css_name,
+                       "accessible-role", role,
                        "factory", factory,
                        NULL);
 }
@@ -480,6 +482,10 @@ gtk_list_item_widget_update (GtkListItemWidget *self,
     gtk_widget_set_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_SELECTED, FALSE);
   else
     gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_SELECTED);
+
+  gtk_accessible_update_state (GTK_ACCESSIBLE (self),
+                               GTK_ACCESSIBLE_STATE_SELECTED, selected,
+                               -1);
 }
 
 void

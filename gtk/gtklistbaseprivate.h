@@ -35,6 +35,7 @@ struct _GtkListBaseClass
   GtkWidgetClass parent_class;
 
   const char *         list_item_name;
+  GtkAccessibleRole    list_item_role;
   gsize                list_item_size;
   gsize                list_item_augment_size;
   GtkRbTreeAugmentFunc list_item_augment_func;

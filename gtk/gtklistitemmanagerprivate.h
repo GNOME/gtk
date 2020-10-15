@@ -22,6 +22,7 @@
 #define __GTK_LIST_ITEM_MANAGER_H__
 
 #include "gtk/gtktypes.h"
+#include "gtk/gtkenums.h"
 
 #include "gtk/gtklistitemfactory.h"
 #include "gtk/gtkrbtreeprivate.h"
@@ -58,6 +59,7 @@ GType                   gtk_list_item_manager_get_type          (void) G_GNUC_CO
 
 GtkListItemManager *    gtk_list_item_manager_new_for_size      (GtkWidget              *widget,
                                                                  const char             *item_css_name,
+                                                                 GtkAccessibleRole       item_role,
                                                                  gsize                   element_size,
                                                                  gsize                   augment_size,
                                                                  GtkRbTreeAugmentFunc    augment_func);

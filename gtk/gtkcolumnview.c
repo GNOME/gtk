@@ -1136,7 +1136,7 @@ gtk_column_view_init (GtkColumnView *self)
 
   self->columns = g_list_store_new (GTK_TYPE_COLUMN_VIEW_COLUMN);
 
-  self->header = gtk_list_item_widget_new (NULL, "header");
+  self->header = gtk_list_item_widget_new (NULL, "header", GTK_ACCESSIBLE_ROLE_WIDGET);
   gtk_widget_set_can_focus (self->header, FALSE);
   gtk_widget_set_layout_manager (self->header, gtk_column_view_layout_new (self));
   gtk_widget_set_parent (self->header, GTK_WIDGET (self));

@@ -30,6 +30,7 @@
 #include "gtkprivate.h"
 #include "gtksingleselection.h"
 #include "gtkwidgetprivate.h"
+#include "gtkmultiselection.h"
 
 /* Maximum number of list items created by the gridview.
  * For debugging, you can set this to G_MAXUINT to ensure
@@ -1025,6 +1026,7 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   list_base_class->list_item_name = "child";
+  list_base_class->list_item_role = GTK_ACCESSIBLE_ROLE_GRID_CELL;
   list_base_class->list_item_size = sizeof (Cell);
   list_base_class->list_item_augment_size = sizeof (CellAugment);
   list_base_class->list_item_augment_func = cell_augment;
@@ -1157,6 +1159,7 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
                                    gtk_grid_view_activate_item);
 
   gtk_widget_class_set_css_name (widget_class, I_("gridview"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GRID);
 }
 
 static void
@@ -1245,6 +1248,10 @@ gtk_grid_view_set_model (GtkGridView       *self,
 
   if (!gtk_list_base_set_model (GTK_LIST_BASE (self), model))
     return;
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE, GTK_IS_MULTI_SELECTION (model),
+                                  -1);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
 }

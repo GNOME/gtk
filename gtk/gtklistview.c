@@ -30,6 +30,7 @@
 #include "gtkrbtreeprivate.h"
 #include "gtkstylecontext.h"
 #include "gtkwidgetprivate.h"
+#include "gtkmultiselection.h"
 
 /* Maximum number of list items created by the listview.
  * For debugging, you can set this to G_MAXUINT to ensure
@@ -800,6 +801,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   list_base_class->list_item_name = "row";
+  list_base_class->list_item_role = GTK_ACCESSIBLE_ROLE_LIST_ITEM;
   list_base_class->list_item_size = sizeof (ListRow);
   list_base_class->list_item_augment_size = sizeof (ListRowAugment);
   list_base_class->list_item_augment_func = list_row_augment;
@@ -916,6 +918,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                                    gtk_list_view_activate_item);
 
   gtk_widget_class_set_css_name (widget_class, I_("listview"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_LIST);
 }
 
 static void
@@ -1000,6 +1003,10 @@ gtk_list_view_set_model (GtkListView       *self,
 
   if (!gtk_list_base_set_model (GTK_LIST_BASE (self), model))
     return;
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE, GTK_IS_MULTI_SELECTION (model),
+                                  -1);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
 }
