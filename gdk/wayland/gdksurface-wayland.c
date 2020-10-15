@@ -2799,6 +2799,8 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
       g_clear_pointer (&impl->popup.layout, gdk_popup_layout_unref);
     }
 
+  impl->has_uncommitted_ack_configure = FALSE;
+
   unset_transient_for_exported (surface);
 
   _gdk_wayland_surface_clear_saved_size (surface);
