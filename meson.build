@@ -613,20 +613,10 @@ if win32_enabled
   backend_immodules += ['ime']
 
   # Check whether libepoxy is built with EGL support on Windows
-  win32_has_egl = cc.links(
-     '''
-     #include <epoxy/egl.h>
-	 
-     int main(int argc, char *argv[])
-     {
-       EGLDisplay disp = EGL_NO_DISPLAY;
-
-       return epoxy_egl_version (disp);
-     } 
-     ''',
-     dependencies : epoxy_dep,
-     name : 'libepoxy supports EGL on Windows'
-    )
+  win32_has_egl = epoxy_dep.get_variable(
+    pkgconfig: 'epoxy_has_egl',
+    internal: 'epoxy_has_egl',
+    default_value: '0') == '1'
 endif
 
 # Check for bind_textdomain_codeset, including -lintl if GLib brings it in by
