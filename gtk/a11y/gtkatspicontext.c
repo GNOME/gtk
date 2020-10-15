@@ -59,6 +59,27 @@
 # include <gdk/x11/gdkx11property.h>
 #endif
 
+/* We create a GtkAtSpiContext object for (almost) every widget.
+ *
+ * Each context implements a number of Atspi interfaces on a D-Bus
+ * object. The context objects are connected into a tree by the
+ * Parent property and GetChildAtIndex method of the Accessible
+ * interface.
+ *
+ * The tree is an almost perfect mirror image of the widget tree,
+ * with a few notable exceptions:
+ *
+ * - We don't create contexts for the GtkText widgets inside
+ *   entry wrappers, since the Text functionality is represented
+ *   on the entry contexts.
+ *
+ * - We insert non-widget backed context objects for each page
+ *   of a stack. The main purpose of these extra context is to
+ *   hold the TAB_PANEL role and be the target of the CONTROLS
+ *   relation with their corresponding tabs (in the stack
+ *   switcher or notebook).
+ */
+
 struct _GtkAtSpiContext
 {
   GtkATContext parent_instance;
