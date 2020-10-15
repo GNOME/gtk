@@ -4948,6 +4948,9 @@ gtk_widget_set_focusable (GtkWidget *widget,
   priv->focusable = focusable;
 
   gtk_widget_queue_resize (widget);
+
+  gtk_accessible_platform_changed (GTK_ACCESSIBLE (widget), GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSABLE);
+
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_FOCUSABLE]);
 }
 
@@ -8092,10 +8095,14 @@ gtk_widget_accessible_get_at_context (GtkAccessible *accessible)
   GtkWidget *self = GTK_WIDGET (accessible);
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (self);
 
+  if (priv->in_destruction)
+    return NULL;
+
   if (priv->at_context == NULL)
     {
       GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (self);
       GtkWidgetClassPrivate *class_priv = widget_class->priv;
+      GdkDisplay *display = _gtk_widget_get_display (self);
       GtkAccessibleRole role;
 
       /* Widgets have two options to set the accessible role: either they
@@ -8112,16 +8119,32 @@ gtk_widget_accessible_get_at_context (GtkAccessible *accessible)
         role = class_priv->accessible_role;
 
       priv->accessible_role = role;
-      priv->at_context = gtk_at_context_create (role, accessible);
+      priv->at_context = gtk_at_context_create (role, accessible, display);
     }
 
   return priv->at_context;
+}
+
+static gboolean
+gtk_widget_accessible_get_platform_state (GtkAccessible              *self,
+                                          GtkAccessiblePlatformState  state)
+{
+  switch (state)
+    {
+    case GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE:
+      return gtk_widget_get_focusable (GTK_WIDGET (self));
+    case GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED:
+      return gtk_widget_has_focus (GTK_WIDGET (self));
+    default:
+      g_assert_not_reached ();
+    }
 }
 
 static void
 gtk_widget_accessible_interface_init (GtkAccessibleInterface *iface)
 {
   iface->get_at_context = gtk_widget_accessible_get_at_context;
+  iface->get_platform_state = gtk_widget_accessible_get_platform_state;
 }
 
 /*
@@ -9750,6 +9773,8 @@ gtk_widget_set_has_focus (GtkWidget *widget,
     return;
 
   priv->has_focus = has_focus;
+
+  gtk_accessible_platform_changed (GTK_ACCESSIBLE (widget), GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSED);
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HAS_FOCUS]);
 }
@@ -12138,6 +12163,10 @@ gtk_widget_update_orientation (GtkWidget      *widget,
       gtk_widget_add_css_class (widget, "vertical");
       gtk_widget_remove_css_class (widget, "horizontal");
     }
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (widget),
+                                  GTK_ACCESSIBLE_PROPERTY_ORIENTATION, orientation,
+                                  -1);
 }
 
 /**

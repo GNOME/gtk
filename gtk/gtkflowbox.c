@@ -75,6 +75,7 @@
 
 #include "gtkflowboxprivate.h"
 
+#include "gtkaccessible.h"
 #include "gtkadjustment.h"
 #include "gtkbinlayout.h"
 #include "gtkbuildable.h"
@@ -483,6 +484,18 @@ gtk_flow_box_child_compute_expand (GtkWidget *widget,
     }
 }
 
+static void
+gtk_flow_box_child_root (GtkWidget *widget)
+{
+  GtkFlowBoxChild *child = GTK_FLOW_BOX_CHILD (widget);
+
+  GTK_WIDGET_CLASS (gtk_flow_box_child_parent_class)->root (widget);
+
+  gtk_accessible_update_state (GTK_ACCESSIBLE (child),
+                               GTK_ACCESSIBLE_STATE_SELECTED, CHILD_PRIV (child)->selected,
+                               -1);
+}
+
 /* GObject implementation {{{2 */
 
 static void
@@ -495,6 +508,7 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
   object_class->get_property = gtk_flow_box_child_get_property;
   object_class->set_property = gtk_flow_box_child_set_property;
 
+  widget_class->root = gtk_flow_box_child_root;
   widget_class->get_request_mode = gtk_flow_box_child_get_request_mode;
   widget_class->compute_expand = gtk_flow_box_child_compute_expand;
   widget_class->focus = gtk_flow_box_child_focus;
@@ -533,6 +547,7 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("flowboxchild"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GRID_CELL);
 }
 
 static void
@@ -905,6 +920,9 @@ gtk_flow_box_child_set_selected (GtkFlowBoxChild *child,
         gtk_widget_unset_state_flags (GTK_WIDGET (child),
                                       GTK_STATE_FLAG_SELECTED);
 
+      gtk_accessible_update_state (GTK_ACCESSIBLE (child),
+                                   GTK_ACCESSIBLE_STATE_SELECTED, selected,
+                                   -1);
       return TRUE;
     }
 
@@ -3870,6 +3888,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                                        NULL);
 
   gtk_widget_class_set_css_name (widget_class, I_("flowbox"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GRID);
 }
 
 static void
@@ -4723,6 +4742,10 @@ gtk_flow_box_set_selection_mode (GtkFlowBox       *box,
     }
 
   BOX_PRIV (box)->selection_mode = mode;
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (box),
+                                  GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE, mode == GTK_SELECTION_MULTIPLE,
+                                  -1);
 
   g_object_notify_by_pspec (G_OBJECT (box), props[PROP_SELECTION_MODE]);
 

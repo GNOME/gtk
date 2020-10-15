@@ -131,8 +131,29 @@ gtk_gizmo_new (const char            *css_name,
                GtkGizmoFocusFunc      focus_func,
                GtkGizmoGrabFocusFunc  grab_focus_func)
 {
+  return gtk_gizmo_new_with_role (css_name,
+                                  GTK_ACCESSIBLE_ROLE_WIDGET,
+                                  measure_func,
+                                  allocate_func,
+                                  snapshot_func,
+                                  contains_func,
+                                  focus_func,
+                                  grab_focus_func);
+}
+
+GtkWidget *
+gtk_gizmo_new_with_role (const char            *css_name,
+                         GtkAccessibleRole      role,
+                         GtkGizmoMeasureFunc    measure_func,
+                         GtkGizmoAllocateFunc   allocate_func,
+                         GtkGizmoSnapshotFunc   snapshot_func,
+                         GtkGizmoContainsFunc   contains_func,
+                         GtkGizmoFocusFunc      focus_func,
+                         GtkGizmoGrabFocusFunc  grab_focus_func)
+{
   GtkGizmo *gizmo = GTK_GIZMO (g_object_new (GTK_TYPE_GIZMO,
                                              "css-name", css_name,
+                                             "accessible-role", role,
                                              NULL));
 
   gizmo->measure_func  = measure_func;

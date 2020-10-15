@@ -1385,6 +1385,14 @@ gtk_paned_size_allocate (GtkWidget *widget,
 
       gtk_widget_set_child_visible (paned->handle_widget, FALSE);
     }
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (paned),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, 0.0,
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_MAX,
+                                      (double) (paned->orientation == GTK_ORIENTATION_HORIZONTAL ?  width : height),
+                                  GTK_ACCESSIBLE_PROPERTY_VALUE_NOW,
+                                      (double) paned->start_child_size,
+                                  -1);
 }
 
 

@@ -21,7 +21,7 @@
 #pragma once
 
 #include "gtkaccessible.h"
-#include "gtkatcontext.h"
+#include "gtkatcontextprivate.h"
 
 G_BEGIN_DECLS
 
@@ -30,8 +30,21 @@ struct _GtkAccessibleInterface
   GTypeInterface g_iface;
 
   GtkATContext *        (* get_at_context)      (GtkAccessible *self);
+
+  gboolean              (* get_platform_state)  (GtkAccessible              *self,
+                                                 GtkAccessiblePlatformState  state);
 };
 
 GtkATContext *  gtk_accessible_get_at_context   (GtkAccessible *self);
+
+const char *    gtk_accessible_role_to_name     (GtkAccessibleRole  role,
+                                                 const char        *domain);
+
+void            gtk_accessible_platform_changed (GtkAccessible                *self,
+                                                 GtkAccessiblePlatformChange   change);
+gboolean        gtk_accessible_get_platform_state (GtkAccessible              *self,
+                                                   GtkAccessiblePlatformState  state);
+
+gboolean        gtk_accessible_should_present   (GtkAccessible     *self);
 
 G_END_DECLS

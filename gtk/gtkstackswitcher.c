@@ -58,6 +58,11 @@
  * When circumstances require it, GtkStackSwitcher adds the
  * .needs-attention style class to the widgets representing the
  * stack pages.
+ *
+ * # Accessibility
+ *
+ * GtkStackSwitcher uses the #GTK_ACCESSIBLE_ROLE_TAB_LIST role
+ * and uses the #GTK_ACCESSIBLE_ROLE_TAB for its buttons.
  */
 
 #define TIMEOUT_EXPAND 500
@@ -247,7 +252,9 @@ add_child (guint             position,
   GtkStackPage *page;
   GtkEventController *controller;
 
-  button = gtk_toggle_button_new ();
+  button = g_object_new (GTK_TYPE_TOGGLE_BUTTON,
+                         "accessible-role", GTK_ACCESSIBLE_ROLE_TAB,
+                         NULL);
   gtk_widget_set_focus_on_click (button, FALSE);
 
   controller = gtk_drop_controller_motion_new ();
@@ -263,6 +270,14 @@ add_child (guint             position,
   g_object_set_data (G_OBJECT (button), "child-index", GUINT_TO_POINTER (position));
   selected = gtk_selection_model_is_selected (self->pages, position);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), selected);
+
+  gtk_accessible_update_state (GTK_ACCESSIBLE (button),
+                               GTK_ACCESSIBLE_STATE_SELECTED, selected,
+                               -1);
+
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (button),
+                                  GTK_ACCESSIBLE_RELATION_CONTROLS, g_list_append (NULL, page),
+                                  -1);
 
   g_signal_connect (button, "notify::active", G_CALLBACK (on_button_toggled), self);
   g_signal_connect (page, "notify", G_CALLBACK (on_page_updated), self);
@@ -328,6 +343,10 @@ selection_changed_cb (GtkSelectionModel *model,
         {
           selected = gtk_selection_model_is_selected (switcher->pages, i);
           gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), selected);
+
+          gtk_accessible_update_state (GTK_ACCESSIBLE (button),
+                                       GTK_ACCESSIBLE_STATE_SELECTED, selected,
+                                       -1);
         }
       g_object_unref (page);
     }
@@ -497,6 +516,7 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("stackswitcher"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_TAB_LIST);
 }
 
 /**

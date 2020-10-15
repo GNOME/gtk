@@ -23,6 +23,9 @@
 
 #include <gtk/gtk.h>
 #include "gtkstack.h"
+#include "gtkenums.h"
+#include "gtkaccessibleprivate.h"
+#include "gtkatcontextprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkprogresstrackerprivate.h"
@@ -77,6 +80,11 @@
  * # CSS nodes
  *
  * GtkStack has a single CSS node named stack.
+ *
+ * # Accessibility
+ *
+ * GtkStack uses the #GTK_ACCESSIBLE_ROLE_TAB_PANEL for the stack
+ * pages.
  */
 
 /**
@@ -181,7 +189,9 @@ enum
   CHILD_PROP_NEEDS_ATTENTION,
   CHILD_PROP_VISIBLE,
   CHILD_PROP_USE_UNDERLINE,
-  LAST_CHILD_PROP
+  LAST_CHILD_PROP,
+
+  PROP_ACCESSIBLE_ROLE
 };
 
 struct _GtkStackPage
@@ -193,6 +203,9 @@ struct _GtkStackPage
   char *title;
   char *icon_name;
   GtkWidget *last_focus;
+
+  GtkATContext *at_context;
+
   guint needs_attention : 1;
   guint visible         : 1;
   guint use_underline   : 1;
@@ -207,7 +220,39 @@ struct _GtkStackPageClass
 static GParamSpec *stack_props[LAST_PROP] = { NULL, };
 static GParamSpec *stack_page_props[LAST_CHILD_PROP] = { NULL, };
 
-G_DEFINE_TYPE (GtkStackPage, gtk_stack_page, G_TYPE_OBJECT)
+static GtkATContext *
+gtk_stack_page_accessible_get_at_context (GtkAccessible *accessible)
+{
+  GtkStackPage *page = GTK_STACK_PAGE (accessible);
+
+  if (page->at_context == NULL)
+    {
+      GtkAccessibleRole role = GTK_ACCESSIBLE_ROLE_TAB_PANEL;
+      GdkDisplay *display = gtk_widget_get_display (page->widget);
+
+      page->at_context = gtk_at_context_create (role, accessible, display);
+    }
+
+  return page->at_context;
+}
+
+static gboolean
+gtk_stack_page_accessible_get_platform_state (GtkAccessible              *self,
+                                              GtkAccessiblePlatformState  state)
+{
+  return FALSE;
+}
+
+static void
+gtk_stack_page_accessible_init (GtkAccessibleInterface *iface)
+{
+  iface->get_at_context = gtk_stack_page_accessible_get_at_context;
+  iface->get_platform_state = gtk_stack_page_accessible_get_platform_state;
+}
+
+G_DEFINE_TYPE_WITH_CODE (GtkStackPage, gtk_stack_page, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE,
+                                                gtk_stack_page_accessible_init))
 
 static void
 gtk_stack_page_init (GtkStackPage *page)
@@ -270,6 +315,10 @@ gtk_stack_page_get_property (GObject      *object,
       g_value_set_boolean (value, gtk_stack_page_get_use_underline (info));
       break;
 
+    case PROP_ACCESSIBLE_ROLE:
+      g_value_set_enum (value, GTK_ACCESSIBLE_ROLE_TAB_PANEL);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -312,6 +361,9 @@ gtk_stack_page_set_property (GObject      *object,
 
     case CHILD_PROP_USE_UNDERLINE:
       gtk_stack_page_set_use_underline (info, g_value_get_boolean (value));
+      break;
+
+    case PROP_ACCESSIBLE_ROLE:
       break;
 
     default:
@@ -386,6 +438,8 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_CHILD_PROP, stack_page_props);
+
+  g_object_class_override_property (object_class, PROP_ACCESSIBLE_ROLE, "accessible-role");
 }
 
 #define GTK_TYPE_STACK_PAGES (gtk_stack_pages_get_type ())

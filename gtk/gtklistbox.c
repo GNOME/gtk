@@ -19,6 +19,7 @@
 
 #include "gtklistbox.h"
 
+#include "gtkaccessible.h"
 #include "gtkactionhelperprivate.h"
 #include "gtkadjustmentprivate.h"
 #include "gtkbinlayout.h"
@@ -678,6 +679,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                                        NULL);
 
   gtk_widget_class_set_css_name (widget_class, I_("list"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_LIST);
 }
 
 static void
@@ -1119,6 +1121,10 @@ gtk_list_box_set_selection_mode (GtkListBox       *box,
 
   gtk_list_box_update_row_styles (box);
 
+  gtk_accessible_update_property (GTK_ACCESSIBLE (box),
+                                  GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE, mode == GTK_SELECTION_MULTIPLE,
+                                  -1);
+
   g_object_notify_by_pspec (G_OBJECT (box), properties[PROP_SELECTION_MODE]);
 
   if (dirty)
@@ -1557,6 +1563,10 @@ gtk_list_box_row_set_selected (GtkListBoxRow *row,
       else
         gtk_widget_unset_state_flags (GTK_WIDGET (row),
                                       GTK_STATE_FLAG_SELECTED);
+
+      gtk_accessible_update_state (GTK_ACCESSIBLE (row),
+                                   GTK_ACCESSIBLE_STATE_SELECTED, selected,
+                                   -1);
 
       return TRUE;
     }
@@ -3019,6 +3029,19 @@ gtk_list_box_row_hide (GtkWidget *widget)
     gtk_list_box_row_visibility_changed (box, row);
 }
 
+static void
+gtk_list_box_row_root (GtkWidget *widget)
+{
+  GtkListBoxRow *row = GTK_LIST_BOX_ROW (widget);
+
+  GTK_WIDGET_CLASS (gtk_list_box_row_parent_class)->root (widget);
+
+  if (ROW_PRIV (row)->selectable)
+    gtk_accessible_update_state (GTK_ACCESSIBLE (row),
+                                 GTK_ACCESSIBLE_STATE_SELECTED, ROW_PRIV (row)->selected,
+                                 -1);
+}
+
 /**
  * gtk_list_box_row_changed:
  * @row: a #GtkListBoxRow
@@ -3228,10 +3251,19 @@ gtk_list_box_row_set_selectable (GtkListBoxRow *row,
     {
       if (!selectable)
         gtk_list_box_row_set_selected (row, FALSE);
- 
+
       ROW_PRIV (row)->selectable = selectable;
 
+      if (selectable)
+        gtk_accessible_update_state (GTK_ACCESSIBLE (row),
+                                     GTK_ACCESSIBLE_STATE_SELECTED, FALSE,
+                                     -1);
+      else
+        gtk_accessible_reset_state (GTK_ACCESSIBLE (row),
+                                    GTK_ACCESSIBLE_STATE_SELECTED);
+
       gtk_list_box_update_row_style (gtk_list_box_row_get_box (row), row);
+
       g_object_notify_by_pspec (G_OBJECT (row), row_properties[ROW_PROP_SELECTABLE]);
     }
 }
@@ -3413,6 +3445,7 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
   object_class->finalize = gtk_list_box_row_finalize;
   object_class->dispose = gtk_list_box_row_dispose;
 
+  widget_class->root = gtk_list_box_row_root;
   widget_class->show = gtk_list_box_row_show;
   widget_class->hide = gtk_list_box_row_hide;
   widget_class->focus = gtk_list_box_row_focus;
@@ -3478,6 +3511,7 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("row"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_LIST_ITEM);
 }
 
 static void

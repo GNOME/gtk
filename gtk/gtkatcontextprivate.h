@@ -80,12 +80,23 @@ typedef enum {
   GTK_ACCESSIBLE_STATE_CHANGE_SELECTED = 1 << GTK_ACCESSIBLE_STATE_SELECTED
 } GtkAccessibleStateChange;
 
+typedef enum {
+  GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE,
+  GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED,
+} GtkAccessiblePlatformState;
+
+typedef enum {
+  GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSABLE = 1 << GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE,
+  GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSED   = 1 << GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED,
+} GtkAccessiblePlatformChange;
+
 struct _GtkATContext
 {
   GObject parent_instance;
 
   GtkAccessibleRole accessible_role;
   GtkAccessible *accessible;
+  GdkDisplay *display;
 
   GtkAccessibleAttributeSet *states;
   GtkAccessibleAttributeSet *properties;
@@ -94,6 +105,7 @@ struct _GtkATContext
   GtkAccessibleStateChange updated_states;
   GtkAccessiblePropertyChange updated_properties;
   GtkAccessibleRelationChange updated_relations;
+  GtkAccessiblePlatformChange updated_platform;
 };
 
 struct _GtkATContextClass
@@ -104,10 +116,13 @@ struct _GtkATContextClass
                          GtkAccessibleStateChange     changed_states,
                          GtkAccessiblePropertyChange  changed_properties,
                          GtkAccessibleRelationChange  changed_relations,
+                         GtkAccessiblePlatformChange  changed_platform,
                          GtkAccessibleAttributeSet   *states,
                          GtkAccessibleAttributeSet   *properties,
                          GtkAccessibleAttributeSet   *relations);
 };
+
+GdkDisplay *            gtk_at_context_get_display              (GtkATContext          *self);
 
 void                    gtk_at_context_update                   (GtkATContext          *self);
 
@@ -132,6 +147,11 @@ gboolean                gtk_at_context_has_accessible_relation  (GtkATContext   
                                                                  GtkAccessibleRelation  relation);
 GtkAccessibleValue *    gtk_at_context_get_accessible_relation  (GtkATContext          *self,
                                                                  GtkAccessibleRelation  relation);
+
+char *                  gtk_at_context_get_label                (GtkATContext          *self);
+
+void                    gtk_at_context_platform_changed         (GtkATContext                *self,
+                                                                 GtkAccessiblePlatformChange  change);
 
 const char *    gtk_accessible_property_get_attribute_name      (GtkAccessibleProperty property);
 const char *    gtk_accessible_relation_get_attribute_name      (GtkAccessibleRelation relation);

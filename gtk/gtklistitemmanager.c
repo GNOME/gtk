@@ -35,6 +35,7 @@ struct _GtkListItemManager
   GtkListItemFactory *factory;
   gboolean single_click_activate;
   const char *item_css_name;
+  GtkAccessibleRole item_role;
 
   GtkRbTree *items;
   GSList *trackers;
@@ -111,6 +112,7 @@ gtk_list_item_manager_clear_node (gpointer _item)
 GtkListItemManager *
 gtk_list_item_manager_new_for_size (GtkWidget            *widget,
                                     const char           *item_css_name,
+                                    GtkAccessibleRole     item_role,
                                     gsize                 element_size,
                                     gsize                 augment_size,
                                     GtkRbTreeAugmentFunc  augment_func)
@@ -126,6 +128,7 @@ gtk_list_item_manager_new_for_size (GtkWidget            *widget,
   /* not taking a ref because the widget refs us */
   self->widget = widget;
   self->item_css_name = g_intern_string (item_css_name);
+  self->item_role = item_role;
 
   self->items = gtk_rb_tree_new_for_size (element_size,
                                           augment_size,
@@ -923,7 +926,8 @@ gtk_list_item_manager_acquire_list_item (GtkListItemManager *self,
   g_return_val_if_fail (prev_sibling == NULL || GTK_IS_WIDGET (prev_sibling), NULL);
 
   result = gtk_list_item_widget_new (self->factory,
-                                     self->item_css_name);
+                                     self->item_css_name,
+                                     self->item_role);
 
   gtk_list_item_widget_set_single_click_activate (GTK_LIST_ITEM_WIDGET (result), self->single_click_activate);
 

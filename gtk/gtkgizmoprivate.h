@@ -3,6 +3,7 @@
 #define __GTK_GIZMO_H__
 
 #include "gtkwidget.h"
+#include "gtkenums.h"
 
 #define GTK_TYPE_GIZMO                 (gtk_gizmo_get_type ())
 #define GTK_GIZMO(obj)                 (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_GIZMO, GtkGizmo))
@@ -60,6 +61,15 @@ GtkWidget *gtk_gizmo_new (const char            *css_name,
                           GtkGizmoContainsFunc   contains_func,
                           GtkGizmoFocusFunc      focus_func,
                           GtkGizmoGrabFocusFunc  grab_focus_func);
+
+GtkWidget *gtk_gizmo_new_with_role (const char            *css_name,
+                                    GtkAccessibleRole      role,
+                                    GtkGizmoMeasureFunc    measure_func,
+                                    GtkGizmoAllocateFunc   allocate_func,
+                                    GtkGizmoSnapshotFunc   snapshot_func,
+                                    GtkGizmoContainsFunc   contains_func,
+                                    GtkGizmoFocusFunc      focus_func,
+                                    GtkGizmoGrabFocusFunc  grab_focus_func);
 
 
 #endif

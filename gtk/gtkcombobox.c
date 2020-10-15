@@ -103,6 +103,10 @@
  * contains a box with the .linked class. That box contains an entry and a
  * button, both with the .combo class added.
  * The button also contains another node with name arrow.
+ *
+ * # Accessibility
+ *
+ * GtkComboBox uses the #GTK_ACCESSIBLE_ROLE_COMBO_BOX role.
  */
 
 
@@ -797,6 +801,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_menu_hide);
 
   gtk_widget_class_set_css_name (widget_class, I_("combobox"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_COMBO_BOX);
 }
 
 static void

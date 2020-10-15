@@ -47,6 +47,9 @@
 #include "gtkatcontextprivate.h"
 #include "gtkenums.h"
 #include "gtktypebuiltins.h"
+#include "gtkwidget.h"
+
+#include <glib/gi18n-lib.h>
 
 #include <stdarg.h>
 
@@ -531,4 +534,193 @@ gtk_accessible_reset_relation (GtkAccessible         *self,
 
   gtk_at_context_set_accessible_relation (context, relation, NULL);
   gtk_at_context_update (context);
+}
+
+static const char *role_names[] = {
+  [GTK_ACCESSIBLE_ROLE_ALERT] = NC_("accessibility", "alert"),
+  [GTK_ACCESSIBLE_ROLE_ALERT_DIALOG] = NC_("accessibility", "alert dialog"),
+  [GTK_ACCESSIBLE_ROLE_BANNER] = NC_("accessibility", "banner"),
+  [GTK_ACCESSIBLE_ROLE_BUTTON] = NC_("accessibility", "button"),
+  [GTK_ACCESSIBLE_ROLE_CAPTION] = NC_("accessibility", "caption"),
+  [GTK_ACCESSIBLE_ROLE_CELL] = NC_("accessibility", "cell"),
+  [GTK_ACCESSIBLE_ROLE_CHECKBOX] = NC_("accessibility", "checkbox"),
+  [GTK_ACCESSIBLE_ROLE_COLUMN_HEADER] = NC_("accessibility", "column header"),
+  [GTK_ACCESSIBLE_ROLE_COMBO_BOX] = NC_("accessibility", "combo box"),
+  [GTK_ACCESSIBLE_ROLE_COMMAND] = NC_("accessibility", "command"),
+  [GTK_ACCESSIBLE_ROLE_COMPOSITE] = NC_("accessibility", "composite"),
+  [GTK_ACCESSIBLE_ROLE_DIALOG] = NC_("accessibility", "dialog"),
+  [GTK_ACCESSIBLE_ROLE_DOCUMENT] = NC_("accessibility", "document"),
+  [GTK_ACCESSIBLE_ROLE_FEED] = NC_("accessibility", "feed"),
+  [GTK_ACCESSIBLE_ROLE_FORM] = NC_("accessibility", "form"),
+  [GTK_ACCESSIBLE_ROLE_GENERIC] = NC_("accessibility", "generic"),
+  [GTK_ACCESSIBLE_ROLE_GRID] = NC_("accessibility", "grid"),
+  [GTK_ACCESSIBLE_ROLE_GRID_CELL] = NC_("accessibility", "grid cell"),
+  [GTK_ACCESSIBLE_ROLE_GROUP] = NC_("accessibility", "group"),
+  [GTK_ACCESSIBLE_ROLE_HEADING] = NC_("accessibility", "heading"),
+  [GTK_ACCESSIBLE_ROLE_IMG] = NC_("accessibility", "image"),
+  [GTK_ACCESSIBLE_ROLE_INPUT] = NC_("accessibility", "input"),
+  [GTK_ACCESSIBLE_ROLE_LABEL] = NC_("accessibility", "label"),
+  [GTK_ACCESSIBLE_ROLE_LANDMARK] = NC_("accessibility", "landmark"),
+  [GTK_ACCESSIBLE_ROLE_LEGEND] = NC_("accessibility", "legend"),
+  [GTK_ACCESSIBLE_ROLE_LINK] = NC_("accessibility", "link"),
+  [GTK_ACCESSIBLE_ROLE_LIST] = NC_("accessibility", "list"),
+  [GTK_ACCESSIBLE_ROLE_LIST_BOX] = NC_("accessibility", "list box"),
+  [GTK_ACCESSIBLE_ROLE_LIST_ITEM] = NC_("accessibility", "list item"),
+  [GTK_ACCESSIBLE_ROLE_LOG] = NC_("accessibility", "log"),
+  [GTK_ACCESSIBLE_ROLE_MAIN] = NC_("accessibility", "main"),
+  [GTK_ACCESSIBLE_ROLE_MARQUEE] = NC_("accessibility", "marquee"),
+  [GTK_ACCESSIBLE_ROLE_MATH] = NC_("accessibility", "math"),
+  [GTK_ACCESSIBLE_ROLE_METER] = NC_("accessibility", "meter"),
+  [GTK_ACCESSIBLE_ROLE_MENU] = NC_("accessibility", "menu"),
+  [GTK_ACCESSIBLE_ROLE_MENU_BAR] = NC_("accessibility", "menu bar"),
+  [GTK_ACCESSIBLE_ROLE_MENU_ITEM] = NC_("accessibility", "menu item"),
+  [GTK_ACCESSIBLE_ROLE_MENU_ITEM_CHECKBOX] = NC_("accessibility", "menu item checkbox"),
+  [GTK_ACCESSIBLE_ROLE_MENU_ITEM_RADIO] = NC_("accessibility", "menu item radio"),
+  [GTK_ACCESSIBLE_ROLE_NAVIGATION] = NC_("accessibility", "navigation"),
+  [GTK_ACCESSIBLE_ROLE_NONE] = NC_("accessibility", "none"),
+  [GTK_ACCESSIBLE_ROLE_NOTE] = NC_("accessibility", "note"),
+  [GTK_ACCESSIBLE_ROLE_OPTION] = NC_("accessibility", "option"),
+  [GTK_ACCESSIBLE_ROLE_PRESENTATION] = NC_("accessibility", "presentation"),
+  [GTK_ACCESSIBLE_ROLE_PROGRESS_BAR] = NC_("accessibility", "progress bar"),
+  [GTK_ACCESSIBLE_ROLE_RADIO] = NC_("accessibility", "radio"),
+  [GTK_ACCESSIBLE_ROLE_RADIO_GROUP] = NC_("accessibility", "radio group"),
+  [GTK_ACCESSIBLE_ROLE_RANGE] = NC_("accessibility", "range"),
+  [GTK_ACCESSIBLE_ROLE_REGION] = NC_("accessibility", "region"),
+  [GTK_ACCESSIBLE_ROLE_ROW] = NC_("accessibility", "row"),
+  [GTK_ACCESSIBLE_ROLE_ROW_GROUP] = NC_("accessibility", "row group"),
+  [GTK_ACCESSIBLE_ROLE_ROW_HEADER] = NC_("accessibility", "row header"),
+  [GTK_ACCESSIBLE_ROLE_SCROLLBAR] = NC_("accessibility", "scroll bar"),
+  [GTK_ACCESSIBLE_ROLE_SEARCH] = NC_("accessibility", "search"),
+  [GTK_ACCESSIBLE_ROLE_SEARCH_BOX] = NC_("accessibility", "search box"),
+  [GTK_ACCESSIBLE_ROLE_SECTION] = NC_("accessibility", "section"),
+  [GTK_ACCESSIBLE_ROLE_SECTION_HEAD] = NC_("accessibility", "section head"),
+  [GTK_ACCESSIBLE_ROLE_SELECT] = NC_("accessibility", "select"),
+  [GTK_ACCESSIBLE_ROLE_SEPARATOR] = NC_("accessibility", "separator"),
+  [GTK_ACCESSIBLE_ROLE_SLIDER] = NC_("accessibility", "slider"),
+  [GTK_ACCESSIBLE_ROLE_SPIN_BUTTON] = NC_("accessibility", "spin button"),
+  [GTK_ACCESSIBLE_ROLE_STATUS] = NC_("accessibility", "status"),
+  [GTK_ACCESSIBLE_ROLE_STRUCTURE] = NC_("accessibility", "structure"),
+  [GTK_ACCESSIBLE_ROLE_SWITCH] = NC_("accessibility", "switch"),
+  [GTK_ACCESSIBLE_ROLE_TAB] = NC_("accessibility", "tab"),
+  [GTK_ACCESSIBLE_ROLE_TABLE] = NC_("accessibility", "table"),
+  [GTK_ACCESSIBLE_ROLE_TAB_LIST] = NC_("accessibility", "tab list"),
+  [GTK_ACCESSIBLE_ROLE_TAB_PANEL] = NC_("accessibility", "tab panel"),
+  [GTK_ACCESSIBLE_ROLE_TEXT_BOX] = NC_("accessibility", "text box"),
+  [GTK_ACCESSIBLE_ROLE_TIME] = NC_("accessibility", "time"),
+  [GTK_ACCESSIBLE_ROLE_TIMER] = NC_("accessibility", "timer"),
+  [GTK_ACCESSIBLE_ROLE_TOOLBAR] = NC_("accessibility", "tool bar"),
+  [GTK_ACCESSIBLE_ROLE_TOOLTIP] = NC_("accessibility", "tool tip"),
+  [GTK_ACCESSIBLE_ROLE_TREE] = NC_("accessibility", "tree"),
+  [GTK_ACCESSIBLE_ROLE_TREE_GRID] = NC_("accessibility", "tree grid"),
+  [GTK_ACCESSIBLE_ROLE_TREE_ITEM] = NC_("accessibility", "tree item"),
+  [GTK_ACCESSIBLE_ROLE_WIDGET] = NC_("accessibility", "widget"),
+  [GTK_ACCESSIBLE_ROLE_WINDOW] = NC_("accessibility", "window"),
+};
+
+/*< private >
+ * gtk_accessible_role_to_name:
+ * @role: a #GtkAccessibleRole
+ * @domain: (nullable): the translation domain
+ *
+ * Converts a #GtkAccessibleRole value to the equivalent role name.
+ *
+ * If @domain is not %NULL, the returned string will be localized.
+ *
+ * Returns: (transfer none): the name of the role
+ */
+const char *
+gtk_accessible_role_to_name (GtkAccessibleRole  role,
+                             const char        *domain)
+{
+  if (domain != NULL)
+    return g_dpgettext2 (domain, "accessibility", role_names[role]);
+
+  return role_names[role];
+}
+
+/*<private>
+ * gtk_accessible_platform_changed:
+ * @self: a #GtkAccessible
+ * @change: the platform state change to report
+ *
+ * ARIA discriminates between author-controlled states
+ * and 'platform' states, which are not. This function
+ * can be used by widgets to inform ATs that a platform
+ * state, such as focus, has changed.
+ *
+ * Note that the state itself is not included in this API.
+ * AT backends should use gtk_accessible_get_platform_state()
+ * to obtain the actual state.
+ */
+void
+gtk_accessible_platform_changed (GtkAccessible               *self,
+                                 GtkAccessiblePlatformChange  change)
+{
+  GtkATContext *context;
+
+  if (GTK_IS_WIDGET (self) &&
+      gtk_widget_get_root (GTK_WIDGET (self)) == NULL)
+    return;
+
+  context = gtk_accessible_get_at_context (self);
+
+  /* propagate changes up from ignored widgets */
+  if (gtk_accessible_get_accessible_role (self) == GTK_ACCESSIBLE_ROLE_NONE)
+    {
+      context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (gtk_widget_get_parent (GTK_WIDGET (self))));
+    }
+
+  if (context == NULL)
+    return;
+
+  gtk_at_context_platform_changed (context, change);
+  gtk_at_context_update (context);
+}
+
+/*<private>
+ * gtk_accessible_get_platform_state:
+ * @self: a #GtkAccessible
+ * @state: platform state to query
+ *
+ * Query a platform state, such as focus.
+ *
+ * See gtk_accessible_platform_changed().
+ *
+ * This functionality can be overridden by #GtkAccessible
+ * implementations, e.g. to get platform state from an ignored
+ * child widget, as is the case for #GtkText wrappers.
+ *
+ * Returns: the value of @state for the accessible
+ */
+gboolean
+gtk_accessible_get_platform_state (GtkAccessible              *self,
+                                   GtkAccessiblePlatformState  state)
+{
+  return GTK_ACCESSIBLE_GET_IFACE (self)->get_platform_state (self, state);
+}
+
+/*<private>
+ * gtk_accessible_should_present:
+ * @self: a #GtkAccessible
+ *
+ * Returns whether this accessible should be represented to ATs.
+ *
+ * By default, hidden widgets are are among these, but there can
+ * be other reasons to return %FALSE, e.g. for widgets that are
+ * purely presentations, or for widgets whose functionality is
+ * represented elsewhere, as is the case for #GtkText widgets.
+ *
+ * Returns: %TRUE if the widget should be represented
+ */
+gboolean
+gtk_accessible_should_present (GtkAccessible *self)
+{
+  if (GTK_IS_WIDGET (self) &&
+      !gtk_widget_get_visible (GTK_WIDGET (self)))
+    return FALSE;
+
+  if (gtk_accessible_get_accessible_role (self) == GTK_ACCESSIBLE_ROLE_NONE)
+    return FALSE;
+
+  return TRUE;
 }

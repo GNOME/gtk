@@ -50,7 +50,8 @@ struct _GtkListItemWidgetClass
 GType                   gtk_list_item_widget_get_type           (void) G_GNUC_CONST;
 
 GtkWidget *             gtk_list_item_widget_new                (GtkListItemFactory     *factory,
-                                                                 const char             *css_name);
+                                                                 const char             *css_name,
+                                                                 GtkAccessibleRole       role);
 
 void                    gtk_list_item_widget_update             (GtkListItemWidget      *self,
                                                                  guint                   position,

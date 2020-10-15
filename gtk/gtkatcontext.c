@@ -36,8 +36,14 @@
 #include "gtkatcontextprivate.h"
 
 #include "gtkaccessiblevalueprivate.h"
+#include "gtkaccessibleprivate.h"
+#include "gtkdebug.h"
 #include "gtktestatcontextprivate.h"
 #include "gtktypebuiltins.h"
+
+#if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND)
+#include "a11y/gtkatspicontextprivate.h"
+#endif
 
 G_DEFINE_ABSTRACT_TYPE (GtkATContext, gtk_at_context, G_TYPE_OBJECT)
 
@@ -45,6 +51,7 @@ enum
 {
   PROP_ACCESSIBLE_ROLE = 1,
   PROP_ACCESSIBLE,
+  PROP_DISPLAY,
 
   N_PROPS
 };
@@ -90,6 +97,10 @@ gtk_at_context_set_property (GObject      *gobject,
       self->accessible = g_value_get_object (value);
       break;
 
+    case PROP_DISPLAY:
+      self->display = g_value_get_object (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
     }
@@ -113,6 +124,10 @@ gtk_at_context_get_property (GObject    *gobject,
       g_value_set_object (value, self->accessible);
       break;
 
+    case PROP_DISPLAY:
+      g_value_set_object (value, self->display);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
     }
@@ -123,6 +138,7 @@ gtk_at_context_real_state_change (GtkATContext                *self,
                                   GtkAccessibleStateChange     changed_states,
                                   GtkAccessiblePropertyChange  changed_properties,
                                   GtkAccessibleRelationChange  changed_relations,
+                                  GtkAccessiblePlatformChange  changed_platform,
                                   GtkAccessibleAttributeSet   *states,
                                   GtkAccessibleAttributeSet   *properties,
                                   GtkAccessibleAttributeSet   *relations)
@@ -168,6 +184,20 @@ gtk_at_context_class_init (GtkATContextClass *klass)
                          "Accessible",
                          "The accessible implementation",
                          GTK_TYPE_ACCESSIBLE,
+                         G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT_ONLY |
+                         G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkATContext:display:
+   *
+   * The #GdkDisplay for the #GtkATContext.
+   */
+  obj_props[PROP_DISPLAY] =
+    g_param_spec_object ("display",
+                         "Display",
+                         "The display connection",
+                         GDK_TYPE_DISPLAY,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS);
@@ -354,13 +384,45 @@ gtk_at_context_get_accessible_role (GtkATContext *self)
   return self->accessible_role;
 }
 
+/*< private >
+ * gtk_at_context_get_display:
+ * @self: a #GtkATContext
+ *
+ * Retrieves the #GdkDisplay used to create the context.
+ *
+ * Returns: (transfer none): a #GdkDisplay
+ */
+GdkDisplay *
+gtk_at_context_get_display (GtkATContext *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), NULL);
+
+  return self->display;
+}
+
+static const struct {
+  const char *name;
+  GtkATContext * (* create_context) (GtkAccessibleRole accessible_role,
+                                     GtkAccessible    *accessible,
+                                     GdkDisplay       *display);
+} a11y_backends[] = {
+#if defined(GDK_WINDOWING_WAYLAND)
+  { "AT-SPI (Wayland)", gtk_at_spi_create_context },
+#endif
+#if defined(GDK_WINDOWING_X11)
+  { "AT-SPI (X11)", gtk_at_spi_create_context },
+#endif
+  { NULL, NULL },
+};
+
 /**
  * gtk_at_context_create: (constructor)
  * @accessible_role: the accessible role used by the #GtkATContext
  * @accessible: the #GtkAccessible implementation using the #GtkATContext
+ * @display: the #GdkDisplay used by the #GtkATContext
  *
- * Creates a new #GtkATContext instance for the given accessible role and
- * accessible instance.
+ * Creates a new #GtkATContext instance for the given accessible role,
+ * accessible instance, and display connection.
  *
  * The #GtkATContext implementation being instantiated will depend on the
  * platform.
@@ -369,7 +431,8 @@ gtk_at_context_get_accessible_role (GtkATContext *self)
  */
 GtkATContext *
 gtk_at_context_create (GtkAccessibleRole  accessible_role,
-                       GtkAccessible     *accessible)
+                       GtkAccessible     *accessible,
+                       GdkDisplay        *display)
 {
   static const char *gtk_test_accessible;
   static const char *gtk_no_a11y;
@@ -401,8 +464,31 @@ gtk_at_context_create (GtkAccessibleRole  accessible_role,
   if (gtk_no_a11y[0] == '1')
     return NULL;
 
+  GtkATContext *res = NULL;
+
+  for (guint i = 0; i < G_N_ELEMENTS (a11y_backends); i++)
+    {
+      if (a11y_backends[i].name == NULL)
+        break;
+
+      if (a11y_backends[i].create_context != NULL)
+        {
+          res = a11y_backends[i].create_context (accessible_role, accessible, display);
+          if (res != NULL)
+            break;
+        }
+    }
+
+  /* Fall back to the test context, so we can get debugging data */
+  if (res == NULL)
+    res = g_object_new (GTK_TYPE_TEST_AT_CONTEXT,
+                        "accessible_role", accessible_role,
+                        "accessible", accessible,
+                        "display", display,
+                        NULL);
+
   /* FIXME: Add GIOExtension for AT contexts */
-  return gtk_test_at_context_new (accessible_role, accessible);
+  return res;
 }
 
 /*< private >
@@ -420,7 +506,8 @@ gtk_at_context_update (GtkATContext *self)
   /* There's no point in notifying of state changes if there weren't any */
   if (self->updated_properties == 0 &&
       self->updated_relations == 0 &&
-      self->updated_states == 0)
+      self->updated_states == 0 &&
+      self->updated_platform == 0)
     return;
 
   GtkAccessibleStateChange changed_states =
@@ -432,12 +519,14 @@ gtk_at_context_update (GtkATContext *self)
 
   GTK_AT_CONTEXT_GET_CLASS (self)->state_change (self,
                                                  changed_states, changed_properties, changed_relations,
+                                                 self->updated_platform,
                                                  self->states, self->properties, self->relations);
   g_signal_emit (self, obj_signals[STATE_CHANGE], 0);
 
   self->updated_properties = 0;
   self->updated_relations = 0;
   self->updated_states = 0;
+  self->updated_platform = 0;
 }
 
 /*< private >
@@ -639,4 +728,92 @@ gtk_at_context_get_accessible_relation (GtkATContext          *self,
   g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), NULL);
 
   return gtk_accessible_attribute_set_get_value (self->relations, relation);
+}
+
+/*< private >
+ * gtk_at_context_get_label:
+ * @self: a #GtkATContext
+ *
+ * Retrieves the accessible label of the #GtkATContext.
+ *
+ * This is a convenience function meant to be used by #GtkATContext implementations.
+ *
+ * Returns: (transfer full): the label of the #GtkATContext
+ */
+char *
+gtk_at_context_get_label (GtkATContext *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), NULL);
+
+  GtkAccessibleValue *value = NULL;
+
+  if (gtk_accessible_attribute_set_contains (self->states, GTK_ACCESSIBLE_STATE_HIDDEN))
+    {
+      value = gtk_accessible_attribute_set_get_value (self->states, GTK_ACCESSIBLE_STATE_HIDDEN);
+
+      if (gtk_boolean_accessible_value_get (value))
+        return g_strdup ("");
+    }
+
+  if (gtk_accessible_attribute_set_contains (self->properties, GTK_ACCESSIBLE_PROPERTY_LABEL))
+    {
+      value = gtk_accessible_attribute_set_get_value (self->properties, GTK_ACCESSIBLE_PROPERTY_LABEL);
+
+      return g_strdup (gtk_string_accessible_value_get (value));
+    }
+
+  if (gtk_accessible_attribute_set_contains (self->relations, GTK_ACCESSIBLE_RELATION_LABELLED_BY))
+    {
+      value = gtk_accessible_attribute_set_get_value (self->relations, GTK_ACCESSIBLE_RELATION_LABELLED_BY);
+
+      GList *list = gtk_reference_list_accessible_value_get (value);
+      GtkAccessible *rel = GTK_ACCESSIBLE (list->data);
+      GtkATContext *rel_context = gtk_accessible_get_at_context (rel);
+
+      return gtk_at_context_get_label (rel_context);
+    }
+
+  GtkAccessibleRole role = gtk_at_context_get_accessible_role (self);
+
+  switch ((int) role)
+    {
+    case GTK_ACCESSIBLE_ROLE_RANGE:
+      {
+        int range_attrs[] = {
+          GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT,
+          GTK_ACCESSIBLE_PROPERTY_VALUE_NOW,
+        };
+
+        for (int i = 0; i < G_N_ELEMENTS (range_attrs); i++)
+          {
+            if (gtk_accessible_attribute_set_contains (self->properties, range_attrs[i]))
+              {
+                value = gtk_accessible_attribute_set_get_value (self->properties, range_attrs[i]);
+                break;
+              }
+          }
+
+        if (value != NULL)
+          return g_strdup (gtk_string_accessible_value_get (value));
+      }
+      break;
+
+    default:
+      break;
+    }
+
+  GEnumClass *enum_class = g_type_class_peek (GTK_TYPE_ACCESSIBLE_ROLE);
+  GEnumValue *enum_value = g_enum_get_value (enum_class, role);
+
+  if (enum_value != NULL)
+    return g_strdup (enum_value->value_nick);
+
+  return g_strdup ("widget");
+}
+
+void
+gtk_at_context_platform_changed (GtkATContext                *self,
+                                 GtkAccessiblePlatformChange  change)
+{
+  self->updated_platform |= change;
 }

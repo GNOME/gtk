@@ -81,6 +81,8 @@ void            gtk_list_view_set_enable_rubberband             (GtkListView    
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_list_view_get_enable_rubberband             (GtkListView            *self);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkListView, g_object_unref)
+
 G_END_DECLS
 
 #endif  /* __GTK_LIST_VIEW_H__ */

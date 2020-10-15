@@ -1794,6 +1794,7 @@ gtk_list_base_init_real (GtkListBase      *self,
 
   priv->item_manager = gtk_list_item_manager_new_for_size (GTK_WIDGET (self),
                                                            g_class->list_item_name,
+                                                           g_class->list_item_role,
                                                            g_class->list_item_size,
                                                            g_class->list_item_augment_size,
                                                            g_class->list_item_augment_func);

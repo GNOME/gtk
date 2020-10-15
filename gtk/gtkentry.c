@@ -30,6 +30,7 @@
 
 #include "gtkentryprivate.h"
 
+#include "gtkaccessibleprivate.h"
 #include "gtkadjustment.h"
 #include "gtkbox.h"
 #include "gtkbutton.h"
@@ -320,9 +321,12 @@ static void     gtk_entry_measure (GtkWidget           *widget,
 static GtkBuildableIface *buildable_parent_iface = NULL;
 
 static void     gtk_entry_buildable_interface_init (GtkBuildableIface *iface);
+static void     gtk_entry_accessible_interface_init (GtkAccessibleInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkEntry, gtk_entry, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkEntry)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE,
+                                                gtk_entry_accessible_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_entry_buildable_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
@@ -330,6 +334,37 @@ G_DEFINE_TYPE_WITH_CODE (GtkEntry, gtk_entry, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_EDITABLE,
                                                 gtk_entry_cell_editable_init))
 
+/* Implement the GtkAccessible interface, in order to obtain focus
+ * state from the #GtkText widget that we are wrapping. The GtkText
+ * widget is ignored for accessibility purposes (it has role NONE),
+ * and any a11y text functionality is implemented for GtkEntry and
+ * similar wrappers (GtkPasswordEntry, GtkSpinButton, etc).
+ */
+static gboolean
+gtk_entry_accessible_get_platform_state (GtkAccessible              *self,
+                                         GtkAccessiblePlatformState  state)
+{
+  GtkEntry *entry = GTK_ENTRY (self);
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
+  switch (state)
+    {
+    case GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE:
+      return gtk_widget_get_focusable (GTK_WIDGET (priv->text));
+    case GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED:
+      return gtk_widget_has_focus (GTK_WIDGET (priv->text));
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static void
+gtk_entry_accessible_interface_init (GtkAccessibleInterface *iface)
+{
+  GtkAccessibleInterface *parent_iface = g_type_interface_peek_parent (iface);
+  iface->get_at_context = parent_iface->get_at_context;
+  iface->get_platform_state = gtk_entry_accessible_get_platform_state;
+}
 
 static const GtkBuildableParser pango_parser =
 {
