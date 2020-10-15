@@ -236,93 +236,178 @@ listview_handle_method (GDBusConnection       *connection,
   GtkWidget *widget = GTK_WIDGET (accessible);
   GtkSelectionModel *model = gtk_list_base_get_model (GTK_LIST_BASE (widget));
 
-  g_print ("list item %s %s\n", interface_name, method_name);
-
   if (g_strcmp0 (method_name, "GetSelectedChild") == 0)
     {
       int idx;
-      guint pos;
-      GtkBitset *set;
       GtkWidget *child;
-      GtkListItem *item;
 
       g_variant_get (parameters, "(i)", &idx);
 
-      set = gtk_selection_model_get_selection (model);
-      pos = gtk_bitset_get_nth (set, idx);
-      gtk_bitset_unref (set);
-
+      /* We are asked for the idx-the selected child *among the
+       * current children*
+       */
       for (child = gtk_widget_get_first_child (widget);
            child;
            child = gtk_widget_get_next_sibling (child))
         {
-          item = gtk_list_item_widget_get_list_item (GTK_LIST_ITEM_WIDGET (child));
-          if (pos == gtk_list_item_get_position (item))
-            break;
+          if (gtk_list_item_widget_get_selected (GTK_LIST_ITEM_WIDGET (child)))
+            {
+              if (idx == 0)
+                break;
+              idx--;
+            }
         }
 
       if (child == NULL)
-        g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS, "No selected child for %d", idx);
+        g_dbus_method_invocation_return_error (invocation,
+                                               G_DBUS_ERROR,
+                                               G_DBUS_ERROR_INVALID_ARGS,
+                                               "No selected child for %d", idx);
       else
         {
           GtkATContext *ctx = gtk_accessible_get_at_context (GTK_ACCESSIBLE (child));
-          g_dbus_method_invocation_return_value (invocation, g_variant_new ("(@(so))", gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (ctx))));
+          g_dbus_method_invocation_return_value (invocation,
+              g_variant_new ("(@(so))", gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (ctx))));
         }
     }
   else if (g_strcmp0 (method_name, "SelectChild") == 0)
     {
       int idx;
-      gboolean ret;
+      GtkWidget *child;
 
       g_variant_get (parameters, "(i)", &idx);
 
-      ret = gtk_selection_model_select_item (model, idx, FALSE);
+      for (child = gtk_widget_get_first_child (widget);
+           child;
+           child = gtk_widget_get_next_sibling (child))
+        {
+          if (idx == 0)
+            break;
+          idx--;
+        }
 
-      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
+      if (child == NULL)
+        g_dbus_method_invocation_return_error (invocation,
+                                               G_DBUS_ERROR,
+                                               G_DBUS_ERROR_INVALID_ARGS,
+                                               "No child for %d", idx);
+      else
+        {
+          guint pos;
+          gboolean ret;
+
+          pos = gtk_list_item_widget_get_position (GTK_LIST_ITEM_WIDGET (child));
+          ret = gtk_selection_model_select_item (model, pos, FALSE);
+
+          g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
+        }
     }
   else if (g_strcmp0 (method_name, "DeselectChild") == 0)
     {
       int idx;
-      gboolean ret;
+      GtkWidget *child;
 
       g_variant_get (parameters, "(i)", &idx);
 
-      ret = gtk_selection_model_select_item (model, idx, FALSE);
+      for (child = gtk_widget_get_first_child (widget);
+           child;
+           child = gtk_widget_get_next_sibling (child))
+        {
+          if (idx == 0)
+            break;
+          idx--;
+        }
 
-      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
+      if (child == NULL)
+        g_dbus_method_invocation_return_error (invocation,
+                                               G_DBUS_ERROR,
+                                               G_DBUS_ERROR_INVALID_ARGS,
+                                               "No child for %d", idx);
+      else
+        {
+          guint pos;
+          gboolean ret;
+
+          pos = gtk_list_item_widget_get_position (GTK_LIST_ITEM_WIDGET (child));
+          ret = gtk_selection_model_unselect_item (model, pos);
+
+          g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
+        }
     }
   else if (g_strcmp0 (method_name, "DeselectSelectedChild") == 0)
     {
       int idx;
-      guint pos;
-      GtkBitset *set;
-      gboolean ret;
+      GtkWidget *child;
 
       g_variant_get (parameters, "(i)", &idx);
 
-      set = gtk_selection_model_get_selection (model);
-      pos = gtk_bitset_get_nth (set, idx);
-      gtk_bitset_unref (set);
+      /* We are asked for the n-th selected child *among the current children* */
+      for (child = gtk_widget_get_first_child (widget);
+           child;
+           child = gtk_widget_get_next_sibling (child))
+        {
+          if (gtk_list_item_widget_get_selected (GTK_LIST_ITEM_WIDGET (child)))
+            {
+              if (idx == 0)
+                break;
+              idx--;
+            }
+        }
 
-      ret = gtk_selection_model_unselect_item (model, pos);
+      if (child == NULL)
+        g_dbus_method_invocation_return_error (invocation,
+                                               G_DBUS_ERROR,
+                                               G_DBUS_ERROR_INVALID_ARGS,
+                                               "No selected child for %d", idx);
+      else
+        {
+          guint pos;
+          gboolean ret;
 
-      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
+          pos = gtk_list_item_widget_get_position (GTK_LIST_ITEM_WIDGET (child));
+          ret = gtk_selection_model_unselect_item (model, pos);
+
+          g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
+        }
     }
   else if (g_strcmp0 (method_name, "IsChildSelected") == 0)
     {
       int idx;
-      gboolean ret;
+      GtkWidget *child;
 
       g_variant_get (parameters, "(i)", &idx);
 
-      ret = gtk_selection_model_is_selected (model, idx);
+      for (child = gtk_widget_get_first_child (widget);
+           child;
+           child = gtk_widget_get_next_sibling (child))
+        {
+          if (idx == 0)
+            break;
+          idx--;
+        }
 
-      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
+      if (child == NULL)
+        g_dbus_method_invocation_return_error (invocation,
+                                               G_DBUS_ERROR,
+                                               G_DBUS_ERROR_INVALID_ARGS,
+                                               "No child for %d", idx);
+      else
+        {
+          gboolean ret;
+
+          ret = gtk_list_item_widget_get_selected (GTK_LIST_ITEM_WIDGET (child));
+
+          g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
+        }
     }
   else if (g_strcmp0 (method_name, "SelectAll") == 0)
     {
       gboolean ret;
 
+      /* This is a bit inconsistent - the Selection interface is defined in terms
+       * of the current children, but this selects all items in the model, whether
+       * they are currently represented or not.
+       */
       ret = gtk_selection_model_select_all (model);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
@@ -758,8 +843,6 @@ notebook_handle_method (GDBusConnection       *connection,
   GtkWidget *widget = GTK_WIDGET (accessible);
   GtkWidget *notebook = gtk_widget_get_parent (gtk_widget_get_parent (widget));
 
-  g_print ("notebook %s %s\n", interface_name, method_name);
-
   if (g_strcmp0 (method_name, "GetSelectedChild") == 0)
     {
       int i;
@@ -882,10 +965,7 @@ gtk_atspi_get_selection_vtable (GtkAccessible     *accessible,
     return &listbox_vtable;
   else if (GTK_IS_LIST_VIEW (accessible) ||
            GTK_IS_GRID_VIEW (accessible))
-    {
-    g_print ("using listview vtable\n");
     return &listview_vtable;
-    }
   else if (GTK_IS_FLOW_BOX (accessible))
     return &flowbox_vtable;
   else if (GTK_IS_COMBO_BOX (accessible))
