@@ -30,6 +30,7 @@
 #include "gtkactionable.h"
 #include "gtkactionmuxerprivate.h"
 #include "gtkbutton.h"
+#include "gtkentryprivate.h"
 #include "gtkexpander.h"
 #include "gtkswitch.h"
 #include "gtkwidgetprivate.h"
@@ -44,6 +45,9 @@ struct _Action
   const char *localized_name;
   const char *description;
   const char *keybinding;
+
+  gboolean (* is_enabled) (GtkAtSpiContext *context);
+  gboolean (* activate) (GtkAtSpiContext *context);
 };
 
 static void
@@ -140,6 +144,9 @@ action_handle_method (GtkAtSpiContext        *self,
         {
           const Action *action = &actions[i];
 
+          if (action->is_enabled != NULL && !action->is_enabled (self))
+            continue;
+
           g_variant_builder_add (&builder, "(sss)",
                                  g_dpgettext2 (GETTEXT_PACKAGE, "accessibility", action->localized_name),
                                  g_dpgettext2 (GETTEXT_PACKAGE, "accessibility", action->description),
@@ -164,8 +171,27 @@ action_handle_method (GtkAtSpiContext        *self,
 
       if (idx >= 0 && idx < n_actions)
         {
-          gtk_widget_activate (widget);
-          g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", TRUE));
+          const Action *action = &actions[idx];
+
+          if (action->is_enabled == NULL || action->is_enabled (self))
+            {
+              gboolean res = TRUE;
+
+              if (action->activate == NULL)
+                {
+                  gtk_widget_activate (widget);
+                }
+              else
+                {
+                  res = action->activate (self);
+                }
+
+              g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", res));
+            }
+          else
+            {
+              g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", FALSE));
+            }
         }
       else
         {
@@ -186,7 +212,19 @@ action_handle_get_property (GtkAtSpiContext  *self,
                             int               n_actions)
 {
   if (g_strcmp0 (property_name, "NActions") == 0)
-    return g_variant_new_int32 (n_actions);
+    {
+      int n_valid_actions = 0;
+
+      for (int i = 0; i < n_actions; i++)
+        {
+          const Action *action = &actions[i];
+
+          if (action->is_enabled == NULL || action->is_enabled (self))
+            n_valid_actions += 1;
+        }
+
+      return g_variant_new_int32 (n_valid_actions);
+    }
 
   g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
                "Unknown property '%s'", property_name);
@@ -344,6 +382,117 @@ expander_handle_get_property (GDBusConnection  *connection,
 static const GDBusInterfaceVTable expander_action_vtable = {
   expander_handle_method,
   expander_handle_get_property,
+  NULL,
+};
+
+/* }}} */
+
+/* {{{ GtkEntry */
+
+static gboolean is_primary_icon_enabled (GtkAtSpiContext *self);
+static gboolean is_secondary_icon_enabled (GtkAtSpiContext *self);
+static gboolean activate_primary_icon (GtkAtSpiContext *self);
+static gboolean activate_secondary_icon (GtkAtSpiContext *self);
+
+static const Action entry_actions[] = {
+  {
+    .name = "activate",
+    .localized_name = NC_("accessibility", "Activate"),
+    .description = NC_("accessibility", "Activates the entry"),
+    .keybinding = "<Return>",
+    .is_enabled = NULL,
+    .activate = NULL,
+  },
+  {
+    .name = "activate-primary-icon",
+    .localized_name = NC_("accessibility", "Activate primary icon"),
+    .description = NC_("accessibility", "Activates the primary icon of the entry"),
+    .keybinding = "<VoidSymbol>",
+    .is_enabled = is_primary_icon_enabled,
+    .activate = activate_primary_icon,
+  },
+  {
+    .name = "activate-secondary-icon",
+    .localized_name = NC_("accessibility", "Activate secondary icon"),
+    .description = NC_("accessibility", "Activates the secondary icon of the entry"),
+    .keybinding = "<VoidSymbol>",
+    .is_enabled = is_secondary_icon_enabled,
+    .activate = activate_secondary_icon,
+  },
+};
+
+static gboolean
+is_primary_icon_enabled (GtkAtSpiContext *self)
+{
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+  GtkEntry *entry = GTK_ENTRY (accessible);
+
+  return gtk_entry_get_icon_storage_type (entry, GTK_ENTRY_ICON_PRIMARY) != GTK_IMAGE_EMPTY;
+}
+
+static gboolean
+activate_primary_icon (GtkAtSpiContext *self)
+{
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+  GtkEntry *entry = GTK_ENTRY (accessible);
+
+  return gtk_entry_activate_icon (entry, GTK_ENTRY_ICON_PRIMARY);
+}
+
+static gboolean
+is_secondary_icon_enabled (GtkAtSpiContext *self)
+{
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+  GtkEntry *entry = GTK_ENTRY (accessible);
+
+  return gtk_entry_get_icon_storage_type (entry, GTK_ENTRY_ICON_SECONDARY) != GTK_IMAGE_EMPTY;
+}
+
+static gboolean
+activate_secondary_icon (GtkAtSpiContext *self)
+{
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+  GtkEntry *entry = GTK_ENTRY (accessible);
+
+  return gtk_entry_activate_icon (entry, GTK_ENTRY_ICON_SECONDARY);
+}
+
+static void
+entry_handle_method (GDBusConnection       *connection,
+                     const gchar           *sender,
+                     const gchar           *object_path,
+                     const gchar           *interface_name,
+                     const gchar           *method_name,
+                     GVariant              *parameters,
+                     GDBusMethodInvocation *invocation,
+                     gpointer               user_data)
+{
+  GtkAtSpiContext *self = user_data;
+
+  action_handle_method (self, method_name, parameters, invocation,
+                        entry_actions,
+                        G_N_ELEMENTS (entry_actions));
+}
+
+static GVariant *
+entry_handle_get_property (GDBusConnection  *connection,
+                           const gchar      *sender,
+                           const gchar      *object_path,
+                           const gchar      *interface_name,
+                           const gchar      *property_name,
+                           GError          **error,
+                           gpointer          user_data)
+{
+  GtkAtSpiContext *self = user_data;
+
+  return action_handle_get_property (self, property_name, error,
+                                     entry_actions,
+                                     G_N_ELEMENTS (entry_actions));
+}
+
+static const GDBusInterfaceVTable entry_action_vtable = {
+  entry_handle_method,
+  entry_handle_get_property,
   NULL,
 };
 
@@ -562,6 +711,8 @@ gtk_atspi_get_action_vtable (GtkAccessible *accessible)
 {
   if (GTK_IS_BUTTON (accessible))
     return &button_action_vtable;
+  else if (GTK_IS_ENTRY (accessible))
+    return &entry_action_vtable;
   else if (GTK_IS_EXPANDER (accessible))
     return &expander_action_vtable;
   else if (GTK_IS_SWITCH (accessible))
