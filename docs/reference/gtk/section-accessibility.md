@@ -49,6 +49,8 @@ Each role name is part of the #GtkAccessibleRole enumeration.
 | `CHECKBOX` | A control that has three possible value: `true`, `false`, or `undefined` | #GtkCheckButton |
 | `COMBOBOX` | A control that can be expanded to show a list of possible values to select | #GtkComboBox |
 | `DIALOG` | A dialog that prompts the user to enter information or require a response | #GtkDialog and subclasses |
+| `GRID` | A grid of items | #GtkFlowBox |
+| `GRID_CELL` | An item in a grid | #GtkFlowBoxChild |
 | `IMG` | An image | #GtkImage, #GtkPicture |
 | `LABEL` | A visible name or caption for a user interface component | #GtkLabel |
 | `LIST` | A list of items | #GtkListBox |

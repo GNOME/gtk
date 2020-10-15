@@ -547,6 +547,7 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("flowboxchild"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GRID_CELL);
 }
 
 static void
@@ -3887,6 +3888,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                                        NULL);
 
   gtk_widget_class_set_css_name (widget_class, I_("flowbox"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GRID);
 }
 
 static void
