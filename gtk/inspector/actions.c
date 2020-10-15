@@ -275,7 +275,7 @@ add_muxer (GtkInspectorActions *sl,
   int i;
   char **names;
 
-  names = gtk_action_muxer_list_actions (muxer);
+  names = gtk_action_muxer_list_actions (muxer, FALSE);
   for (i = 0; names[i]; i++)
     action_added (G_OBJECT (muxer), names[i], sl);
   g_strfreev (names);
