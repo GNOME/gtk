@@ -27,4 +27,6 @@ G_BEGIN_DECLS
 
 GtkText *       gtk_password_entry_get_text_widget      (GtkPasswordEntry *entry);
 
+void            gtk_password_entry_toggle_peek          (GtkPasswordEntry *entry);
+
 G_END_DECLS

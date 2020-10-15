@@ -135,8 +135,14 @@ focus_changed (GtkWidget *widget)
   if (entry->keyboard)
     caps_lock_state_changed (entry->keyboard, NULL, widget);
 }
- 
-static void
+
+/*< private >
+ * gtk_password_entry_toggle_peek:
+ * @entry: a #GtkPasswordEntry
+ *
+ * Toggles the text visibility.
+ */
+void
 gtk_password_entry_toggle_peek (GtkPasswordEntry *entry)
 {
   gboolean visibility;
