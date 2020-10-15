@@ -48,9 +48,10 @@ Each role name is part of the #GtkAccessibleRole enumeration.
 | `BUTTON` | A control that performs an action when pressed | #GtkButton, #GtkLinkButton, #GtkExpander |
 | `CHECKBOX` | A control that has three possible value: `true`, `false`, or `undefined` | #GtkCheckButton |
 | `COMBOBOX` | A control that can be expanded to show a list of possible values to select | #GtkComboBox |
+| `COLUMN_HEADER` | A header in a columned list | #GtkColumnView |
 | `DIALOG` | A dialog that prompts the user to enter information or require a response | #GtkDialog and subclasses |
-| `GRID` | A grid of items | #GtkFlowBox |
-| `GRID_CELL` | An item in a grid | #GtkFlowBoxChild |
+| `GRID` | A grid of items | #GtkFlowBox, #GtkGridView |
+| `GRID_CELL` | An item in a grid | #GtkFlowBoxChild, #GtkGridView, #GtkColumnView |
 | `IMG` | An image | #GtkImage, #GtkPicture |
 | `LABEL` | A visible name or caption for a user interface component | #GtkLabel |
 | `LIST` | A list of items | #GtkListBox |
@@ -58,6 +59,7 @@ Each role name is part of the #GtkAccessibleRole enumeration.
 | `METER` | Represents a value within a known range | #GtkLevelBar |
 | `PROGRESS_BAR` | An element that display progress | #GtkProgressBar |
 | `RADIO` | A checkable input in a group of radio roles | #GtkCheckButton |
+| `ROW` | A row in a columned list | #GtkColumnView |
 | `SCROLLBAR` | A graphical object controlling the scrolling of content | #GtkScrollbar |
 | `SEARCH_BOX` | A text box for entering search criteria | #GtkSearchEntry |
 | `SEPARATOR` | A divider that separates sections of content or groups of items | #GtkSeparator |
@@ -67,6 +69,7 @@ Each role name is part of the #GtkAccessibleRole enumeration.
 | `TAB_LIST` | A list of tabs for switching pages | #GtkStackSwitcher, #GtkNotebook |
 | `TAB_PANEL` | A page in a notebook or stack | #GtkStack |
 | `TEXT_BOX` | A type of input that allows free-form text as its value. | #GtkEntry, #GtkPasswordEntry, #GtkTextView |
+| `TREE_GRID` | A treeview-like columned list | #GtkColumnView |
 | `WINDOW` | An application window | #GtkWindow |
 | `...` | … |
 

@@ -204,6 +204,7 @@ gtk_column_view_cell_class_init (GtkColumnViewCellClass *klass)
   gobject_class->dispose = gtk_column_view_cell_dispose;
 
   gtk_widget_class_set_css_name (widget_class, I_("cell"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GRID_CELL);
 }
 
 static void

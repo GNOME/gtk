@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtklistview.h"
+#include "gtklistviewprivate.h"
 
 #include "gtkbitset.h"
 #include "gtkintl.h"
@@ -140,21 +140,6 @@
 
 typedef struct _ListRow ListRow;
 typedef struct _ListRowAugment ListRowAugment;
-
-struct _GtkListView
-{
-  GtkListBase parent_instance;
-
-  GtkListItemManager *item_manager;
-  gboolean show_separators;
-
-  int list_width;
-};
-
-struct _GtkListViewClass
-{
-  GtkListBaseClass parent_class;
-};
 
 struct _ListRow
 {

@@ -171,6 +171,7 @@ gtk_column_view_title_class_init (GtkColumnViewTitleClass *klass)
   gobject_class->dispose = gtk_column_view_title_dispose;
 
   gtk_widget_class_set_css_name (widget_class, I_("button"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_COLUMN_HEADER);
 }
 
 static void

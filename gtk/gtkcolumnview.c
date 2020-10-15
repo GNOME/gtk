@@ -30,7 +30,7 @@
 #include "gtkcssnodeprivate.h"
 #include "gtkdropcontrollermotion.h"
 #include "gtkintl.h"
-#include "gtklistview.h"
+#include "gtklistviewprivate.h"
 #include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
@@ -105,6 +105,44 @@
  * the style of [list presentation](ListContainers.html#list-styles):
  * .rich-list, .navigation-sidebar or .data-table.
  */
+
+/* We create a subclass of GtkListView for the sole purpose of overriding
+ * some parameters for item creation.
+ */
+
+#define GTK_TYPE_COLUMN_LIST_VIEW (gtk_column_list_view_get_type ())
+G_DECLARE_FINAL_TYPE (GtkColumnListView, gtk_column_list_view, GTK, COLUMN_LIST_VIEW, GtkListView)
+
+struct _GtkColumnListView
+{
+  GtkListView parent_instance;
+};
+
+struct _GtkColumnListViewClass
+{
+  GtkListViewClass parent_class;
+};
+
+G_DEFINE_TYPE (GtkColumnListView, gtk_column_list_view, GTK_TYPE_LIST_VIEW)
+
+static void
+gtk_column_list_view_init (GtkColumnListView *view)
+{
+}
+
+static void
+gtk_column_list_view_class_init (GtkColumnListViewClass *klass)
+{
+  GtkListBaseClass *list_base_class = GTK_LIST_BASE_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  list_base_class->list_item_name = "row";
+  list_base_class->list_item_role = GTK_ACCESSIBLE_ROLE_ROW;
+
+  gtk_widget_class_set_css_name (widget_class, I_("listview"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_LIST);
+}
+
 
 struct _GtkColumnView
 {
@@ -733,6 +771,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                               g_cclosure_marshal_VOID__UINTv);
 
   gtk_widget_class_set_css_name (widget_class, I_("columnview"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_TREE_GRID);
 }
 
 static void update_column_resize  (GtkColumnView *self,
@@ -1136,7 +1175,7 @@ gtk_column_view_init (GtkColumnView *self)
 
   self->columns = g_list_store_new (GTK_TYPE_COLUMN_VIEW_COLUMN);
 
-  self->header = gtk_list_item_widget_new (NULL, "header", GTK_ACCESSIBLE_ROLE_WIDGET);
+  self->header = gtk_list_item_widget_new (NULL, "header", GTK_ACCESSIBLE_ROLE_ROW);
   gtk_widget_set_can_focus (self->header, FALSE);
   gtk_widget_set_layout_manager (self->header, gtk_column_view_layout_new (self));
   gtk_widget_set_parent (self->header, GTK_WIDGET (self));
@@ -1164,8 +1203,8 @@ gtk_column_view_init (GtkColumnView *self)
 
   self->sorter = GTK_SORTER (gtk_column_view_sorter_new ());
   self->factory = gtk_column_list_item_factory_new (self);
-  self->listview = GTK_LIST_VIEW (gtk_list_view_new (NULL,
-        GTK_LIST_ITEM_FACTORY (g_object_ref (self->factory))));
+  self->listview = GTK_LIST_VIEW (g_object_new (GTK_TYPE_COLUMN_LIST_VIEW, NULL));
+  gtk_list_view_set_factory (self->listview, GTK_LIST_ITEM_FACTORY (self->factory));
   gtk_widget_set_hexpand (GTK_WIDGET (self->listview), TRUE);
   gtk_widget_set_vexpand (GTK_WIDGET (self->listview), TRUE);
   g_signal_connect (self->listview, "activate", G_CALLBACK (gtk_column_view_activate_cb), self);
