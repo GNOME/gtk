@@ -619,11 +619,11 @@ gtk_file_chooser_widget_finalize (GObject *object)
 static GtkWindow *
 get_toplevel (GtkWidget *widget)
 {
-  GtkWidget *toplevel;
+  GtkRoot *root;
 
-  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
-  if (GTK_IS_WINDOW (toplevel))
-    return GTK_WINDOW (toplevel);
+  root = gtk_widget_get_root (widget);
+  if (root && GTK_IS_WINDOW (root))
+    return GTK_WINDOW (root);
   else
     return NULL;
 }
