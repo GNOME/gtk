@@ -172,7 +172,7 @@ main (int argc, char **argv)
     }
 
   bytes = g_bytes_new_take (contents, len);
-  GTK_NODE_VIEW (nodeview)->node = gsk_render_node_deserialize (bytes, deserialize_error_func, NULL);
+  GTK_NODE_VIEW (nodeview)->node = gsk_render_node_deserialize (bytes, deserialize_error_func, &error);
   g_bytes_unref (bytes);
 
   if (GTK_NODE_VIEW (nodeview)->node == NULL)
