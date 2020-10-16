@@ -1842,9 +1842,9 @@ gtk_list_box_click_gesture_released (GtkGestureClick *gesture,
     {
       gboolean focus_on_click = gtk_widget_get_focus_on_click (GTK_WIDGET (box->active_row));
 
-      if (box->activate_single_click)
+      if (n_press == 1 && box->activate_single_click)
         gtk_list_box_select_and_activate_full (box, box->active_row, focus_on_click);
-      else if (n_press == 2)
+      else
         {
           GdkEventSequence *sequence;
           GdkInputSource source;
