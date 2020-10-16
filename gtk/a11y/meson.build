@@ -9,15 +9,16 @@ if gtk_a11y_backends.contains('atspi')
   subdir('atspi')
 
   gtk_a11y_src += files([
+    'gtkatspiaction.c',
     'gtkatspicache.c',
     'gtkatspicontext.c',
-    'gtkatspiroot.c',
-    'gtkatspiutils.c',
+    'gtkatspieditabletext.c',
     'gtkatspipango.c',
+    'gtkatspiroot.c',
+    'gtkatspiselection.c',
     'gtkatspitextbuffer.c',
     'gtkatspitext.c',
+    'gtkatspiutils.c',
     'gtkatspivalue.c',
-    'gtkatspieditabletext.c',
-    'gtkatspiselection.c',
   ])
 endif

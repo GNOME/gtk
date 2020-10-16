@@ -1,4 +1,4 @@
-/* gtkpasswordentryprivate.h: Private API for GtkPasswordEntry
+/* gtkatspiactionprivate.h: ATSPI Action implementation
  *
  * Copyright 2020  GNOME Foundation
  *
@@ -20,13 +20,11 @@
 
 #pragma once
 
-#include "gtkpasswordentry.h"
-#include "gtktextprivate.h"
+#include <gio/gio.h>
+#include "gtkaccessible.h"
 
 G_BEGIN_DECLS
 
-GtkText *       gtk_password_entry_get_text_widget      (GtkPasswordEntry *entry);
-
-void            gtk_password_entry_toggle_peek          (GtkPasswordEntry *entry);
+const GDBusInterfaceVTable *gtk_atspi_get_action_vtable (GtkAccessible *accessible);
 
 G_END_DECLS
