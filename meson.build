@@ -352,8 +352,10 @@ if os_unix
 endif
 gmodule_dep    = dependency('gmodule-2.0', version: glib_req,
                             fallback : ['glib', 'libgmodule_dep'])
-cairo_dep      = dependency('cairo', version: cairo_req, required : cc.get_id() != 'msvc')
-cairogobj_dep  = dependency('cairo-gobject', version: cairo_req, required : cc.get_id() != 'msvc')
+cairo_dep      = dependency('cairo', version: cairo_req,
+                            fallback : ['cairo', 'libcairo_dep'])
+cairogobj_dep  = dependency('cairo-gobject', version: cairo_req,
+                            fallback : ['cairo', 'libcairogobject_dep'])
 pango_dep      = dependency('pango', version: pango_req,
                             fallback : ['pango', 'libpango_dep'])
 fribidi_dep    = dependency('fribidi', version: fribidi_req,
@@ -380,7 +382,8 @@ pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
                             fallback : ['gdk-pixbuf', 'gdkpixbuf_dep'])
 epoxy_dep      = dependency('epoxy', version: epoxy_req,
                             fallback: ['libepoxy', 'libepoxy_dep'])
-harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false)
+harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false,
+                            fallback: ['harfbuzz', 'libharfbuzz_dep'])
 xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
 graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
                             fallback: ['graphene', 'graphene_dep'])
@@ -426,7 +429,7 @@ foreach backend: [ ['cairo-xlib', cairo_req, x11_enabled],
  cairo_backend_req = backend.get(1)
  cairo_backend = backend.get(0)
  if backend_enabled
-   if dependency(cairo_backend, version: cairo_backend_req, required : cc.get_id() != 'msvc').found()
+   if dependency(cairo_backend, version: cairo_backend_req).found()
      cairo_backends += [ cairo_backend ]
    endif
  endif
@@ -442,44 +445,9 @@ if cairogobj_dep.found()
   cairogobj_pkg_found = true
 endif
 
-cairo_libs = []
-if cc.get_id() == 'msvc'
-  # Fallback dependency discovery for those on Visual Studio that do not generate
-  # pkg-config files in their build systems for MSVC
-  # Fallback for Cairo
-  if not cairo_dep.found()
-    if (cc.has_header('cairo.h') and cc.has_header('cairo-win32.h'))
-      cairo_dep = cc.find_library('cairo')
-      if cairo_dep.found()
-        cairo_libs += '-lcairo'
-      endif
-    endif
-  endif
-
-  # Fallback for Cairo-GObject
-  if not cairogobj_dep.found()
-    if cc.has_header('cairo-gobject.h')
-      cairogobj_dep = cc.find_library('cairo-gobject')
-      if cairogobj_dep.found()
-        cairo_libs += '-lcairo-gobject'
-      endif
-    endif
-  endif
-
-  # Fallback for HarfBuzz
-  if not harfbuzz_dep.found()
-    if cc.has_header('hb.h')
-      harfbuzz_dep = cc.find_library('harfbuzz', required : false)
-    endif
-  endif
-endif
-
-cairo_csi_dep = cc.find_library('cairo-script-interpreter',
-                                required: get_option('build-tests'))
-
-if not harfbuzz_dep.found()
-  harfbuzz_dep = dependency('harfbuzz', version: '>= 0.9', required: false,
-                            fallback: ['harfbuzz', 'libharfbuzz_dep'])
+cairo_csi_dep = dependency('cairo-script-interpreter', required: false)
+if not cairo_csi_dep.found()
+  cairo_csi_dep = cc.find_library('cairo-script-interpreter', required: get_option('build-tests'))
 endif
 
 cdata.set('HAVE_CAIRO_SCRIPT_INTERPRETER', cairo_csi_dep.found())
@@ -780,9 +748,6 @@ pkgconf.set('GSK_PACKAGES',
             ' '.join([ 'graphene-gobject-1.0', graphene_req ]))
 pkgconf.set('GTK_PACKAGES',
             ' '.join([ 'gio-2.0', glib_req ]))
-
-# Requires.private
-pc_gdk_extra_libs += cairo_libs
 
 gio_pkgname = os_unix ? 'gio-unix-2.0' : 'gio-2.0'
 pkgconf.set('GDK_PRIVATE_PACKAGES',
