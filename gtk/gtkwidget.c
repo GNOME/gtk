@@ -9660,18 +9660,28 @@ gtk_widget_get_allocated_baseline (GtkWidget *widget)
  * @widget: a #GtkWidget
  * @opacity: desired opacity, between 0 and 1
  *
- * Request the @widget to be rendered partially transparent,
- * with opacity 0 being fully transparent and 1 fully opaque. (Opacity values
- * are clamped to the [0,1] range.).
- * This works on both toplevel widget, and child widgets, although there
- * are some limitations:
+ * Request the @widget to be rendered partially transparent, with
+ * opacity 0 being fully transparent and 1 fully opaque. (Opacity
+ * values are clamped to the [0,1] range).
  *
- * For toplevel widgets this depends on the capabilities of the windowing
- * system. On X11 this has any effect only on X displays with a compositing manager
- * running. See gdk_display_is_composited(). On Windows it should work
- * always, although setting a window’s opacity after the window has been
- * shown causes it to flicker once on Windows.
- **/
+ * Opacity works on both toplevel widgets and child widgets, although
+ * there are some limitations: For toplevel widgets, applying opacity
+ * depends on the capabilities of the windowing system. On X11, this
+ * has any effect only on X displays with a compositing manager,
+ * see gdk_display_is_composited(). On Windows and Wayland it should
+ * always work, although setting a window’s opacity after the window
+ * has been shown may cause some flicker.
+ *
+ * Note that the opacity is inherited through inclusion — if you set
+ * a toplevel to be partially translucent, all of its content will
+ * appear translucent, since it is ultimatively rendered on that
+ * toplevel. The opacity value itself is not inherited by child
+ * widgets (since that would make widgets deeper in the hierarchy
+ * progressively more translucent). As a consequence, #GtkPopovers
+ * and other #GtkNative widgets with their own surface will use their
+ * own opacity value, and thus by default appear non-translucent,
+ * even if they are attached to a toplevel that is translucent.
+ */
 void
 gtk_widget_set_opacity (GtkWidget *widget,
                         double     opacity)
