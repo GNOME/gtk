@@ -541,15 +541,10 @@ if x11_enabled
     cdata.set('XINPUT_2_2', 1)
   endif
 
-  enable_xinerama = get_option('xinerama').enabled()
-  if enable_xinerama
-    xinerama_dep = dependency('xinerama', required: true)
-    if xinerama_dep.found() and cc.has_header_symbol('X11/extensions/Xinerama.h', 'XineramaQueryExtension', dependencies: xinerama_dep)
-      cdata.set('HAVE_XFREE_XINERAMA', 1)
-      x11_pkgs += ['xinerama']
-    endif
-  else
-    xinerama_dep = []
+  xinerama_dep = dependency('xinerama', required: get_option('xinerama'))
+  if xinerama_dep.found() and cc.has_header_symbol('X11/extensions/Xinerama.h', 'XineramaQueryExtension', dependencies: xinerama_dep)
+    cdata.set('HAVE_XFREE_XINERAMA', 1)
+    x11_pkgs += ['xinerama']
   endif
 
   cdata.set('HAVE_RANDR', xrandr_dep.found())
