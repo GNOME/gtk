@@ -639,12 +639,12 @@ get_action_at_index (GtkActionMuxer  *muxer,
         continue;
 
       if (real_pos == pos)
-        break;
+        return actions[i];
 
       real_pos += 1;
     }
 
-  return actions[real_pos];
+  return NULL;
 }
 
 static int
