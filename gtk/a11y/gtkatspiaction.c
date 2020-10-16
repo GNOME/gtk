@@ -639,12 +639,12 @@ get_action_at_index (GtkActionMuxer  *muxer,
         continue;
 
       if (real_pos == pos)
-        break;
+        return actions[i];
 
       real_pos += 1;
     }
 
-  return actions[real_pos];
+  return NULL;
 }
 
 static int
@@ -678,12 +678,18 @@ widget_handle_method (GDBusConnection       *connection,
   GtkAtSpiContext *self = user_data;
   GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
   GtkWidget *widget = GTK_WIDGET (accessible);
+  GtkWidget *parent = gtk_widget_get_parent (widget);
   GtkActionMuxer *muxer = _gtk_widget_get_action_muxer (widget, FALSE);
+  GtkActionMuxer *parent_muxer = parent ? _gtk_widget_get_action_muxer (parent, FALSE) : NULL;
 
   if (muxer == NULL)
     return;
 
-  char **actions = gtk_action_muxer_list_actions (muxer, TRUE);
+  char **actions = NULL;
+
+  if (muxer != parent_muxer)
+    actions = gtk_action_muxer_list_actions (muxer, TRUE);
+
   int n_actions = actions != NULL ? g_strv_length (actions) : 0;
 
   /* XXX: We need more fields in the action API */
@@ -771,13 +777,19 @@ widget_handle_get_property (GDBusConnection  *connection,
   GtkAtSpiContext *self = user_data;
   GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
   GtkWidget *widget = GTK_WIDGET (accessible);
+  GtkWidget *parent = gtk_widget_get_parent (widget);
   GtkActionMuxer *muxer = _gtk_widget_get_action_muxer (widget, FALSE);
+  GtkActionMuxer *parent_muxer = parent ? _gtk_widget_get_action_muxer (parent, FALSE) : NULL;
   GVariant *res = NULL;
 
   if (muxer == NULL)
     return res;
 
-  char **actions = gtk_action_muxer_list_actions (muxer, TRUE);
+  char **actions = NULL;
+
+  if (muxer != parent_muxer)
+    actions = gtk_action_muxer_list_actions (muxer, TRUE);
+
   int n_actions = actions != NULL ? g_strv_length (actions) : 0;
 
   if (g_strcmp0 (property_name, "NActions") == 0)
