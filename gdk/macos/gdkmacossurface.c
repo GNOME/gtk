@@ -713,7 +713,10 @@ _gdk_macos_surface_thaw (GdkMacosSurface *self,
       timings = gdk_frame_clock_get_timings (frame_clock, self->pending_frame_counter);
 
       if (timings != NULL)
-        timings->presentation_time = presentation_time - refresh_interval;
+        {
+          timings->presentation_time = presentation_time - refresh_interval;
+          timings->complete = TRUE;
+        }
 
       self->pending_frame_counter = 0;
     }
