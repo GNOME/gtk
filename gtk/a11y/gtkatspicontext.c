@@ -606,7 +606,14 @@ handle_accessible_get_property (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (property_name, "Description") == 0)
     {
-      char *label = gtk_at_context_get_label (GTK_AT_CONTEXT (self));
+      char *label = gtk_at_context_get_description (GTK_AT_CONTEXT (self));
+
+      if (label == NULL || *label == '\0')
+        {
+          g_free (label);
+          label = gtk_at_context_get_name (GTK_AT_CONTEXT (self));
+        }
+
       res = g_variant_new_string (label);
       g_free (label);
     }
@@ -932,7 +939,14 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
 
   if (changed_properties & GTK_ACCESSIBLE_PROPERTY_CHANGE_LABEL)
     {
-      char *label = gtk_at_context_get_label (GTK_AT_CONTEXT (self));
+      char *label = gtk_at_context_get_name (GTK_AT_CONTEXT (self));
+      GVariant *v = g_variant_new_take_string (label);
+      emit_property_changed (self, "accessible-name", v);
+    }
+
+  if (changed_properties & GTK_ACCESSIBLE_PROPERTY_CHANGE_DESCRIPTION)
+    {
+      char *label = gtk_at_context_get_description (GTK_AT_CONTEXT (self));
       GVariant *v = g_variant_new_take_string (label);
       emit_property_changed (self, "accessible-description", v);
     }
