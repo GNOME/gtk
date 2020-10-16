@@ -80,26 +80,6 @@ static GdkKeymap *default_keymap = NULL;
 static void update_keymap              (GdkWin32Keymap *gdk_keymap);
 static void clear_keyboard_layout_info (gpointer        data);
 
-#ifndef _WIN64
-static BOOL
-is_wow64 (void)
-{
-  typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
-
-  BOOL bIsWow64 = FALSE;
-  LPFN_ISWOW64PROCESS fnIsWow64Process;
-
-  fnIsWow64Process = (LPFN_ISWOW64PROCESS)
-                     GetProcAddress (GetModuleHandle (TEXT("kernel32")),
-                                     "IsWow64Process");
-
-  if (fnIsWow64Process != NULL)
-    fnIsWow64Process (GetCurrentProcess (), &bIsWow64);
-
-  return bIsWow64;
-}
-#endif
-
 static void
 gdk_win32_keymap_init (GdkWin32Keymap *keymap)
 {
@@ -122,7 +102,7 @@ gdk_win32_keymap_init (GdkWin32Keymap *keymap)
 
   keymap->gdkwin32_keymap_impl = &gdkwin32_keymap_impl;
 #ifndef _WIN64
-  if (is_wow64())
+  if (_gdk_win32_check_processor (GDK_WIN32_WOW64))
     keymap->gdkwin32_keymap_impl = &gdkwin32_keymap_impl_wow64;
 #endif
 

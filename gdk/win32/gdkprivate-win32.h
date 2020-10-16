@@ -542,4 +542,12 @@ void _gdk_win32_windowing_init (void);
 void _gdk_dnd_init    (void);
 void _gdk_events_init (GdkDisplay *display);
 
+typedef enum _GdkWin32ProcessorCheckType
+{
+  GDK_WIN32_ARM64,
+  GDK_WIN32_WOW64,
+} GdkWin32ProcessorCheckType;
+
+gboolean _gdk_win32_check_processor (GdkWin32ProcessorCheckType check_type);
+
 #endif /* __GDK_PRIVATE_WIN32_H__ */

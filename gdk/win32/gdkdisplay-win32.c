@@ -1034,42 +1034,70 @@ _gdk_win32_enable_hidpi (GdkWin32Display *display)
     }
 }
 
-#if 0
-/* Keep code around in case we need to check for running on ARM64 in the future */
-static void
-_gdk_win32_check_on_arm64 (GdkWin32Display *display)
+gboolean
+_gdk_win32_check_processor (GdkWin32ProcessorCheckType check_type)
 {
   static gsize checked = 0;
+  static gboolean is_arm64 = FALSE;
+  static gboolean is_wow64 = FALSE;
 
   if (g_once_init_enter (&checked))
     {
+      gboolean fallback_wow64_check = FALSE;
       HMODULE kernel32 = LoadLibraryW (L"kernel32.dll");
 
       if (kernel32 != NULL)
         {
-          display->cpu_funcs.isWow64Process2 =
+          GdkWin32KernelCPUFuncs cpu_funcs = {0};
+
+          cpu_funcs.isWow64Process2 =
             (funcIsWow64Process2) GetProcAddress (kernel32, "IsWow64Process2");
 
-          if (display->cpu_funcs.isWow64Process2 != NULL)
+          if (cpu_funcs.isWow64Process2 != NULL)
             {
               USHORT proc_cpu = 0;
               USHORT native_cpu = 0;
 
-              display->cpu_funcs.isWow64Process2 (GetCurrentProcess (),
-                                                  &proc_cpu,
-                                                  &native_cpu);
+              cpu_funcs.isWow64Process2 (GetCurrentProcess (),
+                                        &proc_cpu,
+                                        &native_cpu);
 
               if (native_cpu == IMAGE_FILE_MACHINE_ARM64)
-                display->running_on_arm64 = TRUE;
+                is_arm64 = TRUE;
+
+              if (native_cpu != IMAGE_FILE_MACHINE_UNKNOWN)
+                is_wow64 = TRUE;
             }
+          else
+            fallback_wow64_check = TRUE;
 
           FreeLibrary (kernel32);
         }
+      else
+        fallback_wow64_check = TRUE;
+
+      if (fallback_wow64_check)
+        IsWow64Process (GetCurrentProcess (), &is_wow64);
 
       g_once_init_leave (&checked, 1);
     }
+
+  switch (check_type)
+    {
+      case GDK_WIN32_ARM64:
+        return is_arm64;
+        break;
+
+      case GDK_WIN32_WOW64:
+        return is_wow64;
+        break;
+
+      default:
+        g_warning ("unknown CPU check type");
+        return FALSE;
+        break;
+    }
 }
-#endif
 
 static void
 gdk_win32_display_init (GdkWin32Display *display)
