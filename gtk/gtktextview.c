@@ -4742,15 +4742,9 @@ changed_handler (GtkTextLayout     *layout,
     {
       gtk_widget_queue_draw (widget);
 
-      DV(g_print(" invalidated rect: %d,%d %d x %d\n",
-                 redraw_rect.x,
-                 redraw_rect.y,
-                 redraw_rect.width,
-                 redraw_rect.height));
-
       queue_update_im_spot_location (text_view);
     }
-  
+
   if (old_height != new_height)
     {
       const GList *iter;
