@@ -1001,7 +1001,7 @@ show_window_internal (GdkSurface *window,
       API_CALL (SetWindowPos, (GDK_SURFACE_HWND (window),
 			       (window->state & GDK_TOPLEVEL_STATE_ABOVE)?HWND_TOPMOST:HWND_NOTOPMOST,
 			       0, 0, 0, 0,
-			       SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOOWNERZORDER));
+			       SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE));
     }
 }
 
@@ -1927,7 +1927,7 @@ _gdk_win32_surface_update_style_bits (GdkSurface *window)
   rect.right += after.right - before.right;
   rect.bottom += after.bottom - before.bottom;
 
-  flags = SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREPOSITION | SWP_NOOWNERZORDER;
+  flags = SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREPOSITION;
 
   if (will_be_topmost && !was_topmost)
     {
@@ -4260,7 +4260,7 @@ gdk_win32_surface_fullscreen (GdkSurface *window)
 
       API_CALL (SetWindowPos, (GDK_SURFACE_HWND (window), HWND_TOP,
                 x, y, width, height,
-                SWP_NOCOPYBITS | SWP_SHOWWINDOW | SWP_NOOWNERZORDER));
+                SWP_NOCOPYBITS | SWP_SHOWWINDOW));
     }
 }
 
@@ -4284,7 +4284,7 @@ gdk_win32_surface_unfullscreen (GdkSurface *window)
       API_CALL (SetWindowPos, (GDK_SURFACE_HWND (window), HWND_NOTOPMOST,
 			       fi->r.left, fi->r.top,
 			       fi->r.right - fi->r.left, fi->r.bottom - fi->r.top,
-			       SWP_NOCOPYBITS | SWP_SHOWWINDOW | SWP_NOOWNERZORDER));
+			       SWP_NOCOPYBITS | SWP_SHOWWINDOW));
 
       g_object_set_data (G_OBJECT (window), "fullscreen-info", NULL);
       g_free (fi);
@@ -4825,7 +4825,15 @@ gdk_win32_toplevel_set_property (GObject      *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_MODAL:
-      _gdk_push_modal_window (surface);
+      GDK_SURFACE (surface)->modal_hint = g_value_get_boolean (value);
+
+      if (GDK_SURFACE (surface)->modal_hint)
+        {
+          SetCapture (GDK_SURFACE_HWND (surface));
+          _gdk_push_modal_window (surface);
+        }
+
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
@@ -4879,6 +4887,7 @@ gdk_win32_toplevel_get_property (GObject    *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_MODAL:
+      g_value_set_boolean (value, GDK_SURFACE (surface)->modal_hint);
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
