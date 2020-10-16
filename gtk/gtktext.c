@@ -329,8 +329,6 @@ static void   gtk_text_size_allocate        (GtkWidget        *widget,
                                              int               baseline);
 static void   gtk_text_snapshot             (GtkWidget        *widget,
                                              GtkSnapshot      *snapshot);
-static void   gtk_text_focus_in             (GtkWidget            *widget);
-static void   gtk_text_focus_out            (GtkWidget            *widget);
 static void   gtk_text_focus_changed        (GtkEventControllerFocus *focus,
                                              GParamSpec              *pspec,
                                              GtkWidget               *widget);
@@ -3153,72 +3151,53 @@ gtk_text_key_controller_key_pressed (GtkEventControllerKey *controller,
 }
 
 static void
-gtk_text_focus_in (GtkWidget *widget)
-{
-  GtkText *self = GTK_TEXT (widget);
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GdkSeat *seat = NULL;
-  GdkDevice *keyboard = NULL;
-
-  gtk_widget_queue_draw (widget);
-
-  seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
-  if (seat)
-    keyboard = gdk_seat_get_keyboard (seat);
-  if (keyboard)
-    g_signal_connect (keyboard, "notify::direction",
-                      G_CALLBACK (direction_changed), self);
-
-
-  if (priv->editable)
-    {
-      gtk_text_schedule_im_reset (self);
-      gtk_im_context_focus_in (priv->im_context);
-    }
-
-  gtk_text_reset_blink_time (self);
-  gtk_text_check_cursor_blink (self);
-}
-
-static void
-gtk_text_focus_out (GtkWidget *widget)
-{
-  GtkText *self = GTK_TEXT (widget);
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GdkSeat *seat = NULL;
-  GdkDevice *keyboard = NULL;
-
-  gtk_text_selection_bubble_popup_unset (self);
-
-  priv->text_handles_enabled = FALSE;
-  gtk_text_update_handles (self);
-
-  gtk_widget_queue_draw (widget);
-
-  seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
-  if (seat)
-    keyboard = gdk_seat_get_keyboard (seat);
-  if (keyboard)
-    g_signal_handlers_disconnect_by_func (keyboard, direction_changed, self);
-
-  if (priv->editable)
-    {
-      gtk_text_schedule_im_reset (self);
-      gtk_im_context_focus_out (priv->im_context);
-    }
-
-  gtk_text_check_cursor_blink (self);
-}
-
-static void
 gtk_text_focus_changed (GtkEventControllerFocus *controller,
                         GParamSpec              *pspec,
                         GtkWidget               *widget)
 {
+  GtkText *self = GTK_TEXT (widget);
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  GdkSeat *seat = NULL;
+  GdkDevice *keyboard = NULL;
+
+  seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
+  if (seat)
+    keyboard = gdk_seat_get_keyboard (seat);
+
+  gtk_widget_queue_draw (widget);
+
   if (gtk_event_controller_focus_is_focus (controller))
-    gtk_text_focus_in (widget);
-  else
-    gtk_text_focus_out (widget);
+    {
+      if (keyboard)
+        g_signal_connect (keyboard, "notify::direction",
+                          G_CALLBACK (direction_changed), self);
+
+      if (priv->editable)
+        {
+          gtk_text_schedule_im_reset (self);
+          gtk_im_context_focus_in (priv->im_context);
+        }
+
+      gtk_text_reset_blink_time (self);
+    }
+  else /* Focus out */
+    {
+      gtk_text_selection_bubble_popup_unset (self);
+
+      priv->text_handles_enabled = FALSE;
+      gtk_text_update_handles (self);
+
+      if (keyboard)
+        g_signal_handlers_disconnect_by_func (keyboard, direction_changed, self);
+
+      if (priv->editable)
+        {
+          gtk_text_schedule_im_reset (self);
+          gtk_im_context_focus_out (priv->im_context);
+        }
+    }
+
+  gtk_text_check_cursor_blink (self);
 }
 
 static gboolean
