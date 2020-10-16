@@ -43,12 +43,12 @@ option('print',
 
 option('vulkan',
        type: 'feature',
-       value: 'enabled',
+       value: 'auto',
        description : 'Enable support for the Vulkan graphics API')
 
 option('xinerama',
        type: 'feature',
-       value: 'enabled',
+       value: 'auto',
        description : 'Enable support for the X11 Xinerama extension')
 
 option('cloudproviders',
