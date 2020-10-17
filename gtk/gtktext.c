@@ -339,7 +339,6 @@ static void   gtk_text_direction_changed    (GtkWidget        *widget,
                                              GtkTextDirection  previous_dir);
 static void   gtk_text_state_flags_changed  (GtkWidget        *widget,
                                              GtkStateFlags     previous_state);
-static void   gtk_text_root                 (GtkWidget        *widget);
 
 static gboolean gtk_text_drag_drop          (GtkDropTarget    *dest,
                                              const GValue     *value,
@@ -726,7 +725,6 @@ gtk_text_class_init (GtkTextClass *class)
   widget_class->css_changed = gtk_text_css_changed;
   widget_class->direction_changed = gtk_text_direction_changed;
   widget_class->state_flags_changed = gtk_text_state_flags_changed;
-  widget_class->root = gtk_text_root;
   widget_class->mnemonic_activate = gtk_text_mnemonic_activate;
 
   class->move_cursor = gtk_text_move_cursor;
@@ -3295,12 +3293,6 @@ gtk_text_state_flags_changed (GtkWidget     *widget,
   gtk_css_node_set_state (priv->undershoot_node[1], state);
 
   gtk_text_update_cached_style_values (self);
-}
-
-static void
-gtk_text_root (GtkWidget *widget)
-{
-  GTK_WIDGET_CLASS (gtk_text_parent_class)->root (widget);
 }
 
 /* GtkEditable method implementations
