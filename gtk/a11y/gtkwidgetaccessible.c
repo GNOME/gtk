@@ -82,10 +82,12 @@ size_allocate_cb (GtkWidget     *widget,
   accessible = gtk_widget_get_accessible (widget);
   if (ATK_IS_COMPONENT (accessible))
     {
-      rect.x = allocation->x;
-      rect.y = allocation->y;
-      rect.width = allocation->width;
-      rect.height = allocation->height;
+      int scale = gtk_widget_get_scale_factor (widget);
+
+      rect.x = allocation->x * scale;
+      rect.y = allocation->y * scale;
+      rect.width = allocation->width * scale;
+      rect.height = allocation->height * scale;
       g_signal_emit_by_name (accessible, "bounds-changed", &rect);
     }
 }
