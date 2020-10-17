@@ -385,7 +385,7 @@ gdk_content_formats_match_gtype (const GdkContentFormats *first,
  * in @second. If no matching mime type is found, %NULL is
  * returned.
  *
- * Returns: The first common mime type or %NULL if none.
+ * Returns: (nullable): The first common mime type or %NULL if none.
  **/
 const char *
 gdk_content_formats_match_mime_type (const GdkContentFormats *first,

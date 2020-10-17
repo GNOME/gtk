@@ -1329,7 +1329,7 @@ gtk_entry_completion_real_insert_prefix (GtkEntryCompletion *completion,
  * Get the original text entered by the user that triggered
  * the completion or %NULL if there’s no completion ongoing.
  *
- * Returns: the prefix for the current completion
+ * Returns: (nullable): the prefix for the current completion
  */
 const char *
 gtk_entry_completion_get_completion_prefix (GtkEntryCompletion *completion)

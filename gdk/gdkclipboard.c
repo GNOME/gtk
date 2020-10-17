@@ -681,7 +681,7 @@ gdk_clipboard_read_async (GdkClipboard        *clipboard,
  *
  * Finishes an asynchronous clipboard read started with gdk_clipboard_read_async().
  *
- * Returns: (transfer full): a #GInputStream or %NULL on error.
+ * Returns: (transfer full) (nullable): a #GInputStream or %NULL on error.
  **/
 GInputStream *
 gdk_clipboard_read_finish (GdkClipboard  *clipboard,

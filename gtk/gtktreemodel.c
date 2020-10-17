@@ -623,7 +623,7 @@ gtk_tree_path_new (void)
  * child of that 11th child, and the 1st child of that 5th child.
  * If an invalid path string is passed in, %NULL is returned.
  *
- * Returns: A newly-created #GtkTreePath-struct, or %NULL
+ * Returns: (nullable): A newly-created #GtkTreePath-struct, or %NULL
  */
 GtkTreePath *
 gtk_tree_path_new_from_string (const char *path)
@@ -866,7 +866,7 @@ gtk_tree_path_get_depth (GtkTreePath *path)
  *
  * The length of the array can be obtained with gtk_tree_path_get_depth().
  *
- * Returns: The current indices, or %NULL
+ * Returns: (nullable): The current indices, or %NULL
  */
 int *
 gtk_tree_path_get_indices (GtkTreePath *path)
@@ -2286,7 +2286,7 @@ gtk_tree_row_reference_unref_path (GtkTreePath  *path,
  * propagated, and the path is updated appropriately. If
  * @path isn’t a valid path in @model, then %NULL is returned.
  *
- * Returns: a newly allocated #GtkTreeRowReference, or %NULL
+ * Returns: (nullable): a newly allocated #GtkTreeRowReference, or %NULL
  */
 GtkTreeRowReference *
 gtk_tree_row_reference_new (GtkTreeModel *model,
@@ -2333,7 +2333,7 @@ gtk_tree_row_reference_new (GtkTreeModel *model,
  * need to carefully monitor exactly when a row reference updates
  * itself, and is not generally needed by most applications.
  *
- * Returns: a newly allocated #GtkTreeRowReference, or %NULL
+ * Returns: (nullable): a newly allocated #GtkTreeRowReference, or %NULL
  */
 GtkTreeRowReference *
 gtk_tree_row_reference_new_proxy (GObject      *proxy,

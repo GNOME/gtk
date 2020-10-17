@@ -1684,7 +1684,7 @@ gsk_transform_transform (GskTransform *next,
  * between those cases, you should check @self is not %NULL
  * before calling this function.
  *
- * Returns: The inverted transform or %NULL if the transform
+ * Returns: (nullable): The inverted transform or %NULL if the transform
  *     cannot be inverted.
  **/
 GskTransform *

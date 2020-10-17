@@ -128,7 +128,7 @@ _gtk_style_property_init (GtkStyleProperty *property)
  * always be a #GtkCssValue whose values can be queried with
  * _gtk_css_array_value_get_nth().
  *
- * Returns: %NULL on failure or the parsed #GtkCssValue
+ * Returns: (nullable): %NULL on failure or the parsed #GtkCssValue
  **/
 GtkCssValue *
 _gtk_style_property_parse_value (GtkStyleProperty *property,
