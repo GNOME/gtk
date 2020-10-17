@@ -1,4 +1,4 @@
-FROM fedora:31
+FROM fedora:32
 
 RUN dnf -y install \
     adwaita-icon-theme \
@@ -47,6 +47,9 @@ RUN dnf -y install \
     libcloudproviders-devel \
     libepoxy-devel \
     libffi-devel \
+    libglvnd-devel \
+    libglvnd-egl \
+    libglvnd-glx \
     libmount-devel \
     librsvg2 \
     libselinux-devel \
@@ -65,7 +68,6 @@ RUN dnf -y install \
     libxslt \
     mesa-dri-drivers \
     mesa-libEGL-devel \
-    mesa-libwayland-egl-devel \
     ninja-build \
     pango-devel \
     pcre-devel \
