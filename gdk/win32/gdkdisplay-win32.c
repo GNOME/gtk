@@ -1048,33 +1048,35 @@ _gdk_win32_check_processor (GdkWin32ProcessorCheckType check_type)
 
       if (kernel32 != NULL)
         {
-          GdkWin32KernelCPUFuncs cpu_funcs = {0};
+          typedef BOOL (WINAPI *funcIsWow64Process2) (HANDLE, USHORT *, USHORT *);
 
-          cpu_funcs.isWow64Process2 =
+          funcIsWow64Process2 isWow64Process2 =
             (funcIsWow64Process2) GetProcAddress (kernel32, "IsWow64Process2");
 
-          if (cpu_funcs.isWow64Process2 != NULL)
+          if (isWow64Process2 != NULL)
             {
               USHORT proc_cpu = 0;
               USHORT native_cpu = 0;
 
-              cpu_funcs.isWow64Process2 (GetCurrentProcess (),
-                                        &proc_cpu,
-                                        &native_cpu);
+              isWow64Process2 (GetCurrentProcess (), &proc_cpu, &native_cpu);
 
               if (native_cpu == IMAGE_FILE_MACHINE_ARM64)
                 is_arm64 = TRUE;
 
-              if (native_cpu != IMAGE_FILE_MACHINE_UNKNOWN)
+              if (proc_cpu != IMAGE_FILE_MACHINE_UNKNOWN)
                 is_wow64 = TRUE;
             }
           else
-            fallback_wow64_check = TRUE;
+            {
+              fallback_wow64_check = TRUE;
+            }
 
           FreeLibrary (kernel32);
         }
       else
-        fallback_wow64_check = TRUE;
+        {
+          fallback_wow64_check = TRUE;
+        }
 
       if (fallback_wow64_check)
         IsWow64Process (GetCurrentProcess (), &is_wow64);
