@@ -3236,7 +3236,7 @@ gtk_text_grab_focus (GtkWidget *widget)
  * Causes @self to have keyboard focus.
  *
  * It behaves like gtk_widget_grab_focus(),
- * except that it doesn't select the contents of the self.
+ * except that it doesn't select the contents of @self.
  * You only want to call this on some special entries
  * which the user usually doesn't want to replace all text in,
  * such as search-as-you-type entries.
