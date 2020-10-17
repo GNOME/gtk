@@ -296,7 +296,7 @@ gtk_buildable_parse_context_pop (GtkBuildableParseContext *context)
  * give the element_name as passed to those functions. For the parent
  * elements, see gtk_buildable_parse_context_get_element_stack().
  *
- * Returns: the name of the currently open element, or %NULL
+ * Returns: (nullable): the name of the currently open element, or %NULL
  */
 const char *
 gtk_buildable_parse_context_get_element (GtkBuildableParseContext *context)

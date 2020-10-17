@@ -1026,7 +1026,7 @@ gtk_object_expression_new (GObject *object)
  *
  * Gets the object that the expression evaluates to.
  *
- * Returns: (transfer none): the object, or %NULL
+ * Returns: (transfer none) (nullable): the object, or %NULL
  */
 GObject *
 gtk_object_expression_get_object (GtkExpression *expression)

@@ -1107,7 +1107,7 @@ gdk_display_notify_startup_complete (GdkDisplay  *display,
  * Gets the startup notification ID for a Wayland display, or %NULL
  * if no ID has been defined.
  *
- * Returns: the startup notification ID for @display, or %NULL
+ * Returns: (nullable): the startup notification ID for @display, or %NULL
  */
 const char *
 gdk_display_get_startup_notification_id (GdkDisplay *display)
