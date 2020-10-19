@@ -116,6 +116,7 @@ demo_tagged_entry_class_init (DemoTaggedEntryClass *klass)
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, "entry");
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_TEXT_BOX);
 }
 
 static GtkEditable *
