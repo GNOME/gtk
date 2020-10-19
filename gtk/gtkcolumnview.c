@@ -862,11 +862,15 @@ gtk_column_view_in_resize_rect (GtkColumnView       *self,
 {
   GtkWidget *header;
   graphene_rect_t rect;
+  int width;
 
   header = gtk_column_view_column_get_header (column);
 
   if (!gtk_widget_compute_bounds (header, self->header, &rect))
     return FALSE;
+
+  gtk_column_view_column_get_allocation (column, NULL, &width);
+  rect.size.width = width;
 
   rect.origin.x += rect.size.width - DRAG_WIDTH / 2;
   rect.size.width = DRAG_WIDTH;
