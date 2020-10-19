@@ -700,6 +700,33 @@ gtk_accessible_get_platform_state (GtkAccessible              *self,
 }
 
 /*<private>
+ * gtk_accessible_bounds_changed:
+ * @self: a #GtkAccessible
+ *
+ * This function can be used to inform ATs that an
+ * accessibles bounds (ie its screen extents) have
+ * changed.
+ *
+ * Note that the bounds are not included in this API.
+ * AT backends should use widget API to obtain them.
+ */
+void
+gtk_accessible_bounds_changed (GtkAccessible *self)
+{
+  GtkATContext *context;
+
+  if (GTK_IS_WIDGET (self) &&
+      gtk_widget_get_root (GTK_WIDGET (self)) == NULL)
+    return;
+
+  context = gtk_accessible_get_at_context (self);
+  if (context == NULL)
+    return;
+
+  gtk_at_context_bounds_changed (context);
+}
+
+/*<private>
  * gtk_accessible_should_present:
  * @self: a #GtkAccessible
  *

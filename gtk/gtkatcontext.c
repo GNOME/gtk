@@ -138,10 +138,20 @@ gtk_at_context_real_state_change (GtkATContext                *self,
                                   GtkAccessibleStateChange     changed_states,
                                   GtkAccessiblePropertyChange  changed_properties,
                                   GtkAccessibleRelationChange  changed_relations,
-                                  GtkAccessiblePlatformChange  changed_platform,
                                   GtkAccessibleAttributeSet   *states,
                                   GtkAccessibleAttributeSet   *properties,
                                   GtkAccessibleAttributeSet   *relations)
+{
+}
+
+static void
+gtk_at_context_real_platform_change (GtkATContext                *self,
+                                     GtkAccessiblePlatformChange  change)
+{
+}
+
+static void
+gtk_at_context_real_bounds_change (GtkATContext *self)
 {
 }
 
@@ -155,6 +165,8 @@ gtk_at_context_class_init (GtkATContextClass *klass)
   gobject_class->finalize = gtk_at_context_finalize;
 
   klass->state_change = gtk_at_context_real_state_change;
+  klass->platform_change = gtk_at_context_real_platform_change;
+  klass->bounds_change = gtk_at_context_real_bounds_change;
 
   /**
    * GtkATContext:accessible-role:
@@ -506,8 +518,7 @@ gtk_at_context_update (GtkATContext *self)
   /* There's no point in notifying of state changes if there weren't any */
   if (self->updated_properties == 0 &&
       self->updated_relations == 0 &&
-      self->updated_states == 0 &&
-      self->updated_platform == 0)
+      self->updated_states == 0)
     return;
 
   GtkAccessibleStateChange changed_states =
@@ -519,14 +530,12 @@ gtk_at_context_update (GtkATContext *self)
 
   GTK_AT_CONTEXT_GET_CLASS (self)->state_change (self,
                                                  changed_states, changed_properties, changed_relations,
-                                                 self->updated_platform,
                                                  self->states, self->properties, self->relations);
   g_signal_emit (self, obj_signals[STATE_CHANGE], 0);
 
   self->updated_properties = 0;
   self->updated_relations = 0;
   self->updated_states = 0;
-  self->updated_platform = 0;
 }
 
 /*< private >
@@ -815,5 +824,11 @@ void
 gtk_at_context_platform_changed (GtkATContext                *self,
                                  GtkAccessiblePlatformChange  change)
 {
-  self->updated_platform |= change;
+  GTK_AT_CONTEXT_GET_CLASS (self)->platform_change (self, change);
+}
+
+void
+gtk_at_context_bounds_changed (GtkATContext *self)
+{
+  GTK_AT_CONTEXT_GET_CLASS (self)->bounds_change (self);
 }

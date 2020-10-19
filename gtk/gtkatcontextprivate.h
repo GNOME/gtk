@@ -116,10 +116,14 @@ struct _GtkATContextClass
                          GtkAccessibleStateChange     changed_states,
                          GtkAccessiblePropertyChange  changed_properties,
                          GtkAccessibleRelationChange  changed_relations,
-                         GtkAccessiblePlatformChange  changed_platform,
                          GtkAccessibleAttributeSet   *states,
                          GtkAccessibleAttributeSet   *properties,
                          GtkAccessibleAttributeSet   *relations);
+
+  void (* platform_change) (GtkATContext                *self,
+                            GtkAccessiblePlatformChange  changed_platform);
+
+  void (* bounds_change) (GtkATContext                *self);
 };
 
 GdkDisplay *            gtk_at_context_get_display              (GtkATContext          *self);
@@ -152,6 +156,7 @@ char *                  gtk_at_context_get_label                (GtkATContext   
 
 void                    gtk_at_context_platform_changed         (GtkATContext                *self,
                                                                  GtkAccessiblePlatformChange  change);
+void                    gtk_at_context_bounds_changed           (GtkATContext                *self);
 
 const char *    gtk_accessible_property_get_attribute_name      (GtkAccessibleProperty property);
 const char *    gtk_accessible_relation_get_attribute_name      (GtkAccessibleRelation relation);

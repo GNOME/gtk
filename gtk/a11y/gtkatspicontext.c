@@ -33,6 +33,7 @@
 #include "gtkatspitextprivate.h"
 #include "gtkatspiutilsprivate.h"
 #include "gtkatspivalueprivate.h"
+#include "gtkatspicomponentprivate.h"
 
 #include "a11y/atspi/atspi-accessible.h"
 #include "a11y/atspi/atspi-action.h"
@@ -40,6 +41,7 @@
 #include "a11y/atspi/atspi-text.h"
 #include "a11y/atspi/atspi-value.h"
 #include "a11y/atspi/atspi-selection.h"
+#include "a11y/atspi/atspi-component.h"
 
 #include "gtkdebug.h"
 #include "gtkeditable.h"
@@ -333,7 +335,6 @@ collect_relations (GtkAtSpiContext *self,
     }
 }
 /* }}} */
-
 /* {{{ Accessible implementation */
 static int
 get_index_in_parent (GtkWidget *widget)
@@ -700,7 +701,6 @@ static const GDBusInterfaceVTable accessible_vtable = {
   NULL,
 };
 /* }}} */
-
 /* {{{ Change notification */
 static void
 emit_text_changed (GtkAtSpiContext *self,
@@ -779,19 +779,40 @@ emit_property_changed (GtkAtSpiContext *self,
 }
 
 static void
+emit_bounds_changed (GtkAtSpiContext *self,
+                     int              x,
+                     int              y,
+                     int              width,
+                     int              height)
+{
+  g_dbus_connection_emit_signal (self->connection,
+                                 NULL,
+                                 self->context_path,
+                                 "org.a11y.atspi.Event.Object",
+                                 "BoundsChanged",
+                                 g_variant_new ("(siiva{sv})",
+                                                "", 0, 0, g_variant_new ("(iiii)", x, y, width, height), NULL),
+                                 NULL);
+}
+
+static void
 gtk_at_spi_context_state_change (GtkATContext                *ctx,
                                  GtkAccessibleStateChange     changed_states,
                                  GtkAccessiblePropertyChange  changed_properties,
                                  GtkAccessibleRelationChange  changed_relations,
-                                 GtkAccessiblePlatformChange  changed_platform,
                                  GtkAccessibleAttributeSet   *states,
                                  GtkAccessibleAttributeSet   *properties,
                                  GtkAccessibleAttributeSet   *relations)
 {
   GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (ctx);
-  GtkWidget *widget = GTK_WIDGET (gtk_at_context_get_accessible (ctx));
+  GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
+  GtkWidget *widget;
   GtkAccessibleValue *value;
 
+  if (!GTK_IS_WIDGET (accessible))
+    return;
+
+  widget = GTK_WIDGET (accessible);
   if (!gtk_widget_get_realized (widget))
     return;
 
@@ -936,6 +957,22 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
       GVariant *v = g_variant_new_take_string (label);
       emit_property_changed (self, "accessible-description", v);
     }
+}
+
+static void
+gtk_at_spi_context_platform_change (GtkATContext                *ctx,
+                                    GtkAccessiblePlatformChange  changed_platform)
+{
+  GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (ctx);
+  GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
+  GtkWidget *widget;
+
+  if (!GTK_IS_WIDGET (accessible))
+    return;
+
+  widget = GTK_WIDGET (accessible);
+  if (!gtk_widget_get_realized (widget))
+    return;
 
   if (changed_platform & GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSABLE)
     {
@@ -951,8 +988,38 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
       emit_state_changed (self, "focused", state);
     }
 }
-/* }}} */
 
+static void
+gtk_at_spi_context_bounds_change (GtkATContext *ctx)
+{
+  GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (ctx);
+  GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
+  GtkWidget *widget;
+  GtkWidget *parent;
+  double x, y;
+  int width, height;
+
+  if (!GTK_IS_WIDGET (accessible))
+    return;
+
+  widget = GTK_WIDGET (accessible);
+  if (!gtk_widget_get_realized (widget))
+    return;
+
+  parent = gtk_widget_get_parent (widget);
+
+  if (parent)
+    gtk_widget_translate_coordinates (widget, parent, 0., 0., &x, &y);
+  else
+    x = y = 0.;
+
+  width = gtk_widget_get_width (widget);
+  height = gtk_widget_get_height (widget);
+
+  emit_bounds_changed (self, (int)x, (int)y, width, height);
+}
+/* }}} */
+/* {{{ D-Bus Registration */
 static void
 gtk_at_spi_context_register_object (GtkAtSpiContext *self)
 {
@@ -970,6 +1037,21 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
                                          NULL,
                                          NULL);
   self->n_registered_objects++;
+
+  vtable = gtk_atspi_get_component_vtable (accessible);
+  if (vtable)
+    {
+      g_variant_builder_add (&interfaces, "s", atspi_component_interface.name);
+      self->registration_ids[self->n_registered_objects] =
+          g_dbus_connection_register_object (self->connection,
+                                             self->context_path,
+                                             (GDBusInterfaceInfo *) &atspi_component_interface,
+                                             vtable,
+                                             self,
+                                             NULL,
+                                             NULL);
+      self->n_registered_objects++;
+    }
 
   vtable = gtk_atspi_get_text_vtable (accessible);
   if (vtable)
@@ -1063,7 +1145,8 @@ gtk_at_spi_context_unregister_object (GtkAtSpiContext *self)
       self->registration_ids[self->n_registered_objects] = 0;
     }
 }
-
+/* }}} */
+/* {{{ GObject boilerplate */
 static void
 gtk_at_spi_context_dispose (GObject *gobject)
 {
@@ -1219,6 +1302,8 @@ gtk_at_spi_context_class_init (GtkAtSpiContextClass *klass)
   gobject_class->dispose = gtk_at_spi_context_dispose;
 
   context_class->state_change = gtk_at_spi_context_state_change;
+  context_class->platform_change = gtk_at_spi_context_platform_change;
+  context_class->bounds_change = gtk_at_spi_context_bounds_change;
 
   obj_props[PROP_BUS_ADDRESS] =
     g_param_spec_string ("bus-address", NULL, NULL,
@@ -1234,7 +1319,8 @@ static void
 gtk_at_spi_context_init (GtkAtSpiContext *self)
 {
 }
-
+/* }}} */
+/* {{{ Bus address discovery */
 #ifdef GDK_WINDOWING_X11
 static char *
 get_bus_address_x11 (GdkDisplay *display)
@@ -1380,7 +1466,8 @@ get_bus_address (GdkDisplay *display)
 out:
   return bus_address;
 }
-
+/* }}} */
+/* {{{ API */
 GtkATContext *
 gtk_at_spi_create_context (GtkAccessibleRole  accessible_role,
                            GtkAccessible     *accessible,
@@ -1438,5 +1525,6 @@ gtk_at_spi_context_to_ref (GtkAtSpiContext *self)
   const char *name = g_dbus_connection_get_unique_name (self->connection);
   return g_variant_new ("(so)", name, self->context_path);
 }
+/* }}} */
 
 /* vim:set foldmethod=marker expandtab: */
