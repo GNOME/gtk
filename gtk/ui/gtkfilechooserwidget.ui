@@ -70,6 +70,11 @@
                                 <property name="visible">1</property>
                                 <property name="spacing">6</property>
                                 <property name="border-width">6</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject">
+                                    <property name="AtkObject::accessible-name" translatable="yes">PathBar Layer</property>
+                                  </object>
+                                </child>
                                 <child>
                                   <object class="GtkPathBar" id="browse_path_bar">
                                     <property name="visible">True</property>
@@ -111,6 +116,11 @@
                                 <property name="no-show-all">1</property>
                                 <property name="spacing">6</property>
                                 <property name="border-width">6</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject">
+                                    <property name="AtkObject::accessible-name" translatable="yes">Location Layer</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="name">location</property>
@@ -122,6 +132,11 @@
                                 <property name="no-show-all">1</property>
                                 <property name="spacing">6</property>
                                 <property name="border-width">6</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject">
+                                    <property name="AtkObject::accessible-name" translatable="yes">Search Layer</property>
+                                  </object>
+                                </child>
                                 <child type="center">
                                   <object class="GtkSearchEntry" id="search_entry">
                                     <property name="visible">1</property>
