@@ -2346,6 +2346,16 @@ gtk_widget_root (GtkWidget *widget)
   if (priv->layout_manager)
     gtk_layout_manager_set_root (priv->layout_manager, priv->root);
 
+  if (priv->at_context != NULL)
+    {
+      GtkATContext *root_context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (priv->root));
+
+      if (root_context)
+        gtk_at_context_realize (root_context);
+
+      gtk_at_context_realize (priv->at_context);
+    }
+
   GTK_WIDGET_GET_CLASS (widget)->root (widget);
 
   if (!GTK_IS_ROOT (widget))
@@ -2369,6 +2379,9 @@ gtk_widget_unroot (GtkWidget *widget)
   _gtk_widget_update_parent_muxer (widget);
 
   GTK_WIDGET_GET_CLASS (widget)->unroot (widget);
+
+  if (priv->at_context)
+    gtk_at_context_unrealize (priv->at_context);
 
   if (priv->context)
     gtk_style_context_set_display (priv->context, gdk_display_get_default ());

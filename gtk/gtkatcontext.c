@@ -163,6 +163,16 @@ gtk_at_context_real_child_change (GtkATContext             *self,
 }
 
 static void
+gtk_at_context_real_realize (GtkATContext *self)
+{
+}
+
+static void
+gtk_at_context_real_unrealize (GtkATContext *self)
+{
+}
+
+static void
 gtk_at_context_class_init (GtkATContextClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -171,6 +181,8 @@ gtk_at_context_class_init (GtkATContextClass *klass)
   gobject_class->get_property = gtk_at_context_get_property;
   gobject_class->finalize = gtk_at_context_finalize;
 
+  klass->realize = gtk_at_context_real_realize;
+  klass->unrealize = gtk_at_context_real_unrealize;
   klass->state_change = gtk_at_context_real_state_change;
   klass->platform_change = gtk_at_context_real_platform_change;
   klass->bounds_change = gtk_at_context_real_bounds_change;
@@ -511,6 +523,36 @@ gtk_at_context_create (GtkAccessibleRole  accessible_role,
   return res;
 }
 
+gboolean
+gtk_at_context_is_realized (GtkATContext *self)
+{
+  return self->realized;
+}
+
+void
+gtk_at_context_realize (GtkATContext *self)
+{
+  if (self->realized)
+    return;
+
+  GTK_NOTE (A11Y, g_message ("Realizing AT context '%s'", G_OBJECT_TYPE_NAME (self)));
+  GTK_AT_CONTEXT_GET_CLASS (self)->realize (self);
+
+  self->realized = TRUE;
+}
+
+void
+gtk_at_context_unrealize (GtkATContext *self)
+{
+  if (!self->realized)
+    return;
+
+  GTK_NOTE (A11Y, g_message ("Unrealizing AT context '%s'", G_OBJECT_TYPE_NAME (self)));
+  GTK_AT_CONTEXT_GET_CLASS (self)->unrealize (self);
+
+  self->realized = FALSE;
+}
+
 /*< private >
  * gtk_at_context_update:
  * @self: a #GtkATContext
@@ -522,6 +564,9 @@ void
 gtk_at_context_update (GtkATContext *self)
 {
   g_return_if_fail (GTK_IS_AT_CONTEXT (self));
+
+  if (!self->realized)
+    return;
 
   /* There's no point in notifying of state changes if there weren't any */
   if (self->updated_properties == 0 &&
@@ -979,12 +1024,18 @@ void
 gtk_at_context_platform_changed (GtkATContext                *self,
                                  GtkAccessiblePlatformChange  change)
 {
+  if (!self->realized)
+    return;
+
   GTK_AT_CONTEXT_GET_CLASS (self)->platform_change (self, change);
 }
 
 void
 gtk_at_context_bounds_changed (GtkATContext *self)
 {
+  if (!self->realized)
+    return;
+
   GTK_AT_CONTEXT_GET_CLASS (self)->bounds_change (self);
 }
 
@@ -993,5 +1044,8 @@ gtk_at_context_child_changed (GtkATContext             *self,
                               GtkAccessibleChildChange  change,
                               GtkAccessible            *child)
 {
+  if (!self->realized)
+    return;
+
   GTK_AT_CONTEXT_GET_CLASS (self)->child_change (self, change, child);
 }
