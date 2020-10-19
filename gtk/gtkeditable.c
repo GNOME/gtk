@@ -942,6 +942,21 @@ delegate_notify (GObject    *object,
 }
 
 /**
+ * gtk_editable_get_delegate:
+ * @editable: a #GtkEditable
+ *
+ * Gets the #GtkEditable that @editable is delegating its
+ * implementation to. Typically, the delegate is a #GtkText widget.
+ *
+ * Returns: (nullable) (transfer none): the delegate #GtkEditable
+ */
+GtkEditable *
+gtk_editable_get_delegate (GtkEditable *editable)
+{
+  return get_delegate (editable);
+}
+
+/**
  * gtk_editable_init_delegate:
  * @editable: a #GtkEditable
  *

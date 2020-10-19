@@ -971,6 +971,7 @@ gtk_editable_get_enable_undo
 gtk_editable_set_enable_undo
 <SUBSECTION>
 gtk_editable_install_properties
+gtk_editable_get_delegate
 gtk_editable_init_delegate
 gtk_editable_finish_delegate
 gtk_editable_delegate_set_property
