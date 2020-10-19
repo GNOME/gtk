@@ -592,29 +592,14 @@ handle_accessible_get_property (GDBusConnection       *connection,
 
   if (g_strcmp0 (property_name, "Name") == 0)
     {
-      if (GTK_IS_WIDGET (accessible))
-        res = g_variant_new_string (gtk_widget_get_name (GTK_WIDGET (accessible)));
-      else if (GTK_IS_STACK_PAGE (accessible))
-        {
-          const char *name = gtk_stack_page_get_name (GTK_STACK_PAGE (accessible));
-          if (name == NULL)
-             name = G_OBJECT_TYPE_NAME (accessible);
-          res = g_variant_new_string (name);
-        }
-      else
-        res = g_variant_new_string (G_OBJECT_TYPE_NAME (accessible));
+      char *label = gtk_at_context_get_name (GTK_AT_CONTEXT (self));
+      res = g_variant_new_string (label ? label : "");
+      g_free (label);
     }
   else if (g_strcmp0 (property_name, "Description") == 0)
     {
       char *label = gtk_at_context_get_description (GTK_AT_CONTEXT (self));
-
-      if (label == NULL || *label == '\0')
-        {
-          g_free (label);
-          label = gtk_at_context_get_name (GTK_AT_CONTEXT (self));
-        }
-
-      res = g_variant_new_string (label);
+      res = g_variant_new_string (label ? label : "");
       g_free (label);
     }
   else if (g_strcmp0 (property_name, "Locale") == 0)
