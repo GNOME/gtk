@@ -906,7 +906,7 @@ header_drag_begin (GtkGestureDrag *gesture,
   self->drag_pos = -1;
 
   n = g_list_model_get_n_items (G_LIST_MODEL (self->columns));
-  for (i = 0; !self->in_column_resize && i < n; i++)
+  for (i = n - 1; !self->in_column_resize && i >= 0; i--)
     {
       GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
 
@@ -935,6 +935,17 @@ header_drag_begin (GtkGestureDrag *gesture,
 
           g_object_unref (column);
           break;
+        }
+    }
+
+  for (i = 0; !self->in_column_resize && i < n; i++)
+    {
+      GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+
+      if (!gtk_column_view_column_get_visible (column))
+        {
+          g_object_unref (column);
+          continue;
         }
 
       if (gtk_column_view_get_reorderable (self) &&
