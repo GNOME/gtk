@@ -853,7 +853,7 @@ update_autoscroll (GtkColumnView *self,
 }
 
 
-#define DRAG_WIDTH 6
+#define DRAG_WIDTH 8
 
 static gboolean
 gtk_column_view_in_resize_rect (GtkColumnView       *self,
