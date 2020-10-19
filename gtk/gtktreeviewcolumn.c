@@ -1324,7 +1324,8 @@ _gtk_tree_view_column_set_tree_view (GtkTreeViewColumn *column,
 
   priv->tree_view = GTK_WIDGET (tree_view);
 
-  gtk_widget_set_parent (priv->button, GTK_WIDGET (tree_view));
+  /* avoid a warning with our messed up CSS nodes */
+  gtk_widget_insert_after (priv->button, GTK_WIDGET (tree_view), NULL);
 
   priv->property_changed_signal =
     g_signal_connect_swapped (tree_view,
