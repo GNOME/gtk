@@ -1772,7 +1772,7 @@ treeview.view {
 %column_header_button {
   padding: 0 6px;
   background-image: none;
-  border-style: none solid solid none;
+  border-style: none none solid solid;
   border-color: $_treeview_borders_color;
   border-radius: 0;
   text-shadow: none;
@@ -3141,15 +3141,15 @@ columnview {
     > cell {
       padding: 8px 6px;
 
-      &:not(:last-child) {
-        border-right: 1px solid transparent;
+      &:not(:first-child) {
+        border-left: 1px solid transparent;
       }
     }
   }
 
   // make column separators visible when :show-column-separators is true
   &.column-separators > listview > row > cell {
-    border-right-color: $_treeview_borders_color;
+    border-left-color: $_treeview_borders_color;
   }
 
   // shrink vertically for .data-table
