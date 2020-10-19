@@ -1011,7 +1011,7 @@ gtk_about_dialog_set_program_name (GtkAboutDialog *about,
  *
  * Returns the version string.
  *
- * Returns: The version string. The string is owned by the about
+ * Returns: (nullable): The version string. The string is owned by the about
  *  dialog and must not be modified.
  */
 const char *
@@ -1052,7 +1052,7 @@ gtk_about_dialog_set_version (GtkAboutDialog *about,
  *
  * Returns the copyright string.
  *
- * Returns: The copyright string. The string is owned by the about
+ * Returns: (nullable): The copyright string. The string is owned by the about
  *  dialog and must not be modified.
  */
 const char *
@@ -1104,7 +1104,7 @@ gtk_about_dialog_set_copyright (GtkAboutDialog *about,
  *
  * Returns the comments string.
  *
- * Returns: The comments. The string is owned by the about
+ * Returns: (nullable): The comments. The string is owned by the about
  *  dialog and must not be modified.
  */
 const char *
@@ -1154,7 +1154,7 @@ gtk_about_dialog_set_comments (GtkAboutDialog *about,
  *
  * Returns the license information.
  *
- * Returns: The license information. The string is owned by the about
+ * Returns: (nullable): The license information. The string is owned by the about
  *  dialog and must not be modified.
  */
 const char *
@@ -1209,7 +1209,7 @@ gtk_about_dialog_set_license (GtkAboutDialog *about,
  *
  * Returns the system information that is shown in the about dialog.
  *
- * Returns: the system information
+ * Returns: (nullable): the system information
  */
 const char *
 gtk_about_dialog_get_system_information (GtkAboutDialog *about)
@@ -1290,7 +1290,7 @@ gtk_about_dialog_set_wrap_license (GtkAboutDialog *about,
  *
  * Returns the website URL.
  *
- * Returns: The website URL. The string is owned by the about
+ * Returns: (nullable): The website URL. The string is owned by the about
  *  dialog and must not be modified.
  */
 const char *
@@ -1331,7 +1331,7 @@ gtk_about_dialog_set_website (GtkAboutDialog *about,
  *
  * Returns the label used for the website link.
  *
- * Returns: The label used for the website link. The string is
+ * Returns: (nullable): The label used for the website link. The string is
  *     owned by the about dialog and must not be modified.
  */
 const char *
@@ -1505,7 +1505,7 @@ gtk_about_dialog_set_artists (GtkAboutDialog *about,
  * Returns the translator credits string which is displayed
  * in the translators tab of the secondary credits dialog.
  *
- * Returns: The translator credits string. The string is
+ * Returns: (nullable): The translator credits string. The string is
  *   owned by the about dialog and must not be modified.
  */
 const char *
