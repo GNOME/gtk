@@ -593,22 +593,14 @@ handle_accessible_get_property (GDBusConnection       *connection,
 
   if (g_strcmp0 (property_name, "Name") == 0)
     {
-      if (GTK_IS_WIDGET (accessible))
-        res = g_variant_new_string (gtk_widget_get_name (GTK_WIDGET (accessible)));
-      else if (GTK_IS_STACK_PAGE (accessible))
-        {
-          const char *name = gtk_stack_page_get_name (GTK_STACK_PAGE (accessible));
-          if (name == NULL)
-             name = G_OBJECT_TYPE_NAME (accessible);
-          res = g_variant_new_string (name);
-        }
-      else
-        res = g_variant_new_string (G_OBJECT_TYPE_NAME (accessible));
+      char *label = gtk_at_context_get_name (GTK_AT_CONTEXT (self));
+      res = g_variant_new_string (label ? label : "");
+      g_free (label);
     }
   else if (g_strcmp0 (property_name, "Description") == 0)
     {
-      char *label = gtk_at_context_get_label (GTK_AT_CONTEXT (self));
-      res = g_variant_new_string (label);
+      char *label = gtk_at_context_get_description (GTK_AT_CONTEXT (self));
+      res = g_variant_new_string (label ? label : "");
       g_free (label);
     }
   else if (g_strcmp0 (property_name, "Locale") == 0)
@@ -953,7 +945,14 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
 
   if (changed_properties & GTK_ACCESSIBLE_PROPERTY_CHANGE_LABEL)
     {
-      char *label = gtk_at_context_get_label (GTK_AT_CONTEXT (self));
+      char *label = gtk_at_context_get_name (GTK_AT_CONTEXT (self));
+      GVariant *v = g_variant_new_take_string (label);
+      emit_property_changed (self, "accessible-name", v);
+    }
+
+  if (changed_properties & GTK_ACCESSIBLE_PROPERTY_CHANGE_DESCRIPTION)
+    {
+      char *label = gtk_at_context_get_description (GTK_AT_CONTEXT (self));
       GVariant *v = g_variant_new_take_string (label);
       emit_property_changed (self, "accessible-description", v);
     }

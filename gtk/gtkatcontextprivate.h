@@ -152,7 +152,8 @@ gboolean                gtk_at_context_has_accessible_relation  (GtkATContext   
 GtkAccessibleValue *    gtk_at_context_get_accessible_relation  (GtkATContext          *self,
                                                                  GtkAccessibleRelation  relation);
 
-char *                  gtk_at_context_get_label                (GtkATContext          *self);
+char *                  gtk_at_context_get_name                 (GtkATContext          *self);
+char *                  gtk_at_context_get_description          (GtkATContext          *self);
 
 void                    gtk_at_context_platform_changed         (GtkATContext                *self,
                                                                  GtkAccessiblePlatformChange  change);

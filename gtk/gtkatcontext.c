@@ -739,47 +739,34 @@ gtk_at_context_get_accessible_relation (GtkATContext          *self,
   return gtk_accessible_attribute_set_get_value (self->relations, relation);
 }
 
-/*< private >
- * gtk_at_context_get_label:
- * @self: a #GtkATContext
- *
- * Retrieves the accessible label of the #GtkATContext.
- *
- * This is a convenience function meant to be used by #GtkATContext implementations.
- *
- * Returns: (transfer full): the label of the #GtkATContext
- */
-char *
-gtk_at_context_get_label (GtkATContext *self)
+/* See the WAI-ARIA § 4.3, "Accessible Name and Description Computation" */
+static void
+gtk_at_context_get_name_accumulate (GtkATContext *self,
+                                    GPtrArray    *names,
+                                    gboolean      recurse)
 {
-  g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), NULL);
-
   GtkAccessibleValue *value = NULL;
-
-  if (gtk_accessible_attribute_set_contains (self->states, GTK_ACCESSIBLE_STATE_HIDDEN))
-    {
-      value = gtk_accessible_attribute_set_get_value (self->states, GTK_ACCESSIBLE_STATE_HIDDEN);
-
-      if (gtk_boolean_accessible_value_get (value))
-        return g_strdup ("");
-    }
 
   if (gtk_accessible_attribute_set_contains (self->properties, GTK_ACCESSIBLE_PROPERTY_LABEL))
     {
       value = gtk_accessible_attribute_set_get_value (self->properties, GTK_ACCESSIBLE_PROPERTY_LABEL);
 
-      return g_strdup (gtk_string_accessible_value_get (value));
+      g_ptr_array_add (names, (char *) gtk_string_accessible_value_get (value));
     }
 
-  if (gtk_accessible_attribute_set_contains (self->relations, GTK_ACCESSIBLE_RELATION_LABELLED_BY))
+  if (recurse && gtk_accessible_attribute_set_contains (self->relations, GTK_ACCESSIBLE_RELATION_LABELLED_BY))
     {
       value = gtk_accessible_attribute_set_get_value (self->relations, GTK_ACCESSIBLE_RELATION_LABELLED_BY);
 
       GList *list = gtk_reference_list_accessible_value_get (value);
-      GtkAccessible *rel = GTK_ACCESSIBLE (list->data);
-      GtkATContext *rel_context = gtk_accessible_get_at_context (rel);
 
-      return gtk_at_context_get_label (rel_context);
+      for (GList *l = list; l != NULL; l = l->data)
+        {
+          GtkAccessible *rel = GTK_ACCESSIBLE (l->data);
+          GtkATContext *rel_context = gtk_accessible_get_at_context (rel);
+
+          gtk_at_context_get_name_accumulate (rel_context, names, FALSE);
+        }
     }
 
   GtkAccessibleRole role = gtk_at_context_get_accessible_role (self);
@@ -793,6 +780,7 @@ gtk_at_context_get_label (GtkATContext *self)
           GTK_ACCESSIBLE_PROPERTY_VALUE_NOW,
         };
 
+        value = NULL;
         for (int i = 0; i < G_N_ELEMENTS (range_attrs); i++)
           {
             if (gtk_accessible_attribute_set_contains (self->properties, range_attrs[i]))
@@ -803,7 +791,7 @@ gtk_at_context_get_label (GtkATContext *self)
           }
 
         if (value != NULL)
-          return g_strdup (gtk_string_accessible_value_get (value));
+          g_ptr_array_add (names, (char *) gtk_string_accessible_value_get (value));
       }
       break;
 
@@ -811,13 +799,172 @@ gtk_at_context_get_label (GtkATContext *self)
       break;
     }
 
-  GEnumClass *enum_class = g_type_class_peek (GTK_TYPE_ACCESSIBLE_ROLE);
-  GEnumValue *enum_value = g_enum_get_value (enum_class, role);
+  /* If there is no label or labelled-by attribute, hidden elements
+   * have no name
+   */
+  if (gtk_accessible_attribute_set_contains (self->states, GTK_ACCESSIBLE_STATE_HIDDEN))
+    {
+      value = gtk_accessible_attribute_set_get_value (self->states, GTK_ACCESSIBLE_STATE_HIDDEN);
 
-  if (enum_value != NULL)
-    return g_strdup (enum_value->value_nick);
+      if (gtk_boolean_accessible_value_get (value))
+        return;
+    }
 
-  return g_strdup ("widget");
+  /* This fallback is in place only for unlabelled elements */
+  if (names->len != 0)
+    return;
+
+  if (self->accessible)
+    g_ptr_array_add (names, (char *)G_OBJECT_TYPE_NAME (self->accessible));
+}
+
+static void
+gtk_at_context_get_description_accumulate (GtkATContext *self,
+                                           GPtrArray    *labels,
+                                           gboolean      recurse)
+{
+  GtkAccessibleValue *value = NULL;
+
+  if (gtk_accessible_attribute_set_contains (self->properties, GTK_ACCESSIBLE_PROPERTY_DESCRIPTION))
+    {
+      value = gtk_accessible_attribute_set_get_value (self->properties, GTK_ACCESSIBLE_PROPERTY_DESCRIPTION);
+
+      g_ptr_array_add (labels, (char *) gtk_string_accessible_value_get (value));
+    }
+
+  if (recurse && gtk_accessible_attribute_set_contains (self->relations, GTK_ACCESSIBLE_RELATION_DESCRIBED_BY))
+    {
+      value = gtk_accessible_attribute_set_get_value (self->relations, GTK_ACCESSIBLE_RELATION_DESCRIBED_BY);
+
+      GList *list = gtk_reference_list_accessible_value_get (value);
+
+      for (GList *l = list; l != NULL; l = l->data)
+        {
+          GtkAccessible *rel = GTK_ACCESSIBLE (l->data);
+          GtkATContext *rel_context = gtk_accessible_get_at_context (rel);
+
+          gtk_at_context_get_description_accumulate (rel_context, labels, FALSE);
+        }
+    }
+
+  GtkAccessibleRole role = gtk_at_context_get_accessible_role (self);
+
+  switch ((int) role)
+    {
+    case GTK_ACCESSIBLE_ROLE_RANGE:
+      {
+        int range_attrs[] = {
+          GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT,
+          GTK_ACCESSIBLE_PROPERTY_VALUE_NOW,
+        };
+
+        value = NULL;
+        for (int i = 0; i < G_N_ELEMENTS (range_attrs); i++)
+          {
+            if (gtk_accessible_attribute_set_contains (self->properties, range_attrs[i]))
+              {
+                value = gtk_accessible_attribute_set_get_value (self->properties, range_attrs[i]);
+                break;
+              }
+          }
+
+        if (value != NULL)
+          g_ptr_array_add (labels, (char *) gtk_string_accessible_value_get (value));
+      }
+      break;
+
+    default:
+      break;
+    }
+
+  /* If there is no description or described-by attribute, hidden elements
+   * have no description
+   */
+  if (gtk_accessible_attribute_set_contains (self->states, GTK_ACCESSIBLE_STATE_HIDDEN))
+    {
+      value = gtk_accessible_attribute_set_get_value (self->states, GTK_ACCESSIBLE_STATE_HIDDEN);
+
+      if (gtk_boolean_accessible_value_get (value))
+        return;
+    }
+}
+
+/*< private >
+ * gtk_at_context_get_name:
+ * @self: a #GtkATContext
+ *
+ * Retrieves the accessible name of the #GtkATContext.
+ *
+ * This is a convenience function meant to be used by #GtkATContext implementations.
+ *
+ * Returns: (transfer full): the label of the #GtkATContext
+ */
+char *
+gtk_at_context_get_name (GtkATContext *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), NULL);
+
+  GPtrArray *names = g_ptr_array_new ();
+
+  gtk_at_context_get_name_accumulate (self, names, TRUE);
+
+  if (names->len == 0)
+    {
+      g_ptr_array_unref (names);
+      return g_strdup ("");
+    }
+
+  GString *res = g_string_new ("");
+  g_string_append (res, g_ptr_array_index (names, 0));
+
+  for (guint i = 1; i < names->len; i++)
+    {
+      g_string_append (res, " ");
+      g_string_append (res, g_ptr_array_index (names, i));
+    }
+
+  g_ptr_array_unref (names);
+
+  return g_string_free (res, FALSE);
+}
+
+/*< private >
+ * gtk_at_context_get_description:
+ * @self: a #GtkATContext
+ *
+ * Retrieves the accessible description of the #GtkATContext.
+ *
+ * This is a convenience function meant to be used by #GtkATContext implementations.
+ *
+ * Returns: (transfer full): the label of the #GtkATContext
+ */
+char *
+gtk_at_context_get_description (GtkATContext *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), NULL);
+
+  GPtrArray *names = g_ptr_array_new ();
+
+  gtk_at_context_get_description_accumulate (self, names, TRUE);
+
+  if (names->len == 0)
+    {
+      g_ptr_array_unref (names);
+      return g_strdup ("");
+    }
+
+  GString *res = g_string_new ("");
+  g_string_append (res, g_ptr_array_index (names, 0));
+
+  for (guint i = 1; i < names->len; i++)
+    {
+      g_string_append (res, " ");
+      g_string_append (res, g_ptr_array_index (names, i));
+    }
+
+  g_ptr_array_unref (names);
+
+  return g_string_free (res, FALSE);
 }
 
 void

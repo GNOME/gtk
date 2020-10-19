@@ -220,3 +220,71 @@ which acts as a proxy to the specific platform's accessibility API:
 
 Additionally, an ad hoc accessibility backend is available for the GTK
 testsuite, to ensure reproducibility of issues in the CI pipeline.
+
+## Authoring practices {#authoring-practices}
+
+The authoring practices are aimed at application developers, as well as
+developers of GUI elements based on GTK.
+
+Functionally, #GtkAccessible roles, states, properties, and relations are
+analogous to a CSS for assistive technologies. For screen reader users, for
+instance, the various accessible attributes control the rendering of their
+non-visual experience. Incorrect roles and attributes may result in a
+completely inaccessible user interface.
+
+### A role is a promise
+
+The following code:
+
+```c
+gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_BUTTON);
+```
+
+is a promise that the widget being created will provide the same keyboard
+interactions expected for a button. An accessible role of a button will not
+turn automatically any widget into a #GtkButton; but if your widget behaves
+like a button, using the %GTK_ACCESSIBLE_ROLE_BUTTON will allow any
+assistive technology to handle it like they would a #GtkButton.
+
+### Attributes can both hide and enhance
+
+Accessible attributes can be used to override the content of a UI element,
+for instance:
+
+```c
+gtk_label_set_text (GTK_LABEL (label), "Some text");
+gtk_accessible_update_property (GTK_ACCESSIBLE (label),
+				GTK_ACCESSIBLE_PROPERTY_LABEL,
+				"Assistive technologies users will perceive "
+				"this text, not the contents of the label",
+				-1);
+```
+
+In the example above, the "label" property will override the contents of the
+label widget.
+
+The attributes can also enhance the UI:
+
+```c
+gtk_button_set_label (GTK_BUTTON (button), "Download");
+gtk_box_append (GTK_BOX (button), button);
+
+gtk_label_set_text (GTK_LABEL (label), "Final report.pdf");
+gtk_box_append (GTK_BOX (box), label);
+
+gtk_accessible_update_relation (GTK_ACCESSIBLE (button),
+				GTK_ACCESSIBLE_RELATION_LABELLED_BY,
+				g_list_append (NULL, label),
+				-1);
+```
+
+In the example above, an assistive technology will read the button's
+accessible label as "Download Final report.pdf".
+
+The power of hiding and enhancing can be a double-edged sword, as it can
+lead to inadvertently overriding the accessible semantics of existing
+widgets.
+
+## Design patterns and custom widgets
+
+...
