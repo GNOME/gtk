@@ -1069,12 +1069,10 @@ gtk_inspector_visual_constructed (GObject *object)
 }
 
 static void
-gtk_inspector_visual_dispose (GObject *object)
+gtk_inspector_visual_unroot (GtkWidget *widget)
 {
-  GtkInspectorVisual *vis = GTK_INSPECTOR_VISUAL (object);
+  GtkInspectorVisual *vis = GTK_INSPECTOR_VISUAL (widget);
   GtkInspectorWindow *iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_root (GTK_WIDGET (vis)));
-
-  g_clear_pointer (&vis->swin, gtk_widget_unparent);
 
   if (vis->layout_overlay)
     {
@@ -1097,6 +1095,16 @@ gtk_inspector_visual_dispose (GObject *object)
       vis->focus_overlay = NULL;
     }
 
+  GTK_WIDGET_CLASS (gtk_inspector_visual_parent_class)->unroot (widget);
+}
+
+static void
+gtk_inspector_visual_dispose (GObject *object)
+{
+  GtkInspectorVisual *vis = GTK_INSPECTOR_VISUAL (object);
+
+  g_clear_pointer (&vis->swin, gtk_widget_unparent);
+
   G_OBJECT_CLASS (gtk_inspector_visual_parent_class)->dispose (object);
 }
 
@@ -1108,6 +1116,8 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
 
   object_class->constructed = gtk_inspector_visual_constructed;
   object_class->dispose = gtk_inspector_visual_dispose;
+
+  widget_class->unroot = gtk_inspector_visual_unroot;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/visual.ui");
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, swin);

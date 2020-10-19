@@ -41,6 +41,7 @@
 #include "gtkeventcontrollermotion.h"
 #include "gtkdragsource.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtkgestureclick.h"
 
 /**
  * SECTION:gtkcolumnview
@@ -852,7 +853,7 @@ update_autoscroll (GtkColumnView *self,
 }
 
 
-#define DRAG_WIDTH 6
+#define DRAG_WIDTH 8
 
 static gboolean
 gtk_column_view_in_resize_rect (GtkColumnView       *self,
@@ -862,11 +863,15 @@ gtk_column_view_in_resize_rect (GtkColumnView       *self,
 {
   GtkWidget *header;
   graphene_rect_t rect;
+  int width;
 
   header = gtk_column_view_column_get_header (column);
 
   if (!gtk_widget_compute_bounds (header, self->header, &rect))
     return FALSE;
+
+  gtk_column_view_column_get_allocation (column, NULL, &width);
+  rect.size.width = width;
 
   rect.origin.x += rect.size.width - DRAG_WIDTH / 2;
   rect.size.width = DRAG_WIDTH;
@@ -892,6 +897,25 @@ header = gtk_column_view_column_get_header (column);
 }
 
 static void
+set_resize_cursor (GtkColumnView *self,
+                   gboolean       set)
+{
+  int i, n;
+
+  n = g_list_model_get_n_items (G_LIST_MODEL (self->columns));
+  for (i = 0; i < n; i++)
+    {
+      GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+      GtkWidget *header = gtk_column_view_column_get_header (column);
+      if (set)
+        gtk_widget_set_cursor_from_name (header, "col-resize");
+      else
+        gtk_widget_set_cursor (header, NULL);
+      g_object_unref (column);
+    }
+}
+
+static void
 header_drag_begin (GtkGestureDrag *gesture,
                    double          start_x,
                    double          start_y,
@@ -902,7 +926,7 @@ header_drag_begin (GtkGestureDrag *gesture,
   self->drag_pos = -1;
 
   n = g_list_model_get_n_items (G_LIST_MODEL (self->columns));
-  for (i = 0; !self->in_column_resize && i < n; i++)
+  for (i = n - 1; !self->in_column_resize && i >= 0; i--)
     {
       GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
 
@@ -929,8 +953,22 @@ header_drag_begin (GtkGestureDrag *gesture,
           self->drag_x = start_x - size;
           self->in_column_resize = TRUE;
 
+          set_resize_cursor (self, TRUE);
+
           g_object_unref (column);
+
           break;
+        }
+    }
+
+  for (i = 0; !self->in_column_resize && i < n; i++)
+    {
+      GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+
+      if (!gtk_column_view_column_get_visible (column))
+        {
+          g_object_unref (column);
+          continue;
         }
 
       if (gtk_column_view_get_reorderable (self) &&
@@ -966,6 +1004,7 @@ header_drag_end (GtkGestureDrag *gesture,
 
   if (self->in_column_resize)
     {
+      set_resize_cursor (self, FALSE);
       self->in_column_resize = FALSE;
     }
   else if (self->in_column_reorder)
@@ -1102,6 +1141,9 @@ header_motion (GtkEventControllerMotion *controller,
   gboolean cursor_set = FALSE;
   int i, n;
 
+  if (self->in_column_resize)
+    return;
+
   n = g_list_model_get_n_items (G_LIST_MODEL (self->columns));
   for (i = 0; i < n; i++)
     {
@@ -1146,6 +1188,36 @@ header_key_pressed (GtkEventControllerKey *controller,
 }
 
 static void
+header_pressed (GtkGestureClick *gesture,
+                int              n_press,
+                double           x,
+                double           y,
+                GtkColumnView   *self)
+{
+  int i, n;
+
+  if (n_press != 2)
+    return;
+
+  n = g_list_model_get_n_items (G_LIST_MODEL (self->columns));
+  for (i = n - 1; i >= 0; i--)
+    {
+      GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+
+      g_object_unref (column);
+
+      if (i + 1 < n &&
+          gtk_column_view_column_get_resizable (column) &&
+          gtk_column_view_in_resize_rect (self, column, x, y))
+        {
+          gtk_gesture_set_state (self->drag_gesture, GTK_EVENT_SEQUENCE_DENIED);
+          gtk_column_view_column_set_fixed_width (column, -1);
+          break;
+        }
+    }
+}
+
+static void
 gtk_column_view_drag_motion (GtkDropControllerMotion *motion,
                              double                   x,
                              double                   y,
@@ -1179,6 +1251,11 @@ gtk_column_view_init (GtkColumnView *self)
   gtk_widget_set_can_focus (self->header, FALSE);
   gtk_widget_set_layout_manager (self->header, gtk_column_view_layout_new (self));
   gtk_widget_set_parent (self->header, GTK_WIDGET (self));
+
+  controller = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
+  g_signal_connect (controller, "pressed", G_CALLBACK (header_pressed), self);
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+  gtk_widget_add_controller (self->header, controller);
 
   controller = GTK_EVENT_CONTROLLER (gtk_gesture_drag_new ());
   g_signal_connect (controller, "drag-begin", G_CALLBACK (header_drag_begin), self);

@@ -136,10 +136,11 @@ gtk_column_view_title_size_allocate (GtkWidget *widget,
 
   if (child)
     {
-      if (gtk_column_view_column_get_fixed_width (self->column) > -1)
-        gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, height, NULL, &width, NULL, NULL);
+      int min;
 
-      gtk_widget_allocate (child, width, height, baseline, NULL);
+      gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, height, &min, NULL, NULL, NULL);
+
+      gtk_widget_allocate (child, MAX (min, width), height, baseline, NULL);
     }
 
   if (self->popup_menu)
