@@ -151,6 +151,11 @@ gtk_at_context_real_platform_change (GtkATContext                *self,
 }
 
 static void
+gtk_at_context_real_bounds_change (GtkATContext *self)
+{
+}
+
+static void
 gtk_at_context_class_init (GtkATContextClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -161,6 +166,7 @@ gtk_at_context_class_init (GtkATContextClass *klass)
 
   klass->state_change = gtk_at_context_real_state_change;
   klass->platform_change = gtk_at_context_real_platform_change;
+  klass->bounds_change = gtk_at_context_real_bounds_change;
 
   /**
    * GtkATContext:accessible-role:
@@ -819,4 +825,10 @@ gtk_at_context_platform_changed (GtkATContext                *self,
                                  GtkAccessiblePlatformChange  change)
 {
   GTK_AT_CONTEXT_GET_CLASS (self)->platform_change (self, change);
+}
+
+void
+gtk_at_context_bounds_changed (GtkATContext *self)
+{
+  GTK_AT_CONTEXT_GET_CLASS (self)->bounds_change (self);
 }
