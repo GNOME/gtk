@@ -41,6 +41,7 @@
 #include "gtkeventcontrollermotion.h"
 #include "gtkdragsource.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtkgestureclick.h"
 
 /**
  * SECTION:gtkcolumnview
@@ -1187,6 +1188,36 @@ header_key_pressed (GtkEventControllerKey *controller,
 }
 
 static void
+header_pressed (GtkGestureClick *gesture,
+                int              n_press,
+                double           x,
+                double           y,
+                GtkColumnView   *self)
+{
+  int i, n;
+
+  if (n_press != 2)
+    return;
+
+  n = g_list_model_get_n_items (G_LIST_MODEL (self->columns));
+  for (i = n - 1; i >= 0; i--)
+    {
+      GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+
+      g_object_unref (column);
+
+      if (i + 1 < n &&
+          gtk_column_view_column_get_resizable (column) &&
+          gtk_column_view_in_resize_rect (self, column, x, y))
+        {
+          gtk_gesture_set_state (self->drag_gesture, GTK_EVENT_SEQUENCE_DENIED);
+          gtk_column_view_column_set_fixed_width (column, -1);
+          break;
+        }
+    }
+}
+
+static void
 gtk_column_view_drag_motion (GtkDropControllerMotion *motion,
                              double                   x,
                              double                   y,
@@ -1220,6 +1251,11 @@ gtk_column_view_init (GtkColumnView *self)
   gtk_widget_set_can_focus (self->header, FALSE);
   gtk_widget_set_layout_manager (self->header, gtk_column_view_layout_new (self));
   gtk_widget_set_parent (self->header, GTK_WIDGET (self));
+
+  controller = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
+  g_signal_connect (controller, "pressed", G_CALLBACK (header_pressed), self);
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+  gtk_widget_add_controller (self->header, controller);
 
   controller = GTK_EVENT_CONTROLLER (gtk_gesture_drag_new ());
   g_signal_connect (controller, "drag-begin", G_CALLBACK (header_drag_begin), self);
