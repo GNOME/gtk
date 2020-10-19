@@ -162,6 +162,8 @@ GDK_AVAILABLE_IN_ALL
 guint        gtk_editable_install_properties    (GObjectClass *object_class,
                                                  guint         first_prop);
 GDK_AVAILABLE_IN_ALL
+GtkEditable *gtk_editable_get_delegate          (GtkEditable *editable);
+GDK_AVAILABLE_IN_ALL
 void         gtk_editable_init_delegate         (GtkEditable  *editable);
 GDK_AVAILABLE_IN_ALL
 void         gtk_editable_finish_delegate       (GtkEditable  *editable);

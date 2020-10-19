@@ -412,27 +412,28 @@ static const GDBusInterfaceVTable label_vtable = {
 static GtkText *
 gtk_editable_get_text_widget (GtkWidget *widget)
 {
-  if (GTK_IS_ENTRY (widget))
-    return gtk_entry_get_text_widget (GTK_ENTRY (widget));
-  else if (GTK_IS_SEARCH_ENTRY (widget))
-    return gtk_search_entry_get_text_widget (GTK_SEARCH_ENTRY (widget));
-  else if (GTK_IS_PASSWORD_ENTRY (widget))
-    return gtk_password_entry_get_text_widget (GTK_PASSWORD_ENTRY (widget));
-  else if (GTK_IS_SPIN_BUTTON (widget))
-    return gtk_spin_button_get_text_widget (GTK_SPIN_BUTTON (widget));
+  if (GTK_IS_EDITABLE (widget))
+    {
+      GtkEditable *delegate;
+
+      delegate = gtk_editable_get_delegate (GTK_EDITABLE (widget));
+
+      if (GTK_IS_TEXT (delegate))
+        return GTK_TEXT (delegate);
+    }
 
   return NULL;
 }
 
 static void
-entry_handle_method (GDBusConnection       *connection,
-                     const gchar           *sender,
-                     const gchar           *object_path,
-                     const gchar           *interface_name,
-                     const gchar           *method_name,
-                     GVariant              *parameters,
-                     GDBusMethodInvocation *invocation,
-                     gpointer               user_data)
+editable_handle_method (GDBusConnection       *connection,
+                        const gchar           *sender,
+                        const gchar           *object_path,
+                        const gchar           *interface_name,
+                        const gchar           *method_name,
+                        GVariant              *parameters,
+                        GDBusMethodInvocation *invocation,
+                        gpointer               user_data)
 {
   GtkATContext *self = user_data;
   GtkAccessible *accessible = gtk_at_context_get_accessible (self);
@@ -742,13 +743,13 @@ entry_handle_method (GDBusConnection       *connection,
 }
 
 static GVariant *
-entry_get_property (GDBusConnection  *connection,
-                    const gchar      *sender,
-                    const gchar      *object_path,
-                    const gchar      *interface_name,
-                    const gchar      *property_name,
-                    GError          **error,
-                    gpointer          user_data)
+editable_get_property (GDBusConnection  *connection,
+                       const gchar      *sender,
+                       const gchar      *object_path,
+                       const gchar      *interface_name,
+                       const gchar      *property_name,
+                       GError          **error,
+                       gpointer          user_data)
 {
   GtkATContext *self = user_data;
   GtkAccessible *accessible = gtk_at_context_get_accessible (self);
@@ -776,9 +777,9 @@ entry_get_property (GDBusConnection  *connection,
   return NULL;
 }
 
-static const GDBusInterfaceVTable entry_vtable = {
-  entry_handle_method,
-  entry_get_property,
+static const GDBusInterfaceVTable editable_vtable = {
+  editable_handle_method,
+  editable_get_property,
   NULL,
 };
 
@@ -1169,11 +1170,9 @@ gtk_atspi_get_text_vtable (GtkAccessible *accessible)
 {
   if (GTK_IS_LABEL (accessible))
     return &label_vtable;
-  else if (GTK_IS_ENTRY (accessible) ||
-           GTK_IS_SEARCH_ENTRY (accessible) ||
-           GTK_IS_PASSWORD_ENTRY (accessible) ||
-           GTK_IS_SPIN_BUTTON (accessible))
-    return &entry_vtable;
+  else if (GTK_IS_EDITABLE (accessible) &&
+           GTK_IS_TEXT (gtk_editable_get_delegate (GTK_EDITABLE (accessible))))
+    return &editable_vtable;
   else if (GTK_IS_TEXT_VIEW (accessible))
     return &text_view_vtable;
 
