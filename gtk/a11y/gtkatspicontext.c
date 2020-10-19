@@ -787,9 +787,14 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
                                  GtkAccessibleAttributeSet   *relations)
 {
   GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (ctx);
-  GtkWidget *widget = GTK_WIDGET (gtk_at_context_get_accessible (ctx));
+  GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
+  GtkWidget *widget;
   GtkAccessibleValue *value;
 
+  if (!GTK_IS_WIDGET (accessible))
+    return;
+
+  widget = GTK_WIDGET (accessible);
   if (!gtk_widget_get_realized (widget))
     return;
 
