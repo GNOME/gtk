@@ -46,7 +46,6 @@ gtk_test_at_context_state_change (GtkATContext                *self,
                                   GtkAccessibleStateChange     changed_states,
                                   GtkAccessiblePropertyChange  changed_properties,
                                   GtkAccessibleRelationChange  changed_relations,
-                                  GtkAccessiblePlatformChange  changed_platform,
                                   GtkAccessibleAttributeSet   *states,
                                   GtkAccessibleAttributeSet   *properties,
                                   GtkAccessibleAttributeSet   *relations)

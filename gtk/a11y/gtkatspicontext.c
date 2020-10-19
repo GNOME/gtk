@@ -781,7 +781,6 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
                                  GtkAccessibleStateChange     changed_states,
                                  GtkAccessiblePropertyChange  changed_properties,
                                  GtkAccessibleRelationChange  changed_relations,
-                                 GtkAccessiblePlatformChange  changed_platform,
                                  GtkAccessibleAttributeSet   *states,
                                  GtkAccessibleAttributeSet   *properties,
                                  GtkAccessibleAttributeSet   *relations)
@@ -939,6 +938,22 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
       GVariant *v = g_variant_new_take_string (label);
       emit_property_changed (self, "accessible-description", v);
     }
+}
+
+static void
+gtk_at_spi_context_platform_change (GtkATContext                *ctx,
+                                    GtkAccessiblePlatformChange  changed_platform)
+{
+  GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (ctx);
+  GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
+  GtkWidget *widget;
+
+  if (!GTK_IS_WIDGET (accessible))
+    return;
+
+  widget = GTK_WIDGET (accessible);
+  if (!gtk_widget_get_realized (widget))
+    return;
 
   if (changed_platform & GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSABLE)
     {
@@ -1223,6 +1238,7 @@ gtk_at_spi_context_class_init (GtkAtSpiContextClass *klass)
   gobject_class->dispose = gtk_at_spi_context_dispose;
 
   context_class->state_change = gtk_at_spi_context_state_change;
+  context_class->platform_change = gtk_at_spi_context_platform_change;
 
   obj_props[PROP_BUS_ADDRESS] =
     g_param_spec_string ("bus-address", NULL, NULL,

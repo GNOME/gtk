@@ -116,10 +116,12 @@ struct _GtkATContextClass
                          GtkAccessibleStateChange     changed_states,
                          GtkAccessiblePropertyChange  changed_properties,
                          GtkAccessibleRelationChange  changed_relations,
-                         GtkAccessiblePlatformChange  changed_platform,
                          GtkAccessibleAttributeSet   *states,
                          GtkAccessibleAttributeSet   *properties,
                          GtkAccessibleAttributeSet   *relations);
+
+  void (* platform_change) (GtkATContext                *self,
+                            GtkAccessiblePlatformChange  changed_platform);
 };
 
 GdkDisplay *            gtk_at_context_get_display              (GtkATContext          *self);
