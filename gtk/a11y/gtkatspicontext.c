@@ -333,7 +333,6 @@ collect_relations (GtkAtSpiContext *self,
     }
 }
 /* }}} */
-
 /* {{{ Accessible implementation */
 static int
 get_index_in_parent (GtkWidget *widget)
@@ -700,7 +699,6 @@ static const GDBusInterfaceVTable accessible_vtable = {
   NULL,
 };
 /* }}} */
-
 /* {{{ Change notification */
 static void
 emit_text_changed (GtkAtSpiContext *self,
@@ -952,7 +950,7 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
     }
 }
 /* }}} */
-
+/* {{{ D-Bus Registration */
 static void
 gtk_at_spi_context_register_object (GtkAtSpiContext *self)
 {
@@ -1063,7 +1061,8 @@ gtk_at_spi_context_unregister_object (GtkAtSpiContext *self)
       self->registration_ids[self->n_registered_objects] = 0;
     }
 }
-
+/* }}} */
+/* {{{ GObject boilerplate */
 static void
 gtk_at_spi_context_dispose (GObject *gobject)
 {
@@ -1234,7 +1233,8 @@ static void
 gtk_at_spi_context_init (GtkAtSpiContext *self)
 {
 }
-
+/* }}} */
+/* {{{ Bus address discovery */
 #ifdef GDK_WINDOWING_X11
 static char *
 get_bus_address_x11 (GdkDisplay *display)
@@ -1380,7 +1380,8 @@ get_bus_address (GdkDisplay *display)
 out:
   return bus_address;
 }
-
+/* }}} */
+/* {{{ API */
 GtkATContext *
 gtk_at_spi_create_context (GtkAccessibleRole  accessible_role,
                            GtkAccessible     *accessible,
@@ -1438,5 +1439,6 @@ gtk_at_spi_context_to_ref (GtkAtSpiContext *self)
   const char *name = g_dbus_connection_get_unique_name (self->connection);
   return g_variant_new ("(so)", name, self->context_path);
 }
+/* }}} */
 
 /* vim:set foldmethod=marker expandtab: */
