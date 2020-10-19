@@ -11,6 +11,7 @@ a11y_h_sources =				\
 	a11y/gtkcontainercellaccessible.h	\
 	a11y/gtkentryaccessible.h		\
 	a11y/gtkexpanderaccessible.h		\
+	a11y/gtkfilechooserwidgetaccessible.h	\
 	a11y/gtkflowboxaccessible.h		\
 	a11y/gtkflowboxchildaccessible.h	\
 	a11y/gtkframeaccessible.h		\
@@ -88,6 +89,7 @@ a11y_c_sources =				\
 	a11y/gtkcontainercellaccessible.c	\
 	a11y/gtkentryaccessible.c		\
 	a11y/gtkexpanderaccessible.c		\
+	a11y/gtkfilechooserwidgetaccessible.c	\
 	a11y/gtkflowboxaccessible.c		\
 	a11y/gtkflowboxchildaccessible.c	\
 	a11y/gtkframeaccessible.c		\

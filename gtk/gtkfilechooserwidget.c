@@ -69,6 +69,7 @@
 #include "gtkcheckbutton.h"
 #include "gtkwindowgroup.h"
 #include "gtkintl.h"
+#include "a11y/gtkfilechooserwidgetaccessible.h"
 #include "gtkshow.h"
 #include "gtkmain.h"
 #include "gtkscrollable.h"
@@ -8752,6 +8753,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, rename_file_rename_clicked);
   gtk_widget_class_bind_template_callback (widget_class, rename_file_end);
 
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_FILE_CHOOSER_WIDGET_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, "filechooser");
 }
 
