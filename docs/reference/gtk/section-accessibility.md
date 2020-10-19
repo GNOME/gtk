@@ -284,3 +284,7 @@ accessible label as "Download Final report.pdf".
 The power of hiding and enhancing can be a double-edged sword, as it can
 lead to inadvertently overriding the accessible semantics of existing
 widgets.
+
+## Design patterns and custom widgets
+
+...
