@@ -896,6 +896,25 @@ header = gtk_column_view_column_get_header (column);
 }
 
 static void
+set_resize_cursor (GtkColumnView *self,
+                   gboolean       set)
+{
+  int i, n;
+
+  n = g_list_model_get_n_items (G_LIST_MODEL (self->columns));
+  for (i = 0; i < n; i++)
+    {
+      GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+      GtkWidget *header = gtk_column_view_column_get_header (column);
+      if (set)
+        gtk_widget_set_cursor_from_name (header, "col-resize");
+      else
+        gtk_widget_set_cursor (header, NULL);
+      g_object_unref (column);
+    }
+}
+
+static void
 header_drag_begin (GtkGestureDrag *gesture,
                    double          start_x,
                    double          start_y,
@@ -933,7 +952,10 @@ header_drag_begin (GtkGestureDrag *gesture,
           self->drag_x = start_x - size;
           self->in_column_resize = TRUE;
 
+          set_resize_cursor (self, TRUE);
+
           g_object_unref (column);
+
           break;
         }
     }
@@ -981,6 +1003,7 @@ header_drag_end (GtkGestureDrag *gesture,
 
   if (self->in_column_resize)
     {
+      set_resize_cursor (self, FALSE);
       self->in_column_resize = FALSE;
     }
   else if (self->in_column_reorder)
@@ -1116,6 +1139,9 @@ header_motion (GtkEventControllerMotion *controller,
 {
   gboolean cursor_set = FALSE;
   int i, n;
+
+  if (self->in_column_resize)
+    return;
 
   n = g_list_model_get_n_items (G_LIST_MODEL (self->columns));
   for (i = 0; i < n; i++)
