@@ -17,6 +17,11 @@
                 <property name="hscrollbar-policy">never</property>
                 <property name="local-only">1</property>
                 <property name="show-other-locations">1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject">
+                    <property name="AtkObject::accessible-name" translatable="yes">Places</property>
+                  </object>
+                </child>
                 <style>
                   <class name="sidebar"/>
                 </style>
@@ -37,6 +42,11 @@
                   <object class="GtkRevealer" id="browse_header_revealer">
                     <property name="visible">1</property>
                     <property name="hexpand">1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Browse Header Revealer</property>
+                      </object>
+                    </child>
                     <child>
                       <object class="GtkBox">
                         <property name="visible">1</property>
@@ -50,6 +60,11 @@
                           <object class="GtkStack" id="browse_header_stack">
                             <property name="visible">1</property>
                             <property name="transition-type">crossfade</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject">
+                                <property name="AtkObject::accessible-name" translatable="yes">Browse Header Stack</property>
+                              </object>
+                            </child>
                             <child>
                               <object class="GtkBox">
                                 <property name="visible">1</property>
