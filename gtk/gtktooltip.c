@@ -41,6 +41,7 @@
 
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
+#include "gtkpopover.h"
 #endif
 
 
@@ -932,6 +933,26 @@ gtk_tooltip_position (GtkTooltip *tooltip,
       gdk_window_get_device_position (effective_toplevel,
                                       device,
                                       &pointer_x, &pointer_y, NULL);
+
+#ifdef GDK_WINDOWING_WAYLAND
+      if (GDK_IS_WAYLAND_DISPLAY (display))
+        {
+         /* When pointer is over a Popover in Wayland, previous gdk_window_get_device_position()
+          * call fails to retrieve x relative to the passed in 'effective_toplevel' widget, and
+          * instead returns x relative to the Popover, so to obtain the expected semantic (for
+          * this buggy case) we use gtk_widget_translate_coordinates() to obtain the x offset of
+          * the Popover wrt the toplevel widget, and then add that to pointer_x so now pointer_x
+          * contains the expected x relative to the 'effective_toplevel' widget. Issue #1708
+          */
+          GtkWidget *popover = gtk_widget_get_ancestor (new_tooltip_widget, GTK_TYPE_POPOVER);
+          if (popover)
+            {
+              int popover_x;
+              gtk_widget_translate_coordinates (popover, toplevel, 0, 0, &popover_x, NULL);
+              pointer_x += popover_x;
+            }
+        }
+#endif
 
       if (anchor_rect.height > max_anchor_rect_height)
         {
