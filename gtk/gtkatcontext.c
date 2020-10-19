@@ -805,11 +805,8 @@ gtk_at_context_get_name_accumulate (GtkATContext *self,
   if (names->len != 0)
     return;
 
-  GEnumClass *enum_class = g_type_class_peek (GTK_TYPE_ACCESSIBLE_ROLE);
-  GEnumValue *enum_value = g_enum_get_value (enum_class, role);
-
-  if (enum_value != NULL)
-    g_ptr_array_add (names, (char *) enum_value->value_nick);
+  if (self->accessible)
+    g_ptr_array_add (names, (char *)G_OBJECT_TYPE_NAME (self->accessible));
 }
 
 static void
@@ -871,8 +868,8 @@ gtk_at_context_get_description_accumulate (GtkATContext *self,
       break;
     }
 
-  /* If there is no label or labelled-by attribute, hidden elements
-   * have no name
+  /* If there is no description or described-by attribute, hidden elements
+   * have no description
    */
   if (gtk_accessible_attribute_set_contains (self->states, GTK_ACCESSIBLE_STATE_HIDDEN))
     {
@@ -881,16 +878,6 @@ gtk_at_context_get_description_accumulate (GtkATContext *self,
       if (gtk_boolean_accessible_value_get (value))
         return;
     }
-
-  /* This fallback is in place only for unlabelled elements */
-  if (labels->len != 0)
-    return;
-
-  GEnumClass *enum_class = g_type_class_peek (GTK_TYPE_ACCESSIBLE_ROLE);
-  GEnumValue *enum_value = g_enum_get_value (enum_class, role);
-
-  if (enum_value != NULL)
-    g_ptr_array_add (labels, (char *) enum_value->value_nick);
 }
 
 /*< private >
