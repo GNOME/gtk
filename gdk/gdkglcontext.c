@@ -864,7 +864,7 @@ gdk_gl_context_get_use_es (GdkGLContext *context)
   return priv->use_es > 0;
 }
 
-static void
+static void APIENTRY
 gl_debug_message_callback (GLenum        source,
                            GLenum        type,
                            GLuint        id,
