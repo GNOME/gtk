@@ -713,44 +713,43 @@ find_surface_under_pointer (GdkMacosDisplay *self,
                             int             *y)
 {
   GdkPointerSurfaceInfo *info;
-  GdkMacosSurface *found;
-  GdkSurface *surface = NULL;
+  GdkMacosSurface *surface;
+  GdkDevice *pointer;
   GdkSeat *seat;
   int x_tmp, y_tmp;
 
   seat = gdk_display_get_default_seat (GDK_DISPLAY (self));
-  info = _gdk_display_get_pointer_info (GDK_DISPLAY (self),
-                                        gdk_seat_get_pointer (seat));
+  pointer = gdk_seat_get_pointer (seat);
+  info = _gdk_display_get_pointer_info (GDK_DISPLAY (self), pointer);
 
-  if ((found = _gdk_macos_display_get_surface_at_display_coords (self,
-                                                                 screen_point.x,
-                                                                 screen_point.y,
-                                                                 &x_tmp,
-                                                                 &y_tmp)))
-    {
-      g_set_object (&info->surface_under_pointer, surface);
-      surface = GDK_SURFACE (found);
-    }
+  surface = _gdk_macos_display_get_surface_at_display_coords (self,
+                                                              screen_point.x,
+                                                              screen_point.y,
+                                                              &x_tmp,
+                                                              &y_tmp);
 
-  if (surface)
+  if (surface != NULL)
     {
       _gdk_macos_display_from_display_coords (self,
                                               screen_point.x,
                                               screen_point.y,
                                               &x_tmp, &y_tmp);
-      *x = x_tmp - GDK_MACOS_SURFACE (surface)->root_x;
-      *y = y_tmp - GDK_MACOS_SURFACE (surface)->root_y;
+      *x = x_tmp - surface->root_x;
+      *y = y_tmp - surface->root_y;
       /* If the coordinates are out of window bounds, this surface is not
        * under the pointer and we thus return NULL. This can occur when
        * surface under pointer has not yet been updated due to a very recent
        * window resize. Alternatively, we should no longer be relying on
        * the surface_under_pointer value which is maintained in gdkwindow.c.
        */
-      if (*x < 0 || *y < 0 || *x >= surface->width || *y >= surface->height)
-        return NULL;
+      if (*x < 0 ||
+          *y < 0 ||
+          *x >= GDK_SURFACE (surface)->width ||
+          *y >= GDK_SURFACE (surface)->height)
+        surface = NULL;
     }
 
-  return surface;
+  return GDK_SURFACE (surface);
 }
 
 static GdkSurface *
