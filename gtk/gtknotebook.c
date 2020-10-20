@@ -6143,9 +6143,6 @@ gtk_notebook_update_tab_pos (GtkNotebook *notebook)
       if (notebook->show_tabs)
         {
           gtk_widget_insert_before (notebook->header_widget, GTK_WIDGET (notebook), notebook->stack_widget);
-          gtk_css_node_insert_before (gtk_widget_get_css_node (GTK_WIDGET (notebook)),
-                                      gtk_widget_get_css_node (notebook->header_widget),
-                                      gtk_widget_get_css_node (notebook->stack_widget));
         }
 
       gtk_orientable_set_orientation (GTK_ORIENTABLE (layout), GTK_ORIENTATION_VERTICAL);
@@ -6160,9 +6157,6 @@ gtk_notebook_update_tab_pos (GtkNotebook *notebook)
       if (notebook->show_tabs)
         {
           gtk_widget_insert_after (notebook->header_widget, GTK_WIDGET (notebook), notebook->stack_widget);
-          gtk_css_node_insert_after (gtk_widget_get_css_node (GTK_WIDGET (notebook)),
-                                     gtk_widget_get_css_node (notebook->header_widget),
-                                     gtk_widget_get_css_node (notebook->stack_widget));
         }
 
       gtk_orientable_set_orientation (GTK_ORIENTABLE (layout), GTK_ORIENTATION_VERTICAL);
@@ -6177,9 +6171,6 @@ gtk_notebook_update_tab_pos (GtkNotebook *notebook)
       if (notebook->show_tabs)
         {
           gtk_widget_insert_before (notebook->header_widget, GTK_WIDGET (notebook), notebook->stack_widget);
-          gtk_css_node_insert_before (gtk_widget_get_css_node (GTK_WIDGET (notebook)),
-                                      gtk_widget_get_css_node (notebook->header_widget),
-                                      gtk_widget_get_css_node (notebook->stack_widget));
         }
 
       gtk_orientable_set_orientation (GTK_ORIENTABLE (layout), GTK_ORIENTATION_HORIZONTAL);
@@ -6194,9 +6185,6 @@ gtk_notebook_update_tab_pos (GtkNotebook *notebook)
       if (notebook->show_tabs)
         {
           gtk_widget_insert_after (notebook->header_widget, GTK_WIDGET (notebook), notebook->stack_widget);
-          gtk_css_node_insert_after (gtk_widget_get_css_node (GTK_WIDGET (notebook)),
-                                     gtk_widget_get_css_node (notebook->header_widget),
-                                     gtk_widget_get_css_node (notebook->stack_widget));
         }
 
       gtk_orientable_set_orientation (GTK_ORIENTABLE (layout), GTK_ORIENTATION_HORIZONTAL);
@@ -6676,7 +6664,7 @@ gtk_notebook_child_reordered (GtkNotebook     *notebook,
                               GtkNotebookPage *page)
 {
   GList *list;
-  GtkCssNode *sibling;
+  GtkWidget *sibling;
 
   list = g_list_find (notebook->children, page);
 
@@ -6684,17 +6672,16 @@ gtk_notebook_child_reordered (GtkNotebook     *notebook,
     gtk_notebook_menu_item_recreate (notebook, list);
 
   if (list->prev)
-    sibling = gtk_widget_get_css_node (GTK_NOTEBOOK_PAGE_FROM_LIST (list->prev)->tab_widget);
+    sibling = GTK_NOTEBOOK_PAGE_FROM_LIST (list->prev)->tab_widget;
   else if (notebook->arrow_widget[ARROW_RIGHT_BEFORE])
-    sibling = gtk_widget_get_css_node (notebook->arrow_widget[ARROW_RIGHT_BEFORE]);
+    sibling = notebook->arrow_widget[ARROW_RIGHT_BEFORE];
   else if (notebook->arrow_widget[ARROW_LEFT_BEFORE])
-    sibling = gtk_widget_get_css_node (notebook->arrow_widget[ARROW_LEFT_BEFORE]);
+    sibling = notebook->arrow_widget[ARROW_LEFT_BEFORE];
   else
     sibling = NULL;
 
-  gtk_css_node_insert_after (gtk_widget_get_css_node (notebook->tabs_widget),
-                             gtk_widget_get_css_node (page->tab_widget),
-                             sibling);
+  gtk_widget_insert_after (page->tab_widget, notebook->tabs_widget, sibling);
+
   gtk_notebook_update_labels (notebook);
   gtk_widget_queue_allocate (notebook->tabs_widget);
 }
