@@ -84,7 +84,7 @@
  * # Accessibility
  *
  * GtkStack uses the #GTK_ACCESSIBLE_ROLE_TAB_PANEL for the stack
- * pages.
+ * pages, which are the accessible parent objects of the child widgets.
  */
 
 /**

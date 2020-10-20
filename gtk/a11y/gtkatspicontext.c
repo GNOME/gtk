@@ -455,15 +455,31 @@ handle_accessible_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetChildAtIndex") == 0)
     {
-      GtkWidget *child = NULL;
+      GtkATContext *context = NULL;
+      GtkAccessible *accessible;
       int idx, real_idx = 0;
+      const char *name;
+      const char *path;
 
       g_variant_get (parameters, "(i)", &idx);
 
-      GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
-      if (GTK_IS_WIDGET (accessible))
+      accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+
+      if (GTK_IS_STACK_PAGE (accessible))
+        {
+          if (idx == 0)
+            {
+              GtkWidget *child;
+
+              child = gtk_stack_page_get_child (GTK_STACK_PAGE (accessible));
+              if (gtk_accessible_should_present (GTK_ACCESSIBLE (child)))
+                context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (child));
+            }
+        }
+      else if (GTK_IS_WIDGET (accessible))
         {
           GtkWidget *widget = GTK_WIDGET (accessible);
+          GtkWidget *child;
 
           real_idx = 0;
           for (child = gtk_widget_get_first_child (widget);
@@ -478,18 +494,17 @@ handle_accessible_method (GDBusConnection       *connection,
 
               real_idx += 1;
             }
-        }
-      else if (GTK_IS_STACK_PAGE (accessible))
-        {
-          if (idx == 0)
+
+          if (child)
             {
-              child = gtk_stack_page_get_child (GTK_STACK_PAGE (accessible));
-              if (!gtk_accessible_should_present (GTK_ACCESSIBLE (child)))
-                child = NULL;
+              if (GTK_IS_STACK (accessible))
+                context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (gtk_stack_get_page (GTK_STACK (accessible), child)));
+              else
+                context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (child));
             }
         }
 
-      if (child == NULL)
+      if (context == NULL)
         {
           g_dbus_method_invocation_return_error (invocation,
                                                  G_IO_ERROR,
@@ -498,10 +513,8 @@ handle_accessible_method (GDBusConnection       *connection,
           return;
         }
 
-      GtkATContext *context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (child));
-
-      const char *name = g_dbus_connection_get_unique_name (self->connection);
-      const char *path = gtk_at_spi_context_get_context_path (GTK_AT_SPI_CONTEXT (context));
+      name = g_dbus_connection_get_unique_name (self->connection);
+      path = gtk_at_spi_context_get_context_path (GTK_AT_SPI_CONTEXT (context));
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("((so))", name, path));
     }
