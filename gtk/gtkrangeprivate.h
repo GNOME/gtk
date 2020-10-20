@@ -27,7 +27,6 @@
 
 
 #include <gtk/gtkrange.h>
-#include <gtk/gtkcssnodeprivate.h>
 
 
 G_BEGIN_DECLS

@@ -125,7 +125,6 @@
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtkcssstylepropertyprivate.h"
-#include "gtkcssnodeprivate.h"
 #include "gtkgizmoprivate.h"
 #include "gtkintl.h"
 #include "gtklevelbar.h"

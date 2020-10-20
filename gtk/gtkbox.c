@@ -58,7 +58,6 @@
 #include "gtkbox.h"
 #include "gtkboxlayout.h"
 #include "gtkbuildable.h"
-#include "gtkcsspositionvalueprivate.h"
 #include "gtkintl.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"
@@ -504,9 +503,6 @@ gtk_box_insert_child_after (GtkBox    *box,
     return;
 
   gtk_widget_insert_after (child, widget, sibling);
-  gtk_css_node_insert_after (gtk_widget_get_css_node (widget),
-                             gtk_widget_get_css_node (child),
-                             sibling ? gtk_widget_get_css_node (sibling) : NULL);
 }
 
 /**
@@ -542,9 +538,6 @@ gtk_box_reorder_child_after (GtkBox    *box,
     return;
 
   gtk_widget_insert_after (child, widget, sibling);
-  gtk_css_node_insert_after (gtk_widget_get_css_node (widget),
-                             gtk_widget_get_css_node (child),
-                             sibling ? gtk_widget_get_css_node (sibling) : NULL);
 }
 
 /**

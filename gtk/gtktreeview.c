@@ -10790,9 +10790,11 @@ gtk_tree_view_insert_column (GtkTreeView       *tree_view,
 					    column, position);
   priv->n_columns++;
 
-  gtk_tree_view_update_button_position (tree_view, column);
-
   _gtk_tree_view_column_set_tree_view (column, tree_view);
+
+  /* XXX: We need to reparent the node into the header, somebody make that a real widget */
+  gtk_css_node_set_parent (gtk_widget_get_css_node (gtk_tree_view_column_get_button (column)), NULL);
+  gtk_tree_view_update_button_position (tree_view, column);
 
   if (gtk_widget_get_realized (GTK_WIDGET (tree_view)))
     {

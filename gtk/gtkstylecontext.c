@@ -28,7 +28,6 @@
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssnodedeclarationprivate.h"
-#include "gtkcssnodeprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"

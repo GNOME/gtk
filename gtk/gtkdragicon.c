@@ -23,7 +23,6 @@
 #include "gtkintl.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcssstyleprivate.h"
-#include "gtkcssnodeprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtknativeprivate.h"
 #include "gtkpicture.h"

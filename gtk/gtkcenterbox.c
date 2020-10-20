@@ -55,7 +55,6 @@
 #include "config.h"
 #include "gtkcenterbox.h"
 #include "gtkcenterlayout.h"
-#include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkorientable.h"
 #include "gtkbuildable.h"

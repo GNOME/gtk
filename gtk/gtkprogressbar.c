@@ -27,7 +27,6 @@
 #include "gtkprogressbar.h"
 
 #include "gtkboxlayout.h"
-#include "gtkcssnodeprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkgizmoprivate.h"

@@ -5741,12 +5741,9 @@ gtk_widget_reposition_after (GtkWidget *widget,
   data.flags_to_unset = 0;
   gtk_widget_propagate_state (widget, &data);
 
-  if (gtk_css_node_get_parent (priv->cssnode) == NULL)
-    {
-      gtk_css_node_insert_after (parent->priv->cssnode,
-                                 priv->cssnode,
-                                 previous_sibling ? previous_sibling->priv->cssnode : NULL);
-    }
+  gtk_css_node_insert_after (parent->priv->cssnode,
+                             priv->cssnode,
+                             previous_sibling ? previous_sibling->priv->cssnode : NULL);
 
   _gtk_widget_update_parent_muxer (widget);
 
