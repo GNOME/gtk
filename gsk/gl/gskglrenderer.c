@@ -2390,7 +2390,7 @@ render_outset_shadow_node (GskGLRenderer   *self,
     if (slice_is_visible (&slices[NINE_SLICE_TOP_CENTER]))
       {
         x1 = min_x + (slices[NINE_SLICE_TOP_LEFT].width / scale_x);
-        x2 = max_x - (slices[NINE_SLICE_TOP_RIGHT].width / scale_y);
+        x2 = max_x - (slices[NINE_SLICE_TOP_RIGHT].width / scale_x);
         y1 = min_y;
         y2 = min_y + (slices[NINE_SLICE_TOP_CENTER].height / scale_y);
 
@@ -2487,7 +2487,7 @@ render_outset_shadow_node (GskGLRenderer   *self,
       {
         x1 = min_x;
         x2 = min_x + (slices[NINE_SLICE_LEFT_CENTER].width / scale_x);
-        y1 = min_y + (slices[NINE_SLICE_TOP_LEFT].height / scale_x);
+        y1 = min_y + (slices[NINE_SLICE_TOP_LEFT].height / scale_y);
         y2 = max_y - (slices[NINE_SLICE_BOTTOM_LEFT].height / scale_y);
         tx1 = tregs[NINE_SLICE_LEFT_CENTER].x;
         tx2 = tregs[NINE_SLICE_LEFT_CENTER].x2;
