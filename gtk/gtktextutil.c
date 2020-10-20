@@ -33,7 +33,6 @@
 #include "gtktextlayoutprivate.h"
 #include "gtkintl.h"
 #include "gtkwidgetprivate.h"
-#include "gtkcssnodeprivate.h"
 #include "gtkcssstyleprivate.h"
 #include "gtkstylepropertyprivate.h"
 #include "gtkcsscolorvalueprivate.h"

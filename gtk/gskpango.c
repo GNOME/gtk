@@ -26,7 +26,6 @@
 #include "gtktextlayoutprivate.h"
 #include "gtktextviewprivate.h"
 #include "gtkwidgetprivate.h"
-#include "gtkcssnodeprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 
 #include <math.h>

@@ -20,7 +20,6 @@
 
 #include "config.h"
 
-#include "gtkcssnodeprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkbuiltiniconprivate.h"

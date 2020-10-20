@@ -23,7 +23,6 @@
 #include <string.h>
 
 #include "gtkbox.h"
-#include "gtkcssnodeprivate.h"
 #include "gtkdragsource.h"
 #include "gtkicontheme.h"
 #include "gtkimage.h"

@@ -29,7 +29,6 @@
 #include "gtkactionhelperprivate.h"
 #include "gtkboxlayout.h"
 #include "gtkbuiltiniconprivate.h"
-#include "gtkcssnodeprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkgestureclick.h"
 #include "gtkintl.h"

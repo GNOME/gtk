@@ -27,7 +27,6 @@
 #include "gtkadjustment.h"
 #include "gtkbox.h"
 #include "gtkbutton.h"
-#include "gtkcssnodeprivate.h"
 #include "gtkdebug.h"
 #include "gtkdragicon.h"
 #include "gtkdragsource.h"
