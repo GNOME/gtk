@@ -6177,6 +6177,8 @@ gtk_popover_menu_new_from_model
 gtk_popover_menu_new_from_model_full
 gtk_popover_menu_set_menu_model
 gtk_popover_menu_get_menu_model
+gtk_popover_menu_add_child
+gtk_popover_menu_remove_child
 
 <SUBSECTION Standard>
 GTK_TYPE_POPOVER_MENU
@@ -6195,6 +6197,8 @@ GtkPopoverMenuBar
 gtk_popover_menu_bar_new_from_model
 gtk_popover_menu_bar_set_menu_model
 gtk_popover_menu_bar_get_menu_model
+gtk_popover_menu_bar_add_child
+gtk_popover_menu_bar_remove_child
 
 <SUBSECTION Standard>
 GTK_TYPE_POPOVER_MENU_BAR
