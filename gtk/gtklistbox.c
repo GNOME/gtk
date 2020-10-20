@@ -24,7 +24,6 @@
 #include "gtkadjustmentprivate.h"
 #include "gtkbinlayout.h"
 #include "gtkbuildable.h"
-#include "gtkcssnodeprivate.h"
 #include "gtkgestureclick.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
@@ -1260,22 +1259,14 @@ do_sort (GtkListBoxRow *a,
 }
 
 static void
-gtk_list_box_css_node_foreach (gpointer data,
-                               gpointer user_data)
+gtk_list_box_reorder_foreach (gpointer data,
+                              gpointer user_data)
 {
   GtkWidget **previous = user_data;
   GtkWidget *row = data;
-  GtkCssNode *row_node;
-  GtkCssNode *prev_node;
 
   if (*previous)
-    {
-      prev_node = gtk_widget_get_css_node (*previous);
-      row_node = gtk_widget_get_css_node (row);
-      gtk_css_node_insert_after (gtk_css_node_get_parent (row_node),
-                                 row_node,
-                                 prev_node);
-    }
+    gtk_widget_insert_after (row, _gtk_widget_get_parent (row), *previous);
 
   *previous = row;
 }
@@ -1299,7 +1290,7 @@ gtk_list_box_invalidate_sort (GtkListBox *box)
     return;
 
   g_sequence_sort (box->children, (GCompareDataFunc)do_sort, box);
-  g_sequence_foreach (box->children, gtk_list_box_css_node_foreach, &previous);
+  g_sequence_foreach (box->children, gtk_list_box_reorder_foreach, &previous);
 
   gtk_list_box_invalidate_headers (box);
   gtk_widget_queue_resize (GTK_WIDGET (box));
