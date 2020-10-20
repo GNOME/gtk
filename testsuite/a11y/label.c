@@ -44,6 +44,22 @@ label_relations (void)
   g_object_unref (label2);
 }
 
+static void
+label_properties (void)
+{
+  GtkWidget *label = gtk_label_new ("a");
+
+  g_object_ref_sink (label);
+
+  gtk_test_accessible_assert_property (label, GTK_ACCESSIBLE_PROPERTY_LABEL, "a");
+
+  gtk_label_set_label (GTK_LABEL (label), "b");
+
+  gtk_test_accessible_assert_property (label, GTK_ACCESSIBLE_PROPERTY_LABEL, "b");
+
+  g_object_unref (label);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -51,6 +67,7 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/a11y/label/role", label_role);
   g_test_add_func ("/a11y/label/relations", label_relations);
+  g_test_add_func ("/a11y/label/properties", label_properties);
 
   return g_test_run ();
 }
