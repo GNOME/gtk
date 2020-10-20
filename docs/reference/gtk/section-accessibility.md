@@ -183,7 +183,7 @@ with a form to fill out, you should ensure that:
  * each text entry widget in the form has the `GTK_ACCESSIBLE_RELATION_LABELLED_BY`
    relation pointing to the label widget that describes it
 
-Another example: if you create a tool bar containing buttons with only icons,
+Another example: if you create a toolbar containing buttons with only icons,
 you should ensure that:
 
  * the container has a `GTK_ACCESSIBLE_ROLE_TOOLBAR` role
@@ -192,7 +192,7 @@ you should ensure that:
    "Paste", "Add layer", or "Remove"
 
 GTK will try to fill in some information by using ancillary UI control
-property, for instance the accessible label will be taken from the label or
+properties, for instance the accessible label will be taken from the label or
 placeholder text used by the UI control, or from its tooltip, if the
 `GTK_ACCESSIBLE_PROPERTY_LABEL` property or the `GTK_ACCESSIBLE_RELATION_LABELLED_BY`
 relation are unset. Nevertheless, it is good practice and project hygiene
@@ -287,4 +287,46 @@ widgets.
 
 ## Design patterns and custom widgets
 
-...
+When creating custom widgets, following established patterns can help
+ensuring that the widgets work well for users of accessible technologies
+as well.
+
+### Custom entries
+
+For custom entries, it is highly recommended that you implement the
+#GtkEditable interface by using a #GtkText widget as delegate. If you
+do this, GTK will make your widgets text editing functionality accessible
+in the same way as a #GtkSpinButton or #GtkSearchEntry.
+
+### Tab-based UI
+
+If you make a tab-based interface, you should consider using #GtkStack
+as the core, and just make a custom tab widget to control the active
+stack page. When doing so, the following extra steps will ensure that
+your tabs are accessible in the same way as #GtkStackSwitcher or #GtkNotebook:
+
+- Give your tab container the role %GTK_ACCESSIBLE_ROLE_TAB_LIST
+- Give your tab widgets the role %GTK_ACCESSIBLE_ROLE_TAB
+- Set up the %GTK_ACCESSIBLE_RELATION_CONTROLS relation between each
+  tab and the #GtkStackPage object for its page
+- Set the %GTK_ACCESSIBLE_PROPERTY_SELECTED property on each tab, with
+  the active tab getting the value %TRUE, all others %FALSE
+
+To allow changing the active tab via accessible technologies, you can
+export actions. Since the accessibility interfaces only support actions
+without parameters, you can either provide `previous-tab` and `next-tab`
+actions on the tab container that let users step through the tabs one-by-one,
+or add a `activate-tab` action on each tab.
+
+### Value controls
+
+A value control (ie a widget that controls a one-dimensional quantity
+that can be represented by a #GtkAdjustment) can be represented to
+accessible technologies by setting the %GTK_ACCESSIBLE_PROPERTY_VALUE_MIN,
+%GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, and %GTK_ACCESSIBLE_PROPERTY_VALUE_NOW
+properties.
+
+To allow changing the value via accessible technologies, you can export
+actions.  Since the accessibility interfaces only support actions
+without parameters, you should provide actions such as `increase-value`
+and `decrease-value`.
