@@ -36,7 +36,6 @@
 #include "gtkbutton.h"
 #include "gtkcelleditable.h"
 #include "gtkcelllayout.h"
-#include "gtkcssnodeprivate.h"
 #include "gtkdebug.h"
 #include "gtkeditable.h"
 #include "gtkemojichooser.h"
@@ -1509,14 +1508,9 @@ update_node_ordering (GtkEntry *entry)
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   EntryIconInfo *icon_info;
   GtkEntryIconPosition first_icon_pos, second_icon_pos;
-  GtkCssNode *parent;
 
   if (priv->progress_widget)
-    {
-      gtk_css_node_insert_before (gtk_widget_get_css_node (GTK_WIDGET (entry)),
-                                  gtk_widget_get_css_node (priv->progress_widget),
-                                  NULL);
-    }
+    gtk_widget_insert_before (priv->progress_widget, GTK_WIDGET (entry), NULL);
 
   if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
     {
@@ -1529,15 +1523,13 @@ update_node_ordering (GtkEntry *entry)
       second_icon_pos = GTK_ENTRY_ICON_SECONDARY;
     }
 
-  parent = gtk_widget_get_css_node (GTK_WIDGET (entry));
-
   icon_info = priv->icons[first_icon_pos];
   if (icon_info)
-    gtk_css_node_insert_after (parent, gtk_widget_get_css_node (icon_info->widget), NULL);
+    gtk_widget_insert_after (icon_info->widget, GTK_WIDGET (entry), NULL);
 
   icon_info = priv->icons[second_icon_pos];
   if (icon_info)
-    gtk_css_node_insert_before (parent, gtk_widget_get_css_node (icon_info->widget), NULL);
+    gtk_widget_insert_before (icon_info->widget, GTK_WIDGET (entry), NULL);
 }
 
 static GtkEntryIconPosition
