@@ -25,6 +25,7 @@ tests = [
   { 'name': 'searchentry' },
   { 'name': 'separator' },
   { 'name': 'spinbutton' },
+  { 'name': 'stack' },
   { 'name': 'switch' },
   { 'name': 'textview' },
   { 'name': 'window' },
