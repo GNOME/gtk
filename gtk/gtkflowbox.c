@@ -80,7 +80,6 @@
 #include "gtkbinlayout.h"
 #include "gtkbuildable.h"
 #include "gtkcsscolorvalueprivate.h"
-#include "gtkcssnodeprivate.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkgestureclick.h"
 #include "gtkgesturedrag.h"
@@ -4032,9 +4031,9 @@ gtk_flow_box_new (void)
 }
 
 static void
-gtk_flow_box_insert_css_node (GtkFlowBox    *box,
-                              GtkWidget     *child,
-                              GSequenceIter *iter)
+gtk_flow_box_insert_widget (GtkFlowBox    *box,
+                            GtkWidget     *child,
+                            GSequenceIter *iter)
 {
   GSequenceIter *prev_iter;
   GtkWidget *sibling;
@@ -4042,12 +4041,11 @@ gtk_flow_box_insert_css_node (GtkFlowBox    *box,
   prev_iter = g_sequence_iter_prev (iter);
 
   if (prev_iter != iter)
-    {
-      sibling = g_sequence_get (prev_iter);
-      gtk_css_node_insert_after (gtk_widget_get_css_node (GTK_WIDGET (box)),
-                                 gtk_widget_get_css_node (child),
-                                 gtk_widget_get_css_node (sibling));
-    }
+    sibling = g_sequence_get (prev_iter);
+  else
+    sibling = NULL;
+
+  gtk_widget_insert_after (child, GTK_WIDGET (box), sibling);
 }
 
 /**
@@ -4100,10 +4098,8 @@ gtk_flow_box_insert (GtkFlowBox *box,
       iter = g_sequence_insert_before (pos, child);
     }
 
-  gtk_flow_box_insert_css_node (box, GTK_WIDGET (child), iter);
-
   CHILD_PRIV (child)->iter = iter;
-  gtk_widget_set_parent (GTK_WIDGET (child), GTK_WIDGET (box));
+  gtk_flow_box_insert_widget (box, GTK_WIDGET (child), iter);
   gtk_flow_box_apply_filter (box, child);
 }
 
@@ -4917,22 +4913,14 @@ gtk_flow_box_sort (GtkFlowBoxChild *a,
 }
 
 static void
-gtk_flow_box_css_node_foreach (gpointer data,
-                               gpointer user_data)
+gtk_flow_box_reorder_foreach (gpointer data,
+                              gpointer user_data)
 {
   GtkWidget **previous = user_data;
   GtkWidget *row = data;
-  GtkCssNode *row_node;
-  GtkCssNode *prev_node;
 
   if (*previous)
-    {
-      prev_node = gtk_widget_get_css_node (*previous);
-      row_node = gtk_widget_get_css_node (row);
-      gtk_css_node_insert_after (gtk_css_node_get_parent (row_node),
-                                 row_node,
-                                 prev_node);
-    }
+    gtk_widget_insert_after (row, _gtk_widget_get_parent (row), *previous);
 
   *previous = row;
 }
@@ -4959,7 +4947,7 @@ gtk_flow_box_invalidate_sort (GtkFlowBox *box)
   if (priv->sort_func != NULL)
     {
       g_sequence_sort (priv->children, (GCompareDataFunc)gtk_flow_box_sort, box);
-      g_sequence_foreach (priv->children, gtk_flow_box_css_node_foreach, &previous);
+      g_sequence_foreach (priv->children, gtk_flow_box_reorder_foreach, &previous);
       gtk_widget_queue_resize (GTK_WIDGET (box));
     }
 }
