@@ -4073,7 +4073,7 @@ gtk_widget_real_size_allocate (GtkWidget *widget,
  * @keyval: key value of binding to install
  * @mods: key modifier of binding to install
  * @callback: the callback to call upon activation
- * @format_string: GVariant format string for arguments or %NULL for
+ * @format_string: (nullable): GVariant format string for arguments or %NULL for
  *     no arguments
  * @...: arguments, as given by format string.
  *
@@ -4122,7 +4122,7 @@ gtk_widget_class_add_binding (GtkWidgetClass  *widget_class,
  * @keyval: key value of binding to install
  * @mods: key modifier of binding to install
  * @signal: the signal to execute
- * @format_string: GVariant format string for arguments or %NULL for
+ * @format_string: (nullable): GVariant format string for arguments or %NULL for
  *     no arguments
  * @...: arguments, as given by format string.
  *
@@ -4171,7 +4171,7 @@ gtk_widget_class_add_binding_signal (GtkWidgetClass  *widget_class,
  * @keyval: key value of binding to install
  * @mods: key modifier of binding to install
  * @action_name: the action to activate
- * @format_string: GVariant format string for arguments or %NULL for
+ * @format_string: (nullable): GVariant format string for arguments or %NULL for
  *     no arguments
  * @...: arguments, as given by format string.
  *
