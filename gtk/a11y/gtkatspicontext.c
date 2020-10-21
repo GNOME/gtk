@@ -729,14 +729,24 @@ emit_text_selection_changed (GtkAtSpiContext *self,
                              const char      *kind,
                              int              cursor_position)
 {
-  g_dbus_connection_emit_signal (self->connection,
-                                 NULL,
-                                 self->context_path,
-                                 "org.a11y.atspi.Event.Object",
-                                 "TextChanged",
-                                 g_variant_new ("(siiva{sv})",
-                                                kind, cursor_position, 0, g_variant_new_string (""), NULL),
+  if (strcmp (kind, "text-caret-moved") == 0)
+    g_dbus_connection_emit_signal (self->connection,
+                                   NULL,
+                                   self->context_path,
+                                   "org.a11y.atspi.Event.Object",
+                                   "TextCaretMoved",
+                                   g_variant_new ("(siiva{sv})",
+                                                  "", cursor_position, 0, g_variant_new_string (""), NULL),
                                  NULL);
+  else
+    g_dbus_connection_emit_signal (self->connection,
+                                   NULL,
+                                   self->context_path,
+                                   "org.a11y.atspi.Event.Object",
+                                   "TextSelectionChanged",
+                                   g_variant_new ("(siiva{sv})",
+                                                  "", 0, 0, g_variant_new_string (""), NULL),
+                                   NULL);
 }
 
 static void
