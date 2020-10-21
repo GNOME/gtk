@@ -139,9 +139,6 @@ gtk_separator_init (GtkSeparator *separator)
 
   gtk_widget_update_orientation (GTK_WIDGET (separator),
                                  separator->orientation);
-  gtk_accessible_update_property (GTK_ACCESSIBLE (separator),
-                                  GTK_ACCESSIBLE_PROPERTY_ORIENTATION, separator->orientation,
-                                  -1);
 }
 
 static void
