@@ -628,6 +628,26 @@ gtk_model_button_set_active (GtkModelButton *button,
 }
 
 static void
+update_accessible_properties (GtkModelButton *button)
+{
+  if (button->menu_name || button->popover)
+    gtk_accessible_update_property (GTK_ACCESSIBLE (button),
+                                    GTK_ACCESSIBLE_PROPERTY_HAS_POPUP, TRUE,
+                                    -1);
+  else
+    gtk_accessible_reset_property (GTK_ACCESSIBLE (button),
+                                   GTK_ACCESSIBLE_PROPERTY_HAS_POPUP);
+
+  if (button->popover)
+    gtk_accessible_update_relation (GTK_ACCESSIBLE (button),
+                                    GTK_ACCESSIBLE_RELATION_CONTROLS, g_list_append (NULL, button->popover),
+                                    -1);
+  else
+    gtk_accessible_reset_relation (GTK_ACCESSIBLE (button),
+                                   GTK_ACCESSIBLE_RELATION_CONTROLS);
+}
+
+static void
 gtk_model_button_set_menu_name (GtkModelButton *button,
                                 const char     *menu_name)
 {
@@ -636,6 +656,8 @@ gtk_model_button_set_menu_name (GtkModelButton *button,
 
   update_node_name (button);
   gtk_model_button_update_state (button);
+
+  update_accessible_properties (button);
 
   gtk_widget_queue_resize (GTK_WIDGET (button));
   g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_MENU_NAME]);
@@ -703,6 +725,8 @@ gtk_model_button_set_popover (GtkModelButton *button,
       gtk_widget_set_parent (button->popover, GTK_WIDGET (button));
       gtk_popover_set_position (GTK_POPOVER (button->popover), GTK_POS_RIGHT);
     }
+
+  update_accessible_properties (button);
 
   update_node_name (button);
   gtk_model_button_update_state (button);
@@ -1186,7 +1210,8 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   widget_class->activate_signal = signals[SIGNAL_CLICKED];
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
-  gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), I_("modelbutton"));
+  gtk_widget_class_set_css_name (widget_class, I_("modelbutton"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_MENU_ITEM);
 }
 
 static void
