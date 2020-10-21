@@ -1202,7 +1202,7 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_NONE: An element that is not represented to accessibility technologies.
  * @GTK_ACCESSIBLE_ROLE_NOTE: Unused
  * @GTK_ACCESSIBLE_ROLE_OPTION: Unused
- * @GTK_ACCESSIBLE_ROLE_PRESENTATION: Unused
+ * @GTK_ACCESSIBLE_ROLE_PRESENTATION: An element that is not represented to accessibility technologies.
  * @GTK_ACCESSIBLE_ROLE_PROGRESS_BAR: An element that displays the progress
  *    status for tasks that take a long time.
  * @GTK_ACCESSIBLE_ROLE_RADIO: A checkable input in a group of radio roles,
