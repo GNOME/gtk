@@ -126,23 +126,31 @@ _gtk_gesture_swipe_clear_backlog (GtkGestureSwipe *gesture,
 }
 
 static void
-gtk_gesture_swipe_update (GtkGesture       *gesture,
-                          GdkEventSequence *sequence)
+gtk_gesture_swipe_append_event (GtkGestureSwipe  *swipe,
+                                GdkEventSequence *sequence)
 {
-  GtkGestureSwipe *swipe = GTK_GESTURE_SWIPE (gesture);
   GtkGestureSwipePrivate *priv;
   EventData new;
   gdouble x, y;
 
   priv = gtk_gesture_swipe_get_instance_private (swipe);
-  _gtk_gesture_get_last_update_time (gesture, sequence, &new.evtime);
-  gtk_gesture_get_point (gesture, sequence, &x, &y);
+  _gtk_gesture_get_last_update_time (GTK_GESTURE (swipe), sequence, &new.evtime);
+  gtk_gesture_get_point (GTK_GESTURE (swipe), sequence, &x, &y);
 
   new.point.x = x;
   new.point.y = y;
 
   _gtk_gesture_swipe_clear_backlog (swipe, new.evtime);
   g_array_append_val (priv->events, new);
+}
+
+static void
+gtk_gesture_swipe_update (GtkGesture       *gesture,
+                          GdkEventSequence *sequence)
+{
+  GtkGestureSwipe *swipe = GTK_GESTURE_SWIPE (gesture);
+
+  gtk_gesture_swipe_append_event (swipe, sequence);
 }
 
 static void
@@ -197,6 +205,8 @@ gtk_gesture_swipe_end (GtkGesture       *gesture,
 
   if (gtk_gesture_is_active (gesture))
     return;
+
+  gtk_gesture_swipe_append_event (swipe, sequence);
 
   priv = gtk_gesture_swipe_get_instance_private (swipe);
   _gtk_gesture_swipe_calculate_velocity (swipe, &velocity_x, &velocity_y);
