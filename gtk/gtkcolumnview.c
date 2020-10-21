@@ -105,6 +105,13 @@
  * The main columnview node may also carry style classes to select
  * the style of [list presentation](ListContainers.html#list-styles):
  * .rich-list, .navigation-sidebar or .data-table.
+ *
+ * # Accessibility
+ *
+ * GtkColumnView uses the #GTK_ACCESSIBLE_ROLE_TREE_GRID role, header title
+ * widgets are using the #GTK_ACCESSIBLE_ROLE_COLUMN_HEADER role. The row widgets
+ * are using the #GTK_ACCESSIBLE_ROLE_ROW role, and individual cells are using
+ * the #GTK_ACCESSIBLE_ROLE_GRID_CELL role
  */
 
 /* We create a subclass of GtkListView for the sole purpose of overriding
