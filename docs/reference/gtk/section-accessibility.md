@@ -107,9 +107,9 @@ for instance:
 See the [WAI-ARIA](https://www.w3.org/WAI/PF/aria/appendices#quickref) list
 of attributes for additional information.
 
-#### List of accessible properties
+#### List of accessible states
 
-Each state name is part of the #GtkAccessibleProperty enumeration.
+Each state name is part of the #GtkAccessibleState enumeration.
 
 | State name | ARIA attribute | Value type | Notes |
 |------------|----------------|------------|-------|
@@ -122,9 +122,9 @@ Each state name is part of the #GtkAccessibleProperty enumeration.
 | %GTK_ACCESSIBLE_STATE_PRESSED | “aria-pressed” | #GtkAccessibleTristate | Indicates the current state of a #GtkToggleButton |
 | %GTK_ACCESSIBLE_STATE_SELECTED | “aria-selected” | boolean or undefined | Set when a widget is selected |
 
-#### List of accessible relations
+#### List of accessible properties
 
-Each state name is part of the #GtkAccessibleRelation enumeration.
+Each property name is part of the #GtkAccessibleProperty enumeration.
 
 | State name | ARIA attribute | Value type |
 |------------|----------------|------------|
@@ -148,9 +148,9 @@ Each state name is part of the #GtkAccessibleRelation enumeration.
 | %GTK_ACCESSIBLE_PROPERTY_VALUE_NOW | “aria-valuenow” | double |
 | %GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT | “aria-valuetext” | translatable string |
 
-#### List of accessible states
+#### List of accessible relations
 
-Each state name is part of the #GtkAccessibleState enumeration.
+Each relation name is part of the #GtkAccessibleRelation enumeration.
 
 | State name | ARIA attribute | Value type |
 |------------|----------------|------------|
