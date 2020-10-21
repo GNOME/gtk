@@ -57,6 +57,7 @@ Each role name is part of the #GtkAccessibleRole enumeration.
 | `LIST` | A list of items | #GtkListBox |
 | `LIST_ITEM` | An item in a list | #GtkListBoxRow |
 | `METER` | Represents a value within a known range | #GtkLevelBar |
+| `NONE` | Not represented in the accessibility tree | the slider of a #GtkScale |
 | `PROGRESS_BAR` | An element that display progress | #GtkProgressBar |
 | `RADIO` | A checkable input in a group of radio roles | #GtkCheckButton |
 | `ROW` | A row in a columned list | #GtkColumnView |
