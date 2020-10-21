@@ -8446,6 +8446,161 @@ static const GtkBuildableParser layout_parser =
     layout_text,
   };
 
+typedef struct
+{
+  char *name;
+  GString *value;
+  char *context;
+  gboolean translatable;
+} AccessibilityAttributeInfo;
+
+typedef struct
+{
+  GObject *object;
+  GtkBuilder *builder;
+
+  AccessibilityAttributeInfo *cur_attribute;
+
+  /* SList<AccessibilityAttributeInfo> */
+  GSList *properties;
+  GSList *states;
+  GSList *relations;
+} AccessibilityParserData;
+
+static void
+accessibility_attribute_info_free (gpointer data)
+{
+  AccessibilityAttributeInfo *pinfo = data;
+
+  if (pinfo == NULL)
+    return;
+
+  g_free (pinfo->name);
+  g_free (pinfo->context);
+  g_string_free (pinfo->value, TRUE);
+  g_free (pinfo);
+}
+
+static void
+accessibility_start_element (GtkBuildableParseContext  *context,
+                             const char                *element_name,
+                             const char               **names,
+                             const char               **values,
+                             gpointer                   user_data,
+                             GError                   **error)
+{
+  AccessibilityParserData *accessibility_data = user_data;
+
+  if (strcmp (element_name, "property") == 0 ||
+      strcmp (element_name, "relation") == 0 ||
+      strcmp (element_name, "state") == 0)
+    {
+      const char *name = NULL;
+      const char *ctx = NULL;
+      gboolean translatable = FALSE;
+      AccessibilityAttributeInfo *pinfo;
+
+      if (!_gtk_builder_check_parent (accessibility_data->builder,
+                                      context,
+                                      "accessibility",
+                                      error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_STRING, "name", &name,
+                                        G_MARKUP_COLLECT_BOOLEAN | G_MARKUP_COLLECT_OPTIONAL, "translatable", &translatable,
+                                        G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL, "context", &ctx,
+                                        G_MARKUP_COLLECT_INVALID))
+        {
+          _gtk_builder_prefix_error (accessibility_data->builder, context, error);
+          return;
+        }
+
+      pinfo = g_new0 (AccessibilityAttributeInfo, 1);
+      pinfo->name = g_strdup (name);
+      pinfo->translatable = translatable;
+      pinfo->context = g_strdup (ctx);
+      pinfo->value = g_string_new (NULL);
+
+      accessibility_data->cur_attribute = pinfo;
+    }
+  else if (strcmp (element_name, "accessibility") == 0)
+    {
+      if (!_gtk_builder_check_parent (accessibility_data->builder,
+                                      context,
+                                      "object",
+                                      error))
+        return;
+    }
+  else
+    {
+      _gtk_builder_error_unhandled_tag (accessibility_data->builder, context,
+                                        "GtkWidget", element_name,
+                                        error);
+    }
+}
+
+static void
+accessibility_text (GtkBuildableParseContext  *context,
+                    const char                *text,
+                    gsize                      text_len,
+                    gpointer                   user_data,
+                    GError                   **error)
+{
+  AccessibilityParserData *accessibility_data = user_data;
+
+  if (accessibility_data->cur_attribute != NULL)
+    g_string_append_len (accessibility_data->cur_attribute->value, text, text_len);
+}
+
+static void
+accessibility_end_element (GtkBuildableParseContext  *context,
+                           const char                *element_name,
+                           gpointer                   user_data,
+                           GError                   **error)
+{
+  AccessibilityParserData *accessibility_data = user_data;
+
+  if (accessibility_data->cur_attribute != NULL)
+    {
+      AccessibilityAttributeInfo *pinfo = g_steal_pointer (&accessibility_data->cur_attribute);
+
+      /* Translate the string, if needed */
+      if (pinfo->value->len != 0 && pinfo->translatable)
+        {
+          const char *translated;
+          const char *domain;
+
+          domain = gtk_builder_get_translation_domain (accessibility_data->builder);
+
+          translated = _gtk_builder_parser_translate (domain, pinfo->context, pinfo->value->str);
+
+          g_string_assign (pinfo->value, translated);
+        }
+
+      /* We assign all properties at the end of the `accessibility` section */
+      if (strcmp (element_name, "property") == 0)
+        accessibility_data->properties = g_slist_prepend (accessibility_data->properties, pinfo);
+      else if (strcmp (element_name, "relation") == 0)
+        accessibility_data->relations = g_slist_prepend (accessibility_data->relations, pinfo);
+      else if (strcmp (element_name, "state") == 0)
+        accessibility_data->states = g_slist_prepend (accessibility_data->states, pinfo);
+      else
+        {
+          _gtk_builder_error_unhandled_tag (accessibility_data->builder, context,
+                                            "GtkWidget", element_name,
+                                            error);
+          accessibility_attribute_info_free (pinfo);
+        }
+    }
+}
+
+static const GtkBuildableParser accessibility_parser = {
+  accessibility_start_element,
+  accessibility_end_element,
+  accessibility_text,
+};
+
 static gboolean
 gtk_widget_buildable_custom_tag_start (GtkBuildable       *buildable,
                                        GtkBuilder         *builder,
@@ -8476,6 +8631,20 @@ gtk_widget_buildable_custom_tag_start (GtkBuildable       *buildable,
       data->object = (GObject *) g_object_ref (buildable);
 
       *parser = layout_parser;
+      *parser_data = data;
+
+      return TRUE;
+    }
+
+  if (strcmp (tagname, "accessibility") == 0)
+    {
+      AccessibilityParserData *data;
+
+      data = g_slice_new0 (AccessibilityParserData);
+      data->builder = builder;
+      data->object = (GObject *) g_object_ref (buildable);
+
+      *parser = accessibility_parser;
       *parser_data = data;
 
       return TRUE;
@@ -8560,6 +8729,148 @@ gtk_widget_buildable_finish_layout_properties (GtkWidget *widget,
 }
 
 static void
+gtk_widget_buildable_finish_accessibility_properties (GtkWidget *widget,
+                                                      gpointer   data)
+{
+  AccessibilityParserData *accessibility_data = data;
+  GSList *attributes, *l;
+  GtkATContext *context;
+
+  context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (widget));
+  if (context == NULL)
+    return;
+
+  attributes = g_slist_reverse (accessibility_data->properties);
+  accessibility_data->properties = NULL;
+
+  for (l = attributes; l != NULL; l = l->next)
+    {
+      AccessibilityAttributeInfo *pinfo = l->data;
+      int property;
+      GError *error = NULL;
+      GtkAccessibleValue *value;
+
+      _gtk_builder_enum_from_string (GTK_TYPE_ACCESSIBLE_PROPERTY,
+                                     pinfo->name,
+                                     &property,
+                                     &error);
+      if (error != NULL)
+        {
+          g_warning ("Failed to find accessible property “%s”: %s",
+                     pinfo->name,
+                     error->message);
+          g_error_free (error);
+          continue;
+        }
+
+      value = gtk_accessible_value_parse_for_property (property,
+                                                       pinfo->value->str,
+                                                       pinfo->value->len,
+                                                       &error);
+      if (error != NULL)
+        {
+          g_warning ("Failed to set accessible property “%s” to “%s”: %s",
+                     pinfo->name,
+                     pinfo->value->str,
+                     error->message);
+          g_error_free (error);
+          continue;
+        }
+
+      gtk_at_context_set_accessible_property (context, property, value);
+      gtk_accessible_value_unref (value);
+    }
+
+  g_slist_free_full (attributes, accessibility_attribute_info_free);
+
+  attributes = g_slist_reverse (accessibility_data->relations);
+  accessibility_data->relations = NULL;
+
+  for (l = attributes; l != NULL; l = l->next)
+    {
+      AccessibilityAttributeInfo *pinfo = l->data;
+      int relation;
+      GError *error = NULL;
+      GtkAccessibleValue *value;
+
+      _gtk_builder_enum_from_string (GTK_TYPE_ACCESSIBLE_RELATION,
+                                     pinfo->name,
+                                     &relation,
+                                     &error);
+      if (error != NULL)
+        {
+          g_warning ("Failed to find accessible relation “%s”: %s",
+                     pinfo->name,
+                     error->message);
+          g_error_free (error);
+          continue;
+        }
+
+      value = gtk_accessible_value_parse_for_relation (relation,
+                                                       pinfo->value->str,
+                                                       pinfo->value->len,
+                                                       &error);
+      if (error != NULL)
+        {
+          g_warning ("Failed to set accessible relation “%s” to “%s”: %s",
+                     pinfo->name,
+                     pinfo->value->str,
+                     error->message);
+          g_error_free (error);
+          continue;
+        }
+
+      gtk_at_context_set_accessible_relation (context, relation, value);
+      gtk_accessible_value_unref (value);
+    }
+
+  g_slist_free_full (attributes, accessibility_attribute_info_free);
+
+  attributes = g_slist_reverse (accessibility_data->states);
+  accessibility_data->states = NULL;
+
+  for (l = attributes; l != NULL; l = l->next)
+    {
+      AccessibilityAttributeInfo *pinfo = l->data;
+      int state;
+      GError *error = NULL;
+      GtkAccessibleValue *value;
+
+      _gtk_builder_enum_from_string (GTK_TYPE_ACCESSIBLE_STATE,
+                                     pinfo->name,
+                                     &state,
+                                     &error);
+      if (error != NULL)
+        {
+          g_warning ("Failed to find accessible state “%s”: %s",
+                     pinfo->name,
+                     error->message);
+          g_error_free (error);
+          continue;
+        }
+
+      value = gtk_accessible_value_parse_for_state (state,
+                                                    pinfo->value->str,
+                                                    pinfo->value->len,
+                                                    &error);
+      if (error != NULL)
+        {
+          g_warning ("Failed to set accessible state “%s” to “%s”: %s",
+                     pinfo->name,
+                     pinfo->value->str,
+                     error->message);
+          g_error_free (error);
+          continue;
+        }
+
+      gtk_at_context_set_accessible_state (context, state, value);
+      gtk_accessible_value_unref (value);
+    }
+
+  g_slist_free_full (attributes, accessibility_attribute_info_free);
+}
+
+static void
 gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
                                       GtkBuilder   *builder,
                                       GObject      *child,
@@ -8591,6 +8902,22 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
       g_slist_free_full (layout_data->properties, layout_property_info_free);
       g_object_unref (layout_data->object);
       g_slice_free (LayoutParserData, layout_data);
+    }
+  else if (strcmp (tagname, "accessibility") == 0)
+    {
+      AccessibilityParserData *accessibility_data = user_data;
+
+      gtk_widget_buildable_finish_accessibility_properties (GTK_WIDGET (buildable),
+                                                            accessibility_data);
+
+      g_slist_free_full (accessibility_data->properties,
+                         accessibility_attribute_info_free);
+      g_slist_free_full (accessibility_data->relations,
+                         accessibility_attribute_info_free);
+      g_slist_free_full (accessibility_data->states,
+                         accessibility_attribute_info_free);
+      g_object_unref (accessibility_data->object);
+      g_slice_free (AccessibilityParserData, accessibility_data);
     }
 }
 
