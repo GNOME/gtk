@@ -366,6 +366,23 @@ gtk_frame_get_label (GtkFrame *frame)
     return NULL;
 }
 
+static void
+update_accessible_relation (GtkFrame *frame)
+{
+  GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
+
+  if (!priv->child)
+    return;
+
+  if (priv->label_widget)
+    gtk_accessible_update_relation (GTK_ACCESSIBLE (priv->child),
+                                    GTK_ACCESSIBLE_RELATION_LABELLED_BY, g_list_append (NULL, priv->label_widget),
+                                    -1);
+  else
+    gtk_accessible_reset_relation (GTK_ACCESSIBLE (priv->child),
+                                   GTK_ACCESSIBLE_RELATION_LABELLED_BY);
+}
+
 /**
  * gtk_frame_set_label_widget:
  * @frame: a #GtkFrame
@@ -397,6 +414,8 @@ gtk_frame_set_label_widget (GtkFrame  *frame,
       priv->label_widget = label_widget;
       gtk_widget_set_parent (label_widget, GTK_WIDGET (frame));
     }
+
+  update_accessible_relation (frame);
 
   g_object_freeze_notify (G_OBJECT (frame));
   g_object_notify_by_pspec (G_OBJECT (frame), frame_props[PROP_LABEL_WIDGET]);
@@ -662,6 +681,8 @@ gtk_frame_set_child (GtkFrame  *frame,
       priv->child = child;
       gtk_widget_set_parent (child, GTK_WIDGET (frame));
     }
+
+  update_accessible_relation (frame);
 
   g_object_notify_by_pspec (G_OBJECT (frame), frame_props[PROP_CHILD]);
 }
