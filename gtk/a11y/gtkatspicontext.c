@@ -811,6 +811,41 @@ emit_bounds_changed (GtkAtSpiContext *self,
 }
 
 static void
+emit_children_changed (GtkAtSpiContext         *self,
+                       GtkAtSpiContext         *child_context,
+                       int                      idx,
+                       GtkAccessibleChildState  state)
+{
+  const char *change;
+
+  switch (state)
+    {
+    case GTK_ACCESSIBLE_CHILD_STATE_ADDED:
+      change = "add";
+      break;
+
+    case GTK_ACCESSIBLE_CHILD_STATE_REMOVED:
+      change = "remove";
+      break;
+
+    default:
+      g_assert_not_reached ();
+      return;
+    }
+
+  GVariant *ref = gtk_at_spi_context_to_ref (child_context);
+  GVariant *context_ref = gtk_at_spi_context_to_ref (self);
+
+  g_dbus_connection_emit_signal (self->connection,
+                                 NULL,
+                                 self->context_path,
+                                 "org.a11y.atspi.Event.Object",
+                                 "ChildrenChanged",
+                                 g_variant_new ("(siiv@(so))", change, idx, 0, ref, context_ref),
+                                 NULL);
+}
+
+static void
 gtk_at_spi_context_state_change (GtkATContext                *ctx,
                                  GtkAccessibleStateChange     changed_states,
                                  GtkAccessiblePropertyChange  changed_properties,
@@ -1039,6 +1074,55 @@ gtk_at_spi_context_bounds_change (GtkATContext *ctx)
   height = gtk_widget_get_height (widget);
 
   emit_bounds_changed (self, (int)x, (int)y, width, height);
+}
+
+static void
+gtk_at_spi_context_child_change (GtkATContext             *ctx,
+                                 GtkAccessibleChildChange  change,
+                                 GtkAccessible            *child)
+{
+  GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (ctx);
+  GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
+  GtkATContext *child_context;
+
+  if (!GTK_IS_WIDGET (accessible))
+    return;
+
+  child_context = gtk_accessible_get_at_context (child);
+  if (child_context == NULL)
+    return;
+
+  GtkWidget *parent_widget = GTK_WIDGET (accessible);
+  GtkWidget *child_widget = GTK_WIDGET (child);
+  int idx = 0;
+
+  if (gtk_widget_get_parent (child_widget) != parent_widget)
+    {
+      idx = 0;
+    }
+  else
+    {
+      for (GtkWidget *iter = gtk_widget_get_first_child (parent_widget);
+           iter != NULL;
+           iter = gtk_widget_get_next_sibling (iter))
+        {
+          if (iter == child_widget)
+            break;
+
+          idx += 1;
+        }
+    }
+
+  if (change & GTK_ACCESSIBLE_CHILD_CHANGE_ADDED)
+    emit_children_changed (self,
+                           GTK_AT_SPI_CONTEXT (child_context),
+                           idx,
+                           GTK_ACCESSIBLE_CHILD_STATE_ADDED);
+  else if (change & GTK_ACCESSIBLE_CHILD_CHANGE_REMOVED)
+    emit_children_changed (self,
+                           GTK_AT_SPI_CONTEXT (child_context),
+                           idx,
+                           GTK_ACCESSIBLE_CHILD_STATE_REMOVED);
 }
 /* }}} */
 /* {{{ D-Bus Registration */
@@ -1326,6 +1410,7 @@ gtk_at_spi_context_class_init (GtkAtSpiContextClass *klass)
   context_class->state_change = gtk_at_spi_context_state_change;
   context_class->platform_change = gtk_at_spi_context_platform_change;
   context_class->bounds_change = gtk_at_spi_context_bounds_change;
+  context_class->child_change = gtk_at_spi_context_child_change;
 
   obj_props[PROP_BUS_ADDRESS] =
     g_param_spec_string ("bus-address", NULL, NULL,
