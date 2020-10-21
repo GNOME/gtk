@@ -69,6 +69,11 @@
  * GtkFlowBox uses a single CSS node with name flowbox. GtkFlowBoxChild
  * uses a single CSS node with name flowboxchild.
  * For rubberband selection, a subnode with name rubberband is used.
+ *
+ * # Accessibility
+ *
+ * GtkFlowBox uses the #GTK_ACCESSIBLE_ROLE_GRID role, and GtkFlowBoxChild
+ * uses the #GTK_ACCESSIBLE_ROLE_GRID_CELL role.
  */
 
 #include <config.h>
