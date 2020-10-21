@@ -98,6 +98,10 @@ GtkAccessibleValue *    gtk_accessible_value_collect_for_state          (GtkAcce
 GtkAccessibleValue *    gtk_accessible_value_collect_for_state_value    (GtkAccessibleState             state,
                                                                          const GValue                  *value,
                                                                          GError                       **error);
+GtkAccessibleValue *    gtk_accessible_value_parse_for_state            (GtkAccessibleState             state,
+                                                                         const char                    *str,
+                                                                         gsize                          len,
+                                                                         GError                       **error);
 
 GtkAccessibleValue *    gtk_accessible_value_get_default_for_property   (GtkAccessibleProperty          property);
 GtkAccessibleValue *    gtk_accessible_value_collect_for_property       (GtkAccessibleProperty          property,
@@ -106,6 +110,10 @@ GtkAccessibleValue *    gtk_accessible_value_collect_for_property       (GtkAcce
 GtkAccessibleValue *    gtk_accessible_value_collect_for_property_value (GtkAccessibleProperty          property,
                                                                          const GValue                  *value,
                                                                          GError                       **error);
+GtkAccessibleValue *    gtk_accessible_value_parse_for_property         (GtkAccessibleProperty          property,
+                                                                         const char                    *str,
+                                                                         gsize                          len,
+                                                                         GError                       **error);
 
 GtkAccessibleValue *    gtk_accessible_value_get_default_for_relation   (GtkAccessibleRelation          relation);
 GtkAccessibleValue *    gtk_accessible_value_collect_for_relation       (GtkAccessibleRelation          relation,
@@ -113,6 +121,10 @@ GtkAccessibleValue *    gtk_accessible_value_collect_for_relation       (GtkAcce
                                                                          va_list                       *args);
 GtkAccessibleValue *    gtk_accessible_value_collect_for_relation_value (GtkAccessibleRelation          relation,
                                                                          const GValue                  *value,
+                                                                         GError                       **error);
+GtkAccessibleValue *    gtk_accessible_value_parse_for_relation         (GtkAccessibleRelation          relation,
+                                                                         const char                    *str,
+                                                                         gsize                          len,
                                                                          GError                       **error);
 
 /* Basic values */
@@ -143,14 +155,26 @@ GList *                         gtk_reference_list_accessible_value_get (const G
 /* Token values */
 GtkAccessibleValue *            gtk_invalid_accessible_value_new        (GtkAccessibleInvalidState value);
 GtkAccessibleInvalidState       gtk_invalid_accessible_value_get        (const GtkAccessibleValue *value);
+GtkAccessibleValue *            gtk_invalid_accessible_value_parse      (const char               *str,
+                                                                         gsize                     len,
+                                                                         GError                  **error);
 
 GtkAccessibleValue *            gtk_autocomplete_accessible_value_new   (GtkAccessibleAutocomplete value);
 GtkAccessibleAutocomplete       gtk_autocomplete_accessible_value_get   (const GtkAccessibleValue *value);
+GtkAccessibleValue *            gtk_autocomplete_accessible_value_parse (const char               *str,
+                                                                         gsize                     len,
+                                                                         GError                  **error);
 
 GtkAccessibleValue *            gtk_orientation_accessible_value_new    (GtkOrientation            value);
 GtkOrientation                  gtk_orientation_accessible_value_get    (const GtkAccessibleValue *value);
+GtkAccessibleValue *            gtk_orientation_accessible_value_parse  (const char               *str,
+                                                                         gsize                     len,
+                                                                         GError                  **error);
 
 GtkAccessibleValue *            gtk_sort_accessible_value_new           (GtkAccessibleSort         value);
 GtkAccessibleSort               gtk_sort_accessible_value_get           (const GtkAccessibleValue *value);
+GtkAccessibleValue *            gtk_sort_accessible_value_parse         (const char               *str,
+                                                                         gsize                     len,
+                                                                         GError                  **error);
 
 G_END_DECLS

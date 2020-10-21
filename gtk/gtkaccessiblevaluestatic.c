@@ -282,6 +282,30 @@ gtk_invalid_accessible_value_get (const GtkAccessibleValue *value)
   return self->value;
 }
 
+GtkAccessibleValue *
+gtk_invalid_accessible_value_parse (const char  *str,
+                                    gsize        len,
+                                    GError     **error)
+{
+  g_return_val_if_fail (str == NULL || len == 0, NULL);
+
+  if (strncmp (str, "false", 5) == 0)
+    return gtk_invalid_accessible_value_new (GTK_ACCESSIBLE_INVALID_FALSE);
+  else if (strncmp (str, "true", 4) == 0)
+    return gtk_invalid_accessible_value_new (GTK_ACCESSIBLE_INVALID_TRUE);
+  else if (strncmp (str, "grammar", 7) == 0)
+    return gtk_invalid_accessible_value_new (GTK_ACCESSIBLE_INVALID_GRAMMAR);
+  else if (strncmp (str, "spelling", 8) == 0)
+    return gtk_invalid_accessible_value_new (GTK_ACCESSIBLE_INVALID_SPELLING);
+  else
+    g_set_error (error, GTK_ACCESSIBLE_VALUE_ERROR,
+                 GTK_ACCESSIBLE_VALUE_ERROR_INVALID_TOKEN,
+                 "Unknown token “%s”",
+                 str);
+
+  return NULL;
+}
+
 static const GtkAccessibleValueClass GTK_AUTOCOMPLETE_ACCESSIBLE_VALUE = {
   .type = GTK_ACCESSIBLE_VALUE_TYPE_TOKEN,
   .type_name = "GtkAutocompleteAccessibleValue",
@@ -327,6 +351,30 @@ gtk_autocomplete_accessible_value_get (const GtkAccessibleValue *value)
   return self->value;
 }
 
+GtkAccessibleValue *
+gtk_autocomplete_accessible_value_parse (const char  *str,
+                                         gsize        len,
+                                         GError     **error)
+{
+  g_return_val_if_fail (str == NULL || len == 0, NULL);
+
+  if (strncmp (str, "none", 4) == 0)
+    return gtk_autocomplete_accessible_value_new (GTK_ACCESSIBLE_AUTOCOMPLETE_NONE);
+  else if (strncmp (str, "inline", 6) == 0)
+    return gtk_autocomplete_accessible_value_new (GTK_ACCESSIBLE_AUTOCOMPLETE_INLINE);
+  else if (strncmp (str, "list", 4) == 0)
+    return gtk_autocomplete_accessible_value_new (GTK_ACCESSIBLE_AUTOCOMPLETE_LIST);
+  else if (strncmp (str, "both", 4) == 0)
+    return gtk_autocomplete_accessible_value_new (GTK_ACCESSIBLE_AUTOCOMPLETE_BOTH);
+  else
+    g_set_error (error, GTK_ACCESSIBLE_VALUE_ERROR,
+                 GTK_ACCESSIBLE_VALUE_ERROR_INVALID_TOKEN,
+                 "Unknown token “%s”",
+                 str);
+
+  return NULL;
+}
+
 static const GtkAccessibleValueClass GTK_ORIENTATION_ACCESSIBLE_VALUE = {
   .type = GTK_ACCESSIBLE_VALUE_TYPE_TOKEN,
   .type_name = "GtkOrientationAccessibleValue",
@@ -364,6 +412,26 @@ gtk_orientation_accessible_value_get (const GtkAccessibleValue *value)
                         GTK_ACCESSIBLE_VALUE_UNDEFINED);
 
   return self->value;
+}
+
+GtkAccessibleValue *
+gtk_orientation_accessible_value_parse (const char  *str,
+                                        gsize        len,
+                                        GError     **error)
+{
+  g_return_val_if_fail (str == NULL || len == 0, NULL);
+
+  if (strncmp (str, "horizontal", 10) == 0)
+    return gtk_orientation_accessible_value_new (GTK_ORIENTATION_HORIZONTAL);
+  else if (strncmp (str, "vertical", 8) == 0)
+    return gtk_orientation_accessible_value_new (GTK_ORIENTATION_VERTICAL);
+  else
+    g_set_error (error, GTK_ACCESSIBLE_VALUE_ERROR,
+                 GTK_ACCESSIBLE_VALUE_ERROR_INVALID_TOKEN,
+                 "Unknown token “%s”",
+                 str);
+
+  return NULL;
 }
 
 static const GtkAccessibleValueClass GTK_SORT_ACCESSIBLE_VALUE = {
@@ -409,6 +477,30 @@ gtk_sort_accessible_value_get (const GtkAccessibleValue *value)
                         GTK_ACCESSIBLE_SORT_NONE);
 
   return self->value;
+}
+
+GtkAccessibleValue *
+gtk_sort_accessible_value_parse (const char  *str,
+                                 gsize        len,
+                                 GError     **error)
+{
+  g_return_val_if_fail (str == NULL || len == 0, NULL);
+
+  if (strncmp (str, "none", 4) == 0)
+    return gtk_sort_accessible_value_new (GTK_ACCESSIBLE_SORT_NONE);
+  else if (strncmp (str, "ascending", 9) == 0)
+    return gtk_sort_accessible_value_new (GTK_ACCESSIBLE_SORT_ASCENDING);
+  else if (strncmp (str, "descending", 10) == 0)
+    return gtk_sort_accessible_value_new (GTK_ACCESSIBLE_SORT_DESCENDING);
+  else if (strncmp (str, "other", 5) == 0)
+    return gtk_sort_accessible_value_new (GTK_ACCESSIBLE_SORT_OTHER);
+  else
+    g_set_error (error, GTK_ACCESSIBLE_VALUE_ERROR,
+                 GTK_ACCESSIBLE_VALUE_ERROR_INVALID_TOKEN,
+                 "Unknown token “%s”",
+                 str);
+
+  return NULL;
 }
 
 /* }}} */
