@@ -651,13 +651,21 @@ gtk_switch_init (GtkSwitch *self)
                                   gtk_switch_allocate);
   gtk_widget_set_layout_manager (GTK_WIDGET (self), layout);
 
-  self->on_image = gtk_image_new_from_icon_name ("switch-on-symbolic");
+  self->on_image = g_object_new (GTK_TYPE_IMAGE,
+                                 "accessible-role", GTK_ACCESSIBLE_ROLE_NONE,
+                                 "icon-name", "switch-on-symbolic",
+                                 NULL);
   gtk_widget_set_parent (self->on_image, GTK_WIDGET (self));
 
-  self->off_image = gtk_image_new_from_icon_name ("switch-off-symbolic");
+  self->off_image = g_object_new (GTK_TYPE_IMAGE,
+                                  "accessible-role", GTK_ACCESSIBLE_ROLE_NONE,
+                                  "icon-name", "switch-off-symbolic",
+                                  NULL);
   gtk_widget_set_parent (self->off_image, GTK_WIDGET (self));
 
-  self->slider = gtk_gizmo_new ("slider", NULL, NULL, NULL, NULL, NULL, NULL);
+  self->slider = gtk_gizmo_new_with_role ("slider",
+                                          GTK_ACCESSIBLE_ROLE_NONE,
+                                          NULL, NULL, NULL, NULL, NULL, NULL);
   gtk_widget_set_parent (self->slider, GTK_WIDGET (self));
 
   gtk_accessible_update_state (GTK_ACCESSIBLE (self),
