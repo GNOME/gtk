@@ -816,33 +816,15 @@ emit_children_changed (GtkAtSpiContext         *self,
                        int                      idx,
                        GtkAccessibleChildState  state)
 {
-  const char *change;
-
-  switch (state)
-    {
-    case GTK_ACCESSIBLE_CHILD_STATE_ADDED:
-      change = "add";
-      break;
-
-    case GTK_ACCESSIBLE_CHILD_STATE_REMOVED:
-      change = "remove";
-      break;
-
-    default:
-      g_assert_not_reached ();
-      return;
-    }
-
-  GVariant *ref = gtk_at_spi_context_to_ref (child_context);
+  GVariant *child_ref = gtk_at_spi_context_to_ref (child_context);
   GVariant *context_ref = gtk_at_spi_context_to_ref (self);
 
-  g_dbus_connection_emit_signal (self->connection,
-                                 NULL,
-                                 self->context_path,
-                                 "org.a11y.atspi.Event.Object",
-                                 "ChildrenChanged",
-                                 g_variant_new ("(siiv@(so))", change, idx, 0, ref, context_ref),
-                                 NULL);
+  gtk_at_spi_emit_children_changed (self->connection,
+                                    self->context_path,
+                                    state,
+                                    idx,
+                                    child_ref,
+                                    context_ref);
 }
 
 static void
