@@ -45,6 +45,12 @@
  *
  * The item whose popover is currently open gets the .active
  * style class.
+ *
+ * # Accessibility
+ *
+ * GtkPopoverMenuBar uses the #GTK_ACCESSIBLE_ROLE_MENU_BAR role,
+ * the menu items use the #GTK_ACCESSIBLE_ROLE_MENU_ITEM role and
+ * the menus use the #GTK_ACCESSIBLE_ROLE_MENU role.
  */
 
 
@@ -126,7 +132,12 @@ set_active_item (GtkPopoverMenuBar     *bar,
     was_popup = FALSE;
 
   if (was_popup && changed)
-    gtk_popover_popdown (bar->active_item->popover);
+    {
+      gtk_accessible_update_state (GTK_ACCESSIBLE (bar->active_item),
+                                   GTK_ACCESSIBLE_STATE_EXPANDED, FALSE,
+                                   -1);
+      gtk_popover_popdown (bar->active_item->popover);
+    }
 
   if (changed)
     {
@@ -142,7 +153,12 @@ set_active_item (GtkPopoverMenuBar     *bar,
   if (bar->active_item)
     {
       if (popup || (was_popup && changed))
-        gtk_popover_popup (bar->active_item->popover);
+        {
+          gtk_popover_popup (bar->active_item->popover);
+          gtk_accessible_update_state (GTK_ACCESSIBLE (bar->active_item),
+                                       GTK_ACCESSIBLE_STATE_EXPANDED, FALSE,
+                                       -1);
+        }
       else if (changed)
         gtk_widget_grab_focus (GTK_WIDGET (bar->active_item));
     }
@@ -317,6 +333,22 @@ gtk_popover_menu_bar_item_activate (GtkPopoverMenuBarItem *item)
 }
 
 static void
+gtk_popover_menu_bar_item_root (GtkWidget *widget)
+{
+  GtkPopoverMenuBarItem *item = GTK_POPOVER_MENU_BAR_ITEM (widget);
+
+  GTK_WIDGET_CLASS (gtk_popover_menu_bar_item_parent_class)->root (widget);
+
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (widget),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, g_list_append (NULL, item->label),
+                                  GTK_ACCESSIBLE_RELATION_CONTROLS, g_list_append (NULL, item->popover),
+                                  -1);
+  gtk_accessible_update_property (GTK_ACCESSIBLE (widget),
+                                  GTK_ACCESSIBLE_PROPERTY_HAS_POPUP, TRUE,
+                                  -1);
+}
+
+static void
 gtk_popover_menu_bar_item_class_init (GtkPopoverMenuBarItemClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -325,6 +357,7 @@ gtk_popover_menu_bar_item_class_init (GtkPopoverMenuBarItemClass *klass)
   object_class->dispose = gtk_popover_menu_bar_item_dispose;
   object_class->finalize = gtk_popover_menu_bar_item_finalize;
 
+  widget_class->root = gtk_popover_menu_bar_item_root;
   widget_class->measure = gtk_popover_menu_bar_item_measure;
   widget_class->size_allocate = gtk_popover_menu_bar_item_size_allocate;
 
@@ -340,6 +373,7 @@ gtk_popover_menu_bar_item_class_init (GtkPopoverMenuBarItemClass *klass)
                   G_TYPE_NONE, 0);
 
   gtk_widget_class_set_css_name (widget_class, I_("item"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_MENU_ITEM);
 }
 enum
 {
@@ -552,6 +586,10 @@ gtk_popover_menu_bar_root (GtkWidget *widget)
 
   toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
   add_to_window (GTK_WINDOW (toplevel), bar);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (bar),
+                                  GTK_ACCESSIBLE_PROPERTY_ORIENTATION, GTK_ORIENTATION_HORIZONTAL,
+                                  -1);
 }
 
 static void
@@ -598,6 +636,7 @@ gtk_popover_menu_bar_class_init (GtkPopoverMenuBarClass *klass)
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("menubar"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_MENU_BAR);
 }
 
 static void
