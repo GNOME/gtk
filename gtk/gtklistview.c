@@ -135,6 +135,11 @@
  * The main listview node may also carry style classes to select
  * the style of [list presentation](ListContainers.html#list-styles):
  * .rich-list, .navigation-sidebar or .data-table.
+ *
+ * # Accessibility
+ *
+ * GtkListView uses the #GTK_ACCESSIBLE_ROLE_LIST role, and the list
+ * items use the #GTK_ACCESSIBLE_ROLE_LIST_ITEM role.
  */
 
 typedef struct _ListRow ListRow;

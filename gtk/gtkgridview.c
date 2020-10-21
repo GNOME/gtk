@@ -77,6 +77,11 @@
  * GtkGridView uses a single CSS node with name gridview. Each child
  * uses a single CSS node with name child. For rubberband selection,
  * a subnode with name rubberband is used.
+ *
+ * # Accessibility
+ *
+ * GtkGridView uses the #GTK_ACCESSIBLE_ROLE_GRID role, and the items
+ * use the #GTK_ACCESSIBLE_ROLE_GRID_CELL role.
  */
 
 typedef struct _Cell Cell;
