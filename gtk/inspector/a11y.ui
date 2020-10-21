@@ -29,6 +29,30 @@
           </object>
         </child>
         <child>
+          <object class="GtkBox">
+            <property name="margin-start">10</property>
+            <property name="margin-end">10</property>
+            <property name="margin-top">10</property>
+            <property name="margin-bottom">10</property>
+            <property name="spacing">40</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Object path</property>
+                <property name="halign">start</property>
+                <property name="valign">baseline</property>
+                <property name="xalign">0.0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="path">
+                <property name="selectable">1</property>
+                <property name="halign">end</property>
+                <property name="valign">baseline</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
           <object class="GtkSeparator"/>
         </child>
         <child>

@@ -239,6 +239,31 @@ you get to the point that you actually build your application against
 GTK 4. Making it possible to prepare for these in GTK 3 would
 have been either impossible or impractical.
 
+### Larger changes
+
+Some of the larger themes of GTK 4 development are hard to cover in the form
+of checklist items, so we mention them separately up-front.
+
+#### Subclassing
+
+Compared to previous versions, GTK 4 emphasizes composition and delegation
+over subclassing. As a consequence, many widgets can no longer be subclassed.
+In most cases, you should look deriving your widget directly from GtkWidget
+and use complex widgets as child widgets instead of deriving from them.
+
+#### Life-cycle handling
+
+Widgets in GTK 4 are treated like any other objects - their parent widget
+holds a reference on them, and GTK holds a reference on toplevel windows.
+gtk_window_destroy() will drop the reference on the toplevel window, and
+cause the whole widget hierarchy to be finalized unless there are other
+references that keep widgets alive.
+
+The #GtkWidget::destroy signal is emitted when a widget is disposed, and
+therefore can no longer be used to break reference cycles. A typical sign
+of a reference cycle involving a toplevel window is when closing the window
+does not make the application quit.
+
 ### Stop using GdkScreen
 
 The GdkScreen object has been removed in GTK 4. Most of its APIs already

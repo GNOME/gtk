@@ -8973,6 +8973,7 @@ gtk_widget_add_mnemonic_label (GtkWidget *widget,
                                GtkWidget *label)
 {
   GSList *old_list, *new_list;
+  GList *list;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_IS_WIDGET (label));
@@ -8983,8 +8984,9 @@ gtk_widget_add_mnemonic_label (GtkWidget *widget,
   g_object_set_qdata_full (G_OBJECT (widget), quark_mnemonic_labels,
 			   new_list, (GDestroyNotify) g_slist_free);
 
+  list = gtk_widget_list_mnemonic_labels (widget);
   gtk_accessible_update_relation (GTK_ACCESSIBLE (widget),
-                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, new_list,
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, list,
                                   -1);
 }
 
@@ -9017,15 +9019,17 @@ gtk_widget_remove_mnemonic_label (GtkWidget *widget,
 
   if (new_list != NULL && new_list->data != NULL)
     {
+      GList *list;
+
+      list = gtk_widget_list_mnemonic_labels (widget);
       gtk_accessible_update_relation (GTK_ACCESSIBLE (widget),
-                                      GTK_ACCESSIBLE_RELATION_LABELLED_BY, new_list,
+                                      GTK_ACCESSIBLE_RELATION_LABELLED_BY, list,
                                       -1);
     }
   else
     {
-      gtk_accessible_update_relation (GTK_ACCESSIBLE (widget),
-                                      GTK_ACCESSIBLE_RELATION_LABELLED_BY, NULL,
-                                      -1);
+      gtk_accessible_reset_relation (GTK_ACCESSIBLE (widget),
+                                     GTK_ACCESSIBLE_RELATION_LABELLED_BY);
     }
 }
 

@@ -122,6 +122,12 @@
  * CSS nodes with name cursor-handle. They get the .top or .bottom style class
  * depending on where they are shown in relation to the selection. If there is
  * just a single handle for the text cursor, it gets the style class .insertion-cursor.
+ *
+ * # Accessibility
+ *
+ * GtkText uses the #GTK_ACCESSIBLE_ROLE_NONE role, which causes it to be skipped
+ * for accessibility. This is because GtkText is expected to be used as a delegate
+ * for a #GtkEditable implementation that will be represented to accessibility.
  */
 
 #define NAT_ENTRY_WIDTH  150

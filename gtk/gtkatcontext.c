@@ -760,7 +760,7 @@ gtk_at_context_get_name_accumulate (GtkATContext *self,
 
       GList *list = gtk_reference_list_accessible_value_get (value);
 
-      for (GList *l = list; l != NULL; l = l->data)
+      for (GList *l = list; l != NULL; l = l->next)
         {
           GtkAccessible *rel = GTK_ACCESSIBLE (l->data);
           GtkATContext *rel_context = gtk_accessible_get_at_context (rel);

@@ -85,6 +85,11 @@
  * The main list node may also carry style classes to select
  * the style of [list presentation](ListContainers.html#list-styles):
  * .rich-list, .navigation-sidebar or .data-table.
+ *
+ * # Accessibility
+ *
+ * GtkListBox uses the #GTK_ACCESSIBLE_ROLE_LIST role and GtkListBoxRow uses
+ * the #GTK_ACCESSIBLE_ROLE_LIST_ITEM role.
  */
 
 typedef struct _GtkListBoxClass   GtkListBoxClass;

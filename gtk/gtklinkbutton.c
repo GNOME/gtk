@@ -50,7 +50,7 @@
  *
  * # Accessibility
  *
- * GtkLinkButton uses the #GTK_ACCESSIBKE_ROLE_BUTTON role.
+ * GtkLinkButton uses the #GTK_ACCESSIBLE_ROLE_BUTTON role.
  */
 
 #include "config.h"

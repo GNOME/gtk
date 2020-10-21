@@ -25,6 +25,24 @@ button_label (void)
   g_object_unref (button);
 }
 
+/* Check that we set up a labelled_by relationship between a button
+ * and its label.
+ */
+static void
+button_relation (void)
+{
+  GtkWidget *button = gtk_button_new_with_mnemonic ("_Hello");
+  GList *list;
+
+  g_object_ref_sink (button);
+
+  list = g_list_append (NULL, gtk_widget_get_first_child (button));
+  gtk_test_accessible_assert_relation (GTK_ACCESSIBLE (button), GTK_ACCESSIBLE_RELATION_LABELLED_BY, list);
+  g_list_free (list);
+
+  g_object_unref (button);
+}
+
 static void
 linkbutton_role (void)
 {
@@ -54,6 +72,7 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/a11y/button/role", button_role);
   g_test_add_func ("/a11y/button/label", button_label);
+  g_test_add_func ("/a11y/button/relation", button_relation);
   g_test_add_func ("/a11y/linkbutton/role", linkbutton_role);
   g_test_add_func ("/a11y/linkbutton/label", linkbutton_label);
 
