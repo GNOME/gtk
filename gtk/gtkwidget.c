@@ -248,8 +248,8 @@
  *
  * # GtkWidget as GtkBuildable
  *
- * The GtkWidget implementation of the GtkBuildable interface supports a
- * custom <accelerator> element, which has attributes named ”key”, ”modifiers”
+ * The GtkWidget implementation of the #GtkBuildable interface supports a
+ * custom `<accelerator>` element, which has attributes named ”key”, ”modifiers”
  * and ”signal” and allows to specify accelerators.
  *
  * An example of a UI definition fragment specifying an accelerator:
@@ -260,7 +260,7 @@
  * ]|
  *
  * If the parent widget uses a #GtkLayoutManager, #GtkWidget supports a
- * custom <layout> element, used to define layout properties:
+ * custom `<layout>` element, used to define layout properties:
  *
  * |[
  * <object class="MyGrid" id="grid1">
@@ -288,14 +288,25 @@
  * </object>
  * ]|
  *
- * Finally, GtkWidget allows style information such as style classes to
- * be associated with widgets, using the custom <style> element:
+ * GtkWidget allows style information such as style classes to
+ * be associated with widgets, using the custom `<style>` element:
  * |[
  * <object class="GtkButton" id="button1">
  *   <style>
  *     <class name="my-special-button-class"/>
  *     <class name="dark-button"/>
  *   </style>
+ * </object>
+ * ]|
+ *
+ * GtkWidget allows defining accessibility information, such as properties,
+ * relations, and states, using the custom `<accessibility>` element:
+ * |[
+ * <object class="GtkButton" id="button1">
+ *   <accessibility>
+ *     <property name="label">Download</property>
+ *     <relation name="labelled-by">label1</relation>
+ *   </accessibility>
  * </object>
  * ]|
  *
