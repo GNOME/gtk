@@ -529,12 +529,13 @@ gtk_range_init (GtkRange *range)
 
   gtk_widget_update_orientation (GTK_WIDGET (range), priv->orientation);
 
-  priv->trough_widget = gtk_gizmo_new ("trough",
-                                       gtk_range_measure_trough,
-                                       gtk_range_allocate_trough,
-                                       gtk_range_render_trough,
-                                       NULL,
-                                       NULL, NULL);
+  priv->trough_widget = gtk_gizmo_new_with_role ("trough",
+                                                 GTK_ACCESSIBLE_ROLE_NONE,
+                                                 gtk_range_measure_trough,
+                                                 gtk_range_allocate_trough,
+                                                 gtk_range_render_trough,
+                                                 NULL,
+                                                 NULL, NULL);
 
   gtk_widget_set_parent (priv->trough_widget, GTK_WIDGET (range));
 
