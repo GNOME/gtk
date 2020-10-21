@@ -8831,6 +8831,23 @@ gtk_widget_buildable_finish_accessibility_properties (GtkWidget *widget,
           continue;
         }
 
+      if (value == NULL)
+        {
+          GObject *obj = gtk_builder_get_object (accessibility_data->builder,
+                                                 pinfo->value->str);
+
+          if (obj == NULL)
+            {
+              g_warning ("Failed to find accessible object “%s” for relation “%s”",
+                         pinfo->value->str,
+                         pinfo->name);
+              continue;
+            }
+
+          /* FIXME: Need to distinguish between refs and refslist types */
+          value = gtk_reference_list_accessible_value_new (g_list_append (NULL, obj));
+        }
+
       gtk_at_context_set_accessible_relation (context, relation, value);
       gtk_accessible_value_unref (value);
     }

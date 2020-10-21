@@ -1445,11 +1445,10 @@ gtk_accessible_value_parse (const GtkAccessibleCollect  *cstate,
     case GTK_ACCESSIBLE_COLLECT_REFERENCE:
     case GTK_ACCESSIBLE_COLLECT_REFERENCE_LIST:
       {
+        /* We do not error out, to let the caller code deal
+         * with the references themselves
+         */
         res = NULL;
-        g_set_error (error, GTK_ACCESSIBLE_VALUE_ERROR,
-                     GTK_ACCESSIBLE_VALUE_ERROR_INVALID_VALUE,
-                     "Invalid relation “%s”",
-                     str);
       }
       break;
 
