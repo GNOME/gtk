@@ -406,6 +406,46 @@ static const GDBusInterfaceVTable root_accessible_vtable = {
 };
 
 static void
+root_toplevels__items_changed (GtkAtSpiRoot *self,
+                               guint         position,
+                               guint         removed,
+                               guint         added,
+                               GListModel   *toplevels)
+{
+  GtkWidget *window = g_list_model_get_item (self->toplevels, position);
+  GVariant *window_ref = NULL;
+
+  if (window == NULL)
+    {
+      window_ref = gtk_at_spi_null_ref ();
+    }
+  else
+    {
+      GtkATContext *context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (window));
+
+      window_ref = gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (context));
+    }
+
+  if (added == 1 && removed == 0)
+    gtk_at_spi_emit_children_changed (self->connection,
+                                      self->root_path,
+                                      GTK_ACCESSIBLE_CHILD_STATE_ADDED,
+                                      position,
+                                      gtk_at_spi_root_to_ref (self),
+                                      window_ref);
+  else if (removed == 1 && added == 0)
+    gtk_at_spi_emit_children_changed (self->connection,
+                                      self->root_path,
+                                      GTK_ACCESSIBLE_CHILD_STATE_REMOVED,
+                                      position,
+                                      gtk_at_spi_root_to_ref (self),
+                                      window_ref);
+
+  if (window != NULL)
+    g_object_unref (window);
+}
+
+static void
 on_registration_reply (GObject      *gobject,
                        GAsyncResult *result,
                        gpointer      user_data)
@@ -439,6 +479,9 @@ on_registration_reply (GObject      *gobject,
 
   /* Monitor the top levels */
   self->toplevels = gtk_window_get_toplevels ();
+  g_signal_connect_swapped (self->toplevels, "items-changed",
+                            G_CALLBACK (root_toplevels__items_changed),
+                            self);
 }
 
 static void
