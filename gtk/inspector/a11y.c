@@ -34,6 +34,9 @@
 #include "gtknoselection.h"
 #include "gtkfilterlistmodel.h"
 #include "gtkboolfilter.h"
+#ifdef G_OS_UNIX
+#include "a11y/gtkatspicontextprivate.h"
+#endif
 
 typedef enum {
   STATE,
@@ -198,6 +201,7 @@ struct _GtkInspectorA11y
 
   GtkWidget *box;
   GtkWidget *role;
+  GtkWidget *path;
   GtkWidget *attributes;
 };
 
@@ -223,6 +227,21 @@ update_role (GtkInspectorA11y *sl)
   g_type_class_unref (eclass);
 }
 
+static void
+update_path (GtkInspectorA11y *sl)
+{
+  const char *path = "—";
+#ifdef G_OS_UNIX
+  GtkATContext *context;
+
+  context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (sl->object));
+  if (GTK_IS_AT_SPI_CONTEXT (context))
+    path = gtk_at_spi_context_get_context_path (GTK_AT_SPI_CONTEXT (context));
+#endif
+
+  gtk_label_set_label (GTK_LABEL (sl->path), path);
+}
+
 extern GType gtk_string_pair_get_type (void);
 
 static void
@@ -244,6 +263,8 @@ update_attributes (GtkInspectorA11y *sl)
   gboolean has_value;
 
   context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (sl->object));
+  if (!context)
+    return;
 
   store = g_list_store_new (G_TYPE_OBJECT);
 
@@ -380,6 +401,7 @@ static void
 refresh_all (GtkInspectorA11y *sl)
 {
   update_role (sl);
+  update_path (sl);
   update_attributes (sl);
 }
 
@@ -394,7 +416,8 @@ gtk_inspector_a11y_set_object (GtkInspectorA11y *sl,
   if (sl->object && GTK_IS_ACCESSIBLE (sl->object))
     {
       context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (sl->object));
-      g_signal_handlers_disconnect_by_func (context, refresh_all, sl);
+      if (context)
+        g_signal_handlers_disconnect_by_func (context, refresh_all, sl);
     }
 
   g_set_object (&sl->object, object);
@@ -405,9 +428,11 @@ gtk_inspector_a11y_set_object (GtkInspectorA11y *sl,
   if (GTK_IS_ACCESSIBLE (object))
     {
       context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (sl->object));
-      g_signal_connect_swapped (context, "state-change", G_CALLBACK (refresh_all), sl);
+      if (context)
+        g_signal_connect_swapped (context, "state-change", G_CALLBACK (refresh_all), sl);
       gtk_stack_page_set_visible (page, TRUE);
       update_role (sl);
+      update_path (sl);
       update_attributes (sl);
     }
   else
@@ -453,6 +478,7 @@ gtk_inspector_a11y_class_init (GtkInspectorA11yClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/a11y.ui");
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, box);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, role);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, path);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, attributes);
 
   gtk_widget_class_bind_template_callback (widget_class, setup_cell_cb);
