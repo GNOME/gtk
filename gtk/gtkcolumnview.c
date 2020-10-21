@@ -247,9 +247,26 @@ gtk_column_view_buildable_interface_init (GtkBuildableIface *iface)
   iface->add_child = gtk_column_view_buildable_add_child;
 }
 
+static gboolean
+gtk_column_view_scrollable_get_border (GtkScrollable *scrollable,
+                                       GtkBorder     *border)
+{
+  GtkColumnView *self = GTK_COLUMN_VIEW (scrollable);
+
+  border->top = gtk_widget_get_height (self->header);
+
+  return TRUE;
+}
+
+static void
+gtk_column_view_scrollable_interface_init (GtkScrollableInterface *iface)
+{
+  iface->get_border = gtk_column_view_scrollable_get_border;
+}
+
 G_DEFINE_TYPE_WITH_CODE (GtkColumnView, gtk_column_view, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gtk_column_view_buildable_interface_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, gtk_column_view_scrollable_interface_init))
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };

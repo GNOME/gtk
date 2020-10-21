@@ -3488,11 +3488,13 @@ gtk_text_css_changed (GtkWidget         *widget,
 
   gtk_text_update_cached_style_values (self);
 
-  if (change == NULL ||
-      gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT |
+  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT |
                                             GTK_CSS_AFFECTS_BACKGROUND |
                                             GTK_CSS_AFFECTS_CONTENT))
-    gtk_widget_queue_draw (GTK_WIDGET (self));
+    gtk_widget_queue_draw (widget);
+
+  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_ATTRS))
+    gtk_text_recompute (self);
 }
 
 static void
