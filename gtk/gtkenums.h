@@ -1193,11 +1193,11 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_MARQUEE: Unused
  * @GTK_ACCESSIBLE_ROLE_MATH: Unused
  * @GTK_ACCESSIBLE_ROLE_METER: An element that represents a value within a known range.
- * @GTK_ACCESSIBLE_ROLE_MENU: Unused
- * @GTK_ACCESSIBLE_ROLE_MENU_BAR: Unused
- * @GTK_ACCESSIBLE_ROLE_MENU_ITEM: Unused
- * @GTK_ACCESSIBLE_ROLE_MENU_ITEM_CHECKBOX: Unused
- * @GTK_ACCESSIBLE_ROLE_MENU_ITEM_RADIO: Unused
+ * @GTK_ACCESSIBLE_ROLE_MENU: A menu.
+ * @GTK_ACCESSIBLE_ROLE_MENU_BAR: A menubar.
+ * @GTK_ACCESSIBLE_ROLE_MENU_ITEM: An item in a menu.
+ * @GTK_ACCESSIBLE_ROLE_MENU_ITEM_CHECKBOX: A check item in a menu.
+ * @GTK_ACCESSIBLE_ROLE_MENU_ITEM_RADIO: A radio item in a menu.
  * @GTK_ACCESSIBLE_ROLE_NAVIGATION: Unused
  * @GTK_ACCESSIBLE_ROLE_NONE: An element that is not represented to accessibility technologies.
  * @GTK_ACCESSIBLE_ROLE_NOTE: Unused

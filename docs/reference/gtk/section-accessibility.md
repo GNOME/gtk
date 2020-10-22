@@ -56,6 +56,11 @@ Each role name is part of the #GtkAccessibleRole enumeration.
 | `LABEL` | A visible name or caption for a user interface component | #GtkLabel |
 | `LIST` | A list of items | #GtkListBox |
 | `LIST_ITEM` | An item in a list | #GtkListBoxRow |
+| `MENU` | A menu | #GtkPopoverMenu |
+| `MENU_BAR` | A menubar | #GtkPopoverMenuBar |
+| `MENU_ITEM` | A menu item | Items in #GtkPopoverMenu |
+| `MENU_ITEM_CHECKBOX` | Check menu item | Items in #GtkPopoverMenu |
+| `MENU_ITEM_RADIO` | Radio menu item | Items in #GtkPopoverMenu |
 | `METER` | Represents a value within a known range | #GtkLevelBar |
 | `NONE` | Not represented in the accessibility tree | the slider of a #GtkScale |
 | `PROGRESS_BAR` | An element that display progress | #GtkProgressBar |
