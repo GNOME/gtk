@@ -847,7 +847,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkFontButton" id="fontbutton1">
                                 <property name="receives-default">1</property>
-                                <property name="level">family|style|size|features|variations</property>
+                                <property name="level">family|size|features|variations</property>
                               </object>
                             </child>
                             <child>
@@ -1013,7 +1013,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                         <property name="adjustment">adjustment1</property>
                                         <property name="restrict-to-fill-level">0</property>
                                         <property name="fill-level">75</property>
-                                        <property name="digits">-1</property>
+                                        <property name="digits">1</property>
                                         <property name="draw-value">1</property>
                                         <property name="halign">end</property>
                                       </object>
@@ -1026,7 +1026,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                         <property name="adjustment">adjustment1</property>
                                         <property name="restrict-to-fill-level">0</property>
                                         <property name="fill-level">75</property>
-                                        <property name="digits">-1</property>
+                                        <property name="digits">1</property>
                                         <property name="draw-value">1</property>
                                         <property name="halign">start</property>
                                       </object>
@@ -1081,7 +1081,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </style>
                                 <child type="label">
                                   <object class="GtkLabel" id="label17">
-                                    <property name="label" translatable="yes">&lt;b&gt;Groove&lt;/b&gt;</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;Groove, Groove, Groove&lt;/b&gt;</property>
                                     <property name="use-markup">1</property>
                                   </object>
                                 </child>
