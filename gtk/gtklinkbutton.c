@@ -50,7 +50,7 @@
  *
  * # Accessibility
  *
- * GtkLinkButton uses the #GTK_ACCESSIBLE_ROLE_BUTTON role.
+ * GtkLinkButton uses the #GTK_ACCESSIBLE_ROLE_LINK role.
  */
 
 #include "config.h"
@@ -220,7 +220,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
                   G_TYPE_BOOLEAN, 0);
 
   gtk_widget_class_set_css_name (widget_class, I_("button"));
-  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_BUTTON);
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_LINK);
 
   /**
    * GtkLinkButton|clipboard.copy:

@@ -54,6 +54,7 @@ Each role name is part of the #GtkAccessibleRole enumeration.
 | `GRID_CELL` | An item in a grid | #GtkFlowBoxChild, #GtkGridView, #GtkColumnView |
 | `IMG` | An image | #GtkImage, #GtkPicture |
 | `LABEL` | A visible name or caption for a user interface component | #GtkLabel |
+| `LINK` | A clickable hyperlink | #GtkLinkButton |
 | `LIST` | A list of items | #GtkListBox |
 | `LIST_ITEM` | An item in a list | #GtkListBoxRow |
 | `MENU` | A menu | #GtkPopoverMenu |

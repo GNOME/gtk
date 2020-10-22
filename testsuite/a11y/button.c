@@ -49,7 +49,7 @@ linkbutton_role (void)
   GtkWidget *button = gtk_link_button_new ("Hello");
   g_object_ref_sink (button);
 
-  gtk_test_accessible_assert_role (button, GTK_ACCESSIBLE_ROLE_BUTTON);
+  gtk_test_accessible_assert_role (button, GTK_ACCESSIBLE_ROLE_LINK);
 
   g_object_unref (button);
 }
