@@ -969,6 +969,11 @@ gtk_picture_set_alternative_text (GtkPicture *self,
 
   g_free (self->alternative_text);
   self->alternative_text = g_strdup (alternative_text);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_PROPERTY_DESCRIPTION, alternative_text,
+                                  -1);
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ALTERNATIVE_TEXT]);
 }
 
