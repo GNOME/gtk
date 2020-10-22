@@ -264,6 +264,14 @@ therefore can no longer be used to break reference cycles. A typical sign
 of a reference cycle involving a toplevel window is when closing the window
 does not make the application quit.
 
+A good rule to follow is: If you set a widget pointer with
+gtk_widget_class_bind_template_child() in class_init(), you need to
+unparent it in dispose(). The slight complication here is that you need
+to respect the widget hierarchy while doing so. Ie if you set both `field1`
+and `field2`, but `field1` is an ancestor of `field2`, then you only need
+to unparent `field1` — doing so will remove the the entire subtree below
+`field1`, including `field2`.
+
 ### Stop using GdkScreen
 
 The GdkScreen object has been removed in GTK 4. Most of its APIs already

@@ -45,6 +45,7 @@
 #include "gtkshortcuttrigger.h"
 #include "gtkshortcutcontroller.h"
 #include "gtkshortcut.h"
+#include "gtkaccessibleprivate.h"
 
 /**
  * SECTION:gtkmodelbutton
@@ -175,6 +176,8 @@ struct _GtkModelButton
   guint open_timeout;
   GtkEventController *controller;
 
+  GtkATContext *at_context;
+
   guint active : 1;
   guint centered : 1;
   guint iconic : 1;
@@ -190,7 +193,11 @@ struct _GtkModelButtonClass
 };
 
 static void gtk_model_button_actionable_iface_init (GtkActionableInterface *iface);
+
+static void gtk_model_button_accessible_iface_init (GtkAccessibleInterface *iface);
+
 G_DEFINE_TYPE_WITH_CODE (GtkModelButton, gtk_model_button, GTK_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE, gtk_model_button_accessible_iface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIONABLE, gtk_model_button_actionable_iface_init))
 
 GType
@@ -293,6 +300,50 @@ gtk_model_button_actionable_iface_init (GtkActionableInterface *iface)
   iface->set_action_name = gtk_model_button_set_action_name;
   iface->get_action_target_value = gtk_model_button_get_action_target_value;
   iface->set_action_target_value = gtk_model_button_set_action_target_value;
+}
+
+static GtkATContext *
+create_at_context (GtkModelButton *button)
+{
+  GdkDisplay *display = _gtk_widget_get_display (GTK_WIDGET (button));
+  GtkAccessibleRole role;
+
+  switch (button->role)
+    {
+    default:
+    case GTK_BUTTON_ROLE_NORMAL:
+    case GTK_BUTTON_ROLE_TITLE:
+      role = GTK_ACCESSIBLE_ROLE_MENU_ITEM;
+      break;
+    case GTK_BUTTON_ROLE_CHECK:
+      role = GTK_ACCESSIBLE_ROLE_MENU_ITEM_CHECKBOX;
+      break;
+    case GTK_BUTTON_ROLE_RADIO:
+      role = GTK_ACCESSIBLE_ROLE_MENU_ITEM_RADIO;
+      break;
+    }
+
+  return gtk_at_context_create (role, GTK_ACCESSIBLE (button), display);
+}
+
+static GtkATContext *
+gtk_model_button_get_at_context (GtkAccessible *accessible)
+{
+  GtkModelButton *button = GTK_MODEL_BUTTON (accessible);
+
+  if (button->at_context == NULL)
+    button->at_context = create_at_context (button);
+
+  return button->at_context;
+}
+
+static void
+gtk_model_button_accessible_iface_init (GtkAccessibleInterface *iface)
+{
+  GtkAccessibleInterface *parent_iface = g_type_interface_peek_parent (iface);
+
+  iface->get_at_context = gtk_model_button_get_at_context;
+  iface->get_platform_state = parent_iface->get_platform_state;
 }
 
 static void
@@ -519,6 +570,35 @@ update_node_name (GtkModelButton *self)
 }
 
 static void
+update_accessible_properties (GtkModelButton *button)
+{
+  if (button->menu_name || button->popover)
+    gtk_accessible_update_property (GTK_ACCESSIBLE (button),
+                                    GTK_ACCESSIBLE_PROPERTY_HAS_POPUP, TRUE,
+                                    -1);
+  else
+    gtk_accessible_reset_property (GTK_ACCESSIBLE (button),
+                                   GTK_ACCESSIBLE_PROPERTY_HAS_POPUP);
+
+  if (button->popover)
+    gtk_accessible_update_relation (GTK_ACCESSIBLE (button),
+                                    GTK_ACCESSIBLE_RELATION_CONTROLS, g_list_append (NULL, button->popover),
+                                    -1);
+  else
+    gtk_accessible_reset_relation (GTK_ACCESSIBLE (button),
+                                   GTK_ACCESSIBLE_RELATION_CONTROLS);
+
+  if (button->role == GTK_BUTTON_ROLE_CHECK ||
+      button->role == GTK_BUTTON_ROLE_RADIO)
+    gtk_accessible_update_state (GTK_ACCESSIBLE (button),
+                                 GTK_ACCESSIBLE_STATE_CHECKED, button->active,
+                                 -1);
+  else
+    gtk_accessible_reset_state (GTK_ACCESSIBLE (button),
+                                GTK_ACCESSIBLE_STATE_CHECKED);
+}
+
+static void
 gtk_model_button_set_role (GtkModelButton *self,
                            GtkButtonRole   role)
 {
@@ -540,6 +620,10 @@ gtk_model_button_set_role (GtkModelButton *self,
 
   update_node_name (self);
   gtk_model_button_update_state (self);
+
+  g_set_object (&self->at_context, create_at_context (self));
+
+  update_accessible_properties (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ROLE]);
 }
@@ -622,6 +706,9 @@ gtk_model_button_set_active (GtkModelButton *button,
     return;
 
   button->active = active;
+
+  update_accessible_properties (button);
+
   gtk_model_button_update_state (button);
   gtk_widget_queue_draw (GTK_WIDGET (button));
   g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_ACTIVE]);
@@ -636,6 +723,8 @@ gtk_model_button_set_menu_name (GtkModelButton *button,
 
   update_node_name (button);
   gtk_model_button_update_state (button);
+
+  update_accessible_properties (button);
 
   gtk_widget_queue_resize (GTK_WIDGET (button));
   g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_MENU_NAME]);
@@ -703,6 +792,8 @@ gtk_model_button_set_popover (GtkModelButton *button,
       gtk_widget_set_parent (button->popover, GTK_WIDGET (button));
       gtk_popover_set_position (GTK_POPOVER (button->popover), GTK_POS_RIGHT);
     }
+
+  update_accessible_properties (button);
 
   update_node_name (button);
   gtk_model_button_update_state (button);
@@ -918,11 +1009,13 @@ gtk_model_button_set_property (GObject      *object,
 }
 
 static void
-gtk_model_button_dispose (GObject  *object)
+gtk_model_button_dispose (GObject *object)
 {
   GtkModelButton *model_button = GTK_MODEL_BUTTON (object);
 
   g_clear_pointer (&model_button->menu_name, g_free);
+
+  g_clear_object (&model_button->at_context);
 
   G_OBJECT_CLASS (gtk_model_button_parent_class)->dispose (object);
 }
@@ -1186,7 +1279,8 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   widget_class->activate_signal = signals[SIGNAL_CLICKED];
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
-  gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), I_("modelbutton"));
+  gtk_widget_class_set_css_name (widget_class, I_("modelbutton"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_MENU_ITEM);
 }
 
 static void

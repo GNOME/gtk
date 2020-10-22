@@ -540,7 +540,9 @@ update_block_nodes (GtkLevelBar *self)
       self->block_widget = g_renew (GtkWidget*, self->block_widget, n_blocks);
       for (i = self->n_blocks; i < n_blocks; i++)
         {
-          self->block_widget[i] = gtk_gizmo_new ("block", NULL, NULL, NULL, NULL, NULL, NULL);
+          self->block_widget[i] = gtk_gizmo_new_with_role ("block",
+                                                           GTK_ACCESSIBLE_ROLE_NONE,
+                                                           NULL, NULL, NULL, NULL, NULL, NULL);
           gtk_widget_insert_before (self->block_widget[i], GTK_WIDGET (self->trough_widget), NULL);
         }
       self->n_blocks = n_blocks;
@@ -1024,12 +1026,13 @@ gtk_level_bar_init (GtkLevelBar *self)
 
   self->inverted = FALSE;
 
-  self->trough_widget = gtk_gizmo_new ("trough",
-                                       gtk_level_bar_measure_trough,
-                                       gtk_level_bar_allocate_trough,
-                                       gtk_level_bar_render_trough,
-                                       NULL,
-                                       NULL, NULL);
+  self->trough_widget = gtk_gizmo_new_with_role ("trough",
+                                                 GTK_ACCESSIBLE_ROLE_NONE,
+                                                 gtk_level_bar_measure_trough,
+                                                 gtk_level_bar_allocate_trough,
+                                                 gtk_level_bar_render_trough,
+                                                 NULL,
+                                                 NULL, NULL);
   gtk_widget_set_parent (self->trough_widget, GTK_WIDGET (self));
 
   gtk_level_bar_ensure_offset (self, GTK_LEVEL_BAR_OFFSET_LOW, 0.25);

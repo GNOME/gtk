@@ -32,6 +32,7 @@
 #include "gtkbutton.h"
 #include "gtkentryprivate.h"
 #include "gtkexpander.h"
+#include "gtkmodelbuttonprivate.h"
 #include "gtkpasswordentryprivate.h"
 #include "gtkswitch.h"
 #include "gtkwidgetprivate.h"
@@ -810,7 +811,8 @@ static const GDBusInterfaceVTable widget_action_vtable = {
 const GDBusInterfaceVTable *
 gtk_atspi_get_action_vtable (GtkAccessible *accessible)
 {
-  if (GTK_IS_BUTTON (accessible))
+  if (GTK_IS_BUTTON (accessible) ||
+      GTK_IS_MODEL_BUTTON (accessible))
     return &button_action_vtable;
   else if (GTK_IS_ENTRY (accessible))
     return &entry_action_vtable;

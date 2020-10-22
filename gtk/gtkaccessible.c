@@ -746,7 +746,8 @@ gtk_accessible_should_present (GtkAccessible *self)
       !gtk_widget_get_visible (GTK_WIDGET (self)))
     return FALSE;
 
-  if (gtk_accessible_get_accessible_role (self) == GTK_ACCESSIBLE_ROLE_NONE)
+  if (gtk_accessible_get_accessible_role (self) == GTK_ACCESSIBLE_ROLE_NONE ||
+      gtk_accessible_get_accessible_role (self) == GTK_ACCESSIBLE_ROLE_PRESENTATION)
     return FALSE;
 
   return TRUE;

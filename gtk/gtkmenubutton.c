@@ -106,6 +106,10 @@
  *
  * GtkMenuButton has a single CSS node with name button. To differentiate
  * it from a plain #GtkButton, it gets the .popup style class.
+ *
+ * # Accessibility
+ *
+ * GtkMenuButton uses the #GTK_ACCESSIBLE_ROLE_BUTTON role.
  */
 
 #include "config.h"
@@ -269,9 +273,18 @@ gtk_menu_button_toggled (GtkMenuButton *self)
   if (self->popover)
     {
       if (active)
-        gtk_popover_popup (GTK_POPOVER (self->popover));
+        {
+          gtk_popover_popup (GTK_POPOVER (self->popover));
+          gtk_accessible_update_state (GTK_ACCESSIBLE (self),
+                                       GTK_ACCESSIBLE_STATE_EXPANDED, TRUE,
+                                       -1);
+        }
       else
-        gtk_popover_popdown (GTK_POPOVER (self->popover));
+        {
+          gtk_popover_popdown (GTK_POPOVER (self->popover));
+          gtk_accessible_reset_state (GTK_ACCESSIBLE (self),
+                                      GTK_ACCESSIBLE_STATE_EXPANDED);
+        }
     }
 }
 
@@ -417,6 +430,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   g_object_class_install_properties (gobject_class, LAST_PROP, menu_button_props);
 
   gtk_widget_class_set_css_name (widget_class, I_("menubutton"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_BUTTON);
 }
 
 static void
@@ -495,9 +509,23 @@ gtk_menu_button_new (void)
 static void
 update_sensitivity (GtkMenuButton *self)
 {
-  gtk_widget_set_sensitive (self->button,
-                            self->popover != NULL ||
-                            self->create_popup_func != NULL);
+  gboolean has_popup;
+
+  has_popup = self->popover != NULL || self->create_popup_func != NULL;
+
+  gtk_widget_set_sensitive (self->button, has_popup);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_PROPERTY_HAS_POPUP, has_popup,
+                                  -1);
+  if (self->popover != NULL)
+    gtk_accessible_update_relation (GTK_ACCESSIBLE (self),
+                                    GTK_ACCESSIBLE_RELATION_CONTROLS,
+                                        g_list_append (NULL, self->popover),
+                                    -1);
+  else
+    gtk_accessible_reset_relation (GTK_ACCESSIBLE (self),
+                                   GTK_ACCESSIBLE_RELATION_CONTROLS);
 }
 
 static gboolean

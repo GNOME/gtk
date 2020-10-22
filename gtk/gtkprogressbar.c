@@ -446,15 +446,18 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
   pbar->text = NULL;
   pbar->fraction = 0.0;
 
-  pbar->trough_widget = gtk_gizmo_new ("trough",
-                                       NULL,
-                                       allocate_trough,
-                                       NULL,
-                                       NULL,
-                                       NULL, NULL);
+  pbar->trough_widget = gtk_gizmo_new_with_role ("trough",
+                                                 GTK_ACCESSIBLE_ROLE_NONE,
+                                                 NULL,
+                                                 allocate_trough,
+                                                 NULL,
+                                                 NULL,
+                                                 NULL, NULL);
   gtk_widget_set_parent (pbar->trough_widget, GTK_WIDGET (pbar));
 
-  pbar->progress_widget = gtk_gizmo_new ("progress", NULL, NULL, NULL, NULL, NULL, NULL);
+  pbar->progress_widget = gtk_gizmo_new_with_role ("progress",
+                                                   GTK_ACCESSIBLE_ROLE_NONE,
+                                                   NULL, NULL, NULL, NULL, NULL, NULL);
   gtk_widget_set_parent (pbar->progress_widget, pbar->trough_widget);
 
   /* horizontal is default */
@@ -874,6 +877,7 @@ gtk_progress_bar_set_show_text (GtkProgressBar *pbar,
       char *text = get_current_text (pbar);
 
       pbar->label = g_object_new (GTK_TYPE_LABEL,
+                                  "accessible-role", GTK_ACCESSIBLE_ROLE_NONE,
                                   "css-name", "text",
                                   "label", text,
                                   "ellipsize", pbar->ellipsize,

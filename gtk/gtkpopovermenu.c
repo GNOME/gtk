@@ -122,6 +122,12 @@
  * custom content to it, therefore it has the same CSS nodes.
  * It is one of the cases that add a .menu style class to
  * the popover's main node.
+ *
+ * # Accessibility
+ *
+ * GtkPopoverMenu uses the #GTK_ACCESSIBLE_ROLE_MENU role, and its
+ * items use the #GTK_ACCESSIBLE_ROLE_MENU_ITEM, #GTK_ACCESSIBLE_ROLE_MENU_ITEM_CHECKBOX or #GTK_ACCESSIBLE_ROLE_MENU_ITEM_RADIO roles, depending on the
+ * action they are connected to.
  */
 
 typedef struct _GtkPopoverMenuClass GtkPopoverMenuClass;
@@ -494,6 +500,16 @@ gtk_popover_menu_move_focus (GtkWidget         *widget,
 }
 
 static void
+gtk_popover_menu_root (GtkWidget *widget)
+{
+  GTK_WIDGET_CLASS (gtk_popover_menu_parent_class)->root (widget);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (widget),
+                                  GTK_ACCESSIBLE_PROPERTY_ORIENTATION, GTK_ORIENTATION_VERTICAL,
+                                  -1);
+}
+
+static void
 gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -503,6 +519,7 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
   object_class->set_property = gtk_popover_menu_set_property;
   object_class->get_property = gtk_popover_menu_get_property;
 
+  widget_class->root = gtk_popover_menu_root;
   widget_class->map = gtk_popover_menu_map;
   widget_class->unmap = gtk_popover_menu_unmap;
   widget_class->focus = gtk_popover_menu_focus;
@@ -545,6 +562,8 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
                                        "activate-default", NULL);
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Space, 0,
                                        "activate-default", NULL);
+
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_MENU);
 }
 
 /**
