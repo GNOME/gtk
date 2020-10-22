@@ -50,6 +50,10 @@ void        gtk_color_swatch_set_selectable   (GtkColorSwatch *swatch,
                                                gboolean        selectable);
 gboolean    gtk_color_swatch_get_selectable   (GtkColorSwatch *swatch);
 
+void        gtk_color_swatch_select    (GtkColorSwatch *swatch);
+void        gtk_color_swatch_activate  (GtkColorSwatch *swatch);
+void        gtk_color_swatch_customize (GtkColorSwatch *swatch);
+
 G_END_DECLS
 
 #endif /* __GTK_COLOR_SWATCH_PRIVATE_H__ */

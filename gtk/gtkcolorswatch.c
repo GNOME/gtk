@@ -144,8 +144,8 @@ swatch_drag_drop (GtkDropTarget  *dest,
   return TRUE;
 }
 
-static void
-activate_color (GtkColorSwatch *swatch)
+void
+gtk_color_swatch_activate (GtkColorSwatch *swatch)
 {
   double red, green, blue, alpha;
 
@@ -158,8 +158,8 @@ activate_color (GtkColorSwatch *swatch)
                               "color.select", "(dddd)", red, green, blue, alpha);
 }
 
-static void
-customize_color (GtkColorSwatch *swatch)
+void
+gtk_color_swatch_customize (GtkColorSwatch *swatch)
 {
   double red, green, blue, alpha;
 
@@ -170,6 +170,18 @@ customize_color (GtkColorSwatch *swatch)
 
   gtk_widget_activate_action (GTK_WIDGET (swatch),
                               "color.customize", "(dddd)", red, green, blue, alpha);
+}
+
+void
+gtk_color_swatch_select (GtkColorSwatch *swatch)
+{
+  gtk_widget_set_state_flags (GTK_WIDGET (swatch), GTK_STATE_FLAG_SELECTED, FALSE);
+}
+
+static gboolean
+gtk_color_swatch_is_selected (GtkColorSwatch *swatch)
+{
+  return (gtk_widget_get_state_flags (GTK_WIDGET (swatch)) & GTK_STATE_FLAG_SELECTED) != 0;
 }
 
 static gboolean
@@ -189,10 +201,10 @@ key_controller_key_pressed (GtkEventControllerKey *controller,
     {
       if (swatch->has_color &&
           swatch->selectable &&
-          (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_SELECTED) == 0)
-        gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_SELECTED, FALSE);
+          !gtk_color_swatch_is_selected (swatch))
+        gtk_color_swatch_select (swatch);
       else
-        customize_color (swatch);
+        gtk_color_swatch_customize (swatch);
 
       return TRUE;
     }
@@ -245,19 +257,15 @@ do_popup (GtkColorSwatch *swatch)
 static gboolean
 swatch_primary_action (GtkColorSwatch *swatch)
 {
-  GtkWidget *widget = (GtkWidget *)swatch;
-  GtkStateFlags flags;
-
-  flags = gtk_widget_get_state_flags (widget);
   if (!swatch->has_color)
     {
-      customize_color (swatch);
+      gtk_color_swatch_customize (swatch);
       return TRUE;
     }
   else if (swatch->selectable &&
-           (flags & GTK_STATE_FLAG_SELECTED) == 0)
+           !gtk_color_swatch_is_selected (swatch))
     {
-      gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_SELECTED, FALSE);
+      gtk_color_swatch_select (swatch);
       return TRUE;
     }
 
@@ -290,7 +298,7 @@ tap_action (GtkGestureClick *gesture,
       if (n_press == 1)
         swatch_primary_action (swatch);
       else if (n_press > 1)
-        activate_color (swatch);
+        gtk_color_swatch_activate (swatch);
     }
   else if (button == GDK_BUTTON_SECONDARY)
     {
@@ -360,10 +368,28 @@ update_icon (GtkColorSwatch *swatch)
 
   if (swatch->icon)
     gtk_image_set_from_icon_name (image, swatch->icon);
-  else if (gtk_widget_get_state_flags (GTK_WIDGET (swatch)) & GTK_STATE_FLAG_SELECTED)
+  else if (gtk_color_swatch_is_selected (swatch))
     gtk_image_set_from_icon_name (image, "object-select-symbolic");
   else
     gtk_image_clear (image);
+}
+
+static void
+update_accessible_properties (GtkColorSwatch *swatch)
+{
+  if (swatch->selectable)
+    {
+      gboolean selected = gtk_color_swatch_is_selected (swatch);
+
+      gtk_accessible_update_state (GTK_ACCESSIBLE (swatch),
+                                   GTK_ACCESSIBLE_STATE_CHECKED, selected,
+                                   -1);
+    }
+  else
+    {
+      gtk_accessible_reset_state (GTK_ACCESSIBLE (swatch),
+                                  GTK_ACCESSIBLE_STATE_CHECKED);
+    }
 }
 
 static void
@@ -373,6 +399,7 @@ swatch_state_flags_changed (GtkWidget     *widget,
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
 
   update_icon (swatch);
+  update_accessible_properties (swatch);
 
   GTK_WIDGET_CLASS (gtk_color_swatch_parent_class)->state_flags_changed (widget, previous_state);
 }
@@ -504,6 +531,7 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
                                        NULL);
 
   gtk_widget_class_set_css_name (widget_class, I_("colorswatch"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_RADIO);
 }
 
 static void
@@ -544,8 +572,9 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
   gtk_widget_add_css_class (GTK_WIDGET (swatch), "activatable");
 
   swatch->overlay_widget = g_object_new (GTK_TYPE_IMAGE,
-                                               "css-name", "overlay",
-                                               NULL);
+                                         "accessible-role", GTK_ACCESSIBLE_ROLE_NONE,
+                                         "css-name", "overlay",
+                                         NULL);
   gtk_widget_set_parent (swatch->overlay_widget, GTK_WIDGET (swatch));
 }
 
@@ -669,6 +698,8 @@ gtk_color_swatch_set_selectable (GtkColorSwatch *swatch,
     return;
 
   swatch->selectable = selectable;
+
+  update_accessible_properties (swatch);
   g_object_notify (G_OBJECT (swatch), "selectable");
 }
 
