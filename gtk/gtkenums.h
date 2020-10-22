@@ -1165,9 +1165,8 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_COMBO_BOX: An input that controls another element,
  *   such as a list or a grid, that can dynamically pop up to help the user
  *   set the value of the input
- * @GTK_ACCESSIBLE_ROLE_COMMAND: An abstract widget that performs an
- *   action, but does not receive input
- * @GTK_ACCESSIBLE_ROLE_COMPOSITE: Unused
+ * @GTK_ACCESSIBLE_ROLE_COMMAND: Abstract role.
+ * @GTK_ACCESSIBLE_ROLE_COMPOSITE: Abstract role.
  * @GTK_ACCESSIBLE_ROLE_DIALOG: A dialog is a window that is designed to interrupt
  *    the current processing of an application in order to prompt the user to enter
  *    information or require a response.
@@ -1180,9 +1179,9 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_GROUP: Unused
  * @GTK_ACCESSIBLE_ROLE_HEADING: Unused
  * @GTK_ACCESSIBLE_ROLE_IMG: An image.
- * @GTK_ACCESSIBLE_ROLE_INPUT: Unused
+ * @GTK_ACCESSIBLE_ROLE_INPUT: Abstract role.
  * @GTK_ACCESSIBLE_ROLE_LABEL: A visible name or caption for a user interface component.
- * @GTK_ACCESSIBLE_ROLE_LANDMARK: Unused
+ * @GTK_ACCESSIBLE_ROLE_LANDMARK: Abstract role.
  * @GTK_ACCESSIBLE_ROLE_LEGEND: Unused
  * @GTK_ACCESSIBLE_ROLE_LINK: Unused
  * @GTK_ACCESSIBLE_ROLE_LIST: A list of items.
@@ -1208,7 +1207,7 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_RADIO: A checkable input in a group of radio roles,
  *    only one of which can be checked at a time.
  * @GTK_ACCESSIBLE_ROLE_RADIO_GROUP: Unused
- * @GTK_ACCESSIBLE_ROLE_RANGE: Unused
+ * @GTK_ACCESSIBLE_ROLE_RANGE: Abstract role.
  * @GTK_ACCESSIBLE_ROLE_REGION: Unused
  * @GTK_ACCESSIBLE_ROLE_ROW: A row in a columned list.
  * @GTK_ACCESSIBLE_ROLE_ROW_GROUP: Unused
@@ -1219,9 +1218,9 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_SEARCH: Unused
  * @GTK_ACCESSIBLE_ROLE_SEARCH_BOX: A type of textbox intended for specifying
  *    search criteria.
- * @GTK_ACCESSIBLE_ROLE_SECTION: Unused
- * @GTK_ACCESSIBLE_ROLE_SECTION_HEAD: Unused
- * @GTK_ACCESSIBLE_ROLE_SELECT: Unused
+ * @GTK_ACCESSIBLE_ROLE_SECTION: Abstract role.
+ * @GTK_ACCESSIBLE_ROLE_SECTION_HEAD: Abstract role.
+ * @GTK_ACCESSIBLE_ROLE_SELECT: Abstract role.
  * @GTK_ACCESSIBLE_ROLE_SEPARATOR: A divider that separates and distinguishes
  *    sections of content or groups of menuitems.
  * @GTK_ACCESSIBLE_ROLE_SLIDER: A user input where the user selects a value
@@ -1229,7 +1228,7 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_SPIN_BUTTON: A form of range that expects the user to
  *    select from among discrete choices.
  * @GTK_ACCESSIBLE_ROLE_STATUS: Unused
- * @GTK_ACCESSIBLE_ROLE_STRUCTURE: Unused
+ * @GTK_ACCESSIBLE_ROLE_STRUCTURE: Abstract role.
  * @GTK_ACCESSIBLE_ROLE_SWITCH: A type of checkbox that represents on/off values,
  *    as opposed to checked/unchecked values.
  * @GTK_ACCESSIBLE_ROLE_TAB: An item in a list of tab used for switching pages.
