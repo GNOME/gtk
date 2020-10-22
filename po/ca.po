@@ -34,7 +34,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-27 19:07+0000\n"
+"POT-Creation-Date: 2020-10-19 16:38+0000\n"
 "PO-Revision-Date: 2019-08-31 22:51+0200\n"
 "Last-Translator: Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -116,6 +116,7 @@ msgstr "S'ha desactivat el suport GL mitjançant GDK_DEBUG"
 msgid "The current backend does not support OpenGL"
 msgstr "El rerefons no és compatible OpenGL"
 
+#.
 #. * Translators, the strings in the “keyboard label” context are
 #. * display names for keyboard keys. Some of them have prefixes like
 #. * XF86 or ISO_ — these should be removed in the translation. Similarly,
@@ -125,6 +126,7 @@ msgstr "El rerefons no és compatible OpenGL"
 #. * XF86AudioMute - Audio mute
 #. * Scroll_lock   - Scroll lock
 #. * KP_Space      - Space (keypad)
+#.
 #: gdk/keyname-table.h:6843
 msgctxt "keyboard label"
 msgid "BackSpace"
@@ -674,6 +676,7 @@ msgstr "Activa l'expansor"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
+#.
 #: gtk/a11y/gtkimageaccessible.c:53 gtk/deprecated/gtkstock.c:345
 msgctxt "Stock label"
 msgid "_About"
@@ -704,18 +707,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Tanca"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415
-#: gtk/gtkwindow.c:9319
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9319
 msgid "Minimize"
 msgstr "Minimitza"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439
-#: gtk/gtkwindow.c:9328
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9328
 msgid "Maximize"
 msgstr "Maximitza"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439
-#: gtk/gtkwindow.c:9285
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9285
 msgid "Restore"
 msgstr "Restaura"
 
@@ -1253,12 +1253,12 @@ msgstr "_Desa el color aquí"
 
 #: gtk/deprecated/gtkcolorsel.c:1664
 msgid ""
-"Click this palette entry to make it the current color. To change this entry,"
-" drag a color swatch here or right-click it and select “Save color here.”"
+"Click this palette entry to make it the current color. To change this entry, "
+"drag a color swatch here or right-click it and select “Save color here.”"
 msgstr ""
-"Feu clic en aquesta entrada de paleta per fer que sigui el color actual. Per"
-" canviar aquesta entrada, arrossegueu una gamma de colors aquí o feu-hi clic"
-" amb el botó dret i seleccioneu «Desa el color aquí»."
+"Feu clic en aquesta entrada de paleta per fer que sigui el color actual. Per "
+"canviar aquesta entrada, arrossegueu una gamma de colors aquí o feu-hi clic "
+"amb el botó dret i seleccioneu «Desa el color aquí»."
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
 #: gtk/gtkfilechoosernative.c:545 gtk/gtkfilechoosernative.c:637
@@ -1324,9 +1324,9 @@ msgstr "_D'acord"
 msgid "Font Selection"
 msgstr "Selecció del tipus de lletra"
 
-#. Translators: the format here is used to build the string that will be
-#. rendered
+#. Translators: the format here is used to build the string that will be rendered
 #. * in the number emblem.
+#.
 #: gtk/deprecated/gtknumerableicon.c:473
 #, c-format
 msgctxt "Number format"
@@ -1576,8 +1576,7 @@ msgstr "No s'ha pogut mostrar l'enllaç"
 msgid "Website"
 msgstr "Lloc web"
 
-#. used for the application menu on MacOS.  %s is replaced with the
-#. application name.
+#. used for the application menu on MacOS.  %s is replaced with the application name.
 #: gtk/gtkaboutdialog.c:1093 gtk/ui/gtkapplication-quartz.ui:7
 #, c-format
 msgid "About %s"
@@ -1601,6 +1600,7 @@ msgstr "Art per"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
+#.
 #: gtk/gtkaboutdialog.c:2500
 #, c-format
 msgid ""
@@ -1614,6 +1614,7 @@ msgstr ""
 #. * that use the shift key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
+#.
 #: gtk/gtkaccellabel.c:181 gtk/gtkshortcutlabel.c:102
 #: gtk/gtkshortcutlabel.c:138
 msgctxt "keyboard label"
@@ -1624,6 +1625,7 @@ msgstr "Maj"
 #. * that use the control key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
+#.
 #: gtk/gtkaccellabel.c:187 gtk/gtkshortcutlabel.c:105
 #: gtk/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
@@ -1634,6 +1636,7 @@ msgstr "Ctrl"
 #. * that use the alt key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
+#.
 #: gtk/gtkaccellabel.c:193 gtk/gtkshortcutlabel.c:108
 #: gtk/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
@@ -1644,6 +1647,7 @@ msgstr "Alt"
 #. * that use the super key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
+#.
 #: gtk/gtkaccellabel.c:845 gtk/gtkshortcutlabel.c:114
 #: gtk/gtkshortcutlabel.c:152
 msgctxt "keyboard label"
@@ -1654,6 +1658,7 @@ msgstr "Súper"
 #. * that use the hyper key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
+#.
 #: gtk/gtkaccellabel.c:858 gtk/gtkshortcutlabel.c:117
 #: gtk/gtkshortcutlabel.c:154
 msgctxt "keyboard label"
@@ -1664,6 +1669,7 @@ msgstr "Híper"
 #. * that use the meta key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
+#.
 #: gtk/gtkaccellabel.c:872 gtk/gtkshortcutlabel.c:111
 #: gtk/gtkshortcutlabel.c:156
 msgctxt "keyboard label"
@@ -1843,6 +1849,7 @@ msgstr ""
 #. * further influenced by BIDI ordering. Thus, if you have a default
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
+#.
 #: gtk/gtkcalendar.c:815
 msgid "calendar:MY"
 msgstr "calendar:MY"
@@ -1850,6 +1857,7 @@ msgstr "calendar:MY"
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
+#.
 #: gtk/gtkcalendar.c:853
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
@@ -1858,6 +1866,7 @@ msgstr "calendar:week_start:1"
 #. * Translate it to the widest year text
 #. *
 #. * If you don't understand this, leave it as "2000"
+#.
 #: gtk/gtkcalendar.c:1881
 msgctxt "year measurement template"
 msgid "2000"
@@ -1872,6 +1881,7 @@ msgstr "2000"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
+#.
 #: gtk/gtkcalendar.c:1912 gtk/gtkcalendar.c:2608
 #, c-format
 msgctxt "calendar:day:digits"
@@ -1887,6 +1897,7 @@ msgstr "%d"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
+#.
 #: gtk/gtkcalendar.c:1944 gtk/gtkcalendar.c:2474
 #, c-format
 msgctxt "calendar:week:digits"
@@ -1902,6 +1913,7 @@ msgstr "%d"
 #. * msgid.
 #. *
 #. * "%Y" is appropriate for most locales.
+#.
 #: gtk/gtkcalendar.c:2241
 msgctxt "calendar year format"
 msgid "%Y"
@@ -1909,6 +1921,7 @@ msgstr "%Y"
 
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
+#.
 #: gtk/gtkcellrendereraccel.c:273
 msgctxt "Accelerator"
 msgid "Disabled"
@@ -1917,6 +1930,7 @@ msgstr "Inhabilitat"
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
+#.
 #: gtk/gtkcellrendereraccel.c:283
 msgctxt "Accelerator"
 msgid "Invalid"
@@ -1924,6 +1938,7 @@ msgstr "No vàlid"
 
 #. This label is displayed in a treeview cell displaying an accelerator
 #. * when the cell is clicked to change the acelerator.
+#.
 #: gtk/gtkcellrendereraccel.c:414 gtk/gtkcellrendereraccel.c:488
 msgid "New accelerator…"
 msgstr "Accelerador nou…"
@@ -1953,83 +1968,245 @@ msgstr "Vermell %d%%, verd %d%%, blau %d%%"
 msgid "Color: %s"
 msgstr "Color: %s"
 
-#: gtk/gtkcolorchooserwidget.c:446 gtk/gtkcolorchooserwidget.c:447
-#: gtk/gtkcolorchooserwidget.c:448 gtk/gtkcolorchooserwidget.c:449
-#: gtk/gtkcolorchooserwidget.c:450 gtk/gtkcolorchooserwidget.c:451
+#: gtk/gtkcolorchooserwidget.c:446
+msgctxt "Color name"
+msgid "Very Light Blue"
+msgstr "Blau molt clar"
+
+#: gtk/gtkcolorchooserwidget.c:447
+msgctxt "Color name"
+msgid "Light Blue"
+msgstr "Blau clar"
+
+#: gtk/gtkcolorchooserwidget.c:448
 msgctxt "Color name"
 msgid "Blue"
 msgstr "Blau"
 
-#: gtk/gtkcolorchooserwidget.c:452 gtk/gtkcolorchooserwidget.c:453
-#: gtk/gtkcolorchooserwidget.c:454 gtk/gtkcolorchooserwidget.c:455
-#: gtk/gtkcolorchooserwidget.c:456 gtk/gtkcolorchooserwidget.c:457
+#: gtk/gtkcolorchooserwidget.c:449
+msgctxt "Color name"
+msgid "Dark Blue"
+msgstr "Blau fosc"
+
+#: gtk/gtkcolorchooserwidget.c:450
+msgctxt "Color name"
+msgid "Very Dark Blue"
+msgstr "Blau molt fosc"
+
+#: gtk/gtkcolorchooserwidget.c:451
+msgctxt "Color name"
+msgid "Very Light Green"
+msgstr "Verd molt clar"
+
+#: gtk/gtkcolorchooserwidget.c:452
+msgctxt "Color name"
+msgid "Light Green"
+msgstr "Verd clar"
+
+#: gtk/gtkcolorchooserwidget.c:453
 msgctxt "Color name"
 msgid "Green"
 msgstr "Verd"
 
-#: gtk/gtkcolorchooserwidget.c:458 gtk/gtkcolorchooserwidget.c:459
-#: gtk/gtkcolorchooserwidget.c:460 gtk/gtkcolorchooserwidget.c:461
-#: gtk/gtkcolorchooserwidget.c:462 gtk/gtkcolorchooserwidget.c:463
+#: gtk/gtkcolorchooserwidget.c:454
+msgctxt "Color name"
+msgid "Dark Green"
+msgstr "Verd fosc"
+
+#: gtk/gtkcolorchooserwidget.c:455
+msgctxt "Color name"
+msgid "Very Dark Green"
+msgstr "Verd molt fosc"
+
+#: gtk/gtkcolorchooserwidget.c:456
+msgctxt "Color name"
+msgid "Very Light Yellow"
+msgstr "Groc molt clar"
+
+#: gtk/gtkcolorchooserwidget.c:457
+msgctxt "Color name"
+msgid "Light Yellow"
+msgstr "Groc clar"
+
+#: gtk/gtkcolorchooserwidget.c:458
 msgctxt "Color name"
 msgid "Yellow"
 msgstr "Groc"
 
-#: gtk/gtkcolorchooserwidget.c:464 gtk/gtkcolorchooserwidget.c:465
-#: gtk/gtkcolorchooserwidget.c:466 gtk/gtkcolorchooserwidget.c:467
-#: gtk/gtkcolorchooserwidget.c:468 gtk/gtkcolorchooserwidget.c:469
+#: gtk/gtkcolorchooserwidget.c:459
+msgctxt "Color name"
+msgid "Dark Yellow"
+msgstr "Groc fosc"
+
+#: gtk/gtkcolorchooserwidget.c:460
+msgctxt "Color name"
+msgid "Very Dark Yellow"
+msgstr "Groc molt fosc"
+
+#: gtk/gtkcolorchooserwidget.c:461
+msgctxt "Color name"
+msgid "Very Light Orange"
+msgstr "Taronja molt clar"
+
+#: gtk/gtkcolorchooserwidget.c:462
+msgctxt "Color name"
+msgid "Light Orange"
+msgstr "Taronja clar"
+
+#: gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
 msgid "Orange"
 msgstr "Taronja"
 
-#: gtk/gtkcolorchooserwidget.c:470 gtk/gtkcolorchooserwidget.c:471
-#: gtk/gtkcolorchooserwidget.c:472 gtk/gtkcolorchooserwidget.c:473
-#: gtk/gtkcolorchooserwidget.c:474
+#: gtk/gtkcolorchooserwidget.c:464
+msgctxt "Color name"
+msgid "Dark Orange"
+msgstr "Taronja fosc"
+
+#: gtk/gtkcolorchooserwidget.c:465
+msgctxt "Color name"
+msgid "Very Dark Orange"
+msgstr "Taronja molt fosc"
+
+#: gtk/gtkcolorchooserwidget.c:466
+msgctxt "Color name"
+msgid "Very Light Red"
+msgstr "Vermell molt clar"
+
+#: gtk/gtkcolorchooserwidget.c:467
+msgctxt "Color name"
+msgid "Light Red"
+msgstr "Vermell clar"
+
+#: gtk/gtkcolorchooserwidget.c:468
 msgctxt "Color name"
 msgid "Red"
 msgstr "Vermell"
 
-#: gtk/gtkcolorchooserwidget.c:475 gtk/gtkcolorchooserwidget.c:476
-#: gtk/gtkcolorchooserwidget.c:477 gtk/gtkcolorchooserwidget.c:478
-#: gtk/gtkcolorchooserwidget.c:479
+#: gtk/gtkcolorchooserwidget.c:469
+msgctxt "Color name"
+msgid "Dark Red"
+msgstr "Vermell fosc"
+
+#: gtk/gtkcolorchooserwidget.c:470
+msgctxt "Color name"
+msgid "Very Dark Red"
+msgstr "Vermell molt fosc"
+
+#: gtk/gtkcolorchooserwidget.c:471
+msgctxt "Color name"
+msgid "Very Light Purple"
+msgstr "Porpra molt clar"
+
+#: gtk/gtkcolorchooserwidget.c:472
+msgctxt "Color name"
+msgid "Light Purple"
+msgstr "Porpra clar"
+
+#: gtk/gtkcolorchooserwidget.c:473
 msgctxt "Color name"
 msgid "Purple"
 msgstr "Porpra"
 
-#: gtk/gtkcolorchooserwidget.c:480 gtk/gtkcolorchooserwidget.c:481
-#: gtk/gtkcolorchooserwidget.c:482 gtk/gtkcolorchooserwidget.c:483
-#: gtk/gtkcolorchooserwidget.c:484
+#: gtk/gtkcolorchooserwidget.c:474
+msgctxt "Color name"
+msgid "Dark Purple"
+msgstr "Porpra fosc"
+
+#: gtk/gtkcolorchooserwidget.c:475
+msgctxt "Color name"
+msgid "Very Dark Purple"
+msgstr "Porpra molt fosc"
+
+#: gtk/gtkcolorchooserwidget.c:476
+msgctxt "Color name"
+msgid "Very Light Brown"
+msgstr "Marró molt clar"
+
+#: gtk/gtkcolorchooserwidget.c:477
+msgctxt "Color name"
+msgid "Light Brown"
+msgstr "Marró clar"
+
+#: gtk/gtkcolorchooserwidget.c:478
 msgctxt "Color name"
 msgid "Brown"
 msgstr "Marró"
 
-#: gtk/gtkcolorchooserwidget.c:485 gtk/gtkcolorchooserwidget.c:486
-#: gtk/gtkcolorchooserwidget.c:487 gtk/gtkcolorchooserwidget.c:488
+#: gtk/gtkcolorchooserwidget.c:479
+msgctxt "Color name"
+msgid "Dark Brown"
+msgstr "Marró fosc"
+
+#: gtk/gtkcolorchooserwidget.c:480
+msgctxt "Color name"
+msgid "Very Dark Brown"
+msgstr "Marró molt fosc"
+
+#: gtk/gtkcolorchooserwidget.c:481
+msgctxt "Color name"
+msgid "White"
+msgstr "Blanc"
+
+#: gtk/gtkcolorchooserwidget.c:482
+msgctxt "Color name"
+msgid "Light Gray 1"
+msgstr "Gris clar 1"
+
+#: gtk/gtkcolorchooserwidget.c:483
+msgctxt "Color name"
+msgid "Light Gray 2"
+msgstr "Gris clar 2"
+
+#: gtk/gtkcolorchooserwidget.c:484
+msgctxt "Color name"
+msgid "Light Gray 3"
+msgstr "Gris clar 3"
+
+#: gtk/gtkcolorchooserwidget.c:485
+msgctxt "Color name"
+msgid "Light Gray 4"
+msgstr "Gris clar 4"
+
+#: gtk/gtkcolorchooserwidget.c:486
+msgctxt "Color name"
+msgid "Dark Gray 1"
+msgstr "Gris fosc 1"
+
+#: gtk/gtkcolorchooserwidget.c:487
+msgctxt "Color name"
+msgid "Dark Gray 2"
+msgstr "Gris fosc 2"
+
+#: gtk/gtkcolorchooserwidget.c:488
+msgctxt "Color name"
+msgid "Dark Gray 3"
+msgstr "Gris fosc 3"
+
 #: gtk/gtkcolorchooserwidget.c:489
 msgctxt "Color name"
-msgid "Light"
-msgstr "Clar"
+msgid "Dark Gray 4"
+msgstr "Gris fosc 4"
 
-#: gtk/gtkcolorchooserwidget.c:490 gtk/gtkcolorchooserwidget.c:491
-#: gtk/gtkcolorchooserwidget.c:492 gtk/gtkcolorchooserwidget.c:493
-#: gtk/gtkcolorchooserwidget.c:494
+#: gtk/gtkcolorchooserwidget.c:490
 msgctxt "Color name"
-msgid "Dark"
-msgstr "Fosc"
+msgid "Black"
+msgstr "Negre"
 
 #. translators: label for the custom section in the color chooser
-#: gtk/gtkcolorchooserwidget.c:538
+#: gtk/gtkcolorchooserwidget.c:534
 msgid "Custom"
 msgstr "Personalitzat"
 
-#: gtk/gtkcolorchooserwidget.c:545
+#: gtk/gtkcolorchooserwidget.c:541
 msgid "Custom color"
 msgstr "Color personalitzat"
 
-#: gtk/gtkcolorchooserwidget.c:546
+#: gtk/gtkcolorchooserwidget.c:542
 msgid "Create a custom color"
 msgstr "Crea un color personalitzat"
 
-#: gtk/gtkcolorchooserwidget.c:565
+#: gtk/gtkcolorchooserwidget.c:561
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "Color personalitzat %d: %s"
@@ -2052,13 +2229,14 @@ msgstr "Alfa"
 msgid "C_ustomize"
 msgstr "_Personalitza"
 
+# Premi a qui va ficar "Per defecte:LTR. M'ha costat
+# trobar en quin mòdul estava l'error. jm
 #. Translate to the default units to use for presenting
 #. * lengths to the user. Translate to default:inch if you
 #. * want inches, otherwise translate to default:mm.
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
-# Premi a qui va ficar "Per defecte:LTR. M'ha costat
-# trobar en quin mòdul estava l'error. jm
+#.
 #: gtk/gtkcustompaperunixdialog.c:117
 msgid "default:mm"
 msgstr "default:mm"
@@ -2204,6 +2382,7 @@ msgstr "Seleccioneu quins tipus de fitxers es mostren"
 #. Translators: the first string is a path and the second string
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
+#.
 #: gtk/gtkfilechooserutils.c:505
 #, c-format
 msgid "%1$s on %2$s"
@@ -2219,8 +2398,7 @@ msgstr "No s'ha pogut crear la carpeta"
 
 #: gtk/gtkfilechooserwidget.c:821
 msgid ""
-"The folder could not be created, as a file with the same name already "
-"exists."
+"The folder could not be created, as a file with the same name already exists."
 msgstr ""
 "No s'ha pogut crear la carpeta perquè ja existeix un fitxer amb el mateix "
 "nom."
@@ -2557,11 +2735,11 @@ msgstr "Accedit"
 msgid "Create Folder"
 msgstr "Crea una carpeta"
 
-#. The pointers we return for a GtkFileSystemVolume are opaque tokens; they
-#. are
+#. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
 #. * token for the fake “File System” volume.  So, we’ll return a pointer to
 #. * this particular string.
+#.
 #: gtk/gtkfilesystem.c:49
 msgid "File System"
 msgstr "Sistema de fitxers"
@@ -2830,12 +3008,13 @@ msgstr "Opcions del GTK+"
 msgid "Show GTK+ Options"
 msgstr "Mostra les opcions del GTK+"
 
+# Premi a qui va ficar "Per defecte:LTR. M'ha costat
+# trobar en quin mòdul estava l'error. jm
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
-# Premi a qui va ficar "Per defecte:LTR. M'ha costat
-# trobar en quin mòdul estava l'error. jm
+#.
 #: gtk/gtkmain.c:1275
 msgid "default:LTR"
 msgstr "default:LTR"
@@ -3298,10 +3477,10 @@ msgstr "Xarxes"
 msgid "On This Computer"
 msgstr "En aquest ordinador"
 
-#. Translators: respectively, free and total space of the drive. The plural
-#. form
+#. Translators: respectively, free and total space of the drive. The plural form
 #. * should be based on the free space available.
 #. * i.e. 1 GB / 24 GB available.
+#.
 #: gtk/gtkplacesviewrow.c:134
 #, c-format
 msgid "%s / %s available"
@@ -3337,6 +3516,7 @@ msgstr "No està disponible"
 #. translators: this string is the default job title for print
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
+#.
 #: gtk/gtkprintoperation.c:259
 #, c-format
 msgid "%s job #%d"
@@ -3409,8 +3589,7 @@ msgstr "S'ha produït un error en crear la previsualització d'impressió"
 
 #: gtk/gtkprintoperation.c:3041
 #, c-format
-msgid ""
-"The most probable reason is that a temporary file could not be created."
+msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 "El motiu més probable és perquè no s'ha pogut crear un fitxer temporal."
 
@@ -3493,10 +3672,11 @@ msgid "Getting printer information…"
 msgstr "S'està obtenint informació de la impressora…"
 
 #. Translators: These strings name the possible arrangements of
-#. * multiple pages on a sheet when printing (same as in
-#. gtkprintbackendcups.c)
+#. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
+#.
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
+#.
 #: gtk/gtkprintunixdialog.c:3120
 #: modules/printbackends/cups/gtkprintbackendcups.c:5493
 msgid "Left to right, top to bottom"
@@ -3605,6 +3785,7 @@ msgstr "Mostra els recursos _privats"
 #. * right place when idly populating the menu in case the
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
+#.
 #: gtk/gtkrecentchoosermenu.c:343
 msgid "No items found"
 msgstr "No s'ha trobat cap element"
@@ -3627,6 +3808,7 @@ msgstr "Element desconegut"
 #. * in a recent files menu. The %d is the number of the item,
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
+#.
 #: gtk/gtkrecentchoosermenu.c:830
 #, c-format
 msgctxt "recent menu label"
@@ -3635,6 +3817,7 @@ msgstr "_%d. %s"
 
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
+#.
 #: gtk/gtkrecentchoosermenu.c:835
 #, c-format
 msgctxt "recent menu label"
@@ -3667,6 +3850,7 @@ msgstr "Cerca"
 #. * keys in the shortcut window (e.g. Control_L vs Control_R). Please keep
 #. * this string very short, ideally just a single character, since it will
 #. * be rendered as part of the key.
+#.
 #: gtk/gtkshortcutlabel.c:80
 msgctxt "keyboard side marker"
 msgid "L"
@@ -3676,6 +3860,7 @@ msgstr "E"
 #. * keys in the shortcut window (e.g. Control_L vs Control_R). Please keep
 #. * this string very short, ideally just a single character, since it will
 #. * be rendered as part of the key.
+#.
 #: gtk/gtkshortcutlabel.c:93
 msgctxt "keyboard side marker"
 msgid "R"
@@ -3806,7 +3991,8 @@ msgstr "«%s» no és un nom d'atribut vàlid"
 
 #: gtk/gtktextbufferserialize.c:1197
 #, c-format
-msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid ""
+"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
 "No s'ha pogut convertir «%s» a un valor de tipus «%s» per a l'atribut «%s»"
 
@@ -3907,6 +4093,7 @@ msgstr "Volum al màxim"
 #. * as used in the tooltip, eg. "49 %".
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
+#.
 #: gtk/gtkvolumebutton.c:249
 #, c-format
 msgctxt "volume percentage"
@@ -3934,8 +4121,8 @@ msgstr "Voleu utilitzar l'inspector de la GTK+?"
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
-"the internals of any GTK+ application. Using it may cause the application to"
-" break or crash."
+"the internals of any GTK+ application. Using it may cause the application to "
+"break or crash."
 msgstr ""
 "L'inspector de la GTK+ és un depurador interactiu que us permet explorar i "
 "modificar qualsevol aplicació GTK+ internament. Podeu arribar a trencar o "
@@ -3976,8 +4163,8 @@ msgid ""
 "You can temporarily disable this custom CSS by clicking on the “Pause” "
 "button above."
 msgstr ""
-"Podeu inhabilitar temporalment aquest CSS personalitzat fent clic en el botó"
-" «Fes una pausa» d'aquí sobre."
+"Podeu inhabilitar temporalment aquest CSS personalitzat fent clic en el botó "
+"«Fes una pausa» d'aquí sobre."
 
 #: gtk/inspector/css-editor.c:114
 msgid "Changes are applied instantly and globally, for the whole application."
@@ -6965,8 +7152,7 @@ msgstr "Preferències"
 msgid "Services"
 msgstr "Serveis"
 
-#. used for the application menu on MacOS.  %s is replaced with the
-#. application name.
+#. used for the application menu on MacOS.  %s is replaced with the application name.
 #: gtk/ui/gtkapplication-quartz.ui:29
 #, c-format
 msgid "Hide %s"
@@ -6982,8 +7168,7 @@ msgstr "Amaga els altres"
 msgid "Show All"
 msgstr "Mostra-ho tot"
 
-#. used for the application menu on MacOS.  %s is replaced with the
-#. application name.
+#. used for the application menu on MacOS.  %s is replaced with the application name.
 #: gtk/ui/gtkapplication-quartz.ui:49
 #, c-format
 msgid "Quit %s"
@@ -7325,14 +7510,12 @@ msgstr "Imprimeix el document"
 msgid "_Now"
 msgstr "_Ara"
 
-#. this is one of the choices for the print at option in the print dialog. It
-#. also serves as the label for an entry that allows the user to enter a time.
+#. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
 #: gtk/ui/gtkprintunixdialog.ui:1003
 msgid "A_t:"
 msgstr "_A:"
 
-#. Ability to parse the am/pm format depends on actual locale. You can remove
-#. the am/pm values below for your locale if they are not supported.
+#. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
 #: gtk/ui/gtkprintunixdialog.ui:1007 gtk/ui/gtkprintunixdialog.ui:1009
 #: gtk/ui/gtkprintunixdialog.ui:1028 gtk/ui/gtkprintunixdialog.ui:1030
 #: gtk/ui/gtkprintunixdialog.ui:1037
@@ -7347,9 +7530,7 @@ msgstr ""
 msgid "Time of print"
 msgstr "Hora d'impressió"
 
-#. this is one of the choices for the print at option in the print dialog. It
-#. means that the print job will not be printed until it explicitly gets
-#. 'released'.
+#. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
 #: gtk/ui/gtkprintunixdialog.ui:1050
 msgid "On _hold"
 msgstr "En _espera"
@@ -7362,16 +7543,14 @@ msgstr "Posa la tasca en espera fins que s'alliberi explícitament"
 msgid "Add Cover Page"
 msgstr "Afegeix una coberta"
 
-#. this is the label used for the option in the print dialog that controls the
-#. front cover page.
 # Possiblement sigui "abans de" (josep)
+#. this is the label used for the option in the print dialog that controls the front cover page.
 #: gtk/ui/gtkprintunixdialog.ui:1115
 msgid "Be_fore:"
 msgstr "A_bans:"
 
-#. this is the label used for the option in the print dialog that controls the
-#. back cover page.
 # Possiblement "després de" (josep)
+#. this is the label used for the option in the print dialog that controls the back cover page.
 #: gtk/ui/gtkprintunixdialog.ui:1139
 msgid "_After:"
 msgstr "_Després:"
@@ -7390,8 +7569,7 @@ msgstr "Qualitat d'imatge"
 msgid "Color"
 msgstr "Color"
 
-#. This will appear as a tab label in the print dialog. It's a typographical
-#. term, as in "Binding and finishing"
+#. This will appear as a tab label in the print dialog. It's a typographical term, as in "Binding and finishing"
 #: gtk/ui/gtkprintunixdialog.ui:1280
 msgid "Finishing"
 msgstr "Acabant"
@@ -7538,7 +7716,8 @@ msgid ""
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
 "No hi ha el fitxer índex de tema a «%s».\n"
-"Si realment voleu crear una memòria cau d'icones aquí, utilitzeu --ignore-theme-index.\n"
+"Si realment voleu crear una memòria cau d'icones aquí, utilitzeu --ignore-"
+"theme-index.\n"
 
 #. ID
 #: modules/input/imam-et.c:452
@@ -7552,8 +7731,8 @@ msgctxt "input method menu"
 msgid "Broadway"
 msgstr "Broadway"
 
-#. ID
 # FIXME
+#. ID
 #: modules/input/imcedilla.c:90
 msgctxt "input method menu"
 msgid "Cedilla"
@@ -7772,8 +7951,8 @@ msgstr ""
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr ""
-"La impressora «%s» s'ha quedat sense tinta en almenys un dels contenidors de"
-" color."
+"La impressora «%s» s'ha quedat sense tinta en almenys un dels contenidors de "
+"color."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2581
 #, c-format
@@ -7983,15 +8162,13 @@ msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "Safata posterior"
 
-#. Translators: Output bin where one sided output is oriented in the face-up
-#. position
+#. Translators: Output bin where one sided output is oriented in the face-up position
 #: modules/printbackends/cups/gtkprintbackendcups.c:4538
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "Safata cara amunt"
 
-#. Translators: Output bin where one sided output is oriented in the face-down
-#. position
+#. Translators: Output bin where one sided output is oriented in the face-down position
 #: modules/printbackends/cups/gtkprintbackendcups.c:4540
 msgctxt "output-bin"
 msgid "Face Down Bin"
@@ -8036,6 +8213,7 @@ msgstr "Per defecte de la impressora"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
+#.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5488
 msgid "Urgent"
 msgstr "Urgent"
@@ -8054,12 +8232,14 @@ msgstr "Baixa"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
+#.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5518
 msgid "Job Priority"
 msgstr "Prioritat de la tasca"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
+#.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5529
 msgid "Billing Info"
 msgstr "Informació de facturació"
@@ -8101,6 +8281,7 @@ msgstr "No classificat"
 
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
+#.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5571
 msgctxt "printer option"
 msgid "Pages per Sheet"
@@ -8108,22 +8289,25 @@ msgstr "Pàgines per full"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
+#.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5588
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Ordenació de les pàgines"
 
+# Possiblement sigui "abans de" (josep)
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
-# Possiblement sigui "abans de" (josep)
+#.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5630
 msgctxt "printer option"
 msgid "Before"
 msgstr "Abans"
 
+# Possiblement "després de" (josep)
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
-# Possiblement "després de" (josep)
+#.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5645
 msgctxt "printer option"
 msgid "After"
@@ -8132,14 +8316,16 @@ msgstr "Després"
 #. Translators: this is the name of the option that controls when
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
+#.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5665
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Imprimeix a"
 
+# FIXME: s'ha de mirar que no sigui massa llarg
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
-# FIXME: s'ha de mirar que no sigui massa llarg
+#.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5676
 msgctxt "printer option"
 msgid "Print at time"
@@ -8149,6 +8335,7 @@ msgstr "Imprimeix a una hora determinada"
 #. * paper size. The two placeholders are replaced with
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
+#.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5721
 #, c-format
 msgid "Custom %s×%s"
@@ -8211,20 +8398,20 @@ msgid "_Output format"
 msgstr "F_ormat de sortida"
 
 # FIXME
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:393
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:394
 msgid "Print to LPR"
 msgstr "Imprimeix a LPR"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:419
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:423
 msgid "Pages Per Sheet"
 msgstr "Pàgines per full"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:426
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:430
 msgid "Command Line"
 msgstr "Línia d'ordres"
 
-#. SUN_BRANDING
 # Connectada? (josep)
+#. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:786
 msgid "printer offline"
 msgstr "la impressora no està en línia"
@@ -8260,6 +8447,10 @@ msgid "Print to Test Printer"
 msgstr "Imprimiu per provar la impressora"
 
 #~ msgctxt "Color name"
+#~ msgid "Dark"
+#~ msgstr "Fosc"
+
+#~ msgctxt "Color name"
 #~ msgid "Light Scarlet Red"
 #~ msgstr "Vermell escarlata clar"
 
@@ -8268,28 +8459,12 @@ msgstr "Imprimiu per provar la impressora"
 #~ msgstr "Vermell escarlata"
 
 #~ msgctxt "Color name"
-#~ msgid "Dark Scarlet Red"
-#~ msgstr "Vermell escarlata fosc"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Orange"
-#~ msgstr "Taronja clar"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Orange"
-#~ msgstr "Taronja fosc"
-
-#~ msgctxt "Color name"
 #~ msgid "Light Butter"
 #~ msgstr "Mantega clar"
 
 #~ msgctxt "Color name"
 #~ msgid "Butter"
 #~ msgstr "Mantega"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Butter"
-#~ msgstr "Mantega fosc"
 
 #~ msgctxt "Color name"
 #~ msgid "Light Chameleon"
@@ -8304,20 +8479,8 @@ msgstr "Imprimiu per provar la impressora"
 #~ msgstr "Camaleó fosc"
 
 #~ msgctxt "Color name"
-#~ msgid "Light Sky Blue"
-#~ msgstr "Cel blau clar"
-
-#~ msgctxt "Color name"
 #~ msgid "Sky Blue"
 #~ msgstr "Cel blau"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Sky Blue"
-#~ msgstr "Cel blau fosc"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Plum"
-#~ msgstr "Pruna clar"
 
 #~ msgctxt "Color name"
 #~ msgid "Plum"
@@ -8360,40 +8523,16 @@ msgstr "Imprimiu per provar la impressora"
 #~ msgstr "Alumini fosc 2"
 
 #~ msgctxt "Color name"
-#~ msgid "Black"
-#~ msgstr "Negre"
-
-#~ msgctxt "Color name"
-#~ msgid "Very Dark Gray"
-#~ msgstr "Gris molt fosc"
-
-#~ msgctxt "Color name"
 #~ msgid "Darker Gray"
 #~ msgstr "Gris força fosc"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Gray"
-#~ msgstr "Gris fosc"
 
 #~ msgctxt "Color name"
 #~ msgid "Medium Gray"
 #~ msgstr "Gris mitjà"
 
 #~ msgctxt "Color name"
-#~ msgid "Light Gray"
-#~ msgstr "Gris clar"
-
-#~ msgctxt "Color name"
 #~ msgid "Lighter Gray"
 #~ msgstr "Girs força clar"
-
-#~ msgctxt "Color name"
-#~ msgid "Very Light Gray"
-#~ msgstr "Gris molt clar"
-
-#~ msgctxt "Color name"
-#~ msgid "White"
-#~ msgstr "Blanc"
 
 #~ msgid "3.2 core GL profile is not available on EGL implementation"
 #~ msgstr ""
@@ -8424,18 +8563,18 @@ msgstr "Imprimiu per provar la impressora"
 #~ "The program was not able to create a connection to the indexer daemon. "
 #~ "Please make sure it is running."
 #~ msgstr ""
-#~ "El programa no ha pogut crear cap connexió al dimoni d'indexació. Assegureu-"
-#~ "vos que s'està executant."
+#~ "El programa no ha pogut crear cap connexió al dimoni d'indexació. "
+#~ "Assegureu-vos que s'està executant."
 
 #~ msgid "smb://foo.example.com, ssh://192.168.0.1"
 #~ msgstr "smb://foo.exemple.com, ssh://192.168.0.1"
 
 #~ msgid ""
-#~ "The WGL_ARB_create_context extension needed to create core profiles is not "
-#~ "available"
+#~ "The WGL_ARB_create_context extension needed to create core profiles is "
+#~ "not available"
 #~ msgstr ""
-#~ "L'extensió WGL_ARB_create_context necessària per crear perfils del nucli no "
-#~ "es troba disponible"
+#~ "L'extensió WGL_ARB_create_context necessària per crear perfils del nucli "
+#~ "no es troba disponible"
 
 #~ msgid "Error launching preview"
 #~ msgstr "S'ha produït un error en executar la previsualització"
@@ -8468,11 +8607,11 @@ msgstr "Imprimiu per provar la impressora"
 #~ msgstr "Jerarquia"
 
 #~ msgid ""
-#~ "The GLX_ARB_create_context_profile extension needed to create core profiles "
-#~ "is not available"
+#~ "The GLX_ARB_create_context_profile extension needed to create core "
+#~ "profiles is not available"
 #~ msgstr ""
-#~ "L'extensió GLX_ARB_create_context_profile necessària per crear perfils del "
-#~ "nucli no es troba disponible"
+#~ "L'extensió GLX_ARB_create_context_profile necessària per crear perfils "
+#~ "del nucli no es troba disponible"
 
 #~ msgid "New class"
 #~ msgstr "Classe nova"
@@ -8533,8 +8672,8 @@ msgstr "Imprimiu per provar la impressora"
 
 #~ msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
 #~ msgstr ""
-#~ "Identificador d'objecte duplicat «%s» a la línia %d (anteriorment a la línia"
-#~ " % d)"
+#~ "Identificador d'objecte duplicat «%s» a la línia %d (anteriorment a la "
+#~ "línia % d)"
 
 #~ msgid "Invalid signal '%s' for type '%s' on line %d"
 #~ msgstr "El senyal «%s» per al tipus «%s» a la línia %d no és vàlid"
