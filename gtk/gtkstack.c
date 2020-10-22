@@ -1467,15 +1467,11 @@ stack_remove (GtkStack  *stack,
   if (child_info == NULL)
     return;
 
-  priv->children = g_list_remove (priv->children, child_info);
-  
   g_signal_handlers_disconnect_by_func (child,
                                         stack_child_visibility_notify_cb,
                                         stack);
 
   was_visible = gtk_widget_get_visible (child);
-
-  g_clear_object (&child_info->widget);
 
   if (priv->visible_child == child_info)
     {
@@ -1489,6 +1485,10 @@ stack_remove (GtkStack  *stack,
     priv->last_visible_child = NULL;
 
   gtk_widget_unparent (child);
+
+  g_clear_object (&child_info->widget);
+
+  priv->children = g_list_remove (priv->children, child_info);
 
   g_object_unref (child_info);
 
