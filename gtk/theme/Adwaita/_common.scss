@@ -1227,9 +1227,10 @@ combobox {
    }
 
     .search { //drodowns with searchboxes on top
-      border-radius: $popover_radius $popover_radius 0 0;
+      border-radius: $popover_radius;
       padding: 3px 10px;
-      margin-top: -2px; //paint over the menu borders
+      border-radius: 3px;
+      margin: 4px 4px -4px 4px;
     }
   }
 }
