@@ -414,6 +414,7 @@ do_images (GtkWidget *do_widget)
        * will create the pixbuf and fill it in.
        */
       picture = gtk_picture_new ();
+      gtk_picture_set_alternative_text (GTK_PICTURE (picture), "A slowly loading image");
       gtk_frame_set_child (GTK_FRAME (frame), picture);
 
       start_progressive_loading (picture);
