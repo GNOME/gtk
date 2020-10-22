@@ -249,10 +249,13 @@ gtk_color_button_init (GtkColorButton *button)
   g_signal_connect (button->button, "clicked", G_CALLBACK (gtk_color_button_clicked), button);
   gtk_widget_set_parent (button->button, GTK_WIDGET (button));
 
-  button->swatch = gtk_color_swatch_new ();
+  button->swatch = g_object_new (GTK_TYPE_COLOR_SWATCH,
+                                 "accessible-role", GTK_ACCESSIBLE_ROLE_IMG,
+                                 "selectable", FALSE,
+                                 "has-menu", FALSE,
+                                 NULL);
   gtk_widget_set_can_focus (button->swatch, FALSE);
   gtk_widget_remove_css_class (button->swatch, "activatable");
-  g_object_set (button->swatch, "has-menu", FALSE, NULL);
   layout = gtk_widget_create_pango_layout (GTK_WIDGET (button), "Black");
   pango_layout_get_pixel_extents (layout, NULL, &rect);
   g_object_unref (layout);
@@ -437,17 +440,49 @@ gtk_color_button_clicked (GtkButton *b,
   gtk_window_present (GTK_WINDOW (button->cs_dialog));
 }
 
+static guint
+scale_round (double value,
+             double scale)
+{
+  value = floor (value * scale + 0.5);
+  value = CLAMP (value, 0, scale);
+  return (guint)value;
+}
+
+static char *
+accessible_color_name (const GdkRGBA *color)
+{
+  if (color->alpha < 1.0)
+    return g_strdup_printf (_("Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"),
+                            scale_round (color->red, 100),
+                            scale_round (color->green, 100),
+                            scale_round (color->blue, 100),
+                            scale_round (color->alpha, 100));
+  else
+    return g_strdup_printf (_("Red %d%%, Green %d%%, Blue %d%%"),
+                            scale_round (color->red, 100),
+                            scale_round (color->green, 100),
+                            scale_round (color->blue, 100));
+}
+
 static void
 gtk_color_button_set_rgba (GtkColorChooser *chooser,
                            const GdkRGBA   *rgba)
 {
   GtkColorButton *button = GTK_COLOR_BUTTON (chooser);
+  char *text;
 
   g_return_if_fail (GTK_IS_COLOR_BUTTON (chooser));
   g_return_if_fail (rgba != NULL);
 
   button->rgba = *rgba;
   gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (button->swatch), &button->rgba);
+
+  text = accessible_color_name (rgba);
+  gtk_accessible_update_property (GTK_ACCESSIBLE (button->swatch),
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL, text,
+                                  -1);
+  g_free (text);
 
   g_object_notify (G_OBJECT (chooser), "rgba");
 }
