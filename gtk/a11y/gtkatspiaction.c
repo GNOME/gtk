@@ -30,6 +30,7 @@
 #include "gtkactionable.h"
 #include "gtkactionmuxerprivate.h"
 #include "gtkbutton.h"
+#include "gtkcolorswatchprivate.h"
 #include "gtkentryprivate.h"
 #include "gtkexpander.h"
 #include "gtkmodelbuttonprivate.h"
@@ -284,7 +285,6 @@ static const GDBusInterfaceVTable button_action_vtable = {
 };
 
 /* }}} */
-
 /* {{{ GtkSwitch */
 
 static const Action switch_actions[] = {
@@ -336,7 +336,104 @@ static const GDBusInterfaceVTable switch_action_vtable = {
 };
 
 /* }}} */
+/* {{{ GtkColorSwatch */
+static gboolean
+color_swatch_select (GtkAtSpiContext *self)
+{
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+  gtk_color_swatch_select (GTK_COLOR_SWATCH (accessible));
+  return TRUE;
+}
 
+static gboolean
+color_swatch_activate (GtkAtSpiContext *self)
+{
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+  gtk_color_swatch_activate (GTK_COLOR_SWATCH (accessible));
+  return TRUE;
+}
+
+static gboolean
+color_swatch_customize (GtkAtSpiContext *self)
+{
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+  gtk_color_swatch_customize (GTK_COLOR_SWATCH (accessible));
+  return TRUE;
+}
+
+static gboolean
+color_swatch_is_enabled (GtkAtSpiContext *self)
+{
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+  return gtk_color_swatch_get_selectable (GTK_COLOR_SWATCH (accessible));
+}
+
+static const Action color_swatch_actions[] = {
+  {
+    .name = "select",
+    .localized_name = NC_("accessibility", "Select"),
+    .description = NC_("accessibility", "Selects the color"),
+    .keybinding = "<Return>",
+    .activate = color_swatch_select,
+    .is_enabled = color_swatch_is_enabled,
+  },
+  {
+    .name = "activate",
+    .localized_name = NC_("accessibility", "Activate"),
+    .description = NC_("accessibility", "Activates the color"),
+    .keybinding = "<VoidSymbol>",
+    .activate = color_swatch_activate,
+    .is_enabled = color_swatch_is_enabled,
+  },
+  {
+    .name = "customize",
+    .localized_name = NC_("accessibility", "Customize"),
+    .description = NC_("accessibility", "Customizes the color"),
+    .keybinding = "<VoidSymbol>",
+    .activate = color_swatch_customize,
+    .is_enabled = color_swatch_is_enabled,
+  },
+};
+
+static void
+color_swatch_handle_method (GDBusConnection       *connection,
+                            const gchar           *sender,
+                            const gchar           *object_path,
+                            const gchar           *interface_name,
+                            const gchar           *method_name,
+                            GVariant              *parameters,
+                            GDBusMethodInvocation *invocation,
+                            gpointer               user_data)
+{
+  GtkAtSpiContext *self = user_data;
+
+  action_handle_method (self, method_name, parameters, invocation,
+                        color_swatch_actions,
+                        G_N_ELEMENTS (color_swatch_actions));
+}
+
+static GVariant *
+color_swatch_handle_get_property (GDBusConnection  *connection,
+                                  const gchar      *sender,
+                                  const gchar      *object_path,
+                                  const gchar      *interface_name,
+                                  const gchar      *property_name,
+                                  GError          **error,
+                                  gpointer          user_data)
+{
+  GtkAtSpiContext *self = user_data;
+
+  return action_handle_get_property (self, property_name, error,
+                                     color_swatch_actions,
+                                     G_N_ELEMENTS (color_swatch_actions));
+}
+
+static const GDBusInterfaceVTable color_swatch_action_vtable = {
+  color_swatch_handle_method,
+  color_swatch_handle_get_property,
+  NULL,
+};
+/* }}} */
 /* {{{ GtkExpander */
 
 static const Action expander_actions[] = {
@@ -388,7 +485,6 @@ static const GDBusInterfaceVTable expander_action_vtable = {
 };
 
 /* }}} */
-
 /* {{{ GtkEntry */
 
 static gboolean is_primary_icon_enabled (GtkAtSpiContext *self);
@@ -499,7 +595,6 @@ static const GDBusInterfaceVTable entry_action_vtable = {
 };
 
 /* }}} */
-
 /* {{{ GtkPasswordEntry */
 
 static gboolean is_peek_enabled (GtkAtSpiContext *self);
@@ -822,8 +917,12 @@ gtk_atspi_get_action_vtable (GtkAccessible *accessible)
     return &password_entry_action_vtable;
   else if (GTK_IS_SWITCH (accessible))
     return &switch_action_vtable;
+  else if (GTK_IS_COLOR_SWATCH (accessible))
+    return &color_swatch_action_vtable;
   else if (GTK_IS_WIDGET (accessible))
     return &widget_action_vtable;
 
   return NULL;
 }
+
+/* vim:set foldmethod=marker expandtab: */

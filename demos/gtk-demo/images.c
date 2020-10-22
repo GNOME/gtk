@@ -56,6 +56,7 @@ progressive_updated_callback (GdkPixbufLoader *loader,
   picture = GTK_WIDGET (data);
 
   pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
+  gtk_picture_set_pixbuf (GTK_PICTURE (picture), NULL);
   gtk_picture_set_pixbuf (GTK_PICTURE (picture), pixbuf);
 }
 
@@ -262,7 +263,7 @@ start_progressive_loading (GtkWidget *picture)
    * The timeout simply simulates a slow data source by inserting
    * pauses in the reading process.
    */
-  load_timeout = g_timeout_add (1500, progressive_timeout, picture);
+  load_timeout = g_timeout_add (300, progressive_timeout, picture);
   g_source_set_name_by_id (load_timeout, "[gtk] progressive_timeout");
 }
 
@@ -414,6 +415,7 @@ do_images (GtkWidget *do_widget)
        * will create the pixbuf and fill it in.
        */
       picture = gtk_picture_new ();
+      gtk_picture_set_alternative_text (GTK_PICTURE (picture), "A slowly loading image");
       gtk_frame_set_child (GTK_FRAME (frame), picture);
 
       start_progressive_loading (picture);
