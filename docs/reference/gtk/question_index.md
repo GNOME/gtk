@@ -71,12 +71,12 @@ the question you have, this list is a good place to start.
 6.  How do I use GTK with threads?
 
     GTK requires that all GTK API calls are made from the same thread in which
-    gtk_init() was called (the _main thread_).
+    the #GtkApplication was created, or gtk_init() was called (the _main thread_).
 
     If you want to take advantage of multi-threading in a GTK application,
     it is usually best to send long-running tasks to worker threads, and feed
-    the results back to the main thread using g_idle_add() or GAsyncQueue. GIO
-    offers useful tools for such an approach such as GTask.
+    the results back to the main thread using g_idle_add() or #GAsyncQueue. GIO
+    offers useful tools for such an approach such as #GTask.
 
 7.  How do I internationalize a GTK program?
 

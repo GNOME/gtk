@@ -11,49 +11,49 @@ print_hello (GtkWidget *widget,
 static void
 quit_cb (GtkWidget *widget, gpointer data)
 {
-  gboolean *done = data;
+  GtkWindow *window = data;
 
-  *done = TRUE;
-
-  g_main_context_wakeup (NULL);
+  gtk_window_close (window);
 }
 
-int
-main (int   argc,
-      char *argv[])
+static void
+activate (GtkApplication *app,
+          gpointer        user_data)
 {
-  GtkBuilder *builder;
-  GObject *window;
-  GObject *button;
-  gboolean done = FALSE;
-
-#ifdef GTK_SRCDIR
-  g_chdir (GTK_SRCDIR);
-#endif
-
-  gtk_init ();
-
   /* Construct a GtkBuilder instance and load our UI description */
-  builder = gtk_builder_new ();
+  GtkBuilder *builder = gtk_builder_new ();
   gtk_builder_add_from_file (builder, "builder.ui", NULL);
 
   /* Connect signal handlers to the constructed widgets. */
-  window = gtk_builder_get_object (builder, "window");
-  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
+  GObject *window = gtk_builder_get_object (builder, "window");
+  gtk_window_set_application (GTK_WINDOW (window), app);
 
-  button = gtk_builder_get_object (builder, "button1");
+  GObject *button = gtk_builder_get_object (builder, "button1");
   g_signal_connect (button, "clicked", G_CALLBACK (print_hello), NULL);
 
   button = gtk_builder_get_object (builder, "button2");
   g_signal_connect (button, "clicked", G_CALLBACK (print_hello), NULL);
 
   button = gtk_builder_get_object (builder, "quit");
-  g_signal_connect (button, "clicked", G_CALLBACK (quit_cb), &done);
+  g_signal_connect_swapped (button, "clicked", G_CALLBACK (quit_cb), window);
 
   gtk_widget_show (GTK_WIDGET (window));
+  g_object_unref (builder);
+}
 
-  while (!done)
-    g_main_context_iteration (NULL, TRUE);
+int
+main (int   argc,
+      char *argv[])
+{
+#ifdef GTK_SRCDIR
+  g_chdir (GTK_SRCDIR);
+#endif
 
-  return 0;
+  GtkApplication *app = gtk_application_new ("org.gtk.example", G_APPLICATION_FLAGS_NONE);
+  g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
+
+  int status = g_application_run (G_APPLICATION (app), argc, argv);
+  g_object_unref (app);
+
+  return status;
 }
