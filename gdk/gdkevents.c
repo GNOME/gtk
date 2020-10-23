@@ -814,12 +814,17 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
 void
 _gdk_event_queue_flush (GdkDisplay *display)
 {
-  GList *tmp_list;
-
-  for (tmp_list = display->queued_events.head; tmp_list; tmp_list = tmp_list->next)
+  while (TRUE)
     {
-      GdkEvent *event = tmp_list->data;
+      GdkEvent *event;
+
+      event = (GdkEvent *)g_queue_pop_head (&display->queued_events);
+      if (!event)
+        return;
+
       event->flags |= GDK_EVENT_FLUSHED;
+      _gdk_event_emit (event);
+      gdk_event_unref (event);
     }
 }
 
