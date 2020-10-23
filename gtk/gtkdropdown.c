@@ -251,6 +251,8 @@ gtk_drop_down_dispose (GObject *object)
 {
   GtkDropDown *self = GTK_DROP_DOWN (object);
 
+  gtk_widget_unparent (gtk_widget_get_first_child (self->search_entry));
+
   g_clear_pointer (&self->popup, gtk_widget_unparent);
   g_clear_pointer (&self->button, gtk_widget_unparent);
 
@@ -594,10 +596,18 @@ set_default_factory (GtkDropDown *self)
 static void
 gtk_drop_down_init (GtkDropDown *self)
 {
+  GtkWidget *icon;
+
   g_type_ensure (GTK_TYPE_BUILTIN_ICON);
   g_type_ensure (GTK_TYPE_LIST_ITEM_WIDGET);
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  icon = g_object_new (GTK_TYPE_IMAGE,
+                       "accessible-role", GTK_ACCESSIBLE_ROLE_NONE,
+                       "icon-name", "system-search-symbolic",
+                       NULL);
+  gtk_widget_insert_after (icon, self->search_entry, NULL);
 
   set_default_factory (self);
 }

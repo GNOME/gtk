@@ -34,6 +34,9 @@
 #include "gtkpasswordentrybufferprivate.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcsspositionvalueprivate.h"
+#include "gtkstylecontextprivate.h"
+
 
 /**
  * SECTION:gtkpasswordentry
@@ -350,7 +353,7 @@ gtk_password_entry_measure (GtkWidget      *widget,
     gtk_widget_measure (entry->icon, orientation, for_size,
                         &icon_min, &icon_nat,
                         NULL, NULL);
-   
+
   if (entry->peek_icon && gtk_widget_get_visible (entry->peek_icon))
     gtk_widget_measure (entry->peek_icon, orientation, for_size,
                         &icon_min, &icon_nat,
@@ -364,21 +367,26 @@ gtk_password_entry_size_allocate (GtkWidget *widget,
                                   int        baseline)
 {
   GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (widget);
+  GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
   int icon_min = 0, icon_nat = 0;
   int peek_min = 0, peek_nat = 0;
   int text_width;
+  int spacing;
+
+  spacing = _gtk_css_position_value_get_x (style->size->border_spacing, 100);
 
   if (entry->icon && gtk_widget_get_visible (entry->icon))
     gtk_widget_measure (entry->icon, GTK_ORIENTATION_HORIZONTAL, -1,
                         &icon_min, &icon_nat,
                         NULL, NULL);
-   
+
   if (entry->peek_icon && gtk_widget_get_visible (entry->peek_icon))
     gtk_widget_measure (entry->peek_icon, GTK_ORIENTATION_HORIZONTAL, -1,
                         &peek_min, &peek_nat,
                         NULL, NULL);
-   
-  text_width = width - icon_nat - peek_nat;
+
+  text_width = width - (icon_nat + (icon_nat > 0 ? spacing : 0))
+                     - (peek_nat + (peek_nat > 0 ? spacing : 0));
 
   gtk_widget_size_allocate (entry->entry,
                             &(GtkAllocation) { 0, 0, text_width, height },
@@ -386,12 +394,12 @@ gtk_password_entry_size_allocate (GtkWidget *widget,
 
   if (entry->icon && gtk_widget_get_visible (entry->icon))
     gtk_widget_size_allocate (entry->icon,
-                              &(GtkAllocation) { text_width, 0, icon_nat, height },
+                              &(GtkAllocation) { text_width + spacing, 0, icon_nat, height },
                               baseline);
 
   if (entry->peek_icon && gtk_widget_get_visible (entry->peek_icon))
     gtk_widget_size_allocate (entry->peek_icon,
-                              &(GtkAllocation) { text_width + icon_nat, 0, peek_nat, height },
+                              &(GtkAllocation) { text_width + spacing + icon_nat + (icon_nat > 0 ? spacing : 0), 0, peek_nat, height },
                               baseline);
 }
 
