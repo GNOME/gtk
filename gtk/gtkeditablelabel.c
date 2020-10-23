@@ -341,6 +341,9 @@ gtk_editable_label_dispose (GObject *object)
 
   g_clear_pointer (&self->stack, gtk_widget_unparent);
 
+  self->entry = NULL;
+  self->label = NULL;
+
   G_OBJECT_CLASS (gtk_editable_label_parent_class)->dispose (object);
 }
 
