@@ -2192,8 +2192,6 @@ print_pages_idle_done (gpointer user_data)
   PrintPagesData *data = (PrintPagesData*)user_data;
   GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (data->op);
 
-  priv = data->op->priv;
-
   priv->print_pages_idle_id = 0;
 
   if (priv->show_progress_timeout_id > 0)
