@@ -160,6 +160,8 @@ gtk_search_entry_finalize (GObject *object)
 
   gtk_editable_finish_delegate (GTK_EDITABLE (entry));
 
+  gtk_widget_unparent (gtk_widget_get_first_child (GTK_WIDGET (entry)));
+
   g_clear_pointer (&entry->entry, gtk_widget_unparent);
   g_clear_pointer (&entry->icon, gtk_widget_unparent);
 
@@ -549,7 +551,14 @@ activate_cb (GtkText  *text,
 static void
 gtk_search_entry_init (GtkSearchEntry *entry)
 {
+  GtkWidget *icon;
   GtkGesture *press;
+
+  icon = g_object_new (GTK_TYPE_IMAGE,
+                       "accessible-role", GTK_ACCESSIBLE_ROLE_NONE,
+                       "icon-name", "system-search-symbolic",
+                       NULL);
+  gtk_widget_set_parent (icon, GTK_WIDGET (entry));
 
   entry->entry = gtk_text_new ();
   gtk_widget_set_parent (entry->entry, GTK_WIDGET (entry));
