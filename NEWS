@@ -1,3 +1,31 @@
+Overview of Changes in master
+=============================
+
+* GtkColumnView:
+ - Improve column resizing
+ - Make double-click reset column widths
+ - Move header outside of scrollbars
+
+* GtkSearchEntry:
+ - Add an icon
+
+* Accessibility:
+ - Implement Component for all widgets
+ - Implement Text and EditableText for all editables
+ - Rework accessible name/description computation
+ - Add documentation for app and widget developers
+ - Initial accessibility support for menus
+
+* Introspection:
+ - Add some missing annotations
+
+* Documentation:
+ - Use GtkApplication in all examples
+
+* OS X:
+ - Fix various input issues
+
+
 Overview of Changes in 3.99.3
 =============================
 
