@@ -871,7 +871,6 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
           gtk_at_spi_root_child_changed (self->root,
                                          hidden ? GTK_ACCESSIBLE_CHILD_STATE_REMOVED
                                                 : GTK_ACCESSIBLE_CHILD_STATE_ADDED,
-                                         G_MAXUINT,
                                          widget);
         }
     }

@@ -405,46 +405,17 @@ static const GDBusInterfaceVTable root_accessible_vtable = {
   NULL,
 };
 
-static void
-root_toplevels__items_changed (GtkAtSpiRoot *self,
-                               guint         position,
-                               guint         removed,
-                               guint         added,
-                               GListModel   *toplevels)
-{
-  if (added == 1 && removed == 0)
-    {
-      GtkWidget *window;
-
-      window = GTK_WIDGET (g_list_model_get_item (self->toplevels, position));
-      gtk_at_spi_root_child_changed (self,
-                                     GTK_ACCESSIBLE_CHILD_STATE_ADDED,
-                                     G_MAXUINT,
-                                     window);
-      g_object_unref (window);
-    }
-  else if (added == 0 && removed == 1)
-    {
-      gtk_at_spi_root_child_changed (self,
-                                     GTK_ACCESSIBLE_CHILD_STATE_REMOVED,
-                                     position,
-                                     NULL);
-    }
-  else
-    {
-      g_assert_not_reached ();
-    }
-}
-
 void
 gtk_at_spi_root_child_changed (GtkAtSpiRoot             *self,
                                GtkAccessibleChildState   state,
-                               guint                     position,
                                GtkWidget                *window)
 {
   guint n, i;
   int idx = 0;
   GVariant *window_ref;
+
+  if (!self->toplevels)
+    return;
 
   /* We can be called either with a valid position and window == NULL
    * or with position == G_MAXUINT and a valid window. In both cases,
@@ -457,7 +428,7 @@ gtk_at_spi_root_child_changed (GtkAtSpiRoot             *self,
 
       g_object_unref (item);
 
-      if (i == position || item == GTK_ACCESSIBLE (window))
+      if (item == GTK_ACCESSIBLE (window))
         break;
 
       if (!gtk_accessible_should_present (item))
@@ -517,11 +488,7 @@ on_registration_reply (GObject      *gobject,
   /* Register the cache object */
   self->cache = gtk_at_spi_cache_new (self->connection, ATSPI_CACHE_PATH);
 
-  /* Monitor the top levels */
   self->toplevels = gtk_window_get_toplevels ();
-  g_signal_connect_swapped (self->toplevels, "items-changed",
-                            G_CALLBACK (root_toplevels__items_changed),
-                            self);
 }
 
 static void
