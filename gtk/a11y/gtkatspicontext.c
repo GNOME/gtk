@@ -867,7 +867,13 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
                                           GTK_ACCESSIBLE (widget));
         }
       else
-        g_warning ("Setting GTK_ACCESSIBLE_STATE_HIDDEN on toplevels is not supported");
+        {
+          gtk_at_spi_root_child_changed (self->root,
+                                         hidden ? GTK_ACCESSIBLE_CHILD_STATE_REMOVED
+                                                : GTK_ACCESSIBLE_CHILD_STATE_ADDED,
+                                         G_MAXUINT,
+                                         widget);
+        }
     }
 
   if (changed_states & GTK_ACCESSIBLE_STATE_CHANGE_BUSY)
