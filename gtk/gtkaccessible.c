@@ -742,12 +742,24 @@ gtk_accessible_bounds_changed (GtkAccessible *self)
 gboolean
 gtk_accessible_should_present (GtkAccessible *self)
 {
+  GtkATContext *context;
+
   if (GTK_IS_WIDGET (self) &&
       !gtk_widget_get_visible (GTK_WIDGET (self)))
     return FALSE;
 
   if (gtk_accessible_get_accessible_role (self) == GTK_ACCESSIBLE_ROLE_NONE)
     return FALSE;
+
+  context = gtk_accessible_get_at_context (self);
+  if (gtk_at_context_has_accessible_state (context, GTK_ACCESSIBLE_STATE_HIDDEN))
+    {
+      GtkAccessibleValue *value;
+
+      value = gtk_at_context_get_accessible_state (context, GTK_ACCESSIBLE_STATE_HIDDEN);
+      if (gtk_boolean_accessible_value_get (value))
+        return FALSE;
+    }
 
   return TRUE;
 }
