@@ -772,6 +772,6 @@ gtk_accessible_update_children (GtkAccessible           *self,
   if (context == NULL)
     return;
 
-  gtk_at_context_child_changed (context, state, child);
+  gtk_at_context_child_changed (context, 1 << state, child);
   gtk_at_context_update (context);
 }
