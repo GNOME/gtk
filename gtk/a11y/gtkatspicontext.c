@@ -1168,6 +1168,9 @@ gtk_at_spi_context_child_change (GtkATContext             *ctx,
            iter != NULL;
            iter = gtk_widget_get_next_sibling (iter))
         {
+          if (!gtk_accessible_should_present (GTK_ACCESSIBLE (iter)))
+            continue;
+
           if (iter == child_widget)
             break;
 
