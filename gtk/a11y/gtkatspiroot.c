@@ -412,8 +412,59 @@ root_toplevels__items_changed (GtkAtSpiRoot *self,
                                guint         added,
                                GListModel   *toplevels)
 {
-  GtkWidget *window = g_list_model_get_item (self->toplevels, position);
-  GVariant *window_ref = NULL;
+  if (added == 1 && removed == 0)
+    {
+      GtkWidget *window;
+
+      window = GTK_WIDGET (g_list_model_get_item (self->toplevels, position));
+      gtk_at_spi_root_child_changed (self,
+                                     GTK_ACCESSIBLE_CHILD_STATE_ADDED,
+                                     G_MAXUINT,
+                                     window);
+      g_object_unref (window);
+    }
+  else if (added == 0 && removed == 1)
+    {
+      gtk_at_spi_root_child_changed (self,
+                                     GTK_ACCESSIBLE_CHILD_STATE_REMOVED,
+                                     position,
+                                     NULL);
+    }
+  else
+    {
+      g_assert_not_reached ();
+    }
+}
+
+void
+gtk_at_spi_root_child_changed (GtkAtSpiRoot             *self,
+                               GtkAccessibleChildState   state,
+                               guint                     position,
+                               GtkWidget                *window)
+{
+  guint n, i;
+  int idx = 0;
+  GVariant *window_ref;
+
+  /* We can be called either with a valid position and window == NULL
+   * or with position == G_MAXUINT and a valid window. In both cases,
+   * we need to determine the index of where the removed object would
+   * have been in the accessible tree.
+   */
+  for (i = 0, n = g_list_model_get_n_items (self->toplevels); i < n; i++)
+    {
+      GtkAccessible *item = g_list_model_get_item (self->toplevels, i);
+
+      g_object_unref (item);
+
+      if (i == position || item == GTK_ACCESSIBLE (window))
+        break;
+
+      if (!gtk_accessible_should_present (item))
+        continue;
+
+      idx++;
+    }
 
   if (window == NULL)
     {
@@ -426,23 +477,12 @@ root_toplevels__items_changed (GtkAtSpiRoot *self,
       window_ref = gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (context));
     }
 
-  if (added == 1 && removed == 0)
-    gtk_at_spi_emit_children_changed (self->connection,
-                                      self->root_path,
-                                      GTK_ACCESSIBLE_CHILD_STATE_ADDED,
-                                      position,
-                                      gtk_at_spi_root_to_ref (self),
-                                      window_ref);
-  else if (removed == 1 && added == 0)
-    gtk_at_spi_emit_children_changed (self->connection,
-                                      self->root_path,
-                                      GTK_ACCESSIBLE_CHILD_STATE_REMOVED,
-                                      position,
-                                      gtk_at_spi_root_to_ref (self),
-                                      window_ref);
-
-  if (window != NULL)
-    g_object_unref (window);
+  gtk_at_spi_emit_children_changed (self->connection,
+                                    self->root_path,
+                                    state,
+                                    idx,
+                                    gtk_at_spi_root_to_ref (self),
+                                    window_ref);
 }
 
 static void
