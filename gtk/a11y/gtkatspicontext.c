@@ -34,7 +34,6 @@
 #include "gtkatspiutilsprivate.h"
 #include "gtkatspivalueprivate.h"
 #include "gtkatspicomponentprivate.h"
-
 #include "a11y/atspi/atspi-accessible.h"
 #include "a11y/atspi/atspi-action.h"
 #include "a11y/atspi/atspi-editabletext.h"
@@ -847,6 +846,29 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
   widget = GTK_WIDGET (accessible);
   if (!gtk_widget_get_realized (widget))
     return;
+
+  if (changed_states & GTK_ACCESSIBLE_STATE_CHANGE_HIDDEN)
+    {
+      GtkWidget *parent;
+      gboolean hidden;
+
+      value = gtk_accessible_attribute_set_get_value (states, GTK_ACCESSIBLE_STATE_HIDDEN);
+      hidden = gtk_boolean_accessible_value_get (value);
+
+      parent = gtk_widget_get_parent (widget);
+      if (parent)
+        {
+          if (GTK_IS_STACK (parent))
+            g_warning ("Setting GTK_ACCESSIBLE_STATE_HIDDEN on stack children is not supported");
+          else
+            gtk_at_context_child_changed (gtk_accessible_get_at_context (GTK_ACCESSIBLE (parent)),
+                                          hidden ? GTK_ACCESSIBLE_CHILD_CHANGE_REMOVED
+                                                 : GTK_ACCESSIBLE_CHILD_CHANGE_ADDED,
+                                          GTK_ACCESSIBLE (widget));
+        }
+      else
+        g_warning ("Setting GTK_ACCESSIBLE_STATE_HIDDEN on toplevels is not supported");
+    }
 
   if (changed_states & GTK_ACCESSIBLE_STATE_CHANGE_BUSY)
     {
