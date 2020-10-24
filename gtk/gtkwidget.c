@@ -5794,9 +5794,10 @@ gtk_widget_reposition_after (GtkWidget *widget,
       gtk_widget_queue_compute_expand (parent);
     }
 
-  gtk_accessible_update_children (GTK_ACCESSIBLE (parent),
-                                  GTK_ACCESSIBLE (widget),
-                                  GTK_ACCESSIBLE_CHILD_STATE_ADDED);
+  if (prev_parent == NULL)
+    gtk_accessible_update_children (GTK_ACCESSIBLE (parent),
+                                    GTK_ACCESSIBLE (widget),
+                                    GTK_ACCESSIBLE_CHILD_STATE_ADDED);
 
   gtk_widget_pop_verify_invariants (widget);
 }
