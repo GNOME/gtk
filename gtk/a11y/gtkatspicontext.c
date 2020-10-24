@@ -347,11 +347,11 @@ get_index_in_parent (GtkWidget *widget)
        child;
        child = gtk_widget_get_next_sibling (child))
     {
-      if (!gtk_accessible_should_present (GTK_ACCESSIBLE (child)))
-        continue;
-
       if (child == widget)
         return idx;
+
+      if (!gtk_accessible_should_present (GTK_ACCESSIBLE (child)))
+        continue;
 
       idx++;
     }
@@ -374,11 +374,11 @@ get_index_in_toplevels (GtkWidget *widget)
 
       g_object_unref (window);
 
-      if (!gtk_widget_get_visible (window))
-        continue;
-
       if (window == widget)
         return idx;
+
+      if (!gtk_accessible_should_present (GTK_ACCESSIBLE (window)))
+        continue;
 
       idx += 1;
     }
