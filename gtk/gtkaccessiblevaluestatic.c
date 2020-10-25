@@ -292,8 +292,6 @@ gtk_invalid_accessible_value_parse (const char  *str,
 {
   int value;
 
-  g_return_val_if_fail (str == NULL || len == 0, NULL);
-
   if (_gtk_builder_enum_from_string (GTK_TYPE_ACCESSIBLE_INVALID_STATE, str, &value, error))
     return gtk_invalid_accessible_value_new (value);
 
@@ -352,8 +350,6 @@ gtk_autocomplete_accessible_value_parse (const char  *str,
 {
   int value;
 
-  g_return_val_if_fail (str == NULL || len == 0, NULL);
-
   if (_gtk_builder_enum_from_string (GTK_TYPE_ACCESSIBLE_AUTOCOMPLETE, str, &value, error))
     return gtk_autocomplete_accessible_value_new (value);
 
@@ -405,8 +401,6 @@ gtk_orientation_accessible_value_parse (const char  *str,
                                         GError     **error)
 {
   int value;
-
-  g_return_val_if_fail (str == NULL || len == 0, NULL);
 
   if (_gtk_builder_enum_from_string (GTK_TYPE_ORIENTATION, str, &value, error))
     return gtk_orientation_accessible_value_new (value);
@@ -465,8 +459,6 @@ gtk_sort_accessible_value_parse (const char  *str,
                                  GError     **error)
 {
   int value;
-
-  g_return_val_if_fail (str == NULL || len == 0, NULL);
 
   if (_gtk_builder_enum_from_string (GTK_TYPE_ACCESSIBLE_SORT, str, &value, error))
     return gtk_sort_accessible_value_new (value);
