@@ -17,6 +17,7 @@ tests = [
   { 'name': 'entry' },
   { 'name': 'expander' },
   { 'name': 'flowbox' },
+  { 'name': 'general' },
   { 'name': 'image' },
   { 'name': 'label' },
   { 'name': 'listbox' },
