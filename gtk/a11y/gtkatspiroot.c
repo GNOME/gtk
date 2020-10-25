@@ -408,7 +408,7 @@ static const GDBusInterfaceVTable root_accessible_vtable = {
 void
 gtk_at_spi_root_child_changed (GtkAtSpiRoot             *self,
                                GtkAccessibleChildState   state,
-                               GtkWidget                *window)
+                               GtkAccessible            *child)
 {
   guint n, i;
   int idx = 0;
@@ -417,18 +417,13 @@ gtk_at_spi_root_child_changed (GtkAtSpiRoot             *self,
   if (!self->toplevels)
     return;
 
-  /* We can be called either with a valid position and window == NULL
-   * or with position == G_MAXUINT and a valid window. In both cases,
-   * we need to determine the index of where the removed object would
-   * have been in the accessible tree.
-   */
   for (i = 0, n = g_list_model_get_n_items (self->toplevels); i < n; i++)
     {
       GtkAccessible *item = g_list_model_get_item (self->toplevels, i);
 
       g_object_unref (item);
 
-      if (item == GTK_ACCESSIBLE (window))
+      if (item == child)
         break;
 
       if (!gtk_accessible_should_present (item))
@@ -437,13 +432,13 @@ gtk_at_spi_root_child_changed (GtkAtSpiRoot             *self,
       idx++;
     }
 
-  if (window == NULL)
+  if (child == NULL)
     {
       window_ref = gtk_at_spi_null_ref ();
     }
   else
     {
-      GtkATContext *context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (window));
+      GtkATContext *context = gtk_accessible_get_at_context (child);
 
       window_ref = gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (context));
     }
