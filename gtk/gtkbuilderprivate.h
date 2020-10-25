@@ -242,6 +242,10 @@ gboolean  _gtk_builder_flags_from_string (GType         type,
 					  const char   *string,
 					  guint        *value,
 					  GError      **error);
+gboolean _gtk_builder_boolean_from_string (const char   *string,
+                                           gboolean     *value,
+                                           GError      **error);
+
 const char * _gtk_builder_parser_translate (const char *domain,
                                              const char *context,
                                              const char *text);

@@ -1997,7 +1997,7 @@ gtk_builder_value_from_string (GtkBuilder   *builder,
                                              string, value, error);
 }
 
-static gboolean
+gboolean
 _gtk_builder_boolean_from_string (const char   *string,
                                   gboolean     *value,
                                   GError      **error)
