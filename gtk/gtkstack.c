@@ -1304,6 +1304,10 @@ update_child_visible (GtkStack     *stack,
       gtk_widget_set_child_visible (priv->last_visible_child->widget, FALSE);
       priv->last_visible_child = NULL;
     }
+
+  gtk_accessible_update_state (GTK_ACCESSIBLE (child_info),
+                               GTK_ACCESSIBLE_STATE_HIDDEN, !visible,
+                               -1);
 }
 
 static void
