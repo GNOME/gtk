@@ -1474,12 +1474,7 @@ stack_remove (GtkStack  *stack,
   was_visible = gtk_widget_get_visible (child);
 
   if (priv->visible_child == child_info)
-    {
-      if (in_dispose)
-        priv->visible_child = NULL;
-      else
-        set_visible_child (stack, NULL, priv->transition_type, priv->transition_duration);
-    }
+    priv->visible_child = NULL;
 
   if (priv->last_visible_child == child_info)
     priv->last_visible_child = NULL;
