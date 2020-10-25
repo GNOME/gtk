@@ -45,6 +45,7 @@
 #include "gtkaccessiblevalueprivate.h"
 
 #include "gtkaccessible.h"
+#include "gtkbuilderprivate.h"
 #include "gtkenums.h"
 
 #include <math.h>
@@ -1344,38 +1345,25 @@ gtk_accessible_value_parse (const GtkAccessibleCollect  *cstate,
     {
     case GTK_ACCESSIBLE_COLLECT_BOOLEAN:
       {
-        if (strncmp (str, "true", 4) == 0)
-          res = gtk_boolean_accessible_value_new (TRUE);
-        else if (strncmp (str, "false", 5) == 0)
-          res = gtk_boolean_accessible_value_new (FALSE);
-        else if (collects_undef && strncmp (str, "undefined", 9) == 0)
+        gboolean b;
+
+        if (collects_undef && strncmp (str, "undefined", 9) == 0)
           res = gtk_undefined_accessible_value_new ();
-        else
-          g_set_error (error, GTK_ACCESSIBLE_VALUE_ERROR,
-                       GTK_ACCESSIBLE_VALUE_ERROR_INVALID_TOKEN,
-                       "Invalid token “%s” for boolean attribute",
-                       str);
+        else if (_gtk_builder_boolean_from_string (str, &b, error))
+          res = gtk_boolean_accessible_value_new (b);
       }
       break;
 
     case GTK_ACCESSIBLE_COLLECT_TRISTATE:
       {
-        if (strncmp (str, "true", 4) == 0)
-          res = gtk_tristate_accessible_value_new (GTK_ACCESSIBLE_TRISTATE_TRUE);
-        else if (strncmp (str, "false", 5) == 0)
-          res = gtk_tristate_accessible_value_new (GTK_ACCESSIBLE_TRISTATE_FALSE);
+        gboolean b;
+
+        if (collects_undef && strncmp (str, "undefined", 9) == 0)
+          res = gtk_undefined_accessible_value_new ();
         else if (strncmp (str, "mixed", 5) == 0)
           res = gtk_tristate_accessible_value_new (GTK_ACCESSIBLE_TRISTATE_MIXED);
-        else if (collects_undef && strncmp (str, "undefined", 9) == 0)
-          res = gtk_undefined_accessible_value_new ();
-        else
-          {
-            g_set_error (error, GTK_ACCESSIBLE_VALUE_ERROR,
-                         GTK_ACCESSIBLE_VALUE_ERROR_INVALID_TOKEN,
-                         "Invalid token “%s” for tristate attribute",
-                         str);
-            return NULL;
-          }
+        else if (_gtk_builder_boolean_from_string (str, &b, error))
+          res = gtk_boolean_accessible_value_new (b);
       }
       break;
 
