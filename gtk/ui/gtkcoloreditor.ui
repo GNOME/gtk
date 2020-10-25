@@ -80,7 +80,6 @@
                 <property name="name">h</property>
                 <property name="orientation">vertical</property>
                 <property name="adjustment">h_adj</property>
-                <property name="draw-value">False</property>
                 <property name="has-origin">False</property>
                 <layout>
                   <property name="column">0</property>
@@ -92,7 +91,6 @@
               <object class="GtkColorScale" id="a_slider">
                 <property name="name">a</property>
                 <property name="adjustment">a_adj</property>
-                <property name="draw-value">False</property>
                 <property name="scale-type">1</property>
                 <property name="has-origin">False</property>
                 <style>
