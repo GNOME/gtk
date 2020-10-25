@@ -837,41 +837,38 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
 {
   GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (ctx);
   GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
-  GtkWidget *widget;
   GtkAccessibleValue *value;
 
-  if (!GTK_IS_WIDGET (accessible))
-    return;
-
-  widget = GTK_WIDGET (accessible);
-  if (!gtk_widget_get_realized (widget))
+  if (GTK_IS_WIDGET (accessible) && !gtk_widget_get_realized (GTK_WIDGET (accessible)))
     return;
 
   if (changed_states & GTK_ACCESSIBLE_STATE_CHANGE_HIDDEN)
     {
       GtkWidget *parent;
-      gboolean hidden;
+      GtkATContext *context;
+      GtkAccessibleChildChange change;
 
       value = gtk_accessible_attribute_set_get_value (states, GTK_ACCESSIBLE_STATE_HIDDEN);
-      hidden = gtk_boolean_accessible_value_get (value);
+      if (gtk_boolean_accessible_value_get (value))
+        change = GTK_ACCESSIBLE_CHILD_CHANGE_REMOVED;
+      else
+        change = GTK_ACCESSIBLE_CHILD_CHANGE_ADDED;
 
-      parent = gtk_widget_get_parent (widget);
-      if (parent)
+      if (GTK_IS_ROOT (accessible))
         {
-          if (GTK_IS_STACK (parent))
-            g_warning ("Setting GTK_ACCESSIBLE_STATE_HIDDEN on stack children is not supported");
-          else
-            gtk_at_context_child_changed (gtk_accessible_get_at_context (GTK_ACCESSIBLE (parent)),
-                                          hidden ? GTK_ACCESSIBLE_CHILD_CHANGE_REMOVED
-                                                 : GTK_ACCESSIBLE_CHILD_CHANGE_ADDED,
-                                          GTK_ACCESSIBLE (widget));
+          gtk_at_spi_root_child_changed (self->root, change, accessible);
         }
       else
         {
-          gtk_at_spi_root_child_changed (self->root,
-                                         hidden ? GTK_ACCESSIBLE_CHILD_STATE_REMOVED
-                                                : GTK_ACCESSIBLE_CHILD_STATE_ADDED,
-                                         widget);
+          if (GTK_IS_WIDGET (accessible))
+            parent = gtk_widget_get_parent (GTK_WIDGET (accessible));
+          else if (GTK_IS_STACK_PAGE (accessible))
+            parent = gtk_widget_get_parent (gtk_stack_page_get_child (GTK_STACK_PAGE (accessible)));
+          else
+            g_assert_not_reached ();
+
+          context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (parent));
+          gtk_at_context_child_changed (context, change, accessible);
         }
     }
 
@@ -1097,14 +1094,11 @@ gtk_at_spi_context_child_change (GtkATContext             *ctx,
   GtkWidget *child_widget;
   int idx = 0;
 
-  if (!GTK_IS_WIDGET (accessible) || !GTK_IS_WIDGET (child))
+  if (!GTK_IS_WIDGET (accessible))
     return;
 
   if (child_context == NULL)
     return;
-
-  parent_widget = GTK_WIDGET (accessible);
-  child_widget = GTK_WIDGET (child);
 
   /* handle the stack page special case */
   if (GTK_IS_WIDGET (child) &&
@@ -1162,6 +1156,13 @@ gtk_at_spi_context_child_change (GtkATContext             *ctx,
 
       return;
     }
+
+  parent_widget = GTK_WIDGET (accessible);
+
+  if (GTK_IS_STACK_PAGE (child))
+    child_widget = gtk_stack_page_get_child (GTK_STACK_PAGE (child));
+  else
+    child_widget = GTK_WIDGET (child);
 
   if (gtk_widget_get_parent (child_widget) != parent_widget)
     {
