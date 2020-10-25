@@ -3025,12 +3025,29 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (pattern == parent_relative_pattern)
     {
-      GdkWindow *parent;
+      Window xroot, xparent, *xchildren;
+      guint nxchildren, xparent_depth;
+      XWindowAttributes xattrs;
+
+      if (!XQueryTree (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window),
+            &xroot, &xparent, &xchildren, &nxchildren))
+        {
+          XSetWindowBackgroundPixmap (GDK_WINDOW_XDISPLAY (window),
+              GDK_WINDOW_XID (window), None);
+          return;
+        }
+
+      if (xchildren)
+        XFree (xchildren);
+
+      if (xparent) {
+        XGetWindowAttributes (GDK_WINDOW_XDISPLAY (window), xparent, &xattrs);
+        xparent_depth = xattrs.depth;
+      }
 
       /* X throws BadMatch if the parent has a different depth when
        * using ParentRelative */
-      parent = gdk_window_get_parent (window);
-      if (parent != NULL && window->depth == parent->depth &&
+      if (xparent && window->depth == xparent_depth &&
           cairo_pattern_status (pattern) == CAIRO_STATUS_SUCCESS)
         {
           XSetWindowBackgroundPixmap (GDK_WINDOW_XDISPLAY (window),
