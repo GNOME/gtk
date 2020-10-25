@@ -44,7 +44,7 @@ gtk_at_spi_root_to_ref (GtkAtSpiRoot *self);
 
 void
 gtk_at_spi_root_child_changed (GtkAtSpiRoot             *self,
-                               GtkAccessibleChildState   state,
+                               GtkAccessibleChildChange  change,
                                GtkAccessible            *child);
 
 G_END_DECLS

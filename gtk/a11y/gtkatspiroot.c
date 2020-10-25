@@ -407,12 +407,13 @@ static const GDBusInterfaceVTable root_accessible_vtable = {
 
 void
 gtk_at_spi_root_child_changed (GtkAtSpiRoot             *self,
-                               GtkAccessibleChildState   state,
+                               GtkAccessibleChildChange  change,
                                GtkAccessible            *child)
 {
   guint n, i;
   int idx = 0;
   GVariant *window_ref;
+  GtkAccessibleChildState state;
 
   if (!self->toplevels)
     return;
@@ -441,6 +442,18 @@ gtk_at_spi_root_child_changed (GtkAtSpiRoot             *self,
       GtkATContext *context = gtk_accessible_get_at_context (child);
 
       window_ref = gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (context));
+    }
+
+  switch (change)
+    {
+    case GTK_ACCESSIBLE_CHILD_CHANGE_ADDED:
+      state = GTK_ACCESSIBLE_CHILD_STATE_ADDED;
+      break;
+    case GTK_ACCESSIBLE_CHILD_CHANGE_REMOVED:
+      state = GTK_ACCESSIBLE_CHILD_STATE_REMOVED;
+      break;
+    default:
+      g_assert_not_reached ();
     }
 
   gtk_at_spi_emit_children_changed (self->connection,
