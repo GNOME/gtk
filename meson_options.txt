@@ -27,28 +27,38 @@ option('macos-backend',
 
 # Media backends
 
-option('media',
-       type: 'string',
-       value: 'gstreamer',
-       description : 'Build the specified media engines (comma-separated list, "all", or "none")')
+option('media-ffmpeg',
+       type: 'feature',
+       value: 'auto',
+       description : 'Build the ffmpeg media backend')
+
+option('media-gstreamer',
+       type: 'feature',
+       value: 'auto',
+       description : 'Build the gstreamer media backend')
 
 # Print backends
 
-option('print',
-       type: 'string',
-       value: 'cups,file',
-       description : 'Build the specified print backends (comma-separated list, "all", or "none")')
+option('print-cups',
+       type: 'feature',
+       value: 'auto',
+       description : 'Build the cups print backend')
+
+option('print-cloudprint',
+       type: 'feature',
+       value: 'auto',
+       description : 'Build the cloudprint print backend')
 
 # Optional features
 
 option('vulkan',
        type: 'feature',
-       value: 'enabled',
+       value: 'auto',
        description : 'Enable support for the Vulkan graphics API')
 
 option('xinerama',
        type: 'feature',
-       value: 'enabled',
+       value: 'auto',
        description : 'Enable support for the X11 Xinerama extension')
 
 option('cloudproviders',
