@@ -681,6 +681,11 @@ gtk_model_button_set_text (GtkModelButton *button,
   gtk_label_set_text_with_mnemonic (GTK_LABEL (button->label),
                                     text ? text : "");
   update_visibility (button);
+
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (button),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, g_list_append (NULL, button->label),
+                                  -1);
+
   g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_TEXT]);
 }
 
