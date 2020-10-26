@@ -92,6 +92,16 @@ change_theme_state (GSimpleAction *action,
 static GtkWidget *page_stack;
 
 static void
+transition_speed_changed (GtkRange *range,
+                          gpointer  data)
+{
+  double value;
+
+  value = gtk_range_get_value (range);
+  gtk_stack_set_transition_duration (GTK_STACK (page_stack), (int)value);
+}
+
+static void
 change_transition_state (GSimpleAction *action,
                          GVariant      *state,
                          gpointer       user_data)
@@ -2022,6 +2032,7 @@ activate (GApplication *app)
           "validate_more_details", (GCallback)validate_more_details,
           "mode_switch_state_set", (GCallback)mode_switch_state_set,
           "level_scale_value_changed", (GCallback)level_scale_value_changed,
+          "transition_speed_changed", (GCallback)transition_speed_changed,
           NULL);
   gtk_builder_set_scope (builder, scope);
   g_object_unref (scope);

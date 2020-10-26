@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <menu id="gear_menu">
+  <menu id="gear_menu_model">
     <section>
       <item>
         <attribute name="label" translatable="yes">Get Busy</attribute>
@@ -39,6 +39,9 @@
       <item>
         <attribute name="label" translatable="yes">Transition Pages</attribute>
         <attribute name="action">win.transition</attribute>
+      </item>
+      <item>
+        <attribute name="custom">transition-speed</attribute>
       </item>
     </section>
     <section>
@@ -444,7 +447,26 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
         <child type="end">
           <object class="GtkMenuButton" id="gear_menu_button">
             <property name="valign">center</property>
-            <property name="menu-model">gear_menu</property>
+            <property name="popover">
+              <object class="GtkPopoverMenu" id="gear_menu">
+                <property name="menu-model">gear_menu_model</property>
+                <child type="transition-speed">
+                  <object class="GtkScale">
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">0</property>
+                        <property name="upper">1000</property>
+                        <property name="value">250</property>
+                        <property name="step-increment">50</property>
+                        <property name="page-increment">50</property>
+                        <property name="page-size">0</property>
+                      </object>
+                    </property>
+                    <signal name="value-changed" handler="transition_speed_changed"/>
+                  </object>
+                </child>
+              </object>
+            </property>
             <property name="icon-name">open-menu-symbolic</property>
           </object>
         </child>
