@@ -1067,6 +1067,7 @@ create_picture (void)
   GtkWidget *vbox;
   GtkIconTheme *theme;
   GdkPaintable *paintable;
+  GtkWidget *box;
 
   theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
   paintable = GDK_PAINTABLE (gtk_icon_theme_lookup_icon (theme,
@@ -1080,8 +1081,12 @@ create_picture (void)
   gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
 
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_box_append (GTK_BOX (box), g_object_new (GTK_TYPE_IMAGE, "hexpand", TRUE, NULL));
+  gtk_box_append (GTK_BOX (box), widget);
+  gtk_box_append (GTK_BOX (box), g_object_new (GTK_TYPE_IMAGE, "hexpand", TRUE, NULL));
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox), box);
   gtk_box_append (GTK_BOX (vbox), gtk_label_new ("Picture"));
 
   add_margin (vbox);
