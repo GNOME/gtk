@@ -117,6 +117,13 @@ snapshot_widget (GtkWidget *widget)
   return surface;
 }
 
+static gboolean
+quit_cb (gpointer data)
+{
+  *(gboolean *)data = TRUE;
+  return G_SOURCE_REMOVE;
+}
+
 int
 main (int argc, char **argv)
 {
@@ -144,7 +151,15 @@ main (int argc, char **argv)
                                      NULL);
         }
 
-      //while (1) g_main_context_iteration (NULL, 1);
+      if (info->wait > 0)
+        {
+          gboolean quit = FALSE;
+
+          g_timeout_add (info->wait, quit_cb, &quit);
+
+          while (!quit)
+            g_main_context_iteration (NULL, TRUE);
+        }
 
       surface = snapshot_widget (info->window);
 

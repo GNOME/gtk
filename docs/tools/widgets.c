@@ -1099,10 +1099,13 @@ create_video (void)
 {
   GtkWidget *widget;
   GtkWidget *vbox;
+  WidgetInfo *info;
 
-  widget = gtk_video_new_for_filename ("../../demos/gtk-demo/gtk-logo.webm");
-  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+  widget = gtk_video_new_for_filename ("demos/gtk-demo/gtk-logo.webm");
+  gtk_video_set_autoplay (GTK_VIDEO (widget), TRUE);
+
+  gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
+  gtk_widget_set_valign (widget, GTK_ALIGN_FILL);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   gtk_box_append (GTK_BOX (vbox), widget);
@@ -1110,7 +1113,10 @@ create_video (void)
 
   add_margin (vbox);
 
-  return new_widget_info ("video", vbox, SMALL);
+  info = new_widget_info ("video", vbox, MEDIUM);
+  info->wait = 2000;
+
+  return info;
 }
 
 static WidgetInfo *
