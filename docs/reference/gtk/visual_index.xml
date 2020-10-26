@@ -69,9 +69,13 @@
     <link linkend="GtkFrame"><inlinegraphic fileref="frame.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkListBox"><inlinegraphic fileref="list-box.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkFlowBox"><inlinegraphic fileref="flow-box.png" format="PNG"></inlinegraphic></link>
+  </para>
+  <para role="gallery">
     <link linkend="GtkStack"><inlinegraphic fileref="stack.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkStackSwitcher"><inlinegraphic fileref="stackswitcher.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkStackSidebar"><inlinegraphic fileref="sidebar.png" format="PNG"></inlinegraphic></link>
+  </para>
+  <para role="gallery">
     <link linkend="GtkTreeView"><inlinegraphic fileref="list-and-tree.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkIconView"><inlinegraphic fileref="icon-view.png" format="PNG"></inlinegraphic></link>
   </para>
