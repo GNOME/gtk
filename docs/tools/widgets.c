@@ -33,6 +33,18 @@ new_widget_info (const char *name,
       gtk_window_set_resizable (GTK_WINDOW (info->window), FALSE);
       info->include_decorations = TRUE;
     }
+  else if (GTK_IS_POPOVER (widget))
+    {
+      GtkWidget *button;
+
+      info->snapshot_popover = TRUE;
+      info->window = gtk_window_new ();
+      gtk_window_set_decorated (GTK_WINDOW (info->window), FALSE);
+      info->include_decorations = TRUE;
+      button = gtk_menu_button_new ();
+      gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), widget);
+      gtk_window_set_child (GTK_WINDOW (info->window), button);
+    }
   else
     {
       info->window = gtk_window_new ();
@@ -54,7 +66,7 @@ new_widget_info (const char *name,
       gtk_widget_set_size_request (info->window, 240, 240);
       break;
     default:
-	break;
+      break;
     }
 
   return info;
@@ -1549,6 +1561,21 @@ create_calendar (void)
   return new_widget_info ("calendar", vbox, MEDIUM);
 }
 
+static WidgetInfo *
+create_emojichooser (void)
+{
+  GtkWidget *widget;
+  WidgetInfo *info;
+
+  widget = gtk_emoji_chooser_new ();
+  g_object_set (widget, "autohide", FALSE, NULL);
+
+  info = new_widget_info ("emojichooser", widget, ASIS);
+  info->wait = 2000;
+
+  return info;
+}
+
 GList *
 get_all_widgets (void)
 {
@@ -1616,6 +1643,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_drop_down ());
   retval = g_list_prepend (retval, create_window_controls ());
   retval = g_list_prepend (retval, create_calendar ());
+  retval = g_list_prepend (retval, create_emojichooser ());
 
   return retval;
 }

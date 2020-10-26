@@ -264,6 +264,7 @@ images = [
   'images/ease-out.png',
   'images/ease.png',
   'images/editable-label.png',
+  'images/emojichooser.png',
   'images/entry.png',
   'images/exampleapp.png',
   'images/expanders.png',
