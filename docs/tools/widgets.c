@@ -1589,6 +1589,57 @@ create_expander (void)
   return new_widget_info ("expander", widget, SMALL);
 }
 
+static void
+mapped_cb (GtkWidget *widget)
+{
+  gtk_widget_child_focus (widget, GTK_DIR_RIGHT);
+}
+
+static WidgetInfo *
+create_menu_bar (void)
+{
+  GtkWidget *widget;
+  GtkWidget *vbox;
+  GMenu *menu, *menu1;
+  GMenuItem *item;
+
+  menu = g_menu_new ();
+  menu1 = g_menu_new ();
+  item = g_menu_item_new ("Item", "action");
+  g_menu_append_item (menu1, item);
+  g_menu_append_submenu (menu, "File", G_MENU_MODEL (menu1));
+  g_object_unref (item);
+  g_object_unref (menu1);
+  menu1 = g_menu_new ();
+  item = g_menu_item_new ("Item", "action");
+  g_menu_append_item (menu1, item);
+  g_menu_append_submenu (menu, "Edit", G_MENU_MODEL (menu1));
+  g_object_unref (item);
+  g_object_unref (menu1);
+  menu1 = g_menu_new ();
+  item = g_menu_item_new ("Item", "action");
+  g_menu_append_item (menu1, item);
+  g_menu_append_submenu (menu, "View", G_MENU_MODEL (menu1));
+  g_object_unref (item);
+  g_object_unref (menu1);
+
+  widget = gtk_popover_menu_bar_new_from_model (G_MENU_MODEL (menu));
+
+  g_object_unref (menu);
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox), gtk_label_new ("Menu Bar"));
+
+  add_margin (vbox);
+
+  g_signal_connect (widget, "map", G_CALLBACK (mapped_cb), NULL);
+
+  return new_widget_info ("menubar", vbox, SMALL);
+}
+
 GList *
 get_all_widgets (void)
 {
@@ -1658,6 +1709,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_calendar ());
   retval = g_list_prepend (retval, create_emojichooser ());
   retval = g_list_prepend (retval, create_expander ());
+  retval = g_list_prepend (retval, create_menu_bar ());
 
   return retval;
 }
