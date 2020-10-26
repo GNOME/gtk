@@ -1370,6 +1370,7 @@ create_sidebar (void)
   gtk_widget_add_css_class (view, "view");
   gtk_widget_set_halign (view, GTK_ALIGN_FILL);
   gtk_widget_set_valign (view, GTK_ALIGN_FILL);
+  gtk_widget_set_hexpand (view, TRUE);
   gtk_stack_add_titled (GTK_STACK (stack), view, "page1", "Page 1");
   view = gtk_text_view_new ();
   gtk_stack_add_titled (GTK_STACK (stack), view, "page2", "Page 2");
@@ -1385,7 +1386,7 @@ create_sidebar (void)
   gtk_box_append (GTK_BOX (hbox), stack);
   gtk_frame_set_child (GTK_FRAME (frame), hbox);
 
-  return new_widget_info ("sidebar", frame, ASIS);
+  return new_widget_info ("sidebar", frame, MEDIUM);
 }
 
 static WidgetInfo *
