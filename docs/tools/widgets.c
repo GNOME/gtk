@@ -1170,25 +1170,18 @@ create_spinner (void)
 static WidgetInfo *
 create_volume_button (void)
 {
-  GtkWidget *button, *box;
-  GtkWidget *widget;
-  GtkWidget *popup;
+  GtkWidget *widget, *vbox;
 
-  widget = gtk_window_new ();
-  gtk_widget_set_size_request (widget, 100, 250);
+  widget = gtk_volume_button_new ();
+  gtk_scale_button_set_value (GTK_SCALE_BUTTON (widget), 33);
 
-  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_window_set_child (GTK_WINDOW (widget), box);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox), gtk_label_new ("Volume Button"));
 
-  button = gtk_volume_button_new ();
-  gtk_box_append (GTK_BOX (box), button);
-
-  gtk_scale_button_set_value (GTK_SCALE_BUTTON (button), 33);
-  popup = gtk_scale_button_get_popup (GTK_SCALE_BUTTON (button));
-  gtk_widget_realize (widget);
-  gtk_widget_show (popup);
-
-  return new_widget_info ("volumebutton", widget, ASIS);
+  return new_widget_info ("volumebutton", vbox, SMALL);
 }
 
 static WidgetInfo *
