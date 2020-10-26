@@ -63,23 +63,20 @@
   <title>Containers</title>
   <para role="gallery">
     <link linkend="GtkScrolledWindow"><inlinegraphic fileref="scrolledwindow.png" format="PNG"></inlinegraphic></link>
-    <link linkend="GtkHeaderBar"><inlinegraphic fileref="headerbar.png" format="PNG"></inlinegraphic></link>
+    <link linkend="GtkPaned"><inlinegraphic fileref="panes.png" format="PNG"></inlinegraphic></link>
+    <link linkend="GtkFrame"><inlinegraphic fileref="frame.png" format="PNG"></inlinegraphic></link>
+    <link linkend="GtkExpander"><inlinegraphic fileref="expander.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkSearchBar"><inlinegraphic fileref="search-bar.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkActionBar"><inlinegraphic fileref="action-bar.png" format="PNG"></inlinegraphic></link>
-    <link linkend="GtkPaned"><inlinegraphic fileref="panes.png" format="PNG"></inlinegraphic></link>
+    <link linkend="GtkHeaderBar"><inlinegraphic fileref="headerbar.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkNotebook"><inlinegraphic fileref="notebook.png" format="PNG"></inlinegraphic></link>
-    <link linkend="GtkFrame"><inlinegraphic fileref="frame.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkListBox"><inlinegraphic fileref="list-box.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkFlowBox"><inlinegraphic fileref="flow-box.png" format="PNG"></inlinegraphic></link>
-  </para>
-  <para role="gallery">
+    <link linkend="GtkTreeView"><inlinegraphic fileref="list-and-tree.png" format="PNG"></inlinegraphic></link>
+    <link linkend="GtkIconView"><inlinegraphic fileref="icon-view.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkStack"><inlinegraphic fileref="stack.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkStackSwitcher"><inlinegraphic fileref="stackswitcher.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkStackSidebar"><inlinegraphic fileref="sidebar.png" format="PNG"></inlinegraphic></link>
-  </para>
-  <para role="gallery">
-    <link linkend="GtkTreeView"><inlinegraphic fileref="list-and-tree.png" format="PNG"></inlinegraphic></link>
-    <link linkend="GtkIconView"><inlinegraphic fileref="icon-view.png" format="PNG"></inlinegraphic></link>
   </para>
 </section>
 

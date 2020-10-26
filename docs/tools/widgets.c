@@ -1576,6 +1576,19 @@ create_emojichooser (void)
   return info;
 }
 
+static WidgetInfo *
+create_expander (void)
+{
+  GtkWidget *widget;
+
+  widget = gtk_expander_new ("Expander");
+  gtk_expander_set_child (GTK_EXPANDER (widget), gtk_label_new ("Hidden Content"));
+  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+
+  return new_widget_info ("expander", widget, SMALL);
+}
+
 GList *
 get_all_widgets (void)
 {
@@ -1644,6 +1657,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_window_controls ());
   retval = g_list_prepend (retval, create_calendar ());
   retval = g_list_prepend (retval, create_emojichooser ());
+  retval = g_list_prepend (retval, create_expander ());
 
   return retval;
 }

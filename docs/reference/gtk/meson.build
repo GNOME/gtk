@@ -268,6 +268,7 @@ images = [
   'images/entry.png',
   'images/exampleapp.png',
   'images/expanders.png',
+  'images/expander.png',
   'images/extensions.png',
   'images/figure-hierarchical-drawing.png',
   'images/figure-windowed-label.png',
