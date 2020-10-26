@@ -73,6 +73,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkmain.h"
 #include "gtknative.h"
+#include "gtkbuildable.h"
 
 #define GTK_TYPE_POPOVER_MENU_BAR_ITEM    (gtk_popover_menu_bar_item_get_type ())
 #define GTK_POPOVER_MENU_BAR_ITEM(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_POPOVER_MENU_BAR_ITEM, GtkPopoverMenuBarItem))
@@ -384,7 +385,11 @@ enum
 
 static GParamSpec * bar_props[LAST_PROP];
 
-G_DEFINE_TYPE (GtkPopoverMenuBar, gtk_popover_menu_bar, GTK_TYPE_WIDGET)
+static void gtk_popover_menu_bar_buildable_iface_init (GtkBuildableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GtkPopoverMenuBar, gtk_popover_menu_bar, GTK_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_popover_menu_bar_buildable_iface_init))
 
 static void
 tracker_remove (int      position,
@@ -648,6 +653,31 @@ gtk_popover_menu_bar_init (GtkPopoverMenuBar *bar)
   gtk_event_controller_set_propagation_limit (controller, GTK_LIMIT_NONE);
   g_signal_connect (controller, "leave", G_CALLBACK (bar_leave_cb), NULL);
   gtk_widget_add_controller (GTK_WIDGET (bar), controller);
+}
+
+static GtkBuildableIface *parent_buildable_iface;
+
+static void
+gtk_popover_menu_bar_buildable_add_child (GtkBuildable *buildable,
+                                          GtkBuilder   *builder,
+                                          GObject      *child,
+                                          const char   *type)
+{
+  if (GTK_IS_WIDGET (child))
+    {
+      if (!gtk_popover_menu_bar_add_child (GTK_POPOVER_MENU_BAR (buildable), GTK_WIDGET (child), type))
+        g_warning ("No such custom attribute: %s", type);
+    }
+  else
+    parent_buildable_iface->add_child (buildable, builder, child, type);
+}
+
+static void
+gtk_popover_menu_bar_buildable_iface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
+  iface->add_child = gtk_popover_menu_bar_buildable_add_child;
 }
 
 /**

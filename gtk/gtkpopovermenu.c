@@ -35,6 +35,7 @@
 #include "gtkpopovermenubar.h"
 #include "gtkshortcutmanager.h"
 #include "gtkshortcutcontroller.h"
+#include "gtkbuildable.h"
 
 
 /**
@@ -99,7 +100,8 @@
  *      Possible values include "action-disabled", "action-missing", "macos-menubar".
  *      This is mainly useful for exported menus, see gtk_application_set_menubar().
  * - "custom": a string used to match against the ID of a custom child added
- *      with gtk_popover_menu_add_child() or gtk_popover_menu_bar_add_child().
+ *      with gtk_popover_menu_add_child(), gtk_popover_menu_bar_add_child(), or
+ *      in the ui file with `<child type="ID">`.
  *
  * The following attributes are used when constructing sections:
  * - "label": a user-visible string to use as section heading
@@ -155,7 +157,11 @@ enum {
   PROP_MENU_MODEL
 };
 
-G_DEFINE_TYPE (GtkPopoverMenu, gtk_popover_menu, GTK_TYPE_POPOVER)
+static void gtk_popover_menu_buildable_iface_init (GtkBuildableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GtkPopoverMenu, gtk_popover_menu, GTK_TYPE_POPOVER,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_popover_menu_buildable_iface_init))
 
 GtkWidget *
 gtk_popover_menu_get_parent_menu (GtkPopoverMenu *menu)
@@ -566,6 +572,31 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
                                        "activate-default", NULL);
 
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_MENU);
+}
+
+static GtkBuildableIface *parent_buildable_iface;
+
+static void
+gtk_popover_menu_buildable_add_child (GtkBuildable *buildable,
+                                      GtkBuilder   *builder,
+                                      GObject      *child,
+                                      const char   *type)
+{
+  if (GTK_IS_WIDGET (child))
+    {
+      if (!gtk_popover_menu_add_child (GTK_POPOVER_MENU (buildable), GTK_WIDGET (child), type))
+        g_warning ("No such custom attribute: %s", type);
+    }
+  else
+    parent_buildable_iface->add_child (buildable, builder, child, type);
+}
+
+static void
+gtk_popover_menu_buildable_iface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
+  iface->add_child = gtk_popover_menu_buildable_add_child;
 }
 
 /**
