@@ -35,15 +35,15 @@
     <link linkend="GtkCheckButton"><inlinegraphic fileref="check-button.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkMenuButton"><inlinegraphic fileref="menu-button.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkLockButton"><inlinegraphic fileref="lockbutton.png" format="PNG"></inlinegraphic></link>
-    <link linkend="GtkColorButton"><inlinegraphic fileref="color-button.png" format="PNG"></inlinegraphic></link>
+   <link linkend="GtkVolumeButton"><inlinegraphic fileref="volumebutton.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkSwitch"><inlinegraphic fileref="switch.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkComboBox"><inlinegraphic fileref="combo-box.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkComboBoxText"><inlinegraphic fileref="combo-box-text.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkDropDown"><inlinegraphic fileref="drop-down.png" format="PNG"></inlinegraphic></link>
+    <link linkend="GtkColorButton"><inlinegraphic fileref="color-button.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkFontButton"><inlinegraphic fileref="font-button.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkAppChooserButton"><inlinegraphic fileref="appchooserbutton.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkFileChooserButton"><inlinegraphic fileref="file-button.png" format="PNG"></inlinegraphic></link>
-   <link linkend="GtkVolumeButton"><inlinegraphic fileref="volumebutton.png" format="PNG"></inlinegraphic></link>
   </para>
 </section>
 
