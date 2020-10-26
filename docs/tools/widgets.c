@@ -39,6 +39,7 @@ new_widget_info (const char *name,
 
       info->snapshot_popover = TRUE;
       info->window = gtk_window_new ();
+      gtk_window_set_default_size (GTK_WINDOW (info->window), 200, 200);
       gtk_window_set_decorated (GTK_WINDOW (info->window), FALSE);
       info->include_decorations = TRUE;
       button = gtk_menu_button_new ();
@@ -1640,6 +1641,28 @@ create_menu_bar (void)
   return new_widget_info ("menubar", vbox, SMALL);
 }
 
+static WidgetInfo *
+create_popover (void)
+{
+  GtkWidget *widget;
+  GtkWidget *child;
+  WidgetInfo *info;
+
+  widget = gtk_popover_new ();
+  gtk_widget_set_size_request (widget, 180, 180);
+  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
+  g_object_set (widget, "autohide", FALSE, NULL);
+  child = gtk_label_new ("Popover");
+  gtk_widget_set_halign (child, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (child, GTK_ALIGN_CENTER);
+  gtk_popover_set_child (GTK_POPOVER (widget), child);
+
+  info = new_widget_info ("popover", widget, ASIS);
+  info->wait = 100;
+
+  return info;
+}
+
 GList *
 get_all_widgets (void)
 {
@@ -1710,6 +1733,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_emojichooser ());
   retval = g_list_prepend (retval, create_expander ());
   retval = g_list_prepend (retval, create_menu_bar ());
+  retval = g_list_prepend (retval, create_popover ());
 
   return retval;
 }

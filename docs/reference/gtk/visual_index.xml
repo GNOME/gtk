@@ -78,6 +78,7 @@
     <link linkend="GtkStack"><inlinegraphic fileref="stack.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkStackSwitcher"><inlinegraphic fileref="stackswitcher.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkStackSidebar"><inlinegraphic fileref="sidebar.png" format="PNG"></inlinegraphic></link>
+    <link linkend="GtkPopover"><inlinegraphic fileref="popover.png" format="PNG"></inlinegraphic></link>
   </para>
 </section>
 
