@@ -367,6 +367,7 @@ images = [
   'images/video.png',
   'images/volumebutton.png',
   'images/widget-hvalign.png',
+  'images/windowcontrols.png',
   'images/window-default.png',
   'images/window.png',
   'images/rich-list.png',

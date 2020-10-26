@@ -51,6 +51,9 @@
     <link linkend="GtkMediaControls">
       <inlinegraphic fileref="media-controls.png" format="PNG"></inlinegraphic>
     </link>
+    <link linkend="GtkWindowControls">
+      <inlinegraphic fileref="windowcontrols.png" format="PNG"></inlinegraphic>
+    </link>
   </para>
 </section>
 

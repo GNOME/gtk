@@ -1497,6 +1497,26 @@ create_gl_area (void)
   return info;
 }
 
+static WidgetInfo *
+create_window_controls (void)
+{
+  GtkWidget *controls;
+  GtkWidget *vbox;
+
+  controls = gtk_window_controls_new (GTK_PACK_END);
+  gtk_window_controls_set_decoration_layout (GTK_WINDOW_CONTROLS (controls),
+                                             ":minimize,maximize,close");
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+  gtk_widget_set_halign (controls, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (controls, GTK_ALIGN_CENTER);
+  gtk_box_append (GTK_BOX (vbox), controls);
+  gtk_box_append (GTK_BOX (vbox), gtk_label_new ("Window Controls"));
+
+  add_margin (vbox);
+
+  return new_widget_info ("windowcontrols", vbox, SMALL);
+}
+
 GList *
 get_all_widgets (void)
 {
@@ -1562,6 +1582,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_password_entry ());
   retval = g_list_prepend (retval, create_editable_label ());
   retval = g_list_prepend (retval, create_drop_down ());
+  retval = g_list_prepend (retval, create_window_controls ());
 
   return retval;
 }
