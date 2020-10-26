@@ -47,6 +47,7 @@
 #include "gtkaccessible.h"
 #include "gtkbuilderprivate.h"
 #include "gtkenums.h"
+#include "gtktypebuiltins.h"
 
 #include <math.h>
 #include <float.h>
@@ -1356,14 +1357,12 @@ gtk_accessible_value_parse (const GtkAccessibleCollect  *cstate,
 
     case GTK_ACCESSIBLE_COLLECT_TRISTATE:
       {
-        gboolean b;
+        int value;
 
         if (collects_undef && strncmp (str, "undefined", 9) == 0)
           res = gtk_undefined_accessible_value_new ();
-        else if (strncmp (str, "mixed", 5) == 0)
-          res = gtk_tristate_accessible_value_new (GTK_ACCESSIBLE_TRISTATE_MIXED);
-        else if (_gtk_builder_boolean_from_string (str, &b, error))
-          res = gtk_boolean_accessible_value_new (b);
+        else if (_gtk_builder_enum_from_string (GTK_TYPE_ACCESSIBLE_TRISTATE, str, &value, error))
+          res = gtk_boolean_accessible_value_new (value);
       }
       break;
 
