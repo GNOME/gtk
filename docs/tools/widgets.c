@@ -666,7 +666,7 @@ create_editable_label (void)
 
   add_margin (vbox);
 
-  return new_widget_info ("editable-label", vbox, MEDIUM);
+  return new_widget_info ("editable-label", vbox, SMALL);
 }
 static WidgetInfo *
 create_separator (void)
