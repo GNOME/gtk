@@ -1124,8 +1124,13 @@ create_media_controls (void)
 {
   GtkWidget *widget;
   GtkWidget *vbox;
+  GtkMediaStream *stream;
+  WidgetInfo *info;
 
-  widget = gtk_media_controls_new (NULL);
+  stream = gtk_media_file_new_for_filename ("demos/gtk-demo/gtk-logo.webm");
+  gtk_media_stream_play (stream);
+  widget = gtk_media_controls_new (stream);
+  gtk_widget_set_size_request (widget, 210, -1);
   gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
 
@@ -1135,7 +1140,10 @@ create_media_controls (void)
 
   add_margin (vbox);
 
-  return new_widget_info ("media-controls", vbox, SMALL);
+  info = new_widget_info ("media-controls", vbox, SMALL);
+  info->wait = 2000;
+
+  return info;
 }
 
 static WidgetInfo *
