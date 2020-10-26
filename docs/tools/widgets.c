@@ -33,6 +33,19 @@ new_widget_info (const char *name,
       gtk_window_set_resizable (GTK_WINDOW (info->window), FALSE);
       info->include_decorations = TRUE;
     }
+  else if (GTK_IS_POPOVER (widget))
+    {
+      GtkWidget *button;
+
+      info->snapshot_popover = TRUE;
+      info->window = gtk_window_new ();
+      gtk_window_set_default_size (GTK_WINDOW (info->window), 200, 200);
+      gtk_window_set_decorated (GTK_WINDOW (info->window), FALSE);
+      info->include_decorations = TRUE;
+      button = gtk_menu_button_new ();
+      gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), widget);
+      gtk_window_set_child (GTK_WINDOW (info->window), button);
+    }
   else
     {
       info->window = gtk_window_new ();
@@ -54,7 +67,7 @@ new_widget_info (const char *name,
       gtk_widget_set_size_request (info->window, 240, 240);
       break;
     default:
-	break;
+      break;
     }
 
   return info;
@@ -666,7 +679,7 @@ create_editable_label (void)
 
   add_margin (vbox);
 
-  return new_widget_info ("editable-label", vbox, MEDIUM);
+  return new_widget_info ("editable-label", vbox, SMALL);
 }
 static WidgetInfo *
 create_separator (void)
@@ -1067,6 +1080,7 @@ create_picture (void)
   GtkWidget *vbox;
   GtkIconTheme *theme;
   GdkPaintable *paintable;
+  GtkWidget *box;
 
   theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
   paintable = GDK_PAINTABLE (gtk_icon_theme_lookup_icon (theme,
@@ -1080,8 +1094,12 @@ create_picture (void)
   gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
 
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_box_append (GTK_BOX (box), g_object_new (GTK_TYPE_IMAGE, "hexpand", TRUE, NULL));
+  gtk_box_append (GTK_BOX (box), widget);
+  gtk_box_append (GTK_BOX (box), g_object_new (GTK_TYPE_IMAGE, "hexpand", TRUE, NULL));
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox), box);
   gtk_box_append (GTK_BOX (vbox), gtk_label_new ("Picture"));
 
   add_margin (vbox);
@@ -1094,10 +1112,13 @@ create_video (void)
 {
   GtkWidget *widget;
   GtkWidget *vbox;
+  WidgetInfo *info;
 
-  widget = gtk_video_new_for_filename ("../../demos/gtk-demo/gtk-logo.webm");
-  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+  widget = gtk_video_new_for_filename ("demos/gtk-demo/gtk-logo.webm");
+  gtk_video_set_autoplay (GTK_VIDEO (widget), TRUE);
+
+  gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
+  gtk_widget_set_valign (widget, GTK_ALIGN_FILL);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   gtk_box_append (GTK_BOX (vbox), widget);
@@ -1105,7 +1126,10 @@ create_video (void)
 
   add_margin (vbox);
 
-  return new_widget_info ("video", vbox, SMALL);
+  info = new_widget_info ("video", vbox, MEDIUM);
+  info->wait = 2000;
+
+  return info;
 }
 
 static WidgetInfo *
@@ -1113,8 +1137,13 @@ create_media_controls (void)
 {
   GtkWidget *widget;
   GtkWidget *vbox;
+  GtkMediaStream *stream;
+  WidgetInfo *info;
 
-  widget = gtk_media_controls_new (NULL);
+  stream = gtk_media_file_new_for_filename ("demos/gtk-demo/gtk-logo.webm");
+  gtk_media_stream_play (stream);
+  widget = gtk_media_controls_new (stream);
+  gtk_widget_set_size_request (widget, 210, -1);
   gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
 
@@ -1124,7 +1153,10 @@ create_media_controls (void)
 
   add_margin (vbox);
 
-  return new_widget_info ("media-controls", vbox, SMALL);
+  info = new_widget_info ("media-controls", vbox, SMALL);
+  info->wait = 2000;
+
+  return info;
 }
 
 static WidgetInfo *
@@ -1151,25 +1183,18 @@ create_spinner (void)
 static WidgetInfo *
 create_volume_button (void)
 {
-  GtkWidget *button, *box;
-  GtkWidget *widget;
-  GtkWidget *popup;
+  GtkWidget *widget, *vbox;
 
-  widget = gtk_window_new ();
-  gtk_widget_set_size_request (widget, 100, 250);
+  widget = gtk_volume_button_new ();
+  gtk_scale_button_set_value (GTK_SCALE_BUTTON (widget), 33);
 
-  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_window_set_child (GTK_WINDOW (widget), box);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox), gtk_label_new ("Volume Button"));
 
-  button = gtk_volume_button_new ();
-  gtk_box_append (GTK_BOX (box), button);
-
-  gtk_scale_button_set_value (GTK_SCALE_BUTTON (button), 33);
-  popup = gtk_scale_button_get_popup (GTK_SCALE_BUTTON (button));
-  gtk_widget_realize (widget);
-  gtk_widget_show (popup);
-
-  return new_widget_info ("volumebutton", widget, ASIS);
+  return new_widget_info ("volumebutton", vbox, SMALL);
 }
 
 static WidgetInfo *
@@ -1358,6 +1383,7 @@ create_sidebar (void)
   gtk_widget_add_css_class (view, "view");
   gtk_widget_set_halign (view, GTK_ALIGN_FILL);
   gtk_widget_set_valign (view, GTK_ALIGN_FILL);
+  gtk_widget_set_hexpand (view, TRUE);
   gtk_stack_add_titled (GTK_STACK (stack), view, "page1", "Page 1");
   view = gtk_text_view_new ();
   gtk_stack_add_titled (GTK_STACK (stack), view, "page2", "Page 2");
@@ -1373,7 +1399,7 @@ create_sidebar (void)
   gtk_box_append (GTK_BOX (hbox), stack);
   gtk_frame_set_child (GTK_FRAME (frame), hbox);
 
-  return new_widget_info ("sidebar", frame, ASIS);
+  return new_widget_info ("sidebar", frame, MEDIUM);
 }
 
 static WidgetInfo *
@@ -1471,6 +1497,7 @@ create_flow_box (void)
 static WidgetInfo *
 create_gl_area (void)
 {
+  GtkWidget *vbox;
   WidgetInfo *info;
   GtkWidget *widget;
   GtkWidget *gears;
@@ -1487,12 +1514,412 @@ create_gl_area (void)
   gtk_style_context_add_provider (gtk_widget_get_style_context (gears), GTK_STYLE_PROVIDER (provider), 800);
   g_object_unref (provider);
 
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+  gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
+  gtk_widget_set_valign (widget, GTK_ALIGN_FILL);
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox), gtk_label_new ("GL Area"));
+
+  add_margin (vbox);
+
+  info = new_widget_info ("glarea", vbox, MEDIUM);
+
+  return info;
+}
+
+static WidgetInfo *
+create_window_controls (void)
+{
+  GtkWidget *controls;
+  GtkWidget *vbox;
+
+  controls = gtk_window_controls_new (GTK_PACK_END);
+  gtk_window_controls_set_decoration_layout (GTK_WINDOW_CONTROLS (controls),
+                                             ":minimize,maximize,close");
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+  gtk_widget_set_halign (controls, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (controls, GTK_ALIGN_CENTER);
+  gtk_box_append (GTK_BOX (vbox), controls);
+  gtk_box_append (GTK_BOX (vbox), gtk_label_new ("Window Controls"));
+
+  add_margin (vbox);
+
+  return new_widget_info ("windowcontrols", vbox, SMALL);
+}
+
+static WidgetInfo *
+create_calendar (void)
+{
+  GtkWidget *widget;
+  GtkWidget *vbox;
+
+  widget = gtk_calendar_new ();
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox), gtk_label_new ("Calendar"));
+
+  add_margin (vbox);
+
+  return new_widget_info ("calendar", vbox, MEDIUM);
+}
+
+static WidgetInfo *
+create_emojichooser (void)
+{
+  GtkWidget *widget;
+  WidgetInfo *info;
+
+  widget = gtk_emoji_chooser_new ();
+  g_object_set (widget, "autohide", FALSE, NULL);
+
+  info = new_widget_info ("emojichooser", widget, ASIS);
+  info->wait = 2000;
+
+  return info;
+}
+
+static WidgetInfo *
+create_expander (void)
+{
+  GtkWidget *widget;
+
+  widget = gtk_expander_new ("Expander");
+  gtk_expander_set_child (GTK_EXPANDER (widget), gtk_label_new ("Hidden Content"));
+  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+
+  return new_widget_info ("expander", widget, SMALL);
+}
+
+static void
+mapped_cb (GtkWidget *widget)
+{
+  gtk_widget_child_focus (widget, GTK_DIR_RIGHT);
+}
+
+static WidgetInfo *
+create_menu_bar (void)
+{
+  GtkWidget *widget;
+  GtkWidget *vbox;
+  GMenu *menu, *menu1;
+  GMenuItem *item;
+
+  menu = g_menu_new ();
+  menu1 = g_menu_new ();
+  item = g_menu_item_new ("Item", "action");
+  g_menu_append_item (menu1, item);
+  g_menu_append_submenu (menu, "File", G_MENU_MODEL (menu1));
+  g_object_unref (item);
+  g_object_unref (menu1);
+  menu1 = g_menu_new ();
+  item = g_menu_item_new ("Item", "action");
+  g_menu_append_item (menu1, item);
+  g_menu_append_submenu (menu, "Edit", G_MENU_MODEL (menu1));
+  g_object_unref (item);
+  g_object_unref (menu1);
+  menu1 = g_menu_new ();
+  item = g_menu_item_new ("Item", "action");
+  g_menu_append_item (menu1, item);
+  g_menu_append_submenu (menu, "View", G_MENU_MODEL (menu1));
+  g_object_unref (item);
+  g_object_unref (menu1);
+
+  widget = gtk_popover_menu_bar_new_from_model (G_MENU_MODEL (menu));
+
+  g_object_unref (menu);
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox), gtk_label_new ("Menu Bar"));
+
+  add_margin (vbox);
+
+  g_signal_connect (widget, "map", G_CALLBACK (mapped_cb), NULL);
+
+  return new_widget_info ("menubar", vbox, SMALL);
+}
+
+static WidgetInfo *
+create_popover (void)
+{
+  GtkWidget *widget;
+  GtkWidget *child;
+  WidgetInfo *info;
+
+  widget = gtk_popover_new ();
+  gtk_widget_set_size_request (widget, 180, 180);
+  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
+  g_object_set (widget, "autohide", FALSE, NULL);
+  child = gtk_label_new ("Popover");
+  gtk_widget_set_halign (child, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (child, GTK_ALIGN_CENTER);
+  gtk_popover_set_child (GTK_POPOVER (widget), child);
+
+  info = new_widget_info ("popover", widget, ASIS);
+  info->wait = 100;
+
+  return info;
+}
+
+static WidgetInfo *
+create_menu (void)
+{
+  GtkWidget *widget;
+  GMenu *menu, *menu1;
+  GMenuItem *item;
+  GSimpleActionGroup *group;
+  GSimpleAction *action;
+  GtkEventController *controller;
+  GtkShortcut *shortcut;
+
+  menu = g_menu_new ();
+  menu1 = g_menu_new ();
+  item = g_menu_item_new ("Item", "action");
+  g_menu_append_item (menu1, item);
+  g_menu_append_submenu (menu, "Style", G_MENU_MODEL (menu1));
+  g_object_unref (item);
+  g_object_unref (menu1);
+  item = g_menu_item_new ("Transition", "menu.transition");
+  g_menu_append_item (menu, item);
+  g_object_unref (item);
+
+  menu1 = g_menu_new ();
+  item = g_menu_item_new ("Inspector", "menu.inspector");
+  g_menu_append_item (menu1, item);
+  g_object_unref (item);
+  item = g_menu_item_new ("About", "menu.about");
+  g_menu_append_item (menu1, item);
+  g_object_unref (item);
+  g_menu_append_section (menu, NULL, G_MENU_MODEL (menu1));
+  g_object_unref (menu1);
+
+  widget = gtk_popover_menu_new_from_model (G_MENU_MODEL (menu));
+
+  g_object_unref (menu);
+
+  group = g_simple_action_group_new ();
+  action = g_simple_action_new_stateful ("transition", NULL, g_variant_new_boolean (TRUE));
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (action));
+  g_object_unref (action);
+  action = g_simple_action_new ("inspector", NULL);
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (action));
+  g_object_unref (action);
+  action = g_simple_action_new ("about", NULL);
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (action));
+  g_object_unref (action);
+
+  gtk_widget_insert_action_group (widget, "menu", G_ACTION_GROUP (group));
+
+  g_object_unref (group);
+
+  g_object_set (widget, "autohide", FALSE, NULL);
+
+  controller = gtk_shortcut_controller_new ();
+  shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (GDK_KEY_F1, 0),
+                               gtk_named_action_new ("menu.about"));
+  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
+
+  gtk_widget_add_controller (widget, controller);
+
+  return new_widget_info ("menu", widget, ASIS);
+}
+
+static WidgetInfo *
+create_shortcuts_window (void)
+{
+  GtkBuilder *builder;
+  GtkWidget *overlay;
+
+  builder = gtk_builder_new_from_resource ("/shortcuts-boxes.ui");
+  overlay = GTK_WIDGET (gtk_builder_get_object (builder, "shortcuts-boxes"));
+  g_object_set (overlay, "view-name", "display", NULL);
+  g_object_ref (overlay);
+  g_object_unref (builder);
+
+  return new_widget_info ("shortcuts-window", overlay, ASIS);
+}
+
+static void
+oval_path (cairo_t *cr,
+           double xc, double yc,
+           double xr, double yr)
+{
+  cairo_save (cr);
+
+  cairo_translate (cr, xc, yc);
+  cairo_scale (cr, 1.0, yr / xr);
+  cairo_move_to (cr, xr, 0.0);
+  cairo_arc (cr,
+             0, 0,
+             xr,
+             0, 2 * G_PI);
+  cairo_close_path (cr);
+
+  cairo_restore (cr);
+}
+
+static void
+fill_checks (cairo_t *cr,
+             int x,     int y,
+             int width, int height)
+{
+  int i, j;
+
+#define CHECK_SIZE 16
+
+  cairo_rectangle (cr, x, y, width, height);
+  cairo_set_source_rgb (cr, 0.4, 0.4, 0.4);
+  cairo_fill (cr);
+
+  /* Only works for CHECK_SIZE a power of 2 */
+  j = x & (-CHECK_SIZE);
+
+  for (; j < height; j += CHECK_SIZE)
+    {
+      i = y & (-CHECK_SIZE);
+      for (; i < width; i += CHECK_SIZE)
+        if ((i / CHECK_SIZE + j / CHECK_SIZE) % 2 == 0)
+          cairo_rectangle (cr, i, j, CHECK_SIZE, CHECK_SIZE);
+    }
+
+  cairo_set_source_rgb (cr, 0.7, 0.7, 0.7);
+  cairo_fill (cr);
+
+#undef CHECK_SIZE
+}
+
+static void
+draw_3circles (cairo_t *cr,
+               double xc, double yc,
+               double radius,
+               double alpha)
+{
+  double subradius = radius * (2 / 3. - 0.1);
+
+  cairo_set_source_rgba (cr, 1., 0., 0., alpha);
+  oval_path (cr,
+             xc + radius / 3. * cos (G_PI * (0.5)),
+             yc - radius / 3. * sin (G_PI * (0.5)),
+             subradius, subradius);
+  cairo_fill (cr);
+
+  cairo_set_source_rgba (cr, 0., 1., 0., alpha);
+  oval_path (cr,
+             xc + radius / 3. * cos (G_PI * (0.5 + 2/.3)),
+             yc - radius / 3. * sin (G_PI * (0.5 + 2/.3)),
+             subradius, subradius);
+  cairo_fill (cr);
+
+  cairo_set_source_rgba (cr, 0., 0., 1., alpha);
+  oval_path (cr,
+             xc + radius / 3. * cos (G_PI * (0.5 + 4/.3)),
+             yc - radius / 3. * sin (G_PI * (0.5 + 4/.3)),
+             subradius, subradius);
+  cairo_fill (cr);
+}
+
+static void
+groups_draw (GtkDrawingArea *darea,
+             cairo_t        *cr,
+             int             width,
+             int             height,
+             gpointer        data)
+{
+  cairo_surface_t *overlay, *punch, *circles;
+  cairo_t *overlay_cr, *punch_cr, *circles_cr;
+
+  /* Fill the background */
+  double radius = 0.5 * (width < height ? width : height) - 10;
+  double xc = width / 2.;
+  double yc = height / 2.;
+
+  overlay = cairo_surface_create_similar (cairo_get_target (cr),
+                                          CAIRO_CONTENT_COLOR_ALPHA,
+                                          width, height);
+
+  punch = cairo_surface_create_similar (cairo_get_target (cr),
+                                        CAIRO_CONTENT_ALPHA,
+                                        width, height);
+
+  circles = cairo_surface_create_similar (cairo_get_target (cr),
+                                          CAIRO_CONTENT_COLOR_ALPHA,
+                                          width, height);
+
+  fill_checks (cr, 0, 0, width, height);
+
+  /* Draw a black circle on the overlay
+   */
+  overlay_cr = cairo_create (overlay);
+  cairo_set_source_rgb (overlay_cr, 0., 0., 0.);
+  oval_path (overlay_cr, xc, yc, radius, radius);
+  cairo_fill (overlay_cr);
+
+  /* Draw 3 circles to the punch surface, then cut
+   * that out of the main circle in the overlay
+   */
+  punch_cr = cairo_create (punch);
+  draw_3circles (punch_cr, xc, yc, radius, 1.0);
+  cairo_destroy (punch_cr);
+
+  cairo_set_operator (overlay_cr, CAIRO_OPERATOR_DEST_OUT);
+  cairo_set_source_surface (overlay_cr, punch, 0, 0);
+  cairo_paint (overlay_cr);
+
+  /* Now draw the 3 circles in a subgroup again
+   * at half intensity, and use OperatorAdd to join up
+   * without seams.
+   */
+  circles_cr = cairo_create (circles);
+
+  cairo_set_operator (circles_cr, CAIRO_OPERATOR_OVER);
+  draw_3circles (circles_cr, xc, yc, radius, 0.5);
+  cairo_destroy (circles_cr);
+
+  cairo_set_operator (overlay_cr, CAIRO_OPERATOR_ADD);
+  cairo_set_source_surface (overlay_cr, circles, 0, 0);
+  cairo_paint (overlay_cr);
+
+  cairo_destroy (overlay_cr);
+
+  cairo_set_source_surface (cr, overlay, 0, 0);
+  cairo_paint (cr);
+
+  cairo_surface_destroy (overlay);
+  cairo_surface_destroy (punch);
+  cairo_surface_destroy (circles);
+}
+
+
+static WidgetInfo *
+create_drawing_area (void)
+{
+  GtkWidget *vbox;
+  WidgetInfo *info;
+  GtkWidget *widget;
+  GtkWidget *da;
+
+  widget = gtk_frame_new (NULL);
+  da = gtk_drawing_area_new ();
+  gtk_widget_set_size_request (da, 96, 96);
+  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), groups_draw, NULL, NULL);
+  gtk_frame_set_child (GTK_FRAME (widget), da);
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
   gtk_widget_set_valign (widget, GTK_ALIGN_FILL);
 
-  add_margin (widget);
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox), gtk_label_new ("Drawing Area"));
 
-  info = new_widget_info ("glarea", widget, MEDIUM);
+  add_margin (vbox);
+
+  info = new_widget_info ("drawingarea", vbox, MEDIUM);
 
   return info;
 }
@@ -1562,6 +1989,15 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_password_entry ());
   retval = g_list_prepend (retval, create_editable_label ());
   retval = g_list_prepend (retval, create_drop_down ());
+  retval = g_list_prepend (retval, create_window_controls ());
+  retval = g_list_prepend (retval, create_calendar ());
+  retval = g_list_prepend (retval, create_emojichooser ());
+  retval = g_list_prepend (retval, create_expander ());
+  retval = g_list_prepend (retval, create_menu_bar ());
+  retval = g_list_prepend (retval, create_popover ());
+  retval = g_list_prepend (retval, create_menu ());
+  retval = g_list_prepend (retval, create_shortcuts_window ());
+  retval = g_list_prepend (retval, create_drawing_area());
 
   return retval;
 }

@@ -18,6 +18,8 @@ typedef struct WidgetInfo
   char *name;
   gboolean no_focus;
   gboolean include_decorations;
+  gboolean snapshot_popover;
+  guint wait;
   WidgetSize size;
 } WidgetInfo;
 

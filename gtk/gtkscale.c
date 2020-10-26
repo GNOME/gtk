@@ -839,7 +839,7 @@ gtk_scale_init (GtkScale *scale)
 
   _gtk_range_set_has_origin (range, TRUE);
 
-  gtk_range_set_round_digits (range, priv->digits);
+  gtk_range_set_round_digits (range, -1);
 
   gtk_range_set_flippable (range, TRUE);
 }

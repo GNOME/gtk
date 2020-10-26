@@ -112,9 +112,17 @@ snapshot_widget (GtkWidget *widget)
 
   g_main_loop_unref (loop);
   g_object_unref (paintable);
-  gtk_window_destroy (GTK_WINDOW (widget));
+  gtk_window_destroy (GTK_WINDOW (gtk_widget_get_root (widget)));
 
   return surface;
+}
+
+static gboolean
+quit_cb (gpointer data)
+{
+  *(gboolean *)data = TRUE;
+  g_main_context_wakeup (NULL);
+  return G_SOURCE_REMOVE;
 }
 
 int
@@ -132,6 +140,7 @@ main (int argc, char **argv)
       char *filename;
       cairo_surface_t *surface;
       GdkPixbuf *pixbuf;
+      GtkWidget *widget;
 
       info = node->data;
 
@@ -144,9 +153,29 @@ main (int argc, char **argv)
                                      NULL);
         }
 
-      //while (1) g_main_context_iteration (NULL, 1);
+      if (info->snapshot_popover)
+        {
+          GtkWidget *button = gtk_window_get_child (GTK_WINDOW (info->window));
 
-      surface = snapshot_widget (info->window);
+          gtk_menu_button_popup (GTK_MENU_BUTTON (button));
+          widget = GTK_WIDGET (gtk_menu_button_get_popover (GTK_MENU_BUTTON (button)));
+        }
+      else
+        {
+          widget = info->window;
+        }
+
+      if (info->wait > 0)
+        {
+          gboolean quit = FALSE;
+
+          g_timeout_add (info->wait, quit_cb, &quit);
+
+          while (!quit)
+            g_main_context_iteration (NULL, TRUE);
+        }
+
+      surface = snapshot_widget (widget);
 
       pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0,
                                             cairo_image_surface_get_width (surface),
