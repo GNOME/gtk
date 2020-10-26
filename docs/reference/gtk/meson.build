@@ -259,6 +259,7 @@ images = [
   'images/down-start.png',
   'images/drop-down.png',
   'images/drawing.png',
+  'images/drawingarea.png',
   'images/ease-in-out.png',
   'images/ease-in.png',
   'images/ease-out.png',

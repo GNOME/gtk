@@ -20,6 +20,7 @@
     <link linkend="GtkScale"><inlinegraphic fileref="scales.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkCalendar"><inlinegraphic fileref="calendar.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkGLArea"><inlinegraphic fileref="glarea.png" format="PNG"></inlinegraphic></link>
+    <link linkend="GtkDrawingArea"><inlinegraphic fileref="drawingarea.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkVideo"><inlinegraphic fileref="video.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkMediaControls"><inlinegraphic fileref="media-controls.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkWindowControls"><inlinegraphic fileref="windowcontrols.png" format="PNG"></inlinegraphic></link>
