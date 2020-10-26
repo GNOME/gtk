@@ -1536,6 +1536,25 @@ create_window_controls (void)
   return new_widget_info ("windowcontrols", vbox, SMALL);
 }
 
+static WidgetInfo *
+create_calendar (void)
+{
+  GtkWidget *widget;
+  GtkWidget *vbox;
+
+  widget = gtk_calendar_new ();
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox), gtk_label_new ("Calendar"));
+
+  add_margin (vbox);
+
+  return new_widget_info ("calendar", vbox, MEDIUM);
+}
+
 GList *
 get_all_widgets (void)
 {
@@ -1602,6 +1621,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_editable_label ());
   retval = g_list_prepend (retval, create_drop_down ());
   retval = g_list_prepend (retval, create_window_controls ());
+  retval = g_list_prepend (retval, create_calendar ());
 
   return retval;
 }

@@ -18,6 +18,7 @@
     <link linkend="GtkSeparator"><inlinegraphic fileref="separator.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkTextView"><inlinegraphic fileref="multiline-text.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkScale"><inlinegraphic fileref="scales.png" format="PNG"></inlinegraphic></link>
+    <link linkend="GtkCalendar"><inlinegraphic fileref="calendar.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkGLArea"><inlinegraphic fileref="glarea.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkVideo"><inlinegraphic fileref="video.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkMediaControls"><inlinegraphic fileref="media-controls.png" format="PNG"></inlinegraphic></link>
