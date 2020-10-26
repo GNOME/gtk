@@ -96,6 +96,7 @@
     <link linkend="GtkAppChooserDialog"><inlinegraphic fileref="appchooserdialog.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkPageSetupUnixDialog"><inlinegraphic fileref="pagesetupdialog.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkPrintUnixDialog"><inlinegraphic fileref="printdialog.png" format="PNG"></inlinegraphic></link>
+    <link linkend="GtkShortcutsWindow"><inlinegraphic fileref="shortcuts-window.png" format="PNG"></inlinegraphic></link>
   </para>
 </section>
 </para>

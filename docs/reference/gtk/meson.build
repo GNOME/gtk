@@ -354,6 +354,7 @@ images = [
   'images/search-bar.png',
   'images/search-entry.png',
   'images/separator.png',
+  'images/shortcuts-window.png',
   'images/sidebar.png',
   'images/slices.png',
   'images/sliders.png',

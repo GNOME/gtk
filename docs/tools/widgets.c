@@ -1726,6 +1726,21 @@ create_menu (void)
   return new_widget_info ("menu", widget, ASIS);
 }
 
+static WidgetInfo *
+create_shortcuts_window (void)
+{
+  GtkBuilder *builder;
+  GtkWidget *overlay;
+
+  builder = gtk_builder_new_from_resource ("/shortcuts-boxes.ui");
+  overlay = GTK_WIDGET (gtk_builder_get_object (builder, "shortcuts-boxes"));
+  g_object_set (overlay, "view-name", "display", NULL);
+  g_object_ref (overlay);
+  g_object_unref (builder);
+
+  return new_widget_info ("shortcuts-window", overlay, ASIS);
+}
+
 GList *
 get_all_widgets (void)
 {
@@ -1798,6 +1813,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_menu_bar ());
   retval = g_list_prepend (retval, create_popover ());
   retval = g_list_prepend (retval, create_menu ());
+  retval = g_list_prepend (retval, create_shortcuts_window ());
 
   return retval;
 }

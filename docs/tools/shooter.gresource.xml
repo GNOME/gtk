@@ -1,0 +1,5 @@
+<gresources>
+  <gresource prefix="/">
+    <file>shortcuts-boxes.ui</file>
+  </gresource>
+</gresources>
