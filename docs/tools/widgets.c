@@ -1663,6 +1663,69 @@ create_popover (void)
   return info;
 }
 
+static WidgetInfo *
+create_menu (void)
+{
+  GtkWidget *widget;
+  GMenu *menu, *menu1;
+  GMenuItem *item;
+  GSimpleActionGroup *group;
+  GSimpleAction *action;
+  GtkEventController *controller;
+  GtkShortcut *shortcut;
+
+  menu = g_menu_new ();
+  menu1 = g_menu_new ();
+  item = g_menu_item_new ("Item", "action");
+  g_menu_append_item (menu1, item);
+  g_menu_append_submenu (menu, "Style", G_MENU_MODEL (menu1));
+  g_object_unref (item);
+  g_object_unref (menu1);
+  item = g_menu_item_new ("Transition", "menu.transition");
+  g_menu_append_item (menu, item);
+  g_object_unref (item);
+
+  menu1 = g_menu_new ();
+  item = g_menu_item_new ("Inspector", "menu.inspector");
+  g_menu_append_item (menu1, item);
+  g_object_unref (item);
+  item = g_menu_item_new ("About", "menu.about");
+  g_menu_append_item (menu1, item);
+  g_object_unref (item);
+  g_menu_append_section (menu, NULL, G_MENU_MODEL (menu1));
+  g_object_unref (menu1);
+
+  widget = gtk_popover_menu_new_from_model (G_MENU_MODEL (menu));
+
+  g_object_unref (menu);
+
+  group = g_simple_action_group_new ();
+  action = g_simple_action_new_stateful ("transition", NULL, g_variant_new_boolean (TRUE));
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (action));
+  g_object_unref (action);
+  action = g_simple_action_new ("inspector", NULL);
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (action));
+  g_object_unref (action);
+  action = g_simple_action_new ("about", NULL);
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (action));
+  g_object_unref (action);
+
+  gtk_widget_insert_action_group (widget, "menu", G_ACTION_GROUP (group));
+
+  g_object_unref (group);
+
+  g_object_set (widget, "autohide", FALSE, NULL);
+
+  controller = gtk_shortcut_controller_new ();
+  shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (GDK_KEY_F1, 0),
+                               gtk_named_action_new ("menu.about"));
+  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
+
+  gtk_widget_add_controller (widget, controller);
+
+  return new_widget_info ("menu", widget, ASIS);
+}
+
 GList *
 get_all_widgets (void)
 {
@@ -1734,6 +1797,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_expander ());
   retval = g_list_prepend (retval, create_menu_bar ());
   retval = g_list_prepend (retval, create_popover ());
+  retval = g_list_prepend (retval, create_menu ());
 
   return retval;
 }

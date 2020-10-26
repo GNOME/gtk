@@ -327,6 +327,7 @@ images = [
   'images/lockbutton-sorry.png',
   'images/lockbutton-unlocked.png',
   'images/media-controls.png',
+  'images/menu.png',
   'images/menubar.png',
   'images/menu-button.png',
   'images/messagedialog.png',
