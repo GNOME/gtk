@@ -44,6 +44,7 @@
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtkstringlist.h"
+#include "gtkbox.h"
 
 /**
  * SECTION:gtkdropdown
@@ -537,11 +538,34 @@ setup_item (GtkSignalListItemFactory *factory,
             GtkListItem              *list_item,
             gpointer                  data)
 {
+  GtkWidget *box;
   GtkWidget *label;
+  GtkWidget *icon;
 
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   label = gtk_label_new (NULL);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_list_item_set_child (list_item, label);
+  gtk_box_append (GTK_BOX (box), label);
+  icon = gtk_image_new_from_icon_name ("object-select-symbolic");
+  gtk_box_append (GTK_BOX (box), icon);
+  gtk_list_item_set_child (list_item, box);
+}
+
+static void
+selected_item_changed (GtkDropDown *self,
+                       GParamSpec  *pspec,
+                       GtkListItem *list_item)
+{
+  GtkWidget *box;
+  GtkWidget *icon;
+
+  box = gtk_list_item_get_child (list_item);
+  icon = gtk_widget_get_last_child (box);
+
+  if (gtk_drop_down_get_selected_item (self) == gtk_list_item_get_item (list_item))
+    gtk_widget_set_opacity (icon, 1.0);
+  else
+    gtk_widget_set_opacity (icon, 0.0);
 }
 
 static void
@@ -551,11 +575,15 @@ bind_item (GtkSignalListItemFactory *factory,
 {
   GtkDropDown *self = data;
   gpointer item;
+  GtkWidget *box;
   GtkWidget *label;
+  GtkWidget *icon;
   GValue value = G_VALUE_INIT;
 
   item = gtk_list_item_get_item (list_item);
-  label = gtk_list_item_get_child (list_item);
+  box = gtk_list_item_get_child (list_item);
+  label = gtk_widget_get_first_child (box);
+  icon = gtk_widget_get_last_child (box);
 
   if (self->expression &&
       gtk_expression_evaluate (self->expression, item, &value))
@@ -574,6 +602,28 @@ bind_item (GtkSignalListItemFactory *factory,
     {
       g_critical ("Either GtkDropDown:factory or GtkDropDown:expression must be set");
     }
+
+  if (gtk_widget_get_ancestor (box, GTK_TYPE_POPOVER) == self->popup)
+    {
+      gtk_widget_show (icon);
+      g_signal_connect (self, "notify::selected-item",
+                        G_CALLBACK (selected_item_changed), list_item);
+      selected_item_changed (self, NULL, list_item);
+    }
+  else
+    {
+      gtk_widget_hide (icon);
+    }
+}
+
+static void
+unbind_item (GtkSignalListItemFactory *factory,
+             GtkListItem              *list_item,
+             gpointer                  data)
+{
+  GtkDropDown *self = data;
+
+  g_signal_handlers_disconnect_by_func (self, selected_item_changed, list_item);
 }
 
 static void
@@ -585,6 +635,7 @@ set_default_factory (GtkDropDown *self)
 
   g_signal_connect (factory, "setup", G_CALLBACK (setup_item), self);
   g_signal_connect (factory, "bind", G_CALLBACK (bind_item), self);
+  g_signal_connect (factory, "unbind", G_CALLBACK (unbind_item), self);
 
   gtk_drop_down_set_factory (self, factory);
 
