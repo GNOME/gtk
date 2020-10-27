@@ -619,11 +619,11 @@ gtk_file_chooser_widget_finalize (GObject *object)
 static GtkWindow *
 get_toplevel (GtkWidget *widget)
 {
-  GtkWidget *toplevel;
+  GtkRoot *root;
 
-  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
-  if (GTK_IS_WINDOW (toplevel))
-    return GTK_WINDOW (toplevel);
+  root = gtk_widget_get_root (widget);
+  if (root && GTK_IS_WINDOW (root))
+    return GTK_WINDOW (root);
   else
     return NULL;
 }
@@ -5395,6 +5395,10 @@ gtk_file_chooser_widget_get_files (GtkFileChooser *chooser)
   if (impl->operation_mode == OPERATION_MODE_SEARCH)
     return get_selected_files_as_model (impl);
 
+  info.impl = impl;
+  info.result = g_list_store_new (G_TYPE_FILE);
+  info.file_from_entry = NULL;
+
   if (impl->operation_mode == OPERATION_MODE_RECENT)
     {
       if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
@@ -5403,12 +5407,11 @@ gtk_file_chooser_widget_get_files (GtkFileChooser *chooser)
           goto file_entry;
         }
       else
-        return get_selected_files_as_model (impl);
+        {
+          g_object_unref (info.result);
+          return get_selected_files_as_model (impl);
+        }
     }
-
-  info.impl = impl;
-  info.result = g_list_store_new (G_TYPE_FILE);
-  info.file_from_entry = NULL;
 
   toplevel = get_toplevel (GTK_WIDGET (impl));
   if (toplevel)

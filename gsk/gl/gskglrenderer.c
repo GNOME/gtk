@@ -1914,22 +1914,25 @@ blur_node (GskGLRenderer   *self,
   texture_width  = ceilf ((node->bounds.size.width  + blur_extra));
   texture_height = ceilf ((node->bounds.size.height + blur_extra));
 
-  if (!add_offscreen_ops (self, builder,
-                          &GRAPHENE_RECT_INIT (node->bounds.origin.x - (blur_extra / 2.0),
-                                               node->bounds.origin.y - (blur_extra  /2.0),
-                                               texture_width, texture_height),
-                          node,
-                          &region, &is_offscreen,
-                          RESET_CLIP | RESET_OPACITY | FORCE_OFFSCREEN | extra_flags))
-    g_assert_not_reached ();
+  /* Only blur this if the out region has no texture id yet */
+  if (out_region->texture_id == 0)
+    {
+      if (!add_offscreen_ops (self, builder,
+                              &GRAPHENE_RECT_INIT (node->bounds.origin.x - (blur_extra / 2.0),
+                                                   node->bounds.origin.y - (blur_extra / 2.0),
+                                                   texture_width, texture_height),
+                              node,
+                              &region, &is_offscreen,
+                              RESET_CLIP | RESET_OPACITY | FORCE_OFFSCREEN | extra_flags))
+        g_assert_not_reached ();
 
-  blurred_texture_id = blur_texture (self, builder,
-                                     &region,
-                                     texture_width * scale_x, texture_height * scale_y,
-                                     blur_radius * scale_x,
-                                     blur_radius * scale_y);
-
-  init_full_texture_region (out_region, blurred_texture_id);
+      blurred_texture_id = blur_texture (self, builder,
+                                         &region,
+                                         texture_width * scale_x, texture_height * scale_y,
+                                         blur_radius * scale_x,
+                                         blur_radius * scale_y);
+      init_full_texture_region (out_region, blurred_texture_id);
+    }
 
   if (out_vertex_data)
     {
@@ -1949,6 +1952,7 @@ render_blur_node (GskGLRenderer   *self,
   GskRenderNode *child = gsk_blur_node_get_child (node);
   TextureRegion blurred_region;
   GskTextureKey key;
+  float min_x, max_x, min_y, max_y;
 
   if (node_is_invisible (child))
     return;
@@ -1964,15 +1968,16 @@ render_blur_node (GskGLRenderer   *self,
   key.scale = ops_get_scale (builder);
   key.filter = GL_NEAREST;
   blurred_region.texture_id = gsk_gl_driver_get_texture_for_key (self->gl_driver, &key);
-  if (blurred_region.texture_id == 0)
-    blur_node (self, child, builder, blur_radius, 0, &blurred_region, NULL);
+  blur_node (self, child, builder, blur_radius, 0, &blurred_region,
+             (float*[4]){&min_x, &max_x, &min_y, &max_y});
 
   g_assert (blurred_region.texture_id != 0);
 
   /* Draw the result */
   ops_set_program (builder, &self->programs->blit_program);
   ops_set_texture (builder, blurred_region.texture_id);
-  load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder); /* Render result to screen */
+  fill_vertex_data (ops_draw (builder, NULL), min_x, min_y, max_x, max_y);
+
 
   /* Add to cache for the blur node */
   gsk_gl_driver_set_texture_for_key (self->gl_driver, &key, blurred_region.texture_id);
@@ -2390,7 +2395,7 @@ render_outset_shadow_node (GskGLRenderer   *self,
     if (slice_is_visible (&slices[NINE_SLICE_TOP_CENTER]))
       {
         x1 = min_x + (slices[NINE_SLICE_TOP_LEFT].width / scale_x);
-        x2 = max_x - (slices[NINE_SLICE_TOP_RIGHT].width / scale_y);
+        x2 = max_x - (slices[NINE_SLICE_TOP_RIGHT].width / scale_x);
         y1 = min_y;
         y2 = min_y + (slices[NINE_SLICE_TOP_CENTER].height / scale_y);
 
@@ -2487,7 +2492,7 @@ render_outset_shadow_node (GskGLRenderer   *self,
       {
         x1 = min_x;
         x2 = min_x + (slices[NINE_SLICE_LEFT_CENTER].width / scale_x);
-        y1 = min_y + (slices[NINE_SLICE_TOP_LEFT].height / scale_x);
+        y1 = min_y + (slices[NINE_SLICE_TOP_LEFT].height / scale_y);
         y2 = max_y - (slices[NINE_SLICE_BOTTOM_LEFT].height / scale_y);
         tx1 = tregs[NINE_SLICE_LEFT_CENTER].x;
         tx2 = tregs[NINE_SLICE_LEFT_CENTER].x2;
@@ -2631,6 +2636,7 @@ render_shadow_node (GskGLRenderer   *self,
 
       if (shadow->radius > 0)
         {
+          region.texture_id = 0;
           blur_node (self, shadow_child, builder, shadow->radius, NO_CACHE_PLZ, &region,
                      (float*[4]){&min_x, &max_x, &min_y, &max_y});
           is_offscreen = TRUE;

@@ -113,12 +113,9 @@ apply_transform (CanvasItem *item)
   y = gtk_widget_get_allocated_height (item->label) / 2.0;
   item->r = sqrt (x*x + y*y);
 
-  transform = gsk_transform_translate (
-                 gsk_transform_rotate (
-                   gsk_transform_translate (NULL,
-                                            &(graphene_point_t) { item->r, item->r }),
-                   item->angle + item->delta),
-                 &(graphene_point_t) { - x, - y });
+  transform = gsk_transform_translate (NULL, &(graphene_point_t) { item->r, item->r });
+  transform = gsk_transform_rotate (transform, item->angle + item->delta);
+  transform = gsk_transform_translate (transform, &(graphene_point_t) { -x, -y });
 
   gtk_fixed_set_child_transform (GTK_FIXED (item->fixed), item->label, transform);
   gsk_transform_unref (transform);

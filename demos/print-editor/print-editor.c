@@ -164,7 +164,7 @@ save_file (GFile *save_filename)
                            NULL,
                            &error);
 
-  if (error != NULL)
+  if (error == NULL)
     {
       if (save_filename != filename)
 	{

@@ -895,6 +895,7 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
         case GTK_ACCESSIBLE_TRISTATE_FALSE:
           emit_state_changed (self, "checked", FALSE);
           emit_state_changed (self, "indeterminate", FALSE);
+          break;
         default:
           break;
         }
@@ -930,6 +931,7 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
           break;
         case GTK_ACCESSIBLE_INVALID_FALSE:
           emit_state_changed (self, "invalid", FALSE);
+          break;
         default:
           break;
         }
@@ -951,6 +953,7 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
         case GTK_ACCESSIBLE_TRISTATE_FALSE:
           emit_state_changed (self, "pressed", FALSE);
           emit_state_changed (self, "indeterminate", FALSE);
+          break;
         default:
           break;
         }

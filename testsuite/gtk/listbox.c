@@ -26,6 +26,7 @@ check_sorted (GtkListBox *list)
   GtkWidget *row, *label;
   int res[100];
   int index, value;
+  int n_rows = 0;
   int i;
 
   for (row = gtk_widget_get_first_child (GTK_WIDGET (list));
@@ -39,10 +40,11 @@ check_sorted (GtkListBox *list)
       label = gtk_list_box_row_get_child (GTK_LIST_BOX_ROW (row));
       value = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (label), "data"));
       res[index] = value;
+      n_rows++;
     }
 
-  for (i = 1; i < 100; i++)
-    g_assert (res[i - 1] <= res[i]);
+  for (i = 1; i < n_rows; i++)
+    g_assert_cmpint (res[i - 1], <=, res[i]);
 }
 
 static void
