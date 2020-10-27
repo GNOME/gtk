@@ -338,6 +338,7 @@ images = [
   'images/multiline-text.png',
   'images/notebook.png',
   'images/options.png',
+  'images/overlay.png',
   'images/pagesetupdialog.png',
   'images/panes.png',
   'images/password-entry.png',

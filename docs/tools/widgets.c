@@ -2072,6 +2072,45 @@ create_grid (void)
   return new_widget_info ("grid", vbox, MEDIUM);
 }
 
+static WidgetInfo *
+create_overlay (void)
+{
+  GtkWidget *vbox;
+  WidgetInfo *info;
+  GtkWidget *widget;
+  GtkWidget *overlay;
+  GtkWidget *label;
+  GtkWidget *child;
+
+  widget = gtk_frame_new (NULL);
+  overlay = gtk_overlay_new ();
+  gtk_widget_add_css_class (widget, "view");
+  label = gtk_label_new ("Content");
+  gtk_widget_set_vexpand (label, TRUE);
+  gtk_frame_set_child (GTK_FRAME (widget), overlay);
+  gtk_overlay_set_child (GTK_OVERLAY (overlay), label);
+
+  child = gtk_frame_new (NULL);
+  gtk_widget_add_css_class (child, "app-notification");
+  gtk_frame_set_child (GTK_FRAME (child), gtk_label_new ("Overlay"));
+  gtk_widget_set_valign (child, GTK_ALIGN_START);
+  gtk_widget_set_halign (child, GTK_ALIGN_CENTER);
+  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+  gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
+  gtk_widget_set_valign (widget, GTK_ALIGN_FILL);
+
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox), gtk_label_new ("Overlay"));
+
+  add_margin (vbox);
+
+  info = new_widget_info ("overlay", vbox, MEDIUM);
+
+  return info;
+}
+
 GList *
 get_all_widgets (void)
 {
@@ -2161,6 +2200,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_box ());
   retval = g_list_prepend (retval, create_center_box ());
   retval = g_list_prepend (retval, create_grid ());
+  retval = g_list_prepend (retval, create_overlay ());
 
   return retval;
 }
