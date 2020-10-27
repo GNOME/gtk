@@ -332,9 +332,8 @@ get_default_title (void)
 static ATOM
 RegisterGdkClass (GdkSurfaceType wtype)
 {
-  static ATOM klassTOPLEVEL   = 0;
-  static ATOM klassTEMP       = 0;
-  static ATOM klassTEMPSHADOW = 0;
+  static ATOM klassTOPLEVEL = 0;
+  static ATOM klassTEMP     = 0;
   static HICON hAppIcon = NULL;
   static HICON hAppIconSm = NULL;
   static WNDCLASSEXW wcl;
@@ -416,32 +415,16 @@ RegisterGdkClass (GdkSurfaceType wtype)
       break;
 
     case GDK_SURFACE_TEMP:
-      if (TRUE)
+      if (klassTEMP == 0)
         {
-          if (klassTEMPSHADOW == 0)
-            {
-              wcl.lpszClassName = L"gdkSurfaceTempShadow";
-              wcl.style |= CS_SAVEBITS;
-              wcl.style |= 0x00020000; /* CS_DROPSHADOW */
-
-              ONCE_PER_CLASS ();
-              klassTEMPSHADOW = RegisterClassExW (&wcl);
-            }
-
-          klass = klassTEMPSHADOW;
+          wcl.lpszClassName = L"gdkSurfaceTemp";
+          wcl.style |= CS_SAVEBITS;
+          ONCE_PER_CLASS ();
+          klassTEMP = RegisterClassExW (&wcl);
         }
-       else
-        {
-          if (klassTEMP == 0)
-            {
-              wcl.lpszClassName = L"gdkSurfaceTemp";
-              wcl.style |= CS_SAVEBITS;
-              ONCE_PER_CLASS ();
-              klassTEMP = RegisterClassExW (&wcl);
-            }
 
-          klass = klassTEMP;
-        }
+      klass = klassTEMP;
+
       break;
 
     default:
