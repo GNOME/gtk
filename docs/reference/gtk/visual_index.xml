@@ -65,6 +65,11 @@
 <section id="visual-containers">
   <title>Containers</title>
   <para role="gallery">
+    <link linkend="GtkBox"><inlinegraphic fileref="box.png" format="PNG"></inlinegraphic></link>
+    <link linkend="GtkGrid"><inlinegraphic fileref="grid.png" format="PNG"></inlinegraphic></link>
+    <link linkend="GtkCenterBox"><inlinegraphic fileref="centerbox.png" format="PNG"></inlinegraphic></link>
+  </para>
+  <para role="gallery">
     <link linkend="GtkScrolledWindow"><inlinegraphic fileref="scrolledwindow.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkPaned"><inlinegraphic fileref="panes.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkFrame"><inlinegraphic fileref="frame.png" format="PNG"></inlinegraphic></link>
@@ -77,6 +82,7 @@
     <link linkend="GtkFlowBox"><inlinegraphic fileref="flow-box.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkTreeView"><inlinegraphic fileref="list-and-tree.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkIconView"><inlinegraphic fileref="icon-view.png" format="PNG"></inlinegraphic></link>
+    <link linkend="GtkOverlay"><inlinegraphic fileref="overlay.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkStack"><inlinegraphic fileref="stack.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkStackSwitcher"><inlinegraphic fileref="stackswitcher.png" format="PNG"></inlinegraphic></link>
     <link linkend="GtkStackSidebar"><inlinegraphic fileref="sidebar.png" format="PNG"></inlinegraphic></link>
