@@ -716,6 +716,16 @@ gtk_menu_tracker_item_get_special (GtkMenuTrackerItem *self)
 }
 
 const char *
+gtk_menu_tracker_item_get_custom (GtkMenuTrackerItem *self)
+{
+  const char *custom = NULL;
+
+  g_menu_item_get_attribute (self->item, "custom", "&s", &custom);
+
+  return custom;
+}
+
+const char *
 gtk_menu_tracker_item_get_display_hint (GtkMenuTrackerItem *self)
 {
   const char *display_hint = NULL;

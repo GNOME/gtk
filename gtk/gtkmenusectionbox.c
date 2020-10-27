@@ -32,6 +32,8 @@
 #include "gtkpopovermenuprivate.h"
 #include "gtkorientable.h"
 #include "gtkbuiltiniconprivate.h"
+#include "gtkgizmoprivate.h"
+#include "gtkbinlayout.h"
 
 typedef GtkBoxClass GtkMenuSectionBoxClass;
 
@@ -50,6 +52,7 @@ struct _GtkMenuSectionBox
   int                  depth;
   GtkPopoverMenuFlags  flags;
   GtkSizeGroup        *indicators;
+  GHashTable          *custom_slots;
 };
 
 typedef struct
@@ -341,6 +344,22 @@ gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
           g_free (name);
         }
     }
+  else if (gtk_menu_tracker_item_get_custom (item))
+    {
+      const char *id = gtk_menu_tracker_item_get_custom (item);
+
+      widget = gtk_gizmo_new ("widget", NULL, NULL, NULL, NULL, NULL, NULL);
+      gtk_widget_set_layout_manager (widget, gtk_bin_layout_new ());
+
+      if (g_hash_table_lookup (box->custom_slots, id))
+        g_warning ("Duplicate custom ID: %s", id);
+      else
+        {
+          char *slot_id = g_strdup (id);
+          g_object_set_data_full (G_OBJECT (widget), "slot-id", slot_id, g_free);
+          g_hash_table_insert (box->custom_slots, slot_id, widget);
+        }
+    }
   else
     {
       widget = g_object_new (GTK_TYPE_MODEL_BUTTON,
@@ -458,6 +477,7 @@ gtk_menu_section_box_dispose (GObject *object)
     }
 
   g_clear_object (&box->indicators);
+  g_clear_pointer (&box->custom_slots, g_hash_table_unref);
 
   G_OBJECT_CLASS (gtk_menu_section_box_parent_class)->dispose (object);
 }
@@ -499,8 +519,9 @@ gtk_menu_section_box_new_toplevel (GtkPopoverMenu      *popover,
 {
   GtkMenuSectionBox *box;
 
-  box = g_object_new (GTK_TYPE_MENU_SECTION_BOX,  NULL);
+  box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, NULL);
   box->indicators = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+  box->custom_slots = g_hash_table_new (g_str_hash, g_str_equal);
   box->flags = flags;
 
   gtk_popover_menu_add_submenu (popover, GTK_WIDGET (box), "main");
@@ -524,6 +545,7 @@ gtk_menu_section_box_new_submenu (GtkMenuTrackerItem *item,
 
   box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, NULL);
   box->indicators = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+  box->custom_slots = g_hash_table_ref (toplevel->custom_slots);
   box->flags = toplevel->flags;
 
   button = g_object_new (GTK_TYPE_MODEL_BUTTON,
@@ -562,6 +584,7 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
 
   box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, NULL);
   box->indicators = g_object_ref (parent->indicators);
+  box->custom_slots = g_hash_table_ref (parent->toplevel->custom_slots);
   box->toplevel = parent->toplevel;
   box->depth = parent->depth + 1;
   box->flags = parent->flags;
@@ -660,4 +683,55 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
                                                      box);
 
   return GTK_WIDGET (box);
+}
+
+gboolean
+gtk_menu_section_box_add_custom (GtkPopoverMenu *popover,
+                                 GtkWidget      *child,
+                                 const char     *id)
+{
+  GtkWidget *stack;
+  GtkMenuSectionBox *box;
+  GtkWidget *slot;
+
+  stack = gtk_popover_get_child (GTK_POPOVER (popover));
+  box = GTK_MENU_SECTION_BOX (gtk_stack_get_child_by_name (GTK_STACK (stack), "main"));
+
+  slot = (GtkWidget *)g_hash_table_lookup (box->custom_slots, id);
+
+  if (slot == NULL)
+    return FALSE;
+
+  if (gtk_widget_get_first_child (slot))
+    return FALSE;
+
+  gtk_widget_insert_before (child, slot, NULL);
+  return TRUE;
+}
+
+gboolean
+gtk_menu_section_box_remove_custom (GtkPopoverMenu *popover,
+                                    GtkWidget      *child)
+{
+  GtkWidget *stack;
+  GtkMenuSectionBox *box;
+  GtkWidget *parent;
+  const char *id;
+  GtkWidget *slot;
+
+  stack = gtk_popover_get_child (GTK_POPOVER (popover));
+  box = GTK_MENU_SECTION_BOX (gtk_stack_get_child_by_name (GTK_STACK (stack), "main"));
+  parent = gtk_widget_get_parent (child);
+
+  id = (const char *) g_object_get_data (G_OBJECT (parent), "slot-id");
+  g_return_val_if_fail (id != NULL, FALSE);
+
+  slot = (GtkWidget *)g_hash_table_lookup (box->custom_slots, id);
+
+  if (slot != parent)
+    return FALSE;
+
+  gtk_widget_unparent (child);
+
+  return TRUE;
 }

@@ -73,6 +73,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkmain.h"
 #include "gtknative.h"
+#include "gtkbuildable.h"
 
 #define GTK_TYPE_POPOVER_MENU_BAR_ITEM    (gtk_popover_menu_bar_item_get_type ())
 #define GTK_POPOVER_MENU_BAR_ITEM(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_POPOVER_MENU_BAR_ITEM, GtkPopoverMenuBarItem))
@@ -384,7 +385,11 @@ enum
 
 static GParamSpec * bar_props[LAST_PROP];
 
-G_DEFINE_TYPE (GtkPopoverMenuBar, gtk_popover_menu_bar, GTK_TYPE_WIDGET)
+static void gtk_popover_menu_bar_buildable_iface_init (GtkBuildableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GtkPopoverMenuBar, gtk_popover_menu_bar, GTK_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_popover_menu_bar_buildable_iface_init))
 
 static void
 tracker_remove (int      position,
@@ -650,6 +655,31 @@ gtk_popover_menu_bar_init (GtkPopoverMenuBar *bar)
   gtk_widget_add_controller (GTK_WIDGET (bar), controller);
 }
 
+static GtkBuildableIface *parent_buildable_iface;
+
+static void
+gtk_popover_menu_bar_buildable_add_child (GtkBuildable *buildable,
+                                          GtkBuilder   *builder,
+                                          GObject      *child,
+                                          const char   *type)
+{
+  if (GTK_IS_WIDGET (child))
+    {
+      if (!gtk_popover_menu_bar_add_child (GTK_POPOVER_MENU_BAR (buildable), GTK_WIDGET (child), type))
+        g_warning ("No such custom attribute: %s", type);
+    }
+  else
+    parent_buildable_iface->add_child (buildable, builder, child, type);
+}
+
+static void
+gtk_popover_menu_bar_buildable_iface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
+  iface->add_child = gtk_popover_menu_bar_buildable_add_child;
+}
+
 /**
  * gtk_popover_menu_bar_new_from_model:
  * @model: (allow-none): a #GMenuModel, or %NULL
@@ -733,3 +763,73 @@ gtk_popover_menu_bar_select_first (GtkPopoverMenuBar *bar)
   item = GTK_POPOVER_MENU_BAR_ITEM (gtk_widget_get_first_child (GTK_WIDGET (bar)));
   set_active_item (bar, item, TRUE);
 }
+
+/**
+ * gtk_popover_menu_bar_add_child:
+ * @bar: a #GtkPopoverMenuBar
+ * @child: the #GtkWidget to add
+ * @id: the ID to insert @child at
+ *
+ * Adds a custom widget to a generated menubar.
+ *
+ * For this to work, the menu model of @bar must have an
+ * item with a `custom` attribute that matches @id.
+ *
+ * Returns: %TRUE if @id was found and the widget added
+ */
+gboolean
+gtk_popover_menu_bar_add_child (GtkPopoverMenuBar *bar,
+                                GtkWidget         *child,
+                                const char        *id)
+{
+  GtkWidget *item;
+
+  g_return_val_if_fail (GTK_IS_POPOVER_MENU_BAR (bar), FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (child), FALSE);
+  g_return_val_if_fail (id != NULL, FALSE);
+
+  for (item = gtk_widget_get_first_child (GTK_WIDGET (bar));
+       item;
+       item = gtk_widget_get_next_sibling (item))
+    {
+      GtkPopover *popover = GTK_POPOVER_MENU_BAR_ITEM (item)->popover;
+
+      if (gtk_popover_menu_add_child (GTK_POPOVER_MENU (popover), child, id))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+/**
+ * gtk_popover_menu_bar_remove_child:
+ * @bar: a #GtkPopoverMenuBar
+ * @child: the #GtkWidget to remove
+ *
+ * Removes a widget that has previously been added with
+ * gtk_popover_menu_bar_add_child().
+ *
+ * Returns: %TRUE if the widget was removed
+ */
+gboolean
+gtk_popover_menu_bar_remove_child (GtkPopoverMenuBar *bar,
+                                   GtkWidget         *child)
+{
+  GtkWidget *item;
+
+  g_return_val_if_fail (GTK_IS_POPOVER_MENU_BAR (bar), FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (child), FALSE);
+
+  for (item = gtk_widget_get_first_child (GTK_WIDGET (bar));
+       item;
+       item = gtk_widget_get_next_sibling (item))
+    {
+      GtkPopover *popover = GTK_POPOVER_MENU_BAR_ITEM (item)->popover;
+
+      if (gtk_popover_menu_remove_child (GTK_POPOVER_MENU (popover), child))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+

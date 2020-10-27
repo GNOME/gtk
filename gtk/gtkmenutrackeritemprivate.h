@@ -51,6 +51,8 @@ GtkMenuTrackerItem *   _gtk_menu_tracker_item_new                       (GtkActi
 
 const char *           gtk_menu_tracker_item_get_special               (GtkMenuTrackerItem *self);
 
+const char *           gtk_menu_tracker_item_get_custom                (GtkMenuTrackerItem *self);
+
 const char *           gtk_menu_tracker_item_get_display_hint          (GtkMenuTrackerItem *self);
 
 const char *           gtk_menu_tracker_item_get_text_direction        (GtkMenuTrackerItem *self);
