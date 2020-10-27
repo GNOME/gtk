@@ -124,8 +124,8 @@ g_io_module_unload (GIOModule *module)
 char **
 g_io_module_query (void)
 {
-  char *eps[] = {
-    GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
+  char * eps[] = {
+    (char *) GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
     NULL
   };
 
@@ -919,7 +919,7 @@ cloudprint_printer_get_options (GtkPrinter           *printer,
   /* How many document pages to go onto one side of paper. */
   option = gtk_printer_option_new ("gtk-n-up", _("Pages per _sheet:"), GTK_PRINTER_OPTION_TYPE_PICKONE);
   gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (n_up),
-					 (char **) n_up, (char **) n_up /* FIXME i18n (localised digits)! */);
+					 n_up, n_up /* FIXME i18n (localised digits)! */);
   gtk_printer_option_set (option, "1");
   gtk_printer_option_set_add (set, option);
   g_object_unref (option);
