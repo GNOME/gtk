@@ -65,18 +65,22 @@ strings_setup_item_single_line (GtkSignalListItemFactory *factory,
                                 GtkListItem              *item)
 {
   GtkWidget *box, *image, *title;
+  GtkWidget *checkmark;
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
 
   image = gtk_image_new ();
   title = gtk_label_new ("");
   gtk_label_set_xalign (GTK_LABEL (title), 0.0);
+  checkmark = gtk_image_new_from_icon_name ("object-select-symbolic");
 
   gtk_box_append (GTK_BOX (box), image);
   gtk_box_append (GTK_BOX (box), title);
+  gtk_box_append (GTK_BOX (box), checkmark);
 
   g_object_set_data (G_OBJECT (item), "title", title);
   g_object_set_data (G_OBJECT (item), "image", image);
+  g_object_set_data (G_OBJECT (item), "checkmark", checkmark);
 
   gtk_list_item_set_child (item, box);
 }
@@ -86,6 +90,7 @@ strings_setup_item_full (GtkSignalListItemFactory *factory,
                          GtkListItem              *item)
 {
   GtkWidget *box, *box2, *image, *title, *description;
+  GtkWidget *checkmark;
 
   image = gtk_image_new ();
   title = gtk_label_new ("");
@@ -93,6 +98,7 @@ strings_setup_item_full (GtkSignalListItemFactory *factory,
   description = gtk_label_new ("");
   gtk_label_set_xalign (GTK_LABEL (description), 0.0);
   gtk_widget_add_css_class (description, "dim-label");
+  checkmark = gtk_image_new_from_icon_name ("object-select-symbolic");
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
@@ -101,26 +107,48 @@ strings_setup_item_full (GtkSignalListItemFactory *factory,
   gtk_box_append (GTK_BOX (box), box2);
   gtk_box_append (GTK_BOX (box2), title);
   gtk_box_append (GTK_BOX (box2), description);
+  gtk_box_append (GTK_BOX (box), checkmark);
 
   g_object_set_data (G_OBJECT (item), "title", title);
   g_object_set_data (G_OBJECT (item), "image", image);
   g_object_set_data (G_OBJECT (item), "description", description);
+  g_object_set_data (G_OBJECT (item), "checkmark", checkmark);
 
   gtk_list_item_set_child (item, box);
 }
 
 static void
-strings_bind_item (GtkSignalListItemFactory *factory,
-                    GtkListItem              *item)
+selected_item_changed (GtkDropDown *dropdown,
+                       GParamSpec  *pspec,
+                       GtkListItem *item)
 {
+  GtkWidget *checkmark;
+
+  checkmark = g_object_get_data (G_OBJECT (item), "checkmark");
+
+  if (gtk_drop_down_get_selected_item (dropdown) == gtk_list_item_get_item (item))
+    gtk_widget_set_opacity (checkmark, 1.0);
+  else
+    gtk_widget_set_opacity (checkmark, 0.0);
+}
+
+static void
+strings_bind_item (GtkSignalListItemFactory *factory,
+                   GtkListItem              *item,
+                   gpointer                  data)
+{
+  GtkDropDown *dropdown = data;
   GtkWidget *image, *title, *description;
+  GtkWidget *checkmark;
   StringHolder *holder;
+  GtkWidget *popup;
 
   holder = gtk_list_item_get_item (item);
 
   title = g_object_get_data (G_OBJECT (item), "title");
   image = g_object_get_data (G_OBJECT (item), "image");
   description = g_object_get_data (G_OBJECT (item), "description");
+  checkmark = g_object_get_data (G_OBJECT (item), "checkmark");
 
   gtk_label_set_label (GTK_LABEL (title), holder->title);
   if (image)
@@ -133,19 +161,43 @@ strings_bind_item (GtkSignalListItemFactory *factory,
       gtk_label_set_label (GTK_LABEL (description), holder->description);
       gtk_widget_set_visible (description , holder->description != NULL);
     }
+
+  popup = gtk_widget_get_ancestor (title, GTK_TYPE_POPOVER);
+  if (popup && gtk_widget_is_ancestor (popup, GTK_WIDGET (dropdown)))
+    {
+      gtk_widget_show (checkmark);
+      g_signal_connect (dropdown, "notify::selected-item",
+                        G_CALLBACK (selected_item_changed), item);
+      selected_item_changed (dropdown, NULL, item);
+    }
+  else
+    {
+      gtk_widget_hide (checkmark);
+    }
+}
+
+static void
+strings_unbind_item (GtkSignalListItemFactory *factory,
+                     GtkListItem              *list_item,
+                     gpointer                  data)
+{
+  GtkDropDown *dropdown = data;
+
+  g_signal_handlers_disconnect_by_func (dropdown, selected_item_changed, list_item);
 }
 
 static GtkListItemFactory *
-strings_factory_new (gboolean full)
+strings_factory_new (gpointer data, gboolean full)
 {
   GtkListItemFactory *factory;
 
   factory = gtk_signal_list_item_factory_new ();
   if (full)
-    g_signal_connect (factory, "setup", G_CALLBACK (strings_setup_item_full), NULL);
+    g_signal_connect (factory, "setup", G_CALLBACK (strings_setup_item_full), data);
   else
-    g_signal_connect (factory, "setup", G_CALLBACK (strings_setup_item_single_line), NULL);
-  g_signal_connect (factory, "bind", G_CALLBACK (strings_bind_item), NULL);
+    g_signal_connect (factory, "setup", G_CALLBACK (strings_setup_item_single_line), data);
+  g_signal_connect (factory, "bind", G_CALLBACK (strings_bind_item), data);
+  g_signal_connect (factory, "unbind", G_CALLBACK (strings_unbind_item), data);
 
   return factory;
 }
@@ -186,19 +238,22 @@ drop_down_new_from_strings (const char *const *titles,
   g_return_val_if_fail (descriptions == NULL || g_strv_length ((char **)icons) == g_strv_length ((char **)descriptions), NULL);
 
   model = strings_model_new (titles, icons, descriptions);
-  factory = strings_factory_new (FALSE);
+  widget = g_object_new (GTK_TYPE_DROP_DOWN,
+                         "model", model,
+                         NULL);
+  g_object_unref (model);
+
+  factory = strings_factory_new (widget, FALSE);
   if (icons != NULL || descriptions != NULL)
-    list_factory = strings_factory_new (TRUE);
+    list_factory = strings_factory_new (widget, TRUE);
   else
     list_factory = NULL;
 
-  widget = g_object_new (GTK_TYPE_DROP_DOWN,
-                         "model", model,
-                         "factory", factory,
-                         "list-factory", list_factory,
-                         NULL);
+  g_object_set (widget,
+                "factory", factory,
+                "list-factory", list_factory,
+                NULL);
 
-  g_object_unref (model);
   g_object_unref (factory);
   if (list_factory)
     g_object_unref (list_factory);
