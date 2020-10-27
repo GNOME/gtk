@@ -294,7 +294,7 @@ gtk_gst_media_file_update_audio (GtkMediaStream *stream,
   GtkGstMediaFile *self = GTK_GST_MEDIA_FILE (stream);
 
   gst_player_set_mute (self->player, muted);
-  gst_player_set_volume (self->player, volume);
+  gst_player_set_volume (self->player, volume * volume * volume);
 }
 
 static void
