@@ -1554,6 +1554,11 @@ gtk_window_constructed (GObject *object)
   gtk_widget_add_controller (GTK_WIDGET (object), GTK_EVENT_CONTROLLER (priv->click_gesture));
 
   g_list_store_append (toplevel_list, window);
+
+  gtk_accessible_update_state (GTK_ACCESSIBLE (window),
+                               GTK_ACCESSIBLE_STATE_HIDDEN, TRUE,
+                               -1);
+
   g_object_unref (window);
 }
 
@@ -7195,11 +7200,16 @@ gtk_window_destroy (GtkWindow *window)
     return;
 
   g_object_ref (window);
+
   gtk_tooltip_unset_surface (GTK_NATIVE (window));
+
+  gtk_window_hide (GTK_WIDGET (window));
+  gtk_accessible_update_state (GTK_ACCESSIBLE (window),
+                               GTK_ACCESSIBLE_STATE_HIDDEN, TRUE,
+                               -1);
 
   g_list_store_remove (toplevel_list, i);
 
-  gtk_window_hide (GTK_WIDGET (window));
   gtk_widget_unrealize (GTK_WIDGET (window));
 
   g_object_unref (window);

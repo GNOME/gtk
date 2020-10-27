@@ -42,4 +42,9 @@ gtk_at_spi_root_get_cache (GtkAtSpiRoot *self);
 GVariant *
 gtk_at_spi_root_to_ref (GtkAtSpiRoot *self);
 
+void
+gtk_at_spi_root_child_changed (GtkAtSpiRoot             *self,
+                               GtkAccessibleChildChange  change,
+                               GtkAccessible            *child);
+
 G_END_DECLS

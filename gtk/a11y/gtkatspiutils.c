@@ -305,3 +305,37 @@ gtk_at_spi_null_ref (void)
 {
   return g_variant_new ("(so)", "", "/org/a11y/atspi/null");
 }
+
+void
+gtk_at_spi_emit_children_changed (GDBusConnection         *connection,
+                                  const char              *path,
+                                  GtkAccessibleChildState  state,
+                                  int                      idx,
+                                  GVariant                *child_ref,
+                                  GVariant                *sender_ref)
+{
+  const char *change;
+
+  switch (state)
+    {
+    case GTK_ACCESSIBLE_CHILD_STATE_ADDED:
+      change = "add";
+      break;
+
+    case GTK_ACCESSIBLE_CHILD_STATE_REMOVED:
+      change = "remove";
+      break;
+
+    default:
+      g_assert_not_reached ();
+      return;
+    }
+
+  g_dbus_connection_emit_signal (connection,
+                                 NULL,
+                                 path,
+                                 "org.a11y.atspi.Event.Object",
+                                 "ChildrenChanged",
+                                 g_variant_new ("(siiv@(so))", change, idx, 0, child_ref, sender_ref),
+                                 NULL);
+}

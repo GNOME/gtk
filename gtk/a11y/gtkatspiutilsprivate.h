@@ -31,4 +31,12 @@ gtk_atspi_role_for_context (GtkATContext *context);
 GVariant *
 gtk_at_spi_null_ref (void);
 
+void
+gtk_at_spi_emit_children_changed (GDBusConnection         *connection,
+                                  const char              *path,
+                                  GtkAccessibleChildState  state,
+                                  int                      idx,
+                                  GVariant                *child_ref,
+                                  GVariant                *sender_ref);
+
 G_END_DECLS

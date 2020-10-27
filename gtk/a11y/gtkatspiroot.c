@@ -405,6 +405,65 @@ static const GDBusInterfaceVTable root_accessible_vtable = {
   NULL,
 };
 
+void
+gtk_at_spi_root_child_changed (GtkAtSpiRoot             *self,
+                               GtkAccessibleChildChange  change,
+                               GtkAccessible            *child)
+{
+  guint n, i;
+  int idx = 0;
+  GVariant *window_ref;
+  GtkAccessibleChildState state;
+
+  if (!self->toplevels)
+    return;
+
+  for (i = 0, n = g_list_model_get_n_items (self->toplevels); i < n; i++)
+    {
+      GtkAccessible *item = g_list_model_get_item (self->toplevels, i);
+
+      g_object_unref (item);
+
+      if (item == child)
+        break;
+
+      if (!gtk_accessible_should_present (item))
+        continue;
+
+      idx++;
+    }
+
+  if (child == NULL)
+    {
+      window_ref = gtk_at_spi_null_ref ();
+    }
+  else
+    {
+      GtkATContext *context = gtk_accessible_get_at_context (child);
+
+      window_ref = gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (context));
+    }
+
+  switch (change)
+    {
+    case GTK_ACCESSIBLE_CHILD_CHANGE_ADDED:
+      state = GTK_ACCESSIBLE_CHILD_STATE_ADDED;
+      break;
+    case GTK_ACCESSIBLE_CHILD_CHANGE_REMOVED:
+      state = GTK_ACCESSIBLE_CHILD_STATE_REMOVED;
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  gtk_at_spi_emit_children_changed (self->connection,
+                                    self->root_path,
+                                    state,
+                                    idx,
+                                    gtk_at_spi_root_to_ref (self),
+                                    window_ref);
+}
+
 static void
 on_registration_reply (GObject      *gobject,
                        GAsyncResult *result,
@@ -437,7 +496,6 @@ on_registration_reply (GObject      *gobject,
   /* Register the cache object */
   self->cache = gtk_at_spi_cache_new (self->connection, ATSPI_CACHE_PATH);
 
-  /* Monitor the top levels */
   self->toplevels = gtk_window_get_toplevels ();
 }
 

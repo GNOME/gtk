@@ -49,4 +49,8 @@ gboolean        gtk_accessible_get_platform_state (GtkAccessible              *s
 
 void            gtk_accessible_bounds_changed   (GtkAccessible *self);
 
+void            gtk_accessible_update_children  (GtkAccessible           *self,
+                                                 GtkAccessible           *child,
+                                                 GtkAccessibleChildState  state);
+
 G_END_DECLS
