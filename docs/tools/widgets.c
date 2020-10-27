@@ -681,6 +681,7 @@ create_editable_label (void)
 
   return new_widget_info ("editable-label", vbox, SMALL);
 }
+
 static WidgetInfo *
 create_separator (void)
 {
@@ -1924,10 +1925,169 @@ create_drawing_area (void)
   return info;
 }
 
+static WidgetInfo *
+create_box (void)
+{
+  GtkWidget *hbox;
+  GtkWidget *vbox;
+  GtkWidget *widget;
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
+  gtk_widget_set_margin_top (hbox, 20);
+  gtk_widget_set_margin_bottom (hbox, 20);
+  gtk_widget_set_halign (hbox, GTK_ALIGN_CENTER);
+  widget = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
+  for (int i = 0; i < 2; i++)
+    {
+      GtkWidget *button = gtk_button_new ();
+      gtk_widget_add_css_class (button, "small");
+      gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
+      gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+      gtk_box_append (GTK_BOX (widget), button);
+    }
+  gtk_box_append (GTK_BOX (widget), gtk_label_new ("⋯"));
+  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+  gtk_box_append (GTK_BOX (hbox), widget);
+  widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 4);
+  for (int i = 0; i < 2; i++)
+    {
+      GtkWidget *button = gtk_button_new ();
+      gtk_widget_add_css_class (button, "small");
+      gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
+      gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+      gtk_box_append (GTK_BOX (widget), button);
+    }
+  gtk_box_append (GTK_BOX (widget), gtk_label_new ("⋮"));
+  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+  gtk_box_append (GTK_BOX (hbox), widget);
+  gtk_box_append (GTK_BOX (vbox), hbox);
+  gtk_box_append (GTK_BOX (vbox), g_object_new (GTK_TYPE_LABEL,
+                                                "label", "Horizontal and Vertical Boxes",
+                                                "justify", GTK_JUSTIFY_CENTER,
+                                                NULL));
+  add_margin (vbox);
+
+  return new_widget_info ("box", vbox, MEDIUM);
+}
+
+static WidgetInfo *
+create_center_box (void)
+{
+  GtkWidget *vbox;
+  GtkWidget *widget;
+  GtkWidget *button;
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+  widget = gtk_center_box_new ();
+  gtk_widget_set_margin_top (widget, 10);
+  gtk_widget_set_margin_bottom (widget, 10);
+  gtk_widget_set_margin_start (widget, 20);
+  gtk_widget_set_margin_end (widget, 20);
+  gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
+  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+
+  button = gtk_button_new ();
+  gtk_widget_add_css_class (button, "small");
+  gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  gtk_center_box_set_start_widget (GTK_CENTER_BOX (widget), button);
+
+  button = gtk_button_new ();
+  gtk_widget_add_css_class (button, "small");
+  gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  gtk_center_box_set_center_widget (GTK_CENTER_BOX (widget), button);
+
+  button = gtk_button_new ();
+  gtk_widget_add_css_class (button, "small");
+  gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  gtk_center_box_set_end_widget (GTK_CENTER_BOX (widget), button);
+
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox), g_object_new (GTK_TYPE_LABEL,
+                                                "label", "Center Box",
+                                                "justify", GTK_JUSTIFY_CENTER,
+                                                NULL));
+  add_margin (vbox);
+
+  return new_widget_info ("centerbox", vbox, SMALL);
+}
+
+static WidgetInfo *
+create_grid (void)
+{
+  GtkWidget *vbox;
+  GtkWidget *widget;
+  GtkWidget *button;
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+  widget = gtk_grid_new ();
+  gtk_grid_set_row_spacing (GTK_GRID (widget), 4);
+  gtk_grid_set_column_spacing (GTK_GRID (widget), 4);
+  gtk_widget_set_margin_top (widget, 20);
+  gtk_widget_set_margin_bottom (widget, 20);
+  gtk_widget_set_margin_start (widget, 20);
+  gtk_widget_set_margin_end (widget, 20);
+  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+
+  button = gtk_button_new ();
+  gtk_widget_add_css_class (button, "small");
+  gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  gtk_grid_attach (GTK_GRID (widget), button, 0, 0, 1, 1);
+
+  button = gtk_button_new ();
+  gtk_widget_add_css_class (button, "small");
+  gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  gtk_grid_attach (GTK_GRID (widget), button, 0, 1, 1, 1);
+
+  button = gtk_button_new ();
+  gtk_widget_add_css_class (button, "small");
+  gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  gtk_grid_attach (GTK_GRID (widget), button, 1, 0, 1, 1);
+
+  button = gtk_button_new ();
+  gtk_widget_add_css_class (button, "small");
+  gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  gtk_grid_attach (GTK_GRID (widget), button, 1, 1, 1, 1);
+
+  gtk_grid_attach (GTK_GRID (widget), gtk_label_new ("⋯"), 2, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (widget), gtk_label_new ("⋮"), 0, 2, 1, 1);
+
+  gtk_box_append (GTK_BOX (vbox), widget);
+  gtk_box_append (GTK_BOX (vbox), g_object_new (GTK_TYPE_LABEL,
+                                                "label", "Grid",
+                                                "justify", GTK_JUSTIFY_CENTER,
+                                                NULL));
+  add_margin (vbox);
+
+  return new_widget_info ("grid", vbox, MEDIUM);
+}
+
 GList *
 get_all_widgets (void)
 {
   GList *retval = NULL;
+  GtkCssProvider *provider;
+
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (provider,
+                                   "button.small {\n"
+                                   "  min-width: 16px;\n"
+                                   "  min-height: 16px;\n"
+                                   "  padding: 0;\n"
+                                   "}", -1);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (provider),
+                                              800);
 
   retval = g_list_prepend (retval, create_search_bar ());
   retval = g_list_prepend (retval, create_action_bar ());
@@ -1997,7 +2157,10 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_popover ());
   retval = g_list_prepend (retval, create_menu ());
   retval = g_list_prepend (retval, create_shortcuts_window ());
-  retval = g_list_prepend (retval, create_drawing_area());
+  retval = g_list_prepend (retval, create_drawing_area ());
+  retval = g_list_prepend (retval, create_box ());
+  retval = g_list_prepend (retval, create_center_box ());
+  retval = g_list_prepend (retval, create_grid ());
 
   return retval;
 }
