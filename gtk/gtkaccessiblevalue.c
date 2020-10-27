@@ -45,10 +45,13 @@
 #include "gtkaccessiblevalueprivate.h"
 
 #include "gtkaccessible.h"
+#include "gtkbuilderprivate.h"
 #include "gtkenums.h"
+#include "gtktypebuiltins.h"
 
 #include <math.h>
 #include <float.h>
+#include <errno.h>
 
 G_DEFINE_QUARK (gtk-accessible-value-error-quark, gtk_accessible_value_error)
 
@@ -637,6 +640,7 @@ typedef struct {
    */
   GCallback ctor;
   GCallback getter;
+  GCallback parser;
 } GtkAccessibleCollect;
 
 static const GtkAccessibleCollect collect_states[] = {
@@ -670,7 +674,8 @@ static const GtkAccessibleCollect collect_states[] = {
     .ctype = GTK_ACCESSIBLE_COLLECT_TOKEN,
     .name = "invalid",
     .ctor = (GCallback) gtk_invalid_accessible_value_new,
-    .getter = (GCallback) gtk_invalid_accessible_value_get
+    .getter = (GCallback) gtk_invalid_accessible_value_get,
+    .parser = (GCallback) gtk_invalid_accessible_value_parse,
   },
   [GTK_ACCESSIBLE_STATE_PRESSED] = {
     .value = GTK_ACCESSIBLE_STATE_PRESSED,
@@ -691,7 +696,8 @@ static const GtkAccessibleCollect collect_props[] = {
     .ctype = GTK_ACCESSIBLE_COLLECT_TOKEN,
     .name = "autocomplete",
     .ctor = (GCallback) gtk_autocomplete_accessible_value_new,
-    .getter = (GCallback) gtk_autocomplete_accessible_value_get
+    .getter = (GCallback) gtk_autocomplete_accessible_value_get,
+    .parser = (GCallback) gtk_autocomplete_accessible_value_parse,
   },
   [GTK_ACCESSIBLE_PROPERTY_DESCRIPTION] = {
     .value = GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
@@ -742,7 +748,8 @@ static const GtkAccessibleCollect collect_props[] = {
     .ctype = GTK_ACCESSIBLE_COLLECT_TOKEN | GTK_ACCESSIBLE_COLLECT_UNDEFINED,
     .name = "orientation",
     .ctor = (GCallback) gtk_orientation_accessible_value_new,
-    .getter = (GCallback) gtk_orientation_accessible_value_get
+    .getter = (GCallback) gtk_orientation_accessible_value_get,
+    .parser = (GCallback) gtk_orientation_accessible_value_parse,
   },
   [GTK_ACCESSIBLE_PROPERTY_PLACEHOLDER] = {
     .value = GTK_ACCESSIBLE_PROPERTY_PLACEHOLDER,
@@ -769,7 +776,8 @@ static const GtkAccessibleCollect collect_props[] = {
     .ctype = GTK_ACCESSIBLE_COLLECT_TOKEN,
     .name = "sort",
     .ctor = (GCallback) gtk_sort_accessible_value_new,
-    .getter = (GCallback) gtk_sort_accessible_value_get
+    .getter = (GCallback) gtk_sort_accessible_value_get,
+    .parser = (GCallback) gtk_sort_accessible_value_parse,
   },
   [GTK_ACCESSIBLE_PROPERTY_VALUE_MAX] = {
     .value = GTK_ACCESSIBLE_PROPERTY_VALUE_MAX,
@@ -895,6 +903,10 @@ typedef GtkAccessibleValue * (* GtkAccessibleValueNumberCtor)   (double value);
 typedef GtkAccessibleValue * (* GtkAccessibleValueStringCtor)   (const char *value);
 typedef GtkAccessibleValue * (* GtkAccessibleValueRefCtor)      (GtkAccessible *value);
 typedef GtkAccessibleValue * (* GtkAccessibleValueRefListCtor)  (GList *value);
+
+typedef GtkAccessibleValue * (* GtkAccessibleValueEnumParser)   (const char  *str,
+                                                                 gsize        len,
+                                                                 GError     **error);
 
 /*< private >
  * gtk_accessible_value_get_default_for_state:
@@ -1314,6 +1326,128 @@ gtk_accessible_value_collect_value (const GtkAccessibleCollect  *cstate,
   return res;
 }
 
+static GtkAccessibleValue *
+gtk_accessible_value_parse (const GtkAccessibleCollect  *cstate,
+                            const char                  *str,
+                            gsize                        len,
+                            GError                     **error)
+{
+  GtkAccessibleValue *res = NULL;
+  GtkAccessibleCollectType ctype = cstate->ctype;
+  gboolean collects_undef = (ctype & GTK_ACCESSIBLE_COLLECT_UNDEFINED) != 0;
+
+  ctype &= (GTK_ACCESSIBLE_COLLECT_UNDEFINED - 1);
+
+  /* Tristate values include "undefined" by definition */
+  if (ctype == GTK_ACCESSIBLE_COLLECT_TRISTATE)
+    collects_undef = TRUE;
+
+  switch (ctype)
+    {
+    case GTK_ACCESSIBLE_COLLECT_BOOLEAN:
+      {
+        gboolean b;
+
+        if (collects_undef && strncmp (str, "undefined", 9) == 0)
+          res = gtk_undefined_accessible_value_new ();
+        else if (_gtk_builder_boolean_from_string (str, &b, error))
+          res = gtk_boolean_accessible_value_new (b);
+      }
+      break;
+
+    case GTK_ACCESSIBLE_COLLECT_TRISTATE:
+      {
+        int value;
+
+        if (collects_undef && strncmp (str, "undefined", 9) == 0)
+          res = gtk_undefined_accessible_value_new ();
+        else if (_gtk_builder_enum_from_string (GTK_TYPE_ACCESSIBLE_TRISTATE, str, &value, error))
+          res = gtk_boolean_accessible_value_new (value);
+      }
+      break;
+
+    case GTK_ACCESSIBLE_COLLECT_TOKEN:
+      {
+        GtkAccessibleValueEnumParser parser =
+          (GtkAccessibleValueEnumParser) cstate->parser;
+
+        if (collects_undef && strncmp (str, "undefined", 9) == 0)
+          {
+            res = gtk_undefined_accessible_value_new ();
+          }
+        else
+          {
+            /* Token collection requires a constructor */
+            g_assert (parser != NULL);
+
+            res = (* parser) (str, len, error);
+          }
+      }
+      break;
+
+    case GTK_ACCESSIBLE_COLLECT_INTEGER:
+      {
+        char *end = NULL;
+        gint64 value = g_ascii_strtoll (str, &end, 10);
+
+        if (str == end)
+          {
+            int saved_errno = errno;
+            g_set_error (error, GTK_ACCESSIBLE_VALUE_ERROR,
+                         GTK_ACCESSIBLE_VALUE_ERROR_INVALID_VALUE,
+                         "Invalid integer value “%s”: %s",
+                         str, g_strerror (saved_errno));
+
+            return NULL;
+          }
+        else
+          res = gtk_int_accessible_value_new ((int) value);
+      }
+      break;
+
+    case GTK_ACCESSIBLE_COLLECT_NUMBER:
+      {
+        char *end = NULL;
+        double value = g_ascii_strtod (str, &end);
+
+        if (str == end || isnan (value) || isinf (value))
+          {
+            g_set_error (error, GTK_ACCESSIBLE_VALUE_ERROR,
+                         GTK_ACCESSIBLE_VALUE_ERROR_INVALID_VALUE,
+                         "Invalid numeric value “%s”",
+                         str);
+            return NULL;
+          }
+
+        res = gtk_number_accessible_value_new (value);
+      }
+      break;
+
+    case GTK_ACCESSIBLE_COLLECT_STRING:
+      {
+        res = gtk_string_accessible_value_new (str);
+      }
+      break;
+
+    case GTK_ACCESSIBLE_COLLECT_REFERENCE:
+    case GTK_ACCESSIBLE_COLLECT_REFERENCE_LIST:
+      {
+        /* We do not error out, to let the caller code deal
+         * with the references themselves
+         */
+        res = NULL;
+      }
+      break;
+
+    case GTK_ACCESSIBLE_COLLECT_UNDEFINED:
+    case GTK_ACCESSIBLE_COLLECT_INVALID:
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+
+  return res;
+}
 /*< private >
  * gtk_accessible_value_collect_for_state:
  * @state: a #GtkAccessibleState
@@ -1368,6 +1502,19 @@ gtk_accessible_value_collect_for_state_value (GtkAccessibleState   state,
   g_return_val_if_fail (state <= GTK_ACCESSIBLE_STATE_SELECTED, NULL);
 
   return gtk_accessible_value_collect_value (cstate, value, error);
+}
+
+GtkAccessibleValue *
+gtk_accessible_value_parse_for_state (GtkAccessibleState   state,
+                                      const char          *str,
+                                      gsize                len,
+                                      GError             **error)
+{
+  const GtkAccessibleCollect *cstate = &collect_states[state];
+
+  g_return_val_if_fail (state <= GTK_ACCESSIBLE_STATE_SELECTED, NULL);
+
+  return gtk_accessible_value_parse (cstate, str, len, error);
 }
 
 /*< private >
@@ -1487,6 +1634,19 @@ gtk_accessible_value_collect_for_property_value (GtkAccessibleProperty   propert
   return gtk_accessible_value_collect_value (cstate, value, error);
 }
 
+GtkAccessibleValue *
+gtk_accessible_value_parse_for_property (GtkAccessibleProperty   property,
+                                         const char             *str,
+                                         gsize                   len,
+                                         GError                **error)
+{
+  const GtkAccessibleCollect *cstate = &collect_props[property];
+
+  g_return_val_if_fail (property <= GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT, NULL);
+
+  return gtk_accessible_value_parse (cstate, str, len, error);
+}
+
 /*< private >
  * gtk_accessible_value_get_default_for_relation:
  * @relation: a #GtkAccessibleRelation
@@ -1594,6 +1754,19 @@ gtk_accessible_value_collect_for_relation_value (GtkAccessibleRelation   relatio
   g_return_val_if_fail (relation <= GTK_ACCESSIBLE_RELATION_SET_SIZE, NULL);
  
   return gtk_accessible_value_collect_value (cstate, value, error);
+}
+
+GtkAccessibleValue *
+gtk_accessible_value_parse_for_relation (GtkAccessibleRelation   relation,
+                                         const char             *str,
+                                         gsize                   len,
+                                         GError                **error)
+{
+  const GtkAccessibleCollect *cstate = &collect_rels[relation];
+
+  g_return_val_if_fail (relation <= GTK_ACCESSIBLE_RELATION_SET_SIZE, NULL);
+
+  return gtk_accessible_value_parse (cstate, str, len, error);
 }
 
 /* }}} */

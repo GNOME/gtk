@@ -49,6 +49,9 @@
                   <property name="column">0</property>
                   <property name="row">0</property>
                 </layout>
+                <accessibility>
+                  <property name="label" translatable="yes">Pick a color from the screen</property>
+                </accessibility>
               </object>
             </child>
             <child>
@@ -73,6 +76,9 @@
                   <property name="column">2</property>
                   <property name="row">0</property>
                 </layout>
+                <accessibility>
+                  <property name="label" translatable="yes">Hexadecimal color or color name</property>
+                </accessibility>
               </object>
             </child>
             <child>
@@ -85,6 +91,9 @@
                   <property name="column">0</property>
                   <property name="row">1</property>
                 </layout>
+                <accessibility>
+                  <property name="label" translatable="yes">Hue</property>
+                </accessibility>
               </object>
             </child>
             <child>
@@ -101,6 +110,9 @@
                   <property name="row">2</property>
                   <property name="column-span">2</property>
                 </layout>
+                <accessibility>
+                  <property name="label" translatable="yes">Alpha value</property>
+                </accessibility>
               </object>
             </child>
             <child>
@@ -116,6 +128,9 @@
                   <property name="row">1</property>
                   <property name="column-span">2</property>
                 </layout>
+                <accessibility>
+                  <property name="label" translatable="yes">Saturation and value</property>
+                </accessibility>
               </object>
             </child>
           </object>

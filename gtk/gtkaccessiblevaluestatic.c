@@ -21,6 +21,9 @@
 #include "config.h"
 
 #include "gtkaccessiblevalueprivate.h"
+#include "gtkbuilderprivate.h"
+#include "gtkenums.h"
+#include "gtktypebuiltins.h"
 
 /* {{{ Undefined value */
 
@@ -282,6 +285,19 @@ gtk_invalid_accessible_value_get (const GtkAccessibleValue *value)
   return self->value;
 }
 
+GtkAccessibleValue *
+gtk_invalid_accessible_value_parse (const char  *str,
+                                    gsize        len,
+                                    GError     **error)
+{
+  int value;
+
+  if (_gtk_builder_enum_from_string (GTK_TYPE_ACCESSIBLE_INVALID_STATE, str, &value, error))
+    return gtk_invalid_accessible_value_new (value);
+
+  return NULL;
+}
+
 static const GtkAccessibleValueClass GTK_AUTOCOMPLETE_ACCESSIBLE_VALUE = {
   .type = GTK_ACCESSIBLE_VALUE_TYPE_TOKEN,
   .type_name = "GtkAutocompleteAccessibleValue",
@@ -327,6 +343,19 @@ gtk_autocomplete_accessible_value_get (const GtkAccessibleValue *value)
   return self->value;
 }
 
+GtkAccessibleValue *
+gtk_autocomplete_accessible_value_parse (const char  *str,
+                                         gsize        len,
+                                         GError     **error)
+{
+  int value;
+
+  if (_gtk_builder_enum_from_string (GTK_TYPE_ACCESSIBLE_AUTOCOMPLETE, str, &value, error))
+    return gtk_autocomplete_accessible_value_new (value);
+
+  return NULL;
+}
+
 static const GtkAccessibleValueClass GTK_ORIENTATION_ACCESSIBLE_VALUE = {
   .type = GTK_ACCESSIBLE_VALUE_TYPE_TOKEN,
   .type_name = "GtkOrientationAccessibleValue",
@@ -364,6 +393,19 @@ gtk_orientation_accessible_value_get (const GtkAccessibleValue *value)
                         GTK_ACCESSIBLE_VALUE_UNDEFINED);
 
   return self->value;
+}
+
+GtkAccessibleValue *
+gtk_orientation_accessible_value_parse (const char  *str,
+                                        gsize        len,
+                                        GError     **error)
+{
+  int value;
+
+  if (_gtk_builder_enum_from_string (GTK_TYPE_ORIENTATION, str, &value, error))
+    return gtk_orientation_accessible_value_new (value);
+
+  return NULL;
 }
 
 static const GtkAccessibleValueClass GTK_SORT_ACCESSIBLE_VALUE = {
@@ -409,6 +451,19 @@ gtk_sort_accessible_value_get (const GtkAccessibleValue *value)
                         GTK_ACCESSIBLE_SORT_NONE);
 
   return self->value;
+}
+
+GtkAccessibleValue *
+gtk_sort_accessible_value_parse (const char  *str,
+                                 gsize        len,
+                                 GError     **error)
+{
+  int value;
+
+  if (_gtk_builder_enum_from_string (GTK_TYPE_ACCESSIBLE_SORT, str, &value, error))
+    return gtk_sort_accessible_value_new (value);
+
+  return NULL;
 }
 
 /* }}} */
