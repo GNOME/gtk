@@ -41,7 +41,11 @@ struct _GdkMacosGLContext
   NSOpenGLContext *gl_context;
   G_GNUC_END_IGNORE_DEPRECATIONS
 
-  gboolean is_attached;
+  NSWindow *dummy_window;
+  NSView *dummy_view;
+
+  guint is_attached : 1;
+  guint needs_resize : 1;
 };
 
 struct _GdkMacosGLContextClass

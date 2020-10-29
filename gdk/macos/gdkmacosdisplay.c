@@ -649,7 +649,10 @@ gdk_macos_display_make_gl_context_current (GdkDisplay   *display,
                                            GdkGLContext *gl_context)
 {
   g_assert (GDK_IS_MACOS_DISPLAY (display));
-  g_assert (GDK_IS_MACOS_GL_CONTEXT (gl_context));
+  g_assert (!gl_context || GDK_IS_MACOS_GL_CONTEXT (gl_context));
+
+  if (gl_context == NULL)
+    return FALSE;
 
   return _gdk_macos_gl_context_make_current (GDK_MACOS_GL_CONTEXT (gl_context));
 }

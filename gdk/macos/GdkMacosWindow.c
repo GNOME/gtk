@@ -25,6 +25,7 @@
 
 #import "GdkMacosBaseView.h"
 #import "GdkMacosCairoView.h"
+#import "GdkMacosGLView.h"
 #import "GdkMacosWindow.h"
 
 #include "gdkmacosdisplay-private.h"
@@ -139,6 +140,10 @@
       _gdk_macos_display_send_button_event ([self gdkDisplay], event);
 
       _gdk_macos_display_break_all_grabs (GDK_MACOS_DISPLAY (display), time);
+
+      /* Reset gravity */
+      if (GDK_IS_MACOS_GL_VIEW ([self contentView]))
+        [[[self contentView] layer] setContentsGravity:kCAGravityBottomLeft];
 
       break;
     }
@@ -542,6 +547,43 @@
 
   inManualResize = YES;
   resizeEdge = edge;
+
+  if (GDK_IS_MACOS_GL_VIEW ([self contentView]))
+    {
+      CALayerContentsGravity gravity = kCAGravityBottomLeft;
+
+      switch (edge)
+        {
+        default:
+        case GDK_SURFACE_EDGE_NORTH:
+          gravity = kCAGravityTopLeft;
+          break;
+
+        case GDK_SURFACE_EDGE_NORTH_WEST:
+          gravity = kCAGravityTopRight;
+          break;
+
+        case GDK_SURFACE_EDGE_SOUTH_WEST:
+        case GDK_SURFACE_EDGE_WEST:
+          gravity = kCAGravityBottomRight;
+          break;
+
+        case GDK_SURFACE_EDGE_SOUTH:
+        case GDK_SURFACE_EDGE_SOUTH_EAST:
+          gravity = kCAGravityBottomLeft;
+          break;
+
+        case GDK_SURFACE_EDGE_EAST:
+          gravity = kCAGravityBottomLeft;
+          break;
+
+        case GDK_SURFACE_EDGE_NORTH_EAST:
+          gravity = kCAGravityTopLeft;
+          break;
+        }
+
+      [[[self contentView] layer] setContentsGravity:gravity];
+    }
 
   initialResizeFrame = [self frame];
   initialResizeLocation = [self convertPointToScreen:[self mouseLocationOutsideOfEventStream]];

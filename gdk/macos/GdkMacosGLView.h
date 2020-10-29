@@ -1,6 +1,7 @@
-/* GdkMacosGLLayer.h
+/* GdkMacosGLView.h
  *
  * Copyright © 2020 Red Hat, Inc.
+ * Copyright © 2005-2007 Imendio AB
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,23 +19,23 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#include <AppKit/AppKit.h>
-#include <glib.h>
+#include <cairo.h>
 
-#define GDK_IS_MACOS_GL_LAYER(obj) ((obj) && [obj isKindOfClass:[GdkMacosGLLayer class]])
+#import "GdkMacosBaseView.h"
+
+#define GDK_IS_MACOS_GL_VIEW(obj) ((obj) && [obj isKindOfClass:[GdkMacosGLView class]])
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
-@interface GdkMacosGLLayer : CAOpenGLLayer
+@interface GdkMacosGLView : GdkMacosBaseView
 {
-  NSOpenGLContext *_shared;
-  GLuint _texture;
-  NSSize _pixelSize;
+  NSOpenGLContext *_openGLContext;
 }
 
--(id)initWithContext:(NSOpenGLContext *)shared;
--(void)setTexture:(GLuint)texture;
-
-@end
+-(void)setOpenGLContext:(NSOpenGLContext*)context;
+-(NSOpenGLContext *)openGLContext;
+-(void)invalidateRegion:(const cairo_region_t *)region;
 
 G_GNUC_END_IGNORE_DEPRECATIONS
+
+@end
