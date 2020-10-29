@@ -5,10 +5,9 @@ uniform float u_alpha;// = 1.0;
 uniform vec4 u_viewport;
 uniform vec4[3] u_clip_rect;
 
-#if GSK_GLES
-#elif GSK_LEGACY
+#if defined(GSK_LEGACY)
 _OUT_ vec4 outputColor;
-#else
+#elif !defined(GSK_GLES)
 _OUT_ vec4 outputColor;
 #endif
 
