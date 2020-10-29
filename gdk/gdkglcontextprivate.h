@@ -49,10 +49,6 @@ struct _GdkGLContextClass
                         GError **error);
 
   cairo_region_t * (* get_damage) (GdkGLContext *context);
-
-  gboolean (* texture_from_surface) (GdkGLContext    *context,
-                                     cairo_surface_t *surface,
-                                     cairo_region_t  *region);
 };
 
 typedef struct {
