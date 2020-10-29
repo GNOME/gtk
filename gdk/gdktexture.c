@@ -202,7 +202,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
   /**
    * GdkTexture:width:
    *
-   * The width of the texture.
+   * The width of the texture, in pixels.
    */
   properties[PROP_WIDTH] =
     g_param_spec_int ("width",
@@ -219,7 +219,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
   /**
    * GdkTexture:height:
    *
-   * The height of the texture.
+   * The height of the texture, in pixels.
    */
   properties[PROP_HEIGHT] =
     g_param_spec_int ("height",
@@ -281,7 +281,7 @@ gdk_texture_new_for_surface (cairo_surface_t *surface)
  * gdk_texture_new_for_pixbuf:
  * @pixbuf: a #GdkPixbuf
  *
- * Creates a new texture object representing the GdkPixbuf.
+ * Creates a new texture object representing the #GdkPixbuf.
  *
  * Returns: a new #GdkTexture
  */
@@ -316,7 +316,9 @@ gdk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
  * @resource_path: the path of the resource file
  *
  * Creates a new texture by loading an image from a resource.
- * The file format is detected automatically.
+ * The file format is detected automatically, and can be any
+ * format that is supported by the gdk-pixbuf library, such as
+ * JPEG or PNG.
  *
  * It is a fatal error if @resource_path does not specify a valid
  * image resource and the program will abort if that happens.
@@ -349,8 +351,12 @@ gdk_texture_new_from_resource (const char *resource_path)
  * @file: #GFile to load
  * @error: Return location for an error
  *
- * Creates a new texture by loading an image from a file.  The file format is
- * detected automatically. If %NULL is returned, then @error will be set.
+ * Creates a new texture by loading an image from a file.
+ * The file format is detected automatically, and can be any
+ * format that is supported by the gdk-pixbuf library, such as
+ * JPEG or PNG.
+ *
+ * If %NULL is returned, then @error will be set.
  *
  * Return value: A newly-created #GdkTexture or %NULL if an error occurred.
  **/
@@ -384,7 +390,7 @@ gdk_texture_new_from_file (GFile   *file,
  * gdk_texture_get_width:
  * @texture: a #GdkTexture
  *
- * Returns the width of @texture.
+ * Returns the width of @texture, in pixels.
  *
  * Returns: the width of the #GdkTexture
  */
@@ -400,7 +406,7 @@ gdk_texture_get_width (GdkTexture *texture)
  * gdk_texture_get_height:
  * @texture: a #GdkTexture
  *
- * Returns the height of the @texture.
+ * Returns the height of the @texture, in pixels.
  *
  * Returns: the height of the #GdkTexture
  */
@@ -573,4 +579,3 @@ gdk_texture_save_to_png (GdkTexture *texture,
 
   return result;
 }
-
