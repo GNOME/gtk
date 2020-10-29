@@ -22,6 +22,7 @@
 #define __EDGE_SNAPPING_H__
 
 #include "gdktypes.h"
+#include "gdkmacosutils-private.h"
 
 G_BEGIN_DECLS
 

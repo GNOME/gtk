@@ -33,4 +33,12 @@ queue_contains (GQueue *queue,
   return queue->head == link_ || link_->prev || link_->next;
 }
 
+struct _GdkPoint
+{
+  int x;
+  int y;
+};
+typedef struct _GdkPoint GdkPoint;
+
+
 #endif /* __GDK_MACOS_UTILS_PRIVATE_H__ */
