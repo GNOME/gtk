@@ -214,13 +214,15 @@ struct _GtkTextLineDisplay
   GtkTextLine *line;
 
   GdkRectangle block_cursor;
+
   guint cursors_invalid : 1;
   guint has_block_cursor : 1;
   guint cursor_at_line_end : 1;
   guint size_only : 1;
+  guint pg_bg_rgba_set : 1;
+  guint has_children : 1;
 
   GdkRGBA pg_bg_rgba;
-  guint pg_bg_rgba_set : 1;
 };
 
 #ifdef GTK_COMPILATION
@@ -336,6 +338,8 @@ GtkTextLineDisplay *gtk_text_layout_create_display (GtkTextLayout *layout,
                                                     gboolean       size_only);
 void     gtk_text_layout_update_display_cursors (GtkTextLayout      *layout,
                                                  GtkTextLine        *line,
+                                                 GtkTextLineDisplay *display);
+void     gtk_text_layout_update_children        (GtkTextLayout      *layout,
                                                  GtkTextLineDisplay *display);
 gboolean _gtk_text_layout_get_block_cursor    (GtkTextLayout     *layout,
 					       GdkRectangle      *pos);

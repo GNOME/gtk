@@ -2002,6 +2002,13 @@ allocate_child_widgets (GtkTextLayout      *text_layout,
   pango_layout_iter_free (run_iter);
 }
 
+void
+gtk_text_layout_update_children (GtkTextLayout      *text_layout,
+                                 GtkTextLineDisplay *display)
+{
+  allocate_child_widgets (text_layout, display);
+}
+
 static void
 convert_color (GdkRGBA        *result,
 	       PangoAttrColor *attr)
@@ -2662,6 +2669,8 @@ gtk_text_layout_create_display (GtkTextLayout *layout,
   pango_attr_list_unref (attrs);
   if (tags != NULL)
     g_ptr_array_free (tags, TRUE);
+
+  display->has_children = saw_widget;
 
   if (saw_widget)
     allocate_child_widgets (layout, display);
