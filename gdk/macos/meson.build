@@ -23,6 +23,7 @@ gdk_macos_sources = files([
   'GdkMacosBaseView.c',
   'GdkMacosCairoView.c',
   'GdkMacosCairoSubview.c',
+  'GdkMacosGLView.c',
   'GdkMacosWindow.c',
 ])
 
