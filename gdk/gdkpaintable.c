@@ -35,7 +35,7 @@ void            gtk_snapshot_pop                        (GdkSnapshot            
  * @Short_description: An interface for a paintable region
  * @See_also: #ClutterContent, #GtkImage, #GdkTexture, #GtkSnapshot
  *
- * #GdkPaintable is a simple interface used by GDK and GDK to represent
+ * #GdkPaintable is a simple interface used by GDK and GTK to represent
  * objects that can be painted anywhere at any size without requiring any
  * sort of layout. The interface is inspired by similar concepts elsewhere,
  * such as [ClutterContent](https://developer.gnome.org/clutter/stable/ClutterContent.html),
@@ -347,22 +347,22 @@ gdk_paintable_get_intrinsic_height (GdkPaintable *paintable)
  * @paintable: a #GdkPaintable
  *
  * Gets the preferred aspect ratio the @paintable would like to be displayed at.
- * The aspect ration is the width divided by the height, so a value of 0.5 means
+ * The aspect ratio is the width divided by the height, so a value of 0.5 means
  * that the @paintable prefers to be displayed twice as high as it is wide.
  * Consumers of this interface can use this to preserve aspect ratio when displaying
- * this paintable.
+ * the paintable.
  *
  * This is a purely informational value and does not in any way limit the values
  * that may be passed to gdk_paintable_snapshot().
  *
- * Usually when a @paintable returns non-0 values from
+ * Usually when a @paintable returns nonzero values from
  * gdk_paintable_get_intrinsic_width() and gdk_paintable_get_intrinsic_height()
  * the aspect ratio should conform to those values, though that is not required.
  *
- * If the @paintable does not have a preferred aspect ratio, it returns 0.0.
+ * If the @paintable does not have a preferred aspect ratio, it returns 0.
  * Negative values are never returned.
  *
- * Returns: the intrinsic aspect ratio of @paintable or 0.0 if none.
+ * Returns: the intrinsic aspect ratio of @paintable or 0 if none.
  */
 double
 gdk_paintable_get_intrinsic_aspect_ratio (GdkPaintable *paintable)
@@ -379,9 +379,9 @@ gdk_paintable_get_intrinsic_aspect_ratio (GdkPaintable *paintable)
  * gdk_paintable_invalidate_contents:
  * @paintable: a #GdkPaintable
  *
- * Called by implementations of #GdkPaintable to invalidate their contents.  
+ * Called by implementations of #GdkPaintable to invalidate their contents.
  * Unless the contents are invalidated, implementations must guarantee that
- * multiple calls to GdkPaintable::snapshot produce the same output.
+ * multiple calls of gdk_paintable_snapshot() produce the same output.
  *
  * This function will emit the #GdkPaintable::invalidate-contents signal.
  *
@@ -401,9 +401,9 @@ gdk_paintable_invalidate_contents (GdkPaintable *paintable)
  * gdk_paintable_invalidate_size:
  * @paintable: a #GdkPaintable
  *
- * Called by implementations of #GdkPaintable to invalidate their size.  
- * As long as the size is not invalidated, @paintable must return the same values
- * for its width, height and intrinsic height.
+ * Called by implementations of #GdkPaintable to invalidate their size.
+ * As long as the size is not invalidated, @paintable must return the same
+ * values for its intrinsic width, height and aspect ratio.
  *
  * This function will emit the #GdkPaintable::invalidate-size signal.
  *
@@ -435,7 +435,7 @@ gdk_paintable_invalidate_size (GdkPaintable *paintable)
  * @concrete_height: (out): will be set to the concrete height
  *     computed.
  *
- * Applies the sizing algorithm outlined in 
+ * Applies the sizing algorithm outlined in
  * https://drafts.csswg.org/css-images-3/#default-sizing
  * to the given @paintable. See that link for more details.
  *
