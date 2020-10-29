@@ -606,7 +606,11 @@ static struct {
  *
  * Creates an appropriate #GskRenderer instance for the given @surface.
  *
- * The renderer will be realized when it is returned.
+ * If the `GSK_RENDERER` environment variable is set, GSK will
+ * try that renderer first, before trying the backend-specific
+ * default. The ultimate fallback is the cairo renderer.
+ *
+ * The renderer will be realized before it is returned.
  *
  * Returns: (transfer full) (nullable): a #GskRenderer
  */
