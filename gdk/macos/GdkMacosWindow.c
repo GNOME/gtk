@@ -33,6 +33,7 @@
 #include "gdkmacossurface-private.h"
 #include "gdkmacospopupsurface-private.h"
 #include "gdkmacostoplevelsurface-private.h"
+#include "gdkmacosutils-private.h"
 
 #include "gdkmonitorprivate.h"
 #include "gdksurfaceprivate.h"

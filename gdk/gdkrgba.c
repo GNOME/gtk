@@ -32,10 +32,10 @@
 
 /**
  * SECTION:rgba_colors
+ * @Title: GdkRGBA
  * @Short_description: RGBA colors
- * @Title: RGBA Colors
  *
- * #GdkRGBA is a convenient way to pass rgba colors around.
+ * #GdkRGBA is a convenient way to pass colors around.
  * It’s based on cairo’s way to deal with colors and mirrors its behavior.
  * All values are in the range from 0.0 to 1.0 inclusive. So the color
  * (0.0, 0.0, 0.0, 0.0) represents transparent black and

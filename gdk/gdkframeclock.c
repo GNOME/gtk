@@ -29,11 +29,11 @@
 
 /**
  * SECTION:gdkframeclock
- * @Short_description: Frame clock syncs painting to a window or display
- * @Title: Frame clock
+ * @Title: GdkFrameClock
+ * @Short_description: Synchronizes painting to a surface
  *
- * A #GdkFrameClock tells the application when to update and repaint a
- * window. This may be synced to the vertical refresh rate of the
+ * A #GdkFrameClock tells the application when to update and repaint
+ * a surface. This may be synced to the vertical refresh rate of the
  * monitor, for example. Even when the frame clock uses a simple timer
  * rather than a hardware-based vertical sync, the frame clock helps
  * because it ensures everything paints at the same time (reducing the

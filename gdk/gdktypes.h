@@ -54,20 +54,6 @@ G_BEGIN_DECLS
 #define GDK_CURRENT_TIME     0L
 
 /**
- * GdkPoint:
- * @x: the x coordinate of the point
- * @y: the y coordinate of the point
- *
- * Defines the x and y coordinates of a point.
- */
-struct _GdkPoint
-{
-  int x;
-  int y;
-};
-typedef struct _GdkPoint              GdkPoint;
-
-/**
  * GdkRectangle:
  * @x: the x coordinate of the top left corner
  * @y: the y coordinate of the top left corner

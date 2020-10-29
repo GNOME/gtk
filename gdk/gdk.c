@@ -87,12 +87,12 @@
  */
 
 /**
- * GDK_WINDOWING_QUARTZ:
+ * GDK_WINDOWING_MACOS:
  *
- * The #GDK_WINDOWING_QUARTZ macro is defined if the Quartz backend
+ * The #GDK_WINDOWING_MACOS macro is defined if the MacOS backend
  * is supported.
  *
- * Use this macro to guard code that is specific to the Quartz backend.
+ * Use this macro to guard code that is specific to the MacOS backend.
  */
 
 /**
