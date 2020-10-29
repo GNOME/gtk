@@ -30,8 +30,14 @@
  * SECTION:gdktoplevel
  * @Short_description: Interface for toplevel surfaces
  * @Title: Toplevels
+ * @See_also: #GdkSurface, #GdkPopup
  *
  * A #GdkToplevel is a freestanding toplevel surface.
+ *
+ * The #GdkToplevel interface provides useful APIs for
+ * interacting with the windowing system, such as controlling
+ * maximization and size of the surface, setting icons and
+ * transient parents for dialogs.
  */
 
 G_DEFINE_INTERFACE (GdkToplevel, gdk_toplevel, GDK_TYPE_SURFACE)
