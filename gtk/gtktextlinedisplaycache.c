@@ -294,6 +294,9 @@ gtk_text_line_display_cache_get (GtkTextLineDisplayCache *cache,
           if (!size_only && display->line == cache->cursor_line)
             gtk_text_layout_update_display_cursors (layout, display->line, display);
 
+          if (!size_only && display->has_children)
+            gtk_text_layout_update_children (layout, display);
+
           /* Move to front of MRU */
           g_queue_unlink (&cache->mru, &display->mru_link);
           g_queue_push_head_link (&cache->mru, &display->mru_link);
@@ -321,6 +324,9 @@ gtk_text_line_display_cache_get (GtkTextLineDisplayCache *cache,
     {
       if (line == cache->cursor_line)
         gtk_text_layout_update_display_cursors (layout, line, display);
+
+      if (display->has_children)
+        gtk_text_layout_update_children (layout, display);
 
       gtk_text_line_display_cache_take_display (cache,
                                                 gtk_text_line_display_ref (display),
