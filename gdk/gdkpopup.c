@@ -27,9 +27,13 @@
  * SECTION:gdkpopup
  * @Short_description: Interface for popup surfaces
  * @Title: Popups
+ * @See_also: #GdkToplevel, #GdkSurface
  *
  * A #GdkPopup is a surface that is attached to another surface,
- * and is positioned relative to it.
+ * called its #GdkPopup:parent, and is positioned relative to it.
+ *
+ * #GdkPopups are typically used to implement menus and similar popups.
+ * They can be modal, which is indicated by the #GdkPopup:autohide property.
  */
 
 G_DEFINE_INTERFACE (GdkPopup, gdk_popup, GDK_TYPE_SURFACE)
