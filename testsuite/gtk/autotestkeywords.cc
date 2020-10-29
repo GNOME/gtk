@@ -4,9 +4,9 @@
 #include <gdk/broadway/gdkbroadway.h>
 #endif
 
-#ifdef GDK_WINDOWING_QUARTZ
+#ifdef GDK_WINDOWING_MACOS
 #if HAVE_OBJC
-#include <gdk/quartz/gdkquartz.h>
+#include <gdk/macos/gdkmacos.h>
 #endif
 #endif
 
