@@ -53,6 +53,12 @@
   return YES;
 }
 
+-(void)setNeedsDisplay:(BOOL)needsDisplay
+{
+  for (id child in [self subviews])
+    [child setNeedsDisplay:needsDisplay];
+}
+
 -(void)setCairoSurface:(cairo_surface_t *)cairoSurface
             withDamage:(cairo_region_t *)cairoRegion
 {
