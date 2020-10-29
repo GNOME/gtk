@@ -55,10 +55,17 @@
  * SECTION:gdksurface
  * @Short_description: Onscreen display areas in the target window system
  * @Title: Surfaces
+ * @See_also: #GdkToplevel, #GdkPopup
  *
  * A #GdkSurface is a (usually) rectangular region on the screen.
- * It’s a low-level object, used to implement high-level objects such as
- * #GtkWindow on the GTK level.
+ * It’s a low-level object, used to implement high-level objects
+ * such as #GtkWindow or #GtkDialog in GTK.
+ *
+ * The surfaces you see in practice are either #GdkToplevel or
+ * #GdkPopup, and those interfaces provide much of the required
+ * API to interact with these surfaces. Other, more specialized
+ * surface types exist, but you will rarely interact with them
+ * directly.
  */
 
 /**
