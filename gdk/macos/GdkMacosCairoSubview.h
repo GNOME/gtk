@@ -26,10 +26,12 @@
 {
   BOOL             _isOpaque;
   cairo_surface_t *cairoSurface;
+  cairo_region_t  *clip;
 }
 
 -(void)setOpaque:(BOOL)opaque;
 -(void)setCairoSurface:(cairo_surface_t *)cairoSurface
             withDamage:(cairo_region_t *)region;
+-(void)setClip:(cairo_region_t*)region;
 
 @end

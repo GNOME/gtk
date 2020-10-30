@@ -78,6 +78,7 @@
 
 -(void)setOpaqueRegion:(cairo_region_t *)region
 {
+  cairo_region_t *transparent_clip;
   NSRect abs_bounds;
   guint n_rects;
 
@@ -86,6 +87,17 @@
 
   abs_bounds = [self convertRect:[self bounds] toView:nil];
   n_rects = cairo_region_num_rectangles (region);
+
+  /* First, we create a clip region for the transparent region to use so that
+   * we dont end up exposing too much other than the corners on CSD.
+   */
+  transparent_clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
+    abs_bounds.origin.x, abs_bounds.origin.y,
+    abs_bounds.size.width, abs_bounds.size.height
+  });
+  cairo_region_subtract (transparent_clip, region);
+  [(GdkMacosCairoSubview *)self->transparent setClip:transparent_clip];
+  cairo_region_destroy (transparent_clip);
 
   /* The common case (at least for opaque windows and CSD) is that we will
    * have either one or two opaque rectangles. If we detect that the same
