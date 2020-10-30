@@ -18,6 +18,9 @@
     <file>demoimage.c</file>
     <file>demoimage.h</file>
   </gresource>
+  <gresource prefix="/constraints4">
+    <file>constraints.ui</file>
+  </gresource>
   <gresource prefix="/css_accordion">
     <file>css_accordion.css</file>
     <file>reset.css</file>
@@ -242,6 +245,7 @@
     <file>constraints.c</file>
     <file>constraints2.c</file>
     <file>constraints3.c</file>
+    <file>constraints4.c</file>
     <file>css_accordion.c</file>
     <file>css_basics.c</file>
     <file>css_blendmodes.c</file>
