@@ -946,38 +946,50 @@ gtk_font_chooser_widget_load_fonts (GtkFontChooserWidget *fontchooser,
       int             j, n_faces;
       const gchar    *fam_name = pango_font_family_get_name (families[i]);
 
-      pango_font_family_list_faces (families[i], &faces, &n_faces);
-
-      for (j = 0; j < n_faces; j++)
+      if ((priv->level & GTK_FONT_CHOOSER_LEVEL_STYLE) == 0)
         {
           GtkDelayedFontDescription *desc;
-          const gchar *face_name;
-          char *title;
+          PangoFontFace *face;
 
-          face_name = pango_font_face_get_face_name (faces[j]);
-
-          if ((priv->level & GTK_FONT_CHOOSER_LEVEL_STYLE) != 0)
-            title = g_strconcat (fam_name, " ", face_name, NULL);
-          else
-            title = g_strdup (fam_name);
-
-          desc = gtk_delayed_font_description_new (faces[j]);
+          face = pango_font_family_get_face (families[i], NULL);
+          desc = gtk_delayed_font_description_new (face);
 
           gtk_list_store_insert_with_values (list_store, &iter, -1,
                                              FAMILY_COLUMN, families[i],
-                                             FACE_COLUMN, faces[j],
+                                             FACE_COLUMN, face,
                                              FONT_DESC_COLUMN, desc,
-                                             PREVIEW_TITLE_COLUMN, title,
+                                             PREVIEW_TITLE_COLUMN, fam_name,
                                              -1);
 
-          g_free (title);
           gtk_delayed_font_description_unref (desc);
-
-          if ((priv->level & GTK_FONT_CHOOSER_LEVEL_STYLE) == 0)
-            break;
         }
+      else
+        {
+          pango_font_family_list_faces (families[i], &faces, &n_faces);
 
-      g_free (faces);
+          for (j = 0; j < n_faces; j++)
+            {
+              GtkDelayedFontDescription *desc;
+              const gchar *face_name;
+              char *title;
+
+              face_name = pango_font_face_get_face_name (faces[j]);
+              title = g_strconcat (fam_name, " ", face_name, NULL);
+              desc = gtk_delayed_font_description_new (faces[j]);
+
+              gtk_list_store_insert_with_values (list_store, &iter, -1,
+                                                 FAMILY_COLUMN, families[i],
+                                                 FACE_COLUMN, faces[j],
+                                                 FONT_DESC_COLUMN, desc,
+                                                 PREVIEW_TITLE_COLUMN, title,
+                                                 -1);
+
+              g_free (title);
+              gtk_delayed_font_description_unref (desc);
+            }
+
+          g_free (faces);
+        }
     }
 
   g_free (families);
