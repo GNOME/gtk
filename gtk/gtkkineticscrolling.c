@@ -145,7 +145,8 @@ gtk_kinetic_scrolling_init_overshoot (GtkKineticScrolling *data,
 gboolean
 gtk_kinetic_scrolling_tick (GtkKineticScrolling *data,
                             double               time_delta,
-                            double              *position)
+                            double              *position,
+                            double              *velocity)
 {
   switch(data->phase)
     {
@@ -213,6 +214,8 @@ gtk_kinetic_scrolling_tick (GtkKineticScrolling *data,
 
   if (position)
     *position = data->position;
+  if (velocity)
+    *velocity = data->velocity;
 
   return data->phase != GTK_KINETIC_SCROLLING_PHASE_FINISHED;
 }
