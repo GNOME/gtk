@@ -1696,8 +1696,13 @@ gtk_constraint_layout_custom_finished (GtkBuildable *buildable,
               continue;
             }
 
-          gtk_constraint_layout_add_constraint (data->layout, c);
+          layout_add_constraint (data->layout, c);
+          g_hash_table_add (data->layout->constraints, c);
+          if (data->layout->constraints_observer)
+            g_list_store_append (data->layout->constraints_observer, c);
         }
+
+      gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (data->layout));
 
       g_list_free_full (data->constraints, constraint_data_free);
       g_list_free_full (data->guides, guide_data_free);
