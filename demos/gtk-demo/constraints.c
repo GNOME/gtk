@@ -2,8 +2,15 @@
  * #Keywords: GtkLayoutManager
  *
  * GtkConstraintLayout provides a layout manager that uses relations
- * between widgets (also known as "constraints") to compute the position
+ * between widgets (also known as “constraints”) to compute the position
  * and size of each child.
+ *
+ * In addition to child widgets, the constraints can involve spacer
+ * objects (also known as “guides”). This example has a guide between
+ * the two buttons in the top row.
+ *
+ * Try resizing the window to see how the constraints react to update
+ * the layout.
  */
 
 #include <glib/gi18n.h>

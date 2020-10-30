@@ -1,8 +1,8 @@
 /* Constraints/Builder
  *
- * GtkConstraintLayouts can be created in .ui files, and
- * constraints can be set up at that time as well, as this
- * example demonstrates.
+ * GtkConstraintLayouts can be created in .ui files, and constraints can be
+ * set up at that time as well, as this example demonstrates. It uses the
+ * same setup as the “Simple” constraints demo.
  */
 
 #include <glib/gi18n.h>
@@ -23,8 +23,23 @@ constraints_grid_init (ConstraintsGrid *grid)
 }
 
 static void
+constraints_grid_dispose (GObject *object)
+{
+  GtkWidget *widget = GTK_WIDGET (object);
+  GtkWidget *child;
+
+  while ((child = gtk_widget_get_first_child (widget)))
+    gtk_widget_unparent (child);
+
+  G_OBJECT_CLASS (constraints_grid_parent_class)->dispose (object);
+}
+
+static void
 constraints_grid_class_init (ConstraintsGridClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->dispose = constraints_grid_dispose;
 }
 
 GtkWidget *

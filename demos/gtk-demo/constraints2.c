@@ -1,7 +1,7 @@
 /* Constraints/Interactive
  * #Keywords: GtkConstraintLayout
  *
- * Demonstrate how constraints can be updates during user interaction.
+ * This example shows how constraints can be updated during user interaction.
  * The vertical edge between the buttons can be dragged with the mouse.
  */
 
