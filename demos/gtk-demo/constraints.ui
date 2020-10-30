@@ -12,14 +12,6 @@
                      nat-width="100" nat-height="10"
                      max-width="200" max-height="20"
                      strength="strong"/>
-              <constraint target="button1" target-attribute="start"
-                          relation="ge"
-                          constant="0"
-                          strength="required"/>
-              <constraint target="button1" target-attribute="top"
-                          relation="ge"
-                          constant="0"
-                          strength="required"/>
               <constraint target="button1" target-attribute="width"
                           relation="le"
                           constant="200"
@@ -41,20 +33,20 @@
                           relation="eq"
                           source="button2" source-attribute="start"
                           strength="required"/>
-              <constraint target="button2" target-attribute="end"
+              <constraint target="super" target-attribute="end"
                           relation="eq"
-                          source="super" source-attribute="end"
-                          constant="-8"
+                          source="button2" source-attribute="end"
+                          constant="8"
                           strength="required"/>
               <constraint target="super" target-attribute="start"
                           relation="eq"
                           source="button3" source-attribute="start"
                           constant="-8"
                           strength="required"/>
-              <constraint target="button3" target-attribute="end"
+              <constraint target="super" target-attribute="end"
                           relation="eq"
-                          source="super" source-attribute="end"
-                          constant="-8"
+                          source="button3" source-attribute="end"
+                          constant="8"
                           strength="required"/>
               <constraint target="super" target-attribute="top"
                           relation="eq"
@@ -84,10 +76,10 @@
                           relation="eq"
                           source="button2" source-attribute="height"
                           strength="required"/>
-              <constraint target="button3" target-attribute="bottom"
+              <constraint target="super" target-attribute="bottom"
                           relation="eq"
-                          source="super" source-attribute="bottom"
-                          constant="-8"
+                          source="button3" source-attribute="bottom"
+                          constant="8"
                           strength="required"/>
             </constraints>
           </object>
