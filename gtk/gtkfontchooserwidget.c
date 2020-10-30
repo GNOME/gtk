@@ -942,8 +942,6 @@ gtk_font_chooser_widget_load_fonts (GtkFontChooserWidget *fontchooser,
   for (i = 0; i < n_families; i++)
     {
       GtkTreeIter     iter;
-      PangoFontFace **faces;
-      int             j, n_faces;
       const gchar    *fam_name = pango_font_family_get_name (families[i]);
 
       if ((priv->level & GTK_FONT_CHOOSER_LEVEL_STYLE) == 0)
@@ -951,7 +949,25 @@ gtk_font_chooser_widget_load_fonts (GtkFontChooserWidget *fontchooser,
           GtkDelayedFontDescription *desc;
           PangoFontFace *face;
 
+#if PANGO_VERSION_CHECK(1,46,0)
           face = pango_font_family_get_face (families[i], NULL);
+#else
+          {
+            PangoFontFace **faces;
+            int j, n_faces;
+            pango_font_family_list_faces (families[i], &faces, &n_faces);
+            face = faces[0];
+            for (j = 0; j < n_faces; j++)
+              {
+                if (strcmp (pango_font_face_get_face_name (faces[j]), "Regular") == 0)
+                  {
+                    face = faces[j];
+                    break;
+                  }
+              }
+            g_free (faces);
+          }
+#endif
           desc = gtk_delayed_font_description_new (face);
 
           gtk_list_store_insert_with_values (list_store, &iter, -1,
@@ -965,6 +981,9 @@ gtk_font_chooser_widget_load_fonts (GtkFontChooserWidget *fontchooser,
         }
       else
         {
+          PangoFontFace **faces;
+          int j, n_faces;
+
           pango_font_family_list_faces (families[i], &faces, &n_faces);
 
           for (j = 0; j < n_faces; j++)
