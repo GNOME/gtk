@@ -1867,7 +1867,10 @@ gtk_constraint_layout_add_guide (GtkConstraintLayout *layout,
   if (layout->guides_observer)
     g_list_store_append (layout->guides_observer, guide);
 
+  gtk_constraint_guide_update (guide);
+
   gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (layout));
+
 }
 
 /**
