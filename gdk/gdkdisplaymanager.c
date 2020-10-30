@@ -36,16 +36,6 @@
 #include "x11/gdkprivate-x11.h"
 #endif
 
-#ifdef GDK_WINDOWING_QUARTZ
-/* When the gdk_quartz_display_open function is removed We can
- * immediately include gdkquartzdisplaymanager.h here instead of
- * gdkprivate-quartz.h so that we won’t have to enable -xobjective-c
- * for the “generic” GDK source code.
- * #include "quartz/gdkquartzdisplaymanager.h"
- */
-#include "quartz/gdkprivate-quartz.h"
-#endif
-
 #ifdef GDK_WINDOWING_BROADWAY
 #include "broadway/gdkprivate-broadway.h"
 #endif
@@ -98,8 +88,8 @@
  *     }
  *   else
  * #endif
- * #ifdef GDK_WINDOWING_QUARTZ
- *   if (GDK_IS_QUARTZ_DISPLAY (display))
+ * #ifdef GDK_WINDOWING_MACOS
+ *   if (GDK_IS_MACOS_DISPLAY (display))
  *     {
  *       // make Quartz-specific calls here
 *     }
@@ -263,9 +253,6 @@ struct _GdkBackend {
 };
 
 static GdkBackend gdk_backends[] = {
-#ifdef GDK_WINDOWING_QUARTZ
-  { "quartz",   _gdk_quartz_display_open },
-#endif
 #ifdef GDK_WINDOWING_MACOS
   { "macos",   _gdk_macos_display_open },
 #endif
@@ -305,7 +292,7 @@ gdk_display_manager_get (void)
 
   if (manager == NULL)
     manager = g_object_new (GDK_TYPE_DISPLAY_MANAGER, NULL);
-  
+
   return manager;
 }
 
@@ -344,7 +331,7 @@ gdk_display_get_default (void)
  * gdk_display_manager_set_default_display:
  * @manager: a #GdkDisplayManager
  * @display: a #GdkDisplay
- * 
+ *
  * Sets @display as the default display.
  **/
 void
