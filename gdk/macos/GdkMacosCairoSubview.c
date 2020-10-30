@@ -32,6 +32,12 @@
 
 @implementation GdkMacosCairoSubview
 
+-(void)dealloc
+{
+  g_clear_pointer (&self->clip, cairo_region_destroy);
+  [super dealloc];
+}
+
 -(BOOL)isOpaque
 {
   return _isOpaque;
@@ -94,6 +100,21 @@
    */
   cr = cairo_create (dest);
   cairo_translate (cr, -abs_bounds.origin.x, -abs_bounds.origin.y);
+
+  /* Apply the clip if provided one */
+  if (self->clip != NULL)
+    {
+      cairo_rectangle_int_t area;
+
+      n_rects = cairo_region_num_rectangles (self->clip);
+      for (guint i = 0; i < n_rects; i++)
+        {
+          cairo_region_get_rectangle (self->clip, i, &area);
+          cairo_rectangle (cr, area.x, area.y, area.width, area.height);
+        }
+
+      cairo_clip (cr);
+    }
 
   /* Clip the cairo context based on the rectangles to be drawn
    * within the bounding box :rect.
@@ -166,6 +187,16 @@
 -(void)setOpaque:(BOOL)opaque
 {
   self->_isOpaque = opaque;
+}
+
+-(void)setClip:(cairo_region_t*)region
+{
+  if (region != self->clip)
+    {
+      g_clear_pointer (&self->clip, cairo_region_destroy);
+      if (region != NULL)
+        self->clip = cairo_region_reference (region);
+    }
 }
 
 @end
