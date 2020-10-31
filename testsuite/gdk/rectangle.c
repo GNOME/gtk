@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include <cairo-gobject.h>
 
 static void
 test_rectangle_equal (void)
@@ -65,6 +66,47 @@ test_rectangle_union (void)
   g_assert_true (gdk_rectangle_equal (&f, &g));
 }
 
+/* Test that GdkRectangle works as a boxed type */
+
+static void
+test_rectangle_type (void)
+{
+  GValue value = G_VALUE_INIT;
+  GdkRectangle b = { 5, 5, 10, 10 };
+  GdkRectangle *c;
+  GValue value2 = G_VALUE_INIT;
+  cairo_rectangle_int_t *c2;
+
+  g_value_init (&value, GDK_TYPE_RECTANGLE);
+  g_value_set_boxed (&value, &b);
+  c = g_value_get_boxed (&value);
+
+  g_assert_true (gdk_rectangle_equal (&b, c));
+
+  g_assert_true (g_value_type_transformable (GDK_TYPE_RECTANGLE, CAIRO_GOBJECT_TYPE_RECTANGLE_INT));
+  g_value_init (&value2, CAIRO_GOBJECT_TYPE_RECTANGLE_INT);
+  g_assert_true (g_value_transform (&value, &value2));
+  c2 = g_value_get_boxed (&value2);
+  g_assert_cmpint (c->x, ==, c2->x);
+  g_assert_cmpint (c->y, ==, c2->y);
+  g_assert_cmpint (c->width, ==, c2->width);
+  g_assert_cmpint (c->height, ==, c2->height);
+
+  g_value_unset (&value);
+  g_value_unset (&value2);
+}
+
+static void
+test_rectangle_contains (void)
+{
+  GdkRectangle b = { 5, 5, 5, 5 };
+
+  g_assert_true (gdk_rectangle_contains_point (&b, 5, 5));
+  g_assert_true (gdk_rectangle_contains_point (&b, 9, 9));
+  g_assert_false (gdk_rectangle_contains_point (&b, 4, 8));
+  g_assert_false (gdk_rectangle_contains_point (&b, 10, 6));
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -75,6 +117,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/rectangle/equal", test_rectangle_equal);
   g_test_add_func ("/rectangle/intersect", test_rectangle_intersect);
   g_test_add_func ("/rectangle/union", test_rectangle_union);
+  g_test_add_func ("/rectangle/type", test_rectangle_type);
+  g_test_add_func ("/rectangle/contains", test_rectangle_contains);
 
   return g_test_run ();
 }
