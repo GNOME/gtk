@@ -110,11 +110,23 @@ new_model (const char **strings)
 }
 
 static void
+test_string_object (void)
+{
+  GtkStringObject *so;
+
+  so = gtk_string_object_new ("Hello");
+  g_assert_cmpstr (gtk_string_object_get_string (so), ==, "Hello");
+  g_object_unref (so);
+}
+
+static void
 test_create_empty (void)
 {
   GtkStringList *list;
 
   list = new_model ((const char *[]){ NULL });
+
+  g_assert_true (g_type_is_a (g_list_model_get_item_type (G_LIST_MODEL (list)), G_TYPE_OBJECT));
 
   assert_model (list, "");
   assert_changes (list, "");
@@ -237,6 +249,7 @@ main (int argc, char *argv[])
 
   changes_quark = g_quark_from_static_string ("What did I see? Can I believe what I saw?");
 
+  g_test_add_func ("/stringobject/basic", test_string_object);
   g_test_add_func ("/stringlist/create/empty", test_create_empty);
   g_test_add_func ("/stringlist/create/strv", test_create_strv);
   g_test_add_func ("/stringlist/create/builder", test_create_builder);
