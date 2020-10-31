@@ -374,6 +374,8 @@ test_data = [
   'not-unclosed.ref.css',
   'nth-child.css',
   'nth-child.ref.css',
+  'number-values.css',
+  'number-values.ref.css',
   'opacity.css',
   'opacity.ref.css',
   'outline-color.css',
