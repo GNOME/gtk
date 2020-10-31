@@ -219,6 +219,7 @@ test_any_simple (void)
 {
   GtkFilterListModel *model;
   GtkFilter *any, *filter1, *filter2;
+  gpointer item;
 
   any = GTK_FILTER (gtk_any_filter_new ());
   filter1 = GTK_FILTER (gtk_custom_filter_new (divisible_by, GUINT_TO_POINTER (3), NULL));
@@ -232,6 +233,12 @@ test_any_simple (void)
 
   gtk_multi_filter_append (GTK_MULTI_FILTER (any), filter2);
   assert_model (model, "3 5 6 9 10 12 15 18 20");
+
+  g_assert_true (g_list_model_get_item_type (G_LIST_MODEL (any)) == GTK_TYPE_FILTER);
+  g_assert_cmpuint (2, ==, g_list_model_get_n_items (G_LIST_MODEL (any)));
+  item = g_list_model_get_item (G_LIST_MODEL (any), 1);
+  g_assert_true (GTK_FILTER (item) == filter2);
+  g_object_unref (item);
 
   gtk_multi_filter_remove (GTK_MULTI_FILTER (any), 0);
   assert_model (model, "5 10 15 20");
