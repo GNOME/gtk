@@ -197,6 +197,8 @@ test_data = [
   'calc.ref.css',
   'calc-simple.css',
   'calc-simple.ref.css',
+  'cdo-cdc.css',
+  'cdo-cdc.ref.css',
   'close-at-end-of-file.css',
   'close-at-end-of-file.errors',
   'close-at-end-of-file.ref.css',
