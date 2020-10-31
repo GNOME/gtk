@@ -1,3 +1,12 @@
+changetest_env = environment()
+changetest_env.set('GTK_TEST_ACCESSIBLE', '1')
+changetest_env.set('GSK_RENDERER', 'cairo')
+changetest_env.set('G_TEST_SRCDIR', meson.current_source_dir())
+changetest_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
+changetest_env.set('GIO_USE_VFS', 'local')
+changetest_env.set('GSETTINGS_BACKEND', 'memory')
+changetest_env.set('G_ENABLE_DIAGNOSTIC', '0')
+
 testexecdir = join_paths(installed_test_bindir, 'css', 'change')
 testdatadir = join_paths(installed_test_datadir, 'css')
 
@@ -13,7 +22,7 @@ test_change = executable(
 test('change', test_change,
   args: [ '--tap', '-k' ],
   protocol: 'tap',
-  env: csstest_env,
+  env: changetest_env,
   suite: 'css',
 )
 

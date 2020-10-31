@@ -1,3 +1,12 @@
+styletest_env = environment()
+styletest_env.set('GTK_TEST_ACCESSIBLE', '1')
+styletest_env.set('GSK_RENDERER', 'cairo')
+styletest_env.set('G_TEST_SRCDIR', meson.current_source_dir())
+styletest_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
+styletest_env.set('GIO_USE_VFS', 'local')
+styletest_env.set('GSETTINGS_BACKEND', 'memory')
+styletest_env.set('G_ENABLE_DIAGNOSTIC', '0')
+
 testexecdir = join_paths(installed_test_bindir, 'css', 'style')
 testdatadir = join_paths(installed_test_datadir, 'css')
 
@@ -19,7 +28,7 @@ test_style = executable(
 test('style', test_style,
   args: [ '--tap', '-k' ],
   protocol: 'tap',
-  env: csstest_env,
+  env: styletest_env,
   suite: 'css',
 )
 
