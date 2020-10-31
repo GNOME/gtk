@@ -1299,7 +1299,7 @@ render_gl_shader_node (GskGLRenderer       *self,
     }
 }
 
-/* Returns TRUE is applying transform to bounds
+/* Returns TRUE if applying @transform to @bounds
  * yields an axis-aligned rectangle
  */
 static gboolean
