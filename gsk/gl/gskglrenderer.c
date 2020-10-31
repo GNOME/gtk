@@ -826,8 +826,7 @@ render_text_node (GskGLRenderer   *self,
   lookup.data.font = (PangoFont *)font;
   lookup.data.scale = (guint) (text_scale * 1024);
 
-  /* We use one quad per character, unlike the other nodes which
-   * use at most one quad altogether */
+  /* We use one quad per character */
   for (i = 0; i < num_glyphs; i++)
     {
       const PangoGlyphInfo *gi = &glyphs[i];
