@@ -275,13 +275,15 @@ test_string_properties (void)
 {
   GtkFilterListModel *model;
   GtkFilter *filter;
+  GtkExpression *expr;
 
-  filter = GTK_FILTER (gtk_string_filter_new (
-               gtk_cclosure_expression_new (G_TYPE_STRING,
-                                            NULL,
-                                            0, NULL,
-                                            G_CALLBACK (get_spelled_out),
-                                            NULL, NULL)));
+  expr = gtk_cclosure_expression_new (G_TYPE_STRING,
+                                      NULL,
+                                      0, NULL,
+                                      G_CALLBACK (get_spelled_out),
+                                      NULL, NULL);
+  filter = GTK_FILTER (gtk_string_filter_new (expr));
+  g_assert_true (expr == gtk_string_filter_get_expression (GTK_STRING_FILTER (filter)));
 
   model = new_model (1000, filter);
   gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "thirte");
@@ -296,10 +298,16 @@ test_string_properties (void)
   gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "Thirteen");
   assert_model (model, "13");
 
+  gtk_string_filter_set_match_mode (GTK_STRING_FILTER (filter), GTK_STRING_FILTER_MATCH_MODE_PREFIX);
+  assert_model (model, "13");
+
   gtk_string_filter_set_match_mode (GTK_STRING_FILTER (filter), GTK_STRING_FILTER_MATCH_MODE_EXACT);
   assert_model (model, "13");
 
   gtk_string_filter_set_ignore_case (GTK_STRING_FILTER (filter), TRUE);
+  assert_model (model, "13");
+
+  gtk_string_filter_set_match_mode (GTK_STRING_FILTER (filter), GTK_STRING_FILTER_MATCH_MODE_PREFIX);
   assert_model (model, "13");
 
   gtk_string_filter_set_match_mode (GTK_STRING_FILTER (filter), GTK_STRING_FILTER_MATCH_MODE_SUBSTRING);
