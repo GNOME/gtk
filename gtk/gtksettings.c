@@ -21,7 +21,6 @@
 #include "gtksettingsprivate.h"
 
 #include "gtkcssproviderprivate.h"
-#include "gtkhslaprivate.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkscrolledwindow.h"
