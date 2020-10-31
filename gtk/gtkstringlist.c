@@ -95,27 +95,6 @@ gtk_string_object_finalize (GObject *object)
 }
 
 static void
-gtk_string_object_set_property (GObject      *object,
-                                guint         property_id,
-                                const GValue *value,
-                                GParamSpec   *pspec)
-{
-  GtkStringObject *self = GTK_STRING_OBJECT (object);
-
-  switch (property_id)
-    {
-    case PROP_STRING:
-      g_free (self->string);
-      self->string = g_value_dup_string (value);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-      break;
-    }
-}
-
-static void
 gtk_string_object_get_property (GObject    *object,
                                 guint       property_id,
                                 GValue     *value,
@@ -142,7 +121,6 @@ gtk_string_object_class_init (GtkStringObjectClass *class)
   GParamSpec *pspec;
 
   object_class->finalize = gtk_string_object_finalize;
-  object_class->set_property = gtk_string_object_set_property;
   object_class->get_property = gtk_string_object_get_property;
 
   pspec = g_param_spec_string ("string", "String", "String",
