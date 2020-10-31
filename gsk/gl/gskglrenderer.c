@@ -482,6 +482,50 @@ load_offscreen_vertex_data (GskQuadVertex    vertex_data[GL_N_VERTICES],
                     max_x, max_y);
 }
 
+static void
+load_float_vertex_data (GskQuadVertex    vertex_data[GL_N_VERTICES],
+                        RenderOpBuilder *builder,
+                        float            x,
+                        float            y,
+                        float            width,
+                        float            height)
+{
+  const float min_x = builder->dx + x;
+  const float min_y = builder->dy + y;
+  const float max_x = min_x + width;
+  const float max_y = min_y + height;
+
+  vertex_data[0].position[0] = min_x;
+  vertex_data[0].position[1] = min_y;
+  vertex_data[0].uv[0] = 0;
+  vertex_data[0].uv[1] = 0;
+
+  vertex_data[1].position[0] = min_x;
+  vertex_data[1].position[1] = max_y;
+  vertex_data[1].uv[0] = 0;
+  vertex_data[1].uv[1] = 1;
+
+  vertex_data[2].position[0] = max_x;
+  vertex_data[2].position[1] = min_y;
+  vertex_data[2].uv[0] = 1;
+  vertex_data[2].uv[1] = 0;
+
+  vertex_data[3].position[0] = max_x;
+  vertex_data[3].position[1] = max_y;
+  vertex_data[3].uv[0] = 1;
+  vertex_data[3].uv[1] = 1;
+
+  vertex_data[4].position[0] = min_x;
+  vertex_data[4].position[1] = max_y;
+  vertex_data[4].uv[0] = 0;
+  vertex_data[4].uv[1] = 1;
+
+  vertex_data[5].position[0] = max_x;
+  vertex_data[5].position[1] = min_y;
+  vertex_data[5].uv[0] = 1;
+  vertex_data[5].uv[1] = 0;
+}
+
 static void gsk_gl_renderer_setup_render_mode (GskGLRenderer   *self);
 static gboolean add_offscreen_ops             (GskGLRenderer   *self,
                                                RenderOpBuilder       *builder,
@@ -2148,15 +2192,30 @@ render_inset_shadow_node (GskGLRenderer   *self,
 
 }
 
+/* Spread *grows* the outline. The offset moves the shadow and leaves the
+ * inner rect where it was */
 static inline void
 render_unblurred_outset_shadow_node (GskGLRenderer   *self,
                                      GskRenderNode   *node,
                                      RenderOpBuilder *builder)
 {
   const GskRoundedRect *outline = gsk_outset_shadow_node_peek_outline (node);
+  const float x = node->bounds.origin.x;
+  const float y = node->bounds.origin.y;
+  const float w = node->bounds.size.width;
+  const float h = node->bounds.size.height;
   const float spread = gsk_outset_shadow_node_get_spread (node);
   const float dx = gsk_outset_shadow_node_get_dx (node);
   const float dy = gsk_outset_shadow_node_get_dy (node);
+  const float edge_sizes[] = { // Top, right, bottom, left
+    spread - dy, spread + dx, spread + dy, spread - dx
+  };
+  const float corner_sizes[][2] = { // top left, top right, bottom right, bottom left
+    { outline->corner[0].width + spread - dx, outline->corner[0].height + spread - dy },
+    { outline->corner[1].width + spread + dx, outline->corner[1].height + spread - dy },
+    { outline->corner[2].width + spread + dx, outline->corner[2].height + spread + dy },
+    { outline->corner[3].width + spread - dx, outline->corner[3].height + spread + dy },
+  };
 
   ops_set_program (builder, &self->programs->unblurred_outset_shadow_program);
   ops_set_unblurred_outset_shadow (builder, transform_rect (self, builder, outline),
@@ -2164,7 +2223,40 @@ render_unblurred_outset_shadow_node (GskGLRenderer   *self,
                                    gsk_outset_shadow_node_peek_color (node),
                                    dx, dy);
 
-  load_vertex_data (ops_draw (builder, NULL), node, builder);
+  /* Corners... */
+  if (corner_sizes[0][0] > 0 && corner_sizes[0][1] > 0) /* Top left */
+      load_float_vertex_data (ops_draw (builder, NULL), builder,
+                              x, y,
+                              corner_sizes[0][0], corner_sizes[0][1]);
+  if (corner_sizes[1][0] > 0 && corner_sizes[1][1] > 0) /* Top right */
+      load_float_vertex_data (ops_draw (builder, NULL), builder,
+                              x + w - corner_sizes[1][0], y,
+                              corner_sizes[1][0], corner_sizes[1][1]);
+  if (corner_sizes[2][0] > 0 && corner_sizes[2][1] > 0) /* Bottom right */
+      load_float_vertex_data (ops_draw (builder, NULL), builder,
+                              x + w - corner_sizes[2][0], y + h - corner_sizes[2][1],
+                              corner_sizes[2][0], corner_sizes[2][1]);
+  if (corner_sizes[3][0] > 0 && corner_sizes[3][1] > 0) /* Bottom left */
+      load_float_vertex_data (ops_draw (builder, NULL), builder,
+                              x, y + h - corner_sizes[3][1],
+                              corner_sizes[3][0], corner_sizes[3][1]);
+  /* Edges... */;
+  if (edge_sizes[0] > 0) /* Top */
+    load_float_vertex_data (ops_draw (builder, NULL), builder,
+                            x + corner_sizes[0][0], y,
+                            w - corner_sizes[0][0] - corner_sizes[1][0], edge_sizes[0]);
+  if (edge_sizes[1] > 0) /* Right */
+    load_float_vertex_data (ops_draw (builder, NULL), builder,
+                            x + w - edge_sizes[1], y + corner_sizes[1][1],
+                            edge_sizes[1], h - corner_sizes[1][1] - corner_sizes[2][1]);
+  if (edge_sizes[2] > 0) /* Bottom */
+    load_float_vertex_data (ops_draw (builder, NULL), builder,
+                            x + corner_sizes[3][0], y + h - edge_sizes[2],
+                            w - corner_sizes[3][0] - corner_sizes[2][0], edge_sizes[2]);
+  if (edge_sizes[3] > 0) /* Left */
+    load_float_vertex_data (ops_draw (builder, NULL), builder,
+                            x, y + corner_sizes[0][1],
+                            edge_sizes[3], h - corner_sizes[0][1] - corner_sizes[3][1]);
 }
 
 
