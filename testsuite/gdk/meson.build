@@ -6,6 +6,7 @@ tests = [
   'cairo',
   'clipboard',
   'display',
+  'displaymanager',
   'encoding',
   'keysyms',
   'memorytexture',
