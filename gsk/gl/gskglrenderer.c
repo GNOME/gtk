@@ -2621,10 +2621,7 @@ render_shadow_node (GskGLRenderer   *self,
       const float dy = shadow->dy;
       TextureRegion region;
       gboolean is_offscreen;
-      float min_x;
-      float min_y;
-      float max_x;
-      float max_y;
+      graphene_rect_t bounds;
 
       if (shadow->radius == 0 &&
           gsk_render_node_get_node_type (shadow_child) == GSK_TEXT_NODE)
@@ -2643,9 +2640,18 @@ render_shadow_node (GskGLRenderer   *self,
 
       if (shadow->radius > 0)
         {
+          float min_x;
+          float min_y;
+          float max_x;
+          float max_y;
+
           region.texture_id = 0;
           blur_node (self, shadow_child, builder, shadow->radius, NO_CACHE_PLZ, &region,
                      (float*[4]){&min_x, &max_x, &min_y, &max_y});
+          bounds.origin.x = min_x - builder->dx;
+          bounds.origin.y = min_y - builder->dy;
+          bounds.size.width = max_x - min_x;
+          bounds.size.height = max_y - min_y;
           is_offscreen = TRUE;
         }
       else if (dx == 0 && dy == 0)
@@ -2660,43 +2666,19 @@ render_shadow_node (GskGLRenderer   *self,
                                   RESET_CLIP | RESET_OPACITY | NO_CACHE_PLZ))
             g_assert_not_reached ();
 
-          min_x = builder->dx + shadow_child->bounds.origin.x;
-          min_y = builder->dy + shadow_child->bounds.origin.y;
-          max_x = min_x + shadow_child->bounds.size.width;
-          max_y = min_y + shadow_child->bounds.size.height;
+          bounds = shadow_child->bounds;
         }
 
       ops_set_program (builder, &self->programs->coloring_program);
       ops_set_color (builder, &shadow->color);
       ops_set_texture (builder, region.texture_id);
-      if (is_offscreen)
-        {
-          const GskQuadVertex offscreen_vertex_data[GL_N_VERTICES] = {
-            { { dx + min_x, dy + min_y }, { region.x,  region.y2 }, },
-            { { dx + min_x, dy + max_y }, { region.x,  region.y }, },
-            { { dx + max_x, dy + min_y }, { region.x2, region.y2 }, },
 
-            { { dx + max_x, dy + max_y }, { region.x2, region.y }, },
-            { { dx + min_x, dy + max_y }, { region.x,  region.y }, },
-            { { dx + max_x, dy + min_y }, { region.x2, region.y2 }, },
-          };
-
-          ops_draw (builder, offscreen_vertex_data);
-        }
-      else
-        {
-          const GskQuadVertex onscreen_vertex_data[GL_N_VERTICES] = {
-            { { dx + min_x, dy + min_y }, { region.x,  region.y }, },
-            { { dx + min_x, dy + max_y }, { region.x,  region.y2 }, },
-            { { dx + max_x, dy + min_y }, { region.x2, region.y }, },
-
-            { { dx + max_x, dy + max_y }, { region.x2, region.y2 }, },
-            { { dx + min_x, dy + max_y }, { region.x,  region.y2 }, },
-            { { dx + max_x, dy + min_y }, { region.x2, region.y }, },
-          };
-
-          ops_draw (builder, onscreen_vertex_data);
-        }
+      ops_offset (builder, dx, dy);
+      load_vertex_data_with_region (ops_draw (builder, NULL),
+                                    &bounds, builder,
+                                    &region,
+                                    is_offscreen);
+      ops_offset (builder, -dx, -dy);
     }
 
   /* Now draw the child normally */
