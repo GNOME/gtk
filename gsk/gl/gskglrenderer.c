@@ -388,15 +388,18 @@ load_vertex_data_with_region (GskQuadVertex          vertex_data[GL_N_VERTICES],
   vertex_data[5].uv[1] = y1;
 }
 
-static void
-load_vertex_data (GskQuadVertex    vertex_data[GL_N_VERTICES],
-                  GskRenderNode   *node,
-                  RenderOpBuilder *builder)
+static inline void
+load_float_vertex_data (GskQuadVertex    vertex_data[GL_N_VERTICES],
+                        RenderOpBuilder *builder,
+                        float            x,
+                        float            y,
+                        float            width,
+                        float            height)
 {
-  const float min_x = builder->dx + node->bounds.origin.x;
-  const float min_y = builder->dy + node->bounds.origin.y;
-  const float max_x = min_x + node->bounds.size.width;
-  const float max_y = min_y + node->bounds.size.height;
+  const float min_x = builder->dx + x;
+  const float min_y = builder->dy + y;
+  const float max_x = min_x + width;
+  const float max_y = min_y + height;
 
   vertex_data[0].position[0] = min_x;
   vertex_data[0].position[1] = min_y;
@@ -427,6 +430,16 @@ load_vertex_data (GskQuadVertex    vertex_data[GL_N_VERTICES],
   vertex_data[5].position[1] = min_y;
   vertex_data[5].uv[0] = 1;
   vertex_data[5].uv[1] = 0;
+}
+
+static void
+load_vertex_data (GskQuadVertex          vertex_data[GL_N_VERTICES],
+                  const graphene_rect_t *bounds,
+                  RenderOpBuilder       *builder)
+{
+  load_float_vertex_data (vertex_data, builder,
+                          bounds->origin.x, bounds->origin.y,
+                          bounds->size.width, bounds->size.height);
 }
 
 static void
@@ -482,49 +495,6 @@ load_offscreen_vertex_data (GskQuadVertex    vertex_data[GL_N_VERTICES],
                     max_x, max_y);
 }
 
-static void
-load_float_vertex_data (GskQuadVertex    vertex_data[GL_N_VERTICES],
-                        RenderOpBuilder *builder,
-                        float            x,
-                        float            y,
-                        float            width,
-                        float            height)
-{
-  const float min_x = builder->dx + x;
-  const float min_y = builder->dy + y;
-  const float max_x = min_x + width;
-  const float max_y = min_y + height;
-
-  vertex_data[0].position[0] = min_x;
-  vertex_data[0].position[1] = min_y;
-  vertex_data[0].uv[0] = 0;
-  vertex_data[0].uv[1] = 0;
-
-  vertex_data[1].position[0] = min_x;
-  vertex_data[1].position[1] = max_y;
-  vertex_data[1].uv[0] = 0;
-  vertex_data[1].uv[1] = 1;
-
-  vertex_data[2].position[0] = max_x;
-  vertex_data[2].position[1] = min_y;
-  vertex_data[2].uv[0] = 1;
-  vertex_data[2].uv[1] = 0;
-
-  vertex_data[3].position[0] = max_x;
-  vertex_data[3].position[1] = max_y;
-  vertex_data[3].uv[0] = 1;
-  vertex_data[3].uv[1] = 1;
-
-  vertex_data[4].position[0] = min_x;
-  vertex_data[4].position[1] = max_y;
-  vertex_data[4].uv[0] = 0;
-  vertex_data[4].uv[1] = 1;
-
-  vertex_data[5].position[0] = max_x;
-  vertex_data[5].position[1] = min_y;
-  vertex_data[5].uv[0] = 1;
-  vertex_data[5].uv[1] = 0;
-}
 
 static void gsk_gl_renderer_setup_render_mode (GskGLRenderer   *self);
 static gboolean add_offscreen_ops             (GskGLRenderer   *self,
@@ -899,7 +869,7 @@ render_border_node (GskGLRenderer   *self,
       ops_set_inset_shadow (builder, transform_rect (self, builder, rounded_outline),
                             widths[0], &colors[0], 0, 0);
 
-      load_vertex_data (ops_draw (builder, NULL), node, builder);
+      load_vertex_data (ops_draw (builder, NULL), &node->bounds, builder);
       return;
     }
 
@@ -1026,7 +996,7 @@ render_color_node (GskGLRenderer   *self,
 {
   ops_set_program (builder, &self->programs->color_program);
   ops_set_color (builder, gsk_color_node_peek_color (node));
-  load_vertex_data (ops_draw (builder, NULL), node, builder);
+  load_vertex_data (ops_draw (builder, NULL), &node->bounds, builder);
 }
 
 static inline void
@@ -1295,7 +1265,7 @@ render_gl_shader_node (GskGLRenderer       *self,
       static GdkRGBA pink = { 255 / 255., 105 / 255., 180 / 255., 1.0 };
       ops_set_program (builder, &self->programs->color_program);
       ops_set_color (builder, &pink);
-      load_vertex_data (ops_draw (builder, NULL), node, builder);
+      load_vertex_data (ops_draw (builder, NULL), &node->bounds, builder);
     }
 }
 
@@ -1489,7 +1459,7 @@ render_linear_gradient_node (GskGLRenderer   *self,
                                builder->dx + end->x,
                                builder->dy + end->y);
 
-      load_vertex_data (ops_draw (builder, NULL), node, builder);
+      load_vertex_data (ops_draw (builder, NULL), &node->bounds, builder);
     }
   else
     {
@@ -1523,7 +1493,7 @@ render_radial_gradient_node (GskGLRenderer   *self,
                                hradius * builder->scale_x,
                                vradius * builder->scale_y);
 
-      load_vertex_data (ops_draw (builder, NULL), node, builder);
+      load_vertex_data (ops_draw (builder, NULL), &node->bounds, builder);
     }
   else
     {
@@ -2033,7 +2003,7 @@ render_unblurred_inset_shadow_node (GskGLRenderer   *self,
                         gsk_inset_shadow_node_peek_color (node),
                         dx, dy);
 
-  load_vertex_data (ops_draw (builder, NULL), node, builder);
+  load_vertex_data (ops_draw (builder, NULL), &node->bounds, builder);
 }
 
 static inline void
