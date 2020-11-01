@@ -212,59 +212,6 @@ needs_explicit_setting (GParamSpec *pspec,
 }
 
 static gboolean
-keep_for_rewrite (const char *class_name,
-                  const char *property_name,
-                  PropKind kind)
-{
-  struct _Prop {
-    const char *class;
-    const char *property;
-    PropKind kind;
-  } props[] = {
-    { "GtkPopover", "modal", PROP_KIND_OBJECT },
-    { "GtkActionBar", "pack-type", PROP_KIND_PACKING },
-    { "GtkHeaderBar", "pack-type", PROP_KIND_PACKING },
-    { "GtkPopoverMenu", "submenu", PROP_KIND_PACKING },
-    { "GtkToolbar", "expand", PROP_KIND_PACKING },
-    { "GtkToolbar", "homogeneous", PROP_KIND_PACKING },
-    { "GtkPaned", "resize", PROP_KIND_PACKING },
-    { "GtkPaned", "shrink", PROP_KIND_PACKING },
-    { "GtkOverlay", "measure", PROP_KIND_PACKING },
-    { "GtkOverlay", "clip-overlay", PROP_KIND_PACKING },
-    { "GtkGrid", "column", PROP_KIND_PACKING },
-    { "GtkGrid", "row", PROP_KIND_PACKING },
-    { "GtkGrid", "width", PROP_KIND_PACKING },
-    { "GtkGrid", "height", PROP_KIND_PACKING },
-    { "GtkStack", "name", PROP_KIND_PACKING },
-    { "GtkStack", "title", PROP_KIND_PACKING },
-    { "GtkStack", "icon-name", PROP_KIND_PACKING },
-    { "GtkStack", "needs-attention", PROP_KIND_PACKING },
-  };
-  gboolean found;
-  int k;
-  char *canonical_name;
-
-  canonical_name = g_strdup (property_name);
-  g_strdelimit (canonical_name, "_", '-');
-
-  found = FALSE;
-  for (k = 0; k < G_N_ELEMENTS (props); k++)
-    {
-      if (strcmp (class_name, props[k].class) == 0 &&
-          strcmp (canonical_name, props[k].property) == 0 &&
-          kind == props[k].kind)
-        {
-          found = TRUE;
-          break;
-        }
-    }
-
-  g_free (canonical_name);
-
-  return found;
-}
-
-static gboolean
 has_attribute (Element    *elt,
                const char *name,
                const char *value)
@@ -656,10 +603,6 @@ property_can_be_omitted (Element      *element,
       else if (strcmp (element->attribute_names[i], "name") == 0)
         property_name = (const char *)element->attribute_values[i];
     }
-
-  if (data->convert3to4 &&
-      keep_for_rewrite (class_name, property_name, kind))
-    return FALSE; /* keep, will be rewritten */
 
   if (translatable)
     return FALSE;
