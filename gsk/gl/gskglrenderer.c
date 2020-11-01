@@ -581,28 +581,7 @@ init_shader_builder (GskGLRenderer       *self,
     }
 }
 
-static void G_GNUC_UNUSED
-add_rect_ops (RenderOpBuilder       *builder,
-              const graphene_rect_t *r)
-{
-  const float min_x = r->origin.x;
-  const float min_y = r->origin.y;
-  const float max_x = min_x + r->size.width;
-  const float max_y = min_y + r->size.height;
-
-  ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-    { { min_x, min_y }, { 0, 1 }, },
-    { { min_x, max_y }, { 0, 0 }, },
-    { { max_x, min_y }, { 1, 1 }, },
-
-    { { max_x, max_y }, { 1, 0 }, },
-    { { min_x, max_y }, { 0, 0 }, },
-    { { max_x, min_y }, { 1, 1 }, },
-  });
-}
-
 static GdkRGBA BLACK = {0, 0, 0, 1};
-
 static void G_GNUC_UNUSED
 add_rect_outline_ops (GskGLRenderer         *self,
                       RenderOpBuilder       *builder,
@@ -611,19 +590,20 @@ add_rect_outline_ops (GskGLRenderer         *self,
   ops_set_program (builder, &self->programs->color_program);
   ops_set_color (builder, &BLACK);
 
-  add_rect_ops (builder,
-                &GRAPHENE_RECT_INIT (rect->origin.x, rect->origin.y,
-                                     1, rect->size.height));
-  add_rect_ops (builder,
-                &GRAPHENE_RECT_INIT (rect->origin.x, rect->origin.y,
-                                     rect->size.width, 1));
-  add_rect_ops (builder,
-                &GRAPHENE_RECT_INIT (rect->origin.x + rect->size.width - 1, rect->origin.y,
-                                     1, rect->size.height));
-
-  add_rect_ops (builder,
-                &GRAPHENE_RECT_INIT (rect->origin.x, rect->origin.y + rect->size.height - 1,
-                                     rect->size.width, 1));
+  load_vertex_data (ops_draw (builder, NULL),
+                    &GRAPHENE_RECT_INIT (rect->origin.x, rect->origin.y, 1, rect->size.height),
+                    builder);
+  load_vertex_data (ops_draw (builder, NULL),
+                    &GRAPHENE_RECT_INIT (rect->origin.x, rect->origin.y, rect->size.width, 1),
+                    builder);
+  load_vertex_data (ops_draw (builder, NULL),
+                    &GRAPHENE_RECT_INIT (rect->origin.x + rect->size.width - 1,rect->origin.y,
+                                         1, rect->size.height),
+                    builder);
+  load_vertex_data (ops_draw (builder, NULL),
+                    &GRAPHENE_RECT_INIT (rect->origin.x, rect->origin.y + rect->size.height - 1,
+                                         rect->size.width, 1),
+                    builder);
 }
 
 static inline GskRoundedRect
