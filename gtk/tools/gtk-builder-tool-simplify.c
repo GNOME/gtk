@@ -1266,10 +1266,10 @@ rewrite_paned (Element *element,
     }
 
   if (child1)
-    rewrite_paned_child (element, data, child1, "child1");
+    rewrite_paned_child (element, data, child1, "start-child");
 
   if (child2)
-    rewrite_paned_child (element, data, child2, "child2");
+    rewrite_paned_child (element, data, child2, "end-child");
 }
 
 static void
