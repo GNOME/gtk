@@ -625,7 +625,7 @@ warn_missing_property (Element      *element,
   g_printerr (_("%s:%d: %sproperty %s::%s not found\n"),
               data->input_filename, element->line_number, kind_str[kind], class_name, property_name);
 }
-                       
+
 static gboolean
 property_can_be_omitted (Element      *element,
                          MyParserData *data)
@@ -2091,7 +2091,7 @@ dump_element (Element *element,
               g_fprintf (output, "]]>");
             }
           else
-            {          
+            {
               char *escaped = g_markup_escape_text (element->data, -1);
               g_fprintf (output, "%s", escaped);
               g_free (escaped);
