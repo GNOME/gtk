@@ -13,6 +13,7 @@ tests = [
   'rectangle',
   'rgba',
   'seat',
+  'texture',
 ]
 
 foreach t : tests
