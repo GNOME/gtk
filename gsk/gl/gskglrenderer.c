@@ -2360,15 +2360,8 @@ render_outset_shadow_node (GskGLRenderer   *self,
       /* Draw outline */
       ops_push_clip (builder, &scaled_outline);
       ops_set_color (builder, &COLOR_WHITE);
-      ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-        { { 0,                            }, { 0, 1 }, },
-        { { 0,             texture_height }, { 0, 0 }, },
-        { { texture_width,                }, { 1, 1 }, },
-
-        { { texture_width, texture_height }, { 1, 0 }, },
-        { { 0,             texture_height }, { 0, 0 }, },
-        { { texture_width,                }, { 1, 1 }, },
-      });
+      load_float_vertex_data (ops_draw (builder, NULL), builder,
+                              0, 0, texture_width, texture_height);
 
       ops_pop_clip (builder);
       ops_set_viewport (builder, &prev_viewport);
@@ -2398,9 +2391,8 @@ render_outset_shadow_node (GskGLRenderer   *self,
 
   if (!do_slicing)
     {
-      const float min_x = floorf (builder->dx + outline->bounds.origin.x - spread - (blur_extra / 2.0) + dx);
-      const float min_y = floorf (builder->dy + outline->bounds.origin.y - spread - (blur_extra / 2.0) + dy);
-      float x1, x2, y1, y2, tx1, tx2, ty1, ty2;
+      const float min_x = floorf (outline->bounds.origin.x - spread - (blur_extra / 2.0) + dx);
+      const float min_y = floorf (outline->bounds.origin.y - spread - (blur_extra / 2.0) + dy);
 
       ops_set_program (builder, &self->programs->outset_shadow_program);
       ops_set_color (builder, color);
@@ -2410,23 +2402,13 @@ render_outset_shadow_node (GskGLRenderer   *self,
       shadow->outline.value = transform_rect (self, builder, outline);
       shadow->outline.send = TRUE;
 
-      tx1 = 0; tx2 = 1;
-      ty1 = 0; ty2 = 1;
-
-      x1 = min_x;
-      x2 = min_x + texture_width / scale_x;
-      y1 = min_y;
-      y2 = min_y + texture_height / scale_y;
-
-      ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-        { { x1, y1 }, { tx1, ty2 }, },
-        { { x1, y2 }, { tx1, ty1 }, },
-        { { x2, y1 }, { tx2, ty2 }, },
-
-        { { x2, y2 }, { tx2, ty1 }, },
-        { { x1, y2 }, { tx1, ty1 }, },
-        { { x2, y1 }, { tx2, ty2 }, },
-      });
+      load_vertex_data_with_region (ops_draw (builder, NULL),
+                                    &GRAPHENE_RECT_INIT (
+                                      min_x, min_y,
+                                      texture_width / scale_x, texture_height / scale_y
+                                    ), builder,
+                                    &(TextureRegion) { 0, 0, 0, 1, 1 },
+                                    FALSE);
       return;
     }
 
