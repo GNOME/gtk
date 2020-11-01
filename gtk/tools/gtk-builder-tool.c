@@ -52,10 +52,65 @@ usage (void)
   exit (1);
 }
 
+#if !GLIB_CHECK_VERSION(2,67,0)
+static gboolean
+g_log_writer_default_would_drop (GLogLevelFlags  level,
+                                 const char     *domain)
+{
+  return (level & (G_LOG_LEVEL_ERROR |
+                   G_LOG_LEVEL_CRITICAL |
+                   G_LOG_LEVEL_WARNING)) == 0;
+}
+#endif
+
+static GLogWriterOutput
+log_writer_func (GLogLevelFlags   level,
+                 const GLogField *fields,
+                 gsize            n_fields,
+                 gpointer         user_data)
+{
+  gsize i;
+  const char *domain = NULL;
+  const char *message = NULL;
+
+  for (i = 0; i < n_fields; i++)
+    {
+      if (g_strcmp0 (fields[i].key, "GLIB_DOMAIN") == 0)
+        domain = fields[i].value;
+      else if (g_strcmp0 (fields[i].key, "MESSAGE") == 0)
+        message = fields[i].value;
+    }
+
+  if (message != NULL && !g_log_writer_default_would_drop (level, domain))
+    {
+      const char *prefix;
+      switch (level & G_LOG_LEVEL_MASK)
+        {
+        case G_LOG_LEVEL_ERROR:
+          prefix = "ERROR";
+          break;
+        case G_LOG_LEVEL_CRITICAL:
+          prefix = "CRITICAL";
+          break;
+        case G_LOG_LEVEL_WARNING:
+          prefix = "WARNING";
+          break;
+        default:
+          prefix = "INFO";
+          break;
+        }
+      g_printerr ("%s-%s: %s\n", domain, prefix, message);
+    }
+
+  return G_LOG_WRITER_HANDLED;
+}
+
 int
 main (int argc, const char *argv[])
 {
   g_set_prgname ("gtk-builder-tool");
+
+  g_log_set_writer_func (log_writer_func, NULL, NULL);
 
   gtk_init ();
 
