@@ -589,7 +589,7 @@ static gboolean
 property_is_boolean (Element      *element,
                      MyParserData *data)
 {
-  GParamSpec *pspec;
+  GParamSpec *pspec = NULL;
   const char *class_name;
   const char *property_name;
   int i;
@@ -605,7 +605,8 @@ property_is_boolean (Element      *element,
         property_name = (const char *)element->attribute_values[i];
     }
 
-  pspec = get_property_pspec (data, class_name, property_name, kind);
+  if (class_name && property_name)
+    pspec = get_property_pspec (data, class_name, property_name, kind);
   if (pspec)
     return G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_BOOLEAN;
 
