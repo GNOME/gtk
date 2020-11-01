@@ -1810,6 +1810,67 @@ rewrite_scale (Element      *element,
     }
 }
 
+static void
+rewrite_overlay (Element      *element,
+                 MyParserData *data)
+{
+  GList *l, *ll;
+
+  for (l = element->children; l; l = l->next)
+    {
+      Element *child = l->data;
+
+      if (g_str_equal (child->element_name, "child"))
+        {
+          Element *object = NULL;
+          Element *packing = NULL;
+
+          for (ll = child->children; ll; ll = ll->next)
+            {
+              Element *elt2 = ll->data;
+
+              if (g_str_equal (elt2->element_name, "object"))
+                object = elt2;
+
+              if (g_str_equal (elt2->element_name, "packing"))
+                packing = elt2;
+            }
+
+          if (object && packing)
+            {
+              child->children = g_list_remove (child->children, packing);
+
+              for (ll = packing->children; ll; ll = ll->next)
+                {
+                  Element *elt2 = ll->data;
+
+                  if (g_str_equal (elt2->element_name, "property") &&
+                      (has_attribute (elt2, "name", "pass-through") ||
+                       has_attribute (elt2, "name", "pass_through")))
+                    {
+                      const char *b = canonical_boolean_value (data, elt2->data);
+                      if (g_str_equal (b, "1"))
+                        {
+                          Element *new_prop = g_new0 (Element, 1);
+                          new_prop->element_name = g_strdup ("property");
+                          new_prop->attribute_names = g_new0 (char *, 2);
+                          new_prop->attribute_names[0] = g_strdup ("name");
+                          new_prop->attribute_values = g_new0 (char *, 2);
+                          new_prop->attribute_values[0] = g_strdup ("can-target");
+                          new_prop->data = g_strdup ("0");
+                          new_prop->parent = object;
+                          object->children = g_list_prepend (object->children, new_prop);
+                        }
+                      break;
+                    }
+                }
+
+              free_element (packing);
+            }
+        }
+    }
+}
+
 /* returns TRUE to remove the element from the parent */
 static gboolean
 simplify_element (Element      *element,
@@ -1922,7 +1983,7 @@ rewrite_element (Element      *element,
 
   if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkOverlay"))
-    rewrite_layout_props (element, data);
+    rewrite_overlay (element, data);
 
   if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkGrid"))
