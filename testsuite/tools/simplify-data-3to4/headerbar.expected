@@ -4,6 +4,11 @@
     <child type="titlebar">
       <object class="GtkHeaderBar" id="headerbar1">
         <property name="title-widget">box1</property>
+        <child type="end">
+          <object class="GtkButton">
+            <property name="label">A!</property>
+          </object>
+        </child>
       </object>
     </child>
   </object>
