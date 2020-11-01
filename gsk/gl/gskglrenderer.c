@@ -1877,16 +1877,10 @@ blur_texture (GskGLRenderer       *self,
   op->dir[1] = 0;
   ops_set_texture (builder, region->texture_id);
 
-  ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-    { { 0,                                            }, { region->x,  region->y2 }, },
-    { { 0,                     texture_to_blur_height }, { region->x,  region->y }, },
-    { { texture_to_blur_width,                        }, { region->x2, region->y2 }, },
-
-    { { texture_to_blur_width, texture_to_blur_height }, { region->x2, region->y }, },
-    { { 0,                     texture_to_blur_height }, { region->x,  region->y }, },
-    { { texture_to_blur_width,                        }, { region->x2, region->y2 }, },
-  });
-
+  load_vertex_data_with_region (ops_draw (builder, NULL),
+                                &GRAPHENE_RECT_INIT (0, 0, texture_to_blur_width, texture_to_blur_height),
+                                builder, region,
+                                FALSE);
 #if 0
   {
     static int k;
@@ -1905,15 +1899,10 @@ blur_texture (GskGLRenderer       *self,
   ops_set_texture (builder, pass1_texture_id);
   ops_set_render_target (builder, pass2_render_target);
   ops_begin (builder, OP_CLEAR);
-  ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) { /* render pass 2 */
-    { { 0,                                            }, { 0, 1 }, },
-    { { 0,                     texture_to_blur_height }, { 0, 0 }, },
-    { { texture_to_blur_width,                        }, { 1, 1 }, },
-
-    { { texture_to_blur_width, texture_to_blur_height }, { 1, 0 }, },
-    { { 0,                     texture_to_blur_height }, { 0, 0 }, },
-    { { texture_to_blur_width,                        }, { 1, 1 }, },
-  });
+  load_vertex_data_with_region (ops_draw (builder, NULL), /* render pass 2 */
+                                &GRAPHENE_RECT_INIT (0, 0, texture_to_blur_width, texture_to_blur_height),
+                                builder, region,
+                                FALSE);
 
 #if 0
   {
@@ -2133,15 +2122,8 @@ render_inset_shadow_node (GskGLRenderer   *self,
                             gsk_inset_shadow_node_peek_color (node),
                             dx * scale_x, dy * scale_y);
 
-      ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-        { { 0,             0              }, { 0, 1 }, },
-        { { 0,             texture_height }, { 0, 0 }, },
-        { { texture_width, 0              }, { 1, 1 }, },
-
-        { { texture_width, texture_height }, { 1, 0 }, },
-        { { 0,             texture_height }, { 0, 0 }, },
-        { { texture_width, 0              }, { 1, 1 }, },
-      });
+      load_float_vertex_data (ops_draw (builder, NULL), builder,
+                              0, 0, texture_width, texture_height);
 
       ops_set_render_target (builder, prev_render_target);
       ops_set_viewport (builder, &prev_viewport);
@@ -4386,16 +4368,8 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
     graphene_matrix_scale (&m, 1, -1, 1); /* Undo the scale init_projection_matrix() does again */
     ops_set_projection (&self->op_builder, &m);
 
-    ops_draw (&self->op_builder, (GskQuadVertex[GL_N_VERTICES]) {
-      { { 0,     0      }, { 0, 1 }, },
-      { { 0,     height }, { 0, 0 }, },
-      { { width, 0      }, { 1, 1 }, },
-
-      { { width, height }, { 1, 0 }, },
-      { { 0,     height }, { 0, 0 }, },
-      { { width, 0      }, { 1, 1 }, },
-    });
-
+    fill_vertex_data (ops_draw (&self->op_builder, NULL),
+                      0, 0, width, height);
     ops_pop_clip (&self->op_builder);
     gsk_gl_renderer_render_ops (self);
 
