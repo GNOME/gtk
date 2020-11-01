@@ -1342,46 +1342,6 @@ rewrite_dialog (Element *element,
 }
 
 static void
-rewrite_layout_props (Element *element,
-                      MyParserData *data)
-{
-  GList *l, *ll;
-
-  for (l = element->children; l; l = l->next)
-    {
-      Element *child = l->data;
-
-      if (g_str_equal (child->element_name, "child"))
-        {
-          Element *object = NULL;
-          Element *packing = NULL;
-
-          for (ll = child->children; ll; ll = ll->next)
-            {
-              Element *elt2 = ll->data;
-
-              if (g_str_equal (elt2->element_name, "object"))
-                object = elt2;
-
-              if (g_str_equal (elt2->element_name, "packing"))
-                packing = elt2;
-            }
-
-          if (object && packing)
-            {
-              child->children = g_list_remove (child->children, packing);
-
-              g_free (packing->element_name);
-              packing->element_name = g_strdup ("layout");
-
-              packing->parent = object;
-              object->children = g_list_append (object->children, packing);
-            }
-        }
-    }
-}
-
-static void
 rewrite_grid_layout_prop (Element *element,
                           const char *attr_name,
                           const char *old_value,
@@ -1880,6 +1840,72 @@ rewrite_toolbar (Element      *element,
   set_attribute_value (add_element (style, "class"), "name", "toolbar");
 }
 
+static void
+rewrite_fixed (Element      *element,
+               MyParserData *data)
+{
+  GList *l, *ll;
+
+  for (l = element->children; l; l = l->next)
+    {
+      Element *child = l->data;
+
+      if (g_str_equal (child->element_name, "child"))
+        {
+          Element *object = NULL;
+          Element *packing = NULL;
+
+          for (ll = child->children; ll; ll = ll->next)
+            {
+              Element *elt2 = ll->data;
+
+              if (g_str_equal (elt2->element_name, "object"))
+                object = elt2;
+
+              if (g_str_equal (elt2->element_name, "packing"))
+                packing = elt2;
+            }
+
+          if (object && packing)
+            {
+              int x = 0;
+              int y = 0;
+              Element *layout;
+              Element *new_prop;
+              GskTransform *transform;
+
+              for (ll = packing->children; ll; ll = ll->next)
+                {
+                  Element *elt2 = ll->data;
+                  GValue value = G_VALUE_INIT;
+
+                  if (has_attribute (elt2, "name", "x"))
+                    {
+                      if (gtk_builder_value_from_string_type (data->builder, G_TYPE_INT, elt2->data, &value, NULL))
+                        x = g_value_get_int (&value);
+                    }
+                  else if (has_attribute (elt2, "name", "y"))
+                    {
+                      if (gtk_builder_value_from_string_type (data->builder, G_TYPE_INT, elt2->data, &value, NULL))
+                        y = g_value_get_int (&value);
+                    }
+                }
+
+              child->children = g_list_remove (child->children, packing);
+              free_element (packing);
+
+              layout = add_element (object, "layout");
+              new_prop = add_element (layout, "property");
+              set_attribute_value (new_prop, "name", "transform");
+
+              transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (x, y));
+              new_prop->data = gsk_transform_to_string (transform);
+              gsk_transform_unref (transform);
+            }
+        }
+    }
+}
+
 /* returns TRUE to remove the element from the parent */
 static gboolean
 simplify_element (Element      *element,
@@ -2002,7 +2028,7 @@ rewrite_element (Element      *element,
 
   if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkFixed"))
-    rewrite_layout_props (element, data);
+    rewrite_fixed (element, data);
 
   if (element_is_object_or_template (element) &&
       (g_str_equal (get_class_name (element), "GtkAspectFrame") ||
