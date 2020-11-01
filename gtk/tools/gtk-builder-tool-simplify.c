@@ -484,6 +484,7 @@ set_attribute_value (Element *element,
                      const char *value)
 {
   int i;
+  int len;
 
   for (i = 0; element->attribute_names[i]; i++)
     {
@@ -494,6 +495,14 @@ set_attribute_value (Element *element,
           return;
         }
     }
+
+  len = g_strv_length (element->attribute_names);
+  element->attribute_names = g_realloc (element->attribute_names, len + 2);
+  element->attribute_values = g_realloc (element->attribute_values, len + 2);
+  element->attribute_names[len] = g_strdup (name);
+  element->attribute_values[len] = g_strdup (value);
+  element->attribute_names[len + 1] = NULL;
+  element->attribute_values[len + 1] = NULL;
 }
 
 static gboolean
@@ -1458,6 +1467,21 @@ rewrite_grid_layout (Element *element,
     }
 }
 
+static Element *
+add_element (Element    *parent,
+             const char *element_name)
+{
+  Element *child;
+
+  child = g_new0 (Element, 1);
+  child->parent = parent;
+  child->element_name = g_strdup (element_name);
+  child->attribute_names = g_new0 (char *, 1);
+  child->attribute_values = g_new0 (char *, 1);
+  parent->children = g_list_prepend (parent->children, child);
+
+  return child;
+}
 
 static Element *
 write_box_prop (Element *element,
@@ -1470,16 +1494,11 @@ write_box_prop (Element *element,
     g_free (element->data);
   else
     {
-      element = g_new0 (Element, 1);
-      element->parent = parent;
-      element->element_name = g_strdup ("property");
-      element->attribute_names = g_new0 (char *, 2);
-      element->attribute_names[0] = g_strdup ("name");
-      element->attribute_values = g_new0 (char *, 2);
-      element->attribute_values[0] = g_strdup (name);
-      parent->children = g_list_prepend (parent->children, element);
+      element = add_element (parent, "property");
+      set_attribute_value (element, "name", name);
     }
   element->data = g_strdup (value);
+
   return element;
 }
 
@@ -1691,27 +1710,16 @@ static void
 rewrite_radio_button (Element      *element,
                       MyParserData *data)
 {
-  int i;
   gboolean draw_indicator = TRUE;
-  const char *new_class;
 
   if (!remove_boolean_prop (element, data, "draw-indicator", &draw_indicator))
     remove_boolean_prop (element, data, "draw_indicator", &draw_indicator);
 
   if (draw_indicator)
-    new_class = "GtkCheckButton";
+    set_attribute_value (element, "class", "GtkCheckButton");
   else
-    new_class = "GtkToggleButton";
+    set_attribute_value (element, "class", "GtkToggleButton");
 
-  for (i = 0; element->attribute_names[i]; i++)
-    {
-      if (strcmp (element->attribute_names[i], "class") == 0)
-        {
-          g_free (element->attribute_values[i]);
-          element->attribute_values[i] = g_strdup (new_class);
-          break;
-        }
-    }
 }
 
 static gboolean
@@ -1741,15 +1749,9 @@ rewrite_scale (Element      *element,
       !has_prop (element, data, "draw_value"))
     {
       Element *child;
-      child = g_new0 (Element, 1);
-      child->parent = element;
-      child->element_name = g_strdup ("property");
-      child->attribute_names = g_new0 (char *, 2);
-      child->attribute_names[0] = g_strdup ("name");
-      child->attribute_values = g_new0 (char *, 2);
-      child->attribute_values[0] = g_strdup ("draw-value");
+      child = add_element (element, "property");
+      set_attribute_value (child, "name", "draw-value");
       child->data = g_strdup ("1");
-      element->children = g_list_prepend (element->children, child);
     }
 }
 
@@ -1794,15 +1796,11 @@ rewrite_overlay (Element      *element,
                       const char *b = canonical_boolean_value (data, elt2->data);
                       if (g_str_equal (b, "1"))
                         {
-                          Element *new_prop = g_new0 (Element, 1);
-                          new_prop->element_name = g_strdup ("property");
-                          new_prop->attribute_names = g_new0 (char *, 2);
-                          new_prop->attribute_names[0] = g_strdup ("name");
-                          new_prop->attribute_values = g_new0 (char *, 2);
-                          new_prop->attribute_values[0] = g_strdup ("can-target");
+                          Element *new_prop;
+
+                          new_prop = add_element (object, "property");
+                          set_attribute_value (new_prop, "name", "can-target");
                           new_prop->data = g_strdup ("0");
-                          new_prop->parent = object;
-                          object->children = g_list_prepend (object->children, new_prop);
                         }
                       break;
                     }
@@ -1812,6 +1810,74 @@ rewrite_overlay (Element      *element,
             }
         }
     }
+}
+
+static void
+rewrite_toolbar (Element      *element,
+                 MyParserData *data)
+{
+  GList *l, *ll;
+  Element *style = NULL;
+
+  set_attribute_value (element, "class", "GtkBox");
+
+  for (l = element->children; l; l = l->next)
+    {
+      Element *child = l->data;
+      Element *object = NULL;
+      Element *packing = NULL;
+
+      if (g_str_equal (child->element_name, "style"))
+        style = child;
+
+      if (!g_str_equal (child->element_name, "child"))
+        continue;
+
+      for (ll = child->children; ll; ll = ll->next)
+        {
+          Element *elt2 = ll->data;
+
+          if (g_str_equal (elt2->element_name, "object"))
+            object = elt2;
+
+          if (g_str_equal (elt2->element_name, "packing"))
+            packing = elt2;
+        }
+
+      if (object)
+        {
+          const char *class_name;
+
+          class_name = get_class_name (object);
+
+          if (g_str_equal (class_name, "GtkToolButton"))
+            {
+              set_attribute_value (object, "class", "GtkButton");
+            }
+          else if (g_str_equal (class_name, "GtkToggleToolButton") ||
+                   g_str_equal (class_name, "GtkRadioToolButton"))
+            {
+              set_attribute_value (object, "class", "GtkToggleButton");
+            }
+          else if (g_str_equal (class_name, "GtkSeparatorToolItem"))
+            {
+              Element *prop;
+
+              set_attribute_value (object, "class", "GtkSeparator");
+              prop = add_element (object, "property");
+              set_attribute_value (prop, "name", "orientation");
+              prop->data = g_strdup ("vertical");
+            }
+        }
+
+      if (packing)
+        child->children = g_list_remove (child->children, packing);
+    }
+
+  if (!style)
+    style = add_element (element, "style");
+
+  set_attribute_value (add_element (style, "class"), "name", "toolbar");
 }
 
 /* returns TRUE to remove the element from the parent */
@@ -1910,11 +1976,7 @@ rewrite_element (Element      *element,
 
   if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkToolbar"))
-    rewrite_child_prop_to_prop (element, data, "expand", "expand-item");
-
-  if (element_is_object_or_template (element) &&
-      g_str_equal (get_class_name (element), "GtkToolbar"))
-    rewrite_child_prop_to_prop (element, data, "homogeneous", "homogeneous");
+    rewrite_toolbar (element, data);
 
   if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkPaned"))
@@ -2020,15 +2082,11 @@ add_old_default_properties (Element      *element,
 
       if (!has_visible)
         {
-          Element *new_prop = g_new0 (Element, 1);
-          new_prop->parent = element;
-          new_prop->element_name = g_strdup ("property");
-          new_prop->attribute_names = g_new0 (char *, 2);
-          new_prop->attribute_names[0] = g_strdup ("name");
-          new_prop->attribute_values = g_new0 (char *, 2);
-          new_prop->attribute_values[0] = g_strdup ("visible");
+          Element *new_prop;
+
+          new_prop = add_element (element, "property");
+          set_attribute_value (new_prop, "name", "visible");
           new_prop->data = g_strdup ("0");
-          element->children = g_list_prepend (element->children, new_prop);
         }
     }
 }
