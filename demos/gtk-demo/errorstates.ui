@@ -5,7 +5,7 @@
     <property name="modal">1</property>
     <property name="resizable">0</property>
     <property name="use-header-bar">1</property>
-    <property name="title" translatable="yes">Settings</property>
+    <property name="title" translatable="yes">Error States</property>
     <property name="hide-on-close">1</property>
     <child internal-child="content_area">
       <object class="GtkBox">
