@@ -54,7 +54,77 @@ test_keysyms_xf86 (void)
   g_assert_cmpuint (gdk_keyval_from_name ("Display"), ==, GDK_KEY_Display);
 }
 
-int main (int argc, char *argv[])
+#define UNICODE_KEYVAL(wc) ((wc) | 0x01000000)
+
+static void
+test_key_case (void)
+{
+  struct {
+    guint lower;
+    guint upper;
+  } tests[] = {
+    { GDK_KEY_a, GDK_KEY_A },
+    { GDK_KEY_agrave, GDK_KEY_Agrave },
+    { GDK_KEY_thorn, GDK_KEY_Thorn },
+    { GDK_KEY_oslash, GDK_KEY_Oslash },
+    { GDK_KEY_aogonek, GDK_KEY_Aogonek },
+    { GDK_KEY_lstroke, GDK_KEY_Lstroke },
+    { GDK_KEY_scaron, GDK_KEY_Scaron },
+    { GDK_KEY_zcaron, GDK_KEY_Zcaron },
+    { GDK_KEY_racute, GDK_KEY_Racute },
+    { GDK_KEY_hstroke, GDK_KEY_Hstroke },
+    { GDK_KEY_jcircumflex, GDK_KEY_Jcircumflex },
+    { GDK_KEY_cabovedot, GDK_KEY_Cabovedot },
+    { GDK_KEY_rcedilla, GDK_KEY_Rcedilla },
+    { GDK_KEY_eng, GDK_KEY_ENG },
+    { GDK_KEY_amacron, GDK_KEY_Amacron },
+    { GDK_KEY_Serbian_dje, GDK_KEY_Serbian_DJE },
+    { GDK_KEY_Cyrillic_yu, GDK_KEY_Cyrillic_YU },
+    { GDK_KEY_Greek_alphaaccent, GDK_KEY_Greek_ALPHAaccent },
+    { GDK_KEY_Greek_omega, GDK_KEY_Greek_OMEGA },
+    { GDK_KEY_Greek_sigma, GDK_KEY_Greek_SIGMA },
+
+    { GDK_KEY_space, GDK_KEY_space },
+    { GDK_KEY_0, GDK_KEY_0 },
+    { GDK_KEY_KP_0, GDK_KEY_KP_0 },
+
+    /* Face Savouring Delicious Food */
+    { UNICODE_KEYVAL (0x1f60b), UNICODE_KEYVAL (0x1f60b) },
+  };
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (tests); i++)
+    {
+      g_assert_true (gdk_keyval_is_lower (tests[i].lower));
+      g_assert_true (gdk_keyval_is_upper (tests[i].upper));
+      g_assert_cmpuint (gdk_keyval_to_upper (tests[i].lower), ==, tests[i].upper);
+      g_assert_cmpuint (gdk_keyval_to_lower (tests[i].upper), ==, tests[i].lower);
+    }
+}
+
+static void
+test_key_unicode (void)
+{
+  struct {
+    guint key;
+    gunichar ch;
+  } tests[] = {
+    { GDK_KEY_a, 'a' },
+    { GDK_KEY_A, 'A' },
+    { GDK_KEY_EuroSign, 0x20ac },
+    { UNICODE_KEYVAL (0x1f60b), 0x1f60b },
+  };
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (tests); i++)
+    {
+      g_assert_cmpuint (gdk_keyval_to_unicode (tests[i].key), ==, tests[i].ch);
+      g_assert_cmpuint (gdk_unicode_to_keyval (tests[i].ch), ==, tests[i].key);
+    }
+}
+
+int
+main (int argc, char *argv[])
 {
   setlocale (LC_ALL, "");
 
@@ -64,6 +134,8 @@ int main (int argc, char *argv[])
   g_test_add_func ("/keysyms/basic", test_keysyms_basic);
   g_test_add_func ("/keysyms/void", test_keysyms_void);
   g_test_add_func ("/keysyms/xf86", test_keysyms_xf86);
+  g_test_add_func ("/keys/case", test_key_case);
+  g_test_add_func ("/keys/unicode", test_key_unicode);
 
   return g_test_run ();
 }

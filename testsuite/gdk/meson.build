@@ -6,12 +6,14 @@ tests = [
   'cairo',
   'clipboard',
   'display',
+  'displaymanager',
   'encoding',
   'keysyms',
   'memorytexture',
   'rectangle',
   'rgba',
   'seat',
+  'texture',
 ]
 
 foreach t : tests

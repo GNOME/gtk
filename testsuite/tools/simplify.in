@@ -7,13 +7,14 @@ TEST_RESULT_DIR=${TEST_RESULT_DIR:-/tmp}
 shopt -s nullglob
 TESTS=( "$TEST_DATA_DIR"/*.ui )
 
-echo "1..${#TESTS[*]}"
+echo "1..$((2 * ${#TESTS[*]}))"
 
 I=1
 for t in ${TESTS[*]}; do
   name=$(basename $t .ui)
   expected="$TEST_DATA_DIR/$name.expected"
   result="$TEST_RESULT_DIR/$name.out"
+  result2="$TEST_RESULT_DIR/$name.out2"
   diff="$TEST_RESULT_DIR/$name.diff"
   ref="$TEST_RESULT_DIR/$name.ref"
 
@@ -24,6 +25,19 @@ for t in ${TESTS[*]}; do
     rm "$diff"
   else
     echo "not ok $I $name"
+    cp "$expected" "$ref"
+  fi
+
+  I=$((I+1))
+
+  cp $t $result2
+  $GTK_BUILDER_TOOL simplify --replace $result2 2>/dev/null
+
+  if diff -u "$expected" "$result2" > "$diff"; then
+    echo "ok $I $name (--replace)"
+    rm "$diff"
+  else
+    echo "not ok $I $name (--replace)"
     cp "$expected" "$ref"
   fi
 

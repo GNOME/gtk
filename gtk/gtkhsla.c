@@ -22,24 +22,6 @@
 #include <math.h>
 
 void
-_gtk_hsla_init (GtkHSLA *hsla,
-                float    hue,
-                float    saturation,
-                float    lightness,
-                float    alpha)
-{
-  g_return_if_fail (hsla != NULL);
-
-  if (hue >= 0)
-    hsla->hue = fmod (hue, 360);
-  else
-    hsla->hue = fmod (hue, 360) + 360;
-  hsla->saturation = CLAMP (saturation, 0, 1);
-  hsla->lightness = CLAMP (lightness, 0, 1);
-  hsla->alpha = CLAMP (alpha, 0, 1);
-}
-
-void
 _gtk_hsla_init_from_rgba (GtkHSLA       *hsla,
                           const GdkRGBA *rgba)
 {

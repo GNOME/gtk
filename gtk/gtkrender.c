@@ -27,7 +27,6 @@
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssshadowvalueprivate.h"
 #include "gtkcsstransformvalueprivate.h"
-#include "gtkhslaprivate.h"
 #include "gtkrendericonprivate.h"
 #include "gtkstylecontextprivate.h"
 

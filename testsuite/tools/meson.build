@@ -5,7 +5,7 @@ bash = find_program('bash', required : false)
 if bash.found()
   test_env = environment()
 
-  foreach t : ['simplify', 'simplify-3to4', 'settings']
+  foreach t : ['simplify', 'simplify-3to4', 'validate', 'settings']
     if get_option('install-tests')
       configure_file(output: t,
                      input: '@0@.in'.format(t),
@@ -44,4 +44,5 @@ if get_option('install-tests')
 
   install_subdir('simplify-data', install_dir: testexecdir)
   install_subdir('simplify-data-3to4', install_dir: testexecdir)
+  install_subdir('validate-data', install_dir: testexecdir)
 endif

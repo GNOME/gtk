@@ -405,6 +405,7 @@ test_multi (void)
   GtkSorter *sorter1;
   GtkSorter *sorter2;
   GtkExpression *expression;
+  gpointer item;
 
   model = new_model (20, NULL);
   assert_not_model (model, "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20");
@@ -423,6 +424,12 @@ test_multi (void)
   sorter1 = GTK_SORTER (gtk_custom_sorter_new (compare_even, NULL, NULL));
   gtk_multi_sorter_append (GTK_MULTI_SORTER (sorter), sorter1);
   gtk_multi_sorter_append (GTK_MULTI_SORTER (sorter), sorter2);
+
+  g_assert_true (GTK_TYPE_SORTER == g_list_model_get_item_type (G_LIST_MODEL (sorter)));
+  g_assert_cmpuint (2, ==, g_list_model_get_n_items (G_LIST_MODEL (sorter)));
+  item = g_list_model_get_item (G_LIST_MODEL (sorter), 1);
+  g_assert_true (item == sorter2);
+  g_object_unref (item);
 
   assert_model (model, "2 4 6 8 10 12 14 16 18 20 1 3 5 7 9 11 13 15 17 19");
 

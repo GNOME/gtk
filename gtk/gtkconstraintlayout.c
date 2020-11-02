@@ -103,6 +103,8 @@
  * The "source" and "target" attributes can be set to "super" to indicate
  * that the constraint target is the widget using the GtkConstraintLayout.
  *
+ * There can be "constant" and "multiplier" attributes.
+ *
  * Additionally, the "constraints" element can also contain a description
  * of the #GtkConstraintGuides used by the layout:
  *
@@ -1327,6 +1329,7 @@ parse_int (const char *string,
 static GtkConstraint *
 constraint_data_to_constraint (const ConstraintData *data,
                                GtkBuilder           *builder,
+                               GHashTable           *guides,
                                GError              **error)
 {
   gpointer source, target;
@@ -1350,13 +1353,30 @@ constraint_data_to_constraint (const ConstraintData *data,
       source = NULL;
     }
   else
-    source = gtk_builder_get_object (builder, data->source_name);
+    {
+      if (g_hash_table_contains (guides, data->source_name))
+        source = g_hash_table_lookup (guides, data->source_name);
+      else
+        source = gtk_builder_get_object (builder, data->source_name);
+
+      if (source == NULL)
+        {
+          g_set_error (error, GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_INVALID_VALUE,
+                       "Unable to find source '%s' for constraint",
+                       data->source_name);
+          return NULL;
+        }
+    }
 
   if (g_strcmp0 (data->target_name, "super") == 0)
     target = NULL;
   else
     {
-      target = gtk_builder_get_object (builder, data->target_name);
+      if (g_hash_table_contains (guides, data->target_name))
+        target = g_hash_table_lookup (guides, data->target_name);
+      else
+        target = gtk_builder_get_object (builder, data->target_name);
 
       if (target == NULL)
         {
@@ -1623,6 +1643,9 @@ gtk_constraint_layout_custom_finished (GtkBuildable *buildable,
   if (strcmp (element_name, "constraints") == 0)
     {
       GList *l;
+      GHashTable *guides;
+
+      guides = g_hash_table_new (g_str_hash, g_str_equal);
 
       data->guides = g_list_reverse (data->guides);
       for (l = data->guides; l != NULL; l = l->next)
@@ -1630,16 +1653,25 @@ gtk_constraint_layout_custom_finished (GtkBuildable *buildable,
           const GuideData *gdata = l->data;
           GtkConstraintGuide *g;
           GError *error = NULL;
+          const char *name;
 
           g = guide_data_to_guide (gdata, builder, &error);
           if (error != NULL)
             {
-              g_critical ("Unable to parse guide definition: %s",
-                          error->message);
+              g_critical ("Unable to parse guide definition: %s", error->message);
               g_error_free (error);
               continue;
             }
 
+          name = gtk_constraint_guide_get_name (g);
+          if (g_hash_table_lookup (guides, name))
+            {
+              g_critical ("Duplicate guide: %s", name);
+              g_object_unref (g);
+              continue;
+            }
+
+          g_hash_table_insert (guides, (gpointer)name, g);
           gtk_constraint_layout_add_guide (data->layout, g);
         }
 
@@ -1650,7 +1682,7 @@ gtk_constraint_layout_custom_finished (GtkBuildable *buildable,
           GtkConstraint *c;
           GError *error = NULL;
 
-          c = constraint_data_to_constraint (cdata, builder, &error);
+          c = constraint_data_to_constraint (cdata, builder, guides, &error);
           if (error != NULL)
             {
               g_critical ("Unable to parse constraint definition '%s.%s [%s] %s.%s * %g + %g': %s",
@@ -1664,13 +1696,20 @@ gtk_constraint_layout_custom_finished (GtkBuildable *buildable,
               continue;
             }
 
-          gtk_constraint_layout_add_constraint (data->layout, c);
+          layout_add_constraint (data->layout, c);
+          g_hash_table_add (data->layout->constraints, c);
+          if (data->layout->constraints_observer)
+            g_list_store_append (data->layout->constraints_observer, c);
         }
+
+      gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (data->layout));
 
       g_list_free_full (data->constraints, constraint_data_free);
       g_list_free_full (data->guides, guide_data_free);
       g_object_unref (data->layout);
       g_free (data);
+
+      g_hash_table_unref (guides);
     }
 }
 
@@ -1828,7 +1867,10 @@ gtk_constraint_layout_add_guide (GtkConstraintLayout *layout,
   if (layout->guides_observer)
     g_list_store_append (layout->guides_observer, guide);
 
+  gtk_constraint_guide_update (guide);
+
   gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (layout));
+
 }
 
 /**

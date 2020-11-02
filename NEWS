@@ -9,21 +9,53 @@ Overview of Changes in master
 * GtkSearchEntry:
  - Add an icon
 
+* GtkDropDown:
+ - Polish the appearance
+
+* GtkColorChooser:
+ - Accessibility improvements
+
+* GtkPopoverMenu:
+ - Add accessibility support
+ - Allow custom items. This adds new API:
+   gtk_popover_menu_add/remove_child
+   gtk_popover_menu_bar_add/remove_child
+
+* GtkTextView:
+ - Fix rendering and positioning of anchored children
+
+* Media support:
+ - Use cubic instead of linear volume
+
 * Accessibility:
  - Implement Component for all widgets
  - Implement Text and EditableText for all editables
  - Rework accessible name/description computation
  - Add documentation for app and widget developers
- - Initial accessibility support for menus
+ - Handle HIDDEN state changes by adding/removing elements
+ - Support setting accessibility attributes in ui files
 
 * Introspection:
  - Add some missing annotations
 
+* gdk:
+ - Deliver events on flush
+ - Drop the unused GdkPoint struct from the API
+
 * Documentation:
  - Use GtkApplication in all examples
+ - Improve and expand the widget gallery
+
+* Build:
+ - Fix the build with cups 2.2.12
+ - Make cloudprint support build without warnings
 
 * OS X:
  - Fix various input issues
+ - Make GtkGLArea work (with the cairo backend)
+
+* Translation updates:
+ Polish
 
 
 Overview of Changes in 3.99.3

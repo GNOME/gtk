@@ -58,6 +58,15 @@ Test tests[] = {
   { "charset_base64",
     "data:text/plain;charset=ISO-8859-5;base64,wOPh29DdILjW0ePb0OLe0g==",
     "text/plain", CONTENTS("Руслан Ижбулатов") },
+  { "wrong_scheme",
+    "duda:,Hello",
+    NULL, NULL, 0 },
+  { "missing_comma",
+    "data:text/plain;charset=ISO-8859-1:bla",
+    NULL, NULL, 0 },
+  { "bad_escape",
+    "data:,abc%00",
+    NULL, NULL, -1 },
 };
 
 static void
@@ -70,17 +79,25 @@ test_parse (gconstpointer data)
 
   bytes = gtk_css_data_url_parse (test->url, &mimetype, &error);
 
-  g_assert (bytes != NULL);
-  g_assert_no_error (error);
-  if (test->mimetype == NULL)
-    g_assert (mimetype == NULL);
+  if (test->contents)
+    {
+      g_assert_nonnull (bytes);
+      g_assert_no_error (error);
+      if (test->mimetype == NULL)
+        g_assert (mimetype == NULL);
+      else
+        g_assert_cmpstr (mimetype, ==, test->mimetype);
+
+      g_assert_cmpmem (g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes),
+                       test->contents, test->contents_len);
+      g_bytes_unref (bytes);
+    }
   else
-    g_assert_cmpstr (mimetype, ==, test->mimetype);
-
-  g_assert_cmpmem (g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes),
-                   test->contents, test->contents_len);
-
-  g_bytes_unref (bytes);
+    {
+      g_assert_null (bytes);
+      g_assert_error (error, G_IO_ERROR, G_IO_ERROR_INVALID_FILENAME);
+      g_error_free (error);
+    }
 }
 
 int

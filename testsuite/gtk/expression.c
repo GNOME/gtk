@@ -61,6 +61,16 @@ test_property (void)
   g_object_unref (filter);
 }
 
+static void
+test_interface_property (void)
+{
+  GtkExpression *expr;
+
+  expr = gtk_property_expression_new (GTK_TYPE_ORIENTABLE, NULL, "orientation");
+  g_assert_cmpstr (gtk_property_expression_get_pspec (expr)->name, ==, "orientation");
+  gtk_expression_unref (expr);
+}
+
 static char *
 print_filter_info (GtkStringFilter         *filter,
                    const char              *search,
@@ -75,7 +85,7 @@ print_filter_info (GtkStringFilter         *filter,
 }
 
 static void
-test_closure (void)
+test_cclosure (void)
 {
   GValue value = G_VALUE_INIT;
   GtkExpression *expr, *pexpr[3];
@@ -127,11 +137,34 @@ test_closure (void)
   g_object_unref (filter);
 }
 
+static char *
+make_string (void)
+{
+  return g_strdup ("Hello");
+}
+
+static void
+test_closure (void)
+{
+  GValue value = G_VALUE_INIT;
+  GtkExpression *expr;
+  GClosure *closure;
+
+  closure = g_cclosure_new (G_CALLBACK (make_string), NULL, NULL);
+  expr = gtk_closure_expression_new (G_TYPE_STRING, closure, 0, NULL);
+  g_assert (gtk_expression_evaluate (expr, NULL, &value));
+  g_assert_cmpstr (g_value_get_string (&value), ==, "Hello");
+  g_value_unset (&value);
+
+  gtk_expression_unref (expr);
+}
+
 static void
 test_constant (void)
 {
   GtkExpression *expr;
   GValue value = G_VALUE_INIT;
+  const GValue *v;
   gboolean res;
 
   expr = gtk_constant_expression_new (G_TYPE_INT, 22);
@@ -141,6 +174,9 @@ test_constant (void)
   res = gtk_expression_evaluate (expr, NULL, &value);
   g_assert_true (res);
   g_assert_cmpint (g_value_get_int (&value), ==, 22);
+
+  v = gtk_constant_expression_get_value (expr);
+  g_assert_cmpint (g_value_get_int (v), ==, 22);
 
   gtk_expression_unref (expr);
 }
@@ -155,6 +191,7 @@ test_object (void)
   GObject *obj;
   GValue value = G_VALUE_INIT;
   gboolean res;
+  GObject *o;
 
   obj = G_OBJECT (gtk_string_filter_new (NULL));
 
@@ -166,6 +203,9 @@ test_object (void)
   g_assert_true (res);
   g_assert_true (g_value_get_object (&value) == obj);
   g_value_unset (&value);
+
+  o = gtk_object_expression_get_object (expr);
+  g_assert_true (o == obj);
 
   g_clear_object (&obj);
   res = gtk_expression_evaluate (expr, NULL, &value);
@@ -650,6 +690,9 @@ test_binds (void)
 
   expr2 = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, gtk_expression_ref (filter2_expr), "ignore-case");
 
+  g_assert_true (gtk_property_expression_get_expression (expr2) == filter2_expr);
+  g_assert_cmpstr (gtk_property_expression_get_pspec (expr2)->name, ==, "ignore-case");
+
   gtk_expression_bind (gtk_expression_ref (expr), filter3, "search", NULL);
   gtk_expression_bind (gtk_expression_ref (expr2), filter3, "ignore-case", NULL);
 
@@ -704,6 +747,28 @@ test_bind_object (void)
   g_object_unref (model);
 }
 
+static void
+test_value (void)
+{
+  GValue value = G_VALUE_INIT;
+  GtkExpression *expr;
+
+  expr = gtk_constant_expression_new (G_TYPE_INT, 22);
+
+  g_value_init (&value, GTK_TYPE_EXPRESSION);
+  gtk_value_take_expression (&value, expr);
+  g_assert_true (G_VALUE_TYPE (&value) == GTK_TYPE_EXPRESSION);
+
+  expr = gtk_value_dup_expression (&value);
+  gtk_expression_unref (expr);
+
+  expr = gtk_constant_expression_new (G_TYPE_INT, 23);
+  gtk_value_set_expression (&value, expr);
+  gtk_expression_unref (expr);
+
+  g_value_unset (&value);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -711,6 +776,8 @@ main (int argc, char *argv[])
   setlocale (LC_ALL, "C");
 
   g_test_add_func ("/expression/property", test_property);
+  g_test_add_func ("/expression/interface-property", test_interface_property);
+  g_test_add_func ("/expression/cclosure", test_cclosure);
   g_test_add_func ("/expression/closure", test_closure);
   g_test_add_func ("/expression/constant", test_constant);
   g_test_add_func ("/expression/constant-watch-this-destroyed", test_constant_watch_this_destroyed);
@@ -726,6 +793,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/expression/double-bind", test_double_bind);
   g_test_add_func ("/expression/binds", test_binds);
   g_test_add_func ("/expression/bind-object", test_bind_object);
+  g_test_add_func ("/expression/value", test_value);
 
   return g_test_run ();
 }

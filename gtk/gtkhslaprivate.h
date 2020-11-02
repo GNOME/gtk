@@ -31,11 +31,6 @@ struct _GtkHSLA {
   float alpha;
 };
 
-void            _gtk_hsla_init              (GtkHSLA          *hsla,
-                                             float             hue,
-                                             float             saturation,
-                                             float             lightness,
-                                             float             alpha);
 void            _gtk_hsla_init_from_rgba    (GtkHSLA          *hsla,
                                              const GdkRGBA    *rgba);
 /* Yes, I can name that function like this! */

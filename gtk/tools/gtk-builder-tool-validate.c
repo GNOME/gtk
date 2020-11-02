@@ -139,7 +139,7 @@ validate_file (const char *filename)
         }
       else
         {
-          g_printerr ("%s: %s\n", filename, error->message);
+          g_printerr ("%s\n", error->message);
           return FALSE;
         }
     }

@@ -2,6 +2,10 @@
  *
  * GtkConstraintLayout allows defining constraints using a
  * compact syntax called Visual Format Language, or VFL.
+ *
+ * A typical example of a VFL specification looks like this:
+ *
+ * H:|-[button1(==button2)]-12-[button2]-|
  */
 
 #include <glib/gi18n.h>

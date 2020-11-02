@@ -131,35 +131,6 @@ gtk_buildable_add_child (GtkBuildable *buildable,
 }
 
 /*< private >
- * gtk_buildable_set_buildable_property:
- * @buildable: a #GtkBuildable
- * @builder: a #GtkBuilder
- * @name: name of property
- * @value: value of property
- *
- * Sets the property name @name to @value on the @buildable object.
- */
-void
-gtk_buildable_set_buildable_property (GtkBuildable *buildable,
-				      GtkBuilder   *builder,
-				      const char   *name,
-				      const GValue *value)
-{
-  GtkBuildableIface *iface;
-
-  g_return_if_fail (GTK_IS_BUILDABLE (buildable));
-  g_return_if_fail (GTK_IS_BUILDER (builder));
-  g_return_if_fail (name != NULL);
-  g_return_if_fail (value != NULL);
-
-  iface = GTK_BUILDABLE_GET_IFACE (buildable);
-  if (iface->set_buildable_property)
-    (* iface->set_buildable_property) (buildable, builder, name, value);
-  else
-    g_object_set_property (G_OBJECT (buildable), name, value);
-}
-
-/*< private >
  * gtk_buildable_parser_finished:
  * @buildable: a #GtkBuildable
  * @builder: a #GtkBuilder

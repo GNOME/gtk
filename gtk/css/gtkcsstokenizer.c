@@ -1349,7 +1349,7 @@ gtk_css_tokenizer_read_token (GtkCssTokenizer  *tokenizer,
           tokenizer->data[3] == '-')
         {
           gtk_css_token_init (token, GTK_CSS_TOKEN_CDO);
-          gtk_css_tokenizer_consume (tokenizer, 3, 3);
+          gtk_css_tokenizer_consume (tokenizer, 4, 4);
         }
       else
         {

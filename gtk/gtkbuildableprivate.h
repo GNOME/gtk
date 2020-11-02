@@ -11,10 +11,6 @@ void      gtk_buildable_add_child              (GtkBuildable        *buildable,
                                                 GtkBuilder          *builder,
                                                 GObject             *child,
                                                 const char          *type);
-void      gtk_buildable_set_buildable_property (GtkBuildable        *buildable,
-                                                GtkBuilder          *builder,
-                                                const char          *name,
-                                                const GValue        *value);
 GObject * gtk_buildable_construct_child        (GtkBuildable        *buildable,
                                                 GtkBuilder          *builder,
                                                 const char          *name);

@@ -219,6 +219,7 @@ test_any_simple (void)
 {
   GtkFilterListModel *model;
   GtkFilter *any, *filter1, *filter2;
+  gpointer item;
 
   any = GTK_FILTER (gtk_any_filter_new ());
   filter1 = GTK_FILTER (gtk_custom_filter_new (divisible_by, GUINT_TO_POINTER (3), NULL));
@@ -232,6 +233,12 @@ test_any_simple (void)
 
   gtk_multi_filter_append (GTK_MULTI_FILTER (any), filter2);
   assert_model (model, "3 5 6 9 10 12 15 18 20");
+
+  g_assert_true (g_list_model_get_item_type (G_LIST_MODEL (any)) == GTK_TYPE_FILTER);
+  g_assert_cmpuint (2, ==, g_list_model_get_n_items (G_LIST_MODEL (any)));
+  item = g_list_model_get_item (G_LIST_MODEL (any), 1);
+  g_assert_true (GTK_FILTER (item) == filter2);
+  g_object_unref (item);
 
   gtk_multi_filter_remove (GTK_MULTI_FILTER (any), 0);
   assert_model (model, "5 10 15 20");
@@ -275,13 +282,15 @@ test_string_properties (void)
 {
   GtkFilterListModel *model;
   GtkFilter *filter;
+  GtkExpression *expr;
 
-  filter = GTK_FILTER (gtk_string_filter_new (
-               gtk_cclosure_expression_new (G_TYPE_STRING,
-                                            NULL,
-                                            0, NULL,
-                                            G_CALLBACK (get_spelled_out),
-                                            NULL, NULL)));
+  expr = gtk_cclosure_expression_new (G_TYPE_STRING,
+                                      NULL,
+                                      0, NULL,
+                                      G_CALLBACK (get_spelled_out),
+                                      NULL, NULL);
+  filter = GTK_FILTER (gtk_string_filter_new (expr));
+  g_assert_true (expr == gtk_string_filter_get_expression (GTK_STRING_FILTER (filter)));
 
   model = new_model (1000, filter);
   gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "thirte");
@@ -296,10 +305,16 @@ test_string_properties (void)
   gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "Thirteen");
   assert_model (model, "13");
 
+  gtk_string_filter_set_match_mode (GTK_STRING_FILTER (filter), GTK_STRING_FILTER_MATCH_MODE_PREFIX);
+  assert_model (model, "13");
+
   gtk_string_filter_set_match_mode (GTK_STRING_FILTER (filter), GTK_STRING_FILTER_MATCH_MODE_EXACT);
   assert_model (model, "13");
 
   gtk_string_filter_set_ignore_case (GTK_STRING_FILTER (filter), TRUE);
+  assert_model (model, "13");
+
+  gtk_string_filter_set_match_mode (GTK_STRING_FILTER (filter), GTK_STRING_FILTER_MATCH_MODE_PREFIX);
   assert_model (model, "13");
 
   gtk_string_filter_set_match_mode (GTK_STRING_FILTER (filter), GTK_STRING_FILTER_MATCH_MODE_SUBSTRING);
@@ -326,9 +341,11 @@ test_bool_simple (void)
   assert_model (model, "3 6 9 12 15 18");
 
   gtk_bool_filter_set_invert (GTK_BOOL_FILTER (filter), TRUE);
+  g_assert_true (gtk_bool_filter_get_invert (GTK_BOOL_FILTER (filter)));
   assert_model (model, "1 2 4 5 7 8 10 11 13 14 16 17 19 20");
 
   gtk_bool_filter_set_invert (GTK_BOOL_FILTER (filter), FALSE);
+  g_assert_false (gtk_bool_filter_get_invert (GTK_BOOL_FILTER (filter)));
   assert_model (model, "3 6 9 12 15 18");
 
   expr = gtk_cclosure_expression_new (G_TYPE_BOOLEAN,
@@ -337,6 +354,7 @@ test_bool_simple (void)
                                       G_CALLBACK (divisible_by),
                                       GUINT_TO_POINTER (5), NULL);
   gtk_bool_filter_set_expression (GTK_BOOL_FILTER (filter), expr);
+  g_assert_true (expr == gtk_bool_filter_get_expression (GTK_BOOL_FILTER (filter)));
   gtk_expression_unref (expr);
   assert_model (model, "5 10 15 20");
 

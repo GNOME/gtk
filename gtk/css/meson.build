@@ -47,7 +47,6 @@ libgtk_css = static_library('gtk_css',
                             c_args: [
                               '-DGTK_COMPILATION',
                               '-DG_LOG_DOMAIN="Gtk"',
-                              '-DG_LOG_STRUCTURED=1',
                             ] + common_cflags,
                             link_args: common_ldflags)
 

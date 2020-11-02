@@ -2,8 +2,15 @@
  * #Keywords: GtkLayoutManager
  *
  * GtkConstraintLayout provides a layout manager that uses relations
- * between widgets (also known as "constraints") to compute the position
+ * between widgets (also known as “constraints”) to compute the position
  * and size of each child.
+ *
+ * In addition to child widgets, the constraints can involve spacer
+ * objects (also known as “guides”). This example has a guide between
+ * the two buttons in the top row.
+ *
+ * Try resizing the window to see how the constraints react to update
+ * the layout.
  */
 
 #include <glib/gi18n.h>
@@ -234,15 +241,12 @@ simple_grid_init (SimpleGrid *self)
 
   self->button1 = gtk_button_new_with_label ("Child 1");
   gtk_widget_set_parent (self->button1, widget);
-  gtk_widget_set_name (self->button1, "button1");
 
   self->button2 = gtk_button_new_with_label ("Child 2");
   gtk_widget_set_parent (self->button2, widget);
-  gtk_widget_set_name (self->button2, "button2");
 
   self->button3 = gtk_button_new_with_label ("Child 3");
   gtk_widget_set_parent (self->button3, widget);
-  gtk_widget_set_name (self->button3, "button3");
 
   GtkLayoutManager *manager = gtk_widget_get_layout_manager (GTK_WIDGET (self));
   build_constraints (self, GTK_CONSTRAINT_LAYOUT (manager));
