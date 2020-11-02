@@ -1093,86 +1093,6 @@ rewrite_pack_type (Element *element,
 }
 
 static void
-rewrite_child_prop_to_prop_child (Element *element,
-                                  MyParserData *data,
-                                  const char *child_prop,
-                                  const char *prop)
-{
-  Element *object = NULL;
-  Element *replaced = NULL;
-  GList *l, *ll;
-
-  if (!g_str_equal (element->element_name, "child"))
-    return;
-
-  for (l = element->children; l; l = l->next)
-    {
-      Element *elt = l->data;
-
-      if (g_str_equal (elt->element_name, "object"))
-        object = elt;
-
-      if (g_str_equal (elt->element_name, "packing"))
-        {
-          for (ll = elt->children; ll; ll = ll->next)
-            {
-              Element *elt2 = ll->data;
-
-              if (g_str_equal (elt2->element_name, "property") &&
-                  has_attribute (elt2, "name", child_prop))
-                {
-                  replaced = elt2;
-                  elt->children = g_list_remove (elt->children, replaced);
-                  if (elt->children == NULL)
-                    {
-                      element->children = g_list_remove (element->children, elt);
-                      free_element (elt);
-                    }
-                  break;
-                }
-            }
-        }
-
-      if (replaced)
-        break;
-    }
-
-  if (replaced)
-    {
-      Element *elt;
-
-      elt = g_new0 (Element, 1);
-      elt->parent = element;
-      elt->element_name = g_strdup ("property");
-      elt->attribute_names = g_new0 (char *, 2);
-      elt->attribute_names[0] = g_strdup ("name");
-      elt->attribute_values = g_new0 (char *, 2);
-      elt->attribute_values[0] = g_strdup (prop);
-      elt->data = g_strdup (replaced->data);
-
-      object->children = g_list_prepend (object->children, elt);
-
-      free_element (replaced);
-    }
-}
-
-static void
-rewrite_child_prop_to_prop (Element *element,
-                            MyParserData *data,
-                            const char *child_prop,
-                            const char *prop)
-{
-  GList *l;
-
-  for (l = element->children; l; l = l->next)
-    {
-      Element *elt = l->data;
-      if (g_str_equal (elt->element_name, "child"))
-        rewrite_child_prop_to_prop_child (elt, data, child_prop, prop);
-    }
-}
-
-static void
 rewrite_paned_child (Element *element,
                      MyParserData *data,
                      Element *child,
@@ -1995,10 +1915,6 @@ rewrite_element (Element      *element,
       (g_str_equal (get_class_name (element), "GtkActionBar") ||
        g_str_equal (get_class_name (element), "GtkHeaderBar")))
     rewrite_pack_type (element, data);
-
-  if (element_is_object_or_template (element) &&
-      g_str_equal (get_class_name (element), "GtkPopoverMenu"))
-    rewrite_child_prop_to_prop (element, data, "submenu", "name");
 
   if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkToolbar"))
