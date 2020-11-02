@@ -132,6 +132,9 @@ gtk_list_base_get_position_from_allocation (GtkListBase           *self,
                                             guint                 *pos,
                                             cairo_rectangle_int_t *area)
 {
+  if (widget->priv->resize_needed)
+    return FALSE;
+
   return GTK_LIST_BASE_GET_CLASS (self)->get_position_from_allocation (self, across, along, pos, area);
 }
 
