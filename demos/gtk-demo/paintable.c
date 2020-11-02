@@ -1,4 +1,4 @@
-/* Paintable/A simple paintable
+/* Paintable/Simple Paintable
  *
  * GdkPaintable is an interface used by GTK for drawings of any sort
  * that do not require layouting or positioning.

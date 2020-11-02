@@ -34,7 +34,7 @@ do_layoutmanager (GtkWidget *parent)
       int i;
 
       window = gtk_window_new ();
-      gtk_window_set_title (GTK_WINDOW (window), "Layout Manager—Transition");
+      gtk_window_set_title (GTK_WINDOW (window), "Layout Manager — Transition");
       gtk_window_set_default_size (GTK_WINDOW (window), 600, 600);
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 

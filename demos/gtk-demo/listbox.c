@@ -1,4 +1,4 @@
-/* List Box/Complex list
+/* List Box/Complex
  *
  * GtkListBox allows lists with complicated layouts, using
  * regular widgets supporting sorting and filtering.
@@ -349,7 +349,7 @@ do_listbox (GtkWidget *do_widget)
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
-      gtk_window_set_title (GTK_WINDOW (window), "List Box");
+      gtk_window_set_title (GTK_WINDOW (window), "List Box — Complex");
       gtk_window_set_default_size (GTK_WINDOW (window), 400, 600);
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 

@@ -1,4 +1,4 @@
-/* Pango/Font rendering
+/* Pango/Font Rendering
  *
  * Demonstrates various aspects of font rendering.
  */

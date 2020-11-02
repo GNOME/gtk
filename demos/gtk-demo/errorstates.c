@@ -1,4 +1,4 @@
-/* Error states
+/* Error States
  *
  * GtkLabel and GtkEntry can indicate errors if you set the .error
  * style class on them.

@@ -1,4 +1,4 @@
-/* Paintable/A media stream
+/* Paintable/Media Stream
  *
  * GdkPaintable is also used by the GtkMediaStream class.
  *

@@ -11,6 +11,7 @@
   </object>
   <object class="GtkWindow" id="window">
     <property name="resizable">0</property>
+    <property name="title">Themes</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header">
         <child type="start">

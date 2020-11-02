@@ -1,4 +1,4 @@
-/* OpenGL/Transitions
+/* OpenGL/Transitions and Effects
  * #Keywords: OpenGL, shader, effect
  *
  * Create transitions between pages using a custom fragment shader.
@@ -282,11 +282,12 @@ create_gltransition_window (GtkWidget *do_widget)
 
   window = gtk_window_new ();
   gtk_window_set_display (GTK_WINDOW (window),  gtk_widget_get_display (do_widget));
-  gtk_window_set_title (GTK_WINDOW (window), "Transitions");
+  gtk_window_set_title (GTK_WINDOW (window), "Transitions and Effects");
   headerbar = gtk_header_bar_new ();
   scale = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, NULL);
   gtk_scale_set_draw_value (GTK_SCALE (scale), FALSE);
   gtk_widget_set_size_request (scale, 100, -1);
+  gtk_widget_set_tooltip_text (scale, "Transition duration");
   gtk_header_bar_pack_end (GTK_HEADER_BAR (headerbar), scale);
   gtk_window_set_titlebar (GTK_WINDOW (window), headerbar);
   gtk_window_set_default_size (GTK_WINDOW (window), 800, 600);
