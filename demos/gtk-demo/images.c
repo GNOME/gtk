@@ -346,9 +346,8 @@ do_images (GtkWidget *do_widget)
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
       gtk_box_append (GTK_BOX (hbox), vbox);
 
-      label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label),
-                            "<u>Image loaded from a file</u>");
+      label = gtk_label_new ("Image loaded from a file");
+      gtk_widget_add_css_class (label, "heading");
       gtk_box_append (GTK_BOX (vbox), label);
 
       frame = gtk_frame_new (NULL);
@@ -364,9 +363,8 @@ do_images (GtkWidget *do_widget)
 
       /* Animation */
 
-      label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label),
-                            "<u>Animation loaded from a file</u>");
+      label = gtk_label_new ("Animation loaded from a file");
+      gtk_widget_add_css_class (label, "heading");
       gtk_box_append (GTK_BOX (vbox), label);
 
       frame = gtk_frame_new (NULL);
@@ -380,9 +378,8 @@ do_images (GtkWidget *do_widget)
 
       /* Symbolic icon */
 
-      label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label),
-                            "<u>Symbolic themed icon</u>");
+      label = gtk_label_new ("Symbolic themed icon");
+      gtk_widget_add_css_class (label, "heading");
       gtk_box_append (GTK_BOX (vbox), label);
 
       frame = gtk_frame_new (NULL);
@@ -401,9 +398,8 @@ do_images (GtkWidget *do_widget)
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
       gtk_box_append (GTK_BOX (hbox), vbox);
 
-      label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label),
-                            "<u>Progressive image loading</u>");
+      label = gtk_label_new ("Progressive image loading");
+      gtk_widget_add_css_class (label, "heading");
       gtk_box_append (GTK_BOX (vbox), label);
 
       frame = gtk_frame_new (NULL);
@@ -424,9 +420,8 @@ do_images (GtkWidget *do_widget)
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
       gtk_box_append (GTK_BOX (hbox), vbox);
 
-      label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label),
-                            "<u>Displaying video</u>");
+      label = gtk_label_new ("Displaying video");
+      gtk_widget_add_css_class (label, "heading");
       gtk_box_append (GTK_BOX (vbox), label);
 
       frame = gtk_frame_new (NULL);
@@ -442,9 +437,8 @@ do_images (GtkWidget *do_widget)
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
       gtk_box_append (GTK_BOX (hbox), vbox);
 
-      label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label),
-                            "<u>GtkWidgetPaintable</u>");
+      label = gtk_label_new ("GtkWidgetPaintable");
+      gtk_widget_add_css_class (label, "heading");
       gtk_box_append (GTK_BOX (vbox), label);
 
       paintable = gtk_widget_paintable_new (do_widget);

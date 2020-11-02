@@ -1,4 +1,4 @@
-/* Paintable/An animated paintable
+/* Paintable/Animated Paintable
  *
  * GdkPaintable also allows paintables to change.
  *

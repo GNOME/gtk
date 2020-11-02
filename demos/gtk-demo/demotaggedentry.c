@@ -44,11 +44,23 @@ G_DEFINE_TYPE_WITH_CODE (DemoTaggedEntry, demo_tagged_entry, GTK_TYPE_WIDGET,
 static void
 demo_tagged_entry_init (DemoTaggedEntry *entry)
 {
+  GtkCssProvider *provider;
+
   entry->text = gtk_text_new ();
   gtk_widget_set_hexpand (entry->text, TRUE);
   gtk_widget_set_vexpand (entry->text, TRUE);
   gtk_widget_set_parent (entry->text, GTK_WIDGET (entry));
   gtk_editable_init_delegate (GTK_EDITABLE (entry));
+  gtk_editable_set_width_chars (GTK_EDITABLE (entry->text), 6);
+  gtk_editable_set_max_width_chars (GTK_EDITABLE (entry->text), 6);
+  gtk_widget_add_css_class (GTK_WIDGET (entry), "tagged");
+
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_resource (provider, "/tagged_entry/tagstyle.css");
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (provider),
+                                              800);
+  g_object_unref (provider);
 }
 
 static void
@@ -212,7 +224,6 @@ static void
 demo_tagged_entry_tag_init (DemoTaggedEntryTag *tag)
 {
   GtkGesture *gesture;
-  GtkCssProvider *provider;
 
   tag->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_parent (tag->box, GTK_WIDGET (tag));
@@ -222,13 +233,6 @@ demo_tagged_entry_tag_init (DemoTaggedEntryTag *tag)
   gesture = gtk_gesture_click_new ();
   g_signal_connect (gesture, "released", G_CALLBACK (on_released), tag);
   gtk_widget_add_controller (GTK_WIDGET (tag), GTK_EVENT_CONTROLLER (gesture));
-
-  provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_resource (provider, "/tagged_entry/tagstyle.css");
-  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                              GTK_STYLE_PROVIDER (provider),
-                                              800);
-  g_object_unref (provider);
 }
 
 static void

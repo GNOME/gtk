@@ -78,11 +78,11 @@ do_entry_completion (GtkWidget *do_widget)
       gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
-      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-      gtk_widget_set_margin_start (vbox, 5);
-      gtk_widget_set_margin_end (vbox, 5);
-      gtk_widget_set_margin_top (vbox, 5);
-      gtk_widget_set_margin_bottom (vbox, 5);
+      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
+      gtk_widget_set_margin_start (vbox, 18);
+      gtk_widget_set_margin_end (vbox, 18);
+      gtk_widget_set_margin_top (vbox, 18);
+      gtk_widget_set_margin_bottom (vbox, 18);
       gtk_window_set_child (GTK_WINDOW (window), vbox);
 
       label = gtk_label_new (NULL);

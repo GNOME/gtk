@@ -325,9 +325,8 @@ do_drawingarea (GtkWidget *do_widget)
       /*
        * Create the groups area
        */
-      label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label),
-                            "<u>Knockout groups</u>");
+      label = gtk_label_new ("Knockout groups");
+      gtk_widget_add_css_class (label, "heading");
       gtk_box_append (GTK_BOX (vbox), label);
 
       frame = gtk_frame_new (NULL);
@@ -344,9 +343,8 @@ do_drawingarea (GtkWidget *do_widget)
        * Create the scribble area
        */
 
-      label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label),
-                            "<u>Scribble area</u>");
+      label = gtk_label_new ("Scribble area");
+      gtk_widget_add_css_class (label, "heading");
       gtk_box_append (GTK_BOX (vbox), label);
 
       frame = gtk_frame_new (NULL);

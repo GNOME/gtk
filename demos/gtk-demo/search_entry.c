@@ -110,17 +110,17 @@ set_search_by (GSimpleAction *action,
   if (g_str_equal (term, "name"))
     {
       gtk_entry_set_icon_tooltip_text (entry, GTK_ENTRY_ICON_PRIMARY, "Search by name");
-      gtk_entry_set_placeholder_text (entry, "name");
+      gtk_entry_set_placeholder_text (entry, "Name…");
     }
   else if (g_str_equal (term, "description"))
     {
       gtk_entry_set_icon_tooltip_text (entry, GTK_ENTRY_ICON_PRIMARY, "Search by description");
-      gtk_entry_set_placeholder_text (entry, "description");
+      gtk_entry_set_placeholder_text (entry, "Description…");
     }
   else if (g_str_equal (term, "filename"))
     {
       gtk_entry_set_icon_tooltip_text (entry, GTK_ENTRY_ICON_PRIMARY, "Search by file name");
-      gtk_entry_set_placeholder_text (entry, "file name");
+      gtk_entry_set_placeholder_text (entry, "File name…");
     }
 }
 
@@ -254,7 +254,6 @@ do_search_entry (GtkWidget *do_widget)
 {
   GtkWidget *vbox;
   GtkWidget *hbox;
-  GtkWidget *label;
   GtkWidget *entry;
   GtkWidget *find_button;
   GtkWidget *cancel_button;
@@ -268,18 +267,14 @@ do_search_entry (GtkWidget *do_widget)
 
       g_object_weak_ref (G_OBJECT (window), search_entry_destroyed, &window);
 
-      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-      gtk_widget_set_margin_start (vbox, 5);
-      gtk_widget_set_margin_end (vbox, 5);
-      gtk_widget_set_margin_top (vbox, 5);
-      gtk_widget_set_margin_bottom (vbox, 5);
+      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
+      gtk_widget_set_margin_start (vbox, 18);
+      gtk_widget_set_margin_end (vbox, 18);
+      gtk_widget_set_margin_top (vbox, 18);
+      gtk_widget_set_margin_bottom (vbox, 18);
       gtk_window_set_child (GTK_WINDOW (window), vbox);
 
-      label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label), "Search entry demo");
-      gtk_box_append (GTK_BOX (vbox), label);
-
-      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
       gtk_box_append (GTK_BOX (vbox), hbox);
 
       /* Create our entry */

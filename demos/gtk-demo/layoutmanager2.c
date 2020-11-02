@@ -170,7 +170,7 @@ do_layoutmanager2 (GtkWidget *parent)
       int i;
 
       window = gtk_window_new ();
-      gtk_window_set_title (GTK_WINDOW (window), "Layout Manager—Transformation");
+      gtk_window_set_title (GTK_WINDOW (window), "Layout Manager — Transformation");
       gtk_window_set_default_size (GTK_WINDOW (window), 600, 620);
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
