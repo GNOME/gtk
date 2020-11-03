@@ -260,6 +260,8 @@ activate_about (GSimpleAction *action,
                 gpointer       user_data)
 {
   GtkApplication *app = user_data;
+  GtkWindow *window;
+  GtkWidget *button;
   const char *authors[] = {
     "Andrea Cimitan",
     "Cosimo Cecchi",
@@ -276,6 +278,10 @@ activate_about (GSimpleAction *action,
   GtkWidget *dialog;
 
   s = g_string_new ("");
+
+  window = gtk_application_get_active_window (app);
+  button = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "open_menubutton"));
+  gtk_menu_button_popdown (GTK_MENU_BUTTON (button));
 
   os_name = g_get_os_info (G_OS_INFO_KEY_NAME);
   os_version = g_get_os_info (G_OS_INFO_KEY_VERSION_ID);
@@ -324,6 +330,21 @@ activate_about (GSimpleAction *action,
   g_free (version);
   g_free (os_name);
   g_free (os_version);
+}
+
+static void
+activate_shortcuts_window (GSimpleAction *action,
+                           GVariant      *parameter,
+                           gpointer       user_data)
+{
+  GtkApplication *app = user_data;
+  GtkWindow *window;
+  GtkWidget *button;
+
+  window = gtk_application_get_active_window (app);
+  button = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "open_menubutton"));
+  gtk_menu_button_popdown (GTK_MENU_BUTTON (button));
+  gtk_widget_activate_action (GTK_WIDGET (window), "win.show-help-overlay", NULL);
 }
 
 static void
@@ -2371,6 +2392,7 @@ main (int argc, char *argv[])
   GAction *action;
   static GActionEntry app_entries[] = {
     { "about", activate_about, NULL, NULL, NULL },
+    { "shortcuts", activate_shortcuts_window, NULL, NULL, NULL },
     { "quit", activate_quit, NULL, NULL, NULL },
     { "inspector", activate_inspector, NULL, NULL, NULL },
     { "main", NULL, "s", "'steak'", NULL },
