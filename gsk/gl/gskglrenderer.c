@@ -306,10 +306,10 @@ color_matrix_modifies_alpha (GskRenderNode *node)
 static inline void
 gsk_rounded_rect_shrink_to_minimum (GskRoundedRect *self)
 {
-  self->bounds.size.width = ceilf (MAX (MAX (self->corner[0].width, self->corner[1].width),
-                                        MAX (self->corner[2].width, self->corner[3].width)) * 2);
-  self->bounds.size.height = ceilf (MAX (MAX (self->corner[0].height, self->corner[1].height),
-                                         MAX (self->corner[2].height, self->corner[3].height)) * 2);
+  self->bounds.size.width  = MAX (self->corner[0].width + self->corner[1].width,
+                                  self->corner[3].width + self->corner[2].width);
+  self->bounds.size.height = MAX (self->corner[0].height + self->corner[3].height,
+                                  self->corner[1].height + self->corner[2].height);
 }
 
 static inline gboolean G_GNUC_PURE
