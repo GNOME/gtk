@@ -1080,12 +1080,12 @@ gtk_icon_paintable_get_icon_name() and set the icon name on a #GtkImage.
 
 ### Update to GtkFileChooser API changes
 
-GtkFileChooser moved to a GFile-based API. If you need to convert a
-path or a URI, use g_file_new_for_path(), g_file_new_for_commandline_arg(),
-or g_file_new_for_uri(); similarly, if you need to get a path or a URI
-from a GFile, use g_file_get_path(), or g_file_get_uri(). With the
-removal or path and URI-based functions, the "local-only" property has
-been removed; GFile can be used to access non-local as well as local
+GtkFileChooser moved to a GFile-based API. If you need to convert a path
+or a URI, use g_file_new_for_path(), g_file_new_for_commandline_arg(),
+or g_file_new_for_uri(); similarly, if you need to get a path, name or URI
+from a GFile, use g_file_get_path(), g_file_get_basename() or g_file_get_uri().
+With the removal or path and URI-based functions, the "local-only" property
+has been removed; GFile can be used to access non-local as well as local
 resources.
 
 The GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER action has been removed. Use

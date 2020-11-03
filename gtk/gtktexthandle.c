@@ -116,21 +116,18 @@ gtk_text_handle_present_surface (GtkTextHandle *handle)
   GdkPopupLayout *layout;
   GdkRectangle rect;
   GtkRequisition req;
-  double x, y;
+  GtkWidget *parent;
 
   gtk_widget_get_preferred_size (widget, NULL, &req);
   gtk_text_handle_get_padding (handle, &handle->border);
 
-  rect.x = handle->pointing_to.x;
-  rect.y = handle->pointing_to.y + handle->pointing_to.height - handle->border.top;
+  parent = gtk_widget_get_parent (widget);
+  gtk_widget_get_surface_allocation (parent, &rect);
+
+  rect.x += handle->pointing_to.x;
+  rect.y += handle->pointing_to.y + handle->pointing_to.height - handle->border.top;
   rect.width = req.width - handle->border.left - handle->border.right;
   rect.height = 1;
-
-  gtk_widget_translate_coordinates (gtk_widget_get_parent (widget),
-                                    gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW),
-                                    rect.x, rect.y, &x, &y);
-  rect.x = x;
-  rect.y = y;
 
   if (handle->role == GTK_TEXT_HANDLE_ROLE_CURSOR)
     rect.x -= rect.width / 2;
@@ -420,6 +417,8 @@ gtk_text_handle_update_for_role (GtkTextHandle *handle)
       gtk_widget_remove_css_class (widget, "bottom");
       gtk_widget_remove_css_class (widget, "insertion-cursor");
     }
+
+  gtk_widget_queue_draw (widget);
 }
 
 static void

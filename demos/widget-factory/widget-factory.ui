@@ -51,7 +51,7 @@
       </item>
       <item>
         <attribute name="label" translatable="yes">_Keyboard Shortcuts</attribute>
-        <attribute name="action">win.show-help-overlay</attribute>
+        <attribute name="action">app.shortcuts</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_About Widget Factory</attribute>
@@ -3220,7 +3220,7 @@ bad things might happen.</property>
           <object class="GtkMenuButton">
             <property name="halign">end</property>
             <property name="icon-name">emblem-system-symbolic</property>
-            <property name="menu-model">gear_menu</property>
+            <property name="menu-model">gear_menu_model</property>
             <property name="tooltip-text">This is a menu button</property>
             <layout>
               <property name="column">1</property>

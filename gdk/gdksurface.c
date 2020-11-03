@@ -1408,13 +1408,9 @@ impl_surface_add_update_area (GdkSurface     *impl_surface,
 void
 gdk_surface_queue_render (GdkSurface *surface)
 {
-  cairo_region_t *region;
-
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  region = cairo_region_create ();
-  impl_surface_add_update_area (surface, region);
-  cairo_region_destroy (region);
+  gdk_surface_invalidate_rect (surface, NULL);
 }
 
 /*
@@ -1495,7 +1491,9 @@ gdk_surface_freeze_updates (GdkSurface *surface)
 
   surface->update_freeze_count++;
   if (surface->update_freeze_count == 1)
+    {
     _gdk_frame_clock_uninhibit_freeze (surface->frame_clock);
+    }
 }
 
 /*
