@@ -2695,7 +2695,10 @@ check_autohide (GdkEvent *event)
       device = gdk_event_get_device (event);
       if (gdk_device_grab_info (display, device, &grab_surface, NULL))
         {
-          if (grab_surface != gdk_event_get_surface (event) &&
+          GdkSurface *event_surface = gdk_event_get_surface (event);
+
+          if (grab_surface != event_surface &&
+              grab_surface != event_surface->parent &&
               grab_surface->autohide)
             {
               hide_popup_chain (grab_surface);
