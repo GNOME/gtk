@@ -24,6 +24,9 @@ Overview of Changes in master
 * GtkTextView:
  - Fix rendering and positioning of anchored children
 
+* Constraints:
+ - Fix loading constraints from ui files
+
 * Media support:
  - Use cubic instead of linear volume
 
@@ -42,9 +45,21 @@ Overview of Changes in master
  - Deliver events on flush
  - Drop the unused GdkPoint struct from the API
 
+* Demos:
+ - Add another constraints demo
+ - Tweak various demos to improve consistency
+
+* Tools:
+ - Improve gtk4-builder-tool handling of various
+   widgets when converting ui files from GTK 3
+
 * Documentation:
  - Use GtkApplication in all examples
  - Improve and expand the widget gallery
+
+* Testsuite:
+ - Improve coverage of GDK
+ - Improve coverage of gtk4-builder-tool
 
 * Build:
  - Fix the build with cups 2.2.12
@@ -55,6 +70,7 @@ Overview of Changes in master
  - Make GtkGLArea work (with the cairo backend)
 
 * Translation updates:
+ German
  Polish
 
 
