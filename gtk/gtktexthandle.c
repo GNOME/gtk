@@ -417,6 +417,8 @@ gtk_text_handle_update_for_role (GtkTextHandle *handle)
       gtk_widget_remove_css_class (widget, "bottom");
       gtk_widget_remove_css_class (widget, "insertion-cursor");
     }
+
+  gtk_widget_queue_draw (widget);
 }
 
 static void
