@@ -347,7 +347,7 @@ do_images (GtkWidget *do_widget)
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
       gtk_box_append (GTK_BOX (hbox), vbox);
 
-      label = gtk_label_new ("Image loaded from a file");
+      label = gtk_label_new ("Image from a resource");
       gtk_widget_add_css_class (label, "heading");
       gtk_box_append (GTK_BOX (vbox), label);
 
@@ -356,7 +356,7 @@ do_images (GtkWidget *do_widget)
       gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
       gtk_box_append (GTK_BOX (vbox), frame);
 
-      image = gtk_image_new_from_icon_name ("gtk3-demo");
+      image = gtk_image_new_from_resource ("/images/org.gtk.Demo4.svg");
       gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
 
       gtk_frame_set_child (GTK_FRAME (frame), image);
@@ -364,7 +364,7 @@ do_images (GtkWidget *do_widget)
 
       /* Animation */
 
-      label = gtk_label_new ("Animation loaded from a file");
+      label = gtk_label_new ("Animation from a resource");
       gtk_widget_add_css_class (label, "heading");
       gtk_box_append (GTK_BOX (vbox), label);
 
