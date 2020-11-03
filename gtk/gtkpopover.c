@@ -839,7 +839,7 @@ gtk_popover_init (GtkPopover *popover)
   priv->final_position = GTK_POS_BOTTOM;
   priv->autohide = TRUE;
   priv->has_arrow = TRUE;
-  priv->cascade_popdown = TRUE;
+  priv->cascade_popdown = FALSE;
 
   controller = gtk_event_controller_key_new ();
   g_signal_connect_swapped (controller, "key-pressed", G_CALLBACK (gtk_popover_key_pressed), popover);
@@ -1674,7 +1674,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
       g_param_spec_boolean ("cascade-popdown",
                             P_("Cascade popdown"),
                             P_("Wether the popover pops down after a child popover"),
-                            TRUE,
+                            FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
