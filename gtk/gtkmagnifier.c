@@ -202,6 +202,8 @@ gtk_magnifier_class_init (GtkMagnifierClass *klass)
                                                          P_("resize"),
                                                          FALSE,
                                                          G_PARAM_READWRITE));
+
+  gtk_widget_class_set_css_name (widget_class, "magnifier");
 }
 
 static void
