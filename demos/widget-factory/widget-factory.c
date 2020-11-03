@@ -302,6 +302,7 @@ activate_about (GSimpleAction *action,
 
   dialog = g_object_new (GTK_TYPE_ABOUT_DIALOG,
                          "transient-for", gtk_application_get_active_window (app),
+                         "modal", TRUE,
                          "program-name", "GTK Widget Factory",
                          "version", version,
                          "copyright", "© 1997—2020 The GTK Team",
