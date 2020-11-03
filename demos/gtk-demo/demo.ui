@@ -83,7 +83,7 @@
   </menu>
   <object class="GtkAboutDialog" id="aboutdialog1">
     <property name="program-name" translatable="yes">Builder demo</property>
-    <property name="logo-icon-name" translatable="yes">gtk3-demo</property>
+    <property name="logo-icon-name" translatable="yes">org.gtk.Demo4</property>
     <property name="modal">True</property>
   </object>
   <object class="GtkWindow" id="window1">
