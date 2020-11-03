@@ -1491,9 +1491,7 @@ gdk_surface_freeze_updates (GdkSurface *surface)
 
   surface->update_freeze_count++;
   if (surface->update_freeze_count == 1)
-    {
     _gdk_frame_clock_uninhibit_freeze (surface->frame_clock);
-    }
 }
 
 /*
