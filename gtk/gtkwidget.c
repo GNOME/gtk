@@ -1734,6 +1734,8 @@ gtk_widget_set_property (GObject         *object,
       if (priv->at_context == NULL || !gtk_at_context_is_realized (priv->at_context))
         {
           priv->accessible_role = g_value_get_enum (value);
+          if (priv->at_context)
+            g_object_set (priv->at_context, "accessible-role", priv->accessible_role, NULL);
           g_object_notify_by_pspec (object, pspec);
         }
       else
