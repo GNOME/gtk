@@ -43,6 +43,9 @@
             <property name="valign">center</property>
             <property name="menu-model">gear_menu</property>
             <property name="icon-name">open-menu-symbolic</property>
+            <accessibility>
+              <property name="label" translatable="yes">Primary menu</property>
+            </accessibility>
           </object>
         </child>
       </object>
