@@ -90,7 +90,10 @@ gtk_at_context_set_property (GObject      *gobject,
   switch (prop_id)
     {
     case PROP_ACCESSIBLE_ROLE:
-      self->accessible_role = g_value_get_enum (value);
+      if (!self->realized)
+        self->accessible_role = g_value_get_enum (value);
+      else
+        g_critical ("The accessible role cannot be set on a realized AT context");
       break;
 
     case PROP_ACCESSIBLE:
@@ -203,7 +206,7 @@ gtk_at_context_class_init (GtkATContextClass *klass)
                        GTK_TYPE_ACCESSIBLE_ROLE,
                        GTK_ACCESSIBLE_ROLE_NONE,
                        G_PARAM_READWRITE |
-                       G_PARAM_CONSTRUCT_ONLY |
+                       G_PARAM_CONSTRUCT |
                        G_PARAM_STATIC_STRINGS);
 
   /**

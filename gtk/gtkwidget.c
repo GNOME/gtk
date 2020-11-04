@@ -1731,7 +1731,7 @@ gtk_widget_set_property (GObject         *object,
       gtk_widget_set_layout_manager (widget, g_value_dup_object (value));
       break;
     case PROP_ACCESSIBLE_ROLE:
-      if (priv->at_context == NULL)
+      if (priv->at_context == NULL || !gtk_at_context_is_realized (priv->at_context))
         {
           priv->accessible_role = g_value_get_enum (value);
           g_object_notify_by_pspec (object, pspec);
