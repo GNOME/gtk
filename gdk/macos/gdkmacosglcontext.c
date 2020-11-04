@@ -143,6 +143,18 @@ ensure_gl_view (GdkMacosGLContext *self)
       [nsview setNeedsDisplay:YES];
       [nswindow setContentView:nsview];
       [nsview release];
+
+      if (self->dummy_view != NULL)
+        {
+          NSView *nsview = g_steal_pointer (&self->dummy_view);
+          [nsview release];
+        }
+
+      if (self->dummy_window != NULL)
+        {
+          NSWindow *nswindow = g_steal_pointer (&self->dummy_window);
+          [nswindow release];
+        }
     }
 
   return [nswindow contentView];
@@ -215,21 +227,15 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
   [gl_context setValues:&opaque forParameter:NSOpenGLCPSurfaceOpacity];
   [gl_context setValues:&validate forParameter:NSOpenGLContextParameterStateValidation];
 
-  if (self->is_attached || shared == NULL)
-    {
-      NSRect frame = NSMakeRect (0, 0, 1, 1);
+  self->dummy_window = [[NSWindow alloc] initWithContentRect:NSZeroRect
+                                                   styleMask:0
+                                                     backing:NSBackingStoreBuffered
+                                                       defer:NO
+                                                      screen:nil];
+  self->dummy_view = [[NSView alloc] initWithFrame:NSZeroRect];
+  [self->dummy_window setContentView:self->dummy_view];
+  [gl_context setView:self->dummy_view];
 
-      self->dummy_window = [[NSWindow alloc] initWithContentRect:frame
-                                                       styleMask:0
-                                                         backing:NSBackingStoreBuffered
-                                                           defer:NO
-                                                          screen:nil];
-      self->dummy_view = [[NSView alloc] initWithFrame:frame];
-      [self->dummy_window setContentView:self->dummy_view];
-      [gl_context setView:self->dummy_view];
-    }
-
-  [gl_context makeCurrentContext];
   GLint renderer_id = 0;
   [gl_context getValues:&renderer_id forParameter:NSOpenGLContextParameterCurrentRendererID];
   GDK_DISPLAY_NOTE (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)),
@@ -237,7 +243,6 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
                     g_message ("Created NSOpenGLContext[%p] using %s",
                                gl_context,
                                get_renderer_name (renderer_id)));
-  [NSOpenGLContext clearCurrentContext];
 
   self->gl_context = g_steal_pointer (&gl_context);
 
@@ -339,17 +344,12 @@ gdk_macos_gl_context_dispose (GObject *gobject)
   if (self->dummy_view != nil)
     {
       NSView *nsview = g_steal_pointer (&self->dummy_view);
-
-      if (GDK_IS_MACOS_GL_VIEW (nsview))
-        [(GdkMacosGLView *)nsview setOpenGLContext:nil];
-
       [nsview release];
     }
 
   if (self->dummy_window != nil)
     {
       NSWindow *nswindow = g_steal_pointer (&self->dummy_window);
-
       [nswindow release];
     }
 
