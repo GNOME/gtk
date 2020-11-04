@@ -1491,9 +1491,7 @@ gdk_surface_freeze_updates (GdkSurface *surface)
 
   surface->update_freeze_count++;
   if (surface->update_freeze_count == 1)
-    {
     _gdk_frame_clock_uninhibit_freeze (surface->frame_clock);
-    }
 }
 
 /*
@@ -2657,18 +2655,6 @@ gdk_synthesize_surface_state (GdkSurface       *surface,
   gdk_surface_set_state (surface, (surface->state | set_flags) & ~unset_flags);
 }
 
-static void
-hide_popup_chain (GdkSurface *surface)
-{
-  GdkSurface *parent;
-
-  gdk_surface_hide (surface);
-
-  parent = surface->parent;
-  if (parent->autohide)
-    hide_popup_chain (parent);
-}
-
 static gboolean
 check_autohide (GdkEvent *event)
 {
@@ -2695,10 +2681,23 @@ check_autohide (GdkEvent *event)
       device = gdk_event_get_device (event);
       if (gdk_device_grab_info (display, device, &grab_surface, NULL))
         {
-          if (grab_surface != gdk_event_get_surface (event) &&
+          GdkSurface *event_surface;
+
+          event_surface = gdk_event_get_surface (event);
+
+          if (grab_surface != event_surface &&
+              grab_surface != event_surface->parent &&
               grab_surface->autohide)
             {
-              hide_popup_chain (grab_surface);
+              GdkSurface *surface = grab_surface;
+
+              do
+                {
+                  gdk_surface_hide (surface);
+                  surface = surface->parent;
+                }
+              while (surface->autohide && surface != event_surface);
+
               return TRUE;
             }
         }
