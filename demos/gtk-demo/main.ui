@@ -28,14 +28,7 @@
           <object class="GtkButton">
             <property name="valign">center</property>
             <property name="action-name">win.run</property>
-            <style>
-              <class name="text-button"/>
-            </style>
-            <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">Run</property>
-              </object>
-            </child>
+            <property name="label" translatable="yes">Run</property>
           </object>
         </child>
         <child type="end">
@@ -43,6 +36,9 @@
             <property name="valign">center</property>
             <property name="menu-model">gear_menu</property>
             <property name="icon-name">open-menu-symbolic</property>
+            <accessibility>
+              <property name="label" translatable="yes">Primary menu</property>
+            </accessibility>
           </object>
         </child>
       </object>

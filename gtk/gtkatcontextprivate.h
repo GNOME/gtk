@@ -116,6 +116,8 @@ struct _GtkATContext
   GtkAccessiblePropertyChange updated_properties;
   GtkAccessibleRelationChange updated_relations;
   GtkAccessiblePlatformChange updated_platform;
+
+  guint realized : 1;
 };
 
 struct _GtkATContextClass
@@ -138,9 +140,16 @@ struct _GtkATContextClass
   void (* child_change) (GtkATContext             *self,
                          GtkAccessibleChildChange  changed_child,
                          GtkAccessible            *child);
+
+  void (* realize)       (GtkATContext *self);
+  void (* unrealize)     (GtkATContext *self);
 };
 
 GdkDisplay *            gtk_at_context_get_display              (GtkATContext          *self);
+
+void                    gtk_at_context_realize                  (GtkATContext          *self);
+void                    gtk_at_context_unrealize                (GtkATContext          *self);
+gboolean                gtk_at_context_is_realized              (GtkATContext          *self);
 
 void                    gtk_at_context_update                   (GtkATContext          *self);
 

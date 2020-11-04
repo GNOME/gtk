@@ -1731,9 +1731,11 @@ gtk_widget_set_property (GObject         *object,
       gtk_widget_set_layout_manager (widget, g_value_dup_object (value));
       break;
     case PROP_ACCESSIBLE_ROLE:
-      if (priv->at_context == NULL)
+      if (priv->at_context == NULL || !gtk_at_context_is_realized (priv->at_context))
         {
           priv->accessible_role = g_value_get_enum (value);
+          if (priv->at_context)
+            g_object_set (priv->at_context, "accessible-role", priv->accessible_role, NULL);
           g_object_notify_by_pspec (object, pspec);
         }
       else
@@ -2346,6 +2348,16 @@ gtk_widget_root (GtkWidget *widget)
   if (priv->layout_manager)
     gtk_layout_manager_set_root (priv->layout_manager, priv->root);
 
+  if (priv->at_context != NULL)
+    {
+      GtkATContext *root_context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (priv->root));
+
+      if (root_context)
+        gtk_at_context_realize (root_context);
+
+      gtk_at_context_realize (priv->at_context);
+    }
+
   GTK_WIDGET_GET_CLASS (widget)->root (widget);
 
   if (!GTK_IS_ROOT (widget))
@@ -2369,6 +2381,9 @@ gtk_widget_unroot (GtkWidget *widget)
   _gtk_widget_update_parent_muxer (widget);
 
   GTK_WIDGET_GET_CLASS (widget)->unroot (widget);
+
+  if (priv->at_context)
+    gtk_at_context_unrealize (priv->at_context);
 
   if (priv->context)
     gtk_style_context_set_display (priv->context, gdk_display_get_default ());
@@ -9453,6 +9468,10 @@ gtk_widget_set_tooltip_text (GtkWidget  *widget,
   priv->tooltip_text = tooltip_text;
   priv->tooltip_markup = tooltip_markup;
 
+  gtk_accessible_update_property (GTK_ACCESSIBLE (widget),
+                                  GTK_ACCESSIBLE_PROPERTY_DESCRIPTION, priv->tooltip_text,
+                                  -1);
+
   gtk_widget_set_has_tooltip (widget, priv->tooltip_text != NULL);
   if (_gtk_widget_get_visible (widget))
     gtk_widget_trigger_tooltip_query (widget);
@@ -9534,6 +9553,10 @@ gtk_widget_set_tooltip_markup (GtkWidget  *widget,
                           NULL,
                           NULL);
     }
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (widget),
+                                  GTK_ACCESSIBLE_PROPERTY_DESCRIPTION, priv->tooltip_text,
+                                  -1);
 
   gtk_widget_set_has_tooltip (widget, tooltip_markup != NULL);
   if (_gtk_widget_get_visible (widget))

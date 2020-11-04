@@ -33,6 +33,9 @@ G_DECLARE_FINAL_TYPE (GtkAtSpiRoot, gtk_at_spi_root, GTK, AT_SPI_ROOT, GObject)
 GtkAtSpiRoot *
 gtk_at_spi_root_new (const char *bus_address);
 
+void
+gtk_at_spi_root_queue_register (GtkAtSpiRoot *self);
+
 GDBusConnection *
 gtk_at_spi_root_get_connection (GtkAtSpiRoot *self);
 
