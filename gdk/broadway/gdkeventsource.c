@@ -224,6 +224,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
 	event->scroll.y = message->pointer.win_y;
 	event->scroll.x_root = message->pointer.root_x;
 	event->scroll.y_root = message->pointer.root_y;
+        event->scroll.state = message->pointer.state;
 	event->scroll.direction = message->scroll.dir == 0 ? GDK_SCROLL_UP : GDK_SCROLL_DOWN;
 	gdk_event_set_device (event, device_manager->core_pointer);
 	gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_pointer));
