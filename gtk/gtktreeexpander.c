@@ -21,6 +21,7 @@
 
 #include "gtktreeexpander.h"
 
+#include "gtkaccessible.h"
 #include "gtkboxlayout.h"
 #include "gtkbuiltiniconprivate.h"
 #include "gtkdropcontrollermotion.h"
@@ -199,7 +200,16 @@ gtk_tree_expander_update_for_list_row (GtkTreeExpander *self)
           if (child)
             child = gtk_widget_get_prev_sibling (child);
           else
-            gtk_widget_insert_after (gtk_builtin_icon_new ("indent"), GTK_WIDGET (self), NULL);
+            {
+              GtkWidget *indent = gtk_builtin_icon_new ("indent");
+
+              gtk_widget_insert_after (indent, GTK_WIDGET (self), NULL);
+
+              /* The indent icon is not visible in the accessibility tree */
+              gtk_accessible_update_state (GTK_ACCESSIBLE (indent),
+                                           GTK_ACCESSIBLE_STATE_HIDDEN, TRUE,
+                                           -1);
+            }
         }
 
       while (child)

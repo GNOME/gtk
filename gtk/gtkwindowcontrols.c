@@ -20,6 +20,7 @@
 
 #include "gtkwindowcontrols.h"
 
+#include "gtkaccessible.h"
 #include "gtkactionable.h"
 #include "gtkboxlayout.h"
 #include "gtkbutton.h"
@@ -272,6 +273,11 @@ update_window_buttons (GtkWindowControls *self)
           gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
           gtk_widget_add_css_class (button, "icon");
 
+          /* The icon is not relevant for accessibility purposes */
+          gtk_accessible_update_state (GTK_ACCESSIBLE (button),
+                                       GTK_ACCESSIBLE_STATE_HIDDEN, TRUE,
+                                       -1);
+
           if (!update_window_icon (window, button))
             {
               g_object_ref_sink (button);
@@ -291,6 +297,11 @@ update_window_buttons (GtkWindowControls *self)
           gtk_widget_set_can_focus (button, FALSE);
           gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
                                           "window.minimize");
+          gtk_accessible_update_property (GTK_ACCESSIBLE (button),
+                                          GTK_ACCESSIBLE_PROPERTY_LABEL, _("Minimize"),
+                                          GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
+                                            _("Minimize the window"),
+                                          -1);
         }
       else if (strcmp (tokens[i], "maximize") == 0 &&
                resizable &&
@@ -308,6 +319,11 @@ update_window_buttons (GtkWindowControls *self)
           gtk_widget_set_can_focus (button, FALSE);
           gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
                                           "window.toggle-maximized");
+          gtk_accessible_update_property (GTK_ACCESSIBLE (button),
+                                          GTK_ACCESSIBLE_PROPERTY_LABEL, _("Maximize"),
+                                          GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
+                                            _("Maximize the window"),
+                                          -1);
         }
       else if (strcmp (tokens[i], "close") == 0 &&
                deletable)
@@ -321,6 +337,11 @@ update_window_buttons (GtkWindowControls *self)
           gtk_widget_set_can_focus (button, FALSE);
           gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
                                           "window.close");
+          gtk_accessible_update_property (GTK_ACCESSIBLE (button),
+                                          GTK_ACCESSIBLE_PROPERTY_LABEL, _("Close"),
+                                          GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
+                                            _("Close the window"),
+                                          -1);
         }
 
       if (button)
