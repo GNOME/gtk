@@ -696,6 +696,8 @@ gtk_menu_section_box_add_custom (GtkPopoverMenu *popover,
 
   stack = gtk_popover_get_child (GTK_POPOVER (popover));
   box = GTK_MENU_SECTION_BOX (gtk_stack_get_child_by_name (GTK_STACK (stack), "main"));
+  if (box == NULL)
+    return FALSE;
 
   slot = (GtkWidget *)g_hash_table_lookup (box->custom_slots, id);
 
