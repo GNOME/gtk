@@ -95,8 +95,9 @@ handle_cache_method (GDBusConnection       *connection,
                      GDBusMethodInvocation *invocation,
                      gpointer               user_data)
 {
-  g_printerr ("[Cache] Method '%s' on interface '%s' for object '%s' from '%s'\n",
-              method_name, interface_name, object_path, sender);
+  GTK_NOTE (A11Y,
+            g_message ("[Cache] Method '%s' on interface '%s' for object '%s' from '%s'\n",
+                       method_name, interface_name, object_path, sender));
 
 }
 
