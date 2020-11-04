@@ -100,9 +100,8 @@
         </child>
         <child>
           <object class="GtkBox" id="toolbar1">
-            <style>
-              <class name="toolbar"/>
-            </style>
+            <property name="accessible-role">toolbar</property>
+            <property name="css-classes">toolbar</property>
             <child>
               <object class="GtkButton">
                 <property name="label" translatable="yes">New</property>
