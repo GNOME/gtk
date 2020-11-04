@@ -96,12 +96,18 @@
         <child>
           <object class="GtkPopoverMenuBar" id="menubar1">
             <property name="menu-model">menubar</property>
+            <accessibility>
+              <property name="label">Main Menu</property>
+            </accessibility>
           </object>
         </child>
         <child>
           <object class="GtkBox" id="toolbar1">
             <property name="accessible-role">toolbar</property>
             <property name="css-classes">toolbar</property>
+            <accessibility>
+              <property name="label">Toolbar</property>
+            </accessibility>
             <child>
               <object class="GtkButton">
                 <property name="label" translatable="yes">New</property>
