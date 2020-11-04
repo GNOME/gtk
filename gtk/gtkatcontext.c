@@ -80,6 +80,16 @@ gtk_at_context_finalize (GObject *gobject)
 }
 
 static void
+gtk_at_context_dispose (GObject *gobject)
+{
+  GtkATContext *self = GTK_AT_CONTEXT (gobject);
+
+  gtk_at_context_unrealize (self);
+
+  G_OBJECT_CLASS (gtk_at_context_parent_class)->dispose (gobject);
+}
+
+static void
 gtk_at_context_set_property (GObject      *gobject,
                              guint         prop_id,
                              const GValue *value,
@@ -182,6 +192,7 @@ gtk_at_context_class_init (GtkATContextClass *klass)
 
   gobject_class->set_property = gtk_at_context_set_property;
   gobject_class->get_property = gtk_at_context_get_property;
+  gobject_class->dispose = gtk_at_context_dispose;
   gobject_class->finalize = gtk_at_context_finalize;
 
   klass->realize = gtk_at_context_real_realize;
