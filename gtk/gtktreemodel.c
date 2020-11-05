@@ -1426,7 +1426,7 @@ gtk_tree_model_get_value (GtkTreeModel *tree_model,
 /**
  * gtk_tree_model_iter_next:
  * @tree_model: a #GtkTreeModel
- * @iter: (in): the #GtkTreeIter-struct
+ * @iter: (inout): the #GtkTreeIter-struct
  *
  * Sets @iter to point to the node following it at the current level.
  *
@@ -1474,7 +1474,7 @@ gtk_tree_model_iter_previous_default (GtkTreeModel *tree_model,
 /**
  * gtk_tree_model_iter_previous:
  * @tree_model: a #GtkTreeModel
- * @iter: (in): the #GtkTreeIter-struct
+ * @iter: (inout): the #GtkTreeIter-struct
  *
  * Sets @iter to point to the previous node at the current level.
  *
