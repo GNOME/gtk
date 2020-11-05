@@ -1,4 +1,4 @@
-Overview of Changes in master
+Overview of Changes in 3.99.4
 =============================
 
 * GtkColumnView:
@@ -23,6 +23,7 @@ Overview of Changes in master
 
 * GtkTextView:
  - Fix rendering and positioning of anchored children
+ - Fix positioning of touch handles
 
 * Constraints:
  - Fix loading constraints from ui files
@@ -37,6 +38,7 @@ Overview of Changes in master
  - Add documentation for app and widget developers
  - Handle HIDDEN state changes by adding/removing elements
  - Support setting accessibility attributes in ui files
+ - Make window controls accessible
 
 * Introspection:
  - Add some missing annotations
@@ -44,10 +46,12 @@ Overview of Changes in master
 * gdk:
  - Deliver events on flush
  - Drop the unused GdkPoint struct from the API
+ - Improve popup autohide behavior
 
 * Demos:
  - Add another constraints demo
  - Tweak various demos to improve consistency
+ - Small accessibility improvements
 
 * Tools:
  - Improve gtk4-builder-tool handling of various
@@ -64,6 +68,12 @@ Overview of Changes in master
 * Build:
  - Fix the build with cups 2.2.12
  - Make cloudprint support build without warnings
+
+* Broadway:
+ - Support modifiers for scroll events
+
+* Windows:
+ - Improve IME support
 
 * OS X:
  - Fix various input issues
