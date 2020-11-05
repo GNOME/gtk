@@ -7344,11 +7344,6 @@ gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
   priv = text_view->priv;
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
-  if (!drag_gesture_get_text_surface_coords (gesture, text_view,
-                                             &start_x, &start_y, &x, &y))
-    return;
-
-
   clicked_in_selection =
     g_object_get_qdata (G_OBJECT (gesture), quark_text_selection_data) == NULL;
   g_object_set_qdata (G_OBJECT (gesture), quark_text_selection_data, NULL);
@@ -7362,6 +7357,10 @@ gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
 
   if (priv->magnifier_popover)
     gtk_widget_hide (priv->magnifier_popover);
+
+  if (!drag_gesture_get_text_surface_coords (gesture, text_view,
+                                             &start_x, &start_y, &x, &y))
+    return;
 
   /* Check whether the drag was cancelled rather than finished */
   if (!gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
