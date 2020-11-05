@@ -1408,9 +1408,13 @@ impl_surface_add_update_area (GdkSurface     *impl_surface,
 void
 gdk_surface_queue_render (GdkSurface *surface)
 {
+  cairo_region_t *region;
+
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  gdk_surface_invalidate_rect (surface, NULL);
+  region = cairo_region_create ();
+  impl_surface_add_update_area (surface, region);
+  cairo_region_destroy (region);
 }
 
 /*
