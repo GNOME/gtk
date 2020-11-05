@@ -24,12 +24,23 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GdkMacosToplevelSurface      GdkMacosToplevelSurface;
-typedef struct _GdkMacosToplevelSurfaceClass GdkMacosToplevelSurfaceClass;
-
 #define GDK_TYPE_MACOS_TOPLEVEL_SURFACE       (_gdk_macos_toplevel_surface_get_type())
 #define GDK_MACOS_TOPLEVEL_SURFACE(object)    (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_MACOS_TOPLEVEL_SURFACE, GdkMacosToplevelSurface))
 #define GDK_IS_MACOS_TOPLEVEL_SURFACE(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_MACOS_TOPLEVEL_SURFACE))
+
+typedef struct _GdkMacosToplevelSurface      GdkMacosToplevelSurface;
+typedef struct _GdkMacosToplevelSurfaceClass GdkMacosToplevelSurfaceClass;
+
+struct _GdkMacosToplevelSurface
+{
+  GdkMacosSurface parent_instance;
+  guint           decorated : 1;
+};
+
+struct _GdkMacosToplevelSurfaceClass
+{
+  GdkMacosSurfaceClass parent_instance;
+};
 
 GType            _gdk_macos_toplevel_surface_get_type           (void);
 GdkMacosSurface *_gdk_macos_toplevel_surface_new                (GdkMacosDisplay *display,

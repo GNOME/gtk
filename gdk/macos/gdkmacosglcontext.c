@@ -21,6 +21,7 @@
 
 #include "gdkmacosglcontext-private.h"
 #include "gdkmacossurface-private.h"
+#include "gdkmacostoplevelsurface-private.h"
 
 #include "gdkinternals.h"
 #include "gdkintl.h"
@@ -174,7 +175,6 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
   GdkGLContext *shared_data;
   GdkGLContext *existing;
   GLint sync_to_framerate = 1;
-  GLint opaque = 0;
   GLint validate = 0;
   int major, minor;
 
@@ -225,7 +225,6 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
     }
 
   [gl_context setValues:&sync_to_framerate forParameter:NSOpenGLCPSwapInterval];
-  [gl_context setValues:&opaque forParameter:NSOpenGLCPSurfaceOpacity];
   [gl_context setValues:&validate forParameter:NSOpenGLContextParameterStateValidation];
 
   self->dummy_window = [[NSWindow alloc] initWithContentRect:NSZeroRect
@@ -280,6 +279,9 @@ gdk_macos_gl_context_begin_frame (GdkDrawContext *context,
 
   if (self->needs_resize)
     {
+      GdkSurface *surface = gdk_draw_context_get_surface (context);
+      GLint opaque;
+
       self->needs_resize = FALSE;
 
       if (self->dummy_view != NULL)
@@ -290,6 +292,16 @@ gdk_macos_gl_context_begin_frame (GdkDrawContext *context,
           [self->dummy_window setFrame:frame display:NO];
           [self->dummy_view setFrame:frame];
         }
+
+      /* Possibly update our opaque setting depending on a resize. We can
+       * rely on getting a resize if decoarated is changed, so this reduces
+       * how much we adjust the parameter.
+       */
+      if (GDK_IS_MACOS_TOPLEVEL_SURFACE (surface))
+        opaque = GDK_MACOS_TOPLEVEL_SURFACE (surface)->decorated;
+      else
+        opaque = FALSE;
+      [self->gl_context setValues:&opaque forParameter:NSOpenGLCPSurfaceOpacity];
 
       [self->gl_context update];
     }

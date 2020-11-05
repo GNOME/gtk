@@ -29,17 +29,6 @@
 #include "gdkmacostoplevelsurface-private.h"
 #include "gdkmacosutils-private.h"
 
-struct _GdkMacosToplevelSurface
-{
-  GdkMacosSurface parent_instance;
-  guint           decorated : 1;
-};
-
-struct _GdkMacosToplevelSurfaceClass
-{
-  GdkMacosSurfaceClass parent_instance;
-};
-
 static void
 _gdk_macos_toplevel_surface_fullscreen (GdkMacosToplevelSurface *self)
 {
