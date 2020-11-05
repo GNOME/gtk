@@ -88,19 +88,6 @@ _gdk_win32_gl_context_dispose (GObject *gobject)
 #endif
     }
 
-  if (surface != NULL)
-    {
-      GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
-
-      if (impl->suppress_layered > 0)
-        impl->suppress_layered--;
-
-      /* If we don't have any surface that forces layered windows off,
-       * trigger update_style_bits() to enable layered windows again
-       */
-      if (impl->suppress_layered == 0)
-        _gdk_win32_surface_update_style_bits (surface);
-    }
   G_OBJECT_CLASS (gdk_win32_gl_context_parent_class)->dispose (gobject);
 }
 
@@ -1000,17 +987,6 @@ gdk_win32_gl_context_realize (GdkGLContext *context,
 
   /* set whether we are using GLES */
   gdk_gl_context_set_use_es (context, use_es);
-
-  /* OpenGL does not work with WS_EX_LAYERED enabled, so we need to
-   * disable WS_EX_LAYERED when we acquire a valid HGLRC
-   */
-  impl->suppress_layered++;
-
-  /* if this is the first time a GL context is acquired for the surface,
-   * disable layered windows by triggering update_style_bits()
-   */
-  if (impl->suppress_layered == 1)
-    _gdk_win32_surface_update_style_bits (surface);
 
   /* Ensure that any other context is created with a legacy bit set */
   gdk_gl_context_set_is_legacy (context, legacy_bit);

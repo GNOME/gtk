@@ -351,7 +351,6 @@ _gdk_win32_surface_exstyle_to_string (LONG style)
   BIT (CONTEXTHELP);
   BIT (CONTROLPARENT);
   BIT (DLGMODALFRAME);
-  BIT (LAYERED);
   BIT (LAYOUTRTL);
   BIT (LEFTSCROLLBAR);
   BIT (MDICHILD);

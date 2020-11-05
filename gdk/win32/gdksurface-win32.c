@@ -275,7 +275,6 @@ _gdk_win32_adjust_client_rect (GdkSurface *window,
 gboolean
 _gdk_win32_surface_enable_transparency (GdkSurface *window)
 {
-  GdkWin32Surface *impl;
   DWM_BLURBEHIND blur_behind;
   HRGN empty_region;
   HRESULT call_result;
@@ -283,12 +282,6 @@ _gdk_win32_surface_enable_transparency (GdkSurface *window)
 
   if (window == NULL || GDK_SURFACE_HWND (window) == NULL)
     return FALSE;
-
-  impl = GDK_WIN32_SURFACE (window);
-
-  /* layered windows don't need blurbehind for transparency */
-  if (impl->layered)
-    return TRUE;
 
   if (!gdk_display_is_composited (gdk_surface_get_display (window)))
     return FALSE;
@@ -525,9 +518,6 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
   surface->y = y;
   surface->width = width;
   surface->height = height;
-
-  impl->layered = FALSE;
-  impl->layered_opacity = 1.0;
 
   impl->surface_scale = _gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL, NULL);
   impl->unscaled_width = width * impl->surface_scale;
@@ -1761,11 +1751,6 @@ update_single_bit (LONG    *style,
  * Returns TRUE if window has no decorations.
  * Usually it means CSD windows, because GTK
  * calls gdk_surface_set_decorations (window, 0);
- * This is used to decide whether a toplevel should
- * be made layered, thus it
- * only returns TRUE for toplevels (until GTK minimal
- * system requirements are lifted to Windows 8 or newer,
- * because only toplevels can be layered).
  */
 gboolean
 _gdk_win32_surface_lacks_wm_decorations (GdkSurface *window)
@@ -1858,27 +1843,6 @@ _gdk_win32_surface_update_style_bits (GdkSurface *window)
     {
       new_exstyle &= ~WS_EX_TOOLWINDOW;
     }
-
-  /* We can get away with using layered windows
-   * only when no decorations are needed. It can mean
-   * CSD or borderless non-CSD windows (tooltips?).
-   *
-   * If this window cannot use layered windows, disable it always.
-   * This currently applies to windows using OpenGL, which
-   * does not work with layered windows.
-   */
-  if (impl->suppress_layered == 0)
-    {
-      if (_gdk_win32_surface_lacks_wm_decorations (window))
-        impl->layered = g_strcmp0 (g_getenv ("GDK_WIN32_LAYERED"), "0") != 0;
-    }
-  else
-    impl->layered = FALSE;
-
-  if (impl->layered)
-    new_exstyle |= WS_EX_LAYERED;
-  else
-    new_exstyle &= ~WS_EX_LAYERED;
 
   if (get_effective_window_decorations (window, &decorations))
     {
@@ -3812,67 +3776,6 @@ gdk_win32_get_window_size_and_position_from_client_rect (GdkSurface *window,
 }
 
 void
-_gdk_win32_update_layered_window_from_cache (GdkSurface *surface,
-                                             RECT       *client_rect,
-                                             gboolean    do_move,
-                                             gboolean    do_resize,
-                                             gboolean    do_paint)
-{
-  POINT window_position;
-  SIZE window_size;
-  BLENDFUNCTION blender;
-  HDC hdc;
-  SIZE *window_size_ptr;
-  POINT source_point = { 0, 0 };
-  POINT *source_point_ptr;
-  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
-
-  gdk_win32_get_window_size_and_position_from_client_rect (surface,
-                                                           client_rect,
-                                                           &window_size,
-                                                           &window_position);
-
-  blender.BlendOp = AC_SRC_OVER;
-  blender.BlendFlags = 0;
-  blender.AlphaFormat = AC_SRC_ALPHA;
-  blender.SourceConstantAlpha = impl->layered_opacity * 255;
-
-  /* Strictly speaking, we don't need to supply hdc, source_point and
-   * window_size to just move the window. However, without these arguments
-   * the window moves but does not update its contents on Windows 7 when
-   * desktop composition is off. This forces us to provide hdc and
-   * source_point. window_size is here to avoid the function
-   * inexplicably failing with error 317.
-   */
-  hdc = cairo_win32_surface_get_dc (impl->cache_surface);
-  window_size_ptr = &window_size;
-  source_point_ptr = &source_point;
-
-  if (gdk_display_is_composited (gdk_surface_get_display (surface)))
-    {
-      if (!do_paint)
-        hdc = NULL;
-      if (!do_resize)
-        window_size_ptr = NULL;
-      if (!do_move)
-        source_point_ptr = NULL;
-    }
-
-  /* Don't use UpdateLayeredWindow on minimized windows */
-  if (IsIconic (GDK_SURFACE_HWND (surface)))
-    API_CALL (SetWindowPos, (GDK_SURFACE_HWND (surface),
-                             SWP_NOZORDER_SPECIFIED,
-                             window_position.x, window_position.y,
-                             window_size.cx, window_size.cy,
-                             SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOREDRAW));
-  else
-    API_CALL (UpdateLayeredWindow, (GDK_SURFACE_HWND (surface), NULL,
-                                    &window_position, window_size_ptr,
-                                    hdc, source_point_ptr,
-                                    0, &blender, ULW_ALPHA));
-}
-
-void
 gdk_win32_surface_do_move_resize_drag (GdkSurface *window,
                                       int        x,
                                       int        y)
@@ -4058,30 +3961,23 @@ gdk_win32_surface_do_move_resize_drag (GdkSurface *window,
            (rect.left != new_rect.left ||
             rect.top != new_rect.top))
     {
+      SIZE window_size;
+      POINT window_position;
+
       context->native_move_resize_pending = FALSE;
 
       gdk_surface_request_layout (window);
 
-      if (impl->layered)
-        {
-          _gdk_win32_update_layered_window_from_cache (window, &new_rect, TRUE, FALSE, FALSE);
-        }
-      else
-        {
-          SIZE window_size;
-          POINT window_position;
+      gdk_win32_get_window_size_and_position_from_client_rect (window,
+                                                              &new_rect,
+                                                              &window_size,
+                                                              &window_position);
 
-          gdk_win32_get_window_size_and_position_from_client_rect (window,
-                                                                   &new_rect,
-                                                                   &window_size,
-                                                                   &window_position);
-
-          API_CALL (SetWindowPos, (GDK_SURFACE_HWND (window),
-                                   SWP_NOZORDER_SPECIFIED,
-                                   window_position.x, window_position.y,
-                                   0, 0,
-                                   SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE));
-        }
+      API_CALL (SetWindowPos, (GDK_SURFACE_HWND (window),
+                               SWP_NOZORDER_SPECIFIED,
+                               window_position.x, window_position.y,
+                               0, 0,
+                               SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE));
     }
 
   if (context->op == GDK_WIN32_DRAGOP_RESIZE ||
@@ -4355,61 +4251,6 @@ gdk_win32_surface_lookup_for_display (GdkDisplay *display,
   return (GdkSurface*) gdk_win32_handle_table_lookup (anid);
 }
 
-void
-gdk_win32_surface_set_opacity (GdkSurface *window,
-                               double      opacity)
-{
-  LONG exstyle;
-  typedef BOOL (WINAPI *PFN_SetLayeredWindowAttributes) (HWND, COLORREF, BYTE, DWORD);
-  PFN_SetLayeredWindowAttributes setLayeredWindowAttributes = NULL;
-  GdkWin32Surface *impl;
-
-  g_return_if_fail (GDK_IS_SURFACE (window));
-
-  if (GDK_SURFACE_DESTROYED (window))
-    return;
-
-  if (opacity < 0)
-    opacity = 0;
-  else if (opacity > 1)
-    opacity = 1;
-
-  impl = GDK_WIN32_SURFACE (window);
-
-  if (impl->layered)
-    {
-      if (impl->layered_opacity != opacity)
-        {
-          RECT window_rect;
-
-          impl->layered_opacity = opacity;
-
-          _gdk_win32_get_window_client_area_rect (window, impl->surface_scale, &window_rect);
-          _gdk_win32_update_layered_window_from_cache (window, &window_rect, TRUE, TRUE, TRUE);
-        }
-
-      return;
-    }
-
-  exstyle = GetWindowLong (GDK_SURFACE_HWND (window), GWL_EXSTYLE);
-
-  if (!(exstyle & WS_EX_LAYERED))
-    SetWindowLong (GDK_SURFACE_HWND (window),
-		    GWL_EXSTYLE,
-		    exstyle | WS_EX_LAYERED);
-
-  setLayeredWindowAttributes =
-    (PFN_SetLayeredWindowAttributes)GetProcAddress (GetModuleHandle ("user32.dll"), "SetLayeredWindowAttributes");
-
-  if (setLayeredWindowAttributes)
-    {
-      API_CALL (setLayeredWindowAttributes, (GDK_SURFACE_HWND (window),
-					     0,
-					     opacity * 0xff,
-					     LWA_ALPHA));
-    }
-}
-
 gboolean
 gdk_win32_surface_is_win32 (GdkSurface *window)
 {
@@ -4487,9 +4328,6 @@ GtkShowWindow (GdkSurface *window,
     case SW_SHOWNOACTIVATE:
     case SW_SHOWNORMAL:
       if (IsWindowVisible (hwnd))
-        break;
-
-      if ((WS_EX_LAYERED & GetWindowLongPtr (hwnd, GWL_EXSTYLE)) != WS_EX_LAYERED)
         break;
 
       /* Window was hidden, will be shown. Erase it, GDK will repaint soon,
@@ -5275,7 +5113,6 @@ gdk_win32_surface_apply_queued_move_resize (GdkSurface *surface,
 RECT
 gdk_win32_surface_handle_queued_move_resize (GdkDrawContext *draw_context)
 {
-  GdkWin32CairoContext *cairo_ctx = NULL;
   GdkSurface *surface;
   GdkWin32Surface *impl;
   int scale;
@@ -5285,23 +5122,16 @@ gdk_win32_surface_handle_queued_move_resize (GdkDrawContext *draw_context)
   impl = GDK_WIN32_SURFACE (surface);
   scale = gdk_surface_get_scale_factor (surface);
 
-  if (GDK_IS_WIN32_CAIRO_CONTEXT (draw_context))
-    {
-      cairo_ctx = GDK_WIN32_CAIRO_CONTEXT (draw_context);
-      cairo_ctx->layered = impl->layered;
-    }
-
   gdk_win32_surface_get_queued_window_rect (surface, scale, &queued_window_rect);
 
-  /* Apply queued resizes for non-double-buffered and non-layered windows
+  /* Apply queued resizes for non-double-buffered windows
    * before painting them (we paint on the window DC directly,
    * it must have the right size).
    * Due to some poorly-undetstood issue delayed
    * resizing of double-buffered windows can produce weird
    * artefacts, so these are also resized before we paint.
    */
-  if (impl->drag_move_resize_context.native_move_resize_pending &&
-      (cairo_ctx == NULL || !cairo_ctx->layered))
+  if (impl->drag_move_resize_context.native_move_resize_pending)
     {
       impl->drag_move_resize_context.native_move_resize_pending = FALSE;
       gdk_win32_surface_apply_queued_move_resize (surface, queued_window_rect);

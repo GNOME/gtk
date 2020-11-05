@@ -2113,7 +2113,6 @@ gdk_drag_anim_timeout (gpointer data)
        (drag->start_y - drag->util_data.last_y) * t -
        drag->hot_y);
   gdk_win32_surface_move (drag->drag_surface, x, y);
-  gdk_win32_surface_set_opacity (drag->drag_surface, 1.0 - f);
 
   return G_SOURCE_CONTINUE;
 }

@@ -32,46 +32,6 @@
 G_DEFINE_TYPE (GdkWin32CairoContext, gdk_win32_cairo_context, GDK_TYPE_CAIRO_CONTEXT)
 
 static cairo_surface_t *
-create_cairo_surface_for_layered_window (GdkWin32Surface  *impl,
-                                         int                   width,
-                                         int                   height,
-                                         int                   scale)
-{
-  if (width > impl->dib_width ||
-      height > impl->dib_height)
-    {
-      cairo_surface_t *new_cache;
-
-      impl->dib_width = MAX (impl->dib_width, MAX (width, 1));
-      impl->dib_height = MAX (impl->dib_height, MAX (height, 1));
-      /* Create larger cache surface, copy old cache surface over it */
-      new_cache = cairo_win32_surface_create_with_dib (CAIRO_FORMAT_ARGB32,
-                                                       impl->dib_width,
-                                                       impl->dib_height);
-
-      if (impl->cache_surface)
-        {
-          cairo_t *cr = cairo_create (new_cache);
-          cairo_set_source_surface (cr, impl->cache_surface, 0, 0);
-          cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-          cairo_paint (cr);
-          cairo_destroy (cr);
-          cairo_surface_flush (new_cache);
-
-          cairo_surface_destroy (impl->cache_surface);
-        }
-
-      impl->cache_surface = new_cache;
-
-      cairo_surface_set_device_scale (impl->cache_surface,
-                                      scale,
-                                      scale);
-    }
-
-  return cairo_surface_reference (impl->cache_surface);
-}
-
-static cairo_surface_t *
 create_cairo_surface_for_surface (GdkSurface *surface,
                                   int         scale)
 {
@@ -114,22 +74,11 @@ gdk_win32_cairo_context_begin_frame (GdkDrawContext *draw_context,
   width = MAX (width, 1);
   height = MAX (height, 1);
 
-  if (self->layered)
-    self->window_surface = create_cairo_surface_for_layered_window (impl, width, height, scale);
-  else
-    self->window_surface = create_cairo_surface_for_surface (surface, scale);
+  self->window_surface = create_cairo_surface_for_surface (surface, scale);
 
-  if (self->layered ||
-      !self->double_buffered)
-    {
-      /* Layered windows paint on the window_surface (which is itself
-       * an in-memory cache that the window maintains, since layered windows
-       * do not support incremental redraws.
-       * Non-double-buffered windows paint on the window surface directly
-       * as well.
-       */
-      self->paint_surface = cairo_surface_reference (self->window_surface);
-    }
+  if (!self->double_buffered)
+    /* Non-double-buffered windows paint on the window surface directly */
+    self->paint_surface = cairo_surface_reference (self->window_surface);
   else
     {
       if (width > self->db_width ||
@@ -153,11 +102,10 @@ gdk_win32_cairo_context_begin_frame (GdkDrawContext *draw_context,
     }
 
   /* Clear the paint region.
-   * For non-double-buffered and for layered rendering we must
-   * clear it, otherwise semi-transparent pixels will "add up"
-   * with each repaint.
-   * For double-buffered rendering we must clear the old pixels
-   * from the DB cache surface that we're going to use as a buffer.
+   * For non-double-buffered rendering we must clear it, otherwise
+   * semi-transparent pixels will "add up" with each repaint.
+   * We must also clear the old pixels from the DB cache surface
+   * that we're going to use as a buffer.
    */
   cr = cairo_create (self->paint_surface);
   cairo_set_source_rgba (cr, 0, 0, 0, 00);
@@ -184,12 +132,10 @@ gdk_win32_cairo_context_end_frame (GdkDrawContext *draw_context,
    * to be here.
    */
 
-  /* Layered windows have their own, special copying section
-   * further down. For double-buffered windows we need to blit
+  /* For double-buffered windows we need to blit
    * the DB buffer contents into the window itself.
    */
-  if (!self->layered &&
-      self->double_buffered)
+  if (self->double_buffered)
     {
       cairo_t *cr;
 
@@ -206,18 +152,6 @@ gdk_win32_cairo_context_end_frame (GdkDrawContext *draw_context,
     }
 
   cairo_surface_flush (self->window_surface);
-
-  /* Update layered window, updating its contents, size and position
-   * in one call.
-   */
-  if (self->layered)
-    {
-      RECT client_rect;
-
-      /* Get the position/size of the window that GDK wants. */
-      _gdk_win32_get_window_client_area_rect (surface, scale, &client_rect);
-      _gdk_win32_update_layered_window_from_cache (surface, &client_rect, TRUE, TRUE, TRUE);
-    }
 
   g_clear_pointer (&self->paint_surface, cairo_surface_destroy);
   g_clear_pointer (&self->window_surface, cairo_surface_destroy);

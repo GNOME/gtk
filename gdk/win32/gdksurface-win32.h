@@ -277,13 +277,6 @@ struct _GdkWin32Surface
   guint zero_shadow : 1;
   guint inhibit_configure : 1;
 
-  /* Set to TRUE if window is using true layered mode adjustments
-   * via UpdateLayeredWindow().
-   * Layered windows that get SetLayeredWindowAttributes() called
-   * on them are not true layered windows.
-   */
-  guint layered : 1;
-
   /* If TRUE, the @temp_styles is set to the styles that were temporarily
    * added to this window.
    */
@@ -309,12 +302,6 @@ struct _GdkWin32Surface
   int              dib_width;
   int              dib_height;
 
-  /* If the client wants uniformly-transparent window,
-   * we remember the opacity value here and apply it
-   * during UpdateLayredWindow() call, for layered windows.
-   */
-  double           layered_opacity;
-
   HDC              hdc;
   int              hdc_count;
   HBITMAP          saved_dc_bitmap; /* Original bitmap for dc */
@@ -339,9 +326,6 @@ struct _GdkWin32Surface
 
   /* Enable all decorations? */
   gboolean decorate_all;
-
-  /* No. of windows to force layered windows off */
-  guint suppress_layered;
 
   /* Temporary styles that this window got for the purpose of
    * handling WM_SYSMENU.
@@ -382,11 +366,6 @@ int   _gdk_win32_surface_get_scale_factor    (GdkSurface *window);
 void  _gdk_win32_get_window_client_area_rect (GdkSurface *window,
                                               int         scale,
                                               RECT       *rect);
-void  _gdk_win32_update_layered_window_from_cache (GdkSurface *window,
-                                                   RECT       *client_rect,
-                                                   gboolean    do_move,
-                                                   gboolean    do_resize,
-                                                   gboolean    do_paint);
 
 void gdk_win32_surface_move (GdkSurface *surface,
                              int         x,
