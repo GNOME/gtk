@@ -5217,7 +5217,6 @@ gtk_text_view_update_handles (GtkTextView *text_view)
                                              &cursor);
           gtk_text_handle_set_role (priv->text_handles[TEXT_HANDLE_CURSOR],
                                     GTK_TEXT_HANDLE_ROLE_CURSOR);
-          gtk_widget_show (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_CURSOR]));
         }
       else if (gtk_text_iter_compare (&cursor, &bound) != 0)
         {
@@ -5227,14 +5226,12 @@ gtk_text_view_update_handles (GtkTextView *text_view)
                                              &cursor);
           gtk_text_handle_set_role (priv->text_handles[TEXT_HANDLE_CURSOR],
                                     GTK_TEXT_HANDLE_ROLE_SELECTION_START);
-          gtk_widget_show (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_CURSOR]));
 
           gtk_text_view_set_handle_position (text_view,
                                              priv->text_handles[TEXT_HANDLE_SELECTION_BOUND],
                                              &bound);
           gtk_text_handle_set_role (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND],
                                     GTK_TEXT_HANDLE_ROLE_SELECTION_END);
-          gtk_widget_show (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]));
         }
       else
         {
