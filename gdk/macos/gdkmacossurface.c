@@ -256,7 +256,7 @@ gdk_macos_surface_get_device_state (GdkSurface      *surface,
         | _gdk_macos_display_get_current_mouse_modifiers (GDK_MACOS_DISPLAY (display));
 
   *x = point.x;
-  *y = point.y - surface->height;
+  *y = surface->height - point.y;
 
   return *x >= 0 && *y >= 0 && *x < surface->width && *y < surface->height;
 }
