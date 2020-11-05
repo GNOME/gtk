@@ -285,9 +285,10 @@ gdk_macos_gl_context_begin_frame (GdkDrawContext *context,
       if (self->dummy_view != NULL)
         {
           GdkSurface *surface = gdk_draw_context_get_surface (context);
-          GLint vals[2] = { surface->width, surface->height };
+          NSRect frame = NSMakeRect (0, 0, surface->width, surface->height);
 
-          [self->gl_context setValues:vals forParameter:NSOpenGLContextParameterSurfaceBackingSize];
+          [self->dummy_window setFrame:frame display:NO];
+          [self->dummy_view setFrame:frame];
         }
 
       [self->gl_context update];
