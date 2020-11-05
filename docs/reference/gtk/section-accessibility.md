@@ -298,6 +298,16 @@ When creating custom widgets, following established patterns can help
 ensuring that the widgets work well for users of accessible technologies
 as well.
 
+### Buttons
+
+A button is a widget that enables users to trigger an action. While it is
+recommended you use #GtkButton for anything that looks and behaves like a
+button, it is possible to apply a button behavior to UI elements like images
+by using a #GtkGestureClick gesture. When doing so, you should:
+
+  - Give your widget the role %GTK_ACCESSIBLE_ROLE_BUTTON
+  - Install an action with no parameters, which will activate the widget
+
 ### Custom entries
 
 For custom entries, it is highly recommended that you implement the
