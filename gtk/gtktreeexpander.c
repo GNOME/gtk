@@ -201,14 +201,13 @@ gtk_tree_expander_update_for_list_row (GtkTreeExpander *self)
             child = gtk_widget_get_prev_sibling (child);
           else
             {
-              GtkWidget *indent = gtk_builtin_icon_new ("indent");
+              GtkWidget *indent =
+                g_object_new (GTK_TYPE_BUILTIN_ICON,
+                              "css-name", "indent",
+                              "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
+                              NULL);
 
               gtk_widget_insert_after (indent, GTK_WIDGET (self), NULL);
-
-              /* The indent icon is not visible in the accessibility tree */
-              gtk_accessible_update_state (GTK_ACCESSIBLE (indent),
-                                           GTK_ACCESSIBLE_STATE_HIDDEN, TRUE,
-                                           -1);
             }
         }
 
