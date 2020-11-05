@@ -292,6 +292,20 @@ The power of hiding and enhancing can be a double-edged sword, as it can
 lead to inadvertently overriding the accessible semantics of existing
 widgets.
 
+## Hiding UI elements from the accessible tree
+
+The accessibility API is mainly used to express semantics useful for
+assistive technologies, but it can also be used to hide elements. The
+canonical way to do so is to use the %GTK_ACCESSIBLE_ROLE_PRESENTATION,
+which declares that a UI element is purely meant for presentation purposes,
+and as such it has no meaningful impact on the accessibility of the
+interface.
+
+A "presentation" role should not be confused with the
+%GTK_ACCESSIBLE_STATE_HIDDEN state; the "hidden" state is transient, and is
+typically controlled by showing and hiding a widget using the #GtkWidget
+API.
+
 ## Design patterns and custom widgets
 
 When creating custom widgets, following established patterns can help
