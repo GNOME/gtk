@@ -272,9 +272,9 @@ gdk_cursor_equal (gconstpointer a,
 
 /**
  * gdk_cursor_new_from_name:
+ * @name: the name of the cursor
  * @fallback: (allow-none): %NULL or the #GdkCursor to fall back to when
  *     this one cannot be supported
- * @name: the name of the cursor
  *
  * Creates a new cursor by looking up @name in the current cursor
  * theme.
@@ -321,9 +321,9 @@ gdk_cursor_equal (gconstpointer a,
  * Returns: (nullable): a new #GdkCursor, or %NULL if there is no
  *   cursor with the given name
  */
-GdkCursor*
+GdkCursor *
 gdk_cursor_new_from_name (const char *name,
-                          GdkCursor   *fallback)
+                          GdkCursor  *fallback)
 {
   g_return_val_if_fail (name != NULL, NULL);
   g_return_val_if_fail (fallback == NULL || GDK_IS_CURSOR (fallback), NULL);
@@ -357,7 +357,7 @@ gdk_cursor_new_from_texture (GdkTexture *texture,
   g_return_val_if_fail (0 <= hotspot_y && hotspot_y < gdk_texture_get_height (texture), NULL);
   g_return_val_if_fail (fallback == NULL || GDK_IS_CURSOR (fallback), NULL);
 
-  return g_object_new (GDK_TYPE_CURSOR, 
+  return g_object_new (GDK_TYPE_CURSOR,
                        "texture", texture,
                        "hotspot-x", hotspot_x,
                        "hotspot-y", hotspot_y,

@@ -51,6 +51,7 @@ void            gtk_drag_icon_set_from_paintable (GdkDrag      *drag,
                                                   int           hot_x,
                                                   int           hot_y);
 
+GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_drag_icon_create_widget_for_value           (const GValue           *value);
 
 G_END_DECLS

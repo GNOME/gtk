@@ -500,6 +500,7 @@ gtk_drag_icon_get_child (GtkDragIcon *self)
  * Creates a widget that can be used as a drag icon for the given
  * @value.
  *
+ * Supported types include strings, #GdkRGBA and #GtkTextBuffer.
  * If GTK does not know how to create a widget for a given value,
  * it will return %NULL.
  *

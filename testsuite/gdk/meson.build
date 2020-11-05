@@ -5,6 +5,7 @@ tests = [
   'array',
   'cairo',
   'clipboard',
+  'cursor',
   'display',
   'displaymanager',
   'encoding',
