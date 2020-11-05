@@ -175,7 +175,7 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
   NSOpenGLPixelFormat *pixelFormat;
   GdkGLContext *shared;
   GdkGLContext *shared_data;
-  GdkGLContext *existing;
+  NSOpenGLContext *existing;
   GLint sync_to_framerate = 1;
   GLint validate = 0;
   int major, minor;
@@ -185,7 +185,7 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
   if (self->gl_context != nil)
     return TRUE;
 
-  existing = gdk_gl_context_get_current ();
+  existing = [NSOpenGLContext currentContext];
 
   gdk_gl_context_get_required_version (context, &major, &minor);
 
@@ -249,7 +249,7 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
   self->gl_context = g_steal_pointer (&gl_context);
 
   if (existing != NULL)
-    [GDK_MACOS_GL_CONTEXT (existing)->gl_context makeCurrentContext];
+    [existing makeCurrentContext];
 
   return TRUE;
 }
