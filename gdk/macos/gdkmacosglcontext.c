@@ -101,6 +101,8 @@ create_pixel_format (int      major,
     NSOpenGLPFAAccelerated,
     NSOpenGLPFADoubleBuffer,
     NSOpenGLPFABackingStore,
+    NSOpenGLPFAColorSize, 32,
+    NSOpenGLPFAAlphaSize, 8,
 
     (NSOpenGLPixelFormatAttribute)nil
   };
