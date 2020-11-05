@@ -1,3 +1,73 @@
+Overview of Changes in GTK+ 3.24.24
+===================================
+
+* GtkColorChooser:
+ - Update the default color palette
+
+* GtkFontChooser:
+ - Fix family-only mode to return regular style
+
+* GtkTreeView:
+ - Don't set focus-on-click for header buttons
+
+* Accessibility:
+ - Implement scrollSubstringTo
+ - Add a11y support to GtkPlug/GtkSocket
+
+* Printing:
+ - Allow the lpr backend to print pdf and ps files
+
+* Theme:
+ - Update gesture graphics
+ - Update HighContrast css
+
+* Wayland:
+ - Support the primary-selection-unstable-v1 protocol
+
+* X11:
+ - Fix a crash with parent-relative backgrounds
+
+* Broadway:
+ - Set modifier state of scroll events
+
+* Build:
+ - Fix pc file generation on NixOS
+
+* OS X:
+ - Restore command-key bindings
+
+* Windows:
+ - Fix meson build with epoxy subproject
+
+* Translation updates:
+ Basque
+ Brazilian Portuguese
+ British English
+ Catalan
+ Croatian
+ Czech
+ French
+ Galician
+ German
+ Greek
+ Hebrew
+ Hungarian
+ Indonesian
+ Italian
+ Kazakh
+ Latvian
+ Lithuanian
+ Persian
+ Polish
+ Portuguese
+ Slovak
+ Slovenian
+ Spanish
+ Swedish
+ Turkish
+ Ukrainian
+
+
 Overview of Changes in GTK+ 3.24.23
 ===================================
 
