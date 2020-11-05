@@ -99,6 +99,7 @@ create_pixel_format (int      major,
     NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersionLegacy,
     NSOpenGLPFAAccelerated,
     NSOpenGLPFADoubleBuffer,
+    NSOpenGLPFABackingStore,
 
     (NSOpenGLPixelFormatAttribute)nil
   };
@@ -143,6 +144,18 @@ ensure_gl_view (GdkMacosGLContext *self)
       [nsview setNeedsDisplay:YES];
       [nswindow setContentView:nsview];
       [nsview release];
+
+      if (self->dummy_view != NULL)
+        {
+          NSView *nsview = g_steal_pointer (&self->dummy_view);
+          [nsview release];
+        }
+
+      if (self->dummy_window != NULL)
+        {
+          NSWindow *nswindow = g_steal_pointer (&self->dummy_window);
+          [nswindow release];
+        }
     }
 
   return [nswindow contentView];
@@ -215,21 +228,15 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
   [gl_context setValues:&opaque forParameter:NSOpenGLCPSurfaceOpacity];
   [gl_context setValues:&validate forParameter:NSOpenGLContextParameterStateValidation];
 
-  if (self->is_attached || shared == NULL)
-    {
-      NSRect frame = NSMakeRect (0, 0, 1, 1);
+  self->dummy_window = [[NSWindow alloc] initWithContentRect:NSZeroRect
+                                                   styleMask:0
+                                                     backing:NSBackingStoreBuffered
+                                                       defer:NO
+                                                      screen:nil];
+  self->dummy_view = [[NSView alloc] initWithFrame:NSZeroRect];
+  [self->dummy_window setContentView:self->dummy_view];
+  [gl_context setView:self->dummy_view];
 
-      self->dummy_window = [[NSWindow alloc] initWithContentRect:frame
-                                                       styleMask:0
-                                                         backing:NSBackingStoreBuffered
-                                                           defer:NO
-                                                          screen:nil];
-      self->dummy_view = [[NSView alloc] initWithFrame:frame];
-      [self->dummy_window setContentView:self->dummy_view];
-      [gl_context setView:self->dummy_view];
-    }
-
-  [gl_context makeCurrentContext];
   GLint renderer_id = 0;
   [gl_context getValues:&renderer_id forParameter:NSOpenGLContextParameterCurrentRendererID];
   GDK_DISPLAY_NOTE (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)),
@@ -237,7 +244,6 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
                     g_message ("Created NSOpenGLContext[%p] using %s",
                                gl_context,
                                get_renderer_name (renderer_id)));
-  [NSOpenGLContext clearCurrentContext];
 
   self->gl_context = g_steal_pointer (&gl_context);
 
@@ -257,11 +263,20 @@ gdk_macos_gl_context_begin_frame (GdkDrawContext *context,
 
   /* If begin frame is called, that means we are trying to draw to
    * the NSWindow using our view. That might be a GdkMacosCairoView
-   * but we need it to be a GL view.
+   * but we need it to be a GL view. Also, only in this case do we
+   * want to replace our damage region for the next frame (to avoid
+   * doing it multiple times).
    */
   if (!self->is_attached &&
       gdk_gl_context_get_shared_context (GDK_GL_CONTEXT (context)))
-    ensure_gl_view (self);
+    {
+      ensure_gl_view (self);
+
+      g_clear_pointer (&self->damage, cairo_region_destroy);
+      self->damage = cairo_region_copy (painted);
+
+      cairo_region_get_extents (painted, &self->flush_rect);
+    }
 
   if (self->needs_resize)
     {
@@ -270,9 +285,10 @@ gdk_macos_gl_context_begin_frame (GdkDrawContext *context,
       if (self->dummy_view != NULL)
         {
           GdkSurface *surface = gdk_draw_context_get_surface (context);
-          GLint vals[2] = { surface->width, surface->height };
+          NSRect frame = NSMakeRect (0, 0, surface->width, surface->height);
 
-          [self->gl_context setValues:vals forParameter:NSOpenGLContextParameterSurfaceBackingSize];
+          [self->dummy_window setFrame:frame display:NO];
+          [self->dummy_view setFrame:frame];
         }
 
       [self->gl_context update];
@@ -311,13 +327,14 @@ gdk_macos_gl_context_end_frame (GdkDrawContext *context,
 
   GDK_DRAW_CONTEXT_CLASS (gdk_macos_gl_context_parent_class)->end_frame (context, painted);
 
+  /* We want to limit how much gets moved to the front buffer so here
+   * we adjust the clip rectangle before flushBuffer is called.
+   */
   G_STATIC_ASSERT (sizeof (GLint) == sizeof (int));
-
-  cairo_region_get_extents (painted, &extents);
-
   [self->gl_context
-         setValues:(GLint *)&extents
+         setValues:(GLint *)&self->flush_rect
       forParameter:NSOpenGLCPSwapRectangle];
+
   [self->gl_context flushBuffer];
 }
 
@@ -329,6 +346,21 @@ gdk_macos_gl_context_surface_resized (GdkDrawContext *draw_context)
   g_assert (GDK_IS_MACOS_GL_CONTEXT (self));
 
   self->needs_resize = TRUE;
+
+  g_clear_pointer (&self->damage, cairo_region_destroy);
+}
+
+static cairo_region_t *
+gdk_macos_gl_context_get_damage (GdkGLContext *context)
+{
+  GdkMacosGLContext *self = (GdkMacosGLContext *)context;
+
+  g_assert (GDK_IS_MACOS_GL_CONTEXT (self));
+
+  if (self->damage != NULL)
+    return cairo_region_copy (self->damage);
+
+  return GDK_GL_CONTEXT_CLASS (gdk_macos_gl_context_parent_class)->get_damage (context);
 }
 
 static void
@@ -339,17 +371,12 @@ gdk_macos_gl_context_dispose (GObject *gobject)
   if (self->dummy_view != nil)
     {
       NSView *nsview = g_steal_pointer (&self->dummy_view);
-
-      if (GDK_IS_MACOS_GL_VIEW (nsview))
-        [(GdkMacosGLView *)nsview setOpenGLContext:nil];
-
       [nsview release];
     }
 
   if (self->dummy_window != nil)
     {
       NSWindow *nswindow = g_steal_pointer (&self->dummy_window);
-
       [nswindow release];
     }
 
@@ -363,6 +390,8 @@ gdk_macos_gl_context_dispose (GObject *gobject)
       [gl_context clearDrawable];
       [gl_context release];
     }
+
+  g_clear_pointer (&self->damage, cairo_region_destroy);
 
   G_OBJECT_CLASS (gdk_macos_gl_context_parent_class)->dispose (gobject);
 }
@@ -380,6 +409,7 @@ gdk_macos_gl_context_class_init (GdkMacosGLContextClass *klass)
   draw_context_class->end_frame = gdk_macos_gl_context_end_frame;
   draw_context_class->surface_resized = gdk_macos_gl_context_surface_resized;
 
+  gl_class->get_damage = gdk_macos_gl_context_get_damage;
   gl_class->realize = gdk_macos_gl_context_real_realize;
 }
 
