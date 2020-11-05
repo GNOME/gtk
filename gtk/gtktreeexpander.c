@@ -158,7 +158,11 @@ gtk_tree_expander_update_for_list_row (GtkTreeExpander *self)
             {
               GtkGesture *gesture;
 
-              self->expander = gtk_builtin_icon_new ("expander");
+              self->expander =
+                g_object_new (GTK_TYPE_BUILTIN_ICON,
+                              "css-name", "expander",
+                              "accessible-role", GTK_ACCESSIBLE_ROLE_BUTTON,
+                              NULL);
 
               gesture = gtk_gesture_click_new ();
               gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
@@ -179,10 +183,22 @@ gtk_tree_expander_update_for_list_row (GtkTreeExpander *self)
                                         GTK_WIDGET (self),
                                         self->child);
             }
+
           if (gtk_tree_list_row_get_expanded (self->list_row))
-            gtk_widget_set_state_flags (self->expander, GTK_STATE_FLAG_CHECKED, FALSE);
+            {
+              gtk_widget_set_state_flags (self->expander, GTK_STATE_FLAG_CHECKED, FALSE);
+              gtk_accessible_update_state (GTK_ACCESSIBLE (self->expander),
+                                           GTK_ACCESSIBLE_STATE_EXPANDED, TRUE,
+                                           -1);
+            }
           else
-            gtk_widget_unset_state_flags (self->expander, GTK_STATE_FLAG_CHECKED);
+            {
+              gtk_widget_unset_state_flags (self->expander, GTK_STATE_FLAG_CHECKED);
+              gtk_accessible_update_state (GTK_ACCESSIBLE (self->expander),
+                                           GTK_ACCESSIBLE_STATE_EXPANDED, FALSE,
+                                           -1);
+            }
+
           child = gtk_widget_get_prev_sibling (self->expander);
         }
       else
@@ -201,14 +217,13 @@ gtk_tree_expander_update_for_list_row (GtkTreeExpander *self)
             child = gtk_widget_get_prev_sibling (child);
           else
             {
-              GtkWidget *indent = gtk_builtin_icon_new ("indent");
+              GtkWidget *indent =
+                g_object_new (GTK_TYPE_BUILTIN_ICON,
+                              "css-name", "indent",
+                              "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
+                              NULL);
 
               gtk_widget_insert_after (indent, GTK_WIDGET (self), NULL);
-
-              /* The indent icon is not visible in the accessibility tree */
-              gtk_accessible_update_state (GTK_ACCESSIBLE (indent),
-                                           GTK_ACCESSIBLE_STATE_HIDDEN, TRUE,
-                                           -1);
             }
         }
 
@@ -231,9 +246,19 @@ gtk_tree_expander_list_row_notify_cb (GtkTreeListRow  *list_row,
       if (self->expander)
         {
           if (gtk_tree_list_row_get_expanded (list_row))
-            gtk_widget_set_state_flags (self->expander, GTK_STATE_FLAG_CHECKED, FALSE);
+            {
+              gtk_widget_set_state_flags (self->expander, GTK_STATE_FLAG_CHECKED, FALSE);
+              gtk_accessible_update_state (GTK_ACCESSIBLE (self->expander),
+                                           GTK_ACCESSIBLE_STATE_EXPANDED, TRUE,
+                                           -1);
+            }
           else
-            gtk_widget_unset_state_flags (self->expander, GTK_STATE_FLAG_CHECKED);
+            {
+              gtk_widget_unset_state_flags (self->expander, GTK_STATE_FLAG_CHECKED);
+              gtk_accessible_update_state (GTK_ACCESSIBLE (self->expander),
+                                           GTK_ACCESSIBLE_STATE_EXPANDED, FALSE,
+                                           -1);
+            }
         }
     }
   else if (pspec->name == g_intern_static_string ("item"))
