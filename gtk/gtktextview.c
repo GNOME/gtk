@@ -5473,10 +5473,7 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
                 gtk_text_view_selection_bubble_popup_unset (text_view);
 
                 if (is_touchscreen)
-                  {
-                    gtk_text_buffer_place_cursor (get_buffer (text_view), &iter);
-                    priv->handle_place_time = g_get_monotonic_time ();
-                  }
+                  priv->handle_place_time = g_get_monotonic_time ();
                 else
                   gtk_text_view_start_selection_drag (text_view, &iter,
                                                       SELECT_CHARACTERS, extends);
@@ -7371,7 +7368,7 @@ gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
   is_touchscreen = gtk_simulate_touchscreen () ||
     gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
 
-  if (!is_touchscreen && clicked_in_selection &&
+  if ((is_touchscreen || clicked_in_selection) &&
       !gtk_drag_check_threshold (GTK_WIDGET (text_view), start_x, start_y, x, y))
     {
       GtkTextIter iter;
