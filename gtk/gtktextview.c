@@ -5116,7 +5116,7 @@ gtk_text_view_handle_dragged (GtkTextHandle *handle,
       *old_iter = iter;
 
       if (handle == priv->text_handles[TEXT_HANDLE_CURSOR] &&
-          !gtk_widget_is_visible (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND])))
+          gtk_text_handle_get_role (priv->text_handles[TEXT_HANDLE_CURSOR]) == GTK_TEXT_HANDLE_ROLE_CURSOR)
         gtk_text_buffer_place_cursor (buffer, &cursor);
       else
         gtk_text_buffer_select_range (buffer, &cursor, &bound);
