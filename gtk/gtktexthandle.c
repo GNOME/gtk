@@ -447,7 +447,7 @@ handle_drag_update (GtkGestureDrag *gesture,
   gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
 
   x = start_x + offset_x - handle->dx;
-  y = start_y + offset_y - handle->dy;
+  y = start_y + offset_y - handle->dy + (handle->pointing_to.height / 2);
   g_signal_emit (widget, signals[HANDLE_DRAGGED], 0, x, y);
 }
 
