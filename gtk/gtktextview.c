@@ -5217,7 +5217,6 @@ gtk_text_view_update_handles (GtkTextView *text_view)
                                              &cursor);
           gtk_text_handle_set_role (priv->text_handles[TEXT_HANDLE_CURSOR],
                                     GTK_TEXT_HANDLE_ROLE_CURSOR);
-          gtk_widget_show (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_CURSOR]));
         }
       else if (gtk_text_iter_compare (&cursor, &bound) != 0)
         {
@@ -5227,14 +5226,12 @@ gtk_text_view_update_handles (GtkTextView *text_view)
                                              &cursor);
           gtk_text_handle_set_role (priv->text_handles[TEXT_HANDLE_CURSOR],
                                     GTK_TEXT_HANDLE_ROLE_SELECTION_START);
-          gtk_widget_show (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_CURSOR]));
 
           gtk_text_view_set_handle_position (text_view,
                                              priv->text_handles[TEXT_HANDLE_SELECTION_BOUND],
                                              &bound);
           gtk_text_handle_set_role (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND],
                                     GTK_TEXT_HANDLE_ROLE_SELECTION_END);
-          gtk_widget_show (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]));
         }
       else
         {
@@ -5473,10 +5470,7 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
                 gtk_text_view_selection_bubble_popup_unset (text_view);
 
                 if (is_touchscreen)
-                  {
-                    gtk_text_buffer_place_cursor (get_buffer (text_view), &iter);
-                    priv->handle_place_time = g_get_monotonic_time ();
-                  }
+                  priv->handle_place_time = g_get_monotonic_time ();
                 else
                   gtk_text_view_start_selection_drag (text_view, &iter,
                                                       SELECT_CHARACTERS, extends);
@@ -7344,11 +7338,6 @@ gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
   priv = text_view->priv;
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
-  if (!drag_gesture_get_text_surface_coords (gesture, text_view,
-                                             &start_x, &start_y, &x, &y))
-    return;
-
-
   clicked_in_selection =
     g_object_get_qdata (G_OBJECT (gesture), quark_text_selection_data) == NULL;
   g_object_set_qdata (G_OBJECT (gesture), quark_text_selection_data, NULL);
@@ -7363,6 +7352,10 @@ gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
   if (priv->magnifier_popover)
     gtk_widget_hide (priv->magnifier_popover);
 
+  if (!drag_gesture_get_text_surface_coords (gesture, text_view,
+                                             &start_x, &start_y, &x, &y))
+    return;
+
   /* Check whether the drag was cancelled rather than finished */
   if (!gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
     return;
@@ -7372,7 +7365,7 @@ gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
   is_touchscreen = gtk_simulate_touchscreen () ||
     gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
 
-  if (!is_touchscreen && clicked_in_selection &&
+  if ((is_touchscreen || clicked_in_selection) &&
       !gtk_drag_check_threshold (GTK_WIDGET (text_view), start_x, start_y, x, y))
     {
       GtkTextIter iter;

@@ -546,6 +546,7 @@ gtk_im_context_wayland_set_client_widget (GtkIMContext *context,
 
   if (context_wayland->widget)
     {
+      gtk_im_context_wayland_focus_out (context);
       gtk_widget_remove_controller (context_wayland->widget, GTK_EVENT_CONTROLLER (context_wayland->gesture));
       context_wayland->gesture = NULL;
     }

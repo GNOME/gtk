@@ -44,9 +44,10 @@ struct _GtkTextHandle
 {
   GtkWidget parent_instance;
 
-  GtkWidget *parent;
   GdkSurface *surface;
   GskRenderer *renderer;
+  GtkEventController *controller;
+  GtkWidget *controller_widget;
 
   GdkRectangle pointing_to;
   GtkBorder border;
@@ -60,6 +61,19 @@ struct _GtkTextHandle
 };
 
 static void gtk_text_handle_native_interface_init (GtkNativeInterface *iface);
+
+static void handle_drag_begin (GtkGestureDrag *gesture,
+                               double          x,
+                               double          y,
+                               GtkTextHandle  *handle);
+static void handle_drag_update (GtkGestureDrag *gesture,
+                                double          offset_x,
+                                double          offset_y,
+                                GtkWidget      *widget);
+static void handle_drag_end (GtkGestureDrag *gesture,
+                             double          offset_x,
+                             double          offset_y,
+                             GtkTextHandle  *handle);
 
 G_DEFINE_TYPE_WITH_CODE (GtkTextHandle, gtk_text_handle, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_NATIVE,
@@ -185,15 +199,6 @@ surface_render (GdkSurface     *surface,
   return TRUE;
 }
 
-static gboolean
-surface_event (GdkSurface    *surface,
-               GdkEvent      *event,
-               GtkTextHandle *handle)
-{
-  gtk_main_do_event (event);
-  return TRUE;
-}
-
 static void
 surface_mapped_changed (GtkWidget *widget)
 {
@@ -226,11 +231,11 @@ gtk_text_handle_realize (GtkWidget *widget)
 
   handle->surface = gdk_surface_new_popup (parent_surface, FALSE);
   gdk_surface_set_widget (handle->surface, widget);
+  gdk_surface_set_input_region (handle->surface, cairo_region_create ());
 
   g_signal_connect_swapped (handle->surface, "notify::mapped",
                             G_CALLBACK (surface_mapped_changed), widget);
   g_signal_connect (handle->surface, "render", G_CALLBACK (surface_render), widget);
-  g_signal_connect (handle->surface, "event", G_CALLBACK (surface_event), widget);
 
   GTK_WIDGET_CLASS (gtk_text_handle_parent_class)->realize (widget);
 
@@ -248,12 +253,33 @@ gtk_text_handle_unrealize (GtkWidget *widget)
   g_clear_object (&handle->renderer);
 
   g_signal_handlers_disconnect_by_func (handle->surface, surface_render, widget);
-  g_signal_handlers_disconnect_by_func (handle->surface, surface_event, widget);
   g_signal_handlers_disconnect_by_func (handle->surface, surface_mapped_changed, widget);
 
   gdk_surface_set_widget (handle->surface, NULL);
   gdk_surface_destroy (handle->surface);
   g_clear_object (&handle->surface);
+}
+
+static void
+text_handle_set_up_gesture (GtkTextHandle *handle)
+{
+  GtkNative *native;
+
+  /* The drag gesture is hooked on the parent native */
+  native = gtk_widget_get_native (gtk_widget_get_parent (GTK_WIDGET (handle)));
+  handle->controller_widget = GTK_WIDGET (native);
+
+  handle->controller = GTK_EVENT_CONTROLLER (gtk_gesture_drag_new ());
+  gtk_event_controller_set_propagation_phase (handle->controller,
+                                              GTK_PHASE_CAPTURE);
+  g_signal_connect (handle->controller, "drag-begin",
+                    G_CALLBACK (handle_drag_begin), handle);
+  g_signal_connect (handle->controller, "drag-update",
+                    G_CALLBACK (handle_drag_update), handle);
+  g_signal_connect (handle->controller, "drag-end",
+                    G_CALLBACK (handle_drag_end), handle);
+
+  gtk_widget_add_controller (handle->controller_widget, handle->controller);
 }
 
 static void
@@ -264,7 +290,10 @@ gtk_text_handle_map (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_text_handle_parent_class)->map (widget);
 
   if (handle->has_point)
-    gtk_text_handle_present_surface (handle);
+    {
+      gtk_text_handle_present_surface (handle);
+      text_handle_set_up_gesture (handle);
+    }
 }
 
 static void
@@ -274,6 +303,14 @@ gtk_text_handle_unmap (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_text_handle_parent_class)->unmap (widget);
   gdk_surface_hide (handle->surface);
+
+  if (handle->controller_widget)
+    {
+      gtk_widget_remove_controller (handle->controller_widget,
+                                    handle->controller);
+      handle->controller_widget = NULL;
+      handle->controller = NULL;
+    }
 }
 
 static void
@@ -330,26 +367,67 @@ gtk_text_handle_class_init (GtkTextHandleClass *klass)
   gtk_widget_class_set_css_name (widget_class, I_("cursor-handle"));
 }
 
+/* Relative to pointing_to x/y */
+static void
+handle_get_input_extents (GtkTextHandle *handle,
+                          GtkBorder     *border)
+{
+  GtkWidget *widget = GTK_WIDGET (handle);
+
+  if (handle->role == GTK_TEXT_HANDLE_ROLE_CURSOR)
+    {
+      border->left = (-gtk_widget_get_width (widget) / 2) - handle->border.left;
+      border->right = (gtk_widget_get_width (widget) / 2) + handle->border.right;
+    }
+  else if ((handle->role == GTK_TEXT_HANDLE_ROLE_SELECTION_END &&
+            gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) ||
+           (handle->role == GTK_TEXT_HANDLE_ROLE_SELECTION_START &&
+            gtk_widget_get_direction (widget) != GTK_TEXT_DIR_RTL))
+    {
+      border->left = -gtk_widget_get_width (widget) - handle->border.left;
+      border->right = handle->border.right;
+    }
+  else
+    {
+      border->left = -handle->border.left;
+      border->right = gtk_widget_get_width (widget) + handle->border.right;
+    }
+
+  border->top = - handle->border.top;
+  border->bottom = gtk_widget_get_height (widget) + handle->border.bottom;
+}
+
 static void
 handle_drag_begin (GtkGestureDrag *gesture,
                    double          x,
                    double          y,
                    GtkTextHandle  *handle)
 {
-  GtkWidget *widget;
+  GtkBorder input_extents;
+  double widget_x, widget_y;
 
-  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+  x -= handle->pointing_to.x;
+  y -= handle->pointing_to.y;
 
-  if (handle->role == GTK_TEXT_HANDLE_ROLE_CURSOR)
-    x -= gtk_widget_get_width (widget) / 2;
-  else if ((handle->role == GTK_TEXT_HANDLE_ROLE_SELECTION_END &&
-            gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) ||
-           (handle->role == GTK_TEXT_HANDLE_ROLE_SELECTION_START &&
-            gtk_widget_get_direction (widget) != GTK_TEXT_DIR_RTL))
-    x -= gtk_widget_get_width (widget);
+  /* Figure out if the coordinates fall into the handle input area, coordinates
+   * are relative to the parent widget.
+   */
+  handle_get_input_extents (handle, &input_extents);
+  gtk_widget_translate_coordinates (handle->controller_widget,
+                                    gtk_widget_get_parent (GTK_WIDGET (handle)),
+                                    x, y, &widget_x, &widget_y);
 
-  y += handle->border.top / 2;
+  if (widget_x < input_extents.left || widget_x >= input_extents.right ||
+      widget_y < input_extents.top || widget_y >= input_extents.bottom)
+    {
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+      return;
+    }
 
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+  /* Store untranslated coordinates here, so ::update does not need
+   * an extra translation
+   */
   handle->dx = x;
   handle->dy = y;
   handle->dragged = TRUE;
@@ -368,19 +446,8 @@ handle_drag_update (GtkGestureDrag *gesture,
 
   gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
 
-  x = handle->pointing_to.x + handle->pointing_to.width / 2 +
-    start_x + offset_x - handle->dx;
-  y = handle->pointing_to.y + handle->pointing_to.height +
-    start_y + offset_y - handle->dy;
-
-  if (handle->role == GTK_TEXT_HANDLE_ROLE_CURSOR)
-    x -= gtk_widget_get_width (widget) / 2;
-  else if ((handle->role == GTK_TEXT_HANDLE_ROLE_SELECTION_END &&
-            gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) ||
-           (handle->role == GTK_TEXT_HANDLE_ROLE_SELECTION_START &&
-            gtk_widget_get_direction (widget) != GTK_TEXT_DIR_RTL))
-    x -= gtk_widget_get_width (widget);
-
+  x = start_x + offset_x - handle->dx;
+  y = start_y + offset_y - handle->dy;
   g_signal_emit (widget, signals[HANDLE_DRAGGED], 0, x, y);
 }
 
@@ -390,7 +457,15 @@ handle_drag_end (GtkGestureDrag *gesture,
                  double          offset_y,
                  GtkTextHandle  *handle)
 {
-  g_signal_emit (handle, signals[DRAG_FINISHED], 0);
+  GdkEventSequence *sequence;
+  GtkEventSequenceState state;
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  state = gtk_gesture_get_sequence_state (GTK_GESTURE (gesture), sequence);
+
+  if (state == GTK_EVENT_SEQUENCE_CLAIMED)
+    g_signal_emit (handle, signals[DRAG_FINISHED], 0);
+
   handle->dragged = FALSE;
 }
 
@@ -422,20 +497,9 @@ gtk_text_handle_update_for_role (GtkTextHandle *handle)
 }
 
 static void
-gtk_text_handle_init (GtkTextHandle *widget)
+gtk_text_handle_init (GtkTextHandle *handle)
 {
-  GtkEventController *controller;
-
-  controller = GTK_EVENT_CONTROLLER (gtk_gesture_drag_new ());
-  g_signal_connect (controller, "drag-begin",
-                    G_CALLBACK (handle_drag_begin), widget);
-  g_signal_connect (controller, "drag-update",
-                    G_CALLBACK (handle_drag_update), widget);
-  g_signal_connect (controller, "drag-end",
-                    G_CALLBACK (handle_drag_end), widget);
-  gtk_widget_add_controller (GTK_WIDGET (widget), controller);
-
-  gtk_text_handle_update_for_role (GTK_TEXT_HANDLE (widget));
+  gtk_text_handle_update_for_role (handle);
 }
 
 GtkTextHandle *
