@@ -1636,6 +1636,14 @@ rewrite_scale (Element      *element,
 }
 
 static void
+rewrite_requires (Element      *element,
+                  MyParserData *data)
+{
+  if (has_attribute (element, "lib", "gtk+"))
+    set_attribute_value (element, "lib", "gtk");
+}
+
+static void
 rewrite_overlay (Element      *element,
                  MyParserData *data)
 {
@@ -1977,6 +1985,9 @@ rewrite_element (Element      *element,
   if (g_str_equal (element->element_name, "property") &&
       property_has_been_removed (element, data))
     return TRUE;
+
+  if (g_str_equal (element->element_name, "requires"))
+    rewrite_requires (element, data);
 
   return FALSE;
 }
