@@ -445,6 +445,9 @@ gtk4-builder-tool simplify command can perform many of the
 necessary changes automatically, when called with the --3to4
 option. You should always review the resulting changes.
 
+The <requires> tag now supports for the 'lib' attribute the
+'gtk' value only, instead of the 'gtk+' one previously.
+
 ### Adapt to event controller API changes
 
 A few changes to the event controller and #GtkGesture APIs
