@@ -8,6 +8,7 @@ demos/gtk-demo/blendmodes.ui
 demos/gtk-demo/changedisplay.c
 demos/gtk-demo/clipboard.c
 demos/gtk-demo/combobox.c
+demos/gtk-demo/constraints.ui
 demos/gtk-demo/cursors.ui
 demos/gtk-demo/demoimage.c
 demos/gtk-demo/demo.ui
@@ -182,6 +183,7 @@ testsuite/gtk/focus-chain/widget-factory3.ui
 testsuite/gtk/focus-chain/widget-factory.ui
 testsuite/gtk/ui/a11y2.ui
 testsuite/gtk/ui/celllayout1.ui
+testsuite/gtk/ui/constraints.ui
 testsuite/gtk/ui/container1.ui
 testsuite/gtk/ui/container8.ui
 testsuite/gtk/ui/scale1.ui
@@ -360,6 +362,7 @@ testsuite/tools/simplify-data-3to4/grid.ui
 testsuite/tools/simplify-data-3to4/notebook.ui
 testsuite/tools/simplify-data-3to4/office-runner.ui
 testsuite/tools/simplify-data-3to4/stack.ui
+testsuite/tools/simplify-data-3to4/toolbar.ui
 testsuite/tools/simplify-data/test3.ui
 tests/visuals/linked-buttons-horizontal.ui
 tests/visuals/linked-buttons-vertical.ui
