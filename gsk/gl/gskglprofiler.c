@@ -18,6 +18,7 @@ struct _GskGLProfiler
   GLuint gl_queries[N_QUERIES];
   GLuint active_query;
 
+  gboolean has_queries : 1;
   gboolean has_timer : 1;
   gboolean first_frame : 1;
 };
@@ -37,7 +38,8 @@ gsk_gl_profiler_finalize (GObject *gobject)
 {
   GskGLProfiler *self = GSK_GL_PROFILER (gobject);
 
-  glDeleteQueries (N_QUERIES, self->gl_queries);
+  if (self->has_queries)
+    glDeleteQueries (N_QUERIES, self->gl_queries);
 
   g_clear_object (&self->gl_context);
 
@@ -106,10 +108,14 @@ gsk_gl_profiler_class_init (GskGLProfilerClass *klass)
 static void
 gsk_gl_profiler_init (GskGLProfiler *self)
 {
-  glGenQueries (N_QUERIES, self->gl_queries);
+  self->has_queries = epoxy_is_desktop_gl();
+  self->has_timer = epoxy_is_desktop_gl() && (epoxy_gl_version () >= 33 || epoxy_has_gl_extension ("GL_ARB_timer_query"));
 
+  if (!self->has_queries)
+    return;
+
+  glGenQueries (N_QUERIES, self->gl_queries);
   self->first_frame = TRUE;
-  self->has_timer = epoxy_gl_version () >= 33 || epoxy_has_gl_extension ("GL_ARB_timer_query");
 }
 
 GskGLProfiler *
@@ -127,7 +133,7 @@ gsk_gl_profiler_begin_gpu_region (GskGLProfiler *profiler)
 
   g_return_if_fail (GSK_IS_GL_PROFILER (profiler));
 
-  if (!profiler->has_timer)
+  if (!profiler->has_timer || !profiler->has_queries)
     return;
 
   query_id = profiler->gl_queries[profiler->active_query];
@@ -143,7 +149,7 @@ gsk_gl_profiler_end_gpu_region (GskGLProfiler *profiler)
 
   g_return_val_if_fail (GSK_IS_GL_PROFILER (profiler), 0);
 
-  if (!profiler->has_timer)
+  if (!profiler->has_timer || !profiler->has_queries)
     return 0;
 
   glEndQuery (GL_TIME_ELAPSED);
