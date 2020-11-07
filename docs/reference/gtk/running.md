@@ -293,6 +293,24 @@ CSD is always used for windows with a custom titlebar widget set,
 as the WM should not draw another titlebar or other decorations
 around the custom one.
 
+### GTK_A11Y
+
+If set, selects the accessibility backend to use. The following
+backends can be selected, provided they are included in the GTK
+library you are using:
+
+help
+ : Prints information about available options
+atspi
+ : Selects the AT-SPI accessibility backend
+test
+ : Selects the test backend
+none
+ : Disables the accessibility backend
+
+The `test` accessibility backend is recommended for test suites and remote
+continuous integration pipelines.
+
 ### XDG_DTA_HOME, XDG_DATA_DIRS
 
 GTK uses these environment variables to locate icon themes

@@ -101,7 +101,7 @@ foreach renderer : renderers
                   join_paths(meson.current_source_dir(), 'compare', test + '.png')],
            env: [
                   'GSK_RENDERER=' + renderer[0],
-                  'GTK_TEST_ACCESSIBLE=1',
+                  'GTK_A11Y=test',
                   'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
                   'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
                 ],
@@ -179,7 +179,7 @@ foreach test : node_parser_tests
                ],
          env: [
                 'GSK_RENDERER=opengl',
-                'GTK_TEST_ACCESSIBLE=1',
+                'GTK_A11Y=test',
                 'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
                 'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
               ],
@@ -213,7 +213,7 @@ foreach t : tests
        protocol: 'tap',
        env: [
               'GSK_RENDERER=cairo',
-              'GTK_TEST_ACCESSIBLE=1',
+              'GTK_A11Y=test',
               'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
               'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
             ],

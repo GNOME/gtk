@@ -1,5 +1,5 @@
 nodetest_env = environment()
-nodetest_env.set('GTK_TEST_ACCESSIBLE', '1')
+nodetest_env.set('GTK_A11Y', 'test')
 nodetest_env.set('GSK_RENDERER', 'cairo')
 nodetest_env.set('G_TEST_SRCDIR', meson.current_source_dir())
 nodetest_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
