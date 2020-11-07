@@ -2107,6 +2107,7 @@ gtk_native_dialog_get_type
 <TITLE>GtkNotebook</TITLE>
 GtkNotebook
 GtkNotebookPage
+GtkNotebookTab
 gtk_notebook_new
 gtk_notebook_get_page
 gtk_notebook_get_pages
@@ -2163,7 +2164,6 @@ GTK_NOTEBOOK_GET_CLASS
 <SUBSECTION Private>
 gtk_notebook_get_type
 gtk_notebook_page_get_type
-GtkNotebookTab
 GtkNotebookPrivate
 </SECTION>
 
