@@ -40,7 +40,7 @@ G_BEGIN_DECLS
  * Describes the known strictness of a filter.
  *
  * Note that for filters where the strictness is not known,
- * %@GTK_FILTER_MATCH_SOME is always an acceptable value,
+ * %GTK_FILTER_MATCH_SOME is always an acceptable value,
  * even if a filter does match all or no items.
  */
 typedef enum {
@@ -64,7 +64,7 @@ typedef enum {
  * using the filter to optimize refiltering items.
  *
  * If you are writing an implementation and are not sure which
- * value to pass, @GTK_FILTER_CHANGE_DIFFERENT is always a correct
+ * value to pass, %GTK_FILTER_CHANGE_DIFFERENT is always a correct
  * choice.
  */
 typedef enum {

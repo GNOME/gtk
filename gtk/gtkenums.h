@@ -64,12 +64,12 @@ G_BEGIN_DECLS
  * could be scaled and stretched, it could be centered, or it could be
  * positioned to one side of the space.
  *
- * Note that in horizontal context @GTK_ALIGN_START and @GTK_ALIGN_END
+ * Note that in horizontal context %GTK_ALIGN_START and %GTK_ALIGN_END
  * are interpreted relative to text direction.
  *
- * @GTK_ALIGN_BASELINE support is optional for containers and widgets, and
+ * %GTK_ALIGN_BASELINE support is optional for containers and widgets, and
  * it is only supported for vertical alignment.  When it's not supported by
- * a child or a container it is treated as @GTK_ALIGN_FILL.
+ * a child or a container it is treated as %GTK_ALIGN_FILL.
  */
 typedef enum
 {
@@ -760,7 +760,7 @@ typedef enum
 /**
  * GtkBorderStyle:
  * @GTK_BORDER_STYLE_NONE: No visible border
- * @GTK_BORDER_STYLE_HIDDEN: Same as @GTK_BORDER_STYLE_NONE
+ * @GTK_BORDER_STYLE_HIDDEN: Same as %GTK_BORDER_STYLE_NONE
  * @GTK_BORDER_STYLE_SOLID: A single line segment
  * @GTK_BORDER_STYLE_INSET: Looks as if the content is sunken into the canvas
  * @GTK_BORDER_STYLE_OUTSET: Looks as if the content is coming out of the canvas
@@ -811,8 +811,8 @@ G_END_DECLS
  * @GTK_INPUT_PURPOSE_URL: Edited field expects URL
  * @GTK_INPUT_PURPOSE_EMAIL: Edited field expects email address
  * @GTK_INPUT_PURPOSE_NAME: Edited field expects the name of a person
- * @GTK_INPUT_PURPOSE_PASSWORD: Like @GTK_INPUT_PURPOSE_FREE_FORM, but characters are hidden
- * @GTK_INPUT_PURPOSE_PIN: Like @GTK_INPUT_PURPOSE_DIGITS, but characters are hidden
+ * @GTK_INPUT_PURPOSE_PASSWORD: Like %GTK_INPUT_PURPOSE_FREE_FORM, but characters are hidden
+ * @GTK_INPUT_PURPOSE_PIN: Like %GTK_INPUT_PURPOSE_DIGITS, but characters are hidden
  * @GTK_INPUT_PURPOSE_TERMINAL: Allow any character, in addition to control codes
  *
  * Describes primary purpose of the input widget. This information is
@@ -826,8 +826,8 @@ G_END_DECLS
  * application is expected to validate the entry contents, even if
  * it specified a purpose.
  *
- * The difference between @GTK_INPUT_PURPOSE_DIGITS and
- * @GTK_INPUT_PURPOSE_NUMBER is that the former accepts only digits
+ * The difference between %GTK_INPUT_PURPOSE_DIGITS and
+ * %GTK_INPUT_PURPOSE_NUMBER is that the former accepts only digits
  * while the latter also some punctuation (like commas or points, plus,
  * minus) and “e” or “E” as in 3.14E+000.
  *
@@ -874,7 +874,7 @@ typedef enum
  * behaviour according to the #GtkInputPurpose of the entry.
  *
  * Some common sense is expected when using these flags - mixing
- * @GTK_INPUT_HINT_LOWERCASE with any of the uppercase hints makes no sense.
+ * %GTK_INPUT_HINT_LOWERCASE with any of the uppercase hints makes no sense.
  *
  * This enumeration may be extended in the future; input methods should
  * ignore unknown values.
@@ -1464,7 +1464,7 @@ typedef enum {
  *    position with respect to the total number of columns within a table,
  *    grid, or treegrid. Value type: integer
  * @GTK_ACCESSIBLE_RELATION_COL_INDEX_TEXT: Defines a human readable text
- *   alternative of @GTK_ACCESSIBLE_RELATION_COL_INDEX. Value type: string
+ *   alternative of %GTK_ACCESSIBLE_RELATION_COL_INDEX. Value type: string
  * @GTK_ACCESSIBLE_RELATION_COL_SPAN: Defines the number of columns spanned
  *   by a cell or gridcell within a table, grid, or treegrid. Value type: integer
  * @GTK_ACCESSIBLE_RELATION_CONTROLS: Identifies the element (or elements) whose
