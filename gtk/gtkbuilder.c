@@ -71,7 +71,7 @@
  * element contains an `<object>` element which describes the child object.
  * The target toolkit version(s) are described by <requires> elements,
  * the “lib” attribute specifies the widget library in question (currently
- * the only supported value is “gtk+”) and the “version” attribute specifies
+ * the only supported value is “gtk”) and the “version” attribute specifies
  * the target version in the form “`<major>`.`<minor>`”. The builder will error
  * out if the version requirements are not met.
  *

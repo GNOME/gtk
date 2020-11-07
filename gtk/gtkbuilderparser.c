@@ -2014,7 +2014,7 @@ end_element (GtkBuildableParseContext  *context,
        * required versions, possibly throw a signal allowing them
        * to check their library versions here.
        */
-      if (!strcmp (req_info->library, "gtk+"))
+      if (!strcmp (req_info->library, "gtk"))
         {
           if (!GTK_CHECK_VERSION (req_info->major, req_info->minor, 0))
             {
