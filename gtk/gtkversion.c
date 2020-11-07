@@ -43,7 +43,7 @@
  * (e.g. in GTK version 3.1.5 this is 3.)
  *
  * This function is in the library, so it represents the GTK library
- * your code is running against. Contrast with the #GTK_MAJOR_VERSION
+ * your code is running against. Contrast with the %GTK_MAJOR_VERSION
  * macro, which represents the major version of the GTK headers you
  * have included when compiling your code.
  *
@@ -63,7 +63,7 @@ gtk_get_major_version (void)
  *
  * This function is in the library, so it represents the GTK library
  * your code is are running against. Contrast with the
- * #GTK_MINOR_VERSION macro, which represents the minor version of the
+ * %GTK_MINOR_VERSION macro, which represents the minor version of the
  * GTK headers you have included when compiling your code.
  *
  * Returns: the minor version number of the GTK library
@@ -82,7 +82,7 @@ gtk_get_minor_version (void)
  *
  * This function is in the library, so it represents the GTK library
  * your code is are running against. Contrast with the
- * #GTK_MICRO_VERSION macro, which represents the micro version of the
+ * %GTK_MICRO_VERSION macro, which represents the micro version of the
  * GTK headers you have included when compiling your code.
  *
  * Returns: the micro version number of the GTK library
@@ -133,7 +133,7 @@ gtk_get_interface_age (void)
  *
  * Checks that the GTK library in use is compatible with the
  * given version. Generally you would pass in the constants
- * #GTK_MAJOR_VERSION, #GTK_MINOR_VERSION, #GTK_MICRO_VERSION
+ * %GTK_MAJOR_VERSION, %GTK_MINOR_VERSION, %GTK_MICRO_VERSION
  * as the three arguments to this function; that produces
  * a check that the library in use is compatible with
  * the version of GTK the application or module was compiled
