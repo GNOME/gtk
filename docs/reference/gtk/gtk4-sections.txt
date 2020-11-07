@@ -1432,6 +1432,7 @@ GTK_TYPE_BOOKMARK_LIST
 <FILE>gtkfilter</FILE>
 <TITLE>GtkFilter</TITLE>
 GtkFilter
+GtkFilterMatch
 gtk_filter_match
 gtk_filter_get_strictness
 <SUBSECTION>
