@@ -44,7 +44,7 @@ typedef struct _GtkTreeViewColumn        GtkTreeViewColumn;
  * @GTK_TREE_VIEW_COLUMN_FIXED: Columns are a fixed numbers of pixels wide.
  *
  * The sizing method the column uses to determine its width.  Please note
- * that @GTK_TREE_VIEW_COLUMN_AUTOSIZE are inefficient for large views, and
+ * that %GTK_TREE_VIEW_COLUMN_AUTOSIZE are inefficient for large views, and
  * can make columns appear choppy.
  */
 typedef enum

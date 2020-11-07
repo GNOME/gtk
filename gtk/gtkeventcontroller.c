@@ -516,7 +516,7 @@ gtk_event_controller_get_propagation_limit (GtkEventController *controller)
  *
  * Sets the event propagation limit on the event controller.
  *
- * If the limit is set to %@GTK_LIMIT_SAME_NATIVE, the controller
+ * If the limit is set to %GTK_LIMIT_SAME_NATIVE, the controller
  * won't handle events that are targeted at widgets on a different
  * surface, such as popovers.
  */
