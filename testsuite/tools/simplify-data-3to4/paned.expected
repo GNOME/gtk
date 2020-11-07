@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk+" version="3.0"/>
+  <requires lib="gtk" version="3.0"/>
   <object class="GtkPaned">
     <property name="resize-end-child">0</property>
     <property name="shrink-start-child">0</property>
