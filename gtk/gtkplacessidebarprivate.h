@@ -64,6 +64,11 @@ typedef struct _GtkPlacesSidebarClass GtkPlacesSidebarClass;
  * use #GTK_PLACES_OPEN_NORMAL in the #GtkPlacesSidebar::open-location signal.  This is the
  * default mode of operation.
  */
+typedef enum {
+  GTK_PLACES_OPEN_NORMAL     = 1 << 0,
+  GTK_PLACES_OPEN_NEW_TAB    = 1 << 1,
+  GTK_PLACES_OPEN_NEW_WINDOW = 1 << 2
+} GtkPlacesOpenFlags;
 
 GType              gtk_places_sidebar_get_type                   (void) G_GNUC_CONST;
 GtkWidget *        gtk_places_sidebar_new                        (void);
@@ -112,30 +117,30 @@ gboolean             gtk_places_sidebar_get_show_starred_location (GtkPlacesSide
 
 /* Keep order, since it's used for the sort functions */
 typedef enum {
-  SECTION_INVALID,
-  SECTION_COMPUTER,
-  SECTION_MOUNTS,
-  SECTION_CLOUD,
-  SECTION_BOOKMARKS,
-  SECTION_OTHER_LOCATIONS,
-  N_SECTIONS
-} GtkPlacesSidebarSectionType;
+  GTK_PLACES_SECTION_INVALID,
+  GTK_PLACES_SECTION_COMPUTER,
+  GTK_PLACES_SECTION_MOUNTS,
+  GTK_PLACES_SECTION_CLOUD,
+  GTK_PLACES_SECTION_BOOKMARKS,
+  GTK_PLACES_SECTION_OTHER_LOCATIONS,
+  GTK_PLACES_N_SECTIONS
+} GtkPlacesSectionType;
 
 typedef enum {
-  PLACES_INVALID,
-  PLACES_BUILT_IN,
-  PLACES_XDG_DIR,
-  PLACES_MOUNTED_VOLUME,
-  PLACES_BOOKMARK,
-  PLACES_HEADING,
-  PLACES_CONNECT_TO_SERVER,
-  PLACES_ENTER_LOCATION,
-  PLACES_DROP_FEEDBACK,
-  PLACES_BOOKMARK_PLACEHOLDER,
-  PLACES_OTHER_LOCATIONS,
-  PLACES_STARRED_LOCATION,
-  N_PLACES
-} GtkPlacesSidebarPlaceType;
+  GTK_PLACES_INVALID,
+  GTK_PLACES_BUILT_IN,
+  GTK_PLACES_XDG_DIR,
+  GTK_PLACES_MOUNTED_VOLUME,
+  GTK_PLACES_BOOKMARK,
+  GTK_PLACES_HEADING,
+  GTK_PLACES_CONNECT_TO_SERVER,
+  GTK_PLACES_ENTER_LOCATION,
+  GTK_PLACES_DROP_FEEDBACK,
+  GTK_PLACES_BOOKMARK_PLACEHOLDER,
+  GTK_PLACES_OTHER_LOCATIONS,
+  GTK_PLACES_STARRED_LOCATION,
+  GTK_PLACES_N_PLACES
+} GtkPlacesPlaceType;
 
 char *gtk_places_sidebar_get_location_title (GtkPlacesSidebar *sidebar);
 

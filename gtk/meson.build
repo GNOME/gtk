@@ -437,6 +437,7 @@ gtk_public_sources = files([
 gtk_private_type_headers = files([
   'gtkcsstypesprivate.h',
   'gtktexthandleprivate.h',
+  'gtkplacessidebarprivate.h',
 ])
 
 gtk_public_headers = files([

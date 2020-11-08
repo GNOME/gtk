@@ -27,6 +27,7 @@
 #include "gtkrevealer.h"
 #include "gtkintl.h"
 #include "gtkspinner.h"
+#include "gtkprivatetypebuiltins.h"
 
 #ifdef HAVE_CLOUDPROVIDERS
 #include <cloudproviders.h>
@@ -45,8 +46,8 @@ struct _GtkSidebarRow
   gboolean ejectable;
   GtkWidget *eject_button;
   int order_index;
-  GtkPlacesSidebarSectionType section_type;
-  GtkPlacesSidebarPlaceType place_type;
+  GtkPlacesSectionType section_type;
+  GtkPlacesPlaceType place_type;
   char *uri;
   GDrive *drive;
   GVolume *volume;
@@ -167,11 +168,11 @@ gtk_sidebar_row_get_property (GObject    *object,
       break;
 
     case PROP_SECTION_TYPE:
-      g_value_set_int (value, self->section_type);
+      g_value_set_enum (value, self->section_type);
       break;
 
     case PROP_PLACE_TYPE:
-      g_value_set_int (value, self->place_type);
+      g_value_set_enum (value, self->place_type);
       break;
 
     case PROP_URI:
@@ -276,16 +277,16 @@ gtk_sidebar_row_set_property (GObject      *object,
       break;
 
     case PROP_SECTION_TYPE:
-      self->section_type = g_value_get_int (value);
-      if (self->section_type == SECTION_COMPUTER ||
-          self->section_type == SECTION_OTHER_LOCATIONS)
+      self->section_type = g_value_get_enum (value);
+      if (self->section_type == GTK_PLACES_SECTION_COMPUTER ||
+          self->section_type == GTK_PLACES_SECTION_OTHER_LOCATIONS)
         gtk_label_set_ellipsize (GTK_LABEL (self->label_widget), PANGO_ELLIPSIZE_NONE);
       else
         gtk_label_set_ellipsize (GTK_LABEL (self->label_widget), PANGO_ELLIPSIZE_END);
       break;
 
     case PROP_PLACE_TYPE:
-      self->place_type = g_value_get_int (value);
+      self->place_type = g_value_get_enum (value);
       break;
 
     case PROP_URI:
@@ -337,8 +338,8 @@ gtk_sidebar_row_set_property (GObject      *object,
             self->tooltip = NULL;
             gtk_widget_set_tooltip_text (GTK_WIDGET (self), NULL);
             self->ejectable = FALSE;
-            self->section_type = SECTION_BOOKMARKS;
-            self->place_type = PLACES_BOOKMARK_PLACEHOLDER;
+            self->section_type = GTK_PLACES_SECTION_BOOKMARKS;
+            self->place_type = GTK_PLACES_BOOKMARK_PLACEHOLDER;
             g_free (self->uri);
             self->uri = NULL;
             g_clear_object (&self->drive);
@@ -531,22 +532,24 @@ gtk_sidebar_row_class_init (GtkSidebarRowClass *klass)
                        G_PARAM_STATIC_STRINGS));
 
   properties [PROP_SECTION_TYPE] =
-    g_param_spec_int ("section-type",
-                      "section type",
-                      "The section type.",
-                      SECTION_INVALID, N_SECTIONS, SECTION_INVALID,
-                      (G_PARAM_READWRITE |
-                       G_PARAM_STATIC_STRINGS |
-                       G_PARAM_CONSTRUCT_ONLY));
+    g_param_spec_enum ("section-type",
+                       "section type",
+                       "The section type.",
+                       GTK_TYPE_PLACES_SECTION_TYPE,
+                       GTK_PLACES_SECTION_INVALID,
+                       (G_PARAM_READWRITE |
+                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_CONSTRUCT_ONLY));
 
   properties [PROP_PLACE_TYPE] =
-    g_param_spec_int ("place-type",
-                      "place type",
-                      "The place type.",
-                      PLACES_INVALID, N_PLACES, PLACES_INVALID,
-                      (G_PARAM_READWRITE |
-                       G_PARAM_STATIC_STRINGS |
-                       G_PARAM_CONSTRUCT_ONLY));
+    g_param_spec_enum ("place-type",
+                       "place type",
+                       "The place type.",
+                       GTK_TYPE_PLACES_PLACE_TYPE,
+                       GTK_PLACES_INVALID,
+                       (G_PARAM_READWRITE |
+                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_CONSTRUCT_ONLY));
 
   properties [PROP_URI] =
     g_param_spec_string ("uri",
