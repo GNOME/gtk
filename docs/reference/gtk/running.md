@@ -98,6 +98,14 @@ be used for the default IM module. This also can be a colon-separated
 list of input-methods, which GTK will try in turn until it finds one
 available on the system.
 
+### GTK_MEDIA
+
+Specifies what backend to load for #GtkMediaFile. The possible values
+depend on what options GTK was built with, and can include 'gstreamer',
+'ffmpeg' and 'none'. If set to 'none', media playback will be unavailable.
+The special value 'help' can be used to obtain a list of all supported
+media backends.
+
 ### GTK_EXE_PREFIX
 
 If set, GTK uses `$GTK_EXE_PREFIX/lib` instead of the libdir
