@@ -1192,7 +1192,7 @@ gtk_tree_store_set (GtkTreeStore *tree_store,
 /**
  * gtk_tree_store_remove:
  * @tree_store: A #GtkTreeStore
- * @iter: (inout): A valid #GtkTreeIter
+ * @iter: A valid #GtkTreeIter
  * 
  * Removes @iter from @tree_store.  After being removed, @iter is set to the
  * next valid row at that level, or invalidated if it previously pointed to the
