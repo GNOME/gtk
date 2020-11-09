@@ -1,5 +1,5 @@
 csstest_env = environment()
-csstest_env.set('GTK_TEST_ACCESSIBLE', '1')
+csstest_env.set('GTK_A11Y', 'test')
 csstest_env.set('GSK_RENDERER', 'cairo')
 csstest_env.set('G_TEST_SRCDIR', meson.current_source_dir())
 csstest_env.set('G_TEST_BUILDDIR', meson.current_build_dir())

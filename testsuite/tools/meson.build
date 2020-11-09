@@ -23,7 +23,7 @@ if bash.found()
          env: [
                 'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
                 'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
-                'GTK_TEST_ACCESSIBLE=1',
+                'GTK_A11Y=test',
                 'GTK_BUILDER_TOOL=@0@'.format(get_variable('gtk4_builder_tool').full_path()),
                 'GTK_QUERY_SETTINGS=@0@'.format(get_variable('gtk4_query_settings').full_path())
               ],

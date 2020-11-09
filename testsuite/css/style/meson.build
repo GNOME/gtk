@@ -1,5 +1,5 @@
 styletest_env = environment()
-styletest_env.set('GTK_TEST_ACCESSIBLE', '1')
+styletest_env.set('GTK_A11Y', 'test')
 styletest_env.set('GSK_RENDERER', 'cairo')
 styletest_env.set('G_TEST_SRCDIR', meson.current_source_dir())
 styletest_env.set('G_TEST_BUILDDIR', meson.current_build_dir())

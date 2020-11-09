@@ -95,6 +95,7 @@ gtk_test_at_context_init (GtkTestATContext *self)
  * gtk_test_at_context_new:
  * @accessible_role: the #GtkAccessibleRole for the AT context
  * @accessible: the #GtkAccessible instance which owns the AT context
+ * @display: a #GdkDisplay
  *
  * Creates a new #GtkTestATContext instance for @accessible, using the
  * given @accessible_role.
@@ -103,11 +104,13 @@ gtk_test_at_context_init (GtkTestATContext *self)
  */
 GtkATContext *
 gtk_test_at_context_new (GtkAccessibleRole  accessible_role,
-                         GtkAccessible     *accessible)
+                         GtkAccessible     *accessible,
+                         GdkDisplay        *display)
 {
   return g_object_new (GTK_TYPE_TEST_AT_CONTEXT,
                        "accessible-role", accessible_role,
                        "accessible", accessible,
+                       "display", display,
                        NULL);
 }
 

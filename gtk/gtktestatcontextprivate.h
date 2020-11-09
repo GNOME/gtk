@@ -31,6 +31,7 @@ G_DECLARE_FINAL_TYPE (GtkTestATContext, gtk_test_at_context, GTK, TEST_AT_CONTEX
 
 GtkATContext *
 gtk_test_at_context_new (GtkAccessibleRole  accessible_role,
-                         GtkAccessible     *accessible);
+                         GtkAccessible     *accessible,
+                         GdkDisplay        *display);
 
 G_END_DECLS

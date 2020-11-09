@@ -451,7 +451,7 @@ xfails = [
 ]
 
 reftest_env = environment()
-reftest_env.set('GTK_TEST_ACCESSIBLE', '1')
+reftest_env.set('GTK_A11Y', 'test')
 reftest_env.set('GSK_RENDERER', 'opengl')
 reftest_env.set('G_TEST_SRCDIR', meson.current_source_dir())
 reftest_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
