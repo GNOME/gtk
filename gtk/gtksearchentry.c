@@ -570,7 +570,7 @@ gtk_search_entry_init (GtkSearchEntry *entry)
   g_signal_connect (entry->entry, "notify", G_CALLBACK (notify_cb), entry);
   g_signal_connect (entry->entry, "activate", G_CALLBACK (activate_cb), entry);
 
-  entry->icon = gtk_image_new_from_icon_name ("edit-clear-all-symbolic");
+  entry->icon = gtk_image_new_from_icon_name ("edit-clear-symbolic");
   gtk_widget_set_tooltip_text (entry->icon, _("Clear entry"));
   gtk_widget_set_parent (entry->icon, GTK_WIDGET (entry));
   gtk_widget_set_child_visible (entry->icon, FALSE);
