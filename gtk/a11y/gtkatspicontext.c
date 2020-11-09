@@ -1387,9 +1387,11 @@ gtk_at_spi_context_unregister_object (GtkAtSpiContext *self)
                                            self->registration_ids[self->n_registered_objects]);
       self->registration_ids[self->n_registered_objects] = 0;
     }
+
+  g_clear_pointer (&self->interfaces, g_variant_unref);
 }
 /* }}} */
-/* {{{ GObject boilerplate */
+/* {{{ GObject boilerplate */ 
 static void
 gtk_at_spi_context_finalize (GObject *gobject)
 {
@@ -1399,7 +1401,6 @@ gtk_at_spi_context_finalize (GObject *gobject)
 
   g_free (self->bus_address);
   g_free (self->context_path);
-  g_clear_pointer (&self->interfaces, g_variant_unref);
 
   G_OBJECT_CLASS (gtk_at_spi_context_parent_class)->finalize (gobject);
 }
