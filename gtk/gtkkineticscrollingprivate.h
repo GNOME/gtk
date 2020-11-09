@@ -36,7 +36,8 @@ void                     gtk_kinetic_scrolling_free (GtkKineticScrolling  *kinet
 
 gboolean                 gtk_kinetic_scrolling_tick (GtkKineticScrolling  *data,
                                                      double                time_delta,
-                                                     double               *position);
+                                                     double               *position,
+                                                     double               *velocity);
 
 G_END_DECLS
 
