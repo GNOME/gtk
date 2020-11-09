@@ -28,6 +28,7 @@
 #include "gtkplacesviewprivate.h"
 #include "gtkplacesviewrowprivate.h"
 #include "gtktypebuiltins.h"
+#include "gtkprivatetypebuiltins.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkpopovermenu.h"
 

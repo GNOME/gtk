@@ -971,12 +971,6 @@ typedef enum
   GTK_SHORTCUT_SCOPE_GLOBAL
 } GtkShortcutScope;
 
-typedef enum {
-  GTK_PLACES_OPEN_NORMAL     = 1 << 0,
-  GTK_PLACES_OPEN_NEW_TAB    = 1 << 1,
-  GTK_PLACES_OPEN_NEW_WINDOW = 1 << 2
-} GtkPlacesOpenFlags;
-
 /**
  * GtkPickFlags:
  * @GTK_PICK_DEFAULT: The default behavior, include widgets that are receiving events

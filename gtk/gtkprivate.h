@@ -31,6 +31,7 @@
 
 #include "gtkcsstypesprivate.h"
 #include "gtktexthandleprivate.h"
+#include "gtkplacessidebarprivate.h"
 #include "gtkeventcontrollerprivate.h"
 #include "gtkwindowgroup.h"
 
