@@ -80,7 +80,7 @@ ucd_model_new (void)
   iter = g_variant_iter_new (v);
 
   store = g_list_store_new (G_TYPE_OBJECT);
-  while (g_variant_iter_next (iter, "(us)", &u, &name))
+  while (g_variant_iter_next (iter, "(u&s)", &u, &name))
     {
       if (u == 0)
         continue;
