@@ -7028,6 +7028,7 @@ gtk_widget_dispose (GObject *object)
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GSList *sizegroups;
   GtkActionMuxer *muxer;
+  GtkATContext *at_context;
 
   muxer = g_object_get_qdata (G_OBJECT (widget), quark_action_muxer);
   if (muxer != NULL)
@@ -7049,8 +7050,6 @@ gtk_widget_dispose (GObject *object)
   if (priv->layout_manager != NULL)
     gtk_layout_manager_set_widget (priv->layout_manager, NULL);
   g_clear_object (&priv->layout_manager);
-
-  g_clear_object (&priv->at_context);
 
   priv->visible = FALSE;
   if (_gtk_widget_get_realized (widget))
@@ -7075,6 +7074,10 @@ gtk_widget_dispose (GObject *object)
       sizegroups = sizegroups->next;
       gtk_size_group_remove_widget (size_group, widget);
     }
+
+  at_context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (widget));
+  if (at_context != NULL)
+    gtk_at_context_unrealize (at_context);
 
   g_object_set_qdata (object, quark_action_muxer, NULL);
 
@@ -7237,6 +7240,7 @@ gtk_widget_finalize (GObject *object)
   g_object_unref (priv->cssnode);
 
   g_clear_object (&priv->context);
+  g_clear_object (&priv->at_context);
 
   _gtk_size_request_cache_free (&priv->requests);
 
