@@ -1696,7 +1696,7 @@ gtk_label_set_text_internal (GtkLabel *self,
   self->text = str;
 
   gtk_accessible_update_property (GTK_ACCESSIBLE (self),
-                                  GTK_ACCESSIBLE_PROPERTY_LABEL, str,
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL, self->text,
                                   -1);
 
   gtk_label_select_region_index (self, 0, 0);

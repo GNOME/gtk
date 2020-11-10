@@ -1120,18 +1120,35 @@ gtk_accessible_value_collect_valist (const GtkAccessibleCollect  *cstate,
         GtkAccessibleValueRefListCtor ctor =
           (GtkAccessibleValueRefListCtor) cstate->ctor;
 
-        GList *value = va_arg (*args, gpointer);
+        GtkAccessible *ref = va_arg (*args, gpointer);
+        GList *value = NULL;
 
-        if (ctor == NULL)
+        while (ref != NULL)
           {
-            if (value == NULL)
-              res = NULL;
-            else
-              res = gtk_reference_list_accessible_value_new (value);
+            if (!GTK_IS_ACCESSIBLE (ref))
+              {
+                g_set_error (error, GTK_ACCESSIBLE_VALUE_ERROR,
+                             GTK_ACCESSIBLE_VALUE_ERROR_INVALID_VALUE,
+                             "Reference of type “%s” [%p] does not implement GtkAccessible",
+                             G_OBJECT_TYPE_NAME (ref), ref);
+                return NULL;
+              }
+
+            value = g_list_prepend (value, ref);
+
+            ref = va_arg (*args, gpointer);
           }
+
+        if (value == NULL)
+          res = gtk_undefined_accessible_value_new ();
         else
           {
-            res = (* ctor) (value);
+            value = g_list_reverse (value);
+
+            if (ctor == NULL)
+              res = gtk_reference_list_accessible_value_new (value);
+            else
+              res = (* ctor) (value);
           }
       }
       break;

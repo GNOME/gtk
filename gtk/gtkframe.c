@@ -376,7 +376,7 @@ update_accessible_relation (GtkFrame *frame)
 
   if (priv->label_widget)
     gtk_accessible_update_relation (GTK_ACCESSIBLE (priv->child),
-                                    GTK_ACCESSIBLE_RELATION_LABELLED_BY, g_list_append (NULL, priv->label_widget),
+                                    GTK_ACCESSIBLE_RELATION_LABELLED_BY, priv->label_widget, NULL,
                                     -1);
   else
     gtk_accessible_reset_relation (GTK_ACCESSIBLE (priv->child),

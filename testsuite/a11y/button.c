@@ -32,13 +32,11 @@ static void
 button_relation (void)
 {
   GtkWidget *button = gtk_button_new_with_mnemonic ("_Hello");
-  GList *list;
 
   g_object_ref_sink (button);
 
-  list = g_list_append (NULL, gtk_widget_get_first_child (button));
-  gtk_test_accessible_assert_relation (GTK_ACCESSIBLE (button), GTK_ACCESSIBLE_RELATION_LABELLED_BY, list);
-  g_list_free (list);
+  gtk_test_accessible_assert_relation (GTK_ACCESSIBLE (button),
+                                       GTK_ACCESSIBLE_RELATION_LABELLED_BY, gtk_widget_get_first_child (button), NULL);
 
   g_object_unref (button);
 }

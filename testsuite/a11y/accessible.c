@@ -590,7 +590,6 @@ test_reflist_relation (gconstpointer data)
   TestObject *object;
   TestObject *other;
   TestObject *third;
-  GList *refs;
 
   object = test_object_new (GTK_ACCESSIBLE_ROLE_CHECKBOX);
   other = test_object_new (GTK_ACCESSIBLE_ROLE_CHECKBOX);
@@ -600,21 +599,15 @@ test_reflist_relation (gconstpointer data)
 
   gtk_test_accessible_assert_relation (object, relation, NULL);
 
-  refs = g_list_append (NULL, other);
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (object),
+                                  relation, other, NULL,
+                                  -1);
+  gtk_test_accessible_assert_relation (object, relation, other, NULL);
 
   gtk_accessible_update_relation (GTK_ACCESSIBLE (object),
-                                  relation, refs,
+                                  relation, other, third, NULL,
                                   -1);
-  gtk_test_accessible_assert_relation (object, relation, refs);
-
-  refs = g_list_append (refs, third);
-
-  gtk_accessible_update_relation (GTK_ACCESSIBLE (object),
-                                  relation, refs,
-                                  -1);
-  gtk_test_accessible_assert_relation (object, relation, refs);
-
-  g_list_free (refs);
+  gtk_test_accessible_assert_relation (object, relation, other, third, NULL);
 
   g_object_unref (object);
   g_object_unref (other);

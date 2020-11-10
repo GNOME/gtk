@@ -61,7 +61,6 @@ test_labelled_by (void)
 {
   GtkWidget *widget;
   GtkWidget *label;
-  GList *list;
 
   widget = gtk_switch_new ();
   g_object_ref_sink (widget);
@@ -72,9 +71,7 @@ test_labelled_by (void)
   g_object_ref_sink (label);
   gtk_widget_add_mnemonic_label (widget, label);
 
-  list = g_list_append (NULL, label);
-  gtk_test_accessible_assert_relation (widget, GTK_ACCESSIBLE_RELATION_LABELLED_BY, list);
-  g_list_free (list);
+  gtk_test_accessible_assert_relation (widget, GTK_ACCESSIBLE_RELATION_LABELLED_BY, label, NULL);
 
   g_object_unref (widget);
   g_object_unref (label);

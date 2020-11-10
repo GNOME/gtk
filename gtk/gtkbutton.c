@@ -939,8 +939,7 @@ gtk_button_set_icon_name (GtkButton  *button,
     }
 
   gtk_accessible_update_relation (GTK_ACCESSIBLE (button),
-                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY,
-                                    g_list_append (NULL, priv->child),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, priv->child, NULL,
                                   -1);
 
   gtk_button_set_child_type (button, ICON_CHILD);

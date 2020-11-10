@@ -9329,7 +9329,8 @@ gtk_widget_add_mnemonic_label (GtkWidget *widget,
                                GtkWidget *label)
 {
   GSList *old_list, *new_list;
-  GList *list;
+  GtkAccessibleRelation relation = GTK_ACCESSIBLE_RELATION_LABELLED_BY;
+  GValue value = G_VALUE_INIT;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_IS_WIDGET (label));
@@ -9340,10 +9341,13 @@ gtk_widget_add_mnemonic_label (GtkWidget *widget,
   g_object_set_qdata_full (G_OBJECT (widget), quark_mnemonic_labels,
 			   new_list, (GDestroyNotify) g_slist_free);
 
-  list = gtk_widget_list_mnemonic_labels (widget);
-  gtk_accessible_update_relation (GTK_ACCESSIBLE (widget),
-                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, list,
-                                  -1);
+  /* The ATContext takes ownership of the GList returned by list_mnemonic_labels(),
+   * so we don't need to free it
+   */
+  gtk_accessible_relation_init_value (relation, &value);
+  g_value_set_pointer (&value, gtk_widget_list_mnemonic_labels (widget));
+  gtk_accessible_update_relation_value (GTK_ACCESSIBLE (widget), 1, &relation, &value);
+  g_value_unset (&value);
 }
 
 /**

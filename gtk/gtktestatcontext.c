@@ -171,7 +171,12 @@ gtk_test_accessible_check_property (GtkAccessible         *accessible,
 
   va_end (args);
 
-  g_assert_no_error (error);
+  if (error != NULL)
+    {
+      res = g_strdup (error->message);
+      g_error_free (error);
+      return res;
+    }
 
   if (check_value == NULL)
     check_value = gtk_accessible_value_get_default_for_property (property);
@@ -233,7 +238,12 @@ gtk_test_accessible_check_state (GtkAccessible      *accessible,
 
   va_end (args);
 
-  g_assert_no_error (error);
+  if (error != NULL)
+    {
+      res = g_strdup (error->message);
+      g_error_free (error);
+      return res;
+    }
 
   if (check_value == NULL)
     check_value = gtk_accessible_value_get_default_for_state (state);
@@ -295,7 +305,12 @@ gtk_test_accessible_check_relation (GtkAccessible         *accessible,
 
   va_end (args);
 
-  g_assert_no_error (error);
+  if (error != NULL)
+    {
+      res = g_strdup (error->message);
+      g_error_free (error);
+      return res;
+    }
 
   if (check_value == NULL)
     check_value = gtk_accessible_value_get_default_for_relation (relation);

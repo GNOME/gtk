@@ -71,7 +71,6 @@ stack_relations (void)
   GtkWidget *switcher = gtk_stack_switcher_new ();
   GtkWidget *child;
   GtkStackPage *page;
-  GList *list;
 
   g_object_ref_sink (stack);
   g_object_ref_sink (switcher);
@@ -83,15 +82,11 @@ stack_relations (void)
 
   child = gtk_widget_get_first_child (switcher);
   page = gtk_stack_get_page (GTK_STACK (stack), child1);
-  list = g_list_append (NULL, page);
-  gtk_test_accessible_assert_relation (GTK_ACCESSIBLE (child), GTK_ACCESSIBLE_RELATION_CONTROLS, list);
-  g_list_free (list);
+  gtk_test_accessible_assert_relation (GTK_ACCESSIBLE (child), GTK_ACCESSIBLE_RELATION_CONTROLS, page, NULL);
 
   child = gtk_widget_get_last_child (switcher);
   page = gtk_stack_get_page (GTK_STACK (stack), child2);
-  list = g_list_append (NULL, page);
-  gtk_test_accessible_assert_relation (GTK_ACCESSIBLE (child), GTK_ACCESSIBLE_RELATION_CONTROLS, list);
-  g_list_free (list);
+  gtk_test_accessible_assert_relation (GTK_ACCESSIBLE (child), GTK_ACCESSIBLE_RELATION_CONTROLS, page, NULL);
 
   g_object_unref (stack);
   g_object_unref (switcher);

@@ -4106,7 +4106,6 @@ gtk_scrolled_window_set_child (GtkScrolledWindow *scrolled_window,
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
   GtkWidget *scrollable_child;
-  GList *list;
 
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
 
@@ -4163,16 +4162,21 @@ gtk_scrolled_window_set_child (GtkScrolledWindow *scrolled_window,
     }
 
   if (priv->child)
-    list = g_list_append (NULL, priv->child);
+    {
+      gtk_accessible_update_relation (GTK_ACCESSIBLE (priv->hscrollbar),
+                                      GTK_ACCESSIBLE_RELATION_CONTROLS, priv->child, NULL,
+                                      -1);
+      gtk_accessible_update_relation (GTK_ACCESSIBLE (priv->vscrollbar),
+                                      GTK_ACCESSIBLE_RELATION_CONTROLS, priv->child, NULL,
+                                      -1);
+    }
   else
-    list = NULL;
-  gtk_accessible_update_relation (GTK_ACCESSIBLE (priv->hscrollbar),
-                                  GTK_ACCESSIBLE_RELATION_CONTROLS, list,
-                                  -1);
-  gtk_accessible_update_relation (GTK_ACCESSIBLE (priv->vscrollbar),
-                                  GTK_ACCESSIBLE_RELATION_CONTROLS, list,
-                                  -1);
-  g_list_free (list);
+    {
+      gtk_accessible_reset_relation (GTK_ACCESSIBLE (priv->hscrollbar),
+                                     GTK_ACCESSIBLE_RELATION_CONTROLS);
+      gtk_accessible_reset_relation (GTK_ACCESSIBLE (priv->vscrollbar),
+                                     GTK_ACCESSIBLE_RELATION_CONTROLS);
+    }
 
   g_object_notify_by_pspec (G_OBJECT (scrolled_window), properties[PROP_CHILD]);
 }

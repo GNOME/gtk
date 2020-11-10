@@ -3968,7 +3968,7 @@ gtk_notebook_insert_notebook_page (GtkNotebook *notebook,
 
   stack_page = gtk_stack_get_page (GTK_STACK (notebook->stack_widget), page->child);
   gtk_accessible_update_relation (GTK_ACCESSIBLE (page->tab_widget),
-                                  GTK_ACCESSIBLE_RELATION_CONTROLS, g_list_append (NULL, stack_page),
+                                  GTK_ACCESSIBLE_RELATION_CONTROLS, stack_page, NULL,
                                   -1);
 
   gtk_accessible_update_state (GTK_ACCESSIBLE (page->tab_widget),
