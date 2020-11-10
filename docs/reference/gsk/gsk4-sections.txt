@@ -307,6 +307,46 @@ GSK_TYPE_CORNER
 </SECTION>
 
 <SECTION>
+<FILE>GskPath</FILE>
+<SUBSECTION>
+GskPath
+gsk_path_ref
+gsk_path_unref
+gsk_path_new_rect
+gsk_path_new_from_cairo
+<SUBSECTION>
+gsk_path_print
+gsk_path_to_string
+gsk_path_to_cairo
+<SUBSECTION>
+gsk_path_is_empty
+gsk_path_get_bounds
+<SUBSECTION Private>
+GSK_TYPE_PATH
+gsk_path_get_type
+</SECTION>
+
+<SECTION>
+<FILE>GskPathBuilder</FILE>
+GskPathBuilder
+gsk_path_builder_new
+gsk_path_builder_ref
+gsk_path_builder_unref
+gsk_path_builder_to_path
+gsk_path_builder_free_to_path
+<SUBSECTION>
+gsk_path_builder_add_rect
+<SUBSECTION>
+gsk_path_builder_move_to
+gsk_path_builder_line_to
+gsk_path_builder_curve_to
+gsk_path_builder_close
+<SUBSECTION Private>
+GSK_TYPE_PATH_BUILDER
+gsk_path_builder_get_type
+</SECTION>
+
+<SECTION>
 <FILE>GskTransform</FILE>
 GskTransform
 gsk_transform_ref
