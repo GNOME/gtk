@@ -3633,6 +3633,7 @@ gsk_ngl_render_job_visit_node (GskNglRenderJob     *job,
       gsk_ngl_render_job_visit_transform_node (job, node);
     break;
 
+    case GSK_FILL_NODE:
     case GSK_CAIRO_NODE:
       gsk_ngl_render_job_visit_as_fallback (job, node);
     break;

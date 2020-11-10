@@ -269,6 +269,7 @@ collect_reused_child_nodes (GskRenderer *renderer,
     case GSK_BLEND_NODE:
     case GSK_CROSS_FADE_NODE:
     case GSK_BLUR_NODE:
+    case GSK_FILL_NODE:
 
     default:
 
@@ -855,6 +856,7 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
     case GSK_CROSS_FADE_NODE:
     case GSK_BLUR_NODE:
     case GSK_GL_SHADER_NODE:
+    case GSK_FILL_NODE:
     default:
       break; /* Fallback */
     }
