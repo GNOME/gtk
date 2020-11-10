@@ -569,7 +569,7 @@ gtk_reference_list_accessible_value_new (GList *value)
 
   GtkReferenceListAccessibleValue *self = (GtkReferenceListAccessibleValue *) res;
 
-  self->refs = g_list_copy (value);
+  self->refs = value;
   if (self->refs != NULL)
     {
       for (GList *l = self->refs; l != NULL; l = l->next)
