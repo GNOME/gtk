@@ -76,4 +76,14 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_accessible_reset_relation           (GtkAccessible         *self,
                                                                  GtkAccessibleRelation  relation);
 
+GDK_AVAILABLE_IN_ALL
+void                    gtk_accessible_state_init_value         (GtkAccessibleState     state,
+                                                                 GValue                *value);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_accessible_property_init_value      (GtkAccessibleProperty  property,
+                                                                 GValue                *value);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_accessible_relation_init_value      (GtkAccessibleRelation  relation,
+                                                                 GValue                *value);
+
 G_END_DECLS

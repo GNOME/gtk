@@ -158,23 +158,27 @@ GtkAccessibleInvalidState       gtk_invalid_accessible_value_get        (const G
 GtkAccessibleValue *            gtk_invalid_accessible_value_parse      (const char               *str,
                                                                          gsize                     len,
                                                                          GError                  **error);
+void                            gtk_invalid_accessible_value_init_value (GValue                   *value);
 
 GtkAccessibleValue *            gtk_autocomplete_accessible_value_new   (GtkAccessibleAutocomplete value);
 GtkAccessibleAutocomplete       gtk_autocomplete_accessible_value_get   (const GtkAccessibleValue *value);
 GtkAccessibleValue *            gtk_autocomplete_accessible_value_parse (const char               *str,
                                                                          gsize                     len,
                                                                          GError                  **error);
+void                            gtk_autocomplete_accessible_value_init_value (GValue              *value);
 
 GtkAccessibleValue *            gtk_orientation_accessible_value_new    (GtkOrientation            value);
 GtkOrientation                  gtk_orientation_accessible_value_get    (const GtkAccessibleValue *value);
 GtkAccessibleValue *            gtk_orientation_accessible_value_parse  (const char               *str,
                                                                          gsize                     len,
                                                                          GError                  **error);
+void                            gtk_orientation_accessible_value_init_value (GValue               *value);
 
 GtkAccessibleValue *            gtk_sort_accessible_value_new           (GtkAccessibleSort         value);
 GtkAccessibleSort               gtk_sort_accessible_value_get           (const GtkAccessibleValue *value);
 GtkAccessibleValue *            gtk_sort_accessible_value_parse         (const char               *str,
                                                                          gsize                     len,
                                                                          GError                  **error);
+void                            gtk_sort_accessible_value_init_value    (GValue                   *value);
 
 G_END_DECLS
