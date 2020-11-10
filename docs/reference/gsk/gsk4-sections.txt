@@ -146,6 +146,12 @@ gsk_rounded_clip_node_new
 gsk_rounded_clip_node_get_child
 gsk_rounded_clip_node_get_clip
 <SUBSECTION>
+GskFillRule
+gsk_fill_node_new
+gsk_fill_node_get_child
+gsk_fill_node_get_path
+gsk_fill_node_get_fill_rule
+<SUBSECTION>
 GskShadow
 gsk_shadow_node_new
 gsk_shadow_node_get_shadow
@@ -198,6 +204,7 @@ GSK_TYPE_COLOR_NODE
 GSK_TYPE_CONTAINER_NODE
 GSK_TYPE_CROSS_FADE_NODE
 GSK_TYPE_DEBUG_NODE
+GSK_TYPE_FILL_NODE
 GSK_TYPE_INSET_SHADOW_NODE
 GSK_TYPE_LINEAR_GRADIENT_NODE
 GSK_TYPE_OPACITY_NODE
@@ -223,6 +230,7 @@ gsk_color_node_get_type
 gsk_container_node_get_type
 gsk_cross_fade_node_get_type
 gsk_debug_node_get_type
+gsk_fill_node_get_type
 gsk_inset_shadow_node_get_type
 gsk_linear_gradient_node_get_type
 gsk_opacity_node_get_type
