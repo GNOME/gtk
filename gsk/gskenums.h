@@ -43,6 +43,7 @@
  * @GSK_REPEAT_NODE: A node that repeats the child's contents
  * @GSK_CLIP_NODE: A node that clips its child to a rectangular area
  * @GSK_ROUNDED_CLIP_NODE: A node that clips its child to a rounded rectangle
+ * @GSK_FILL_NODE: A node that fills a path
  * @GSK_SHADOW_NODE: A node that draws a shadow below its child
  * @GSK_BLEND_NODE: A node that blends two children together
  * @GSK_CROSS_FADE_NODE: A node that cross-fades between two children
@@ -73,6 +74,7 @@ typedef enum {
   GSK_REPEAT_NODE,
   GSK_CLIP_NODE,
   GSK_ROUNDED_CLIP_NODE,
+  GSK_FILL_NODE,
   GSK_SHADOW_NODE,
   GSK_BLEND_NODE,
   GSK_CROSS_FADE_NODE,
@@ -166,6 +168,34 @@ typedef enum {
   GSK_CORNER_BOTTOM_RIGHT,
   GSK_CORNER_BOTTOM_LEFT
 } GskCorner;
+
+/**
+ * GskFillRule:
+ * @GSK_FILL_RULE_WINDING: If the path crosses the ray from
+ *   left-to-right, counts +1. If the path crosses the ray
+ *   from right to left, counts -1. (Left and right are determined
+ *   from the perspective of looking along the ray from the starting
+ *   point.) If the total count is non-zero, the point will be filled.
+ * @GSK_FILL_RULE_EVEN_ODD: Counts the total number of
+ *   intersections, without regard to the orientation of the contour. If
+ *   the total number of intersections is odd, the point will be
+ *   filled.
+ *
+ * #GskFillRule is used to select how paths are filled, for example in
+ * gsk_fill_node_new(). Whether or not a point is included in the fill is
+ * determined by taking a ray from that point to infinity and looking
+ * at intersections with the path. The ray can be in any direction,
+ * as long as it doesn't pass through the end point of a segment
+ * or have a tricky intersection such as intersecting tangent to the path.
+ * (Note that filling is not actually implemented in this way. This
+ * is just a description of the rule that is applied.)
+ *
+ * New entries may be added in future versions.
+ **/
+typedef enum {
+  GSK_FILL_RULE_WINDING,
+  GSK_FILL_RULE_EVEN_ODD
+} GskFillRule;
 
 /**
  * GskSerializationError:
