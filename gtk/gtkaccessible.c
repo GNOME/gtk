@@ -411,6 +411,18 @@ gtk_accessible_reset_property (GtkAccessible         *self,
  *
  * This function should be called by #GtkWidget types whenever an accessible
  * relation change must be communicated to assistive technologies.
+ *
+ * If the #GtkAccessibleRelation requires a list of references, you should
+ * pass each reference individually, followed by %NULL, e.g.
+ *
+ * |[<!-- language="C" -->
+ *   gtk_accessible_update_relation (accessible,
+ *                                   GTK_ACCESSIBLE_RELATION_CONTROLS,
+ *                                     ref1, NULL,
+ *                                   GTK_ACCESSIBLE_LABELLED_BY,
+ *                                     ref1, ref2, ref3, NULL,
+ *                                   -1);
+ * ]|
  */
 void
 gtk_accessible_update_relation (GtkAccessible         *self,

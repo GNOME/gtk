@@ -276,7 +276,7 @@ add_child (guint             position,
                                -1);
 
   gtk_accessible_update_relation (GTK_ACCESSIBLE (button),
-                                  GTK_ACCESSIBLE_RELATION_CONTROLS, g_list_append (NULL, page),
+                                  GTK_ACCESSIBLE_RELATION_CONTROLS, page, NULL,
                                   -1);
 
   g_signal_connect (button, "notify::active", G_CALLBACK (on_button_toggled), self);

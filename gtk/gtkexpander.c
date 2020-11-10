@@ -1177,8 +1177,6 @@ void
 gtk_expander_set_child (GtkExpander *expander,
                         GtkWidget   *child)
 {
-  GList *list = NULL;
-
   g_return_if_fail (GTK_IS_EXPANDER (expander));
   g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
 
@@ -1201,14 +1199,16 @@ gtk_expander_set_child (GtkExpander *expander,
             g_object_ref_sink (expander->child);
           g_object_ref (expander->child);
         }
-    }
 
-  if (expander->child)
-    list = g_list_append (list, expander->child);
-  gtk_accessible_update_relation (GTK_ACCESSIBLE (expander),
-                                  GTK_ACCESSIBLE_RELATION_CONTROLS, list,
-                                  -1);
-  g_list_free (list);
+      gtk_accessible_update_relation (GTK_ACCESSIBLE (expander),
+                                      GTK_ACCESSIBLE_RELATION_CONTROLS, expander->child, NULL,
+                                      -1);
+    }
+  else
+    {
+      gtk_accessible_reset_relation (GTK_ACCESSIBLE (expander),
+                                     GTK_ACCESSIBLE_RELATION_CONTROLS);
+    }
 
   g_object_notify (G_OBJECT (expander), "child");
 }

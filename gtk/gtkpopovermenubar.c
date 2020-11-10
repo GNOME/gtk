@@ -341,8 +341,8 @@ gtk_popover_menu_bar_item_root (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_popover_menu_bar_item_parent_class)->root (widget);
 
   gtk_accessible_update_relation (GTK_ACCESSIBLE (widget),
-                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, g_list_append (NULL, item->label),
-                                  GTK_ACCESSIBLE_RELATION_CONTROLS, g_list_append (NULL, item->popover),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, item->label, NULL,
+                                  GTK_ACCESSIBLE_RELATION_CONTROLS, item->popover, NULL,
                                   -1);
   gtk_accessible_update_property (GTK_ACCESSIBLE (widget),
                                   GTK_ACCESSIBLE_PROPERTY_HAS_POPUP, TRUE,

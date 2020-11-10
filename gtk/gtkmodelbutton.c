@@ -303,7 +303,8 @@ gtk_model_button_actionable_iface_init (GtkActionableInterface *iface)
 }
 
 static GtkATContext *
-create_at_context (GtkModelButton *button)
+create_at_context (GtkModelButton *button,
+                   GtkATContext   *old_context)
 {
   GdkDisplay *display = _gtk_widget_get_display (GTK_WIDGET (button));
   GtkAccessibleRole role;
@@ -323,6 +324,9 @@ create_at_context (GtkModelButton *button)
       break;
     }
 
+  if (old_context != NULL)
+    return gtk_at_context_clone (old_context, role, GTK_ACCESSIBLE (button), display);
+
   return gtk_at_context_create (role, GTK_ACCESSIBLE (button), display);
 }
 
@@ -332,7 +336,7 @@ gtk_model_button_get_at_context (GtkAccessible *accessible)
   GtkModelButton *button = GTK_MODEL_BUTTON (accessible);
 
   if (button->at_context == NULL)
-    button->at_context = create_at_context (button);
+    button->at_context = create_at_context (button, NULL);
 
   return button->at_context;
 }
@@ -582,7 +586,7 @@ update_accessible_properties (GtkModelButton *button)
 
   if (button->popover)
     gtk_accessible_update_relation (GTK_ACCESSIBLE (button),
-                                    GTK_ACCESSIBLE_RELATION_CONTROLS, g_list_append (NULL, button->popover),
+                                    GTK_ACCESSIBLE_RELATION_CONTROLS, button->popover, NULL,
                                     -1);
   else
     gtk_accessible_reset_relation (GTK_ACCESSIBLE (button),
@@ -596,12 +600,18 @@ update_accessible_properties (GtkModelButton *button)
   else
     gtk_accessible_reset_state (GTK_ACCESSIBLE (button),
                                 GTK_ACCESSIBLE_STATE_CHECKED);
+
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (button),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, button->label, NULL,
+                                  -1);
 }
 
 static void
 gtk_model_button_set_role (GtkModelButton *self,
                            GtkButtonRole   role)
 {
+  GtkATContext *old_context;
+
   if (role == self->role)
     return;
 
@@ -621,7 +631,10 @@ gtk_model_button_set_role (GtkModelButton *self,
   update_node_name (self);
   gtk_model_button_update_state (self);
 
-  g_set_object (&self->at_context, create_at_context (self));
+  /* Replace the old context, if any, with a new context */
+  old_context = g_steal_pointer (&self->at_context);
+  self->at_context = create_at_context (self, old_context);
+  g_clear_object (&old_context);
 
   update_accessible_properties (self);
 
@@ -683,7 +696,7 @@ gtk_model_button_set_text (GtkModelButton *button,
   update_visibility (button);
 
   gtk_accessible_update_relation (GTK_ACCESSIBLE (button),
-                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, g_list_append (NULL, button->label),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, button->label, NULL,
                                   -1);
 
   g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_TEXT]);

@@ -538,6 +538,61 @@ gtk_at_context_create (GtkAccessibleRole  accessible_role,
   return res;
 }
 
+/*< private >
+ * gtk_at_context_clone: (constructor)
+ * @self: the #GtkATContext to clone
+ * @role: the accessible role of the clone, or %GTK_ACCESSIBLE_ROLE_NONE to
+ *   use the same accessible role of @self
+ * @accessible: (nullable): the accessible creating the context, or %NULL to
+ *   use the same #GtkAccessible of @self
+ * @display: (nullable): the display connection, or %NULL to use the same
+ *   #GdkDisplay of @self
+ *
+ * Clones the state of the given #GtkATContext, using @role, @accessible,
+ * and @display.
+ *
+ * If @self is realized, the returned #GtkATContext will also be realized.
+ *
+ * Returns: (transfer full): the newly created #GtkATContext
+ */
+GtkATContext *
+gtk_at_context_clone (GtkATContext      *self,
+                      GtkAccessibleRole  role,
+                      GtkAccessible     *accessible,
+                      GdkDisplay        *display)
+{
+  g_return_val_if_fail (self == NULL || GTK_IS_AT_CONTEXT (self), NULL);
+  g_return_val_if_fail (accessible == NULL || GTK_IS_ACCESSIBLE (accessible), NULL);
+  g_return_val_if_fail (display == NULL || GDK_IS_DISPLAY (display), NULL);
+
+  if (self != NULL && role == GTK_ACCESSIBLE_ROLE_NONE)
+    role = self->accessible_role;
+
+  if (self != NULL && accessible == NULL)
+    accessible = self->accessible;
+
+  if (self != NULL && display == NULL)
+    display = self->display;
+
+  GtkATContext *res = gtk_at_context_create (role, accessible, display);
+
+  if (self != NULL)
+    {
+      g_clear_pointer (&res->states, gtk_accessible_attribute_set_unref);
+      g_clear_pointer (&res->properties, gtk_accessible_attribute_set_unref);
+      g_clear_pointer (&res->relations, gtk_accessible_attribute_set_unref);
+
+      res->states = gtk_accessible_attribute_set_ref (self->states);
+      res->properties = gtk_accessible_attribute_set_ref (self->properties);
+      res->relations = gtk_accessible_attribute_set_ref (self->relations);
+
+      if (self->realized)
+        gtk_at_context_realize (res);
+    }
+
+  return res;
+}
+
 gboolean
 gtk_at_context_is_realized (GtkATContext *self)
 {

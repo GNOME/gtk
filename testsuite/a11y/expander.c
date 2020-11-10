@@ -31,15 +31,12 @@ expander_relations (void)
 {
   GtkWidget *widget = gtk_expander_new ("Hello");
   GtkWidget *child = gtk_label_new ("Child");
-  GList *list;
 
   g_object_ref_sink (widget);
 
   gtk_expander_set_child (GTK_EXPANDER (widget), child);
 
-  list = g_list_append (NULL, child);
-  gtk_test_accessible_assert_relation (widget, GTK_ACCESSIBLE_RELATION_CONTROLS, list);
-  g_list_free (list);
+  gtk_test_accessible_assert_relation (widget, GTK_ACCESSIBLE_RELATION_CONTROLS, child, NULL);
 
   g_object_unref (widget);
 }

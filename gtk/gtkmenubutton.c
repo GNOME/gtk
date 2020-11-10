@@ -520,8 +520,7 @@ update_sensitivity (GtkMenuButton *self)
                                   -1);
   if (self->popover != NULL)
     gtk_accessible_update_relation (GTK_ACCESSIBLE (self),
-                                    GTK_ACCESSIBLE_RELATION_CONTROLS,
-                                        g_list_append (NULL, self->popover),
+                                    GTK_ACCESSIBLE_RELATION_CONTROLS, self->popover, NULL,
                                     -1);
   else
     gtk_accessible_reset_relation (GTK_ACCESSIBLE (self),

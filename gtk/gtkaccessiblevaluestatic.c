@@ -298,6 +298,12 @@ gtk_invalid_accessible_value_parse (const char  *str,
   return NULL;
 }
 
+void
+gtk_invalid_accessible_value_init_value (GValue *value)
+{
+  g_value_init (value, GTK_TYPE_ACCESSIBLE_INVALID_STATE);
+}
+
 static const GtkAccessibleValueClass GTK_AUTOCOMPLETE_ACCESSIBLE_VALUE = {
   .type = GTK_ACCESSIBLE_VALUE_TYPE_TOKEN,
   .type_name = "GtkAutocompleteAccessibleValue",
@@ -356,6 +362,12 @@ gtk_autocomplete_accessible_value_parse (const char  *str,
   return NULL;
 }
 
+void
+gtk_autocomplete_accessible_value_init_value (GValue *value)
+{
+  g_value_init (value, GTK_TYPE_ACCESSIBLE_AUTOCOMPLETE);
+}
+
 static const GtkAccessibleValueClass GTK_ORIENTATION_ACCESSIBLE_VALUE = {
   .type = GTK_ACCESSIBLE_VALUE_TYPE_TOKEN,
   .type_name = "GtkOrientationAccessibleValue",
@@ -406,6 +418,12 @@ gtk_orientation_accessible_value_parse (const char  *str,
     return gtk_orientation_accessible_value_new (value);
 
   return NULL;
+}
+
+void
+gtk_orientation_accessible_value_init_value (GValue *value)
+{
+  g_value_init (value, GTK_TYPE_ORIENTATION);
 }
 
 static const GtkAccessibleValueClass GTK_SORT_ACCESSIBLE_VALUE = {
@@ -464,6 +482,12 @@ gtk_sort_accessible_value_parse (const char  *str,
     return gtk_sort_accessible_value_new (value);
 
   return NULL;
+}
+
+void
+gtk_sort_accessible_value_init_value (GValue *value)
+{
+  g_value_init (value, GTK_TYPE_ACCESSIBLE_SORT);
 }
 
 /* }}} */
