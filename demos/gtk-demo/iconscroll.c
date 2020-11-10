@@ -234,7 +234,7 @@ set_widget_type (int type)
       break;
 
     case 5:
-      gtk_window_set_title (GTK_WINDOW (window), "Scrolling a list");
+      gtk_window_set_title (GTK_WINDOW (window), "Scrolling a columned list");
       populate_list2 ();
       break;
 
