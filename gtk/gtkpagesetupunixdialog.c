@@ -702,6 +702,8 @@ paper_size_changed (GtkDropDown            *combo_box,
           g_signal_connect (custom_paper_dialog, "response", G_CALLBACK (custom_paper_dialog_response_cb), dialog);
           gtk_window_present (GTK_WINDOW (custom_paper_dialog));
 
+          g_object_unref (page_setup);
+
           return;
         }
 

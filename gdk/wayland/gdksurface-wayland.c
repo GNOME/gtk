@@ -1270,6 +1270,7 @@ configure_surface_geometry (GdkSurface *surface)
 
   monitor = g_list_model_get_item (gdk_display_get_monitors (display), 0);
   gdk_monitor_get_geometry (monitor, &monitor_geometry);
+  g_object_unref (monitor);
   bounds_width = monitor_geometry.width;
   bounds_height = monitor_geometry.height;
 

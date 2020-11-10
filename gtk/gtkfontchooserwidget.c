@@ -1368,10 +1368,13 @@ gtk_font_chooser_widget_ensure_matching_selection (GtkFontChooserWidget *self)
   n = g_list_model_get_n_items (G_LIST_MODEL (self->selection));
   for (i = 0; i < n; i++)
     {
-      gpointer item = g_list_model_get_item (G_LIST_MODEL (self->selection), i);
+      gpointer item;
       PangoFontFace *face;
       PangoFontFamily *family;
       PangoFontDescription *merged;
+
+      item = g_list_model_get_item (G_LIST_MODEL (self->selection), i);
+      g_object_unref (item);
 
       if (PANGO_IS_FONT_FAMILY (item))
         {
@@ -1384,14 +1387,10 @@ gtk_font_chooser_widget_ensure_matching_selection (GtkFontChooserWidget *self)
           family = pango_font_face_get_family (face);
         }
       if (!my_pango_font_family_equal (desc_family, pango_font_family_get_name (family)))
-        {
-          g_object_unref (face);
-          continue;
-        }
+        continue;
 
       merged = pango_font_face_describe (face);
       pango_font_description_merge_static (merged, self->font_desc, FALSE);
-      g_object_unref (face);
 
       if (pango_font_description_equal (merged, self->font_desc))
         {

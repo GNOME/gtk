@@ -613,10 +613,8 @@ init_randr15 (GdkX11Screen *x11_screen)
       notify_surface_monitor_change (x11_display, GDK_MONITOR (monitor));
       if (monitor->remove)
         {
-          g_object_ref (monitor);
           g_list_store_remove (x11_display->monitors, i);
           gdk_monitor_invalidate (GDK_MONITOR (monitor));
-          g_object_unref (monitor);
         }
       g_object_unref (monitor);
     }
@@ -764,11 +762,10 @@ init_randr13 (GdkX11Screen *x11_screen)
       notify_surface_monitor_change (x11_display, GDK_MONITOR (monitor));
       if (monitor->remove)
         {
-          g_object_ref (monitor);
           g_list_store_remove (x11_display->monitors, i);
           gdk_monitor_invalidate (GDK_MONITOR (monitor));
-          g_object_unref (monitor);
         }
+      g_object_unref (monitor);
     }
 
   x11_display->primary_monitor = 0;
@@ -852,10 +849,8 @@ init_no_multihead (GdkX11Screen *x11_screen)
       notify_surface_monitor_change (x11_display, GDK_MONITOR (monitor));
       if (monitor->remove)
         {
-          g_object_ref (monitor);
           g_list_store_remove (x11_display->monitors, i);
           gdk_monitor_invalidate (GDK_MONITOR (monitor));
-          g_object_unref (monitor);
         }
       g_object_unref (monitor);
     }
