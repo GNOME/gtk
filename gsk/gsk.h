@@ -21,11 +21,12 @@
 #define __GSK_H_INSIDE__
 
 #include <gsk/gskenums.h>
+#include <gsk/gskglshader.h>
+#include <gsk/gskpath.h>
 #include <gsk/gskrenderer.h>
 #include <gsk/gskrendernode.h>
 #include <gsk/gskroundedrect.h>
 #include <gsk/gsktransform.h>
-#include <gsk/gskglshader.h>
 
 #include <gsk/gskcairorenderer.h>
 
