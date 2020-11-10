@@ -501,7 +501,7 @@ fontify (const char    *format,
   char *theme;
   gboolean prefer_dark;
   const char *style_arg;
-  const char *text;
+  char *text;
   GtkTextIter start, end;
   GBytes *bytes;
   GError *error = NULL;
@@ -553,7 +553,7 @@ fontify (const char    *format,
 
   gtk_text_buffer_get_bounds (source_buffer, &start, &end);
   text = gtk_text_buffer_get_text (source_buffer, &start, &end, TRUE);
-  bytes = g_bytes_new_static (text, strlen (text));
+  bytes = g_bytes_new_take (text, strlen (text));
 
 #ifdef HAVE_GIO_UNIX
   /* Work around https://gitlab.gnome.org/GNOME/glib/-/issues/2182 */
@@ -570,4 +570,5 @@ fontify (const char    *format,
                                   NULL,
                                   fontify_finish,
                                   g_object_ref (source_buffer));
+  g_bytes_unref (bytes);
 }

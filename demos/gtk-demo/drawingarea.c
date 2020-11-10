@@ -311,6 +311,7 @@ do_drawingarea (GtkWidget *do_widget)
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Drawing Area");
+      gtk_window_set_default_size (GTK_WINDOW (window), 250, -1);
 
       g_signal_connect (window, "destroy",
                         G_CALLBACK (close_window), NULL);

@@ -153,7 +153,7 @@ do_paintable_emblem (GtkWidget *do_widget)
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
-      gtk_window_set_title (GTK_WINDOW (window), "Emblems");
+      gtk_window_set_title (GTK_WINDOW (window), "Paintable — Emblems");
       gtk_window_set_default_size (GTK_WINDOW (window), 300, 200);
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 

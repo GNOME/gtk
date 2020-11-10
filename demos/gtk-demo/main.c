@@ -337,8 +337,8 @@ display_text (const char  *format,
 
   bytes = g_resources_lookup_data (resource, 0, NULL);
   g_assert (bytes);
-
-  g_assert (g_utf8_validate (g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes), NULL));
+  text = g_bytes_get_data (bytes, &len);
+  g_assert (g_utf8_validate (text, len, NULL));
 
   textview = gtk_text_view_new ();
   gtk_text_view_set_left_margin (GTK_TEXT_VIEW (textview), 20);
@@ -354,9 +354,8 @@ display_text (const char  *format,
   gtk_text_view_set_monospace (GTK_TEXT_VIEW (textview), TRUE);
 
   buffer = gtk_text_buffer_new (NULL);
-
-  text = g_bytes_unref_to_data (bytes, &len);
   gtk_text_buffer_set_text (buffer, text, len);
+  g_bytes_unref (bytes);
 
   if (format)
     fontify (format, buffer);
