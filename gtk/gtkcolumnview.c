@@ -983,6 +983,8 @@ header_drag_begin (GtkGestureDrag *gesture,
 
           break;
         }
+
+      g_object_unref (column);
     }
 
   for (i = 0; !self->in_column_resize && i < n; i++)
@@ -1049,7 +1051,10 @@ header_drag_end (GtkGestureDrag *gesture,
 
       sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
       if (!gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
-        return;
+        {
+          g_object_unref (column);
+          return;
+        }
 
       for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->columns)); i++)
         {
@@ -1531,7 +1536,6 @@ gtk_column_view_remove_column (GtkColumnView       *self,
       g_object_unref (item);
       if (item == column)
         break;
-
     }
 
   gtk_column_view_sorter_remove_column (GTK_COLUMN_VIEW_SORTER (self->sorter), column);
