@@ -640,6 +640,9 @@ static void             gtk_widget_buildable_custom_finished    (GtkBuildable   
 static void             gtk_widget_buildable_parser_finished    (GtkBuildable       *buildable,
                                                                  GtkBuilder         *builder);
 
+static void                     gtk_widget_set_accessible_role  (GtkWidget          *self,
+                                                                 GtkAccessibleRole   role);
+static GtkAccessibleRole        gtk_widget_get_accessible_role  (GtkWidget          *self);
 
 static GtkSizeRequestMode gtk_widget_real_get_request_mode      (GtkWidget        *widget);
 
@@ -1731,21 +1734,7 @@ gtk_widget_set_property (GObject         *object,
       gtk_widget_set_layout_manager (widget, g_value_dup_object (value));
       break;
     case PROP_ACCESSIBLE_ROLE:
-      if (priv->at_context == NULL || !gtk_at_context_is_realized (priv->at_context))
-        {
-          priv->accessible_role = g_value_get_enum (value);
-          if (priv->at_context)
-            g_object_set (priv->at_context, "accessible-role", priv->accessible_role, NULL);
-          g_object_notify_by_pspec (object, pspec);
-        }
-      else
-        {
-          char *role_str = g_enum_to_string (GTK_TYPE_ACCESSIBLE_ROLE, priv->accessible_role);
-          g_critical ("Widget of type “%s” already has an accessible role of type “%s”",
-                      G_OBJECT_TYPE_NAME (object),
-                      role_str);
-          g_free (role_str);
-        }
+      gtk_widget_set_accessible_role (widget, g_value_get_enum (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1878,14 +1867,7 @@ gtk_widget_get_property (GObject         *object,
       g_value_set_object (value, gtk_widget_get_layout_manager (widget));
       break;
     case PROP_ACCESSIBLE_ROLE:
-      {
-        GtkAccessibleRole role = priv->accessible_role;
-
-        if (priv->accessible_role == GTK_ACCESSIBLE_ROLE_WIDGET)
-          role = gtk_widget_class_get_accessible_role (GTK_WIDGET_GET_CLASS (widget));
-
-        g_value_set_enum (value, role);
-      }
+      g_value_set_enum (value, gtk_widget_get_accessible_role (widget));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -12562,6 +12544,49 @@ gtk_widget_update_orientation (GtkWidget      *widget,
   gtk_accessible_update_property (GTK_ACCESSIBLE (widget),
                                   GTK_ACCESSIBLE_PROPERTY_ORIENTATION, orientation,
                                   -1);
+}
+
+static void
+gtk_widget_set_accessible_role (GtkWidget         *self,
+                                GtkAccessibleRole  role)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (self);
+
+  if (priv->at_context == NULL || !gtk_at_context_is_realized (priv->at_context))
+    {
+      priv->accessible_role = role;
+
+      if (priv->at_context != NULL)
+        g_object_set (priv->at_context, "accessible-role", priv->accessible_role, NULL);
+
+      g_object_notify (G_OBJECT (self), "accessible-role");
+    }
+  else
+    {
+      char *role_str = g_enum_to_string (GTK_TYPE_ACCESSIBLE_ROLE, priv->accessible_role);
+
+      g_critical ("Widget of type “%s” already has an accessible role of type “%s”",
+                  G_OBJECT_TYPE_NAME (self),
+                  role_str);
+      g_free (role_str);
+    }
+}
+
+static GtkAccessibleRole
+gtk_widget_get_accessible_role (GtkWidget *self)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (self);
+  GtkATContext *context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (self));
+
+  if (context == NULL || !gtk_at_context_is_realized (context))
+    {
+      if (priv->accessible_role == GTK_ACCESSIBLE_ROLE_WIDGET)
+        return gtk_widget_class_get_accessible_role (GTK_WIDGET_GET_CLASS (self));
+
+      return priv->accessible_role;
+    }
+
+  return gtk_at_context_get_accessible_role (context);
 }
 
 /**
