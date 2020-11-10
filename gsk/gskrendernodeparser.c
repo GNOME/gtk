@@ -23,6 +23,7 @@
 
 #include "gskrendernodeparserprivate.h"
 
+#include "gskpath.h"
 #include "gskroundedrectprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gsktransformprivate.h"
@@ -2539,6 +2540,20 @@ render_node_print (Printer       *p,
         append_rounded_rect_param (p, "clip", gsk_rounded_clip_node_get_clip (node));
         append_node_param (p, "child", gsk_rounded_clip_node_get_child (node));
 
+        end_node (p);
+      }
+      break;
+
+    case GSK_FILL_NODE:
+      {
+        char *path_str;
+
+        start_node (p, "fill");
+
+        append_node_param (p, "child", gsk_fill_node_get_child (node));
+        path_str = gsk_path_to_string (gsk_fill_node_get_path (node));
+        append_string_param (p, "path", path_str);
+        g_free (path_str);
 
         end_node (p);
       }
