@@ -208,7 +208,8 @@ do_paintable_svg (GtkWidget *do_widget)
       window = gtk_window_new ();
       header = gtk_header_bar_new ();
       gtk_window_set_titlebar (GTK_WINDOW (window), header);
-      gtk_window_set_default_size (GTK_WINDOW (window), 300, 200);
+      gtk_window_set_default_size (GTK_WINDOW (window), 330, 330);
+      gtk_window_set_title (GTK_WINDOW (window), "Paintable — SVG");
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       button = gtk_file_chooser_button_new ("Select an SVG file", GTK_FILE_CHOOSER_ACTION_OPEN);
