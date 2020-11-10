@@ -1982,6 +1982,7 @@ calculate_aerosnap_regions (GdkW32DragMoveResizeContext *context)
       GdkMonitor *monitor;
 
       monitor = g_list_model_get_item (monitors, monitor_idx);
+      g_object_unref (monitor);
       gdk_win32_monitor_get_workarea (monitor, &wa);
       gdk_monitor_get_geometry (monitor, &geometry);
 
