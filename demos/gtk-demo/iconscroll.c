@@ -13,7 +13,7 @@ static GtkWidget *window = NULL;
 static GtkWidget *scrolledwindow;
 static int selected;
 
-#define N_WIDGET_TYPES 6
+#define N_WIDGET_TYPES 7
 
 
 static int hincrement = 5;
@@ -177,6 +177,24 @@ populate_grid (void)
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolledwindow), list);
 }
 
+extern GtkWidget *create_ucd_view (GtkWidget *label);
+
+static void
+populate_list2 (void)
+{
+  GtkWidget *list;
+
+  list = create_ucd_view (NULL);
+
+  hincrement = 0;
+  vincrement = 5;
+
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow),
+                                  GTK_POLICY_AUTOMATIC,
+                                  GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolledwindow), list);
+}
+
 static void
 set_widget_type (int type)
 {
@@ -216,6 +234,11 @@ set_widget_type (int type)
       break;
 
     case 5:
+      gtk_window_set_title (GTK_WINDOW (window), "Scrolling a list");
+      populate_list2 ();
+      break;
+
+    case 6:
       gtk_window_set_title (GTK_WINDOW (window), "Scrolling a grid");
       populate_grid ();
       break;

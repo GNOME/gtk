@@ -259,7 +259,7 @@ selection_changed (GObject    *object,
   gtk_label_set_label (GTK_LABEL (label), buffer);
 }
 
-static GtkWidget *
+GtkWidget *
 create_ucd_view (GtkWidget *label)
 {
   GtkWidget *cv;
@@ -273,7 +273,8 @@ create_ucd_view (GtkWidget *label)
   selection = gtk_single_selection_new (ucd_model);
   gtk_single_selection_set_autoselect (selection, TRUE);
   gtk_single_selection_set_can_unselect (selection, FALSE);
-  g_signal_connect (selection, "notify::selected", G_CALLBACK (selection_changed), label);
+  if (label)
+    g_signal_connect (selection, "notify::selected", G_CALLBACK (selection_changed), label);
 
   cv = gtk_column_view_new (GTK_SELECTION_MODEL (selection));
   gtk_column_view_set_show_column_separators (GTK_COLUMN_VIEW (cv), TRUE);
