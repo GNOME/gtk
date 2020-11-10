@@ -57,6 +57,8 @@ do_shortcut_triggers (GtkWidget *do_widget)
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Shortcuts");
+      gtk_window_set_default_size (GTK_WINDOW (window), 200, -1);
+      gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       list = gtk_list_box_new ();
