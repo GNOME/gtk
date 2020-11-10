@@ -16,27 +16,27 @@
 # André Gondim <In Memoriam>, 2009, 2011.
 # Og Maciel <ogmaciel@gnome.org>, 2007, 2011.
 # Jonh Wendell <jwendell@gnome.org>, 2009-2010, 2012.
-# Enrico Nicoletto <liverig@gmail.com>, 2013.
 # Felipe Braga <fbobraga@gmail.com>, 2015.
 # Fabrício Godoy <skarllot@gmail.com>, 2010, 2016.
 # Artur de Aquino Morais <artur.morais93@outlook.com>, 2016.
 # Ricardo Silva Veloso <ricvelozo@gmail.com>, 2018-2020.
 # Rafael Fontenelle <rafaelff@gnome.org>, 2013-2020.
+# Enrico Nicoletto <liverig@gmail.com>, 2013, 2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-18 20:52+0000\n"
-"PO-Revision-Date: 2020-09-18 18:06-0300\n"
-"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"POT-Creation-Date: 2020-11-08 12:08+0000\n"
+"PO-Revision-Date: 2020-11-10 17:36-0300\n"
+"Last-Translator: Enrico Nicoletto <liverig@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <www-pt-br-general@gnu.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
-"X-Generator: Gtranslator 3.38.0\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 2.4.1\n"
 
 # Não encontrei tradução melhor para broadway
 #: gdk/broadway/gdkbroadway-server.c:144
@@ -1962,90 +1962,245 @@ msgstr "Vermelho %d%%, Verde %d%%, Azul %d%%"
 msgid "Color: %s"
 msgstr "Cor: %s"
 
-#: gtk/gtkcolorchooserwidget.c:446 gtk/gtkcolorchooserwidget.c:447
-#: gtk/gtkcolorchooserwidget.c:448 gtk/gtkcolorchooserwidget.c:449
-#: gtk/gtkcolorchooserwidget.c:450 gtk/gtkcolorchooserwidget.c:451
-#| msgid "_Blue:"
+#: gtk/gtkcolorchooserwidget.c:446
+msgctxt "Color name"
+msgid "Very Light Blue"
+msgstr "Azul muito claro"
+
+#: gtk/gtkcolorchooserwidget.c:447
+msgctxt "Color name"
+msgid "Light Blue"
+msgstr "Azul claro"
+
+#: gtk/gtkcolorchooserwidget.c:448
 msgctxt "Color name"
 msgid "Blue"
 msgstr "Azul"
 
-#: gtk/gtkcolorchooserwidget.c:452 gtk/gtkcolorchooserwidget.c:453
-#: gtk/gtkcolorchooserwidget.c:454 gtk/gtkcolorchooserwidget.c:455
-#: gtk/gtkcolorchooserwidget.c:456 gtk/gtkcolorchooserwidget.c:457
-#| msgid "_Green:"
+#: gtk/gtkcolorchooserwidget.c:449
+msgctxt "Color name"
+msgid "Dark Blue"
+msgstr "Azul escuro"
+
+#: gtk/gtkcolorchooserwidget.c:450
+msgctxt "Color name"
+msgid "Very Dark Blue"
+msgstr "Azul muito escuro"
+
+#: gtk/gtkcolorchooserwidget.c:451
+msgctxt "Color name"
+msgid "Very Light Green"
+msgstr "Verde muito claro"
+
+#: gtk/gtkcolorchooserwidget.c:452
+msgctxt "Color name"
+msgid "Light Green"
+msgstr "Verde claro"
+
+#: gtk/gtkcolorchooserwidget.c:453
 msgctxt "Color name"
 msgid "Green"
 msgstr "Verde"
 
-#: gtk/gtkcolorchooserwidget.c:458 gtk/gtkcolorchooserwidget.c:459
-#: gtk/gtkcolorchooserwidget.c:460 gtk/gtkcolorchooserwidget.c:461
-#: gtk/gtkcolorchooserwidget.c:462 gtk/gtkcolorchooserwidget.c:463
+#: gtk/gtkcolorchooserwidget.c:454
+msgctxt "Color name"
+msgid "Dark Green"
+msgstr "Verde escuro"
+
+#: gtk/gtkcolorchooserwidget.c:455
+msgctxt "Color name"
+msgid "Very Dark Green"
+msgstr "Verde muito escuro"
+
+#: gtk/gtkcolorchooserwidget.c:456
+msgctxt "Color name"
+msgid "Very Light Yellow"
+msgstr "Verde muito claro"
+
+#: gtk/gtkcolorchooserwidget.c:457
+msgctxt "Color name"
+msgid "Light Yellow"
+msgstr "Amarelo claro"
+
+#: gtk/gtkcolorchooserwidget.c:458
 msgctxt "Color name"
 msgid "Yellow"
 msgstr "Amarelo"
 
-#: gtk/gtkcolorchooserwidget.c:464 gtk/gtkcolorchooserwidget.c:465
-#: gtk/gtkcolorchooserwidget.c:466 gtk/gtkcolorchooserwidget.c:467
-#: gtk/gtkcolorchooserwidget.c:468 gtk/gtkcolorchooserwidget.c:469
+#: gtk/gtkcolorchooserwidget.c:459
+msgctxt "Color name"
+msgid "Dark Yellow"
+msgstr "Amarelo escuro"
+
+#: gtk/gtkcolorchooserwidget.c:460
+msgctxt "Color name"
+msgid "Very Dark Yellow"
+msgstr "Amarelo muito escuro"
+
+#: gtk/gtkcolorchooserwidget.c:461
+msgctxt "Color name"
+msgid "Very Light Orange"
+msgstr "Laranja muito claro"
+
+#: gtk/gtkcolorchooserwidget.c:462
+msgctxt "Color name"
+msgid "Light Orange"
+msgstr "Laranja claro"
+
+#: gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
 msgid "Orange"
 msgstr "Laranja"
 
-#: gtk/gtkcolorchooserwidget.c:470 gtk/gtkcolorchooserwidget.c:471
-#: gtk/gtkcolorchooserwidget.c:472 gtk/gtkcolorchooserwidget.c:473
-#: gtk/gtkcolorchooserwidget.c:474
-#| msgid "_Red:"
+#: gtk/gtkcolorchooserwidget.c:464
+msgctxt "Color name"
+msgid "Dark Orange"
+msgstr "Laranja escuro"
+
+#: gtk/gtkcolorchooserwidget.c:465
+msgctxt "Color name"
+msgid "Very Dark Orange"
+msgstr "Laranja muito escuro"
+
+#: gtk/gtkcolorchooserwidget.c:466
+msgctxt "Color name"
+msgid "Very Light Red"
+msgstr "Vermelho muito claro"
+
+#: gtk/gtkcolorchooserwidget.c:467
+msgctxt "Color name"
+msgid "Light Red"
+msgstr "Vermelho claro"
+
+#: gtk/gtkcolorchooserwidget.c:468
 msgctxt "Color name"
 msgid "Red"
 msgstr "Vermelho"
 
-#: gtk/gtkcolorchooserwidget.c:475 gtk/gtkcolorchooserwidget.c:476
-#: gtk/gtkcolorchooserwidget.c:477 gtk/gtkcolorchooserwidget.c:478
-#: gtk/gtkcolorchooserwidget.c:479
+#: gtk/gtkcolorchooserwidget.c:469
+msgctxt "Color name"
+msgid "Dark Red"
+msgstr "Vermelho escuro"
+
+#: gtk/gtkcolorchooserwidget.c:470
+msgctxt "Color name"
+msgid "Very Dark Red"
+msgstr "Vermelho muito escuro"
+
+#: gtk/gtkcolorchooserwidget.c:471
+msgctxt "Color name"
+msgid "Very Light Purple"
+msgstr "Roxo muito claro"
+
+#: gtk/gtkcolorchooserwidget.c:472
+msgctxt "Color name"
+msgid "Light Purple"
+msgstr "Roxo claro"
+
+#: gtk/gtkcolorchooserwidget.c:473
 msgctxt "Color name"
 msgid "Purple"
 msgstr "Roxo"
 
-#: gtk/gtkcolorchooserwidget.c:480 gtk/gtkcolorchooserwidget.c:481
-#: gtk/gtkcolorchooserwidget.c:482 gtk/gtkcolorchooserwidget.c:483
-#: gtk/gtkcolorchooserwidget.c:484
+#: gtk/gtkcolorchooserwidget.c:474
+msgctxt "Color name"
+msgid "Dark Purple"
+msgstr "Roxo escuro"
+
+#: gtk/gtkcolorchooserwidget.c:475
+msgctxt "Color name"
+msgid "Very Dark Purple"
+msgstr "Roxo muito escuro"
+
+#: gtk/gtkcolorchooserwidget.c:476
+msgctxt "Color name"
+msgid "Very Light Brown"
+msgstr "Marrom muito claro"
+
+#: gtk/gtkcolorchooserwidget.c:477
+msgctxt "Color name"
+msgid "Light Brown"
+msgstr "Marrom claro"
+
+#: gtk/gtkcolorchooserwidget.c:478
 msgctxt "Color name"
 msgid "Brown"
 msgstr "Marrom"
 
-#: gtk/gtkcolorchooserwidget.c:485 gtk/gtkcolorchooserwidget.c:486
-#: gtk/gtkcolorchooserwidget.c:487 gtk/gtkcolorchooserwidget.c:488
-#: gtk/gtkcolorchooserwidget.c:489
-#| msgctxt "keyboard label"
-#| msgid "Right"
+#: gtk/gtkcolorchooserwidget.c:479
 msgctxt "Color name"
-msgid "Light"
-msgstr "Claro"
+msgid "Dark Brown"
+msgstr "Marrom escuro"
 
-#: gtk/gtkcolorchooserwidget.c:490 gtk/gtkcolorchooserwidget.c:491
-#: gtk/gtkcolorchooserwidget.c:492 gtk/gtkcolorchooserwidget.c:493
-#: gtk/gtkcolorchooserwidget.c:494
-#| msgctxt "Color name"
-#| msgid "Dark Plum"
+#: gtk/gtkcolorchooserwidget.c:480
 msgctxt "Color name"
-msgid "Dark"
-msgstr "Escuro"
+msgid "Very Dark Brown"
+msgstr "Marrom muito escuro"
+
+#: gtk/gtkcolorchooserwidget.c:481
+msgctxt "Color name"
+msgid "White"
+msgstr "Branco"
+
+#: gtk/gtkcolorchooserwidget.c:482
+msgctxt "Color name"
+msgid "Light Gray 1"
+msgstr "Cinza claro 1"
+
+#: gtk/gtkcolorchooserwidget.c:483
+msgctxt "Color name"
+msgid "Light Gray 2"
+msgstr "Cinza claro 2"
+
+#: gtk/gtkcolorchooserwidget.c:484
+msgctxt "Color name"
+msgid "Light Gray 3"
+msgstr "Cinza claro 3"
+
+#: gtk/gtkcolorchooserwidget.c:485
+msgctxt "Color name"
+msgid "Light Gray 4"
+msgstr "Cinza claro 4"
+
+#: gtk/gtkcolorchooserwidget.c:486
+msgctxt "Color name"
+msgid "Dark Gray 1"
+msgstr "Cinza escuro 1"
+
+#: gtk/gtkcolorchooserwidget.c:487
+msgctxt "Color name"
+msgid "Dark Gray 2"
+msgstr "Cinza escuro 2"
+
+#: gtk/gtkcolorchooserwidget.c:488
+msgctxt "Color name"
+msgid "Dark Gray 3"
+msgstr "Cinza escuro 3"
+
+#: gtk/gtkcolorchooserwidget.c:489
+msgctxt "Color name"
+msgid "Dark Gray 4"
+msgstr "Cinza escuro 4"
+
+#: gtk/gtkcolorchooserwidget.c:490
+msgctxt "Color name"
+msgid "Black"
+msgstr "Preto"
 
 #. translators: label for the custom section in the color chooser
-#: gtk/gtkcolorchooserwidget.c:538
+#: gtk/gtkcolorchooserwidget.c:534
 msgid "Custom"
 msgstr "Personalizado"
 
-#: gtk/gtkcolorchooserwidget.c:545
+#: gtk/gtkcolorchooserwidget.c:541
 msgid "Custom color"
 msgstr "Cor personalizada"
 
-#: gtk/gtkcolorchooserwidget.c:546
+#: gtk/gtkcolorchooserwidget.c:542
 msgid "Create a custom color"
 msgstr "Criar uma cor personalizada"
 
-#: gtk/gtkcolorchooserwidget.c:565
+#: gtk/gtkcolorchooserwidget.c:561
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "Cor personalizada %d: %s"
@@ -2593,53 +2748,53 @@ msgctxt "font"
 msgid "None"
 msgstr "Nenhuma"
 
-#: gtk/gtkfontchooserwidget.c:1525
+#: gtk/gtkfontchooserwidget.c:1556
 msgid "Width"
 msgstr "Largura"
 
-#: gtk/gtkfontchooserwidget.c:1526
+#: gtk/gtkfontchooserwidget.c:1557
 msgid "Weight"
 msgstr "Peso"
 
-#: gtk/gtkfontchooserwidget.c:1527
+#: gtk/gtkfontchooserwidget.c:1558
 msgid "Italic"
 msgstr "Itálico"
 
-#: gtk/gtkfontchooserwidget.c:1528
+#: gtk/gtkfontchooserwidget.c:1559
 msgid "Slant"
 msgstr "Inclinado"
 
-#: gtk/gtkfontchooserwidget.c:1529
+#: gtk/gtkfontchooserwidget.c:1560
 msgid "Optical Size"
 msgstr "Tamanho ótico"
 
-#: gtk/gtkfontchooserwidget.c:2066 gtk/inspector/prop-editor.c:1676
+#: gtk/gtkfontchooserwidget.c:2097 gtk/inspector/prop-editor.c:1676
 msgid "Default"
 msgstr "Padrão"
 
 #  Drop-down item
 #  https://developer.mozilla.org/en-US/docs/Web/API/Event/eventPhase
-#: gtk/gtkfontchooserwidget.c:2113
+#: gtk/gtkfontchooserwidget.c:2144
 msgid "Ligatures"
 msgstr "Ligaduras"
 
-#: gtk/gtkfontchooserwidget.c:2114
+#: gtk/gtkfontchooserwidget.c:2145
 msgid "Letter Case"
 msgstr "Caixa de letra"
 
-#: gtk/gtkfontchooserwidget.c:2115
+#: gtk/gtkfontchooserwidget.c:2146
 msgid "Number Case"
 msgstr "Caixa de número"
 
-#: gtk/gtkfontchooserwidget.c:2116
+#: gtk/gtkfontchooserwidget.c:2147
 msgid "Number Spacing"
 msgstr "Espaçamento de número"
 
-#: gtk/gtkfontchooserwidget.c:2117
+#: gtk/gtkfontchooserwidget.c:2148
 msgid "Number Formatting"
 msgstr "Formatação de número"
 
-#: gtk/gtkfontchooserwidget.c:2118
+#: gtk/gtkfontchooserwidget.c:2149
 msgid "Character Variants"
 msgstr "Variantes de caractere"
 
@@ -6022,7 +6177,7 @@ msgstr "edp"
 #: gtk/paper_names_offsets.c:128
 msgctxt "paper size"
 msgid "European edp"
-msgstr "edp europeu"
+msgstr "Edp europeu"
 
 #: gtk/paper_names_offsets.c:129
 msgctxt "paper size"
@@ -8290,15 +8445,15 @@ msgstr "Arquivo"
 msgid "_Output format"
 msgstr "Formato da _saída"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:393
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:394
 msgid "Print to LPR"
 msgstr "Imprimir para LPR"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:419
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:423
 msgid "Pages Per Sheet"
 msgstr "Páginas por folha"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:426
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:430
 msgid "Command Line"
 msgstr "Linha de comando"
 
@@ -8336,810 +8491,3 @@ msgstr "saida-teste.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Imprimir para testar impressora"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Scarlet Red"
-#~ msgstr "Vermelho escarlate claro"
-
-#~ msgctxt "Color name"
-#~ msgid "Scarlet Red"
-#~ msgstr "Vermelho escarlate"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Scarlet Red"
-#~ msgstr "Vermelho escarlate escuro"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Orange"
-#~ msgstr "Laranja claro"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Orange"
-#~ msgstr "Laranja escuro"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Butter"
-#~ msgstr "Baunilha claro"
-
-#~ msgctxt "Color name"
-#~ msgid "Butter"
-#~ msgstr "Baunilha"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Butter"
-#~ msgstr "Baunilha escuro"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Chameleon"
-#~ msgstr "Marrom claro"
-
-#~ msgctxt "Color name"
-#~ msgid "Chameleon"
-#~ msgstr "Marrom"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Chameleon"
-#~ msgstr "Marrom escuro"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Sky Blue"
-#~ msgstr "Azul celeste claro"
-
-#~ msgctxt "Color name"
-#~ msgid "Sky Blue"
-#~ msgstr "Azul celeste"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Sky Blue"
-#~ msgstr "Azul celeste escuro"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Plum"
-#~ msgstr "Ameixa claro"
-
-#~ msgctxt "Color name"
-#~ msgid "Plum"
-#~ msgstr "Ameixa"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Chocolate"
-#~ msgstr "Chocolate claro"
-
-#~ msgctxt "Color name"
-#~ msgid "Chocolate"
-#~ msgstr "Chocolate"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Chocolate"
-#~ msgstr "Chocolate escuro"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Aluminum 1"
-#~ msgstr "Alumínio claro 1"
-
-#~ msgctxt "Color name"
-#~ msgid "Aluminum 1"
-#~ msgstr "Alumínio 1"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Aluminum 1"
-#~ msgstr "Alumínio escuro 1"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Aluminum 2"
-#~ msgstr "Alumínio claro 2"
-
-#~ msgctxt "Color name"
-#~ msgid "Aluminum 2"
-#~ msgstr "Alumínio 2"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Aluminum 2"
-#~ msgstr "Alumínio escuro 2"
-
-#~ msgctxt "Color name"
-#~ msgid "Black"
-#~ msgstr "Preto"
-
-#~ msgctxt "Color name"
-#~ msgid "Very Dark Gray"
-#~ msgstr "Cinza muito escuro"
-
-#~ msgctxt "Color name"
-#~ msgid "Darker Gray"
-#~ msgstr "Cinza mais escuro"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Gray"
-#~ msgstr "Cinza escuro"
-
-# prioridade de impressão
-#~ msgctxt "Color name"
-#~ msgid "Medium Gray"
-#~ msgstr "Cinza médio"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Gray"
-#~ msgstr "Cinza claro"
-
-#~ msgctxt "Color name"
-#~ msgid "Lighter Gray"
-#~ msgstr "Cinza mais claro"
-
-#~ msgctxt "Color name"
-#~ msgid "Very Light Gray"
-#~ msgstr "Cinza muito claro"
-
-#~ msgctxt "Color name"
-#~ msgid "White"
-#~ msgstr "Branco"
-
-#  OpenGL: Core and compatibility in contexts
-#  (https://www.opengl.org/wiki/Core_And_Compatibility_in_Contexts).
-#~ msgid "3.2 core GL profile is not available on EGL implementation"
-#~ msgstr "Perfil GL 3.2 Core não está disponível na implementação EGL"
-
-#~ msgid "Not implemented on OS X"
-#~ msgstr "Não implementado no OS X"
-
-#~ msgctxt "switch"
-#~ msgid "ON"
-#~ msgstr "❙"
-
-#~ msgctxt "switch"
-#~ msgid "OFF"
-#~ msgstr "○"
-
-#~ msgid "smb://"
-#~ msgstr "smb://"
-
-#~ msgid "Browse Network"
-#~ msgstr "Navegar na rede"
-
-#~ msgid "Browse the contents of the network"
-#~ msgstr "Navegue no conteúdo da rede"
-
-#~ msgid "Could not start the search process"
-#~ msgstr "Não foi possível iniciar o processo de pesquisa"
-
-#~ msgid ""
-#~ "The program was not able to create a connection to the indexer daemon. "
-#~ "Please make sure it is running."
-#~ msgstr ""
-#~ "O programa não foi capaz de criar uma conexão com o serviço indexador.  "
-#~ "Por favor, certifique-se de que o serviço está em execução."
-
-#~ msgid "smb://foo.example.com, ssh://192.168.0.1"
-#~ msgstr "smb://foo.exemplo.com, ssh://192.168.0.1"
-
-#~ msgid "Unexpected start tag '%s’ on line %d char %d"
-#~ msgstr "Tag de início “%s” inesperada na linha %d caractere %d"
-
-#~ msgid "Icon '%s’ not present in theme %s"
-#~ msgstr "O ícone “%s” não está presente no tema %s"
-
-#~ msgid "APPLICATION [URI…] — launch an APPLICATION"
-#~ msgstr "APLICATIVO [URI…] — inicia um APLICATIVO"
-
-#~ msgid "Try “%s --help” for more information."
-#~ msgstr "Tente “%s --help” para mais informações."
-
-#~ msgid "No item for URI '%s’ found"
-#~ msgstr "Nenhum item encontrado para o URI “%s”"
-
-#~ msgid "No recently used resource found with URI '%s’"
-#~ msgstr "Nenhum recurso usado recentemente foi encontrado com o URI “%s”"
-
-#~ msgid "Open '%s’"
-#~ msgstr "Abrir “%s”"
-
-#~ msgid "Unable to find an item with URI '%s’"
-#~ msgstr "Não foi possível encontrar um item com o URI “%s”"
-
-#~ msgid "Unable to move the item with URI '%s’ to '%s'"
-#~ msgstr "Não foi possível mover o item com o URI “%s” para “%s”"
-
-#~ msgid ""
-#~ "No registered application with name '%s’ for item with URI '%s' found"
-#~ msgstr ""
-#~ "Não foi encontrado nenhum aplicativo registrado com o nome “%s” para o "
-#~ "item com URI “%s”"
-
-#~ msgid "Both “id” and \"name\" were found on the <%s> element"
-#~ msgstr "Tanto “id” quanto \"name\" foram encontrados no elemento <%s>"
-
-#~ msgid "The attribute “%s” was found twice on the <%s> element"
-#~ msgstr "O atributo “%s” foi encontrado duas vezes no elemento <%s>"
-
-#~ msgid "<%s> element has invalid ID “%s”"
-#~ msgstr "O ID “%2$s” do elemento <%1$s> é inválido"
-
-#~ msgid "<%s> element has neither a “name” nor an \"id\" attribute"
-#~ msgstr "O elemento <%s> não tem o atributo “name” nem \"id”"
-
-#~ msgid "Attribute “%s” repeated twice on the same <%s> element"
-#~ msgstr "O atributo “%s” foi repetido duas vezes no mesmo elemento <%s>"
-
-#~ msgid "Attribute “%s” is invalid on <%s> element in this context"
-#~ msgstr "O atributo “%s” é inválido no elemento <%s> neste contexto"
-
-#~ msgid "Tag “%s” has not been defined."
-#~ msgstr "A tag “%s” não foi definida."
-
-#~ msgid "Tag “%s” does not exist in buffer and tags can not be created."
-#~ msgstr "A tag “%s” não existe no buffer e tags não podem ser criadas."
-
-#~ msgid "\"%s” is not a valid attribute type"
-#~ msgstr "“%s” não é um tipo de atributo válido"
-
-#~ msgid "\"%s” is not a valid attribute name"
-#~ msgstr "“%s” não é um nome de atributo válido"
-
-#~ msgid ""
-#~ "\"%s” could not be converted to a value of type “%s\" for attribute \"%s”"
-#~ msgstr ""
-#~ "Não foi possível converter “%s” para um valor do tipo \"%s\" para o "
-#~ "atributo “%s”"
-
-#~ msgid "\"%s” is not a valid value for attribute “%s”"
-#~ msgstr "“%s” não é um valor válido para o atributo “%s”"
-
-#~ msgid "Tag “%s” already defined"
-#~ msgstr "A tag “%s” já foi definida"
-
-#~ msgid "Tag “%s” has invalid priority \"%s”"
-#~ msgstr "A prioridade “%2$s” da tag “%1$s” é inválida"
-
-#~ msgid ""
-#~ "No theme index file in '%s’.\n"
-#~ "If you really want to create an icon cache here, use --ignore-theme-"
-#~ "index.\n"
-#~ msgstr ""
-#~ "Sem arquivo de índice de tema em “%s”.\n"
-#~ "Se você realmente quiser criar um cache de ícones aqui, use --ignore-"
-#~ "theme-index.\n"
-
-#~ msgid ""
-#~ "The WGL_ARB_create_context extension needed to create core profiles is "
-#~ "not available"
-#~ msgstr ""
-#~ "A extensão WGL_ARB_create_context necessária para criar perfis Core não "
-#~ "está disponível"
-
-#  Menu em "Nós CSS"
-#~ msgid "Change name"
-#~ msgstr "Alterar nome"
-
-#  Menu em "Nós CSS"
-#~ msgid "Change classes"
-#~ msgstr "Alterar classes"
-
-#  Menu em "Nós CSS"
-#~ msgid "CSS properties"
-#~ msgstr "Propriedades CSS"
-
-#  Cabeçalho de tabela
-#~ msgid "Classes"
-#~ msgstr "Classes"
-
-#~ msgid "Error launching preview"
-#~ msgstr "Erro ao iniciar visualização"
-
-#~ msgid "Changes are applied instantly, only for this selected widget."
-#~ msgstr ""
-#~ "As alterações são aplicados instantaneamente, apenas para esse componente "
-#~ "selecionado."
-
-#  Tooltip botão "<"
-#~ msgid "Show all CSS nodes"
-#~ msgstr "Mostra todos os nós CSS"
-
-#  Tooltip botão ">"
-#~ msgid "Show CSS properties"
-#~ msgstr "Mostra propriedades CSS"
-
-#~ msgid "Node:"
-#~ msgstr "Nó:"
-
-#~ msgid "Hierarchy"
-#~ msgstr "Hierarquia"
-
-#~ msgid "Allocated size"
-#~ msgstr "Tamanho alocado"
-
-#~ msgid ""
-#~ "The GLX_ARB_create_context_profile extension needed to create core "
-#~ "profiles is not available"
-#~ msgstr ""
-#~ "A extensão GLX_ARB_create_context_profile necessária para criar perfis de "
-#~ "núcleo não está disponível"
-
-#~ msgid "New class"
-#~ msgstr "Nova classe"
-
-#~ msgid "Cancel"
-#~ msgstr "Cancelar"
-
-#~ msgid "Add a class"
-#~ msgstr "Adicionar uma classe"
-
-#~ msgid "Restore defaults for this widget"
-#~ msgstr "Restaurar padrões para este componente"
-
-#~ msgid "Object Hierarchy"
-#~ msgstr "Hierarquia de objeto"
-
-#~ msgid "Style Properties"
-#~ msgstr "Propriedades de estilo"
-
-#~ msgid "_Customize"
-#~ msgstr "_Personalizar"
-
-#~ msgid "Yesterday at %-I:%M %P"
-#~ msgstr "Ontem às %-I:%M %P"
-
-#~ msgid "Devices"
-#~ msgstr "Dispositivos"
-
-#~ msgid "Bookmarks"
-#~ msgstr "Marcadores"
-
-#~ msgid "Remove"
-#~ msgstr "Remover"
-
-#~ msgid "X display"
-#~ msgstr "Tela X"
-
-#~ msgid "All Files"
-#~ msgstr "Todos arquivos"
-
-#~| msgid "No items found"
-#~ msgid "No Files Found"
-#~ msgstr "Nenhum arquivo encontrado"
-
-#~ msgid "Invalid object type '%s' on line %d"
-#~ msgstr "Tipo de objeto inválido \"%s\" na linha %d"
-
-#~ msgid "Invalid type function on line %d: '%s'"
-#~ msgstr "Função de tipo inválida na linha %d: \"%s\""
-
-#~ msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
-#~ msgstr "ID de objeto duplicado \"%s\" na linha %d (outro na linha %d)"
-
-#~ msgid "Invalid signal '%s' for type '%s' on line %d"
-#~ msgstr "Sinal inválido \"%s\" para o tipo \"%s\" na linha %d"
-
-#~ msgid "Invalid root element: <%s>"
-#~ msgstr "Elemento raiz inválido: <%s>"
-
-#~ msgid "Unhandled tag: <%s>"
-#~ msgstr "Marca não tratada: \"%s\""
-
-#~ msgid ""
-#~ "No fonts matched your search. You can revise your search and try again."
-#~ msgstr ""
-#~ "Nenhuma fonte corresponde com sua pesquisa. Você pode revisar sua "
-#~ "pesquisa e tentar novamente."
-
-#~ msgid "The license of the program"
-#~ msgstr "A licença do programa"
-
-#~ msgctxt "progress bar label"
-#~ msgid "%d %%"
-#~ msgstr "%d %%"
-
-#~ msgctxt "volume percentage"
-#~ msgid "%d %%"
-#~ msgstr "%d %%"
-
-#~ msgid "Choose a widget through the inspector"
-#~ msgstr "Escolha um componente por meio do inspetor"
-
-#~ msgid "Count:"
-#~ msgstr "Número:"
-
-#~ msgid "Dark variant"
-#~ msgstr "Variante escura"
-
-#~ msgid "GTK+ Inspector — %s"
-#~ msgstr "Inspetor GTK+ — %s"
-
-#~ msgid "Send Widget to Shell"
-#~ msgstr "Envia componente para shell"
-
-#~ msgid "Custom CSS"
-#~ msgstr "CSS personalizado"
-
-#~ msgctxt "paper size"
-#~ msgid "A0x2"
-#~ msgstr "A0x2"
-
-#~ msgctxt "paper size"
-#~ msgid "A0x3"
-#~ msgstr "A0x3"
-
-#~ msgctxt "paper size"
-#~ msgid "A1x3"
-#~ msgstr "A1x3"
-
-#~ msgctxt "paper size"
-#~ msgid "A1x4"
-#~ msgstr "A1x4"
-
-#~ msgctxt "paper size"
-#~ msgid "A2x3"
-#~ msgstr "A2x3"
-
-#~ msgctxt "paper size"
-#~ msgid "A2x4"
-#~ msgstr "A2x4"
-
-#~ msgctxt "paper size"
-#~ msgid "A2x5"
-#~ msgstr "A2x5"
-
-#~ msgctxt "paper size"
-#~ msgid "A3x3"
-#~ msgstr "A3x3"
-
-#~ msgctxt "paper size"
-#~ msgid "A3x4"
-#~ msgstr "A3x4"
-
-#~ msgctxt "paper size"
-#~ msgid "A3x5"
-#~ msgstr "A3x5"
-
-#~ msgctxt "paper size"
-#~ msgid "A3x6"
-#~ msgstr "A3x6"
-
-#~ msgctxt "paper size"
-#~ msgid "A3x7"
-#~ msgstr "A3x7"
-
-#~ msgctxt "paper size"
-#~ msgid "A4x3"
-#~ msgstr "A4x3"
-
-#~ msgctxt "paper size"
-#~ msgid "A4x4"
-#~ msgstr "A4x4"
-
-#~ msgctxt "paper size"
-#~ msgid "A4x5"
-#~ msgstr "A4x5"
-
-#~ msgctxt "paper size"
-#~ msgid "A4x6"
-#~ msgstr "A4x6"
-
-#~ msgctxt "paper size"
-#~ msgid "A4x7"
-#~ msgstr "A4x7"
-
-#~ msgctxt "paper size"
-#~ msgid "A4x8"
-#~ msgstr "A4x8"
-
-#~ msgctxt "paper size"
-#~ msgid "A4x9"
-#~ msgstr "A4x9"
-
-#~ msgctxt "paper size"
-#~ msgid "10x11"
-#~ msgstr "10x11"
-
-#~ msgctxt "paper size"
-#~ msgid "10x13"
-#~ msgstr "10x13"
-
-#~ msgctxt "paper size"
-#~ msgid "10x14"
-#~ msgstr "10x14"
-
-#~ msgctxt "paper size"
-#~ msgid "10x15"
-#~ msgstr "10x15"
-
-#~ msgctxt "paper size"
-#~ msgid "11x12"
-#~ msgstr "11x12"
-
-#~ msgctxt "paper size"
-#~ msgid "11x15"
-#~ msgstr "11x15"
-
-#~ msgctxt "paper size"
-#~ msgid "12x19"
-#~ msgstr "12x19"
-
-#~ msgctxt "paper size"
-#~ msgid "5x7"
-#~ msgstr "5x7"
-
-#~ msgid "Create Fo_lder"
-#~ msgstr "Criar _pasta"
-
-#~ msgid "_Location:"
-#~ msgstr "Locali_zação:"
-
-#~ msgid ""
-#~ "Specify one or more page ranges,\n"
-#~ " e.g. 1-3,7,11"
-#~ msgstr ""
-#~ "Especificar um ou mais intervalos de páginas,\n"
-#~ " ex.: 1-3,7,11"
-
-#~ msgid ""
-#~ "Specify the time of print,\n"
-#~ " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
-#~ msgstr ""
-#~ "Informe a hora da impressão,\n"
-#~ " ex.: 9:30, 15:10, 19:40:15"
-
-#~ msgid "Unmaximize"
-#~ msgstr "Restaurar"
-
-#~ msgid "Always on Visible Workspace"
-#~ msgstr "Sempre no espaço de trabalho visível"
-
-#~ msgid "Only on This Workspace"
-#~ msgstr "Apenas neste espaço de trabalho"
-
-#~ msgid "Move to Workspace Up"
-#~ msgstr "Mover para o espaço de trabalho acima"
-
-#~ msgid "Move to Workspace Down"
-#~ msgstr "Mover para o espaço de trabalho abaixo"
-
-#~ msgid "Move to Another Workspace"
-#~ msgstr "Mover para outro espaço de trabalho"
-
-#~ msgid "Workspace %d"
-#~ msgstr "Espaço de trabalho %d"
-
-#~ msgid "Please select a folder below"
-#~ msgstr "Por favor, selecione uma pasta abaixo"
-
-#~ msgid "Please type a file name"
-#~ msgstr "Por favor, digite um nome de arquivo"
-
-#~ msgid "Recently Used"
-#~ msgstr "Usado recentemente"
-
-#~ msgid "Search:"
-#~ msgstr "Pesquisar:"
-
-#~ msgid "Save in folder:"
-#~ msgstr "Salvar na pasta:"
-
-#~ msgid "Create in folder:"
-#~ msgstr "Criar na pasta:"
-
-#~ msgid "Places"
-#~ msgstr "Locais"
-
-#~ msgid "Type a file name"
-#~ msgstr "Digite um nome de arquivo"
-
-#~ msgid "_Find Applications in Software "
-#~ msgstr "_Localizar aplicativos no Programas "
-
-#~ msgid "Select an application to open “%s”"
-#~ msgstr "Selecione um aplicativo para abrir \"%s\""
-
-#~ msgid "No applications available to open “%s” files"
-#~ msgstr "Nenhum aplicativo disponível para abrir os arquivos \"%s\""
-
-#~ msgid ""
-#~ "Click \"Show other applications\", for more options, or \"Software\" to "
-#~ "install a new application"
-#~ msgstr ""
-#~ "Clique em \"Mostrar outros aplicativos\", para mais opções, ou \"Programas"
-#~ "\" para instalar um novo aplicativo"
-
-#~ msgid "Software"
-#~ msgstr "Programas"
-
-#~ msgid "+"
-#~ msgstr "+"
-
-#~ msgid "-"
-#~ msgstr "-"
-
-#~ msgid "C_ontinue"
-#~ msgstr "C_ontinuar"
-
-#~ msgid ""
-#~ "%s cannot quit at this time:\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "%s não pode encerrar no momento:\n"
-#~ "\n"
-#~ "%s"
-
-#~ msgid "Failed to look for applications online"
-#~ msgstr "Falha ao procurar por aplicativos online"
-
-#~ msgctxt "light switch widget"
-#~ msgid "Switch"
-#~ msgstr "Alternar"
-
-#~ msgid "Switches between on and off states"
-#~ msgstr "Alterna entre ligado e desligado"
-
-#~ msgid " "
-#~ msgstr " "
-
-#~ msgid "Save in _folder:"
-#~ msgstr "Salvar na _pasta:"
-
-#~ msgid "Input _Methods"
-#~ msgstr "_Métodos de entrada"
-
-#~ msgid "_Insert Unicode Control Character"
-#~ msgstr "_Inserir caractere de controle Unicode"
-
-#~ msgid "Could not retrieve information about the file"
-#~ msgstr "Não foi possível obter informações sobre o arquivo"
-
-#~ msgid "Could not add a bookmark"
-#~ msgstr "Não foi possível adicionar um marcador"
-
-#~ msgid "Could not remove bookmark"
-#~ msgstr "Não foi possível remover o marcador"
-
-#~ msgid "Add the folder '%s' to the bookmarks"
-#~ msgstr "Adiciona a pasta \"%s\" aos marcadores"
-
-#~ msgid "Add the current folder to the bookmarks"
-#~ msgstr "Adiciona a pasta atual aos marcadores"
-
-#~ msgid "Add the selected folders to the bookmarks"
-#~ msgstr "Adiciona as pastas selecionadas aos marcadores"
-
-#~ msgid "Remove the bookmark '%s'"
-#~ msgstr "Remove o marcador \"%s\""
-
-#~ msgid "Bookmark '%s' cannot be removed"
-#~ msgstr "O marcador \"%s\" não pode ser removido"
-
-#~ msgid "Remove the selected bookmark"
-#~ msgstr "Remove o marcador selecionado"
-
-#~ msgid "_Places"
-#~ msgstr "_Locais"
-
-#~ msgid "Add the selected folder to the Bookmarks"
-#~ msgstr "Adiciona a pasta selecionada aos Marcadores"
-
-#~ msgid "_Copy file’s location"
-#~ msgstr "_Copiar localização do arquivo"
-
-#~ msgid "Shortcut %s does not exist"
-#~ msgstr "O atalho %s não existe"
-
-#~ msgid "Could not mount %s"
-#~ msgstr "Não foi possível montar %s"
-
-#~ msgid "Could not find '%s'"
-#~ msgstr "Não foi possível localizar \"%s\""
-
-#~ msgid "Could not find application"
-#~ msgstr "Não foi possível localizar o aplicativo"
-
-#~ msgid "Homepage"
-#~ msgstr "Página inicial"
-
-#~ msgid "Manage Custom Sizes..."
-#~ msgstr "Gerenciar tamanhos personalizados..."
-
-#~ msgid "Caps Lock and Num Lock are on"
-#~ msgstr "As teclas Caps e Num Lock estão ativas"
-
-#~ msgid "Num Lock is on"
-#~ msgstr "A tecla Num Lock está ativa"
-
-#~ msgid "Connect as u_ser:"
-#~ msgstr "Conectar como u_suário:"
-
-#~ msgid "Select a folder"
-#~ msgstr "Selecione uma pasta"
-
-#~ msgid "Invalid path"
-#~ msgstr "Caminho inválido"
-
-#~ msgid "No match"
-#~ msgstr "Nada encontrado"
-
-#~ msgid "Sole completion"
-#~ msgstr "Conclusão exclusiva"
-
-#~ msgid "Complete, but not unique"
-#~ msgstr "Concluído, mas não é o único"
-
-#~ msgid "Completing..."
-#~ msgstr "Completando..."
-
-#~ msgid "Only local files may be selected"
-#~ msgstr "Somente arquivos locais podem ser selecionados"
-
-#~ msgid "Incomplete hostname; end it with '/'"
-#~ msgstr "O nome da máquina está incompleto; ele deve terminar com \"/\""
-
-#~ msgid "Path does not exist"
-#~ msgstr "O caminho não existe"
-
-#~ msgid "Could not get information for file '%s': %s"
-#~ msgstr "Não foi possível obter informações sobre o arquivo \"%s\": %s"
-
-#~ msgid "Failed to open file '%s': %s"
-#~ msgstr "Falha ao abrir o arquivo \"%s\": %s"
-
-#~ msgid ""
-#~ "Failed to load image '%s': reason not known, probably a corrupt image file"
-#~ msgstr ""
-#~ "Falha ao carregar a imagem \"%s\": razão desconhecida, provavelmente um "
-#~ "arquivo de imagem corrompido"
-
-#~ msgid "Received invalid color data\n"
-#~ msgstr "Dados de cor inválidos recebidos\n"
-
-#~ msgid "_Browse for other folders"
-#~ msgstr "_Navegar em outras pastas"
-
-#~ msgid ""
-#~ "Could not find the icon '%s'. The '%s' theme\n"
-#~ "was not found either, perhaps you need to install it.\n"
-#~ "You can get a copy from:\n"
-#~ "\t%s"
-#~ msgstr ""
-#~ "Não foi possível localizar o ícone \"%s\". O tema \"%s\" não\n"
-#~ "foi localizado também. Talvez você precise instalá-lo.\n"
-#~ "Você pode obter uma cópia a partir de:\n"
-#~ "\t%s"
-
-#~ msgid "Unable to locate image file in pixmap_path: \"%s\""
-#~ msgstr ""
-#~ "Não foi possível encontrar o arquivo de imagem no pixmap_path: \"%s\""
-
-#~ msgid "This function is not implemented for widgets of class '%s'"
-#~ msgstr "Esta função não está implementada para widgets da classe \"%s\""
-
-#~ msgid "different idatas found for symlinked '%s' and '%s'\n"
-#~ msgstr ""
-#~ "idatas diferentes localizados para \"%s\" e \"%s\" ligados "
-#~ "simbolicamente\n"
-
-#~ msgid "X screen to use"
-#~ msgstr "Tela do X a ser utilizada"
-
-#~ msgid "SCREEN"
-#~ msgstr "TELA"
-
-#~ msgid "Make X calls synchronous"
-#~ msgstr "Torna síncronas as chamadas do X"
-
-#~ msgid "Written by"
-#~ msgstr "Escrito por"
-
-#~ msgid "_Add"
-#~ msgstr "_Adicionar"
-
-#~ msgid "Error creating folder '%s': %s"
-#~ msgstr "Erro ao criar a pasta \"%s\": %s"
-
-#~ msgid "Unable to find include file: \"%s\""
-#~ msgstr "Não foi possível localizar o arquivo de include: \"%s\""
-
-#~ msgid "Unable to locate theme engine in module_path: \"%s\","
-#~ msgstr ""
-#~ "Não foi possível localizar a ferramenta de temas no module_path: \"%s\","
-
-#~ msgid "Gdk debugging flags to set"
-#~ msgstr "Opções de depuração do Gdk a serem ativadas"
-
-#~ msgid "Gdk debugging flags to unset"
-#~ msgstr "Opções de depuração do Gdk a serem desativadas"
