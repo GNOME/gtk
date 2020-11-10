@@ -3767,6 +3767,10 @@ gsk_gl_render_job_visit_node (GskGLRenderJob      *job,
       gsk_gl_render_job_visit_as_fallback (job, node);
     break;
 
+    case GSK_FILL_NODE:
+      gsk_gl_render_job_visit_as_fallback (job, node);
+    break;
+
     case GSK_NOT_A_RENDER_NODE:
     default:
       g_assert_not_reached ();
