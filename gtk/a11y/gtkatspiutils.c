@@ -80,7 +80,7 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
       break;
 
     case GTK_ACCESSIBLE_ROLE_FORM:
-      break;
+      return ATSPI_ROLE_FORM;
 
     case GTK_ACCESSIBLE_ROLE_GENERIC:
       break;
@@ -92,10 +92,10 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
       return ATSPI_ROLE_TABLE_CELL;
 
     case GTK_ACCESSIBLE_ROLE_GROUP:
-      break;
+      return ATSPI_ROLE_PANEL;
 
     case GTK_ACCESSIBLE_ROLE_HEADING:
-      break;
+      return ATSPI_ROLE_HEADING;
 
     case GTK_ACCESSIBLE_ROLE_IMG:
       return ATSPI_ROLE_IMAGE;
@@ -110,7 +110,7 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
       break;
 
     case GTK_ACCESSIBLE_ROLE_LEGEND:
-      break;
+      return ATSPI_ROLE_LABEL;
 
     case GTK_ACCESSIBLE_ROLE_LINK:
       return ATSPI_ROLE_LINK;
@@ -134,7 +134,7 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
       return ATSPI_ROLE_MARQUEE;
 
     case GTK_ACCESSIBLE_ROLE_MATH:
-      return ATSPI_ROLE_MATH;;
+      return ATSPI_ROLE_MATH;
 
     case GTK_ACCESSIBLE_ROLE_METER:
       return ATSPI_ROLE_LEVEL_BAR;
