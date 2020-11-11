@@ -1,10 +1,10 @@
-/* GSK - The GTK Scene Kit
- * Copyright 2016  Endless 
+/*
+ * Copyright © 2020 Benjamin Otte
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -13,29 +13,36 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GSK_H__
-#define __GSK_H__
 
-#define __GSK_H_INSIDE__
+#ifndef __GSK_STROKE_PRIVATE_H__
+#define __GSK_STROKE_PRIVATE_H__
 
-#include <gsk/gskenums.h>
-#include <gsk/gskglshader.h>
-#include <gsk/gskpath.h>
-#include <gsk/gskrenderer.h>
-#include <gsk/gskrendernode.h>
-#include <gsk/gskroundedrect.h>
-#include <gsk/gskstroke.h>
-#include <gsk/gsktransform.h>
+#include "gskstroke.h"
 
-#include <gsk/gskcairorenderer.h>
+G_BEGIN_DECLS
 
-#include <gsk/gsktypes.h>
-#include <gsk/gskenumtypes.h>
+struct _GskStroke
+{
+  float line_width;
+};
 
-#include <gsk/gsk-autocleanup.h>
+static inline void
+gsk_stroke_init_copy (GskStroke       *stroke,
+                      const GskStroke *other)
+{
+  *stroke = *other;
+}
 
-#undef __GSK_H_INSIDE__
+static inline void
+gsk_stroke_clear (GskStroke *stroke)
+{
+}
 
-#endif /* __GSK_H__ */
+G_END_DECLS
+
+#endif /* __GSK_STROKE_PRIVATE_H__ */
+

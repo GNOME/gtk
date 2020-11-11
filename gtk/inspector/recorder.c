@@ -163,6 +163,9 @@ create_list_model_for_render_node (GskRenderNode *node)
     case GSK_FILL_NODE:
       return create_render_node_list_model ((GskRenderNode *[1]) { gsk_fill_node_get_child (node) }, 1);
 
+    case GSK_STROKE_NODE:
+      return create_render_node_list_model ((GskRenderNode *[1]) { gsk_stroke_node_get_child (node) }, 1);
+
     case GSK_SHADOW_NODE:
       return create_render_node_list_model ((GskRenderNode *[1]) { gsk_shadow_node_get_child (node) }, 1);
 
@@ -284,6 +287,8 @@ node_type_name (GskRenderNodeType type)
       return "Rounded Clip";
     case GSK_FILL_NODE:
       return "Fill";
+    case GSK_STROKE_NODE:
+      return "Stroke";
     case GSK_SHADOW_NODE:
       return "Shadow";
     case GSK_BLEND_NODE:
@@ -323,6 +328,7 @@ node_name (GskRenderNode *node)
     case GSK_CLIP_NODE:
     case GSK_ROUNDED_CLIP_NODE:
     case GSK_FILL_NODE:
+    case GSK_STROKE_NODE:
     case GSK_SHADOW_NODE:
     case GSK_BLEND_NODE:
     case GSK_CROSS_FADE_NODE:
@@ -1046,6 +1052,25 @@ populate_render_node_properties (GtkListStore  *store,
 
         tmp = gsk_path_to_string (path);
         add_text_row (store, "Path", tmp);
+        g_free (tmp);
+
+        tmp = g_enum_to_string (GSK_TYPE_FILL_RULE, gsk_fill_node_get_fill_rule (node));
+        add_text_row (store, "Fill rule", tmp);
+        g_free (tmp);
+      }
+      break;
+
+    case GSK_STROKE_NODE:
+      {
+        GskPath *path = gsk_stroke_node_get_path (node);
+        const GskStroke *stroke = gsk_stroke_node_get_stroke (node);
+
+        tmp = gsk_path_to_string (path);
+        add_text_row (store, "Path", tmp);
+        g_free (tmp);
+
+        tmp = g_strdup_printf ("%.2f", gsk_stroke_get_line_width (stroke));
+        add_text_row (store, "Line width", tmp);
         g_free (tmp);
       }
       break;
