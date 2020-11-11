@@ -31,6 +31,7 @@
 #include "gsktransformprivate.h"
 
 #include "gsk/gskrendernodeprivate.h"
+#include "gsk/gskstrokeprivate.h"
 
 #include "gtk/gskpango.h"
 
@@ -112,6 +113,10 @@ struct _GtkSnapshotState {
       GskPath *path;
       GskFillRule fill_rule;
     } fill;
+    struct {
+      GskPath *path;
+      GskStroke stroke;
+    } stroke;
     struct {
       gsize n_shadows;
       GskShadow *shadows;
@@ -1169,6 +1174,70 @@ gtk_snapshot_push_fill (GtkSnapshot *snapshot,
 
   state->data.fill.path = gsk_path_ref (path);
   state->data.fill.fill_rule = fill_rule;
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_stroke (GtkSnapshot      *snapshot,
+                             GtkSnapshotState *state,
+                             GskRenderNode   **nodes,
+                             guint             n_nodes)
+{
+  GskRenderNode *node, *stroke_node;
+
+  node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
+  if (node == NULL)
+    return NULL;
+
+  stroke_node = gsk_stroke_node_new (node,
+                                     state->data.stroke.path,
+                                     &state->data.stroke.stroke);
+
+  if (stroke_node->bounds.size.width == 0 ||
+      stroke_node->bounds.size.height == 0)
+    {
+      gsk_render_node_unref (node);
+      gsk_render_node_unref (stroke_node);
+      return NULL;
+    }
+
+  gsk_render_node_unref (node);
+
+  return stroke_node;
+}
+
+static void
+gtk_snapshot_clear_stroke (GtkSnapshotState *state)
+{
+  gsk_path_unref (state->data.stroke.path);
+  gsk_stroke_clear (&state->data.stroke.stroke);
+}
+
+/**
+ * gtk_snapshot_push_stroke:
+ * @snapshot: a #GtkSnapshot
+ * @path: The path to stroke
+ * @stroke: The stroke attributes
+ *
+ * Strokes the given @path with the attributes given by @stroke and the
+ * image being recorded until the next call to gtk_snapshot_pop().
+ */
+void
+gtk_snapshot_push_stroke (GtkSnapshot     *snapshot,
+                          GskPath         *path,
+                          const GskStroke *stroke)
+{
+  GtkSnapshotState *state;
+
+  /* FIXME: Is it worth calling ensure_affine() and transforming the path here? */
+  gtk_snapshot_ensure_identity (snapshot);
+
+  state = gtk_snapshot_push_state (snapshot,
+                                   gtk_snapshot_get_current_state (snapshot)->transform,
+                                   gtk_snapshot_collect_stroke,
+                                   gtk_snapshot_clear_stroke);
+
+  state->data.stroke.path = gsk_path_ref (path);
+  gsk_stroke_init_copy (&state->data.stroke.stroke, stroke);
 }
 
 static GskRenderNode *
