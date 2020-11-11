@@ -68,6 +68,7 @@ demos = files([
   'paintable_mediastream.c',
   'panes.c',
   'password_entry.c',
+  'path_fill.c',
   'peg_solitaire.c',
   'pickers.c',
   'printing.c',
