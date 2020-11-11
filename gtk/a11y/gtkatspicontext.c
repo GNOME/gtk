@@ -411,7 +411,11 @@ get_parent_context_ref (GtkAccessible *accessible)
             gtk_accessible_get_at_context (GTK_ACCESSIBLE (page));
 
           if (parent_context != NULL)
-            res = gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (parent_context));
+            {
+              gtk_at_context_realize (parent_context);
+
+              res = gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (parent_context));
+            }
         }
       else
         {
