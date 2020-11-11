@@ -109,6 +109,10 @@ struct _GtkSnapshotState {
       GskRoundedRect bounds;
     } rounded_clip;
     struct {
+      GskPath *path;
+      GskFillRule fill_rule;
+    } fill;
+    struct {
       gsize n_shadows;
       GskShadow *shadows;
       GskShadow a_shadow; /* Used if n_shadows == 1 */
@@ -1100,6 +1104,71 @@ gtk_snapshot_push_rounded_clip (GtkSnapshot          *snapshot,
                                    NULL);
 
   gtk_rounded_rect_scale_affine (&state->data.rounded_clip.bounds, bounds, scale_x, scale_y, dx, dy);
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_fill (GtkSnapshot      *snapshot,
+                           GtkSnapshotState *state,
+                           GskRenderNode   **nodes,
+                           guint             n_nodes)
+{
+  GskRenderNode *node, *fill_node;
+
+  node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
+  if (node == NULL)
+    return NULL;
+
+  fill_node = gsk_fill_node_new (node,
+                                 state->data.fill.path,
+                                 state->data.fill.fill_rule);
+
+  if (fill_node->bounds.size.width == 0 ||
+      fill_node->bounds.size.height == 0)
+    {
+      gsk_render_node_unref (node);
+      gsk_render_node_unref (fill_node);
+      return NULL;
+    }
+
+  gsk_render_node_unref (node);
+
+  return fill_node;
+}
+
+static void
+gtk_snapshot_clear_fill (GtkSnapshotState *state)
+{
+  gsk_path_unref (state->data.fill.path);
+}
+
+/**
+ * gtk_snapshot_push_fill:
+ * @snapshot: a #GtkSnapshot
+ * @path: The path describing the area to fill
+ * @fill_rule: The fill rule to use
+ *
+ * Fills the area given by @path and @fill_rule with an image and discards everything
+ * outside of it.
+ *
+ * The image is recorded until the next call to gtk_snapshot_pop().
+ */
+void
+gtk_snapshot_push_fill (GtkSnapshot *snapshot,
+                        GskPath     *path,
+                        GskFillRule  fill_rule)
+{
+  GtkSnapshotState *state;
+
+  /* FIXME: Is it worth calling ensure_affine() and transforming the path here? */
+  gtk_snapshot_ensure_identity (snapshot);
+
+  state = gtk_snapshot_push_state (snapshot,
+                                   gtk_snapshot_get_current_state (snapshot)->transform,
+                                   gtk_snapshot_collect_fill,
+                                   gtk_snapshot_clear_fill);
+
+  state->data.fill.path = gsk_path_ref (path);
+  state->data.fill.fill_rule = fill_rule;
 }
 
 static GskRenderNode *
