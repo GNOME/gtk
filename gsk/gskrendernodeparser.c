@@ -26,6 +26,7 @@
 #include "gskpath.h"
 #include "gskroundedrectprivate.h"
 #include "gskrendernodeprivate.h"
+#include "gskstroke.h"
 #include "gsktransformprivate.h"
 
 #include "gdk/gdkrgbaprivate.h"
@@ -2438,6 +2439,10 @@ printer_init_duplicates_for_node (Printer       *printer,
       printer_init_duplicates_for_node (printer, gsk_fill_node_get_child (node));
       break;
 
+    case GSK_STROKE_NODE:
+      printer_init_duplicates_for_node (printer, gsk_stroke_node_get_child (node));
+      break;
+
     case GSK_BLEND_NODE:
       printer_init_duplicates_for_node (printer, gsk_blend_node_get_bottom_child (node));
       printer_init_duplicates_for_node (printer, gsk_blend_node_get_top_child (node));
@@ -2663,7 +2668,7 @@ append_float_param (Printer    *p,
                     float       value,
                     float       default_value)
 {
-  /* Don't approximate-compare here, better be topo verbose */
+  /* Don't approximate-compare here, better be too verbose */
   if (value == default_value)
     return;
 
@@ -3223,6 +3228,25 @@ render_node_print (Printer       *p,
         path_str = gsk_path_to_string (gsk_fill_node_get_path (node));
         append_string_param (p, "path", path_str);
         g_free (path_str);
+
+        end_node (p);
+      }
+      break;
+
+    case GSK_STROKE_NODE:
+      {
+        const GskStroke *stroke;
+        char *path_str;
+
+        start_node (p, "stroke", node_name);
+
+        append_node_param (p, "child", gsk_stroke_node_get_child (node));
+        path_str = gsk_path_to_string (gsk_stroke_node_get_path (node));
+        append_string_param (p, "path", path_str);
+        g_free (path_str);
+
+        stroke = gsk_stroke_node_get_stroke (node);
+        append_float_param (p, "line-width", gsk_stroke_get_line_width (stroke), 0.0);
 
         end_node (p);
       }

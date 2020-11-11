@@ -159,6 +159,7 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
 #define GSK_TYPE_CLIP_NODE                      (gsk_clip_node_get_type())
 #define GSK_TYPE_ROUNDED_CLIP_NODE              (gsk_rounded_clip_node_get_type())
 #define GSK_TYPE_FILL_NODE                      (gsk_fill_node_get_type())
+#define GSK_TYPE_STROKE_NODE                    (gsk_stroke_node_get_type())
 #define GSK_TYPE_SHADOW_NODE                    (gsk_shadow_node_get_type())
 #define GSK_TYPE_BLEND_NODE                     (gsk_blend_node_get_type())
 #define GSK_TYPE_CROSS_FADE_NODE                (gsk_cross_fade_node_get_type())
@@ -188,6 +189,7 @@ typedef struct _GskRepeatNode                   GskRepeatNode;
 typedef struct _GskClipNode                     GskClipNode;
 typedef struct _GskRoundedClipNode              GskRoundedClipNode;
 typedef struct _GskFillNode                     GskFillNode;
+typedef struct _GskStrokeNode                   GskStrokeNode;
 typedef struct _GskShadowNode                   GskShadowNode;
 typedef struct _GskBlendNode                    GskBlendNode;
 typedef struct _GskCrossFadeNode                GskCrossFadeNode;
@@ -473,6 +475,19 @@ GDK_AVAILABLE_IN_4_14
 GskPath *               gsk_fill_node_get_path                  (const GskRenderNode      *node);
 GDK_AVAILABLE_IN_4_14
 GskFillRule             gsk_fill_node_get_fill_rule             (const GskRenderNode      *node);
+
+GDK_AVAILABLE_IN_4_14
+GType                   gsk_stroke_node_get_type                (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_4_14
+GskRenderNode *         gsk_stroke_node_new                     (GskRenderNode            *child,
+                                                                 GskPath                  *path,
+                                                                 const GskStroke          *stroke);
+GDK_AVAILABLE_IN_4_14
+GskRenderNode *         gsk_stroke_node_get_child               (const GskRenderNode      *node);
+GDK_AVAILABLE_IN_4_14
+GskPath *               gsk_stroke_node_get_path                (const GskRenderNode      *node);
+GDK_AVAILABLE_IN_4_14
+const GskStroke *       gsk_stroke_node_get_stroke              (const GskRenderNode      *node);
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_shadow_node_get_type                (void) G_GNUC_CONST;
