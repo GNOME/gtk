@@ -26,7 +26,9 @@
 #include "gtkatspiprivate.h"
 #include "gtkatspiutilsprivate.h"
 #include "gtkaccessibleprivate.h"
+#include "gtkpopover.h"
 #include "gtkwidget.h"
+#include "gtkwindow.h"
 
 #include "a11y/atspi/atspi-component.h"
 
@@ -194,11 +196,20 @@ component_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetLayer") == 0)
     {
-      g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED, "");
+      AtspiComponentLayer layer;
+
+      if (GTK_IS_WINDOW (widget))
+        layer = ATSPI_COMPONENT_LAYER_WINDOW;
+      else if (GTK_IS_POPOVER (widget))
+        layer = ATSPI_COMPONENT_LAYER_POPUP;
+      else
+        layer = ATSPI_COMPONENT_LAYER_WIDGET;
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(u)", layer));
     }
   else if (g_strcmp0 (method_name, "GetMDIZOrder") == 0)
     {
-      g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED, "");
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(n)", 0));
     }
   else if (g_strcmp0 (method_name, "GrabFocus") == 0)
     {
@@ -206,7 +217,9 @@ component_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetAlpha") == 0)
     {
-      g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED, "");
+      double opacity = gtk_widget_get_opacity (widget);
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(d)", opacity));
     }
   else if (g_strcmp0 (method_name, "SetExtents") == 0)
     {
