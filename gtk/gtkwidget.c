@@ -7040,8 +7040,6 @@ gtk_widget_dispose (GObject *object)
 
   if (priv->parent)
     gtk_widget_unparent (widget);
-  else if (_gtk_widget_get_visible (widget))
-    gtk_widget_hide (widget);
 
   while (priv->paintables)
     gtk_widget_paintable_set_widget (priv->paintables->data, NULL);

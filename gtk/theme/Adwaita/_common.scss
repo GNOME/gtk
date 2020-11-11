@@ -3098,13 +3098,13 @@ list {
   > row.expander { padding: 0px; }
   > row.expander .row-header { padding: 2px; }
 
-  &.horizontal row.separator:not(:first-child),
-  &.separators.horizontal > row:not(:first-child) {
+  &.horizontal row.separator,
+  &.separators.horizontal > row {
     border-left: 1px solid $_treeview_borders_color;
   }
-  &:not(.horizontal) row.separator:not(:first-child),
-  &.separators:not(.horizontal) > row:not(:first-child) {
-    border-top: 1px solid $_treeview_borders_color;
+  &:not(.horizontal) row.separator,
+  &.separators:not(.horizontal) > row {
+    border-bottom: 1px solid $_treeview_borders_color;
   }
 }
 

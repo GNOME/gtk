@@ -139,6 +139,7 @@ librsvg_dep = dependency('librsvg-2.0', version: '>= 2.46.0', required: false)
 
 if librsvg_dep.found()
   demos += files('paintable_svg.c')
+  extra_demo_sources += files(['svgpaintable.c'])
   gtkdemo_deps += [ librsvg_dep ]
 endif
 
