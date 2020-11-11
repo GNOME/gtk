@@ -2016,13 +2016,16 @@ end_element (GtkBuildableParseContext  *context,
        */
       if (!strcmp (req_info->library, "gtk"))
         {
-          if (!GTK_CHECK_VERSION (req_info->major, req_info->minor, 0))
+          if (req_info->major == 4 && req_info->minor == 0)
+            {
+              /* We allow 3.99.x to pass as 4.0 */
+            }
+          else if (gtk_check_version (req_info->major, req_info->minor, 0) != NULL)
             {
               g_set_error (error,
                            GTK_BUILDER_ERROR,
                            GTK_BUILDER_ERROR_VERSION_MISMATCH,
-                           "Required %s version %d.%d, current version is %d.%d",
-                           req_info->library,
+                           "Required GTK version %d.%d, current version is %d.%d",
                            req_info->major, req_info->minor,
                            GTK_MAJOR_VERSION, GTK_MINOR_VERSION);
               _gtk_builder_prefix_error (data->builder, context, error);
