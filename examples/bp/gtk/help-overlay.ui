@@ -1,5 +1,4 @@
 <interface>
-  <!-- interface-requires gtk+ 3.17 -->
   <object class="GtkShortcutsWindow" id="help_overlay">
     <property name="modal">1</property>
     <child>

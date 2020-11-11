@@ -62,6 +62,7 @@ typedef struct {
   char *output_filename;
   FILE *output;
   gboolean convert3to4;
+  gboolean has_gtk_requires;
 } MyParserData;
 
 static void
@@ -1636,6 +1637,17 @@ rewrite_scale (Element      *element,
 }
 
 static void
+rewrite_requires (Element      *element,
+                  MyParserData *data)
+{
+  if (has_attribute (element, "lib", "gtk+"))
+    {
+      set_attribute_value (element, "lib", "gtk");
+      set_attribute_value (element, "version", "4.0");
+    }
+}
+
+static void
 rewrite_overlay (Element      *element,
                  MyParserData *data)
 {
@@ -1978,6 +1990,9 @@ rewrite_element (Element      *element,
       property_has_been_removed (element, data))
     return TRUE;
 
+  if (g_str_equal (element->element_name, "requires"))
+    rewrite_requires (element, data);
+
   return FALSE;
 }
 
@@ -2039,12 +2054,25 @@ enhance_element (Element      *element,
 {
   GList *l;
 
+  if (strcmp (element->element_name, "requires") == 0 &&
+      has_attribute (element, "lib", "gtk+"))
+    {
+      data->has_gtk_requires = TRUE;
+    }
+
   add_old_default_properties (element, data);
 
   for (l = element->children; l; l = l->next)
     {
       Element *child = l->data;
       enhance_element (child, data);
+    }
+
+  if (element == data->root && !data->has_gtk_requires)
+    {
+      Element *requires = add_element (element, "requires");
+      set_attribute_value (requires, "lib", "gtk+");
+      set_attribute_value (requires, "version", "3.0");
     }
 }
 
@@ -2133,6 +2161,7 @@ simplify_file (const char *filename,
   data.input_filename = filename;
   data.output_filename = NULL;
   data.convert3to4 = convert3to4;
+  data.has_gtk_requires = FALSE;
 
   if (replace)
     {

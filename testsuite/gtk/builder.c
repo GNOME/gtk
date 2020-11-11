@@ -1829,7 +1829,7 @@ test_requires (void)
   char       *buffer;
   const char buffer_fmt[] =
     "<interface>"
-    "  <requires lib=\"gtk+\" version=\"%d.%d\"/>"
+    "  <requires lib=\"gtk\" version=\"%d.%d\"/>"
     "</interface>";
 
   buffer = g_strdup_printf (buffer_fmt, GTK_MAJOR_VERSION, GTK_MINOR_VERSION + 1);
@@ -2307,9 +2307,8 @@ test_anaconda_signal (void)
   GtkBuilder *builder;
   const char buffer[] = 
     "<?xml version='1.0' encoding='UTF-8'?>"
-    "<!-- Generated with glade 3.18.3 -->"
     "<interface>"
-    "  <requires lib='gtk+' version='3.12'/>"
+    "  <requires lib='gtk' version='3.99'/>"
     "  <object class='GtkListStore' id='liststore1'>"
     "    <columns>"
     "      <!-- column-name use -->"

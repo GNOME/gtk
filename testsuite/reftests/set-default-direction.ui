@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk+" version="3.12"/>
   <object class="GtkWindow" id="window1">
     <property name="decorated">0</property>
     <signal name="map" handler="reftest:switch_default_direction" swapped="no"/>

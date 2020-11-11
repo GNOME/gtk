@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk30">
+  <requires lib="gtk" version="4.0"/>
   <template class="GtkFileChooserDialog" parent="GtkDialog">
     <property name="role">GtkFileChooserDialog</property>
     <property name="type-hint">dialog</property>
