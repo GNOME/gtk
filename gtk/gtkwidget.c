@@ -12607,11 +12607,17 @@ gtk_widget_get_accessible_role (GtkWidget *self)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (self);
   GtkATContext *context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (self));
+  GtkWidgetClassPrivate *class_priv;
 
   if (context != NULL && gtk_at_context_is_realized (context))
     return gtk_at_context_get_accessible_role (context);
 
-  return priv->accessible_role;
+  if (priv->accessible_role != GTK_ACCESSIBLE_ROLE_WIDGET)
+    return priv->accessible_role;
+
+  class_priv = GTK_WIDGET_GET_CLASS (self)->priv;
+
+  return class_priv->accessible_role;
 }
 
 /**
