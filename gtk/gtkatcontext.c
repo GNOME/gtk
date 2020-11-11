@@ -862,6 +862,27 @@ gtk_at_context_get_accessible_relation (GtkATContext          *self,
   return gtk_accessible_attribute_set_get_value (self->relations, relation);
 }
 
+static gboolean
+is_structural_role (GtkAccessibleRole role)
+{
+  /* Keep the switch small while avoiding the compiler warning for
+   * unhandled enumeration values
+   */
+  switch ((int) role)
+    {
+    case GTK_ACCESSIBLE_ROLE_FORM:
+    case GTK_ACCESSIBLE_ROLE_GROUP:
+    case GTK_ACCESSIBLE_ROLE_GENERIC:
+    case GTK_ACCESSIBLE_ROLE_REGION:
+      return TRUE;
+
+    default:
+      break;
+    }
+
+  return FALSE;
+}
+
 /* See the WAI-ARIA § 4.3, "Accessible Name and Description Computation" */
 static void
 gtk_at_context_get_name_accumulate (GtkATContext *self,
@@ -937,7 +958,8 @@ gtk_at_context_get_name_accumulate (GtkATContext *self,
   if (names->len != 0)
     return;
 
-  if (self->accessible)
+  /* Ignore structural elements, namely: generic containers */
+  if (self->accessible != NULL && !is_structural_role (role))
     g_ptr_array_add (names, (char *)G_OBJECT_TYPE_NAME (self->accessible));
 }
 
