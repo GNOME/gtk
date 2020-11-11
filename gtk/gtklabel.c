@@ -450,7 +450,7 @@ static gboolean gtk_label_query_tooltip     (GtkWidget        *widget,
 static void gtk_label_set_text_internal          (GtkLabel      *self,
 						  char          *str);
 static gboolean gtk_label_set_label_internal     (GtkLabel      *self,
-						  char          *str);
+						  const char    *str);
 static gboolean gtk_label_set_use_markup_internal    (GtkLabel  *self,
                                                       gboolean   val);
 static gboolean gtk_label_set_use_underline_internal (GtkLabel  *self,
@@ -1703,17 +1703,14 @@ gtk_label_set_text_internal (GtkLabel *self,
 }
 
 static gboolean
-gtk_label_set_label_internal (GtkLabel *self,
-                              char     *str)
+gtk_label_set_label_internal (GtkLabel   *self,
+                              const char *str)
 {
   if (g_strcmp0 (str, self->label) == 0)
-    {
-      g_free (str);
-      return FALSE;
-    }
+    return FALSE;
 
   g_free (self->label);
-  self->label = str;
+  self->label = g_strdup (str ? str : "");
 
   g_object_notify_by_pspec (G_OBJECT (self), label_props[PROP_LABEL]);
 
@@ -1809,7 +1806,7 @@ gtk_label_set_text (GtkLabel    *self,
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  if (gtk_label_set_label_internal (self, g_strdup (str ? str : "")) ||
+  if (gtk_label_set_label_internal (self, str) ||
       gtk_label_set_use_markup_internal (self, FALSE) ||
       gtk_label_set_use_underline_internal (self, FALSE))
     gtk_label_recalculate (self);
@@ -1894,7 +1891,7 @@ gtk_label_set_label (GtkLabel    *self,
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  if (gtk_label_set_label_internal (self, g_strdup (str ? str : "")))
+  if (gtk_label_set_label_internal (self, str))
     gtk_label_recalculate (self);
 
   g_object_thaw_notify (G_OBJECT (self));
@@ -2419,7 +2416,7 @@ gtk_label_set_markup (GtkLabel    *self,
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  if (gtk_label_set_label_internal (self, g_strdup (str ? str : "")) ||
+  if (gtk_label_set_label_internal (self, str) ||
       gtk_label_set_use_markup_internal (self, TRUE) ||
       gtk_label_set_use_underline_internal (self, FALSE))
     gtk_label_recalculate (self);
@@ -2450,7 +2447,7 @@ gtk_label_set_markup_with_mnemonic (GtkLabel    *self,
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  if (gtk_label_set_label_internal (self, g_strdup (str ? str : "")) ||
+  if (gtk_label_set_label_internal (self, str) ||
       gtk_label_set_use_markup_internal (self, TRUE) ||
       gtk_label_set_use_underline_internal (self, TRUE))
     gtk_label_recalculate (self);
@@ -3572,7 +3569,7 @@ gtk_label_set_text_with_mnemonic (GtkLabel    *self,
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  if (gtk_label_set_label_internal (self, g_strdup (str)) ||
+  if (gtk_label_set_label_internal (self, str) ||
       gtk_label_set_use_markup_internal (self, FALSE) ||
       gtk_label_set_use_underline_internal (self, TRUE))
     gtk_label_recalculate (self);
