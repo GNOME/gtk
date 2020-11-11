@@ -1349,6 +1349,9 @@ gdk_wayland_window_sync_margin (GdkWindow *window)
     return;
 
   gdk_wayland_window_get_window_geometry (window, &geometry);
+
+  g_return_if_fail (geometry.width > 0 && geometry.height > 0);
+
   gdk_window_set_geometry_hints (window,
                                  &impl->geometry_hints,
                                  impl->geometry_mask);
