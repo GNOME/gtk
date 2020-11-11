@@ -93,6 +93,10 @@ void            gtk_snapshot_push_fill                  (GtkSnapshot            
                                                          GskPath                *path,
                                                          GskFillRule             fill_rule);
 GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_push_stroke                (GtkSnapshot            *snapshot,
+                                                         GskPath                *path,
+                                                         const GskStroke        *stroke);
+GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_push_shadow                (GtkSnapshot            *snapshot,
                                                          const GskShadow        *shadow,
                                                          gsize                   n_shadows);
