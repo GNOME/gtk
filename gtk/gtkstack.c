@@ -274,6 +274,8 @@ gtk_stack_page_finalize (GObject *object)
     g_object_remove_weak_pointer (G_OBJECT (page->last_focus),
                                   (gpointer *)&page->last_focus);
 
+  g_clear_object (&page->at_context);
+
   G_OBJECT_CLASS (gtk_stack_page_parent_class)->finalize (object);
 }
 
