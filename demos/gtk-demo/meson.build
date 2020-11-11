@@ -55,6 +55,7 @@ demos = files([
   'listview_filebrowser.c',
   'listview_minesweeper.c',
   'listview_settings.c',
+  'listview_ucd.c',
   'listview_weather.c',
   'listview_words.c',
   'markup.c',
@@ -120,11 +121,13 @@ extra_demo_sources = files(['main.c',
                             'four_point_transform.c',
                             'demo2widget.c',
                             'demo3widget.c',
-                            'pixbufpaintable.c'])
+                            'pixbufpaintable.c',
+                            'script-names.c',
+                            'unicode-names.c'])
 
 if harfbuzz_dep.found() and pangoft_dep.found()
-  demos += files(['font_features.c', 'listview_ucd.c'])
-  extra_demo_sources += files(['script-names.c', 'language-names.c', 'unicode-names.c'])
+  demos += files(['font_features.c'])
+  extra_demo_sources += files(['language-names.c'])
   gtkdemo_deps += [ harfbuzz_dep, epoxy_dep ]
 endif
 
