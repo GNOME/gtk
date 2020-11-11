@@ -111,7 +111,7 @@ gtk_at_context_set_property (GObject      *gobject,
       break;
 
     case PROP_DISPLAY:
-      self->display = g_value_get_object (value);
+      gtk_at_context_set_display (self, g_value_get_object (value));
       break;
 
     default:
@@ -245,8 +245,8 @@ gtk_at_context_class_init (GtkATContextClass *klass)
                          "The display connection",
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READWRITE |
-                         G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS);
+                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkATContext::state-change:
@@ -385,15 +385,15 @@ gtk_at_context_init (GtkATContext *self)
   self->accessible_role = GTK_ACCESSIBLE_ROLE_NONE;
 
   self->properties =
-    gtk_accessible_attribute_set_new (N_PROPERTIES,
+    gtk_accessible_attribute_set_new (G_N_ELEMENTS (property_attrs),
                                       property_attrs,
                                       (GtkAccessibleAttributeDefaultFunc) gtk_accessible_value_get_default_for_property);
   self->relations =
-    gtk_accessible_attribute_set_new (N_RELATIONS,
+    gtk_accessible_attribute_set_new (G_N_ELEMENTS (relation_attrs),
                                       relation_attrs,
                                       (GtkAccessibleAttributeDefaultFunc) gtk_accessible_value_get_default_for_relation);
   self->states =
-    gtk_accessible_attribute_set_new (N_STATES,
+    gtk_accessible_attribute_set_new (G_N_ELEMENTS (state_attrs),
                                       state_attrs,
                                       (GtkAccessibleAttributeDefaultFunc) gtk_accessible_value_get_default_for_state);
 }
@@ -414,6 +414,30 @@ gtk_at_context_get_accessible (GtkATContext *self)
   return self->accessible;
 }
 
+/*< private >
+ * gtk_at_context_set_accessible_role:
+ * @self: a #GtkATContext
+ * @role: the accessible role for the context
+ *
+ * Sets the accessible role for the given #GtkATContext.
+ *
+ * This function can only be called if the #GtkATContext is unrealized.
+ */
+void
+gtk_at_context_set_accessible_role (GtkATContext      *self,
+                                    GtkAccessibleRole  role)
+{
+  g_return_if_fail (GTK_IS_AT_CONTEXT (self));
+  g_return_if_fail (!self->realized);
+
+  if (self->accessible_role == role)
+    return;
+
+  self->accessible_role = role;
+
+  g_object_notify_by_pspec (G_OBJECT (self), obj_props[PROP_ACCESSIBLE_ROLE]);
+}
+
 /**
  * gtk_at_context_get_accessible_role:
  * @self: a #GtkATContext
@@ -428,6 +452,34 @@ gtk_at_context_get_accessible_role (GtkATContext *self)
   g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), GTK_ACCESSIBLE_ROLE_NONE);
 
   return self->accessible_role;
+}
+
+/*< private >
+ * gtk_at_context_set_display:
+ * @self: a #GtkATContext
+ * @display: a #GdkDisplay
+ *
+ * Sets the #GdkDisplay used by the #GtkATContext.
+ *
+ * This function can only be called if the #GtkATContext is
+ * not realized.
+ */
+void
+gtk_at_context_set_display (GtkATContext *self,
+                            GdkDisplay   *display)
+{
+  g_return_if_fail (GTK_IS_AT_CONTEXT (self));
+  g_return_if_fail (display == NULL || GDK_IS_DISPLAY (display));
+
+  if (self->display == display)
+    return;
+
+  if (self->realized)
+    return;
+
+  self->display = display;
+
+  g_object_notify_by_pspec (G_OBJECT (self), obj_props[PROP_DISPLAY]);
 }
 
 /*< private >
