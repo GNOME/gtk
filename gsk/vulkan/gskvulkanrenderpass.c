@@ -1180,6 +1180,7 @@ static const GskVulkanRenderPassNodeFunc nodes_vtable[] = {
   [GSK_TEXTURE_SCALE_NODE] = gsk_vulkan_render_pass_add_texture_scale_node,
   [GSK_MASK_NODE] = NULL,
   [GSK_FILL_NODE] = NULL,
+  [GSK_STROKE_NODE] = NULL,
 };
 
 static void
