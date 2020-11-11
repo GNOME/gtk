@@ -19,7 +19,6 @@ demos = files([
   'cursors.c',
   'dialog.c',
   'drawingarea.c',
-  'dropdown.c',
   'dnd.c',
   'editable_cells.c',
   'entry_completion.c',
@@ -54,6 +53,7 @@ demos = files([
   'listview_colors.c',
   'listview_filebrowser.c',
   'listview_minesweeper.c',
+  'dropdown.c',
   'listview_settings.c',
   'listview_ucd.c',
   'listview_weather.c',
@@ -123,7 +123,8 @@ extra_demo_sources = files(['main.c',
                             'demo3widget.c',
                             'pixbufpaintable.c',
                             'script-names.c',
-                            'unicode-names.c'])
+                            'unicode-names.c',
+                            'suggestionentry.c'])
 
 if harfbuzz_dep.found() and pangoft_dep.found()
   demos += files(['font_features.c'])

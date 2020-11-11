@@ -1,17 +1,16 @@
-/* Drop Downs
+/* Lists/Selections
  *
  * The GtkDropDown widget is a modern alternative to GtkComboBox.
  * It uses list models instead of tree models, and the content is
  * displayed using widgets instead of cell renderers.
  *
- * The examples here demonstrate how to use different kinds of
- * list models with GtkDropDown, how to use search and how to
- * display the selected item differently from the presentation
- * in the popup.
+ * This example also shows a custom widget that can replace
+ * GtkEntryCompletion or GtkComboBoxText. It is not currently
+ * part of GTK.
  */
 
 #include <gtk/gtk.h>
-
+#include "suggestionentry.h"
 
 #define STRING_TYPE_HOLDER (string_holder_get_type ())
 G_DECLARE_FINAL_TYPE (StringHolder, string_holder, STRING, HOLDER, GObject)
@@ -273,13 +272,110 @@ get_title (gpointer item)
   return g_strdup (STRING_HOLDER (item)->title);
 }
 
+static char *
+get_file_name (gpointer item)
+{
+  return g_strdup (g_file_info_get_display_name (G_FILE_INFO (item)));
+}
+
+static void
+setup_item (GtkSignalListItemFactory *factory,
+            GtkListItem              *item)
+{
+  GtkWidget *box;
+  GtkWidget *icon;
+  GtkWidget *label;
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+  icon = gtk_image_new ();
+  label = gtk_label_new ("");
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_box_append (GTK_BOX (box), icon);
+  gtk_box_append (GTK_BOX (box), label);
+  gtk_list_item_set_child (item, box);
+}
+
+static void
+bind_item (GtkSignalListItemFactory *factory,
+           GtkListItem              *item)
+{
+  MatchObject *match = MATCH_OBJECT (gtk_list_item_get_item (item));
+  GFileInfo *info = G_FILE_INFO (match_object_get_item (match));
+  GtkWidget *box = gtk_list_item_get_child (item);
+  GtkWidget *icon = gtk_widget_get_first_child (box);
+  GtkWidget *label = gtk_widget_get_last_child (box);
+
+  gtk_image_set_from_gicon (GTK_IMAGE (icon), g_file_info_get_icon (info));
+  gtk_label_set_label (GTK_LABEL (label), g_file_info_get_display_name (info));
+}
+
+static void
+setup_highlight_item (GtkSignalListItemFactory *factory,
+                      GtkListItem              *item)
+{
+  GtkWidget *label;
+
+  label = gtk_label_new ("");
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_list_item_set_child (item, label);
+}
+
+static void
+bind_highlight_item (GtkSignalListItemFactory *factory,
+                     GtkListItem              *item)
+{
+  MatchObject *obj;
+  GtkWidget *label;
+  PangoAttrList *attrs;
+  PangoAttribute *attr;
+  const char *str;
+
+  obj = MATCH_OBJECT (gtk_list_item_get_item (item));
+  label = gtk_list_item_get_child (item);
+
+  str = match_object_get_string (obj);
+
+  gtk_label_set_label (GTK_LABEL (label), str);
+  attrs = pango_attr_list_new ();
+  attr = pango_attr_weight_new (PANGO_WEIGHT_BOLD);
+  attr->start_index = match_object_get_match_start (obj);
+  attr->end_index = match_object_get_match_end (obj);
+  pango_attr_list_insert (attrs, attr);
+  gtk_label_set_attributes (GTK_LABEL (label), attrs);
+  pango_attr_list_unref (attrs);
+}
+
+static void
+match_func (MatchObject *obj,
+            const char  *search,
+            gpointer     user_data)
+{
+  char *tmp1, *tmp2;
+  char *p;
+
+  tmp1 = g_utf8_normalize (match_object_get_string (obj), -1, G_NORMALIZE_ALL);
+  tmp2 = g_utf8_normalize (search, -1, G_NORMALIZE_ALL);
+
+  if ((p = strstr (tmp1, tmp2)) != NULL)
+    match_object_set_match (obj,
+                            p - tmp1,
+                            (p - tmp1) + g_utf8_strlen (search, -1),
+                            1);
+  else
+    match_object_set_match (obj, 0, 0, 0);
+
+  g_free (tmp1);
+  g_free (tmp2);
+}
+
 GtkWidget *
 do_dropdown (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
-  GtkWidget *button, *box, *spin, *check;
+  GtkWidget *button, *box, *spin, *check, *hbox, *label, *entry;
   GListModel *model;
   GtkExpression *expression;
+  GtkListItemFactory *factory;
   const char * const times[] = { "1 minute", "2 minutes", "5 minutes", "20 minutes", NULL };
   const char * const many_times[] = {
     "1 minute", "2 minutes", "5 minutes", "10 minutes", "15 minutes", "20 minutes",
@@ -292,22 +388,49 @@ do_dropdown (GtkWidget *do_widget)
   const char * const device_descriptions[] = {
     "Built-in Audio", "Built-in audio", "Thinkpad Tunderbolt 3 Dock USB Audio", "Thinkpad Tunderbolt 3 Dock USB Audio", NULL
   };
+  char *cwd;
+  GFile *file;
+  GListModel *dir;
+  GtkStringList *strings;
 
   if (!window)
     {
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
-      gtk_window_set_title (GTK_WINDOW (window), "Drop Downs");
+      gtk_window_set_title (GTK_WINDOW (window), "Selections");
       gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
+      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 20);
+
+      gtk_widget_set_margin_start (hbox, 20);
+      gtk_widget_set_margin_end (hbox, 20);
+      gtk_widget_set_margin_top (hbox, 20);
+      gtk_widget_set_margin_bottom (hbox, 20);
+      gtk_window_set_child (GTK_WINDOW (window), hbox);
+
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
-      gtk_widget_set_margin_start (box, 10);
-      gtk_widget_set_margin_end (box, 10);
-      gtk_widget_set_margin_top (box, 10);
-      gtk_widget_set_margin_bottom (box, 10);
-      gtk_window_set_child (GTK_WINDOW (window), box);
+      gtk_box_append (GTK_BOX (hbox), box);
+
+      label = gtk_label_new ("Dropdowns");
+      gtk_widget_add_css_class (label, "title-4");
+      gtk_box_append (GTK_BOX (box), label);
+
+      /* A basic dropdown */
+      button = drop_down_new_from_strings (times, NULL, NULL);
+      gtk_box_append (GTK_BOX (box), button);
+
+      /* A dropdown using an expression to obtain strings */
+      button = drop_down_new_from_strings (many_times, NULL, NULL);
+      gtk_drop_down_set_enable_search (GTK_DROP_DOWN (button), TRUE);
+      expression = gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
+                                                0, NULL,
+                                                (GCallback)get_title,
+                                                NULL, NULL);
+      gtk_drop_down_set_expression (GTK_DROP_DOWN (button), expression);
+      gtk_expression_unref (expression);
+      gtk_box_append (GTK_BOX (box), button);
 
       button = gtk_drop_down_new (NULL, NULL);
 
@@ -325,30 +448,118 @@ do_dropdown (GtkWidget *do_widget)
 
       spin = gtk_spin_button_new_with_range (-1, g_list_model_get_n_items (G_LIST_MODEL (model)), 1);
       gtk_widget_set_halign (spin, GTK_ALIGN_START);
+      gtk_widget_set_margin_start (spin, 20);
       g_object_bind_property  (button, "selected", spin, "value", G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
       gtk_box_append (GTK_BOX (box), spin);
 
       check = gtk_check_button_new_with_label ("Enable search");
+      gtk_widget_set_margin_start (check, 20);
       g_object_bind_property  (button, "enable-search", check, "active", G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
       gtk_box_append (GTK_BOX (box), check);
 
       g_object_unref (model);
 
-      button = drop_down_new_from_strings (times, NULL, NULL);
-      gtk_box_append (GTK_BOX (box), button);
-
-      button = drop_down_new_from_strings (many_times, NULL, NULL);
-      gtk_drop_down_set_enable_search (GTK_DROP_DOWN (button), TRUE);
-      expression = gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
-                                                0, NULL,
-                                                (GCallback)get_title,
-                                                NULL, NULL);
-      gtk_drop_down_set_expression (GTK_DROP_DOWN (button), expression);
-      gtk_expression_unref (expression);
-      gtk_box_append (GTK_BOX (box), button);
-
+      /* A dropdown with a separate list factory */
       button = drop_down_new_from_strings (device_titles, device_icons, device_descriptions);
       gtk_box_append (GTK_BOX (box), button);
+
+      gtk_box_append (GTK_BOX (hbox), gtk_separator_new (GTK_ORIENTATION_VERTICAL));
+
+      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
+      gtk_box_append (GTK_BOX (hbox), box);
+
+      label = gtk_label_new ("Suggestions");
+      gtk_widget_add_css_class (label, "title-4");
+      gtk_box_append (GTK_BOX (box), label);
+
+      /* A basic suggestion entry */
+      entry = suggestion_entry_new ();
+      g_object_set (entry, "placeholder-text", "Words with T or G…", NULL);
+      strings = gtk_string_list_new ((const char *[]){
+                                     "GNOME",
+                                     "gnominious",
+                                     "Gnomonic projection",
+                                     "total",
+                                     "totally",
+                                     "toto",
+                                     "tottery",
+                                     "totterer",
+                                     "Totten trust",
+                                     "totipotent",
+                                     "totipotency",
+                                     "totemism",
+                                     "totem pole",
+                                     "Totara",
+                                     "totalizer",
+                                     "totalizator",
+                                     "totalitarianism",
+                                     "total parenteral nutrition",
+                                     "total hysterectomy",
+                                     "total eclipse",
+                                     "Totipresence",
+                                     "Totipalmi",
+                                     "Tomboy",
+                                     "zombie",
+                                     NULL});
+      suggestion_entry_set_model (SUGGESTION_ENTRY (entry), G_LIST_MODEL (strings));
+      g_object_unref (strings);
+
+      gtk_box_append (GTK_BOX (box), entry);
+
+      /* A suggestion entry using a custom model, and no filtering */
+      entry = suggestion_entry_new ();
+
+      cwd = g_get_current_dir ();
+      file = g_file_new_for_path (cwd);
+      dir = G_LIST_MODEL (gtk_directory_list_new ("standard::display-name,standard::content-type,standard::icon,standard::size", file));
+      suggestion_entry_set_model (SUGGESTION_ENTRY (entry), dir);
+      g_object_unref (dir);
+      g_object_unref (file);
+      g_free (cwd);
+
+      expression = gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
+                                                0, NULL,
+                                                (GCallback)get_file_name,
+                                                NULL, NULL);
+      suggestion_entry_set_expression (SUGGESTION_ENTRY (entry), expression);
+      gtk_expression_unref (expression);
+
+      factory = gtk_signal_list_item_factory_new ();
+      g_signal_connect (factory, "setup", G_CALLBACK (setup_item), NULL);
+      g_signal_connect (factory, "bind", G_CALLBACK (bind_item), NULL);
+
+      suggestion_entry_set_factory (SUGGESTION_ENTRY (entry), factory);
+      g_object_unref (factory);
+
+      suggestion_entry_set_use_filter (SUGGESTION_ENTRY (entry), FALSE);
+      suggestion_entry_set_show_arrow (SUGGESTION_ENTRY (entry), TRUE);
+
+      gtk_box_append (GTK_BOX (box), entry);
+
+      /* A suggestion entry with match highlighting */
+      entry = suggestion_entry_new ();
+      g_object_set (entry, "placeholder-text", "Destination", NULL);
+
+      strings = gtk_string_list_new ((const char *[]){
+                                     "app-mockups",
+                                     "settings-mockups",
+                                     "os-mockups",
+                                     "software-mockups",
+                                     "mocktails",
+                                     NULL});
+      suggestion_entry_set_model (SUGGESTION_ENTRY (entry), G_LIST_MODEL (strings));
+      g_object_unref (strings);
+
+      gtk_box_append (GTK_BOX (box), entry);
+
+      suggestion_entry_set_match_func (SUGGESTION_ENTRY (entry), match_func, NULL, NULL);
+
+      factory = gtk_signal_list_item_factory_new ();
+      g_signal_connect (factory, "setup", G_CALLBACK (setup_highlight_item), NULL);
+      g_signal_connect (factory, "bind", G_CALLBACK (bind_highlight_item), NULL);
+      suggestion_entry_set_factory (SUGGESTION_ENTRY (entry), factory);
+      g_object_unref (factory);
+
     }
 
   if (!gtk_widget_get_visible (window))

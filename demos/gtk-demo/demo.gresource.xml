@@ -43,6 +43,11 @@
     <file>cssview.css</file>
     <file>reset.css</file>
   </gresource>
+  <gresource prefix="/dropdown">
+    <file>suggestionentry.h</file>
+    <file>suggestionentry.c</file>
+    <file>suggestionentry.css</file>
+  </gresource>
   <gresource prefix="/theming_style_classes">
     <file>theming.ui</file>
   </gresource>
