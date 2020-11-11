@@ -176,8 +176,6 @@ struct _GtkModelButton
   guint open_timeout;
   GtkEventController *controller;
 
-  GtkATContext *at_context;
-
   guint active : 1;
   guint centered : 1;
   guint iconic : 1;
@@ -194,10 +192,7 @@ struct _GtkModelButtonClass
 
 static void gtk_model_button_actionable_iface_init (GtkActionableInterface *iface);
 
-static void gtk_model_button_accessible_iface_init (GtkAccessibleInterface *iface);
-
 G_DEFINE_TYPE_WITH_CODE (GtkModelButton, gtk_model_button, GTK_TYPE_WIDGET,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE, gtk_model_button_accessible_iface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIONABLE, gtk_model_button_actionable_iface_init))
 
 GType
@@ -302,12 +297,20 @@ gtk_model_button_actionable_iface_init (GtkActionableInterface *iface)
   iface->set_action_target_value = gtk_model_button_set_action_target_value;
 }
 
-static GtkATContext *
-create_at_context (GtkModelButton *button,
-                   GtkATContext   *old_context)
+static void
+update_at_context (GtkModelButton *button)
 {
-  GdkDisplay *display = _gtk_widget_get_display (GTK_WIDGET (button));
   GtkAccessibleRole role;
+  GtkATContext *context;
+  gboolean was_realized;
+
+  context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (button));
+  if (context == NULL)
+    return;
+
+  was_realized = gtk_at_context_is_realized (context);
+
+  gtk_at_context_unrealize (context);
 
   switch (button->role)
     {
@@ -324,30 +327,10 @@ create_at_context (GtkModelButton *button,
       break;
     }
 
-  if (old_context != NULL)
-    return gtk_at_context_clone (old_context, role, GTK_ACCESSIBLE (button), display);
+  gtk_at_context_set_accessible_role (context, role);
 
-  return gtk_at_context_create (role, GTK_ACCESSIBLE (button), display);
-}
-
-static GtkATContext *
-gtk_model_button_get_at_context (GtkAccessible *accessible)
-{
-  GtkModelButton *button = GTK_MODEL_BUTTON (accessible);
-
-  if (button->at_context == NULL)
-    button->at_context = create_at_context (button, NULL);
-
-  return button->at_context;
-}
-
-static void
-gtk_model_button_accessible_iface_init (GtkAccessibleInterface *iface)
-{
-  GtkAccessibleInterface *parent_iface = g_type_interface_peek_parent (iface);
-
-  iface->get_at_context = gtk_model_button_get_at_context;
-  iface->get_platform_state = parent_iface->get_platform_state;
+  if (was_realized)
+    gtk_at_context_realize (context);
 }
 
 static void
@@ -610,8 +593,6 @@ static void
 gtk_model_button_set_role (GtkModelButton *self,
                            GtkButtonRole   role)
 {
-  GtkATContext *old_context;
-
   if (role == self->role)
     return;
 
@@ -631,11 +612,7 @@ gtk_model_button_set_role (GtkModelButton *self,
   update_node_name (self);
   gtk_model_button_update_state (self);
 
-  /* Replace the old context, if any, with a new context */
-  old_context = g_steal_pointer (&self->at_context);
-  self->at_context = create_at_context (self, old_context);
-  g_clear_object (&old_context);
-
+  update_at_context (self);
   update_accessible_properties (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ROLE]);
@@ -1032,8 +1009,6 @@ gtk_model_button_dispose (GObject *object)
   GtkModelButton *model_button = GTK_MODEL_BUTTON (object);
 
   g_clear_pointer (&model_button->menu_name, g_free);
-
-  g_clear_object (&model_button->at_context);
 
   G_OBJECT_CLASS (gtk_model_button_parent_class)->dispose (object);
 }
