@@ -3807,6 +3807,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     break;
 
     case GSK_FILL_NODE:
+    case GSK_STROKE_NODE:
     case GSK_CAIRO_NODE:
     default:
       {
