@@ -3771,6 +3771,7 @@ gsk_gl_render_job_visit_node (GskGLRenderJob      *job,
     break;
 
     case GSK_FILL_NODE:
+    case GSK_STROKE_NODE:
       gsk_gl_render_job_visit_as_fallback (job, node);
     break;
 
