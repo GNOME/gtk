@@ -600,6 +600,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("headerbar"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GROUP);
 }
 
 static void
