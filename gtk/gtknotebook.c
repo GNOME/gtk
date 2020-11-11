@@ -1369,6 +1369,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("notebook"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GROUP);
 }
 
 static void
