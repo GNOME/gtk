@@ -72,6 +72,7 @@ demos = files([
   'paintable_symbolic.c',
   'panes.c',
   'password_entry.c',
+  'path_fill.c',
   'peg_solitaire.c',
   'pickers.c',
   'printing.c',
