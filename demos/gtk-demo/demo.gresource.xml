@@ -325,6 +325,7 @@
     <file>paintable_symbolic.c</file>
     <file>panes.c</file>
     <file>password_entry.c</file>
+    <file>path_fill.c</file>
     <file>peg_solitaire.c</file>
     <file>pickers.c</file>
     <file>printing.c</file>
