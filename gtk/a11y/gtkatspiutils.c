@@ -269,7 +269,7 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
       return ATSPI_ROLE_FILLER;
 
     case GTK_ACCESSIBLE_ROLE_WINDOW:
-      return ATSPI_ROLE_WINDOW;
+      return ATSPI_ROLE_FRAME;
 
     default:
       break;
@@ -294,6 +294,7 @@ gtk_atspi_role_for_context (GtkATContext *context)
   GtkAccessible *accessible = gtk_at_context_get_accessible (context);
   GtkAccessibleRole role = gtk_at_context_get_accessible_role (context);
 
+  /* ARIA does not have a "password entry" role, so we need to fudge it here */
   if (GTK_IS_PASSWORD_ENTRY (accessible))
     return ATSPI_ROLE_PASSWORD_TEXT;
 
