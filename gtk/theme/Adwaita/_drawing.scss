@@ -179,7 +179,7 @@
     border-color: if($c != $bg_color, _border_color($c), $borders_color);
     border-bottom-color: if($c != $bg_color, _border_color($c, true), $alt_borders_color);
     $button_fill: if($variant == 'light', linear-gradient(to top, darken($c, 4%) 2px, $c),
-                                          linear-gradient(to top, darken($c,1%) 2px, $c)) !global;
+                                          linear-gradient(to top, darken($c,1%) 2px, $c));
     background-image: $button_fill;
     @include _shadows(inset 0 1px $_hilight_color, $_button_edge, $_button_shadow);
   }
@@ -192,11 +192,11 @@
     border-color: if($c != $bg_color, _border_color($c), $borders_color);
     border-bottom-color: if($c != $bg_color, _border_color($c, true), $alt_borders_color);
     @if $variant == 'light' {
-      $button_fill: linear-gradient(to top, $c, lighten($c, 1%) 1px) !global;
+      $button_fill: linear-gradient(to top, $c, lighten($c, 1%) 1px);
       @include _shadows(inset 0 1px _button_hilight_color(lighten($c, 6%)), $_button_edge, $_button_shadow);
     }
     @else {
-      $button_fill: linear-gradient(to top, darken($c,1%), lighten($c, 1%) 1px) !global;
+      $button_fill: linear-gradient(to top, darken($c,1%), lighten($c, 1%) 1px);
       @include _shadows(inset 0 1px _button_hilight_color(darken($c, 2%)), $_button_edge, $_button_shadow);
     }
     background-image: $button_fill;
@@ -228,12 +228,12 @@
     color: $tc;
     border-color: if($c != $bg_color, _border_color($c, true), $alt_borders_color);
     @if $variant == 'light' {
-      $button_fill: linear-gradient(to bottom, lighten($c, 9%) 10%, lighten($c, 4%) 90%) !global;
+      $button_fill: linear-gradient(to bottom, lighten($c, 9%) 10%, lighten($c, 4%) 90%);
       @include _shadows(inset 0 1px _button_hilight_color(lighten($c, 6%)),
                         $_button_edge, $_button_shadow);
     }
     @else {
-      $button_fill: linear-gradient(to bottom, $c 20%, darken($c, 4%) 90%) !global;
+      $button_fill: linear-gradient(to bottom, $c 20%, darken($c, 4%) 90%);
       @include _shadows(inset 0 1px $_hilight_color,
                         $_button_edge, $_button_shadow);
     }
@@ -246,7 +246,7 @@
   //
     color: $tc;
     border-color: if($c != $bg_color, _border_color($c), $borders_color);
-    $button_fill: if($variant == 'light', image(darken($c, 14%)), image(darken($c, 9%))) !global;
+    $button_fill: if($variant == 'light', image(darken($c, 14%)), image(darken($c, 9%)));
     background-image: $button_fill;
     @include _shadows(inset 0 1px transparentize($_hilight_color, 1), $_button_edge);
 
@@ -262,7 +262,7 @@
 
     color: if($tc != $fg_color, mix($tc, $_bg, 50%), $insensitive_fg_color);
     border-color: if($c != $bg_color, _border_color($c), $insensitive_borders_color);
-    $button_fill: image($_bg) !global;
+    $button_fill: image($_bg);
     background-image: $button_fill;
     text-shadow: none;
     -gtk-icon-shadow: none;
@@ -280,7 +280,7 @@
 
     color: if($c != $bg_color, mix($tc, $_bg, 60%), $insensitive_fg_color);
     border-color: $_bc;
-    $button_fill: image($_bg) !global;
+    $button_fill: image($_bg);
     background-image: $button_fill;
     // white with 0 alpha to avoid an ugly transition, since no color means
     // black with 0 alpha
@@ -296,7 +296,7 @@
 
     color: if($tc != $fg_color, mix($tc, $_bg, 80%), $backdrop_fg_color);
     border-color: if($c != $bg_color, $_bc, $backdrop_borders_color);
-    $button_fill: image($_bg) !global;
+    $button_fill: image($_bg);
     background-image: $button_fill;
     text-shadow: none;
     -gtk-icon-shadow: none;
@@ -312,7 +312,7 @@
 
     color: if($tc != $fg_color, mix($tc, $_bg, 80%), $backdrop_fg_color);
     border-color: if($c != $bg_color, $_bc, $backdrop_borders_color);
-    $button_fill: image($_bg) !global;
+    $button_fill: image($_bg);
     background-image: $button_fill;
     @include _shadows(inset 0 1px transparentize(white, 1), $_blank_edge);
   }
@@ -327,7 +327,7 @@
 
     color: if($c != $bg_color, mix($tc, $_bg, 35%), $backdrop_insensitive_color);
     border-color: if($c != $bg_color, $_bc, $backdrop_borders_color);
-    $button_fill: image($_bg) !global;
+    $button_fill: image($_bg);
     background-image: $button_fill;
     text-shadow: none;
     -gtk-icon-shadow: none;
@@ -346,7 +346,7 @@
 
     color: if($c != $bg_color, mix($tc, $_bg, 35%), $backdrop_insensitive_color);
     border-color: if($c != $bg_color, $_bc, $backdrop_borders_color);
-    $button_fill: image($_bg) !global;
+    $button_fill: image($_bg);
     background-image: $button_fill;
     @include _shadows(inset 0 1px transparentize(white, 1), $_blank_edge);
   }
@@ -361,7 +361,7 @@
     outline-color: if($c != $bg_color, $alt_focus_border_color, $focus_border_color);
     border-color: $osd_borders_color;
     background-color: transparent;
-    $button_fill: image($_bg) !global;
+    $button_fill: image($_bg);
     background-image: $button_fill;
     background-clip: padding-box;
     box-shadow: inset 0 1px transparentize(white, 0.9);
@@ -378,7 +378,7 @@
     color: white;
     border-color: $osd_borders_color;
     background-color: transparent;
-    $button_fill: image($_bg) !global;
+    $button_fill: image($_bg);
     background-image: $button_fill;
     background-clip: padding-box;
     box-shadow: inset 0 1px transparentize(white, 0.9);
@@ -395,7 +395,7 @@
     color: white;
     border-color: $osd_borders_color;
     background-color: transparent;
-    $button_fill: image($_bg) !global;
+    $button_fill: image($_bg);
     background-image: $button_fill;
     background-clip: padding-box;
     box-shadow: none;
@@ -410,7 +410,7 @@
     color: $osd_insensitive_fg_color;
     border-color: $osd_borders_color;
     background-color: transparent;
-    $button_fill: image($osd_insensitive_bg_color) !global;
+    $button_fill: image($osd_insensitive_bg_color);
     background-image: $button_fill;
     background-clip: padding-box;
     box-shadow: none;
@@ -427,7 +427,7 @@
     color: $osd_fg_color;
     border-color: $osd_borders_color;
     background-color: transparent;
-    $button_fill: image($_bg) !global;
+    $button_fill: image($_bg);
     background-image: $button_fill;
     background-clip: padding-box;
     box-shadow: none;
@@ -441,7 +441,7 @@
   //
     border-color: transparent;
     background-color: transparent;
-    $button_fill: none !global;
+    $button_fill: none;
     background-image: $button_fill;
 
     @include _shadows(inset 0 1px transparentize(white, 1), $_blank_edge);

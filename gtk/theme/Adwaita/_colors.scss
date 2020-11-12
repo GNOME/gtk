@@ -1,6 +1,8 @@
 // When color definition differs for dark and light variant
 // it gets @if ed depending on $variant
 
+// !global vars no longer in sass
+$button_fill: null;
 
 $base_color: if($variant == 'light', #ffffff, lighten(desaturate(#241f31, 100%), 2%));
 $text_color: if($variant == 'light', black, white);
