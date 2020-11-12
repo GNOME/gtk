@@ -37,6 +37,12 @@ void                    gsk_contour_free_measure                (GskPath        
 void                    gsk_path_builder_add_contour            (GskPathBuilder       *builder,
                                                                  GskPath              *path,
                                                                  gsize                 i);
+void                    gsk_path_builder_add_contour_segment    (GskPathBuilder       *builder,
+                                                                 GskPath              *path,
+                                                                 gsize                 i,
+                                                                 gpointer              measure_data,
+                                                                 float                 start,
+                                                                 float                 end);
 
 G_END_DECLS
 
