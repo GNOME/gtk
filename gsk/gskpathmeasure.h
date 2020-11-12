@@ -25,7 +25,7 @@
 #endif
 
 
-#include <gsk/gsktypes.h>
+#include <gsk/gskpath.h>
 
 G_BEGIN_DECLS
 
@@ -44,6 +44,11 @@ void                    gsk_path_measure_unref                  (GskPathMeasure 
 GDK_AVAILABLE_IN_ALL
 float                   gsk_path_measure_get_length             (GskPathMeasure         *self);
 
+GDK_AVAILABLE_IN_ALL
+void                    gsk_path_measure_add_segment            (GskPathMeasure         *self,
+                                                                 GskPathBuilder         *builder,
+                                                                 float                   start,
+                                                                 float                   end);
 G_END_DECLS
 
 #endif /* __GSK_PATH_MEASURE_H__ */
