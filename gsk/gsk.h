@@ -22,6 +22,7 @@
 #include <gsk/gskenums.h>
 #include <gsk/gskglshader.h>
 #include <gsk/gskpath.h>
+#include <gsk/gskpathmeasure.h>
 #include <gsk/gskrenderer.h>
 #include <gsk/gskrendernode.h>
 #include <gsk/gskroundedrect.h>
