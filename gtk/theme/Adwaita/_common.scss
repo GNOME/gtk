@@ -1947,6 +1947,9 @@ filechooser .path-bar.linked > button {
 /**************
  * Tree Views *
  **************/
+
+$_treeview_borders_color: if($variant=='light',mix($borders_color, $base_color,80%),mix($fg_color, $base_color, 20%));
+
 treeview.view {
   @at-root * {
     -GtkTreeView-horizontal-separator: 4;
@@ -2130,7 +2133,7 @@ treeview.view {
   padding: 0 6px;
   background-image: none;
   border-style: none solid solid none;
-  border-color: $bg_color;
+  border-color: $_treeview_borders_color;
   border-radius: 0;
   text-shadow: none;
 
