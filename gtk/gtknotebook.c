@@ -1424,6 +1424,9 @@ gtk_notebook_init (GtkNotebook *notebook)
                                                    (GtkGizmoGrabFocusFunc)gtk_widget_grab_focus_self);
   gtk_widget_set_hexpand (notebook->tabs_widget, TRUE);
   gtk_box_append (GTK_BOX (notebook->header_widget), notebook->tabs_widget);
+  gtk_accessible_update_property (GTK_ACCESSIBLE (notebook->tabs_widget),
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL, _("Tab list"),
+                                  -1);
 
   notebook->stack_widget = gtk_stack_new ();
   gtk_widget_set_hexpand (notebook->stack_widget, TRUE);
@@ -3115,8 +3118,8 @@ update_arrow_nodes (GtkNotebook *notebook)
                 }
 
               notebook->arrow_widget[i] = g_object_new (GTK_TYPE_BUTTON,
-                                                    "css-name", "arrow",
-                                                    NULL);
+                                                        "css-name", "arrow",
+                                                        NULL);
               controller = gtk_drop_controller_motion_new ();
               g_signal_connect (controller, "enter", G_CALLBACK (gtk_notebook_arrow_drag_enter), notebook);
               g_signal_connect (controller, "leave", G_CALLBACK (gtk_notebook_arrow_drag_leave), notebook);
@@ -3138,6 +3141,15 @@ update_arrow_nodes (GtkNotebook *notebook)
             gtk_button_set_icon_name (GTK_BUTTON (notebook->arrow_widget[i]), down_icon_name);
           else
             gtk_button_set_icon_name (GTK_BUTTON (notebook->arrow_widget[i]), up_icon_name);
+
+          if (i == ARROW_LEFT_BEFORE || i == ARROW_LEFT_AFTER)
+            gtk_accessible_update_property (GTK_ACCESSIBLE (notebook->arrow_widget[i]),
+                                            GTK_ACCESSIBLE_PROPERTY_LABEL, _("Previous tab"),
+                                            -1);
+          else
+            gtk_accessible_update_property (GTK_ACCESSIBLE (notebook->arrow_widget[i]),
+                                            GTK_ACCESSIBLE_PROPERTY_LABEL, _("Next tab"),
+                                            -1);
         }
       else
         {
@@ -3955,6 +3967,9 @@ gtk_notebook_insert_notebook_page (GtkNotebook *notebook,
   g_signal_connect (controller, "enter", G_CALLBACK (gtk_notebook_tab_drop_enter), page);
   g_signal_connect (controller, "leave", G_CALLBACK (gtk_notebook_tab_drop_leave), page);
   gtk_widget_add_controller (page->tab_widget, controller);
+  gtk_accessible_update_property (GTK_ACCESSIBLE (page->tab_widget),
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL, _("Tab"),
+                                  -1);
 
   page->expand = FALSE;
   page->fill = TRUE;
