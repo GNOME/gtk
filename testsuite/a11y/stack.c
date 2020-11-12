@@ -18,7 +18,7 @@ stack_role (void)
 
   gtk_stack_switcher_set_stack (GTK_STACK_SWITCHER (switcher), GTK_STACK (stack));
 
-  gtk_test_accessible_assert_role (GTK_ACCESSIBLE (stack), GTK_ACCESSIBLE_ROLE_WIDGET);
+  gtk_test_accessible_assert_role (GTK_ACCESSIBLE (stack), GTK_ACCESSIBLE_ROLE_GROUP);
   gtk_test_accessible_assert_role (GTK_ACCESSIBLE (switcher), GTK_ACCESSIBLE_ROLE_TAB_LIST);
 
   child = gtk_widget_get_first_child (switcher);
