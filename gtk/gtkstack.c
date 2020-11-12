@@ -228,7 +228,12 @@ gtk_stack_page_accessible_get_at_context (GtkAccessible *accessible)
   if (page->at_context == NULL)
     {
       GtkAccessibleRole role = GTK_ACCESSIBLE_ROLE_TAB_PANEL;
-      GdkDisplay *display = gtk_widget_get_display (page->widget);
+      GdkDisplay *display;
+
+      if (page->widget != NULL)
+        display = gtk_widget_get_display (page->widget);
+      else
+        display = gdk_display_get_default ();
 
       page->at_context = gtk_at_context_create (role, accessible, display);
     }
