@@ -2778,6 +2778,10 @@ gtk_stack_page_set_title (GtkStackPage *self,
   g_free (self->title);
   self->title = g_strdup (setting);
   g_object_notify_by_pspec (G_OBJECT (self), stack_page_props[CHILD_PROP_TITLE]);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL, self->title,
+                                  -1);
 }
 
 
