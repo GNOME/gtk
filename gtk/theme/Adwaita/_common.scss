@@ -3885,16 +3885,28 @@ window {
                   0 0 0 1px $_wm_border_backdrop;
       transition: $backdrop_transition;
     }
-  }
 
-  &.solid-csd {
-    margin: 0;
-    padding: 0;
-    border: solid 1px $borders_color;
-    border-radius: 0;
-    box-shadow: inset 0 0 0 3px $headerbar_color, inset 0 1px $top_hilight;
+    &.popup {
+      border-radius: $menu_radius;
+      box-shadow: 0 1px 2px transparentize(black, 0.8),
+                  0 0 0 1px transparentize($_wm_border, 0.1);
+    }
 
-    &:backdrop { box-shadow: inset 0 0 0 3px $backdrop_bg_color, inset 0 1px $top_hilight; }
+    &.dialog.message {
+      border-radius: $window_radius;
+      box-shadow: 0 1px 2px transparentize(black, 0.8),
+                  0 0 0 1px transparentize($_wm_border, 0.1);
+    }
+
+    &.solid-csd {
+      margin: 0;
+      padding: 0;
+      border: solid 1px $borders_color;
+      border-radius: 0;
+      box-shadow: inset 0 0 0 3px $headerbar_color, inset 0 1px $top_hilight;
+
+      &:backdrop { box-shadow: inset 0 0 0 3px $backdrop_bg_color, inset 0 1px $top_hilight; }
+    }
   }
 
   &.maximized,
@@ -3909,18 +3921,6 @@ window {
 
   // server-side decorations as used by mutter
   &.ssd { box-shadow: 0 0 0 1px $_wm_border; } //just doing borders, wm draws actual shadows
-
-  &.csd.popup {
-    border-radius: $menu_radius;
-    box-shadow: 0 1px 2px transparentize(black, 0.8),
-                0 0 0 1px transparentize($_wm_border, 0.1);
-  }
-
-  &.dialog.message.csd {
-    border-radius: $window_radius;
-    box-shadow: 0 1px 2px transparentize(black, 0.8),
-                0 0 0 1px transparentize($_wm_border, 0.1);
-  }
 
 }
 
