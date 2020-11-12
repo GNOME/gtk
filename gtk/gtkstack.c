@@ -280,6 +280,17 @@ gtk_stack_page_finalize (GObject *object)
 }
 
 static void
+gtk_stack_page_dispose (GObject *object)
+{
+  GtkStackPage *page = GTK_STACK_PAGE (object);
+
+  if (page->at_context != NULL)
+    gtk_at_context_unrealize (page->at_context);
+
+  G_OBJECT_CLASS (gtk_stack_page_parent_class)->dispose (object);
+}
+
+static void
 gtk_stack_page_get_property (GObject      *object,
                              guint         property_id,
                              GValue       *value,
@@ -379,6 +390,7 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
   object_class->finalize = gtk_stack_page_finalize;
+  object_class->dispose = gtk_stack_page_dispose;
   object_class->get_property = gtk_stack_page_get_property;
   object_class->set_property = gtk_stack_page_set_property;
 
