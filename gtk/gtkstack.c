@@ -228,7 +228,12 @@ gtk_stack_page_accessible_get_at_context (GtkAccessible *accessible)
   if (page->at_context == NULL)
     {
       GtkAccessibleRole role = GTK_ACCESSIBLE_ROLE_TAB_PANEL;
-      GdkDisplay *display = gtk_widget_get_display (page->widget);
+      GdkDisplay *display;
+
+      if (page->widget != NULL)
+        display = gtk_widget_get_display (page->widget);
+      else
+        display = gdk_display_get_default ();
 
       page->at_context = gtk_at_context_create (role, accessible, display);
     }
@@ -277,6 +282,17 @@ gtk_stack_page_finalize (GObject *object)
   g_clear_object (&page->at_context);
 
   G_OBJECT_CLASS (gtk_stack_page_parent_class)->finalize (object);
+}
+
+static void
+gtk_stack_page_dispose (GObject *object)
+{
+  GtkStackPage *page = GTK_STACK_PAGE (object);
+
+  if (page->at_context != NULL)
+    gtk_at_context_unrealize (page->at_context);
+
+  G_OBJECT_CLASS (gtk_stack_page_parent_class)->dispose (object);
 }
 
 static void
@@ -379,6 +395,7 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
   object_class->finalize = gtk_stack_page_finalize;
+  object_class->dispose = gtk_stack_page_dispose;
   object_class->get_property = gtk_stack_page_get_property;
   object_class->set_property = gtk_stack_page_set_property;
 
@@ -805,6 +822,7 @@ gtk_stack_class_init (GtkStackClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, stack_props);
 
   gtk_widget_class_set_css_name (widget_class, I_("stack"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GROUP);
 }
 
 /**
@@ -2760,6 +2778,10 @@ gtk_stack_page_set_title (GtkStackPage *self,
   g_free (self->title);
   self->title = g_strdup (setting);
   g_object_notify_by_pspec (G_OBJECT (self), stack_page_props[CHILD_PROP_TITLE]);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL, self->title,
+                                  -1);
 }
 
 

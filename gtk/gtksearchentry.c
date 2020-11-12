@@ -554,8 +554,9 @@ gtk_search_entry_init (GtkSearchEntry *entry)
   GtkWidget *icon;
   GtkGesture *press;
 
+  /* The search icon is purely presentational */
   icon = g_object_new (GTK_TYPE_IMAGE,
-                       "accessible-role", GTK_ACCESSIBLE_ROLE_NONE,
+                       "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
                        "icon-name", "system-search-symbolic",
                        NULL);
   gtk_widget_set_parent (icon, GTK_WIDGET (entry));
@@ -570,7 +571,10 @@ gtk_search_entry_init (GtkSearchEntry *entry)
   g_signal_connect (entry->entry, "notify", G_CALLBACK (notify_cb), entry);
   g_signal_connect (entry->entry, "activate", G_CALLBACK (activate_cb), entry);
 
-  entry->icon = gtk_image_new_from_icon_name ("edit-clear-symbolic");
+  entry->icon = g_object_new (GTK_TYPE_IMAGE,
+                              "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
+                              "icon-name", "edit-clear-symbolic",
+                              NULL);
   gtk_widget_set_tooltip_text (entry->icon, _("Clear entry"));
   gtk_widget_set_parent (entry->icon, GTK_WIDGET (entry));
   gtk_widget_set_child_visible (entry->icon, FALSE);

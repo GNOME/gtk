@@ -25,6 +25,7 @@
 #include "gtkboxlayout.h"
 #include "gtkbuiltiniconprivate.h"
 #include "gtkdropcontrollermotion.h"
+#include "gtkenums.h"
 #include "gtkgestureclick.h"
 #include "gtkintl.h"
 #include "gtktreelistmodel.h"
@@ -66,6 +67,12 @@
  * If the node is not expandable, an "indent" node will be displayed instead.
  *
  * For every level of depth, another "indent" node is prepended.
+ *
+ * # Accessibility
+ *
+ * GtkTreeExpander uses the %GTK_ACCESSIBLE_ROLE_GROUP role. The expander icon
+ * is represented as a %GTK_ACCESSIBLE_ROLE_BUTTON, labelled by the expander's
+ * child, and toggling it will change the %GTK_ACCESSIBLE_STATE_EXPANDED state.
  */
 
 struct _GtkTreeExpander
@@ -182,6 +189,13 @@ gtk_tree_expander_update_for_list_row (GtkTreeExpander *self)
               gtk_widget_insert_before (self->expander,
                                         GTK_WIDGET (self),
                                         self->child);
+
+              gtk_accessible_update_property (GTK_ACCESSIBLE (self->expander),
+                                              GTK_ACCESSIBLE_PROPERTY_LABEL, _("Expand"),
+                                              -1);
+              gtk_accessible_update_relation (GTK_ACCESSIBLE (self->expander),
+                                              GTK_ACCESSIBLE_RELATION_LABELLED_BY, self->child, NULL,
+                                              -1);
             }
 
           if (gtk_tree_list_row_get_expanded (self->list_row))
@@ -600,6 +614,7 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("treeexpander"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GROUP);
 }
 
 static gboolean

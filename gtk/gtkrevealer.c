@@ -53,6 +53,13 @@
  * When styling #GtkRevealer using CSS, remember that it only hides its contents,
  * not itself. That means applied margin, padding and borders will be
  * visible even when the #GtkRevealer:reveal-child property is set to %FALSE.
+ *
+ * # Accessibility
+ *
+ * GtkRevealer uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
+ *
+ * The child of GtkRevealer, if set, is always available in the accessibility
+ * tree, regardless of the state of the revealer widget.
  */
 
 /**
@@ -346,6 +353,7 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
   gtk_widget_class_set_css_name (widget_class, I_("revealer"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GROUP);
 }
 
 /**

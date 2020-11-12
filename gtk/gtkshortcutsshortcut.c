@@ -721,6 +721,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
   gtk_widget_class_set_css_name (widget_class, I_("shortcut"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GROUP);
 }
 
 static void
@@ -738,6 +739,7 @@ gtk_shortcuts_shortcut_init (GtkShortcutsShortcut *self)
   self->image = g_object_new (GTK_TYPE_IMAGE,
                               "visible", FALSE,
                               "valign", GTK_ALIGN_CENTER,
+                              "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
                               NULL);
   gtk_box_append (GTK_BOX (self->box), GTK_WIDGET (self->image));
 

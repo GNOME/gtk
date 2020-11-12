@@ -648,7 +648,10 @@ gtk_model_button_set_icon (GtkModelButton *self,
 {
   if (!self->image && icon)
     {
-      self->image = gtk_image_new_from_gicon (icon);
+      self->image = g_object_new (GTK_TYPE_IMAGE,
+                                  "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
+                                  "gicon", icon,
+                                  NULL);
       gtk_widget_insert_before (self->image, GTK_WIDGET (self), self->label);
     }
   else if (self->image && !icon)

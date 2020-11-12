@@ -927,7 +927,10 @@ gtk_button_set_icon_name (GtkButton  *button,
 
   if (priv->child_type != ICON_CHILD || priv->child == NULL)
     {
-      GtkWidget *child = gtk_image_new_from_icon_name (icon_name);
+      GtkWidget *child = g_object_new (GTK_TYPE_IMAGE,
+                                       "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
+                                       "icon-name", icon_name,
+                                       NULL);
       gtk_button_set_child (GTK_BUTTON (button), child);
       gtk_widget_set_valign (child, GTK_ALIGN_CENTER);
       gtk_widget_remove_css_class (GTK_WIDGET (button), "text-button");
