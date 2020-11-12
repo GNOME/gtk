@@ -272,7 +272,7 @@ gtk_gesture_click_end (GtkGesture       *gesture,
   interpreted = gtk_gesture_get_point (gesture, current, &x, &y);
   state = gtk_gesture_get_sequence_state (gesture, current);
 
-  if (state != GTK_EVENT_SEQUENCE_DENIED && interpreted)
+  if (current == sequence && state != GTK_EVENT_SEQUENCE_DENIED && interpreted)
     g_signal_emit (gesture, signals[RELEASED], 0, priv->n_release, x, y);
 
   priv->n_release = 0;
