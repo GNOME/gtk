@@ -74,6 +74,10 @@
                         <property name="resource">/ui/main-listitem.ui</property>
                       </object>
                     </property>
+                    <accessibility>
+                      <property name="label" translatable="yes">Demo list</property>
+                      <relation name="controls">notebook</relation>
+                    </accessibility>
                   </object>
                 </child>
 
@@ -108,6 +112,10 @@
                         <property name="editable">0</property>
                         <property name="wrap-mode">word</property>
                         <property name="cursor-visible">0</property>
+                        <accessibility>
+                          <property name="label" translatable="yes">Info</property>
+                          <property name="description" translatable="yes">A description of the demo</property>
+                        </accessibility>
                       </object>
                     </child>
                   </object>
@@ -138,6 +146,10 @@
                         <property name="wrap-mode">word</property>
                         <property name="pixels-above-lines">2</property>
                         <property name="pixels-below-lines">2</property>
+                        <accessibility>
+                          <property name="label" translatable="yes">Source</property>
+                          <property name="description" translatable="yes">The source code of the demo</property>
+                        </accessibility>
                       </object>
                     </child>
                   </object>
