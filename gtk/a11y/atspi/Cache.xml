@@ -3,18 +3,18 @@
 <interface name="org.a11y.atspi.Cache">
 
   <method name="GetItems">
-    <arg name="nodes" type="a((so)(so)iiassusau)" direction="out"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiAccessibleCacheArray"/>
+    <arg direction="out" name="nodes" type="a((so)(so)iiassusau)"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiAccessibleCacheArray"/>
   </method>
 
   <signal name="AddAccessible">
-    <arg name="nodeAdded" type="((so)(so)iiassusau)"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QSpiAccessibleCacheItem"/>
+    <arg direction="in" name="nodeAdded" type="((so)(so)iiassusau)"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="QSpiAccessibleCacheItem"/>
   </signal>
 
   <signal name="RemoveAccessible">
-    <arg name="nodeRemoved" type="(so)"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QSpiObjectReference"/>
+    <arg direction="in" name="nodeRemoved" type="(so)"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="QSpiObjectReference"/>
   </signal>
 
 </interface>

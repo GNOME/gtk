@@ -65,12 +65,12 @@
     <arg direction="out" type="a{ss}"/>
     <arg direction="out" name="startOffset" type="i"/>
     <arg direction="out" name="endOffset" type="i"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiAttributeSet"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiAttributeSet"/>
   </method>
 
   <method name="GetDefaultAttributes">
     <arg direction="out" type="a{ss}"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiAttributeSet"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiAttributeSet"/>
   </method>
 
   <method name="GetCharacterExtents">
@@ -136,7 +136,7 @@
     <arg direction="in" name="xClipType" type="u"/>
     <arg direction="in" name="yClipType" type="u"/>
     <arg direction="out" type="a(iisv)"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiRangeList"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiRangeList"/>
   </method>
 
   <method name="GetAttributeRun">
@@ -145,11 +145,12 @@
     <arg direction="out" type="a{ss}"/>
     <arg direction="out" name="startOffset" type="i"/>
     <arg direction="out" name="endOffset" type="i"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiAttributeSet"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiAttributeSet"/>
   </method>
 
   <method name="GetDefaultAttributeSet">
     <arg direction="out" type="a{ss}"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiAttributeSet"/>
   </method>
 
   <method name="ScrollSubstringTo">

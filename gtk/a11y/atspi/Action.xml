@@ -26,7 +26,7 @@
 
   <method name="GetActions">
     <arg direction="out" type="a(sss)"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiActionArray"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiActionArray"/>
   </method>
 
   <method name="DoAction">

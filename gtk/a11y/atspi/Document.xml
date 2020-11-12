@@ -17,7 +17,7 @@
 
   <method name="GetAttributes">
     <arg direction="out" type="{ss}"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiAttrubutes"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiAttributeSet"/>
   </method>
 
 </interface>

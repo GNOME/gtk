@@ -4,11 +4,15 @@
 
   <property access="read" name="ColumnSpan" type="i" />
 
-  <property access="read" name="Position" type="(ii)" />
+  <property access="read" name="Position" type="(ii)">
+    <annotation name="org.qtproject.QtDBus.QtTypeName" value="QPoint"/>
+  </property>
 
   <property access="read" name="RowSpan" type="i" />
 
-  <property access="read" name="Table" type="(so)" />
+  <property access="read" name="Table" type="(so)">
+    <annotation name="org.qtproject.QtDBus.QtTypeName" value="QSpiObjectReference"/>
+  </property>
 
   <method name="GetRowColumnSpan">
     <arg direction="out" type="b" />

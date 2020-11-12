@@ -14,13 +14,13 @@
     <arg direction="in" name="y" type="i"/>
     <arg direction="in" name="coord_type" type="u"/>
     <arg direction="out" type="(so)"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiObjectReference"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiObjectReference"/>
   </method>
 
   <method name="GetExtents">
     <arg direction="in" name="coord_type" type="u"/>
     <arg direction="out" type="(iiii)"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiRect"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiRect"/>
   </method>
 
   <method name="GetPosition">
