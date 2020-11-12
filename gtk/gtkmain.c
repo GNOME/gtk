@@ -1362,9 +1362,9 @@ set_widget_active_state (GtkWidget       *target,
   while (w)
     {
       if (release)
-        gtk_widget_unset_state_flags (w, GTK_STATE_FLAG_ACTIVE);
+        gtk_widget_set_active_state (w, FALSE);
       else
-        gtk_widget_set_state_flags (w, GTK_STATE_FLAG_ACTIVE, FALSE);
+        gtk_widget_set_active_state (w, TRUE);
 
       w = _gtk_widget_get_parent (w);
     }
