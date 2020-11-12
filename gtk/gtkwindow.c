@@ -142,7 +142,7 @@
  *
  * # Accessibility
  *
- * GtkWindow uses the #GTK_ACCESSIBLE_ROLE_WINDOW role.
+ * GtkWindow uses the %GTK_ACCESSIBLE_ROLE_WINDOW role.
  */
 
 #define MENU_BAR_ACCEL GDK_KEY_F10

@@ -1136,7 +1136,8 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_GENERIC: Unused
  * @GTK_ACCESSIBLE_ROLE_GRID: A grid of items.
  * @GTK_ACCESSIBLE_ROLE_GRID_CELL: An item in a grid or tree grid.
- * @GTK_ACCESSIBLE_ROLE_GROUP: Unused
+ * @GTK_ACCESSIBLE_ROLE_GROUP: An element that groups multiple widgets. GTK uses
+ *   this role for various containers, like #GtkBox, #GtkViewport, and #GtkHeaderBar.
  * @GTK_ACCESSIBLE_ROLE_HEADING: Unused
  * @GTK_ACCESSIBLE_ROLE_IMG: An image.
  * @GTK_ACCESSIBLE_ROLE_INPUT: Abstract role.

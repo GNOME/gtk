@@ -50,7 +50,11 @@
  *
  * # CSS nodes
  *
- * GtkGrid uses a single CSS node with name grid.
+ * GtkGrid uses a single CSS node with name `grid`.
+ *
+ * # Accessibility
+ *
+ * GtkGrid uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
  */
 
 typedef struct

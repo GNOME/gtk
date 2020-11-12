@@ -50,6 +50,10 @@
  *
  * In vertical orientation, the nodes of the children are arranged from top to
  * bottom.
+ *
+ * # Accessibility
+ *
+ * GtkCenterBox uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
  */
 
 #include "config.h"

@@ -126,30 +126,33 @@
  *     ╰── <child>
  * ]|
  *
- * GtkNotebook has a main CSS node with name notebook, a subnode
- * with name header and below that a subnode with name tabs which
- * contains one subnode per tab with name tab.
+ * GtkNotebook has a main CSS node with name `notebook`, a subnode
+ * with name `header` and below that a subnode with name `tabs` which
+ * contains one subnode per tab with name `tab`.
  *
  * If action widgets are present, their CSS nodes are placed next
- * to the tabs node. If the notebook is scrollable, CSS nodes with
- * name arrow are placed as first and last child of the tabs node.
+ * to the `tabs` node. If the notebook is scrollable, CSS nodes with
+ * name `arrow` are placed as first and last child of the `tabs` node.
  *
- * The main node gets the .frame style class when the notebook
+ * The main node gets the `.frame` style class when the notebook
  * has a border (see gtk_notebook_set_show_border()).
  *
- * The header node gets one of the style class .top, .bottom,
- * .left or .right, depending on where the tabs are placed. For
- * reorderable pages, the tab node gets the .reorderable-page class.
+ * The header node gets one of the style class `.top`, `.bottom`,
+ * `.left` or `.right`, depending on where the tabs are placed. For
+ * reorderable pages, the tab node gets the `.reorderable-page` class.
  *
- * A tab node gets the .dnd style class while it is moved with drag-and-drop.
+ * A `tab` node gets the `.dnd` style class while it is moved with drag-and-drop.
  *
  * The nodes are always arranged from left-to-right, regardless of text direction.
  *
  * # Accessibility
  *
- * GtkNotebook uses the #GTK_ACCESSIBLE_ROLE_TAB_LIST and
- * #GTK_ACCESSIBLE_ROLE_TAB roles for its list of tabs and the
- * #GTK_ACCESSIBLE_ROLE_TAB_PANEL for the pages.
+ * GtkNotebook uses the following roles:
+ *
+ *  - %GTK_ACCESSIBLE_ROLE_GROUP for the notebook widget
+ *  - %GTK_ACCESSIBLE_ROLE_TAB_LIST for the list of tabs
+ *  - %GTK_ACCESSIBLE_ROLE_TAB role for each tab
+ *  - %GTK_ACCESSIBLE_ROLE_TAB_PANEL for each page
  */
 
 

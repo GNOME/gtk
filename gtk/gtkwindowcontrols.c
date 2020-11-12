@@ -79,6 +79,10 @@
  * and #GtkWindowControls:decoration-layout value.
  *
  * When #GtkWindowControls:empty is %TRUE, it gets the .empty style class.
+ *
+ * # Accessibility
+ *
+ * GtkWindowHandle uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
  */
 
 struct _GtkWindowControls {

@@ -142,6 +142,10 @@
  *
  * If both scrollbars are visible, the area where they meet is drawn
  * with a subnode named junction.
+ *
+ * # Accessibility
+ *
+ * GtkScrolledWindow uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
  */
 
 

@@ -51,6 +51,10 @@
  * # CSS nodes
  *
  * GtkBox uses a single CSS node with name box.
+ *
+ * # Accessibility
+ *
+ * GtkBox uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
  */
 
 #include "config.h"

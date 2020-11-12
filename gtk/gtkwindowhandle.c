@@ -48,7 +48,11 @@
  *
  * # CSS nodes
  *
- * #GtkWindowHandle has a single CSS node with the name windowhandle.
+ * #GtkWindowHandle has a single CSS node with the name `windowhandle`.
+ *
+ * # Accessibility
+ *
+ * GtkWindowHandle uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
  */
 
 struct _GtkWindowHandle {

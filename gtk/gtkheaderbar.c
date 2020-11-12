@@ -96,13 +96,17 @@
  *             ╰── windowcontrols.end
  * ]|
  *
- * A #GtkHeaderBar's CSS node is called headerbar. It contains a windowhandle
- * subnode, which contains a box subnode, which contains two box subnodes at
- * the start and end of the headerbar, as well as a center node that represents
+ * A #GtkHeaderBar's CSS node is called `headerbar`. It contains a `windowhandle`
+ * subnode, which contains a `box` subnode, which contains two `box` subnodes at
+ * the start and end of the header bar, as well as a center node that represents
  * the title.
  *
- * Each of the boxes contains a windowcontrols subnode, see #GtkWindowControls
+ * Each of the boxes contains a `windowcontrols` subnode, see #GtkWindowControls
  * for details, as well as other children.
+ *
+ * # Accessibility
+ *
+ * GtkHeaderBar uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
  */
 
 #define MIN_TITLE_CHARS 5
