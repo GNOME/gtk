@@ -48,6 +48,11 @@ struct _GskContourClass
                                                  gpointer                measure_data);
   void                  (* copy)                (const GskContour       *contour,
                                                  GskContour             *dest);
+  void                  (* add_segment)         (const GskContour       *contour,
+                                                 GskPathBuilder         *builder,
+                                                 gpointer                measure_data,
+                                                 float                   start,
+                                                 float                   end);
 };
 
 struct _GskPath
@@ -182,6 +187,71 @@ gsk_rect_contour_copy (const GskContour *contour,
   *target = *self;
 }
 
+static void
+gsk_rect_contour_add_segment (const GskContour *contour,
+                              GskPathBuilder   *builder,
+                              gpointer          measure_data,
+                              float             start,
+                              float             end)
+{
+  const GskRectContour *self = (const GskRectContour *) contour;
+  float w = ABS (self->width);
+  float h = ABS (self->height);
+
+  if (start < w)
+    {
+      gsk_path_builder_move_to (builder, self->x + start * (w / self->width), self->y);
+      if (end <= w)
+        {
+          gsk_path_builder_line_to (builder, self->x + end * (w / self->width), self->y);
+          return;
+        }
+      gsk_path_builder_line_to (builder, self->x + self->width, self->y);
+    }
+  start -= w;
+  end -= w;
+
+  if (start < h)
+    {
+      if (start >= 0)
+        gsk_path_builder_move_to (builder, self->x + self->width, self->y + start * (h / self->height));
+      if (end <= h)
+        {
+          gsk_path_builder_line_to (builder, self->x + self->width, self->y + end * (h / self->height));
+          return;
+        }
+      gsk_path_builder_line_to (builder, self->x + self->width, self->y + self->height);
+    }
+  start -= h;
+  end -= h;
+
+  if (start < w)
+    {
+      if (start >= 0)
+        gsk_path_builder_move_to (builder, self->x + (w - start) * (w / self->width), self->y + self->height);
+      if (end <= w)
+        {
+          gsk_path_builder_line_to (builder, self->x + (w - end) * (w / self->width), self->y + self->height);
+          return;
+        }
+      gsk_path_builder_line_to (builder, self->x, self->y + self->height);
+    }
+  start -= w;
+  end -= w;
+
+  if (start < h)
+    {
+      if (start >= 0)
+        gsk_path_builder_move_to (builder, self->x, self->y + (h - start) * (h / self->height));
+      if (end <= h)
+        {
+          gsk_path_builder_line_to (builder, self->x, self->y + (h - end) * (h / self->height));
+          return;
+        }
+      gsk_path_builder_line_to (builder, self->x, self->y);
+    }
+}
+
 static const GskContourClass GSK_RECT_CONTOUR_CLASS =
 {
   sizeof (GskRectContour),
@@ -192,7 +262,8 @@ static const GskContourClass GSK_RECT_CONTOUR_CLASS =
   gsk_rect_contour_get_bounds,
   gsk_rect_contour_init_measure,
   gsk_rect_contour_free_measure,
-  gsk_rect_contour_copy
+  gsk_rect_contour_copy,
+  gsk_rect_contour_add_segment
 };
 
 static void
@@ -446,6 +517,102 @@ gsk_standard_contour_copy (const GskContour *contour,
   gsk_standard_contour_init (dest, self->ops, self->n_ops, self->points, self->n_points);
 }
 
+static void
+gsk_standard_contour_add_segment (const GskContour *contour,
+                                  GskPathBuilder   *builder,
+                                  gpointer          measure_data,
+                                  float             start,
+                                  float             end)
+{
+  GskStandardContour *self = (GskStandardContour *) contour;
+  gsize i;
+  float length;
+
+  for (i = 0; end > 0 && i < self->n_ops; i ++)
+    {
+      graphene_point_t *pt = &self->points[self->ops[i].point];
+
+      switch (self->ops[i].op)
+      {
+        case GSK_PATH_MOVE:
+          if (start <= 0.0)
+            {
+              gsk_path_builder_move_to (builder, pt[0].x, pt[0].y);
+              start = -1;
+            }
+          break;
+
+        case GSK_PATH_CLOSE:
+        case GSK_PATH_LINE:
+          length = graphene_point_distance (&pt[0], &pt[1], NULL, NULL);
+          if (length <= start)
+            {
+              start -= length;
+              end -= length;
+            }
+          else
+            {
+              if (start >= 0)
+                {
+                  graphene_point_t start_pt;
+                  graphene_point_interpolate (&pt[0], &pt[1], start / length, &start_pt);
+                  gsk_path_builder_move_to (builder, start_pt.x, start_pt.y);
+                  start = -1;
+                }
+              if (length <= end)
+                {
+                  gsk_path_builder_line_to (builder, pt[1].x, pt[1].y);
+                  end -= length;
+                }
+              else
+                {
+                  graphene_point_t end_pt;
+                  graphene_point_interpolate (&pt[0], &pt[1], end / length, &end_pt);
+                  gsk_path_builder_line_to (builder, end_pt.x, end_pt.y);
+                  return;
+                }
+            }
+          break;
+
+        case GSK_PATH_CURVE:
+          g_warning ("i'm not fat!");
+          length = graphene_point_distance (&pt[0], &pt[3], NULL, NULL);
+          if (length <= start)
+            {
+              start -= length;
+              end -= length;
+            }
+          else
+            {
+              if (start >= 0)
+                {
+                  graphene_point_t start_pt;
+                  graphene_point_interpolate (&pt[0], &pt[3], start / length, &start_pt);
+                  gsk_path_builder_move_to (builder, start_pt.x, start_pt.y);
+                  start = -1;
+                }
+              if (length <= end)
+                {
+                  gsk_path_builder_line_to (builder, pt[3].x, pt[3].y);
+                  end -= length;
+                }
+              else
+                {
+                  graphene_point_t end_pt;
+                  graphene_point_interpolate (&pt[0], &pt[3], end / length, &end_pt);
+                  gsk_path_builder_line_to (builder, end_pt.x, end_pt.y);
+                  return;
+                }
+            }
+          break;
+
+        default:
+          g_assert_not_reached();
+          return;
+      }
+    }
+}
+
 static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
 {
   sizeof (GskStandardContour),
@@ -456,7 +623,8 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   gsk_standard_contour_get_bounds,
   gsk_standard_contour_init_measure,
   gsk_standard_contour_free_measure,
-  gsk_standard_contour_copy
+  gsk_standard_contour_copy,
+  gsk_standard_contour_add_segment
 };
 
 /* You must ensure the contour has enough size allocated,
@@ -839,6 +1007,19 @@ gsk_path_builder_add_contour (GskPathBuilder *builder,
 
   copy = gsk_contour_dup (path->contours[i]);
   builder->contours = g_slist_prepend (builder->contours, copy);
+}
+
+void
+gsk_path_builder_add_contour_segment (GskPathBuilder *builder,
+                                      GskPath        *path,
+                                      gsize           i,
+                                      gpointer        measure_data,
+                                      float           start,
+                                      float           end)
+{
+  const GskContour *self = path->contours[i];
+
+  self->klass->add_segment (self, builder, measure_data, start, end);
 }
 
 /**

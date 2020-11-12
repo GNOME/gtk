@@ -154,3 +154,61 @@ gsk_path_measure_get_length (GskPathMeasure *self)
 
   return self->length;
 }
+
+/**
+ * gsk_path_measure_add_segment:
+ * @self: a `GskPathMeasure`
+ * @builder: the builder to add the segment to
+ * @start: start distance into the path
+ * @end: end distance into the path
+ *
+ * Adds to @builder the segment of @path inbetween @start and @end.
+ *
+ * The distances are given relative to the length of @self's path,
+ * from 0 for the beginning of the path to [method@Gsk.PathMeasure.get_length]
+ * for the end of the path. The values will be clamped to that range.
+ *
+ * If @start >= @end after clamping, no path will be added.
+ **/
+void
+gsk_path_measure_add_segment (GskPathMeasure *self,
+                              GskPathBuilder *builder,
+                              float           start,
+                              float           end)
+{
+  gsize i;
+
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (builder != NULL);
+
+  start = CLAMP (start, 0, self->length);
+  end = CLAMP (end, 0, self->length);
+  if (start >= end)
+    return;
+
+  for (i = 0; i < self->n_contours; i++)
+    {
+      if (self->measures[i].length < start)
+        {
+          start -= self->measures[i].length;
+          end -= self->measures[i].length;
+        }
+      else if (start > 0 || end < self->measures[i].length)
+        {
+          float len = MIN (end, self->measures[i].length);
+          gsk_path_builder_add_contour_segment (builder,
+                                                self->path,
+                                                i,
+                                                self->measures[i].contour_data,
+                                                start,
+                                                len);
+          start = 0;
+          end -= len;
+        }
+      else
+        {
+          end -= self->measures[i].length;
+          gsk_path_builder_add_contour (builder, self->path, i);
+        }
+    }
+}
