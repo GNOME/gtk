@@ -171,7 +171,7 @@ reveal_child_changed_cb (GObject      *object,
     {
       if (reveal_child && GTK_IS_ENTRY (bar->entry))
         gtk_entry_grab_focus_without_selecting (GTK_ENTRY (bar->entry));
-      else if (GTK_IS_SEARCH_ENTRY (bar->entry))
+      else if (reveal_child && GTK_IS_SEARCH_ENTRY (bar->entry))
         gtk_widget_grab_focus (bar->entry);
       else
         gtk_editable_set_text (GTK_EDITABLE (bar->entry), "");
