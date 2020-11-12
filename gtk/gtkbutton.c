@@ -405,7 +405,6 @@ gtk_button_init (GtkButton *button)
 
   priv->gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->gesture), FALSE);
-  gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->gesture), TRUE);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->gesture), GDK_BUTTON_PRIMARY);
   g_signal_connect (priv->gesture, "pressed", G_CALLBACK (click_pressed_cb), button);
   g_signal_connect (priv->gesture, "released", G_CALLBACK (click_released_cb), button);
