@@ -27,6 +27,7 @@
     <title>Paths</title>
     <xi:include href="xml/GskPath.xml" />
     <xi:include href="xml/GskPathBuilder.xml" />
+    <xi:include href="xml/GskPathMeasure.xml" />
     <xi:include href="xml/GskStroke.xml" />
   </part>
 
