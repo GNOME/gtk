@@ -1110,7 +1110,98 @@ text_view_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "ScrollSubstringTo") == 0)
     {
-      g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED, "");
+      GtkTextBuffer *buffer = buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
+      GtkTextIter iter;
+      int start_offset = 0;
+      int end_offset = 0;
+      int offset = 0;
+      double x_align = -1.0, y_align = -1.0;
+      AtspiScrollType scroll_type;
+      gboolean is_rtl = FALSE, use_align = TRUE;
+      gboolean ret = FALSE;
+
+      g_variant_get (parameters, "(iiu)", &start_offset, &end_offset, &scroll_type);
+
+      if (end_offset < start_offset)
+        {
+          g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR,
+                                                         G_DBUS_ERROR_INVALID_ARGS,
+                                                         "Negative offset is not supported");
+          return;
+        }
+
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+        is_rtl = TRUE;
+
+      switch (scroll_type)
+        {
+        case ATSPI_SCROLL_TOP_LEFT:
+          offset = (is_rtl) ? end_offset : start_offset;
+          x_align = 0.0;
+          y_align = 0.0;
+          break;
+
+        case ATSPI_SCROLL_BOTTOM_RIGHT:
+          offset = (is_rtl) ? start_offset : end_offset;
+          x_align = 1.0;
+          y_align = 1.0;
+          break;
+
+        case ATSPI_SCROLL_TOP_EDGE:
+          offset = start_offset;
+          y_align = 0.0;
+          break;
+
+        case ATSPI_SCROLL_BOTTOM_EDGE:
+          offset = end_offset;
+          y_align = 1.0;
+          break;
+
+        case ATSPI_SCROLL_LEFT_EDGE:
+          offset = (is_rtl) ? end_offset : start_offset;
+          x_align = 0.0;
+          break;
+
+        case ATSPI_SCROLL_RIGHT_EDGE:
+          offset = (is_rtl) ? start_offset : end_offset;
+          x_align = 1.0;
+          break;
+
+        case ATSPI_SCROLL_ANYWHERE:
+          offset = start_offset;
+          use_align = FALSE;
+          x_align = 0.0;
+          y_align = 0.0;
+          break;
+
+        default:
+          g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR,
+                                                         G_DBUS_ERROR_INVALID_ARGS,
+                                                         "Invalid scroll type");
+          return;
+        }
+
+      gtk_text_buffer_get_iter_at_offset (buffer, &iter, offset);
+
+      if (use_align && (x_align != -1.0 || y_align != -1.0))
+        {
+          GdkRectangle visible_rect, iter_rect;
+
+          gtk_text_view_get_visible_rect (GTK_TEXT_VIEW (widget), &visible_rect);
+          gtk_text_view_get_iter_location (GTK_TEXT_VIEW (widget), &iter, &iter_rect);
+
+          if (x_align == -1.0)
+            x_align = ((double) (iter_rect.x - visible_rect.x)) / (visible_rect.width - 1);
+          if (y_align == -1.0)
+            y_align = ((double) (iter_rect.y - visible_rect.y)) / (visible_rect.height - 1);
+        }
+
+      ret = gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (widget), &iter,
+                                          0.0,
+                                          use_align,
+                                          x_align, y_align);
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
     }
   else if (g_strcmp0 (method_name, "ScrollSubstringToPoint") == 0)
     {
