@@ -288,6 +288,12 @@ struct _GtkLabel
   int      width_chars;
   int      max_width_chars;
   int      lines;
+
+  struct {
+    int width;
+    int height;
+    int baseline;
+  } cached_extents[3];
 };
 
 struct _GtkLabelClass
@@ -472,6 +478,7 @@ static void gtk_label_ensure_select_info  (GtkLabel *self);
 static void gtk_label_clear_select_info   (GtkLabel *self);
 static void gtk_label_update_cursor       (GtkLabel *self);
 static void gtk_label_clear_layout        (GtkLabel *self);
+static void gtk_label_clear_cached_extents (GtkLabel *self);
 static void gtk_label_ensure_layout       (GtkLabel *self);
 static void gtk_label_select_region_index (GtkLabel *self,
                                            int       anchor_index,
@@ -2580,6 +2587,8 @@ gtk_label_set_width_chars (GtkLabel *self,
   if (self->width_chars != n_chars)
     {
       self->width_chars = n_chars;
+
+      gtk_label_clear_cached_extents (self);
       g_object_notify_by_pspec (G_OBJECT (self), label_props[PROP_WIDTH_CHARS]);
       gtk_widget_queue_resize (GTK_WIDGET (self));
     }
@@ -2618,6 +2627,8 @@ gtk_label_set_max_width_chars (GtkLabel *self,
   if (self->max_width_chars != n_chars)
     {
       self->max_width_chars = n_chars;
+
+      gtk_label_clear_cached_extents (self);
 
       g_object_notify_by_pspec (G_OBJECT (self), label_props[PROP_MAX_WIDTH_CHARS]);
       gtk_widget_queue_resize (GTK_WIDGET (self));
@@ -2766,12 +2777,26 @@ gtk_label_finalize (GObject *object)
 }
 
 static void
+gtk_label_clear_cached_extents (GtkLabel *self)
+{
+  int i;
+
+  for (i = 0; i < 3; i++)
+    {
+      self->cached_extents[i].width = 0;
+      self->cached_extents[i].height = 0;
+      self->cached_extents[i].baseline = 0;
+    }
+}
+
+static void
 gtk_label_clear_layout (GtkLabel *self)
 {
   g_clear_object (&self->layout);
+  gtk_label_clear_cached_extents (self);
 }
 
-/**
+/*
  * gtk_label_get_measuring_layout:
  * @self: the label
  * @existing_layout: %NULL or an existing layout already in use.
@@ -3003,14 +3028,13 @@ get_height_for_width (GtkLabel *self,
 }
 
 static int
-get_char_pixels (GtkWidget   *self,
-                 PangoLayout *layout)
+get_char_pixels (GtkWidget *self)
 {
   PangoContext *context;
   PangoFontMetrics *metrics;
   int char_width, digit_width;
 
-  context = pango_layout_get_context (layout);
+  context = gtk_widget_get_pango_context (self);
   metrics = pango_context_get_metrics (context,
                                        pango_context_get_font_description (context),
                                        pango_context_get_language (context));
@@ -3018,7 +3042,33 @@ get_char_pixels (GtkWidget   *self,
   digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
   pango_font_metrics_unref (metrics);
 
-  return MAX (char_width, digit_width);;
+  return MAX (char_width, digit_width);
+}
+
+static void
+get_cached_extents (GtkLabel        *self,
+                    PangoLayout    **layout,
+                    int              idx,
+                    int              for_width,
+                    int              min_width,
+                    PangoRectangle  *extents,
+                    int             *baseline)
+{
+  if (self->cached_extents[idx].width == 0)
+    {
+      *layout = gtk_label_get_measuring_layout (self, *layout, for_width);
+
+      pango_layout_get_extents (*layout, NULL, extents);
+
+      self->cached_extents[idx].width = MAX (extents->width, min_width);
+      self->cached_extents[idx].height = extents->height;
+      self->cached_extents[idx].baseline = pango_layout_get_baseline (*layout) / PANGO_SCALE;
+    }
+
+  extents->x = extents->y = 0;
+  extents->width = self->cached_extents[idx].width;
+  extents->height = self->cached_extents[idx].height;
+  *baseline = self->cached_extents[idx].baseline;
 }
 
 static void
@@ -3028,7 +3078,7 @@ gtk_label_get_preferred_layout_size (GtkLabel *self,
                                      int *smallest_baseline,
                                      int *widest_baseline)
 {
-  PangoLayout *layout;
+  PangoLayout *layout = NULL;
   int char_pixels;
 
   /* "width-chars" Hard-coded minimum width:
@@ -3047,43 +3097,30 @@ gtk_label_get_preferred_layout_size (GtkLabel *self,
    *    width will default to the wrap guess that gtk_label_ensure_layout() does.
    */
 
-  /* Start off with the pixel extents of an as-wide-as-possible layout */
-  layout = gtk_label_get_measuring_layout (self, NULL, -1);
-
   if (self->width_chars > -1 || self->max_width_chars > -1)
-    char_pixels = get_char_pixels (GTK_WIDGET (self), layout);
+    char_pixels = get_char_pixels (GTK_WIDGET (self));
   else
     char_pixels = 0;
 
-  pango_layout_get_extents (layout, NULL, widest);
-  widest->width = MAX (widest->width, char_pixels * self->width_chars);
-  widest->x = widest->y = 0;
-  *widest_baseline = pango_layout_get_baseline (layout) / PANGO_SCALE;
+  /* Start off with the pixel extents of an as-wide-as-possible layout */
+  get_cached_extents (self, &layout, 0,
+                      -1, char_pixels * self->width_chars,
+                      widest, widest_baseline);
 
   if (self->ellipsize || self->wrap)
     {
       /* a layout with width 0 will be as small as humanly possible */
-      layout = gtk_label_get_measuring_layout (self,
-                                               layout,
-                                               self->width_chars > -1 ? char_pixels * self->width_chars
-                                                                      : 0);
-
-      pango_layout_get_extents (layout, NULL, smallest);
-      smallest->width = MAX (smallest->width, char_pixels * self->width_chars);
-      smallest->x = smallest->y = 0;
-
-      *smallest_baseline = pango_layout_get_baseline (layout) / PANGO_SCALE;
+      get_cached_extents (self, &layout, 1,
+                          self->width_chars > -1 ? char_pixels * self->width_chars : 0,
+                          char_pixels * self->width_chars,
+                          smallest, smallest_baseline);
 
       if (self->max_width_chars > -1 && widest->width > char_pixels * self->max_width_chars)
         {
-          layout = gtk_label_get_measuring_layout (self,
-                                                   layout,
-                                                   MAX (smallest->width, char_pixels * self->max_width_chars));
-          pango_layout_get_extents (layout, NULL, widest);
-          widest->width = MAX (widest->width, char_pixels * self->width_chars);
-          widest->x = widest->y = 0;
-
-          *widest_baseline = pango_layout_get_baseline (layout) / PANGO_SCALE;
+          get_cached_extents (self, &layout, 2,
+                              MAX (smallest->width, char_pixels * self->max_width_chars),
+                              char_pixels * self->width_chars,
+                              widest, widest_baseline);
         }
 
       if (widest->width < smallest->width)
@@ -3098,7 +3135,7 @@ gtk_label_get_preferred_layout_size (GtkLabel *self,
       *smallest_baseline = *widest_baseline;
     }
 
-  g_object_unref (layout);
+  g_clear_object (&layout);
 }
 
 static void
