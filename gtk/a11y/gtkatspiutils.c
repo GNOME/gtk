@@ -21,8 +21,10 @@
 #include "config.h"
 
 #include "gtkatspiutilsprivate.h"
+
 #include "gtkenums.h"
 #include "gtkpasswordentry.h"
+#include "gtkscrolledwindow.h"
 
 /*< private >
  * gtk_accessible_role_to_atspi_role:
@@ -297,6 +299,10 @@ gtk_atspi_role_for_context (GtkATContext *context)
   /* ARIA does not have a "password entry" role, so we need to fudge it here */
   if (GTK_IS_PASSWORD_ENTRY (accessible))
     return ATSPI_ROLE_PASSWORD_TEXT;
+
+  /* ARIA does not have a "scroll area" role */
+  if (GTK_IS_SCROLLED_WINDOW (accessible))
+    return ATSPI_ROLE_SCROLL_PANE;
 
   return gtk_accessible_role_to_atspi_role (role);
 }
