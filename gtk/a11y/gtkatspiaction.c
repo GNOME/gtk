@@ -35,6 +35,7 @@
 #include "gtkexpander.h"
 #include "gtkmodelbuttonprivate.h"
 #include "gtkpasswordentryprivate.h"
+#include "gtksearchentry.h"
 #include "gtkswitch.h"
 #include "gtkwidgetprivate.h"
 
@@ -682,6 +683,93 @@ static const GDBusInterfaceVTable password_entry_action_vtable = {
 };
 
 /* }}} */
+/* {{{ GtkSearchEntry */
+
+static gboolean is_clear_enabled (GtkAtSpiContext *self);
+static gboolean activate_clear (GtkAtSpiContext *self);
+
+static const Action search_entry_actions[] = {
+  {
+    .name = "activate",
+    .localized_name = NC_("accessibility", "Activate"),
+    .description = NC_("accessibility", "Activates the entry"),
+    .keybinding = "<Return>",
+    .is_enabled = NULL,
+    .activate = NULL,
+  },
+  {
+    .name = "clear",
+    .localized_name = NC_("accessibility", "Clear"),
+    .description = NC_("accessibility", "Clears the contents of the entry"),
+    .keybinding = "<VoidSymbol>",
+    .is_enabled = is_clear_enabled,
+    .activate = activate_clear,
+  },
+};
+
+static gboolean
+is_clear_enabled (GtkAtSpiContext *self)
+{
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+  GtkSearchEntry *entry = GTK_SEARCH_ENTRY (accessible);
+
+  const char *str = gtk_editable_get_text (GTK_EDITABLE (entry));
+
+  if (str == NULL || *str == '\0')
+    return FALSE;
+
+  return TRUE;
+}
+
+static gboolean
+activate_clear (GtkAtSpiContext *self)
+{
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+
+  gtk_editable_set_text (GTK_EDITABLE (accessible), "");
+
+  return TRUE;
+}
+
+static void
+search_entry_handle_method (GDBusConnection       *connection,
+                            const gchar           *sender,
+                            const gchar           *object_path,
+                            const gchar           *interface_name,
+                            const gchar           *method_name,
+                            GVariant              *parameters,
+                            GDBusMethodInvocation *invocation,
+                            gpointer               user_data)
+{
+  GtkAtSpiContext *self = user_data;
+
+  action_handle_method (self, method_name, parameters, invocation,
+                        search_entry_actions,
+                        G_N_ELEMENTS (search_entry_actions));
+}
+
+static GVariant *
+search_entry_handle_get_property (GDBusConnection  *connection,
+                                  const gchar      *sender,
+                                  const gchar      *object_path,
+                                  const gchar      *interface_name,
+                                  const gchar      *property_name,
+                                  GError          **error,
+                                  gpointer          user_data)
+{
+  GtkAtSpiContext *self = user_data;
+
+  return action_handle_get_property (self, property_name, error,
+                                     search_entry_actions,
+                                     G_N_ELEMENTS (search_entry_actions));
+}
+
+static const GDBusInterfaceVTable search_entry_action_vtable = {
+  search_entry_handle_method,
+  search_entry_handle_get_property,
+  NULL,
+};
+/* }}} */
 
 static gboolean
 is_valid_action (GtkActionMuxer *muxer,
@@ -915,6 +1003,8 @@ gtk_atspi_get_action_vtable (GtkAccessible *accessible)
     return &expander_action_vtable;
   else if (GTK_IS_PASSWORD_ENTRY (accessible))
     return &password_entry_action_vtable;
+  else if (GTK_IS_SEARCH_ENTRY (accessible))
+    return &search_entry_action_vtable;
   else if (GTK_IS_SWITCH (accessible))
     return &switch_action_vtable;
   else if (GTK_IS_COLOR_SWATCH (accessible))
