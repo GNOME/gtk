@@ -925,7 +925,11 @@ is_structural_role (GtkAccessibleRole role)
     case GTK_ACCESSIBLE_ROLE_FORM:
     case GTK_ACCESSIBLE_ROLE_GROUP:
     case GTK_ACCESSIBLE_ROLE_GENERIC:
+    case GTK_ACCESSIBLE_ROLE_LANDMARK:
+    case GTK_ACCESSIBLE_ROLE_LIST_ITEM:
     case GTK_ACCESSIBLE_ROLE_REGION:
+    case GTK_ACCESSIBLE_ROLE_SEARCH:
+    case GTK_ACCESSIBLE_ROLE_SEPARATOR:
       return TRUE;
 
     default:
