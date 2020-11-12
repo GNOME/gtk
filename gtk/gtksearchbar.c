@@ -82,6 +82,10 @@
  * ## Creating a search bar
  *
  * [A simple example](https://gitlab.gnome.org/GNOME/gtk/tree/master/examples/search-bar.c)
+ *
+ * # Accessibility
+ *
+ * GtkSearchBar uses the %GTK_ACCESSIBLE_ROLE_SEARCH role.
  */
 
 typedef struct _GtkSearchBarClass   GtkSearchBarClass;
@@ -336,6 +340,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("searchbar"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_SEARCH);
 }
 
 static void
