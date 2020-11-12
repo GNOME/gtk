@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gskpath.h"
+#include "gskpathprivate.h"
 
 /**
  * SECTION:gskpath
@@ -55,6 +55,10 @@ struct _GskContourClass
                                                  cairo_t                *cr);
   gboolean              (* get_bounds)          (const GskContour       *contour,
                                                  graphene_rect_t        *bounds);
+  gpointer              (* init_measure)        (const GskContour       *contour,
+                                                 float                  *out_length);
+  void                  (* free_measure)        (const GskContour       *contour,
+                                                 gpointer                measure_data);
 };
 
 struct _GskPath
@@ -155,6 +159,23 @@ gsk_rect_contour_get_bounds (const GskContour *contour,
   return TRUE;
 }
 
+static gpointer
+gsk_rect_contour_init_measure (const GskContour *contour,
+                               float            *out_length)
+{
+  const GskRectContour *self = (const GskRectContour *) contour;
+
+  *out_length = 2 * ABS (self->width) + 2 * ABS (self->height);
+
+  return NULL;
+}
+
+static void
+gsk_rect_contour_free_measure (const GskContour *contour,
+                               gpointer          data)
+{
+}
+
 static const GskContourClass GSK_RECT_CONTOUR_CLASS =
 {
   sizeof (GskRectContour),
@@ -162,7 +183,9 @@ static const GskContourClass GSK_RECT_CONTOUR_CLASS =
   gsk_contour_get_size_default,
   gsk_rect_contour_print,
   gsk_rect_contour_to_cairo,
-  gsk_rect_contour_get_bounds
+  gsk_rect_contour_get_bounds,
+  gsk_rect_contour_init_measure,
+  gsk_rect_contour_free_measure
 };
 
 static void
@@ -235,7 +258,7 @@ gsk_standard_contour_print (const GskContour *contour,
 
   for (i = 0; i < self->n_ops; i ++)
     {
-      graphene_point_t *pt = &self->points [self->ops[i].point];
+      graphene_point_t *pt = &self->points[self->ops[i].point];
 
       switch (self->ops[i].op)
       {
@@ -280,7 +303,7 @@ gsk_standard_contour_to_cairo (const GskContour *contour,
 
   for (i = 0; i < self->n_ops; i ++)
     {
-      graphene_point_t *pt = &self->points [self->ops[i].point];
+      graphene_point_t *pt = &self->points[self->ops[i].point];
 
       switch (self->ops[i].op)
       {
@@ -354,6 +377,52 @@ gsk_standard_contour_get_bounds (const GskContour *contour,
   return bounds->size.width > 0 && bounds->size.height > 0;
 }
 
+static gpointer
+gsk_standard_contour_init_measure (const GskContour *contour,
+                                   float            *out_length)
+{
+  const GskStandardContour *self = (const GskStandardContour *) contour;
+  gsize i;
+  float length;
+
+  length = 0;
+
+  for (i = 1; i < self->n_ops; i ++)
+    {
+      graphene_point_t *pt = &self->points[self->ops[i].point];
+
+      switch (self->ops[i].op)
+      {
+        case GSK_PATH_MOVE:
+          break;
+
+        case GSK_PATH_CLOSE:
+        case GSK_PATH_LINE:
+          length += graphene_point_distance (&pt[0], &pt[1], NULL, NULL);
+          break;
+
+        case GSK_PATH_CURVE:
+          g_warning ("i'm not fat!");
+          length += graphene_point_distance (&pt[0], &pt[3], NULL, NULL);
+          break;
+
+        default:
+          g_assert_not_reached();
+          return NULL;
+      }
+    }
+
+  *out_length = length;
+
+  return NULL;
+}
+
+static void
+gsk_standard_contour_free_measure (const GskContour *contour,
+                                   gpointer          data)
+{
+}
+
 static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
 {
   sizeof (GskStandardContour),
@@ -361,7 +430,9 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   gsk_standard_contour_get_size,
   gsk_standard_contour_print,
   gsk_standard_contour_to_cairo,
-  gsk_standard_contour_get_bounds
+  gsk_standard_contour_get_bounds,
+  gsk_standard_contour_init_measure,
+  gsk_standard_contour_free_measure
 };
 
 /* You must ensure the contour has enough size allocated,
@@ -383,6 +454,28 @@ gsk_standard_contour_init (GskContour *contour,
   self->n_points = n_points;
   self->points = (graphene_point_t *) &self->ops[n_ops];
   memcpy (self->points, points, sizeof (graphene_point_t) * n_points);
+}
+
+/* CONTOUR */
+
+gpointer
+gsk_contour_init_measure (GskPath *path,
+                          gsize    i,
+                          float   *out_length)
+{
+  GskContour *self = path->contours[i];
+
+  return self->klass->init_measure (self, out_length);
+}
+
+void
+gsk_contour_free_measure (GskPath  *path,
+                          gsize     i,
+                          gpointer  data)
+{
+  GskContour *self = path->contours[i];
+
+  self->klass->free_measure (self, data);
 }
 
 /* PATH */
@@ -576,6 +669,20 @@ gsk_path_to_cairo (GskPath *self,
     {
       self->contours[i]->klass->to_cairo (self->contours[i], cr);
     }
+}
+
+/*
+ * gsk_path_get_n_contours:
+ * @path: a #GskPath
+ *
+ * Gets the nnumber of contours @path is composed out of.
+ *
+ * Returns: the number of contours in @path
+ **/
+gsize
+gsk_path_get_n_contours (GskPath *path)
+{
+  return path->n_contours;
 }
 
 /**
