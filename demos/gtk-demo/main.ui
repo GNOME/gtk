@@ -59,7 +59,11 @@
                   <object class="GtkSearchBar" id="searchbar">
                     <property name="key-capture-widget">window</property>
                     <child>
-                      <object class="GtkSearchEntry" id="search-entry"/>
+                      <object class="GtkSearchEntry" id="search-entry">
+                        <accessibility>
+                          <relation name="controls">listview</relation>
+                        </accessibility>
+                      </object>
                     </child>
                   </object>
                 </child>
