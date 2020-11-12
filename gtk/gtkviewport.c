@@ -53,7 +53,11 @@
  *
  * # CSS nodes
  *
- * GtkViewport has a single CSS node with name viewport.
+ * GtkViewport has a single CSS node with name `viewport`.
+ *
+ * # Accessibility
+ *
+ * GtkViewport uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
  */
 
 typedef struct _GtkViewportPrivate       GtkViewportPrivate;
@@ -382,6 +386,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
                                                         GTK_PARAM_READWRITE));
 
   gtk_widget_class_set_css_name (widget_class, I_("viewport"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GROUP);
 }
 
 static void

@@ -50,7 +50,11 @@
  *
  * # CSS nodes
  *
- * GtkGrid uses a single CSS node with name grid.
+ * GtkGrid uses a single CSS node with name `grid`.
+ *
+ * # Accessibility
+ *
+ * GtkGrid uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
  */
 
 typedef struct
@@ -395,8 +399,8 @@ gtk_grid_class_init (GtkGridClass *class)
   g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
 
   gtk_widget_class_set_css_name (widget_class, I_("grid"));
-
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_GRID_LAYOUT);
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GROUP);
 }
 
 static GtkBuildableIface *parent_buildable_iface;

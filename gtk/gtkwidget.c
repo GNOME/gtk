@@ -771,8 +771,6 @@ gtk_widget_base_class_init (gpointer g_class)
           g_object_unref (shortcut);
         }
     }
-
-  priv->accessible_role = GTK_ACCESSIBLE_ROLE_WIDGET;
 }
 
 static void
@@ -1624,6 +1622,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                               _gtk_marshal_BOOLEAN__INT_INT_BOOLEAN_OBJECTv);
 
   gtk_widget_class_set_css_name (klass, I_("widget"));
+  gtk_widget_class_set_accessible_role (klass, GTK_ACCESSIBLE_ROLE_WIDGET);
 }
 
 static void
@@ -2300,6 +2299,34 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
       gtk_event_controller_set_name (controller, "gtk-widget-class-shortcuts");
       gtk_widget_add_controller (widget, controller);
     }
+
+  priv->at_context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (widget));
+}
+
+static void
+gtk_widget_realize_at_context (GtkWidget *self)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (self);
+  GtkAccessibleRole role = priv->accessible_role;
+
+  if (gtk_at_context_is_realized (priv->at_context))
+    return;
+
+  /* Realize the root ATContext first */
+  if (!GTK_IS_ROOT (self))
+    gtk_widget_realize_at_context (GTK_WIDGET (priv->root));
+
+  /* Reset the accessible role to its current value */
+  if (role == GTK_ACCESSIBLE_ROLE_WIDGET)
+    {
+      GtkWidgetClassPrivate *class_priv = GTK_WIDGET_GET_CLASS (self)->priv;
+
+      role = class_priv->accessible_role;
+    }
+
+  gtk_at_context_set_accessible_role (priv->at_context, role);
+  gtk_at_context_set_display (priv->at_context, gtk_root_get_display (priv->root));
+  gtk_at_context_realize (priv->at_context);
 }
 
 void
@@ -2330,15 +2357,7 @@ gtk_widget_root (GtkWidget *widget)
   if (priv->layout_manager)
     gtk_layout_manager_set_root (priv->layout_manager, priv->root);
 
-  if (priv->at_context != NULL)
-    {
-      GtkATContext *root_context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (priv->root));
-
-      if (root_context)
-        gtk_at_context_realize (root_context);
-
-      gtk_at_context_realize (priv->at_context);
-    }
+  gtk_widget_realize_at_context (widget);
 
   GTK_WIDGET_GET_CLASS (widget)->root (widget);
 
@@ -2364,8 +2383,8 @@ gtk_widget_unroot (GtkWidget *widget)
 
   GTK_WIDGET_GET_CLASS (widget)->unroot (widget);
 
-  if (priv->at_context)
-    gtk_at_context_unrealize (priv->at_context);
+  gtk_at_context_set_display (priv->at_context, gdk_display_get_default ());
+  gtk_at_context_unrealize (priv->at_context);
 
   if (priv->context)
     gtk_style_context_set_display (priv->context, gdk_display_get_default ());
@@ -7028,6 +7047,7 @@ gtk_widget_dispose (GObject *object)
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GSList *sizegroups;
   GtkActionMuxer *muxer;
+  GtkATContext *at_context;
 
   muxer = g_object_get_qdata (G_OBJECT (widget), quark_action_muxer);
   if (muxer != NULL)
@@ -7047,8 +7067,6 @@ gtk_widget_dispose (GObject *object)
   if (priv->layout_manager != NULL)
     gtk_layout_manager_set_widget (priv->layout_manager, NULL);
   g_clear_object (&priv->layout_manager);
-
-  g_clear_object (&priv->at_context);
 
   priv->visible = FALSE;
   if (_gtk_widget_get_realized (widget))
@@ -7073,6 +7091,10 @@ gtk_widget_dispose (GObject *object)
       sizegroups = sizegroups->next;
       gtk_size_group_remove_widget (size_group, widget);
     }
+
+  at_context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (widget));
+  if (at_context != NULL)
+    gtk_at_context_unrealize (at_context);
 
   g_object_set_qdata (object, quark_action_muxer, NULL);
 
@@ -7235,6 +7257,7 @@ gtk_widget_finalize (GObject *object)
   g_object_unref (priv->cssnode);
 
   g_clear_object (&priv->context);
+  g_clear_object (&priv->at_context);
 
   _gtk_size_request_cache_free (&priv->requests);
 
@@ -8103,33 +8126,36 @@ gtk_widget_accessible_get_at_context (GtkAccessible *accessible)
 {
   GtkWidget *self = GTK_WIDGET (accessible);
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (self);
+  GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (self);
+  GtkWidgetClassPrivate *class_priv = widget_class->priv;
+  GtkAccessibleRole role;
 
   if (priv->in_destruction)
-    return NULL;
-
-  if (priv->at_context == NULL)
     {
-      GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (self);
-      GtkWidgetClassPrivate *class_priv = widget_class->priv;
-      GdkDisplay *display = _gtk_widget_get_display (self);
-      GtkAccessibleRole role;
-
-      /* Widgets have two options to set the accessible role: either they
-       * define it in their class_init() function, and the role applies to
-       * all instances; or an instance is created with the :accessible-role
-       * property (from GtkAccessible) set to anything other than the default
-       * GTK_ACCESSIBLE_ROLE_WIDGET value.
-       *
-       * In either case, the accessible role cannot be set post-construction.
-       */
-      if (priv->accessible_role != GTK_ACCESSIBLE_ROLE_WIDGET)
-        role = priv->accessible_role;
-      else
-        role = class_priv->accessible_role;
-
-      priv->accessible_role = role;
-      priv->at_context = gtk_at_context_create (role, accessible, display);
+      GTK_NOTE (A11Y, g_message ("ATContext for widget “%s” [%p] accessed during destruction",
+                                 G_OBJECT_TYPE_NAME (self),
+                                 self));
+      return NULL;
     }
+
+  if (priv->at_context != NULL)
+    return priv->at_context;
+
+  /* Widgets have two options to set the accessible role: either they
+   * define it in their class_init() function, and the role applies to
+   * all instances; or an instance is created with the :accessible-role
+   * property (from GtkAccessible) set to anything other than the default
+   * GTK_ACCESSIBLE_ROLE_WIDGET value.
+   *
+   * In either case, the accessible role cannot be set post-construction.
+   */
+  if (priv->accessible_role != GTK_ACCESSIBLE_ROLE_WIDGET)
+    role = priv->accessible_role;
+  else
+    role = class_priv->accessible_role;
+
+  priv->accessible_role = role;
+  priv->at_context = gtk_at_context_create (role, accessible, gdk_display_get_default ());
 
   return priv->at_context;
 }
@@ -12559,7 +12585,7 @@ gtk_widget_set_accessible_role (GtkWidget         *self,
       priv->accessible_role = role;
 
       if (priv->at_context != NULL)
-        g_object_set (priv->at_context, "accessible-role", priv->accessible_role, NULL);
+        gtk_at_context_set_accessible_role (priv->at_context, role);
 
       g_object_notify (G_OBJECT (self), "accessible-role");
     }
@@ -12579,16 +12605,17 @@ gtk_widget_get_accessible_role (GtkWidget *self)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (self);
   GtkATContext *context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (self));
+  GtkWidgetClassPrivate *class_priv;
 
-  if (context == NULL || !gtk_at_context_is_realized (context))
-    {
-      if (priv->accessible_role == GTK_ACCESSIBLE_ROLE_WIDGET)
-        return gtk_widget_class_get_accessible_role (GTK_WIDGET_GET_CLASS (self));
+  if (context != NULL && gtk_at_context_is_realized (context))
+    return gtk_at_context_get_accessible_role (context);
 
-      return priv->accessible_role;
-    }
+  if (priv->accessible_role != GTK_ACCESSIBLE_ROLE_WIDGET)
+    return priv->accessible_role;
 
-  return gtk_at_context_get_accessible_role (context);
+  class_priv = GTK_WIDGET_GET_CLASS (self)->priv;
+
+  return class_priv->accessible_role;
 }
 
 /**

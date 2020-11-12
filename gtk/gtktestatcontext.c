@@ -118,15 +118,9 @@ gboolean
 gtk_test_accessible_has_role (GtkAccessible     *accessible,
                               GtkAccessibleRole  role)
 {
-  GtkATContext *context;
-
   g_return_val_if_fail (GTK_IS_ACCESSIBLE (accessible), FALSE);
 
-  context = gtk_accessible_get_at_context (accessible);
-  if (context == NULL)
-    return FALSE;
-
-  return gtk_at_context_get_accessible_role (context) == role;
+  return gtk_accessible_get_accessible_role (accessible) == role;
 }
 
 gboolean
