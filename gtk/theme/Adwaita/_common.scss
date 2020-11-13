@@ -4154,8 +4154,6 @@ menubar {
       box-shadow: none;
     }
   }
-  // remove padding and rounding from menubar submenu decoration
-  .csd.popup decoration { border-radius:0; }
   // only bottom part rounded for menubar menus
   & > item popover.menu.background > contents {
     margin-top: -1px; //nudge it into the menubar
@@ -4166,7 +4164,7 @@ menubar {
   //nested submenus
   & > item popover.menu.background popover.menu.background > contents {
     margin: 0;
-    border-radius: 0;
+    border-radius: $popover_radius; //including top
   }
 }
 
