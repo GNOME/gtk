@@ -40,3 +40,8 @@ flatpak build-bundle \
         ${appid}-dev.flatpak \
         --runtime-repo=https://nightly.gnome.org/gnome-nightly.flatpakrepo \
         ${appid}
+
+# to be consumed by the nightly publish jobs
+if [[ $CI_COMMIT_BRANCH == master ]]; then
+        tar cf repo.tar ${repodir}
+fi
