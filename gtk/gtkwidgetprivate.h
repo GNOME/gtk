@@ -115,6 +115,8 @@ struct _GtkWidgetPrivate
   guint8 verifying_invariants_count;
 #endif
 
+  guint8 n_active;
+
   int width_request;
   int height_request;
 
@@ -323,6 +325,9 @@ void              gtk_widget_get_surface_allocation         (GtkWidget *widget,
 
 GtkWidget *       gtk_widget_common_ancestor               (GtkWidget *widget_a,
                                                             GtkWidget *widget_b);
+
+void              gtk_widget_set_active_state              (GtkWidget *widget,
+                                                            gboolean   active);
 
 void              gtk_widget_cancel_event_sequence         (GtkWidget             *widget,
                                                             GtkGesture            *gesture,

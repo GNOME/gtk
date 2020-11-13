@@ -12663,3 +12663,29 @@ gtk_widget_class_get_accessible_role (GtkWidgetClass *widget_class)
   priv = widget_class->priv;
   return priv->accessible_role;
 }
+
+void
+gtk_widget_set_active_state (GtkWidget *widget,
+                             gboolean   active)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  if (active)
+    {
+      priv->n_active++;
+      gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_ACTIVE, FALSE);
+    }
+  else
+    {
+      if (priv->n_active == 0)
+        {
+          g_warning ("Broken accounting of active state for widget %p(%s)",
+                     widget, G_OBJECT_TYPE_NAME (widget));
+        }
+      else
+        priv->n_active--;
+
+      if (priv->n_active == 0)
+        gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_ACTIVE);
+    }
+}

@@ -1362,9 +1362,9 @@ set_widget_active_state (GtkWidget       *target,
   while (w)
     {
       if (release)
-        gtk_widget_unset_state_flags (w, GTK_STATE_FLAG_ACTIVE);
+        gtk_widget_set_active_state (w, FALSE);
       else
-        gtk_widget_set_state_flags (w, GTK_STATE_FLAG_ACTIVE, FALSE);
+        gtk_widget_set_active_state (w, TRUE);
 
       w = _gtk_widget_get_parent (w);
     }
@@ -1413,7 +1413,9 @@ handle_pointing_event (GdkEvent *event)
     case GDK_TOUCH_END:
     case GDK_TOUCH_CANCEL:
       old_target = update_pointer_focus_state (toplevel, event, NULL);
-      if (type == GDK_LEAVE_NOTIFY)
+      if (type == GDK_TOUCH_END || type == GDK_TOUCH_CANCEL)
+        set_widget_active_state (old_target, TRUE);
+      else if (type == GDK_LEAVE_NOTIFY)
         gtk_synthesize_crossing_events (GTK_ROOT (toplevel), GTK_CROSSING_POINTER, old_target, NULL,
                                         event, gdk_crossing_event_get_mode (event), NULL);
       break;
@@ -1465,7 +1467,10 @@ handle_pointing_event (GdkEvent *event)
           gtk_drop_end_event (drop);
         }
       else if (type == GDK_TOUCH_BEGIN)
-        gtk_window_set_pointer_focus_grab (toplevel, device, sequence, target);
+        {
+          gtk_window_set_pointer_focus_grab (toplevel, device, sequence, target);
+          set_widget_active_state (target, FALSE);
+        }
 
       /* Let it take the effective pointer focus anyway, as it may change due
        * to implicit grabs.
