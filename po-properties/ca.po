@@ -1025,7 +1025,7 @@ msgstr ""
 
 #: gtk/deprecated/gtktable.c:243 gtk/gtkgrid.c:1802
 msgid "Top attachment"
-msgstr "Fitxer adjunt superior"
+msgstr "Adjunt superior"
 
 #: gtk/deprecated/gtktable.c:244
 msgid "The row number to attach the top of a child widget to"
@@ -1033,7 +1033,7 @@ msgstr "El número de la fila on adjuntar la part superior del giny fill"
 
 #: gtk/deprecated/gtktable.c:250
 msgid "Bottom attachment"
-msgstr "Fitxer adjunt inferior"
+msgstr "Adjunt inferior"
 
 #: gtk/deprecated/gtktable.c:251 gtk/gtkmenu.c:990
 msgid "The row number to attach the bottom of the child to"
