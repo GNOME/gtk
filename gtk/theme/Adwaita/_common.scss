@@ -3658,10 +3658,9 @@ tooltip {
     color: white;
   }
 
-  padding: 10px;
-  border-radius: 5px;
+  padding: 6px 10px;
+  border-radius: $window_radius;
   box-shadow: none; // otherwise it gets inherited by windowframe.csd
-  text-shadow: 0 1px black;
 
   > box {
     border-spacing: 6px;
