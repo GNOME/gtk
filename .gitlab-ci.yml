@@ -1,3 +1,7 @@
+include:
+  - project: 'gnome/citemplates'
+    file: 'flatpak/flatpak_ci_initiative.yml'
+
 stages:
   - build
   - analysis
@@ -149,6 +153,7 @@ msys2-mingw64:
   artifacts:
     paths:
       - "${APPID}-dev.flatpak"
+      - 'repo.tar'
     expire_in: 1 day
   script:
     - bash -x ./.gitlab-ci/flatpak-build.sh "${APPID}"
@@ -199,6 +204,24 @@ flatpak-master:icon-browser:
   needs: []
   variables:
     APPID: org.gtk.IconBrowser4
+
+# Publish the demo apps to the GNOME Nightly repo
+# https://wiki.gnome.org/Apps/Nightly
+# https://gitlab.gnome.org/GNOME/Initiatives/-/wikis/DevOps-with-Flatpak
+nightly demo:
+    extends: '.publish_nightly'
+    dependencies: ['flatpak-master:demo']
+    needs: ['flatpak-master:demo']
+
+nightly factory:
+    extends: '.publish_nightly'
+    dependencies: ['flatpak-master:widget-factory']
+    needs: ['flatpak-master:widget-factory']
+
+nightly icon-browser:
+    extends: '.publish_nightly'
+    dependencies: ['flatpak-master:icon-browser']
+    needs: ['flatpak-master:icon-browser']
 
 static-scan:
   image: $FEDORA_IMAGE
