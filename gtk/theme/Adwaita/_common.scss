@@ -916,16 +916,14 @@ button {
     $_border_bg: linear-gradient(to top, $alt-borders-color 25%, $borders-color 50%);
 
     &:not(.flat):not(.osd):not(:checked):not(:active):not(:disabled):not(:backdrop) {
-      @include button(normal);
+      @include button(normal, $backimage: $_border_bg);
 
-      background-image: $button_fill, $_border_bg;
       border-color: transparent;
     }
 
     &:hover:not(.osd):not(:checked):not(:active):not(:disabled):not(:backdrop) {
-      @include button(hover);
+      @include button(hover, $backimage: $_border_bg);
 
-      background-image: $button_fill, $_border_bg;
       border-color: transparent;
     }
 
