@@ -9,6 +9,7 @@
 #include <gtk/gtk.h>
 #include "script-names.h"
 #include "unicode-names.h"
+#include "simplelabel.h"
 
 
 #define UCD_TYPE_ITEM (ucd_item_get_type ())
@@ -102,7 +103,9 @@ setup_centered_label (GtkSignalListItemFactory *factory,
                       GObject                  *listitem)
 {
   GtkWidget *label;
-  label = gtk_label_new ("");
+  label = simple_label_new ();
+  simple_label_set_min_chars (SIMPLE_LABEL (label), 3);
+  simple_label_set_nat_chars (SIMPLE_LABEL (label), 20);
   gtk_list_item_set_child (GTK_LIST_ITEM (listitem), label);
 }
 
@@ -111,8 +114,9 @@ setup_label (GtkSignalListItemFactory *factory,
              GObject                  *listitem)
 {
   GtkWidget *label;
-  label = gtk_label_new ("");
-  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  label = simple_label_new ();
+  simple_label_set_min_chars (SIMPLE_LABEL (label), 3);
+  simple_label_set_nat_chars (SIMPLE_LABEL (label), 20);
   gtk_list_item_set_child (GTK_LIST_ITEM (listitem), label);
 }
 
@@ -121,10 +125,9 @@ setup_ellipsizing_label (GtkSignalListItemFactory *factory,
                          GObject                  *listitem)
 {
   GtkWidget *label;
-  label = gtk_label_new ("");
-  gtk_label_set_xalign (GTK_LABEL (label), 0);
-  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-  gtk_label_set_width_chars (GTK_LABEL (label), 20);
+  label = simple_label_new ();
+  simple_label_set_min_chars (SIMPLE_LABEL (label), 3);
+  simple_label_set_nat_chars (SIMPLE_LABEL (label), 20);
   gtk_list_item_set_child (GTK_LIST_ITEM (listitem), label);
 }
 
@@ -142,7 +145,7 @@ bind_codepoint (GtkSignalListItemFactory *factory,
   codepoint = ucd_item_get_codepoint (UCD_ITEM (item));
 
   g_snprintf (buffer, 10, "%#06x", codepoint);
-  gtk_label_set_label (GTK_LABEL (label), buffer);
+  simple_label_set_text (SIMPLE_LABEL (label), buffer);
 }
 
 static void
@@ -161,7 +164,7 @@ bind_char (GtkSignalListItemFactory *factory,
   if (g_unichar_isprint (codepoint))
     g_unichar_to_utf8 (codepoint, buffer);
 
-  gtk_label_set_label (GTK_LABEL (label), buffer);
+  simple_label_set_text (SIMPLE_LABEL (label), buffer);
 }
 
 static void
@@ -176,7 +179,7 @@ bind_name (GtkSignalListItemFactory *factory,
   item = gtk_list_item_get_item (GTK_LIST_ITEM (listitem));
   name = ucd_item_get_name (UCD_ITEM (item));
 
-  gtk_label_set_label (GTK_LABEL (label), name);
+  simple_label_set_text (SIMPLE_LABEL (label), name);
 }
 
 static void
@@ -191,7 +194,7 @@ bind_type (GtkSignalListItemFactory *factory,
   item = gtk_list_item_get_item (GTK_LIST_ITEM (listitem));
   codepoint = ucd_item_get_codepoint (UCD_ITEM (item));
 
-  gtk_label_set_label (GTK_LABEL (label), get_unicode_type_name (g_unichar_type (codepoint)));
+  simple_label_set_text (SIMPLE_LABEL (label), get_unicode_type_name (g_unichar_type (codepoint)));
 }
 
 static void
@@ -206,7 +209,7 @@ bind_break_type (GtkSignalListItemFactory *factory,
   item = gtk_list_item_get_item (GTK_LIST_ITEM (listitem));
   codepoint = ucd_item_get_codepoint (UCD_ITEM (item));
 
-  gtk_label_set_label (GTK_LABEL (label), get_break_type_name (g_unichar_break_type (codepoint)));
+  simple_label_set_text (SIMPLE_LABEL (label), get_break_type_name (g_unichar_break_type (codepoint)));
 }
 
 static void
@@ -221,7 +224,7 @@ bind_combining_class (GtkSignalListItemFactory *factory,
   item = gtk_list_item_get_item (GTK_LIST_ITEM (listitem));
   codepoint = ucd_item_get_codepoint (UCD_ITEM (item));
 
-  gtk_label_set_label (GTK_LABEL (label), get_combining_class_name (g_unichar_combining_class (codepoint)));
+  simple_label_set_text (SIMPLE_LABEL (label), get_combining_class_name (g_unichar_combining_class (codepoint)));
 }
 
 static void
@@ -238,7 +241,7 @@ bind_script (GtkSignalListItemFactory *factory,
   codepoint = ucd_item_get_codepoint (UCD_ITEM (item));
   script = g_unichar_get_script (codepoint);
 
-  gtk_label_set_label (GTK_LABEL (label), get_script_name (script));
+  simple_label_set_text (SIMPLE_LABEL (label), get_script_name (script));
 }
 
 static void
