@@ -1506,10 +1506,13 @@ handle_pointing_event (GdkEvent *event)
     case GDK_TOUCHPAD_SWIPE:
       break;
     case GDK_GRAB_BROKEN:
-      target = gtk_window_lookup_effective_pointer_focus_widget (toplevel,
-                                                                 device,
-                                                                 sequence);
-      set_widget_active_state (target, TRUE);
+      if (gdk_grab_broken_event_get_implicit (event))
+        {
+          target = gtk_window_lookup_effective_pointer_focus_widget (toplevel,
+                                                                     device,
+                                                                     sequence);
+          set_widget_active_state (target, TRUE);
+        }
       break;
     default:
       g_assert_not_reached ();
