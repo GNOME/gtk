@@ -1,7 +1,6 @@
 #include "gskdebugprivate.h"
 #include "gdk/gdk-private.h"
 
-#ifdef G_ENABLE_DEBUG
 static const GdkDebugKey gsk_debug_keys[] = {
   { "renderer", GSK_DEBUG_RENDERER, "General renderer information" },
   { "cairo", GSK_DEBUG_CAIRO, "Cairo renderer information" },
@@ -17,14 +16,12 @@ static const GdkDebugKey gsk_debug_keys[] = {
   { "vulkan-staging-image", GSK_DEBUG_VULKAN_STAGING_IMAGE, "Use a staging image for Vulkan texture upload" },
   { "vulkan-staging-buffer", GSK_DEBUG_VULKAN_STAGING_BUFFER, "Use a staging buffer for Vulkan texture upload" }
 };
-#endif
 
 static guint gsk_debug_flags;
 
 static void
 init_debug_flags (void)
 {
-#ifdef G_ENABLE_DEBUG
   static volatile gsize gsk_debug_flags__set;
 
   if (g_once_init_enter (&gsk_debug_flags__set))
@@ -35,7 +32,6 @@ init_debug_flags (void)
 
       g_once_init_leave (&gsk_debug_flags__set, TRUE);
     }
-#endif
 }
 
 gboolean
