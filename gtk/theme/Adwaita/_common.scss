@@ -3099,11 +3099,11 @@ list {
   > row.expander .row-header { padding: 2px; }
 
   &.horizontal row.separator,
-  &.separators.horizontal > row {
+  &.separators.horizontal > row:not(.separator) {
     border-left: 1px solid $_treeview_borders_color;
   }
   &:not(.horizontal) row.separator,
-  &.separators:not(.horizontal) > row {
+  &.separators:not(.horizontal) > row:not(.separator) {
     border-bottom: 1px solid $_treeview_borders_color;
   }
 }

@@ -1802,13 +1802,17 @@ void
 gtk_label_set_text (GtkLabel    *self,
                     const char *str)
 {
+  gboolean changed;
+
   g_return_if_fail (GTK_IS_LABEL (self));
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  if (gtk_label_set_label_internal (self, str) ||
-      gtk_label_set_use_markup_internal (self, FALSE) ||
-      gtk_label_set_use_underline_internal (self, FALSE))
+  changed = gtk_label_set_label_internal (self, str);
+  changed = gtk_label_set_use_markup_internal (self, FALSE) || changed;
+  changed = gtk_label_set_use_underline_internal (self, FALSE) || changed;
+
+  if (changed)
     gtk_label_recalculate (self);
 
   g_object_thaw_notify (G_OBJECT (self));
@@ -2412,13 +2416,17 @@ void
 gtk_label_set_markup (GtkLabel    *self,
                       const char *str)
 {
+  gboolean changed;
+
   g_return_if_fail (GTK_IS_LABEL (self));
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  if (gtk_label_set_label_internal (self, str) ||
-      gtk_label_set_use_markup_internal (self, TRUE) ||
-      gtk_label_set_use_underline_internal (self, FALSE))
+  changed = gtk_label_set_label_internal (self, str);
+  changed = gtk_label_set_use_markup_internal (self, TRUE) || changed;
+  changed = gtk_label_set_use_underline_internal (self, FALSE) || changed;
+
+  if (changed)
     gtk_label_recalculate (self);
 
   g_object_thaw_notify (G_OBJECT (self));
@@ -2443,13 +2451,17 @@ void
 gtk_label_set_markup_with_mnemonic (GtkLabel    *self,
                                     const char *str)
 {
+  gboolean changed;
+
   g_return_if_fail (GTK_IS_LABEL (self));
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  if (gtk_label_set_label_internal (self, str) ||
-      gtk_label_set_use_markup_internal (self, TRUE) ||
-      gtk_label_set_use_underline_internal (self, TRUE))
+  changed = gtk_label_set_label_internal (self, str);
+  changed = gtk_label_set_use_markup_internal (self, TRUE) || changed;
+  changed = gtk_label_set_use_underline_internal (self, TRUE) || changed;
+
+  if (changed)
     gtk_label_recalculate (self);
 
   g_object_thaw_notify (G_OBJECT (self));
@@ -3553,25 +3565,29 @@ gtk_label_snapshot (GtkWidget   *widget,
  * gtk_label_set_text_with_mnemonic:
  * @self: a #GtkLabel
  * @str: a string
- * 
+ *
  * Sets the label’s text from the string @str.
  * If characters in @str are preceded by an underscore, they are underlined
  * indicating that they represent a keyboard accelerator called a mnemonic.
- * The mnemonic key can be used to activate another widget, chosen 
+ * The mnemonic key can be used to activate another widget, chosen
  * automatically, or explicitly using gtk_label_set_mnemonic_widget().
  **/
 void
 gtk_label_set_text_with_mnemonic (GtkLabel    *self,
-				  const char *str)
+                                  const char *str)
 {
+  gboolean changed;
+
   g_return_if_fail (GTK_IS_LABEL (self));
   g_return_if_fail (str != NULL);
 
   g_object_freeze_notify (G_OBJECT (self));
 
-  if (gtk_label_set_label_internal (self, str) ||
-      gtk_label_set_use_markup_internal (self, FALSE) ||
-      gtk_label_set_use_underline_internal (self, TRUE))
+  changed = gtk_label_set_label_internal (self, str);
+  changed = gtk_label_set_use_markup_internal (self, FALSE) || changed;
+  changed = gtk_label_set_use_underline_internal (self, TRUE) || changed;
+
+  if (changed)
     gtk_label_recalculate (self);
 
   g_object_thaw_notify (G_OBJECT (self));
