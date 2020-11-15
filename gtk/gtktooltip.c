@@ -917,6 +917,11 @@ _gtk_tooltip_handle_event (GtkWidget *target,
   surface = gdk_event_get_surface (event);
   gdk_event_get_position (event, &x, &y);
 
+  /* ignore synthetic motion events */
+  if (event_type == GDK_MOTION_NOTIFY &&
+      gdk_event_get_time (event) == GDK_CURRENT_TIME)
+    return;
+
   gtk_native_get_surface_transform (native, &nx, &ny);
   gtk_widget_translate_coordinates (GTK_WIDGET (native), target, x - nx, y - ny, &x, &y);
   gtk_tooltip_handle_event_internal (event_type, surface, target, x, y);
