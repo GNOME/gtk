@@ -244,7 +244,6 @@ gtk_simulate_touchscreen (void)
   return (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0;
 }
 
-#ifdef G_ENABLE_DEBUG
 static const GdkDebugKey gtk_debug_keys[] = {
   { "keybindings", GTK_DEBUG_KEYBINDINGS, "Information about keyboard shortcuts" },
   { "modules", GTK_DEBUG_MODULES, "Information about modules and extensions" },
@@ -260,12 +259,11 @@ static const GdkDebugKey gtk_debug_keys[] = {
   { "builder", GTK_DEBUG_BUILDER, "Trace GtkBuilder operation" },
   { "builder-objects", GTK_DEBUG_BUILDER_OBJECTS, "Log unused GtkBuilder objects" },
   { "no-css-cache", GTK_DEBUG_NO_CSS_CACHE, "Disable style property cache" },
-  { "interactive", GTK_DEBUG_INTERACTIVE, "Enable the GTK inspector" },
+  { "interactive", GTK_DEBUG_INTERACTIVE, "Enable the GTK inspector", TRUE },
   { "touchscreen", GTK_DEBUG_TOUCHSCREEN, "Pretend the pointer is a touchscreen" },
   { "snapshot", GTK_DEBUG_SNAPSHOT, "Generate debug render nodes" },
   { "accessibility", GTK_DEBUG_A11Y, "Information about accessibility state changes" },
 };
-#endif /* G_ENABLE_DEBUG */
 
 /* This checks to see if the process is running suid or sgid
  * at the current time. If so, we don’t allow GTK to be initialized.
@@ -546,15 +544,10 @@ do_pre_parse_initialization (void)
 
   gdk_pre_parse ();
 
-#ifdef G_ENABLE_DEBUG
   debug_flags[0].flags = gdk_parse_debug_var ("GTK_DEBUG",
                                               gtk_debug_keys,
                                               G_N_ELEMENTS (gtk_debug_keys));
   any_display_debug_flags_set = debug_flags[0].flags > 0;
-#else
-  if (g_getenv ("GTK_DEBUG"))
-    g_warning ("GTK_DEBUG set but ignored because GTK isn't built with G_ENABLE_DEBUG");
-#endif  /* G_ENABLE_DEBUG */
 
   env_string = g_getenv ("GTK_SLOWDOWN");
   if (env_string)

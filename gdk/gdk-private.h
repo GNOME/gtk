@@ -45,6 +45,7 @@ typedef struct
   const char *key;
   guint value;
   const char *help;
+  gboolean always_enabled;
 } GdkDebugKey;
 
 guint gdk_parse_debug_var (const char        *variable,

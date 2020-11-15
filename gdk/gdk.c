@@ -128,7 +128,6 @@ static int gdk_initialized = 0;                     /* 1 if the library is initi
                                                      * 0 otherwise.
                                                      */
 
-#ifdef G_ENABLE_DEBUG
 static const GdkDebugKey gdk_debug_keys[] = {
   { "misc",            GDK_DEBUG_MISC, "Miscellaneous information" },
   { "events",          GDK_DEBUG_EVENTS, "Information about events" },
@@ -152,7 +151,6 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "vulkan-validate", GDK_DEBUG_VULKAN_VALIDATE, "Load the Vulkan validation layer" },
   { "default-settings",GDK_DEBUG_DEFAULT_SETTINGS, "Force default values for xsettings" },
 };
-#endif
 
 
 #ifdef G_HAS_CONSTRUCTORS
@@ -212,6 +210,13 @@ gdk_parse_debug_var (const char        *variable,
   const char *q;
   gboolean invert;
   gboolean help;
+  gboolean debug_enabled;
+
+#ifdef G_ENABLE_DEBUG
+  debug_enabled = TRUE;
+#else
+  debug_enabled = FALSE;
+#endif
 
   string = g_getenv (variable);
   if (string == NULL)
@@ -237,21 +242,25 @@ gdk_parse_debug_var (const char        *variable,
         }
       else
         {
+          char *val = g_strndup (p, q - p);
           for (i = 0; i < nkeys; i++)
             {
               if (strlen (keys[i].key) == q - p &&
                   g_ascii_strncasecmp (keys[i].key, p, q - p) == 0)
                 {
+                  if (!debug_enabled && !keys[i].always_enabled)
+                    {
+                      fprintf (stderr, "\"%s\" is only available when building GTK with G_ENABLE_DEBUG. See %s=help\n",
+                               val, variable);
+                      break;
+                    }
                   result |= keys[i].value;
                   break;
                 }
             }
           if (i == nkeys)
-            {
-              char *val = g_strndup (p, q - p);
-              fprintf (stderr, "Unrecognized value \"%s\". Try %s=help\n", val, variable);
-              g_free (val);
-            }
+            fprintf (stderr, "Unrecognized value \"%s\". Try %s=help\n", val, variable);
+          g_free (val);
          }
 
       p = q;
@@ -267,11 +276,17 @@ gdk_parse_debug_var (const char        *variable,
       max_width += 4;
 
       fprintf (stderr, "Supported %s values:\n", variable);
-      for (i = 0; i < nkeys; i++)
-        fprintf (stderr, "  %s%*s%s\n", keys[i].key, (int)(max_width - strlen (keys[i].key)), " ", keys[i].help);
+      for (i = 0; i < nkeys; i++) {
+        fprintf (stderr, "  %s%*s%s", keys[i].key, (int)(max_width - strlen (keys[i].key)), " ", keys[i].help);
+        if (!debug_enabled && !keys[i].always_enabled)
+          fprintf (stderr, " [unavailable]");
+        fprintf (stderr, "\n");
+      }
       fprintf (stderr, "  %s%*s%s\n", "all", max_width - 3, " ", "Enable all values");
       fprintf (stderr, "  %s%*s%s\n", "help", max_width - 4, " ", "Print this help");
       fprintf (stderr, "\nMultiple values can be given, separated by : or space.\n");
+      if (!debug_enabled)
+        fprintf (stderr, "Values marked as [unavailable] are only accessible if GTK is built with G_ENABLE_DEBUG.\n");
     }
 
   if (invert)
@@ -279,7 +294,10 @@ gdk_parse_debug_var (const char        *variable,
       guint all_flags = 0;
 
       for (i = 0; i < nkeys; i++)
-        all_flags |= keys[i].value;
+        {
+          if (debug_enabled || keys[i].always_enabled)
+            all_flags |= keys[i].value;
+        }
 
       result = all_flags & (~result);
     }
@@ -294,14 +312,9 @@ gdk_pre_parse (void)
 
   gdk_ensure_resources ();
 
-#ifdef G_ENABLE_DEBUG
   _gdk_debug_flags = gdk_parse_debug_var ("GDK_DEBUG",
                                           gdk_debug_keys,
                                           G_N_ELEMENTS (gdk_debug_keys));
-#else
-  if (g_getenv ("GDK_DEBUG"))
-    g_warning ("GDK_DEBUG set but ignored because GTK isn't built with G_ENABLE_DEBUG");
-#endif  /* G_ENABLE_DEBUG */
 
 #ifndef G_HAS_CONSTRUCTORS
   stash_desktop_startup_notification_id ();
