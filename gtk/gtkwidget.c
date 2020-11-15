@@ -2309,7 +2309,7 @@ gtk_widget_realize_at_context (GtkWidget *self)
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (self);
   GtkAccessibleRole role = priv->accessible_role;
 
-  if (gtk_at_context_is_realized (priv->at_context))
+  if (priv->at_context == NULL || gtk_at_context_is_realized (priv->at_context))
     return;
 
   /* Realize the root ATContext first */
@@ -2383,8 +2383,11 @@ gtk_widget_unroot (GtkWidget *widget)
 
   GTK_WIDGET_GET_CLASS (widget)->unroot (widget);
 
-  gtk_at_context_set_display (priv->at_context, gdk_display_get_default ());
-  gtk_at_context_unrealize (priv->at_context);
+  if (priv->at_context != NULL)
+    {
+      gtk_at_context_set_display (priv->at_context, gdk_display_get_default ());
+      gtk_at_context_unrealize (priv->at_context);
+    }
 
   if (priv->context)
     gtk_style_context_set_display (priv->context, gdk_display_get_default ());
