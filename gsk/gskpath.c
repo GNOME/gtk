@@ -179,43 +179,37 @@ gsk_rect_contour_init (GskContour *contour,
 
 typedef enum
 {
-  GSK_PATH_VERB_MOVE,
-  GSK_PATH_VERB_CLOSE,
-  GSK_PATH_VERB_LINE,
-  GSK_PATH_VERB_CURVE,
-} GskPathVerb;
+  GSK_PATH_MOVE,
+  GSK_PATH_CLOSE,
+  GSK_PATH_LINE,
+  GSK_PATH_CURVE,
+} GskPathOperation;
 
-typedef union {
-  GskPathVerb verb;
-  graphene_point_t point;
-} GskStandardPoint;
+typedef struct _GskStandardOperation GskStandardOperation;
+
+struct _GskStandardOperation {
+  GskPathOperation op;
+  gsize point; /* index into points array of the start point (last point of previous op) */
+};
 
 typedef struct _GskStandardContour GskStandardContour;
 struct _GskStandardContour
 {
   GskContour contour;
 
+  gsize n_ops;
   gsize n_points;
-  GskStandardPoint path[];
+  graphene_point_t *points;
+  GskStandardOperation ops[];
 };
 
 static gsize
-gsk_path_verb_n_elements (GskPathVerb verb)
+gsk_standard_contour_compute_size (gsize n_ops,
+                                   gsize n_points)
 {
-  switch (verb)
-  {
-    case GSK_PATH_VERB_MOVE:
-    case GSK_PATH_VERB_LINE:
-    case GSK_PATH_VERB_CLOSE:
-      return 2;
-
-    case GSK_PATH_VERB_CURVE:
-      return 4;
-
-    default:
-      g_assert_not_reached();
-      return 0;
-  }
+  return sizeof (GskStandardContour)
+       + sizeof (GskStandardOperation) * n_ops
+       + sizeof (graphene_point_t) * n_points;
 }
 
 static gsize
@@ -223,7 +217,7 @@ gsk_standard_contour_get_size (const GskContour *contour)
 {
   const GskStandardContour *self = (const GskStandardContour *) contour;
 
-  return sizeof (GskStandardContour) + sizeof (GskStandardPoint) * self->n_points;
+  return gsk_standard_contour_compute_size (self->n_ops, self->n_points);
 }
 
 static void
@@ -233,31 +227,33 @@ gsk_standard_contour_print (const GskContour *contour,
   const GskStandardContour *self = (const GskStandardContour *) contour;
   gsize i;
 
-  for (i = 0; i < self->n_points; i += gsk_path_verb_n_elements (self->path[i].verb))
+  for (i = 0; i < self->n_ops; i ++)
     {
-      switch (self->path[i].verb)
+      graphene_point_t *pt = &self->points [self->ops[i].point];
+
+      switch (self->ops[i].op)
       {
-        case GSK_PATH_VERB_MOVE:
+        case GSK_PATH_MOVE:
           g_string_append (string, "M ");
-          _g_string_append_point (string, &self->path[i + 1].point);
+          _g_string_append_point (string, &pt[0]);
           break;
 
-        case GSK_PATH_VERB_CLOSE:
+        case GSK_PATH_CLOSE:
           g_string_append (string, " Z");
           break;
 
-        case GSK_PATH_VERB_LINE:
+        case GSK_PATH_LINE:
           g_string_append (string, " L ");
-          _g_string_append_point (string, &self->path[i + 1].point);
+          _g_string_append_point (string, &pt[1]);
           break;
 
-        case GSK_PATH_VERB_CURVE:
+        case GSK_PATH_CURVE:
           g_string_append (string, " C ");
-          _g_string_append_point (string, &self->path[i + 1].point);
+          _g_string_append_point (string, &pt[1]);
           g_string_append (string, ", ");
-          _g_string_append_point (string, &self->path[i + 2].point);
+          _g_string_append_point (string, &pt[2]);
           g_string_append (string, ", ");
-          _g_string_append_point (string, &self->path[i + 3].point);
+          _g_string_append_point (string, &pt[3]);
           break;
 
         default:
@@ -276,27 +272,26 @@ gsk_standard_contour_to_cairo (const GskContour *contour,
 
   cairo_new_sub_path (cr);
 
-  for (i = 0; i < self->n_points; i += gsk_path_verb_n_elements (self->path[i].verb))
+  for (i = 0; i < self->n_ops; i ++)
     {
-      switch (self->path[i].verb)
+      graphene_point_t *pt = &self->points [self->ops[i].point];
+
+      switch (self->ops[i].op)
       {
-        case GSK_PATH_VERB_MOVE:
-          cairo_move_to (cr, self->path[i + 1].point.x, self->path[i + 1].point.y);
+        case GSK_PATH_MOVE:
+          cairo_move_to (cr, pt[0].x, pt[0].y);
           break;
 
-        case GSK_PATH_VERB_CLOSE:
+        case GSK_PATH_CLOSE:
           cairo_close_path (cr);
           break;
 
-        case GSK_PATH_VERB_LINE:
-          cairo_line_to (cr, self->path[i + 1].point.x, self->path[i + 1].point.y);
+        case GSK_PATH_LINE:
+          cairo_line_to (cr, pt[1].x, pt[1].y);
           break;
 
-        case GSK_PATH_VERB_CURVE:
-          cairo_curve_to (cr,
-                          self->path[i + 1].point.x, self->path[i + 1].point.y,
-                          self->path[i + 2].point.x, self->path[i + 2].point.y,
-                          self->path[i + 3].point.x, self->path[i + 3].point.y);
+        case GSK_PATH_CURVE:
+          cairo_curve_to (cr, pt[1].x, pt[1].y, pt[2].x, pt[2].y, pt[3].x, pt[3].y);
           break;
 
         default:
@@ -338,33 +333,16 @@ gsk_standard_contour_get_bounds (const GskContour *contour,
   const GskStandardContour *self = (const GskStandardContour *) contour;
   gsize i;
 
-  for (i = 0; i < self->n_points; i += gsk_path_verb_n_elements (self->path[i].verb))
+  if (self->n_points == 0)
+    return FALSE;
+
+  graphene_rect_init (bounds,
+                      self->points[0].x, self->points[0].y,
+                      0, 0);
+
+  for (i = 1; i < self->n_points; i ++)
     {
-      switch (self->path[i].verb)
-      {
-        case GSK_PATH_VERB_MOVE:
-          graphene_rect_init (bounds,
-                              self->path[i + 1].point.x, self->path[i + 1].point.y,
-                              0, 0);
-          break;
-
-        case GSK_PATH_VERB_CLOSE:
-          break;
-
-        case GSK_PATH_VERB_LINE:
-          rect_add_point (bounds, &self->path[i + 1].point);
-          break;
-
-        case GSK_PATH_VERB_CURVE:
-          rect_add_point (bounds, &self->path[i + 1].point);
-          rect_add_point (bounds, &self->path[i + 2].point);
-          rect_add_point (bounds, &self->path[i + 3].point);
-          break;
-
-        default:
-          g_assert_not_reached();
-          return FALSE;
-      }
+      rect_add_point (bounds, &self->points[i]);
     }
 
   return bounds->size.width > 0 && bounds->size.height > 0;
@@ -380,10 +358,25 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   gsk_standard_contour_get_bounds
 };
 
+/* You must ensure the contour has enough size allocated,
+ * see gsk_standard_contour_compute_size()
+ */
 static void
-gsk_standard_contour_init (GskContour *contour)
+gsk_standard_contour_init (GskContour *contour,
+                           const GskStandardOperation *ops,
+                           gsize n_ops,
+                           const graphene_point_t *points,
+                           gsize n_points)
 {
-  contour->klass = &GSK_STANDARD_CONTOUR_CLASS;
+  GskStandardContour *self = (GskStandardContour *) contour;
+
+  self->contour.klass = &GSK_STANDARD_CONTOUR_CLASS;
+
+  self->n_ops = n_ops;
+  memcpy (self->ops, ops, sizeof (GskStandardOperation) * n_ops);
+  self->n_points = n_points;
+  self->points = (graphene_point_t *) &self->ops[n_ops];
+  memcpy (self->points, points, sizeof (graphene_point_t) * n_points);
 }
 
 /* PATH */
@@ -664,8 +657,10 @@ struct _GskPathBuilder
 {
   int ref_count;
 
-  GSList *contours;
-  GskStandardContour *current;
+  GSList *contours; /* (reverse) list of already recorded contours */
+
+  GArray *ops; /* operations for current contour - size == 0 means no current contour */
+  GArray *points; /* points for the operations */
 };
 
 G_DEFINE_BOXED_TYPE (GskPathBuilder,
@@ -691,6 +686,8 @@ gsk_path_builder_new (void)
   builder = g_slice_new0 (GskPathBuilder);
   builder->ref_count = 1;
 
+  builder->ops = g_array_new (FALSE, FALSE, sizeof (GskStandardOperation));
+  builder->points = g_array_new (FALSE, FALSE, sizeof (graphene_point_t));
   return builder;
 }
 
@@ -718,28 +715,37 @@ gsk_path_builder_ref (GskPathBuilder *builder)
 }
 
 static void
-gsk_path_builder_append_current (GskPathBuilder   *builder,
-                                 gsize             n_points,
-                                 GskStandardPoint *points)
+gsk_path_builder_append_current (GskPathBuilder         *builder,
+                                 GskPathOperation        op,
+                                 gsize                   n_points,
+                                 const graphene_point_t *points)
 {
-  gsize size;
+  g_assert (builder->ops->len > 0);
+  g_assert (builder->points->len > 0);
+  g_assert (n_points > 0);
 
-  g_assert (builder->current);
-
-  size = sizeof (GskStandardContour) + sizeof (GskStandardPoint) * builder->current->n_points;
-  builder->current = g_realloc (builder->current, size + sizeof (GskStandardPoint) * n_points);
-  memcpy ((guint8 *) builder->current + size, points, sizeof (GskStandardPoint) * n_points);
-  builder->current->n_points += n_points;
+  g_array_append_vals (builder->ops, &(GskStandardOperation) { op, builder->points->len - 1 }, 1);
+  g_array_append_vals (builder->points, points, n_points);
 }
 
 static void
 gsk_path_builder_end_current (GskPathBuilder *builder)
 {
-  if (builder->current == NULL)
+  GskContour *contour;
+
+  if (builder->ops->len == 0)
    return;
 
-  builder->contours = g_slist_prepend (builder->contours, builder->current);
-  builder->current = NULL;
+  contour = g_malloc0 (gsk_standard_contour_compute_size (builder->ops->len, builder->points->len));
+  gsk_standard_contour_init (contour,
+                             (GskStandardOperation *) builder->ops->data,
+                             builder->ops->len,
+                             (graphene_point_t *) builder->points->data,
+                             builder->points->len);
+  builder->contours = g_slist_prepend (builder->contours, contour);
+
+  g_array_set_size (builder->ops, 0);
+  g_array_set_size (builder->points, 0);
 }
 
 static void
@@ -769,6 +775,8 @@ gsk_path_builder_unref (GskPathBuilder *builder)
     return;
 
   gsk_path_builder_clear (builder);
+  g_array_unref (builder->ops);
+  g_array_unref (builder->points);
   g_slice_free (GskPathBuilder, builder);
 }
 
@@ -905,18 +913,12 @@ gsk_path_builder_move_to (GskPathBuilder *builder,
                           float           x,
                           float           y)
 {
-  gsize size;
-
   g_return_if_fail (builder != NULL);
 
   gsk_path_builder_end_current (builder);
 
-  size = GSK_STANDARD_CONTOUR_CLASS.struct_size + 2 * sizeof (GskStandardPoint);
-  builder->current = g_malloc0 (size);
-  gsk_standard_contour_init ((GskContour *) builder->current);
-  builder->current->n_points = 2;
-  builder->current->path[0].verb = GSK_PATH_VERB_MOVE;
-  builder->current->path[1].point = GRAPHENE_POINT_INIT (x, y);
+  g_array_append_vals (builder->ops, &(GskStandardOperation) { GSK_PATH_MOVE, 0 }, 1);
+  g_array_append_val (builder->points, GRAPHENE_POINT_INIT(x, y));
 }
 
 void
@@ -926,15 +928,16 @@ gsk_path_builder_line_to (GskPathBuilder *builder,
 {
   g_return_if_fail (builder != NULL);
 
-  if (builder->current == NULL)
+  if (builder->ops->len == 0)
     {
       gsk_path_builder_move_to (builder, x, y);
       return;
     }
 
-  gsk_path_builder_append_current (builder, 2, (GskStandardPoint[2]) {
-                                     { .verb = GSK_PATH_VERB_LINE },
-                                     { .point = GRAPHENE_POINT_INIT (x, y) }
+  gsk_path_builder_append_current (builder,
+                                   GSK_PATH_LINE,
+                                   1, (graphene_point_t[1]) {
+                                     GRAPHENE_POINT_INIT (x, y)
                                    });
 }
 
@@ -949,14 +952,15 @@ gsk_path_builder_curve_to (GskPathBuilder *builder,
 {
   g_return_if_fail (builder != NULL);
 
-  if (builder->current == NULL)
+  if (builder->ops->len == 0)
     gsk_path_builder_move_to (builder, x1, y1);
 
-  gsk_path_builder_append_current (builder, 4, (GskStandardPoint[4]) {
-                                     { .verb = GSK_PATH_VERB_CURVE },
-                                     { .point = GRAPHENE_POINT_INIT (x1, y1) },
-                                     { .point = GRAPHENE_POINT_INIT (x2, y2) },
-                                     { .point = GRAPHENE_POINT_INIT (x3, y3) }
+  gsk_path_builder_append_current (builder,
+                                   GSK_PATH_CURVE,
+                                   3, (graphene_point_t[3]) {
+                                     GRAPHENE_POINT_INIT (x1, y1),
+                                     GRAPHENE_POINT_INIT (x2, y2),
+                                     GRAPHENE_POINT_INIT (x3, y3)
                                    });
 }
 
@@ -965,13 +969,15 @@ gsk_path_builder_close (GskPathBuilder *builder)
 {
   g_return_if_fail (builder != NULL);
 
-  if (builder->current == NULL)
+  if (builder->ops->len == 0)
     return;
 
-  gsk_path_builder_append_current (builder, 2, (GskStandardPoint[2]) {
-                                     { .verb = GSK_PATH_VERB_CLOSE },
-                                     { .point = builder->current->path[1].point },
+  gsk_path_builder_append_current (builder,
+                                   GSK_PATH_CLOSE,
+                                   1, (graphene_point_t[1]) {
+                                     g_array_index (builder->points, graphene_point_t, 0)
                                    });
+
   gsk_path_builder_end_current (builder);
 }
 
