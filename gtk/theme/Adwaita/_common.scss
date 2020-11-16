@@ -4193,6 +4193,10 @@ popover.menu {
       @extend %list_button;
 
       padding: 11px;
+      &:focus {
+         background-color: $menu_selected_color;
+         border-color: $menu_selected_color;
+      }
     }
   }
 
