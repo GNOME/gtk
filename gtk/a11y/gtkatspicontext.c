@@ -632,17 +632,7 @@ handle_accessible_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetIndexInParent") == 0)
     {
-      GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
-      int idx;
-
-      if (GTK_IS_ROOT (accessible))
-        idx = get_index_in_toplevels (GTK_WIDGET (accessible));
-      else if (GTK_IS_STACK_PAGE (accessible))
-        idx = get_index_in_parent (gtk_stack_page_get_child (GTK_STACK_PAGE (accessible)));
-      else if (GTK_IS_STACK (gtk_widget_get_parent (GTK_WIDGET (accessible))))
-        idx = 1;
-      else
-        idx = get_index_in_parent (GTK_WIDGET (accessible));
+      int idx = gtk_at_spi_context_get_index_in_parent (self);
 
       if (idx == -1)
         g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR, G_DBUS_ERROR_FAILED, "Not found");
@@ -695,30 +685,7 @@ handle_accessible_get_property (GDBusConnection       *connection,
   else if (g_strcmp0 (property_name, "Parent") == 0)
     res = get_parent_context_ref (accessible);
   else if (g_strcmp0 (property_name, "ChildCount") == 0)
-    {
-      int n_children = 0;
-
-      if (GTK_IS_WIDGET (accessible))
-        {
-          GtkWidget *child;
-
-          for (child = gtk_widget_get_first_child (GTK_WIDGET (accessible));
-               child;
-               child = gtk_widget_get_next_sibling (child))
-            {
-              if (!gtk_accessible_should_present (GTK_ACCESSIBLE (child)))
-                continue;
-
-              n_children++;
-            }
-        }
-      else if (GTK_IS_STACK_PAGE (accessible))
-        {
-          n_children = 1;
-        }
-
-      res = g_variant_new_int32 (n_children);
-    }
+    res = g_variant_new_int32 (gtk_at_spi_context_get_child_count (self));
   else
     g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
                  "Unknown property '%s'", property_name);
@@ -1531,7 +1498,7 @@ gtk_at_spi_context_realize (GtkATContext *context)
                                        self);
   gtk_at_spi_context_register_object (self);
 
-  gtk_at_spi_root_queue_register (self->root);
+  gtk_at_spi_root_queue_register (self->root, self);
 }
 
 static void
@@ -1546,6 +1513,7 @@ gtk_at_spi_context_unrealize (GtkATContext *context)
 
   /* Notify ATs that the accessible object is going away */
   emit_defunct (self);
+  gtk_at_spi_root_unregister (self->root, self);
 
   gtk_atspi_disconnect_text_signals (accessible);
   gtk_atspi_disconnect_selection_signals (accessible);
@@ -1833,6 +1801,57 @@ gtk_at_spi_context_get_root (GtkAtSpiContext *self)
   g_return_val_if_fail (GTK_IS_AT_SPI_CONTEXT (self), NULL);
 
   return self->root;
+}
+
+int
+gtk_at_spi_context_get_index_in_parent (GtkAtSpiContext *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_SPI_CONTEXT (self), -1);
+
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+  int idx;
+
+  if (GTK_IS_ROOT (accessible))
+    idx = get_index_in_toplevels (GTK_WIDGET (accessible));
+  else if (GTK_IS_STACK_PAGE (accessible))
+    idx = get_index_in_parent (gtk_stack_page_get_child (GTK_STACK_PAGE (accessible)));
+  else if (GTK_IS_STACK (gtk_widget_get_parent (GTK_WIDGET (accessible))))
+    idx = 1;
+  else
+    idx = get_index_in_parent (GTK_WIDGET (accessible));
+
+  return idx;
+}
+
+int
+gtk_at_spi_context_get_child_count (GtkAtSpiContext *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_SPI_CONTEXT (self), -1);
+
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+  int n_children = -1;
+
+  if (GTK_IS_WIDGET (accessible))
+    {
+      GtkWidget *child;
+
+      n_children = 0;
+      for (child = gtk_widget_get_first_child (GTK_WIDGET (accessible));
+           child;
+           child = gtk_widget_get_next_sibling (child))
+        {
+          if (!gtk_accessible_should_present (GTK_ACCESSIBLE (child)))
+            continue;
+
+          n_children++;
+        }
+    }
+  else if (GTK_IS_STACK_PAGE (accessible))
+    {
+      n_children = 1;
+    }
+
+  return n_children;
 }
 /* }}} */
 

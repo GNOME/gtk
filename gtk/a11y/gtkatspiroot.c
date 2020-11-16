@@ -22,6 +22,7 @@
 
 #include "gtkatspirootprivate.h"
 
+#include "gtkatspicacheprivate.h"
 #include "gtkatspicontextprivate.h"
 #include "gtkaccessibleprivate.h"
 #include "gtkatspiprivate.h"
@@ -65,6 +66,7 @@ struct _GtkAtSpiRoot
   gint32 application_id;
   guint register_id;
 
+  GList *queued_contexts;
   GtkAtSpiCache *cache;
 
   GListModel *toplevels;
@@ -502,6 +504,15 @@ on_registration_reply (GObject      *gobject,
   /* Register the cache object */
   self->cache = gtk_at_spi_cache_new (self->connection, ATSPI_CACHE_PATH);
 
+  /* Drain the list of queued GtkAtSpiContexts, and add them to the cache */
+  if (self->queued_contexts != NULL)
+    {
+      for (GList *l = self->queued_contexts; l != NULL; l = l->next)
+        gtk_at_spi_cache_add_context (self->cache, l->data);
+
+      g_clear_pointer (&self->queued_contexts, g_list_free);
+    }
+
   self->toplevels = gtk_window_get_toplevels ();
 }
 
@@ -578,18 +589,40 @@ root_register (gpointer data)
  * Queues the registration of the root object on the AT-SPI bus.
  */
 void
-gtk_at_spi_root_queue_register (GtkAtSpiRoot *self)
+gtk_at_spi_root_queue_register (GtkAtSpiRoot    *self,
+                                GtkAtSpiContext *context)
 {
+  /* The cache is available if the root has finished registering itself; if we
+   * are still waiting for the registration to finish, add the context to a queue
+   */
+  if (self->cache != NULL)
+    {
+      gtk_at_spi_cache_add_context (self->cache, context);
+      return;
+    }
+  else
+    {
+      if (g_list_find (self->queued_contexts, context) == NULL)
+        self->queued_contexts = g_list_prepend (self->queued_contexts, context);
+    }
+
   /* Ignore multiple registration requests while one is already in flight */
   if (self->register_id != 0)
     return;
 
-  /* The cache is only available once the registration succeeds */
-  if (self->cache != NULL)
-    return;
-
   self->register_id = g_idle_add (root_register, self);
   g_source_set_name_by_id (self->register_id, "[gtk] ATSPI root registration");
+}
+
+void
+gtk_at_spi_root_unregister (GtkAtSpiRoot    *self,
+                            GtkAtSpiContext *context)
+{
+  if (self->queued_contexts != NULL)
+    self->queued_contexts = g_list_remove (self->queued_contexts, context);
+
+  if (self->cache != NULL)
+    gtk_at_spi_cache_remove_context (self->cache, context);
 }
 
 static void

@@ -20,7 +20,8 @@
 
 #pragma once
 
-#include "gtkatcontextprivate.h"
+#include <gio/gio.h>
+#include "gtkatspiprivate.h"
 
 G_BEGIN_DECLS
 
@@ -34,11 +35,10 @@ gtk_at_spi_cache_new (GDBusConnection *connection,
 
 void
 gtk_at_spi_cache_add_context (GtkAtSpiCache *self,
-                              const char *path,
-                              GtkATContext *context);
+                              GtkAtSpiContext *context);
 
-GtkATContext *
-gtk_at_spi_cache_get_context (GtkAtSpiCache *self,
-                              const char *path);
+void
+gtk_at_spi_cache_remove_context (GtkAtSpiCache *self,
+                                 GtkAtSpiContext *context);
 
 G_END_DECLS

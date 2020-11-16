@@ -52,4 +52,10 @@ gtk_at_spi_context_get_interfaces (GtkAtSpiContext *self);
 GVariant *
 gtk_at_spi_context_get_states (GtkAtSpiContext *self);
 
+int
+gtk_at_spi_context_get_index_in_parent (GtkAtSpiContext *self);
+
+int
+gtk_at_spi_context_get_child_count (GtkAtSpiContext *self);
+
 G_END_DECLS
