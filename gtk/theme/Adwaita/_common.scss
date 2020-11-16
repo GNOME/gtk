@@ -3457,24 +3457,24 @@ separator.sidebar {
     }
 
     &:selected {
-      background-color: desaturate($selected_bg_color,100%);
-      color: $selected_fg_color;
+      background-color: $menu_selected_color;
+      color: $fg_color;
 
       &:focus-visible:focus-within {
         outline-width: 0;
         color: $selected_fg_color;
         background-color: $selected_bg_color;
-        &:hover { background-color: darken($selected_bg_color,10%); }
+        &:hover { color: $selected_fg_color; background-color: darken($selected_bg_color,10%); }
       }
       &:hover:not(:last-child) { /* FIXME: dirty specificity bump */
-        color: $selected_fg_color;
-        background-color: darken(desaturate($selected_bg_color,100%),10%);
+        color: $fg_color;
+        background-color: darken($menu_selected_color,5%);
       }
     }
 
     &:hover {
       color: $fg_color;
-      background-color: $menu_selected_color;
+      background-color: darken($menu_selected_color, 5%);
     }
 
     &:disabled { color: $insensitive_fg_color; }
