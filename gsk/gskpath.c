@@ -46,6 +46,8 @@ struct _GskContourClass
                                                  float                  *out_length);
   void                  (* free_measure)        (const GskContour       *contour,
                                                  gpointer                measure_data);
+  void                  (* copy)                (const GskContour       *contour,
+                                                 GskContour             *dest);
 };
 
 struct _GskPath
@@ -170,6 +172,16 @@ gsk_rect_contour_free_measure (const GskContour *contour,
 {
 }
 
+static void
+gsk_rect_contour_copy (const GskContour *contour,
+                       GskContour       *dest)
+{
+  const GskRectContour *self = (const GskRectContour *) contour;
+  GskRectContour *target = (GskRectContour *) dest;
+
+  *target = *self;
+}
+
 static const GskContourClass GSK_RECT_CONTOUR_CLASS =
 {
   sizeof (GskRectContour),
@@ -179,7 +191,8 @@ static const GskContourClass GSK_RECT_CONTOUR_CLASS =
   gsk_rect_contour_to_cairo,
   gsk_rect_contour_get_bounds,
   gsk_rect_contour_init_measure,
-  gsk_rect_contour_free_measure
+  gsk_rect_contour_free_measure,
+  gsk_rect_contour_copy
 };
 
 static void
@@ -417,6 +430,22 @@ gsk_standard_contour_free_measure (const GskContour *contour,
 {
 }
 
+static void
+gsk_standard_contour_init (GskContour *contour,
+                           const GskStandardOperation *ops,
+                           gsize n_ops,
+                           const graphene_point_t *points,
+                           gsize n_points);
+
+static void
+gsk_standard_contour_copy (const GskContour *contour,
+                           GskContour       *dest)
+{
+  const GskStandardContour *self = (const GskStandardContour *) contour;
+
+  gsk_standard_contour_init (dest, self->ops, self->n_ops, self->points, self->n_points);
+}
+
 static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
 {
   sizeof (GskStandardContour),
@@ -426,7 +455,8 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   gsk_standard_contour_to_cairo,
   gsk_standard_contour_get_bounds,
   gsk_standard_contour_init_measure,
-  gsk_standard_contour_free_measure
+  gsk_standard_contour_free_measure,
+  gsk_standard_contour_copy
 };
 
 /* You must ensure the contour has enough size allocated,
@@ -451,6 +481,30 @@ gsk_standard_contour_init (GskContour *contour,
 }
 
 /* CONTOUR */
+
+static gsize
+gsk_contour_get_size (const GskContour *contour)
+{
+  return contour->klass->get_size (contour);
+}
+
+static void
+gsk_contour_copy (GskContour       *dest,
+                  const GskContour *src)
+{
+  src->klass->copy (src, dest);
+}
+
+static GskContour *
+gsk_contour_dup (const GskContour *src)
+{
+  GskContour *copy;
+
+  copy = g_malloc0 (gsk_contour_get_size (src));
+  gsk_contour_copy (copy, src);
+
+  return copy;
+}
 
 gpointer
 gsk_contour_init_measure (GskPath *path,
@@ -776,6 +830,17 @@ G_DEFINE_BOXED_TYPE (GskPathBuilder,
                      gsk_path_builder_unref)
 
 
+void
+gsk_path_builder_add_contour (GskPathBuilder *builder,
+                              GskPath        *path,
+                              gsize           i)
+{
+  GskContour *copy;
+
+  copy = gsk_contour_dup (path->contours[i]);
+  builder->contours = g_slist_prepend (builder->contours, copy);
+}
+
 /**
  * gsk_path_builder_new:
  *
@@ -948,7 +1013,7 @@ gsk_path_builder_to_path (GskPathBuilder *builder)
 
       n_contours++;
       size += sizeof (GskContour *);
-      size += contour->klass->get_size (contour);
+      size += gsk_contour_get_size (contour);
     }
 
   path = gsk_path_alloc (size);
@@ -961,8 +1026,8 @@ gsk_path_builder_to_path (GskPathBuilder *builder)
       GskContour *contour = l->data;
 
       path->contours[n_contours] = (GskContour *) contour_data;
-      size = contour->klass->get_size (contour);
-      memcpy (contour_data, contour, size);
+      gsk_contour_copy ((GskContour *) contour_data, contour);
+      size = gsk_contour_get_size (contour);
       contour_data += size;
       n_contours++;
     }
@@ -972,9 +1037,31 @@ gsk_path_builder_to_path (GskPathBuilder *builder)
   return path;
 }
 
+/**
+ * gsk_path_builder_add_path:
+ * @builder: a #GskPathBuilder
+ * @path: (transfer none): the path to append
+ *
+ * Appends all of @path to @builder.
+ **/
+void
+gsk_path_builder_add_path (GskPathBuilder *builder,
+                           GskPath        *path)
+{
+  gsize i;
+
+  g_return_if_fail (builder != NULL);
+  g_return_if_fail (path != NULL);
+
+  for (i = 0; i < path->n_contours; i++)
+    {
+      gsk_path_builder_add_contour (builder, path, i);
+    }
+}
+
 static GskContour *
-gsk_path_builder_add_contour (GskPathBuilder        *builder,
-                              const GskContourClass *klass)
+gsk_path_builder_add_contour_by_klass (GskPathBuilder        *builder,
+                                       const GskContourClass *klass)
 {
   GskContour *contour;
 
@@ -1009,7 +1096,7 @@ gsk_path_builder_add_rect (GskPathBuilder        *builder,
 
   g_return_if_fail (builder != NULL);
 
-  contour = gsk_path_builder_add_contour (builder, &GSK_RECT_CONTOUR_CLASS);
+  contour = gsk_path_builder_add_contour_by_klass (builder, &GSK_RECT_CONTOUR_CLASS);
   gsk_rect_contour_init (contour,
                          rect->origin.x, rect->origin.y,
                          rect->size.width, rect->size.height);

@@ -73,6 +73,10 @@ GDK_AVAILABLE_IN_ALL
 GskPath *               gsk_path_builder_free_to_path           (GskPathBuilder         *builder) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_ALL
 GskPath *               gsk_path_builder_to_path                (GskPathBuilder         *builder) G_GNUC_WARN_UNUSED_RESULT;
+
+GDK_AVAILABLE_IN_ALL
+void                    gsk_path_builder_add_path               (GskPathBuilder         *builder,
+                                                                 GskPath                *path);
 GDK_AVAILABLE_IN_ALL
 void                    gsk_path_builder_add_rect               (GskPathBuilder         *builder,
                                                                  const graphene_rect_t  *rect);
