@@ -891,6 +891,8 @@ modelbutton.flat arrow {
   &:backdrop:disabled { @include button('backdrop-insensitive'); }
 }
 
+box.inline-toolbar { margin-top: 2px; }
+
 button.color {
   padding: 4px;
 

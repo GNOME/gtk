@@ -2039,6 +2039,7 @@ microphone-sensitivity-medium-symbolic</property>
                                       <object class="GtkBox">
                                         <style>
                                           <class name="linked"/>
+                                          <class name="inline-toolbar"/>
                                         </style>
                                         <child>
                                           <object class="GtkButton" id="decrease_button">
