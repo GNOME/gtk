@@ -992,6 +992,7 @@ spinbutton {
     @extend %entry;
 
     padding: 0;
+    border-spacing: 0;
 
     %spinbutton_horz_entry {
       min-width: 28px;
