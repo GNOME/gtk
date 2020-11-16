@@ -284,12 +284,14 @@ create_ucd_view (GtkWidget *label)
   g_signal_connect (factory, "bind", G_CALLBACK (bind_codepoint), NULL);
   column = gtk_column_view_column_new ("Codepoint", factory);
   gtk_column_view_append_column (GTK_COLUMN_VIEW (cv), column);
+  g_object_unref (column);
 
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_centered_label), NULL);
   g_signal_connect (factory, "bind", G_CALLBACK (bind_char), NULL);
   column = gtk_column_view_column_new ("Char", factory);
   gtk_column_view_append_column (GTK_COLUMN_VIEW (cv), column);
+  g_object_unref (column);
 
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_ellipsizing_label), NULL);
@@ -297,6 +299,7 @@ create_ucd_view (GtkWidget *label)
   column = gtk_column_view_column_new ("Name", factory);
   gtk_column_view_column_set_resizable (column, TRUE);
   gtk_column_view_append_column (GTK_COLUMN_VIEW (cv), column);
+  g_object_unref (column);
 
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_ellipsizing_label), NULL);
@@ -304,6 +307,7 @@ create_ucd_view (GtkWidget *label)
   column = gtk_column_view_column_new ("Type", factory);
   gtk_column_view_column_set_resizable (column, TRUE);
   gtk_column_view_append_column (GTK_COLUMN_VIEW (cv), column);
+  g_object_unref (column);
 
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_ellipsizing_label), NULL);
@@ -311,6 +315,7 @@ create_ucd_view (GtkWidget *label)
   column = gtk_column_view_column_new ("Break Type", factory);
   gtk_column_view_column_set_resizable (column, TRUE);
   gtk_column_view_append_column (GTK_COLUMN_VIEW (cv), column);
+  g_object_unref (column);
 
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_label), NULL);
@@ -318,6 +323,7 @@ create_ucd_view (GtkWidget *label)
   column = gtk_column_view_column_new ("Combining Class", factory);
   gtk_column_view_column_set_resizable (column, TRUE);
   gtk_column_view_append_column (GTK_COLUMN_VIEW (cv), column);
+  g_object_unref (column);
 
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect (factory, "setup", G_CALLBACK (setup_label), NULL);
@@ -325,6 +331,7 @@ create_ucd_view (GtkWidget *label)
   column = gtk_column_view_column_new ("Script", factory);
   gtk_column_view_column_set_resizable (column, TRUE);
   gtk_column_view_append_column (GTK_COLUMN_VIEW (cv), column);
+  g_object_unref (column);
 
   return cv;
 }
