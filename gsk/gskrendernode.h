@@ -166,7 +166,7 @@ GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_color_node_new                      (const GdkRGBA            *rgba,
                                                                  const graphene_rect_t    *bounds);
 GDK_AVAILABLE_IN_ALL
-const GdkRGBA *         gsk_color_node_peek_color               (GskRenderNode            *node);
+const GdkRGBA *         gsk_color_node_get_color                (GskRenderNode            *node);
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_texture_node_get_type               (void) G_GNUC_CONST;
@@ -185,13 +185,13 @@ GskRenderNode *         gsk_linear_gradient_node_new                (const graph
                                                                      const GskColorStop       *color_stops,
                                                                      gsize                     n_color_stops);
 GDK_AVAILABLE_IN_ALL
-const graphene_point_t * gsk_linear_gradient_node_peek_start        (GskRenderNode            *node);
+const graphene_point_t * gsk_linear_gradient_node_get_start         (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
-const graphene_point_t * gsk_linear_gradient_node_peek_end          (GskRenderNode            *node);
+const graphene_point_t * gsk_linear_gradient_node_get_end           (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
 gsize                    gsk_linear_gradient_node_get_n_color_stops (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
-const GskColorStop *     gsk_linear_gradient_node_peek_color_stops  (GskRenderNode            *node,
+const GskColorStop *     gsk_linear_gradient_node_get_color_stops   (GskRenderNode            *node,
                                                                      gsize                    *n_stops);
 
 GDK_AVAILABLE_IN_ALL
@@ -217,10 +217,10 @@ GskRenderNode *         gsk_radial_gradient_node_new      (const graphene_rect_t
 GDK_AVAILABLE_IN_ALL
 gsize                   gsk_radial_gradient_node_get_n_color_stops (GskRenderNode *node);
 GDK_AVAILABLE_IN_ALL
-const GskColorStop *    gsk_radial_gradient_node_peek_color_stops  (GskRenderNode *node,
+const GskColorStop *    gsk_radial_gradient_node_get_color_stops   (GskRenderNode *node,
                                                                     gsize         *n_stops);
 GDK_AVAILABLE_IN_ALL
-const graphene_point_t *gsk_radial_gradient_node_peek_center       (GskRenderNode *node);
+const graphene_point_t *gsk_radial_gradient_node_get_center        (GskRenderNode *node);
 GDK_AVAILABLE_IN_ALL
 float                   gsk_radial_gradient_node_get_hradius       (GskRenderNode *node);
 GDK_AVAILABLE_IN_ALL
@@ -249,11 +249,11 @@ GskRenderNode *         gsk_border_node_new                     (const GskRounde
                                                                  const float               border_width[4],
                                                                  const GdkRGBA             border_color[4]);
 GDK_AVAILABLE_IN_ALL
-const GskRoundedRect *  gsk_border_node_peek_outline            (GskRenderNode            *node);
+const GskRoundedRect *  gsk_border_node_get_outline             (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
-const float *           gsk_border_node_peek_widths             (GskRenderNode            *node);
+const float *           gsk_border_node_get_widths              (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
-const GdkRGBA *         gsk_border_node_peek_colors             (GskRenderNode            *node);
+const GdkRGBA *         gsk_border_node_get_colors              (GskRenderNode            *node);
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_inset_shadow_node_get_type          (void) G_GNUC_CONST;
@@ -265,9 +265,9 @@ GskRenderNode *         gsk_inset_shadow_node_new               (const GskRounde
                                                                  float                     spread,
                                                                  float                     blur_radius);
 GDK_AVAILABLE_IN_ALL
-const GskRoundedRect *  gsk_inset_shadow_node_peek_outline      (GskRenderNode            *node);
+const GskRoundedRect *  gsk_inset_shadow_node_get_outline       (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
-const GdkRGBA *         gsk_inset_shadow_node_peek_color        (GskRenderNode            *node);
+const GdkRGBA *         gsk_inset_shadow_node_get_color         (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
 float                   gsk_inset_shadow_node_get_dx            (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
@@ -287,9 +287,9 @@ GskRenderNode *         gsk_outset_shadow_node_new              (const GskRounde
                                                                  float                     spread,
                                                                  float                     blur_radius);
 GDK_AVAILABLE_IN_ALL
-const GskRoundedRect *  gsk_outset_shadow_node_peek_outline     (GskRenderNode            *node);
+const GskRoundedRect *  gsk_outset_shadow_node_get_outline      (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
-const GdkRGBA *         gsk_outset_shadow_node_peek_color       (GskRenderNode            *node);
+const GdkRGBA *         gsk_outset_shadow_node_get_color        (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
 float                   gsk_outset_shadow_node_get_dx           (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
@@ -306,7 +306,7 @@ GskRenderNode *         gsk_cairo_node_new                      (const graphene_
 GDK_AVAILABLE_IN_ALL
 cairo_t *               gsk_cairo_node_get_draw_context         (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
-cairo_surface_t *       gsk_cairo_node_peek_surface             (GskRenderNode            *node);
+cairo_surface_t *       gsk_cairo_node_get_surface              (GskRenderNode            *node);
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_container_node_get_type             (void) G_GNUC_CONST;
@@ -349,9 +349,9 @@ GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_color_matrix_node_get_child         (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
 const graphene_matrix_t *
-                        gsk_color_matrix_node_peek_color_matrix (GskRenderNode            *node);
+                        gsk_color_matrix_node_get_color_matrix  (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
-const graphene_vec4_t * gsk_color_matrix_node_peek_color_offset (GskRenderNode            *node);
+const graphene_vec4_t * gsk_color_matrix_node_get_color_offset  (GskRenderNode            *node);
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_repeat_node_get_type                (void) G_GNUC_CONST;
@@ -362,7 +362,7 @@ GskRenderNode *         gsk_repeat_node_new                     (const graphene_
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_repeat_node_get_child               (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
-const graphene_rect_t * gsk_repeat_node_peek_child_bounds       (GskRenderNode            *node);
+const graphene_rect_t * gsk_repeat_node_get_child_bounds        (GskRenderNode            *node);
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_clip_node_get_type                  (void) G_GNUC_CONST;
@@ -372,7 +372,7 @@ GskRenderNode *         gsk_clip_node_new                       (GskRenderNode  
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_clip_node_get_child                 (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
-const graphene_rect_t * gsk_clip_node_peek_clip                 (GskRenderNode            *node);
+const graphene_rect_t * gsk_clip_node_get_clip                  (GskRenderNode            *node);
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_rounded_clip_node_get_type          (void) G_GNUC_CONST;
@@ -382,7 +382,7 @@ GskRenderNode *         gsk_rounded_clip_node_new               (GskRenderNode  
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_rounded_clip_node_get_child         (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
-const GskRoundedRect *  gsk_rounded_clip_node_peek_clip         (GskRenderNode            *node);
+const GskRoundedRect *  gsk_rounded_clip_node_get_clip          (GskRenderNode            *node);
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_shadow_node_get_type                (void) G_GNUC_CONST;
@@ -393,7 +393,7 @@ GskRenderNode *         gsk_shadow_node_new                     (GskRenderNode  
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_shadow_node_get_child               (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
-const GskShadow *       gsk_shadow_node_peek_shadow             (GskRenderNode            *node,
+const GskShadow *       gsk_shadow_node_get_shadow              (GskRenderNode            *node,
                                                                  gsize                     i);
 GDK_AVAILABLE_IN_ALL
 gsize                   gsk_shadow_node_get_n_shadows           (GskRenderNode            *node);
@@ -432,15 +432,15 @@ GskRenderNode *         gsk_text_node_new                       (PangoFont      
                                                                  const GdkRGBA            *color,
                                                                  const graphene_point_t   *offset);
 GDK_AVAILABLE_IN_ALL
-PangoFont *             gsk_text_node_peek_font                 (GskRenderNode            *node);
+PangoFont *             gsk_text_node_get_font                  (GskRenderNode            *node);
 gboolean                gsk_text_node_has_color_glyphs          (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
 guint                   gsk_text_node_get_num_glyphs            (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
-const PangoGlyphInfo   *gsk_text_node_peek_glyphs               (GskRenderNode            *node,
+const PangoGlyphInfo   *gsk_text_node_get_glyphs                (GskRenderNode            *node,
                                                                  guint                    *n_glyphs);
 GDK_AVAILABLE_IN_ALL
-const GdkRGBA *         gsk_text_node_peek_color                (GskRenderNode            *node);
+const GdkRGBA *         gsk_text_node_get_color                 (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
 const graphene_point_t *gsk_text_node_get_offset                (GskRenderNode            *node);
 

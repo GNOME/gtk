@@ -86,7 +86,7 @@ gsk_color_node_diff (GskRenderNode  *node1,
 }
 
 /**
- * gsk_color_node_peek_color:
+ * gsk_color_node_get_color:
  * @node: (type GskColorNode): a #GskColorNode
  *
  * Retrieves the color of the given @node.
@@ -94,7 +94,7 @@ gsk_color_node_diff (GskRenderNode  *node1,
  * Returns: (transfer none): the color of the node
  */
 const GdkRGBA *
-gsk_color_node_peek_color (GskRenderNode *node)
+gsk_color_node_get_color (GskRenderNode *node)
 {
   GskColorNode *self = (GskColorNode *) node;
 
@@ -322,7 +322,7 @@ gsk_repeating_linear_gradient_node_new (const graphene_rect_t  *bounds,
 }
 
 /**
- * gsk_linear_gradient_node_peek_start:
+ * gsk_linear_gradient_node_get_start:
  * @node: (type GskLinearGradientNode): a #GskRenderNode for a linear gradient
  *
  * Retrieves the initial point of the linear gradient.
@@ -330,7 +330,7 @@ gsk_repeating_linear_gradient_node_new (const graphene_rect_t  *bounds,
  * Returns: (transfer none): the initial point
  */
 const graphene_point_t *
-gsk_linear_gradient_node_peek_start (GskRenderNode *node)
+gsk_linear_gradient_node_get_start (GskRenderNode *node)
 {
   GskLinearGradientNode *self = (GskLinearGradientNode *) node;
 
@@ -338,7 +338,7 @@ gsk_linear_gradient_node_peek_start (GskRenderNode *node)
 }
 
 /**
- * gsk_linear_gradient_node_peek_end:
+ * gsk_linear_gradient_node_get_end:
  * @node: (type GskLinearGradientNode): a #GskRenderNode for a linear gradient
  *
  * Retrieves the final point of the linear gradient.
@@ -346,7 +346,7 @@ gsk_linear_gradient_node_peek_start (GskRenderNode *node)
  * Returns: (transfer none): the final point
  */
 const graphene_point_t *
-gsk_linear_gradient_node_peek_end (GskRenderNode *node)
+gsk_linear_gradient_node_get_end (GskRenderNode *node)
 {
   GskLinearGradientNode *self = (GskLinearGradientNode *) node;
 
@@ -370,7 +370,7 @@ gsk_linear_gradient_node_get_n_color_stops (GskRenderNode *node)
 }
 
 /**
- * gsk_linear_gradient_node_peek_color_stops:
+ * gsk_linear_gradient_node_get_color_stops:
  * @node: (type GskLinearGradientNode): a #GskRenderNode for a linear gradient
  * @n_stops: (out) (optional): the number of color stops in the returned array
  *
@@ -379,8 +379,8 @@ gsk_linear_gradient_node_get_n_color_stops (GskRenderNode *node)
  * Returns: (array length=n_stops): the color stops in the gradient
  */
 const GskColorStop *
-gsk_linear_gradient_node_peek_color_stops (GskRenderNode *node,
-                                           gsize         *n_stops)
+gsk_linear_gradient_node_get_color_stops (GskRenderNode *node,
+                                          gsize         *n_stops)
 {
   GskLinearGradientNode *self = (GskLinearGradientNode *) node;
 
@@ -641,7 +641,7 @@ gsk_radial_gradient_node_get_n_color_stops (GskRenderNode *node)
 }
 
 /**
- * gsk_radial_gradient_node_peek_color_stops:
+ * gsk_radial_gradient_node_get_color_stops:
  * @node: (type GskRadialGradientNode): a #GskRenderNode for a radial gradient
  * @n_stops: (out) (optional): the number of color stops in the returned array
  *
@@ -650,8 +650,8 @@ gsk_radial_gradient_node_get_n_color_stops (GskRenderNode *node)
  * Returns: (array length=n_stops): the color stops in the gradient
  */
 const GskColorStop *
-gsk_radial_gradient_node_peek_color_stops (GskRenderNode *node,
-                                           gsize         *n_stops)
+gsk_radial_gradient_node_get_color_stops (GskRenderNode *node,
+                                          gsize         *n_stops)
 {
   GskRadialGradientNode *self = (GskRadialGradientNode *) node;
 
@@ -662,7 +662,7 @@ gsk_radial_gradient_node_peek_color_stops (GskRenderNode *node,
 }
 
 /**
- * gsk_radial_gradient_node_peek_center:
+ * gsk_radial_gradient_node_get_center:
  * @node: (type GskRadialGradientNode): a #GskRenderNode for a radial gradient
  *
  * Retrieves the center pointer for the gradient.
@@ -670,7 +670,7 @@ gsk_radial_gradient_node_peek_color_stops (GskRenderNode *node,
  * Returns: the center point for the gradient
  */
 const graphene_point_t *
-gsk_radial_gradient_node_peek_center (GskRenderNode *node)
+gsk_radial_gradient_node_get_center (GskRenderNode *node)
 {
   GskRadialGradientNode *self = (GskRadialGradientNode *) node;
 
@@ -919,7 +919,7 @@ gsk_border_node_diff (GskRenderNode  *node1,
 }
 
 /**
- * gsk_border_node_peek_outline:
+ * gsk_border_node_get_outline:
  * @node: (type GskBorderNode): a #GskRenderNode for a border
  *
  * Retrieves the outline of the border.
@@ -927,7 +927,7 @@ gsk_border_node_diff (GskRenderNode  *node1,
  * Returns: the outline of the border
  */
 const GskRoundedRect *
-gsk_border_node_peek_outline (GskRenderNode *node)
+gsk_border_node_get_outline (GskRenderNode *node)
 {
   GskBorderNode *self = (GskBorderNode *) node;
 
@@ -935,7 +935,7 @@ gsk_border_node_peek_outline (GskRenderNode *node)
 }
 
 /**
- * gsk_border_node_peek_widths:
+ * gsk_border_node_get_widths:
  * @node: (type GskBorderNode): a #GskRenderNode for a border
  *
  * Retrieves the stroke widths of the border.
@@ -944,7 +944,7 @@ gsk_border_node_peek_outline (GskRenderNode *node)
  *     right, bottom and left stroke width of the border
  */
 const float *
-gsk_border_node_peek_widths (GskRenderNode *node)
+gsk_border_node_get_widths (GskRenderNode *node)
 {
   GskBorderNode *self = (GskBorderNode *) node;
 
@@ -952,7 +952,7 @@ gsk_border_node_peek_widths (GskRenderNode *node)
 }
 
 /**
- * gsk_border_node_peek_colors:
+ * gsk_border_node_get_colors:
  * @node: (type GskBorderNode): a #GskRenderNode for a border
  *
  * Retrieves the colors of the border.
@@ -961,7 +961,7 @@ gsk_border_node_peek_widths (GskRenderNode *node)
  *     for the top, right, bottom and left color of the border
  */
 const GdkRGBA *
-gsk_border_node_peek_colors (GskRenderNode *node)
+gsk_border_node_get_colors (GskRenderNode *node)
 {
   GskBorderNode *self = (GskBorderNode *) node;
 
@@ -1587,7 +1587,7 @@ gsk_inset_shadow_node_new (const GskRoundedRect *outline,
 }
 
 /**
- * gsk_inset_shadow_node_peek_outline:
+ * gsk_inset_shadow_node_get_outline:
  * @node: (type GskInsetShadowNode): a #GskRenderNode for an inset shadow
  *
  * Retrieves the outline rectangle of the inset shadow.
@@ -1595,7 +1595,7 @@ gsk_inset_shadow_node_new (const GskRoundedRect *outline,
  * Returns: (transfer none): a rounded rectangle
  */
 const GskRoundedRect *
-gsk_inset_shadow_node_peek_outline (GskRenderNode *node)
+gsk_inset_shadow_node_get_outline (GskRenderNode *node)
 {
   GskInsetShadowNode *self = (GskInsetShadowNode *) node;
 
@@ -1605,7 +1605,7 @@ gsk_inset_shadow_node_peek_outline (GskRenderNode *node)
 }
 
 /**
- * gsk_inset_shadow_node_peek_color:
+ * gsk_inset_shadow_node_get_color:
  * @node: (type GskInsetShadowNode): a #GskRenderNode for an inset shadow
  *
  * Retrieves the color of the inset shadow.
@@ -1613,7 +1613,7 @@ gsk_inset_shadow_node_peek_outline (GskRenderNode *node)
  * Returns: (transfer none): the color of the shadow
  */
 const GdkRGBA *
-gsk_inset_shadow_node_peek_color (GskRenderNode *node)
+gsk_inset_shadow_node_get_color (GskRenderNode *node)
 {
   GskInsetShadowNode *self = (GskInsetShadowNode *) node;
 
@@ -1896,7 +1896,7 @@ gsk_outset_shadow_node_new (const GskRoundedRect *outline,
 }
 
 /**
- * gsk_outset_shadow_node_peek_outline:
+ * gsk_outset_shadow_node_get_outline:
  * @node: (type GskOutsetShadowNode): a #GskRenderNode for an outset shadow
  *
  * Retrieves the outline rectangle of the outset shadow.
@@ -1904,7 +1904,7 @@ gsk_outset_shadow_node_new (const GskRoundedRect *outline,
  * Returns: (transfer none): a rounded rectangle
  */
 const GskRoundedRect *
-gsk_outset_shadow_node_peek_outline (GskRenderNode *node)
+gsk_outset_shadow_node_get_outline (GskRenderNode *node)
 {
   GskOutsetShadowNode *self = (GskOutsetShadowNode *) node;
 
@@ -1914,7 +1914,7 @@ gsk_outset_shadow_node_peek_outline (GskRenderNode *node)
 }
 
 /**
- * gsk_outset_shadow_node_peek_color:
+ * gsk_outset_shadow_node_get_color:
  * @node: (type GskOutsetShadowNode): a #GskRenderNode for an outset shadow
  *
  * Retrieves the color of the outset shadow.
@@ -1922,7 +1922,7 @@ gsk_outset_shadow_node_peek_outline (GskRenderNode *node)
  * Returns: (transfer none): a color
  */
 const GdkRGBA *
-gsk_outset_shadow_node_peek_color (GskRenderNode *node)
+gsk_outset_shadow_node_get_color (GskRenderNode *node)
 {
   GskOutsetShadowNode *self = (GskOutsetShadowNode *) node;
 
@@ -2038,7 +2038,7 @@ gsk_cairo_node_draw (GskRenderNode *node,
 }
 
 /**
- * gsk_cairo_node_peek_surface:
+ * gsk_cairo_node_get_surface:
  * @node: (type GskCairoNode): a #GskRenderNode for a Cairo surface
  *
  * Retrieves the Cairo surface used by the render node.
@@ -2046,7 +2046,7 @@ gsk_cairo_node_draw (GskRenderNode *node,
  * Returns: (transfer none): a Cairo surface
  */
 cairo_surface_t *
-gsk_cairo_node_peek_surface (GskRenderNode *node)
+gsk_cairo_node_get_surface (GskRenderNode *node)
 {
   GskCairoNode *self = (GskCairoNode *) node;
 
@@ -2823,7 +2823,7 @@ gsk_color_matrix_node_get_child (GskRenderNode *node)
 }
 
 /**
- * gsk_color_matrix_node_peek_color_matrix:
+ * gsk_color_matrix_node_get_color_matrix:
  * @node: (type GskColorMatrixNode): a color matrix #GskRenderNode
  *
  * Retrieves the color matrix used by the @node.
@@ -2831,7 +2831,7 @@ gsk_color_matrix_node_get_child (GskRenderNode *node)
  * Returns: a 4x4 color matrix
  */
 const graphene_matrix_t *
-gsk_color_matrix_node_peek_color_matrix (GskRenderNode *node)
+gsk_color_matrix_node_get_color_matrix (GskRenderNode *node)
 {
   GskColorMatrixNode *self = (GskColorMatrixNode *) node;
 
@@ -2841,7 +2841,7 @@ gsk_color_matrix_node_peek_color_matrix (GskRenderNode *node)
 }
 
 /**
- * gsk_color_matrix_node_peek_color_offset:
+ * gsk_color_matrix_node_get_color_offset:
  * @node: (type GskColorMatrixNode): a color matrix #GskRenderNode
  *
  * Retrieves the color offset used by the @node.
@@ -2849,7 +2849,7 @@ gsk_color_matrix_node_peek_color_matrix (GskRenderNode *node)
  * Returns: a color vector
  */
 const graphene_vec4_t *
-gsk_color_matrix_node_peek_color_offset (GskRenderNode *node)
+gsk_color_matrix_node_get_color_offset (GskRenderNode *node)
 {
   GskColorMatrixNode *self = (GskColorMatrixNode *) node;
 
@@ -2973,7 +2973,7 @@ gsk_repeat_node_get_child (GskRenderNode *node)
 }
 
 /**
- * gsk_repeat_node_peek_child_bounds:
+ * gsk_repeat_node_get_child_bounds:
  * @node: (type GskRepeatNode): a repeat #GskRenderNode
  *
  * Retrieves the bounding rectangle of the child of @node.
@@ -2981,7 +2981,7 @@ gsk_repeat_node_get_child (GskRenderNode *node)
  * Returns: (transfer none): a bounding rectangle
  */
 const graphene_rect_t *
-gsk_repeat_node_peek_child_bounds (GskRenderNode *node)
+gsk_repeat_node_get_child_bounds (GskRenderNode *node)
 {
   GskRepeatNode *self = (GskRepeatNode *) node;
 
@@ -3103,7 +3103,7 @@ gsk_clip_node_get_child (GskRenderNode *node)
 }
 
 /**
- * gsk_clip_node_peek_clip:
+ * gsk_clip_node_get_clip:
  * @node: (type GskClipNode): a #GskClipNode
  *
  * Retrieves the clip rectangle for @node.
@@ -3111,7 +3111,7 @@ gsk_clip_node_get_child (GskRenderNode *node)
  * Returns: a clip rectangle
  */
 const graphene_rect_t *
-gsk_clip_node_peek_clip (GskRenderNode *node)
+gsk_clip_node_get_clip (GskRenderNode *node)
 {
   GskClipNode *self = (GskClipNode *) node;
 
@@ -3233,7 +3233,7 @@ gsk_rounded_clip_node_get_child (GskRenderNode *node)
 }
 
 /**
- * gsk_rounded_clip_node_peek_clip:
+ * gsk_rounded_clip_node_get_clip:
  * @node: (type GskRoundedClipNode): a rounded clip #GskRenderNode
  *
  * Retrievs the rounded rectangle used to clip the contents of the @node.
@@ -3241,7 +3241,7 @@ gsk_rounded_clip_node_get_child (GskRenderNode *node)
  * Returns: (transfer none): a rounded rectangle
  */
 const GskRoundedRect *
-gsk_rounded_clip_node_peek_clip (GskRenderNode *node)
+gsk_rounded_clip_node_get_clip (GskRenderNode *node)
 {
   GskRoundedClipNode *self = (GskRoundedClipNode *) node;
 
@@ -3451,7 +3451,7 @@ gsk_shadow_node_get_child (GskRenderNode *node)
 }
 
 /**
- * gsk_shadow_node_peek_shadow:
+ * gsk_shadow_node_get_shadow:
  * @node: (type GskShadowNode): a shadow #GskRenderNode
  * @i: the given index
  *
@@ -3460,8 +3460,8 @@ gsk_shadow_node_get_child (GskRenderNode *node)
  * Returns: (transfer none): the shadow data
  */
 const GskShadow *
-gsk_shadow_node_peek_shadow (GskRenderNode *node,
-                             gsize          i)
+gsk_shadow_node_get_shadow (GskRenderNode *node,
+                            gsize          i)
 {
   GskShadowNode *self = (GskShadowNode *) node;
 
@@ -3983,7 +3983,7 @@ gsk_text_node_new (PangoFont              *font,
 }
 
 /**
- * gsk_text_node_peek_color:
+ * gsk_text_node_get_color:
  * @node: (type GskTextNode): a text #GskRenderNode
  *
  * Retrieves the color used by the text @node.
@@ -3991,7 +3991,7 @@ gsk_text_node_new (PangoFont              *font,
  * Returns: (transfer none): the text color
  */
 const GdkRGBA *
-gsk_text_node_peek_color (GskRenderNode *node)
+gsk_text_node_get_color (GskRenderNode *node)
 {
   GskTextNode *self = (GskTextNode *) node;
 
@@ -4001,7 +4001,7 @@ gsk_text_node_peek_color (GskRenderNode *node)
 }
 
 /**
- * gsk_text_node_peek_font:
+ * gsk_text_node_get_font:
  * @node: (type GskTextNode): The #GskRenderNode
  *
  * Returns the font used by the text @node.
@@ -4009,7 +4009,7 @@ gsk_text_node_peek_color (GskRenderNode *node)
  * Returns: (transfer none): the font
  */
 PangoFont *
-gsk_text_node_peek_font (GskRenderNode *node)
+gsk_text_node_get_font (GskRenderNode *node)
 {
   GskTextNode *self = (GskTextNode *) node;
 
@@ -4055,7 +4055,7 @@ gsk_text_node_get_num_glyphs (GskRenderNode *node)
 }
 
 /**
- * gsk_text_node_peek_glyphs:
+ * gsk_text_node_get_glyphs:
  * @node: (type GskTextNode): a text #GskRenderNode
  * @n_glyphs: (out) (optional): the number of glyphs returned
  *
@@ -4064,8 +4064,8 @@ gsk_text_node_get_num_glyphs (GskRenderNode *node)
  * Returns: (transfer none) (array length=n_glyphs): the glyph information
  */
 const PangoGlyphInfo *
-gsk_text_node_peek_glyphs (GskRenderNode *node,
-                           guint         *n_glyphs)
+gsk_text_node_get_glyphs (GskRenderNode *node,
+                          guint         *n_glyphs)
 {
   GskTextNode *self = (GskTextNode *) node;
 

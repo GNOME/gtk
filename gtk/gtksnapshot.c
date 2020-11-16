@@ -528,8 +528,8 @@ merge_color_matrix_nodes (const graphene_matrix_t *matrix2,
                           const graphene_vec4_t   *offset2,
                           GskRenderNode           *child)
 {
-  const graphene_matrix_t *mat1 = gsk_color_matrix_node_peek_color_matrix (child);
-  const graphene_vec4_t *offset1 = gsk_color_matrix_node_peek_color_offset (child);
+  const graphene_matrix_t *mat1 = gsk_color_matrix_node_get_color_matrix (child);
+  const graphene_vec4_t *offset1 = gsk_color_matrix_node_get_color_offset (child);
   graphene_matrix_t mat2 = *matrix2;
   graphene_vec4_t off2 = *offset2;
   GskRenderNode *result;
@@ -654,7 +654,7 @@ gtk_snapshot_collect_repeat (GtkSnapshot      *snapshot,
     {
       /* Repeating a color node entirely is pretty easy by just increasing
        * the size of the color node. */
-      GskRenderNode *color_node = gsk_color_node_new (gsk_color_node_peek_color (node), bounds);
+      GskRenderNode *color_node = gsk_color_node_new (gsk_color_node_get_color (node), bounds);
 
       gsk_render_node_unref (node);
 
