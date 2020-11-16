@@ -42,6 +42,9 @@ gtk_at_spi_root_get_connection (GtkAtSpiRoot *self);
 GtkAtSpiCache *
 gtk_at_spi_root_get_cache (GtkAtSpiRoot *self);
 
+const char *
+gtk_at_spi_root_get_base_path (GtkAtSpiRoot *self);
+
 GVariant *
 gtk_at_spi_root_to_ref (GtkAtSpiRoot *self);
 

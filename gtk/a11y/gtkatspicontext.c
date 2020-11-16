@@ -1458,45 +1458,6 @@ gtk_at_spi_context_constructed (GObject *gobject)
   /* Make sure that we were properly constructed */
   g_assert (self->bus_address);
 
-  /* We use the application's object path to build the path of each
-   * accessible object exposed on the accessibility bus; the path is
-   * also used to access the object cache
-   */
-  GApplication *application = g_application_get_default ();
-  char *base_path = NULL;
-
-  if (application != NULL)
-    {
-      const char *app_path = g_application_get_dbus_object_path (application);
-      base_path = g_strconcat (app_path, "/a11y", NULL);
-    }
-  else
-    {
-      char *uuid = g_uuid_string_random ();
-      base_path = g_strconcat ("/org/gtk/application/", uuid, "/a11y", NULL);
-      g_free (uuid);
-    }
-
-  /* We use a unique id to ensure that we don't have conflicting
-   * objects on the bus
-   */
-  char *uuid = g_uuid_string_random ();
-
-  self->context_path = g_strconcat (base_path, "/", uuid, NULL);
-
-  /* UUIDs use '-' as the separator, but that's not a valid character
-   * for a DBus object path
-   */
-  size_t path_len = strlen (self->context_path);
-  for (size_t i = 0; i < path_len; i++)
-    {
-      if (self->context_path[i] == '-')
-        self->context_path[i] = '_';
-    }
-
-  g_free (base_path);
-  g_free (uuid);
-
   G_OBJECT_CLASS (gtk_at_spi_context_parent_class)->constructed (gobject);
 }
 
@@ -1525,6 +1486,22 @@ gtk_at_spi_context_realize (GtkATContext *context)
     {
       g_object_ref (self->root);
     }
+
+  /* UUIDs use '-' as the separator, but that's not a valid character
+   * for a DBus object path
+   */
+  char *uuid = g_uuid_string_random ();
+  size_t len = strlen (uuid);
+  for (size_t i = 0; i < len; i++)
+    {
+      if (uuid[i] == '-')
+        uuid[i] = '_';
+    }
+
+  self->context_path =
+    g_strconcat (gtk_at_spi_root_get_base_path (self->root), "/", uuid, NULL);
+
+  g_free (uuid);
 
   self->connection = gtk_at_spi_root_get_connection (self->root);
   if (self->connection == NULL)
@@ -1812,7 +1789,13 @@ gtk_at_spi_context_get_context_path (GtkAtSpiContext *self)
 GVariant *
 gtk_at_spi_context_to_ref (GtkAtSpiContext *self)
 {
+  g_return_val_if_fail (GTK_IS_AT_SPI_CONTEXT (self), NULL);
+
+  if (self->context_path == NULL)
+    return gtk_at_spi_null_ref ();
+
   const char *name = g_dbus_connection_get_unique_name (self->connection);
+
   return g_variant_new ("(so)", name, self->context_path);
 }
 /* }}} */

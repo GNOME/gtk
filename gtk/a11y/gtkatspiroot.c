@@ -51,6 +51,8 @@ struct _GtkAtSpiRoot
   char *bus_address;
   GDBusConnection *connection;
 
+  char *base_path;
+
   const char *root_path;
 
   const char *toolkit_name;
@@ -87,6 +89,7 @@ gtk_at_spi_root_finalize (GObject *gobject)
   g_clear_handle_id (&self->register_id, g_source_remove);
 
   g_free (self->bus_address);
+  g_free (self->base_path);
   g_free (self->desktop_name);
   g_free (self->desktop_path);
 
@@ -613,6 +616,27 @@ gtk_at_spi_root_constructed (GObject *gobject)
       goto out;
     }
 
+  /* We use the application's object path to build the path of each
+   * accessible object exposed on the accessibility bus; the path is
+   * also used to access the object cache
+   */
+  GApplication *application = g_application_get_default ();
+
+  if (application != NULL && g_application_get_is_registered (application))
+    {
+      const char *app_path = g_application_get_dbus_object_path (application);
+
+      self->base_path = g_strconcat (app_path, "/a11y", NULL);
+    }
+  else
+    {
+      self->base_path = g_strconcat ("/org/gtk/application/",
+                                     g_get_prgname (),
+                                     "/a11y",
+                                     NULL);
+    }
+
+
 out:
   G_OBJECT_CLASS (gtk_at_spi_root_parent_class)->constructed (gobject);
 }
@@ -686,4 +710,12 @@ gtk_at_spi_root_to_ref (GtkAtSpiRoot *self)
     return gtk_at_spi_null_ref ();
 
   return g_variant_new ("(so)", self->desktop_name, self->desktop_path);
+}
+
+const char *
+gtk_at_spi_root_get_base_path (GtkAtSpiRoot *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_SPI_ROOT (self), NULL);
+
+  return self->base_path;
 }
