@@ -344,6 +344,7 @@ gsk_path_builder_to_path
 gsk_path_builder_free_to_path
 <SUBSECTION>
 gsk_path_builder_add_rect
+gsk_path_builder_add_path
 <SUBSECTION>
 gsk_path_builder_move_to
 gsk_path_builder_line_to
