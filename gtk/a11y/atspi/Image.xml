@@ -9,7 +9,7 @@
   <method name="GetImageExtents">
     <arg direction="in" name="coordType" type="u"/>
     <arg direction="out" type="(iiii)"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiRect"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiRect"/>
   </method>
 
   <method name="GetImagePosition">

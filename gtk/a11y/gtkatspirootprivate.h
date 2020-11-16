@@ -22,7 +22,8 @@
 
 #include <gio/gio.h>
 
-#include "gtkatspicacheprivate.h"
+#include "gtkatcontextprivate.h"
+#include "gtkatspiprivate.h"
 
 G_BEGIN_DECLS
 
@@ -34,13 +35,21 @@ GtkAtSpiRoot *
 gtk_at_spi_root_new (const char *bus_address);
 
 void
-gtk_at_spi_root_queue_register (GtkAtSpiRoot *self);
+gtk_at_spi_root_queue_register (GtkAtSpiRoot *self,
+                                GtkAtSpiContext *context);
+
+void
+gtk_at_spi_root_unregister (GtkAtSpiRoot *self,
+                            GtkAtSpiContext *context);
 
 GDBusConnection *
 gtk_at_spi_root_get_connection (GtkAtSpiRoot *self);
 
 GtkAtSpiCache *
 gtk_at_spi_root_get_cache (GtkAtSpiRoot *self);
+
+const char *
+gtk_at_spi_root_get_base_path (GtkAtSpiRoot *self);
 
 GVariant *
 gtk_at_spi_root_to_ref (GtkAtSpiRoot *self);

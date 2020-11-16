@@ -11,7 +11,7 @@
   <method name="GetObject">
     <arg direction="in" name="i" type="i"/>
     <arg direction="out" type="(so)"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiObjectReference"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiObjectReference"/>
   </method>
 
   <method name="GetURI">

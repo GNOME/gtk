@@ -13,8 +13,8 @@
   </method>
 
   <method name="GetRegisteredEvents">
-    <arg direction="out" name="events" type="a(ss)">
-    </arg>
+    <arg direction="out" name="events" type="a(ss)"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiEventListenerArray"/>
   </method>
 
   <signal name="EventListenerRegistered">

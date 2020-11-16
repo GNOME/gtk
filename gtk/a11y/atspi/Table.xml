@@ -7,11 +7,11 @@
   <property name="NColumns" type="i" access="read"/>
 
   <property name="Caption" type="(so)" access="read">
-    <annotation name="com.trolltech.QtDBus.QtTypeName" value="QSpiObjectReference"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName" value="QSpiObjectReference"/>
   </property>
 
   <property name="Summary" type="(so)" access="read">
-    <annotation name="com.trolltech.QtDBus.QtTypeName" value="QSpiObjectReference"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName" value="QSpiObjectReference"/>
   </property>
 
   <property name="NSelectedRows" type="i" access="read"/>
@@ -22,7 +22,7 @@
     <arg direction="in" name="row" type="i"/>
     <arg direction="in" name="column" type="i"/>
     <arg direction="out" type="(so)"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiObjectReference"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiObjectReference"/>
   </method>
 
   <method name="GetIndexAt">
@@ -66,23 +66,23 @@
   <method name="GetRowHeader">
     <arg direction="in" name="row" type="i"/>
     <arg direction="out" type="(so)"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiObjectReference"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiObjectReference"/>
   </method>
 
   <method name="GetColumnHeader">
     <arg direction="in" name="column" type="i"/>
     <arg direction="out" type="(so)"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiObjectReference"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiObjectReference"/>
   </method>
 
   <method name="GetSelectedRows">
     <arg direction="out" type="ai"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiIntList"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiIntList"/>
   </method>
 
   <method name="GetSelectedColumns">
     <arg direction="out" type="ai"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiIntList"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiIntList"/>
   </method>
 
   <method name="IsRowSelected">

@@ -632,17 +632,7 @@ handle_accessible_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetIndexInParent") == 0)
     {
-      GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
-      int idx;
-
-      if (GTK_IS_ROOT (accessible))
-        idx = get_index_in_toplevels (GTK_WIDGET (accessible));
-      else if (GTK_IS_STACK_PAGE (accessible))
-        idx = get_index_in_parent (gtk_stack_page_get_child (GTK_STACK_PAGE (accessible)));
-      else if (GTK_IS_STACK (gtk_widget_get_parent (GTK_WIDGET (accessible))))
-        idx = 1;
-      else
-        idx = get_index_in_parent (GTK_WIDGET (accessible));
+      int idx = gtk_at_spi_context_get_index_in_parent (self);
 
       if (idx == -1)
         g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR, G_DBUS_ERROR_FAILED, "Not found");
@@ -695,30 +685,7 @@ handle_accessible_get_property (GDBusConnection       *connection,
   else if (g_strcmp0 (property_name, "Parent") == 0)
     res = get_parent_context_ref (accessible);
   else if (g_strcmp0 (property_name, "ChildCount") == 0)
-    {
-      int n_children = 0;
-
-      if (GTK_IS_WIDGET (accessible))
-        {
-          GtkWidget *child;
-
-          for (child = gtk_widget_get_first_child (GTK_WIDGET (accessible));
-               child;
-               child = gtk_widget_get_next_sibling (child))
-            {
-              if (!gtk_accessible_should_present (GTK_ACCESSIBLE (child)))
-                continue;
-
-              n_children++;
-            }
-        }
-      else if (GTK_IS_STACK_PAGE (accessible))
-        {
-          n_children = 1;
-        }
-
-      res = g_variant_new_int32 (n_children);
-    }
+    res = g_variant_new_int32 (gtk_at_spi_context_get_child_count (self));
   else
     g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
                  "Unknown property '%s'", property_name);
@@ -1458,45 +1425,6 @@ gtk_at_spi_context_constructed (GObject *gobject)
   /* Make sure that we were properly constructed */
   g_assert (self->bus_address);
 
-  /* We use the application's object path to build the path of each
-   * accessible object exposed on the accessibility bus; the path is
-   * also used to access the object cache
-   */
-  GApplication *application = g_application_get_default ();
-  char *base_path = NULL;
-
-  if (application != NULL)
-    {
-      const char *app_path = g_application_get_dbus_object_path (application);
-      base_path = g_strconcat (app_path, "/a11y", NULL);
-    }
-  else
-    {
-      char *uuid = g_uuid_string_random ();
-      base_path = g_strconcat ("/org/gtk/application/", uuid, "/a11y", NULL);
-      g_free (uuid);
-    }
-
-  /* We use a unique id to ensure that we don't have conflicting
-   * objects on the bus
-   */
-  char *uuid = g_uuid_string_random ();
-
-  self->context_path = g_strconcat (base_path, "/", uuid, NULL);
-
-  /* UUIDs use '-' as the separator, but that's not a valid character
-   * for a DBus object path
-   */
-  size_t path_len = strlen (self->context_path);
-  for (size_t i = 0; i < path_len; i++)
-    {
-      if (self->context_path[i] == '-')
-        self->context_path[i] = '_';
-    }
-
-  g_free (base_path);
-  g_free (uuid);
-
   G_OBJECT_CLASS (gtk_at_spi_context_parent_class)->constructed (gobject);
 }
 
@@ -1526,6 +1454,22 @@ gtk_at_spi_context_realize (GtkATContext *context)
       g_object_ref (self->root);
     }
 
+  /* UUIDs use '-' as the separator, but that's not a valid character
+   * for a DBus object path
+   */
+  char *uuid = g_uuid_string_random ();
+  size_t len = strlen (uuid);
+  for (size_t i = 0; i < len; i++)
+    {
+      if (uuid[i] == '-')
+        uuid[i] = '_';
+    }
+
+  self->context_path =
+    g_strconcat (gtk_at_spi_root_get_base_path (self->root), "/", uuid, NULL);
+
+  g_free (uuid);
+
   self->connection = gtk_at_spi_root_get_connection (self->root);
   if (self->connection == NULL)
     return;
@@ -1554,7 +1498,7 @@ gtk_at_spi_context_realize (GtkATContext *context)
                                        self);
   gtk_at_spi_context_register_object (self);
 
-  gtk_at_spi_root_queue_register (self->root);
+  gtk_at_spi_root_queue_register (self->root, self);
 }
 
 static void
@@ -1569,6 +1513,7 @@ gtk_at_spi_context_unrealize (GtkATContext *context)
 
   /* Notify ATs that the accessible object is going away */
   emit_defunct (self);
+  gtk_at_spi_root_unregister (self->root, self);
 
   gtk_atspi_disconnect_text_signals (accessible);
   gtk_atspi_disconnect_selection_signals (accessible);
@@ -1812,8 +1757,101 @@ gtk_at_spi_context_get_context_path (GtkAtSpiContext *self)
 GVariant *
 gtk_at_spi_context_to_ref (GtkAtSpiContext *self)
 {
+  g_return_val_if_fail (GTK_IS_AT_SPI_CONTEXT (self), NULL);
+
+  if (self->context_path == NULL)
+    return gtk_at_spi_null_ref ();
+
   const char *name = g_dbus_connection_get_unique_name (self->connection);
+
   return g_variant_new ("(so)", name, self->context_path);
+}
+
+GVariant *
+gtk_at_spi_context_get_interfaces (GtkAtSpiContext *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_SPI_CONTEXT (self), NULL);
+
+  return self->interfaces;
+}
+
+GVariant *
+gtk_at_spi_context_get_states (GtkAtSpiContext *self)
+{
+  GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("au"));
+
+  collect_states (self, &builder);
+
+  return g_variant_builder_end (&builder);
+}
+
+GVariant *
+gtk_at_spi_context_get_parent_ref (GtkAtSpiContext *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_SPI_CONTEXT (self), NULL);
+
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+
+  return get_parent_context_ref (accessible);
+}
+
+GtkAtSpiRoot *
+gtk_at_spi_context_get_root (GtkAtSpiContext *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_SPI_CONTEXT (self), NULL);
+
+  return self->root;
+}
+
+int
+gtk_at_spi_context_get_index_in_parent (GtkAtSpiContext *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_SPI_CONTEXT (self), -1);
+
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+  int idx;
+
+  if (GTK_IS_ROOT (accessible))
+    idx = get_index_in_toplevels (GTK_WIDGET (accessible));
+  else if (GTK_IS_STACK_PAGE (accessible))
+    idx = get_index_in_parent (gtk_stack_page_get_child (GTK_STACK_PAGE (accessible)));
+  else if (GTK_IS_STACK (gtk_widget_get_parent (GTK_WIDGET (accessible))))
+    idx = 1;
+  else
+    idx = get_index_in_parent (GTK_WIDGET (accessible));
+
+  return idx;
+}
+
+int
+gtk_at_spi_context_get_child_count (GtkAtSpiContext *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_SPI_CONTEXT (self), -1);
+
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+  int n_children = -1;
+
+  if (GTK_IS_WIDGET (accessible))
+    {
+      GtkWidget *child;
+
+      n_children = 0;
+      for (child = gtk_widget_get_first_child (GTK_WIDGET (accessible));
+           child;
+           child = gtk_widget_get_next_sibling (child))
+        {
+          if (!gtk_accessible_should_present (GTK_ACCESSIBLE (child)))
+            continue;
+
+          n_children++;
+        }
+    }
+  else if (GTK_IS_STACK_PAGE (accessible))
+    {
+      n_children = 1;
+    }
+
+  return n_children;
 }
 /* }}} */
 

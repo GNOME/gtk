@@ -7,7 +7,7 @@
   <method name="GetSelectedChild">
     <arg direction="in" name="selectedChildIndex" type="i"/>
     <arg direction="out" type="(so)"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiObjectReference"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiObjectReference"/>
   </method>
 
   <method name="SelectChild">

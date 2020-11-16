@@ -7,7 +7,7 @@
   <property name="Description" type="s" access="read"/>
 
   <property name="Parent" type="(so)" access="read">
-    <annotation name="com.trolltech.QtDBus.QtTypeName" value="QSpiObjectReference"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName" value="QSpiObjectReference"/>
   </property>
 
   <property name="ChildCount" type="i" access="read"/>
@@ -19,12 +19,12 @@
   <method name="GetChildAtIndex">
     <arg direction="in" name="index" type="i"/>
     <arg direction="out" type="(so)"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiObjectReference"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiObjectReference"/>
   </method>
 
   <method name="GetChildren">
     <arg direction="out" type="a(so)"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiObjectReferenceArray"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiObjectReferenceArray"/>
   </method>
 
   <method name="GetIndexInParent">
@@ -33,7 +33,7 @@
 
   <method name="GetRelationSet">
     <arg direction="out" type="a(ua(so))"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiRelationArray"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiRelationArray"/>
   </method>
 
   <method name="GetRole">
@@ -50,17 +50,17 @@
 
   <method name="GetState">
     <arg direction="out" type="au"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiIntList"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiIntList"/>
   </method>
 
   <method name="GetAttributes">
     <arg direction="out" type="a{ss}"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiAttributeSet"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiAttributeSet"/>
   </method>
 
   <method name="GetApplication">
     <arg direction="out" type="(so)"/>
-    <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QSpiObjectReference"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QSpiObjectReference"/>
   </method>
 
   <method name="GetInterfaces">
