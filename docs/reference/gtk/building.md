@@ -159,7 +159,8 @@ Other libraries are maintained separately.
   fonts and matching them against font names.
 - [Cairo](https://www.cairographics.org) is a graphics library that
   supports vector graphics and image compositing. Both Pango and GTK
-  use Cairo for drawing.
+  use Cairo for drawing. Note that we also need the auxiliary cairo-gobject
+  library.
 - [libepoxy](https://github.com/anholt/libepoxy) is a library that
   abstracts the differences between different OpenGL libraries. GTK
   uses it for cross-platform GL support and for its own drawing.
