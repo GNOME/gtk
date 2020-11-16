@@ -1,4 +1,4 @@
-/* Path/Fill
+/* Path/Text Fill
  *
  * This demo shows how to use PangoCairo to draw text with more than
  * just a single color.
@@ -57,7 +57,13 @@ gtk_path_paintable_snapshot (GdkPaintable *paintable,
 {
   GtkPathPaintable *self = GTK_PATH_PAINTABLE (paintable);
 
+#if 0
   gtk_snapshot_push_fill (snapshot, self->path, GSK_FILL_RULE_WINDING);
+#else
+  GskStroke *stroke = gsk_stroke_new (4.0);
+  gtk_snapshot_push_stroke (snapshot, self->path, stroke);
+  gsk_stroke_free (stroke);
+#endif
 
   if (self->background)
     {
@@ -151,6 +157,34 @@ gtk_path_paintable_new (GskPath      *path,
   return GDK_PAINTABLE (self);
 }
 
+void
+gtk_path_paintable_set_path (GtkPathPaintable *self,
+                             GskPath          *path)
+{
+  g_clear_pointer (&self->path, gsk_path_unref);
+  self->path = gsk_path_ref (path);
+
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+}
+
+static GskPath *
+create_hexagon (GtkWidget *widget)
+{
+  GskPathBuilder *builder;
+
+  builder = gsk_path_builder_new ();
+
+  gsk_path_builder_move_to (builder, 120, 0);
+  gsk_path_builder_line_to (builder, 360, 0);
+  gsk_path_builder_line_to (builder, 480, 208);
+  gsk_path_builder_line_to (builder, 360, 416);
+  gsk_path_builder_line_to (builder, 120, 416);
+  gsk_path_builder_line_to (builder, 0, 208);
+  gsk_path_builder_close (builder);
+
+  return gsk_path_builder_free_to_path (builder);
+}
+
 static GskPath *
 create_path_from_text (GtkWidget *widget)
 {
@@ -170,7 +204,7 @@ create_path_from_text (GtkWidget *widget)
   pango_font_description_free (desc);
 
   pango_cairo_layout_path (cr, layout);
-  path = cairo_copy_path (cr);
+  path = cairo_copy_path_flat (cr);
   result = gsk_path_new_from_cairo (path);
 
   cairo_path_destroy (path);
@@ -179,6 +213,40 @@ create_path_from_text (GtkWidget *widget)
   cairo_surface_destroy (surface);
 
   return result;
+}
+
+static gboolean
+update_path (GtkWidget     *widget,
+             GdkFrameClock *frame_clock,
+             gpointer       measure)
+{
+  float progress = gdk_frame_clock_get_frame_time (frame_clock) % (60 * G_USEC_PER_SEC) / (float) (30 * G_USEC_PER_SEC);
+  GskPathBuilder *builder;
+  GskPath *path;
+  graphene_point_t pos;
+  graphene_vec2_t tangent;
+
+  builder = gsk_path_builder_new ();
+  gsk_path_measure_add_segment (measure,
+                                builder,
+                                progress > 1 ? (progress - 1) * gsk_path_measure_get_length (measure) : 0.0,
+                                (progress < 1 ? progress : 1.0) * gsk_path_measure_get_length (measure));
+
+  gsk_path_measure_get_point (measure,
+                              (progress > 1 ? (progress - 1) : progress) * gsk_path_measure_get_length (measure),
+                              &pos,
+                              &tangent);
+  gsk_path_builder_move_to (builder, pos.x + 5 * graphene_vec2_get_x (&tangent), pos.y + 5 * graphene_vec2_get_y (&tangent));
+  gsk_path_builder_line_to (builder, pos.x + 3 * graphene_vec2_get_y (&tangent), pos.y + 3 * graphene_vec2_get_x (&tangent));
+  gsk_path_builder_line_to (builder, pos.x - 3 * graphene_vec2_get_y (&tangent), pos.y - 3 * graphene_vec2_get_x (&tangent));
+  gsk_path_builder_close (builder);
+  path = gsk_path_builder_free_to_path (builder);
+
+  gtk_path_paintable_set_path (GTK_PATH_PAINTABLE (gtk_picture_get_paintable (GTK_PICTURE (widget))),
+                               path);
+  gsk_path_unref (path);
+
+  return G_SOURCE_CONTINUE;
 }
 
 GtkWidget *
@@ -193,6 +261,7 @@ do_path_fill (GtkWidget *do_widget)
       GtkMediaStream *stream;
       GskPath *path;
       graphene_rect_t bounds;
+      GskPathMeasure *measure;
 
       window = gtk_window_new ();
       gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
@@ -207,14 +276,17 @@ do_path_fill (GtkWidget *do_widget)
       gtk_media_stream_play (stream);
       gtk_media_stream_set_loop (stream, TRUE);
 
+      path = create_hexagon (window);
       path = create_path_from_text (window);
       gsk_path_get_bounds (path, &bounds);
 
-      paintable = gtk_path_paintable_new (create_path_from_text (window),
+      paintable = gtk_path_paintable_new (path,
                                           GDK_PAINTABLE (stream),
                                           bounds.origin.x + bounds.size.width,
                                           bounds.origin.y + bounds.size.height);
       picture = gtk_picture_new_for_paintable (paintable);
+      measure = gsk_path_measure_new (path);
+      gtk_widget_add_tick_callback (picture, update_path, measure, (GDestroyNotify) gsk_path_measure_unref);
       gtk_picture_set_keep_aspect_ratio (GTK_PICTURE (picture), FALSE);
       gtk_picture_set_can_shrink (GTK_PICTURE (picture), FALSE);
       g_object_unref (paintable);
