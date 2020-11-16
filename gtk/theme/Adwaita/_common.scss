@@ -4166,7 +4166,7 @@ menubar {
 $_menu-padding: 12px;
 
 popover.menu {
-  padding: 0;
+  padding: 2px 2px 2px 4px; //allow some shadow. #1987
 
   box.inline-buttons {
     padding: 0 $_menu-padding;
