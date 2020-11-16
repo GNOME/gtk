@@ -659,6 +659,7 @@ gtk_at_spi_root_constructed (GObject *gobject)
     {
       const char *app_path = g_application_get_dbus_object_path (application);
 
+      /* No need to validate the path */
       self->base_path = g_strconcat (app_path, "/a11y", NULL);
     }
   else
@@ -667,8 +668,27 @@ gtk_at_spi_root_constructed (GObject *gobject)
                                      g_get_prgname (),
                                      "/a11y",
                                      NULL);
-    }
 
+      /* Turn potentially invalid program names into something that can be
+       * used as a DBus path
+       */
+      size_t len = strlen (self->base_path);
+      for (size_t i = 0; i < len; i++)
+        {
+          char c = self->base_path[i];
+
+          if (c == '/')
+            continue;
+
+          if ((c >= '0' && c <= '9') ||
+              (c >= 'A' && c <= 'Z') ||
+              (c >= 'a' && c <= 'z') ||
+              (c == '_'))
+            continue;
+
+          self->base_path[i] = '_';
+        }
+    }
 
 out:
   G_OBJECT_CLASS (gtk_at_spi_root_parent_class)->constructed (gobject);
