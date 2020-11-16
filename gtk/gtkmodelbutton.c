@@ -179,6 +179,7 @@ struct _GtkModelButton
   guint active : 1;
   guint centered : 1;
   guint iconic : 1;
+  guint keep_open : 1;
 };
 
 typedef struct _GtkModelButtonClass GtkModelButtonClass;
@@ -1044,7 +1045,7 @@ gtk_model_button_clicked (GtkModelButton *self)
       gtk_popover_menu_set_open_submenu (menu, submenu);
       gtk_popover_menu_set_parent_menu (GTK_POPOVER_MENU (submenu), GTK_WIDGET (menu));
     }
-  else if (self->role == GTK_BUTTON_ROLE_NORMAL)
+  else if (!self->keep_open)
     {
       GtkWidget *popover;
 
@@ -1055,6 +1056,20 @@ gtk_model_button_clicked (GtkModelButton *self)
 
   if (self->action_helper)
     gtk_action_helper_activate (self->action_helper);
+}
+
+static gboolean
+toggle_cb (GtkWidget *widget,
+           GVariant  *args,
+           gpointer   user_data)
+{
+  GtkModelButton *self = GTK_MODEL_BUTTON (widget);
+
+  self->keep_open = self->role != GTK_BUTTON_ROLE_NORMAL;
+  g_signal_emit (widget, signals[SIGNAL_CLICKED], 0);
+  self->keep_open = FALSE;
+
+  return TRUE;
 }
 
 static void
@@ -1128,6 +1143,14 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  GtkShortcutAction *action;
+  guint activate_keyvals[] = {
+    GDK_KEY_Return, GDK_KEY_ISO_Enter, GDK_KEY_KP_Enter
+  };
+  guint toggle_keyvals[] = {
+    GDK_KEY_space, GDK_KEY_KP_Space
+  };
+  int i;
 
   object_class->dispose = gtk_model_button_dispose;
   object_class->finalize = gtk_model_button_finalize;
@@ -1277,6 +1300,30 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("modelbutton"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_MENU_ITEM);
+
+  action = gtk_signal_action_new ("clicked");
+  for (i = 0; i < G_N_ELEMENTS (activate_keyvals); i++)
+    {
+      GtkShortcut *shortcut;
+
+      shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (activate_keyvals[i], 0),
+                                   g_object_ref (action));
+      gtk_widget_class_add_shortcut (widget_class, shortcut);
+      g_object_unref (shortcut);
+    }
+  g_object_unref (action);
+
+  action = gtk_callback_action_new (toggle_cb, NULL, NULL);
+  for (i = 0; i < G_N_ELEMENTS (toggle_keyvals); i++)
+    {
+      GtkShortcut *shortcut;
+
+      shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (toggle_keyvals[i], 0),
+                                   g_object_ref (action));
+      gtk_widget_class_add_shortcut (widget_class, shortcut);
+      g_object_unref (shortcut);
+    }
+  g_object_unref (action);
 }
 
 static void
