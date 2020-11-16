@@ -4134,35 +4134,9 @@ popover.entry-completion > contents {
   padding: 0;
 }
 
-// initial styling for popover menu and bar
-menubar {
-  padding: 0px;
-  box-shadow: inset 0 -1px transparentize(black, 0.9);
-
-  > item {
-    min-height: 16px;
-    padding: 4px 8px;
-
-    &:selected { //Seems like it :hover even with keyboard focus
-      box-shadow: inset 0 -3px $selected_bg_color;
-      color: $link_color;
-    }
-
-    &:disabled {
-      color: $insensitive_fg_color;
-      box-shadow: none;
-    }
-  }
-
-  & > item popover.menu.background > contents {
-    padding: 0;
-  }
-  //nested submenus
-  & > item popover.menu.background popover.menu.background > contents {
-    margin: 0;
-    border-radius: $popover_radius; //including top
-  }
-}
+/**********************
+ * Popover Base Menus *
+ **********************/
 
 $_menu-padding: 12px;
 
@@ -4264,6 +4238,39 @@ popover.menu {
   label.title {
     font-weight: bold;
     padding: 4px ($_menu-padding + 20px); //this will fall apart with font sizing
+  }
+}
+
+// initial styling for popover menu and bar
+menubar {
+  padding: 0px;
+  box-shadow: inset 0 -1px transparentize(black, 0.9);
+
+  > item {
+    min-height: 16px;
+    padding: 4px 8px;
+
+    &:selected { //Seems like it :hover even with keyboard focus
+      box-shadow: inset 0 -3px $selected_bg_color;
+      color: $link_color;
+    }
+
+    &:disabled {
+      color: $insensitive_fg_color;
+      box-shadow: none;
+    }
+  }
+
+  & > item popover.menu.background > contents {
+    padding: 0;
+  }
+  //nested submenus
+  & > item popover.menu popover.menu {
+    padding: 0 0 4px 0;
+  }
+  & > item popover.menu.background popover.menu.background > contents {
+    margin: 0;
+    border-radius: $popover_radius; //including top
   }
 }
 
