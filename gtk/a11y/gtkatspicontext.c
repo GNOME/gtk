@@ -1798,6 +1798,42 @@ gtk_at_spi_context_to_ref (GtkAtSpiContext *self)
 
   return g_variant_new ("(so)", name, self->context_path);
 }
+
+GVariant *
+gtk_at_spi_context_get_interfaces (GtkAtSpiContext *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_SPI_CONTEXT (self), NULL);
+
+  return self->interfaces;
+}
+
+GVariant *
+gtk_at_spi_context_get_states (GtkAtSpiContext *self)
+{
+  GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("au"));
+
+  collect_states (self, &builder);
+
+  return g_variant_builder_end (&builder);
+}
+
+GVariant *
+gtk_at_spi_context_get_parent_ref (GtkAtSpiContext *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_SPI_CONTEXT (self), NULL);
+
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+
+  return get_parent_context_ref (accessible);
+}
+
+GtkAtSpiRoot *
+gtk_at_spi_context_get_root (GtkAtSpiContext *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_SPI_CONTEXT (self), NULL);
+
+  return self->root;
+}
 /* }}} */
 
 /* vim:set foldmethod=marker expandtab: */

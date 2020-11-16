@@ -273,4 +273,8 @@ typedef enum {
   ATSPI_SCROLL_ANYWHERE
 } AtspiScrollType;
 
+typedef struct _GtkAtSpiRoot    GtkAtSpiRoot;
+typedef struct _GtkAtSpiCache   GtkAtSpiCache;
+typedef struct _GtkAtSpiContext GtkAtSpiContext;
+
 G_END_DECLS

@@ -21,6 +21,7 @@
 #pragma once
 
 #include "gtkatcontextprivate.h"
+#include "gtkatspiprivate.h"
 
 G_BEGIN_DECLS
 
@@ -38,5 +39,17 @@ gtk_at_spi_context_get_context_path (GtkAtSpiContext *self);
 
 GVariant *
 gtk_at_spi_context_to_ref (GtkAtSpiContext *self);
+
+GtkAtSpiRoot *
+gtk_at_spi_context_get_root (GtkAtSpiContext *self);
+
+GVariant *
+gtk_at_spi_context_get_parent_ref (GtkAtSpiContext *self);
+
+GVariant *
+gtk_at_spi_context_get_interfaces (GtkAtSpiContext *self);
+
+GVariant *
+gtk_at_spi_context_get_states (GtkAtSpiContext *self);
 
 G_END_DECLS
