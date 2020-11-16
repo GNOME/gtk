@@ -4303,7 +4303,7 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    glFramebufferTexture (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, final_texture_id, 0);
+    glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, final_texture_id, 0);
     g_assert_cmphex (glCheckFramebufferStatus (GL_FRAMEBUFFER), ==, GL_FRAMEBUFFER_COMPLETE);
 
     ops_set_render_target (&self->op_builder, final_fbo_id);
@@ -4324,6 +4324,9 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
     gsk_gl_renderer_render_ops (self);
 
     ops_finish (&self->op_builder);
+
+    glDeleteTextures (1, &texture_id);
+
     texture_id = final_texture_id;
   }
 
