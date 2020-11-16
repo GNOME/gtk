@@ -1092,7 +1092,7 @@ G_DEFINE_BOXED_TYPE (GskShaderArgsBuilder, gsk_shader_args_builder,
 
 
 /**
- * gsk_gl_shader_build_args:
+ * gsk_shader_args_builder_new:
  * @shader: a #GskGLShader
  * @initial_values: (nullable): optional #Bytes with initial values
  *
@@ -1100,7 +1100,7 @@ G_DEFINE_BOXED_TYPE (GskShaderArgsBuilder, gsk_shader_args_builder,
  * chunk.
  *
  * Returns: (transfer full): The newly allocated builder, free with
- *     gsk_shader_args_builder_free()
+ *     gsk_shader_args_builder_unref()
  */
 GskShaderArgsBuilder *
 gsk_shader_args_builder_new (GskGLShader *shader,
@@ -1149,7 +1149,7 @@ gsk_shader_args_builder_to_args (GskShaderArgsBuilder *builder)
 }
 
 /**
- * gdk_content_formats_builder_free_to_args: (skip)
+ * gdk_shader_args_builder_free_to_args: (skip)
  * @builder: a #GdkContentFormatsBuilder
  *
  * Creates a new #GBytes args from the current state of the
