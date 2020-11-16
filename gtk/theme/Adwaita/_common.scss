@@ -4152,12 +4152,9 @@ menubar {
       box-shadow: none;
     }
   }
-  // only bottom part rounded for menubar menus
+
   & > item popover.menu.background > contents {
-    margin-top: -1px; //nudge it into the menubar
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    padding: 0 0 $menu_radius 0;
+    padding: 0;
   }
   //nested submenus
   & > item popover.menu.background popover.menu.background > contents {
@@ -4169,7 +4166,7 @@ menubar {
 $_menu-padding: 12px;
 
 popover.menu {
-  padding: 0px;
+  padding: 0;
 
   box.inline-buttons {
     padding: 0 $_menu-padding;
@@ -4189,7 +4186,8 @@ popover.menu {
   }
 
   box.circular-buttons {
-    padding: 6px $_menu-padding;
+    padding: $_menu-padding;
+    padding-bottom: $_menu-padding/2;
 
     button.circular.image-button.model {
       @extend %list_button;
@@ -4201,10 +4199,7 @@ popover.menu {
   & > arrow,
   &.background > contents {
     background-color: $menu_color;
-  }
-
-  &.background > contents {
-    padding: 8px 0;
+    padding: 0;
   }
 
   &.background separator {
