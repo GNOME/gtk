@@ -123,6 +123,12 @@ test_type (gconstpointer data)
                                NULL);
       g_object_unref (list_store);
     }
+  else if (g_type_is_a (type, GSK_TYPE_GL_SHADER))
+    {
+      GBytes *bytes = g_bytes_new_static ("", 0);
+      instance = g_object_new (type, "source", bytes, NULL);
+      g_bytes_unref (bytes);
+    }
   else if (g_type_is_a (type, GDK_TYPE_CLIPBOARD) ||
            g_str_equal (g_type_name (type), "GdkX11Cursor"))
     instance = g_object_new (type, "display", display, NULL);
@@ -167,6 +173,11 @@ test_type (gconstpointer data)
 
       if (g_type_is_a (type, GDK_TYPE_CONTENT_PROVIDER) &&
 	  strcmp (pspec->name, "storable-formats") == 0)
+	continue;
+
+      /* set in the constructor */
+      if (g_type_is_a (type, GSK_TYPE_GL_SHADER) &&
+	  strcmp (pspec->name, "source") == 0)
 	continue;
 
       /* This one has a special-purpose default value */
