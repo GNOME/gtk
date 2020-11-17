@@ -740,7 +740,7 @@ gtk_tree_expander_set_child (GtkTreeExpander *self,
  * This call is essentially equivalent to calling
  * `gtk_tree_list_row_get_item (gtk_tree_expander_get_list_row (@self))`.
  *
- * Returns: (nullable) (transfer none): The item of the row
+ * Returns: (nullable) (transfer none) (type GObject): The item of the row
  **/
 gpointer
 gtk_tree_expander_get_item (GtkTreeExpander *self)
