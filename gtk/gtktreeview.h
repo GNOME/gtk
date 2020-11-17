@@ -528,8 +528,8 @@ void          gtk_tree_view_set_tooltip_cell   (GtkTreeView       *tree_view,
 						GtkCellRenderer   *cell);
 GDK_AVAILABLE_IN_ALL
 gboolean      gtk_tree_view_get_tooltip_context(GtkTreeView       *tree_view,
-						int               *x,
-						int               *y,
+						int                x,
+						int                y,
 						gboolean           keyboard_tip,
 						GtkTreeModel     **model,
 						GtkTreePath      **path,
