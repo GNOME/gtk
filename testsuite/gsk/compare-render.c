@@ -111,16 +111,26 @@ save_image (cairo_surface_t *surface,
 }
 
 static void
-deserialize_error_func (const GtkCssSection *section,
-                        const GError        *error,
-                        gpointer             user_data)
+deserialize_error_func (const GskParseLocation *start,
+                        const GskParseLocation *end,
+                        const GError           *error,
+                        gpointer                user_data)
 {
-  char *section_str = gtk_css_section_to_string (section);
+  GString *string = g_string_new ("<data>");
 
-  g_print ("Error at %s: %s", section_str, error->message);
-  *((gboolean *) user_data) = FALSE;
+  g_string_append_printf (string, ":%zu:%zu",
+                          start->lines + 1, start->line_chars + 1);
+  if (start->lines != end->lines || start->line_chars != end->line_chars)
+    {
+      g_string_append (string, "-");
+      if (start->lines != end->lines)
+        g_string_append_printf (string, "%zu:", end->lines + 1);
+      g_string_append_printf (string, "%zu", end->line_chars + 1);
+    }
 
-  free (section_str);
+  g_warning ("Error at %s: %s", string->str, error->message);
+
+  g_string_free (string, TRUE);
 }
 
 static const GOptionEntry options[] = {
