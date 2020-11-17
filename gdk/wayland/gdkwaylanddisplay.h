@@ -51,7 +51,7 @@ GDK_AVAILABLE_IN_ALL
 struct wl_compositor   *gdk_wayland_display_get_wl_compositor   (GdkDisplay *display);
 GDK_AVAILABLE_IN_ALL
 void                    gdk_wayland_display_set_cursor_theme    (GdkDisplay  *display,
-                                                                 const char *theme,
+                                                                 const char *name,
                                                                  int          size);
 GDK_AVAILABLE_IN_ALL
 const char *           gdk_wayland_display_get_startup_notification_id (GdkDisplay *display);
