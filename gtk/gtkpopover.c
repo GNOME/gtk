@@ -1679,6 +1679,12 @@ gtk_popover_class_init (GtkPopoverClass *klass)
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
+  /**
+   * GtkPopover::closed:
+   * @self: the #GtkPopover which received the signal
+   *
+   * The ::closed signal is emitted when the popover is closed.
+   */
   signals[CLOSED] =
     g_signal_new (I_("closed"),
                   G_TYPE_FROM_CLASS (object_class),
@@ -1689,6 +1695,15 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                   G_TYPE_NONE,
                   0);
 
+  /**
+   * GtkPopover::activate-default:
+   * @self: the #GtkPopover which received the signal
+   *
+   * The ::activate-default signal is a
+   * [keybinding signal][GtkBindingSignal]
+   * which gets emitted when the user activates the default widget
+   * of @self.
+   */
   signals[ACTIVATE_DEFAULT] =
     g_signal_new (I_("activate-default"),
                   G_TYPE_FROM_CLASS (object_class),
