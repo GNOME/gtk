@@ -36,6 +36,7 @@ gboolean                gsk_path_foreach_with_tolerance         (GskPath        
 
 gpointer                gsk_contour_init_measure                (GskPath              *path,
                                                                  gsize                 i,
+                                                                 float                 tolerance,
                                                                  float                *out_length);
 void                    gsk_contour_free_measure                (GskPath              *path,
                                                                  gsize                 i,
