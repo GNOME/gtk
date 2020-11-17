@@ -940,8 +940,9 @@ gsk_border_node_peek_outline (GskRenderNode *node)
  *
  * Retrieves the stroke widths of the border.
  *
- * Returns: (transfer none): an array of 4 floats for the top,
- *     right, bottom and left stroke width of the border
+ * Returns: (transfer none) (array fixed-size=4): an array of 4 floats
+ *   for the top, right, bottom and left stroke width of the border,
+ *   respectively
  */
 const float *
 gsk_border_node_peek_widths (GskRenderNode *node)
