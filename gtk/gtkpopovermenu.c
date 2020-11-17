@@ -189,6 +189,20 @@ gtk_popover_menu_set_open_submenu (GtkPopoverMenu *menu,
   menu->open_submenu = submenu;
 }
 
+void
+gtk_popover_menu_close_submenus (GtkPopoverMenu *menu)
+{
+  GtkWidget *submenu;
+
+  submenu = menu->open_submenu;
+  if (submenu)
+    {
+      gtk_popover_menu_close_submenus (GTK_POPOVER_MENU (submenu));
+      gtk_widget_hide (submenu);
+      gtk_popover_menu_set_open_submenu (menu, NULL);
+    }
+}
+
 GtkWidget *
 gtk_popover_menu_get_active_item (GtkPopoverMenu *menu)
 {

@@ -28,6 +28,8 @@ void       gtk_popover_menu_set_active_item  (GtkPopoverMenu *menu,
 GtkWidget *gtk_popover_menu_get_open_submenu (GtkPopoverMenu *menu);
 void       gtk_popover_menu_set_open_submenu (GtkPopoverMenu *menu,
                                               GtkWidget      *submenu);
+void       gtk_popover_menu_close_submenus   (GtkPopoverMenu *menu);
+
 GtkWidget *gtk_popover_menu_get_parent_menu  (GtkPopoverMenu *menu);
 void       gtk_popover_menu_set_parent_menu  (GtkPopoverMenu *menu,
                                               GtkWidget      *parent);
