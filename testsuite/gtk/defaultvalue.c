@@ -123,6 +123,12 @@ test_type (gconstpointer data)
                                NULL);
       g_object_unref (list_store);
     }
+  else if (g_type_is_a (type, GSK_TYPE_GL_SHADER))
+    {
+      GBytes *bytes = g_bytes_new_static ("", 0);
+      instance = g_object_new (type, "source", bytes, NULL);
+      g_bytes_unref (bytes);
+    }
   else if (g_type_is_a (type, GDK_TYPE_CLIPBOARD) ||
            g_str_equal (g_type_name (type), "GdkX11Cursor"))
     instance = g_object_new (type, "display", display, NULL);
@@ -137,6 +143,7 @@ test_type (gconstpointer data)
     {
       GParamSpec *pspec = pspecs[i];
       GValue value = G_VALUE_INIT;
+      gboolean check = TRUE;
 
       if (pspec->owner_type != type)
 	continue;
@@ -147,79 +154,84 @@ test_type (gconstpointer data)
       /* This is set via class_init, and we have a11y tests to verify it */
       if (g_type_is_a (type, GTK_TYPE_ACCESSIBLE) &&
           strcmp (pspec->name, "accessible-role") == 0)
-        continue;
+        check = FALSE;
 
       /* This is set via construct property */
       if (g_type_is_a (type, GTK_TYPE_BUILDER) &&
           strcmp (pspec->name, "scope") == 0)
-        continue;
+        check = FALSE;
 
       if (g_type_is_a (type, GDK_TYPE_CLIPBOARD) &&
 	  strcmp (pspec->name, "display") == 0)
-	continue;
+	check = FALSE;
 
       /* These are set in init() */
       if ((g_type_is_a (type, GDK_TYPE_CLIPBOARD) ||
            g_type_is_a (type, GDK_TYPE_CONTENT_PROVIDER) ||
            g_type_is_a (type, GTK_TYPE_DROP_TARGET)) &&
 	  strcmp (pspec->name, "formats") == 0)
-	continue;
+	check = FALSE;
 
       if (g_type_is_a (type, GDK_TYPE_CONTENT_PROVIDER) &&
 	  strcmp (pspec->name, "storable-formats") == 0)
-	continue;
+	check = FALSE;
+
+      /* set in the constructor */
+      if (g_type_is_a (type, GSK_TYPE_GL_SHADER) &&
+	  strcmp (pspec->name, "source") == 0)
+	check = FALSE;
 
       /* This one has a special-purpose default value */
       if (g_type_is_a (type, GTK_TYPE_DIALOG) &&
 	  (strcmp (pspec->name, "use-header-bar") == 0))
-	continue;
+	check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_ASSISTANT) &&
 	  (strcmp (pspec->name, "use-header-bar") == 0 ||
            strcmp (pspec->name, "pages") == 0)) /* pages always gets a non-NULL value */
-	continue;
+	check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_STACK) &&
 	  (strcmp (pspec->name, "pages") == 0)) /* pages always gets a non-NULL value */
-	continue;
+	check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_NOTEBOOK) &&
 	  (strcmp (pspec->name, "pages") == 0)) /* pages always gets a non-NULL value */
-	continue;
+	check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_COMBO_BOX) &&
           (strcmp (pspec->name, "child") == 0))
-        continue;
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_POPOVER) &&
 	  (strcmp (pspec->name, "pointing-to") == 0))
-	continue;
+	check = FALSE;
 
       if (g_type_is_a (type, GDK_TYPE_DISPLAY_MANAGER) &&
 	  (strcmp (pspec->name, "default-display") == 0))
-	continue;
+	check = FALSE;
 
       if (g_type_is_a (type, GDK_TYPE_MONITOR) &&
           (strcmp (pspec->name, "geometry") == 0))
-        continue;
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_ABOUT_DIALOG) &&
 	  (strcmp (pspec->name, "program-name") == 0))
-	continue;
+	check = FALSE;
 
       /* These are set to the current date */
       if (g_type_is_a (type, GTK_TYPE_CALENDAR) &&
 	  (strcmp (pspec->name, "year") == 0 ||
 	   strcmp (pspec->name, "month") == 0 ||
 	   strcmp (pspec->name, "day") == 0))
-	continue;
+	check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_CELL_AREA_CONTEXT) &&
 	  (strcmp (pspec->name, "minimum-width") == 0 ||
 	   strcmp (pspec->name, "minimum-height") == 0 ||
 	   strcmp (pspec->name, "natural-width") == 0 ||
 	   strcmp (pspec->name, "natural-height") == 0))
-	continue;
+	check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_CELL_RENDERER_TEXT) &&
 	  (strcmp (pspec->name, "background-gdk") == 0 ||
@@ -228,7 +240,7 @@ test_type (gconstpointer data)
 	   strcmp (pspec->name, "foreground-rgba") == 0 ||
 	   strcmp (pspec->name, "font") == 0 ||
 	   strcmp (pspec->name, "font-desc") == 0))
-	continue;
+	check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_CELL_VIEW) &&
 	  (strcmp (pspec->name, "background-gdk") == 0 ||
@@ -237,24 +249,24 @@ test_type (gconstpointer data)
 	   strcmp (pspec->name, "background-rgba") == 0 ||
            strcmp (pspec->name, "cell-area") == 0 ||
            strcmp (pspec->name, "cell-area-context") == 0))
-	continue;
+	check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_COLOR_BUTTON) &&
 	  (strcmp (pspec->name, "color") == 0 ||
 	   strcmp (pspec->name, "rgba") == 0))
-	continue;
+	check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_COLUMN_VIEW) &&
           (strcmp (pspec->name, "columns") == 0 ||
 	   strcmp (pspec->name, "sorter") == 0))
-	continue;
+	check = FALSE;
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
       if (g_type_is_a (type, GTK_TYPE_COMBO_BOX) &&
 	  (strcmp (pspec->name, "cell-area") == 0 ||
            strcmp (pspec->name, "cell-area-context") == 0))
-	continue;
+	check = FALSE;
 
 G_GNUC_END_IGNORE_DEPRECATIONS
 
@@ -264,19 +276,19 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       if (g_type_is_a (type, GTK_TYPE_ENTRY) &&
 	  (strcmp (pspec->name, "invisible-char") == 0 ||
            strcmp (pspec->name, "buffer") == 0))
-	continue;
+	check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_TEXT) &&
 	  (strcmp (pspec->name, "invisible-char") == 0 ||
            strcmp (pspec->name, "buffer") == 0))
-	continue;
+	check = FALSE;
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
       if (g_type_is_a (type, GTK_TYPE_ENTRY_COMPLETION) &&
 	  (strcmp (pspec->name, "cell-area") == 0 ||
            strcmp (pspec->name, "cell-area-context") == 0))
-	continue;
+	check = FALSE;
 
 G_GNUC_END_IGNORE_DEPRECATIONS
 
@@ -285,82 +297,82 @@ G_GNUC_END_IGNORE_DEPRECATIONS
            g_type_is_a (type, GTK_TYPE_SINGLE_SELECTION) ||
            g_type_is_a (type, GTK_TYPE_MULTI_SELECTION)) &&
           strcmp (pspec->name, "model") == 0)
-        continue;
+        check = FALSE;
 
       /* This is set in init() */
       if (g_type_is_a (type, GTK_TYPE_FONT_CHOOSER_WIDGET) &&
           strcmp (pspec->name, "tweak-action") == 0)
-        continue;
+        check = FALSE;
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
       if (g_type_is_a (type, GTK_TYPE_ICON_VIEW) &&
 	  (strcmp (pspec->name, "cell-area") == 0 ||
            strcmp (pspec->name, "cell-area-context") == 0))
-	continue;
+	check = FALSE;
 
 G_GNUC_END_IGNORE_DEPRECATIONS
 
       if (g_type_is_a (type, GTK_TYPE_MESSAGE_DIALOG) &&
           (strcmp (pspec->name, "image") == 0 ||
            strcmp (pspec->name, "message-area") == 0))
-	continue;
+	check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_PANED) &&
 	  strcmp (pspec->name, "max-position") == 0)
-	continue;
+	check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_PRINT_OPERATION) &&
 	  strcmp (pspec->name, "job-name") == 0)
-	continue;
+	check = FALSE;
 
 #ifdef G_OS_UNIX
       if (g_type_is_a (type, GTK_TYPE_PRINT_UNIX_DIALOG) &&
 	  (strcmp (pspec->name, "page-setup") == 0 ||
 	   strcmp (pspec->name, "print-settings") == 0))
-	continue;
+	check = FALSE;
 #endif
 
       if (g_type_is_a (type, GTK_TYPE_PROGRESS_BAR) &&
           strcmp (pspec->name, "adjustment") == 0)
-        continue;
+        check = FALSE;
 
       /* filename value depends on $HOME */
       if (g_type_is_a (type, GTK_TYPE_RECENT_MANAGER) &&
           (strcmp (pspec->name, "filename") == 0 ||
 	   strcmp (pspec->name, "size") == 0))
-        continue;
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_SCALE_BUTTON) &&
           strcmp (pspec->name, "adjustment") == 0)
-        continue;
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_SCROLLED_WINDOW) &&
 	  (strcmp (pspec->name, "hadjustment") == 0 ||
            strcmp (pspec->name, "vadjustment") == 0))
-	continue;
+	check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_SETTINGS))
-        continue;
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_SHORTCUT) &&
 	  (strcmp (pspec->name, "action") == 0 ||
            strcmp (pspec->name, "trigger") == 0))
-        continue;
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_SPIN_BUTTON) &&
           (strcmp (pspec->name, "adjustment") == 0))
-        continue;
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_STYLE_CONTEXT) &&
            strcmp (pspec->name, "display") == 0)
-        continue;
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_TEXT_BUFFER) &&
           (strcmp (pspec->name, "tag-table") == 0 ||
            strcmp (pspec->name, "copy-target-list") == 0 ||
            strcmp (pspec->name, "paste-target-list") == 0))
-        continue;
+        check = FALSE;
 
       /* language depends on the current locale */
       if (g_type_is_a (type, GTK_TYPE_TEXT_TAG) &&
@@ -369,77 +381,79 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 	   strcmp (pspec->name, "language") == 0 ||
 	   strcmp (pspec->name, "font") == 0 ||
 	   strcmp (pspec->name, "font-desc") == 0))
-        continue;
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_TEXT_VIEW) &&
           strcmp (pspec->name, "buffer") == 0)
-        continue;
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_TREE_VIEW) &&
 	  (strcmp (pspec->name, "hadjustment") == 0 ||
            strcmp (pspec->name, "vadjustment") == 0))
-	continue;
+	check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_TREE_VIEW_COLUMN) &&
 	  (strcmp (pspec->name, "cell-area") == 0 ||
            strcmp (pspec->name, "cell-area-context") == 0))
-	continue;
+	check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_VIEWPORT) &&
 	  (strcmp (pspec->name, "hadjustment") == 0 ||
            strcmp (pspec->name, "vadjustment") == 0))
-	continue;
+	check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_WIDGET) &&
           (strcmp (pspec->name, "name") == 0 ||
 	   strcmp (pspec->name, "display") == 0 ||
 	   strcmp (pspec->name, "style") == 0))
-	continue;
+	check = FALSE;
 
       /* resize-grip-visible is determined at runtime */
       if (g_type_is_a (type, GTK_TYPE_WINDOW) &&
           strcmp (pspec->name, "resize-grip-visible") == 0)
-        continue;
+        check = FALSE;
 
       /* show-desktop depends on desktop environment */
       if (g_str_equal (g_type_name (type), "GtkPlacesSidebar") &&
           strcmp (pspec->name, "show-desktop") == 0)
-        continue;
+        check = FALSE;
 
       /* GtkRange constructs an adjustment on its own if NULL is set and
        * the property is a CONSTRUCT one, so the returned value is never NULL. */
       if (g_type_is_a (type, GTK_TYPE_RANGE) &&
           strcmp (pspec->name, "adjustment") == 0)
-        continue;
+        check = FALSE;
 
       /* ... and GtkScrollbar wraps that property. */
       if (g_type_is_a (type, GTK_TYPE_SCROLLBAR) &&
           strcmp (pspec->name, "adjustment") == 0)
-        continue;
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_DROP_DOWN) &&
           strcmp (pspec->name, "factory") == 0)
-        continue;
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_BOOKMARK_LIST) &&
           (strcmp (pspec->name, "filename") == 0 ||
            strcmp (pspec->name, "loading") == 0))
-        continue;
+        check = FALSE;
 
       /* All the icontheme properties depend on the environment */
       if (g_type_is_a (type, GTK_TYPE_ICON_THEME))
-        continue;
+        check = FALSE;
 
       if (g_test_verbose ())
         {
-          g_print ("Property %s:%s\n",
+          g_print ("Property %s:%s%s\n",
                    g_type_name (pspec->owner_type),
-                   pspec->name);
+                   pspec->name,
+                   check ? "" : " (no check)");
         }
 
       g_value_init (&value, G_PARAM_SPEC_VALUE_TYPE (pspec));
       g_object_get_property (instance, pspec->name, &value);
-      check_property ("Property", pspec, &value);
+      if (check)
+        check_property ("Property", pspec, &value);
       g_value_unset (&value);
     }
   g_free (pspecs);

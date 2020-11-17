@@ -128,7 +128,7 @@ print_render_node_tree (GskRenderNode *root, int level)
         break;
 
       case GSK_COLOR_NODE:
-        g_print ("%*s Color %s\n", level * INDENT, " ", gdk_rgba_to_string (gsk_color_node_peek_color (root)));
+        g_print ("%*s Color %s\n", level * INDENT, " ", gdk_rgba_to_string (gsk_color_node_get_color (root)));
         break;
 
       case GSK_SHADOW_NODE:
@@ -291,8 +291,8 @@ init_projection_matrix (graphene_matrix_t     *out_proj,
 static inline gboolean G_GNUC_PURE
 color_matrix_modifies_alpha (GskRenderNode *node)
 {
-  const graphene_matrix_t *matrix = gsk_color_matrix_node_peek_color_matrix (node);
-  const graphene_vec4_t *offset = gsk_color_matrix_node_peek_color_offset (node);
+  const graphene_matrix_t *matrix = gsk_color_matrix_node_get_color_matrix (node);
+  const graphene_vec4_t *offset = gsk_color_matrix_node_get_color_offset (node);
   graphene_vec4_t row3;
 
   if (graphene_vec4_get_w (offset) != 0.0f)
@@ -750,8 +750,8 @@ render_text_node (GskGLRenderer   *self,
                   const GdkRGBA   *color,
                   gboolean         force_color)
 {
-  const PangoFont *font = gsk_text_node_peek_font (node);
-  const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node, NULL);
+  const PangoFont *font = gsk_text_node_get_font (node);
+  const PangoGlyphInfo *glyphs = gsk_text_node_get_glyphs (node, NULL);
   const float text_scale = ops_get_scale (builder);
   const graphene_point_t *offset = gsk_text_node_get_offset (node);
   const guint num_glyphs = gsk_text_node_get_num_glyphs (node);
@@ -834,9 +834,9 @@ render_border_node (GskGLRenderer   *self,
                     GskRenderNode   *node,
                     RenderOpBuilder *builder)
 {
-  const GdkRGBA *colors = gsk_border_node_peek_colors (node);
-  const GskRoundedRect *rounded_outline = gsk_border_node_peek_outline (node);
-  const float *widths = gsk_border_node_peek_widths (node);
+  const GdkRGBA *colors = gsk_border_node_get_colors (node);
+  const GskRoundedRect *rounded_outline = gsk_border_node_get_outline (node);
+  const float *widths = gsk_border_node_get_widths (node);
   int i;
   struct {
     float w;
@@ -975,7 +975,7 @@ render_color_node (GskGLRenderer   *self,
                    RenderOpBuilder *builder)
 {
   ops_set_program (builder, &self->programs->color_program);
-  ops_set_color (builder, gsk_color_node_peek_color (node));
+  ops_set_color (builder, gsk_color_node_get_color (node));
   load_vertex_data (ops_draw (builder, NULL), &node->bounds, builder);
 }
 
@@ -1426,9 +1426,9 @@ render_linear_gradient_node (GskGLRenderer   *self,
 
   if (n_color_stops < GL_MAX_GRADIENT_STOPS)
     {
-      const GskColorStop *stops = gsk_linear_gradient_node_peek_color_stops (node, NULL);
-      const graphene_point_t *start = gsk_linear_gradient_node_peek_start (node);
-      const graphene_point_t *end = gsk_linear_gradient_node_peek_end (node);
+      const GskColorStop *stops = gsk_linear_gradient_node_get_color_stops (node, NULL);
+      const graphene_point_t *start = gsk_linear_gradient_node_get_start (node);
+      const graphene_point_t *end = gsk_linear_gradient_node_get_end (node);
 
       ops_set_program (builder, &self->programs->linear_gradient_program);
       ops_set_linear_gradient (builder,
@@ -1456,8 +1456,8 @@ render_radial_gradient_node (GskGLRenderer   *self,
 
   if (n_color_stops < GL_MAX_GRADIENT_STOPS)
     {
-      const GskColorStop *stops = gsk_radial_gradient_node_peek_color_stops (node, NULL);
-      const graphene_point_t *center = gsk_radial_gradient_node_peek_center (node);
+      const GskColorStop *stops = gsk_radial_gradient_node_get_color_stops (node, NULL);
+      const graphene_point_t *center = gsk_radial_gradient_node_get_center (node);
       const float start = gsk_radial_gradient_node_get_start (node);
       const float end = gsk_radial_gradient_node_get_end (node);
       const float hradius = gsk_radial_gradient_node_get_hradius (node);
@@ -1628,7 +1628,7 @@ render_clip_node (GskGLRenderer   *self,
                   GskRenderNode   *node,
                   RenderOpBuilder *builder)
 {
-  const graphene_rect_t *clip = gsk_clip_node_peek_clip (node);
+  const graphene_rect_t *clip = gsk_clip_node_get_clip (node);
   GskRenderNode *child = gsk_clip_node_get_child (node);
 
   render_clipped_child (self, builder, clip, child);
@@ -1641,7 +1641,7 @@ render_rounded_clip_node (GskGLRenderer       *self,
 {
   const float scale_x = builder->scale_x;
   const float scale_y = builder->scale_y;
-  const GskRoundedRect *clip = gsk_rounded_clip_node_peek_clip (node);
+  const GskRoundedRect *clip = gsk_rounded_clip_node_get_clip (node);
   GskRenderNode *child = gsk_rounded_clip_node_get_child (node);
   GskRoundedRect transformed_clip;
   gboolean need_offscreen;
@@ -1761,8 +1761,8 @@ render_color_matrix_node (GskGLRenderer       *self,
 
   ops_set_program (builder, &self->programs->color_matrix_program);
   ops_set_color_matrix (builder,
-                        gsk_color_matrix_node_peek_color_matrix (node),
-                        gsk_color_matrix_node_peek_color_offset (node));
+                        gsk_color_matrix_node_get_color_matrix (node),
+                        gsk_color_matrix_node_get_color_offset (node));
 
   ops_set_texture (builder, region.texture_id);
 
@@ -1978,9 +1978,9 @@ render_unblurred_inset_shadow_node (GskGLRenderer   *self,
   g_assert (blur_radius == 0);
 
   ops_set_program (builder, &self->programs->inset_shadow_program);
-  ops_set_inset_shadow (builder, transform_rect (self, builder, gsk_inset_shadow_node_peek_outline (node)),
+  ops_set_inset_shadow (builder, transform_rect (self, builder, gsk_inset_shadow_node_get_outline (node)),
                         spread,
-                        gsk_inset_shadow_node_peek_color (node),
+                        gsk_inset_shadow_node_get_color (node),
                         dx, dy);
 
   load_vertex_data (ops_draw (builder, NULL), &node->bounds, builder);
@@ -1997,7 +1997,7 @@ render_inset_shadow_node (GskGLRenderer   *self,
   const float blur_extra = blur_radius * 2.0; /* 2.0 = shader radius_multiplier */
   const float dx = gsk_inset_shadow_node_get_dx (node);
   const float dy = gsk_inset_shadow_node_get_dy (node);
-  const GskRoundedRect *node_outline = gsk_inset_shadow_node_peek_outline (node);
+  const GskRoundedRect *node_outline = gsk_inset_shadow_node_get_outline (node);
   float texture_width;
   float texture_height;
   int blurred_texture_id;
@@ -2069,7 +2069,7 @@ render_inset_shadow_node (GskGLRenderer   *self,
       ops_set_program (builder, &self->programs->inset_shadow_program);
       ops_set_inset_shadow (builder, transform_rect (self, builder, &outline_to_blur),
                             spread * MAX (scale_x, scale_y),
-                            gsk_inset_shadow_node_peek_color (node),
+                            gsk_inset_shadow_node_get_color (node),
                             dx * scale_x, dy * scale_y);
 
       load_float_vertex_data (ops_draw (builder, NULL), builder,
@@ -2130,7 +2130,7 @@ render_unblurred_outset_shadow_node (GskGLRenderer   *self,
                                      GskRenderNode   *node,
                                      RenderOpBuilder *builder)
 {
-  const GskRoundedRect *outline = gsk_outset_shadow_node_peek_outline (node);
+  const GskRoundedRect *outline = gsk_outset_shadow_node_get_outline (node);
   const float x = node->bounds.origin.x;
   const float y = node->bounds.origin.y;
   const float w = node->bounds.size.width;
@@ -2151,7 +2151,7 @@ render_unblurred_outset_shadow_node (GskGLRenderer   *self,
   ops_set_program (builder, &self->programs->unblurred_outset_shadow_program);
   ops_set_unblurred_outset_shadow (builder, transform_rect (self, builder, outline),
                                    spread,
-                                   gsk_outset_shadow_node_peek_color (node),
+                                   gsk_outset_shadow_node_get_color (node),
                                    dx, dy);
 
   /* Corners... */
@@ -2200,8 +2200,8 @@ render_outset_shadow_node (GskGLRenderer   *self,
   const float scale = ops_get_scale (builder);
   const float scale_x = builder->scale_x;
   const float scale_y = builder->scale_y;
-  const GskRoundedRect *outline = gsk_outset_shadow_node_peek_outline (node);
-  const GdkRGBA *color = gsk_outset_shadow_node_peek_color (node);
+  const GskRoundedRect *outline = gsk_outset_shadow_node_get_outline (node);
+  const GdkRGBA *color = gsk_outset_shadow_node_get_color (node);
   const float blur_radius = gsk_outset_shadow_node_get_blur_radius (node);
   const float blur_extra = blur_radius * 2.0f; /* 2.0 = shader radius_multiplier */
   const int extra_blur_pixels = (int) ceilf(blur_extra / 2.0 * scale);
@@ -2529,7 +2529,7 @@ render_shadow_node (GskGLRenderer   *self,
 
   for (i = 0; i < n_shadows; i ++)
     {
-      const GskShadow *shadow = gsk_shadow_node_peek_shadow (node, i);
+      const GskShadow *shadow = gsk_shadow_node_get_shadow (node, i);
       const float dx = shadow->dx;
       const float dy = shadow->dy;
       TextureRegion region;
@@ -2713,7 +2713,7 @@ render_repeat_node (GskGLRenderer   *self,
                     RenderOpBuilder *builder)
 {
   GskRenderNode *child = gsk_repeat_node_get_child (node);
-  const graphene_rect_t *child_bounds = gsk_repeat_node_peek_child_bounds (node);
+  const graphene_rect_t *child_bounds = gsk_repeat_node_get_child_bounds (node);
   TextureRegion region;
   gboolean is_offscreen;
   OpRepeat *op;
@@ -3663,7 +3663,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
 
     case GSK_TEXT_NODE:
       render_text_node (self, node, builder,
-                        gsk_text_node_peek_color (node), FALSE);
+                        gsk_text_node_get_color (node), FALSE);
     break;
 
     case GSK_COLOR_MATRIX_NODE:

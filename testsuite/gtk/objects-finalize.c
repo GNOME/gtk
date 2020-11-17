@@ -69,6 +69,12 @@ test_finalize_object (gconstpointer data)
                              NULL);
       gdk_content_formats_unref (formats);
     }
+  else if (g_type_is_a (test_type, GSK_TYPE_GL_SHADER))
+    {
+      GBytes *bytes = g_bytes_new_static ("", 0);
+      object = g_object_new (test_type, "source", bytes, NULL);
+      g_bytes_unref (bytes);
+    }
   else if (g_type_is_a (test_type, GTK_TYPE_FILTER_LIST_MODEL) ||
            g_type_is_a (test_type, GTK_TYPE_NO_SELECTION) ||
            g_type_is_a (test_type, GTK_TYPE_SINGLE_SELECTION) ||

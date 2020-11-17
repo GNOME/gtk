@@ -337,7 +337,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       return;
 
     case GSK_CAIRO_NODE:
-      if (gsk_cairo_node_peek_surface (node) == NULL)
+      if (gsk_cairo_node_get_surface (node) == NULL)
         return;
       /* We're using recording surfaces, so drawing them to an image
        * surface and uploading them is the right thing.
@@ -347,8 +347,8 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
 
     case GSK_TEXT_NODE:
       {
-        const PangoFont *font = gsk_text_node_peek_font (node);
-        const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node, NULL);
+        const PangoFont *font = gsk_text_node_get_font (node);
+        const PangoGlyphInfo *glyphs = gsk_text_node_get_glyphs (node, NULL);
         guint num_glyphs = gsk_text_node_get_num_glyphs (node);
         gboolean has_color_glyphs = gsk_text_node_has_color_glyphs (node);
         int i;
@@ -571,7 +571,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
 
     case GSK_CLIP_NODE:
       {
-        if (!gsk_vulkan_push_constants_intersect_rect (&op.constants.constants, constants, gsk_clip_node_peek_clip (node)))
+        if (!gsk_vulkan_push_constants_intersect_rect (&op.constants.constants, constants, gsk_clip_node_get_clip (node)))
           FALLBACK ("Failed to find intersection between clip of type %u and rectangle", constants->clip.type);
         if (op.constants.constants.clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
           return;
@@ -590,7 +590,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       {
         if (!gsk_vulkan_push_constants_intersect_rounded (&op.constants.constants,
                                                           constants,
-                                                          gsk_rounded_clip_node_peek_clip (node)))
+                                                          gsk_rounded_clip_node_get_clip (node)))
           FALLBACK ("Failed to find intersection between clip of type %u and rounded rectangle", constants->clip.type);
         if (op.constants.constants.clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
           return;
@@ -932,7 +932,7 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
           {
             GskRenderNode *child = gsk_repeat_node_get_child (op->render.node);
             const graphene_rect_t *bounds = &op->render.node->bounds;
-            const graphene_rect_t *child_bounds = gsk_repeat_node_peek_child_bounds (op->render.node);
+            const graphene_rect_t *child_bounds = gsk_repeat_node_get_child_bounds (op->render.node);
 
             op->render.source = gsk_vulkan_render_pass_get_node_as_texture (self,
                                                                             render,
@@ -1195,10 +1195,10 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
                                                           data + n_bytes + offset,
                                                           GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
                                                           &op->text.node->bounds,
-                                                          (PangoFont *)gsk_text_node_peek_font (op->text.node),
+                                                          (PangoFont *)gsk_text_node_get_font (op->text.node),
                                                           gsk_text_node_get_num_glyphs (op->text.node),
-                                                          gsk_text_node_peek_glyphs (op->text.node, NULL),
-                                                          gsk_text_node_peek_color (op->text.node),
+                                                          gsk_text_node_get_glyphs (op->text.node, NULL),
+                                                          gsk_text_node_get_color (op->text.node),
                                                           gsk_text_node_get_offset (op->text.node),
                                                           op->text.start_glyph,
                                                           op->text.num_glyphs,
@@ -1214,9 +1214,9 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
                                                                 data + n_bytes + offset,
                                                                 GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
                                                                 &op->text.node->bounds,
-                                                                (PangoFont *)gsk_text_node_peek_font (op->text.node),
+                                                                (PangoFont *)gsk_text_node_get_font (op->text.node),
                                                                 gsk_text_node_get_num_glyphs (op->text.node),
-                                                                gsk_text_node_peek_glyphs (op->text.node, NULL),
+                                                                gsk_text_node_get_glyphs (op->text.node, NULL),
                                                                 gsk_text_node_get_offset (op->text.node),
                                                                 op->text.start_glyph,
                                                                 op->text.num_glyphs,
@@ -1231,7 +1231,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
             gsk_vulkan_color_pipeline_collect_vertex_data (GSK_VULKAN_COLOR_PIPELINE (op->render.pipeline),
                                                            data + n_bytes + offset,
                                                            &op->render.node->bounds,
-                                                           gsk_color_node_peek_color (op->render.node));
+                                                           gsk_color_node_get_color (op->render.node));
             n_bytes += op->render.vertex_count;
           }
           break;
@@ -1242,11 +1242,11 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
             gsk_vulkan_linear_gradient_pipeline_collect_vertex_data (GSK_VULKAN_LINEAR_GRADIENT_PIPELINE (op->render.pipeline),
                                                                      data + n_bytes + offset,
                                                                      &op->render.node->bounds,
-                                                                     gsk_linear_gradient_node_peek_start (op->render.node),
-                                                                     gsk_linear_gradient_node_peek_end (op->render.node),
+                                                                     gsk_linear_gradient_node_get_start (op->render.node),
+                                                                     gsk_linear_gradient_node_get_end (op->render.node),
                                                                      gsk_render_node_get_node_type (op->render.node) == GSK_REPEATING_LINEAR_GRADIENT_NODE,
                                                                      gsk_linear_gradient_node_get_n_color_stops (op->render.node),
-                                                                     gsk_linear_gradient_node_peek_color_stops (op->render.node, NULL));
+                                                                     gsk_linear_gradient_node_get_color_stops (op->render.node, NULL));
             n_bytes += op->render.vertex_count;
           }
           break;
@@ -1295,8 +1295,8 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
                                                             data + n_bytes + offset,
                                                             &op->render.node->bounds,
                                                             &op->render.source_rect,
-                                                            gsk_color_matrix_node_peek_color_matrix (op->render.node),
-                                                            gsk_color_matrix_node_peek_color_offset (op->render.node));
+                                                            gsk_color_matrix_node_get_color_matrix (op->render.node),
+                                                            gsk_color_matrix_node_get_color_offset (op->render.node));
             n_bytes += op->render.vertex_count;
           }
           break;
@@ -1306,9 +1306,9 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
             op->render.vertex_offset = offset + n_bytes;
             gsk_vulkan_border_pipeline_collect_vertex_data (GSK_VULKAN_BORDER_PIPELINE (op->render.pipeline),
                                                             data + n_bytes + offset,
-                                                            gsk_border_node_peek_outline (op->render.node),
-                                                            gsk_border_node_peek_widths (op->render.node),
-                                                            gsk_border_node_peek_colors (op->render.node));
+                                                            gsk_border_node_get_outline (op->render.node),
+                                                            gsk_border_node_get_widths (op->render.node),
+                                                            gsk_border_node_get_colors (op->render.node));
             n_bytes += op->render.vertex_count;
           }
           break;
@@ -1318,8 +1318,8 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
             op->render.vertex_offset = offset + n_bytes;
             gsk_vulkan_box_shadow_pipeline_collect_vertex_data (GSK_VULKAN_BOX_SHADOW_PIPELINE (op->render.pipeline),
                                                                 data + n_bytes + offset,
-                                                                gsk_inset_shadow_node_peek_outline (op->render.node),
-                                                                gsk_inset_shadow_node_peek_color (op->render.node),
+                                                                gsk_inset_shadow_node_get_outline (op->render.node),
+                                                                gsk_inset_shadow_node_get_color (op->render.node),
                                                                 gsk_inset_shadow_node_get_dx (op->render.node),
                                                                 gsk_inset_shadow_node_get_dy (op->render.node),
                                                                 gsk_inset_shadow_node_get_spread (op->render.node),
@@ -1333,8 +1333,8 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
             op->render.vertex_offset = offset + n_bytes;
             gsk_vulkan_box_shadow_pipeline_collect_vertex_data (GSK_VULKAN_BOX_SHADOW_PIPELINE (op->render.pipeline),
                                                                 data + n_bytes + offset,
-                                                                gsk_outset_shadow_node_peek_outline (op->render.node),
-                                                                gsk_outset_shadow_node_peek_color (op->render.node),
+                                                                gsk_outset_shadow_node_get_outline (op->render.node),
+                                                                gsk_outset_shadow_node_get_color (op->render.node),
                                                                 gsk_outset_shadow_node_get_dx (op->render.node),
                                                                 gsk_outset_shadow_node_get_dy (op->render.node),
                                                                 gsk_outset_shadow_node_get_spread (op->render.node),

@@ -926,6 +926,7 @@ typefuncs = custom_target('gtktypefuncs.inc',
                           depends: [ gdkenum_h, gskenum_h, ],
                           output: 'gtktypefuncs.inc',
                           input: gdk_headers +
+                            gsk_public_headers +
                             gtk_public_headers +
                             gtk_deprecated_headers +
                             [ gtktypebuiltins_h, ] +
