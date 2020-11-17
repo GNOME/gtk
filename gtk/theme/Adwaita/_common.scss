@@ -4141,7 +4141,7 @@ popover.entry-completion > contents {
 $_menu-padding: 12px;
 
 popover.menu {
-  padding: 2px 2px 2px 4px; //allow some shadow. #1987
+  padding: 0;
 
   box.inline-buttons {
     padding: 0 $_menu-padding;
