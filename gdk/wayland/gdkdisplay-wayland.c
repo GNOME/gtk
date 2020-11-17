@@ -1076,6 +1076,8 @@ get_cursor_theme (GdkWaylandDisplay *display_wayland,
 /**
  * gdk_wayland_display_set_cursor_theme:
  * @display: (type GdkWaylandDisplay): a #GdkDisplay
+ * @name: the new cursor theme
+ * @size: the size to use for cursors
  *
  * Sets the cursor theme for the given @display.
  */

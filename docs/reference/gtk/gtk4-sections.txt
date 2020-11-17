@@ -4336,7 +4336,6 @@ gtk_snapshot_render_background
 gtk_snapshot_render_frame
 gtk_snapshot_render_focus
 gtk_snapshot_render_layout
-gtk_snapshot_render_insertion_cursor
 <SUBSECTION Private>
 gtk_snapshot_get_type
 </SECTION>
