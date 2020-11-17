@@ -114,8 +114,6 @@ enum {
   PROP_TEXT,
   PROP_HAS_SELECTION,
   PROP_CURSOR_POSITION,
-  PROP_COPY_TARGET_LIST,
-  PROP_PASTE_TARGET_LIST,
   PROP_CAN_UNDO,
   PROP_CAN_REDO,
   PROP_ENABLE_UNDO,
@@ -537,32 +535,6 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
 			0, G_MAXINT,
                         0,
                         GTK_PARAM_READABLE);
-
-  /**
-   * GtkTextBuffer:copy-target-list:
-   *
-   * The list of targets this buffer supports for clipboard copying
-   * and as DND source.
-   */
-  text_buffer_props[PROP_COPY_TARGET_LIST] =
-      g_param_spec_boxed ("copy-target-list",
-                          P_("Copy target list"),
-                          P_("The list of targets this buffer supports for clipboard copying and DND source"),
-                          GDK_TYPE_CONTENT_FORMATS,
-                          GTK_PARAM_READABLE);
-
-  /**
-   * GtkTextBuffer:paste-target-list:
-   *
-   * The list of targets this buffer supports for clipboard pasting
-   * and as DND destination.
-   */
-  text_buffer_props[PROP_PASTE_TARGET_LIST] =
-      g_param_spec_boxed ("paste-target-list",
-                          P_("Paste target list"),
-                          P_("The list of targets this buffer supports for clipboard pasting and DND destination"),
-                          GDK_TYPE_CONTENT_FORMATS,
-                          GTK_PARAM_READABLE);
 
   g_object_class_install_properties (object_class, LAST_PROP, text_buffer_props);
 
