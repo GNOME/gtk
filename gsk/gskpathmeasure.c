@@ -47,6 +47,7 @@ struct _GskPathMeasure
   guint ref_count;
 
   GskPath *path;
+  float tolerance;
 
   float length;
   gsize n_contours;
@@ -61,17 +62,35 @@ G_DEFINE_BOXED_TYPE (GskPathMeasure, gsk_path_measure,
  * gsk_path_measure_new:
  * @path: the path to measure
  *
- * Creates a measure object for the given @path.
+ * Creates a measure object for the given @path with a
+ * default tolerance.
  *
  * Returns: a new `GskPathMeasure` representing @path
  **/
 GskPathMeasure *
 gsk_path_measure_new (GskPath *path)
 {
+  return gsk_path_measure_new_with_tolerance (path, GSK_PATH_TOLERANCE_DEFAULT);
+}
+
+/**
+ * gsk_path_measure_new_with_tolerance:
+ * @path: the path to measure
+ * @tolerance: the tolerance for measuring operations
+ *
+ * Creates a measure object for the given @path and @tolerance.
+ *
+ * Returns: a new `GskPathMeasure` representing @path
+ **/
+GskPathMeasure *
+gsk_path_measure_new_with_tolerance (GskPath *path,
+                                     float    tolerance)
+{
   GskPathMeasure *self;
   gsize i, n_contours;
 
   g_return_val_if_fail (path != NULL, NULL);
+  g_return_val_if_fail (tolerance > 0, NULL);
 
   n_contours = gsk_path_get_n_contours (path);
 
@@ -79,11 +98,14 @@ gsk_path_measure_new (GskPath *path)
 
   self->ref_count = 1;
   self->path = gsk_path_ref (path);
+  self->tolerance = tolerance;
   self->n_contours = n_contours;
 
   for (i = 0; i < n_contours; i++)
     {
-      self->measures[i].contour_data = gsk_contour_init_measure (path, i, &self->measures[i].length);
+      self->measures[i].contour_data = gsk_contour_init_measure (path, i,
+                                                                 self->tolerance,
+                                                                 &self->measures[i].length);
       self->length += self->measures[i].length;
     }
 
