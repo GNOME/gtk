@@ -9,6 +9,7 @@ $button_transition: all 200ms $ease-out-quad;
 $focus_transition: outline-width 200ms $ease-out-quad, outline-offset 200ms $ease-out-quad;
 $button_radius: 5px;
 $menu_radius: 5px;
+$menu_margin: $menu_radius; //margin around menuitems & sidebar items
 $window_radius: $button_radius + 3;
 $popover_radius: $button_radius + 4;
 
@@ -194,7 +195,10 @@ window.assistant {
 
   .sidebar > label { padding: 6px 12px; }
 
-  .sidebar > label.highlight { background-color: mix($bg_color, $fg_color, 80%); }
+  .sidebar > label.highlight {
+    background-color: $menu_selected_color;
+    border-radius: $menu-margin;
+  }
 }
 
 %osd,
@@ -1849,6 +1853,148 @@ magnifier {
   background-color: $base_color;
 }
 
+/**********************
+ * Popover Base Menus *
+ **********************/
+
+$_menu-padding: 12px; //inner menuitem padding
+//global $menu-margin for outside menuitems
+
+popover.menu {
+  padding: 0;
+
+  box.inline-buttons {
+    padding: 0 $_menu-padding;
+
+    button.image-button.model {
+      @include button(undecorated);
+
+      min-height: 30px;
+      min-width: 30px;
+      padding: 0;
+      border: none;
+      outline: none;
+      transition: none;
+
+      &:selected { background: image($menu_selected_color); }
+    }
+  }
+
+  box.circular-buttons {
+    padding: $_menu-padding $_menu-padding 6px;
+
+    button.circular.image-button.model {
+      @extend %list_button;
+
+      padding: 11px;
+      &:focus {
+         background-color: $menu_selected_color;
+         border-color: $menu_selected_color;
+      }
+    }
+  }
+
+  & > arrow,
+  &.background > contents {
+    background-color: $menu_color;
+    padding: $menu-margin;
+  }
+
+  &.background separator {
+    margin: 6px 0;
+  }
+
+  accelerator {
+    color: gtkalpha(currentColor,0.55);
+
+    &:dir(ltr) { margin-left: $_menu-padding; }
+    &:dir(rtl) { margin-right: $_menu-padding; }
+  }
+
+  check,
+  radio {
+    @include check('menu', 'transparent', $text_color);
+
+    &:hover { @include check('menu-active', 'transparent', $text_color); }
+    &:active { @include check('menu-active', 'transparent', $text_color); }
+  }
+
+  //only menu radios have a border
+  radio { border-color: $borders_color;
+    &:active { border-color: transparentize($borders_color,0.5); }
+  }
+
+  arrow.left,
+  radio.left,
+  check.left {
+    margin-left: -2px;
+    margin-right: 6px;
+  }
+
+  arrow.right,
+  radio.right,
+  check.right {
+    margin-left: 6px;
+    margin-right: -2px;
+  }
+
+  modelbutton {
+    min-height: 30px;
+    min-width: 40px;
+    padding: 0 $_menu-padding;
+    border-radius: $menu-margin;
+
+    &:selected {
+      color: $text-color;
+      background-color: $menu_selected_color;
+    }
+    &:selected:active {
+      //@extend %selected_items;
+      //color: $selected_fg_color;
+      background-color: darken($bg_color,14%); // matching buttons
+    }
+  }
+
+  label.title {
+    font-weight: bold;
+    padding: 4px ($_menu-padding + 20px); //this will fall apart with font sizing
+  }
+}
+
+// initial styling for popover menu and bar
+menubar {
+  padding: 0px;
+  box-shadow: inset 0 -1px transparentize(black, 0.9);
+
+  > item {
+    min-height: 16px;
+    padding: 4px 8px;
+
+    &:selected { //Seems like it :hover even with keyboard focus
+      box-shadow: inset 0 -3px $selected_bg_color;
+      color: $link_color;
+    }
+
+    &:disabled {
+      color: $insensitive_fg_color;
+      box-shadow: none;
+    }
+  }
+
+  & > item popover.menu.background > contents {
+    padding: $menu-margin;
+  }
+  //nested submenus
+  & > item popover.menu popover.menu {
+    padding: 0 0 4px 0;
+  }
+  & > item popover.menu.background popover.menu.background > contents {
+    margin: 0;
+    border-radius: $popover_radius; //including top
+  }
+}
+
+
 /*************
  * Notebooks *
  *************/
@@ -3389,6 +3535,7 @@ filechooserbutton:drop(active) {
  * Sidebar *
  ***********/
 .sidebar {
+  padding: $menu-margin;
   border-style: none;
   background-color: mix($bg_color, $base_color, 50%);
 
@@ -3441,11 +3588,14 @@ separator.sidebar {
  **********************/
 
 .navigation-sidebar {
+  padding: $menu-margin 0; //only vertical padding. horizontal row size would clip
 
   > row {
     // Needs overriding of the GtkListBoxRow padding
     min-height: 36px;
-    padding: 0px 8px;
+    padding: 0px 2px;
+    border-radius: $menu-margin;
+    margin: 0 $menu-margin;
 
     // Using margins/padding directly in the SidebarRow
     // will make the animation of the new bookmark row jump
@@ -4132,146 +4282,6 @@ emoji-completion-row emoji:hover {
 
 popover.entry-completion > contents {
   padding: 0;
-}
-
-/**********************
- * Popover Base Menus *
- **********************/
-
-$_menu-padding: 12px;
-
-popover.menu {
-  padding: 0;
-
-  box.inline-buttons {
-    padding: 0 $_menu-padding;
-
-    button.image-button.model {
-      @include button(undecorated);
-
-      min-height: 30px;
-      min-width: 30px;
-      padding: 0;
-      border: none;
-      outline: none;
-      transition: none;
-
-      &:selected { background: image($menu_selected_color); }
-    }
-  }
-
-  box.circular-buttons {
-    padding: $_menu-padding $_menu-padding 6px;
-
-    button.circular.image-button.model {
-      @extend %list_button;
-
-      padding: 11px;
-      &:focus {
-         background-color: $menu_selected_color;
-         border-color: $menu_selected_color;
-      }
-    }
-  }
-
-  & > arrow,
-  &.background > contents {
-    background-color: $menu_color;
-    padding: 0;
-  }
-
-  &.background separator {
-    margin: 6px 0;
-  }
-
-  accelerator {
-    color: gtkalpha(currentColor,0.55);
-
-    &:dir(ltr) { margin-left: $_menu-padding; }
-    &:dir(rtl) { margin-right: $_menu-padding; }
-  }
-
-  check,
-  radio {
-    @include check('menu', 'transparent', $text_color);
-
-    &:hover { @include check('menu-active', 'transparent', $text_color); }
-    &:active { @include check('menu-active', 'transparent', $text_color); }
-  }
-
-  //only menu radios have a border
-  radio { border-color: $borders_color;
-    &:active { border-color: transparentize($borders_color,0.5); }
-  }
-
-  arrow.left,
-  radio.left,
-  check.left {
-    margin-left: -2px;
-    margin-right: 6px;
-  }
-
-  arrow.right,
-  radio.right,
-  check.right {
-    margin-left: 6px;
-    margin-right: -2px;
-  }
-
-  modelbutton {
-    min-height: 30px;
-    min-width: 40px;
-    padding: $_menu-padding/6 $_menu-padding;
-    border-radius: 0;
-
-    &:selected {
-      color: $text-color;
-      background-color: $menu_selected_color;
-    }
-    &:selected:active {
-      //@extend %selected_items;
-      //color: $selected_fg_color;
-      background-color: darken($bg_color,14%); // matching buttons
-    }
-  }
-
-  label.title {
-    font-weight: bold;
-    padding: 4px ($_menu-padding + 20px); //this will fall apart with font sizing
-  }
-}
-
-// initial styling for popover menu and bar
-menubar {
-  padding: 0px;
-  box-shadow: inset 0 -1px transparentize(black, 0.9);
-
-  > item {
-    min-height: 16px;
-    padding: 4px 8px;
-
-    &:selected { //Seems like it :hover even with keyboard focus
-      box-shadow: inset 0 -3px $selected_bg_color;
-      color: $link_color;
-    }
-
-    &:disabled {
-      color: $insensitive_fg_color;
-      box-shadow: none;
-    }
-  }
-
-  & > item popover.menu.background > contents {
-    padding: 0;
-  }
-  //nested submenus
-  & > item popover.menu popover.menu {
-    padding: 0 0 4px 0;
-  }
-  & > item popover.menu.background popover.menu.background > contents {
-    margin: 0;
-    border-radius: $popover_radius; //including top
-  }
 }
 
 statusbar {
