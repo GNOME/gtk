@@ -932,7 +932,7 @@ gtk_window_class_init (GtkWindowClass *klass)
    * @window: the window which received the signal
    *
    * The ::activate-focus signal is a
-   * [keybinding signal][GtkBindingSignal]
+   * [keybinding signal][GtkSignalAction]
    * which gets emitted when the user activates the currently
    * focused widget of @window.
    */
@@ -951,7 +951,7 @@ gtk_window_class_init (GtkWindowClass *klass)
    * @window: the window which received the signal
    *
    * The ::activate-default signal is a
-   * [keybinding signal][GtkBindingSignal]
+   * [keybinding signal][GtkSignalAction]
    * which gets emitted when the user activates the default widget
    * of @window.
    */
@@ -987,7 +987,7 @@ gtk_window_class_init (GtkWindowClass *klass)
    * @window: the window on which the signal is emitted
    * @toggle: toggle the debugger
    *
-   * The ::enable-debugging signal is a [keybinding signal][GtkBindingSignal]
+   * The ::enable-debugging signal is a [keybinding signal][GtkSignalAction]
    * which gets emitted when the user enables or disables interactive
    * debugging. When @toggle is %TRUE, interactive debugging is toggled
    * on or off, when it is %FALSE, the debugger will be pointed at the

@@ -536,7 +536,7 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
    * double-clicking, or by using the Space or Enter key.
    *
    * While this signal is used as a
-   * [keybinding signal][GtkBindingSignal],
+   * [keybinding signal][GtkSignalAction],
    * it can be used by applications for their own purposes.
    */
   child_signals[CHILD_ACTIVATE] =
@@ -3732,7 +3732,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * @box: the #GtkFlowBox on which the signal is emitted
    *
    * The ::activate-cursor-child signal is a
-   * [keybinding signal][GtkBindingSignal]
+   * [keybinding signal][GtkSignalAction]
    * which gets emitted when the user activates the @box.
    */
   signals[ACTIVATE_CURSOR_CHILD] = g_signal_new (I_("activate-cursor-child"),
@@ -3748,7 +3748,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * @box: the #GtkFlowBox on which the signal is emitted
    *
    * The ::toggle-cursor-child signal is a
-   * [keybinding signal][GtkBindingSignal]
+   * [keybinding signal][GtkSignalAction]
    * which toggles the selection of the child that has the focus.
    *
    * The default binding for this signal is Ctrl-Space.
@@ -3770,7 +3770,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * @modify: whether to modify the selection
    *
    * The ::move-cursor signal is a
-   * [keybinding signal][GtkBindingSignal]
+   * [keybinding signal][GtkSignalAction]
    * which gets emitted when the user initiates a cursor movement.
    *
    * Applications should not connect to it, but may emit it with
@@ -3804,7 +3804,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * @box: the #GtkFlowBox on which the signal is emitted
    *
    * The ::select-all signal is a
-   * [keybinding signal][GtkBindingSignal]
+   * [keybinding signal][GtkSignalAction]
    * which gets emitted to select all children of the box, if
    * the selection mode permits it.
    *
@@ -3823,7 +3823,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * @box: the #GtkFlowBox on which the signal is emitted
    *
    * The ::unselect-all signal is a
-   * [keybinding signal][GtkBindingSignal]
+   * [keybinding signal][GtkSignalAction]
    * which gets emitted to unselect all children of the box, if
    * the selection mode permits it.
    *

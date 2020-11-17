@@ -1333,7 +1333,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
    * @modify: whether to modify the selection
    *
    * The #GtkTreeView::move-cursor signal is a [keybinding
-   * signal][GtkBindingSignal] which gets emitted when the user
+   * signal][GtkSignalAction] which gets emitted when the user
    * presses one of the cursor keys.
    *
    * Applications should not connect to it, but may emit it with

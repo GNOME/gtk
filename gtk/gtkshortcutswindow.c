@@ -775,7 +775,7 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
    * GtkShortcutsWindow::close:
    *
    * The ::close signal is a
-   * [keybinding signal][GtkBindingSignal]
+   * [keybinding signal][GtkSignalAction]
    * which gets emitted when the user uses a keybinding to close
    * the window.
    *
@@ -793,7 +793,7 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
    * GtkShortcutsWindow::search:
    *
    * The ::search signal is a
-   * [keybinding signal][GtkBindingSignal]
+   * [keybinding signal][GtkSignalAction]
    * which gets emitted when the user uses a keybinding to start a search.
    *
    * The default binding for this signal is Control-F.

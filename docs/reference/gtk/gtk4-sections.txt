@@ -4845,7 +4845,6 @@ gtk_render_line
 gtk_render_option
 gtk_render_activity
 gtk_render_icon
-gtk_render_insertion_cursor
 
 <SUBSECTION Standard>
 GTK_TYPE_STYLE_CONTEXT

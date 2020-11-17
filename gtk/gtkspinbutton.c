@@ -528,7 +528,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
    * @spin_button: the object on which the signal was emitted
    * @scroll: a #GtkScrollType to specify the speed and amount of change
    *
-   * The ::change-value signal is a [keybinding signal][GtkBindingSignal] 
+   * The ::change-value signal is a [keybinding signal][GtkSignalAction] 
    * which gets emitted when the user initiates a value change. 
    *
    * Applications should not connect to it, but may emit it with 

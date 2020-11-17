@@ -338,7 +338,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    * GtkSearchEntry::next-match:
    * @entry: the entry on which the signal was emitted
    *
-   * The ::next-match signal is a [keybinding signal][GtkBindingSignal]
+   * The ::next-match signal is a [keybinding signal][GtkSignalAction]
    * which gets emitted when the user initiates a move to the next match
    * for the current search string.
    *
@@ -360,7 +360,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    * GtkSearchEntry::previous-match:
    * @entry: the entry on which the signal was emitted
    *
-   * The ::previous-match signal is a [keybinding signal][GtkBindingSignal]
+   * The ::previous-match signal is a [keybinding signal][GtkSignalAction]
    * which gets emitted when the user initiates a move to the previous match
    * for the current search string.
    *
@@ -382,7 +382,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    * GtkSearchEntry::stop-search:
    * @entry: the entry on which the signal was emitted
    *
-   * The ::stop-search signal is a [keybinding signal][GtkBindingSignal]
+   * The ::stop-search signal is a [keybinding signal][GtkSignalAction]
    * which gets emitted when the user stops a search via keyboard input.
    *
    * Applications should connect to it, to implement hiding the search
