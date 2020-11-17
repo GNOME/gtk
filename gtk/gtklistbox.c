@@ -560,7 +560,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    * GtkListBox::select-all:
    * @box: the #GtkListBox on which the signal is emitted
    *
-   * The ::select-all signal is a [keybinding signal][GtkBindingSignal]
+   * The ::select-all signal is a [keybinding signal][GtkSignalAction]
    * which gets emitted to select all children of the box, if the selection
    * mode permits it.
    *
@@ -578,7 +578,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    * GtkListBox::unselect-all:
    * @box: the #GtkListBox on which the signal is emitted
    * 
-   * The ::unselect-all signal is a [keybinding signal][GtkBindingSignal]
+   * The ::unselect-all signal is a [keybinding signal][GtkSignalAction]
    * which gets emitted to unselect all children of the box, if the selection
    * mode permits it.
    *

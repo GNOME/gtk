@@ -1700,7 +1700,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
    * @self: the #GtkPopover which received the signal
    *
    * The ::activate-default signal is a
-   * [keybinding signal][GtkBindingSignal]
+   * [keybinding signal][GtkSignalAction]
    * which gets emitted when the user activates the default widget
    * of @self.
    */

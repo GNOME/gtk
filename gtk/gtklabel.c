@@ -634,7 +634,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * @extend_selection: %TRUE if the move should extend the selection
    *
    * The ::move-cursor signal is a
-   * [keybinding signal][GtkBindingSignal]
+   * [keybinding signal][GtkSignalAction]
    * which gets emitted when the user initiates a cursor movement.
    * If the cursor is not visible in @entry, this signal causes
    * the viewport to be moved instead.
@@ -668,7 +668,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * @self: the object which received the signal
    *
    * The ::copy-clipboard signal is a
-   * [keybinding signal][GtkBindingSignal]
+   * [keybinding signal][GtkSignalAction]
    * which gets emitted to copy the selection to the clipboard.
    *
    * The default binding for this signal is Ctrl-c.
@@ -686,7 +686,7 @@ gtk_label_class_init (GtkLabelClass *class)
      * GtkLabel::activate-current-link:
      * @self: The label on which the signal was emitted
      *
-     * A [keybinding signal][GtkBindingSignal]
+     * A [keybinding signal][GtkSignalAction]
      * which gets emitted when the user activates a link in the label.
      *
      * Applications may also emit the signal with g_signal_emit_by_name()
