@@ -66,7 +66,7 @@ typedef enum
  * GdkTimeCoord:
  * @time: The timestamp for this event.
  * @flags: Flags indicating what axes are present
- * @axes: axis values
+ * @axes: (array fixed-size=12): axis values
  *
  * A #GdkTimeCoord stores a single event in a motion history.
  */
