@@ -1145,7 +1145,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <child>
                                       <object class="GtkLabel">
                                         <property name="label">Caption</property>
-                                        <style><class name="Caption"/></style>
+                                        <style><class name="caption"/></style>
                                       </object>
                                     </child>
                                   </object>
