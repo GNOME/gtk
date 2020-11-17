@@ -52,6 +52,9 @@
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
 #endif
+#ifdef GDK_WINDOWING_MACOS
+#include "macos/gdkmacos.h"
+#endif
 
 #include "gdk/gdk-private.h"
 
@@ -173,34 +176,27 @@ redraw_everything (void)
 }
 
 static double
+get_dpi_ratio (GtkInspectorVisual *vis)
+{
+#ifdef GDK_WINDOWING_MACOS
+  if (GDK_IS_MACOS_DISPLAY (vis->display))
+    return 72.0 * 1024.0;
+#endif
+
+  return 96.0 * 1024.0;
+}
+
+static double
 get_font_scale (GtkInspectorVisual *vis)
 {
-#ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_DISPLAY (vis->display))
-    {
-      int dpi_int;
+  double ratio = get_dpi_ratio (vis);
+  int dpi_int;
 
-      g_object_get (gtk_settings_get_for_display (vis->display),
-                    "gtk-xft-dpi", &dpi_int,
-                    NULL);
+  g_object_get (gtk_settings_get_for_display (vis->display),
+                "gtk-xft-dpi", &dpi_int,
+                NULL);
 
-      return dpi_int / (96.0 * 1024.0);
-    }
-#endif
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (vis->display))
-    {
-      int dpi_int;
-
-      g_object_get (gtk_settings_get_for_display (vis->display),
-                    "gtk-xft-dpi", &dpi_int,
-                    NULL);
-
-      return dpi_int / (96.0 * 1024.0);
-    }
-#endif
-
-  return 1.0;
+  return dpi_int / ratio;
 }
 
 static void
@@ -209,8 +205,10 @@ update_font_scale (GtkInspectorVisual *vis,
                    gboolean            update_adjustment,
                    gboolean            update_entry)
 {
+  double ratio = get_dpi_ratio (vis);
+
   g_object_set (gtk_settings_get_for_display (vis->display),
-                "gtk-xft-dpi", (int)(factor * 96 * 1024),
+                "gtk-xft-dpi", (int)(factor * ratio),
                 NULL);
 
   if (update_adjustment)
