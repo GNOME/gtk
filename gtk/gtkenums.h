@@ -343,10 +343,11 @@ typedef enum
 
 /**
  * GtkPackType:
- * @GTK_PACK_START: The child is packed into the start of the box
- * @GTK_PACK_END: The child is packed into the end of the box
+ * @GTK_PACK_START: The child is packed into the start of the widget
+ * @GTK_PACK_END: The child is packed into the end of the widget
  *
- * Represents the packing location #GtkBox children
+ * Represents the packing location of a children in its parent.
+ * See #GtkWindowControls for example.
  */
 typedef enum
 {
