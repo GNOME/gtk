@@ -73,12 +73,14 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkSearchEngineQuartz, _gtk_search_engine_quartz, GT
 {
   int i;
   GList *hits = NULL;
-  /* The max was originally set to 1000 to mimic the Beagle backend. */
-  const unsigned int max_hits = 1000;
-  const unsigned int max_iter = submitted_hits + [ns_query resultCount];
+  /* The max was originally set to 1000 to mimic something called "the
+   * boogie backend". submitted_hits contains the number of hits we've
+   * processed in previous calls to this function.
+   */
+  const unsigned int max_hits = 1000 - submitted_hits;
+  const unsigned int max_iter = [ns_query resultCount];
 
-  /* Here we submit hits "submitted_hits" to "resultCount" */
-  for (i = submitted_hits; i < max_iter && i < max_hits; ++i)
+  for (i = 0; i < max_iter && i < max_hits; ++i)
     {
       id result = [ns_query resultAtIndex:i];
       const char *result_path;
@@ -86,6 +88,10 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkSearchEngineQuartz, _gtk_search_engine_quartz, GT
       GtkSearchHit *hit;
 
       result_path = [[result valueForAttribute:@"kMDItemPath"] UTF8String];
+
+      if (result_path == NULL)
+        continue;
+
       file = g_file_new_for_path (result_path);
 
       hit = g_new (GtkSearchHit, 1);
@@ -101,7 +107,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkSearchEngineQuartz, _gtk_search_engine_quartz, GT
   if (max_iter >= max_hits)
     [ns_query stopQuery];
 
-  submitted_hits = max_iter;
+  submitted_hits += max_iter;
 }
 
 - (void) queryUpdate:(id)sender
@@ -190,6 +196,8 @@ gtk_search_engine_quartz_set_query (GtkSearchEngine *engine,
 				    GtkQuery        *query)
 {
   GtkSearchEngineQuartz *quartz;
+  const char* path = NULL;
+  GFile *location = NULL;
 
   QUARTZ_POOL_ALLOC;
 
@@ -202,11 +210,28 @@ gtk_search_engine_quartz_set_query (GtkSearchEngine *engine,
     g_object_unref (quartz->priv->query);
 
   quartz->priv->query = query;
+  location = gtk_query_get_location (query);
+
+  if (location)
+    path = g_file_peek_path (location);
 
   /* We create a query to look for ".*text.*" in the text contents of
    * all indexed files.  (Should we also search for text in file and folder
    * names?).
    */
+
+  if (path)
+    {
+      NSString *ns_path = [[NSString string] initWithUTF8String:path];
+      [quartz->priv->ns_query setSearchScopes:@[ns_path]];
+    }
+  else
+    {
+      [quartz->priv->ns_query setSearchScopes:@[NSMetadataQueryLocalComputerScope]];
+    }
+
+  [quartz->priv->ns_query setSearchItems:@[(NSString*)kMDItemTextContent,
+                                           (NSString*)kMDItemFSName]];
   [quartz->priv->ns_query setPredicate:
     [NSPredicate predicateWithFormat:
       [NSString stringWithFormat:@"(kMDItemTextContent LIKE[cd] \"*%s*\")",
