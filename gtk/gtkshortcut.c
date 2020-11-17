@@ -97,7 +97,7 @@ gtk_shortcut_get_property (GObject    *object,
   switch (property_id)
     {
     case PROP_ACTION:
-      g_value_set_boxed (value, self->action);
+      g_value_set_object (value, self->action);
       break;
 
     case PROP_ARGUMENTS:
