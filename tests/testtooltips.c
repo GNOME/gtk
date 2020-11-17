@@ -125,7 +125,7 @@ query_tooltip_tree_view_cb (GtkWidget  *widget,
 
   char buffer[512];
 
-  if (!gtk_tree_view_get_tooltip_context (tree_view, &x, &y,
+  if (!gtk_tree_view_get_tooltip_context (tree_view, x, y,
 					  keyboard_tip,
 					  &model, &path, &iter))
     return FALSE;

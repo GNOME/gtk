@@ -14676,8 +14676,8 @@ gtk_tree_view_set_tooltip_cell (GtkTreeView       *tree_view,
 /**
  * gtk_tree_view_get_tooltip_context:
  * @tree_view: a #GtkTreeView
- * @x: (inout): the x coordinate (relative to widget coordinates)
- * @y: (inout): the y coordinate (relative to widget coordinates)
+ * @x: the x coordinate (relative to widget coordinates)
+ * @y: the y coordinate (relative to widget coordinates)
  * @keyboard_tip: whether this is a keyboard tooltip or not
  * @model: (out) (optional) (nullable) (transfer none): a pointer to
  *         receive a #GtkTreeModel or %NULL
@@ -14700,8 +14700,8 @@ gtk_tree_view_set_tooltip_cell (GtkTreeView       *tree_view,
  */
 gboolean
 gtk_tree_view_get_tooltip_context (GtkTreeView   *tree_view,
-				   int           *x,
-				   int           *y,
+				   int            x,
+				   int            y,
 				   gboolean       keyboard_tip,
 				   GtkTreeModel **model,
 				   GtkTreePath  **path,
@@ -14710,8 +14710,6 @@ gtk_tree_view_get_tooltip_context (GtkTreeView   *tree_view,
   GtkTreePath *tmppath = NULL;
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
-  g_return_val_if_fail (x != NULL, FALSE);
-  g_return_val_if_fail (y != NULL, FALSE);
 
   if (keyboard_tip)
     {
@@ -14722,10 +14720,12 @@ gtk_tree_view_get_tooltip_context (GtkTreeView   *tree_view,
     }
   else
     {
-      gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, *x, *y,
-							  x, y);
+      int rel_x, rel_y;
 
-      if (!gtk_tree_view_get_path_at_pos (tree_view, *x, *y,
+      gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, x, y,
+                                                         &rel_x, &rel_y);
+
+      if (!gtk_tree_view_get_path_at_pos (tree_view, rel_x, rel_y,
 					  &tmppath, NULL, NULL, NULL))
 	return FALSE;
     }
@@ -14762,7 +14762,7 @@ gtk_tree_view_set_tooltip_query_cb (GtkWidget  *widget,
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
 
   if (!gtk_tree_view_get_tooltip_context (GTK_TREE_VIEW (widget),
-					  &x, &y,
+					  x, y,
 					  keyboard_tip,
 					  &model, &path, &iter))
     return FALSE;

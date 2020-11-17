@@ -1136,6 +1136,14 @@ gtk_buildable_get_buildable_id().
 GtkAboutDialog now directly derives from GtkWindow, the GtkDialog API can no
 longer be used on it.
 
+### Adapt to GtkTreeView and GtkIconView tooltip context changes
+
+The getter functions for retrieving the data from #GtkTreeView
+and #GtkIconView inside a #GtkWidget::query-tooltip signal do not take the
+pointer coordinates as inout arguments any more, but as normal in ones.
+
+See: gtk_tree_view_get_tooltip_context(), gtk_icon_view_get_tooltip_context()
+
 ## Changes to consider after the switch
 
 GTK 4 has a number of new features that you may want to take

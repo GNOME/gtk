@@ -268,8 +268,8 @@ void    gtk_icon_view_set_tooltip_cell                        (GtkIconView     *
                                                                GtkCellRenderer *cell);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_icon_view_get_tooltip_context                    (GtkIconView       *icon_view,
-                                                               int               *x,
-                                                               int               *y,
+                                                               int                x,
+                                                               int                y,
                                                                gboolean           keyboard_tip,
                                                                GtkTreeModel     **model,
                                                                GtkTreePath      **path,

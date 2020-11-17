@@ -4254,8 +4254,8 @@ gtk_icon_view_set_tooltip_cell (GtkIconView     *icon_view,
 /**
  * gtk_icon_view_get_tooltip_context:
  * @icon_view: an #GtkIconView
- * @x: (inout): the x coordinate (relative to widget coordinates)
- * @y: (inout): the y coordinate (relative to widget coordinates)
+ * @x: the x coordinate (relative to widget coordinates)
+ * @y: the y coordinate (relative to widget coordinates)
  * @keyboard_tip: whether this is a keyboard tooltip or not
  * @model: (out) (allow-none) (transfer none): a pointer to receive a
  *         #GtkTreeModel or %NULL
@@ -4277,8 +4277,8 @@ gtk_icon_view_set_tooltip_cell (GtkIconView     *icon_view,
  */
 gboolean
 gtk_icon_view_get_tooltip_context (GtkIconView   *icon_view,
-                                   int           *x,
-                                   int           *y,
+                                   int            x,
+                                   int            y,
                                    gboolean       keyboard_tip,
                                    GtkTreeModel **model,
                                    GtkTreePath  **path,
@@ -4287,8 +4287,6 @@ gtk_icon_view_get_tooltip_context (GtkIconView   *icon_view,
   GtkTreePath *tmppath = NULL;
 
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), FALSE);
-  g_return_val_if_fail (x != NULL, FALSE);
-  g_return_val_if_fail (y != NULL, FALSE);
 
   if (keyboard_tip)
     {
@@ -4299,7 +4297,7 @@ gtk_icon_view_get_tooltip_context (GtkIconView   *icon_view,
     }
   else
     {
-      if (!gtk_icon_view_get_item_at_pos (icon_view, *x, *y, &tmppath, NULL))
+      if (!gtk_icon_view_get_item_at_pos (icon_view, x, y, &tmppath, NULL))
         return FALSE;
     }
 
@@ -4333,7 +4331,7 @@ gtk_icon_view_set_tooltip_query_cb (GtkWidget  *widget,
   GtkIconView *icon_view = GTK_ICON_VIEW (widget);
 
   if (!gtk_icon_view_get_tooltip_context (GTK_ICON_VIEW (widget),
-                                          &x, &y,
+                                          x, y,
                                           keyboard_tip,
                                           &model, &path, &iter))
     return FALSE;

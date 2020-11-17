@@ -2111,7 +2111,7 @@ file_list_query_tooltip_cb (GtkWidget  *widget,
 
 
   if (!gtk_tree_view_get_tooltip_context (GTK_TREE_VIEW (impl->browse_files_tree_view),
-                                          &x, &y,
+                                          x, y,
                                           keyboard_tip,
                                           &model, &path, &iter))
     return FALSE;
