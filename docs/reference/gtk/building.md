@@ -107,7 +107,9 @@ The `plain` build type provided by Meson should only be used when
 packaging GTK, and it's expected that packagers will provide their
 own compiler flags when building GTK. See the previous section for
 the list of environment variables to be used to define compiler and
-linker flags.
+linker flags. Note that with the plain build type, you are also
+responsible for controlling the debugging features of GTK with
+`-DG_ENABLE_DEBUG` and `-DG_DISABLE_CAST_CHECKS`.
 
 ## Dependencies {#dependencies}
 
