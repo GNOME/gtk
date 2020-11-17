@@ -1326,26 +1326,6 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   g_object_unref (action);
 }
 
-static void
-close_submenus (GtkPopover *popover)
-{
-  GtkPopoverMenu *menu;
-
-  if (GTK_IS_POPOVER_MENU (popover))
-    {
-      GtkWidget *submenu;
-
-      menu = GTK_POPOVER_MENU (popover);
-      submenu = gtk_popover_menu_get_open_submenu (menu);
-      if (submenu)
-        {
-          close_submenus (GTK_POPOVER (submenu));
-          gtk_popover_popdown (GTK_POPOVER (submenu));
-          gtk_popover_menu_set_open_submenu (menu, NULL);
-        }
-    }
-}
-
 static gboolean
 open_submenu (gpointer data)
 {
@@ -1363,7 +1343,7 @@ open_submenu (gpointer data)
           GtkWidget *submenu = button->popover;
 
           if (gtk_popover_menu_get_open_submenu (GTK_POPOVER_MENU (popover)) != submenu)
-            close_submenus (popover);
+            gtk_popover_menu_close_submenus (GTK_POPOVER_MENU (popover));
 
           gtk_popover_popup (GTK_POPOVER (submenu));
           gtk_popover_menu_set_open_submenu (GTK_POPOVER_MENU (popover), submenu);
