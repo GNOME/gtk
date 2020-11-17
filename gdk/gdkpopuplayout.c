@@ -300,10 +300,10 @@ gdk_popup_layout_set_offset (GdkPopupLayout *layout,
 /**
  * gdk_popup_layout_get_offset:
  * @layout: a #GdkPopupLayout
- * @dx: a pointer to where to store the delta x coordinate
- * @dy: a pointer to where to store the delta y coordinate
+ * @dx: (out): return location for the delta X coordinate
+ * @dy: (out): return location for the delta Y coordinate
  *
- * Get the delta the anchor rectangle is offset with
+ * Retrieves the offset for the anchor rectangle.
  */
 void
 gdk_popup_layout_get_offset (GdkPopupLayout *layout,
