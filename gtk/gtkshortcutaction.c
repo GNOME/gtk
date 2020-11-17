@@ -319,7 +319,7 @@ gtk_nothing_action_init (GtkNothingAction *self)
  * Gets the nothing action. This is an action that does nothing and where
  * activating it always fails.
  *
- * Returns: (transfer none): The nothing action
+ * Returns: (transfer none) (type GtkNothingAction): The nothing action
  */
 GtkShortcutAction *
 gtk_nothing_action_get (void)
@@ -409,7 +409,7 @@ gtk_callback_action_init (GtkCallbackAction *self)
  * Create a custom action that calls the given @callback when
  * activated.
  *
- * Returns: (transfer full): A new shortcut action
+ * Returns: (transfer full) (type GtkCallbackAction): A new shortcut action
  */
 GtkShortcutAction *
 gtk_callback_action_new (GtkShortcutFunc callback,
@@ -491,7 +491,7 @@ gtk_activate_action_init (GtkActivateAction *self)
  * Gets the activate action. This is an action that calls gtk_widget_activate()
  * on the given widget upon activation.
  *
- * Returns: (transfer none): The activate action
+ * Returns: (transfer none) (type GtkActivateAction): The activate action
  */
 GtkShortcutAction *
 gtk_activate_action_get (void)
@@ -566,7 +566,7 @@ gtk_mnemonic_action_init (GtkMnemonicAction *self)
  * Gets the mnemonic action. This is an action that calls
  * gtk_widget_mnemonic_activate() on the given widget upon activation.
  *
- * Returns: (transfer none): The mnemonic action
+ * Returns: (transfer none) (type GtkMnemonicAction): The mnemonic action
  */
 GtkShortcutAction *
 gtk_mnemonic_action_get (void)
