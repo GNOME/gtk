@@ -465,7 +465,7 @@ save_response_cb (GtkWidget        *dialog,
       text = get_current_text (self->text_buffer);
 
       file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
-      g_file_replace_contents (file, text, -1,
+      g_file_replace_contents (file, text, strlen (text),
                                NULL, FALSE,
                                G_FILE_CREATE_NONE,
                                NULL,
