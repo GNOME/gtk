@@ -363,6 +363,7 @@ gsk_path_builder_get_type
 <FILE>GskPathMeasure</FILE>
 GskPathMeasure
 gsk_path_measure_new
+gsk_path_measure_new_with_tolerance
 gsk_path_measure_ref
 gsk_path_measure_unref
 <SUBSECTION>
