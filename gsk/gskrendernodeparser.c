@@ -1859,12 +1859,10 @@ gsk_render_node_parser_error (GtkCssParser         *parser,
   } *error_func_pair = user_data;
 
   if (error_func_pair->error_func)
-    {
-      GtkCssSection *section = gtk_css_section_new (gtk_css_parser_get_file (parser), start, end);
-
-      error_func_pair->error_func (section, error, error_func_pair->user_data);
-      gtk_css_section_unref (section);
-    }
+    error_func_pair->error_func ((const GskParseLocation *)start,
+                                 (const GskParseLocation *)end,
+                                 error,
+                                 error_func_pair->user_data);
 }
 
 GskRenderNode *

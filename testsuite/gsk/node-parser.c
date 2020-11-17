@@ -122,19 +122,26 @@ append_error_value (GString *string,
 }
 
 static void
-deserialize_error_func (const GtkCssSection *section,
-                        const GError        *error,
-                        gpointer             user_data)
+deserialize_error_func (const GskParseLocation *start,
+                        const GskParseLocation *end,
+                        const GError           *error,
+                        gpointer                user_data)
 {
   GString *errors = user_data;
-  char *section_string;
+  GString *string = g_string_new ("<data>");
 
-  section_string = gtk_css_section_to_string (section);
+  g_string_append_printf (string, ":%zu:%zu",
+                          start->lines + 1, start->line_chars + 1);
+  if (start->lines != end->lines || start->line_chars != end->line_chars)
+    {
+      g_string_append (string, "-");
+      if (start->lines != end->lines)
+        g_string_append_printf (string, "%zu:", end->lines + 1);
+      g_string_append_printf (string, "%zu", end->line_chars + 1);
+    }
 
-  g_string_append_printf (errors,
-                          "%s: error: ",
-                          section_string);
-  g_free (section_string);
+  g_string_append_printf (errors, "%s: error: ", string->str);
+  g_string_free (string, TRUE);
 
   if (error->domain == GTK_CSS_PARSER_ERROR)
     append_error_value (errors, GTK_TYPE_CSS_PARSER_ERROR, error->code);

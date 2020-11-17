@@ -102,12 +102,11 @@ text_buffer_remove_all_tags (GtkTextBuffer *buffer)
 }
 
 static void
-deserialize_error_func (const GtkCssSection *section,
-                        const GError        *error,
-                        gpointer             user_data)
+deserialize_error_func (const GskParseLocation *start_location,
+                        const GskParseLocation *end_location,
+                        const GError           *error,
+                        gpointer                user_data)
 {
-  const GtkCssLocation *start_location = gtk_css_section_get_start_location (section);
-  const GtkCssLocation *end_location = gtk_css_section_get_end_location (section);
   NodeEditorWindow *self = user_data;
   GtkTextIter start_iter, end_iter;
   TextViewError text_view_error;
