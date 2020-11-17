@@ -35,6 +35,9 @@ GDK_AVAILABLE_IN_ALL
 GType                   gsk_path_measure_get_type               (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GskPathMeasure *        gsk_path_measure_new                    (GskPath                *path);
+GDK_AVAILABLE_IN_ALL
+GskPathMeasure *        gsk_path_measure_new_with_tolerance     (GskPath                *path,
+                                                                 float                   tolerance);
 
 GDK_AVAILABLE_IN_ALL
 GskPathMeasure *        gsk_path_measure_ref                    (GskPathMeasure         *self);
