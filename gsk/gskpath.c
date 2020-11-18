@@ -22,6 +22,12 @@
 #include "gskpathprivate.h"
 
 
+typedef enum 
+{
+  GSK_PATH_FLAT,
+  GSK_PATH_CLOSED
+} GskPathFlags;
+
 typedef struct _GskContour GskContour;
 typedef struct _GskContourClass GskContourClass;
 
@@ -36,6 +42,7 @@ struct _GskContourClass
   const char *type_name;
 
   gsize                 (* get_size)            (const GskContour       *contour);
+  GskPathFlags          (* get_flags)           (const GskContour       *contour);
   void                  (* print)               (const GskContour       *contour,
                                                  GString                *string);
   void                  (* to_cairo)            (const GskContour       *contour,
@@ -59,6 +66,8 @@ struct _GskPath
 {
   /*< private >*/
   guint ref_count;
+
+  GskPathFlags flags;
 
   gsize n_contours;
   GskContour *contours[];
@@ -101,6 +110,12 @@ struct _GskRectContour
   float width;
   float height;
 };
+
+static GskPathFlags
+gsk_rect_contour_get_flags (const GskContour *contour)
+{
+  return GSK_PATH_FLAT | GSK_PATH_CLOSED;
+}
 
 static void
 _g_string_append_double (GString *string,
@@ -257,6 +272,7 @@ static const GskContourClass GSK_RECT_CONTOUR_CLASS =
   sizeof (GskRectContour),
   "GskRectContour",
   gsk_contour_get_size_default,
+  gsk_rect_contour_get_flags,
   gsk_rect_contour_print,
   gsk_rect_contour_to_cairo,
   gsk_rect_contour_get_bounds,
@@ -304,6 +320,8 @@ struct _GskStandardContour
 {
   GskContour contour;
 
+  GskPathFlags flags;
+
   gsize n_ops;
   gsize n_points;
   graphene_point_t *points;
@@ -325,6 +343,14 @@ gsk_standard_contour_get_size (const GskContour *contour)
   const GskStandardContour *self = (const GskStandardContour *) contour;
 
   return gsk_standard_contour_compute_size (self->n_ops, self->n_points);
+}
+
+static GskPathFlags
+gsk_standard_contour_get_flags (const GskContour *contour)
+{
+  const GskStandardContour *self = (const GskStandardContour *) contour;
+
+  return self->flags;
 }
 
 static void
@@ -503,6 +529,7 @@ gsk_standard_contour_free_measure (const GskContour *contour,
 
 static void
 gsk_standard_contour_init (GskContour *contour,
+                           GskPathFlags flags,
                            const GskStandardOperation *ops,
                            gsize n_ops,
                            const graphene_point_t *points,
@@ -514,7 +541,7 @@ gsk_standard_contour_copy (const GskContour *contour,
 {
   const GskStandardContour *self = (const GskStandardContour *) contour;
 
-  gsk_standard_contour_init (dest, self->ops, self->n_ops, self->points, self->n_points);
+  gsk_standard_contour_init (dest, self->flags, self->ops, self->n_ops, self->points, self->n_points);
 }
 
 static void
@@ -618,6 +645,7 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   sizeof (GskStandardContour),
   "GskStandardContour",
   gsk_standard_contour_get_size,
+  gsk_standard_contour_get_flags,
   gsk_standard_contour_print,
   gsk_standard_contour_to_cairo,
   gsk_standard_contour_get_bounds,
@@ -632,6 +660,7 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
  */
 static void
 gsk_standard_contour_init (GskContour *contour,
+                           GskPathFlags flags,
                            const GskStandardOperation *ops,
                            gsize n_ops,
                            const graphene_point_t *points,
@@ -641,6 +670,7 @@ gsk_standard_contour_init (GskContour *contour,
 
   self->contour.klass = &GSK_STANDARD_CONTOUR_CLASS;
 
+  self->flags = flags;
   self->n_ops = n_ops;
   memcpy (self->ops, ops, sizeof (GskStandardOperation) * n_ops);
   self->n_points = n_points;
@@ -988,6 +1018,7 @@ struct _GskPathBuilder
 
   GSList *contours; /* (reverse) list of already recorded contours */
 
+  GskPathFlags flags; /* flags for the current path */
   GArray *ops; /* operations for current contour - size == 0 means no current contour */
   GArray *points; /* points for the operations */
 };
@@ -1091,6 +1122,7 @@ gsk_path_builder_end_current (GskPathBuilder *builder)
 
   contour = g_malloc0 (gsk_standard_contour_compute_size (builder->ops->len, builder->points->len));
   gsk_standard_contour_init (contour,
+                             0,
                              (GskStandardOperation *) builder->ops->data,
                              builder->ops->len,
                              (graphene_point_t *) builder->points->data,
@@ -1180,12 +1212,14 @@ gsk_path_builder_to_path (GskPathBuilder *builder)
   gsize size;
   gsize n_contours;
   guint8 *contour_data;
+  GskPathFlags flags;
 
   g_return_val_if_fail (builder != NULL, NULL);
 
   gsk_path_builder_end_current (builder);
 
   builder->contours = g_slist_reverse (builder->contours);
+  flags = GSK_PATH_CLOSED | GSK_PATH_FLAT;
   size = 0;
   n_contours = 0;
   for (l = builder->contours; l; l = l->next)
@@ -1195,9 +1229,11 @@ gsk_path_builder_to_path (GskPathBuilder *builder)
       n_contours++;
       size += sizeof (GskContour *);
       size += gsk_contour_get_size (contour);
+      flags &= contour->klass->get_flags (contour);
     }
 
   path = gsk_path_alloc (size);
+  path->flags = flags;
   path->n_contours = n_contours;
   contour_data = (guint8 *) &path->contours[n_contours];
   n_contours = 0;
@@ -1292,6 +1328,7 @@ gsk_path_builder_move_to (GskPathBuilder *builder,
 
   gsk_path_builder_end_current (builder);
 
+  builder->flags = GSK_PATH_FLAT;
   g_array_append_vals (builder->ops, &(GskStandardOperation) { GSK_PATH_MOVE, 0 }, 1);
   g_array_append_val (builder->points, GRAPHENE_POINT_INIT(x, y));
 }
@@ -1330,6 +1367,7 @@ gsk_path_builder_curve_to (GskPathBuilder *builder,
   if (builder->ops->len == 0)
     gsk_path_builder_move_to (builder, x1, y1);
 
+  builder->flags &= ~GSK_PATH_FLAT;
   gsk_path_builder_append_current (builder,
                                    GSK_PATH_CURVE,
                                    3, (graphene_point_t[3]) {
@@ -1347,6 +1385,7 @@ gsk_path_builder_close (GskPathBuilder *builder)
   if (builder->ops->len == 0)
     return;
 
+  builder->flags |= GSK_PATH_CLOSED;
   gsk_path_builder_append_current (builder,
                                    GSK_PATH_CLOSE,
                                    1, (graphene_point_t[1]) {
