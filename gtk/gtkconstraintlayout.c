@@ -1431,18 +1431,18 @@ constraint_data_to_constraint (const ConstraintData *data,
   else
     strength = GTK_CONSTRAINT_STRENGTH_REQUIRED;
 
-  if (source != NULL && source_attr != GTK_CONSTRAINT_ATTRIBUTE_NONE)
+  if (source == NULL && source_attr == GTK_CONSTRAINT_ATTRIBUTE_NONE)
+    return gtk_constraint_new_constant (target, target_attr,
+                                        relation,
+                                        data->constant,
+                                        strength);
+  else
     return gtk_constraint_new (target, target_attr,
                                relation,
                                source, source_attr,
                                data->multiplier,
                                data->constant,
                                strength);
-
-  return gtk_constraint_new_constant (target, target_attr,
-                                      relation,
-                                      data->constant,
-                                      strength);
 }
 
 static GtkConstraintGuide *
