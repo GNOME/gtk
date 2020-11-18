@@ -58,8 +58,6 @@ struct _GskContourClass
   GskPathFlags          (* get_flags)           (const GskContour       *contour);
   void                  (* print)               (const GskContour       *contour,
                                                  GString                *string);
-  void                  (* to_cairo)            (const GskContour       *contour,
-                                                 cairo_t                *cr);
   gboolean              (* get_bounds)          (const GskContour       *contour,
                                                  graphene_rect_t        *bounds);
   gboolean              (* foreach)             (const GskContour       *contour,
@@ -137,17 +135,6 @@ gsk_rect_contour_print (const GskContour *contour,
                           self->x, self->y,
                           self->width, self->height,
                           -self->width);
-}
-
-static void
-gsk_rect_contour_to_cairo (const GskContour *contour,
-                           cairo_t          *cr)
-{
-  const GskRectContour *self = (const GskRectContour *) contour;
-
-  cairo_rectangle (cr,
-                   self->x, self->y,
-                   self->width, self->height);
 }
 
 static gboolean
@@ -283,7 +270,6 @@ static const GskContourClass GSK_RECT_CONTOUR_CLASS =
   gsk_contour_get_size_default,
   gsk_rect_contour_get_flags,
   gsk_rect_contour_print,
-  gsk_rect_contour_to_cairo,
   gsk_rect_contour_get_bounds,
   gsk_rect_contour_foreach,
   gsk_rect_contour_init_measure,
@@ -409,44 +395,6 @@ gsk_standard_contour_print (const GskContour *contour,
                                   pt[1].x, pt[1].y,
                                   pt[2].x, pt[2].y,
                                   pt[3].x, pt[3].y);
-          break;
-
-        default:
-          g_assert_not_reached();
-          return;
-      }
-    }
-}
-
-static void
-gsk_standard_contour_to_cairo (const GskContour *contour,
-                               cairo_t          *cr)
-{
-  const GskStandardContour *self = (const GskStandardContour *) contour;
-  gsize i;
-
-  cairo_new_sub_path (cr);
-
-  for (i = 0; i < self->n_ops; i ++)
-    {
-      graphene_point_t *pt = &self->points[self->ops[i].point];
-
-      switch (self->ops[i].op)
-      {
-        case GSK_PATH_MOVE:
-          cairo_move_to (cr, pt[0].x, pt[0].y);
-          break;
-
-        case GSK_PATH_CLOSE:
-          cairo_close_path (cr);
-          break;
-
-        case GSK_PATH_LINE:
-          cairo_line_to (cr, pt[1].x, pt[1].y);
-          break;
-
-        case GSK_PATH_CURVE:
-          cairo_curve_to (cr, pt[1].x, pt[1].y, pt[2].x, pt[2].y, pt[3].x, pt[3].y);
           break;
 
         default:
@@ -669,7 +617,6 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   gsk_standard_contour_get_size,
   gsk_standard_contour_get_flags,
   gsk_standard_contour_print,
-  gsk_standard_contour_to_cairo,
   gsk_standard_contour_get_bounds,
   gsk_standard_contour_foreach,
   gsk_standard_contour_init_measure,
@@ -958,6 +905,38 @@ gsk_path_to_string (GskPath *self)
   return g_string_free (string, FALSE);
 }
 
+static gboolean
+gsk_path_to_cairo_add_op (GskPathOperation        op,
+                          const graphene_point_t *pts,
+                          gsize                   n_pts,
+                          gpointer                cr)
+{
+  switch (op)
+  {
+    case GSK_PATH_MOVE:
+      cairo_move_to (cr, pts[0].x, pts[0].y);
+      break;
+
+    case GSK_PATH_CLOSE:
+      cairo_close_path (cr);
+      break;
+
+    case GSK_PATH_LINE:
+      cairo_line_to (cr, pts[1].x, pts[1].y);
+      break;
+
+    case GSK_PATH_CURVE:
+      cairo_curve_to (cr, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
+      break;
+
+    default:
+      g_assert_not_reached ();
+      return FALSE;
+  }
+
+  return TRUE;
+}
+
 /**
  * gsk_path_to_cairo:
  * @self: a #GskPath
@@ -976,15 +955,13 @@ void
 gsk_path_to_cairo (GskPath *self,
                    cairo_t *cr)
 {
-  gsize i;
-
   g_return_if_fail (self != NULL);
   g_return_if_fail (cr != NULL);
 
-  for (i = 0; i < self->n_contours; i++)
-    {
-      self->contours[i]->klass->to_cairo (self->contours[i], cr);
-    }
+  gsk_path_foreach_with_tolerance (self,
+                                   cairo_get_tolerance (cr),
+                                   gsk_path_to_cairo_add_op,
+                                   cr);
 }
 
 /*
@@ -1082,14 +1059,23 @@ gsk_path_foreach (GskPath            *self,
                   GskPathForeachFunc  func,
                   gpointer            user_data)
 {
-  gsize i;
-
   g_return_val_if_fail (self != NULL, FALSE);
   g_return_val_if_fail (func, FALSE);
 
+  return gsk_path_foreach_with_tolerance (self, GSK_PATH_TOLERANCE_DEFAULT, func, user_data);
+}
+
+gboolean
+gsk_path_foreach_with_tolerance (GskPath            *self,
+                                 double              tolerance,
+                                 GskPathForeachFunc  func,
+                                 gpointer            user_data)
+{
+  gsize i;
+
   for (i = 0; i < self->n_contours; i++)
     {
-      if (!gsk_contour_foreach (self->contours[i], GSK_PATH_TOLERANCE_DEFAULT, func, user_data))
+      if (!gsk_contour_foreach (self->contours[i], tolerance, func, user_data))
         return FALSE;
     }
 
