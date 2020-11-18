@@ -62,6 +62,10 @@ struct _GskContourClass
                                                  cairo_t                *cr);
   gboolean              (* get_bounds)          (const GskContour       *contour,
                                                  graphene_rect_t        *bounds);
+  gboolean              (* foreach)             (const GskContour       *contour,
+                                                 float                   tolerance,
+                                                 GskPathForeachFunc      func,
+                                                 gpointer                user_data);
   gpointer              (* init_measure)        (const GskContour       *contour,
                                                  float                  *out_length);
   void                  (* free_measure)        (const GskContour       *contour,
@@ -181,6 +185,29 @@ gsk_rect_contour_get_bounds (const GskContour *contour,
   return TRUE;
 }
 
+static gboolean
+gsk_rect_contour_foreach (const GskContour   *contour,
+                          float               tolerance,
+                          GskPathForeachFunc  func,
+                          gpointer            user_data)
+{
+  const GskRectContour *self = (const GskRectContour *) contour;
+
+  graphene_point_t pts[] = {
+    GRAPHENE_POINT_INIT (self->x,               self->y),
+    GRAPHENE_POINT_INIT (self->x + self->width, self->y),
+    GRAPHENE_POINT_INIT (self->x + self->width, self->y + self->height),
+    GRAPHENE_POINT_INIT (self->x,               self->y + self->height),
+    GRAPHENE_POINT_INIT (self->x,               self->y)
+  };
+
+  return func (GSK_PATH_MOVE, &pts[0], 1, user_data)
+      && func (GSK_PATH_LINE, &pts[0], 2, user_data)
+      && func (GSK_PATH_LINE, &pts[1], 2, user_data)
+      && func (GSK_PATH_LINE, &pts[2], 2, user_data)
+      && func (GSK_PATH_CLOSE, &pts[3], 2, user_data);
+}
+
 static gpointer
 gsk_rect_contour_init_measure (const GskContour *contour,
                                float            *out_length)
@@ -282,6 +309,7 @@ static const GskContourClass GSK_RECT_CONTOUR_CLASS =
   gsk_rect_contour_print,
   gsk_rect_contour_to_cairo,
   gsk_rect_contour_get_bounds,
+  gsk_rect_contour_foreach,
   gsk_rect_contour_init_measure,
   gsk_rect_contour_free_measure,
   gsk_rect_contour_copy,
@@ -305,14 +333,6 @@ gsk_rect_contour_init (GskContour *contour,
 }
 
 /* STANDARD CONTOUR */
-
-typedef enum
-{
-  GSK_PATH_MOVE,
-  GSK_PATH_CLOSE,
-  GSK_PATH_LINE,
-  GSK_PATH_CURVE,
-} GskPathOperation;
 
 typedef struct _GskStandardOperation GskStandardOperation;
 
@@ -349,6 +369,30 @@ gsk_standard_contour_get_size (const GskContour *contour)
   const GskStandardContour *self = (const GskStandardContour *) contour;
 
   return gsk_standard_contour_compute_size (self->n_ops, self->n_points);
+}
+
+static gboolean
+gsk_standard_contour_foreach (const GskContour   *contour,
+                              float               tolerance,
+                              GskPathForeachFunc  func,
+                              gpointer            user_data)
+{
+  const GskStandardContour *self = (const GskStandardContour *) contour;
+  gsize i;
+  const gsize n_points[] = {
+    [GSK_PATH_MOVE] = 1,
+    [GSK_PATH_CLOSE] = 2,
+    [GSK_PATH_LINE] = 2,
+    [GSK_PATH_CURVE] = 4
+  };
+
+  for (i = 0; i < self->n_ops; i ++)
+    {
+      if (!func (self->ops[i].op, &self->points[self->ops[i].point], n_points[self->ops[i].op], user_data))
+        return FALSE;
+    }
+
+  return TRUE;
 }
 
 static GskPathFlags
@@ -655,6 +699,7 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   gsk_standard_contour_print,
   gsk_standard_contour_to_cairo,
   gsk_standard_contour_get_bounds,
+  gsk_standard_contour_foreach,
   gsk_standard_contour_init_measure,
   gsk_standard_contour_free_measure,
   gsk_standard_contour_copy,
@@ -708,6 +753,15 @@ gsk_contour_dup (const GskContour *src)
   gsk_contour_copy (copy, src);
 
   return copy;
+}
+
+static gboolean
+gsk_contour_foreach (const GskContour   *contour,
+                     float               tolerance,
+                     GskPathForeachFunc  func,
+                     gpointer            user_data)
+{
+  return contour->klass->foreach (contour, tolerance, func, user_data);
 }
 
 gpointer
@@ -1007,6 +1061,38 @@ gsk_path_get_bounds (GskPath         *self,
 
   return TRUE;
 }
+
+/**
+ * gsk_path_foreach:
+ * @self: a #GskPath
+ * @func: (scope call) (closure user_data): the function to call for operations
+ * @user_data: (nullable): user data passed to @func
+ *
+ * Calls @func for every operation of the path. Note that this only approximates
+ * @self, because paths can contain optimizations for various specialized contours.
+ *
+ * Returns: %FALSE if @func returned %FALSE, %TRUE otherwise.
+ **/
+gboolean
+gsk_path_foreach (GskPath            *self,
+                  GskPathForeachFunc  func,
+                  gpointer            user_data)
+{
+  gsize i;
+
+  g_return_val_if_fail (self != NULL, FALSE);
+  g_return_val_if_fail (func, FALSE);
+
+  for (i = 0; i < self->n_contours; i++)
+    {
+      if (!gsk_contour_foreach (self->contours[i], GSK_PATH_TOLERANCE_DEFAULT, func, user_data))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+/* BUILDER */
 
 /**
  * GskPathBuilder:
