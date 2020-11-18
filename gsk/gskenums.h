@@ -236,6 +236,30 @@ typedef enum {
 } GskLineJoin;
 
 /**
+ * GskPathOperation:
+ * @GSK_PATH_MOVE: A move-to operation, with 1 point describing the
+ *   target point.
+ * @GSK_PATH_LINE: A line-to operation, with 2 points describing the
+ *   start and end point of a straight line.
+ * @GSK_PATH_CLOSE: A close operation ending the current contour with
+ *   a line back to the starting point. Two points describe the start
+ *   and end of the line.
+ * @GSK_PATH_CURVE: A curve-to operation describing a cubic Bézier curve
+ *   with 4 points describing the start point, the two control points
+ *   and the end point of the curve.
+ *
+ * Path operations can be used to approximate a #GskPath.
+ *
+ * More values may be added in the future.
+ **/
+typedef enum {
+  GSK_PATH_MOVE,
+  GSK_PATH_CLOSE,
+  GSK_PATH_LINE,
+  GSK_PATH_CURVE,
+} GskPathOperation;
+
+/**
  * GskSerializationError:
  * @GSK_SERIALIZATION_UNSUPPORTED_FORMAT: The format can not be identified
  * @GSK_SERIALIZATION_UNSUPPORTED_VERSION: The version of the data is not

@@ -25,6 +25,9 @@
 
 G_BEGIN_DECLS
 
+/* Same as Cairo, so looks like a good value. ¯\_(ツ)_/¯ */
+#define GSK_PATH_TOLERANCE_DEFAULT (0.1)
+
 gsize                   gsk_path_get_n_contours                 (GskPath              *path);
 
 gpointer                gsk_contour_init_measure                (GskPath              *path,
