@@ -36,7 +36,7 @@ struct _ConstraintEditorWindow
 G_DEFINE_TYPE(ConstraintEditorWindow, constraint_editor_window, GTK_TYPE_APPLICATION_WINDOW);
 
 static GtkConstraintTarget *
-find_target (GListModel *model,
+find_target (GListModel          *model,
              GtkConstraintTarget *orig)
 {
   const char *name;
@@ -163,20 +163,30 @@ constraint_editor_window_load (ConstraintEditorWindow *self,
       GtkConstraint *clone;
       GtkConstraintTarget *target;
       GtkConstraintTarget *source;
+      GtkConstraintAttribute source_attr;
 
       item = g_list_model_get_item (list, i);
       constraint = GTK_CONSTRAINT (item);
 
       target = gtk_constraint_get_target (constraint);
       source = gtk_constraint_get_source (constraint);
-      clone = gtk_constraint_new (find_target (constraint_view_get_model (CONSTRAINT_VIEW (self->view)), target),
+      source_attr = gtk_constraint_get_source_attribute (constraint);
+
+      if (source == NULL && source_attr == GTK_CONSTRAINT_ATTRIBUTE_NONE)
+        clone = gtk_constraint_new_constant (find_target (constraint_view_get_model (CONSTRAINT_VIEW (self->view)), target),
                                   gtk_constraint_get_target_attribute (constraint),
                                   gtk_constraint_get_relation (constraint),
-                                  find_target (constraint_view_get_model (CONSTRAINT_VIEW (self->view)), source),
-                                  gtk_constraint_get_target_attribute (constraint),
-                                  gtk_constraint_get_multiplier (constraint),
                                   gtk_constraint_get_constant (constraint),
                                   gtk_constraint_get_strength (constraint));
+      else
+        clone = gtk_constraint_new (find_target (constraint_view_get_model (CONSTRAINT_VIEW (self->view)), target),
+                                    gtk_constraint_get_target_attribute (constraint),
+                                    gtk_constraint_get_relation (constraint),
+                                    find_target (constraint_view_get_model (CONSTRAINT_VIEW (self->view)), source),
+                                    source_attr,
+                                    gtk_constraint_get_multiplier (constraint),
+                                    gtk_constraint_get_constant (constraint),
+                                    gtk_constraint_get_strength (constraint));
 
       constraint_view_add_constraint (CONSTRAINT_VIEW (self->view), clone);
 

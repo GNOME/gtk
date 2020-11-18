@@ -78,6 +78,7 @@
           <object class="GtkComboBoxText" id="source_attr">
             <signal name="changed" handler="update_preview" swapped="yes"/>
             <signal name="changed" handler="source_attr_changed" swapped="yes"/>
+            <signal name="changed" handler="update_button" swapped="yes"/>
             <layout>
               <property name="column">2</property>
               <property name="row">3</property>
