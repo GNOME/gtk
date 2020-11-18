@@ -1766,6 +1766,8 @@ gdk_wayland_surface_create_xdg_toplevel (GdkSurface *surface)
     case GDK_WAYLAND_SHELL_VARIANT_XDG_SHELL:
       if (surface->state & GDK_TOPLEVEL_STATE_MAXIMIZED)
         xdg_toplevel_set_maximized (impl->display_server.xdg_toplevel);
+      if (surface->state & GDK_TOPLEVEL_STATE_MINIMIZED)
+        xdg_toplevel_set_minimized (impl->display_server.xdg_toplevel);
       if (surface->state & GDK_TOPLEVEL_STATE_FULLSCREEN)
         xdg_toplevel_set_fullscreen (impl->display_server.xdg_toplevel,
                                      impl->initial_fullscreen_output);
@@ -1773,6 +1775,8 @@ gdk_wayland_surface_create_xdg_toplevel (GdkSurface *surface)
     case GDK_WAYLAND_SHELL_VARIANT_ZXDG_SHELL_V6:
       if (surface->state & GDK_TOPLEVEL_STATE_MAXIMIZED)
         zxdg_toplevel_v6_set_maximized (impl->display_server.zxdg_toplevel_v6);
+      if (surface->state & GDK_TOPLEVEL_STATE_MINIMIZED)
+        zxdg_toplevel_v6_set_minimized (impl->display_server.zxdg_toplevel_v6);
       if (surface->state & GDK_TOPLEVEL_STATE_FULLSCREEN)
         zxdg_toplevel_v6_set_fullscreen (impl->display_server.zxdg_toplevel_v6,
                                          impl->initial_fullscreen_output);
@@ -3541,6 +3545,9 @@ gdk_wayland_toplevel_set_transient_for (GdkWaylandToplevel *toplevel,
 static void
 gdk_wayland_surface_minimize (GdkSurface *surface)
 {
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandDisplay *display_wayland;
+
   if (GDK_SURFACE_DESTROYED (surface) ||
       !SURFACE_IS_TOPLEVEL (surface))
     return;
@@ -3548,13 +3555,9 @@ gdk_wayland_surface_minimize (GdkSurface *surface)
   if (!is_realized_toplevel (GDK_WAYLAND_SURFACE (surface)))
     return;
 
-#if 0
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  GdkWaylandDisplay *display_wayland;
-
-  /* We cannot use set_minimized() because it does not come with a
-   * minimized state that we can query or get notified of. This means
-   * we cannot implement the full GdkSurface API
+  /* FIXME: xdg_toplevel does not come with a minimized state that we can
+   * query or get notified of. This means we cannot implement the full
+   * GdkSurface API, and our state will not reflect minimization.
    */
   display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   switch (display_wayland->shell_variant)
@@ -3568,7 +3571,6 @@ gdk_wayland_surface_minimize (GdkSurface *surface)
     default:
       g_assert_not_reached ();
     }
-#endif
 }
 
 static void
