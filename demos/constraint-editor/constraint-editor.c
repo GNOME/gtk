@@ -142,6 +142,9 @@ get_target (GListModel *model,
 {
   int i;
 
+  if (id == NULL)
+    return NULL;
+
   if (strcmp ("super", id) == 0)
     return NULL;
 
@@ -210,6 +213,22 @@ get_relation_nick (GtkConstraintRelation relation)
   g_type_class_unref (class);
 
   return nick;
+}
+
+static const char *
+get_relation_display_name (GtkConstraintRelation relation)
+{
+  switch (relation)
+    {
+    case GTK_CONSTRAINT_RELATION_LE:
+      return "≤";
+    case GTK_CONSTRAINT_RELATION_EQ:
+      return "=";
+    case GTK_CONSTRAINT_RELATION_GE:
+      return "≥";
+    default:
+      return "?";
+    }
 }
 
 static GtkConstraintStrength
@@ -331,6 +350,7 @@ source_attr_changed (ConstraintEditor *editor)
     {
       gtk_widget_set_sensitive (editor->source, TRUE);
       gtk_widget_set_sensitive (editor->multiplier, TRUE);
+      gtk_editable_set_text (GTK_EDITABLE (editor->multiplier), "1");
     }
 }
 
@@ -347,7 +367,7 @@ constraint_editor_constraint_to_string (GtkConstraint *constraint)
 
   name = get_target_name (gtk_constraint_get_target (constraint));
   attr = get_attr_nick (gtk_constraint_get_target_attribute (constraint));
-  relation = get_relation_nick (gtk_constraint_get_relation (constraint));
+  relation = get_relation_display_name (gtk_constraint_get_relation (constraint));
 
   if (name == NULL)
     name = "[ ]";
@@ -441,8 +461,12 @@ update_preview (ConstraintEditor *editor)
 static void
 update_button (ConstraintEditor *editor)
 {
-  if (gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->target)) != NULL &&
-      gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->source)) != NULL)
+  const char *target = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->target));
+  const char *source = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->source));
+  const char *source_attr = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->source_attr));
+
+  if (target &&
+      (source || (source_attr && get_target_attr (source_attr) == GTK_CONSTRAINT_ATTRIBUTE_NONE)))
     gtk_widget_set_sensitive (editor->button, TRUE);
   else
     gtk_widget_set_sensitive (editor->button, FALSE);
