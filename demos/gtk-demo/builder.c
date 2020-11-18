@@ -1,5 +1,5 @@
 /* Builder
- * #Keywords: GMenu, GtkPopoverMenuBar, GtkBuilder, GtkStatusBar, toolbar
+ * #Keywords: GMenu, GtkPopoverMenuBar, GtkBuilder, GtkStatusBar, GtkShortcutController, toolbar
  *
  * Demonstrates a traditional interface, loaded from a XML description,
  * and shows how to connect actions to the menu items and toolbar buttons.

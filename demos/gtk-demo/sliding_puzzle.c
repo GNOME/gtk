@@ -1,5 +1,5 @@
 /* Sliding Puzzle
- * #Keywords: GdkPaintable, GdkGesture, game
+ * #Keywords: GdkPaintable, GdkGesture, GtkShortcutController, game
  *
  * This demo demonstrates how to use gestures and paintables to create a
  * small sliding puzzle game.
@@ -281,7 +281,8 @@ start_puzzle (GdkPaintable *paintable)
   gtk_aspect_frame_set_obey_child (GTK_ASPECT_FRAME (frame), FALSE);
 
   /* Add shortcuts so people can use the arrow
-   * keys to move the puzzle */
+   * keys to move the puzzle
+   */
   controller = gtk_shortcut_controller_new ();
   gtk_shortcut_controller_set_scope (GTK_SHORTCUT_CONTROLLER (controller),
                                      GTK_SHORTCUT_SCOPE_LOCAL);
