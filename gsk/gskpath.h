@@ -29,6 +29,24 @@
 
 G_BEGIN_DECLS
 
+/**
+ * GskPathForeachFunc:
+ * @op: The operation to perform
+ * @pts: The points of the operation
+ * @n_pts: The number of points
+ * @user_data: The user data provided with the function
+ *
+ * Prototype of the callback to iterate throught the operations of
+ * a path.
+ *
+ * Returns: %TRUE to continue evaluating the path, %FALSE to
+ *     immediately abort and not call the function again.
+ */
+typedef gboolean (* GskPathForeachFunc) (GskPathOperation        op,
+                                         const graphene_point_t *pts,
+                                         gsize                   n_pts,
+                                         gpointer                user_data);
+
 #define GSK_TYPE_PATH (gsk_path_get_type ())
 
 GDK_AVAILABLE_IN_ALL
@@ -55,6 +73,11 @@ gboolean                gsk_path_is_empty                       (GskPath        
 GDK_AVAILABLE_IN_ALL
 gboolean                gsk_path_get_bounds                     (GskPath                *self,
                                                                  graphene_rect_t        *bounds);
+
+GDK_AVAILABLE_IN_ALL
+gboolean                gsk_path_foreach                        (GskPath                *self,
+                                                                 GskPathForeachFunc      func,
+                                                                 gpointer                user_data);
 
 #define GSK_TYPE_PATH_BUILDER (gsk_path_builder_get_type ())
 
