@@ -29,6 +29,10 @@ G_BEGIN_DECLS
 #define GSK_PATH_TOLERANCE_DEFAULT (0.1)
 
 gsize                   gsk_path_get_n_contours                 (GskPath              *path);
+gboolean                gsk_path_foreach_with_tolerance         (GskPath              *self,
+                                                                 double                tolerance,
+                                                                 GskPathForeachFunc    func,
+                                                                 gpointer              user_data);
 
 gpointer                gsk_contour_init_measure                (GskPath              *path,
                                                                  gsize                 i,
