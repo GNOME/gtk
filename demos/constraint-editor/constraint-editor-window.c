@@ -300,7 +300,7 @@ save_response_cb (GtkNativeDialog        *dialog,
       model = constraint_view_get_model (CONSTRAINT_VIEW (self->view));
       text = serialize_model (model);
       file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
-      g_file_replace_contents (file, text, -1,
+      g_file_replace_contents (file, text, strlen (text),
                                NULL, FALSE,
                                G_FILE_CREATE_NONE,
                                NULL,
