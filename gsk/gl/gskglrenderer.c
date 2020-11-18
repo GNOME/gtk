@@ -4273,7 +4273,7 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
                                         g_type_name_from_instance ((GTypeInstance *) root),
                                         root,
                                         fbo_id);
-  glFramebufferTexture (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture_id, 0);
+  glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_id, 0);
 
   /* Render the actual scene */
   gsk_gl_renderer_do_render (renderer, root, viewport, fbo_id, 1);
