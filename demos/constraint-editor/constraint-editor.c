@@ -212,6 +212,22 @@ get_relation_nick (GtkConstraintRelation relation)
   return nick;
 }
 
+static const char *
+get_relation_display_name (GtkConstraintRelation relation)
+{
+  switch (relation)
+    {
+    case GTK_CONSTRAINT_RELATION_LE:
+      return "≤";
+    case GTK_CONSTRAINT_RELATION_EQ:
+      return "=";
+    case GTK_CONSTRAINT_RELATION_GE:
+      return "≥";
+    default:
+      return "?";
+    }
+}
+
 static GtkConstraintStrength
 get_strength (const char *id)
 {
@@ -347,7 +363,7 @@ constraint_editor_constraint_to_string (GtkConstraint *constraint)
 
   name = get_target_name (gtk_constraint_get_target (constraint));
   attr = get_attr_nick (gtk_constraint_get_target_attribute (constraint));
-  relation = get_relation_nick (gtk_constraint_get_relation (constraint));
+  relation = get_relation_display_name (gtk_constraint_get_relation (constraint));
 
   if (name == NULL)
     name = "[ ]";
