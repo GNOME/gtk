@@ -329,6 +329,10 @@ gsk_path_to_cairo
 <SUBSECTION>
 gsk_path_is_empty
 gsk_path_get_bounds
+<SUBSECTION>
+GskPathOperation
+GskPathForeachFunc
+gsk_path_foreach
 <SUBSECTION Private>
 GSK_TYPE_PATH
 gsk_path_get_type
