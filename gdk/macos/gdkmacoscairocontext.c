@@ -23,7 +23,6 @@
 #include "gdkconfig.h"
 
 #include <CoreGraphics/CoreGraphics.h>
-#include <cairo-quartz.h>
 
 #import "GdkMacosCairoView.h"
 
@@ -58,7 +57,12 @@ create_cairo_surface_for_surface (GdkSurface *surface)
   width = scale * gdk_surface_get_width (surface);
   height = scale * gdk_surface_get_height (surface);
 
-  cairo_surface = cairo_quartz_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+  /* We use a cairo image surface here instead of a quartz surface because we
+   * get strange artifacts with the quartz surface such as empty cross-fades
+   * when hovering buttons. For performance, we want to be using GL rendering
+   * so there isn't much point here as correctness is better.
+   */
+  cairo_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
 
   if (cairo_surface != NULL)
     cairo_surface_set_device_scale (cairo_surface, scale, scale);
