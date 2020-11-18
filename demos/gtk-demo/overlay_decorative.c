@@ -21,7 +21,7 @@ margin_changed (GtkAdjustment *adjustment,
 }
 
 GtkWidget *
-do_overlay2 (GtkWidget *do_widget)
+do_overlay_decorative (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
 

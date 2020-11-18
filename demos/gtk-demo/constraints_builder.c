@@ -43,7 +43,7 @@ constraints_grid_class_init (ConstraintsGridClass *klass)
 }
 
 GtkWidget *
-do_constraints4 (GtkWidget *do_widget)
+do_constraints_builder (GtkWidget *do_widget)
 {
  static GtkWidget *window;
 
@@ -53,7 +53,7 @@ do_constraints4 (GtkWidget *do_widget)
 
      g_type_ensure (constraints_grid_get_type ());
 
-     builder = gtk_builder_new_from_resource ("/constraints4/constraints.ui");
+     builder = gtk_builder_new_from_resource ("/constraints_builder/constraints_builder.ui");
 
      window = GTK_WIDGET (gtk_builder_get_object (builder, "window1"));
      gtk_window_set_display (GTK_WINDOW (window),

@@ -205,7 +205,7 @@ interactive_grid_init (InteractiveGrid *self)
 }
 
 GtkWidget *
-do_constraints2 (GtkWidget *do_widget)
+do_constraints_interactive (GtkWidget *do_widget)
 {
  static GtkWidget *window;
 
