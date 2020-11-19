@@ -1374,6 +1374,7 @@ handle_pointing_event (GdkEvent *event)
   double native_x, native_y;
   GtkWidget *native;
   GdkEventType type;
+  gboolean has_implicit;
 
   event_widget = gtk_get_event_widget (event);
   device = gdk_event_get_device (event);
@@ -1475,6 +1476,11 @@ handle_pointing_event (GdkEvent *event)
       target = gtk_window_lookup_effective_pointer_focus_widget (toplevel,
                                                                  device,
                                                                  sequence);
+      has_implicit =
+        gtk_window_lookup_pointer_focus_implicit_grab (toplevel,
+                                                       device,
+                                                       sequence) != NULL;
+
       gtk_window_set_pointer_focus_grab (toplevel, device, sequence,
                                          type == GDK_BUTTON_PRESS ?  target : NULL);
 
@@ -1491,7 +1497,10 @@ handle_pointing_event (GdkEvent *event)
           update_pointer_focus_state (toplevel, event, new_target);
         }
 
-      set_widget_active_state (target, type == GDK_BUTTON_RELEASE);
+      if (type == GDK_BUTTON_PRESS)
+        set_widget_active_state (target, FALSE);
+      else if (has_implicit)
+        set_widget_active_state (target, TRUE);
 
       break;
     case GDK_SCROLL:
