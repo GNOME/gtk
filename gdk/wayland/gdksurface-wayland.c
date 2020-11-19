@@ -603,6 +603,14 @@ gdk_wayland_surface_request_frame (GdkSurface *surface)
   impl->awaiting_frame = TRUE;
 }
 
+gboolean
+gdk_wayland_surface_has_surface (GdkSurface *surface)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  return !!impl->display_server.wl_surface;
+}
+
 void
 gdk_wayland_surface_commit (GdkSurface *surface)
 {
@@ -1449,6 +1457,19 @@ gdk_wayland_surface_configure_popup (GdkSurface *surface)
 }
 
 static void
+maybe_notify_mapped (GdkSurface *surface)
+{
+  if (surface->destroyed)
+    return;
+
+  if (!GDK_SURFACE_IS_MAPPED (surface))
+    {
+      gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
+      gdk_surface_invalidate_rect (surface, NULL);
+    }
+}
+
+static void
 gdk_wayland_surface_configure (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
@@ -1458,6 +1479,7 @@ gdk_wayland_surface_configure (GdkSurface *surface)
       gdk_surface_thaw_updates (surface);
       impl->initial_configure_received = TRUE;
       impl->pending.is_initial_configure = TRUE;
+      maybe_notify_mapped (surface);
     }
 
   impl->has_uncommitted_ack_configure = TRUE;
@@ -2949,19 +2971,6 @@ is_relayout_finished (GdkSurface *surface)
 }
 
 static void
-maybe_notify_mapped (GdkSurface *surface)
-{
-  if (surface->destroyed)
-    return;
-
-  if (!GDK_SURFACE_IS_MAPPED (surface))
-    {
-      gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
-      gdk_surface_invalidate_rect (surface, NULL);
-    }
-}
-
-static void
 gdk_wayland_surface_map_popup (GdkSurface     *surface,
                                int             width,
                                int             height,
@@ -2995,8 +3004,6 @@ gdk_wayland_surface_map_popup (GdkSurface     *surface,
   impl->popup.unconstrained_width = width;
   impl->popup.unconstrained_height = height;
   impl->mapped = TRUE;
-
-  maybe_notify_mapped (surface);
 }
 
 static void
@@ -4801,7 +4808,6 @@ gdk_wayland_toplevel_present (GdkToplevel       *toplevel,
   impl->toplevel.layout = gdk_toplevel_layout_copy (layout);
 
   gdk_wayland_surface_show (surface, FALSE);
-  maybe_notify_mapped (surface);
 
   display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   callback = wl_display_sync (display_wayland->wl_display);
