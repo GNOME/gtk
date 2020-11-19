@@ -179,6 +179,9 @@ gtk_fishbowl_add (GtkFishbowl *fishbowl,
   child_info->dy = new_speed ();
 
   gtk_widget_set_parent (widget, GTK_WIDGET (fishbowl));
+  gtk_accessible_update_state (GTK_ACCESSIBLE (widget),
+                               GTK_ACCESSIBLE_STATE_HIDDEN, TRUE,
+                               -1);
 
   g_hash_table_insert (priv->children, widget, child_info);
   priv->count++;
@@ -342,6 +345,8 @@ gtk_fishbowl_class_init (GtkFishbowlClass *klass)
                           G_PARAM_READWRITE);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
+
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_PRESENTATION);
 }
 
 guint

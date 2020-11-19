@@ -349,8 +349,9 @@ handle_accessible_method (GDBusConnection       *connection,
     {
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("as"));
 
-      g_variant_builder_add (&builder, "s", "org.a11y.atspi.Accessible");
-      g_variant_builder_add (&builder, "s", "org.a11y.atspi.Application");
+      g_variant_builder_add (&builder, "s", atspi_accessible_interface.name);
+      g_variant_builder_add (&builder, "s", atspi_application_interface.name);
+
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(as)", &builder));
     }
 }
@@ -664,8 +665,10 @@ gtk_at_spi_root_constructed (GObject *gobject)
     }
   else
     {
+      const char *program_name = g_get_prgname ();
+
       self->base_path = g_strconcat ("/org/gtk/application/",
-                                     g_get_prgname (),
+                                     program_name != NULL ? program_name : "unknown",
                                      "/a11y",
                                      NULL);
 
