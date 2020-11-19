@@ -91,6 +91,7 @@ struct _GtkShortcutController
   GtkShortcutScope scope;
   GdkModifierType mnemonics_modifiers;
 
+  gulong shortcuts_changed_id;
   guint custom_shortcuts : 1;
 
   guint last_activated;
@@ -213,7 +214,11 @@ gtk_shortcut_controller_set_property (GObject      *object,
             self->shortcuts = g_object_ref (model);
             self->custom_shortcuts = FALSE;
           }
-        g_signal_connect_swapped (self->shortcuts, "items-changed", G_CALLBACK (g_list_model_items_changed), self);
+
+        self->shortcuts_changed_id =  g_signal_connect_swapped (self->shortcuts,
+                                                                "items-changed",
+                                                                G_CALLBACK (g_list_model_items_changed),
+                                                                self);
       }
       break;
 
@@ -265,7 +270,7 @@ gtk_shortcut_controller_finalize (GObject *object)
 {
   GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (object);
 
-  g_signal_handlers_disconnect_by_func (self->shortcuts, g_list_model_items_changed, self);
+  g_clear_signal_handler (&self->shortcuts_changed_id, self->shortcuts);
   g_clear_object (&self->shortcuts);
 
   G_OBJECT_CLASS (gtk_shortcut_controller_parent_class)->finalize (object);
