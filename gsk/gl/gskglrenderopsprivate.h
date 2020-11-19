@@ -90,6 +90,8 @@ typedef struct
 
 struct _Program
 {
+  const char *name;
+
   int index;        /* Into the renderer's program array -1 for custom */
 
   int id;

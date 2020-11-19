@@ -2793,8 +2793,12 @@ apply_modelview_op (const Program  *program,
 {
   float mat[16];
 
-  OP_PRINT (" -> Modelview");
   graphene_matrix_to_float (&op->matrix, mat);
+  OP_PRINT (" -> Modelview { { %f,%f,%f,%f }, { %f,%f,%f,%f }, { %f,%f,%f,%f }, { %f,%f,%f,%f }",
+            mat[0], mat[1], mat[2], mat[3],
+            mat[4], mat[5], mat[6], mat[7],
+            mat[8], mat[9], mat[10], mat[11],
+            mat[12], mat[13], mat[14], mat[15]);
   glUniformMatrix4fv (program->modelview_location, 1, GL_FALSE, mat);
 }
 
@@ -2804,8 +2808,12 @@ apply_projection_op (const Program  *program,
 {
   float mat[16];
 
-  OP_PRINT (" -> Projection");
   graphene_matrix_to_float (&op->matrix, mat);
+  OP_PRINT (" -> Projection { { %f,%f,%f,%f }, { %f,%f,%f,%f }, { %f,%f,%f,%f }, { %f,%f,%f,%f }",
+            mat[0], mat[1], mat[2], mat[3],
+            mat[4], mat[5], mat[6], mat[7],
+            mat[8], mat[9], mat[10], mat[11],
+            mat[12], mat[13], mat[14], mat[15]);
   glUniformMatrix4fv (program->projection_location, 1, GL_FALSE, mat);
 }
 
@@ -3260,6 +3268,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
     {
       Program *prog = &programs->programs[i];
 
+      prog->name = program_definitions[i].name;
       prog->index = i;
       prog->id = gsk_gl_shader_builder_create_program (&shader_builder,
                                                        program_definitions[i].resource_path,
@@ -4052,8 +4061,9 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self)
           {
             const OpDraw *op = ptr;
 
-            OP_PRINT (" -> draw %ld, size %ld and program %d\n",
-                      op->vao_offset, op->vao_size, program->index);
+            OP_PRINT (" -> draw %ld, size %ld and program %d: %s",
+                      op->vao_offset, op->vao_size, program->index,
+                      program->name ?: "");
             glDrawArrays (GL_TRIANGLES, op->vao_offset, op->vao_size);
             break;
           }
