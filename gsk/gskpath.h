@@ -104,6 +104,11 @@ GDK_AVAILABLE_IN_ALL
 void                    gsk_path_builder_add_rect               (GskPathBuilder         *builder,
                                                                  const graphene_rect_t  *rect);
 GDK_AVAILABLE_IN_ALL
+void                    gsk_path_builder_add_circle             (GskPathBuilder         *builder,
+                                                                 const graphene_point_t *center,
+                                                                 float                   radius);
+
+GDK_AVAILABLE_IN_ALL
 void                    gsk_path_builder_move_to                (GskPathBuilder         *builder,
                                                                  float                   x,
                                                                  float                   y);
