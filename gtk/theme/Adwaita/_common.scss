@@ -4088,12 +4088,6 @@ tooltip.csd {
     @at-root %selected_items_disabled,
     &:disabled { color: mix($selected_fg_color, $selected_bg_color, 50%); }
 
-    @at-root %selected_items_backdrop,
-    &:backdrop {
-      color: $backdrop_selected_fg_color;
-
-      &:disabled { color: mix($backdrop_selected_fg_color, $selected_bg_color, 30%); }
-    }
   }
 }
 
