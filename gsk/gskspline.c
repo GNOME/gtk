@@ -47,6 +47,41 @@ gsk_spline_decompose_add_point (GskCubicDecomposition  *decomp,
   decomp->last_progress += progress;
 }
 
+static void
+gsk_spline_cubic_get_coefficients (graphene_point_t       coeffs[4],
+                                   const graphene_point_t pts[4])
+{
+  coeffs[0] = GRAPHENE_POINT_INIT (pts[3].x - 3.0f * pts[2].x + 3.0f * pts[1].x - pts[0].x,
+                                   pts[3].y - 3.0f * pts[2].y + 3.0f * pts[1].y - pts[0].y);
+  coeffs[1] = GRAPHENE_POINT_INIT (3.0f * pts[2].x - 6.0f * pts[1].x + 3.0f * pts[0].x,
+                                   3.0f * pts[2].y - 6.0f * pts[1].y + 3.0f * pts[0].y);
+  coeffs[2] = GRAPHENE_POINT_INIT (3.0f * pts[1].x - 3.0f * pts[0].x,
+                                   3.0f * pts[1].y - 3.0f * pts[0].y);
+  coeffs[3] = pts[0];
+}
+
+void
+gsk_spline_get_point_cubic (const graphene_point_t  pts[4],
+                            float                   progress,
+                            graphene_point_t       *pos,
+                            graphene_vec2_t        *tangent)
+{
+  graphene_point_t c[4];
+
+  gsk_spline_cubic_get_coefficients (c, pts);
+
+  if (pos)
+    *pos = GRAPHENE_POINT_INIT (((c[0].x * progress + c[1].x) * progress +c[2].x) * progress + c[3].x,
+                                ((c[0].y * progress + c[1].y) * progress +c[2].y) * progress + c[3].y);
+  if (tangent)
+    {
+      graphene_vec2_init (tangent,
+                          (3.0f * c[0].x * progress + 2.0f * c[1].x) * progress + c[2].x,
+                          (3.0f * c[0].y * progress + 2.0f * c[1].y) * progress + c[2].y);
+      graphene_vec2_normalize (tangent, tangent);
+    }
+}
+
 void
 gsk_spline_split_cubic (const graphene_point_t pts[4],
                         graphene_point_t       result1[4],

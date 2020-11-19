@@ -31,6 +31,10 @@ typedef void (* GskSplineAddPointFunc) (const graphene_point_t *from,
                                         float                   to_progress,
                                         gpointer                user_data);
 
+void                    gsk_spline_get_point_cubic              (const graphene_point_t  pts[4],
+                                                                 float                   progress,
+                                                                 graphene_point_t       *pos,
+                                                                 graphene_vec2_t        *tangent);
 void                    gsk_spline_split_cubic                  (const graphene_point_t  pts[4],
                                                                  graphene_point_t        result1[4],
                                                                  graphene_point_t        result2[4],
