@@ -347,7 +347,7 @@ filechooser_quartz_launch (FileChooserQuartzData *data)
 
   void (^handler)(NSInteger ret) = ^(NSInteger result) {
 
-    if (result == NSFileHandlingPanelOKButton)
+    if (result == NSModalResponseOK)
       {
         // get selected files and update data->files
         data->response = GTK_RESPONSE_ACCEPT;

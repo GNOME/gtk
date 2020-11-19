@@ -150,14 +150,14 @@ ensure_gl_view (GdkMacosGLContext *self)
 
       if (self->dummy_view != NULL)
         {
-          NSView *nsview = g_steal_pointer (&self->dummy_view);
-          [nsview release];
+          NSView *dummy_view = g_steal_pointer (&self->dummy_view);
+          [dummy_view release];
         }
 
       if (self->dummy_window != NULL)
         {
-          NSWindow *nswindow = g_steal_pointer (&self->dummy_window);
-          [nswindow release];
+          NSWindow *dummy_window = g_steal_pointer (&self->dummy_window);
+          [dummy_window release];
         }
     }
 
@@ -288,7 +288,6 @@ gdk_macos_gl_context_begin_frame (GdkDrawContext *context,
 
       if (self->dummy_view != NULL)
         {
-          GdkSurface *surface = gdk_draw_context_get_surface (context);
           NSRect frame = NSMakeRect (0, 0, surface->width, surface->height);
 
           [self->dummy_window setFrame:frame display:NO];
@@ -327,17 +326,9 @@ gdk_macos_gl_context_end_frame (GdkDrawContext *context,
                                 cairo_region_t *painted)
 {
   GdkMacosGLContext *self = GDK_MACOS_GL_CONTEXT (context);
-  GdkMacosSurface *surface;
-  NSView *nsview;
-  cairo_rectangle_int_t extents;
 
   g_assert (GDK_IS_MACOS_GL_CONTEXT (self));
   g_assert (self->gl_context != nil);
-
-  surface = GDK_MACOS_SURFACE (gdk_draw_context_get_surface (context));
-  nsview = self->dummy_view ?
-           self->dummy_view :
-           _gdk_macos_surface_get_view (surface);
 
   GDK_DRAW_CONTEXT_CLASS (gdk_macos_gl_context_parent_class)->end_frame (context, painted);
 
