@@ -486,13 +486,14 @@ gtk_shortcut_controller_set_widget (GtkEventController *controller,
                                     GtkWidget          *widget)
 {
   GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (controller);
+  GListModel *shortcuts = self->shortcuts;
   guint i, p;
 
   GTK_EVENT_CONTROLLER_CLASS (gtk_shortcut_controller_parent_class)->set_widget (controller, widget);
 
-  for (i = 0, p = g_list_model_get_n_items (G_LIST_MODEL (controller)); i < p; i++)
+  for (i = 0, p = g_list_model_get_n_items (shortcuts); i < p; i++)
     {
-      GtkShortcut *shortcut = g_list_model_get_item (G_LIST_MODEL (controller), i);
+      GtkShortcut *shortcut = g_list_model_get_item (shortcuts, i);
       if (GTK_IS_SHORTCUT (shortcut))
         update_accel (shortcut, widget, TRUE);
       g_object_unref (shortcut);
