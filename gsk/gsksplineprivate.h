@@ -40,6 +40,16 @@ void                    gsk_spline_decompose_cubic              (const graphene_
                                                                  GskSplineAddPointFunc   add_point_func,
                                                                  gpointer                user_data);
 
+typedef gboolean (* GskSplineAddCurveFunc) (const graphene_point_t curve[4],
+                                            gpointer               user_data);
+gboolean                gsk_spline_decompose_arc                (const graphene_point_t *center,
+                                                                 float                   radius,
+                                                                 float                   tolerance,
+                                                                 float                   start_angle,
+                                                                 float                   end_angle,
+                                                                 GskSplineAddCurveFunc   curve_func,
+                                                                 gpointer                user_data);
+
 G_END_DECLS
 
 #endif /* __GSK_SPLINE_PRIVATE_H__ */
