@@ -461,11 +461,12 @@ update_accel (GtkShortcut    *shortcut,
   if (!muxer)
     return;
 
-  trigger = gtk_shortcut_get_trigger (shortcut);
   action = gtk_shortcut_get_action (shortcut);
+  if (!GTK_IS_NAMED_ACTION (action))
+    return;
 
-  if (!GTK_IS_NAMED_ACTION (action) ||
-      !GTK_IS_KEYVAL_TRIGGER (trigger))
+  trigger = gtk_shortcut_get_trigger (shortcut);
+  if (!GTK_IS_KEYVAL_TRIGGER (trigger))
     return;
 
   target = gtk_shortcut_get_arguments (shortcut);
