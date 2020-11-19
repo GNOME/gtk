@@ -74,6 +74,7 @@ demos = files([
   'password_entry.c',
   'path_fill.c',
   'path_walk.c',
+  'path_text.c',
   'peg_solitaire.c',
   'pickers.c',
   'printing.c',
