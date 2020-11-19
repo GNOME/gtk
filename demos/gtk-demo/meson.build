@@ -75,6 +75,7 @@ demos = files([
   'path_fill.c',
   'path_spinner.c',
   'path_walk.c',
+  'path_text.c',
   'peg_solitaire.c',
   'pickers.c',
   'printing.c',
