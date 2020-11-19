@@ -185,7 +185,8 @@ emit_add_accessible (GtkAtSpiCache   *self,
                                  self->cache_path,
                                  "org.a11y.atspi.Cache",
                                  "AddAccessible",
-                                 g_variant_builder_end (&builder),
+                                 g_variant_new ("(@(" ITEM_SIGNATURE "))",
+                                   g_variant_builder_end (&builder)),
                                  NULL);
 }
 
@@ -198,7 +199,7 @@ emit_remove_accessible (GtkAtSpiCache *self,
                                  self->cache_path,
                                  "org.a11y.atspi.Cache",
                                  "RemoveAccessible",
-                                 ref,
+                                 g_variant_new ("(@(so))", ref),
                                  NULL);
 }
 
