@@ -342,6 +342,8 @@ gtk_fishbowl_class_init (GtkFishbowlClass *klass)
                           G_PARAM_READWRITE);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
+
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_PRESENTATION);
 }
 
 guint
