@@ -369,6 +369,7 @@ gsk_path_measure_ref
 gsk_path_measure_unref
 <SUBSECTION>
 gsk_path_measure_get_length
+gsk_path_measure_get_point
 gsk_path_measure_add_segment
 <SUBSECTION Private>
 GSK_TYPE_PATH_MEASURE
