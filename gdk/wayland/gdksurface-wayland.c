@@ -4737,22 +4737,16 @@ gdk_wayland_toplevel_class_init (GdkWaylandToplevelClass *class)
 }
 
 static void
-show_surface (GdkSurface *surface)
+maybe_notify_mapped (GdkSurface *surface)
 {
-  gboolean was_mapped;
-
   if (surface->destroyed)
     return;
 
-  was_mapped = GDK_SURFACE_IS_MAPPED (surface);
-
-  if (!was_mapped)
-    gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
-
-  gdk_wayland_surface_show (surface, FALSE);
-
-  if (!was_mapped)
-    gdk_surface_invalidate_rect (surface, NULL);
+  if (!GDK_SURFACE_IS_MAPPED (surface))
+    {
+      gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
+      gdk_surface_invalidate_rect (surface, NULL);
+    }
 }
 
 static void
@@ -4806,7 +4800,8 @@ gdk_wayland_toplevel_present (GdkToplevel       *toplevel,
   g_clear_pointer (&impl->toplevel.layout, gdk_toplevel_layout_unref);
   impl->toplevel.layout = gdk_toplevel_layout_copy (layout);
 
-  show_surface (surface);
+  gdk_wayland_surface_show (surface, FALSE);
+  maybe_notify_mapped (surface);
 
   display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   callback = wl_display_sync (display_wayland->wl_display);
@@ -4962,7 +4957,8 @@ gdk_wayland_drag_surface_present (GdkDragSurface *drag_surface,
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
   gdk_wayland_surface_resize (surface, width, height, impl->scale);
-  show_surface (surface);
+  gdk_wayland_surface_show (surface, FALSE);
+  maybe_notify_mapped (surface);
 
   return TRUE;
 }
