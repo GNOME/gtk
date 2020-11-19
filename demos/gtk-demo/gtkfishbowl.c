@@ -179,6 +179,9 @@ gtk_fishbowl_add (GtkFishbowl *fishbowl,
   child_info->dy = new_speed ();
 
   gtk_widget_set_parent (widget, GTK_WIDGET (fishbowl));
+  gtk_accessible_update_state (GTK_ACCESSIBLE (widget),
+                               GTK_ACCESSIBLE_STATE_HIDDEN, TRUE,
+                               -1);
 
   g_hash_table_insert (priv->children, widget, child_info);
   priv->count++;
