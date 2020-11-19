@@ -525,8 +525,8 @@ select_thread_start_poll (GPollFD *ufds,
         have_new_pollfds = TRUE;
       else
         {
-          if (!((nfds == 1 && poll_fd_index < 0 && g_thread_supported ()) ||
-                (nfds == 2 && poll_fd_index >= 0 && g_thread_supported ())))
+          if (!((nfds == 1 && poll_fd_index < 0) ||
+                (nfds == 2 && poll_fd_index >= 0)))
             select_thread_set_state (POLLING_RESTART);
         }
     }

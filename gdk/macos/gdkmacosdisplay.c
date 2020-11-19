@@ -512,7 +512,7 @@ _gdk_macos_display_surface_became_key (GdkMacosDisplay *self,
    * ("is not key").  We send a dummy motion notify event now, so that
    * everything in the window is set to correct state.
    */
-  gdk_surface_request_motion (surface);
+  gdk_surface_request_motion (GDK_SURFACE (surface));
 }
 
 void

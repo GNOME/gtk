@@ -185,7 +185,7 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
   if (register_session)
     {
       quartz->delegate = [[GtkApplicationQuartzDelegate alloc] initWithImpl:quartz];
-      [NSApp setDelegate: quartz->delegate];
+      [NSApp setDelegate: (id<NSApplicationDelegate>)quartz->delegate];
     }
 
   quartz->muxer = gtk_action_muxer_new (NULL);
@@ -216,7 +216,7 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
        * app menu at index 0 in 'combined'.
        */
       builder = gtk_builder_new_from_resource ("/org/gtk/libgtk/ui/gtkapplication-quartz.ui");
-      app_menu = G_MENU (gtk_builder_get_object (builder, "app-menu"));
+      app_menu = G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu"));
       g_object_set_data_full (G_OBJECT (impl), "APP_DATA", g_object_ref (app_menu), g_object_unref);
       g_object_unref (builder);
     }
