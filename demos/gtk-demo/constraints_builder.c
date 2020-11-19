@@ -1,8 +1,10 @@
 /* Constraints/Builder
  *
- * GtkConstraintLayouts can be created in .ui files, and constraints can be
- * set up at that time as well, as this example demonstrates. It uses the
- * same setup as the “Simple” constraints demo.
+ * GtkConstraintLayouts can be created in .ui files, and constraints can
+ * be set up at that time as well, as this example demonstrates. It shows
+ * various ways to do spacing and sizing with constraints.
+ *
+ * Make the window wider to see the rows react differently
  */
 
 #include <glib/gi18n.h>
