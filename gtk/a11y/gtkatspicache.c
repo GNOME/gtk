@@ -191,9 +191,11 @@ emit_add_accessible (GtkAtSpiCache   *self,
 }
 
 static void
-emit_remove_accessible (GtkAtSpiCache *self,
-                        GVariant      *ref)
+emit_remove_accessible (GtkAtSpiCache   *self,
+                        GtkAtSpiContext *context)
 {
+  GVariant *ref = gtk_at_spi_context_to_ref (context);
+
   g_dbus_connection_emit_signal (self->connection,
                                  NULL,
                                  self->cache_path,
@@ -325,29 +327,6 @@ gtk_at_spi_cache_new (GDBusConnection *connection,
                        NULL);
 }
 
-static void
-context_weak_unref (gpointer  data,
-                    GObject  *stale_context)
-{
-  GtkAtSpiCache *self = data;
-
-  const char *path = g_hash_table_lookup (self->contexts_to_path, stale_context);
-  if (path == NULL)
-    return;
-
-  /* By the time we get here, the context has already been dropped,
-   * so we need to generate the reference ourselves
-   */
-  emit_remove_accessible (self, g_variant_new ("(so)",
-                                               g_dbus_connection_get_unique_name (self->connection),
-                                               path));
-
-  GTK_NOTE (A11Y, g_message ("Removing stale context '%s' from cache", path));
-
-  g_hash_table_remove (self->contexts_by_path, path);
-  g_hash_table_remove (self->contexts_to_path, stale_context);
-}
-
 void
 gtk_at_spi_cache_add_context (GtkAtSpiCache   *self,
                               GtkAtSpiContext *context)
@@ -362,15 +341,13 @@ gtk_at_spi_cache_add_context (GtkAtSpiCache   *self,
   if (g_hash_table_contains (self->contexts_by_path, path))
     return;
 
-  g_object_weak_ref (G_OBJECT (context), context_weak_unref, self);
-
   char *path_key = g_strdup (path);
   g_hash_table_insert (self->contexts_by_path, path_key, context);
   g_hash_table_insert (self->contexts_to_path, context, path_key);
 
-  emit_add_accessible (self, context);
-
   GTK_NOTE (A11Y, g_message ("Adding context '%s' to cache", path_key));
+
+  emit_add_accessible (self, context);
 }
 
 void
@@ -384,9 +361,7 @@ gtk_at_spi_cache_remove_context (GtkAtSpiCache   *self,
   if (!g_hash_table_contains (self->contexts_by_path, path))
     return;
 
-  emit_remove_accessible (self, gtk_at_spi_context_to_ref (context));
-
-  g_object_weak_unref (G_OBJECT (context), context_weak_unref, self);
+  emit_remove_accessible (self, context);
 
   /* The order is important: the value in contexts_by_path is the
    * key in contexts_to_path
