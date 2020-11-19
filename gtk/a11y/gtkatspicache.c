@@ -176,6 +176,18 @@ static void
 emit_add_accessible (GtkAtSpiCache   *self,
                      GtkAtSpiContext *context)
 {
+  GtkATContext *at_context = GTK_AT_CONTEXT (context);
+
+  /* If the context is hidden, we don't need to update the cache */
+  if (gtk_at_context_has_accessible_state (at_context, GTK_ACCESSIBLE_STATE_HIDDEN))
+    {
+      GtkAccessibleValue *is_hidden =
+        gtk_at_context_get_accessible_state (at_context, GTK_ACCESSIBLE_STATE_HIDDEN);
+
+      if (gtk_boolean_accessible_value_get (is_hidden))
+        return;
+    }
+
   GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("(" ITEM_SIGNATURE ")"));
 
   collect_object (self, &builder, context);
@@ -194,6 +206,18 @@ static void
 emit_remove_accessible (GtkAtSpiCache   *self,
                         GtkAtSpiContext *context)
 {
+  GtkATContext *at_context = GTK_AT_CONTEXT (context);
+
+  /* If the context is hidden, we don't need to update the cache */
+  if (gtk_at_context_has_accessible_state (at_context, GTK_ACCESSIBLE_STATE_HIDDEN))
+    {
+      GtkAccessibleValue *is_hidden =
+        gtk_at_context_get_accessible_state (at_context, GTK_ACCESSIBLE_STATE_HIDDEN);
+
+      if (gtk_boolean_accessible_value_get (is_hidden))
+        return;
+    }
+
   GVariant *ref = gtk_at_spi_context_to_ref (context);
 
   g_dbus_connection_emit_signal (self->connection,
