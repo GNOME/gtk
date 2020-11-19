@@ -2949,6 +2949,19 @@ is_relayout_finished (GdkSurface *surface)
 }
 
 static void
+maybe_notify_mapped (GdkSurface *surface)
+{
+  if (surface->destroyed)
+    return;
+
+  if (!GDK_SURFACE_IS_MAPPED (surface))
+    {
+      gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
+      gdk_surface_invalidate_rect (surface, NULL);
+    }
+}
+
+static void
 gdk_wayland_surface_map_popup (GdkSurface     *surface,
                                int             width,
                                int             height,
@@ -2983,7 +2996,7 @@ gdk_wayland_surface_map_popup (GdkSurface     *surface,
   impl->popup.unconstrained_height = height;
   impl->mapped = TRUE;
 
-  gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
+  maybe_notify_mapped (surface);
 }
 
 static void
@@ -4734,19 +4747,6 @@ gdk_wayland_toplevel_class_init (GdkWaylandToplevelClass *class)
   object_class->set_property = gdk_wayland_toplevel_set_property;
 
   gdk_toplevel_install_properties (object_class, 1);
-}
-
-static void
-maybe_notify_mapped (GdkSurface *surface)
-{
-  if (surface->destroyed)
-    return;
-
-  if (!GDK_SURFACE_IS_MAPPED (surface))
-    {
-      gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
-      gdk_surface_invalidate_rect (surface, NULL);
-    }
 }
 
 static void
