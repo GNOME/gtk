@@ -5,6 +5,7 @@ gtk_tests = [
   ['blur-performance', ['../gsk/gskcairoblur.c']],
   ['motion-compression'],
   ['overlayscroll'],
+  ['curve', ['curve.c', 'curve-editor.c']],
   ['testupload'],
   ['testtransform'],
   ['testdropdown'],
