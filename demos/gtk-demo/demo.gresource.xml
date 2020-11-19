@@ -325,6 +325,7 @@
     <file>panes.c</file>
     <file>password_entry.c</file>
     <file>path_fill.c</file>
+    <file>path_text.c</file>
     <file>peg_solitaire.c</file>
     <file>pickers.c</file>
     <file>printing.c</file>
@@ -408,6 +409,9 @@
   </gresource>
   <gresource prefix="/fontrendering">
     <file>fontrendering.ui</file>
+  </gresource>
+  <gresource prefix="/path_text">
+    <file>path_text.ui</file>
   </gresource>
   <gresource prefix="/org/gtk/Demo4">
     <file>icons/16x16/actions/application-exit.png</file>
