@@ -182,6 +182,38 @@ gsk_path_measure_get_length (GskPathMeasure *self)
   return self->length;
 }
 
+void
+gsk_path_measure_get_point (GskPathMeasure   *self,
+                            float             distance,
+                            graphene_point_t *pos,
+                            graphene_vec2_t  *tangent)
+{
+  gsize i;
+
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (pos != NULL || tangent != NULL);
+
+  distance = CLAMP (distance, 0, self->length);
+
+  for (i = 0; i < self->n_contours; i++)
+    {
+      if (self->measures[i].length < distance)
+        {
+          distance -= self->measures[i].length;
+        }
+      else
+        {
+          gsk_contour_get_point (self->path,
+                                 i,
+                                 self->measures[i].contour_data,
+                                 distance,
+                                 pos,
+                                 tangent);
+          break;
+        }
+    }
+}
+
 /**
  * gsk_path_measure_add_segment:
  * @self: a #GskPathMeasure
