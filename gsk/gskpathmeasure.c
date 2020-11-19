@@ -182,6 +182,67 @@ gsk_path_measure_get_length (GskPathMeasure *self)
   return self->length;
 }
 
+static float
+gsk_path_measure_clamp_distance (GskPathMeasure *self,
+                                 float           distance)
+{
+  if (isnan (distance))
+    return 0;
+
+  return CLAMP (distance, 0, self->length);
+}
+
+/**
+ * gsk_path_measure_get_point:
+ * @self: a #GskPathMeasure
+ * @distance: distance into the path
+ * @pos: (out) (optional) (caller-allocates): The coordinates
+ *    of the position at @distance
+ * @tangent: (out) (optional) (caller-allocates): The tangent
+ *    to the position at @distance
+ *
+ * Calculates the coordinates and tangent of the point @distance 
+ * units into the path. The value will be clamped to the length
+ * of the path.
+ *
+ * If the point is a discontinuous edge in the path, the returned
+ * point and tangent will describe the line starting at that point
+ * going forward.
+ **/
+void
+gsk_path_measure_get_point (GskPathMeasure   *self,
+                            float             distance,
+                            graphene_point_t *pos,
+                            graphene_vec2_t  *tangent)
+{
+  gsize i;
+
+  g_return_if_fail (self != NULL);
+
+  if (pos == NULL && tangent == NULL)
+    return;
+
+  distance = gsk_path_measure_clamp_distance (self, distance);
+
+  for (i = 0; i < self->n_contours; i++)
+    {
+      if (self->measures[i].length < distance)
+        {
+          distance -= self->measures[i].length;
+        }
+      else
+        {
+          gsk_contour_get_point (self->path,
+                                 i,
+                                 self->measures[i].contour_data,
+                                 distance,
+                                 pos,
+                                 tangent);
+          break;
+        }
+    }
+}
+
 /**
  * gsk_path_measure_add_segment:
  * @self: a #GskPathMeasure
@@ -209,8 +270,8 @@ gsk_path_measure_add_segment (GskPathMeasure *self,
   g_return_if_fail (self != NULL);
   g_return_if_fail (builder != NULL);
 
-  start = CLAMP (start, 0, self->length);
-  end = CLAMP (end, 0, self->length);
+  start = gsk_path_measure_clamp_distance (self, start);
+  end = gsk_path_measure_clamp_distance (self, end);
   if (start >= end)
     return;
 
