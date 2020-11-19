@@ -184,7 +184,7 @@ gsk_render_node_init (GskRenderNode *self)
 GType
 gsk_render_node_get_type (void)
 {
-  static volatile gsize render_node_type__volatile;
+  static gsize render_node_type__volatile;
 
   if (g_once_init_enter (&render_node_type__volatile))
     {
