@@ -96,6 +96,7 @@ void       gdk_wayland_surface_sync (GdkSurface *surface);
 void       gdk_wayland_surface_commit (GdkSurface *surface);
 void       gdk_wayland_surface_notify_committed (GdkSurface *surface);
 void       gdk_wayland_surface_request_frame (GdkSurface *surface);
+gboolean   gdk_wayland_surface_has_surface (GdkSurface *surface);
 void            gdk_wayland_surface_attach_image           (GdkSurface           *surface,
                                                             cairo_surface_t      *cairo_surface,
                                                             const cairo_region_t *damage);

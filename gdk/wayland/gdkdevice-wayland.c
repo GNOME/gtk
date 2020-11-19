@@ -4502,7 +4502,7 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
   if (prepare_func)
     (prepare_func) (seat, surface, prepare_func_data);
 
-  if (!gdk_surface_get_mapped (surface))
+  if (!gdk_wayland_surface_has_surface (surface))
     {
       gdk_wayland_seat_set_grab_surface (wayland_seat, NULL);
       return GDK_GRAB_NOT_VIEWABLE;
