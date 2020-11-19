@@ -5776,6 +5776,9 @@ gtk_widget_reposition_after (GtkWidget *widget,
 
   _gtk_widget_update_parent_muxer (widget);
 
+  if (parent->priv->root && priv->root == NULL)
+    gtk_widget_root (widget);
+
   if (parent->priv->children_observer)
     {
       if (prev_previous)
@@ -5783,9 +5786,6 @@ gtk_widget_reposition_after (GtkWidget *widget,
       else
         gtk_list_list_model_item_added (parent->priv->children_observer, widget);
     }
-
-  if (parent->priv->root && priv->root == NULL)
-    gtk_widget_root (widget);
 
   if (prev_parent == NULL)
     g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_PARENT]);
