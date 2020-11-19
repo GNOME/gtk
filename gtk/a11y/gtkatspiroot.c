@@ -665,8 +665,10 @@ gtk_at_spi_root_constructed (GObject *gobject)
     }
   else
     {
+      const char *program_name = g_get_prgname ();
+
       self->base_path = g_strconcat ("/org/gtk/application/",
-                                     g_get_prgname (),
+                                     program_name != NULL ? program_name : "unknown",
                                      "/a11y",
                                      NULL);
 
