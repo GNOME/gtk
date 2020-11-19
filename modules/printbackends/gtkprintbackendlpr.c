@@ -405,7 +405,7 @@ lpr_printer_get_options (GtkPrinter           *printer,
 
   option = gtk_printer_option_new ("gtk-n-up", _("Pages Per Sheet"), GTK_PRINTER_OPTION_TYPE_PICKONE);
   gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (n_up),
-					 n_up, n_up);
+                                         (char **)n_up, (char **)n_up);
   gtk_printer_option_set (option, "1");
   gtk_printer_option_set_add (set, option);
   g_object_unref (option);
