@@ -1,67 +1,111 @@
-/* simple.c
- * Copyright (C) 2017  Red Hat, Inc
- * Author: Benjamin Otte
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public
- * License along with this library. If not, see <http://www.gnu.org/licenses/>.
- */
-#include "config.h"
 #include <gtk/gtk.h>
 
 
-static void
-hello (void)
+typedef struct
 {
-  g_print ("hello world\n");
+  GtkWidget parent_instance;
+} DemoWidget;
+
+typedef struct
+{
+  GtkWidgetClass parent_class;
+} DemoWidgetClass;
+
+GType demo_widget_get_type (void) G_GNUC_CONST;
+
+G_DEFINE_TYPE (DemoWidget, demo_widget, GTK_TYPE_WIDGET)
+
+static void
+demo_widget_init (DemoWidget *demo)
+{
 }
 
 static void
-quit_cb (GtkWidget *widget,
-         gpointer   data)
+demo_widget_snapshot (GtkWidget   *widget,
+                      GtkSnapshot *snapshot)
 {
-  gboolean *done = data;
+  GdkRGBA red, green, yellow, blue;
+  float w, h;
+  GskPathBuilder *builder;
+  GskPath *path;
 
-  *done = TRUE;
+  gdk_rgba_parse (&red, "red");
+  gdk_rgba_parse (&green, "green");
+  gdk_rgba_parse (&yellow, "yellow");
+  gdk_rgba_parse (&blue, "blue");
 
-  g_main_context_wakeup (NULL);
+  w = gtk_widget_get_width (widget) / 2.0;
+  h = gtk_widget_get_height (widget) / 2.0;
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_move_to (builder, 10, 10);
+  gsk_path_builder_curve_to (builder, 100, 10, 110, 20, 110, 30);
+  gsk_path_builder_curve_to (builder, 80, 30, 100, 60, 80, 60);
+  gsk_path_builder_line_to (builder, 120, 100);
+  gsk_path_builder_curve_to (builder, 110, 110, 80, 120, 30, 70);
+  gsk_path_builder_close (builder);
+  path = gsk_path_builder_free_to_path (builder);
+
+  gtk_snapshot_push_fill (snapshot, path, GSK_FILL_RULE_WINDING);
+  gsk_path_unref (path);
+
+  gtk_snapshot_append_color (snapshot, &red,
+                             &GRAPHENE_RECT_INIT(0, 0, w, h));
+  gtk_snapshot_append_color (snapshot, &green,
+                             &GRAPHENE_RECT_INIT(w, 0, w, h));
+  gtk_snapshot_append_color (snapshot, &yellow,
+                             &GRAPHENE_RECT_INIT(0, h, w, h));
+  gtk_snapshot_append_color (snapshot, &blue,
+                             &GRAPHENE_RECT_INIT(w, h, w, h));
+
+  gtk_snapshot_pop (snapshot);
+}
+
+static void
+demo_widget_measure (GtkWidget      *widget,
+                     GtkOrientation  orientation,
+                     int             for_size,
+                     int            *minimum_size,
+                     int            *natural_size,
+                     int            *minimum_baseline,
+                     int            *natural_baseline)
+{
+  *minimum_size = 100;
+  *natural_size = 200;
+}
+
+static void
+demo_widget_class_init (DemoWidgetClass *class)
+{
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+
+  widget_class->snapshot = demo_widget_snapshot;
+  widget_class->measure = demo_widget_measure;
+}
+
+static GtkWidget *
+demo_widget_new (void)
+{
+  return g_object_new (demo_widget_get_type (), NULL);
 }
 
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *window, *button;
-  gboolean done = FALSE;
+  GtkWindow *window;
+  GtkWidget *demo;
 
   gtk_init ();
 
-  window = gtk_window_new ();
-  gtk_window_set_title (GTK_WINDOW (window), "hello world");
-  gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
-  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
+  window = GTK_WINDOW (gtk_window_new ());
 
-  button = gtk_button_new ();
-  gtk_button_set_label (GTK_BUTTON (button), "hello world");
-  gtk_widget_set_margin_top (button, 10);
-  gtk_widget_set_margin_bottom (button, 10);
-  gtk_widget_set_margin_start (button, 10);
-  gtk_widget_set_margin_end (button, 10);
-  g_signal_connect (button, "clicked", G_CALLBACK (hello), NULL);
+  demo = demo_widget_new ();
 
-  gtk_window_set_child (GTK_WINDOW (window), button);
+  gtk_window_set_child (window, demo);
 
-  gtk_widget_show (window);
+  gtk_window_present (window);
 
-  while (!done)
+  while (g_list_model_get_n_items (gtk_window_get_toplevels ()) > 0)
     g_main_context_iteration (NULL, TRUE);
 
   return 0;
