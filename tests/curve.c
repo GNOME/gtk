@@ -5,10 +5,15 @@
 
 typedef struct
 {
+  gboolean smooth;
+} PointData;
+
+typedef struct
+{
   GtkWidget parent_instance;
   graphene_point_t *points;
-  gboolean *smooth;
   int n_points;
+  PointData *point_data; /* length is n_points / 3 */
   int dragged;
   gboolean edit;
 } DemoWidget;
@@ -85,7 +90,7 @@ drag_update (GtkGestureDrag *gesture,
     {
       /* point is on curve */
 
-      if (self->smooth[self->dragged])
+      if (self->point_data[self->dragged % 3].smooth)
         {
           self->points[(self->dragged - 1 + self->n_points) % self->n_points].x += dx;
           self->points[(self->dragged - 1 + self->n_points) % self->n_points].y += dy;
@@ -113,7 +118,7 @@ drag_update (GtkGestureDrag *gesture,
       else
         g_assert_not_reached ();
 
-      if (self->smooth[point])
+      if (self->point_data[point / 3].smooth)
         {
           a = atan2 (self->points[self->dragged].y - p->y, self->points[self->dragged].x - p->x) + M_PI;
           d = dist (c, p);
@@ -154,8 +159,8 @@ released (GtkGestureClick *gesture,
         {
           if (i % 3 == 0)
             {
-              self->smooth[i] = !self->smooth[i];
-              if (self->smooth[i])
+              self->point_data[i / 3].smooth = !self->point_data[i / 3].smooth;
+              if (self->point_data[i / 3].smooth)
                 {
                   graphene_point_t *p, *c, *c2;
                   float a, d;
@@ -190,25 +195,34 @@ init_points (DemoWidget *self)
   float kr = k  * r;
   int i;
 
-  /* curve 1 */
+  g_free (self->points);
+  g_free (self->point_data);
+
+  self->n_points = 12;
+  self->points = g_new (graphene_point_t, self->n_points);
+  self->point_data = g_new (PointData, self->n_points / 3);
+
+
   self->points[0] = GRAPHENE_POINT_INIT (cx, pad);
   self->points[1] = GRAPHENE_POINT_INIT (cx + kr, pad);
   self->points[2] = GRAPHENE_POINT_INIT (w - pad, cy - kr);
+
   self->points[3] = GRAPHENE_POINT_INIT (w - pad, cy);
-  /* curve 2 */
   self->points[4] = GRAPHENE_POINT_INIT (w - pad, cy + kr);
   self->points[5] = GRAPHENE_POINT_INIT (cx + kr, h - pad);
+
   self->points[6] = GRAPHENE_POINT_INIT (cx, h - pad);
-  /* curve 3 */
   self->points[7] = GRAPHENE_POINT_INIT (cx - kr, h - pad);
   self->points[8] = GRAPHENE_POINT_INIT (pad, cy + kr);
+ 
   self->points[9] = GRAPHENE_POINT_INIT (pad, cy);
-  /* curve 4 */
   self->points[10] = GRAPHENE_POINT_INIT (pad, cy - kr);
   self->points[11] = GRAPHENE_POINT_INIT (cx - kr, pad);
 
-  for (i = 0; i < self->n_points; i++)
-    self->smooth[i] = TRUE;
+  for (i = 0; i < self->n_points / 3; i++)
+    {
+      self->point_data[i].smooth = TRUE;
+    }
 }
 
 static void
@@ -230,10 +244,6 @@ demo_widget_init (DemoWidget *self)
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
   g_signal_connect (gesture, "released", G_CALLBACK (released), self);
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
-
-  self->n_points = 12;
-  self->points = g_new (graphene_point_t, self->n_points);
-  self->smooth = g_new (gboolean, self->n_points);
 
   init_points (self);
 }
@@ -316,7 +326,7 @@ demo_widget_snapshot (GtkWidget   *widget,
                 case 1:
                   if (i != self->dragged &&
                       i % 3 == 0 &&
-                      self->smooth[i])
+                      self->point_data[i / 3].smooth)
                     break;
                   else
                     continue;
@@ -324,7 +334,7 @@ demo_widget_snapshot (GtkWidget   *widget,
                 case 2:
                   if (i != self->dragged &&
                       i % 3 == 0 &&
-                      !self->smooth[i])
+                      !self->point_data[i / 3].smooth)
                     break;
                   else
                     continue;
@@ -367,7 +377,7 @@ static void
 demo_widget_measure (GtkWidget      *widget,
                      GtkOrientation  orientation,
                      int             for_size,
-                    int            *minimum_size,
+                     int            *minimum_size,
                      int            *natural_size,
                      int            *minimum_baseline,
                      int            *natural_baseline)
