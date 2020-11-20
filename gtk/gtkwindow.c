@@ -3856,7 +3856,8 @@ gtk_window_update_toplevel (GtkWindow *window)
       g_clear_pointer (&priv->layout, gdk_toplevel_layout_unref);
       priv->layout = gtk_window_compute_layout (window);
 
-      gdk_toplevel_present (GDK_TOPLEVEL (priv->surface), priv->layout);
+      if (_gtk_widget_get_mapped (GTK_WIDGET (window)))
+        gdk_toplevel_present (GDK_TOPLEVEL (priv->surface), priv->layout);
     }
 }
 
@@ -5660,7 +5661,8 @@ gtk_window_move_resize (GtkWindow *window)
       if (configure_request_pos_changed)
         g_warning ("configure request position changed. This should not happen. Ignoring the position");
 
-      gdk_toplevel_present (GDK_TOPLEVEL (priv->surface), priv->layout);
+      if (_gtk_widget_get_mapped (widget))
+        gdk_toplevel_present (GDK_TOPLEVEL (priv->surface), priv->layout);
     }
   else
     {
@@ -5868,8 +5870,6 @@ gtk_window_present_with_time (GtkWindow *window,
       surface = priv->surface;
 
       g_assert (surface != NULL);
-
-      gtk_window_present_toplevel (window);
 
       /* Translate a timestamp of GDK_CURRENT_TIME appropriately */
       if (timestamp == GDK_CURRENT_TIME)
