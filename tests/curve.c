@@ -15,6 +15,7 @@ typedef struct
   int n_points;
   PointData *point_data; /* length is n_points / 3 */
   int dragged;
+  gboolean symmetric;
   gboolean edit;
 } DemoWidget;
 
@@ -50,8 +51,11 @@ drag_begin (GtkGestureDrag *gesture,
       {
         if (dist (&self->points[i], &p) < RADIUS)
           {
-            self->dragged = i;
             gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+
+            self->dragged = i;
+            self->symmetric = (gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (gesture)) & GDK_CONTROL_MASK) == 0;
+
             gtk_widget_queue_draw (GTK_WIDGET (self));
             return;
           }
@@ -68,9 +72,7 @@ drag_update (GtkGestureDrag *gesture,
 {
   double x, y;
   double dx, dy;
-  graphene_point_t *c, *p;
-  double a;
-  double d;
+  graphene_point_t *c, *p, *d;
 
   if (self->dragged == -1)
     return;
@@ -80,11 +82,13 @@ drag_update (GtkGestureDrag *gesture,
   x += offset_x;
   y += offset_y;
 
-  dx = x - self->points[self->dragged].x;
-  dy = y - self->points[self->dragged].y;
+  d = &self->points[self->dragged];
 
-  self->points[self->dragged].x += dx;
-  self->points[self->dragged].y += dy;
+  dx = x - d->x;
+  dy = y - d->y;
+
+  d->x += dx;
+  d->y += dy;
 
   if (self->dragged % 3 == 0)
     {
@@ -120,10 +124,23 @@ drag_update (GtkGestureDrag *gesture,
 
       if (self->point_data[point / 3].smooth)
         {
+          double a, l;
+
           a = atan2 (self->points[self->dragged].y - p->y, self->points[self->dragged].x - p->x) + M_PI;
-          d = dist (c, p);
-          c->x = p->x + d * cos (a);
-          c->y = p->y + d * sin (a);
+          l = dist (c, p);
+          c->x = p->x + l * cos (a);
+          c->y = p->y + l * sin (a);
+        }
+
+      if (self->symmetric)
+        {
+          double l, l2;
+
+          l = dist (d, p);
+          l2 = dist (c, p);
+
+          c->x = p->x + (l / l2) * (c->x - p->x);
+          c->y = p->y + (l / l2) * (c->y - p->y);
         }
     }
 
@@ -138,6 +155,7 @@ drag_end (GtkGestureDrag *gesture,
 {
   drag_update (gesture, offset_x, offset_y, self);
   self->dragged = -1;
+  self->symmetric = FALSE;
 }
 
 static void
@@ -220,9 +238,7 @@ init_points (DemoWidget *self)
   self->points[11] = GRAPHENE_POINT_INIT (cx - kr, pad);
 
   for (i = 0; i < self->n_points / 3; i++)
-    {
-      self->point_data[i].smooth = TRUE;
-    }
+    self->point_data[i].smooth = TRUE;
 }
 
 static void
