@@ -4849,7 +4849,7 @@ gdk_x11_toplevel_class_init (GdkX11ToplevelClass *class)
   gdk_toplevel_install_properties (object_class, LAST_PROP);
 }
 
-static gboolean
+static void
 gdk_x11_toplevel_present (GdkToplevel       *toplevel,
                           GdkToplevelLayout *layout)
 {
@@ -4922,7 +4922,7 @@ gdk_x11_toplevel_present (GdkToplevel       *toplevel,
     gdk_x11_surface_unfullscreen (surface);
 
   if (surface->destroyed)
-    return TRUE;
+    return;
 
   was_mapped = GDK_SURFACE_IS_MAPPED (surface);
 
@@ -4933,8 +4933,6 @@ gdk_x11_toplevel_present (GdkToplevel       *toplevel,
 
   if (!was_mapped)
     gdk_surface_invalidate_rect (surface, NULL);
-
-  return TRUE;
 }
 
 static gboolean

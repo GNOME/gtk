@@ -129,7 +129,7 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (GdkToplevel, gdk_toplevel, GDK, TOPLEVEL, GObject)
 
 GDK_AVAILABLE_IN_ALL
-gboolean        gdk_toplevel_present            (GdkToplevel       *toplevel,
+void            gdk_toplevel_present            (GdkToplevel       *toplevel,
                                                  GdkToplevelLayout *layout);
 
 GDK_AVAILABLE_IN_ALL

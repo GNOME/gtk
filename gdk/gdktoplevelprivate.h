@@ -13,7 +13,7 @@ struct _GdkToplevelInterface
 {
   GTypeInterface g_iface;
 
-  gboolean      (* present)             (GdkToplevel       *toplevel,
+  void          (* present)             (GdkToplevel       *toplevel,
                                          GdkToplevelLayout *layout);
   gboolean      (* minimize)            (GdkToplevel       *toplevel);
   gboolean      (* lower)               (GdkToplevel       *toplevel);

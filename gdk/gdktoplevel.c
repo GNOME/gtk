@@ -51,11 +51,10 @@ enum
 
 static guint signals[N_SIGNALS] = { 0 };
 
-static gboolean
+static void
 gdk_toplevel_default_present (GdkToplevel       *toplevel,
                               GdkToplevelLayout *layout)
 {
-  return FALSE;
 }
 
 static gboolean
@@ -239,18 +238,17 @@ gdk_toplevel_install_properties (GObjectClass *object_class,
  * compute the preferred size of the toplevel surface. See
  * #GdkToplevel::compute-size for details.
  *
- * Presenting may fail.
- *
- * Returns: %FALSE if @toplevel failed to be presented, otherwise %TRUE.
+ * Presenting is asynchronous and the specified layout parameters are not
+ * guaranteed to be respected.
  */
-gboolean
+void
 gdk_toplevel_present (GdkToplevel       *toplevel,
                       GdkToplevelLayout *layout)
 {
-  g_return_val_if_fail (GDK_IS_TOPLEVEL (toplevel), FALSE);
-  g_return_val_if_fail (layout != NULL, FALSE);
+  g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
+  g_return_if_fail (layout != NULL);
 
-  return GDK_TOPLEVEL_GET_IFACE (toplevel)->present (toplevel, layout);
+  GDK_TOPLEVEL_GET_IFACE (toplevel)->present (toplevel, layout);
 }
 
 /**
