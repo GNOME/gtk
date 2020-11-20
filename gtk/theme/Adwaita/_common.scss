@@ -3562,6 +3562,10 @@ filechooserbutton:drop(active) {
 }
 
 stacksidebar {
+  //not a regular list
+  list.separators:not(.horizontal) > row:not(.separator) {
+    border-bottom: none;
+  }
   row {
     padding: 10px 4px;
 
@@ -3572,8 +3576,20 @@ stacksidebar {
 
     &.needs-attention > label {
       @extend %needs_attention;
-
-      background-size: 6px 6px, 0 0;
+       background-size: 6px 6px, 0 0;
+    }
+    &:selected {
+      background-color: $menu_selected_color;
+      border-radius: $menu_radius;
+      color: $fg_color;
+    }
+    &:selected:hover:dir(ltr), &:selected:hover:dir(rtl) {
+      background-color: darken($menu_selected_color,5%);
+    }
+    &:focus:focus-visible {
+      outline-width: 0;
+      background-color: $selected_bg_color;
+      color: $selected_fg_color;
     }
   }
 }
@@ -3648,6 +3664,7 @@ row image.sidebar-icon { opacity: $_placesidebar_icons_opacity; } // dim the sid
 */
 
 placessidebar {
+  &.sidebar { padding: 0; } //override default as it's nested
   row:not(:last-child) { //FIXME: specificty bump hack
     padding: 0;
 
