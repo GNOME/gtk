@@ -52,8 +52,8 @@
  * #GtkAdjustment:page-size represents the size of the visible scrollable area.
  * The fields #GtkAdjustment:step-increment and #GtkAdjustment:page-increment
  * fields are added to or subtracted from the #GtkAdjustment:value when the user
- * asks to move by a step (using e.g. the cursor arrow keys or, if present, the
- * stepper buttons) or by a page (using e.g. the Page Down/Up keys).
+ * asks to move by a step (using e.g. the cursor arrow keys) or by a page (using
+ * e.g. the Page Down/Up keys).
  *
  * # CSS nodes
  *
@@ -70,10 +70,6 @@
  *
  * The range node gets the style class .fine-tune added when the scrollbar is
  * in 'fine-tuning' mode.
- *
- * If steppers are enabled, they are represented by up to four additional
- * subnodes with name button. These get the style classes .up and .down to
- * indicate in which direction they are moving.
  *
  * Other style classes that may be added to scrollbars inside #GtkScrolledWindow
  * include the positional classes (.left, .right, .top, .bottom) and style

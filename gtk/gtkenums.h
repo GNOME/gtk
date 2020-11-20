@@ -196,13 +196,13 @@ typedef enum
 
 /**
  * GtkSensitivityType:
- * @GTK_SENSITIVITY_AUTO: The arrow is made insensitive if the
- *   thumb is at the end
- * @GTK_SENSITIVITY_ON: The arrow is always sensitive
- * @GTK_SENSITIVITY_OFF: The arrow is always insensitive
+ * @GTK_SENSITIVITY_AUTO: The control is made insensitive if no
+ *   action can be triggered
+ * @GTK_SENSITIVITY_ON: The control is always sensitive
+ * @GTK_SENSITIVITY_OFF: The control is always insensitive
  *
- * Determines how GTK handles the sensitivity of stepper arrows
- * at the end of range widgets.
+ * Determines how GTK handles the sensitivity of various controls,
+ * such as combo box buttons.
  */
 typedef enum
 {

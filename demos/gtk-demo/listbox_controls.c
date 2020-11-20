@@ -34,7 +34,7 @@ row_activated (GtkListBox    *list,
 }
 
 GtkWidget *
-do_listbox2 (GtkWidget *do_widget)
+do_listbox_controls (GtkWidget *do_widget)
 {
   if (!window)
     {
@@ -47,7 +47,7 @@ do_listbox2 (GtkWidget *do_widget)
       builder = gtk_builder_new ();
       gtk_builder_set_scope (builder, scope);
 
-      gtk_builder_add_from_resource (builder, "/listbox2/listbox2.ui", NULL);
+      gtk_builder_add_from_resource (builder, "/listbox_controls/listbox_controls.ui", NULL);
 
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       gtk_window_set_display (GTK_WINDOW (window),

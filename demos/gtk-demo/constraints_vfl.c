@@ -128,7 +128,7 @@ vfl_grid_init (VflGrid *self)
 }
 
 GtkWidget *
-do_constraints3 (GtkWidget *do_widget)
+do_constraints_vfl (GtkWidget *do_widget)
 {
  static GtkWidget *window;
 
