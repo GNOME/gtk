@@ -5,6 +5,7 @@
 
 typedef struct
 {
+  gboolean edit;
   gboolean smooth;
 } PointData;
 
@@ -51,8 +52,6 @@ drag_begin (GtkGestureDrag *gesture,
       {
         if (dist (&self->points[i], &p) < RADIUS)
           {
-            gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
-
             self->dragged = i;
             self->symmetric = (gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (gesture)) & GDK_CONTROL_MASK) == 0;
 
@@ -76,6 +75,8 @@ drag_update (GtkGestureDrag *gesture,
 
   if (self->dragged == -1)
     return;
+
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
   gtk_gesture_drag_get_start_point (gesture, &x, &y);
 
@@ -124,20 +125,13 @@ drag_update (GtkGestureDrag *gesture,
           double a, l;
 
           a = atan2 (self->points[self->dragged].y - p->y, self->points[self->dragged].x - p->x) + M_PI;
-          l = dist (c, p);
+
+          if (self->symmetric)
+            l = dist (d, p);
+          else
+            l = dist (c, p);
           c->x = p->x + l * cos (a);
           c->y = p->y + l * sin (a);
-        }
-
-      if (self->symmetric)
-        {
-          double l, l2;
-
-          l = dist (d, p);
-          l2 = dist (c, p);
-
-          c->x = p->x + (l / l2) * (c->x - p->x);
-          c->y = p->y + (l / l2) * (c->y - p->y);
         }
     }
 
@@ -174,25 +168,32 @@ released (GtkGestureClick *gesture,
         {
           if (i % 3 == 0)
             {
-              self->point_data[i / 3].smooth = !self->point_data[i / 3].smooth;
-              if (self->point_data[i / 3].smooth)
+              int button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+              if (button == GDK_BUTTON_PRIMARY)
                 {
-                  graphene_point_t *p, *c, *c2;
-                  float a, d;
+                  self->point_data[i / 3].edit = !self->point_data[i / 3].edit;
+                }
+              else if (button == GDK_BUTTON_SECONDARY)
+                {
+                  self->point_data[i / 3].smooth = !self->point_data[i / 3].smooth;
+                  if (self->point_data[i / 3].smooth)
+                    {
+                      graphene_point_t *p, *c, *c2;
+                      float a, d;
 
-                  p = &self->points[i];
-                  c = &self->points[(i - 1 + self->n_points) % self->n_points];
-                  c2 = &self->points[(i + 1 + self->n_points) % self->n_points];
+                      p = &self->points[i];
+                      c = &self->points[(i - 1 + self->n_points) % self->n_points];
+                      c2 = &self->points[(i + 1 + self->n_points) % self->n_points];
 
-                  a = atan2 (c2->y - p->y, c2->x - p->x) + M_PI;
-                  d = dist (c, p);
-                  c->x = p->x + d * cos (a);
-                  c->y = p->y + d * sin (a);
+                      a = atan2 (c2->y - p->y, c2->x - p->x) + M_PI;
+                      d = dist (c, p);
+                      c->x = p->x + d * cos (a);
+                      c->y = p->y + d * sin (a);
+                    }
                 }
 
               gtk_widget_queue_draw (GTK_WIDGET (self));
             }
-          break;
         }
     }
 }
@@ -235,7 +236,10 @@ init_points (DemoWidget *self)
   self->points[11] = GRAPHENE_POINT_INIT (cx - kr, pad);
 
   for (i = 0; i < self->n_points / 3; i++)
-    self->point_data[i].smooth = TRUE;
+    {
+      self->point_data[i].edit = FALSE;
+      self->point_data[i].smooth = TRUE;
+    }
 }
 
 static void
@@ -254,7 +258,7 @@ demo_widget_init (DemoWidget *self)
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
 
   gesture = gtk_gesture_click_new ();
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
   g_signal_connect (gesture, "released", G_CALLBACK (released), self);
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
 
@@ -283,12 +287,23 @@ demo_widget_snapshot (GtkWidget   *widget,
       gsk_path_builder_move_to (builder, self->points[0].x, self->points[0].y);
       for (i = 1; i < self->n_points; i++)
         {
+          gboolean edit;
+
           if (i % 3 == 2)
-            gsk_path_builder_move_to (builder, self->points[i].x, self->points[i].y);
+            edit = self->point_data[((i + 3) % self->n_points) / 3].edit;
           else
-            gsk_path_builder_line_to (builder, self->points[i].x, self->points[i].y);
+            edit = self->point_data[i / 3].edit;
+
+          if (edit)
+            {
+              if (i % 3 == 2)
+                gsk_path_builder_move_to (builder, self->points[i].x, self->points[i].y);
+              else
+                gsk_path_builder_line_to (builder, self->points[i].x, self->points[i].y);
+            }
         }
-      gsk_path_builder_line_to (builder, self->points[0].x, self->points[0].y);
+      if (self->point_data[0].edit)
+        gsk_path_builder_line_to (builder, self->points[0].x, self->points[0].y);
     }
 
   gsk_path_builder_move_to (builder, self->points[0].x, self->points[0].y);
@@ -315,14 +330,13 @@ demo_widget_snapshot (GtkWidget   *widget,
   if (self->edit)
     {
       const char *colors[] = {
-        "white",
         "red",
         "green",
         "blue"
       };
       GdkRGBA color;
 
-      for (j = 0; j < 4; j++)
+      for (j = 0; j < 3; j++)
         {
           builder = gsk_path_builder_new ();
 
@@ -331,30 +345,27 @@ demo_widget_snapshot (GtkWidget   *widget,
               switch (j)
                 {
                 case 0:
-                  if (i == self->dragged)
-                    break;
-                  else
-                    continue;
-
-                case 1:
-                  if (i != self->dragged &&
-                      i % 3 == 0 &&
+                  if (i % 3 == 0 &&
+                      self->edit &&
                       self->point_data[i / 3].smooth)
                     break;
                   else
                     continue;
 
-                case 2:
-                  if (i != self->dragged &&
-                      i % 3 == 0 &&
+                case 1:
+                  if (i % 3 == 0 &&
+                      self->edit &&
                       !self->point_data[i / 3].smooth)
                     break;
                   else
                     continue;
 
-                case 3:
-                  if (i != self->dragged &&
-                      i % 3 != 0)
+                case 2:
+                  if (self->edit &&
+                      ((i % 3 == 1 &&
+                        self->point_data[i / 3].edit) ||
+                       (i % 3 == 2 &&
+                        self->point_data[((i + 3) % self->n_points) / 3].edit)))
                     break;
                   else
                     continue;
@@ -419,7 +430,14 @@ edit_changed (GtkToggleButton *button,
               GParamSpec      *pspec,
               DemoWidget      *self)
 {
+  int i;
+
   self->edit = gtk_toggle_button_get_active (button);
+  if (!self->edit)
+    {
+      for (i = 0; i < self->n_points / 3; i++)
+        self->point_data[i].edit = FALSE;
+    }
   gtk_widget_queue_draw (GTK_WIDGET (self));
 }
 
