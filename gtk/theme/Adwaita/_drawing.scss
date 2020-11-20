@@ -189,12 +189,12 @@
     border-color: if($c != $bg_color, _border_color($c), $borders_color);
     border-bottom-color: if($c != $bg_color, _border_color($c, true), $alt_borders_color);
     @if $variant == 'light' {
-      background-image: linear-gradient(to top, $c, lighten($c, 1%) 1px);
-      @include _shadows(inset 0 1px _button_hilight_color(lighten($c, 6%)), $_button_edge, $_button_shadow);
+      background-image: linear-gradient(to top, darken($c,16%), darken($c,8%) 1px);
+      @include _shadows(inset 0 1px darken($c,1%), $_button_edge, $_button_shadow);
     }
     @else {
-      background-image: linear-gradient(to top, darken($c,1%), lighten($c, 1%) 1px);
-      @include _shadows(inset 0 1px _button_hilight_color(darken($c, 2%)), $_button_edge, $_button_shadow);
+      background-image: linear-gradient(to top, darken($c,4%) 20%, darken($c, 3%) 90%);
+      @include _shadows(inset 0 1px $c, $_button_edge, $_button_shadow);
     }
   }
 
@@ -212,24 +212,6 @@
     }
     @else {
       background-image: linear-gradient(to bottom, darken($c, 3%) 20%, darken($c, 6%) 90%);
-      @include _shadows(inset 0 1px $_hilight_color,
-                        $_button_edge, $_button_shadow);
-    }
-  }
-
-  @else if $t==hover-alt {
-  //
-  // hovered button alternative look
-  //
-    color: $tc;
-    border-color: if($c != $bg_color, _border_color($c, true), $alt_borders_color);
-    @if $variant == 'light' {
-      background-image: linear-gradient(to bottom, lighten($c, 9%) 10%, lighten($c, 4%) 90%);
-      @include _shadows(inset 0 1px _button_hilight_color(lighten($c, 6%)),
-                        $_button_edge, $_button_shadow);
-    }
-    @else {
-      background-image: linear-gradient(to bottom, $c 20%, darken($c, 4%) 90%);
       @include _shadows(inset 0 1px $_hilight_color,
                         $_button_edge, $_button_shadow);
     }
@@ -360,7 +342,7 @@
   //
   // active osd button
   //
-    $_bg: if($c != $bg_color, transparentize($c, 0.3), lighten($osd_bg_color, 12%));
+    $_bg: if($c != $bg_color, transparentize($c, 0.3), darken($osd_bg_color, 10%));
 
     color: white;
     border-color: $osd_borders_color;
@@ -376,7 +358,7 @@
   //
   // active osd button
   //
-    $_bg: if($c != $bg_color, $c, $osd_borders_color);
+    $_bg: if($c != $bg_color, $c, darken($osd_bg_color, 20%));
 
     color: white;
     border-color: $osd_borders_color;
