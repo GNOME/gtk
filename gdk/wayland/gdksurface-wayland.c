@@ -4756,79 +4756,87 @@ gdk_wayland_toplevel_class_init (GdkWaylandToplevelClass *class)
   gdk_toplevel_install_properties (object_class, 1);
 }
 
-static void
-reconfigure_callback (void               *data,
-                      struct wl_callback *callback,
-                      uint32_t            time)
+static gboolean
+did_maximize_layout_change (GdkToplevel       *toplevel,
+                            GdkToplevelLayout *layout)
 {
-  gboolean *done = (gboolean *) data;
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  *done = TRUE;
+  if (!impl->toplevel.layout)
+    return TRUE;
+
+  if (gdk_toplevel_layout_get_maximized (impl->toplevel.layout) !=
+      gdk_toplevel_layout_get_maximized (layout))
+    return TRUE;
+
+  return FALSE;
 }
 
-static const struct wl_callback_listener reconfigure_listener = {
-  reconfigure_callback
-};
-
 static gboolean
+did_fullscreen_layout_change (GdkToplevel       *toplevel,
+                              GdkToplevelLayout *layout)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  if (!impl->toplevel.layout)
+    return TRUE;
+
+  if (gdk_toplevel_layout_get_fullscreen (impl->toplevel.layout) !=
+      gdk_toplevel_layout_get_fullscreen (layout))
+    return TRUE;
+
+  if (gdk_toplevel_layout_get_fullscreen_monitor (impl->toplevel.layout) !=
+      gdk_toplevel_layout_get_fullscreen_monitor (layout))
+    return TRUE;
+
+  return FALSE;
+}
+
+static void
 gdk_wayland_toplevel_present (GdkToplevel       *toplevel,
                               GdkToplevelLayout *layout)
 {
   GdkSurface *surface = GDK_SURFACE (toplevel);
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  GdkWaylandDisplay *display_wayland;
-  struct wl_callback *callback;
-  gboolean done = FALSE;
-  int last_configure_serial = impl->last_configure_serial;
-  gboolean needs_reconfigure = TRUE;
+  gboolean pending_configure = FALSE;
 
-  if (gdk_toplevel_layout_get_maximized (layout))
+  if (did_maximize_layout_change (toplevel, layout))
     {
-      gdk_wayland_surface_maximize (surface);
-      needs_reconfigure = FALSE;
-    }
-  else
-    {
-      gdk_wayland_surface_unmaximize (surface);
-    }
-
-  if (gdk_toplevel_layout_get_fullscreen (layout))
-    {
-      GdkMonitor *monitor = gdk_toplevel_layout_get_fullscreen_monitor (layout);
-      if (monitor)
-        gdk_wayland_surface_fullscreen_on_monitor (surface, monitor);
+      if (gdk_toplevel_layout_get_maximized (layout))
+        gdk_wayland_surface_maximize (surface);
       else
-        gdk_wayland_surface_fullscreen (surface);
-      needs_reconfigure = FALSE;
+        gdk_wayland_surface_unmaximize (surface);
+      pending_configure = TRUE;
     }
-  else
-    gdk_wayland_surface_unfullscreen (surface);
+
+  if (did_fullscreen_layout_change (toplevel, layout))
+    {
+      if (gdk_toplevel_layout_get_fullscreen (layout))
+        {
+          GdkMonitor *monitor;
+
+          monitor = gdk_toplevel_layout_get_fullscreen_monitor (layout);
+          if (monitor)
+            gdk_wayland_surface_fullscreen_on_monitor (surface, monitor);
+          else
+            gdk_wayland_surface_fullscreen (surface);
+        }
+      else
+        {
+          gdk_wayland_surface_unfullscreen (surface);
+        }
+      pending_configure = TRUE;
+    }
 
   g_clear_pointer (&impl->toplevel.layout, gdk_toplevel_layout_unref);
   impl->toplevel.layout = gdk_toplevel_layout_copy (layout);
 
   gdk_wayland_surface_show (surface, FALSE);
 
-  display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
-  callback = wl_display_sync (display_wayland->wl_display);
-  wl_proxy_set_queue ((struct wl_proxy *) callback, impl->event_queue);
-  wl_callback_add_listener (callback,
-                            &reconfigure_listener,
-                            &done);
-  while (is_realized_toplevel (impl) &&
-         (!impl->initial_configure_received || !done))
-    wl_display_dispatch_queue (display_wayland->wl_display, impl->event_queue);
-
-  wl_callback_destroy (callback);
-
-  if (needs_reconfigure &&
-      last_configure_serial == impl->last_configure_serial &&
-      !(surface->state & (GDK_TOPLEVEL_STATE_MAXIMIZED |
-                          GDK_TOPLEVEL_STATE_FULLSCREEN |
-                          GDK_TOPLEVEL_STATE_TILED)))
+  if (!pending_configure)
     configure_surface_geometry (surface);
-
-  return TRUE;
 }
 
 static gboolean

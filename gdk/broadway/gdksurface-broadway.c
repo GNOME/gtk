@@ -1524,7 +1524,7 @@ show_surface (GdkSurface *surface)
     gdk_surface_invalidate_rect (surface, NULL);
 }
 
-static gboolean
+static void
 gdk_broadway_toplevel_present (GdkToplevel       *toplevel,
                                GdkToplevelLayout *layout)
 {
@@ -1583,8 +1583,6 @@ gdk_broadway_toplevel_present (GdkToplevel       *toplevel,
     gdk_broadway_surface_unmaximize (surface);
 
   show_surface (surface);
-
-  return TRUE;
 }
 
 static gboolean
