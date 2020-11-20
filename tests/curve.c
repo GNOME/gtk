@@ -1,12 +1,94 @@
+/* TODO
+ * - point insert/remove
+ * - rename to CurveEditor
+ * - add properties
+ */
+
 #include <gtk/gtk.h>
 
+/* Set q to the projection of p onto the line through a and b */
+static void
+closest_point (const graphene_point_t *p,
+               const graphene_point_t *a,
+               const graphene_point_t *b,
+               graphene_point_t       *q)
+{
+  graphene_vec2_t n;
+  graphene_vec2_t ap;
+  float t;
+
+  graphene_vec2_init (&n, b->x - a->x, b->y - a->y);
+  graphene_vec2_init (&ap, p->x - a->x, p->y - a->y);
+
+  t = graphene_vec2_dot (&ap, &n) / graphene_vec2_dot (&n, &n);
+
+  q->x = a->x + t * (b->x - a->x);
+  q->y = a->y + t * (b->y - a->y);
+}
+
+/* Set q to the point on the line through p and a that is
+ * at a distance of d from p, on the opposite side
+ */
+static void
+opposite_point (const graphene_point_t *p,
+                const graphene_point_t *a,
+                float                   d,
+                graphene_point_t       *q)
+{
+  graphene_vec2_t ap;
+  float t;
+
+  graphene_vec2_init (&ap, p->x - a->x, p->y - a->y);
+
+  t = - sqrt (d * d / graphene_vec2_dot (&ap, &ap));
+
+  q->x = p->x + t * (a->x - p->x);
+  q->y = p->y + t * (a->y - p->y);
+}
 
 #define RADIUS 5
 
 G_DECLARE_FINAL_TYPE (DemoWidget, demo_widget, DEMO, WIDGET, GtkWidget)
 
+typedef enum
+{
+  MOVE,
+  LINE,
+  CURVE
+} Operation;
+
+static const char *
+op_to_string (Operation op)
+{
+  switch (op)
+    {
+    case MOVE:
+      return "move";
+    case LINE:
+      return "line";
+    case CURVE:
+      return "curve";
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static Operation
+op_from_string (const char *s)
+{
+  if (strcmp (s, "move") == 0)
+    return MOVE;
+  else if (strcmp (s, "line") == 0)
+    return LINE;
+  else if (strcmp (s, "curve") == 0)
+    return CURVE;
+  else
+    g_assert_not_reached ();
+}
+
 typedef struct
 {
+  Operation op;
   gboolean edit;
   gboolean smooth;
 } PointData;
@@ -76,6 +158,7 @@ drag_update (GtkGestureDrag *gesture,
   double x, y;
   double dx, dy;
   graphene_point_t *c, *p, *d;
+  double l1, l2;
 
   if (self->dragged == -1)
     return;
@@ -89,53 +172,174 @@ drag_update (GtkGestureDrag *gesture,
 
   d = &self->points[self->dragged];
 
+  /* before moving the point, record the distances to its neighbors, since
+   * we may want to preserve those
+   */
+  c = &self->points[(self->dragged - 1 + self->n_points) % self->n_points];
+  l1 = dist (d, c);
+  c = &self->points[(self->dragged + 1) % self->n_points];
+  l2 = dist (d, c);
+
   dx = x - d->x;
   dy = y - d->y;
 
-  d->x += dx;
-  d->y += dy;
-
   if (self->dragged % 3 == 0)
     {
-      /* point is on curve */
+      /* dragged point is on curve */
 
-      self->points[(self->dragged - 1 + self->n_points) % self->n_points].x += dx;
-      self->points[(self->dragged - 1 + self->n_points) % self->n_points].y += dy;
+      Operation op, op1, op2;
 
-      self->points[(self->dragged + 1) % self->n_points].x += dx;
-      self->points[(self->dragged + 1) % self->n_points].y += dy;
+      /* first move the point itself */
+      d->x = x;
+      d->y = y;
+
+      /* adjust control points as needed */
+      op = self->point_data[self->dragged / 3].op;
+      op1 = self->point_data[((self->dragged - 1 + self->n_points) % self->n_points) / 3].op;
+
+      if (op1 == LINE)
+        {
+          /* the other endpoint of the line */
+          p = &self->points[(self->dragged - 3 + self->n_points) % self->n_points];
+
+          if (op == CURVE && self->point_data[self->dragged / 3].smooth)
+            {
+              /* adjust the control point after the line segment */
+              c = &self->points[(self->dragged + 1) % self->n_points];
+              opposite_point (d, p, l2, c);
+            }
+          else
+            {
+              c = &self->points[(self->dragged + 1) % self->n_points];
+              c->x += dx;
+              c->y += dy;
+            }
+
+          c = &self->points[(self->dragged - 1 + self->n_points) % self->n_points];
+          c->x += dx;
+          c->y += dy;
+
+          op2 = self->point_data[((self->dragged - 4 + self->n_points) % self->n_points) / 3].op;
+          if (op2 == CURVE && self->point_data[((self->dragged - 3 + self->n_points) % self->n_points) / 3].smooth)
+            {
+              double l;
+
+              /* adjust the control point before the line segment */
+              c = &self->points[((self->dragged - 4 + self->n_points) % self->n_points)];
+
+              l = dist (c, p);
+              opposite_point (p, d, l, c);
+            }
+        }
+
+      if (op == LINE)
+        {
+          /* the other endpoint of the line */
+          p = &self->points[(self->dragged + 3) % self->n_points];
+
+          if (op1 == CURVE && self->point_data[self->dragged / 3].smooth)
+            {
+              /* adjust the control point before the line segment */
+              c = &self->points[(self->dragged - 1 + self->n_points) % self->n_points];
+              opposite_point (d, p, l1, c);
+            }
+          else
+            {
+              c = &self->points[(self->dragged -1 + self->n_points) % self->n_points];
+              c->x += dx;
+              c->y += dy;
+            }
+
+          c = &self->points[(self->dragged + 1) % self->n_points];
+          c->x += dx;
+          c->y += dy;
+
+          op2 = self->point_data[((self->dragged + 3) % self->n_points) / 3].op;
+          if (op2 == CURVE && self->point_data[((self->dragged + 3) % self->n_points) / 3].smooth)
+            {
+              double l;
+
+              /* adjust the control point after the line segment */
+              c = &self->points[((self->dragged + 4) % self->n_points)];
+
+              l = dist (c, p);
+              opposite_point (p, d, l, c);
+            }
+        }
+
+      if (op1 != LINE && op != LINE)
+        {
+          self->points[(self->dragged - 1 + self->n_points) % self->n_points].x += dx;
+          self->points[(self->dragged - 1 + self->n_points) % self->n_points].y += dy;
+
+          self->points[(self->dragged + 1) % self->n_points].x += dx;
+          self->points[(self->dragged + 1) % self->n_points].y += dy;
+        }
     }
   else
     {
+      /* dragged point is a control point */
+
       int point;
+      graphene_point_t *p1;
+      Operation op, op1;
 
       if (self->dragged % 3 == 1)
         {
           point = (self->dragged - 1 + self->n_points) % self->n_points;
           c = &self->points[(self->dragged - 2 + self->n_points) % self->n_points];
           p = &self->points[point];
+
+          op = self->point_data[point / 3].op;
+          op1 = self->point_data[((self->dragged - 4 + self->n_points) % self->n_points) / 3].op;
+          p1 = &self->points[(self->dragged - 4 + self->n_points) % self->n_points];
         }
       else if (self->dragged % 3 == 2)
         {
           point = (self->dragged + 1) % self->n_points;
           c = &self->points[(self->dragged + 2) % self->n_points];
           p = &self->points[point];
+
+          op = self->point_data[self->dragged / 3].op;
+          op1 = self->point_data[point / 3].op;
+          p1 = &self->points[(self->dragged + 4) % self->n_points];
         }
       else
         g_assert_not_reached ();
 
-      if (self->point_data[point / 3].smooth)
+      if (op == CURVE && self->point_data[point / 3].smooth)
         {
-          double a, l;
+          if (op1 == CURVE)
+            {
+              double l;
 
-          a = atan2 (self->points[self->dragged].y - p->y, self->points[self->dragged].x - p->x) + M_PI;
+              /* first move the point itself */
+              d->x = x;
+              d->y = y;
 
-          if (self->symmetric)
-            l = dist (d, p);
+              /* then adjust the other control point */
+              if (self->symmetric)
+                l = dist (d, p);
+              else
+                l = dist (c, p);
+
+              opposite_point (p, d, l, c);
+            }
+          else if (op1 == LINE)
+            {
+              graphene_point_t m = GRAPHENE_POINT_INIT (x, y);
+              closest_point (&m, p, p1, d);
+            }
           else
-            l = dist (c, p);
-          c->x = p->x + l * cos (a);
-          c->y = p->y + l * sin (a);
+            {
+              d->x = x;
+              d->y = y;
+            }
+        }
+      else
+        {
+          d->x = x;
+          d->y = y;
         }
     }
 
@@ -154,28 +358,84 @@ drag_end (GtkGestureDrag *gesture,
 }
 
 static void
+maintain_smoothness (DemoWidget *self,
+                     int         point)
+{
+  gboolean smooth;
+  Operation op, op1;
+
+  smooth = self->point_data[point / 3].smooth;
+
+  op = self->point_data[point / 3].op;
+  op1 = self->point_data[((point - 1 + self->n_points) % self->n_points) / 3].op;
+
+  if (smooth)
+    {
+      graphene_point_t *p;
+
+      p = &self->points[point];
+
+      if (op == CURVE && op1 == CURVE)
+        {
+          graphene_point_t *c, *c2;
+          float d;
+
+          c = &self->points[(point - 1 + self->n_points) % self->n_points];
+          c2 = &self->points[(point + 1) % self->n_points];
+
+          d = dist (c, p);
+          opposite_point (p, c2, d, c);
+        }
+      else if (op == CURVE && op1 == LINE)
+        {
+          graphene_point_t *c, *p2;
+          float d;
+
+          c = &self->points[(point + 1) % self->n_points];
+          p2 = &self->points[(point - 3 + self->n_points) % self->n_points];
+
+          d = dist (c, p);
+          opposite_point (p, p2, d, c);
+        }
+      else if (op == LINE && op1 == CURVE)
+        {
+          graphene_point_t *c, *p2;
+          float d;
+
+          c = &self->points[(point - 1 + self->n_points) % self->n_points];
+          p2 = &self->points[(point + 3) % self->n_points];
+
+          d = dist (c, p);
+          opposite_point (p, p2, d, c);
+        }
+    }
+}
+
+static void
 toggle_smooth (GSimpleAction *action,
                GVariant      *value,
                gpointer       data)
 {
   DemoWidget *self = DEMO_WIDGET (data);
-  gboolean smooth = g_variant_get_boolean (value);
 
-  self->point_data[self->context / 3].smooth = smooth;
-  if (smooth)
-    {
-      graphene_point_t *p, *c, *c2;
-      float a, d;
+  self->point_data[self->context / 3].smooth = g_variant_get_boolean (value);
 
-      p = &self->points[self->context];
-      c = &self->points[(self->context - 1 + self->n_points) % self->n_points];
-      c2 = &self->points[(self->context + 1 + self->n_points) % self->n_points];
+  maintain_smoothness (self, self->context);
 
-      a = atan2 (c2->y - p->y, c2->x - p->x) + M_PI;
-      d = dist (c, p);
-      c->x = p->x + d * cos (a);
-      c->y = p->y + d * sin (a);
-    }
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+static void
+set_operation (GSimpleAction *action,
+               GVariant      *value,
+               gpointer       data)
+{
+  DemoWidget *self = DEMO_WIDGET (data);
+
+  self->point_data[self->context / 3].op = op_from_string (g_variant_get_string (value, NULL));
+
+  maintain_smoothness (self, self->context);
+  maintain_smoothness (self, (self->context + 3) % self->n_points);
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
 }
@@ -210,6 +470,10 @@ pressed (GtkGestureClick *gesture,
 
           action = g_action_map_lookup_action (self->actions, "smooth");
           g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (self->point_data[i / 3].smooth));
+
+          action = g_action_map_lookup_action (self->actions, "operation");
+          
+          g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_string (op_to_string (self->point_data[i / 3].op)));
 
           gtk_popover_set_pointing_to (GTK_POPOVER (self->menu),
                                        &(const GdkRectangle){ x, y, 1, 1 });
@@ -250,16 +514,14 @@ released (GtkGestureClick *gesture,
                   if (self->point_data[i / 3].smooth)
                     {
                       graphene_point_t *p, *c, *c2;
-                      float a, d;
+                      float d;
 
                       p = &self->points[i];
                       c = &self->points[(i - 1 + self->n_points) % self->n_points];
                       c2 = &self->points[(i + 1 + self->n_points) % self->n_points];
 
-                      a = atan2 (c2->y - p->y, c2->x - p->x) + M_PI;
                       d = dist (c, p);
-                      c->x = p->x + d * cos (a);
-                      c->y = p->y + d * sin (a);
+                      opposite_point (p, c2, d, c);
                     }
                 }
             }
@@ -308,6 +570,7 @@ init_points (DemoWidget *self)
     {
       self->point_data[i].edit = FALSE;
       self->point_data[i].smooth = TRUE;
+      self->point_data[i].op = CURVE;
     }
 }
 
@@ -316,6 +579,7 @@ demo_widget_init (DemoWidget *self)
 {
   GtkGesture *gesture;
   GMenu *menu;
+  GMenu *section;
   GMenuItem *item;
   GSimpleAction *action;
 
@@ -338,15 +602,40 @@ demo_widget_init (DemoWidget *self)
   init_points (self);
 
   self->actions = G_ACTION_MAP (g_simple_action_group_new ());
+
   action = g_simple_action_new_stateful ("smooth", NULL, g_variant_new_boolean (FALSE));
   g_signal_connect (action, "change-state", G_CALLBACK (toggle_smooth), self);
   g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (action));
   gtk_widget_insert_action_group (GTK_WIDGET (self), "point", G_ACTION_GROUP (self->actions));
 
+  action = g_simple_action_new_stateful ("operation", G_VARIANT_TYPE_STRING, g_variant_new_string ("curve"));
+  g_signal_connect (action, "change-state", G_CALLBACK (set_operation), self);
+  g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (action));
+
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "point", G_ACTION_GROUP (self->actions));
+
   menu = g_menu_new ();
+
   item = g_menu_item_new ("Smooth", "point.smooth");
   g_menu_append_item (menu, item);
   g_object_unref (item);
+
+  section = g_menu_new ();
+
+  item = g_menu_item_new ("Move", "point.operation::move");
+  g_menu_append_item (section, item);
+  g_object_unref (item);
+
+  item = g_menu_item_new ("Line", "point.operation::line");
+  g_menu_append_item (section, item);
+  g_object_unref (item);
+
+  item = g_menu_item_new ("Curve", "point.operation::curve");
+  g_menu_append_item (section, item);
+  g_object_unref (item);
+
+  g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
+  g_object_unref (section);
 
   self->menu = gtk_popover_menu_new_from_model (G_MENU_MODEL (menu));
   g_object_unref (menu);
@@ -373,19 +662,27 @@ demo_widget_snapshot (GtkWidget   *widget,
 
   if (self->edit)
     {
+      /* Add the skeleton */
+
       gsk_path_builder_move_to (builder, self->points[0].x, self->points[0].y);
       for (i = 1; i < self->n_points; i++)
         {
           gboolean edit;
+          gboolean line;
 
           if (i % 3 == 2)
             edit = self->point_data[((i + 3) % self->n_points) / 3].edit;
           else
             edit = self->point_data[i / 3].edit;
 
+          if (i % 3 == 0)
+            line = self->point_data[((i - 1 + self->n_points) % self->n_points) / 3].op != CURVE;
+          else
+            line = self->point_data[i / 3].op != CURVE;
+
           if (edit)
             {
-              if (i % 3 == 2)
+              if (i % 3 == 2 || line)
                 gsk_path_builder_move_to (builder, self->points[i].x, self->points[i].y);
               else
                 gsk_path_builder_line_to (builder, self->points[i].x, self->points[i].y);
@@ -395,14 +692,35 @@ demo_widget_snapshot (GtkWidget   *widget,
         gsk_path_builder_line_to (builder, self->points[0].x, self->points[0].y);
     }
 
+  /* Add the curve itself */
+
   gsk_path_builder_move_to (builder, self->points[0].x, self->points[0].y);
   for (i = 1; i < self->n_points; i += 3)
     {
-      gsk_path_builder_curve_to (builder,
-                                 self->points[i].x, self->points[i].y,
-                                 self->points[(i + 1) % self->n_points].x, self->points[(i + 1) % self->n_points].y,
-                                 self->points[(i + 2) % self->n_points].x, self->points[(i + 2) % self->n_points].y);
+      switch (self->point_data[i / 3].op)
+        {
+        case MOVE:
+          gsk_path_builder_move_to (builder,
+                                    self->points[(i + 2) % self->n_points].x, self->points[(i + 2) % self->n_points].y);
+          break;
+
+        case LINE:
+          gsk_path_builder_line_to (builder,
+                                    self->points[(i + 2) % self->n_points].x, self->points[(i + 2) % self->n_points].y);
+          break;
+
+        case CURVE:
+          gsk_path_builder_curve_to (builder,
+                                     self->points[i].x, self->points[i].y,
+                                     self->points[(i + 1) % self->n_points].x, self->points[(i + 1) % self->n_points].y,
+                                     self->points[(i + 2) % self->n_points].x, self->points[(i + 2) % self->n_points].y);
+          break;
+        default:
+          g_assert_not_reached ();
+        }
     }
+
+  /* Stroke everything we have so far */
 
   path = gsk_path_builder_free_to_path (builder);
   stroke = gsk_stroke_new (1);
@@ -418,6 +736,8 @@ demo_widget_snapshot (GtkWidget   *widget,
 
   if (self->edit)
     {
+      /* Draw the circles, in several passes, one for each color */
+
       const char *colors[] = {
         "red",
         "green",
@@ -434,30 +754,33 @@ demo_widget_snapshot (GtkWidget   *widget,
               switch (j)
                 {
                 case 0:
-                  if (i % 3 == 0 &&
-                      self->edit &&
-                      self->point_data[i / 3].smooth)
-                    break;
-                  else
+                  if (!(i % 3 == 0 &&
+                        self->point_data[i / 3].smooth))
                     continue;
+                  break;
 
                 case 1:
-                  if (i % 3 == 0 &&
-                      self->edit &&
-                      !self->point_data[i / 3].smooth)
-                    break;
-                  else
+                  if (!(i % 3 == 0 &&
+                        !self->point_data[i / 3].smooth))
                     continue;
+                  break;
 
                 case 2:
-                  if (self->edit &&
-                      ((i % 3 == 1 &&
-                        self->point_data[i / 3].edit) ||
-                       (i % 3 == 2 &&
-                        self->point_data[((i + 3) % self->n_points) / 3].edit)))
-                    break;
+                  if (i % 3 == 1)
+                    {
+                      if (!(self->point_data[i / 3].edit &&
+                            self->point_data[i / 3].op == CURVE))
+                        continue;
+                    }
+                  else if (i % 3 == 2)
+                    {
+                      if (!(self->point_data[((i + 3) % self->n_points) / 3].edit &&
+                            self->point_data[i / 3].op == CURVE))
+                        continue;
+                    }
                   else
                     continue;
+                  break;
 
                 default:
                   g_assert_not_reached ();
