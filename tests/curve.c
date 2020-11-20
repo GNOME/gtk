@@ -3,29 +3,33 @@
 
 #define RADIUS 5
 
+G_DECLARE_FINAL_TYPE (DemoWidget, demo_widget, DEMO, WIDGET, GtkWidget)
+
 typedef struct
 {
   gboolean edit;
   gboolean smooth;
 } PointData;
 
-typedef struct
+struct _DemoWidget
 {
   GtkWidget parent_instance;
   graphene_point_t *points;
   int n_points;
   PointData *point_data; /* length is n_points / 3 */
   int dragged;
+  int context;
   gboolean symmetric;
   gboolean edit;
-} DemoWidget;
 
-typedef struct
+  GtkWidget *menu;
+  GActionMap *actions;
+};
+
+struct _DemoWidgetClass
 {
   GtkWidgetClass parent_class;
-} DemoWidgetClass;
-
-GType demo_widget_get_type (void) G_GNUC_CONST;
+};
 
 G_DEFINE_TYPE (DemoWidget, demo_widget, GTK_TYPE_WIDGET)
 
@@ -150,6 +154,72 @@ drag_end (GtkGestureDrag *gesture,
 }
 
 static void
+toggle_smooth (GSimpleAction *action,
+               GVariant      *value,
+               gpointer       data)
+{
+  DemoWidget *self = DEMO_WIDGET (data);
+  gboolean smooth = g_variant_get_boolean (value);
+
+  self->point_data[self->context / 3].smooth = smooth;
+  if (smooth)
+    {
+      graphene_point_t *p, *c, *c2;
+      float a, d;
+
+      p = &self->points[self->context];
+      c = &self->points[(self->context - 1 + self->n_points) % self->n_points];
+      c2 = &self->points[(self->context + 1 + self->n_points) % self->n_points];
+
+      a = atan2 (c2->y - p->y, c2->x - p->x) + M_PI;
+      d = dist (c, p);
+      c->x = p->x + d * cos (a);
+      c->y = p->y + d * sin (a);
+    }
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+static void
+pressed (GtkGestureClick *gesture,
+         int              n_press,
+         double           x,
+         double           y,
+         DemoWidget      *self)
+{
+  graphene_point_t m = GRAPHENE_POINT_INIT (x, y);
+  int i;
+  int button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+
+  if (!self->edit)
+    return;
+
+  if (button != GDK_BUTTON_SECONDARY)
+    return;
+
+  for (i = 0; i < self->n_points; i++)
+    {
+      if (i % 3 != 0)
+        continue;
+
+      if (dist (&self->points[i], &m) < RADIUS)
+        {
+          GAction *action;
+
+          self->context = i;
+
+          action = g_action_map_lookup_action (self->actions, "smooth");
+          g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (self->point_data[i / 3].smooth));
+
+          gtk_popover_set_pointing_to (GTK_POPOVER (self->menu),
+                                       &(const GdkRectangle){ x, y, 1, 1 });
+          gtk_popover_popup (GTK_POPOVER (self->menu));
+          return;
+        }
+    }
+}
+
+static void
 released (GtkGestureClick *gesture,
           int              n_press,
           double           x,
@@ -175,6 +245,7 @@ released (GtkGestureClick *gesture,
                 }
               else if (button == GDK_BUTTON_SECONDARY)
                 {
+                  self->context = i;
                   self->point_data[i / 3].smooth = !self->point_data[i / 3].smooth;
                   if (self->point_data[i / 3].smooth)
                     {
@@ -191,8 +262,6 @@ released (GtkGestureClick *gesture,
                       c->y = p->y + d * sin (a);
                     }
                 }
-
-              gtk_widget_queue_draw (GTK_WIDGET (self));
             }
         }
     }
@@ -246,6 +315,9 @@ static void
 demo_widget_init (DemoWidget *self)
 {
   GtkGesture *gesture;
+  GMenu *menu;
+  GMenuItem *item;
+  GSimpleAction *action;
 
   self->dragged = -1;
   self->edit = FALSE;
@@ -259,10 +331,27 @@ demo_widget_init (DemoWidget *self)
 
   gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  g_signal_connect (gesture, "pressed", G_CALLBACK (pressed), self);
   g_signal_connect (gesture, "released", G_CALLBACK (released), self);
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
 
   init_points (self);
+
+  self->actions = G_ACTION_MAP (g_simple_action_group_new ());
+  action = g_simple_action_new_stateful ("smooth", NULL, g_variant_new_boolean (FALSE));
+  g_signal_connect (action, "change-state", G_CALLBACK (toggle_smooth), self);
+  g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (action));
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "point", G_ACTION_GROUP (self->actions));
+
+  menu = g_menu_new ();
+  item = g_menu_item_new ("Smooth", "point.smooth");
+  g_menu_append_item (menu, item);
+  g_object_unref (item);
+
+  self->menu = gtk_popover_menu_new_from_model (G_MENU_MODEL (menu));
+  g_object_unref (menu);
+
+  gtk_widget_set_parent (self->menu, GTK_WIDGET (self));
 }
 
 static void
@@ -411,12 +500,39 @@ demo_widget_measure (GtkWidget      *widget,
 }
 
 static void
+demo_widget_size_allocate (GtkWidget *widget,
+                           int        width,
+                           int        height,
+                           int        baseline)
+{
+  DemoWidget *self = DEMO_WIDGET (widget);
+
+  gtk_native_check_resize (GTK_NATIVE (self->menu));
+}
+
+static void
+demo_widget_dispose (GObject *object)
+{
+  DemoWidget *self = DEMO_WIDGET (object);
+
+  g_clear_pointer (&self->points, g_free);
+  g_clear_pointer (&self->point_data, g_free);
+  g_clear_pointer (&self->menu, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (demo_widget_parent_class)->dispose (object);
+}
+
+static void
 demo_widget_class_init (DemoWidgetClass *class)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+
+  object_class->dispose = demo_widget_dispose;
 
   widget_class->snapshot = demo_widget_snapshot;
   widget_class->measure = demo_widget_measure;
+  widget_class->size_allocate = demo_widget_size_allocate;
 }
 
 static GtkWidget *
