@@ -94,14 +94,11 @@ drag_update (GtkGestureDrag *gesture,
     {
       /* point is on curve */
 
-      if (self->point_data[self->dragged % 3].smooth)
-        {
-          self->points[(self->dragged - 1 + self->n_points) % self->n_points].x += dx;
-          self->points[(self->dragged - 1 + self->n_points) % self->n_points].y += dy;
+      self->points[(self->dragged - 1 + self->n_points) % self->n_points].x += dx;
+      self->points[(self->dragged - 1 + self->n_points) % self->n_points].y += dy;
 
-          self->points[(self->dragged + 1) % self->n_points].x += dx;
-          self->points[(self->dragged + 1) % self->n_points].y += dy;
-       }
+      self->points[(self->dragged + 1) % self->n_points].x += dx;
+      self->points[(self->dragged + 1) % self->n_points].y += dy;
     }
   else
     {
