@@ -888,7 +888,7 @@ gtk_application_set_menubar (GtkApplication *application,
  * Returns the menu model that has been set with
  * gtk_application_set_menubar().
  *
- * Returns: (transfer none): the menubar for windows of @application
+ * Returns: (nullable) (transfer none): the menubar for windows of @application
  */
 GMenuModel *
 gtk_application_get_menubar (GtkApplication *application)
@@ -1174,7 +1174,7 @@ gtk_application_handle_window_map (GtkApplication *application,
  * See [Automatic resources][automatic-resources]
  * for more information.
  *
- * Returns: (transfer none): Gets the menu with the
+ * Returns: (nullable) (transfer none): Gets the menu with the
  *     given id from the automatically loaded resources
  */
 GMenu *

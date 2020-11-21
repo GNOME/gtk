@@ -945,7 +945,7 @@ update_website (GtkAboutDialog *about)
  *
  * Returns the program name displayed in the about dialog.
  *
- * Returns: The program name. The string is owned by the about
+ * Returns: (nullable): The program name. The string is owned by the about
  *  dialog and must not be modified.
  */
 const char *

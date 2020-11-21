@@ -3245,7 +3245,7 @@ gtk_entry_set_completion (GtkEntry           *entry,
  *
  * Returns the auxiliary completion object currently in use by @entry.
  *
- * Returns: (transfer none): The auxiliary completion object currently
+ * Returns: (nullable) (transfer none): The auxiliary completion object currently
  *     in use by @entry.
  */
 GtkEntryCompletion *
