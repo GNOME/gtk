@@ -125,15 +125,6 @@ struct _CurveEditorClass
 
 G_DEFINE_TYPE (CurveEditor, curve_editor, GTK_TYPE_WIDGET)
 
-static float
-dist (graphene_point_t *a, graphene_point_t *b)
-{
-  graphene_vec2_t v;
-
-  graphene_vec2_init (&v, a->x - b->x, a->y - b->y);
-  return graphene_vec2_length (&v);
-}
-
 static void
 drag_begin (GtkGestureDrag *gesture,
             double          start_x,
@@ -146,7 +137,7 @@ drag_begin (GtkGestureDrag *gesture,
   if (self->edit)
     for (i = 0; i < self->n_points; i++)
       {
-        if (dist (&self->points[i], &p) < RADIUS)
+        if (graphene_point_distance (&self->points[i], &p, NULL, NULL) < RADIUS)
           {
             self->dragged = i;
             self->symmetric = (gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (gesture)) & GDK_CONTROL_MASK) == 0;
@@ -186,9 +177,9 @@ drag_update (GtkGestureDrag *gesture,
    * we may want to preserve those
    */
   c = &self->points[(self->dragged - 1 + self->n_points) % self->n_points];
-  l1 = dist (d, c);
+  l1 = graphene_point_distance (d, c, NULL, NULL);
   c = &self->points[(self->dragged + 1) % self->n_points];
-  l2 = dist (d, c);
+  l2 = graphene_point_distance (d, c, NULL, NULL);
 
   dx = x - d->x;
   dy = y - d->y;
@@ -237,7 +228,7 @@ drag_update (GtkGestureDrag *gesture,
               /* adjust the control point before the line segment */
               c = &self->points[((self->dragged - 4 + self->n_points) % self->n_points)];
 
-              l = dist (c, p);
+              l = graphene_point_distance (c, p, NULL, NULL);
               opposite_point (p, d, l, c);
             }
         }
@@ -271,7 +262,7 @@ drag_update (GtkGestureDrag *gesture,
               /* adjust the control point after the line segment */
               c = &self->points[((self->dragged + 4) % self->n_points)];
 
-              l = dist (c, p);
+              l = graphene_point_distance (c, p, NULL, NULL);
               opposite_point (p, d, l, c);
             }
         }
@@ -327,9 +318,9 @@ drag_update (GtkGestureDrag *gesture,
 
               /* then adjust the other control point */
               if (self->symmetric)
-                l = dist (d, p);
+                l = graphene_point_distance (d, p, NULL, NULL);
               else
-                l = dist (c, p);
+                l = graphene_point_distance (c, p, NULL, NULL);
 
               opposite_point (p, d, l, c);
             }
@@ -391,7 +382,7 @@ maintain_smoothness (CurveEditor *self,
           c = &self->points[(point - 1 + self->n_points) % self->n_points];
           c2 = &self->points[(point + 1) % self->n_points];
 
-          d = dist (c, p);
+          d = graphene_point_distance (c, p, NULL, NULL);
           opposite_point (p, c2, d, c);
         }
       else if (op == CURVE && op1 == LINE)
@@ -402,7 +393,7 @@ maintain_smoothness (CurveEditor *self,
           c = &self->points[(point + 1) % self->n_points];
           p2 = &self->points[(point - 3 + self->n_points) % self->n_points];
 
-          d = dist (c, p);
+          d = graphene_point_distance (c, p, NULL, NULL);
           opposite_point (p, p2, d, c);
         }
       else if (op == LINE && op1 == CURVE)
@@ -413,7 +404,7 @@ maintain_smoothness (CurveEditor *self,
           c = &self->points[(point - 1 + self->n_points) % self->n_points];
           p2 = &self->points[(point + 3) % self->n_points];
 
-          d = dist (c, p);
+          d = graphene_point_distance (c, p, NULL, NULL);
           opposite_point (p, p2, d, c);
         }
     }
@@ -470,7 +461,7 @@ pressed (GtkGestureClick *gesture,
       if (i % 3 != 0)
         continue;
 
-      if (dist (&self->points[i], &m) < RADIUS)
+      if (graphene_point_distance (&self->points[i], &m, NULL, NULL) < RADIUS)
         {
           GAction *action;
 
@@ -506,7 +497,7 @@ released (GtkGestureClick *gesture,
 
   for (i = 0; i < self->n_points; i++)
     {
-      if (dist (&self->points[i], &m) < RADIUS)
+      if (graphene_point_distance (&self->points[i], &m, NULL, NULL) < RADIUS)
         {
           if (i % 3 == 0)
             {
@@ -528,7 +519,7 @@ released (GtkGestureClick *gesture,
                       c = &self->points[(i - 1 + self->n_points) % self->n_points];
                       c2 = &self->points[(i + 1 + self->n_points) % self->n_points];
 
-                      d = dist (c, p);
+                      d = graphene_point_distance (c, p, NULL, NULL);
                       opposite_point (p, c2, d, c);
                     }
                 }
