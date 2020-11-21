@@ -99,6 +99,7 @@ typedef struct
   Operation op;
   gboolean edit;
   gboolean smooth;
+  gboolean symmetric;
 } PointData;
 
 struct _CurveEditor
@@ -110,7 +111,6 @@ struct _CurveEditor
   int dragged;
   int hovered;
   int context;
-  gboolean symmetric;
   gboolean edit;
 
   GtkWidget *menu;
@@ -169,8 +169,6 @@ drag_begin (GtkGestureDrag *gesture,
             if (point_is_visible (self, i))
               {
                 self->dragged = i;
-                self->symmetric = (gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (gesture)) & GDK_CONTROL_MASK) == 0;
-
                 gtk_widget_queue_draw (GTK_WIDGET (self));
               }
             return;
@@ -347,7 +345,7 @@ drag_update (GtkGestureDrag *gesture,
               d->y = y;
 
               /* then adjust the other control point */
-              if (self->symmetric)
+              if (self->point_data[point / 3].symmetric)
                 l = graphene_point_distance (d, p, NULL, NULL);
               else
                 l = graphene_point_distance (c, p, NULL, NULL);
@@ -383,7 +381,6 @@ drag_end (GtkGestureDrag *gesture,
 {
   drag_update (gesture, offset_x, offset_y, self);
   self->dragged = -1;
-  self->symmetric = FALSE;
 }
 
 static void
@@ -441,13 +438,27 @@ maintain_smoothness (CurveEditor *self,
 }
 
 static void
-toggle_smooth (GSimpleAction *action,
+set_smooth (GSimpleAction *action,
+            GVariant      *value,
+            gpointer       data)
+{
+  CurveEditor *self = CURVE_EDITOR (data);
+
+  self->point_data[self->context / 3].smooth = g_variant_get_boolean (value);
+
+  maintain_smoothness (self, self->context);
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+static void
+set_symmetric (GSimpleAction *action,
                GVariant      *value,
                gpointer       data)
 {
   CurveEditor *self = CURVE_EDITOR (data);
 
-  self->point_data[self->context / 3].smooth = g_variant_get_boolean (value);
+  self->point_data[self->context / 3].symmetric = g_variant_get_boolean (value);
 
   maintain_smoothness (self, self->context);
 
@@ -819,6 +830,18 @@ pressed (GtkGestureClick *gesture,
             action = g_action_map_lookup_action (self->actions, "smooth");
             g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (self->point_data[i / 3].smooth));
 
+            action = g_action_map_lookup_action (self->actions, "symmetric");
+            if (self->point_data[i / 3].smooth)
+              {
+                g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
+                g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (self->point_data[i / 3].symmetric));
+              }
+            else
+              {
+                g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+                g_simple_action_set_state (G_SIMPLE_ACTION (action), FALSE);
+              }
+
             action = g_action_map_lookup_action (self->actions, "operation");
 
             g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_string (op_to_string (self->point_data[i / 3].op)));
@@ -964,7 +987,12 @@ curve_editor_init (CurveEditor *self)
   self->actions = G_ACTION_MAP (g_simple_action_group_new ());
 
   action = g_simple_action_new_stateful ("smooth", NULL, g_variant_new_boolean (FALSE));
-  g_signal_connect (action, "change-state", G_CALLBACK (toggle_smooth), self);
+  g_signal_connect (action, "change-state", G_CALLBACK (set_smooth), self);
+  g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (action));
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "point", G_ACTION_GROUP (self->actions));
+
+  action = g_simple_action_new_stateful ("symmetric", NULL, g_variant_new_boolean (FALSE));
+  g_signal_connect (action, "change-state", G_CALLBACK (set_symmetric), self);
   g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (action));
   gtk_widget_insert_action_group (GTK_WIDGET (self), "point", G_ACTION_GROUP (self->actions));
 
@@ -981,6 +1009,10 @@ curve_editor_init (CurveEditor *self)
   menu = g_menu_new ();
 
   item = g_menu_item_new ("Smooth", "point.smooth");
+  g_menu_append_item (menu, item);
+  g_object_unref (item);
+
+  item = g_menu_item_new ("Symmetric", "point.symmetric");
   g_menu_append_item (menu, item);
   g_object_unref (item);
 
