@@ -856,7 +856,7 @@ released (GtkGestureClick *gesture,
 static void
 curve_editor_init (CurveEditor *self)
 {
-  GtkGesture *gesture;
+  GtkEventController *controller;
   GMenu *menu;
   GMenu *section;
   GMenuItem *item;
@@ -865,18 +865,18 @@ curve_editor_init (CurveEditor *self)
   self->dragged = -1;
   self->edit = FALSE;
 
-  gesture = gtk_gesture_drag_new ();
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_PRIMARY);
-  g_signal_connect (gesture, "drag-begin", G_CALLBACK (drag_begin), self);
-  g_signal_connect (gesture, "drag-update", G_CALLBACK (drag_update), self);
-  g_signal_connect (gesture, "drag-end", G_CALLBACK (drag_end), self);
-  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
+  controller = GTK_EVENT_CONTROLLER (gtk_gesture_drag_new ());
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (controller), GDK_BUTTON_PRIMARY);
+  g_signal_connect (controller, "drag-begin", G_CALLBACK (drag_begin), self);
+  g_signal_connect (controller, "drag-update", G_CALLBACK (drag_update), self);
+  g_signal_connect (controller, "drag-end", G_CALLBACK (drag_end), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
-  gesture = gtk_gesture_click_new ();
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
-  g_signal_connect (gesture, "pressed", G_CALLBACK (pressed), self);
-  g_signal_connect (gesture, "released", G_CALLBACK (released), self);
-  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
+  controller = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (controller), 0);
+  g_signal_connect (controller, "pressed", G_CALLBACK (pressed), self);
+  g_signal_connect (controller, "released", G_CALLBACK (released), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   self->points = NULL;
   self->point_data = NULL;
