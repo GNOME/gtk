@@ -108,6 +108,7 @@ struct _CurveEditor
   int n_points;
   PointData *point_data; /* length is n_points / 3 */
   int dragged;
+  int hovered;
   int context;
   gboolean symmetric;
   gboolean edit;
@@ -854,6 +855,48 @@ released (GtkGestureClick *gesture,
 }
 
 static void
+motion (GtkEventControllerMotion *controller,
+        double                    x,
+        double                    y,
+        CurveEditor              *self)
+{
+  graphene_point_t m = GRAPHENE_POINT_INIT (x, y);
+  int i;
+  int was_hovered = self->hovered;
+
+  self->hovered = -1;
+
+  if (self->edit)
+    for (i = 0; i < self->n_points; i++)
+      {
+        if (((i % 3) == 1 && !self->point_data[i / 3].edit) ||
+            ((i % 3) == 2 && !self->point_data[((i + 1) % self->n_points) / 3].edit))
+          continue;
+
+        if (graphene_point_distance (&self->points[i], &m, NULL, NULL) < CLICK_RADIUS)
+          {
+            if (self->hovered != i)
+              self->hovered = i;
+            break;
+          }
+    }
+
+  if (self->hovered != was_hovered)
+    gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+static void
+leave (GtkEventController *controller,
+       CurveEditor        *self)
+{
+  if (self->hovered != -1)
+    {
+      self->hovered = -1;
+      gtk_widget_queue_draw (GTK_WIDGET (self));
+    }
+}
+
+static void
 curve_editor_init (CurveEditor *self)
 {
   GtkEventController *controller;
@@ -876,6 +919,11 @@ curve_editor_init (CurveEditor *self)
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (controller), 0);
   g_signal_connect (controller, "pressed", G_CALLBACK (pressed), self);
   g_signal_connect (controller, "released", G_CALLBACK (released), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), controller);
+
+  controller = gtk_event_controller_motion_new ();
+  g_signal_connect (controller, "motion", G_CALLBACK (motion), self);
+  g_signal_connect (controller, "leave", G_CALLBACK (leave), self);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   self->points = NULL;
@@ -1040,13 +1088,14 @@ curve_editor_snapshot (GtkWidget   *widget,
       /* Draw the circles, in several passes, one for each color */
 
       const char *colors[] = {
-        "red",
-        "green",
-        "blue"
+        "white", /* hovered */
+        "red",   /* smooth curve points */
+        "green", /* sharp curve points */
+        "blue"   /* control points */
       };
       GdkRGBA color;
 
-      for (j = 0; j < 3; j++)
+       for (j = 0; j < 4; j++)
         {
           builder = gsk_path_builder_new ();
 
@@ -1055,18 +1104,32 @@ curve_editor_snapshot (GtkWidget   *widget,
               switch (j)
                 {
                 case 0:
+                  if (i != self->hovered)
+                    continue;
+                  break;
+
+                case 1:
+                  if (i == self->hovered)
+                    continue;
+
                   if (!(i % 3 == 0 &&
                         self->point_data[i / 3].smooth))
                     continue;
                   break;
 
-                case 1:
+                case 2:
+                  if (i == self->hovered)
+                    continue;
+
                   if (!(i % 3 == 0 &&
                         !self->point_data[i / 3].smooth))
                     continue;
                   break;
 
-                case 2:
+                case 3:
+                  if (i == self->hovered)
+                    continue;
+
                   if (i % 3 == 1)
                     {
                       if (!(self->point_data[i / 3].edit &&
@@ -1174,6 +1237,7 @@ curve_editor_set_edit (CurveEditor *self,
   self->edit = edit;
   if (!self->edit)
     {
+      self->hovered = -1;
       for (i = 0; i < self->n_points / 3; i++)
         self->point_data[i].edit = FALSE;
     }
