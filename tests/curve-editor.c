@@ -58,7 +58,8 @@ opposite_point (const graphene_point_t *p,
   q->y = p->y + t * (a->y - p->y);
 }
 
-#define RADIUS 5
+#define DRAW_RADIUS 5
+#define CLICK_RADIUS 8
 
 typedef enum
 {
@@ -137,7 +138,7 @@ drag_begin (GtkGestureDrag *gesture,
   if (self->edit)
     for (i = 0; i < self->n_points; i++)
       {
-        if (graphene_point_distance (&self->points[i], &p, NULL, NULL) < RADIUS)
+        if (graphene_point_distance (&self->points[i], &p, NULL, NULL) < CLICK_RADIUS)
           {
             self->dragged = i;
             self->symmetric = (gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (gesture)) & GDK_CONTROL_MASK) == 0;
@@ -461,7 +462,7 @@ pressed (GtkGestureClick *gesture,
       if (i % 3 != 0)
         continue;
 
-      if (graphene_point_distance (&self->points[i], &m, NULL, NULL) < RADIUS)
+      if (graphene_point_distance (&self->points[i], &m, NULL, NULL) < CLICK_RADIUS)
         {
           GAction *action;
 
@@ -497,7 +498,7 @@ released (GtkGestureClick *gesture,
 
   for (i = 0; i < self->n_points; i++)
     {
-      if (graphene_point_distance (&self->points[i], &m, NULL, NULL) < RADIUS)
+      if (graphene_point_distance (&self->points[i], &m, NULL, NULL) < CLICK_RADIUS)
         {
           if (i % 3 == 0)
             {
@@ -754,7 +755,7 @@ curve_editor_snapshot (GtkWidget   *widget,
                   g_assert_not_reached ();
                 }
 
-              gsk_path_builder_add_circle (builder, &self->points[i], RADIUS);
+              gsk_path_builder_add_circle (builder, &self->points[i], DRAW_RADIUS);
             }
 
           path = gsk_path_builder_free_to_path (builder);
