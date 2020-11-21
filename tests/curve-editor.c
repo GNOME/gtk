@@ -124,6 +124,34 @@ struct _CurveEditorClass
 
 G_DEFINE_TYPE (CurveEditor, curve_editor, GTK_TYPE_WIDGET)
 
+static gboolean
+point_is_visible (CurveEditor *self,
+                  int          point)
+{
+  g_assert (0 <= point && point < self->n_points);
+
+  if (!self->edit)
+    return FALSE;
+
+  switch (point % 3)
+    {
+    case 0: /* point on curve */
+      return TRUE;
+    case 1:
+      if (!self->point_data[point / 3].edit)
+        return FALSE;
+      else
+        return self->point_data[point / 3].op == CURVE;
+    case 2:
+      if (!self->point_data[((point + 1) % self->n_points) / 3].edit)
+        return FALSE;
+      else
+        return self->point_data[point / 3].op == CURVE;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 static void
 drag_begin (GtkGestureDrag *gesture,
             double          start_x,
@@ -138,10 +166,13 @@ drag_begin (GtkGestureDrag *gesture,
       {
         if (graphene_point_distance (&self->points[i], &p, NULL, NULL) < CLICK_RADIUS)
           {
-            self->dragged = i;
-            self->symmetric = (gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (gesture)) & GDK_CONTROL_MASK) == 0;
+            if (point_is_visible (self, i))
+              {
+                self->dragged = i;
+                self->symmetric = (gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (gesture)) & GDK_CONTROL_MASK) == 0;
 
-            gtk_widget_queue_draw (GTK_WIDGET (self));
+                gtk_widget_queue_draw (GTK_WIDGET (self));
+              }
             return;
           }
       }
@@ -773,33 +804,31 @@ pressed (GtkGestureClick *gesture,
   if (!self->edit)
     return;
 
-  if (button != GDK_BUTTON_SECONDARY)
-    return;
+  if (button == GDK_BUTTON_SECONDARY)
+    for (i = 0; i < self->n_points; i++)
+      {
+        if (i % 3 != 0 || !point_is_visible (self, i))
+          continue;
 
-  for (i = 0; i < self->n_points; i++)
-    {
-      if (i % 3 != 0)
-        continue;
+        if (graphene_point_distance (&self->points[i], &m, NULL, NULL) < CLICK_RADIUS)
+          {
+            GAction *action;
 
-      if (graphene_point_distance (&self->points[i], &m, NULL, NULL) < CLICK_RADIUS)
-        {
-          GAction *action;
+            self->context = i;
 
-          self->context = i;
+            action = g_action_map_lookup_action (self->actions, "smooth");
+            g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (self->point_data[i / 3].smooth));
 
-          action = g_action_map_lookup_action (self->actions, "smooth");
-          g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (self->point_data[i / 3].smooth));
+            action = g_action_map_lookup_action (self->actions, "operation");
 
-          action = g_action_map_lookup_action (self->actions, "operation");
+            g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_string (op_to_string (self->point_data[i / 3].op)));
 
-          g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_string (op_to_string (self->point_data[i / 3].op)));
-
-          gtk_popover_set_pointing_to (GTK_POPOVER (self->menu),
-                                       &(const GdkRectangle){ x, y, 1, 1 });
-          gtk_popover_popup (GTK_POPOVER (self->menu));
-          return;
-        }
-    }
+            gtk_popover_set_pointing_to (GTK_POPOVER (self->menu),
+                                         &(const GdkRectangle){ x, y, 1, 1 });
+            gtk_popover_popup (GTK_POPOVER (self->menu));
+            return;
+          }
+      }
 }
 
 static void
@@ -818,6 +847,9 @@ released (GtkGestureClick *gesture,
 
   for (i = 0; i < self->n_points; i++)
     {
+      if (!point_is_visible (self, i))
+        continue;
+
       if (graphene_point_distance (&self->points[i], &m, NULL, NULL) < CLICK_RADIUS)
         {
           if (i % 3 == 0)
@@ -869,8 +901,7 @@ motion (GtkEventControllerMotion *controller,
   if (self->edit)
     for (i = 0; i < self->n_points; i++)
       {
-        if (((i % 3) == 1 && !self->point_data[i / 3].edit) ||
-            ((i % 3) == 2 && !self->point_data[((i + 1) % self->n_points) / 3].edit))
+        if (!point_is_visible (self, i))
           continue;
 
         if (graphene_point_distance (&self->points[i], &m, NULL, NULL) < CLICK_RADIUS)
@@ -1036,32 +1067,18 @@ curve_editor_snapshot (GtkWidget   *widget,
   if (self->edit)
     {
       /* Add the skeleton */
-
       gsk_path_builder_move_to (builder, self->points[0].x, self->points[0].y);
       for (i = 1; i < self->n_points; i++)
         {
-          gboolean edit;
-          gboolean line;
-
-          if (i % 3 == 2)
-            edit = self->point_data[((i + 3) % self->n_points) / 3].edit;
+          if (i % 3 != 2 &&
+              point_is_visible (self, i) &&
+              point_is_visible (self, (i - 1 + self->n_points) % self->n_points))
+            gsk_path_builder_line_to (builder, self->points[i].x, self->points[i].y);
           else
-            edit = self->point_data[i / 3].edit;
-
-          if (i % 3 == 0)
-            line = self->point_data[((i - 1 + self->n_points) % self->n_points) / 3].op != CURVE;
-          else
-            line = self->point_data[i / 3].op != CURVE;
-
-          if (edit)
-            {
-              if (i % 3 == 2 || line)
-                gsk_path_builder_move_to (builder, self->points[i].x, self->points[i].y);
-              else
-                gsk_path_builder_line_to (builder, self->points[i].x, self->points[i].y);
-            }
+            gsk_path_builder_move_to (builder, self->points[i].x, self->points[i].y);
         }
-      if (self->point_data[0].edit)
+      if (point_is_visible (self, 0) &&
+          point_is_visible (self, self->n_points - 1))
         gsk_path_builder_line_to (builder, self->points[0].x, self->points[0].y);
     }
 
