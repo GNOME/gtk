@@ -441,6 +441,29 @@ set_operation (GSimpleAction *action,
 }
 
 static void
+remove_point (GSimpleAction *action,
+              GVariant      *value,
+              gpointer       data)
+{
+  CurveEditor *self = CURVE_EDITOR (data);
+  int i;
+
+  for (i = self->context / 3; i + 1 < self->n_points / 3; i++)
+    self->point_data[i] = self->point_data[i + 1];
+
+  self->point_data = g_realloc (self->point_data, sizeof (PointData) * (self->n_points / 3 - 1));
+
+  self->points[(self->context - 1 + self->n_points) % self->n_points] = self->points[self->context + 2];
+
+  for (i = self->context; i + 3 < self->n_points; i++)
+    self->points[i] = self->points[i + 3];
+
+  self->points = g_realloc (self->points, sizeof (graphene_point_t) * (self->n_points - 3));
+
+  self->n_points -= 3;
+}
+
+static void
 pressed (GtkGestureClick *gesture,
          int              n_press,
          double           x,
@@ -569,6 +592,10 @@ curve_editor_init (CurveEditor *self)
   g_signal_connect (action, "change-state", G_CALLBACK (set_operation), self);
   g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (action));
 
+  action = g_simple_action_new ("remove", NULL);
+  g_signal_connect (action, "activate", G_CALLBACK (remove_point), self);
+  g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (action));
+
   gtk_widget_insert_action_group (GTK_WIDGET (self), "point", G_ACTION_GROUP (self->actions));
 
   menu = g_menu_new ();
@@ -593,6 +620,10 @@ curve_editor_init (CurveEditor *self)
 
   g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
   g_object_unref (section);
+
+  item = g_menu_item_new ("Remove", "point.remove");
+  g_menu_append_item (section, item);
+  g_object_unref (item);
 
   self->menu = gtk_popover_menu_new_from_model (G_MENU_MODEL (menu));
   g_object_unref (menu);
