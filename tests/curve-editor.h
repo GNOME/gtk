@@ -15,4 +15,6 @@ void        curve_editor_set_edit (CurveEditor *self,
 void        curve_editor_set_path (CurveEditor *self,
                                    GskPath     *path);
 
+GskPath *   curve_editor_get_path (CurveEditor *self);
+
 G_END_DECLS

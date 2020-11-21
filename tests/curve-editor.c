@@ -609,8 +609,41 @@ curve_editor_init (CurveEditor *self)
 }
 
 static void
+curve_editor_add_path (CurveEditor    *self,
+                       GskPathBuilder *builder)
+{
+  int i;
+
+  gsk_path_builder_move_to (builder, self->points[0].x, self->points[0].y);
+  for (i = 1; i < self->n_points; i += 3)
+    {
+      switch (self->point_data[i / 3].op)
+        {
+        case MOVE:
+          gsk_path_builder_move_to (builder,
+                                    self->points[(i + 2) % self->n_points].x, self->points[(i + 2) % self->n_points].y);
+          break;
+
+        case LINE:
+          gsk_path_builder_line_to (builder,
+                                    self->points[(i + 2) % self->n_points].x, self->points[(i + 2) % self->n_points].y);
+          break;
+
+        case CURVE:
+          gsk_path_builder_curve_to (builder,
+                                     self->points[i].x, self->points[i].y,
+                                     self->points[(i + 1) % self->n_points].x, self->points[(i + 1) % self->n_points].y,
+                                     self->points[(i + 2) % self->n_points].x, self->points[(i + 2) % self->n_points].y);
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+    }
+}
+
+static void
 curve_editor_snapshot (GtkWidget   *widget,
-                      GtkSnapshot *snapshot)
+                       GtkSnapshot *snapshot)
 {
   CurveEditor *self = (CurveEditor *)widget;
   GskPathBuilder *builder;
@@ -662,31 +695,7 @@ curve_editor_snapshot (GtkWidget   *widget,
 
   /* Add the curve itself */
 
-  gsk_path_builder_move_to (builder, self->points[0].x, self->points[0].y);
-  for (i = 1; i < self->n_points; i += 3)
-    {
-      switch (self->point_data[i / 3].op)
-        {
-        case MOVE:
-          gsk_path_builder_move_to (builder,
-                                    self->points[(i + 2) % self->n_points].x, self->points[(i + 2) % self->n_points].y);
-          break;
-
-        case LINE:
-          gsk_path_builder_line_to (builder,
-                                    self->points[(i + 2) % self->n_points].x, self->points[(i + 2) % self->n_points].y);
-          break;
-
-        case CURVE:
-          gsk_path_builder_curve_to (builder,
-                                     self->points[i].x, self->points[i].y,
-                                     self->points[(i + 1) % self->n_points].x, self->points[(i + 1) % self->n_points].y,
-                                     self->points[(i + 2) % self->n_points].x, self->points[(i + 2) % self->n_points].y);
-          break;
-        default:
-          g_assert_not_reached ();
-        }
-    }
+  curve_editor_add_path (self, builder);
 
   /* Stroke everything we have so far */
 
@@ -1011,4 +1020,16 @@ curve_editor_set_path (CurveEditor *self,
     update_smoothness (self, i);
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+GskPath *
+curve_editor_get_path (CurveEditor *self)
+{
+  GskPathBuilder *builder;
+
+  builder = gsk_path_builder_new ();
+
+  curve_editor_add_path (self, builder);
+
+  return gsk_path_builder_free_to_path (builder);
 }
