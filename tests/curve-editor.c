@@ -1,6 +1,3 @@
-/* TODO: point insert/remove
- */
-
 #include "curve-editor.h"
 
 #include <gtk/gtk.h>
@@ -464,6 +461,304 @@ remove_point (GSimpleAction *action,
 }
 
 static void
+find_line_point (graphene_point_t *a,
+                 graphene_point_t *b,
+                 graphene_point_t *p,
+                 double           *t,
+                 graphene_point_t *pp,
+                 double           *d)
+{
+  graphene_vec2_t n;
+  graphene_vec2_t ap;
+  float tt;
+
+  graphene_vec2_init (&n, b->x - a->x, b->y - a->y);
+  graphene_vec2_init (&ap, p->x - a->x, p->y - a->y);
+
+  tt = graphene_vec2_dot (&ap, &n) / graphene_vec2_dot (&n, &n);
+
+  if (tt < 0)
+    {
+      *pp = *a;
+      *t = 0;
+      *d = graphene_point_distance (a, p, NULL, NULL);
+    }
+  else if (tt > 1)
+    {
+      *pp = *b;
+      *t = 1;
+      *d = graphene_point_distance (b, p, NULL, NULL);
+    }
+  else
+    {
+      pp->x = a->x + tt * (b->x - a->x);
+      pp->y = a->y + tt * (b->y - a->y);
+      *t = tt;
+      *d = graphene_point_distance (pp, p, NULL, NULL);
+    }
+}
+
+static void
+gsk_split_get_coefficients (graphene_point_t       coeffs[4],
+                            const graphene_point_t pts[4])
+{
+  coeffs[0] = GRAPHENE_POINT_INIT (pts[3].x - 3.0f * pts[2].x + 3.0f * pts[1].x - pts[0].x,
+                                   pts[3].y - 3.0f * pts[2].y + 3.0f * pts[1].y - pts[0].y);
+  coeffs[1] = GRAPHENE_POINT_INIT (3.0f * pts[2].x - 6.0f * pts[1].x + 3.0f * pts[0].x,
+                                   3.0f * pts[2].y - 6.0f * pts[1].y + 3.0f * pts[0].y);
+  coeffs[2] = GRAPHENE_POINT_INIT (3.0f * pts[1].x - 3.0f * pts[0].x,
+                                   3.0f * pts[1].y - 3.0f * pts[0].y);
+  coeffs[3] = pts[0];
+}
+
+static void
+gsk_spline_get_point_cubic (const graphene_point_t  pts[4],
+                            float                   progress,
+                            graphene_point_t       *pos,
+                            graphene_vec2_t        *tangent)
+{
+  graphene_point_t c[4];
+
+  gsk_split_get_coefficients (c, pts);
+  if (pos)
+    *pos = GRAPHENE_POINT_INIT (((c[0].x * progress + c[1].x) * progress +c[2].x) * progress + c[3].x,
+                                ((c[0].y * progress + c[1].y) * progress +c[2].y) * progress + c[3].y);
+  if (tangent)
+    {
+      graphene_vec2_init (tangent,
+                          (3.0f * c[0].x * progress + 2.0f * c[1].x) * progress + c[2].x,
+                          (3.0f * c[0].y * progress + 2.0f * c[1].y) * progress + c[2].y);
+      graphene_vec2_normalize (tangent, tangent);
+    }
+}
+
+static void
+find_curve_point (graphene_point_t *points,
+                  graphene_point_t *p,
+                  double           *t,
+                  graphene_point_t *pp,
+                  double           *d)
+{
+  graphene_point_t q;
+  graphene_point_t best_p;
+  double best_d;
+  double best_t;
+  double dd;
+  double tt;
+  int i;
+
+  best_d = G_MAXDOUBLE;
+  best_t = 0;
+
+  for (i = 0; i < 20; i++)
+    {
+      tt = i / 20.0;
+      gsk_spline_get_point_cubic (points, tt, &q, NULL);
+      dd = graphene_point_distance (&q, p, NULL, NULL);
+      if (dd < best_d)
+        {
+          best_d = dd;
+          best_t = tt;
+          best_p = q;
+        }
+    }
+
+  /* TODO: bisect from here */
+
+  *t = best_t;
+  *pp = best_p;
+  *d = best_d;
+}
+
+static void
+find_closest_point (CurveEditor      *self,
+                    graphene_point_t *p,
+                    int              *point,
+                    double           *t,
+                    double           *d)
+{
+  int i;
+  int best_i;
+  double best_d;
+  double best_t;
+  double tt;
+  double dd;
+  graphene_point_t pp;
+
+  best_i = -1;
+  best_d = G_MAXDOUBLE;
+  best_t = 0;
+
+  for (i = 0; i < self->n_points; i++)
+    {
+      if (i % 3 != 0)
+        continue;
+
+      switch (self->point_data[i / 3].op)
+        {
+        case MOVE:
+          continue;
+        case LINE:
+          find_line_point (&self->points[i], &self->points[(i + 3) % self->n_points], p, &tt, &pp, &dd);
+          if (dd < best_d)
+            {
+              best_i = i;
+              best_d = dd;
+              best_t = tt;
+            }
+          break;
+        case CURVE:
+          {
+            graphene_point_t points[4];
+            int k;
+
+            for (k = 0; k < 4; k++)
+              points[k] = self->points[(i + k) % self->n_points];
+
+            find_curve_point (points, p, &tt, &pp, &dd);
+            if (dd < best_d)
+              {
+                best_i = i;
+                best_d = dd;
+                best_t = tt;
+              }
+          }
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+    }
+
+  *point = best_i;
+  *t = best_t;
+  *d = best_d;
+}
+
+static void
+split_bezier (graphene_point_t *points,
+              int               length,
+              float             t,
+              graphene_point_t *left,
+              int              *left_pos,
+              graphene_point_t *right,
+              int              *right_pos)
+{
+  if (length == 1)
+    {
+      left[*left_pos] = points[0];
+      (*left_pos)++;
+      right[*right_pos] = points[0];
+      (*right_pos)++;
+    }
+  else
+    {
+      graphene_point_t *newpoints;
+      int i;
+
+      newpoints = g_alloca (sizeof (graphene_point_t) * (length - 1));
+      for (i = 0; i < length - 1; i++)
+        {
+          if (i == 0)
+            {
+              left[*left_pos] = points[i];
+              (*left_pos)++;
+            }
+          if (i == length - 2)
+            {
+              right[*right_pos] = points[i + 1];
+              (*right_pos)++;
+            }
+          graphene_point_interpolate (&points[i], &points[i+1], t, &newpoints[i]);
+        }
+      split_bezier (newpoints, length - 1, t, left, left_pos, right, right_pos);
+    }
+}
+
+static void
+insert_point (CurveEditor *self,
+              int          point,
+              double       pos)
+{
+  Operation op = self->point_data[point / 3].op;
+  int i;
+  graphene_point_t points[4];
+      int k;
+
+  if (op == MOVE)
+    return;
+
+  for (k = 0; k < 4; k++)
+    points[k] = self->points[(point + k) % self->n_points];
+
+  self->point_data = g_realloc (self->point_data, sizeof (PointData) * (self->n_points / 3 + 1));
+  for (i = self->n_points / 3; i > point / 3; i--)
+    self->point_data[i] = self->point_data[i - 1];
+
+  self->points = g_realloc (self->points, sizeof (graphene_point_t) * (self->n_points + 3));
+  for (i = self->n_points + 2; i > point + 4; i--)
+    self->points[i] = self->points[i - 3];
+
+  self->n_points += 3;
+
+  if (op == LINE)
+    {
+      graphene_point_t p;
+      graphene_point_t q;
+
+      graphene_point_interpolate (&self->points[point], &self->points[(point + 6) % self->n_points], pos, &p);
+      self->points[point + 3] = p;
+
+      graphene_point_interpolate (&p, &self->points[(point + 6) % self->n_points], 0.33, &q);
+
+      self->points[point + 4] = q;
+
+      graphene_point_interpolate (&p, &self->points[(point + 6) % self->n_points], 0.66, &q);
+
+      self->points[point + 5] = q;
+      self->point_data[point / 3 + 1].smooth = TRUE;
+      self->point_data[point / 3 + 1].op = LINE;
+    }
+  else if (op == CURVE)
+    {
+      graphene_point_t left[4];
+      graphene_point_t right[4];
+      int left_pos = 0;
+      int right_pos = 0;
+
+      split_bezier (points, 4, pos, left, &left_pos, right, &right_pos);
+
+      for (k = 0; k < 4; k++)
+        {
+          self->points[(point + k) % self->n_points] = left[k];
+          self->points[(point + 3 + k) % self->n_points] = right[3 - k];
+        }
+
+      self->point_data[point / 3 + 1].smooth = TRUE;
+      self->point_data[point / 3 + 1].op = CURVE;
+    }
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+static void
+maybe_insert_point (CurveEditor *self,
+                    double       x,
+                    double       y)
+{
+  graphene_point_t m = GRAPHENE_POINT_INIT (x, y);
+  int point;
+  double t;
+  double d;
+
+  find_closest_point (self, &m, &point, &t, &d);
+
+  if (d > CLICK_RADIUS)
+    return;
+
+  insert_point (self, point, t);
+}
+
+static void
 pressed (GtkGestureClick *gesture,
          int              n_press,
          double           x,
@@ -514,6 +809,7 @@ released (GtkGestureClick *gesture,
           CurveEditor      *self)
 {
   graphene_point_t m = GRAPHENE_POINT_INIT (x, y);
+  int button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
   int i;
 
   if (!self->edit)
@@ -525,10 +821,10 @@ released (GtkGestureClick *gesture,
         {
           if (i % 3 == 0)
             {
-              int button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
               if (button == GDK_BUTTON_PRIMARY)
                 {
                   self->point_data[i / 3].edit = !self->point_data[i / 3].edit;
+                  return;
                 }
               else if (button == GDK_BUTTON_SECONDARY)
                 {
@@ -546,10 +842,15 @@ released (GtkGestureClick *gesture,
                       d = graphene_point_distance (c, p, NULL, NULL);
                       opposite_point (p, c2, d, c);
                     }
+
+                  return;
                 }
             }
         }
     }
+
+  if (button == GDK_BUTTON_PRIMARY)
+    maybe_insert_point (self, x, y);
 }
 
 static void
@@ -926,23 +1227,19 @@ copy_segments (GskPathOperation        op,
                gpointer                data)
 {
   CopySegmentData *d = data;
-  int i;
 
   switch (op)
     {
     case GSK_PATH_MOVE:
-      if (d->pos == 0)
-        {
-          d->editor->points[d->pos++] = pts[0];
-        }
-      else
+      if (d->pos != 0)
         {
           d->editor->point_data[d->pos / 3].op = MOVE;
           d->editor->point_data[d->pos / 3].smooth = FALSE;
 
           d->editor->points[d->pos++] = pts[0];
           d->editor->points[d->pos++] = pts[0];
-          d->editor->points[d->pos++] = pts[0];
+          if (d->pos < d->editor->n_points)
+            d->editor->points[d->pos++] = pts[0];
         }
       break;
     case GSK_PATH_CLOSE:
@@ -956,7 +1253,8 @@ copy_segments (GskPathOperation        op,
 
       d->editor->points[d->pos++] = pts[1];
       d->editor->points[d->pos++] = pts[1];
-      d->editor->points[d->pos++] = pts[1];
+      if (d->pos < d->editor->n_points)
+        d->editor->points[d->pos++] = pts[1];
       break;
     case GSK_PATH_CURVE:
       d->editor->point_data[d->pos / 3].op = CURVE;
@@ -965,8 +1263,11 @@ copy_segments (GskPathOperation        op,
       if (d->pos == 0)
         d->editor->points[d->pos++] = pts[0];
 
-      for (i = 1; i < n_pts; i++)
-        d->editor->points[d->pos++] = pts[i];
+      d->editor->points[d->pos++] = pts[1];
+      d->editor->points[d->pos++] = pts[2];
+
+      if (d->pos < d->editor->n_points)
+        d->editor->points[d->pos++] = pts[3];
       break;
     default:
       g_assert_not_reached ();
