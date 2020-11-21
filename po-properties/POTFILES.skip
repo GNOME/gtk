@@ -8,6 +8,7 @@ demos/gtk-demo/blendmodes.ui
 demos/gtk-demo/changedisplay.c
 demos/gtk-demo/clipboard.c
 demos/gtk-demo/combobox.c
+demos/gtk-demo/constraints_builder.ui
 demos/gtk-demo/constraints.ui
 demos/gtk-demo/cursors.ui
 demos/gtk-demo/demoimage.c
@@ -25,7 +26,7 @@ demos/gtk-demo/font-features.ui
 demos/gtk-demo/fontrendering.ui
 demos/gtk-demo/iconview.c
 demos/gtk-demo/infobar.c
-demos/gtk-demo/listbox2.ui
+demos/gtk-demo/listbox_controls.ui
 demos/gtk-demo/listbox.ui
 demos/gtk-demo/listview_filebrowser.ui
 demos/gtk-demo/listview_minesweeper.ui
