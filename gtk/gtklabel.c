@@ -5942,7 +5942,7 @@ gtk_label_set_extra_menu (GtkLabel   *self,
  *
  * Gets the menu model set with gtk_label_set_extra_menu().
  *
- * Returns: (transfer none): (nullable): the menu model
+ * Returns: (transfer none) (nullable): the menu model
  */
 GMenuModel *
 gtk_label_get_extra_menu (GtkLabel *self)

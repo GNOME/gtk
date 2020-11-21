@@ -130,7 +130,7 @@ gtk_actionable_set_action_name (GtkActionable *actionable,
  *
  * See gtk_actionable_set_action_target_value() for more information.
  *
- * Returns: (transfer none): the current target value
+ * Returns: (nullable) (transfer none): the current target value
  **/
 GVariant *
 gtk_actionable_get_action_target_value (GtkActionable *actionable)
