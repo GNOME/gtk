@@ -153,7 +153,6 @@ scale_point (const graphene_point_t *p,
   q->x = p->x + t * (a->x - p->x);
   q->y = p->y + t * (a->y - p->y);
 }
-
 /* }}} */
 /* {{{ Misc. Bezier math */
 static void
@@ -331,6 +330,14 @@ find_closest_point (CurveEditor      *self,
   *d = best_d;
 }
 
+/* Given Bezier control points and a t value between 0 and 1,
+ * return new Bezier control points for two segments in left
+ * and right that are obtained by splitting the curve at the
+ * point for t.
+ *
+ * Note that the points in the right array are in returned in
+ * reverse order.
+ */
 static void
 split_bezier (graphene_point_t *points,
               int               length,
@@ -719,24 +726,26 @@ drag_begin (GtkGestureDrag *gesture,
   graphene_point_t p = GRAPHENE_POINT_INIT (start_x, start_y);
 
   if (self->edit)
-    for (i = 0; i < self->n_points; i++)
-      {
-        PointData *pd = &self->points[i];
+    {
+      for (i = 0; i < self->n_points; i++)
+        {
+          PointData *pd = &self->points[i];
 
-        for (j = 0; j < 3; j++)
-          {
-            if (graphene_point_distance (&pd->p[j], &p, NULL, NULL) < CLICK_RADIUS)
-              {
-                if (point_is_visible (self, i, j))
-                  {
-                    self->dragged = i;
-                    pd->dragged = j;
-                    gtk_widget_queue_draw (GTK_WIDGET (self));
-                  }
-                return;
-              }
-          }
-      }
+          for (j = 0; j < 3; j++)
+            {
+              if (graphene_point_distance (&pd->p[j], &p, NULL, NULL) < CLICK_RADIUS)
+                {
+                  if (point_is_visible (self, i, j))
+                    {
+                      self->dragged = i;
+                      pd->dragged = j;
+                      gtk_widget_queue_draw (GTK_WIDGET (self));
+                    }
+                  return;
+                }
+            }
+        }
+    }
 
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
 }
@@ -940,7 +949,7 @@ drag_end (GtkGestureDrag *gesture,
   self->dragged = -1;
 }
 /* }}} */
-/* {{{ A ction callbacks */
+/* {{{ Action callbacks */
 static void
 set_smooth (GSimpleAction *action,
             GVariant      *value,
@@ -1185,6 +1194,9 @@ curve_editor_snapshot (GtkWidget   *widget,
 
   builder = gsk_path_builder_new ();
 
+  /* Add the curve itself */
+  curve_editor_add_path (self, builder);
+
   if (self->edit)
     {
       /* Add the skeleton */
@@ -1207,12 +1219,7 @@ curve_editor_snapshot (GtkWidget   *widget,
         }
     }
 
-  /* Add the curve itself */
-
-  curve_editor_add_path (self, builder);
-
   /* Stroke everything we have so far */
-
   path = gsk_path_builder_free_to_path (builder);
   stroke = gsk_stroke_new (1);
   gtk_snapshot_push_stroke (snapshot, path, stroke);
@@ -1293,15 +1300,18 @@ curve_editor_snapshot (GtkWidget   *widget,
 
           gtk_snapshot_push_fill (snapshot, path, GSK_FILL_RULE_WINDING);
           gdk_rgba_parse (&color, colors[k]);
-          gtk_snapshot_append_color (snapshot, &color, &GRAPHENE_RECT_INIT (0, 0, width, height));
+          gtk_snapshot_append_color (snapshot,
+                                     &color,
+                                     &GRAPHENE_RECT_INIT (0, 0, width, height));
           gtk_snapshot_pop (snapshot);
 
           stroke = gsk_stroke_new (1.0);
           gtk_snapshot_push_stroke (snapshot, path, stroke);
           gsk_stroke_free (stroke);
 
-          gdk_rgba_parse (&color, "black");
-          gtk_snapshot_append_color (snapshot, &color, &GRAPHENE_RECT_INIT (0, 0, width, height));
+          gtk_snapshot_append_color (snapshot,
+                                     &(GdkRGBA){ 0, 0, 0, 1 },
+                                     &GRAPHENE_RECT_INIT (0, 0, width, height));
           gtk_snapshot_pop (snapshot);
 
           gsk_path_unref (path);
