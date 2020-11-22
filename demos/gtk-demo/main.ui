@@ -47,6 +47,9 @@
       <object class="GtkBox">
         <child>
           <object class="GtkScrolledWindow">
+            <style>
+              <class name="sidebar"/>
+            </style>
             <property name="width-request">120</property>
             <property name="hscrollbar-policy">never</property>
             <property name="min-content-width">150</property>
@@ -88,9 +91,6 @@
               </object>
             </child>
           </object>
-        </child>
-        <child>
-          <object class="GtkSeparator"/>
         </child>
         <child>
           <object class="GtkNotebook" id="notebook">
