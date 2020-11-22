@@ -1,5 +1,3 @@
-/* TODO: redo data structure, use gskpath for math */
-
 #include "curve-editor.h"
 
 #include <gtk/gtk.h>
@@ -44,22 +42,32 @@ op_from_string (const char *s)
     g_assert_not_reached ();
 }
 
+/* We don't store Bezier segments, but an array of points on
+ * the line. Each point comes with its two neighboring control
+ * points, so each Bezier segment contains p[1] and p[2] from
+ * one point, and p[0] and p[1] from the next.
+ *
+ * The control points are irrelevant for MOVE and LINE segments.
+ */
 typedef struct
 {
-  Operation op;
+  /* 0 and 2 are control points, 1 is the point on the line */
+  graphene_point_t p[3];
   gboolean edit;
   gboolean smooth;
   gboolean symmetric;
+  int dragged;
+  int hovered;
+  /* refers to the segment following the point */
+  Operation op;
 } PointData;
 
 struct _CurveEditor
 {
   GtkWidget parent_instance;
-  graphene_point_t *points;
+  PointData *points;
   int n_points;
-  PointData *point_data; /* length is n_points / 3 */
   int dragged;
-  int hovered;
   int context;
   gboolean edit;
 
@@ -260,15 +268,15 @@ find_closest_point (CurveEditor      *self,
 
   for (i = 0; i < self->n_points; i++)
     {
-      if (i % 3 != 0)
-        continue;
+      PointData *pd = &self->points[i];
+      PointData *pd1 = &self->points[(i + 1) % self->n_points];
 
-      switch (self->point_data[i / 3].op)
+      switch (pd->op)
         {
         case MOVE:
           continue;
         case LINE:
-          find_line_point (&self->points[i], &self->points[(i + 3) % self->n_points], p, &tt, &pp, &dd);
+          find_line_point (&pd->p[1], &pd1->p[1], p, &tt, &pp, &dd);
           if (dd < best_d)
             {
               best_i = i;
@@ -279,10 +287,11 @@ find_closest_point (CurveEditor      *self,
         case CURVE:
           {
             graphene_point_t points[4];
-            int k;
 
-            for (k = 0; k < 4; k++)
-              points[k] = self->points[(i + k) % self->n_points];
+            points[0] = pd->p[1];
+            points[1] = pd->p[2];
+            points[2] = pd1->p[0];
+            points[3] = pd1->p[1];
 
             find_curve_point (points, p, &tt, &pp, &dd);
             if (dd < best_d)
@@ -346,27 +355,28 @@ split_bezier (graphene_point_t *points,
 /* {{{ Utilities */
 static gboolean
 point_is_visible (CurveEditor *self,
-                  int          point)
+                  int          point,
+                  int          point1)
 {
   g_assert (0 <= point && point < self->n_points);
 
   if (!self->edit)
     return FALSE;
 
-  switch (point % 3)
+  switch (point1)
     {
-    case 0: /* point on curve */
+    case 0:
+      if (!self->points[point].edit)
+        return FALSE;
+      else
+        return self->points[(point - 1 + self->n_points) % self->n_points].op == CURVE;
+    case 1: /* point on curve */
       return TRUE;
-    case 1:
-      if (!self->point_data[point / 3].edit)
-        return FALSE;
-      else
-        return self->point_data[point / 3].op == CURVE;
     case 2:
-      if (!self->point_data[((point + 1) % self->n_points) / 3].edit)
+      if (!self->points[point].edit)
         return FALSE;
       else
-        return self->point_data[point / 3].op == CURVE;
+        return self->points[point].op == CURVE;
     default:
       g_assert_not_reached ();
     }
@@ -374,55 +384,54 @@ point_is_visible (CurveEditor *self,
 
 static void
 maintain_smoothness (CurveEditor *self,
-                     int         point)
+                     int          point)
 {
-  gboolean smooth;
+  PointData *pd;
   Operation op, op1;
+  graphene_point_t *p;
 
-  smooth = self->point_data[point / 3].smooth;
+  pd = &self->points[point];
 
-  op = self->point_data[point / 3].op;
-  op1 = self->point_data[((point - 1 + self->n_points) % self->n_points) / 3].op;
+  if (!pd->smooth)
+    return;
 
-  if (smooth)
+  op = pd->op;
+  op1 = self->points[(point - 1 + self->n_points) % self->n_points].op;
+
+  p = &pd->p[1];
+
+  if (op == CURVE && op1 == CURVE)
     {
-      graphene_point_t *p;
+      graphene_point_t *c, *c2;
+      float d;
 
-      p = &self->points[point];
+      c = &pd->p[0];
+      c2 = &pd->p[2];
 
-      if (op == CURVE && op1 == CURVE)
-        {
-          graphene_point_t *c, *c2;
-          float d;
+      d = graphene_point_distance (c, p, NULL, NULL);
+      opposite_point (p, c2, d, c);
+    }
+  else if (op == CURVE && op1 == LINE)
+    {
+      graphene_point_t *c, *p2;
+      float d;
 
-          c = &self->points[(point - 1 + self->n_points) % self->n_points];
-          c2 = &self->points[(point + 1) % self->n_points];
+      c = &pd->p[2];
+      p2 = &self->points[(point - 1 + self->n_points) % self->n_points].p[1];
 
-          d = graphene_point_distance (c, p, NULL, NULL);
-          opposite_point (p, c2, d, c);
-        }
-      else if (op == CURVE && op1 == LINE)
-        {
-          graphene_point_t *c, *p2;
-          float d;
+      d = graphene_point_distance (c, p, NULL, NULL);
+      opposite_point (p, p2, d, c);
+    }
+  else if (op == LINE && op1 == CURVE)
+    {
+      graphene_point_t *c, *p2;
+      float d;
 
-          c = &self->points[(point + 1) % self->n_points];
-          p2 = &self->points[(point - 3 + self->n_points) % self->n_points];
+      c = &pd->p[0];
+      p2 = &self->points[(point + 1) % self->n_points].p[1];
 
-          d = graphene_point_distance (c, p, NULL, NULL);
-          opposite_point (p, p2, d, c);
-        }
-      else if (op == LINE && op1 == CURVE)
-        {
-          graphene_point_t *c, *p2;
-          float d;
-
-          c = &self->points[(point - 1 + self->n_points) % self->n_points];
-          p2 = &self->points[(point + 3) % self->n_points];
-
-          d = graphene_point_distance (c, p, NULL, NULL);
-          opposite_point (p, p2, d, c);
-        }
+      d = graphene_point_distance (c, p, NULL, NULL);
+      opposite_point (p, p2, d, c);
     }
 }
 
@@ -430,34 +439,35 @@ maintain_smoothness (CurveEditor *self,
  * smoothness conditions. Set PointData.smooth accordingly.
  */
 static void
-update_smoothness (CurveEditor *self,
-                   int          point)
+check_smoothness (CurveEditor *self,
+                  int          point)
 {
   Operation op, op1;
-  graphene_point_t *p, *p2, *p1;
+  graphene_point_t *p1, *p2;
+  PointData *pd;
 
-  p = &self->points[point];
-  op = self->point_data[point / 3].op;
-  op1 = self->point_data[((point - 1 + self->n_points) % self->n_points) / 3].op;
+  pd = &self->points[point];
+  op = pd->op;
+  op1 = self->points[(point - 1 + self->n_points) % self->n_points].op;
 
   if (op == CURVE)
-    p2 = &self->points[(point + 1) % self->n_points];
+    p2 = &pd->p[2];
   else if (op == LINE)
-    p2 = &self->points[(point + 3) % self->n_points];
+    p2 = &self->points[(point + 1) % self->n_points].p[1];
   else
     p2 = NULL;
 
   if (op1 == CURVE)
-    p1 = &self->points[(point - 1 + self->n_points) % self->n_points];
+    p1 = &pd->p[0];
   else if (op1 == LINE)
-    p1 = &self->points[(point - 3 + self->n_points) % self->n_points];
+    p1 = &self->points[(point - 1 + self->n_points) % self->n_points].p[1];
   else
     p1 = NULL;
 
   if (p1 && p2)
-    self->point_data[point / 3].smooth = collinear (p, p1, p2);
+    pd->smooth = collinear (&pd->p[1], p1, p2);
   else
-    self->point_data[point / 3].smooth = TRUE;
+    pd->smooth = TRUE;
 }
 
 static void
@@ -465,44 +475,37 @@ insert_point (CurveEditor *self,
               int          point,
               double       pos)
 {
-  Operation op = self->point_data[point / 3].op;
+  Operation op = self->points[point].op;
   int i;
   graphene_point_t points[4];
-      int k;
+  int point1, point2;
 
   if (op == MOVE)
     return;
 
-  for (k = 0; k < 4; k++)
-    points[k] = self->points[(point + k) % self->n_points];
+  point1 = (point + 1) % self->n_points;
+  points[0] = self->points[point].p[1];
+  points[1] = self->points[point].p[2];
+  points[2] = self->points[point1].p[0];
+  points[3] = self->points[point1].p[1];
 
-  self->point_data = g_realloc (self->point_data, sizeof (PointData) * (self->n_points / 3 + 1));
-  for (i = self->n_points / 3; i > point / 3; i--)
-    self->point_data[i] = self->point_data[i - 1];
+  self->points = g_realloc (self->points, sizeof (PointData) * (self->n_points + 1));
+  for (i = self->n_points; i > point; i--)
+    self->points[i] = self->points[i - 1];
 
-  self->points = g_realloc (self->points, sizeof (graphene_point_t) * (self->n_points + 3));
-  for (i = self->n_points + 2; i > point + 4; i--)
-    self->points[i] = self->points[i - 3];
+  self->n_points += 1;
 
-  self->n_points += 3;
+  point1 = (point + 1) % self->n_points;
+  point2 = (point + 2) % self->n_points;
 
   if (op == LINE)
     {
       graphene_point_t p;
-      graphene_point_t q;
 
-      graphene_point_interpolate (&self->points[point], &self->points[(point + 6) % self->n_points], pos, &p);
-      self->points[point + 3] = p;
-
-      graphene_point_interpolate (&p, &self->points[(point + 6) % self->n_points], 0.33, &q);
-
-      self->points[point + 4] = q;
-
-      graphene_point_interpolate (&p, &self->points[(point + 6) % self->n_points], 0.66, &q);
-
-      self->points[point + 5] = q;
-      self->point_data[point / 3 + 1].smooth = TRUE;
-      self->point_data[point / 3 + 1].op = LINE;
+      graphene_point_interpolate (&points[0], &points[3], pos, &p);
+      self->points[point1].p[1] = p;
+      self->points[point1].smooth = TRUE;
+      self->points[point1].op = LINE;
     }
   else if (op == CURVE)
     {
@@ -513,14 +516,16 @@ insert_point (CurveEditor *self,
 
       split_bezier (points, 4, pos, left, &left_pos, right, &right_pos);
 
-      for (k = 0; k < 4; k++)
-        {
-          self->points[(point + k) % self->n_points] = left[k];
-          self->points[(point + 3 + k) % self->n_points] = right[3 - k];
-        }
+      self->points[point].p[1] = left[0];
+      self->points[point].p[2] = left[1];
+      self->points[point1].p[0] = left[2];
+      self->points[point1].p[1] = left[3];
+      self->points[point1].p[2] = right[2];
+      self->points[point2].p[0] = right[1];
+      self->points[point2].p[1] = right[0];
 
-      self->point_data[point / 3 + 1].smooth = TRUE;
-      self->point_data[point / 3 + 1].op = CURVE;
+      self->points[point1].smooth = TRUE;
+      self->points[point1].op = CURVE;
     }
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
@@ -533,26 +538,31 @@ curve_editor_add_path (CurveEditor    *self,
 {
   int i;
 
-  gsk_path_builder_move_to (builder, self->points[0].x, self->points[0].y);
-  for (i = 1; i < self->n_points; i += 3)
+  if (self->n_points > 0)
+    gsk_path_builder_move_to (builder, self->points[0].p[1].x, self->points[0].p[1].y);
+
+  for (i = 0; i < self->n_points; i++)
     {
-      switch (self->point_data[i / 3].op)
+      PointData *pd1, *pd;
+
+      pd1 = &self->points[i];
+      pd = &self->points[(i + 1) % self->n_points];
+
+      switch (pd1->op)
         {
         case MOVE:
-          gsk_path_builder_move_to (builder,
-                                    self->points[(i + 2) % self->n_points].x, self->points[(i + 2) % self->n_points].y);
+          gsk_path_builder_move_to (builder, pd->p[1].x, pd->p[1].y);
           break;
 
         case LINE:
-          gsk_path_builder_line_to (builder,
-                                    self->points[(i + 2) % self->n_points].x, self->points[(i + 2) % self->n_points].y);
+          gsk_path_builder_line_to (builder, pd->p[1].x, pd->p[1].y);
           break;
 
         case CURVE:
           gsk_path_builder_curve_to (builder,
-                                     self->points[i].x, self->points[i].y,
-                                     self->points[(i + 1) % self->n_points].x, self->points[(i + 1) % self->n_points].y,
-                                     self->points[(i + 2) % self->n_points].x, self->points[(i + 2) % self->n_points].y);
+                                     pd1->p[2].x, pd1->p[2].y,
+                                     pd->p[0].x, pd->p[0].y,
+                                     pd->p[1].x, pd->p[1].y);
           break;
         default:
           g_assert_not_reached ();
@@ -606,47 +616,37 @@ copy_segments (GskPathOperation        op,
                gpointer                data)
 {
   CopySegmentData *d = data;
+  CurveEditor *self = d->editor;
 
   switch (op)
     {
     case GSK_PATH_MOVE:
       if (d->pos != 0)
         {
-          d->editor->point_data[d->pos / 3].op = MOVE;
-          d->editor->point_data[d->pos / 3].smooth = FALSE;
-
-          d->editor->points[d->pos++] = pts[0];
-          d->editor->points[d->pos++] = pts[0];
-          if (d->pos < d->editor->n_points)
-            d->editor->points[d->pos++] = pts[0];
+          d->editor->points[d->pos - 1].op = MOVE;
+          d->editor->points[d->pos % self->n_points].p[1] = pts[0];
+          d->pos++;
         }
       break;
     case GSK_PATH_CLOSE:
       break;
     case GSK_PATH_LINE:
-      d->editor->point_data[d->pos / 3].op = LINE;
-      d->editor->point_data[d->pos / 3].smooth = FALSE;
-
-      if (d->pos == 0)
-        d->editor->points[d->pos++] = pts[0];
-
-      d->editor->points[d->pos++] = pts[1];
-      d->editor->points[d->pos++] = pts[1];
-      if (d->pos < d->editor->n_points)
-        d->editor->points[d->pos++] = pts[1];
+      d->editor->points[d->pos - 1].op = LINE;
+      d->editor->points[d->pos % self->n_points].p[1] = pts[1];
       break;
     case GSK_PATH_CURVE:
-      d->editor->point_data[d->pos / 3].op = CURVE;
-      d->editor->point_data[d->pos / 3].smooth = FALSE;
-
       if (d->pos == 0)
-        d->editor->points[d->pos++] = pts[0];
+        {
+          d->editor->points[d->pos].p[1] = pts[0];
+          d->pos++;
+        }
 
-      d->editor->points[d->pos++] = pts[1];
-      d->editor->points[d->pos++] = pts[2];
+      d->editor->points[d->pos - 1].op = CURVE;
 
-      if (d->pos < d->editor->n_points)
-        d->editor->points[d->pos++] = pts[3];
+      d->editor->points[d->pos - 1].p[2] = pts[1];
+      d->editor->points[d->pos % self->n_points].p[0] = pts[2];
+      d->editor->points[d->pos % self->n_points].p[1] = pts[3];
+      d->pos++;
       break;
     default:
       g_assert_not_reached ();
@@ -662,20 +662,24 @@ drag_begin (GtkGestureDrag *gesture,
             double          start_y,
             CurveEditor     *self)
 {
-  int i;
+  int i, j;
   graphene_point_t p = GRAPHENE_POINT_INIT (start_x, start_y);
 
   if (self->edit)
     for (i = 0; i < self->n_points; i++)
       {
-        if (graphene_point_distance (&self->points[i], &p, NULL, NULL) < CLICK_RADIUS)
+        for (j = 0; j < 3; j++)
           {
-            if (point_is_visible (self, i))
+            if (graphene_point_distance (&self->points[i].p[j], &p, NULL, NULL) < CLICK_RADIUS)
               {
-                self->dragged = i;
-                gtk_widget_queue_draw (GTK_WIDGET (self));
+                if (point_is_visible (self, i, j))
+                  {
+                    self->dragged = i;
+                    self->points[i].dragged = j;
+                    gtk_widget_queue_draw (GTK_WIDGET (self));
+                  }
+                return;
               }
-            return;
           }
       }
 
@@ -692,6 +696,7 @@ drag_update (GtkGestureDrag *gesture,
   double dx, dy;
   graphene_point_t *c, *p, *d;
   double l1, l2;
+  PointData *pd;
 
   if (self->dragged == -1)
     return;
@@ -703,142 +708,134 @@ drag_update (GtkGestureDrag *gesture,
   x += offset_x;
   y += offset_y;
 
-  d = &self->points[self->dragged];
+  pd = &self->points[self->dragged];
+  d = &pd->p[pd->dragged];
 
   /* before moving the point, record the distances to its neighbors, since
    * we may want to preserve those
    */
-  c = &self->points[(self->dragged - 1 + self->n_points) % self->n_points];
-  l1 = graphene_point_distance (d, c, NULL, NULL);
-  c = &self->points[(self->dragged + 1) % self->n_points];
-  l2 = graphene_point_distance (d, c, NULL, NULL);
+  l1 = graphene_point_distance (&pd->p[1], &pd->p[0], NULL, NULL);
+  l2 = graphene_point_distance (&pd->p[1], &pd->p[2], NULL, NULL);
 
   dx = x - d->x;
   dy = y - d->y;
 
-  if (self->dragged % 3 == 0)
+  if (pd->dragged == 1)
     {
       /* dragged point is on curve */
 
-      Operation op, op1, op2;
+      Operation op, op1, op11, op2;
+      PointData *pd1, *pd2;
 
       /* first move the point itself */
       d->x = x;
       d->y = y;
 
       /* adjust control points as needed */
-      op = self->point_data[self->dragged / 3].op;
-      op1 = self->point_data[((self->dragged - 1 + self->n_points) % self->n_points) / 3].op;
+      pd1 = &self->points[((self->dragged - 1 + self->n_points) % self->n_points)];
+      pd2 = &self->points[((self->dragged + 1) % self->n_points)];
+
+      op = pd->op;
+      op1 = pd1->op;
+      op2 = pd2->op;
 
       if (op1 == LINE)
         {
           /* the other endpoint of the line */
-          p = &self->points[(self->dragged - 3 + self->n_points) % self->n_points];
+          p = &pd1->p[1];
 
-          if (op == CURVE && self->point_data[self->dragged / 3].smooth)
+          if (op == CURVE && pd->smooth)
             {
               /* adjust the control point after the line segment */
-              c = &self->points[(self->dragged + 1) % self->n_points];
-              opposite_point (d, p, l2, c);
+              opposite_point (d, p, l2, &pd->p[2]);
             }
           else
             {
-              c = &self->points[(self->dragged + 1) % self->n_points];
-              c->x += dx;
-              c->y += dy;
+              pd->p[2].x += dx;
+              pd->p[2].y += dy;
             }
 
-          c = &self->points[(self->dragged - 1 + self->n_points) % self->n_points];
-          c->x += dx;
-          c->y += dy;
+          pd->p[0].x += dx;
+          pd->p[0].y += dy;
 
-          op2 = self->point_data[((self->dragged - 4 + self->n_points) % self->n_points) / 3].op;
-          if (op2 == CURVE && self->point_data[((self->dragged - 3 + self->n_points) % self->n_points) / 3].smooth)
+          op11 = self->points[((self->dragged - 2 + self->n_points) % self->n_points)].op;
+
+          if (op11 == CURVE && pd1->smooth)
             {
               double l;
 
               /* adjust the control point before the line segment */
-              c = &self->points[((self->dragged - 4 + self->n_points) % self->n_points)];
-
-              l = graphene_point_distance (c, p, NULL, NULL);
-              opposite_point (p, d, l, c);
+              l = graphene_point_distance (&pd1->p[0], p, NULL, NULL);
+              opposite_point (p, d, l, &pd1->p[0]);
             }
         }
+
       if (op == LINE)
         {
           /* the other endpoint of the line */
-          p = &self->points[(self->dragged + 3) % self->n_points];
+          p = &pd2->p[1];
 
-          if (op1 == CURVE && self->point_data[self->dragged / 3].smooth)
+          if (op1 == CURVE && pd->smooth)
             {
               /* adjust the control point before the line segment */
-              c = &self->points[(self->dragged - 1 + self->n_points) % self->n_points];
-              opposite_point (d, p, l1, c);
+              opposite_point (d, p, l1, &pd->p[0]);
             }
           else
             {
-              c = &self->points[(self->dragged -1 + self->n_points) % self->n_points];
-              c->x += dx;
-              c->y += dy;
+              pd->p[0].x += dx;
+              pd->p[0].y += dy;
             }
 
-          c = &self->points[(self->dragged + 1) % self->n_points];
-          c->x += dx;
-          c->y += dy;
+          pd->p[2].x += dx;
+          pd->p[2].y += dy;
 
-          op2 = self->point_data[((self->dragged + 3) % self->n_points) / 3].op;
-          if (op2 == CURVE && self->point_data[((self->dragged + 3) % self->n_points) / 3].smooth)
+          if (op2 == CURVE && pd2->smooth)
             {
               double l;
 
               /* adjust the control point after the line segment */
-              c = &self->points[((self->dragged + 4) % self->n_points)];
-
-              l = graphene_point_distance (c, p, NULL, NULL);
-              opposite_point (p, d, l, c);
+              l = graphene_point_distance (&pd2->p[2], p, NULL, NULL);
+              opposite_point (p, d, l, &pd2->p[2]);
             }
         }
       if (op1 != LINE && op != LINE)
         {
-          self->points[(self->dragged - 1 + self->n_points) % self->n_points].x += dx;
-          self->points[(self->dragged - 1 + self->n_points) % self->n_points].y += dy;
-
-          self->points[(self->dragged + 1) % self->n_points].x += dx;
-          self->points[(self->dragged + 1) % self->n_points].y += dy;
+          pd->p[0].x += dx;
+          pd->p[0].y += dy;
+          pd->p[2].x += dx;
+          pd->p[2].y += dy;
         }
     }
   else
     {
       /* dragged point is a control point */
 
-      int point;
       graphene_point_t *p1;
       Operation op, op1;
 
-      if (self->dragged % 3 == 1)
+      if (pd->dragged == 0)
         {
-          point = (self->dragged - 1 + self->n_points) % self->n_points;
-          c = &self->points[(self->dragged - 2 + self->n_points) % self->n_points];
-          p = &self->points[point];
+          c = &pd->p[2];
+          p = &pd->p[1];
 
-          op = self->point_data[point / 3].op;
-          op1 = self->point_data[((self->dragged - 4 + self->n_points) % self->n_points) / 3].op;
-          p1 = &self->points[(self->dragged - 4 + self->n_points) % self->n_points];
+          op = self->points[(self->dragged - 1 + self->n_points) % self->n_points].op;
+          op1 = self->points[self->dragged].op;
+
+          p1 = &self->points[(self->dragged + 1) % self->n_points].p[1];
         }
-      else if (self->dragged % 3 == 2)
+      else if (pd->dragged == 2)
         {
-          point = (self->dragged + 1) % self->n_points;
-          c = &self->points[(self->dragged + 2) % self->n_points];
-          p = &self->points[point];
+          c = &pd->p[0];
+          p = &pd->p[1];
 
-          op = self->point_data[self->dragged / 3].op;
-          op1 = self->point_data[point / 3].op;
-          p1 = &self->points[(self->dragged + 4) % self->n_points];
+          op = self->points[self->dragged].op;
+          op1 = self->points[(self->dragged - 1 + self->n_points) % self->n_points].op;
+          p1 = &self->points[(self->dragged - 1 + self->n_points) % self->n_points].p[1];
         }
       else
         g_assert_not_reached ();
 
-      if (op == CURVE && self->point_data[point / 3].smooth)
+      if (op == CURVE && pd->smooth)
         {
           if (op1 == CURVE)
             {
@@ -849,7 +846,7 @@ drag_update (GtkGestureDrag *gesture,
               d->y = y;
 
               /* then adjust the other control point */
-              if (self->point_data[point / 3].symmetric)
+              if (pd->symmetric)
                 l = graphene_point_distance (d, p, NULL, NULL);
               else
                 l = graphene_point_distance (c, p, NULL, NULL);
@@ -895,7 +892,7 @@ set_smooth (GSimpleAction *action,
 {
   CurveEditor *self = CURVE_EDITOR (data);
 
-  self->point_data[self->context / 3].smooth = g_variant_get_boolean (value);
+  self->points[self->context].smooth = g_variant_get_boolean (value);
 
   maintain_smoothness (self, self->context);
 
@@ -909,7 +906,7 @@ set_symmetric (GSimpleAction *action,
 {
   CurveEditor *self = CURVE_EDITOR (data);
 
-  self->point_data[self->context / 3].symmetric = g_variant_get_boolean (value);
+  self->points[self->context].symmetric = g_variant_get_boolean (value);
 
   maintain_smoothness (self, self->context);
 
@@ -923,10 +920,10 @@ set_operation (GSimpleAction *action,
 {
   CurveEditor *self = CURVE_EDITOR (data);
 
-  self->point_data[self->context / 3].op = op_from_string (g_variant_get_string (value, NULL));
+  self->points[self->context].op = op_from_string (g_variant_get_string (value, NULL));
 
   maintain_smoothness (self, self->context);
-  maintain_smoothness (self, (self->context + 3) % self->n_points);
+  maintain_smoothness (self, (self->context + 1) % self->n_points);
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
 }
@@ -939,19 +936,12 @@ remove_point (GSimpleAction *action,
   CurveEditor *self = CURVE_EDITOR (data);
   int i;
 
-  for (i = self->context / 3; i + 1 < self->n_points / 3; i++)
-    self->point_data[i] = self->point_data[i + 1];
+  for (i = self->context; i + 1 < self->n_points; i++)
+    self->points[i] = self->points[i + 1];
 
-  self->point_data = g_realloc (self->point_data, sizeof (PointData) * (self->n_points / 3 - 1));
+  self->points = g_realloc (self->points, sizeof (PointData) * (self->n_points - 1));
 
-  self->points[(self->context - 1 + self->n_points) % self->n_points] = self->points[self->context + 2];
-
-  for (i = self->context; i + 3 < self->n_points; i++)
-    self->points[i] = self->points[i + 3];
-
-  self->points = g_realloc (self->points, sizeof (graphene_point_t) * (self->n_points - 3));
-
-  self->n_points -= 3;
+  self->n_points -= 1;
 }
 /* }}} */
 /* {{{ Event handlers */
@@ -970,42 +960,43 @@ pressed (GtkGestureClick *gesture,
     return;
 
   if (button == GDK_BUTTON_SECONDARY)
-    for (i = 0; i < self->n_points; i++)
-      {
-        if (i % 3 != 0 || !point_is_visible (self, i))
-          continue;
+    {
+      for (i = 0; i < self->n_points; i++)
+        {
+          PointData *pd = &self->points[i];
 
-        if (graphene_point_distance (&self->points[i], &m, NULL, NULL) < CLICK_RADIUS)
-          {
-            GAction *action;
+          if (graphene_point_distance (&pd->p[1], &m, NULL, NULL) < CLICK_RADIUS)
+            {
+              GAction *action;
 
-            self->context = i;
+              self->context = i;
 
-            action = g_action_map_lookup_action (self->actions, "smooth");
-            g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (self->point_data[i / 3].smooth));
+              action = g_action_map_lookup_action (self->actions, "smooth");
+              g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (pd->smooth));
 
-            action = g_action_map_lookup_action (self->actions, "symmetric");
-            if (self->point_data[i / 3].smooth)
-              {
-                g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
-                g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (self->point_data[i / 3].symmetric));
-              }
-            else
-              {
-                g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
-                g_simple_action_set_state (G_SIMPLE_ACTION (action), FALSE);
-              }
+              action = g_action_map_lookup_action (self->actions, "symmetric");
+              if (pd->smooth)
+                {
+                  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
+                  g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (pd->symmetric));
+                }
+              else
+                {
+                  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+                  g_simple_action_set_state (G_SIMPLE_ACTION (action), FALSE);
+                }
 
-            action = g_action_map_lookup_action (self->actions, "operation");
+              action = g_action_map_lookup_action (self->actions, "operation");
 
-            g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_string (op_to_string (self->point_data[i / 3].op)));
+              g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_string (op_to_string (pd->op)));
 
-            gtk_popover_set_pointing_to (GTK_POPOVER (self->menu),
-                                         &(const GdkRectangle){ x, y, 1, 1 });
-            gtk_popover_popup (GTK_POPOVER (self->menu));
-            return;
-          }
-      }
+              gtk_popover_set_pointing_to (GTK_POPOVER (self->menu),
+                                           &(const GdkRectangle){ x, y, 1, 1 });
+              gtk_popover_popup (GTK_POPOVER (self->menu));
+              return;
+            }
+        }
+    }
 }
 
 static void
@@ -1024,18 +1015,15 @@ released (GtkGestureClick *gesture,
 
   for (i = 0; i < self->n_points; i++)
     {
-      if (!point_is_visible (self, i))
-        continue;
+      PointData *pd = &self->points[i];
 
-      if (graphene_point_distance (&self->points[i], &m, NULL, NULL) < CLICK_RADIUS)
+      if (graphene_point_distance (&pd->p[1], &m, NULL, NULL) < CLICK_RADIUS)
         {
-          if (i % 3 == 0)
+          if (button == GDK_BUTTON_PRIMARY)
             {
-              if (button == GDK_BUTTON_PRIMARY)
-                {
-                  self->point_data[i / 3].edit = !self->point_data[i / 3].edit;
-                  return;
-                }
+              pd->edit = !pd->edit;
+              gtk_widget_queue_draw (GTK_WIDGET (self));
+              return;
             }
         }
     }
@@ -1060,26 +1048,36 @@ motion (GtkEventControllerMotion *controller,
         CurveEditor              *self)
 {
   graphene_point_t m = GRAPHENE_POINT_INIT (x, y);
-  int i;
-  int was_hovered = self->hovered;
-
-  self->hovered = -1;
+  int i, j;
+  gboolean changed = FALSE;
 
   if (self->edit)
-    for (i = 0; i < self->n_points; i++)
-      {
-        if (!point_is_visible (self, i))
-          continue;
+    {
+      for (i = 0; i < self->n_points; i++)
+        {
+          PointData *pd = &self->points[i];
+          int hovered = -1;
 
-        if (graphene_point_distance (&self->points[i], &m, NULL, NULL) < CLICK_RADIUS)
-          {
-            if (self->hovered != i)
-              self->hovered = i;
-            break;
-          }
+          for (j = 0; j < 3; j++)
+            {
+              if (!point_is_visible (self, i, j))
+                continue;
+
+              if (graphene_point_distance (&pd->p[j], &m, NULL, NULL) < CLICK_RADIUS)
+                {
+                  hovered = j;
+                  break;
+                }
+            }
+          if (pd->hovered != hovered)
+            {
+              pd->hovered = hovered;
+              changed = TRUE;
+            }
+        }
     }
 
-  if (self->hovered != was_hovered)
+  if (changed)
     gtk_widget_queue_draw (GTK_WIDGET (self));
 }
 
@@ -1087,11 +1085,21 @@ static void
 leave (GtkEventController *controller,
        CurveEditor        *self)
 {
-  if (self->hovered != -1)
+  int i;
+  gboolean changed = FALSE;
+
+  for (i = 0; i < self->n_points; i++)
     {
-      self->hovered = -1;
-      gtk_widget_queue_draw (GTK_WIDGET (self));
+      PointData *pd = &self->points[i];
+      if (pd->hovered != -1)
+        {
+          pd->hovered = -1;
+          changed = TRUE;
+        }
     }
+
+  if (changed)
+    gtk_widget_queue_draw (GTK_WIDGET (self));
 }
 /* }}} */
 /* {{{ Snapshot */
@@ -1103,7 +1111,7 @@ curve_editor_snapshot (GtkWidget   *widget,
   GskPathBuilder *builder;
   GskPath *path;
   GskStroke *stroke;
-  int i, j;
+  int i, j, k;
   float width;
   float height;
 
@@ -1118,19 +1126,23 @@ curve_editor_snapshot (GtkWidget   *widget,
   if (self->edit)
     {
       /* Add the skeleton */
-      gsk_path_builder_move_to (builder, self->points[0].x, self->points[0].y);
-      for (i = 1; i < self->n_points; i++)
+      for (i = 0; i < self->n_points; i++)
         {
-          if (i % 3 != 2 &&
-              point_is_visible (self, i) &&
-              point_is_visible (self, (i - 1 + self->n_points) % self->n_points))
-            gsk_path_builder_line_to (builder, self->points[i].x, self->points[i].y);
-          else
-            gsk_path_builder_move_to (builder, self->points[i].x, self->points[i].y);
+          PointData *pd = &self->points[i];
+          gboolean need_move = TRUE;
+          if (point_is_visible (self, i, 0))
+            {
+              gsk_path_builder_move_to (builder, pd->p[0].x, pd->p[0].y);
+              gsk_path_builder_line_to (builder, pd->p[1].x, pd->p[1].y);
+              need_move = FALSE;
+            }
+          if (point_is_visible (self, i, 2))
+            {
+              if (need_move)
+                gsk_path_builder_move_to (builder, pd->p[1].x, pd->p[1].y);
+              gsk_path_builder_line_to (builder, pd->p[2].x, pd->p[2].y);
+            }
         }
-      if (point_is_visible (self, 0) &&
-          point_is_visible (self, self->n_points - 1))
-        gsk_path_builder_line_to (builder, self->points[0].x, self->points[0].y);
     }
 
   /* Add the curve itself */
@@ -1163,68 +1175,62 @@ curve_editor_snapshot (GtkWidget   *widget,
       };
       GdkRGBA color;
 
-       for (j = 0; j < 4; j++)
+       for (k = 0; k < 4; k++)
         {
           builder = gsk_path_builder_new ();
 
           for (i = 0; i < self->n_points; i++)
             {
-              switch (j)
+              PointData *pd = &self->points[i];
+
+              for (j = 0; j < 3; j++)
                 {
-                case 0:
-                  if (i != self->hovered)
-                    continue;
-                  break;
-
-                case 1:
-                  if (i == self->hovered)
-                    continue;
-
-                  if (!(i % 3 == 0 &&
-                        self->point_data[i / 3].smooth))
-                    continue;
-                  break;
-
-                case 2:
-                  if (i == self->hovered)
-                    continue;
-
-                  if (!(i % 3 == 0 &&
-                        !self->point_data[i / 3].smooth))
-                    continue;
-                  break;
-
-                case 3:
-                  if (i == self->hovered)
-                    continue;
-
-                  if (i % 3 == 1)
+                  switch (k)
                     {
-                      if (!(self->point_data[i / 3].edit &&
-                            self->point_data[i / 3].op == CURVE))
+                    case 0:
+                      if (j != pd->hovered)
                         continue;
-                    }
-                  else if (i % 3 == 2)
-                    {
-                      if (!(self->point_data[((i + 3) % self->n_points) / 3].edit &&
-                            self->point_data[i / 3].op == CURVE))
-                        continue;
-                    }
-                  else
-                    continue;
-                  break;
+                      break;
 
-                default:
-                  g_assert_not_reached ();
+                    case 1:
+                      if (j == pd->hovered)
+                        continue;
+
+                      if (!(j == 1 && pd->smooth))
+                        continue;
+                      break;
+
+                    case 2:
+                      if (j == pd->hovered)
+                        continue;
+
+                      if (!(j == 1 && !pd->smooth))
+                        continue;
+                      break;
+
+                    case 3:
+                      if (j == pd->hovered)
+                        continue;
+
+                      if (j == 1)
+                        continue;
+
+                      if (!point_is_visible (self, i, j))
+                        continue;
+                      break;
+
+                    default:
+                      g_assert_not_reached ();
+                    }
+
+                  gsk_path_builder_add_circle (builder, &pd->p[j], DRAW_RADIUS);
                 }
-
-              gsk_path_builder_add_circle (builder, &self->points[i], DRAW_RADIUS);
             }
 
           path = gsk_path_builder_free_to_path (builder);
 
           gtk_snapshot_push_fill (snapshot, path, GSK_FILL_RULE_WINDING);
-          gdk_rgba_parse (&color, colors[j]);
+          gdk_rgba_parse (&color, colors[k]);
           gtk_snapshot_append_color (snapshot, &color, &GRAPHENE_RECT_INIT (0, 0, width, height));
           gtk_snapshot_pop (snapshot);
 
@@ -1273,7 +1279,6 @@ curve_editor_dispose (GObject *object)
   CurveEditor *self = CURVE_EDITOR (object);
 
   g_clear_pointer (&self->points, g_free);
-  g_clear_pointer (&self->point_data, g_free);
   g_clear_pointer (&self->menu, gtk_widget_unparent);
 
   G_OBJECT_CLASS (curve_editor_parent_class)->dispose (object);
@@ -1324,7 +1329,6 @@ curve_editor_init (CurveEditor *self)
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   self->points = NULL;
-  self->point_data = NULL;
   self->n_points = 0;
 
   self->actions = G_ACTION_MAP (g_simple_action_group_new ());
@@ -1403,9 +1407,11 @@ curve_editor_set_edit (CurveEditor *self,
   self->edit = edit;
   if (!self->edit)
     {
-      self->hovered = -1;
-      for (i = 0; i < self->n_points / 3; i++)
-        self->point_data[i].edit = FALSE;
+      for (i = 0; i < self->n_points; i++)
+        {
+          self->points[i].edit = FALSE;
+          self->points[i].hovered = -1;
+        }
     }
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
@@ -1420,7 +1426,6 @@ curve_editor_set_path (CurveEditor *self,
   int i;
 
   g_clear_pointer (&self->points, g_free);
-  g_clear_pointer (&self->point_data, g_free);
   self->n_points = 0;
 
   data.count = 0;
@@ -1433,16 +1438,20 @@ curve_editor_set_path (CurveEditor *self,
   if (!graphene_point_near (&data.first, &data.last, 0.0001) && !data.has_close)
     data.count++;
 
-  self->n_points = data.count * 3;
-  self->points = g_new0 (graphene_point_t, self->n_points);
-  self->point_data = g_new0 (PointData, data.count);
+  self->n_points = data.count;
+  self->points = g_new0 (PointData, self->n_points);
+  for (i = 0; i < self->n_points; i++)
+    {
+      self->points[i].smooth = FALSE;
+      self->points[i].hovered = -1;
+    }
 
   data2.editor = self;
   data2.pos = 0;
   gsk_path_foreach (path, copy_segments, &data2);
 
-  for (i = 0; i < self->n_points; i += 3)
-    update_smoothness (self, i);
+  for (i = 0; i < self->n_points; i++)
+    check_smoothness (self, i);
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
 }
