@@ -129,12 +129,31 @@ opposite_point (const graphene_point_t *p,
   float t;
 
   graphene_vec2_init (&ap, p->x - a->x, p->y - a->y);
-
   t = - sqrt (d * d / graphene_vec2_dot (&ap, &ap));
 
   q->x = p->x + t * (a->x - p->x);
   q->y = p->y + t * (a->y - p->y);
 }
+
+/* Set q to the point on the line through p and a that is
+ * at a distance of d from p, on the same side
+ */
+static void
+scale_point (const graphene_point_t *p,
+             const graphene_point_t *a,
+             float                   d,
+             graphene_point_t       *q)
+{
+  graphene_vec2_t ap;
+  float t;
+
+  graphene_vec2_init (&ap, p->x - a->x, p->y - a->y);
+  t = sqrt (d * d / graphene_vec2_dot (&ap, &ap));
+
+  q->x = p->x + t * (a->x - p->x);
+  q->y = p->y + t * (a->y - p->y);
+}
+
 /* }}} */
 /* {{{ Misc. Bezier math */
 static void
@@ -435,6 +454,35 @@ maintain_smoothness (CurveEditor *self,
     }
 }
 
+static void
+maintain_symmetry (CurveEditor *self,
+                   int          point)
+{
+  PointData *pd;
+  graphene_point_t *p, *c, *c2;
+  double l1, l2, l;
+
+  pd = &self->points[point];
+
+  if (!pd->symmetric)
+    return;
+
+  c = &pd->p[0];
+  p = &pd->p[1];
+  c2 = &pd->p[2];
+
+  l1 = graphene_point_distance (p, c, NULL, NULL);
+  l2 = graphene_point_distance (p, c2, NULL, NULL);
+
+  if (l1 != l2)
+    {
+      l = (l1 + l2) / 2;
+
+      scale_point (p, c, l, c);
+      scale_point (p, c2, l, c2);
+    }
+}
+
 /* Check if the points arount point currently satisfy
  * smoothness conditions. Set PointData.smooth accordingly.
  */
@@ -498,14 +546,17 @@ insert_point (CurveEditor *self,
   point1 = (point + 1) % self->n_points;
   point2 = (point + 2) % self->n_points;
 
+  self->points[point1].smooth = TRUE;
+  self->points[point1].hovered = -1;
+
   if (op == LINE)
     {
       graphene_point_t p;
 
+      self->points[point1].op = LINE;
+
       graphene_point_interpolate (&points[0], &points[3], pos, &p);
       self->points[point1].p[1] = p;
-      self->points[point1].smooth = TRUE;
-      self->points[point1].op = LINE;
     }
   else if (op == CURVE)
     {
@@ -513,6 +564,8 @@ insert_point (CurveEditor *self,
       graphene_point_t right[4];
       int left_pos = 0;
       int right_pos = 0;
+
+      self->points[point1].op = CURVE;
 
       split_bezier (points, 4, pos, left, &left_pos, right, &right_pos);
 
@@ -523,15 +576,14 @@ insert_point (CurveEditor *self,
       self->points[point1].p[2] = right[2];
       self->points[point2].p[0] = right[1];
       self->points[point2].p[1] = right[0];
-
-      self->points[point1].smooth = TRUE;
-      self->points[point1].op = CURVE;
     }
+  else
+    g_assert_not_reached ();
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
 }
 /* }}} */
-/* {{{ GskPath helpers */
+/* {{{ GskPath helpers */ 
 static void
 curve_editor_add_path (CurveEditor    *self,
                        GskPathBuilder *builder)
@@ -564,6 +616,7 @@ curve_editor_add_path (CurveEditor    *self,
                                      pd->p[0].x, pd->p[0].y,
                                      pd->p[1].x, pd->p[1].y);
           break;
+
         default:
           g_assert_not_reached ();
         }
@@ -668,14 +721,16 @@ drag_begin (GtkGestureDrag *gesture,
   if (self->edit)
     for (i = 0; i < self->n_points; i++)
       {
+        PointData *pd = &self->points[i];
+
         for (j = 0; j < 3; j++)
           {
-            if (graphene_point_distance (&self->points[i].p[j], &p, NULL, NULL) < CLICK_RADIUS)
+            if (graphene_point_distance (&pd->p[j], &p, NULL, NULL) < CLICK_RADIUS)
               {
                 if (point_is_visible (self, i, j))
                   {
                     self->dragged = i;
-                    self->points[i].dragged = j;
+                    pd->dragged = j;
                     gtk_widget_queue_draw (GTK_WIDGET (self));
                   }
                 return;
@@ -798,6 +853,7 @@ drag_update (GtkGestureDrag *gesture,
               opposite_point (p, d, l, &pd2->p[2]);
             }
         }
+
       if (op1 != LINE && op != LINE)
         {
           pd->p[0].x += dx;
@@ -884,7 +940,7 @@ drag_end (GtkGestureDrag *gesture,
   self->dragged = -1;
 }
 /* }}} */
-/* {{{ Action callbacks */
+/* {{{ A ction callbacks */
 static void
 set_smooth (GSimpleAction *action,
             GVariant      *value,
@@ -908,7 +964,7 @@ set_symmetric (GSimpleAction *action,
 
   self->points[self->context].symmetric = g_variant_get_boolean (value);
 
-  maintain_smoothness (self, self->context);
+  maintain_symmetry (self, self->context);
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
 }
@@ -924,6 +980,8 @@ set_operation (GSimpleAction *action,
 
   maintain_smoothness (self, self->context);
   maintain_smoothness (self, (self->context + 1) % self->n_points);
+  maintain_symmetry (self, self->context);
+  maintain_symmetry (self, (self->context + 1) % self->n_points);
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
 }
@@ -942,7 +1000,7 @@ remove_point (GSimpleAction *action,
   self->points = g_realloc (self->points, sizeof (PointData) * (self->n_points - 1));
 
   self->n_points -= 1;
-}
+ }
 /* }}} */
 /* {{{ Event handlers */
 static void
