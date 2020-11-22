@@ -23,4 +23,11 @@ void        curve_editor_set_stroke (CurveEditor *self,
 const GskStroke *
             curve_editor_get_stroke (CurveEditor *self);
 
+
+void        curve_editor_set_color  (CurveEditor *self,
+                                     GdkRGBA     *color);
+
+const GdkRGBA *
+            curve_editor_get_color  (CurveEditor *self);
+
 G_END_DECLS
