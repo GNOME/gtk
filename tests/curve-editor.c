@@ -1000,6 +1000,10 @@ remove_point (GSimpleAction *action,
   self->points = g_realloc (self->points, sizeof (PointData) * (self->n_points - 1));
 
   self->n_points -= 1;
+
+  maintain_smoothness (self, self->context);
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
  }
 /* }}} */
 /* {{{ Event handlers */
