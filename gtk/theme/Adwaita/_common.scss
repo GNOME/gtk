@@ -186,9 +186,9 @@ label {
 
 window.assistant {
   .sidebar {
+    padding: $menu-margin;
     background-color: $base_color;
     border-top: 1px solid $borders_color;
-
   }
 
   &.csd .sidebar { border-top-style: none; }
@@ -3540,7 +3540,6 @@ filechooserbutton:drop(active) {
  * Sidebar *
  ***********/
 .sidebar {
-  padding: $menu-margin;
   border-style: none;
   background-color: mix($bg_color, $base_color, 50%);
 
@@ -3594,6 +3593,10 @@ separator.sidebar {
 
 .navigation-sidebar {
   padding: $menu-margin 0; //only vertical padding. horizontal row size would clip
+
+  > separator {
+    margin: $menu-margin;
+  }
 
   > row {
     min-height: 36px;
