@@ -1598,7 +1598,7 @@ get_bus_address_dbus (GdkDisplay *display)
 
   if (error != NULL)
     {
-      g_critical ("Unable to acquire session bus: %s", error->message);
+      GTK_NOTE (A11Y, g_message ("Unable to acquire session bus: %s", error->message));
       g_error_free (error);
       return NULL;
     }
@@ -1615,8 +1615,8 @@ get_bus_address_dbus (GdkDisplay *display)
                                   &error);
   if (error != NULL)
     {
-      g_critical ("Unable to acquire the address of the accessibility bus: %s",
-                  error->message);
+      GTK_NOTE (A11Y, g_message ("Unable to acquire the address of the accessibility bus: %s",
+                                 error->message));
       g_error_free (error);
     }
 
