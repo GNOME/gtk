@@ -46,7 +46,8 @@ typedef enum
 {
   CUSP,
   SMOOTH,
-  SYMMETRIC
+  SYMMETRIC,
+  AUTO
 } PointType;
 
 static const char *
@@ -60,6 +61,8 @@ point_type_to_string (PointType type)
       return "smooth";
     case SYMMETRIC:
       return "symmetric";
+    case AUTO:
+      return "auto";
     default:
       g_assert_not_reached ();
     }
@@ -74,6 +77,8 @@ point_type_from_string (const char *s)
     return SMOOTH;
   else if (strcmp (s, "symmetric") == 0)
     return SYMMETRIC;
+  else if (strcmp (s, "auto") == 0)
+    return AUTO;
   else
     g_assert_not_reached ();
 }
@@ -512,6 +517,46 @@ maintain_symmetry (CurveEditor *self,
     }
 }
 
+/* Make the line through the control points perpendicular
+ * to the line bisecting the angle between neighboring
+ * points, and make the lengths 1/3 of the distance to
+ * the corresponding neighboring points.
+ */
+static void
+update_automatic (CurveEditor *self,
+                  int          point)
+{
+  PointData *pd, *pd1, *pd2;
+  double l1, l2;
+  graphene_point_t a;
+
+  pd = &self->points[point];
+
+  if (pd->type != AUTO)
+    return;
+
+  pd1 = &self->points[(point - 1 + self->n_points) % self->n_points];
+  pd2 = &self->points[(point + 1) % self->n_points];
+
+  l1 = graphene_point_distance (&pd->p[1], &pd1->p[1], NULL, NULL);
+  l2 = graphene_point_distance (&pd->p[1], &pd2->p[1], NULL, NULL);
+
+  a.x = pd2->p[1].x + (pd->p[1].x - pd1->p[1].x);
+  a.y = pd2->p[1].y + (pd->p[1].y - pd1->p[1].y);
+
+  scale_point (&pd->p[1], &a, l2/3, &pd->p[2]);
+  opposite_point (&pd->p[1], &a, l1/3, &pd->p[0]);
+}
+
+static void
+maintain_automatic (CurveEditor *self,
+                    int          point)
+{
+  update_automatic (self, point);
+  update_automatic (self, (point - 1 + self->n_points) % self->n_points);
+  update_automatic (self, (point + 1) % self->n_points);
+}
+
 /* Check if the points arount point currently satisfy
  * smoothness conditions. Set PointData.type accordingly.
  */
@@ -608,6 +653,8 @@ insert_point (CurveEditor *self,
     }
   else
     g_assert_not_reached ();
+
+  maintain_automatic (self, self->context);
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
 }
@@ -892,6 +939,8 @@ drag_update (GtkGestureDrag *gesture,
           pd->p[2].x += dx;
           pd->p[2].y += dy;
         }
+
+      maintain_automatic (self, self->dragged);
     }
   else
     {
@@ -983,6 +1032,7 @@ set_point_type (GSimpleAction *action,
 
   maintain_smoothness (self, self->context);
   maintain_symmetry (self, self->context);
+  maintain_automatic (self, self->context);
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
 }
@@ -1020,6 +1070,7 @@ remove_point (GSimpleAction *action,
   self->n_points -= 1;
 
   maintain_smoothness (self, self->context);
+  maintain_automatic (self, self->context);
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
  }
@@ -1432,6 +1483,11 @@ curve_editor_init (CurveEditor *self)
   item = g_menu_item_new ("Symmetric", "point.type::symmetric");
   g_menu_append_item (section, item);
   g_object_unref (item);
+
+  item = g_menu_item_new ("Automatic", "point.type::auto");
+  g_menu_append_item (section, item);
+  g_object_unref (item);
+
 
   g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
   g_object_unref (section);
