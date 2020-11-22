@@ -66,11 +66,14 @@
       <object class="GtkBox">
         <child>
           <object class="GtkScrolledWindow">
+            <style>
+              <class name="sidebar"/>
+            </style>
             <property name="hscrollbar-policy">never</property>
             <child>
               <object class="GtkListView">
                 <style>
-                  <class name="navigation-sidebar" />
+                  <class name="navigation-sidebar"/>
                 </style>
                 <property name="model">
                   <object class="GtkSingleSelection" id="context_model">
@@ -106,11 +109,6 @@
                 </property>
               </object>
             </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSeparator">
-            <property name="orientation">vertical</property>
           </object>
         </child>
         <child>
