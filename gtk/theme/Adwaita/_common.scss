@@ -3596,15 +3596,10 @@ separator.sidebar {
   padding: $menu-margin 0; //only vertical padding. horizontal row size would clip
 
   > row {
-    // Needs overriding of the GtkListBoxRow padding
     min-height: 36px;
-    padding: 0px 2px;
+    padding: 0 8px;
     border-radius: $menu-margin;
     margin: 0 $menu-margin;
-
-    // Using margins/padding directly in the SidebarRow
-    // will make the animation of the new bookmark row jump
-    > revealer { padding: 0 14px; }
 
     &:selected {
       background-color: $menu_selected_color;
@@ -3647,8 +3642,13 @@ row image.sidebar-icon { opacity: $_placesidebar_icons_opacity; } // dim the sid
 */
 
 placessidebar {
-  row:not(:last-child) { //FIXME: specificty bump hack
+  .navigation-sidebar > row {
+    // Needs overriding of the `.navigation-sidebar > row` padding
     padding: 0;
+
+    // Using margins/padding directly in the SidebarRow
+    // will make the animation of the new bookmark row jump
+    > revealer { padding: 0 14px; }
 
     image.sidebar-icon {
       &:dir(ltr) { padding-right: 8px; }
