@@ -91,6 +91,16 @@ join_changed (GtkDropDown *combo,
   gsk_stroke_free (stroke);
 }
 
+static void
+color_changed (GtkColorChooser *chooser,
+               CurveEditor     *editor)
+{
+  GdkRGBA color;
+
+  gtk_color_chooser_get_rgba (chooser, &color);
+  curve_editor_set_color (editor, &color);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -105,6 +115,7 @@ main (int argc, char *argv[])
   GtkWidget *grid;
   GtkWidget *cap_combo;
   GtkWidget *join_combo;
+  GtkWidget *color_button;
 
   gtk_init ();
 
@@ -126,7 +137,7 @@ main (int argc, char *argv[])
   gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
   gtk_popover_set_child (GTK_POPOVER (popover), grid);
 
-  gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Line width:"), 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Line Width:"), 0, 0, 1, 1);
   scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 1, 10, 1);
   gtk_widget_set_size_request (scale, 60, -1);
   gtk_grid_attach (GTK_GRID (grid), scale, 1, 0, 1, 1);
@@ -138,6 +149,10 @@ main (int argc, char *argv[])
   gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Line join:"), 0, 2, 1, 1);
   join_combo = gtk_drop_down_new_from_strings ((const char *[]){"Miter", "Round", "Bevel", NULL});
   gtk_grid_attach (GTK_GRID (grid), join_combo, 1, 2, 1, 1);
+
+  gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Stroke color:"), 0, 3, 1, 1);
+  color_button = gtk_color_button_new_with_rgba (&(GdkRGBA){ 0., 0., 0., 1.});
+  gtk_grid_attach (GTK_GRID (grid), color_button, 1, 3, 1, 1);
 
   titlebar = gtk_header_bar_new ();
   gtk_header_bar_pack_start (GTK_HEADER_BAR (titlebar), edit_toggle);
@@ -153,6 +168,7 @@ main (int argc, char *argv[])
   g_signal_connect (scale, "value-changed", G_CALLBACK (width_changed), demo);
   g_signal_connect (cap_combo, "notify::selected", G_CALLBACK (cap_changed), demo);
   g_signal_connect (join_combo, "notify::selected", G_CALLBACK (join_changed), demo);
+  g_signal_connect (color_button, "color-set", G_CALLBACK (color_changed), demo);
 
   reset (NULL, CURVE_EDITOR (demo));
 
