@@ -214,25 +214,23 @@ find_line_point (graphene_point_t *a,
 
   tt = graphene_vec2_dot (&ap, &n) / graphene_vec2_dot (&n, &n);
 
-  if (tt < 0)
+  if (tt <= 0)
     {
       *pp = *a;
       *t = 0;
-      *d = graphene_point_distance (a, p, NULL, NULL);
     }
-  else if (tt > 1)
+  else if (tt >= 1)
     {
       *pp = *b;
       *t = 1;
-      *d = graphene_point_distance (b, p, NULL, NULL);
     }
   else
     {
       pp->x = a->x + tt * (b->x - a->x);
       pp->y = a->y + tt * (b->y - a->y);
       *t = tt;
-      *d = graphene_point_distance (pp, p, NULL, NULL);
     }
+  *d = graphene_point_distance (pp, p, NULL, NULL);
 }
 
 static void
