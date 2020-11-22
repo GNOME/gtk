@@ -1623,5 +1623,11 @@ curve_editor_set_stroke (CurveEditor *self,
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
 }
+
+const GskStroke *
+curve_editor_get_stroke (CurveEditor *self)
+{
+  return self->stroke;
+}
 /* }}} */
 /* vim:set foldmethod=marker expandtab: */

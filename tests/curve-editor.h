@@ -20,4 +20,7 @@ GskPath *   curve_editor_get_path (CurveEditor *self);
 void        curve_editor_set_stroke (CurveEditor *self,
                                      GskStroke   *stroke);
 
+const GskStroke *
+            curve_editor_get_stroke (CurveEditor *self);
+
 G_END_DECLS
