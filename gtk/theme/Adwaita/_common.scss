@@ -3604,25 +3604,25 @@ separator.sidebar {
     border-radius: $menu-margin;
     margin: 0 $menu-margin;
 
+    &:hover,
+    &:focus-visible:focus-within {
+      background-color: darken($menu_selected_color, 5%);
+    }
+
     &:selected {
       background-color: $menu_selected_color;
-      color: $fg_color;
+      color: inherit;
+
+      &:hover {
+        background-color: darken($menu_selected_color,5%);
+      }
 
       &:focus-visible:focus-within {
         outline-width: 0;
         color: $selected_fg_color;
         background-color: $selected_bg_color;
-        &:hover { color: $selected_fg_color; background-color: darken($selected_bg_color,10%); }
+        &:hover { background-color: darken($selected_bg_color,10%); }
       }
-      &:hover:not(:last-child) { /* FIXME: dirty specificity bump */
-        color: $fg_color;
-        background-color: darken($menu_selected_color,5%);
-      }
-    }
-
-    &:hover {
-      color: $fg_color;
-      background-color: darken($menu_selected_color, 5%);
     }
 
     &:disabled { color: $insensitive_fg_color; }
