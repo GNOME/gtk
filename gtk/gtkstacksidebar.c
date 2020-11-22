@@ -150,7 +150,7 @@ gtk_stack_sidebar_init (GtkStackSidebar *self)
   gtk_widget_set_parent (sw, GTK_WIDGET (self));
 
   self->list = GTK_LIST_BOX (gtk_list_box_new ());
-  gtk_list_box_set_show_separators (GTK_LIST_BOX (self->list), TRUE);
+  gtk_widget_add_css_class (GTK_WIDGET (self->list), "navigation-sidebar");
 
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), GTK_WIDGET (self->list));
 
