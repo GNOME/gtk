@@ -3311,6 +3311,10 @@ columnview {
   }
 }
 
+treeexpander {
+  border-spacing: 4px;
+}
+
 /********************************************************
  * Data Tables                                          *
  * treeview like tables with individual focusable cells *
@@ -3601,12 +3605,6 @@ separator.sidebar {
     // Using margins/padding directly in the SidebarRow
     // will make the animation of the new bookmark row jump
     > revealer { padding: 0 14px; }
-
-    expander {
-      margin: 0 8px 0 0;
-
-      &:dir(rtl) { margin: 0 0 0 8px; }
-    }
 
     &:selected {
       background-color: $menu_selected_color;
