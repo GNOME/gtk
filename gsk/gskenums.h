@@ -300,4 +300,18 @@ typedef enum
 } GskGLUniformType;
 
 
+typedef enum
+{
+  GSK_LINE_CAP_BUTT,
+  GSK_LINE_CAP_ROUND,
+  GSK_LINE_CAP_SQUARE
+} GskLineCap;
+
+typedef enum
+{
+  GSK_LINE_JOIN_MITER,
+  GSK_LINE_JOIN_ROUND,
+  GSK_LINE_JOIN_BEVEL
+} GskLineJoin;
+
 #endif /* __GSK_TYPES_H__ */

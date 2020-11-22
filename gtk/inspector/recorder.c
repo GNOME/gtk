@@ -583,6 +583,20 @@ add_float_row (GtkListStore  *store,
   g_free (text);
 }
 
+static const char *
+enum_to_nick (GType type,
+              int   value)
+{
+  GEnumClass *class;
+  GEnumValue *v;
+
+  class = g_type_class_ref (type);
+  v = g_enum_get_value (class, value);
+  g_type_class_unref (class);
+
+  return v->value_nick;
+}
+
 static void
 populate_render_node_properties (GtkListStore  *store,
                                  GskRenderNode *node)
@@ -811,9 +825,7 @@ populate_render_node_properties (GtkListStore  *store,
     case GSK_BLEND_NODE:
       {
         GskBlendMode mode = gsk_blend_node_get_blend_mode (node);
-        tmp = g_enum_to_string (GSK_TYPE_BLEND_MODE, mode);
-        add_text_row (store, "Blendmode", tmp);
-        g_free (tmp);
+        add_text_row (store, "Blendmode", enum_to_nick (GSK_TYPE_BLEND_MODE, mode));
       }
       break;
 
@@ -1049,14 +1061,13 @@ populate_render_node_properties (GtkListStore  *store,
     case GSK_FILL_NODE:
       {
         GskPath *path = gsk_fill_node_get_path (node);
+        GskFillRule fill_rule = gsk_fill_node_get_fill_rule (node);
 
         tmp = gsk_path_to_string (path);
         add_text_row (store, "Path", tmp);
         g_free (tmp);
 
-        tmp = g_enum_to_string (GSK_TYPE_FILL_RULE, gsk_fill_node_get_fill_rule (node));
-        add_text_row (store, "Fill rule", tmp);
-        g_free (tmp);
+        add_text_row (store, "Fill rule", enum_to_nick (GSK_TYPE_FILL_RULE, fill_rule));
       }
       break;
 
@@ -1064,6 +1075,8 @@ populate_render_node_properties (GtkListStore  *store,
       {
         GskPath *path = gsk_stroke_node_get_path (node);
         const GskStroke *stroke = gsk_stroke_node_get_stroke (node);
+        GskLineCap line_cap = gsk_stroke_get_line_cap (stroke);
+        GskLineJoin line_join = gsk_stroke_get_line_join (stroke);
 
         tmp = gsk_path_to_string (path);
         add_text_row (store, "Path", tmp);
@@ -1072,6 +1085,9 @@ populate_render_node_properties (GtkListStore  *store,
         tmp = g_strdup_printf ("%.2f", gsk_stroke_get_line_width (stroke));
         add_text_row (store, "Line width", tmp);
         g_free (tmp);
+
+        add_text_row (store, "Line cap", enum_to_nick (GSK_TYPE_LINE_CAP, line_cap));
+        add_text_row (store, "Line join", enum_to_nick (GSK_TYPE_LINE_JOIN, line_join));
       }
       break;
 

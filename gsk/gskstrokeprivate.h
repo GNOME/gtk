@@ -28,6 +28,8 @@ G_BEGIN_DECLS
 struct _GskStroke
 {
   float line_width;
+  GskLineCap line_cap;
+  GskLineJoin line_join;
 };
 
 static inline void

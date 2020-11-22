@@ -26,6 +26,7 @@
 
 
 #include <gsk/gsktypes.h>
+#include <gsk/gskenums.h>
 
 G_BEGIN_DECLS
 
@@ -50,6 +51,19 @@ void                    gsk_stroke_set_line_width               (GskStroke      
 GDK_AVAILABLE_IN_ALL
 float                   gsk_stroke_get_line_width               (const GskStroke        *self);
 
+GDK_AVAILABLE_IN_ALL
+void                    gsk_stroke_set_line_cap                 (GskStroke              *self,
+                                                                 GskLineCap              line_cap);
+
+GDK_AVAILABLE_IN_ALL
+GskLineCap              gsk_stroke_get_line_cap                 (const GskStroke        *self);
+
+GDK_AVAILABLE_IN_ALL
+void                    gsk_stroke_set_line_join                (GskStroke              *self,
+                                                                 GskLineJoin             line_join);
+
+GDK_AVAILABLE_IN_ALL
+GskLineJoin             gsk_stroke_get_line_join                (const GskStroke        *self);
 
 G_END_DECLS
 
