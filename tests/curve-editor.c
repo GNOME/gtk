@@ -1036,25 +1036,6 @@ released (GtkGestureClick *gesture,
                   self->point_data[i / 3].edit = !self->point_data[i / 3].edit;
                   return;
                 }
-              else if (button == GDK_BUTTON_SECONDARY)
-                {
-                  self->context = i;
-                  self->point_data[i / 3].smooth = !self->point_data[i / 3].smooth;
-                  if (self->point_data[i / 3].smooth)
-                    {
-                      graphene_point_t *p, *c, *c2;
-                      float d;
-
-                      p = &self->points[i];
-                      c = &self->points[(i - 1 + self->n_points) % self->n_points];
-                      c2 = &self->points[(i + 1 + self->n_points) % self->n_points];
-
-                      d = graphene_point_distance (c, p, NULL, NULL);
-                      opposite_point (p, c2, d, c);
-                    }
-
-                  return;
-                }
             }
         }
     }
