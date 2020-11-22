@@ -1711,9 +1711,17 @@ gtk_at_spi_create_context (GtkAccessibleRole  accessible_role,
   g_return_val_if_fail (GTK_IS_ACCESSIBLE (accessible), NULL);
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  const char *bus_address = get_bus_address (display);
+  static const char *bus_address;
 
   if (bus_address == NULL)
+    {
+      bus_address = get_bus_address (display);
+
+      if (bus_address == NULL)
+        bus_address = "";
+    }
+
+  if (*bus_address == '\0')
     return NULL;
 
 #if defined(GDK_WINDOWING_WAYLAND)
