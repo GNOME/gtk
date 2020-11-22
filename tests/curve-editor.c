@@ -1352,6 +1352,7 @@ curve_editor_dispose (GObject *object)
 
   g_clear_pointer (&self->points, g_free);
   g_clear_pointer (&self->menu, gtk_widget_unparent);
+  g_clear_object (&self->actions);
 
   G_OBJECT_CLASS (curve_editor_parent_class)->dispose (object);
 }
