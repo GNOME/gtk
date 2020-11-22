@@ -1239,14 +1239,30 @@ curve_editor_snapshot (GtkWidget   *widget,
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_width (widget);
 
+  /* Add the curve itself */
+
   builder = gsk_path_builder_new ();
 
-  /* Add the curve itself */
   curve_editor_add_path (self, builder);
+
+  path = gsk_path_builder_free_to_path (builder);
+  stroke = gsk_stroke_new (1);
+  gtk_snapshot_push_stroke (snapshot, path, stroke);
+  gsk_stroke_free (stroke);
+  gsk_path_unref (path);
+
+  gtk_snapshot_append_color (snapshot,
+                             &(GdkRGBA){ 0, 0, 0, 1 },
+                             &GRAPHENE_RECT_INIT (0, 0, width, height ));
+
+  gtk_snapshot_pop (snapshot);
 
   if (self->edit)
     {
       /* Add the skeleton */
+
+      builder = gsk_path_builder_new ();
+
       for (i = 0; i < self->n_points; i++)
         {
           PointData *pd = &self->points[i];
@@ -1264,23 +1280,19 @@ curve_editor_snapshot (GtkWidget   *widget,
               gsk_path_builder_line_to (builder, pd->p[2].x, pd->p[2].y);
             }
         }
-    }
 
-  /* Stroke everything we have so far */
-  path = gsk_path_builder_free_to_path (builder);
-  stroke = gsk_stroke_new (1);
-  gtk_snapshot_push_stroke (snapshot, path, stroke);
-  gsk_stroke_free (stroke);
-  gsk_path_unref (path);
+      path = gsk_path_builder_free_to_path (builder);
+      stroke = gsk_stroke_new (1);
+      gtk_snapshot_push_stroke (snapshot, path, stroke);
+      gsk_stroke_free (stroke);
+      gsk_path_unref (path);
 
-  gtk_snapshot_append_color (snapshot,
-                             &(GdkRGBA){ 0, 0, 0, 1 },
-                             &GRAPHENE_RECT_INIT (0, 0, width, height ));
+      gtk_snapshot_append_color (snapshot,
+                                 &(GdkRGBA){ 0, 0, 0, 1 },
+                                 &GRAPHENE_RECT_INIT (0, 0, width, height ));
 
-  gtk_snapshot_pop (snapshot);
+      gtk_snapshot_pop (snapshot);
 
-  if (self->edit)
-    {
       /* Draw the circles, in several passes, one for each color */
 
       const char *colors[] = {
