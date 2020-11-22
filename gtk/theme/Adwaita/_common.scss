@@ -187,7 +187,6 @@ label {
 window.assistant {
   .sidebar {
     padding: $menu-margin;
-    background-color: $base_color;
     border-top: 1px solid $borders_color;
   }
 
@@ -3540,7 +3539,6 @@ filechooserbutton:drop(active) {
  * Sidebar *
  ***********/
 .sidebar {
-  border-style: none;
   background-color: mix($bg_color, $base_color, 50%);
 
   &:not(separator) {
@@ -3560,6 +3558,7 @@ filechooserbutton:drop(active) {
     }
   }
 
+  listview.view,
   list { background-color: transparent; }
 
   paned & { &.left, &.right, &.left:dir(rtl), &:dir(rtl), &:dir(ltr), & { border-style: none; }}
