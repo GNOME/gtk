@@ -42,6 +42,42 @@ op_from_string (const char *s)
     g_assert_not_reached ();
 }
 
+typedef enum
+{
+  CUSP,
+  SMOOTH,
+  SYMMETRIC
+} PointType;
+
+static const char *
+point_type_to_string (PointType type)
+{
+  switch (type)
+    {
+    case CUSP:
+      return "cusp";
+    case SMOOTH:
+      return "smooth";
+    case SYMMETRIC:
+      return "symmetric";
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static PointType
+point_type_from_string (const char *s)
+{
+  if (strcmp (s, "cusp") == 0)
+    return CUSP;
+  else if (strcmp (s, "smooth") == 0)
+    return SMOOTH;
+  else if (strcmp (s, "symmetric") == 0)
+    return SYMMETRIC;
+  else
+    g_assert_not_reached ();
+}
+
 /* We don't store Bezier segments, but an array of points on
  * the line. Each point comes with its two neighboring control
  * points, so each Bezier segment contains p[1] and p[2] from
@@ -53,9 +89,8 @@ typedef struct
 {
   /* 0 and 2 are control points, 1 is the point on the line */
   graphene_point_t p[3];
+  PointType type;
   gboolean edit;
-  gboolean smooth;
-  gboolean symmetric;
   int dragged;
   int hovered;
   /* refers to the segment following the point */
@@ -414,48 +449,35 @@ maintain_smoothness (CurveEditor *self,
 {
   PointData *pd;
   Operation op, op1;
-  graphene_point_t *p;
+  graphene_point_t *p, *c, *c2, *p2;
+  float d;
 
   pd = &self->points[point];
 
-  if (!pd->smooth)
+  if (pd->type == CUSP)
     return;
 
   op = pd->op;
   op1 = self->points[(point - 1 + self->n_points) % self->n_points].op;
 
   p = &pd->p[1];
+  c = &pd->p[0];
+  c2 = &pd->p[2];
 
   if (op == CURVE && op1 == CURVE)
     {
-      graphene_point_t *c, *c2;
-      float d;
-
-      c = &pd->p[0];
-      c2 = &pd->p[2];
-
       d = graphene_point_distance (c, p, NULL, NULL);
       opposite_point (p, c2, d, c);
     }
   else if (op == CURVE && op1 == LINE)
     {
-      graphene_point_t *c, *p2;
-      float d;
-
-      c = &pd->p[2];
       p2 = &self->points[(point - 1 + self->n_points) % self->n_points].p[1];
-
-      d = graphene_point_distance (c, p, NULL, NULL);
-      opposite_point (p, p2, d, c);
+      d = graphene_point_distance (c2, p, NULL, NULL);
+      opposite_point (p, p2, d, c2);
     }
   else if (op == LINE && op1 == CURVE)
     {
-      graphene_point_t *c, *p2;
-      float d;
-
-      c = &pd->p[0];
       p2 = &self->points[(point + 1) % self->n_points].p[1];
-
       d = graphene_point_distance (c, p, NULL, NULL);
       opposite_point (p, p2, d, c);
     }
@@ -471,7 +493,7 @@ maintain_symmetry (CurveEditor *self,
 
   pd = &self->points[point];
 
-  if (!pd->symmetric)
+  if (pd->type != SYMMETRIC)
     return;
 
   c = &pd->p[0];
@@ -491,7 +513,7 @@ maintain_symmetry (CurveEditor *self,
 }
 
 /* Check if the points arount point currently satisfy
- * smoothness conditions. Set PointData.smooth accordingly.
+ * smoothness conditions. Set PointData.type accordingly.
  */
 static void
 check_smoothness (CurveEditor *self,
@@ -519,10 +541,10 @@ check_smoothness (CurveEditor *self,
   else
     p1 = NULL;
 
-  if (p1 && p2)
-    pd->smooth = collinear (&pd->p[1], p1, p2);
+  if (!p1 || !p2 || !collinear (&pd->p[1], p1, p2))
+    pd->type = CUSP;
   else
-    pd->smooth = TRUE;
+    pd->type = SMOOTH;
 }
 
 static void
@@ -553,7 +575,7 @@ insert_point (CurveEditor *self,
   point1 = (point + 1) % self->n_points;
   point2 = (point + 2) % self->n_points;
 
-  self->points[point1].smooth = TRUE;
+  self->points[point1].type = SMOOTH;
   self->points[point1].hovered = -1;
 
   if (op == LINE)
@@ -808,7 +830,7 @@ drag_update (GtkGestureDrag *gesture,
           /* the other endpoint of the line */
           p = &pd1->p[1];
 
-          if (op == CURVE && pd->smooth)
+          if (op == CURVE && pd->type != CUSP)
             {
               /* adjust the control point after the line segment */
               opposite_point (d, p, l2, &pd->p[2]);
@@ -824,7 +846,7 @@ drag_update (GtkGestureDrag *gesture,
 
           op11 = self->points[((self->dragged - 2 + self->n_points) % self->n_points)].op;
 
-          if (op11 == CURVE && pd1->smooth)
+          if (op11 == CURVE && pd1->type != CUSP)
             {
               double l;
 
@@ -839,7 +861,7 @@ drag_update (GtkGestureDrag *gesture,
           /* the other endpoint of the line */
           p = &pd2->p[1];
 
-          if (op1 == CURVE && pd->smooth)
+          if (op1 == CURVE && pd->type != CUSP)
             {
               /* adjust the control point before the line segment */
               opposite_point (d, p, l1, &pd->p[0]);
@@ -853,7 +875,7 @@ drag_update (GtkGestureDrag *gesture,
           pd->p[2].x += dx;
           pd->p[2].y += dy;
 
-          if (op2 == CURVE && pd2->smooth)
+          if (op2 == CURVE && pd2->type != CUSP)
             {
               double l;
 
@@ -900,7 +922,7 @@ drag_update (GtkGestureDrag *gesture,
       else
         g_assert_not_reached ();
 
-      if (op == CURVE && pd->smooth)
+      if (op == CURVE && pd->type != CUSP)
         {
           if (op1 == CURVE)
             {
@@ -911,7 +933,7 @@ drag_update (GtkGestureDrag *gesture,
               d->y = y;
 
               /* then adjust the other control point */
-              if (pd->symmetric)
+              if (pd->type == SYMMETRIC)
                 l = graphene_point_distance (d, p, NULL, NULL);
               else
                 l = graphene_point_distance (c, p, NULL, NULL);
@@ -951,28 +973,15 @@ drag_end (GtkGestureDrag *gesture,
 /* }}} */
 /* {{{ Action callbacks */
 static void
-set_smooth (GSimpleAction *action,
-            GVariant      *value,
-            gpointer       data)
+set_point_type (GSimpleAction *action,
+                GVariant      *value,
+                gpointer       data)
 {
   CurveEditor *self = CURVE_EDITOR (data);
 
-  self->points[self->context].smooth = g_variant_get_boolean (value);
+  self->points[self->context].type = point_type_from_string (g_variant_get_string (value, NULL));
 
   maintain_smoothness (self, self->context);
-
-  gtk_widget_queue_draw (GTK_WIDGET (self));
-}
-
-static void
-set_symmetric (GSimpleAction *action,
-               GVariant      *value,
-               gpointer       data)
-{
-  CurveEditor *self = CURVE_EDITOR (data);
-
-  self->points[self->context].symmetric = g_variant_get_boolean (value);
-
   maintain_symmetry (self, self->context);
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
@@ -1042,23 +1051,10 @@ pressed (GtkGestureClick *gesture,
 
               self->context = i;
 
-              action = g_action_map_lookup_action (self->actions, "smooth");
-              g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (pd->smooth));
-
-              action = g_action_map_lookup_action (self->actions, "symmetric");
-              if (pd->smooth)
-                {
-                  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
-                  g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (pd->symmetric));
-                }
-              else
-                {
-                  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
-                  g_simple_action_set_state (G_SIMPLE_ACTION (action), FALSE);
-                }
+              action = g_action_map_lookup_action (self->actions, "type");
+              g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_string (point_type_to_string (pd->type)));
 
               action = g_action_map_lookup_action (self->actions, "operation");
-
               g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_string (op_to_string (pd->op)));
 
               gtk_popover_set_pointing_to (GTK_POPOVER (self->menu),
@@ -1265,7 +1261,7 @@ curve_editor_snapshot (GtkWidget   *widget,
                       if (j == pd->hovered)
                         continue;
 
-                      if (!(j == 1 && pd->smooth))
+                      if (!(j == 1 && pd->type != CUSP))
                         continue;
                       break;
 
@@ -1273,7 +1269,7 @@ curve_editor_snapshot (GtkWidget   *widget,
                       if (j == pd->hovered)
                         continue;
 
-                      if (!(j == 1 && !pd->smooth))
+                      if (!(j == 1 && pd->type == CUSP))
                         continue;
                       break;
 
@@ -1406,13 +1402,8 @@ curve_editor_init (CurveEditor *self)
 
   self->actions = G_ACTION_MAP (g_simple_action_group_new ());
 
-  action = g_simple_action_new_stateful ("smooth", NULL, g_variant_new_boolean (FALSE));
-  g_signal_connect (action, "change-state", G_CALLBACK (set_smooth), self);
-  g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (action));
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "point", G_ACTION_GROUP (self->actions));
-
-  action = g_simple_action_new_stateful ("symmetric", NULL, g_variant_new_boolean (FALSE));
-  g_signal_connect (action, "change-state", G_CALLBACK (set_symmetric), self);
+  action = g_simple_action_new_stateful ("type", G_VARIANT_TYPE_STRING, g_variant_new_string ("smooth"));
+  g_signal_connect (action, "change-state", G_CALLBACK (set_point_type), self);
   g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (action));
   gtk_widget_insert_action_group (GTK_WIDGET (self), "point", G_ACTION_GROUP (self->actions));
 
@@ -1428,13 +1419,22 @@ curve_editor_init (CurveEditor *self)
 
   menu = g_menu_new ();
 
-  item = g_menu_item_new ("Smooth", "point.smooth");
-  g_menu_append_item (menu, item);
+  section = g_menu_new ();
+
+  item = g_menu_item_new ("Cusp", "point.type::cusp");
+  g_menu_append_item (section, item);
   g_object_unref (item);
 
-  item = g_menu_item_new ("Symmetric", "point.symmetric");
-  g_menu_append_item (menu, item);
+  item = g_menu_item_new ("Smooth", "point.type::smooth");
+  g_menu_append_item (section, item);
   g_object_unref (item);
+
+  item = g_menu_item_new ("Symmetric", "point.type::symmetric");
+  g_menu_append_item (section, item);
+  g_object_unref (item);
+
+  g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
+  g_object_unref (section);
 
   section = g_menu_new ();
 
@@ -1453,9 +1453,14 @@ curve_editor_init (CurveEditor *self)
   g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
   g_object_unref (section);
 
+  section = g_menu_new ();
+
   item = g_menu_item_new ("Remove", "point.remove");
   g_menu_append_item (section, item);
   g_object_unref (item);
+
+  g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
+  g_object_unref (section);
 
   self->menu = gtk_popover_menu_new_from_model (G_MENU_MODEL (menu));
   g_object_unref (menu);
@@ -1515,7 +1520,7 @@ curve_editor_set_path (CurveEditor *self,
   self->points = g_new0 (PointData, self->n_points);
   for (i = 0; i < self->n_points; i++)
     {
-      self->points[i].smooth = FALSE;
+      self->points[i].type = CUSP;
       self->points[i].hovered = -1;
     }
 
