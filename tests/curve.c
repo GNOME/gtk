@@ -54,12 +54,39 @@ reset (GtkButton   *button,
 }
 
 static void
-stroke_changed (GtkRange    *range,
-                CurveEditor *editor)
+width_changed (GtkRange    *range,
+               CurveEditor *editor)
 {
   GskStroke *stroke;
 
-  stroke = gsk_stroke_new (gtk_range_get_value (range));
+  stroke = gsk_stroke_copy (curve_editor_get_stroke (editor));
+  gsk_stroke_set_line_width (stroke, gtk_range_get_value (range));
+  curve_editor_set_stroke (editor, stroke);
+  gsk_stroke_free (stroke);
+}
+
+static void
+cap_changed (GtkDropDown *combo,
+             GParamSpec  *pspec,
+             CurveEditor *editor)
+{
+  GskStroke *stroke;
+
+  stroke = gsk_stroke_copy (curve_editor_get_stroke (editor));
+  gsk_stroke_set_line_cap (stroke, (GskLineCap)gtk_drop_down_get_selected (combo));
+  curve_editor_set_stroke (editor, stroke);
+  gsk_stroke_free (stroke);
+}
+
+static void
+join_changed (GtkDropDown *combo,
+              GParamSpec  *pspec,
+              CurveEditor *editor)
+{
+  GskStroke *stroke;
+
+  stroke = gsk_stroke_copy (curve_editor_get_stroke (editor));
+  gsk_stroke_set_line_join (stroke, (GskLineJoin)gtk_drop_down_get_selected (combo));
   curve_editor_set_stroke (editor, stroke);
   gsk_stroke_free (stroke);
 }
@@ -73,6 +100,11 @@ main (int argc, char *argv[])
   GtkWidget *reset_button;
   GtkWidget *titlebar;
   GtkWidget *scale;
+  GtkWidget *stroke_button;
+  GtkWidget *popover;
+  GtkWidget *grid;
+  GtkWidget *cap_combo;
+  GtkWidget *join_combo;
 
   gtk_init ();
 
@@ -84,13 +116,33 @@ main (int argc, char *argv[])
 
   reset_button = gtk_button_new_from_icon_name ("edit-undo-symbolic");
 
+  stroke_button = gtk_menu_button_new ();
+  gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (stroke_button), "open-menu-symbolic");
+  popover = gtk_popover_new ();
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (stroke_button), popover);
+
+  grid = gtk_grid_new ();
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
+  gtk_popover_set_child (GTK_POPOVER (popover), grid);
+
+  gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Line width:"), 0, 0, 1, 1);
   scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 1, 10, 1);
   gtk_widget_set_size_request (scale, 60, -1);
+  gtk_grid_attach (GTK_GRID (grid), scale, 1, 0, 1, 1);
+
+  gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Line cap:"), 0, 1, 1, 1);
+  cap_combo = gtk_drop_down_new_from_strings ((const char *[]){"Butt", "Round", "Square", NULL});
+  gtk_grid_attach (GTK_GRID (grid), cap_combo, 1, 1, 1, 1);
+
+  gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Line join:"), 0, 2, 1, 1);
+  join_combo = gtk_drop_down_new_from_strings ((const char *[]){"Miter", "Round", "Bevel", NULL});
+  gtk_grid_attach (GTK_GRID (grid), join_combo, 1, 2, 1, 1);
 
   titlebar = gtk_header_bar_new ();
   gtk_header_bar_pack_start (GTK_HEADER_BAR (titlebar), edit_toggle);
   gtk_header_bar_pack_start (GTK_HEADER_BAR (titlebar), reset_button);
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (titlebar), scale);
+  gtk_header_bar_pack_start (GTK_HEADER_BAR (titlebar), stroke_button);
 
   gtk_window_set_titlebar (GTK_WINDOW (window), titlebar);
 
@@ -98,7 +150,9 @@ main (int argc, char *argv[])
 
   g_signal_connect (edit_toggle, "notify::active", G_CALLBACK (edit_changed), demo);
   g_signal_connect (reset_button, "clicked", G_CALLBACK (reset), demo);
-  g_signal_connect (scale, "value-changed", G_CALLBACK (stroke_changed), demo);
+  g_signal_connect (scale, "value-changed", G_CALLBACK (width_changed), demo);
+  g_signal_connect (cap_combo, "notify::selected", G_CALLBACK (cap_changed), demo);
+  g_signal_connect (join_combo, "notify::selected", G_CALLBACK (join_changed), demo);
 
   reset (NULL, CURVE_EDITOR (demo));
 
