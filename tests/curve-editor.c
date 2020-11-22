@@ -113,6 +113,7 @@ struct _CurveEditor
 
   GtkWidget *menu;
   GActionMap *actions;
+  GskStroke *stroke;
 };
 
 struct _CurveEditorClass
@@ -1246,9 +1247,7 @@ curve_editor_snapshot (GtkWidget   *widget,
   curve_editor_add_path (self, builder);
 
   path = gsk_path_builder_free_to_path (builder);
-  stroke = gsk_stroke_new (1);
-  gtk_snapshot_push_stroke (snapshot, path, stroke);
-  gsk_stroke_free (stroke);
+  gtk_snapshot_push_stroke (snapshot, path, self->stroke);
   gsk_path_unref (path);
 
   gtk_snapshot_append_color (snapshot,
@@ -1441,6 +1440,7 @@ curve_editor_init (CurveEditor *self)
 
   self->dragged = -1;
   self->edit = FALSE;
+  self->stroke = gsk_stroke_new (1.0);
 
   controller = GTK_EVENT_CONTROLLER (gtk_gesture_drag_new ());
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (controller), GDK_BUTTON_PRIMARY);
@@ -1612,6 +1612,16 @@ curve_editor_get_path (CurveEditor *self)
   curve_editor_add_path (self, builder);
 
   return gsk_path_builder_free_to_path (builder);
+}
+
+void
+curve_editor_set_stroke (CurveEditor *self,
+                         GskStroke   *stroke)
+{
+  gsk_stroke_free (self->stroke);
+  self->stroke = gsk_stroke_copy (stroke);
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
 }
 /* }}} */
 /* vim:set foldmethod=marker expandtab: */

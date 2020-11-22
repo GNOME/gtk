@@ -53,6 +53,17 @@ reset (GtkButton   *button,
   gsk_path_unref (path);
 }
 
+static void
+stroke_changed (GtkRange    *range,
+                CurveEditor *editor)
+{
+  GskStroke *stroke;
+
+  stroke = gsk_stroke_new (gtk_range_get_value (range));
+  curve_editor_set_stroke (editor, stroke);
+  gsk_stroke_free (stroke);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -61,6 +72,7 @@ main (int argc, char *argv[])
   GtkWidget *edit_toggle;
   GtkWidget *reset_button;
   GtkWidget *titlebar;
+  GtkWidget *scale;
 
   gtk_init ();
 
@@ -72,9 +84,13 @@ main (int argc, char *argv[])
 
   reset_button = gtk_button_new_from_icon_name ("edit-undo-symbolic");
 
+  scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 1, 10, 1);
+  gtk_widget_set_size_request (scale, 60, -1);
+
   titlebar = gtk_header_bar_new ();
   gtk_header_bar_pack_start (GTK_HEADER_BAR (titlebar), edit_toggle);
   gtk_header_bar_pack_start (GTK_HEADER_BAR (titlebar), reset_button);
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (titlebar), scale);
 
   gtk_window_set_titlebar (GTK_WINDOW (window), titlebar);
 
@@ -82,6 +98,7 @@ main (int argc, char *argv[])
 
   g_signal_connect (edit_toggle, "notify::active", G_CALLBACK (edit_changed), demo);
   g_signal_connect (reset_button, "clicked", G_CALLBACK (reset), demo);
+  g_signal_connect (scale, "value-changed", G_CALLBACK (stroke_changed), demo);
 
   reset (NULL, CURVE_EDITOR (demo));
 
