@@ -24,6 +24,7 @@
 #include "gskrendernodeparserprivate.h"
 
 #include "gskpath.h"
+#include "gskpathprivate.h"
 #include "gskroundedrectprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskstroke.h"
@@ -1732,7 +1733,22 @@ static gboolean
 parse_path (GtkCssParser *parser,
             gpointer      out_path)
 {
-  return FALSE;
+  char *str = NULL;
+
+  if (!parse_string (parser, &str))
+    return FALSE;
+
+  *((GskPath **) out_path) = gsk_path_from_string (str);
+
+  g_free (str);
+
+  return TRUE;
+}
+
+static void
+clear_path (gpointer inout_path)
+{
+  g_clear_pointer ((GskPath **) inout_path, gsk_path_unref);
 }
 
 static gboolean
@@ -1789,7 +1805,7 @@ parse_fill_node (GtkCssParser *parser)
   GskFillRule rule = GSK_FILL_RULE_WINDING;
   const Declaration declarations[] = {
     { "child", parse_node, clear_node, &child },
-    { "path", parse_path, NULL, &path },
+    { "path", parse_path, clear_path, &path },
     { "fill-rule", parse_fill_rule, NULL, &rule },
   };
   GskRenderNode *result;
@@ -1817,7 +1833,7 @@ parse_stroke_node (GtkCssParser *parser)
 
   const Declaration declarations[] = {
     { "child", parse_node, clear_node, &child },
-    { "path", parse_path, NULL, &path },
+    { "path", parse_path, clear_path, &path },
     { "line-width", parse_double, NULL, &line_width },
     { "line-cap", parse_line_cap, NULL, &line_cap },
     { "line-join", parse_line_join, NULL, &line_join },

@@ -1919,3 +1919,140 @@ gsk_path_builder_close (GskPathBuilder *builder)
   gsk_path_builder_end_current (builder);
 }
 
+static const char *
+skip_whitespace (const char *p)
+{
+  while (g_ascii_isspace (*p))
+    p++;
+  return p;
+}
+
+static void
+parse_point (const char  *p,
+             char       **end,
+             double      *x,
+             double      *y)
+{
+  char *e;
+  *x = g_ascii_strtod (p, &e);
+  *y = g_ascii_strtod (e, end);
+}
+
+GskPath *
+gsk_path_from_string (const char *s)
+{
+  GskPathBuilder *builder;
+  double x0, y0, x1, y1, x2, y2;
+  double w, h, r;
+  const char *p;
+  char *end;
+  int i;
+
+  builder = gsk_path_builder_new ();
+
+  /* Commands that we produce:
+   * M x y h w v h h -w z  (rectangle)
+   * M x y A r r 0 i i x1 y1 (circle)
+   * M x y (move)
+   * Z (close)
+   * L x y (line)
+   * C x0 y0, x1 y1, x2 y2 (curve)
+   */
+  p = s;
+  while (p)
+    {
+      p = skip_whitespace (p);
+      if (*p == '\0')
+        break;
+
+      switch (*p)
+        {
+        case 'M':
+          p++;
+          parse_point (p, &end, &x0, &y0);
+          p = skip_whitespace (end);
+          switch (*p)
+            {
+            case 'h':
+              p++;
+              w = g_ascii_strtod (p, &end);
+              p = skip_whitespace (end);
+              if (*p != 'v')
+                goto error;
+              p++;
+              h = g_ascii_strtod (p, &end);
+              p = skip_whitespace (end);
+              if (*p != 'h')
+                goto error;
+              p++;
+              g_ascii_strtod (p, &end);
+              p = skip_whitespace (end);
+              if (*p != 'z')
+                goto error;
+              p++;
+
+              gsk_path_builder_add_rect (builder, x0, y0, w, h);
+              break;
+
+            case 'A':
+              p++;
+              parse_point (p, &end, &r, &r);
+              p = skip_whitespace (end);
+              /* FIXME reconstruct partial circles */
+              for (i = 0; i < 5; i++)
+                {
+                  g_ascii_strtod (p, &end);
+                  p = skip_whitespace (end);
+                }
+
+              gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (x0 - r, y0), r);
+              break;
+
+            default:
+              gsk_path_builder_move_to (builder, x0, y0);
+              break;
+            }
+          break;
+
+        case 'Z':
+          p++;
+          gsk_path_builder_close (builder);
+          break;
+
+        case 'L':
+          p++;
+          parse_point (p, &end, &x0, &y0);
+          p = skip_whitespace (end);
+
+          gsk_path_builder_line_to (builder, x0, y0);
+          break;
+
+        case 'C':
+          p++;
+          parse_point (p, &end, &x0, &y0);
+          p = skip_whitespace (end);
+          if (*p == ',')
+            p++;
+          parse_point (p, &end, &x1, &y1);
+          p = skip_whitespace (end);
+          if (*p == ',')
+            p++;
+          parse_point (p, &end, &x2, &y2);
+          p = skip_whitespace (end);
+
+          gsk_path_builder_curve_to (builder, x0, y0, x1, y1, x2, y2);
+          break;
+
+        default:
+          goto error;
+        }
+    }
+
+  return gsk_path_builder_free_to_path (builder);
+
+error:
+  g_warning ("Can't parse string as GskPath, error at %ld", p - s);
+  gsk_path_builder_unref (builder);
+
+  return NULL;
+}
