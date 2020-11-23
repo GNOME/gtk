@@ -179,6 +179,11 @@ struct _GdkWaylandSurface
     gboolean is_dirty;
   } pending;
 
+  struct {
+    GdkToplevelState unset_flags;
+    GdkToplevelState set_flags;
+  } initial_state;
+
   uint32_t last_configure_serial;
 
   int state_freeze_count;
@@ -1308,6 +1313,20 @@ configure_surface_geometry (GdkSurface *surface)
 }
 
 static void
+synthesize_initial_surface_state (GdkSurface       *surface,
+                                  GdkToplevelState  unset_flags,
+                                  GdkToplevelState  set_flags)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  impl->initial_state.unset_flags |= unset_flags;
+  impl->initial_state.set_flags &= ~unset_flags;
+
+  impl->initial_state.set_flags |= set_flags;
+  impl->initial_state.unset_flags &= ~set_flags;
+}
+
+static void
 gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
@@ -1786,20 +1805,20 @@ gdk_wayland_surface_create_xdg_toplevel (GdkSurface *surface)
   switch (display_wayland->shell_variant)
     {
     case GDK_WAYLAND_SHELL_VARIANT_XDG_SHELL:
-      if (surface->state & GDK_TOPLEVEL_STATE_MAXIMIZED)
+      if (impl->initial_state.set_flags & GDK_TOPLEVEL_STATE_MAXIMIZED)
         xdg_toplevel_set_maximized (impl->display_server.xdg_toplevel);
-      if (surface->state & GDK_TOPLEVEL_STATE_MINIMIZED)
+      if (impl->initial_state.set_flags & GDK_TOPLEVEL_STATE_MINIMIZED)
         xdg_toplevel_set_minimized (impl->display_server.xdg_toplevel);
-      if (surface->state & GDK_TOPLEVEL_STATE_FULLSCREEN)
+      if (impl->initial_state.set_flags & GDK_TOPLEVEL_STATE_FULLSCREEN)
         xdg_toplevel_set_fullscreen (impl->display_server.xdg_toplevel,
                                      impl->initial_fullscreen_output);
       break;
     case GDK_WAYLAND_SHELL_VARIANT_ZXDG_SHELL_V6:
-      if (surface->state & GDK_TOPLEVEL_STATE_MAXIMIZED)
+      if (impl->initial_state.set_flags & GDK_TOPLEVEL_STATE_MAXIMIZED)
         zxdg_toplevel_v6_set_maximized (impl->display_server.zxdg_toplevel_v6);
-      if (surface->state & GDK_TOPLEVEL_STATE_MINIMIZED)
+      if (impl->initial_state.set_flags & GDK_TOPLEVEL_STATE_MINIMIZED)
         zxdg_toplevel_v6_set_minimized (impl->display_server.zxdg_toplevel_v6);
-      if (surface->state & GDK_TOPLEVEL_STATE_FULLSCREEN)
+      if (impl->initial_state.set_flags & GDK_TOPLEVEL_STATE_FULLSCREEN)
         zxdg_toplevel_v6_set_fullscreen (impl->display_server.zxdg_toplevel_v6,
                                          impl->initial_fullscreen_output);
       break;
@@ -3628,7 +3647,7 @@ gdk_wayland_surface_maximize (GdkSurface *surface)
     }
   else
     {
-      gdk_synthesize_surface_state (surface, 0, GDK_TOPLEVEL_STATE_MAXIMIZED);
+      synthesize_initial_surface_state (surface, 0, GDK_TOPLEVEL_STATE_MAXIMIZED);
     }
 }
 
@@ -3659,7 +3678,7 @@ gdk_wayland_surface_unmaximize (GdkSurface *surface)
     }
   else
     {
-      gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_MAXIMIZED, 0);
+      synthesize_initial_surface_state (surface, GDK_TOPLEVEL_STATE_MAXIMIZED, 0);
     }
 }
 
@@ -3696,7 +3715,7 @@ gdk_wayland_surface_fullscreen_on_monitor (GdkSurface *surface,
     }
   else
     {
-      gdk_synthesize_surface_state (surface, 0, GDK_TOPLEVEL_STATE_FULLSCREEN);
+      synthesize_initial_surface_state (surface, 0, GDK_TOPLEVEL_STATE_FULLSCREEN);
       impl->initial_fullscreen_output = output;
     }
 }
@@ -3734,7 +3753,7 @@ gdk_wayland_surface_fullscreen (GdkSurface *surface)
     }
   else
     {
-      gdk_synthesize_surface_state (surface, 0, GDK_TOPLEVEL_STATE_FULLSCREEN);
+      synthesize_initial_surface_state (surface, 0, GDK_TOPLEVEL_STATE_FULLSCREEN);
     }
 }
 
@@ -3767,7 +3786,7 @@ gdk_wayland_surface_unfullscreen (GdkSurface *surface)
     }
   else
     {
-      gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_FULLSCREEN, 0);
+      synthesize_initial_surface_state (surface, GDK_TOPLEVEL_STATE_FULLSCREEN, 0);
     }
 }
 
