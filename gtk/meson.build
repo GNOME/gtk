@@ -976,14 +976,11 @@ gtk_sources += [
 
 gtk_deps = [
   gmodule_dep,
-  glib_dep,
   gobject_dep,
   platform_gio_dep,
   pangocairo_dep,
-  pango_dep,
   fribidi_dep,
   cairogobj_dep,
-  cairo_dep,
   fontconfig_dep,
   pixbuf_dep,
   epoxy_dep,
