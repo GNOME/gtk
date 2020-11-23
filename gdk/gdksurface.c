@@ -1523,26 +1523,6 @@ gdk_surface_thaw_updates (GdkSurface *surface)
           gdk_surface_schedule_update (surface);
         }
     }
-}
-
-void
-gdk_surface_freeze_toplevel_updates (GdkSurface *surface)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  surface->update_and_descendants_freeze_count++;
-  gdk_surface_freeze_updates (surface);
-}
-
-void
-gdk_surface_thaw_toplevel_updates (GdkSurface *surface)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-  g_return_if_fail (surface->update_and_descendants_freeze_count > 0);
-
-  surface->update_and_descendants_freeze_count--;
-  gdk_surface_schedule_update (surface);
-  gdk_surface_thaw_updates (surface);
 
 }
 
