@@ -10,19 +10,7 @@ project('gtk', 'c',
         meson_version : '>= 0.54',
         license: 'LGPLv2.1+')
 
-glib_major_req = 2
-glib_minor_req = 65
-glib_micro_req = 0
-
-if glib_minor_req.is_odd()
-  glib_min_required = 'GLIB_VERSION_@0@_@1@'.format(glib_major_req, glib_minor_req - 1)
-  glib_max_allowed = 'GLIB_VERSION_@0@_@1@'.format(glib_major_req, glib_minor_req + 1)
-else
-  glib_min_required = 'GLIB_VERSION_@0@_@1@'.format(glib_major_req, glib_minor_req)
-  glib_max_allowed = 'GLIB_VERSION_@0@_@1@'.format(glib_major_req, glib_minor_req)
-endif
-
-glib_req           = '>= @0@.@1@.@2@'.format(glib_major_req, glib_minor_req, glib_micro_req)
+glib_req           = '>= 2.66.0'
 pango_req          = '>= 1.47.0' # keep this in sync with .gitlab-ci/test-msys.sh
 fribidi_req        = '>= 0.19.7'
 cairo_req          = '>= 1.14.0'
@@ -39,8 +27,7 @@ sysprof_req        = '>= 3.38.0'
 gnome = import('gnome')
 
 add_project_arguments('-DG_LOG_USE_STRUCTURED=1', language: 'c')
-add_project_arguments('-DGLIB_VERSION_MIN_REQUIRED=' + glib_min_required, language: 'c')
-add_project_arguments('-DGLIB_VERSION_MAX_ALLOWED=' + glib_max_allowed, language: 'c')
+add_project_arguments('-DGLIB_DISABLE_DEPRECATION_WARNINGS', language: 'c')
 
 # Making releases:
 #  1. gtk_micro_version += 1;
