@@ -346,6 +346,10 @@ create_clocks_model (void)
 
   result = g_list_store_new (GTK_TYPE_CLOCK);
 
+#if GLIB_CHECK_VERSION (2, 67, 0)
+# define g_time_zone_new        g_time_zone_new_identifier
+#endif
+
   /* local time */
   clock = gtk_clock_new ("local", NULL);
   g_list_store_append (result, clock);
