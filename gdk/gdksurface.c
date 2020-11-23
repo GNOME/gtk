@@ -1670,7 +1670,11 @@ gdk_surface_hide (GdkSurface *surface)
   was_mapped = GDK_SURFACE_IS_MAPPED (surface);
 
   if (GDK_SURFACE_IS_MAPPED (surface))
-    gdk_synthesize_surface_state (surface, 0, GDK_TOPLEVEL_STATE_WITHDRAWN);
+    {
+      gdk_synthesize_surface_state (surface, 0, GDK_TOPLEVEL_STATE_WITHDRAWN);
+      surface->pending_unset_flags = 0;
+      surface->pending_set_flags = 0;
+    }
 
   if (was_mapped)
     {
@@ -2657,6 +2661,33 @@ gdk_synthesize_surface_state (GdkSurface       *surface,
                               GdkToplevelState  set_flags)
 {
   gdk_surface_set_state (surface, (surface->state | set_flags) & ~unset_flags);
+}
+
+void
+gdk_surface_queue_state_change (GdkSurface       *surface,
+                                GdkToplevelState  unset_flags,
+                                GdkToplevelState  set_flags)
+{
+  surface->pending_unset_flags |= unset_flags;
+  surface->pending_set_flags &= ~unset_flags;
+
+  surface->pending_set_flags |= set_flags;
+  surface->pending_unset_flags &= ~set_flags;
+}
+
+void
+gdk_surface_apply_state_change (GdkSurface *surface)
+{
+  if (!surface->pending_unset_flags && !surface->pending_set_flags)
+    return;
+
+  gdk_synthesize_surface_state (surface,
+                                surface->pending_unset_flags,
+                                surface->pending_set_flags);
+  if (surface->pending_unset_flags & GDK_TOPLEVEL_STATE_WITHDRAWN)
+    gdk_surface_invalidate_rect (surface, NULL);
+  surface->pending_unset_flags = 0;
+  surface->pending_set_flags = 0;
 }
 
 static gboolean
