@@ -38,7 +38,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkbutton.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
@@ -54,12 +54,12 @@ typedef struct _GtkScaleButtonClass   GtkScaleButtonClass;
 
 struct _GtkScaleButton
 {
-  GtkButton parent_instance;
+  GtkWidget parent_instance;
 };
 
 struct _GtkScaleButtonClass
 {
-  GtkButtonClass parent_class;
+  GtkWidgetClass parent_class;
 
   /* signals */
   void	(* value_changed) (GtkScaleButton *button,
