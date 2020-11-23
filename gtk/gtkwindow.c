@@ -177,8 +177,6 @@ typedef struct
 
   guint32  initial_timestamp;
 
-  guint16  configure_request_count;
-
   guint    mnemonics_display_timeout_id;
 
   guint    focus_visible_timeout;
@@ -1467,7 +1465,6 @@ gtk_window_init (GtkWindow *window)
   priv->geometry_info = NULL;
   priv->focus_widget = NULL;
   priv->default_widget = NULL;
-  priv->configure_request_count = 0;
   priv->resizable = TRUE;
   priv->configure_notify_received = FALSE;
   priv->need_default_size = TRUE;
@@ -3924,11 +3921,6 @@ gtk_window_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unmap (widget);
   gdk_surface_hide (priv->surface);
 
-  while (priv->configure_request_count > 0)
-    {
-      priv->configure_request_count--;
-      gdk_surface_thaw_toplevel_updates (priv->surface);
-    }
   priv->configure_notify_received = FALSE;
 
   state = gdk_toplevel_get_state (GDK_TOPLEVEL (priv->surface));
@@ -4770,25 +4762,6 @@ surface_size_changed (GtkWidget *widget,
       info->last.configure_request.height = height;
     }
 
-  /* priv->configure_request_count incremented for each
-   * configure request, and decremented to a min of 0 for
-   * each configure notify.
-   *
-   * All it means is that we know we will get at least
-   * priv->configure_request_count more configure notifies.
-   * We could get more configure notifies than that; some
-   * of the configure notifies we get may be unrelated to
-   * the configure requests. But we will get at least
-   * priv->configure_request_count notifies.
-   */
-
-  if (priv->configure_request_count > 0)
-    {
-      priv->configure_request_count -= 1;
-
-      gdk_surface_thaw_toplevel_updates (priv->surface);
-    }
-
   /*
    * If we do need to resize, we do that by:
    *   - setting configure_notify_received to TRUE
@@ -5498,7 +5471,6 @@ gtk_window_move_resize (GtkWindow *window)
 		 "resize:      \t%d x %d\n" 
 		 "size_changed: %d pos_changed: %d hints_changed: %d\n"
 		 "configure_notify_received: %d\n"
-		 "configure_request_count: %d\n"
 		 "position_constraints_changed: %d",
 		 priv->title ? priv->title : "(no title)",
 		 info->last.configure_request.x,
@@ -5519,7 +5491,6 @@ gtk_window_move_resize (GtkWindow *window)
 		 configure_request_pos_changed,
 		 hints_changed,
 		 priv->configure_notify_received,
-		 priv->configure_request_count,
 		 info->position_constraints_changed);
     }
 #endif
@@ -5630,16 +5601,6 @@ gtk_window_move_resize (GtkWindow *window)
        * the window manager unless it decides to change our requisition. If
        * we don't get the ConfigureNotify back, the resize queue will never be run.
        */
-
-      /* Increment the number of have-not-yet-received-notify requests.
-       * This is done before gdk_surface[_move]_resize(), because
-       * that call might be synchronous (depending on which GDK backend
-       * is being used), so any preparations for its effects must
-       * be done beforehand.
-       */
-      priv->configure_request_count += 1;
-
-      gdk_surface_freeze_toplevel_updates (priv->surface);
 
       /* for GTK_RESIZE_QUEUE toplevels, we are now awaiting a new
        * configure event in response to our resizing request.
