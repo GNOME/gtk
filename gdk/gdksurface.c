@@ -1671,7 +1671,9 @@ gdk_surface_hide (GdkSurface *surface)
 
   if (GDK_SURFACE_IS_MAPPED (surface))
     {
-      gdk_synthesize_surface_state (surface, 0, GDK_TOPLEVEL_STATE_WITHDRAWN);
+      gdk_synthesize_surface_state (surface,
+                                    surface->state & ~GDK_TOPLEVEL_STATE_WITHDRAWN,
+                                    GDK_TOPLEVEL_STATE_WITHDRAWN);
       surface->pending_unset_flags = 0;
       surface->pending_set_flags = 0;
     }
