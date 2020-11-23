@@ -110,6 +110,7 @@ struct _CurveEditor
   int dragged;
   int context;
   gboolean edit;
+  int molded;
 
   GtkWidget *menu;
   GActionMap *actions;
@@ -195,8 +196,71 @@ scale_point (const graphene_point_t *p,
   q->x = p->x + t * (a->x - p->x);
   q->y = p->y + t * (a->y - p->y);
 }
-/* }}} */
-/* {{{ Misc. Bezier math */
+
+/* Set p to the intersection of the lines through a, b
+ * and c, d
+ */
+static void
+line_intersection (const graphene_point_t *a,
+                   const graphene_point_t *b,
+                   const graphene_point_t *c,
+                   const graphene_point_t *d,
+                   graphene_point_t       *p)
+{
+  double a1 = b->y - a->y;
+  double b1 = a->x - b->x;
+  double c1 = a1*a->x + b1*a->y;
+
+  double a2 = d->y - c->y;
+  double b2 = c->x - d->x;
+  double c2 = a2*c->x+ b2*c->y;
+
+  double det = a1*b2 - a2*b1;
+
+  if (det == 0)
+    {
+      p->x = NAN;
+      p->y = NAN;
+    }
+  else
+    {
+      p->x = (b2*c1 - b1*c2) / det;
+      p->y = (a1*c2 - a2*c1) / det;
+    }
+}
+
+/* Given 3 points, determine the center of a circle that
+ * passes through all of them.
+ */
+static void
+circle_through_points (const graphene_point_t *a,
+                       const graphene_point_t *b,
+                       const graphene_point_t *c,
+                       graphene_point_t       *center)
+{
+  graphene_point_t ab;
+  graphene_point_t ac;
+  graphene_point_t ab2;
+  graphene_point_t ac2;
+
+  ab.x = (a->x + b->x) / 2;
+  ab.y = (a->y + b->y) / 2;
+  ac.x = (a->x + c->x) / 2;
+  ac.y = (a->y + c->y) / 2;
+
+  ab2.x = ab.x + a->y - b->y;
+  ab2.y = ab.y + b->x - a->x;
+  ac2.x = ac.x + a->y - c->y;
+  ac2.y = ac.y + c->x - a->x;
+
+  line_intersection (&ab, &ab2, &ac, &ac2, center);
+}
+
+/* Set pp to the closest point to p on the line
+ * segment from a to b, set t to the position as
+ * a value between 0 and 1, and set d to the distance
+ * between pp and p
+ */
 static void
 find_line_point (graphene_point_t *a,
                  graphene_point_t *b,
@@ -233,6 +297,24 @@ find_line_point (graphene_point_t *a,
   *d = graphene_point_distance (pp, p, NULL, NULL);
 }
 
+/* Return the cosine of the angle between b1 - a and b2 - a */
+static double
+three_point_angle (const graphene_point_t *a,
+                   const graphene_point_t *b1,
+                   const graphene_point_t *b2)
+{
+  graphene_vec2_t u;
+  graphene_vec2_t v;
+
+  graphene_vec2_init (&u, b1->x - a->x, b1->y - a->y);
+  graphene_vec2_init (&v, b2->x - a->x, b2->y - a->y);
+  graphene_vec2_normalize (&u, &u);
+  graphene_vec2_normalize (&v, &v);
+
+  return graphene_vec2_dot (&u, &v);
+}
+/* }}} */
+/* {{{ Misc. Bezier math */
 static void
 gsk_split_get_coefficients (graphene_point_t       coeffs[4],
                             const graphene_point_t pts[4])
@@ -246,6 +328,9 @@ gsk_split_get_coefficients (graphene_point_t       coeffs[4],
   coeffs[3] = pts[0];
 }
 
+/* Compute a point on the Bezier curve with control points pts
+ * at position progress, and optionally the tangent at that point.
+ */
 static void
 gsk_spline_get_point_cubic (const graphene_point_t  pts[4],
                             float                   progress,
@@ -267,6 +352,11 @@ gsk_spline_get_point_cubic (const graphene_point_t  pts[4],
     }
 }
 
+/* Set pp to the closest point to p on the Bezier
+ * segment given by points, set t to the position as
+ * a value between 0 and 1, and set d to the distance
+ * between pp and p
+ */
 static void
 find_curve_point (graphene_point_t *points,
                   graphene_point_t *p,
@@ -305,6 +395,11 @@ find_curve_point (graphene_point_t *points,
   *d = best_d;
 }
 
+/* Find the closest point to p on the path currently held
+ * by the CurveEditor, return the index of the segment
+ * in point, the position t as a value between 0 and 1,
+ * and the distance d to the curve.
+ */
 static void
 find_closest_point (CurveEditor      *self,
                     graphene_point_t *p,
@@ -416,6 +511,124 @@ split_bezier (graphene_point_t *points,
         }
       split_bezier (newpoints, length - 1, t, left, left_pos, right, right_pos);
     }
+}
+
+static double
+projection_ratio (double t)
+{
+  double top, bottom;
+
+  if (t == 0 || t == 1)
+    return t;
+
+  top = pow (1 - t, 3),
+  bottom = pow (t, 3) + top;
+
+  return top / bottom;
+}
+
+static double
+abc_ratio (double t)
+{
+  double top, bottom;
+
+  if (t == 0 || t == 1)
+    return t;
+
+  bottom = pow (t, 3) + pow (1 - t, 3);
+  top = bottom - 1;
+
+  return fabs (top / bottom);
+}
+
+static void
+find_control_points (double                  t,
+                     const graphene_point_t *A,
+                     const graphene_point_t *B,
+                     const graphene_point_t *C,
+                     const graphene_point_t *S,
+                     const graphene_point_t *E,
+                     graphene_point_t       *C1,
+                     graphene_point_t       *C2)
+{
+  double angle;
+  double dist;
+  double bc;
+  double de1;
+  double de2;
+  graphene_point_t c;
+  graphene_point_t t0, t1;
+  double tlength;
+  double dx, dy;
+  graphene_point_t e1, e2;
+  graphene_point_t v1, v2;
+
+  dist = graphene_point_distance (S, E, NULL, NULL);
+  angle = atan2 (E->y - S->y, E->x - S->x) - atan2 (B->y - S->y, B->x - S->x);
+  bc = (angle < 0 || angle > M_PI ? -1 : 1) * dist / 3;
+  de1 = t * bc;
+  de2 = (1 - t) * bc;
+
+  circle_through_points (S, B, E, &c);
+
+  t0.x = B->x - (B->y - c.y);
+  t0.y = B->y + (B->x - c.x);
+  t1.x = B->x + (B->y - c.y);
+  t1.y = B->y - (B->x - c.x);
+
+  tlength = graphene_point_distance (&t0, &t1, NULL, NULL);
+  dx = (t1.x - t0.x) / tlength;
+  dy = (t1.y - t0.y) / tlength;
+
+  e1.x = B->x + de1 * dx;
+  e1.y = B->y + de1 * dy;
+  e2.x = B->x - de2 * dx;
+  e2.y = B->y - de2 * dy;
+
+  v1.x = A->x + (e1.x - A->x) / (1 - t);
+  v1.y = A->y + (e1.y - A->y) / (1 - t);
+
+  v2.x = A->x + (e2.x - A->x) / t;
+  v2.y = A->y + (e2.y - A->y) / t;
+
+  C1->x = S->x + (v1.x - S->x) / t;
+  C1->y = S->y + (v1.y - S->y) / t;
+
+  C2->x = E->x + (v2.x - E->x) / (1 - t);
+  C2->y = E->y + (v2.y - E->y) / (1 - t);
+}
+
+/* Given points S, B, E, determine control
+ * points C1, C2 such that B lies on the
+ * Bezier segment given bY S, C1, C2, E.
+ */
+static void
+bezier_through (const graphene_point_t *S,
+                const graphene_point_t *B,
+                const graphene_point_t *E,
+                graphene_point_t       *C1,
+                graphene_point_t       *C2)
+{
+  double d1, d2, t;
+  double u, um, s;
+  graphene_point_t A, C;
+
+  d1 = graphene_point_distance (S, B, NULL, NULL);
+  d2 = graphene_point_distance (E, B, NULL, NULL);
+  t = d1 / (d1 + d2);
+
+  u = projection_ratio (t);
+  um = 1 - u;
+
+  C.x = u * S->x + um * E->x;
+  C.y = u * S->y + um * E->y;
+
+  s = abc_ratio (t);
+
+  A.x = B->x + (B->x - C.x) / s;
+  A.y = B->y + (B->y - C.y) / s;
+
+  find_control_points (t, &A, B, &C, S, E, C1, C2);
 }
 /* }}} */
 /* {{{ Utilities */
@@ -793,53 +1006,54 @@ drag_begin (GtkGestureDrag *gesture,
 {
   int i, j;
   graphene_point_t p = GRAPHENE_POINT_INIT (start_x, start_y);
+  int point;
+  double t;
+  double d;
 
-  if (self->edit)
+  if (!self->edit)
+    return;
+
+  for (i = 0; i < self->n_points; i++)
     {
-      for (i = 0; i < self->n_points; i++)
-        {
-          PointData *pd = &self->points[i];
+      PointData *pd = &self->points[i];
 
-          for (j = 0; j < 3; j++)
+      for (j = 0; j < 3; j++)
+        {
+          if (graphene_point_distance (&pd->p[j], &p, NULL, NULL) < CLICK_RADIUS)
             {
-              if (graphene_point_distance (&pd->p[j], &p, NULL, NULL) < CLICK_RADIUS)
+              if (point_is_visible (self, i, j))
                 {
-                  if (point_is_visible (self, i, j))
-                    {
-                      self->dragged = i;
-                      pd->dragged = j;
-                      gtk_widget_queue_draw (GTK_WIDGET (self));
-                    }
-                  return;
+                  self->dragged = i;
+                  pd->dragged = j;
+                  gtk_widget_queue_draw (GTK_WIDGET (self));
                 }
+              return;
             }
         }
+    }
+
+  find_closest_point (self, &p, &point, &t, &d);
+
+  if (d <= CLICK_RADIUS)
+    {
+      /* Can't bend a straight line */
+      self->points[point].op = CURVE;
+      self->molded = point;
+      return;
     }
 
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
 }
 
 static void
-drag_update (GtkGestureDrag *gesture,
-             double          offset_x,
-             double          offset_y,
-             CurveEditor     *self)
+drag_control_point (CurveEditor *self,
+                    double       x,
+                    double       y)
 {
-  double x, y;
   double dx, dy;
   graphene_point_t *c, *p, *d;
   double l1, l2;
   PointData *pd;
-
-  if (self->dragged == -1)
-    return;
-
-  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
-
-  gtk_gesture_drag_get_start_point (gesture, &x, &y);
-
-  x += offset_x;
-  y += offset_y;
 
   pd = &self->points[self->dragged];
   d = &pd->p[pd->dragged];
@@ -1006,8 +1220,100 @@ drag_update (GtkGestureDrag *gesture,
           d->y = y;
         }
     }
+}
 
-  gtk_widget_queue_draw (GTK_WIDGET (self));
+static void
+drag_curve (CurveEditor *self,
+            double       x,
+            double       y)
+{
+  PointData *pd, *pd1, *pd2, *pd3;
+  graphene_point_t *S, *E;
+  graphene_point_t B, C1, C2;
+  double l;
+
+  pd = &self->points[self->molded];
+  pd1 = &self->points[(self->molded + 1) % self->n_points];
+  pd2 = &self->points[(self->molded - 1 + self->n_points) % self->n_points];
+  pd3 = &self->points[(self->molded + 2) % self->n_points];
+
+  S = &pd->p[1];
+  B = GRAPHENE_POINT_INIT (x, y);
+  E = &pd1->p[1];
+
+  bezier_through (S, &B, E, &C1, &C2);
+
+  pd->p[2] = C1;
+  pd1->p[0] = C2;
+
+  /* When the neighboring segments are lines, we can't actually
+   * use C1 and C2 as-is, since we need control points to lie
+   * on the line. So we just use their distance. This makes our
+   * point B not quite match anymore, but we're overconstrained.
+   */
+  if (pd2->op == LINE)
+    {
+      l = graphene_point_distance (&pd->p[1], &pd->p[2], NULL, NULL);
+      if (three_point_angle (&pd->p[1], &pd2->p[1], &B) > 0)
+        scale_point (&pd->p[1], &pd2->p[1], l, &pd->p[2]);
+      else
+        opposite_point (&pd->p[1], &pd2->p[1], l, &pd->p[2]);
+    }
+
+  if (pd1->op == LINE)
+    {
+      l = graphene_point_distance (&pd1->p[1], &pd1->p[0], NULL, NULL);
+      if (three_point_angle (&pd1->p[1], &pd3->p[1], &B) > 0)
+        scale_point (&pd1->p[1], &pd3->p[1], l, &pd1->p[0]);
+      else
+        opposite_point (&pd1->p[1], &pd3->p[1], l, &pd1->p[0]);
+    }
+
+  /* Maintain smoothness and symmetry */
+  if (pd->type != CUSP)
+    {
+      if (pd->type == SYMMETRIC)
+        l = graphene_point_distance (&pd->p[1], &pd->p[2], NULL, NULL);
+      else
+        l = graphene_point_distance (&pd->p[1], &pd->p[0], NULL, NULL);
+      opposite_point (&pd->p[1], &pd->p[2], l, &pd->p[0]);
+    }
+
+  if (pd1->type != CUSP)
+    {
+      if (pd1->type == SYMMETRIC)
+        l = graphene_point_distance (&pd1->p[1], &pd1->p[0], NULL, NULL);
+      else
+        l = graphene_point_distance (&pd1->p[1], &pd1->p[2], NULL, NULL);
+      opposite_point (&pd1->p[1], &pd1->p[0], l, &pd1->p[2]);
+    }
+}
+
+static void
+drag_update (GtkGestureDrag *gesture,
+             double          offset_x,
+             double          offset_y,
+             CurveEditor     *self)
+{
+  double x, y;
+
+  gtk_gesture_drag_get_start_point (gesture, &x, &y);
+
+  x += offset_x;
+  y += offset_y;
+
+  if (self->dragged != -1)
+    {
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+      drag_control_point (self, x, y);
+      gtk_widget_queue_draw (GTK_WIDGET (self));
+    }
+  else if (self->molded != -1)
+    {
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+      drag_curve (self, x, y);
+      gtk_widget_queue_draw (GTK_WIDGET (self));
+    }
 }
 
 static void
@@ -1018,6 +1324,7 @@ drag_end (GtkGestureDrag *gesture,
 {
   drag_update (gesture, offset_x, offset_y, self);
   self->dragged = -1;
+  self->molded = -1;
 }
 /* }}} */
 /* {{{ Action callbacks */
@@ -1438,6 +1745,7 @@ curve_editor_init (CurveEditor *self)
   GSimpleAction *action;
 
   self->dragged = -1;
+  self->molded = -1;
   self->edit = FALSE;
   self->stroke = gsk_stroke_new (1.0);
   self->color = (GdkRGBA){ 0, 0, 0, 1 };
