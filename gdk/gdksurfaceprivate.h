@@ -59,6 +59,8 @@ struct _GdkSurface
      more than we have to, but it represents the "true" damage. */
   cairo_region_t *active_update_area;
 
+  GdkToplevelState pending_set_flags;
+  GdkToplevelState pending_unset_flags;
   GdkToplevelState state;
 
   guint8 resize_count;
@@ -325,8 +327,15 @@ void       gdk_surface_constrain_size      (GdkGeometry    *geometry,
                                             int            *new_width,
                                             int            *new_height);
 
+void       gdk_surface_queue_state_change  (GdkSurface       *surface,
+                                            GdkToplevelState  unset_flags,
+                                            GdkToplevelState  set_flags);
+
+void       gdk_surface_apply_state_change  (GdkSurface       *surface);
+
 GDK_AVAILABLE_IN_ALL
 void           gdk_surface_request_motion (GdkSurface *surface);
+
 
 G_END_DECLS
 
