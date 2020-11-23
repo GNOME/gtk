@@ -812,8 +812,6 @@ activate (GApplication *app)
   gtk_application_window_set_show_menubar (GTK_APPLICATION_WINDOW (main_window), TRUE);
   update_title (GTK_WINDOW (main_window));
 
-  gtk_widget_add_css_class (main_window, "devel");
-
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_window_set_child (GTK_WINDOW (main_window), box);
 

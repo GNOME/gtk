@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkWindow" id="window">
-    <style>
-      <class name="devel"/>
-    </style>
     <property name="title" translatable="yes">Help</property>
     <property name="default-width">720</property>
     <property name="default-height">520</property>

@@ -433,9 +433,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
     </columns>
   </object>
   <object class="GtkApplicationWindow" id="window">
-    <style>
-      <class name="devel"/>
-    </style>
     <property name="title">GTK Widget Factory</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="headerbar1">
