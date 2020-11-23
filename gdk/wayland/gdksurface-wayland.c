@@ -587,6 +587,8 @@ on_frame_clock_before_paint (GdkFrameClock *clock,
        */
       timings->predicted_presentation_time = timings->frame_time + refresh_interval / 2 + refresh_interval;
     }
+
+  gdk_surface_apply_state_change (surface);
 }
 
 void
@@ -1401,7 +1403,7 @@ gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
                        (new_state & GDK_TOPLEVEL_STATE_FOCUSED) ? " focused" : "",
                        (new_state & GDK_TOPLEVEL_STATE_TILED) ? " tiled" : ""));
 
-  gdk_surface_set_state (surface, new_state);
+  gdk_surface_queue_state_change (surface, ~0 & ~new_state, new_state);
 
   switch (display_wayland->shell_variant)
     {
@@ -1482,10 +1484,7 @@ maybe_notify_mapped (GdkSurface *surface)
     return;
 
   if (!GDK_SURFACE_IS_MAPPED (surface))
-    {
-      gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
-      gdk_surface_invalidate_rect (surface, NULL);
-    }
+    gdk_surface_queue_state_change (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
 }
 
 static void
