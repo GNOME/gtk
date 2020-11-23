@@ -59,7 +59,6 @@ struct _GdkSurface
      more than we have to, but it represents the "true" damage. */
   cairo_region_t *active_update_area;
 
-  GdkToplevelState old_state;
   GdkToplevelState state;
 
   guint8 resize_count;
