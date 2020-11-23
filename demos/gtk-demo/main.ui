@@ -17,9 +17,6 @@
     </section>
   </menu>
   <object class="GtkApplicationWindow" id="window">
-    <style>
-      <class name="devel"/>
-    </style>
     <property name="default-width">800</property>
     <property name="default-height">600</property>
     <child type="titlebar">

@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="ConstraintEditorWindow" parent="GtkApplicationWindow">
-    <style>
-      <class name="devel"/>
-    </style>
     <property name="title" translatable="yes">GTK Constraint Editor</property>
     <property name="default-width">1024</property>
     <property name="default-height">768</property>
