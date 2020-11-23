@@ -976,7 +976,6 @@ gtk_sources += [
 
 gtk_deps = [
   gmodule_dep,
-  glib_dep,
   gobject_dep,
   platform_gio_dep,
   pangocairo_dep,
