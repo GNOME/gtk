@@ -2343,8 +2343,11 @@ append_escaping_newlines (GString    *str,
     len = strcspn (string, "\n");
     g_string_append_len (str, string, len);
     string += len;
-    g_string_append (str, "\\\n");
-    string++;
+    if (*string)
+      {
+        g_string_append (str, "\\\n");
+        string++;
+      }
   } while (*string);
 }
 
@@ -2403,6 +2406,28 @@ append_enum_param (Printer    *p,
   g_string_append (p->str, enum_to_nick (type, value));
   g_string_append_c (p->str, ';');
   g_string_append_c (p->str, '\n');
+}
+
+static void
+append_path_param (Printer    *p,
+                   const char *param_name,
+                   GskPath    *path)
+{
+  char *str, *s;
+
+  _indent (p);
+  g_string_append (p->str, "path: \"\n");
+  str = gsk_path_to_string (path);
+  /* Put each command on a new line */
+  for (s = str; *s; s++)
+    {
+      if (*s == ' ' &&
+          (s[1] == 'M' || s[1] == 'C' || s[1] == 'Z' || s[1] == 'L'))
+        *s = '\n';
+    }
+  append_escaping_newlines (p->str, str);
+  g_string_append (p->str, "\";\n");
+  g_free (str);
 }
 
 static void
@@ -2573,14 +2598,10 @@ render_node_print (Printer       *p,
 
     case GSK_FILL_NODE:
       {
-        char *path_str;
-
         start_node (p, "fill");
 
         append_node_param (p, "child", gsk_fill_node_get_child (node));
-        path_str = gsk_path_to_string (gsk_fill_node_get_path (node));
-        append_string_param (p, "path", path_str);
-        g_free (path_str);
+        append_path_param (p, "path", gsk_fill_node_get_path (node));
         append_enum_param (p, "fill-rule", GSK_TYPE_FILL_RULE, gsk_fill_node_get_fill_rule (node));
 
         end_node (p);
@@ -2589,15 +2610,12 @@ render_node_print (Printer       *p,
 
     case GSK_STROKE_NODE:
       {
-        char *path_str;
         const GskStroke *stroke;
 
         start_node (p, "stroke");
 
         append_node_param (p, "child", gsk_stroke_node_get_child (node));
-        path_str = gsk_path_to_string (gsk_stroke_node_get_path (node));
-        append_string_param (p, "path", path_str);
-        g_free (path_str);
+        append_path_param (p, "path", gsk_stroke_node_get_path (node));
 
         stroke = gsk_stroke_node_get_stroke (node);
         append_float_param (p, "line-width", gsk_stroke_get_line_width (stroke), 0.0);
