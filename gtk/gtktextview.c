@@ -9679,7 +9679,8 @@ gtk_text_view_insert_emoji (GtkTextView *text_view)
  * @model: (allow-none): a #GMenuModel
  *
  * Sets a menu model to add when constructing
- * the context menu for @text_view.
+ * the context menu for @text_view. You can pass
+ * %NULL to remove a previously set extra menu.
  */
 void
 gtk_text_view_set_extra_menu (GtkTextView *text_view,
@@ -9700,9 +9701,10 @@ gtk_text_view_set_extra_menu (GtkTextView *text_view,
  * gtk_text_view_get_extra_menu:
  * @text_view: a #GtkTextView
  *
- * Gets the menu model set with gtk_text_view_set_extra_menu().
+ * Gets the menu model set with gtk_text_view_set_extra_menu()
+ * or %NULL if none has been set.
  *
- * Returns: (transfer none): (nullable): the menu model
+ * Returns: (transfer none): the menu model
  */
 GMenuModel *
 gtk_text_view_get_extra_menu (GtkTextView *text_view)
