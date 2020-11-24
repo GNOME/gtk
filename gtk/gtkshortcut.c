@@ -287,7 +287,7 @@ gtk_shortcut_new_with_arguments (GtkShortcutTrigger *trigger,
  *
  * Gets the action that is activated by this shortcut.
  *
- * Returns: (transfer none): the action
+ * Returns: (transfer none) (nullable): the action
  **/
 GtkShortcutAction *
 gtk_shortcut_get_action (GtkShortcut *self)
@@ -327,7 +327,7 @@ gtk_shortcut_set_action (GtkShortcut *self,
  *
  * Gets the trigger used to trigger @self.
  *
- * Returns: (transfer none): the trigger used
+ * Returns: (transfer none) (nullable): the trigger used
  **/
 GtkShortcutTrigger *
 gtk_shortcut_get_trigger (GtkShortcut *self)
