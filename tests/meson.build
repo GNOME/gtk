@@ -1,6 +1,7 @@
 gtk_tests = [
   # testname, optional extra sources
   ['curve', ['curve.c', 'curve-editor.c']],
+  ['curve2'],
   ['testupload'],
   ['testtransform'],
   ['testdropdown'],
