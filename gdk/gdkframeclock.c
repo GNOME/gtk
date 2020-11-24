@@ -78,6 +78,7 @@ enum {
   FLUSH_EVENTS,
   BEFORE_PAINT,
   UPDATE,
+  COMPUTE_SIZE,
   LAYOUT,
   PAINT,
   AFTER_PAINT,
@@ -178,6 +179,21 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    */
   signals[UPDATE] =
     g_signal_new (g_intern_static_string ("update"),
+                  GDK_TYPE_FRAME_CLOCK,
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 0);
+
+  /**
+   * GdkFrameClock::compute-size:
+   * @clock: the frame clock emitting the signal
+   *
+   * This signal is used for computing the size of the underlying
+   * #GdkSurface. Applications should generally not handle this signal.
+   */
+  signals[COMPUTE_SIZE] =
+    g_signal_new (g_intern_static_string ("compute-size"),
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
                   0,
@@ -680,6 +696,18 @@ _gdk_frame_clock_emit_update (GdkFrameClock *frame_clock)
   g_signal_emit (frame_clock, signals[UPDATE], 0);
 
   gdk_profiler_end_mark (before, "frameclock update", NULL);
+}
+
+void
+_gdk_frame_clock_emit_compute_size (GdkFrameClock *frame_clock)
+{
+  gint64 before G_GNUC_UNUSED;
+
+  before = GDK_PROFILER_CURRENT_TIME;
+
+  g_signal_emit (frame_clock, signals[COMPUTE_SIZE], 0);
+
+  gdk_profiler_end_mark (before, "frameclock compute size", NULL);
 }
 
 void

@@ -50,6 +50,7 @@ typedef struct _GdkFrameClockClass         GdkFrameClockClass;
  * @GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS: corresponds to GdkFrameClock::flush-events. Should not be handled by applications.
  * @GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT: corresponds to GdkFrameClock::before-paint. Should not be handled by applications.
  * @GDK_FRAME_CLOCK_PHASE_UPDATE: corresponds to GdkFrameClock::update.
+ * @GDK_FRAME_CLOCK_PHASE_COMPUTE_SIZE: corresponds to GdkFrameClock::compute-size. Should not be handled by applications.
  * @GDK_FRAME_CLOCK_PHASE_LAYOUT: corresponds to GdkFrameClock::layout.
  * @GDK_FRAME_CLOCK_PHASE_PAINT: corresponds to GdkFrameClock::paint.
  * @GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS: corresponds to GdkFrameClock::resume-events. Should not be handled by applications.
@@ -64,10 +65,11 @@ typedef enum {
   GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS  = 1 << 0,
   GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT  = 1 << 1,
   GDK_FRAME_CLOCK_PHASE_UPDATE        = 1 << 2,
-  GDK_FRAME_CLOCK_PHASE_LAYOUT        = 1 << 3,
-  GDK_FRAME_CLOCK_PHASE_PAINT         = 1 << 4,
-  GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS = 1 << 5,
-  GDK_FRAME_CLOCK_PHASE_AFTER_PAINT   = 1 << 6
+  GDK_FRAME_CLOCK_PHASE_COMPUTE_SIZE  = 1 << 3,
+  GDK_FRAME_CLOCK_PHASE_LAYOUT        = 1 << 4,
+  GDK_FRAME_CLOCK_PHASE_PAINT         = 1 << 5,
+  GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS = 1 << 6,
+  GDK_FRAME_CLOCK_PHASE_AFTER_PAINT   = 1 << 7
 } GdkFrameClockPhase;
 
 GDK_AVAILABLE_IN_ALL
