@@ -1,5 +1,6 @@
 gtk_tests = [
   # testname, optional extra sources
+  ['curve2'],
   ['testsections'],
   ['testfilelauncher'],
   ['input'],
