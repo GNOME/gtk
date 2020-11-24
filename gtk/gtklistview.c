@@ -587,11 +587,12 @@ gtk_list_view_size_allocate (GtkWidget *widget,
   int min, nat, row_height;
   int x, y;
   GtkOrientation orientation, opposite_orientation;
-  GtkScrollablePolicy scroll_policy;
+  GtkScrollablePolicy scroll_policy, opposite_scroll_policy;
 
   orientation = gtk_list_base_get_orientation (GTK_LIST_BASE (self));
   opposite_orientation = OPPOSITE_ORIENTATION (orientation);
   scroll_policy = gtk_list_base_get_scroll_policy (GTK_LIST_BASE (self), orientation);
+  opposite_scroll_policy = gtk_list_base_get_scroll_policy (GTK_LIST_BASE (self), opposite_orientation);
 
   /* step 0: exit early if list is empty */
   if (gtk_list_item_manager_get_root (self->item_manager) == NULL)
@@ -602,7 +603,7 @@ gtk_list_view_size_allocate (GtkWidget *widget,
                       -1,
                       &min, &nat, NULL, NULL);
   self->list_width = orientation == GTK_ORIENTATION_VERTICAL ? width : height;
-  if (scroll_policy == GTK_SCROLL_MINIMUM)
+  if (opposite_scroll_policy == GTK_SCROLL_MINIMUM)
     self->list_width = MAX (min, self->list_width);
   else
     self->list_width = MAX (nat, self->list_width);
