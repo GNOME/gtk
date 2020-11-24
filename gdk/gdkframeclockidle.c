@@ -552,18 +552,6 @@ gdk_frame_clock_paint_idle (void *data)
             }
           G_GNUC_FALLTHROUGH;
 
-        case GDK_FRAME_CLOCK_PHASE_COMPUTE_SIZE:
-          if (priv->freeze_count == 0)
-            {
-              priv->phase = GDK_FRAME_CLOCK_PHASE_COMPUTE_SIZE;
-              if ((priv->requested & GDK_FRAME_CLOCK_PHASE_COMPUTE_SIZE) != 0)
-                {
-                  priv->requested &= ~GDK_FRAME_CLOCK_PHASE_COMPUTE_SIZE;
-                  _gdk_frame_clock_emit_compute_size (clock);
-                }
-            }
-          G_GNUC_FALLTHROUGH;
-
         case GDK_FRAME_CLOCK_PHASE_LAYOUT:
           if (priv->freeze_count == 0)
             {
