@@ -44,7 +44,8 @@
  */
 
 static GQuark quark_restyle_pending;
-static GQuark quark_resize_handler;
+static GQuark quark_layout_handler;
+static GQuark quark_after_update_handler;
 
 G_DEFINE_INTERFACE_WITH_CODE (GtkRoot, gtk_root, GTK_TYPE_WIDGET,
                               g_type_interface_add_prerequisite (g_define_type_id, GTK_TYPE_NATIVE))
@@ -83,7 +84,8 @@ gtk_root_default_init (GtkRootInterface *iface)
   iface->set_focus = gtk_root_default_set_focus;
 
   quark_restyle_pending = g_quark_from_static_string ("gtk-root-restyle-pending");
-  quark_resize_handler = g_quark_from_static_string ("gtk-root-resize-handler");
+  quark_layout_handler = g_quark_from_static_string ("gtk-root-layout-handler");
+  quark_after_update_handler = g_quark_from_static_string ("gtk-root-after-update-handler");
 }
 
 /**
@@ -171,8 +173,8 @@ gtk_root_needs_layout (GtkRoot *self)
 }
 
 static void
-gtk_root_layout_cb (GdkFrameClock *clock,
-                    GtkRoot       *self)
+gtk_root_after_update_cb (GdkFrameClock *clock,
+                          GtkRoot       *self)
 {
   GtkWidget *widget = GTK_WIDGET (self);
 
@@ -188,9 +190,17 @@ gtk_root_layout_cb (GdkFrameClock *clock,
    */
   if (g_object_get_qdata (G_OBJECT (self), quark_restyle_pending))
     {
-      g_object_set_qdata (G_OBJECT (self), quark_restyle_pending, NULL);
       gtk_css_node_validate (gtk_widget_get_css_node (widget));
     }
+}
+
+static void
+gtk_root_layout_cb (GdkFrameClock *clock,
+                    GtkRoot       *self)
+{
+  GtkWidget *widget = GTK_WIDGET (self);
+
+  g_object_set_qdata (G_OBJECT (self), quark_restyle_pending, NULL);
 
   /* we may be invoked with a container_resize_queue of NULL, because
    * queue_resize could have been adding an extra idle function while
@@ -219,20 +229,17 @@ gtk_root_layout_cb (GdkFrameClock *clock,
         }
     }
 
-  if (!gtk_root_needs_layout (self))
-    gtk_root_stop_layout (self);
-  else
-    gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_LAYOUT);
+  if (gtk_root_needs_layout (self))
+    {
+      gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_UPDATE);
+      gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_LAYOUT);
+    }
 }
 
 void
 gtk_root_start_layout (GtkRoot *self)
 {
   GdkFrameClock *clock;
-  guint resize_handler;
-
-  if (g_object_get_qdata (G_OBJECT (self), quark_resize_handler))
-    return;
 
   if (!gtk_root_needs_layout (self))
     return;
@@ -241,10 +248,25 @@ gtk_root_start_layout (GtkRoot *self)
   if (clock == NULL)
     return;
 
-  resize_handler = g_signal_connect (clock, "layout",
-                                     G_CALLBACK (gtk_root_layout_cb), self);
-  g_object_set_qdata (G_OBJECT (self), quark_resize_handler, GINT_TO_POINTER (resize_handler));
+  if (!g_object_get_qdata (G_OBJECT (self), quark_layout_handler))
+    {
+      guint layout_handler;
+      guint after_update_handler;
 
+      after_update_handler =
+        g_signal_connect_after (clock, "update",
+                                G_CALLBACK (gtk_root_after_update_cb), self);
+      g_object_set_qdata (G_OBJECT (self), quark_after_update_handler,
+                          GINT_TO_POINTER (after_update_handler));
+
+      layout_handler =
+        g_signal_connect (clock, "layout",
+                          G_CALLBACK (gtk_root_layout_cb), self);
+      g_object_set_qdata (G_OBJECT (self), quark_layout_handler,
+                          GINT_TO_POINTER (layout_handler));
+    }
+
+  gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_UPDATE);
   gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_LAYOUT);
 }
 
@@ -252,16 +274,24 @@ void
 gtk_root_stop_layout (GtkRoot *self)
 {
   GdkFrameClock *clock;
-  guint resize_handler;
+  guint layout_handler;
+  guint after_update_handler;
 
-  resize_handler = GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (self), quark_resize_handler));
+  layout_handler =
+    GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (self),
+                                         quark_layout_handler));
+  after_update_handler =
+    GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (self),
+                                         quark_after_update_handler));
 
-  if (resize_handler == 0)
+  if (layout_handler == 0)
     return;
 
   clock = gtk_widget_get_frame_clock (GTK_WIDGET (self));
-  g_signal_handler_disconnect (clock, resize_handler);
-  g_object_set_qdata (G_OBJECT (self), quark_resize_handler, NULL);
+  g_signal_handler_disconnect (clock, layout_handler);
+  g_signal_handler_disconnect (clock, after_update_handler);
+  g_object_set_qdata (G_OBJECT (self), quark_layout_handler, NULL);
+  g_object_set_qdata (G_OBJECT (self), quark_after_update_handler, NULL);
 }
 
 void

@@ -78,6 +78,7 @@
 enum {
   POPUP_LAYOUT_CHANGED,
   SIZE_CHANGED,
+  LAYOUT,
   RENDER,
   EVENT,
   ENTER_MONITOR,
@@ -560,6 +561,31 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
    */
   signals[SIZE_CHANGED] =
     g_signal_new (g_intern_static_string ("size-changed"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_FIRST,
+                  0,
+                  NULL,
+                  NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  2,
+                  G_TYPE_INT,
+                  G_TYPE_INT);
+
+  /**
+   * GdkSurface::layout:
+   * @surface: the #GdkSurface
+   * @width: the current width
+   * @height: the current height
+   *
+   * Emitted when the size of @surface is changed, or when relayout should
+   * be performed.
+   *
+   * Surface size is reported in ”application pixels”, not
+   * ”device pixels” (see gdk_surface_get_scale_factor()).
+   */
+  signals[LAYOUT] =
+    g_signal_new (g_intern_static_string ("layout"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_FIRST,
                   0,
