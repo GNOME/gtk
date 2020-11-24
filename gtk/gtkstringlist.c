@@ -557,7 +557,7 @@ gtk_string_list_remove (GtkStringList *self,
  * This function returns the const char *. To get the
  * object wrapping it, use g_list_model_get_item().
  *
- * Returns: the string at the given position
+ * Returns: (nullable): the string at the given position
  */
 const char *
 gtk_string_list_get_string (GtkStringList *self,
