@@ -1919,139 +1919,578 @@ gsk_path_builder_close (GskPathBuilder *builder)
   gsk_path_builder_end_current (builder);
 }
 
-static const char *
-skip_whitespace (const char *p)
+static void
+arc_segment (GskPathBuilder *builder,
+             double          cx,
+             double          cy,
+             double          rx,
+             double          ry,
+             double          sin_phi,
+             double          cos_phi,
+             double          sin_th0,
+             double          cos_th0,
+             double          sin_th1,
+             double          cos_th1,
+             double          t)
 {
-  while (g_ascii_isspace (*p))
-    p++;
-  return p;
+  double x1, y1, x2, y2, x3, y3;
+
+  x1 = rx * (cos_th0 - t * sin_th0);
+  y1 = ry * (sin_th0 + t * cos_th0);
+  x3 = rx * cos_th1;
+  y3 = ry * sin_th1;
+  x2 = x3 + rx * (t * sin_th1);
+  y2 = y3 + ry * (-t * cos_th1);
+
+  gsk_path_builder_curve_to (builder,
+                             cx + cos_phi * x1 - sin_phi * y1,
+                             cy + sin_phi * x1 + cos_phi * y1,
+                             cx + cos_phi * x2 - sin_phi * y2,
+                             cy + sin_phi * x2 + cos_phi * y2,
+                             cx + cos_phi * x3 - sin_phi * y3,
+                             cy + sin_phi * x3 + cos_phi * y3);
 }
 
 static void
-parse_point (const char  *p,
-             char       **end,
-             double      *x,
-             double      *y)
+gsk_path_builder_arc_to (GskPathBuilder *builder,
+                         float           rx,
+                         float           ry,
+                         float           x_axis_rotation,
+                         gboolean        large_arc,
+                         gboolean        positive_sweep,
+                         float           x,
+                         float           y)
+{
+  graphene_point_t *current;
+  double x1, y1, x2, y2;
+  double phi, sin_phi, cos_phi;
+  double mid_x, mid_y;
+  double lambda;
+  double d;
+  double k;
+  double x1_, y1_;
+  double cx_, cy_;
+  double  cx, cy;
+  double ux, uy, u_len;
+  double cos_theta1, theta1;
+  double vx, vy, v_len;
+  double dp_uv;
+  double cos_delta_theta, delta_theta;
+  int i, n_segs;
+  double d_theta, theta;
+  double sin_th0, cos_th0;
+  double sin_th1, cos_th1;
+  double th_half;
+  double t;
+
+  current = &g_array_index (builder->points, graphene_point_t, builder->points->len - 1);
+  x1 = current->x;
+  y1 = current->y;
+  x2 = x;
+  y2 = y;
+
+  phi = x_axis_rotation * M_PI / 180.0;
+  sincos (phi, &sin_phi, &cos_phi);
+
+  rx = fabs (rx);
+  ry = fabs (ry);
+
+  mid_x = (x1 - x2) / 2;
+  mid_y = (y1 - y2) / 2;
+
+  x1_ = cos_phi * mid_x + sin_phi * mid_y;
+  y1_ = - sin_phi * mid_x + cos_phi * mid_y;
+
+  lambda = (x1_ / rx) * (x1_ / rx) + (y1_ / ry) * (y1_ / ry);
+  if (lambda > 1)
+    {
+      lambda = sqrt (lambda);
+      rx *= lambda;
+      ry *= lambda;
+    }
+
+  d = (rx * y1_) * (rx * y1_) + (ry * x1_) * (ry * x1_);
+  if (d == 0)
+    return;
+
+  k = sqrt (fabs ((rx * ry) * (rx * ry) / d - 1.0));
+  if (positive_sweep == large_arc)
+    k = -k;
+
+  cx_ = k * rx * y1_ / ry;
+  cy_ = -k * ry * x1_ / rx;
+
+  cx = cos_phi * cx_ - sin_phi * cy_ + (x1 + x2) / 2;
+  cy = sin_phi * cx_ + cos_phi * cy_ + (y1 + y2) / 2;
+
+  ux = (x1_ - cx_) / rx;
+  uy = (y1_ - cy_) / ry;
+  u_len = sqrt (ux * ux + uy * uy);
+  if (u_len == 0)
+    return;
+
+  cos_theta1 = CLAMP (ux / u_len, -1, 1);
+  theta1 = acos (cos_theta1);
+  if (uy < 0)
+    theta1 = - theta1;
+
+  vx = (- x1_ - cx_) / rx;
+  vy = (- y1_ - cy_) / ry;
+  v_len = sqrt (vx * vx + vy * vy);
+  if (v_len == 0)
+    return;
+
+  dp_uv = ux * vx + uy * vy;
+  cos_delta_theta = CLAMP (dp_uv / (u_len * v_len), -1, 1);
+  delta_theta = acos (cos_delta_theta);
+  if (ux * vy - uy * vx < 0)
+    delta_theta = - delta_theta;
+  if (positive_sweep && delta_theta < 0)
+    delta_theta += 2 * M_PI;
+  else if (!positive_sweep && delta_theta > 0)
+    delta_theta -= 2 * M_PI;
+
+  n_segs = ceil (fabs (delta_theta / (M_PI_2 + 0.001)));
+  d_theta = delta_theta / n_segs;
+  theta = theta1;
+  sincos (theta1, &sin_th1, &cos_th1);
+
+  th_half = d_theta / 2;
+  t = (8.0 / 3.0) * sin (th_half / 2) * sin (th_half / 2) / sin (th_half);
+
+  for (i = 0; i < n_segs; i++)
+    {
+      theta = theta1;
+      theta1 = theta + d_theta;
+      sin_th0 = sin_th1;
+      cos_th0 = cos_th1;
+      sincos (theta1, &sin_th1, &cos_th1);
+      arc_segment (builder,
+                   cx, cy, rx, ry,
+                   sin_phi, cos_phi,
+                   sin_th0, cos_th0,
+                   sin_th1, cos_th1,
+                   t);
+    }
+}
+
+static void
+skip_whitespace (const char **p)
+{
+  while (g_ascii_isspace (**p))
+    (*p)++;
+}
+
+static void
+skip_optional_comma (const char **p)
+{
+  skip_whitespace (p);
+  if (**p == ',')
+    (*p)++;
+}
+
+static gboolean
+parse_number (const char **p,
+              double      *c)
 {
   char *e;
-  *x = g_ascii_strtod (p, &e);
-  *y = g_ascii_strtod (e, end);
+  *c = g_ascii_strtod (*p, &e);
+  if (e == *p)
+    return FALSE;
+  *p = e;
+  skip_optional_comma (p);
+  return TRUE;
+}
+
+static gboolean
+parse_coordinate (const char **p,
+                  double      *c)
+{
+  return parse_number (p, c);
+}
+
+static gboolean
+parse_coordinate_pair (const char **p,
+                       double      *x,
+                       double      *y)
+{
+  double xx, yy;
+  const char *o = *p;
+
+  if (!parse_coordinate (p, &xx))
+    {
+      *p = o;
+      return FALSE;
+    }
+  if (!parse_coordinate (p, &yy))
+    {
+      *p = o;
+      return FALSE;
+    }
+
+  *x = xx;
+  *y = yy;
+
+  return TRUE;
+}
+
+static gboolean
+parse_nonnegative_number (const char **p,
+                          double      *x)
+{
+  const char *o = *p;
+  double n;
+
+  if (!parse_number (p, &n))
+    return FALSE;
+
+  if (n < 0)
+    {
+      *p = o;
+      return FALSE;
+    }
+
+  *x = n;
+
+  return TRUE;
+}
+
+static gboolean
+parse_flag (const char **p,
+            gboolean    *f)
+{
+  skip_whitespace (p);
+  if (strchr ("01", **p))
+    {
+      *f = **p == '1';
+      (*p)++;
+      skip_optional_comma (p);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+parse_command (const char **p,
+               char        *cmd)
+{
+  char *s;
+  const char *allowed;
+
+  if (*cmd == 'X')
+    allowed = "mM";
+  else
+    allowed = "mMhHvVzZlLcCsStTqQaA";
+
+  skip_whitespace (p);
+  s = strchr (allowed, **p);
+  if (s)
+    {
+      *cmd = *s;
+      (*p)++;
+      return TRUE;
+    }
+  return FALSE;
 }
 
 GskPath *
 gsk_path_from_string (const char *s)
 {
   GskPathBuilder *builder;
-  double x0, y0, x1, y1, x2, y2;
-  double w, h, r;
+  double x, y;
+  double prev_x1, prev_y1;
   const char *p;
-  char *end;
-  int i;
+  char cmd;
+  char prev_cmd;
+  gboolean after_comma;
+  gboolean repeat;
 
   builder = gsk_path_builder_new ();
 
-  /* Commands that we produce:
-   * M x y h w v h h -w z  (rectangle)
-   * M x y A r r 0 i i x1 y1 (circle)
-   * M x y (move)
-   * Z (close)
-   * L x y (line)
-   * C x0 y0, x1 y1, x2 y2 (curve)
-   */
+  cmd = 'X';
+  x = y = 0;
+  prev_x1 = prev_y1 = 0;
+  after_comma = FALSE;
+
   p = s;
-  while (p)
+  while (*p)
     {
-      p = skip_whitespace (p);
-      if (*p == '\0')
-        break;
-
-      switch (*p)
+      prev_cmd = cmd;
+      repeat = !parse_command (&p, &cmd);
+      if (after_comma && !repeat)
+        goto error;
+      switch (cmd)
         {
-        case 'M':
-          p++;
-          parse_point (p, &end, &x0, &y0);
-          p = skip_whitespace (end);
-          switch (*p)
-            {
-            case 'h':
-              p++;
-              w = g_ascii_strtod (p, &end);
-              p = skip_whitespace (end);
-              if (*p != 'v')
-                goto error;
-              p++;
-              h = g_ascii_strtod (p, &end);
-              p = skip_whitespace (end);
-              if (*p != 'h')
-                goto error;
-              p++;
-              g_ascii_strtod (p, &end);
-              p = skip_whitespace (end);
-              if (*p != 'z')
-                goto error;
-              p++;
-
-              gsk_path_builder_add_rect (builder, x0, y0, w, h);
-              break;
-
-            case 'A':
-              p++;
-              parse_point (p, &end, &r, &r);
-              p = skip_whitespace (end);
-              /* FIXME reconstruct partial circles */
-              for (i = 0; i < 5; i++)
-                {
-                  g_ascii_strtod (p, &end);
-                  p = skip_whitespace (end);
-                }
-
-              gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (x0 - r, y0), r);
-              break;
-
-            default:
-              gsk_path_builder_move_to (builder, x0, y0);
-              break;
-            }
-          break;
+        case 'X':
+          goto error;
 
         case 'Z':
-          p++;
-          gsk_path_builder_close (builder);
+        case 'z':
+          if (repeat)
+            goto error;
+          else
+            gsk_path_builder_close (builder);
+          break;
+
+        case 'M':
+        case 'm':
+          {
+            double x1, y1;
+
+            if (parse_coordinate_pair (&p, &x1, &y1))
+              {
+                if (cmd == 'm')
+                  {
+                    x1 += x;
+                    y1 += y;
+                  }
+                if (repeat)
+                  gsk_path_builder_line_to (builder, x1, y1);
+                else
+                  gsk_path_builder_move_to (builder, x1, y1);
+                x = x1;
+                y = y1;
+              }
+            else
+              goto error;
+          }
           break;
 
         case 'L':
-          p++;
-          parse_point (p, &end, &x0, &y0);
-          p = skip_whitespace (end);
+        case 'l':
+          {
+            double x1, y1;
 
-          gsk_path_builder_line_to (builder, x0, y0);
+            if (parse_coordinate_pair (&p, &x1, &y1))
+              {
+                if (cmd == 'l')
+                  {
+                    x1 += x;
+                    y1 += y;
+                  }
+                gsk_path_builder_line_to (builder, x1, y1);
+                x = x1;
+                y = y1;
+              }
+            else
+              goto error;
+          }
+          break;
+
+        case 'H':
+        case 'h':
+          {
+            double x1;
+
+            if (parse_coordinate (&p, &x1))
+              {
+                if (cmd == 'h')
+                  x1 += x;
+                gsk_path_builder_line_to (builder, x1, y);
+                x = x1;
+              }
+            else
+              goto error;
+          }
+          break;
+
+        case 'V':
+        case 'v':
+          {
+            double y1;
+
+            if (parse_coordinate (&p, &y1))
+              {
+                if (cmd == 'v')
+                  y1 += y;
+                gsk_path_builder_line_to (builder, x, y1);
+                y = y1;
+              }
+            else
+              goto error;
+          }
           break;
 
         case 'C':
-          p++;
-          parse_point (p, &end, &x0, &y0);
-          p = skip_whitespace (end);
-          if (*p == ',')
-            p++;
-          parse_point (p, &end, &x1, &y1);
-          p = skip_whitespace (end);
-          if (*p == ',')
-            p++;
-          parse_point (p, &end, &x2, &y2);
-          p = skip_whitespace (end);
+        case 'c':
+          {
+            double x0, y0, x1, y1, x2, y2;
 
-          gsk_path_builder_curve_to (builder, x0, y0, x1, y1, x2, y2);
+            if (parse_coordinate_pair (&p, &x0, &y0) &&
+                parse_coordinate_pair (&p, &x1, &y1) &&
+                parse_coordinate_pair (&p, &x2, &y2))
+              {
+                if (cmd == 'c')
+                  {
+                    x0 += x;
+                    y0 += y;
+                    x1 += x;
+                    y1 += y;
+                    x2 += x;
+                    y2 += y;
+                  }
+                gsk_path_builder_curve_to (builder, x0, y0, x1, y1, x2, y2);
+                prev_x1 = x1;
+                prev_y1 = y1;
+                x = x2;
+                y = y2;
+              }
+            else
+              goto error;
+          }
+          break;
+
+        case 'S':
+        case 's':
+          {
+            double x0, y0, x1, y1, x2, y2;
+
+            if (parse_coordinate_pair (&p, &x1, &y1) &&
+                parse_coordinate_pair (&p, &x2, &y2))
+              {
+                if (cmd == 's')
+                  {
+                    x1 += x;
+                    y1 += y;
+                    x2 += x;
+                    y2 += y;
+                  }
+                if (strchr ("CcSs", prev_cmd))
+                  {
+                    x0 = 2 * x - prev_x1;
+                    y0 = 2 * y - prev_y1;
+                  }
+                else
+                  {
+                    x0 = x;
+                    y0 = y;
+                  }
+                gsk_path_builder_curve_to (builder, x0, y0, x1, y1, x2, y2);
+                prev_x1 = x1;
+                prev_y1 = y1;
+                x = x2;
+                y = y2;
+              }
+            else
+              goto error;
+          }
+          break;
+
+        case 'Q':
+        case 'q':
+          {
+            double x1, y1, x2, y2, xx1, yy1, xx2, yy2;
+
+            if (parse_coordinate_pair (&p, &x1, &y1) &&
+                parse_coordinate_pair (&p, &x2, &y2))
+              {
+                if (cmd == 'q')
+                  {
+                    x1 += x;
+                    y1 += y;
+                    x2 += x;
+                    y2 += y;
+                  }
+                xx1 = (x + 2.0 * x1) / 3.0;
+                yy1 = (y + 2.0 * y1) / 3.0;
+                xx2 = (x2 + 2.0 * x1) / 3.0;
+                yy2 = (y2 + 2.0 * y1) / 3.0;
+                gsk_path_builder_curve_to (builder, xx1, yy1, xx2, yy2, x2, y2);
+                prev_x1 = x1;
+                prev_y1 = y1;
+                x = x2;
+                y = y2;
+              }
+            else
+              goto error;
+          }
+          break;
+
+        case 'T':
+        case 't':
+          {
+            double x1, y1, x2, y2, xx1, yy1, xx2, yy2;
+
+            if (parse_coordinate_pair (&p, &x2, &y2))
+              {
+                if (cmd == 't')
+                  {
+                    x2 += x;
+                    y2 += y;
+                  }
+                if (strchr ("QqTt", prev_cmd))
+                  {
+                    x1 = 2 * x - prev_x1;
+                    y1 = 2 * y - prev_y1;
+                  }
+                else
+                  {
+                    x1 = x;
+                    y1 = y;
+                  }
+                xx1 = (x + 2.0 * x1) / 3.0;
+                yy1 = (y + 2.0 * y1) / 3.0;
+                xx2 = (x2 + 2.0 * x1) / 3.0;
+                yy2 = (y2 + 2.0 * y1) / 3.0;
+                gsk_path_builder_curve_to (builder, xx1, yy1, xx2, yy2, x2, y2);
+                prev_x1 = x1;
+                prev_y1 = y1;
+                x = x2;
+                y = y2;
+              }
+            else
+              goto error;
+          }
+          break;
+
+        case 'A':
+        case 'a':
+          {
+            double rx, ry;
+            double x_axis_rotation;
+            int large_arc, sweep;
+            double x1, y1;
+
+            if (parse_nonnegative_number (&p, &rx) &&
+                parse_nonnegative_number (&p, &ry) &&
+                parse_number (&p, &x_axis_rotation) &&
+                parse_flag (&p, &large_arc) &&
+                parse_flag (&p, &sweep) &&
+                parse_coordinate_pair (&p, &x1, &y1))
+              {
+                if (cmd == 'a')
+                  {
+                    x1 += x;
+                    y1 += y;
+                  }
+
+                gsk_path_builder_arc_to (builder,
+                                         rx, ry, x_axis_rotation,
+                                         large_arc, sweep,
+                                         x1, y1);
+                x = x1;
+                y = y1;
+              }
+            else
+              goto error;
+          }
           break;
 
         default:
           goto error;
         }
+
+      after_comma = (p > s) && p[-1] == ',';
     }
+
+  if (after_comma)
+    goto error;
 
   return gsk_path_builder_free_to_path (builder);
 
 error:
-  g_warning ("Can't parse string as GskPath, error at %ld", p - s);
+  //g_warning ("Can't parse string '%s' as GskPath, error at %ld", s, p - s);
   gsk_path_builder_unref (builder);
 
   return NULL;

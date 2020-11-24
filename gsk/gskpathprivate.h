@@ -58,7 +58,6 @@ void                    gsk_path_builder_add_contour_segment    (GskPathBuilder 
                                                                  float                 start,
                                                                  float                 end);
 
-GskPath *               gsk_path_from_string                    (const char *string);
 
 G_END_DECLS
 

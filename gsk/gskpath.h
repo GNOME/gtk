@@ -84,6 +84,10 @@ gboolean                gsk_path_foreach                        (GskPath        
                                                                  GskPathForeachFunc    func,
                                                                  gpointer              user_data);
 
+GDK_AVAILABLE_IN_ALL
+GskPath *               gsk_path_from_string                    (const char *string);
+
+
 #define GSK_TYPE_PATH_BUILDER (gsk_path_builder_get_type ())
 
 typedef struct _GskPathBuilder GskPathBuilder;
