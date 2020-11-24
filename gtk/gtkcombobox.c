@@ -2142,7 +2142,7 @@ out:
  *
  * Returns the #GtkTreeModel which is acting as data source for @combo_box.
  *
- * Returns: (transfer none): A #GtkTreeModel which was passed
+ * Returns: (nullable) (transfer none): A #GtkTreeModel which was passed
  *     during construction.
  */
 GtkTreeModel *
@@ -2541,7 +2541,7 @@ gtk_combo_box_get_popup_fixed_width (GtkComboBox *combo_box)
  *
  * Returns the current row separator function.
  *
- * Returns: the current row separator function.
+ * Returns: (nullable): the current row separator function.
  */
 GtkTreeViewRowSeparatorFunc
 gtk_combo_box_get_row_separator_func (GtkComboBox *combo_box)
@@ -2556,7 +2556,7 @@ gtk_combo_box_get_row_separator_func (GtkComboBox *combo_box)
 /**
  * gtk_combo_box_set_row_separator_func:
  * @combo_box: a #GtkComboBox
- * @func: a #GtkTreeViewRowSeparatorFunc
+ * @func: (nullable): a #GtkTreeViewRowSeparatorFunc
  * @data: (allow-none): user data to pass to @func, or %NULL
  * @destroy: (allow-none): destroy notifier for @data, or %NULL
  *

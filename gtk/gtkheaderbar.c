@@ -795,7 +795,7 @@ gtk_header_bar_set_decoration_layout (GtkHeaderBar *bar,
  * Gets the decoration layout set with
  * gtk_header_bar_set_decoration_layout().
  *
- * Returns: the decoration layout
+ * Returns: (nullable): the decoration layout
  */
 const char *
 gtk_header_bar_get_decoration_layout (GtkHeaderBar *bar)

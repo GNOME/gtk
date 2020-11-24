@@ -619,7 +619,7 @@ gtk_center_layout_get_baseline_position (GtkCenterLayout *self)
 /**
  * gtk_center_layout_set_start_widget:
  * @self: a #GtkCenterLayout
- * @widget: the new start widget
+ * @widget (nullable): the new start widget
  *
  * Sets the new start widget of @self.
  */
@@ -636,7 +636,7 @@ gtk_center_layout_set_start_widget (GtkCenterLayout *self,
  *
  * Returns the start widget fo the layout.
  *
- * Returns: (transfer none): The current start widget of @self
+ * Returns: (nullable) (transfer none): The current start widget of @self
  */
 GtkWidget *
 gtk_center_layout_get_start_widget (GtkCenterLayout *self)
@@ -647,7 +647,7 @@ gtk_center_layout_get_start_widget (GtkCenterLayout *self)
 /**
  * gtk_center_layout_set_center_widget:
  * @self: a #GtkCenterLayout
- * @widget: the new center widget
+ * @widget (nullable): the new center widget
  *
  * Sets the new center widget of @self
  */
@@ -664,7 +664,7 @@ gtk_center_layout_set_center_widget (GtkCenterLayout *self,
  *
  * Returns the center widget of the layout.
  *
- * Returns: (transfer none): the current center widget of @self
+ * Returns: (nullable) (transfer none): the current center widget of @self
  */
 GtkWidget *
 gtk_center_layout_get_center_widget (GtkCenterLayout *self)
@@ -675,7 +675,7 @@ gtk_center_layout_get_center_widget (GtkCenterLayout *self)
 /**
  * gtk_center_layout_set_end_widget:
  * @self: a #GtkCenterLayout
- * @widget: (transfer none): the new end widget
+ * @widget: (nullable) (transfer none): the new end widget
  *
  * Sets the new end widget of @self
  */
@@ -692,7 +692,7 @@ gtk_center_layout_set_end_widget (GtkCenterLayout *self,
  *
  * Returns the end widget of the layout.
  *
- * Returns: (transfer none): the current end widget of @self
+ * Returns: (nullable) (transfer none): the current end widget of @self
  */
 GtkWidget *
 gtk_center_layout_get_end_widget (GtkCenterLayout *self)

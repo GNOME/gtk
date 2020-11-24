@@ -772,7 +772,7 @@ gtk_column_view_column_set_sorter (GtkColumnViewColumn *self,
  *
  * Returns the sorter that is associated with the column.
  *
- * Returns: (transfer none): the #GtkSorter of @self
+ * Returns: (nullable) (transfer none): the #GtkSorter of @self
  */
 GtkSorter *
 gtk_column_view_column_get_sorter (GtkColumnViewColumn *self)

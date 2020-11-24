@@ -1661,7 +1661,7 @@ gtk_column_view_get_list_view (GtkColumnView *self)
  *   gtk_column_view_set_model (view, selection);
  * ]|
  *
- * Returns: (transfer none): the #GtkSorter of @self
+ * Returns: (nullable) (transfer none): the #GtkSorter of @self
  */
 GtkSorter *
 gtk_column_view_get_sorter (GtkColumnView *self)
