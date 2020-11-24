@@ -1277,6 +1277,14 @@ gdk_surface_schedule_update (GdkSurface *surface)
                                    GDK_FRAME_CLOCK_PHASE_PAINT);
 }
 
+void
+gdk_surface_emit_size_changed (GdkSurface *surface,
+                               int         width,
+                               int         height)
+{
+  g_signal_emit (surface, signals[SIZE_CHANGED], 0, width, height);
+}
+
 static void
 gdk_surface_process_updates_internal (GdkSurface *surface)
 {
@@ -2839,8 +2847,8 @@ gdk_surface_handle_event (GdkEvent *event)
       int width, height;
 
       gdk_configure_event_get_size (event, &width, &height);
-      g_signal_emit (gdk_event_get_surface (event), signals[SIZE_CHANGED], 0,
-                     width, height);
+      gdk_surface_emit_size_changed (gdk_event_get_surface (event),
+                                     width, height);
       handled = TRUE;
     }
   else

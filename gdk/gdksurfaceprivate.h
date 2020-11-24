@@ -333,6 +333,10 @@ void       gdk_surface_queue_state_change  (GdkSurface       *surface,
 
 void       gdk_surface_apply_state_change  (GdkSurface       *surface);
 
+void       gdk_surface_emit_size_changed   (GdkSurface       *surface,
+                                            int               width,
+                                            int               height);
+
 GDK_AVAILABLE_IN_ALL
 void           gdk_surface_request_motion (GdkSurface *surface);
 
