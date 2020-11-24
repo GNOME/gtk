@@ -54,6 +54,7 @@ struct _GdkSurface
   cairo_region_t *update_area;
   guint update_freeze_count;
   gboolean pending_schedule_update;
+  gboolean pending_request_compute_size;
   /* This is the update_area that was in effect when the current expose
      started. It may be smaller than the expose area if we'e painting
      more than we have to, but it represents the "true" damage. */
@@ -336,6 +337,8 @@ void       gdk_surface_apply_state_change  (GdkSurface       *surface);
 void       gdk_surface_emit_size_changed   (GdkSurface       *surface,
                                             int               width,
                                             int               height);
+
+void       gdk_surface_request_compute_size (GdkSurface      *surface);
 
 GDK_AVAILABLE_IN_ALL
 void           gdk_surface_request_motion (GdkSurface *surface);
