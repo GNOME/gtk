@@ -9289,11 +9289,11 @@ gtk_text_view_move_overlay (GtkTextView *text_view,
 {
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (gtk_widget_get_parent (child) == GTK_WIDGET (text_view));
+  g_return_if_fail (text_view->priv->center_child != NULL);
+  g_return_if_fail (gtk_widget_get_parent (child) == (GtkWidget *)text_view->priv->center_child);
 
-  if (text_view->priv->center_child == NULL)
-    gtk_text_view_child_move_overlay (text_view->priv->center_child,
-                                      child, xpos, ypos);
+  gtk_text_view_child_move_overlay (text_view->priv->center_child,
+                                    child, xpos, ypos);
 }
 
 
