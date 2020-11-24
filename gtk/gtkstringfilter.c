@@ -333,7 +333,7 @@ gtk_string_filter_new (GtkExpression *expression)
  *
  * Gets the search string set via gtk_string_filter_set_search().
  *
- * Returns: (allow-none) (transfer none): The search string
+ * Returns: (nullable) (transfer none): The search string
  **/
 const char *
 gtk_string_filter_get_search (GtkStringFilter *self)
