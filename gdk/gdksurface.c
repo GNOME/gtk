@@ -1285,6 +1285,25 @@ gdk_surface_emit_size_changed (GdkSurface *surface,
   g_signal_emit (surface, signals[SIZE_CHANGED], 0, width, height);
 }
 
+void
+gdk_surface_request_compute_size (GdkSurface *surface)
+{
+  GdkFrameClock *frame_clock;
+
+  if (surface->update_freeze_count ||
+      gdk_surface_is_toplevel_frozen (surface))
+    {
+      surface->pending_request_compute_size = TRUE;
+      return;
+    }
+
+  frame_clock = gdk_surface_get_frame_clock (surface);
+  g_return_if_fail (frame_clock);
+
+  gdk_frame_clock_request_phase (frame_clock,
+                                 GDK_FRAME_CLOCK_PHASE_COMPUTE_SIZE);
+}
+
 static void
 gdk_surface_process_updates_internal (GdkSurface *surface)
 {
@@ -1530,8 +1549,13 @@ gdk_surface_thaw_updates (GdkSurface *surface)
           surface->pending_schedule_update = FALSE;
           gdk_surface_schedule_update (surface);
         }
-    }
 
+      if (surface->pending_request_compute_size)
+        {
+          surface->pending_request_compute_size = FALSE;
+          gdk_surface_request_compute_size (surface);
+        }
+    }
 }
 
 /*
