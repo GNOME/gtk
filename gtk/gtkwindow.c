@@ -4364,6 +4364,13 @@ toplevel_compute_size (GdkToplevel     *toplevel,
   min_height = MIN (min_height + shadow.top + shadow.bottom, height);
 
   gdk_toplevel_size_set_min_size (size, min_width, min_height);
+
+  if (priv->use_client_shadow)
+    {
+      gdk_toplevel_size_set_margin (size,
+                                    shadow.left, shadow.right,
+                                    shadow.top, shadow.bottom);
+    }
 }
 
 static void

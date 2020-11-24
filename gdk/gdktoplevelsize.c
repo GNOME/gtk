@@ -119,6 +119,20 @@ gdk_toplevel_size_set_min_size (GdkToplevelSize *size,
 }
 
 void
+gdk_toplevel_size_set_margin (GdkToplevelSize *size,
+                              int              left,
+                              int              right,
+                              int              top,
+                              int              bottom)
+{
+  size->margin.is_valid = TRUE;
+  size->margin.left = left;
+  size->margin.right = right;
+  size->margin.top = top;
+  size->margin.bottom = bottom;
+}
+
+void
 gdk_toplevel_size_validate (GdkToplevelSize *size)
 {
   if (size->min_width > size->bounds_width ||
