@@ -2200,6 +2200,7 @@ gsk_path_from_string (const char *s)
   GskPathBuilder *builder;
   double x, y;
   double prev_x1, prev_y1;
+  double path_x, path_y;
   const char *p;
   char cmd;
   char prev_cmd;
@@ -2209,6 +2210,7 @@ gsk_path_from_string (const char *s)
   builder = gsk_path_builder_new ();
 
   cmd = 'X';
+  path_x = path_y = 0;
   x = y = 0;
   prev_x1 = prev_y1 = 0;
   after_comma = FALSE;
@@ -2218,8 +2220,10 @@ gsk_path_from_string (const char *s)
     {
       prev_cmd = cmd;
       repeat = !parse_command (&p, &cmd);
+
       if (after_comma && !repeat)
         goto error;
+
       switch (cmd)
         {
         case 'X':
@@ -2230,7 +2234,12 @@ gsk_path_from_string (const char *s)
           if (repeat)
             goto error;
           else
-            gsk_path_builder_close (builder);
+            {
+              gsk_path_builder_line_to (builder, path_x, path_y);
+              gsk_path_builder_close (builder);
+              x = path_x;
+              y = path_y;
+            }
           break;
 
         case 'M':
@@ -2248,7 +2257,14 @@ gsk_path_from_string (const char *s)
                 if (repeat)
                   gsk_path_builder_line_to (builder, x1, y1);
                 else
-                  gsk_path_builder_move_to (builder, x1, y1);
+                  {
+                    gsk_path_builder_move_to (builder, x1, y1);
+                    if (strchr ("zZX", prev_cmd))
+                      {
+                        path_x = x1;
+                        path_y = y1;
+                      }
+                  }
                 x = x1;
                 y = y1;
               }
@@ -2269,6 +2285,13 @@ gsk_path_from_string (const char *s)
                     x1 += x;
                     y1 += y;
                   }
+
+                if (strchr ("zZ", prev_cmd))
+                  {
+                    gsk_path_builder_move_to (builder, x, y);
+                    path_x = x;
+                    path_y = y;
+                  }
                 gsk_path_builder_line_to (builder, x1, y1);
                 x = x1;
                 y = y1;
@@ -2287,6 +2310,12 @@ gsk_path_from_string (const char *s)
               {
                 if (cmd == 'h')
                   x1 += x;
+                if (strchr ("zZ", prev_cmd))
+                  {
+                    gsk_path_builder_move_to (builder, x, y);
+                    path_x = x;
+                    path_y = y;
+                  }
                 gsk_path_builder_line_to (builder, x1, y);
                 x = x1;
               }
@@ -2304,6 +2333,12 @@ gsk_path_from_string (const char *s)
               {
                 if (cmd == 'v')
                   y1 += y;
+                if (strchr ("zZ", prev_cmd))
+                  {
+                    gsk_path_builder_move_to (builder, x, y);
+                    path_x = x;
+                    path_y = y;
+                  }
                 gsk_path_builder_line_to (builder, x, y1);
                 y = y1;
               }
@@ -2329,6 +2364,12 @@ gsk_path_from_string (const char *s)
                     y1 += y;
                     x2 += x;
                     y2 += y;
+                  }
+                if (strchr ("zZ", prev_cmd))
+                  {
+                    gsk_path_builder_move_to (builder, x, y);
+                    path_x = x;
+                    path_y = y;
                   }
                 gsk_path_builder_curve_to (builder, x0, y0, x1, y1, x2, y2);
                 prev_x1 = x1;
@@ -2366,6 +2407,12 @@ gsk_path_from_string (const char *s)
                     x0 = x;
                     y0 = y;
                   }
+                if (strchr ("zZ", prev_cmd))
+                  {
+                    gsk_path_builder_move_to (builder, x, y);
+                    path_x = x;
+                    path_y = y;
+                  }
                 gsk_path_builder_curve_to (builder, x0, y0, x1, y1, x2, y2);
                 prev_x1 = x1;
                 prev_y1 = y1;
@@ -2396,6 +2443,12 @@ gsk_path_from_string (const char *s)
                 yy1 = (y + 2.0 * y1) / 3.0;
                 xx2 = (x2 + 2.0 * x1) / 3.0;
                 yy2 = (y2 + 2.0 * y1) / 3.0;
+                if (strchr ("zZ", prev_cmd))
+                  {
+                    gsk_path_builder_move_to (builder, x, y);
+                    path_x = x;
+                    path_y = y;
+                  }
                 gsk_path_builder_curve_to (builder, xx1, yy1, xx2, yy2, x2, y2);
                 prev_x1 = x1;
                 prev_y1 = y1;
@@ -2433,6 +2486,12 @@ gsk_path_from_string (const char *s)
                 yy1 = (y + 2.0 * y1) / 3.0;
                 xx2 = (x2 + 2.0 * x1) / 3.0;
                 yy2 = (y2 + 2.0 * y1) / 3.0;
+                if (strchr ("zZ", prev_cmd))
+                  {
+                    gsk_path_builder_move_to (builder, x, y);
+                    path_x = x;
+                    path_y = y;
+                  }
                 gsk_path_builder_curve_to (builder, xx1, yy1, xx2, yy2, x2, y2);
                 prev_x1 = x1;
                 prev_y1 = y1;
@@ -2465,6 +2524,12 @@ gsk_path_from_string (const char *s)
                     y1 += y;
                   }
 
+                if (strchr ("zZ", prev_cmd))
+                  {
+                    gsk_path_builder_move_to (builder, x, y);
+                    path_x = x;
+                    path_y = y;
+                  }
                 gsk_path_builder_arc_to (builder,
                                          rx, ry, x_axis_rotation,
                                          large_arc, sweep,
