@@ -117,6 +117,153 @@ test_create (void)
     }
 }
 
+static void
+test_segment_start (void)
+{
+  GskPath *path, *path1;
+  GskPathMeasure *measure, *measure1;
+  GskPathBuilder *builder;
+  float epsilon, length;
+  guint i;
+
+  path = create_random_path ();
+  measure = gsk_path_measure_new (path);
+  length = gsk_path_measure_get_length (measure);
+  epsilon = MAX (length / 1024, G_MINFLOAT);
+
+  for (i = 0; i < 100; i++)
+    {
+      float seg_length = length * i / 100.0f;
+
+      builder = gsk_path_builder_new ();
+      gsk_path_measure_add_segment (measure, builder, 0, seg_length);
+      path1 = gsk_path_builder_free_to_path (builder);
+      measure1 = gsk_path_measure_new (path1);
+
+      g_assert_cmpfloat_with_epsilon (seg_length, gsk_path_measure_get_length (measure1), epsilon);
+
+      gsk_path_measure_unref (measure1);
+      gsk_path_unref (path1);
+    }
+
+  gsk_path_measure_unref (measure);
+  gsk_path_unref (path);
+}
+
+static void
+test_segment_end (void)
+{
+  GskPath *path, *path1;
+  GskPathMeasure *measure, *measure1;
+  GskPathBuilder *builder;
+  float epsilon, length;
+  guint i;
+
+  path = create_random_path ();
+  measure = gsk_path_measure_new (path);
+  length = gsk_path_measure_get_length (measure);
+  epsilon = MAX (length / 1024, G_MINFLOAT);
+
+  for (i = 0; i < 100; i++)
+    {
+      float seg_length = length * i / 100.0f;
+
+      builder = gsk_path_builder_new ();
+      gsk_path_measure_add_segment (measure, builder, length - seg_length, length);
+      path1 = gsk_path_builder_free_to_path (builder);
+      measure1 = gsk_path_measure_new (path1);
+
+      g_assert_cmpfloat_with_epsilon (seg_length, gsk_path_measure_get_length (measure1), epsilon);
+
+      gsk_path_measure_unref (measure1);
+      gsk_path_unref (path1);
+    }
+
+  gsk_path_measure_unref (measure);
+  gsk_path_unref (path);
+}
+
+static void
+test_segment_chunk (void)
+{
+  GskPath *path, *path1;
+  GskPathMeasure *measure, *measure1;
+  GskPathBuilder *builder;
+  float epsilon, length;
+  guint i;
+
+  path = create_random_path ();
+  measure = gsk_path_measure_new (path);
+  length = gsk_path_measure_get_length (measure);
+  epsilon = MAX (length / 1024, G_MINFLOAT);
+
+  for (i = 0; i <= 100; i++)
+    {
+      float seg_start = length * i / 200.0f;
+
+      builder = gsk_path_builder_new ();
+      gsk_path_measure_add_segment (measure, builder, seg_start, seg_start + length / 2);
+      path1 = gsk_path_builder_free_to_path (builder);
+      measure1 = gsk_path_measure_new (path1);
+
+      g_assert_cmpfloat_with_epsilon (length / 2, gsk_path_measure_get_length (measure1), epsilon);
+
+      gsk_path_measure_unref (measure1);
+      gsk_path_unref (path1);
+    }
+
+  gsk_path_measure_unref (measure);
+  gsk_path_unref (path);
+}
+
+static void
+test_segment (void)
+{
+  GskPath *path, *path1, *path2, *path3;
+  GskPathMeasure *measure, *measure1, *measure2, *measure3;
+  GskPathBuilder *builder;
+  guint i;
+  float split1, split2, epsilon, length;
+
+  for (i = 0; i < 1000; i++)
+    {
+      path = create_random_path ();
+      measure = gsk_path_measure_new (path);
+      length = gsk_path_measure_get_length (measure);
+      /* chosen high enough to stop the testsuite from failing */
+      epsilon = MAX (length / 256, 1.f / 1024);
+
+      split1 = g_test_rand_double_range (0, length);
+      split2 = g_test_rand_double_range (split1, length);
+
+      builder = gsk_path_builder_new ();
+      gsk_path_measure_add_segment (measure, builder, 0, split1);
+      path1 = gsk_path_builder_free_to_path (builder);
+      measure1 = gsk_path_measure_new (path1);
+
+      builder = gsk_path_builder_new ();
+      gsk_path_measure_add_segment (measure, builder, split1, split2);
+      path2 = gsk_path_builder_free_to_path (builder);
+      measure2 = gsk_path_measure_new (path2);
+
+      builder = gsk_path_builder_new ();
+      gsk_path_measure_add_segment (measure, builder, split2, length);
+      path3 = gsk_path_builder_free_to_path (builder);
+      measure3 = gsk_path_measure_new (path3);
+
+      g_assert_cmpfloat_with_epsilon (split1, gsk_path_measure_get_length (measure1), epsilon);
+      g_assert_cmpfloat_with_epsilon (split2 - split1, gsk_path_measure_get_length (measure2), epsilon);
+      g_assert_cmpfloat_with_epsilon (length - split2, gsk_path_measure_get_length (measure3), epsilon);
+
+      gsk_path_measure_unref (measure2);
+      gsk_path_measure_unref (measure1);
+      gsk_path_measure_unref (measure);
+      gsk_path_unref (path2);
+      gsk_path_unref (path1);
+      gsk_path_unref (path);
+    }
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -124,6 +271,10 @@ main (int   argc,
   gtk_test_init (&argc, &argv, NULL);
 
   g_test_add_func ("/path/create", test_create);
+  g_test_add_func ("/path/segment_start", test_segment_start);
+  g_test_add_func ("/path/segment_end", test_segment_end);
+  g_test_add_func ("/path/segment_chunk", test_segment_chunk);
+  g_test_add_func ("/path/segment", test_segment);
 
   return g_test_run ();
 }
