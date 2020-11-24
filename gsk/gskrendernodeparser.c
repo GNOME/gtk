@@ -1816,6 +1816,8 @@ parse_fill_node (GtkCssParser *parser)
 
   result = gsk_fill_node_new (child, path, rule);
 
+  gsk_path_unref (path);
+
   gsk_render_node_unref (child);
 
   return result;
@@ -1850,6 +1852,7 @@ parse_stroke_node (GtkCssParser *parser)
 
   result = gsk_stroke_node_new (child, path, stroke);
 
+  gsk_path_unref (path);
   gsk_stroke_free (stroke);
   gsk_render_node_unref (child);
 
@@ -2416,7 +2419,7 @@ append_path_param (Printer    *p,
   char *str, *s;
 
   _indent (p);
-  g_string_append (p->str, "path: \"\n");
+  g_string_append (p->str, "path: \"\\\n");
   str = gsk_path_to_string (path);
   /* Put each command on a new line */
   for (s = str; *s; s++)
