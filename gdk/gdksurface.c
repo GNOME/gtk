@@ -1290,7 +1290,7 @@ gdk_surface_schedule_update (GdkSurface *surface)
   if (surface->update_freeze_count ||
       gdk_surface_is_toplevel_frozen (surface))
     {
-      surface->pending_schedule_update = TRUE;
+      surface->pending_phases |= GDK_FRAME_CLOCK_PHASE_PAINT;
       return;
     }
 
@@ -1319,7 +1319,7 @@ gdk_surface_request_compute_size (GdkSurface *surface)
   if (surface->update_freeze_count ||
       gdk_surface_is_toplevel_frozen (surface))
     {
-      surface->pending_request_compute_size = TRUE;
+      surface->pending_phases |= GDK_FRAME_CLOCK_PHASE_COMPUTE_SIZE;
       return;
     }
 
@@ -1568,18 +1568,14 @@ gdk_surface_thaw_updates (GdkSurface *surface)
 
   if (--surface->update_freeze_count == 0)
     {
-      _gdk_frame_clock_inhibit_freeze (surface->frame_clock);
+      GdkFrameClock *frame_clock = surface->frame_clock;
 
-      if (surface->pending_schedule_update)
-        {
-          surface->pending_schedule_update = FALSE;
-          gdk_surface_schedule_update (surface);
-        }
+      _gdk_frame_clock_inhibit_freeze (frame_clock);
 
-      if (surface->pending_request_compute_size)
+      if (surface->pending_phases)
         {
-          surface->pending_request_compute_size = FALSE;
-          gdk_surface_request_compute_size (surface);
+          gdk_frame_clock_request_phase (frame_clock, surface->pending_phases);
+          surface->pending_phases = 0;
         }
     }
 }
