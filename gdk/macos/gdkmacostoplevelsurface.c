@@ -174,6 +174,8 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
     }
   else
     {
+      [nswindow setAnimationBehavior:NSWindowAnimationBehaviorDocumentWindow];
+
       if (!self->decorated &&
           !GDK_MACOS_SURFACE (self)->did_initial_present &&
           GDK_SURFACE (self)->x == 0 &&
