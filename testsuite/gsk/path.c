@@ -264,6 +264,91 @@ test_segment (void)
     }
 }
 
+static void
+test_closest_point (void)
+{
+  static const float tolerance = 0.5;
+  GskPath *path, *path1, *path2;
+  GskPathMeasure *measure, *measure1, *measure2;
+  GskPathBuilder *builder;
+  guint i, j;
+
+  for (i = 0; i < 10; i++)
+    {
+      path1 = create_random_path ();
+      measure1 = gsk_path_measure_new_with_tolerance (path1, tolerance);
+      path2 = create_random_path ();
+      measure2 = gsk_path_measure_new_with_tolerance (path2, tolerance);
+
+      builder = gsk_path_builder_new ();
+      gsk_path_builder_add_path (builder, path1);
+      gsk_path_builder_add_path (builder, path2);
+      path = gsk_path_builder_free_to_path (builder);
+      measure = gsk_path_measure_new_with_tolerance (path, tolerance);
+
+      for (j = 0; j < 100; j++)
+        {
+          graphene_point_t test = GRAPHENE_POINT_INIT (g_test_rand_double_range (-1000, 1000),
+                                                       g_test_rand_double_range (-1000, 1000));
+          graphene_point_t p1, p2, p;
+          graphene_vec2_t t1, t2, t;
+          float offset1, offset2, offset;
+          float distance1, distance2, distance;
+          gboolean found1, found2, found;
+
+          found1 = gsk_path_measure_get_closest_point_full (measure1,
+                                                            &test,
+                                                            INFINITY,
+                                                            &distance1,
+                                                            &p1,
+                                                            &offset1,
+                                                            &t1);
+          found2 = gsk_path_measure_get_closest_point_full (measure2,
+                                                            &test,
+                                                            INFINITY,
+                                                            &distance2,
+                                                            &p2,
+                                                            &offset2,
+                                                            &t2);
+          found = gsk_path_measure_get_closest_point_full (measure,
+                                                           &test,
+                                                           INFINITY,
+                                                           &distance,
+                                                           &p,
+                                                           &offset,
+                                                           &t);
+
+          if (found1 && (!found2 || distance1 < distance2 + tolerance))
+            {
+              g_assert_cmpfloat (distance1, ==, distance);
+              g_assert_cmpfloat (p1.x, ==, p.x);
+              g_assert_cmpfloat (p1.y, ==, p.y);
+              g_assert_cmpfloat (offset1, ==, offset);
+              g_assert_true (graphene_vec2_equal (&t1, &t));
+            }
+          else if (found2)
+            {
+              g_assert_cmpfloat (distance2, ==, distance);
+              g_assert_cmpfloat (p2.x, ==, p.x);
+              g_assert_cmpfloat (p2.y, ==, p.y);
+              g_assert_cmpfloat_with_epsilon (offset2 + gsk_path_measure_get_length (measure1), offset, MAX (G_MINFLOAT, offset / 1024));
+              g_assert_true (graphene_vec2_equal (&t2, &t));
+            }
+          else
+            {
+              g_assert (!found);
+            }
+        }
+
+      gsk_path_measure_unref (measure2);
+      gsk_path_measure_unref (measure1);
+      gsk_path_measure_unref (measure);
+      gsk_path_unref (path2);
+      gsk_path_unref (path1);
+      gsk_path_unref (path);
+    }
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -275,6 +360,7 @@ main (int   argc,
   g_test_add_func ("/path/segment_end", test_segment_end);
   g_test_add_func ("/path/segment_chunk", test_segment_chunk);
   g_test_add_func ("/path/segment", test_segment);
+  g_test_add_func ("/path/closest_point", test_closest_point);
 
   return g_test_run ();
 }
