@@ -1,4 +1,4 @@
-/* Path/Text
+/* Path/Curved Text
  *
  * This demo shows how to use GskPath to animate a path along another path.
  */
@@ -28,6 +28,7 @@ struct _GtkPathWidget
   graphene_point_t points[4];
 
   guint active_point;
+  float line_closest;
 
   GskPath *line_path;
   GskPathMeasure *line_measure;
@@ -248,7 +249,7 @@ gtk_path_widget_snapshot (GtkWidget   *widget,
   /* frosted glass the background */
   gtk_snapshot_push_blur (snapshot, 100);
   gdk_paintable_snapshot (self->background, snapshot, width, height);
-  gtk_snapshot_append_color (snapshot, &(GdkRGBA) { 1, 1, 1, 0.6 }, &GRAPHENE_RECT_INIT (0, 0, width, height));
+  gtk_snapshot_append_color (snapshot, &(GdkRGBA) { 1, 1, 1, 0.5 }, &GRAPHENE_RECT_INIT (0, 0, width, height));
   gtk_snapshot_pop (snapshot);
 
   /* draw the text */
@@ -270,14 +271,34 @@ gtk_path_widget_snapshot (GtkWidget   *widget,
 
   if (self->editable && self->line_path)
     {
-      GskPathBuilder *builder;
-
       /* draw the control line */
       stroke = gsk_stroke_new (1.0);
       gtk_snapshot_push_stroke (snapshot, self->line_path, stroke);
       gsk_stroke_free (stroke);
       gtk_snapshot_append_color (snapshot, &(GdkRGBA) { 0, 0, 0, 1 }, &GRAPHENE_RECT_INIT (0, 0, width, height));
       gtk_snapshot_pop (snapshot);
+    }
+
+  if (self->line_closest >= 0)
+    {
+      GskPathBuilder *builder;
+      graphene_point_t closest;
+
+      builder = gsk_path_builder_new ();
+      gsk_path_measure_get_point (self->line_measure, self->line_closest, &closest, NULL);
+      gsk_path_builder_add_circle (builder, &closest, POINT_SIZE);
+      path = gsk_path_builder_free_to_path (builder);
+
+      gtk_snapshot_push_fill (snapshot, path, GSK_FILL_RULE_WINDING);
+      gtk_snapshot_append_color (snapshot, &(GdkRGBA) { 0, 0, 1, 1 }, &GRAPHENE_RECT_INIT (0, 0, width, height));
+      gtk_snapshot_pop (snapshot);
+
+      gsk_path_unref (path);
+    }
+
+  if (self->editable && self->line_path)
+    {
+      GskPathBuilder *builder;
 
       /* draw the points */
       builder = gsk_path_builder_new ();
@@ -472,6 +493,31 @@ drag_update (GtkGestureDrag *drag,
 }
 
 static void
+pointer_motion (GtkEventControllerMotion *controller,
+                double                    x,
+                double                    y,
+                GtkPathWidget            *self)
+{
+  gsk_path_measure_get_closest_point_full (self->line_measure,
+                                           &GRAPHENE_POINT_INIT (x, y),
+                                           INFINITY,
+                                           NULL, NULL,
+                                           &self->line_closest,
+                                           NULL);
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+static void
+pointer_leave (GtkEventControllerMotion *controller,
+               GtkPathWidget            *self)
+{
+  self->line_closest = -1;
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+static void
 gtk_path_widget_init (GtkPathWidget *self)
 {
   GtkEventController *controller;
@@ -480,8 +526,15 @@ gtk_path_widget_init (GtkPathWidget *self)
   g_signal_connect (controller, "drag-begin", G_CALLBACK (drag_begin), self);
   g_signal_connect (controller, "drag-update", G_CALLBACK (drag_update), self);
   g_signal_connect (controller, "drag-end", G_CALLBACK (drag_update), self);
-
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
+
+  controller = GTK_EVENT_CONTROLLER (gtk_event_controller_motion_new ());
+  g_signal_connect (controller, "enter", G_CALLBACK (pointer_motion), self);
+  g_signal_connect (controller, "motion", G_CALLBACK (pointer_motion), self);
+  g_signal_connect (controller, "leave", G_CALLBACK (pointer_leave), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), controller);
+
+  self->line_closest = -1;
 
   self->points[0] = GRAPHENE_POINT_INIT (0.1, 0.9);
   self->points[1] = GRAPHENE_POINT_INIT (0.3, 0.1);
