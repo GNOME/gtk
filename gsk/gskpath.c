@@ -505,17 +505,22 @@ gsk_circle_contour_print (const GskContour *contour,
                           GString          *string)
 {
   const GskCircleContour *self = (const GskCircleContour *) contour;
-  graphene_point_t start = GRAPHENE_POINT_INIT (cos (DEG_TO_RAD (self->start_angle)) * self->radius,
-                                                sin (DEG_TO_RAD (self->start_angle)) * self->radius);
-  graphene_point_t end = GRAPHENE_POINT_INIT (cos (DEG_TO_RAD (self->end_angle)) * self->radius,
-                                              sin (DEG_TO_RAD (self->end_angle)) * self->radius);
+  double mid_angle = (self->end_angle - self->start_angle) / 2;
+  graphene_point_t start = GRAPHENE_POINT_INIT (self->center.x + cos (DEG_TO_RAD (self->start_angle)) * self->radius,
+                                                self->center.y + sin (DEG_TO_RAD (self->start_angle)) * self->radius);
+  graphene_point_t mid = GRAPHENE_POINT_INIT (self->center.x + cos (DEG_TO_RAD (mid_angle)) * self->radius,
+                                                self->center.y + sin (DEG_TO_RAD (mid_angle)) * self->radius);
+  graphene_point_t end = GRAPHENE_POINT_INIT (self->center.x + cos (DEG_TO_RAD (self->end_angle)) * self->radius,
+                                              self->center.y + sin (DEG_TO_RAD (self->end_angle)) * self->radius);
 
-  g_string_append_printf (string, "M %g %g A %g %g 0 %u %u %g %g",
-                          self->center.x + start.x, self->center.y + start.y, 
-                          self->radius, self->radius,
-                          fabs (self->start_angle - self->end_angle) > 180 ? 1 : 0,
-                          self->start_angle < self->end_angle ? 0 : 1,
-                          self->center.x + end.x, self->center.y + end.y);
+  g_string_append_printf (string, "M %g %g ", start.x, start.y);
+  g_string_append_printf (string, "A %g %g 0 1 0 %g %g ",
+                          self->radius, self->radius, mid.x, mid.y);
+  g_string_append_printf (string, "A %g %g 0 1 0 %g %g ",
+                          self->radius, self->radius, end.x, end.y);
+
+  if (fabs (self->start_angle - self->end_angle) >= 360)
+    g_string_append (string, "Z");
 }
 
 static gboolean
