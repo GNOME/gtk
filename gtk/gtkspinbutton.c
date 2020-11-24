@@ -1883,12 +1883,41 @@ gtk_spin_button_default_input (GtkSpinButton *spin_button,
                                gdouble       *new_val)
 {
   gchar *err = NULL;
+  const char *text;
 
-  *new_val = g_strtod (gtk_entry_get_text (GTK_ENTRY (spin_button)), &err);
+  text = gtk_entry_get_text (GTK_ENTRY (spin_button));
+
+  *new_val = g_strtod (text, &err);
   if (*err)
-    return GTK_INPUT_ERROR;
-  else
-    return FALSE;
+    {
+      /* try to convert with local digits */
+      gint64 val = 0;
+      int sign = 1;
+      const char *p;
+
+      for (p = text; *p; p = g_utf8_next_char (p))
+        {
+          gunichar ch = g_utf8_get_char (p);
+
+          if (p == text && ch == '-')
+            {
+              sign = -1;
+              continue;
+            }
+
+          if (!g_unichar_isdigit (ch))
+            break;
+
+          val = val * 10 + g_unichar_digit_value (ch);
+        }
+
+      if (*p)
+        return GTK_INPUT_ERROR;
+
+      *new_val = sign * val;
+    }
+
+  return FALSE;
 }
 
 static void
