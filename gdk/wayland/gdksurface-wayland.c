@@ -341,6 +341,9 @@ _gdk_wayland_surface_save_size (GdkSurface *surface)
                         GDK_TOPLEVEL_STATE_TILED))
     return;
 
+  if (surface->width <= 1 || surface->height <= 1)
+    return;
+
   impl->saved_width = surface->width - impl->margin_left - impl->margin_right;
   impl->saved_height = surface->height - impl->margin_top - impl->margin_bottom;
 }
