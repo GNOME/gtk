@@ -6,6 +6,7 @@ gtk_tests = [
   ['motion-compression'],
   ['ottie'],
   ['overlayscroll'],
+  ['curve2'],
   ['testupload'],
   ['testtransform'],
   ['testdropdown'],
