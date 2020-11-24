@@ -3244,7 +3244,7 @@ gtk_widget_remove_surface_transform_changed_callback (GtkWidget *widget,
     }
 }
 
-static GdkSurface *
+GdkSurface *
 gtk_widget_get_surface (GtkWidget *widget)
 {
   GtkNative *native = gtk_widget_get_native (widget);

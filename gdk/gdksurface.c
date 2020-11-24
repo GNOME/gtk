@@ -1371,6 +1371,45 @@ gdk_surface_process_updates_internal (GdkSurface *surface)
 }
 
 static void
+gdk_surface_layout_on_clock (GdkFrameClock *clock,
+                             void          *data)
+{
+  GdkSurface *surface = GDK_SURFACE (data);
+
+  g_return_if_fail (GDK_IS_SURFACE (surface));
+
+  if (GDK_SURFACE_DESTROYED (surface))
+    return;
+
+  if (!GDK_SURFACE_IS_MAPPED (surface))
+    return;
+
+  if (surface->update_freeze_count)
+    return;
+
+  g_signal_emit (surface, signals[LAYOUT], 0, surface->width, surface->height);
+}
+
+void
+gdk_surface_request_layout (GdkSurface *surface)
+{
+  GdkFrameClock *frame_clock;
+
+  if (surface->update_freeze_count ||
+      gdk_surface_is_toplevel_frozen (surface))
+    {
+      surface->pending_phases |= GDK_FRAME_CLOCK_PHASE_LAYOUT;
+      return;
+    }
+
+  frame_clock = gdk_surface_get_frame_clock (surface);
+  g_return_if_fail (frame_clock);
+
+  gdk_frame_clock_request_phase (frame_clock,
+                                 GDK_FRAME_CLOCK_PHASE_LAYOUT);
+}
+
+static void
 gdk_surface_paint_on_clock (GdkFrameClock *clock,
                             void          *data)
 {
@@ -2452,6 +2491,10 @@ gdk_surface_set_frame_clock (GdkSurface     *surface,
                         G_CALLBACK (gdk_surface_resume_events),
                         surface);
       g_signal_connect (G_OBJECT (clock),
+                        "layout",
+                        G_CALLBACK (gdk_surface_layout_on_clock),
+                        surface);
+      g_signal_connect (G_OBJECT (clock),
                         "paint",
                         G_CALLBACK (gdk_surface_paint_on_clock),
                         surface);
@@ -2470,6 +2513,9 @@ gdk_surface_set_frame_clock (GdkSurface     *surface,
                                             surface);
       g_signal_handlers_disconnect_by_func (G_OBJECT (surface->frame_clock),
                                             G_CALLBACK (gdk_surface_resume_events),
+                                            surface);
+      g_signal_handlers_disconnect_by_func (G_OBJECT (surface->frame_clock),
+                                            G_CALLBACK (gdk_surface_layout_on_clock),
                                             surface);
       g_signal_handlers_disconnect_by_func (G_OBJECT (surface->frame_clock),
                                             G_CALLBACK (gdk_surface_paint_on_clock),

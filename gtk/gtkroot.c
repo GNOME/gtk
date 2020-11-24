@@ -195,8 +195,10 @@ gtk_root_after_update_cb (GdkFrameClock *clock,
 }
 
 static void
-gtk_root_layout_cb (GdkFrameClock *clock,
-                    GtkRoot       *self)
+gtk_root_layout_cb (GdkSurface *surface,
+                    int         width,
+                    int         height,
+                    GtkRoot    *self)
 {
   GtkWidget *widget = GTK_WIDGET (self);
 
@@ -231,19 +233,22 @@ gtk_root_layout_cb (GdkFrameClock *clock,
 
   if (gtk_root_needs_layout (self))
     {
-      gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_UPDATE);
-      gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_LAYOUT);
+      gdk_frame_clock_request_phase (gdk_surface_get_frame_clock (surface),
+                                     GDK_FRAME_CLOCK_PHASE_UPDATE);
+      gdk_surface_request_layout (surface);
     }
 }
 
 void
 gtk_root_start_layout (GtkRoot *self)
 {
+  GdkSurface *surface;
   GdkFrameClock *clock;
 
   if (!gtk_root_needs_layout (self))
     return;
 
+  surface = gtk_widget_get_surface (GTK_WIDGET (self));
   clock = gtk_widget_get_frame_clock (GTK_WIDGET (self));
   if (clock == NULL)
     return;
@@ -260,19 +265,20 @@ gtk_root_start_layout (GtkRoot *self)
                           GINT_TO_POINTER (after_update_handler));
 
       layout_handler =
-        g_signal_connect (clock, "layout",
+        g_signal_connect (surface, "layout",
                           G_CALLBACK (gtk_root_layout_cb), self);
       g_object_set_qdata (G_OBJECT (self), quark_layout_handler,
                           GINT_TO_POINTER (layout_handler));
     }
 
   gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_UPDATE);
-  gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_LAYOUT);
+  gdk_surface_request_layout (surface);
 }
 
 void
 gtk_root_stop_layout (GtkRoot *self)
 {
+  GdkSurface *surface;
   GdkFrameClock *clock;
   guint layout_handler;
   guint after_update_handler;
@@ -287,8 +293,9 @@ gtk_root_stop_layout (GtkRoot *self)
   if (layout_handler == 0)
     return;
 
+  surface = gtk_widget_get_surface (GTK_WIDGET (self));
   clock = gtk_widget_get_frame_clock (GTK_WIDGET (self));
-  g_signal_handler_disconnect (clock, layout_handler);
+  g_signal_handler_disconnect (surface, layout_handler);
   g_signal_handler_disconnect (clock, after_update_handler);
   g_object_set_qdata (G_OBJECT (self), quark_layout_handler, NULL);
   g_object_set_qdata (G_OBJECT (self), quark_after_update_handler, NULL);
