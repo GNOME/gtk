@@ -170,6 +170,7 @@ struct _GdkSurfaceClass
                                            gboolean        attached,
                                            GdkGLContext   *share,
                                            GError        **error);
+  void         (* compute_size)           (GdkSurface     *surface);
 };
 
 #define GDK_SURFACE_DESTROYED(d) (((GdkSurface *)(d))->destroyed)

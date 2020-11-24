@@ -603,8 +603,7 @@ on_frame_clock_before_paint (GdkFrameClock *clock,
 }
 
 static void
-on_frame_clock_compute_size (GdkFrameClock *clock,
-                             GdkSurface    *surface)
+gdk_wayland_surface_compute_size (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
@@ -794,7 +793,6 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
   gdk_wayland_surface_create_surface (surface);
 
   g_signal_connect (frame_clock, "before-paint", G_CALLBACK (on_frame_clock_before_paint), surface);
-  g_signal_connect (frame_clock, "compute-size", G_CALLBACK (on_frame_clock_compute_size), surface);
   g_signal_connect (frame_clock, "after-paint", G_CALLBACK (on_frame_clock_after_paint), surface);
 
   g_object_unref (frame_clock);
@@ -1448,7 +1446,7 @@ gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
     }
 
   impl->surface_geometry_dirty = TRUE;
-  gdk_surface_request_compute_size (surface);
+  gdk_surface_request_layout (surface);
 
   GDK_DISPLAY_NOTE (gdk_surface_get_display (surface), EVENTS,
             g_message ("configure, surface %p %dx%d,%s%s%s%s",
@@ -3314,7 +3312,6 @@ gdk_wayland_surface_destroy (GdkSurface *surface,
 
   frame_clock = gdk_surface_get_frame_clock (surface);
   g_signal_handlers_disconnect_by_func (frame_clock, on_frame_clock_before_paint, surface);
-  g_signal_handlers_disconnect_by_func (frame_clock, on_frame_clock_compute_size, surface);
   g_signal_handlers_disconnect_by_func (frame_clock, on_frame_clock_after_paint, surface);
 
   display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
@@ -4110,6 +4107,7 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   impl_class->set_opaque_region = gdk_wayland_surface_set_opaque_region;
   impl_class->set_shadow_width = gdk_wayland_surface_set_shadow_width;
   impl_class->create_gl_context = gdk_wayland_surface_create_gl_context;
+  impl_class->compute_size = gdk_wayland_surface_compute_size;
 }
 
 void
@@ -4893,7 +4891,7 @@ gdk_wayland_toplevel_present (GdkToplevel       *toplevel,
   if (!pending_configure)
     {
       impl->surface_geometry_dirty = TRUE;
-      gdk_surface_request_compute_size (surface);
+      gdk_surface_request_layout (surface);
     }
 }
 
