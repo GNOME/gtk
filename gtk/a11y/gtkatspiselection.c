@@ -1132,6 +1132,8 @@ gtk_atspi_disconnect_selection_signals (GtkAccessible *accessible)
       SelectionChanged *changed;
 
       changed = g_object_get_data (G_OBJECT (accessible), "accessible-selection-data");
+      if (changed == NULL)
+        return;
 
       g_signal_handlers_disconnect_by_func (accessible, changed->changed, changed->data);
 
@@ -1143,6 +1145,8 @@ gtk_atspi_disconnect_selection_signals (GtkAccessible *accessible)
       SelectionChanged *changed;
 
       changed = g_object_get_data (G_OBJECT (accessible), "accessible-selection-data");
+      if (changed == NULL)
+        return;
 
       g_signal_handlers_disconnect_by_func (notebook, changed->changed, changed->data);
 
