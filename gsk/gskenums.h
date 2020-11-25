@@ -197,6 +197,43 @@ typedef enum {
 } GskFillRule;
 
 /**
+ * @GSK_LINE_CAP_BUTT: Start and stop the line exactly at the start
+ *     and end point
+ * @GSK_LINE_CAP_ROUND: Use a round ending, the center of the circle
+ *     is the start or end point.
+ * @GSK_LINE_CAP_SQUARE: use squared ending, the center of the square
+ *     is the start or end point.
+ *
+ * Specifies how to render the start and end points of contours or
+ * dashes when stroking.
+ *
+ * The default line cap style is %GSK_LINE_CAP_BUTT.
+ */
+typedef enum {
+  GSK_LINE_CAP_BUTT,
+  GSK_LINE_CAP_ROUND,
+  GSK_LINE_CAP_SQUARE
+} GskLineCap;
+
+/**
+ * GskLineJoin:
+ * @GSK_LINE_JOIN_MITER: Use a shart angled corner
+ * @GSK_LINE_JOIN_ROUND: Use a round join, the center of the circle is
+ *     the joing point
+ * @GSK_LINE_JOIN_BEVEL: use a cut-off join, the join is cut off at half
+ *     the line width from the joint point
+ *
+ * Specifies how to render the junction of two lines when stroking.
+ *
+ * The default line join style is %GSK_LINE_JOIN_MITER.
+ **/
+typedef enum {
+  GSK_LINE_JOIN_MITER,
+  GSK_LINE_JOIN_ROUND,
+  GSK_LINE_JOIN_BEVEL
+} GskLineJoin;
+
+/**
  * GskSerializationError:
  * @GSK_SERIALIZATION_UNSUPPORTED_FORMAT: The format can not be
  *     identified
@@ -277,6 +314,5 @@ typedef enum
   GSK_GL_UNIFORM_TYPE_VEC3,
   GSK_GL_UNIFORM_TYPE_VEC4,
 } GskGLUniformType;
-
 
 #endif /* __GSK_TYPES_H__ */
