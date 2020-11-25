@@ -76,7 +76,6 @@
  */
 
 enum {
-  POPUP_LAYOUT_CHANGED,
   SIZE_CHANGED,
   LAYOUT,
   RENDER,
