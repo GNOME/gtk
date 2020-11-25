@@ -322,6 +322,7 @@ gsk_path_ref
 gsk_path_unref
 gsk_path_new_rect
 gsk_path_new_from_cairo
+gsk_path_parse
 <SUBSECTION>
 gsk_path_print
 gsk_path_to_string
