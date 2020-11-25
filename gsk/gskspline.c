@@ -29,7 +29,7 @@ typedef struct
 {
   graphene_point_t last_point;
   float last_progress;
-  float tolerance_squared;
+  float tolerance;
   GskSplineAddPointFunc func;
   gpointer user_data;
 } GskCubicDecomposition;
@@ -103,6 +103,7 @@ gsk_spline_split_cubic (const graphene_point_t pts[4],
     memcpy (result2, (graphene_point_t[4]) { final, bccd, cd, pts[3] }, sizeof (graphene_point_t[4]));
 }
 
+#if 0
 /* Return an upper bound on the error (squared) that could result from
  * approximating a spline as a line segment connecting the two endpoints. */
 static float
@@ -180,6 +181,25 @@ gsk_spline_error_squared (const graphene_point_t pts[4])
     else
       return cerr;
 }
+#endif
+
+/* taken from Skia, including the very descriptive name */
+static gboolean
+gsk_spline_cubic_too_curvy (const graphene_point_t pts[4],
+                            float                  tolerance)
+{
+  graphene_point_t p;
+
+  graphene_point_interpolate (&pts[0], &pts[3], 1.0f / 3, &p);
+  if (ABS (p.x - pts[1].x) + ABS (p.y - pts[1].y)  > tolerance)
+    return TRUE;
+
+  graphene_point_interpolate (&pts[0], &pts[3], 2.0f / 3, &p);
+  if (ABS (p.x - pts[2].x) + ABS (p.y - pts[2].y)  > tolerance)
+    return TRUE;
+
+  return FALSE;
+}
 
 static void
 gsk_spline_decompose_into (GskCubicDecomposition  *decomp,
@@ -188,7 +208,7 @@ gsk_spline_decompose_into (GskCubicDecomposition  *decomp,
 {
   graphene_point_t left[4], right[4];
 
-  if (gsk_spline_error_squared (pts) < decomp->tolerance_squared)
+  if (!gsk_spline_cubic_too_curvy (pts, decomp->tolerance) || progress < 1 / 1024.f)
     {
       gsk_spline_decompose_add_point (decomp, &pts[3], progress);
       return;
@@ -206,7 +226,7 @@ gsk_spline_decompose_cubic (const graphene_point_t pts[4],
                             GskSplineAddPointFunc  add_point_func,
                             gpointer               user_data)
 {
-  GskCubicDecomposition decomp = { pts[0], 0.0f, tolerance * tolerance, add_point_func, user_data };
+  GskCubicDecomposition decomp = { pts[0], 0.0f, tolerance, add_point_func, user_data };
 
   gsk_spline_decompose_into (&decomp, pts, 1.0f);
 
