@@ -47,6 +47,16 @@ void                    gsk_contour_get_point                   (GskPath        
                                                                  float                 distance,
                                                                  graphene_point_t     *pos,
                                                                  graphene_vec2_t      *tangent);
+gboolean                gsk_contour_get_closest_point           (GskPath                *path,
+                                                                 gsize                   i,
+                                                                 gpointer                measure_data,
+                                                                 float                   tolerance,
+                                                                 const graphene_point_t *point,
+                                                                 float                   threshold,
+                                                                 float                  *out_distance,
+                                                                 graphene_point_t       *out_pos,
+                                                                 float                  *out_offset,
+                                                                 graphene_vec2_t        *out_tangent);
 
 void                    gsk_path_builder_add_contour            (GskPathBuilder       *builder,
                                                                  GskPath              *path,
