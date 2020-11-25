@@ -32,6 +32,7 @@ gsk_public_sources = files([
   'gskrendernodeimpl.c',
   'gskrendernodeparser.c',
   'gskroundedrect.c',
+  'gskstroke.c',
   'gsktransform.c',
   'gl/gskglrenderer.c',
 ])
@@ -71,6 +72,7 @@ gsk_public_headers = files([
   'gskrenderer.h',
   'gskrendernode.h',
   'gskroundedrect.h',
+  'gskstroke.h',
   'gsktransform.h',
   'gsktypes.h',
 ])
