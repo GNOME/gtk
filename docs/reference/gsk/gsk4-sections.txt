@@ -355,6 +355,25 @@ gsk_path_builder_get_type
 </SECTION>
 
 <SECTION>
+<FILE>GskStroke</FILE>
+GskLineCap
+GskLineJoin
+gsk_stroke_new
+gsk_stroke_copy
+gsk_stroke_free
+gsk_stroke_equal
+gsk_stroke_set_line_width
+gsk_stroke_get_line_width
+gsk_stroke_set_line_cap
+gsk_stroke_get_line_cap
+gsk_stroke_set_line_join
+gsk_stroke_get_line_join
+<SUBSECTION Private>
+GSK_TYPE_STROKE
+gsk_stroke_get_type
+</SECTION>
+
+<SECTION>
 <FILE>GskTransform</FILE>
 GskTransform
 gsk_transform_ref
