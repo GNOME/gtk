@@ -1990,3 +1990,504 @@ gsk_path_foreach_with_tolerance (GskPath            *self,
 
   return TRUE;
 }
+
+/* path parser and utilities */
+
+static void
+skip_whitespace (const char **p)
+{
+  while (g_ascii_isspace (**p))
+    (*p)++;
+}
+
+static void
+skip_optional_comma (const char **p)
+{
+  skip_whitespace (p);
+  if (**p == ',')
+    (*p)++;
+}
+
+static gboolean
+parse_number (const char **p,
+              double      *c)
+{
+  char *e;
+  *c = g_ascii_strtod (*p, &e);
+  if (e == *p)
+    return FALSE;
+  *p = e;
+  skip_optional_comma (p);
+  return TRUE;
+}
+
+static gboolean
+parse_coordinate (const char **p,
+                  double      *c)
+{
+  return parse_number (p, c);
+}
+
+static gboolean
+parse_coordinate_pair (const char **p,
+                       double      *x,
+                       double      *y)
+{
+  double xx, yy;
+  const char *o = *p;
+
+  if (!parse_coordinate (p, &xx))
+    {
+      *p = o;
+      return FALSE;
+    }
+  if (!parse_coordinate (p, &yy))
+    {
+      *p = o;
+      return FALSE;
+    }
+
+  *x = xx;
+  *y = yy;
+
+  return TRUE;
+}
+
+static gboolean
+parse_nonnegative_number (const char **p,
+                          double      *x)
+{
+  const char *o = *p;
+  double n;
+
+  if (!parse_number (p, &n))
+    return FALSE;
+
+  if (n < 0)
+    {
+      *p = o;
+      return FALSE;
+    }
+
+  *x = n;
+
+  return TRUE;
+}
+
+static gboolean
+parse_flag (const char **p,
+            gboolean    *f)
+{
+  skip_whitespace (p);
+  if (strchr ("01", **p))
+    {
+      *f = **p == '1';
+      (*p)++;
+      skip_optional_comma (p);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+parse_command (const char **p,
+               char        *cmd)
+{
+  char *s;
+  const char *allowed;
+
+  if (*cmd == 'X')
+    allowed = "mM";
+  else
+    allowed = "mMhHvVzZlLcCsStTqQaA";
+
+  skip_whitespace (p);
+  s = strchr (allowed, **p);
+  if (s)
+    {
+      *cmd = *s;
+      (*p)++;
+      return TRUE;
+    }
+  return FALSE;
+}
+
+/**
+ * gsk_path_parse:
+ * @string: a string
+ *
+ * This is a convenience function that constructs a `GskPath`
+ * from a serialized form.
+ *
+ * The string is expected to be in
+ * [SVG path syntax](https://www.w3.org/TR/SVG11/paths.html#PathData),
+ * as e.g. produced by [method@Gsk.Path.to_string].
+ *
+ * Returns: (nullable): a new `GskPath`, or %NULL if @string could not be parsed
+ **/
+GskPath *
+gsk_path_parse (const char *string)
+{
+  GskPathBuilder *builder;
+  double x, y;
+  double prev_x1, prev_y1;
+  double path_x, path_y;
+  const char *p;
+  char cmd;
+  char prev_cmd;
+  gboolean after_comma;
+  gboolean repeat;
+
+  builder = gsk_path_builder_new ();
+
+  cmd = 'X';
+  path_x = path_y = 0;
+  x = y = 0;
+  prev_x1 = prev_y1 = 0;
+  after_comma = FALSE;
+
+  p = string;
+  while (*p)
+    {
+      prev_cmd = cmd;
+      repeat = !parse_command (&p, &cmd);
+
+      if (after_comma && !repeat)
+        goto error;
+
+      switch (cmd)
+        {
+        case 'X':
+          goto error;
+
+        case 'Z':
+        case 'z':
+          if (repeat)
+            goto error;
+          else
+            {
+              gsk_path_builder_close (builder);
+              x = path_x;
+              y = path_y;
+            }
+          break;
+
+        case 'M':
+        case 'm':
+          {
+            double x1, y1;
+
+            if (parse_coordinate_pair (&p, &x1, &y1))
+              {
+                if (cmd == 'm')
+                  {
+                    x1 += x;
+                    y1 += y;
+                  }
+                if (repeat)
+                  gsk_path_builder_line_to (builder, x1, y1);
+                else
+                  {
+                    gsk_path_builder_move_to (builder, x1, y1);
+                    if (strchr ("zZX", prev_cmd))
+                      {
+                        path_x = x1;
+                        path_y = y1;
+                      }
+                  }
+                x = x1;
+                y = y1;
+              }
+            else
+              goto error;
+          }
+          break;
+
+        case 'L':
+        case 'l':
+          {
+            double x1, y1;
+
+            if (parse_coordinate_pair (&p, &x1, &y1))
+              {
+                if (cmd == 'l')
+                  {
+                    x1 += x;
+                    y1 += y;
+                  }
+
+                if (strchr ("zZ", prev_cmd))
+                  {
+                    gsk_path_builder_move_to (builder, x, y);
+                    path_x = x;
+                    path_y = y;
+                  }
+                gsk_path_builder_line_to (builder, x1, y1);
+                x = x1;
+                y = y1;
+              }
+            else
+              goto error;
+          }
+          break;
+
+        case 'H':
+        case 'h':
+          {
+            double x1;
+
+            if (parse_coordinate (&p, &x1))
+              {
+                if (cmd == 'h')
+                  x1 += x;
+                if (strchr ("zZ", prev_cmd))
+                  {
+                    gsk_path_builder_move_to (builder, x, y);
+                    path_x = x;
+                    path_y = y;
+                  }
+                gsk_path_builder_line_to (builder, x1, y);
+                x = x1;
+              }
+            else
+              goto error;
+          }
+          break;
+
+        case 'V':
+        case 'v':
+          {
+            double y1;
+
+            if (parse_coordinate (&p, &y1))
+              {
+                if (cmd == 'v')
+                  y1 += y;
+                if (strchr ("zZ", prev_cmd))
+                  {
+                    gsk_path_builder_move_to (builder, x, y);
+                    path_x = x;
+                    path_y = y;
+                  }
+                gsk_path_builder_line_to (builder, x, y1);
+                y = y1;
+              }
+            else
+              goto error;
+          }
+          break;
+
+        case 'C':
+        case 'c':
+          {
+            double x0, y0, x1, y1, x2, y2;
+
+            if (parse_coordinate_pair (&p, &x0, &y0) &&
+                parse_coordinate_pair (&p, &x1, &y1) &&
+                parse_coordinate_pair (&p, &x2, &y2))
+              {
+                if (cmd == 'c')
+                  {
+                    x0 += x;
+                    y0 += y;
+                    x1 += x;
+                    y1 += y;
+                    x2 += x;
+                    y2 += y;
+                  }
+                if (strchr ("zZ", prev_cmd))
+                  {
+                    gsk_path_builder_move_to (builder, x, y);
+                    path_x = x;
+                    path_y = y;
+                  }
+                gsk_path_builder_curve_to (builder, x0, y0, x1, y1, x2, y2);
+                prev_x1 = x1;
+                prev_y1 = y1;
+                x = x2;
+                y = y2;
+              }
+            else
+              goto error;
+          }
+          break;
+
+        case 'S':
+        case 's':
+          {
+            double x0, y0, x1, y1, x2, y2;
+
+            if (parse_coordinate_pair (&p, &x1, &y1) &&
+                parse_coordinate_pair (&p, &x2, &y2))
+              {
+                if (cmd == 's')
+                  {
+                    x1 += x;
+                    y1 += y;
+                    x2 += x;
+                    y2 += y;
+                  }
+                if (strchr ("CcSs", prev_cmd))
+                  {
+                    x0 = 2 * x - prev_x1;
+                    y0 = 2 * y - prev_y1;
+                  }
+                else
+                  {
+                    x0 = x;
+                    y0 = y;
+                  }
+                if (strchr ("zZ", prev_cmd))
+                  {
+                    gsk_path_builder_move_to (builder, x, y);
+                    path_x = x;
+                    path_y = y;
+                  }
+                gsk_path_builder_curve_to (builder, x0, y0, x1, y1, x2, y2);
+                prev_x1 = x1;
+                prev_y1 = y1;
+                x = x2;
+                y = y2;
+              }
+            else
+              goto error;
+          }
+          break;
+
+        case 'Q':
+        case 'q':
+          {
+            double x1, y1, x2, y2, xx1, yy1, xx2, yy2;
+
+            if (parse_coordinate_pair (&p, &x1, &y1) &&
+                parse_coordinate_pair (&p, &x2, &y2))
+              {
+                if (cmd == 'q')
+                  {
+                    x1 += x;
+                    y1 += y;
+                    x2 += x;
+                    y2 += y;
+                  }
+                xx1 = (x + 2.0 * x1) / 3.0;
+                yy1 = (y + 2.0 * y1) / 3.0;
+                xx2 = (x2 + 2.0 * x1) / 3.0;
+                yy2 = (y2 + 2.0 * y1) / 3.0;
+                if (strchr ("zZ", prev_cmd))
+                  {
+                    gsk_path_builder_move_to (builder, x, y);
+                    path_x = x;
+                    path_y = y;
+                  }
+                gsk_path_builder_curve_to (builder, xx1, yy1, xx2, yy2, x2, y2);
+                prev_x1 = x1;
+                prev_y1 = y1;
+                x = x2;
+                y = y2;
+              }
+            else
+              goto error;
+          }
+          break;
+
+        case 'T':
+        case 't':
+          {
+            double x1, y1, x2, y2, xx1, yy1, xx2, yy2;
+
+            if (parse_coordinate_pair (&p, &x2, &y2))
+              {
+                if (cmd == 't')
+                  {
+                    x2 += x;
+                    y2 += y;
+                  }
+                if (strchr ("QqTt", prev_cmd))
+                  {
+                    x1 = 2 * x - prev_x1;
+                    y1 = 2 * y - prev_y1;
+                  }
+                else
+                  {
+                    x1 = x;
+                    y1 = y;
+                  }
+                xx1 = (x + 2.0 * x1) / 3.0;
+                yy1 = (y + 2.0 * y1) / 3.0;
+                xx2 = (x2 + 2.0 * x1) / 3.0;
+                yy2 = (y2 + 2.0 * y1) / 3.0;
+                if (strchr ("zZ", prev_cmd))
+                  {
+                    gsk_path_builder_move_to (builder, x, y);
+                    path_x = x;
+                    path_y = y;
+                  }
+                gsk_path_builder_curve_to (builder, xx1, yy1, xx2, yy2, x2, y2);
+                prev_x1 = x1;
+                prev_y1 = y1;
+                x = x2;
+                y = y2;
+              }
+            else
+              goto error;
+          }
+          break;
+
+        case 'A':
+        case 'a':
+          {
+            double rx, ry;
+            double x_axis_rotation;
+            int large_arc, sweep;
+            double x1, y1;
+
+            if (parse_nonnegative_number (&p, &rx) &&
+                parse_nonnegative_number (&p, &ry) &&
+                parse_number (&p, &x_axis_rotation) &&
+                parse_flag (&p, &large_arc) &&
+                parse_flag (&p, &sweep) &&
+                parse_coordinate_pair (&p, &x1, &y1))
+              {
+                if (cmd == 'a')
+                  {
+                    x1 += x;
+                    y1 += y;
+                  }
+
+                if (strchr ("zZ", prev_cmd))
+                  {
+                    gsk_path_builder_move_to (builder, x, y);
+                    path_x = x;
+                    path_y = y;
+                  }
+                gsk_path_builder_svg_arc_to (builder,
+                                             rx, ry, x_axis_rotation,
+                                             large_arc, sweep,
+                                             x1, y1);
+                x = x1;
+                y = y1;
+              }
+            else
+              goto error;
+          }
+          break;
+
+        default:
+          goto error;
+        }
+
+      after_comma = (p > string) && p[-1] == ',';
+    }
+
+  if (after_comma)
+    goto error;
+
+  return gsk_path_builder_free_to_path (builder);
+
+error:
+  //g_warning ("Can't parse string '%s' as GskPath, error at %ld", string, p - string);
+  gsk_path_builder_unref (builder);
+
+  return NULL;
+}
