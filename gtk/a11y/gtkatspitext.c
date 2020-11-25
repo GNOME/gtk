@@ -1526,9 +1526,15 @@ gtk_atspi_connect_text_signals (GtkAccessible *accessible,
 void
 gtk_atspi_disconnect_text_signals (GtkAccessible *accessible)
 {
+  if (!GTK_IS_EDITABLE (accessible) &&
+      !GTK_IS_TEXT_VIEW (accessible))
+    return;
+
   TextChanged *changed;
 
   changed = g_object_get_data (G_OBJECT (accessible), "accessible-text-data");
+  if (changed == NULL)
+    return;
 
   if (GTK_IS_EDITABLE (accessible))
     {
@@ -1544,6 +1550,7 @@ gtk_atspi_disconnect_text_signals (GtkAccessible *accessible)
   else if (GTK_IS_TEXT_VIEW (accessible))
     {
       g_signal_handlers_disconnect_by_func (accessible, buffer_changed, changed);
+
       if (changed->buffer)
         {
           g_signal_handlers_disconnect_by_func (changed->buffer, insert_range_cb, changed);
@@ -1551,6 +1558,7 @@ gtk_atspi_disconnect_text_signals (GtkAccessible *accessible)
           g_signal_handlers_disconnect_by_func (changed->buffer, delete_range_after_cb, changed);
           g_signal_handlers_disconnect_by_func (changed->buffer, mark_set_cb, changed);
         }
+
       g_clear_object (&changed->buffer);
     }
 
