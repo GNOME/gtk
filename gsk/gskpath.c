@@ -2118,6 +2118,81 @@ parse_command (const char **p,
   return FALSE;
 }
 
+static gboolean
+parse_string (const char **p,
+              const char  *s)
+{
+  int len = strlen (s);
+  if (strncmp (*p, s, len) != 0)
+    return FALSE;
+  (*p) += len;
+  return TRUE;
+}
+
+static gboolean
+parse_rectangle (const char **p,
+                 double      *x,
+                 double      *y,
+                 double      *w,
+                 double      *h)
+{
+  const char *o = *p;
+  double w2;
+
+  /* Check for M%g,%gh%gv%gh%gz without any intervening whitespace */
+  if (parse_coordinate_pair (p, x, y) &&
+      parse_string (p, "h") &&
+      parse_coordinate (p, w) &&
+      parse_string (p, "v") &&
+      parse_coordinate (p, h) &&
+      parse_string (p, "h") &&
+      parse_coordinate (p, &w2) &&
+      parse_string (p, "z") &&
+      w2 == - *w)
+    {
+      skip_whitespace (p);
+
+      return TRUE;
+    }
+
+  *p = o;
+  return FALSE;
+}
+
+static gboolean
+parse_circle (const char **p,
+              double      *sx,
+              double      *sy,
+              double      *r)
+{
+  const char *o = *p;
+  double r1, r2, r3, mx, my, ex, ey;
+
+  /* Check for M%g,%gA%g,%g,0,1,0,%g,%gA%g,%g,0,1,0,%g,%g
+   * without any intervening whitespace
+   */
+  if (parse_coordinate_pair (p, sx, sy) &&
+      parse_string (p, "A") &&
+      parse_coordinate_pair (p, r, &r1) &&
+      parse_string (p, "0 0 0") &&
+      parse_coordinate_pair (p, &mx, &my) &&
+      parse_string (p, "A") &&
+      parse_coordinate_pair (p, &r2, &r3) &&
+      parse_string (p, "0 0 0") &&
+      parse_coordinate_pair (p, &ex, &ey) &&
+      parse_string (p, "z") &&
+      *r == r1 && r1 == r2 && r2 == r3 &&
+      *sx == ex && *sy == ey)
+    {
+      skip_whitespace (p);
+
+      return TRUE;
+    }
+
+  *p = o;
+  return FALSE;
+}
+
 /**
  * gsk_path_parse:
  * @string: a string
@@ -2181,9 +2256,31 @@ gsk_path_parse (const char *string)
         case 'M':
         case 'm':
           {
-            double x1, y1;
+            double x1, y1, w, h, r;
 
-            if (parse_coordinate_pair (&p, &x1, &y1))
+            if (parse_rectangle (&p, &x1, &y1, &w, &h))
+              {
+                gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (x1, y1, w, h));
+                if (strchr ("zZX", prev_cmd))
+                  {
+                    path_x = x1;
+                    path_y = y1;
+                  }
+                x = x1;
+                y = y1;
+              }
+            else if (parse_circle (&p, &x1, &y1, &r))
+              {
+                gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (x1 - r, y1), r);
+                if (strchr ("zZX", prev_cmd))
+                  {
+                    path_x = x1;
+                    path_y = y1;
+                  }
+                x = x1;
+                y = y1;
+              }
+            else if (parse_coordinate_pair (&p, &x1, &y1))
               {
                 if (cmd == 'm')
                   {
