@@ -276,6 +276,36 @@ test_rsvg_parse (void)
     }
 }
 
+/* Test that circles and rectangles serialize as expected and can be
+ * round-tripped through strings.
+ */
+static void
+test_serialize_custom_contours (void)
+{
+  GskPathBuilder *builder;
+  GskPath *path;
+  GskPath *path1;
+  char *string;
+  char *string1;
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (100, 100), 50);
+  gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (111, 222, 333, 444));
+  path = gsk_path_builder_free_to_path (builder);
+
+  string = gsk_path_to_string (path);
+  g_assert_cmpstr ("M 150 100 A 50 50 0 0 0 50 100 A 50 50 0 0 0 150 100 z M 111 222 h 333 v 444 h -333 z", ==, string);
+
+  path1 = gsk_path_parse (string);
+  string1 = gsk_path_to_string (path1);
+  g_assert_cmpstr (string, ==, string1);
+
+  g_free (string);
+  g_free (string1);
+  gsk_path_unref (path);
+  gsk_path_unref (path1);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -283,6 +313,7 @@ main (int   argc,
   gtk_test_init (&argc, &argv, NULL);
 
   g_test_add_func ("/path/rsvg-parse", test_rsvg_parse);
+  g_test_add_func ("/path/serialize-custom-contours", test_serialize_custom_contours);
 
   return g_test_run ();
 }
