@@ -283,6 +283,11 @@ static void gdk_wayland_surface_maybe_resize (GdkSurface *surface,
                                               int         height,
                                               int         scale);
 
+static void gdk_wayland_surface_resize (GdkSurface *surface,
+                                        int         width,
+                                        int         height,
+                                        int         scale);
+
 static void gdk_wayland_surface_configure (GdkSurface *surface);
 
 static void maybe_set_gtk_surface_dbus_properties (GdkWaylandSurface *impl);
@@ -623,6 +628,17 @@ configure_popup_geometry (GdkSurface *surface)
 }
 
 static void
+configure_drag_surface_geometry (GdkSurface *surface)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  gdk_wayland_surface_resize (surface,
+                              impl->next_layout.configured_width,
+                              impl->next_layout.configured_height,
+                              impl->scale);
+}
+
+static void
 gdk_wayland_surface_compute_size (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
@@ -633,6 +649,8 @@ gdk_wayland_surface_compute_size (GdkSurface *surface)
         configure_toplevel_geometry (surface);
       else if (GDK_IS_POPUP (impl))
         configure_popup_geometry (surface);
+      else if (GDK_IS_DRAG_SURFACE (impl))
+        configure_drag_surface_geometry (surface);
 
       impl->next_layout.surface_geometry_dirty = FALSE;
     }
@@ -5041,8 +5059,13 @@ gdk_wayland_drag_surface_present (GdkDragSurface *drag_surface,
   GdkSurface *surface = GDK_SURFACE (drag_surface);
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  gdk_wayland_surface_resize (surface, width, height, impl->scale);
   gdk_wayland_surface_show (surface, FALSE);
+
+  impl->next_layout.configured_width = width;
+  impl->next_layout.configured_height = height;
+  impl->next_layout.surface_geometry_dirty = TRUE;
+  gdk_surface_request_layout (surface);
+
   maybe_notify_mapped (surface);
 
   return TRUE;
