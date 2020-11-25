@@ -51,6 +51,18 @@ void                    gsk_path_measure_get_point              (GskPathMeasure 
                                                                  float                   distance,
                                                                  graphene_point_t       *pos,
                                                                  graphene_vec2_t        *tangent);
+GDK_AVAILABLE_IN_ALL
+float                   gsk_path_measure_get_closest_point      (GskPathMeasure         *self,
+                                                                 const graphene_point_t *point,
+                                                                 graphene_point_t       *out_pos);
+GDK_AVAILABLE_IN_ALL
+gboolean                gsk_path_measure_get_closest_point_full (GskPathMeasure         *self,
+                                                                 const graphene_point_t *point,
+                                                                 float                   threshold,
+                                                                 float                  *out_distance,
+                                                                 graphene_point_t       *out_pos,
+                                                                 float                  *out_offset,
+                                                                 graphene_vec2_t        *out_tangent);
 
 GDK_AVAILABLE_IN_ALL
 void                    gsk_path_measure_add_segment            (GskPathMeasure         *self,
