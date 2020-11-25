@@ -30,7 +30,7 @@ create_random_path (void)
 
   for (i = 0; i < n; i++)
     {
-      switch (g_test_rand_int_range (0, 11))
+      switch (g_test_rand_int_range (0, 14))
       {
         case 0:
           gsk_path_builder_move_to (builder,
@@ -65,11 +65,21 @@ create_random_path (void)
           break;
 
         case 10:
+        case 11:
           gsk_path_builder_add_rect (builder,
                                      g_test_rand_double_range (-1000, 1000),
                                      g_test_rand_double_range (-1000, 1000),
                                      g_test_rand_double_range (-1000, 1000),
                                      g_test_rand_double_range (-1000, 1000));
+          break;
+
+        case 12:
+        case 13:
+          gsk_path_builder_add_circle (builder,
+                                       &GRAPHENE_POINT_INIT (
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (-1000, 1000)),
+                                       g_test_rand_double_range (0, 1000));
           break;
 
         default:
