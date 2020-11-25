@@ -155,14 +155,7 @@ gtk_drag_icon_native_check_resize (GtkNative *native)
   if (!_gtk_widget_get_alloc_needed (widget))
     gtk_widget_ensure_allocate (widget);
   else if (gtk_widget_get_visible (widget))
-    {
-      gtk_drag_icon_move_resize (icon);
-      if (icon->surface)
-        gtk_widget_allocate (widget,
-                             gdk_surface_get_width (icon->surface),
-                             gdk_surface_get_height (icon->surface),
-                             -1, NULL);
-    }
+    gtk_drag_icon_move_resize (icon);
 }
 
 static void
@@ -172,6 +165,15 @@ gtk_drag_icon_native_init (GtkNativeInterface *iface)
   iface->get_renderer = gtk_drag_icon_native_get_renderer;
   iface->get_surface_transform = gtk_drag_icon_native_get_surface_transform;
   iface->check_resize = gtk_drag_icon_native_check_resize;
+}
+
+static void
+surface_layout (GdkSurface *surface,
+                int         width,
+                int         height,
+                GtkWidget  *widget)
+{
+  gtk_widget_allocate (widget, width, height, -1, NULL);
 }
 
 static gboolean
@@ -192,6 +194,7 @@ gtk_drag_icon_realize (GtkWidget *widget)
 
   gdk_surface_set_widget (icon->surface, widget);
 
+  g_signal_connect (icon->surface, "layout", G_CALLBACK (surface_layout), widget);
   g_signal_connect (icon->surface, "render", G_CALLBACK (surface_render), widget);
 
   GTK_WIDGET_CLASS (gtk_drag_icon_parent_class)->realize (widget);
@@ -211,6 +214,7 @@ gtk_drag_icon_unrealize (GtkWidget *widget)
 
   if (icon->surface)
     {
+      g_signal_handlers_disconnect_by_func (icon->surface, surface_layout, widget);
       g_signal_handlers_disconnect_by_func (icon->surface, surface_render, widget);
       gdk_surface_set_widget (icon->surface, NULL);
     }
