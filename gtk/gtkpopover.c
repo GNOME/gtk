@@ -1673,7 +1673,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   properties[PROP_CASCADE_POPDOWN] =
       g_param_spec_boolean ("cascade-popdown",
                             P_("Cascade popdown"),
-                            P_("Wether the popover pops down after a child popover"),
+                            P_("Whether the popover pops down after a child popover"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
