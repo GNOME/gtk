@@ -1732,7 +1732,22 @@ static gboolean
 parse_path (GtkCssParser *parser,
             gpointer      out_path)
 {
-  return FALSE;
+  char *str = NULL;
+
+  if (!parse_string (parser, &str))
+    return FALSE;
+
+  *((GskPath **) out_path) = gsk_path_parse (str);
+
+  g_free (str);
+
+  return TRUE;
+}
+
+static void
+clear_path (gpointer inout_path)
+{
+  g_clear_pointer ((GskPath **) inout_path, gsk_path_unref);
 }
 
 static gboolean
@@ -1775,7 +1790,7 @@ parse_fill_node (GtkCssParser *parser)
   GskFillRule rule = GSK_FILL_RULE_WINDING;
   const Declaration declarations[] = {
     { "child", parse_node, clear_node, &child },
-    { "path", parse_path, NULL, &path },
+    { "path", parse_path, clear_path, &path },
     { "fill-rule", parse_fill_rule, NULL, &rule },
   };
   GskRenderNode *result;
@@ -1785,6 +1800,8 @@ parse_fill_node (GtkCssParser *parser)
     child = create_default_render_node ();
 
   result = gsk_fill_node_new (child, path, rule);
+
+  gsk_path_unref (path);
 
   gsk_render_node_unref (child);
 
@@ -1817,7 +1834,7 @@ parse_stroke_node (GtkCssParser *parser)
 
   const Declaration declarations[] = {
     { "child", parse_node, clear_node, &child },
-    { "path", parse_path, NULL, &path },
+    { "path", parse_path, clear_path, &path },
     { "line-width", parse_double, NULL, &line_width },
     { "line-cap", parse_line_cap, NULL, &line_cap },
     { "line-join", parse_line_join, NULL, &line_join },
@@ -1834,6 +1851,7 @@ parse_stroke_node (GtkCssParser *parser)
 
   result = gsk_stroke_node_new (child, path, stroke);
 
+  gsk_path_unref (path);
   gsk_stroke_free (stroke);
   gsk_render_node_unref (child);
 
@@ -2327,8 +2345,11 @@ append_escaping_newlines (GString    *str,
     len = strcspn (string, "\n");
     g_string_append_len (str, string, len);
     string += len;
-    g_string_append (str, "\\\n");
-    string++;
+    if (*string)
+      {
+        g_string_append (str, "\\\n");
+        string++;
+      }
   } while (*string);
 }
 
@@ -2387,6 +2408,28 @@ append_enum_param (Printer    *p,
   g_string_append (p->str, enum_to_nick (type, value));
   g_string_append_c (p->str, ';');
   g_string_append_c (p->str, '\n');
+}
+
+static void
+append_path_param (Printer    *p,
+                   const char *param_name,
+                   GskPath    *path)
+{
+  char *str, *s;
+
+  _indent (p);
+  g_string_append (p->str, "path: \"\\\n");
+  str = gsk_path_to_string (path);
+  /* Put each command on a new line */
+  for (s = str; *s; s++)
+    {
+      if (*s == ' ' &&
+          (s[1] == 'M' || s[1] == 'C' || s[1] == 'Z' || s[1] == 'L'))
+        *s = '\n';
+    }
+  append_escaping_newlines (p->str, str);
+  g_string_append (p->str, "\";\n");
+  g_free (str);
 }
 
 static void
@@ -2557,14 +2600,10 @@ render_node_print (Printer       *p,
 
     case GSK_FILL_NODE:
       {
-        char *path_str;
-
         start_node (p, "fill");
 
         append_node_param (p, "child", gsk_fill_node_get_child (node));
-        path_str = gsk_path_to_string (gsk_fill_node_get_path (node));
-        append_string_param (p, "path", path_str);
-        g_free (path_str);
+        append_path_param (p, "path", gsk_fill_node_get_path (node));
         append_enum_param (p, "fill-rule", GSK_TYPE_FILL_RULE, gsk_fill_node_get_fill_rule (node));
 
         end_node (p);
@@ -2573,15 +2612,12 @@ render_node_print (Printer       *p,
 
     case GSK_STROKE_NODE:
       {
-        char *path_str;
         const GskStroke *stroke;
 
         start_node (p, "stroke");
 
         append_node_param (p, "child", gsk_stroke_node_get_child (node));
-        path_str = gsk_path_to_string (gsk_stroke_node_get_path (node));
-        append_string_param (p, "path", path_str);
-        g_free (path_str);
+        append_path_param (p, "path", gsk_stroke_node_get_path (node));
 
         stroke = gsk_stroke_node_get_stroke (node);
         append_float_param (p, "line-width", gsk_stroke_get_line_width (stroke), 0.0);
