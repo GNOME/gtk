@@ -419,11 +419,6 @@ update_popover_layout (GtkPopover     *popover,
       g_clear_pointer (&priv->arrow_render_node, gsk_render_node_unref);
     }
 
-  gtk_widget_allocate (GTK_WIDGET (popover),
-                       gdk_surface_get_width (priv->surface),
-                       gdk_surface_get_height (priv->surface),
-                       -1, NULL);
-
   gtk_widget_queue_draw (GTK_WIDGET (popover));
 }
 
@@ -772,6 +767,20 @@ popup_layout_changed (GdkSurface *surface,
 }
 
 static void
+surface_layout (GdkSurface *surface,
+                int         width,
+                int         height,
+                GtkWidget  *widget)
+{
+  GtkPopover *popover = GTK_POPOVER (widget);
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  update_popover_layout (popover, gdk_popup_layout_ref (priv->layout));
+  if (_gtk_widget_get_alloc_needed (widget))
+    gtk_widget_allocate (widget, width, height, -1, NULL);
+}
+
+static void
 gtk_popover_activate_default (GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
@@ -891,6 +900,7 @@ gtk_popover_realize (GtkWidget *widget)
   g_signal_connect (priv->surface, "render", G_CALLBACK (surface_render), widget);
   g_signal_connect (priv->surface, "event", G_CALLBACK (surface_event), widget);
   g_signal_connect (priv->surface, "popup-layout-changed", G_CALLBACK (popup_layout_changed), widget);
+  g_signal_connect (priv->surface, "layout", G_CALLBACK (surface_layout), widget);
 
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->realize (widget);
 
@@ -913,6 +923,7 @@ gtk_popover_unrealize (GtkWidget *widget)
   g_signal_handlers_disconnect_by_func (priv->surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (priv->surface, surface_event, widget);
   g_signal_handlers_disconnect_by_func (priv->surface, popup_layout_changed, widget);
+  g_signal_handlers_disconnect_by_func (priv->surface, surface_layout, widget);
   gdk_surface_set_widget (priv->surface, NULL);
   gdk_surface_destroy (priv->surface);
   g_clear_object (&priv->surface);

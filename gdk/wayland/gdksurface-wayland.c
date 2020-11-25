@@ -189,6 +189,10 @@ struct _GdkWaylandSurface
       gboolean should_constrain;
       gboolean size_is_fixed;
     } toplevel;
+    struct {
+      int x;
+      int y;
+    } popup;
     int configured_width;
     int configured_height;
     gboolean surface_geometry_dirty;
@@ -616,7 +620,6 @@ configure_popup_geometry (GdkSurface *surface)
                                    impl->next_layout.popup.y,
                                    impl->next_layout.configured_width,
                                    impl->next_layout.configured_height);
-  g_signal_emit_by_name (surface, "popup-layout");
 }
 
 static void
@@ -626,8 +629,10 @@ gdk_wayland_surface_compute_size (GdkSurface *surface)
 
   if (impl->next_layout.surface_geometry_dirty)
     {
-      g_warn_if_fail (GDK_IS_TOPLEVEL (impl));
-      configure_toplevel_geometry (surface);
+      if (GDK_IS_TOPLEVEL (impl))
+        configure_toplevel_geometry (surface);
+      else if (GDK_IS_POPUP (impl))
+        configure_popup_geometry (surface);
 
       impl->next_layout.surface_geometry_dirty = FALSE;
     }
@@ -1538,18 +1543,20 @@ gdk_wayland_surface_configure_popup (GdkSurface *surface)
   width = impl->pending.popup.width;
   height = impl->pending.popup.height;
 
-  gdk_wayland_surface_resize (surface, width, height, impl->scale);
+  x += surface->parent->shadow_left;
+  y += surface->parent->shadow_top;
 
   update_popup_layout_state (surface,
                              x, y,
                              width, height,
                              impl->popup.layout);
 
-  if (!impl->pending.popup.has_repositioned_token &&
-      !impl->pending.is_initial_configure)
-    g_signal_emit_by_name (surface, "popup-layout-changed");
-
-  gdk_surface_invalidate_rect (surface, NULL);
+  impl->next_layout.popup.x = x;
+  impl->next_layout.popup.y = y;
+  impl->next_layout.configured_width = width;
+  impl->next_layout.configured_height = height;
+  impl->next_layout.surface_geometry_dirty = TRUE;
+  gdk_surface_request_layout (surface);
 }
 
 static void
@@ -2316,25 +2323,11 @@ update_popup_layout_state (GdkSurface     *surface,
                            int             height,
                            GdkPopupLayout *layout)
 {
-  int surface_x, surface_y;
-  int surface_width, surface_height;
   GdkRectangle best_rect;
   GdkRectangle flipped_rect;
   GdkGravity rect_anchor;
   GdkGravity surface_anchor;
   GdkAnchorHints anchor_hints;
-
-  x += surface->parent->shadow_left;
-  y += surface->parent->shadow_top;
-
-  surface_x = x;
-  surface_y = y;
-  surface_width = width + surface->shadow_left + surface->shadow_right;
-  surface_height = height + surface->shadow_top + surface->shadow_bottom;
-
-  gdk_wayland_surface_move_resize (surface,
-                                   surface_x, surface_y,
-                                   surface_width, surface_height);
 
   rect_anchor = gdk_popup_layout_get_rect_anchor (layout);
   surface_anchor = gdk_popup_layout_get_surface_anchor (layout);
