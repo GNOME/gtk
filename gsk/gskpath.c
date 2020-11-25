@@ -195,14 +195,11 @@ gsk_rect_contour_print (const GskContour *contour,
 {
   const GskRectContour *self = (const GskRectContour *) contour;
 
-  g_string_append (string, "M ");
-  _g_string_append_point (string, &GRAPHENE_POINT_INIT (self->x, self->y));
-  g_string_append (string, " h ");
-  _g_string_append_double (string, self->width);
-  g_string_append (string, " v ");
-  _g_string_append_double (string, self->height);
-  g_string_append (string, " h ");
-  _g_string_append_double (string, - self->width);
+  /* Write commands in a form that gsk_path_new_from_string() recognizes */
+  g_string_append_printf (string, "M%g,%gh%gv%gh%gz",
+                          self->x, self->y,
+                          self->width, self->height,
+                          -self->width);
 }
 
 static gboolean
@@ -554,18 +551,20 @@ gsk_circle_contour_print (const GskContour *contour,
   const GskCircleContour *self = (const GskCircleContour *) contour;
   float mid_angle = (self->end_angle - self->start_angle) / 2;
 
-  g_string_append (string, "M ");
+  g_string_append_printf (string, "M%g,%g",
+                          self->center.x + cos (DEG_TO_RAD (self->start_angle)) * self->radius,
+                          self->center.y + sin (DEG_TO_RAD (self->start_angle)) * self->radius);
   _g_string_append_point (string, &GSK_CIRCLE_POINT_INIT (self, self->start_angle));
-  g_string_append (string, " A ");
-  _g_string_append_point (string, &GRAPHENE_POINT_INIT (self->radius, self->radius));
-  g_string_append_printf (string, " 0 0 %u",
-                          self->start_angle < self->end_angle ? 0 : 1);
-  _g_string_append_point (string, &GSK_CIRCLE_POINT_INIT (self, mid_angle));
-  g_string_append (string, " A ");
-  _g_string_append_point (string, &GRAPHENE_POINT_INIT (self->radius, self->radius));
-  g_string_append_printf (string, " 0 0 %u",
-                          self->start_angle < self->end_angle ? 0 : 1);
-  _g_string_append_point (string, &GSK_CIRCLE_POINT_INIT (self, self->end_angle));
+  g_string_append_printf (string, "A%g,%g,0,0,%u,%g,%g",
+                          self->radius, self->radius,
+                          self->start_angle < self->end_angle ? 0 : 1,
+                          self->center.x + cos (DEG_TO_RAD (mid_angle)) * self->radius,
+                          self->center.y + sin (DEG_TO_RAD (mid_angle)) * self->radius);
+  g_string_append_printf (string, "A%g,%g,0,0,%u,%g,%g",
+                          self->radius, self->radius,
+                          self->start_angle < self->end_angle ? 0 : 1,
+                          self->center.x + cos (DEG_TO_RAD (self->end_angle)) * self->radius,
+                          self->center.y + sin (DEG_TO_RAD (self->end_angle)) * self->radius);
   if (fabs (self->start_angle - self->end_angle >= 360))
     g_string_append (string, "Z");
 }
@@ -2194,6 +2193,115 @@ parse_command (const char **p,
   return FALSE;
 }
 
+static gboolean
+parse_char (const char **p,
+            char         ch)
+{
+  if (**p != ch)
+    return FALSE;
+  (*p)++;
+  return TRUE;
+}
+
+static gboolean
+parse_string (const char **p,
+              const char  *s)
+{
+  int len = strlen (s);
+  if (strncmp (*p, s, len) != 0)
+    return FALSE;
+  (*p) += len;
+  return TRUE;
+}
+
+static gboolean
+parse_rectangle (const char **p,
+                 double      *x,
+                 double      *y,
+                 double      *w,
+                 double      *h)
+{
+  const char *o = *p;
+  double w2;
+
+  /* Check for M%g,%gh%gv%gh%gz without any intervening whitespace */
+  if (parse_coordinate_pair (p, x, y) &&
+      parse_char (p, 'h') &&
+      parse_coordinate (p, w) &&
+      parse_char (p, 'v') &&
+      parse_coordinate (p, h) &&
+      parse_char (p, 'h') &&
+      parse_coordinate (p, &w2) &&
+      parse_char (p, 'z') &&
+      w2 == - *w)
+    {
+      const char *s;
+
+      for (s = o; s != *p; s++)
+        {
+          if (g_ascii_isspace (*s))
+            {
+              *p = o;
+              return FALSE;
+            }
+        }
+
+      skip_whitespace (p);
+
+      return TRUE;
+    }
+
+  *p = o;
+  return FALSE;
+}
+
+static gboolean
+parse_circle (const char **p,
+              double      *sx,
+              double      *sy,
+              double      *r)
+{
+  const char *o = *p;
+  double r1, r2, r3, mx, my, ex, ey;
+
+  /* Check for M%g,%gA%g,%g,0,1,0,%g,%gA%g,%g,0,1,0,%g,%g
+   * without any intervening whitespace
+   */
+  if (parse_coordinate_pair (p, sx, sy) &&
+      parse_char (p, 'A') &&
+      parse_coordinate_pair (p, r, &r1) &&
+      parse_string (p, "0,1,0,") &&
+      parse_coordinate_pair (p, &mx, &my) &&
+      parse_char (p, 'A') &&
+      parse_coordinate_pair (p, &r2, &r3) &&
+      parse_string (p, "0,1,0,") &&
+      parse_coordinate_pair (p, &ex, &ey) &&
+      parse_char (p, 'Z') &&
+      *r == r1 && r1 == r2 && r2 == r3 &&
+      *sx == ex && *sy == ey)
+    {
+      const char *s;
+
+      for (s = o; s != *p; s++)
+        {
+          if (g_ascii_isspace (*s))
+            {
+              *p = o;
+              return FALSE;
+            }
+        }
+
+      *r = r1;
+
+      skip_whitespace (p);
+
+      return TRUE;
+    }
+
+  *p = o;
+  return FALSE;
+}
+
 /**
  * gsk_path_parse:
  * @string: a string
@@ -2255,9 +2363,31 @@ gsk_path_parse (const char *string)
         case 'M':
         case 'm':
           {
-            double x1, y1;
+            double x1, y1, w, h, r;
 
-            if (parse_coordinate_pair (&p, &x1, &y1))
+            if (parse_rectangle (&p, &x1, &y1, &w, &h))
+              {
+                gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (x1, y1, w, h));
+                if (strchr ("zZX", prev_cmd))
+                  {
+                    path_x = x1;
+                    path_y = y1;
+                  }
+                x = x1;
+                y = y1;
+              }
+            else if (parse_circle (&p, &x1, &y1, &r))
+              {
+                gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (x1 - r, y1), r);
+                if (strchr ("zZX", prev_cmd))
+                  {
+                    path_x = x1;
+                    path_y = y1;
+                  }
+                x = x1;
+                y = y1;
+              }
+            else if (parse_coordinate_pair (&p, &x1, &y1))
               {
                 if (cmd == 'm')
                   {
