@@ -184,11 +184,15 @@ struct _GdkWaylandSurface
     GdkToplevelState set_flags;
   } initial_state;
 
-  gboolean configured_size_should_constrain;
-  gboolean configured_size_is_fixed;
-  int configured_width;
-  int configured_height;
-  gboolean surface_geometry_dirty;
+  struct {
+    struct {
+      gboolean should_constrain;
+      gboolean size_is_fixed;
+    } toplevel;
+    int configured_width;
+    int configured_height;
+    gboolean surface_geometry_dirty;
+  } next_layout;
 
   uint32_t last_configure_serial;
 
@@ -301,7 +305,7 @@ static void update_popup_layout_state (GdkSurface     *surface,
 
 static gboolean gdk_wayland_surface_is_exported (GdkWaylandSurface *impl);
 
-static void configure_surface_geometry (GdkSurface *surface);
+static void configure_toplevel_geometry (GdkSurface *surface);
 
 static void
 gdk_wayland_surface_init (GdkWaylandSurface *impl)
@@ -603,14 +607,29 @@ on_frame_clock_before_paint (GdkFrameClock *clock,
 }
 
 static void
+configure_popup_geometry (GdkSurface *surface)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  gdk_wayland_surface_move_resize (surface,
+                                   impl->next_layout.popup.x,
+                                   impl->next_layout.popup.y,
+                                   impl->next_layout.configured_width,
+                                   impl->next_layout.configured_height);
+  g_signal_emit_by_name (surface, "popup-layout");
+}
+
+static void
 gdk_wayland_surface_compute_size (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  if (impl->surface_geometry_dirty)
+  if (impl->next_layout.surface_geometry_dirty)
     {
-      configure_surface_geometry (surface);
-      impl->surface_geometry_dirty = FALSE;
+      g_warn_if_fail (GDK_IS_TOPLEVEL (impl));
+      configure_toplevel_geometry (surface);
+
+      impl->next_layout.surface_geometry_dirty = FALSE;
     }
 }
 
@@ -1286,7 +1305,7 @@ gdk_wayland_surface_create_surface (GdkSurface *surface)
 }
 
 static void
-configure_surface_geometry (GdkSurface *surface)
+configure_toplevel_geometry (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkDisplay *display = gdk_surface_get_display (surface);
@@ -1332,14 +1351,17 @@ configure_surface_geometry (GdkSurface *surface)
       impl->margin_bottom = size.margin.bottom;
     }
 
-  if (impl->configured_width > 0 && impl->configured_height > 0)
+  if (impl->next_layout.configured_width > 0 &&
+      impl->next_layout.configured_height > 0)
     {
       int width, height;
 
-      width = impl->configured_width + impl->margin_left + impl->margin_right;
-      height = impl->configured_height + impl->margin_top + impl->margin_bottom;
+      width = impl->next_layout.configured_width +
+        impl->margin_left + impl->margin_right;
+      height = impl->next_layout.configured_height +
+        impl->margin_top + impl->margin_bottom;
 
-      if (impl->configured_size_should_constrain)
+      if (impl->next_layout.toplevel.should_constrain)
         {
           gdk_surface_constrain_size (&impl->geometry_hints,
                                       impl->geometry_mask,
@@ -1348,11 +1370,11 @@ configure_surface_geometry (GdkSurface *surface)
         }
       gdk_wayland_surface_resize (surface, width, height, impl->scale);
 
-      if (!impl->configured_size_is_fixed)
+      if (!impl->next_layout.toplevel.size_is_fixed)
         {
-          impl->configured_size_should_constrain = FALSE;
-          impl->configured_width = 0;
-          impl->configured_height = 0;
+          impl->next_layout.toplevel.should_constrain = FALSE;
+          impl->next_layout.configured_width = 0;
+          impl->next_layout.configured_height = 0;
         }
     }
   else
@@ -1423,29 +1445,29 @@ gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
     {
       if (!saved_size)
         {
-          impl->configured_size_should_constrain = TRUE;
+          impl->next_layout.toplevel.should_constrain = TRUE;
 
           /* Save size for next time we get 0x0 */
           _gdk_wayland_surface_save_size (surface);
         }
       else
         {
-          impl->configured_size_should_constrain = FALSE;
+          impl->next_layout.toplevel.should_constrain = FALSE;
         }
 
-      impl->configured_size_is_fixed = fixed_size;
-      impl->configured_width = width;
-      impl->configured_height = height;
+      impl->next_layout.toplevel.size_is_fixed = fixed_size;
+      impl->next_layout.configured_width = width;
+      impl->next_layout.configured_height = height;
     }
   else
     {
-      impl->configured_size_should_constrain = FALSE;
-      impl->configured_size_is_fixed = FALSE;
-      impl->configured_width = 0;
-      impl->configured_height = 0;
+      impl->next_layout.toplevel.should_constrain = FALSE;
+      impl->next_layout.toplevel.size_is_fixed = FALSE;
+      impl->next_layout.configured_width = 0;
+      impl->next_layout.configured_height = 0;
     }
 
-  impl->surface_geometry_dirty = TRUE;
+  impl->next_layout.surface_geometry_dirty = TRUE;
   gdk_surface_request_layout (surface);
 
   GDK_DISPLAY_NOTE (gdk_surface_get_display (surface), EVENTS,
@@ -4890,7 +4912,7 @@ gdk_wayland_toplevel_present (GdkToplevel       *toplevel,
 
   if (!pending_configure)
     {
-      impl->surface_geometry_dirty = TRUE;
+      impl->next_layout.surface_geometry_dirty = TRUE;
       gdk_surface_request_layout (surface);
     }
 }
