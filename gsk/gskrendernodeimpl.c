@@ -3464,7 +3464,6 @@ gsk_stroke_node_draw (GskRenderNode *node,
   cairo_pop_group_to_source (cr);
 
   gsk_stroke_to_cairo (&self->stroke, cr);
-
   gsk_path_to_cairo (self->path, cr);
   cairo_stroke (cr);
 

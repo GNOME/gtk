@@ -269,4 +269,3 @@ gsk_stroke_get_line_join (const GskStroke *self)
 
   return self->line_join;
 }
-
