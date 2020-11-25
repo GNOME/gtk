@@ -603,6 +603,156 @@ test_from_string (void)
     }
 }
 
+/* test that the parser can handle random paths */
+static void
+test_from_random_string (void)
+{
+  int i;
+
+  for (i = 0; i < 1000; i++)
+    {
+      GskPath *path = create_random_path ();
+      char *string = gsk_path_to_string (path);
+      GskPath *path1;
+
+      g_assert_nonnull (string);
+
+      path1 = gsk_path_parse (string);
+      g_assert_nonnull (path1);
+
+      gsk_path_unref (path1);
+      g_free (string);
+      gsk_path_unref (path);
+    }
+}
+
+typedef struct
+{
+  GskPathOperation op;
+  graphene_point_t pts[4];
+  gsize n_pts;
+} Contour;
+
+static gboolean
+append_contour (GskPathOperation        op,
+                const graphene_point_t *pts,
+                gsize                   n_pts,
+                gpointer                user_data)
+{
+  GArray *a = user_data;
+  Contour c;
+  int i;
+
+  g_assert (n_pts <= 4);
+  c.op = op;
+  c.n_pts = n_pts;
+  for (i = 0; i < n_pts; i++)
+    c.pts[i] = pts[i];
+
+  g_array_append_val (a, c);
+  return  TRUE;
+}
+
+static GArray *
+path_to_contours (GskPath *path)
+{
+  GArray *a;
+
+  a = g_array_new (FALSE, FALSE, sizeof (Contour));
+  gsk_path_foreach (path, append_contour, a);
+
+  return a;
+}
+
+static gboolean
+contour_equal (Contour *c1,
+               Contour *c2)
+{
+  int i;
+
+  if (c1->op != c2->op)
+    return FALSE;
+
+  if (c1->n_pts != c2->n_pts)
+    return FALSE;
+
+  for (i = 0; i < c1->n_pts; i++)
+    {
+      if (c1->pts[i].x != c2->pts[i].x ||
+          c1->pts[i].y != c2->pts[i].y)
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static gboolean
+contours_equal (GArray *a1,
+                GArray *a2)
+{
+  int i;
+
+  if (a1->len != a2->len)
+    return FALSE;
+
+  for (i = 0; i < a1->len; i++)
+    {
+      Contour *c1 = &g_array_index (a1, Contour, i);
+      Contour *c2 = &g_array_index (a2, Contour, i);
+
+      if (!contour_equal (c1, c2))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static gboolean
+path_equal (GskPath *path1,
+            GskPath *path2)
+{
+  GArray *a1, *a2;
+  gboolean ret;
+
+  a1 = path_to_contours (path1);
+  a2 = path_to_contours (path2);
+
+  ret = contours_equal (a1, a2);
+
+  g_array_unref (a1);
+  g_array_unref (a2);
+
+  return ret;
+}
+
+/* Test that circles and rectangles serialize as expected and can be
+ * round-tripped through strings.
+ */
+static void
+test_serialize (void)
+{
+  GskPathBuilder *builder;
+  GskPath *path;
+  GskPath *path1;
+  char *string;
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (100, 100), 50);
+  gsk_path_builder_add_rect (builder, 111, 222, 333, 444);
+  path = gsk_path_builder_free_to_path (builder);
+
+  string = gsk_path_to_string (path);
+  g_assert_cmpstr ("M150,100A50,50,0,1,0,50,100A50,50,0,1,0,150,100Z M111,222h333v444h-333z", ==, string);
+
+  path1 = gsk_path_parse (string);
+
+  g_assert_true (path_equal (path, path1));
+
+  g_free (string);
+  gsk_path_unref (path);
+  gsk_path_unref (path1);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -616,6 +766,8 @@ main (int   argc,
   g_test_add_func ("/path/segment", test_segment);
   g_test_add_func ("/path/closest_point", test_closest_point);
   g_test_add_func ("/path/from-string", test_from_string);
+  g_test_add_func ("/path/from-random-string", test_from_random_string);
+  g_test_add_func ("/path/serialize", test_serialize);
 
   return g_test_run ();
 }
