@@ -256,6 +256,120 @@ gsk_path_measure_get_point (GskPathMeasure   *self,
 }
 
 /**
+ * gsk_path_measure_get_closest_point:
+ * @self: a `GskPathMeasure`
+ * @point: the point to find the closest point to
+ * @out_pos: (optional) (out caller-allocates): return location
+ *   for the closest point
+ *
+ * Gets the point on the path that is closest to @point.
+ *
+ * If the path being measured is empty, return 0 and set
+ * @out_pos to (0, 0).
+ *
+ * This is a simpler and slower version of
+ * [method@Gsk.PathMeasure.get_closest_point_full].
+ * Use that one if you need more control.
+ *
+ * Returns: The offset into the path of the closest point
+ **/
+float
+gsk_path_measure_get_closest_point (GskPathMeasure         *self,
+                                    const graphene_point_t *point,
+                                    graphene_point_t       *out_pos)
+{
+  float result;
+
+  g_return_val_if_fail (self != NULL, 0.0f);
+
+  if (gsk_path_measure_get_closest_point_full (self,
+                                               point,
+                                               INFINITY,
+                                               NULL,
+                                               out_pos,
+                                               &result,
+                                               NULL))
+    return result;
+
+  if (out_pos)
+    *out_pos = GRAPHENE_POINT_INIT (0, 0);
+
+  return 0;
+
+}
+
+/**
+ * gsk_path_measure_get_closest_point_full:
+ * @self: a `GskPathMeasure`
+ * @point: the point to find the closest point to
+ * @threshold: The maximum allowed distance between the path and @point.
+ *   Use INFINITY to look for any point.
+ * @out_distance: (optional) (out caller-allocates): The
+ *   distance between the found closest point on the path and the given
+ *   @point.
+ * @out_pos: (optional) (out caller-allocates): return location
+ *   for the closest point
+ * @out_offset: (optional) (out caller-allocates): The offset into
+ *   the path of the found point
+ * @out_tangent: (optional) (out caller-allocates): return location for
+ *   the tangent at the closest point
+ *
+ * Gets the point on the path that is closest to @point. If no point on
+ * path is closer to @point than @threshold, return %FALSE.
+ *
+ * Returns: %TRUE if a point was found, %FALSE otherwise.
+ **/
+gboolean
+gsk_path_measure_get_closest_point_full (GskPathMeasure         *self,
+                                         const graphene_point_t *point,
+                                         float                   threshold,
+                                         float                  *out_distance,
+                                         graphene_point_t       *out_pos,
+                                         float                  *out_offset,
+                                         graphene_vec2_t        *out_tangent)
+{
+  gboolean result;
+  gsize i;
+  float distance, length;
+
+  g_return_val_if_fail (self != NULL, FALSE);
+  g_return_val_if_fail (point != NULL, FALSE);
+
+  result = FALSE;
+  length = 0;
+
+  for (i = 0; i < self->n_contours; i++)
+    {
+      if (gsk_contour_get_closest_point (self->path,
+                                         i,
+                                         self->measures[i].contour_data,
+                                         self->tolerance,
+                                         point,
+                                         threshold,
+                                         &distance,
+                                         out_pos,
+                                         out_offset,
+                                         out_tangent))
+        {
+          result = TRUE;
+          if (out_offset)
+            *out_offset += length;
+
+          if (distance < self->tolerance)
+            break;
+          threshold = distance - self->tolerance;
+        }
+
+      length += self->measures[i].length;
+    }
+
+  if (result && out_distance)
+    *out_distance = distance;
+
+  return result;
+}
+
+/**
  * gsk_path_measure_add_segment:
  * @self: a `GskPathMeasure`
  * @builder: the builder to add the segment to
@@ -302,8 +416,10 @@ gsk_path_measure_add_segment (GskPathMeasure *self,
                                                 self->measures[i].contour_data,
                                                 start,
                                                 len);
-          start = 0;
           end -= len;
+          start = 0;
+          if (end <= 0)
+            break;
         }
       else
         {
