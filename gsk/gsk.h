@@ -26,6 +26,7 @@
 #include <gsk/gskrenderer.h>
 #include <gsk/gskrendernode.h>
 #include <gsk/gskroundedrect.h>
+#include <gsk/gskstroke.h>
 #include <gsk/gsktransform.h>
 
 #include <gsk/gskcairorenderer.h>

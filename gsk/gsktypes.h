@@ -28,6 +28,7 @@
 
 typedef struct _GskPath                 GskPath;
 typedef struct _GskRenderer             GskRenderer;
+typedef struct _GskStroke               GskStroke;
 typedef struct _GskTransform            GskTransform;
 
 #endif /* __GSK_TYPES_H__ */
