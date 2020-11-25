@@ -64,6 +64,10 @@ void                    gsk_path_print                          (GskPath        
                                                                  GString                *string);
 GDK_AVAILABLE_IN_ALL
 char *                  gsk_path_to_string                      (GskPath                *self);
+
+GDK_AVAILABLE_IN_ALL
+GskPath *               gsk_path_parse                          (const char             *string);
+
 GDK_AVAILABLE_IN_ALL
 void                    gsk_path_to_cairo                       (GskPath                *self,
                                                                  cairo_t                *cr);
