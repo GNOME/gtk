@@ -131,6 +131,7 @@ void                    gsk_path_builder_curve_to               (GskPathBuilder 
                                                                  float                 y2,
                                                                  float                 x3,
                                                                  float                 y3);
+
 GDK_AVAILABLE_IN_ALL
 void                    gsk_path_builder_close                  (GskPathBuilder       *builder);
 
