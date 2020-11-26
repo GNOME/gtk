@@ -11,6 +11,7 @@ struct _DemoWidget
   GskPathMeasure *measure;
   double x, y;
   graphene_point_t point;
+  graphene_point_t point2;
   graphene_vec2_t tangent;
   double start, end;
 
@@ -34,6 +35,7 @@ motion (GtkEventControllerMotion *controller,
 {
   float distance;
   char *text;
+  float t;
 
   if (!self->track)
     return;
@@ -45,8 +47,10 @@ motion (GtkEventControllerMotion *controller,
                                            FLT_MAX,
                                            &distance,
                                            &self->point,
-                                           NULL,
+                                           &t,
                                            &self->tangent);
+
+  gsk_path_measure_get_point (self->measure, t, &self->point2, NULL);
 
   text = g_strdup_printf ("%.1f", distance);
   gtk_label_set_label (GTK_LABEL (self->label), text);
@@ -155,6 +159,7 @@ demo_widget_snapshot (GtkWidget   *widget,
 
       gsk_path_builder_add_circle (builder, &self->point, 5);
       gsk_path_builder_add_circle (builder, &p, 2.5);
+      gsk_path_builder_add_circle (builder, &self->point2, 5);
 
       path = gsk_path_builder_free_to_path (builder);
 
