@@ -531,12 +531,47 @@ gsk_circle_contour_get_bounds (const GskContour *contour,
 {
   const GskCircleContour *self = (const GskCircleContour *) contour;
 
-  /* XXX: handle partial circles */
-  graphene_rect_init (rect,
-                      self->center.x - self->radius,
-                      self->center.y - self->radius,
-                      2 * self->radius,
-                      2 * self->radius);
+  if (fabs (self->start_angle - self->end_angle) >= 360)
+    graphene_rect_init (rect,
+                        self->center.x - self->radius,
+                        self->center.y - self->radius,
+                        2 * self->radius,
+                        2 * self->radius);
+  else
+    {
+      graphene_point_t p;
+
+      p = GRAPHENE_POINT_INIT (self->center.x + cos (DEG_TO_RAD (self->start_angle)) * self->radius,
+                               self->center.y + sin (DEG_TO_RAD (self->start_angle)) * self->radius);
+
+      graphene_rect_init (rect, p.x, p.y, 0, 0);
+
+      p = GRAPHENE_POINT_INIT (self->center.x + cos (DEG_TO_RAD (self->end_angle)) * self->radius,
+                               self->center.y + sin (DEG_TO_RAD (self->end_angle)) * self->radius);
+
+      graphene_rect_expand (rect, &p, rect);
+
+      if (self->start_angle <= 0 && self->end_angle >= 0)
+        {
+          p = GRAPHENE_POINT_INIT (self->center.x + self->radius, self->center.y);
+          graphene_rect_expand (rect, &p, rect);
+        }
+      if (self->start_angle <= 90 && self->end_angle >= 90)
+        {
+          p = GRAPHENE_POINT_INIT (self->center.x, self->center.y + self->radius);
+          graphene_rect_expand (rect, &p, rect);
+        }
+      if (self->start_angle <= 180 && self->end_angle >= 180)
+        {
+          p = GRAPHENE_POINT_INIT (self->center.x - self->radius, self->center.y);
+          graphene_rect_expand (rect, &p, rect);
+        }
+      if (self->start_angle <= 270 && self->end_angle >= 270)
+        {
+          p = GRAPHENE_POINT_INIT (self->center.x, self->center.y - self->radius);
+          graphene_rect_expand (rect, &p, rect);
+        }
+    }
 
   return TRUE;
 }
