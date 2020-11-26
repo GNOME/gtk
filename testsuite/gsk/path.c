@@ -920,6 +920,46 @@ test_closest_point_offset (void)
     }
 }
 
+static void
+test_move_only (void)
+{
+  GskPathBuilder *builder;
+  GskPath *path;
+  GskPathMeasure *measure;
+  graphene_point_t p = GRAPHENE_POINT_INIT (100, 100);
+  graphene_rect_t bounds;
+  gboolean ret;
+  float length;
+  graphene_point_t pos;
+  graphene_vec2_t tangent;
+  float distance;
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_move_to (builder, p.x, p.y);
+  path = gsk_path_builder_free_to_path (builder);
+
+  ret = gsk_path_get_bounds (path, &bounds);
+  g_assert_true (ret);
+  g_assert_true (bounds.origin.x == 100 &&
+                 bounds.origin.y == 100 &&
+                 bounds.size.width == 0 &&
+                 bounds.size.height == 0);
+
+  measure = gsk_path_measure_new (path);
+  length = gsk_path_measure_get_length (measure);
+  g_assert_cmpfloat (length, ==, 0.f);
+
+  gsk_path_measure_get_point (measure, 0.f, &pos, &tangent);
+  g_assert_true (graphene_point_near (&pos, &p, 0.0001));
+
+  distance = gsk_path_measure_get_closest_point (measure, &GRAPHENE_POINT_INIT (100, 200), &pos);
+  g_assert_true (graphene_point_near (&pos, &p, 0.0001));
+  g_assert_cmpfloat (distance, ==, 100);
+
+  gsk_path_unref (path);
+  gsk_path_measure_unref (measure);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -937,6 +977,7 @@ main (int   argc,
   g_test_add_func ("/path/serialize", test_serialize);
   g_test_add_func ("/path/bounds", test_bounds);
   g_test_add_func ("/path/closest_point_offset", test_closest_point_offset);
+  g_test_add_func ("/path/move_only", test_move_only);
 
   return g_test_run ();
 }
