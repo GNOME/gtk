@@ -278,6 +278,9 @@ init_demo (DemoWidget  *demo,
   builder = gsk_path_builder_new ();
   gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (150, 150), 100);
   gsk_path_builder_add_rect (builder, 100, 100, 100, 100);
+  gsk_path_builder_move_to (builder, 300, 150);
+  gsk_path_builder_curve_to (builder, 300, 50, 400, 50, 400, 150);
+  gsk_path_builder_curve_to (builder, 400, 250, 500, 250, 500, 150);
   path = gsk_path_builder_free_to_path (builder);
 
   demo_widget_set_path (demo, path);
