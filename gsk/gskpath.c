@@ -1003,6 +1003,9 @@ gsk_standard_contour_measure_add_point (const graphene_point_t *from,
   float seg_length;
 
   seg_length = graphene_point_distance (from, to, NULL, NULL);
+  if (seg_length == 0)
+    return;
+
   decomp->measure.end += seg_length;
   decomp->measure.start_progress = from_progress;
   decomp->measure.end_progress = to_progress;
@@ -1139,6 +1142,18 @@ gsk_standard_contour_get_point (const GskContour *contour,
   guint index;
   float progress;
   GskStandardContourMeasure *measure;
+
+  if (array->len == 0)
+    {
+      /* This is the special case for point-only */
+      if (pos)
+        *pos = self->points[0];
+
+      if (tangent)
+        *tangent = *graphene_vec2_x_axis ();
+
+      return;
+    }
 
   if (!g_array_binary_search (array, &distance, gsk_standard_contour_find_measure, &index))
     index = array->len - 1;
