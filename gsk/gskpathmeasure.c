@@ -201,7 +201,7 @@ gsk_path_measure_clamp_distance (GskPathMeasure *self,
  * @tangent: (out) (optional) (caller-allocates): The tangent
  *    to the position at @distance
  *
- * Calculates the coordinates and tangent of the point @distance 
+ * Calculates the coordinates and tangent of the point @distance
  * units into the path. The value will be clamped to the length
  * of the path.
  *
@@ -322,7 +322,7 @@ gsk_path_measure_get_closest_point (GskPathMeasure         *self,
  * Gets the point on the path that is closest to @point. If no point on
  * path is closer to @point than @threshold, return %FALSE.
  *
- * Returns: %TRUE if a pointwas found, %FALSE otherwise.
+ * Returns: %TRUE if a point was found, %FALSE otherwise.
  **/
 gboolean
 gsk_path_measure_get_closest_point_full (GskPathMeasure         *self,
@@ -384,7 +384,7 @@ gsk_path_measure_get_closest_point_full (GskPathMeasure         *self,
  * Adds to @builder the segment of @path inbetween @start and @end.
  *
  * The distances are given relative to the length of @self's path,
- * from 0 for the begginning of the path to 
+ * from 0 for the beginning of the path to
  * gsk_path_measure_get_length() for the end of the path. The values
  * will be clamped to that range.
  *
