@@ -765,6 +765,8 @@ test_bounds (void)
   for (i = 0; i < 10; i++)
     {
       path = create_random_path ();
+      if (gsk_path_is_empty (path))
+        continue;
       measure = gsk_path_measure_new (path);
       length = gsk_path_measure_get_length (measure);
       gsk_path_get_bounds (path, &bounds);
@@ -777,6 +779,142 @@ test_bounds (void)
           g_assert_true (graphene_rect_contains_point (&bounds, &p));
         }
 
+      gsk_path_measure_unref (measure);
+      gsk_path_unref (path);
+    }
+}
+
+static gboolean
+add_segment (GskPathOperation        op,
+             const graphene_point_t *pts,
+             gsize                   n_pts,
+             gpointer                user_data)
+{
+  GPtrArray *segments = user_data;
+  GskPathBuilder *builder;
+  GskPath *path;
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_move_to (builder, pts[0].x, pts[0].y);
+
+  switch (op)
+    {
+    case GSK_PATH_MOVE:
+      break;
+
+    case GSK_PATH_CLOSE:
+    case GSK_PATH_LINE:
+      gsk_path_builder_line_to (builder, pts[1].x, pts[1].y);
+      break;
+
+    case GSK_PATH_CURVE:
+      gsk_path_builder_curve_to (builder, pts[1].x, pts[1].y,
+                                          pts[2].x, pts[2].y,
+                                          pts[3].x, pts[3].y);
+    break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  path = gsk_path_builder_free_to_path (builder);
+  g_ptr_array_add (segments, gsk_path_measure_new (path));
+  gsk_path_unref (path);
+
+  return TRUE;
+}
+
+static GPtrArray *
+get_segments (GskPath *path)
+{
+  GPtrArray *segments;
+
+  segments = g_ptr_array_new_with_free_func ((GDestroyNotify)gsk_path_measure_unref);
+
+  gsk_path_foreach (path, add_segment, segments);
+
+  return segments;
+}
+
+static void
+test_closest_point_offset (void)
+{
+  guint i;
+
+  for (i = 0; i < 10; i++)
+    {
+      GskPath *path;
+      GskPathMeasure *measure;
+      int j;
+      GPtrArray *segments;
+
+      path = create_random_path ();
+      measure = gsk_path_measure_new (path);
+
+      segments = get_segments (path);
+
+      for (j = 0; j < 100; j++)
+        {
+          graphene_point_t test = GRAPHENE_POINT_INIT (g_test_rand_double_range (-1000, 1000),
+                                                       g_test_rand_double_range (-1000, 1000));
+          graphene_point_t p;
+          graphene_vec2_t t;
+          float offset;
+          float distance;
+          gboolean found;
+
+          found = gsk_path_measure_get_closest_point_full (measure,
+                                                           &test,
+                                                           INFINITY,
+                                                           &distance,
+                                                           &p,
+                                                           &offset,
+                                                           &t);
+
+          if (found)
+            {
+              graphene_point_t p2;
+              gboolean at_segment_start = FALSE;
+              gboolean at_segment_end = FALSE;
+              int k;
+
+              for (k = 0; k < segments->len; k++)
+                {
+                  GskPathMeasure *m = g_ptr_array_index (segments, k);
+                  graphene_vec2_t t2;
+                  float offset2;
+                  float distance2;
+                  gboolean found2;
+
+                  found2 = gsk_path_measure_get_closest_point_full (m,
+                                                                    &test,
+                                                                    INFINITY,
+                                                                    &distance2,
+                                                                    &p2,
+                                                                    &offset2,
+                                                                    &t2);
+
+                  g_assert_true (found2);
+
+                  if (offset2 == 0)
+                    {
+                      at_segment_start = TRUE;
+                    }
+                  if (offset2 == gsk_path_measure_get_length (m))
+                    {
+                      at_segment_end = TRUE;
+                    }
+                }
+
+              gsk_path_measure_get_point (measure, offset, &p2, NULL);
+              if (!graphene_point_near (&p, &p2, 0.0001))
+                {
+                  g_assert_true (at_segment_start || at_segment_end);
+                }
+            }
+        }
+
+      g_ptr_array_unref (segments);
       gsk_path_measure_unref (measure);
       gsk_path_unref (path);
     }
@@ -798,6 +936,7 @@ main (int   argc,
   g_test_add_func ("/path/from-random-string", test_from_random_string);
   g_test_add_func ("/path/serialize", test_serialize);
   g_test_add_func ("/path/bounds", test_bounds);
+  g_test_add_func ("/path/closest_point_offset", test_closest_point_offset);
 
   return g_test_run ();
 }
