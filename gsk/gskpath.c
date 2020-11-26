@@ -1795,7 +1795,7 @@ gsk_path_to_cairo (GskPath *self,
  * gsk_path_get_n_contours:
  * @path: a #GskPath
  *
- * Gets the nnumber of contours @path is composed out of.
+ * Gets the number of contours @path is composed out of.
  *
  * Returns: the number of contours in @path
  **/
@@ -1809,7 +1809,7 @@ gsk_path_get_n_contours (GskPath *path)
  * gsk_path_is_empty:
  * @path: a #GskPath
  *
- * Checks if the path is empty, ie contains no lines or curves.
+ * Checks if the path is empty, i.e. contains no lines or curves.
  *
  * Returns: %TRUE if the path is empty
  **/
