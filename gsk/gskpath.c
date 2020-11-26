@@ -347,8 +347,16 @@ gsk_rect_contour_get_closest_point (const GskContour       *contour,
     *out_pos = p;
 
   if (out_offset)
-    *out_offset = (t.x > 0.5 ? t.y : 2 - t.y) * ABS (self->height) + 
-                  (t.y > 0.5 ? 2 - t.x : t.x) * ABS (self->width);
+    {
+      if (t.y == 0.0)
+        *out_offset = t.x * ABS (self->width);
+      else if (t.y == 1.0)
+        *out_offset = (2 - t.x) * ABS (self->width) + ABS (self->height);
+      else if (t.x == 1.0)
+        *out_offset = ABS (self->width) + t.y * ABS (self->height);
+      else
+        *out_offset = 2 * ABS (self->width) + ( 2 - t.y) * ABS (self->height);
+    }
 
   if (out_tangent)
     {
