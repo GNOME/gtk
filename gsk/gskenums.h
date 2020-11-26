@@ -218,10 +218,10 @@ typedef enum {
 
 /**
  * GskLineJoin:
- * @GSK_LINE_JOIN_MITER: Use a shart angled corner
+ * @GSK_LINE_JOIN_MITER: Use a sharp, angled corner
  * @GSK_LINE_JOIN_ROUND: Use a round join, the center of the circle is
- *     the joing point
- * @GSK_LINE_JOIN_BEVEL: use a cut-off join, the join is cut off at half
+ *     the joint point
+ * @GSK_LINE_JOIN_BEVEL: Use a cut-off join, the join is cut off at half
  *     the line width from the joint point
  *
  * Specifies how to render the junction of two lines when stroking.
@@ -243,7 +243,7 @@ typedef enum {
  * @GSK_PATH_CLOSE: A close operation ending the current contour with
  *     a line back to the starting point. Two points describe the start
  *     and end of the line.
- * @GSK_PATH_CURVE: A curve-to operation describing a cubic bezier curve
+ * @GSK_PATH_CURVE: A curve-to operation describing a cubic Bézier curve
  *     with 4 points describing the start point, the two control points
  *     and the end point of the curve.
  *
