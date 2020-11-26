@@ -753,6 +753,35 @@ test_serialize (void)
   gsk_path_unref (path1);
 }
 
+static void
+test_bounds (void)
+{
+  GskPath *path;
+  GskPathMeasure *measure;
+  guint i, j;
+  graphene_rect_t bounds;
+  float length;
+
+  for (i = 0; i < 10; i++)
+    {
+      path = create_random_path ();
+      measure = gsk_path_measure_new (path);
+      length = gsk_path_measure_get_length (measure);
+      gsk_path_get_bounds (path, &bounds);
+
+      for (j = 0; j < 100; j++)
+        {
+          graphene_point_t p;
+
+          gsk_path_measure_get_point (measure, length / 100.f, &p, NULL);
+          g_assert_true (graphene_rect_contains_point (&bounds, &p));
+        }
+
+      gsk_path_measure_unref (measure);
+      gsk_path_unref (path);
+    }
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -768,6 +797,7 @@ main (int   argc,
   g_test_add_func ("/path/from-string", test_from_string);
   g_test_add_func ("/path/from-random-string", test_from_random_string);
   g_test_add_func ("/path/serialize", test_serialize);
+  g_test_add_func ("/path/bounds", test_bounds);
 
   return g_test_run ();
 }
