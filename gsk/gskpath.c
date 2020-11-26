@@ -1224,7 +1224,7 @@ gsk_standard_contour_get_closest_point (const GskContour       *contour,
               if (out_pos)
                 *out_pos = p;
               if (out_offset)
-                *out_offset = measure->start + (measure->end - measure->start) * found_progress;
+                *out_offset = measure->start + (measure->end - measure->start) * progress;
               if (out_tangent)
                 *out_tangent = t;
               result = TRUE;
