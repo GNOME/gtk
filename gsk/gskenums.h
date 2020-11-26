@@ -196,7 +196,6 @@ typedef enum {
 } GskFillRule;
 
 /**
-<<<<<<< HEAD
  * @GSK_LINE_CAP_BUTT: Start and stop the line exactly at the start
  *     and end point
  * @GSK_LINE_CAP_ROUND: Use a round ending, the center of the circle
