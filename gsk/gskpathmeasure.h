@@ -69,6 +69,12 @@ void                    gsk_path_measure_add_segment            (GskPathMeasure 
                                                                  GskPathBuilder         *builder,
                                                                  float                   start,
                                                                  float                   end);
+
+GDK_AVAILABLE_IN_ALL
+gboolean                gsk_path_measure_in_fill                (GskPathMeasure         *self,
+                                                                 graphene_point_t       *point,
+                                                                 GskFillRule             fill_rule);
+
 G_END_DECLS
 
 #endif /* __GSK_PATH_MEASURE_H__ */
