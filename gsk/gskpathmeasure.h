@@ -70,6 +70,11 @@ void                    gsk_path_measure_add_segment            (GskPathMeasure 
                                                                  float                   start,
                                                                  float                   end);
 
+GDK_AVAILABLE_IN_ALL
+gboolean                gsk_path_measure_in_fill                (GskPathMeasure         *self,
+                                                                 const graphene_point_t *point,
+                                                                 GskFillRule             fill_rule);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskPathMeasure, gsk_path_measure_unref)
 G_END_DECLS
 
