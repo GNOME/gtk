@@ -370,6 +370,48 @@ gsk_path_measure_get_closest_point_full (GskPathMeasure         *self,
 }
 
 /**
+ * gsk_path_measure_in_fill:
+ * @self: a #GskPathMeasure
+ * @point: the point to test
+ * @fill_rule: the fill rule to follow
+ *
+ * Returns whether the given point is inside the area that would be
+ * affected if the path of @self was filled according to @fill_rule.
+ *
+ * Returns: %TRUE if @point is inside
+ */
+gboolean
+gsk_path_measure_in_fill (GskPathMeasure   *self,
+                          graphene_point_t *point,
+                          GskFillRule       fill_rule)
+{
+  int winding = 0;
+  gboolean on_edge = FALSE;
+  int i;
+
+  for (i = 0; i < self->n_contours; i++)
+    {
+      winding += gsk_contour_get_winding (gsk_path_get_contour (self->path, i),
+                                          self->measures[i].contour_data,
+                                          point,
+                                          &on_edge);
+      if (on_edge)
+        return TRUE;
+    }
+
+  switch (fill_rule)
+    {
+    case GSK_FILL_RULE_EVEN_ODD:
+      return winding & 1;
+    case GSK_FILL_RULE_WINDING:
+      return winding != 0;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+
+/**
  * gsk_path_measure_add_segment:
  * @self: a `GskPathMeasure`
  * @builder: the builder to add the segment to
