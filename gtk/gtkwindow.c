@@ -1937,7 +1937,7 @@ gtk_window_new (void)
 /**
  * gtk_window_set_title:
  * @window: a #GtkWindow
- * @title: title of the window
+ * @title: (nullable): title of the window, or %NULL
  * 
  * Sets the title of the #GtkWindow. The title of a window will be
  * displayed in its title bar; on the X Window System, the title bar
@@ -1947,10 +1947,11 @@ gtk_window_new (void)
  * user distinguish this window from other windows they may have
  * open. A good title might include the application name and current
  * document filename, for example.
+ * Passing %NULL does the same as setting the title to an empty string.
  * 
  **/
 void
-gtk_window_set_title (GtkWindow   *window,
+gtk_window_set_title (GtkWindow  *window,
                       const char *title)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
