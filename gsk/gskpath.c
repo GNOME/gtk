@@ -24,6 +24,10 @@
 #include "gskcurveprivate.h"
 #include "gskpathbuilder.h"
 
+#include "gskstrokeprivate.h"
+
+#include "gdk/gdk-private.h"
+
 /**
  * SECTION:gskpath
  * @Title: Path
