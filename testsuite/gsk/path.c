@@ -589,6 +589,56 @@ test_closest_point (void)
     }
 }
 
+static void
+test_closest_point_for_point (void)
+{
+  static const float tolerance = 0.5;
+  GskPath *path;
+  GskPathMeasure *measure;
+  float length, offset, closest_offset, distance;
+  graphene_point_t point, closest_point;
+  guint i, j;
+
+  for (i = 0; i < 100; i++)
+    {
+      path = create_random_path (G_MAXUINT);
+      if (gsk_path_is_empty (path))
+        {
+          /* empty paths have no closest point to anything */
+          gsk_path_unref (path);
+          continue;
+        }
+
+      measure = gsk_path_measure_new_with_tolerance (path, tolerance);
+      length = gsk_path_measure_get_length (measure);
+
+      for (j = 0; j < 100; j++)
+        {
+          offset = g_test_rand_double_range (0, length);
+
+          gsk_path_measure_get_point (measure,
+                                      offset,
+                                      &point,
+                                      NULL);
+          g_assert_true (gsk_path_measure_get_closest_point_full (measure,
+                                                                  &point,
+                                                                  tolerance,
+                                                                  &distance,
+                                                                  &closest_point,
+                                                                  &closest_offset,
+                                                                  NULL));
+          /* should be given due to the TRUE return above, but who knows... */
+          g_assert_cmpfloat (distance, <=, tolerance);
+          g_assert_cmpfloat (graphene_point_distance (&point, &closest_point, NULL, NULL), <=, tolerance);
+          /* can't do == here because points may overlap if we're unlucky */
+          g_assert_cmpfloat (closest_offset, <, offset + tolerance);
+        }
+
+      gsk_path_measure_unref (measure);
+      gsk_path_unref (path);
+    }
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -602,6 +652,7 @@ main (int   argc,
   g_test_add_func ("/path/segment", test_segment);
   g_test_add_func ("/path/get_point", test_get_point);
   g_test_add_func ("/path/closest_point", test_closest_point);
+  g_test_add_func ("/path/closest_point_for_point", test_closest_point_for_point);
 
   return g_test_run ();
 }
