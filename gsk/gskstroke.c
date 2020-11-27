@@ -212,10 +212,9 @@ gsk_stroke_get_line_width (const GskStroke *self)
  **/
 void
 gsk_stroke_set_line_cap (GskStroke  *self,
-                           GskLineCap  line_cap)
+                         GskLineCap  line_cap)
 {
   g_return_if_fail (self != NULL);
-  g_return_if_fail (line_cap > 0);
 
   self->line_cap = line_cap;
 }
@@ -249,7 +248,6 @@ gsk_stroke_set_line_join (GskStroke   *self,
                           GskLineJoin  line_join)
 {
   g_return_if_fail (self != NULL);
-  g_return_if_fail (line_join > 0);
 
   self->line_join = line_join;
 }
