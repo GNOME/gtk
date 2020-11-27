@@ -378,6 +378,7 @@ gsk_path_measure_get_length
 gsk_path_measure_get_point
 gsk_path_measure_get_closest_point
 gsk_path_measure_get_closest_point_full
+gsk_path_measure_in_fill
 gsk_path_measure_add_segment
 <SUBSECTION Private>
 GSK_TYPE_PATH_MEASURE
