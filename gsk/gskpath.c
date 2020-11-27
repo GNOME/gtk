@@ -23,10 +23,10 @@
 
 #include "gskcurveprivate.h"
 #include "gskpathbuilder.h"
+#include "gskstrokeprivate.h"
 
+#include "gdk/gdk-private.h"
 
-typedef struct _GskContour GskContour;
-typedef struct _GskContourClass GskContourClass;
 
 struct _GskPath
 {

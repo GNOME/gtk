@@ -532,6 +532,8 @@ gsk_rect_contour_add_stroke (const GskContour *contour,
       rect.size.width = - rect.size.width;
       gsk_path_builder_add_rect (builder, &rect);
     }
+  else
+    gsk_contour_default_add_stroke (contour, builder, stroke);
 }
 
 static const GskContourClass GSK_RECT_CONTOUR_CLASS =
@@ -906,6 +908,8 @@ gsk_circle_contour_add_stroke (const GskContour *contour,
                                   self->start_angle);
       gsk_path_builder_add_contour (builder, c);
     }
+  else
+    gsk_contour_default_add_stroke (contour, builder, stroke);
 }
 
 static const GskContourClass GSK_CIRCLE_CONTOUR_CLASS =
@@ -1637,6 +1641,7 @@ gsk_standard_contour_add_stroke (const GskContour *contour,
                                  GskPathBuilder   *builder,
                                  GskStroke        *stroke)
 {
+  gsk_contour_default_add_stroke (contour, builder, stroke);
 }
 
 static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
