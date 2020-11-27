@@ -194,6 +194,7 @@ tests = [
   ['curve-performance', ['../../gsk/gskcurve.c'], ['-DGTK_COMPILATION']],
   ['path'],
   ['path-special-cases'],
+  ['path-stroke'],
   ['rounded-rect'],
   ['transform'],
   ['shader'],
