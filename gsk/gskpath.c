@@ -1932,6 +1932,29 @@ gsk_path_foreach_with_tolerance (GskPath            *self,
   return TRUE;
 }
 
+gboolean
+gsk_path_in_fill (GskPath          *path,
+                  graphene_point_t *point,
+                  GskFillRule       fill_rule)
+{
+  cairo_surface_t *dummy;
+  cairo_t *cr;
+  gboolean inside;
+
+  dummy = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 1, 1);
+  cr = cairo_create (dummy);
+  cairo_set_fill_rule (cr, (cairo_fill_rule_t)fill_rule);
+
+  gsk_path_to_cairo (path, cr);
+
+  inside = cairo_in_fill (cr, point->x, point->y);
+
+  cairo_destroy (cr);
+  cairo_surface_destroy (dummy);
+
+  return inside;
+}
+
 /* BUILDER */
 
 /**
