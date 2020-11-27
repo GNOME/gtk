@@ -56,6 +56,11 @@ gboolean                gsk_contour_get_closest_point           (GskPath        
                                                                  graphene_point_t       *out_pos,
                                                                  float                  *out_offset,
                                                                  graphene_vec2_t        *out_tangent);
+int                     gsk_contour_get_winding                 (GskPath                *path,
+                                                                 gsize                   i,
+                                                                 gpointer                measure_data,
+                                                                 const graphene_point_t *point,
+                                                                 gboolean               *on_edge);
 
 void                    gsk_path_builder_add_contour            (GskPathBuilder       *builder,
                                                                  GskPath              *path,

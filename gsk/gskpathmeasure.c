@@ -412,3 +412,34 @@ gsk_path_measure_add_segment (GskPathMeasure *self,
     }
 }
 
+gboolean
+gsk_path_measure_in_fill (GskPathMeasure   *self,
+                          graphene_point_t *point,
+                          GskFillRule       fill_rule)
+{
+  int winding = 0;
+  gboolean on_edge = FALSE;
+  int i;
+
+  for (i = 0; i < self->n_contours; i++)
+    {
+      winding += gsk_contour_get_winding (self->path,
+                                          i,
+                                          self->measures[i].contour_data,
+                                          point,
+                                          &on_edge);
+      if (on_edge)
+        return TRUE;
+    }
+
+  switch (fill_rule)
+    {
+    case GSK_FILL_RULE_EVEN_ODD:
+      return winding & 1;
+    case GSK_FILL_RULE_WINDING:
+      return winding != 0;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
