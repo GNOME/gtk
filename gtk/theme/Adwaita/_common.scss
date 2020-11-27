@@ -1033,7 +1033,7 @@ spinbutton {
 
       &:hover {
         color: $fg_color;
-        background-color: $base_hover_color;
+        background-color: darken($bg_color,5%);
       }
 
       &:disabled {
@@ -1076,7 +1076,7 @@ spinbutton {
 
         color: $osd_fg_color;
         border-color: transparentize(opacify($osd_borders_color, 1), 0.5);
-        background-color: transparentize($osd_fg_color, 0.9);
+        background-color: darken($osd_bg_color,10%);
         -gtk-icon-shadow: 0 1px black;
         box-shadow: none;
       }
@@ -2138,7 +2138,7 @@ notebook {
 
       &:hover {
         color: $fg_color;
-        background-color: darken($bg_color,4%);
+        background-color: darken($dark_fill,4%);
 
         &.reorderable-page {
           border-color: transparentize($borders_color, 0.7);
@@ -2370,12 +2370,7 @@ switch {
   > image { color: transparent; } /* only show i / o for the accessible theme */
 
   &:hover > slider {
-    @if $variant == 'light' {
-      @include button(hover-alt, $edge: $shadow_color);
-    }
-    @else {
-      @include button(hover-alt, $c: lighten($bg_color,6%), $edge: $shadow_color);
-    }
+    @include button(hover, $edge: $shadow_color);
   }
 
   &:checked > slider { border: 1px solid $switch_borders_color; }
@@ -2675,7 +2670,7 @@ scale {
     transition: $button_transition;
     transition-property: background, border, box-shadow;
 
-    &:hover { @include button(hover-alt, $edge: $shadow_color); }
+    &:hover { @include button(hover, $edge: $shadow_color); }
 
     &:active { border-color: $selected_borders_color; }
 
@@ -3565,6 +3560,10 @@ filechooserbutton:drop(active) {
 }
 
 stacksidebar {
+  //not a regular list
+  list.separators:not(.horizontal) > row:not(.separator) {
+    border-bottom: none;
+  }
   row {
     padding: 10px 4px;
 
@@ -3575,8 +3574,20 @@ stacksidebar {
 
     &.needs-attention > label {
       @extend %needs_attention;
-
-      background-size: 6px 6px, 0 0;
+       background-size: 6px 6px, 0 0;
+    }
+    &:selected {
+      background-color: $menu_selected_color;
+      border-radius: $menu_radius;
+      color: $fg_color;
+    }
+    &:selected:hover:dir(ltr), &:selected:hover:dir(rtl) {
+      background-color: darken($menu_selected_color,5%);
+    }
+    &:focus:focus-visible {
+      outline-width: 0;
+      background-color: $selected_bg_color;
+      color: $selected_fg_color;
     }
   }
 }
