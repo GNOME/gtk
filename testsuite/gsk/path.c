@@ -456,6 +456,55 @@ test_segment (void)
 }
 
 static void
+test_get_point (void)
+{
+  static const guint max_contours = 5;
+  static const float tolerance = 0.5;
+  GskPath *path;
+  GskPathMeasure *measure;
+  guint n_discontinuities;
+  float length, offset, last_offset;
+  graphene_point_t point, last_point;
+  guint i, j;
+
+  for (i = 0; i < 10; i++)
+    {
+      path = create_random_path (max_contours);
+      measure = gsk_path_measure_new_with_tolerance (path, tolerance);
+      length = gsk_path_measure_get_length (measure);
+      n_discontinuities = 0;
+
+      gsk_path_measure_get_point (measure,
+                                  0,
+                                  &last_point,
+                                  NULL);
+      /* FIXME: anything we can test with tangents here? */
+      last_offset = 0;
+
+      for (j = 1; j <= 1024; j++)
+        {
+          offset = length * j / 1024;
+          gsk_path_measure_get_point (measure,
+                                      offset,
+                                      &point,
+                                      NULL);
+
+          if (graphene_point_distance (&last_point, &point, NULL, NULL) > offset - last_offset + tolerance)
+            {
+              n_discontinuities++;
+              g_assert_cmpint (n_discontinuities, <, max_contours);
+            }
+
+          last_offset = offset;
+          last_point = point;
+        }
+
+      gsk_path_measure_unref (measure);
+      gsk_path_unref (path);
+    }
+}
+
+static void
 test_closest_point (void)
 {
   static const float tolerance = 0.5;
@@ -551,6 +600,7 @@ main (int   argc,
   g_test_add_func ("/path/segment_end", test_segment_end);
   g_test_add_func ("/path/segment_chunk", test_segment_chunk);
   g_test_add_func ("/path/segment", test_segment);
+  g_test_add_func ("/path/get_point", test_get_point);
   g_test_add_func ("/path/closest_point", test_closest_point);
 
   return g_test_run ();
