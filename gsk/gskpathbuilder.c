@@ -77,6 +77,7 @@ struct _GskPathBuilder
   GSList *contours; /* (reverse) list of already recorded contours */
 
   GskPathFlags flags; /* flags for the current path */
+  graphene_point_t current_point; /* the point all drawing ops start from */
   GArray *ops; /* operations for current contour - size == 0 means no current contour */
   GArray *points; /* points for the operations */
 };
@@ -106,6 +107,10 @@ gsk_path_builder_new (void)
 
   self->ops = g_array_new (FALSE, FALSE, sizeof (GskStandardOperation));
   self->points = g_array_new (FALSE, FALSE, sizeof (graphene_point_t));
+
+  /* Be explicit here */
+  self->current_point = GRAPHENE_POINT_INIT (0, 0);
+
   return self;
 }
 
@@ -133,17 +138,28 @@ gsk_path_builder_ref (GskPathBuilder *self)
 }
 
 static void
+gsk_path_builder_ensure_current (GskPathBuilder *self)
+{
+  if (self->ops->len != 0)
+    return;
+
+  self->flags = GSK_PATH_FLAT;
+  g_array_append_vals (self->ops, &(GskStandardOperation) { GSK_PATH_MOVE, 0 }, 1);
+  g_array_append_val (self->points, self->current_point);
+}
+
+static void
 gsk_path_builder_append_current (GskPathBuilder         *self,
                                  GskPathOperation        op,
                                  gsize                   n_points,
                                  const graphene_point_t *points)
 {
-  g_assert (self->ops->len > 0);
-  g_assert (self->points->len > 0);
-  g_assert (n_points > 0);
+  gsk_path_builder_ensure_current (self);
 
-  g_array_append_vals (self->ops, &(GskStandardOperation) { op, builder->points->len - 1 }, 1);
+  g_array_append_vals (self->ops, &(GskStandardOperation) { op, self->points->len - 1 }, 1);
   g_array_append_vals (self->points, points, n_points);
+
+  self->current_point = points[n_points - 1];
 }
 
 static void
@@ -247,7 +263,7 @@ gsk_path_builder_to_path (GskPathBuilder *self)
 
   gsk_path_builder_end_current (self);
 
-  self->contours = g_slist_reverse (builder->contours);
+  self->contours = g_slist_reverse (self->contours);
 
   path = gsk_path_new_from_contours (self->contours);
 
@@ -262,7 +278,7 @@ gsk_path_builder_add_contour (GskPathBuilder *self,
 {
   gsk_path_builder_end_current (self);
 
-  self->contours = g_slist_prepend (builder->contours, contour);
+  self->contours = g_slist_prepend (self->contours, contour);
 }
 
 /**
@@ -312,6 +328,8 @@ gsk_path_builder_add_rect (GskPathBuilder        *self,
 
   contour = gsk_rect_contour_new (rect);
   gsk_path_builder_add_contour (self, contour);
+
+  gsk_contour_get_start_end (contour, NULL, &self->current_point);
 }
 
 /**
@@ -358,9 +376,9 @@ gsk_path_builder_move_to (GskPathBuilder *self,
 
   gsk_path_builder_end_current (self);
 
-  self->flags = GSK_PATH_FLAT;
-  g_array_append_vals (self->ops, &(GskStandardOperation) { GSK_PATH_MOVE, 0 }, 1);
-  g_array_append_val (self->points, GRAPHENE_POINT_INIT(x, y));
+  self->current_point = GRAPHENE_POINT_INIT(x, y);
+
+  gsk_path_builder_ensure_current (self);
 }
 
 /**
@@ -379,14 +397,8 @@ gsk_path_builder_line_to (GskPathBuilder *self,
 {
   g_return_if_fail (self != NULL);
 
-  if (self->ops->len == 0)
-    {
-      gsk_path_builder_move_to (self, x, y);
-      return;
-    }
-
   /* skip the line if it goes to the same point */
-  if (graphene_point_equal (&g_array_index (self->points, graphene_point_t, builder->points->len - 1),
+  if (graphene_point_equal (&self->current_point,
                             &GRAPHENE_POINT_INIT (x, y)))
     return;
 
@@ -421,9 +433,6 @@ gsk_path_builder_curve_to (GskPathBuilder *self,
                            float           y3)
 {
   g_return_if_fail (self != NULL);
-
-  if (self->ops->len == 0)
-    gsk_path_builder_move_to (self, x1, y1);
 
   self->flags &= ~GSK_PATH_FLAT;
   gsk_path_builder_append_current (self,
