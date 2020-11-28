@@ -220,6 +220,7 @@ typedef enum {
 /**
  * GskLineJoin:
  * @GSK_LINE_JOIN_MITER: Use a sharp, angled corner
+ * @GSK_LINE_JOIN_MITER_CLIP: Use a sharp, angled corner, at a distance
  * @GSK_LINE_JOIN_ROUND: Use a round join, the center of the circle is
  *   the joint point
  * @GSK_LINE_JOIN_BEVEL: use a cut-off join, the join is cut off at half
@@ -227,10 +228,14 @@ typedef enum {
  *
  * Specifies how to render the junction of two lines when stroking.
  *
+ * See [method@Gsk.Stroke.set_miter_limit] for details on the difference
+ * between @GSK_LINE_JOIN_MITER and @GSK_LINE_JOIN_MITER_CLIP.
+ *
  * The default line join style is @GSK_LINE_JOIN_MITER.
  **/
 typedef enum {
   GSK_LINE_JOIN_MITER,
+  GSK_LINE_JOIN_MITER_CLIP,
   GSK_LINE_JOIN_ROUND,
   GSK_LINE_JOIN_BEVEL
 } GskLineJoin;

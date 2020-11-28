@@ -50,6 +50,9 @@ gsk_stroke_new (float line_width)
   self = g_new0 (GskStroke, 1);
 
   self->line_width = line_width;
+  self->line_cap = GSK_LINE_CAP_BUTT;
+  self->line_join = GSK_LINE_JOIN_MITER;
+  self->miter_limit = 4.f; /* following svg */
 
   return self;
 }
@@ -120,6 +123,7 @@ gsk_stroke_to_cairo (const GskStroke *self,
   switch (self->line_join)
     {
       case GSK_LINE_JOIN_MITER:
+      case GSK_LINE_JOIN_MITER_CLIP:
         cairo_set_line_join (cr, CAIRO_LINE_JOIN_MITER);
         break;
       case GSK_LINE_JOIN_ROUND:
@@ -132,6 +136,8 @@ gsk_stroke_to_cairo (const GskStroke *self,
         g_assert_not_reached ();
         break;
     }
+
+  cairo_set_miter_limit (cr, self->miter_limit);
 }
 
 /**
@@ -152,7 +158,8 @@ gsk_stroke_equal (gconstpointer stroke1,
 
   if (self1->line_width != self2->line_width ||
       self1->line_cap != self2->line_cap ||
-      self1->line_join != self2->line_join)
+      self1->line_join != self2->line_join ||
+      self1->miter_limit != self2->miter_limit)
     return FALSE;
 
   return TRUE;
@@ -265,3 +272,40 @@ gsk_stroke_get_line_join (const GskStroke *self)
   return self->line_join;
 }
 
+/**
+ * gsk_stroke_set_miter_limit:
+ * @self: a `GskStroke`
+ * @limit: the miter limit, must be non-negative
+ *
+ * Sets the limit for the distance from the corner where sharp
+ * turns of joins get cut off. The miter limit is in units of
+ * line width.
+ *
+ * For joins of type `GSK_LINE_JOIN_MITER` that exceed the miter
+ * limit, the join gets rendered as if it was of type
+ * `GSK_LINE_JOIN_BEVEL`. For joins of type `GSK_LINE_JOIN_MITER_CLIP`,
+ * the miter is clipped at a distance of half the miter limit.
+ */
+void
+gsk_stroke_set_miter_limit (GskStroke  *self,
+                            float       limit)
+{
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (limit >= 0);
+
+  self->miter_limit = limit;
+}
+
+/**
+ * gsk_stroke_get_miter_limit:
+ * @self: a `GskStroke`
+ *
+ * Returns the miter limit of a `GskStroke`.
+ */
+float
+gsk_stroke_get_miter_limit (const GskStroke *self)
+{
+  g_return_val_if_fail (self != NULL, 4.f);
+
+  return self->miter_limit;
+}
