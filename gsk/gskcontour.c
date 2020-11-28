@@ -217,11 +217,11 @@ gsk_rect_contour_foreach (const GskContour   *contour,
     GRAPHENE_POINT_INIT (self->x,               self->y)
   };
 
-  return func (GSK_PATH_MOVE, &pts[0], 1, user_data)
-      && func (GSK_PATH_LINE, &pts[0], 2, user_data)
-      && func (GSK_PATH_LINE, &pts[1], 2, user_data)
-      && func (GSK_PATH_LINE, &pts[2], 2, user_data)
-      && func (GSK_PATH_CLOSE, &pts[3], 2, user_data);
+  return func (GSK_PATH_MOVE, &pts[0], 1, 0, user_data)
+      && func (GSK_PATH_LINE, &pts[0], 2, 0, user_data)
+      && func (GSK_PATH_LINE, &pts[1], 2, 0, user_data)
+      && func (GSK_PATH_LINE, &pts[2], 2, 0, user_data)
+      && func (GSK_PATH_CLOSE, &pts[3], 2, 0, user_data);
 }
 
 static gpointer
@@ -607,7 +607,7 @@ gsk_circle_contour_curve (const graphene_point_t curve[4],
 {
   ForeachWrapper *wrapper = data;
 
-  return wrapper->func (GSK_PATH_CURVE, curve, 4, wrapper->user_data);
+  return wrapper->func (GSK_PATH_CURVE, curve, 4, 0, wrapper->user_data);
 }
 
 static gboolean
@@ -619,7 +619,7 @@ gsk_circle_contour_foreach (const GskContour   *contour,
   const GskCircleContour *self = (const GskCircleContour *) contour;
   graphene_point_t start = GSK_CIRCLE_POINT_INIT (self, self->start_angle);
 
-  if (!func (GSK_PATH_MOVE, &start, 1, user_data))
+  if (!func (GSK_PATH_MOVE, &start, 1, 0, user_data))
     return FALSE;
 
   if (!gsk_spline_decompose_arc (&self->center,
@@ -633,7 +633,7 @@ gsk_circle_contour_foreach (const GskContour   *contour,
 
   if (fabs (self->start_angle - self->end_angle) >= 360)
     {
-      if (!func (GSK_PATH_CLOSE, (graphene_point_t[2]) { start, start }, 2, user_data))
+      if (!func (GSK_PATH_CLOSE, (graphene_point_t[2]) { start, start }, 2, 0, user_data))
         return FALSE;
     }
 
@@ -893,8 +893,21 @@ gsk_standard_contour_foreach (const GskContour   *contour,
 
   for (i = 0; i < self->n_ops; i ++)
     {
-      if (!func (self->ops[i].op, &self->points[self->ops[i].point], n_points[self->ops[i].op], user_data))
-        return FALSE;
+      if (self->ops[i].op == GSK_PATH_CONIC)
+        {
+          graphene_point_t pts[3] = { self->points[self->ops[i].point],
+                                      self->points[self->ops[i].point + 1],
+                                      self->points[self->ops[i].point + 3] };
+          float weight = self->points[self->ops[i].point + 2].x;
+
+          if (!func (GSK_PATH_CONIC, pts, 3, weight, user_data))
+            return FALSE;
+        }
+      else
+        {
+          if (!func (self->ops[i].op, &self->points[self->ops[i].point], n_points[self->ops[i].op], 0, user_data))
+            return FALSE;
+        }
     }
 
   return TRUE;
@@ -942,6 +955,16 @@ gsk_standard_contour_print (const GskContour *contour,
           _g_string_append_point (string, &pt[2]);
           g_string_append (string, ", ");
           _g_string_append_point (string, &pt[3]);
+          break;
+
+        case GSK_PATH_CONIC:
+          /* This is not valid SVG */
+          g_string_append (string, " O ");
+          _g_string_append_point (string, &pt[1]);
+          g_string_append (string, ", ");
+          _g_string_append_point (string, &pt[3]);
+          g_string_append (string, ", ");
+          _g_string_append_double (string, pt[2].x);
           break;
 
         default:
@@ -1096,6 +1119,14 @@ gsk_standard_contour_init_measure (const GskContour *contour,
           }
           break;
 
+        case GSK_PATH_CONIC:
+          {
+            LengthDecompose decomp = { array, { length, length, 0, 0, pt[0], i } };
+            gsk_spline_decompose_conic (pt, tolerance, gsk_standard_contour_measure_add_point, &decomp);
+            length = decomp.measure.start;
+          }
+          break;
+
         default:
           g_assert_not_reached();
           return NULL;
@@ -1154,6 +1185,10 @@ gsk_standard_contour_measure_get_point (GskStandardContour        *self,
 
       case GSK_PATH_CURVE:
         gsk_spline_get_point_cubic (pts, progress, pos, tangent);
+        break;
+
+      case GSK_PATH_CONIC:
+        gsk_spline_get_point_conic (pts, progress, pos, tangent);
         break;
 
       case GSK_PATH_MOVE:
@@ -1389,6 +1424,25 @@ gsk_standard_contour_add_segment (const GskContour *contour,
           }
           break;
 
+        case GSK_PATH_CONIC:
+          {
+            graphene_point_t *pts = &self->points[self->ops[start_measure->op].point];
+            graphene_point_t curve[4], discard[4];
+
+            gsk_spline_split_conic (pts, discard, curve, start_progress);
+            if (end_measure && end_measure->op == start_measure->op)
+              {
+                graphene_point_t tiny[4];
+                gsk_spline_split_conic (curve, tiny, discard, (end_progress - start_progress) / (1 - start_progress));
+                gsk_path_builder_move_to (builder, tiny[0].x, tiny[0].y);
+                gsk_path_builder_conic_to (builder, tiny[1].x, tiny[1].y, tiny[3].x, tiny[3].y, tiny[2].x);
+                return;
+              }
+            gsk_path_builder_move_to (builder, curve[0].x, curve[0].y);
+            gsk_path_builder_conic_to (builder, curve[1].x, curve[1].y, curve[3].x, curve[3].y, curve[2].x);
+          }
+          break;
+
         case GSK_PATH_MOVE:
         default:
           g_assert_not_reached();
@@ -1416,6 +1470,10 @@ gsk_standard_contour_add_segment (const GskContour *contour,
 
         case GSK_PATH_CURVE:
           gsk_path_builder_curve_to (builder, pt[1].x, pt[1].y, pt[2].x, pt[2].y, pt[3].x, pt[3].y);
+          break;
+
+        case GSK_PATH_CONIC:
+          gsk_path_builder_conic_to (builder, pt[1].x, pt[1].y, pt[3].x, pt[3].y, pt[2].x);
           break;
 
         default:
@@ -1447,6 +1505,16 @@ gsk_standard_contour_add_segment (const GskContour *contour,
 
             gsk_spline_split_cubic (pts, curve, discard, end_progress);
             gsk_path_builder_curve_to (builder, curve[1].x, curve[1].y, curve[2].x, curve[2].y, curve[3].x, curve[3].y);
+          }
+          break;
+
+        case GSK_PATH_CONIC:
+          {
+            graphene_point_t *pts = &self->points[self->ops[end_measure->op].point];
+            graphene_point_t curve[4], discard[4];
+
+            gsk_spline_split_conic (pts, curve, discard, end_progress);
+            gsk_path_builder_conic_to (builder, curve[1].x, curve[1].y, curve[3].x, curve[3].y, curve[2].x);
           }
           break;
 

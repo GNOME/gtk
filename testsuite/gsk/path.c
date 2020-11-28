@@ -349,6 +349,16 @@ path_operation_print (const PathOperation *p,
       _g_string_append_point (string, &p->pts[3]);
       break;
 
+    case GSK_PATH_CONIC:
+      /* This is not valid SVG */
+      g_string_append (string, " O ");
+      _g_string_append_point (string, &p->pts[1]);
+      g_string_append (string, ", ");
+      _g_string_append_point (string, &p->pts[2]);
+      g_string_append (string, ", ");
+      _g_string_append_double (string, p->weight);
+      break;
+
     default:
       g_assert_not_reached();
       return;
@@ -379,6 +389,11 @@ path_operation_equal (const PathOperation *p1,
             && graphene_point_near (&p1->pts[2], &p2->pts[2], epsilon)
             && graphene_point_near (&p1->pts[3], &p2->pts[3], epsilon);
 
+      case GSK_PATH_CONIC:
+        return graphene_point_near (&p1->pts[1], &p2->pts[1], epsilon)
+            && graphene_point_near (&p1->pts[2], &p2->pts[2], epsilon)
+            && G_APPROX_VALUE (p1->weight, p2->weight, epsilon);
+
       default:
         g_return_val_if_reached (FALSE);
     }
@@ -388,6 +403,7 @@ static gboolean
 collect_path_operation_cb (GskPathOperation        op,
                            const graphene_point_t *pts,
                            gsize                   n_pts,
+                           float                   weight,
                            gpointer                user_data)
 {
   g_array_append_vals (user_data,
@@ -402,6 +418,7 @@ collect_path_operation_cb (GskPathOperation        op,
                            GRAPHENE_POINT_INIT(n_pts > 3 ? pts[3].x : 0,
                                                n_pts > 3 ? pts[3].y : 0)
                          },
+                         weight
                        },
                        1);
   return TRUE;
@@ -968,6 +985,7 @@ static gboolean
 rotate_path_cb (GskPathOperation        op,
                 const graphene_point_t *pts,
                 gsize                   n_pts,
+                float                   weight,
                 gpointer                user_data)
 {
   GskPathBuilder **builders = user_data;
@@ -992,6 +1010,11 @@ rotate_path_cb (GskPathOperation        op,
     case GSK_PATH_CURVE:
       gsk_path_builder_curve_to (builders[0], pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
       gsk_path_builder_curve_to (builders[1], pts[1].y, -pts[1].x, pts[2].y, -pts[2].x, pts[3].y, -pts[3].x);
+      break;
+
+    case GSK_PATH_CONIC:
+      gsk_path_builder_conic_to (builders[0], pts[2].x, pts[2].y, pts[3].x, pts[3].y, weight);
+      gsk_path_builder_conic_to (builders[1], pts[2].y, -pts[2].x, pts[3].y, -pts[3].x, weight);
       break;
 
     default:

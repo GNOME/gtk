@@ -31,10 +31,10 @@ G_BEGIN_DECLS
 
 /**
  * GskPathForeachFlags:
- * @GSK_PATH_FOREACH_ALLOW_CURVES: Allow emission of `GSK_PATH_CURVE`
- *   operations.
+ * @GSK_PATH_FOREACH_ALLOW_CURVE: Allow emission of `GSK_PATH_CURVE` operations.
+ * @GSK_PATH_FOREACH_ALLOW_CONIC: Allow emission of `GSK_PATH_CONIC` operations.
  *
- * Flags that can be passed to gsk_path_foreach() to enable additional
+ * Flags that can be passed to [method@Gsk.Path.foreach] to enable additional
  * features.
  *
  * By default, [method@Gsk.Path.foreach] will only emit a path with all
@@ -44,7 +44,8 @@ G_BEGIN_DECLS
  */
 typedef enum
 {
-  GSK_PATH_FOREACH_ALLOW_CURVES = (1 << 0)
+  GSK_PATH_FOREACH_ALLOW_CURVE = (1 << 0),
+  GSK_PATH_FOREACH_ALLOW_CONIC = (1 << 1)
 } GskPathForeachFlags;
 
 /**
@@ -52,6 +53,7 @@ typedef enum
  * @op: The operation to perform
  * @pts: The points of the operation
  * @n_pts: The number of points
+ * @weight: The weight for conic curves, or unused if not a conic curve.
  * @user_data: The user data provided with the function
  *
  * Prototype of the callback to iterate throught the operations of
@@ -63,6 +65,7 @@ typedef enum
 typedef gboolean (* GskPathForeachFunc) (GskPathOperation        op,
                                          const graphene_point_t *pts,
                                          gsize                   n_pts,
+                                         float                   weight,
                                          gpointer                user_data);
 
 #define GSK_TYPE_PATH (gsk_path_get_type ())
