@@ -347,13 +347,18 @@ gsk_path_builder_unref
 gsk_path_builder_to_path
 gsk_path_builder_free_to_path
 <SUBSECTION>
+gsk_path_builder_get_current_point
+<SUBSECTION>
 gsk_path_builder_add_rect
 gsk_path_builder_add_circle
 gsk_path_builder_add_path
 <SUBSECTION>
 gsk_path_builder_move_to
+gsk_path_builder_rel_move_to
 gsk_path_builder_line_to
+gsk_path_builder_rel_line_to
 gsk_path_builder_curve_to
+gsk_path_builder_rel_curve_to
 gsk_path_builder_close
 <SUBSECTION Private>
 GSK_TYPE_PATH_BUILDER
