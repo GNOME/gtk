@@ -34,6 +34,7 @@ G_BEGIN_DECLS
  * @op: The operation to perform
  * @pts: The points of the operation
  * @n_pts: The number of points
+ * @weight: The weight for conic curves, or unused if not a conic curve.
  * @user_data: The user data provided with the function
  *
  * Prototype of the callback to iterate throught the operations of
@@ -45,6 +46,7 @@ G_BEGIN_DECLS
 typedef gboolean (* GskPathForeachFunc) (GskPathOperation        op,
                                          const graphene_point_t *pts,
                                          gsize                   n_pts,
+                                         float                   weight,
                                          gpointer                user_data);
 
 #define GSK_TYPE_PATH (gsk_path_get_type ())

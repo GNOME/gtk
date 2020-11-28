@@ -447,6 +447,41 @@ gsk_path_builder_curve_to (GskPathBuilder *builder,
 }
 
 /**
+ * gsk_path_builder_conic_to:
+ * @builder: a #GskPathBuilder
+ * @x1: x coordinate of control point
+ * @y1: y coordinate of control point
+ * @x2: x coordinate of the end of the curve
+ * @y2: y coordinate of the end of the curve
+ * @weight: weight of the curve
+ *
+ * Adds a [conic curve](https://en.wikipedia.org/wiki/Non-uniform_rational_B-spline)
+ * from the current point to @x2, @y2 with the given
+ * @weight and @x1, @y1 as the single control point.
+ *
+ * Conic curves can be used to draw ellipses and circles.
+ **/
+void
+gsk_path_builder_conic_to (GskPathBuilder *builder,
+                           float           x1,
+                           float           y1,
+                           float           x2,
+                           float           y2,
+                           float           weight)
+{
+  g_return_if_fail (builder != NULL);
+
+  builder->flags ^= ~GSK_PATH_FLAT;
+  gsk_path_builder_append_current (builder,
+                                   GSK_PATH_CONIC,
+                                   3, (graphene_point_t[3]) {
+                                     GRAPHENE_POINT_INIT (x1, y1),
+                                     GRAPHENE_POINT_INIT (weight, 0),
+                                     GRAPHENE_POINT_INIT (x2, y2)
+                                   });
+}
+
+/**
  * gsk_path_builder_close:
  * @builder: a #GskPathBuilder
  *

@@ -103,6 +103,7 @@ static gboolean
 gtk_path_transform_op (GskPathOperation        op,
                        const graphene_point_t *pts,
                        gsize                   n_pts,
+                       float                   weight,
                        gpointer                data)
 {
   GtkPathTransform *transform = data;
@@ -132,6 +133,15 @@ gtk_path_transform_op (GskPathOperation        op,
         gtk_path_transform_point (transform->measure, &pts[2], transform->scale, &res[1]);
         gtk_path_transform_point (transform->measure, &pts[3], transform->scale, &res[2]);
         gsk_path_builder_curve_to (transform->builder, res[0].x, res[0].y, res[1].x, res[1].y, res[2].x, res[2].y);
+      }
+      break;
+
+    case GSK_PATH_CONIC:
+      {
+        graphene_point_t res[2];
+        gtk_path_transform_point (transform->measure, &pts[1], transform->scale, &res[0]);
+        gtk_path_transform_point (transform->measure, &pts[2], transform->scale, &res[1]);
+        gsk_path_builder_conic_to (transform->builder, res[0].x, res[0].y, res[1].x, res[1].y, weight);
       }
       break;
 

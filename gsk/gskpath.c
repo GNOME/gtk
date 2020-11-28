@@ -246,11 +246,11 @@ gsk_rect_contour_foreach (const GskContour   *contour,
     GRAPHENE_POINT_INIT (self->x,               self->y)
   };
 
-  return func (GSK_PATH_MOVE, &pts[0], 1, user_data)
-      && func (GSK_PATH_LINE, &pts[0], 2, user_data)
-      && func (GSK_PATH_LINE, &pts[1], 2, user_data)
-      && func (GSK_PATH_LINE, &pts[2], 2, user_data)
-      && func (GSK_PATH_CLOSE, &pts[3], 2, user_data);
+  return func (GSK_PATH_MOVE, &pts[0], 1, 0, user_data)
+      && func (GSK_PATH_LINE, &pts[0], 2, 0, user_data)
+      && func (GSK_PATH_LINE, &pts[1], 2, 0, user_data)
+      && func (GSK_PATH_LINE, &pts[2], 2, 0, user_data)
+      && func (GSK_PATH_CLOSE, &pts[3], 2, 0, user_data);
 }
 
 static gpointer
@@ -605,7 +605,7 @@ gsk_circle_contour_curve (const graphene_point_t curve[4],
 {
   ForeachWrapper *wrapper = data;
 
-  return wrapper->func (GSK_PATH_CURVE, curve, 4, wrapper->user_data);
+  return wrapper->func (GSK_PATH_CURVE, curve, 4, 0, wrapper->user_data);
 }
 
 static gboolean
@@ -617,7 +617,7 @@ gsk_circle_contour_foreach (const GskContour   *contour,
   const GskCircleContour *self = (const GskCircleContour *) contour;
   graphene_point_t start = GSK_CIRCLE_POINT_INIT (self, self->start_angle);
 
-  if (!func (GSK_PATH_MOVE, &start, 1, user_data))
+  if (!func (GSK_PATH_MOVE, &start, 1, 0, user_data))
     return FALSE;
 
   if (!gsk_spline_decompose_arc (&self->center,
@@ -631,7 +631,7 @@ gsk_circle_contour_foreach (const GskContour   *contour,
 
   if (fabs (self->start_angle - self->end_angle) >= 360)
     {
-      if (!func (GSK_PATH_CLOSE, (graphene_point_t[2]) { start, start }, 2, user_data))
+      if (!func (GSK_PATH_CLOSE, (graphene_point_t[2]) { start, start }, 2, 0, user_data))
         return FALSE;
     }
 
@@ -862,13 +862,25 @@ gsk_standard_contour_foreach (const GskContour   *contour,
     [GSK_PATH_MOVE] = 1,
     [GSK_PATH_CLOSE] = 2,
     [GSK_PATH_LINE] = 2,
-    [GSK_PATH_CURVE] = 4
+    [GSK_PATH_CURVE] = 4,
   };
 
   for (i = 0; i < self->n_ops; i ++)
     {
-      if (!func (self->ops[i].op, &self->points[self->ops[i].point], n_points[self->ops[i].op], user_data))
-        return FALSE;
+      if (self->ops[i].op == GSK_PATH_CONIC)
+        {
+          graphene_point_t pts[2] = { self->points[self->ops[i].point],
+                                      self->points[self->ops[i].point + 2] };
+          float weight = self->points[self->ops[i].point + 1].x;
+
+          if (!func (GSK_PATH_CONIC, pts, 2, weight, user_data))
+            return FALSE;
+        }
+      else
+        {
+          if (!func (self->ops[i].op, &self->points[self->ops[i].point], n_points[self->ops[i].op], 0, user_data))
+            return FALSE;
+        }
     }
 
   return TRUE;
@@ -914,6 +926,16 @@ gsk_standard_contour_print (const GskContour *contour,
           _g_string_append_point (string, &pt[1]);
           g_string_append (string, ", ");
           _g_string_append_point (string, &pt[2]);
+          g_string_append (string, ", ");
+          _g_string_append_point (string, &pt[3]);
+          break;
+
+        case GSK_PATH_CONIC:
+          /* This is not valid SVG */
+          g_string_append (string, " O ");
+          _g_string_append_point (string, &pt[1]);
+          g_string_append (string, ", ");
+          _g_string_append_double (string, pt[2].x);
           g_string_append (string, ", ");
           _g_string_append_point (string, &pt[3]);
           break;
@@ -1070,6 +1092,23 @@ gsk_standard_contour_init_measure (const GskContour *contour,
           }
           break;
 
+        case GSK_PATH_CONIC:
+          g_warning ("FIXME: Stop treating conics as lines");
+          seg_length = graphene_point_distance (&pt[0], &pt[3], NULL, NULL);
+          if (seg_length > 0)
+            {
+              g_array_append_vals (array,
+                                   &(GskStandardContourMeasure) {
+                                     length, 
+                                     length + seg_length,
+                                     0, 1,
+                                     pt[1],
+                                     i,
+                                   }, 1);
+              length += seg_length;
+            }
+          break;
+
         default:
           g_assert_not_reached();
           return NULL;
@@ -1130,6 +1169,16 @@ gsk_standard_contour_measure_get_point (GskStandardContour        *self,
         gsk_spline_get_point_cubic (pts, progress, pos, tangent);
         break;
 
+      case GSK_PATH_CONIC:
+        g_warning ("FIXME: Stop treating conics as lines");
+        if (pos)
+          graphene_point_interpolate (&pts[0], &pts[3], progress, pos);
+        if (tangent)
+          {
+            graphene_vec2_init (tangent, pts[3].x - pts[0].x, pts[3].y - pts[0].y);
+            graphene_vec2_normalize (tangent, tangent);
+          }
+        break;
       case GSK_PATH_MOVE:
       default:
         g_assert_not_reached ();
@@ -1363,6 +1412,24 @@ gsk_standard_contour_add_segment (const GskContour *contour,
           }
           break;
 
+        case GSK_PATH_CONIC:
+          g_warning ("FIXME: Stop treating conics as lines");
+          {
+            graphene_point_t *pts = &self->points[self->ops[start_measure->op].point];
+            graphene_point_t point;
+
+            graphene_point_interpolate (&pts[0], &pts[3], start_progress, &point);
+            gsk_path_builder_move_to (builder, point.x, point.y);
+            if (end_measure && end_measure->op == start_measure->op)
+              {
+                graphene_point_interpolate (&pts[0], &pts[3], end_progress, &point);
+                gsk_path_builder_line_to (builder, point.x, point.y);
+                return;
+              }
+            gsk_path_builder_line_to (builder, pts[3].x, pts[3].y);
+          }
+          break;
+
         case GSK_PATH_MOVE:
         default:
           g_assert_not_reached();
@@ -1390,6 +1457,10 @@ gsk_standard_contour_add_segment (const GskContour *contour,
 
         case GSK_PATH_CURVE:
           gsk_path_builder_curve_to (builder, pt[1].x, pt[1].y, pt[2].x, pt[2].y, pt[3].x, pt[3].y);
+          break;
+
+        case GSK_PATH_CONIC:
+          gsk_path_builder_conic_to (builder, pt[1].x, pt[1].y, pt[3].x, pt[3].y, pt[2].x);
           break;
 
         default:
@@ -1421,6 +1492,17 @@ gsk_standard_contour_add_segment (const GskContour *contour,
 
             gsk_spline_split_cubic (pts, curve, discard, end_progress);
             gsk_path_builder_curve_to (builder, curve[1].x, curve[1].y, curve[2].x, curve[2].y, curve[3].x, curve[3].y);
+          }
+          break;
+
+        case GSK_PATH_CONIC:
+          g_warning ("FIXME: Stop treating conics as lines");
+          {
+            graphene_point_t *pts = &self->points[self->ops[end_measure->op].point];
+            graphene_point_t point;
+
+            graphene_point_interpolate (&pts[0], &pts[3], end_progress, &point);
+            gsk_path_builder_line_to (builder, point.x, point.y);
           }
           break;
 
@@ -1804,6 +1886,7 @@ static gboolean
 gsk_path_to_cairo_add_op (GskPathOperation        op,
                           const graphene_point_t *pts,
                           gsize                   n_pts,
+                          float                   weight,
                           gpointer                cr)
 {
   switch (op)
@@ -1822,6 +1905,11 @@ gsk_path_to_cairo_add_op (GskPathOperation        op,
 
     case GSK_PATH_CURVE:
       cairo_curve_to (cr, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
+      break;
+
+    case GSK_PATH_CONIC:
+      g_warning ("FIXME: Stop treating conics as lines");
+      cairo_line_to (cr, pts[3].x, pts[3].y);
       break;
 
     default:
