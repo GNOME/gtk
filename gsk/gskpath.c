@@ -541,24 +541,24 @@ gsk_circle_contour_get_flags (const GskContour *contour)
     return 0;
 }
 
+#define GSK_CIRCLE_POINT_INIT(self, angle) \
+  GRAPHENE_POINT_INIT ((self)->center.x + cos (DEG_TO_RAD (angle)) * self->radius, \
+                       (self)->center.y + sin (DEG_TO_RAD (angle)) * self->radius)
+
 static void
 gsk_circle_contour_print (const GskContour *contour,
                           GString          *string)
 {
   const GskCircleContour *self = (const GskCircleContour *) contour;
-  graphene_point_t start = GRAPHENE_POINT_INIT (cos (DEG_TO_RAD (self->start_angle)) * self->radius,
-                                                sin (DEG_TO_RAD (self->start_angle)) * self->radius);
-  graphene_point_t end = GRAPHENE_POINT_INIT (cos (DEG_TO_RAD (self->end_angle)) * self->radius,
-                                              sin (DEG_TO_RAD (self->end_angle)) * self->radius);
 
   g_string_append (string, "M ");
-  _g_string_append_point (string, &GRAPHENE_POINT_INIT (self->center.x + start.x, self->center.y + start.y));
+  _g_string_append_point (string, &GSK_CIRCLE_POINT_INIT (self, self->start_angle));
   g_string_append (string, " A ");
   _g_string_append_point (string, &GRAPHENE_POINT_INIT (self->radius, self->radius));
   g_string_append_printf (string, " 0 %u %u ",
                           fabs (self->start_angle - self->end_angle) > 180 ? 1 : 0,
                           self->start_angle < self->end_angle ? 0 : 1);
-  _g_string_append_point (string, &GRAPHENE_POINT_INIT (self->center.x + end.x, self->center.y + end.y));
+  _g_string_append_point (string, &GSK_CIRCLE_POINT_INIT (self, self->end_angle));
   if (fabs (self->start_angle - self->end_angle >= 360))
     g_string_append (string, " z");
 }
@@ -615,8 +615,7 @@ gsk_circle_contour_foreach (const GskContour   *contour,
                             gpointer            user_data)
 {
   const GskCircleContour *self = (const GskCircleContour *) contour;
-  graphene_point_t start = GRAPHENE_POINT_INIT (self->center.x + cos (DEG_TO_RAD (self->start_angle)) * self->radius,
-                                                self->center.y + sin (DEG_TO_RAD (self->start_angle)) * self->radius);
+  graphene_point_t start = GSK_CIRCLE_POINT_INIT (self, self->start_angle);
 
   if (!func (GSK_PATH_MOVE, &start, 1, user_data))
     return FALSE;
@@ -670,8 +669,7 @@ gsk_circle_contour_get_point (const GskContour *contour,
   float angle = self->start_angle + distance/length * delta;
   graphene_point_t p;
 
-  p = GRAPHENE_POINT_INIT (self->center.x + cos (DEG_TO_RAD (angle)) * self->radius,
-                              self->center.y + sin (DEG_TO_RAD (angle)) * self->radius);
+  p = GSK_CIRCLE_POINT_INIT (self, angle);
 
   if (pos)
     *pos = p;
