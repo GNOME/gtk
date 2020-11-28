@@ -51,7 +51,7 @@ static void gtk_cell_renderer_toggle_set_property  (GObject                    *
 						    guint                       param_id,
 						    const GValue               *value,
 						    GParamSpec                 *pspec);
-static void gtk_cell_renderer_toggle_get_size   (GtkCellRenderer            *cell,
+static void gtk_cell_renderer_toggle_get_size   (GtkCellRendererToggle      *self,
 						 GtkWidget                  *widget,
 						 const GdkRectangle         *cell_area,
 						 int                        *x_offset,
@@ -146,6 +146,48 @@ gtk_cell_renderer_toggle_dispose (GObject *object)
   G_OBJECT_CLASS (gtk_cell_renderer_toggle_parent_class)->dispose (object);
 }
 
+static GtkSizeRequestMode
+gtk_cell_renderer_toggle_get_request_mode (GtkCellRenderer *cell)
+{
+  return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+}
+
+static void
+gtk_cell_renderer_toggle_get_preferred_width (GtkCellRenderer *cell,
+                                              GtkWidget       *widget,
+                                              int             *minimum,
+                                              int             *natural)
+{
+  int width = 0;
+
+  gtk_cell_renderer_toggle_get_size (GTK_CELL_RENDERER_TOGGLE (cell), widget,
+                                     NULL,
+                                     NULL, NULL, &width, NULL);
+
+  if (minimum)
+    *minimum = width;
+  if (natural)
+    *natural = width;
+}
+
+static void
+gtk_cell_renderer_toggle_get_preferred_height (GtkCellRenderer *cell,
+                                               GtkWidget       *widget,
+                                               int             *minimum,
+                                               int             *natural)
+{
+  int height = 0;
+
+  gtk_cell_renderer_toggle_get_size (GTK_CELL_RENDERER_TOGGLE (cell), widget,
+                                     NULL,
+                                     NULL, NULL, NULL, &height);
+
+  if (minimum)
+    *minimum = height;
+  if (natural)
+    *natural = height;
+}
+
 static void
 gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 {
@@ -156,7 +198,9 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
   object_class->set_property = gtk_cell_renderer_toggle_set_property;
   object_class->dispose = gtk_cell_renderer_toggle_dispose;
 
-  cell_class->get_size = gtk_cell_renderer_toggle_get_size;
+  cell_class->get_request_mode = gtk_cell_renderer_toggle_get_request_mode;
+  cell_class->get_preferred_width = gtk_cell_renderer_toggle_get_preferred_width;
+  cell_class->get_preferred_height = gtk_cell_renderer_toggle_get_preferred_height;
   cell_class->snapshot = gtk_cell_renderer_toggle_snapshot;
   cell_class->activate = gtk_cell_renderer_toggle_activate;
   
@@ -345,14 +389,15 @@ calc_indicator_size (GtkStyleContext *context)
 }
 
 static void
-gtk_cell_renderer_toggle_get_size (GtkCellRenderer    *cell,
-				   GtkWidget          *widget,
-				   const GdkRectangle *cell_area,
-				   int                *x_offset,
-				   int                *y_offset,
-				   int                *width,
-				   int                *height)
+gtk_cell_renderer_toggle_get_size (GtkCellRendererToggle *self,
+				   GtkWidget             *widget,
+				   const GdkRectangle    *cell_area,
+				   int                   *x_offset,
+				   int                   *y_offset,
+				   int                   *width,
+				   int                   *height)
 {
+  GtkCellRenderer *cell = GTK_CELL_RENDERER (self);
   int calc_width;
   int calc_height;
   int xpad, ypad;
@@ -361,7 +406,7 @@ gtk_cell_renderer_toggle_get_size (GtkCellRenderer    *cell,
 
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
 
-  context = gtk_cell_renderer_toggle_save_context (GTK_CELL_RENDERER_TOGGLE (cell), widget);
+  context = gtk_cell_renderer_toggle_save_context (self, widget);
   gtk_style_context_get_padding (context, &padding);
   gtk_style_context_get_border (context, &border);
 
@@ -369,7 +414,7 @@ gtk_cell_renderer_toggle_get_size (GtkCellRenderer    *cell,
   calc_width += xpad * 2 + padding.left + padding.right + border.left + border.right;
   calc_height += ypad * 2 + padding.top + padding.bottom + border.top + border.bottom;
 
-  gtk_cell_renderer_toggle_restore_context (GTK_CELL_RENDERER_TOGGLE (cell), context);
+  gtk_cell_renderer_toggle_restore_context (self, context);
 
   if (width)
     *width = calc_width;
@@ -397,8 +442,10 @@ gtk_cell_renderer_toggle_get_size (GtkCellRenderer    *cell,
     }
   else
     {
-      if (x_offset) *x_offset = 0;
-      if (y_offset) *y_offset = 0;
+      if (x_offset)
+        *x_offset = 0;
+      if (y_offset)
+        *y_offset = 0;
     }
 }
 
@@ -419,7 +466,7 @@ gtk_cell_renderer_toggle_snapshot (GtkCellRenderer      *cell,
   GtkStateFlags state;
   GtkBorder padding, border;
 
-  gtk_cell_renderer_toggle_get_size (cell, widget, cell_area,
+  gtk_cell_renderer_toggle_get_size (celltoggle, widget, cell_area,
 				     &x_offset, &y_offset,
 				     &width, &height);
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
