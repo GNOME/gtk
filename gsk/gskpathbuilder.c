@@ -421,9 +421,9 @@ gsk_path_builder_line_to (GskPathBuilder *builder,
  * @x3: x coordinate of the end of the curve
  * @y3: y coordinate of the end of the curve
  *
- * Adds a cubic [Bézier curve](https://en.wikipedia.org/wiki/B%C3%A9zier_curve)
+ * Adds a [cubic Bézier curve](https://en.wikipedia.org/wiki/B%C3%A9zier_curve)
  * from the current point to @x3, @y3 with @x1, @y1 and @x2, @y2 as the control
- * point.
+ * points.
  **/
 void
 gsk_path_builder_curve_to (GskPathBuilder *builder,
