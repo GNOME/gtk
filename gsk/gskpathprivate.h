@@ -73,6 +73,9 @@ gpointer                gsk_contour_init_measure                (GskPath        
 void                    gsk_contour_free_measure                (GskPath              *path,
                                                                  gsize                 i,
                                                                  gpointer              data);
+void                    gsk_contour_get_start_end               (const GskContour       *self,
+                                                                 graphene_point_t       *start,
+                                                                 graphene_point_t       *end);
 void                    gsk_contour_get_point                   (GskPath              *path,
                                                                  gsize                 i,
                                                                  gpointer              measure_data,
