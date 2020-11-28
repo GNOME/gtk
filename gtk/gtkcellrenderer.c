@@ -86,7 +86,6 @@ static void gtk_cell_renderer_set_property  (GObject              *object,
 static void set_cell_bg_color               (GtkCellRenderer      *cell,
 					     GdkRGBA              *rgba);
 
-/* Fallback GtkCellRenderer    implementation to use remaining ->get_size() implementations */
 static GtkSizeRequestMode gtk_cell_renderer_real_get_request_mode(GtkCellRenderer         *cell);
 static void gtk_cell_renderer_real_get_preferred_width           (GtkCellRenderer         *cell,
                                                                   GtkWidget               *widget,
@@ -201,7 +200,6 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
   object_class->set_property = gtk_cell_renderer_set_property;
 
   class->snapshot = NULL;
-  class->get_size = NULL;
   class->get_request_mode               = gtk_cell_renderer_real_get_request_mode;
   class->get_preferred_width            = gtk_cell_renderer_real_get_preferred_width;
   class->get_preferred_height           = gtk_cell_renderer_real_get_preferred_height;
@@ -1177,15 +1175,8 @@ gtk_cell_renderer_real_get_preferred_size (GtkCellRenderer   *cell,
 {
   GtkRequisition min_req;
 
-  /* Fallback on the old API to get the size. */
-  if (GTK_CELL_RENDERER_GET_CLASS (cell)->get_size)
-    GTK_CELL_RENDERER_GET_CLASS (cell)->get_size (GTK_CELL_RENDERER (cell), widget, NULL, NULL, NULL,
-						  &min_req.width, &min_req.height);
-  else
-    {
-      min_req.width = 0;
-      min_req.height = 0;
-    }
+  min_req.width = 0;
+  min_req.height = 0;
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -1240,7 +1231,6 @@ gtk_cell_renderer_real_get_preferred_height_for_width (GtkCellRenderer *cell,
                                                        int             *minimum_height,
                                                        int             *natural_height)
 {
-  /* Fall back on the height reported from ->get_size() */
   gtk_cell_renderer_get_preferred_height (cell, widget, minimum_height, natural_height);
 }
 
@@ -1251,7 +1241,6 @@ gtk_cell_renderer_real_get_preferred_width_for_height (GtkCellRenderer *cell,
                                                        int             *minimum_width,
                                                        int             *natural_width)
 {
-  /* Fall back on the width reported from ->get_size() */
   gtk_cell_renderer_get_preferred_width (cell, widget, minimum_width, natural_width);
 }
 
