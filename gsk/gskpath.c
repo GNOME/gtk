@@ -266,6 +266,7 @@ static gboolean
 gsk_path_to_cairo_add_op (GskPathOperation        op,
                           const graphene_point_t *pts,
                           gsize                   n_pts,
+                          float                   weight,
                           gpointer                cr)
 {
   switch (op)
@@ -286,6 +287,7 @@ gsk_path_to_cairo_add_op (GskPathOperation        op,
       cairo_curve_to (cr, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
       break;
 
+    case GSK_PATH_CONIC:
     default:
       g_assert_not_reached ();
       return FALSE;
@@ -316,7 +318,7 @@ gsk_path_to_cairo (GskPath *self,
   g_return_if_fail (cr != NULL);
 
   gsk_path_foreach_with_tolerance (self,
-                                   GSK_PATH_FOREACH_ALLOW_CURVES,
+                                   GSK_PATH_FOREACH_ALLOW_CURVE,
                                    cairo_get_tolerance (cr),
                                    gsk_path_to_cairo_add_op,
                                    cr);
@@ -463,6 +465,7 @@ gsk_path_foreach_trampoline_add_point (const graphene_point_t *from,
   trampoline->retval = trampoline->func (GSK_PATH_LINE,
                                          (graphene_point_t[2]) { *from, *to },
                                          2,
+                                         0.0f,
                                          trampoline->user_data);
 }
 
@@ -470,6 +473,7 @@ static gboolean
 gsk_path_foreach_trampoline (GskPathOperation        op,
                              const graphene_point_t *pts,
                              gsize                   n_pts,
+                             float                   weight,
                              gpointer                data)
 {
   GskPathForeachTrampoline *trampoline = data;
@@ -479,13 +483,24 @@ gsk_path_foreach_trampoline (GskPathOperation        op,
     case GSK_PATH_MOVE:
     case GSK_PATH_CLOSE:
     case GSK_PATH_LINE:
-      return trampoline->func (op, pts, n_pts, trampoline->user_data);
+      return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
 
     case GSK_PATH_CURVE:
-      if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_CURVES)
-        return trampoline->func (op, pts, n_pts, trampoline->user_data);
+      if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_CURVE)
+        return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
 
       gsk_spline_decompose_cubic (pts,
+                                  trampoline->tolerance,
+                                  gsk_path_foreach_trampoline_add_point,
+                                  trampoline);
+      return trampoline->retval;
+
+    case GSK_PATH_CONIC:
+      if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_CONIC)
+        return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
+
+      /* XXX: decompose into curves if allowed */
+      gsk_spline_decompose_conic ((graphene_point_t[4]) { pts[0], pts[1], { weight, }, pts[2] },
                                   trampoline->tolerance,
                                   gsk_path_foreach_trampoline_add_point,
                                   trampoline);
@@ -508,7 +523,7 @@ gsk_path_foreach_with_tolerance (GskPath             *self,
   gsize i;
 
   /* If we need to massage the data, set up a trampoline here */
-  if (flags != GSK_PATH_FOREACH_ALLOW_CURVES)
+  if (flags != (GSK_PATH_FOREACH_ALLOW_CURVE | GSK_PATH_FOREACH_ALLOW_CONIC))
     {
       trampoline = (GskPathForeachTrampoline) { flags, tolerance, func, user_data, TRUE };
       func = gsk_path_foreach_trampoline;
@@ -633,7 +648,7 @@ parse_command (const char **p,
   if (*cmd == 'X')
     allowed = "mM";
   else
-    allowed = "mMhHvVzZlLcCsStTqQaA";
+    allowed = "mMhHvVzZlLcCsStTqQoOaA";
 
   skip_whitespace (p);
   s = strchr (allowed, **p);
@@ -1056,6 +1071,37 @@ gsk_path_parse (const char *string)
                 gsk_path_builder_curve_to (builder, xx1, yy1, xx2, yy2, x2, y2);
                 prev_x1 = x1;
                 prev_y1 = y1;
+                x = x2;
+                y = y2;
+              }
+            else
+              goto error;
+          }
+          break;
+
+        case 'O':
+        case 'o':
+          {
+            double x1, y1, x2, y2, weight;
+
+            if (parse_coordinate_pair (&p, &x1, &y1) &&
+                parse_coordinate_pair (&p, &x2, &y2) &&
+                parse_nonnegative_number (&p, &weight))
+              {
+                if (cmd == 'c')
+                  {
+                    x1 += x;
+                    y1 += y;
+                    x2 += x;
+                    y2 += y;
+                  }
+                if (strchr ("zZ", prev_cmd))
+                  {
+                    gsk_path_builder_move_to (builder, x, y);
+                    path_x = x;
+                    path_y = y;
+                  }
+                gsk_path_builder_conic_to (builder, x1, y1, x2, y2, weight);
                 x = x2;
                 y = y2;
               }

@@ -2666,7 +2666,7 @@ append_path_param (Printer    *p,
   for (s = str; *s; s++)
     {
       if (*s == ' ' &&
-          (s[1] == 'M' || s[1] == 'C' || s[1] == 'Z' || s[1] == 'L'))
+          (s[1] == 'M' || s[1] == 'C' || s[1] == 'Z' || s[1] == 'L' || s[1] == 'O'))
         *s = '\n';
     }
   append_escaping_newlines (p->str, str);

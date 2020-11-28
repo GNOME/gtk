@@ -99,6 +99,20 @@ void                    gsk_path_builder_rel_curve_to           (GskPathBuilder 
                                                                  float                   x3,
                                                                  float                   y3);
 GDK_AVAILABLE_IN_ALL
+void                    gsk_path_builder_conic_to               (GskPathBuilder         *builder,
+                                                                 float                   x1,
+                                                                 float                   y1,
+                                                                 float                   x2,
+                                                                 float                   y2,
+                                                                 float                   weight);
+GDK_AVAILABLE_IN_ALL
+void                    gsk_path_builder_rel_conic_to           (GskPathBuilder         *builder,
+                                                                 float                   x1,
+                                                                 float                   y1,
+                                                                 float                   x2,
+                                                                 float                   y2,
+                                                                 float                   weight);
+GDK_AVAILABLE_IN_ALL
 void                    gsk_path_builder_close                  (GskPathBuilder         *builder);
 
 G_END_DECLS
