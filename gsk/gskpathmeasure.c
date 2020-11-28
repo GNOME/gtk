@@ -410,12 +410,11 @@ gsk_path_measure_add_segment (GskPathMeasure *self,
       else if (start > 0 || end < self->measures[i].length)
         {
           float len = MIN (end, self->measures[i].length);
-          gsk_path_builder_add_contour_segment (builder,
-                                                self->path,
-                                                i,
-                                                self->measures[i].contour_data,
-                                                start,
-                                                len);
+          gsk_contour_add_segment (gsk_path_get_contour (self->path, i),
+                                   builder,
+                                   self->measures[i].contour_data,
+                                   start,
+                                   len);
           end -= len;
           start = 0;
           if (end <= 0)
@@ -424,7 +423,7 @@ gsk_path_measure_add_segment (GskPathMeasure *self,
       else
         {
           end -= self->measures[i].length;
-          gsk_path_builder_add_contour (builder, self->path, i);
+          gsk_path_builder_add_contour (builder, gsk_contour_dup (gsk_path_get_contour (self->path, i)));
         }
     }
 }
