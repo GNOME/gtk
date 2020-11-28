@@ -550,16 +550,21 @@ gsk_circle_contour_print (const GskContour *contour,
                           GString          *string)
 {
   const GskCircleContour *self = (const GskCircleContour *) contour;
+  float mid_angle = (self->end_angle - self->start_angle) / 2;
 
   g_string_append (string, "M ");
   _g_string_append_point (string, &GSK_CIRCLE_POINT_INIT (self, self->start_angle));
   g_string_append (string, " A ");
   _g_string_append_point (string, &GRAPHENE_POINT_INIT (self->radius, self->radius));
-  g_string_append_printf (string, " 0 %u %u ",
-                          fabs (self->start_angle - self->end_angle) > 180 ? 1 : 0,
+  g_string_append_printf (string, " 0 0 %u ",
+                          self->start_angle < self->end_angle ? 0 : 1);
+  _g_string_append_point (string, &GSK_CIRCLE_POINT_INIT (self, mid_angle));
+  g_string_append (string, " A ");
+  _g_string_append_point (string, &GRAPHENE_POINT_INIT (self->radius, self->radius));
+  g_string_append_printf (string, " 0 0 %u ",
                           self->start_angle < self->end_angle ? 0 : 1);
   _g_string_append_point (string, &GSK_CIRCLE_POINT_INIT (self, self->end_angle));
-  if (fabs (self->start_angle - self->end_angle >= 360))
+  if (fabs (self->start_angle - self->end_angle) >= 360)
     g_string_append (string, " z");
 }
 
