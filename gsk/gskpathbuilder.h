@@ -46,6 +46,9 @@ GDK_AVAILABLE_IN_ALL
 GskPath *               gsk_path_builder_to_path                (GskPathBuilder         *builder) G_GNUC_WARN_UNUSED_RESULT;
 
 GDK_AVAILABLE_IN_ALL
+const graphene_point_t *gsk_path_builder_get_current_point      (GskPathBuilder         *builder);
+
+GDK_AVAILABLE_IN_ALL
 void                    gsk_path_builder_add_path               (GskPathBuilder         *builder,
                                                                  GskPath                *path);
 GDK_AVAILABLE_IN_ALL
@@ -61,11 +64,27 @@ void                    gsk_path_builder_move_to                (GskPathBuilder 
                                                                  float                   x,
                                                                  float                   y);
 GDK_AVAILABLE_IN_ALL
+void                    gsk_path_builder_rel_move_to            (GskPathBuilder         *builder,
+                                                                 float                   x,
+                                                                 float                   y);
+GDK_AVAILABLE_IN_ALL
 void                    gsk_path_builder_line_to                (GskPathBuilder         *builder,
                                                                  float                   x,
                                                                  float                   y);
 GDK_AVAILABLE_IN_ALL
+void                    gsk_path_builder_rel_line_to            (GskPathBuilder         *builder,
+                                                                 float                   x,
+                                                                 float                   y);
+GDK_AVAILABLE_IN_ALL
 void                    gsk_path_builder_curve_to               (GskPathBuilder         *builder,
+                                                                 float                   x1,
+                                                                 float                   y1,
+                                                                 float                   x2,
+                                                                 float                   y2,
+                                                                 float                   x3,
+                                                                 float                   y3);
+GDK_AVAILABLE_IN_ALL
+void                    gsk_path_builder_rel_curve_to           (GskPathBuilder         *builder,
                                                                  float                   x1,
                                                                  float                   y1,
                                                                  float                   x2,
