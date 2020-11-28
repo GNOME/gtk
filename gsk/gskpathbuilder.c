@@ -282,6 +282,25 @@ gsk_path_builder_add_contour (GskPathBuilder *self,
 }
 
 /**
+ * gsk_path_builder_get_current_point:
+ * @self: a #GskPathBuilder
+ *
+ * Gets the current point. The current point is used for relative
+ * drawing commands and updated after every operation.
+ *
+ * When the builder is created, the default current point is set to (0, 0).
+ *
+ * Returns: (transfer none): The current point
+ **/
+const graphene_point_t *
+gsk_path_builder_get_current_point (GskPathBuilder *self)
+{
+  g_return_val_if_fail (self != NULL, NULL);
+
+  return &self->current_point;
+}
+
+/**
  * gsk_path_builder_add_path:
  * @self: a #GskPathBuilder
  * @path: (transfer none): the path to append
@@ -382,6 +401,29 @@ gsk_path_builder_move_to (GskPathBuilder *self,
 }
 
 /**
+ * gsk_path_builder_rel_move_to:
+ * @self: a #GskPathBuilder
+ * @x: x offset
+ * @y: y offset
+ *
+ * Starts a new contour by placing the pen at @x, @y relative to the current
+ * point.
+ *
+ * This is the relative version of gsk_path_builder_move_to().
+ **/
+void
+gsk_path_builder_rel_move_to (GskPathBuilder *self,
+                              float           x,
+                              float           y)
+{
+  g_return_if_fail (self != NULL);
+
+  gsk_path_builder_move_to (self,
+                            self->current_point.x + x,
+                            self->current_point.y + y);
+}
+
+/**
  * gsk_path_builder_line_to:
  * @self: a #GskPathBuilder
  * @x: x coordinate
@@ -410,6 +452,29 @@ gsk_path_builder_line_to (GskPathBuilder *self,
 }
 
 /**
+ * gsk_path_builder_rel_line_to:
+ * @self: a #GskPathBuilder
+ * @x: x offset
+ * @y: y offset
+ *
+ * Draws a line from the current point to a point offset to it by @x, @y
+ * and makes it the new current point.
+ *
+ * This is the relative version of gsk_path_builder_line_to().
+ **/
+void
+gsk_path_builder_rel_line_to (GskPathBuilder *self,
+                              float           x,
+                              float           y)
+{
+  g_return_if_fail (self != NULL);
+
+  gsk_path_builder_line_to (self,
+                            self->current_point.x + x,
+                            self->current_point.y + y);
+}
+
+/**
  * gsk_path_builder_curve_to:
  * @self: a #GskPathBuilder
  * @x1: x coordinate of first control point
@@ -422,6 +487,8 @@ gsk_path_builder_line_to (GskPathBuilder *self,
  * Adds a [cubic Bézier curve](https://en.wikipedia.org/wiki/B%C3%A9zier_curve)
  * from the current point to @x3, @y3 with @x1, @y1 and @x2, @y2 as the control
  * points.
+ *
+ * After this, @x3, @y3 will be the new current point.
  **/
 void
 gsk_path_builder_curve_to (GskPathBuilder *self,
@@ -442,6 +509,42 @@ gsk_path_builder_curve_to (GskPathBuilder *self,
                                      GRAPHENE_POINT_INIT (x2, y2),
                                      GRAPHENE_POINT_INIT (x3, y3)
                                    });
+}
+
+/**
+ * gsk_path_builder_rel_curve_to:
+ * @self: a #GskPathBuilder
+ * @x1: x offset of first control point
+ * @y1: y offset of first control point
+ * @x2: x offset of second control point
+ * @y2: y offset of second control point
+ * @x3: x offset of the end of the curve
+ * @y3: y offset of the end of the curve
+ *
+ * Adds a [cubic Bézier curve](https://en.wikipedia.org/wiki/B%C3%A9zier_curve)
+ * from the current point to @x3, @y3 with @x1, @y1 and @x2, @y2 as the control
+ * points. All coordinates are given relative to the current point.
+ *
+ * This is the relative version of gsk_path_builder_curve_to().
+ **/
+void
+gsk_path_builder_rel_curve_to (GskPathBuilder *self,
+                               float           x1,
+                               float           y1,
+                               float           x2,
+                               float           y2,
+                               float           x3,
+                               float           y3)
+{
+  g_return_if_fail (self != NULL);
+
+  gsk_path_builder_curve_to (self,
+                             self->current_point.x + x1,
+                             self->current_point.y + y1,
+                             self->current_point.x + x2,
+                             self->current_point.y + y2,
+                             self->current_point.x + x3,
+                             self->current_point.y + y3);
 }
 
 /**
