@@ -28,12 +28,44 @@ G_BEGIN_DECLS
 /* Same as Skia, so looks like a good value. ¯\_(ツ)_/¯ */
 #define GSK_PATH_TOLERANCE_DEFAULT (0.5)
 
+typedef enum 
+{
+  GSK_PATH_FLAT,
+  GSK_PATH_CLOSED
+} GskPathFlags;
+
+typedef struct _GskContour GskContour;
+typedef struct _GskContourClass GskContourClass;
+
+typedef struct _GskStandardOperation GskStandardOperation;
+
+struct _GskStandardOperation {
+  GskPathOperation op;
+  gsize point; /* index into points array of the start point (last point of previous op) */
+};
+
+GskContour *            gsk_rect_contour_new                    (const graphene_rect_t  *rect);
+GskContour *            gsk_circle_contour_new                  (const graphene_point_t *center,
+                                                                 float                   radius,
+                                                                 float                   start_angle,
+                                                                 float                   end_angle);
+GskContour *            gsk_standard_contour_new                (GskPathFlags            flags,
+                                                                 const                   GskStandardOperation *ops,
+                                                                 gsize                   n_ops,
+                                                                 const                   graphene_point_t *points,
+                                                                 gsize                   n_points);
+
+GskPath *               gsk_path_new_from_contours              (const GSList           *contours);
+
 gsize                   gsk_path_get_n_contours                 (GskPath              *path);
+const GskContour *      gsk_path_get_contour                    (GskPath              *path,
+                                                                 gsize                 i);
 gboolean                gsk_path_foreach_with_tolerance         (GskPath              *self,
                                                                  double                tolerance,
                                                                  GskPathForeachFunc    func,
                                                                  gpointer              user_data);
 
+GskContour *            gsk_contour_dup                         (const GskContour     *src);
 gpointer                gsk_contour_init_measure                (GskPath              *path,
                                                                  gsize                 i,
                                                                  float                 tolerance,
@@ -57,16 +89,14 @@ gboolean                gsk_contour_get_closest_point           (GskPath        
                                                                  graphene_point_t       *out_pos,
                                                                  float                  *out_offset,
                                                                  graphene_vec2_t        *out_tangent);
+void                    gsk_contour_add_segment                 (const GskContour       *self,
+                                                                 GskPathBuilder         *builder,
+                                                                 gpointer                measure_data,
+                                                                 float                   start,
+                                                                 float                   end);
 
-void                    gsk_path_builder_add_contour            (GskPathBuilder       *builder,
-                                                                 GskPath              *path,
-                                                                 gsize                 i);
-void                    gsk_path_builder_add_contour_segment    (GskPathBuilder       *builder,
-                                                                 GskPath              *path,
-                                                                 gsize                 i,
-                                                                 gpointer              measure_data,
-                                                                 float                 start,
-                                                                 float                 end);
+void                    gsk_path_builder_add_contour            (GskPathBuilder         *builder,
+                                                                 GskContour             *contour);
 
 G_END_DECLS
 
