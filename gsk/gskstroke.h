@@ -60,6 +60,12 @@ void                    gsk_stroke_set_line_join                (GskStroke      
 GDK_AVAILABLE_IN_ALL
 GskLineJoin             gsk_stroke_get_line_join                (const GskStroke        *self);
 
+GDK_AVAILABLE_IN_ALL
+void                    gsk_stroke_set_miter_limit              (GskStroke              *self,
+                                                                 float                   limit);
+GDK_AVAILABLE_IN_ALL
+float                   gsk_stroke_get_miter_limit              (const GskStroke        *self);
+
 
 G_END_DECLS
 
