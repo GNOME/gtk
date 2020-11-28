@@ -68,6 +68,7 @@ struct _GskPathBuilder
   GSList *contours; /* (reverse) list of already recorded contours */
 
   GskPathFlags flags; /* flags for the current path */
+  graphene_point_t current_point; /* the point all drawing ops start from */
   GArray *ops; /* operations for current contour - size == 0 means no current contour */
   GArray *points; /* points for the operations */
 };
@@ -97,6 +98,10 @@ gsk_path_builder_new (void)
 
   builder->ops = g_array_new (FALSE, FALSE, sizeof (GskStandardOperation));
   builder->points = g_array_new (FALSE, FALSE, sizeof (graphene_point_t));
+
+  /* Be explicit here */
+  builder->current_point = GRAPHENE_POINT_INIT (0, 0);
+
   return builder;
 }
 
@@ -124,17 +129,28 @@ gsk_path_builder_ref (GskPathBuilder *builder)
 }
 
 static void
+gsk_path_builder_ensure_current (GskPathBuilder *builder)
+{
+  if (builder->ops->len != 0)
+    return;
+
+  builder->flags = GSK_PATH_FLAT;
+  g_array_append_vals (builder->ops, &(GskStandardOperation) { GSK_PATH_MOVE, 0 }, 1);
+  g_array_append_val (builder->points, builder->current_point);
+}
+
+static void
 gsk_path_builder_append_current (GskPathBuilder         *builder,
                                  GskPathOperation        op,
                                  gsize                   n_points,
                                  const graphene_point_t *points)
 {
-  g_assert (builder->ops->len > 0);
-  g_assert (builder->points->len > 0);
-  g_assert (n_points > 0);
+  gsk_path_builder_ensure_current (builder);
 
   g_array_append_vals (builder->ops, &(GskStandardOperation) { op, builder->points->len - 1 }, 1);
   g_array_append_vals (builder->points, points, n_points);
+
+  builder->current_point = points[n_points - 1];
 }
 
 static void
@@ -303,6 +319,8 @@ gsk_path_builder_add_rect (GskPathBuilder        *builder,
 
   contour = gsk_rect_contour_new (rect);
   gsk_path_builder_add_contour (builder, contour);
+
+  gsk_contour_get_start_end (contour, NULL, &builder->current_point);
 }
 
 /**
@@ -349,9 +367,9 @@ gsk_path_builder_move_to (GskPathBuilder *builder,
 
   gsk_path_builder_end_current (builder);
 
-  builder->flags = GSK_PATH_FLAT;
-  g_array_append_vals (builder->ops, &(GskStandardOperation) { GSK_PATH_MOVE, 0 }, 1);
-  g_array_append_val (builder->points, GRAPHENE_POINT_INIT(x, y));
+  builder->current_point = GRAPHENE_POINT_INIT(x, y);
+
+  gsk_path_builder_ensure_current (builder);
 }
 
 /**
@@ -370,14 +388,8 @@ gsk_path_builder_line_to (GskPathBuilder *builder,
 {
   g_return_if_fail (builder != NULL);
 
-  if (builder->ops->len == 0)
-    {
-      gsk_path_builder_move_to (builder, x, y);
-      return;
-    }
-
   /* skip the line if it goes to the same point */
-  if (graphene_point_equal (&g_array_index (builder->points, graphene_point_t, builder->points->len - 1),
+  if (graphene_point_equal (&builder->current_point,
                             &GRAPHENE_POINT_INIT (x, y)))
     return;
 
@@ -412,9 +424,6 @@ gsk_path_builder_curve_to (GskPathBuilder *builder,
                            float           y3)
 {
   g_return_if_fail (builder != NULL);
-
-  if (builder->ops->len == 0)
-    gsk_path_builder_move_to (builder, x1, y1);
 
   builder->flags &= ~GSK_PATH_FLAT;
   gsk_path_builder_append_current (builder,

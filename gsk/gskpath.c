@@ -44,6 +44,9 @@ struct _GskContourClass
                                                  GString                *string);
   gboolean              (* get_bounds)          (const GskContour       *contour,
                                                  graphene_rect_t        *bounds);
+  void                  (* get_start_end)       (const GskContour       *self,
+                                                 graphene_point_t       *start,
+                                                 graphene_point_t       *end);
   gboolean              (* foreach)             (const GskContour       *contour,
                                                  float                   tolerance,
                                                  GskPathForeachFunc      func,
@@ -209,6 +212,20 @@ gsk_rect_contour_get_bounds (const GskContour *contour,
   graphene_rect_init (rect, self->x, self->y, self->width, self->height);
 
   return TRUE;
+}
+
+static void
+gsk_rect_contour_get_start_end (const GskContour *contour,
+                                graphene_point_t *start,
+                                graphene_point_t *end)
+{
+  const GskRectContour *self = (const GskRectContour *) contour;
+
+  if (start)
+    *start = GRAPHENE_POINT_INIT (self->x, self->y);
+
+  if (end)
+    *end = GRAPHENE_POINT_INIT (self->x, self->y);
 }
 
 static gboolean
@@ -469,6 +486,7 @@ static const GskContourClass GSK_RECT_CONTOUR_CLASS =
   gsk_rect_contour_get_flags,
   gsk_rect_contour_print,
   gsk_rect_contour_get_bounds,
+  gsk_rect_contour_get_start_end,
   gsk_rect_contour_foreach,
   gsk_rect_contour_init_measure,
   gsk_rect_contour_free_measure,
@@ -559,6 +577,20 @@ gsk_circle_contour_get_bounds (const GskContour *contour,
                       2 * self->radius);
 
   return TRUE;
+}
+
+static void
+gsk_circle_contour_get_start_end (const GskContour *contour,
+                                  graphene_point_t *start,
+                                  graphene_point_t *end)
+{
+  const GskCircleContour *self = (const GskCircleContour *) contour;
+
+  if (start)
+    *start = GSK_CIRCLE_POINT_INIT (self, self->start_angle);
+
+  if (end)
+    *end = GSK_CIRCLE_POINT_INIT (self, self->end_angle);
 }
 
 typedef struct
@@ -755,6 +787,7 @@ static const GskContourClass GSK_CIRCLE_CONTOUR_CLASS =
   gsk_circle_contour_get_flags,
   gsk_circle_contour_print,
   gsk_circle_contour_get_bounds,
+  gsk_circle_contour_get_start_end,
   gsk_circle_contour_foreach,
   gsk_circle_contour_init_measure,
   gsk_circle_contour_free_measure,
@@ -939,6 +972,20 @@ gsk_standard_contour_get_bounds (const GskContour *contour,
     }
 
   return bounds->size.width > 0 && bounds->size.height > 0;
+}
+
+static void
+gsk_standard_contour_get_start_end (const GskContour *contour,
+                                    graphene_point_t *start,
+                                    graphene_point_t *end)
+{
+  const GskStandardContour *self = (const GskStandardContour *) contour;
+
+  if (start)
+    *start = self->points[0];
+
+  if (end)
+    *end = self->points[self->n_points - 1];
 }
 
 typedef struct
@@ -1395,6 +1442,7 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   gsk_standard_contour_get_flags,
   gsk_standard_contour_print,
   gsk_standard_contour_get_bounds,
+  gsk_standard_contour_get_start_end,
   gsk_standard_contour_foreach,
   gsk_standard_contour_init_measure,
   gsk_standard_contour_free_measure,
@@ -1479,6 +1527,14 @@ gsk_contour_free_measure (GskPath  *path,
   GskContour *self = path->contours[i];
 
   self->klass->free_measure (self, data);
+}
+
+void
+gsk_contour_get_start_end (const GskContour *self,
+                           graphene_point_t *start,
+                           graphene_point_t *end)
+{
+  self->klass->get_start_end (self, start, end);
 }
 
 void
