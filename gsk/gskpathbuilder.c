@@ -568,3 +568,166 @@ gsk_path_builder_close (GskPathBuilder *builder)
   gsk_path_builder_end_current (builder);
 }
 
+
+static void
+arc_segment (GskPathBuilder *builder,
+             double          cx,
+             double          cy,
+             double          rx,
+             double          ry,
+             double          sin_phi,
+             double          cos_phi,
+             double          sin_th0,
+             double          cos_th0,
+             double          sin_th1,
+             double          cos_th1,
+             double          t)
+{
+  double x1, y1, x2, y2, x3, y3;
+
+  x1 = rx * (cos_th0 - t * sin_th0);
+  y1 = ry * (sin_th0 + t * cos_th0);
+  x3 = rx * cos_th1;
+  y3 = ry * sin_th1;
+  x2 = x3 + rx * (t * sin_th1);
+  y2 = y3 + ry * (-t * cos_th1);
+
+  gsk_path_builder_curve_to (builder,
+                             cx + cos_phi * x1 - sin_phi * y1,
+                             cy + sin_phi * x1 + cos_phi * y1,
+                             cx + cos_phi * x2 - sin_phi * y2,
+                             cy + sin_phi * x2 + cos_phi * y2,
+                             cx + cos_phi * x3 - sin_phi * y3,
+                             cy + sin_phi * x3 + cos_phi * y3);
+}
+
+void
+gsk_path_builder_svg_arc_to (GskPathBuilder *builder,
+                             float           rx,
+                             float           ry,
+                             float           x_axis_rotation,
+                             gboolean        large_arc,
+                             gboolean        positive_sweep,
+                             float           x,
+                             float           y)
+{
+  graphene_point_t *current;
+  double x1, y1, x2, y2;
+  double phi, sin_phi, cos_phi;
+  double mid_x, mid_y;
+  double lambda;
+  double d;
+  double k;
+  double x1_, y1_;
+  double cx_, cy_;
+  double  cx, cy;
+  double ux, uy, u_len;
+  double cos_theta1, theta1;
+  double vx, vy, v_len;
+  double dp_uv;
+  double cos_delta_theta, delta_theta;
+  int i, n_segs;
+  double d_theta, theta;
+  double sin_th0, cos_th0;
+  double sin_th1, cos_th1;
+  double th_half;
+  double t;
+
+  if (builder->points->len > 0)
+    {
+      current = &g_array_index (builder->points, graphene_point_t, builder->points->len - 1);
+      x1 = current->x;
+      y1 = current->y;
+    }
+  else
+    {
+      x1 = 0;
+      y1 = 0;
+    }
+  x2 = x;
+  y2 = y;
+
+  phi = x_axis_rotation * M_PI / 180.0;
+  sincos (phi, &sin_phi, &cos_phi);
+
+  rx = fabs (rx);
+  ry = fabs (ry);
+
+  mid_x = (x1 - x2) / 2;
+  mid_y = (y1 - y2) / 2;
+
+  x1_ = cos_phi * mid_x + sin_phi * mid_y;
+  y1_ = - sin_phi * mid_x + cos_phi * mid_y;
+
+  lambda = (x1_ / rx) * (x1_ / rx) + (y1_ / ry) * (y1_ / ry);
+  if (lambda > 1)
+    {
+      lambda = sqrt (lambda);
+      rx *= lambda;
+      ry *= lambda;
+    }
+
+  d = (rx * y1_) * (rx * y1_) + (ry * x1_) * (ry * x1_);
+  if (d == 0)
+    return;
+
+  k = sqrt (fabs ((rx * ry) * (rx * ry) / d - 1.0));
+  if (positive_sweep == large_arc)
+    k = -k;
+
+  cx_ = k * rx * y1_ / ry;
+  cy_ = -k * ry * x1_ / rx;
+
+  cx = cos_phi * cx_ - sin_phi * cy_ + (x1 + x2) / 2;
+  cy = sin_phi * cx_ + cos_phi * cy_ + (y1 + y2) / 2;
+
+  ux = (x1_ - cx_) / rx;
+  uy = (y1_ - cy_) / ry;
+  u_len = sqrt (ux * ux + uy * uy);
+  if (u_len == 0)
+    return;
+
+  cos_theta1 = CLAMP (ux / u_len, -1, 1);
+  theta1 = acos (cos_theta1);
+  if (uy < 0)
+    theta1 = - theta1;
+
+  vx = (- x1_ - cx_) / rx;
+  vy = (- y1_ - cy_) / ry;
+  v_len = sqrt (vx * vx + vy * vy);
+  if (v_len == 0)
+    return;
+
+  dp_uv = ux * vx + uy * vy;
+  cos_delta_theta = CLAMP (dp_uv / (u_len * v_len), -1, 1);
+  delta_theta = acos (cos_delta_theta);
+  if (ux * vy - uy * vx < 0)
+    delta_theta = - delta_theta;
+  if (positive_sweep && delta_theta < 0)
+    delta_theta += 2 * M_PI;
+  else if (!positive_sweep && delta_theta > 0)
+    delta_theta -= 2 * M_PI;
+
+  n_segs = ceil (fabs (delta_theta / (M_PI_2 + 0.001)));
+  d_theta = delta_theta / n_segs;
+  theta = theta1;
+  sincos (theta1, &sin_th1, &cos_th1);
+
+  th_half = d_theta / 2;
+  t = (8.0 / 3.0) * sin (th_half / 2) * sin (th_half / 2) / sin (th_half);
+
+  for (i = 0; i < n_segs; i++)
+    {
+      theta = theta1;
+      theta1 = theta + d_theta;
+      sin_th0 = sin_th1;
+      cos_th0 = cos_th1;
+      sincos (theta1, &sin_th1, &cos_th1);
+      arc_segment (builder,
+                   cx, cy, rx, ry,
+                   sin_phi, cos_phi,
+                   sin_th0, cos_th0,
+                   sin_th1, cos_th1,
+                   t);
+    }
+}
