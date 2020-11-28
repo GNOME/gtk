@@ -30,6 +30,7 @@ struct _GskStroke
   float line_width;
   GskLineCap line_cap;
   GskLineJoin line_join;
+  float miter_limit;
 };
 
 static inline void
