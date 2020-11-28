@@ -103,6 +103,7 @@ static gboolean
 gtk_path_transform_op (GskPathOperation        op,
                        const graphene_point_t *pts,
                        gsize                   n_pts,
+                       float                   weight,
                        gpointer                data)
 {
   GtkPathTransform *transform = data;
@@ -135,6 +136,15 @@ gtk_path_transform_op (GskPathOperation        op,
       }
       break;
 
+    case GSK_PATH_CONIC:
+      {
+        graphene_point_t res[2];
+        gtk_path_transform_point (transform->measure, &pts[1], transform->scale, &res[0]);
+        gtk_path_transform_point (transform->measure, &pts[2], transform->scale, &res[1]);
+        gsk_path_builder_conic_to (transform->builder, res[0].x, res[0].y, res[1].x, res[1].y, weight);
+      }
+      break;
+
     case GSK_PATH_CLOSE:
       gsk_path_builder_close (transform->builder);
       break;
@@ -160,7 +170,7 @@ gtk_path_transform (GskPathMeasure *measure,
   else
     transform.scale = 1.0f;
 
-  gsk_path_foreach (path, GSK_PATH_FOREACH_ALLOW_CURVES, gtk_path_transform_op, &transform);
+  gsk_path_foreach (path, GSK_PATH_FOREACH_ALLOW_CURVE, gtk_path_transform_op, &transform);
 
   return gsk_path_builder_free_to_path (transform.builder);
 }

@@ -25,17 +25,18 @@
 
 #include <math.h>
 
+#define MIN_PROGRESS (1/1024.f)
+
 typedef struct
 {
   graphene_point_t last_point;
   float last_progress;
-  float tolerance;
   GskSplineAddPointFunc func;
   gpointer user_data;
-} GskCubicDecomposition;
+} GskSplineDecompose;
 
 static void
-gsk_spline_decompose_add_point (GskCubicDecomposition  *decomp,
+gsk_spline_decompose_add_point (GskSplineDecompose     *decomp,
                                 const graphene_point_t *pt,
                                 float                   progress)
 {
@@ -46,6 +47,20 @@ gsk_spline_decompose_add_point (GskCubicDecomposition  *decomp,
   decomp->last_point = *pt;
   decomp->last_progress += progress;
 }
+
+static void
+gsk_spline_decompose_finish (GskSplineDecompose     *decomp,
+                             const graphene_point_t *end_point)
+{
+  g_assert (graphene_point_equal (&decomp->last_point, end_point));
+  g_assert (decomp->last_progress == 1.0f || decomp->last_progress == 0.0f);
+}
+
+typedef struct
+{
+  GskSplineDecompose decomp;
+  float tolerance;
+} GskCubicDecomposition;
 
 static void
 gsk_spline_cubic_get_coefficients (graphene_point_t       coeffs[4],
@@ -202,22 +217,22 @@ gsk_spline_cubic_too_curvy (const graphene_point_t pts[4],
 }
 
 static void
-gsk_spline_decompose_into (GskCubicDecomposition  *decomp,
-                           const graphene_point_t  pts[4],
-                           float                   progress)
+gsk_spline_cubic_decompose (GskCubicDecomposition  *d,
+                            const graphene_point_t  pts[4],
+                            float                   progress)
 {
   graphene_point_t left[4], right[4];
 
-  if (!gsk_spline_cubic_too_curvy (pts, decomp->tolerance) || progress < 1 / 1024.f)
+  if (!gsk_spline_cubic_too_curvy (pts, d->tolerance) || progress < MIN_PROGRESS)
     {
-      gsk_spline_decompose_add_point (decomp, &pts[3], progress);
+      gsk_spline_decompose_add_point (&d->decomp, &pts[3], progress);
       return;
     }
 
   gsk_spline_split_cubic (pts, left, right, 0.5);
 
-  gsk_spline_decompose_into (decomp, left, progress / 2);
-  gsk_spline_decompose_into (decomp, right, progress / 2);
+  gsk_spline_cubic_decompose (d, left, progress / 2);
+  gsk_spline_cubic_decompose (d, right, progress / 2);
 }
 
 void 
@@ -226,12 +241,166 @@ gsk_spline_decompose_cubic (const graphene_point_t pts[4],
                             GskSplineAddPointFunc  add_point_func,
                             gpointer               user_data)
 {
-  GskCubicDecomposition decomp = { pts[0], 0.0f, tolerance, add_point_func, user_data };
+  GskCubicDecomposition decomp = { { pts[0], 0.0f, add_point_func, user_data }, tolerance };
 
-  gsk_spline_decompose_into (&decomp, pts, 1.0f);
+  gsk_spline_cubic_decompose (&decomp, pts, 1.0f);
 
-  g_assert (graphene_point_equal (&decomp.last_point, &pts[3]));
-  g_assert (decomp.last_progress == 1.0f || decomp.last_progress == 0.0f);
+  gsk_spline_decompose_finish (&decomp.decomp, &pts[3]);
+}
+
+/* CONIC */
+
+typedef struct {
+  graphene_point_t num[3];
+  graphene_point_t denom[3];
+} ConicCoefficients;
+
+typedef struct
+{
+  GskSplineDecompose decomp;
+  float tolerance;
+  ConicCoefficients c;
+} GskConicDecomposition;
+
+
+static void
+gsk_spline_conic_get_coefficents (ConicCoefficients      *c,
+                                  const graphene_point_t  pts[4])
+{
+  float w = pts[2].x;
+  graphene_point_t pw = GRAPHENE_POINT_INIT (w * pts[1].x, w * pts[1].y);
+
+  c->num[2] = pts[0];
+  c->num[1] = GRAPHENE_POINT_INIT (2 * (pw.x - pts[0].x),
+                                   2 * (pw.y - pts[0].y));
+  c->num[0] = GRAPHENE_POINT_INIT (pts[3].x - 2 * pw.x + pts[0].x,
+                                   pts[3].y - 2 * pw.y + pts[0].y);
+
+  c->denom[2] = GRAPHENE_POINT_INIT (1, 1);
+  c->denom[1] = GRAPHENE_POINT_INIT (2 * (w - 1), 2 * (w - 1));
+  c->denom[0] = GRAPHENE_POINT_INIT (-c->denom[1].x, -c->denom[1].y);
+}
+
+static inline void
+gsk_spline_eval_quad (const graphene_point_t quad[3],
+                      float                  progress,
+                      graphene_point_t      *result)
+{
+  *result = GRAPHENE_POINT_INIT ((quad[0].x * progress + quad[1].x) * progress + quad[2].x,
+                                 (quad[0].y * progress + quad[1].y) * progress + quad[2].y);
+}
+
+static inline void
+gsk_spline_eval_conic (const ConicCoefficients *c,
+                       float                    progress,
+                       graphene_point_t        *result)
+{
+  graphene_point_t num, denom;
+
+  gsk_spline_eval_quad (c->num, progress, &num);
+  gsk_spline_eval_quad (c->denom, progress, &denom);
+  *result = GRAPHENE_POINT_INIT (num.x / denom.x, num.y / denom.y);
+}
+                       
+void
+gsk_spline_get_point_conic (const graphene_point_t  pts[4],
+                            float                   progress,
+                            graphene_point_t       *pos,
+                            graphene_vec2_t        *tangent)
+{
+  ConicCoefficients c;
+
+  gsk_spline_conic_get_coefficents (&c, pts);
+
+  if (pos)
+    gsk_spline_eval_conic (&c, progress, pos);
+
+  if (tangent)
+    {
+      graphene_point_t tmp;
+      float w = pts[2].x;
+
+      /* The tangent will be 0 in these corner cases, just
+       * treat it like a line here. */
+      if ((progress <= 0.f && graphene_point_equal (&pts[0], &pts[1])) ||
+          (progress >= 1.f && graphene_point_equal (&pts[1], &pts[3])))
+        {
+          graphene_vec2_init (tangent, pts[3].x - pts[0].x, pts[3].y - pts[0].y);
+          return;
+        }
+
+      gsk_spline_eval_quad ((graphene_point_t[3]) {
+                              GRAPHENE_POINT_INIT ((w - 1) * (pts[3].x - pts[0].x),
+                                                   (w - 1) * (pts[3].y - pts[0].y)),
+                              GRAPHENE_POINT_INIT (pts[3].x - pts[0].x - 2 * w * (pts[1].x - pts[0].x),
+                                                   pts[3].y - pts[0].y - 2 * w * (pts[1].y - pts[0].y)),
+                              GRAPHENE_POINT_INIT (w * (pts[1].x - pts[0].x),
+                                                   w * (pts[1].y - pts[0].y))
+                            },
+                            progress,
+                            &tmp);
+      graphene_vec2_init (tangent, tmp.x, tmp.y);
+      graphene_vec2_normalize (tangent, tangent);
+    }
+}
+
+void
+gsk_spline_split_conic (const graphene_point_t pts[4],
+                        graphene_point_t       result1[4],
+                        graphene_point_t       result2[4],
+                        float                  progress)
+{
+  g_warning ("FIXME: Stop treating conics as lines");
+}
+
+/* taken from Skia, including the very descriptive name */
+static gboolean
+gsk_spline_conic_too_curvy (const graphene_point_t *start,
+                            const graphene_point_t *mid,
+                            const graphene_point_t *end,
+                            float                  tolerance)
+{
+  return fabs ((start->x + end->x) * 0.5 - mid->x) > tolerance
+      || fabs ((start->y + end->y) * 0.5 - mid->y) > tolerance;
+}
+
+static void
+gsk_spline_decompose_conic_subdivide (GskConicDecomposition  *d,
+                                      const graphene_point_t *start,
+                                      float                   start_progress,
+                                      const graphene_point_t *end,
+                                      float                   end_progress)
+{
+  graphene_point_t mid;
+  float mid_progress;
+
+  mid_progress = (start_progress + end_progress) / 2;
+  gsk_spline_eval_conic (&d->c, mid_progress, &mid);
+
+  if (end_progress - start_progress < MIN_PROGRESS ||
+      !gsk_spline_conic_too_curvy (start, &mid, end, d->tolerance))
+    {
+      gsk_spline_decompose_add_point (&d->decomp, end, end_progress - start_progress);
+      return;
+    }
+
+  gsk_spline_decompose_conic_subdivide (d, start, start_progress, &mid, mid_progress);
+  gsk_spline_decompose_conic_subdivide (d, &mid, mid_progress, end, end_progress);
+}
+
+void
+gsk_spline_decompose_conic (const graphene_point_t pts[4],
+                            float                  tolerance,
+                            GskSplineAddPointFunc  add_point_func,
+                            gpointer               user_data)
+{
+  GskConicDecomposition d = { { pts[0], 0.0f, add_point_func, user_data }, tolerance, };
+
+  gsk_spline_conic_get_coefficents (&d.c, pts);
+
+  gsk_spline_decompose_conic_subdivide (&d, &pts[0], 0.0f, &pts[3], 1.0f);
+
+  gsk_spline_decompose_finish (&d.decomp, &pts[3]);
 }
 
 /* Spline deviation from the circle in radius would be given by:
