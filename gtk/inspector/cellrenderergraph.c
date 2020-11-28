@@ -115,44 +115,43 @@ gtk_cell_renderer_graph_set_property (GObject      *object,
     }
 }
 
-static void
-gtk_cell_renderer_graph_get_size (GtkCellRenderer    *cell,
-                                  GtkWidget          *widget,
-                                  const GdkRectangle *cell_area,
-                                  int                *x_offset,
-                                  int                *y_offset,
-                                  int                *width,
-                                  int                *height)
-{
-  int xpad, ypad;
-
 #define MIN_HEIGHT 24
-#define MIN_WIDTH 3 * MIN_HEIGHT
+#define MIN_WIDTH (3 * MIN_HEIGHT)
 
-  g_object_get (cell,
-                "xpad", &xpad,
-                "ypad", &ypad,
-                NULL);
+static void
+gtk_cell_renderer_graph_get_preferred_width (GtkCellRenderer *cell,
+                                             GtkWidget       *widget,
+                                             int             *minimum,
+                                             int             *natural)
+{
+  int xpad, size;
 
-  if (cell_area)
-    {
-      if (width)
-        *width = cell_area->width - 2 * xpad;
-      if (height)
-        *height = cell_area->height - 2 * ypad;
-    }
-  else
-    {
-      if (width)
-        *width = MIN_WIDTH + 2 * xpad;
-      if (height)
-        *height = MIN_HEIGHT + 2 * ypad;
-    }
+  g_object_get (cell, "xpad", &xpad, NULL);
 
-  if (x_offset)
-    *x_offset = xpad;
-  if (y_offset)
-    *y_offset = ypad;
+  size = MIN_WIDTH + 2 * xpad;
+
+  if (minimum != NULL)
+    *minimum = size;
+  if (natural != NULL)
+    *natural = size;
+}
+
+static void
+gtk_cell_renderer_graph_get_preferred_height (GtkCellRenderer *cell,
+                                              GtkWidget       *widget,
+                                              int             *minimum,
+                                              int             *natural)
+{
+  int ypad, size;
+
+  g_object_get (cell, "ypad", &ypad, NULL);
+
+  size = MIN_HEIGHT + 2 * ypad;
+
+  if (minimum != NULL)
+    *minimum = size;
+  if (natural != NULL)
+    *natural = size;
 }
 
 static void
@@ -250,7 +249,8 @@ gtk_cell_renderer_graph_class_init (GtkCellRendererGraphClass *klass)
   object_class->get_property = gtk_cell_renderer_graph_get_property;
   object_class->set_property = gtk_cell_renderer_graph_set_property;
 
-  cell_class->get_size = gtk_cell_renderer_graph_get_size;
+  cell_class->get_preferred_width = gtk_cell_renderer_graph_get_preferred_width;
+  cell_class->get_preferred_height = gtk_cell_renderer_graph_get_preferred_height;
   cell_class->snapshot = gtk_cell_renderer_graph_snapshot;
 
   g_object_class_install_property (object_class,
@@ -292,4 +292,3 @@ gtk_cell_renderer_graph_new (void)
 {
   return g_object_new (GTK_TYPE_CELL_RENDERER_GRAPH, NULL);
 }
-
