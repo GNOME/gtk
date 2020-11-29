@@ -275,15 +275,15 @@ focus_out (GtkEventController   *controller,
 }
 
 static void
-leave_cb (GtkEventController   *controller,
-          gpointer              data)
+leave_cb (GtkEventController *controller,
+          gpointer            data)
 {
-  GtkWidget *target;
-
-  target = gtk_event_controller_get_widget (controller);
-
   if (!gtk_event_controller_motion_contains_pointer (GTK_EVENT_CONTROLLER_MOTION (controller)))
-    gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (target), NULL);
+    {
+      GtkWidget *target = gtk_event_controller_get_widget (controller);
+
+      gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (target), NULL);
+    }
 }
 
 static void
