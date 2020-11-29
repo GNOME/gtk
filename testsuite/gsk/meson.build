@@ -356,6 +356,7 @@ endforeach
 
 tests = [
   ['path'],
+  ['path-special-cases'],
   ['transform'],
   ['shader'],
 ]
