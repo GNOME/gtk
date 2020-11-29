@@ -295,6 +295,202 @@ create_random_path (guint max_contours)
   return gsk_path_builder_free_to_path (builder);
 }
 
+typedef struct {
+  GskPathOperation op;
+  graphene_point_t pts[4];
+  float weight;
+} PathOperation;
+
+static void
+_g_string_append_double (GString *string,
+                         double   d)
+{
+  char buf[G_ASCII_DTOSTR_BUF_SIZE];
+
+  g_ascii_dtostr (buf, G_ASCII_DTOSTR_BUF_SIZE, d);
+  g_string_append (string, buf);
+}
+
+static void
+_g_string_append_point (GString                *string,
+                        const graphene_point_t *pt)
+{
+  _g_string_append_double (string, pt->x);
+  g_string_append_c (string, ' ');
+  _g_string_append_double (string, pt->y);
+}
+
+static void
+path_operation_print (const PathOperation *p,
+                      GString             *string)
+{
+  switch (p->op)
+  {
+    case GSK_PATH_MOVE:
+      g_string_append (string, "M ");
+      _g_string_append_point (string, &p->pts[0]);
+      break;
+
+    case GSK_PATH_CLOSE:
+      g_string_append (string, " Z");
+      break;
+
+    case GSK_PATH_LINE:
+      g_string_append (string, " L ");
+      _g_string_append_point (string, &p->pts[1]);
+      break;
+
+    case GSK_PATH_CURVE:
+      g_string_append (string, " C ");
+      _g_string_append_point (string, &p->pts[1]);
+      g_string_append (string, ", ");
+      _g_string_append_point (string, &p->pts[2]);
+      g_string_append (string, ", ");
+      _g_string_append_point (string, &p->pts[3]);
+      break;
+
+    default:
+      g_assert_not_reached();
+      return;
+  }
+}
+
+static gboolean
+path_operation_equal (const PathOperation *p1,
+                      const PathOperation *p2,
+                      float                epsilon)
+{
+  if (p1->op != p2->op)
+    return FALSE;
+
+  /* No need to compare pts[0] for most ops, that's just
+   * duplicate work. */
+  switch (p1->op)
+    {
+      case GSK_PATH_MOVE:
+        return graphene_point_near (&p1->pts[0], &p2->pts[0], epsilon);
+
+      case GSK_PATH_LINE:
+      case GSK_PATH_CLOSE:
+        return graphene_point_near (&p1->pts[1], &p2->pts[1], epsilon);
+
+      case GSK_PATH_CURVE:
+        return graphene_point_near (&p1->pts[1], &p2->pts[1], epsilon)
+            && graphene_point_near (&p1->pts[2], &p2->pts[2], epsilon)
+            && graphene_point_near (&p1->pts[3], &p2->pts[3], epsilon);
+
+      default:
+        g_return_val_if_reached (FALSE);
+    }
+}
+
+static gboolean 
+collect_path_operation_cb (GskPathOperation        op,
+                           const graphene_point_t *pts,
+                           gsize                   n_pts,
+                           gpointer                user_data)
+{
+  g_array_append_vals (user_data,
+                       (PathOperation[1]) {
+                         op,
+                         {
+                           GRAPHENE_POINT_INIT(pts[0].x, pts[0].y),
+                           GRAPHENE_POINT_INIT(n_pts > 1 ? pts[1].x : 0,
+                                               n_pts > 1 ? pts[1].y : 0),
+                           GRAPHENE_POINT_INIT(n_pts > 2 ? pts[2].x : 0,
+                                               n_pts > 2 ? pts[2].y : 0),
+                           GRAPHENE_POINT_INIT(n_pts > 3 ? pts[3].x : 0,
+                                               n_pts > 3 ? pts[3].y : 0)
+                         },
+                       },
+                       1);
+  return TRUE;
+}
+
+static GArray *
+collect_path (GskPath *path)
+{
+  GArray *array = g_array_new (FALSE, FALSE, sizeof (PathOperation));
+
+  gsk_path_foreach (path, collect_path_operation_cb, array);
+
+  return array;
+}
+
+static void
+assert_path_equal_func (const char *domain,
+                        const char *file,
+                        int         line,
+                        const char *func,
+                        GskPath    *path1,
+                        GskPath    *path2,
+                        float       epsilon)
+{
+  GArray *ops1, *ops2;
+  guint i;
+
+  ops1 = collect_path (path1);
+  ops2 = collect_path (path2);
+
+  for (i = 0; i < MAX (ops1->len, ops2->len); i++)
+    {
+      PathOperation *op1 = i < ops1->len ? &g_array_index (ops1, PathOperation, i) : NULL;
+      PathOperation *op2 = i < ops2->len ? &g_array_index (ops2, PathOperation, i) : NULL;
+
+      if (op1 == NULL || op2 == NULL || !path_operation_equal (op1, op2, epsilon))
+        {
+          GString *string;
+          guint j;
+
+          /* Find the operation we start to print */
+          for (j = i; j-- > 0; )
+            {
+              PathOperation *op = &g_array_index (ops1, PathOperation, j);
+              if (op->op == GSK_PATH_MOVE)
+                break;
+              if (j + 3 == i)
+                {
+                  j = i - 1;
+                  break;
+                }
+            }
+
+          string = g_string_new (j == 0 ? "" : "... ");
+          for (; j < i; j++)
+            {
+              PathOperation *op = &g_array_index (ops1, PathOperation, j);
+              path_operation_print (op, string);
+              g_string_append_c (string, ' ');
+            }
+
+          g_string_append (string, "\\\n    ");
+          if (op1)
+            {
+              path_operation_print (op1, string);
+              if (ops1->len > i + 1)
+                g_string_append (string, " ...");
+            }
+          g_string_append (string, "\n    ");
+          if (op1)
+            {
+              path_operation_print (op2, string);
+              if (ops2->len > i + 1)
+                g_string_append (string, " ...");
+            }
+
+          g_assertion_message (domain, file, line, func, string->str);
+
+          g_string_free (string, TRUE);
+        }
+    }
+
+  g_array_free (ops1, TRUE);
+  g_array_free (ops2, TRUE);
+}
+#define assert_path_equal(p1,p2) assert_path_equal_func(G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, (p1),(p2), FLOAT_EPSILON)
+#define assert_path_equal_with_epsilon(p1,p2, epsilon) \
+    assert_path_equal_func(G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, (p1),(p2), (epsilon))
+
 static void
 test_create (void)
 {
@@ -662,6 +858,34 @@ test_closest_point_for_point (void)
     }
 }
 
+static void
+test_parse (void)
+{
+  int i;
+
+  for (i = 0; i < 1000; i++)
+    {
+      GskPath *path1, *path2;
+      char *string1, *string2;
+
+      path1 = create_random_path (G_MAXUINT);
+      string1 = gsk_path_to_string (path1);
+      g_assert_nonnull (string1);
+
+      path2 = gsk_path_parse (string1);
+      g_assert_nonnull (path2);
+      string2 = gsk_path_to_string (path2);
+      g_assert_nonnull (string2);
+
+      assert_path_equal_with_epsilon (path1, path2, 1.f / 1024);
+
+      gsk_path_unref (path2);
+      gsk_path_unref (path1);
+      g_free (string2);
+      g_free (string1);
+    }
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -676,6 +900,7 @@ main (int   argc,
   g_test_add_func ("/path/get_point", test_get_point);
   g_test_add_func ("/path/closest_point", test_closest_point);
   g_test_add_func ("/path/closest_point_for_point", test_closest_point_for_point);
+  g_test_add_func ("/path/parse", test_parse);
 
   return g_test_run ();
 }
