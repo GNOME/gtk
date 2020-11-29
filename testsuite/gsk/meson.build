@@ -202,6 +202,7 @@ endforeach
 
 tests = [
   ['path'],
+  ['path-special-cases'],
   ['rounded-rect'],
   ['transform'],
   ['shader'],
