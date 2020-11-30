@@ -1,3 +1,86 @@
+Overview of Changes
+===================
+
+* Accessibility:
+ - Map presentation role according to Core-AAM
+ - Use presentation role for spacers in list views
+ - Set proper roles, relations and descriptions on more widgets
+ - Expand the documentation
+ - Use a single GTK_A11Y environment variable and document it
+ - Serveral memory leak and crash fixes
+ - Initialize AT contexts lazily
+ - Improve the API for storing lists in relations
+ - Implement more of the Component interface
+ - Implement the Cache interface
+ - Implement ScrollSubstringTo for GtkTextView
+
+* Touch support:
+ - Fix issues with text handles
+ - Fix interaction between touch scrolling and focus
+ - Fix active state updates for touch events
+ - Allow pressing buttons with multiple fingers
+
+* GtkScrolledWindow:
+ - Accumulate velocity with kinetic scrolling
+
+* GtkSearchEntry:
+ - Use a better clear icon
+
+* GtkTreeView:
+ - Remove the deprecated GtkCellRendererClass.get_size vfunc
+
+* GtkBuilder:
+ - Be stricter about <requires>
+ - Make gtk-builder-tool simplify update <requires>
+
+* Make the inspector available in non-debug builds
+
+* Adwaita:
+ - Round all window corners
+ - Round submenus
+ - Remove the 'chin' on menus
+ - Industrial style menuitems
+ - Improved tooltip styling
+ - Unified sidebar styles
+ - Dark prelight
+ - Don't backdrop labels
+
+* GSK:
+ - Rename render node apis from peek to get
+
+* Make GLES work in the absence of GL_ARB_timer_query
+
+* Wayland:
+ - Support gtk_shell1 version 3 (startup notification
+   and activation)
+ - Implmement minimization
+
+* OS X:
+ - Some work towards working GL
+ - Search engine updates
+ - Fix rendering artifacts with hover transitions
+
+* Introspection:
+ - Add many missing annotations to APIs
+ - In particular, nullability annotation fixes for rust
+
+* Documentation:
+ - Add missing enumerations, symbols and types
+ - Lots of smaller fixes
+
+* Demos:
+ - Make the constraints demo more useful
+ - Add a suggestion entry demo
+ - Consistency improvements
+ - Drop 'devel' styling
+
+* Translation updates:
+ Belarusian
+ Polish
+ Swedish
+ Ukrainian
+
+
 Overview of Changes in 3.99.4
 =============================
 
