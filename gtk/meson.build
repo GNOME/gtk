@@ -1095,7 +1095,7 @@ libgtk = library('gtk-4',
                  c_args: gtk_cargs + common_cflags,
                  include_directories: [confinc, gdkinc, gskinc, gtkinc],
                  dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep],
-                 link_with: [libgtk_css, libgdk, libgsk, ],
+                 link_whole: [libgtk_css, libgdk, libgsk, ],
                  link_args: common_ldflags + gtk_ldflags,
                  install: true)
 
