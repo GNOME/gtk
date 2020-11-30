@@ -312,7 +312,7 @@ msgstr "Codi d'operació"
 
 #: gdk/x11/gdkdevicemanager-xi2.c:158
 msgid "Opcode for XInput2 requests"
-msgstr "Codi d'operació per a les sol·licituds d'XInput2"
+msgstr "Codi d'operació per a les sol·licituds XInput2"
 
 #: gdk/x11/gdkdevicemanager-xi2.c:165
 msgid "Major"
@@ -1502,7 +1502,7 @@ msgstr "Color de primer pla com a cadena"
 
 #: gtk/gtkcellrenderertext.c:311
 msgid "Foreground color as RGBA"
-msgstr "Color de primer pla com a RGBA "
+msgstr "Color de primer pla com a RGBA"
 
 #: gtk/gtkcellrenderertext.c:312 gtk/gtktexttag.c:258
 msgid "Foreground color as a GdkRGBA"
@@ -6806,11 +6806,11 @@ msgstr "Com representar els caràcters invisibles."
 
 #: gtk/gtktexttag.c:667
 msgid "Insert hyphens"
-msgstr "Insereix guions"
+msgstr "Insereix guionets"
 
 #: gtk/gtktexttag.c:668
 msgid "Whether to insert hyphens at breaks."
-msgstr "Si s'han d'inserir els guions als salts."
+msgstr "Si s'han d'inserir els guionets als salts."
 
 #: gtk/gtktexttag.c:684
 msgid "Margin Accumulates"
@@ -6990,7 +6990,7 @@ msgstr "Insereix guions definit"
 
 #: gtk/gtktexttag.c:845
 msgid "Whether this tag affects insertion of hyphens"
-msgstr "Si aquesta etiqueta afecta la inserció de guions"
+msgstr "Si aquesta etiqueta afecta la inserció de guionets"
 
 #: gtk/gtktextview.c:836
 msgid "Pixels Above Lines"
