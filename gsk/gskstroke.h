@@ -66,6 +66,21 @@ void                    gsk_stroke_set_miter_limit              (GskStroke      
 GDK_AVAILABLE_IN_ALL
 float                   gsk_stroke_get_miter_limit              (const GskStroke        *self);
 
+GDK_AVAILABLE_IN_ALL
+void                    gsk_stroke_set_dash                     (GskStroke              *self,
+                                                                 const float            *dash,
+                                                                 gsize                   n_dash);
+GDK_AVAILABLE_IN_ALL
+const float *           gsk_stroke_get_dash                     (const GskStroke        *self,
+                                                                 gsize                  *n_dash);
+
+GDK_AVAILABLE_IN_ALL
+void                    gsk_stroke_set_dash_offset              (GskStroke              *self,
+                                                                 float                   offset);
+GDK_AVAILABLE_IN_ALL
+float                   gsk_stroke_get_dash_offset              (const GskStroke        *self);
+
+
 
 G_END_DECLS
 

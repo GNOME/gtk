@@ -138,6 +138,20 @@ gsk_stroke_to_cairo (const GskStroke *self,
     }
 
   cairo_set_miter_limit (cr, self->miter_limit);
+
+  if (self->dash_length)
+    {
+      gsize i;
+      double *dash = g_newa (double, self->n_dash);
+
+      for (i = 0; i < self->n_dash; i++)
+        {
+          dash[i] = self->dash[i];
+        }
+      cairo_set_dash (cr, dash, self->n_dash, self->dash_offset);
+    }
+  else
+    cairo_set_dash (cr, NULL, 0, 0.0);
 }
 
 /**
@@ -160,6 +174,18 @@ gsk_stroke_equal (gconstpointer stroke1,
       self1->line_cap != self2->line_cap ||
       self1->line_join != self2->line_join ||
       self1->miter_limit != self2->miter_limit)
+    return FALSE;
+
+  if (self1->n_dash != self2->n_dash)
+    return FALSE;
+
+  for (int i = 0; i < self1->n_dash; i++)
+    {
+      if (self1->dash[i] != self2->dash[i])
+        return FALSE;
+    }
+
+  if (self1->dash_offset != self2->dash_offset)
     return FALSE;
 
   return TRUE;
@@ -308,4 +334,116 @@ gsk_stroke_get_miter_limit (const GskStroke *self)
   g_return_val_if_fail (self != NULL, 4.f);
 
   return self->miter_limit;
+}
+
+/**
+ * gsk_stroke_set_dash:
+ * @self: a `GskStroke`
+ * @dash: (array length=n_dash) (transfer none) (allow-none): the array of dashes
+ * @n_dash: number of elements in @dash
+ *
+ * Sets the dash pattern to use by this stroke. A dash pattern is specified by
+ * an array of alternating non-negative values. Each value provides the length
+ * of alternate "on" and "off" portions of the stroke.
+ *
+ * Each "on" segment will have caps applied as if the segment were a separate
+ * contour. In particular, it is valid to use an "on" length of 0 with
+ * `GSK_LINE_CAP_ROUND` or `GSK_LINE_CAP_SQUARE` to draw dots or squares along
+ * a path.
+ *
+ * If @n_dash is 0, if all elements in @dash are 0, or if there are negative
+ * values in @dash, then dashing is disabled.
+ *
+ * If @n_dash is 1, an alternating "on" and "off" pattern with the single
+ * dash length provided is assumed.
+ *
+ * If @n_dash is uneven, the dash array will be used with the first element
+ * in @dash defining an "on" or "off" in alternating passes through the array.
+ *
+ * You can specify a starting offset into the dash with [method@Gsk.Stroke.set_dash_offset].
+ **/
+void
+gsk_stroke_set_dash (GskStroke   *self,
+                     const float *dash,
+                     gsize        n_dash)
+{
+  float dash_length;
+  gsize i;
+
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (dash != NULL || n_dash == 0);
+
+  dash_length = 0;
+  for (i = 0; i < n_dash; i++)
+    {
+      if (!(dash[i] >= 0)) /* should catch NaN */
+        {
+          g_critical ("invalid value in dash array at position %zu", i);
+          return;
+        }
+      dash_length += dash[i];
+    }
+
+  self->dash_length = dash_length;
+  g_free (self->dash);
+  self->dash = g_memdup (dash, sizeof (gfloat) * n_dash);
+  self->n_dash = n_dash;
+
+}
+
+/**
+ * gsk_stroke_get_dash:
+ * @self: a `GskStroke`
+ * @n_dash: (out caller-allocates): number of elements
+ *   in the array returned
+ *
+ * Gets the dash array in use or %NULL if dashing is disabled.
+ *
+ * Returns: (array length=n_dash) (transfer none) (allow-none):
+ *   The dash array or %NULL if the dash array is empty.
+ **/
+const float *
+gsk_stroke_get_dash (const GskStroke *self,
+                     gsize           *n_dash)
+{
+  g_return_val_if_fail (self != NULL, NULL);
+  g_return_val_if_fail (n_dash != NULL, NULL);
+
+  *n_dash = self->n_dash;
+
+  return self->dash;
+}
+
+/**
+ * gsk_stroke_set_dash_offset:
+ * @self: a `GskStroke`
+ * @offset: offset into the dash pattern
+ *
+ * Sets the offset into the dash pattern set via [method@Gsk.Stroke.set_dash]
+ * where dashing should begin.
+ *
+ * This is an offset into the length of the path, not an index into
+ * the array values of the dash array.
+ **/
+void
+gsk_stroke_set_dash_offset (GskStroke *self,
+                            float      offset)
+{
+  g_return_if_fail (self != NULL);
+
+  self->dash_offset = offset;
+}
+
+/**
+ * gsk_stroke_get_dash_offset:
+ * @self: a `GskStroke`
+ *
+ * Returns the dash offset of a `GskStroke`.
+ */
+float
+gsk_stroke_get_dash_offset (const GskStroke *self)
+{
+  g_return_val_if_fail (self != NULL, 4.f);
+
+  return self->dash_offset;
 }
