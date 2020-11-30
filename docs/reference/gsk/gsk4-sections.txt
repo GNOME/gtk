@@ -402,6 +402,10 @@ gsk_stroke_set_line_cap
 gsk_stroke_get_line_cap
 gsk_stroke_set_miter_limit
 gsk_stroke_get_miter_limit
+gsk_stroke_set_dash
+gsk_stroke_get_dash
+gsk_stroke_set_dash_offset
+gsk_stroke_get_dash_offset
 <SUBSECTION Private>
 GSK_TYPE_STROKE
 gsk_stroke_get_type
