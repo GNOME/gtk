@@ -275,15 +275,15 @@ focus_out (GtkEventController   *controller,
 }
 
 static void
-leave_cb (GtkEventController   *controller,
-          gpointer              data)
+leave_cb (GtkEventController *controller,
+          gpointer            data)
 {
-  GtkWidget *target;
-
-  target = gtk_event_controller_get_widget (controller);
-
   if (!gtk_event_controller_motion_contains_pointer (GTK_EVENT_CONTROLLER_MOTION (controller)))
-    gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (target), NULL);
+    {
+      GtkWidget *target = gtk_event_controller_get_widget (controller);
+
+      gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (target), NULL);
+    }
 }
 
 static void
@@ -309,7 +309,7 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
   gtk_widget_add_controller (GTK_WIDGET (popover), controller);
 
   controller = gtk_event_controller_motion_new ();
-  g_signal_connect (controller, "leave", G_CALLBACK (leave_cb), popover);
+  g_signal_connect (controller, "notify::contains-pointer", G_CALLBACK (leave_cb), popover);
   gtk_widget_add_controller (GTK_WIDGET (popover), controller);
 
   controllers = gtk_widget_list_controllers (GTK_WIDGET (popover), GTK_PHASE_CAPTURE, &n_controllers);

@@ -91,6 +91,7 @@ struct _GtkShortcutController
   GtkShortcutScope scope;
   GdkModifierType mnemonics_modifiers;
 
+  gulong shortcuts_changed_id;
   guint custom_shortcuts : 1;
 
   guint last_activated;
@@ -213,7 +214,11 @@ gtk_shortcut_controller_set_property (GObject      *object,
             self->shortcuts = g_object_ref (model);
             self->custom_shortcuts = FALSE;
           }
-        g_signal_connect_swapped (self->shortcuts, "items-changed", G_CALLBACK (g_list_model_items_changed), self);
+
+        self->shortcuts_changed_id =  g_signal_connect_swapped (self->shortcuts,
+                                                                "items-changed",
+                                                                G_CALLBACK (g_list_model_items_changed),
+                                                                self);
       }
       break;
 
@@ -265,7 +270,7 @@ gtk_shortcut_controller_finalize (GObject *object)
 {
   GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (object);
 
-  g_signal_handlers_disconnect_by_func (self->shortcuts, g_list_model_items_changed, self);
+  g_clear_signal_handler (&self->shortcuts_changed_id, self->shortcuts);
   g_clear_object (&self->shortcuts);
 
   G_OBJECT_CLASS (gtk_shortcut_controller_parent_class)->finalize (object);
@@ -442,27 +447,26 @@ gtk_shortcut_controller_handle_event (GtkEventController *controller,
 }
 
 static void
-update_accel (GtkShortcut *shortcut,
-              GtkWidget   *widget,
-              gboolean     set)
+update_accel (GtkShortcut    *shortcut,
+              GtkActionMuxer *muxer,
+              gboolean        set)
 {
   GtkShortcutTrigger *trigger;
   GtkShortcutAction *action;
-  GtkActionMuxer *muxer;
   GVariant *target;
   const char *action_name;
   char *action_and_target;
   char *accel = NULL;
 
-  trigger = gtk_shortcut_get_trigger (shortcut);
-  action = gtk_shortcut_get_action (shortcut);
-
-  if (!GTK_IS_NAMED_ACTION (action) ||
-      !GTK_IS_KEYVAL_TRIGGER (trigger))
+  if (!muxer)
     return;
 
-  muxer = _gtk_widget_get_action_muxer (widget, set);
-  if (!muxer)
+  action = gtk_shortcut_get_action (shortcut);
+  if (!GTK_IS_NAMED_ACTION (action))
+    return;
+
+  trigger = gtk_shortcut_get_trigger (shortcut);
+  if (!GTK_IS_KEYVAL_TRIGGER (trigger))
     return;
 
   target = gtk_shortcut_get_arguments (shortcut);
@@ -481,15 +485,18 @@ gtk_shortcut_controller_set_widget (GtkEventController *controller,
                                     GtkWidget          *widget)
 {
   GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (controller);
+  GListModel *shortcuts = self->shortcuts;
+  GtkActionMuxer *muxer;
   guint i, p;
 
   GTK_EVENT_CONTROLLER_CLASS (gtk_shortcut_controller_parent_class)->set_widget (controller, widget);
 
-  for (i = 0, p = g_list_model_get_n_items (G_LIST_MODEL (controller)); i < p; i++)
+  muxer = _gtk_widget_get_action_muxer (widget, TRUE);
+  for (i = 0, p = g_list_model_get_n_items (shortcuts); i < p; i++)
     {
-      GtkShortcut *shortcut = g_list_model_get_item (G_LIST_MODEL (controller), i);
+      GtkShortcut *shortcut = g_list_model_get_item (shortcuts, i);
       if (GTK_IS_SHORTCUT (shortcut))
-        update_accel (shortcut, widget, TRUE);
+        update_accel (shortcut, muxer, TRUE);
       g_object_unref (shortcut);
     }
 
@@ -736,7 +743,11 @@ gtk_shortcut_controller_add_shortcut (GtkShortcutController *self,
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self));
   if (widget)
-    update_accel (shortcut, widget, TRUE);
+    {
+      GtkActionMuxer *muxer = _gtk_widget_get_action_muxer (widget, TRUE);
+
+      update_accel (shortcut, muxer, TRUE);
+    }
 
   g_list_store_append (G_LIST_STORE (self->shortcuts), shortcut);
   g_object_unref (shortcut);
@@ -767,7 +778,11 @@ gtk_shortcut_controller_remove_shortcut (GtkShortcutController  *self,
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self));
   if (widget)
-    update_accel (shortcut, widget, FALSE);
+    {
+      GtkActionMuxer *muxer = _gtk_widget_get_action_muxer (widget, FALSE);
+
+      update_accel (shortcut, muxer, FALSE);
+    }
 
   for (i = 0; i < g_list_model_get_n_items (self->shortcuts); i++)
     {

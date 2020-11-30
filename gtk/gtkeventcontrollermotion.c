@@ -133,12 +133,12 @@ update_pointer_focus (GtkEventController    *controller,
   if (motion->is_pointer != is_pointer)
     {
       motion->is_pointer = is_pointer;
-      g_object_notify (G_OBJECT (motion), "is-pointer");
+      g_object_notify_by_pspec (G_OBJECT (motion), props[PROP_IS_POINTER]);
     }
   if (motion->contains_pointer != contains_pointer)
     {
       motion->contains_pointer = contains_pointer;
-      g_object_notify (G_OBJECT (motion), "contains-pointer");
+      g_object_notify_by_pspec (G_OBJECT (motion), props[PROP_CONTAINS_POINTER]);
     }
   g_object_thaw_notify (G_OBJECT (motion));
 

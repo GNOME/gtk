@@ -1387,18 +1387,16 @@ pointer_cb (GObject    *object,
             GParamSpec *pspec,
             gpointer    data)
 {
+  GtkWidget *target = GTK_WIDGET (data);
+  GtkWidget *popover;
   gboolean contains;
 
   contains = gtk_event_controller_motion_contains_pointer (GTK_EVENT_CONTROLLER_MOTION (object));
 
+  popover = gtk_widget_get_ancestor (target, GTK_TYPE_POPOVER_MENU);
+
   if (contains)
     {
-      GtkWidget *target;
-      GtkWidget *popover;
-
-      target = GTK_WIDGET (data);
-      popover = gtk_widget_get_ancestor (target, GTK_TYPE_POPOVER_MENU);
-
       if (popover)
         {
           if (gtk_popover_menu_get_open_submenu (GTK_POPOVER_MENU (popover)) != NULL)
@@ -1412,6 +1410,7 @@ pointer_cb (GObject    *object,
       GtkModelButton *button = data;
 
       stop_open (button);
+      gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (popover), NULL);
     }
 }
 
