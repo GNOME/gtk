@@ -1178,7 +1178,9 @@ gtk_snapshot_collect_blend_top (GtkSnapshot      *snapshot,
   GdkRGBA transparent = { 0, 0, 0, 0 };
 
   top_node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
-  bottom_node = gsk_render_node_ref (state->data.blend.bottom_node);
+  bottom_node = state->data.blend.bottom_node != NULL
+              ? gsk_render_node_ref (state->data.blend.bottom_node)
+              : NULL;
 
   g_assert (top_node != NULL || bottom_node != NULL);
 
@@ -1199,7 +1201,7 @@ gtk_snapshot_collect_blend_top (GtkSnapshot      *snapshot,
 static void
 gtk_snapshot_clear_blend_top (GtkSnapshotState *state)
 {
-  gsk_render_node_unref (state->data.blend.bottom_node);
+  g_clear_pointer (&(state->data.blend.bottom_node), gsk_render_node_unref);
 }
 
 static GskRenderNode *
