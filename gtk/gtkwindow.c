@@ -1947,8 +1947,9 @@ gtk_window_new (void)
  * user distinguish this window from other windows they may have
  * open. A good title might include the application name and current
  * document filename, for example.
+ * document filename, for example.
+
  * Passing %NULL does the same as setting the title to an empty string.
- * 
  **/
 void
 gtk_window_set_title (GtkWindow  *window,
