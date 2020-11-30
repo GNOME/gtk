@@ -66,25 +66,21 @@ gboolean                gsk_path_foreach_with_tolerance         (GskPath        
                                                                  GskPathForeachFunc    func,
                                                                  gpointer              user_data);
 
-GskContour *            gsk_contour_dup                         (const GskContour     *src);
-gpointer                gsk_contour_init_measure                (GskPath              *path,
-                                                                 gsize                 i,
-                                                                 float                 tolerance,
-                                                                 float                *out_length);
-void                    gsk_contour_free_measure                (GskPath              *path,
-                                                                 gsize                 i,
-                                                                 gpointer              data);
+GskContour *            gsk_contour_dup                         (const GskContour       *src);
+gpointer                gsk_contour_init_measure                (const GskContour       *self,
+                                                                 float                   tolerance,
+                                                                 float                  *out_length);
+void                    gsk_contour_free_measure                (const GskContour       *self,
+                                                                 gpointer                data);
 void                    gsk_contour_get_start_end               (const GskContour       *self,
                                                                  graphene_point_t       *start,
                                                                  graphene_point_t       *end);
-void                    gsk_contour_get_point                   (GskPath              *path,
-                                                                 gsize                 i,
-                                                                 gpointer              measure_data,
-                                                                 float                 distance,
-                                                                 graphene_point_t     *pos,
-                                                                 graphene_vec2_t      *tangent);
-gboolean                gsk_contour_get_closest_point           (GskPath                *path,
-                                                                 gsize                   i,
+void                    gsk_contour_get_point                   (const GskContour       *self,
+                                                                 gpointer                measure_data,
+                                                                 float                   distance,
+                                                                 graphene_point_t       *pos,
+                                                                 graphene_vec2_t        *tangent);
+gboolean                gsk_contour_get_closest_point           (const GskContour       *self,
                                                                  gpointer                measure_data,
                                                                  float                   tolerance,
                                                                  const graphene_point_t *point,
