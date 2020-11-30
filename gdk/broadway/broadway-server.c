@@ -1022,7 +1022,7 @@ parse_line (const char *line, const char *key)
 {
   const char *p;
 
-  if (!g_str_has_prefix (line, key))
+  if (g_ascii_strncasecmp (line, key, strlen (key)) != 0)
     return NULL;
   p = line + strlen (key);
   if (*p != ':')
