@@ -1823,6 +1823,43 @@ clear_path (gpointer inout_path)
 }
 
 static gboolean
+parse_dash (GtkCssParser *parser,
+            gpointer      out_dash)
+{
+  GArray *dash;
+  double d;
+
+  /* because CSS does this, too */
+  if (gtk_css_parser_try_ident (parser, "none"))
+    {
+      *((GArray **) out_dash) = NULL;
+      return TRUE;
+    }
+
+  dash = g_array_new (FALSE, FALSE, sizeof (float));
+  do {
+    if (!gtk_css_parser_consume_number (parser, &d))
+      {
+        g_array_free (dash, TRUE);
+        return FALSE;
+      }
+
+    g_array_append_vals (dash, (float[1]) { d }, 1);
+  } while (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SIGNLESS_NUMBER) ||
+           gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SIGNLESS_INTEGER));
+
+  *((GArray **) out_dash) = dash;
+
+  return TRUE;
+}
+
+static void
+clear_dash (gpointer inout_array)
+{
+  g_clear_pointer ((GArray **) inout_array, g_array_unref);
+}
+
+static gboolean
 parse_enum (GtkCssParser *parser,
             GType         type,
             gpointer      out_value)
@@ -1915,6 +1952,8 @@ parse_stroke_node (GtkCssParser *parser)
   int line_cap = GSK_LINE_CAP_BUTT;
   int line_join = GSK_LINE_JOIN_MITER;
   double miter_limit = 4.0;
+  GArray *dash = NULL;
+  double dash_offset = 0.0;
   GskStroke *stroke;
 
   const Declaration declarations[] = {
@@ -1924,6 +1963,8 @@ parse_stroke_node (GtkCssParser *parser)
     { "line-cap", parse_line_cap, NULL, &line_cap },
     { "line-join", parse_line_join, NULL, &line_join },
     { "miter-limit", parse_double, NULL, &miter_limit },
+    { "dash", parse_dash, clear_dash, &dash },
+    { "dash-offset", parse_double, NULL, &dash_offset},
   };
   GskRenderNode *result;
 
@@ -1937,6 +1978,12 @@ parse_stroke_node (GtkCssParser *parser)
   gsk_stroke_set_line_cap (stroke, line_cap);
   gsk_stroke_set_line_join (stroke, line_join);
   gsk_stroke_set_miter_limit (stroke, miter_limit);
+  if (dash)
+    {
+      gsk_stroke_set_dash (stroke, (float *) dash->data, dash->len);
+      g_array_free (dash, TRUE);
+    }
+  gsk_stroke_set_dash_offset (stroke, dash_offset);
 
   result = gsk_stroke_node_new (child, path, stroke);
 
@@ -2628,6 +2675,34 @@ append_path_param (Printer    *p,
 }
 
 static void
+append_dash_param (Printer     *p,
+                   const char  *param_name,
+                   const float *dash,
+                   gsize        n_dash)
+{
+  _indent (p);
+  g_string_append (p->str, "dash: ");
+
+  if (n_dash == 0)
+    {
+      g_string_append (p->str, "none");
+    }
+  else
+    {
+      gsize i;
+
+      string_append_double (p->str, dash[0]);
+      for (i = 1; i < n_dash; i++)
+        {
+          g_string_append_c (p->str, ' ');
+          string_append_double (p->str, dash[i]);
+        }
+    }
+
+  g_string_append (p->str, ";\n");
+}
+
+static void
 render_node_print (Printer       *p,
                    GskRenderNode *node)
 {
@@ -2794,6 +2869,8 @@ render_node_print (Printer       *p,
     case GSK_STROKE_NODE:
       {
         const GskStroke *stroke;
+        const float *dash;
+        gsize n_dash;
 
         start_node (p, "stroke");
 
@@ -2805,6 +2882,10 @@ render_node_print (Printer       *p,
         append_enum_param (p, "line-cap", GSK_TYPE_LINE_CAP, gsk_stroke_get_line_cap (stroke));
         append_enum_param (p, "line-join", GSK_TYPE_LINE_JOIN, gsk_stroke_get_line_join (stroke));
         append_float_param (p, "miter-limit", gsk_stroke_get_miter_limit (stroke), 4.0f);
+        dash = gsk_stroke_get_dash (stroke, &n_dash);
+        if (dash)
+          append_dash_param (p, "dash", dash, n_dash);
+        append_float_param (p, "dash-offset", gsk_stroke_get_dash_offset (stroke), 0.0f);
 
         end_node (p);
       }

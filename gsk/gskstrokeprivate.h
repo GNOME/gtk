@@ -31,6 +31,11 @@ struct _GskStroke
   GskLineCap line_cap;
   GskLineJoin line_join;
   float miter_limit;
+
+  float *dash;
+  gsize n_dash;
+  float dash_length; /* sum of all dashes in the array */
+  float dash_offset;
 };
 
 static inline void
@@ -38,11 +43,15 @@ gsk_stroke_init_copy (GskStroke       *stroke,
                       const GskStroke *other)
 {
   *stroke = *other;
+
+  stroke->dash = g_memdup (other->dash, stroke->n_dash * sizeof (float));
 }
 
 static inline void
 gsk_stroke_clear (GskStroke *stroke)
 {
+  g_clear_pointer (&stroke->dash, g_free);
+  stroke->n_dash = 0; /* better safe than sorry */
 }
 
 void                    gsk_stroke_to_cairo                     (const GskStroke        *self,
