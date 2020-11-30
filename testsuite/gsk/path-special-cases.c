@@ -306,6 +306,43 @@ test_serialize_custom_contours (void)
   gsk_path_unref (path1);
 }
 
+static void
+test_path_winding (void)
+{
+  struct {
+    const char *path;
+    graphene_point_t point;
+    gboolean result;
+  } tests[] = {
+    { "M 150 103 L 250 100 L 300 103 L 250 180 Z", GRAPHENE_POINT_INIT (175, 100), FALSE },
+    { "M 100 100 L 300 200 L 300 0 Z", GRAPHENE_POINT_INIT (250, 100), TRUE },
+    { "M 100 100 L 300 200 L 300 0 Z", GRAPHENE_POINT_INIT (400, 100), FALSE},
+    { "M 100 100  L 200 100 L 300 200 L 300 0 Z", GRAPHENE_POINT_INIT (50, 100), FALSE },
+    { "M 100 100  L 200 100 L 300 200 L 300 0 Z", GRAPHENE_POINT_INIT (150, 100), TRUE },
+    { "M 100 100  L 200 100 L 300 200 L 300 0 Z", GRAPHENE_POINT_INIT (250, 100), TRUE },
+    { "M 100 100  L 200 100 L 300 200 L 300 0 Z", GRAPHENE_POINT_INIT (400, 100), FALSE },
+    /* the following check that our elementary contours wind as expected.
+     * our rect contour is clockwise, our circle contour is counterclockwise
+     */
+    { "M100,100h100v100h-100z M200,150A50,50,0,1,0,100,150A50,50,0,1,0,200,150z", GRAPHENE_POINT_INIT (150,150), FALSE },
+  };
+  GskPath *path;
+  GskPathMeasure *measure;
+  gboolean res;
+
+  for (int i = 0; i < G_N_ELEMENTS (tests); i++)
+    {
+      path = gsk_path_parse (tests[i].path);
+      measure = gsk_path_measure_new (path);
+
+      res = gsk_path_measure_in_fill (measure, &tests[i].point, GSK_FILL_RULE_WINDING);
+      g_assert_true (res == tests[i].result);
+
+      gsk_path_measure_unref (measure);
+      gsk_path_unref (path);
+    }
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -314,6 +351,7 @@ main (int   argc,
 
   g_test_add_func ("/path/rsvg-parse", test_rsvg_parse);
   g_test_add_func ("/path/serialize-custom-contours", test_serialize_custom_contours);
+  g_test_add_func ("/path/winding", test_path_winding);
 
   return g_test_run ();
 }
