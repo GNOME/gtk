@@ -1937,7 +1937,7 @@ gtk_window_new (void)
 /**
  * gtk_window_set_title:
  * @window: a #GtkWindow
- * @title: (nullable): title of the window, or %NULL
+ * @title: (nullable): title of the window
  * 
  * Sets the title of the #GtkWindow. The title of a window will be
  * displayed in its title bar; on the X Window System, the title bar
