@@ -209,16 +209,23 @@ add_standard_contour (GskPathBuilder *builder)
   guint i, n;
 
   if (g_test_rand_bit ())
-    gsk_path_builder_move_to (builder,
-                              g_test_rand_double_range (-1000, 1000),
-                              g_test_rand_double_range (-1000, 1000));
+    {
+      if (g_test_rand_bit ())
+        gsk_path_builder_move_to (builder,
+                                  g_test_rand_double_range (-1000, 1000),
+                                  g_test_rand_double_range (-1000, 1000));
+      else
+        gsk_path_builder_rel_move_to (builder,
+                                      g_test_rand_double_range (-1000, 1000),
+                                      g_test_rand_double_range (-1000, 1000));
+    }
 
   /* that 20 is random, but should be enough to get some
    * crazy self-intersecting shapes */
   n = g_test_rand_int_range (1, 20);
   for (i = 0; i < n; i++)
     {
-      switch (g_test_rand_int_range (0, 2))
+      switch (g_test_rand_int_range (0, 4))
       {
         case 0:
           gsk_path_builder_line_to (builder,
@@ -227,6 +234,12 @@ add_standard_contour (GskPathBuilder *builder)
           break;
 
         case 1:
+          gsk_path_builder_rel_line_to (builder,
+                                        g_test_rand_double_range (-1000, 1000),
+                                        g_test_rand_double_range (-1000, 1000));
+          break;
+
+        case 2:
           gsk_path_builder_curve_to (builder,
                                      g_test_rand_double_range (-1000, 1000),
                                      g_test_rand_double_range (-1000, 1000),
@@ -234,6 +247,16 @@ add_standard_contour (GskPathBuilder *builder)
                                      g_test_rand_double_range (-1000, 1000),
                                      g_test_rand_double_range (-1000, 1000),
                                      g_test_rand_double_range (-1000, 1000));
+          break;
+
+        case 3:
+          gsk_path_builder_rel_curve_to (builder,
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (-1000, 1000));
           break;
 
         default:
