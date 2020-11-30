@@ -63,6 +63,7 @@ gsk_public_sources = files([
 
 gsk_private_sources = files([
   'gskcairoblur.c',
+  'gskcontour.c',
   'gskdebug.c',
   'gskprivate.c',
   'gskprofiler.c',
