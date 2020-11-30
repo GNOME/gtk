@@ -886,6 +886,169 @@ test_parse (void)
     }
 }
 
+#define N_PATHS 3
+static void
+test_in_fill_union (void)
+{
+  GskPath *path;
+  GskPathMeasure *measure, *measures[N_PATHS];
+  GskPathBuilder *builder;
+  guint i, j, k;
+
+  for (i = 0; i < 100; i++)
+    {
+      builder = gsk_path_builder_new ();
+      for (k = 0; k < N_PATHS; k++)
+        {
+          path = create_random_path (G_MAXUINT);
+          measures[k] = gsk_path_measure_new (path);
+          gsk_path_builder_add_path (builder, path);
+          gsk_path_unref (path);
+        }
+      path = gsk_path_builder_free_to_path (builder);
+      measure = gsk_path_measure_new (path);
+      gsk_path_unref (path);
+
+      for (j = 0; j < 100; j++)
+        {
+          graphene_point_t test = GRAPHENE_POINT_INIT (g_test_rand_double_range (-1000, 1000),
+                                                       g_test_rand_double_range (-1000, 1000));
+          GskFillRule fill_rule;
+
+          for (fill_rule = GSK_FILL_RULE_WINDING; fill_rule <= GSK_FILL_RULE_EVEN_ODD; fill_rule++)
+            {
+              guint n_in_fill = 0;
+              gboolean in_fill;
+
+              for (k = 0; k < N_PATHS; k++)
+                {
+                  if (gsk_path_measure_in_fill (measures[k], &test, GSK_FILL_RULE_EVEN_ODD))
+                    n_in_fill++;
+                }
+
+              in_fill = gsk_path_measure_in_fill (measure, &test, GSK_FILL_RULE_EVEN_ODD);
+
+              switch (fill_rule)
+              {
+                case GSK_FILL_RULE_WINDING:
+                  if (n_in_fill == 0)
+                    g_assert_false (in_fill);
+                  else if (n_in_fill == 1)
+                    g_assert_true (in_fill);
+                  /* else we can't say anything because the winding rule doesn't give enough info */
+                  break;
+
+                case GSK_FILL_RULE_EVEN_ODD:
+                  g_assert_cmpint (in_fill, ==, n_in_fill & 1);
+                  break;
+
+                default:
+                  g_assert_not_reached ();
+                  break;
+              }
+            }
+        }
+
+      gsk_path_measure_unref (measure);
+      for (k = 0; k < N_PATHS; k++)
+        {
+          gsk_path_measure_unref (measures[k]);
+        }
+    }
+}
+#undef N_PATHS
+
+/* This is somewhat sucky because using foreach breaks up the contours
+ * (like rects and circles) and replaces everything with the standard
+ * contour.
+ * But at least it extensively tests the standard contour.
+ */
+static gboolean
+rotate_path_cb (GskPathOperation        op,
+                const graphene_point_t *pts,
+                gsize                   n_pts,
+                gpointer                user_data)
+{
+  GskPathBuilder **builders = user_data;
+
+  switch (op)
+  {
+    case GSK_PATH_MOVE:
+      gsk_path_builder_move_to (builders[0], pts[0].x, pts[0].y);
+      gsk_path_builder_move_to (builders[1], pts[0].y, -pts[0].x);
+      break;
+
+    case GSK_PATH_CLOSE:
+      gsk_path_builder_close (builders[0]);
+      gsk_path_builder_close (builders[1]);
+      break;
+
+    case GSK_PATH_LINE:
+      gsk_path_builder_line_to (builders[0], pts[1].x, pts[1].y);
+      gsk_path_builder_line_to (builders[1], pts[1].y, -pts[1].x);
+      break;
+
+    case GSK_PATH_CURVE:
+      gsk_path_builder_curve_to (builders[0], pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
+      gsk_path_builder_curve_to (builders[1], pts[1].y, -pts[1].x, pts[2].y, -pts[2].x, pts[3].y, -pts[3].x);
+      break;
+
+    default:
+      g_assert_not_reached ();
+      return FALSE;
+  }
+
+  return TRUE;
+}
+
+static void
+test_in_fill_rotated (void)
+{
+  GskPath *path;
+  GskPathBuilder *builders[2];
+  GskPathMeasure *measures[2];
+  guint i, j;
+
+#define N_FILL_RULES 2
+  /* if this triggers, you added a new enum value to GskFillRule, so the define above needs
+   * an update */
+  g_assert_null (g_enum_get_value (g_type_class_ref (GSK_TYPE_FILL_RULE), N_FILL_RULES));
+
+  for (i = 0; i < 100; i++)
+    {
+      path = create_random_path (G_MAXUINT);
+      builders[0] = gsk_path_builder_new ();
+      builders[1] = gsk_path_builder_new ();
+      gsk_path_foreach (path, rotate_path_cb, builders);
+      gsk_path_unref (path);
+
+      path = gsk_path_builder_free_to_path (builders[0]);
+      measures[0] = gsk_path_measure_new (path);
+      gsk_path_unref (path);
+      path = gsk_path_builder_free_to_path (builders[1]);
+      measures[1] = gsk_path_measure_new (path);
+      gsk_path_unref (path);
+
+      for (j = 0; j < 100; j++)
+        {
+          GskFillRule fill_rule = g_random_int_range (0, N_FILL_RULES);
+          float x = g_test_rand_double_range (-1000, 1000);
+          float y = g_test_rand_double_range (-1000, 1000);
+  
+          g_assert_cmpint (gsk_path_measure_in_fill (measures[0], &GRAPHENE_POINT_INIT (x, y), fill_rule),
+                           ==,
+                           gsk_path_measure_in_fill (measures[1], &GRAPHENE_POINT_INIT (y, -x), fill_rule));
+          g_assert_cmpint (gsk_path_measure_in_fill (measures[0], &GRAPHENE_POINT_INIT (y, x), fill_rule),
+                           ==,
+                           gsk_path_measure_in_fill (measures[1], &GRAPHENE_POINT_INIT (x, -y), fill_rule));
+        }
+
+      gsk_path_measure_unref (measures[0]);
+      gsk_path_measure_unref (measures[1]);
+    }
+#undef N_FILL_RULES
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -901,6 +1064,8 @@ main (int   argc,
   g_test_add_func ("/path/closest_point", test_closest_point);
   g_test_add_func ("/path/closest_point_for_point", test_closest_point_for_point);
   g_test_add_func ("/path/parse", test_parse);
+  g_test_add_func ("/path/in-fill-union", test_in_fill_union);
+  g_test_add_func ("/path/in-fill-rotated", test_in_fill_rotated);
 
   return g_test_run ();
 }
