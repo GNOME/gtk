@@ -103,7 +103,7 @@ gsk_path_measure_new_with_tolerance (GskPath *path,
 
   for (i = 0; i < n_contours; i++)
     {
-      self->measures[i].contour_data = gsk_contour_init_measure (path, i,
+      self->measures[i].contour_data = gsk_contour_init_measure (gsk_path_get_contour (path, i),
                                                                  self->tolerance,
                                                                  &self->measures[i].length);
       self->length += self->measures[i].length;
@@ -152,7 +152,8 @@ gsk_path_measure_unref (GskPathMeasure *self)
 
   for (i = 0; i < self->n_contours; i++)
     {
-      gsk_contour_free_measure (self->path, i, self->measures[i].contour_data);
+      gsk_contour_free_measure (gsk_path_get_contour (self->path, i),
+                                self->measures[i].contour_data);
     }
 
   gsk_path_unref (self->path);
@@ -247,8 +248,7 @@ gsk_path_measure_get_point (GskPathMeasure   *self,
       distance = self->measures[i].length;
     }
 
-  gsk_contour_get_point (self->path,
-                         i,
+  gsk_contour_get_point (gsk_path_get_contour (self->path, i),
                          self->measures[i].contour_data,
                          distance,
                          pos,
@@ -340,8 +340,7 @@ gsk_path_measure_get_closest_point_full (GskPathMeasure         *self,
 
   for (i = 0; i < self->n_contours; i++)
     {
-      if (gsk_contour_get_closest_point (self->path,
-                                         i,
+      if (gsk_contour_get_closest_point (gsk_path_get_contour (self->path, i),
                                          self->measures[i].contour_data,
                                          self->tolerance,
                                          point,
@@ -469,3 +468,4 @@ gsk_path_measure_add_segment (GskPathMeasure *self,
         }
     }
 }
+

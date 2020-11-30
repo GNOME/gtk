@@ -1648,23 +1648,17 @@ gsk_contour_foreach (const GskContour   *contour,
 }
 
 gpointer
-gsk_contour_init_measure (GskPath *path,
-                          gsize    i,
-                          float    tolerance,
-                          float   *out_length)
+gsk_contour_init_measure (const GskContour *self,
+                          float             tolerance,
+                          float            *out_length)
 {
-  GskContour *self = path->contours[i];
-
   return self->klass->init_measure (self, tolerance, out_length);
 }
 
 void
-gsk_contour_free_measure (GskPath  *path,
-                          gsize     i,
-                          gpointer  data)
+gsk_contour_free_measure (const GskContour *self,
+                          gpointer          data)
 {
-  GskContour *self = path->contours[i];
-
   self->klass->free_measure (self, data);
 }
 
@@ -1677,21 +1671,17 @@ gsk_contour_get_start_end (const GskContour *self,
 }
 
 void
-gsk_contour_get_point (GskPath          *path,
-                       gsize             i,
+gsk_contour_get_point (const GskContour *self,
                        gpointer          measure_data,
                        float             distance,
                        graphene_point_t *pos,
                        graphene_vec2_t  *tangent)
 {
-  GskContour *self = path->contours[i];
-
   self->klass->get_point (self, measure_data, distance, pos, tangent);
 }
 
 gboolean
-gsk_contour_get_closest_point (GskPath                *path,
-                               gsize                   i,
+gsk_contour_get_closest_point (const GskContour       *self,
                                gpointer                measure_data,
                                float                   tolerance,
                                const graphene_point_t *point,
@@ -1701,8 +1691,6 @@ gsk_contour_get_closest_point (GskPath                *path,
                                float                  *out_offset,
                                graphene_vec2_t        *out_tangent)
 {
-  GskContour *self = path->contours[i];
-
   return self->klass->get_closest_point (self,
                                          measure_data,
                                          tolerance,
