@@ -99,7 +99,6 @@ struct _GtkCellRenderer
  * @get_preferred_height: Called to get a renderer’s natural height.
  * @get_preferred_width_for_height: Called to get a renderer’s natural width for height.
  * @get_aligned_area: Called to get the aligned area used by @cell inside @cell_area.
- * @get_size: Called to get the width and height needed to render the cell. Deprecated: 3.0.
  * @snapshot: Called to snapshot the content of the #GtkCellRenderer.
  * @activate: Called to activate the content of the #GtkCellRenderer.
  * @start_editing: Called to initiate editing the content of the #GtkCellRenderer.
@@ -138,13 +137,6 @@ struct _GtkCellRendererClass
 							  GtkCellRendererState  flags,
                                                           const GdkRectangle   *cell_area,
                                                           GdkRectangle         *aligned_area);
-  void               (* get_size)                        (GtkCellRenderer      *cell,
-                                                          GtkWidget            *widget,
-                                                          const GdkRectangle   *cell_area,
-                                                          int                  *x_offset,
-                                                          int                  *y_offset,
-                                                          int                  *width,
-                                                          int                  *height);
   void               (* snapshot)                        (GtkCellRenderer      *cell,
                                                           GtkSnapshot          *snapshot,
                                                           GtkWidget            *widget,
