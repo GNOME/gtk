@@ -143,6 +143,7 @@ typedef struct _GtkBitsetIter GtkBitsetIter;
 
 struct _GtkBitsetIter
 {
+  /*< private >*/
   gpointer private_data[10];
 };
 
