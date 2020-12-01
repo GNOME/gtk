@@ -21,6 +21,7 @@
 
 #include "gskpathmeasure.h"
 
+#include "gskpathbuilder.h"
 #include "gskpathprivate.h"
 
 /**
@@ -411,49 +412,49 @@ gsk_path_measure_in_fill (GskPathMeasure   *self,
 
 
 /**
- * gsk_path_measure_add_segment:
- * @self: a `GskPathMeasure`
- * @builder: the builder to add the segment to
+ * gsk_path_builder_add_segment:
+ * @builder: a `GskPathBuilder`
+ * @measure: the `GskPathMeasure` to take the segment to
  * @start: start distance into the path
  * @end: end distance into the path
  *
- * Adds to @builder the segment of @path inbetween @start and @end.
+ * Adds to @builder the segment of @measure from @start to @end.
  *
- * The distances are given relative to the length of @self's path,
+ * The distances are given relative to the length of @measure's path,
  * from 0 for the beginning of the path to [method@Gsk.PathMeasure.get_length]
  * for the end of the path. The values will be clamped to that range.
  *
  * If @start >= @end after clamping, no path will be added.
  **/
 void
-gsk_path_measure_add_segment (GskPathMeasure *self,
-                              GskPathBuilder *builder,
+gsk_path_builder_add_segment (GskPathBuilder *builder,
+                              GskPathMeasure *measure,
                               float           start,
                               float           end)
 {
   gsize i;
 
-  g_return_if_fail (self != NULL);
   g_return_if_fail (builder != NULL);
+  g_return_if_fail (measure != NULL);
 
-  start = gsk_path_measure_clamp_distance (self, start);
-  end = gsk_path_measure_clamp_distance (self, end);
+  start = gsk_path_measure_clamp_distance (measure, start);
+  end = gsk_path_measure_clamp_distance (measure, end);
   if (start >= end)
     return;
 
-  for (i = 0; i < self->n_contours; i++)
+  for (i = 0; i < measure->n_contours; i++)
     {
-      if (self->measures[i].length < start)
+      if (measure->measures[i].length < start)
         {
-          start -= self->measures[i].length;
-          end -= self->measures[i].length;
+          start -= measure->measures[i].length;
+          end -= measure->measures[i].length;
         }
-      else if (start > 0 || end < self->measures[i].length)
+      else if (start > 0 || end < measure->measures[i].length)
         {
-          float len = MIN (end, self->measures[i].length);
-          gsk_contour_add_segment (gsk_path_get_contour (self->path, i),
+          float len = MIN (end, measure->measures[i].length);
+          gsk_contour_add_segment (gsk_path_get_contour (measure->path, i),
                                    builder,
-                                   self->measures[i].contour_data,
+                                   measure->measures[i].contour_data,
                                    start,
                                    len);
           end -= len;
@@ -463,9 +464,8 @@ gsk_path_measure_add_segment (GskPathMeasure *self,
         }
       else
         {
-          end -= self->measures[i].length;
-          gsk_path_builder_add_contour (builder, gsk_contour_dup (gsk_path_get_contour (self->path, i)));
+          end -= measure->measures[i].length;
+          gsk_path_builder_add_contour (builder, gsk_contour_dup (gsk_path_get_contour (measure->path, i)));
         }
     }
 }
-
