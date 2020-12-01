@@ -285,6 +285,7 @@ gsk_path_to_cairo
 gsk_path_is_empty
 gsk_path_get_bounds
 <SUBSECTION>
+GskPathForeachFlags
 gsk_path_foreach
 <SUBSECTION Private>
 GSK_TYPE_PATH
