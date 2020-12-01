@@ -160,7 +160,7 @@ gtk_path_transform (GskPathMeasure *measure,
   else
     transform.scale = 1.0f;
 
-  gsk_path_foreach (path, gtk_path_transform_op, &transform);
+  gsk_path_foreach (path, GSK_PATH_FOREACH_ALLOW_CURVES, gtk_path_transform_op, &transform);
 
   return gsk_path_builder_free_to_path (transform.builder);
 }
