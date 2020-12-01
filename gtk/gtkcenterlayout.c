@@ -563,6 +563,8 @@ void
 gtk_center_layout_set_orientation (GtkCenterLayout *self,
                                    GtkOrientation   orientation)
 {
+  g_return_if_fail (GTK_IS_CENTER_LAYOUT (self));
+
   if (orientation != self->orientation)
     {
       self->orientation = orientation;
@@ -581,6 +583,8 @@ gtk_center_layout_set_orientation (GtkCenterLayout *self,
 GtkOrientation
 gtk_center_layout_get_orientation (GtkCenterLayout *self)
 {
+  g_return_val_if_fail (GTK_IS_CENTER_LAYOUT (self), GTK_ORIENTATION_HORIZONTAL);
+
   return self->orientation;
 }
 
@@ -595,6 +599,8 @@ void
 gtk_center_layout_set_baseline_position (GtkCenterLayout     *self,
                                          GtkBaselinePosition  baseline_position)
 {
+  g_return_if_fail (GTK_IS_CENTER_LAYOUT (self));
+
   if (baseline_position != self->baseline_pos)
     {
       self->baseline_pos = baseline_position;
@@ -631,7 +637,14 @@ void
 gtk_center_layout_set_start_widget (GtkCenterLayout *self,
                                     GtkWidget       *widget)
 {
+  g_return_if_fail (GTK_IS_CENTER_LAYOUT (self));
+  g_return_if_fail (widget == NULL || GTK_IS_WIDGET (widget));
+
+  if (self->start_widget == widget)
+    return;
+
   self->start_widget = widget;
+  gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (self));
 }
 
 /**
@@ -663,7 +676,14 @@ void
 gtk_center_layout_set_center_widget (GtkCenterLayout *self,
                                      GtkWidget       *widget)
 {
+  g_return_if_fail (GTK_IS_CENTER_LAYOUT (self));
+  g_return_if_fail (widget == NULL || GTK_IS_WIDGET (widget));
+
+  if (self->center_widget == widget)
+    return;
+
   self->center_widget = widget;
+  gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (self));
 }
 
 /**
@@ -677,6 +697,8 @@ gtk_center_layout_set_center_widget (GtkCenterLayout *self,
 GtkWidget *
 gtk_center_layout_get_center_widget (GtkCenterLayout *self)
 {
+  g_return_val_if_fail (GTK_IS_CENTER_LAYOUT (self), NULL);
+
   return self->center_widget;
 }
 
@@ -693,7 +715,14 @@ void
 gtk_center_layout_set_end_widget (GtkCenterLayout *self,
                                   GtkWidget       *widget)
 {
+  g_return_if_fail (GTK_IS_CENTER_LAYOUT (self));
+  g_return_if_fail (widget == NULL || GTK_IS_WIDGET (widget));
+
+  if (self->end_widget == widget)
+    return;
+
   self->end_widget = widget;
+  gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (self));
 }
 
 /**
@@ -707,5 +736,7 @@ gtk_center_layout_set_end_widget (GtkCenterLayout *self,
 GtkWidget *
 gtk_center_layout_get_end_widget (GtkCenterLayout *self)
 {
+  g_return_val_if_fail (GTK_IS_CENTER_LAYOUT (self), NULL);
+
   return self->end_widget;
 }
