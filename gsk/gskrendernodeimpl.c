@@ -24,6 +24,7 @@
 #include "gskdebugprivate.h"
 #include "gskdiffprivate.h"
 #include "gskpath.h"
+#include "gskpathmeasure.h"
 #include "gskrendererprivate.h"
 #include "gskroundedrectprivate.h"
 #include "gskstrokeprivate.h"
@@ -3842,6 +3843,7 @@ struct _GskStrokeNode
   GskRenderNode *child;
   GskPath *path;
   GskStroke stroke;
+  GskPath *stroke_path;
 };
 
 static void
@@ -3853,6 +3855,7 @@ gsk_stroke_node_finalize (GskRenderNode *node)
   gsk_render_node_unref (self->child);
   gsk_path_unref (self->path);
   gsk_stroke_clear (&self->stroke);
+  gsk_path_unref (self->stroke_path);
 
   parent_class->finalize (node);
 }
@@ -3865,25 +3868,18 @@ gsk_stroke_node_draw (GskRenderNode *node,
 
   cairo_save (cr);
 
-  gsk_cairo_rectangle (cr, &self->child->bounds);
+  gsk_path_to_cairo (self->stroke_path, cr);
   cairo_clip (cr);
 
-  cairo_push_group (cr);
   gsk_render_node_draw (self->child, cr);
-  cairo_pop_group_to_source (cr);
-
-  gsk_stroke_to_cairo (&self->stroke, cr);
-
-  gsk_path_to_cairo (self->path, cr);
-  cairo_stroke (cr);
 
   cairo_restore (cr);
 }
 
 static void
 gsk_stroke_node_diff (GskRenderNode  *node1,
-                    GskRenderNode  *node2,
-                    cairo_region_t *region)
+                      GskRenderNode  *node2,
+                      cairo_region_t *region)
 {
   GskStrokeNode *self1 = (GskStrokeNode *) node1;
   GskStrokeNode *self2 = (GskStrokeNode *) node2;
@@ -3922,6 +3918,7 @@ gsk_stroke_node_new (GskRenderNode   *child,
 {
   GskStrokeNode *self;
   GskRenderNode *node;
+  GskPathMeasure *measure;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
   g_return_val_if_fail (path != NULL, NULL);
@@ -3933,9 +3930,13 @@ gsk_stroke_node_new (GskRenderNode   *child,
   self->child = gsk_render_node_ref (child);
   self->path = gsk_path_ref (path);
   gsk_stroke_init_copy (&self->stroke, stroke);
+  measure = gsk_path_measure_new (path);
+  self->stroke_path = gsk_path_measure_stroke (measure, &self->stroke);
+  gsk_path_measure_unref (measure);
 
-  /* XXX: Figure out a way to compute bounds from the path */
   graphene_rect_init_from_rect (&node->bounds, &child->bounds);
+
+//  gsk_path_get_bounds (self->stroke_path, &node->bounds);
 
   return node;
 }
