@@ -547,7 +547,7 @@ test_segment_start (void)
       float seg_length = length * i / 100.0f;
 
       builder = gsk_path_builder_new ();
-      gsk_path_measure_add_segment (measure, builder, 0, seg_length);
+      gsk_path_builder_add_segment (builder, measure, 0, seg_length);
       path1 = gsk_path_builder_free_to_path (builder);
       measure1 = gsk_path_measure_new (path1);
 
@@ -580,7 +580,7 @@ test_segment_end (void)
       float seg_length = length * i / 100.0f;
 
       builder = gsk_path_builder_new ();
-      gsk_path_measure_add_segment (measure, builder, length - seg_length, length);
+      gsk_path_builder_add_segment (builder, measure, length - seg_length, length);
       path1 = gsk_path_builder_free_to_path (builder);
       measure1 = gsk_path_measure_new (path1);
 
@@ -613,7 +613,7 @@ test_segment_chunk (void)
       float seg_start = length * i / 200.0f;
 
       builder = gsk_path_builder_new ();
-      gsk_path_measure_add_segment (measure, builder, seg_start, seg_start + length / 2);
+      gsk_path_builder_add_segment (builder, measure, seg_start, seg_start + length / 2);
       path1 = gsk_path_builder_free_to_path (builder);
       measure1 = gsk_path_measure_new (path1);
 
@@ -648,17 +648,17 @@ test_segment (void)
       split2 = g_test_rand_double_range (split1, length);
 
       builder = gsk_path_builder_new ();
-      gsk_path_measure_add_segment (measure, builder, 0, split1);
+      gsk_path_builder_add_segment (builder, measure, 0, split1);
       path1 = gsk_path_builder_free_to_path (builder);
       measure1 = gsk_path_measure_new (path1);
 
       builder = gsk_path_builder_new ();
-      gsk_path_measure_add_segment (measure, builder, split1, split2);
+      gsk_path_builder_add_segment (builder, measure, split1, split2);
       path2 = gsk_path_builder_free_to_path (builder);
       measure2 = gsk_path_measure_new (path2);
 
       builder = gsk_path_builder_new ();
-      gsk_path_measure_add_segment (measure, builder, split2, length);
+      gsk_path_builder_add_segment (builder, measure, split2, length);
       path3 = gsk_path_builder_free_to_path (builder);
       measure3 = gsk_path_measure_new (path3);
 
