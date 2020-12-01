@@ -566,7 +566,7 @@ gtk_drag_source_new (void)
  *
  * Gets the current content provider of a #GtkDragSource.
  *
- * Returns: (transfer none): the #GdkContentProvider of @source
+ * Returns: (nullable) (transfer none): the #GdkContentProvider of @source
  */
 GdkContentProvider *
 gtk_drag_source_get_content (GtkDragSource *source)
