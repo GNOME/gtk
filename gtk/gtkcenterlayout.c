@@ -613,13 +613,15 @@ gtk_center_layout_set_baseline_position (GtkCenterLayout     *self,
 GtkBaselinePosition
 gtk_center_layout_get_baseline_position (GtkCenterLayout *self)
 {
+  g_return_val_if_fail (GTK_IS_CENTER_LAYOUT (self), GTK_BASELINE_POSITION_TOP);
+
   return self->baseline_pos;
 }
 
 /**
  * gtk_center_layout_set_start_widget:
  * @self: a #GtkCenterLayout
- * @widget (nullable): the new start widget
+ * @widget: (nullable): the new start widget
  *
  * Sets the new start widget of @self.
  *
@@ -643,13 +645,15 @@ gtk_center_layout_set_start_widget (GtkCenterLayout *self,
 GtkWidget *
 gtk_center_layout_get_start_widget (GtkCenterLayout *self)
 {
+  g_return_val_if_fail (GTK_IS_CENTER_LAYOUT (self), NULL);
+
   return self->start_widget;
 }
 
 /**
  * gtk_center_layout_set_center_widget:
  * @self: a #GtkCenterLayout
- * @widget (nullable): the new center widget
+ * @widget: (nullable): the new center widget
  *
  * Sets the new center widget of @self.
  *
