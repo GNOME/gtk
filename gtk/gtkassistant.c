@@ -560,6 +560,12 @@ gtk_assistant_class_init (GtkAssistantClass *class)
                   NULL,
                   G_TYPE_NONE, 0);
 
+  /**
+   * GtkAssistant::escape
+   * @assistant: the #GtkAssistant
+   *
+   * The action signal for the Escape binding.
+   */
   signals[ESCAPE] =
     g_signal_new_class_handler (I_("escape"),
                                 G_TYPE_FROM_CLASS (gobject_class),
