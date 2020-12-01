@@ -223,7 +223,9 @@ private_headers = [
   'gtkwin32themeprivate.h',
   'gtkwindowprivate.h',
   'gtk-text-input-client-protocol.h',
-  'roaring.h',
+
+  'roaring',
+  'a11y',
 ]
 
 images = [
@@ -471,6 +473,7 @@ if get_option('gtk_doc')
                ],
                mkdb_args: [
                  '--default-includes=gtk/gtk.h',
+                 '--ignore-files=' + ' '.join(private_headers),
                ],
                fixxref_args: [
                  '--html-dir=@0@'.format(docpath),
