@@ -562,7 +562,6 @@ event_mask_string (GdkEventMask mask)
   BIT (VISIBILITY_NOTIFY);
   BIT (PROXIMITY_IN);
   BIT (PROXIMITY_OUT);
-  BIT (SUBSTRUCTURE);
   BIT (SCROLL);
 #undef BIT
 
