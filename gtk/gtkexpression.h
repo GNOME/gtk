@@ -154,6 +154,12 @@ GtkExpression *         gtk_cclosure_expression_new             (GType          
 
 /* GObject integration, so we can use GtkBuilder */
 
+/**
+ * GTK_VALUE_HOLDS_EXPRESSION:
+ * @value: a #GValue
+ *
+ * Evaluates to %TRUE if @value was initialized with %GTK_TYPE_EXPRESSION.
+ */
 #define GTK_VALUE_HOLDS_EXPRESSION(value)       (G_VALUE_HOLDS ((value), GTK_TYPE_EXPRESSION))
 
 GDK_AVAILABLE_IN_ALL
@@ -171,6 +177,11 @@ GtkExpression * gtk_value_dup_expression        (const GValue  *value);
 #define GTK_PARAM_SPEC_EXPRESSION(obj)          (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PARAM_SPEC_EXPRESSION, GtkParamSpecExpression))
 #define GTK_IS_PARAM_SPEC_EXPRESSION(obj)       (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PARAM_SPEC_EXPRESSION))
 
+/**
+ * GtkParamSpecExpression:
+ *
+ * A #GParamSpec for properties holding a #GtkExpression.
+ */
 typedef struct {
   /*< private >*/
   GParamSpec parent_instance;
