@@ -120,6 +120,11 @@ typedef enum
 
 #define GDK_TYPE_TOPLEVEL (gdk_toplevel_get_type ())
 
+/**
+ * GdkToplevel:
+ *
+ * An interface for top level surfaces.
+ */
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (GdkToplevel, gdk_toplevel, GDK, TOPLEVEL, GObject)
 
@@ -197,7 +202,6 @@ void          gdk_toplevel_begin_move                (GdkToplevel    *toplevel,
                                                       double          x,
                                                       double          y,
                                                       guint32         timestamp);
-
 
 G_END_DECLS
 
