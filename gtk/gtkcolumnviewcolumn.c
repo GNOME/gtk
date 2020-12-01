@@ -742,6 +742,9 @@ gtk_column_view_column_remove_from_sorter (GtkColumnViewColumn *self)
  *
  * Associates a sorter with the column.
  *
+ * If @sorter is %NULL, the column will not let users change
+ * the sorting by clicking on its header.
+ *
  * This sorter can be made active by clicking on the column
  * header, or by calling gtk_column_view_sort_by_column().
  *
