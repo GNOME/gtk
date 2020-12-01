@@ -61,6 +61,7 @@ gsize                   gsk_path_get_n_contours                 (GskPath        
 const GskContour *      gsk_path_get_contour                    (GskPath              *path,
                                                                  gsize                 i);
 gboolean                gsk_path_foreach_with_tolerance         (GskPath              *self,
+                                                                 GskPathForeachFlags   flags,
                                                                  double                tolerance,
                                                                  GskPathForeachFunc    func,
                                                                  gpointer              user_data);

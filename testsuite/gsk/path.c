@@ -412,7 +412,8 @@ collect_path (GskPath *path)
 {
   GArray *array = g_array_new (FALSE, FALSE, sizeof (PathOperation));
 
-  gsk_path_foreach (path, collect_path_operation_cb, array);
+  /* Use -1 here because we want all the flags, even future additions */
+  gsk_path_foreach (path, -1, collect_path_operation_cb, array);
 
   return array;
 }
@@ -1019,7 +1020,8 @@ test_in_fill_rotated (void)
       path = create_random_path (G_MAXUINT);
       builders[0] = gsk_path_builder_new ();
       builders[1] = gsk_path_builder_new ();
-      gsk_path_foreach (path, rotate_path_cb, builders);
+      /* Use -1 here because we want all the flags, even future additions */
+      gsk_path_foreach (path, -1, rotate_path_cb, builders);
       gsk_path_unref (path);
 
       path = gsk_path_builder_free_to_path (builders[0]);
