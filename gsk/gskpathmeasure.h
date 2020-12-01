@@ -65,12 +65,6 @@ gboolean                gsk_path_measure_get_closest_point_full (GskPathMeasure 
                                                                  graphene_vec2_t        *out_tangent);
 
 GDK_AVAILABLE_IN_ALL
-void                    gsk_path_measure_add_segment            (GskPathMeasure         *self,
-                                                                 GskPathBuilder         *builder,
-                                                                 float                   start,
-                                                                 float                   end);
-
-GDK_AVAILABLE_IN_ALL
 gboolean                gsk_path_measure_in_fill                (GskPathMeasure         *self,
                                                                  graphene_point_t       *point,
                                                                  GskFillRule             fill_rule);
