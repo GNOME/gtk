@@ -30,6 +30,23 @@
 G_BEGIN_DECLS
 
 /**
+ * GskPathForeachFlags:
+ * @GSK_PATH_FOREACH_ALLOW_CURVES: Allow emission of %GSK_PATH_CURVE
+ *     operations.
+ *
+ * Flags that can be passed to gsk_path_foreach() to enable additional
+ * features.
+ *
+ * By default, gsk_path_foreach() will only emit a path with all operations
+ * flattened to straight lines to allow for maximum compatibility. The only
+ * operations emitted will be %GSK_PATH_MOVE, %GSK_PATH_LINE and %GSK_PATH_CLOSE.
+ */
+typedef enum
+{
+  GSK_PATH_FOREACH_ALLOW_CURVES = (1 << 0)
+} GskPathForeachFlags;
+
+/**
  * GskPathForeachFunc:
  * @op: The operation to perform
  * @pts: The points of the operation
@@ -80,6 +97,7 @@ gboolean                gsk_path_get_bounds                     (GskPath        
 
 GDK_AVAILABLE_IN_ALL
 gboolean                gsk_path_foreach                        (GskPath              *path,
+                                                                 GskPathForeachFlags   flags,
                                                                  GskPathForeachFunc    func,
                                                                  gpointer              user_data);
 

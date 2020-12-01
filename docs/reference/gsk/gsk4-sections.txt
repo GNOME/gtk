@@ -332,6 +332,7 @@ gsk_path_is_empty
 gsk_path_get_bounds
 <SUBSECTION>
 GskPathOperation
+GskPathForeachFlags
 GskPathForeachFunc
 gsk_path_foreach
 <SUBSECTION Private>
