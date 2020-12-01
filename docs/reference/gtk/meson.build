@@ -227,7 +227,8 @@ private_headers = [
   'gtkwin32drawprivate.h',
   'gtkwin32themeprivate.h',
   'gtkwindowprivate.h',
-  'gtk-text-input-client-protocol.h',
+
+  'text-input-unstable-v3-client-protocol.h',
 
   'a11y',
   'inspector',
