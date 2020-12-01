@@ -146,6 +146,7 @@ private_headers = [
   'gtkimageprivate.h',
   'gtkimcontextsimpleprivate.h',
   'gtkimmoduleprivate.h',
+  'gtkintl.h',
   'gtkkineticscrollingprivate.h',
   'gtklabelprivate.h',
   'gtklistbaseprivate.h',
@@ -183,6 +184,10 @@ private_headers = [
   'gtkrendernodepaintableprivate.h',
   'gtkroundedboxprivate.h',
   'gtkscalerprivate.h',
+  'gtksearchengine.h',
+  'gtksearchenginemodel.h',
+  'gtksearchenginequartz.h',
+  'gtksearchenginetracker3.h',
   'gtksearchentryprivate.h',
   'gtksettingsprivate.h',
   'gtkshortcutcontrollerprivate.h',
@@ -224,8 +229,9 @@ private_headers = [
   'gtkwindowprivate.h',
   'gtk-text-input-client-protocol.h',
 
-  'roaring',
   'a11y',
+  'inspector',
+  'roaring',
 ]
 
 images = [
