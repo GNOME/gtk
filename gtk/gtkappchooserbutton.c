@@ -715,6 +715,13 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
                           G_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_properties (oclass, NUM_PROPERTIES, properties);
 
+  /**
+   * GtkAppChooserButton::changed:
+   * @self: the object which received the signal
+   *
+   * Emitted when the active application on the #GtkAppChooserButton
+   * changes.
+   */
   signals[SIGNAL_CHANGED] =
     g_signal_new (I_("changed"),
                   G_OBJECT_CLASS_TYPE (klass),
