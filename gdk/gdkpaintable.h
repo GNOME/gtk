@@ -31,6 +31,11 @@ G_BEGIN_DECLS
 
 #define GDK_TYPE_PAINTABLE               (gdk_paintable_get_type ())
 
+/**
+ * GdkPaintable:
+ *
+ * Interface for paintable objects.
+ */
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (GdkPaintable, gdk_paintable, GDK, PAINTABLE, GObject)
 
@@ -74,11 +79,13 @@ typedef enum {
  *     this function should return the aspect ratio computed from those.
  *
  * The list of functions that can be implemented for the #GdkPaintable interface.
- * Note that apart from the first function, no function is mandatory to implement,
- * though it is a good idea to implement #GdkPaintableInterface.get_current_image()
- * for non-static paintables and #GdkPaintableInterface.get_flags() if the image
- * is not dynamic as the default implementation returns no flags and that will
- * make the implementation likely quite slow.
+ *
+ * Note that apart from the #GdkPaintableInterface.snapshot() function, no virtual
+ * function of this interface is mandatory to implement, though it is a good idea
+ * to implement #GdkPaintableInterface.get_current_image() for non-static paintables
+ * and #GdkPaintableInterface.get_flags() if the image is not dynamic as the default
+ * implementation returns no flags and that will make the implementation likely
+ * quite slow.
  */
 struct _GdkPaintableInterface
 {
