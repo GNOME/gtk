@@ -620,7 +620,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 {
   Window xwindow;
   GdkSurface *surface;
-  gboolean is_substructure;
   GdkX11Surface *surface_impl = NULL;
   GdkX11Screen *x11_screen = NULL;
   GdkToplevelX11 *toplevel = NULL;
@@ -629,18 +628,9 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 
   event = NULL;
 
-  /* Find the GdkSurface that this event relates to. If that's
-   * not the same as the surface that the event was sent to,
-   * we are getting an event from SubstructureNotifyMask.
-   * We ignore such events for internal operation, but we
-   * need to report them to the application because of
-   * GDK_SUBSTRUCTURE_MASK (which should be removed at next
-   * opportunity.) The most likely reason for getting these
-   * events is when we are used in the Metacity or Mutter
-   * window managers.
-   */
   xwindow = get_event_xwindow (xevent);
-  is_substructure = xwindow != xevent->xany.window;
+  if (xwindow != xevent->xany.window)
+    return NULL;
 
   surface = gdk_x11_surface_lookup_for_display (display, xwindow);
   if (surface)
@@ -664,7 +654,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
         goto done;
     }
 
-  if (xevent->type == DestroyNotify && !is_substructure)
+  if (xevent->type == DestroyNotify)
     {
       x11_screen = GDK_X11_DISPLAY (display)->screen;
 
@@ -793,14 +783,11 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 		g_message ("destroy notify:\twindow: %ld",
 			   xevent->xdestroywindow.window));
 
-      if (!is_substructure)
-	{
-          if (surface)
-            event = gdk_delete_event_new (surface);
+      if (surface)
+        event = gdk_delete_event_new (surface);
 
-	  if (surface && GDK_SURFACE_XID (surface) != x11_screen->xroot_window)
-	    gdk_surface_destroy_notify (surface);
-	}
+      if (surface && GDK_SURFACE_XID (surface) != x11_screen->xroot_window)
+        gdk_surface_destroy_notify (surface);
 
       break;
 
@@ -809,7 +796,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 		g_message ("unmap notify:\t\twindow: %ld",
 			   xevent->xmap.window));
 
-      if (surface && !is_substructure)
+      if (surface)
 	{
           /* If the WM supports the _NET_WM_STATE_HIDDEN hint, we do not want to
            * interpret UnmapNotify events as implying iconic state.
@@ -852,7 +839,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 		g_message ("map notify:\t\twindow: %ld",
 			   xevent->xmap.window));
 
-      if (surface && !is_substructure)
+      if (surface)
 	{
 	  /* Unset minimized if it was set */
 	  if (surface->state & GDK_TOPLEVEL_STATE_MINIMIZED)
@@ -902,7 +889,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
         }
 
 #ifdef HAVE_XSYNC
-      if (!is_substructure && toplevel && display_x11->use_sync && toplevel->pending_counter_value != 0)
+      if (toplevel && display_x11->use_sync && toplevel->pending_counter_value != 0)
 	{
 	  toplevel->configure_counter_value = toplevel->pending_counter_value;
 	  toplevel->configure_counter_value_is_extended = toplevel->pending_counter_value_is_extended;
@@ -916,6 +903,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
           int x, y;
           int c_w = (xevent->xconfigure.width + surface_impl->surface_scale - 1) / surface_impl->surface_scale;
           int c_h = (xevent->xconfigure.height + surface_impl->surface_scale - 1) / surface_impl->surface_scale;
+          int new_abs_x, new_abs_y;
 
           event = gdk_configure_event_new (surface, c_w, c_h);
 
@@ -946,47 +934,43 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	      x = xevent->xconfigure.x / surface_impl->surface_scale;
 	      y = xevent->xconfigure.y / surface_impl->surface_scale;
 	    }
-	  if (!is_substructure)
-	    {
-              int new_abs_x, new_abs_y;
 
-              new_abs_x = x;
-              new_abs_y = y;
+          new_abs_x = x;
+          new_abs_y = y;
 
-              surface_impl->abs_x = new_abs_x;
-              surface_impl->abs_y = new_abs_y;
+          surface_impl->abs_x = new_abs_x;
+          surface_impl->abs_y = new_abs_y;
 
-              if (surface->parent)
-                {
-                  GdkX11Surface *parent_impl =
-                    GDK_X11_SURFACE (surface->parent);
+          if (surface->parent)
+            {
+              GdkX11Surface *parent_impl =
+                GDK_X11_SURFACE (surface->parent);
 
-                  surface->x = new_abs_x - parent_impl->abs_x;
-                  surface->y = new_abs_y - parent_impl->abs_y;
-                }
+              surface->x = new_abs_x - parent_impl->abs_x;
+              surface->y = new_abs_y - parent_impl->abs_y;
+            }
 
-              if (surface_impl->unscaled_width != xevent->xconfigure.width ||
-                  surface_impl->unscaled_height != xevent->xconfigure.height)
-                {
-                  surface_impl->unscaled_width = xevent->xconfigure.width;
-                  surface_impl->unscaled_height = xevent->xconfigure.height;
-                  gdk_configure_event_get_size (event, &surface->width, &surface->height);
+          if (surface_impl->unscaled_width != xevent->xconfigure.width ||
+              surface_impl->unscaled_height != xevent->xconfigure.height)
+            {
+              surface_impl->unscaled_width = xevent->xconfigure.width;
+              surface_impl->unscaled_height = xevent->xconfigure.height;
+              gdk_configure_event_get_size (event, &surface->width, &surface->height);
 
-                  _gdk_surface_update_size (surface);
-                  _gdk_x11_surface_update_size (surface_impl);
-                }
+              _gdk_surface_update_size (surface);
+              _gdk_x11_surface_update_size (surface_impl);
+            }
 
-	      if (surface->resize_count >= 1)
-		{
-		  surface->resize_count -= 1;
+          if (surface->resize_count >= 1)
+            {
+              surface->resize_count -= 1;
 
-		  if (surface->resize_count == 0)
-		    _gdk_x11_moveresize_configure_done (display, surface);
-		}
+              if (surface->resize_count == 0)
+                _gdk_x11_moveresize_configure_done (display, surface);
+            }
 
-              gdk_x11_surface_update_popups (surface);
-              gdk_x11_surface_enter_leave_monitors (surface);
-	    }
+          gdk_x11_surface_update_popups (surface);
+          gdk_x11_surface_enter_leave_monitors (surface);
         }
       break;
 
