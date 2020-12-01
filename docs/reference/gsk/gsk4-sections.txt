@@ -354,6 +354,7 @@ gsk_path_builder_get_current_point
 gsk_path_builder_add_rect
 gsk_path_builder_add_circle
 gsk_path_builder_add_path
+gtk_path_builder_add_segment
 <SUBSECTION>
 gsk_path_builder_move_to
 gsk_path_builder_rel_move_to
@@ -380,7 +381,6 @@ gsk_path_measure_get_point
 gsk_path_measure_get_closest_point
 gsk_path_measure_get_closest_point_full
 gsk_path_measure_in_fill
-gsk_path_measure_add_segment
 <SUBSECTION Private>
 GSK_TYPE_PATH_MEASURE
 gsk_path_measure_get_type

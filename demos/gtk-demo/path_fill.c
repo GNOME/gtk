@@ -227,8 +227,8 @@ update_path (GtkWidget     *widget,
   graphene_vec2_t tangent;
 
   builder = gsk_path_builder_new ();
-  gsk_path_measure_add_segment (measure,
-                                builder,
+  gsk_path_builder_add_segment (builder,
+                                measure,
                                 progress > 1 ? (progress - 1) * gsk_path_measure_get_length (measure) : 0.0,
                                 (progress < 1 ? progress : 1.0) * gsk_path_measure_get_length (measure));
 
