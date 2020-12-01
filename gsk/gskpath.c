@@ -2015,6 +2015,7 @@ gsk_path_to_cairo (GskPath *self,
   g_return_if_fail (cr != NULL);
 
   gsk_path_foreach_with_tolerance (self,
+                                   GSK_PATH_FOREACH_ALLOW_CURVES,
                                    cairo_get_tolerance (cr),
                                    gsk_path_to_cairo_add_op,
                                    cr);
@@ -2108,6 +2109,8 @@ gsk_path_get_bounds (GskPath         *self,
 /**
  * gsk_path_foreach:
  * @self: a `GskPath`
+ * @flags: flags to pass to the foreach function. See `GskPathForeachFlags` for
+ *   details about flags.
  * @func: (scope call) (closure user_data): the function to call for operations
  * @user_data: (nullable): user data passed to @func
  *
@@ -2119,23 +2122,97 @@ gsk_path_get_bounds (GskPath         *self,
  * Returns: %FALSE if @func returned %FALSE, %TRUE otherwise.
  **/
 gboolean
-gsk_path_foreach (GskPath            *self,
-                  GskPathForeachFunc  func,
-                  gpointer            user_data)
+gsk_path_foreach (GskPath             *self,
+                  GskPathForeachFlags  flags,
+                  GskPathForeachFunc   func,
+                  gpointer             user_data)
 {
   g_return_val_if_fail (self != NULL, FALSE);
   g_return_val_if_fail (func, FALSE);
 
-  return gsk_path_foreach_with_tolerance (self, GSK_PATH_TOLERANCE_DEFAULT, func, user_data);
+  return gsk_path_foreach_with_tolerance (self,
+                                          flags,
+                                          GSK_PATH_TOLERANCE_DEFAULT,
+                                          func,
+                                          user_data);
+}
+
+typedef struct _GskPathForeachTrampoline GskPathForeachTrampoline;
+struct _GskPathForeachTrampoline
+{
+  GskPathForeachFlags flags;
+  double tolerance;
+  GskPathForeachFunc func;
+  gpointer user_data;
+  gboolean retval;
+};
+
+static void
+gsk_path_foreach_trampoline_add_point (const graphene_point_t *from,
+                                       const graphene_point_t *to,
+                                       float                   from_progress,
+                                       float                   to_progress,
+                                       gpointer                data)
+{
+  GskPathForeachTrampoline *trampoline = data;
+
+  if (!trampoline->retval)
+    return;
+
+  trampoline->retval = trampoline->func (GSK_PATH_LINE,
+                                         (graphene_point_t[2]) { *from, *to },
+                                         2,
+                                         trampoline->user_data);
+}
+
+static gboolean
+gsk_path_foreach_trampoline (GskPathOperation        op,
+                             const graphene_point_t *pts,
+                             gsize                   n_pts,
+                             gpointer                data)
+{
+  GskPathForeachTrampoline *trampoline = data;
+
+  switch (op)
+  {
+    case GSK_PATH_MOVE:
+    case GSK_PATH_CLOSE:
+    case GSK_PATH_LINE:
+      return trampoline->func (op, pts, n_pts, trampoline->user_data);
+
+    case GSK_PATH_CURVE:
+      if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_CURVES)
+        return trampoline->func (op, pts, n_pts, trampoline->user_data);
+
+      gsk_spline_decompose_cubic (pts,
+                                  trampoline->tolerance,
+                                  gsk_path_foreach_trampoline_add_point,
+                                  trampoline);
+      return trampoline->retval;
+
+    default:
+      g_assert_not_reached ();
+      return FALSE;
+  }
 }
 
 gboolean
-gsk_path_foreach_with_tolerance (GskPath            *self,
-                                 double              tolerance,
-                                 GskPathForeachFunc  func,
-                                 gpointer            user_data)
+gsk_path_foreach_with_tolerance (GskPath             *self,
+                                 GskPathForeachFlags  flags,
+                                 double               tolerance,
+                                 GskPathForeachFunc   func,
+                                 gpointer             user_data)
 {
+  GskPathForeachTrampoline trampoline;
   gsize i;
+
+  /* If we need to massage the data, set up a trampoline here */
+  if (flags != GSK_PATH_FOREACH_ALLOW_CURVES)
+    {
+      trampoline = (GskPathForeachTrampoline) { flags, tolerance, func, user_data, TRUE };
+      func = gsk_path_foreach_trampoline;
+      user_data = &trampoline;
+    }
 
   for (i = 0; i < self->n_contours; i++)
     {
