@@ -58,6 +58,13 @@ GDK_AVAILABLE_IN_ALL
 void                    gsk_path_builder_add_circle             (GskPathBuilder         *self,
                                                                  const graphene_point_t *center,
                                                                  float                   radius);
+/* next function implemented in gskpathmeasure.c */
+GDK_AVAILABLE_IN_ALL
+void                    gsk_path_builder_add_segment            (GskPathBuilder         *self,
+                                                                 GskPathMeasure         *measure,
+                                                                 float                   start,
+                                                                 float                   end);
+
 
 GDK_AVAILABLE_IN_ALL
 void                    gsk_path_builder_move_to                (GskPathBuilder         *self,
