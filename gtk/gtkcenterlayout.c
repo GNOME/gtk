@@ -622,6 +622,8 @@ gtk_center_layout_get_baseline_position (GtkCenterLayout *self)
  * @widget (nullable): the new start widget
  *
  * Sets the new start widget of @self.
+ *
+ * To remove the existing start widget, pass %NULL.
  */
 void
 gtk_center_layout_set_start_widget (GtkCenterLayout *self,
@@ -649,7 +651,9 @@ gtk_center_layout_get_start_widget (GtkCenterLayout *self)
  * @self: a #GtkCenterLayout
  * @widget (nullable): the new center widget
  *
- * Sets the new center widget of @self
+ * Sets the new center widget of @self.
+ *
+ * To remove the existing center widget, pass %NULL.
  */
 void
 gtk_center_layout_set_center_widget (GtkCenterLayout *self,
@@ -677,7 +681,9 @@ gtk_center_layout_get_center_widget (GtkCenterLayout *self)
  * @self: a #GtkCenterLayout
  * @widget: (nullable) (transfer none): the new end widget
  *
- * Sets the new end widget of @self
+ * Sets the new end widget of @self.
+ *
+ * To remove the existing center widget, pass %NULL.
  */
 void
 gtk_center_layout_set_end_widget (GtkCenterLayout *self,
