@@ -361,6 +361,17 @@ gdk_macos_surface_destroy (GdkSurface *surface,
 
   GdkMacosSurface *self = (GdkMacosSurface *)surface;
   GdkMacosWindow *window = g_steal_pointer (&self->window);
+  GdkFrameClock *frame_clock;
+
+  if ((frame_clock = gdk_surface_get_frame_clock (GDK_SURFACE (self))))
+    {
+      g_signal_handlers_disconnect_by_func (frame_clock,
+                                            G_CALLBACK (gdk_macos_surface_before_paint),
+                                            self);
+      g_signal_handlers_disconnect_by_func (frame_clock,
+                                            G_CALLBACK (gdk_macos_surface_before_paint),
+                                            self);
+    }
 
   g_clear_pointer (&self->title, g_free);
 
