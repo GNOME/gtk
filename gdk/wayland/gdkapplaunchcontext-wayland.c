@@ -30,6 +30,35 @@
 #include "gdkinternals.h"
 #include "gdkintl.h"
 
+typedef struct {
+  gchar *token;
+  gboolean failed;
+} AppLaunchData;
+
+static void
+token_provider_done (gpointer                                  data,
+                     struct zxdg_activation_token_provider_v1 *provider,
+                     const char                               *token)
+{
+  AppLaunchData *app_launch_data = data;
+
+  app_launch_data->token = g_strdup (token);
+}
+
+static void
+token_provider_failed (gpointer                                  data,
+                       struct zxdg_activation_token_provider_v1 *provider)
+{
+  AppLaunchData *app_launch_data = data;
+
+  app_launch_data->failed = TRUE;
+}
+
+static const struct zxdg_activation_token_provider_v1_listener token_provider_listener = {
+  token_provider_done,
+  token_provider_failed,
+};
+
 static char *
 gdk_wayland_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
                                                       GAppInfo          *info,
@@ -40,7 +69,41 @@ gdk_wayland_app_launch_context_get_startup_notify_id (GAppLaunchContext *context
 
   g_object_get (context, "display", &display, NULL);
 
-  if (display->gtk_shell_version >= 3)
+  if (display->xdg_activation)
+    {
+      struct zxdg_activation_token_provider_v1 *token_provider;
+      GdkSeat *seat;
+      GdkWindow *focus_window;
+      AppLaunchData app_launch_data = { 0 };
+
+      seat = gdk_display_get_default_seat (GDK_DISPLAY (display));
+      focus_window = gdk_wayland_device_get_focus (gdk_seat_get_keyboard (seat));
+      token_provider =
+        zxdg_activation_v1_get_activation_token (display->xdg_activation,
+                                                 gdk_wayland_window_get_wl_surface (focus_window),
+                                                 _gdk_wayland_seat_get_last_implicit_grab_serial (seat, NULL),
+                                                 gdk_wayland_seat_get_wl_seat (seat));
+
+      zxdg_activation_token_provider_v1_add_listener (token_provider,
+                                                      &token_provider_listener,
+                                                      &app_launch_data);
+
+      while (app_launch_data.token == NULL && !app_launch_data.failed)
+        wl_display_roundtrip (display->wl_display);
+
+      if (!app_launch_data.failed)
+        {
+          zxdg_activation_v1_associate (display->xdg_activation,
+                                        app_launch_data.token,
+                                        g_app_info_get_id (info));
+        }
+      else
+        g_warning ("App activation failed");
+
+      zxdg_activation_token_provider_v1_destroy (token_provider);
+      id = app_launch_data.token;
+    }
+  else if (display->gtk_shell_version >= 3)
     {
       id = g_uuid_string_random ();
       gtk_shell1_notify_launch (display->gtk_shell, id);

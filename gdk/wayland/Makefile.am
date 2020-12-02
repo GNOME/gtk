@@ -23,6 +23,8 @@ noinst_LTLIBRARIES =				\
 BUILT_SOURCES = 				\
 	pointer-gestures-unstable-v1-client-protocol.h		\
 	pointer-gestures-unstable-v1-protocol.c			\
+	xdg-activation-unstable-v1-client-protocol.h		\
+	xdg-activation-unstable-v1-protocol.c			\
 	xdg-shell-client-protocol.h				\
 	xdg-shell-protocol.c					\
 	xdg-shell-unstable-v6-client-protocol.h			\
