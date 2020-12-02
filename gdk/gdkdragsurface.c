@@ -30,6 +30,12 @@
  * during a DND operation.
  */
 
+/**
+ * GdkDragSurfaceInterface:
+ *
+ * The #GdkDragSurfaceInterface implementation is private to GDK.
+ */
+
 G_DEFINE_INTERFACE (GdkDragSurface, gdk_drag_surface, GDK_TYPE_SURFACE)
 
 static gboolean
