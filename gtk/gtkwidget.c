@@ -5288,7 +5288,7 @@ gtk_widget_set_name (GtkWidget	 *widget,
  * Retrieves the name of a widget. See gtk_widget_set_name() for the
  * significance of widget names.
  *
- * Returns: name of the widget. This string is owned by GTK and
+ * Returns: (nullable): name of the widget. This string is owned by GTK and
  * should not be modified or freed
  **/
 const char *
@@ -10356,7 +10356,8 @@ _gtk_widget_get_sizegroups (GtkWidget    *widget)
  * Sets the name to be used for CSS matching of widgets.
  *
  * If this function is not called for a given class, the name
- * of the parent class is used.
+ * set on the parent class is used. By default, GtkWidget uses
+ * the name "widget".
  */
 void
 gtk_widget_class_set_css_name (GtkWidgetClass *widget_class,

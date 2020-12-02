@@ -6564,7 +6564,7 @@ gtk_text_set_placeholder_text (GtkText    *self,
  *
  * Retrieves the text that will be displayed when @self is empty and unfocused
  *
- * Returns: (nullable) (transfer none):a pointer to the placeholder text as a string.
+ * Returns: (nullable) (transfer none): a pointer to the placeholder text as a string.
  *   This string points to internally allocated storage in the widget and must
  *   not be freed, modified or stored. If no placeholder text has been set,
  *   %NULL will be returned.
@@ -6866,7 +6866,7 @@ gtk_text_set_extra_menu (GtkText    *self,
  *
  * Gets the menu model set with gtk_text_set_extra_menu().
  *
- * Returns: (transfer none): (nullable): the menu model
+ * Returns: (transfer none) (nullable): the menu model
  */
 GMenuModel *
 gtk_text_get_extra_menu (GtkText *self)

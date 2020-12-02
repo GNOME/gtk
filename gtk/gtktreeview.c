@@ -11067,10 +11067,11 @@ gtk_tree_view_set_expander_column (GtkTreeView       *tree_view,
  * gtk_tree_view_get_expander_column:
  * @tree_view: A #GtkTreeView
  *
- * Returns the column that is the current expander column.
+ * Returns the column that is the current expander column,
+ * or %NULL if none has been set.
  * This column has the expander arrow drawn next to it.
  *
- * Returns: (transfer none): The expander column.
+ * Returns: (transfer none) (nullable): The expander column.
  **/
 GtkTreeViewColumn *
 gtk_tree_view_get_expander_column (GtkTreeView *tree_view)
@@ -13178,7 +13179,7 @@ gtk_treeview_snapshot_border (GtkSnapshot           *snapshot,
  * Creates a #cairo_surface_t representation of the row at @path.  
  * This image is used for a drag icon.
  *
- * Returns: (transfer full): a newly-allocated surface of the drag icon.
+ * Returns: (transfer full) (nullable): a newly-allocated surface of the drag icon.
  **/
 GdkPaintable *
 gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
@@ -13481,7 +13482,7 @@ gtk_tree_view_set_search_equal_func (GtkTreeView                *tree_view,
  * entry for @tree_view.  In case the built-in entry is being used, %NULL
  * will be returned.
  *
- * Returns: (transfer none): the entry currently in use as search entry.
+ * Returns: (transfer none) (nullable): the entry currently in use as search entry.
  */
 GtkEditable *
 gtk_tree_view_get_search_entry (GtkTreeView *tree_view)

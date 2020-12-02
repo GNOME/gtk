@@ -3283,12 +3283,13 @@ gtk_window_set_default_icon_name (const char *name)
  * gtk_window_get_default_icon_name:
  *
  * Returns the fallback icon name for windows that has been set
- * with gtk_window_set_default_icon_name(). The returned
- * string is owned by GTK and should not be modified. It
- * is only valid until the next call to
- * gtk_window_set_default_icon_name().
+ * with gtk_window_set_default_icon_name(), or %NULL if that function
+ * has not been called.
  *
- * Returns: the fallback icon name for windows
+ * The returned string is owned by GTK and should not be modified.
+ * It is only valid until the next call to gtk_window_set_default_icon_name().
+ *
+ * Returns: (nullable): the fallback icon name for windows
  */
 const char *
 gtk_window_get_default_icon_name (void)
