@@ -447,15 +447,28 @@ _gdk_macos_gl_context_new (GdkMacosSurface  *surface,
 gboolean
 _gdk_macos_gl_context_make_current (GdkMacosGLContext *self)
 {
+  NSOpenGLContext *current;
+
   g_return_val_if_fail (GDK_IS_MACOS_GL_CONTEXT (self), FALSE);
 
-  if (self->gl_context != nil)
+  if (self->gl_context == NULL)
+    return FALSE;
+
+  current = [NSOpenGLContext currentContext];
+
+  if (self->gl_context != current)
     {
+      /* The OpenGL mac programming guide suggests that glFlush() is called
+       * before switching current contexts to ensure that the drawing commands
+       * are submitted.
+       */
+      if (current != NULL)
+        glFlush ();
+
       [self->gl_context makeCurrentContext];
-      return TRUE;
     }
 
-  return FALSE;
+  return TRUE;
 }
 
 G_GNUC_END_IGNORE_DEPRECATIONS
