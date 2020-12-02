@@ -4303,15 +4303,12 @@ toplevel_compute_size (GdkToplevel     *toplevel,
       gtk_window_get_remembered_size (window, &width, &height);
     }
 
-  get_shadow_width (window, &shadow);
-
   /* Don't ever request zero width or height, it's not supported by
      gdk. The size allocation code will round it to 1 anyway but if
      we do it then the value returned from this function will is
      not comparable to the size allocation read from the GtkWindow. */
   width = MAX (width, 1);
   height = MAX (height, 1);
-
 
   gtk_window_update_csd_size (window,
                               &min_width, &min_height,
@@ -4325,6 +4322,7 @@ toplevel_compute_size (GdkToplevel     *toplevel,
 
   if (priv->use_client_shadow)
     {
+      get_shadow_width (window, &shadow);
       gdk_toplevel_size_set_margin (size,
                                     shadow.left, shadow.right,
                                     shadow.top, shadow.bottom);
