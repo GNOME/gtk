@@ -162,6 +162,7 @@ struct _GdkWaylandSurface
       int width;
       int height;
       GdkToplevelState state;
+      gboolean is_resizing;
     } toplevel;
 
     struct {
@@ -1435,16 +1436,21 @@ gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
     GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   GdkToplevelState new_state;
   int width, height;
+  gboolean is_resizing;
   gboolean fixed_size;
   gboolean saved_size;
 
   new_state = impl->pending.toplevel.state;
   impl->pending.toplevel.state = 0;
 
+  is_resizing = impl->pending.toplevel.is_resizing;
+  impl->pending.toplevel.is_resizing = FALSE;
+
   fixed_size =
     new_state & (GDK_TOPLEVEL_STATE_MAXIMIZED |
                  GDK_TOPLEVEL_STATE_FULLSCREEN |
-                 GDK_TOPLEVEL_STATE_TILED);
+                 GDK_TOPLEVEL_STATE_TILED) ||
+    is_resizing;
 
   width = impl->pending.toplevel.width;
   height = impl->pending.toplevel.height;
@@ -1472,6 +1478,10 @@ gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
 
           /* Save size for next time we get 0x0 */
           _gdk_wayland_surface_save_size (surface);
+        }
+      else if (is_resizing)
+        {
+          impl->next_layout.toplevel.should_constrain = TRUE;
         }
       else
         {
@@ -1679,8 +1689,11 @@ xdg_toplevel_configure (void                *data,
                         struct wl_array     *states)
 {
   GdkSurface *surface = GDK_SURFACE (data);
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   uint32_t *p;
   GdkToplevelState pending_state = 0;
+
+  impl->pending.toplevel.is_resizing = FALSE;
 
   wl_array_for_each (p, states)
     {
@@ -1698,6 +1711,7 @@ xdg_toplevel_configure (void                *data,
           pending_state |= GDK_TOPLEVEL_STATE_FOCUSED;
           break;
         case XDG_TOPLEVEL_STATE_RESIZING:
+          impl->pending.toplevel.is_resizing = TRUE;
           break;
         default:
           /* Unknown state */
@@ -1768,8 +1782,11 @@ zxdg_toplevel_v6_configure (void                    *data,
                             struct wl_array         *states)
 {
   GdkSurface *surface = GDK_SURFACE (data);
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   uint32_t *p;
   GdkToplevelState pending_state = 0;
+
+  impl->pending.toplevel.is_resizing = FALSE;
 
   wl_array_for_each (p, states)
     {
@@ -1787,6 +1804,7 @@ zxdg_toplevel_v6_configure (void                    *data,
           pending_state |= GDK_TOPLEVEL_STATE_FOCUSED;
           break;
         case ZXDG_TOPLEVEL_V6_STATE_RESIZING:
+          impl->pending.toplevel.is_resizing = TRUE;
           break;
         default:
           /* Unknown state */
