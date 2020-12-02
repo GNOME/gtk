@@ -954,7 +954,6 @@ gdk_wayland_display_query_registry
 gdk_wayland_display_set_cursor_theme
 gdk_wayland_display_get_startup_notification_id
 gdk_wayland_display_set_startup_notification_id
-gdk_wayland_display_query_registry
 
 <SUBSECTION Device>
 gdk_wayland_seat_get_wl_seat
