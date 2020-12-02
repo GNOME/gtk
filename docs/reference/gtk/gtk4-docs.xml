@@ -283,7 +283,6 @@
       <xi:include href="xml/gtkcolorchooserwidget.xml" />
       <xi:include href="xml/gtkcolorchooserdialog.xml" />
       <xi:include href="xml/gtkfilechooser.xml" />
-      <xi:include href="xml/gtkfilechooserbutton.xml" />
       <xi:include href="xml/gtkfilechoosernative.xml" />
       <xi:include href="xml/gtkfilechooserdialog.xml" />
       <xi:include href="xml/gtkfilechooserwidget.xml" />

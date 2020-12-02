@@ -29,15 +29,14 @@
  * SECTION:gtkfilechooser
  * @Short_description: File chooser interface used by GtkFileChooserWidget and GtkFileChooserDialog
  * @Title: GtkFileChooser
- * @See_also: #GtkFileChooserDialog, #GtkFileChooserWidget, #GtkFileChooserButton
+ * @See_also: #GtkFileChooserDialog, #GtkFileChooserWidget
  *
  * #GtkFileChooser is an interface that can be implemented by file
  * selection widgets.  In GTK, the main objects that implement this
- * interface are #GtkFileChooserWidget, #GtkFileChooserDialog, and
- * #GtkFileChooserButton.  You do not need to write an object that
- * implements the #GtkFileChooser interface unless you are trying to
- * adapt an existing file selector to expose a standard programming
- * interface.
+ * interface are #GtkFileChooserWidget and #GtkFileChooserDialog.  You do not
+ * need to write an object that implements the #GtkFileChooser interface
+ * unless you are trying to adapt an existing file selector to expose a
+ * standard programming interface.
  *
  * #GtkFileChooser allows for shortcuts to various places in the filesystem.
  * In the default implementation these are displayed in the left pane. It

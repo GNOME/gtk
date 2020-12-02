@@ -33,7 +33,6 @@ gtk_tests = [
   ['testentrycompletion'],
   ['testentryicons'],
   ['testfilechooser'],
-  ['testfilechooserbutton'],
   ['testflowbox'],
   ['testfontoptions'],
   ['testframe'],

@@ -119,7 +119,6 @@
 #include <gtk/gtkfixed.h>
 #include <gtk/gtkfixedlayout.h>
 #include <gtk/gtkfilechooser.h>
-#include <gtk/gtkfilechooserbutton.h>
 #include <gtk/gtkfilechooserdialog.h>
 #include <gtk/gtkfilechoosernative.h>
 #include <gtk/gtkfilechooserwidget.h>
