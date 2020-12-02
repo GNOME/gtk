@@ -1378,7 +1378,12 @@ gdk_surface_layout_on_clock (GdkFrameClock *clock,
 void
 gdk_surface_request_layout (GdkSurface *surface)
 {
+  GdkSurfaceClass *class;
   GdkFrameClock *frame_clock;
+
+  class = GDK_SURFACE_GET_CLASS (surface);
+  if (class->request_layout)
+    class->request_layout (surface);
 
   if (surface->update_freeze_count ||
       gdk_surface_is_toplevel_frozen (surface))
