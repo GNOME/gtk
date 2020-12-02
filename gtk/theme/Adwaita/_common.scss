@@ -1393,6 +1393,20 @@ windowcontrols {
     margin: 0 2px;
     min-width: 0;
     min-height: 0;
+
+    &.close {
+      background-image: none;
+      border: none;
+      box-shadow: none;
+      background-color: transparent;
+      &:hover { background-color: darken($headerbar_color,25%); }
+      &:active { background-color: darken($headerbar_color,35%); }
+      &:backdrop:hover image { color: $selected_fg_color; }
+         /* because of clickthrough and the destructive nature,
+            make an exception about hovering over an unfocused
+            window close button */
+
+    }
   }
 }
 
