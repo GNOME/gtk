@@ -24,6 +24,15 @@
 #include "gdk/gdk-private.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkcssnodeprivate.h"
+
+typedef struct _GtkNativePrivate
+{
+  gulong update_handler_id;
+  gulong layout_handler_id;
+} GtkNativePrivate;
+
+static GQuark quark_gtk_native_private;
 
 /**
  * SECTION:gtknative
@@ -60,11 +69,107 @@ gtk_native_default_check_resize (GtkNative *self)
 }
 
 static void
+gtk_native_default_layout (GtkNative *self,
+                           int        width,
+                           int        height)
+{
+}
+
+static void
 gtk_native_default_init (GtkNativeInterface *iface)
 {
   iface->get_renderer = gtk_native_default_get_renderer;
   iface->get_surface_transform = gtk_native_default_get_surface_transform;
   iface->check_resize = gtk_native_default_check_resize;
+  iface->layout = gtk_native_default_layout;
+
+  quark_gtk_native_private = g_quark_from_static_string ("gtk-native-private");
+}
+
+static void
+frame_clock_update_cb (GdkFrameClock *clock,
+                       GtkNative     *native)
+{
+  if (GTK_IS_ROOT (native))
+    gtk_css_node_validate (gtk_widget_get_css_node (GTK_WIDGET (native)));
+}
+
+static void
+gtk_native_layout (GtkNative *self,
+                   int        width,
+                   int        height)
+{
+  return GTK_NATIVE_GET_IFACE (self)->layout (self, width, height);
+}
+
+static void
+surface_layout_cb (GdkSurface *surface,
+                   int         width,
+                   int         height,
+                   GtkNative  *native)
+{
+  gtk_native_layout (native, width, height);
+
+  if (gtk_widget_needs_allocate (GTK_WIDGET (native)))
+    gtk_native_queue_relayout (native);
+}
+
+static void
+verify_priv_unrealized (gpointer user_data)
+{
+  GtkNativePrivate *priv = user_data;
+
+  g_warn_if_fail (priv->update_handler_id == 0);
+  g_warn_if_fail (priv->layout_handler_id == 0);
+
+  g_free (priv);
+}
+
+void
+gtk_native_realize (GtkNative *self)
+{
+  GdkSurface *surface;
+  GdkFrameClock *clock;
+  GtkNativePrivate *priv;
+
+  g_return_if_fail (g_object_get_qdata (G_OBJECT (self),
+                                        quark_gtk_native_private) == NULL);
+
+  surface = gtk_native_get_surface (self);
+  clock = gdk_surface_get_frame_clock (surface);
+  g_return_if_fail (clock != NULL);
+
+  priv = g_new0 (GtkNativePrivate, 1);
+  priv->update_handler_id = g_signal_connect_after (clock, "update",
+                                              G_CALLBACK (frame_clock_update_cb),
+                                              self);
+  priv->layout_handler_id = g_signal_connect (surface, "layout",
+                                              G_CALLBACK (surface_layout_cb),
+                                              self);
+  g_object_set_qdata_full (G_OBJECT (self),
+                           quark_gtk_native_private,
+                           priv,
+                           verify_priv_unrealized);
+}
+
+void
+gtk_native_unrealize (GtkNative *self)
+{
+  GtkNativePrivate *priv;
+  GdkSurface *surface;
+  GdkFrameClock *clock;
+
+  priv = g_object_get_qdata (G_OBJECT (self), quark_gtk_native_private);
+  g_return_if_fail (priv != NULL);
+
+  surface = gtk_native_get_surface (self);
+  clock = gdk_surface_get_frame_clock (surface);
+  g_return_if_fail (clock != NULL);
+
+  g_clear_signal_handler (&priv->update_handler_id, clock);
+  g_clear_signal_handler (&priv->layout_handler_id, surface);
+
+  g_object_set_qdata (G_OBJECT (self), quark_gtk_native_private, NULL);
 }
 
 /**
@@ -156,4 +261,20 @@ gtk_native_get_for_surface (GdkSurface *surface)
     return GTK_NATIVE (widget);
 
   return NULL;
+}
+
+void
+gtk_native_queue_relayout (GtkNative *self)
+{
+  GtkWidget *widget = GTK_WIDGET (self);
+  GdkSurface *surface;
+  GdkFrameClock *clock;
+
+  surface = gtk_widget_get_surface (widget);
+  clock = gtk_widget_get_frame_clock (widget);
+  if (clock == NULL)
+    return;
+
+  gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_UPDATE);
+  gdk_surface_request_layout (surface);
 }

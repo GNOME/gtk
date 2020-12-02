@@ -152,12 +152,21 @@ gtk_tooltip_window_native_check_resize (GtkNative *native)
   else if (gtk_widget_get_visible (widget))
     {
       gtk_tooltip_window_relayout (window);
-      if (window->surface)
-        gtk_widget_allocate (GTK_WIDGET (window),
-                             gdk_surface_get_width (window->surface),
-                             gdk_surface_get_height (window->surface),
-                             -1, NULL);
     }
+}
+
+static void
+gtk_tooltip_window_native_layout (GtkNative *native,
+                                  int        width,
+                                  int        height)
+{
+  GtkWidget *widget = GTK_WIDGET (native);
+
+  if (gtk_widget_needs_allocate (widget))
+    gtk_widget_allocate (widget, width, height, -1, NULL);
+  else
+    gtk_widget_ensure_allocate (widget);
+
 }
 
 static void
@@ -167,6 +176,7 @@ gtk_tooltip_window_native_init (GtkNativeInterface *iface)
   iface->get_renderer = gtk_tooltip_window_native_get_renderer;
   iface->get_surface_transform = gtk_tooltip_window_native_get_surface_transform;
   iface->check_resize = gtk_tooltip_window_native_check_resize;
+  iface->layout = gtk_tooltip_window_native_layout;
 }
 
 static void
@@ -223,12 +233,16 @@ gtk_tooltip_window_realize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_tooltip_window_parent_class)->realize (widget);
 
   window->renderer = gsk_renderer_new_for_surface (window->surface);
+
+  gtk_native_realize (GTK_NATIVE (window));
 }
 
 static void
 gtk_tooltip_window_unrealize (GtkWidget *widget)
 {
   GtkTooltipWindow *window = GTK_TOOLTIP_WINDOW (widget);
+
+  gtk_native_unrealize (GTK_NATIVE (window));
 
   GTK_WIDGET_CLASS (gtk_tooltip_window_parent_class)->unrealize (widget);
 

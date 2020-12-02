@@ -589,6 +589,23 @@ gtk_popover_native_check_resize (GtkNative *native)
     present_popup (popover);
 }
 
+static void
+gtk_popover_native_layout (GtkNative *native,
+                           int        width,
+                           int        height)
+{
+  GtkPopover *popover = GTK_POPOVER (native);
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+  GtkWidget *widget = GTK_WIDGET (popover);
+
+  update_popover_layout (popover, gdk_popup_layout_ref (priv->layout));
+
+  if (gtk_widget_needs_allocate (widget))
+    gtk_widget_allocate (widget, width, height, -1, NULL);
+  else
+    gtk_widget_ensure_allocate (widget);
+}
+
 static gboolean
 gtk_popover_has_mnemonic_modifier_pressed (GtkPopover *popover)
 {
@@ -767,20 +784,6 @@ popup_layout_changed (GdkSurface *surface,
 }
 
 static void
-surface_layout (GdkSurface *surface,
-                int         width,
-                int         height,
-                GtkWidget  *widget)
-{
-  GtkPopover *popover = GTK_POPOVER (widget);
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-
-  update_popover_layout (popover, gdk_popup_layout_ref (priv->layout));
-  if (_gtk_widget_get_alloc_needed (widget))
-    gtk_widget_allocate (widget, width, height, -1, NULL);
-}
-
-static void
 gtk_popover_activate_default (GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
@@ -900,11 +903,12 @@ gtk_popover_realize (GtkWidget *widget)
   g_signal_connect (priv->surface, "render", G_CALLBACK (surface_render), widget);
   g_signal_connect (priv->surface, "event", G_CALLBACK (surface_event), widget);
   g_signal_connect (priv->surface, "popup-layout-changed", G_CALLBACK (popup_layout_changed), widget);
-  g_signal_connect (priv->surface, "layout", G_CALLBACK (surface_layout), widget);
 
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->realize (widget);
 
   priv->renderer = gsk_renderer_new_for_surface (priv->surface);
+
+  gtk_native_realize (GTK_NATIVE (popover));
 }
 
 static void
@@ -912,6 +916,8 @@ gtk_popover_unrealize (GtkWidget *widget)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  gtk_native_unrealize (GTK_NATIVE (popover));
 
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->unrealize (widget);
 
@@ -923,7 +929,6 @@ gtk_popover_unrealize (GtkWidget *widget)
   g_signal_handlers_disconnect_by_func (priv->surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (priv->surface, surface_event, widget);
   g_signal_handlers_disconnect_by_func (priv->surface, popup_layout_changed, widget);
-  g_signal_handlers_disconnect_by_func (priv->surface, surface_layout, widget);
   gdk_surface_set_widget (priv->surface, NULL);
   gdk_surface_destroy (priv->surface);
   g_clear_object (&priv->surface);
@@ -1859,6 +1864,7 @@ gtk_popover_native_interface_init (GtkNativeInterface *iface)
   iface->get_renderer = gtk_popover_native_get_renderer;
   iface->get_surface_transform = gtk_popover_native_get_surface_transform;
   iface->check_resize = gtk_popover_native_check_resize;
+  iface->layout = gtk_popover_native_layout;
 }
 
 static GtkBuildableIface *parent_buildable_iface;
