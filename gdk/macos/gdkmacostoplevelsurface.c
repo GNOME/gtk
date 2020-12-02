@@ -100,6 +100,8 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
   g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
   g_assert (GDK_IS_MACOS_WINDOW (nswindow));
 
+  _gdk_macos_toplevel_surface_attach_to_parent (self);
+
   style_mask = [nswindow styleMask];
 
   monitor = gdk_display_get_monitor_at_surface (display, surface);
