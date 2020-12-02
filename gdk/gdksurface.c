@@ -1368,6 +1368,8 @@ gdk_surface_layout_on_clock (GdkFrameClock *clock,
   if (surface->update_freeze_count)
     return;
 
+  surface->pending_phases &= ~GDK_FRAME_CLOCK_PHASE_LAYOUT;
+
   class = GDK_SURFACE_GET_CLASS (surface);
   if (class->compute_size)
     class->compute_size (surface);
@@ -1420,6 +1422,7 @@ gdk_surface_paint_on_clock (GdkFrameClock *clock,
        * do the update later when idle instead. */
       !surface->in_update)
     {
+      surface->pending_phases &= ~GDK_FRAME_CLOCK_PHASE_PAINT;
       gdk_surface_process_updates_internal (surface);
       gdk_surface_remove_update_surface (surface);
     }
@@ -1602,10 +1605,7 @@ gdk_surface_thaw_updates (GdkSurface *surface)
       _gdk_frame_clock_inhibit_freeze (frame_clock);
 
       if (surface->pending_phases)
-        {
-          gdk_frame_clock_request_phase (frame_clock, surface->pending_phases);
-          surface->pending_phases = 0;
-        }
+        gdk_frame_clock_request_phase (frame_clock, surface->pending_phases);
     }
 }
 
