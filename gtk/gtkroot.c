@@ -21,6 +21,7 @@
 
 #include "gtkrootprivate.h"
 #include "gtknative.h"
+#include "gtknativeprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gdk/gdk-private.h"
@@ -42,10 +43,6 @@
  *
  * The obvious example of a #GtkRoot is #GtkWindow.
  */
-
-static GQuark quark_restyle_pending;
-static GQuark quark_layout_handler;
-static GQuark quark_after_update_handler;
 
 G_DEFINE_INTERFACE_WITH_CODE (GtkRoot, gtk_root, GTK_TYPE_WIDGET,
                               g_type_interface_add_prerequisite (g_define_type_id, GTK_TYPE_NATIVE))
@@ -82,10 +79,6 @@ gtk_root_default_init (GtkRootInterface *iface)
   iface->get_constraint_solver = gtk_root_default_get_constraint_solver;
   iface->get_focus = gtk_root_default_get_focus;
   iface->set_focus = gtk_root_default_set_focus;
-
-  quark_restyle_pending = g_quark_from_static_string ("gtk-root-restyle-pending");
-  quark_layout_handler = g_quark_from_static_string ("gtk-root-layout-handler");
-  quark_after_update_handler = g_quark_from_static_string ("gtk-root-after-update-handler");
 }
 
 /**
@@ -163,152 +156,19 @@ gtk_root_get_focus (GtkRoot *self)
   return GTK_ROOT_GET_IFACE (self)->get_focus (self);
 }
 
-static gboolean
-gtk_root_needs_layout (GtkRoot *self)
-{
-  if (g_object_get_qdata (G_OBJECT (self), quark_restyle_pending))
-    return TRUE;
-
-  return gtk_widget_needs_allocate (GTK_WIDGET (self));
-}
-
-static void
-gtk_root_after_update_cb (GdkFrameClock *clock,
-                          GtkRoot       *self)
-{
-  GtkWidget *widget = GTK_WIDGET (self);
-
-  /* We validate the style contexts in a single loop before even trying
-   * to handle resizes instead of doing validations inline.
-   * This is mostly necessary for compatibility reasons with old code,
-   * because both css_changed and size_allocate functions often change
-   * styles and so could cause infinite loops in this function.
-   *
-   * It's important to note that even an invalid style context returns
-   * sane values. So the result of an invalid style context will never be
-   * a program crash, but only a wrong layout or rendering.
-   */
-  if (g_object_get_qdata (G_OBJECT (self), quark_restyle_pending))
-    {
-      gtk_css_node_validate (gtk_widget_get_css_node (widget));
-    }
-}
-
-static void
-gtk_root_layout_cb (GdkSurface *surface,
-                    int         width,
-                    int         height,
-                    GtkRoot    *self)
-{
-  GtkWidget *widget = GTK_WIDGET (self);
-
-  g_object_set_qdata (G_OBJECT (self), quark_restyle_pending, NULL);
-
-  /* we may be invoked with a container_resize_queue of NULL, because
-   * queue_resize could have been adding an extra idle function while
-   * the queue still got processed. we better just ignore such case
-   * than trying to explicitly work around them with some extra flags,
-   * since it doesn't cause any actual harm.
-   */
-  if (gtk_widget_needs_allocate (widget))
-    {
-      gtk_native_check_resize (GTK_NATIVE (self));
-      if (GTK_IS_WINDOW (widget))
-        {
-          GdkSeat *seat;
-
-          seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
-          if (seat)
-            {
-              GdkDevice *device;
-              GtkWidget *focus;
-
-              device = gdk_seat_get_pointer (seat);
-              focus = gtk_window_lookup_pointer_focus_widget (GTK_WINDOW (widget), device, NULL);
-              if (focus)
-                gdk_surface_request_motion (gtk_native_get_surface (gtk_widget_get_native (focus)));
-            }
-        }
-    }
-
-  if (gtk_root_needs_layout (self))
-    {
-      gdk_frame_clock_request_phase (gdk_surface_get_frame_clock (surface),
-                                     GDK_FRAME_CLOCK_PHASE_UPDATE);
-      gdk_surface_request_layout (surface);
-    }
-}
-
 void
 gtk_root_start_layout (GtkRoot *self)
 {
-  GdkSurface *surface;
-  GdkFrameClock *clock;
-
-  if (!gtk_root_needs_layout (self))
-    return;
-
-  surface = gtk_widget_get_surface (GTK_WIDGET (self));
-  clock = gtk_widget_get_frame_clock (GTK_WIDGET (self));
-  if (clock == NULL)
-    return;
-
-  if (!g_object_get_qdata (G_OBJECT (self), quark_layout_handler))
-    {
-      guint layout_handler;
-      guint after_update_handler;
-
-      after_update_handler =
-        g_signal_connect_after (clock, "update",
-                                G_CALLBACK (gtk_root_after_update_cb), self);
-      g_object_set_qdata (G_OBJECT (self), quark_after_update_handler,
-                          GINT_TO_POINTER (after_update_handler));
-
-      layout_handler =
-        g_signal_connect (surface, "layout",
-                          G_CALLBACK (gtk_root_layout_cb), self);
-      g_object_set_qdata (G_OBJECT (self), quark_layout_handler,
-                          GINT_TO_POINTER (layout_handler));
-    }
-
-  gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_UPDATE);
-  gdk_surface_request_layout (surface);
+  gtk_native_queue_relayout (GTK_NATIVE (self));
 }
 
 void
 gtk_root_stop_layout (GtkRoot *self)
 {
-  GdkSurface *surface;
-  GdkFrameClock *clock;
-  guint layout_handler;
-  guint after_update_handler;
-
-  layout_handler =
-    GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (self),
-                                         quark_layout_handler));
-  after_update_handler =
-    GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (self),
-                                         quark_after_update_handler));
-
-  if (layout_handler == 0)
-    return;
-
-  surface = gtk_widget_get_surface (GTK_WIDGET (self));
-  clock = gtk_widget_get_frame_clock (GTK_WIDGET (self));
-  g_signal_handler_disconnect (surface, layout_handler);
-  g_signal_handler_disconnect (clock, after_update_handler);
-  g_object_set_qdata (G_OBJECT (self), quark_layout_handler, NULL);
-  g_object_set_qdata (G_OBJECT (self), quark_after_update_handler, NULL);
 }
 
 void
 gtk_root_queue_restyle (GtkRoot *self)
 {
-  if (g_object_get_qdata (G_OBJECT (self), quark_restyle_pending))
-    return;
-
-  g_object_set_qdata (G_OBJECT (self), quark_restyle_pending, GINT_TO_POINTER (1));
-
   gtk_root_start_layout (self);
 }
-

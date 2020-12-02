@@ -162,11 +162,6 @@ gtk_text_handle_present_surface (GtkTextHandle *handle)
                      MAX (req.height, 1),
                      layout);
   gdk_popup_layout_unref (layout);
-
-  gtk_widget_allocate (widget,
-                       gdk_surface_get_width (handle->surface),
-                       gdk_surface_get_height (handle->surface),
-                       -1, NULL);
 }
 
 static void
@@ -182,12 +177,26 @@ gtk_text_handle_native_check_resize (GtkNative *native)
 }
 
 static void
+gtk_text_handle_native_layout (GtkNative *native,
+                               int        width,
+                               int        height)
+{
+  GtkWidget *widget = GTK_WIDGET (native);
+
+  if (_gtk_widget_get_alloc_needed (widget))
+    gtk_widget_allocate (widget, width, height, -1, NULL);
+  else
+    gtk_widget_ensure_allocate (widget);
+}
+
+static void
 gtk_text_handle_native_interface_init (GtkNativeInterface *iface)
 {
   iface->get_surface = gtk_text_handle_native_get_surface;
   iface->get_renderer = gtk_text_handle_native_get_renderer;
   iface->get_surface_transform = gtk_text_handle_native_get_surface_transform;
   iface->check_resize = gtk_text_handle_native_check_resize;
+  iface->layout = gtk_text_handle_native_layout;
 }
 
 static gboolean
@@ -240,12 +249,16 @@ gtk_text_handle_realize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_text_handle_parent_class)->realize (widget);
 
   handle->renderer = gsk_renderer_new_for_surface (handle->surface);
+
+  gtk_native_realize (GTK_NATIVE (handle));
 }
 
 static void
 gtk_text_handle_unrealize (GtkWidget *widget)
 {
   GtkTextHandle *handle = GTK_TEXT_HANDLE (widget);
+
+  gtk_native_unrealize (GTK_NATIVE (handle));
 
   GTK_WIDGET_CLASS (gtk_text_handle_parent_class)->unrealize (widget);
 
