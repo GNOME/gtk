@@ -741,6 +741,327 @@ gsk_radial_gradient_node_get_end (GskRenderNode *node)
   return self->end;
 }
 
+/*** GSK_CONIC_GRADIENT_NODE ***/
+
+struct _GskConicGradientNode
+{
+  GskRenderNode render_node;
+
+  graphene_point_t center;
+  float rotation;
+
+  gsize n_stops;
+  GskColorStop *stops;
+};
+
+static void
+gsk_conic_gradient_node_finalize (GskRenderNode *node)
+{
+  GskConicGradientNode *self = (GskConicGradientNode *) node;
+  GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_CONIC_GRADIENT_NODE));
+
+  g_free (self->stops);
+
+  parent_class->finalize (node);
+}
+
+#define DEG_TO_RAD(x)          ((x) * (G_PI / 180.f))
+
+static void
+_cairo_mesh_pattern_set_corner_rgba (cairo_pattern_t *pattern,
+                                     guint            corner_num,
+                                     const GdkRGBA   *rgba)
+{
+  cairo_mesh_pattern_set_corner_color_rgba (pattern, corner_num, rgba->red, rgba->green, rgba->blue, rgba->alpha);
+}
+
+static void
+project (double  angle,
+         double  radius,
+         double *x_out,
+         double *y_out)
+{
+  double x, y;
+
+  x = radius * cos (angle);
+  y = radius * sin (angle);
+  if (copysign (x, 1.0) > copysign (y, 1.0))
+    {
+      *x_out = copysign (radius, x);
+      *y_out = y * radius / copysign (x, 1.0);
+    }
+  else
+    {
+      *x_out = x * radius / copysign (y, 1.0);
+      *y_out = copysign (radius, y);
+    }
+}
+
+static void
+gsk_conic_gradient_node_add_patch (cairo_pattern_t *pattern, 
+                                   float            radius,
+                                   float            start_angle,
+                                   const GdkRGBA   *start_color,
+                                   float            end_angle,
+                                   const GdkRGBA   *end_color)
+{
+  double x, y;
+
+  cairo_mesh_pattern_begin_patch (pattern);
+
+  cairo_mesh_pattern_move_to  (pattern, 0, 0);
+  project (start_angle, radius, &x, &y);
+  cairo_mesh_pattern_line_to  (pattern, x, y);
+  project (end_angle, radius, &x, &y);
+  cairo_mesh_pattern_line_to  (pattern, x, y);
+  cairo_mesh_pattern_line_to  (pattern, 0, 0);
+
+  _cairo_mesh_pattern_set_corner_rgba (pattern, 0, start_color);
+  _cairo_mesh_pattern_set_corner_rgba (pattern, 1, start_color);
+  _cairo_mesh_pattern_set_corner_rgba (pattern, 2, end_color);
+  _cairo_mesh_pattern_set_corner_rgba (pattern, 3, end_color);
+
+  cairo_mesh_pattern_end_patch (pattern);
+}
+
+static void
+gdk_rgba_color_interpolate (GdkRGBA       *dest,
+                            const GdkRGBA *src1,
+                            const GdkRGBA *src2,
+                            double         progress)
+{
+  double alpha = src1->alpha * (1.0 - progress) + src2->alpha * progress;
+
+  dest->alpha = alpha;
+  if (alpha == 0)
+    {
+      dest->red = src1->red * (1.0 - progress) + src2->red * progress;
+      dest->green = src1->green * (1.0 - progress) + src2->green * progress;
+      dest->blue = src1->blue * (1.0 - progress) + src2->blue * progress;
+    }
+  else
+    {
+      dest->red = (src1->red * src1->alpha * (1.0 - progress) + src2->red * src2->alpha * progress) / alpha;
+      dest->green = (src1->green * src1->alpha * (1.0 - progress) + src2->green * src2->alpha * progress) / alpha;
+      dest->blue = (src1->blue * src1->alpha * (1.0 - progress) + src2->blue * src2->alpha * progress) / alpha;
+    }
+}
+
+static void
+gsk_conic_gradient_node_draw (GskRenderNode *node,
+                              cairo_t       *cr)
+{
+  GskConicGradientNode *self = (GskConicGradientNode *) node;
+  cairo_pattern_t *pattern;
+  graphene_point_t corner;
+  float radius;
+  gsize i;
+
+  pattern = cairo_pattern_create_mesh ();
+  graphene_rect_get_top_right (&node->bounds, &corner);
+  radius = graphene_point_distance (&self->center, &corner, NULL, NULL);
+  graphene_rect_get_bottom_right (&node->bounds, &corner);
+  radius = MAX (radius, graphene_point_distance (&self->center, &corner, NULL, NULL));
+  graphene_rect_get_bottom_left (&node->bounds, &corner);
+  radius = MAX (radius, graphene_point_distance (&self->center, &corner, NULL, NULL));
+  graphene_rect_get_top_left (&node->bounds, &corner);
+  radius = MAX (radius, graphene_point_distance (&self->center, &corner, NULL, NULL));
+
+  for (i = 0; i <= self->n_stops; i++)
+    {
+      GskColorStop *stop1 = &self->stops[MAX (i, 1) - 1];
+      GskColorStop *stop2 = &self->stops[MIN (i, self->n_stops - 1)];
+      double offset1 = i > 0 ? stop1->offset : 0;
+      double offset2 = i < self->n_stops ? stop2->offset : 1;
+      double start_angle, end_angle;
+
+      offset1 = offset1 * 360 + self->rotation - 90;
+      offset2 = offset2 * 360 + self->rotation - 90;
+
+      for (start_angle = offset1; start_angle < offset2; start_angle = end_angle)
+        {
+          GdkRGBA start_color, end_color;
+          end_angle = (floor (start_angle / 45) + 1) * 45;
+          end_angle = MIN (end_angle, offset2);
+          gdk_rgba_color_interpolate (&start_color,
+                                      &stop1->color,
+                                      &stop2->color,
+                                      (start_angle - offset1) / (offset2 - offset1));
+          gdk_rgba_color_interpolate (&end_color,
+                                      &stop1->color,
+                                      &stop2->color,
+                                      (end_angle - offset1) / (offset2 - offset1));
+
+          gsk_conic_gradient_node_add_patch (pattern, 
+                                             radius,
+                                             DEG_TO_RAD (start_angle),
+                                             &start_color,
+                                             DEG_TO_RAD (end_angle),
+                                             &end_color);
+        }
+    }
+
+  cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
+
+  gsk_cairo_rectangle (cr, &node->bounds);
+  cairo_translate (cr, self->center.x, self->center.y);
+  cairo_set_source (cr, pattern);
+  cairo_fill (cr);
+
+  cairo_pattern_destroy (pattern);
+}
+
+static void
+gsk_conic_gradient_node_diff (GskRenderNode  *node1,
+                              GskRenderNode  *node2,
+                              cairo_region_t *region)
+{
+  GskConicGradientNode *self1 = (GskConicGradientNode *) node1;
+  GskConicGradientNode *self2 = (GskConicGradientNode *) node2;
+  gsize i;
+
+  if (!graphene_point_equal (&self1->center, &self2->center) ||
+      self1->rotation != self2->rotation ||
+      self1->n_stops != self2->n_stops)
+    {
+      gsk_render_node_diff_impossible (node1, node2, region);
+      return;
+    }
+
+  for (i = 0; i < self1->n_stops; i++)
+    {
+      GskColorStop *stop1 = &self1->stops[i];
+      GskColorStop *stop2 = &self2->stops[i];
+
+      if (stop1->offset != stop2->offset ||
+          !gdk_rgba_equal (&stop1->color, &stop2->color))
+        {
+          gsk_render_node_diff_impossible (node1, node2, region);
+          return;
+        }
+    }
+}
+
+/**
+ * gsk_conic_gradient_node_new:
+ * @bounds: the bounds of the node
+ * @center: the center of the gradient
+ * @rotation: the rotation of the gradient in degrees
+ * @color_stops: (array length=n_color_stops): a pointer to an array of #GskColorStop defining the gradient
+ *   The offsets of all color steps must be increasing. The first stop's offset must be >= 0 and the last
+ *   stop's offset must be <= 1.
+ * @n_color_stops: the number of elements in @color_stops
+ *
+ * Creates a #GskRenderNode that draws a conic gradient. The conic gradient
+ * starts around @center in the direction of @rotation. A rotation of 0 means
+ * that the gradient points up. Color stops are then added clockwise.
+ *
+ * Returns: (transfer full) (type GskConicGradientNode): A new #GskRenderNode
+ */
+GskRenderNode *
+gsk_conic_gradient_node_new (const graphene_rect_t  *bounds,
+                             const graphene_point_t *center,
+                             float                   rotation,
+                             const GskColorStop     *color_stops,
+                             gsize                   n_color_stops)
+{
+  GskConicGradientNode *self;
+  GskRenderNode *node;
+  gsize i;
+
+  g_return_val_if_fail (bounds != NULL, NULL);
+  g_return_val_if_fail (center != NULL, NULL);
+  g_return_val_if_fail (color_stops != NULL, NULL);
+  g_return_val_if_fail (n_color_stops >= 2, NULL);
+  g_return_val_if_fail (color_stops[0].offset >= 0, NULL);
+  for (i = 1; i < n_color_stops; i++)
+    g_return_val_if_fail (color_stops[i].offset >= color_stops[i - 1].offset, NULL);
+  g_return_val_if_fail (color_stops[n_color_stops - 1].offset <= 1, NULL);
+
+  self = gsk_render_node_alloc (GSK_CONIC_GRADIENT_NODE);
+  node = (GskRenderNode *) self;
+
+  graphene_rect_init_from_rect (&node->bounds, bounds);
+  graphene_point_init_from_point (&self->center, center);
+
+  self->rotation = rotation;
+
+  self->n_stops = n_color_stops;
+  self->stops = g_malloc_n (n_color_stops, sizeof (GskColorStop));
+  memcpy (self->stops, color_stops, n_color_stops * sizeof (GskColorStop));
+
+  return node;
+}
+
+/**
+ * gsk_conic_gradient_node_get_n_color_stops:
+ * @node: (type GskConicGradientNode): a #GskRenderNode for a conic gradient
+ *
+ * Retrieves the number of color stops in the gradient.
+ *
+ * Returns: the number of color stops
+ */
+gsize
+gsk_conic_gradient_node_get_n_color_stops (GskRenderNode *node)
+{
+  GskConicGradientNode *self = (GskConicGradientNode *) node;
+
+  return self->n_stops;
+}
+
+/**
+ * gsk_conic_gradient_node_get_color_stops:
+ * @node: (type GskConicGradientNode): a #GskRenderNode for a conic gradient
+ * @n_stops: (out) (optional): the number of color stops in the returned array
+ *
+ * Retrieves the color stops in the gradient.
+ *
+ * Returns: (array length=n_stops): the color stops in the gradient
+ */
+const GskColorStop *
+gsk_conic_gradient_node_get_color_stops (GskRenderNode *node,
+                                         gsize         *n_stops)
+{
+  GskConicGradientNode *self = (GskConicGradientNode *) node;
+
+  if (n_stops != NULL)
+    *n_stops = self->n_stops;
+
+  return self->stops;
+}
+
+/**
+ * gsk_conic_gradient_node_get_center:
+ * @node: (type GskConicGradientNode): a #GskRenderNode for a conic gradient
+ *
+ * Retrieves the center pointer for the gradient.
+ *
+ * Returns: the center point for the gradient
+ */
+const graphene_point_t *
+gsk_conic_gradient_node_get_center (GskRenderNode *node)
+{
+  GskConicGradientNode *self = (GskConicGradientNode *) node;
+
+  return &self->center;
+}
+
+/**
+ * gsk_conic_gradient_node_get_rotation:
+ * @node: (type GskConicGradientNode): a #GskRenderNode for a conic gradient
+ *
+ * Retrieves the rotation for the gradient in degrees.
+ *
+ * Returns: the rotation for the gradient
+ */
+float
+gsk_conic_gradient_node_get_rotation (GskRenderNode *node)
+{
+  GskConicGradientNode *self = (GskConicGradientNode *) node;
+
+  return self->rotation;
+}
+
 /*** GSK_BORDER_NODE ***/
 
 struct _GskBorderNode
@@ -4752,6 +5073,7 @@ GSK_DEFINE_RENDER_NODE_TYPE (gsk_linear_gradient_node, GSK_LINEAR_GRADIENT_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_repeating_linear_gradient_node, GSK_REPEATING_LINEAR_GRADIENT_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_radial_gradient_node, GSK_RADIAL_GRADIENT_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_repeating_radial_gradient_node, GSK_REPEATING_RADIAL_GRADIENT_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_conic_gradient_node, GSK_CONIC_GRADIENT_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_border_node, GSK_BORDER_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_texture_node, GSK_TEXTURE_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_inset_shadow_node, GSK_INSET_SHADOW_NODE)
@@ -4883,6 +5205,22 @@ gsk_render_node_init_types_once (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskRepeatingRadialGradientNode"), &node_info);
     gsk_render_node_types[GSK_REPEATING_RADIAL_GRADIENT_NODE] = node_type;
+  }
+
+  {
+    const GskRenderNodeTypeInfo node_info =
+    {
+      GSK_REPEATING_RADIAL_GRADIENT_NODE,
+      sizeof (GskRadialGradientNode),
+      NULL,
+      gsk_conic_gradient_node_finalize,
+      gsk_conic_gradient_node_draw,
+      NULL,
+      gsk_conic_gradient_node_diff,
+    };
+
+    GType node_type = gsk_render_node_type_register_static (I_("GskConicGradientNode"), &node_info);
+    gsk_render_node_types[GSK_CONIC_GRADIENT_NODE] = node_type;
   }
 
   {

@@ -133,6 +133,7 @@ create_list_model_for_render_node (GskRenderNode *node)
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_RADIAL_GRADIENT_NODE:
     case GSK_REPEATING_RADIAL_GRADIENT_NODE:
+    case GSK_CONIC_GRADIENT_NODE:
     case GSK_BORDER_NODE:
     case GSK_INSET_SHADOW_NODE:
     case GSK_OUTSET_SHADOW_NODE:
@@ -259,6 +260,8 @@ node_type_name (GskRenderNodeType type)
       return "Radial Gradient";
     case GSK_REPEATING_RADIAL_GRADIENT_NODE:
       return "Repeating Radial Gradient";
+    case GSK_CONIC_GRADIENT_NODE:
+      return "Conic Gradient";
     case GSK_BORDER_NODE:
       return "Border";
     case GSK_TEXTURE_NODE:
@@ -308,6 +311,7 @@ node_name (GskRenderNode *node)
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_RADIAL_GRADIENT_NODE:
     case GSK_REPEATING_RADIAL_GRADIENT_NODE:
+    case GSK_CONIC_GRADIENT_NODE:
     case GSK_BORDER_NODE:
     case GSK_INSET_SHADOW_NODE:
     case GSK_OUTSET_SHADOW_NODE:
@@ -707,6 +711,44 @@ populate_render_node_properties (GtkListStore  *store,
 
         tmp = g_strdup_printf ("%.2f, %.2f", hradius, vradius);
         add_text_row (store, "Radius", tmp);
+        g_free (tmp);
+
+        s = g_string_new ("");
+        for (i = 0; i < n_stops; i++)
+          {
+            tmp = gdk_rgba_to_string (&stops[i].color);
+            g_string_append_printf (s, "%.2f, %s\n", stops[i].offset, tmp);
+            g_free (tmp);
+          }
+
+        texture = get_linear_gradient_texture (n_stops, stops);
+        gtk_list_store_insert_with_values (store, NULL, -1,
+                                           0, "Color Stops",
+                                           1, s->str,
+                                           2, TRUE,
+                                           3, texture,
+                                           -1);
+        g_string_free (s, TRUE);
+        g_object_unref (texture);
+      }
+      break;
+
+    case GSK_CONIC_GRADIENT_NODE:
+      {
+        const graphene_point_t *center = gsk_conic_gradient_node_get_center (node);
+        const float rotation = gsk_conic_gradient_node_get_rotation (node);
+        const gsize n_stops = gsk_conic_gradient_node_get_n_color_stops (node);
+        const GskColorStop *stops = gsk_conic_gradient_node_get_color_stops (node, NULL);
+        gsize i;
+        GString *s;
+        GdkTexture *texture;
+
+        tmp = g_strdup_printf ("%.2f, %.2f", center->x, center->y);
+        add_text_row (store, "Center", tmp);
+        g_free (tmp);
+
+        tmp = g_strdup_printf ("%.2f", rotation);
+        add_text_row (store, "Rotation", tmp);
         g_free (tmp);
 
         s = g_string_new ("");

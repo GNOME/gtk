@@ -1071,6 +1071,40 @@ parse_repeating_radial_gradient_node (GtkCssParser *parser)
 }
 
 static GskRenderNode *
+parse_conic_gradient_node (GtkCssParser *parser)
+{
+  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
+  graphene_point_t center = GRAPHENE_POINT_INIT (25, 25);
+  double rotation = 0.0;
+  GArray *stops = NULL;
+  const Declaration declarations[] = {
+    { "bounds", parse_rect, NULL, &bounds },
+    { "center", parse_point, NULL, &center },
+    { "rotation", parse_double, NULL, &rotation },
+    { "stops", parse_stops, clear_stops, &stops },
+  };
+  GskRenderNode *result;
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+  if (stops == NULL)
+    {
+      GskColorStop from = { 0.0, GDK_RGBA("AAFF00") };
+      GskColorStop to = { 1.0, GDK_RGBA("FF00CC") };
+
+      stops = g_array_new (FALSE, FALSE, sizeof (GskColorStop));
+      g_array_append_val (stops, from);
+      g_array_append_val (stops, to);
+    }
+
+  result = gsk_conic_gradient_node_new (&bounds, &center, rotation, 
+                                        (GskColorStop *) stops->data, stops->len);
+
+  g_array_free (stops, TRUE);
+
+  return result;
+}
+
+static GskRenderNode *
 parse_inset_shadow_node (GtkCssParser *parser)
 {
   GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 50, 50);
@@ -1797,6 +1831,7 @@ parse_node (GtkCssParser *parser,
     { "inset-shadow", parse_inset_shadow_node },
     { "linear-gradient", parse_linear_gradient_node },
     { "radial-gradient", parse_radial_gradient_node },
+    { "conic-gradient", parse_conic_gradient_node },
     { "opacity", parse_opacity_node },
     { "outset-shadow", parse_outset_shadow_node },
     { "repeat", parse_repeat_node },
@@ -2350,6 +2385,21 @@ render_node_print (Printer       *p,
 
         append_stops_param (p, "stops", gsk_radial_gradient_node_get_color_stops (node, NULL),
                                         gsk_radial_gradient_node_get_n_color_stops (node));
+
+        end_node (p);
+      }
+      break;
+
+    case GSK_CONIC_GRADIENT_NODE:
+      {
+        start_node (p, "conic-gradient");
+
+        append_rect_param (p, "bounds", &node->bounds);
+        append_point_param (p, "center", gsk_conic_gradient_node_get_center (node));
+        append_float_param (p, "rotation", gsk_conic_gradient_node_get_rotation (node), 0.0f);
+
+        append_stops_param (p, "stops", gsk_conic_gradient_node_get_color_stops (node, NULL),
+                                        gsk_conic_gradient_node_get_n_color_stops (node));
 
         end_node (p);
       }
