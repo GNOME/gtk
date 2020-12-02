@@ -357,16 +357,16 @@ snapshot_frame_fill (GtkSnapshot          *snapshot,
   gtk_snapshot_append_border (snapshot, outline, border_width, colors);
 }
 
-static void
-set_stroke_style (cairo_t        *cr,
-                  double          line_width,
-                  GtkBorderStyle  style,
-                  double          length)
+static GskStroke *
+create_stroke_style (double          line_width,
+                     GtkBorderStyle  style,
+                     double          length)
 {
-  double segments[2];
+  GskStroke *stroke;
+  float segments[2];
   double n;
 
-  cairo_set_line_width (cr, line_width);
+  stroke = gsk_stroke_new (line_width);
 
   if (style == GTK_BORDER_STYLE_DOTTED)
     {
@@ -374,12 +374,12 @@ set_stroke_style (cairo_t        *cr,
 
       segments[0] = 0;
       segments[1] = n ? length / n : 2;
-      cairo_set_dash (cr, segments, G_N_ELEMENTS (segments), 0);
+      gsk_stroke_set_dash (stroke, segments, 2);
 
-      cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);
-      cairo_set_line_join (cr, CAIRO_LINE_JOIN_ROUND);
+      gsk_stroke_set_line_cap (stroke, GSK_LINE_CAP_ROUND);
+      gsk_stroke_set_line_join (stroke, GSK_LINE_JOIN_ROUND);
     }
-  else
+  else if (style == GTK_BORDER_STYLE_DASHED)
     {
       n = length / line_width;
       /* Optimize the common case of an integer-sized rectangle
@@ -397,31 +397,32 @@ set_stroke_style (cairo_t        *cr,
           segments[0] = n ? (1. / 3) * length / n : 1;
           segments[1] = 2 * segments[0];
         }
-      cairo_set_dash (cr, segments, G_N_ELEMENTS (segments), 0);
+      gsk_stroke_set_dash (stroke, segments, 2);
 
-      cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
-      cairo_set_line_join (cr, CAIRO_LINE_JOIN_MITER);
+      gsk_stroke_set_line_cap (stroke, GSK_LINE_CAP_SQUARE);
+      gsk_stroke_set_line_join (stroke, GSK_LINE_JOIN_MITER);
     }
+  else
+    {
+      g_assert_not_reached ();
+    }
+
+  return stroke;
 }
 
 static void
-render_frame_stroke (cairo_t              *cr,
-                     const GskRoundedRect *border_box,
-                     const double          border_width[4],
-                     GdkRGBA               colors[4],
-                     guint                 hidden_side,
-                     GtkBorderStyle        stroke_style)
+snapshot_frame_stroke (GtkSnapshot          *snapshot,
+                       const GskRoundedRect *border_box,
+                       const float           border_width[4],
+                       GdkRGBA               colors[4],
+                       guint                 hidden_side,
+                       GtkBorderStyle        stroke_style)
 {
-  gboolean different_colors, different_borders;
   GskRoundedRect stroke_box;
+  GskPathBuilder *builder;
+  GskPath *path;
+  GskStroke *stroke;
   guint i;
-
-  different_colors = !gdk_rgba_equal (&colors[0], &colors[1]) ||
-                     !gdk_rgba_equal (&colors[0], &colors[2]) ||
-                     !gdk_rgba_equal (&colors[0], &colors[3]);
-  different_borders = border_width[0] != border_width[1] ||
-                      border_width[0] != border_width[2] ||
-                      border_width[0] != border_width[3] ;
 
   stroke_box = *border_box;
   gsk_rounded_rect_shrink (&stroke_box,
@@ -430,32 +431,36 @@ render_frame_stroke (cairo_t              *cr,
                            border_width[GTK_CSS_BOTTOM] / 2.0,
                            border_width[GTK_CSS_LEFT] / 2.0);
 
-  if (!different_colors && !different_borders && hidden_side == 0)
+  if (border_width[0] == border_width[1] &&
+      border_width[0] == border_width[2] &&
+      border_width[0] == border_width[3] &&
+      hidden_side == 0)
     {
       double length = 0;
 
       /* FAST PATH:
        * Mostly expected to trigger for focus rectangles */
-      for (i = 0; i < 4; i++) 
+      for (i = 0; i < 4; i++)
         {
           length += _gtk_rounded_box_guess_length (&stroke_box, i);
         }
 
-      gsk_rounded_rect_path (&stroke_box, cr);
-      gdk_cairo_set_source_rgba (cr, &colors[0]);
-      set_stroke_style (cr, border_width[0], stroke_style, length);
-      cairo_stroke (cr);
+      builder = gsk_path_builder_new ();
+      gsk_path_builder_add_rounded_rect (builder, &stroke_box);
+      path = gsk_path_builder_free_to_path (builder);
+      stroke = create_stroke_style (border_width[0],
+                                    stroke_style, length);
+      gtk_snapshot_push_stroke (snapshot, path, stroke);
+      gsk_stroke_free (stroke);
+      gsk_path_unref (path);
+
+      gtk_snapshot_append_border (snapshot, border_box, border_width, colors);
+
+      gtk_snapshot_pop (snapshot);
     }
   else
     {
-      GskRoundedRect padding_box;
-
-      padding_box = *border_box;
-      gsk_rounded_rect_shrink (&padding_box,
-                               border_width[GTK_CSS_TOP],
-                               border_width[GTK_CSS_RIGHT],
-                               border_width[GTK_CSS_BOTTOM],
-                               border_width[GTK_CSS_LEFT]);
+      const float weight = sqrtf(2)/2.0;
 
       for (i = 0; i < 4; i++)
         {
@@ -465,47 +470,109 @@ render_frame_stroke (cairo_t              *cr,
           if (border_width[i] == 0)
             continue;
 
-          cairo_save (cr);
-
+          builder = gsk_path_builder_new ();
           if (i == 0)
-            _gtk_rounded_box_path_top (border_box, &padding_box, cr);
+            {
+              /* top */
+              gsk_path_builder_move_to (builder,
+                                        stroke_box.bounds.origin.x + stroke_box.corner[GSK_CORNER_TOP_LEFT].width / 2,
+                                        stroke_box.bounds.origin.y + stroke_box.corner[GSK_CORNER_TOP_LEFT].height / 2);
+              gsk_path_builder_conic_to (builder,
+                                         stroke_box.bounds.origin.x,
+                                         stroke_box.bounds.origin.y,
+                                         stroke_box.bounds.origin.x + stroke_box.corner[GSK_CORNER_TOP_LEFT].width,
+                                         stroke_box.bounds.origin.y,
+                                         weight);
+              gsk_path_builder_line_to (builder,
+                                        stroke_box.bounds.origin.x + stroke_box.bounds.size.width - stroke_box.corner[GSK_CORNER_TOP_RIGHT].width,
+                                        stroke_box.bounds.origin.y);
+              gsk_path_builder_conic_to (builder,
+                                         stroke_box.bounds.origin.x + stroke_box.bounds.size.width,
+                                         stroke_box.bounds.origin.y,
+                                         stroke_box.bounds.origin.x + stroke_box.bounds.size.width - stroke_box.corner[GSK_CORNER_TOP_RIGHT].width / 2,
+                                         stroke_box.bounds.origin.y + stroke_box.corner[GSK_CORNER_TOP_RIGHT].height / 2,
+                                         weight);
+            }
           else if (i == 1)
-            _gtk_rounded_box_path_right (border_box, &padding_box, cr);
+            {
+              /* right */
+              gsk_path_builder_move_to (builder,
+                                        stroke_box.bounds.origin.x + stroke_box.bounds.size.width - stroke_box.corner[GSK_CORNER_TOP_RIGHT].width / 2,
+                                        stroke_box.bounds.origin.y + stroke_box.corner[GSK_CORNER_TOP_RIGHT].height / 2);
+              gsk_path_builder_conic_to (builder,
+                                         stroke_box.bounds.origin.x + stroke_box.bounds.size.width,
+                                         stroke_box.bounds.origin.y,
+                                         stroke_box.bounds.origin.x + stroke_box.bounds.size.width,
+                                         stroke_box.bounds.origin.y + stroke_box.corner[GSK_CORNER_TOP_RIGHT].height,
+                                         weight);
+              gsk_path_builder_line_to (builder,
+                                        stroke_box.bounds.origin.x + stroke_box.bounds.size.width,
+                                        stroke_box.bounds.origin.y + stroke_box.bounds.size.height - stroke_box.corner[GSK_CORNER_BOTTOM_RIGHT].height);
+              gsk_path_builder_conic_to (builder,
+                                         stroke_box.bounds.origin.x + stroke_box.bounds.size.width,
+                                         stroke_box.bounds.origin.y + stroke_box.bounds.size.height,
+                                         stroke_box.bounds.origin.x + stroke_box.bounds.size.width - stroke_box.corner[GSK_CORNER_BOTTOM_RIGHT].width / 2,
+                                         stroke_box.bounds.origin.y + stroke_box.bounds.size.height - stroke_box.corner[GSK_CORNER_BOTTOM_RIGHT].height / 2,
+                                         weight);
+            }
           else if (i == 2)
-            _gtk_rounded_box_path_bottom (border_box, &padding_box, cr);
+            {
+              /* bottom */
+              gsk_path_builder_move_to (builder,
+                                         stroke_box.bounds.origin.x + stroke_box.bounds.size.width - stroke_box.corner[GSK_CORNER_BOTTOM_RIGHT].width / 2,
+                                         stroke_box.bounds.origin.y + stroke_box.bounds.size.height - stroke_box.corner[GSK_CORNER_BOTTOM_RIGHT].height / 2);
+              gsk_path_builder_conic_to (builder,
+                                         stroke_box.bounds.origin.x + stroke_box.bounds.size.width,
+                                         stroke_box.bounds.origin.y + stroke_box.bounds.size.height,
+                                         stroke_box.bounds.origin.x + stroke_box.bounds.size.width - stroke_box.corner[GSK_CORNER_BOTTOM_RIGHT].width,
+                                         stroke_box.bounds.origin.y + stroke_box.bounds.size.height,
+                                         weight);
+              gsk_path_builder_line_to (builder,
+                                        stroke_box.bounds.origin.x + stroke_box.corner[GSK_CORNER_BOTTOM_LEFT].width,
+                                        stroke_box.bounds.origin.y + stroke_box.bounds.size.height);
+              gsk_path_builder_conic_to (builder,
+                                         stroke_box.bounds.origin.x,
+                                         stroke_box.bounds.origin.y + stroke_box.bounds.size.height,
+                                         stroke_box.bounds.origin.x + stroke_box.corner[GSK_CORNER_BOTTOM_LEFT].width / 2,
+                                         stroke_box.bounds.origin.y + stroke_box.bounds.size.height - stroke_box.corner[GSK_CORNER_BOTTOM_LEFT].height / 2,
+                                         weight);
+            }
           else if (i == 3)
-            _gtk_rounded_box_path_left (border_box, &padding_box, cr);
-          cairo_clip (cr);
+            {
+              /* left */
+              gsk_path_builder_move_to (builder,
+                                        stroke_box.bounds.origin.x + stroke_box.corner[GSK_CORNER_BOTTOM_LEFT].width / 2,
+                                        stroke_box.bounds.origin.y + stroke_box.bounds.size.height - stroke_box.corner[GSK_CORNER_BOTTOM_LEFT].height / 2);
+              gsk_path_builder_conic_to (builder,
+                                         stroke_box.bounds.origin.x,
+                                         stroke_box.bounds.origin.y + stroke_box.bounds.size.height,
+                                         stroke_box.bounds.origin.x,
+                                         stroke_box.bounds.origin.y + stroke_box.bounds.size.height - stroke_box.corner[GSK_CORNER_BOTTOM_LEFT].height,
+                                         weight);
+              gsk_path_builder_line_to (builder,
+                                        stroke_box.bounds.origin.x,
+                                        stroke_box.bounds.origin.y + stroke_box.corner[GSK_CORNER_TOP_LEFT].height);
+              gsk_path_builder_conic_to (builder,
+                                         stroke_box.bounds.origin.x,
+                                         stroke_box.bounds.origin.y,
+                                         stroke_box.bounds.origin.x + stroke_box.corner[GSK_CORNER_TOP_LEFT].width,
+                                         stroke_box.bounds.origin.y,
+                                         weight);
+            }
 
-          _gtk_rounded_box_path_side (&stroke_box, cr, i);
+          path = gsk_path_builder_free_to_path (builder);
+          stroke = create_stroke_style (border_width[i],
+                                        stroke_style,
+                                        _gtk_rounded_box_guess_length (&stroke_box, i));
+          gtk_snapshot_push_stroke (snapshot, path, stroke);
+          gsk_stroke_free (stroke);
+          gsk_path_unref (path);
 
-          gdk_cairo_set_source_rgba (cr, &colors[i]);
-          set_stroke_style (cr,
-                            border_width[i],
-                            stroke_style,
-                            _gtk_rounded_box_guess_length (&stroke_box, i));
-          cairo_stroke (cr);
+          gtk_snapshot_append_border (snapshot, border_box, border_width, colors);
 
-          cairo_restore (cr);
+          gtk_snapshot_pop (snapshot);
         }
     }
-}
-
-static void
-snapshot_frame_stroke (GtkSnapshot          *snapshot,
-                       const GskRoundedRect *outline,
-                       const float           border_width[4],
-                       GdkRGBA               colors[4],
-                       guint                 hidden_side,
-                       GtkBorderStyle        stroke_style)
-{
-  double double_width[4] = { border_width[0], border_width[1], border_width[2], border_width[3] };
-  cairo_t *cr;
-
-  cr = gtk_snapshot_append_cairo (snapshot,
-                                  &outline->bounds);
-  render_frame_stroke (cr, outline, double_width, colors, hidden_side, stroke_style);
-  cairo_destroy (cr);
 }
 
 static void
