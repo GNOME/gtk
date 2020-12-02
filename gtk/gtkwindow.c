@@ -4368,7 +4368,6 @@ gtk_window_realize (GtkWidget *widget)
     priv->renderer = gsk_renderer_new_for_surface (surface);
 
   g_signal_connect_swapped (surface, "notify::state", G_CALLBACK (surface_state_changed), widget);
-  g_signal_connect_swapped (surface, "size-changed", G_CALLBACK (surface_size_changed), widget);
   g_signal_connect (surface, "render", G_CALLBACK (surface_render), widget);
   g_signal_connect (surface, "event", G_CALLBACK (surface_event), widget);
   g_signal_connect (surface, "compute-size", G_CALLBACK (toplevel_compute_size), widget);
@@ -4476,7 +4475,6 @@ gtk_window_unrealize (GtkWidget *widget)
   surface = priv->surface;
 
   g_signal_handlers_disconnect_by_func (surface, surface_state_changed, widget);
-  g_signal_handlers_disconnect_by_func (surface, surface_size_changed, widget);
   g_signal_handlers_disconnect_by_func (surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (surface, surface_event, widget);
 

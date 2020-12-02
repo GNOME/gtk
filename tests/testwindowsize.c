@@ -8,14 +8,27 @@ static GtkWidget *default_width_spin;
 static GtkWidget *default_height_spin;
 static GtkWidget *resizable_check;
 
-static void
-size_changed_cb (GdkSurface *surface, int width, int height, GtkLabel *label)
+static gboolean
+set_label_idle (gpointer user_data)
 {
+  GtkLabel *label = user_data;
+  GtkNative *native = gtk_widget_get_native (GTK_WIDGET (label));
+  GdkSurface *surface = gtk_native_get_surface (native);
   char *str;
 
-  str = g_strdup_printf ("%d x %d", width, height);
+  str = g_strdup_printf ("%d x %d",
+                         gdk_surface_get_width (surface),
+                         gdk_surface_get_height (surface));
   gtk_label_set_label (label, str);
   g_free (str);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+layout_cb (GdkSurface *surface, int width, int height, GtkLabel *label)
+{
+  g_idle_add (set_label_idle, label);
 }
 
 static void
@@ -63,8 +76,8 @@ show_dialog (void)
 
   gtk_dialog_add_action_widget (GTK_DIALOG (dialog), label, GTK_RESPONSE_HELP);
   gtk_widget_realize (dialog);
-  g_signal_connect (gtk_native_get_surface (GTK_NATIVE (dialog)), "size-changed",
-                    G_CALLBACK (size_changed_cb), label);
+  g_signal_connect (gtk_native_get_surface (GTK_NATIVE (dialog)), "layout",
+                    G_CALLBACK (layout_cb), label);
   g_signal_connect (dialog, "response",
                     G_CALLBACK (gtk_window_destroy),
                     NULL);

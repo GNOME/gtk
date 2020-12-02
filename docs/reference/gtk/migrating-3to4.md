@@ -165,7 +165,7 @@ for this change.
 | ::key-release-event | #GtkEventControllerKey |
 | ::enter-notify-event | #GtkEventControllerMotion |
 | ::leave-notify-event | #GtkEventControllerMotion |
-| ::configure-event | replaced by #GdkSurface::size-changed |
+| ::configure-event | replaced by #GdkSurface::layout |
 | ::focus-in-event | #GtkEventControllerFocus |
 | ::focus-out-event | #GtkEventControllerFocus |
 | ::map-event | replaced by #GdkSurface:mapped |
