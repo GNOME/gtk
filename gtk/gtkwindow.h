@@ -216,10 +216,6 @@ void     gtk_window_get_default_size (GtkWindow   *window,
                                       int         *width,
                                       int         *height);
 GDK_AVAILABLE_IN_ALL
-void     gtk_window_resize           (GtkWindow   *window,
-                                      int          width,
-                                      int          height);
-GDK_AVAILABLE_IN_ALL
 void     gtk_window_get_size         (GtkWindow   *window,
                                       int         *width,
                                       int         *height);
