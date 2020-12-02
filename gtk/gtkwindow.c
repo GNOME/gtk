@@ -4323,9 +4323,9 @@ toplevel_compute_size (GdkToplevel     *toplevel,
   if (priv->use_client_shadow)
     {
       get_shadow_width (window, &shadow);
-      gdk_toplevel_size_set_margin (size,
-                                    shadow.left, shadow.right,
-                                    shadow.top, shadow.bottom);
+      gdk_toplevel_size_set_shadow_width (size,
+                                          shadow.left, shadow.right,
+                                          shadow.top, shadow.bottom);
     }
 
   gtk_widget_ensure_resize (widget);

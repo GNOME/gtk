@@ -118,18 +118,30 @@ gdk_toplevel_size_set_min_size (GdkToplevelSize *size,
   size->min_height = min_height;
 }
 
+/**
+ * gdk_toplevel_size_set_shadow_width:
+ * @size: a #GdkToplevelSize
+ * @left: width of the left part of the shadow
+ * @right: width of the right part of the shadow
+ * @top: height of the top part of the shadow
+ * @bottom: height of the bottom part of the shadow
+ *
+ * The shadow width corresponds to the part of the computed surface size
+ * that would consist of the shadow margin surrounding the window, would
+ * there be any.
+ */
 void
-gdk_toplevel_size_set_margin (GdkToplevelSize *size,
-                              int              left,
-                              int              right,
-                              int              top,
-                              int              bottom)
+gdk_toplevel_size_set_shadow_width (GdkToplevelSize *size,
+                                    int              left,
+                                    int              right,
+                                    int              top,
+                                    int              bottom)
 {
-  size->margin.is_valid = TRUE;
-  size->margin.left = left;
-  size->margin.right = right;
-  size->margin.top = top;
-  size->margin.bottom = bottom;
+  size->shadow.is_valid = TRUE;
+  size->shadow.left = left;
+  size->shadow.right = right;
+  size->shadow.top = top;
+  size->shadow.bottom = bottom;
 }
 
 void
@@ -145,10 +157,10 @@ gdk_toplevel_size_validate (GdkToplevelSize *size)
 
   geometry_width = size->width;
   geometry_height = size->height;
-  if (size->margin.is_valid)
+  if (size->shadow.is_valid)
     {
-      geometry_width -= size->margin.left + size->margin.right;
-      geometry_height -= size->margin.top + size->margin.bottom;
+      geometry_width -= size->shadow.left + size->shadow.right;
+      geometry_height -= size->shadow.top + size->shadow.bottom;
     }
   if (geometry_width > size->bounds_width ||
       geometry_height > size->bounds_height)
