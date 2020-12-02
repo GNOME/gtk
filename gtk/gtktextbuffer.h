@@ -77,6 +77,10 @@ struct _GtkTextBuffer
  * @begin_user_action: The class handler for the #GtkTextBuffer::begin-user-action signal.
  * @end_user_action: The class handler for the #GtkTextBuffer::end-user-action signal.
  * @paste_done: The class handler for the #GtkTextBuffer::paste-done signal.
+ * @undo: The class handler for the #GtkTextBuffer::undo signal
+ * @redo: The class handler for the #GtkTextBuffer::redo signal
+ *
+ * The class structure for #GtkTextBuffer.
  */
 struct _GtkTextBufferClass
 {
