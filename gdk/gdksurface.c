@@ -285,6 +285,10 @@ void
 gdk_surface_layout_popup_helper (GdkSurface     *surface,
                                  int             width,
                                  int             height,
+                                 int             shadow_left,
+                                 int             shadow_right,
+                                 int             shadow_top,
+                                 int             shadow_bottom,
                                  GdkMonitor     *monitor,
                                  GdkRectangle   *bounds,
                                  GdkPopupLayout *layout,
@@ -315,8 +319,8 @@ gdk_surface_layout_popup_helper (GdkSurface     *surface,
   gdk_popup_layout_get_offset (layout, &rect_anchor_dx, &rect_anchor_dy);
   anchor_hints = gdk_popup_layout_get_anchor_hints (layout);
 
-  final_rect.width = width - surface->shadow_left - surface->shadow_right;
-  final_rect.height = height - surface->shadow_top - surface->shadow_bottom;
+  final_rect.width = width - shadow_left - shadow_right;
+  final_rect.height = height - shadow_top - shadow_bottom;
   final_rect.x = maybe_flip_position (bounds->x,
                                       bounds->width,
                                       root_rect.x,
@@ -380,10 +384,10 @@ gdk_surface_layout_popup_helper (GdkSurface     *surface,
         final_rect.height = bounds->y + bounds->height - final_rect.y;
     }
 
-  final_rect.x -= surface->shadow_left;
-  final_rect.y -= surface->shadow_top;
-  final_rect.width += surface->shadow_left + surface->shadow_right;
-  final_rect.height += surface->shadow_top + surface->shadow_bottom;
+  final_rect.x -= shadow_left;
+  final_rect.y -= shadow_top;
+  final_rect.width += shadow_left + shadow_right;
+  final_rect.height += shadow_top + shadow_bottom;
 
   gdk_surface_get_origin (surface->parent, &x, &y);
   final_rect.x -= x;
@@ -2644,53 +2648,6 @@ gdk_surface_set_opaque_region (GdkSurface      *surface,
   class = GDK_SURFACE_GET_CLASS (surface);
   if (class->set_opaque_region)
     class->set_opaque_region (surface, region);
-}
-
-/**
- * gdk_surface_set_shadow_width:
- * @surface: a #GdkSurface
- * @left: The left extent
- * @right: The right extent
- * @top: The top extent
- * @bottom: The bottom extent
- *
- * Newer GTK windows using client-side decorations use extra geometry
- * around their frames for effects like shadows and invisible borders.
- * Window managers that want to maximize windows or snap to edges need
- * to know where the extents of the actual frame lie, so that users
- * don’t feel like windows are snapping against random invisible edges.
- *
- * Note that this property is automatically updated by GTK, so this
- * function should only be used by applications which do not use GTK
- * to create toplevel surfaces.
- */
-void
-gdk_surface_set_shadow_width (GdkSurface *surface,
-                              int        left,
-                              int        right,
-                              int        top,
-                              int        bottom)
-{
-  GdkSurfaceClass *class;
-
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-  g_return_if_fail (!GDK_SURFACE_DESTROYED (surface));
-  g_return_if_fail (left >= 0 && right >= 0 && top >= 0 && bottom >= 0);
-
-  if (surface->shadow_left == left &&
-      surface->shadow_right == right &&
-      surface->shadow_top == top &&
-      surface->shadow_bottom == bottom)
-    return;
-
-  surface->shadow_top = top;
-  surface->shadow_left = left;
-  surface->shadow_right = right;
-  surface->shadow_bottom = bottom;
-
-  class = GDK_SURFACE_GET_CLASS (surface);
-  if (class->set_shadow_width)
-    class->set_shadow_width (surface, left, right, top, bottom);
 }
 
 void

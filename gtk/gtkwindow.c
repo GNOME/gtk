@@ -4139,10 +4139,6 @@ update_realized_window_properties (GtkWindow *window)
   if (!priv->client_decorated)
     return;
 
-  if (priv->surface && priv->use_client_shadow)
-    gdk_surface_set_shadow_width (priv->surface,
-                                  shadow.left, shadow.right, shadow.top, shadow.bottom);
-
   gtk_native_get_surface_transform (GTK_NATIVE (window), &native_x, &native_y);
 
   /* update the input shape, which makes it so that clicks

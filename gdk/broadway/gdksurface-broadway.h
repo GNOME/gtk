@@ -64,6 +64,11 @@ struct _GdkBroadwaySurface
 
   int root_x;
   int root_y;
+
+  int shadow_left;
+  int shadow_right;
+  int shadow_top;
+  int shadow_bottom;
 };
 
 struct _GdkBroadwaySurfaceClass

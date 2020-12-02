@@ -139,7 +139,7 @@ gdk_macos_surface_get_scale_factor (GdkSurface *surface)
   return [self->window backingScaleFactor];
 }
 
-static void
+void
 gdk_macos_surface_set_shadow_width (GdkSurface *surface,
                                     int         left,
                                     int         right,
@@ -491,7 +491,6 @@ gdk_macos_surface_class_init (GdkMacosSurfaceClass *klass)
   surface_class->hide = gdk_macos_surface_hide;
   surface_class->set_input_region = gdk_macos_surface_set_input_region;
   surface_class->set_opaque_region = gdk_macos_surface_set_opaque_region;
-  surface_class->set_shadow_width = gdk_macos_surface_set_shadow_width;
 
   properties [PROP_NATIVE] =
     g_param_spec_pointer ("native",

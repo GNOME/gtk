@@ -84,10 +84,6 @@ struct _GdkSurface
   guint update_and_descendants_freeze_count;
 
   int width, height;
-  int shadow_top;
-  int shadow_left;
-  int shadow_right;
-  int shadow_bottom;
 
   GdkCursor *cursor;
   GHashTable *device_cursor;
@@ -161,11 +157,6 @@ struct _GdkSurfaceClass
 
   void         (* set_opaque_region)      (GdkSurface      *surface,
                                            cairo_region_t *region);
-  void         (* set_shadow_width)       (GdkSurface      *surface,
-                                           int             left,
-                                           int             right,
-                                           int             top,
-                                           int             bottom);
   GdkGLContext *(*create_gl_context)      (GdkSurface      *surface,
                                            gboolean        attached,
                                            GdkGLContext   *share,
@@ -190,6 +181,10 @@ GdkMonitor * gdk_surface_get_layout_monitor (GdkSurface      *surface,
 void gdk_surface_layout_popup_helper (GdkSurface     *surface,
                                       int             width,
                                       int             height,
+                                      int             shadow_left,
+                                      int             shadow_right,
+                                      int             shadow_top,
+                                      int             shadow_bottom,
                                       GdkMonitor     *monitor,
                                       GdkRectangle   *bounds,
                                       GdkPopupLayout *layout,

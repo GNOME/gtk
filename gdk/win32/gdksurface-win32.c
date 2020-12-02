@@ -1217,6 +1217,7 @@ gdk_win32_surface_layout_popup (GdkSurface     *surface,
                                 int             height,
                                 GdkPopupLayout *layout)
 {
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
   GdkMonitor *monitor;
   GdkRectangle bounds;
   GdkRectangle final_rect;
@@ -1229,6 +1230,10 @@ gdk_win32_surface_layout_popup (GdkSurface     *surface,
   gdk_surface_layout_popup_helper (surface,
                                    width,
                                    height,
+                                   impl->margins.left,
+                                   impl->margins.right,
+                                   impl->margins.top,
+                                   impl->margins.bottom,
                                    monitor,
                                    &bounds,
                                    layout,
@@ -4615,8 +4620,6 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
 
   //impl_class->beep = gdk_x11_surface_beep;
 
-
-  impl_class->set_shadow_width = gdk_win32_surface_set_shadow_width;
   impl_class->destroy_notify = gdk_win32_surface_destroy_notify;
   impl_class->drag_begin = _gdk_win32_surface_drag_begin;
   impl_class->create_gl_context = _gdk_win32_surface_create_gl_context;
@@ -4991,6 +4994,15 @@ gdk_win32_toplevel_present (GdkToplevel       *toplevel,
     gdk_win32_surface_unfullscreen (surface);
 
   show_surface (surface);
+
+  if (size.margin.is_valid)
+    {
+      gdk_win32_surface_set_shadow_width (surface,
+                                          size.margin.left,
+                                          size.margin.right,
+                                          size.margin.top,
+                                          size.margin.bottom);
+    }
 
   return TRUE;
 }
