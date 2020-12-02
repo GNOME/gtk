@@ -901,11 +901,16 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	xevent->xconfigure.event == xevent->xconfigure.window)
         {
           int x, y;
-          int c_w = (xevent->xconfigure.width + surface_impl->surface_scale - 1) / surface_impl->surface_scale;
-          int c_h = (xevent->xconfigure.height + surface_impl->surface_scale - 1) / surface_impl->surface_scale;
+          int configured_width;
+          int configured_height;
           int new_abs_x, new_abs_y;
 
-          event = gdk_configure_event_new (surface, c_w, c_h);
+          configured_width =
+            (xevent->xconfigure.width + surface_impl->surface_scale - 1) /
+            surface_impl->surface_scale;
+          configured_height =
+            (xevent->xconfigure.height + surface_impl->surface_scale - 1) /
+            surface_impl->surface_scale;
 
 	  if (!xevent->xconfigure.send_event &&
 	      !xevent->xconfigure.override_redirect &&
@@ -914,6 +919,16 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	      int tx = 0;
 	      int ty = 0;
 	      Window child_window = 0;
+
+              if (surface_impl->pending_configure_events == 1)
+                {
+                  surface_impl->pending_configure_events = 0;
+                  gdk_surface_thaw_updates (surface);
+                }
+              else if (surface_impl->pending_configure_events > 1)
+                {
+                  surface_impl->pending_configure_events--;
+                }
 
               x = y = 0;
 	      gdk_x11_display_error_trap_push (display);
@@ -955,10 +970,11 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
             {
               surface_impl->unscaled_width = xevent->xconfigure.width;
               surface_impl->unscaled_height = xevent->xconfigure.height;
-              gdk_configure_event_get_size (event, &surface->width, &surface->height);
 
-              _gdk_surface_update_size (surface);
-              _gdk_x11_surface_update_size (surface_impl);
+              surface_impl->next_layout.configured_width = configured_width;
+              surface_impl->next_layout.configured_height = configured_height;
+              surface_impl->next_layout.surface_geometry_dirty = TRUE;
+              gdk_surface_request_layout (surface);
             }
 
           if (surface->resize_count >= 1)
