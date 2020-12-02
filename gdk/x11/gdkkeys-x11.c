@@ -1395,7 +1395,7 @@ gdk_x11_keymap_translate_keyboard_state (GdkKeymap       *keymap,
   return tmp_keyval != NoSymbol;
 }
 
-/**
+/*< private >
  * gdk_x11_keymap_get_group_for_state:
  * @keymap: (type GdkX11Keymap): a #GdkX11Keymap
  * @state: raw state returned from X
@@ -1459,7 +1459,7 @@ _gdk_x11_keymap_add_virt_mods (GdkKeymap       *keymap,
     }
 }
 
-/**
+/*< private >
  * gdk_x11_keymap_key_is_modifier:
  * @keymap: (type GdkX11Keymap): a #GdkX11Keymap
  * @keycode: the hardware keycode from a key event
