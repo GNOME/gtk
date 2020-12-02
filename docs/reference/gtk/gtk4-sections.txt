@@ -4644,7 +4644,6 @@ gtk_window_get_title
 gtk_window_get_transient_for
 gtk_window_get_group
 gtk_window_has_group
-gtk_window_resize
 gtk_window_set_default_icon_name
 gtk_window_set_icon_name
 gtk_window_set_auto_startup_notification

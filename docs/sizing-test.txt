@@ -12,13 +12,6 @@ gtk_widget_set_size_request():
    we use 1x1 for implementation convenience)
  - causes notifies on width_request, height_request properties
 
-gtk_window_resize():
- - causes a configure request in all cases if the window is mapped, 
-   unless the new size is the same as the old size
- - overrides the default size on map if the window is unmapped
- - allows size of 0, equivalent to 1
- - clamped to geometry hints
-
 gtk_window_set_default_size():
  - has no effect after the window has been mapped the first time, 
    unless the window has been unrealized in which case it should 
@@ -26,7 +19,6 @@ gtk_window_set_default_size():
  - allows size of 0, equivalent to 1
  - allows size of -1 to unset the default size
  - clamped to geometry hints
- - gtk_window_resize() overrides it
  - causes notifies on default_width, default_height properties
 
 gtk_window_get_default_size():
