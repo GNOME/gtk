@@ -10356,7 +10356,8 @@ _gtk_widget_get_sizegroups (GtkWidget    *widget)
  * Sets the name to be used for CSS matching of widgets.
  *
  * If this function is not called for a given class, the name
- * of the parent class is used.
+ * set on the parent class is used. By default, GtkWidget uses
+ * the name "widget".
  */
 void
 gtk_widget_class_set_css_name (GtkWidgetClass *widget_class,
