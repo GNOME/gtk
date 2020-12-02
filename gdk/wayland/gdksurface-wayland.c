@@ -999,9 +999,6 @@ gdk_wayland_surface_resize (GdkSurface *surface,
 {
   gdk_wayland_surface_update_size (surface, width, height, scale);
   _gdk_surface_update_size (surface);
-
-  if (is_realized_shell_surface (GDK_WAYLAND_SURFACE (surface)))
-    gdk_surface_emit_size_changed (surface, width, height);
 }
 
 static void gdk_wayland_surface_show (GdkSurface *surface,
