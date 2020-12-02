@@ -657,6 +657,14 @@ gdk_wayland_surface_compute_size (GdkSurface *surface)
     }
 }
 
+static void
+gdk_wayland_surface_request_layout (GdkSurface *surface)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  impl->next_layout.surface_geometry_dirty = TRUE;
+}
+
 void
 gdk_wayland_surface_request_frame (GdkSurface *surface)
 {
@@ -4158,6 +4166,7 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   impl_class->set_opaque_region = gdk_wayland_surface_set_opaque_region;
   impl_class->set_shadow_width = gdk_wayland_surface_set_shadow_width;
   impl_class->create_gl_context = gdk_wayland_surface_create_gl_context;
+  impl_class->request_layout = gdk_wayland_surface_request_layout;
   impl_class->compute_size = gdk_wayland_surface_compute_size;
 }
 
