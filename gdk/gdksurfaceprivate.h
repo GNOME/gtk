@@ -170,6 +170,7 @@ struct _GdkSurfaceClass
                                            gboolean        attached,
                                            GdkGLContext   *share,
                                            GError        **error);
+  void         (* request_layout)         (GdkSurface     *surface);
   void         (* compute_size)           (GdkSurface     *surface);
 };
 
