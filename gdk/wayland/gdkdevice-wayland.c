@@ -732,7 +732,7 @@ device_emit_grab_crossing (GdkDevice       *device,
     }
 }
 
-static GdkWindow *
+GdkWindow *
 gdk_wayland_device_get_focus (GdkDevice *device)
 {
   GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (device));

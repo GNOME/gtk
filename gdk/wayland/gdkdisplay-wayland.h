@@ -36,6 +36,7 @@
 #include <gdk/wayland/server-decoration-client-protocol.h>
 #include <gdk/wayland/xdg-output-unstable-v1-client-protocol.h>
 #include <gdk/wayland/primary-selection-unstable-v1-client-protocol.h>
+#include <gdk/wayland/xdg-activation-v1-client-protocol.h>
 
 #include <glib.h>
 #include <gdk/gdkkeys.h>
@@ -97,6 +98,7 @@ struct _GdkWaylandDisplay
   struct zwp_keyboard_shortcuts_inhibit_manager_v1 *keyboard_shortcuts_inhibit;
   struct org_kde_kwin_server_decoration_manager *server_decoration_manager;
   struct zxdg_output_manager_v1 *xdg_output_manager;
+  struct xdg_activation_v1 *xdg_activation;
   uint32_t xdg_output_version;
 
   GList *async_roundtrips;
@@ -125,6 +127,7 @@ struct _GdkWaylandDisplay
   int data_device_manager_version;
   int gtk_shell_version;
   int xdg_output_manager_version;
+  int xdg_activation_version;
 
   uint32_t server_decoration_mode;
 

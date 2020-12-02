@@ -85,6 +85,7 @@
 #define MIN_SYSTEM_BELL_DELAY_MS 20
 
 #define GTK_SHELL1_VERSION       5
+#define XDG_ACTIVATION_VERSION   1
 
 static void _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland);
 
@@ -519,6 +520,15 @@ gdk_registry_handle_global (void               *data,
       _gdk_wayland_screen_init_xdg_output (display_wayland->screen);
       _gdk_wayland_display_async_roundtrip (display_wayland);
     }
+  else if (strcmp (interface, "xdg_activation_v1") == 0)
+    {
+      display_wayland->xdg_activation_version =
+        MIN (version, XDG_ACTIVATION_VERSION);
+      display_wayland->xdg_activation =
+        wl_registry_bind (display_wayland->wl_registry, id,
+                          &xdg_activation_v1_interface,
+                          display_wayland->xdg_activation_version);
+    }
 
   g_hash_table_insert (display_wayland->known_globals,
                        GUINT_TO_POINTER (id), g_strdup (interface));
@@ -943,7 +953,7 @@ gdk_wayland_display_notify_startup_complete (GdkDisplay  *display,
         return;
     }
 
-  if (display_wayland->gtk_shell)
+  if (!display_wayland->xdg_activation && display_wayland->gtk_shell)
     gtk_shell1_set_startup_id (display_wayland->gtk_shell, startup_id);
 }
 

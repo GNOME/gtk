@@ -23,6 +23,8 @@ noinst_LTLIBRARIES =				\
 BUILT_SOURCES = 				\
 	pointer-gestures-unstable-v1-client-protocol.h		\
 	pointer-gestures-unstable-v1-protocol.c			\
+	xdg-activation-v1-client-protocol.h			\
+	xdg-activation-v1-protocol.c				\
 	xdg-shell-client-protocol.h				\
 	xdg-shell-protocol.c					\
 	xdg-shell-unstable-v6-client-protocol.h			\
@@ -96,6 +98,11 @@ endef
 %-protocol.c : $(WAYLAND_PROTOCOLS_DATADIR)/$$(call protostability,$$*)/$$(call protoname,$$*)/$$*.xml
 	$(AM_V_GEN)$(WAYLAND_SCANNER) private-code < $< > $@
 %-client-protocol.h : $(WAYLAND_PROTOCOLS_DATADIR)/$$(call protostability,$$*)/$$(call protoname,$$*)/$$*.xml
+	$(AM_V_GEN)$(WAYLAND_SCANNER) client-header < $< > $@
+
+xdg-activation-v1-protocol.c : $(WAYLAND_PROTOCOLS_DATADIR)/staging/xdg-activation/xdg-activation-v1.xml
+	$(AM_V_GEN)$(WAYLAND_SCANNER) private-code < $< > $@
+xdg-activation-v1-client-protocol.h : $(WAYLAND_PROTOCOLS_DATADIR)/staging/xdg-activation/xdg-activation-v1.xml
 	$(AM_V_GEN)$(WAYLAND_SCANNER) client-header < $< > $@
 
 %-protocol.c : $(srcdir)/protocol/%.xml
