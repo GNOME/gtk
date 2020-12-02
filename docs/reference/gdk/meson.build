@@ -8,6 +8,7 @@ private_headers = [
   'gdkcontentformatsprivate.h',
   'gdkcontentproviderprivate.h',
   'gdkcursorprivate.h',
+  'gdkdebug.h',
   'gdkdevicepadprivate.h',
   'gdkdeviceprivate.h',
   'gdkdevicetoolprivate.h',
