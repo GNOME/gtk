@@ -122,7 +122,7 @@ gdk_macos_device_ungrab (GdkDevice *device,
   grab = _gdk_display_get_last_device_grab (display, device);
 
   if (grab != NULL)
-    grab->serial_end = 0;
+    grab->serial_end = grab->serial_start;
 
   _gdk_display_device_grab_update (display, device, 0);
 }

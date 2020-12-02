@@ -361,6 +361,17 @@ gdk_macos_surface_destroy (GdkSurface *surface,
 
   GdkMacosSurface *self = (GdkMacosSurface *)surface;
   GdkMacosWindow *window = g_steal_pointer (&self->window);
+  GdkFrameClock *frame_clock;
+
+  if ((frame_clock = gdk_surface_get_frame_clock (GDK_SURFACE (self))))
+    {
+      g_signal_handlers_disconnect_by_func (frame_clock,
+                                            G_CALLBACK (gdk_macos_surface_before_paint),
+                                            self);
+      g_signal_handlers_disconnect_by_func (frame_clock,
+                                            G_CALLBACK (gdk_macos_surface_before_paint),
+                                            self);
+    }
 
   g_clear_pointer (&self->title, g_free);
 
@@ -505,7 +516,6 @@ _gdk_macos_surface_new (GdkMacosDisplay   *display,
 {
   GdkFrameClock *frame_clock;
   GdkMacosSurface *ret;
-  NSInteger window_level = NSNormalWindowLevel;
 
   g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (display), NULL);
 
@@ -522,12 +532,10 @@ _gdk_macos_surface_new (GdkMacosDisplay   *display,
 
     case GDK_SURFACE_POPUP:
       ret = _gdk_macos_popup_surface_new (display, parent, frame_clock, x, y, width, height);
-      window_level = NSPopUpMenuWindowLevel;
       break;
 
     case GDK_SURFACE_TEMP:
       ret = _gdk_macos_drag_surface_new (display, frame_clock, x, y, width, height);
-      window_level = NSPopUpMenuWindowLevel;
       break;
 
     default:
@@ -536,10 +544,7 @@ _gdk_macos_surface_new (GdkMacosDisplay   *display,
     }
 
   if (ret != NULL)
-    {
-      [ret->window setLevel:window_level];
-      _gdk_macos_surface_monitor_changed (ret);
-    }
+    _gdk_macos_surface_monitor_changed (ret);
 
   g_object_unref (frame_clock);
 

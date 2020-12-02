@@ -320,11 +320,20 @@
 
 -(void)hide
 {
+  BOOL wasKey = [self isKeyWindow];
+  BOOL wasMain = [self isMainWindow];
+
   inShowOrHide = YES;
   [self orderOut:nil];
   inShowOrHide = NO;
 
   initialPositionKnown = NO;
+
+  if (wasMain)
+    [self windowDidResignMain:nil];
+
+  if (wasKey)
+    [self windowDidResignKey:nil];
 }
 
 -(BOOL)trackManualMove
