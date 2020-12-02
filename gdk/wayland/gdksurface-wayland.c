@@ -1537,6 +1537,7 @@ static void
 gdk_wayland_surface_configure_popup (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandSurface *parent_impl = GDK_WAYLAND_SURFACE (surface->parent);
   int x, y, width, height;
 
   if (impl->display_server.xdg_popup)
@@ -1576,8 +1577,8 @@ gdk_wayland_surface_configure_popup (GdkSurface *surface)
   width = impl->pending.popup.width;
   height = impl->pending.popup.height;
 
-  x += surface->parent->shadow_left;
-  y += surface->parent->shadow_top;
+  x += parent_impl->margin_left;
+  y += parent_impl->margin_top;
 
   update_popup_layout_state (surface,
                              x, y,
@@ -2449,6 +2450,7 @@ create_dynamic_positioner (GdkSurface     *surface,
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkSurface *parent = surface->parent;
+  GdkWaylandSurface *parent_impl = GDK_WAYLAND_SURFACE (parent);
   GdkWaylandDisplay *display =
     GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   GdkRectangle geometry;
@@ -2470,8 +2472,8 @@ create_dynamic_positioner (GdkSurface     *surface,
   };
 
   anchor_rect = gdk_popup_layout_get_anchor_rect (layout);
-  real_anchor_rect_x = anchor_rect->x - parent->shadow_left;
-  real_anchor_rect_y = anchor_rect->y - parent->shadow_top;
+  real_anchor_rect_x = anchor_rect->x - parent_impl->margin_left;
+  real_anchor_rect_y = anchor_rect->y - parent_impl->margin_top;
 
   anchor_rect_width = MAX (anchor_rect->width, 1);
   anchor_rect_height = MAX (anchor_rect->height, 1);
@@ -2530,7 +2532,6 @@ create_dynamic_positioner (GdkSurface     *surface,
             xdg_positioner_get_version (positioner) >=
             XDG_POSITIONER_SET_PARENT_CONFIGURE_SINCE_VERSION)
           {
-            GdkWaylandSurface *parent_impl = GDK_WAYLAND_SURFACE (parent);
             int parent_width;
             int parent_height;
 
@@ -4068,15 +4069,6 @@ gdk_wayland_surface_set_opaque_region (GdkSurface     *surface,
   impl->opaque_region_dirty = TRUE;
 }
 
-static void
-gdk_wayland_surface_set_shadow_width (GdkSurface *surface,
-                                      int         left,
-                                      int         right,
-                                      int         top,
-                                      int         bottom)
-{
-}
-
 static gboolean
 gdk_wayland_surface_show_window_menu (GdkSurface *surface,
                                       GdkEvent   *event)
@@ -4161,7 +4153,6 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   impl_class->drag_begin = _gdk_wayland_surface_drag_begin;
   impl_class->get_scale_factor = gdk_wayland_surface_get_scale_factor;
   impl_class->set_opaque_region = gdk_wayland_surface_set_opaque_region;
-  impl_class->set_shadow_width = gdk_wayland_surface_set_shadow_width;
   impl_class->create_gl_context = gdk_wayland_surface_create_gl_context;
   impl_class->request_layout = gdk_wayland_surface_request_layout;
   impl_class->compute_size = gdk_wayland_surface_compute_size;

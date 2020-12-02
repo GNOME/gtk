@@ -558,6 +558,7 @@ gdk_broadway_surface_layout_popup (GdkSurface     *surface,
                                    int             height,
                                    GdkPopupLayout *layout)
 {
+  GdkBroadwaySurface *impl = GDK_BROADWAY_SURFACE (surface);
   GdkMonitor *monitor;
   GdkRectangle bounds;
   GdkRectangle final_rect;
@@ -570,6 +571,10 @@ gdk_broadway_surface_layout_popup (GdkSurface     *surface,
   gdk_surface_layout_popup_helper (surface,
                                    width,
                                    height,
+                                   impl->shadow_left,
+                                   impl->shadow_right,
+                                   impl->shadow_top,
+                                   impl->shadow_bottom,
                                    monitor,
                                    &bounds,
                                    layout,
@@ -1529,6 +1534,7 @@ gdk_broadway_toplevel_present (GdkToplevel       *toplevel,
                                GdkToplevelLayout *layout)
 {
   GdkSurface *surface = GDK_SURFACE (toplevel);
+  GdkBroadwaySurface *impl = GDK_BROADWAY_SURFACE (surface);
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkMonitor *monitor;
   GdkToplevelSize size;
@@ -1581,6 +1587,14 @@ gdk_broadway_toplevel_present (GdkToplevel       *toplevel,
     gdk_broadway_surface_maximize (surface);
   else
     gdk_broadway_surface_unmaximize (surface);
+
+  if (size.margin.is_valid)
+    {
+      impl->shadow_left = size.margin.left;
+      impl->shadow_right = size.margin.right;
+      impl->shadow_top = size.margin.top;
+      impl->shadow_bottom = size.margin.bottom;
+    }
 
   show_surface (surface);
 }

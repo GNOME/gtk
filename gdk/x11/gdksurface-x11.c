@@ -1664,6 +1664,7 @@ gdk_x11_surface_layout_popup (GdkSurface     *surface,
                               int             height,
                               GdkPopupLayout *layout)
 {
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
   GdkMonitor *monitor;
   GdkRectangle bounds;
   GdkRectangle final_rect;
@@ -1676,6 +1677,10 @@ gdk_x11_surface_layout_popup (GdkSurface     *surface,
   gdk_surface_layout_popup_helper (surface,
                                    width,
                                    height,
+                                   impl->shadow_left,
+                                   impl->shadow_right,
+                                   impl->shadow_top,
+                                   impl->shadow_bottom,
                                    monitor,
                                    &bounds,
                                    layout,
@@ -2922,15 +2927,6 @@ gdk_x11_surface_set_utf8_property  (GdkSurface *surface,
                        GDK_SURFACE_XID (surface),
                        gdk_x11_get_xatom_by_name_for_display (display, name));
     }
-}
-
-static void
-gdk_x11_surface_set_shadow_width (GdkSurface *surface,
-                                 int        left,
-                                 int        right,
-                                 int        top,
-                                 int        bottom)
-{
 }
 
 /**
@@ -4658,7 +4654,6 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->drag_begin = _gdk_x11_surface_drag_begin;
   impl_class->get_scale_factor = gdk_x11_surface_get_scale_factor;
   impl_class->set_opaque_region = gdk_x11_surface_set_opaque_region;
-  impl_class->set_shadow_width = gdk_x11_surface_set_shadow_width;
   impl_class->create_gl_context = gdk_x11_surface_create_gl_context;
   impl_class->get_unscaled_size = gdk_x11_surface_get_unscaled_size;
   impl_class->request_layout = gdk_x11_surface_request_layout;
