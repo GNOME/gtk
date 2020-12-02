@@ -135,15 +135,24 @@ gdk_toplevel_size_set_margin (GdkToplevelSize *size,
 void
 gdk_toplevel_size_validate (GdkToplevelSize *size)
 {
+  int geometry_width, geometry_height;
+
   if (size->min_width > size->bounds_width ||
       size->min_height > size->bounds_height)
     g_warning ("GdkToplevelSize: min_size (%d, %d) exceeds bounds (%d, %d)",
                size->min_width, size->min_height,
                size->bounds_width, size->bounds_height);
 
-  if (size->width > size->bounds_width ||
-      size->height > size->bounds_height)
-    g_warning ("GdkToplevelSize: size (%d, %d) exceeds bounds (%d, %d)",
+  geometry_width = size->width;
+  geometry_height = size->height;
+  if (size->margin.is_valid)
+    {
+      geometry_width -= size->margin.left + size->margin.right;
+      geometry_height -= size->margin.top + size->margin.bottom;
+    }
+  if (geometry_width > size->bounds_width ||
+      geometry_height > size->bounds_height)
+    g_warning ("GdkToplevelSize: geometry size (%d, %d) exceeds bounds (%d, %d)",
                size->width, size->height,
                size->bounds_width, size->bounds_height);
 
