@@ -725,23 +725,7 @@ gtk_expander_resize_toplevel (GtkExpander *expander)
 
       if (GTK_IS_WINDOW (toplevel) &&
           gtk_widget_get_realized (toplevel))
-        {
-          int toplevel_width, toplevel_height;
-          int child_height;
-
-          gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL, -1,
-                              &child_height, NULL, NULL, NULL);
-          gtk_window_get_size (GTK_WINDOW (toplevel), &toplevel_width, &toplevel_height);
-
-          if (expander->expanded)
-            toplevel_height += child_height;
-          else
-            toplevel_height -= child_height;
-
-          gtk_window_resize (GTK_WINDOW (toplevel),
-                             toplevel_width,
-                             toplevel_height);
-        }
+        gtk_widget_queue_resize (GTK_WIDGET (expander));
     }
 }
 
