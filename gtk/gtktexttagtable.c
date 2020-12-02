@@ -126,6 +126,8 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
    * @texttagtable: the object which received the signal.
    * @tag: the changed tag.
    * @size_changed: whether the change affects the #GtkTextView layout.
+   *
+   * Emitted every time a tag in the #GtkTextTagTable changes.
    */
   signals[TAG_CHANGED] =
     g_signal_new (I_("tag-changed"),
@@ -146,6 +148,8 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
    * GtkTextTagTable::tag-added:
    * @texttagtable: the object which received the signal.
    * @tag: the added tag.
+   *
+   * Emitted every time a new tag is added in the #GtkTextTagTable.
    */
   signals[TAG_ADDED] =
     g_signal_new (I_("tag-added"),
@@ -162,6 +166,11 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
    * GtkTextTagTable::tag-removed:
    * @texttagtable: the object which received the signal.
    * @tag: the removed tag.
+   *
+   * Emitted every time a tag is removed from the #GtkTextTagTable.
+   *
+   * The @tag is still valid by the time the signal is emitted, but
+   * it is not associated with a tag table any more.
    */
   signals[TAG_REMOVED] =
     g_signal_new (I_("tag-removed"),  

@@ -31,6 +31,11 @@ G_BEGIN_DECLS
 
 #define GDK_TYPE_POPUP (gdk_popup_get_type ())
 
+/**
+ * GdkPopup:
+ *
+ * Interface for popup surfaces.
+ */
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (GdkPopup, gdk_popup, GDK, POPUP, GObject)
 

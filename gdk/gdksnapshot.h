@@ -29,7 +29,13 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GdkSnapshotClass       GdkSnapshotClass;
+/**
+ * GdkSnapshot:
+ *
+ * Base type for snapshot operations.
+ */
+
+typedef struct _GdkSnapshotClass        GdkSnapshotClass;
 
 #define GDK_TYPE_SNAPSHOT               (gdk_snapshot_get_type ())
 

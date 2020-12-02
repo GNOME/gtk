@@ -51,6 +51,11 @@ rectangle_init_from_graphene (cairo_rectangle_int_t *cairo,
 
 /*** GSK_COLOR_NODE ***/
 
+/**
+ * GskColorNode:
+ *
+ * A render node for a solid color.
+ */
 struct _GskColorNode
 {
   GskRenderNode render_node;
@@ -134,6 +139,17 @@ gsk_color_node_new (const GdkRGBA         *rgba,
 
 /*** GSK_LINEAR_GRADIENT_NODE ***/
 
+/**
+ * GskRepeatingLinearGradientNode:
+ *
+ * A render node for a repeating linear gradient.
+ */
+
+/**
+ * GskLinearGradientNode:
+ *
+ * A render node for a linear gradient.
+ */
 struct _GskLinearGradientNode
 {
   GskRenderNode render_node;
@@ -392,6 +408,17 @@ gsk_linear_gradient_node_get_color_stops (GskRenderNode *node,
 
 /*** GSK_RADIAL_GRADIENT_NODE ***/
 
+/**
+ * GskRepeatingRadialGradientNode:
+ *
+ * A render node for a repeating radial gradient.
+ */
+
+/**
+ * GskRadialGradientNode:
+ *
+ * A render node for a radial gradient.
+ */
 struct _GskRadialGradientNode
 {
   GskRenderNode render_node;
@@ -743,6 +770,11 @@ gsk_radial_gradient_node_get_end (GskRenderNode *node)
 
 /*** GSK_BORDER_NODE ***/
 
+/**
+ * GskBorderNode:
+ *
+ * A render node for a border.
+ */
 struct _GskBorderNode
 {
   GskRenderNode render_node;
@@ -1027,6 +1059,11 @@ gsk_border_node_get_uniform (GskRenderNode *self)
 
 /*** GSK_TEXTURE_NODE ***/
 
+/**
+ * GskTextureNode:
+ *
+ * A render node for a #GdkTexture.
+ */
 struct _GskTextureNode
 {
   GskRenderNode render_node;
@@ -1138,6 +1175,11 @@ gsk_texture_node_new (GdkTexture            *texture,
 
 /*** GSK_INSET_SHADOW_NODE ***/
 
+/**
+ * GskInsetShadowNode:
+ *
+ * A render node for an inset shadow.
+ */
 struct _GskInsetShadowNode
 {
   GskRenderNode render_node;
@@ -1697,6 +1739,11 @@ gsk_inset_shadow_node_get_blur_radius (GskRenderNode *node)
 
 /*** GSK_OUTSET_SHADOW_NODE ***/
 
+/**
+ * GskOutsetShadowNode:
+ *
+ * A render node for an outset shadow.
+ */
 struct _GskOutsetShadowNode
 {
   GskRenderNode render_node;
@@ -2006,6 +2053,11 @@ gsk_outset_shadow_node_get_blur_radius (GskRenderNode *node)
 
 /*** GSK_CAIRO_NODE ***/
 
+/**
+ * GskCairoNode:
+ *
+ * A render node for a Cairo surface.
+ */
 struct _GskCairoNode
 {
   GskRenderNode render_node;
@@ -2137,6 +2189,11 @@ gsk_cairo_node_get_draw_context (GskRenderNode *node)
 
 /**** GSK_CONTAINER_NODE ***/
 
+/**
+ * GskContainerNode:
+ *
+ * A render node that can contain other render nodes.
+ */
 struct _GskContainerNode
 {
   GskRenderNode render_node;
@@ -2324,6 +2381,11 @@ gsk_container_node_get_child (GskRenderNode *node,
 
 /*** GSK_TRANSFORM_NODE ***/
 
+/**
+ * GskTransformNode:
+ *
+ * A render node applying a #GskTransform to its single child node.
+ */
 struct _GskTransformNode
 {
   GskRenderNode render_node;
@@ -2517,6 +2579,11 @@ gsk_transform_node_get_transform (GskRenderNode *node)
 
 /*** GSK_OPACITY_NODE ***/
 
+/**
+ * GskOpacityNode:
+ *
+ * A render node controlling the opacity of its single child node.
+ */
 struct _GskOpacityNode
 {
   GskRenderNode render_node;
@@ -2640,6 +2707,11 @@ gsk_opacity_node_get_opacity (GskRenderNode *node)
 
 /*** GSK_COLOR_MATRIX_NODE ***/
 
+/**
+ * GskColorMatrixNode:
+ *
+ * A render node controlling the color matrix of its single child node.
+ */
 struct _GskColorMatrixNode
 {
   GskRenderNode render_node;
@@ -2861,6 +2933,11 @@ gsk_color_matrix_node_get_color_offset (GskRenderNode *node)
 
 /*** GSK_REPEAT_NODE ***/
 
+/**
+ * GskRepeatNode:
+ *
+ * A render node repeating its single child node.
+ */
 struct _GskRepeatNode
 {
   GskRenderNode render_node;
@@ -2993,6 +3070,11 @@ gsk_repeat_node_get_child_bounds (GskRenderNode *node)
 
 /*** GSK_CLIP_NODE ***/
 
+/**
+ * GskClipNode:
+ *
+ * A render node applying a rectangular clip to its single child node.
+ */
 struct _GskClipNode
 {
   GskRenderNode render_node;
@@ -3123,6 +3205,11 @@ gsk_clip_node_get_clip (GskRenderNode *node)
 
 /*** GSK_ROUNDED_CLIP_NODE ***/
 
+/**
+ * GskRoundedClipNode:
+ *
+ * A render node applying a rounded rectangle clip to its single child.
+ */
 struct _GskRoundedClipNode
 {
   GskRenderNode render_node;
@@ -3253,6 +3340,11 @@ gsk_rounded_clip_node_get_clip (GskRenderNode *node)
 
 /*** GSK_SHADOW_NODE ***/
 
+/**
+ * GskShadowNode:
+ *
+ * A render node drawing one or more shadows behind its single child node.
+ */
 struct _GskShadowNode
 {
   GskRenderNode render_node;
@@ -3492,6 +3584,11 @@ gsk_shadow_node_get_n_shadows (GskRenderNode *node)
 
 /*** GSK_BLEND_NODE ***/
 
+/**
+ * GskBlendNode:
+ *
+ * A render node applying a blending function between its two child nodes.
+ */
 struct _GskBlendNode
 {
   GskRenderNode render_node;
@@ -3684,6 +3781,11 @@ gsk_blend_node_get_blend_mode (GskRenderNode *node)
 
 /*** GSK_CROSS_FADE_NODE ***/
 
+/**
+ * GskCrossFadeNode:
+ *
+ * A render node cross fading between two child nodes.
+ */
 struct _GskCrossFadeNode
 {
   GskRenderNode render_node;
@@ -3833,6 +3935,11 @@ gsk_cross_fade_node_get_progress (GskRenderNode *node)
 
 /*** GSK_TEXT_NODE ***/
 
+/**
+ * GskTextNode:
+ *
+ * A render node drawing a set of glyphs.
+ */
 struct _GskTextNode
 {
   GskRenderNode render_node;
@@ -4098,6 +4205,11 @@ gsk_text_node_get_offset (GskRenderNode *node)
 
 /*** GSK_BLUR_NODE ***/
 
+/**
+ * GskBlurNode:
+ *
+ * A render node applying a blur effect to its single child.
+ */
 struct _GskBlurNode
 {
   GskRenderNode render_node;
@@ -4410,6 +4522,12 @@ gsk_blur_node_get_radius (GskRenderNode *node)
 
 /*** GSK_DEBUG_NODE ***/
 
+/**
+ * GskDebugNode:
+ *
+ * A render node that emits a debugging message when drawing its
+ * child node.
+ */
 struct _GskDebugNode
 {
   GskRenderNode render_node;
@@ -4530,6 +4648,11 @@ gsk_debug_node_get_message (GskRenderNode *node)
 
 /*** GSK_GL_SHADER_NODE ***/
 
+/**
+ * GskGLShaderNode:
+ *
+ * A render node using a GL shader when drawing its children nodes.
+ */
 struct _GskGLShaderNode
 {
   GskRenderNode render_node;

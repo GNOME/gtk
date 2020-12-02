@@ -39,6 +39,15 @@ typedef struct _GtkBuildableIface GtkBuildableIface;
 typedef struct _GtkBuildableParseContext      GtkBuildableParseContext;
 typedef struct _GtkBuildableParser GtkBuildableParser;
 
+/**
+ * GtkBuildableParser:
+ * @start_element: function called for open elements
+ * @end_element: function called for close elements
+ * @text: function called for character data
+ * @error: function called on error
+ *
+ * A sub-parser for #GtkBuildable implementations.
+ */
 struct _GtkBuildableParser
 {
   /* Called for open tags <foo bar="baz"> */
@@ -70,6 +79,7 @@ struct _GtkBuildableParser
                           GError                   *error,
                           gpointer                 user_data);
 
+  /*< private >*/
   gpointer padding[4];
 };
 
@@ -158,7 +168,7 @@ struct _GtkBuildableIface
    * @builder: a #GtkBuilder used to construct this object
    * @child: (nullable): child object or %NULL for non-child tags
    * @tagname: name of tag
-   * @parser: (out): a #GMarkupParser to fill in
+   * @parser: (out): a #GtkBuildableParser to fill in
    * @data: (out): return location for user data that will be passed in
    *   to parser functions
    *

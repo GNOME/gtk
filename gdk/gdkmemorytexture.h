@@ -94,6 +94,11 @@ typedef enum {
 #define GDK_MEMORY_TEXTURE(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_MEMORY_TEXTURE, GdkMemoryTexture))
 #define GDK_IS_MEMORY_TEXTURE(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_MEMORY_TEXTURE))
 
+/**
+ * GdkMemoryTexture:
+ *
+ * A #GdkTexture representing image data in memory.
+ */
 typedef struct _GdkMemoryTexture        GdkMemoryTexture;
 typedef struct _GdkMemoryTextureClass   GdkMemoryTextureClass;
 

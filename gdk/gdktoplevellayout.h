@@ -30,7 +30,7 @@
 G_BEGIN_DECLS
 
 /**
- * GdkTopLevelLayout:
+ * GdkToplevelLayout:
  *
  * Struct containing information for gdk_toplevel_present()
  */

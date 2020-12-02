@@ -40,12 +40,28 @@ typedef struct _GskRenderNode           GskRenderNode;
 typedef struct _GskColorStop            GskColorStop;
 typedef struct _GskShadow               GskShadow;
 
+/**
+ * GskColorStop:
+ * @offset: the offset of the color stop
+ * @color: the color at the given offset
+ *
+ * A color stop in a gradient node.
+ */
 struct _GskColorStop
 {
   float offset;
   GdkRGBA color;
 };
 
+/**
+ * GskShadow:
+ * @color: the color of the shadow
+ * @dx: the horizontal offset of the shadow
+ * @dy: the vertical offset of the shadow
+ * @radius: the radius of the shadow
+ *
+ * The shadow parameters in a shadow node.
+ */
 struct _GskShadow
 {
   GdkRGBA color;
@@ -56,6 +72,16 @@ struct _GskShadow
 
 typedef struct _GskParseLocation GskParseLocation;
 
+/**
+ * GskParseLocation:
+ * @bytes: the offset of the location in the parse buffer, as bytes
+ * @chars: the offset of the location in the parse buffer, as characters
+ * @lines: the line of the location in the parse buffer
+ * @line_bytes: the position in the line, as bytes
+ * @line_chars: the position in the line, as characters
+ *
+ * A location in a parse buffer.
+ */
 struct _GskParseLocation
 {
   gsize bytes;

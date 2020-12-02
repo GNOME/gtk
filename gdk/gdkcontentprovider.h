@@ -49,6 +49,12 @@ struct _GdkContentProvider
   GObject parent;
 };
 
+/**
+ * GdkContentProviderClass:
+ * @content_changed: Signal class closure for #GdkContentProvider::content-changed
+ *
+ * Class structure for #GdkContentProvider.
+ */
 struct _GdkContentProviderClass
 {
   GObjectClass parent_class;
@@ -56,6 +62,7 @@ struct _GdkContentProviderClass
   /* signals */
   void                  (* content_changed)                             (GdkContentProvider     *provider);
 
+  /*< private >*/
   /* vfuncs */
   void                  (* attach_clipboard)                            (GdkContentProvider     *provider,
                                                                          GdkClipboard           *clipboard);
