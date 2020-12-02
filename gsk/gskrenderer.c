@@ -567,8 +567,9 @@ get_renderer_for_backend (GdkSurface *surface)
     return GSK_TYPE_BROADWAY_RENDERER;
 #endif
 #ifdef GDK_WINDOWING_MACOS
+  /* Use Cairo until GL renderer is working */
   if (GDK_IS_MACOS_SURFACE (surface))
-    return GSK_TYPE_GL_RENDERER;
+    return GSK_TYPE_CAIRO_RENDERER;
 #endif
 #ifdef GDK_WINDOWING_WIN32
   if (GDK_IS_WIN32_SURFACE (surface))
