@@ -25,6 +25,7 @@
 #endif
 
 
+#include <gsk/gskroundedrect.h>
 #include <gsk/gsktypes.h>
 
 G_BEGIN_DECLS
@@ -54,6 +55,9 @@ void                    gsk_path_builder_add_path               (GskPathBuilder 
 GDK_AVAILABLE_IN_ALL
 void                    gsk_path_builder_add_rect               (GskPathBuilder         *builder,
                                                                  const graphene_rect_t  *rect);
+GDK_AVAILABLE_IN_ALL
+void                    gsk_path_builder_add_rounded_rect       (GskPathBuilder         *builder,
+                                                                 const GskRoundedRect   *rect);
 GDK_AVAILABLE_IN_ALL
 void                    gsk_path_builder_add_circle             (GskPathBuilder         *builder,
                                                                  const graphene_point_t *center,
