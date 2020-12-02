@@ -379,7 +379,7 @@ gtk_tree_expander_get_property (GObject    *object,
       break;
 
     case PROP_ITEM:
-      g_value_set_object (value, gtk_tree_expander_get_item (self));
+      g_value_take_object (value, gtk_tree_expander_get_item (self));
       break;
 
     case PROP_LIST_ROW:
@@ -737,10 +737,13 @@ gtk_tree_expander_set_child (GtkTreeExpander *self,
  *
  * Forwards the item set on the #GtkTreeListRow that @self is managing.
  *
- * This call is essentially equivalent to calling
- * `gtk_tree_list_row_get_item (gtk_tree_expander_get_list_row (@self))`.
+ * This call is essentially equivalent to calling:
  *
- * Returns: (nullable) (transfer none) (type GObject): The item of the row
+ * |[<!-- language="C" -->
+ *   gtk_tree_list_row_get_item (gtk_tree_expander_get_list_row (@self));
+ * ]|
+ *
+ * Returns: (nullable) (transfer full) (type GObject): The item of the row
  **/
 gpointer
 gtk_tree_expander_get_item (GtkTreeExpander *self)
