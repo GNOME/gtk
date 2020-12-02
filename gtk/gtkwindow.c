@@ -4256,9 +4256,6 @@ toplevel_compute_size (GdkToplevel     *toplevel,
       /* Override with default size */
       if (info)
         {
-          /* Take width of shadows/headerbar into account. We want to set the
-           * default size of the content area and not the window area.
-           */
           int default_width_csd = info->default_width;
           int default_height_csd = info->default_height;
           gtk_window_update_csd_size (window,
