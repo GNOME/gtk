@@ -4277,12 +4277,22 @@ toplevel_compute_size (GdkToplevel     *toplevel,
     }
   else if (!priv->resizable)
     {
-      width = nat_width;
-      height = nat_height;
-
-      gtk_window_update_csd_size (window,
-                                  &width, &height,
-                                  INCLUDE_CSD_SIZE);
+      if (info &&
+          info->default_width > 0 &&
+          info->default_height > 0)
+        {
+          width = info->default_width;
+          height = info->default_height;
+          gtk_window_update_csd_size (window, &width, &height,
+                                      INCLUDE_CSD_SIZE);
+        }
+      else
+        {
+          width = nat_width;
+          height = nat_height;
+          gtk_window_update_csd_size (window, &width, &height,
+                                      INCLUDE_CSD_SIZE);
+        }
     }
   else
     {
