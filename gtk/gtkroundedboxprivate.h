@@ -28,20 +28,6 @@
 
 G_BEGIN_DECLS
 
-void            _gtk_rounded_box_init_rect                      (GskRoundedRect         *box,
-                                                                 double                  x,
-                                                                 double                  y,
-                                                                 double                  width,
-                                                                 double                  height);
-void            gtk_rounded_boxes_init_for_style                (GskRoundedRect         *border_box,
-                                                                 GskRoundedRect         *padding_box,
-                                                                 GskRoundedRect         *content_box,
-                                                                 GtkCssStyle            *style,
-                                                                 double                  x,
-                                                                 double                  y,
-                                                                 double                  width,
-                                                                 double                  height);
-
 double          _gtk_rounded_box_guess_length                   (const GskRoundedRect   *box,
                                                                  GtkCssSide              side);
 
@@ -59,8 +45,6 @@ void            _gtk_rounded_box_path_bottom                    (const GskRounde
                                                                  cairo_t                *cr);
 void            _gtk_rounded_box_path_left                      (const GskRoundedRect   *outer,
                                                                  const GskRoundedRect   *inner,
-                                                                 cairo_t                *cr);
-void            _gtk_rounded_box_clip_path                      (const GskRoundedRect   *box,
                                                                  cairo_t                *cr);
 
 G_END_DECLS
