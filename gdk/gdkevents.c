@@ -430,7 +430,6 @@ static void
 gdk_event_init_types_once (void)
 {
   g_type_ensure (GDK_TYPE_BUTTON_EVENT);
-  g_type_ensure (GDK_TYPE_CONFIGURE_EVENT);
   g_type_ensure (GDK_TYPE_CROSSING_EVENT);
   g_type_ensure (GDK_TYPE_DELETE_EVENT);
   g_type_ensure (GDK_TYPE_DND_EVENT);
@@ -1814,76 +1813,6 @@ gdk_key_event_get_match (GdkEvent        *event,
   *modifiers = accel_mods;
 
   return TRUE;
-}
-
-/* }}} */
-
-/* {{{ GdkConfigureEvent */
-
-static gboolean
-gdk_configure_event_get_position (GdkEvent *event,
-                                  double   *x,
-                                  double   *y)
-{
-  GdkConfigureEvent *self = (GdkConfigureEvent *) event;
-
-  *x = self->x;
-  *y = self->y;
-
-  return TRUE;
-}
-
-static const GdkEventTypeInfo gdk_configure_event_info = {
-  sizeof (GdkConfigureEvent),
-  NULL,
-  NULL,
-  NULL,
-  gdk_configure_event_get_position,
-  NULL,
-  NULL,
-  NULL,
-};
-
-GDK_DEFINE_EVENT_TYPE (GdkConfigureEvent, gdk_configure_event,
-                       &gdk_configure_event_info,
-                       GDK_EVENT_TYPE_SLOT (GDK_CONFIGURE))
-
-GdkEvent *
-gdk_configure_event_new (GdkSurface *surface,
-                         int         width,
-                         int         height)
-{
-  GdkConfigureEvent *self;
-
-  g_return_val_if_fail (width >= 0 && height >= 0, NULL);
-
-  self = gdk_event_alloc (GDK_CONFIGURE, surface, NULL, GDK_CURRENT_TIME);
-  self->width = width;
-  self->height = height;
-
-  return (GdkEvent *) self;
-}
-
-/**
- * gdk_configure_event_get_size:
- * @event: (type GdkConfigureEvent): a configure event
- * @width: (out): return location for surface width
- * @height: (out): return location for surface height
- *
- * Extracts the surface size from a configure event.
- */
-void
-gdk_configure_event_get_size (GdkEvent *event,
-                              int      *width,
-                              int      *height)
-{
-  GdkConfigureEvent *self = (GdkConfigureEvent *) event;
-
-  g_return_if_fail (GDK_IS_EVENT (event));
-  g_return_if_fail (GDK_IS_EVENT_TYPE (event, GDK_CONFIGURE));
-
-  *width = self->width;
-  *height = self->height;
 }
 
 /* }}} */

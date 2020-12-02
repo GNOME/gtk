@@ -280,12 +280,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
     surface = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->configure_notify.id));
     if (surface)
       {
-        event = gdk_configure_event_new (surface,
-                                         message->configure_notify.width,
-                                         message->configure_notify.height);
-
-        node = _gdk_event_queue_append (display, event);
-        _gdk_windowing_got_event (display, node, event, message->base.serial);
+        gdk_surface_request_layout (surface);
 
         if (surface->resize_count >= 1)
           {

@@ -323,25 +323,6 @@ struct _GdkFocusEvent
 };
 
 /*
- * GdkConfigureEvent:
- * @x: the new x coordinate of the surface, relative to its parent.
- * @y: the new y coordinate of the surface, relative to its parent.
- * @width: the new width of the surface.
- * @height: the new height of the surface.
- *
- * Generated when a surface size or position has changed.
- */
-struct _GdkConfigureEvent
-{
-  GdkEvent parent_instance;
-
-  int x;
-  int y;
-  int width;
-  int height;
-};
-
-/*
  * GdkProximityEvent:
  * @tool: the #GdkDeviceTool associated to the event
  *

@@ -106,7 +106,6 @@ typedef struct _GdkEventSequence        GdkEventSequence;
 typedef struct _GdkEvent                GdkEvent;
 
 #define GDK_TYPE_BUTTON_EVENT (gdk_button_event_get_type())
-#define GDK_TYPE_CONFIGURE_EVENT (gdk_configure_event_get_type())
 #define GDK_TYPE_CROSSING_EVENT (gdk_crossing_event_get_type())
 #define GDK_TYPE_DELETE_EVENT (gdk_delete_event_get_type())
 #define GDK_TYPE_DND_EVENT (gdk_dnd_event_get_type())
@@ -121,7 +120,6 @@ typedef struct _GdkEvent                GdkEvent;
 #define GDK_TYPE_TOUCHPAD_EVENT (gdk_touchpad_event_get_type())
 
 typedef struct _GdkButtonEvent          GdkButtonEvent;
-typedef struct _GdkConfigureEvent       GdkConfigureEvent;
 typedef struct _GdkCrossingEvent        GdkCrossingEvent;
 typedef struct _GdkDeleteEvent          GdkDeleteEvent;
 typedef struct _GdkDNDEvent             GdkDNDEvent;
@@ -148,7 +146,6 @@ typedef struct _GdkTouchpadEvent        GdkTouchpadEvent;
  * @GDK_ENTER_NOTIFY: the pointer has entered the surface.
  * @GDK_LEAVE_NOTIFY: the pointer has left the surface.
  * @GDK_FOCUS_CHANGE: the keyboard focus has entered or left the surface.
- * @GDK_CONFIGURE: the size of the surface has changed.
  * @GDK_PROXIMITY_IN: an input device has moved into contact with a sensing
  *   surface (e.g. a touchscreen or graphics tablet).
  * @GDK_PROXIMITY_OUT: an input device has moved out of contact with a sensing
@@ -188,7 +185,6 @@ typedef enum
   GDK_ENTER_NOTIFY,
   GDK_LEAVE_NOTIFY,
   GDK_FOCUS_CHANGE,
-  GDK_CONFIGURE,
   GDK_PROXIMITY_IN,
   GDK_PROXIMITY_OUT,
   GDK_DRAG_ENTER,
@@ -428,12 +424,6 @@ GDK_AVAILABLE_IN_ALL
 GdkNotifyType           gdk_crossing_event_get_detail   (GdkEvent *event);
 GDK_AVAILABLE_IN_ALL
 gboolean                gdk_crossing_event_get_focus    (GdkEvent *event);
-GDK_AVAILABLE_IN_ALL
-GType                   gdk_configure_event_get_type    (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-void                    gdk_configure_event_get_size    (GdkEvent *event,
-                                                         int      *width,
-                                                         int      *height);
 GDK_AVAILABLE_IN_ALL
 GType                   gdk_touchpad_event_get_type     (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
