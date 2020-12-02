@@ -748,13 +748,6 @@ surface_mapped_changed (GtkWidget *widget)
   gtk_widget_set_visible (widget, gdk_surface_get_mapped (priv->surface));
 }
 
-static void
-surface_size_changed (GtkWidget *widget,
-                      guint      width,
-                      guint      height)
-{
-}
-
 static gboolean
 surface_render (GdkSurface     *surface,
                 cairo_region_t *region,
@@ -899,7 +892,6 @@ gtk_popover_realize (GtkWidget *widget)
   gdk_surface_set_widget (priv->surface, widget);
 
   g_signal_connect_swapped (priv->surface, "notify::mapped", G_CALLBACK (surface_mapped_changed), widget);
-  g_signal_connect_swapped (priv->surface, "size-changed", G_CALLBACK (surface_size_changed), widget);
   g_signal_connect (priv->surface, "render", G_CALLBACK (surface_render), widget);
   g_signal_connect (priv->surface, "event", G_CALLBACK (surface_event), widget);
   g_signal_connect (priv->surface, "popup-layout-changed", G_CALLBACK (popup_layout_changed), widget);
@@ -925,7 +917,6 @@ gtk_popover_unrealize (GtkWidget *widget)
   g_clear_object (&priv->renderer);
 
   g_signal_handlers_disconnect_by_func (priv->surface, surface_mapped_changed, widget);
-  g_signal_handlers_disconnect_by_func (priv->surface, surface_size_changed, widget);
   g_signal_handlers_disconnect_by_func (priv->surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (priv->surface, surface_event, widget);
   g_signal_handlers_disconnect_by_func (priv->surface, popup_layout_changed, widget);

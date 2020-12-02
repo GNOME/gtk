@@ -76,7 +76,6 @@
  */
 
 enum {
-  SIZE_CHANGED,
   LAYOUT,
   RENDER,
   EVENT,
@@ -550,30 +549,6 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
-
-  /**
-   * GdkSurface::size-changed:
-   * @surface: the #GdkSurface
-   * @width: the new width
-   * @height: the new height
-   *
-   * Emitted when the size of @surface is changed.
-   *
-   * Surface size is reported in ”application pixels”, not
-   * ”device pixels” (see gdk_surface_get_scale_factor()).
-   */
-  signals[SIZE_CHANGED] =
-    g_signal_new (g_intern_static_string ("size-changed"),
-                  G_OBJECT_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_FIRST,
-                  0,
-                  NULL,
-                  NULL,
-                  NULL,
-                  G_TYPE_NONE,
-                  2,
-                  G_TYPE_INT,
-                  G_TYPE_INT);
 
   /**
    * GdkSurface::layout:
@@ -1304,14 +1279,6 @@ gdk_surface_schedule_update (GdkSurface *surface)
   if (frame_clock)
     gdk_frame_clock_request_phase (gdk_surface_get_frame_clock (surface),
                                    GDK_FRAME_CLOCK_PHASE_PAINT);
-}
-
-void
-gdk_surface_emit_size_changed (GdkSurface *surface,
-                               int         width,
-                               int         height)
-{
-  g_signal_emit (surface, signals[SIZE_CHANGED], 0, width, height);
 }
 
 static void
