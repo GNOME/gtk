@@ -37,6 +37,7 @@
 #include <gdk/wayland/xdg-output-unstable-v1-client-protocol.h>
 #include <gdk/wayland/idle-inhibit-unstable-v1-client-protocol.h>
 #include <gdk/wayland/primary-selection-unstable-v1-client-protocol.h>
+#include <gdk/wayland/xdg-activation-v1-client-protocol.h>
 
 #include <glib.h>
 #include <gdk/gdkkeys.h>
@@ -112,6 +113,7 @@ struct _GdkWaylandDisplay
   struct org_kde_kwin_server_decoration_manager *server_decoration_manager;
   struct zxdg_output_manager_v1 *xdg_output_manager;
   struct zwp_idle_inhibit_manager_v1 *idle_inhibit_manager;
+  struct xdg_activation_v1 *xdg_activation;
 
   GList *async_roundtrips;
 
@@ -139,6 +141,7 @@ struct _GdkWaylandDisplay
   int data_device_manager_version;
   int gtk_shell_version;
   int xdg_output_manager_version;
+  int xdg_activation_version;
 
   uint32_t server_decoration_mode;
 

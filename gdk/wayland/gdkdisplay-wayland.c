@@ -90,6 +90,7 @@
 #define GTK_SHELL1_VERSION       4
 #define OUTPUT_VERSION_WITH_DONE 2
 #define NO_XDG_OUTPUT_DONE_SINCE_VERSION 3
+#define XDG_ACTIVATION_VERSION   1
 
 static void _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland);
 
@@ -493,6 +494,15 @@ gdk_registry_handle_global (void               *data,
         wl_registry_bind (display_wayland->wl_registry, id,
                           &zwp_idle_inhibit_manager_v1_interface, 1);
     }
+  else if (strcmp (interface, "xdg_activation_v1") == 0)
+    {
+      display_wayland->xdg_activation_version =
+        MIN (version, XDG_ACTIVATION_VERSION);
+      display_wayland->xdg_activation =
+        wl_registry_bind (display_wayland->wl_registry, id,
+                          &xdg_activation_v1_interface,
+                          display_wayland->xdg_activation_version);
+    }
 
   g_hash_table_insert (display_wayland->known_globals,
                        GUINT_TO_POINTER (id), g_strdup (interface));
@@ -857,7 +867,7 @@ gdk_wayland_display_notify_startup_complete (GdkDisplay  *display,
         return;
     }
 
-  if (display_wayland->gtk_shell)
+  if (!display_wayland->xdg_activation && display_wayland->gtk_shell)
     gtk_shell1_set_startup_id (display_wayland->gtk_shell, startup_id);
 
   g_free (free_this);
