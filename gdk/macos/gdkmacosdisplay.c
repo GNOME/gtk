@@ -519,22 +519,29 @@ void
 _gdk_macos_display_surface_resigned_key (GdkMacosDisplay *self,
                                          GdkMacosSurface *surface)
 {
+  gboolean was_keyboard_surface;
+
   g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
   g_return_if_fail (GDK_IS_MACOS_SURFACE (surface));
 
-  if (self->keyboard_surface == surface)
+  was_keyboard_surface = self->keyboard_surface == surface;
+
+  self->keyboard_surface = NULL;
+
+  if (was_keyboard_surface)
     {
       GdkDevice *keyboard;
       GdkEvent *event;
       GdkSeat *seat;
+      GList *node;
 
       seat = gdk_display_get_default_seat (GDK_DISPLAY (self));
       keyboard = gdk_seat_get_keyboard (seat);
       event = gdk_focus_event_new (GDK_SURFACE (surface), keyboard, FALSE);
-      _gdk_event_queue_append (GDK_DISPLAY (self), event);
+      node = _gdk_event_queue_append (GDK_DISPLAY (self), event);
+      _gdk_windowing_got_event (GDK_DISPLAY (self), node, event,
+                                _gdk_display_get_next_serial (GDK_DISPLAY (self)));
     }
-
-  self->keyboard_surface = NULL;
 
   _gdk_macos_display_clear_sorting (self);
 }
