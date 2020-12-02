@@ -1588,12 +1588,12 @@ gdk_broadway_toplevel_present (GdkToplevel       *toplevel,
   else
     gdk_broadway_surface_unmaximize (surface);
 
-  if (size.margin.is_valid)
+  if (size.shadow.is_valid)
     {
-      impl->shadow_left = size.margin.left;
-      impl->shadow_right = size.margin.right;
-      impl->shadow_top = size.margin.top;
-      impl->shadow_bottom = size.margin.bottom;
+      impl->shadow_left = size.shadow.left;
+      impl->shadow_right = size.shadow.right;
+      impl->shadow_top = size.shadow.top;
+      impl->shadow_bottom = size.shadow.bottom;
     }
 
   show_surface (surface);

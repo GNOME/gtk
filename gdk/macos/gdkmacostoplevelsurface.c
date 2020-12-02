@@ -155,13 +155,13 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
   if (style_mask != [nswindow styleMask])
     [nswindow setStyleMask:style_mask];
 
-  if (size.margin.is_valid)
+  if (size.shadow.is_valid)
     {
       _gdk_macos_surface_set_shadow_width (surface,
-                                           size.margin.left,
-                                           size.margin.right,
-                                           size.margin.top,
-                                           size.margin.bottom);
+                                           size.shadow.left,
+                                           size.shadow.right,
+                                           size.shadow.top,
+                                           size.shadow.bottom);
     }
 
   _gdk_macos_surface_set_geometry_hints (GDK_MACOS_SURFACE (self), &geometry, mask);

@@ -122,11 +122,11 @@ struct _GdkWaylandSurface
   gint64 pending_frame_counter;
   guint32 scale;
 
-  int margin_left;
-  int margin_right;
-  int margin_top;
-  int margin_bottom;
-  gboolean margin_dirty;
+  int shadow_left;
+  int shadow_right;
+  int shadow_top;
+  int shadow_bottom;
+  gboolean shadow_dirty;
 
   struct wl_output *initial_fullscreen_output;
 
@@ -294,7 +294,7 @@ static void gdk_wayland_surface_configure (GdkSurface *surface);
 static void maybe_set_gtk_surface_dbus_properties (GdkWaylandSurface *impl);
 static void maybe_set_gtk_surface_modal (GdkSurface *surface);
 
-static void gdk_wayland_surface_sync_margin (GdkSurface *surface);
+static void gdk_wayland_surface_sync_shadow (GdkSurface *surface);
 static void gdk_wayland_surface_sync_input_region (GdkSurface *surface);
 static void gdk_wayland_surface_sync_opaque_region (GdkSurface *surface);
 
@@ -366,8 +366,8 @@ _gdk_wayland_surface_save_size (GdkSurface *surface)
   if (surface->width <= 1 || surface->height <= 1)
     return;
 
-  impl->saved_width = surface->width - impl->margin_left - impl->margin_right;
-  impl->saved_height = surface->height - impl->margin_top - impl->margin_bottom;
+  impl->saved_width = surface->width - impl->shadow_left - impl->shadow_right;
+  impl->saved_height = surface->height - impl->shadow_top - impl->shadow_bottom;
 }
 
 static void
@@ -890,7 +890,7 @@ gdk_wayland_surface_attach_image (GdkSurface           *surface,
 void
 gdk_wayland_surface_sync (GdkSurface *surface)
 {
-  gdk_wayland_surface_sync_margin (surface);
+  gdk_wayland_surface_sync_shadow (surface);
   gdk_wayland_surface_sync_opaque_region (surface);
   gdk_wayland_surface_sync_input_region (surface);
 }
@@ -1148,10 +1148,10 @@ gdk_wayland_surface_get_window_geometry (GdkSurface   *surface,
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
   *geometry = (GdkRectangle) {
-    .x = impl->margin_left,
-    .y = impl->margin_top,
-    .width = surface->width - (impl->margin_left + impl->margin_right),
-    .height = surface->height - (impl->margin_top + impl->margin_bottom)
+    .x = impl->shadow_left,
+    .y = impl->shadow_top,
+    .width = surface->width - (impl->shadow_left + impl->shadow_right),
+    .height = surface->height - (impl->shadow_top + impl->shadow_bottom)
   };
 }
 
@@ -1160,7 +1160,7 @@ static void gdk_wayland_surface_set_geometry_hints (GdkWaylandSurface  *impl,
                                                     GdkSurfaceHints     geom_mask);
 
 static void
-gdk_wayland_surface_sync_margin (GdkSurface *surface)
+gdk_wayland_surface_sync_shadow (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkWaylandDisplay *display_wayland =
@@ -1372,12 +1372,12 @@ configure_toplevel_geometry (GdkSurface *surface)
     }
   gdk_wayland_surface_set_geometry_hints (impl, &geometry, mask);
 
-  if (size.margin.is_valid)
+  if (size.shadow.is_valid)
     {
-      impl->margin_left = size.margin.left;
-      impl->margin_right = size.margin.right;
-      impl->margin_top = size.margin.top;
-      impl->margin_bottom = size.margin.bottom;
+      impl->shadow_left = size.shadow.left;
+      impl->shadow_right = size.shadow.right;
+      impl->shadow_top = size.shadow.top;
+      impl->shadow_bottom = size.shadow.bottom;
     }
 
   if (impl->next_layout.configured_width > 0 &&
@@ -1386,9 +1386,9 @@ configure_toplevel_geometry (GdkSurface *surface)
       int width, height;
 
       width = impl->next_layout.configured_width +
-        impl->margin_left + impl->margin_right;
+        impl->shadow_left + impl->shadow_right;
       height = impl->next_layout.configured_height +
-        impl->margin_top + impl->margin_bottom;
+        impl->shadow_top + impl->shadow_bottom;
 
       if (impl->next_layout.toplevel.should_constrain)
         {
@@ -1577,8 +1577,8 @@ gdk_wayland_surface_configure_popup (GdkSurface *surface)
   width = impl->pending.popup.width;
   height = impl->pending.popup.height;
 
-  x += parent_impl->margin_left;
-  y += parent_impl->margin_top;
+  x += parent_impl->shadow_left;
+  y += parent_impl->shadow_top;
 
   update_popup_layout_state (surface,
                              x, y,
@@ -2262,9 +2262,9 @@ calculate_popup_rect (GdkSurface     *surface,
   int x = 0, y = 0;
 
   width = (impl->popup.unconstrained_width -
-           (impl->margin_left + impl->margin_right));
+           (impl->shadow_left + impl->shadow_right));
   height = (impl->popup.unconstrained_height -
-            (impl->margin_top + impl->margin_bottom));
+            (impl->shadow_top + impl->shadow_bottom));
 
   anchor_rect = *gdk_popup_layout_get_anchor_rect (layout);
   gdk_popup_layout_get_offset (layout, &dx, &dy);
@@ -2465,15 +2465,15 @@ create_dynamic_positioner (GdkSurface     *surface,
   GdkAnchorHints anchor_hints;
 
   geometry = (GdkRectangle) {
-    .x = impl->margin_left,
-    .y = impl->margin_top,
-    .width = width - (impl->margin_left + impl->margin_right),
-    .height = height - (impl->margin_top + impl->margin_bottom),
+    .x = impl->shadow_left,
+    .y = impl->shadow_top,
+    .width = width - (impl->shadow_left + impl->shadow_right),
+    .height = height - (impl->shadow_top + impl->shadow_bottom),
   };
 
   anchor_rect = gdk_popup_layout_get_anchor_rect (layout);
-  real_anchor_rect_x = anchor_rect->x - parent_impl->margin_left;
-  real_anchor_rect_y = anchor_rect->y - parent_impl->margin_top;
+  real_anchor_rect_x = anchor_rect->x - parent_impl->shadow_left;
+  real_anchor_rect_y = anchor_rect->y - parent_impl->shadow_top;
 
   anchor_rect_width = MAX (anchor_rect->width, 1);
   anchor_rect_height = MAX (anchor_rect->height, 1);
@@ -2535,10 +2535,10 @@ create_dynamic_positioner (GdkSurface     *surface,
             int parent_width;
             int parent_height;
 
-            parent_width = parent->width - (parent_impl->margin_left +
-                                            parent_impl->margin_right);
-            parent_height = parent->height - (parent_impl->margin_top +
-                                              parent_impl->margin_bottom);
+            parent_width = parent->width - (parent_impl->shadow_left +
+                                            parent_impl->shadow_right);
+            parent_height = parent->height - (parent_impl->shadow_top +
+                                              parent_impl->shadow_bottom);
 
             xdg_positioner_set_parent_size (positioner,
                                             parent_width,
@@ -3558,9 +3558,9 @@ gdk_wayland_surface_set_geometry_hints (GdkWaylandSurface  *impl,
   if (geom_mask & GDK_HINT_MIN_SIZE)
     {
       min_width = MAX (0, (geometry->min_width -
-                           (impl->margin_left + impl->margin_right)));
+                           (impl->shadow_left + impl->shadow_right)));
       min_height = MAX (0, (geometry->min_height -
-                            (impl->margin_top + impl->margin_bottom)));
+                            (impl->shadow_top + impl->shadow_bottom)));
     }
   else
     {
@@ -3571,9 +3571,9 @@ gdk_wayland_surface_set_geometry_hints (GdkWaylandSurface  *impl,
   if (geom_mask & GDK_HINT_MAX_SIZE)
     {
       max_width = MAX (0, (geometry->max_width -
-                           (impl->margin_left + impl->margin_right)));
+                           (impl->shadow_left + impl->shadow_right)));
       max_height = MAX (0, (geometry->max_height -
-                            (impl->margin_top + impl->margin_bottom)));
+                            (impl->shadow_top + impl->shadow_bottom)));
     }
   else
     {

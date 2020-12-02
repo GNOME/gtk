@@ -55,11 +55,11 @@ void                    gdk_toplevel_size_set_min_size  (GdkToplevelSize       *
                                                          int                    min_height);
 
 GDK_AVAILABLE_IN_ALL
-void                    gdk_toplevel_size_set_margin    (GdkToplevelSize       *size,
-                                                         int                    left,
-                                                         int                    right,
-                                                         int                    top,
-                                                         int                    bottom);
+void                    gdk_toplevel_size_set_shadow_width (GdkToplevelSize    *size,
+                                                            int                 left,
+                                                            int                 right,
+                                                            int                 top,
+                                                            int                 bottom);
 
 G_END_DECLS
 

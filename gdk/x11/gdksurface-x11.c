@@ -268,13 +268,13 @@ gdk_x11_surface_compute_size (GdkSurface *surface)
           gdk_toplevel_size_init (&size, bounds_width, bounds_height);
           gdk_toplevel_notify_compute_size (GDK_TOPLEVEL (surface), &size);
 
-          if (size.margin.is_valid)
+          if (size.shadow.is_valid)
             {
               update_shadow_size (surface,
-                                  size.margin.left,
-                                  size.margin.right,
-                                  size.margin.top,
-                                  size.margin.bottom);
+                                  size.shadow.left,
+                                  size.shadow.right,
+                                  size.shadow.top,
+                                  size.shadow.bottom);
             }
 
           surface->width = impl->next_layout.configured_width;
@@ -4999,13 +4999,13 @@ gdk_x11_toplevel_present (GdkToplevel       *toplevel,
   gdk_surface_constrain_size (&geometry, mask, width, height, &width, &height);
   gdk_x11_surface_toplevel_resize (surface, width, height);
 
-  if (size.margin.is_valid)
+  if (size.shadow.is_valid)
     {
       update_shadow_size (surface,
-                          size.margin.left,
-                          size.margin.right,
-                          size.margin.top,
-                          size.margin.bottom);
+                          size.shadow.left,
+                          size.shadow.right,
+                          size.shadow.top,
+                          size.shadow.bottom);
     }
 
   impl->pending_configure_events++;

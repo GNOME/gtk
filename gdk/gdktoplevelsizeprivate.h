@@ -37,7 +37,7 @@ struct _GdkToplevelSize
     int right;
     int top;
     int bottom;
-  } margin;
+  } shadow;
 };
 
 void gdk_toplevel_size_init (GdkToplevelSize *size,

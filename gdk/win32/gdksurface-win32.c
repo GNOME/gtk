@@ -4995,13 +4995,13 @@ gdk_win32_toplevel_present (GdkToplevel       *toplevel,
 
   show_surface (surface);
 
-  if (size.margin.is_valid)
+  if (size.shadow.is_valid)
     {
       gdk_win32_surface_set_shadow_width (surface,
-                                          size.margin.left,
-                                          size.margin.right,
-                                          size.margin.top,
-                                          size.margin.bottom);
+                                          size.shadow.left,
+                                          size.shadow.right,
+                                          size.shadow.top,
+                                          size.shadow.bottom);
     }
 
   return TRUE;
