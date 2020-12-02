@@ -3307,19 +3307,6 @@ gtk_window_update_csd_size (GtkWindow *window,
   w = *width + apply * (window_border.left + window_border.right);
   h = *height + apply * (window_border.top + window_border.bottom);
 
-  if (priv->title_box != NULL &&
-      gtk_widget_get_visible (priv->title_box) &&
-      gtk_widget_get_child_visible (priv->title_box))
-    {
-      int minimum_height;
-      int natural_height;
-
-      gtk_widget_measure (priv->title_box, GTK_ORIENTATION_VERTICAL, -1,
-                          &minimum_height, &natural_height,
-                          NULL, NULL);
-      h += apply * natural_height;
-    }
-
   /* Make sure the size remains acceptable */
   if (w < 1)
     w = 1;
