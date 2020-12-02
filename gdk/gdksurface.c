@@ -2830,14 +2830,6 @@ add_event_mark (GdkEvent *event,
         break;
       }
 
-    case GDK_CONFIGURE:
-      {
-        int width, height;
-        gdk_configure_event_get_size (event, &width, &height);
-        message = g_strdup_printf ("%s {width=%d, height=%d}", kind, width, height);
-        break;
-      }
-
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
     case GDK_TOUCHPAD_SWIPE:
@@ -2875,30 +2867,18 @@ add_event_mark (GdkEvent *event,
 gboolean
 gdk_surface_handle_event (GdkEvent *event)
 {
+  GdkSurface *surface = gdk_event_get_surface (event);
   gint64 begin_time = GDK_PROFILER_CURRENT_TIME;
   gboolean handled = FALSE;
 
   if (check_autohide (event))
     return TRUE;
 
-  if (gdk_event_get_event_type (event) == GDK_CONFIGURE)
-    {
-      int width, height;
 
-      gdk_configure_event_get_size (event, &width, &height);
-      gdk_surface_emit_size_changed (gdk_event_get_surface (event),
-                                     width, height);
-      handled = TRUE;
-    }
-  else
-    {
-      GdkSurface *surface = gdk_event_get_surface (event);
+  if (gdk_event_get_event_type (event) == GDK_MOTION_NOTIFY)
+    surface->request_motion = FALSE;
 
-      if (gdk_event_get_event_type (event) == GDK_MOTION_NOTIFY)
-        surface->request_motion = FALSE;
-
-      g_signal_emit (surface, signals[EVENT], 0, event, &handled);
-    }
+  g_signal_emit (surface, signals[EVENT], 0, event, &handled);
 
   if (GDK_PROFILER_IS_RUNNING)
     add_event_mark (event, begin_time, GDK_PROFILER_CURRENT_TIME);

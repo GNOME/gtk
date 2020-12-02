@@ -407,7 +407,6 @@ GdkSurface *gdk_win32_display_get_root_window (GdkDisplay *display);
 /* Distributed display manager implementation */
 GdkDisplay *_gdk_win32_display_open (const char *display_name);
 void _gdk_win32_append_event (GdkEvent *event);
-void _gdk_win32_emit_configure_event (GdkSurface *window);
 
 
 guint32 _gdk_win32_keymap_get_decimal_mark (GdkWin32Keymap *keymap);

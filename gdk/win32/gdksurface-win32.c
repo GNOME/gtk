@@ -1190,7 +1190,7 @@ gdk_win32_surface_move_resize_internal (GdkSurface *window,
  out:
   surface->inhibit_configure = FALSE;
 
-  _gdk_win32_emit_configure_event (window);
+  gdk_surface_request_layout (window);
 }
 
 void
@@ -4018,7 +4018,7 @@ gdk_win32_surface_do_move_resize_drag (GdkSurface *window,
        rect.bottom != new_rect.bottom))
     {
       context->native_move_resize_pending = TRUE;
-      _gdk_win32_do_emit_configure_event (window, new_rect);
+      gdk_surface_request_layout (window);
     }
   else if (context->op == GDK_WIN32_DRAGOP_MOVE &&
            (rect.left != new_rect.left ||
@@ -4026,7 +4026,7 @@ gdk_win32_surface_do_move_resize_drag (GdkSurface *window,
     {
       context->native_move_resize_pending = FALSE;
 
-      _gdk_win32_do_emit_configure_event (window, new_rect);
+      gdk_surface_request_layout (window);
 
       if (impl->layered)
         {

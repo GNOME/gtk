@@ -1277,35 +1277,6 @@ _gdk_win32_get_window_rect (GdkSurface *window,
   return !impl->inhibit_configure;
 }
 
-void
-_gdk_win32_do_emit_configure_event (GdkSurface *surface,
-                                    RECT       rect)
-{
-  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
-
-  impl->unscaled_width = rect.right - rect.left;
-  impl->unscaled_height = rect.bottom - rect.top;
-  surface->width = (impl->unscaled_width + impl->surface_scale - 1) / impl->surface_scale;
-  surface->height = (impl->unscaled_height + impl->surface_scale - 1) / impl->surface_scale;
-  surface->x = rect.left / impl->surface_scale;
-  surface->y = rect.top / impl->surface_scale;
-
-  _gdk_surface_update_size (surface);
-
-  g_signal_emit_by_name (surface, "size-changed", surface->width, surface->height);
-}
-
-void
-_gdk_win32_emit_configure_event (GdkSurface *surface)
-{
-  RECT rect;
-
-  if (!_gdk_win32_get_window_rect (surface, &rect))
-    return;
-
-  _gdk_win32_do_emit_configure_event (surface, rect);
-}
-
 cairo_region_t *
 _gdk_win32_hrgn_to_region (HRGN  hrgn,
                            guint scale)
@@ -2889,7 +2860,7 @@ gdk_event_translate (MSG *msg,
 	{
 	  if (!IsIconic (msg->hwnd) &&
 	      !GDK_SURFACE_DESTROYED (window))
-	    _gdk_win32_emit_configure_event (window);
+	    gdk_surface_request_layout (window);
 	}
 
       if ((windowpos->flags & SWP_HIDEWINDOW) &&

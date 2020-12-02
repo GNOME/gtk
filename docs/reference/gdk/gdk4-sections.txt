@@ -528,7 +528,6 @@ GDK_IS_EVENT
 gdk_event_get_type
 gdk_event_sequence_get_type
 gdk_button_event_get_type
-gdk_configure_event_get_type
 gdk_crossing_event_get_type
 gdk_delete_event_get_type
 gdk_dnd_event_get_type
