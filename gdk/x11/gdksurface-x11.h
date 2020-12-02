@@ -59,6 +59,11 @@ struct _GdkX11Surface
 
   int surface_scale;
 
+  int shadow_left;
+  int shadow_right;
+  int shadow_top;
+  int shadow_bottom;
+
   /* Width and height not divided by surface_scale - this matters in the
    * corner-case where the window manager assigns us a size that isn't
    * a multiple of surface_scale - for example for a maximized window
@@ -66,6 +71,14 @@ struct _GdkX11Surface
    */
   int unscaled_width;
   int unscaled_height;
+
+  int pending_configure_events;
+
+  struct {
+    int configured_width;
+    int configured_height;
+    gboolean surface_geometry_dirty;
+  } next_layout;
 
   cairo_surface_t *cairo_surface;
 
