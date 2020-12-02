@@ -123,8 +123,8 @@ on_frame (double progress)
       window_height = HEIGHT + jitter;
     }
 
-  gtk_window_resize (GTK_WINDOW (window),
-                     window_width, window_height);
+  gtk_widget_set_size_request (gtk_window_get_child (GTK_WINDOW (window)),
+                               window_width, window_height);
 
   gtk_widget_queue_draw (window);
 }
@@ -196,6 +196,7 @@ main(int argc, char **argv)
            cb_no_resize ? "no" : "yes");
 
   window = gtk_window_new ();
+  gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
   frame_stats_ensure (GTK_WINDOW (window));
 
   da = gtk_drawing_area_new ();
