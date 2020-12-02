@@ -1,9 +1,6 @@
 fs = import('fs')
 
 private_headers = [
-  'imm-extra.h',
-  'gtkbitmaskprivateimpl.h',
-  'gdkpixbufutilsprivate.h',
   'gtkaccelgroupprivate.h',
   'gtkaccelmapprivate.h',
   'gtkaccessibleattributesetprivate.h',
@@ -21,6 +18,7 @@ private_headers = [
   'gtkapplicationprivate.h',
   'gtkatcontextprivate.h',
   'gtkbindingsprivate.h',
+  'gtkbitmaskprivateimpl.h',
   'gtkbitmaskprivate.h',
   'gtkbuilderprivate.h',
   'gtkbuilderscopeprivate.h',
@@ -166,6 +164,7 @@ private_headers = [
   'gtknativedialogprivate.h',
   'gtknomediafileprivate.h',
   'gtkpango.h',
+  'gdkpixbufutilsprivate.h',
   'gtkplacessidebarprivate.h',
   'gtkplacesviewprivate.h',
   'gtkplacesviewrowprivate.h',
@@ -228,11 +227,14 @@ private_headers = [
   'gtkwin32themeprivate.h',
   'gtkwindowprivate.h',
 
+  'gtkdbusgenerated.h',
+  'imm-extra.h',
   'text-input-unstable-v3-client-protocol.h',
 
   'a11y',
   'inspector',
   'roaring',
+  'timsort',
 ]
 
 images = [

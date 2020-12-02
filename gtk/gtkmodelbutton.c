@@ -47,7 +47,7 @@
 #include "gtkshortcut.h"
 #include "gtkaccessibleprivate.h"
 
-/**
+/*< private >
  * SECTION:gtkmodelbutton
  * @Short_description: A button that uses a GAction as model
  * @Title: GtkModelButton
