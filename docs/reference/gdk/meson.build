@@ -44,6 +44,7 @@ private_headers = [
   'gdktoplevelprivate.h',
   'gdktoplevelsizeprivate.h',
   'gdkvulkancontextprivate.h',
+  'filetransferportalprivate.h',
   'keyname-table.h',
 
   # gdk/x11
@@ -95,8 +96,12 @@ private_headers = [
   'xdg-output-unstable-v1-client-protocol.h',
   'xdg-shell-client-protocol.h',
   'xdg-shell-unstable-v6-client-protocol.h',
+  'wayland-cursor.h',
+  'os-compatibility.h',
+  'xcursor.h',
 
   'broadway',
+  'wayland/cursor',
   'macos',
   'win32',
 ]
