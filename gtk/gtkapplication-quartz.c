@@ -251,10 +251,36 @@ gtk_application_impl_quartz_shutdown (GtkApplicationImpl *impl)
 }
 
 static void
+on_window_unmap_cb (GtkApplicationImpl *impl,
+                    GtkWindow          *window)
+{
+  GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) impl;
+
+  if ((GActionGroup *)window == gtk_action_muxer_get_group (quartz->muxer, "win"))
+    gtk_action_muxer_remove (quartz->muxer, "win");
+}
+
+static void
 gtk_application_impl_quartz_active_window_changed (GtkApplicationImpl *impl,
                                                    GtkWindow          *window)
 {
   GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) impl;
+
+  /* Track unmapping of the window so we can clear the "win" field.
+   * Without this, we might hold on to a reference of the window
+   * preventing it from getting disposed.
+   */
+  if (window != NULL && !g_object_get_data (G_OBJECT (window), "quartz-muxer-umap"))
+    {
+      gulong handler_id = g_signal_connect_object (window,
+                                                   "unmap",
+                                                   G_CALLBACK (on_window_unmap_cb),
+                                                   impl,
+                                                   G_CONNECT_SWAPPED);
+      g_object_set_data (G_OBJECT (window),
+                         "quartz-muxer-unmap",
+                         GSIZE_TO_POINTER (handler_id));
+    }
 
   gtk_action_muxer_remove (quartz->muxer, "win");
 
