@@ -477,7 +477,8 @@ _gdk_macos_display_surface_removed (GdkMacosDisplay *self,
   if (self->keyboard_surface == surface)
     _gdk_macos_display_surface_resigned_key (self, surface);
 
-  g_queue_unlink (&self->sorted_surfaces, &surface->sorted);
+  if (queue_contains (&self->sorted_surfaces, &surface->sorted))
+    g_queue_unlink (&self->sorted_surfaces, &surface->sorted);
 
   if (queue_contains (&self->main_surfaces, &surface->main))
     _gdk_macos_display_surface_resigned_main (self, surface);
