@@ -2250,6 +2250,66 @@ gtk_snapshot_append_repeating_linear_gradient (GtkSnapshot            *snapshot,
 }
 
 /**
+ * gtk_snapshot_append_conic_gradient:
+ * @snapshot: a #GtkSnapshot
+ * @bounds: the rectangle to render the gradient into
+ * @center: the center point of the conic gradient
+ * @rotation: the clockwise rotation in degrees of the starting angle. 0 means the
+ *     starting angle is the top.
+ * @stops: (array length=n_stops): a pointer to an array of #GskColorStop defining the gradient
+ * @n_stops: the number of elements in @stops
+ *
+ * Appends a conic gradient node with the given stops to @snapshot.
+ */
+void
+gtk_snapshot_append_conic_gradient (GtkSnapshot            *snapshot,
+                                    const graphene_rect_t  *bounds,
+                                    const graphene_point_t *center,
+                                    float                   rotation,
+                                    const GskColorStop     *stops,
+                                    gsize                   n_stops)
+{
+  GskRenderNode *node;
+  graphene_rect_t real_bounds;
+  float dx, dy;
+  const GdkRGBA *first_color;
+  gboolean need_gradient = FALSE;
+  int i;
+
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (center != NULL);
+  g_return_if_fail (stops != NULL);
+  g_return_if_fail (n_stops > 1);
+
+  gtk_snapshot_ensure_translate (snapshot, &dx, &dy);
+  graphene_rect_offset_r (bounds, dx, dy, &real_bounds);
+
+  first_color = &stops[0].color;
+  for (i = 0; i < n_stops; i ++)
+    {
+      if (!gdk_rgba_equal (first_color, &stops[i].color))
+        {
+          need_gradient = TRUE;
+          break;
+        }
+    }
+
+  if (need_gradient)
+    node = gsk_conic_gradient_node_new (&real_bounds,
+                                        &GRAPHENE_POINT_INIT(
+                                          center->x + dx,
+                                          center->y + dy
+                                        ),
+                                        rotation,
+                                        stops,
+                                        n_stops);
+  else
+    node = gsk_color_node_new (first_color, &real_bounds);
+
+  gtk_snapshot_append_node_internal (snapshot, node);
+}
+
+/**
  * gtk_snapshot_append_radial_gradient:
  * @snapshot: a #GtkSnapshot
  * @bounds: the rectangle to render the readial gradient into
