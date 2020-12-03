@@ -1038,3 +1038,27 @@ ops_set_radial_gradient (RenderOpBuilder    *self,
   op->start = start;
   op->end = end;
 }
+
+void
+ops_set_conic_gradient (RenderOpBuilder    *self,
+                        guint               n_color_stops,
+                        const GskColorStop *color_stops,
+                        float               center_x,
+                        float               center_y,
+                        float               rotation)
+{
+  const guint real_n_color_stops = MIN (GL_MAX_GRADIENT_STOPS, n_color_stops);
+  OpConicGradient *op;
+
+  /* TODO: State tracking? */
+
+  op = ops_begin (self, OP_CHANGE_CONIC_GRADIENT);
+  op->n_color_stops.value = real_n_color_stops;
+  op->n_color_stops.send = true;
+  op->color_stops.value = color_stops;
+  op->color_stops.send = true;
+  op->center[0] = center_x;
+  op->center[1] = center_y;
+  op->rotation = rotation;
+}
+

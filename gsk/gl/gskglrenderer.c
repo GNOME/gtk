@@ -54,6 +54,8 @@
                               glGetUniformLocation(programs->program_name ## _program.id, "u_" #uniform_basename);\
                 if (programs->program_name ## _program.program_name.uniform_basename ## _location == -1) \
                   { \
+                    g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_LINK_FAILED, \
+                                 "Failed to find variable \"u_%s\" in shader program \"%s\"", #uniform_basename, #program_name); \
                     g_clear_pointer (&programs, gsk_gl_renderer_programs_unref); \
                     goto out; \
                   } \
@@ -1472,6 +1474,35 @@ render_radial_gradient_node (GskGLRenderer   *self,
                                start, end,
                                hradius * builder->scale_x,
                                vradius * builder->scale_y);
+
+      load_vertex_data (ops_draw (builder, NULL), &node->bounds, builder);
+    }
+  else
+    {
+      render_fallback_node (self, node, builder);
+    }
+}
+
+static inline void
+render_conic_gradient_node (GskGLRenderer   *self,
+                             GskRenderNode   *node,
+                             RenderOpBuilder *builder)
+{
+  const int n_color_stops = gsk_conic_gradient_node_get_n_color_stops (node);
+
+  if (n_color_stops < GL_MAX_GRADIENT_STOPS)
+    {
+      const GskColorStop *stops = gsk_conic_gradient_node_get_color_stops (node, NULL);
+      const graphene_point_t *center = gsk_conic_gradient_node_get_center (node);
+      const float rotation = gsk_conic_gradient_node_get_rotation (node);
+
+      ops_set_program (builder, &self->programs->conic_gradient_program);
+      ops_set_conic_gradient (builder,
+                              n_color_stops,
+                              stops,
+                              builder->dx + center->x,
+                              builder->dy + center->y,
+                              rotation);
 
       load_vertex_data (ops_draw (builder, NULL), &node->bounds, builder);
     }
@@ -3015,6 +3046,23 @@ apply_radial_gradient_op (const Program          *program,
 }
 
 static inline void
+apply_conic_gradient_op (const Program         *program,
+                         const OpConicGradient *op)
+{
+  OP_PRINT (" -> Conic gradient");
+  if (op->n_color_stops.send)
+    glUniform1i (program->conic_gradient.num_color_stops_location, op->n_color_stops.value);
+
+  if (op->color_stops.send)
+    glUniform1fv (program->conic_gradient.color_stops_location,
+                  op->n_color_stops.value * 5,
+                  (float *)op->color_stops.value);
+
+  glUniform1f (program->conic_gradient.rotation_location, op->rotation);
+  glUniform2f (program->conic_gradient.center_location, op->center[0], op->center[1]);
+}
+
+static inline void
 apply_border_op (const Program  *program,
                  const OpBorder *op)
 {
@@ -3248,6 +3296,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
     { "/org/gtk/libgsk/glsl/inset_shadow.glsl",              "inset shadow" },
     { "/org/gtk/libgsk/glsl/linear_gradient.glsl",           "linear gradient" },
     { "/org/gtk/libgsk/glsl/radial_gradient.glsl",           "radial gradient" },
+    { "/org/gtk/libgsk/glsl/conic_gradient.glsl",            "conic gradient" },
     { "/org/gtk/libgsk/glsl/outset_shadow.glsl",             "outset shadow" },
     { "/org/gtk/libgsk/glsl/repeat.glsl",                    "repeat" },
     { "/org/gtk/libgsk/glsl/unblurred_outset_shadow.glsl",   "unblurred_outset shadow" },
@@ -3310,6 +3359,12 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, end);
   INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, radius);
 
+  /* conic gradient */
+  INIT_PROGRAM_UNIFORM_LOCATION (conic_gradient, color_stops);
+  INIT_PROGRAM_UNIFORM_LOCATION (conic_gradient, num_color_stops);
+  INIT_PROGRAM_UNIFORM_LOCATION (conic_gradient, center);
+  INIT_PROGRAM_UNIFORM_LOCATION (conic_gradient, rotation);
+
   /* blur */
   INIT_PROGRAM_UNIFORM_LOCATION (blur, blur_radius);
   INIT_PROGRAM_UNIFORM_LOCATION (blur, blur_size);
@@ -3361,9 +3416,8 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
 out:
   gsk_gl_shader_builder_finish (&shader_builder);
 
-  if (error && !(*error) && !programs)
-    g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_COMPILATION_FAILED,
-                 "Failed to compile all shader programs"); /* Probably, eh. */
+  /* Check we indeed emitted an error if there was one */
+  g_assert (programs || !error || *error);
 
   return programs;
 }
@@ -3662,6 +3716,10 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       render_radial_gradient_node (self, node, builder);
     break;
 
+    case GSK_CONIC_GRADIENT_NODE:
+      render_conic_gradient_node (self, node, builder);
+    break;
+
     case GSK_CLIP_NODE:
       render_clip_node (self, node, builder);
     break;
@@ -3723,7 +3781,6 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
 
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_REPEATING_RADIAL_GRADIENT_NODE:
-    case GSK_CONIC_GRADIENT_NODE:
     case GSK_CAIRO_NODE:
     default:
       {
@@ -4024,6 +4081,10 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self)
 
         case OP_CHANGE_RADIAL_GRADIENT:
           apply_radial_gradient_op (program, ptr);
+          break;
+
+        case OP_CHANGE_CONIC_GRADIENT:
+          apply_conic_gradient_op (program, ptr);
           break;
 
         case OP_CHANGE_BLUR:

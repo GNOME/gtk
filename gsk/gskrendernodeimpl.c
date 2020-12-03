@@ -5333,8 +5333,8 @@ gsk_render_node_init_types_once (void)
   {
     const GskRenderNodeTypeInfo node_info =
     {
-      GSK_REPEATING_RADIAL_GRADIENT_NODE,
-      sizeof (GskRadialGradientNode),
+      GSK_CONIC_GRADIENT_NODE,
+      sizeof (GskConicGradientNode),
       NULL,
       gsk_conic_gradient_node_finalize,
       gsk_conic_gradient_node_draw,

@@ -41,6 +41,7 @@ typedef enum
   OP_CHANGE_BLEND                      = 27,
   OP_CHANGE_GL_SHADER_ARGS             = 28,
   OP_CHANGE_EXTRA_SOURCE_TEXTURE       = 29,
+  OP_CHANGE_CONIC_GRADIENT             = 30,
   OP_LAST
 } OpKind;
 
@@ -155,6 +156,14 @@ typedef struct
   float radius[2];
   float center[2];
 } OpRadialGradient;
+
+typedef struct
+{
+  ColorStopUniformValue color_stops;
+  IntUniformValue n_color_stops;
+  float center[2];
+  float rotation;
+} OpConicGradient;
 
 typedef struct
 {
