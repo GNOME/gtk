@@ -54,6 +54,8 @@
                               glGetUniformLocation(programs->program_name ## _program.id, "u_" #uniform_basename);\
                 if (programs->program_name ## _program.program_name.uniform_basename ## _location == -1) \
                   { \
+                    g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_LINK_FAILED, \
+                                 "Failed to find variable \"u_%s\" in shader program \"%s\"", #uniform_basename, #program_name); \
                     g_clear_pointer (&programs, gsk_gl_renderer_programs_unref); \
                     goto out; \
                   } \
@@ -3361,9 +3363,8 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
 out:
   gsk_gl_shader_builder_finish (&shader_builder);
 
-  if (error && !(*error) && !programs)
-    g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_COMPILATION_FAILED,
-                 "Failed to compile all shader programs"); /* Probably, eh. */
+  /* Check we indeed emitted an error if there was one */
+  g_assert (programs || !error || *error);
 
   return programs;
 }
