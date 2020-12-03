@@ -112,8 +112,11 @@ gdk_macos_surface_hide (GdkSurface *surface)
 {
   GdkMacosSurface *self = (GdkMacosSurface *)surface;
   GdkSeat *seat;
+  gboolean was_mapped;
 
   g_assert (GDK_IS_MACOS_SURFACE (self));
+
+  was_mapped = GDK_SURFACE_IS_MAPPED (GDK_SURFACE (self));
 
   seat = gdk_display_get_default_seat (surface->display);
   gdk_seat_ungrab (seat);
@@ -121,6 +124,9 @@ gdk_macos_surface_hide (GdkSurface *surface)
   [self->window hide];
 
   _gdk_surface_clear_update_area (surface);
+
+  if (was_mapped)
+    gdk_surface_freeze_updates (GDK_SURFACE (self));
 }
 
 static int
@@ -544,7 +550,10 @@ _gdk_macos_surface_new (GdkMacosDisplay   *display,
     }
 
   if (ret != NULL)
-    _gdk_macos_surface_monitor_changed (ret);
+    {
+      gdk_surface_freeze_updates (GDK_SURFACE (ret));
+      _gdk_macos_surface_monitor_changed (ret);
+    }
 
   g_object_unref (frame_clock);
 
@@ -766,6 +775,7 @@ _gdk_macos_surface_show (GdkMacosSurface *self)
         {
           _gdk_macos_surface_update_position (self);
           gdk_surface_invalidate_rect (GDK_SURFACE (self), NULL);
+          gdk_surface_thaw_updates (GDK_SURFACE (self));
         }
     }
 
