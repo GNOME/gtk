@@ -1056,9 +1056,8 @@ _gdk_macos_display_clear_sorting (GdkMacosDisplay *self)
 {
   g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
 
-  self->sorted_surfaces.head = NULL;
-  self->sorted_surfaces.tail = NULL;
-  self->sorted_surfaces.length = 0;
+  while (self->sorted_surfaces.head != NULL)
+    g_queue_unlink (&self->sorted_surfaces, self->sorted_surfaces.head);
 }
 
 const GList *
