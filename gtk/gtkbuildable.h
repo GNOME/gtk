@@ -110,8 +110,8 @@ struct _GtkBuildableParser
  * @custom_tag_start: Implement this if the buildable needs to parse
  *  content below <child>. To handle an element, the implementation
  *  must fill in the @parser and @user_data and return %TRUE.
- *  #GtkWidget implements this to parse keyboard accelerators specified
- *  in <accelerator> elements.
+ *  #GtkWidget implements this to parse accessible attributes specified
+ *  in <accessibility> elements.
  *  Note that @user_data must be freed in @custom_tag_end or @custom_finished.
  * @custom_tag_end: Called for the end tag of each custom element that is
  *  handled by the buildable (see @custom_tag_start).
