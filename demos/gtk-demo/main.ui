@@ -28,6 +28,16 @@
             <property name="label" translatable="yes">Run</property>
           </object>
         </child>
+        <child>
+          <object class="GtkToggleButton">
+            <property name="icon-name">edit-find-symbolic</property>
+            <property name="valign">center</property>
+            <property name="active" bind-source="searchbar" bind-property="search-mode-enabled" bind-flags="bidirectional|sync-create"/>
+            <accessibility>
+              <property name="label" translatable="yes">Search</property>
+            </accessibility>
+          </object>
+        </child>
         <child type="end">
           <object class="GtkMenuButton" id="gear_menu_button">
             <property name="valign">center</property>
