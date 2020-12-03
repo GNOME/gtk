@@ -14,6 +14,10 @@ Overview of Changes
  - Implement the Cache interface
  - Implement ScrollSubstringTo for GtkTextView
 
+* Introspection:
+ - Add many missing annotations to APIs
+ - In particular, nullability annotation fixes for rust
+
 * Touch support:
  - Fix issues with text handles
  - Fix interaction between touch scrolling and focus
@@ -33,7 +37,13 @@ Overview of Changes
  - Be stricter about <requires>
  - Make gtk-builder-tool simplify update <requires>
 
+* GtkFileChooser:
+ - Remove GtkFileChooserButton
+
 * Make the inspector available in non-debug builds
+
+* CSS:
+ - Support conic gradients
 
 * Adwaita:
  - Round all window corners
@@ -56,13 +66,13 @@ Overview of Changes
  - Implmement minimization
 
 * OS X:
- - Some work towards working GL
+ - Use the cairo renderer by default
+ - Work towards a working GL renderer
  - Search engine updates
  - Fix rendering artifacts with hover transitions
 
-* Introspection:
- - Add many missing annotations to APIs
- - In particular, nullability annotation fixes for rust
+* Windows:
+ - Fix key event generation, making text input work
 
 * Documentation:
  - Add missing enumerations, symbols and types
@@ -70,13 +80,16 @@ Overview of Changes
 
 * Demos:
  - Make the constraints demo more useful
+ - Make search more obvious
  - Add a suggestion entry demo
  - Consistency improvements
  - Drop 'devel' styling
 
 * Translation updates:
  Belarusian
+ Catalan
  Polish
+ Spanish
  Swedish
  Ukrainian
 
