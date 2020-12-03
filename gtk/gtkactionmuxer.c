@@ -315,6 +315,19 @@ gtk_action_muxer_find (GtkActionMuxer  *muxer,
   return NULL;
 }
 
+GActionGroup *
+gtk_action_muxer_get_group (GtkActionMuxer *muxer,
+                            const char     *group_name)
+{
+  Group *group;
+
+  group = g_hash_table_lookup (muxer->groups, group_name);
+  if (group)
+    return group->group;
+
+  return NULL;
+}
+
 static inline Action *
 find_observers (GtkActionMuxer *muxer,
                 const char     *action_name)

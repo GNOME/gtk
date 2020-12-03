@@ -60,6 +60,8 @@ void                    gtk_action_muxer_remove                         (GtkActi
 GActionGroup *          gtk_action_muxer_find                           (GtkActionMuxer *muxer,
                                                                          const char     *action_name,
                                                                          const char    **unprefixed_name);
+GActionGroup *          gtk_action_muxer_get_group                      (GtkActionMuxer *muxer,
+                                                                         const char     *group_name);
 GtkActionMuxer *        gtk_action_muxer_get_parent                     (GtkActionMuxer *muxer);
 
 void                    gtk_action_muxer_set_parent                     (GtkActionMuxer *muxer,
