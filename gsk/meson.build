@@ -8,6 +8,7 @@ gsk_private_gl_shaders = [
   'resources/glsl/color.glsl',
   'resources/glsl/linear_gradient.glsl',
   'resources/glsl/radial_gradient.glsl',
+  'resources/glsl/conic_gradient.glsl',
   'resources/glsl/color_matrix.glsl',
   'resources/glsl/blur.glsl',
   'resources/glsl/inset_shadow.glsl',
