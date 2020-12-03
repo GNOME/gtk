@@ -67,7 +67,7 @@ vec2 raySphere(vec3 ro, vec3 rd, vec4 sphere) {
   return vec2(t0, t1);
 }
 
-float noise1(vec2 p) {
+float noize1(vec2 p) {
   vec2 n = mod2(p, vec2(cellWidth));
   vec2 hh = hash(sqrt(2.0)*(n+1000.0));
   hh.x *= hh.y;
@@ -81,7 +81,7 @@ float noise1(vec2 p) {
   return h*0.25;
 }
 
-float noise2(vec2 p) {
+float noize2(vec2 p) {
   vec2 n = mod2(p, vec2(cellWidth));
   vec2 hh = hash(sqrt(2.0)*(n+1000.0));
   hh.x *= hh.y;
@@ -114,7 +114,7 @@ float height(vec2 p, float dd, int mx) {
   int i = 0;
 
   for (; i < 4;++i) {
-    float nn = a*noise2(p);
+    float nn = a*noize2(p);
     s += nn;
     d += abs(a);
     p += o;
@@ -130,7 +130,7 @@ float height(vec2 p, float dd, int mx) {
   mx = int(mix(float(4), float(mx), step(rdd, far)));
 
   for (; i < mx; ++i) {
-    float nn = a*noise1(p);
+    float nn = a*noize1(p);
     s += nn;
     d += abs(a);
     p += o;
