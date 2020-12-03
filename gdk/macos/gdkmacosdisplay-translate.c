@@ -610,7 +610,7 @@ fill_scroll_event (GdkMacosDisplay *self,
       sx = [nsevent scrollingDeltaX];
       sy = [nsevent scrollingDeltaY];
 
-      if (sx != 0.0 || dx != 0.0)
+      if (sx != 0.0 || sy != 0.0)
         ret = gdk_scroll_event_new (GDK_SURFACE (surface),
                                     pointer,
                                     NULL,
