@@ -26,14 +26,15 @@
 #include "gtkprivate.h"
 
 /* for the types only */
+#include "gtk/gtkcssimageconicprivate.h"
 #include "gtk/gtkcssimagecrossfadeprivate.h"
+#include "gtk/gtkcssimagefallbackprivate.h"
 #include "gtk/gtkcssimageiconthemeprivate.h"
 #include "gtk/gtkcssimagelinearprivate.h"
 #include "gtk/gtkcssimageradialprivate.h"
 #include "gtk/gtkcssimageurlprivate.h"
 #include "gtk/gtkcssimagescaledprivate.h"
 #include "gtk/gtkcssimagerecolorprivate.h"
-#include "gtk/gtkcssimagefallbackprivate.h"
 
 G_DEFINE_ABSTRACT_TYPE (GtkCssImage, _gtk_css_image, G_TYPE_OBJECT)
 
@@ -521,6 +522,7 @@ gtk_css_image_get_parser_type (GtkCssParser *parser)
     { "repeating-linear-gradient", _gtk_css_image_linear_get_type },
     { "radial-gradient", _gtk_css_image_radial_get_type },
     { "repeating-radial-gradient", _gtk_css_image_radial_get_type },
+    { "conic-gradient", gtk_css_image_conic_get_type },
     { "cross-fade", gtk_css_image_cross_fade_get_type },
     { "image", _gtk_css_image_fallback_get_type }
   };
