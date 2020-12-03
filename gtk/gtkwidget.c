@@ -249,15 +249,8 @@
  * # GtkWidget as GtkBuildable
  *
  * The GtkWidget implementation of the #GtkBuildable interface supports a
- * custom `<accelerator>` element, which has attributes named ”key”, ”modifiers”
- * and ”signal” and allows to specify accelerators.
- *
- * An example of a UI definition fragment specifying an accelerator:
- * |[
- * <object class="GtkButton">
- *   <accelerator key="q" modifiers="GDK_CONTROL_MASK" signal="clicked"/>
- * </object>
- * ]|
+ * custom elements to specify various aspects of widgets that are not
+ * directly expressed as properties.
  *
  * If the parent widget uses a #GtkLayoutManager, #GtkWidget supports a
  * custom `<layout>` element, used to define layout properties:
