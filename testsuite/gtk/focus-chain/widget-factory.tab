@@ -16,7 +16,6 @@ GtkToggleButton
 GtkToggleButton
 GtkButton
 GtkButton
-GtkButton
 GtkLinkButton
 GtkSwitch
 GtkScale

@@ -13,19 +13,50 @@
 
 
 static void
-file_set (GtkFileChooserButton *button,
-          GtkWidget            *picture)
+open_response_cb (GtkWidget  *dialog,
+                  int         response,
+                  GtkPicture *picture)
 {
-  GFile *file;
-  GdkPaintable *paintable;
+  gtk_widget_hide (dialog);
 
-  file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (button));
+  if (response == GTK_RESPONSE_ACCEPT)
+    {
+      GFile *file;
+      GdkPaintable *paintable;
 
-  paintable = svg_paintable_new (file);
-  gtk_picture_set_paintable (GTK_PICTURE (picture), paintable);
+      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+      paintable = svg_paintable_new (file);
+      gtk_picture_set_paintable (GTK_PICTURE (picture), paintable);
+      g_object_unref (paintable);
+      g_object_unref (file);
+    }
 
-  g_object_unref (paintable);
-  g_object_unref (file);
+  gtk_window_destroy (GTK_WINDOW (dialog));
+}
+
+static void
+show_file_open (GtkWidget  *button,
+                GtkPicture *picture)
+{
+  GtkFileFilter *filter;
+  GtkWidget *dialog;
+
+  dialog = gtk_file_chooser_dialog_new ("Open node file",
+                                        GTK_WINDOW (gtk_widget_get_root (button)),
+                                        GTK_FILE_CHOOSER_ACTION_OPEN,
+                                        "_Cancel", GTK_RESPONSE_CANCEL,
+                                        "_Load", GTK_RESPONSE_ACCEPT,
+                                        NULL);
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_add_mime_type (filter, "image/svg+xml");
+  gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
+
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+
+  g_signal_connect (dialog, "response", G_CALLBACK (open_response_cb), picture);
+  gtk_widget_show (dialog);
 }
 
 static GtkWidget *window;
@@ -35,7 +66,6 @@ do_paintable_svg (GtkWidget *do_widget)
 {
   GtkWidget *header;
   GtkWidget *picture;
-  GtkFileFilter *filter;
   GtkWidget *button;
   GFile *file;
   GdkPaintable *paintable;
@@ -49,17 +79,14 @@ do_paintable_svg (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "Paintable — SVG");
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
-      button = gtk_file_chooser_button_new ("Select an SVG file", GTK_FILE_CHOOSER_ACTION_OPEN);
-      filter = gtk_file_filter_new ();
-      gtk_file_filter_add_mime_type (filter, "image/svg+xml");
-      gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (button), filter);
+      button = gtk_button_new_with_mnemonic ("_Open");
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), button);
 
       picture = gtk_picture_new ();
       gtk_picture_set_can_shrink (GTK_PICTURE (picture), TRUE);
       gtk_widget_set_size_request (picture, 16, 16);
 
-      g_signal_connect (button, "file-set", G_CALLBACK (file_set), picture);
+      g_signal_connect (button, "clicked", G_CALLBACK (show_file_open), picture);
 
       gtk_window_set_child (GTK_WINDOW (window), picture);
 

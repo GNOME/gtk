@@ -94,8 +94,7 @@ test_type (gconstpointer data)
     return;
 
   /* These leak their GDBusConnections */
-  if (g_type_is_a (type, GTK_TYPE_FILE_CHOOSER_BUTTON) ||
-      g_type_is_a (type, GTK_TYPE_FILE_CHOOSER_DIALOG) ||
+  if (g_type_is_a (type, GTK_TYPE_FILE_CHOOSER_DIALOG) ||
       g_type_is_a (type, GTK_TYPE_FILE_CHOOSER_WIDGET) ||
       g_str_equal (g_type_name (type), "GtkPlacesSidebar"))
     return;

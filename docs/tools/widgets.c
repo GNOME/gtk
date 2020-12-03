@@ -616,51 +616,6 @@ create_font_button (void)
 }
 
 static WidgetInfo *
-create_file_button (void)
-{
-  GtkWidget *vbox;
-  GtkWidget *vbox2;
-  GtkWidget *picker;
-  char *path;
-  GFile *file;
-
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
-  vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-  picker = gtk_file_chooser_button_new ("File Chooser Button",
-		  			GTK_FILE_CHOOSER_ACTION_OPEN);
-  gtk_widget_set_size_request (picker, 150, -1);
-  gtk_widget_set_halign (picker, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (picker, GTK_ALIGN_CENTER);
-  gtk_box_append (GTK_BOX (vbox2), picker);
-  gtk_box_append (GTK_BOX (vbox2),
-		      gtk_label_new ("File Button (Files)"));
-
-  gtk_box_append (GTK_BOX (vbox),
-		      vbox2);
-  gtk_box_append (GTK_BOX (vbox),
-		      gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
-
-  vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-  picker = gtk_file_chooser_button_new ("File Chooser Button",
-		  			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-  gtk_widget_set_size_request (picker, 150, -1);
-  path = g_build_filename (g_get_home_dir (), "Documents", NULL);
-  file = g_file_new_for_path (path);
-  gtk_file_chooser_set_file (GTK_FILE_CHOOSER (picker), file, NULL);
-  g_free (path);
-  g_object_unref (file);
-  gtk_widget_set_halign (picker, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (picker, GTK_ALIGN_CENTER);
-  gtk_box_append (GTK_BOX (vbox2), picker);
-  gtk_box_append (GTK_BOX (vbox2), gtk_label_new ("File Button (Select Folder)"));
-  gtk_box_append (GTK_BOX (vbox), vbox2);
-
-  add_margin (vbox);
-
-  return new_widget_info ("file-button", vbox, MEDIUM);
-}
-
-static WidgetInfo *
 create_editable_label (void)
 {
   GtkWidget *vbox;
@@ -2144,7 +2099,6 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_combo_box_entry ());
   retval = g_list_prepend (retval, create_combo_box_text ());
   retval = g_list_prepend (retval, create_entry ());
-  retval = g_list_prepend (retval, create_file_button ());
   retval = g_list_prepend (retval, create_font_button ());
   retval = g_list_prepend (retval, create_frame ());
   retval = g_list_prepend (retval, create_icon_view ());

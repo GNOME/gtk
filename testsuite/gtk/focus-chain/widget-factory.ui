@@ -855,9 +855,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkFileChooserButton" id="filechooserbutton1"/>
-                            </child>
-                            <child>
                               <object class="GtkLinkButton" id="linkbutton1">
                                 <property name="label" translatable="yes">link button</property>
                                 <property name="receives-default">1</property>

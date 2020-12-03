@@ -57,8 +57,6 @@ list_ignore_properties (gboolean buglist)
     { "GtkWidget",              "has-default",          (void*) TRUE, },                /* conflicts with toplevel-less widgets */
     { "GtkWidget",              "display",              (void*) MATCH_ANY_VALUE },
     { "GtkCellView",            "background",           (void*) "", },                  /* "" is not a valid background color */
-    { "GtkFileChooserButton",   "select-multiple",      (void*) MATCH_ANY_VALUE },      /* property disabled */
-    { "GtkFileChooserButton",   "action",               (void*) GTK_FILE_CHOOSER_ACTION_SAVE },
     { "GtkFileChooserWidget",   "select-multiple",      (void*) 0x1 },                  /* property conflicts */
     { "GtkFileChooserDialog",   "select-multiple",      (void*) MATCH_ANY_VALUE },      /* property disabled */
     { "GtkTextView",            "overwrite",            (void*) MATCH_ANY_VALUE },      /* needs text buffer */
