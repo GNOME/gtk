@@ -1894,7 +1894,6 @@ gtk_window_native_layout (GtkNative *native,
   GtkWindow *window = GTK_WINDOW (native);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *widget = GTK_WIDGET (native);
-  GdkSeat *seat;
 
   if (priv->surface_width != width || priv->surface_height != height)
     {
@@ -1903,21 +1902,30 @@ gtk_window_native_layout (GtkNative *native,
       priv->surface_height = height;
     }
 
-  seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
-  if (seat)
+  /* This fake motion event is needed for getting up to date pointer focus
+   * and coordinates when tho pointer didn't move but the layout changed
+   * within the window.
+   */
+  if (gtk_widget_needs_allocate (widget))
     {
-      GdkDevice *device;
-      GtkWidget *focus;
+      GdkSeat *seat;
 
-      device = gdk_seat_get_pointer (seat);
-      focus = gtk_window_lookup_pointer_focus_widget (GTK_WINDOW (widget),
-                                                      device, NULL);
-      if (focus)
+      seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
+      if (seat)
         {
-          GdkSurface *focus_surface =
-            gtk_native_get_surface (gtk_widget_get_native (focus));
+          GdkDevice *device;
+          GtkWidget *focus;
 
-          gdk_surface_request_motion (focus_surface);
+          device = gdk_seat_get_pointer (seat);
+          focus = gtk_window_lookup_pointer_focus_widget (GTK_WINDOW (widget),
+                                                          device, NULL);
+          if (focus)
+            {
+              GdkSurface *focus_surface =
+                gtk_native_get_surface (gtk_widget_get_native (focus));
+
+              gdk_surface_request_motion (focus_surface);
+            }
         }
     }
 
