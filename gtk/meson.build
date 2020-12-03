@@ -1159,7 +1159,7 @@ if build_gir
                                      includes: [ gdk_gir[0], 'xlib-2.0', ],
                                      install: true,
                                      dependencies: gdk_gir_dep,
-                                     header: 'gdk/gdkx.h',
+                                     header: 'gdk/x11/gdkx.h',
                                      extra_args: gir_args,
     )
     gtk_dep_sources += gdk_x11_gir
@@ -1176,7 +1176,7 @@ if build_gir
                                          includes: [ gdk_gir[0], ],
                                          install: true,
                                          dependencies: gdk_gir_dep,
-                                         header: 'gdk/gdkwayland.h',
+                                         header: 'gdk/wayland/gdkwayland.h',
                                          extra_args: gir_args,
     )
     gtk_dep_sources += gdk_wayland_gir
