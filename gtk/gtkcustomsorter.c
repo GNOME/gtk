@@ -101,7 +101,7 @@ gtk_custom_sorter_init (GtkCustomSorter *self)
 
 /**
  * gtk_custom_sorter_new:
- * @sort_func: the #GCompareDataFunc to use for sorting
+ * @sort_func: (nullable): the #GCompareDataFunc to use for sorting
  * @user_data: (nullable): user data to pass to @sort_func
  * @user_destroy: (nullable): destroy notify for @user_data
  *
