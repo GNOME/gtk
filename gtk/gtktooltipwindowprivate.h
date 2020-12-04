@@ -37,6 +37,8 @@ G_DECLARE_FINAL_TYPE (GtkTooltipWindow, gtk_tooltip_window, GTK, TOOLTIP_WINDOW,
 
 GtkWidget *     gtk_tooltip_window_new                          (void);
 
+void            gtk_tooltip_window_present                      (GtkTooltipWindow *window);
+
 void            gtk_tooltip_window_set_label_markup             (GtkTooltipWindow *window,
                                                                  const char       *markup);
 void            gtk_tooltip_window_set_label_text               (GtkTooltipWindow *window,
