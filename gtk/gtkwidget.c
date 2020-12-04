@@ -4296,9 +4296,18 @@ gtk_widget_mnemonic_activate (GtkWidget *widget,
   return handled;
 }
 
-static gboolean
+/*< private >
+ * gtk_widget_can_activate:
+ * @self: a #GtkWidget
+ *
+ * Checks whether a #GtkWidget can be activated using
+ * gtk_widget_activate().
+ */
+gboolean
 gtk_widget_can_activate (GtkWidget *self)
 {
+  g_return_val_if_fail (GTK_IS_WIDGET (self), FALSE);
+
   GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (self);
 
   if (widget_class->activate_signal != 0)
