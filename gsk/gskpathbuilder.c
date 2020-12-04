@@ -96,7 +96,7 @@ gsk_path_builder_new (void)
   builder = g_slice_new0 (GskPathBuilder);
   builder->ref_count = 1;
 
-  builder->ops = g_array_new (FALSE, FALSE, sizeof (GskStandardOperation));
+  builder->ops = g_array_new (FALSE, FALSE, sizeof (gskpathop));
   builder->points = g_array_new (FALSE, FALSE, sizeof (graphene_point_t));
 
   /* Be explicit here */
@@ -128,6 +128,19 @@ gsk_path_builder_ref (GskPathBuilder *builder)
   return builder;
 }
 
+/* We're cheating here. Out pathops are relative to the NULL pointer,
+ * so that we can not care about the points GArray reallocating itself
+ * until we create the contour.
+ * This does however mean that we need to not use gsk_pathop_get_points()
+ * without offsetting the returned pointer.
+ */
+static inline gskpathop
+gsk_pathop_encode_index (GskPathOperation op,
+                         gsize            index)
+{
+  return gsk_pathop_encode (op, ((graphene_point_t *) NULL) + index);
+}
+
 static void
 gsk_path_builder_ensure_current (GskPathBuilder *builder)
 {
@@ -135,7 +148,7 @@ gsk_path_builder_ensure_current (GskPathBuilder *builder)
     return;
 
   builder->flags = GSK_PATH_FLAT;
-  g_array_append_vals (builder->ops, &(GskStandardOperation) { GSK_PATH_MOVE, 0 }, 1);
+  g_array_append_vals (builder->ops, (gskpathop[1]) { gsk_pathop_encode_index (GSK_PATH_MOVE, 0) }, 1);
   g_array_append_val (builder->points, builder->current_point);
 }
 
@@ -147,7 +160,7 @@ gsk_path_builder_append_current (GskPathBuilder         *builder,
 {
   gsk_path_builder_ensure_current (builder);
 
-  g_array_append_vals (builder->ops, &(GskStandardOperation) { op, builder->points->len - 1 }, 1);
+  g_array_append_vals (builder->ops, (gskpathop[1]) { gsk_pathop_encode_index (op, builder->points->len - 1) }, 1);
   g_array_append_vals (builder->points, points, n_points);
 
   builder->current_point = points[n_points - 1];
@@ -162,10 +175,11 @@ gsk_path_builder_end_current (GskPathBuilder *builder)
    return;
 
   contour = gsk_standard_contour_new (builder->flags,
-                                      (GskStandardOperation *) builder->ops->data,
-                                      builder->ops->len,
                                       (graphene_point_t *) builder->points->data,
-                                      builder->points->len);
+                                      builder->points->len,
+                                      (gskpathop *) builder->ops->data,
+                                      builder->ops->len,
+                                      (graphene_point_t *) builder->points->data - (graphene_point_t *) NULL);
 
   g_array_set_size (builder->ops, 0);
   g_array_set_size (builder->points, 0);
