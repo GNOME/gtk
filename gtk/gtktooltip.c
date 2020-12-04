@@ -1024,7 +1024,7 @@ gtk_tooltip_maybe_allocate (GtkNative *native)
   if (!tooltip || GTK_NATIVE (tooltip->native) != native)
     return;
 
-  gtk_native_check_resize (GTK_NATIVE (tooltip->window));
+  gtk_tooltip_window_present (GTK_TOOLTIP_WINDOW (tooltip->window));
 }
 
 void

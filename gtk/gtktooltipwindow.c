@@ -142,8 +142,12 @@ gtk_tooltip_window_relayout (GtkTooltipWindow *window)
 static void
 gtk_tooltip_window_native_check_resize (GtkNative *native)
 {
-  GtkTooltipWindow *window = GTK_TOOLTIP_WINDOW (native);
-  GtkWidget *widget = GTK_WIDGET (native);
+}
+
+void
+gtk_tooltip_window_present (GtkTooltipWindow *window)
+{
+  GtkWidget *widget = GTK_WIDGET (window);
 
   if (!_gtk_widget_get_alloc_needed (widget))
     {
