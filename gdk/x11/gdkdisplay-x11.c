@@ -920,16 +920,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	      int ty = 0;
 	      Window child_window = 0;
 
-              if (surface_impl->pending_configure_events == 1)
-                {
-                  surface_impl->pending_configure_events = 0;
-                  gdk_surface_thaw_updates (surface);
-                }
-              else if (surface_impl->pending_configure_events > 1)
-                {
-                  surface_impl->pending_configure_events--;
-                }
-
               x = y = 0;
 	      gdk_x11_display_error_trap_push (display);
 	      if (XTranslateCoordinates (GDK_SURFACE_XDISPLAY (surface),

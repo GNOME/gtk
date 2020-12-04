@@ -1626,8 +1626,13 @@ x11_surface_resize (GdkSurface *surface,
     }
   else
     {
-      if (width * impl->surface_scale != impl->unscaled_width || height * impl->surface_scale != impl->unscaled_height)
-        surface->resize_count += 1;
+      if (width * impl->surface_scale != impl->unscaled_width ||
+          height * impl->surface_scale != impl->unscaled_height)
+        {
+          surface->resize_count++;
+          if (surface->resize_count == 1)
+            gdk_surface_freeze_updates (surface);
+        }
     }
 }
 
@@ -1678,8 +1683,13 @@ x11_surface_move_resize (GdkSurface *surface,
     }
   else
     {
-      if (width * impl->surface_scale != impl->unscaled_width || height * impl->surface_scale != impl->unscaled_height)
-        surface->resize_count += 1;
+      if (width * impl->surface_scale != impl->unscaled_width ||
+          height * impl->surface_scale != impl->unscaled_height)
+        {
+          surface->resize_count++;
+          if (surface->resize_count == 1)
+            gdk_surface_freeze_updates (surface);
+        }
     }
 }
 
@@ -4244,6 +4254,9 @@ _gdk_x11_moveresize_configure_done (GdkDisplay *display,
   XEvent *tmp_event;
   MoveResizeData *mv_resize = get_move_resize_data (display, FALSE);
 
+  gdk_surface_thaw_updates (surface);
+  gdk_surface_request_layout (surface);
+
   if (!mv_resize || surface != mv_resize->moveresize_surface)
     return FALSE;
 
@@ -5067,10 +5080,6 @@ gdk_x11_toplevel_present (GdkToplevel       *toplevel,
                           size.shadow.top,
                           size.shadow.bottom);
     }
-
-  impl->pending_configure_events++;
-  if (impl->pending_configure_events == 1)
-    gdk_surface_freeze_updates (surface);
 
   if (gdk_toplevel_layout_get_maximized (layout))
     gdk_x11_surface_maximize (surface);
