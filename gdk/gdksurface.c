@@ -1340,7 +1340,10 @@ gdk_surface_layout_on_clock (GdkFrameClock *clock,
 
   class = GDK_SURFACE_GET_CLASS (surface);
   if (class->compute_size)
-    class->compute_size (surface);
+    {
+      if (class->compute_size (surface))
+        return;
+    }
 
   g_signal_emit (surface, signals[LAYOUT], 0, surface->width, surface->height);
 }

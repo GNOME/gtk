@@ -295,7 +295,7 @@ gdk_x11_surface_request_layout (GdkSurface *surface)
     }
 }
 
-static void
+static gboolean
 gdk_x11_surface_compute_size (GdkSurface *surface)
 {
   GdkX11Surface *impl = GDK_X11_SURFACE (surface);
@@ -352,6 +352,8 @@ gdk_x11_surface_compute_size (GdkSurface *surface)
 
       impl->next_layout.surface_geometry_dirty = FALSE;
     }
+
+  return surface->resize_count > 0;
 }
 
 gboolean
