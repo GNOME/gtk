@@ -547,11 +547,11 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
                   NULL, NULL,
                   NULL,
                   G_TYPE_NONE, 0);
-  widget_class->activate_signal = child_signals[CHILD_ACTIVATE];
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("flowboxchild"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GRID_CELL);
+  gtk_widget_class_set_activate_signal (widget_class, child_signals[CHILD_ACTIVATE]);
 }
 
 static void
@@ -3837,7 +3837,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                                         NULL,
                                         G_TYPE_NONE, 0);
 
-  widget_class->activate_signal = signals[ACTIVATE_CURSOR_CHILD];
+  gtk_widget_class_set_activate_signal (widget_class, signals[ACTIVATE_CURSOR_CHILD]);
 
   gtk_flow_box_add_move_binding (widget_class, GDK_KEY_Home, 0,
                                  GTK_MOVEMENT_BUFFER_ENDS, -1);

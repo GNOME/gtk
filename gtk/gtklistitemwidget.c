@@ -263,7 +263,7 @@ gtk_list_item_widget_class_init (GtkListItemWidgetClass *klass)
                   NULL,
                   G_TYPE_NONE, 0);
 
-  widget_class->activate_signal = signals[ACTIVATE_SIGNAL];
+  gtk_widget_class_set_activate_signal (widget_class, signals[ACTIVATE_SIGNAL]);
 
   /**
    * GtkListItem|listitem.select:

@@ -1295,8 +1295,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
                                           NULL,
                                           G_TYPE_NONE, 0);
 
-  widget_class->activate_signal = signals[SIGNAL_CLICKED];
-
+  gtk_widget_class_set_activate_signal (widget_class, signals[SIGNAL_CLICKED]);
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("modelbutton"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_MENU_ITEM);

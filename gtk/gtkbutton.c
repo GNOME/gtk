@@ -282,9 +282,10 @@ gtk_button_class_init (GtkButtonClass *klass)
                   NULL, NULL,
                   NULL,
                   G_TYPE_NONE, 0);
-  widget_class->activate_signal = button_signals[ACTIVATE];
-  activate_action = gtk_signal_action_new ("activate");
 
+  gtk_widget_class_set_activate_signal (widget_class, button_signals[ACTIVATE]);
+
+  activate_action = gtk_signal_action_new ("activate");
   for (guint i = 0; i < G_N_ELEMENTS (activate_keyvals); i++)
     {
       GtkShortcut *activate_shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (activate_keyvals[i], 0),

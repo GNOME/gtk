@@ -292,6 +292,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  guint activate_signal;
 
   gobject_class->dispose = gtk_expander_dispose;
   gobject_class->set_property = gtk_expander_set_property;
@@ -368,7 +369,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE));
 
-  widget_class->activate_signal =
+  activate_signal =
     g_signal_new (I_("activate"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -377,6 +378,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                   NULL,
                   G_TYPE_NONE, 0);
 
+  gtk_widget_class_set_activate_signal (widget_class, activate_signal);
   gtk_widget_class_set_css_name (widget_class, I_("expander-widget"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_BUTTON);
 }
