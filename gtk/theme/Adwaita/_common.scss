@@ -4035,7 +4035,7 @@ window {
     box-shadow: 0 3px 9px 1px transparentize(black, 0.5),
                 0 0 0 1px $_wm_border; //doing borders with box-shadow
     margin: 0px;
-    border-radius: $window_radius;
+    border-radius: $window_radius $window_radius 0 0;
     &:backdrop {
       // the transparent shadow here is to enforce that the shadow extents don't
       // change when we go to backdrop, to prevent jumping windows.
@@ -4054,6 +4054,7 @@ window {
     }
 
     &.dialog.message {
+      border-radius: $window_radius;
       box-shadow: 0 1px 2px transparentize(black, 0.8),
                   0 0 0 1px transparentize($_wm_border, 0.1);
     }
