@@ -23,6 +23,8 @@
 
 #include <gskpath.h>
 
+#include "gskpathopprivate.h"
+
 G_BEGIN_DECLS
 
 typedef enum 
@@ -33,23 +35,17 @@ typedef enum
 
 typedef struct _GskContour GskContour;
 
-typedef struct _GskStandardOperation GskStandardOperation;
-
-struct _GskStandardOperation {
-  GskPathOperation op;
-  gsize point; /* index into points array of the start point (last point of previous op) */
-};
-
 GskContour *            gsk_rect_contour_new                    (const graphene_rect_t  *rect);
 GskContour *            gsk_circle_contour_new                  (const graphene_point_t *center,
                                                                  float                   radius,
                                                                  float                   start_angle,
                                                                  float                   end_angle);
 GskContour *            gsk_standard_contour_new                (GskPathFlags            flags,
-                                                                 const                   GskStandardOperation *ops,
+                                                                 const graphene_point_t *points,
+                                                                 gsize                   n_points,
+                                                                 const gskpathop        *ops,
                                                                  gsize                   n_ops,
-                                                                 const                   graphene_point_t *points,
-                                                                 gsize                   n_points);
+                                                                 gssize                  offset);
 
 void                    gsk_contour_copy                        (GskContour *            dest,
                                                                  const GskContour       *src);

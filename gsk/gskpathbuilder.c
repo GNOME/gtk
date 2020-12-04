@@ -105,7 +105,7 @@ gsk_path_builder_new (void)
   self = g_slice_new0 (GskPathBuilder);
   self->ref_count = 1;
 
-  self->ops = g_array_new (FALSE, FALSE, sizeof (GskStandardOperation));
+  self->ops = g_array_new (FALSE, FALSE, sizeof (gskpathop));
   self->points = g_array_new (FALSE, FALSE, sizeof (graphene_point_t));
 
   /* Be explicit here */
@@ -137,6 +137,19 @@ gsk_path_builder_ref (GskPathBuilder *self)
   return self;
 }
 
+/* We're cheating here. Out pathops are relative to the NULL pointer,
+ * so that we can not care about the points GArray reallocating itself
+ * until we create the contour.
+ * This does however mean that we need to not use gsk_pathop_get_points()
+ * without offsetting the returned pointer.
+ */
+static inline gskpathop
+gsk_pathop_encode_index (GskPathOperation op,
+                         gsize            index)
+{
+  return gsk_pathop_encode (op, ((graphene_point_t *) NULL) + index);
+}
+
 static void
 gsk_path_builder_ensure_current (GskPathBuilder *self)
 {
@@ -144,7 +157,7 @@ gsk_path_builder_ensure_current (GskPathBuilder *self)
     return;
 
   self->flags = GSK_PATH_FLAT;
-  g_array_append_vals (self->ops, &(GskStandardOperation) { GSK_PATH_MOVE, 0 }, 1);
+  g_array_append_vals (self->ops, (gskpathop[1]) { gsk_pathop_encode_index (GSK_PATH_MOVE, 0) }, 1);
   g_array_append_val (self->points, self->current_point);
 }
 
@@ -156,7 +169,7 @@ gsk_path_builder_append_current (GskPathBuilder         *self,
 {
   gsk_path_builder_ensure_current (self);
 
-  g_array_append_vals (self->ops, &(GskStandardOperation) { op, self->points->len - 1 }, 1);
+  g_array_append_vals (self->ops, (gskpathop[1]) { gsk_pathop_encode_index (op, self->points->len - 1) }, 1);
   g_array_append_vals (self->points, points, n_points);
 
   self->current_point = points[n_points - 1];
@@ -171,10 +184,11 @@ gsk_path_builder_end_current (GskPathBuilder *self)
    return;
 
   contour = gsk_standard_contour_new (self->flags,
-                                      (GskStandardOperation *) self->ops->data,
-                                      self->ops->len,
                                       (graphene_point_t *) self->points->data,
-                                      self->points->len);
+                                      self->points->len,
+                                      (gskpathop *) self->ops->data,
+                                      self->ops->len,
+                                      (graphene_point_t *) self->points->data - (graphene_point_t *) NULL);
 
   g_array_set_size (self->ops, 0);
   g_array_set_size (self->points, 0);
