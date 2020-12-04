@@ -365,6 +365,13 @@ void       gtk_widget_class_add_shortcut  (GtkWidgetClass      *widget_class,
                                            GtkShortcut         *shortcut);
 
 GDK_AVAILABLE_IN_ALL
+void       gtk_widget_class_set_activate_signal                 (GtkWidgetClass *widget_class,
+                                                                 guint           signal_id);
+GDK_AVAILABLE_IN_ALL
+void       gtk_widget_class_set_activate_signal_from_name       (GtkWidgetClass *widget_class,
+                                                                 const char     *signal_name);
+
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_mnemonic_activate   (GtkWidget           *widget,
                                            gboolean             group_cycling);
 GDK_AVAILABLE_IN_ALL

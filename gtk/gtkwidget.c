@@ -4297,10 +4297,21 @@ gtk_widget_mnemonic_activate (GtkWidget *widget,
 }
 
 static gboolean
+gtk_widget_can_activate (GtkWidget *self)
+{
+  GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (self);
+
+  if (widget_class->activate_signal != 0)
+    return TRUE;
+
+  return FALSE;
+}
+
+static gboolean
 gtk_widget_real_mnemonic_activate (GtkWidget *widget,
                                    gboolean   group_cycling)
 {
-  if (!group_cycling && GTK_WIDGET_GET_CLASS (widget)->activate_signal)
+  if (!group_cycling && gtk_widget_can_activate (widget))
     gtk_widget_activate (widget);
   else if (gtk_widget_get_can_focus (widget))
     return gtk_widget_grab_focus (widget);
@@ -4563,6 +4574,61 @@ gtk_widget_event (GtkWidget *widget,
 }
 
 /**
+ * gtk_widget_class_set_activate_signal:
+ * @widget_class: a #GtkWidgetClass
+ * @signal_id: the id for the activate signal
+ *
+ * Sets the #GtkWidgetClass.activate_signal field with the
+ * given @signal_id; the signal will be emitted when calling
+ * gtk_widget_activate().
+ *
+ * The @signal_id must have been registered with g_signal_new()
+ * or g_signal_newv() before calling this function.
+ */
+void
+gtk_widget_class_set_activate_signal (GtkWidgetClass *widget_class,
+                                      guint           signal_id)
+{
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+  g_return_if_fail (signal_id != 0);
+
+  widget_class->activate_signal = signal_id;
+}
+
+/**
+ * gtk_widget_class_set_activate_signal_from_name:
+ * @widget_class: a #GtkWidgetClass
+ * @signal_name: the name of the activate signal of @widget_type
+ *
+ * Sets the #GtkWidgetClass.activate_signal field with the signal id for
+ * the given @signal_name; the signal will be emitted when calling
+ * gtk_widget_activate().
+ *
+ * The @signal_name of @widget_type must have been registered with
+ * g_signal_new() or g_signal_newv() before calling this function.
+ */
+void
+gtk_widget_class_set_activate_signal_from_name (GtkWidgetClass *widget_class,
+                                                const char     *signal_name)
+{
+  guint signal_id;
+
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+  g_return_if_fail (signal_name != NULL);
+
+  signal_id = g_signal_lookup (signal_name, G_TYPE_FROM_CLASS (widget_class));
+  if (signal_id == 0)
+    {
+      g_critical ("Widget type “%s” does not have a “%s” signal",
+                  G_OBJECT_CLASS_NAME (widget_class),
+                  signal_name);
+      return;
+    }
+
+  widget_class->activate_signal = signal_id;
+}
+
+/**
  * gtk_widget_activate:
  * @widget: a #GtkWidget that’s activatable
  *
@@ -4578,7 +4644,7 @@ gtk_widget_activate (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  if (GTK_WIDGET_GET_CLASS (widget)->activate_signal)
+  if (gtk_widget_can_activate (widget))
     {
       /* FIXME: we should eventually check the signals signature here */
       g_signal_emit (widget, GTK_WIDGET_GET_CLASS (widget)->activate_signal, 0);
