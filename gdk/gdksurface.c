@@ -1336,9 +1336,6 @@ gdk_surface_layout_on_clock (GdkFrameClock *clock,
   if (!GDK_SURFACE_IS_MAPPED (surface))
     return;
 
-  if (surface->update_freeze_count)
-    return;
-
   surface->pending_phases &= ~GDK_FRAME_CLOCK_PHASE_LAYOUT;
 
   class = GDK_SURFACE_GET_CLASS (surface);
@@ -1357,13 +1354,6 @@ gdk_surface_request_layout (GdkSurface *surface)
   class = GDK_SURFACE_GET_CLASS (surface);
   if (class->request_layout)
     class->request_layout (surface);
-
-  if (surface->update_freeze_count ||
-      gdk_surface_is_toplevel_frozen (surface))
-    {
-      surface->pending_phases |= GDK_FRAME_CLOCK_PHASE_LAYOUT;
-      return;
-    }
 
   frame_clock = gdk_surface_get_frame_clock (surface);
   g_return_if_fail (frame_clock);
