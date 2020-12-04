@@ -58,15 +58,15 @@
  *
  * # Sizing the paintable
  *
- * You can influence how the paintable is displayed inside the #GtkPicture. 
- * By turning off GtkPicture::keep-aspect-ratio you can allow the paintable
- * to get stretched. GtkPicture::can-shrink can be unset to make
- * sure that paintables are never made smaller than their ideal size - but be
- * careful if you do not know the size of the paintable in use (like when
- * displaying user-loaded images). This can easily cause the picture to grow larger
- * than the screen. And GtkWidget::halign and GtkWidget::valign can be used
- * to make sure the paintable doesn't fill all available space but is instead
- * displayed at its original size.
+ * You can influence how the paintable is displayed inside the #GtkPicture.
+ * By turning off #GtkPicture:keep-aspect-ratio you can allow the paintable
+ * to get stretched. #GtkPicture:can-shrink can be unset to make sure that
+ * paintables are never made smaller than their ideal size - but be careful
+ * if you do not know the size of the paintable in use (like when displaying
+ * user-loaded images). This can easily cause the picture to grow larger than
+ * the screen. And #GtkWidget:halign and #GtkWidget:valign can be used to make
+ * sure the paintable doesn't fill all available space but is instead displayed
+ * at its original size.
  *
  * # CSS nodes
  *
