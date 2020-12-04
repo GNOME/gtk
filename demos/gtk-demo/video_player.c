@@ -10,11 +10,11 @@
 static GtkWidget *window = NULL;
 
 static void
-open_dialog_response_cb (GtkWidget *dialog,
-                         int        response,
-                         GtkWidget *video)
+open_dialog_response_cb (GtkNativeDialog *dialog,
+                         int              response,
+                         GtkWidget       *video)
 {
-  gtk_widget_hide (dialog);
+  gtk_native_dialog_hide (dialog);
 
   if (response == GTK_RESPONSE_ACCEPT)
     {
@@ -25,32 +25,30 @@ open_dialog_response_cb (GtkWidget *dialog,
       g_object_unref (file);
     }
 
-  gtk_window_destroy (GTK_WINDOW (dialog));
+  gtk_native_dialog_destroy (dialog);
 }
 
 static void
 open_clicked_cb (GtkWidget *button,
                  GtkWidget *video)
 {
-  GtkWidget *dialog;
+  GtkFileChooserNative *dialog;
   GtkFileFilter *filter;
 
-  dialog = gtk_file_chooser_dialog_new ("Select a video",
+  dialog = gtk_file_chooser_native_new ("Select a video",
                                         GTK_WINDOW (gtk_widget_get_root (button)),
                                         GTK_FILE_CHOOSER_ACTION_OPEN,
-                                        "_Cancel", GTK_RESPONSE_CANCEL,
-                                        "_Open", GTK_RESPONSE_ACCEPT,
-                                        NULL);
+                                        "_Open",
+                                        "_Cancel");
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_add_mime_type (filter, "video/*");
   gtk_file_filter_set_name (filter, "Video");
   gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
   g_object_unref (filter);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (dialog), TRUE);
   g_signal_connect (dialog, "response", G_CALLBACK (open_dialog_response_cb), video);
-  gtk_widget_show (dialog);
+  gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
 }
 
 static void

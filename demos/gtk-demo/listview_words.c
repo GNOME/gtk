@@ -142,11 +142,11 @@ load_file (GtkStringList *list,
 }
 
 static void
-open_response_cb (GtkWidget     *dialog,
-                  int            response,
-                  GtkStringList *stringlist)
+open_response_cb (GtkNativeDialog *dialog,
+                  int              response,
+                  GtkStringList   *stringlist)
 {
-  gtk_widget_hide (dialog);
+  gtk_native_dialog_hide (dialog);
 
   if (response == GTK_RESPONSE_ACCEPT)
     {
@@ -157,27 +157,24 @@ open_response_cb (GtkWidget     *dialog,
       g_object_unref (file);
     }
 
-  gtk_window_destroy (GTK_WINDOW (dialog));
+  gtk_native_dialog_destroy (dialog);
 }
 
 static void
 file_open_cb (GtkWidget     *button,
               GtkStringList *stringlist)
 {
-  GtkWidget *dialog;
+  GtkFileChooserNative *dialog;
 
-  dialog = gtk_file_chooser_dialog_new ("Open file",
+  dialog = gtk_file_chooser_native_new ("Open file",
                                         GTK_WINDOW (gtk_widget_get_root (button)),
                                         GTK_FILE_CHOOSER_ACTION_OPEN,
-                                        "_Cancel", GTK_RESPONSE_CANCEL,
-                                        "_Load", GTK_RESPONSE_ACCEPT,
-                                        NULL);
-
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+                                        "_Load",
+                                        "_Cancel");
+  gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (dialog), TRUE);
 
   g_signal_connect (dialog, "response", G_CALLBACK (open_response_cb), stringlist);
-  gtk_widget_show (dialog);
+  gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
 }
 
 GtkWidget *

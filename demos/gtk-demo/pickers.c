@@ -1,9 +1,8 @@
 /* Pickers
- * #Keywords: GtkColorChooser, GtkFontChooser, GtkFileChooser,
- * #Keywords: GtkApplicationChooser
+ * #Keywords: GtkColorChooser, GtkFontChooser, GtkApplicationChooser
  *
  * These widgets are mainly intended for use in preference dialogs.
- * They allow to select colors, fonts, files, directories and applications.
+ * They allow to select colors, fonts, directories and applications.
  *
  * This demo shows both the default appearance for these dialogs,
  * as well as some of the customizations that are possible.
@@ -120,20 +119,14 @@ do_pickers (GtkWidget *do_widget)
 
     gtk_grid_attach (GTK_GRID (table), picker, 2, 1, 1, 1);
 
-    label = gtk_label_new ("File:");
-    gtk_widget_set_halign (label, GTK_ALIGN_START);
-    gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-    gtk_widget_set_hexpand (label, TRUE);
-    gtk_grid_attach (GTK_GRID (table), label, 0, 2, 1, 1);
-
     label = gtk_label_new ("Mail:");
     gtk_widget_set_halign (label, GTK_ALIGN_START);
     gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
     gtk_widget_set_hexpand (label, TRUE);
     picker = gtk_app_chooser_button_new ("x-scheme-handler/mailto");
     gtk_app_chooser_button_set_show_dialog_item (GTK_APP_CHOOSER_BUTTON (picker), TRUE);
-    gtk_grid_attach (GTK_GRID (table), label, 0, 4, 1, 1);
-    gtk_grid_attach (GTK_GRID (table), picker, 1, 4, 1, 1);
+    gtk_grid_attach (GTK_GRID (table), label, 0, 3, 1, 1);
+    gtk_grid_attach (GTK_GRID (table), picker, 1, 3, 1, 1);
   }
 
   if (!gtk_widget_get_visible (window))
