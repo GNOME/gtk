@@ -2654,7 +2654,7 @@ gtk_tree_view_size_allocate (GtkWidget *widget,
     }
 
   if (priv->search_popover)
-    gtk_native_check_resize (GTK_NATIVE (priv->search_popover));
+    gtk_popover_present (GTK_POPOVER (priv->search_popover));
 }
 
 /* Grabs the focus and unsets the GTK_TREE_VIEW_DRAW_KEYFOCUS flag */

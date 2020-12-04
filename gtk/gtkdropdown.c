@@ -383,7 +383,7 @@ gtk_drop_down_size_allocate (GtkWidget *widget,
   gtk_widget_set_size_request (self->popup, width, -1);
   gtk_widget_queue_resize (self->popup);
 
-  gtk_native_check_resize (GTK_NATIVE (self->popup));
+  gtk_popover_present (GTK_POPOVER (self->popup));
 }
 
 static gboolean

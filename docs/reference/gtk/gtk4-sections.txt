@@ -6112,6 +6112,7 @@ GtkPopover
 gtk_popover_new
 gtk_popover_popup
 gtk_popover_popdown
+gtk_popover_present
 gtk_popover_set_child
 gtk_popover_get_child
 gtk_popover_set_pointing_to

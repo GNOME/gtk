@@ -577,16 +577,20 @@ present_popup (GtkPopover *popover)
   return FALSE;
 }
 
-static void
-gtk_popover_native_check_resize (GtkNative *native)
+void
+gtk_popover_present (GtkPopover *popover)
 {
-  GtkPopover *popover = GTK_POPOVER (native);
   GtkWidget *widget = GTK_WIDGET (popover);
 
   if (!_gtk_widget_get_alloc_needed (widget))
     gtk_widget_ensure_allocate (widget);
   else if (gtk_widget_get_visible (widget))
     present_popup (popover);
+}
+
+static void
+gtk_popover_native_check_resize (GtkNative *native)
+{
 }
 
 static void

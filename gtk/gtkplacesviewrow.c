@@ -36,6 +36,7 @@
 #include "gtkstack.h"
 #include "gtktypebuiltins.h"
 #include "gtknative.h"
+#include "gtkpopover.h"
 #else
 #include <gtk/gtk.h>
 #endif
@@ -319,7 +320,7 @@ gtk_places_view_row_size_allocate (GtkWidget *widget,
 
   GTK_WIDGET_CLASS (gtk_places_view_row_parent_class)->size_allocate (widget, width, height, baseline);
   if (menu)
-    gtk_native_check_resize (GTK_NATIVE (menu));
+    gtk_popover_present (GTK_POPOVER (menu));
 }
 
 static void
