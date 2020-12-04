@@ -2957,6 +2957,8 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
 
   unset_transient_for_exported (surface);
 
+  impl->last_sent_window_geometry = (GdkRectangle) { 0 };
+
   _gdk_wayland_surface_clear_saved_size (surface);
   impl->mapped = FALSE;
 }
