@@ -639,7 +639,7 @@ configure_drag_surface_geometry (GdkSurface *surface)
                               impl->scale);
 }
 
-static void
+static gboolean
 gdk_wayland_surface_compute_size (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
@@ -655,6 +655,8 @@ gdk_wayland_surface_compute_size (GdkSurface *surface)
 
       impl->next_layout.surface_geometry_dirty = FALSE;
     }
+
+  return FALSE;
 }
 
 static void
