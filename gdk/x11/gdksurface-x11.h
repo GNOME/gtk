@@ -80,6 +80,8 @@ struct _GdkX11Surface
     gboolean surface_geometry_dirty;
   } next_layout;
 
+  guint compute_size_source_id;
+
   cairo_surface_t *cairo_surface;
 
   int abs_x;
