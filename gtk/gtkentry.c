@@ -181,7 +181,6 @@ struct _GtkEntryPrivate
 
   GtkWidget     *text;
   GtkWidget     *progress_widget;
-  GtkWidget     *emoji_chooser;
 
   guint         show_emoji_icon         : 1;
   guint         editing_canceled        : 1; /* Only used by GtkCellRendererText */
@@ -1452,8 +1451,6 @@ gtk_entry_dispose (GObject *object)
     }
   g_clear_pointer (&priv->text, gtk_widget_unparent);
 
-  g_clear_pointer (&priv->emoji_chooser, gtk_widget_unparent);
-
   G_OBJECT_CLASS (gtk_entry_parent_class)->dispose (object);
 }
 
@@ -1803,9 +1800,6 @@ gtk_entry_size_allocate (GtkWidget *widget,
       if (completion)
         _gtk_entry_completion_resize_popup (completion);
     }
-
-  if (priv->emoji_chooser)
-    gtk_native_check_resize (GTK_NATIVE (priv->emoji_chooser));
 }
 
 static void
