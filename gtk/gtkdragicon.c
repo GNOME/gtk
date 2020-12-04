@@ -149,8 +149,12 @@ gtk_drag_icon_move_resize (GtkDragIcon *icon)
 static void
 gtk_drag_icon_native_check_resize (GtkNative *native)
 {
-  GtkDragIcon *icon = GTK_DRAG_ICON (native);
-  GtkWidget *widget = GTK_WIDGET (native);
+}
+
+static void
+gtk_drag_icon_present (GtkDragIcon *icon)
+{
+  GtkWidget *widget = GTK_WIDGET (icon);
 
   if (!_gtk_widget_get_alloc_needed (widget))
     gtk_widget_ensure_allocate (widget);
@@ -285,7 +289,7 @@ gtk_drag_icon_show (GtkWidget *widget)
   _gtk_widget_set_visible_flag (widget, TRUE);
   gtk_css_node_validate (gtk_widget_get_css_node (widget));
   gtk_widget_realize (widget);
-  gtk_drag_icon_native_check_resize (GTK_NATIVE (widget));
+  gtk_drag_icon_present (GTK_DRAG_ICON (widget));
   gtk_widget_map (widget);
 }
 
