@@ -167,8 +167,12 @@ gtk_text_handle_present_surface (GtkTextHandle *handle)
 static void
 gtk_text_handle_native_check_resize (GtkNative *native)
 {
-  GtkTextHandle *handle = GTK_TEXT_HANDLE (native);
-  GtkWidget *widget = GTK_WIDGET (native);
+}
+
+void
+gtk_text_handle_present (GtkTextHandle *handle)
+{
+  GtkWidget *widget = GTK_WIDGET (handle);
 
   if (!_gtk_widget_get_alloc_needed (widget))
     gtk_widget_ensure_allocate (widget);

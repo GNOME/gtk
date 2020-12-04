@@ -35,6 +35,8 @@ typedef enum
 
 GtkTextHandle *    gtk_text_handle_new          (GtkWidget             *parent);
 
+void               gtk_text_handle_present      (GtkTextHandle         *handle);
+
 void               gtk_text_handle_set_role (GtkTextHandle     *handle,
 					     GtkTextHandleRole  role);
 GtkTextHandleRole  gtk_text_handle_get_role (GtkTextHandle     *handle);

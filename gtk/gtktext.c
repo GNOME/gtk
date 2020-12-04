@@ -2465,10 +2465,10 @@ gtk_text_size_allocate (GtkWidget *widget,
     gtk_popover_present (GTK_POPOVER (priv->selection_bubble));
 
   if (priv->text_handles[TEXT_HANDLE_CURSOR])
-    gtk_native_check_resize (GTK_NATIVE (priv->text_handles[TEXT_HANDLE_CURSOR]));
+    gtk_text_handle_present (priv->text_handles[TEXT_HANDLE_CURSOR]);
 
   if (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND])
-    gtk_native_check_resize (GTK_NATIVE (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]));
+    gtk_text_handle_present (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]);
 }
 
 static void
