@@ -72,8 +72,6 @@ struct _GdkX11Surface
   int unscaled_width;
   int unscaled_height;
 
-  int pending_configure_events;
-
   struct {
     int configured_width;
     int configured_height;
