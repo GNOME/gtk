@@ -856,7 +856,7 @@ struct _GskStandardContour
   gsize n_ops;
   gsize n_points;
   graphene_point_t *points;
-  GskStandardOperation ops[];
+  gskpathop ops[];
 };
 
 static gsize
@@ -864,7 +864,7 @@ gsk_standard_contour_compute_size (gsize n_ops,
                                    gsize n_points)
 {
   return sizeof (GskStandardContour)
-       + sizeof (GskStandardOperation) * n_ops
+       + sizeof (gskpathop) * n_ops
        + sizeof (graphene_point_t) * n_points;
 }
 
@@ -884,30 +884,11 @@ gsk_standard_contour_foreach (const GskContour   *contour,
 {
   const GskStandardContour *self = (const GskStandardContour *) contour;
   gsize i;
-  const gsize n_points[] = {
-    [GSK_PATH_MOVE] = 1,
-    [GSK_PATH_CLOSE] = 2,
-    [GSK_PATH_LINE] = 2,
-    [GSK_PATH_CURVE] = 4
-  };
 
   for (i = 0; i < self->n_ops; i ++)
     {
-      if (self->ops[i].op == GSK_PATH_CONIC)
-        {
-          graphene_point_t pts[3] = { self->points[self->ops[i].point],
-                                      self->points[self->ops[i].point + 1],
-                                      self->points[self->ops[i].point + 3] };
-          float weight = self->points[self->ops[i].point + 2].x;
-
-          if (!func (GSK_PATH_CONIC, pts, 3, weight, user_data))
-            return FALSE;
-        }
-      else
-        {
-          if (!func (self->ops[i].op, &self->points[self->ops[i].point], n_points[self->ops[i].op], 0, user_data))
-            return FALSE;
-        }
+      if (!gsk_pathop_foreach (self->ops[i], func, user_data))
+        return FALSE;
     }
 
   return TRUE;
@@ -930,9 +911,9 @@ gsk_standard_contour_print (const GskContour *contour,
 
   for (i = 0; i < self->n_ops; i ++)
     {
-      graphene_point_t *pt = &self->points[self->ops[i].point];
+      const graphene_point_t *pt = gsk_pathop_points (self->ops[i]);
 
-      switch (self->ops[i].op)
+      switch (gsk_pathop_op (self->ops[i]))
       {
         case GSK_PATH_MOVE:
           g_string_append (string, "M ");
@@ -1087,9 +1068,9 @@ gsk_standard_contour_init_measure (const GskContour *contour,
 
   for (i = 1; i < self->n_ops; i ++)
     {
-      graphene_point_t *pt = &self->points[self->ops[i].point];
+      const graphene_point_t *pt = gsk_pathop_points (self->ops[i]);
 
-      switch (self->ops[i].op)
+      switch (gsk_pathop_op (self->ops[i]))
       {
         case GSK_PATH_MOVE:
           break;
@@ -1169,8 +1150,8 @@ gsk_standard_contour_measure_get_point (GskStandardContour        *self,
 {
   const graphene_point_t *pts;
 
-  pts = &self->points[self->ops[op].point];
-  switch (self->ops[op].op)
+  pts = gsk_pathop_points (self->ops[op]);
+  switch (gsk_pathop_op (self->ops[op]))
     {
       case GSK_PATH_LINE:
       case GSK_PATH_CLOSE:
@@ -1214,7 +1195,7 @@ gsk_standard_contour_get_point (const GskContour *contour,
   if (array->len == 0)
     {
       g_assert (distance == 0);
-      g_assert (self->ops[0].op == GSK_PATH_MOVE);
+      g_assert (gsk_pathop_op (self->ops[0]) == GSK_PATH_MOVE);
       if (pos)
         *pos = self->points[0];
       if (tangent)
@@ -1251,7 +1232,7 @@ gsk_standard_contour_get_closest_point (const GskContour       *contour,
   gsize i;
   gboolean result = FALSE;
 
-  g_assert (self->ops[0].op == GSK_PATH_MOVE);
+  g_assert (gsk_pathop_op (self->ops[0]) == GSK_PATH_MOVE);
   last_point = self->points[0];
 
   if (array->len == 0)
@@ -1323,12 +1304,13 @@ gsk_standard_contour_get_closest_point (const GskContour       *contour,
 }
 
 static void
-gsk_standard_contour_init (GskContour *contour,
-                           GskPathFlags flags,
-                           const GskStandardOperation *ops,
-                           gsize n_ops,
+gsk_standard_contour_init (GskContour             *contour,
+                           GskPathFlags            flags,
                            const graphene_point_t *points,
-                           gsize n_points);
+                           gsize                   n_points,
+                           const gskpathop        *ops,
+                           gsize                   n_ops,
+                           ptrdiff_t               offset);
 
 static void
 gsk_standard_contour_copy (const GskContour *contour,
@@ -1336,7 +1318,7 @@ gsk_standard_contour_copy (const GskContour *contour,
 {
   const GskStandardContour *self = (const GskStandardContour *) contour;
 
-  gsk_standard_contour_init (dest, self->flags, self->ops, self->n_ops, self->points, self->n_points);
+  gsk_standard_contour_init (dest, self->flags, self->points, self->n_points, self->ops, self->n_ops, 0);
 }
 
 static void
@@ -1385,12 +1367,12 @@ gsk_standard_contour_add_segment (const GskContour *contour,
    * taking care that first and last operation might be identical */
   if (start_measure)
     {
-      switch (self->ops[start_measure->op].op)
+      switch (gsk_pathop_op (self->ops[start_measure->op]))
       {
         case GSK_PATH_CLOSE:
         case GSK_PATH_LINE:
           {
-            graphene_point_t *pts = &self->points[self->ops[start_measure->op].point];
+            const graphene_point_t *pts = gsk_pathop_points (self->ops[start_measure->op]);
             graphene_point_t point;
 
             graphene_point_interpolate (&pts[0], &pts[1], start_progress, &point);
@@ -1407,7 +1389,7 @@ gsk_standard_contour_add_segment (const GskContour *contour,
 
         case GSK_PATH_CURVE:
           {
-            graphene_point_t *pts = &self->points[self->ops[start_measure->op].point];
+            const graphene_point_t *pts = gsk_pathop_points (self->ops[start_measure->op]);
             graphene_point_t curve[4], discard[4];
 
             gsk_spline_split_cubic (pts, discard, curve, start_progress);
@@ -1426,7 +1408,7 @@ gsk_standard_contour_add_segment (const GskContour *contour,
 
         case GSK_PATH_CONIC:
           {
-            graphene_point_t *pts = &self->points[self->ops[start_measure->op].point];
+            const graphene_point_t *pts = gsk_pathop_points (self->ops[start_measure->op]);
             graphene_point_t curve[4], discard[4];
 
             gsk_spline_split_conic (pts, discard, curve, start_progress);
@@ -1455,9 +1437,9 @@ gsk_standard_contour_add_segment (const GskContour *contour,
 
   for (; i < (end_measure ? end_measure->op : self->n_ops); i++)
     {
-      graphene_point_t *pt = &self->points[self->ops[i].point];
+      const graphene_point_t *pt = gsk_pathop_points (self->ops[i]);
 
-      switch (self->ops[i].op)
+      switch (gsk_pathop_op (self->ops[i]))
       {
         case GSK_PATH_MOVE:
           gsk_path_builder_move_to (builder, pt[0].x, pt[0].y);
@@ -1485,12 +1467,12 @@ gsk_standard_contour_add_segment (const GskContour *contour,
   /* Add the last partial operation */
   if (end_measure)
     {
-      switch (self->ops[end_measure->op].op)
+      switch (gsk_pathop_op (self->ops[end_measure->op]))
       {
         case GSK_PATH_CLOSE:
         case GSK_PATH_LINE:
           {
-            graphene_point_t *pts = &self->points[self->ops[end_measure->op].point];
+            const graphene_point_t *pts = gsk_pathop_points (self->ops[end_measure->op]);
             graphene_point_t point;
 
             graphene_point_interpolate (&pts[0], &pts[1], end_progress, &point);
@@ -1500,7 +1482,7 @@ gsk_standard_contour_add_segment (const GskContour *contour,
 
         case GSK_PATH_CURVE:
           {
-            graphene_point_t *pts = &self->points[self->ops[end_measure->op].point];
+            const graphene_point_t *pts = gsk_pathop_points (self->ops[end_measure->op]);
             graphene_point_t curve[4], discard[4];
 
             gsk_spline_split_cubic (pts, curve, discard, end_progress);
@@ -1510,7 +1492,7 @@ gsk_standard_contour_add_segment (const GskContour *contour,
 
         case GSK_PATH_CONIC:
           {
-            graphene_point_t *pts = &self->points[self->ops[end_measure->op].point];
+            const graphene_point_t *pts = gsk_pathop_points (self->ops[end_measure->op]);
             graphene_point_t curve[4], discard[4];
 
             gsk_spline_split_conic (pts, curve, discard, end_progress);
@@ -1639,37 +1621,47 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
  * see gsk_standard_contour_compute_size()
  */
 static void
-gsk_standard_contour_init (GskContour   *contour,
-                           GskPathFlags  flags,
-                           const         GskStandardOperation *ops,
-                           gsize         n_ops,
-                           const         graphene_point_t *points,
-                           gsize         n_points)
+gsk_standard_contour_init (GskContour             *contour,
+                           GskPathFlags            flags,
+                           const graphene_point_t *points,
+                           gsize                   n_points,
+                           const gskpathop        *ops,
+                           gsize                   n_ops,
+                           gssize                  offset)
+
 {
   GskStandardContour *self = (GskStandardContour *) contour;
+  gsize i;
 
   self->contour.klass = &GSK_STANDARD_CONTOUR_CLASS;
 
   self->flags = flags;
   self->n_ops = n_ops;
-  memcpy (self->ops, ops, sizeof (GskStandardOperation) * n_ops);
   self->n_points = n_points;
   self->points = (graphene_point_t *) &self->ops[n_ops];
   memcpy (self->points, points, sizeof (graphene_point_t) * n_points);
+
+  offset += self->points - points;
+  for (i = 0; i < n_ops; i++)
+    {
+      self->ops[i] = gsk_pathop_encode (gsk_pathop_op (ops[i]),
+                                        gsk_pathop_points (ops[i]) + offset);
+    }
 }
 
 GskContour *
-gsk_standard_contour_new (GskPathFlags flags,
-                          const        GskStandardOperation *ops,
-                          gsize        n_ops,
-                          const        graphene_point_t *points,
-                          gsize        n_points)
+gsk_standard_contour_new (GskPathFlags            flags,
+                          const graphene_point_t *points,
+                          gsize                   n_points,
+                          const gskpathop        *ops,
+                          gsize                   n_ops,
+                          gssize                  offset)
 {
   GskContour *contour;
 
   contour = g_malloc0 (gsk_standard_contour_compute_size (n_ops, n_points));
 
-  gsk_standard_contour_init (contour, flags, ops, n_ops, points, n_points);
+  gsk_standard_contour_init (contour, flags, points, n_points, ops, n_ops, offset);
 
   return contour;
 }
