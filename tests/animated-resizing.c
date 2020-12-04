@@ -130,10 +130,9 @@ on_frame (double progress)
 }
 
 static gboolean
-tick_callback (GtkWidget     *widget,
-               GdkFrameClock *frame_clock,
-               gpointer       user_data)
+resize_idle (gpointer user_data)
 {
+  GdkFrameClock *frame_clock = user_data;
   gint64 frame_time = gdk_frame_clock_get_frame_time (frame_clock);
   double scaled_time;
 
@@ -142,6 +141,16 @@ tick_callback (GtkWidget     *widget,
 
   scaled_time = (frame_time - start_frame_time) / (CYCLE_TIME * 1000000);
   on_frame (scaled_time - floor (scaled_time));
+
+  return G_SOURCE_REMOVE;
+}
+
+static gboolean
+tick_callback (GtkWidget     *widget,
+               GdkFrameClock *frame_clock,
+               gpointer       user_data)
+{
+  g_idle_add (resize_idle, frame_clock);
 
   return G_SOURCE_CONTINUE;
 }
@@ -196,7 +205,6 @@ main(int argc, char **argv)
            cb_no_resize ? "no" : "yes");
 
   window = gtk_window_new ();
-  gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
   frame_stats_ensure (GTK_WINDOW (window));
 
   da = gtk_drawing_area_new ();
