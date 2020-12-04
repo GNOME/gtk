@@ -590,6 +590,34 @@ gtk_popover_native_check_resize (GtkNative *native)
 }
 
 static void
+maybe_request_motion_event (GtkPopover *popover)
+{
+  GtkWidget *widget = GTK_WIDGET (popover);
+  GtkRoot *root = gtk_widget_get_root (widget);
+  GdkSeat *seat;
+  GdkDevice *device;
+  GtkWidget *focus;
+  GdkSurface *focus_surface;
+
+  seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
+  if (!seat)
+    return;
+
+
+  device = gdk_seat_get_pointer (seat);
+  focus = gtk_window_lookup_pointer_focus_widget (GTK_WINDOW (root),
+                                                  device, NULL);
+  if (!focus)
+    return;
+
+  if (!gtk_widget_is_ancestor (focus, GTK_WIDGET (popover)))
+    return;
+
+  focus_surface = gtk_native_get_surface (gtk_widget_get_native (focus));
+  gdk_surface_request_motion (focus_surface);
+}
+
+static void
 gtk_popover_native_layout (GtkNative *native,
                            int        width,
                            int        height)
@@ -601,9 +629,19 @@ gtk_popover_native_layout (GtkNative *native,
   update_popover_layout (popover, gdk_popup_layout_ref (priv->layout));
 
   if (gtk_widget_needs_allocate (widget))
-    gtk_widget_allocate (widget, width, height, -1, NULL);
+    {
+      gtk_widget_allocate (widget, width, height, -1, NULL);
+
+      /* This fake motion event is needed for getting up to date pointer focus
+       * and coordinates when tho pointer didn't move but the layout changed
+       * within the popover.
+       */
+      maybe_request_motion_event (popover);
+    }
   else
-    gtk_widget_ensure_allocate (widget);
+    {
+      gtk_widget_ensure_allocate (widget);
+    }
 }
 
 static gboolean
