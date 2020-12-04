@@ -586,7 +586,8 @@ texture_key_hash (gconstpointer v)
   const GskTextureKey *k = (GskTextureKey *)v;
 
   return GPOINTER_TO_UINT (k->pointer)
-         + (guint)(k->scale*100)
+         + (guint)(k->scale_x * 100)
+         + (guint)(k->scale_y * 100)
          + (guint)k->filter * 2 +
          + (guint)k->pointer_is_child;
 }
@@ -598,7 +599,8 @@ texture_key_equal (gconstpointer v1, gconstpointer v2)
   const GskTextureKey *k2 = (GskTextureKey *)v2;
 
   return k1->pointer == k2->pointer &&
-         k1->scale == k2->scale &&
+         k1->scale_x == k2->scale_x &&
+         k1->scale_y == k2->scale_y &&
          k1->filter == k2->filter &&
          k1->pointer_is_child == k2->pointer_is_child &&
          (!k1->pointer_is_child || graphene_rect_equal (&k1->parent_rect, &k2->parent_rect));

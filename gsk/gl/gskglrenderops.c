@@ -120,16 +120,6 @@ ops_pop_debug_group (RenderOpBuilder *builder)
   ops_begin (builder, OP_POP_DEBUG_GROUP);
 }
 
-float
-ops_get_scale (const RenderOpBuilder *builder)
-{
-  g_assert (builder->mv_stack != NULL);
-  g_assert (builder->mv_stack->len >= 1);
-
-  /* TODO: Use two separate values */
-  return MAX (builder->scale_x, builder->scale_y);
-}
-
 static void
 extract_matrix_metadata (GskTransform      *transform,
                          OpsMatrixMetadata *md)

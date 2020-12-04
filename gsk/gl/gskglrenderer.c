@@ -632,10 +632,11 @@ render_fallback_node (GskGLRenderer   *self,
                       GskRenderNode   *node,
                       RenderOpBuilder *builder)
 {
+  const float scale_x = builder->scale_x;
+  const float scale_y = builder->scale_y;
+  const int surface_width = ceilf (node->bounds.size.width * scale_x);
+  const int surface_height = ceilf (node->bounds.size.height * scale_y);
   GdkTexture *texture;
-  const float scale = ops_get_scale (builder);
-  const int surface_width = ceilf (node->bounds.size.width * scale);
-  const int surface_height = ceilf (node->bounds.size.height * scale);
   cairo_surface_t *surface;
   cairo_surface_t *rendered_surface;
   cairo_t *cr;
@@ -649,7 +650,8 @@ render_fallback_node (GskGLRenderer   *self,
 
   key.pointer = node;
   key.pointer_is_child = FALSE;
-  key.scale = scale;
+  key.scale_x = scale_x;
+  key.scale_y = scale_y;
   key.filter = GL_NEAREST;
 
   cached_id = gsk_gl_driver_get_texture_for_key (self->gl_driver, &key);
@@ -671,7 +673,7 @@ render_fallback_node (GskGLRenderer   *self,
                                                    surface_width,
                                                    surface_height);
 
-    cairo_surface_set_device_scale (rendered_surface, scale, scale);
+    cairo_surface_set_device_scale (rendered_surface, scale_x, scale_y);
     cr = cairo_create (rendered_surface);
 
     cairo_save (cr);
@@ -684,15 +686,15 @@ render_fallback_node (GskGLRenderer   *self,
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                         surface_width,
                                         surface_height);
-  cairo_surface_set_device_scale (surface, scale, scale);
+  cairo_surface_set_device_scale (surface, scale_x, scale_y);
   cr = cairo_create (surface);
 
   /* We draw upside down here, so it matches what GL does. */
   cairo_save (cr);
   cairo_scale (cr, 1, -1);
-  cairo_translate (cr, 0, - surface_height / scale);
+  cairo_translate (cr, 0, - surface_height / scale_y);
   cairo_set_source_surface (cr, rendered_surface, 0, 0);
-  cairo_rectangle (cr, 0, 0, surface_width / scale, surface_height / scale);
+  cairo_rectangle (cr, 0, 0, surface_width / scale_x, surface_height / scale_y);
   cairo_fill (cr);
   cairo_restore (cr);
 
@@ -754,7 +756,7 @@ render_text_node (GskGLRenderer   *self,
 {
   const PangoFont *font = gsk_text_node_get_font (node);
   const PangoGlyphInfo *glyphs = gsk_text_node_get_glyphs (node, NULL);
-  const float text_scale = ops_get_scale (builder);
+  const float text_scale = MAX (builder->scale_x, builder->scale_y); /* TODO: Fix for uneven scales? */
   const graphene_point_t *offset = gsk_text_node_get_offset (node);
   const guint num_glyphs = gsk_text_node_get_num_glyphs (node);
   const float x = offset->x + builder->dx;
@@ -1978,7 +1980,8 @@ render_blur_node (GskGLRenderer   *self,
 
   key.pointer = node;
   key.pointer_is_child = FALSE;
-  key.scale = ops_get_scale (builder);
+  key.scale_x = builder->scale_x;
+  key.scale_y = builder->scale_y;
   key.filter = GL_NEAREST;
   blurred_region.texture_id = gsk_gl_driver_get_texture_for_key (self->gl_driver, &key);
   blur_node (self, child, builder, blur_radius, 0, &blurred_region,
@@ -2041,7 +2044,8 @@ render_inset_shadow_node (GskGLRenderer   *self,
 
   key.pointer = node;
   key.pointer_is_child = FALSE;
-  key.scale = MAX (scale_x, scale_y); /* TODO: Use scale_x/scale_y here? */
+  key.scale_x = scale_x;
+  key.scale_y = scale_y;
   key.filter = GL_NEAREST;
   blurred_texture_id = gsk_gl_driver_get_texture_for_key (self->gl_driver, &key);
   if (blurred_texture_id == 0)
@@ -2228,14 +2232,13 @@ render_outset_shadow_node (GskGLRenderer   *self,
                            GskRenderNode   *node,
                            RenderOpBuilder *builder)
 {
-  const float scale = ops_get_scale (builder);
   const float scale_x = builder->scale_x;
   const float scale_y = builder->scale_y;
   const GskRoundedRect *outline = gsk_outset_shadow_node_get_outline (node);
   const GdkRGBA *color = gsk_outset_shadow_node_get_color (node);
   const float blur_radius = gsk_outset_shadow_node_get_blur_radius (node);
   const float blur_extra = blur_radius * 2.0f; /* 2.0 = shader radius_multiplier */
-  const int extra_blur_pixels = (int) ceilf(blur_extra / 2.0 * scale);
+  const int extra_blur_pixels = (int) ceilf(blur_extra / 2.0 * MAX (scale_x, scale_y)); /* TODO: No need to MAX() her actually */
   const float spread = gsk_outset_shadow_node_get_spread (node);
   const float dx = gsk_outset_shadow_node_get_dx (node);
   const float dy = gsk_outset_shadow_node_get_dy (node);
@@ -3798,9 +3801,11 @@ add_offscreen_ops (GskGLRenderer         *self,
                    gboolean              *is_offscreen,
                    guint                  flags)
 {
-  float scale, width, height, size, scaled_size;
+  float width, height;
   const float dx = builder->dx;
   const float dy = builder->dy;
+  float scale_x;
+  float scale_y;
   int render_target;
   int prev_render_target;
   graphene_matrix_t prev_projection;
@@ -3808,7 +3813,6 @@ add_offscreen_ops (GskGLRenderer         *self,
   graphene_matrix_t item_proj;
   float prev_opacity = 1.0;
   int texture_id = 0;
-  int max_texture_size;
   int filter;
   GskTextureKey key;
   int cached_id;
@@ -3841,7 +3845,8 @@ add_offscreen_ops (GskGLRenderer         *self,
   key.pointer = child_node;
   key.pointer_is_child = TRUE; /* Don't conflict with the child using the cache too */
   key.parent_rect = *bounds;
-  key.scale = ops_get_scale (builder);
+  key.scale_x = builder->scale_x;
+  key.scale_y = builder->scale_y;
   key.filter = filter;
   cached_id = gsk_gl_driver_get_texture_for_key (self->gl_driver, &key);
 
@@ -3853,23 +3858,32 @@ add_offscreen_ops (GskGLRenderer         *self,
       return TRUE;
     }
 
-  scale = ops_get_scale (builder);
   width = bounds->size.width;
   height = bounds->size.height;
+  scale_x = builder->scale_x;
+  scale_y = builder->scale_y;
 
   /* Tweak the scale factor so that the required texture doesn't
    * exceed the max texture limit. This will render with a lower
    * resolution, but this is better than clipping.
    */
+  {
+    const int max_texture_size = gsk_gl_driver_get_max_texture_size (self->gl_driver);
 
-  size = MAX (width, height);
-  scaled_size = ceilf (size * scale);
-  max_texture_size = gsk_gl_driver_get_max_texture_size (self->gl_driver);
-  if (scaled_size > max_texture_size)
-    scale *= (float) max_texture_size / scaled_size;
+    width = ceilf (width * scale_x);
+    if (width > max_texture_size)
+      {
+        scale_x *= (float)max_texture_size / width;
+        width = max_texture_size;
+      }
 
-  width  = ceilf (width * scale);
-  height = ceilf (height * scale);
+    height = ceilf (height * scale_y);
+    if (height > max_texture_size)
+      {
+        scale_y *= (float)max_texture_size / height;
+        height = max_texture_size;
+      }
+  }
 
   gsk_gl_driver_create_render_target (self->gl_driver,
                                       width, height,
@@ -3889,8 +3903,8 @@ add_offscreen_ops (GskGLRenderer         *self,
 
   init_projection_matrix (&item_proj,
                           &GRAPHENE_RECT_INIT (
-                            bounds->origin.x * scale,
-                            bounds->origin.y * scale,
+                            bounds->origin.x * scale_x,
+                            bounds->origin.y * scale_y,
                             width, height
                          ));
 
@@ -3898,15 +3912,15 @@ add_offscreen_ops (GskGLRenderer         *self,
   /* Clear since we use this rendertarget for the first time */
   ops_begin (builder, OP_CLEAR);
   prev_projection = ops_set_projection (builder, &item_proj);
-  ops_set_modelview (builder, gsk_transform_scale (NULL, scale, scale));
+  ops_set_modelview (builder, gsk_transform_scale (NULL, scale_x, scale_y));
   prev_viewport = ops_set_viewport (builder,
-                                    &GRAPHENE_RECT_INIT (bounds->origin.x * scale,
-                                                         bounds->origin.y * scale,
+                                    &GRAPHENE_RECT_INIT (bounds->origin.x * scale_x,
+                                                         bounds->origin.y * scale_y,
                                                          width, height));
   if (flags & RESET_CLIP)
     ops_push_clip (builder,
-                   &GSK_ROUNDED_RECT_INIT (bounds->origin.x * scale,
-                                           bounds->origin.y * scale,
+                   &GSK_ROUNDED_RECT_INIT (bounds->origin.x * scale_x,
+                                           bounds->origin.y * scale_y,
                                            width, height));
 
   builder->dx = 0;

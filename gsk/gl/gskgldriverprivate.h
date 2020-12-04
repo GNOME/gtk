@@ -23,7 +23,8 @@ typedef struct {
 
 typedef struct {
   gpointer pointer;
-  float scale;
+  float scale_x;
+  float scale_y;
   int filter;
   int pointer_is_child;
   graphene_rect_t parent_rect; /* Only set if pointer_is_child */
