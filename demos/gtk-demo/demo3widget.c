@@ -97,9 +97,9 @@ demo3_widget_size_allocate (GtkWidget *widget,
 
   /* Since we are not using a layout manager (who would do this
    * for us), we need to allocate a size for our menu by calling
-   * gtk_native_check_resize().
+   * gtk_popover_present().
    */
-  gtk_native_check_resize (GTK_NATIVE (self->menu));
+  gtk_popover_present (GTK_POPOVER (self->menu));
 }
 
 static void

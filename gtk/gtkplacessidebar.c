@@ -4076,10 +4076,10 @@ gtk_places_sidebar_size_allocate (GtkWidget *widget,
                             baseline);
 
   if (sidebar->popover)
-    gtk_native_check_resize (GTK_NATIVE (sidebar->popover));
+    gtk_popover_present (GTK_POPOVER (sidebar->popover));
 
   if (sidebar->rename_popover)
-    gtk_native_check_resize (GTK_NATIVE (sidebar->rename_popover));
+    gtk_popover_present (GTK_POPOVER (sidebar->rename_popover));
 }
 
 static void

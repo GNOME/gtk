@@ -1150,7 +1150,8 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
                                     NULL, FALSE, 0.0, 0.0);
       gtk_tree_path_free (path);
     }
-  gtk_native_check_resize (GTK_NATIVE (completion->popup_window));
+
+  gtk_popover_present (GTK_POPOVER (completion->popup_window));
 }
 
 static void

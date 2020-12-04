@@ -77,6 +77,7 @@
 #include "gtklayoutchild.h"
 #include "gtkwidgetprivate.h"
 #include "gtknative.h"
+#include "gtkpopover.h"
 
 #ifdef G_ENABLE_DEBUG
 #define LAYOUT_MANAGER_WARN_NOT_IMPLEMENTED(m,method)   G_STMT_START {  \
@@ -363,7 +364,9 @@ allocate_native_children (GtkWidget *widget)
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
-      if (GTK_IS_NATIVE (child))
+      if (GTK_IS_POPOVER (child))
+        gtk_popover_present (GTK_POPOVER (child));
+      else if (GTK_IS_NATIVE (child))
         gtk_native_check_resize (GTK_NATIVE (child));
     }
 }
