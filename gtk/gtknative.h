@@ -44,9 +44,6 @@ GDK_AVAILABLE_IN_ALL
 GtkNative * gtk_native_get_for_surface (GdkSurface *surface);
 
 GDK_AVAILABLE_IN_ALL
-void        gtk_native_check_resize    (GtkNative *self);
-
-GDK_AVAILABLE_IN_ALL
 GdkSurface *gtk_native_get_surface     (GtkNative *self);
 
 GDK_AVAILABLE_IN_ALL

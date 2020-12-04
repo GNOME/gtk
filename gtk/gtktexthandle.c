@@ -164,11 +164,6 @@ gtk_text_handle_present_surface (GtkTextHandle *handle)
   gdk_popup_layout_unref (layout);
 }
 
-static void
-gtk_text_handle_native_check_resize (GtkNative *native)
-{
-}
-
 void
 gtk_text_handle_present (GtkTextHandle *handle)
 {
@@ -199,7 +194,6 @@ gtk_text_handle_native_interface_init (GtkNativeInterface *iface)
   iface->get_surface = gtk_text_handle_native_get_surface;
   iface->get_renderer = gtk_text_handle_native_get_renderer;
   iface->get_surface_transform = gtk_text_handle_native_get_surface_transform;
-  iface->check_resize = gtk_text_handle_native_check_resize;
   iface->layout = gtk_text_handle_native_layout;
 }
 

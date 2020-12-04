@@ -373,7 +373,8 @@ allocate_native_children (GtkWidget *widget)
       else if (GTK_IS_TOOLTIP_WINDOW (child))
         gtk_tooltip_window_present (GTK_TOOLTIP_WINDOW (child));
       else if (GTK_IS_NATIVE (child))
-        gtk_native_check_resize (GTK_NATIVE (child));
+        g_warning ("Unable to present a to the layout manager unknown auxiliary child surface widget type %s",
+                   G_OBJECT_TYPE_NAME (child));
     }
 }
 
