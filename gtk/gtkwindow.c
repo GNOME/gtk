@@ -1871,11 +1871,6 @@ gtk_window_native_get_surface_transform (GtkNative *native,
 }
 
 static void
-gtk_window_native_check_resize (GtkNative *native)
-{
-}
-
-static void
 gtk_window_native_layout (GtkNative *native,
                           int        width,
                           int        height)
@@ -1946,7 +1941,6 @@ gtk_window_native_interface_init (GtkNativeInterface *iface)
   iface->get_surface = gtk_window_native_get_surface;
   iface->get_renderer = gtk_window_native_get_renderer;
   iface->get_surface_transform = gtk_window_native_get_surface_transform;
-  iface->check_resize = gtk_window_native_check_resize;
   iface->layout = gtk_window_native_layout;
 }
 

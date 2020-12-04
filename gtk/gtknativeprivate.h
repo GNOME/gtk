@@ -23,8 +23,6 @@ struct _GtkNativeInterface
                                            double       *x,
                                            double       *y);
 
-  void          (* check_resize)          (GtkNative    *self);
-
   void          (* layout)                (GtkNative    *self,
                                            int           width,
                                            int           height);

@@ -139,11 +139,6 @@ gtk_tooltip_window_relayout (GtkTooltipWindow *window)
   gdk_popup_layout_unref (layout);
 }
 
-static void
-gtk_tooltip_window_native_check_resize (GtkNative *native)
-{
-}
-
 void
 gtk_tooltip_window_present (GtkTooltipWindow *window)
 {
@@ -179,7 +174,6 @@ gtk_tooltip_window_native_init (GtkNativeInterface *iface)
   iface->get_surface = gtk_tooltip_window_native_get_surface;
   iface->get_renderer = gtk_tooltip_window_native_get_renderer;
   iface->get_surface_transform = gtk_tooltip_window_native_get_surface_transform;
-  iface->check_resize = gtk_tooltip_window_native_check_resize;
   iface->layout = gtk_tooltip_window_native_layout;
 }
 
@@ -358,7 +352,7 @@ gtk_tooltip_window_show (GtkWidget *widget)
 {
   _gtk_widget_set_visible_flag (widget, TRUE);
   gtk_widget_realize (widget);
-  gtk_tooltip_window_native_check_resize (GTK_NATIVE (widget));
+  gtk_tooltip_window_present (GTK_TOOLTIP_WINDOW (widget));
   gtk_widget_map (widget);
 }
 

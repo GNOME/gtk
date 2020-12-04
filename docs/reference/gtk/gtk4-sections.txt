@@ -6970,7 +6970,6 @@ GtkNative
 gtk_native_get_for_surface
 gtk_native_get_surface
 gtk_native_get_renderer
-gtk_native_check_resize
 gtk_native_get_surface_transform
 
 <SUBSECTION Private>

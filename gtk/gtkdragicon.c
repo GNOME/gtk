@@ -147,11 +147,6 @@ gtk_drag_icon_move_resize (GtkDragIcon *icon)
 }
 
 static void
-gtk_drag_icon_native_check_resize (GtkNative *native)
-{
-}
-
-static void
 gtk_drag_icon_present (GtkDragIcon *icon)
 {
   GtkWidget *widget = GTK_WIDGET (icon);
@@ -176,7 +171,6 @@ gtk_drag_icon_native_init (GtkNativeInterface *iface)
   iface->get_surface = gtk_drag_icon_native_get_surface;
   iface->get_renderer = gtk_drag_icon_native_get_renderer;
   iface->get_surface_transform = gtk_drag_icon_native_get_surface_transform;
-  iface->check_resize = gtk_drag_icon_native_check_resize;
   iface->layout = gtk_drag_icon_native_layout;
 }
 
