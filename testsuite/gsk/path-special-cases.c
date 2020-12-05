@@ -306,6 +306,56 @@ test_serialize_custom_contours (void)
   gsk_path_unref (path1);
 }
 
+/* Test that get_closest_point works for rectangles and circles */
+static void
+test_closest_point_custom_contours (void)
+{
+  static const float tolerance = 0.5;
+  GskPathBuilder *builder;
+  GskPath *path;
+  GskPathMeasure *measure;
+  float length, offset, closest_offset, distance;
+  graphene_point_t point, closest_point;
+  guint i, j;
+
+  for (i = 0; i < 2; i++)
+    {
+      builder = gsk_path_builder_new ();
+      if (i == 0)
+        gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (100, 100, 200, 200));
+      else
+        gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (100, 100), 200);
+
+      path = gsk_path_builder_free_to_path (builder);
+
+      measure = gsk_path_measure_new_with_tolerance (path, tolerance);
+      length = gsk_path_measure_get_length (measure);
+
+      for (j = 0; j < 100; j++)
+        {
+          offset = g_test_rand_double_range (0, length);
+
+          gsk_path_measure_get_point (measure,
+                                      offset,
+                                      &point,
+                                      NULL);
+          g_assert_true (gsk_path_measure_get_closest_point_full (measure,
+                                                                  &point,
+                                                                  tolerance,
+                                                                  &distance,
+                                                                  &closest_point,
+                                                                  &closest_offset,
+                                                                  NULL));
+          g_assert_cmpfloat (distance, <=, tolerance);
+          g_assert_cmpfloat (graphene_point_distance (&point, &closest_point, NULL, NULL), <=, tolerance);
+          g_assert_cmpfloat_with_epsilon (closest_offset, offset, tolerance);
+        }
+
+      gsk_path_measure_unref (measure);
+      gsk_path_unref (path);
+    }
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -314,6 +364,7 @@ main (int   argc,
 
   g_test_add_func ("/path/rsvg-parse", test_rsvg_parse);
   g_test_add_func ("/path/serialize-custom-contours", test_serialize_custom_contours);
+  g_test_add_func ("/path/closest-point-custom-contours", test_closest_point_custom_contours);
 
   return g_test_run ();
 }
