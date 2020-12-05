@@ -1519,6 +1519,7 @@ gtk_at_spi_context_unrealize (GtkATContext *context)
   gtk_atspi_disconnect_selection_signals (accessible);
   gtk_at_spi_context_unregister_object (self);
 
+  g_clear_pointer (&self->context_path, g_free);
   g_clear_object (&self->root);
 }
 
