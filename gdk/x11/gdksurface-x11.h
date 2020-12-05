@@ -72,6 +72,8 @@ struct _GdkX11Surface
   int unscaled_width;
   int unscaled_height;
 
+  GdkToplevelLayout *toplevel_layout;
+
   struct {
     int configured_width;
     int configured_height;
