@@ -370,6 +370,8 @@ void       gtk_widget_class_set_activate_signal                 (GtkWidgetClass 
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_class_set_activate_signal_from_name       (GtkWidgetClass *widget_class,
                                                                  const char     *signal_name);
+GDK_AVAILABLE_IN_ALL
+guint      gtk_widget_class_get_activate_signal                 (GtkWidgetClass *widget_class);
 
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_mnemonic_activate   (GtkWidget           *widget,

@@ -4583,6 +4583,24 @@ gtk_widget_event (GtkWidget *widget,
 }
 
 /**
+ * gtk_widget_class_get_activate_signal:
+ * @widget_class: a #GtkWidgetClass
+ *
+ * Retrieves the signal id for the activation signal set using
+ * gtk_widget_class_set_activate_signal().
+ *
+ * Returns: a signal id, or 0 if the widget class does not
+ *   specify an activation signal
+ */
+guint
+gtk_widget_class_get_activate_signal (GtkWidgetClass *widget_class)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET_CLASS (widget_class), 0);
+
+  return widget_class->activate_signal;
+}
+
+/**
  * gtk_widget_class_set_activate_signal:
  * @widget_class: a #GtkWidgetClass
  * @signal_id: the id for the activate signal
