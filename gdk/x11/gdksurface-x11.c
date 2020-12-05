@@ -1580,6 +1580,7 @@ gdk_x11_surface_hide (GdkSurface *surface)
                                     NextRequest (GDK_SURFACE_XDISPLAY (surface)));
 
   g_clear_handle_id (&impl->compute_size_source_id, g_source_remove);
+  g_clear_pointer (&impl->toplevel_layout, gdk_toplevel_layout_unref);
 
   gdk_x11_surface_withdraw (surface);
 }
@@ -5053,6 +5054,9 @@ gdk_x11_toplevel_present (GdkToplevel       *toplevel,
   was_mapped = GDK_SURFACE_IS_MAPPED (surface);
 
   gdk_x11_surface_unminimize (surface);
+
+  g_clear_pointer (&impl->toplevel_layout, gdk_toplevel_layout_unref);
+  impl->toplevel_layout = gdk_toplevel_layout_copy (layout);
 
   monitor = gdk_display_get_monitor_at_surface (display, surface);
   if (monitor)
