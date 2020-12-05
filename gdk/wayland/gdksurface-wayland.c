@@ -4876,6 +4876,8 @@ did_maximize_layout_change (GdkToplevel       *toplevel,
     return TRUE;
 
   if (gdk_toplevel_layout_get_maximized (impl->toplevel.layout) !=
+      gdk_toplevel_layout_get_maximized (layout) ||
+      !!(surface->state & GDK_TOPLEVEL_STATE_MAXIMIZED) !=
       gdk_toplevel_layout_get_maximized (layout))
     return TRUE;
 
@@ -4893,6 +4895,8 @@ did_fullscreen_layout_change (GdkToplevel       *toplevel,
     return TRUE;
 
   if (gdk_toplevel_layout_get_fullscreen (impl->toplevel.layout) !=
+      gdk_toplevel_layout_get_fullscreen (layout) ||
+      !!(surface->state & GDK_TOPLEVEL_STATE_FULLSCREEN) !=
       gdk_toplevel_layout_get_fullscreen (layout))
     return TRUE;
 
