@@ -285,6 +285,7 @@ enum {
   PROP_FOCUS_VISIBLE,
 
   PROP_MAXIMIZED,
+  PROP_FULLSCREEN,
 
   LAST_ARG
 };
@@ -869,6 +870,13 @@ gtk_window_class_init (GtkWindowClass *klass)
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
+  window_props[PROP_FULLSCREEN] =
+      g_param_spec_boolean ("fullscreen",
+                            P_("Is fullscreen"),
+                            P_("Whether the window is fullscreen"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
+
   /**
    * GtkWindow:application:
    *
@@ -1109,6 +1117,36 @@ gtk_window_is_maximized (GtkWindow *window)
     return priv->maximized;
   else
     return priv->maximize_initially;
+}
+
+/**
+ * gtk_window_is_fullscreen:
+ * @window: a #GtkWindow
+ *
+ * Retrieves the current fullscreen state of @window.
+ *
+ * Note that since fullscreening is ultimately handled by the window
+ * manager and happens asynchronously to an application request, you
+ * shouldn’t assume the return value of this function changing
+ * immediately (or at all), as an effect of calling
+ * gtk_window_fullscreen() or gtk_window_unfullscreen().
+ *
+ * If the window isn't yet mapped, the value returned will whether the
+ * initial requested state is fullscreen.
+ *
+ * Returns: whether the window has a fullscreen state.
+ */
+gboolean
+gtk_window_is_fullscreen (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
+
+  if (priv->surface && gdk_surface_get_mapped (priv->surface))
+    return priv->fullscreen;
+  else
+    return priv->fullscreen_initially;
 }
 
 void
@@ -1623,6 +1661,12 @@ gtk_window_set_property (GObject      *object,
       else
         gtk_window_unmaximize (window);
       break;
+    case PROP_FULLSCREEN:
+      if (g_value_get_boolean (value))
+        gtk_window_fullscreen (window);
+      else
+        gtk_window_unfullscreen (window);
+      break;
     case PROP_FOCUS_WIDGET:
       gtk_window_set_focus (window, g_value_get_object (value));
       break;
@@ -1699,6 +1743,9 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_MAXIMIZED:
       g_value_set_boolean (value, gtk_window_is_maximized (window));
+      break;
+    case PROP_FULLSCREEN:
+      g_value_set_boolean (value, gtk_window_is_fullscreen (window));
       break;
     case PROP_FOCUS_WIDGET:
       g_value_set_object (value, gtk_window_get_focus (window));
@@ -4426,6 +4473,8 @@ surface_state_changed (GtkWidget *widget)
     {
       priv->fullscreen = (new_surface_state & GDK_TOPLEVEL_STATE_FULLSCREEN) ? TRUE : FALSE;
       priv->fullscreen_initially = priv->fullscreen;
+
+      g_object_notify_by_pspec (G_OBJECT (widget), window_props[PROP_FULLSCREEN]);
     }
 
   if (changed_mask & GDK_TOPLEVEL_STATE_MAXIMIZED)
@@ -5196,12 +5245,17 @@ void
 gtk_window_fullscreen (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  gboolean was_fullscreen_initially;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
+  was_fullscreen_initially = priv->fullscreen_initially;
   priv->fullscreen_initially = TRUE;
 
-  gtk_window_update_toplevel (window);
+  if (priv->surface && gdk_surface_get_mapped (priv->surface))
+    gtk_window_update_toplevel (window);
+  else if (!was_fullscreen_initially)
+    g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_FULLSCREEN]);
 }
 
 static void
@@ -5268,13 +5322,20 @@ void
 gtk_window_unfullscreen (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  gboolean was_fullscreen_initially;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
+  was_fullscreen_initially = priv->fullscreen_initially;
   unset_fullscreen_monitor (window);
   priv->fullscreen_initially = FALSE;
 
   gtk_window_update_toplevel (window);
+
+  if (priv->surface && gdk_surface_get_mapped (priv->surface))
+    gtk_window_update_toplevel (window);
+  else if (was_fullscreen_initially)
+    g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_FULLSCREEN]);
 }
 
 /**
