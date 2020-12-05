@@ -303,11 +303,15 @@ compute_toplevel_size (GdkSurface *surface,
       gdk_surface_constrain_size (&geometry, mask,
                                   size.width, size.height,
                                   &size.width, &size.height);
-      if ((impl->next_layout.configured_width != size.width ||
+      if ((impl->last_computed_width != size.width ||
+           impl->last_computed_height != size.height) &&
+          (impl->next_layout.configured_width != size.width ||
            impl->next_layout.configured_height != size.height))
         {
           *width = size.width;
           *height = size.height;
+          impl->last_computed_width = size.width;
+          impl->last_computed_height = size.height;
 
           return TRUE;
         }
