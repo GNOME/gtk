@@ -56,6 +56,12 @@ If the issue includes a crash, you should also include:
  0. the eventual warnings printed on the terminal
  0. a backtrace, obtained with tools such as GDB or LLDB
 
+It is fine to include screenshots of screen recordings to demonstrate
+an issue that is best to understand visually, but please don't just
+dump screen recordings without further details into issues. It is
+essential that the problem is described in enough detail to reproduce
+it without watching a video.
+
 For small issues, such as:
 
  - spelling/grammar fixes in the documentation
