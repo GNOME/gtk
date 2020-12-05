@@ -92,6 +92,12 @@ void                    gsk_contour_add_segment                 (const GskContou
                                                                  gpointer                measure_data,
                                                                  float                   start,
                                                                  float                   end);
+void                    gsk_contour_add_stroke                  (const GskContour       *contour,
+                                                                 GskPathBuilder         *builder,
+                                                                 GskStroke              *stroke);
+void                    gsk_contour_default_add_stroke          (const GskContour       *contour,
+                                                                 GskPathBuilder         *builder,
+                                                                 GskStroke              *stroke);
 
 G_END_DECLS
 
