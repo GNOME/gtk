@@ -510,8 +510,13 @@ gtk_window_set_gravity(), gtk_window_move(), gtk_window_parse_geometry(),
 gtk_window_set_keep_above(), gtk_window_set_keep_below(),
 gtk_window_begin_resize_drag(), gtk_window_begin_move_drag().
 Most likely, you should just stop using them. In some cases, you can
-fall back to using the underlying #GdkToplevel APIS (for example,
+fall back to using the underlying #GdkToplevel APIs (for example,
 gdk_toplevel_begin_resize()).
+
+The APIs for controlling GtkWindow size have changed to be better aligned
+with the way size changes are integrated in the frame cycle. gtk_window_resize()
+and gtk_window_get_size() have been removed. Instead, use
+gtk_window_set_default_size() and gtk_window_get_default_size().
 
 ### Adapt to GtkHeaderBar and GtkActionBar API changes
 
