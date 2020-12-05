@@ -2154,7 +2154,14 @@ render_inset_shadow_node (GskGLRenderer   *self,
 
     if (needs_clip)
       {
-        const GskRoundedRect node_clip = transform_rect (self, builder, node_outline);
+        GskRoundedRect node_clip;
+
+        ops_transform_bounds_modelview (builder, &node_outline->bounds, &node_clip.bounds);
+        for (int i = 0; i < 4; i ++)
+          {
+            node_clip.corner[i].width = node_outline->corner[i].width * scale_x;
+            node_clip.corner[i].height = node_outline->corner[i].height * scale_y;
+          }
 
         ops_push_clip (builder, &node_clip);
       }
