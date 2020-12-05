@@ -90,6 +90,9 @@ struct _GskContourClass
                                                  const GskStroke        *stroke,
                                                  graphene_rect_t        *bounds);
   GskContour *          (* reverse)             (const GskContour       *contour);
+  void                  (* add_stroke)          (const GskContour       *contour,
+                                                 GskPathBuilder         *builder,
+                                                 GskStroke              *stroke);
 };
 
 static gsize
@@ -510,6 +513,13 @@ gsk_rect_contour_reverse (const GskContour *contour)
                                                     self->height));
 }
 
+static void
+gsk_rect_contour_add_stroke (const GskContour *contour,
+                             GskPathBuilder   *builder,
+                             GskStroke        *stroke)
+{
+}
+
 static const GskContourClass GSK_RECT_CONTOUR_CLASS =
 {
   sizeof (GskRectContour),
@@ -530,6 +540,7 @@ static const GskContourClass GSK_RECT_CONTOUR_CLASS =
   gsk_rect_contour_get_winding,
   gsk_rect_contour_get_stroke_bounds,
   gsk_rect_contour_reverse,
+  gsk_rect_contour_add_stroke,
 };
 
 GskContour *
@@ -906,6 +917,13 @@ gsk_circle_contour_reverse (const GskContour *contour)
                                  self->start_angle);
 }
 
+static void
+gsk_circle_contour_add_stroke (const GskContour *contour,
+                               GskPathBuilder   *builder,
+                               GskStroke        *stroke)
+{
+}
+
 static const GskContourClass GSK_CIRCLE_CONTOUR_CLASS =
 {
   sizeof (GskCircleContour),
@@ -926,6 +944,7 @@ static const GskContourClass GSK_CIRCLE_CONTOUR_CLASS =
   gsk_circle_contour_get_winding,
   gsk_circle_contour_get_stroke_bounds,
   gsk_circle_contour_reverse,
+  gsk_circle_contour_add_stroke,
 };
 
 GskContour *
@@ -1763,6 +1782,13 @@ gsk_standard_contour_reverse (const GskContour *contour)
   return res;
 }
 
+static void
+gsk_standard_contour_add_stroke (const GskContour *contour,
+                                 GskPathBuilder   *builder,
+                                 GskStroke        *stroke)
+{
+}
+
 static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
 {
   sizeof (GskStandardContour),
@@ -1783,6 +1809,7 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   gsk_standard_contour_get_winding,
   gsk_standard_contour_get_stroke_bounds,
   gsk_standard_contour_reverse,
+  gsk_standard_contour_add_stroke,
 };
 
 /* You must ensure the contour has enough size allocated,
@@ -1960,6 +1987,14 @@ gsk_contour_get_stroke_bounds (const GskContour *self,
                                graphene_rect_t  *bounds)
 {
   return self->klass->get_stroke_bounds (self, stroke, bounds);
+}
+
+void
+gsk_contour_add_stroke (const GskContour *self,
+                        GskPathBuilder   *builder,
+                        GskStroke        *stroke)
+{
+  self->klass->add_stroke (self, builder, stroke);
 }
 
 void
