@@ -107,5 +107,12 @@ gboolean                gsk_contour_dash                        (const GskContou
                                                                  GskPathForeachFunc      func,
                                                                  gpointer                user_data);
 
+void                    gsk_contour_add_stroke                  (const GskContour       *contour,
+                                                                 GskPathBuilder         *builder,
+                                                                 GskStroke              *stroke);
+
+void                    gsk_contour_default_add_stroke          (const GskContour       *contour,
+                                                                 GskPathBuilder         *builder,
+                                                                 GskStroke              *stroke);
 
 G_END_DECLS
