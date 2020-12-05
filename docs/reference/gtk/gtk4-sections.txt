@@ -4615,7 +4615,6 @@ gtk_window_get_default_size
 gtk_window_get_destroy_with_parent
 gtk_window_get_icon_name
 gtk_window_get_modal
-gtk_window_get_size
 gtk_window_get_title
 gtk_window_get_transient_for
 gtk_window_get_group
