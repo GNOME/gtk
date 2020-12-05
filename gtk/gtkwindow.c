@@ -284,7 +284,7 @@ enum {
   PROP_MNEMONICS_VISIBLE,
   PROP_FOCUS_VISIBLE,
 
-  PROP_IS_MAXIMIZED,
+  PROP_MAXIMIZED,
 
   LAST_ARG
 };
@@ -862,12 +862,12 @@ gtk_window_class_init (GtkWindowClass *klass)
                            GTK_TYPE_WINDOW,
                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
-  window_props[PROP_IS_MAXIMIZED] =
-      g_param_spec_boolean ("is-maximized",
+  window_props[PROP_MAXIMIZED] =
+      g_param_spec_boolean ("maximized",
                             P_("Is maximized"),
                             P_("Whether the window is maximized"),
                             FALSE,
-                            GTK_PARAM_READABLE);
+                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:application:
@@ -1093,6 +1093,9 @@ gtk_window_class_init (GtkWindowClass *klass)
  * immediately (or at all), as an effect of calling
  * gtk_window_maximize() or gtk_window_unmaximize().
  *
+ * If the window isn't yet mapped, the value returned will whether the
+ * initial requested state is maximized.
+ *
  * Returns: whether the window has a maximized state.
  */
 gboolean
@@ -1102,7 +1105,10 @@ gtk_window_is_maximized (GtkWindow *window)
 
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
-  return priv->maximized;
+  if (priv->surface && gdk_surface_get_mapped (priv->surface))
+    return priv->maximized;
+  else
+    return priv->maximize_initially;
 }
 
 void
@@ -1613,6 +1619,12 @@ gtk_window_set_property (GObject      *object,
     case PROP_FOCUS_VISIBLE:
       gtk_window_set_focus_visible (window, g_value_get_boolean (value));
       break;
+    case PROP_MAXIMIZED:
+      if (g_value_get_boolean (value))
+        gtk_window_maximize (window);
+      else
+        gtk_window_unmaximize (window);
+      break;
     case PROP_FOCUS_WIDGET:
       gtk_window_set_focus (window, g_value_get_object (value));
       break;
@@ -1687,7 +1699,7 @@ gtk_window_get_property (GObject      *object,
     case PROP_FOCUS_VISIBLE:
       g_value_set_boolean (value, priv->focus_visible);
       break;
-    case PROP_IS_MAXIMIZED:
+    case PROP_MAXIMIZED:
       g_value_set_boolean (value, gtk_window_is_maximized (window));
       break;
     case PROP_FOCUS_WIDGET:
@@ -4420,7 +4432,7 @@ surface_state_changed (GtkWidget *widget)
       priv->maximized = (new_surface_state & GDK_TOPLEVEL_STATE_MAXIMIZED) ? TRUE : FALSE;
       priv->maximize_initially = priv->maximized;
 
-      g_object_notify_by_pspec (G_OBJECT (widget), window_props[PROP_IS_MAXIMIZED]);
+      g_object_notify_by_pspec (G_OBJECT (widget), window_props[PROP_MAXIMIZED]);
     }
 
   update_edge_constraints (window, new_surface_state);
@@ -5107,19 +5119,28 @@ gtk_window_unminimize (GtkWindow *window)
  * initially.
  *
  * You can track the result of this operation via the #GdkToplevel:state
- * property, or by listening to notifications on the #GtkWindow:is-maximized
+ * property, or by listening to notifications on the #GtkWindow:maximized
  * property.
  */
 void
 gtk_window_maximize (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  gboolean was_maximized_initially;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
+  was_maximized_initially = priv->maximize_initially;
   priv->maximize_initially = TRUE;
 
-  gtk_window_update_toplevel (window);
+  if (priv->surface && gdk_surface_get_mapped (priv->surface))
+    {
+      gtk_window_update_toplevel (window);
+    }
+  else if (!was_maximized_initially)
+    {
+      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_MAXIMIZED]);
+    }
 }
 
 /**
@@ -5134,19 +5155,26 @@ gtk_window_maximize (GtkWindow *window)
  * end up unmaximized. Just don’t write code that crashes if not.
  *
  * You can track the result of this operation via the #GdkToplevel:state
- * property, or by listening to notifications on the #GtkWindow:is-maximized
+ * property, or by listening to notifications on the #GtkWindow:maximized
  * property.
  */
 void
 gtk_window_unmaximize (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  gboolean was_maximized_initially;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
+  was_maximized_initially = priv->maximize_initially;
   priv->maximize_initially = FALSE;
 
   gtk_window_update_toplevel (window);
+
+  if (priv->surface && gdk_surface_get_mapped (priv->surface))
+    gtk_window_update_toplevel (window);
+  else if (was_maximized_initially)
+    g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_MAXIMIZED]);
 }
 
 /**
