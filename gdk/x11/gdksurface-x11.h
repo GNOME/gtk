@@ -75,6 +75,7 @@ struct _GdkX11Surface
   struct {
     int configured_width;
     int configured_height;
+    gboolean configure_pending;
     gboolean surface_geometry_dirty;
   } next_layout;
 

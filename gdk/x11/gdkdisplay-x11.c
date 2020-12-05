@@ -964,6 +964,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
               surface_impl->next_layout.configured_width = configured_width;
               surface_impl->next_layout.configured_height = configured_height;
               surface_impl->next_layout.surface_geometry_dirty = TRUE;
+              surface_impl->next_layout.configure_pending = TRUE;
               gdk_surface_request_layout (surface);
             }
 
