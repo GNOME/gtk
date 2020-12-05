@@ -96,6 +96,12 @@ void                    gsk_contour_add_segment                 (const GskContou
 gboolean                gsk_contour_get_stroke_bounds           (const GskContour       *self,
                                                                  const GskStroke        *stroke,
                                                                  graphene_rect_t        *bounds);
+void                    gsk_contour_add_stroke                  (const GskContour       *contour,
+                                                                 GskPathBuilder         *builder,
+                                                                 GskStroke              *stroke);
+void                    gsk_contour_default_add_stroke          (const GskContour       *contour,
+                                                                 GskPathBuilder         *builder,
+                                                                 GskStroke              *stroke);
 
 G_END_DECLS
 

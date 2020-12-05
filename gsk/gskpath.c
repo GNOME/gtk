@@ -1239,3 +1239,28 @@ gsk_path_get_stroke_bounds (GskPath         *path,
 
   return TRUE;
 }
+
+/**
+ * gsk_path_stroke:
+ * @self: a `GskPath`
+ * @stroke: stroke parameters
+ *
+ * Create a new path that follows the outline of the area
+ * that would be affected by stroking along @self with
+ * the given stroke parameters.
+ *
+ * Returns: a new `GskPath`
+ */
+GskPath *
+gsk_path_stroke (GskPath   *self,
+                 GskStroke *stroke)
+{
+  GskPathBuilder *builder;
+
+  builder = gsk_path_builder_new ();
+
+  for (int i = 0; i < self->n_contours; i++)
+    gsk_contour_add_stroke (gsk_path_get_contour (self, i), builder, stroke);
+
+  return gsk_path_builder_free_to_path (builder);
+}
