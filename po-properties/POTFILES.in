@@ -136,7 +136,6 @@ gtk/gtkeventcontrollerlegacy.c
 gtk/gtkeventcontrollermotion.c
 gtk/gtkeventcontrollerscroll.c
 gtk/gtkexpander.c
-gtk/gtkfilechooserbutton.c
 gtk/gtkfilechooser.c
 gtk/gtkfilechooserdialog.c
 gtk/gtkfilechooserentry.c
