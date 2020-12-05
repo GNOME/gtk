@@ -4589,6 +4589,7 @@ gtk_window_set_destroy_with_parent
 gtk_window_set_display
 gtk_window_is_active
 gtk_window_is_maximized
+gtk_window_is_fullscreen
 gtk_window_get_toplevels
 gtk_window_list_toplevels
 gtk_window_get_focus
