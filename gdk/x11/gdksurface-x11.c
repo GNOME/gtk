@@ -341,6 +341,7 @@ gdk_x11_surface_compute_size (GdkSurface *surface)
       _gdk_x11_surface_update_size (impl);
 
       impl->next_layout.surface_geometry_dirty = FALSE;
+      impl->next_layout.configure_pending = FALSE;
     }
   else
     {
