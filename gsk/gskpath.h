@@ -110,6 +110,10 @@ gboolean                gsk_path_foreach                        (GskPath        
                                                                  GskPathForeachFunc      func,
                                                                  gpointer                user_data);
 
+GDK_AVAILABLE_IN_ALL
+GskPath *               gsk_path_stroke                         (GskPath                *self,
+                                                                 GskStroke              *stroke);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskPath, gsk_path_unref)
 
 G_END_DECLS
