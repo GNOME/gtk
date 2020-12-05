@@ -495,11 +495,43 @@ gsk_rect_contour_get_stroke_bounds (const GskContour       *contour,
   return TRUE;
 }
 
+static gboolean
+stroke_is_simple (GskStroke *stroke)
+{
+  if (stroke->line_join != GSK_LINE_JOIN_MITER &&
+      stroke->line_join != GSK_LINE_JOIN_MITER_CLIP)
+    return FALSE;
+
+  if (stroke->miter_limit < 1.5)
+    return FALSE;
+
+  if (stroke->dash_length != 0)
+    return FALSE;
+
+  return TRUE;
+}
+
 static void
 gsk_rect_contour_add_stroke (const GskContour *contour,
                              GskPathBuilder   *builder,
                              GskStroke        *stroke)
 {
+  const GskRectContour *self = (const GskRectContour *) contour;
+
+  if (stroke_is_simple (stroke))
+    {
+      graphene_rect_t rect;
+
+      graphene_rect_init (&rect, self->x, self->y, self->width, self->height);
+
+      graphene_rect_inset (&rect, stroke->line_width / 2, stroke->line_width / 2);
+      gsk_path_builder_add_rect (builder, &rect);
+
+      graphene_rect_inset (&rect, - stroke->line_width, - stroke->line_width);
+      rect.origin.x += rect.size.width;
+      rect.size.width = - rect.size.width;
+      gsk_path_builder_add_rect (builder, &rect);
+    }
 }
 
 static const GskContourClass GSK_RECT_CONTOUR_CLASS =
