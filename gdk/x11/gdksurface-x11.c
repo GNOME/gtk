@@ -1003,6 +1003,19 @@ on_frame_clock_before_paint (GdkFrameClock *clock,
 }
 
 static void
+on_frame_clock_after_update (GdkFrameClock *clock,
+                             GdkSurface    *surface)
+{
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
+
+  if (impl->compute_size_source_id)
+    {
+      g_clear_handle_id (&impl->compute_size_source_id, g_source_remove);
+      compute_size_idle (surface);
+    }
+}
+
+static void
 on_frame_clock_after_paint (GdkFrameClock *clock,
                             GdkSurface     *surface)
 {
@@ -1024,6 +1037,8 @@ connect_frame_clock (GdkSurface *surface)
 
       g_signal_connect (frame_clock, "before-paint",
                         G_CALLBACK (on_frame_clock_before_paint), surface);
+      g_signal_connect_after (frame_clock, "update",
+                              G_CALLBACK (on_frame_clock_after_update), surface);
       g_signal_connect (frame_clock, "after-paint",
                         G_CALLBACK (on_frame_clock_after_paint), surface);
 
@@ -1043,6 +1058,8 @@ disconnect_frame_clock (GdkSurface *surface)
 
       g_signal_handlers_disconnect_by_func (frame_clock,
                                             on_frame_clock_before_paint, surface);
+      g_signal_handlers_disconnect_by_func (frame_clock,
+                                            on_frame_clock_after_update, surface);
       g_signal_handlers_disconnect_by_func (frame_clock,
                                             on_frame_clock_after_paint, surface);
 
