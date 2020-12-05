@@ -244,6 +244,21 @@ _graphene_rect_contains_rect (const graphene_rect_t *r1,
   return false;
 }
 
+static inline bool G_GNUC_PURE
+equal_texture_nodes (GskRenderNode *node1,
+                     GskRenderNode *node2)
+{
+  if (gsk_render_node_get_node_type (node1) != GSK_TEXTURE_NODE ||
+      gsk_render_node_get_node_type (node2) != GSK_TEXTURE_NODE)
+    return false;
+
+  if (gsk_texture_node_get_texture (node1) !=
+      gsk_texture_node_get_texture (node2))
+    return false;
+
+  return graphene_rect_equal (&node1->bounds, &node2->bounds);
+}
+
 static inline void
 sort_border_sides (const GdkRGBA *colors,
                    int           *indices)
@@ -2651,6 +2666,12 @@ render_cross_fade_node (GskGLRenderer   *self,
       return;
     }
   else if (progress >= 1)
+    {
+      gsk_gl_renderer_add_render_ops (self, end_node, builder);
+      return;
+    }
+
+  if (equal_texture_nodes (start_node, end_node))
     {
       gsk_gl_renderer_add_render_ops (self, end_node, builder);
       return;
