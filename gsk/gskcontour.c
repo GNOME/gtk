@@ -25,6 +25,7 @@
 #include "gskpathbuilder.h"
 #include "gskpathprivate.h"
 #include "gsksplineprivate.h"
+#include "gskstrokeprivate.h"
 
 typedef struct _GskContourClass GskContourClass;
 
@@ -81,6 +82,9 @@ struct _GskContourClass
                                                  gpointer                measure_data,
                                                  const graphene_point_t *point,
                                                  gboolean               *on_edge);
+  gboolean              (* get_stroke_bounds)   (const GskContour       *contour,
+                                                 const GskStroke        *stroke,
+                                                 graphene_rect_t        *bounds);
 };
 
 static gsize
@@ -474,6 +478,17 @@ gsk_rect_contour_get_winding (const GskContour       *contour,
   return 0;
 }
 
+static gboolean
+gsk_rect_contour_get_stroke_bounds (const GskContour       *contour,
+                                    const GskStroke        *stroke,
+                                    graphene_rect_t        *bounds)
+{
+  const GskRectContour *self = (const GskRectContour *) contour;
+  graphene_rect_init (bounds, self->x, self->y, self->width, self->height);
+  graphene_rect_inset (bounds, - stroke->line_width / 2, - stroke->line_width / 2);
+  return TRUE;
+}
+
 static const GskContourClass GSK_RECT_CONTOUR_CLASS =
 {
   sizeof (GskRectContour),
@@ -490,7 +505,8 @@ static const GskContourClass GSK_RECT_CONTOUR_CLASS =
   gsk_rect_contour_get_closest_point,
   gsk_rect_contour_copy,
   gsk_rect_contour_add_segment,
-  gsk_rect_contour_get_winding
+  gsk_rect_contour_get_winding,
+  gsk_rect_contour_get_stroke_bounds
 };
 
 GskContour *
@@ -801,6 +817,23 @@ gsk_circle_contour_get_winding (const GskContour       *contour,
   return 0;
 }
 
+static gboolean
+gsk_circle_contour_get_stroke_bounds (const GskContour       *contour,
+                                      const GskStroke        *stroke,
+                                      graphene_rect_t        *bounds)
+{
+  const GskCircleContour *self = (const GskCircleContour *) contour;
+
+  graphene_rect_init (bounds,
+                      self->center.x - self->radius,
+                      self->center.y - self->radius,
+                      2 * self->radius,
+                      2 * self->radius);
+  graphene_rect_inset (bounds, - stroke->line_width / 2, - stroke->line_width / 2);
+
+  return TRUE;
+}
+
 static const GskContourClass GSK_CIRCLE_CONTOUR_CLASS =
 {
   sizeof (GskCircleContour),
@@ -817,7 +850,8 @@ static const GskContourClass GSK_CIRCLE_CONTOUR_CLASS =
   gsk_circle_contour_get_closest_point,
   gsk_circle_contour_copy,
   gsk_circle_contour_add_segment,
-  gsk_circle_contour_get_winding
+  gsk_circle_contour_get_winding,
+  gsk_circle_contour_get_stroke_bounds
 };
 
 GskContour *
@@ -1453,6 +1487,55 @@ gsk_standard_contour_get_winding (const GskContour       *contour,
   return winding;
 }
 
+static gboolean
+add_stroke_bounds (GskPathOperation        op,
+                   const graphene_point_t *pts,
+                   gsize                   n_pts,
+                   float                   weight,
+                   gpointer                user_data)
+{
+  struct {
+    graphene_rect_t *bounds;
+    float lw;
+    float mw;
+  } *data = user_data;
+  graphene_rect_t bounds;
+
+  for (int i = 1; i < n_pts - 1; i++)
+    {
+      graphene_rect_init (&bounds, pts[i].x - data->lw/2, pts[i].y - data->lw/2, data->lw, data->lw);
+      graphene_rect_union (&bounds, data->bounds, data->bounds);
+    }
+
+  graphene_rect_init (&bounds, pts[n_pts - 1].x - data->mw/2, pts[n_pts  - 1].y - data->mw/2, data->mw, data->mw);
+  graphene_rect_union (&bounds, data->bounds, data->bounds);
+
+  return TRUE;
+}
+
+static gboolean
+gsk_standard_contour_get_stroke_bounds (const GskContour *contour,
+                                        const GskStroke  *stroke,
+                                        graphene_rect_t  *bounds)
+{
+  GskStandardContour *self = (GskStandardContour *) contour;
+  struct {
+    graphene_rect_t *bounds;
+    float lw;
+    float mw;
+  } data;
+
+  data.bounds = bounds;
+  data.lw = stroke->line_width;
+  data.mw = MAX (stroke->miter_limit, 1.f) * stroke->line_width;
+
+  graphene_rect_init (bounds, self->points[0].x - data.mw/2, self->points[0].y - data.mw/2, data.mw, data.mw);
+
+  gsk_standard_contour_foreach (contour, GSK_PATH_TOLERANCE_DEFAULT, add_stroke_bounds, &data);
+
+  return TRUE;
+}
+
 static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
 {
   sizeof (GskStandardContour),
@@ -1469,7 +1552,8 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   gsk_standard_contour_get_closest_point,
   gsk_standard_contour_copy,
   gsk_standard_contour_add_segment,
-  gsk_standard_contour_get_winding
+  gsk_standard_contour_get_winding,
+  gsk_standard_contour_get_stroke_bounds
 };
 
 /* You must ensure the contour has enough size allocated,
@@ -1630,6 +1714,14 @@ gsk_contour_get_winding (const GskContour       *self,
                          gboolean               *on_edge)
 {
   return self->klass->get_winding (self, measure_data, point, on_edge);
+}
+
+gboolean
+gsk_contour_get_stroke_bounds (const GskContour *self,
+                               const GskStroke  *stroke,
+                               graphene_rect_t  *bounds)
+{
+  return self->klass->get_stroke_bounds (self, stroke, bounds);
 }
 
 void

@@ -92,6 +92,9 @@ void                    gsk_contour_add_segment                 (const GskContou
                                                                  gpointer                measure_data,
                                                                  float                   start,
                                                                  float                   end);
+gboolean                gsk_contour_get_stroke_bounds           (const GskContour       *self,
+                                                                 const GskStroke        *stroke,
+                                                                 graphene_rect_t        *bounds);
 
 G_END_DECLS
 

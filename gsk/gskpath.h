@@ -98,6 +98,10 @@ gboolean                gsk_path_is_empty                       (GskPath        
 GDK_AVAILABLE_IN_ALL
 gboolean                gsk_path_get_bounds                     (GskPath                *self,
                                                                  graphene_rect_t        *bounds);
+GDK_AVAILABLE_IN_ALL
+gboolean                gsk_path_get_stroke_bounds              (GskPath                *path,
+                                                                 const GskStroke        *stroke,
+                                                                 graphene_rect_t        *bounds);
 
 GDK_AVAILABLE_IN_ALL
 gboolean                gsk_path_foreach                        (GskPath                *self,
