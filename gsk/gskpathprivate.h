@@ -24,6 +24,7 @@
 #include "gskpath.h"
 
 #include "gskcontourprivate.h"
+#include "gskpathopprivate.h"
 
 G_BEGIN_DECLS
 
