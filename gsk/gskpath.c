@@ -1172,3 +1172,53 @@ error:
 
   return NULL;
 }
+
+/**
+ * gsk_path_get_stroke_bounds:
+ * @path: a `GtkPath`
+ * @stroke: stroke parameters
+ * @bounds: (out caller-allocates): the bounds to fill in
+ *
+ * Computes the bounds for stroking the given path with the
+ * parameters in @stroke.
+ *
+ * The returned bounds may be larger than necessary, because this
+ * function aims to be fast, not accurate. The bounds are guaranteed
+ * to contain the area affected by the stroke, including protrusions
+ * like miters.
+ *
+ * Returns: %TRUE if the path has bounds, %FALSE if the path is known
+ *   to be empty and have no bounds.
+ */
+gboolean
+gsk_path_get_stroke_bounds (GskPath         *path,
+                            const GskStroke *stroke,
+                            graphene_rect_t *bounds)
+{
+  gsize i;
+
+  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (bounds != NULL, FALSE);
+
+  for (i = 0; i < path->n_contours; i++)
+    {
+      if (gsk_contour_get_stroke_bounds (path->contours[i], stroke, bounds))
+        break;
+    }
+
+  if (i >= path->n_contours)
+    {
+      graphene_rect_init_from_rect (bounds, graphene_rect_zero ());
+      return FALSE;
+    }
+
+  for (i++; i < path->n_contours; i++)
+    {
+      graphene_rect_t tmp;
+
+      if (gsk_contour_get_stroke_bounds (path->contours[i], stroke, &tmp))
+        graphene_rect_union (bounds, &tmp, bounds);
+    }
+
+  return TRUE;
+}
