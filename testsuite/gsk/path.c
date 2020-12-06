@@ -1130,6 +1130,105 @@ test_in_fill_rotated (void)
 #undef N_FILL_RULES
 }
 
+static void
+check_distance_at_position (GskPathMeasure *measure,
+                            GskPathMeasure *measure2,
+                            float           distance,
+                            float           position)
+{
+  graphene_point_t p;
+  graphene_point_t s;
+  float d;
+
+  gsk_path_measure_get_point (measure, position, &p, NULL);
+  gsk_path_measure_get_closest_point (measure2, &p, &s);
+
+  d = graphene_point_distance (&p, &s, NULL, NULL);
+  g_assert_true (d <= distance + gsk_path_measure_get_tolerance (measure2));
+}
+
+static void
+check_path_distance (GskPath *path,
+                     GskPath *path2,
+                     float    distance)
+{
+  GskPathMeasure *measure;
+  GskPathMeasure *measure2;
+  float length;
+  float t;
+  int i;
+
+  measure = gsk_path_measure_new_with_tolerance (path, 0.1);
+  measure2 = gsk_path_measure_new_with_tolerance (path2, 0.1);
+
+  length = gsk_path_measure_get_length (measure);
+
+  for (i = 0; i < 1000; i++)
+    {
+      t = g_test_rand_double_range (0, length);
+      check_distance_at_position (measure, measure2, distance, t);
+    }
+
+  gsk_path_measure_unref (measure);
+  gsk_path_measure_unref (measure2);
+}
+
+static gboolean
+check_spaced_out (GskPathOperation        op,
+                  const graphene_point_t *pts,
+                  gsize                   n_pts,
+                  float                   weight,
+                  gpointer                user_data)
+{
+  float *distance = user_data;
+  return graphene_point_distance (&pts[0], &pts[n_pts - 1], NULL, NULL) >= *distance;
+}
+
+static gboolean
+path_is_spaced_out (GskPath *path,
+                    float    distance)
+{
+  return gsk_path_foreach (path, GSK_PATH_FOREACH_ALLOW_CURVE | GSK_PATH_FOREACH_ALLOW_CONIC, check_spaced_out, &distance);
+}
+
+static void
+test_path_stroke_distance (void)
+{
+  GskPath *path;
+  GskPath *stroke_path;
+  GskStroke *stroke;
+  int i;
+  float width = 10;
+
+  stroke = gsk_stroke_new (width);
+  gsk_stroke_set_line_cap (stroke, GSK_LINE_CAP_ROUND);
+  gsk_stroke_set_line_join (stroke, GSK_LINE_JOIN_ROUND);
+
+  i = 0;
+  while (i < 1000)
+    {
+      path = create_random_path (1);
+      /* We know the stroker can't robustly handle paths with
+       * too close neighbouring points
+       */
+      if (!path_is_spaced_out (path, width / 2))
+        continue;
+
+      stroke_path = gsk_path_stroke (path, stroke);
+
+      check_path_distance (path, stroke_path, width / 2);
+      /* This relies on round joins */
+      check_path_distance (stroke_path, path, width / 2);
+
+      gsk_path_unref (stroke_path);
+      gsk_path_unref (path);
+
+      i++;
+    }
+
+  gsk_stroke_free (stroke);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -1147,6 +1246,7 @@ main (int   argc,
   g_test_add_func ("/path/parse", test_parse);
   g_test_add_func ("/path/in-fill-union", test_in_fill_union);
   g_test_add_func ("/path/in-fill-rotated", test_in_fill_rotated);
+  g_test_add_func ("/path/stroke/distance", test_path_stroke_distance);
 
   return g_test_run ();
 }
