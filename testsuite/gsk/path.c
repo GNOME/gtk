@@ -1175,6 +1175,68 @@ test_path_stroke_distance (void)
   gsk_stroke_free (stroke);
 }
 
+static void
+check_path_contained (GskPath         *path,
+                      graphene_rect_t *bounds)
+{
+  GskPathMeasure *measure;
+  float length;
+  float t;
+  int i;
+  graphene_point_t p;
+
+  measure = gsk_path_measure_new_with_tolerance (path, 0.1);
+  length = gsk_path_measure_get_length (measure);
+
+  for (i = 0; i < 1000; i++)
+    {
+      t = g_test_rand_double_range (0, length);
+      gsk_path_measure_get_point (measure,t, &p, NULL);
+
+      g_assert_true (graphene_rect_contains_point (bounds, &p));
+    }
+
+  gsk_path_measure_unref (measure);
+}
+
+static void
+test_path_stroke_bounds (void)
+{
+  GskPath *path;
+  GskPath *stroke_path;
+  GskStroke *stroke;
+  int i;
+  float width = 10;
+  graphene_rect_t bounds;
+
+  stroke = gsk_stroke_new (width);
+  gsk_stroke_set_line_cap (stroke, GSK_LINE_CAP_ROUND);
+
+  i = 0;
+  while (i < 1000)
+    {
+      path = create_random_path (1);
+      /* We know the stroker can't robustly handle paths with
+       * too close neighbouring points
+       */
+      if (!path_is_spaced_out (path, width / 2))
+        continue;
+
+      stroke_path = gsk_path_stroke (path, stroke);
+
+      gsk_path_get_stroke_bounds (path, stroke, &bounds);
+
+      check_path_contained (stroke_path, &bounds);
+
+      gsk_path_unref (stroke_path);
+      gsk_path_unref (path);
+
+      i++;
+    }
+
+  gsk_stroke_free (stroke);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -1193,6 +1255,7 @@ main (int   argc,
   g_test_add_func ("/path/in-fill-union", test_in_fill_union);
   g_test_add_func ("/path/in-fill-rotated", test_in_fill_rotated);
   g_test_add_func ("/path/stroke/distance", test_path_stroke_distance);
+  g_test_add_func ("/path/stroke/bounds", test_path_stroke_bounds);
 
   return g_test_run ();
 }
