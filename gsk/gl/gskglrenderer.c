@@ -2735,7 +2735,7 @@ render_blend_node (GskGLRenderer   *self,
                           &node->bounds,
                           bottom_child,
                           &bottom_region, &is_offscreen1,
-                          FORCE_OFFSCREEN | RESET_CLIP))
+                          FORCE_OFFSCREEN | RESET_CLIP | RESET_OPACITY))
     {
       gsk_gl_renderer_add_render_ops (self, top_child, builder);
       return;
@@ -2745,7 +2745,7 @@ render_blend_node (GskGLRenderer   *self,
                           &node->bounds,
                           top_child,
                           &top_region, &is_offscreen2,
-                          FORCE_OFFSCREEN | RESET_CLIP))
+                          FORCE_OFFSCREEN | RESET_CLIP | RESET_OPACITY))
     {
       load_vertex_data_with_region (ops_draw (builder, NULL),
                                     &node->bounds,
