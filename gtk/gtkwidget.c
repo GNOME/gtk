@@ -885,7 +885,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   gobject_class->set_property = gtk_widget_set_property;
   gobject_class->get_property = gtk_widget_get_property;
 
-  klass->activate_signal = 0;
   klass->show = gtk_widget_real_show;
   klass->hide = gtk_widget_real_hide;
   klass->map = gtk_widget_real_map;
@@ -4310,7 +4309,7 @@ gtk_widget_can_activate (GtkWidget *self)
 
   GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (self);
 
-  if (widget_class->activate_signal != 0)
+  if (widget_class->priv->activate_signal != 0)
     return TRUE;
 
   return FALSE;
@@ -4597,7 +4596,7 @@ gtk_widget_class_get_activate_signal (GtkWidgetClass *widget_class)
 {
   g_return_val_if_fail (GTK_IS_WIDGET_CLASS (widget_class), 0);
 
-  return widget_class->activate_signal;
+  return widget_class->priv->activate_signal;
 }
 
 /**
@@ -4619,7 +4618,7 @@ gtk_widget_class_set_activate_signal (GtkWidgetClass *widget_class,
   g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
   g_return_if_fail (signal_id != 0);
 
-  widget_class->activate_signal = signal_id;
+  widget_class->priv->activate_signal = signal_id;
 }
 
 /**
@@ -4652,7 +4651,7 @@ gtk_widget_class_set_activate_signal_from_name (GtkWidgetClass *widget_class,
       return;
     }
 
-  widget_class->activate_signal = signal_id;
+  widget_class->priv->activate_signal = signal_id;
 }
 
 /**
@@ -4673,8 +4672,9 @@ gtk_widget_activate (GtkWidget *widget)
 
   if (gtk_widget_can_activate (widget))
     {
+      GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (widget);
       /* FIXME: we should eventually check the signals signature here */
-      g_signal_emit (widget, GTK_WIDGET_GET_CLASS (widget)->activate_signal, 0);
+      g_signal_emit (widget, widget_class->priv->activate_signal, 0);
 
       return TRUE;
     }

@@ -215,6 +215,7 @@ struct _GtkWidgetClassPrivate
   GType layout_manager_type;
   GtkWidgetAction *actions;
   GtkAccessibleRole accessible_role;
+  guint activate_signal;
 };
 
 void          gtk_widget_root               (GtkWidget *widget);

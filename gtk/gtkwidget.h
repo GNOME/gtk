@@ -120,9 +120,6 @@ struct _GtkWidget
  *   element in the widget class structure in order for the class mechanism
  *   to work correctly. This allows a GtkWidgetClass pointer to be cast to
  *   a GObjectClass pointer.
- * @activate_signal: The signal to emit when a widget of this class is
- *   activated, gtk_widget_activate() handles the emission.
- *   Implementation of this signal is optional.
  * @show: Signal emitted when widget is shown
  * @hide: Signal emitted when widget is hidden.
  * @map: Signal emitted when widget is going to be mapped, that is
@@ -193,8 +190,6 @@ struct _GtkWidgetClass
   GInitiallyUnownedClass parent_class;
 
   /*< public >*/
-
-  guint activate_signal;
 
   /* basics */
   void (* show)                (GtkWidget        *widget);
