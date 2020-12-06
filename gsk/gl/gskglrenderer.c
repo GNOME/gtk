@@ -76,7 +76,6 @@ typedef enum
 {
   FORCE_OFFSCREEN  = 1 << 0,
   RESET_CLIP       = 1 << 1,
-  RESET_OPACITY    = 1 << 2,
   DUMP_FRAMEBUFFER = 1 << 3,
   NO_CACHE_PLZ     = 1 << 5,
   LINEAR_FILTER    = 1 << 6,
@@ -1241,7 +1240,7 @@ render_gl_shader_node (GskGLRenderer       *self,
                                   &node->bounds,
                                   child,
                                   &regions[i], &is_offscreen[i],
-                                  FORCE_OFFSCREEN | RESET_CLIP | RESET_OPACITY))
+                                  FORCE_OFFSCREEN | RESET_CLIP))
             return;
         }
 
@@ -1360,7 +1359,7 @@ render_transform_node (GskGLRenderer   *self,
                                    &child->bounds,
                                    child,
                                    &region, &is_offscreen,
-                                   RESET_CLIP | RESET_OPACITY | filter_flag))
+                                   RESET_CLIP | filter_flag))
               {
                 /* For non-trivial transforms, we draw everything on a texture and then
                  * draw the texture transformed. */
@@ -1407,7 +1406,7 @@ render_opacity_node (GskGLRenderer   *self,
       if (!add_offscreen_ops (self, builder, &child->bounds,
                               child,
                               &region, &is_offscreen,
-                              FORCE_OFFSCREEN | RESET_OPACITY | RESET_CLIP))
+                              FORCE_OFFSCREEN | RESET_CLIP))
         return;
 
       prev_opacity = ops_set_opacity (builder,
@@ -1656,7 +1655,7 @@ render_clipped_child (GskGLRenderer         *self,
       if (!add_offscreen_ops (self, builder, &child->bounds,
                               child,
                               &region, &is_offscreen,
-                              RESET_OPACITY | FORCE_OFFSCREEN))
+                              FORCE_OFFSCREEN))
         g_assert_not_reached ();
       ops_pop_clip (builder);
 
@@ -1772,7 +1771,7 @@ render_rounded_clip_node (GskGLRenderer       *self,
       if (!add_offscreen_ops (self, builder, &node->bounds,
                               child,
                               &region, &is_offscreen,
-                              FORCE_OFFSCREEN | RESET_OPACITY))
+                              0))
         g_assert_not_reached ();
 
       ops_pop_clip (builder);
@@ -1800,7 +1799,7 @@ render_color_matrix_node (GskGLRenderer       *self,
                           &node->bounds,
                           child,
                           &region, &is_offscreen,
-                          RESET_CLIP | RESET_OPACITY))
+                          RESET_CLIP))
     g_assert_not_reached ();
 
   ops_set_program (builder, &self->programs->color_matrix_program);
@@ -1949,7 +1948,7 @@ blur_node (GskGLRenderer   *self,
                                                    texture_width, texture_height),
                               node,
                               &region, &is_offscreen,
-                              RESET_CLIP | RESET_OPACITY | FORCE_OFFSCREEN | extra_flags))
+                              RESET_CLIP | FORCE_OFFSCREEN | extra_flags))
         g_assert_not_reached ();
 
       blurred_texture_id = blur_texture (self, builder,
@@ -2628,7 +2627,7 @@ render_shadow_node (GskGLRenderer   *self,
           if (!add_offscreen_ops (self, builder,
                                   &shadow_child->bounds,
                                   shadow_child, &region, &is_offscreen,
-                                  RESET_CLIP | RESET_OPACITY | NO_CACHE_PLZ))
+                                  RESET_CLIP | NO_CACHE_PLZ))
             g_assert_not_reached ();
 
           bounds = shadow_child->bounds;
@@ -2687,7 +2686,7 @@ render_cross_fade_node (GskGLRenderer   *self,
                           &node->bounds,
                           start_node,
                           &start_region, &is_offscreen1,
-                          FORCE_OFFSCREEN | RESET_CLIP | RESET_OPACITY))
+                          FORCE_OFFSCREEN | RESET_CLIP))
     {
       gsk_gl_renderer_add_render_ops (self, end_node, builder);
       return;
@@ -2697,7 +2696,7 @@ render_cross_fade_node (GskGLRenderer   *self,
                           &node->bounds,
                           end_node,
                           &end_region, &is_offscreen2,
-                          FORCE_OFFSCREEN | RESET_CLIP | RESET_OPACITY))
+                          FORCE_OFFSCREEN | RESET_CLIP))
     {
       const float prev_opacity = ops_set_opacity (builder, builder->current_opacity * progress);
       gsk_gl_renderer_add_render_ops (self, start_node, builder);
@@ -2735,7 +2734,7 @@ render_blend_node (GskGLRenderer   *self,
                           &node->bounds,
                           bottom_child,
                           &bottom_region, &is_offscreen1,
-                          FORCE_OFFSCREEN | RESET_CLIP | RESET_OPACITY))
+                          FORCE_OFFSCREEN | RESET_CLIP))
     {
       gsk_gl_renderer_add_render_ops (self, top_child, builder);
       return;
@@ -2745,7 +2744,7 @@ render_blend_node (GskGLRenderer   *self,
                           &node->bounds,
                           top_child,
                           &top_region, &is_offscreen2,
-                          FORCE_OFFSCREEN | RESET_CLIP | RESET_OPACITY))
+                          FORCE_OFFSCREEN | RESET_CLIP))
     {
       load_vertex_data_with_region (ops_draw (builder, NULL),
                                     &node->bounds,
@@ -2800,7 +2799,7 @@ render_repeat_node (GskGLRenderer   *self,
                           &child->bounds,
                           child,
                           &region, &is_offscreen,
-                          RESET_CLIP | RESET_OPACITY))
+                          RESET_CLIP))
     g_assert_not_reached ();
 
   ops_set_program (builder, &self->programs->repeat_program);
@@ -3950,8 +3949,7 @@ add_offscreen_ops (GskGLRenderer         *self,
   builder->dx = 0;
   builder->dy = 0;
 
-  if (flags & RESET_OPACITY)
-    prev_opacity = ops_set_opacity (builder, 1.0);
+  prev_opacity = ops_set_opacity (builder, 1.0);
 
   gsk_gl_renderer_add_render_ops (self, child_node, builder);
 
@@ -3968,8 +3966,7 @@ add_offscreen_ops (GskGLRenderer         *self,
     }
 #endif
 
-  if (flags & RESET_OPACITY)
-    ops_set_opacity (builder, prev_opacity);
+  ops_set_opacity (builder, prev_opacity);
 
   builder->dx = dx;
   builder->dy = dy;
