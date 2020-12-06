@@ -4659,9 +4659,18 @@ gtk_widget_class_set_activate_signal_from_name (GtkWidgetClass *widget_class,
  * @widget: a #GtkWidget that’s activatable
  *
  * For widgets that can be “activated” (buttons, menu items, etc.)
- * this function activates them. Activation is what happens when you
- * press Enter on a widget during key navigation. If @widget isn't
- * activatable, the function returns %FALSE.
+ * this function activates them. The activation will emit the signal
+ * set using gtk_widget_class_set_activate_signal() during class
+ * initialization.
+ *
+ * Activation is what happens when you press Enter on a widget during
+ * key navigation.
+ *
+ * If you wish to handle the activation keybinding yourself, it is
+ * recommended to use gtk_widget_class_add_shortcut() with an action
+ * created with gtk_signal_action_new().
+ *
+ * If @widget isn't activatable, the function returns %FALSE.
  *
  * Returns: %TRUE if the widget was activatable
  **/
