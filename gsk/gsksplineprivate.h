@@ -25,38 +25,6 @@
 
 G_BEGIN_DECLS
 
-typedef void (* GskSplineAddPointFunc) (const graphene_point_t *from,
-                                        const graphene_point_t *to,
-                                        float                   from_progress,
-                                        float                   to_progress,
-                                        gpointer                user_data);
-
-void                    gsk_spline_get_point_cubic              (const graphene_point_t  pts[4],
-                                                                 float                   progress,
-                                                                 graphene_point_t       *pos,
-                                                                 graphene_vec2_t        *tangent);
-void                    gsk_spline_split_cubic                  (const graphene_point_t  pts[4],
-                                                                 graphene_point_t        result1[4],
-                                                                 graphene_point_t        result2[4],
-                                                                 float                   progress);
-void                    gsk_spline_decompose_cubic              (const graphene_point_t  pts[4],
-                                                                 float                   tolerance,
-                                                                 GskSplineAddPointFunc   add_point_func,
-                                                                 gpointer                user_data);
-
-void                    gsk_spline_get_point_conic              (const graphene_point_t  pts[4],
-                                                                 float                   progress,
-                                                                 graphene_point_t       *pos,
-                                                                 graphene_vec2_t        *tangent);
-void                    gsk_spline_split_conic                  (const graphene_point_t  pts[4],
-                                                                 graphene_point_t        result1[4],
-                                                                 graphene_point_t        result2[4],
-                                                                 float                   progress);
-void                    gsk_spline_decompose_conic              (const graphene_point_t  pts[4],
-                                                                 float                   tolerance,
-                                                                 GskSplineAddPointFunc   add_point_func,
-                                                                 gpointer                user_data);
-
 typedef gboolean (* GskSplineAddCurveFunc) (const graphene_point_t curve[4],
                                             gpointer               user_data);
 gboolean                gsk_spline_decompose_arc                (const graphene_point_t *center,

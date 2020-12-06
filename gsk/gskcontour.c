@@ -21,6 +21,7 @@
 
 #include "gskcontourprivate.h"
 
+#include "gskcurveprivate.h"
 #include "gskpathbuilder.h"
 #include "gskpathprivate.h"
 #include "gsksplineprivate.h"
@@ -1030,7 +1031,7 @@ typedef struct
   GskStandardContourMeasure measure;
 } LengthDecompose;
 
-static void
+static gboolean
 gsk_standard_contour_measure_add_point (const graphene_point_t *from,
                                         const graphene_point_t *to,
                                         float                   from_progress,
@@ -1041,6 +1042,9 @@ gsk_standard_contour_measure_add_point (const graphene_point_t *from,
   float seg_length;
 
   seg_length = graphene_point_distance (from, to, NULL, NULL);
+  if (seg_length == 0)
+    return TRUE;
+
   decomp->measure.end += seg_length;
   decomp->measure.start_progress = from_progress;
   decomp->measure.end_progress = to_progress;
@@ -1049,6 +1053,8 @@ gsk_standard_contour_measure_add_point (const graphene_point_t *from,
   g_array_append_val (decomp->array, decomp->measure);
 
   decomp->measure.start += seg_length;
+
+  return TRUE;
 }
 
 static gpointer
@@ -1058,7 +1064,7 @@ gsk_standard_contour_init_measure (const GskContour *contour,
 {
   const GskStandardContour *self = (const GskStandardContour *) contour;
   gsize i;
-  float length, seg_length;
+  float length;
   GArray *array;
 
   array = g_array_new (FALSE, FALSE, sizeof (GskStandardContourMeasure));
@@ -1066,50 +1072,12 @@ gsk_standard_contour_init_measure (const GskContour *contour,
 
   for (i = 1; i < self->n_ops; i ++)
     {
-      const graphene_point_t *pt = gsk_pathop_points (self->ops[i]);
+      GskCurve curve;
+      LengthDecompose decomp = { array, { length, length, 0, 0, { }, i } };
 
-      switch (gsk_pathop_op (self->ops[i]))
-      {
-        case GSK_PATH_MOVE:
-          break;
-
-        case GSK_PATH_CLOSE:
-        case GSK_PATH_LINE:
-          seg_length = graphene_point_distance (&pt[0], &pt[1], NULL, NULL);
-          if (seg_length > 0)
-            {
-              g_array_append_vals (array,
-                                   &(GskStandardContourMeasure) {
-                                     length, 
-                                     length + seg_length,
-                                     0, 1,
-                                     pt[1],
-                                     i,
-                                   }, 1);
-              length += seg_length;
-            }
-          break;
-
-        case GSK_PATH_CURVE:
-          {
-            LengthDecompose decomp = { array, { length, length, 0, 0, pt[0], i } };
-            gsk_spline_decompose_cubic (pt, tolerance, gsk_standard_contour_measure_add_point, &decomp);
-            length = decomp.measure.start;
-          }
-          break;
-
-        case GSK_PATH_CONIC:
-          {
-            LengthDecompose decomp = { array, { length, length, 0, 0, pt[0], i } };
-            gsk_spline_decompose_conic (pt, tolerance, gsk_standard_contour_measure_add_point, &decomp);
-            length = decomp.measure.start;
-          }
-          break;
-
-        default:
-          g_assert_not_reached();
-          return NULL;
-      }
+      gsk_curve_init (&curve, self->ops[i]);
+      gsk_curve_decompose (&curve, tolerance, gsk_standard_contour_measure_add_point, &decomp);
+      length = decomp.measure.start;
     }
 
   *out_length = length;
@@ -1146,35 +1114,11 @@ gsk_standard_contour_measure_get_point (GskStandardContour        *self,
                                         graphene_point_t          *pos,
                                         graphene_vec2_t           *tangent)
 {
-  const graphene_point_t *pts;
+  GskCurve curve;
 
-  pts = gsk_pathop_points (self->ops[op]);
-  switch (gsk_pathop_op (self->ops[op]))
-    {
-      case GSK_PATH_LINE:
-      case GSK_PATH_CLOSE:
-        if (pos)
-          graphene_point_interpolate (&pts[0], &pts[1], progress, pos);
-        if (tangent)
-          {
-            graphene_vec2_init (tangent, pts[1].x - pts[0].x, pts[1].y - pts[0].y);
-            graphene_vec2_normalize (tangent, tangent);
-          }
-        break;
+  gsk_curve_init (&curve, self->ops[op]);
 
-      case GSK_PATH_CURVE:
-        gsk_spline_get_point_cubic (pts, progress, pos, tangent);
-        break;
-
-      case GSK_PATH_CONIC:
-        gsk_spline_get_point_conic (pts, progress, pos, tangent);
-        break;
-
-      case GSK_PATH_MOVE:
-      default:
-        g_assert_not_reached ();
-        return;
-    }
+  gsk_curve_eval (&curve, progress, pos, tangent);
 }
 
 static void
@@ -1365,144 +1309,52 @@ gsk_standard_contour_add_segment (const GskContour *contour,
    * taking care that first and last operation might be identical */
   if (start_measure)
     {
-      switch (gsk_pathop_op (self->ops[start_measure->op]))
-      {
-        case GSK_PATH_CLOSE:
-        case GSK_PATH_LINE:
-          {
-            const graphene_point_t *pts = gsk_pathop_points (self->ops[start_measure->op]);
-            graphene_point_t point;
+      GskCurve curve, cut;
+      const graphene_point_t *start_point;
 
-            graphene_point_interpolate (&pts[0], &pts[1], start_progress, &point);
-            gsk_path_builder_move_to (builder, point.x, point.y);
-            if (end_measure && end_measure->op == start_measure->op)
-              {
-                graphene_point_interpolate (&pts[0], &pts[1], end_progress, &point);
-                gsk_path_builder_line_to (builder, point.x, point.y);
-                return;
-              }
-            gsk_path_builder_line_to (builder, pts[1].x, pts[1].y);
-          }
-          break;
+      gsk_curve_init (&curve, self->ops[start_measure->op]);
 
-        case GSK_PATH_CURVE:
-          {
-            const graphene_point_t *pts = gsk_pathop_points (self->ops[start_measure->op]);
-            graphene_point_t curve[4], discard[4];
+      gsk_curve_split (&curve, start_progress, NULL, &cut);
+      start_point = gsk_curve_get_start_point (&cut);
+      gsk_path_builder_move_to (builder, start_point->x, start_point->y);
 
-            gsk_spline_split_cubic (pts, discard, curve, start_progress);
-            if (end_measure && end_measure->op == start_measure->op)
-              {
-                graphene_point_t tiny[4];
-                gsk_spline_split_cubic (curve, tiny, discard, (end_progress - start_progress) / (1 - start_progress));
-                gsk_path_builder_move_to (builder, tiny[0].x, tiny[0].y);
-                gsk_path_builder_curve_to (builder, tiny[1].x, tiny[1].y, tiny[2].x, tiny[2].y, tiny[3].x, tiny[3].y);
-                return;
-              }
-            gsk_path_builder_move_to (builder, curve[0].x, curve[0].y);
-            gsk_path_builder_curve_to (builder, curve[1].x, curve[1].y, curve[2].x, curve[2].y, curve[3].x, curve[3].y);
-          }
-          break;
-
-        case GSK_PATH_CONIC:
-          {
-            const graphene_point_t *pts = gsk_pathop_points (self->ops[start_measure->op]);
-            graphene_point_t curve[4], discard[4];
-
-            gsk_spline_split_conic (pts, discard, curve, start_progress);
-            if (end_measure && end_measure->op == start_measure->op)
-              {
-                graphene_point_t tiny[4];
-                gsk_spline_split_conic (curve, tiny, discard, (end_progress - start_progress) / (1 - start_progress));
-                gsk_path_builder_move_to (builder, tiny[0].x, tiny[0].y);
-                gsk_path_builder_conic_to (builder, tiny[1].x, tiny[1].y, tiny[3].x, tiny[3].y, tiny[2].x);
-                return;
-              }
-            gsk_path_builder_move_to (builder, curve[0].x, curve[0].y);
-            gsk_path_builder_conic_to (builder, curve[1].x, curve[1].y, curve[3].x, curve[3].y, curve[2].x);
-          }
-          break;
-
-        case GSK_PATH_MOVE:
-        default:
-          g_assert_not_reached();
+      if (end_measure && end_measure->op == start_measure->op)
+        {
+          GskCurve cut2;
+      
+          gsk_curve_split (&cut, (end_progress - start_progress) / (1 - start_progress), &cut2, NULL);
+          gsk_curve_builder_to (&cut2, builder);
           return;
-      }
+        }
+
+      gsk_curve_builder_to (&cut, builder);
       i = start_measure->op + 1;
     }
   else
     i = 0;
 
-  for (; i < (end_measure ? end_measure->op : self->n_ops); i++)
+  for (; i < (end_measure ? end_measure->op : self->n_ops - 1); i++)
     {
-      const graphene_point_t *pt = gsk_pathop_points (self->ops[i]);
-
-      switch (gsk_pathop_op (self->ops[i]))
-      {
-        case GSK_PATH_MOVE:
-          gsk_path_builder_move_to (builder, pt[0].x, pt[0].y);
-          break;
-
-        case GSK_PATH_LINE:
-        case GSK_PATH_CLOSE:
-          gsk_path_builder_line_to (builder, pt[1].x, pt[1].y);
-          break;
-
-        case GSK_PATH_CURVE:
-          gsk_path_builder_curve_to (builder, pt[1].x, pt[1].y, pt[2].x, pt[2].y, pt[3].x, pt[3].y);
-          break;
-
-        case GSK_PATH_CONIC:
-          gsk_path_builder_conic_to (builder, pt[1].x, pt[1].y, pt[3].x, pt[3].y, pt[2].x);
-          break;
-
-        default:
-          g_assert_not_reached();
-          return;
-      }
+      gsk_path_builder_pathop_to (builder, self->ops[i]);
     }
 
   /* Add the last partial operation */
   if (end_measure)
     {
-      switch (gsk_pathop_op (self->ops[end_measure->op]))
-      {
-        case GSK_PATH_CLOSE:
-        case GSK_PATH_LINE:
-          {
-            const graphene_point_t *pts = gsk_pathop_points (self->ops[end_measure->op]);
-            graphene_point_t point;
+      GskCurve curve, cut;
 
-            graphene_point_interpolate (&pts[0], &pts[1], end_progress, &point);
-            gsk_path_builder_line_to (builder, point.x, point.y);
-          }
-          break;
+      gsk_curve_init (&curve, self->ops[end_measure->op]);
 
-        case GSK_PATH_CURVE:
-          {
-            const graphene_point_t *pts = gsk_pathop_points (self->ops[end_measure->op]);
-            graphene_point_t curve[4], discard[4];
-
-            gsk_spline_split_cubic (pts, curve, discard, end_progress);
-            gsk_path_builder_curve_to (builder, curve[1].x, curve[1].y, curve[2].x, curve[2].y, curve[3].x, curve[3].y);
-          }
-          break;
-
-        case GSK_PATH_CONIC:
-          {
-            const graphene_point_t *pts = gsk_pathop_points (self->ops[end_measure->op]);
-            graphene_point_t curve[4], discard[4];
-
-            gsk_spline_split_conic (pts, curve, discard, end_progress);
-            gsk_path_builder_conic_to (builder, curve[1].x, curve[1].y, curve[3].x, curve[3].y, curve[2].x);
-          }
-          break;
-
-        case GSK_PATH_MOVE:
-        default:
-          g_assert_not_reached();
-          return;
-      }
+      gsk_curve_split (&curve, end_progress, &cut, NULL);
+      gsk_curve_builder_to (&cut, builder);
+    }
+  else if (i == self->n_ops - 1)
+    {
+      gskpathop op = self->ops[i];
+      if (gsk_pathop_op (op) == GSK_PATH_CLOSE)
+        gsk_path_builder_pathop_to (builder, gsk_pathop_encode (GSK_PATH_LINE, gsk_pathop_points (op)));
+      else
+        gsk_path_builder_pathop_to (builder, op);
     }
 }
 
