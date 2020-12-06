@@ -330,6 +330,7 @@ gsk_path_to_cairo
 <SUBSECTION>
 gsk_path_is_empty
 gsk_path_get_bounds
+gsk_path_get_stroke_bounds
 <SUBSECTION>
 GskPathOperation
 GskPathForeachFlags
