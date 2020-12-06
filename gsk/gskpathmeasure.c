@@ -162,6 +162,34 @@ gsk_path_measure_unref (GskPathMeasure *self)
 }
 
 /**
+ * gsk_path_measure_get_path:
+ * @self: a `GskPathMeasure`
+ *
+ * Returns the path that the measure was created for.
+ *
+ * Returns: (transfer none): the path of @self
+ */
+GskPath *
+gsk_path_measure_get_path (GskPathMeasure *self)
+{
+  return self->path;
+}
+
+/**
+ * gsk_path_measure_get_tolerance:
+ * @self: a `GskPathMeasure`
+ *
+ * Returns the tolerance that the measure was created with.
+ *
+ * Returns: the tolerance of @self
+ */
+float
+gsk_path_measure_get_tolerance (GskPathMeasure *self)
+{
+  return self->tolerance;
+}
+
+/**
  * gsk_path_measure_get_length:
  * @self: a `GskPathMeasure`
  *
