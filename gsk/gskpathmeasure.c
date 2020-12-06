@@ -167,6 +167,18 @@ gsk_path_measure_unref (GskPathMeasure *self)
   g_free (self);
 }
 
+GskPath *
+gsk_path_measure_get_path (GskPathMeasure *self)
+{
+  return self->path;
+}
+
+float
+gsk_path_measure_get_tolerance (GskPathMeasure *self)
+{
+  return self->tolerance;
+}
+
 /**
  * gsk_path_measure_get_length:
  * @self: a #GskPathMeasure
