@@ -108,9 +108,27 @@ demo_widget_snapshot (GtkWidget   *widget,
   GskStroke *stroke;
   GskPathBuilder *builder;
   GskPath *path;
+  graphene_rect_t bounds;
 
   if (!self->path)
     return;
+
+  gsk_path_get_bounds (self->orig_path, &bounds);
+
+  if (self->stroke_path)
+    {
+      graphene_rect_t b;
+      gsk_path_get_bounds (self->stroke_path, &b);
+      graphene_rect_union (&b, &bounds, &bounds);
+    }
+
+  g_print ("bounds: %f %f %f %f\n",
+           bounds.origin.x, bounds.origin.y,
+           bounds.size.width, bounds.size.height);
+
+  gtk_snapshot_save (snapshot);
+
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (20 - bounds.origin.x, 20 - bounds.origin.y));
 
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_width (widget);
@@ -159,8 +177,6 @@ demo_widget_snapshot (GtkWidget   *widget,
 
   if (self->show_bounding_box)
     {
-      graphene_rect_t bounds;
-
       if (gsk_path_get_bounds (self->do_stroke ? self->outline_path : self->path, &bounds))
         {
           builder = gsk_path_builder_new ();
@@ -237,6 +253,37 @@ demo_widget_snapshot (GtkWidget   *widget,
 
       gtk_widget_snapshot_child (widget, self->label, snapshot);
     }
+
+  gtk_snapshot_restore (snapshot);
+}
+
+static void
+demo_widget_measure (GtkWidget      *widget,
+                     GtkOrientation  orientation,
+                     int             for_size,
+                     int            *minimum,
+                     int            *natural,
+                     int            *minimum_baseline,
+                     int            *natural_baseline)
+{
+  DemoWidget *self = DEMO_WIDGET (widget);
+  graphene_rect_t bounds;
+
+  *minimum = *natural = 0;
+
+  gsk_path_get_bounds (self->orig_path, &bounds);
+
+  if (self->stroke_path)
+    {
+      graphene_rect_t b;
+      gsk_path_get_bounds (self->stroke_path, &b);
+      graphene_rect_union (&b, &bounds, &bounds);
+    }
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    *minimum = *natural = 40 + bounds.size.width - bounds.origin.x;
+  else
+    *minimum = *natural = 40 + bounds.size.height - bounds.origin.y;
 }
 
 static void
@@ -265,8 +312,7 @@ demo_widget_class_init (DemoWidgetClass *class)
   object_class->dispose = demo_widget_dispose;
 
   widget_class->snapshot = demo_widget_snapshot;
-
-  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
+  widget_class->measure = demo_widget_measure;
 }
 
 static GtkWidget *
@@ -299,7 +345,7 @@ update_stroke_path (DemoWidget *self)
       update_outline_path (self);
     }
 
-  gtk_widget_queue_draw (GTK_WIDGET (self));
+  gtk_widget_queue_resize (GTK_WIDGET (self));
 }
 
 static void
@@ -327,8 +373,6 @@ update_path (DemoWidget *self)
   self->measure = gsk_path_measure_new (self->path);
 
   update_stroke_path (self);
-
-  gtk_widget_queue_draw (GTK_WIDGET (self));
 }
 
 static void
@@ -494,6 +538,7 @@ main (int argc, char *argv[])
   GtkWidget *window, *box, *demo, *entry;
   GtkWidget *popover, *button, *grid;
   GtkWidget *header, *toggle, *combo, *spin;
+  GtkWidget *sw;
 
   gtk_init ();
 
@@ -505,7 +550,9 @@ main (int argc, char *argv[])
   demo = demo_widget_new ();
   gtk_widget_set_hexpand (demo, TRUE);
   gtk_widget_set_vexpand (demo, TRUE);
-  gtk_box_append (GTK_BOX (box), demo);
+  sw = gtk_scrolled_window_new ();
+  gtk_box_append (GTK_BOX (box), sw);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), demo);
 
   header = gtk_header_bar_new ();
   button = gtk_menu_button_new ();
