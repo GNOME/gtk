@@ -111,6 +111,11 @@ GskPath *               gsk_path_stroke                         (GskPath        
                                                                  GskStroke            *stroke);
 
 
+GDK_AVAILABLE_IN_ALL
+gboolean                gsk_path_get_stroke_bounds              (GskPath              *path,
+                                                                 GskStroke            *stroke,
+                                                                 graphene_rect_t      *bounds);
+
 G_END_DECLS
 
 #endif /* __GSK_PATH_H__ */
