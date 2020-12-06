@@ -356,6 +356,117 @@ test_closest_point_custom_contours (void)
     }
 }
 
+static void
+test_point_rect1 (void)
+{
+  GskPathBuilder *builder;
+  GskPath *path;
+  GskPathMeasure *measure;
+  graphene_point_t p;
+  float length;
+  int i;
+  float t;
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (0, 0, 100, 100));
+  path = gsk_path_builder_free_to_path (builder);
+  measure = gsk_path_measure_new (path);
+
+  length = gsk_path_measure_get_length (measure);
+  g_assert_true (length == 400);
+
+  for (i = 0; i < 100; i++)
+    {
+      t = g_test_rand_double_range (0, length);
+
+      gsk_path_measure_get_point (measure, t, &p, NULL);
+      if (t <= 100)
+        g_assert_true (p.y == 0);
+      else if (t <= 200)
+        g_assert_true (p.x == 100);
+      else if (t <= 300)
+        g_assert_true (p.y == 100);
+      else
+        g_assert_true (p.x == 0);
+    }
+
+  gsk_path_measure_unref (measure);
+  gsk_path_unref (path);
+}
+
+static void
+test_point_rect2 (void)
+{
+  GskPathBuilder *builder;
+  GskPath *path;
+  GskPathMeasure *measure;
+  graphene_point_t p;
+  float length;
+  int i;
+  float t;
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (100, 0, -100, 100));
+  path = gsk_path_builder_free_to_path (builder);
+  measure = gsk_path_measure_new (path);
+
+  length = gsk_path_measure_get_length (measure);
+  g_assert_true (length == 400);
+
+  for (i = 0; i < 100; i++)
+    {
+      t = g_test_rand_double_range (0, length);
+
+      gsk_path_measure_get_point (measure, t, &p, NULL);
+      if (t <= 100)
+        g_assert_true (p.y == 0);
+      else if (t <= 200)
+        g_assert_true (p.x == 0);
+      else if (t <= 300)
+        g_assert_true (p.y == 100);
+      else
+        g_assert_true (p.x == 100);
+    }
+
+  gsk_path_measure_unref (measure);
+  gsk_path_unref (path);
+}
+
+static void
+test_point_circle (void)
+{
+  GskPathBuilder *builder;
+  GskPath *path;
+  GskPathMeasure *measure;
+  graphene_point_t center, p;
+  float radius;
+  float length;
+  int i;
+  float t;
+
+  builder = gsk_path_builder_new ();
+  center.x = center.y = 100;
+  radius = 1;
+  gsk_path_builder_add_circle (builder, &center, radius);
+  path = gsk_path_builder_free_to_path (builder);
+  measure = gsk_path_measure_new (path);
+
+  length = gsk_path_measure_get_length (measure);
+  g_assert_cmpfloat_with_epsilon (length, 2*M_PI, 0.0001);
+
+  for (i = 0; i < 100; i++)
+    {
+      t = g_test_rand_double_range (0, length);
+
+      gsk_path_measure_get_point (measure, t, &p, NULL);
+
+      g_assert_cmpfloat_with_epsilon (graphene_point_distance (&p, &center, NULL, NULL), radius, 0.0001);
+    }
+
+  gsk_path_measure_unref (measure);
+  gsk_path_unref (path);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -365,6 +476,9 @@ main (int   argc,
   g_test_add_func ("/path/rsvg-parse", test_rsvg_parse);
   g_test_add_func ("/path/serialize-custom-contours", test_serialize_custom_contours);
   g_test_add_func ("/path/closest-point-custom-contours", test_closest_point_custom_contours);
+  g_test_add_func ("/path/get-point/rect1", test_point_rect1);
+  g_test_add_func ("/path/get-point/rect2", test_point_rect2);
+  g_test_add_func ("/path/get-point/circle", test_point_circle);
 
   return g_test_run ();
 }
