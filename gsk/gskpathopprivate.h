@@ -58,6 +58,7 @@ gsk_pathop_encode (GskPathOperation        op,
                    const graphene_point_t *pts)
 {
   /* g_assert (op & GSK_PATHOP_OPERATION_MASK == op); */
+  g_assert ((GPOINTER_TO_SIZE (pts) & GSK_PATHOP_OPERATION_MASK) == 0);
 
   return GSIZE_TO_POINTER (GPOINTER_TO_SIZE (pts) | op);
 }
