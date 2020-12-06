@@ -24,6 +24,7 @@
 #include "gskpath.h"
 
 #include "gskcontourprivate.h"
+#include "gskpathopprivate.h"
 
 G_BEGIN_DECLS
 
@@ -53,6 +54,10 @@ void                    gsk_path_builder_svg_arc_to             (GskPathBuilder 
                                                                  gboolean                positive_sweep,
                                                                  float                   x,
                                                                  float                   y);
+void                    gsk_path_builder_pathop_to              (GskPathBuilder         *builder,
+                                                                 gskpathop               op);
+void                    gsk_path_builder_pathop_reverse_to      (GskPathBuilder         *builder,
+                                                                 gskpathop               op);
 
 G_END_DECLS
 

@@ -895,3 +895,72 @@ gsk_path_builder_svg_arc_to (GskPathBuilder *builder,
                    t);
     }
 }
+
+void
+gsk_path_builder_pathop_to (GskPathBuilder *builder,
+                            gskpathop       op)
+{
+  const graphene_point_t *pts = gsk_pathop_points (op);
+
+  switch (gsk_pathop_op (op))
+  {
+    case GSK_PATH_MOVE:
+      gsk_path_builder_move_to (builder, pts[0].x, pts[0].y);
+      break;
+
+    case GSK_PATH_CLOSE:
+      gsk_path_builder_close (builder);
+      break;
+
+    case GSK_PATH_LINE:
+      gsk_path_builder_line_to (builder, pts[1].x, pts[1].y);
+      break;
+
+    case GSK_PATH_CURVE:
+      gsk_path_builder_curve_to (builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
+      break;
+
+    case GSK_PATH_CONIC:
+      gsk_path_builder_conic_to (builder, pts[1].x, pts[1].y, pts[3].x, pts[3].y, pts[2].x);
+      break;
+
+    default:
+      g_assert_not_reached ();
+      break;
+  }
+}
+
+void
+gsk_path_builder_pathop_reverse_to (GskPathBuilder *builder,
+                                    gskpathop       op)
+{
+  const graphene_point_t *pts = gsk_pathop_points (op);
+
+  switch (gsk_pathop_op (op))
+  {
+    case GSK_PATH_MOVE:
+      gsk_path_builder_move_to (builder, pts[0].x, pts[0].y);
+      break;
+
+    case GSK_PATH_CLOSE:
+      gsk_path_builder_line_to (builder, pts[0].x, pts[0].y);
+      break;
+
+    case GSK_PATH_LINE:
+      gsk_path_builder_line_to (builder, pts[1].x, pts[1].y);
+      break;
+
+    case GSK_PATH_CURVE:
+      gsk_path_builder_curve_to (builder, pts[2].x, pts[2].y, pts[1].x, pts[1].y, pts[0].x, pts[0].y);
+      break;
+
+    case GSK_PATH_CONIC:
+      gsk_path_builder_conic_to (builder, pts[1].x, pts[1].y, pts[0].x, pts[0].y, pts[2].x);
+      break;
+
+    default:
+      g_assert_not_reached ();
+      break;
+  }
+}
+
