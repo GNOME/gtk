@@ -191,6 +191,102 @@ test_curve_decompose (void)
     }
 }
 
+static void
+test_line_line_intersection (void)
+{
+  GskCurve c1, c2;
+  graphene_point_t p1[2], p2[2];
+  float t1, t2;
+  graphene_point_t p;
+  int n;
+
+  graphene_point_init (&p1[0], 10, 0);
+  graphene_point_init (&p1[1], 10, 100);
+  graphene_point_init (&p2[0], 0, 10);
+  graphene_point_init (&p2[1], 100, 10);
+
+  gsk_curve_init (&c1, gsk_pathop_encode (GSK_PATH_LINE, p1));
+  gsk_curve_init (&c2, gsk_pathop_encode (GSK_PATH_LINE, p2));
+
+  n = gsk_curve_intersect (&c1, &c2, &t1, &t2, &p, 1);
+
+  g_assert_cmpint (n, ==, 1);
+  g_assert_cmpfloat_with_epsilon (t1, 0.1, 0.0001);
+  g_assert_cmpfloat_with_epsilon (t2, 0.1, 0.0001);
+  g_assert_true (graphene_point_near (&p, &GRAPHENE_POINT_INIT (10, 10), 0.0001));
+}
+
+static void
+test_line_curve_intersection (void)
+{
+  GskCurve c1, c2;
+  graphene_point_t p1[4], p2[2];
+  float t1[9], t2[9];
+  graphene_point_t p[9];
+  int n;
+  graphene_rect_t b;
+
+  graphene_point_init (&p1[0], 0, 100);
+  graphene_point_init (&p1[1], 50, 100);
+  graphene_point_init (&p1[2], 50, 0);
+  graphene_point_init (&p1[3], 100, 0);
+  graphene_point_init (&p2[0], 0, 0);
+  graphene_point_init (&p2[1], 100, 100);
+
+  gsk_curve_init (&c1, gsk_pathop_encode (GSK_PATH_CURVE, p1));
+  gsk_curve_init (&c2, gsk_pathop_encode (GSK_PATH_LINE, p2));
+
+  n = gsk_curve_intersect (&c1, &c2, t1, t2, p, 1);
+
+  g_assert_cmpint (n, ==, 1);
+  g_assert_cmpfloat_with_epsilon (t1[0], 0.5, 0.0001);
+  g_assert_cmpfloat_with_epsilon (t2[0], 0.5, 0.0001);
+  g_assert_true (graphene_point_near (&p[0], &GRAPHENE_POINT_INIT (50, 50), 0.0001));
+
+  gsk_curve_get_tight_bounds (&c1, &b);
+  graphene_rect_contains_point (&b, &p[0]);
+
+  gsk_curve_get_tight_bounds (&c2, &b);
+  graphene_rect_contains_point (&b, &p[0]);
+}
+
+static void
+test_curve_curve_intersection (void)
+{
+  GskCurve c1, c2;
+  graphene_point_t p1[4], p2[4];
+  float t1[9], t2[9];
+  graphene_point_t p[9];
+  int n;
+  graphene_rect_t b;
+
+  graphene_point_init (&p1[0], 0, 0);
+  graphene_point_init (&p1[1], 33.333, 100);
+  graphene_point_init (&p1[2], 66.667, 0);
+  graphene_point_init (&p1[3], 100, 100);
+  graphene_point_init (&p2[0], 0, 50);
+  graphene_point_init (&p2[1], 100, 0);
+  graphene_point_init (&p2[2], 20, 0); // weight 20
+  graphene_point_init (&p2[3], 50, 100);
+
+  gsk_curve_init (&c1, gsk_pathop_encode (GSK_PATH_CURVE, p1));
+  gsk_curve_init (&c2, gsk_pathop_encode (GSK_PATH_CONIC, p2));
+
+  n = gsk_curve_intersect (&c1, &c2, t1, t2, p, 9);
+
+  g_assert_cmpint (n, ==, 2);
+  g_assert_cmpfloat (t1[0], <, 0.5);
+  g_assert_cmpfloat (t1[1], >, 0.5);
+  g_assert_cmpfloat (t2[0], <, 0.5);
+  g_assert_cmpfloat (t2[1], >, 0.5);
+
+  gsk_curve_get_tight_bounds (&c1, &b);
+  graphene_rect_contains_point (&b, &p[0]);
+
+  gsk_curve_get_tight_bounds (&c2, &b);
+  graphene_rect_contains_point (&b, &p[0]);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -199,6 +295,9 @@ main (int argc, char *argv[])
   g_test_add_func ("/curve/points", test_curve_points);
   g_test_add_func ("/curve/tangents", test_curve_tangents);
   g_test_add_func ("/curve/decompose", test_curve_decompose);
+  g_test_add_func ("/curve/intersection/line-line", test_line_line_intersection);
+  g_test_add_func ("/curve/intersection/line-curve", test_line_curve_intersection);
+  g_test_add_func ("/curve/intersection/curve-curve", test_curve_curve_intersection);
 
   return g_test_run ();
 }
