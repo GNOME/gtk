@@ -178,6 +178,15 @@ add_shape_contour (GskPathBuilder *builder)
   }
 }
 
+static float
+random_weight (void)
+{
+  if (g_test_rand_bit ())
+    return g_test_rand_double_range (0, 100);
+  else
+    return 1.0 / g_test_rand_double_range (1, 100);
+}
+
 static void
 add_standard_contour (GskPathBuilder *builder)
 {
@@ -200,7 +209,7 @@ add_standard_contour (GskPathBuilder *builder)
   n = g_test_rand_int_range (1, 20);
   for (i = 0; i < n; i++)
     {
-      switch (g_test_rand_int_range (0, 4))
+      switch (g_test_rand_int_range (0, 6))
       {
         case 0:
           gsk_path_builder_line_to (builder,
@@ -232,6 +241,24 @@ add_standard_contour (GskPathBuilder *builder)
                                          g_test_rand_double_range (-1000, 1000),
                                          g_test_rand_double_range (-1000, 1000),
                                          g_test_rand_double_range (-1000, 1000));
+          break;
+
+        case 4:
+          gsk_path_builder_conic_to (builder,
+                                     g_test_rand_double_range (-1000, 1000),
+                                     g_test_rand_double_range (-1000, 1000),
+                                     g_test_rand_double_range (-1000, 1000),
+                                     g_test_rand_double_range (-1000, 1000),
+                                     random_weight ());
+          break;
+
+        case 5:
+          gsk_path_builder_rel_conic_to (builder,
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (-1000, 1000),
+                                         random_weight ());
           break;
 
         default:
