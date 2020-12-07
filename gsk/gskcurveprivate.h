@@ -113,8 +113,10 @@ void                    gsk_curve_get_start_tangent             (const GskCurve 
                                                                  graphene_vec2_t        *tangent);
 void                    gsk_curve_get_end_tangent               (const GskCurve         *curve,
                                                                  graphene_vec2_t        *tangent);
-
-
+void                    gsk_curve_get_bounds                    (const GskCurve         *curve,
+                                                                 graphene_rect_t        *bounds);
+void                    gsk_curve_get_tight_bounds              (const GskCurve         *curve,
+                                                                 graphene_rect_t        *bounds);
 
 
 G_END_DECLS
