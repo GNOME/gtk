@@ -98,6 +98,10 @@ gskpathop               gsk_curve_pathop                        (const GskCurve 
 #define gsk_curve_builder_to(curve, builder) gsk_path_builder_pathop_to ((builder), gsk_curve_pathop (curve))
 const graphene_point_t *gsk_curve_get_start_point               (const GskCurve         *curve);
 const graphene_point_t *gsk_curve_get_end_point                 (const GskCurve         *curve);
+void                    gsk_curve_get_start_tangent             (const GskCurve         *curve,
+                                                                 graphene_vec2_t        *tangent);
+void                    gsk_curve_get_end_tangent               (const GskCurve         *curve,
+                                                                 graphene_vec2_t        *tangent);
 
 
 
