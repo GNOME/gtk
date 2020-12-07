@@ -22,6 +22,7 @@
 
 #include "gskpathopprivate.h"
 #include "gskpath.h"
+#include "gskboundingboxprivate.h"
 
 G_BEGIN_DECLS
 
@@ -158,6 +159,10 @@ gboolean                gsk_curve_decompose_curve               (const GskCurve 
 float                   gsk_curve_get_curvature                 (const GskCurve         *curve,
                                                                  float                   t,
                                                                  graphene_point_t       *center);
+void                    gsk_curve_get_bounds                    (const GskCurve         *curve,
+                                                                 GskBoundingBox         *bounds);
+void                    gsk_curve_get_tight_bounds              (const GskCurve         *curve,
+                                                                 GskBoundingBox         *bounds);
 
 G_END_DECLS
 
