@@ -205,6 +205,7 @@ foreach test : node_parser_tests
 endforeach
 
 tests = [
+  ['curve', ['../../gsk/gskcurve.c'], ['-DGTK_COMPILATION']],
   ['path'],
   ['path-special-cases'],
   ['rounded-rect'],
