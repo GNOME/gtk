@@ -48,6 +48,8 @@ struct _GskCurveClass
                                                          graphene_vec2_t        *tangent);
   void                          (* get_end_tangent)     (const GskCurve         *curve,
                                                          graphene_vec2_t        *tangent);
+  void                          (* get_bounds)          (const GskCurve         *curve,
+                                                         graphene_rect_t        *bounds);
   void                          (* get_tight_bounds)    (const GskCurve         *curve,
                                                          graphene_rect_t        *bounds);
 };
@@ -183,6 +185,7 @@ static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_get_end_point,
   gsk_line_curve_get_tangent,
   gsk_line_curve_get_tangent,
+  gsk_line_curve_get_bounds,
   gsk_line_curve_get_bounds
 };
 
@@ -366,6 +369,19 @@ gsk_curve_curve_get_end_tangent (const GskCurve  *curve,
   return get_tangent (&self->points[2], &self->points[3], tangent);
 }
 
+static void
+gsk_curve_curve_get_bounds (const GskCurve  *curve,
+                            graphene_rect_t *bounds)
+{
+  const GskCurveCurve *self = &curve->curve;
+  const graphene_point_t *pts = self->points;
+
+  graphene_rect_init (bounds, pts[0].x, pts[0].y, 0, 0);
+  graphene_rect_expand (bounds, &pts[1], bounds);
+  graphene_rect_expand (bounds, &pts[2], bounds);
+  graphene_rect_expand (bounds, &pts[3], bounds);
+}
+
 static inline gboolean
 acceptable (float t)
 {
@@ -450,6 +466,7 @@ static const GskCurveClass GSK_CURVE_CURVE_CLASS = {
   gsk_curve_curve_get_end_point,
   gsk_curve_curve_get_start_tangent,
   gsk_curve_curve_get_end_tangent,
+  gsk_curve_curve_get_bounds,
   gsk_curve_curve_get_tight_bounds
 };
 
@@ -774,6 +791,18 @@ gsk_conic_curve_get_end_tangent (const GskCurve  *curve,
   return get_tangent (&self->points[1], &self->points[3], tangent);
 }
 
+static void
+gsk_conic_curve_get_bounds (const GskCurve  *curve,
+                            graphene_rect_t *bounds)
+{
+  const GskCurveCurve *self = &curve->curve;
+  const graphene_point_t *pts = self->points;
+
+  graphene_rect_init (bounds, pts[0].x, pts[0].y, 0, 0);
+  graphene_rect_expand (bounds, &pts[1], bounds);
+  graphene_rect_expand (bounds, &pts[3], bounds);
+}
+
 /* Solve N = 0 where N is the numerator of (P/Q)', with
  * P = (1-t)^2*a + 2*t*(1-t)*w*b + t^2*c
  * Q = (1-t)^2 + 2*t*(1-t)*w + t^2
@@ -850,6 +879,7 @@ static const GskCurveClass GSK_CONIC_CURVE_CLASS = {
   gsk_conic_curve_get_end_point,
   gsk_conic_curve_get_start_tangent,
   gsk_conic_curve_get_end_tangent,
+  gsk_conic_curve_get_bounds,
   gsk_conic_curve_get_tight_bounds
 };
 
@@ -934,6 +964,13 @@ gsk_curve_get_end_tangent (const GskCurve  *curve,
                            graphene_vec2_t *tangent)
 {
   get_class (curve->op)->get_end_tangent (curve, tangent);
+}
+
+void
+gsk_curve_get_bounds (const GskCurve  *curve,
+                      graphene_rect_t *bounds)
+{
+  get_class (curve->op)->get_bounds (curve, bounds);
 }
 
 void
