@@ -164,6 +164,12 @@ void                    gsk_curve_get_bounds                    (const GskCurve 
 void                    gsk_curve_get_tight_bounds              (const GskCurve         *curve,
                                                                  GskBoundingBox         *bounds);
 
+int                     gsk_curve_get_curvature_points          (const GskCurve         *curve,
+                                                                 float                   t[3]);
+
+int                     gsk_curve_get_cusps                     (const GskCurve         *curve,
+                                                                 float                   t[2]);
+
 int                     gsk_curve_get_crossing                  (const GskCurve         *curve,
                                                                  const graphene_point_t *point);
 gboolean                gsk_curve_get_closest_point             (const GskCurve         *curve,
