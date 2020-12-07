@@ -123,7 +123,7 @@ on_frame (double progress)
       window_height = HEIGHT + jitter;
     }
 
-  gtk_widget_set_size_request (gtk_window_get_child (GTK_WINDOW (window)),
+  gtk_window_set_default_size (GTK_WINDOW (window),
                                window_width, window_height);
 
   gtk_widget_queue_draw (window);
