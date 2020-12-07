@@ -1401,7 +1401,7 @@ update_wm_hints (GdkSurface *surface,
 
   if (!force &&
       !toplevel->is_leader &&
-      surface->state & GDK_TOPLEVEL_STATE_WITHDRAWN)
+      !GDK_SURFACE_IS_MAPPED (surface))
     return;
 
   wm_hints.flags = StateHint | InputHint;
@@ -1608,9 +1608,7 @@ gdk_x11_surface_withdraw (GdkSurface *surface)
   if (!surface->destroyed)
     {
       if (GDK_SURFACE_IS_MAPPED (surface))
-        gdk_synthesize_surface_state (surface,
-                                     0,
-                                     GDK_TOPLEVEL_STATE_WITHDRAWN);
+        gdk_surface_set_is_mapped (surface, FALSE);
 
       g_assert (!GDK_SURFACE_IS_MAPPED (surface));
       XWithdrawWindow (GDK_SURFACE_XDISPLAY (surface),
@@ -1852,7 +1850,7 @@ static void
 show_popup (GdkSurface *surface)
 {
   gdk_x11_surface_raise (surface);
-  gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
+  gdk_surface_set_is_mapped (surface, TRUE);
   gdk_x11_surface_show (surface, FALSE);
   gdk_surface_invalidate_rect (surface, NULL);
 }
@@ -5116,7 +5114,7 @@ gdk_x11_toplevel_present (GdkToplevel       *toplevel,
   gdk_surface_request_layout (surface);
 
   if (!was_mapped)
-    gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
+    gdk_surface_set_is_mapped (surface, TRUE);
 
   gdk_x11_surface_show (surface, was_mapped);
 
@@ -5287,7 +5285,7 @@ gdk_x11_drag_surface_present (GdkDragSurface *drag_surface,
   GdkSurface *surface = GDK_SURFACE (drag_surface);
 
   gdk_x11_surface_toplevel_resize (surface, width, height);
-  gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
+  gdk_surface_set_is_mapped (surface, TRUE);
   gdk_x11_surface_show (surface, FALSE);
   gdk_surface_invalidate_rect (surface, NULL);
 

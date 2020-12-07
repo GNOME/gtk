@@ -274,11 +274,6 @@ _gdk_win32_surface_state_to_string (GdkToplevelState state)
   if (state & GDK_TOPLEVEL_STATE_ ## x)			\
     (bufp += sprintf (bufp, "%s" #x, s), s = "|")
 
-  /* For clarity, also show the complement of WITHDRAWN, i.e. "MAPPED" */
-  if (!(state & GDK_TOPLEVEL_STATE_WITHDRAWN))
-    (bufp += sprintf (bufp, "MAPPED"), s = "|");
-
-  BIT (WITHDRAWN);
   BIT (MINIMIZED);
   BIT (MAXIMIZED);
   BIT (STICKY);

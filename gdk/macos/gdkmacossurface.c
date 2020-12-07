@@ -762,7 +762,7 @@ _gdk_macos_surface_show (GdkMacosSurface *self)
   was_mapped = GDK_SURFACE_IS_MAPPED (GDK_SURFACE (self));
 
   if (!was_mapped)
-    gdk_synthesize_surface_state (GDK_SURFACE (self), GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
+    gdk_surface_set_is_mapped (GDK_SURFACE (self), TRUE);
 
   _gdk_macos_display_clear_sorting (GDK_MACOS_DISPLAY (GDK_SURFACE (self)->display));
 

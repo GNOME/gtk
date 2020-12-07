@@ -463,7 +463,7 @@ on_surface_state_changed (GdkGLContext *context)
 {
   GdkSurface *surface = gdk_gl_context_get_surface (context);
 
-  if ((surface->state & GDK_TOPLEVEL_STATE_WITHDRAWN) == 0)
+  if (GDK_SURFACE_IS_MAPPED (surface))
     return;
 
   /* If we're about to withdraw the surface, then we don't care if the frame is

@@ -566,7 +566,7 @@ gdk_check_edge_constraints_changed (GdkSurface *surface)
        * messing around with shifts, just make the passed value and GDK's
        * enum values match by shifting to the first tiled state.
        */
-      toplevel->edge_constraints = constraints[0] << 9;
+      toplevel->edge_constraints = constraints[0] << 8;
 
       XFree (constraints);
     }

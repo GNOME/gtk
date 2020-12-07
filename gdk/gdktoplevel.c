@@ -123,7 +123,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
       g_param_spec_flags ("state",
                           P_("State"),
                           P_("State"),
-                          GDK_TYPE_TOPLEVEL_STATE, GDK_TOPLEVEL_STATE_WITHDRAWN,
+                          GDK_TYPE_TOPLEVEL_STATE, 0,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_interface_install_property (iface,
       g_param_spec_string ("title",

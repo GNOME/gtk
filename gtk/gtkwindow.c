@@ -1503,7 +1503,7 @@ gtk_window_init (GtkWindow *window)
   priv->decorated = TRUE;
   priv->display = gdk_display_get_default ();
 
-  priv->state = GDK_TOPLEVEL_STATE_WITHDRAWN;
+  priv->state = 0;
 
   priv->deletable = TRUE;
   priv->startup_id = NULL;
@@ -4165,6 +4165,7 @@ gtk_window_realize (GtkWidget *widget)
     priv->renderer = gsk_renderer_new_for_surface (surface);
 
   g_signal_connect_swapped (surface, "notify::state", G_CALLBACK (surface_state_changed), widget);
+  g_signal_connect_swapped (surface, "notify::mapped", G_CALLBACK (surface_state_changed), widget);
   g_signal_connect (surface, "render", G_CALLBACK (surface_render), widget);
   g_signal_connect (surface, "event", G_CALLBACK (surface_event), widget);
   g_signal_connect (surface, "compute-size", G_CALLBACK (toplevel_compute_size), widget);

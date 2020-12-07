@@ -114,6 +114,9 @@ static void update_cursor               (GdkDisplay *display,
 static void gdk_surface_set_frame_clock (GdkSurface      *surface,
                                          GdkFrameClock  *clock);
 
+static void gdk_surface_queue_set_is_mapped (GdkSurface *surface,
+                                             gboolean    is_mapped);
+
 
 static guint signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *properties[LAST_PROP] = { NULL, };
@@ -472,7 +475,7 @@ gdk_surface_init (GdkSurface *surface)
 {
   /* 0-initialization is good for all other fields. */
 
-  surface->state = GDK_TOPLEVEL_STATE_WITHDRAWN;
+  surface->state = 0;
   surface->fullscreen_mode = GDK_FULLSCREEN_ON_CURRENT_MONITOR;
   surface->width = 1;
   surface->height = 1;
@@ -923,7 +926,10 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
 
   _gdk_surface_clear_update_area (surface);
 
-  surface->state |= GDK_TOPLEVEL_STATE_WITHDRAWN;
+  g_clear_handle_id (&surface->set_is_mapped_source_id, g_source_remove);
+  surface->is_mapped = FALSE;
+  surface->pending_is_mapped = FALSE;
+
   surface->destroyed = TRUE;
 
   surface_remove_from_pointer_info (surface, surface->display);
@@ -1696,14 +1702,7 @@ gdk_surface_hide (GdkSurface *surface)
 
   was_mapped = GDK_SURFACE_IS_MAPPED (surface);
 
-  if (GDK_SURFACE_IS_MAPPED (surface))
-    {
-      gdk_synthesize_surface_state (surface,
-                                    surface->state & ~GDK_TOPLEVEL_STATE_WITHDRAWN,
-                                    GDK_TOPLEVEL_STATE_WITHDRAWN);
-      surface->pending_unset_flags = 0;
-      surface->pending_set_flags = 0;
-    }
+  gdk_surface_queue_set_is_mapped (surface, FALSE);
 
   if (was_mapped)
     {
@@ -2614,7 +2613,6 @@ void
 gdk_surface_set_state (GdkSurface      *surface,
                        GdkToplevelState new_state)
 {
-  gboolean was_mapped, mapped;
   gboolean was_sticky, sticky;
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
@@ -2626,19 +2624,14 @@ gdk_surface_set_state (GdkSurface      *surface,
    * inconsistent state to the user.
    */
 
-  was_mapped = GDK_SURFACE_IS_MAPPED (surface);
   was_sticky = GDK_SURFACE_IS_STICKY (surface);
 
   surface->state = new_state;
 
-  mapped = GDK_SURFACE_IS_MAPPED (surface);
   sticky = GDK_SURFACE_IS_STICKY (surface);
 
   if (GDK_IS_TOPLEVEL (surface))
     g_object_notify (G_OBJECT (surface), "state");
-
-  if (was_mapped != mapped)
-    g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
 
   if (was_sticky != sticky)
     g_object_notify (G_OBJECT (surface), "sticky");
@@ -2673,10 +2666,71 @@ gdk_surface_apply_state_change (GdkSurface *surface)
   gdk_synthesize_surface_state (surface,
                                 surface->pending_unset_flags,
                                 surface->pending_set_flags);
-  if (surface->pending_unset_flags & GDK_TOPLEVEL_STATE_WITHDRAWN)
-    gdk_surface_invalidate_rect (surface, NULL);
   surface->pending_unset_flags = 0;
   surface->pending_set_flags = 0;
+}
+
+static gboolean
+set_is_mapped_idle (gpointer user_data)
+{
+  GdkSurface *surface = GDK_SURFACE (user_data);
+
+  surface->set_is_mapped_source_id = 0;
+
+  g_return_val_if_fail (surface->pending_is_mapped != surface->is_mapped,
+                        G_SOURCE_REMOVE);
+
+  surface->is_mapped = surface->pending_is_mapped;
+  if (surface->is_mapped)
+    gdk_surface_invalidate_rect (surface, NULL);
+
+  g_object_notify (G_OBJECT (surface), "mapped");
+
+  return G_SOURCE_REMOVE;
+}
+
+void
+gdk_surface_set_is_mapped (GdkSurface *surface,
+                           gboolean    is_mapped)
+{
+  gboolean was_mapped;
+
+  if (surface->pending_is_mapped != surface->is_mapped)
+    g_clear_handle_id (&surface->set_is_mapped_source_id, g_source_remove);
+
+  surface->pending_is_mapped = is_mapped;
+
+  was_mapped = surface->is_mapped;
+  surface->is_mapped = is_mapped;
+  if (surface->is_mapped)
+    gdk_surface_invalidate_rect (surface, NULL);
+
+  if (was_mapped != is_mapped)
+    g_object_notify (G_OBJECT (surface), "mapped");
+}
+
+static void
+gdk_surface_queue_set_is_mapped (GdkSurface *surface,
+                                 gboolean    is_mapped)
+{
+  if (surface->pending_is_mapped == is_mapped)
+    return;
+
+  surface->pending_is_mapped = is_mapped;
+
+  if (surface->is_mapped == surface->pending_is_mapped)
+    {
+      g_clear_handle_id (&surface->set_is_mapped_source_id, g_source_remove);
+    }
+  else
+    {
+      g_return_if_fail (!surface->set_is_mapped_source_id);
+
+      surface->set_is_mapped_source_id =
+        g_idle_add_full (G_PRIORITY_HIGH - 10,
+                         set_is_mapped_idle,
+                         surface, NULL);
+    }
 }
 
 static gboolean

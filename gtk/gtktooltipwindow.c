@@ -47,7 +47,6 @@ struct _GtkTooltipWindow
   GdkSurface *surface;
   GskRenderer *renderer;
 
-  GdkToplevelState state;
   GtkWidget *relative_to;
   GdkRectangle rect;
   GdkGravity rect_anchor;
@@ -178,21 +177,12 @@ gtk_tooltip_window_native_init (GtkNativeInterface *iface)
 }
 
 static void
-surface_state_changed (GtkWidget *widget)
+mapped_changed (GdkSurface *surface,
+                GParamSpec *pspec,
+                GtkWidget  *widget)
 {
-  GtkTooltipWindow *window = GTK_TOOLTIP_WINDOW (widget);
-  GdkToplevelState new_surface_state;
-  GdkToplevelState changed_mask;
-
-  new_surface_state = gdk_toplevel_get_state (GDK_TOPLEVEL (window->surface));
-  changed_mask = new_surface_state ^ window->state;
-  window->state = new_surface_state;
-
-  if (changed_mask & GDK_TOPLEVEL_STATE_WITHDRAWN)
-    {
-      if (window->state & GDK_TOPLEVEL_STATE_WITHDRAWN)
-        gtk_widget_hide (widget);
-    }
+  if (!gdk_surface_get_mapped (surface))
+    gtk_widget_hide (widget);
 }
 
 static gboolean
@@ -224,7 +214,7 @@ gtk_tooltip_window_realize (GtkWidget *widget)
 
   gdk_surface_set_widget (window->surface, widget);
 
-  g_signal_connect_swapped (window->surface, "notify::state", G_CALLBACK (surface_state_changed), widget);
+  g_signal_connect (window->surface, "notify::mapped", G_CALLBACK (mapped_changed), widget);
   g_signal_connect (window->surface, "render", G_CALLBACK (surface_render), widget);
   g_signal_connect (window->surface, "event", G_CALLBACK (surface_event), widget);
 
@@ -247,7 +237,7 @@ gtk_tooltip_window_unrealize (GtkWidget *widget)
   gsk_renderer_unrealize (window->renderer);
   g_clear_object (&window->renderer);
 
-  g_signal_handlers_disconnect_by_func (window->surface, surface_state_changed, widget);
+  g_signal_handlers_disconnect_by_func (window->surface, mapped_changed, widget);
   g_signal_handlers_disconnect_by_func (window->surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (window->surface, surface_event, widget);
   gdk_surface_set_widget (window->surface, NULL);

@@ -1006,9 +1006,7 @@ gdk_win32_surface_hide (GdkSurface *window)
 			   _gdk_win32_surface_state_to_string (window->state)));
 
   if (GDK_SURFACE_IS_MAPPED (window))
-    gdk_synthesize_surface_state (window,
-				 0,
-				 GDK_TOPLEVEL_STATE_WITHDRAWN);
+    gdk_surface_set_is_mapped (window, FALSE);
 
   _gdk_surface_clear_update_area (window);
 
@@ -1262,7 +1260,7 @@ static void
 show_popup (GdkSurface *surface)
 {
   gdk_win32_surface_raise (surface);
-  gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
+  gdk_surface_set_is_mapped (surface, TRUE);
   show_window_internal (surface, FALSE, FALSE);
   gdk_surface_invalidate_rect (surface, NULL);
 }
@@ -4924,7 +4922,7 @@ show_surface (GdkSurface *surface)
   was_mapped = GDK_SURFACE_IS_MAPPED (surface);
 
   if (!was_mapped)
-    gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
+    gdk_surface_set_is_mapped (surface, TRUE);
 
   gdk_win32_surface_show (surface, FALSE);
 

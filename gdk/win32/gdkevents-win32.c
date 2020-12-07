@@ -2825,11 +2825,6 @@ gdk_event_translate (MSG *msg,
 	  set_bits = 0;
 	  unset_bits = 0;
 
-	  if (IsWindowVisible (msg->hwnd))
-	    unset_bits |= GDK_TOPLEVEL_STATE_WITHDRAWN;
-	  else
-	    set_bits |= GDK_TOPLEVEL_STATE_WITHDRAWN;
-
 	  if (IsIconic (msg->hwnd))
 	    set_bits |= GDK_TOPLEVEL_STATE_MINIMIZED;
 	  else
@@ -2840,6 +2835,7 @@ gdk_event_translate (MSG *msg,
 	  else
 	    unset_bits |= GDK_TOPLEVEL_STATE_MAXIMIZED;
 
+	  gdk_surface_set_is_mapped (window, !!IsWindowVisible (msg->hwnd));
 	  gdk_synthesize_surface_state (window, unset_bits, set_bits);
 
 	  new_state = window->state;

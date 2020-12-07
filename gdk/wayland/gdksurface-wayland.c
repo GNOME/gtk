@@ -1602,7 +1602,7 @@ maybe_notify_mapped (GdkSurface *surface)
     return;
 
   if (!GDK_SURFACE_IS_MAPPED (surface))
-    gdk_surface_queue_state_change (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
+    gdk_surface_set_is_mapped (surface, TRUE);
 }
 
 static void

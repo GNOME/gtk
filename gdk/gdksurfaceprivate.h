@@ -44,6 +44,10 @@ struct _GdkSurface
   GdkSurface *parent;        /* for popups */
   GList *children;           /* popups */
 
+  guint set_is_mapped_source_id;
+  gboolean pending_is_mapped;
+  gboolean is_mapped;
+
   gpointer widget;
 
   int x;
@@ -167,11 +171,13 @@ struct _GdkSurfaceClass
 
 #define GDK_SURFACE_DESTROYED(d) (((GdkSurface *)(d))->destroyed)
 
-#define GDK_SURFACE_IS_MAPPED(surface) (((surface)->state & GDK_TOPLEVEL_STATE_WITHDRAWN) == 0)
-
+#define GDK_SURFACE_IS_MAPPED(surface) ((surface)->pending_is_mapped)
 
 void gdk_surface_set_state (GdkSurface      *surface,
                             GdkToplevelState  new_state);
+
+void gdk_surface_set_is_mapped (GdkSurface *surface,
+                                gboolean    is_mapped);
 
 GdkMonitor * gdk_surface_get_layout_monitor (GdkSurface      *surface,
                                              GdkPopupLayout  *layout,
