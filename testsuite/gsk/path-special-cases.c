@@ -467,6 +467,115 @@ test_point_circle (void)
   gsk_path_unref (path);
 }
 
+static void
+test_in_fill_rect1 (void)
+{
+  GskPathBuilder *builder;
+  GskPath *path;
+  GskPathMeasure *measure;
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (0, 0, 100, 100));
+  path = gsk_path_builder_free_to_path (builder);
+  measure = gsk_path_measure_new (path);
+
+  g_assert_true (gsk_path_measure_in_fill (measure, &GRAPHENE_POINT_INIT (50, 50), GSK_FILL_RULE_WINDING));
+  g_assert_true (gsk_path_measure_in_fill (measure, &GRAPHENE_POINT_INIT (50, 50), GSK_FILL_RULE_EVEN_ODD));
+
+  g_assert_false (gsk_path_measure_in_fill (measure, &GRAPHENE_POINT_INIT (-50, 50), GSK_FILL_RULE_WINDING));
+  g_assert_false (gsk_path_measure_in_fill (measure, &GRAPHENE_POINT_INIT (-50, 50), GSK_FILL_RULE_EVEN_ODD));
+
+  g_assert_false (gsk_path_measure_in_fill (measure, &GRAPHENE_POINT_INIT (50, -50), GSK_FILL_RULE_WINDING));
+  g_assert_false (gsk_path_measure_in_fill (measure, &GRAPHENE_POINT_INIT (50, -50), GSK_FILL_RULE_EVEN_ODD));
+
+  gsk_path_measure_unref (measure);
+  gsk_path_unref (path);
+}
+
+static void
+test_in_fill_rect2 (void)
+{
+  GskPathBuilder *builder;
+  GskPath *path;
+  GskPathMeasure *measure;
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (100, 0, -100, 100));
+  path = gsk_path_builder_free_to_path (builder);
+  measure = gsk_path_measure_new (path);
+
+  g_assert_true (gsk_path_measure_in_fill (measure, &GRAPHENE_POINT_INIT (50, 50), GSK_FILL_RULE_WINDING));
+  g_assert_true (gsk_path_measure_in_fill (measure, &GRAPHENE_POINT_INIT (50, 50), GSK_FILL_RULE_EVEN_ODD));
+
+  gsk_path_measure_unref (measure);
+  gsk_path_unref (path);
+}
+
+static void
+test_in_fill_rect3 (void)
+{
+  GskPathBuilder *builder;
+  GskPath *path;
+  GskPathMeasure *measure;
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (0, 0, 100, 100));
+  gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (10, 10, 80, 80));
+  path = gsk_path_builder_free_to_path (builder);
+  measure = gsk_path_measure_new (path);
+
+  g_assert_true (gsk_path_measure_in_fill (measure, &GRAPHENE_POINT_INIT (50, 50), GSK_FILL_RULE_WINDING));
+  g_assert_false (gsk_path_measure_in_fill (measure, &GRAPHENE_POINT_INIT (50, 50), GSK_FILL_RULE_EVEN_ODD));
+
+  gsk_path_measure_unref (measure);
+  gsk_path_unref (path);
+}
+
+static void
+test_in_fill_rect4 (void)
+{
+  GskPathBuilder *builder;
+  GskPath *path;
+  GskPathMeasure *measure;
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (0, 0, 100, 100));
+  gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (90, 10, -80, 80));
+  path = gsk_path_builder_free_to_path (builder);
+  measure = gsk_path_measure_new (path);
+
+  g_assert_false (gsk_path_measure_in_fill (measure, &GRAPHENE_POINT_INIT (50, 50), GSK_FILL_RULE_WINDING));
+  g_assert_false (gsk_path_measure_in_fill (measure, &GRAPHENE_POINT_INIT (50, 50), GSK_FILL_RULE_EVEN_ODD));
+
+  gsk_path_measure_unref (measure);
+  gsk_path_unref (path);
+}
+
+static void
+test_in_fill_circle (void)
+{
+  GskPathBuilder *builder;
+  GskPath *path;
+  GskPathMeasure *measure;
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (50, 50), 50);
+  path = gsk_path_builder_free_to_path (builder);
+  measure = gsk_path_measure_new (path);
+
+  g_assert_true (gsk_path_measure_in_fill (measure, &GRAPHENE_POINT_INIT (50, 50), GSK_FILL_RULE_WINDING));
+  g_assert_true (gsk_path_measure_in_fill (measure, &GRAPHENE_POINT_INIT (50, 50), GSK_FILL_RULE_EVEN_ODD));
+
+  g_assert_false (gsk_path_measure_in_fill (measure, &GRAPHENE_POINT_INIT (0, 0), GSK_FILL_RULE_WINDING));
+  g_assert_false (gsk_path_measure_in_fill (measure, &GRAPHENE_POINT_INIT (0, 0), GSK_FILL_RULE_EVEN_ODD));
+
+  g_assert_false (gsk_path_measure_in_fill (measure, &GRAPHENE_POINT_INIT (100, 100), GSK_FILL_RULE_WINDING));
+  g_assert_false (gsk_path_measure_in_fill (measure, &GRAPHENE_POINT_INIT (100, 100), GSK_FILL_RULE_EVEN_ODD));
+
+  gsk_path_measure_unref (measure);
+  gsk_path_unref (path);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -479,6 +588,11 @@ main (int   argc,
   g_test_add_func ("/path/get-point/rect1", test_point_rect1);
   g_test_add_func ("/path/get-point/rect2", test_point_rect2);
   g_test_add_func ("/path/get-point/circle", test_point_circle);
+  g_test_add_func ("/path/in-fill/rect1", test_in_fill_rect1);
+  g_test_add_func ("/path/in-fill/rect2", test_in_fill_rect2);
+  g_test_add_func ("/path/in-fill/rect3", test_in_fill_rect3);
+  g_test_add_func ("/path/in-fill/rect4", test_in_fill_rect4);
+  g_test_add_func ("/path/in-fill/circle", test_in_fill_circle);
 
   return g_test_run ();
 }
