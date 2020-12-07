@@ -71,6 +71,55 @@ test_conic_segment (void)
   g_assert_cmpfloat_with_epsilon (measure_length (&c), measure_length (&s) + measure_length (&m) + measure_length (&e), 0.03125);
 }
 
+static void
+test_curve_tangents (void)
+{
+  GskCurve c;
+  graphene_point_t p[4];
+  graphene_vec2_t t;
+
+  graphene_point_init (&p[0], 0, 0);
+  graphene_point_init (&p[1], 100, 0);
+  gsk_curve_init (&c, gsk_pathop_encode (GSK_PATH_LINE, p));
+
+  gsk_curve_get_start_tangent (&c, &t);
+  g_assert_true (graphene_vec2_near (&t, graphene_vec2_x_axis (), 0.0001));
+  gsk_curve_get_end_tangent (&c, &t);
+  g_assert_true (graphene_vec2_near (&t, graphene_vec2_x_axis (), 0.0001));
+
+
+  graphene_point_init (&p[0], 0, 0);
+  graphene_point_init (&p[1], 0, 100);
+  gsk_curve_init (&c, gsk_pathop_encode (GSK_PATH_LINE, p));
+
+  gsk_curve_get_start_tangent (&c, &t);
+  g_assert_true (graphene_vec2_near (&t, graphene_vec2_y_axis (), 0.0001));
+  gsk_curve_get_end_tangent (&c, &t);
+  g_assert_true (graphene_vec2_near (&t, graphene_vec2_y_axis (), 0.0001));
+
+  graphene_point_init (&p[0], 0, 0);
+  graphene_point_init (&p[1], 100, 0);
+  p[2] = GRAPHENE_POINT_INIT (g_test_rand_double_range (0, 20), 0);
+  graphene_point_init (&p[3], 100, 100);
+  gsk_curve_init (&c, gsk_pathop_encode (GSK_PATH_CONIC, p));
+
+  gsk_curve_get_start_tangent (&c, &t);
+  g_assert_true (graphene_vec2_near (&t, graphene_vec2_x_axis (), 0.0001));
+  gsk_curve_get_end_tangent (&c, &t);
+  g_assert_true (graphene_vec2_near (&t, graphene_vec2_y_axis (), 0.0001));
+
+  graphene_point_init (&p[0], 0, 0);
+  graphene_point_init (&p[1], 50, 0);
+  graphene_point_init (&p[2], 100, 50);
+  graphene_point_init (&p[3], 100, 100);
+  gsk_curve_init (&c, gsk_pathop_encode (GSK_PATH_CURVE, p));
+
+  gsk_curve_get_start_tangent (&c, &t);
+  g_assert_true (graphene_vec2_near (&t, graphene_vec2_x_axis (), 0.0001));
+  gsk_curve_get_end_tangent (&c, &t);
+  g_assert_true (graphene_vec2_near (&t, graphene_vec2_y_axis (), 0.0001));
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -78,6 +127,7 @@ main (int   argc,
   gtk_test_init (&argc, &argv, NULL);
 
   g_test_add_func ("/curve/special/conic-segment", test_conic_segment);
+  g_test_add_func ("/curve/special/tangents", test_curve_tangents);
 
   return g_test_run ();
 }
