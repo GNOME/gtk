@@ -19,10 +19,19 @@
 
 #include <gtk/gtk.h>
 
+static float
+random_weight (void)
+{
+  if (g_test_rand_bit ())
+    return g_test_rand_double_range (0, 100);
+  else
+    return 1.0 / g_test_rand_double_range (1, 100);
+}
+
 static GskPath *
 create_random_degenerate_path (guint max_contours)
 {
-#define N_DEGENERATE_PATHS 14
+#define N_DEGENERATE_PATHS 15
   GskPathBuilder *builder;
   guint i;
 
@@ -156,6 +165,20 @@ create_random_degenerate_path (guint max_contours)
       }
       break;
 
+    case 14:
+      /* a conic with start == end */
+      {
+        graphene_point_t point = GRAPHENE_POINT_INIT (g_test_rand_double_range (-1000, 1000),
+                                                      g_test_rand_double_range (-1000, 1000));
+        gsk_path_builder_move_to (builder, point.x, point.y);
+        gsk_path_builder_conic_to (builder,
+                                   g_test_rand_double_range (-1000, 1000),
+                                   g_test_rand_double_range (-1000, 1000),
+                                   point.x, point.y,
+                                   random_weight ());
+      }
+      break;
+
     case N_DEGENERATE_PATHS:
     default:
       g_assert_not_reached ();
@@ -225,7 +248,7 @@ add_standard_contour (GskPathBuilder *builder)
   n = g_test_rand_int_range (1, 20);
   for (i = 0; i < n; i++)
     {
-      switch (g_test_rand_int_range (0, 4))
+      switch (g_test_rand_int_range (0, 6))
       {
         case 0:
           gsk_path_builder_line_to (builder,
@@ -257,6 +280,24 @@ add_standard_contour (GskPathBuilder *builder)
                                          g_test_rand_double_range (-1000, 1000),
                                          g_test_rand_double_range (-1000, 1000),
                                          g_test_rand_double_range (-1000, 1000));
+          break;
+
+        case 4:
+          gsk_path_builder_conic_to (builder,
+                                     g_test_rand_double_range (-1000, 1000),
+                                     g_test_rand_double_range (-1000, 1000),
+                                     g_test_rand_double_range (-1000, 1000),
+                                     g_test_rand_double_range (-1000, 1000),
+                                     random_weight ());
+          break;
+
+        case 5:
+          gsk_path_builder_rel_conic_to (builder,
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (-1000, 1000),
+                                         random_weight ());
           break;
 
         default:
