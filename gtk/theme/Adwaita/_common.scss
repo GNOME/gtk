@@ -3588,6 +3588,9 @@ stacksidebar {
       background-color: $selected_bg_color;
       color: $selected_fg_color;
     }
+    &.activatable:active, &.activatable:selected:active {
+      box-shadow: none; // #3413
+    }
   }
 }
 
