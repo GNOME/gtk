@@ -476,7 +476,12 @@ gsk_rect_contour_get_winding (const GskContour       *contour,
   graphene_rect_init (&rect, self->x, self->y, self->width, self->height);
 
   if (graphene_rect_contains_point (&rect, point))
-    return -1;
+    {
+      if ((self->width > 0) != (self->height > 0))
+        return 1;
+      else
+       return -1;
+    }
 
   return 0;
 }
