@@ -22,6 +22,7 @@
 #define __GSK_CURVE_PRIVATE_H__
 
 #include "gskpathopprivate.h"
+#include "gskboundingboxprivate.h"
 
 G_BEGIN_DECLS
 
@@ -59,6 +60,9 @@ struct _GskConicCurve
 
   gboolean has_coefficients;
 
+  /* points[0], points[1], points[3] are the control points,
+   * points[2].x is the weight
+   */
   graphene_point_t points[4];
 
   graphene_point_t num[3];
@@ -113,8 +117,10 @@ void                    gsk_curve_get_start_tangent             (const GskCurve 
                                                                  graphene_vec2_t        *tangent);
 void                    gsk_curve_get_end_tangent               (const GskCurve         *curve,
                                                                  graphene_vec2_t        *tangent);
-
-
+void                    gsk_curve_get_bounds                    (const GskCurve         *curve,
+                                                                 GskBoundingBox         *bounds);
+void                    gsk_curve_get_tight_bounds              (const GskCurve         *curve,
+                                                                 GskBoundingBox         *bounds);
 
 
 G_END_DECLS
