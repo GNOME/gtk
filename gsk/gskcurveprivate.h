@@ -23,6 +23,7 @@
 
 #include "gskpathopprivate.h"
 #include "gskpath.h"
+#include "gskboundingboxprivate.h"
 
 G_BEGIN_DECLS
 
@@ -149,10 +150,13 @@ void                    gsk_curve_get_end_tangent               (const GskCurve 
                                                                  graphene_vec2_t        *tangent);
 void                    gsk_curve_reverse                       (const GskCurve         *curve,
                                                                  GskCurve               *reverse);
+void                    gsk_curve_get_bounds                    (const GskCurve         *curve,
+                                                                 GskBoundingBox         *bounds);
+void                    gsk_curve_get_tight_bounds              (const GskCurve         *curve,
+                                                                 GskBoundingBox         *bounds);
+
 void                    gsk_curve_raise                         (const GskCurve         *curve,
                                                                  GskCurve               *raised);
-
-
 int                     gsk_curve_get_curvature_points          (const GskCurve         *curve,
                                                                  float                   t[3]);
 
