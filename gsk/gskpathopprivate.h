@@ -21,7 +21,7 @@
 #ifndef __GSK_PATHOP_PRIVATE_H__
 #define __GSK_PATHOP_PRIVATE_H__
 
-#include <gskpath.h>
+#include <gsk/gskpath.h>
 
 G_BEGIN_DECLS
 
