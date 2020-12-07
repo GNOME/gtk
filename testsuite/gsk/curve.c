@@ -191,6 +191,33 @@ test_curve_decompose (void)
     }
 }
 
+static void
+test_curve_bounds (void)
+{
+  for (int i = 0; i < 100; i++)
+    {
+      GskCurve c;
+      graphene_rect_t bounds;
+      graphene_rect_t hull;
+
+      init_random_curve (&c);
+      gsk_curve_get_bounds (&c, &hull);
+      gsk_curve_get_tight_bounds (&c, &bounds);
+
+      graphene_rect_inset (&hull, - 0.5, - 0.5); // FIXME: this seems big
+      g_assert_true (graphene_rect_contains_rect (&hull, &bounds));
+      graphene_rect_inset (&bounds, - 0.5, - 0.5);
+
+      for (int j = 0; j < 100; j++)
+        {
+          graphene_point_t p;
+
+          gsk_curve_get_point (&c, j / 99.0, &p);
+          g_assert_true (graphene_rect_contains_point (&bounds, &p));
+        }
+    }
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -199,6 +226,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/curve/points", test_curve_points);
   g_test_add_func ("/curve/tangents", test_curve_tangents);
   g_test_add_func ("/curve/decompose", test_curve_decompose);
+  g_test_add_func ("/curve/bounds", test_curve_bounds);
 
   return g_test_run ();
 }
