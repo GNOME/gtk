@@ -130,8 +130,6 @@ struct _GtkHeaderBar
 
   guint show_title_buttons : 1;
   guint track_default_decoration : 1;
-
-  GdkToplevelState state;
 };
 
 typedef struct _GtkHeaderBarClass GtkHeaderBarClass;
@@ -613,7 +611,6 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   bar->title_widget = NULL;
   bar->decoration_layout = NULL;
   bar->show_title_buttons = TRUE;
-  bar->state = GDK_TOPLEVEL_STATE_WITHDRAWN;
 
   bar->handle = gtk_window_handle_new ();
   gtk_widget_set_parent (bar->handle, GTK_WIDGET (bar));
