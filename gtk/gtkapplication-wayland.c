@@ -122,7 +122,7 @@ gtk_application_impl_wayland_inhibit (GtkApplicationImpl         *impl,
   if (!flags)
     return 0;
 
-  inhibitor = g_slice_new (GtkApplicationWaylandInhibitor);
+  inhibitor = g_slice_new0 (GtkApplicationWaylandInhibitor);
   inhibitor->cookie = ++wayland->next_cookie;
   inhibitor->flags = flags;
   wayland->inhibitors = g_slist_prepend (wayland->inhibitors, inhibitor);
