@@ -354,6 +354,7 @@ gtk_popover_menu_bar_item_class_init (GtkPopoverMenuBarItemClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  guint activate_signal;
 
   object_class->dispose = gtk_popover_menu_bar_item_dispose;
   object_class->finalize = gtk_popover_menu_bar_item_finalize;
@@ -364,7 +365,7 @@ gtk_popover_menu_bar_item_class_init (GtkPopoverMenuBarItemClass *klass)
 
   klass->activate = gtk_popover_menu_bar_item_activate;
 
-  widget_class->activate_signal =
+  activate_signal =
     g_signal_new (I_("activate"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_FIRST,
@@ -375,6 +376,7 @@ gtk_popover_menu_bar_item_class_init (GtkPopoverMenuBarItemClass *klass)
 
   gtk_widget_class_set_css_name (widget_class, I_("item"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_MENU_ITEM);
+  gtk_widget_class_set_activate_signal (widget_class, activate_signal);
 }
 enum
 {

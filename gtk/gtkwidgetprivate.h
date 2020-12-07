@@ -215,6 +215,7 @@ struct _GtkWidgetClassPrivate
   GType layout_manager_type;
   GtkWidgetAction *actions;
   GtkAccessibleRole accessible_role;
+  guint activate_signal;
 };
 
 void          gtk_widget_root               (GtkWidget *widget);
@@ -355,6 +356,8 @@ guint             gtk_widget_add_surface_transform_changed_callback (GtkWidget  
 
 void              gtk_widget_remove_surface_transform_changed_callback (GtkWidget *widget,
                                                                         guint      id);
+
+gboolean          gtk_widget_can_activate       (GtkWidget *widget);
 
 /* focus vfuncs for non-focusable containers with focusable children */
 gboolean gtk_widget_grab_focus_child (GtkWidget        *widget);

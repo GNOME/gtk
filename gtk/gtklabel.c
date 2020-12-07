@@ -1452,7 +1452,7 @@ gtk_label_mnemonic_activate (GtkWidget *widget,
   while (parent)
     {
       if (gtk_widget_get_can_focus (parent) ||
-	  (!group_cycling && GTK_WIDGET_GET_CLASS (parent)->activate_signal) ||
+	  (!group_cycling && gtk_widget_can_activate (parent)) ||
           GTK_IS_NOTEBOOK (gtk_widget_get_parent (parent)))
 	return gtk_widget_mnemonic_activate (parent, group_cycling);
       parent = gtk_widget_get_parent (parent);

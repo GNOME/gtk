@@ -570,7 +570,8 @@ gtk_switch_class_init (GtkSwitchClass *klass)
                   NULL, NULL,
                   NULL,
                   G_TYPE_NONE, 0);
-  widget_class->activate_signal = signals[ACTIVATE];
+
+  gtk_widget_class_set_activate_signal (widget_class, signals[ACTIVATE]);
 
   /**
    * GtkSwitch::state-set:
