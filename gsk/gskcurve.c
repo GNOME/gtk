@@ -44,9 +44,22 @@ struct _GskCurveClass
   gskpathop                     (* pathop)              (const GskCurve         *curve);
   const graphene_point_t *      (* get_start_point)     (const GskCurve         *curve);
   const graphene_point_t *      (* get_end_point)       (const GskCurve         *curve);
+  void                          (* get_start_tangent)   (const GskCurve         *curve,
+                                                         graphene_vec2_t        *tangent);
+  void                          (* get_end_tangent)     (const GskCurve         *curve,
+                                                         graphene_vec2_t        *tangent);
 };
 
 /* {{{ Line implementation */
+
+static void
+get_tangent (const graphene_point_t *p0,
+             const graphene_point_t *p1,
+             graphene_vec2_t        *t)
+{
+  graphene_vec2_init (t, p1->x - p0->x, p1->y - p0->y);
+  graphene_vec2_normalize (t, t);
+}
 
 static void
 gsk_line_curve_init_from_points (GskLineCurve           *self,
@@ -139,6 +152,15 @@ gsk_line_curve_get_end_point (const GskCurve *curve)
   return &self->points[1];
 }
 
+static void
+gsk_line_curve_get_tangent (const GskCurve  *curve,
+                            graphene_vec2_t *tangent)
+{
+  const GskLineCurve *self = &curve->line;
+
+  get_tangent (&self->points[0], &self->points[1], tangent);
+}
+
 static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_init,
   gsk_line_curve_eval,
@@ -147,6 +169,8 @@ static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_pathop,
   gsk_line_curve_get_start_point,
   gsk_line_curve_get_end_point,
+  gsk_line_curve_get_tangent,
+  gsk_line_curve_get_tangent
 };
 
 /* }}} */
@@ -312,6 +336,24 @@ gsk_curve_curve_get_end_point (const GskCurve *curve)
   return &self->points[3];
 }
 
+static void
+gsk_curve_curve_get_start_tangent (const GskCurve  *curve,
+                                   graphene_vec2_t *tangent)
+{
+  const GskCurveCurve *self = &curve->curve;
+
+  get_tangent (&self->points[0], &self->points[1], tangent);
+}
+
+static void
+gsk_curve_curve_get_end_tangent (const GskCurve  *curve,
+                                 graphene_vec2_t *tangent)
+{
+  const GskCurveCurve *self = &curve->curve;
+
+  get_tangent (&self->points[2], &self->points[3], tangent);
+}
+
 static const GskCurveClass GSK_CURVE_CURVE_CLASS = {
   gsk_curve_curve_init,
   gsk_curve_curve_eval,
@@ -320,6 +362,8 @@ static const GskCurveClass GSK_CURVE_CURVE_CLASS = {
   gsk_curve_curve_pathop,
   gsk_curve_curve_get_start_point,
   gsk_curve_curve_get_end_point,
+  gsk_curve_curve_get_start_tangent,
+  gsk_curve_curve_get_end_tangent
 };
 
 /* }}} */
@@ -626,6 +670,24 @@ gsk_conic_curve_get_end_point (const GskCurve *curve)
   return &self->points[3];
 }
 
+static void
+gsk_conic_curve_get_start_tangent (const GskCurve  *curve,
+                                   graphene_vec2_t *tangent)
+{
+  const GskConicCurve *self = &curve->conic;
+
+  get_tangent (&self->points[0], &self->points[1], tangent);
+}
+
+static void
+gsk_conic_curve_get_end_tangent (const GskCurve  *curve,
+                                 graphene_vec2_t *tangent)
+{
+  const GskConicCurve *self = &curve->conic;
+
+  get_tangent (&self->points[1], &self->points[3], tangent);
+}
+
 static const GskCurveClass GSK_CONIC_CURVE_CLASS = {
   gsk_conic_curve_init,
   gsk_conic_curve_eval,
@@ -634,6 +696,8 @@ static const GskCurveClass GSK_CONIC_CURVE_CLASS = {
   gsk_conic_curve_pathop,
   gsk_conic_curve_get_start_point,
   gsk_conic_curve_get_end_point,
+  gsk_conic_curve_get_start_tangent,
+  gsk_conic_curve_get_end_tangent
 };
 
 /* }}} */
@@ -704,6 +768,20 @@ const graphene_point_t *
 gsk_curve_get_end_point (const GskCurve *curve)
 {
   return get_class (curve->op)->get_end_point (curve);
+}
+
+void
+gsk_curve_get_start_tangent (const GskCurve  *curve,
+                             graphene_vec2_t *tangent)
+{
+  get_class (curve->op)->get_start_tangent (curve, tangent);
+}
+
+void
+gsk_curve_get_end_tangent (const GskCurve  *curve,
+                           graphene_vec2_t *tangent)
+{
+  get_class (curve->op)->get_end_tangent (curve, tangent);
 }
 
 /* }}} */
