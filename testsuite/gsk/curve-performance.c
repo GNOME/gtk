@@ -117,6 +117,59 @@ conic_intersection (void)
   test_intersection (GSK_PATH_CONIC, GSK_PATH_CONIC);
 }
 
+static void
+test_get_point (GskPathOperation op)
+{
+  GskCurve curves[10000];
+  GskCurve *c;
+  gint64 start, time;
+  gint64 count;
+  double time_elapsed;
+  double result;
+  float t;
+  graphene_point_t point;
+
+  for (int i = 0; i < 10000; i++)
+    init_random_curve_with_op (&curves[i], op, op);
+
+  count = 0;
+  start = time = g_get_monotonic_time ();
+
+  while (time - start < G_TIME_SPAN_SECOND * 20)
+    {
+      c = &curves[g_test_rand_int_range (0, 10000)];
+      t = g_test_rand_int_range (0, 1);
+
+      gsk_curve_get_point (c, t, &point);
+
+      count++;
+      if (count % 10000 == 0)
+        time = g_get_monotonic_time ();
+    }
+
+  time_elapsed = (time - start) / (double) G_TIME_SPAN_SECOND;
+  result = ((double) count / time_elapsed);
+  g_test_maximized_result (result, "%8.1f ops/s", result);
+}
+
+static void
+line_get_point (void)
+{
+  test_get_point (GSK_PATH_LINE);
+}
+
+static void
+curve_get_point (void)
+{
+  test_get_point (GSK_PATH_CURVE);
+}
+
+static void
+conic_get_point (void)
+{
+  test_get_point (GSK_PATH_CONIC);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -128,6 +181,9 @@ main (int argc, char *argv[])
       g_test_add_func ("/curve/perf/intersection/line-curve", line_curve_intersection);
       g_test_add_func ("/curve/perf/intersection/curve", curve_intersection);
       g_test_add_func ("/curve/perf/intersection/conic", conic_intersection);
+      g_test_add_func ("/curve/perf/get-point/line", line_get_point);
+      g_test_add_func ("/curve/perf/get-point/curve", curve_get_point);
+      g_test_add_func ("/curve/perf/get-point/conic", conic_get_point);
     }
 
   return g_test_run ();
