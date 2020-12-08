@@ -706,7 +706,7 @@ gsk_path_builder_rel_conic_to (GskPathBuilder *builder,
  * gsk_path_builder_close:
  * @builder: a #GskPathBuilder
  *
- * Ends the current contour with a line back to the start point. 
+ * Ends the current contour with a line back to the start point.
  *
  * Note that this is different from calling gsk_path_builder_line_to()
  * with the start point in that the contour will be closed. A closed
