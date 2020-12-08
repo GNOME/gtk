@@ -85,6 +85,11 @@ void               _gdk_macos_surface_get_shadow              (GdkMacosSurface  
                                                                int                *right,
                                                                int                *bottom,
                                                                int                *left);
+void               _gdk_macos_surface_set_shadow              (GdkMacosSurface    *self,
+                                                               int                 top,
+                                                               int                 right,
+                                                               int                 bottom,
+                                                               int                 left);
 NSView            *_gdk_macos_surface_get_view                (GdkMacosSurface    *self);
 gboolean           _gdk_macos_surface_get_modal_hint          (GdkMacosSurface    *self);
 void               _gdk_macos_surface_set_modal_hint          (GdkMacosSurface    *self,
@@ -125,11 +130,6 @@ void               _gdk_macos_surface_set_opacity             (GdkMacosSurface  
 void               _gdk_macos_surface_get_root_coords         (GdkMacosSurface    *self,
                                                                int                *x,
                                                                int                *y);
-void               _gdk_macos_surface_set_shadow_width        (GdkSurface         *surface,
-                                                               int                 left,
-                                                               int                 right,
-                                                               int                 top,
-                                                               int                 bottom);
 
 G_END_DECLS
 
