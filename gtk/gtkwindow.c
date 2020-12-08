@@ -863,13 +863,33 @@ gtk_window_class_init (GtkWindowClass *klass)
                            GTK_TYPE_WINDOW,
                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkWindow:maximized:
+   *
+   * Whether the window is maximized.
+   *
+   * Setting this property is the equivalent of calling gtk_window_maximize()
+   * and gtk_window_unmaximize(); either operation is asynchronous, which
+   * means you will need to connect to the #GObject::notify signal in order to
+   * know whether the operation was successful.
+   */
   window_props[PROP_MAXIMIZED] =
       g_param_spec_boolean ("maximized",
-                            P_("Is maximized"),
+                            P_("Is Maximized"),
                             P_("Whether the window is maximized"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkWindow:fullscreen:
+   *
+   * Whether the window is fullscreen.
+   *
+   * Setting this property is the equivalent of calling gtk_window_fullscreen()
+   * and gtk_window_unfullscreen(); either operation is asynchronous, which
+   * means you will need to connect to the #GObject::notify signal in order to
+   * know whether the operation was successful.
+   */
   window_props[PROP_FULLSCREEN] =
       g_param_spec_boolean ("fullscreen",
                             P_("Is fullscreen"),
@@ -5155,17 +5175,14 @@ gtk_window_unminimize (GtkWindow *window)
  * gtk_window_maximize:
  * @window: a #GtkWindow
  *
- * Asks to maximize @window, so that it becomes full-screen. Note that
- * you shouldn’t assume the window is definitely maximized afterward,
- * because other entities (e.g. the user or
- * [window manager][gtk-X11-arch]) could unmaximize it
- * again, and not all window managers support maximization. But
- * normally the window will end up maximized. Just don’t write code
- * that crashes if not.
+ * Asks to maximize @window, so that it fills the screen.
  *
- * It’s permitted to call this function before showing a window,
- * in which case the window will be maximized when it appears onscreen
- * initially.
+ * Note that you shouldn’t assume the window is definitely maximized afterward,
+ * because other entities (e.g. the user or [window manager][gtk-X11-arch])
+ * could unmaximize it again, and not all window managers support maximization.
+ *
+ * It’s permitted to call this function before showing a window, in which case
+ * the window will be maximized when it appears onscreen initially.
  *
  * You can track the result of this operation via the #GdkToplevel:state
  * property, or by listening to notifications on the #GtkWindow:maximized
@@ -5196,12 +5213,11 @@ gtk_window_maximize (GtkWindow *window)
  * gtk_window_unmaximize:
  * @window: a #GtkWindow
  *
- * Asks to unmaximize @window. Note that you shouldn’t assume the
- * window is definitely unmaximized afterward, because other entities
- * (e.g. the user or [window manager][gtk-X11-arch])
- * could maximize it again, and not all window
- * managers honor requests to unmaximize. But normally the window will
- * end up unmaximized. Just don’t write code that crashes if not.
+ * Asks to unmaximize @window.
+ *
+ * Note that you shouldn’t assume the window is definitely unmaximized afterward,
+ * because other entities (e.g. the user or [window manager][gtk-X11-arch]) could
+ * maximize it again, and not all window managers honor requests to unmaximize.
  *
  * You can track the result of this operation via the #GdkToplevel:state
  * property, or by listening to notifications on the #GtkWindow:maximized
@@ -5230,16 +5246,16 @@ gtk_window_unmaximize (GtkWindow *window)
  * gtk_window_fullscreen:
  * @window: a #GtkWindow
  *
- * Asks to place @window in the fullscreen state. Note that you
- * shouldn’t assume the window is definitely full screen afterward,
- * because other entities (e.g. the user or
- * [window manager][gtk-X11-arch]) could unfullscreen it
- * again, and not all window managers honor requests to fullscreen
- * windows. But normally the window will end up fullscreen. Just
- * don’t write code that crashes if not.
+ * Asks to place @window in the fullscreen state.
  *
- * You can track iconification via the #GdkToplevel:state property
- **/
+ * Note that you shouldn’t assume the window is definitely full screen afterward,
+ * because other entities (e.g. the user or [window manager][gtk-X11-arch]) could
+ * unfullscreen it again, and not all window managers honor requests to fullscreen
+ * windows.
+ *
+ * You can track the result of this operation via the #GdkToplevel:state property,
+ * or by listening to notifications of the #GtkWindow:fullscreen property.
+ */
 void
 gtk_window_fullscreen (GtkWindow *window)
 {
@@ -5275,10 +5291,15 @@ unset_fullscreen_monitor (GtkWindow *window)
  * @window: a #GtkWindow
  * @monitor: which monitor to go fullscreen on
  *
- * Asks to place @window in the fullscreen state. Note that you shouldn't assume
- * the window is definitely full screen afterward.
+ * Asks to place @window in the fullscreen state on the given @monitor.
  *
- * You can track iconification via the #GdkToplevel:state property
+ * Note that you shouldn't assume the window is definitely full screen
+ * afterward, or that the windowing system allows fullscreen windows on
+ * any given monitor.
+ *
+ * You can track the result of this operation via the #GdkToplevel:state
+ * property, or by listening to notifications of the #GtkWindow:fullscreen
+ * property.
  */
 void
 gtk_window_fullscreen_on_monitor (GtkWindow  *window,
@@ -5307,16 +5328,18 @@ gtk_window_fullscreen_on_monitor (GtkWindow  *window,
  * gtk_window_unfullscreen:
  * @window: a #GtkWindow
  *
- * Asks to toggle off the fullscreen state for @window. Note that you
- * shouldn’t assume the window is definitely not full screen
- * afterward, because other entities (e.g. the user or
- * [window manager][gtk-X11-arch]) could fullscreen it
- * again, and not all window managers honor requests to unfullscreen
- * windows. But normally the window will end up restored to its normal
- * state. Just don’t write code that crashes if not.
+ * Asks to remove the fullscreen state for @window, and return to its previous
+ * state.
  *
- * You can track iconification via the #GdkToplevel:state property
- **/
+ * Note that you shouldn’t assume the window is definitely not full screen afterward,
+ * because other entities (e.g. the user or [window manager][gtk-X11-arch]) could
+ * fullscreen it again, and not all window managers honor requests to unfullscreen
+ * windows; normally the window will end up restored to its normal state. Just don’t
+ * write code that crashes if not.
+ *
+ * You can track the result of this operation via the #GdkToplevel:state property,
+ * or by listening to notifications of the #GtkWindow:fullscreen property.
+ */
 void
 gtk_window_unfullscreen (GtkWindow *window)
 {
@@ -5342,8 +5365,9 @@ gtk_window_unfullscreen (GtkWindow *window)
  * @window: a #GtkWindow
  * @resizable: %TRUE if the user can resize this window
  *
- * Sets whether the user can resize a window. Windows are user resizable
- * by default.
+ * Sets whether the user can resize a window.
+ *
+ * Windows are user resizable by default.
  **/
 void
 gtk_window_set_resizable (GtkWindow *window,
