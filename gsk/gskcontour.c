@@ -1120,7 +1120,10 @@ gsk_standard_contour_measure_get_point (GskStandardContour        *self,
 
   gsk_curve_init (&curve, self->ops[op]);
 
-  gsk_curve_eval (&curve, progress, pos, tangent);
+  if (pos)
+    gsk_curve_get_point (&curve, progress, pos);
+  if (tangent)
+    gsk_curve_get_tangent (&curve, progress, tangent);
 }
 
 static void
