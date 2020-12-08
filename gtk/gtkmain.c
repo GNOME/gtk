@@ -1375,6 +1375,7 @@ handle_pointing_event (GdkEvent *event)
   GtkWidget *native;
   GdkEventType type;
   gboolean has_implicit;
+  GdkModifierType modifiers;
 
   event_widget = gtk_get_event_widget (event);
   device = gdk_event_get_device (event);
@@ -1480,13 +1481,16 @@ handle_pointing_event (GdkEvent *event)
         gtk_window_lookup_pointer_focus_implicit_grab (toplevel,
                                                        device,
                                                        sequence) != NULL;
+      modifiers = gdk_event_get_modifier_state (event);
 
-      gtk_window_set_pointer_focus_grab (toplevel, device, sequence,
-                                         type == GDK_BUTTON_PRESS ?  target : NULL);
-
-      if (type == GDK_BUTTON_RELEASE)
+      if (type == GDK_BUTTON_RELEASE &&
+          __builtin_popcount (modifiers &
+                              (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK |
+                               GDK_BUTTON4_MASK | GDK_BUTTON5_MASK)) == 1)
         {
           GtkWidget *new_target = gtk_widget_pick (native, x, y, GTK_PICK_DEFAULT);
+
+          gtk_window_set_pointer_focus_grab (toplevel, device, sequence, NULL);
 
           if (new_target == NULL)
             new_target = GTK_WIDGET (toplevel);
@@ -1495,6 +1499,11 @@ handle_pointing_event (GdkEvent *event)
                                           event, GDK_CROSSING_UNGRAB, NULL);
           gtk_window_maybe_update_cursor (toplevel, NULL, device);
           update_pointer_focus_state (toplevel, event, new_target);
+        }
+      else if (type == GDK_BUTTON_PRESS)
+        {
+          gtk_window_set_pointer_focus_grab (toplevel, device,
+                                             sequence, target);
         }
 
       if (type == GDK_BUTTON_PRESS)
