@@ -37,6 +37,7 @@
   <object class="GtkWindow" id="window1">
     <child>
       <object class="GtkTextView" id="textview1">
+        <property name="cursor_visible">false</property>
         <property name="buffer">textbuffer1</property>
         <signal name="map" handler="reftest:apply_tags_blue" swapped="no"/>
       </object>
