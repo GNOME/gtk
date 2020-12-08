@@ -82,9 +82,11 @@ typedef gboolean (* GskCurveAddLineFunc) (const graphene_point_t *from,
 void                    gsk_curve_init                          (GskCurve               *curve,
                                                                  gskpathop               op);
 
-void                    gsk_curve_eval                          (const GskCurve         *curve,
+void                    gsk_curve_get_point                     (const GskCurve         *curve,
                                                                  float                   progress,
-                                                                 graphene_point_t       *pos,
+                                                                 graphene_point_t       *pos);
+void                    gsk_curve_get_tangent                   (const GskCurve         *curve,
+                                                                 float                   progress,
                                                                  graphene_vec2_t        *tangent);
 void                    gsk_curve_split                         (const GskCurve         *curve,
                                                                  float                   progress,
