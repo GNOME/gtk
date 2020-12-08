@@ -227,6 +227,54 @@ test_curve_curve_intersection (void)
   g_assert_cmpfloat (t2[1], >, 0.5);
 }
 
+/* Some sanity checks for splitting curves.
+ */
+static void
+test_curve_split (void)
+{
+  GskCurve c;
+
+  for (int i = 0; i < 100; i++)
+    {
+      init_random_curve (&c);
+
+      for (int j = 1; j < 20; j++)
+        {
+          GskCurve c1, c2;
+          graphene_point_t p;
+          graphene_vec2_t t, t1, t2;
+
+          gsk_curve_split (&c, j / 20.0, &c1, &c2);
+
+          g_assert_true (c1.op == c.op);
+          g_assert_true (c2.op == c.op);
+
+          g_assert_true (graphene_point_near (gsk_curve_get_start_point (&c),
+                                              gsk_curve_get_start_point (&c1), 0.005));
+          g_assert_true (graphene_point_near (gsk_curve_get_end_point (&c1),
+                                              gsk_curve_get_start_point (&c2), 0.005));
+          g_assert_true (graphene_point_near (gsk_curve_get_end_point (&c),
+                                              gsk_curve_get_end_point (&c2), 0.005));
+          gsk_curve_eval (&c, j / 20.0, &p, &t);
+          g_assert_true (graphene_point_near (gsk_curve_get_end_point (&c1), &p, 0.005));
+          g_assert_true (graphene_point_near (gsk_curve_get_start_point (&c2), &p, 0.005));
+
+          gsk_curve_get_start_tangent (&c, &t1);
+          gsk_curve_get_start_tangent (&c1, &t2);
+          g_assert_true (graphene_vec2_near (&t1, &t2, 0.005));
+          gsk_curve_get_end_tangent (&c1, &t1);
+          gsk_curve_get_start_tangent (&c2, &t2);
+          g_assert_true (graphene_vec2_near (&t1, &t2, 0.005));
+          g_assert_true (graphene_vec2_near (&t, &t1, 0.005));
+          g_assert_true (graphene_vec2_near (&t, &t2, 0.005));
+          gsk_curve_get_end_tangent (&c, &t1);
+          gsk_curve_get_end_tangent (&c2, &t2);
+          g_assert_true (graphene_vec2_near (&t1, &t2, 0.005));
+
+        }
+    }
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -238,6 +286,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/curve/intersection/line-line", test_line_line_intersection);
   g_test_add_func ("/curve/intersection/line-curve", test_line_curve_intersection);
   g_test_add_func ("/curve/intersection/curve-curve", test_curve_curve_intersection);
+  g_test_add_func ("/curve/split", test_curve_split);
 
   return g_test_run ();
 }
