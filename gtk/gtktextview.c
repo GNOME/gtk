@@ -8666,11 +8666,15 @@ gtk_text_view_do_popup (GtkTextView *text_view,
     }
   else
     {
+      GtkTextBuffer *buffer;
       GtkTextIter iter;
       GdkRectangle iter_location;
       GdkRectangle visible_rect;
       gboolean is_visible;
 
+      buffer = get_buffer (text_view);
+      gtk_text_buffer_get_iter_at_mark (buffer, &iter,
+                                        gtk_text_buffer_get_insert (buffer));
       gtk_text_view_get_iter_location (text_view, &iter, &iter_location);
       gtk_text_view_get_visible_rect (text_view, &visible_rect);
 
