@@ -3461,7 +3461,7 @@ gtk_window_set_default_size_internal (GtkWindow    *window,
  *
  * If you use this function to reestablish a previously saved window size,
  * note that the appropriate size to save is the one returned by
- * gtk_window_get_size(). Using the window allocation directly will not
+ * gtk_window_get_default_size(). Using the window allocation directly will not
  * work in all circumstances and can lead to growing or shrinking windows.
  */
 void
@@ -3487,7 +3487,6 @@ gtk_window_set_default_size (GtkWindow   *window,
  * height indicates that a default size has not been explicitly set
  * for that dimension, so the “natural” size of the window will be
  * used.
- * 
  **/
 void
 gtk_window_get_default_size (GtkWindow *window,
