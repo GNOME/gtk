@@ -40,6 +40,10 @@ Overview of Changes
 * GtkFileChooser:
  - Remove GtkFileChooserButton
 
+* GtkWindow:
+ - Replace gtk_window_get_size with gtk_window_get_default_size
+ - Add maximized and fullscreen properties
+
 * Make the inspector available in non-debug builds
 
 * CSS:
@@ -60,16 +64,19 @@ Overview of Changes
 
 * Make GLES work in the absence of GL_ARB_timer_query
 
+* Rework the way size allocation is integrated in the
+  frame cycle
+
 * Wayland:
  - Support gtk_shell1 version 3 (startup notification
    and activation)
  - Implmement minimization
 
 * OS X:
- - Use the cairo renderer by default
- - Work towards a working GL renderer
+ - Mostly working GL renderer
  - Search engine updates
  - Fix rendering artifacts with hover transitions
+ - Fix kinetic scrolling deceleration
 
 * Windows:
  - Fix key event generation, making text input work
@@ -83,6 +90,7 @@ Overview of Changes
  - Make search more obvious
  - Add a suggestion entry demo
  - Consistency improvements
+ - Use native file choosers
  - Drop 'devel' styling
 
 * Translation updates:
