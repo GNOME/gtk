@@ -212,7 +212,11 @@ gsk_path_get_contour (GskPath *path,
  * Converts @self into a human-readable string representation suitable
  * for printing.
  *
- * The string is compatible with SVG paths.
+ * The string is compatible with
+ * [SVG path syntax](https://www.w3.org/TR/SVG11/paths.html#PathData),
+ * with the exception that conic curves will generate a string of the
+ * form "O x1 y1, x2 y2, w" where x1, y1 is the control point, x2, y2
+ * is the end point, and w is the weight.
  **/
 void
 gsk_path_print (GskPath *self,
@@ -301,7 +305,7 @@ gsk_path_to_cairo_add_op (GskPathOperation        op,
  * with Cairo.
  *
  * This may cause some suboptimal conversions to be performed as Cairo
- * may not perform all features of #GskPath.
+ * may not support all features of #GskPath.
  *
  * This function does not clear the existing Cairo path. Call
  * cairo_new_path() if you want this.
@@ -366,10 +370,9 @@ gsk_path_is_empty (GskPath *path)
  * axis-aligned line.
  *
  * If the path is empty, %FALSE is returned and @bounds are set to
- * graphene_rect_zero().  
- * This is different from the case where the path is a signle point at
- * the origin, where the @bounds will also be set to the zero rectangle
- * but 0 will be returned.
+ * graphene_rect_zero(). This is different from the case where the path
+ * is a single point at the origin, where the @bounds will also be set to
+ * the zero rectangle but 0 will be returned.
  *
  * Returns: %TRUE if the path has bounds, %FALSE if the path is known
  *     to be empty and have no bounds.
