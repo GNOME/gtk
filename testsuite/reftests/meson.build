@@ -421,8 +421,10 @@ testdata = [
   'textview-margins.css',
   'textview-margins.ref.ui',
   'textview-margins.ui',
-  'textview-tags.ref.ui',
-  'textview-tags.ui',
+  # this test needs a better way to perform delayed actions
+  # it is not in xfail since it succeeds on some platforms
+  #'textview-tags.ref.ui',
+  #'textview-tags.ui',
   'treeview-crash-too-wide.ref.ui',
   'treeview-crash-too-wide.ui',
   'treeview-fixed-height.css',
@@ -439,8 +441,10 @@ testdata = [
   'window-default-size.ui',
   'window-height-for-width.ref.ui',
   'window-height-for-width.ui',
-  'window-show-contents-on-map.ref.ui',
-  'window-show-contents-on-map.ui',
+  # this test needs a better way to perform delayed actions
+  # it is not in xfail since it succeeds on some platforms
+  #'window-show-contents-on-map.ref.ui',
+  #'window-show-contents-on-map.ui',
 ]
 
 # These need to be fixed but the issue hasn't been tracked down.
@@ -448,8 +452,6 @@ xfails = [
   'sizegroups-evolution-identity-page.ui',
   # these depend on details of text layout
   'label-sizing.ui',
-  # needs a better way to perform delayed actions
-  'window-show-contents-on-map.ui',
 ]
 
 reftest_env = environment()
