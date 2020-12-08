@@ -448,6 +448,8 @@ xfails = [
   'sizegroups-evolution-identity-page.ui',
   # these depend on details of text layout
   'label-sizing.ui',
+  # needs a better way to perform delayed actions
+  'window-show-contents-on-map.ui',
 ]
 
 reftest_env = environment()
