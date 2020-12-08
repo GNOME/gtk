@@ -140,11 +140,11 @@ gdk_macos_surface_get_scale_factor (GdkSurface *surface)
 }
 
 void
-gdk_macos_surface_set_shadow_width (GdkSurface *surface,
-                                    int         left,
-                                    int         right,
-                                    int         top,
-                                    int         bottom)
+_gdk_macos_surface_set_shadow (GdkMacosSurface *surface,
+                               int              top,
+                               int              right,
+                               int              bottom,
+                               int              left)
 {
   GdkMacosSurface *self = (GdkMacosSurface *)surface;
 

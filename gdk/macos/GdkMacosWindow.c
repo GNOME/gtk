@@ -230,9 +230,7 @@
   NSRect content_rect;
   GdkSurface *surface;
   GdkDisplay *display;
-  GdkEvent *event;
   gboolean maximized;
-  GList *node;
 
   surface = GDK_SURFACE (gdk_surface);
   display = gdk_surface_get_display (surface);

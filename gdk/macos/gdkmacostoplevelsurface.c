@@ -157,11 +157,11 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
 
   if (size.shadow.is_valid)
     {
-      _gdk_macos_surface_set_shadow_width (surface,
-                                           size.shadow.left,
-                                           size.shadow.right,
-                                           size.shadow.top,
-                                           size.shadow.bottom);
+      _gdk_macos_surface_set_shadow (GDK_MACOS_SURFACE (surface),
+                                     size.shadow.top,
+                                     size.shadow.right,
+                                     size.shadow.bottom,
+                                     size.shadow.left);
     }
 
   _gdk_macos_surface_set_geometry_hints (GDK_MACOS_SURFACE (self), &geometry, mask);
