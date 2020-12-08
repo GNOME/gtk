@@ -108,6 +108,89 @@ test_curve_points (void)
     }
 }
 
+/* at this point the subdivision stops and the decomposer
+ * violates tolerance rules
+ */
+#define MIN_PROGRESS (1/1024.f)
+
+typedef struct
+{
+  graphene_point_t p;
+  float t;
+} PointOnLine;
+
+static gboolean
+add_line_to_array (const graphene_point_t *from,
+                   const graphene_point_t *to,
+                   float                   from_progress,
+                   float                   to_progress,
+                   gpointer                user_data)
+{
+  GArray *array = user_data;
+  PointOnLine *last = &g_array_index (array, PointOnLine, array->len - 1);
+
+  g_assert (array->len > 0);
+  g_assert_cmpfloat (from_progress, >=, 0.0f);
+  g_assert_cmpfloat (from_progress, <, to_progress);
+  g_assert_cmpfloat (to_progress, <=, 1.0f);
+
+  g_assert_true (graphene_point_equal (&last->p, from));
+  g_assert_cmpfloat (last->t, ==, from_progress);
+
+  g_array_append_vals (array, (PointOnLine[1]) { { *to, to_progress } }, 1);
+
+  return TRUE;
+}
+
+static void
+test_curve_decompose (void)
+{
+  static const float tolerance = 0.5;
+
+  for (int i = 0; i < 100; i++)
+    {
+      GArray *array;
+      GskCurve c;
+
+      init_random_curve (&c);
+
+      array = g_array_new (FALSE, FALSE, sizeof (PointOnLine));
+      g_array_append_vals (array, (PointOnLine[1]) { { *gsk_curve_get_start_point (&c), 0.f } }, 1);
+
+      g_assert_true (gsk_curve_decompose (&c, tolerance, add_line_to_array, array));
+
+      g_assert_cmpint (array->len, >=, 2); /* We at least got a line to the end */
+      g_assert_cmpfloat (g_array_index (array, PointOnLine, array->len - 1).t, ==, 1.0);
+
+      for (int j = 0; j < array->len; j++)
+        {
+          PointOnLine *pol = &g_array_index (array, PointOnLine, j);
+          graphene_point_t p;
+
+          /* Check that the points we got are actually on the line */
+          gsk_curve_get_point (&c, pol->t, &p);
+          g_assert_true (graphene_point_near (&pol->p, &p, 0.05));
+
+          /* Check that the mid point is not further than the tolerance */
+          if (j > 0)
+            {
+              PointOnLine *last = &g_array_index (array, PointOnLine, j - 1);
+              graphene_point_t mid;
+
+              if (pol->t - last->t > MIN_PROGRESS)
+                {
+                  graphene_point_interpolate (&last->p, &pol->p, 0.5, &mid);
+                  gsk_curve_get_point (&c, (pol->t + last->t) / 2, &p);
+                  /* The decomposer does this cheaper Manhattan distance test,
+                   * so graphene_point_near() does not work */
+                  g_assert_cmpfloat (fabs (mid.x - p.x), <=, tolerance);
+                  g_assert_cmpfloat (fabs (mid.y - p.y), <=, tolerance);
+                }
+            }
+        }
+    }
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -115,6 +198,7 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/curve/points", test_curve_points);
   g_test_add_func ("/curve/tangents", test_curve_tangents);
+  g_test_add_func ("/curve/decompose", test_curve_decompose);
 
   return g_test_run ();
 }
