@@ -681,6 +681,78 @@ test_curve_intersection_horizontal_line (void)
   g_assert_true (n == 1);
 }
 
+/* Some sanity checks for splitting curves.
+ */
+static void
+test_curve_split (void)
+{
+  for (int i = 0; i < 100; i++)
+    {
+      GskCurve c;
+      GskPathBuilder *builder;
+      GskPath *path;
+      GskPathMeasure *measure;
+      const graphene_point_t *s;
+      GskCurve c1, c2;
+      graphene_point_t p;
+      graphene_vec2_t t, t1, t2;
+
+      init_random_curve (&c);
+
+      builder = gsk_path_builder_new ();
+
+      s = gsk_curve_get_start_point (&c);
+      gsk_path_builder_move_to (builder, s->x, s->y);
+      gsk_curve_builder_to (&c, builder);
+      path = gsk_path_builder_free_to_path (builder);
+      measure = gsk_path_measure_new_with_tolerance (path, 0.1);
+
+      gsk_curve_split (&c, 0.5, &c1, &c2);
+
+      g_assert_true (c1.op == c.op);
+      g_assert_true (c2.op == c.op);
+
+      g_assert_true (graphene_point_near (gsk_curve_get_start_point (&c),
+                                          gsk_curve_get_start_point (&c1), 0.005));
+      g_assert_true (graphene_point_near (gsk_curve_get_end_point (&c1),
+                                          gsk_curve_get_start_point (&c2), 0.005));
+      g_assert_true (graphene_point_near (gsk_curve_get_end_point (&c),
+                                          gsk_curve_get_end_point (&c2), 0.005));
+      gsk_curve_get_point (&c, 0.5, &p);
+      gsk_curve_get_tangent (&c, 0.5, &t);
+      g_assert_true (graphene_point_near (gsk_curve_get_end_point (&c1), &p, 0.005));
+      g_assert_true (graphene_point_near (gsk_curve_get_start_point (&c2), &p, 0.005));
+
+      gsk_curve_get_start_tangent (&c, &t1);
+      gsk_curve_get_start_tangent (&c1, &t2);
+      g_assert_true (graphene_vec2_near (&t1, &t2, 0.005));
+      gsk_curve_get_end_tangent (&c1, &t1);
+      gsk_curve_get_start_tangent (&c2, &t2);
+      g_assert_true (graphene_vec2_near (&t1, &t2, 0.005));
+      g_assert_true (graphene_vec2_near (&t, &t1, 0.005));
+      g_assert_true (graphene_vec2_near (&t, &t2, 0.005));
+      gsk_curve_get_end_tangent (&c, &t1);
+      gsk_curve_get_end_tangent (&c2, &t2);
+      g_assert_true (graphene_vec2_near (&t1, &t2, 0.005));
+
+      for (int k = 0; k < 20; k++)
+        {
+          graphene_point_t q;
+          float dist;
+
+          gsk_curve_get_point (&c1, k/19.0, &q);
+          gsk_path_measure_get_closest_point_full (measure, &q, INFINITY,
+                                                   &dist, NULL, NULL, NULL);
+          g_assert_cmpfloat (dist, <=, 0.2);
+
+          gsk_curve_get_point (&c2, k/19.0, &q);
+          gsk_path_measure_get_closest_point_full (measure, &q, INFINITY,
+                                                   &dist, NULL, NULL, NULL);
+          g_assert_cmpfloat (dist, <=, 0.2);
+        }
+    }
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -702,6 +774,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/curve/intersection/curve-curve-end2", test_curve_curve_end_intersection2);
   g_test_add_func ("/curve/intersection/curve-curve-max", test_curve_curve_max_intersection);
   g_test_add_func ("/curve/intersection/horizontal-line", test_curve_intersection_horizontal_line);
+  g_test_add_func ("/curve/split", test_curve_split);
 
   return g_test_run ();
 }
