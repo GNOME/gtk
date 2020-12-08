@@ -82,7 +82,9 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 -(BOOL)isOpaque
 {
-  return NO;
+  if ([self window])
+    return [[self window] isOpaque];
+  return YES;
 }
 
 -(BOOL)isFlipped
