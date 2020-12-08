@@ -56,6 +56,7 @@
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkrenderborderprivate.h"
 #include "gtkrootprivate.h"
+#include "gtknativeprivate.h"
 #include "gtkscrollable.h"
 #include "gtksettingsprivate.h"
 #include "gtkshortcut.h"
@@ -3243,7 +3244,7 @@ gtk_widget_remove_surface_transform_changed_callback (GtkWidget *widget,
     }
 }
 
-static GdkSurface *
+GdkSurface *
 gtk_widget_get_surface (GtkWidget *widget)
 {
   GtkNative *native = gtk_widget_get_native (widget);
@@ -10325,9 +10326,11 @@ gtk_widget_set_alloc_needed (GtkWidget *widget)
       if (!priv->visible)
         break;
 
+      if (GTK_IS_NATIVE (widget))
+        gtk_native_queue_relayout (GTK_NATIVE (widget));
+
       if (!priv->parent && GTK_IS_ROOT (widget))
         {
-          gtk_root_start_layout (GTK_ROOT (widget));
           break;
         }
 

@@ -98,6 +98,14 @@ const int _gdk_x11_event_mask_table[21] =
   ButtonPressMask      /* SCROLL; on X mouse wheel events is treated as mouse button 4/5 */
 };
 
+typedef struct {
+  GdkX11Surface parent_instance;
+} GdkX11Toplevel;
+
+typedef struct {
+  GdkX11SurfaceClass parent_class;
+} GdkX11ToplevelClass;
+
 const int _gdk_x11_event_mask_table_size = G_N_ELEMENTS (_gdk_x11_event_mask_table);
 
 /* Forward declarations */
@@ -110,6 +118,14 @@ static void     move_to_current_desktop           (GdkSurface *surface);
 static void     gdk_x11_toplevel_state_callback   (GdkSurface *surface);
 static gboolean gdk_x11_toplevel_event_callback   (GdkSurface *surface,
                                                    GdkEvent   *gdk_event);
+
+static void     gdk_x11_surface_toplevel_resize   (GdkSurface *surface,
+                                                   int         width,
+                                                   int         height);
+
+static void gdk_x11_surface_set_geometry_hints (GdkSurface        *surface,
+                                                const GdkGeometry *geometry,
+                                                GdkSurfaceHints    geom_mask);
 
 /* Return whether time1 is considered later than time2 as far as xserver
  * time is concerned.  Accounts for wraparound.
@@ -190,6 +206,206 @@ gdk_x11_surface_get_unscaled_size (GdkSurface *surface,
 
   if (unscaled_height)
     *unscaled_height = impl->unscaled_height;
+}
+
+static void
+update_shadow_size (GdkSurface *surface,
+                    int         shadow_left,
+                    int         shadow_right,
+                    int         shadow_top,
+                    int         shadow_bottom)
+{
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
+  Atom frame_extents;
+  gulong data[4];
+
+  if (impl->shadow_left == shadow_left &&
+      impl->shadow_right == shadow_right &&
+      impl->shadow_top == shadow_top &&
+      impl->shadow_bottom == shadow_bottom)
+    return;
+
+  impl->shadow_left = shadow_left;
+  impl->shadow_right = shadow_right;
+  impl->shadow_top = shadow_top;
+  impl->shadow_bottom = shadow_bottom;
+
+  data[0] = shadow_left * impl->surface_scale;
+  data[1] = shadow_right * impl->surface_scale;
+  data[2] = shadow_top * impl->surface_scale;
+  data[3] = shadow_bottom * impl->surface_scale;
+
+  frame_extents = gdk_x11_get_xatom_by_name_for_display (gdk_surface_get_display (surface),
+                                                         "_GTK_FRAME_EXTENTS");
+  XChangeProperty (GDK_SURFACE_XDISPLAY (surface),
+                   GDK_SURFACE_XID (surface),
+                   frame_extents, XA_CARDINAL,
+                   32, PropModeReplace,
+                   (guchar *) &data, 4);
+}
+
+#define UPDATE_GEOMETRY TRUE
+#define DONT_UPDATE_GEOMETRY FALSE
+
+static gboolean
+compute_toplevel_size (GdkSurface *surface,
+                       gboolean    update_geometry,
+                       int        *width,
+                       int        *height)
+{
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkMonitor *monitor;
+  GdkToplevelSize size;
+  int bounds_width, bounds_height;
+
+  monitor = gdk_display_get_monitor_at_surface (display, surface);
+  if (monitor)
+    {
+      GdkRectangle workarea;
+
+      gdk_x11_monitor_get_workarea (monitor, &workarea);
+      bounds_width = workarea.width;
+      bounds_height = workarea.height;
+    }
+  else
+    {
+      bounds_width = G_MAXINT;
+      bounds_height = G_MAXINT;
+    }
+
+  gdk_toplevel_size_init (&size, bounds_width, bounds_height);
+  gdk_toplevel_notify_compute_size (GDK_TOPLEVEL (surface), &size);
+
+  if (size.shadow.is_valid && update_geometry)
+    {
+      update_shadow_size (surface,
+                          size.shadow.left,
+                          size.shadow.right,
+                          size.shadow.top,
+                          size.shadow.bottom);
+    }
+
+  if (update_geometry)
+    {
+      GdkGeometry geometry;
+      GdkSurfaceHints mask;
+
+      if (gdk_toplevel_layout_get_resizable (impl->toplevel_layout))
+        {
+          geometry.min_width = size.min_width;
+          geometry.min_height = size.min_height;
+          mask = GDK_HINT_MIN_SIZE;
+        }
+      else
+        {
+          geometry.max_width = geometry.min_width = size.width;
+          geometry.max_height = geometry.min_height = size.height;
+          mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE;
+        }
+      gdk_x11_surface_set_geometry_hints (surface, &geometry, mask);
+    }
+
+  if (!(surface->state & (GDK_TOPLEVEL_STATE_FULLSCREEN |
+                          GDK_TOPLEVEL_STATE_MAXIMIZED |
+                          GDK_TOPLEVEL_STATE_TILED |
+                          GDK_TOPLEVEL_STATE_TOP_TILED |
+                          GDK_TOPLEVEL_STATE_RIGHT_TILED |
+                          GDK_TOPLEVEL_STATE_BOTTOM_TILED |
+                          GDK_TOPLEVEL_STATE_LEFT_TILED |
+                          GDK_TOPLEVEL_STATE_MINIMIZED)) &&
+      (!impl->next_layout.configure_pending || surface->resize_count > 0))
+    {
+      GdkToplevelX11 *toplevel = _gdk_x11_surface_get_toplevel (surface);
+      GdkGeometry geometry;
+      GdkSurfaceHints mask;
+
+      geometry = toplevel->last_geometry_hints;
+      mask = toplevel->last_geometry_hints_mask;
+      gdk_surface_constrain_size (&geometry, mask,
+                                  size.width, size.height,
+                                  &size.width, &size.height);
+      if ((impl->last_computed_width != size.width ||
+           impl->last_computed_height != size.height) &&
+          (impl->next_layout.configured_width != size.width ||
+           impl->next_layout.configured_height != size.height))
+        {
+          *width = size.width;
+          *height = size.height;
+          impl->last_computed_width = size.width;
+          impl->last_computed_height = size.height;
+
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static gboolean
+compute_size_idle (gpointer user_data)
+{
+  GdkSurface *surface = user_data;
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
+  int width, height;
+
+  impl->compute_size_source_id = 0;
+  if (compute_toplevel_size (surface, UPDATE_GEOMETRY, &width, &height))
+    gdk_x11_surface_toplevel_resize (surface, width, height);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gdk_x11_surface_request_layout (GdkSurface *surface)
+{
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
+
+  if (!impl->compute_size_source_id &&
+      GDK_IS_TOPLEVEL (surface))
+    {
+      impl->compute_size_source_id = g_idle_add_full (G_PRIORITY_HIGH - 10,
+                                                      compute_size_idle,
+                                                      surface,
+                                                      NULL);
+    }
+}
+
+static gboolean
+gdk_x11_surface_compute_size (GdkSurface *surface)
+{
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
+
+  if (GDK_IS_TOPLEVEL (surface))
+    {
+      int width, height;
+
+      if (compute_toplevel_size (surface, UPDATE_GEOMETRY, &width, &height))
+        gdk_x11_surface_toplevel_resize (surface, width, height);
+
+      if (surface->resize_count == 0)
+        {
+          surface->width = impl->next_layout.configured_width;
+          surface->height = impl->next_layout.configured_height;
+          _gdk_surface_update_size (surface);
+          _gdk_x11_surface_update_size (impl);
+        }
+
+      impl->next_layout.surface_geometry_dirty = FALSE;
+      impl->next_layout.configure_pending = FALSE;
+    }
+  else
+    {
+      surface->width = impl->next_layout.configured_width;
+      surface->height = impl->next_layout.configured_height;
+
+      _gdk_surface_update_size (surface);
+      _gdk_x11_surface_update_size (impl);
+
+      impl->next_layout.surface_geometry_dirty = FALSE;
+    }
+
+  return surface->resize_count > 0;
 }
 
 gboolean
@@ -838,6 +1054,19 @@ on_frame_clock_before_paint (GdkFrameClock *clock,
 }
 
 static void
+on_frame_clock_after_update (GdkFrameClock *clock,
+                             GdkSurface    *surface)
+{
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
+
+  if (impl->compute_size_source_id)
+    {
+      g_clear_handle_id (&impl->compute_size_source_id, g_source_remove);
+      compute_size_idle (surface);
+    }
+}
+
+static void
 on_frame_clock_after_paint (GdkFrameClock *clock,
                             GdkSurface     *surface)
 {
@@ -859,6 +1088,8 @@ connect_frame_clock (GdkSurface *surface)
 
       g_signal_connect (frame_clock, "before-paint",
                         G_CALLBACK (on_frame_clock_before_paint), surface);
+      g_signal_connect_after (frame_clock, "update",
+                              G_CALLBACK (on_frame_clock_after_update), surface);
       g_signal_connect (frame_clock, "after-paint",
                         G_CALLBACK (on_frame_clock_after_paint), surface);
 
@@ -878,6 +1109,8 @@ disconnect_frame_clock (GdkSurface *surface)
 
       g_signal_handlers_disconnect_by_func (frame_clock,
                                             on_frame_clock_before_paint, surface);
+      g_signal_handlers_disconnect_by_func (frame_clock,
+                                            on_frame_clock_after_update, surface);
       g_signal_handlers_disconnect_by_func (frame_clock,
                                             on_frame_clock_after_paint, surface);
 
@@ -1168,7 +1401,7 @@ update_wm_hints (GdkSurface *surface,
 
   if (!force &&
       !toplevel->is_leader &&
-      surface->state & GDK_TOPLEVEL_STATE_WITHDRAWN)
+      !GDK_SURFACE_IS_MAPPED (surface))
     return;
 
   wm_hints.flags = StateHint | InputHint;
@@ -1375,9 +1608,7 @@ gdk_x11_surface_withdraw (GdkSurface *surface)
   if (!surface->destroyed)
     {
       if (GDK_SURFACE_IS_MAPPED (surface))
-        gdk_synthesize_surface_state (surface,
-                                     0,
-                                     GDK_TOPLEVEL_STATE_WITHDRAWN);
+        gdk_surface_set_is_mapped (surface, FALSE);
 
       g_assert (!GDK_SURFACE_IS_MAPPED (surface));
       XWithdrawWindow (GDK_SURFACE_XDISPLAY (surface),
@@ -1388,12 +1619,17 @@ gdk_x11_surface_withdraw (GdkSurface *surface)
 static void
 gdk_x11_surface_hide (GdkSurface *surface)
 {
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
+
   /* We'll get the unmap notify eventually, and handle it then,
    * but checking here makes things more consistent if we are
    * just doing stuff ourself.
    */
   _gdk_x11_surface_grab_check_unmap (surface,
                                     NextRequest (GDK_SURFACE_XDISPLAY (surface)));
+
+  g_clear_handle_id (&impl->compute_size_source_id, g_source_remove);
+  g_clear_pointer (&impl->toplevel_layout, gdk_toplevel_layout_unref);
 
   gdk_x11_surface_withdraw (surface);
 }
@@ -1424,6 +1660,9 @@ x11_surface_move (GdkSurface *surface,
           surface->x = x;
           surface->y = y;
         }
+
+      impl->next_layout.surface_geometry_dirty = TRUE;
+      gdk_surface_request_layout (surface);
     }
 }
 
@@ -1450,15 +1689,20 @@ x11_surface_resize (GdkSurface *surface,
     {
       impl->unscaled_width = width * impl->surface_scale;
       impl->unscaled_height = height * impl->surface_scale;
-      surface->width = width;
-      surface->height = height;
-      _gdk_surface_update_size (surface);
-      _gdk_x11_surface_update_size (GDK_X11_SURFACE (surface));
+      impl->next_layout.configured_width = width;
+      impl->next_layout.configured_height = height;
+      impl->next_layout.surface_geometry_dirty = TRUE;
+      gdk_surface_request_layout (surface);
     }
   else
     {
-      if (width * impl->surface_scale != impl->unscaled_width || height * impl->surface_scale != impl->unscaled_height)
-        surface->resize_count += 1;
+      if (width * impl->surface_scale != impl->unscaled_width ||
+          height * impl->surface_scale != impl->unscaled_height)
+        {
+          surface->resize_count++;
+          if (surface->resize_count == 1)
+            gdk_surface_freeze_updates (surface);
+        }
     }
 }
 
@@ -1491,10 +1735,10 @@ x11_surface_move_resize (GdkSurface *surface,
 
       impl->unscaled_width = width * impl->surface_scale;
       impl->unscaled_height = height * impl->surface_scale;
-      surface->width = width;
-      surface->height = height;
-
-      _gdk_x11_surface_update_size (GDK_X11_SURFACE (surface));
+      impl->next_layout.configured_width = width;
+      impl->next_layout.configured_height = height;
+      impl->next_layout.surface_geometry_dirty = TRUE;
+      gdk_surface_request_layout (surface);
 
       if (surface->parent)
         {
@@ -1509,8 +1753,13 @@ x11_surface_move_resize (GdkSurface *surface,
     }
   else
     {
-      if (width * impl->surface_scale != impl->unscaled_width || height * impl->surface_scale != impl->unscaled_height)
-        surface->resize_count += 1;
+      if (width * impl->surface_scale != impl->unscaled_width ||
+          height * impl->surface_scale != impl->unscaled_height)
+        {
+          surface->resize_count++;
+          if (surface->resize_count == 1)
+            gdk_surface_freeze_updates (surface);
+        }
     }
 }
 
@@ -1555,6 +1804,7 @@ gdk_x11_surface_layout_popup (GdkSurface     *surface,
                               int             height,
                               GdkPopupLayout *layout)
 {
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
   GdkMonitor *monitor;
   GdkRectangle bounds;
   GdkRectangle final_rect;
@@ -1567,6 +1817,10 @@ gdk_x11_surface_layout_popup (GdkSurface     *surface,
   gdk_surface_layout_popup_helper (surface,
                                    width,
                                    height,
+                                   impl->shadow_left,
+                                   impl->shadow_right,
+                                   impl->shadow_top,
+                                   impl->shadow_bottom,
                                    monitor,
                                    &bounds,
                                    layout,
@@ -1596,7 +1850,7 @@ static void
 show_popup (GdkSurface *surface)
 {
   gdk_x11_surface_raise (surface);
-  gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
+  gdk_surface_set_is_mapped (surface, TRUE);
   gdk_x11_surface_show (surface, FALSE);
   gdk_surface_invalidate_rect (surface, NULL);
 }
@@ -1720,10 +1974,6 @@ gdk_x11_surface_enter_leave_monitors (GdkSurface *surface)
       g_object_unref (monitor);
     }
 }
-
-static void gdk_x11_surface_set_geometry_hints (GdkSurface         *surface,
-                                                const GdkGeometry *geometry,
-                                                GdkSurfaceHints     geom_mask);
 
 void
 _gdk_x11_surface_set_surface_scale (GdkSurface *surface,
@@ -2813,31 +3063,6 @@ gdk_x11_surface_set_utf8_property  (GdkSurface *surface,
                        GDK_SURFACE_XID (surface),
                        gdk_x11_get_xatom_by_name_for_display (display, name));
     }
-}
-
-static void
-gdk_x11_surface_set_shadow_width (GdkSurface *surface,
-                                 int        left,
-                                 int        right,
-                                 int        top,
-                                 int        bottom)
-{
-  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
-  Atom frame_extents;
-  gulong data[4] = {
-    left * impl->surface_scale,
-    right * impl->surface_scale,
-    top * impl->surface_scale,
-    bottom * impl->surface_scale
-  };
-
-  frame_extents = gdk_x11_get_xatom_by_name_for_display (gdk_surface_get_display (surface),
-                                                         "_GTK_FRAME_EXTENTS");
-  XChangeProperty (GDK_SURFACE_XDISPLAY (surface),
-                   GDK_SURFACE_XID (surface),
-                   frame_extents, XA_CARDINAL,
-                   32, PropModeReplace,
-                   (guchar *) &data, 4);
 }
 
 /**
@@ -4095,6 +4320,9 @@ _gdk_x11_moveresize_configure_done (GdkDisplay *display,
   XEvent *tmp_event;
   MoveResizeData *mv_resize = get_move_resize_data (display, FALSE);
 
+  gdk_surface_thaw_updates (surface);
+  gdk_surface_request_layout (surface);
+
   if (!mv_resize || surface != mv_resize->moveresize_surface)
     return FALSE;
 
@@ -4565,9 +4793,10 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->drag_begin = _gdk_x11_surface_drag_begin;
   impl_class->get_scale_factor = gdk_x11_surface_get_scale_factor;
   impl_class->set_opaque_region = gdk_x11_surface_set_opaque_region;
-  impl_class->set_shadow_width = gdk_x11_surface_set_shadow_width;
   impl_class->create_gl_context = gdk_x11_surface_create_gl_context;
   impl_class->get_unscaled_size = gdk_x11_surface_get_unscaled_size;
+  impl_class->request_layout = gdk_x11_surface_request_layout;
+  impl_class->compute_size = gdk_x11_surface_compute_size;
 }
 
 #define LAST_PROP 1
@@ -4695,14 +4924,6 @@ gdk_x11_popup_iface_init (GdkPopupInterface *iface)
   iface->get_position_x = gdk_x11_popup_get_position_x;
   iface->get_position_y = gdk_x11_popup_get_position_y;
 }
-
-typedef struct {
-  GdkX11Surface parent_instance;
-} GdkX11Toplevel;
-
-typedef struct {
-  GdkX11SurfaceClass parent_class;
-} GdkX11ToplevelClass;
 
 static void gdk_x11_toplevel_iface_init (GdkToplevelInterface *iface);
 
@@ -4849,59 +5070,27 @@ gdk_x11_toplevel_class_init (GdkX11ToplevelClass *class)
   gdk_toplevel_install_properties (object_class, LAST_PROP);
 }
 
-static gboolean
+static void
 gdk_x11_toplevel_present (GdkToplevel       *toplevel,
                           GdkToplevelLayout *layout)
 {
   GdkSurface *surface = GDK_SURFACE (toplevel);
-  GdkDisplay *display = gdk_surface_get_display (surface);
-  GdkMonitor *monitor;
-  GdkToplevelSize size;
-  int bounds_width, bounds_height;
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
   int width, height;
-  GdkGeometry geometry;
-  GdkSurfaceHints mask;
   gboolean was_mapped;
+
+  if (surface->destroyed)
+    return;
+
+  was_mapped = GDK_SURFACE_IS_MAPPED (surface);
 
   gdk_x11_surface_unminimize (surface);
 
-  monitor = gdk_display_get_monitor_at_surface (display, surface);
-  if (monitor)
-    {
-      GdkRectangle workarea;
+  g_clear_pointer (&impl->toplevel_layout, gdk_toplevel_layout_unref);
+  impl->toplevel_layout = gdk_toplevel_layout_copy (layout);
 
-      gdk_x11_monitor_get_workarea (monitor, &workarea);
-      bounds_width = workarea.width;
-      bounds_height = workarea.height;
-    }
-  else
-    {
-      bounds_width = G_MAXINT;
-      bounds_height = G_MAXINT;
-    }
-
-  gdk_toplevel_size_init (&size, bounds_width, bounds_height);
-  gdk_toplevel_notify_compute_size (toplevel, &size);
-  g_warn_if_fail (size.width > 0);
-  g_warn_if_fail (size.height > 0);
-  width = size.width;
-  height = size.height;
-
-  if (gdk_toplevel_layout_get_resizable (layout))
-    {
-      geometry.min_width = size.min_width;
-      geometry.min_height = size.min_height;
-      mask = GDK_HINT_MIN_SIZE;
-    }
-  else
-    {
-      geometry.max_width = geometry.min_width = width;
-      geometry.max_height = geometry.min_height = height;
-      mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE;
-    }
-  gdk_x11_surface_set_geometry_hints (surface, &geometry, mask);
-  gdk_surface_constrain_size (&geometry, mask, width, height, &width, &height);
-  gdk_x11_surface_toplevel_resize (surface, width, height);
+  if (compute_toplevel_size (surface, DONT_UPDATE_GEOMETRY, &width, &height))
+    gdk_x11_surface_toplevel_resize (surface, width, height);
 
   if (gdk_toplevel_layout_get_maximized (layout))
     gdk_x11_surface_maximize (surface);
@@ -4921,20 +5110,16 @@ gdk_x11_toplevel_present (GdkToplevel       *toplevel,
   else
     gdk_x11_surface_unfullscreen (surface);
 
-  if (surface->destroyed)
-    return TRUE;
-
-  was_mapped = GDK_SURFACE_IS_MAPPED (surface);
+  impl->next_layout.surface_geometry_dirty = TRUE;
+  gdk_surface_request_layout (surface);
 
   if (!was_mapped)
-    gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
+    gdk_surface_set_is_mapped (surface, TRUE);
 
   gdk_x11_surface_show (surface, was_mapped);
 
   if (!was_mapped)
     gdk_surface_invalidate_rect (surface, NULL);
-
-  return TRUE;
 }
 
 static gboolean
@@ -5100,7 +5285,7 @@ gdk_x11_drag_surface_present (GdkDragSurface *drag_surface,
   GdkSurface *surface = GDK_SURFACE (drag_surface);
 
   gdk_x11_surface_toplevel_resize (surface, width, height);
-  gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
+  gdk_surface_set_is_mapped (surface, TRUE);
   gdk_x11_surface_show (surface, FALSE);
   gdk_surface_invalidate_rect (surface, NULL);
 

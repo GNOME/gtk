@@ -455,6 +455,15 @@ value_is_default (Element      *element,
 
           ret = g_value_get_boolean (&value) == default_value;
         }
+      else if (pspec->owner_type == GTK_TYPE_WINDOW &&
+               (g_str_equal (pspec->name, "default-width") ||
+                g_str_equal (pspec->name, "default-height")))
+        {
+          int default_size;
+
+          default_size = g_value_get_int (&value);
+          ret = default_size <= 0;
+        }
       else
         ret = g_param_value_defaults (pspec, &value);
     }

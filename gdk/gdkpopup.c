@@ -38,15 +38,6 @@
 
 G_DEFINE_INTERFACE (GdkPopup, gdk_popup, GDK_TYPE_SURFACE)
 
-enum
-{
-  POPUP_LAYOUT_CHANGED,
-
-  N_SIGNALS
-};
-
-static guint signals[N_SIGNALS] = { 0 };
-
 static gboolean
 gdk_popup_default_present (GdkPopup       *popup,
                            int             width,
@@ -101,25 +92,6 @@ gdk_popup_default_init (GdkPopupInterface *iface)
                            P_("Whether to hide on outside clicks"),
                            FALSE,
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
-  /**
-   * GdkPopup::popup-layout-changed
-   * @popup: the #GdkSurface that was laid out
-   *
-   * Emitted when the layout of a popup surface has changed, e.g. if the popup
-   * layout was reactive and after the parent moved causing the popover to end
-   * up partially off-screen.
-   */
-  signals[POPUP_LAYOUT_CHANGED] =
-    g_signal_new (g_intern_static_string ("popup-layout-changed"),
-                  GDK_TYPE_POPUP,
-                  G_SIGNAL_RUN_FIRST,
-                  0,
-                  NULL,
-                  NULL,
-                  NULL,
-                  G_TYPE_NONE,
-                  0);
 }
 
 /**
@@ -133,13 +105,16 @@ gdk_popup_default_init (GdkPopupInterface *iface)
  * If the popup was previously now showing, it will be showed,
  * otherwise it will change position according to @layout.
  *
- * After calling this function, the result of the layout can be queried
- * using gdk_popup_get_position_x(), gdk_popup_get_position_y(),
- * gdk_surface_get_width(), gdk_surface_get_height(),
- * gdk_popup_get_rect_anchor() and gdk_popup_get_surface_anchor().
+ * After calling this function, the result should be handled in response
+ * to the #GdkSurface::layout signal being emitted. The resulting popup
+ * position can be queried using gdk_popup_get_position_x(),
+ * gdk_popup_get_position_y(), and the resulting size will be sent as
+ * parameters in the layout signal. Use gdk_popup_get_rect_anchor() and
+ * gdk_popup_get_surface_anchor() to get the resulting anchors.
  *
- * Presenting may have fail, for example if it was immediately
- * hidden if the @popup was set to autohide.
+ * Presenting may fail, for example if the @popup is set to autohide
+ * and is immediately hidden upon being presented. If presenting failed,
+ * the #GdkSurface::layout signal will not me emitted.
  *
  * Returns: %FALSE if it failed to be presented, otherwise %TRUE.
  */
@@ -164,7 +139,7 @@ gdk_popup_present (GdkPopup       *popup,
  * Gets the current popup surface anchor.
  *
  * The value returned may change after calling gdk_popup_present(),
- * or after the "popup-layout-changed" is emitted.
+ * or after the #GdkSurface::layout signal is emitted.
  *
  * Returns: the current surface anchor value of @popup
  */
@@ -183,7 +158,7 @@ gdk_popup_get_surface_anchor (GdkPopup *popup)
  * Gets the current popup rectangle anchor.
  *
  * The value returned may change after calling gdk_popup_present(),
- * or after the "popup-layout-changed" is emitted.
+ * or after the #GdkSurface::layout signal is emitted.
  *
  * Returns: the current rectangle anchor value of @popup
  */

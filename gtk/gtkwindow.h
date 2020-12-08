@@ -215,14 +215,6 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_window_get_default_size (GtkWindow   *window,
                                       int         *width,
                                       int         *height);
-GDK_AVAILABLE_IN_ALL
-void     gtk_window_resize           (GtkWindow   *window,
-                                      int          width,
-                                      int          height);
-GDK_AVAILABLE_IN_ALL
-void     gtk_window_get_size         (GtkWindow   *window,
-                                      int         *width,
-                                      int         *height);
 
 GDK_AVAILABLE_IN_ALL
 GtkWindowGroup *gtk_window_get_group (GtkWindow   *window);
@@ -250,6 +242,9 @@ GtkWidget *gtk_window_get_titlebar         (GtkWindow    *window);
 
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_window_is_maximized           (GtkWindow    *window);
+
+GDK_AVAILABLE_IN_ALL
+gboolean gtk_window_is_fullscreen          (GtkWindow    *window);
 
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_destroy                (GtkWindow    *window);

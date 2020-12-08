@@ -4531,8 +4531,6 @@ surface_state_callback (GdkSurface  *window,
 
   new_state = gdk_toplevel_get_state (GDK_TOPLEVEL (window));
   msg = g_strconcat ((const char *)g_object_get_data (G_OBJECT (label), "title"), ": ",
-                     (new_state & GDK_TOPLEVEL_STATE_WITHDRAWN) ?
-                     "withdrawn" : "not withdrawn", ", ",
                      (new_state & GDK_TOPLEVEL_STATE_MINIMIZED) ?
                      "minimized" : "not minimized", ", ",
                      (new_state & GDK_TOPLEVEL_STATE_STICKY) ?
@@ -4776,17 +4774,6 @@ get_ints (GtkWidget *window,
 }
 
 static void
-set_size_callback (GtkWidget *widget,
-                   gpointer   data)
-{
-  int w, h;
-  
-  get_ints (data, &w, &h);
-
-  gtk_window_resize (GTK_WINDOW (g_object_get_data (data, "target")), w, h);
-}
-
-static void
 unset_default_size_callback (GtkWidget *widget,
                              gpointer   data)
 {
@@ -4889,13 +4876,6 @@ window_controls (GtkWidget *window)
 			   G_CALLBACK (gtk_widget_queue_resize),
 			   window,
 			   G_CONNECT_SWAPPED);
-  gtk_box_append (GTK_BOX (vbox), button);
-
-  button = gtk_button_new_with_label ("Resize");
-  g_signal_connect (button,
-		    "clicked",
-		    G_CALLBACK (set_size_callback),
-		    control_window);
   gtk_box_append (GTK_BOX (vbox), button);
 
   button = gtk_button_new_with_label ("Set default size");

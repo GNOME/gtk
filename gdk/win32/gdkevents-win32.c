@@ -562,7 +562,6 @@ event_mask_string (GdkEventMask mask)
   BIT (VISIBILITY_NOTIFY);
   BIT (PROXIMITY_IN);
   BIT (PROXIMITY_OUT);
-  BIT (SUBSTRUCTURE);
   BIT (SCROLL);
 #undef BIT
 
@@ -1276,35 +1275,6 @@ _gdk_win32_get_window_rect (GdkSurface *window,
   rect->bottom = point.y + client_rect.bottom - client_rect.top;
 
   return !impl->inhibit_configure;
-}
-
-void
-_gdk_win32_do_emit_configure_event (GdkSurface *surface,
-                                    RECT       rect)
-{
-  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
-
-  impl->unscaled_width = rect.right - rect.left;
-  impl->unscaled_height = rect.bottom - rect.top;
-  surface->width = (impl->unscaled_width + impl->surface_scale - 1) / impl->surface_scale;
-  surface->height = (impl->unscaled_height + impl->surface_scale - 1) / impl->surface_scale;
-  surface->x = rect.left / impl->surface_scale;
-  surface->y = rect.top / impl->surface_scale;
-
-  _gdk_surface_update_size (surface);
-
-  g_signal_emit_by_name (surface, "size-changed", surface->width, surface->height);
-}
-
-void
-_gdk_win32_emit_configure_event (GdkSurface *surface)
-{
-  RECT rect;
-
-  if (!_gdk_win32_get_window_rect (surface, &rect))
-    return;
-
-  _gdk_win32_do_emit_configure_event (surface, rect);
 }
 
 cairo_region_t *
@@ -2855,11 +2825,6 @@ gdk_event_translate (MSG *msg,
 	  set_bits = 0;
 	  unset_bits = 0;
 
-	  if (IsWindowVisible (msg->hwnd))
-	    unset_bits |= GDK_TOPLEVEL_STATE_WITHDRAWN;
-	  else
-	    set_bits |= GDK_TOPLEVEL_STATE_WITHDRAWN;
-
 	  if (IsIconic (msg->hwnd))
 	    set_bits |= GDK_TOPLEVEL_STATE_MINIMIZED;
 	  else
@@ -2870,6 +2835,7 @@ gdk_event_translate (MSG *msg,
 	  else
 	    unset_bits |= GDK_TOPLEVEL_STATE_MAXIMIZED;
 
+	  gdk_surface_set_is_mapped (window, !!IsWindowVisible (msg->hwnd));
 	  gdk_synthesize_surface_state (window, unset_bits, set_bits);
 
 	  new_state = window->state;
@@ -2890,7 +2856,7 @@ gdk_event_translate (MSG *msg,
 	{
 	  if (!IsIconic (msg->hwnd) &&
 	      !GDK_SURFACE_DESTROYED (window))
-	    _gdk_win32_emit_configure_event (window);
+	    gdk_surface_request_layout (window);
 	}
 
       if ((windowpos->flags & SWP_HIDEWINDOW) &&

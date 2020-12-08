@@ -376,7 +376,7 @@ gtk_combo_box_size_allocate (GtkWidget *widget,
   gtk_widget_set_size_request (priv->popup_widget,
                                MAX (width, menu_width), -1);
 
-  gtk_native_check_resize (GTK_NATIVE (priv->popup_widget));
+  gtk_popover_present (GTK_POPOVER (priv->popup_widget));
 }
 
 static void

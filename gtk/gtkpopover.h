@@ -121,6 +121,9 @@ GDK_AVAILABLE_IN_ALL
 void gtk_popover_set_default_widget (GtkPopover *popover,
                                      GtkWidget  *widget);
 
+GDK_AVAILABLE_IN_ALL
+void gtk_popover_present (GtkPopover *popover);
+
 
 G_END_DECLS
 

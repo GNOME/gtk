@@ -76,8 +76,7 @@
  */
 
 enum {
-  POPUP_LAYOUT_CHANGED,
-  SIZE_CHANGED,
+  LAYOUT,
   RENDER,
   EVENT,
   ENTER_MONITOR,
@@ -114,6 +113,9 @@ static void update_cursor               (GdkDisplay *display,
 
 static void gdk_surface_set_frame_clock (GdkSurface      *surface,
                                          GdkFrameClock  *clock);
+
+static void gdk_surface_queue_set_is_mapped (GdkSurface *surface,
+                                             gboolean    is_mapped);
 
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -285,6 +287,10 @@ void
 gdk_surface_layout_popup_helper (GdkSurface     *surface,
                                  int             width,
                                  int             height,
+                                 int             shadow_left,
+                                 int             shadow_right,
+                                 int             shadow_top,
+                                 int             shadow_bottom,
                                  GdkMonitor     *monitor,
                                  GdkRectangle   *bounds,
                                  GdkPopupLayout *layout,
@@ -315,8 +321,8 @@ gdk_surface_layout_popup_helper (GdkSurface     *surface,
   gdk_popup_layout_get_offset (layout, &rect_anchor_dx, &rect_anchor_dy);
   anchor_hints = gdk_popup_layout_get_anchor_hints (layout);
 
-  final_rect.width = width - surface->shadow_left - surface->shadow_right;
-  final_rect.height = height - surface->shadow_top - surface->shadow_bottom;
+  final_rect.width = width - shadow_left - shadow_right;
+  final_rect.height = height - shadow_top - shadow_bottom;
   final_rect.x = maybe_flip_position (bounds->x,
                                       bounds->width,
                                       root_rect.x,
@@ -380,10 +386,10 @@ gdk_surface_layout_popup_helper (GdkSurface     *surface,
         final_rect.height = bounds->y + bounds->height - final_rect.y;
     }
 
-  final_rect.x -= surface->shadow_left;
-  final_rect.y -= surface->shadow_top;
-  final_rect.width += surface->shadow_left + surface->shadow_right;
-  final_rect.height += surface->shadow_top + surface->shadow_bottom;
+  final_rect.x -= shadow_left;
+  final_rect.y -= shadow_top;
+  final_rect.width += shadow_left + shadow_right;
+  final_rect.height += shadow_top + shadow_bottom;
 
   gdk_surface_get_origin (surface->parent, &x, &y);
   final_rect.x -= x;
@@ -469,7 +475,7 @@ gdk_surface_init (GdkSurface *surface)
 {
   /* 0-initialization is good for all other fields. */
 
-  surface->state = GDK_TOPLEVEL_STATE_WITHDRAWN;
+  surface->state = 0;
   surface->fullscreen_mode = GDK_FULLSCREEN_ON_CURRENT_MONITOR;
   surface->width = 1;
   surface->height = 1;
@@ -548,18 +554,19 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   /**
-   * GdkSurface::size-changed:
+   * GdkSurface::layout:
    * @surface: the #GdkSurface
-   * @width: the new width
-   * @height: the new height
+   * @width: the current width
+   * @height: the current height
    *
-   * Emitted when the size of @surface is changed.
+   * Emitted when the size of @surface is changed, or when relayout should
+   * be performed.
    *
    * Surface size is reported in ”application pixels”, not
    * ”device pixels” (see gdk_surface_get_scale_factor()).
    */
-  signals[SIZE_CHANGED] =
-    g_signal_new (g_intern_static_string ("size-changed"),
+  signals[LAYOUT] =
+    g_signal_new (g_intern_static_string ("layout"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_FIRST,
                   0,
@@ -919,7 +926,10 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
 
   _gdk_surface_clear_update_area (surface);
 
-  surface->state |= GDK_TOPLEVEL_STATE_WITHDRAWN;
+  g_clear_handle_id (&surface->set_is_mapped_source_id, g_source_remove);
+  surface->is_mapped = FALSE;
+  surface->pending_is_mapped = FALSE;
+
   surface->destroyed = TRUE;
 
   surface_remove_from_pointer_info (surface, surface->display);
@@ -1264,7 +1274,7 @@ gdk_surface_schedule_update (GdkSurface *surface)
   if (surface->update_freeze_count ||
       gdk_surface_is_toplevel_frozen (surface))
     {
-      surface->pending_schedule_update = TRUE;
+      surface->pending_phases |= GDK_FRAME_CLOCK_PHASE_PAINT;
       return;
     }
 
@@ -1318,6 +1328,50 @@ gdk_surface_process_updates_internal (GdkSurface *surface)
 }
 
 static void
+gdk_surface_layout_on_clock (GdkFrameClock *clock,
+                             void          *data)
+{
+  GdkSurface *surface = GDK_SURFACE (data);
+  GdkSurfaceClass *class;
+
+  g_return_if_fail (GDK_IS_SURFACE (surface));
+
+  if (GDK_SURFACE_DESTROYED (surface))
+    return;
+
+  if (!GDK_SURFACE_IS_MAPPED (surface))
+    return;
+
+  surface->pending_phases &= ~GDK_FRAME_CLOCK_PHASE_LAYOUT;
+
+  class = GDK_SURFACE_GET_CLASS (surface);
+  if (class->compute_size)
+    {
+      if (class->compute_size (surface))
+        return;
+    }
+
+  g_signal_emit (surface, signals[LAYOUT], 0, surface->width, surface->height);
+}
+
+void
+gdk_surface_request_layout (GdkSurface *surface)
+{
+  GdkSurfaceClass *class;
+  GdkFrameClock *frame_clock;
+
+  class = GDK_SURFACE_GET_CLASS (surface);
+  if (class->request_layout)
+    class->request_layout (surface);
+
+  frame_clock = gdk_surface_get_frame_clock (surface);
+  g_return_if_fail (frame_clock);
+
+  gdk_frame_clock_request_phase (frame_clock,
+                                 GDK_FRAME_CLOCK_PHASE_LAYOUT);
+}
+
+static void
 gdk_surface_paint_on_clock (GdkFrameClock *clock,
                             void          *data)
 {
@@ -1338,6 +1392,7 @@ gdk_surface_paint_on_clock (GdkFrameClock *clock,
        * do the update later when idle instead. */
       !surface->in_update)
     {
+      surface->pending_phases &= ~GDK_FRAME_CLOCK_PHASE_PAINT;
       gdk_surface_process_updates_internal (surface);
       gdk_surface_remove_update_surface (surface);
     }
@@ -1515,35 +1570,13 @@ gdk_surface_thaw_updates (GdkSurface *surface)
 
   if (--surface->update_freeze_count == 0)
     {
-      _gdk_frame_clock_inhibit_freeze (surface->frame_clock);
+      GdkFrameClock *frame_clock = surface->frame_clock;
 
-      if (surface->pending_schedule_update)
-        {
-          surface->pending_schedule_update = FALSE;
-          gdk_surface_schedule_update (surface);
-        }
+      _gdk_frame_clock_inhibit_freeze (frame_clock);
+
+      if (surface->pending_phases)
+        gdk_frame_clock_request_phase (frame_clock, surface->pending_phases);
     }
-}
-
-void
-gdk_surface_freeze_toplevel_updates (GdkSurface *surface)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  surface->update_and_descendants_freeze_count++;
-  gdk_surface_freeze_updates (surface);
-}
-
-void
-gdk_surface_thaw_toplevel_updates (GdkSurface *surface)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-  g_return_if_fail (surface->update_and_descendants_freeze_count > 0);
-
-  surface->update_and_descendants_freeze_count--;
-  gdk_surface_schedule_update (surface);
-  gdk_surface_thaw_updates (surface);
-
 }
 
 /*
@@ -1669,8 +1702,7 @@ gdk_surface_hide (GdkSurface *surface)
 
   was_mapped = GDK_SURFACE_IS_MAPPED (surface);
 
-  if (GDK_SURFACE_IS_MAPPED (surface))
-    gdk_synthesize_surface_state (surface, 0, GDK_TOPLEVEL_STATE_WITHDRAWN);
+  gdk_surface_queue_set_is_mapped (surface, FALSE);
 
   if (was_mapped)
     {
@@ -2412,6 +2444,10 @@ gdk_surface_set_frame_clock (GdkSurface     *surface,
                         G_CALLBACK (gdk_surface_resume_events),
                         surface);
       g_signal_connect (G_OBJECT (clock),
+                        "layout",
+                        G_CALLBACK (gdk_surface_layout_on_clock),
+                        surface);
+      g_signal_connect (G_OBJECT (clock),
                         "paint",
                         G_CALLBACK (gdk_surface_paint_on_clock),
                         surface);
@@ -2430,6 +2466,9 @@ gdk_surface_set_frame_clock (GdkSurface     *surface,
                                             surface);
       g_signal_handlers_disconnect_by_func (G_OBJECT (surface->frame_clock),
                                             G_CALLBACK (gdk_surface_resume_events),
+                                            surface);
+      g_signal_handlers_disconnect_by_func (G_OBJECT (surface->frame_clock),
+                                            G_CALLBACK (gdk_surface_layout_on_clock),
                                             surface);
       g_signal_handlers_disconnect_by_func (G_OBJECT (surface->frame_clock),
                                             G_CALLBACK (gdk_surface_paint_on_clock),
@@ -2570,58 +2609,10 @@ gdk_surface_set_opaque_region (GdkSurface      *surface,
     class->set_opaque_region (surface, region);
 }
 
-/**
- * gdk_surface_set_shadow_width:
- * @surface: a #GdkSurface
- * @left: The left extent
- * @right: The right extent
- * @top: The top extent
- * @bottom: The bottom extent
- *
- * Newer GTK windows using client-side decorations use extra geometry
- * around their frames for effects like shadows and invisible borders.
- * Window managers that want to maximize windows or snap to edges need
- * to know where the extents of the actual frame lie, so that users
- * don’t feel like windows are snapping against random invisible edges.
- *
- * Note that this property is automatically updated by GTK, so this
- * function should only be used by applications which do not use GTK
- * to create toplevel surfaces.
- */
-void
-gdk_surface_set_shadow_width (GdkSurface *surface,
-                              int        left,
-                              int        right,
-                              int        top,
-                              int        bottom)
-{
-  GdkSurfaceClass *class;
-
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-  g_return_if_fail (!GDK_SURFACE_DESTROYED (surface));
-  g_return_if_fail (left >= 0 && right >= 0 && top >= 0 && bottom >= 0);
-
-  if (surface->shadow_left == left &&
-      surface->shadow_right == right &&
-      surface->shadow_top == top &&
-      surface->shadow_bottom == bottom)
-    return;
-
-  surface->shadow_top = top;
-  surface->shadow_left = left;
-  surface->shadow_right = right;
-  surface->shadow_bottom = bottom;
-
-  class = GDK_SURFACE_GET_CLASS (surface);
-  if (class->set_shadow_width)
-    class->set_shadow_width (surface, left, right, top, bottom);
-}
-
 void
 gdk_surface_set_state (GdkSurface      *surface,
                        GdkToplevelState new_state)
 {
-  gboolean was_mapped, mapped;
   gboolean was_sticky, sticky;
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
@@ -2633,19 +2624,14 @@ gdk_surface_set_state (GdkSurface      *surface,
    * inconsistent state to the user.
    */
 
-  was_mapped = GDK_SURFACE_IS_MAPPED (surface);
   was_sticky = GDK_SURFACE_IS_STICKY (surface);
 
   surface->state = new_state;
 
-  mapped = GDK_SURFACE_IS_MAPPED (surface);
   sticky = GDK_SURFACE_IS_STICKY (surface);
 
   if (GDK_IS_TOPLEVEL (surface))
     g_object_notify (G_OBJECT (surface), "state");
-
-  if (was_mapped != mapped)
-    g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
 
   if (was_sticky != sticky)
     g_object_notify (G_OBJECT (surface), "sticky");
@@ -2657,6 +2643,94 @@ gdk_synthesize_surface_state (GdkSurface       *surface,
                               GdkToplevelState  set_flags)
 {
   gdk_surface_set_state (surface, (surface->state | set_flags) & ~unset_flags);
+}
+
+void
+gdk_surface_queue_state_change (GdkSurface       *surface,
+                                GdkToplevelState  unset_flags,
+                                GdkToplevelState  set_flags)
+{
+  surface->pending_unset_flags |= unset_flags;
+  surface->pending_set_flags &= ~unset_flags;
+
+  surface->pending_set_flags |= set_flags;
+  surface->pending_unset_flags &= ~set_flags;
+}
+
+void
+gdk_surface_apply_state_change (GdkSurface *surface)
+{
+  if (!surface->pending_unset_flags && !surface->pending_set_flags)
+    return;
+
+  gdk_synthesize_surface_state (surface,
+                                surface->pending_unset_flags,
+                                surface->pending_set_flags);
+  surface->pending_unset_flags = 0;
+  surface->pending_set_flags = 0;
+}
+
+static gboolean
+set_is_mapped_idle (gpointer user_data)
+{
+  GdkSurface *surface = GDK_SURFACE (user_data);
+
+  surface->set_is_mapped_source_id = 0;
+
+  g_return_val_if_fail (surface->pending_is_mapped != surface->is_mapped,
+                        G_SOURCE_REMOVE);
+
+  surface->is_mapped = surface->pending_is_mapped;
+  if (surface->is_mapped)
+    gdk_surface_invalidate_rect (surface, NULL);
+
+  g_object_notify (G_OBJECT (surface), "mapped");
+
+  return G_SOURCE_REMOVE;
+}
+
+void
+gdk_surface_set_is_mapped (GdkSurface *surface,
+                           gboolean    is_mapped)
+{
+  gboolean was_mapped;
+
+  if (surface->pending_is_mapped != surface->is_mapped)
+    g_clear_handle_id (&surface->set_is_mapped_source_id, g_source_remove);
+
+  surface->pending_is_mapped = is_mapped;
+
+  was_mapped = surface->is_mapped;
+  surface->is_mapped = is_mapped;
+  if (surface->is_mapped)
+    gdk_surface_invalidate_rect (surface, NULL);
+
+  if (was_mapped != is_mapped)
+    g_object_notify (G_OBJECT (surface), "mapped");
+}
+
+static void
+gdk_surface_queue_set_is_mapped (GdkSurface *surface,
+                                 gboolean    is_mapped)
+{
+  if (surface->pending_is_mapped == is_mapped)
+    return;
+
+  surface->pending_is_mapped = is_mapped;
+
+  if (surface->is_mapped == surface->pending_is_mapped)
+    {
+      g_clear_handle_id (&surface->set_is_mapped_source_id, g_source_remove);
+    }
+  else
+    {
+      g_return_if_fail (!surface->set_is_mapped_source_id);
+
+      surface->set_is_mapped_source_id =
+        g_idle_add_full (G_PRIORITY_HIGH - 10,
+                         set_is_mapped_idle,
+                         surface, NULL);
+    }
 }
 
 static gboolean
@@ -2770,14 +2844,6 @@ add_event_mark (GdkEvent *event,
         break;
       }
 
-    case GDK_CONFIGURE:
-      {
-        int width, height;
-        gdk_configure_event_get_size (event, &width, &height);
-        message = g_strdup_printf ("%s {width=%d, height=%d}", kind, width, height);
-        break;
-      }
-
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
     case GDK_TOUCHPAD_SWIPE:
@@ -2815,30 +2881,18 @@ add_event_mark (GdkEvent *event,
 gboolean
 gdk_surface_handle_event (GdkEvent *event)
 {
+  GdkSurface *surface = gdk_event_get_surface (event);
   gint64 begin_time = GDK_PROFILER_CURRENT_TIME;
   gboolean handled = FALSE;
 
   if (check_autohide (event))
     return TRUE;
 
-  if (gdk_event_get_event_type (event) == GDK_CONFIGURE)
-    {
-      int width, height;
 
-      gdk_configure_event_get_size (event, &width, &height);
-      g_signal_emit (gdk_event_get_surface (event), signals[SIZE_CHANGED], 0,
-                     width, height);
-      handled = TRUE;
-    }
-  else
-    {
-      GdkSurface *surface = gdk_event_get_surface (event);
+  if (gdk_event_get_event_type (event) == GDK_MOTION_NOTIFY)
+    surface->request_motion = FALSE;
 
-      if (gdk_event_get_event_type (event) == GDK_MOTION_NOTIFY)
-        surface->request_motion = FALSE;
-
-      g_signal_emit (surface, signals[EVENT], 0, event, &handled);
-    }
+  g_signal_emit (surface, signals[EVENT], 0, event, &handled);
 
   if (GDK_PROFILER_IS_RUNNING)
     add_event_mark (event, begin_time, GDK_PROFILER_CURRENT_TIME);

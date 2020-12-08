@@ -47,7 +47,6 @@ struct _GtkTooltipWindow
   GdkSurface *surface;
   GskRenderer *renderer;
 
-  GdkToplevelState state;
   GtkWidget *relative_to;
   GdkRectangle rect;
   GdkGravity rect_anchor;
@@ -139,11 +138,10 @@ gtk_tooltip_window_relayout (GtkTooltipWindow *window)
   gdk_popup_layout_unref (layout);
 }
 
-static void
-gtk_tooltip_window_native_check_resize (GtkNative *native)
+void
+gtk_tooltip_window_present (GtkTooltipWindow *window)
 {
-  GtkTooltipWindow *window = GTK_TOOLTIP_WINDOW (native);
-  GtkWidget *widget = GTK_WIDGET (native);
+  GtkWidget *widget = GTK_WIDGET (window);
 
   if (!_gtk_widget_get_alloc_needed (widget))
     {
@@ -152,12 +150,21 @@ gtk_tooltip_window_native_check_resize (GtkNative *native)
   else if (gtk_widget_get_visible (widget))
     {
       gtk_tooltip_window_relayout (window);
-      if (window->surface)
-        gtk_widget_allocate (GTK_WIDGET (window),
-                             gdk_surface_get_width (window->surface),
-                             gdk_surface_get_height (window->surface),
-                             -1, NULL);
     }
+}
+
+static void
+gtk_tooltip_window_native_layout (GtkNative *native,
+                                  int        width,
+                                  int        height)
+{
+  GtkWidget *widget = GTK_WIDGET (native);
+
+  if (gtk_widget_needs_allocate (widget))
+    gtk_widget_allocate (widget, width, height, -1, NULL);
+  else
+    gtk_widget_ensure_allocate (widget);
+
 }
 
 static void
@@ -166,25 +173,16 @@ gtk_tooltip_window_native_init (GtkNativeInterface *iface)
   iface->get_surface = gtk_tooltip_window_native_get_surface;
   iface->get_renderer = gtk_tooltip_window_native_get_renderer;
   iface->get_surface_transform = gtk_tooltip_window_native_get_surface_transform;
-  iface->check_resize = gtk_tooltip_window_native_check_resize;
+  iface->layout = gtk_tooltip_window_native_layout;
 }
 
 static void
-surface_state_changed (GtkWidget *widget)
+mapped_changed (GdkSurface *surface,
+                GParamSpec *pspec,
+                GtkWidget  *widget)
 {
-  GtkTooltipWindow *window = GTK_TOOLTIP_WINDOW (widget);
-  GdkToplevelState new_surface_state;
-  GdkToplevelState changed_mask;
-
-  new_surface_state = gdk_toplevel_get_state (GDK_TOPLEVEL (window->surface));
-  changed_mask = new_surface_state ^ window->state;
-  window->state = new_surface_state;
-
-  if (changed_mask & GDK_TOPLEVEL_STATE_WITHDRAWN)
-    {
-      if (window->state & GDK_TOPLEVEL_STATE_WITHDRAWN)
-        gtk_widget_hide (widget);
-    }
+  if (!gdk_surface_get_mapped (surface))
+    gtk_widget_hide (widget);
 }
 
 static gboolean
@@ -216,13 +214,15 @@ gtk_tooltip_window_realize (GtkWidget *widget)
 
   gdk_surface_set_widget (window->surface, widget);
 
-  g_signal_connect_swapped (window->surface, "notify::state", G_CALLBACK (surface_state_changed), widget);
+  g_signal_connect (window->surface, "notify::mapped", G_CALLBACK (mapped_changed), widget);
   g_signal_connect (window->surface, "render", G_CALLBACK (surface_render), widget);
   g_signal_connect (window->surface, "event", G_CALLBACK (surface_event), widget);
 
   GTK_WIDGET_CLASS (gtk_tooltip_window_parent_class)->realize (widget);
 
   window->renderer = gsk_renderer_new_for_surface (window->surface);
+
+  gtk_native_realize (GTK_NATIVE (window));
 }
 
 static void
@@ -230,12 +230,14 @@ gtk_tooltip_window_unrealize (GtkWidget *widget)
 {
   GtkTooltipWindow *window = GTK_TOOLTIP_WINDOW (widget);
 
+  gtk_native_unrealize (GTK_NATIVE (window));
+
   GTK_WIDGET_CLASS (gtk_tooltip_window_parent_class)->unrealize (widget);
 
   gsk_renderer_unrealize (window->renderer);
   g_clear_object (&window->renderer);
 
-  g_signal_handlers_disconnect_by_func (window->surface, surface_state_changed, widget);
+  g_signal_handlers_disconnect_by_func (window->surface, mapped_changed, widget);
   g_signal_handlers_disconnect_by_func (window->surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (window->surface, surface_event, widget);
   gdk_surface_set_widget (window->surface, NULL);
@@ -340,7 +342,7 @@ gtk_tooltip_window_show (GtkWidget *widget)
 {
   _gtk_widget_set_visible_flag (widget, TRUE);
   gtk_widget_realize (widget);
-  gtk_tooltip_window_native_check_resize (GTK_NATIVE (widget));
+  gtk_tooltip_window_present (GTK_TOOLTIP_WINDOW (widget));
   gtk_widget_map (widget);
 }
 

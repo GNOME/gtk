@@ -1006,9 +1006,7 @@ gdk_win32_surface_hide (GdkSurface *window)
 			   _gdk_win32_surface_state_to_string (window->state)));
 
   if (GDK_SURFACE_IS_MAPPED (window))
-    gdk_synthesize_surface_state (window,
-				 0,
-				 GDK_TOPLEVEL_STATE_WITHDRAWN);
+    gdk_surface_set_is_mapped (window, FALSE);
 
   _gdk_surface_clear_update_area (window);
 
@@ -1190,7 +1188,7 @@ gdk_win32_surface_move_resize_internal (GdkSurface *window,
  out:
   surface->inhibit_configure = FALSE;
 
-  _gdk_win32_emit_configure_event (window);
+  gdk_surface_request_layout (window);
 }
 
 void
@@ -1217,6 +1215,7 @@ gdk_win32_surface_layout_popup (GdkSurface     *surface,
                                 int             height,
                                 GdkPopupLayout *layout)
 {
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
   GdkMonitor *monitor;
   GdkRectangle bounds;
   GdkRectangle final_rect;
@@ -1229,6 +1228,10 @@ gdk_win32_surface_layout_popup (GdkSurface     *surface,
   gdk_surface_layout_popup_helper (surface,
                                    width,
                                    height,
+                                   impl->margins.left,
+                                   impl->margins.right,
+                                   impl->margins.top,
+                                   impl->margins.bottom,
                                    monitor,
                                    &bounds,
                                    layout,
@@ -1257,7 +1260,7 @@ static void
 show_popup (GdkSurface *surface)
 {
   gdk_win32_surface_raise (surface);
-  gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
+  gdk_surface_set_is_mapped (surface, TRUE);
   show_window_internal (surface, FALSE, FALSE);
   gdk_surface_invalidate_rect (surface, NULL);
 }
@@ -4013,7 +4016,7 @@ gdk_win32_surface_do_move_resize_drag (GdkSurface *window,
        rect.bottom != new_rect.bottom))
     {
       context->native_move_resize_pending = TRUE;
-      _gdk_win32_do_emit_configure_event (window, new_rect);
+      gdk_surface_request_layout (window);
     }
   else if (context->op == GDK_WIN32_DRAGOP_MOVE &&
            (rect.left != new_rect.left ||
@@ -4021,7 +4024,7 @@ gdk_win32_surface_do_move_resize_drag (GdkSurface *window,
     {
       context->native_move_resize_pending = FALSE;
 
-      _gdk_win32_do_emit_configure_event (window, new_rect);
+      gdk_surface_request_layout (window);
 
       if (impl->layered)
         {
@@ -4615,8 +4618,6 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
 
   //impl_class->beep = gdk_x11_surface_beep;
 
-
-  impl_class->set_shadow_width = gdk_win32_surface_set_shadow_width;
   impl_class->destroy_notify = gdk_win32_surface_destroy_notify;
   impl_class->drag_begin = _gdk_win32_surface_drag_begin;
   impl_class->create_gl_context = _gdk_win32_surface_create_gl_context;
@@ -4921,7 +4922,7 @@ show_surface (GdkSurface *surface)
   was_mapped = GDK_SURFACE_IS_MAPPED (surface);
 
   if (!was_mapped)
-    gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
+    gdk_surface_set_is_mapped (surface, TRUE);
 
   gdk_win32_surface_show (surface, FALSE);
 
@@ -4991,6 +4992,15 @@ gdk_win32_toplevel_present (GdkToplevel       *toplevel,
     gdk_win32_surface_unfullscreen (surface);
 
   show_surface (surface);
+
+  if (size.shadow.is_valid)
+    {
+      gdk_win32_surface_set_shadow_width (surface,
+                                          size.shadow.left,
+                                          size.shadow.right,
+                                          size.shadow.top,
+                                          size.shadow.bottom);
+    }
 
   return TRUE;
 }

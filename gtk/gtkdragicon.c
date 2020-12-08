@@ -147,22 +147,22 @@ gtk_drag_icon_move_resize (GtkDragIcon *icon)
 }
 
 static void
-gtk_drag_icon_native_check_resize (GtkNative *native)
+gtk_drag_icon_present (GtkDragIcon *icon)
 {
-  GtkDragIcon *icon = GTK_DRAG_ICON (native);
-  GtkWidget *widget = GTK_WIDGET (native);
+  GtkWidget *widget = GTK_WIDGET (icon);
 
   if (!_gtk_widget_get_alloc_needed (widget))
     gtk_widget_ensure_allocate (widget);
   else if (gtk_widget_get_visible (widget))
-    {
-      gtk_drag_icon_move_resize (icon);
-      if (icon->surface)
-        gtk_widget_allocate (widget,
-                             gdk_surface_get_width (icon->surface),
-                             gdk_surface_get_height (icon->surface),
-                             -1, NULL);
-    }
+    gtk_drag_icon_move_resize (icon);
+}
+
+static void
+gtk_drag_icon_native_layout (GtkNative *native,
+                             int        width,
+                             int        height)
+{
+  gtk_widget_allocate (GTK_WIDGET (native), width, height, -1, NULL);
 }
 
 static void
@@ -171,7 +171,7 @@ gtk_drag_icon_native_init (GtkNativeInterface *iface)
   iface->get_surface = gtk_drag_icon_native_get_surface;
   iface->get_renderer = gtk_drag_icon_native_get_renderer;
   iface->get_surface_transform = gtk_drag_icon_native_get_surface_transform;
-  iface->check_resize = gtk_drag_icon_native_check_resize;
+  iface->layout = gtk_drag_icon_native_layout;
 }
 
 static gboolean
@@ -197,12 +197,16 @@ gtk_drag_icon_realize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_drag_icon_parent_class)->realize (widget);
 
   icon->renderer = gsk_renderer_new_for_surface (icon->surface);
+
+  gtk_native_realize (GTK_NATIVE (icon));
 }
 
 static void
 gtk_drag_icon_unrealize (GtkWidget *widget)
 {
   GtkDragIcon *icon = GTK_DRAG_ICON (widget);
+
+  gtk_native_unrealize (GTK_NATIVE (icon));
 
   GTK_WIDGET_CLASS (gtk_drag_icon_parent_class)->unrealize (widget);
 
@@ -279,7 +283,7 @@ gtk_drag_icon_show (GtkWidget *widget)
   _gtk_widget_set_visible_flag (widget, TRUE);
   gtk_css_node_validate (gtk_widget_get_css_node (widget));
   gtk_widget_realize (widget);
-  gtk_drag_icon_native_check_resize (GTK_NATIVE (widget));
+  gtk_drag_icon_present (GTK_DRAG_ICON (widget));
   gtk_widget_map (widget);
 }
 
@@ -414,7 +418,8 @@ gtk_drag_icon_get_for_drag (GdkDrag *drag)
 
       g_object_set_qdata_full (G_OBJECT (drag), drag_icon_quark, g_object_ref_sink (self), g_object_unref);
 
-      gtk_widget_show (self);
+      if (GTK_DRAG_ICON (self)->child != NULL)
+        gtk_widget_show (self);
     }
 
   return self;
@@ -472,7 +477,10 @@ gtk_drag_icon_set_child (GtkDragIcon *self,
   self->child = child;
 
   if (self->child)
-    gtk_widget_set_parent (self->child, GTK_WIDGET (self));
+    {
+      gtk_widget_set_parent (self->child, GTK_WIDGET (self));
+      gtk_widget_show (GTK_WIDGET (self));
+    }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CHILD]);
 }

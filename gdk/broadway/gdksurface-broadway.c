@@ -558,6 +558,7 @@ gdk_broadway_surface_layout_popup (GdkSurface     *surface,
                                    int             height,
                                    GdkPopupLayout *layout)
 {
+  GdkBroadwaySurface *impl = GDK_BROADWAY_SURFACE (surface);
   GdkMonitor *monitor;
   GdkRectangle bounds;
   GdkRectangle final_rect;
@@ -570,6 +571,10 @@ gdk_broadway_surface_layout_popup (GdkSurface     *surface,
   gdk_surface_layout_popup_helper (surface,
                                    width,
                                    height,
+                                   impl->shadow_left,
+                                   impl->shadow_right,
+                                   impl->shadow_top,
+                                   impl->shadow_bottom,
                                    monitor,
                                    &bounds,
                                    layout,
@@ -596,7 +601,7 @@ gdk_broadway_surface_layout_popup (GdkSurface     *surface,
 static void
 show_popup (GdkSurface *surface)
 {
-  gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
+  gdk_surface_set_is_mapped (surface, TRUE);
   gdk_broadway_surface_show (surface, FALSE);
   gdk_surface_invalidate_rect (surface, NULL);
 }
@@ -1516,7 +1521,7 @@ show_surface (GdkSurface *surface)
   was_mapped = GDK_SURFACE_IS_MAPPED (surface);
 
   if (!was_mapped)
-    gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
+    gdk_surface_set_is_mapped (surface, TRUE);
 
   gdk_broadway_surface_show (surface, FALSE);
 
@@ -1524,11 +1529,12 @@ show_surface (GdkSurface *surface)
     gdk_surface_invalidate_rect (surface, NULL);
 }
 
-static gboolean
+static void
 gdk_broadway_toplevel_present (GdkToplevel       *toplevel,
                                GdkToplevelLayout *layout)
 {
   GdkSurface *surface = GDK_SURFACE (toplevel);
+  GdkBroadwaySurface *impl = GDK_BROADWAY_SURFACE (surface);
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkMonitor *monitor;
   GdkToplevelSize size;
@@ -1582,9 +1588,15 @@ gdk_broadway_toplevel_present (GdkToplevel       *toplevel,
   else
     gdk_broadway_surface_unmaximize (surface);
 
-  show_surface (surface);
+  if (size.shadow.is_valid)
+    {
+      impl->shadow_left = size.shadow.left;
+      impl->shadow_right = size.shadow.right;
+      impl->shadow_top = size.shadow.top;
+      impl->shadow_bottom = size.shadow.bottom;
+    }
 
-  return TRUE;
+  show_surface (surface);
 }
 
 static gboolean

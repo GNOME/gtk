@@ -113,7 +113,7 @@ gtk_emoji_chooser_child_size_allocate (GtkWidget *widget,
 
   GTK_WIDGET_CLASS (gtk_emoji_chooser_child_parent_class)->size_allocate (widget, width, height, baseline);
   if (child->variations)
-    gtk_native_check_resize (GTK_NATIVE (child->variations));
+    gtk_popover_present (GTK_POPOVER (child->variations));
 }
 
 static gboolean

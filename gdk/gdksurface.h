@@ -119,18 +119,14 @@ GDK_AVAILABLE_IN_ALL
 void       gdk_surface_queue_render       (GdkSurface       *surface);
 
 GDK_AVAILABLE_IN_ALL
+void       gdk_surface_request_layout     (GdkSurface       *surface);
+
+GDK_AVAILABLE_IN_ALL
 GdkFrameClock* gdk_surface_get_frame_clock      (GdkSurface     *surface);
 
 GDK_AVAILABLE_IN_ALL
 void       gdk_surface_set_opaque_region        (GdkSurface      *surface,
                                                  cairo_region_t *region);
-
-GDK_AVAILABLE_IN_ALL
-void       gdk_surface_set_shadow_width         (GdkSurface      *surface,
-                                                 int             left,
-                                                 int             right,
-                                                 int             top,
-                                                 int             bottom);
 
 GDK_AVAILABLE_IN_ALL
 GdkCairoContext *gdk_surface_create_cairo_context(GdkSurface    *surface);

@@ -419,11 +419,6 @@ update_popover_layout (GtkPopover     *popover,
       g_clear_pointer (&priv->arrow_render_node, gsk_render_node_unref);
     }
 
-  gtk_widget_allocate (GTK_WIDGET (popover),
-                       gdk_surface_get_width (priv->surface),
-                       gdk_surface_get_height (priv->surface),
-                       -1, NULL);
-
   gtk_widget_queue_draw (GTK_WIDGET (popover));
 }
 
@@ -582,16 +577,70 @@ present_popup (GtkPopover *popover)
   return FALSE;
 }
 
-static void
-gtk_popover_native_check_resize (GtkNative *native)
+void
+gtk_popover_present (GtkPopover *popover)
 {
-  GtkPopover *popover = GTK_POPOVER (native);
   GtkWidget *widget = GTK_WIDGET (popover);
 
   if (!_gtk_widget_get_alloc_needed (widget))
     gtk_widget_ensure_allocate (widget);
   else if (gtk_widget_get_visible (widget))
     present_popup (popover);
+}
+
+static void
+maybe_request_motion_event (GtkPopover *popover)
+{
+  GtkWidget *widget = GTK_WIDGET (popover);
+  GtkRoot *root = gtk_widget_get_root (widget);
+  GdkSeat *seat;
+  GdkDevice *device;
+  GtkWidget *focus;
+  GdkSurface *focus_surface;
+
+  seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
+  if (!seat)
+    return;
+
+
+  device = gdk_seat_get_pointer (seat);
+  focus = gtk_window_lookup_pointer_focus_widget (GTK_WINDOW (root),
+                                                  device, NULL);
+  if (!focus)
+    return;
+
+  if (!gtk_widget_is_ancestor (focus, GTK_WIDGET (popover)))
+    return;
+
+  focus_surface = gtk_native_get_surface (gtk_widget_get_native (focus));
+  gdk_surface_request_motion (focus_surface);
+}
+
+static void
+gtk_popover_native_layout (GtkNative *native,
+                           int        width,
+                           int        height)
+{
+  GtkPopover *popover = GTK_POPOVER (native);
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+  GtkWidget *widget = GTK_WIDGET (popover);
+
+  update_popover_layout (popover, gdk_popup_layout_ref (priv->layout));
+
+  if (gtk_widget_needs_allocate (widget))
+    {
+      gtk_widget_allocate (widget, width, height, -1, NULL);
+
+      /* This fake motion event is needed for getting up to date pointer focus
+       * and coordinates when tho pointer didn't move but the layout changed
+       * within the popover.
+       */
+      maybe_request_motion_event (popover);
+    }
+  else
+    {
+      gtk_widget_ensure_allocate (widget);
+    }
 }
 
 static gboolean
@@ -736,13 +785,6 @@ surface_mapped_changed (GtkWidget *widget)
   gtk_widget_set_visible (widget, gdk_surface_get_mapped (priv->surface));
 }
 
-static void
-surface_size_changed (GtkWidget *widget,
-                      guint      width,
-                      guint      height)
-{
-}
-
 static gboolean
 surface_render (GdkSurface     *surface,
                 cairo_region_t *region,
@@ -759,16 +801,6 @@ surface_event (GdkSurface *surface,
 {
   gtk_main_do_event (event);
   return TRUE;
-}
-
-static void
-popup_layout_changed (GdkSurface *surface,
-                      GtkWidget  *widget)
-{
-  GtkPopover *popover = GTK_POPOVER (widget);
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-
-  update_popover_layout (popover, gdk_popup_layout_ref (priv->layout));
 }
 
 static void
@@ -887,14 +919,14 @@ gtk_popover_realize (GtkWidget *widget)
   gdk_surface_set_widget (priv->surface, widget);
 
   g_signal_connect_swapped (priv->surface, "notify::mapped", G_CALLBACK (surface_mapped_changed), widget);
-  g_signal_connect_swapped (priv->surface, "size-changed", G_CALLBACK (surface_size_changed), widget);
   g_signal_connect (priv->surface, "render", G_CALLBACK (surface_render), widget);
   g_signal_connect (priv->surface, "event", G_CALLBACK (surface_event), widget);
-  g_signal_connect (priv->surface, "popup-layout-changed", G_CALLBACK (popup_layout_changed), widget);
 
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->realize (widget);
 
   priv->renderer = gsk_renderer_new_for_surface (priv->surface);
+
+  gtk_native_realize (GTK_NATIVE (popover));
 }
 
 static void
@@ -903,16 +935,16 @@ gtk_popover_unrealize (GtkWidget *widget)
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
+  gtk_native_unrealize (GTK_NATIVE (popover));
+
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->unrealize (widget);
 
   gsk_renderer_unrealize (priv->renderer);
   g_clear_object (&priv->renderer);
 
   g_signal_handlers_disconnect_by_func (priv->surface, surface_mapped_changed, widget);
-  g_signal_handlers_disconnect_by_func (priv->surface, surface_size_changed, widget);
   g_signal_handlers_disconnect_by_func (priv->surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (priv->surface, surface_event, widget);
-  g_signal_handlers_disconnect_by_func (priv->surface, popup_layout_changed, widget);
   gdk_surface_set_widget (priv->surface, NULL);
   gdk_surface_destroy (priv->surface);
   g_clear_object (&priv->surface);
@@ -1847,7 +1879,7 @@ gtk_popover_native_interface_init (GtkNativeInterface *iface)
   iface->get_surface = gtk_popover_native_get_surface;
   iface->get_renderer = gtk_popover_native_get_renderer;
   iface->get_surface_transform = gtk_popover_native_get_surface_transform;
-  iface->check_resize = gtk_popover_native_check_resize;
+  iface->layout = gtk_popover_native_layout;
 }
 
 static GtkBuildableIface *parent_buildable_iface;

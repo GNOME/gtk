@@ -377,7 +377,7 @@ window_notify_cb (GtkWindowControls *self,
 {
   if (pspec->name == I_("deletable") ||
       pspec->name == I_("icon-name") ||
-      pspec->name == I_("is-maximized") ||
+      pspec->name == I_("maximized") ||
       pspec->name == I_("modal") ||
       pspec->name == I_("resizable") ||
       pspec->name == I_("scale-factor") ||

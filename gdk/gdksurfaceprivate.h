@@ -44,6 +44,10 @@ struct _GdkSurface
   GdkSurface *parent;        /* for popups */
   GList *children;           /* popups */
 
+  guint set_is_mapped_source_id;
+  gboolean pending_is_mapped;
+  gboolean is_mapped;
+
   gpointer widget;
 
   int x;
@@ -53,13 +57,14 @@ struct _GdkSurface
 
   cairo_region_t *update_area;
   guint update_freeze_count;
-  gboolean pending_schedule_update;
+  GdkFrameClockPhase pending_phases;
   /* This is the update_area that was in effect when the current expose
      started. It may be smaller than the expose area if we'e painting
      more than we have to, but it represents the "true" damage. */
   cairo_region_t *active_update_area;
 
-  GdkToplevelState old_state;
+  GdkToplevelState pending_set_flags;
+  GdkToplevelState pending_unset_flags;
   GdkToplevelState state;
 
   guint8 resize_count;
@@ -83,10 +88,6 @@ struct _GdkSurface
   guint update_and_descendants_freeze_count;
 
   int width, height;
-  int shadow_top;
-  int shadow_left;
-  int shadow_right;
-  int shadow_bottom;
 
   GdkCursor *cursor;
   GHashTable *device_cursor;
@@ -160,24 +161,23 @@ struct _GdkSurfaceClass
 
   void         (* set_opaque_region)      (GdkSurface      *surface,
                                            cairo_region_t *region);
-  void         (* set_shadow_width)       (GdkSurface      *surface,
-                                           int             left,
-                                           int             right,
-                                           int             top,
-                                           int             bottom);
   GdkGLContext *(*create_gl_context)      (GdkSurface      *surface,
                                            gboolean        attached,
                                            GdkGLContext   *share,
                                            GError        **error);
+  void         (* request_layout)         (GdkSurface     *surface);
+  gboolean     (* compute_size)           (GdkSurface     *surface);
 };
 
 #define GDK_SURFACE_DESTROYED(d) (((GdkSurface *)(d))->destroyed)
 
-#define GDK_SURFACE_IS_MAPPED(surface) (((surface)->state & GDK_TOPLEVEL_STATE_WITHDRAWN) == 0)
-
+#define GDK_SURFACE_IS_MAPPED(surface) ((surface)->pending_is_mapped)
 
 void gdk_surface_set_state (GdkSurface      *surface,
                             GdkToplevelState  new_state);
+
+void gdk_surface_set_is_mapped (GdkSurface *surface,
+                                gboolean    is_mapped);
 
 GdkMonitor * gdk_surface_get_layout_monitor (GdkSurface      *surface,
                                              GdkPopupLayout  *layout,
@@ -187,6 +187,10 @@ GdkMonitor * gdk_surface_get_layout_monitor (GdkSurface      *surface,
 void gdk_surface_layout_popup_helper (GdkSurface     *surface,
                                       int             width,
                                       int             height,
+                                      int             shadow_left,
+                                      int             shadow_right,
+                                      int             shadow_top,
+                                      int             shadow_bottom,
                                       GdkMonitor     *monitor,
                                       GdkRectangle   *bounds,
                                       GdkPopupLayout *layout,
@@ -326,8 +330,21 @@ void       gdk_surface_constrain_size      (GdkGeometry    *geometry,
                                             int            *new_width,
                                             int            *new_height);
 
+void       gdk_surface_queue_state_change  (GdkSurface       *surface,
+                                            GdkToplevelState  unset_flags,
+                                            GdkToplevelState  set_flags);
+
+void       gdk_surface_apply_state_change  (GdkSurface       *surface);
+
+void       gdk_surface_emit_size_changed   (GdkSurface       *surface,
+                                            int               width,
+                                            int               height);
+
+void       gdk_surface_request_compute_size (GdkSurface      *surface);
+
 GDK_AVAILABLE_IN_ALL
 void           gdk_surface_request_motion (GdkSurface *surface);
+
 
 G_END_DECLS
 

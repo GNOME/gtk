@@ -320,7 +320,7 @@ gtk_popover_menu_bar_item_size_allocate (GtkWidget *widget,
                             &(GtkAllocation) { 0, 0, width, height },
                             baseline);
 
-  gtk_native_check_resize (GTK_NATIVE (item->popover));
+  gtk_popover_present (GTK_POPOVER (item->popover));
 }
 
 static void

@@ -77,6 +77,9 @@
 #include "gtklayoutchild.h"
 #include "gtkwidgetprivate.h"
 #include "gtknative.h"
+#include "gtkpopover.h"
+#include "gtktexthandleprivate.h"
+#include "gtktooltipwindowprivate.h"
 
 #ifdef G_ENABLE_DEBUG
 #define LAYOUT_MANAGER_WARN_NOT_IMPLEMENTED(m,method)   G_STMT_START {  \
@@ -363,8 +366,15 @@ allocate_native_children (GtkWidget *widget)
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
-      if (GTK_IS_NATIVE (child))
-        gtk_native_check_resize (GTK_NATIVE (child));
+      if (GTK_IS_POPOVER (child))
+        gtk_popover_present (GTK_POPOVER (child));
+      else if (GTK_IS_TEXT_HANDLE (child))
+        gtk_text_handle_present (GTK_TEXT_HANDLE (child));
+      else if (GTK_IS_TOOLTIP_WINDOW (child))
+        gtk_tooltip_window_present (GTK_TOOLTIP_WINDOW (child));
+      else if (GTK_IS_NATIVE (child))
+        g_warning ("Unable to present a to the layout manager unknown auxiliary child surface widget type %s",
+                   G_OBJECT_TYPE_NAME (child));
     }
 }
 

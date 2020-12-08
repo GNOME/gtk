@@ -15,9 +15,6 @@ gboolean        gdk_device_grab_info            (GdkDisplay  *display,
 
 void            gdk_pre_parse                   (void);
 
-void            gdk_surface_freeze_toplevel_updates      (GdkSurface *surface);
-void            gdk_surface_thaw_toplevel_updates        (GdkSurface *surface);
-
 gboolean        gdk_surface_supports_edge_constraints    (GdkSurface *surface);
 
 void gdk_display_set_double_click_time     (GdkDisplay   *display,

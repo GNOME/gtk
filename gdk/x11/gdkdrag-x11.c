@@ -2036,7 +2036,7 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
   if (gdk_x11_surface_get_group (surface))
     gdk_x11_surface_set_group (x11_drag->ipc_surface, surface);
 
-  gdk_synthesize_surface_state (x11_drag->ipc_surface, GDK_TOPLEVEL_STATE_WITHDRAWN, 0);
+  gdk_surface_set_is_mapped (x11_drag->ipc_surface, TRUE);
   gdk_x11_surface_show (x11_drag->ipc_surface, FALSE);
 
   x11_drag->drag_surface = create_drag_surface (display);
