@@ -3249,11 +3249,7 @@ list {
 }
 
 row {
-  transition: all 150ms $ease-out-quad;
-
   @include focus-ring();
-
-  &:hover { transition: none; }
 
   &.activatable {
     &.has-open-popup, // this is for indicathing which row generated a popover see https://bugzilla.gnome.org/show_bug.cgi?id=754411
@@ -3614,7 +3610,7 @@ separator.sidebar {
     min-height: 36px;
     padding: 0 8px;
     border-radius: $menu-margin;
-    margin: 0 $menu-margin;
+    margin: 0 $menu-margin 2px;
 
     &:hover,
     &:focus-visible:focus-within {
