@@ -35,9 +35,10 @@
 /**
  * GDK_DISABLE_DEPRECATION_WARNINGS:
  *
- * A macro that should be defined before including the gdk.h header.
- * If it is defined, no compiler warnings will be produced for uses
- * of deprecated GDK and GTK APIs.
+ * A macro that should be defined before including the `gdk.h` header.
+ *
+ * If this symbol is defined, no compiler warnings will be produced for
+ * uses of deprecated GDK and GTK APIs.
  */
 
 #ifdef GDK_DISABLE_DEPRECATION_WARNINGS
@@ -52,9 +53,6 @@
 
 /* XXX: Every new stable minor release bump should add a macro here */
 
-#define GDK_VERSION_3_92        (G_ENCODE_VERSION (3, 92))
-#define GDK_VERSION_3_94        (G_ENCODE_VERSION (3, 94))
-
 /**
  * GDK_VERSION_4_0:
  *
@@ -65,26 +63,34 @@
 
 
 /* evaluates to the current stable version; for development cycles,
- * this means the next stable target
+ * this means the next stable target, with a hard backstop to the
+ * beginning of the stable series
  */
-#if (GDK_MINOR_VERSION % 2)
-#define GDK_VERSION_CUR_STABLE         (G_ENCODE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION + 1))
+#if GDK_MAJOR_VERSION >= 4 && (GDK_MINOR_VERSION % 2)
+# define GDK_VERSION_CUR_STABLE         (G_ENCODE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION + 1))
+#elif G_ENCODE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION) > GDK_VERSION_4_0
+# define GDK_VERSION_CUR_STABLE         (G_ENCODE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION))
 #else
-#define GDK_VERSION_CUR_STABLE         (G_ENCODE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION))
+# define GDK_VERSION_CUR_STABLE         GDK_VERSION_4_0
 #endif
 
-/* evaluates to the previous stable version */
-#if (GDK_MINOR_VERSION % 2)
-#define GDK_VERSION_PREV_STABLE        (G_ENCODE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION - 1))
+/* evaluates to the previous stable version, with a hard backstop
+ * to the beginning of the stable series
+ */
+#if GDK_MAJOR_VERSION >= 4 && (GDK_MINOR_VERSION % 2)
+# define GDK_VERSION_PREV_STABLE        (G_ENCODE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION - 1))
+#elif GDK_MAJOR_VERSION >= 4 && GDK_MINOR_VERSION > 2
+# define GDK_VERSION_PREV_STABLE        (G_ENCODE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION - 2))
 #else
-#define GDK_VERSION_PREV_STABLE        (G_ENCODE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION - 2))
+# define GDK_VERSION_PREV_STABLE        GDK_VERSION_4_0
 #endif
 
 /**
  * GDK_VERSION_MIN_REQUIRED:
  *
  * A macro that should be defined by the user prior to including
- * the gdk.h header.
+ * the `gdk.h` header.
+ *
  * The definition should be one of the predefined GDK version
  * macros: %GDK_VERSION_4_0, %GDK_VERSION_4_2,...
  *
@@ -102,7 +108,8 @@
  * GDK_VERSION_MAX_ALLOWED:
  *
  * A macro that should be defined by the user prior to including
- * the gdk.h header.
+ * the `gdk.h` header.
+ *
  * The definition should be one of the predefined GDK version
  * macros: %GDK_VERSION_4_0, %GDK_VERSION_4_2,...
  *
@@ -122,29 +129,33 @@
 
 /* sanity checks */
 #if GDK_VERSION_MAX_ALLOWED < GDK_VERSION_MIN_REQUIRED
-#error "GDK_VERSION_MAX_ALLOWED must be >= GDK_VERSION_MIN_REQUIRED"
+# error "GDK_VERSION_MAX_ALLOWED must be >= GDK_VERSION_MIN_REQUIRED"
 #endif
-#if GDK_VERSION_MIN_REQUIRED < GDK_VERSION_3_92
-#error "GDK_VERSION_MIN_REQUIRED must be >= GDK_VERSION_3_92"
+#if GDK_VERSION_MIN_REQUIRED < GDK_VERSION_4_0
+# error "GDK_VERSION_MIN_REQUIRED must be >= GDK_VERSION_4_0"
 #endif
 
 #define GDK_AVAILABLE_IN_ALL                  _GDK_EXTERN
 
 /* XXX: Every new stable minor release should add a set of macros here */
 
+/* This is not really necessary for 4.0, since there can't be an
+ * earlier version, and there are no deprecated symbols. We just
+ * include it for completeness, and because it's easier to copy
+ * this stanza every time a new development cycle starts.
+ */
 #if GDK_VERSION_MAX_ALLOWED < GDK_VERSION_4_0
-# define GDK_AVAILABLE_IN_4_0                GDK_UNAVAILABLE(4, 0)
+# define GDK_AVAILABLE_IN_4_0                   GDK_UNAVAILABLE(4, 0)
 #else
-# define GDK_AVAILABLE_IN_4_0                _GDK_EXTERN
+# define GDK_AVAILABLE_IN_4_0                   _GDK_EXTERN
 #endif
 
-#if GDK_VERSION_MIN_REQUIRED >= GDK_VERSION_3_92
-# define GDK_DEPRECATED_IN_4_0                GDK_DEPRECATED
-# define GDK_DEPRECATED_IN_4_0_FOR(f)         GDK_DEPRECATED_FOR(f)
+#if GDK_VERSION_MIN_REQUIRED >= GDK_VERSION_4_0
+# define GDK_DEPRECATED_IN_4_0                  GDK_DEPRECATED
+# define GDK_DEPRECATED_IN_4_0_FOR(f)           GDK_DEPRECATED_FOR(f)
 #else
-# define GDK_DEPRECATED_IN_4_0                _GDK_EXTERN
-# define GDK_DEPRECATED_IN_4_0_FOR(f)         _GDK_EXTERN
+# define GDK_DEPRECATED_IN_4_0                  _GDK_EXTERN
+# define GDK_DEPRECATED_IN_4_0_FOR(f)           _GDK_EXTERN
 #endif
 
 #endif  /* __GDK_VERSION_MACROS_H__ */
-

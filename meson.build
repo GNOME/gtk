@@ -30,15 +30,26 @@ add_project_arguments('-DG_LOG_USE_STRUCTURED=1', language: 'c')
 add_project_arguments('-DGLIB_DISABLE_DEPRECATION_WARNINGS', language: 'c')
 
 # Making releases:
-#  1. gtk_micro_version += 1;
-#  2. gtk_interface_age += 1;
-#  3. if any functions have been added, set gtk_interface_age to 0.
-#  4. if backwards compatibility has been broken, we're in trouble
+#  1. new development cycle:
+#    a. gtk_minor_version += 1
+#    b. gtk_micro_version = 0
+#  2. new stable cycle:
+#    a. gtk_minor_version += 1
+#    b. gtk_micro_version = 0
+#  3. every new release:
+#    a. gtk_micro_version += 1
 gtk_version       = meson.project_version()
 gtk_major_version = gtk_version.split('.')[0].to_int()
 gtk_minor_version = gtk_version.split('.')[1].to_int()
 gtk_micro_version = gtk_version.split('.')[2].to_int()
-gtk_interface_age = 0
+
+# Interface age gets reset during development cycles, when
+# we add new API; new micro versions of the same minor
+# stable cycle will have the same interface age
+#
+# If new API is added during a stable cycle, reset to 0
+gtk_interface_age = gtk_minor_version.is_odd() ? 0 : gtk_micro_version
+
 add_project_arguments('-DGTK_VERSION="@0@"'.format(meson.project_version()), language: 'c')
 
 add_project_arguments('-D_GNU_SOURCE', language: 'c')
@@ -68,8 +79,8 @@ gtk_binary_version = '4.0.0'
 
 gtk_binary_age = 100 * gtk_minor_version + gtk_micro_version
 
-gtk_soversion = '0'
-gtk_library_version = '0.@0@.@1@'.format(gtk_binary_age - gtk_interface_age, gtk_interface_age)
+gtk_soversion = '1'
+gtk_library_version = '1.@0@.@1@'.format(gtk_binary_age - gtk_interface_age, gtk_interface_age)
 
 gtk_api_version = '4.0'
 
