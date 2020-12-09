@@ -76,7 +76,6 @@ typedef enum
 {
   FORCE_OFFSCREEN  = 1 << 0,
   RESET_CLIP       = 1 << 1,
-  RESET_OPACITY    = 1 << 2,
   DUMP_FRAMEBUFFER = 1 << 3,
   NO_CACHE_PLZ     = 1 << 5,
   LINEAR_FILTER    = 1 << 6,
@@ -242,6 +241,21 @@ _graphene_rect_contains_rect (const graphene_rect_t *r1,
     return true;
 
   return false;
+}
+
+static inline bool G_GNUC_PURE
+equal_texture_nodes (GskRenderNode *node1,
+                     GskRenderNode *node2)
+{
+  if (gsk_render_node_get_node_type (node1) != GSK_TEXTURE_NODE ||
+      gsk_render_node_get_node_type (node2) != GSK_TEXTURE_NODE)
+    return false;
+
+  if (gsk_texture_node_get_texture (node1) !=
+      gsk_texture_node_get_texture (node2))
+    return false;
+
+  return graphene_rect_equal (&node1->bounds, &node2->bounds);
 }
 
 static inline void
@@ -632,10 +646,11 @@ render_fallback_node (GskGLRenderer   *self,
                       GskRenderNode   *node,
                       RenderOpBuilder *builder)
 {
+  const float scale_x = builder->scale_x;
+  const float scale_y = builder->scale_y;
+  const int surface_width = ceilf (node->bounds.size.width * scale_x);
+  const int surface_height = ceilf (node->bounds.size.height * scale_y);
   GdkTexture *texture;
-  const float scale = ops_get_scale (builder);
-  const int surface_width = ceilf (node->bounds.size.width * scale);
-  const int surface_height = ceilf (node->bounds.size.height * scale);
   cairo_surface_t *surface;
   cairo_surface_t *rendered_surface;
   cairo_t *cr;
@@ -649,7 +664,8 @@ render_fallback_node (GskGLRenderer   *self,
 
   key.pointer = node;
   key.pointer_is_child = FALSE;
-  key.scale = scale;
+  key.scale_x = scale_x;
+  key.scale_y = scale_y;
   key.filter = GL_NEAREST;
 
   cached_id = gsk_gl_driver_get_texture_for_key (self->gl_driver, &key);
@@ -671,7 +687,7 @@ render_fallback_node (GskGLRenderer   *self,
                                                    surface_width,
                                                    surface_height);
 
-    cairo_surface_set_device_scale (rendered_surface, scale, scale);
+    cairo_surface_set_device_scale (rendered_surface, scale_x, scale_y);
     cr = cairo_create (rendered_surface);
 
     cairo_save (cr);
@@ -684,15 +700,15 @@ render_fallback_node (GskGLRenderer   *self,
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                         surface_width,
                                         surface_height);
-  cairo_surface_set_device_scale (surface, scale, scale);
+  cairo_surface_set_device_scale (surface, scale_x, scale_y);
   cr = cairo_create (surface);
 
   /* We draw upside down here, so it matches what GL does. */
   cairo_save (cr);
   cairo_scale (cr, 1, -1);
-  cairo_translate (cr, 0, - surface_height / scale);
+  cairo_translate (cr, 0, - surface_height / scale_y);
   cairo_set_source_surface (cr, rendered_surface, 0, 0);
-  cairo_rectangle (cr, 0, 0, surface_width / scale, surface_height / scale);
+  cairo_rectangle (cr, 0, 0, surface_width / scale_x, surface_height / scale_y);
   cairo_fill (cr);
   cairo_restore (cr);
 
@@ -754,7 +770,7 @@ render_text_node (GskGLRenderer   *self,
 {
   const PangoFont *font = gsk_text_node_get_font (node);
   const PangoGlyphInfo *glyphs = gsk_text_node_get_glyphs (node, NULL);
-  const float text_scale = ops_get_scale (builder);
+  const float text_scale = MAX (builder->scale_x, builder->scale_y); /* TODO: Fix for uneven scales? */
   const graphene_point_t *offset = gsk_text_node_get_offset (node);
   const guint num_glyphs = gsk_text_node_get_num_glyphs (node);
   const float x = offset->x + builder->dx;
@@ -1224,7 +1240,7 @@ render_gl_shader_node (GskGLRenderer       *self,
                                   &node->bounds,
                                   child,
                                   &regions[i], &is_offscreen[i],
-                                  FORCE_OFFSCREEN | RESET_CLIP | RESET_OPACITY))
+                                  FORCE_OFFSCREEN | RESET_CLIP))
             return;
         }
 
@@ -1343,7 +1359,7 @@ render_transform_node (GskGLRenderer   *self,
                                    &child->bounds,
                                    child,
                                    &region, &is_offscreen,
-                                   RESET_CLIP | RESET_OPACITY | filter_flag))
+                                   RESET_CLIP | filter_flag))
               {
                 /* For non-trivial transforms, we draw everything on a texture and then
                  * draw the texture transformed. */
@@ -1390,7 +1406,7 @@ render_opacity_node (GskGLRenderer   *self,
       if (!add_offscreen_ops (self, builder, &child->bounds,
                               child,
                               &region, &is_offscreen,
-                              FORCE_OFFSCREEN | RESET_OPACITY | RESET_CLIP))
+                              FORCE_OFFSCREEN | RESET_CLIP))
         return;
 
       prev_opacity = ops_set_opacity (builder,
@@ -1628,22 +1644,18 @@ render_clipped_child (GskGLRenderer         *self,
       /* well fuck */
       const float scale_x = builder->scale_x;
       const float scale_y = builder->scale_y;
+      const GskRoundedRect scaled_clip = GSK_ROUNDED_RECT_INIT (clip->origin.x * scale_x,
+                                                                clip->origin.y * scale_y,
+                                                                clip->size.width * scale_x,
+                                                                clip->size.height * scale_y);
       gboolean is_offscreen;
       TextureRegion region;
-      GskRoundedRect scaled_clip;
-
-      memset (&scaled_clip, 0, sizeof (GskRoundedRect));
-
-      scaled_clip.bounds.origin.x = clip->origin.x * scale_x;
-      scaled_clip.bounds.origin.y = clip->origin.y * scale_y;
-      scaled_clip.bounds.size.width = clip->size.width * scale_x;
-      scaled_clip.bounds.size.height = clip->size.height * scale_y;
 
       ops_push_clip (builder, &scaled_clip);
       if (!add_offscreen_ops (self, builder, &child->bounds,
                               child,
                               &region, &is_offscreen,
-                              RESET_OPACITY | FORCE_OFFSCREEN))
+                              FORCE_OFFSCREEN))
         g_assert_not_reached ();
       ops_pop_clip (builder);
 
@@ -1759,7 +1771,7 @@ render_rounded_clip_node (GskGLRenderer       *self,
       if (!add_offscreen_ops (self, builder, &node->bounds,
                               child,
                               &region, &is_offscreen,
-                              FORCE_OFFSCREEN | RESET_OPACITY))
+                              0))
         g_assert_not_reached ();
 
       ops_pop_clip (builder);
@@ -1787,7 +1799,7 @@ render_color_matrix_node (GskGLRenderer       *self,
                           &node->bounds,
                           child,
                           &region, &is_offscreen,
-                          RESET_CLIP | RESET_OPACITY))
+                          RESET_CLIP))
     g_assert_not_reached ();
 
   ops_set_program (builder, &self->programs->color_matrix_program);
@@ -1936,7 +1948,7 @@ blur_node (GskGLRenderer   *self,
                                                    texture_width, texture_height),
                               node,
                               &region, &is_offscreen,
-                              RESET_CLIP | RESET_OPACITY | FORCE_OFFSCREEN | extra_flags))
+                              RESET_CLIP | FORCE_OFFSCREEN | extra_flags))
         g_assert_not_reached ();
 
       blurred_texture_id = blur_texture (self, builder,
@@ -1978,7 +1990,8 @@ render_blur_node (GskGLRenderer   *self,
 
   key.pointer = node;
   key.pointer_is_child = FALSE;
-  key.scale = ops_get_scale (builder);
+  key.scale_x = builder->scale_x;
+  key.scale_y = builder->scale_y;
   key.filter = GL_NEAREST;
   blurred_region.texture_id = gsk_gl_driver_get_texture_for_key (self->gl_driver, &key);
   blur_node (self, child, builder, blur_radius, 0, &blurred_region,
@@ -2041,7 +2054,8 @@ render_inset_shadow_node (GskGLRenderer   *self,
 
   key.pointer = node;
   key.pointer_is_child = FALSE;
-  key.scale = MAX (scale_x, scale_y); /* TODO: Use scale_x/scale_y here? */
+  key.scale_x = scale_x;
+  key.scale_y = scale_y;
   key.filter = GL_NEAREST;
   blurred_texture_id = gsk_gl_driver_get_texture_for_key (self->gl_driver, &key);
   if (blurred_texture_id == 0)
@@ -2135,7 +2149,14 @@ render_inset_shadow_node (GskGLRenderer   *self,
 
     if (needs_clip)
       {
-        const GskRoundedRect node_clip = transform_rect (self, builder, node_outline);
+        GskRoundedRect node_clip;
+
+        ops_transform_bounds_modelview (builder, &node_outline->bounds, &node_clip.bounds);
+        for (int i = 0; i < 4; i ++)
+          {
+            node_clip.corner[i].width = node_outline->corner[i].width * scale_x;
+            node_clip.corner[i].height = node_outline->corner[i].height * scale_y;
+          }
 
         ops_push_clip (builder, &node_clip);
       }
@@ -2228,14 +2249,13 @@ render_outset_shadow_node (GskGLRenderer   *self,
                            GskRenderNode   *node,
                            RenderOpBuilder *builder)
 {
-  const float scale = ops_get_scale (builder);
   const float scale_x = builder->scale_x;
   const float scale_y = builder->scale_y;
   const GskRoundedRect *outline = gsk_outset_shadow_node_get_outline (node);
   const GdkRGBA *color = gsk_outset_shadow_node_get_color (node);
   const float blur_radius = gsk_outset_shadow_node_get_blur_radius (node);
   const float blur_extra = blur_radius * 2.0f; /* 2.0 = shader radius_multiplier */
-  const int extra_blur_pixels = (int) ceilf(blur_extra / 2.0 * scale);
+  const int extra_blur_pixels = (int) ceilf(blur_extra / 2.0 * MAX (scale_x, scale_y)); /* TODO: No need to MAX() her actually */
   const float spread = gsk_outset_shadow_node_get_spread (node);
   const float dx = gsk_outset_shadow_node_get_dx (node);
   const float dy = gsk_outset_shadow_node_get_dy (node);
@@ -2607,7 +2627,7 @@ render_shadow_node (GskGLRenderer   *self,
           if (!add_offscreen_ops (self, builder,
                                   &shadow_child->bounds,
                                   shadow_child, &region, &is_offscreen,
-                                  RESET_CLIP | RESET_OPACITY | NO_CACHE_PLZ))
+                                  RESET_CLIP | NO_CACHE_PLZ))
             g_assert_not_reached ();
 
           bounds = shadow_child->bounds;
@@ -2653,6 +2673,12 @@ render_cross_fade_node (GskGLRenderer   *self,
       return;
     }
 
+  if (equal_texture_nodes (start_node, end_node))
+    {
+      gsk_gl_renderer_add_render_ops (self, end_node, builder);
+      return;
+    }
+
   /* TODO: We create 2 textures here as big as the cross-fade node, but both the
    * start and the end node might be a lot smaller than that. */
 
@@ -2660,7 +2686,7 @@ render_cross_fade_node (GskGLRenderer   *self,
                           &node->bounds,
                           start_node,
                           &start_region, &is_offscreen1,
-                          FORCE_OFFSCREEN | RESET_CLIP | RESET_OPACITY))
+                          FORCE_OFFSCREEN | RESET_CLIP))
     {
       gsk_gl_renderer_add_render_ops (self, end_node, builder);
       return;
@@ -2670,7 +2696,7 @@ render_cross_fade_node (GskGLRenderer   *self,
                           &node->bounds,
                           end_node,
                           &end_region, &is_offscreen2,
-                          FORCE_OFFSCREEN | RESET_CLIP | RESET_OPACITY))
+                          FORCE_OFFSCREEN | RESET_CLIP))
     {
       const float prev_opacity = ops_set_opacity (builder, builder->current_opacity * progress);
       gsk_gl_renderer_add_render_ops (self, start_node, builder);
@@ -2773,7 +2799,7 @@ render_repeat_node (GskGLRenderer   *self,
                           &child->bounds,
                           child,
                           &region, &is_offscreen,
-                          RESET_CLIP | RESET_OPACITY))
+                          RESET_CLIP))
     g_assert_not_reached ();
 
   ops_set_program (builder, &self->programs->repeat_program);
@@ -3798,9 +3824,11 @@ add_offscreen_ops (GskGLRenderer         *self,
                    gboolean              *is_offscreen,
                    guint                  flags)
 {
-  float scale, width, height, size, scaled_size;
+  float width, height;
   const float dx = builder->dx;
   const float dy = builder->dy;
+  float scale_x;
+  float scale_y;
   int render_target;
   int prev_render_target;
   graphene_matrix_t prev_projection;
@@ -3808,7 +3836,6 @@ add_offscreen_ops (GskGLRenderer         *self,
   graphene_matrix_t item_proj;
   float prev_opacity = 1.0;
   int texture_id = 0;
-  int max_texture_size;
   int filter;
   GskTextureKey key;
   int cached_id;
@@ -3841,7 +3868,8 @@ add_offscreen_ops (GskGLRenderer         *self,
   key.pointer = child_node;
   key.pointer_is_child = TRUE; /* Don't conflict with the child using the cache too */
   key.parent_rect = *bounds;
-  key.scale = ops_get_scale (builder);
+  key.scale_x = builder->scale_x;
+  key.scale_y = builder->scale_y;
   key.filter = filter;
   cached_id = gsk_gl_driver_get_texture_for_key (self->gl_driver, &key);
 
@@ -3853,23 +3881,32 @@ add_offscreen_ops (GskGLRenderer         *self,
       return TRUE;
     }
 
-  scale = ops_get_scale (builder);
   width = bounds->size.width;
   height = bounds->size.height;
+  scale_x = builder->scale_x;
+  scale_y = builder->scale_y;
 
   /* Tweak the scale factor so that the required texture doesn't
    * exceed the max texture limit. This will render with a lower
    * resolution, but this is better than clipping.
    */
+  {
+    const int max_texture_size = gsk_gl_driver_get_max_texture_size (self->gl_driver);
 
-  size = MAX (width, height);
-  scaled_size = ceilf (size * scale);
-  max_texture_size = gsk_gl_driver_get_max_texture_size (self->gl_driver);
-  if (scaled_size > max_texture_size)
-    scale *= (float) max_texture_size / scaled_size;
+    width = ceilf (width * scale_x);
+    if (width > max_texture_size)
+      {
+        scale_x *= (float)max_texture_size / width;
+        width = max_texture_size;
+      }
 
-  width  = ceilf (width * scale);
-  height = ceilf (height * scale);
+    height = ceilf (height * scale_y);
+    if (height > max_texture_size)
+      {
+        scale_y *= (float)max_texture_size / height;
+        height = max_texture_size;
+      }
+  }
 
   gsk_gl_driver_create_render_target (self->gl_driver,
                                       width, height,
@@ -3889,8 +3926,8 @@ add_offscreen_ops (GskGLRenderer         *self,
 
   init_projection_matrix (&item_proj,
                           &GRAPHENE_RECT_INIT (
-                            bounds->origin.x * scale,
-                            bounds->origin.y * scale,
+                            bounds->origin.x * scale_x,
+                            bounds->origin.y * scale_y,
                             width, height
                          ));
 
@@ -3898,22 +3935,21 @@ add_offscreen_ops (GskGLRenderer         *self,
   /* Clear since we use this rendertarget for the first time */
   ops_begin (builder, OP_CLEAR);
   prev_projection = ops_set_projection (builder, &item_proj);
-  ops_set_modelview (builder, gsk_transform_scale (NULL, scale, scale));
+  ops_set_modelview (builder, gsk_transform_scale (NULL, scale_x, scale_y));
   prev_viewport = ops_set_viewport (builder,
-                                    &GRAPHENE_RECT_INIT (bounds->origin.x * scale,
-                                                         bounds->origin.y * scale,
+                                    &GRAPHENE_RECT_INIT (bounds->origin.x * scale_x,
+                                                         bounds->origin.y * scale_y,
                                                          width, height));
   if (flags & RESET_CLIP)
     ops_push_clip (builder,
-                   &GSK_ROUNDED_RECT_INIT (bounds->origin.x * scale,
-                                           bounds->origin.y * scale,
+                   &GSK_ROUNDED_RECT_INIT (bounds->origin.x * scale_x,
+                                           bounds->origin.y * scale_y,
                                            width, height));
 
   builder->dx = 0;
   builder->dy = 0;
 
-  if (flags & RESET_OPACITY)
-    prev_opacity = ops_set_opacity (builder, 1.0);
+  prev_opacity = ops_set_opacity (builder, 1.0);
 
   gsk_gl_renderer_add_render_ops (self, child_node, builder);
 
@@ -3930,8 +3966,7 @@ add_offscreen_ops (GskGLRenderer         *self,
     }
 #endif
 
-  if (flags & RESET_OPACITY)
-    ops_set_opacity (builder, prev_opacity);
+  ops_set_opacity (builder, prev_opacity);
 
   builder->dx = dx;
   builder->dy = dy;

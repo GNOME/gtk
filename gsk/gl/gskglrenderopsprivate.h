@@ -255,8 +255,6 @@ void              ops_push_modelview     (RenderOpBuilder         *builder,
 void              ops_set_modelview      (RenderOpBuilder         *builder,
                                           GskTransform            *transform);
 void              ops_pop_modelview      (RenderOpBuilder         *builder);
-float             ops_get_scale          (const RenderOpBuilder   *builder);
-
 void              ops_set_program        (RenderOpBuilder         *builder,
                                           Program                 *program);
 
