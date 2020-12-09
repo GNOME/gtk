@@ -42,6 +42,7 @@ fi
 
 $XGETTEXT --default-domain="$GETTEXT_PACKAGE" \
           --directory="$top_srcdir" \
+          --msgid-bugs-address="https://gitlab.gnome.org/GNOME/gtk/-/issues/" \
           --add-comments \
           $XGETTEXT_KEYWORDS \
           --from-code=utf-8 \
