@@ -7,4 +7,3 @@ Terminal=false
 Type=Application
 StartupNotify=true
 Categories=Development;GTK;
-NoDisplay=true
