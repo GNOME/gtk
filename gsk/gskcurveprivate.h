@@ -83,6 +83,9 @@ typedef gboolean (* GskCurveAddLineFunc) (const graphene_point_t *from,
                                           float                   to_progress,
                                           gpointer                user_data);
 
+typedef gboolean (* GskCurveAddCurveFunc) (const graphene_point_t points[4],
+                                           gpointer                user_data);
+
 void                    gsk_curve_init                          (GskCurve               *curve,
                                                                  gskpathop               op);
 void                    gsk_curve_init_foreach                  (GskCurve               *curve,
@@ -108,6 +111,10 @@ void                    gsk_curve_segment                       (const GskCurve 
 gboolean                gsk_curve_decompose                     (const GskCurve         *curve,
                                                                  float                   tolerance,
                                                                  GskCurveAddLineFunc     add_line_func,
+                                                                 gpointer                user_data);
+gboolean                gsk_curve_decompose_curve               (const GskCurve         *curve,
+                                                                 float                   tolerance,
+                                                                 GskCurveAddCurveFunc    add_curve_func,
                                                                  gpointer                user_data);
 gskpathop               gsk_curve_pathop                        (const GskCurve         *curve);
 #define gsk_curve_builder_to(curve, builder) gsk_path_builder_pathop_to ((builder), gsk_curve_pathop (curve))
