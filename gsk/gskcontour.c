@@ -1317,19 +1317,19 @@ gsk_standard_contour_add_segment (const GskContour *contour,
 
       gsk_curve_init (&curve, self->ops[start_measure->op]);
 
-      gsk_curve_split (&curve, start_progress, NULL, &cut);
-      start_point = gsk_curve_get_start_point (&cut);
-      gsk_path_builder_move_to (builder, start_point->x, start_point->y);
-
       if (end_measure && end_measure->op == start_measure->op)
         {
-          GskCurve cut2;
-      
-          gsk_curve_split (&cut, (end_progress - start_progress) / (1 - start_progress), &cut2, NULL);
-          gsk_curve_builder_to (&cut2, builder);
+          gsk_curve_segment (&curve, start_progress, end_progress, &cut);
+          start_point = gsk_curve_get_start_point (&cut);
+          gsk_path_builder_move_to (builder, start_point->x, start_point->y);
+          gsk_curve_builder_to (&cut, builder);
           return;
         }
 
+      gsk_curve_split (&curve, start_progress, NULL, &cut);
+
+      start_point = gsk_curve_get_start_point (&cut);
+      gsk_path_builder_move_to (builder, start_point->x, start_point->y);
       gsk_curve_builder_to (&cut, builder);
       i = start_measure->op + 1;
     }
