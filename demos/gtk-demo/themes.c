@@ -1,6 +1,6 @@
 /* Benchmark/Themes
  *
- * This demo switches themes like a maniac, like some of you.
+ * This demo continuously switches themes, like some of you.
  *
  * Warning: This demo involves rapidly flashing changes and may
  * be hazardous to photosensitive viewers.
