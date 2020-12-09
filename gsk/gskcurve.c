@@ -52,6 +52,11 @@ struct _GskCurveClass
                                                          float                   tolerance,
                                                          GskCurveAddLineFunc     add_line_func,
                                                          gpointer                user_data);
+  gboolean                      (* decompose_curve)     (const GskCurve         *curve,
+                                                         GskPathForeachFlags     flags,
+                                                         float                   tolerance,
+                                                         GskCurveAddCurveFunc    add_curve_func,
+                                                         gpointer                user_data);
   gskpathop                     (* pathop)              (const GskCurve         *curve);
   const graphene_point_t *      (* get_start_point)     (const GskCurve         *curve);
   const graphene_point_t *      (* get_end_point)       (const GskCurve         *curve);
@@ -179,6 +184,18 @@ gsk_line_curve_decompose (const GskCurve      *curve,
   return add_line_func (&self->points[0], &self->points[1], 0.0f, 1.0f, GSK_CURVE_LINE_REASON_STRAIGHT, user_data);
 }
 
+static gboolean
+gsk_line_curve_decompose_curve (const GskCurve       *curve,
+                                GskPathForeachFlags   flags,
+                                float                 tolerance,
+                                GskCurveAddCurveFunc  add_curve_func,
+                                gpointer              user_data)
+{
+  const GskLineCurve *self = &curve->line;
+
+  return add_curve_func (GSK_PATH_LINE, self->points, 2, 0.f, user_data);
+}
+
 static gskpathop
 gsk_line_curve_pathop (const GskCurve *curve)
 {
@@ -247,6 +264,7 @@ static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_split,
   gsk_line_curve_segment,
   gsk_line_curve_decompose,
+  gsk_line_curve_decompose_curve,
   gsk_line_curve_pathop,
   gsk_line_curve_get_start_point,
   gsk_line_curve_get_end_point,
@@ -420,6 +438,60 @@ gsk_quad_curve_decompose (const GskCurve      *curve,
   return gsk_quad_curve_decompose_step (curve, 0.0, 1.0, tolerance, add_line_func, user_data);
 }
 
+typedef struct
+{
+  GskCurveAddCurveFunc add_curve;
+  gpointer user_data;
+} AddLineData;
+
+static gboolean
+gsk_curve_add_line_cb (const graphene_point_t *from,
+                       const graphene_point_t *to,
+                       float                   from_progress,
+                       float                   to_progress,
+                       GskCurveLineReason      reason,
+                       gpointer                user_data)
+{
+  AddLineData *data = user_data;
+  graphene_point_t p[2] = { *from, *to };
+
+  return data->add_curve (GSK_PATH_LINE, p, 2, 0.f, data->user_data);
+}
+
+static gboolean
+gsk_quad_curve_decompose_curve (const GskCurve       *curve,
+                                GskPathForeachFlags   flags,
+                                float                 tolerance,
+                                GskCurveAddCurveFunc  add_curve_func,
+                                gpointer              user_data)
+{
+  const GskQuadCurve *self = &curve->quad;
+
+  if (flags & GSK_PATH_FOREACH_ALLOW_QUAD)
+    return add_curve_func (GSK_PATH_QUAD, self->points, 3, 0.f, user_data);
+  else if (flags & GSK_PATH_FOREACH_ALLOW_CUBIC)
+    {
+      GskCurve c;
+
+      gsk_curve_raise (curve, &c);
+      return add_curve_func (GSK_PATH_CUBIC, c.cubic.points, 4, 0.f, user_data);
+    }
+  else if (flags & GSK_PATH_FOREACH_ALLOW_CONIC)
+    {
+      GskCurve c;
+
+      gsk_curve_init_foreach (&c, GSK_PATH_CONIC, self->points, 3, 1.f);
+      return add_curve_func (GSK_PATH_CUBIC, c.cubic.points, 4, 0.f, user_data);
+    }
+  else
+    {
+      return gsk_quad_curve_decompose (curve,
+                                       tolerance,
+                                       gsk_curve_add_line_cb,
+                                       &(AddLineData) { add_curve_func, user_data });
+    }
+}
+
 static gskpathop
 gsk_quad_curve_pathop (const GskCurve *curve)
 {
@@ -543,6 +615,7 @@ static const GskCurveClass GSK_QUAD_CURVE_CLASS = {
   gsk_quad_curve_split,
   gsk_quad_curve_segment,
   gsk_quad_curve_decompose,
+  gsk_quad_curve_decompose_curve,
   gsk_quad_curve_pathop,
   gsk_quad_curve_get_start_point,
   gsk_quad_curve_get_end_point,
@@ -725,6 +798,25 @@ gsk_cubic_curve_decompose (const GskCurve      *curve,
                            gpointer             user_data)
 {
   return gsk_curce_curve_decompose_step (curve, 0.0, 1.0, tolerance, add_line_func, user_data);
+}
+
+static gboolean
+gsk_cubic_curve_decompose_curve (const GskCurve       *curve,
+                                 GskPathForeachFlags   flags,
+                                 float                 tolerance,
+                                 GskCurveAddCurveFunc  add_curve_func,
+                                 gpointer              user_data)
+{
+  const GskCubicCurve *self = &curve->cubic;
+
+  if (flags & GSK_PATH_FOREACH_ALLOW_CUBIC)
+    return add_curve_func (GSK_PATH_CUBIC, self->points, 4, 0.f, user_data);
+
+  /* FIXME: Quadratic (or conic?) approximation */
+  return gsk_cubic_curve_decompose (curve,
+                                    tolerance,
+                                    gsk_curve_add_line_cb,
+                                    &(AddLineData) { add_curve_func, user_data });
 }
 
 static gskpathop
@@ -973,6 +1065,7 @@ static const GskCurveClass GSK_CUBIC_CURVE_CLASS = {
   gsk_cubic_curve_split,
   gsk_cubic_curve_segment,
   gsk_cubic_curve_decompose,
+  gsk_cubic_curve_decompose_curve,
   gsk_cubic_curve_pathop,
   gsk_cubic_curve_get_start_point,
   gsk_cubic_curve_get_end_point,
@@ -1341,6 +1434,110 @@ gsk_conic_curve_decompose (const GskCurve      *curve,
                                               user_data);
 }
 
+/* See Floater, M: An analysis of cubic approximation schemes
+ * for conic sections
+ */
+static void
+cubic_approximation (const GskCurve *curve,
+                     GskCurve       *cubic)
+{
+  const GskConicCurve *self = &curve->conic;
+  graphene_point_t p[4];
+  float w = self->points[2].x;
+  float w2 = w*w;
+  float lambda;
+
+  lambda = 2 * (6*w2 + 1 - sqrt (3*w2 + 1)) / (12*w2 + 3);
+
+  p[0] = self->points[0];
+  p[3] = self->points[3];
+  graphene_point_interpolate (&self->points[0], &self->points[1], lambda, &p[1]);
+  graphene_point_interpolate (&self->points[3], &self->points[1], lambda, &p[2]);
+
+  gsk_curve_init (cubic, gsk_pathop_encode (GSK_PATH_CUBIC, p));
+}
+
+static gboolean
+gsk_conic_is_close_to_cubic (const GskCurve *conic,
+                             const GskCurve *cubic,
+                             float           tolerance)
+{
+  float t[] = { 0.1, 0.5, 0.9 };
+  graphene_point_t p0, p1;
+
+  for (int i = 0; i < G_N_ELEMENTS (t); i++)
+    {
+      gsk_curve_get_point (conic, t[i], &p0);
+      gsk_curve_get_point (cubic, t[i], &p1);
+      if (graphene_point_distance (&p0, &p1, NULL, NULL) > tolerance)
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static gboolean gsk_conic_curve_decompose_curve (const GskCurve       *curve,
+                                                 GskPathForeachFlags   flags,
+                                                 float                 tolerance,
+                                                 GskCurveAddCurveFunc  add_curve_func,
+                                                 gpointer              user_data);
+
+static gboolean
+gsk_conic_curve_decompose_or_add (const GskCurve       *curve,
+                                  const GskCurve       *cubic,
+                                  float                 tolerance,
+                                  GskCurveAddCurveFunc  add_curve_func,
+                                  gpointer              user_data)
+{
+  if (gsk_conic_is_close_to_cubic (curve, cubic, tolerance))
+    return add_curve_func (GSK_PATH_CUBIC, cubic->cubic.points, 4, 0.f, user_data);
+  else
+    {
+      GskCurve c1, c2;
+      GskCurve cc1, cc2;
+
+      gsk_conic_curve_split (curve, 0.5, &c1, &c2);
+
+      cubic_approximation (&c1, &cc1);
+      cubic_approximation (&c2, &cc2);
+
+      return gsk_conic_curve_decompose_or_add (&c1, &cc1, tolerance, add_curve_func, user_data) &&
+             gsk_conic_curve_decompose_or_add (&c2, &cc2, tolerance, add_curve_func, user_data);
+    }
+}
+
+static gboolean
+gsk_conic_curve_decompose_curve (const GskCurve       *curve,
+                                 GskPathForeachFlags   flags,
+                                 float                 tolerance,
+                                 GskCurveAddCurveFunc  add_curve_func,
+                                 gpointer              user_data)
+{
+  const GskConicCurve *self = &curve->conic;
+  GskCurve c;
+
+  if (flags & GSK_PATH_FOREACH_ALLOW_CONIC)
+    return add_curve_func (GSK_PATH_CONIC,
+                           (const graphene_point_t[3]) { self->points[0],
+                                                         self->points[1],
+                                                         self->points[3] },
+                            3,
+                            self->points[2].x,
+                            user_data);
+
+  if (flags & GSK_PATH_FOREACH_ALLOW_CUBIC)
+    {
+      cubic_approximation (curve, &c);
+      return gsk_conic_curve_decompose_or_add (curve, &c, tolerance, add_curve_func, user_data);
+    }
+
+  /* FIXME: Quadratic (or conic?) approximation */
+  return gsk_conic_curve_decompose (curve,
+                                    tolerance,
+                                    gsk_curve_add_line_cb,
+                                    &(AddLineData) { add_curve_func, user_data });
+}
+
 static gskpathop
 gsk_conic_curve_pathop (const GskCurve *curve)
 {
@@ -1511,6 +1708,7 @@ static const GskCurveClass GSK_CONIC_CURVE_CLASS = {
   gsk_conic_curve_split,
   gsk_conic_curve_segment,
   gsk_conic_curve_decompose,
+  gsk_conic_curve_decompose_curve,
   gsk_conic_curve_pathop,
   gsk_conic_curve_get_start_point,
   gsk_conic_curve_get_end_point,
@@ -1619,6 +1817,16 @@ gsk_curve_decompose (const GskCurve      *curve,
                      gpointer             user_data)
 {
   return get_class (curve->op)->decompose (curve, tolerance, add_line_func, user_data);
+}
+
+gboolean
+gsk_curve_decompose_curve (const GskCurve       *curve,
+                           GskPathForeachFlags   flags,
+                           float                 tolerance,
+                           GskCurveAddCurveFunc  add_curve_func,
+                           gpointer              user_data)
+{
+  return get_class (curve->op)->decompose_curve (curve, flags, tolerance, add_curve_func, user_data);
 }
 
 gskpathop
