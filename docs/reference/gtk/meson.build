@@ -169,6 +169,7 @@ private_headers = [
   'gtkplacesviewprivate.h',
   'gtkplacesviewrowprivate.h',
   'gtkpointerfocusprivate.h',
+  'gtkpopcountprivate.h',
   'gtkpopoverprivate.h',
   'gtkprinterprivate.h',
   'gtkprintoperation-private.h',
