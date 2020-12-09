@@ -132,6 +132,7 @@
 #include "gtkimmodule.h"
 #include "gtkroot.h"
 #include "gtknative.h"
+#include "gtkpopcountprivate.h"
 
 #include "inspector/window.h"
 
@@ -1484,9 +1485,11 @@ handle_pointing_event (GdkEvent *event)
       modifiers = gdk_event_get_modifier_state (event);
 
       if (type == GDK_BUTTON_RELEASE &&
-          __builtin_popcount (modifiers &
-                              (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK |
-                               GDK_BUTTON4_MASK | GDK_BUTTON5_MASK)) == 1)
+          gtk_popcount (modifiers & (GDK_BUTTON1_MASK |
+                                     GDK_BUTTON2_MASK |
+                                     GDK_BUTTON3_MASK |
+                                     GDK_BUTTON4_MASK |
+                                     GDK_BUTTON5_MASK)) == 1)
         {
           GtkWidget *new_target = gtk_widget_pick (native, x, y, GTK_PICK_DEFAULT);
 
