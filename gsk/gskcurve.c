@@ -727,13 +727,24 @@ gsk_conic_curve_decompose (const GskCurve      *curve,
                            gpointer             user_data)
 {
   const GskConicCurve *self = &curve->conic;
+  graphene_point_t mid;
 
   gsk_conic_curve_ensure_coefficents (self);
+
+  gsk_conic_curve_eval_point (self, 0.5, &mid);
 
   return gsk_conic_curve_decompose_subdivide (self,
                                               tolerance,
                                               &self->points[0],
                                               0.0f,
+                                              &mid,
+                                              0.5f,
+                                              add_line_func,
+                                              user_data)
+      && gsk_conic_curve_decompose_subdivide (self,
+                                              tolerance,
+                                              &mid,
+                                              0.5f,
                                               &self->points[3],
                                               1.0f,
                                               add_line_func,
