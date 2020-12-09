@@ -8,9 +8,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-08 15:39+0000\n"
-"PO-Revision-Date: 2020-12-08 22:24+0200\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
+"POT-Creation-Date: 2020-12-09 05:51+0000\n"
+"PO-Revision-Date: 2020-12-09 09:07+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -701,7 +701,7 @@ msgstr ""
 #: gtk/gtknotebook.c:576 gtk/gtkoverlay.c:318 gtk/gtkpopover.c:1700
 #: gtk/gtkrevealer.c:347 gtk/gtkscrolledwindow.c:757 gtk/gtksearchbar.c:327
 #: gtk/gtkstack.c:404 gtk/gtktreeexpander.c:508 gtk/gtkviewport.c:383
-#: gtk/gtkwindow.c:916 gtk/gtkwindowhandle.c:548
+#: gtk/gtkwindow.c:936 gtk/gtkwindowhandle.c:548
 msgid "Child"
 msgstr "Вкладений елемент"
 
@@ -709,7 +709,7 @@ msgstr "Вкладений елемент"
 #: gtk/gtkflowbox.c:526 gtk/gtkframe.c:191 gtk/gtklistbox.c:3499
 #: gtk/gtkoverlay.c:319 gtk/gtkpopover.c:1701 gtk/gtkrevealer.c:348
 #: gtk/gtkscrolledwindow.c:758 gtk/gtksearchbar.c:328 gtk/gtkviewport.c:384
-#: gtk/gtkwindow.c:917 gtk/gtkwindowhandle.c:549
+#: gtk/gtkwindow.c:937 gtk/gtkwindowhandle.c:549
 msgid "The child widget"
 msgstr "Дочірній віджет"
 
@@ -4741,11 +4741,11 @@ msgstr "Позиція для розміщення вікна-бульбашки
 msgid "Whether to dismiss the popover on outside clicks"
 msgstr "Чи слід закривати накладне меню при клацанні ззовні"
 
-#: gtk/gtkpopover.c:1679 gtk/gtkwindow.c:902
+#: gtk/gtkpopover.c:1679 gtk/gtkwindow.c:922
 msgid "Default widget"
 msgstr "Типовий віджет"
 
-#: gtk/gtkpopover.c:1680 gtk/gtkwindow.c:903
+#: gtk/gtkpopover.c:1680 gtk/gtkwindow.c:923
 msgid "The default widget"
 msgstr "Типовий віджет"
 
@@ -7575,7 +7575,6 @@ msgid "Default Width"
 msgstr "Типова ширина"
 
 #: gtk/gtkwindow.c:746
-#| msgid "The title of the window"
 msgid "The default width of the window"
 msgstr "Типова ширина вікна"
 
@@ -7584,7 +7583,6 @@ msgid "Default Height"
 msgstr "Типова висота"
 
 #: gtk/gtkwindow.c:754
-#| msgid "The title of the window"
 msgid "The default height of the window"
 msgstr "Типова висота вікна"
 
@@ -7653,36 +7651,36 @@ msgstr "Може видалятись"
 msgid "Whether the window frame should have a close button"
 msgstr "Чи кадр вікна повинен мати кнопку закривання"
 
-#: gtk/gtkwindow.c:868
-msgid "Is maximized"
-msgstr "Розгорнуте"
+#: gtk/gtkwindow.c:878
+#| msgid "Is maximized"
+msgid "Is Maximized"
+msgstr "Чи розгорнуте"
 
-#: gtk/gtkwindow.c:869
+#: gtk/gtkwindow.c:879
 msgid "Whether the window is maximized"
 msgstr "Чи вікно розгорнуте"
 
-#: gtk/gtkwindow.c:875
+#: gtk/gtkwindow.c:895
 msgid "Is fullscreen"
 msgstr "Чи є повноекранним"
 
-#: gtk/gtkwindow.c:876
-#| msgid "Whether the window is maximized"
+#: gtk/gtkwindow.c:896
 msgid "Whether the window is fullscreen"
 msgstr "Чи розкрито вікно на увесь екран"
 
-#: gtk/gtkwindow.c:895
+#: gtk/gtkwindow.c:915
 msgid "GtkApplication"
 msgstr "GtkApplication"
 
-#: gtk/gtkwindow.c:896
+#: gtk/gtkwindow.c:916
 msgid "The GtkApplication for the window"
 msgstr "GtkApplication для вікна"
 
-#: gtk/gtkwindow.c:909
+#: gtk/gtkwindow.c:929
 msgid "Focus widget"
 msgstr "Фокусний віджет"
 
-#: gtk/gtkwindow.c:910
+#: gtk/gtkwindow.c:930
 msgid "The focus widget"
 msgstr "Фокусний віджет"
 
