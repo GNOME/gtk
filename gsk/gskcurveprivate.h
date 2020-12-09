@@ -92,6 +92,10 @@ void                    gsk_curve_split                         (const GskCurve 
                                                                  float                   progress,
                                                                  GskCurve               *start,
                                                                  GskCurve               *end);
+void                    gsk_curve_segment                       (const GskCurve         *curve,
+                                                                 float                   start,
+                                                                 float                   end,
+                                                                 GskCurve               *segment);
 gboolean                gsk_curve_decompose                     (const GskCurve         *curve,
                                                                  float                   tolerance,
                                                                  GskCurveAddLineFunc     add_line_func,
