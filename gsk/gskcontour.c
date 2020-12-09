@@ -1108,23 +1108,6 @@ gsk_standard_contour_find_measure (gconstpointer m,
 }
 
 static void
-gsk_standard_contour_measure_get_point (GskStandardContour        *self,
-                                        gsize                      op,
-                                        float                      progress,
-                                        graphene_point_t          *pos,
-                                        graphene_vec2_t           *tangent)
-{
-  GskCurve curve;
-
-  gsk_curve_init (&curve, self->ops[op]);
-
-  if (pos)
-    gsk_curve_get_point (&curve, progress, pos);
-  if (tangent)
-    gsk_curve_get_tangent (&curve, progress, tangent);
-}
-
-static void
 gsk_standard_contour_get_point (const GskContour *contour,
                                 gpointer          measure_data,
                                 float             distance,
@@ -1136,6 +1119,7 @@ gsk_standard_contour_get_point (const GskContour *contour,
   guint index;
   float progress;
   GskStandardContourMeasure *measure;
+  GskCurve curve;
 
   if (array->len == 0)
     {
@@ -1155,7 +1139,12 @@ gsk_standard_contour_get_point (const GskContour *contour,
   progress = measure->start_progress + (measure->end_progress - measure->start_progress) * progress;
   g_assert (progress >= 0 && progress <= 1);
 
-  gsk_standard_contour_measure_get_point (self, measure->op, progress, pos, tangent);
+  gsk_curve_init (&curve, self->ops[measure->op]);
+
+  if (pos)
+    gsk_curve_get_point (&curve, progress, pos);
+  if (tangent)
+    gsk_curve_get_tangent (&curve, progress, tangent);
 }
 
 static gboolean
@@ -1218,15 +1207,45 @@ gsk_standard_contour_get_closest_point (const GskContour       *contour,
       //g_print ("%zu: (%g-%g) dist %g\n", i, measure->start, measure->end, dist);
       if (dist <= threshold + 1.0f)
         {
-          graphene_vec2_t t;
-          float found_progress;
+          GskCurve curve;
+          graphene_point_t p2;
+          float found_progress, test_progress, test_dist;
+          const float step = 1/1024.f;
+
+          gsk_curve_init (&curve, self->ops[measure->op]);
 
           found_progress = measure->start_progress + (measure->end_progress - measure->start_progress) * progress;
-
-          gsk_standard_contour_measure_get_point (self, measure->op, found_progress, &p, out_tangent ? &t : NULL);
+          gsk_curve_get_point (&curve, found_progress, &p);
           dist = graphene_point_distance (point, &p, NULL, NULL);
+          //g_print ("!!! %zu: (%g-%g @ %g) dist %g\n", i, measure->start_progress, measure->end_progress, progress, dist);
+
+          /* The progress is non-uniform, so simple translation of progress doesn't work.
+           * Check if larger values inch closer towards minimal distance. */
+          while (progress + step < 1.0f) {
+            test_progress = measure->start_progress + (measure->end_progress - measure->start_progress) * (progress + step);
+            gsk_curve_get_point (&curve, test_progress, &p2);
+            test_dist = graphene_point_distance (point, &p2, NULL, NULL);
+            if (test_dist > dist)
+              break;
+            progress += step;
+            p = p2;
+            found_progress = test_progress;
+            dist = test_dist;
+          }
+          /* Also check smaller ones */
+          while (progress - step > 0.0f) {
+            test_progress = measure->start_progress + (measure->end_progress - measure->start_progress) * (progress - step);
+            gsk_curve_get_point (&curve, test_progress, &p2);
+            test_dist = graphene_point_distance (point, &p2, NULL, NULL);
+            if (test_dist > dist)
+              break;
+            progress -= step;
+            p = p2;
+            found_progress = test_progress;
+            dist = test_dist;
+          }
+          //g_print ("!!! %zu: (%g-%g @ %g) dist %g\n", i, measure->start_progress, measure->end_progress, progress, dist);
           /* double check that the point actually is closer */ 
-          //g_print ("!!! %zu: (%g-%g) dist %g\n", i, measure->start, measure->end, dist);
           if (dist <= threshold)
             {
               if (out_distance)
@@ -1236,7 +1255,7 @@ gsk_standard_contour_get_closest_point (const GskContour       *contour,
               if (out_offset)
                 *out_offset = measure->start + (measure->end - measure->start) * progress;
               if (out_tangent)
-                *out_tangent = t;
+                gsk_curve_get_tangent (&curve, found_progress, out_tangent);
               result = TRUE;
               if (tolerance >= dist)
                   return TRUE;
