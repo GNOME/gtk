@@ -1072,7 +1072,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="margin-end">6</property>
                                     <property name="margin-top">6</property>
                                     <property name="margin-bottom">6</property>
-                                    <property name="autoplay">0</property>
+                                    <property name="autoplay">1</property>
                                     <property name="loop">1</property>
                                     <property name="file">resource:///org/gtk/WidgetFactory4/gtk-logo.webm</property>
                                   </object>
