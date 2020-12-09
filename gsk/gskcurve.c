@@ -39,6 +39,10 @@ struct _GskCurveClass
                                                          float                   progress,
                                                          GskCurve               *result1,
                                                          GskCurve               *result2);
+  void                          (* segment)             (const GskCurve         *curve,
+                                                         float                   start,
+                                                         float                   end,
+                                                         GskCurve               *segment);
   gboolean                      (* decompose)           (const GskCurve         *curve,
                                                          float                   tolerance,
                                                          GskCurveAddLineFunc     add_line_func,
@@ -121,6 +125,21 @@ gsk_line_curve_split (const GskCurve   *curve,
     gsk_line_curve_init_from_points (&end->line, GSK_PATH_LINE, &point, &self->points[1]);
 }
 
+static void
+gsk_line_curve_segment (const GskCurve *curve,
+                        float           start,
+                        float           end,
+                        GskCurve       *segment)
+{
+  const GskLineCurve *self = &curve->line;
+  graphene_point_t start_point, end_point;
+
+  graphene_point_interpolate (&self->points[0], &self->points[1], start, &start_point);
+  graphene_point_interpolate (&self->points[0], &self->points[1], end, &end_point);
+
+  gsk_line_curve_init_from_points (&segment->line, GSK_PATH_LINE, &start_point, &end_point);
+}
+
 static gboolean
 gsk_line_curve_decompose (const GskCurve      *curve,
                           float                tolerance,
@@ -170,6 +189,7 @@ static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_get_point,
   gsk_line_curve_get_tangent,
   gsk_line_curve_split,
+  gsk_line_curve_segment,
   gsk_line_curve_decompose,
   gsk_line_curve_pathop,
   gsk_line_curve_get_start_point,
@@ -274,6 +294,18 @@ gsk_curve_curve_split (const GskCurve   *curve,
     gsk_curve_curve_init_from_points (&end->curve, (graphene_point_t[4]) { final, bccd, cd, pts[3] });
 }
 
+static void
+gsk_curve_curve_segment (const GskCurve *curve,
+                         float           start,
+                         float           end,
+                         GskCurve       *segment)
+{
+  GskCurve tmp;
+
+  gsk_curve_curve_split (curve, start, NULL, &tmp);
+  gsk_curve_curve_split (&tmp, (end - start) / (1.0f - start), segment, NULL);
+}
+
 /* taken from Skia, including the very descriptive name */
 static gboolean
 gsk_curve_curve_too_curvy (const GskCurveCurve *self,
@@ -371,6 +403,7 @@ static const GskCurveClass GSK_CURVE_CURVE_CLASS = {
   gsk_curve_curve_get_point,
   gsk_curve_curve_get_tangent,
   gsk_curve_curve_split,
+  gsk_curve_curve_segment,
   gsk_curve_curve_decompose,
   gsk_curve_curve_pathop,
   gsk_curve_curve_get_start_point,
@@ -600,6 +633,52 @@ gsk_conic_curve_split (const GskCurve   *curve,
     gsk_curve_init (end, gsk_pathop_encode (GSK_PATH_CONIC, right));
 }
 
+static void
+gsk_conic_curve_segment (const GskCurve *curve,
+                         float           start,
+                         float           end,
+                         GskCurve       *segment)
+{
+  const GskConicCurve *self = &curve->conic;
+  graphene_point_t start_num, start_denom;
+  graphene_point_t mid_num, mid_denom;
+  graphene_point_t end_num, end_denom;
+  graphene_point_t ctrl_num, ctrl_denom;
+  float mid;
+
+  if (start <= 0.0f)
+    return gsk_conic_curve_split (curve, end, segment, NULL);
+  else if (end >= 1.0f)
+    return gsk_conic_curve_split (curve, start, NULL, segment);
+
+  gsk_conic_curve_ensure_coefficents (self);
+
+  gsk_curve_eval_quad (self->num, start, &start_num);
+  gsk_curve_eval_quad (self->denom, start, &start_denom);
+  mid = (start + end) / 2;
+  gsk_curve_eval_quad (self->num, mid, &mid_num);
+  gsk_curve_eval_quad (self->denom, mid, &mid_denom);
+  gsk_curve_eval_quad (self->num, end, &end_num);
+  gsk_curve_eval_quad (self->denom, end, &end_denom);
+  ctrl_num = GRAPHENE_POINT_INIT (2 * mid_num.x - (start_num.x + end_num.x) / 2,
+                                  2 * mid_num.y - (start_num.y + end_num.y) / 2);
+  ctrl_denom = GRAPHENE_POINT_INIT (2 * mid_denom.x - (start_denom.x + end_denom.x) / 2,
+                                    2 * mid_denom.y - (start_denom.y + end_denom.y) / 2);
+
+  gsk_conic_curve_init_from_points (&segment->conic,
+                                    (graphene_point_t[4]) {
+                                      GRAPHENE_POINT_INIT (start_num.x / start_denom.x,
+                                                           start_num.y / start_denom.y),
+                                      GRAPHENE_POINT_INIT (ctrl_num.x / ctrl_denom.x,
+                                                           ctrl_num.y / ctrl_denom.y),
+                                      GRAPHENE_POINT_INIT (ctrl_denom.x / sqrtf (start_denom.x * end_denom.x),
+                                                           0),
+                                      GRAPHENE_POINT_INIT (end_num.x / end_denom.x,
+                                                           end_num.y / end_denom.y)
+                                    });
+
+}
+
 /* taken from Skia, including the very descriptive name */
 static gboolean
 gsk_conic_curve_too_curvy (const graphene_point_t *start,
@@ -708,6 +787,7 @@ static const GskCurveClass GSK_CONIC_CURVE_CLASS = {
   gsk_conic_curve_get_point,
   gsk_conic_curve_get_tangent,
   gsk_conic_curve_split,
+  gsk_conic_curve_segment,
   gsk_conic_curve_decompose,
   gsk_conic_curve_pathop,
   gsk_conic_curve_get_start_point,
@@ -764,6 +844,21 @@ gsk_curve_split (const GskCurve *curve,
                  GskCurve       *end)
 {
   get_class (curve->op)->split (curve, progress, start, end);
+}
+
+void
+gsk_curve_segment (const GskCurve *curve,
+                   float           start,
+                   float           end,
+                   GskCurve       *segment)
+{
+  if (start <= 0 && end >= 1)
+    {
+      *segment = *curve;
+      return;
+    }
+
+  get_class (curve->op)->segment (curve, start, end, segment);
 }
 
 gboolean
