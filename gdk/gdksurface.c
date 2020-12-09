@@ -681,6 +681,8 @@ gdk_surface_finalize (GObject *object)
 {
   GdkSurface *surface = GDK_SURFACE (object);
 
+  g_clear_handle_id (&surface->request_motion_id, g_source_remove);
+
   g_signal_handlers_disconnect_by_func (surface->display,
                                         seat_removed_cb, surface);
 
@@ -2408,6 +2410,19 @@ gdk_surface_flush_events (GdkFrameClock *clock,
   surface->frame_clock_events_paused = TRUE;
 }
 
+static gboolean
+request_motion_cb (void *data)
+{
+  GdkSurface *surface = GDK_SURFACE (data);
+  GdkFrameClock *clock = gdk_surface_get_frame_clock (surface);
+
+  if (clock)
+    gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS);
+  surface->request_motion_id = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 gdk_surface_resume_events (GdkFrameClock *clock,
                            void          *data)
@@ -2418,6 +2433,13 @@ gdk_surface_resume_events (GdkFrameClock *clock,
     {
       _gdk_display_unpause_events (surface->display);
       surface->frame_clock_events_paused = FALSE;
+    }
+
+  if (surface->request_motion)
+    {
+      surface->request_motion_id =
+        g_idle_add_full (GDK_PRIORITY_REDRAW + 1,
+                         request_motion_cb, surface, NULL);
     }
 }
 
@@ -2912,13 +2934,7 @@ gdk_surface_handle_event (GdkEvent *event)
 void
 gdk_surface_request_motion (GdkSurface *surface)
 {
-  GdkFrameClock *frame_clock;
-
   surface->request_motion = TRUE;
-
-  frame_clock = gdk_surface_get_frame_clock (surface);
-  if (frame_clock)
-    gdk_frame_clock_request_phase (frame_clock, GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS);
 }
 
 /**

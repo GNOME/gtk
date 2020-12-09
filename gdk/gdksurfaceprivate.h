@@ -80,6 +80,8 @@ struct _GdkSurface
   guint shortcuts_inhibited : 1;
   guint request_motion : 1;
 
+  guint request_motion_id;
+
   struct {
     GdkGravity surface_anchor;
     GdkGravity rect_anchor;
