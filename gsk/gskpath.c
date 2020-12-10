@@ -444,6 +444,18 @@ gsk_path_foreach_trampoline_add_line (const graphene_point_t *from,
 }
 
 static gboolean
+gsk_path_foreach_trampoline_add_curve (GskPathOperation        op,
+                                       const graphene_point_t *pts,
+                                       gsize                   n_pts,
+                                       float                   weight,
+                                       gpointer                data)
+{
+  GskPathForeachTrampoline *trampoline = data;
+
+  return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
+}
+
+static gboolean
 gsk_path_foreach_trampoline (GskPathOperation        op,
                              const graphene_point_t *pts,
                              gsize                   n_pts,
@@ -453,22 +465,43 @@ gsk_path_foreach_trampoline (GskPathOperation        op,
   GskPathForeachTrampoline *trampoline = data;
 
   switch (op)
-  {
+    {
     case GSK_PATH_MOVE:
     case GSK_PATH_CLOSE:
     case GSK_PATH_LINE:
       return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
 
     case GSK_PATH_QUAD:
+      {
+        GskCurve curve;
+
+        if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_QUAD)
+          return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
+
+        gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_QUAD, pts));
+        return gsk_curve_decompose (&curve,
+                                    trampoline->tolerance,
+                                    gsk_path_foreach_trampoline_add_line,
+                                    trampoline);
+      }
+
     case GSK_PATH_CUBIC:
       {
         GskCurve curve;
 
         if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_CUBIC)
           return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
-        
+
         gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_CUBIC, pts));
-        return gsk_curve_decompose (&curve, 
+
+        if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_QUAD)
+          return gsk_curve_decompose_curve (&curve,
+                                            trampoline->flags,
+                                            trampoline->tolerance,
+                                            gsk_path_foreach_trampoline_add_curve,
+                                            trampoline);
+
+        return gsk_curve_decompose (&curve,
                                     trampoline->tolerance,
                                     gsk_path_foreach_trampoline_add_line,
                                     trampoline);
@@ -476,14 +509,21 @@ gsk_path_foreach_trampoline (GskPathOperation        op,
 
     case GSK_PATH_CONIC:
       {
-        GskCurve curve;
+         GskCurve curve;
 
         if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_CONIC)
           return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
 
-        /* XXX: decompose into curves if allowed */
         gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_CONIC, (graphene_point_t[4]) { pts[0], pts[1], { weight, }, pts[2] } ));
-        return gsk_curve_decompose (&curve, 
+
+        if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_QUAD)
+          return gsk_curve_decompose_curve (&curve,
+                                            trampoline->flags,
+                                            trampoline->tolerance,
+                                            gsk_path_foreach_trampoline_add_curve,
+                                            trampoline);
+
+        return gsk_curve_decompose (&curve,
                                     trampoline->tolerance,
                                     gsk_path_foreach_trampoline_add_line,
                                     trampoline);
@@ -493,8 +533,12 @@ gsk_path_foreach_trampoline (GskPathOperation        op,
     default:
       g_assert_not_reached ();
       return FALSE;
-  }
+    }
 }
+
+#define ALLOW_ANY (GSK_PATH_FOREACH_ALLOW_QUAD| \
+                   GSK_PATH_FOREACH_ALLOW_CUBIC| \
+                   GSK_PATH_FOREACH_ALLOW_CONIC)
 
 gboolean
 gsk_path_foreach_with_tolerance (GskPath             *self,
@@ -507,7 +551,7 @@ gsk_path_foreach_with_tolerance (GskPath             *self,
   gsize i;
 
   /* If we need to massage the data, set up a trampoline here */
-  if (flags != (GSK_PATH_FOREACH_ALLOW_CUBIC | GSK_PATH_FOREACH_ALLOW_CONIC))
+  if ((flags & ALLOW_ANY) != ALLOW_ANY)
     {
       trampoline = (GskPathForeachTrampoline) { flags, tolerance, func, user_data };
       func = gsk_path_foreach_trampoline;
