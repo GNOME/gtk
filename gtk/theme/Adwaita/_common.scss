@@ -1389,11 +1389,17 @@ windowcontrols {
 
     @extend %button_basic_flat;
 
+
     border-radius: 9999px;
     padding: 6px;
     margin: 0 2px;
     min-width: 0;
     min-height: 0;
+    &:hover {
+      //special case hover colors inside a headerbar
+      @include button(undecorated-hover,$c:$headerbar_bg_color);
+    }
+    &:active { @include button(undecorated-active,$c:$headerbar_bg_color); }
   }
 }
 
