@@ -18,9 +18,11 @@ random_weight (void)
 }
 
 static void
-init_random_curve (GskCurve *curve)
+init_random_curve_with_op (GskCurve *curve,
+                           GskPathOperation min_op,
+                           GskPathOperation max_op)
 {
-  switch (g_test_rand_int_range (GSK_PATH_LINE, GSK_PATH_CONIC + 1))
+  switch (g_test_rand_int_range (min_op, max_op + 1))
     {
     case GSK_PATH_LINE:
       {
@@ -59,6 +61,12 @@ init_random_curve (GskCurve *curve)
     default:
       g_assert_not_reached ();
     }
+}
+
+static void
+init_random_curve (GskCurve *curve)
+{
+  init_random_curve_with_op (curve, GSK_PATH_LINE, GSK_PATH_CONIC);
 }
 
 static void
@@ -218,6 +226,75 @@ test_curve_decompose (void)
                 }
             }
         }
+    }
+}
+
+static gboolean
+add_curve_to_array (const graphene_point_t points[4],
+                    gpointer               user_data)
+{
+  GArray *array = user_data;
+  GskCurve c;
+
+  gsk_curve_init (&c, gsk_pathop_encode (GSK_PATH_CURVE, points));
+  g_array_append_val (array, c);
+
+  return TRUE;
+}
+
+static void
+test_curve_decompose_curve (void)
+{
+  g_test_skip ("No good error bounds for decomposing conics");
+  return;
+
+  for (int i = 0; i < 100; i++)
+    {
+      GArray *array;
+      GskCurve c;
+      GskPathBuilder *builder;
+      GskPath *path;
+      GskPathMeasure *measure;
+      const graphene_point_t *s;
+
+      init_random_curve_with_op (&c, GSK_PATH_CONIC, GSK_PATH_CONIC);
+
+      builder = gsk_path_builder_new ();
+
+      s = gsk_curve_get_start_point (&c);
+      gsk_path_builder_move_to (builder, s->x, s->y);
+      gsk_curve_builder_to (&c, builder);
+      path = gsk_path_builder_free_to_path (builder);
+      measure = gsk_path_measure_new_with_tolerance (path, 0.1);
+
+      array = g_array_new (FALSE, FALSE, sizeof (GskCurve));
+
+      g_assert_true (gsk_curve_decompose_curve (&c, 0.1, add_curve_to_array, array));
+
+      g_assert_cmpint (array->len, >=, 1);
+
+      for (int j = 0; j < array->len; j++)
+        {
+          GskCurve *c2 = &g_array_index (array, GskCurve, j);
+
+          g_assert_true (c2->op == GSK_PATH_CURVE);
+
+          /* Check that the curves we got are approximating the conic */
+          for (int k = 0; k < 11; k++)
+            {
+              graphene_point_t p;
+              float dist;
+
+              gsk_curve_get_point (c2, k/10.0, &p);
+              dist = gsk_path_measure_get_closest_point (measure, &p, NULL);
+              g_assert_cmpfloat (dist, <, 0.5); // FIXME error bound ?
+            }
+        }
+
+      g_array_unref (array);
+
+      gsk_path_measure_unref (measure);
+      gsk_path_unref (path);
     }
 }
 
@@ -762,6 +839,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/curve/bounds", test_curve_bounds);
   g_test_add_func ("/curve/tangents", test_curve_tangents);
   g_test_add_func ("/curve/decompose", test_curve_decompose);
+  g_test_add_func ("/curve/decompose-curve", test_curve_decompose_curve);
   g_test_add_func ("/curve/intersection/line-line", test_line_line_intersection);
   g_test_add_func ("/curve/intersection/line-line-none", test_line_line_none_intersection);
   g_test_add_func ("/curve/intersection/line-line-end", test_line_line_end_intersection);
