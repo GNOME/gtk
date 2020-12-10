@@ -496,9 +496,9 @@ button {
       &:hover {
         transition: $button_transition;
         transition-duration: 500ms;
-
-        &:active { transition: $button_transition; }
       }
+      &:active { transition: $button_transition; }
+      &:backdrop, &:disabled, &:backdrop:disabled { @include button(undecorated); }
     }
 
     &:hover {
@@ -531,9 +531,6 @@ button {
         }
       }
     }
-
-    @at-root %button_basic_flat,
-    &.flat { &:backdrop, &:disabled, &:backdrop:disabled { @include button(undecorated); }}
 
     &:disabled {
       @include button(insensitive);
