@@ -466,6 +466,15 @@ gsk_path_foreach_trampoline_add_line (const graphene_point_t *from,
 }
 
 static gboolean
+gsk_path_foreach_trampoline_add_curve (const graphene_point_t points[4],
+                                       gpointer               data)
+{
+  GskPathForeachTrampoline *trampoline = data;
+
+  return trampoline->func (GSK_PATH_CURVE, points, 4, 0.0f, trampoline->user_data);
+}
+
+static gboolean
 gsk_path_foreach_trampoline (GskPathOperation        op,
                              const graphene_point_t *pts,
                              gsize                   n_pts,
@@ -497,17 +506,25 @@ gsk_path_foreach_trampoline (GskPathOperation        op,
 
     case GSK_PATH_CONIC:
       {
-        GskCurve curve;
+         GskCurve curve;
 
         if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_CONIC)
           return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
+        else
+          {
+            gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_CONIC, (graphene_point_t[4]) { pts[0], pts[1], { weight, }, pts[2] } ));
 
-        /* XXX: decompose into curves if allowed */
-        gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_CONIC, (graphene_point_t[4]) { pts[0], pts[1], { weight, }, pts[2] } ));
-        return gsk_curve_decompose (&curve,
-                                    trampoline->tolerance,
-                                    gsk_path_foreach_trampoline_add_line,
-                                    trampoline);
+            if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_CURVE)
+              return gsk_curve_decompose_curve (&curve,
+                                                trampoline->tolerance,
+                                                gsk_path_foreach_trampoline_add_curve,
+                                                trampoline);
+            else
+              return gsk_curve_decompose (&curve,
+                                          trampoline->tolerance,
+                                          gsk_path_foreach_trampoline_add_line,
+                                          trampoline);
+          }
       }
 
 
