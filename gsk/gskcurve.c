@@ -29,6 +29,11 @@ struct _GskCurveClass
 {
   void                          (* init)                (GskCurve               *curve,
                                                          gskpathop               op);
+  void                          (* init_foreach)        (GskCurve               *curve,
+                                                         GskPathOperation        op,
+                                                         const graphene_point_t *pts,
+                                                         gsize                   n_pts,
+                                                         float                   weight);
   void                          (* get_point)           (const GskCurve         *curve,
                                                          float                   t,
                                                          graphene_point_t       *pos);
@@ -86,6 +91,20 @@ gsk_line_curve_init (GskCurve  *curve,
   const graphene_point_t *pts = gsk_pathop_points (op);
 
   gsk_line_curve_init_from_points (self, gsk_pathop_op (op), &pts[0], &pts[1]);
+}
+
+static void
+gsk_line_curve_init_foreach (GskCurve               *curve,
+                             GskPathOperation        op,
+                             const graphene_point_t *pts,
+                             gsize                   n_pts,
+                             float                   weight)
+{
+  GskLineCurve *self = &curve->line;
+
+  g_assert (n_pts == 2);
+
+  gsk_line_curve_init_from_points (self, op, &pts[0], &pts[1]);
 }
 
 static void
@@ -186,6 +205,7 @@ gsk_line_curve_get_start_end_tangent (const GskCurve  *curve,
 
 static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_init,
+  gsk_line_curve_init_foreach,
   gsk_line_curve_get_point,
   gsk_line_curve_get_tangent,
   gsk_line_curve_split,
@@ -217,6 +237,20 @@ gsk_curve_curve_init (GskCurve  *curve,
   GskCurveCurve *self = &curve->curve;
 
   gsk_curve_curve_init_from_points (self, gsk_pathop_points (op));
+}
+
+static void
+gsk_curve_curve_init_foreach (GskCurve               *curve,
+                              GskPathOperation        op,
+                              const graphene_point_t *pts,
+                              gsize                   n_pts,
+                              float                   weight)
+{
+  GskCurveCurve *self = &curve->curve;
+
+  g_assert (n_pts == 4);
+
+  gsk_curve_curve_init_from_points (self, pts);
 }
 
 static void
@@ -400,6 +434,7 @@ gsk_curve_curve_get_end_tangent (const GskCurve  *curve,
 
 static const GskCurveClass GSK_CURVE_CURVE_CLASS = {
   gsk_curve_curve_init,
+  gsk_curve_curve_init_foreach,
   gsk_curve_curve_get_point,
   gsk_curve_curve_get_tangent,
   gsk_curve_curve_split,
@@ -432,6 +467,26 @@ gsk_conic_curve_init (GskCurve  *curve,
   GskConicCurve *self = &curve->conic;
 
   gsk_conic_curve_init_from_points (self, gsk_pathop_points (op));
+}
+
+static void
+gsk_conic_curve_init_foreach (GskCurve               *curve,
+                              GskPathOperation        op,
+                              const graphene_point_t *pts,
+                              gsize                   n_pts,
+                              float                   weight)
+{
+  GskConicCurve *self = &curve->conic;
+
+  g_assert (n_pts == 3);
+
+  gsk_conic_curve_init_from_points (self,
+                                    (graphene_point_t[4]) {
+                                      pts[0],
+                                      pts[1],
+                                      GRAPHENE_POINT_INIT (weight, 0),
+                                      pts[2]
+                                    });
 }
 
 static inline float
@@ -795,6 +850,7 @@ gsk_conic_curve_get_end_tangent (const GskCurve  *curve,
 
 static const GskCurveClass GSK_CONIC_CURVE_CLASS = {
   gsk_conic_curve_init,
+  gsk_conic_curve_init_foreach,
   gsk_conic_curve_get_point,
   gsk_conic_curve_get_tangent,
   gsk_conic_curve_split,
@@ -830,6 +886,16 @@ gsk_curve_init (GskCurve  *curve,
                 gskpathop  op)
 {
   get_class (gsk_pathop_op (op))->init (curve, op);
+}
+
+void
+gsk_curve_init_foreach (GskCurve               *curve,
+                        GskPathOperation        op,
+                        const graphene_point_t *pts,
+                        gsize                   n_pts,
+                        float                   weight)
+{
+  get_class (op)->init_foreach (curve, op, pts, n_pts, weight);
 }
 
 void
