@@ -5254,7 +5254,7 @@ gtk_window_unmaximize (GtkWindow *window)
  * windows.
  *
  * You can track the result of this operation via the #GdkToplevel:state property,
- * or by listening to notifications of the #GtkWindow:fullscreen property.
+ * or by listening to notifications of the #GtkWindow:fullscreened property.
  */
 void
 gtk_window_fullscreen (GtkWindow *window)
@@ -5298,7 +5298,7 @@ unset_fullscreen_monitor (GtkWindow *window)
  * any given monitor.
  *
  * You can track the result of this operation via the #GdkToplevel:state
- * property, or by listening to notifications of the #GtkWindow:fullscreen
+ * property, or by listening to notifications of the #GtkWindow:fullscreened
  * property.
  */
 void
@@ -5338,7 +5338,7 @@ gtk_window_fullscreen_on_monitor (GtkWindow  *window,
  * write code that crashes if not.
  *
  * You can track the result of this operation via the #GdkToplevel:state property,
- * or by listening to notifications of the #GtkWindow:fullscreen property.
+ * or by listening to notifications of the #GtkWindow:fullscreened property.
  */
 void
 gtk_window_unfullscreen (GtkWindow *window)
