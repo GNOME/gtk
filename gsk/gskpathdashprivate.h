@@ -25,6 +25,7 @@
 
 G_BEGIN_DECLS
 
+GDK_AVAILABLE_IN_ALL
 gboolean                gsk_path_dash                           (GskPath                *path,
                                                                  GskStroke              *stroke,
                                                                  float                   tolerance,
