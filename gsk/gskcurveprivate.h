@@ -81,6 +81,11 @@ typedef gboolean (* GskCurveAddLineFunc) (const graphene_point_t *from,
 
 void                    gsk_curve_init                          (GskCurve               *curve,
                                                                  gskpathop               op);
+void                    gsk_curve_init_foreach                  (GskCurve               *curve,
+                                                                 GskPathOperation        op,
+                                                                 const graphene_point_t *pts,
+                                                                 gsize                   n_pts,
+                                                                 float                   weight);
 
 void                    gsk_curve_get_point                     (const GskCurve         *curve,
                                                                  float                   progress,
