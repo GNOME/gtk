@@ -413,6 +413,30 @@
     text-shadow: none;
     -gtk-icon-shadow: none;
   }
+  @else if $t==undecorated-hover {
+    border-color: transparent;
+    background-image: none;
+    box-shadow: none;
+    text-shadow: none;
+    @if $variant == 'light' {
+      background-color: darken($c,26%);
+    }
+    @else {
+      background-color: darken($c,10%);
+    }
+  }
+  @else if $t==undecorated-active {
+    border-color: transparent;
+    background-image: none;
+    box-shadow: none;
+    text-shadow: none;
+    @if $variant == 'light' {
+      background-color: darken($c,40%);
+    }
+    @else {
+      background-color: darken($c,14%);
+    }
+  }
 }
 
 @mixin headerbar_fill($c:$headerbar_bg_color, $hc:$top_hilight, $ov: none) {

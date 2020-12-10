@@ -484,23 +484,6 @@ button {
 
     @include focus-ring();
 
-    @at-root %button_basic_flat,
-    &.flat {
-      @include button(undecorated);
-      // to avoid adjacent buttons borders clashing when transitioning, the transition on the normal state is set
-      // to none, while it's added back in the hover state, so the button decoration will fade in on hover, but
-      // it won't fade out when the pointer leave the button allocation area. To make the transition more evident
-      // in this case the duration is increased.
-      transition: none;
-
-      &:hover {
-        transition: $button_transition;
-        transition-duration: 500ms;
-      }
-      &:active { transition: $button_transition; }
-      &:backdrop, &:disabled, &:backdrop:disabled { @include button(undecorated); }
-    }
-
     &:hover {
       @include button(hover);
       -gtk-icon-filter: brightness(1.2);
@@ -537,6 +520,27 @@ button {
 
       &:active,
       &:checked { @include button(insensitive-active); }
+    }
+
+    @at-root %button_basic_flat,
+    &.flat {
+      @include button(undecorated);
+      // to avoid adjacent buttons borders clashing when transitioning, the transition on the normal state is set
+      // to none, while it's added back in the hover state, so the button decoration will fade in on hover, but
+      // it won't fade out when the pointer leave the button allocation area. To make the transition more evident
+      // in this case the duration is increased.
+      transition: none;
+
+      &:hover {
+        @include button(undecorated-hover);
+        transition: $button_transition;
+        transition-duration: 500ms;
+      }
+      &:active {
+        @include button(undecorated-active);
+        transition: $button_transition;
+      }
+      &:backdrop, &:disabled, &:backdrop:disabled { @include button(undecorated); }
     }
 
     &.image-button {
