@@ -132,6 +132,10 @@ int                     gsk_curve_intersect                     (const GskCurve 
                                                                  graphene_point_t       *p,
                                                                  int                     n);
 
+void                    gsk_curve_offset                        (const GskCurve         *curve,
+                                                                 float                   distance,
+                                                                 GskCurve               *offset_curve);
+
 G_END_DECLS
 
 #endif /* __GSK_CURVE_PRIVATE_H__ */
