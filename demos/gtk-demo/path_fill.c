@@ -8,6 +8,7 @@
 #include <gtk/gtk.h>
 
 #include "paintable.h"
+#include "gsk/gskpathdashprivate.h"
 
 #define GTK_TYPE_PATH_PAINTABLE (gtk_path_paintable_get_type ())
 G_DECLARE_FINAL_TYPE (GtkPathPaintable, gtk_path_paintable, GTK, PATH_PAINTABLE, GObject)
@@ -60,7 +61,7 @@ gtk_path_paintable_snapshot (GdkPaintable *paintable,
 #if 0
   gtk_snapshot_push_fill (snapshot, self->path, GSK_FILL_RULE_WINDING);
 #else
-  GskStroke *stroke = gsk_stroke_new (4.0);
+  GskStroke *stroke = gsk_stroke_new (2.0);
   gtk_snapshot_push_stroke (snapshot, self->path, stroke);
   gsk_stroke_free (stroke);
 #endif
@@ -216,6 +217,46 @@ create_path_from_text (GtkWidget *widget)
 }
 
 static gboolean
+build_path (GskPathOperation        op,
+            const graphene_point_t *pts,
+            gsize                   n_pts,
+            float                   weight,
+            gpointer                user_data)
+{
+  GskPathBuilder *builder = user_data;
+
+  switch (op)
+  {
+    case GSK_PATH_MOVE:
+      gsk_path_builder_move_to (builder, pts[0].x, pts[0].y);
+      break;
+
+    case GSK_PATH_CLOSE:
+      gsk_path_builder_close (builder);
+      break;
+
+    case GSK_PATH_LINE:
+      gsk_path_builder_line_to (builder, pts[1].x, pts[1].y);
+      break;
+
+    case GSK_PATH_CURVE:
+      gsk_path_builder_curve_to (builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
+      break;
+
+    case GSK_PATH_CONIC:
+      gsk_path_builder_conic_to (builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, weight);
+      break;
+
+    default:
+      g_assert_not_reached ();
+      break;
+  }
+
+  return TRUE;
+}
+
+
+static gboolean
 update_path (GtkWidget     *widget,
              GdkFrameClock *frame_clock,
              gpointer       measure)
@@ -225,12 +266,26 @@ update_path (GtkWidget     *widget,
   GskPath *path;
   graphene_point_t pos;
   graphene_vec2_t tangent;
+  GskStroke *stroke;
 
   builder = gsk_path_builder_new ();
   gsk_path_builder_add_segment (builder,
                                 measure,
+#if 1
+                                0.0, gsk_path_measure_get_length (measure));
+#else
                                 progress > 1 ? (progress - 1) * gsk_path_measure_get_length (measure) : 0.0,
                                 (progress < 1 ? progress : 1.0) * gsk_path_measure_get_length (measure));
+#endif
+
+  path = gsk_path_builder_free_to_path (builder);
+
+  stroke = gsk_stroke_new (1);
+  gsk_stroke_set_dash (stroke, (float[2]) { 10, 5 }, 2);
+  gsk_stroke_set_dash_offset (stroke, - (gdk_frame_clock_get_frame_time (frame_clock) % G_USEC_PER_SEC) * 15. / G_USEC_PER_SEC);
+  builder = gsk_path_builder_new ();
+  gsk_path_dash (path, stroke, 0.2, build_path, builder);
+  gsk_path_unref (path);
 
   gsk_path_measure_get_point (measure,
                               (progress > 1 ? (progress - 1) : progress) * gsk_path_measure_get_length (measure),
@@ -240,6 +295,7 @@ update_path (GtkWidget     *widget,
   gsk_path_builder_line_to (builder, pos.x + 3 * graphene_vec2_get_y (&tangent), pos.y + 3 * graphene_vec2_get_x (&tangent));
   gsk_path_builder_line_to (builder, pos.x - 3 * graphene_vec2_get_y (&tangent), pos.y - 3 * graphene_vec2_get_x (&tangent));
   gsk_path_builder_close (builder);
+
   path = gsk_path_builder_free_to_path (builder);
 
   gtk_path_paintable_set_path (GTK_PATH_PAINTABLE (gtk_picture_get_paintable (GTK_PICTURE (widget))),
