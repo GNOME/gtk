@@ -239,7 +239,154 @@ test_curve_decompose (void)
                 }
             }
         }
+
+      g_array_unref (array);
     }
+}
+
+static gboolean
+add_curve_to_array (GskPathOperation        op,
+                    const graphene_point_t *pts,
+                    gsize                   n_pts,
+                    float                   weight,
+                    gpointer                user_data)
+{
+  GArray *array = user_data;
+  GskCurve c;
+
+  gsk_curve_init_foreach (&c, op, pts, n_pts, weight);
+  g_array_append_val (array, c);
+
+  return TRUE;
+}
+
+static void
+test_curve_decompose_conic (void)
+{
+  g_test_skip ("No good error bounds for decomposing conics");
+  return;
+
+  for (int i = 0; i < 100; i++)
+    {
+      GArray *array;
+      GskCurve c;
+      GskPathBuilder *builder;
+      GskPath *path;
+      GskPathMeasure *measure;
+      const graphene_point_t *s;
+
+      init_random_curve_with_op (&c, GSK_PATH_CONIC, GSK_PATH_CONIC);
+
+      builder = gsk_path_builder_new ();
+
+      s = gsk_curve_get_start_point (&c);
+      gsk_path_builder_move_to (builder, s->x, s->y);
+      gsk_curve_builder_to (&c, builder);
+      path = gsk_path_builder_free_to_path (builder);
+      measure = gsk_path_measure_new_with_tolerance (path, 0.1);
+
+      array = g_array_new (FALSE, FALSE, sizeof (GskCurve));
+
+      g_assert_true (gsk_curve_decompose_curve (&c, GSK_PATH_FOREACH_ALLOW_CUBIC, 0.1, add_curve_to_array, array));
+
+      g_assert_cmpint (array->len, >=, 1);
+
+      for (int j = 0; j < array->len; j++)
+        {
+          GskCurve *c2 = &g_array_index (array, GskCurve, j);
+
+          g_assert_true (c2->op == GSK_PATH_CUBIC);
+
+          /* Check that the curves we got are approximating the conic */
+          for (int k = 0; k < 11; k++)
+            {
+              graphene_point_t p;
+              float dist;
+
+              gsk_curve_get_point (c2, k/10.0, &p);
+              dist = gsk_path_measure_get_closest_point (measure, &p, NULL);
+              g_assert_cmpfloat (dist, <, 0.5); // FIXME error bound ?
+            }
+        }
+
+      g_array_unref (array);
+
+      gsk_path_measure_unref (measure);
+      gsk_path_unref (path);
+    }
+}
+
+static void
+test_curve_decompose_into (GskPathForeachFlags flags)
+{
+  for (int i = 0; i < 100; i++)
+    {
+      GskCurve c;
+      GskPathBuilder *builder;
+      const graphene_point_t *s;
+      GskPath *path;
+      GArray *array;
+
+      init_random_curve (&c);
+
+      builder = gsk_path_builder_new ();
+
+      s = gsk_curve_get_start_point (&c);
+      gsk_path_builder_move_to (builder, s->x, s->y);
+      gsk_curve_builder_to (&c, builder);
+      path = gsk_path_builder_free_to_path (builder);
+
+      array = g_array_new (FALSE, FALSE, sizeof (GskCurve));
+
+      g_assert_true (gsk_curve_decompose_curve (&c, flags, 0.1, add_curve_to_array, array));
+
+      g_assert_cmpint (array->len, >=, 1);
+
+      for (int j = 0; j < array->len; j++)
+        {
+          GskCurve *c2 = &g_array_index (array, GskCurve, j);
+
+          switch (c2->op)
+            {
+            case GSK_PATH_MOVE:
+            case GSK_PATH_CLOSE:
+            case GSK_PATH_LINE:
+              break;
+            case GSK_PATH_QUAD:
+              g_assert_true (flags & GSK_PATH_FOREACH_ALLOW_QUAD);
+              break;
+            case GSK_PATH_CUBIC:
+              g_assert_true (flags & GSK_PATH_FOREACH_ALLOW_CUBIC);
+              break;
+            case GSK_PATH_CONIC:
+              g_assert_true (flags & GSK_PATH_FOREACH_ALLOW_CONIC);
+              break;
+            default:
+              g_assert_not_reached ();
+            }
+        }
+
+      g_array_unref (array);
+      gsk_path_unref (path);
+    }
+}
+
+static void
+test_curve_decompose_into_line (void)
+{
+  test_curve_decompose_into (0);
+}
+
+static void
+test_curve_decompose_into_quad (void)
+{
+  test_curve_decompose_into (GSK_PATH_FOREACH_ALLOW_QUAD);
+}
+
+static void
+test_curve_decompose_into_cubic (void)
+{
+  test_curve_decompose_into (GSK_PATH_FOREACH_ALLOW_CUBIC);
 }
 
 static float
@@ -945,6 +1092,10 @@ main (int argc, char *argv[])
   g_test_add_func ("/curve/tangents", test_curve_tangents);
   g_test_add_func ("/curve/match", test_curve_match);
   g_test_add_func ("/curve/decompose", test_curve_decompose);
+  g_test_add_func ("/curve/decompose/conic", test_curve_decompose_conic);
+  g_test_add_func ("/curve/decompose/into/line", test_curve_decompose_into_line);
+  g_test_add_func ("/curve/decompose/into/quad", test_curve_decompose_into_quad);
+  g_test_add_func ("/curve/decompose/into/cubic", test_curve_decompose_into_cubic);
   g_test_add_func ("/curve/intersection/line-line", test_line_line_intersection);
   g_test_add_func ("/curve/intersection/line-line-none", test_line_line_none_intersection);
   g_test_add_func ("/curve/intersection/line-line-end", test_line_line_end_intersection);
