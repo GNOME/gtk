@@ -31,10 +31,11 @@ G_BEGIN_DECLS
 
 /**
  * GskPathForeachFlags:
+ * @GSK_PATH_FOREACH_ALLOW_QUAD: Allow emission of %GSK_PATH_QUAD
  * @GSK_PATH_FOREACH_ALLOW_CUBIC: Allow emission of %GSK_PATH_CUBIC
- *     operations.
- * @GSK_PATH_FOREACH_ALLOW_CONIC: Allow emission of %GSK_PATH_CONIC
- *     operations.
+ *   and %GSK_PATH_QUAD operations.
+ * @GSK_PATH_FOREACH_ALLOW_CONIC: Allow emission of %GSK_PATH_CONIC,
+ *   %GSK_PATH_CUBIC and %GSK_PATH_QUAD operations.
  *
  * Flags that can be passed to gsk_path_foreach() to enable additional
  * features.
@@ -45,8 +46,9 @@ G_BEGIN_DECLS
  */
 typedef enum
 {
-  GSK_PATH_FOREACH_ALLOW_CUBIC = (1 << 0),
-  GSK_PATH_FOREACH_ALLOW_CONIC = (1 << 1)
+  GSK_PATH_FOREACH_ALLOW_QUAD  = (1 << 0),
+  GSK_PATH_FOREACH_ALLOW_CUBIC = (1 << 1),
+  GSK_PATH_FOREACH_ALLOW_CONIC = (1 << 2)
 } GskPathForeachFlags;
 
 /**
