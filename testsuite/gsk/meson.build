@@ -207,6 +207,7 @@ endforeach
 tests = [
   ['curve', ['../../gsk/gskcurve.c'], ['-DGTK_COMPILATION']],
   ['curve-special-cases', ['../../gsk/gskcurve.c'], ['-DGTK_COMPILATION']],
+  ['dash'],
   ['path'],
   ['path-special-cases'],
   ['rounded-rect'],
