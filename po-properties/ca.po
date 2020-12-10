@@ -214,7 +214,7 @@ msgstr "Codi d'operació"
 
 #: gdk/x11/gdkdevicemanager-xi2.c:133
 msgid "Opcode for XInput2 requests"
-msgstr "Codi d'operació per a les sol·licituds d'XInput2"
+msgstr "Codi d'operació per a les sol·licituds XInput2"
 
 #: gdk/x11/gdkdevicemanager-xi2.c:139
 msgid "Major"
