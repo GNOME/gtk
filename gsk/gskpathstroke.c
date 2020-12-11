@@ -996,7 +996,10 @@ curve_intersection (Curve            *c1,
 
 typedef struct
 {
-  GskCurve curve;
+  GskPathOperation op;
+  int n_pts;
+  graphene_point_t pts[4]; /* points of the curve */
+  float w;
 
   graphene_point_t r[4]; /* offset to the right */
   graphene_point_t l[4]; /* offset to the left */
@@ -1004,37 +1007,6 @@ typedef struct
   graphene_point_t le[2]; /* intersection of adjacent l lines of this and next op */
   float angle[2]; /* angles between tangents at the both ends */
 } PathOpData;
-
-/* Compute the curve that results from offsetting the control points */
-static void
-offset_curve (const GskCurve *c,
-              float           distance,
-              GskCurve       *o)
-{
-  graphene_vec2_t n;
-  graphene_point_t p[4];
-
-  switch (c->op)
-    {
-    case GSK_PATH_LINE:
-      normal_vector (&c->line.points[0], &c->line.points[1], &n);
-      scale_point (&c->line.points[0], &n, distance, &p[0]);
-      scale_point (&c->line.points[1], &n, distance, &p[1]);
-      gsk_curve_initialize (o, gsk_patho_encode (GSK_PATH_LINE, p);
-      break;
-    case GSK_PATH_CURVE:
-      normal_vector (&c->curve.points[0], &c->curve.points[1], &n1);
-      scale_point (&c->curve.points[0], &n, distance, &p[0]);
-      scale_point (&c->curve.points[1], &n, distance, &p[1]);
-      break;
-    case GSK_PATH_CONIC:
-      break;
-    case GSK_PATH_CLOSE:
-    case GSK_PATH_MOVE:
-    default:
-      g_assert_not_reached ();
-    }
-}
 
 static void
 compute_offsets (PathOpData *op,
@@ -1226,10 +1198,11 @@ path_op_data_new (GskPathOperation        op,
   int i;
 
   d = g_new0 (PathOpData, 1);
-  if (op == GSK_PATH_CONIC)
-    gsk_curve_init (&d->curve, gsk_pathop_encode (op, { pts[0], pts[1], { w,}, pts[2] }));
-  else
-    gsk_curve_init (&d->curve, gsk_pathop_encode (op, pts));
+  d->op = op;
+  for (i = 0; i < n_pts; i++)
+    d->pts[i] = pts[i];
+  d->n_pts = n_pts;
+  d->w = w;
 
 #if STROKE_DEBUG
   /* detect uninitialized values */
