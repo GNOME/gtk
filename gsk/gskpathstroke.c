@@ -188,18 +188,6 @@ get_rational_bezier (const graphene_point_t *p,
     }
 }
 
-/* Given control points and weight for a rational quadratic Bezier
- * and a t in the range [0,1], compute the point on the curve at t
- */
-static void
-get_conic (const graphene_point_t points[3],
-           float                  weight,
-           float                  t,
-           graphene_point_t      *p)
-{
-  get_rational_bezier (points, (float [3]) { 1, weight, 1}, 3, t, p);
-}
-
 static void
 split_bezier3d_recurse (const graphene_point3d_t *p,
                         int                       l,
@@ -248,18 +236,6 @@ split_bezier3d (const graphene_point3d_t *p,
   int lpos = 0;
   int rpos = l - 1;
   split_bezier3d_recurse (p, l, t, left, right, &lpos, &rpos);
-}
-
-/* not sure this is useful for anything in particular */
-static void
-get_conic_shoulder_point (const graphene_point_t  p[3],
-                          float                   w,
-                          graphene_point_t       *q)
-{
-  graphene_point_t m;
-
-  graphene_point_interpolate (&p[0], &p[2], 0.5, &m);
-  graphene_point_interpolate (&m, &p[1], w / (1 + w), q);
 }
 
 static gboolean
@@ -1113,6 +1089,40 @@ find_largest (float t[], int n)
   return i0;
 }
 
+static int
+ray_intersection (const graphene_point_t *p1,
+                  const graphene_point_t *p2,
+                  const graphene_point_t *p3,
+                  const graphene_point_t *p4,
+                  graphene_point_t       *p)
+{
+  float a1 = p2->x - p1->x;
+  float b1 = p2->y - p1->y;
+
+  float a2 = p4->x - p3->x;
+  float b2 = p4->y - p3->y;
+
+  float det = a1 * b2 - a2 * b1;
+  float tt, ss;
+
+  if (det != 0)
+    {
+      tt = ((p3->x - p1->x) * b2 - (p3->y - p1->y) * a2) / det;
+      ss = - ((p3->y - p1->y) * a2 + (p3->x - p1->x) * b1) / det;
+
+      g_print ("tt %f ss %f\n", tt, ss);
+      if (tt >= 0 && ss >= 0)
+        {
+          p->x = p1->x + tt * (p2->x - p1->x);
+          p->y = p1->y + tt * (p2->y - p1->y);
+
+          return 1;
+        }
+    }
+
+  return 0;
+}
+
 static void
 compute_intersections (PathOpData *op1,
                        PathOpData *op2)
@@ -1132,17 +1142,18 @@ compute_intersections (PathOpData *op1,
       Curve c1, c2, cl, cr;
 
       if (!line_intersection (&op1->r[op1->n_pts - 2], &op1->r[op1->n_pts - 1],
-                              &op2->r[0], &op2->r[1],
+                              &op2->r[1], &op2->r[0],
                               &op1->re[1]))
         midpoint (&op1->r[op1->n_pts - 1], &op2->r[0], &op1->re[1]);
 
       if (!line_intersection (&op1->l[op1->n_pts - 2], &op1->l[op1->n_pts - 1],
-                              &op2->l[0], &op2->l[1],
+                              &op2->l[1], &op2->l[0],
                               &op1->le[1]))
         midpoint (&op1->l[op1->n_pts - 1], &op2->l[0], &op1->le[1]);
 
       if (op1->angle[1] > 180.f)
         {
+          g_print ("right turn\n");
           init_curve (&c1, op1->op, op1->r, op1->w);
           init_curve (&c2, op2->op, op2->r, op2->w);
           n = curve_intersection (&c1, &c2, t, s, p, 9);
@@ -1158,9 +1169,20 @@ compute_intersections (PathOpData *op1,
               for (i = 0; i < op2->n_pts; i++)
                 op2->r[i] = cr.p[i];
             }
+          else
+            {
+              g_print ("no intersection\n");
+              midpoint (&op1->r[op1->n_pts - 1], &op2->r[0], &op1->re[1]);
+            }
+
+          if (!ray_intersection (&op1->l[op1->n_pts - 2], &op1->l[op1->n_pts - 1],
+                                 &op2->l[1], &op2->l[0],
+                                 &op1->le[1]))
+            midpoint (&op1->l[op1->n_pts - 1], &op2->l[0], &op1->le[1]);
         }
       else
         {
+          g_print ("left turn\n");
           init_curve (&c1, op1->op, op1->l, op1->w);
           init_curve (&c2, op2->op, op2->l, op2->w);
           n = curve_intersection (&c1, &c2, t, s, p, 9);
@@ -1176,6 +1198,16 @@ compute_intersections (PathOpData *op1,
               for (i = 0; i < op2->n_pts; i++)
                 op2->l[i] = cr.p[i];
             }
+          else
+            {
+              g_print ("no intersection\n");
+              midpoint (&op1->l[op1->n_pts - 1], &op2->l[0], &op1->le[1]);
+            }
+
+          if (!ray_intersection (&op1->r[op1->n_pts - 2], &op1->r[op1->n_pts - 1],
+                                  &op2->r[1], &op2->r[0],
+                                  &op1->re[1]))
+            midpoint (&op1->r[op1->n_pts - 1], &op2->r[0], &op1->re[1]);
         }
     }
   else
@@ -1844,6 +1876,8 @@ gsk_contour_default_add_stroke (const GskContour *contour,
   data.ops = NULL;
   data.has_start = FALSE;
   data.print = FALSE;
+
+  g_print ("***\n");
 
   if (stroke->dash_length <= 0)
     gsk_contour_foreach (contour, GSK_PATH_TOLERANCE_DEFAULT, add_op_to_list, &data);
