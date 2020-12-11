@@ -168,16 +168,15 @@ static void gtk_range_click_gesture_pressed  (GtkGestureClick *gesture,
                                                    double                x,
                                                    double                y,
                                                    GtkRange             *range);
-static void gtk_range_click_gesture_released (GtkGestureClick *gesture,
-                                                   guint                 n_press,
-                                                   double                x,
-                                                   double                y,
-                                                   GtkRange             *range);
 static void gtk_range_drag_gesture_begin          (GtkGestureDrag       *gesture,
                                                    double                offset_x,
                                                    double                offset_y,
                                                    GtkRange             *range);
 static void gtk_range_drag_gesture_update         (GtkGestureDrag       *gesture,
+                                                   double                offset_x,
+                                                   double                offset_y,
+                                                   GtkRange             *range);
+static void gtk_range_drag_gesture_end            (GtkGestureDrag       *gesture,
                                                    double                offset_x,
                                                    double                offset_y,
                                                    GtkRange             *range);
@@ -554,14 +553,14 @@ gtk_range_init (GtkRange *range)
                     G_CALLBACK (gtk_range_drag_gesture_begin), range);
   g_signal_connect (priv->drag_gesture, "drag-update",
                     G_CALLBACK (gtk_range_drag_gesture_update), range);
+  g_signal_connect (priv->drag_gesture, "drag-end",
+                    G_CALLBACK (gtk_range_drag_gesture_end), range);
   gtk_widget_add_controller (GTK_WIDGET (range), GTK_EVENT_CONTROLLER (priv->drag_gesture));
 
   gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
   g_signal_connect (gesture, "pressed",
                     G_CALLBACK (gtk_range_click_gesture_pressed), range);
-  g_signal_connect (gesture, "released",
-                    G_CALLBACK (gtk_range_click_gesture_released), range);
   gtk_widget_add_controller (GTK_WIDGET (range), GTK_EVENT_CONTROLLER (gesture));
   gtk_gesture_group (gesture, priv->drag_gesture);
 
@@ -1976,19 +1975,6 @@ gtk_range_click_gesture_pressed (GtkGestureClick *gesture,
     gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
-static void
-gtk_range_click_gesture_released (GtkGestureClick *gesture,
-                                  guint            n_press,
-                                  double           x,
-                                  double           y,
-                                  GtkRange        *range)
-{
-  GtkRangePrivate *priv = gtk_range_get_instance_private (range);
-
-  priv->in_drag = FALSE;
-  stop_scrolling (range);
-}
-
 /* During a slide, move the slider as required given new mouse position */
 static void
 update_slider_position (GtkRange *range,
@@ -2299,6 +2285,18 @@ gtk_range_drag_gesture_begin (GtkGestureDrag *gesture,
 
   if (priv->grab_location == priv->slider_widget)
     gtk_gesture_set_state (priv->drag_gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+}
+
+static void
+gtk_range_drag_gesture_end (GtkGestureDrag *gesture,
+                            double          offset_x,
+                            double          offset_y,
+                            GtkRange       *range)
+{
+  GtkRangePrivate *priv = gtk_range_get_instance_private (range);
+
+  priv->in_drag = FALSE;
+  stop_scrolling (range);
 }
 
 static void
