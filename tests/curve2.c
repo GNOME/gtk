@@ -142,7 +142,7 @@ demo_widget_snapshot (GtkWidget   *widget,
            gtk_snapshot_pop (snapshot);
         }
 
-      gtk_snapshot_push_fill (snapshot, self->outline_path, GSK_FILL_RULE_WINDING);
+      gtk_snapshot_push_stroke (snapshot, self->outline_path, self->outline_stroke);
 
       gtk_snapshot_append_color (snapshot,
                                  &(GdkRGBA){ 0, 0, 0, 0.2},
@@ -323,7 +323,7 @@ update_outline_path (DemoWidget *self)
   if (self->stroke_path)
     {
       g_clear_pointer (&self->outline_path, gsk_path_unref);
-      self->outline_path = gsk_path_stroke (self->stroke_path, self->outline_stroke);
+      self->outline_path = gsk_path_ref (self->stroke_path);
       gtk_widget_queue_draw (GTK_WIDGET (self));
     }
 }
