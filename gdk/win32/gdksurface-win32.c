@@ -1257,10 +1257,23 @@ gdk_win32_surface_layout_popup (GdkSurface     *surface,
 }
 
 static void
+maybe_notify_mapped (GdkSurface *surface)
+{
+  if (surface->destroyed)
+    return;
+
+  if (!GDK_SURFACE_IS_MAPPED (surface))
+    {
+      gdk_surface_set_is_mapped (surface, TRUE);
+      gdk_surface_invalidate_rect (surface, NULL);
+    }
+}
+
+static void
 show_popup (GdkSurface *surface)
 {
   gdk_win32_surface_raise (surface);
-  gdk_surface_set_is_mapped (surface, TRUE);
+  maybe_notify_mapped (surface);
   show_window_internal (surface, FALSE, FALSE);
   gdk_surface_invalidate_rect (surface, NULL);
 }
@@ -4911,25 +4924,6 @@ gdk_win32_toplevel_class_init (GdkWin32ToplevelClass *class)
   gdk_toplevel_install_properties (object_class, 1);
 }
 
-static void
-show_surface (GdkSurface *surface)
-{
-  gboolean was_mapped;
-
-  if (surface->destroyed)
-    return;
-
-  was_mapped = GDK_SURFACE_IS_MAPPED (surface);
-
-  if (!was_mapped)
-    gdk_surface_set_is_mapped (surface, TRUE);
-
-  gdk_win32_surface_show (surface, FALSE);
-
-  if (!was_mapped)
-    gdk_surface_invalidate_rect (surface, NULL);
-}
-
 static gboolean
 gdk_win32_toplevel_present (GdkToplevel       *toplevel,
                             GdkToplevelLayout *layout)
@@ -4999,7 +4993,8 @@ gdk_win32_toplevel_present (GdkToplevel       *toplevel,
         gdk_win32_surface_unfullscreen (surface);
     }
 
-  show_surface (surface);
+  gdk_win32_surface_show (surface, FALSE);
+  maybe_notify_mapped (surface);
 
   if (size.shadow.is_valid)
     {
@@ -5093,8 +5088,9 @@ gdk_win32_drag_surface_present (GdkDragSurface *drag_surface,
 {
   GdkSurface *surface = GDK_SURFACE (drag_surface);
 
-  gdk_win32_surface_resize (surface, width, height);
-  show_surface (surface);
+  gdk_win32_surface_resize (surface, width, height);  
+  gdk_win32_surface_show (surface, FALSE);
+  maybe_notify_mapped (surface);
 
   return TRUE;
 }
