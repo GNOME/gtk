@@ -122,10 +122,6 @@ demo_widget_snapshot (GtkWidget   *widget,
       graphene_rect_union (&b, &bounds, &bounds);
     }
 
-  g_print ("bounds: %f %f %f %f\n",
-           bounds.origin.x, bounds.origin.y,
-           bounds.size.width, bounds.size.height);
-
   gtk_snapshot_save (snapshot);
 
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (20 - bounds.origin.x, 20 - bounds.origin.y));
@@ -532,6 +528,36 @@ line_width_changed (GtkSpinButton *spin,
   update_outline_path (self);
 }
 
+static void
+dash_changed (GtkEntry   *entry,
+              DemoWidget *self)
+{
+  const char *text;
+  char **s;
+  float dash[20];
+  int i;
+
+  text = gtk_editable_get_text (GTK_EDITABLE (entry));
+  s = g_strsplit (text, " ", -1);
+  for (i = 0; s[i]; i++)
+    {
+      char *end;
+      float f;
+
+      f = g_strtod (s[i], &end);
+      if (*end != '\0')
+        return;
+
+      dash[i] = f;
+    }
+
+  g_strfreev (s);
+
+  gsk_stroke_set_dash (self->stroke, dash, i);
+
+  update_stroke_path (self);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -614,6 +640,11 @@ main (int argc, char *argv[])
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (spin), 1);
   g_signal_connect (spin, "value-changed", G_CALLBACK (line_width_changed), demo);
   gtk_grid_attach (GTK_GRID (grid), spin, 1, 8, 1, 1);
+
+  gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Dashes:"), 0, 9, 1, 1);
+  entry = gtk_entry_new ();
+  g_signal_connect (entry, "changed", G_CALLBACK (dash_changed), demo);
+  gtk_grid_attach (GTK_GRID (grid), entry, 1, 9, 1, 1);
 
   entry = gtk_entry_new ();
   g_signal_connect (entry, "activate", G_CALLBACK (activate), demo);
