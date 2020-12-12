@@ -11,9 +11,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-08 15:39+0000\n"
-"PO-Revision-Date: 2020-12-08 21:31+0200\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
+"POT-Creation-Date: 2020-12-10 15:35+0000\n"
+"PO-Revision-Date: 2020-12-12 20:47+0200\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28@gmail.com>\n"
 "Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -707,7 +707,7 @@ msgstr "Forțează raportul de aspect să se potrivească cu inferiorul cadrului
 #: gtk/gtknotebook.c:576 gtk/gtkoverlay.c:318 gtk/gtkpopover.c:1700
 #: gtk/gtkrevealer.c:347 gtk/gtkscrolledwindow.c:757 gtk/gtksearchbar.c:327
 #: gtk/gtkstack.c:404 gtk/gtktreeexpander.c:508 gtk/gtkviewport.c:383
-#: gtk/gtkwindow.c:916 gtk/gtkwindowhandle.c:548
+#: gtk/gtkwindow.c:936 gtk/gtkwindowhandle.c:548
 msgid "Child"
 msgstr "Inferior"
 
@@ -715,7 +715,7 @@ msgstr "Inferior"
 #: gtk/gtkflowbox.c:526 gtk/gtkframe.c:191 gtk/gtklistbox.c:3499
 #: gtk/gtkoverlay.c:319 gtk/gtkpopover.c:1701 gtk/gtkrevealer.c:348
 #: gtk/gtkscrolledwindow.c:758 gtk/gtksearchbar.c:328 gtk/gtkviewport.c:384
-#: gtk/gtkwindow.c:917 gtk/gtkwindowhandle.c:549
+#: gtk/gtkwindow.c:937 gtk/gtkwindowhandle.c:549
 msgid "The child widget"
 msgstr "Widgetul inferior"
 
@@ -4753,11 +4753,11 @@ msgstr "Poziția unde să se plaseze fereastra-balon"
 msgid "Whether to dismiss the popover on outside clicks"
 msgstr "Dacă să se ignore popover-ul la clic-uri din afară"
 
-#: gtk/gtkpopover.c:1679 gtk/gtkwindow.c:902
+#: gtk/gtkpopover.c:1679 gtk/gtkwindow.c:922
 msgid "Default widget"
 msgstr "Widget implicit"
 
-#: gtk/gtkpopover.c:1680 gtk/gtkwindow.c:903
+#: gtk/gtkpopover.c:1680 gtk/gtkwindow.c:923
 msgid "The default widget"
 msgstr "Widgetul implicit"
 
@@ -7678,35 +7678,35 @@ msgstr "Poate fi șters"
 msgid "Whether the window frame should have a close button"
 msgstr "Specifică dacă fereastra ar trebui să aibă un buton de închidere"
 
-#: gtk/gtkwindow.c:868
-msgid "Is maximized"
+#: gtk/gtkwindow.c:878
+msgid "Is Maximized"
 msgstr "Este maximizată"
 
-#: gtk/gtkwindow.c:869
+#: gtk/gtkwindow.c:879
 msgid "Whether the window is maximized"
 msgstr "Dacă fereastra este maximizată"
 
-#: gtk/gtkwindow.c:875
+#: gtk/gtkwindow.c:895
 msgid "Is fullscreen"
 msgstr "Este în ecran complet"
 
-#: gtk/gtkwindow.c:876
+#: gtk/gtkwindow.c:896
 msgid "Whether the window is fullscreen"
 msgstr "Dacă fereastra este în ecran complet"
 
-#: gtk/gtkwindow.c:895
+#: gtk/gtkwindow.c:915
 msgid "GtkApplication"
 msgstr "GtkApplication"
 
-#: gtk/gtkwindow.c:896
+#: gtk/gtkwindow.c:916
 msgid "The GtkApplication for the window"
 msgstr "GtkApplication pentru fereastră"
 
-#: gtk/gtkwindow.c:909
+#: gtk/gtkwindow.c:929
 msgid "Focus widget"
 msgstr "Widget focalizat"
 
-#: gtk/gtkwindow.c:910
+#: gtk/gtkwindow.c:930
 msgid "The focus widget"
 msgstr "Widgetul focalizat"
 
