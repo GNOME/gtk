@@ -96,6 +96,7 @@ struct _GtkDropDown
   GtkWidget *button_stack;
   GtkWidget *button_item;
   GtkWidget *button_placeholder;
+  GtkWidget *search_box;
   GtkWidget *search_entry;
 
   gboolean enable_search;
@@ -521,6 +522,7 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkDropDown, button_item);
   gtk_widget_class_bind_template_child (widget_class, GtkDropDown, popup);
   gtk_widget_class_bind_template_child (widget_class, GtkDropDown, popup_list);
+  gtk_widget_class_bind_template_child (widget_class, GtkDropDown, search_box);
   gtk_widget_class_bind_template_child (widget_class, GtkDropDown, search_entry);
 
   gtk_widget_class_bind_template_callback (widget_class, row_activated);
@@ -936,7 +938,7 @@ gtk_drop_down_set_enable_search (GtkDropDown *self,
   self->enable_search = enable_search;
 
   gtk_editable_set_text (GTK_EDITABLE (self->search_entry), "");
-  gtk_widget_set_visible (self->search_entry, enable_search);
+  gtk_widget_set_visible (self->search_box, enable_search);
   
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ENABLE_SEARCH]);
 }
