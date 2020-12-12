@@ -12,9 +12,9 @@ static float
 random_weight (void)
 {
   if (g_test_rand_bit ())
-    return g_test_rand_double_range (0, 100);
+    return g_test_rand_double_range (0, 20);
   else
-    return 1.0 / g_test_rand_double_range (1, 100);
+    return 1.0 / g_test_rand_double_range (1, 20);
 }
 
 static void
