@@ -70,3 +70,8 @@ gtk/inspector           @otte @matthiasc
 # Layout managers
 gtk/gtklayout*          @ebassi
 gtk/gtkconstraint*      @ebassi
+
+# Accessibility
+gtk/gtkaccessible*.[ch] @ebassi
+gtk/gtkatcontext*.[ch]  @ebassi
+gtk/a11y                @ebassi

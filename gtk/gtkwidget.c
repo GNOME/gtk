@@ -265,7 +265,7 @@
  *         <property name="column">0</property>
  *         <property name="row">0</property>
  *         <property name="row-span">1</property>
- *         <property name="col-span">1</property>
+ *         <property name="column-span">1</property>
  *       </layout>
  *     </object>
  *   </child>
@@ -275,7 +275,7 @@
  *         <property name="column">1</property>
  *         <property name="row">0</property>
  *         <property name="row-span">1</property>
- *         <property name="col-span">1</property>
+ *         <property name="column-span">1</property>
  *       </layout>
  *     </object>
  *   </child>
