@@ -1309,10 +1309,10 @@ get_edge_for_coordinates (GtkWindow *window,
 
   if (x < left && x >= left - handle_size.left)
     {
-      if (y < top && y >= top - handle_size.top)
+      if (y < top + handle_size.top && y >= top - handle_size.top)
         return edge_or_minus_one (GDK_SURFACE_EDGE_NORTH_WEST);
 
-      if (y > top + border_rect->size.height &&
+      if (y > top + border_rect->size.height - handle_size.bottom &&
           y <= top + border_rect->size.height + handle_size.bottom)
         return edge_or_minus_one (GDK_SURFACE_EDGE_SOUTH_WEST);
 
@@ -1321,24 +1321,36 @@ get_edge_for_coordinates (GtkWindow *window,
   else if (x > left + border_rect->size.width &&
            x <= left + border_rect->size.width + handle_size.right)
     {
-      if (y < top && y >= top - handle_size.top)
+      if (y < top + handle_size.top && y >= top - handle_size.top)
         return edge_or_minus_one (GDK_SURFACE_EDGE_NORTH_EAST);
 
-      if (y > top + border_rect->size.height &&
+      if (y > top + border_rect->size.height - handle_size.bottom &&
           y <= top + border_rect->size.height + handle_size.bottom)
         return edge_or_minus_one (GDK_SURFACE_EDGE_SOUTH_EAST);
 
       return edge_or_minus_one (GDK_SURFACE_EDGE_EAST);
     }
-
-  if (y < top && y >= top - handle_size.top)
+  else if (y < top && y >= top - handle_size.top)
     {
-      /* NORTH_EAST is handled elsewhere */
+      if (x < left + handle_size.left && x >= left - handle_size.left)
+        return edge_or_minus_one (GDK_SURFACE_EDGE_NORTH_WEST);
+
+      if (x > left + border_rect->size.width - handle_size.right &&
+          x <= left + border_rect->size.width + handle_size.right)
+        return edge_or_minus_one (GDK_SURFACE_EDGE_NORTH_EAST);
+
       return edge_or_minus_one (GDK_SURFACE_EDGE_NORTH);
     }
   else if (y > top + border_rect->size.height &&
            y <= top + border_rect->size.height + handle_size.bottom)
     {
+      if (x < left + handle_size.left && x >= left - handle_size.left)
+        return edge_or_minus_one (GDK_SURFACE_EDGE_SOUTH_WEST);
+
+      if (x > left + border_rect->size.width - handle_size.right &&
+          x <= left + border_rect->size.width + handle_size.right)
+        return edge_or_minus_one (GDK_SURFACE_EDGE_SOUTH_EAST);
+
       return edge_or_minus_one (GDK_SURFACE_EDGE_SOUTH);
     }
 

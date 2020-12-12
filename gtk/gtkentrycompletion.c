@@ -1099,7 +1099,6 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   GdkSurface *surface;
   GtkRequisition entry_req;
   GtkRequisition tree_req;
-  GtkTreePath *path;
   int width;
 
   surface = gtk_native_get_surface (gtk_widget_get_native (completion->entry));
@@ -1143,14 +1142,6 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   gtk_widget_set_size_request (completion->popup_window, width, -1);
   gtk_scrolled_window_set_min_content_height (GTK_SCROLLED_WINDOW (completion->scrolled_window), items * height);
 
-  if (matches > 0)
-    {
-      path = gtk_tree_path_new_from_indices (0, -1);
-      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (completion->tree_view), path,
-                                    NULL, FALSE, 0.0, 0.0);
-      gtk_tree_path_free (path);
-    }
-
   gtk_popover_present (GTK_POPOVER (completion->popup_window));
 }
 
@@ -1174,6 +1165,16 @@ gtk_entry_completion_popup (GtkEntryCompletion *completion)
   gtk_widget_realize (completion->popup_window);
 
   _gtk_entry_completion_resize_popup (completion);
+
+  if (completion->filter_model)
+    {
+      GtkTreePath *path;
+
+      path = gtk_tree_path_new_from_indices (0, -1);
+      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (completion->tree_view), path,
+                                    NULL, FALSE, 0.0, 0.0);
+      gtk_tree_path_free (path);
+    }
 
   gtk_popover_popup (GTK_POPOVER (completion->popup_window));
 }

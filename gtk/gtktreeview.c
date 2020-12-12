@@ -2627,10 +2627,10 @@ gtk_tree_view_size_allocate (GtkWidget *widget,
        * preferring the top left corner (for RTL)
        * or top right corner (for LTR)
        */
-      min_x = gtk_adjustment_get_value (priv->hadjustment);
+      min_x = 0;
       max_x = min_x + width - child_rect.width;
       min_y = 0;
-        max_y = min_y + height - gtk_tree_view_get_effective_header_height (tree_view) - child_rect.height;
+      max_y = min_y + height - gtk_tree_view_get_effective_header_height (tree_view) - child_rect.height;
 
       if (direction == GTK_TEXT_DIR_LTR)
         /* Ensure that child's right edge is not sticking to the right

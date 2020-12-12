@@ -1555,6 +1555,20 @@ gdk_surface_freeze_updates (GdkSurface *surface)
     _gdk_frame_clock_uninhibit_freeze (surface->frame_clock);
 }
 
+static gboolean
+request_motion_cb (void *data)
+{
+  GdkSurface *surface = GDK_SURFACE (data);
+  GdkFrameClock *clock = gdk_surface_get_frame_clock (surface);
+
+  if (clock)
+    gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS);
+  surface->request_motion_id = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
+
 /*
  * gdk_surface_thaw_updates:
  * @surface: a #GdkSurface
@@ -1578,6 +1592,13 @@ gdk_surface_thaw_updates (GdkSurface *surface)
 
       if (surface->pending_phases)
         gdk_frame_clock_request_phase (frame_clock, surface->pending_phases);
+
+      if (surface->request_motion && surface->request_motion_id == 0)
+        {
+          surface->request_motion_id =
+            g_idle_add_full (GDK_PRIORITY_REDRAW + 20,
+                             request_motion_cb, surface, NULL);
+        }
     }
 }
 
@@ -2410,19 +2431,6 @@ gdk_surface_flush_events (GdkFrameClock *clock,
   surface->frame_clock_events_paused = TRUE;
 }
 
-static gboolean
-request_motion_cb (void *data)
-{
-  GdkSurface *surface = GDK_SURFACE (data);
-  GdkFrameClock *clock = gdk_surface_get_frame_clock (surface);
-
-  if (clock)
-    gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS);
-  surface->request_motion_id = 0;
-
-  return G_SOURCE_REMOVE;
-}
-
 static void
 gdk_surface_resume_events (GdkFrameClock *clock,
                            void          *data)
@@ -2433,13 +2441,6 @@ gdk_surface_resume_events (GdkFrameClock *clock,
     {
       _gdk_display_unpause_events (surface->display);
       surface->frame_clock_events_paused = FALSE;
-    }
-
-  if (surface->request_motion)
-    {
-      surface->request_motion_id =
-        g_idle_add_full (GDK_PRIORITY_REDRAW + 1,
-                         request_motion_cb, surface, NULL);
     }
 }
 

@@ -408,6 +408,11 @@ static void     indicator_set_over   (Indicator *indicator,
 static void     install_scroll_cursor (GtkScrolledWindow *scrolled_window);
 static void     uninstall_scroll_cursor (GtkScrolledWindow *scrolled_window);
 
+static void scrolled_window_scroll (GtkScrolledWindow        *scrolled_window,
+                                    double                    delta_x,
+                                    double                    delta_y,
+                                    GtkEventControllerScroll *scroll);
+
 static guint signals[LAST_SIGNAL] = {0};
 static GParamSpec *properties[NUM_PROPERTIES];
 
@@ -1220,7 +1225,16 @@ captured_scroll_cb (GtkEventControllerScroll *scroll,
                     double                    delta_y,
                     GtkScrolledWindow        *scrolled_window)
 {
+  GtkScrolledWindowPrivate *priv =
+    gtk_scrolled_window_get_instance_private (scrolled_window);
+
   gtk_scrolled_window_cancel_deceleration (scrolled_window);
+
+  if (priv->smooth_scroll)
+    {
+      scrolled_window_scroll (scrolled_window, delta_x, delta_y, scroll);
+      return GDK_EVENT_STOP;
+    }
 
   return GDK_EVENT_PROPAGATE;
 }
@@ -1305,13 +1319,14 @@ scroll_controller_scroll_begin (GtkEventControllerScroll *scroll,
   priv->smooth_scroll = TRUE;
 }
 
-static gboolean
-scroll_controller_scroll (GtkEventControllerScroll *scroll,
-                          double                    delta_x,
-                          double                    delta_y,
-                          GtkScrolledWindow        *scrolled_window)
+static void
+scrolled_window_scroll (GtkScrolledWindow        *scrolled_window,
+                        double                    delta_x,
+                        double                    delta_y,
+                        GtkEventControllerScroll *scroll)
 {
-  GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
+  GtkScrolledWindowPrivate *priv =
+    gtk_scrolled_window_get_instance_private (scrolled_window);
   gboolean shifted;
   GdkModifierType state;
 
@@ -1373,6 +1388,19 @@ scroll_controller_scroll (GtkEventControllerScroll *scroll,
       g_source_set_name_by_id (priv->scroll_events_overshoot_id,
                                "[gtk] start_scroll_deceleration_cb");
     }
+}
+
+static gboolean
+scroll_controller_scroll (GtkEventControllerScroll *scroll,
+                          double                    delta_x,
+                          double                    delta_y,
+                          GtkScrolledWindow        *scrolled_window)
+{
+  GtkScrolledWindowPrivate *priv =
+    gtk_scrolled_window_get_instance_private (scrolled_window);
+
+  if (!priv->smooth_scroll)
+    scrolled_window_scroll (scrolled_window, delta_x, delta_y, scroll);
 
   return GDK_EVENT_STOP;
 }
@@ -2056,8 +2084,6 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
                     G_CALLBACK (scroll_controller_scroll), scrolled_window);
   g_signal_connect (controller, "scroll-end",
                     G_CALLBACK (scroll_controller_scroll_end), scrolled_window);
-  g_signal_connect (controller, "decelerate",
-                    G_CALLBACK (scroll_controller_decelerate), scrolled_window);
   gtk_widget_add_controller (widget, controller);
 
   controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES |
@@ -2065,6 +2091,8 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
   g_signal_connect (controller, "scroll",
                     G_CALLBACK (captured_scroll_cb), scrolled_window);
+  g_signal_connect (controller, "decelerate",
+                    G_CALLBACK (scroll_controller_decelerate), scrolled_window);
   gtk_widget_add_controller (widget, controller);
 
   controller = gtk_event_controller_motion_new ();

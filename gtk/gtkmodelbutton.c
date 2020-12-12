@@ -1493,6 +1493,7 @@ gtk_model_button_init (GtkModelButton *self)
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_PRIMARY);
   g_signal_connect (gesture, "pressed", G_CALLBACK (gesture_pressed), self);
   g_signal_connect_swapped (gesture, "released", G_CALLBACK (emit_clicked), self);
+  g_signal_connect_swapped (gesture, "unpaired-release", G_CALLBACK (emit_clicked), self);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture), GTK_PHASE_CAPTURE);
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
 }
