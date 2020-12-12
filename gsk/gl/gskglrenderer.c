@@ -3839,6 +3839,7 @@ add_offscreen_ops (GskGLRenderer         *self,
   int filter;
   GskTextureKey key;
   int cached_id;
+  graphene_rect_t viewport;
 
   if (node_is_invisible (child_node))
     {
@@ -3924,27 +3925,19 @@ add_offscreen_ops (GskGLRenderer         *self,
                                           render_target);
     }
 
-  init_projection_matrix (&item_proj,
-                          &GRAPHENE_RECT_INIT (
-                            bounds->origin.x * scale_x,
-                            bounds->origin.y * scale_y,
-                            width, height
-                         ));
+  viewport = GRAPHENE_RECT_INIT (bounds->origin.x * scale_x,
+                                 bounds->origin.y * scale_y,
+                                 width, height);
 
+  init_projection_matrix (&item_proj, &viewport);
   prev_render_target = ops_set_render_target (builder, render_target);
   /* Clear since we use this rendertarget for the first time */
   ops_begin (builder, OP_CLEAR);
   prev_projection = ops_set_projection (builder, &item_proj);
   ops_set_modelview (builder, gsk_transform_scale (NULL, scale_x, scale_y));
-  prev_viewport = ops_set_viewport (builder,
-                                    &GRAPHENE_RECT_INIT (bounds->origin.x * scale_x,
-                                                         bounds->origin.y * scale_y,
-                                                         width, height));
+  prev_viewport = ops_set_viewport (builder, &viewport);
   if (flags & RESET_CLIP)
-    ops_push_clip (builder,
-                   &GSK_ROUNDED_RECT_INIT (bounds->origin.x * scale_x,
-                                           bounds->origin.y * scale_y,
-                                           width, height));
+    ops_push_clip (builder, &GSK_ROUNDED_RECT_INIT_FROM_RECT (viewport));
 
   builder->dx = 0;
   builder->dy = 0;

@@ -7,6 +7,16 @@
 
 G_BEGIN_DECLS
 
+#define GSK_ROUNDED_RECT_INIT_FROM_RECT(_r)   \
+  (GskRoundedRect) { .bounds = _r, \
+                     .corner = { \
+                        GRAPHENE_SIZE_INIT(0, 0),\
+                        GRAPHENE_SIZE_INIT(0, 0),\
+                        GRAPHENE_SIZE_INIT(0, 0),\
+                        GRAPHENE_SIZE_INIT(0, 0),\
+                     }}
+
+
 gboolean                 gsk_rounded_rect_is_circular           (const GskRoundedRect     *self);
 
 void                     gsk_rounded_rect_path                  (const GskRoundedRect     *self,
