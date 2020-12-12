@@ -4229,8 +4229,18 @@ stackswitcher.circular {
 
 popover.emoji-picker > contents {
   padding: 0;
+}
 
-  entry.search { margin: 5px; }
+.emoji-searchbar {
+  padding: 6px;
+  border-spacing: 6px;
+  border-bottom: 1px solid $borders_color;
+}
+
+.emoji-toolbar {
+  padding: 6px;
+  border-spacing: 6px;
+  border-top: 1px solid $borders_color;
 }
 
 button.emoji-section {
@@ -4239,7 +4249,6 @@ button.emoji-section {
   border-style: none none solid;
   border-radius: 0;
 
-  margin: 2px 8px 4px;
   padding: 3px 0 0;
   min-width: 32px;
   min-height: 28px;
@@ -4249,20 +4258,8 @@ button.emoji-section {
   box-shadow: none;
   text-shadow: none;
 
-  &:dir(ltr):not(:last-child) { margin-right: 0; }
-  &:dir(rtl):not(:last-child) { margin-left: 0; }
-
   &:hover { border-color: if($variant == 'light', $borders_color, transparentize($fg_color, .9)); }
   &:checked { border-color: $selected_bg_color; }
-
-  label {
-    padding: 0;
-
-    opacity: 0.55;
-  }
-
-  &:hover label { opacity: 0.775; }
-  &:checked label { opacity: 1; }
 }
 
 popover.emoji-picker emoji {
