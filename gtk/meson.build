@@ -1127,13 +1127,13 @@ if cc.get_id() == 'msvc' and cc.version().split('.').get(0) < '19'
     gtk4_objs += target.extract_all_objects(recursive: false)
   endforeach
 else
-  whole_archives = [libgtk_static, libgtk_css, libgdk, libgsk ]
+  whole_archives = [libgtk_static, libgtk_css, libgdk, libgsk, libottie ]
 endif
 
 libgtk = shared_library('gtk-4',
   c_args: gtk_cargs + common_cflags,
   include_directories: [confinc, gdkinc, gskinc, gtkinc],
-  dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep],
+  dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep, libottie_dep],
   link_whole: whole_archives,
   objects: gtk4_objs,
   link_args: common_ldflags,
