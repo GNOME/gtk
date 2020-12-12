@@ -677,6 +677,7 @@ endif
 subdir('gtk/css')
 subdir('gdk')
 subdir('gsk')
+subdir('ottie')
 subdir('gtk')
 subdir('modules')
 if get_option('demos')
