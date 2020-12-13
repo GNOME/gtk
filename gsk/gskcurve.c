@@ -70,6 +70,8 @@ struct _GskCurveClass
   void                          (* offset)              (const GskCurve         *curve,
                                                          float                   distance,
                                                          GskCurve               *offset_curve);
+  void                          (* reverse)             (const GskCurve         *curve,
+                                                         GskCurve               *reverse);
 };
 
 /* {{{ Line implementation */
@@ -312,6 +314,17 @@ gsk_line_curve_offset (const GskCurve *curve,
   gsk_curve_init (offset_curve, gsk_pathop_encode (GSK_PATH_LINE, p));
 }
 
+static void
+gsk_line_curve_reverse (const GskCurve *curve,
+                        GskCurve       *reverse)
+{
+  const GskLineCurve *self = &curve->line;
+
+  reverse->op = GSK_PATH_LINE;
+  reverse->line.points[0] = self->points[1];
+  reverse->line.points[1] = self->points[0];
+}
+
 static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_init,
   gsk_line_curve_init_foreach,
@@ -328,7 +341,8 @@ static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_get_start_end_tangent,
   gsk_line_curve_get_bounds,
   gsk_line_curve_get_bounds,
-  gsk_line_curve_offset
+  gsk_line_curve_offset,
+  gsk_line_curve_reverse
 };
 
 /* }}} */
@@ -674,6 +688,20 @@ gsk_curve_curve_offset (const GskCurve *curve,
   gsk_curve_curve_init_from_points (&offset->curve, p);
 }
 
+static void
+gsk_curve_curve_reverse (const GskCurve *curve,
+                         GskCurve       *reverse)
+{
+  const GskCurveCurve *self = &curve->curve;
+
+  reverse->op = GSK_PATH_CURVE;
+  reverse->curve.points[0] = self->points[3];
+  reverse->curve.points[1] = self->points[2];
+  reverse->curve.points[2] = self->points[1];
+  reverse->curve.points[3] = self->points[0];
+  reverse->curve.has_coefficients = FALSE;
+}
+
 static const GskCurveClass GSK_CURVE_CURVE_CLASS = {
   gsk_curve_curve_init,
   gsk_curve_curve_init_foreach,
@@ -690,7 +718,8 @@ static const GskCurveClass GSK_CURVE_CURVE_CLASS = {
   gsk_curve_curve_get_end_tangent,
   gsk_curve_curve_get_bounds,
   gsk_curve_curve_get_tight_bounds,
-  gsk_curve_curve_offset
+  gsk_curve_curve_offset,
+  gsk_curve_curve_reverse
 };
 
 /* }}} */
@@ -1282,6 +1311,20 @@ gsk_conic_curve_offset (const GskCurve *curve,
   gsk_conic_curve_init_from_points (&offset->conic, p);
 }
 
+static void
+gsk_conic_curve_reverse (const GskCurve *curve,
+                         GskCurve       *reverse)
+{
+  const GskConicCurve *self = &curve->conic;
+
+  reverse->op = GSK_PATH_CONIC;
+  reverse->conic.points[0] = self->points[3];
+  reverse->conic.points[1] = self->points[1];
+  reverse->conic.points[2] = self->points[2];
+  reverse->conic.points[3] = self->points[0];
+  reverse->conic.has_coefficients = FALSE;
+}
+
 static const GskCurveClass GSK_CONIC_CURVE_CLASS = {
   gsk_conic_curve_init,
   gsk_conic_curve_init_foreach,
@@ -1298,7 +1341,8 @@ static const GskCurveClass GSK_CONIC_CURVE_CLASS = {
   gsk_conic_curve_get_end_tangent,
   gsk_conic_curve_get_bounds,
   gsk_conic_curve_get_tight_bounds,
-  gsk_conic_curve_offset
+  gsk_conic_curve_offset,
+  gsk_conic_curve_reverse
 };
 
 /* }}} */
@@ -1446,6 +1490,13 @@ gsk_curve_offset (const GskCurve *curve,
                   GskCurve       *offset_curve)
 {
   get_class (curve->op)->offset (curve, distance, offset_curve);
+}
+
+void
+gsk_curve_reverse (const GskCurve *curve,
+                   GskCurve       *reverse)
+{
+  get_class (curve->op)->reverse (curve, reverse);
 }
 
 /* }}} */
