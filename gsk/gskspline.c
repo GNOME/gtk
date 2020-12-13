@@ -192,7 +192,7 @@ gsk_spline_decompose_arc (const graphene_point_t *center,
     }
   else if (ABS (step) < tolerance)
     {
-      return TRUE;
+      return gsk_spline_decompose_arc_segment (center, radius, start_angle, end_angle, curve_func, user_data);
     }
 
   n_segments = arc_segments_needed (ABS (step), radius, tolerance);
