@@ -334,6 +334,12 @@ get_bounds (const GskCurve  *curve,
 
   gsk_curve_segment (curve, tl, tr, &c);
   gsk_curve_get_tight_bounds (&c, bounds);
+
+ /* FIXME this is working around inadequacies of
+  * graphene_rect_t as bounding box
+  */
+ bounds->size.width += 0.0001;
+ bounds->size.height += 0.0001;
 }
 
 static void
