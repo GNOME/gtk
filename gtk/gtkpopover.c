@@ -1414,6 +1414,7 @@ create_arrow_render_node (GtkPopover *popover)
 
       stroke = gsk_stroke_new (border.bottom + 1);
       gtk_snapshot_push_stroke (snapshot, path, stroke);
+      gsk_stroke_free (stroke);
 
       gsk_path_get_bounds (path, &bounds);
       gtk_snapshot_append_color (snapshot, border_color, &bounds);
