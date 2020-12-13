@@ -135,6 +135,8 @@ int                     gsk_curve_intersect                     (const GskCurve 
 void                    gsk_curve_offset                        (const GskCurve         *curve,
                                                                  float                   distance,
                                                                  GskCurve               *offset_curve);
+void                    gsk_curve_reverse                       (const GskCurve         *curve,
+                                                                 GskCurve               *reverse);
 
 G_END_DECLS
 
