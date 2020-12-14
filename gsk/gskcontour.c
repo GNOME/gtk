@@ -1651,7 +1651,10 @@ gsk_contour_get_winding (const GskContour       *self,
                          const graphene_point_t *point,
                          gboolean               *on_edge)
 {
-  return self->klass->get_winding (self, measure_data, point, on_edge);
+  if (gsk_contour_get_flags (self) & GSK_PATH_CLOSED)
+    return self->klass->get_winding (self, measure_data, point, on_edge);
+
+  return 0;
 }
 
 void
