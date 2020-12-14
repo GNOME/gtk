@@ -34,6 +34,7 @@ static guint op_sizes[OP_LAST] = {
   sizeof (OpGLShader),
   sizeof (OpExtraTexture),
   sizeof (OpConicGradient),
+  sizeof (OpMask),
 };
 
 void

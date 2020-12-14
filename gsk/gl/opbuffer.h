@@ -42,6 +42,7 @@ typedef enum
   OP_CHANGE_GL_SHADER_ARGS             = 28,
   OP_CHANGE_EXTRA_SOURCE_TEXTURE       = 29,
   OP_CHANGE_CONIC_GRADIENT             = 30,
+  OP_CHANGE_MASK                       = 31,
   OP_LAST
 } OpKind;
 
@@ -221,6 +222,12 @@ typedef struct
   GskGLShader *shader;
   const guchar *uniform_data;
 } OpGLShader;
+
+typedef struct
+{
+  int mask;
+  float texture_rect[4];
+} OpMask;
 
 void     op_buffer_init            (OpBuffer *buffer);
 void     op_buffer_destroy         (OpBuffer *buffer);

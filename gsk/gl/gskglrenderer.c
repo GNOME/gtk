@@ -2717,6 +2717,52 @@ render_cross_fade_node (GskGLRenderer   *self,
 }
 
 static inline void
+render_mask_node (GskGLRenderer   *self,
+                  GskRenderNode   *node,
+                  RenderOpBuilder *builder)
+{
+  GskRenderNode *source = gsk_mask_node_get_source (node);
+  GskRenderNode *mask = gsk_mask_node_get_mask (node);
+  TextureRegion source_region;
+  TextureRegion mask_region;
+  gboolean is_offscreen1, is_offscreen2;
+  OpMask *op;
+
+  if (!add_offscreen_ops (self, builder,
+                          &node->bounds,
+                          source,
+                          &source_region, &is_offscreen1,
+                          FORCE_OFFSCREEN | RESET_CLIP))
+    {
+      gsk_gl_renderer_add_render_ops (self, source, builder);
+      return;
+    }
+
+  if (!add_offscreen_ops (self, builder,
+                          &node->bounds,
+                          mask,
+                          &mask_region, &is_offscreen2,
+                          FORCE_OFFSCREEN | RESET_CLIP))
+    {
+      gsk_gl_renderer_add_render_ops (self, source, builder);
+      return;
+    }
+
+  ops_set_program (builder, &self->programs->mask_program);
+
+  op = ops_begin (builder, OP_CHANGE_MASK);
+  op->mask = mask_region.texture_id;
+  op->texture_rect[0] = 0;
+  op->texture_rect[1] = 0;
+  op->texture_rect[2] = 1;
+  op->texture_rect[3] = 1;
+
+  ops_set_texture (builder, source_region.texture_id);
+
+  load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder);
+}
+
+static inline void
 render_blend_node (GskGLRenderer   *self,
                    GskRenderNode   *node,
                    RenderOpBuilder *builder)
@@ -3203,6 +3249,17 @@ apply_repeat_op (const Program  *program,
   glUniform4fv (program->repeat.texture_rect_location, 1, op->texture_rect);
 }
 
+static inline void
+apply_mask_op (const Program *program,
+               const OpMask  *op)
+{
+  OP_PRINT (" -> Mask ");
+  glUniform4fv (program->mask.texture_rect_location, 1, op->texture_rect);
+  glUniform1i (program->mask.mask_location, 1);
+  glActiveTexture (GL_TEXTURE0 + 1);
+  glBindTexture (GL_TEXTURE_2D, op->mask);
+}
+
 static void
 gsk_gl_renderer_dispose (GObject *gobject)
 {
@@ -3326,6 +3383,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
     { "/org/gtk/libgsk/glsl/outset_shadow.glsl",             "outset shadow" },
     { "/org/gtk/libgsk/glsl/repeat.glsl",                    "repeat" },
     { "/org/gtk/libgsk/glsl/unblurred_outset_shadow.glsl",   "unblurred_outset shadow" },
+    { "/org/gtk/libgsk/glsl/mask.glsl",                      "mask" },
   };
 
   gsk_gl_shader_builder_init (&shader_builder,
@@ -3420,6 +3478,10 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   /* cross fade */
   INIT_PROGRAM_UNIFORM_LOCATION (cross_fade, progress);
   INIT_PROGRAM_UNIFORM_LOCATION (cross_fade, source2);
+
+  /* mask */
+  INIT_PROGRAM_UNIFORM_LOCATION (mask, mask);
+  INIT_PROGRAM_UNIFORM_LOCATION (mask, texture_rect);
 
   /* blend */
   INIT_PROGRAM_UNIFORM_LOCATION (blend, source2);
@@ -3805,12 +3867,15 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       render_gl_shader_node (self, node, builder);
     break;
 
+    case GSK_MASK_NODE:
+      render_mask_node (self, node, builder);
+    break;
+
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_REPEATING_RADIAL_GRADIENT_NODE:
     case GSK_FILL_NODE:
     case GSK_STROKE_NODE:
     case GSK_CAIRO_NODE:
-    case GSK_MASK_NODE:
     default:
       {
         render_fallback_node (self, node, builder);
@@ -4111,6 +4176,11 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self)
         case OP_CHANGE_BLEND:
           g_assert (program == &self->programs->blend_program);
           apply_blend_op (program, ptr);
+          break;
+
+        case OP_CHANGE_MASK:
+          g_assert (program == &self->programs->mask_program);
+          apply_mask_op (program, ptr);
           break;
 
         case OP_CHANGE_LINEAR_GRADIENT:

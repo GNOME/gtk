@@ -13,7 +13,7 @@
 #include "opbuffer.h"
 
 #define GL_N_VERTICES 6
-#define GL_N_PROGRAMS 15
+#define GL_N_PROGRAMS 16
 #define GL_MAX_GRADIENT_STOPS 6
 
 typedef struct
@@ -179,6 +179,10 @@ struct _Program
       int texture_locations[4];
       GError *compile_error;
     } glshader;
+    struct {
+      int mask_location;
+      int texture_rect_location;
+    } mask;
   };
   ProgramState state;
 };
@@ -203,6 +207,7 @@ typedef struct {
       Program outset_shadow_program;
       Program repeat_program;
       Program unblurred_outset_shadow_program;
+      Program mask_program;
     };
   };
   GHashTable *custom_programs; /* GskGLShader -> Program* */
