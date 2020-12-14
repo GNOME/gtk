@@ -202,6 +202,7 @@ gdk_pixbuf_get_from_surface  (cairo_surface_t *surface,
   if (cairo_surface_status (surface) || dest == NULL)
     {
       cairo_surface_destroy (surface);
+      g_clear_object (&dest);
       return NULL;
     }
 
