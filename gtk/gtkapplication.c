@@ -191,11 +191,15 @@ gtk_application_load_resources (GtkApplication *application)
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
   const char *base_path;
+  const char *optional_slash = "/";
 
   base_path = g_application_get_resource_base_path (G_APPLICATION (application));
 
   if (base_path == NULL)
     return;
+
+  if (base_path[strlen (base_path) - 1] == '/')
+    optional_slash = "";
 
   /* Expand the icon search path */
   {
@@ -203,7 +207,7 @@ gtk_application_load_resources (GtkApplication *application)
     char *iconspath;
 
     default_theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
-    iconspath = g_strconcat (base_path, "/icons/", NULL);
+    iconspath = g_strconcat (base_path, optional_slash, "icons/", NULL);
     gtk_icon_theme_add_resource_path (default_theme, iconspath);
     g_free (iconspath);
   }
@@ -212,7 +216,7 @@ gtk_application_load_resources (GtkApplication *application)
   {
     char *menuspath;
 
-    menuspath = g_strconcat (base_path, "/gtk/menus.ui", NULL);
+    menuspath = g_strconcat (base_path, optional_slash, "gtk/menus.ui", NULL);
     if (g_resources_get_info (menuspath, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL, NULL, NULL))
       priv->menus_builder = gtk_builder_new_from_resource (menuspath);
     g_free (menuspath);
@@ -231,7 +235,7 @@ gtk_application_load_resources (GtkApplication *application)
   {
     char *path;
 
-    path = g_strconcat (base_path, "/gtk/help-overlay.ui", NULL);
+    path = g_strconcat (base_path, optional_slash, "gtk/help-overlay.ui", NULL);
     if (g_resources_get_info (path, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL, NULL, NULL))
       {
         const char * const accels[] = { "<Control>question", NULL };
