@@ -55,13 +55,21 @@
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkSearchEntry" id="search_entry">
-            <signal name="search-changed" handler="search_changed"/>
-            <signal name="stop-search" handler="search_stop"/>
+          <object class="GtkBox" id="search_box">
             <property name="visible">0</property>
-            <property name="max-width-chars">6</property>
-            <property name="width-chars">6</property>
-            <property name="placeholder-text" translatable="yes">Search…</property>
+            <style>
+              <class name="dropdown-searchbar"/>
+            </style>
+            <child>
+              <object class="GtkSearchEntry" id="search_entry">
+                <signal name="search-changed" handler="search_changed"/>
+                <signal name="stop-search" handler="search_stop"/>
+                <property name="hexpand">1</property>
+                <property name="max-width-chars">6</property>
+                <property name="width-chars">6</property>
+                <property name="placeholder-text" translatable="yes">Search…</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>

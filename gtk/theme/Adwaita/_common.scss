@@ -1230,11 +1230,10 @@ combobox {
       }
    }
 
-    .search { //drodowns with searchboxes on top
-      border-radius: $popover_radius;
-      padding: 3px 10px;
-      border-radius: 3px;
-      margin: 4px 4px -4px 4px;
+    // drodowns with searchboxes on top
+    .dropdown-searchbar {
+      padding: 6px;
+      border-bottom: 1px solid $borders_color;
     }
   }
 }
