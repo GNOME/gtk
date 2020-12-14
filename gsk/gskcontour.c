@@ -888,6 +888,23 @@ gsk_circle_contour_add_stroke (const GskContour *contour,
                                GskPathBuilder   *builder,
                                GskStroke        *stroke)
 {
+  const GskCircleContour *self = (const GskCircleContour *) contour;
+
+  if (stroke->dash_length == 0 &&
+      fabs (self->start_angle - self->end_angle) >= 360)
+    {
+      GskContour *c;
+
+      c = gsk_circle_contour_new (&self->center, self->radius + stroke->line_width / 2,
+                                  self->start_angle,
+                                  self->end_angle);
+      gsk_path_builder_add_contour (builder, c);
+
+      c = gsk_circle_contour_new (&self->center, self->radius - stroke->line_width / 2,
+                                  self->end_angle,
+                                  self->start_angle);
+      gsk_path_builder_add_contour (builder, c);
+    }
 }
 
 static const GskContourClass GSK_CIRCLE_CONTOUR_CLASS =
