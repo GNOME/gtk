@@ -1149,6 +1149,14 @@ pointer coordinates as inout arguments any more, but as normal in ones.
 
 See: gtk_tree_view_get_tooltip_context(), gtk_icon_view_get_tooltip_context()
 
+### Stop using GtkFileChooserButton
+
+The `GtkFileChooserButton` widget was removed, due to its shortcomings in
+the user interaction. You can replace it with a simple #GtkButton that
+shows a #GtkFileChooserNative dialog when clicked; once the file selection
+has completed, you can update the label of the #GtkButton with the selected
+file.
+
 ## Changes to consider after the switch
 
 GTK 4 has a number of new features that you may want to take
