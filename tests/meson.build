@@ -59,6 +59,7 @@ gtk_tests = [
   ['testlockbutton'],
   ['testmenubutton'],
   ['testmountoperation'],
+  ['testnestedscrolling'],
   ['testnotebookdnd'],
   ['testnouiprint'],
   ['testoverlay'],
