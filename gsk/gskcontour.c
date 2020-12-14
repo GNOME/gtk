@@ -792,32 +792,10 @@ gsk_circle_contour_get_winding (const GskContour       *contour,
 
   if (fabs (self->start_angle - self->end_angle) >= 360)
     {
-      return -1;
-    }
-  else
-    {
-      /* Check if the point and the midpoint are on the same side
-       * of the chord through start and end.
-       */
-      double mid_angle = (self->end_angle - self->start_angle) / 2;
-      graphene_point_t start = GRAPHENE_POINT_INIT (self->center.x + cos (DEG_TO_RAD (self->start_angle)) * self->radius,
-                                                    self->center.y + sin (DEG_TO_RAD (self->start_angle)) * self->radius);
-      graphene_point_t mid = GRAPHENE_POINT_INIT (self->center.x + cos (DEG_TO_RAD (mid_angle)) * self->radius,
-                                                  self->center.y + sin (DEG_TO_RAD (mid_angle)) * self->radius);
-      graphene_point_t end = GRAPHENE_POINT_INIT (self->center.x + cos (DEG_TO_RAD (self->end_angle)) * self->radius,
-                                                  self->center.y + sin (DEG_TO_RAD (self->end_angle)) * self->radius);
-
-      graphene_vec2_t n, m;
-      float a, b;
-
-      graphene_vec2_init (&n, start.y - end.y, end.x - start.x);
-      graphene_vec2_init (&m, mid.x, mid.y);
-      a = graphene_vec2_dot (&m, &n);
-      graphene_vec2_init (&m, point->x, point->y);
-      b = graphene_vec2_dot (&m, &n);
-
-      if ((a < 0) != (b < 0))
+      if (self->end_angle > self->start_angle)
         return -1;
+      else
+        return 1;
     }
 
   return 0;
