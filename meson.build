@@ -367,7 +367,7 @@ endif
 
 if win32_enabled
   # for GTK_IM_CONTEXT_IME
-  pangowin32_dep  = dependency('pangowin32')
+  pangowin32_dep = dependency('pangowin32')
 endif
 
 pangocairo_dep = dependency('pangocairo', version: pango_req,
@@ -410,8 +410,6 @@ else
 endif
 
 
-backend_immodules = []
-
 pc_gdk_extra_libs = []
 
 cairo_backends = []
@@ -453,7 +451,6 @@ if wayland_enabled
   wlclientdep    = dependency('wayland-client', version:  wayland_req)
   wlprotocolsdep = dependency('wayland-protocols', version: wayland_proto_req, required: false)
   wlegldep       = dependency('wayland-egl')
-  backend_immodules += ['wayland']
 
   if not wlprotocolsdep.found()
     wlproto_dir = subproject('wayland-protocols').get_variable('wayland_protocols_srcdir')
@@ -482,8 +479,6 @@ if x11_enabled
   xfixes_dep     = dependency('xfixes', required: false)
   xcomposite_dep = dependency('xcomposite', required: false)
   fontconfig_dep = dependency('fontconfig')
-
-  backend_immodules += ['xim']
 
   x11_pkgs = ['fontconfig', 'x11', 'xext', 'xi', 'xrandr']
 
@@ -547,12 +542,10 @@ endif
 
 if broadway_enabled
   pc_gdk_extra_libs += ['-lz']
-  backend_immodules += ['broadway']
 endif
 
 if macos_enabled
   pc_gdk_extra_libs += ['-framework Cocoa', '-framework Carbon']
-  backend_immodules += ['quartz']
 endif
 
 extra_demo_ldflags = []
@@ -567,7 +560,6 @@ if win32_enabled
     pc_gdk_extra_libs += ['-Wl,-luuid']
   endif
   pc_gdk_extra_libs += ['-lwinmm', '-ldwmapi', '-lsetupapi', '-lcfgmgr32']
-  backend_immodules += ['ime']
 
   # Check whether libepoxy is built with EGL support on Windows
   win32_has_egl = epoxy_dep.get_variable(
