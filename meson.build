@@ -319,15 +319,11 @@ if get_option('default_library') != 'static'
   endif
 endif
 
-common_ldflags = []
-
-if os_unix and not os_darwin
-  foreach ldflag: [ '-Wl,-Bsymbolic', '-Wl,-z,relro', '-Wl,-z,now', ]
-    if cc.links('int main () { return 0; }', name: ldflag, args: ldflag)
-      common_ldflags += [ ldflag ]
-    endif
-  endforeach
-endif
+common_ldflags = cc.get_supported_link_arguments([
+  '-Wl,-Bsymbolic',
+  '-Wl,-z,relro',
+  '-Wl,-z,now',
+])
 
 confinc = include_directories('.')
 gdkinc = include_directories('gdk')
