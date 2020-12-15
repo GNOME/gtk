@@ -1231,9 +1231,7 @@ if build_gir
                                header: 'gtk/gtk.h',
                                install: true,
                                dependencies: gsk_gir_dep,
-                               extra_args: gir_args + [
-                                 '-DGTK_COMPILATION',
-                               ])
+                               extra_args: gir_args)
   gtk_dep_sources += gtk_gir
 endif
 
