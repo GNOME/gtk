@@ -196,6 +196,7 @@ gdk_surface_create_cairo_context
 <SUBSECTION>
 gdk_surface_queue_render
 gdk_surface_get_frame_clock
+gdk_surface_request_layout
 
 <SUBSECTION>
 gdk_surface_set_cursor
@@ -645,6 +646,7 @@ GdkToplevelSize
 gdk_toplevel_size_get_bounds
 gdk_toplevel_size_set_size
 gdk_toplevel_size_set_min_size
+gdk_toplevel_size_set_shadow_width
 <SUBSECTION Standard>
 GDK_TYPE_TOPLEVEL_SIZE
 gdk_toplevel_size_get_type
