@@ -476,10 +476,6 @@ GdkEvent * gdk_focus_event_new          (GdkSurface      *surface,
                                          GdkDevice       *device,
                                          gboolean         focus_in);
 
-GdkEvent * gdk_configure_event_new      (GdkSurface      *surface,
-                                         int              width,
-                                         int              height);
-
 GdkEvent * gdk_delete_event_new         (GdkSurface      *surface);
 
 GdkEvent * gdk_scroll_event_new         (GdkSurface      *surface,
