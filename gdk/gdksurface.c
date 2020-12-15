@@ -1356,6 +1356,13 @@ gdk_surface_layout_on_clock (GdkFrameClock *clock,
   g_signal_emit (surface, signals[LAYOUT], 0, surface->width, surface->height);
 }
 
+/**
+ * gdk_surface_request_layout:
+ * @surface: a #GdkSurface
+ *
+ * Request a %GDK_FRAME_CLOCK_PHASE_LAYOUT from the surface's
+ * frame clock. See gdk_frame_clock_request_phase().
+ */
 void
 gdk_surface_request_layout (GdkSurface *surface)
 {
