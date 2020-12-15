@@ -770,6 +770,12 @@ gsk_radial_gradient_node_get_end (GskRenderNode *node)
 
 /*** GSK_CONIC_GRADIENT_NODE ***/
 
+/**
+ * GskConicGradientNode:
+ *
+ * A render node for a conic gradient.
+ */
+
 struct _GskConicGradientNode
 {
   GskRenderNode render_node;
