@@ -618,6 +618,14 @@ GtkBuildable
 GtkBuildableIface
 GtkBuildableParser
 gtk_buildable_get_buildable_id
+
+<SUBSECTION Parser>
+gtk_buildable_parse_context_get_element
+gtk_buildable_parse_context_get_element_stack
+gtk_buildable_parse_context_get_position
+gtk_buildable_parse_context_pop
+gtk_buildable_parse_context_push
+
 <SUBSECTION Standard>
 GTK_BUILDABLE
 GTK_IS_BUILDABLE
@@ -835,6 +843,8 @@ gtk_combo_box_get_active_id
 gtk_combo_box_set_active_id
 gtk_combo_box_get_model
 gtk_combo_box_set_model
+gtk_combo_box_popup
+gtk_combo_box_popup_for_device
 gtk_combo_box_popdown
 gtk_combo_box_get_row_separator_func
 gtk_combo_box_set_row_separator_func
@@ -4002,6 +4012,10 @@ gtk_cell_renderer_get_padding
 gtk_cell_renderer_set_padding
 gtk_cell_renderer_get_state
 gtk_cell_renderer_is_activatable
+gtk_cell_renderer_get_is_expanded
+gtk_cell_renderer_get_is_expander
+gtk_cell_renderer_set_is_expanded
+gtk_cell_renderer_set_is_expander
 
 <SUBSECTION Width-for-height>
 gtk_cell_renderer_get_preferred_height
@@ -4442,6 +4456,7 @@ gtk_widget_get_focusable
 gtk_widget_set_focusable
 gtk_widget_get_focus_on_click
 gtk_widget_set_focus_on_click
+gtk_widget_get_focus_child
 gtk_widget_set_focus_child
 gtk_widget_get_can_target
 gtk_widget_set_can_target
@@ -7514,6 +7529,9 @@ gtk_accessible_reset_property
 gtk_accessible_update_relation
 gtk_accessible_update_relation_value
 gtk_accessible_reset_relation
+gtk_accessible_property_init_value
+gtk_accessible_relation_init_value
+gtk_accessible_state_init_value
 
 <SUBSECTION Standard>
 GTK_TYPE_ACCESSIBLE
