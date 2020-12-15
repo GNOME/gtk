@@ -130,30 +130,33 @@ if get_variable('broadway_enabled')
 endif
 
 gsk_resources_xml = configure_file(output: 'gsk.resources.xml',
-                                   input: 'gen-gsk-gresources-xml.py',
-                                   command: [
-                                     find_program('gen-gsk-gresources-xml.py'),
-                                     '@OUTPUT@',
-                                     gsk_private_gl_shaders,
-                                     gsk_private_vulkan_compiled_shaders,
-                                     gsk_private_vulkan_shaders
-                                   ])
+  input: 'gen-gsk-gresources-xml.py',
+  command: [
+    find_program('gen-gsk-gresources-xml.py'),
+    '@OUTPUT@',
+    gsk_private_gl_shaders,
+    gsk_private_vulkan_compiled_shaders,
+    gsk_private_vulkan_shaders
+  ],
+)
 
 gsk_enums = gnome.mkenums('gskenumtypes',
-                          sources: gsk_public_headers,
-                          c_template: 'gskenumtypes.c.template',
-                          h_template: 'gskenumtypes.h.template',
-                          install_dir: join_paths(gtk_includedir, 'gtk-4.0/gsk'),
-                          install_header: true)
+  sources: gsk_public_headers,
+  c_template: 'gskenumtypes.c.template',
+  h_template: 'gskenumtypes.h.template',
+  install_dir: gtk_includedir / 'gtk-4.0/gsk',
+  install_header: true,
+)
 
 gskenum_h = gsk_enums[1]
 
 gskresources = gnome.compile_resources('gskresources',
-                                       gsk_resources_xml,
-                                       dependencies: gsk_private_vulkan_compiled_shaders_deps,
-                                       source_dir: '.',
-                                       c_name: '_gsk',
-                                       extra_args: [ '--manual-register', ])
+  gsk_resources_xml,
+  dependencies: gsk_private_vulkan_compiled_shaders_deps,
+  source_dir: '.',
+  c_name: '_gsk',
+  extra_args: [ '--manual-register', ],
+)
 
 gsk_gen_headers = [ gskenum_h, ]
 
@@ -167,19 +170,26 @@ gsk_deps = [
 ]
 
 libgsk = static_library('gsk',
-                        sources: [ gsk_public_sources, gsk_private_sources, gsk_enums, gskresources, ],
-                        dependencies: gsk_deps,
-                        include_directories: [ confinc, ],
-                        c_args: [
-                          '-DGTK_COMPILATION',
-                          '-DG_LOG_DOMAIN="Gsk"',
-                          '-DG_LOG_STRUCTURED=1',
-                        ] + common_cflags,
-                        link_with: libgdk)
+  sources: [
+    gsk_public_sources,
+    gsk_private_sources,
+    gsk_enums,
+    gskresources,
+  ],
+  dependencies: gsk_deps,
+  include_directories: [ confinc, ],
+  c_args: [
+    '-DGTK_COMPILATION',
+    '-DG_LOG_DOMAIN="Gsk"',
+    '-DG_LOG_STRUCTURED=1',
+  ] + common_cflags,
+  link_with: libgdk,
+)
 
 # We don't have link_with: to internal static libs here on purpose, just
 # list the dependencies and generated headers and such, for use in the
 # "public" libgtk_dep used by internal executables.
 libgsk_dep = declare_dependency(include_directories: [ confinc, ],
-                                sources: [ gskenum_h, ],
-                                dependencies: libgdk_dep)
+  sources: [ gskenum_h, ],
+  dependencies: libgdk_dep,
+)

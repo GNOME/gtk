@@ -81,11 +81,11 @@ foreach t : tests
   endif
 
   test(test_name, test_exe,
-       args: [ '--tap', '-k' ],
-       protocol: 'tap',
-       timeout: test_timeout,
-       env: test_env,
-       suite: ['a11y'] + test_extra_suites,
-       should_fail: expect_fail,
+    args: [ '--tap', '-k' ],
+    protocol: 'tap',
+    timeout: test_timeout,
+    env: test_env,
+    suite: ['a11y'] + test_extra_suites,
+    should_fail: expect_fail,
   )
 endforeach

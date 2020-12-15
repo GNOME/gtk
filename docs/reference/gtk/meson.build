@@ -460,44 +460,46 @@ if get_option('gtk_doc')
   expand_md_targets = []
   foreach t : expand_content_md_files
     expand_md_targets += custom_target(t,
-                                       input: [ t ],
-                                       output: [ fs.replace_suffix(t, '.xml') ],
-                                       command: [ expand_md, '@INPUT@', '@OUTPUT@'])
+      input: [ t ],
+      output: [ fs.replace_suffix(t, '.xml') ],
+      command: [ expand_md, '@INPUT@', '@OUTPUT@'],
+    )
   endforeach
 
   gnome.gtkdoc('gtk4',
-               mode: 'none',
-               main_xml: 'gtk4-docs.xml',
-               src_dir: [
-                 gtkinc,
-               ],
-               dependencies: libgtk_dep,
-               gobject_typesfile: configure_file(
-                 input: 'gtk4.types.in',
-                 output: 'gtk4.types',
-                 configuration: types_conf,
-               ),
-               scan_args: [
-                 '--ignore-decorators=_GDK_EXTERN|G_GNUC_WARN_UNUSED_RESULT',
-                 '--ignore-headers=' + ' '.join(private_headers),
-               ],
-               mkdb_args: [
-                 '--default-includes=gtk/gtk.h',
-                 '--ignore-files=' + ' '.join(private_headers),
-               ],
-               fixxref_args: [
-                 '--html-dir=@0@'.format(docpath),
-                 '--extra-dir=@0@'.format(join_paths(glib_docpath, 'glib')),
-                 '--extra-dir=@0@'.format(join_paths(glib_docpath, 'gobject')),
-                 '--extra-dir=@0@'.format(join_paths(glib_docpath, 'gio')),
-                 '--extra-dir=@0@'.format(cairo_docpath),
-                 '--extra-dir=@0@'.format(gdkpixbuf_docpath),
-                 '--extra-dir=../gdk',
-                 '--extra-dir=../gsk',
-               ],
-               content_files: content_files + expand_md_targets,
-               html_assets: images,
-               install: true)
+    mode: 'none',
+    main_xml: 'gtk4-docs.xml',
+    src_dir: [
+      gtkinc,
+    ],
+    dependencies: libgtk_dep,
+    gobject_typesfile: configure_file(
+      input: 'gtk4.types.in',
+      output: 'gtk4.types',
+      configuration: types_conf,
+    ),
+    scan_args: [
+      '--ignore-decorators=_GDK_EXTERN|G_GNUC_WARN_UNUSED_RESULT',
+      '--ignore-headers=' + ' '.join(private_headers),
+    ],
+    mkdb_args: [
+      '--default-includes=gtk/gtk.h',
+      '--ignore-files=' + ' '.join(private_headers),
+    ],
+    fixxref_args: [
+      '--html-dir=@0@'.format(docpath),
+      '--extra-dir=@0@'.format(join_paths(glib_docpath, 'glib')),
+      '--extra-dir=@0@'.format(join_paths(glib_docpath, 'gobject')),
+      '--extra-dir=@0@'.format(join_paths(glib_docpath, 'gio')),
+      '--extra-dir=@0@'.format(cairo_docpath),
+      '--extra-dir=@0@'.format(gdkpixbuf_docpath),
+      '--extra-dir=../gdk',
+      '--extra-dir=../gsk',
+    ],
+    content_files: content_files + expand_md_targets,
+    html_assets: images,
+    install: true,
+  )
 endif
 
 xsltproc = find_program('xsltproc', required: false)
@@ -532,16 +534,17 @@ if get_option('man-pages') and xsltproc.found()
     man_name = man.get(0)
     man_section = man.get(1, '1')
     custom_target('@0@.@1@'.format(man_name, man_section),
-                  input: '@0@.xml'.format(man_name),
-                  output: '@0@.@1@'.format(man_name, man_section),
-                  command: [
-                    xsltproc,
-                    xlstproc_flags,
-                    '-o', '@OUTPUT@',
-                    'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl',
-                    '@INPUT@',
-                  ],
-                  install: true,
-                  install_dir: join_paths(get_option('mandir'), 'man@0@'.format(man_section)))
+      input: '@0@.xml'.format(man_name),
+      output: '@0@.@1@'.format(man_name, man_section),
+      command: [
+        xsltproc,
+        xlstproc_flags,
+        '-o', '@OUTPUT@',
+        'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl',
+        '@INPUT@',
+      ],
+      install: true,
+      install_dir: join_paths(get_option('mandir'), 'man@0@'.format(man_section)),
+    )
   endforeach
 endif

@@ -29,23 +29,27 @@ cups_dep = dependency('cups', version : '>=2.0', required: get_option('print-cup
 if cups_dep.found()
   print_backends += 'cups'
   shared_module('printbackend-cups',
-                'gtkprintbackendcups.c',
-                'gtkprintercups.c',
-                'gtkcupsutils.c',
-                'gtkcupssecretsutils.c',
-                c_args: printbackends_args,
-                dependencies: [libgtk_dep, cups_dep, colord_dep],
-                install_dir: printbackends_install_dir,
-                install : true)
+    sources: [
+      'gtkprintbackendcups.c',
+      'gtkprintercups.c',
+      'gtkcupsutils.c',
+      'gtkcupssecretsutils.c',
+    ],
+    c_args: printbackends_args,
+    dependencies: [libgtk_dep, cups_dep, colord_dep],
+    install_dir: printbackends_install_dir,
+    install: true,
+  )
 else
   # Automatic fall-back to the lpr backend
   print_backends += 'lpr'
   shared_module('printbackend-lpr',
-                'gtkprintbackendlpr.c',
-                c_args: printbackends_args,
-                dependencies: libgtk_dep,
-                install_dir: printbackends_install_dir,
-                install : true)
+    sources: 'gtkprintbackendlpr.c',
+    c_args: printbackends_args,
+    dependencies: libgtk_dep,
+    install_dir: printbackends_install_dir,
+    install: true,
+  )
 endif
 
 rest_dep = dependency('rest-0.7', required : get_option('print-cloudprint'))
@@ -53,20 +57,23 @@ json_glib_dep = dependency('json-glib-1.0', required : get_option('print-cloudpr
 if rest_dep.found() and json_glib_dep.found()
   print_backends += 'cloudprint'
   shared_module('printbackend-cloudprint',
-                'gtkprintbackendcloudprint.c',
-                'gtkprintercloudprint.c',
-                'gtkcloudprintaccount.c',
-                c_args: printbackends_args,
-                dependencies: [ libgtk_dep, rest_dep, json_glib_dep ],
-                install_dir: printbackends_install_dir,
-                install : true)
+    sources: [
+      'gtkprintbackendcloudprint.c',
+      'gtkprintercloudprint.c',
+      'gtkcloudprintaccount.c',
+    ],
+    c_args: printbackends_args,
+    dependencies: [ libgtk_dep, rest_dep, json_glib_dep ],
+    install_dir: printbackends_install_dir,
+    install: true)
 endif
 
 # The 'file' print backend cannot be disabled
 print_backends += 'file'
 shared_module('printbackend-file',
-              'gtkprintbackendfile.c',
-              c_args: printbackends_args,
-              dependencies: libgtk_dep,
-              install_dir: printbackends_install_dir,
-              install : true)
+  sources: 'gtkprintbackendfile.c',
+  c_args: printbackends_args,
+  dependencies: libgtk_dep,
+  install_dir: printbackends_install_dir,
+  install: true,
+)

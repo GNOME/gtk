@@ -9,12 +9,13 @@ endforeach
 
 
 libgtkreftestprivate = library('gtkreftestprivate',
-  'reftest-compare.c', 'reftest-module.c', 'reftest-snapshot.c',
-  dependencies : libgtk_dep,
+  sources: [ 'reftest-compare.c', 'reftest-module.c', 'reftest-snapshot.c', ],
+  dependencies: libgtk_dep,
   c_args: reftest_cflags)
 
 libreftest = library('reftest',
-  [ 'expand-expander.c',
+  sources: [
+    'expand-expander.c',
     'frame-inhibitor.c',
     'letter-spacing.c',
     'set-default-direction.c',
@@ -37,12 +38,15 @@ tcdata.set('libexecdir', join_paths(get_option('prefix'), get_option('libexecdir
 #    configuration : tcdata)
 #endforeach
 
-gtk_reftest = executable('gtk-reftest', 'gtk-reftest.c',
+gtk_reftest = executable('gtk-reftest',
+  sources: 'gtk-reftest.c',
   c_args: common_cflags,
   link_with : [libgtkreftestprivate, libreftest],
-  dependencies : libgtk_dep)
+  dependencies : libgtk_dep,
+)
 
-image_compare = executable('image-compare', 'image-compare.c',
+image_compare = executable('image-compare',
+  sources: 'image-compare.c',
   c_args: common_cflags,
   link_with : [libgtkreftestprivate, libreftest],
   dependencies : libgtk_dep)
@@ -467,15 +471,17 @@ reftest_env.set('REFTEST_MODULE_DIR', meson.current_build_dir())
 foreach testname : testdata
   if testname.endswith('.ui') and not testname.endswith('.ref.ui')
     test('reftest ' + testname, gtk_reftest,
-         args: [ '--tap',
-                 '-k',
-                 '-o', join_paths(meson.current_build_dir(), 'output'),
-                 join_paths(meson.current_source_dir(), testname),
-         ],
-         protocol: 'tap',
-         env: reftest_env,
-         suite: 'reftest',
-         should_fail: xfails.contains(testname))
+      args: [
+        '--tap',
+        '-k',
+        '-o', join_paths(meson.current_build_dir(), 'output'),
+        join_paths(meson.current_source_dir(), testname),
+      ],
+      protocol: 'tap',
+      env: reftest_env,
+      suite: 'reftest',
+      should_fail: xfails.contains(testname),
+    )
   endif
 endforeach
 

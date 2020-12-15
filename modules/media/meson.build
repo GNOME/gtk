@@ -32,11 +32,12 @@ if ffmpeg_found
   media_backends += 'ffmpeg'
   cdata.set('HAVE_FFMPEG', 1)
   shared_module('media-ffmpeg',
-                'gtkffmediafile.c',
-                c_args: extra_c_args,
-                dependencies: [ libgtk_dep, ffmpeg_deps ],
-                install_dir: media_install_dir,
-                install : true)
+    sources: 'gtkffmediafile.c',
+    c_args: extra_c_args,
+    dependencies: [ libgtk_dep, ffmpeg_deps ],
+    install_dir: media_install_dir,
+    install: true,
+  )
 endif
 
 gstplayer_dep = dependency('gstreamer-player-1.0', version: '>= 1.12.3',
@@ -45,11 +46,14 @@ if gstplayer_dep.found()
   media_backends += 'gstreamer'
   cdata.set('HAVE_GSTREAMER', 1)
   shared_module('media-gstreamer',
-                'gtkgstmediafile.c',
-                'gtkgstpaintable.c',
-                'gtkgstsink.c',
-                c_args: extra_c_args,
-                dependencies: [ libgtk_dep, gstplayer_dep ],
-                install_dir: media_install_dir,
-                install : true)
+    sources: [
+      'gtkgstmediafile.c',
+      'gtkgstpaintable.c',
+      'gtkgstsink.c',
+    ],
+    c_args: extra_c_args,
+    dependencies: [ libgtk_dep, gstplayer_dep ],
+    install_dir: media_install_dir,
+    install: true,
+  )
 endif

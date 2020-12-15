@@ -59,16 +59,25 @@ libgdk_broadway = static_library('gdk-broadway',
     '-DGTK_COMPILATION',
     '-DG_LOG_DOMAIN="Gdk"',
   ] + common_cflags,
-  dependencies: [gdk_deps, gdk_broadway_deps])
+  dependencies: [gdk_deps, gdk_broadway_deps],
+)
 
 # gtk4-broadwayd
 
 broadwayd_syslib = os_win32 ? find_library('ws2_32') : shmlib
 
 executable('gtk4-broadwayd',
-  clienthtml_h, broadwayjs_h, gdkconfig, gdkenum_h,
-  'broadwayd.c', 'broadway-server.c', 'broadway-output.c',
+  sources: [
+    clienthtml_h,
+    broadwayjs_h,
+    gdkconfig,
+    gdkenum_h,
+    'broadwayd.c',
+    'broadway-server.c',
+    'broadway-output.c',
+  ],
   include_directories: [confinc, gdkinc, include_directories('.')],
   c_args: ['-DGTK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"', ],
-  dependencies : [broadwayd_syslib, gdk_deps],
-  install : true)
+  dependencies: [ broadwayd_syslib, gdk_deps ],
+  install: true,
+)

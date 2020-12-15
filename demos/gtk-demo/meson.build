@@ -100,31 +100,33 @@ demos = files([
 
 gtkdemo_deps = [ libgtk_dep, ]
 
-extra_demo_sources = files(['main.c',
-                            'fontify.c',
-                            'gtkfishbowl.c',
-                            'fontplane.c',
-                            'gtkgears.c',
-                            'gtkshaderbin.c',
-                            'gtkshadertoy.c',
-                            'gtkshaderstack.c',
-                            'gskshaderpaintable.c',
-                            'puzzlepiece.c',
-                            'bluroverlay.c',
-                            'demoimage.c',
-                            'demotaggedentry.c',
-                            'demochild.c',
-                            'demolayout.c',
-                            'demowidget.c',
-                            'demo2layout.c',
-                            'singular_value_decomposition.c',
-                            'four_point_transform.c',
-                            'demo2widget.c',
-                            'demo3widget.c',
-                            'pixbufpaintable.c',
-                            'script-names.c',
-                            'unicode-names.c',
-                            'suggestionentry.c'])
+extra_demo_sources = files([
+  'main.c',
+  'fontify.c',
+  'gtkfishbowl.c',
+  'fontplane.c',
+  'gtkgears.c',
+  'gtkshaderbin.c',
+  'gtkshadertoy.c',
+  'gtkshaderstack.c',
+  'gskshaderpaintable.c',
+  'puzzlepiece.c',
+  'bluroverlay.c',
+  'demoimage.c',
+  'demotaggedentry.c',
+  'demochild.c',
+  'demolayout.c',
+  'demowidget.c',
+  'demo2layout.c',
+  'singular_value_decomposition.c',
+  'four_point_transform.c',
+  'demo2widget.c',
+  'demo3widget.c',
+  'pixbufpaintable.c',
+  'script-names.c',
+  'unicode-names.c',
+  'suggestionentry.c',
+])
 
 if harfbuzz_dep.found() and pangoft_dep.found()
   demos += files(['font_features.c'])
@@ -147,14 +149,17 @@ endif
 gtkdemo_args = [ '-DGDK_DISABLE_DEPRECATED', '-DGTK_DISABLE_DEPRECATED', ]
 
 demos_h = custom_target('gtk4 demo header',
-                        output: 'demos.h',
-                        input: demos,
-                        command: [ find_program('geninclude.py'), '@OUTPUT@', '@INPUT@' ])
+  output: 'demos.h',
+  input: demos,
+  command: [ find_program('geninclude.py'), '@OUTPUT@', '@INPUT@' ],
+)
 
 gtkdemo_resources = gnome.compile_resources('gtkdemo_resources',
-                                            'demo.gresource.xml',
-                                            source_dir: '.')
+  'demo.gresource.xml',
+  source_dir: '.',
+)
 
+# Use a subset of compiler flags
 demo_cflags = []
 foreach flag: common_cflags
   if flag not in ['-Werror=missing-prototypes', '-Werror=missing-declarations', '-fvisibility=hidden']
@@ -163,30 +168,30 @@ foreach flag: common_cflags
 endforeach
 
 executable('gtk4-demo',
-           demos, demos_h, extra_demo_sources, gtkdemo_resources,
-           c_args: gtkdemo_args + demo_cflags,
-           dependencies: gtkdemo_deps,
-           include_directories: confinc,
-           gui_app: true,
-           link_args: extra_demo_ldflags,
-           install: true)
+  sources: [demos, demos_h, extra_demo_sources, gtkdemo_resources],
+  c_args: gtkdemo_args + demo_cflags,
+  dependencies: gtkdemo_deps,
+  include_directories: confinc,
+  gui_app: true,
+  link_args: extra_demo_ldflags,
+  install: true,
+)
 
 executable('gtk4-demo-application',
-           'application.c', gtkdemo_resources,
-           c_args: gtkdemo_args + common_cflags,
-           dependencies: gtkdemo_deps,
-           include_directories: confinc,
-           gui_app: true,
-           link_args: extra_demo_ldflags,
-           install: true)
+  sources: ['application.c', gtkdemo_resources],
+  c_args: gtkdemo_args + common_cflags,
+  dependencies: gtkdemo_deps,
+  include_directories: confinc,
+  gui_app: true,
+  link_args: extra_demo_ldflags,
+  install: true,
+)
 
 # icons
 icontheme_dir = join_paths(gtk_datadir, 'icons/hicolor')
 
 foreach size: ['scalable', 'symbolic']
-  install_subdir('data/' + size,
-    install_dir: icontheme_dir
-  )
+  install_subdir('data/' + size, install_dir: icontheme_dir)
 endforeach
 
 # desktop file
