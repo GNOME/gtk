@@ -1093,11 +1093,13 @@ if cc.has_header('langinfo.h')
   endforeach
 endif
 
-# Maintain compatibility with autotools
-gtk_ldflags = []
-if os_darwin
-  gtk_ldflags += [ '-compatibility_version 1', '-current_version 1.0', ]
-endif
+# Generate versions for macOS dylib
+darwin_versions = [
+  # compatibility version
+  1 + '@0@'.format(gtk_binary_age - gtk_interface_age).to_int(),
+  # current version
+  '@0@.@1@'.format(1 + '@0@'.format(gtk_binary_age - gtk_interface_age).to_int(), gtk_interface_age),
+]
 
 # Library
 libgtk = library('gtk-4',
@@ -1108,7 +1110,8 @@ libgtk = library('gtk-4',
   include_directories: [confinc, gdkinc, gskinc, gtkinc],
   dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep],
   link_whole: [libgtk_css, libgdk, libgsk, ],
-  link_args: common_ldflags + gtk_ldflags,
+  link_args: common_ldflags,
+  darwin_versions: darwin_versions,
   install: true,
 )
 
