@@ -251,7 +251,7 @@ libgdk = static_library('gdk',
   include_directories: [confinc, gdkx11_inc, wlinc],
   c_args: libgdk_c_args + common_cflags,
   link_whole: gdk_backends,
-  link_args: common_ldflags)
+)
 
 # We don't have link_with: to internal static libs here on purpose, just
 # list the dependencies and generated headers and such, for use in the

@@ -59,7 +59,6 @@ libgdk_broadway = static_library('gdk-broadway',
     '-DGTK_COMPILATION',
     '-DG_LOG_DOMAIN="Gdk"',
   ] + common_cflags,
-  link_args: common_ldflags,
   dependencies: [gdk_deps, gdk_broadway_deps])
 
 # gtk4-broadwayd

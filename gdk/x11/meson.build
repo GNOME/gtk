@@ -79,5 +79,4 @@ libgdk_x11 = static_library('gdk-x11', gdkmarshal_h,
                               '-DGTK_COMPILATION',
                               '-DG_LOG_DOMAIN="Gdk"',
                             ] + common_cflags,
-                            link_args: common_ldflags,
                             dependencies: [ gdk_deps, gdk_x11_deps, ])
