@@ -23,7 +23,7 @@ The **container** node is a special node that allows specifying a list of child 
 
 | property | syntax           | default                | printed     |
 | -------- | ---------------- | ---------------------- | ----------- |
-| bottom   | `<node>`         | color { color: #AF0; } | always      |
+| bottom   | `<node>`         | color { }              | always      |
 | mode     | `<blend-mode>`   | normal                 | non-default |
 | top      | `<node>`         | color { }              | always      |
 
@@ -48,7 +48,22 @@ Creates a node like `gsk_blur_node_new()` with the given properties.
 
 Creates a node like `gsk_border_node_new()` with the given properties.
 
-For the color and width properties, the values follow the typical CSS order of top, right, bottom, left. If the last/left value isn't given, the 2nd/right value is used. If the 3rd/bottom value isn't given, the 1st/top value is used. And if the 2nd/right value also isn't given, the 1st/top value is used for every 4 values.
+For the color and width properties, the values follow the typical CSS order
+of top, right, bottom, left. If the last/left value isn't given, the 2nd/right
+value is used. If the 3rd/bottom value isn't given, the 1st/top value is used.
+And if the 2nd/right value also isn't given, the 1st/top value is used for
+every 4 values.
+
+### cairo
+
+| property | syntax           | default                | printed     |
+| -------- | ---------------- | ---------------------- | ----------- |
+| bounds   | `<rect>`         | none                   | always      |
+| pixels   | `<url>`          | none                   | non-default |
+| script   | `<url>`          | none                   | non-default |
+
+The pixels are a base64-encoded data url of png data. The script is
+a base64-encoded data url of a cairo script.
 
 ### clip
 
@@ -59,7 +74,9 @@ For the color and width properties, the values follow the typical CSS order of t
 
 Creates a node like `gsk_clip_node_new()` with the given properties.
 
-As an extension, this node allows specifying a rounded rectangle for the clip property. If that rectangle is indeed rounded, a node like `gsk_rounded_clip_node_new()` will be created instead.
+As an extension, this node allows specifying a rounded rectangle for the
+clip property. If that rectangle is indeed rounded, a node like
+`gsk_rounded_clip_node_new()` will be created instead.
 
 ### color
 
@@ -70,7 +87,8 @@ As an extension, this node allows specifying a rounded rectangle for the clip pr
 
 Creates a node like `gsk_color_node_new()` with the given properties.
 
-The color is chosen as an error pink so it is visible while also reminding people to change it.
+The color is chosen as an error pink so it is visible while also reminding
+people to change it.
 
 ### color-matrix
 
@@ -82,7 +100,21 @@ The color is chosen as an error pink so it is visible while also reminding peopl
 
 Creates a node like `gsk_color_matrix_node_new()` with the given properties.
 
-The matrix property accepts a <transform> for compatibility purposes, but you should be aware that the allowed values are meant to be used on 3D transformations, so their naming might appear awkward. However, it is always possible to use the matrix3d() production to specify all 16 values individually.
+The matrix property accepts a <transform> for compatibility purposes, but you
+should be aware that the allowed values are meant to be used on 3D transformations,
+so their naming might appear awkward. However, it is always possible to use the
+matrix3d() production to specify all 16 values individually.
+
+### conic-gradient
+
+| property | syntax           | default                | printed     |
+| -------- | ---------------- | ---------------------- | ----------- |
+| bounds   | `<rect>`         | 50                     | always      |
+| center   | `<point>`        | 25, 25                 | always      |
+| rotation | `<number>`       | 0                      | always      |
+| stops    | `<color-stop>`   | 0 #AF0, 1 #F0C         | always      |
+
+Creates a node like `gsk_conic_gradient_node_new()` with the given properties.
 
 ### cross-fade
 
@@ -90,7 +122,7 @@ The matrix property accepts a <transform> for compatibility purposes, but you sh
 | -------- | ---------------- | ---------------------- | ----------- |
 | end      | `<node>`         | color { }              | always      |
 | mode     | `<number>`       | 0.5                    | non-default |
-| start    | `<node>`         | color { color: #AF0; } | always      |
+| start    | `<node>`         | color { }              | always      |
 
 Creates a node like `gsk_cross_fade_node_new()` with the given properties.
 
@@ -121,8 +153,8 @@ Creates a node like `gsk_inset_shadow_node_new()` with the given properties.
 | property | syntax           | default                | printed     |
 | -------- | ---------------- | ---------------------- | ----------- |
 | bounds   | `<rect>`         | 50                     | always      |
-| end      | `<point>`        | 0 50                   | always      |
 | start    | `<point>`        | 0 0                    | always      |
+| end      | `<point>`        | 0 50                   | always      |
 | stops    | `<color-stop>`   | 0 #AF0, 1 #F0C         | always      |
 
 Creates a node like `gsk_linear_gradient_node_new()` with the given properties.
@@ -149,15 +181,56 @@ Creates a node like `gsk_transform_node_new()` with the given properties.
 
 Creates a node like `gsk_outset_shadow_node_new()` with the given properties.
 
-### repeat
+### radial-gradient
 
 | property | syntax           | default                | printed     |
 | -------- | ---------------- | ---------------------- | ----------- |
-| bounds   | `<rect>`         | *bounds of child node* | non-default |
-| child    | `<node>`         | color { }              | always      |
-| child-bounds| `<rect>`      | *bounds of child node* | non-default |
+| bounds   | `<rect>`         | 50                     | always      |
+| center   | `<point>`        | 25 25                  | always      |
+| hradius  | `<number>`       | 25                     | always      |
+| vradius  | `<number>`       | 25                     | always      |
+| start    | `<number>`       | 0                      | always      |
+| end      | `<number>`       | 1                      | always      |
+| stops    | `<color-stop>`   | 0 #AF0, 1 #F0C         | always      |
+
+Creates a node like `gsk_radial_gradient_node_new()` with the given properties.
+
+### repeat
+
+| property    | syntax           | default                | printed     |
+| ----------- | ---------------- | ---------------------- | ----------- |
+| bounds      | `<rect>`         | *bounds of child node* | non-default |
+| child       | `<node>`         | color { }              | always      |
+| child-bounds| `<rect>`         | *bounds of child node* | non-default |
 
 Creates a node like `gsk_repeat_node_new()` with the given properties.
+
+### repeating-linear-gradient
+
+| property | syntax           | default                | printed     |
+| -------- | ---------------- | ---------------------- | ----------- |
+| bounds   | `<rect>`         | 50                     | always      |
+| start    | `<point>`        | 0 0                    | always      |
+| end      | `<point>`        | 0 50                   | always      |
+| stops    | `<color-stop>`   | 0 #AF0, 1 #F0C         | always      |
+
+Creates a node like `gsk_repeating_linear_gradient_node_new()` with the given
+properties.
+
+### repeating radial-gradient
+
+| property | syntax           | default                | printed     |
+| -------- | ---------------- | ---------------------- | ----------- |
+| bounds   | `<rect>`         | 50                     | always      |
+| center   | `<point>`        | 25 25                  | always      |
+| hradius  | `<number>`       | 25                     | always      |
+| vradius  | `<number>`       | 25                     | always      |
+| start    | `<number>`       | 0                      | always      |
+| end      | `<number>`       | 1                      | always      |
+| stops    | `<color-stop>`   | 0 #AF0, 1 #F0C         | always      |
+
+Creates a node like `gsk_repeating_radial_gradient_node_new()` with the given
+properties.
 
 ### rounded-clip
 
@@ -188,7 +261,8 @@ Creates a node like `gsk_shadow_node_new()` with the given properties.
 
 Creates a node like `gsk_text_node_new()` with the given properties.
 
-If the given font does not exist or the given glyphs are invalid for the given font, an error node will be returned.
+If the given font does not exist or the given glyphs are invalid for the given
+font, an error node will be returned.
 
 ### texture
 
@@ -199,7 +273,9 @@ If the given font does not exist or the given glyphs are invalid for the given f
 
 Creates a node like `gsk_texture_node_new()` with the given properties.
 
-The default texture is a 10x10 checkerboard with the top left and bottom right 5x5 being in the color #FF00CC and the other part being transparent. A possible representation for this texture is `url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABmJLR0QA/wD/AP+gvaeTAAAAKUlEQVQYlWP8z3DmPwMaYGQwYUQXY0IXwAUGUCGGoxkYGBiweXAoeAYAz44F3e3U1xUAAAAASUVORK5CYII=")
+The default texture is a 10x10 checkerboard with the top left and bottom right
+5x5 being in the color #FF00CC and the other part being transparent. A possible
+representation for this texture is `url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABmJLR0QA/wD/AP+gvaeTAAAAKUlEQVQYlWP8z3DmPwMaYGQwYUQXY0IXwAUGUCGGoxkYGBiweXAoeAYAz44F3e3U1xUAAAAASUVORK5CYII=")
 `.
 
 ### transform
@@ -211,3 +287,19 @@ The default texture is a 10x10 checkerboard with the top left and bottom right 5
 
 Creates a node like `gsk_transform_node_new()` with the given properties.
 
+### glshader
+
+| property   | syntax             | default                | printed     |
+| ---------- | ------------------ | ---------------------- | ----------- |
+| bounds     | `<rect>`           | 50                     | always      |
+| sourcecode | `<string>`         | ""                     | always      |
+| args       | `<uniform values>` | none                   | non-default |
+| child1     | `<node>`           | none                   | non-default |
+| child2     | `<node>`           | none                   | non-default |
+| child3     | `<node>`           | none                   | non-default |
+| child4     | `<node>`           | none                   | non-default |
+
+Creates a GLShader node. The `sourcecode` must be a GLSL fragment shader.
+The `args` must match the uniforms of simple types declared in that shader,
+in order and comma-separated. The `child` properties must match the sampler
+uniforms in the shader.
