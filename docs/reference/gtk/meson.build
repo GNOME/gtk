@@ -244,6 +244,7 @@ private_headers = [
   'gtkstylepropertyprivate.h',
   'gtkstyleproviderprivate.h',
   'gtktestatcontextprivate.h',
+  'gtktextattributes.h',
   'gtktextbufferprivate.h',
   'gtktextchildprivate.h',
   'gtktextdisplayprivate.h',

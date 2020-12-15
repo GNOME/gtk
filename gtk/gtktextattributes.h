@@ -58,9 +58,6 @@
 G_BEGIN_DECLS
 
 typedef struct _GtkTextAttributes GtkTextAttributes;
-
-#define GTK_TYPE_TEXT_ATTRIBUTES     (gtk_text_attributes_get_type ())
-
 typedef struct _GtkTextAppearance GtkTextAppearance;
 
 /**
@@ -184,23 +181,13 @@ struct _GtkTextAttributes
   char *font_features;
 };
 
-GDK_AVAILABLE_IN_ALL
 GtkTextAttributes* gtk_text_attributes_new         (void);
-GDK_AVAILABLE_IN_ALL
 GtkTextAttributes* gtk_text_attributes_copy        (GtkTextAttributes *src);
-GDK_AVAILABLE_IN_ALL
 void               gtk_text_attributes_copy_values (GtkTextAttributes *src,
                                                     GtkTextAttributes *dest);
-GDK_AVAILABLE_IN_ALL
 void               gtk_text_attributes_unref       (GtkTextAttributes *values);
-GDK_AVAILABLE_IN_ALL
 GtkTextAttributes *gtk_text_attributes_ref         (GtkTextAttributes *values);
-
-GDK_AVAILABLE_IN_ALL
-GType              gtk_text_attributes_get_type    (void) G_GNUC_CONST;
-
 
 G_END_DECLS
 
 #endif
-

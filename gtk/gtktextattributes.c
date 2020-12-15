@@ -100,10 +100,6 @@ gtk_text_attributes_copy (GtkTextAttributes *src)
   return dest;
 }
 
-G_DEFINE_BOXED_TYPE (GtkTextAttributes, gtk_text_attributes,
-                     gtk_text_attributes_ref,
-                     gtk_text_attributes_unref)
-
 /**
  * gtk_text_attributes_copy_values:
  * @src: a #GtkTextAttributes
