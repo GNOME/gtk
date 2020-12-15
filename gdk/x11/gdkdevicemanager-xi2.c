@@ -18,8 +18,8 @@
 #include "config.h"
 
 #include "gdkx11devicemanager-xi2.h"
-#include "gdkx11device-xi2.h"
 
+#include "gdkdevice-xi2-private.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevicetoolprivate.h"
 #include "gdkdisplayprivate.h"
