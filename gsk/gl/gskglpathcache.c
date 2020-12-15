@@ -10,6 +10,8 @@ typedef struct
   GskPath *path;
   GskFillRule fill_rule;
   const GskStroke *stroke;
+  float scale_x;
+  float scale_y;
   guint hash;
 
   GskStroke stroke_copy;
@@ -27,6 +29,8 @@ compute_hash (CacheItem *item)
   hash += item->fill_rule;
   if (item->stroke)
     hash += gsk_stroke_hash (item->stroke);
+  hash += (int)(item->scale_x * 100);
+  hash += (int)(item->scale_y * 200);
 
   return hash;
 }
@@ -48,6 +52,8 @@ cache_key_equal (gconstpointer v1,
 
   return item1->path == item2->path &&
          item1->fill_rule == item2->fill_rule &&
+         item1->scale_x == item2->scale_x &&
+         item1->scale_y == item2->scale_y &&
          (item1->stroke == item2->stroke ||
           (item1->stroke && item2->stroke &&
            gsk_stroke_equal (item1->stroke, item2->stroke)));
@@ -102,6 +108,8 @@ gsk_gl_path_cache_get_texture_id (GskGLPathCache  *self,
                                   GskPath         *path,
                                   GskFillRule      fill_rule,
                                   const GskStroke *stroke,
+                                  float            scale_x,
+                                  float            scale_y,
                                   graphene_rect_t *out_bounds)
 {
   CacheItem key;
@@ -110,6 +118,8 @@ gsk_gl_path_cache_get_texture_id (GskGLPathCache  *self,
   key.path = path;
   key.fill_rule = fill_rule;
   key.stroke = stroke;
+  key.scale_x = scale_x;
+  key.scale_y = scale_y;
   key.hash = compute_hash (&key);
 
   item = g_hash_table_lookup (self->textures, &key);
@@ -130,6 +140,8 @@ gsk_gl_path_cache_commit (GskGLPathCache        *self,
                           GskPath               *path,
                           GskFillRule            fill_rule,
                           const GskStroke       *stroke,
+                          float                  scale_x,
+                          float                  scale_y,
                           int                    texture_id,
                           const graphene_rect_t *bounds)
 {
@@ -147,6 +159,9 @@ gsk_gl_path_cache_commit (GskGLPathCache        *self,
       gsk_stroke_init_copy (&item->stroke_copy, stroke);
       item->stroke = &item->stroke_copy;
     }
+  item->scale_x = scale_x;
+  item->scale_y = scale_y;
+
   item->hash = compute_hash (item);
 
   item->unused_frames = 0;

@@ -2764,6 +2764,217 @@ render_mask_node (GskGLRenderer   *self,
   load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder);
 }
 
+static GdkTexture *
+make_path_mask (GskPath         *path,
+                GskFillRule      fill_rule,
+                float            scale_x,
+                float            scale_y,
+                graphene_rect_t *bounds)
+{
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  int width;
+  int height;
+  int stride;
+  guchar *buffer;
+  GBytes *bytes;
+  GdkTexture *mask;
+
+  gsk_path_get_bounds (path, bounds);
+
+  width = ceilf (bounds->size.width * scale_x);
+  height = ceilf (bounds->size.height * scale_y);
+  stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, width);
+
+  buffer = g_malloc0 (stride * height);
+  surface = cairo_image_surface_create_for_data (buffer,
+                                                 CAIRO_FORMAT_ARGB32,
+                                                 width, height,
+                                                 stride);
+  cairo_surface_set_device_scale (surface, scale_x, scale_y);
+
+  cr = cairo_create (surface);
+  cairo_translate (cr, 0, bounds->size.height);
+  cairo_scale (cr, 1, -1);
+  cairo_translate (cr, - bounds->origin.x, - bounds->origin.y);
+
+ switch (fill_rule)
+  {
+    case GSK_FILL_RULE_WINDING:
+      cairo_set_fill_rule (cr, CAIRO_FILL_RULE_WINDING);
+      break;
+    case GSK_FILL_RULE_EVEN_ODD:
+      cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+  }
+
+  gsk_path_to_cairo (path, cr);
+  cairo_clip (cr);
+
+  cairo_set_source_rgb (cr, 0, 0, 0);
+  cairo_paint (cr);
+
+  cairo_destroy (cr);
+
+  bytes = g_bytes_new_take (buffer, stride * height);
+  mask = gdk_memory_texture_new (width, height, GDK_MEMORY_DEFAULT, bytes, stride);
+  g_bytes_unref (bytes);
+
+  cairo_surface_destroy (surface);
+
+  return mask;
+}
+
+static inline void
+render_fill_node (GskGLRenderer   *self,
+                  GskRenderNode   *node,
+                  RenderOpBuilder *builder)
+{
+  GskRenderNode *child = gsk_fill_node_get_child (node);
+  TextureRegion child_region;
+  gboolean is_offscreen1;
+  GskPath *path;
+  GskFillRule fill_rule;
+  graphene_rect_t mask_bounds;
+  int mask_texture_id;
+  OpMask *op;
+  float scale_x = builder->scale_x;
+  float scale_y = builder->scale_y;
+
+  if (!add_offscreen_ops (self, builder,
+                          &node->bounds,
+                          child,
+                          &child_region, &is_offscreen1,
+                          FORCE_OFFSCREEN | RESET_CLIP))
+    {
+      gsk_gl_renderer_add_render_ops (self, child, builder);
+      return;
+    }
+
+  path = gsk_fill_node_get_path (node);
+  fill_rule = gsk_fill_node_get_fill_rule (node);
+  mask_texture_id = gsk_gl_path_cache_get_texture_id (&self->path_cache,
+                                                      path,
+                                                      fill_rule,
+                                                      NULL,
+                                                      scale_x, scale_y,
+                                                      &mask_bounds);
+  if (mask_texture_id == 0)
+    {
+      GdkTexture *mask;
+
+      mask = make_path_mask (path, fill_rule, scale_x, scale_y, &mask_bounds);
+
+      mask_texture_id =
+          gsk_gl_driver_get_texture_for_texture (self->gl_driver,
+                                                 mask,
+                                                 GL_LINEAR,
+                                                 GL_LINEAR);
+
+      gsk_gl_driver_mark_texture_permanent (self->gl_driver, mask_texture_id);
+      gsk_gl_path_cache_commit (&self->path_cache,
+                                path,
+                                fill_rule,
+                                NULL,
+                                scale_x, scale_y,
+                                mask_texture_id,
+                                &mask_bounds);
+
+      g_object_unref (mask);
+    }
+
+  ops_set_program (builder, &self->programs->mask_program);
+
+  op = ops_begin (builder, OP_CHANGE_MASK);
+  op->mask = mask_texture_id;
+  op->texture_rect[0] = (mask_bounds.origin.x - node->bounds.origin.x) / node->bounds.size.width;
+  op->texture_rect[1] = (mask_bounds.origin.y - node->bounds.origin.y) / node->bounds.size.height;
+  op->texture_rect[2] = (mask_bounds.origin.x + mask_bounds.size.width - node->bounds.origin.x) / node->bounds.size.width;
+  op->texture_rect[3] =  (mask_bounds.origin.y + mask_bounds.size.height - node->bounds.origin.y) / node->bounds.size.height;
+
+  ops_set_texture (builder, child_region.texture_id);
+
+  load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder);
+}
+
+static inline void
+render_stroke_node (GskGLRenderer   *self,
+                    GskRenderNode   *node,
+                    RenderOpBuilder *builder)
+{
+  GskRenderNode *child = gsk_stroke_node_get_child (node);
+  TextureRegion child_region;
+  gboolean is_offscreen1;
+  GskPath *path;
+  GskStroke *stroke;
+  int mask_texture_id;
+  graphene_rect_t mask_bounds;
+  OpMask *op;
+  float scale_x = builder->scale_x;
+  float scale_y = builder->scale_y;
+
+  if (!add_offscreen_ops (self, builder,
+                          &node->bounds,
+                          child,
+                          &child_region, &is_offscreen1,
+                          FORCE_OFFSCREEN | RESET_CLIP))
+    {
+      gsk_gl_renderer_add_render_ops (self, child, builder);
+      return;
+    }
+
+  path = gsk_stroke_node_get_path (node);
+  stroke = (GskStroke *)gsk_stroke_node_get_stroke (node);
+
+  mask_texture_id = gsk_gl_path_cache_get_texture_id (&self->path_cache,
+                                                      path,
+                                                      GSK_FILL_RULE_EVEN_ODD,
+                                                      stroke,
+                                                      scale_x, scale_y,
+                                                      &mask_bounds);
+  if (mask_texture_id == 0)
+    {
+      GskPath *stroke_path;
+      GdkTexture *mask;
+
+      stroke_path = gsk_path_stroke (path, stroke);
+      mask = make_path_mask (stroke_path, GSK_FILL_RULE_EVEN_ODD, scale_x, scale_y, &mask_bounds);
+
+      mask_texture_id =
+          gsk_gl_driver_get_texture_for_texture (self->gl_driver,
+                                                 mask,
+                                                 GL_LINEAR,
+                                                 GL_LINEAR);
+
+      gsk_gl_driver_mark_texture_permanent (self->gl_driver, mask_texture_id);
+      gsk_gl_path_cache_commit (&self->path_cache,
+                                path,
+                                GSK_FILL_RULE_EVEN_ODD,
+                                stroke,
+                                scale_x, scale_y,
+                                mask_texture_id,
+                                &mask_bounds);
+      g_object_unref (mask);
+      gsk_path_unref (stroke_path);
+    }
+
+  ops_set_program (builder, &self->programs->mask_program);
+
+  op = ops_begin (builder, OP_CHANGE_MASK);
+  op->mask = mask_texture_id;
+  op->texture_rect[0] = (mask_bounds.origin.x - node->bounds.origin.x) / node->bounds.size.width;
+  op->texture_rect[1] = (mask_bounds.origin.y - node->bounds.origin.y) / node->bounds.size.height;
+  op->texture_rect[2] = (mask_bounds.origin.x + mask_bounds.size.width - node->bounds.origin.x) / node->bounds.size.width;
+  op->texture_rect[3] =  (mask_bounds.origin.y + mask_bounds.size.height - node->bounds.origin.y) / node->bounds.size.height;
+
+  ops_set_texture (builder, child_region.texture_id);
+
+  load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder);
+}
+
 static inline void
 render_blend_node (GskGLRenderer   *self,
                    GskRenderNode   *node,
@@ -3493,7 +3704,6 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   INIT_PROGRAM_UNIFORM_LOCATION (repeat, child_bounds);
   INIT_PROGRAM_UNIFORM_LOCATION (repeat, texture_rect);
 
-
   /* We initialize the alpha uniform here, since the default value is important.
    * We can't do it in the shader like a reasonable person would because that doesn't
    * work in gles. */
@@ -3875,10 +4085,16 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       render_mask_node (self, node, builder);
     break;
 
+    case GSK_FILL_NODE:
+      render_fill_node (self, node, builder);
+    break;
+
+    case GSK_STROKE_NODE:
+      render_stroke_node (self, node, builder);
+    break;
+
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_REPEATING_RADIAL_GRADIENT_NODE:
-    case GSK_FILL_NODE:
-    case GSK_STROKE_NODE:
     case GSK_CAIRO_NODE:
     default:
       {

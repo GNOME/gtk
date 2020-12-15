@@ -181,6 +181,7 @@ struct _Program
     } glshader;
     struct {
       int mask_location;
+      int child_rect_location;
       int texture_rect_location;
     } mask;
   };
