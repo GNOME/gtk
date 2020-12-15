@@ -139,9 +139,6 @@ gsk_resources_xml = configure_file(output: 'gsk.resources.xml',
                                      gsk_private_vulkan_shaders
                                    ])
 
-# FIXME: do we need this variable?
-gsk_sources = gsk_public_sources + gsk_private_sources
-
 gsk_enums = gnome.mkenums('gskenumtypes',
                           sources: gsk_public_headers,
                           c_template: 'gskenumtypes.c.template',
@@ -170,7 +167,7 @@ gsk_deps = [
 ]
 
 libgsk = static_library('gsk',
-                        sources: [ gsk_sources, gsk_enums, gskresources, ],
+                        sources: [ gsk_public_sources, gsk_private_sources, gsk_enums, gskresources, ],
                         dependencies: gsk_deps,
                         include_directories: [ confinc, ],
                         c_args: [
