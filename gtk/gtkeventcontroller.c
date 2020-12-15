@@ -226,6 +226,11 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
                          GTK_LIMIT_SAME_NATIVE,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkEventController:name:
+   *
+   * The name for this controller, typically used for debugging purposes.
+   */
   properties[PROP_NAME] =
       g_param_spec_string ("name",
                            P_("Name"),
@@ -364,7 +369,7 @@ gtk_event_controller_handle_event (GtkEventController *controller,
   return retval;
 }
 
-/**
+/*< private >
  * gtk_event_controller_handle_crossing:
  * @controller: a #GtkEventController
  * @crossing: a #GtkCrossingData
@@ -373,7 +378,7 @@ gtk_event_controller_handle_event (GtkEventController *controller,
  *
  * Feeds a crossing event into @controller, so it can be interpreted
  * and the controller actions triggered.
- **/
+ */
 void
 gtk_event_controller_handle_crossing (GtkEventController    *controller,
                                       const GtkCrossingData *crossing,
@@ -658,33 +663,3 @@ gtk_event_controller_get_current_event_state (GtkEventController *controller)
 
   return 0;
 }
-
-static GtkCrossingData *
-gtk_crossing_data_copy (GtkCrossingData *crossing)
-{
-  GtkCrossingData *copy;
-
-  copy = g_new (GtkCrossingData, 1);
-
-  copy->type = crossing->type;
-  copy->direction = crossing->direction;
-
-  if (crossing->old_target)
-    copy->old_target = g_object_ref (crossing->old_target);
-  if (crossing->new_target)
-    copy->new_target = g_object_ref (crossing->new_target);
-
-  return copy;
-}
-
-static void
-gtk_crossing_data_free (GtkCrossingData *crossing)
-{
-  g_clear_object (&crossing->old_target);
-  g_clear_object (&crossing->new_target);
-
-  g_free (crossing);
-}
-
-G_DEFINE_BOXED_TYPE (GtkCrossingData, gtk_crossing_data,
-                     gtk_crossing_data_copy, gtk_crossing_data_free)
