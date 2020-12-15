@@ -55,9 +55,9 @@ gdk_macos_deps = [
 libgdk_c_args += ['-xobjective-c']
 
 libgdk_macos = static_library('gdk-macos',
-                              gdk_macos_sources, gdkconfig, gdkenum_h,
-                              include_directories: [ confinc, gdkinc, ],
-                              c_args: libgdk_c_args + common_cflags,
-                              link_args: common_ldflags,
-                              link_with: [],
-                              dependencies: gdk_deps + gdk_macos_deps)
+  gdk_macos_sources, gdkconfig, gdkenum_h,
+  include_directories: [ confinc, gdkinc, ],
+  c_args: [ libgdk_c_args, common_cflags, ],
+  link_with: [],
+  dependencies: [ gdk_deps, gdk_macos_deps, ],
+)

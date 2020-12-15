@@ -40,9 +40,6 @@ G_BEGIN_DECLS
 #define GTK_EVENT_CONTROLLER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_EVENT_CONTROLLER, GtkEventControllerClass))
 
 
-GDK_AVAILABLE_IN_ALL
-GType               gtk_crossing_data_get_type (void) G_GNUC_CONST;
-
 
 GDK_AVAILABLE_IN_ALL
 GType        gtk_event_controller_get_type       (void) G_GNUC_CONST;

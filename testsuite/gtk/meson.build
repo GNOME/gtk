@@ -174,12 +174,14 @@ foreach t : tests
   test_extra_suites = t.get('suites', [])
   test_timeout = 60
 
-  test_exe = executable(test_name, test_srcs,
-    c_args : test_cargs + test_extra_cargs,
-    link_args : test_extra_ldflags,
-    dependencies : libgtk_dep,
+  test_exe = executable(test_name,
+    sources: test_srcs,
+    c_args: test_cargs + test_extra_cargs,
+    link_args: test_extra_ldflags,
+    dependencies: libgtk_dep,
     install: get_option('install-tests'),
-    install_dir: testexecdir)
+    install_dir: testexecdir,
+  )
 
   expect_fail = xfail.contains(test_name)
 
@@ -188,36 +190,39 @@ foreach t : tests
   endif
 
   test(test_name, test_exe,
-       args: [ '--tap', '-k' ],
-       protocol: 'tap',
-       timeout: test_timeout,
-       env: test_env,
-       suite: ['gtk'] + test_extra_suites,
-       should_fail: expect_fail,
+    args: [ '--tap', '-k' ],
+    protocol: 'tap',
+    timeout: test_timeout,
+    env: test_env,
+    suite: ['gtk'] + test_extra_suites,
+    should_fail: expect_fail,
   )
 endforeach
 
 # FIXME: if objc autotestkeywords_CPPFLAGS += -DHAVE_OBJC=1 -x objective-c++
-if add_languages('cpp', required: false)
+if add_languages('cpp', required: false, native: false)
   test_exe = executable('autotestkeywords',
-                        'autotestkeywords.cc',
-                        c_args : test_cargs + ['-Idummy-headers'],
-                        dependencies : libgtk_dep,
-                        install: get_option('install-tests'),
-                        install_dir: testexecdir)
+    sources: 'autotestkeywords.cc',
+    c_args: test_cargs + ['-Idummy-headers'],
+    dependencies: libgtk_dep,
+    install: get_option('install-tests'),
+    install_dir: testexecdir,
+  )
   test('c++ keywords', test_exe,
-       args: [ '--tap', '-k' ],
-       #protocol: 'tap',
-       env: test_env,
-       suite: 'gtk')
+    args: [ '--tap', '-k' ],
+    #protocol: 'tap',
+    env: test_env,
+    suite: 'gtk',
+  )
   if get_option('install-tests')
     conf = configuration_data()
     conf.set('testexecdir', testexecdir)
     conf.set('test', 'autotestkeywords')
     configure_file(input: 'gtk.test.in',
-                   output: 'autotestkeywords.test',
-                   configuration: conf,
-                   install_dir: testdatadir)
+      output: 'autotestkeywords.test',
+      configuration: conf,
+      install_dir: testdatadir,
+    )
   endif
 endif
 
@@ -245,7 +250,7 @@ focus_chain_tests = [
 
 focus_chain = executable(
   'test-focus-chain',
-  ['test-focus-chain.c'],
+  sources: ['test-focus-chain.c'],
   dependencies: libgtk_dep,
   c_args: common_cflags,
   install: get_option('install-tests'),
@@ -254,10 +259,13 @@ focus_chain = executable(
 
 foreach test : focus_chain_tests
   test(test[0] + ' ' + test[1], focus_chain,
-       args: [ join_paths(meson.current_source_dir(), 'focus-chain', test[0] + '.ui'),
-               join_paths(meson.current_source_dir(), 'focus-chain', test[0] + '.' + test[1]) ],
-       env: test_env,
-       suite: [ 'gtk', 'focus' ])
+    args: [
+      join_paths(meson.current_source_dir(), 'focus-chain', test[0] + '.ui'),
+      join_paths(meson.current_source_dir(), 'focus-chain', test[0] + '.' + test[1]),
+    ],
+    env: test_env,
+    suite: [ 'gtk', 'focus' ],
+  )
 endforeach
 
 
@@ -268,15 +276,15 @@ if get_option('install-tests')
     conf.set('testexecdir', testexecdir)
     conf.set('test', test_name)
     configure_file(input: 'gtk.test.in',
-                   output: '@0@.test'.format(test_name),
-                   configuration: conf,
-                   install_dir: testdatadir)
+      output: '@0@.test'.format(test_name),
+      configuration: conf,
+      install_dir: testdatadir,
+    )
   endforeach
 
   install_subdir('icons', install_dir: testexecdir)
   install_subdir('icons2', install_dir: testexecdir)
   install_subdir('ui', install_dir: testexecdir)
-
 endif
 
 if false and get_option ('profiler')
@@ -285,13 +293,20 @@ if false and get_option ('profiler')
   performance_env.set('GTK_THEME', 'Empty')
 
   test('performance-layout', test_performance,
-       args: [ '--mark', 'size allocation', join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory') ],
-       env: performance_env,
-       suite: [ 'gtk' ])
+    args: [
+      '--mark', 'size allocation',
+      join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory'),
+    ],
+    env: performance_env,
+    suite: [ 'gtk' ],
+  )
 
   test('performance-snapshot', test_performance,
-       args: [ '--mark', 'widget snapshot', join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory') ],
-       env: performance_end,
-       suite: [ 'gtk' ])
-
+    args: [
+      '--mark', 'widget snapshot',
+      join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory'),
+    ],
+    env: performance_env,
+    suite: [ 'gtk' ],
+  )
 endif

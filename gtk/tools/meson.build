@@ -18,19 +18,23 @@ foreach tool: gtk_tools
   tool_name = tool.get(0)
   tool_srcs = tool.get(1)
 
-  exe = executable(tool_name, tool_srcs,
-                   include_directories: [confinc],
-                   c_args: common_cflags,
-                   dependencies: libgtk_dep,
-                   install: true)
+  exe = executable(tool_name,
+    sources: tool_srcs,
+    include_directories: [confinc],
+    c_args: common_cflags,
+    dependencies: libgtk_dep,
+    install: true,
+  )
 
   set_variable(tool_name.underscorify(), exe) # used in testsuites
 endforeach
 
 # Data to install
-install_data('gtk4builder.rng',
-             install_dir: join_paths(gtk_datadir, 'gtk-4.0'))
+install_data('gtk4builder.rng', install_dir: gtk_datadir / 'gtk-4.0')
 
-install_data('gtk4builder.loc', 'gtk4builder.its',
-             install_dir: join_paths(gtk_datadir, 'gettext/its'))
-
+install_data([
+    'gtk4builder.loc',
+    'gtk4builder.its',
+  ],
+  install_dir: gtk_datadir / 'gettext/its',
+)

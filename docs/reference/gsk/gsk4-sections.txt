@@ -32,6 +32,7 @@ GskCairoNode
 GskClipNode
 GskColorMatrixNode
 GskColorNode
+GskConicGradientNode
 GskContainerNode
 GskCrossFadeNode
 GskDebugNode
@@ -56,6 +57,7 @@ gsk_render_node_get_node_type
 gsk_render_node_draw
 GskSerializationError
 GskParseErrorFunc
+GskParseLocation
 gsk_render_node_serialize
 gsk_render_node_deserialize
 gsk_render_node_write_to_file
@@ -175,6 +177,7 @@ GSK_TYPE_CLIP_NODE
 GSK_TYPE_COLOR_MATRIX_NODE
 GSK_TYPE_COLOR_NODE
 GSK_TYPE_CONTAINER_NODE
+GSK_TYPE_CONIC_GRADIENT_NODE
 GSK_TYPE_CROSS_FADE_NODE
 GSK_TYPE_DEBUG_NODE
 GSK_TYPE_INSET_SHADOW_NODE
@@ -199,22 +202,25 @@ gsk_cairo_renderer_get_type
 gsk_clip_node_get_type
 gsk_color_matrix_node_get_type
 gsk_color_node_get_type
+gsk_conic_gradient_node_get_type
 gsk_container_node_get_type
 gsk_cross_fade_node_get_type
 gsk_debug_node_get_type
+gsk_gl_shader_node_get_type
 gsk_inset_shadow_node_get_type
 gsk_linear_gradient_node_get_type
 gsk_opacity_node_get_type
 gsk_outset_shadow_node_get_type
+gsk_radial_gradient_node_get_type
 gsk_render_node_get_type
 gsk_repeating_linear_gradient_node_get_type
+gsk_repeating_radial_gradient_node_get_type
 gsk_repeat_node_get_type
 gsk_rounded_clip_node_get_type
 gsk_shadow_node_get_type
 gsk_text_node_get_type
 gsk_texture_node_get_type
 gsk_transform_node_get_type
-gsk_gl_shader_node_get_type
 GSK_TYPE_BLEND_MODE
 <SUBSECTION Standard>
 gsk_serialization_error_quark
@@ -286,10 +292,12 @@ gsk_gl_shader_new_from_bytes
 gsk_gl_shader_new_from_resource
 gsk_gl_shader_compile
 gsk_gl_shader_get_source
+gsk_gl_shader_get_resource
 gsk_gl_shader_get_n_textures
 gsk_gl_shader_get_n_uniforms
 gsk_gl_shader_get_uniform_name
 gsk_gl_shader_find_uniform_by_name
+GskGLUniformType
 gsk_gl_shader_get_uniform_type
 gsk_gl_shader_get_uniform_offset
 gsk_gl_shader_get_args_size
@@ -321,4 +329,7 @@ gsk_shader_args_builder_set_bool
 gsk_shader_args_builder_set_vec2
 gsk_shader_args_builder_set_vec3
 gsk_shader_args_builder_set_vec4
+
+<SUBSECTION Private>
+gsk_shader_args_builder_get_type
 </SECTION>

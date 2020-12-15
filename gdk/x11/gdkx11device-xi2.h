@@ -41,10 +41,6 @@ typedef enum {
 GDK_AVAILABLE_IN_ALL
 GType gdk_x11_device_xi2_get_type (void) G_GNUC_CONST;
 
-GdkX11DeviceType gdk_x11_device_xi2_get_device_type (GdkX11DeviceXI2 *device);
-void             gdk_x11_device_xi2_set_device_type (GdkX11DeviceXI2  *device,
-                                                     GdkX11DeviceType  type);
-
 G_END_DECLS
 
 #endif /* __GDK_X11_DEVICE_XI2_H__ */

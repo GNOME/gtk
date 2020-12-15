@@ -723,22 +723,24 @@ foreach p: proto_sources
 
     # wayland_scanner is defined in gdk/wayland/meson.build
     im_wayland_sources += custom_target('@0@ client header'.format(output_base),
-                                        input: input,
-                                        output: '@0@-client-protocol.h'.format(output_base),
-                                        command: [
-                                          wayland_scanner,
-                                          'client-header',
-                                          '@INPUT@', '@OUTPUT@',
-                                        ])
+      input: input,
+      output: '@0@-client-protocol.h'.format(output_base),
+      command: [
+        wayland_scanner,
+        'client-header',
+        '@INPUT@', '@OUTPUT@',
+      ],
+    )
 
     im_wayland_sources += custom_target('@0@ source'.format(output_base),
-                                        input: input,
-                                        output: '@0@-protocol.c'.format(output_base),
-                                        command: [
-                                          wayland_scanner,
-                                          'private-code',
-                                          '@INPUT@', '@OUTPUT@',
-                                        ])
+      input: input,
+      output: '@0@-protocol.c'.format(output_base),
+      command: [
+        wayland_scanner,
+        'private-code',
+        '@INPUT@', '@OUTPUT@',
+      ],
+    )
   endif
 endforeach
 
@@ -827,11 +829,12 @@ endif
 
 gen_gtk_gresources_xml = find_program('gen-gtk-gresources-xml.py')
 gtk_gresources_xml = configure_file(output: 'gtk.gresources.xml',
-                                    command: [
-                                      gen_gtk_gresources_xml,
-                                      meson.current_source_dir(),
-                                      '@OUTPUT@'
-                                    ])
+  command: [
+    gen_gtk_gresources_xml,
+    meson.current_source_dir(),
+    '@OUTPUT@'
+  ],
+)
 
 # Build the theme files
 sassc = find_program('sassc', required: false)
@@ -866,8 +869,8 @@ foreach lang : [ 'de', 'fr', 'es', 'zh' ]
   conf = configuration_data()
   conf.set('lang', lang)
   resxml = configure_file(input: 'emoji/gresource.xml.in',
-                          output: lang + '.gresource.xml',
-                          configuration: conf
+    output: lang + '.gresource.xml',
+    configuration: conf
   )
 
   gnome.compile_resources(lang,
@@ -875,7 +878,7 @@ foreach lang : [ 'de', 'fr', 'es', 'zh' ]
     source_dir: 'emoji',
     gresource_bundle: true,
     install: true,
-    install_dir: join_paths(gtk_datadir, 'gtk-4.0', 'emoji')
+    install_dir: gtk_datadir / 'gtk-4.0/emoji',
   )
 endforeach
 
@@ -893,49 +896,54 @@ gtk_use_wayland_or_x11_c_sources = files([
 ])
 
 gtk_dbus_src = gnome.gdbus_codegen('gtkdbusgenerated',
-                                   'gtkdbusinterfaces.xml',
-                                   interface_prefix: 'org.Gtk.',
-                                   namespace: '_Gtk')
+  'gtkdbusinterfaces.xml',
+  interface_prefix: 'org.Gtk.',
+  namespace: '_Gtk',
+)
 
 gtkmarshalers = gnome.genmarshal('gtkmarshalers',
-                                 sources: 'gtkmarshalers.list',
-                                 prefix: '_gtk_marshal',
-                                 valist_marshallers: true)
+  sources: 'gtkmarshalers.list',
+  prefix: '_gtk_marshal',
+  valist_marshallers: true,
+)
 
 gtkmarshal_h = gtkmarshalers[1]
 
 gtktypebuiltins = gnome.mkenums('gtktypebuiltins',
-                                sources: gtk_public_headers + gtk_deprecated_headers,
-                                c_template: 'gtktypebuiltins.c.template',
-                                h_template: 'gtktypebuiltins.h.template',
-                                install_dir: join_paths(gtk_includedir, 'gtk-4.0/gtk'),
-                                install_header: true)
+  sources: gtk_public_headers + gtk_deprecated_headers,
+  c_template: 'gtktypebuiltins.c.template',
+  h_template: 'gtktypebuiltins.h.template',
+  install_dir: gtk_includedir / 'gtk-4.0/gtk',
+  install_header: true,
+)
 
 gtktypebuiltins_h = gtktypebuiltins[1]
 
 gtkprivatetypebuiltins = gnome.mkenums('gtkprivatetypebuiltins',
-                                       sources: gtk_private_type_headers,
-                                       c_template: 'gtkprivatetypebuiltins.c.template',
-                                       h_template: 'gtkprivatetypebuiltins.h.template')
+  sources: gtk_private_type_headers,
+  c_template: 'gtkprivatetypebuiltins.c.template',
+  h_template: 'gtkprivatetypebuiltins.h.template',
+)
 
 gtkprivatetypebuiltins_h = gtkprivatetypebuiltins[1]
 
 # Generate gtktypefuncs.inc
 typefuncs = custom_target('gtktypefuncs.inc',
-                          depends: [ gdkenum_h, gskenum_h, ],
-                          output: 'gtktypefuncs.inc',
-                          input: gdk_headers +
-                            gsk_public_headers +
-                            gtk_public_headers +
-                            gtk_deprecated_headers +
-                            [ gtktypebuiltins_h, ] +
-                            [ gtk_css_enum_h, gdkenum_h, gskenum_h, ],
-                          command: [
-                            find_program('gentypefuncs.py'),
-                            '@OUTPUT@',
-                            '@INPUT@',
-                          ],
-                          install: false)
+  depends: [ gdkenum_h, gskenum_h, ],
+  output: 'gtktypefuncs.inc',
+  input: gdk_headers +
+    gsk_public_headers +
+    gtk_public_headers +
+    gtk_deprecated_headers +
+    [ gtktypebuiltins_h, ] +
+    [ gtk_css_enum_h, gdkenum_h, gskenum_h, ],
+  command: [
+    find_program('gentypefuncs.py'),
+    '@OUTPUT@',
+    '@INPUT@',
+  ],
+  install: false,
+)
 
 gtkversion_cdata = configuration_data()
 gtkversion_cdata.set('GTK_MAJOR_VERSION', gtk_major_version)
@@ -951,9 +959,11 @@ if host_machine.system() == 'windows'
 endif
 
 gtkversion = configure_file(input: 'gtkversion.h.in',
-                            output: 'gtkversion.h',
-                            configuration: gtkversion_cdata,
-                            install_dir: join_paths(gtk_includedir, 'gtk-4.0/gtk'))
+  output: 'gtkversion.h',
+  configuration: gtkversion_cdata,
+  install: true,
+  install_dir: gtk_includedir / 'gtk-4.0/gtk',
+)
 
 gtk_gen_headers = [
   gtkmarshal_h,
@@ -1015,23 +1025,27 @@ if win32_enabled
   gtk_cargs += ['-DGTK_PRINT_BACKENDS="file,lpr"']
   gtk_deps += [ giowin32_dep, pangowin32_dep ]
 
-  gtk_deps += [cc.find_library('advapi32'),
-               cc.find_library('comctl32'),
-               cc.find_library('crypt32'), # For CryptProtectMemory()
-               cc.find_library('dwmapi'),
-               cc.find_library('imm32'),
-               cc.find_library('setupapi'),
-               cc.find_library('winmm')]
+  gtk_deps += [
+    cc.find_library('advapi32'),
+    cc.find_library('comctl32'),
+    cc.find_library('crypt32'), # For CryptProtectMemory()
+    cc.find_library('dwmapi'),
+    cc.find_library('imm32'),
+    cc.find_library('setupapi'),
+    cc.find_library('winmm'),
+  ]
 
   gtkwin32rc = configure_file(input: 'gtk-win32.rc.body.in',
-                              output: 'gtk-win32.rc.body',
-                              configuration: gtkversion_cdata)
+    output: 'gtk-win32.rc.body',
+    configuration: gtkversion_cdata,
+  )
 
   win32_manifest = configure_file(input: 'libgtk4.manifest.in',
-                                  output: 'libgtk4.manifest',
-                                  configuration: gtkversion_cdata)
+    output: 'libgtk4.manifest',
+    configuration: gtkversion_cdata,
+  )
 
-  win32res = import('windows').compile_resources(gtkwin32rc, include_directories : win32rcinc)
+  win32res = import('windows').compile_resources(gtkwin32rc, include_directories: win32rcinc)
   gtk_sources += win32res
 endif
 
@@ -1066,8 +1080,7 @@ gtk_settings_schemas = [
   'org.gtk.gtk4.Settings.Debug.gschema.xml',
 ]
 install_data(gtk_settings_schemas, install_dir: gtk_schemasdir)
-gnome.compile_schemas(depend_files: files(gtk_settings_schemas),
-                      build_by_default: true)
+gnome.compile_schemas(depend_files: files(gtk_settings_schemas), build_by_default: true)
 gtk_schema_build_dir = meson.current_build_dir()
 
 # Check for more things
@@ -1080,23 +1093,27 @@ if cc.has_header('langinfo.h')
   endforeach
 endif
 
-# Maintain compatibility with autotools
-gtk_ldflags = []
-if os_darwin
-  gtk_ldflags += [ '-compatibility_version 1', '-current_version 1.0', ]
-endif
+# Generate versions for macOS dylib
+darwin_versions = [
+  # compatibility version
+  1 + '@0@'.format(gtk_binary_age - gtk_interface_age).to_int(),
+  # current version
+  '@0@.@1@'.format(1 + '@0@'.format(gtk_binary_age - gtk_interface_age).to_int(), gtk_interface_age),
+]
 
 # Library
 libgtk = library('gtk-4',
-                 soversion: gtk_soversion,
-                 version: gtk_library_version,
-                 sources: [typefuncs, gtk_sources, gtkmarshal_h, gtkprivatetypebuiltins_h],
-                 c_args: gtk_cargs + common_cflags,
-                 include_directories: [confinc, gdkinc, gskinc, gtkinc],
-                 dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep],
-                 link_whole: [libgtk_css, libgdk, libgsk, ],
-                 link_args: common_ldflags + gtk_ldflags,
-                 install: true)
+  soversion: gtk_soversion,
+  version: gtk_library_version,
+  sources: [typefuncs, gtk_sources, gtkmarshal_h, gtkprivatetypebuiltins_h],
+  c_args: gtk_cargs + common_cflags,
+  include_directories: [confinc, gdkinc, gskinc, gtkinc],
+  dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep],
+  link_whole: [libgtk_css, libgdk, libgsk, ],
+  link_args: common_ldflags,
+  darwin_versions: darwin_versions,
+  install: true,
+)
 
 gtk_dep_sources = [gtkversion, gtktypebuiltins_h]
 
@@ -1134,50 +1151,50 @@ if build_gir
   endif
 
   gdk_gir = gnome.generate_gir(libgtk,
-                               sources: gdk_public_headers + gdk_public_sources + [ gdkenum_h ],
-                               namespace: 'Gdk',
-                               nsversion: gtk_api_version,
-                               identifier_prefix: 'Gdk',
-                               symbol_prefix: 'gdk',
-                               export_packages: 'gtk4',
-                               includes: gdk_gir_inc,
-                               header: 'gdk/gdk.h',
-                               install: true,
-                               extra_args: gir_args,
+    sources: gdk_public_headers + gdk_public_sources + [ gdkenum_h ],
+    namespace: 'Gdk',
+    nsversion: gtk_api_version,
+    identifier_prefix: 'Gdk',
+    symbol_prefix: 'gdk',
+    export_packages: 'gtk4',
+    includes: gdk_gir_inc,
+    header: 'gdk/gdk.h',
+    install: true,
+    extra_args: gir_args,
   )
   gdk_gir_dep = declare_dependency(sources: gdk_gir)
   gtk_dep_sources += gdk_gir
 
   if x11_enabled
     gdk_x11_gir = gnome.generate_gir(libgtk,
-                                     sources: gdk_x11_public_headers + gdk_x11_public_sources,
-                                     namespace: 'GdkX11',
-                                     nsversion: gtk_api_version,
-                                     identifier_prefix: 'Gdk',
-                                     symbol_prefix: 'gdk',
-                                     export_packages: 'gtk4-x11',
-                                     includes: [ gdk_gir[0], 'xlib-2.0', ],
-                                     install: true,
-                                     dependencies: gdk_gir_dep,
-                                     header: 'gdk/x11/gdkx.h',
-                                     extra_args: gir_args,
+      sources: gdk_x11_public_headers + gdk_x11_public_sources,
+      namespace: 'GdkX11',
+      nsversion: gtk_api_version,
+      identifier_prefix: 'Gdk',
+      symbol_prefix: 'gdk',
+      export_packages: 'gtk4-x11',
+      includes: [ gdk_gir[0], 'xlib-2.0', ],
+      install: true,
+      dependencies: gdk_gir_dep,
+      header: 'gdk/x11/gdkx.h',
+      extra_args: gir_args,
     )
     gtk_dep_sources += gdk_x11_gir
   endif
 
   if wayland_enabled
     gdk_wayland_gir = gnome.generate_gir(libgtk,
-                                         sources: gdk_wayland_public_headers + gdk_wayland_sources,
-                                         namespace: 'GdkWayland',
-                                         nsversion: gtk_api_version,
-                                         identifier_prefix: 'Gdk',
-                                         symbol_prefix: 'gdk',
-                                         export_packages: 'gtk4-wayland',
-                                         includes: [ gdk_gir[0], ],
-                                         install: true,
-                                         dependencies: gdk_gir_dep,
-                                         header: 'gdk/wayland/gdkwayland.h',
-                                         extra_args: gir_args,
+      sources: gdk_wayland_public_headers + gdk_wayland_sources,
+      namespace: 'GdkWayland',
+      nsversion: gtk_api_version,
+      identifier_prefix: 'Gdk',
+      symbol_prefix: 'gdk',
+      export_packages: 'gtk4-wayland',
+      includes: [ gdk_gir[0], ],
+      install: true,
+      dependencies: gdk_gir_dep,
+      header: 'gdk/wayland/gdkwayland.h',
+      extra_args: gir_args,
     )
     gtk_dep_sources += gdk_wayland_gir
   endif
@@ -1185,17 +1202,17 @@ if build_gir
   gsk_gir_inc = [ gdk_gir[0] ]
 
   gsk_gir = gnome.generate_gir(libgtk,
-                               sources: gsk_public_headers + gsk_public_sources + [ gskenum_h ],
-                               namespace: 'Gsk',
-                               nsversion: gtk_api_version,
-                               identifier_prefix: 'Gsk',
-                               symbol_prefix: 'gsk',
-                               export_packages: 'gtk4',
-                               includes: gsk_gir_inc,
-                               header: 'gsk/gsk.h',
-                               install: true,
-                               dependencies: [gdk_gir_dep, graphene_dep],
-                               extra_args: gir_args,
+    sources: gsk_public_headers + gsk_public_sources + [ gskenum_h ],
+    namespace: 'Gsk',
+    nsversion: gtk_api_version,
+    identifier_prefix: 'Gsk',
+    symbol_prefix: 'gsk',
+    export_packages: 'gtk4',
+    includes: gsk_gir_inc,
+    header: 'gsk/gsk.h',
+    install: true,
+    dependencies: [gdk_gir_dep, graphene_dep],
+    extra_args: gir_args,
   )
   gsk_gir_dep = declare_dependency(dependencies: [gdk_gir_dep, graphene_dep],
                                    sources: gsk_gir)
@@ -1221,26 +1238,26 @@ if build_gir
   endif
 
   gtk_gir = gnome.generate_gir(libgtk,
-                               sources: gtk_introspection_sources,
-                               namespace: 'Gtk',
-                               nsversion: gtk_api_version,
-                               identifier_prefix: 'Gtk',
-                               symbol_prefix: 'gtk',
-                               export_packages: 'gtk4',
-                               includes: [ gdk_gir[0], gsk_gir[0], ],
-                               header: 'gtk/gtk.h',
-                               install: true,
-                               dependencies: gsk_gir_dep,
-                               extra_args: gir_args + [
-                                 '-DGTK_COMPILATION',
-                               ])
+    sources: gtk_introspection_sources,
+    namespace: 'Gtk',
+    nsversion: gtk_api_version,
+    identifier_prefix: 'Gtk',
+    symbol_prefix: 'gtk',
+    export_packages: 'gtk4',
+    includes: [ gdk_gir[0], gsk_gir[0], ],
+    header: 'gtk/gtk.h',
+    install: true,
+    dependencies: gsk_gir_dep,
+    extra_args: gir_args,
+  )
   gtk_dep_sources += gtk_gir
 endif
 
 libgtk_dep = declare_dependency(sources: gtk_dep_sources,
-                                include_directories: [confinc, gtkinc],
-                                dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep],
-                                link_with: libgtk,
-                                link_args: common_ldflags)
+  include_directories: [confinc, gtkinc],
+  dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep],
+  link_with: libgtk,
+  link_args: common_ldflags,
+)
 
 subdir('tools')

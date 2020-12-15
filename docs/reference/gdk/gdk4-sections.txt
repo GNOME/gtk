@@ -196,6 +196,7 @@ gdk_surface_create_cairo_context
 <SUBSECTION>
 gdk_surface_queue_render
 gdk_surface_get_frame_clock
+gdk_surface_request_layout
 
 <SUBSECTION>
 gdk_surface_set_cursor
@@ -501,7 +502,6 @@ gdk_crossing_event_get_focus
 gdk_grab_broken_event_get_grab_surface
 gdk_grab_broken_event_get_implicit
 gdk_dnd_event_get_drop
-gdk_configure_event_get_size
 gdk_touchpad_event_get_gesture_phase
 gdk_touchpad_event_get_n_fingers
 gdk_touchpad_event_get_deltas
@@ -645,6 +645,7 @@ GdkToplevelSize
 gdk_toplevel_size_get_bounds
 gdk_toplevel_size_set_size
 gdk_toplevel_size_set_min_size
+gdk_toplevel_size_set_shadow_width
 <SUBSECTION Standard>
 GDK_TYPE_TOPLEVEL_SIZE
 gdk_toplevel_size_get_type

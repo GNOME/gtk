@@ -96,16 +96,19 @@ foreach renderer : renderers
     if ((renderer[1] == '' or not test.contains(renderer[1])) and
         (renderer[0] != 'broadway' or broadway_enabled))
       test(renderer[0] + ' ' + test, compare_render,
-           args: ['--output', join_paths(meson.current_build_dir(), 'compare', renderer[0]),
-                  join_paths(meson.current_source_dir(), 'compare', test + '.node'),
-                  join_paths(meson.current_source_dir(), 'compare', test + '.png')],
-           env: [
-                  'GSK_RENDERER=' + renderer[0],
-                  'GTK_A11Y=test',
-                  'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-                  'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
-                ],
-         suite: [ 'gsk', 'gsk-compare', 'gsk-' + renderer[0], 'gsk-compare-' + renderer[0] ])
+        args: [
+          '--output', join_paths(meson.current_build_dir(), 'compare', renderer[0]),
+          join_paths(meson.current_source_dir(), 'compare', test + '.node'),
+          join_paths(meson.current_source_dir(), 'compare', test + '.png'),
+        ],
+        env: [
+          'GSK_RENDERER=' + renderer[0],
+          'GTK_A11Y=test',
+          'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+          'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
+        ],
+        suite: [ 'gsk', 'gsk-compare', 'gsk-' + renderer[0], 'gsk-compare-' + renderer[0] ],
+      )
     endif
   endforeach
 endforeach
@@ -175,15 +178,17 @@ node_parser_tests = [
 foreach test : node_parser_tests
   if test.endswith('.node') and not test.endswith('.ref.node')
     test('parser ' + test, node_parser,
-         args: [ join_paths(meson.current_source_dir(), 'nodeparser', test)
-               ],
-         env: [
-                'GSK_RENDERER=opengl',
-                'GTK_A11Y=test',
-                'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-                'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
-              ],
-         suite: 'gsk')
+      args: [
+        join_paths(meson.current_source_dir(), 'nodeparser', test)
+      ],
+      env: [
+        'GSK_RENDERER=opengl',
+        'GTK_A11Y=test',
+        'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+        'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
+      ],
+      suite: 'gsk',
+    )
   endif
 endforeach
 
@@ -206,16 +211,18 @@ foreach t : tests
     link_args : test_extra_ldflags,
     dependencies : libgtk_dep,
     install: get_option('install-tests'),
-    install_dir: testexecdir)
+    install_dir: testexecdir,
+  )
 
   test(test_name, test_exe,
-       args: [ '--tap', '-k' ],
-       protocol: 'tap',
-       env: [
-              'GSK_RENDERER=cairo',
-              'GTK_A11Y=test',
-              'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
-            ],
-       suite: 'gsk')
+    args: [ '--tap', '-k' ],
+    protocol: 'tap',
+    env: [
+      'GSK_RENDERER=cairo',
+      'GTK_A11Y=test',
+      'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+      'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
+    ],
+    suite: 'gsk',
+  )
 endforeach

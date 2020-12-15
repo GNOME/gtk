@@ -112,32 +112,39 @@ gdk_private_h_sources = files([
   'gdktoplevelsizeprivate.h',
 ])
 
-gdk_gresource_xml = configure_file(output : 'gdk.gresource.xml',
-  input : 'gen-gdk-gresources-xml.py',
-  command : [find_program('gen-gdk-gresources-xml.py'),
-             meson.current_source_dir(), '@OUTPUT@'])
+gdk_gresource_xml = configure_file(output: 'gdk.gresource.xml',
+  input: 'gen-gdk-gresources-xml.py',
+  command: [
+    find_program('gen-gdk-gresources-xml.py'),
+    meson.current_source_dir(),
+    '@OUTPUT@',
+  ],
+)
 
 gdkresources = gnome.compile_resources('gdkresources',
   gdk_gresource_xml,
   source_dir: '.',
   c_name: '_gdk',
-  extra_args: '--manual-register')
+  extra_args: '--manual-register',
+)
 
 gdk_headers = gdk_public_headers
 
 gdk_enums = gnome.mkenums('gdkenumtypes',
   sources: gdk_public_headers,
-  c_template : 'gdkenumtypes.c.template',
-  h_template : 'gdkenumtypes.h.template',
-  install_dir: join_paths(gtk_includedir, 'gtk-4.0/gdk'),
-  install_header : true)
+  c_template: 'gdkenumtypes.c.template',
+  h_template: 'gdkenumtypes.h.template',
+  install_dir: gtk_includedir / 'gtk-4.0/gdk',
+  install_header: true,
+)
 
 gdkenum_h = gdk_enums[1]
 
 gdk_marshalers = gnome.genmarshal('gdkmarshalers',
-  sources : 'gdkmarshalers.list',
-  prefix : '_gdk_marshal',
-  valist_marshallers : true)
+  sources: 'gdkmarshalers.list',
+  prefix: '_gdk_marshal',
+  valist_marshallers: true,
+)
 
 gdkmarshal_h = gdk_marshalers[1]
 
@@ -150,11 +157,11 @@ gdkconfig_cdata.set('GDK_WINDOWING_MACOS', macos_enabled)
 gdkconfig_cdata.set('GDK_RENDERING_VULKAN', have_vulkan)
 
 gdkconfig = configure_file(
-  input  : 'gdkconfig.h.meson',
-  output : 'gdkconfig.h',
-  configuration : gdkconfig_cdata,
-  install_dir: join_paths(gtk_includedir, 'gtk-4.0/gdk'))
-
+  input: 'gdkconfig.h.meson',
+  output: 'gdkconfig.h',
+  configuration: gdkconfig_cdata,
+  install_dir: gtk_includedir / 'gtk-4.0/gdk',
+)
 
 gdkversion_cdata = configuration_data()
 gdkversion_cdata.set('GTK_MAJOR_VERSION', gtk_major_version)
@@ -162,10 +169,11 @@ gdkversion_cdata.set('GTK_MINOR_VERSION', gtk_minor_version)
 gdkversion_cdata.set('GTK_MICRO_VERSION', gtk_micro_version)
 
 gdkversionmacros = configure_file(
-  input  : 'gdkversionmacros.h.in',
-  output : 'gdkversionmacros.h',
+  input: 'gdkversionmacros.h.in',
+  output: 'gdkversionmacros.h',
   configuration: gdkversion_cdata,
-  install_dir: join_paths(gtk_includedir, 'gtk-4.0/gdk'))
+  install_dir: gtk_includedir / 'gtk-4.0/gdk',
+)
 
 gdkinc = include_directories('.')
 gdkx11_inc = include_directories('x11')
@@ -251,7 +259,7 @@ libgdk = static_library('gdk',
   include_directories: [confinc, gdkx11_inc, wlinc],
   c_args: libgdk_c_args + common_cflags,
   link_whole: gdk_backends,
-  link_args: common_ldflags)
+)
 
 # We don't have link_with: to internal static libs here on purpose, just
 # list the dependencies and generated headers and such, for use in the
@@ -259,4 +267,5 @@ libgdk = static_library('gdk',
 libgdk_dep = declare_dependency(
   sources: ['gdk.h', gdkconfig, gdkenum_h],
   include_directories: [confinc, gdkx11_inc, wlinc],
-  dependencies: gdk_deps + [libgtk_css_dep])
+  dependencies: gdk_deps + [libgtk_css_dep],
+)

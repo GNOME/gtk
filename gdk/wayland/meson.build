@@ -77,31 +77,38 @@ foreach p: proto_sources
   endif
 
   gdk_wayland_gen_headers += custom_target('@0@ client header'.format(output_base),
-                                           input: input,
-                                           output: '@0@-client-protocol.h'.format(output_base),
-                                           command: [
-                                             wayland_scanner,
-                                             'client-header',
-                                             '@INPUT@', '@OUTPUT@',
-                                           ])
+    input: input,
+    output: '@0@-client-protocol.h'.format(output_base),
+    command: [
+      wayland_scanner,
+      'client-header',
+      '@INPUT@', '@OUTPUT@',
+    ],
+  )
 
   gdk_wayland_sources += custom_target('@0@ source'.format(output_base),
-                                       input: input,
-                                       output: '@0@-protocol.c'.format(output_base),
-                                       command: [
-                                         wayland_scanner,
-                                         'private-code',
-                                         '@INPUT@', '@OUTPUT@',
-                                       ])
+    input: input,
+    output: '@0@-protocol.c'.format(output_base),
+    command: [
+      wayland_scanner,
+      'private-code',
+      '@INPUT@', '@OUTPUT@',
+    ],
+  )
 endforeach
 
 libgdk_wayland = static_library('gdk-wayland',
-                                gdk_wayland_sources, gdk_wayland_gen_headers, gdkconfig, gdkenum_h,
-                                include_directories: [ confinc, gdkinc, ],
-                                c_args: [
-                                  '-DGTK_COMPILATION',
-                                  '-DG_LOG_DOMAIN="Gdk"',
-                                ] + common_cflags,
-                                link_args: common_ldflags,
-                                link_with: [libwayland_cursor, ],
-                                dependencies: [ gdk_deps, gdk_wayland_deps])
+  sources: [
+    gdk_wayland_sources,
+    gdk_wayland_gen_headers,
+    gdkconfig,
+    gdkenum_h,
+  ],
+  include_directories: [ confinc, gdkinc, ],
+  c_args: [
+    '-DGTK_COMPILATION',
+    '-DG_LOG_DOMAIN="Gdk"',
+  ] + common_cflags,
+  link_with: [ libwayland_cursor, ],
+  dependencies: [ gdk_deps, gdk_wayland_deps ],
+)

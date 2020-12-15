@@ -131,13 +131,17 @@ test_args = ['-DGTK_SRCDIR="@0@"'.format(meson.current_source_dir())]
 foreach t: gtk_tests
   test_name = t.get(0)
   test_srcs = ['@0@.c'.format(test_name), t.get(1, [])]
-  executable(test_name, test_srcs,
-             include_directories: [confinc, gdkinc],
-             c_args: test_args + common_cflags,
-             dependencies: [libgtk_dep, libm])
+  executable(test_name,
+    sources: test_srcs,
+    include_directories: [confinc, gdkinc],
+    c_args: test_args + common_cflags,
+    dependencies: [libgtk_dep, libm],
+  )
 endforeach
 
 if profiler_enabled
-  executable('testperf', 'testperf.c',
-              dependencies: [libsysprof_dep, platform_gio_dep, libm])
+  executable('testperf',
+    sources: 'testperf.c',
+    dependencies: [libsysprof_dep, platform_gio_dep, libm],
+  )
 endif

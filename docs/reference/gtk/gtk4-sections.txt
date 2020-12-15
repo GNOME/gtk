@@ -618,6 +618,14 @@ GtkBuildable
 GtkBuildableIface
 GtkBuildableParser
 gtk_buildable_get_buildable_id
+
+<SUBSECTION Parser>
+gtk_buildable_parse_context_get_element
+gtk_buildable_parse_context_get_element_stack
+gtk_buildable_parse_context_get_position
+gtk_buildable_parse_context_pop
+gtk_buildable_parse_context_push
+
 <SUBSECTION Standard>
 GTK_BUILDABLE
 GTK_IS_BUILDABLE
@@ -835,6 +843,8 @@ gtk_combo_box_get_active_id
 gtk_combo_box_set_active_id
 gtk_combo_box_get_model
 gtk_combo_box_set_model
+gtk_combo_box_popup
+gtk_combo_box_popup_for_device
 gtk_combo_box_popdown
 gtk_combo_box_get_row_separator_func
 gtk_combo_box_set_row_separator_func
@@ -1133,6 +1143,8 @@ gtk_password_entry_set_show_peek_icon
 gtk_password_entry_get_show_peek_icon
 gtk_password_entry_set_extra_menu
 gtk_password_entry_get_extra_menu
+gtk_password_entry_get_text_widget
+gtk_password_entry_toggle_peek
 <SUBSECTION Private>
 gtk_password_entry_get_type
 </SECTION>
@@ -2627,7 +2639,9 @@ GtkSorterOrder
 GtkSorterChange
 gtk_sorter_compare
 gtk_sorter_get_order
+gtk_sorter_get_keys
 gtk_sorter_changed
+gtk_sorter_changed_with_keys
 <SUBSECTION Standard>
 GTK_SORTER
 GTK_IS_SORTER
@@ -2757,7 +2771,6 @@ gtk_sort_list_model_get_type
 GtkSpinButton
 GtkSpinButtonUpdatePolicy
 GtkSpinType
-gtk_spin_button_configure
 gtk_spin_button_new
 gtk_spin_button_new_with_range
 gtk_spin_button_set_adjustment
@@ -2781,8 +2794,10 @@ gtk_spin_button_set_snap_to_ticks
 gtk_spin_button_get_snap_to_ticks
 gtk_spin_button_set_climb_rate
 gtk_spin_button_get_climb_rate
+gtk_spin_button_configure
 gtk_spin_button_spin
 gtk_spin_button_update
+gtk_spin_button_get_text_widget
 GTK_INPUT_ERROR
 <SUBSECTION Standard>
 GTK_SPIN_BUTTON
@@ -2829,6 +2844,7 @@ gtk_statusbar_push
 gtk_statusbar_pop
 gtk_statusbar_remove
 gtk_statusbar_remove_all
+gtk_statusbar_get_message
 <SUBSECTION Standard>
 GTK_STATUSBAR
 GTK_IS_STATUSBAR
@@ -2963,6 +2979,8 @@ GTK_TEXT_BUFFER_GET_CLASS
 gtk_text_buffer_get_type
 <SUBSECTION Private>
 GtkTextBufferPrivate
+gtk_text_byte_begins_utf8_char
+gtk_text_unknown_char_utf8_gtk_tests_only
 </SECTION>
 
 <SECTION>
@@ -4002,6 +4020,10 @@ gtk_cell_renderer_get_padding
 gtk_cell_renderer_set_padding
 gtk_cell_renderer_get_state
 gtk_cell_renderer_is_activatable
+gtk_cell_renderer_get_is_expanded
+gtk_cell_renderer_get_is_expander
+gtk_cell_renderer_set_is_expanded
+gtk_cell_renderer_set_is_expander
 
 <SUBSECTION Width-for-height>
 gtk_cell_renderer_get_preferred_height
@@ -4286,6 +4308,7 @@ gtk_snapshot_push_shadow
 gtk_snapshot_push_debug
 gtk_snapshot_push_gl_shader
 gtk_snapshot_pop
+gtk_snapshot_gl_shader_pop_texture
 gtk_snapshot_save
 gtk_snapshot_restore
 gtk_snapshot_transform
@@ -4308,6 +4331,9 @@ gtk_snapshot_append_conic_gradient
 gtk_snapshot_append_border
 gtk_snapshot_append_inset_shadow
 gtk_snapshot_append_outset_shadow
+gtk_snapshot_append_radial_gradient
+gtk_snapshot_append_repeating_radial_gradient
+gtk_snapshot_render_insertion_cursor
 gtk_snapshot_render_background
 gtk_snapshot_render_frame
 gtk_snapshot_render_focus
@@ -4442,6 +4468,7 @@ gtk_widget_get_focusable
 gtk_widget_set_focusable
 gtk_widget_get_focus_on_click
 gtk_widget_set_focus_on_click
+gtk_widget_get_focus_child
 gtk_widget_set_focus_child
 gtk_widget_get_can_target
 gtk_widget_set_can_target
@@ -5105,6 +5132,34 @@ GTK_PRINTER_GET_CLASS
 <SUBSECTION Private>
 GtkPrinterPrivate
 gtk_printer_get_type 
+GtkPrinterOption
+gtk_printer_option_allocate_choices
+gtk_printer_option_choices_from_array
+gtk_printer_option_clear_has_conflict
+gtk_printer_option_get_activates_default
+gtk_printer_option_get_type
+gtk_printer_option_has_choice
+gtk_printer_option_new
+gtk_printer_option_set
+gtk_printer_option_set_activates_default
+gtk_printer_option_set_add
+gtk_printer_option_set_boolean
+gtk_printer_option_set_clear_conflicts
+gtk_printer_option_set_foreach
+gtk_printer_option_set_foreach_in_group
+gtk_printer_option_set_get_groups
+gtk_printer_option_set_get_type
+gtk_printer_option_set_has_conflict
+gtk_printer_option_set_lookup
+gtk_printer_option_set_new
+gtk_printer_option_set_remove
+GtkPrinterOptionWidget
+gtk_printer_option_widget_get_external_label
+gtk_printer_option_widget_get_type
+gtk_printer_option_widget_get_value
+gtk_printer_option_widget_has_external_label
+gtk_printer_option_widget_new
+gtk_printer_option_widget_set_source
 </SECTION>
 
 
@@ -5297,6 +5352,7 @@ GtkCustomPaperUnixDialogClass
 <SUBSECTION Private>
 gtk_paper_size_get_type
 gtk_custom_paper_unix_dialog_get_type
+gtk_print_load_custom_papers
 GtkCustomPaperUnixDialogPrivate
 </SECTION>
 
@@ -5452,6 +5508,19 @@ gtk_test_init
 gtk_test_list_all_types
 gtk_test_register_all_types
 gtk_test_widget_wait_for_draw
+<SUBSECTION Accessibility>
+gtk_test_accessible_assert_property
+gtk_test_accessible_assert_relation
+gtk_test_accessible_assert_role
+gtk_test_accessible_assert_state
+gtk_test_accessible_assertion_message_role
+gtk_test_accessible_check_property
+gtk_test_accessible_check_relation
+gtk_test_accessible_check_state
+gtk_test_accessible_has_property
+gtk_test_accessible_has_relation
+gtk_test_accessible_has_role
+gtk_test_accessible_has_state
 </SECTION>
 
 <SECTION>
@@ -6131,6 +6200,8 @@ gtk_popover_get_offset
 gtk_popover_set_default_widget
 gtk_popover_set_cascade_popdown
 gtk_popover_get_cascade_popdown
+gtk_popover_get_mnemonics_visible
+gtk_popover_set_mnemonics_visible
 <SUBSECTION Standard>
 GTK_TYPE_POPOVER
 GTK_IS_POPOVER
@@ -6974,6 +7045,8 @@ gtk_native_get_for_surface
 gtk_native_get_surface
 gtk_native_get_renderer
 gtk_native_get_surface_transform
+gtk_native_realize
+gtk_native_unrealize
 
 <SUBSECTION Private>
 gtk_native_get_type
@@ -7514,6 +7587,9 @@ gtk_accessible_reset_property
 gtk_accessible_update_relation
 gtk_accessible_update_relation_value
 gtk_accessible_reset_relation
+gtk_accessible_property_init_value
+gtk_accessible_relation_init_value
+gtk_accessible_state_init_value
 
 <SUBSECTION Standard>
 GTK_TYPE_ACCESSIBLE
