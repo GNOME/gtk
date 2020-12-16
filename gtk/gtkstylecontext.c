@@ -2916,6 +2916,14 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
                 "gtk-cursor-aspect-ratio", &aspect_ratio,
                 NULL);
 
+  /* Fall back to style property if the GtkSetting property is unchanged */
+  if (aspect_ratio == 0.04f)
+    {
+      gtk_style_context_get_style (context,
+                                   "cursor-aspect-ratio", &aspect_ratio,
+                                   NULL);
+    }
+
   keymap_direction = gdk_keymap_get_direction (gdk_keymap_get_for_display (gdk_screen_get_display (priv->screen)));
 
   pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
@@ -3002,6 +3010,14 @@ gtk_draw_insertion_cursor (GtkWidget          *widget,
   g_object_get (gtk_settings_get_for_screen (context->priv->screen),
                 "gtk-cursor-aspect-ratio", &aspect_ratio,
                 NULL);
+
+  /* Fall back to style property if the GtkSetting property is unchanged */
+  if (aspect_ratio == 0.04f)
+    {
+      gtk_style_context_get_style (context,
+                                   "cursor-aspect-ratio", &aspect_ratio,
+                                   NULL);
+    }
 
   draw_insertion_cursor (context, cr,
                          location->x, location->y, location->height,
