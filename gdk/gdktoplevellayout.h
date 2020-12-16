@@ -67,7 +67,7 @@ void                    gdk_toplevel_layout_set_fullscreen (GdkToplevelLayout *l
 
 GDK_AVAILABLE_IN_ALL
 gboolean                gdk_toplevel_layout_get_maximized (GdkToplevelLayout *layout,
-                                                           gboolean          *maximize);
+                                                           gboolean          *maximized);
 
 GDK_AVAILABLE_IN_ALL
 gboolean                gdk_toplevel_layout_get_fullscreen (GdkToplevelLayout *layout,
