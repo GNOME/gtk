@@ -193,7 +193,25 @@ gsk_stroke_equal (gconstpointer stroke1,
   const GskStroke *self1 = stroke1;
   const GskStroke *self2 = stroke2;
 
-  return self1->line_width == self2->line_width;
+  if (self1->line_width != self2->line_width ||
+      self1->line_cap != self2->line_cap ||
+      self1->line_join != self2->line_join ||
+      self1->miter_limit != self2->miter_limit)
+    return FALSE;
+
+  if (self1->n_dash != self2->n_dash)
+    return FALSE;
+
+  for (int i = 0; i < self1->n_dash; i++)
+    {
+      if (self1->dash[i] != self2->dash[i])
+        return FALSE;
+    }
+
+  if (self1->dash_offset != self2->dash_offset)
+    return FALSE;
+
+  return TRUE;
 }
 
 /**
