@@ -238,6 +238,7 @@ private_headers = [
   'gtksizegroup-private.h',
   'gtksizerequestcacheprivate.h',
   'gtksnapshotprivate.h',
+  'gtksorterprivate.h',
   'gtksortkeysprivate.h',
   'gtkstyleanimationprivate.h',
   'gtkstylecascadeprivate.h',

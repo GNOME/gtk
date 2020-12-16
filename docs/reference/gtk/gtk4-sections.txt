@@ -2636,9 +2636,7 @@ GtkSorterOrder
 GtkSorterChange
 gtk_sorter_compare
 gtk_sorter_get_order
-gtk_sorter_get_keys
 gtk_sorter_changed
-gtk_sorter_changed_with_keys
 <SUBSECTION Standard>
 GTK_SORTER
 GTK_IS_SORTER
