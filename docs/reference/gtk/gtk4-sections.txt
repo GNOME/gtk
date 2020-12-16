@@ -1011,7 +1011,6 @@ gtk_editable_label_get_type
 <FILE>gtktext</FILE>
 <TITLE>GtkText</TITLE>
 GtkText
-GtkTextClass
 gtk_text_new
 gtk_text_new_with_buffer
 gtk_text_set_buffer
@@ -1143,8 +1142,6 @@ gtk_password_entry_set_show_peek_icon
 gtk_password_entry_get_show_peek_icon
 gtk_password_entry_set_extra_menu
 gtk_password_entry_get_extra_menu
-gtk_password_entry_get_text_widget
-gtk_password_entry_toggle_peek
 <SUBSECTION Private>
 gtk_password_entry_get_type
 </SECTION>
