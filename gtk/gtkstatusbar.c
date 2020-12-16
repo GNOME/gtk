@@ -489,6 +489,14 @@ gtk_statusbar_remove_all (GtkStatusbar *statusbar,
     }
 }
 
+/**
+ * gtk_statusbar_get_message:
+ * @statusbar: a #GtkStatusbar
+ *
+ * Retrieves the contents of the label in #GtkStatusbar.
+ *
+ * Returns: (transfer none): the contents of the statusbar
+ */
 const char *
 gtk_statusbar_get_message (GtkStatusbar *statusbar)
 {
