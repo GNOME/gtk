@@ -1691,6 +1691,13 @@ gtk_cell_renderer_get_state (GtkCellRenderer      *cell,
   return state;
 }
 
+/**
+ * gtk_cell_renderer_set_is_expander:
+ * @cell: a #GtkCellRenderer
+ * @is_expander: whether @cell is an expander
+ *
+ * Sets whether the given #GtkCellRenderer is an expander.
+ */
 void
 gtk_cell_renderer_set_is_expander (GtkCellRenderer *cell,
                                    gboolean         is_expander)
@@ -1709,6 +1716,14 @@ gtk_cell_renderer_set_is_expander (GtkCellRenderer *cell,
     }
 }
 
+/**
+ * gtk_cell_renderer_get_is_expander:
+ * @cell: a #GtkCellRenderer
+ *
+ * Checks whether the given #GtkCellRenderer is an expander.
+ *
+ * Returns: %TRUE if @cell is an expander, and %FALSE otherwise
+ */
 gboolean
 gtk_cell_renderer_get_is_expander (GtkCellRenderer *cell)
 {
@@ -1719,6 +1734,13 @@ gtk_cell_renderer_get_is_expander (GtkCellRenderer *cell)
   return priv->is_expander;
 }
 
+/**
+ * gtk_cell_renderer_set_is_expanded:
+ * @cell: a #GtkCellRenderer
+ * @is_expanded: whether @cell should be expanded
+ *
+ * Sets whether the given #GtkCellRenderer is expanded.
+ */
 void
 gtk_cell_renderer_set_is_expanded (GtkCellRenderer *cell,
                                    gboolean         is_expanded)
@@ -1737,6 +1759,14 @@ gtk_cell_renderer_set_is_expanded (GtkCellRenderer *cell,
     }
 }
 
+/**
+ * gtk_cell_renderer_get_is_expanded:
+ * @cell: a #GtkCellRenderer
+ *
+ * Checks whether the given #GtkCellRenderer is expanded.
+ *
+ * Returns: %TRUE if the cell renderer is expanded
+ */
 gboolean
 gtk_cell_renderer_get_is_expanded (GtkCellRenderer *cell)
 {
