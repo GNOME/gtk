@@ -1157,6 +1157,11 @@ shows a #GtkFileChooserNative dialog when clicked; once the file selection
 has completed, you can update the label of the #GtkButton with the selected
 file.
 
+### Adapt to changed GtkSettings properties
+
+In GTK 3 the #GtkSettings:gtk-cursor-aspect-ratio property of #GtkSettings was
+a float. In GTK 4 this has been changed to a double.
+
 ## Changes to consider after the switch
 
 GTK 4 has a number of new features that you may want to take
