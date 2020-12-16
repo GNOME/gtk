@@ -24,7 +24,8 @@
  * @See_also: #GtkGesture, #GtkGestureSingle
  *
  * #GtkGestureStylus is a #GtkGesture implementation specific to stylus
- * input. The provided signals just provide the basic information
+ * input. The provided signals just relay the basic information of the
+ * stylus events.
  */
 
 #include "config.h"
@@ -94,6 +95,14 @@ gtk_gesture_stylus_class_init (GtkGestureStylusClass *klass)
   event_controller_class = GTK_EVENT_CONTROLLER_CLASS (klass);
   event_controller_class->handle_event = gtk_gesture_stylus_handle_event;
 
+  /**
+   * GtkGestureStylus::proximity:
+   * @gesture: the #GtkGestureStylus that emitted the signal
+   * @x: the X coordinate of the stylus event
+   * @y: the Y coordinate of the stylus event
+   *
+   * A signal emitted when the stylus is in proximity of the device.
+   */
   signals[PROXIMITY] =
     g_signal_new (I_("proximity"),
                   G_TYPE_FROM_CLASS (klass),
@@ -106,6 +115,14 @@ gtk_gesture_stylus_class_init (GtkGestureStylusClass *klass)
                               G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_VOID__DOUBLE_DOUBLEv);
 
+  /**
+   * GtkGestureStylus::down:
+   * @gesture: the #GtkGestureStylus that emitted the signal
+   * @x: the X coordinate of the stylus event
+   * @y: the Y coordinate of the stylus event
+   *
+   * A signal emitted when the stylus touches the device.
+   */
   signals[DOWN] =
     g_signal_new (I_("down"),
                   G_TYPE_FROM_CLASS (klass),
@@ -118,6 +135,14 @@ gtk_gesture_stylus_class_init (GtkGestureStylusClass *klass)
                               G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_VOID__DOUBLE_DOUBLEv);
 
+  /**
+   * GtkGestureStylus::motion:
+   * @gesture: the #GtkGestureStylus that emitted the signal
+   * @x: the X coordinate of the stylus event
+   * @y: the Y coordinate of the stylus event
+   *
+   * A signal emitted when the stylus moves while touching the device.
+   */
   signals[MOTION] =
     g_signal_new (I_("motion"),
                   G_TYPE_FROM_CLASS (klass),
@@ -130,6 +155,14 @@ gtk_gesture_stylus_class_init (GtkGestureStylusClass *klass)
                               G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_VOID__DOUBLE_DOUBLEv);
 
+  /**
+   * GtkGestureStylus::up:
+   * @gesture: the #GtkGestureStylus that emitted the signal
+   * @x: the X coordinate of the stylus event
+   * @y: the Y coordinate of the stylus event
+   *
+   * A signal emitted when the stylus no longer touches the device.
+   */
   signals[UP] =
     g_signal_new (I_("up"),
                   G_TYPE_FROM_CLASS (klass),
@@ -178,12 +211,13 @@ gesture_get_current_event (GtkGestureStylus *gesture)
  * @axis: requested device axis
  * @value: (out): return location for the axis value
  *
- * Returns the current value for the requested @axis. This function
- * must be called from either the #GtkGestureStylus::down,
- * #GtkGestureStylus::motion, #GtkGestureStylus::up or #GtkGestureStylus::proximity
- * signals.
+ * Returns the current value for the requested @axis.
  *
- * Returns: #TRUE if there is a current value for the axis
+ * This function must be called from the handler of one of the
+ * #GtkGestureStylus::down, #GtkGestureStylus::motion,
+ * #GtkGestureStylus::up or #GtkGestureStylus::proximity signals.
+ *
+ * Returns: %TRUE if there is a current value for the axis
  **/
 gboolean
 gtk_gesture_stylus_get_axis (GtkGestureStylus *gesture,
@@ -214,7 +248,7 @@ gtk_gesture_stylus_get_axis (GtkGestureStylus *gesture,
  * #GtkGestureStylus::motion, #GtkGestureStylus::up or #GtkGestureStylus::proximity
  * signals.
  *
- * Returns: #TRUE if there is a current value for the axes
+ * Returns: %TRUE if there is a current value for the axes
  **/
 gboolean
 gtk_gesture_stylus_get_axes (GtkGestureStylus  *gesture,
@@ -272,9 +306,9 @@ gtk_gesture_stylus_get_axes (GtkGestureStylus  *gesture,
  * gtk_gesture_stylus_get_axis() call express the latest (most up-to-date)
  * state in motion history.
  *
- * @backlog is provided in chronological order.
+ * The @backlog is provided in chronological order.
  *
- * Returns: #TRUE if there is a backlog to unfold in the current state.
+ * Returns: %TRUE if there is a backlog to unfold in the current state.
  **/
 gboolean
 gtk_gesture_stylus_get_backlog (GtkGestureStylus  *gesture,
