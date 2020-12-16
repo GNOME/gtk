@@ -4024,6 +4024,7 @@ gsk_stroke_node_new (GskRenderNode   *child,
 {
   GskStrokeNode *self;
   GskRenderNode *node;
+  graphene_rect_t path_bounds;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
   g_return_val_if_fail (path != NULL, NULL);
@@ -4036,8 +4037,10 @@ gsk_stroke_node_new (GskRenderNode   *child,
   self->path = gsk_path_ref (path);
   gsk_stroke_init_copy (&self->stroke, stroke);
 
-  /* XXX: Figure out a way to compute bounds from the path */
-  graphene_rect_init_from_rect (&node->bounds, &child->bounds);
+  if (gsk_path_get_stroke_bounds (path, stroke, &path_bounds))
+    graphene_rect_intersection (&path_bounds, &child->bounds, &node->bounds);
+  else
+    graphene_rect_init_from_rect (&node->bounds, graphene_rect_zero ());
 
   return node;
 }
