@@ -1,5 +1,39 @@
-Overview of Changes
-===================
+Overview of Changes in GTK 4.0
+==============================
+
+* Fix problems with synthetic motion events affecting frame rates
+
+* Fix problems with implicit grabs affecting widget states
+
+* Fix problems with zoom mode on scales getting stuck
+
+* Fix submenu closing by outside clicks
+
+* Rename GtkWindow:fullscreen to :fullscreened to help
+  language bindings
+
+* Bump the soname. Stable GTK 4 releases use libgtk-4.0.so.1.xxxx.y
+
+* Adwaita:
+ - Reduce hover transition effects in lists
+ - Special-case header buttons
+
+* Demos:
+ - Remove NoDisplay from desktop files
+ - Autoplay the video in widget-factory
+
+* Translation updates:
+ Catalan
+ Norwegian Bokmål
+ Polish
+ Spanish
+ Swedish
+ Romanian
+ Ukrainian
+
+
+Overview of Changes in 3.99.5
+=============================
 
 * Accessibility:
  - Map presentation role according to Core-AAM
