@@ -54,6 +54,8 @@ gsk_stroke_clear (GskStroke *stroke)
   stroke->n_dash = 0; /* better safe than sorry */
 }
 
+guint                   gsk_stroke_hash                         (const GskStroke        *stroke);
+
 G_END_DECLS
 
 #endif /* __GSK_STROKE_PRIVATE_H__ */

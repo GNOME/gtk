@@ -465,3 +465,20 @@ gsk_stroke_get_dash_offset (const GskStroke *self)
 
   return self->dash_offset;
 }
+
+guint
+gsk_stroke_hash (const GskStroke *stroke)
+{
+  guint32 h = 5381;
+
+  h = (h << 5) + h + (guint) (stroke->line_width * 100);
+  h = (h << 5) + h + stroke->line_cap;
+  h = (h << 5) + h + stroke->line_join;
+  h = (h << 5) + h + (guint) (stroke->miter_limit * 100);
+  h = (h << 5) + h + stroke->n_dash;
+  for (int i = 0; i < stroke->n_dash; i++)
+    h = (h << 5) + h + (guint) (stroke->dash[i] * 100);
+  h = (h << 5) + h + (guint) (stroke->dash_offset * 100);
+
+  return h;
+}
