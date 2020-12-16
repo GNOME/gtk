@@ -1314,6 +1314,12 @@ gdk_event_get_position (GdkEvent *event,
 
 /* {{{ GdkButtonEvent */
 
+/**
+ * GdkButtonEvent:
+ *
+ * An event related to a button on a pointer device/
+ */
+
 static void
 gdk_button_event_finalize (GdkEvent *event)
 {
@@ -1437,6 +1443,12 @@ gdk_button_event_get_button (GdkEvent *event)
 /* }}} */
 
 /* {{{ GdkKeyEvent */
+
+/**
+ * GdkKeyEvent:
+ *
+ * An event related to a key-based device.
+ */
 
 static GdkModifierType
 gdk_key_event_get_state (GdkEvent *event)
@@ -1819,6 +1831,12 @@ gdk_key_event_get_match (GdkEvent        *event,
 
 /* {{{ GdkTouchEvent */
 
+/**
+ * GdkTouchEvent:
+ *
+ * An event related to a touch-based device.
+ */
+
 static void
 gdk_touch_event_finalize (GdkEvent *event)
 {
@@ -1949,6 +1967,12 @@ gdk_touch_event_get_emulating_pointer (GdkEvent *event)
 /* }}} */
 
 /* {{{ GdkCrossingEvent */
+
+/**
+ * GdkCrossingEvent:
+ *
+ * An event caused by a pointing device moving between surfaces.
+ */
 
 static void
 gdk_crossing_event_finalize (GdkEvent *event)
@@ -2088,6 +2112,12 @@ gdk_crossing_event_get_detail (GdkEvent *event)
 
 /* {{{ GdkDeleteEvent */
 
+/**
+ * GdkDeleteEvent:
+ *
+ * An event related to closing a top-level surface.
+ */
+
 static const GdkEventTypeInfo gdk_delete_event_info = {
   sizeof (GdkDeleteEvent),
   NULL,
@@ -2112,6 +2142,12 @@ gdk_delete_event_new (GdkSurface *surface)
 /* }}} */
 
 /* {{{ GdkFocusEvent */
+
+/**
+ * GdkFocusEvent:
+ *
+ * An event related to a focus change.
+ */
 
 static const GdkEventTypeInfo gdk_focus_event_info = {
   sizeof (GdkFocusEvent),
@@ -2163,6 +2199,12 @@ gdk_focus_event_get_in (GdkEvent *event)
 /* }}} */
 
 /* {{{ GdkScrollEvent */
+
+/**
+ * GdkScrollEvent:
+ *
+ * An event related to a scrolling motion.
+ */
 
 static void
 gdk_scroll_event_finalize (GdkEvent *event)
@@ -2320,6 +2362,12 @@ gdk_scroll_event_is_stop (GdkEvent *event)
 /* }}} */
 
 /* {{{ GdkTouchpadEvent */
+
+/**
+ * GdkTouchpadEvent:
+ *
+ * An event related to a touchpad device.
+ */
 
 static GdkModifierType
 gdk_touchpad_event_get_state (GdkEvent *event)
@@ -2517,6 +2565,12 @@ gdk_touchpad_event_get_pinch_scale (GdkEvent *event)
 
 /* {{{ GdkPadEvent */
 
+/**
+ * GdkPadEvent:
+ *
+ * An event related to a pad-based device.
+ */
+
 static const GdkEventTypeInfo gdk_pad_event_info = {
   sizeof (GdkPadEvent),
   NULL,
@@ -2685,6 +2739,12 @@ gdk_pad_event_get_group_mode (GdkEvent *event,
 
 /* {{{ GdkMotionEvent */
 
+/**
+ * GdkMotionEvent:
+ *
+ * An event related to a pointer or touch device motion.
+ */
+
 static void
 gdk_motion_event_finalize (GdkEvent *event)
 {
@@ -2839,6 +2899,12 @@ gdk_event_get_history (GdkEvent *event,
 
 /* {{{ GdkProximityEvent */
 
+/**
+ * GdkProximityEvent:
+ *
+ * An event related to the proximity of a tool to a device.
+ */
+
 static void
 gdk_proximity_event_finalize (GdkEvent *event)
 {
@@ -2895,6 +2961,12 @@ gdk_proximity_event_new (GdkEventType   type,
 /* }}} */
 
 /* {{{ GdkDNDEvent */
+
+/**
+ * GdkDNDEvent:
+ *
+ * An event related to drag and drop operations.
+ */
 
 static void
 gdk_dnd_event_finalize (GdkEvent *event)
@@ -2995,6 +3067,12 @@ gdk_dnd_event_get_drop (GdkEvent *event)
 /* }}} */
 
 /* {{{ GdkGrabBrokenEvent */
+
+/**
+ * GdkGrabBrokenEvent:
+ *
+ * An event related to a broken windowing system grab.
+ */
 
 static const GdkEventTypeInfo gdk_grab_broken_event_info = {
   sizeof (GdkGrabBrokenEvent),

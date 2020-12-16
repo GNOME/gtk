@@ -1,4 +1,3 @@
-
 <INCLUDE>gdk/gdk.h</INCLUDE>
 
 <SECTION>
@@ -29,8 +28,9 @@ GDK_TYPE_GRAB_STATUS
 GDK_TYPE_STATUS
 GdkStatus
 GDKVAR
-GDK_VERSION_3_92
-GDK_VERSION_3_94
+GDK_EXTERN_VAR
+_GDK_EXTERN
+GDK_DECLARE_INTERNAL_TYPE
 gdk_axis_use_get_type
 gdk_byte_order_get_type
 gdk_crossing_mode_get_type
@@ -375,6 +375,7 @@ gdk_device_tool_get_hardware_id
 gdk_device_tool_get_axes
 
 <SUBSECTION Standard>
+GDK_TYPE_AXIS_FLAGS
 GDK_TYPE_AXIS_USE
 GDK_TYPE_EXTENSION_MODE
 GDK_TYPE_INPUT_MODE
@@ -447,6 +448,7 @@ gdk_seat_capabilities_get_type
 <FILE>events</FILE>
 GdkEvent
 GdkEventType
+GdkKeymapKey
 GdkKeyMatch
 GdkTouchpadGesturePhase
 GdkScrollDirection
@@ -482,10 +484,14 @@ gdk_event_get_axis
 gdk_event_get_history
 gdk_event_get_pointer_emulated
 gdk_event_triggers_context_menu
+GdkButtonEvent
 gdk_button_event_get_button
+GdkScrollEvent
 gdk_scroll_event_get_direction
 gdk_scroll_event_get_deltas
 gdk_scroll_event_is_stop
+GdkMotionEvent
+GdkKeyEvent
 gdk_key_event_get_keyval
 gdk_key_event_get_keycode
 gdk_key_event_get_consumed_modifiers
@@ -494,22 +500,31 @@ gdk_key_event_get_level
 gdk_key_event_is_modifier
 gdk_key_event_matches
 gdk_key_event_get_match
+GdkFocusEvent
 gdk_focus_event_get_in
 gdk_touch_event_get_emulating_pointer
+GdkCrossingEvent
 gdk_crossing_event_get_mode
 gdk_crossing_event_get_detail
 gdk_crossing_event_get_focus
+GdkGrabBrokenEvent
 gdk_grab_broken_event_get_grab_surface
 gdk_grab_broken_event_get_implicit
+GdkDeleteEvent
+GdkDNDEvent
 gdk_dnd_event_get_drop
+GdkTouchEvent
+GdkTouchpadEvent
 gdk_touchpad_event_get_gesture_phase
 gdk_touchpad_event_get_n_fingers
 gdk_touchpad_event_get_deltas
 gdk_touchpad_event_get_pinch_angle_delta
 gdk_touchpad_event_get_pinch_scale
+GdkPadEvent
 gdk_pad_event_get_axis_value
 gdk_pad_event_get_button
 gdk_pad_event_get_group_mode
+GdkProximityEvent
 
 <SUBSECTION>
 gdk_events_get_angle
@@ -517,6 +532,7 @@ gdk_events_get_center
 gdk_events_get_distance
 
 <SUBSECTION Standard>
+GDK_EVENT
 GDK_TYPE_EVENT
 GDK_TYPE_EVENT_MASK
 GDK_TYPE_EVENT_TYPE
@@ -524,6 +540,20 @@ GDK_TYPE_CROSSING_MODE
 GDK_TYPE_SCROLL_DIRECTION
 GDK_TYPE_NOTIFY_TYPE
 GDK_IS_EVENT
+GDK_IS_EVENT_TYPE
+GDK_TYPE_BUTTON_EVENT
+GDK_TYPE_CROSSING_EVENT
+GDK_TYPE_DELETE_EVENT
+GDK_TYPE_DND_EVENT
+GDK_TYPE_FOCUS_EVENT
+GDK_TYPE_GRAB_BROKEN_EVENT
+GDK_TYPE_KEY_EVENT
+GDK_TYPE_MOTION_EVENT
+GDK_TYPE_PAD_EVENT
+GDK_TYPE_PROXIMITY_EVENT
+GDK_TYPE_SCROLL_EVENT
+GDK_TYPE_TOUCH_EVENT
+GDK_TYPE_TOUCHPAD_EVENT
 
 gdk_event_get_type
 gdk_event_sequence_get_type
@@ -1173,6 +1203,10 @@ GdkCairoContext
 gdk_cairo_context_cairo_create
 
 <SUBSECTION Standard>
+GDK_CAIRO_CONTEXT
+GDK_IS_CAIRO_CONTEXT
+GDK_TYPE_CAIRO_CONTEXT
+GDK_CAIRO_ERROR
 gdk_cairo_context_get_type
 </SECTION>
 
@@ -1192,6 +1226,11 @@ gdk_vulkan_context_get_queue
 gdk_vulkan_context_get_queue_family_index
 
 <SUBSECTION Standard>
+GDK_VULKAN_CONTEXT
+GDK_IS_VULKAN_CONTEXT
+GDK_TYPE_VULKAN_CONTEXT
+GDK_RENDERING_VULKAN
+GDK_VULKAN_ERROR
 gdk_vulkan_context_get_type
 gdk_vulkan_error_quark
 gdk_vulkan_strerror
