@@ -1716,19 +1716,49 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             scroll_valuators_changed (GDK_X11_DEVICE_XI2 (source_device),
                                       &xev->valuators, &delta_x, &delta_y))
           {
+            GdkModifierType state;
+
             GDK_DISPLAY_NOTE (display, EVENTS,
                      g_message ("smooth scroll: \n\tdevice: %u\n\tsource device: %u\n\twindow %ld\n\tdeltas: %f %f",
                                 xev->deviceid, xev->sourceid,
                                 xev->event, delta_x, delta_y));
 
-            event = gdk_scroll_event_new (surface,
-                                          device,
-                                          NULL,
-                                          xev->time,
-                                          _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group),
-                                          delta_x,
-                                          delta_y,
-                                          delta_x == 0.0 && delta_y == 0.0);
+            state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
+
+            if (gdk_device_get_source (source_device) != GDK_SOURCE_TOUCHPAD &&
+                ((delta_x == 0.0 && ABS (delta_y) == 1.0) ||
+                 (ABS (delta_x) == 1.0 && delta_y == 0.0)))
+              {
+                GdkScrollDirection direction;
+
+                if (delta_x > 0)
+                  direction = GDK_SCROLL_RIGHT;
+                else if (delta_x < 0)
+                  direction = GDK_SCROLL_LEFT;
+                else if (delta_y > 0)
+                  direction = GDK_SCROLL_DOWN;
+                else
+                  direction = GDK_SCROLL_UP;
+
+                event = gdk_scroll_event_new_discrete (surface,
+                                                       device,
+                                                       NULL,
+                                                       xev->time,
+                                                       state,
+                                                       direction,
+                                                       FALSE);
+              }
+            else
+              {
+                event = gdk_scroll_event_new (surface,
+                                              device,
+                                              NULL,
+                                              xev->time,
+                                              state,
+                                              delta_x,
+                                              delta_y,
+                                              delta_x == 0.0 && delta_y == 0.0);
+              }
             break;
           }
 
