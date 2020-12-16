@@ -10258,9 +10258,17 @@ text_window_invalidate_cursors (GtkTextWindow *win)
 
   draw_arrow = (strong.x != weak.x || strong.y != weak.y);
 
-  gtk_widget_style_get (win->widget,
-                        "cursor-aspect-ratio", &cursor_aspect_ratio,
-                        NULL);
+  g_object_get (gtk_widget_get_settings (win->widget),
+                "gtk-cursor-aspect-ratio", &cursor_aspect_ratio,
+                NULL);
+
+  /* Fall back to style property if the GtkSetting property is unchanged */
+  if (cursor_aspect_ratio == 0.04f)
+    {
+      gtk_widget_style_get (win->widget,
+                            "cursor-aspect-ratio", &cursor_aspect_ratio,
+                            NULL);
+    }
   
   stem_width = strong.height * cursor_aspect_ratio + 1;
   arrow_width = stem_width + 1;
