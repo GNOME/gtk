@@ -466,12 +466,15 @@ load_vertex_data (GskQuadVertex          vertex_data[GL_N_VERTICES],
 }
 
 static void
-fill_vertex_data (GskQuadVertex vertex_data[GL_N_VERTICES],
-                  const float   min_x,
-                  const float   min_y,
-                  const float   max_x,
-                  const float   max_y)
+load_offscreen_vertex_data (GskQuadVertex          vertex_data[GL_N_VERTICES],
+                            const graphene_rect_t *bounds,
+                            RenderOpBuilder       *builder)
 {
+  const float min_x = builder->dx + bounds->origin.x;
+  const float min_y = builder->dy + bounds->origin.y;
+  const float max_x = min_x + bounds->size.width;
+  const float max_y = min_y + bounds->size.height;
+
   vertex_data[0].position[0] = min_x;
   vertex_data[0].position[1] = min_y;
   vertex_data[0].uv[0] = 0;
@@ -502,22 +505,6 @@ fill_vertex_data (GskQuadVertex vertex_data[GL_N_VERTICES],
   vertex_data[5].uv[0] = 1;
   vertex_data[5].uv[1] = 1;
 }
-
-static void
-load_offscreen_vertex_data (GskQuadVertex    vertex_data[GL_N_VERTICES],
-                            GskRenderNode   *node,
-                            RenderOpBuilder *builder)
-{
-  const float min_x = builder->dx + node->bounds.origin.x;
-  const float min_y = builder->dy + node->bounds.origin.y;
-  const float max_x = min_x + node->bounds.size.width;
-  const float max_y = min_y + node->bounds.size.height;
-
-  fill_vertex_data (vertex_data,
-                    min_x, min_y,
-                    max_x, max_y);
-}
-
 
 static void gsk_gl_renderer_setup_render_mode (GskGLRenderer   *self);
 static bool add_offscreen_ops                 (GskGLRenderer   *self,
@@ -682,7 +669,7 @@ render_fallback_node (GskGLRenderer   *self,
     {
       ops_set_program (builder, &self->programs->blit_program);
       ops_set_texture (builder, cached_id);
-      load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder);
+      load_offscreen_vertex_data (ops_draw (builder, NULL), &node->bounds, builder);
       return;
     }
 
@@ -766,7 +753,7 @@ render_fallback_node (GskGLRenderer   *self,
 
   ops_set_program (builder, &self->programs->blit_program);
   ops_set_texture (builder, texture_id);
-  load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder);
+  load_offscreen_vertex_data (ops_draw (builder, NULL), &node->bounds, builder);
 }
 
 static inline void
@@ -1260,7 +1247,7 @@ render_gl_shader_node (GskGLRenderer       *self,
             ops_set_extra_texture (builder, results[i].region.texture_id, i);
         }
 
-      load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder);
+      load_offscreen_vertex_data (ops_draw (builder, NULL), &node->bounds, builder);
     }
   else
     {
@@ -1748,7 +1735,7 @@ render_rounded_clip_node (GskGLRenderer       *self,
       ops_set_program (builder, &self->programs->blit_program);
       ops_set_texture (builder, result.region.texture_id);
 
-      load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder);
+      load_offscreen_vertex_data (ops_draw (builder, NULL), &node->bounds, builder);
     }
 }
 
@@ -1888,7 +1875,7 @@ blur_node (GskGLRenderer   *self,
            float            blur_radius,
            guint            extra_flags,
            TextureRegion   *out_region,
-           float           *out_vertex_data[4]) /* min, max, min, max */
+           graphene_rect_t *out_rect)
 {
   const float scale_x = builder->scale_x;
   const float scale_y = builder->scale_y;
@@ -1897,6 +1884,7 @@ blur_node (GskGLRenderer   *self,
   int blurred_texture_id;
 
   g_assert (blur_radius > 0);
+  g_assert (out_rect);
 
   /* Increase texture size for the given blur radius and scale it */
   texture_width  = ceilf ((node->bounds.size.width  + blur_extra));
@@ -1922,13 +1910,10 @@ blur_node (GskGLRenderer   *self,
       init_full_texture_region (out_region, blurred_texture_id);
     }
 
-  if (out_vertex_data)
-    {
-      *out_vertex_data[0] = builder->dx + node->bounds.origin.x - (blur_extra / 2.0);
-      *out_vertex_data[1] = builder->dx + node->bounds.origin.x + node->bounds.size.width + (blur_extra / 2.0);
-      *out_vertex_data[2] = builder->dy + node->bounds.origin.y - (blur_extra / 2.0);
-      *out_vertex_data[3] = builder->dy + node->bounds.origin.y + node->bounds.size.height + (blur_extra / 2.0);
-    }
+  out_rect->origin.x = node->bounds.origin.x - (blur_extra / 2.0f);
+  out_rect->origin.y = node->bounds.origin.y - (blur_extra / 2.0f);
+  out_rect->size.width = node->bounds.size.width + (blur_extra / 2.0f);
+  out_rect->size.height = node->bounds.size.height + (blur_extra / 2.0f);
 }
 
 static inline void
@@ -1940,7 +1925,7 @@ render_blur_node (GskGLRenderer   *self,
   GskRenderNode *child = gsk_blur_node_get_child (node);
   TextureRegion blurred_region;
   GskTextureKey key;
-  float min_x, max_x, min_y, max_y;
+  graphene_rect_t result_rect;
 
   if (node_is_invisible (child))
     return;
@@ -1957,16 +1942,14 @@ render_blur_node (GskGLRenderer   *self,
   key.scale_y = builder->scale_y;
   key.filter = GL_NEAREST;
   blurred_region.texture_id = gsk_gl_driver_get_texture_for_key (self->gl_driver, &key);
-  blur_node (self, child, builder, blur_radius, 0, &blurred_region,
-             (float*[4]){&min_x, &max_x, &min_y, &max_y});
+  blur_node (self, child, builder, blur_radius, 0, &blurred_region, &result_rect);
 
   g_assert (blurred_region.texture_id != 0);
 
   /* Draw the result */
   ops_set_program (builder, &self->programs->blit_program);
   ops_set_texture (builder, blurred_region.texture_id);
-  fill_vertex_data (ops_draw (builder, NULL), min_x, min_y, max_x, max_y);
-
+  load_offscreen_vertex_data (ops_draw (builder, NULL), &result_rect, builder);
 
   /* Add to cache for the blur node */
   gsk_gl_driver_set_texture_for_key (self->gl_driver, &key, blurred_region.texture_id);
@@ -2566,18 +2549,9 @@ render_shadow_node (GskGLRenderer   *self,
 
       if (shadow->radius > 0)
         {
-          float min_x;
-          float min_y;
-          float max_x;
-          float max_y;
-
           result.region.texture_id = 0;
           blur_node (self, shadow_child, builder, shadow->radius, NO_CACHE_PLZ, &result.region,
-                     (float*[4]){&min_x, &max_x, &min_y, &max_y});
-          bounds.origin.x = min_x - builder->dx;
-          bounds.origin.y = min_y - builder->dy;
-          bounds.size.width = max_x - min_x;
-          bounds.size.height = max_y - min_y;
+                     &bounds);
           result.is_offscreen = true;
         }
       else if (dx == 0 && dy == 0)
@@ -2666,7 +2640,7 @@ render_cross_fade_node (GskGLRenderer   *self,
 
   ops_set_texture (builder, start_result.region.texture_id);
 
-  load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder);
+  load_offscreen_vertex_data (ops_draw (builder, NULL), &node->bounds, builder);
 }
 
 static inline void
@@ -2707,7 +2681,7 @@ render_blend_node (GskGLRenderer   *self,
   op->source2 = top_result.region.texture_id;
   op->mode = gsk_blend_node_get_blend_mode (node);
 
-  load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder);
+  load_offscreen_vertex_data (ops_draw (builder, NULL), &node->bounds, builder);
 }
 
 static inline void
@@ -4403,8 +4377,11 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
     graphene_matrix_scale (&m, 1, -1, 1); /* Undo the scale init_projection_matrix() does again */
     ops_set_projection (&self->op_builder, &m);
 
-    fill_vertex_data (ops_draw (&self->op_builder, NULL),
-                      0, 0, width, height);
+    g_assert (self->op_builder.dx == 0);
+    g_assert (self->op_builder.dy == 0);
+
+    load_offscreen_vertex_data (ops_draw (&self->op_builder, NULL),
+                                &GRAPHENE_RECT_INIT (0, 0, width, height), &self->op_builder);
     ops_pop_clip (&self->op_builder);
     gsk_gl_renderer_render_ops (self);
 
