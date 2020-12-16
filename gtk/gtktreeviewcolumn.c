@@ -257,7 +257,13 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
   object_class->dispose = gtk_tree_view_column_dispose;
   object_class->set_property = gtk_tree_view_column_set_property;
   object_class->get_property = gtk_tree_view_column_get_property;
-  
+
+  /**
+   * GtkTreeViewColumn::clicked:
+   * @column: the #GtkTreeViewColumn that emitted the signal
+   *
+   * Emitted when the column's header has been clicked.
+   */
   tree_column_signals[CLICKED] =
     g_signal_new (I_("clicked"),
                   G_OBJECT_CLASS_TYPE (object_class),
