@@ -975,7 +975,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   gtk_editable_install_properties (gobject_class, PROP_EDITING_CANCELED + 1);
 
   /**
-   * GtkEntry:activate:
+   * GtkEntry::activate:
    * @self: The widget on which the signal is emitted
    *
    * The ::activate signal is forwarded from the
