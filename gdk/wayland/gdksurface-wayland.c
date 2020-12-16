@@ -4865,48 +4865,6 @@ gdk_wayland_toplevel_class_init (GdkWaylandToplevelClass *class)
   gdk_toplevel_install_properties (object_class, 1);
 }
 
-static gboolean
-did_maximize_layout_change (GdkToplevel       *toplevel,
-                            GdkToplevelLayout *layout)
-{
-  GdkSurface *surface = GDK_SURFACE (toplevel);
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-
-  if (!impl->toplevel.layout)
-    return TRUE;
-
-  if (gdk_toplevel_layout_get_maximized (impl->toplevel.layout) !=
-      gdk_toplevel_layout_get_maximized (layout) ||
-      !!(surface->state & GDK_TOPLEVEL_STATE_MAXIMIZED) !=
-      gdk_toplevel_layout_get_maximized (layout))
-    return TRUE;
-
-  return FALSE;
-}
-
-static gboolean
-did_fullscreen_layout_change (GdkToplevel       *toplevel,
-                              GdkToplevelLayout *layout)
-{
-  GdkSurface *surface = GDK_SURFACE (toplevel);
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-
-  if (!impl->toplevel.layout)
-    return TRUE;
-
-  if (gdk_toplevel_layout_get_fullscreen (impl->toplevel.layout) !=
-      gdk_toplevel_layout_get_fullscreen (layout) ||
-      !!(surface->state & GDK_TOPLEVEL_STATE_FULLSCREEN) !=
-      gdk_toplevel_layout_get_fullscreen (layout))
-    return TRUE;
-
-  if (gdk_toplevel_layout_get_fullscreen_monitor (impl->toplevel.layout) !=
-      gdk_toplevel_layout_get_fullscreen_monitor (layout))
-    return TRUE;
-
-  return FALSE;
-}
-
 static void
 gdk_wayland_toplevel_present (GdkToplevel       *toplevel,
                               GdkToplevelLayout *layout)
@@ -4914,19 +4872,21 @@ gdk_wayland_toplevel_present (GdkToplevel       *toplevel,
   GdkSurface *surface = GDK_SURFACE (toplevel);
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   gboolean pending_configure = FALSE;
+  gboolean maximize;
+  gboolean fullscreen;
 
-  if (did_maximize_layout_change (toplevel, layout))
+  if (gdk_toplevel_layout_get_maximized (layout, &maximize))
     {
-      if (gdk_toplevel_layout_get_maximized (layout))
+      if (maximize)
         gdk_wayland_surface_maximize (surface);
       else
         gdk_wayland_surface_unmaximize (surface);
       pending_configure = TRUE;
     }
 
-  if (did_fullscreen_layout_change (toplevel, layout))
+  if (gdk_toplevel_layout_get_fullscreen (layout, &fullscreen))
     {
-      if (gdk_toplevel_layout_get_fullscreen (layout))
+      if (fullscreen)
         {
           GdkMonitor *monitor;
 
