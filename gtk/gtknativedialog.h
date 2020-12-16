@@ -32,10 +32,18 @@ G_BEGIN_DECLS
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (GtkNativeDialog, gtk_native_dialog, GTK, NATIVE_DIALOG, GObject)
 
+/**
+ * GtkNativeDialogClass:
+ * @response: class handler for the #GtkNativeDialog::response signal
+ *
+ * Class structure for #GtkNativeDialog.
+ */
 struct _GtkNativeDialogClass
 {
+  /*< private >*/
   GObjectClass parent_class;
 
+  /*< public >*/
   void (* response) (GtkNativeDialog *self, int response_id);
 
   /* <private> */
