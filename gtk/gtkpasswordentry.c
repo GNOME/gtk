@@ -528,6 +528,14 @@ gtk_password_entry_accessible_init (GtkAccessibleInterface *iface)
   iface->get_platform_state = gtk_password_entry_accessible_get_platform_state;
 }
 
+/*< private >
+ * gtk_password_entry_get_text_widget
+ * @entry: a #GtkPasswordEntry
+ *
+ * Retrieves the #GtkText delegate of the #GtkPasswordEntry.
+ *
+ * Returns: (transfer none): the #GtkText delegate widget
+ */
 GtkText *
 gtk_password_entry_get_text_widget (GtkPasswordEntry *entry)
 {

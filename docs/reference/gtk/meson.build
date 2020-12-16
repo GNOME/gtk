@@ -193,6 +193,7 @@ private_headers = [
   'gtknomediafileprivate.h',
   'gtkpango.h',
   'gtkpasswordentrybufferprivate.h',
+  'gtkpasswordentryprivate.h',
   'gtkpathbar.h',
   'gdkpixbufutilsprivate.h',
   'gtkplacessidebarprivate.h',
