@@ -355,6 +355,17 @@ GDK_AVAILABLE_IN_ALL
 gboolean gtk_text_iter_backward_to_tag_toggle (GtkTextIter *iter,
                                                GtkTextTag  *tag);
 
+/**
+ * GtkTextCharPredicate:
+ * @ch: a Unicode code point
+ * @user_data: data passed to the callback
+ *
+ * The predicate function used by gtk_text_iter_forward_find_char() and
+ * gtk_text_iter_backward_find_char().
+ *
+ * Returns: %TRUE if the predicate is satisfied, and the iteration should
+ *   stop, and %FALSE otherwise
+ */
 typedef gboolean (* GtkTextCharPredicate) (gunichar ch, gpointer user_data);
 
 GDK_AVAILABLE_IN_ALL
