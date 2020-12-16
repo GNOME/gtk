@@ -2792,7 +2792,6 @@ gtk_spin_button_get_climb_rate
 gtk_spin_button_configure
 gtk_spin_button_spin
 gtk_spin_button_update
-gtk_spin_button_get_text_widget
 GTK_INPUT_ERROR
 <SUBSECTION Standard>
 GTK_SPIN_BUTTON

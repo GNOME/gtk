@@ -240,6 +240,7 @@ private_headers = [
   'gtksnapshotprivate.h',
   'gtksorterprivate.h',
   'gtksortkeysprivate.h',
+  'gtkspinbuttonprivate.h',
   'gtkstyleanimationprivate.h',
   'gtkstylecascadeprivate.h',
   'gtkstylecontextprivate.h',
