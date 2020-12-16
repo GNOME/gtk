@@ -97,7 +97,7 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
   GdkSurfaceHints mask;
   NSWindowStyleMask style_mask;
   gboolean maximize;
-  gboolean fullscreen
+  gboolean fullscreen;
 
   g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
   g_assert (GDK_IS_MACOS_WINDOW (nswindow));
