@@ -2308,7 +2308,7 @@ test_anaconda_signal (void)
   const char buffer[] = 
     "<?xml version='1.0' encoding='UTF-8'?>"
     "<interface>"
-    "  <requires lib='gtk' version='3.99'/>"
+    "  <requires lib='gtk' version='4.0'/>"
     "  <object class='GtkListStore' id='liststore1'>"
     "    <columns>"
     "      <!-- column-name use -->"
