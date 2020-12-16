@@ -1133,7 +1133,7 @@ gtk_window_is_maximized (GtkWindow *window)
 
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
-  if (priv->surface && gdk_surface_get_mapped (priv->surface))
+  if (_gtk_widget_get_mapped (GTK_WIDGET (window)))
     return priv->maximized;
   else
     return priv->maximize_initially;
@@ -1163,7 +1163,7 @@ gtk_window_is_fullscreen (GtkWindow *window)
 
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
-  if (priv->surface && gdk_surface_get_mapped (priv->surface))
+  if (_gtk_widget_get_mapped (GTK_WIDGET (window)))
     return priv->fullscreen;
   else
     return priv->fullscreen_initially;
@@ -3760,13 +3760,12 @@ gtk_window_update_toplevel (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   
-  if (priv->surface && gdk_surface_get_mapped (priv->surface))
+  if (_gtk_widget_get_mapped (GTK_WIDGET (window)))
     {
       g_clear_pointer (&priv->layout, gdk_toplevel_layout_unref);
       priv->layout = gtk_window_compute_layout (window);
 
-      if (_gtk_widget_get_mapped (GTK_WIDGET (window)))
-        gdk_toplevel_present (GDK_TOPLEVEL (priv->surface), priv->layout);
+      gdk_toplevel_present (GDK_TOPLEVEL (priv->surface), priv->layout);
     }
 }
 
@@ -5211,7 +5210,7 @@ gtk_window_maximize (GtkWindow *window)
   was_maximized_initially = priv->maximize_initially;
   priv->maximize_initially = TRUE;
 
-  if (priv->surface && gdk_surface_get_mapped (priv->surface))
+  if (_gtk_widget_get_mapped (GTK_WIDGET (window)))
     {
       gtk_window_update_toplevel (window);
     }
@@ -5248,7 +5247,7 @@ gtk_window_unmaximize (GtkWindow *window)
 
   gtk_window_update_toplevel (window);
 
-  if (priv->surface && gdk_surface_get_mapped (priv->surface))
+  if (_gtk_widget_get_mapped (GTK_WIDGET (window)))
     gtk_window_update_toplevel (window);
   else if (was_maximized_initially)
     g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_MAXIMIZED]);
@@ -5279,7 +5278,7 @@ gtk_window_fullscreen (GtkWindow *window)
   was_fullscreen_initially = priv->fullscreen_initially;
   priv->fullscreen_initially = TRUE;
 
-  if (priv->surface && gdk_surface_get_mapped (priv->surface))
+  if (_gtk_widget_get_mapped (GTK_WIDGET (window)))
     gtk_window_update_toplevel (window);
   else if (!was_fullscreen_initially)
     g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_FULLSCREENED]);
@@ -5366,7 +5365,7 @@ gtk_window_unfullscreen (GtkWindow *window)
 
   gtk_window_update_toplevel (window);
 
-  if (priv->surface && gdk_surface_get_mapped (priv->surface))
+  if (_gtk_widget_get_mapped (GTK_WIDGET (window)))
     gtk_window_update_toplevel (window);
   else if (was_fullscreen_initially)
     g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_FULLSCREENED]);
