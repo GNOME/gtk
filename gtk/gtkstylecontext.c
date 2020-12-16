@@ -969,7 +969,7 @@ draw_insertion_cursor (GtkStyleContext *context,
                        double           x,
                        double           y,
                        double           height,
-                       float            aspect_ratio,
+                       double           aspect_ratio,
                        gboolean         is_primary,
                        PangoDirection   direction,
                        gboolean         draw_arrow)
@@ -1032,7 +1032,7 @@ draw_insertion_cursor (GtkStyleContext *context,
 
 static void
 get_insertion_cursor_bounds (double           height,
-                             float            aspect_ratio,
+                             double           aspect_ratio,
                              PangoDirection   direction,
                              gboolean         draw_arrow,
                              graphene_rect_t *bounds)
@@ -1073,7 +1073,7 @@ static void
 snapshot_insertion_cursor (GtkSnapshot     *snapshot,
                            GtkStyleContext *context,
                            double           height,
-                           float            aspect_ratio,
+                           double           aspect_ratio,
                            gboolean         is_primary,
                            PangoDirection   direction,
                            gboolean         draw_arrow)
@@ -1136,7 +1136,7 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
 {
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
   gboolean split_cursor;
-  float aspect_ratio;
+  double aspect_ratio;
   PangoRectangle strong_pos, weak_pos;
   PangoRectangle *cursor1, *cursor2;
   GdkSeat *seat;

@@ -386,11 +386,11 @@ gtk_settings_class_init (GtkSettingsClass *class)
   g_assert (result == PROP_SPLIT_CURSOR);
 
   result = settings_install_property_parser (class,
-                                             g_param_spec_float ("gtk-cursor-aspect-ratio",
-                                                                 P_("Cursor Aspect Ratio"),
-                                                                 P_("The aspect ratio of the text caret"),
-                                                                 0.0, 1.0, 0.04,
-                                                                 GTK_PARAM_READWRITE));
+                                             g_param_spec_double ("gtk-cursor-aspect-ratio",
+                                                                  P_("Cursor Aspect Ratio"),
+                                                                  P_("The aspect ratio of the text caret"),
+                                                                  0.0, 1.0, 0.04,
+                                                                  GTK_PARAM_READWRITE));
   g_assert (result == PROP_CURSOR_ASPECT_RATIO);
 
   result = settings_install_property_parser (class,
