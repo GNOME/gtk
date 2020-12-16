@@ -1011,7 +1011,6 @@ gtk_editable_label_get_type
 <FILE>gtktext</FILE>
 <TITLE>GtkText</TITLE>
 GtkText
-GtkTextClass
 gtk_text_new
 gtk_text_new_with_buffer
 gtk_text_set_buffer
@@ -1143,8 +1142,6 @@ gtk_password_entry_set_show_peek_icon
 gtk_password_entry_get_show_peek_icon
 gtk_password_entry_set_extra_menu
 gtk_password_entry_get_extra_menu
-gtk_password_entry_get_text_widget
-gtk_password_entry_toggle_peek
 <SUBSECTION Private>
 gtk_password_entry_get_type
 </SECTION>
@@ -2639,9 +2636,7 @@ GtkSorterOrder
 GtkSorterChange
 gtk_sorter_compare
 gtk_sorter_get_order
-gtk_sorter_get_keys
 gtk_sorter_changed
-gtk_sorter_changed_with_keys
 <SUBSECTION Standard>
 GTK_SORTER
 GTK_IS_SORTER
@@ -2797,7 +2792,6 @@ gtk_spin_button_get_climb_rate
 gtk_spin_button_configure
 gtk_spin_button_spin
 gtk_spin_button_update
-gtk_spin_button_get_text_widget
 GTK_INPUT_ERROR
 <SUBSECTION Standard>
 GTK_SPIN_BUTTON
@@ -5513,7 +5507,6 @@ gtk_test_accessible_assert_property
 gtk_test_accessible_assert_relation
 gtk_test_accessible_assert_role
 gtk_test_accessible_assert_state
-gtk_test_accessible_assertion_message_role
 gtk_test_accessible_check_property
 gtk_test_accessible_check_relation
 gtk_test_accessible_check_state
@@ -5521,6 +5514,8 @@ gtk_test_accessible_has_property
 gtk_test_accessible_has_relation
 gtk_test_accessible_has_role
 gtk_test_accessible_has_state
+<SECTION Private>
+gtk_test_accessible_assertion_message_role
 </SECTION>
 
 <SECTION>

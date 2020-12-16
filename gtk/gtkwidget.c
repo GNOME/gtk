@@ -1535,7 +1535,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::move-focus:
    * @widget: the object which received the signal.
-   * @direction:
+   * @direction: the direction of the focus move
+   *
+   * Emitted when the focus is moved.
    */
   widget_signals[MOVE_FOCUS] =
     g_signal_new (I_("move-focus"),

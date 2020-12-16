@@ -280,7 +280,7 @@ gboolean         gtk_cell_renderer_get_is_expander (GtkCellRenderer     *cell);
 
 GDK_AVAILABLE_IN_ALL
 void             gtk_cell_renderer_set_is_expanded (GtkCellRenderer     *cell,
-                                                    gboolean             is_expander);
+                                                    gboolean             is_expanded);
 GDK_AVAILABLE_IN_ALL
 gboolean         gtk_cell_renderer_get_is_expanded (GtkCellRenderer     *cell);
 

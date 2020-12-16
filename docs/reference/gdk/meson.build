@@ -45,10 +45,13 @@ private_headers = [
   'gdktoplevelprivate.h',
   'gdktoplevelsizeprivate.h',
   'gdkvulkancontextprivate.h',
+
   'filetransferportalprivate.h',
+  'gdkconstructor.h',
   'keyname-table.h',
 
   # gdk/x11
+  'gdkasync.h',
   'gdkcairocontext-x11.h',
   'gdkclipboard-x11.h',
   'gdkdevice-xi2-private.h',

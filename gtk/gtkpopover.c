@@ -577,6 +577,12 @@ present_popup (GtkPopover *popover)
   return FALSE;
 }
 
+/**
+ * gtk_popover_present:
+ * @popover: a #GtkPopover
+ *
+ * Presents the popover to the user.
+ */
 void
 gtk_popover_present (GtkPopover *popover)
 {

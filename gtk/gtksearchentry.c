@@ -302,7 +302,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
   gtk_editable_install_properties (object_class, NUM_PROPERTIES);
 
   /**
-   * GtkSearchEntry:activate:
+   * GtkSearchEntry::activate:
    * @self: The widget on which the signal is emitted
    *
    * The ::activate signal is forwarded from the

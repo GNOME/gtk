@@ -369,6 +369,12 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE));
 
+  /**
+   * GtkExpander::activate:
+   * @expander: the #GtkExpander that emitted the signal
+   *
+   * Activates the #GtkExpander.
+   */
   activate_signal =
     g_signal_new (I_("activate"),
                   G_TYPE_FROM_CLASS (gobject_class),

@@ -119,6 +119,12 @@ verify_priv_unrealized (gpointer user_data)
   g_free (priv);
 }
 
+/**
+ * gtk_native_realize:
+ * @self: a #GtkNative
+ *
+ * Realizes a #GtkNative.
+ */
 void
 gtk_native_realize (GtkNative *self)
 {
@@ -146,6 +152,12 @@ gtk_native_realize (GtkNative *self)
                            verify_priv_unrealized);
 }
 
+/**
+ * gtk_native_unrealize:
+ * @self: a #GtkNative
+ *
+ * Unrealizes a #GtkNative.
+ */
 void
 gtk_native_unrealize (GtkNative *self)
 {

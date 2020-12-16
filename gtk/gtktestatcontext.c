@@ -114,6 +114,16 @@ gtk_test_at_context_new (GtkAccessibleRole  accessible_role,
                        NULL);
 }
 
+/**
+ * gtk_test_accessible_has_role:
+ * @accessible: a #GtkAccessible
+ * @role: a #GtkAccessibleRole
+ *
+ * Checks whether the #GtkAccessible:accessible-role of the accessible
+ * is @role.
+ *
+ * Returns: %TRUE if the role matches
+ */
 gboolean
 gtk_test_accessible_has_role (GtkAccessible     *accessible,
                               GtkAccessibleRole  role)
@@ -123,6 +133,15 @@ gtk_test_accessible_has_role (GtkAccessible     *accessible,
   return gtk_accessible_get_accessible_role (accessible) == role;
 }
 
+/**
+ * gtk_test_accessible_has_property:
+ * @accessible: a #GtkAccessible
+ * @property: a #GtkAccessibleProperty
+ *
+ * Checks whether the #GtkAccessible has @property set.
+ *
+ * Returns: %TRUE if the @property is set in the @accessible
+ */
 gboolean
 gtk_test_accessible_has_property (GtkAccessible         *accessible,
                                   GtkAccessibleProperty  property)
@@ -190,6 +209,15 @@ out:
   return res;
 }
 
+/**
+ * gtk_test_accessible_has_state:
+ * @accessible: a #GtkAccessible
+ * @state: a #GtkAccessibleState
+ *
+ * Checks whether the #GtkAccessible has @state set.
+ *
+ * Returns: %TRUE if the @state is set in the @accessible
+ */
 gboolean
 gtk_test_accessible_has_state (GtkAccessible      *accessible,
                                GtkAccessibleState  state)
@@ -257,6 +285,15 @@ out:
   return res;
 }
 
+/**
+ * gtk_test_accessible_has_relation:
+ * @accessible: a #GtkAccessible
+ * @relation: a #GtkAccessibleRelation
+ *
+ * Checks whether the #GtkAccessible has @relation set.
+ *
+ * Returns: %TRUE if the @relation is set in the @accessible
+ */
 gboolean
 gtk_test_accessible_has_relation (GtkAccessible         *accessible,
                                   GtkAccessibleRelation  relation)
@@ -324,6 +361,19 @@ out:
   return res;
 }
 
+/*< private >
+ * gtk_test_accessible_assertion_message_role:
+ * @domain: a domain
+ * @file: a file name
+ * @line: the line in @file
+ * @func: a function name in @file
+ * @expr: the expression being tested
+ * @accessible: a #GtkAccessible
+ * @expected_role: the expected #GtkAccessibleRole
+ * @actual_role: the actual #GtkAccessibleRole
+ *
+ * Prints an assertion message for gtk_test_accessible_assert_role().
+ */
 void
 gtk_test_accessible_assertion_message_role (const char        *domain,
                                             const char        *file,

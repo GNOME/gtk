@@ -24,8 +24,25 @@
 
 #include <glib.h>
 
+/**
+ * GDK_MAJOR_VERSION:
+ *
+ * The major version component of the library's version, e.g. "1" for "1.2.3".
+ */
 #define GDK_MAJOR_VERSION (@GTK_MAJOR_VERSION@)
+
+/**
+ * GDK_MINOR_VERSION:
+ *
+ * The minor version component of the library's version, e.g. "2" for "1.2.3".
+ */
 #define GDK_MINOR_VERSION (@GTK_MINOR_VERSION@)
+
+/**
+ * GDK_MICRO_VERSION:
+ *
+ * The micro version component of the library's version, e.g. "3" for "1.2.3".
+ */
 #define GDK_MICRO_VERSION (@GTK_MICRO_VERSION@)
 
 #ifndef _GDK_EXTERN
