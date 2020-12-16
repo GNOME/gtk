@@ -4942,6 +4942,8 @@ gdk_win32_toplevel_present (GdkToplevel       *toplevel,
   int width, height;
   GdkGeometry geometry;
   GdkSurfaceHints mask;
+  gboolean maximize;
+  gboolean fullscreen;
 
   monitor = gdk_display_get_monitor_at_surface (display, surface);
   if (monitor)
@@ -4981,15 +4983,21 @@ gdk_win32_toplevel_present (GdkToplevel       *toplevel,
   gdk_surface_constrain_size (&geometry, mask, width, height, &width, &height);
   gdk_win32_surface_resize (surface, width, height);
 
-  if (gdk_toplevel_layout_get_maximized (layout))
-    gdk_win32_surface_maximize (surface);
-  else
-    gdk_win32_surface_unmaximize (surface);
+  if (gdk_toplevel_layout_get_maximized (layout, &maximize))
+    {
+      if (maximize)
+        gdk_win32_surface_maximize (surface);
+      else
+        gdk_win32_surface_unmaximize (surface);
+    }
 
-  if (gdk_toplevel_layout_get_fullscreen (layout))
-    gdk_win32_surface_fullscreen (surface);
-  else
-    gdk_win32_surface_unfullscreen (surface);
+  if (gdk_toplevel_layout_get_fullscreen (layout, &fullscreen))
+    {
+      if (fullscreen)
+        gdk_win32_surface_fullscreen (surface);
+      else
+        gdk_win32_surface_unfullscreen (surface);
+    }
 
   show_surface (surface);
 

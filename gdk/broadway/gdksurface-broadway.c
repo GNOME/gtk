@@ -1542,6 +1542,7 @@ gdk_broadway_toplevel_present (GdkToplevel       *toplevel,
   int width, height;
   GdkGeometry geometry;
   GdkSurfaceHints mask;
+  gboolean maximize;
 
   gdk_broadway_surface_unminimize (surface);
 
@@ -1583,10 +1584,13 @@ gdk_broadway_toplevel_present (GdkToplevel       *toplevel,
   gdk_surface_constrain_size (&geometry, mask, width, height, &width, &height);
   gdk_broadway_surface_toplevel_resize (surface, width, height);
 
-  if (gdk_toplevel_layout_get_maximized (layout))
-    gdk_broadway_surface_maximize (surface);
-  else
-    gdk_broadway_surface_unmaximize (surface);
+  if (gdk_toplevel_layout_get_maximized (layout, &maximize))
+    {
+      if (maximize)
+        gdk_broadway_surface_maximize (surface);
+      else
+        gdk_broadway_surface_unmaximize (surface);
+    }
 
   if (size.shadow.is_valid)
     {

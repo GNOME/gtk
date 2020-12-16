@@ -40,7 +40,10 @@ struct _GdkToplevelLayout
   grefcount ref_count;
 
   guint resizable  : 1;
+
+  guint maximized_valid : 1;
   guint maximized  : 1;
+  guint fullscreen_valid : 1;
   guint fullscreen : 1;
   GdkMonitor *fullscreen_monitor;
 };
@@ -70,7 +73,9 @@ gdk_toplevel_layout_new (void)
   layout = g_new0 (GdkToplevelLayout, 1);
   g_ref_count_init (&layout->ref_count);
   layout->resizable = TRUE;
+  layout->maximized_valid = FALSE;
   layout->maximized = FALSE;
+  layout->fullscreen_valid = FALSE;
   layout->fullscreen = FALSE;
   layout->fullscreen_monitor = NULL;
 
@@ -125,7 +130,9 @@ gdk_toplevel_layout_copy (GdkToplevelLayout *layout)
   g_ref_count_init (&new_layout->ref_count);
 
   new_layout->resizable = layout->resizable;
+  new_layout->maximized_valid = layout->maximized_valid;
   new_layout->maximized = layout->maximized;
+  new_layout->fullscreen_valid = layout->fullscreen_valid;
   new_layout->fullscreen = layout->fullscreen;
   if (layout->fullscreen_monitor)
     new_layout->fullscreen_monitor = g_object_ref (layout->fullscreen_monitor);
@@ -151,7 +158,9 @@ gdk_toplevel_layout_equal (GdkToplevelLayout *layout,
   g_return_val_if_fail (other, FALSE);
 
   return layout->resizable == other->resizable &&
+         layout->maximized_valid == other->maximized_valid &&
          layout->maximized == other->maximized &&
+         layout->fullscreen_valid == other->fullscreen_valid &&
          layout->fullscreen == other->fullscreen &&
          layout->fullscreen_monitor == other->fullscreen_monitor;
 }
@@ -198,22 +207,32 @@ void
 gdk_toplevel_layout_set_maximized (GdkToplevelLayout *layout,
                                    gboolean           maximized)
 {
+  layout->maximized_valid = TRUE;
   layout->maximized = maximized;
 }
 
 /**
  * gdk_toplevel_layout_get_maximized:
  * @layout: a #GdkToplevelLayout
+ * @maximized: (out): set to %TRUE if the toplevel should be maximized
  *
- * Returns whether the layout should present the
- * surface as maximized.
+ * If the layout specifies whether to the toplevel should go maximized,
+ * the value pointed to by @maximized is set to %TRUE if it should go
+ * fullscreen, or %FALSE, if it should go unmaximized.
  *
- * Returns: %TRUE if the layout is maximized
+ * Returns: whether the @layout specifies the maximized state for the toplevel
  */
 gboolean
-gdk_toplevel_layout_get_maximized (GdkToplevelLayout *layout)
+gdk_toplevel_layout_get_maximized (GdkToplevelLayout *layout,
+                                   gboolean          *maximized)
 {
-  return layout->maximized;
+  if (layout->maximized_valid)
+    {
+      *maximized = layout->maximized;
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 /**
@@ -230,6 +249,7 @@ gdk_toplevel_layout_set_fullscreen (GdkToplevelLayout *layout,
                                     gboolean           fullscreen,
                                     GdkMonitor        *monitor)
 {
+  layout->fullscreen_valid = TRUE;
   layout->fullscreen = fullscreen;
   if (monitor)
     layout->fullscreen_monitor = g_object_ref (monitor);
@@ -238,16 +258,25 @@ gdk_toplevel_layout_set_fullscreen (GdkToplevelLayout *layout,
 /**
  * gdk_toplevel_layout_get_fullscreen:
  * @layout: a #GdkToplevelLayout
+ * @fullscreen: (out): location to store whether the toplevel should be fullscreen
  *
- * Returns whether the layout should cause the surface
- * to be fullscreen when presented.
+ * If the layout specifies whether to the toplevel should go fullscreen,
+ * the value pointed to by @fullscreen is set to %TRUE if it should go
+ * fullscreen, or %FALSE, if it should go unfullscreen.
  *
- * Returns: %TRUE if @layout is fullscreen
+ * Returns: whether the @layout specifies the fullscreen state for the toplevel
  */
 gboolean
-gdk_toplevel_layout_get_fullscreen (GdkToplevelLayout *layout)
+gdk_toplevel_layout_get_fullscreen (GdkToplevelLayout *layout,
+                                    gboolean          *fullscreen)
 {
-  return layout->fullscreen;
+  if (layout->fullscreen_valid)
+    {
+      *fullscreen = layout->fullscreen;
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 /**

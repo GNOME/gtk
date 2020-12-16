@@ -5078,6 +5078,8 @@ gdk_x11_toplevel_present (GdkToplevel       *toplevel,
   GdkX11Surface *impl = GDK_X11_SURFACE (surface);
   int width, height;
   gboolean was_mapped;
+  gboolean maximize;
+  gboolean fullscreen;
 
   if (surface->destroyed)
     return;
@@ -5092,23 +5094,31 @@ gdk_x11_toplevel_present (GdkToplevel       *toplevel,
   if (compute_toplevel_size (surface, DONT_UPDATE_GEOMETRY, &width, &height))
     gdk_x11_surface_toplevel_resize (surface, width, height);
 
-  if (gdk_toplevel_layout_get_maximized (layout))
-    gdk_x11_surface_maximize (surface);
-  else
-    gdk_x11_surface_unmaximize (surface);
-
-  if (gdk_toplevel_layout_get_fullscreen (layout))
+  if (gdk_toplevel_layout_get_maximized (layout, &maximize))
     {
-      GdkMonitor *fullscreen_monitor =
-        gdk_toplevel_layout_get_fullscreen_monitor (layout);
-
-      if (fullscreen_monitor)
-        gdk_x11_surface_fullscreen_on_monitor (surface, fullscreen_monitor);
+      if (maximize)
+        gdk_x11_surface_maximize (surface);
       else
-        gdk_x11_surface_fullscreen (surface);
+        gdk_x11_surface_unmaximize (surface);
     }
-  else
-    gdk_x11_surface_unfullscreen (surface);
+
+  if (gdk_toplevel_layout_get_fullscreen (layout, &fullscreen))
+    {
+      if (fullscreen)
+        {
+          GdkMonitor *fullscreen_monitor =
+            gdk_toplevel_layout_get_fullscreen_monitor (layout);
+
+          if (fullscreen_monitor)
+            gdk_x11_surface_fullscreen_on_monitor (surface, fullscreen_monitor);
+          else
+            gdk_x11_surface_fullscreen (surface);
+        }
+      else
+        {
+          gdk_x11_surface_unfullscreen (surface);
+        }
+    }
 
   impl->next_layout.surface_geometry_dirty = TRUE;
   gdk_surface_request_layout (surface);
