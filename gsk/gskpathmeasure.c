@@ -50,6 +50,9 @@ struct _GskPathMeasure
   GskPath *path;
   float tolerance;
 
+  gsize first;
+  gsize last;
+
   float length;
   gsize n_contours;
   GskContourMeasure measures[];
@@ -101,6 +104,8 @@ gsk_path_measure_new_with_tolerance (GskPath *path,
   self->path = gsk_path_ref (path);
   self->tolerance = tolerance;
   self->n_contours = n_contours;
+  self->first = 0;
+  self->last = n_contours;
 
   for (i = 0; i < n_contours; i++)
     {
@@ -172,6 +177,8 @@ gsk_path_measure_unref (GskPathMeasure *self)
 GskPath *
 gsk_path_measure_get_path (GskPathMeasure *self)
 {
+  g_return_val_if_fail (self != NULL, NULL);
+
   return self->path;
 }
 
@@ -186,7 +193,63 @@ gsk_path_measure_get_path (GskPathMeasure *self)
 float
 gsk_path_measure_get_tolerance (GskPathMeasure *self)
 {
+  g_return_val_if_fail (self != NULL, 0.f);
+
   return self->tolerance;
+}
+
+/**
+ * gsk_path_measure_get_n_contours:
+ * @self: a `GskPathMeasure`
+ *
+ * Returns the number of contours in the path being measured.
+ *
+ * The returned value is independent of whether @self if restricted
+ * or not.
+ *
+ * Returns: The number of contours
+ **/
+gsize
+gsk_path_measure_get_n_contours (GskPathMeasure *self)
+{
+  g_return_val_if_fail (self != NULL, 0);
+
+  return self->n_contours;
+}
+
+/**
+ * gsk_path_measure_restrict_to_contour:
+ * @self: a `GskPathMeasure`
+ * @contour: contour to restrict to or (gsize) -1 for using the
+ *   whole path
+ *
+ * Restricts all functions on the path to just the given @contour.
+ *
+ * If @contour >= gsk_path_measure_get_n_contours() - so in
+ * particular when it is set to -1 - the whole path will be used.
+ **/
+void
+gsk_path_measure_restrict_to_contour (GskPathMeasure *self,
+                                      gsize           contour)
+{
+  if (contour >= self->n_contours)
+    {
+      /* use the whole path */
+      self->first = 0;
+      self->last = self->n_contours;
+    }
+  else
+    {
+      /* use just one contour */
+      self->first = contour;
+      self->last = contour + 1;
+    }
+
+  self->length = 0;
+  for (gsize i = self->first; i < self->last; i++)
+    {
+      self->length += self->measures[i].length;
+    }
 }
 
 /**
@@ -252,7 +315,7 @@ gsk_path_measure_get_point (GskPathMeasure   *self,
 
   distance = gsk_path_measure_clamp_distance (self, distance);
 
-  for (i = 0; i < self->n_contours; i++)
+  for (i = self->first; i < self->last; i++)
     {
       if (distance < self->measures[i].length)
         break;
@@ -261,10 +324,10 @@ gsk_path_measure_get_point (GskPathMeasure   *self,
     }
 
   /* weird corner cases */
-  if (i == self->n_contours)
+  if (i == self->last)
     {
       /* the empty path goes here */
-      if (self->n_contours == 0)
+      if (self->first == self->last)
         {
           if (pos)
             graphene_point_init (pos, 0.f, 0.f);
@@ -273,7 +336,7 @@ gsk_path_measure_get_point (GskPathMeasure   *self,
           return;
         }
       /* rounding errors can make this happen */
-      i = self->n_contours - 1;
+      i = self->last - 1;
       distance = self->measures[i].length;
     }
 
@@ -367,7 +430,7 @@ gsk_path_measure_get_closest_point_full (GskPathMeasure         *self,
   result = FALSE;
   length = 0;
 
-  for (i = 0; i < self->n_contours; i++)
+  for (i = self->first; i < self->last; i++)
     {
       if (gsk_contour_get_closest_point (gsk_path_get_contour (self->path, i),
                                          self->measures[i].contour_data,
@@ -417,7 +480,7 @@ gsk_path_measure_in_fill (GskPathMeasure   *self,
   gboolean on_edge = FALSE;
   int i;
 
-  for (i = 0; i < self->n_contours; i++)
+  for (i = self->first; i < self->last; i++)
     {
       winding += gsk_contour_get_winding (gsk_path_get_contour (self->path, i),
                                           self->measures[i].contour_data,
@@ -470,7 +533,7 @@ gsk_path_builder_add_segment (GskPathBuilder *builder,
   if (start >= end)
     return;
 
-  for (i = 0; i < measure->n_contours; i++)
+  for (i = measure->first; i < measure->last; i++)
     {
       if (measure->measures[i].length < start)
         {
