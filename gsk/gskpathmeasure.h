@@ -58,6 +58,8 @@ void                    gsk_path_measure_restrict_to_contour    (GskPathMeasure 
 GDK_AVAILABLE_IN_ALL
 float                   gsk_path_measure_get_length             (GskPathMeasure         *self);
 GDK_AVAILABLE_IN_ALL
+gboolean                gsk_path_measure_is_closed              (GskPathMeasure         *self);
+GDK_AVAILABLE_IN_ALL
 void                    gsk_path_measure_get_point              (GskPathMeasure         *self,
                                                                  float                   distance,
                                                                  graphene_point_t       *pos,

@@ -386,6 +386,7 @@ gsk_path_measure_get_n_contours
 gsk_path_measure_restrict_to_contour
 <SUBSECTION>
 gsk_path_measure_get_length
+gsk_path_measure_is_closed
 gsk_path_measure_get_point
 gsk_path_measure_get_closest_point
 gsk_path_measure_get_closest_point_full
