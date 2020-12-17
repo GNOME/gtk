@@ -48,6 +48,12 @@ GDK_AVAILABLE_IN_ALL
 GskPath *               gsk_path_measure_get_path               (GskPathMeasure         *self) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 float                   gsk_path_measure_get_tolerance          (GskPathMeasure         *self) G_GNUC_PURE;
+GDK_AVAILABLE_IN_ALL
+gsize                   gsk_path_measure_get_n_contours         (GskPathMeasure         *self) G_GNUC_PURE;
+
+GDK_AVAILABLE_IN_ALL
+void                    gsk_path_measure_restrict_to_contour    (GskPathMeasure         *self,
+                                                                 gsize                   contour);
 
 GDK_AVAILABLE_IN_ALL
 float                   gsk_path_measure_get_length             (GskPathMeasure         *self);
