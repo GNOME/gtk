@@ -609,7 +609,10 @@ test_segment_start (void)
       path1 = gsk_path_builder_free_to_path (builder);
       measure1 = gsk_path_measure_new (path1);
 
-      g_assert_cmpfloat_with_epsilon (seg_length, gsk_path_measure_get_length (measure1), epsilon);
+      if (seg_length == 0)
+        g_assert_cmpfloat_with_epsilon (gsk_path_measure_get_length (measure), gsk_path_measure_get_length (measure1), epsilon);
+      else
+        g_assert_cmpfloat_with_epsilon (seg_length, gsk_path_measure_get_length (measure1), epsilon);
 
       gsk_path_measure_unref (measure1);
       gsk_path_unref (path1);
@@ -642,7 +645,10 @@ test_segment_end (void)
       path1 = gsk_path_builder_free_to_path (builder);
       measure1 = gsk_path_measure_new (path1);
 
-      g_assert_cmpfloat_with_epsilon (seg_length, gsk_path_measure_get_length (measure1), epsilon);
+      if (seg_length == 0)
+        g_assert_cmpfloat_with_epsilon (gsk_path_measure_get_length (measure), gsk_path_measure_get_length (measure1), epsilon);
+      else
+        g_assert_cmpfloat_with_epsilon (seg_length, gsk_path_measure_get_length (measure1), epsilon);
 
       gsk_path_measure_unref (measure1);
       gsk_path_unref (path1);
@@ -655,8 +661,8 @@ test_segment_end (void)
 static void
 test_segment_chunk (void)
 {
-  GskPath *path, *path1;
-  GskPathMeasure *measure, *measure1;
+  GskPath *path, *path1, *path2;
+  GskPathMeasure *measure, *measure1, *measure2;
   GskPathBuilder *builder;
   float epsilon, length;
   guint i;
@@ -677,6 +683,15 @@ test_segment_chunk (void)
 
       g_assert_cmpfloat_with_epsilon (length / 2, gsk_path_measure_get_length (measure1), epsilon);
 
+      builder = gsk_path_builder_new ();
+      gsk_path_builder_add_segment (builder, measure, seg_start + length / 2, seg_start);
+      path2 = gsk_path_builder_free_to_path (builder);
+      measure2 = gsk_path_measure_new (path2);
+
+      g_assert_cmpfloat_with_epsilon (length / 2, gsk_path_measure_get_length (measure2), epsilon);
+
+      gsk_path_measure_unref (measure2);
+      gsk_path_unref (path2);
       gsk_path_measure_unref (measure1);
       gsk_path_unref (path1);
     }
