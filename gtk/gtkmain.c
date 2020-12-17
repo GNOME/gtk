@@ -936,8 +936,6 @@ rewrite_event_for_surface (GdkEvent  *event,
   GdkEventType type;
   double x, y;
   double dx, dy;
-  double *axes = NULL;
-  guint n_axes = 0;
 
   type = gdk_event_get_event_type (event);
 
@@ -960,16 +958,6 @@ rewrite_event_for_surface (GdkEvent  *event,
       break;
     }
 
-  if (gdk_event_get_axes (event, &axes, &n_axes))
-    {
-      double *axes_copy = g_memdup (axes, n_axes * sizeof (double));
-
-      /* The newly created event takes ownership of the axes, so
-       * we need a copy
-       */
-      axes = axes_copy;
-    }
-
   switch ((guint) type)
     {
     case GDK_BUTTON_PRESS:
@@ -982,7 +970,7 @@ rewrite_event_for_surface (GdkEvent  *event,
                                    gdk_event_get_modifier_state (event),
                                    gdk_button_event_get_button (event),
                                    x, y,
-                                   g_steal_pointer (&axes));
+                                   gdk_event_dup_axes (event));
     case GDK_MOTION_NOTIFY:
       return gdk_motion_event_new (new_surface,
                                    gdk_event_get_device (event),
@@ -990,7 +978,7 @@ rewrite_event_for_surface (GdkEvent  *event,
                                    gdk_event_get_time (event),
                                    gdk_event_get_modifier_state (event),
                                    x, y,
-                                   g_steal_pointer (&axes));
+                                   gdk_event_dup_axes (event));
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_UPDATE:
     case GDK_TOUCH_END:
@@ -1002,7 +990,7 @@ rewrite_event_for_surface (GdkEvent  *event,
                                   gdk_event_get_time (event),
                                   gdk_event_get_modifier_state (event),
                                   x, y,
-                                  g_steal_pointer (&axes),
+                                  gdk_event_dup_axes (event),
                                   gdk_touch_event_get_emulating_pointer (event));
     case GDK_TOUCHPAD_SWIPE:
       gdk_touchpad_event_get_deltas (event, &dx, &dy);
@@ -1030,7 +1018,6 @@ rewrite_event_for_surface (GdkEvent  *event,
       break;
     }
 
-  g_assert (!axes);
   return NULL;
 }
 
