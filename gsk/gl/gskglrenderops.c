@@ -357,19 +357,18 @@ ops_set_modelview_internal (RenderOpBuilder *builder,
                             GskTransform    *transform)
 {
   ProgramState *current_program_state = get_current_program_state (builder);
-  OpMatrix *op;
 
-#if 0
-  XXX This is not possible if we want pop() to work.
-  if (builder->current_program &&
-      gsk_transform_equal (builder->current_program_state->modelview, transform))
-    return;
-#endif
+  if (current_program_state &&
+      gsk_transform_equal (current_program_state->modelview, transform))
+    {
+      /* We can save us this op entirely... */
+    }
+  else
+    {
+      OpMatrix *op = op_buffer_add (&builder->render_ops, OP_CHANGE_MODELVIEW);
 
-  if (!(op = op_buffer_peek_tail_checked (&builder->render_ops, OP_CHANGE_MODELVIEW)))
-    op = op_buffer_add (&builder->render_ops, OP_CHANGE_MODELVIEW);
-
-  gsk_transform_to_matrix (transform, &op->matrix);
+      gsk_transform_to_matrix (transform, &op->matrix);
+    }
 
   if (builder->current_program != NULL)
     {
