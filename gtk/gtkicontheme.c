@@ -3850,7 +3850,7 @@ gtk_icon_paintable_ensure_texture (GtkIconPaintable *self)
 
   icon_ensure_texture__locked (self, FALSE);
 
-  texture = g_object_ref (self->texture);
+  texture = self->texture;
 
   g_mutex_unlock (&self->texture_lock);
 
@@ -3971,10 +3971,7 @@ gtk_icon_paintable_snapshot_with_colors (GtkIconPaintable *icon,
 
   if (symbolic)
     gtk_snapshot_pop (snapshot);
-
-  g_object_unref (texture);
 }
-
 
 static GdkPaintableFlags
 icon_paintable_get_flags (GdkPaintable *paintable)
