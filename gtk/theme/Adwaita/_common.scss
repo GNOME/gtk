@@ -536,7 +536,8 @@ button {
         transition: $button_transition;
         transition-duration: 500ms;
       }
-      &:active {
+      &:active,
+      &:checked {
         @include button(undecorated-active);
         transition: $button_transition;
       }
@@ -1396,9 +1397,10 @@ windowcontrols {
     min-height: 0;
     &:hover {
       //special case hover colors inside a headerbar
-      @include button(undecorated-hover,$c:$headerbar_bg_color);
+      @include button(undecorated-hover,$c:darken($headerbar_bg_color,10%));
     }
-    &:active { @include button(undecorated-active,$c:$headerbar_bg_color); }
+    &:active,
+    &:checked { @include button(undecorated-active,$c:darken($headerbar_bg_color,10%)); }
   }
 }
 
