@@ -135,6 +135,9 @@ gtk_password_entry_buffer_real_deleted_text (GtkEntryBuffer *buffer,
   memmove (self->text + start, self->text + end, self->text_bytes + 1 - end);
   self->text_chars -= n_chars;
   self->text_bytes -= (end - start);
+
+  g_object_notify (G_OBJECT (buffer), "text");
+  g_object_notify (G_OBJECT (buffer), "length");
 }
 
 static guint

@@ -133,8 +133,8 @@
  * }
  * ]|
  * 
- * Finally, use gtk_editable_delegate_set_property() in your set_property
- * function (and similar for get_property), to set the editable properties:
+ * Finally, use gtk_editable_delegate_set_property() in your `set_property`
+ * function (and similar for `get_property`), to set the editable properties:
  *
  * |[
  *   ...
@@ -144,6 +144,14 @@
  *   switch (prop_id)
  *   ...
  * ]|
+ *
+ * It is important to note that if you create a GtkEditable that uses a delegate,
+ * the low level #GtkEditable::insert-text and #GtkEditable::delete-text signals
+ * will be propagated from the "wrapper" editable to the delegate, but they will
+ * not be propagated from the delegate to the "wrapper" editable, as they would
+ * cause an infinite recursion. If you wish to connect to the #GtkEditable::insert-text
+ * and #GtkEditable::delete-text signals, you will need to connect to them on
+ * the delegate obtained via gtk_editable_get_delegate().
  */
 
 #include "config.h"
