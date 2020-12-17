@@ -90,6 +90,7 @@ int                     gsk_contour_get_winding                 (const GskContou
 void                    gsk_contour_add_segment                 (const GskContour       *self,
                                                                  GskPathBuilder         *builder,
                                                                  gpointer                measure_data,
+                                                                 gboolean                emit_move_to,
                                                                  float                   start,
                                                                  float                   end);
 gboolean                gsk_contour_get_stroke_bounds           (const GskContour       *self,
