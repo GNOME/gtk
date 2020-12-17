@@ -76,6 +76,7 @@ struct _GskContourClass
   void                  (* add_segment)         (const GskContour       *contour,
                                                  GskPathBuilder         *builder,
                                                  gpointer                measure_data,
+                                                 gboolean                emit_move_to,
                                                  float                   start,
                                                  float                   end);
   int                   (* get_winding)         (const GskContour       *contour,
@@ -395,6 +396,7 @@ static void
 gsk_rect_contour_add_segment (const GskContour *contour,
                               GskPathBuilder   *builder,
                               gpointer          measure_data,
+                              gboolean          emit_move_to,
                               float             start,
                               float             end)
 {
@@ -404,7 +406,8 @@ gsk_rect_contour_add_segment (const GskContour *contour,
 
   if (start < w)
     {
-      gsk_path_builder_move_to (builder, self->x + start * (w / self->width), self->y);
+      if (emit_move_to)
+        gsk_path_builder_move_to (builder, self->x + start * (w / self->width), self->y);
       if (end <= w)
         {
           gsk_path_builder_line_to (builder, self->x + end * (w / self->width), self->y);
@@ -417,7 +420,7 @@ gsk_rect_contour_add_segment (const GskContour *contour,
 
   if (start < h)
     {
-      if (start >= 0)
+      if (start >= 0 && emit_move_to)
         gsk_path_builder_move_to (builder, self->x + self->width, self->y + start * (h / self->height));
       if (end <= h)
         {
@@ -431,7 +434,7 @@ gsk_rect_contour_add_segment (const GskContour *contour,
 
   if (start < w)
     {
-      if (start >= 0)
+      if (start >= 0 && emit_move_to)
         gsk_path_builder_move_to (builder, self->x + (w - start) * (w / self->width), self->y + self->height);
       if (end <= w)
         {
@@ -445,7 +448,7 @@ gsk_rect_contour_add_segment (const GskContour *contour,
 
   if (start < h)
     {
-      if (start >= 0)
+      if (start >= 0 && emit_move_to)
         gsk_path_builder_move_to (builder, self->x, self->y + (h - start) * (h / self->height));
       if (end <= h)
         {
@@ -782,6 +785,7 @@ static void
 gsk_circle_contour_add_segment (const GskContour *contour,
                                 GskPathBuilder   *builder,
                                 gpointer          measure_data,
+                                gboolean          emit_move_to,
                                 float             start,
                                 float             end)
 {
@@ -790,6 +794,8 @@ gsk_circle_contour_add_segment (const GskContour *contour,
   float length = self->radius * DEG_TO_RAD (delta);
   GskContour *segment;
 
+  if (!emit_move_to)
+    g_warning ("FIXME: somebody needs to decompose contours into segments differently");
   segment = gsk_circle_contour_new (&self->center, self->radius,
                                     self->start_angle + start/length * delta,
                                     self->start_angle + end/length * delta);
@@ -1325,6 +1331,7 @@ static void
 gsk_standard_contour_add_segment (const GskContour *contour,
                                   GskPathBuilder   *builder,
                                   gpointer          measure_data,
+                                  gboolean          emit_move_to,
                                   float             start,
                                   float             end)
 {
@@ -1376,7 +1383,8 @@ gsk_standard_contour_add_segment (const GskContour *contour,
         {
           gsk_curve_segment (&curve, start_progress, end_progress, &cut);
           start_point = gsk_curve_get_start_point (&cut);
-          gsk_path_builder_move_to (builder, start_point->x, start_point->y);
+          if (emit_move_to)
+            gsk_path_builder_move_to (builder, start_point->x, start_point->y);
           gsk_curve_builder_to (&cut, builder);
           return;
         }
@@ -1384,12 +1392,13 @@ gsk_standard_contour_add_segment (const GskContour *contour,
       gsk_curve_split (&curve, start_progress, NULL, &cut);
 
       start_point = gsk_curve_get_start_point (&cut);
-      gsk_path_builder_move_to (builder, start_point->x, start_point->y);
+      if (emit_move_to)
+        gsk_path_builder_move_to (builder, start_point->x, start_point->y);
       gsk_curve_builder_to (&cut, builder);
       i = start_measure->op + 1;
     }
-  else
-    i = 0;
+  else 
+    i = emit_move_to ? 0 : 1;
 
   for (; i < (end_measure ? end_measure->op : self->n_ops - 1); i++)
     {
@@ -1721,10 +1730,11 @@ void
 gsk_contour_add_segment (const GskContour *self,
                          GskPathBuilder   *builder,
                          gpointer          measure_data,
+                         gboolean          emit_move_to,
                          float             start,
                          float             end)
 {
-  self->klass->add_segment (self, builder, measure_data, start, end);
+  self->klass->add_segment (self, builder, measure_data, emit_move_to, start, end);
 }
 
 int
