@@ -530,40 +530,16 @@ gsk_path_measure_in_fill (GskPathMeasure   *self,
     }
 }
 
-
-/**
- * gsk_path_builder_add_segment:
- * @self: a #GskPathBuilder 
- * @measure: the #GskPathMeasure to take the segment to
- * @start: start distance into the path
- * @end: end distance into the path
- *
- * Adds to @self the segment of @measure inbetween @start and @end.
- *
- * The distances are given relative to the length of @measure's path,
- * from 0 for the beginning of the path to
- * gsk_path_measure_get_length() for the end of the path. The values
- * will be clamped to that range.
- *
- * If @start >= @end after clamping, no path will be added.
- **/
-void
-gsk_path_builder_add_segment (GskPathBuilder *self,
-                              GskPathMeasure *measure,
-                              float           start,
-                              float           end)
+static void
+gsk_path_builder_add_segment_chunk (GskPathBuilder *self,
+                                    GskPathMeasure *measure,
+                                    gboolean        emit_move_to,
+                                    float           start,
+                                    float           end)
 {
-  gsize i;
+  g_assert (start < end);
 
-  g_return_if_fail (self != NULL);
-  g_return_if_fail (measure != NULL);
-
-  start = gsk_path_measure_clamp_distance (measure, start);
-  end = gsk_path_measure_clamp_distance (measure, end);
-  if (start >= end)
-    return;
-
-  for (i = measure->first; i < measure->last; i++)
+  for (gsize i = measure->first; i < measure->last; i++)
     {
       if (measure->measures[i].length < start)
         {
@@ -576,6 +552,7 @@ gsk_path_builder_add_segment (GskPathBuilder *self,
           gsk_contour_add_segment (gsk_path_get_contour (measure->path, i),
                                    self,
                                    measure->measures[i].contour_data,
+                                   emit_move_to,
                                    start,
                                    len);
           end -= len;
@@ -588,6 +565,64 @@ gsk_path_builder_add_segment (GskPathBuilder *self,
           end -= measure->measures[i].length;
           gsk_path_builder_add_contour (self, gsk_contour_dup (gsk_path_get_contour (measure->path, i)));
         }
+      emit_move_to = TRUE;
+    }
+}
+
+/**
+ * gsk_path_builder_add_segment:
+ * @self: a #GskPathBuilder 
+ * @measure: the #GskPathMeasure to take the segment to
+ * @start: start distance into the path
+ * @end: end distance into the path
+ *
+ * Adds to @self the segment of @measure from @start to @end.
+ *
+ * The distances are given relative to the length of @measure's path,
+ * from 0 for the beginning of the path to
+ * gsk_path_measure_get_length() for the end of the path. The values
+ * will be clamped to that range.
+ *
+ * If @start >= @end after clamping, the path will first add the segment
+ * from @start to the end of the path, and then add the segment from
+ * the beginning to @end. If the path is closed, these segments will
+ * be connected.
+ **/
+void
+gsk_path_builder_add_segment (GskPathBuilder *self,
+                              GskPathMeasure *measure,
+                              float           start,
+                              float           end)
+{
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (measure != NULL);
+
+  start = gsk_path_measure_clamp_distance (measure, start);
+  end = gsk_path_measure_clamp_distance (measure, end);
+
+  if (start < end)
+    {
+      gsk_path_builder_add_segment_chunk (self, measure, TRUE, start, end);
+    }
+  else
+    {
+      /* If the path is closed, we can connect the 2 subpaths. */
+      gboolean closed = gsk_path_measure_is_closed (measure);
+      gboolean need_move_to = !closed;
+
+      if (start < measure->length)
+        gsk_path_builder_add_segment_chunk (self, measure,
+                                            TRUE,
+                                            start, measure->length);
+      else
+        need_move_to = TRUE;
+
+      if (end > 0)
+        gsk_path_builder_add_segment_chunk (self, measure,
+                                            need_move_to,
+                                            0, end);
+      if (start == end && closed)
+        gsk_path_builder_close (self);
     }
 }
 
