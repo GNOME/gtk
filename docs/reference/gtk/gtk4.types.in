@@ -19,8 +19,8 @@ gtk_assistant_page_get_type
 gtk_at_context_get_type
 gtk_bin_layout_get_type
 gtk_bitset_get_type
-gtk_expression_get_type
 gtk_bookmark_list_get_type
+gtk_bool_filter_get_type
 gtk_box_get_type
 gtk_box_layout_get_type
 gtk_buildable_get_type
@@ -46,6 +46,7 @@ gtk_cell_renderer_spinner_get_type
 gtk_cell_renderer_text_get_type
 gtk_cell_renderer_toggle_get_type
 gtk_cell_view_get_type
+gtk_center_box_get_type
 gtk_center_layout_get_type
 gtk_check_button_get_type
 gtk_closure_expression_get_type
@@ -65,14 +66,16 @@ gtk_constraint_target_get_type
 gtk_css_provider_get_type
 gtk_custom_filter_get_type
 gtk_custom_sorter_get_type
+gtk_custom_layout_get_type
 gtk_dialog_get_type
 gtk_directory_list_get_type
 gtk_drag_icon_get_type
 gtk_drag_source_get_type
 gtk_drawing_area_get_type
-gtk_drop_target_get_type
-gtk_drop_target_async_get_type
+gtk_drop_controller_motion_get_type
 gtk_drop_down_get_type
+gtk_drop_target_async_get_type
+gtk_drop_target_get_type
 gtk_editable_get_type
 gtk_editable_label_get_type
 gtk_emoji_chooser_get_type
@@ -87,6 +90,7 @@ gtk_event_controller_motion_get_type
 gtk_event_controller_scroll_get_type
 gtk_every_filter_get_type
 gtk_expander_get_type
+gtk_expression_get_type
 gtk_file_chooser_dialog_get_type
 gtk_file_chooser_get_type
 gtk_file_chooser_native_get_type
@@ -250,6 +254,7 @@ gtk_video_get_type
 gtk_viewport_get_type
 gtk_volume_button_get_type
 gtk_widget_get_type
+gtk_widget_paintable_get_type
 gtk_window_get_type
 gtk_window_controls_get_type
 gtk_window_group_get_type
