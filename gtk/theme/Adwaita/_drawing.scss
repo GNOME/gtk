@@ -419,7 +419,7 @@
     box-shadow: none;
     text-shadow: none;
     @if $variant == 'light' {
-      background-color: darken($c,26%);
+      background-color: darken($c,14%);
     }
     @else {
       background-color: darken($c,10%);
@@ -431,7 +431,7 @@
     box-shadow: none;
     text-shadow: none;
     @if $variant == 'light' {
-      background-color: darken($c,40%);
+      background-color: darken($c,30%);
     }
     @else {
       background-color: darken($c,14%);
