@@ -119,21 +119,18 @@ around or to activate a widget that does not currently have the focus.
 
 GTK has traditionally supported different kinds of shortcuts:
 
-Accelerators
- : Accelerators are any other shortcuts that can be activated regardless
-   of where the focus is, and typically trigger global actions, such as
-   Ctrl-Q to quit an application.
-Mnmemonics
- : Mnemonics are usually triggered using Alt as a modifier for a letter.
-   They are used in places where a label is associated with a control,
-   and are indicated by underlining the letter in the label. As a special
-   case, inside menus (i.e. inside #GtkPopoverMenu), mnemonics can be
-   triggered without the modifier.
-Key bindings
- : Key bindings are specific to individual widgets, such as Ctrl-C or
-   Ctrl-V in an entry copy to or paste from the clipboard. They are only
-   triggered when the widget has focus.
-   
+- Accelerators are any other shortcuts that can be activated regardless
+  of where the focus is, and typically trigger global actions, such as
+  Ctrl-Q to quit an application.
+- Mnemonics are usually triggered using Alt as a modifier for a letter.
+  They are used in places where a label is associated with a control,
+  and are indicated by underlining the letter in the label. As a special
+  case, inside menus (i.e. inside #GtkPopoverMenu), mnemonics can be
+  triggered without the modifier.
+- Key bindings are specific to individual widgets, such as Ctrl-C or
+  Ctrl-V in an entry copy to or paste from the clipboard. They are only
+  triggered when the widget has focus.
+
 GTK handles accelerators and mnemonics in a global scope, during the
 capture phase, and key bindings locally, during the target phase.
 
