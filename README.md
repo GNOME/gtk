@@ -17,7 +17,7 @@ license fees or royalties.
 
 The official download location
 
-  - https://download.gnome.org/sources/gtk+
+  - https://download.gnome.org/sources/gtk/
 
 The official web site
 
@@ -49,11 +49,11 @@ In order to build GTK you will need:
 You will also need various dependencies, based on the platform you are
 building for:
 
-  - [GLib](https://download.gnome.org/sources/glib)
-  - [GdkPixbuf](https://download.gnome.org/sources/gdk-pixbuf)
-  - [GObject-Introspection](https://download.gnome.org/sources/gobject-introspection)
-  - [Cairo](https://www.cairographics.org)
-  - [Pango](https://download.gnome.org/sources/pango)
+  - [GLib](https://download.gnome.org/sources/glib/)
+  - [GdkPixbuf](https://download.gnome.org/sources/gdk-pixbuf/)
+  - [GObject-Introspection](https://download.gnome.org/sources/gobject-introspection/)
+  - [Cairo](https://www.cairographics.org/)
+  - [Pango](https://download.gnome.org/sources/pango/)
   - [Epoxy](https://github.com/anholt/libepoxy)
   - [Graphene](https://github.com/ebassi/graphene)
   - [Xkb-common](https://github.com/xkbcommon/libxkbcommon)
