@@ -49,10 +49,12 @@ In order to build GTK you will need:
 You will also need various dependencies, based on the platform you are
 building for:
 
+  - a C++ compiler
   - [GLib](https://download.gnome.org/sources/glib)
   - [GdkPixbuf](https://download.gnome.org/sources/gdk-pixbuf)
   - [GObject-Introspection](https://download.gnome.org/sources/gobject-introspection)
   - [Cairo](https://www.cairographics.org)
+  - cairo-gobject
   - [Pango](https://download.gnome.org/sources/pango)
   - [Epoxy](https://github.com/anholt/libepoxy)
   - [Graphene](https://github.com/ebassi/graphene)
@@ -76,6 +78,12 @@ If you are building the Wayland backend, you will also need:
   - Wayland-protocols
   - Wayland-cursor
   - Wayland-EGL
+
+If you are building the developer documentation, you will also need:
+
+  - gtk-doc
+  - the DocBook xsl stylesheets
+  - pandoc
 
 Once you have all the necessary dependencies, you can build GTK by using
 Meson:
