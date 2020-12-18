@@ -53,6 +53,7 @@ typedef struct { GskRoundedRect value; guint send: 1; guint send_corners: 1; } R
 typedef struct { const GdkRGBA *value; guint send: 1; } RGBAUniformValue;
 typedef struct { const graphene_vec4_t *value; guint send: 1; } Vec4UniformValue;
 typedef struct { const GskColorStop *value; guint send: 1; } ColorStopUniformValue;
+typedef struct { const graphene_matrix_t *value; guint send: 1; } MatrixUniformValue;
 
 /* OpNode are allocated within OpBuffer.pos, but we keep
  * a secondary index into the locations of that buffer
@@ -167,7 +168,7 @@ typedef struct
 
 typedef struct
 {
-  const graphene_matrix_t *matrix;
+  MatrixUniformValue matrix;
   Vec4UniformValue offset;
 } OpColorMatrix;
 

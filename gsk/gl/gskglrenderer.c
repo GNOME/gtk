@@ -2940,10 +2940,15 @@ static inline void
 apply_color_matrix_op (const Program       *program,
                        const OpColorMatrix *op)
 {
-  float mat[16];
-  OP_PRINT (" -> Color Matrix");
-  graphene_matrix_to_float (op->matrix, mat);
-  glUniformMatrix4fv (program->color_matrix.color_matrix_location, 1, GL_FALSE, mat);
+  OP_PRINT (" -> Color matrix. Send matrix: %d. Send offset: %d.",
+            op->matrix.send, op->offset.send);
+
+  if (op->matrix.send)
+    {
+      float mat[16];
+      graphene_matrix_to_float (op->matrix.value, mat);
+      glUniformMatrix4fv (program->color_matrix.color_matrix_location, 1, GL_FALSE, mat);
+    }
 
   if (op->offset.send)
     {
