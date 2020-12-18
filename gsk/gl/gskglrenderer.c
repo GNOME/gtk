@@ -3199,6 +3199,7 @@ static inline void
 apply_repeat_op (const Program  *program,
                  const OpRepeat *op)
 {
+  OP_PRINT (" -> Repeat");
   glUniform4fv (program->repeat.child_bounds_location, 1, op->child_bounds);
   glUniform4fv (program->repeat.texture_rect_location, 1, op->texture_rect);
 }
