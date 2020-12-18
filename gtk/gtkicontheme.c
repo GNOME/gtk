@@ -3867,10 +3867,10 @@ init_color_matrix (graphene_matrix_t *color_matrix,
                    const GdkRGBA     *warning_color,
                    const GdkRGBA     *error_color)
 {
-  GdkRGBA fg_default = { 0.7450980392156863, 0.7450980392156863, 0.7450980392156863, 1.0};
-  GdkRGBA success_default = { 0.3046921492332342,0.6015716792553597, 0.023437857633325704, 1.0};
-  GdkRGBA warning_default = {0.9570458533607996, 0.47266346227206835, 0.2421911955443656, 1.0 };
-  GdkRGBA error_default = { 0.796887159533074, 0 ,0, 1.0 };
+  const GdkRGBA fg_default = { 0.7450980392156863, 0.7450980392156863, 0.7450980392156863, 1.0};
+  const GdkRGBA success_default = { 0.3046921492332342,0.6015716792553597, 0.023437857633325704, 1.0};
+  const GdkRGBA warning_default = {0.9570458533607996, 0.47266346227206835, 0.2421911955443656, 1.0 };
+  const GdkRGBA error_default = { 0.796887159533074, 0 ,0, 1.0 };
   const GdkRGBA *fg = foreground_color ? foreground_color : &fg_default;
   const GdkRGBA *sc = success_color ? success_color : &success_default;
   const GdkRGBA *wc = warning_color ? warning_color : &warning_default;
