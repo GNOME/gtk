@@ -219,7 +219,7 @@ gsk_identity_transform_equal (GskTransform *first_transform,
 static const GskTransformClass GSK_IDENTITY_TRANSFORM_CLASS =
 {
   sizeof (GskTransform),
-  "GskIdentityMatrix",
+  "GskIdentityTransform",
   gsk_identity_transform_finalize,
   gsk_identity_transform_to_matrix,
   gsk_identity_transform_apply_2d,
