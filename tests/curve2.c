@@ -28,6 +28,7 @@ struct _DemoWidget
   GskFillRule fill_rule;
 
   graphene_rect_t bounds;
+  gboolean show_cairo;
 };
 
 struct _DemoWidgetClass
@@ -118,6 +119,19 @@ demo_widget_snapshot (GtkWidget   *widget,
 
   if (self->do_stroke)
     {
+      if (self->show_cairo)
+        {
+          cairo_t *cr;
+
+          graphene_rect_init (&bounds, 0, 0, width, height);
+          cr = gtk_snapshot_append_cairo (snapshot, &bounds);
+          gsk_path_to_cairo (self->path, cr);
+          gsk_stroke_to_cairo (self->stroke, cr);
+          cairo_set_source_rgba (cr, 0, 0, 1, 0.2);
+          cairo_stroke (cr);
+          cairo_destroy (cr);
+        }
+
       if (self->inside)
         {
            gtk_snapshot_push_fill (snapshot, self->stroke_path, self->fill_rule);
@@ -444,6 +458,14 @@ bb_toggled (GtkCheckButton *button,
 }
 
 static void
+cairo_toggled (GtkCheckButton *button,
+               DemoWidget      *self)
+{
+  self->show_cairo = gtk_check_button_get_active (button);
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+static void
 stroke_toggled (GtkCheckButton *button,
                 DemoWidget      *self)
 {
@@ -663,6 +685,10 @@ main (int argc, char *argv[])
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (spin), 0);
   g_signal_connect (spin, "value-changed", G_CALLBACK (dash_offset_changed), demo);
   gtk_grid_attach (GTK_GRID (grid), spin, 1, 10, 1, 1);
+
+  toggle = gtk_check_button_new_with_label ("Show cairo");
+  g_signal_connect (toggle, "toggled", G_CALLBACK (cairo_toggled), demo);
+  gtk_grid_attach (GTK_GRID (grid), toggle, 1, 11, 1, 1);
 
   entry = gtk_entry_new ();
   g_signal_connect (entry, "activate", G_CALLBACK (activate), demo);
