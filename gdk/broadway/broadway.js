@@ -1,3 +1,27 @@
+/* check if we are on Android and using Chrome */
+var isAndroidChrome = false;
+{
+    var ua = navigator.userAgent.toLowerCase();
+    if (ua.indexOf("android") > -1 && ua.indexOf("chrom") > -1) {
+	isAndroidChrome = true;
+    }
+}
+/* check for the passive option for Event listener */
+let passiveSupported = false;
+try {
+  const options = {
+    get passive() { // This function will be called when the browser
+                    //   attempts to access the passive property.
+      passiveSupported = true;
+      return false;
+    }
+  };
+
+  window.addEventListener("test", null, options);
+  window.removeEventListener("test", null, options);
+} catch(err) {
+  passiveSupported = false;
+}
 /* Helper functions for debugging */
 var logDiv = null;
 function log(str) {
@@ -9,6 +33,25 @@ function log(str) {
     }
     logDiv.appendChild(document.createTextNode(str));
     logDiv.appendChild(document.createElement('br'));
+}
+/* Helper functions for touch identifier to make it unique on Android */
+var globalTouchIdentifier = Math.round(Date.now() / 1000);
+function touchIdentifierStart(tId)
+{
+    if (isAndroidChrome) {
+	if (tId == 0) {
+	    return ++globalTouchIdentifier;
+	}
+	return globalTouchIdentifier + tId;
+    }
+    return tId;
+}
+function touchIdentifier(tId)
+{
+    if (isAndroidChrome) {
+	return globalTouchIdentifier + tId;
+    }
+    return tId;
 }
 
 function getStackTrace()
@@ -223,6 +266,7 @@ function cmdSetTransientFor(id, parentId)
 {
     var surface = surfaces[id];
 
+    if (surface === undefined) return;
     if (surface.transientParent == parentId)
 	return;
 
@@ -253,8 +297,9 @@ function moveToHelper(surface, position) {
 
     for (var cid in surfaces) {
 	var child = surfaces[cid];
-	if (child.transientParent == surface.id)
+	if (child.transientParent == surface.id) {
 	    moveToHelper(child, stackingOrder.indexOf(surface) + 1);
+	}
     }
 }
 
@@ -269,6 +314,13 @@ function cmdDeleteSurface(id)
 	stackingOrder.splice(i, 1);
     var canvas = surface.canvas;
     canvas.parentNode.removeChild(canvas);
+    if (id == windowWithMouse) {
+	windowWithMouse = 0;
+    }
+    if (id == realWindowWithMouse) {
+	realWindowWithMouse = 0;
+	firstTouchDownId = null;
+    }
     delete surfaces[id];
 }
 
@@ -307,6 +359,7 @@ function cmdRaiseSurface(id)
 {
     var surface = surfaces[id];
 
+    if (surface === undefined) return;
     moveToHelper(surface);
     restackWindows();
 }
@@ -315,6 +368,7 @@ function cmdLowerSurface(id)
 {
     var surface = surfaces[id];
 
+    if (surface === undefined) return;
     moveToHelper(surface, 0);
     restackWindows();
 }
@@ -2481,13 +2535,14 @@ function onMouseWheel(ev)
 }
 
 function onTouchStart(ev) {
-    event.preventDefault();
+    ev.preventDefault();
 
     updateKeyboardStatus();
     updateForEvent(ev);
 
     for (var i = 0; i < ev.changedTouches.length; i++) {
         var touch = ev.changedTouches.item(i);
+	var touchId = touchIdentifierStart(touch.identifier);
 
         var origId = getSurfaceId(touch);
         var id = getEffectiveEventTarget (origId);
@@ -2495,7 +2550,7 @@ function onTouchStart(ev) {
         var isEmulated = 0;
 
         if (firstTouchDownId == null) {
-            firstTouchDownId = touch.identifier;
+            firstTouchDownId = touchId;
             isEmulated = 1;
 
             if (realWindowWithMouse != origId || id != windowWithMouse) {
@@ -2510,52 +2565,54 @@ function onTouchStart(ev) {
             }
         }
 
-        sendInput ("t", [0, id, touch.identifier, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
+        sendInput ("t", [0, id, touchId, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
     }
 }
 
 function onTouchMove(ev) {
-    event.preventDefault();
+    ev.preventDefault();
 
     updateKeyboardStatus();
     updateForEvent(ev);
 
     for (var i = 0; i < ev.changedTouches.length; i++) {
         var touch = ev.changedTouches.item(i);
+	var touchId = touchIdentifier(touch.identifier);
 
         var origId = getSurfaceId(touch);
         var id = getEffectiveEventTarget (origId);
         var pos = getPositionsFromEvent(touch, id);
 
         var isEmulated = 0;
-        if (firstTouchDownId == touch.identifier) {
+        if (firstTouchDownId == touchId) {
             isEmulated = 1;
         }
 
-        sendInput ("t", [1, id, touch.identifier, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
+        sendInput ("t", [1, id, touchId, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
     }
 }
 
 function onTouchEnd(ev) {
-    event.preventDefault();
+    ev.preventDefault();
 
     updateKeyboardStatus();
     updateForEvent(ev);
 
     for (var i = 0; i < ev.changedTouches.length; i++) {
         var touch = ev.changedTouches.item(i);
+	var touchId = touchIdentifier(touch.identifier);
 
         var origId = getSurfaceId(touch);
         var id = getEffectiveEventTarget (origId);
         var pos = getPositionsFromEvent(touch, id);
 
         var isEmulated = 0;
-        if (firstTouchDownId == touch.identifier) {
+        if (firstTouchDownId == touchId) {
             isEmulated = 1;
             firstTouchDownId = null;
         }
 
-        sendInput ("t", [2, id, touch.identifier, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
+        sendInput ("t", [2, id, touchId, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
     }
 }
 
@@ -2572,11 +2629,11 @@ function setupDocument(document)
     document.onkeyup = onKeyUp;
 
     if (document.addEventListener) {
-      document.addEventListener('DOMMouseScroll', onMouseWheel, false);
-      document.addEventListener('mousewheel', onMouseWheel, false);
-      document.addEventListener('touchstart', onTouchStart, false);
-      document.addEventListener('touchmove', onTouchMove, false);
-      document.addEventListener('touchend', onTouchEnd, false);
+	document.addEventListener('DOMMouseScroll', onMouseWheel, passiveSupported ? { passive: false, capture: false } : false);
+	document.addEventListener('mousewheel', onMouseWheel, passiveSupported ? { passive: false, capture: false } : false);
+	document.addEventListener('touchstart', onTouchStart, passiveSupported ? { passive: false, capture: false } : false);
+	document.addEventListener('touchmove', onTouchMove, passiveSupported ? { passive: false, capture: false } : false);
+	document.addEventListener('touchend', onTouchEnd, passiveSupported ? { passive: false, capture: false } : false);
     } else if (document.attachEvent) {
       element.attachEvent("onmousewheel", onMouseWheel);
     }
