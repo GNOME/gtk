@@ -29,6 +29,8 @@ struct _DemoWidget
 
   graphene_rect_t bounds;
   gboolean show_cairo;
+
+  double zoom;
 };
 
 struct _DemoWidgetClass
@@ -113,6 +115,8 @@ demo_widget_snapshot (GtkWidget   *widget,
     return;
 
   gtk_snapshot_save (snapshot);
+
+  gtk_snapshot_scale (snapshot, self->zoom, self->zoom);
 
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_width (widget);
@@ -264,13 +268,14 @@ demo_widget_measure (GtkWidget      *widget,
                      int            *natural_baseline)
 {
   DemoWidget *self = DEMO_WIDGET (widget);
-
-  *minimum = *natural = 0;
+  float size;
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    *minimum = *natural = self->bounds.origin.x + self->bounds.size.width;
+    size = self->zoom * (self->bounds.origin.x + self->bounds.size.width);
   else
-    *minimum = *natural = self->bounds.origin.y + self->bounds.size.height;
+    size = self->zoom * (self->bounds.origin.y + self->bounds.size.height);
+
+  *minimum = *natural = (int)size;
 }
 
 static void
@@ -439,6 +444,16 @@ init_demo (DemoWidget  *demo,
 
   demo->stroke = gsk_stroke_new (20);
   demo->outline_stroke = gsk_stroke_new (1);
+
+  demo->zoom = 1;
+}
+
+static void
+zoom_changed (GtkRange   *range,
+              DemoWidget *self)
+{
+  self->zoom = gtk_range_get_value (range);
+  gtk_widget_queue_resize (GTK_WIDGET (self));
 }
 
 static void
@@ -598,6 +613,7 @@ main (int argc, char *argv[])
   GtkWidget *popover, *button, *grid;
   GtkWidget *header, *toggle, *combo, *spin;
   GtkWidget *sw;
+  GtkWidget *zoom_scale;
 
   gtk_init ();
 
@@ -617,6 +633,13 @@ main (int argc, char *argv[])
   button = gtk_menu_button_new ();
   gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (button), "emblem-system-symbolic");
   gtk_header_bar_pack_start (GTK_HEADER_BAR (header), button);
+
+  zoom_scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 1, 20, 0.25);
+  gtk_range_set_value (GTK_RANGE (zoom_scale), 1);
+  g_signal_connect (zoom_scale, "value-changed", G_CALLBACK (zoom_changed), demo);
+  gtk_widget_set_size_request (zoom_scale, 150, -1);
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (header), zoom_scale);
+
   gtk_window_set_titlebar (GTK_WINDOW (window), header);
 
   popover = gtk_popover_new ();
