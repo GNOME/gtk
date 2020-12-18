@@ -97,11 +97,11 @@ the question you have, this list is a good place to start.
         #define N_(x)     x
         #define C_(ctx,x) pgettext (ctx, x)
         
-    You use N_() (N stands for no-op) to mark a string for translation in
+    You use `N_()` (N stands for no-op) to mark a string for translation in
     a location where a function call to gettext() is not allowed, such as
     in an array initializer. You eventually have to call gettext() on the
-    string to actually fetch the translation. _() both marks the string for
-    translation and actually translates it. The C_() macro (C stands for
+    string to actually fetch the translation. `_()` both marks the string for
+    translation and actually translates it. The `C_()` macro (C stands for
     context) adds an additional context to the string that is marked for
     translation, which can help to disambiguate short strings that might
     need different translations in different parts of your program.
@@ -190,7 +190,7 @@ the question you have, this list is a good place to start.
       encode string literals in UTF-8 by using octal or hexadecimal escapes
       like `\212` or `\xa8` to encode each byte. This is portable, but
       modifying the escaped strings is not very convenient. Be careful when
-      mixing hexadecimal escapes with ordinary text; `"\xa8abcd" is a string
+      mixing hexadecimal escapes with ordinary text; `"\xa8abcd"`  is a string
       of length 1 !
 
     - Runtime conversion
