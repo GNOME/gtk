@@ -1,0 +1,87 @@
+transform {
+  child: clip {
+    child: transform {
+      child: container {
+        fill {
+          child: color {
+            bounds: -32 -32 64 64;
+            color: rgb(255,0,0);
+          }
+          path: "\
+M -32 -32 h 64 v 64 h -64 z";
+          fill-rule: winding;
+        }
+        fill {
+          child: color {
+            bounds: -32 -16 64 32;
+            color: rgb(255,255,0);
+          }
+          path: "\
+M -32 -16 h 64 v 32 h -64 z";
+          fill-rule: winding;
+        }
+      }
+      transform: translate(64, 64);
+    }
+    clip: 0 0 200 200;
+  }
+  transform: translate(64, 64) scale(3);
+}
+transform {
+  child: clip {
+    child: transform {
+      child: container {
+        fill {
+          child: color {
+            bounds: -32 -32 64 64;
+            color: rgb(255,0,0);
+          }
+          path: "\
+M -32 -32 h 64 v 64 h -64 z";
+          fill-rule: winding;
+        }
+        fill {
+          child: color {
+            bounds: -32 -16 64 32;
+            color: rgb(255,255,0);
+          }
+          path: "\
+M -32 -16 h 64 v 32 h -64 z";
+          fill-rule: winding;
+        }
+      }
+      transform: translate(64, 64);
+    }
+    clip: 0 0 200 200;
+  }
+  transform: translate(64, 64) scale(2);
+}
+transform {
+  child: clip {
+    child: transform {
+      child: container {
+        fill {
+          child: color {
+            bounds: -32 -32 64 64;
+            color: rgb(255,0,0);
+          }
+          path: "\
+M -32 -32 h 64 v 64 h -64 z";
+          fill-rule: winding;
+        }
+        fill {
+          child: color {
+            bounds: -32 -16 64 32;
+            color: rgb(255,255,0);
+          }
+          path: "\
+M -32 -16 h 64 v 32 h -64 z";
+          fill-rule: winding;
+        }
+      }
+      transform: translate(64, 64);
+    }
+    clip: 0 0 200 200;
+  }
+  transform: translate(64, 64) scale(4);
+}
