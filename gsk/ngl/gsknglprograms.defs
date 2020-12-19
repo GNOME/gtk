@@ -1,0 +1,83 @@
+GSK_NGL_DEFINE_PROGRAM (blend,
+                        "/org/gtk/libgsk/glsl/blend.glsl",
+                        GSK_NGL_ADD_UNIFORM (1, BLEND_SOURCE2, u_source2)
+                        GSK_NGL_ADD_UNIFORM (2, BLEND_MODE, u_mode))
+
+GSK_NGL_DEFINE_PROGRAM (blit,
+                        "/org/gtk/libgsk/glsl/blit.glsl",
+                        GSK_NGL_NO_UNIFORMS)
+
+GSK_NGL_DEFINE_PROGRAM (blur,
+                        "/org/gtk/libgsk/glsl/blur.glsl",
+                        GSK_NGL_ADD_UNIFORM (1, BLUR_RADIUS, u_blur_radius)
+                        GSK_NGL_ADD_UNIFORM (2, BLUR_SIZE, u_blur_size)
+                        GSK_NGL_ADD_UNIFORM (3, BLUR_DIR, u_blur_dir))
+
+GSK_NGL_DEFINE_PROGRAM (border,
+                        "/org/gtk/libgsk/glsl/border.glsl",
+                        GSK_NGL_ADD_UNIFORM (1, BORDER_COLOR, u_color)
+                        GSK_NGL_ADD_UNIFORM (2, BORDER_WIDTHS, u_widths)
+                        GSK_NGL_ADD_UNIFORM (3, BORDER_OUTLINE_RECT, u_outline_rect))
+
+GSK_NGL_DEFINE_PROGRAM (color,
+                        "/org/gtk/libgsk/glsl/color.glsl",
+                        GSK_NGL_ADD_UNIFORM (1, COLOR_COLOR, u_color))
+
+GSK_NGL_DEFINE_PROGRAM (coloring,
+                        "/org/gtk/libgsk/glsl/coloring.glsl",
+                        GSK_NGL_ADD_UNIFORM (1, COLORING_COLOR, u_color))
+
+GSK_NGL_DEFINE_PROGRAM (color_matrix,
+                        "/org/gtk/libgsk/glsl/color_matrix.glsl",
+                        GSK_NGL_ADD_UNIFORM (1, COLOR_MATRIX_COLOR_MATRIX, u_color_matrix)
+                        GSK_NGL_ADD_UNIFORM (2, COLOR_MATRIX_COLOR_OFFSET, u_color_offset))
+
+GSK_NGL_DEFINE_PROGRAM (conic_gradient,
+                        "/org/gtk/libgsk/glsl/conic_gradient.glsl",
+                        GSK_NGL_ADD_UNIFORM (1, CONIC_GRADIENT_COLOR_STOPS, u_color_stops)
+                        GSK_NGL_ADD_UNIFORM (2, CONIC_GRADIENT_NUM_COLOR_STOPS, u_num_color_stops)
+                        GSK_NGL_ADD_UNIFORM (3, CONIC_GRADIENT_GEOMETRY, u_geometry))
+
+GSK_NGL_DEFINE_PROGRAM (cross_fade,
+                        "/org/gtk/libgsk/glsl/cross_fade.glsl",
+                        GSK_NGL_ADD_UNIFORM (1, CROSS_FADE_PROGRESS, u_progress)
+                        GSK_NGL_ADD_UNIFORM (2, CROSS_FADE_SOURCE2, u_source2))
+
+GSK_NGL_DEFINE_PROGRAM (inset_shadow,
+                        "/org/gtk/libgsk/glsl/inset_shadow.glsl",
+                        GSK_NGL_ADD_UNIFORM (1, INSET_SHADOW_COLOR, u_color)
+                        GSK_NGL_ADD_UNIFORM (2, INSET_SHADOW_SPREAD, u_spread)
+                        GSK_NGL_ADD_UNIFORM (3, INSET_SHADOW_OFFSET, u_offset)
+                        GSK_NGL_ADD_UNIFORM (4, INSET_SHADOW_OUTLINE_RECT, u_outline_rect))
+
+GSK_NGL_DEFINE_PROGRAM (linear_gradient,
+                        "/org/gtk/libgsk/glsl/linear_gradient.glsl",
+                        GSK_NGL_ADD_UNIFORM (1, LINEAR_GRADIENT_COLOR_STOPS, u_color_stops)
+                        GSK_NGL_ADD_UNIFORM (2, LINEAR_GRADIENT_NUM_COLOR_STOPS, u_num_color_stops)
+                        GSK_NGL_ADD_UNIFORM (3, LINEAR_GRADIENT_POINTS, u_points)
+                        GSK_NGL_ADD_UNIFORM (4, LINEAR_GRADIENT_REPEAT, u_repeat))
+
+GSK_NGL_DEFINE_PROGRAM (outset_shadow,
+                        "/org/gtk/libgsk/glsl/outset_shadow.glsl",
+                        GSK_NGL_ADD_UNIFORM (1, OUTSET_SHADOW_COLOR, u_color)
+                        GSK_NGL_ADD_UNIFORM (2, OUTSET_SHADOW_OUTLINE_RECT, u_outline_rect))
+
+GSK_NGL_DEFINE_PROGRAM (radial_gradient,
+                        "/org/gtk/libgsk/glsl/radial_gradient.glsl",
+                        GSK_NGL_ADD_UNIFORM (1, RADIAL_GRADIENT_COLOR_STOPS, u_color_stops)
+                        GSK_NGL_ADD_UNIFORM (2, RADIAL_GRADIENT_NUM_COLOR_STOPS, u_num_color_stops)
+                        GSK_NGL_ADD_UNIFORM (3, RADIAL_GRADIENT_REPEAT, u_repeat)
+                        GSK_NGL_ADD_UNIFORM (4, RADIAL_GRADIENT_RANGE, u_range)
+                        GSK_NGL_ADD_UNIFORM (5, RADIAL_GRADIENT_GEOMETRY, u_geometry))
+
+GSK_NGL_DEFINE_PROGRAM (repeat,
+                        "/org/gtk/libgsk/glsl/repeat.glsl",
+                        GSK_NGL_ADD_UNIFORM (1, REPEAT_CHILD_BOUNDS, u_child_bounds)
+                        GSK_NGL_ADD_UNIFORM (2, REPEAT_TEXTURE_RECT, u_texture_rect))
+
+GSK_NGL_DEFINE_PROGRAM (unblurred_outset_shadow,
+                        "/org/gtk/libgsk/glsl/unblurred_outset_shadow.glsl",
+                        GSK_NGL_ADD_UNIFORM (1, UNBLURRED_OUTSET_SHADOW_COLOR, u_color)
+                        GSK_NGL_ADD_UNIFORM (2, UNBLURRED_OUTSET_SHADOW_SPREAD, u_spread)
+                        GSK_NGL_ADD_UNIFORM (3, UNBLURRED_OUTSET_SHADOW_OFFSET, u_offset)
+                        GSK_NGL_ADD_UNIFORM (4, UNBLURRED_OUTSET_SHADOW_OUTLINE_RECT, u_outline_rect))

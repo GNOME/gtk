@@ -90,6 +90,7 @@ informative_render_tests = [
 renderers = [
   # name      exclude term
   [ 'opengl', ''    ],
+  [ 'next', ''    ],
   [ 'broadway',  '-3d' ],
   [ 'cairo',  '-3d' ],
 ]
