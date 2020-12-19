@@ -1,0 +1,42 @@
+transform {
+  child: clip {
+    child: fill {
+      child: color {
+        bounds: 128 192 256 128;
+        color: rgb(128,128,128);
+      }
+      path: "\
+M 128 192 h 256 v 128 h -256 z";
+      fill-rule: winding;
+    }
+    clip: 0 0 512 512;
+  }
+  transform: translate(0, 128);
+}
+clip {
+  child: fill {
+    child: color {
+      bounds: 128 192 256 128;
+      color: rgb(128,128,128);
+    }
+    path: "\
+M 128 192 h 256 v 128 h -256 z";
+    fill-rule: winding;
+  }
+  clip: 0 0 512 512;
+}
+transform {
+  child: clip {
+    child: fill {
+      child: color {
+        bounds: 128 192 256 128;
+        color: rgb(0,0,255);
+      }
+      path: "\
+M 128 192 h 256 v 128 h -256 z";
+      fill-rule: winding;
+    }
+    clip: 0 0 512 512;
+  }
+  transform: translate(0, -128);
+}

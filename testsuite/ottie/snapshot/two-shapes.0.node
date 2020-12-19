@@ -1,0 +1,27 @@
+transform {
+  child: container {
+    stroke {
+      child: color {
+        bounds: -153 -153 306 306;
+        color: rgb(255,255,255);
+      }
+      path: "\
+M -50 -150 h 100 v 300 h -100 z\
+M -150 -50 h 300 v 100 h -300 z";
+      line-width: 6;
+      line-cap: round;
+      line-join: round;
+    }
+    fill {
+      child: color {
+        bounds: -150 -150 300 300;
+        color: rgba(255,0,0,0.4);
+      }
+      path: "\
+M -50 -150 h 100 v 300 h -100 z\
+M -150 -50 h 300 v 100 h -300 z";
+      fill-rule: winding;
+    }
+  }
+  transform: translate(256, 256);
+}

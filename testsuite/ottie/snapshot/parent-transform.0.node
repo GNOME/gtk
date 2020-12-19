@@ -1,0 +1,104 @@
+clip {
+  child: container {
+    transform {
+      child: transform {
+        child: transform {
+          child: clip {
+            child: transform {
+              child: container {
+                fill {
+                  child: color {
+                    bounds: -128 -64 256 128;
+                    color: rgb(255,255,0);
+                  }
+                  path: "\
+M -128 -64 h 256 v 128 h -256 z";
+                  fill-rule: winding;
+                }
+                stroke {
+                  child: color {
+                    bounds: -131 -67 262 134;
+                    color: rgb(0,255,0);
+                  }
+                  path: "\
+M -128 -64 h 256 v 128 h -256 z";
+                  line-width: 6;
+                  line-cap: round;
+                  line-join: round;
+                }
+              }
+              transform: translate(128, 128);
+            }
+            clip: 0 0 512 512;
+          }
+          transform: translate(64, 64);
+        }
+        transform: translate(64, 64);
+      }
+      transform: translate(320, 320) rotate(90) scale(1.5) translate(-256, -256);
+    }
+    transform {
+      child: transform {
+        child: clip {
+          child: transform {
+            child: container {
+              fill {
+                child: color {
+                  bounds: -128 -64 256 128;
+                  color: rgb(255,255,0);
+                }
+                path: "\
+M -128 -64 h 256 v 128 h -256 z";
+                fill-rule: winding;
+              }
+              stroke {
+                child: color {
+                  bounds: -131 -67 262 134;
+                  color: rgb(0,255,0);
+                }
+                path: "\
+M -128 -64 h 256 v 128 h -256 z";
+                line-width: 6;
+                line-cap: round;
+                line-join: round;
+              }
+            }
+            transform: translate(128, 128);
+          }
+          clip: 0 0 512 512;
+        }
+        transform: translate(64, 64);
+      }
+      transform: translate(320, 320) rotate(90) scale(1.5) translate(-256, -256);
+    }
+    clip {
+      child: transform {
+        child: container {
+          fill {
+            child: color {
+              bounds: -128 -64 256 128;
+              color: rgb(255,255,0);
+            }
+            path: "\
+M -128 -64 h 256 v 128 h -256 z";
+            fill-rule: winding;
+          }
+          stroke {
+            child: color {
+              bounds: -131 -67 262 134;
+              color: rgb(0,255,0);
+            }
+            path: "\
+M -128 -64 h 256 v 128 h -256 z";
+            line-width: 6;
+            line-cap: round;
+            line-join: round;
+          }
+        }
+        transform: translate(128, 128);
+      }
+      clip: 0 0 512 512;
+    }
+  }
+  clip: 0 0 512 512;
+}
