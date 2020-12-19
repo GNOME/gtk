@@ -1,0 +1,15 @@
+clip {
+  child: transform {
+    child: fill {
+      child: color {
+        bounds: -128 -64 256 128;
+        color: rgb(255,0,0);
+      }
+      path: "\
+M -128 -64 h 256 v 128 h -256 z";
+      fill-rule: winding;
+    }
+    transform: translate(256, 256);
+  }
+  clip: 0 0 512 512;
+}

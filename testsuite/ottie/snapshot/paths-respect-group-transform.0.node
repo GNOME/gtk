@@ -1,0 +1,30 @@
+transform {
+  child: container {
+    fill {
+      child: color {
+        bounds: -64 -128 128 256;
+        color: rgb(0,0,255);
+      }
+      path: "\
+M 64 -128\
+L 64 128\
+L -64 128\
+L -64 -128\
+Z";
+      fill-rule: winding;
+    }
+    transform {
+      child: fill {
+        child: color {
+          bounds: -128 -64 256 128;
+          color: rgba(255,0,0,0.4);
+        }
+        path: "\
+M -128 -64 h 256 v 128 h -256 z";
+        fill-rule: winding;
+      }
+      transform: rotate(90);
+    }
+  }
+  transform: translate(256, 256);
+}

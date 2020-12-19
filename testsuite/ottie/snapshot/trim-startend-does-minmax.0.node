@@ -1,0 +1,16 @@
+clip {
+  child: stroke {
+    child: color {
+      bounds: -3 0 106 100;
+      color: rgb(0,255,0);
+    }
+    path: "\
+M 47 50\
+C 49 50, 51 50, 53 50";
+    line-width: 10;
+    line-cap: square;
+    line-join: miter;
+    miter-limit: 10;
+  }
+  clip: 0 0 100 100;
+}
