@@ -96,6 +96,14 @@ gsk_stroke_free (GskStroke *self)
   g_free (self);
 }
 
+/**
+ * gsk_stroke_to_cairo:
+ * @self: a #GskStroke
+ * @cr: the cairo context to configure
+ *
+ * A helper function that sets the stroke parameters
+ * of @cr from the values found in @self.
+ */
 void
 gsk_stroke_to_cairo (const GskStroke *self,
                      cairo_t         *cr)
