@@ -80,6 +80,10 @@ void                    gsk_stroke_set_dash_offset              (GskStroke      
 GDK_AVAILABLE_IN_ALL
 float                   gsk_stroke_get_dash_offset              (const GskStroke        *self);
 
+GDK_AVAILABLE_IN_ALL
+void                    gsk_stroke_to_cairo                     (const GskStroke        *self,
+                                                                 cairo_t                *cr);
+
 
 
 G_END_DECLS
