@@ -660,6 +660,7 @@ property_has_been_removed (Element      *element,
     { "GtkBox", "pack-type", PROP_KIND_PACKING },
     { "GtkHeaderBar", "position", PROP_KIND_PACKING },
     { "GtkPopoverMenu", "position",PROP_KIND_PACKING },
+    { "GtkCheckButton", "draw-indicator", PROP_KIND_OBJECT },
   };
   char *canonical_name;
   gboolean found;
