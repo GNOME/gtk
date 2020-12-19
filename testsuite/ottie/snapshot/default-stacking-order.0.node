@@ -1,0 +1,18 @@
+fill {
+  child: color {
+    bounds: 40 20 20 60;
+    color: rgb(0,255,0);
+  }
+  path: "\
+M 40 20 h 20 v 60 h -20 z";
+  fill-rule: winding;
+}
+fill {
+  child: color {
+    bounds: 20 40 60 20;
+    color: rgb(255,0,0);
+  }
+  path: "\
+M 20 40 h 60 v 20 h -60 z";
+  fill-rule: winding;
+}

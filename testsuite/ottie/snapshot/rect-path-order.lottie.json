@@ -1,0 +1,1816 @@
+{
+  "v" : "5.5.2",
+  "ip" : 0.0,
+  "op" : 180.0,
+  "nm" : "Animation",
+  "mn" : "{7153872e-1744-4216-afbb-03b46b40fd05}",
+  "fr" : 60.0,
+  "w" : 512,
+  "h" : 512,
+  "assets" : [],
+  "layers" : [
+    {
+      "ddd" : 0,
+      "ty" : 4,
+      "ind" : 0,
+      "st" : 0,
+      "ip" : 0.0,
+      "op" : 180.0,
+      "nm" : "Layer",
+      "mn" : "{cd0e6ac2-2d03-42dd-aa7d-033d609a938e}",
+      "ks" : {
+        "a" : {
+          "a" : 0,
+          "k" : [
+            256.0,
+            256.0
+          ]
+        },
+        "p" : {
+          "a" : 0,
+          "k" : [
+            256.0,
+            256.0
+          ]
+        },
+        "s" : {
+          "a" : 0,
+          "k" : [
+            100.0,
+            100.0
+          ]
+        },
+        "r" : {
+          "a" : 0,
+          "k" : 0.0
+        },
+        "o" : {
+          "a" : 0,
+          "k" : 100.0
+        }
+      },
+      "shapes" : [
+        {
+          "ty" : "gr",
+          "nm" : "Group Forwards",
+          "mn" : "Group-Forwards",
+          "it" : [
+            {
+              "ty" : "rc",
+              "nm" : "Rect Forwards",
+              "mn" : "Rect-Forwards",
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  64.0,
+                  64.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  96.0,
+                  64.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "d" : 1
+            },
+            {
+              "ty" : "tm",
+              "s" : {
+                "a" : 0,
+                "k" : 0,
+                "ix" : 1
+              },
+              "e" : {
+                "a" : 0,
+                "k" : 25,
+                "ix" : 2
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 0,
+                "ix" : 3
+              },
+              "m" : 1,
+              "ix" : 2,
+              "nm" : "Trim Forwards",
+              "mn" : "Trim-Forwards"
+            },
+            {
+              "ty" : "st",
+              "nm" : "Stroke Forwards",
+              "mn" : "Stroke-Forwards",
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              },
+              "c" : {
+                "a" : 0,
+                "k" : [
+                  1.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "lc" : 1,
+              "lj" : 1,
+              "ml" : 0.0,
+              "w" : {
+                "a" : 0,
+                "k" : 6.0
+              }
+            },
+            {
+              "ty" : "tr",
+              "a" : {
+                "a" : 0,
+                "k" : [
+                  0.0,
+                  0.0
+                ]
+              },
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  0.0,
+                  0.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  100.0,
+                  100.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              }
+            }
+          ]
+        },
+        {
+          "ty" : "gr",
+          "nm" : "Group Backwards",
+          "mn" : "Group-Backwards",
+          "it" : [
+            {
+              "ty" : "rc",
+              "nm" : "Rect Backwards",
+              "mn" : "Rect-Backwards",
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  64.0,
+                  64.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  96.0,
+                  64.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "d" : 0
+            },
+            {
+              "ty" : "tm",
+              "s" : {
+                "a" : 0,
+                "k" : 0,
+                "ix" : 1
+              },
+              "e" : {
+                "a" : 0,
+                "k" : 25,
+                "ix" : 2
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 0,
+                "ix" : 3
+              },
+              "m" : 1,
+              "ix" : 2,
+              "nm" : "Trim Backwards",
+              "mn" : "Trim-Backwards"
+            },
+            {
+              "ty" : "st",
+              "nm" : "Stroke Backwards",
+              "mn" : "Stroke-Backwards",
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              },
+              "c" : {
+                "a" : 0,
+                "k" : [
+                  1.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "lc" : 1,
+              "lj" : 1,
+              "ml" : 0.0,
+              "w" : {
+                "a" : 0,
+                "k" : 6.0
+              }
+            },
+            {
+              "ty" : "tr",
+              "a" : {
+                "a" : 0,
+                "k" : [
+                  0.0,
+                  0.0
+                ]
+              },
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  128.0,
+                  0.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  100.0,
+                  100.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              }
+            }
+          ]
+        },
+        {
+          "ty" : "gr",
+          "nm" : "Group Rounded Forwards",
+          "mn" : "Group-Forwards",
+          "it" : [
+            {
+              "ty" : "rc",
+              "nm" : "Rect Rounded Forwards",
+              "mn" : "Rect-Forwards",
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  64.0,
+                  64.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  96.0,
+                  64.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 16.0
+              },
+              "d" : 1
+            },
+            {
+              "ty" : "tm",
+              "s" : {
+                "a" : 0,
+                "k" : 0,
+                "ix" : 1
+              },
+              "e" : {
+                "a" : 0,
+                "k" : 25,
+                "ix" : 2
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 0,
+                "ix" : 3
+              },
+              "m" : 1,
+              "ix" : 2,
+              "nm" : "Trim Rounded Forwards",
+              "mn" : "Trim-Forwards"
+            },
+            {
+              "ty" : "st",
+              "nm" : "Stroke Rounded Forwards",
+              "mn" : "Stroke-Rounded-Forwards",
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              },
+              "c" : {
+                "a" : 0,
+                "k" : [
+                  1.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "lc" : 1,
+              "lj" : 1,
+              "ml" : 0.0,
+              "w" : {
+                "a" : 0,
+                "k" : 6.0
+              }
+            },
+            {
+              "ty" : "tr",
+              "a" : {
+                "a" : 0,
+                "k" : [
+                  0.0,
+                  0.0
+                ]
+              },
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  256.0,
+                  0.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  100.0,
+                  100.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              }
+            }
+          ]
+        },
+        {
+          "ty" : "gr",
+          "nm" : "Group Rounded Backwards",
+          "mn" : "Group-Rounded-Backwards",
+          "it" : [
+            {
+              "ty" : "rc",
+              "nm" : "Rect Rounded Backwards",
+              "mn" : "Rect-Rounded-Backwards",
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  64.0,
+                  64.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  96.0,
+                  64.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 16.0
+              },
+              "d" : 0
+            },
+            {
+              "ty" : "tm",
+              "s" : {
+                "a" : 0,
+                "k" : 0,
+                "ix" : 1
+              },
+              "e" : {
+                "a" : 0,
+                "k" : 25,
+                "ix" : 2
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 0,
+                "ix" : 3
+              },
+              "m" : 1,
+              "ix" : 2,
+              "nm" : "Trim Rounded Backwards",
+              "mn" : "Trim-Rounded-Backwards"
+            },
+            {
+              "ty" : "st",
+              "nm" : "Stroke Rounded Backwards",
+              "mn" : "Stroke-Rounded-Backwards",
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              },
+              "c" : {
+                "a" : 0,
+                "k" : [
+                  1.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "lc" : 1,
+              "lj" : 1,
+              "ml" : 0.0,
+              "w" : {
+                "a" : 0,
+                "k" : 6.0
+              }
+            },
+            {
+              "ty" : "tr",
+              "a" : {
+                "a" : 0,
+                "k" : [
+                  0.0,
+                  0.0
+                ]
+              },
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  384.0,
+                  0.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  100.0,
+                  100.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              }
+            }
+          ]
+        },
+        {
+          "ty" : "gr",
+          "nm" : "Group Offset Forwards",
+          "mn" : "Group-Offset-Forwards",
+          "it" : [
+            {
+              "ty" : "rc",
+              "nm" : "Rect Offset Forwards",
+              "mn" : "Rect-Offset-Forwards",
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  64.0,
+                  64.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  96.0,
+                  64.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "d" : 1
+            },
+            {
+              "ty" : "tm",
+              "s" : {
+                "a" : 0,
+                "k" : 0,
+                "ix" : 1
+              },
+              "e" : {
+                "a" : 0,
+                "k" : 25,
+                "ix" : 2
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 90,
+                "ix" : 3
+              },
+              "m" : 1,
+              "ix" : 2,
+              "nm" : "Trim Offset Forwards",
+              "mn" : "Trim-Offset-Forwards"
+            },
+            {
+              "ty" : "st",
+              "nm" : "Stroke Offset Forwards",
+              "mn" : "Stroke-Offset-Forwards",
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              },
+              "c" : {
+                "a" : 0,
+                "k" : [
+                  1.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "lc" : 1,
+              "lj" : 1,
+              "ml" : 0.0,
+              "w" : {
+                "a" : 0,
+                "k" : 6.0
+              }
+            },
+            {
+              "ty" : "tr",
+              "a" : {
+                "a" : 0,
+                "k" : [
+                  0.0,
+                  0.0
+                ]
+              },
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  0.0,
+                  128.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  100.0,
+                  100.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              }
+            }
+          ]
+        },
+        {
+          "ty" : "gr",
+          "nm" : "Group Backwards",
+          "mn" : "Group-Backwards",
+          "it" : [
+            {
+              "ty" : "rc",
+              "nm" : "Rect Backwards",
+              "mn" : "Rect-Backwards",
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  64.0,
+                  64.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  96.0,
+                  64.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "d" : 0
+            },
+            {
+              "ty" : "tm",
+              "s" : {
+                "a" : 0,
+                "k" : 0,
+                "ix" : 1
+              },
+              "e" : {
+                "a" : 0,
+                "k" : 25,
+                "ix" : 2
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 90,
+                "ix" : 3
+              },
+              "m" : 1,
+              "ix" : 2,
+              "nm" : "Trim Backwards",
+              "mn" : "Trim-Backwards"
+            },
+            {
+              "ty" : "st",
+              "nm" : "Stroke Backwards",
+              "mn" : "Stroke-Backwards",
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              },
+              "c" : {
+                "a" : 0,
+                "k" : [
+                  1.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "lc" : 1,
+              "lj" : 1,
+              "ml" : 0.0,
+              "w" : {
+                "a" : 0,
+                "k" : 6.0
+              }
+            },
+            {
+              "ty" : "tr",
+              "a" : {
+                "a" : 0,
+                "k" : [
+                  0.0,
+                  0.0
+                ]
+              },
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  128.0,
+                  128.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  100.0,
+                  100.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              }
+            }
+          ]
+        },
+        {
+          "ty" : "gr",
+          "nm" : "Group Rounded Offset Forwards",
+          "mn" : "Group-Offset-Forwards",
+          "it" : [
+            {
+              "ty" : "rc",
+              "nm" : "Rect Rounded Offset Forwards",
+              "mn" : "Rect-Offset-Forwards",
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  64.0,
+                  64.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  96.0,
+                  64.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 16.0
+              },
+              "d" : 1
+            },
+            {
+              "ty" : "tm",
+              "s" : {
+                "a" : 0,
+                "k" : 0,
+                "ix" : 1
+              },
+              "e" : {
+                "a" : 0,
+                "k" : 25,
+                "ix" : 2
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 90,
+                "ix" : 3
+              },
+              "m" : 1,
+              "ix" : 2,
+              "nm" : "Trim Rounded Offset Forwards",
+              "mn" : "Trim-Offset-Forwards"
+            },
+            {
+              "ty" : "st",
+              "nm" : "Stroke Rounded Offset Forwards",
+              "mn" : "Stroke-Rounded-Offset-Forwards",
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              },
+              "c" : {
+                "a" : 0,
+                "k" : [
+                  1.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "lc" : 1,
+              "lj" : 1,
+              "ml" : 0.0,
+              "w" : {
+                "a" : 0,
+                "k" : 6.0
+              }
+            },
+            {
+              "ty" : "tr",
+              "a" : {
+                "a" : 0,
+                "k" : [
+                  0.0,
+                  0.0
+                ]
+              },
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  256.0,
+                  128.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  100.0,
+                  100.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              }
+            }
+          ]
+        },
+        {
+          "ty" : "gr",
+          "nm" : "Group Rounded Backwards",
+          "mn" : "Group-Rounded-Backwards",
+          "it" : [
+            {
+              "ty" : "rc",
+              "nm" : "Rect Rounded Backwards",
+              "mn" : "Rect-Rounded-Backwards",
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  64.0,
+                  64.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  96.0,
+                  64.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 16.0
+              },
+              "d" : 0
+            },
+            {
+              "ty" : "tm",
+              "s" : {
+                "a" : 0,
+                "k" : 0,
+                "ix" : 1
+              },
+              "e" : {
+                "a" : 0,
+                "k" : 25,
+                "ix" : 2
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 90,
+                "ix" : 3
+              },
+              "m" : 1,
+              "ix" : 2,
+              "nm" : "Trim Rounded Backwards",
+              "mn" : "Trim-Rounded-Backwards"
+            },
+            {
+              "ty" : "st",
+              "nm" : "Stroke Rounded Backwards",
+              "mn" : "Stroke-Rounded-Backwards",
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              },
+              "c" : {
+                "a" : 0,
+                "k" : [
+                  1.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "lc" : 1,
+              "lj" : 1,
+              "ml" : 0.0,
+              "w" : {
+                "a" : 0,
+                "k" : 6.0
+              }
+            },
+            {
+              "ty" : "tr",
+              "a" : {
+                "a" : 0,
+                "k" : [
+                  0.0,
+                  0.0
+                ]
+              },
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  384.0,
+                  128.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  100.0,
+                  100.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              }
+            }
+          ]
+        },
+        {
+          "ty" : "gr",
+          "nm" : "Group End Forwards",
+          "mn" : "Group-End-Forwards",
+          "it" : [
+            {
+              "ty" : "rc",
+              "nm" : "Rect End Forwards",
+              "mn" : "Rect-End-Forwards",
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  64.0,
+                  64.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  96.0,
+                  64.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "d" : 1
+            },
+            {
+              "ty" : "tm",
+              "s" : {
+                "a" : 0,
+                "k" : 75,
+                "ix" : 1
+              },
+              "e" : {
+                "a" : 0,
+                "k" : 100,
+                "ix" : 2
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 0,
+                "ix" : 3
+              },
+              "m" : 1,
+              "ix" : 2,
+              "nm" : "Trim End Forwards",
+              "mn" : "Trim-End-Forwards"
+            },
+            {
+              "ty" : "st",
+              "nm" : "Stroke End Forwards",
+              "mn" : "Stroke-End-Forwards",
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              },
+              "c" : {
+                "a" : 0,
+                "k" : [
+                  1.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "lc" : 1,
+              "lj" : 1,
+              "ml" : 0.0,
+              "w" : {
+                "a" : 0,
+                "k" : 6.0
+              }
+            },
+            {
+              "ty" : "tr",
+              "a" : {
+                "a" : 0,
+                "k" : [
+                  0.0,
+                  0.0
+                ]
+              },
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  0.0,
+                  256.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  100.0,
+                  100.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              }
+            }
+          ]
+        },
+        {
+          "ty" : "gr",
+          "nm" : "Group End Backwards",
+          "mn" : "Group-End-Backwards",
+          "it" : [
+            {
+              "ty" : "rc",
+              "nm" : "Rect End Backwards",
+              "mn" : "Rect-End-Backwards",
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  64.0,
+                  64.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  96.0,
+                  64.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "d" : 0
+            },
+            {
+              "ty" : "tm",
+              "s" : {
+                "a" : 0,
+                "k" : 75,
+                "ix" : 1
+              },
+              "e" : {
+                "a" : 0,
+                "k" : 100,
+                "ix" : 2
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 0,
+                "ix" : 3
+              },
+              "m" : 1,
+              "ix" : 2,
+              "nm" : "Trim End Backwards",
+              "mn" : "Trim-End-Backwards"
+            },
+            {
+              "ty" : "st",
+              "nm" : "Stroke End Backwards",
+              "mn" : "Stroke-End-Backwards",
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              },
+              "c" : {
+                "a" : 0,
+                "k" : [
+                  1.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "lc" : 1,
+              "lj" : 1,
+              "ml" : 0.0,
+              "w" : {
+                "a" : 0,
+                "k" : 6.0
+              }
+            },
+            {
+              "ty" : "tr",
+              "a" : {
+                "a" : 0,
+                "k" : [
+                  0.0,
+                  0.0
+                ]
+              },
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  128.0,
+                  256.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  100.0,
+                  100.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              }
+            }
+          ]
+        },
+        {
+          "ty" : "gr",
+          "nm" : "Group Rounded End Forwards",
+          "mn" : "Group-End-Forwards",
+          "it" : [
+            {
+              "ty" : "rc",
+              "nm" : "Rect Rounded End Forwards",
+              "mn" : "Rect-End-Forwards",
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  64.0,
+                  64.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  96.0,
+                  64.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 16.0
+              },
+              "d" : 1
+            },
+            {
+              "ty" : "tm",
+              "s" : {
+                "a" : 0,
+                "k" : 75,
+                "ix" : 1
+              },
+              "e" : {
+                "a" : 0,
+                "k" : 100,
+                "ix" : 2
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 0,
+                "ix" : 3
+              },
+              "m" : 1,
+              "ix" : 2,
+              "nm" : "Trim Rounded End Forwards",
+              "mn" : "Trim-End-Forwards"
+            },
+            {
+              "ty" : "st",
+              "nm" : "Stroke Rounded End Forwards",
+              "mn" : "Stroke-Rounded-End-Forwards",
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              },
+              "c" : {
+                "a" : 0,
+                "k" : [
+                  1.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "lc" : 1,
+              "lj" : 1,
+              "ml" : 0.0,
+              "w" : {
+                "a" : 0,
+                "k" : 6.0
+              }
+            },
+            {
+              "ty" : "tr",
+              "a" : {
+                "a" : 0,
+                "k" : [
+                  0.0,
+                  0.0
+                ]
+              },
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  256.0,
+                  256.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  100.0,
+                  100.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              }
+            }
+          ]
+        },
+        {
+          "ty" : "gr",
+          "nm" : "Group Rounded End Backwards",
+          "mn" : "Group-Rounded-End-Backwards",
+          "it" : [
+            {
+              "ty" : "rc",
+              "nm" : "Rect Rounded End Backwards",
+              "mn" : "Rect-Rounded-End-Backwards",
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  64.0,
+                  64.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  96.0,
+                  64.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 16.0
+              },
+              "d" : 0
+            },
+            {
+              "ty" : "tm",
+              "s" : {
+                "a" : 0,
+                "k" : 75,
+                "ix" : 1
+              },
+              "e" : {
+                "a" : 0,
+                "k" : 100,
+                "ix" : 2
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 0,
+                "ix" : 3
+              },
+              "m" : 1,
+              "ix" : 2,
+              "nm" : "Trim Rounded End Backwards",
+              "mn" : "Trim-Rounded-End-Backwards"
+            },
+            {
+              "ty" : "st",
+              "nm" : "Stroke Rounded End Backwards",
+              "mn" : "Stroke-Rounded-End-Backwards",
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              },
+              "c" : {
+                "a" : 0,
+                "k" : [
+                  1.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "lc" : 1,
+              "lj" : 1,
+              "ml" : 0.0,
+              "w" : {
+                "a" : 0,
+                "k" : 6.0
+              }
+            },
+            {
+              "ty" : "tr",
+              "a" : {
+                "a" : 0,
+                "k" : [
+                  0.0,
+                  0.0
+                ]
+              },
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  384.0,
+                  256.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  100.0,
+                  100.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              }
+            }
+          ]
+        },
+        {
+          "ty" : "gr",
+          "nm" : "Group Offset End Forwards",
+          "mn" : "Group-Offset-End-Forwards",
+          "it" : [
+            {
+              "ty" : "rc",
+              "nm" : "Rect Offset End Forwards",
+              "mn" : "Rect-Offset-End-Forwards",
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  64.0,
+                  64.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  96.0,
+                  64.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "d" : 1
+            },
+            {
+              "ty" : "tm",
+              "s" : {
+                "a" : 0,
+                "k" : 75,
+                "ix" : 1
+              },
+              "e" : {
+                "a" : 0,
+                "k" : 100,
+                "ix" : 2
+              },
+              "o" : {
+                "a" : 0,
+                "k" : -90,
+                "ix" : 3
+              },
+              "m" : 1,
+              "ix" : 2,
+              "nm" : "Trim Offset End Forwards",
+              "mn" : "Trim-Offset-End-Forwards"
+            },
+            {
+              "ty" : "st",
+              "nm" : "Stroke Offset End Forwards",
+              "mn" : "Stroke-Offset-End-Forwards",
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              },
+              "c" : {
+                "a" : 0,
+                "k" : [
+                  1.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "lc" : 1,
+              "lj" : 1,
+              "ml" : 0.0,
+              "w" : {
+                "a" : 0,
+                "k" : 6.0
+              }
+            },
+            {
+              "ty" : "tr",
+              "a" : {
+                "a" : 0,
+                "k" : [
+                  0.0,
+                  0.0
+                ]
+              },
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  0.0,
+                  384.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  100.0,
+                  100.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              }
+            }
+          ]
+        },
+        {
+          "ty" : "gr",
+          "nm" : "Group End Backwards",
+          "mn" : "Group-End-Backwards",
+          "it" : [
+            {
+              "ty" : "rc",
+              "nm" : "Rect End Backwards",
+              "mn" : "Rect-End-Backwards",
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  64.0,
+                  64.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  96.0,
+                  64.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "d" : 0
+            },
+            {
+              "ty" : "tm",
+              "s" : {
+                "a" : 0,
+                "k" : 75,
+                "ix" : 1
+              },
+              "e" : {
+                "a" : 0,
+                "k" : 100,
+                "ix" : 2
+              },
+              "o" : {
+                "a" : 0,
+                "k" : -90,
+                "ix" : 3
+              },
+              "m" : 1,
+              "ix" : 2,
+              "nm" : "Trim End Backwards",
+              "mn" : "Trim-End-Backwards"
+            },
+            {
+              "ty" : "st",
+              "nm" : "Stroke End Backwards",
+              "mn" : "Stroke-End-Backwards",
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              },
+              "c" : {
+                "a" : 0,
+                "k" : [
+                  1.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "lc" : 1,
+              "lj" : 1,
+              "ml" : 0.0,
+              "w" : {
+                "a" : 0,
+                "k" : 6.0
+              }
+            },
+            {
+              "ty" : "tr",
+              "a" : {
+                "a" : 0,
+                "k" : [
+                  0.0,
+                  0.0
+                ]
+              },
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  128.0,
+                  384.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  100.0,
+                  100.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              }
+            }
+          ]
+        },
+        {
+          "ty" : "gr",
+          "nm" : "Group Rounded Offset End Forwards",
+          "mn" : "Group-Offset-End-Forwards",
+          "it" : [
+            {
+              "ty" : "rc",
+              "nm" : "Rect Rounded Offset End Forwards",
+              "mn" : "Rect-Offset-End-Forwards",
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  64.0,
+                  64.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  96.0,
+                  64.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 16.0
+              },
+              "d" : 1
+            },
+            {
+              "ty" : "tm",
+              "s" : {
+                "a" : 0,
+                "k" : 75,
+                "ix" : 1
+              },
+              "e" : {
+                "a" : 0,
+                "k" : 100,
+                "ix" : 2
+              },
+              "o" : {
+                "a" : 0,
+                "k" : -90,
+                "ix" : 3
+              },
+              "m" : 1,
+              "ix" : 2,
+              "nm" : "Trim Rounded Offset End Forwards",
+              "mn" : "Trim-Offset-End-Forwards"
+            },
+            {
+              "ty" : "st",
+              "nm" : "Stroke Rounded Offset End Forwards",
+              "mn" : "Stroke-Rounded-Offset-End-Forwards",
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              },
+              "c" : {
+                "a" : 0,
+                "k" : [
+                  1.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "lc" : 1,
+              "lj" : 1,
+              "ml" : 0.0,
+              "w" : {
+                "a" : 0,
+                "k" : 6.0
+              }
+            },
+            {
+              "ty" : "tr",
+              "a" : {
+                "a" : 0,
+                "k" : [
+                  0.0,
+                  0.0
+                ]
+              },
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  256.0,
+                  384.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  100.0,
+                  100.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              }
+            }
+          ]
+        },
+        {
+          "ty" : "gr",
+          "nm" : "Group Rounded End Backwards",
+          "mn" : "Group-Rounded-End-Backwards",
+          "it" : [
+            {
+              "ty" : "rc",
+              "nm" : "Rect Rounded End Backwards",
+              "mn" : "Rect-Rounded-End-Backwards",
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  64.0,
+                  64.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  96.0,
+                  64.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 16.0
+              },
+              "d" : 0
+            },
+            {
+              "ty" : "tm",
+              "s" : {
+                "a" : 0,
+                "k" : 75,
+                "ix" : 1
+              },
+              "e" : {
+                "a" : 0,
+                "k" : 100,
+                "ix" : 2
+              },
+              "o" : {
+                "a" : 0,
+                "k" : -90,
+                "ix" : 3
+              },
+              "m" : 1,
+              "ix" : 2,
+              "nm" : "Trim Rounded End Backwards",
+              "mn" : "Trim-Rounded-End-Backwards"
+            },
+            {
+              "ty" : "st",
+              "nm" : "Stroke Rounded End Backwards",
+              "mn" : "Stroke-Rounded-End-Backwards",
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              },
+              "c" : {
+                "a" : 0,
+                "k" : [
+                  1.0,
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              },
+              "lc" : 1,
+              "lj" : 1,
+              "ml" : 0.0,
+              "w" : {
+                "a" : 0,
+                "k" : 6.0
+              }
+            },
+            {
+              "ty" : "tr",
+              "a" : {
+                "a" : 0,
+                "k" : [
+                  0.0,
+                  0.0
+                ]
+              },
+              "p" : {
+                "a" : 0,
+                "k" : [
+                  384.0,
+                  384.0
+                ]
+              },
+              "s" : {
+                "a" : 0,
+                "k" : [
+                  100.0,
+                  100.0
+                ]
+              },
+              "r" : {
+                "a" : 0,
+                "k" : 0.0
+              },
+              "o" : {
+                "a" : 0,
+                "k" : 100.0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

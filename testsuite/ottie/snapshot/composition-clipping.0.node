@@ -1,0 +1,29 @@
+transform {
+  child: clip {
+    child: transform {
+      child: container {
+        fill {
+          child: color {
+            bounds: -256 -256 512 512;
+            color: rgb(255,255,0);
+          }
+          path: "\
+M -256 -256 h 512 v 512 h -512 z";
+          fill-rule: winding;
+        }
+        fill {
+          child: color {
+            bounds: -128 -64 256 128;
+            color: rgb(255,0,0);
+          }
+          path: "\
+M -128 -64 h 256 v 128 h -256 z";
+          fill-rule: winding;
+        }
+      }
+      transform: translate(256, 256);
+    }
+    clip: 0 0 200 200;
+  }
+  transform: translate(128, 128) scale(1.5, 0.5);
+}
