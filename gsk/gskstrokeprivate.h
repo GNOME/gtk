@@ -54,9 +54,6 @@ gsk_stroke_clear (GskStroke *stroke)
   stroke->n_dash = 0; /* better safe than sorry */
 }
 
-void                    gsk_stroke_to_cairo                     (const GskStroke        *self,
-                                                                 cairo_t                *cr);
-
 G_END_DECLS
 
 #endif /* __GSK_STROKE_PRIVATE_H__ */
