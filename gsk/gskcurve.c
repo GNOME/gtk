@@ -877,7 +877,15 @@ gsk_cubic_curve_get_start_tangent (const GskCurve  *curve,
 {
   const GskCubicCurve *self = &curve->cubic;
 
-  get_tangent (&self->points[0], &self->points[1], tangent);
+  if (graphene_point_near (&self->points[0], &self->points[1], 0.0001))
+    {
+      if (graphene_point_near (&self->points[0], &self->points[2], 0.0001))
+        get_tangent (&self->points[0], &self->points[3], tangent);
+      else
+        get_tangent (&self->points[0], &self->points[2], tangent);
+    }
+  else
+    get_tangent (&self->points[0], &self->points[1], tangent);
 }
 
 static void
@@ -886,7 +894,15 @@ gsk_cubic_curve_get_end_tangent (const GskCurve  *curve,
 {
   const GskCubicCurve *self = &curve->cubic;
 
-  get_tangent (&self->points[2], &self->points[3], tangent);
+  if (graphene_point_near (&self->points[2], &self->points[3], 0.0001))
+    {
+      if (graphene_point_near (&self->points[1], &self->points[3], 0.0001))
+        get_tangent (&self->points[0], &self->points[3], tangent);
+      else
+        get_tangent (&self->points[1], &self->points[3], tangent);
+    }
+  else
+    get_tangent (&self->points[2], &self->points[3], tangent);
 }
 
 static void
