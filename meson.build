@@ -127,6 +127,7 @@ gtk_libdir = join_paths(gtk_prefix, get_option('libdir'))
 gtk_datadir = join_paths(gtk_prefix, get_option('datadir'))
 gtk_localedir = join_paths(gtk_prefix, get_option('localedir'))
 gtk_sysconfdir = join_paths(gtk_prefix, get_option('sysconfdir'))
+gtk_bindir = join_paths(gtk_prefix, get_option('bindir'))
 gtk_applicationsdir = join_paths(gtk_datadir, 'applications')
 gtk_schemasdir = join_paths(gtk_datadir, 'glib-2.0/schemas')
 gtk_appdatadir = join_paths(gtk_datadir, 'metainfo')
@@ -788,7 +789,8 @@ if not meson.is_cross_build()
                            gtk_api_version,
                            gtk_binary_version,
                            gtk_libdir,
-                           gtk_datadir)
+                           gtk_datadir,
+                           gtk_bindir)
 else
   message('Not executing post-install steps automatically when cross compiling')
 endif
