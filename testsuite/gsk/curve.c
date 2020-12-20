@@ -830,6 +830,52 @@ test_curve_split (void)
     }
 }
 
+/* Test that reversing curves of all types produces the
+ * expected result
+ */
+static void
+test_curve_reverse (void)
+{
+  GskCurve c, r;
+  graphene_point_t p[4];
+
+  graphene_point_init (&p[0], 0, 0);
+  graphene_point_init (&p[1], 50, 50);
+  gsk_curve_init (&c, gsk_pathop_encode (GSK_PATH_LINE, p));
+
+  gsk_curve_reverse (&c, &r);
+
+  g_assert_true (r.op == GSK_PATH_LINE);
+  g_assert_true (graphene_point_equal (&r.line.points[0], &p[1]));
+  g_assert_true (graphene_point_equal (&r.line.points[1], &p[0]));
+
+  graphene_point_init (&p[0], 0, 0);
+  graphene_point_init (&p[1], 50, 50);
+  graphene_point_init (&p[2], 100, 50);
+  graphene_point_init (&p[3], 200, 0);
+  gsk_curve_init (&c, gsk_pathop_encode (GSK_PATH_CURVE, p));
+
+  gsk_curve_reverse (&c, &r);
+  g_assert_true (r.op == GSK_PATH_CURVE);
+  g_assert_true (graphene_point_equal (&r.curve.points[0], &p[3]));
+  g_assert_true (graphene_point_equal (&r.curve.points[1], &p[2]));
+  g_assert_true (graphene_point_equal (&r.curve.points[2], &p[1]));
+  g_assert_true (graphene_point_equal (&r.curve.points[3], &p[0]));
+
+  graphene_point_init (&p[0], 0, 0);
+  graphene_point_init (&p[1], 50, 50);
+  graphene_point_init (&p[2], 100, 50);
+  gsk_curve_init_foreach (&c, GSK_PATH_CONIC, p, 3, 20);
+
+  gsk_curve_reverse (&c, &r);
+  g_assert_true (r.op == GSK_PATH_CONIC);
+  g_assert_true (r.conic.points[2].x == 20);
+
+  g_assert_true (graphene_point_equal (&r.conic.points[0], &c.conic.points[3]));
+  g_assert_true (graphene_point_equal (&r.conic.points[1], &c.conic.points[1]));
+  g_assert_true (graphene_point_equal (&r.conic.points[3], &c.conic.points[0]));
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -853,6 +899,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/curve/intersection/curve-curve-max", test_curve_curve_max_intersection);
   g_test_add_func ("/curve/intersection/horizontal-line", test_curve_intersection_horizontal_line);
   g_test_add_func ("/curve/split", test_curve_split);
+  g_test_add_func ("/curve/reverse", test_curve_reverse);
 
   return g_test_run ();
 }
