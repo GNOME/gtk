@@ -9,6 +9,7 @@ if 'DESTDIR' not in os.environ:
     gtk_abi_version = sys.argv[2]
     gtk_libdir = sys.argv[3]
     gtk_datadir = sys.argv[4]
+    gtk_bindir = sys.argv[5]
 
     gtk_moduledir = os.path.join(gtk_libdir, 'gtk-' + gtk_api_version, gtk_abi_version)
     gtk_printmodule_dir = os.path.join(gtk_moduledir, 'printbackends')
@@ -25,7 +26,8 @@ if 'DESTDIR' not in os.environ:
                     os.path.join(gtk_datadir, 'glib-2.0', 'schemas')])
 
     print('Updating icon cache...')
-    subprocess.call(['gtk4-update-icon-cache', '-q', '-t' ,'-f',
+    update_icon_cache = os.path.join(gtk_bindir, 'gtk4-update-icon-cache')
+    subprocess.call([update_icon_cache, '-q', '-t' ,'-f',
                     os.path.join(gtk_datadir, 'icons', 'hicolor')])
 
     print('Updating module cache for print backends...')
