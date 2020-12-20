@@ -87,7 +87,6 @@ test_curve_tangents (void)
   gsk_curve_get_end_tangent (&c, &t);
   g_assert_true (graphene_vec2_near (&t, graphene_vec2_x_axis (), 0.0001));
 
-
   graphene_point_init (&p[0], 0, 0);
   graphene_point_init (&p[1], 0, 100);
   gsk_curve_init (&c, gsk_pathop_encode (GSK_PATH_LINE, p));
@@ -120,6 +119,36 @@ test_curve_tangents (void)
   g_assert_true (graphene_vec2_near (&t, graphene_vec2_y_axis (), 0.0001));
 }
 
+static void
+test_curve_degenerate_tangents (void)
+{
+  GskCurve c;
+  graphene_point_t p[4];
+  graphene_vec2_t t;
+
+  graphene_point_init (&p[0], 0, 0);
+  graphene_point_init (&p[1], 0, 0);
+  graphene_point_init (&p[2], 100, 0);
+  graphene_point_init (&p[3], 100, 0);
+  gsk_curve_init (&c, gsk_pathop_encode (GSK_PATH_CURVE, p));
+
+  gsk_curve_get_start_tangent (&c, &t);
+  g_assert_true (graphene_vec2_near (&t, graphene_vec2_x_axis (), 0.0001));
+  gsk_curve_get_end_tangent (&c, &t);
+  g_assert_true (graphene_vec2_near (&t, graphene_vec2_x_axis (), 0.0001));
+
+  graphene_point_init (&p[0], 0, 0);
+  graphene_point_init (&p[1], 50, 0);
+  graphene_point_init (&p[2], 50, 0);
+  graphene_point_init (&p[3], 100, 0);
+  gsk_curve_init (&c, gsk_pathop_encode (GSK_PATH_CURVE, p));
+
+  gsk_curve_get_start_tangent (&c, &t);
+  g_assert_true (graphene_vec2_near (&t, graphene_vec2_x_axis (), 0.0001));
+  gsk_curve_get_end_tangent (&c, &t);
+  g_assert_true (graphene_vec2_near (&t, graphene_vec2_x_axis (), 0.0001));
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -128,6 +157,7 @@ main (int   argc,
 
   g_test_add_func ("/curve/special/conic-segment", test_conic_segment);
   g_test_add_func ("/curve/special/tangents", test_curve_tangents);
+  g_test_add_func ("/curve/special/degenerate-tangents", test_curve_degenerate_tangents);
 
   return g_test_run ();
 }
