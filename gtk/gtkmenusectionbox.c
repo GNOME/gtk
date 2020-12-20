@@ -191,6 +191,35 @@ gtk_popover_item_activate (GtkWidget *button,
 }
 
 static void
+remove_submenu_tree_from_stack (const char *submenu_name,
+                                GtkStack   *stack)
+{
+  GtkWidget *submenu;
+  GtkBox *item_box;
+  GList *children, *l;
+
+  submenu = gtk_stack_get_child_by_name (stack, submenu_name);
+  if (submenu == NULL)
+    return;
+
+  item_box = GTK_MENU_SECTION_BOX (submenu)->item_box;
+  children = gtk_container_get_children (GTK_CONTAINER (item_box));
+  for (l = children; l != NULL; l = l->next)
+    {
+      GtkMenuTrackerItem *item;
+
+      item = g_object_get_data (G_OBJECT (l->data), "GtkMenuTrackerItem");
+
+      if (gtk_menu_tracker_item_get_has_link (item, G_MENU_LINK_SUBMENU))
+        remove_submenu_tree_from_stack (gtk_menu_tracker_item_get_label (item),
+                                        stack);
+    }
+  g_list_free (children);
+
+  gtk_container_remove (GTK_CONTAINER (stack), submenu);
+}
+
+static void
 gtk_menu_section_box_remove_func (gint     position,
                                   gpointer user_data)
 {
@@ -206,12 +235,12 @@ gtk_menu_section_box_remove_func (gint     position,
   item = g_object_get_data (G_OBJECT (widget), "GtkMenuTrackerItem");
   if (gtk_menu_tracker_item_get_has_link (item, G_MENU_LINK_SUBMENU))
     {
-      GtkWidget *stack, *subbox;
+      GtkWidget *stack;
 
       stack = gtk_widget_get_ancestor (GTK_WIDGET (box->toplevel), GTK_TYPE_STACK);
-      subbox = gtk_stack_get_child_by_name (GTK_STACK (stack), gtk_menu_tracker_item_get_label (item));
-      if (subbox != NULL)
-        gtk_container_remove (GTK_CONTAINER (stack), subbox);
+
+      remove_submenu_tree_from_stack (gtk_menu_tracker_item_get_label (item),
+                                      GTK_STACK (stack));
     }
 
   gtk_widget_destroy (g_list_nth_data (children, position));
