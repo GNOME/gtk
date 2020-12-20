@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-18 01:03+0000\n"
-"PO-Revision-Date: 2020-08-18 17:45+0900\n"
+"PO-Revision-Date: 2020-12-20 16:48+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
@@ -1939,127 +1939,84 @@ msgid "Color: %s"
 msgstr "色: %s"
 
 #: gtk/gtkcolorchooserwidget.c:446
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Blue"
-msgstr "ごく明るい灰色"
+msgstr "ごく明るい青"
 
 #: gtk/gtkcolorchooserwidget.c:447
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Light Sky Blue"
 msgctxt "Color name"
 msgid "Light Blue"
-msgstr "明るいスカイブルー"
+msgstr "明るい青"
 
 #: gtk/gtkcolorchooserwidget.c:448
-#, fuzzy
-#| msgid "_Blue:"
 msgctxt "Color name"
 msgid "Blue"
-msgstr "青(_B):"
+msgstr "青"
 
 #: gtk/gtkcolorchooserwidget.c:449
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Dark Sky Blue"
 msgctxt "Color name"
 msgid "Dark Blue"
-msgstr "暗いスカイブルー"
+msgstr "暗い青"
 
 #: gtk/gtkcolorchooserwidget.c:450
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Blue"
-msgstr "ごく暗い灰色"
+msgstr "ごく暗い青"
 
 #: gtk/gtkcolorchooserwidget.c:451
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Green"
-msgstr "ごく明るい灰色"
+msgstr "ごく明るい緑"
 
 #: gtk/gtkcolorchooserwidget.c:452
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Green"
-msgstr "明るい灰色"
+msgstr "明るい緑"
 
 #: gtk/gtkcolorchooserwidget.c:453
-#, fuzzy
-#| msgid "_Green:"
 msgctxt "Color name"
 msgid "Green"
-msgstr "緑(_G):"
+msgstr "緑"
 
 #: gtk/gtkcolorchooserwidget.c:454
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Green"
-msgstr "暗い灰色"
+msgstr "暗い緑"
 
 #: gtk/gtkcolorchooserwidget.c:455
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Green"
-msgstr "ごく暗い灰色"
+msgstr "ごく暗い緑"
 
 #: gtk/gtkcolorchooserwidget.c:456
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Yellow"
-msgstr "ごく明るい灰色"
+msgstr "ごく明るい黄色"
 
 #: gtk/gtkcolorchooserwidget.c:457
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Light Chameleon"
 msgctxt "Color name"
 msgid "Light Yellow"
-msgstr "明るいカメレオン"
+msgstr "明るい黄色"
 
 #: gtk/gtkcolorchooserwidget.c:458
 msgctxt "Color name"
 msgid "Yellow"
-msgstr ""
+msgstr "黄色"
 
 #: gtk/gtkcolorchooserwidget.c:459
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Dark Chameleon"
 msgctxt "Color name"
 msgid "Dark Yellow"
-msgstr "暗いカメレオン"
+msgstr "暗い黄色"
 
 #: gtk/gtkcolorchooserwidget.c:460
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Yellow"
-msgstr "ごく暗い灰色"
+msgstr "ごく暗い黄色"
 
 #: gtk/gtkcolorchooserwidget.c:461
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Light Orange"
 msgctxt "Color name"
 msgid "Very Light Orange"
-msgstr "明るいオレンジ"
+msgstr "ごく明るいオレンジ"
 
 #: gtk/gtkcolorchooserwidget.c:462
 msgctxt "Color name"
@@ -2077,125 +2034,84 @@ msgid "Dark Orange"
 msgstr "暗いオレンジ"
 
 #: gtk/gtkcolorchooserwidget.c:465
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Dark Orange"
 msgctxt "Color name"
 msgid "Very Dark Orange"
-msgstr "暗いオレンジ"
+msgstr "ごく暗いオレンジ"
 
 #: gtk/gtkcolorchooserwidget.c:466
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Red"
-msgstr "ごく明るい灰色"
+msgstr "ごく明るい赤"
 
 #: gtk/gtkcolorchooserwidget.c:467
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Light Scarlet Red"
 msgctxt "Color name"
 msgid "Light Red"
-msgstr "明るいスカーレットレッド"
+msgstr "明るい赤"
 
 #: gtk/gtkcolorchooserwidget.c:468
-#, fuzzy
-#| msgid "_Red:"
 msgctxt "Color name"
 msgid "Red"
-msgstr "赤(_R):"
+msgstr "赤"
 
 #: gtk/gtkcolorchooserwidget.c:469
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Dark Scarlet Red"
 msgctxt "Color name"
 msgid "Dark Red"
-msgstr "暗いスカーレットレッド"
+msgstr "暗い赤"
 
 #: gtk/gtkcolorchooserwidget.c:470
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Red"
-msgstr "ごく暗い灰色"
+msgstr "ごく暗い赤"
 
 #: gtk/gtkcolorchooserwidget.c:471
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Purple"
-msgstr "ごく明るい灰色"
+msgstr "ごく明るい紫"
 
 #: gtk/gtkcolorchooserwidget.c:472
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Light Plum"
 msgctxt "Color name"
 msgid "Light Purple"
-msgstr "明るいプラム"
+msgstr "明るい紫"
 
 #: gtk/gtkcolorchooserwidget.c:473
 msgctxt "Color name"
 msgid "Purple"
-msgstr ""
+msgstr "紫"
 
 #: gtk/gtkcolorchooserwidget.c:474
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Dark Plum"
 msgctxt "Color name"
 msgid "Dark Purple"
-msgstr "暗いプラム"
+msgstr "暗い紫"
 
 #: gtk/gtkcolorchooserwidget.c:475
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Purple"
-msgstr "ごく暗い灰色"
+msgstr "ごく暗い紫"
 
 #: gtk/gtkcolorchooserwidget.c:476
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Brown"
-msgstr "ごく明るい灰色"
+msgstr "ごく明るい茶色"
 
 #: gtk/gtkcolorchooserwidget.c:477
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Light Butter"
 msgctxt "Color name"
 msgid "Light Brown"
-msgstr "明るいバター"
+msgstr "明るい茶色"
 
 #: gtk/gtkcolorchooserwidget.c:478
 msgctxt "Color name"
 msgid "Brown"
-msgstr ""
+msgstr "茶色"
 
 #: gtk/gtkcolorchooserwidget.c:479
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Dark Butter"
 msgctxt "Color name"
 msgid "Dark Brown"
-msgstr "暗いバター"
+msgstr "暗い茶色"
 
 #: gtk/gtkcolorchooserwidget.c:480
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Brown"
-msgstr "ごく暗い灰色"
+msgstr "ごく暗い茶色"
 
 #: gtk/gtkcolorchooserwidget.c:481
 msgctxt "Color name"
@@ -2203,68 +2119,44 @@ msgid "White"
 msgstr "白"
 
 #: gtk/gtkcolorchooserwidget.c:482
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 1"
-msgstr "明るい灰色"
+msgstr "明るい灰色 1"
 
 #: gtk/gtkcolorchooserwidget.c:483
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 2"
-msgstr "明るい灰色"
+msgstr "明るい灰色 2"
 
 #: gtk/gtkcolorchooserwidget.c:484
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 3"
-msgstr "明るい灰色"
+msgstr "明るい灰色 3"
 
 #: gtk/gtkcolorchooserwidget.c:485
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 4"
-msgstr "明るい灰色"
+msgstr "明るい灰色 4"
 
 #: gtk/gtkcolorchooserwidget.c:486
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 1"
-msgstr "暗い灰色"
+msgstr "暗い灰色 1"
 
 #: gtk/gtkcolorchooserwidget.c:487
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 2"
-msgstr "暗い灰色"
+msgstr "暗い灰色 2"
 
 #: gtk/gtkcolorchooserwidget.c:488
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 3"
-msgstr "暗い灰色"
+msgstr "暗い灰色 3"
 
 #: gtk/gtkcolorchooserwidget.c:489
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 4"
-msgstr "暗い灰色"
+msgstr "暗い灰色 4"
 
 #: gtk/gtkcolorchooserwidget.c:490
 msgctxt "Color name"
