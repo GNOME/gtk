@@ -876,6 +876,114 @@ test_curve_reverse (void)
   g_assert_true (graphene_point_equal (&r.conic.points[3], &c.conic.points[0]));
 }
 
+#define DEG_TO_RAD(x) ((x)*M_PI/180)
+
+static float
+line_point_distance (const graphene_point_t *a,
+                     const graphene_point_t *b,
+                     const graphene_point_t *p)
+{
+  graphene_vec2_t n, ap, r;
+
+  graphene_vec2_init (&n, b->x - a->x, b->y - a->y);
+  graphene_vec2_normalize (&n, &n);
+
+  graphene_vec2_init (&ap, a->x - p->x, a->y - p->y);
+
+  graphene_vec2_scale (&n, graphene_vec2_dot (&ap, &n), &r);
+
+  graphene_vec2_subtract (&ap, &r, &r);
+
+  return graphene_vec2_length (&r);
+}
+
+/* Test simple cases of curve offsetting */
+static void
+test_curve_offset (void)
+{
+  GskCurve c, r;
+  graphene_point_t p[4];
+
+  graphene_point_init (&p[0], 0, 0);
+  graphene_point_init (&p[1], 50, 0);
+  gsk_curve_init (&c, gsk_pathop_encode (GSK_PATH_LINE, p));
+
+  gsk_curve_offset (&c, 10, &r);
+
+  g_assert_true (r.op == GSK_PATH_LINE);
+  g_assert_true (graphene_point_near (&r.line.points[0], &GRAPHENE_POINT_INIT (0, 10), 0.0001));
+  g_assert_true (graphene_point_near (&r.line.points[1], &GRAPHENE_POINT_INIT (50, 10), 0.0001));
+
+  gsk_curve_offset (&c, -10, &r);
+
+  g_assert_true (r.op == GSK_PATH_LINE);
+  g_assert_true (graphene_point_near (&r.line.points[0], &GRAPHENE_POINT_INIT (0, -10), 0.0001));
+  g_assert_true (graphene_point_near (&r.line.points[1], &GRAPHENE_POINT_INIT (50, -10), 0.0001));
+
+  graphene_point_init (&p[0], 0, 0);
+  graphene_point_init (&p[1], 50, 0);
+  graphene_point_init (&p[2], 100, 50);
+  graphene_point_init (&p[3], 100, 100);
+
+  gsk_curve_init (&c, gsk_pathop_encode (GSK_PATH_CURVE, p));
+
+  gsk_curve_offset (&c, 10, &r);
+
+  g_assert_true (r.op == GSK_PATH_CURVE);
+  g_assert_true (graphene_point_near (&r.curve.points[0], &GRAPHENE_POINT_INIT (0, 10), 0.0001));
+
+  g_assert_cmpfloat_with_epsilon (r.curve.points[1].y, 10.0, 0.001);
+
+  g_assert_cmpfloat_with_epsilon (line_point_distance (&p[0], &p[1], &r.curve.points[1]), 10.0, 0.001);
+  g_assert_cmpfloat_with_epsilon (line_point_distance (&p[1], &p[2], &r.curve.points[1]), 10.0, 0.001);
+
+  g_assert_cmpfloat_with_epsilon (r.curve.points[2].x, 90.0, 0.001);
+
+  g_assert_cmpfloat_with_epsilon (line_point_distance (&p[1], &p[2], &r.curve.points[2]), 10.0, 0.001);
+  g_assert_cmpfloat_with_epsilon (line_point_distance (&p[2], &p[3], &r.curve.points[2]), 10.0, 0.001);
+
+  g_assert_true (graphene_point_near (&r.curve.points[3], &GRAPHENE_POINT_INIT (90, 100), 0.0001));
+
+  gsk_curve_offset (&c, -10, &r);
+
+  g_assert_true (r.op == GSK_PATH_CURVE);
+  g_assert_true (graphene_point_near (&r.curve.points[0], &GRAPHENE_POINT_INIT (0, -10), 0.0001));
+
+  g_assert_cmpfloat_with_epsilon (r.curve.points[1].y, -10.0, 0.001);
+
+  g_assert_cmpfloat_with_epsilon (line_point_distance (&p[0], &p[1], &r.curve.points[1]), 10.0, 0.001);
+  g_assert_cmpfloat_with_epsilon (line_point_distance (&p[1], &p[2], &r.curve.points[1]), 10.0, 0.001);
+
+  g_assert_cmpfloat_with_epsilon (r.curve.points[2].x, 110.0, 0.001);
+
+  g_assert_cmpfloat_with_epsilon (line_point_distance (&p[1], &p[2], &r.curve.points[2]), 10.0, 0.001);
+  g_assert_cmpfloat_with_epsilon (line_point_distance (&p[2], &p[3], &r.curve.points[2]), 10.0, 0.001);
+
+  g_assert_true (graphene_point_near (&r.curve.points[3], &GRAPHENE_POINT_INIT (110, 100), 0.0001));
+
+  graphene_point_init (&p[0], 0, 0);
+  graphene_point_init (&p[1], 100, 0);
+  graphene_point_init (&p[2], 100, 100);
+
+  gsk_curve_init_foreach (&c, GSK_PATH_CONIC, p, 3, 20);
+
+  gsk_curve_offset (&c, 10, &r);
+
+  g_assert_true (r.op == GSK_PATH_CONIC);
+
+  g_assert_true (graphene_point_near (&r.curve.points[0], &GRAPHENE_POINT_INIT (0, 10), 0.0001));
+  g_assert_true (graphene_point_near (&r.curve.points[1], &GRAPHENE_POINT_INIT (90, 10), 0.0001));
+  g_assert_true (graphene_point_near (&r.curve.points[3], &GRAPHENE_POINT_INIT (90, 100), 0.0001));
+
+  gsk_curve_offset (&c, -10, &r);
+
+  g_assert_true (r.op == GSK_PATH_CONIC);
+
+  g_assert_true (graphene_point_near (&r.curve.points[0], &GRAPHENE_POINT_INIT (0, -10), 0.0001));
+  g_assert_true (graphene_point_near (&r.curve.points[1], &GRAPHENE_POINT_INIT (110, -10), 0.0001));
+  g_assert_true (graphene_point_near (&r.curve.points[3], &GRAPHENE_POINT_INIT (110, 100), 0.0001));
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -900,6 +1008,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/curve/intersection/horizontal-line", test_curve_intersection_horizontal_line);
   g_test_add_func ("/curve/split", test_curve_split);
   g_test_add_func ("/curve/reverse", test_curve_reverse);
+  g_test_add_func ("/curve/offset", test_curve_offset);
 
   return g_test_run ();
 }
