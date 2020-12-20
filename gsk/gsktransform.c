@@ -1709,8 +1709,8 @@ gsk_transform_invert (GskTransform *self)
 
 /**
  * gsk_transform_equal:
- * @first: the first transform
- * @second: the second transform
+ * @first: (nullable): the first transform
+ * @second: (nullable): the second transform
  *
  * Checks two transforms for equality.
  *
