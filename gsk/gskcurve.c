@@ -558,7 +558,15 @@ gsk_curve_curve_get_start_tangent (const GskCurve  *curve,
 {
   const GskCurveCurve *self = &curve->curve;
 
-  get_tangent (&self->points[0], &self->points[1], tangent);
+  if (graphene_point_near (&self->points[0], &self->points[1], 0.0001))
+    {
+      if (graphene_point_near (&self->points[0], &self->points[2], 0.0001))
+        get_tangent (&self->points[0], &self->points[3], tangent);
+      else
+        get_tangent (&self->points[0], &self->points[2], tangent);
+    }
+  else
+    get_tangent (&self->points[0], &self->points[1], tangent);
 }
 
 static void
@@ -567,7 +575,15 @@ gsk_curve_curve_get_end_tangent (const GskCurve  *curve,
 {
   const GskCurveCurve *self = &curve->curve;
 
-  get_tangent (&self->points[2], &self->points[3], tangent);
+  if (graphene_point_near (&self->points[2], &self->points[3], 0.0001))
+    {
+      if (graphene_point_near (&self->points[1], &self->points[3], 0.0001))
+        get_tangent (&self->points[0], &self->points[3], tangent);
+      else
+        get_tangent (&self->points[1], &self->points[3], tangent);
+    }
+  else
+    get_tangent (&self->points[2], &self->points[3], tangent);
 }
 
 static void
@@ -665,25 +681,92 @@ gsk_curve_curve_offset (const GskCurve *curve,
   graphene_vec2_t n;
   graphene_point_t p[4];
   graphene_point_t m1, m2, m3, m4;
+  int coinc;
 
-  /* Simply scale control points, a la Tiller and Hanson */
-  get_normal (&pts[0], &pts[1], &n);
-  scale_point (&pts[0], &n, distance, &p[0]);
-  scale_point (&pts[1], &n, distance, &m1);
+  coinc = (graphene_point_near (&pts[0], &pts[1], 0.001) << 0) |
+          (graphene_point_near (&pts[1], &pts[2], 0.001) << 1) |
+          (graphene_point_near (&pts[2], &pts[3], 0.001) << 2);
 
-  get_normal (&pts[1], &pts[2], &n);
-  scale_point (&pts[1], &n, distance, &m2);
-  scale_point (&pts[2], &n, distance, &m3);
+  if (coinc == 7)
+    {
+      /* just give up */
+      p[0] = pts[0];
+      p[1] = pts[1];
+      p[2] = pts[2];
+      p[3] = pts[3];
+    }
+  else if (coinc == 3 || coinc == 5 || coinc == 6)
+    {
+      /* a straight line */
+      get_normal (&pts[0], &pts[3], &n);
+      scale_point (&pts[0], &n, distance, &p[0]);
+      scale_point (&pts[3], &n, distance, &p[3]);
 
-  get_normal (&pts[2], &pts[3], &n);
-  scale_point (&pts[2], &n, distance, &m4);
-  scale_point (&pts[3], &n, distance, &p[3]);
+      if (coinc & (1 << 0))
+        p[1] = p[0];
+      else
+        p[1] = p[3];
+      if (coinc & (1 << 2))
+        p[2] = p[3];
+      else
+        p[2] = p[0];
+    }
+  else if (coinc == 1 || coinc == 2 || coinc == 4)
+    {
+      graphene_point_t p1;
 
-  if (!line_intersection (&p[0], &m1, &m2, &m3, &p[1]))
-    p[1] = m1;
+      if (coinc == 1)
+        p1 = pts[2];
+      else
+        p1 = pts[1];
 
-  if (!line_intersection (&m2, &m3, &m4, &p[3], &p[2]))
-    p[2] = m4;
+      get_normal (&pts[0], &p1, &n);
+      scale_point (&pts[0], &n, distance, &p[0]);
+      scale_point (&p1, &n, distance, &m1);
+
+      get_normal (&p1, &pts[3], &n);
+      scale_point (&p1, &n, distance, &m2);
+      scale_point (&pts[3], &n, distance, &p[3]);
+
+      if (!line_intersection (&p[0], &m1, &m2, &p[3], &m3))
+        m3 = m1;
+
+      if (coinc == 1)
+        {
+          p[1] = p[0];
+          p[2] = m3;
+        }
+      else if (coinc == 2)
+        {
+          p[1] = m3;
+          p[2] = m3;
+        }
+      else
+        {
+          p[1] = m3;
+          p[2] = p[3];
+        }
+    }
+  else if (coinc == 0)
+    {
+      get_normal (&pts[0], &pts[1], &n);
+      scale_point (&pts[0], &n, distance, &p[0]);
+      scale_point (&pts[1], &n, distance, &m1);
+
+      get_normal (&pts[1], &pts[2], &n);
+      scale_point (&pts[1], &n, distance, &m2);
+      scale_point (&pts[2], &n, distance, &m3);
+
+      get_normal (&pts[2], &pts[3], &n);
+      scale_point (&pts[2], &n, distance, &m4);
+      scale_point (&pts[3], &n, distance, &p[3]);
+
+      if (!line_intersection (&p[0], &m1, &m2, &m3, &p[1]))
+        p[1] = m1;
+
+      if (!line_intersection (&m2, &m3, &m4, &p[3], &p[2]))
+        p[2] = m4;
+    }
 
   gsk_curve_curve_init_from_points (&offset->curve, p);
 }
