@@ -743,8 +743,12 @@ gtk_css_style_snapshot_outline (GtkCssBoxes *boxes,
       if (gdk_rgba_is_clear (color))
         return;
 
-      border_style[1] = border_style[2] = border_style[3] = border_style[0];
       border_width[0] = _gtk_css_number_value_get (outline->outline_width, 100);
+
+      if (G_APPROX_VALUE (border_width[0], 0, FLT_EPSILON))
+        return;
+
+      border_style[1] = border_style[2] = border_style[3] = border_style[0];
       border_width[3] = border_width[2] = border_width[1] = border_width[0];
       colors[0] = colors[1] = colors[2] = colors[3] = *color;
 
