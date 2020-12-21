@@ -3906,7 +3906,6 @@ gtk_text_layout_after_buffer_delete_range (GtkTextBuffer *textbuffer,
 
 static void
 render_para (GskPangoRenderer   *crenderer,
-             int                 offset_y,
              GtkTextLineDisplay *line_display,
              int                 selection_start_index,
              int                 selection_end_index,
@@ -3934,13 +3933,6 @@ render_para (GskPangoRenderer   *crenderer,
       selection = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
 
       gtk_style_context_restore (context);
-    }
-
-  if (offset_y)
-    {
-      gtk_snapshot_save (crenderer->snapshot);
-      gtk_snapshot_translate (crenderer->snapshot,
-                              &GRAPHENE_POINT_INIT (0, offset_y));
     }
 
   do
@@ -4114,9 +4106,6 @@ render_para (GskPangoRenderer   *crenderer,
     }
   while (pango_layout_iter_next_line (iter));
 
-  if (offset_y)
-    gtk_snapshot_restore (crenderer->snapshot);
-
   pango_layout_iter_free (iter);
 }
 
@@ -4248,7 +4237,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
           if (line_display->node == NULL)
             {
               gtk_snapshot_push_collect (snapshot);
-              render_para (crenderer, 0, line_display,
+              render_para (crenderer, line_display,
                            selection_start_index, selection_end_index,
                            cursor_alpha);
 
