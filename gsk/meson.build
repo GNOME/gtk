@@ -59,6 +59,7 @@ gsk_private_sources = files([
   'gl/gskgliconcache.c',
   'gl/opbuffer.c',
   'gl/stb_rect_pack.c',
+  'gl/gskglpathcache.c',
 ])
 
 gsk_public_headers = files([

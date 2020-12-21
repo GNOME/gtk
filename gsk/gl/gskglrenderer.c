@@ -16,6 +16,7 @@
 #include "gskglrenderopsprivate.h"
 #include "gskcairoblurprivate.h"
 #include "gskglshadowcacheprivate.h"
+#include "gskglpathcacheprivate.h"
 #include "gskglnodesampleprivate.h"
 #include "gsktransform.h"
 #include "glutilsprivate.h"
@@ -542,6 +543,7 @@ struct _GskGLRenderer
   GskGLGlyphCache *glyph_cache;
   GskGLIconCache *icon_cache;
   GskGLShadowCache shadow_cache;
+  GskGLPathCache path_cache;
 
 #ifdef G_ENABLE_DEBUG
   struct {
@@ -3636,6 +3638,7 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
   self->glyph_cache = get_glyph_cache_for_display (gdk_surface_get_display (surface), self->atlases);
   self->icon_cache = get_icon_cache_for_display (gdk_surface_get_display (surface), self->atlases);
   gsk_gl_shadow_cache_init (&self->shadow_cache);
+  gsk_gl_path_cache_init (&self->path_cache);
 
   gdk_profiler_end_mark (before, "gl renderer realize", NULL);
 
@@ -3663,6 +3666,7 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
   g_clear_pointer (&self->icon_cache, gsk_gl_icon_cache_unref);
   g_clear_pointer (&self->atlases, gsk_gl_texture_atlases_unref);
   gsk_gl_shadow_cache_free (&self->shadow_cache, self->gl_driver);
+  gsk_gl_path_cache_free (&self->path_cache, self->gl_driver);
 
   g_clear_object (&self->gl_profiler);
   g_clear_object (&self->gl_driver);
@@ -4304,6 +4308,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   gsk_gl_glyph_cache_begin_frame (self->glyph_cache, self->gl_driver, removed);
   gsk_gl_icon_cache_begin_frame (self->icon_cache, removed);
   gsk_gl_shadow_cache_begin_frame (&self->shadow_cache, self->gl_driver);
+  gsk_gl_path_cache_begin_frame (&self->path_cache, self->gl_driver);
   g_ptr_array_unref (removed);
 
   /* Set up the modelview and projection matrices to fit our viewport */
