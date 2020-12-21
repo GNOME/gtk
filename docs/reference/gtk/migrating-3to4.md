@@ -1062,7 +1062,7 @@ to start a drag manually, call gdk_drag_begin().
 The ::drag-data-get signal has been replaced by the #GtkDragSource::prepare
 signal, which returns a #GdkContentProvider for the drag operation.
 
-The destination-side Drag-and-Drop  apis in GTK 4 have also been changed
+The destination-side Drag-and-Drop API in GTK 4 have also been changed
 to use an event controller, #GtkDropTarget. Instead of calling
 gtk_drag_dest_set() and connecting to #GtkWidget signals, you create
 a #GtkDropTarget object, attach it to the widget with

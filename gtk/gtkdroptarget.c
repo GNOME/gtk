@@ -47,7 +47,46 @@
  * The most basic way to use a #GtkDropTarget to receive drops on a
  * widget is to create it via gtk_drop_target_new() passing in the
  * #GType of the data you want to receive and connect to the
- * GtkDropTarget::drop signal to receive the data.
+ * GtkDropTarget::drop signal to receive the data:
+ *
+ * |[<!-- language="C" -->
+ * static gboolean
+ * on_drop (GtkDropTarget *target,
+ *          const GValue  *value,
+ *          double         x,
+ *          double         y,
+ *          gpointer       data)
+ * {
+ *   MyWidget *self = data;
+ *
+ *   // Call the appropriate setter depending on the type of data
+ *   // that we received
+ *   if (G_VALUE_HOLDS (value, G_TYPE_FILE))
+ *     my_widget_set_file (self, g_value_get_object (value));
+ *   else if (G_VALUE_HOLDS (value, GDK_TYPE_PIXBUF))
+ *     my_widget_set_pixbuf (self, g_value_get_object (value));
+ *   else
+ *     return FALSE;
+ *
+ *   return TRUE;
+ * }
+ *
+ * static void
+ * my_widget_init (MyWidget *self)
+ * {
+ *   GtkDropTarget *target =
+ *     gtk_drop_target_new (G_TYPE_INVALID, GDK_ACTION_COPY);
+ *
+ *   // This widget accepts two types of drop types: GFile objects
+ *   // and GdkPixbuf objects
+ *   gtk_drop_target_set_gtypes (target, (GTypes [2]) {
+ *     G_TYPE_FILE,
+ *     GDK_TYPE_PIXBUF,
+ *   }, 2);
+ *
+ *   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (target));
+ * }
+ * ]|
  *
  * #GtkDropTarget supports more options, such as:
  *
