@@ -65,9 +65,9 @@ static void
 recurse_child_widgets (GtkWidget   *widget,
                        GtkSnapshot *snapshot)
 {
-  gboolean needs_clip;
   int width = gtk_widget_get_width (widget);
   int height = gtk_widget_get_height (widget);
+  gboolean needs_clip;
   GtkCssStyle *style;
   GtkWidget *child;
   GtkBorder boxes[4];
@@ -107,14 +107,18 @@ recurse_child_widgets (GtkWidget   *widget,
       const GdkRGBA *color = &colors[i];
       const GtkBorder *box = &boxes[i];
 
-      gtk_snapshot_append_color (snapshot, color,
-                                 &GRAPHENE_RECT_INIT ( 0, - box->top, width, box->top));
-      gtk_snapshot_append_color (snapshot, color,
-                                 &GRAPHENE_RECT_INIT (width, 0, box->right, height));
-      gtk_snapshot_append_color (snapshot, color,
-                                 &GRAPHENE_RECT_INIT (0, height, width, box->bottom));
-      gtk_snapshot_append_color (snapshot, color,
-                                 &GRAPHENE_RECT_INIT (- box->left, 0, box->left, height));
+      if (box->top > 0)
+        gtk_snapshot_append_color (snapshot, color,
+                                   &GRAPHENE_RECT_INIT ( 0, - box->top, width, box->top));
+      if (box->right > 0)
+        gtk_snapshot_append_color (snapshot, color,
+                                   &GRAPHENE_RECT_INIT (width, 0, box->right, height));
+      if (box->bottom > 0)
+        gtk_snapshot_append_color (snapshot, color,
+                                   &GRAPHENE_RECT_INIT (0, height, width, box->bottom));
+      if (box->left > 0)
+        gtk_snapshot_append_color (snapshot, color,
+                                   &GRAPHENE_RECT_INIT (- box->left, 0, box->left, height));
 
       /* Grow box + offset */
       width += box->left + box->right;
