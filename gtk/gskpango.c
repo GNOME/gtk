@@ -234,7 +234,6 @@ gsk_pango_renderer_draw_shape (PangoRenderer  *renderer,
                                int             y)
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
-  cairo_t *cr;
   PangoLayout *layout;
   PangoCairoShapeRendererFunc shape_renderer;
   gpointer shape_renderer_data;
@@ -263,17 +262,21 @@ gsk_pango_renderer_draw_shape (PangoRenderer  *renderer,
 
   if (!handled)
     {
-      cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds);
+      cairo_t *cr;
 
       layout = pango_renderer_get_layout (renderer);
       if (!layout)
         return;
 
+      cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds);
       shape_renderer = pango_cairo_context_get_shape_renderer (pango_layout_get_context (layout),
                                                                &shape_renderer_data);
 
       if (!shape_renderer)
-        return;
+        {
+          cairo_destroy (cr);
+          return;
+        }
 
       set_color (crenderer, PANGO_RENDER_PART_FOREGROUND, cr);
 
