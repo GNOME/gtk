@@ -66,11 +66,11 @@ get_color (GskPangoRenderer *crenderer,
       rgba->red = color->red / 65535.;
       rgba->green = color->green / 65535.;
       rgba->blue = color->blue / 65535.;
-      rgba->alpha = a ? a  / 65535. : crenderer->fg_color.alpha;
+      rgba->alpha = a ? a  / 65535. : crenderer->fg_color->alpha;
     }
   else
     {
-      *rgba = crenderer->fg_color;
+      *rgba = *crenderer->fg_color;
       if (a)
         rgba->alpha = a / 65535.;
     }
@@ -502,7 +502,7 @@ gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
   crenderer = gsk_pango_renderer_acquire ();
 
   crenderer->snapshot = snapshot;
-  crenderer->fg_color = *color;
+  crenderer->fg_color = color;
 
   pango_renderer_draw_layout (PANGO_RENDERER (crenderer), layout, 0, 0);
 

@@ -4164,7 +4164,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
 
   crenderer->widget = widget;
   crenderer->snapshot = snapshot;
-  crenderer->fg_color = color;
+  crenderer->fg_color = &color;
 
   gtk_text_layout_wrap_loop_start (layout);
 
