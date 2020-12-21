@@ -688,10 +688,16 @@ create_ascii_glyphs (PangoFont *font)
   glyph_string = pango_glyph_string_new ();
   for (i = MIN_ASCII_GLYPH; i < MAX_ASCII_GLYPH; i++)
     {
-      pango_shape ((char[2]) { i, 0 },
-                   1,
-                   &not_a_hack,
-                   glyph_string);
+      const char text[2] = { i, 0 };
+
+      pango_shape_with_flags (text,
+                              1,
+                              text,
+                              1,
+                              &not_a_hack,
+                              glyph_string,
+                              PANGO_SHAPE_ROUND_POSITIONS);
+
       if (glyph_string->num_glyphs != 1)
         {
           pango_glyph_string_free (glyph_string);
