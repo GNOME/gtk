@@ -16,8 +16,6 @@ endif
 printbackends_subdir = 'gtk-4.0/@0@/printbackends'.format(gtk_binary_version)
 printbackends_install_dir = join_paths(get_option('libdir'), printbackends_subdir)
 
-cdata.set_quoted('GTK_PRINT_BACKENDS', ','.join(print_backends))
-
 printbackends_args = [
   '-DGTK_COMPILATION',
   '-DGTK_DISABLE_DEPRECATION_WARNINGS',
@@ -77,3 +75,5 @@ shared_module('printbackend-file',
   install_dir: printbackends_install_dir,
   install: true,
 )
+
+cdata.set_quoted('GTK_PRINT_BACKENDS', ','.join(print_backends))
