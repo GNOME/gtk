@@ -248,6 +248,7 @@ do_video (int         argc,
   GOutputStream *pipe;
   cairo_surface_t *surface;
   char *width_string, *height_string;
+  char *location_string;
 
   while (TRUE)
     {
@@ -282,6 +283,7 @@ do_video (int         argc,
 
   width_string = g_strdup_printf ("width=%d", width);
   height_string = g_strdup_printf ("height=%d", height);
+  location_string = g_strdup_printf ("location=%s", argv[1]);
   process = g_subprocess_new (G_SUBPROCESS_FLAGS_STDIN_PIPE,
                               &error,
                               "gst-launch-1.0",
@@ -291,10 +293,11 @@ do_video (int         argc,
                               "!", "videoconvert",
                               "!", "vp9enc",
                               "!", "webmmux",
-                              "!", "filesink", "location=foo.webm",
+                              "!", "filesink", location_string,
                               NULL);
   g_free (width_string);
   g_free (height_string);
+  g_free (location_string);
 
   if (process == NULL)
     {
