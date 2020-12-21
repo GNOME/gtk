@@ -107,6 +107,9 @@ recurse_child_widgets (GtkWidget   *widget,
       const GdkRGBA *color = &colors[i];
       const GtkBorder *box = &boxes[i];
 
+      if (gdk_rgba_is_clear (color))
+        goto next;
+
       if (box->top > 0)
         gtk_snapshot_append_color (snapshot, color,
                                    &GRAPHENE_RECT_INIT ( 0, - box->top, width, box->top));
@@ -120,6 +123,7 @@ recurse_child_widgets (GtkWidget   *widget,
         gtk_snapshot_append_color (snapshot, color,
                                    &GRAPHENE_RECT_INIT (- box->left, 0, box->left, height));
 
+next:
       /* Grow box + offset */
       width += box->left + box->right;
       height += box->top + box->bottom;
