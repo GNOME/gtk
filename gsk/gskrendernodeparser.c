@@ -2692,7 +2692,7 @@ render_node_print (Printer       *p,
                 glyphs[i].geometry.x_offset != 0 ||
                 glyphs[i].geometry.y_offset != 0)
             {
-              g_string_append_printf (p->str, "%g %g",
+              g_string_append_printf (p->str, " %g %g",
                                       (double) glyphs[i].geometry.x_offset / PANGO_SCALE,
                                       (double) glyphs[i].geometry.y_offset / PANGO_SCALE);
               if (!glyphs[i].attr.is_cluster_start)
