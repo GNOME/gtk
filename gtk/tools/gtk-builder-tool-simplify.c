@@ -507,8 +507,8 @@ set_attribute_value (Element *element,
     }
 
   len = g_strv_length (element->attribute_names);
-  element->attribute_names = g_realloc (element->attribute_names, len + 2);
-  element->attribute_values = g_realloc (element->attribute_values, len + 2);
+  element->attribute_names = g_realloc_n (element->attribute_names, len + 2, sizeof (char *));
+  element->attribute_values = g_realloc_n (element->attribute_values, len + 2, sizeof (char *));
   element->attribute_names[len] = g_strdup (name);
   element->attribute_values[len] = g_strdup (value);
   element->attribute_names[len + 1] = NULL;
