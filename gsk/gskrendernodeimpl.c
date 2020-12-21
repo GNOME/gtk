@@ -1263,6 +1263,13 @@ gsk_border_node_diff (GskRenderNode  *node1,
       gdk_rgba_equal (&self1->border_color[0], &self2->border_color[0]))
     return;
 
+  /* Different uniformity -> diff impossible */
+  if (self1->uniform ^ self2->uniform)
+    {
+      gsk_render_node_diff_impossible (node1, node2, region);
+      return;
+    }
+
   if (self1->border_width[0] == self2->border_width[0] &&
       self1->border_width[1] == self2->border_width[1] &&
       self1->border_width[2] == self2->border_width[2] &&
