@@ -1,3 +1,38 @@
+Overview of Changes from GTK+ 2.24.32 to 2.24.33
+================================================
+
+*********************************************************
+*                                                       *
+*   This is the final GTK 2.x release.                  *
+*   There will be no more updates to GTK 2.             *
+*   All users are encouraged to update to GTK 3 or 4.   *
+*                                                       *
+*********************************************************
+
+* Make the output of gtk-query-immodules deterministic
+
+* GtkCalendar: Use %OB if supported
+
+* GtkIconTheme: prefer exact matches
+
+* win32:
+ - Always process all available messages
+ - Ignore autorepeat for modifier keys
+ - Ensure monitor enumeration matches up
+ - Fix pkg-config file generation with msvc
+ - Fix UAC manifest rc file
+ - Add Visual Studio 2019 project files
+
+* MacOS:
+ - Use NSGraphicsContext after Yosemite
+ - Force redraw on Mojave and later when processing updates
+ - Fix a use-after-free
+
+* build:
+ - Support automake 1.16
+ - Fix compiler warnings with newer gcc
+
+
 Overview of Changes from GTK+ 2.24.31 to 2.24.32
 ================================================
 
