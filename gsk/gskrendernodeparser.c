@@ -2310,6 +2310,84 @@ base64_encode_with_linebreaks (const guchar *data,
   return out;
 }
 
+void
+gsk_text_node_serialize_glyphs (GskRenderNode *node,
+                                GString       *p)
+{
+  const guint n_glyphs = gsk_text_node_get_num_glyphs (node);
+  const PangoGlyphInfo *glyphs = gsk_text_node_get_glyphs (node, NULL);
+  PangoFont *font = gsk_text_node_get_font (node);
+  GString *str;
+  guint i, j;
+  PangoGlyphString *ascii;
+
+  ascii = create_ascii_glyphs (font);
+  str = g_string_new ("");
+
+  for (i = 0; i < n_glyphs; i++)
+    {
+      if (ascii)
+        {
+          for (j = 0; j < ascii->num_glyphs; j++)
+            {
+              if (glyphs[i].glyph == ascii->glyphs[j].glyph &&
+                  glyphs[i].geometry.width == ascii->glyphs[j].geometry.width &&
+                  glyphs[i].geometry.x_offset == 0 &&
+                  glyphs[i].geometry.y_offset == 0 &&
+                  glyphs[i].attr.is_cluster_start)
+                {
+                  g_string_append_c (str, j + MIN_ASCII_GLYPH);
+                  break;
+                }
+              else if (glyphs[i].glyph == ascii->glyphs[j].glyph)
+                {
+                  if (glyphs[i].geometry.width != ascii->glyphs[j].geometry.width)
+                    g_print ("not ascii because of width (%d != %d)\n",
+                             glyphs[i].geometry.width,
+                             ascii->glyphs[j].geometry.width);
+                  if (glyphs[i].geometry.x_offset != 0 ||
+                      glyphs[i].geometry.y_offset != 0)
+                    g_print ("not ascii because of offset\n");
+                  if (!glyphs[i].attr.is_cluster_start)
+                    g_print ("not ascii because of cluster\n");
+                }
+            }
+          if (j != ascii->num_glyphs)
+            continue;
+        }
+
+      if (str->len)
+        {
+          g_string_append_printf (p, "\"%s\", ", str->str);
+          g_string_set_size (str, 0);
+        }
+
+      g_string_append_printf (p, "%u %g",
+                              glyphs[i].glyph,
+                              (double) glyphs[i].geometry.width / PANGO_SCALE);
+      if (!glyphs[i].attr.is_cluster_start ||
+          glyphs[i].geometry.x_offset != 0 ||
+          glyphs[i].geometry.y_offset != 0)
+        {
+          g_string_append_printf (p, " %g %g",
+                                  (double) glyphs[i].geometry.x_offset / PANGO_SCALE,
+                                  (double) glyphs[i].geometry.y_offset / PANGO_SCALE);
+          if (!glyphs[i].attr.is_cluster_start)
+            g_string_append (p, " same-cluster");
+        }
+
+      if (i + 1 < n_glyphs)
+        g_string_append (p, ", ");
+    }
+
+  if (str->len)
+    g_string_append_printf (p, "\"%s\"", str->str);
+
+  g_string_free (str, TRUE);
+  if (ascii)
+    pango_glyph_string_free (ascii);
+}
+
 static void
 render_node_print (Printer       *p,
                    GskRenderNode *node)
@@ -2637,16 +2715,11 @@ render_node_print (Printer       *p,
 
     case GSK_TEXT_NODE:
       {
-        const guint n_glyphs = gsk_text_node_get_num_glyphs (node);
-        const PangoGlyphInfo *glyphs = gsk_text_node_get_glyphs (node, NULL);
         const graphene_point_t *offset = gsk_text_node_get_offset (node);
         const GdkRGBA *color = gsk_text_node_get_color (node);
         PangoFont *font = gsk_text_node_get_font (node);
         PangoFontDescription *desc;
         char *font_name;
-        GString *str;
-        guint i, j;
-        PangoGlyphString *ascii = create_ascii_glyphs (font);
 
         start_node (p, "text");
 
@@ -2656,61 +2729,14 @@ render_node_print (Printer       *p,
         _indent (p);
         desc = pango_font_describe (font);
         font_name = pango_font_description_to_string (desc);
-        if (ascii == NULL)
-          g_print ("\"%s\" has no ascii table\n", font_name);
         g_string_append_printf (p->str, "font: \"%s\";\n", font_name);
         g_free (font_name);
         pango_font_description_free (desc);
 
         _indent (p);
-        str = g_string_new (NULL);
         g_string_append (p->str, "glyphs: ");
-        for (i = 0; i < n_glyphs; i++)
-          {
-            if (ascii)
-              {
-                for (j = 0; j < ascii->num_glyphs; j++)
-                  {
-                    if (glyphs[i].glyph == ascii->glyphs[j].glyph &&
-                        glyphs[i].geometry.width == ascii->glyphs[j].geometry.width &&
-                        glyphs[i].geometry.x_offset == 0 &&
-                        glyphs[i].geometry.y_offset == 0 &&
-                        glyphs[i].attr.is_cluster_start)
-                      {
-                        g_string_append_c (str, j + MIN_ASCII_GLYPH);
-                        break;
-                      }
-                  }
-                if (j != ascii->num_glyphs)
-                  continue;
-              }
 
-            if (str->len)
-              {
-                g_string_append_printf (p->str, "\"%s\", ", str->str);
-                g_string_set_size (str, 0);
-              }
-
-            g_string_append_printf (p->str, "%u %g",
-                                    glyphs[i].glyph,
-                                    (double) glyphs[i].geometry.width / PANGO_SCALE);
-            if (!glyphs[i].attr.is_cluster_start ||
-                glyphs[i].geometry.x_offset != 0 ||
-                glyphs[i].geometry.y_offset != 0)
-            {
-              g_string_append_printf (p->str, " %g %g",
-                                      (double) glyphs[i].geometry.x_offset / PANGO_SCALE,
-                                      (double) glyphs[i].geometry.y_offset / PANGO_SCALE);
-              if (!glyphs[i].attr.is_cluster_start)
-                g_string_append (p->str, " same-cluster");
-            }
-
-            if (i + 1 < n_glyphs)
-              g_string_append (p->str, ", ");
-          }
-
-        if (str->len)
-          g_string_append_printf (p->str, "\"%s\"", str->str);
+        gsk_text_node_serialize_glyphs (node, p->str);
 
         g_string_append_c (p->str, ';');
         g_string_append_c (p->str, '\n');
@@ -2719,10 +2745,6 @@ render_node_print (Printer       *p,
           append_point_param (p, "offset", offset);
 
         end_node (p);
-
-        g_string_free (str, TRUE);
-        if (ascii)
-          pango_glyph_string_free (ascii);
       }
       break;
 

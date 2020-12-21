@@ -96,6 +96,9 @@ void            gsk_render_node_diff_impossible         (GskRenderNode          
 
 bool            gsk_border_node_get_uniform             (GskRenderNode               *self);
 
+void            gsk_text_node_serialize_glyphs          (GskRenderNode               *self,
+                                                         GString                     *str);
+
 G_END_DECLS
 
 #endif /* __GSK_RENDER_NODE_PRIVATE_H__ */
