@@ -14,27 +14,28 @@ rect_equal (const graphene_rect_t *a,
   return memcmp (a, b, sizeof (graphene_rect_t)) == 0;
 }
 
-static inline gboolean G_GNUC_PURE
+static inline bool G_GNUC_PURE
 rounded_rect_equal (const GskRoundedRect *r1,
                     const GskRoundedRect *r2)
 {
-  int i;
+  if (r1 == r2)
+      return true;
 
   if (!r1)
-    return FALSE;
+    return false;
 
   if (r1->bounds.origin.x != r2->bounds.origin.x ||
       r1->bounds.origin.y != r2->bounds.origin.y ||
       r1->bounds.size.width != r2->bounds.size.width ||
       r1->bounds.size.height != r2->bounds.size.height)
-    return FALSE;
+    return false;
 
-  for (i = 0; i < 4; i ++)
+  for (int i = 0; i < 4; i ++)
     if (r1->corner[i].width != r2->corner[i].width ||
         r1->corner[i].height != r2->corner[i].height)
-      return FALSE;
+      return false;
 
-  return TRUE;
+  return true;
 }
 
 static inline gboolean G_GNUC_PURE
