@@ -3199,12 +3199,11 @@ get_layout_location (GtkLabel  *self,
                      int       *yp)
 {
   GtkWidget *widget = GTK_WIDGET (self);
-  int req_width, x, y;
-  int req_height;
+  int layout_width, layout_height, x, y;
   float xalign, yalign;
   PangoRectangle logical;
   int baseline, layout_baseline, baseline_offset;
-  int label_width, label_height;
+  int widget_width, widget_height;
 
   xalign = self->xalign;
   yalign = self->yalign;
@@ -3212,19 +3211,17 @@ get_layout_location (GtkLabel  *self,
   if (_gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
     xalign = 1.0 - xalign;
 
-  pango_layout_get_extents (self->layout, NULL, &logical);
+  pango_layout_get_pixel_extents (self->layout, NULL, &logical);
 
-  pango_extents_to_pixels (&logical, NULL);
+  layout_width  = logical.width;
+  layout_height = logical.height;
 
-  req_width  = logical.width;
-  req_height = logical.height;
-
-  label_width = gtk_widget_get_width (widget);
-  label_height = gtk_widget_get_height (widget);
+  widget_width = gtk_widget_get_width (widget);
+  widget_height = gtk_widget_get_height (widget);
 
   baseline = gtk_widget_get_allocated_baseline (widget);
 
-  x = floor ((xalign * (label_width - req_width)) - logical.x);
+  x = floor ((xalign * (widget_width - layout_width)) - logical.x);
 
   baseline_offset = 0;
   if (baseline != -1)
@@ -3234,23 +3231,7 @@ get_layout_location (GtkLabel  *self,
       yalign = 0.0; /* Can't support yalign while baseline aligning */
     }
 
-  /* bgo#315462 - For single-line labels, *do* align the requisition with
-   * respect to the allocation, even if we are under-allocated.  For multi-line
-   * labels, always show the top of the text when they are under-allocated.  The
-   * rationale is this:
-   *
-   * - Single-line labels appear in GtkButtons, and it is very easy to get them
-   *   to be smaller than their requisition.  The button may clip the label, but
-   *   the label will still be able to show most of itself and the focus
-   *   rectangle.  Also, it is fairly easy to read a single line of clipped text.
-   *
-   * - Multi-line labels should not be clipped to showing "something in the
-   *   middle".  You want to read the first line, at least, to get some context.
-   */
-  if (pango_layout_get_line_count (self->layout) == 1)
-    y = floor ((label_height - req_height) * yalign) + baseline_offset;
-  else
-    y = floor (MAX ((label_height - req_height) * yalign, 0)) + baseline_offset;
+  y = floor ((widget_height - layout_height) * yalign) + baseline_offset;
 
   if (xp)
     *xp = x;
