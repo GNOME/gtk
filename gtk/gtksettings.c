@@ -2448,6 +2448,7 @@ gtk_settings_set_property_value_internal (GtkSettings            *settings,
   GQuark name_quark;
 
   if (!G_VALUE_HOLDS_LONG (&new_value->value) &&
+      !G_VALUE_HOLDS_FLOAT (&new_value->value) &&
       !G_VALUE_HOLDS_DOUBLE (&new_value->value) &&
       !G_VALUE_HOLDS_STRING (&new_value->value) &&
       !G_VALUE_HOLDS (&new_value->value, G_TYPE_GSTRING))
@@ -3443,14 +3444,20 @@ gtk_settings_load_from_key_file (GtkSettings       *settings,
             break;
           }
 
+        case G_TYPE_FLOAT:
         case G_TYPE_DOUBLE:
           {
             gdouble d_val;
 
-            g_value_init (&svalue.value, G_TYPE_DOUBLE);
+            g_value_init (&svalue.value, value_type);
             d_val = g_key_file_get_double (keyfile, "Settings", key, &error);
             if (!error)
-              g_value_set_double (&svalue.value, d_val);
+              {
+                if (value_type == G_TYPE_FLOAT)
+                  g_value_set_float (&svalue.value, (float) d_val);
+                else
+                  g_value_set_double (&svalue.value, d_val);
+              }
             break;
           }
 
