@@ -1263,15 +1263,15 @@ gsk_border_node_diff (GskRenderNode  *node1,
       gdk_rgba_equal (&self1->border_color[0], &self2->border_color[0]))
     return;
 
-  if (gsk_rounded_rect_equal (&self1->outline, &self2->outline) &&
+  if (self1->border_width[0] == self2->border_width[0] &&
+      self1->border_width[1] == self2->border_width[1] &&
+      self1->border_width[2] == self2->border_width[2] &&
+      self1->border_width[3] == self2->border_width[3] &&
       gdk_rgba_equal (&self1->border_color[0], &self2->border_color[0]) &&
       gdk_rgba_equal (&self1->border_color[1], &self2->border_color[1]) &&
       gdk_rgba_equal (&self1->border_color[2], &self2->border_color[2]) &&
       gdk_rgba_equal (&self1->border_color[3], &self2->border_color[3]) &&
-      self1->border_width[0] == self2->border_width[0] &&
-      self1->border_width[1] == self2->border_width[1] &&
-      self1->border_width[2] == self2->border_width[2] &&
-      self1->border_width[3] == self2->border_width[3])
+      gsk_rounded_rect_equal (&self1->outline, &self2->outline))
     return;
 
   gsk_render_node_diff_impossible (node1, node2, region);
