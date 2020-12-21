@@ -59,7 +59,6 @@ struct _GskPangoRenderer
   GtkWidget             *widget;
   GtkSnapshot           *snapshot;
   GdkRGBA                fg_color;
-  graphene_rect_t        bounds;
 
   /* Error underline color for this widget */
   GdkRGBA               *error_color;

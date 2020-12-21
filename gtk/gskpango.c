@@ -138,11 +138,19 @@ gsk_pango_renderer_draw_trapezoid (PangoRenderer   *renderer,
                                    double           x22)
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
+  PangoLayout *layout;
+  PangoRectangle ink_rect;
   cairo_t *cr;
   double x, y;
 
-  cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds);
+  layout = pango_renderer_get_layout (renderer);
+  if (!layout)
+    return;
 
+  pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
+  cr = gtk_snapshot_append_cairo (crenderer->snapshot,
+                                  &GRAPHENE_RECT_INIT (ink_rect.x, ink_rect.y,
+                                                       ink_rect.width, ink_rect.height));
   set_color (crenderer, part, cr);
 
   x = y = 0;
@@ -263,12 +271,16 @@ gsk_pango_renderer_draw_shape (PangoRenderer  *renderer,
   if (!handled)
     {
       cairo_t *cr;
+      PangoRectangle ink_rect;
 
       layout = pango_renderer_get_layout (renderer);
       if (!layout)
         return;
 
-      cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds);
+      pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
+      cr = gtk_snapshot_append_cairo (crenderer->snapshot,
+                                      &GRAPHENE_RECT_INIT (ink_rect.x, ink_rect.y,
+                                                           ink_rect.width, ink_rect.height));
       shape_renderer = pango_cairo_context_get_shape_renderer (pango_layout_get_context (layout),
                                                                &shape_renderer_data);
 
@@ -483,7 +495,6 @@ gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
                             const GdkRGBA *color)
 {
   GskPangoRenderer *crenderer;
-  PangoRectangle ink_rect;
 
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (PANGO_IS_LAYOUT (layout));
@@ -492,9 +503,6 @@ gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
 
   crenderer->snapshot = snapshot;
   crenderer->fg_color = *color;
-
-  pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
-  graphene_rect_init (&crenderer->bounds, ink_rect.x, ink_rect.y, ink_rect.width, ink_rect.height);
 
   pango_renderer_draw_layout (PANGO_RENDERER (crenderer), layout, 0, 0);
 
