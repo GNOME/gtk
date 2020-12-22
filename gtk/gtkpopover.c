@@ -360,7 +360,9 @@ did_flip_vertically (GdkGravity original_gravity,
 
 static void
 update_popover_layout (GtkPopover     *popover,
-                       GdkPopupLayout *layout)
+                       GdkPopupLayout *layout,
+                       int             width,
+                       int             height)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GdkRectangle final_rect;
@@ -413,7 +415,9 @@ update_popover_layout (GtkPopover     *popover,
       break;
     }
 
-  if (priv->final_position != position)
+  if (priv->final_position != position ||
+      priv->final_rect.width != width ||
+      priv->final_rect.height != height)
     {
       gtk_widget_queue_allocate (GTK_WIDGET (popover));
       g_clear_pointer (&priv->arrow_render_node, gsk_render_node_unref);
@@ -545,9 +549,9 @@ create_popup_layout (GtkPopover *popover)
       g_assert_not_reached ();
     }
 
-  layout = gdk_popup_layout_new (&rect,
-                                 parent_anchor,
-                                 surface_anchor);
+  anchor_hints |= GDK_ANCHOR_RESIZE;
+
+  layout = gdk_popup_layout_new (&rect, parent_anchor, surface_anchor);
   gdk_popup_layout_set_anchor_hints (layout, anchor_hints);
 
   if (priv->x_offset || priv->y_offset)
@@ -560,17 +564,17 @@ static gboolean
 present_popup (GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GtkRequisition req;
+  GtkRequisition nat;
   GdkPopupLayout *layout;
 
   layout = create_popup_layout (popover);
-  gtk_widget_get_preferred_size (GTK_WIDGET (popover), NULL, &req);
+  gtk_widget_get_preferred_size (GTK_WIDGET (popover), NULL, &nat);
+
   if (gdk_popup_present (GDK_POPUP (priv->surface),
-                         MAX (req.width, 1),
-                         MAX (req.height, 1),
+                         nat.width, nat.height,
                          layout))
     {
-      update_popover_layout (popover, layout);
+      update_popover_layout (popover, layout, nat.width, nat.height);
       return TRUE;
     }
 
@@ -631,7 +635,7 @@ gtk_popover_native_layout (GtkNative *native,
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkWidget *widget = GTK_WIDGET (popover);
 
-  update_popover_layout (popover, gdk_popup_layout_ref (priv->layout));
+  update_popover_layout (popover, gdk_popup_layout_ref (priv->layout), width, height);
 
   if (gtk_widget_needs_allocate (widget))
     {
