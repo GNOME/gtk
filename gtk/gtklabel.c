@@ -3199,12 +3199,11 @@ get_layout_location (GtkLabel  *self,
                      int       *yp)
 {
   GtkWidget *widget = GTK_WIDGET (self);
-  int req_width, x, y;
-  int req_height;
+  int layout_width, layout_height, x, y;
   float xalign, yalign;
   PangoRectangle logical;
   int baseline, layout_baseline, baseline_offset;
-  int label_width, label_height;
+  int widget_width, widget_height;
 
   xalign = self->xalign;
   yalign = self->yalign;
@@ -3212,19 +3211,17 @@ get_layout_location (GtkLabel  *self,
   if (_gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
     xalign = 1.0 - xalign;
 
-  pango_layout_get_extents (self->layout, NULL, &logical);
+  pango_layout_get_pixel_extents (self->layout, NULL, &logical);
 
-  pango_extents_to_pixels (&logical, NULL);
+  layout_width  = logical.width;
+  layout_height = logical.height;
 
-  req_width  = logical.width;
-  req_height = logical.height;
-
-  label_width = gtk_widget_get_width (widget);
-  label_height = gtk_widget_get_height (widget);
+  widget_width = gtk_widget_get_width (widget);
+  widget_height = gtk_widget_get_height (widget);
 
   baseline = gtk_widget_get_allocated_baseline (widget);
 
-  x = floor ((xalign * (label_width - req_width)) - logical.x);
+  x = floor ((xalign * (widget_width - layout_width)) - logical.x);
 
   baseline_offset = 0;
   if (baseline != -1)
@@ -3234,23 +3231,7 @@ get_layout_location (GtkLabel  *self,
       yalign = 0.0; /* Can't support yalign while baseline aligning */
     }
 
-  /* bgo#315462 - For single-line labels, *do* align the requisition with
-   * respect to the allocation, even if we are under-allocated.  For multi-line
-   * labels, always show the top of the text when they are under-allocated.  The
-   * rationale is this:
-   *
-   * - Single-line labels appear in GtkButtons, and it is very easy to get them
-   *   to be smaller than their requisition.  The button may clip the label, but
-   *   the label will still be able to show most of itself and the focus
-   *   rectangle.  Also, it is fairly easy to read a single line of clipped text.
-   *
-   * - Multi-line labels should not be clipped to showing "something in the
-   *   middle".  You want to read the first line, at least, to get some context.
-   */
-  if (pango_layout_get_line_count (self->layout) == 1)
-    y = floor ((label_height - req_height) * yalign) + baseline_offset;
-  else
-    y = floor (MAX ((label_height - req_height) * yalign, 0)) + baseline_offset;
+  y = floor ((widget_height - layout_height) * yalign) + baseline_offset;
 
   if (xp)
     *xp = x;
@@ -3440,42 +3421,84 @@ gtk_label_snapshot (GtkWidget   *widget,
   GtkLabelSelectionInfo *info;
   GtkStyleContext *context;
   int lx, ly;
-  int width, height, x;
+  int width, height;
 
-  info = self->select_info;
+  if (!self->text || (*self->text == '\0'))
+    return;
 
   gtk_label_ensure_layout (self);
 
   context = _gtk_widget_get_style_context (widget);
+  get_layout_location (self, &lx, &ly);
+
+  gtk_snapshot_render_layout (snapshot, context, lx, ly, self->layout);
+
+  info = self->select_info;
+  if (!info)
+    return;
 
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_height (widget);
-  x = 0;
 
-  if (self->text && (*self->text != '\0'))
+  if (info->selection_anchor != info->selection_end)
     {
-      get_layout_location (self, &lx, &ly);
+      int range[2];
+      cairo_region_t *range_clip;
+      cairo_rectangle_int_t clip_rect;
+      int i;
 
-      gtk_snapshot_render_layout (snapshot, context, lx, ly, self->layout);
+      range[0] = MIN (info->selection_anchor, info->selection_end);
+      range[1] = MAX (info->selection_anchor, info->selection_end);
 
-      if (info && (info->selection_anchor != info->selection_end))
+      gtk_style_context_save_to_node (context, info->selection_node);
+
+      range_clip = gdk_pango_layout_get_clip_region (self->layout, lx, ly, range, 1);
+      for (i = 0; i < cairo_region_num_rectangles (range_clip); i++)
         {
-          int range[2];
-          cairo_region_t *range_clip;
-          cairo_rectangle_int_t clip_rect;
-          int i;
+          cairo_region_get_rectangle (range_clip, i, &clip_rect);
 
-          range[0] = info->selection_anchor;
-          range[1] = info->selection_end;
+          gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_FROM_RECT (&clip_rect));
+          gtk_snapshot_render_background (snapshot, context, 0, 0, width, height);
+          gtk_snapshot_render_layout (snapshot, context, lx, ly, self->layout);
+          gtk_snapshot_pop (snapshot);
+        }
 
-          if (range[0] > range[1])
-            {
-              int tmp = range[0];
-              range[0] = range[1];
-              range[1] = tmp;
-            }
+      cairo_region_destroy (range_clip);
 
-          gtk_style_context_save_to_node (context, info->selection_node);
+      gtk_style_context_restore (context);
+    }
+  else
+    {
+      GtkLabelLink *focus_link;
+      GtkLabelLink *active_link;
+      int range[2];
+      cairo_region_t *range_clip;
+      cairo_rectangle_int_t clip_rect;
+      int i;
+      GdkRectangle rect;
+
+      if (info->selectable &&
+          gtk_widget_has_focus (widget) &&
+          gtk_widget_is_drawable (widget))
+        {
+          PangoDirection cursor_direction;
+
+          cursor_direction = get_cursor_direction (self);
+          gtk_snapshot_render_insertion_cursor (snapshot, context,
+                                                lx, ly,
+                                                self->layout, self->select_info->selection_end,
+                                                cursor_direction);
+        }
+
+      focus_link = gtk_label_get_focus_link (self, NULL);
+      active_link = info->active_link;
+
+      if (active_link)
+        {
+          range[0] = active_link->start;
+          range[1] = active_link->end;
+
+          gtk_style_context_save_to_node (context, active_link->cssnode);
 
           range_clip = gdk_pango_layout_get_clip_region (self->layout, lx, ly, range, 1);
           for (i = 0; i < cairo_region_num_rectangles (range_clip); i++)
@@ -3483,7 +3506,7 @@ gtk_label_snapshot (GtkWidget   *widget,
               cairo_region_get_rectangle (range_clip, i, &clip_rect);
 
               gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_FROM_RECT (&clip_rect));
-              gtk_snapshot_render_background (snapshot, context, x, 0, width, height);
+              gtk_snapshot_render_background (snapshot, context, 0, 0, width, height);
               gtk_snapshot_render_layout (snapshot, context, lx, ly, self->layout);
               gtk_snapshot_pop (snapshot);
             }
@@ -3492,71 +3515,22 @@ gtk_label_snapshot (GtkWidget   *widget,
 
           gtk_style_context_restore (context);
         }
-      else if (info)
+
+      if (focus_link && gtk_widget_has_visible_focus (widget))
         {
-          GtkLabelLink *focus_link;
-          GtkLabelLink *active_link;
-          int range[2];
-          cairo_region_t *range_clip;
-          cairo_rectangle_int_t clip_rect;
-          int i;
-          GdkRectangle rect;
+          range[0] = focus_link->start;
+          range[1] = focus_link->end;
 
-          if (info->selectable &&
-              gtk_widget_has_focus (widget) &&
-              gtk_widget_is_drawable (widget))
-            {
-              PangoDirection cursor_direction;
+          gtk_style_context_save_to_node (context, focus_link->cssnode);
 
-              cursor_direction = get_cursor_direction (self);
-              gtk_snapshot_render_insertion_cursor (snapshot, context,
-                                                    lx, ly,
-                                                    self->layout, self->select_info->selection_end,
-                                                    cursor_direction);
-            }
+          range_clip = gdk_pango_layout_get_clip_region (self->layout, lx, ly, range, 1);
+          cairo_region_get_extents (range_clip, &rect);
 
-          focus_link = gtk_label_get_focus_link (self, NULL);
-          active_link = info->active_link;
+          gtk_snapshot_render_focus (snapshot, context, rect.x, rect.y, rect.width, rect.height);
 
-          if (active_link)
-            {
-              range[0] = active_link->start;
-              range[1] = active_link->end;
+          cairo_region_destroy (range_clip);
 
-              gtk_style_context_save_to_node (context, active_link->cssnode);
-
-              range_clip = gdk_pango_layout_get_clip_region (self->layout, lx, ly, range, 1);
-              for (i = 0; i < cairo_region_num_rectangles (range_clip); i++)
-                {
-                  cairo_region_get_rectangle (range_clip, i, &clip_rect);
-
-                  gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_FROM_RECT (&clip_rect));
-                  gtk_snapshot_render_background (snapshot, context, x, 0, width, height);
-                  gtk_snapshot_render_layout (snapshot, context, lx, ly, self->layout);
-                  gtk_snapshot_pop (snapshot);
-                }
-
-              cairo_region_destroy (range_clip);
-
-              gtk_style_context_restore (context);
-            }
-
-          if (focus_link && gtk_widget_has_visible_focus (widget))
-            {
-              range[0] = focus_link->start;
-              range[1] = focus_link->end;
-
-              gtk_style_context_save_to_node (context, focus_link->cssnode);
-
-              range_clip = gdk_pango_layout_get_clip_region (self->layout, lx, ly, range, 1);
-              cairo_region_get_extents (range_clip, &rect);
-
-              gtk_snapshot_render_focus (snapshot, context, rect.x, rect.y, rect.width, rect.height);
-
-              cairo_region_destroy (range_clip);
-
-              gtk_style_context_restore (context);
-            }
+          gtk_style_context_restore (context);
         }
     }
 }

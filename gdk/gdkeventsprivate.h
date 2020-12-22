@@ -603,6 +603,8 @@ void    _gdk_event_queue_handle_motion_compression (GdkDisplay *display);
 void    gdk_event_queue_handle_scroll_compression  (GdkDisplay *display);
 void    _gdk_event_queue_flush                     (GdkDisplay       *display);
 
+double * gdk_event_dup_axes (GdkEvent *event);
+
 
 G_END_DECLS
 

@@ -1824,6 +1824,7 @@ blur_texture (GskGLRenderer       *self,
               float                blur_radius_x,
               float                blur_radius_y)
 {
+  const GskRoundedRect new_clip = GSK_ROUNDED_RECT_INIT (0, 0, texture_to_blur_width, texture_to_blur_height);
   int pass1_texture_id, pass1_render_target;
   int pass2_texture_id, pass2_render_target;
   int prev_render_target;
@@ -1850,17 +1851,16 @@ blur_texture (GskGLRenderer       *self,
                                       GL_NEAREST, GL_NEAREST,
                                       &pass2_texture_id, &pass2_render_target);
 
-  init_projection_matrix (&item_proj,
-                          &GRAPHENE_RECT_INIT (0, 0, texture_to_blur_width, texture_to_blur_height));
+  init_projection_matrix (&item_proj, &new_clip.bounds);
 
+  ops_set_program (builder, &self->programs->blur_program);
   prev_projection = ops_set_projection (builder, &item_proj);
   ops_set_modelview (builder, NULL);
-  prev_viewport = ops_set_viewport (builder, &GRAPHENE_RECT_INIT (0, 0, texture_to_blur_width, texture_to_blur_height));
-  ops_push_clip (builder, &GSK_ROUNDED_RECT_INIT (0, 0, texture_to_blur_width, texture_to_blur_height));
+  prev_viewport = ops_set_viewport (builder, &new_clip.bounds);
+  ops_push_clip (builder, &new_clip);
 
   prev_render_target = ops_set_render_target (builder, pass1_render_target);
   ops_begin (builder, OP_CLEAR);
-  ops_set_program (builder, &self->programs->blur_program);
 
   op = ops_begin (builder, OP_CHANGE_BLUR);
   op->size.width = texture_to_blur_width;
@@ -1871,7 +1871,7 @@ blur_texture (GskGLRenderer       *self,
   ops_set_texture (builder, region->texture_id);
 
   load_vertex_data_with_region (ops_draw (builder, NULL),
-                                &GRAPHENE_RECT_INIT (0, 0, texture_to_blur_width, texture_to_blur_height),
+                                &new_clip.bounds,
                                 builder, region,
                                 FALSE);
 #if 0
@@ -1893,7 +1893,7 @@ blur_texture (GskGLRenderer       *self,
   ops_set_render_target (builder, pass2_render_target);
   ops_begin (builder, OP_CLEAR);
   load_vertex_data_with_region (ops_draw (builder, NULL), /* render pass 2 */
-                                &GRAPHENE_RECT_INIT (0, 0, texture_to_blur_width, texture_to_blur_height),
+                                &new_clip.bounds,
                                 builder, region,
                                 FALSE);
 
@@ -2940,10 +2940,15 @@ static inline void
 apply_color_matrix_op (const Program       *program,
                        const OpColorMatrix *op)
 {
-  float mat[16];
-  OP_PRINT (" -> Color Matrix");
-  graphene_matrix_to_float (op->matrix, mat);
-  glUniformMatrix4fv (program->color_matrix.color_matrix_location, 1, GL_FALSE, mat);
+  OP_PRINT (" -> Color matrix. Send matrix: %d. Send offset: %d.",
+            op->matrix.send, op->offset.send);
+
+  if (op->matrix.send)
+    {
+      float mat[16];
+      graphene_matrix_to_float (op->matrix.value, mat);
+      glUniformMatrix4fv (program->color_matrix.color_matrix_location, 1, GL_FALSE, mat);
+    }
 
   if (op->offset.send)
     {
@@ -3199,6 +3204,7 @@ static inline void
 apply_repeat_op (const Program  *program,
                  const OpRepeat *op)
 {
+  OP_PRINT (" -> Repeat");
   glUniform4fv (program->repeat.child_bounds_location, 1, op->child_bounds);
   glUniform4fv (program->repeat.texture_rect_location, 1, op->texture_rect);
 }

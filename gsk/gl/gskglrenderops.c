@@ -14,27 +14,28 @@ rect_equal (const graphene_rect_t *a,
   return memcmp (a, b, sizeof (graphene_rect_t)) == 0;
 }
 
-static inline gboolean G_GNUC_PURE
+static inline bool G_GNUC_PURE
 rounded_rect_equal (const GskRoundedRect *r1,
                     const GskRoundedRect *r2)
 {
-  int i;
+  if (r1 == r2)
+      return true;
 
   if (!r1)
-    return FALSE;
+    return false;
 
   if (r1->bounds.origin.x != r2->bounds.origin.x ||
       r1->bounds.origin.y != r2->bounds.origin.y ||
       r1->bounds.size.width != r2->bounds.size.width ||
       r1->bounds.size.height != r2->bounds.size.height)
-    return FALSE;
+    return false;
 
-  for (i = 0; i < 4; i ++)
+  for (int i = 0; i < 4; i ++)
     if (r1->corner[i].width != r2->corner[i].width ||
         r1->corner[i].height != r2->corner[i].height)
-      return FALSE;
+      return false;
 
-  return TRUE;
+  return true;
 }
 
 static inline gboolean G_GNUC_PURE
@@ -208,10 +209,9 @@ ops_free (RenderOpBuilder *builder)
 
 void
 ops_set_program (RenderOpBuilder *builder,
-                 Program   *program)
+                 Program         *program)
 {
   OpProgram *op;
-  ProgramState *program_state = NULL;
 
   if (builder->current_program == program)
     return;
@@ -220,86 +220,6 @@ ops_set_program (RenderOpBuilder *builder,
   op->program = program;
 
   builder->current_program = program;
-
-  program_state = &program->state;
-
-  if (memcmp (&builder->current_projection, &program_state->projection, sizeof (graphene_matrix_t)) != 0)
-    {
-      OpMatrix *opm;
-
-      opm = ops_begin (builder, OP_CHANGE_PROJECTION);
-      opm->matrix = builder->current_projection;
-      program_state->projection = builder->current_projection;
-    }
-
-  if (program_state->modelview == NULL ||
-      !gsk_transform_equal (builder->current_modelview, program_state->modelview))
-    {
-      OpMatrix *opm;
-
-      opm = ops_begin (builder, OP_CHANGE_MODELVIEW);
-      gsk_transform_to_matrix (builder->current_modelview, &opm->matrix);
-      gsk_transform_unref (program_state->modelview);
-      program_state->modelview = gsk_transform_ref (builder->current_modelview);
-    }
-
-  if (!rect_equal (&builder->current_viewport, &program_state->viewport))
-    {
-      OpViewport *opv;
-
-      opv = ops_begin (builder, OP_CHANGE_VIEWPORT);
-      opv->viewport = builder->current_viewport;
-      program_state->viewport = builder->current_viewport;
-    }
-
-  if (!rounded_rect_equal (builder->current_clip, &program_state->clip))
-    {
-      OpClip *opc;
-
-      opc = ops_begin (builder, OP_CHANGE_CLIP);
-      opc->clip = *builder->current_clip;
-      opc->send_corners = !rounded_rect_corners_equal (builder->current_clip, &program_state->clip);
-      program_state->clip = *builder->current_clip;
-    }
-
-  if (program_state->opacity != builder->current_opacity)
-    {
-      OpOpacity *opo;
-
-      opo = ops_begin (builder, OP_CHANGE_OPACITY);
-      opo->opacity = builder->current_opacity;
-      program_state->opacity = builder->current_opacity;
-    }
-}
-
-static void
-ops_set_clip (RenderOpBuilder      *builder,
-              const GskRoundedRect *clip)
-{
-  ProgramState *current_program_state = get_current_program_state (builder);
-  OpClip *op;
-
-  if (current_program_state &&
-      rounded_rect_equal (&current_program_state->clip, clip))
-    return;
-
-  if (!(op = op_buffer_peek_tail_checked (&builder->render_ops, OP_CHANGE_CLIP)))
-    {
-      op = op_buffer_add (&builder->render_ops, OP_CHANGE_CLIP);
-      op->send_corners = !current_program_state ||
-                         !rounded_rect_corners_equal (&current_program_state->clip, clip);
-    }
-  else
-    {
-      /* If the op before sent the corners, this one needs, too */
-      op->send_corners |= !current_program_state ||
-                          !rounded_rect_corners_equal (&current_program_state->clip, clip);
-    }
-
-  op->clip = *clip;
-
-  if (current_program_state)
-    current_program_state->clip = *clip;
 }
 
 void
@@ -318,7 +238,6 @@ ops_push_clip (RenderOpBuilder      *self,
   g_array_append_val (self->clip_stack, entry);
   self->current_clip = &g_array_index (self->clip_stack, ClipStackEntry, self->clip_stack->len - 1).rect;
   self->clip_is_rectilinear = entry.is_rectilinear;
-  ops_set_clip (self, clip);
 }
 
 void
@@ -336,7 +255,6 @@ ops_pop_clip (RenderOpBuilder *self)
     {
       self->current_clip = &head->rect;
       self->clip_is_rectilinear = head->is_rectilinear;
-      ops_set_clip (self, &head->rect);
     }
   else
     {
@@ -350,32 +268,6 @@ ops_has_clip (RenderOpBuilder *self)
 {
   return self->clip_stack != NULL &&
          self->clip_stack->len > 1;
-}
-
-static void
-ops_set_modelview_internal (RenderOpBuilder *builder,
-                            GskTransform    *transform)
-{
-  ProgramState *current_program_state = get_current_program_state (builder);
-  OpMatrix *op;
-
-#if 0
-  XXX This is not possible if we want pop() to work.
-  if (builder->current_program &&
-      gsk_transform_equal (builder->current_program_state->modelview, transform))
-    return;
-#endif
-
-  if (!(op = op_buffer_peek_tail_checked (&builder->render_ops, OP_CHANGE_MODELVIEW)))
-    op = op_buffer_add (&builder->render_ops, OP_CHANGE_MODELVIEW);
-
-  gsk_transform_to_matrix (transform, &op->matrix);
-
-  if (builder->current_program != NULL)
-    {
-      gsk_transform_unref (current_program_state->modelview);
-      current_program_state->modelview = gsk_transform_ref (transform);
-    }
 }
 
 /**
@@ -410,7 +302,6 @@ ops_set_modelview (RenderOpBuilder *builder,
   builder->current_modelview = entry->transform;
   builder->scale_x = entry->metadata.scale_x;
   builder->scale_y = entry->metadata.scale_y;
-  ops_set_modelview_internal (builder, entry->transform);
 }
 
 /* This sets the given modelview to the one we get when multiplying
@@ -456,7 +347,6 @@ ops_push_modelview (RenderOpBuilder *builder,
   builder->scale_x = entry->metadata.scale_x;
   builder->scale_y = entry->metadata.scale_y;
   builder->current_modelview = entry->transform;
-  ops_set_modelview_internal (builder, entry->transform);
 }
 
 void
@@ -480,7 +370,6 @@ ops_pop_modelview (RenderOpBuilder *builder)
       builder->scale_x = head->metadata.scale_x;
       builder->scale_y = head->metadata.scale_y;
       builder->current_modelview = head->transform;
-      ops_set_modelview_internal (builder, head->transform);
     }
   else
     {
@@ -492,17 +381,7 @@ graphene_matrix_t
 ops_set_projection (RenderOpBuilder         *builder,
                     const graphene_matrix_t *projection)
 {
-  ProgramState *current_program_state = get_current_program_state (builder);
   graphene_matrix_t prev_mv;
-  OpMatrix *op;
-
-  if (!(op = op_buffer_peek_tail_checked (&builder->render_ops, OP_CHANGE_PROJECTION)))
-    op = op_buffer_add (&builder->render_ops, OP_CHANGE_PROJECTION);
-
-  op->matrix = *projection;
-
-  if (builder->current_program != NULL)
-    current_program_state->projection = *projection;
 
   prev_mv = builder->current_projection;
   builder->current_projection = *projection;
@@ -518,9 +397,8 @@ ops_set_viewport (RenderOpBuilder       *builder,
   OpViewport *op;
   graphene_rect_t prev_viewport;
 
-  if (current_program_state != NULL &&
-      rect_equal (&current_program_state->viewport, viewport))
-    return current_program_state->viewport;
+  if (rect_equal (&builder->current_viewport, viewport))
+    return *viewport;
 
   op = ops_begin (builder, OP_CHANGE_VIEWPORT);
   op->viewport = *viewport;
@@ -586,23 +464,13 @@ float
 ops_set_opacity (RenderOpBuilder *builder,
                  float            opacity)
 {
-  ProgramState *current_program_state = get_current_program_state (builder);
-  OpOpacity *op;
   float prev_opacity;
 
   if (builder->current_opacity == opacity)
     return opacity;
 
-  if (!(op = op_buffer_peek_tail_checked (&builder->render_ops, OP_CHANGE_OPACITY)))
-    op = op_buffer_add (&builder->render_ops, OP_CHANGE_OPACITY);
-
-  op->opacity = opacity;
-
   prev_opacity = builder->current_opacity;
   builder->current_opacity = opacity;
-
-  if (builder->current_program != NULL)
-    current_program_state->opacity = opacity;
 
   return prev_opacity;
 }
@@ -666,30 +534,30 @@ ops_set_color_matrix (RenderOpBuilder         *builder,
                       const graphene_vec4_t   *offset)
 {
   ProgramState *current_program_state = get_current_program_state (builder);
+  const bool offset_equal = graphene_vec4_equal (offset, &current_program_state->color_matrix.offset);
+  const bool matrix_equal = graphene_matrix_equal_fast (matrix,
+                                                        &current_program_state->color_matrix.matrix);
   OpColorMatrix *op;
-  bool offset_equal;
 
-  offset_equal = memcmp (offset,
-                         &current_program_state->color_matrix.offset,
-                         sizeof (graphene_vec4_t)) == 0;
-
-  if (memcmp (matrix,
-              &current_program_state->color_matrix.matrix,
-              sizeof (graphene_matrix_t)) == 0 &&
-      offset_equal)
+  if (offset_equal && matrix_equal)
     return;
 
-  current_program_state->color_matrix.matrix = *matrix;
-
   op = ops_begin (builder, OP_CHANGE_COLOR_MATRIX);
-  op->matrix = matrix;
+
+  if (!matrix_equal)
+    {
+      current_program_state->color_matrix.matrix = *matrix;
+      op->matrix.value = matrix;
+      op->matrix.send = TRUE;
+    }
+  else
+    op->matrix.send = FALSE;
 
   if (!offset_equal)
     {
+      current_program_state->color_matrix.offset = *offset;
       op->offset.value = offset;
       op->offset.send = TRUE;
-
-      current_program_state->color_matrix.offset = *offset;
     }
   else
     op->offset.send = FALSE;
@@ -755,8 +623,58 @@ GskQuadVertex *
 ops_draw (RenderOpBuilder     *builder,
           const GskQuadVertex  vertex_data[GL_N_VERTICES])
 {
+  ProgramState *program_state = get_current_program_state (builder);
   OpDraw *op;
 
+  if (memcmp (&builder->current_projection, &program_state->projection, sizeof (graphene_matrix_t)) != 0)
+    {
+      OpMatrix *opm;
+
+      opm = ops_begin (builder, OP_CHANGE_PROJECTION);
+      opm->matrix = builder->current_projection;
+      program_state->projection = builder->current_projection;
+    }
+
+  if (program_state->modelview == NULL ||
+      !gsk_transform_equal (builder->current_modelview, program_state->modelview))
+    {
+      OpMatrix *opm;
+
+      opm = ops_begin (builder, OP_CHANGE_MODELVIEW);
+      gsk_transform_to_matrix (builder->current_modelview, &opm->matrix);
+      gsk_transform_unref (program_state->modelview);
+      program_state->modelview = gsk_transform_ref (builder->current_modelview);
+    }
+
+  if (!rect_equal (&builder->current_viewport, &program_state->viewport))
+    {
+      OpViewport *opv;
+
+      opv = ops_begin (builder, OP_CHANGE_VIEWPORT);
+      opv->viewport = builder->current_viewport;
+      program_state->viewport = builder->current_viewport;
+    }
+
+  if (!rounded_rect_equal (builder->current_clip, &program_state->clip))
+    {
+      OpClip *opc;
+
+      opc = ops_begin (builder, OP_CHANGE_CLIP);
+      opc->clip = *builder->current_clip;
+      opc->send_corners = !rounded_rect_corners_equal (builder->current_clip, &program_state->clip);
+      program_state->clip = *builder->current_clip;
+    }
+
+  if (program_state->opacity != builder->current_opacity)
+    {
+      OpOpacity *opo;
+
+      opo = ops_begin (builder, OP_CHANGE_OPACITY);
+      opo->opacity = builder->current_opacity;
+      program_state->opacity = builder->current_opacity;
+    }
+
+  /* TODO: Did the additions above break the following optimization? */
   if ((op = op_buffer_peek_tail_checked (&builder->render_ops, OP_DRAW)))
     {
       op->vao_size += GL_N_VERTICES;

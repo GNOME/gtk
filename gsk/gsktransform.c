@@ -127,8 +127,10 @@ gsk_transform_alloc (const GskTransformClass *transform_class,
 
   self->transform_class = transform_class;
   self->category = next ? MIN (category, next->category) : category;
-  self->next = gsk_transform_is_identity (next) ? NULL : gsk_transform_ref (next);
-  g_clear_pointer (&next, gsk_transform_unref);
+  if (gsk_transform_is_identity (next))
+    gsk_transform_unref (next);
+  else
+    self->next = next;
 
   return self;
 }
@@ -217,7 +219,7 @@ gsk_identity_transform_equal (GskTransform *first_transform,
 static const GskTransformClass GSK_IDENTITY_TRANSFORM_CLASS =
 {
   sizeof (GskTransform),
-  "GskIdentityMatrix",
+  "GskIdentityTransform",
   gsk_identity_transform_finalize,
   gsk_identity_transform_to_matrix,
   gsk_identity_transform_apply_2d,
@@ -1707,8 +1709,8 @@ gsk_transform_invert (GskTransform *self)
 
 /**
  * gsk_transform_equal:
- * @first: the first transform
- * @second: the second transform
+ * @first: (nullable): the first transform
+ * @second: (nullable): the second transform
  *
  * Checks two transforms for equality.
  *

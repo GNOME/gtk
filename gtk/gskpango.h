@@ -49,7 +49,7 @@ typedef gboolean (*GskPangoShapeHandler) (PangoAttrShape         *attr,
 /*
  * This is a PangoRenderer implementation that translates all the draw calls to
  * gsk render nodes, using the GtkSnapshot helper class. Glyphs are translated
- * to text nodes, all other draw calls fall back to cairo nodes.
+ * to text nodes, other draw calls may fall back to cairo nodes.
  */
 
 struct _GskPangoRenderer
@@ -58,8 +58,7 @@ struct _GskPangoRenderer
 
   GtkWidget             *widget;
   GtkSnapshot           *snapshot;
-  GdkRGBA                fg_color;
-  graphene_rect_t        bounds;
+  const GdkRGBA         *fg_color;
 
   /* Error underline color for this widget */
   GdkRGBA               *error_color;

@@ -66,11 +66,11 @@ get_color (GskPangoRenderer *crenderer,
       rgba->red = color->red / 65535.;
       rgba->green = color->green / 65535.;
       rgba->blue = color->blue / 65535.;
-      rgba->alpha = a ? a  / 65535. : crenderer->fg_color.alpha;
+      rgba->alpha = a ? a  / 65535. : crenderer->fg_color->alpha;
     }
   else
     {
-      *rgba = crenderer->fg_color;
+      *rgba = *crenderer->fg_color;
       if (a)
         rgba->alpha = a / 65535.;
     }
@@ -138,11 +138,19 @@ gsk_pango_renderer_draw_trapezoid (PangoRenderer   *renderer,
                                    double           x22)
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
+  PangoLayout *layout;
+  PangoRectangle ink_rect;
   cairo_t *cr;
   double x, y;
 
-  cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds);
+  layout = pango_renderer_get_layout (renderer);
+  if (!layout)
+    return;
 
+  pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
+  cr = gtk_snapshot_append_cairo (crenderer->snapshot,
+                                  &GRAPHENE_RECT_INIT (ink_rect.x, ink_rect.y,
+                                                       ink_rect.width, ink_rect.height));
   set_color (crenderer, part, cr);
 
   x = y = 0;
@@ -234,7 +242,6 @@ gsk_pango_renderer_draw_shape (PangoRenderer  *renderer,
                                int             y)
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
-  cairo_t *cr;
   PangoLayout *layout;
   PangoCairoShapeRendererFunc shape_renderer;
   gpointer shape_renderer_data;
@@ -263,17 +270,25 @@ gsk_pango_renderer_draw_shape (PangoRenderer  *renderer,
 
   if (!handled)
     {
-      cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds);
+      cairo_t *cr;
+      PangoRectangle ink_rect;
 
       layout = pango_renderer_get_layout (renderer);
       if (!layout)
         return;
 
+      pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
+      cr = gtk_snapshot_append_cairo (crenderer->snapshot,
+                                      &GRAPHENE_RECT_INIT (ink_rect.x, ink_rect.y,
+                                                           ink_rect.width, ink_rect.height));
       shape_renderer = pango_cairo_context_get_shape_renderer (pango_layout_get_context (layout),
                                                                &shape_renderer_data);
 
       if (!shape_renderer)
-        return;
+        {
+          cairo_destroy (cr);
+          return;
+        }
 
       set_color (crenderer, PANGO_RENDER_PART_FOREGROUND, cr);
 
@@ -480,7 +495,6 @@ gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
                             const GdkRGBA *color)
 {
   GskPangoRenderer *crenderer;
-  PangoRectangle ink_rect;
 
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (PANGO_IS_LAYOUT (layout));
@@ -488,10 +502,7 @@ gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
   crenderer = gsk_pango_renderer_acquire ();
 
   crenderer->snapshot = snapshot;
-  crenderer->fg_color = *color;
-
-  pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
-  graphene_rect_init (&crenderer->bounds, ink_rect.x, ink_rect.y, ink_rect.width, ink_rect.height);
+  crenderer->fg_color = color;
 
   pango_renderer_draw_layout (PANGO_RENDERER (crenderer), layout, 0, 0);
 

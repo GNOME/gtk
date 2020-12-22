@@ -1138,6 +1138,22 @@ gdk_event_get_axes (GdkEvent  *event,
   return GDK_EVENT_GET_CLASS (event)->get_axes (event, axes, n_axes);
 }
 
+double *
+gdk_event_dup_axes (GdkEvent *event)
+{
+  double *axes;
+  guint n_axes;
+
+  if (gdk_event_get_axes (event, &axes, &n_axes))
+    {
+      double *axes_copy = g_memdup (axes, n_axes * sizeof (double));
+
+      return axes_copy;
+    }
+
+  return NULL;
+}
+
 /**
  * gdk_event_get_event_type:
  * @event: a #GdkEvent
