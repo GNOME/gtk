@@ -210,6 +210,10 @@ gdk_vulkan_strerror (VkResult result)
       return "An unknown error has occurred; either the application has provided invalid input, or an implementation failure has occurred.";
 #endif
 #if VK_HEADER_VERSION >= 135
+#if VK_HEADER_VERSION < 162
+    case VK_ERROR_INCOMPATIBLE_VERSION_KHR:
+      return "This error was removed by the Vulkan gods.";
+#endif
     case VK_THREAD_IDLE_KHR:
       return "A deferred operation is not complete but there is currently no work for this thread to do at the time of this call.";
     case VK_THREAD_DONE_KHR:
@@ -221,7 +225,7 @@ gdk_vulkan_strerror (VkResult result)
     case VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT:
       return "A requested pipeline creation would have required compilation, but the application requested compilation to not be performed.";
 #endif
-#if VK_HEADER_VERSION < 140
+#if VK_HEADER_VERSION < 142
     case VK_RESULT_RANGE_SIZE:
 #endif
     case VK_RESULT_MAX_ENUM:
