@@ -167,6 +167,10 @@ int                     gsk_curve_get_curvature_points          (const GskCurve 
 int                     gsk_curve_get_cusps                     (const GskCurve         *curve,
                                                                  float                   t[2]);
 
+float                   gsk_curve_get_curvature                 (const GskCurve         *curve,
+                                                                 float                   t,
+                                                                 graphene_point_t       *center);
+
 G_END_DECLS
 
 #endif /* __GSK_CURVE_PRIVATE_H__ */
