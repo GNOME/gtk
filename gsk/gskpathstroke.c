@@ -71,6 +71,32 @@ angle_between (const graphene_vec2_t *t1,
   return angle;
 }
 
+static float
+angle_between_points (const graphene_point_t *c,
+                      const graphene_point_t *a,
+                      const graphene_point_t *b)
+{
+  graphene_vec2_t t1, t2;
+
+  graphene_vec2_init (&t1, a->x - c->x, a->y - c->y);
+  graphene_vec2_init (&t2, b->x - c->x, b->y - c->y);
+
+  return angle_between (&t1, &t2);
+}
+
+static void
+rotate_vector (const graphene_vec2_t *t,
+               float                  alpha,
+               graphene_vec2_t       *t2)
+{
+  float x, y, s, c;
+
+  x = graphene_vec2_get_x (t);
+  y = graphene_vec2_get_y (t);
+  sincosf (alpha, &s, &c);
+  graphene_vec2_init (t2, c*x + s*y, c*y - s * x);
+}
+
 /* Set p to the intersection of the lines a + t * ab * and
  * c + s * cd. Return 1 if the lines intersect, 0 otherwise.
  */
@@ -109,6 +135,183 @@ line_point_dist (const graphene_point_t *a,
 
   graphene_vec2_init (&t, q->x - a->x, q->y - a->y);
   return graphene_vec2_dot (n, &t);
+}
+
+static void
+line_point (const graphene_point_t *a,
+            const graphene_vec2_t  *n,
+            float                   t,
+            graphene_point_t       *q)
+{
+  q->x = a->x + t * graphene_vec2_get_x (n);
+  q->y = a->y + t * graphene_vec2_get_y (n);
+}
+
+static void
+rotate_point (const graphene_point_t *z,
+              const graphene_point_t *p,
+              float                   angle,
+              graphene_point_t       *q)
+{
+  double x, y;
+  double s, c;
+
+  x = p->x - z->x;
+  y = p->y - z->y;
+  sincos (angle, &s, &c);
+
+  graphene_point_init (q, z->x + x*c + y*s, z->y - x*s + y*c);
+}
+
+static int
+circle_intersect (const graphene_point_t *c0,
+                  float                   r0,
+                  const graphene_point_t *c1,
+                  float                   r1,
+                  graphene_point_t        p[2])
+{
+  float r, R;
+  float cx, cy, Cx, Cy;
+  float dx, dy;
+  float d;
+  float x, y;
+  float D;
+  float angle;
+  graphene_point_t p0, C;
+
+  if (r0 < r1)
+    {
+      r  = r0;  R = r1;
+      cx = c0->x; cy = c0->y;
+      Cx = c1->x; Cy = c1->y;
+    }
+  else
+    {
+      r  = r1; R = r0;
+      Cx = c0->x; Cy = c0->y;
+      cx = c1->x; cy = c1->y;
+    }
+
+  dx = cx - Cx;
+  dy = cy - Cy;
+
+  d = sqrt (dx*dx + dy*dy);
+
+  if (d < 0.0001)
+    return 0;
+
+  x = (dx / d) * R + Cx;
+  y = (dy / d) * R + Cy;
+
+  if (fabs (R + r - d) < 0.0001 ||
+      fabs (R - (r + d)) < 0.0001)
+    {
+      graphene_point_init (&p[0], x, y);
+      return 1;
+    }
+
+  if (d + r < R || R + r < d)
+    return 0;
+
+  D = (r*r - d*d - R*R) / (-2 * d * R);
+  if (D >= 1)
+    angle = 0;
+  else if (D <= -1)
+    angle = M_PI;
+  else
+    angle = acos (D);
+
+  graphene_point_init (&p0, x, y);
+  graphene_point_init (&C, Cx, Cy);
+
+  rotate_point (&C, &p0, angle, &p[0]);
+  rotate_point (&C, &p0, -angle, &p[1]);
+
+  return 2;
+}
+
+static int
+circle_line_intersect (const graphene_point_t *c,
+                       float                   r,
+                       const graphene_point_t *a,
+                       const graphene_vec2_t  *t,
+                       graphene_point_t        p[2])
+{
+  float x, y;
+  float dx, dy;
+  float dr2;
+  float D;
+  float dis;
+
+  x = a->x - c->x;
+  y = a->y - c->y;
+
+  dx = graphene_vec2_get_x (t);
+  dy = graphene_vec2_get_y (t);
+  dr2 = dx * dx + dy * dy;
+  D = x * (y + dy) - (x + dx) * y;
+  dis = r*r*dr2 - D*D;
+
+  if (dis < 0)
+    return 0;
+  else if (dis == 0)
+    {
+      p[0].x = c->x + D*dy / dr2;
+      p[0].y = c->y - D*dx / dr2;
+      return 1;
+    }
+  else
+    {
+      int sdy = dy < 0 ? -1 : 1;
+      p[0].x = c->x + (D*dy + sdy*dx*sqrt (dis)) / dr2;
+      p[0].y = c->y + (-D*dx + fabs (dy)*sqrt (dis)) / dr2;
+      p[1].x = c->x + (D*dy - sdy*dx*sqrt (dis)) / dr2;
+      p[1].y = c->y + (-D*dx - fabs (dy)*sqrt (dis)) / dr2;
+      return 2;
+    }
+}
+
+static void
+find_closest_point (const graphene_point_t *p,
+                    int                     n,
+                    const graphene_point_t *c,
+                    graphene_point_t       *d)
+{
+  float dist;
+
+  *d = p[0];
+  dist = graphene_point_distance (&p[0], c, NULL, NULL);
+  for (int i = 1; i < n; i++)
+    {
+      float dist2 = graphene_point_distance (&p[i], c, NULL, NULL);
+      if (dist2 < dist)
+        {
+          dist = dist2;
+          *d = p[i];
+        }
+    }
+}
+
+/* Find the circle through p0 and p1 with tangent t
+ * at p1, and set c to its center.
+ */
+static int
+find_tangent_circle (const graphene_point_t *p0,
+                     const graphene_point_t *p1,
+                     const graphene_vec2_t  *t,
+                     graphene_point_t       *c)
+{
+  graphene_vec2_t n1, n2;
+  graphene_point_t p2;
+
+  graphene_vec2_init (&n1, - graphene_vec2_get_y (t), graphene_vec2_get_x (t));
+
+  get_normal (p0, p1, &n2);
+
+  p2.x = (p0->x + p1->x) / 2;
+  p2.y = (p0->y + p1->y) / 2;
+
+  return line_intersect (p1, &n1, &p2, &n2, c);
 }
 
 /* }}} */
@@ -205,6 +408,34 @@ path_builder_add_reverse_path (GskPathBuilder *builder,
       path_builder_add_curve (builder, curve);
     }
   g_list_free_full (ops, g_free);
+}
+
+/* Draw a circular arc from the current point to e,
+ * around c
+ */
+static gboolean
+path_builder_arc_to (GskPathBuilder         *builder,
+                     const graphene_point_t *c,
+                     const graphene_point_t *e)
+{
+  const graphene_point_t *s;
+  graphene_vec2_t ts, te;
+  graphene_point_t p;
+  float a, w;
+
+  s = gsk_path_builder_get_current_point (builder);
+
+  get_normal (c, s, &ts);
+  get_normal (c, e, &te);
+
+  if (!line_intersect (s, &ts, e, &te, &p))
+    return FALSE;
+
+  a = angle_between_points (&p, s, e);
+  w = fabs (sin (a / 2));
+
+  gsk_path_builder_conic_to (builder, p.x, p.y, e->x, e->y, w);
+  return TRUE;
 }
 
 /* }}} */
@@ -330,15 +561,456 @@ add_line_join (GskPathBuilder         *builder,
   const graphene_point_t *b;
   graphene_vec2_t ta;
   graphene_vec2_t tb;
+  float ml, w;
+
+  ml = MAX (miter_limit, 1);
+  w = line_width / 2;
 
   a = gsk_curve_get_end_point (aa);
   gsk_curve_get_end_tangent (aa, &ta);
   b = gsk_curve_get_start_point (bb);
   gsk_curve_get_start_tangent (bb, &tb);
 
+again:
   switch (line_join)
     {
     case GSK_LINE_JOIN_ARCS:
+      {
+        float ka, kb;
+        graphene_point_t ca, cb;
+        graphene_point_t p[2];
+        int n;
+
+        if (line_intersect (a, &ta, b, &tb, p) == 0)
+          {
+            line_point (a, &ta, ml * w, &p[0]);
+            line_point (b, &tb, - ml * w, &p[1]);
+            path_builder_line_to_point (builder, &p[0]);
+            path_builder_line_to_point (builder, &p[1]);
+            path_builder_line_to_point (builder, b);
+            break;
+          }
+
+        ka = gsk_curve_get_curvature (aa, 1, &ca);
+        kb = gsk_curve_get_curvature (bb, 0, &cb);
+
+        if (ka == 0 && kb == 0)
+          {
+            line_join = GSK_LINE_JOIN_MITER_CLIP;
+            goto again;
+          }
+
+        if (ka > 2 / line_width || kb > 2 / line_width)
+          {
+            line_join = GSK_LINE_JOIN_ROUND;
+            goto again;
+          }
+
+        if (ka != 0 && kb != 0)
+          {
+            float ra, rb;
+            graphene_point_t p0;
+
+            ra = fabs (1/ka);
+            rb = fabs (1/kb);
+
+            n = circle_intersect (&ca, ra, &cb, rb, p);
+
+            if (n == 0)
+              {
+                graphene_vec2_t ac, bc;
+                float d;
+                float rr0, rr1, rr;
+                int m;
+                graphene_point_t cca, ccb;
+                float rra, rrb;
+
+                d = graphene_point_distance (&ca, &cb, NULL, NULL);
+
+                if (d > ra + rb)
+                  {
+                    gboolean big_enough;
+
+                    /* disjoint circles */
+
+                    get_tangent (a, &ca, &ac);
+                    get_tangent (b, &cb, &bc);
+
+                    rr0 = 0;
+                    rr1 = d;
+                    big_enough = FALSE;
+                    while (fabs (rr1 - rr0) > 0.001)
+                      {
+                        rr = (rr0 + rr1) / 2;
+                        rra = ra + rr;
+                        rrb = rb + rr;
+                        line_point (a, &ac, rra, &cca);
+                        line_point (b, &bc, rrb, &ccb);
+                        m = circle_intersect (&cca, rra, &ccb, rrb, p);
+                        if (m == 1)
+                          {
+                            rr1 = rr;
+                            break;
+                          }
+                        if (m == 2)
+                          {
+                            rr1 = rr;
+                            big_enough = TRUE;
+                          }
+                        else
+                          {
+                            if (big_enough)
+                              rr0 = rr;
+                            else
+                              rr1 += d;
+                          }
+                      }
+
+                    ra += rr1;
+                    rb += rr1;
+
+                    line_point (a, &ac, ra, &ca);
+                    line_point (b, &bc, rb, &cb);
+
+                    n = circle_intersect (&ca, ra, &cb, rb, p);
+                  }
+                else
+                  {
+                    /* contained circles */
+
+                    get_tangent (a, &ca, &ac);
+                    get_tangent (b, &cb, &bc);
+
+                    rr0 = 0;
+                    rr1 = rb - ra;
+                    while (fabs (rr1 - rr0) > 0.001)
+                      {
+                        rr = (rr0 + rr1) / 2;
+                        rra = ra + rr;
+                        rrb = rb - rr;
+                        line_point (a, &ac, rra, &cca);
+                        line_point (b, &bc, rrb, &ccb);
+                        m = circle_intersect (&cca, rra, &ccb, rrb, p);
+                        if (m == 1)
+                          {
+                            rr1 = rr;
+                            break;
+                          }
+                        if (m == 2)
+                          rr1 = rr;
+                        else
+                          rr0 = rr;
+                      }
+
+                    ra += rr1;
+                    rb -= rr1;
+
+                    line_point (a, &ac, ra, &ca);
+                    line_point (b, &bc, rb, &cb);
+
+                    n = circle_intersect (&ca, ra, &cb, rb, p);
+                  }
+              }
+
+            if (n > 0)
+              {
+                /* We have an intersection; connect things */
+                graphene_vec2_t n0;
+                graphene_point_t cm;
+                float rm;
+                graphene_vec2_t t;
+                float alpha;
+                graphene_point_t pa, pb;
+
+                find_closest_point (p, n, c, &p0);
+                get_normal (&ca, &cb, &n0);
+
+                if (find_tangent_circle (c, &p0, &n0, &cm))
+                  {
+                    rm = graphene_point_distance (c, &cm, NULL, NULL);
+
+                    alpha = angle_between_points (&cm, c, &p0);
+
+                    /* FIXME: currently, we don't let miter_limit go below 1,
+                     * to avoid dealing with bevel overlap
+                     */
+                    if (fabs (alpha * rm) > ml * w)
+                      {
+                        get_tangent (&cm, c, &t);
+                        rotate_vector (&t, ml * w / rm, &t);
+                        n = circle_line_intersect (&ca, ra, &cm, &t, p);
+                        find_closest_point (p, n, &p0, &pa);
+                        n = circle_line_intersect (&cb, rb, &cm, &t, p);
+                        find_closest_point (p, n, &p0, &pb);
+
+                        path_builder_arc_to (builder, &ca, &pa);
+                        path_builder_line_to_point (builder, &pb);
+                        path_builder_arc_to (builder, &cb, b);
+                      }
+                    else
+                      {
+                        path_builder_arc_to (builder, &ca, &p0);
+                        path_builder_arc_to (builder, &cb, b);
+                      }
+                  }
+                else
+                  {
+                    if (graphene_point_distance (c, &p0, NULL, NULL) > ml * w)
+                      {
+                        get_tangent (c, &p0, &t);
+                        line_point (c, &t, ml * w, &cm);
+                        graphene_vec2_init (&t, - graphene_vec2_get_y (&t), graphene_vec2_get_x (&t));
+
+                        n = circle_line_intersect (&ca, ra, &cm, &t, p);
+                        find_closest_point (p, n, &p0, &pa);
+                        n = circle_line_intersect (&cb, rb, &cm, &t, p);
+                        find_closest_point (p, n, &p0, &pb);
+
+                        path_builder_arc_to (builder, &ca, &pa);
+                        path_builder_line_to_point (builder, &pb);
+                        path_builder_arc_to (builder, &cb, b);
+                      }
+                    else
+                      {
+                        path_builder_arc_to (builder, &ca, &p0);
+                        path_builder_arc_to (builder, &cb, b);
+                      }
+                  }
+              }
+          }
+        else if (ka != 0 && kb == 0)
+          {
+            float ra = fabs (1/ka);
+            graphene_vec2_t ac;
+            float rr0, rr1, rr, rra;
+            graphene_point_t cca;
+            int m;
+
+            n = circle_line_intersect (&ca, ra, b, &tb, p);
+            if (n == 0)
+              {
+                gboolean big_enough;
+
+                get_tangent (a, &ca, &ac);
+
+                rr = 0;
+                rr0 = 0;
+                rr1 = ra;
+                big_enough = FALSE;
+                while (fabs (rr1 - rr0) > 0.001)
+                  {
+                    rr = (rr0 + rr1) / 2;
+                    rra = ra + rr;
+                    line_point (a, &ac, rra, &cca);
+                    m = circle_line_intersect (&cca, rra, b, &tb, p);
+                    if (m == 1)
+                      break;
+                    if (m == 2)
+                      {
+                        big_enough = TRUE;
+                        rr1 = rr;
+                      }
+                    else
+                      {
+                        if (big_enough)
+                          rr0 = rr;
+                        else
+                          rr1 += ra;
+                      }
+                  }
+
+                ra += rr1;
+                line_point (a, &ac, ra, &ca);
+                n = circle_line_intersect (&ca, ra, b, &tb, p);
+              }
+
+            if (n > 0)
+              {
+                graphene_point_t p0, cm;
+                graphene_vec2_t n0;
+                float rm;
+                float alpha;
+
+                find_closest_point (p, n, c, &p0);
+                if (n == 1)
+                  graphene_vec2_init_from_vec2 (&n0, &tb);
+                else
+                  get_tangent (&p[0], &p[1], &n0);
+
+                if (find_tangent_circle (c, &p0, &n0, &cm))
+                  {
+                    rm = graphene_point_distance (c, &cm, NULL, NULL);
+
+                    alpha = angle_between_points (&cm, c, &p0);
+
+                    if (fabs (alpha * rm) > ml * w)
+                      {
+                        graphene_vec2_t t;
+                        graphene_point_t pa, pb;
+
+                        get_tangent (&cm, c, &t);
+                        rotate_vector (&t, ml * w / rm, &t);
+                        n = circle_line_intersect (&ca, ra, &cm, &t, p);
+                        find_closest_point (p, n, &p0, &pa);
+                        n = line_intersect (b, &tb, &cm, &t, p);
+                        find_closest_point (p, n, &p0, &pb);
+
+                        path_builder_arc_to (builder, &ca, &pa);
+                        path_builder_line_to_point (builder, &pb);
+                        path_builder_line_to_point (builder, b);
+                      }
+                    else
+                      {
+                        path_builder_arc_to (builder, &ca, &p0);
+                        path_builder_line_to_point (builder, b);
+                      }
+                  }
+                else
+                  {
+                    if (graphene_point_distance (c, &p0, NULL, NULL) > ml * w)
+                      {
+                        graphene_vec2_t t;
+                        graphene_point_t pa, pb;
+
+                        get_tangent (c, &p0, &t);
+                        line_point (c, &t, ml * w, &cm);
+                        graphene_vec2_init (&t, - graphene_vec2_get_y (&t), graphene_vec2_get_x (&t));
+
+                        n = circle_line_intersect (&ca, ra, &cm, &t, p);
+                        find_closest_point (p, n, &p0, &pa);
+                        n = line_intersect (b, &tb, &cm, &t, p);
+                        find_closest_point (p, n, &p0, &pb);
+
+                        path_builder_arc_to (builder, &ca, &pa);
+                        path_builder_line_to_point (builder, &pb);
+                        path_builder_line_to_point (builder, b);
+                      }
+                    else
+                      {
+                        path_builder_arc_to (builder, &ca, &p0);
+                        path_builder_line_to_point (builder, b);
+                      }
+                  }
+              }
+          }
+        else if (ka == 0 && kb != 0)
+          {
+            float rb = fabs (1/kb);
+            graphene_vec2_t bc;
+            float rr0, rr1, rr, rrb;
+            graphene_point_t ccb;
+            int m;
+
+            n = circle_line_intersect (&cb, rb, a, &ta, p);
+            if (n == 0)
+              {
+                gboolean big_enough;
+
+                get_tangent (b, &cb, &bc);
+
+                rr = 0;
+                rr0 = 0;
+                rr1 = rb;
+                big_enough = FALSE;
+                while (fabs (rr1 - rr0) > 0.001)
+                  {
+                    rr = (rr0 + rr1) / 2;
+                    rrb = rb + rr;
+                    line_point (b, &bc, rrb, &ccb);
+                    m = circle_line_intersect (&ccb, rrb, a, &ta, p);
+                    if (m == 1)
+                      break;
+                    if (m == 2)
+                      {
+                        big_enough = TRUE;
+                        rr1 = rr;
+                      }
+                    else
+                      {
+                        if (big_enough)
+                          rr0 = rr;
+                        else
+                          rr1 += rb;
+                      }
+                  }
+
+                rb += rr1;
+                line_point (b, &bc, rb, &cb);
+                n = circle_line_intersect (&cb, rb, a, &ta, p);
+              }
+
+            if (n > 0)
+              {
+                graphene_point_t p0, cm;
+                graphene_vec2_t n0;
+                float rm;
+                float alpha;
+
+                find_closest_point (p, n, c, &p0);
+                if (n == 1)
+                  graphene_vec2_init_from_vec2 (&n0, &tb);
+                else
+                  get_tangent (&p[0], &p[1], &n0);
+
+                if (find_tangent_circle (c, &p0, &n0, &cm))
+                  {
+                    rm = graphene_point_distance (c, &cm, NULL, NULL);
+
+                    alpha = angle_between_points (&cm, c, &p0);
+
+                    if (fabs (alpha * rm) > ml * w)
+                      {
+                        graphene_vec2_t t;
+                        graphene_point_t pa, pb;
+
+                        get_tangent (&cm, c, &t);
+                        rotate_vector (&t, ml * w / rm, &t);
+                        n = line_intersect (a, &ta, &cm, &t, p);
+                        find_closest_point (p, n, &p0, &pa);
+                        n = circle_line_intersect (&cb, rb, &cm, &t, p);
+                        find_closest_point (p, n, &p0, &pb);
+
+                        path_builder_line_to_point (builder, &pa);
+                        path_builder_line_to_point (builder, &pb);
+                        path_builder_arc_to (builder, &cb, b);
+                      }
+                    else
+                      {
+                        path_builder_line_to_point (builder, &p0);
+                        path_builder_arc_to (builder, &cb, b);
+                      }
+                  }
+                else
+                  {
+                    if (graphene_point_distance (c, &p0, NULL, NULL) > ml * w)
+                      {
+                        graphene_vec2_t t;
+                        graphene_point_t pa, pb;
+
+                        get_tangent (c, &p0, &t);
+                        line_point (c, &t, ml * w, &cm);
+                        graphene_vec2_init (&t, - graphene_vec2_get_y (&t), graphene_vec2_get_x (&t));
+
+                        n = line_intersect (a, &ta, &cm, &t, p);
+                        find_closest_point (p, n, &p0, &pa);
+                        n = circle_line_intersect (&cb, rb, &cm, &t, p);
+                        find_closest_point (p, n, &p0, &pb);
+
+                        path_builder_line_to_point (builder, &pa);
+                        path_builder_line_to_point (builder, &pb);
+                        path_builder_arc_to (builder, &cb, b);
+                      }
+                    else
+                      {
+                        path_builder_line_to_point (builder, &p0);
+                        path_builder_arc_to (builder, &cb, b);
+                      }
+                  }
+              }
+          }
+      }
+      break;
+
     case GSK_LINE_JOIN_MITER:
     case GSK_LINE_JOIN_MITER_CLIP:
       {
