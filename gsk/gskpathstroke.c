@@ -469,6 +469,7 @@ add_line_join (GskPathBuilder         *builder,
 
   switch (line_join)
     {
+    case GSK_LINE_JOIN_ARCS:
     case GSK_LINE_JOIN_MITER:
     case GSK_LINE_JOIN_MITER_CLIP:
       {
