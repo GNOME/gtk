@@ -6480,6 +6480,8 @@ gtk_window_destroy (GtkWindow *window)
 
   g_list_store_remove (toplevel_list, i);
 
+  gtk_window_release_application (window);
+
   gtk_widget_unrealize (GTK_WIDGET (window));
 
   g_object_unref (window);
