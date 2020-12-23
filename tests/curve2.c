@@ -13,6 +13,8 @@ struct _DemoWidget
   graphene_point_t point2;
   graphene_vec2_t tangent;
   double start, end;
+  float curvature;
+  graphene_point_t center;
 
   gboolean track;
   gboolean show_bounding_box;
@@ -63,6 +65,7 @@ motion (GtkEventControllerMotion *controller,
                                                &self->tangent);
 
       gsk_path_measure_get_point (self->measure, t, &self->point2, NULL);
+      self->curvature = gsk_path_measure_get_curvature (self->measure, t, &self->center);
 
       text = g_strdup_printf ("%.1f", distance);
       gtk_label_set_label (GTK_LABEL (self->label), text);
@@ -272,6 +275,25 @@ demo_widget_snapshot (GtkWidget   *widget,
       gtk_snapshot_pop (snapshot);
 
       gsk_path_unref (path);
+
+      if (self->curvature != 0)
+        {
+          builder = gsk_path_builder_new ();
+          gsk_path_builder_add_circle (builder, &self->center, fabs (1/self->curvature));
+          gsk_path_builder_add_circle (builder, &self->center, 3);
+
+          path = gsk_path_builder_free_to_path (builder);
+
+          stroke = gsk_stroke_new (1.0);
+          gtk_snapshot_push_stroke (snapshot, path, stroke);
+          gsk_stroke_free (stroke);
+
+          gtk_snapshot_append_color (snapshot,
+                                     &(GdkRGBA){ 1, 0, 1, 1},
+                                     &GRAPHENE_RECT_INIT (0, 0, width, height ));
+
+          gtk_snapshot_pop (snapshot);
+        }
 
       gtk_widget_snapshot_child (widget, self->label, snapshot);
     }
