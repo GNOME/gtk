@@ -124,6 +124,7 @@ gsk_stroke_to_cairo (const GskStroke *self,
     {
       case GSK_LINE_JOIN_MITER:
       case GSK_LINE_JOIN_MITER_CLIP:
+      case GSK_LINE_JOIN_ARCS:
         cairo_set_line_join (cr, CAIRO_LINE_JOIN_MITER);
         break;
       case GSK_LINE_JOIN_ROUND:
