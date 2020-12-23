@@ -167,7 +167,7 @@ gtk_css_selector_matches_insert_sorted (GtkCssSelectorMatches *matches,
         break;
     }
 
-  gtk_css_selector_matches_splice (matches, i, 0, (gpointer[1]) { data }, 1);
+  gtk_css_selector_matches_splice (matches, i, 0, FALSE, (gpointer[1]) { data }, 1);
 }
 
 static inline gboolean

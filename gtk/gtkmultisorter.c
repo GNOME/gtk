@@ -432,7 +432,7 @@ gtk_multi_sorter_remove (GtkMultiSorter *self,
 
   sorter = gtk_sorters_get (&self->sorters, position);
   g_signal_handlers_disconnect_by_func (sorter, gtk_multi_sorter_changed_cb, self);
-  gtk_sorters_splice (&self->sorters, position, 1, NULL, 0);
+  gtk_sorters_splice (&self->sorters, position, 1, FALSE, NULL, 0);
 
   gtk_sorter_changed_with_keys (GTK_SORTER (self),
                                 GTK_SORTER_CHANGE_LESS_STRICT,

@@ -182,6 +182,7 @@ G_GNUC_UNUSED static inline void
 gdk_array(splice) (GdkArray *self,
                    gsize      pos,
                    gsize      removed,
+                   gboolean   stolen,
                    _T_       *additions,
                    gsize      added)
 {
@@ -192,8 +193,9 @@ gdk_array(splice) (GdkArray *self,
   g_assert (pos + removed <= size);
   remaining = size - pos - removed;
 
-  gdk_array(free_elements) (gdk_array(index) (self, pos),
-                            gdk_array(index) (self, pos + removed));
+  if (!stolen)
+    gdk_array(free_elements) (gdk_array(index) (self, pos),
+                              gdk_array(index) (self, pos + removed));
 
   gdk_array(reserve) (self, size - removed + added);
 
@@ -225,9 +227,9 @@ gdk_array(set_size) (GdkArray *self,
 {
   gsize old_size = gdk_array(get_size) (self);
   if (new_size > old_size)
-    gdk_array(splice) (self, old_size, 0, NULL, new_size - old_size);
+    gdk_array(splice) (self, old_size, 0, FALSE, NULL, new_size - old_size);
   else
-    gdk_array(splice) (self, new_size, old_size - new_size, NULL, 0);
+    gdk_array(splice) (self, new_size, old_size - new_size, FALSE, NULL, 0);
 }
 
 G_GNUC_UNUSED static void
@@ -241,6 +243,7 @@ gdk_array(append) (GdkArray *self,
   gdk_array(splice) (self, 
                      gdk_array(get_size) (self),
                      0,
+                     FALSE,
 #ifdef GDK_ARRAY_BY_VALUE
                      value,
 #else
