@@ -96,6 +96,9 @@ void                    gsk_curve_get_point                     (const GskCurve 
 void                    gsk_curve_get_tangent                   (const GskCurve         *curve,
                                                                  float                   progress,
                                                                  graphene_vec2_t        *tangent);
+void                    gsk_curve_get_normal                    (const GskCurve         *curve,
+                                                                 float                   progress,
+                                                                 graphene_vec2_t        *normal);
 void                    gsk_curve_split                         (const GskCurve         *curve,
                                                                  float                   progress,
                                                                  GskCurve               *start,
