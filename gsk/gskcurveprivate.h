@@ -141,6 +141,10 @@ void                    gsk_curve_offset                        (const GskCurve 
 void                    gsk_curve_reverse                       (const GskCurve         *curve,
                                                                  GskCurve               *reverse);
 
+float                   gsk_curve_get_curvature                 (const GskCurve         *curve,
+                                                                 float                   t,
+                                                                 graphene_point_t       *center);
+
 G_END_DECLS
 
 #endif /* __GSK_CURVE_PRIVATE_H__ */
