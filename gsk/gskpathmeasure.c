@@ -373,6 +373,61 @@ gsk_path_measure_get_point (GskPathMeasure   *self,
 }
 
 /**
+ * gsk_path_measure_get_curvature:
+ * @self: a `GskPathMeasure`
+ * @distance: distance into the path
+ * @center: (optional) (out caller-allocates): The center
+ *   of the osculating circle at the point
+ *
+ * Calculates the curvature at the point @distance units into
+ * the path.
+ *
+ * Optionally, returns the center of the osculating circle as well.
+ *
+ * If the curvature is infinite (at line segments), or does
+ * not exist (at sharp turns), zero is returned, and @center
+ * is not modified.
+ *
+ * Returns: The curvature of the path at the given point
+ */
+float
+gsk_path_measure_get_curvature (GskPathMeasure   *self,
+                                float             distance,
+                                graphene_point_t *center)
+{
+  gsize i;
+
+  g_return_val_if_fail (self != NULL, 0);
+
+  distance = gsk_path_measure_clamp_distance (self, distance);
+
+  for (i = self->first; i < self->last; i++)
+    {
+      if (distance < self->measures[i].length)
+        break;
+
+      distance -= self->measures[i].length;
+    }
+
+  /* weird corner cases */
+  if (i == self->last)
+    {
+      /* the empty path goes here */
+      if (self->first == self->last)
+        return 0;
+
+      /* rounding errors can make this happen */
+      i = self->last - 1;
+      distance = self->measures[i].length;
+    }
+
+  return gsk_contour_get_curvature (gsk_path_get_contour (self->path, i),
+                                    self->measures[i].contour_data,
+                                    distance,
+                                    center);
+}
+
+/**
  * gsk_path_measure_get_closest_point:
  * @self: a `GskPathMeasure`
  * @point: the point to find the closest point to
