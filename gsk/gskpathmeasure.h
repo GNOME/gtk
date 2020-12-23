@@ -65,6 +65,11 @@ void                    gsk_path_measure_get_point              (GskPathMeasure 
                                                                  graphene_point_t       *pos,
                                                                  graphene_vec2_t        *tangent);
 GDK_AVAILABLE_IN_ALL
+float                   gsk_path_measure_get_curvature          (GskPathMeasure         *self,
+                                                                 float                   distance,
+                                                                 graphene_point_t       *center);
+
+GDK_AVAILABLE_IN_ALL
 float                   gsk_path_measure_get_closest_point      (GskPathMeasure         *self,
                                                                  const graphene_point_t *point,
                                                                  graphene_point_t       *out_pos);

@@ -74,6 +74,10 @@ void                    gsk_contour_get_point                   (const GskContou
                                                                  float                   distance,
                                                                  graphene_point_t       *pos,
                                                                  graphene_vec2_t        *tangent);
+float                   gsk_contour_get_curvature               (const GskContour       *self,
+                                                                 gpointer                measure_data,
+                                                                 float                   distance,
+                                                                 graphene_point_t       *center);
 gboolean                gsk_contour_get_closest_point           (const GskContour       *self,
                                                                  gpointer                measure_data,
                                                                  float                   tolerance,
