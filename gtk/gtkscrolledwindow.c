@@ -48,7 +48,7 @@
 #include "gtkprogresstrackerprivate.h"
 #include "gtksettingsprivate.h"
 
-#include <math.h>
+#include "fallback-c89.c"
 
 /**
  * SECTION:gtkscrolledwindow
@@ -3754,10 +3754,11 @@ kinetic_scroll_stop_notify (GtkScrolledWindow *scrolled_window)
 static void
 gtk_scrolled_window_accumulate_velocity (GtkKineticScrolling **scrolling, double elapsed, double *velocity)
 {
+    double last_velocity;
+
     if (!*scrolling)
       return;
 
-    double last_velocity;
     gtk_kinetic_scrolling_tick (*scrolling, elapsed, NULL, &last_velocity);
     if (((*velocity >= 0) == (last_velocity >= 0)) &&
         (fabs (*velocity) >= fabs (last_velocity) * VELOCITY_ACCUMULATION_FLOOR))

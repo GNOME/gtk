@@ -52,6 +52,11 @@
 /* Define to 1 if you have the `flockfile' function. */
 #undef HAVE_FLOCKFILE
 
+/* Define to 1 if you have the `fmin' function. */
+#if !defined (_MSC_VER) || (_MSC_VER >= 1800)
+# define HAVE_FMIN 1
+#endif
+
 /* Define to 1 if you have the <ftw.h> header file. */
 /* #undef HAVE_FTW_H */
 

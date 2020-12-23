@@ -126,3 +126,11 @@ isnan (double x)
   return _isnan (x);
 }
 #endif
+
+#ifndef HAVE_FMIN
+static inline double
+fmin (double x, double y)
+{
+  return x < y ? x : y;
+}
+#endif

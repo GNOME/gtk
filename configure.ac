@@ -843,7 +843,7 @@ AC_TYPE_UID_T
 # Check for round(), rint(), isnan() and isinf()
 # Check for log2(), exp2(), nearbyint() and trunc()
 AC_CHECK_LIB(m,round,,)
-AC_CHECK_FUNCS(round rint nearbyint sincos exp2 log2 trunc)
+AC_CHECK_FUNCS(round rint nearbyint sincos exp2 log2 trunc fmin)
 AC_CHECK_DECLS([isnan, isinf], [], [], [[#include <math.h>]])
 
 AC_MSG_CHECKING(whether to build dynamic modules)
