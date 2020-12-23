@@ -48,7 +48,7 @@
 #include "gtkprogresstrackerprivate.h"
 #include "gtksettingsprivate.h"
 
-#include <math.h>
+#include "fallback-c89.c"
 
 /**
  * SECTION:gtkscrolledwindow

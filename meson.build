@@ -252,6 +252,7 @@ check_functions = [
   'sincos',
   'trunc',
   'localtime_r',
+  'fmin',
 ]
 
 foreach func : check_functions

@@ -44,6 +44,9 @@
 /* Define to 1 if you have the `flockfile' function. */
 #mesondefine HAVE_FLOCKFILE
 
+/* Define to 1 if you have the `fmin' function. */
+#mesondefine HAVE_FMIN
+
 /* Define to 1 if you have the <ftw.h> header file. */
 #mesondefine HAVE_FTW_H
 
