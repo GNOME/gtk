@@ -242,14 +242,22 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "wayland", "swap buffers");
   if (display_wayland->have_egl_swap_buffers_with_damage)
     {
+      EGLint stack_rects[4 * 4]; /* 4 rects */
+      EGLint *heap_rects = NULL;
       int i, j, n_rects = cairo_region_num_rectangles (painted);
-      EGLint *rects = g_new (EGLint, n_rects * 4);
-      cairo_rectangle_int_t rect;
       int surface_height = gdk_surface_get_height (surface);
       int scale = gdk_surface_get_scale_factor (surface);
+      EGLint *rects;
+
+      if (n_rects < G_N_ELEMENTS (stack_rects) / 4)
+        rects = (EGLint *)&stack_rects;
+      else
+        heap_rects = rects = g_new (EGLint, n_rects * 4);
 
       for (i = 0, j = 0; i < n_rects; i++)
         {
+          cairo_rectangle_int_t rect;
+
           cairo_region_get_rectangle (painted, i, &rect);
           rects[j++] = rect.x * scale;
           rects[j++] = (surface_height - rect.height - rect.y) * scale;
@@ -257,7 +265,7 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
           rects[j++] = rect.height * scale;
         }
       eglSwapBuffersWithDamageEXT (display_wayland->egl_display, egl_surface, rects, n_rects);
-      g_free (rects);
+      g_free (heap_rects);
     }
   else
     eglSwapBuffers (display_wayland->egl_display, egl_surface);
