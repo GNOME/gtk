@@ -56,6 +56,7 @@ GTK_PREPROCESSOR_FLAGS =	\
 	 /I$(PREFIX)\include\gdk-pixbuf-2.0	\
 	 /I$(PREFIX)\include\pango-1.0	\
 	 /I$(PREFIX)\include\atk-1.0	\
+	 /I$(PREFIX)\include\harfbuzz	\
 	 /I$(PREFIX)\include\cairo	\
 	 /I$(PREFIX)\include\gio-win32-2.0	\
 	 /I$(PREFIX)\include\glib-2.0	\
