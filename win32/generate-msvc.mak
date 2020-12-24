@@ -117,7 +117,7 @@ all:	\
 
 ..\gtk\gtkdbusgenerated.h ..\gtk\gtkdbusgenerated.c: ..\gtk\gtkdbusinterfaces.xml
 	@echo Generating GTK DBus sources...
-	@$(PYTHON) $(PREFIX)\bin\gdbus-codegen	\
+	@$(PYTHON) $(GDBUS_CODEGEN)	\
 	--interface-prefix org.Gtk. --c-namespace _Gtk	\
 	--generate-c-code gtkdbusgenerated $**	\
 	--output-directory $(@D)
