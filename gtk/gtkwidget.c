@@ -41,6 +41,7 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsswidgetnodeprivate.h"
 #include "gtkdebug.h"
+#include "gtkdragsource.h"
 #include "gtkgesturedrag.h"
 #include "gtkgestureprivate.h"
 #include "gtkgesturesingle.h"
@@ -11345,7 +11346,8 @@ gtk_widget_consumes_motion (GtkWidget        *widget,
 
           if ((!GTK_IS_GESTURE_SINGLE (controller) ||
                GTK_IS_GESTURE_DRAG (controller) ||
-               GTK_IS_GESTURE_SWIPE (controller)) &&
+               GTK_IS_GESTURE_SWIPE (controller) ||
+               GTK_IS_DRAG_SOURCE (controller)) &&
               gtk_gesture_handles_sequence (GTK_GESTURE (controller), sequence))
             return TRUE;
         }
