@@ -35,6 +35,7 @@
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
+#include "gtknative.h"
 
 G_DEFINE_TYPE (GtkGestureStylus, gtk_gesture_stylus, GTK_TYPE_GESTURE_SINGLE)
 
@@ -319,6 +320,8 @@ gtk_gesture_stylus_get_backlog (GtkGestureStylus  *gesture,
   GArray *backlog_array;
   GdkTimeCoord *history = NULL;
   guint n_coords = 0, i;
+  double surf_x, surf_y;
+  GtkNative *native;
 
   g_return_val_if_fail (GTK_IS_GESTURE_STYLUS (gesture), FALSE);
   g_return_val_if_fail (backlog != NULL && n_elems != NULL, FALSE);
@@ -331,6 +334,9 @@ gtk_gesture_stylus_get_backlog (GtkGestureStylus  *gesture,
   if (!history)
     return FALSE;
 
+  native = gtk_widget_get_native (gtk_get_event_widget (event));
+  gtk_native_get_surface_transform (native, &surf_x, &surf_y);
+
   backlog_array = g_array_new (FALSE, FALSE, sizeof (GdkTimeCoord));
   for (i = 0; i < n_coords; i++)
     {
@@ -339,10 +345,11 @@ gtk_gesture_stylus_get_backlog (GtkGestureStylus  *gesture,
 
       g_array_append_val (backlog_array, *time_coord);
       time_coord = &g_array_index (backlog_array, GdkTimeCoord, backlog_array->len - 1);
-      if (gtk_widget_compute_point (gtk_get_event_widget (event),
+
+      if (gtk_widget_compute_point (GTK_WIDGET (native),
                                     gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)),
-                                    &GRAPHENE_POINT_INIT (time_coord->axes[GDK_AXIS_X],
-                                                          time_coord->axes[GDK_AXIS_Y]),
+                                    &GRAPHENE_POINT_INIT (time_coord->axes[GDK_AXIS_X] - surf_x,
+                                                          time_coord->axes[GDK_AXIS_Y] - surf_y),
                                     &p))
         {
           time_coord->axes[GDK_AXIS_X] = p.x;
