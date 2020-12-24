@@ -77,7 +77,7 @@ gdk_array(test_splice) (void)
       for (j = 0; j < add; j++)
         sum += ++additions[j];
 
-      gdk_array(splice) (&v, pos, remove, additions, add);
+      gdk_array(splice) (&v, pos, remove, FALSE, additions, add);
       {
         gsize total = 0;
         for (j = 0; j < gdk_array(get_size) (&v); j++)

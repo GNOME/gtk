@@ -100,7 +100,7 @@ gtk_accels_remove (GtkAccels  *accels,
 
   position = gtk_accels_find (accels, action_and_target);
   if (position < gtk_accels_get_size (accels))
-    gtk_accels_splice (accels, position, 1, NULL, 0);
+    gtk_accels_splice (accels, position, 1, FALSE, NULL, 0);
 }
 
 /*< private >

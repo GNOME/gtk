@@ -206,7 +206,7 @@ gtk_multi_filter_remove (GtkMultiFilter *self,
 
   filter = gtk_filters_get (&self->filters, position);
   g_signal_handlers_disconnect_by_func (filter, gtk_multi_filter_changed_cb, self);
-  gtk_filters_splice (&self->filters, position, 1, NULL, 0);
+  gtk_filters_splice (&self->filters, position, 1, FALSE, NULL, 0);
 
   gtk_filter_changed (GTK_FILTER (self),
                       GTK_MULTI_FILTER_GET_CLASS (self)->removal_change);

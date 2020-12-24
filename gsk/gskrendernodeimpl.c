@@ -2762,6 +2762,16 @@ gsk_transform_node_draw (GskRenderNode *node,
                             ctm.xx, ctm.yx,
                             ctm.xy, ctm.yy,
                             ctm.x0, ctm.y0));
+  if (xx * yy == xy * yx)
+    {
+      /* broken matrix here. This can happen during transitions
+       * (like when flipping an axis at the point where scale == 0)
+       * and just means that nothing should be drawn.
+       * But Cairo thows lots of ugly errors instead of silently
+       * going on. So We silently go on.
+       */
+      return;
+    }
   cairo_transform (cr, &ctm);
 
   gsk_render_node_draw (self->child, cr);

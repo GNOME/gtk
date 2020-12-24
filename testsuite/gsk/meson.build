@@ -48,6 +48,7 @@ compare_render_tests = [
   'empty-shadow',
   'empty-texture',
   'empty-transform',
+  'invalid-transform',
   'opacity_clip',
   'outset_shadow_offset_both',
   'outset_shadow_offset_x',

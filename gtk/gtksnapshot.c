@@ -1386,7 +1386,7 @@ gtk_snapshot_pop_one (GtkSnapshot *snapshot)
 
       /* Remove all the state's nodes from the list of nodes */
       g_assert (state->start_node_index + state->n_nodes == gtk_snapshot_nodes_get_size (&snapshot->nodes));
-      gtk_snapshot_nodes_splice (&snapshot->nodes, state->start_node_index, state->n_nodes, NULL, 0);
+      gtk_snapshot_nodes_splice (&snapshot->nodes, state->start_node_index, state->n_nodes, FALSE, NULL, 0);
     }
   else
     {
@@ -1400,7 +1400,7 @@ gtk_snapshot_pop_one (GtkSnapshot *snapshot)
       g_assert (previous_state->start_node_index + previous_state->n_nodes == gtk_snapshot_nodes_get_size (&snapshot->nodes));
     }
 
-  gtk_snapshot_states_splice (&snapshot->state_stack, state_index, 1, NULL, 0);
+  gtk_snapshot_states_splice (&snapshot->state_stack, state_index, 1, FALSE, NULL, 0);
 
   return node;
 }

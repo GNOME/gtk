@@ -471,7 +471,7 @@ gtk_string_list_splice (GtkStringList      *self,
   else
     n_additions = 0;
 
-  objects_splice (&self->items, position, n_removals, NULL, n_additions);
+  objects_splice (&self->items, position, n_removals, FALSE, NULL, n_additions);
 
   for (i = 0; i < n_additions; i++)
     {

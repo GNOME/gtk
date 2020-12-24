@@ -545,6 +545,11 @@ gtk_video_notify_cb (GtkMediaStream *stream,
     gtk_video_update_error (self);
   if (g_str_equal (pspec->name, "playing"))
     gtk_video_update_playing (self);
+  if (g_str_equal (pspec->name, "prepared"))
+    {
+      if (self->autoplay && gtk_media_stream_is_prepared (stream))
+        gtk_media_stream_play (stream);
+    }
 }
 
 /**
