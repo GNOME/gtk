@@ -386,7 +386,7 @@ find_eglconfig_for_surface (GdkSurface  *surface,
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   EGLint attrs[MAX_EGL_ATTRS];
   EGLint count;
-  EGLConfig *configs;
+  EGLConfig config;
   int i = 0;
 
   attrs[i++] = EGL_SURFACE_TYPE;
@@ -407,30 +407,17 @@ find_eglconfig_for_surface (GdkSurface  *surface,
   attrs[i++] = EGL_NONE;
   g_assert (i < MAX_EGL_ATTRS);
 
-  if (!eglChooseConfig (display_wayland->egl_display, attrs, NULL, 0, &count) || count < 1)
-    {
-      g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_UNSUPPORTED_FORMAT,
-                           _("No available configurations for the given pixel format"));
-      return FALSE;
-    }
-
-  configs = g_new (EGLConfig, count);
-
-  if (!eglChooseConfig (display_wayland->egl_display, attrs, configs, count, &count) || count < 1)
-    {
-      g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_UNSUPPORTED_FORMAT,
-                           _("No available configurations for the given pixel format"));
-      return FALSE;
-    }
-
   /* Pick first valid configuration i guess? */
+  if (!eglChooseConfig (display_wayland->egl_display, attrs, &config, 1, &count) || count < 1)
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_UNSUPPORTED_FORMAT,
+                           _("No available configurations for the given pixel format"));
+      return FALSE;
+    }
 
-  if (egl_config_out != NULL)
-    *egl_config_out = configs[0];
-
-  g_free (configs);
+  g_assert (egl_config_out);
+  *egl_config_out = config;
 
   return TRUE;
 }
