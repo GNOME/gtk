@@ -24,6 +24,7 @@
 #include "gtkbinlayout.h"
 #include "gtkbox.h"
 #include "gtkbuildable.h"
+#include "gtkdragsourceprivate.h"
 #include "gtkgestureclick.h"
 #include "gtkgesturedrag.h"
 #include "gtkgestureprivate.h"
@@ -388,16 +389,7 @@ drag_gesture_update_cb (GtkGestureDrag  *gesture,
                         double           offset_y,
                         GtkWindowHandle *self)
 {
-  int double_click_distance;
-  GtkSettings *settings;
-
-  settings = gtk_widget_get_settings (GTK_WIDGET (self));
-  g_object_get (settings,
-                "gtk-double-click-distance", &double_click_distance,
-                NULL);
-
-  if (ABS (offset_x) > double_click_distance ||
-      ABS (offset_y) > double_click_distance)
+  if (gtk_drag_check_threshold_double (GTK_WIDGET (self), 0, 0, offset_x, offset_y))
     {
       double start_x, start_y;
       double native_x, native_y;
