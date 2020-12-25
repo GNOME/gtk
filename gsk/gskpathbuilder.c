@@ -447,6 +447,52 @@ gsk_path_builder_add_circle (GskPathBuilder         *builder,
 }
 
 /**
+ * gsk_path_builder_add_ellipse:
+ * @builder: a `GskPathBuilder`
+ * @center: the center point of the ellipse
+ * @radius: the radius of the ellipse in x/y direction
+ *
+ * Adds an ellipse with the given @center and the @radius in
+ * x/y direction.
+ **/
+void
+gsk_path_builder_add_ellipse (GskPathBuilder         *builder,
+                              const graphene_point_t *center,
+                              const graphene_size_t  *radius)
+{
+  const float weight = sqrt(0.5f);
+  graphene_point_t pts[8];
+
+  g_return_if_fail (builder != NULL);
+  g_return_if_fail (center != NULL);
+  g_return_if_fail (radius != NULL);
+
+  pts[0] = GRAPHENE_POINT_INIT (center->x + radius->width / 2,
+                                center->y);
+  pts[1] = GRAPHENE_POINT_INIT (center->x + radius->width / 2,
+                                center->y + radius->height / 2);
+  pts[2] = GRAPHENE_POINT_INIT (center->x,
+                                center->y + radius->height / 2);
+  pts[3] = GRAPHENE_POINT_INIT (center->x - radius->width / 2,
+                                center->y + radius->height / 2);
+  pts[4] = GRAPHENE_POINT_INIT (center->x - radius->width / 2,
+                                center->y);
+  pts[5] = GRAPHENE_POINT_INIT (center->x - radius->width / 2,
+                                center->y - radius->height / 2);
+  pts[6] = GRAPHENE_POINT_INIT (center->x,
+                                center->y - radius->height / 2);
+  pts[7] = GRAPHENE_POINT_INIT (center->x + radius->width / 2,
+                                center->y - radius->height / 2);
+
+  gsk_path_builder_move_to (builder, pts[0].x, pts[0].y);
+  gsk_path_builder_conic_to (builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, weight);
+  gsk_path_builder_conic_to (builder, pts[3].x, pts[3].y, pts[4].x, pts[4].y, weight);
+  gsk_path_builder_conic_to (builder, pts[5].x, pts[5].y, pts[6].x, pts[6].y, weight);
+  gsk_path_builder_conic_to (builder, pts[7].x, pts[7].y, pts[0].x, pts[0].y, weight);
+  gsk_path_builder_close (builder);
+}
+
+/**
  * gsk_path_builder_move_to:
  * @builder: a `GskPathBuilder`
  * @x: x coordinate
