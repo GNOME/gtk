@@ -179,7 +179,7 @@ float ccell2(vec2 p, float r) {
 float df(vec2 p, float scale, inout vec2 nn) {
   p /= scale;
   nn = hextile(p);
-  nn = round(nn);
+  nn = floor(nn + 0.5);
   float r = hash(nn);
 
   float d;;

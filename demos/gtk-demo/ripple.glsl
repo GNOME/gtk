@@ -31,7 +31,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord, in vec2 resolution, in vec
   float propagation_length = time * wave_speed;
 
   float t = (propagation_length - distance_from_center) / wave_length;
-  float offset_magnitude = 0;
+  float offset_magnitude = 0.0;
   if (t > 0.0)
     offset_magnitude = decay(wave_height * sin(t * 2.0 * PI), t);
 

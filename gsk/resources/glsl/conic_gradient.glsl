@@ -15,8 +15,8 @@ void main() {
   gl_Position = u_projection * u_modelview * vec4(aPosition, 0.0, 1.0);
 
   // The -90 is because conics point to the top by default
-  rotation = mod (u_rotation - 90, 360.0);
-  if (rotation < 0)
+  rotation = mod (u_rotation - 90.0, 360.0);
+  if (rotation < 0.0)
     rotation += 360.0;
   rotation = PI / 180.0 * rotation;
 
@@ -55,7 +55,7 @@ void main() {
   angle -= rotation;
   // fract() does the modulo here, so now we have progress
   // into the current conic
-  float offset = fract (angle / 2 / PI + 2);
+  float offset = fract (angle / 2.0 / PI + 2.0);
 
   vec4 color = color_stops[0];
   for (int i = 1; i < u_num_color_stops; i ++) {
