@@ -20,7 +20,7 @@ mainImage(out vec4 fragColor, in vec2 fragCoord, in vec2 resolution, in vec2 uv)
   float b = 1.0/distance (pos, p2);
   float sum = r + g + b;
 
-  float alpha = 1.0 - pow (1.0/(sum), 40)*pow (10.0, 40*0.7);
+  float alpha = 1.0 - pow (1.0/(sum), 40.0)*pow (10.0, 40.0*0.7);
 
   fragColor = vec4 (r*0.5, g*0.5, b*0.5, 1.0) * alpha;
 }
