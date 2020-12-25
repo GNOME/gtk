@@ -24,8 +24,6 @@
 
 G_BEGIN_DECLS
 
-void _gtk_label_mnemonics_visible_apply_recursively (GtkWidget *widget,
-                                                     gboolean   mnemonics_visible);
 int _gtk_label_get_cursor_position (GtkLabel *label);
 int _gtk_label_get_selection_bound (GtkLabel *label);
 

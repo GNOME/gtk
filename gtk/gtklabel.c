@@ -2642,6 +2642,36 @@ gtk_label_new_with_mnemonic (const char *str)
 }
 
 static void
+_gtk_label_mnemonics_visible_apply_recursively (GtkWidget *widget,
+                                                gboolean   visible)
+{
+  if (GTK_IS_LABEL (widget))
+    {
+      GtkLabel *self = GTK_LABEL (widget);
+
+      if (self->mnemonics_visible != visible)
+        {
+          self->mnemonics_visible = visible;
+          gtk_label_recalculate (self);
+        }
+    }
+  else
+    {
+      GtkWidget *child;
+
+      for (child = gtk_widget_get_first_child (widget);
+           child;
+           child = gtk_widget_get_next_sibling (child))
+        {
+          if (GTK_IS_NATIVE (child))
+            continue;
+
+          _gtk_label_mnemonics_visible_apply_recursively (child, visible);
+        }
+    }
+}
+
+static void
 label_mnemonics_visible_changed (GtkWidget  *widget,
                                  GParamSpec *pspec,
                                  gpointer    data)
@@ -2712,35 +2742,6 @@ gtk_label_setup_mnemonic (GtkLabel *self)
     }
 }
 
-void
-_gtk_label_mnemonics_visible_apply_recursively (GtkWidget *widget,
-                                                gboolean   visible)
-{
-  if (GTK_IS_LABEL (widget))
-    {
-      GtkLabel *self = GTK_LABEL (widget);
-
-      if (self->mnemonics_visible != visible)
-        {
-          self->mnemonics_visible = visible;
-          gtk_label_recalculate (self);
-        }
-    }
-  else
-    {
-      GtkWidget *child;
-
-      for (child = gtk_widget_get_first_child (widget);
-           child;
-           child = gtk_widget_get_next_sibling (child))
-        {
-          if (GTK_IS_NATIVE (child))
-            continue;
-
-          _gtk_label_mnemonics_visible_apply_recursively (child, visible);
-        }
-    }
-}
 static void
 label_mnemonic_widget_weak_notify (gpointer      data,
                                    GObject      *where_the_object_was)
