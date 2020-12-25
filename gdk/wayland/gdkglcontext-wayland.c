@@ -301,27 +301,27 @@ gdk_wayland_get_display (GdkWaylandDisplay *display_wayland)
   if (epoxy_has_egl_extension (NULL, "EGL_KHR_platform_base"))
     {
       PFNEGLGETPLATFORMDISPLAYPROC getPlatformDisplay =
-	(void *) eglGetProcAddress ("eglGetPlatformDisplay");
+        (void *) eglGetProcAddress ("eglGetPlatformDisplay");
 
       if (getPlatformDisplay)
-	dpy = getPlatformDisplay (EGL_PLATFORM_WAYLAND_EXT,
-				  display_wayland->wl_display,
-				  NULL);
+        dpy = getPlatformDisplay (EGL_PLATFORM_WAYLAND_EXT,
+                                  display_wayland->wl_display,
+                                  NULL);
       if (dpy)
-	return dpy;
+        return dpy;
     }
 
   if (epoxy_has_egl_extension (NULL, "EGL_EXT_platform_base"))
     {
       PFNEGLGETPLATFORMDISPLAYEXTPROC getPlatformDisplay =
-	(void *) eglGetProcAddress ("eglGetPlatformDisplayEXT");
+        (void *) eglGetProcAddress ("eglGetPlatformDisplayEXT");
 
       if (getPlatformDisplay)
-	dpy = getPlatformDisplay (EGL_PLATFORM_WAYLAND_EXT,
-				  display_wayland->wl_display,
-				  NULL);
+        dpy = getPlatformDisplay (EGL_PLATFORM_WAYLAND_EXT,
+                                  display_wayland->wl_display,
+                                  NULL);
       if (dpy)
-	return dpy;
+        return dpy;
     }
 
   return eglGetDisplay ((EGLNativeDisplayType) display_wayland->wl_display);
@@ -432,9 +432,9 @@ find_eglconfig_for_surface (GdkSurface  *surface,
 
 GdkGLContext *
 gdk_wayland_surface_create_gl_context (GdkSurface     *surface,
-				      gboolean       attached,
-                                      GdkGLContext  *share,
-                                      GError       **error)
+                                       gboolean       attached,
+                                       GdkGLContext  *share,
+                                       GError       **error)
 {
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
@@ -521,10 +521,10 @@ gdk_wayland_display_make_gl_context_current (GdkDisplay   *display,
   else
     {
       if (display_wayland->have_egl_surfaceless_context)
-	egl_surface = EGL_NO_SURFACE;
+        egl_surface = EGL_NO_SURFACE;
       else
-	egl_surface = gdk_wayland_surface_get_dummy_egl_surface (surface,
-								context_wayland->egl_config);
+        egl_surface = gdk_wayland_surface_get_dummy_egl_surface (surface,
+                                                                 context_wayland->egl_config);
     }
 
   if (!eglMakeCurrent (display_wayland->egl_display, egl_surface,
