@@ -24,7 +24,7 @@
 
 #include "config.h"
 
-#include "gtkdragsource.h"
+#include "gtkdragsourceprivate.h"
 
 #include "gtkgesturedrag.h"
 #include "gtkgesturesingleprivate.h"
@@ -292,7 +292,7 @@ gtk_drag_source_update (GtkGesture       *gesture,
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
 
-  if (gtk_drag_check_threshold (widget, source->start_x, source->start_y, x, y))
+  if (gtk_drag_check_threshold_double (widget, source->start_x, source->start_y, x, y))
     {
       gtk_drag_source_drag_begin (source);
     }
@@ -786,6 +786,23 @@ gtk_drag_check_threshold (GtkWidget *widget,
                           int        start_y,
                           int        current_x,
                           int        current_y)
+{
+  int drag_threshold;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  drag_threshold = gtk_settings_get_dnd_drag_threshold (gtk_widget_get_settings (widget));
+
+  return (ABS (current_x - start_x) > drag_threshold ||
+          ABS (current_y - start_y) > drag_threshold);
+}
+
+gboolean
+gtk_drag_check_threshold_double (GtkWidget *widget,
+                                 double     start_x,
+                                 double     start_y,
+                                 double     current_x,
+                                 double     current_y)
 {
   int drag_threshold;
 

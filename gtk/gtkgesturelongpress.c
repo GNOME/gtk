@@ -37,7 +37,7 @@
 #include "gtkgesturelongpressprivate.h"
 #include "gtkgestureprivate.h"
 #include "gtkmarshalers.h"
-#include "gtkdragsource.h"
+#include "gtkdragsourceprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
@@ -159,7 +159,7 @@ gtk_gesture_long_press_update (GtkGesture       *gesture,
   priv = gtk_gesture_long_press_get_instance_private (GTK_GESTURE_LONG_PRESS (gesture));
   gtk_gesture_get_point (gesture, sequence, &x, &y);
 
-  if (gtk_drag_check_threshold (widget, priv->initial_x, priv->initial_y, x, y))
+  if (gtk_drag_check_threshold_double (widget, priv->initial_x, priv->initial_y, x, y))
     {
       if (priv->timeout_id)
         {

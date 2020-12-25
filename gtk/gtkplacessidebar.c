@@ -60,7 +60,7 @@
 #include "gtkgestureclick.h"
 #include "gtkgesturedrag.h"
 #include "gtknative.h"
-#include "gtkdragsource.h"
+#include "gtkdragsourceprivate.h"
 #include "gtkdragicon.h"
 
 /*< private >
@@ -3451,7 +3451,7 @@ on_row_dragged (GtkGestureDrag *gesture,
       return;
     }
 
-  if (gtk_drag_check_threshold (GTK_WIDGET (row), 0, 0, x, y))
+  if (gtk_drag_check_threshold_double (GTK_WIDGET (row), 0, 0, x, y))
     {
       double start_x, start_y;
       double drag_x, drag_y;

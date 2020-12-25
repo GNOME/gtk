@@ -23,7 +23,7 @@
 
 #include "gtkadjustment.h"
 #include "gtkbitset.h"
-#include "gtkdragsource.h"
+#include "gtkdragsourceprivate.h"
 #include "gtkdropcontrollermotion.h"
 #include "gtkgesturedrag.h"
 #include "gtkgizmoprivate.h"
@@ -1709,7 +1709,7 @@ gtk_list_base_drag_update (GtkGestureDrag *gesture,
 
   if (!priv->rubberband)
     {
-      if (!gtk_drag_check_threshold (GTK_WIDGET (self), 0, 0, offset_x, offset_y))
+      if (!gtk_drag_check_threshold_double (GTK_WIDGET (self), 0, 0, offset_x, offset_y))
         return;
       
       gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);

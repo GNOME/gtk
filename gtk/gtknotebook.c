@@ -50,7 +50,7 @@
 #include "gtkstack.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
-#include "gtkdragsource.h"
+#include "gtkdragsourceprivate.h"
 #include "gtkwidgetpaintable.h"
 #include "gtknative.h"
 
@@ -248,14 +248,14 @@ struct _GtkNotebook
   GList         *first_tab;             /* The first tab visible (for scrolling notebooks) */
   GList         *focus_tab;
 
-  int            drag_begin_x;
-  int            drag_begin_y;
+  double         drag_begin_x;
+  double         drag_begin_y;
   int            drag_offset_x;
   int            drag_offset_y;
   int            drag_surface_x;
   int            drag_surface_y;
-  int            mouse_x;
-  int            mouse_y;
+  double         mouse_x;
+  double         mouse_y;
   int            pressed_button;
 
   GQuark         group;
@@ -2934,8 +2934,11 @@ gtk_notebook_motion (GtkEventController *controller,
 
   if (page->reorderable &&
       (notebook->operation == DRAG_OPERATION_REORDER ||
-       gtk_drag_check_threshold (widget, notebook->drag_begin_x, notebook->drag_begin_y,
-                                 notebook->mouse_x, notebook->mouse_y)))
+       gtk_drag_check_threshold_double (widget,
+                                        notebook->drag_begin_x,
+                                        notebook->drag_begin_y,
+                                        notebook->mouse_x,
+                                        notebook->mouse_y)))
     {
       GtkNotebookPointerPosition pointer_position = get_pointer_position (notebook);
 
