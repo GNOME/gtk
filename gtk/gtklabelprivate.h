@@ -27,22 +27,6 @@ G_BEGIN_DECLS
 int _gtk_label_get_cursor_position (GtkLabel *label);
 int _gtk_label_get_selection_bound (GtkLabel *label);
 
-int          _gtk_label_get_n_links     (GtkLabel *label);
-int          _gtk_label_get_link_at     (GtkLabel *label,
-                                         int       pos);
-void         _gtk_label_activate_link   (GtkLabel *label,
-                                         int       idx);
-const char *_gtk_label_get_link_uri    (GtkLabel *label,
-                                         int       idx);
-void         _gtk_label_get_link_extent (GtkLabel *label,
-                                         int       idx,
-                                         int      *start,
-                                         int      *end);
-gboolean     _gtk_label_get_link_visited (GtkLabel *label,
-                                          int       idx);
-gboolean     _gtk_label_get_link_focused (GtkLabel *label,
-                                          int       idx);
-
 G_END_DECLS
 
 #endif /* __GTK_LABEL_PRIVATE_H__ */

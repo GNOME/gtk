@@ -892,6 +892,26 @@ get_cursor_direction (GtkLabel *self)
   return PANGO_DIRECTION_LTR;
 }
 
+static int
+_gtk_label_get_link_at (GtkLabel *self,
+                        int       pos)
+{
+  if (self->select_info)
+    {
+      guint i;
+
+      for (i = 0; i < self->select_info->n_links; i++)
+        {
+          const GtkLabelLink *link = &self->select_info->links[i];
+
+          if (link->start <= pos && pos < link->end)
+            return i;
+        }
+    }
+
+  return -1;
+}
+
 static GtkLabelLink *
 gtk_label_get_focus_link (GtkLabel *self,
                           int      *out_index)
@@ -5557,111 +5577,6 @@ gtk_label_get_lines (GtkLabel *self)
   g_return_val_if_fail (GTK_IS_LABEL (self), -1);
 
   return self->lines;
-}
-
-int
-_gtk_label_get_n_links (GtkLabel *self)
-{
-  if (self->select_info)
-    return self->select_info->n_links;
-
-  return 0;
-}
-
-const char *
-_gtk_label_get_link_uri (GtkLabel *self,
-                         int       idx)
-{
-  if (self->select_info)
-    return self->select_info->links[idx].uri;
-
-  return NULL;
-}
-
-void
-_gtk_label_get_link_extent (GtkLabel *self,
-                            int       idx,
-                            int      *start,
-                            int      *end)
-{
-  if (self->select_info)
-    {
-      const GtkLabelLink *link = &self->select_info->links[idx];
-
-      *start = link->start;
-      *end = link->end;
-    }
-  else
-    {
-      *start = -1;
-      *end = -1;
-    }
-}
-
-int
-_gtk_label_get_link_at (GtkLabel *self,
-                        int       pos)
-{
-  if (self->select_info)
-    {
-      guint i;
-
-      for (i = 0; i < self->select_info->n_links; i++)
-        {
-          const GtkLabelLink *link = &self->select_info->links[i];
-
-          if (link->start <= pos && pos < link->end)
-            return i;
-        }
-    }
-
-  return -1;
-}
-
-void
-_gtk_label_activate_link (GtkLabel *self,
-                          int       idx)
-{
-  if (self->select_info)
-    {
-      GtkLabelLink *link = &self->select_info->links[idx];
-
-      emit_activate_link (self, link);
-    }
-}
-
-gboolean
-_gtk_label_get_link_visited (GtkLabel *self,
-                             int       idx)
-{
-  if (self->select_info)
-    return self->select_info->links[idx].visited;
-
-  return FALSE;
-}
-
-gboolean
-_gtk_label_get_link_focused (GtkLabel *self,
-                             int       idx)
-{
-  GtkLabelSelectionInfo *info = self->select_info;
-
-  if (!info)
-    return FALSE;
-
-  if (info->selection_anchor != info->selection_end)
-    return FALSE;
-
-  if (idx >= 0 && idx < info->n_links)
-    {
-      const GtkLabelLink *link = &info->links[idx];
-
-      if (link->start <= info->selection_anchor &&
-          info->selection_anchor <= link->end)
-        return TRUE;
-    }
-
-  return FALSE;
 }
 
 /**
