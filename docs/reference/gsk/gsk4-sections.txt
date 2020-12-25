@@ -355,6 +355,7 @@ gsk_path_builder_get_current_point
 gsk_path_builder_add_rect
 gsk_path_builder_add_rounded_rect
 gsk_path_builder_add_circle
+gsk_path_builder_add_ellipse
 gsk_path_builder_add_path
 gtk_path_builder_add_segment
 <SUBSECTION>
