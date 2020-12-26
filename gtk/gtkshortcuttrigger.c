@@ -399,9 +399,6 @@ gtk_shortcut_trigger_compare (gconstpointer trigger1,
 struct _GtkNeverTrigger
 {
   GtkShortcutTrigger parent_instance;
-
-  guint never;
-  GdkModifierType modifiers;
 };
 
 struct _GtkNeverTriggerClass
