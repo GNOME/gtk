@@ -51,7 +51,8 @@ enum {
 };
 
 enum {
-  PROP_DELAY_FACTOR = 1
+  PROP_DELAY_FACTOR = 1,
+  LAST_PROP
 };
 
 struct _GtkGestureLongPressPrivate
@@ -67,6 +68,7 @@ struct _GtkGestureLongPressPrivate
 };
 
 static guint signals[N_SIGNALS] = { 0 };
+static GParamSpec *props[LAST_PROP] = { NULL, };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkGestureLongPress, gtk_gesture_long_press, GTK_TYPE_GESTURE_SINGLE)
 
@@ -275,13 +277,14 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
   gesture_class->cancel = gtk_gesture_long_press_cancel;
   gesture_class->sequence_state_changed = gtk_gesture_long_press_sequence_state_changed;
 
-  g_object_class_install_property (object_class,
-                                   PROP_DELAY_FACTOR,
-                                   g_param_spec_double ("delay-factor",
-                                                        P_("Delay factor"),
-                                                        P_("Factor by which to modify the default timeout"),
-                                                        0.5, 2.0, 1.0,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_DELAY_FACTOR] =
+    g_param_spec_double ("delay-factor",
+                         P_("Delay factor"),
+                         P_("Factor by which to modify the default timeout"),
+                         0.5, 2.0, 1.0,
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, LAST_PROP, props);
 
   /**
    * GtkGestureLongPress::pressed:
@@ -351,9 +354,12 @@ gtk_gesture_long_press_set_delay_factor (GtkGestureLongPress *gesture,
   g_return_if_fail (delay_factor >= 0.5);
   g_return_if_fail (delay_factor <= 2.0);
 
+  if (delay_factor == priv->delay_factor)
+    return;
+
   priv->delay_factor = delay_factor;
 
-  g_object_notify (G_OBJECT (gesture), "delay-factor");
+  g_object_notify_by_pspec (G_OBJECT (gesture), props[PROP_DELAY_FACTOR]);
 }
 
 /**
