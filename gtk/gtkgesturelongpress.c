@@ -75,9 +75,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkGestureLongPress, gtk_gesture_long_press, GTK_TYP
 static void
 gtk_gesture_long_press_init (GtkGestureLongPress *gesture)
 {
-  GtkGestureLongPressPrivate *priv;
-
-  priv = gtk_gesture_long_press_get_instance_private (GTK_GESTURE_LONG_PRESS (gesture));
+  GtkGestureLongPressPrivate *priv = gtk_gesture_long_press_get_instance_private (gesture);
   priv->delay_factor = 1.0;
 }
 
