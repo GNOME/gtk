@@ -442,6 +442,37 @@ path_builder_arc_to (GskPathBuilder         *builder,
 /* {{{ GskCurve utilities */
 
 static gboolean
+curve_is_ignorable (const GskCurve *curve)
+{
+  if (curve->op == GSK_PATH_CURVE)
+    {
+      const graphene_point_t *pts = curve->curve.points;
+
+      if (graphene_point_near (&pts[0], &pts[1], 0.001) &&
+          graphene_point_near (&pts[1], &pts[2], 0.001) &&
+          graphene_point_near (&pts[2], &pts[3], 0.001))
+        return TRUE;
+    }
+  else if (curve->op == GSK_PATH_CONIC)
+    {
+      const graphene_point_t *pts = curve->conic.points;
+
+      if (graphene_point_near (&pts[0], &pts[1], 0.001) &&
+          graphene_point_near (&pts[1], &pts[3], 0.001))
+        return TRUE;
+    }
+  else if (curve->op == GSK_PATH_LINE)
+    {
+      const graphene_point_t *pts = curve->line.points;
+
+      if (graphene_point_near (&pts[0], &pts[1], 0.001))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
 cubic_is_simple (const GskCurve *curve)
 {
   const graphene_point_t *pts = curve->curve.points;
@@ -470,6 +501,47 @@ cubic_is_simple (const GskCurve *curve)
     return FALSE;
 
   return TRUE;
+}
+
+static gboolean
+conic_is_simple (const GskCurve *curve)
+{
+  const graphene_point_t *pts = curve->conic.points;
+  graphene_vec2_t n1, n2;
+  float s;
+
+  get_normal (&pts[0], &pts[1], &n1);
+  get_normal (&pts[1], &pts[3], &n2);
+
+  s = graphene_vec2_dot (&n1, &n2);
+
+  if (fabs (acos (s)) >= M_PI / 3.f)
+    return FALSE;
+
+  return TRUE;
+}
+
+static gboolean
+conic_is_degenerate (const GskCurve *curve)
+{
+  if (curve->op == GSK_PATH_CONIC)
+    {
+      const graphene_point_t *pts = curve->curve.points;
+      float a;
+      graphene_vec2_t t1, t2;
+
+      get_tangent (&pts[0], &pts[1], &t1);
+      get_tangent (&pts[1], &pts[3], &t2);
+      a = angle_between (&t1, &t2);
+
+      if (a < 0)
+        a += M_PI;
+
+      if (fabs (a) < DEG_TO_RAD (3))
+        return TRUE;
+    }
+
+  return FALSE;
 }
 
 static void
@@ -1457,37 +1529,6 @@ add_debug (StrokeData     *stroke_data,
 }
 #endif
 
-static gboolean
-curve_is_ignorable (const GskCurve *curve)
-{
-  if (curve->op == GSK_PATH_CURVE)
-    {
-      const graphene_point_t *pts = curve->curve.points;
-
-      if (graphene_point_near (&pts[0], &pts[1], 0.001) &&
-          graphene_point_near (&pts[1], &pts[2], 0.001) &&
-          graphene_point_near (&pts[2], &pts[3], 0.001))
-        return TRUE;
-    }
-  else if (curve->op == GSK_PATH_CONIC)
-    {
-      const graphene_point_t *pts = curve->conic.points;
-
-      if (graphene_point_near (&pts[0], &pts[1], 0.001) &&
-          graphene_point_near (&pts[1], &pts[3], 0.001))
-        return TRUE;
-    }
-  else if (curve->op == GSK_PATH_LINE)
-    {
-      const graphene_point_t *pts = curve->line.points;
-
-      if (graphene_point_near (&pts[0], &pts[1], 0.001))
-        return TRUE;
-    }
-
-  return FALSE;
-}
-
 /* Add a curve to the in-progress stroke. We look at the angle between
  * the previous curve and this one to determine on which side we need
  * to intersect the curves, and on which to add a join.
@@ -1518,24 +1559,6 @@ cmpfloat (const void *p1, const void *p2)
   const float *f1 = p1;
   const float *f2 = p2;
   return *f1 < *f2 ? -1 : (*f1 > *f2 ? 1 : 0);
-}
-
-static void
-add_degenerate_conic (StrokeData     *stroke_data,
-                      const GskCurve *curve)
-{
-  GskCurve c;
-  graphene_point_t p[2];
-
-  p[0] = *gsk_curve_get_start_point (curve);
-  gsk_curve_get_point (curve, 0.5, &p[1]);
-  gsk_curve_init_foreach (&c, GSK_PATH_LINE, p, 2, 0);
-  add_curve (stroke_data, &c, FALSE);
-
-  p[0] = p[1];
-  p[1] = *gsk_curve_get_end_point (curve);
-  gsk_curve_init_foreach (&c, GSK_PATH_LINE, p, 2, 0);
-  add_curve (stroke_data, &c, TRUE);
 }
 
 #define MAX_SUBDIVISION 3
@@ -1594,45 +1617,22 @@ subdivide_and_add_curve (StrokeData     *stroke_data,
     }
 }
 
-static gboolean
-conic_is_simple (const GskCurve *curve)
+static void
+add_degenerate_conic (StrokeData     *stroke_data,
+                      const GskCurve *curve)
 {
-  const graphene_point_t *pts = curve->conic.points;
-  graphene_vec2_t n1, n2;
-  float s;
+  GskCurve c;
+  graphene_point_t p[2];
 
-  get_normal (&pts[0], &pts[1], &n1);
-  get_normal (&pts[1], &pts[3], &n2);
+  p[0] = *gsk_curve_get_start_point (curve);
+  gsk_curve_get_point (curve, 0.5, &p[1]);
+  gsk_curve_init_foreach (&c, GSK_PATH_LINE, p, 2, 0);
+  add_curve (stroke_data, &c, FALSE);
 
-  s = graphene_vec2_dot (&n1, &n2);
-
-  if (fabs (acos (s)) >= M_PI / 3.f)
-    return FALSE;
-
-  return TRUE;
-}
-
-static gboolean
-conic_is_degenerate (const GskCurve *curve)
-{
-  if (curve->op == GSK_PATH_CONIC)
-    {
-      const graphene_point_t *pts = curve->curve.points;
-      float a;
-      graphene_vec2_t t1, t2;
-
-      get_tangent (&pts[0], &pts[1], &t1);
-      get_tangent (&pts[1], &pts[3], &t2);
-      a = angle_between (&t1, &t2);
-
-      if (a < 0)
-        a += M_PI;
-
-      if (fabs (a) < DEG_TO_RAD (3))
-        return TRUE;
-    }
-
-  return FALSE;
+  p[0] = p[1];
+  p[1] = *gsk_curve_get_end_point (curve);
+  gsk_curve_init_foreach (&c, GSK_PATH_LINE, p, 2, 0);
+  add_curve (stroke_data, &c, TRUE);
 }
 
 static void
