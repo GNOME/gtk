@@ -639,4 +639,8 @@ gtk_media_file_extension_init (void)
                    g_type_name (g_io_extension_get_type (ext)));
         }
     }
+
+  /* IF the env var is given, check at startup that things actually work */
+  if (g_getenv ("GTK_MEDIA"))
+    gtk_media_file_get_extension ();
 }
