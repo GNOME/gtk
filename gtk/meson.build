@@ -1102,14 +1102,24 @@ darwin_versions = [
 ]
 
 # Library
+libgtk_static = static_library('gtk',
+  sources: [typefuncs, gtk_sources, gtkmarshal_h, gtkprivatetypebuiltins_h],
+  dependencies: gtk_deps,
+  include_directories: [confinc, gdkinc, gskinc, gtkinc],
+  c_args: gtk_cargs + common_cflags,
+  link_with: [libgtk_css, libgdk, libgsk, libottie],
+)
+
+libgtk_static_dep = declare_dependency(include_directories: [ confinc, ],
+                                       dependencies: gtk_deps)
+
 libgtk = library('gtk-4',
   soversion: gtk_soversion,
   version: gtk_library_version,
-  sources: [typefuncs, gtk_sources, gtkmarshal_h, gtkprivatetypebuiltins_h],
   c_args: gtk_cargs + common_cflags,
   include_directories: [confinc, gdkinc, gskinc, gtkinc],
-  dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep],
-  link_whole: [libgtk_css, libgdk, libgsk, ],
+  dependencies: [libgtk_static_dep, libgtk_css_dep, libgdk_dep, libgsk_dep],
+  link_whole: [libgtk_static, libgtk_css, libgdk, libgsk],
   link_args: common_ldflags,
   darwin_versions: darwin_versions,
   install: true,
