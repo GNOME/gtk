@@ -25,6 +25,7 @@ xkbcommon_req      = '>= 0.2.0'
 sysprof_req        = '>= 3.38.0'
 
 gnome = import('gnome')
+pkg_config = import('pkgconfig')
 
 add_project_arguments('-DG_LOG_USE_STRUCTURED=1', language: 'c')
 add_project_arguments('-DGLIB_DISABLE_DEPRECATION_WARNINGS', language: 'c')
@@ -461,9 +462,9 @@ if wayland_enabled
   endif
 
   wayland_pkgs = [
-    'wayland-client', wayland_req,
-    'wayland-protocols', wayland_proto_req,
-    'xkbcommon', xkbcommon_req,
+    'wayland-client @0@'.format(wayland_req),
+    'wayland-protocols @0@'.format(wayland_proto_req),
+    'xkbcommon @0@'.format(xkbcommon_req),
     'wayland-egl',
   ]
 endif
@@ -697,84 +698,88 @@ configure_file(input: 'config.h.meson',
                output: 'config.h',
                configuration: cdata)
 
-# pkg-config files - bit of a mess all of this
-pkgconf = configuration_data()
-
-pkgconf.set('prefix', get_option('prefix'))
-pkgconf.set('exec_prefix', '${prefix}')
-pkgconf.set('libdir', '${prefix}' / get_option('libdir'))
-pkgconf.set('includedir', '${prefix}' / get_option('includedir'))
-pkgconf.set('GTK_API_VERSION', gtk_api_version)
-pkgconf.set('VERSION', meson.project_version())
-pkgconf.set('GTK_BINARY_VERSION', gtk_binary_version)
-pkgconf.set('host', '@0@-@1@'.format(host_machine.cpu_family(), host_machine.system())) # FIXME
-
 # Requires
 pango_pkgname = win32_enabled ? 'pangowin32' : 'pango'
-gdk_packages = ' '.join([ pango_pkgname, pango_req,
-                       'pangocairo', pango_req,
-                       'gdk-pixbuf-2.0', gdk_pixbuf_req ])
+gdk_packages = [
+  '@0@ @1@'.format(pango_pkgname, pango_req),
+  'pangocairo @0@'.format(pango_req),
+  'gdk-pixbuf-2.0 @0@'.format(gdk_pixbuf_req),
+]
 
 if cairo_pkg_found
-  gdk_packages += ' '.join([ ' cairo', cairo_req ])
+  gdk_packages += 'cairo @0@'.format(cairo_req)
 endif
 if cairogobj_pkg_found
-  gdk_packages += ' '.join([ ' cairo-gobject', cairo_req ])
+  gdk_packages += 'cairo-gobject @0@'.format(cairo_req)
 endif
 
 if vulkan_pkg_found
   gdk_packages += 'vulkan'
 endif
 
-pkgconf.set('GDK_PACKAGES', gdk_packages)
-pkgconf.set('GSK_PACKAGES',
-            ' '.join([ 'graphene-gobject-1.0', graphene_req ]))
-pkgconf.set('GTK_PACKAGES',
-            ' '.join([ 'gio-2.0', glib_req ]))
+gsk_packages = [ 'graphene-gobject-1.0 @0@'.format(graphene_req) ]
+gtk_packages = [ 'gio-2.0 @0@'.format(glib_req) ]
 
 gio_pkgname = os_unix ? 'gio-unix-2.0' : 'gio-2.0'
-pkgconf.set('GDK_PRIVATE_PACKAGES',
-            ' '.join([ gio_pkgname, glib_req,
-                       'epoxy', epoxy_req ] + x11_pkgs + wayland_pkgs + cairo_backends))
-pkgconf.set('GSK_PRIVATE_PACKAGES', '') # all already in GDK_PRIVATE_PACKAGES
+gdk_private_packages = [
+  '@0@ @1@'.format(gio_pkgname, glib_req),
+  'epoxy @0@'.format(epoxy_req),
+] + x11_pkgs + wayland_pkgs + cairo_backends
+gsk_private_packages = [] # all already in gdk_private_packages
 pangoft2_pkgs = (wayland_enabled or x11_enabled) ? ['pangoft2'] : []
-pkgconf.set('GTK_PRIVATE_PACKAGES', ' '.join(pangoft2_pkgs))
+gtk_private_packages = pangoft2_pkgs
 
-pkgconf.set('GDK_EXTRA_LIBS', ' '.join(pc_gdk_extra_libs))
-pkgconf.set('GSK_EXTRA_LIBS', '')
-pkgconf.set('GTK_EXTRA_LIBS', '')
+gdk_extra_libs = pc_gdk_extra_libs
+gsk_extra_libs = []
+gtk_extra_libs = []
 
-pkgconf.set('GDK_EXTRA_CFLAGS', '')
-pkgconf.set('GSK_EXTRA_CFLAGS', '')
-pkgconf.set('GTK_EXTRA_CFLAGS', '')
+gdk_extra_cflags = []
+gsk_extra_cflags = []
+gtk_extra_cflags = []
 
-pkg_install_dir = join_paths(get_option('libdir'), 'pkgconfig')
+pkgs = [ 'gtk4' ]
 
-pkgs = [ 'gtk4.pc' ]
-
-pkg_targets = ''
+pkg_targets = []
 display_backends = []
 foreach backend: [ 'broadway', 'macos', 'wayland', 'win32', 'x11', ]
   if get_variable('@0@_enabled'.format(backend))
-    pkgs += ['gtk4-@0@.pc'.format(backend)]
-    pkg_targets += ' ' + backend
+    pkgs += ['gtk4-@0@'.format(backend)]
+    pkg_targets += backend
     display_backends += [ backend ]
   endif
 endforeach
-pkgconf.set('GDK_BACKENDS', pkg_targets.strip())
+
+common_pc_variables = [
+  'targets=@0@'.format(' '.join(pkg_targets)),
+  'gtk_binary_version=@0@'.format(gtk_binary_version),
+  'gtk_host=@0@-@1@'.format(host_machine.cpu_family(), host_machine.system()), # FIXME
+]
 
 foreach pkg: pkgs
-  configure_file(input: 'gtk4.pc.in',
-                 output: pkg,
-                 configuration: pkgconf,
-                 install_dir: pkg_install_dir)
+  pkg_config.generate(
+    filebase: pkg,
+    variables: common_pc_variables,
+    name: 'GTK',
+    description: 'GTK Graphical UI Library',
+    requires: gdk_packages + gsk_packages + gtk_packages,
+    requires_private: gdk_private_packages + gsk_private_packages + gtk_private_packages,
+    libraries: ['-L${libdir}', '-lgtk-4'],
+    libraries_private: gdk_extra_libs + gsk_extra_libs + gtk_extra_libs,
+    subdirs: ['gtk-@0@'.format(gtk_api_version)],
+    extra_cflags: gdk_extra_cflags + gsk_extra_cflags + gtk_extra_cflags,
+  )
 endforeach
 
 if os_unix
-  configure_file(input: 'gtk4-unix-print.pc.in',
-                 output: 'gtk4-unix-print.pc',
-                 configuration: pkgconf,
-                 install_dir: pkg_install_dir)
+  pkg_config.generate(
+    filebase: 'gtk4-unix-print',
+    variables: common_pc_variables,
+    name: 'GTK',
+    description: 'GTK Unix print support',
+    requires: ['gtk4'] + gtk_packages,
+    libraries: [],
+    subdirs: ['gtk-@0@/unix-print'.format(gtk_api_version)],
+  )
 endif
 
 subdir('po')
