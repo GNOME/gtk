@@ -25,11 +25,14 @@
 
 #include <gst/player/gstplayer-video-renderer.h>
 
+#include <math.h>
+
 struct _GtkGstPaintable
 {
   GObject parent_instance;
 
   GdkPaintable *image;
+  double pixel_aspect_ratio;
 };
 
 struct _GtkGstPaintableClass
@@ -66,7 +69,8 @@ gtk_gst_paintable_paintable_get_intrinsic_width (GdkPaintable *paintable)
   GtkGstPaintable *self = GTK_GST_PAINTABLE (paintable);
 
   if (self->image)
-    return gdk_paintable_get_intrinsic_width (self->image);
+    return round (self->pixel_aspect_ratio *
+      gdk_paintable_get_intrinsic_width (self->image));
 
   return 0;
 }
@@ -88,7 +92,8 @@ gtk_gst_paintable_paintable_get_intrinsic_aspect_ratio (GdkPaintable *paintable)
   GtkGstPaintable *self = GTK_GST_PAINTABLE (paintable);
 
   if (self->image)
-    return gdk_paintable_get_intrinsic_aspect_ratio (self->image);
+    return self->pixel_aspect_ratio *
+      gdk_paintable_get_intrinsic_aspect_ratio (self->image);
 
   return 0.0;
 };
@@ -157,7 +162,8 @@ gtk_gst_paintable_new (void)
 
 static void
 gtk_gst_paintable_set_paintable (GtkGstPaintable *self,
-                                 GdkPaintable    *paintable)
+                                 GdkPaintable    *paintable,
+                                 double           pixel_aspect_ratio)
 {
   gboolean size_changed;
 
@@ -165,7 +171,8 @@ gtk_gst_paintable_set_paintable (GtkGstPaintable *self,
     return;
 
   if (self->image == NULL ||
-      gdk_paintable_get_intrinsic_width (self->image) != gdk_paintable_get_intrinsic_width (paintable) ||
+      self->pixel_aspect_ratio * gdk_paintable_get_intrinsic_width (self->image) !=
+      pixel_aspect_ratio * gdk_paintable_get_intrinsic_width (paintable) ||
       gdk_paintable_get_intrinsic_height (self->image) != gdk_paintable_get_intrinsic_height (paintable) ||
       gdk_paintable_get_intrinsic_aspect_ratio (self->image) != gdk_paintable_get_intrinsic_aspect_ratio (paintable))
     size_changed = TRUE;
@@ -173,6 +180,7 @@ gtk_gst_paintable_set_paintable (GtkGstPaintable *self,
     size_changed = FALSE;
 
   g_set_object (&self->image, paintable);
+  self->pixel_aspect_ratio = pixel_aspect_ratio;
 
   if (size_changed)
     gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
@@ -185,6 +193,7 @@ typedef struct _SetTextureInvocation SetTextureInvocation;
 struct _SetTextureInvocation {
   GtkGstPaintable *paintable;
   GdkTexture      *texture;
+  double           pixel_aspect_ratio;
 };
 
 static void
@@ -202,20 +211,23 @@ gtk_gst_paintable_set_texture_invoke (gpointer data)
   SetTextureInvocation *invoke = data;
 
   gtk_gst_paintable_set_paintable (invoke->paintable,
-                                   GDK_PAINTABLE (invoke->texture));
+                                   GDK_PAINTABLE (invoke->texture),
+                                   invoke->pixel_aspect_ratio);
 
   return G_SOURCE_REMOVE;
 }
 
 void
 gtk_gst_paintable_queue_set_texture (GtkGstPaintable *self,
-                                     GdkTexture      *texture)
+                                     GdkTexture      *texture,
+                                     double           pixel_aspect_ratio)
 {
   SetTextureInvocation *invoke;
 
   invoke = g_slice_new0 (SetTextureInvocation);
   invoke->paintable = g_object_ref (self);
   invoke->texture = g_object_ref (texture);
+  invoke->pixel_aspect_ratio = pixel_aspect_ratio;
 
   g_main_context_invoke_full (NULL,
                               G_PRIORITY_DEFAULT,

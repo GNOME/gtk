@@ -31,7 +31,8 @@ G_DECLARE_FINAL_TYPE (GtkGstPaintable, gtk_gst_paintable, GTK, GST_PAINTABLE, GO
 GdkPaintable *  gtk_gst_paintable_new                   (void);
 
 void            gtk_gst_paintable_queue_set_texture     (GtkGstPaintable        *self,
-                                                         GdkTexture             *texture);
+                                                         GdkTexture             *texture,
+                                                         double                  pixel_aspect_ratio);
 
 G_END_DECLS
 

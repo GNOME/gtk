@@ -52,7 +52,7 @@ if gstplayer_dep.found()
       'gtkgstsink.c',
     ],
     c_args: extra_c_args,
-    dependencies: [ libgtk_dep, gstplayer_dep ],
+    dependencies: [ libm, libgtk_dep, gstplayer_dep ],
     install_dir: media_install_dir,
     install: true,
   )
