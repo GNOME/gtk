@@ -930,3 +930,35 @@ gsk_path_builder_svg_arc_to (GskPathBuilder *builder,
                    t);
     }
 }
+
+/**
+ * gsk_path_builder_add_layout:
+ * @builder: a `GskPathBuilder`
+ * @layout: the pango layout to add
+ *
+ * Adds the outlines for the glyphs in @layout to @builder.
+ */
+void
+gsk_path_builder_add_layout (GskPathBuilder *builder,
+                             PangoLayout    *layout)
+{
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  cairo_path_t *cairo_path;
+  GskPath *path;
+
+  surface = cairo_recording_surface_create (CAIRO_CONTENT_COLOR_ALPHA, NULL);
+  cr = cairo_create (surface);
+
+  pango_cairo_layout_path (cr, layout);
+  cairo_path = cairo_copy_path_flat (cr);
+  path = gsk_path_new_from_cairo (cairo_path);
+
+  gsk_path_builder_add_path (builder, path);
+
+  gsk_path_unref (path);
+
+  cairo_path_destroy (cairo_path);
+  cairo_destroy (cr);
+  cairo_surface_destroy (surface);
+}
