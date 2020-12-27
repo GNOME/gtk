@@ -106,60 +106,6 @@ gsk_path_new_from_contours (const GSList *contours)
 }
 
 /**
- * gsk_path_new_from_cairo:
- * @path: a Cairo path
- *
- * This is a convenience function that constructs a #GskPath from a Cairo path.
- *
- * You can use cairo_copy_path() to access the path from a Cairo context.
- *
- * Returns: a new #GskPath
- **/
-GskPath *
-gsk_path_new_from_cairo (const cairo_path_t *path)
-{
-  GskPathBuilder *builder;
-  gsize i;
-
-  g_return_val_if_fail (path != NULL, NULL);
-
-  builder = gsk_path_builder_new ();
-
-  for (i = 0; i < path->num_data; i += path->data[i].header.length)
-    {
-      const cairo_path_data_t *data = &path->data[i];
-      
-      switch (data->header.type)
-      {
-        case CAIRO_PATH_MOVE_TO:
-          gsk_path_builder_move_to (builder, data[1].point.x, data[1].point.y);
-          break;
-
-        case CAIRO_PATH_LINE_TO:
-          gsk_path_builder_line_to (builder, data[1].point.x, data[1].point.y);
-          break;
-
-        case CAIRO_PATH_CURVE_TO:
-          gsk_path_builder_curve_to (builder,
-                                     data[1].point.x, data[1].point.y,
-                                     data[2].point.x, data[2].point.y,
-                                     data[3].point.x, data[3].point.y);
-          break;
-
-        case CAIRO_PATH_CLOSE_PATH:
-          gsk_path_builder_close (builder);
-          break;
-
-        default:
-          g_assert_not_reached ();
-          break;
-      }
-    }
-
-  return gsk_path_builder_free_to_path (builder);
-}
-
-/**
  * gsk_path_ref:
  * @self: a #GskPath
  *
