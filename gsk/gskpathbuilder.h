@@ -53,6 +53,10 @@ GDK_AVAILABLE_IN_ALL
 void                    gsk_path_builder_add_path               (GskPathBuilder         *builder,
                                                                  GskPath                *path);
 GDK_AVAILABLE_IN_ALL
+void                    gsk_path_builder_add_layout             (GskPathBuilder         *builder,
+                                                                 PangoLayout            *layout);
+
+GDK_AVAILABLE_IN_ALL
 void                    gsk_path_builder_add_rect               (GskPathBuilder         *builder,
                                                                  const graphene_rect_t  *rect);
 GDK_AVAILABLE_IN_ALL
@@ -122,6 +126,7 @@ void                    gsk_path_builder_rel_conic_to           (GskPathBuilder 
                                                                  float                   weight);
 GDK_AVAILABLE_IN_ALL
 void                    gsk_path_builder_close                  (GskPathBuilder         *builder);
+
 
 G_END_DECLS
 
