@@ -539,14 +539,6 @@ static void	gtk_widget_class_init		(GtkWidgetClass     *klass);
 static void	gtk_widget_base_class_finalize	(GtkWidgetClass     *klass);
 static void     gtk_widget_init                  (GTypeInstance     *instance,
                                                   gpointer           g_class);
-static void	gtk_widget_set_property		 (GObject           *object,
-						  guint              prop_id,
-						  const GValue      *value,
-						  GParamSpec        *pspec);
-static void	gtk_widget_get_property		 (GObject           *object,
-						  guint              prop_id,
-						  GValue            *value,
-						  GParamSpec        *pspec);
 static void	gtk_widget_dispose		 (GObject	    *object);
 static void	gtk_widget_finalize		 (GObject	    *object);
 static void     gtk_widget_real_destroy          (GtkWidget         *object);
@@ -558,18 +550,9 @@ static void	gtk_widget_real_map		 (GtkWidget	    *widget);
 static void	gtk_widget_real_unmap		 (GtkWidget	    *widget);
 static void	gtk_widget_real_realize		 (GtkWidget	    *widget);
 static void	gtk_widget_real_unrealize	 (GtkWidget	    *widget);
-static void	gtk_widget_real_size_allocate    (GtkWidget         *widget,
-                                                  int                width,
-                                                  int                height,
-                                                  int                baseline);
 static void	gtk_widget_real_direction_changed(GtkWidget         *widget,
                                                   GtkTextDirection   previous_direction);
 
-static gboolean gtk_widget_real_query_tooltip    (GtkWidget         *widget,
-						  int                x,
-						  int                y,
-						  gboolean           keyboard_tip,
-						  GtkTooltip        *tooltip);
 static void     gtk_widget_real_css_changed      (GtkWidget         *widget,
                                                   GtkCssStyleChange *change);
 static void     gtk_widget_real_system_setting_changed (GtkWidget         *widget,
@@ -596,16 +579,6 @@ static void             gtk_widget_propagate_state              (GtkWidget      
                                                                  const GtkStateData *data);
 static gboolean		gtk_widget_real_mnemonic_activate	(GtkWidget	  *widget,
 								 gboolean	   group_cycling);
-static void             gtk_widget_real_measure                 (GtkWidget        *widget,
-                                                                 GtkOrientation    orientation,
-                                                                 int               for_size,
-                                                                 int              *minimum,
-                                                                 int              *natural,
-                                                                 int              *minimum_baseline,
-                                                                 int              *natural_baseline);
-static void             gtk_widget_real_state_flags_changed     (GtkWidget        *widget,
-                                                                 GtkStateFlags     old_state);
-
 static void             gtk_widget_accessible_interface_init    (GtkAccessibleInterface *iface);
 
 static void             gtk_widget_buildable_interface_init     (GtkBuildableIface  *iface);
@@ -637,8 +610,6 @@ static void             gtk_widget_buildable_parser_finished    (GtkBuildable   
 static void                     gtk_widget_set_accessible_role  (GtkWidget          *self,
                                                                  GtkAccessibleRole   role);
 static GtkAccessibleRole        gtk_widget_get_accessible_role  (GtkWidget          *self);
-
-static GtkSizeRequestMode gtk_widget_real_get_request_mode      (GtkWidget        *widget);
 
 static void                  template_data_free                 (GtkWidgetTemplate*template_data);
 
@@ -745,7 +716,7 @@ gtk_widget_base_class_init (gpointer g_class)
   GtkWidgetClassPrivate *priv;
 
   priv = klass->priv = G_TYPE_CLASS_GET_PRIVATE (g_class, GTK_TYPE_WIDGET, GtkWidgetClassPrivate);
-  
+
   priv->template = NULL;
 
   if (priv->shortcuts == NULL)
@@ -861,6 +832,305 @@ gtk_widget_constructed (GObject *object)
 
       muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (object), TRUE);
       gtk_action_muxer_connect_class_actions (muxer);
+    }
+}
+
+static void
+gtk_widget_real_measure (GtkWidget      *widget,
+                         GtkOrientation  orientation,
+                         int             for_size,
+                         int            *minimum,
+                         int            *natural,
+                         int            *minimum_baseline,
+                         int            *natural_baseline)
+{
+  *minimum = 0;
+  *natural = 0;
+}
+
+static GtkSizeRequestMode
+gtk_widget_real_get_request_mode (GtkWidget *widget)
+{
+  /* By default widgets don't trade size at all. */
+  return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+}
+
+static void
+gtk_widget_real_state_flags_changed (GtkWidget     *widget,
+                                     GtkStateFlags  old_state)
+{
+}
+
+static gboolean
+gtk_widget_real_query_tooltip (GtkWidget  *widget,
+                               int         x,
+                               int         y,
+                               gboolean    keyboard_tip,
+                               GtkTooltip *tooltip)
+{
+  const char *tooltip_markup;
+  gboolean has_tooltip;
+
+  has_tooltip = gtk_widget_get_has_tooltip (widget);
+  tooltip_markup = gtk_widget_get_tooltip_markup (widget);
+  if (tooltip_markup == NULL)
+    tooltip_markup = gtk_widget_get_tooltip_text (widget);
+
+  if (has_tooltip && tooltip_markup != NULL)
+    {
+      gtk_tooltip_set_markup (tooltip, tooltip_markup);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+gtk_widget_real_size_allocate (GtkWidget *widget,
+                               int        width,
+                               int        height,
+                               int        baseline)
+{
+}
+
+static void
+gtk_widget_set_property (GObject      *object,
+                         guint         prop_id,
+                         const GValue *value,
+                         GParamSpec   *pspec)
+{
+  GtkWidget *widget = GTK_WIDGET (object);
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  switch (prop_id)
+    {
+    case PROP_NAME:
+      gtk_widget_set_name (widget, g_value_get_string (value));
+      break;
+    case PROP_WIDTH_REQUEST:
+      gtk_widget_set_usize_internal (widget, g_value_get_int (value), -2);
+      break;
+    case PROP_HEIGHT_REQUEST:
+      gtk_widget_set_usize_internal (widget, -2, g_value_get_int (value));
+      break;
+    case PROP_VISIBLE:
+      gtk_widget_set_visible (widget, g_value_get_boolean (value));
+      break;
+    case PROP_SENSITIVE:
+      gtk_widget_set_sensitive (widget, g_value_get_boolean (value));
+      break;
+    case PROP_CAN_FOCUS:
+      gtk_widget_set_can_focus (widget, g_value_get_boolean (value));
+      break;
+    case PROP_FOCUSABLE:
+      gtk_widget_set_focusable (widget, g_value_get_boolean (value));
+      break;
+    case PROP_CAN_TARGET:
+      gtk_widget_set_can_target (widget, g_value_get_boolean (value));
+      break;
+    case PROP_FOCUS_ON_CLICK:
+      gtk_widget_set_focus_on_click (widget, g_value_get_boolean (value));
+      break;
+    case PROP_RECEIVES_DEFAULT:
+      gtk_widget_set_receives_default (widget, g_value_get_boolean (value));
+      break;
+    case PROP_CURSOR:
+      gtk_widget_set_cursor (widget, g_value_get_object (value));
+      break;
+    case PROP_HAS_TOOLTIP:
+      gtk_widget_set_has_tooltip (widget, g_value_get_boolean (value));
+      break;
+    case PROP_TOOLTIP_MARKUP:
+      gtk_widget_set_tooltip_markup (widget, g_value_get_string (value));
+      break;
+    case PROP_TOOLTIP_TEXT:
+      gtk_widget_set_tooltip_text (widget, g_value_get_string (value));
+      break;
+    case PROP_HALIGN:
+      gtk_widget_set_halign (widget, g_value_get_enum (value));
+      break;
+    case PROP_VALIGN:
+      gtk_widget_set_valign (widget, g_value_get_enum (value));
+      break;
+    case PROP_MARGIN_START:
+      gtk_widget_set_margin_start (widget, g_value_get_int (value));
+      break;
+    case PROP_MARGIN_END:
+      gtk_widget_set_margin_end (widget, g_value_get_int (value));
+      break;
+    case PROP_MARGIN_TOP:
+      gtk_widget_set_margin_top (widget, g_value_get_int (value));
+      break;
+    case PROP_MARGIN_BOTTOM:
+      gtk_widget_set_margin_bottom (widget, g_value_get_int (value));
+      break;
+    case PROP_HEXPAND:
+      gtk_widget_set_hexpand (widget, g_value_get_boolean (value));
+      break;
+    case PROP_HEXPAND_SET:
+      gtk_widget_set_hexpand_set (widget, g_value_get_boolean (value));
+      break;
+    case PROP_VEXPAND:
+      gtk_widget_set_vexpand (widget, g_value_get_boolean (value));
+      break;
+    case PROP_VEXPAND_SET:
+      gtk_widget_set_vexpand_set (widget, g_value_get_boolean (value));
+      break;
+    case PROP_OPACITY:
+      gtk_widget_set_opacity (widget, g_value_get_double (value));
+      break;
+    case PROP_OVERFLOW:
+      gtk_widget_set_overflow (widget, g_value_get_enum (value));
+      break;
+    case PROP_CSS_NAME:
+      if (g_value_get_string (value) != NULL)
+        gtk_css_node_set_name (priv->cssnode, g_quark_from_string (g_value_get_string (value)));
+      break;
+    case PROP_CSS_CLASSES:
+      gtk_widget_set_css_classes (widget, g_value_get_boxed (value));
+      break;
+    case PROP_LAYOUT_MANAGER:
+      gtk_widget_set_layout_manager (widget, g_value_dup_object (value));
+      break;
+    case PROP_ACCESSIBLE_ROLE:
+      gtk_widget_set_accessible_role (widget, g_value_get_enum (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_widget_get_property (GObject    *object,
+                         guint       prop_id,
+                         GValue     *value,
+                         GParamSpec *pspec)
+{
+  GtkWidget *widget = GTK_WIDGET (object);
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  switch (prop_id)
+    {
+    case PROP_NAME:
+      if (priv->name)
+        g_value_set_string (value, priv->name);
+      else
+        g_value_set_static_string (value, "");
+      break;
+    case PROP_PARENT:
+      g_value_set_object (value, priv->parent);
+      break;
+    case PROP_ROOT:
+      g_value_set_object (value, priv->root);
+      break;
+    case PROP_WIDTH_REQUEST:
+      {
+        int w;
+        gtk_widget_get_size_request (widget, &w, NULL);
+        g_value_set_int (value, w);
+      }
+      break;
+    case PROP_HEIGHT_REQUEST:
+      {
+        int h;
+        gtk_widget_get_size_request (widget, NULL, &h);
+        g_value_set_int (value, h);
+      }
+      break;
+    case PROP_VISIBLE:
+      g_value_set_boolean (value, _gtk_widget_get_visible (widget));
+      break;
+    case PROP_SENSITIVE:
+      g_value_set_boolean (value, gtk_widget_get_sensitive (widget));
+      break;
+    case PROP_CAN_FOCUS:
+      g_value_set_boolean (value, gtk_widget_get_can_focus (widget));
+      break;
+    case PROP_FOCUSABLE:
+      g_value_set_boolean (value, gtk_widget_get_focusable (widget));
+      break;
+    case PROP_HAS_FOCUS:
+      g_value_set_boolean (value, gtk_widget_has_focus (widget));
+      break;
+    case PROP_CAN_TARGET:
+      g_value_set_boolean (value, gtk_widget_get_can_target (widget));
+      break;
+    case PROP_FOCUS_ON_CLICK:
+      g_value_set_boolean (value, gtk_widget_get_focus_on_click (widget));
+      break;
+    case PROP_HAS_DEFAULT:
+      g_value_set_boolean (value, gtk_widget_has_default (widget));
+      break;
+    case PROP_RECEIVES_DEFAULT:
+      g_value_set_boolean (value, gtk_widget_get_receives_default (widget));
+      break;
+    case PROP_CURSOR:
+      g_value_set_object (value, gtk_widget_get_cursor (widget));
+      break;
+    case PROP_HAS_TOOLTIP:
+      g_value_set_boolean (value, gtk_widget_get_has_tooltip (widget));
+      break;
+    case PROP_TOOLTIP_TEXT:
+      g_value_set_string (value, gtk_widget_get_tooltip_text (widget));
+      break;
+    case PROP_TOOLTIP_MARKUP:
+      g_value_set_string (value, gtk_widget_get_tooltip_markup (widget));
+      break;
+    case PROP_HALIGN:
+      g_value_set_enum (value, gtk_widget_get_halign (widget));
+      break;
+    case PROP_VALIGN:
+      g_value_set_enum (value, gtk_widget_get_valign (widget));
+      break;
+    case PROP_MARGIN_START:
+      g_value_set_int (value, gtk_widget_get_margin_start (widget));
+      break;
+    case PROP_MARGIN_END:
+      g_value_set_int (value, gtk_widget_get_margin_end (widget));
+      break;
+    case PROP_MARGIN_TOP:
+      g_value_set_int (value, gtk_widget_get_margin_top (widget));
+      break;
+    case PROP_MARGIN_BOTTOM:
+      g_value_set_int (value, gtk_widget_get_margin_bottom (widget));
+      break;
+    case PROP_HEXPAND:
+      g_value_set_boolean (value, gtk_widget_get_hexpand (widget));
+      break;
+    case PROP_HEXPAND_SET:
+      g_value_set_boolean (value, gtk_widget_get_hexpand_set (widget));
+      break;
+    case PROP_VEXPAND:
+      g_value_set_boolean (value, gtk_widget_get_vexpand (widget));
+      break;
+    case PROP_VEXPAND_SET:
+      g_value_set_boolean (value, gtk_widget_get_vexpand_set (widget));
+      break;
+    case PROP_OPACITY:
+      g_value_set_double (value, gtk_widget_get_opacity (widget));
+      break;
+    case PROP_OVERFLOW:
+      g_value_set_enum (value, gtk_widget_get_overflow (widget));
+      break;
+    case PROP_SCALE_FACTOR:
+      g_value_set_int (value, gtk_widget_get_scale_factor (widget));
+      break;
+    case PROP_CSS_NAME:
+      g_value_set_string (value, gtk_widget_get_css_name (widget));
+      break;
+    case PROP_CSS_CLASSES:
+      g_value_take_boxed (value, gtk_widget_get_css_classes (widget));
+      break;
+    case PROP_LAYOUT_MANAGER:
+      g_value_set_object (value, gtk_widget_get_layout_manager (widget));
+      break;
+    case PROP_ACCESSIBLE_ROLE:
+      g_value_set_enum (value, gtk_widget_get_accessible_role (widget));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
     }
 }
 
@@ -1626,247 +1896,6 @@ gtk_widget_base_class_finalize (GtkWidgetClass *klass)
 
   template_data_free (klass->priv->template);
   g_object_unref (klass->priv->shortcuts);
-}
-
-static void
-gtk_widget_set_property (GObject         *object,
-			 guint            prop_id,
-			 const GValue    *value,
-			 GParamSpec      *pspec)
-{
-  GtkWidget *widget = GTK_WIDGET (object);
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  switch (prop_id)
-    {
-    case PROP_NAME:
-      gtk_widget_set_name (widget, g_value_get_string (value));
-      break;
-    case PROP_WIDTH_REQUEST:
-      gtk_widget_set_usize_internal (widget, g_value_get_int (value), -2);
-      break;
-    case PROP_HEIGHT_REQUEST:
-      gtk_widget_set_usize_internal (widget, -2, g_value_get_int (value));
-      break;
-    case PROP_VISIBLE:
-      gtk_widget_set_visible (widget, g_value_get_boolean (value));
-      break;
-    case PROP_SENSITIVE:
-      gtk_widget_set_sensitive (widget, g_value_get_boolean (value));
-      break;
-    case PROP_CAN_FOCUS:
-      gtk_widget_set_can_focus (widget, g_value_get_boolean (value));
-      break;
-    case PROP_FOCUSABLE:
-      gtk_widget_set_focusable (widget, g_value_get_boolean (value));
-      break;
-    case PROP_CAN_TARGET:
-      gtk_widget_set_can_target (widget, g_value_get_boolean (value));
-      break;
-    case PROP_FOCUS_ON_CLICK:
-      gtk_widget_set_focus_on_click (widget, g_value_get_boolean (value));
-      break;
-    case PROP_RECEIVES_DEFAULT:
-      gtk_widget_set_receives_default (widget, g_value_get_boolean (value));
-      break;
-    case PROP_CURSOR:
-      gtk_widget_set_cursor (widget, g_value_get_object (value));
-      break;
-    case PROP_HAS_TOOLTIP:
-      gtk_widget_set_has_tooltip (widget, g_value_get_boolean (value));
-      break;
-    case PROP_TOOLTIP_MARKUP:
-      gtk_widget_set_tooltip_markup (widget, g_value_get_string (value));
-      break;
-    case PROP_TOOLTIP_TEXT:
-      gtk_widget_set_tooltip_text (widget, g_value_get_string (value));
-      break;
-    case PROP_HALIGN:
-      gtk_widget_set_halign (widget, g_value_get_enum (value));
-      break;
-    case PROP_VALIGN:
-      gtk_widget_set_valign (widget, g_value_get_enum (value));
-      break;
-    case PROP_MARGIN_START:
-      gtk_widget_set_margin_start (widget, g_value_get_int (value));
-      break;
-    case PROP_MARGIN_END:
-      gtk_widget_set_margin_end (widget, g_value_get_int (value));
-      break;
-    case PROP_MARGIN_TOP:
-      gtk_widget_set_margin_top (widget, g_value_get_int (value));
-      break;
-    case PROP_MARGIN_BOTTOM:
-      gtk_widget_set_margin_bottom (widget, g_value_get_int (value));
-      break;
-    case PROP_HEXPAND:
-      gtk_widget_set_hexpand (widget, g_value_get_boolean (value));
-      break;
-    case PROP_HEXPAND_SET:
-      gtk_widget_set_hexpand_set (widget, g_value_get_boolean (value));
-      break;
-    case PROP_VEXPAND:
-      gtk_widget_set_vexpand (widget, g_value_get_boolean (value));
-      break;
-    case PROP_VEXPAND_SET:
-      gtk_widget_set_vexpand_set (widget, g_value_get_boolean (value));
-      break;
-    case PROP_OPACITY:
-      gtk_widget_set_opacity (widget, g_value_get_double (value));
-      break;
-    case PROP_OVERFLOW:
-      gtk_widget_set_overflow (widget, g_value_get_enum (value));
-      break;
-    case PROP_CSS_NAME:
-      if (g_value_get_string (value) != NULL)
-        gtk_css_node_set_name (priv->cssnode, g_quark_from_string (g_value_get_string (value)));
-      break;
-    case PROP_CSS_CLASSES:
-      gtk_widget_set_css_classes (widget, g_value_get_boxed (value));
-      break;
-    case PROP_LAYOUT_MANAGER:
-      gtk_widget_set_layout_manager (widget, g_value_dup_object (value));
-      break;
-    case PROP_ACCESSIBLE_ROLE:
-      gtk_widget_set_accessible_role (widget, g_value_get_enum (value));
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
-
-static void
-gtk_widget_get_property (GObject         *object,
-			 guint            prop_id,
-			 GValue          *value,
-			 GParamSpec      *pspec)
-{
-  GtkWidget *widget = GTK_WIDGET (object);
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  switch (prop_id)
-    {
-    case PROP_NAME:
-      if (priv->name)
-	g_value_set_string (value, priv->name);
-      else
-	g_value_set_static_string (value, "");
-      break;
-    case PROP_PARENT:
-      g_value_set_object (value, priv->parent);
-      break;
-    case PROP_ROOT:
-      g_value_set_object (value, priv->root);
-      break;
-    case PROP_WIDTH_REQUEST:
-      {
-        int w;
-        gtk_widget_get_size_request (widget, &w, NULL);
-        g_value_set_int (value, w);
-      }
-      break;
-    case PROP_HEIGHT_REQUEST:
-      {
-        int h;
-        gtk_widget_get_size_request (widget, NULL, &h);
-        g_value_set_int (value, h);
-      }
-      break;
-    case PROP_VISIBLE:
-      g_value_set_boolean (value, _gtk_widget_get_visible (widget));
-      break;
-    case PROP_SENSITIVE:
-      g_value_set_boolean (value, gtk_widget_get_sensitive (widget));
-      break;
-    case PROP_CAN_FOCUS:
-      g_value_set_boolean (value, gtk_widget_get_can_focus (widget));
-      break;
-    case PROP_FOCUSABLE:
-      g_value_set_boolean (value, gtk_widget_get_focusable (widget));
-      break;
-    case PROP_HAS_FOCUS:
-      g_value_set_boolean (value, gtk_widget_has_focus (widget));
-      break;
-    case PROP_CAN_TARGET:
-      g_value_set_boolean (value, gtk_widget_get_can_target (widget));
-      break;
-    case PROP_FOCUS_ON_CLICK:
-      g_value_set_boolean (value, gtk_widget_get_focus_on_click (widget));
-      break;
-    case PROP_HAS_DEFAULT:
-      g_value_set_boolean (value, gtk_widget_has_default (widget));
-      break;
-    case PROP_RECEIVES_DEFAULT:
-      g_value_set_boolean (value, gtk_widget_get_receives_default (widget));
-      break;
-    case PROP_CURSOR:
-      g_value_set_object (value, gtk_widget_get_cursor (widget));
-      break;
-    case PROP_HAS_TOOLTIP:
-      g_value_set_boolean (value, gtk_widget_get_has_tooltip (widget));
-      break;
-    case PROP_TOOLTIP_TEXT:
-      g_value_set_string (value, gtk_widget_get_tooltip_text (widget));
-      break;
-    case PROP_TOOLTIP_MARKUP:
-      g_value_set_string (value, gtk_widget_get_tooltip_markup (widget));
-      break;
-    case PROP_HALIGN:
-      g_value_set_enum (value, gtk_widget_get_halign (widget));
-      break;
-    case PROP_VALIGN:
-      g_value_set_enum (value, gtk_widget_get_valign (widget));
-      break;
-    case PROP_MARGIN_START:
-      g_value_set_int (value, gtk_widget_get_margin_start (widget));
-      break;
-    case PROP_MARGIN_END:
-      g_value_set_int (value, gtk_widget_get_margin_end (widget));
-      break;
-    case PROP_MARGIN_TOP:
-      g_value_set_int (value, gtk_widget_get_margin_top (widget));
-      break;
-    case PROP_MARGIN_BOTTOM:
-      g_value_set_int (value, gtk_widget_get_margin_bottom (widget));
-      break;
-    case PROP_HEXPAND:
-      g_value_set_boolean (value, gtk_widget_get_hexpand (widget));
-      break;
-    case PROP_HEXPAND_SET:
-      g_value_set_boolean (value, gtk_widget_get_hexpand_set (widget));
-      break;
-    case PROP_VEXPAND:
-      g_value_set_boolean (value, gtk_widget_get_vexpand (widget));
-      break;
-    case PROP_VEXPAND_SET:
-      g_value_set_boolean (value, gtk_widget_get_vexpand_set (widget));
-      break;
-    case PROP_OPACITY:
-      g_value_set_double (value, gtk_widget_get_opacity (widget));
-      break;
-    case PROP_OVERFLOW:
-      g_value_set_enum (value, gtk_widget_get_overflow (widget));
-      break;
-    case PROP_SCALE_FACTOR:
-      g_value_set_int (value, gtk_widget_get_scale_factor (widget));
-      break;
-    case PROP_CSS_NAME:
-      g_value_set_string (value, gtk_widget_get_css_name (widget));
-      break;
-    case PROP_CSS_CLASSES:
-      g_value_take_boxed (value, gtk_widget_get_css_classes (widget));
-      break;
-    case PROP_LAYOUT_MANAGER:
-      g_value_set_object (value, gtk_widget_get_layout_manager (widget));
-      break;
-    case PROP_ACCESSIBLE_ROLE:
-      g_value_set_enum (value, gtk_widget_get_accessible_role (widget));
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
 }
 
 static void
@@ -4086,14 +4115,6 @@ gtk_widget_compute_point (GtkWidget              *widget,
   return TRUE;
 }
 
-static void
-gtk_widget_real_size_allocate (GtkWidget *widget,
-                               int        width,
-                               int        height,
-                               int        baseline)
-{
-}
-
 /**
  * gtk_widget_class_add_binding: (skip)
  * @widget_class: the class to add the binding to
@@ -4752,30 +4773,6 @@ gtk_widget_grab_focus_child (GtkWidget *widget)
   return FALSE;
 }
 
-static gboolean
-gtk_widget_real_query_tooltip (GtkWidget  *widget,
-			       int         x,
-			       int         y,
-			       gboolean    keyboard_tip,
-			       GtkTooltip *tooltip)
-{
-  const char *tooltip_markup;
-  gboolean has_tooltip;
-
-  has_tooltip = gtk_widget_get_has_tooltip (widget);
-  tooltip_markup = gtk_widget_get_tooltip_markup (widget);
-  if (tooltip_markup == NULL)
-    tooltip_markup = gtk_widget_get_tooltip_text (widget);
-
-  if (has_tooltip && tooltip_markup != NULL)
-    {
-      gtk_tooltip_set_markup (tooltip, tooltip_markup);
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
 gboolean
 gtk_widget_query_tooltip (GtkWidget  *widget,
                           int         x,
@@ -4794,12 +4791,6 @@ gtk_widget_query_tooltip (GtkWidget  *widget,
                  &retval);
 
   return retval;
-}
-
-static void
-gtk_widget_real_state_flags_changed (GtkWidget     *widget,
-                                     GtkStateFlags  old_state)
-{
 }
 
 static void
@@ -9073,26 +9064,6 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
       g_object_unref (accessibility_data->object);
       g_slice_free (AccessibilityParserData, accessibility_data);
     }
-}
-
-static GtkSizeRequestMode
-gtk_widget_real_get_request_mode (GtkWidget *widget)
-{
-  /* By default widgets don't trade size at all. */
-  return GTK_SIZE_REQUEST_CONSTANT_SIZE;
-}
-
-static void
-gtk_widget_real_measure (GtkWidget      *widget,
-                         GtkOrientation  orientation,
-                         int             for_size,
-                         int            *minimum,
-                         int            *natural,
-                         int            *minimum_baseline,
-                         int            *natural_baseline)
-{
-  *minimum = 0;
-  *natural = 0;
 }
 
 /**
