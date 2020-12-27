@@ -86,6 +86,9 @@ void            gtk_picture_set_alternative_text        (GtkPicture             
 GDK_AVAILABLE_IN_ALL
 const char *    gtk_picture_get_alternative_text        (GtkPicture             *self);
 
+GDK_AVAILABLE_IN_ALL
+void            gtk_picture_get_paintable_bounds        (GtkPicture             *self,
+                                                         graphene_rect_t        *bounds);
 
 G_END_DECLS
 
