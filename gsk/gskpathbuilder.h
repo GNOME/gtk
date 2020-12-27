@@ -123,6 +123,10 @@ void                    gsk_path_builder_rel_conic_to           (GskPathBuilder 
 GDK_AVAILABLE_IN_ALL
 void                    gsk_path_builder_close                  (GskPathBuilder         *builder);
 
+GDK_AVAILABLE_IN_ALL
+void                    gsk_path_builder_add_layout             (GskPathBuilder         *builder,
+                                                                 PangoLayout            *layout);
+
 G_END_DECLS
 
 #endif /* __GSK_PATH_BUILDER_H__ */

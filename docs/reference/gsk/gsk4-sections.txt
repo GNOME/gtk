@@ -358,6 +358,7 @@ gsk_path_builder_add_circle
 gsk_path_builder_add_ellipse
 gsk_path_builder_add_path
 gtk_path_builder_add_segment
+gtk_path_builder_add_layout
 <SUBSECTION>
 gsk_path_builder_move_to
 gsk_path_builder_rel_move_to
