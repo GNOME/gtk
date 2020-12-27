@@ -59,7 +59,14 @@
  *
  * # CSS nodes
  *
- * GtkFontButton has a single CSS node with name fontbutton.
+ * |[<!-- language="plain" -->
+ * fontbutton
+ * ╰── button.font
+ *     ╰── [content]
+ *]|
+ *
+ * GtkFontButton has a single CSS node with name fontbutton which
+ * contains a button node with the .font style class.
  */
 
 typedef struct _GtkFontButtonClass   GtkFontButtonClass;

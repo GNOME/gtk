@@ -104,8 +104,14 @@
  *
  * # CSS nodes
  *
- * GtkMenuButton has a single CSS node with name button. To differentiate
- * it from a plain #GtkButton, it gets the .popup style class.
+ * |[<!-- language="plain" -->
+ * menubutton
+ * ╰── button.toggle
+ *     ╰── [content]
+ *]|
+ *
+ * GtkMenuButton has a single CSS node with name menubutton
+ * which contains a toggle button node.
  *
  * # Accessibility
  *

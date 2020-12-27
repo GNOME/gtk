@@ -489,7 +489,7 @@ update_node_name (GtkModelButton *self)
     {
     case GTK_BUTTON_ROLE_TITLE:
       start_name = "arrow";
-      end_name = NULL;
+      end_name = "";
       break;
     case GTK_BUTTON_ROLE_NORMAL:
       start_name = NULL;
