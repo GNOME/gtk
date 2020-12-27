@@ -26,6 +26,19 @@
 #include <math.h>
 #include <glib/gi18n.h>
 
+/**
+ * SECTION:ottiepaintable
+ * @Title: Paintable
+ * @Short_description: GdkPaintable implementation for Lottie
+ *
+ * OttiePaintable is an implementation of GdkPaintable that can
+ * draw Lottie animations. To create an OttiePaintable, you need
+ * a OttieCreation (i.e. a parsed Lottie animation).
+ *
+ * Beyond the standard GdkPaintable API, OttiePaintable lets you
+ * get and set the current timestamp, and query to overall duration
+ * of the animation.
+ */
 struct _OttiePaintable
 {
   GObject parent_instance;

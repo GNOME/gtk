@@ -26,6 +26,14 @@
 
 #include <glib/gi18n.h>
 
+/**
+ * SECTION:ottieplayer
+ * @Title: Player
+ * @Short_description: Plays a Lottie animation
+ *
+ * OttiePlayer is an implementation of the GtkMediaStream interface
+ * for Lottie animations.
+ */
 struct _OttiePlayer
 {
   GObject parent_instance;

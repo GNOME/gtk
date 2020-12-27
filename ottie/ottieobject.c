@@ -23,6 +23,15 @@
 
 #include "ottieintl.h"
 
+/*
+ * OttieObject is the base class for all objects that are
+ * created by parsing a Lottie animation. Every such object
+ * has a name and a match-name. The match-name is used for
+ * referencing the object in scripts.
+ *
+ * The two subclasses of OttieObject are OttieLayer and OttieShape.
+ */
+
 enum {
   PROP_0,
   PROP_MATCH_NAME,

@@ -28,6 +28,20 @@
 #include <glib/gi18n-lib.h>
 #include <json-glib/json-glib.h>
 
+/**
+ * SECTION:ottiecreation
+ * @Title: Creation
+ * @Short_description: Top-level object for Lottie animations
+ *
+ * OttieCreation is the top-level object which holds a Lottie
+ * animation. You can create an OttieCreation by loading a Lottie
+ * file with otte_creation_new_for_file() or ottie_creation_load_file(),
+ * or by parsing a Lottie animation from memory with ottie_creation_load_bytes().
+ *
+ * OttieCreation provides some general information about the loaded
+ * animation, such as a name, the frame rate, start and end frames
+ * and the dimensions.
+ */
 struct _OttieCreation
 {
   GObject parent;

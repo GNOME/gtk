@@ -24,6 +24,18 @@
 #include <glib/gi18n-lib.h>
 #include <json-glib/json-glib.h>
 
+/*
+ * OttieLayer is the parent class for all kinds of layers
+ * in Lottie animations.
+ *
+ * OttieComposition - a layer that contains other layers
+ * OttieShapeLayer - a layer containing shapes
+ * OttieNullLayer - a layer that does nothing
+ *
+ * Layers are organized in a tree (via composition layers),
+ * and rendering an animation is just rendering all its layers.
+ */
+
 G_DEFINE_TYPE (OttieLayer, ottie_layer, OTTIE_TYPE_OBJECT)
 
 static void

@@ -23,6 +23,25 @@
 
 #include <glib/gi18n-lib.h>
 
+/*
+ * OttieShape is the base class of all shape objects in
+ * Lottie animations. Shapes are operations that are applied
+ * to the render tree, for example:
+ *
+ * - adding a rectangle to the list of paths
+ * - trimming or offsetting an existing path
+ * - rendering a path by stroking or filling it
+ *
+ * There are many subclasses of OttieShape:
+ *
+ * - OttieEllipseShape
+ * - OttieRectShape
+ * - OttiePathShape
+ * - OttieFillShape
+ * - OttieStrokeShape
+ * - OttieTrimShape
+ * - OttieGroupShape
+ */
 G_DEFINE_TYPE (OttieShape, ottie_shape, OTTIE_TYPE_OBJECT)
 
 static void

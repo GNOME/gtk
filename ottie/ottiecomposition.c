@@ -29,6 +29,16 @@
 #include <glib/gi18n-lib.h>
 #include <gsk/gsk.h>
 
+/*
+ * An OttieComposition is an OttieLayer that contains
+ * an array of other layers. It is created by calling
+ * ottie_composition_parse_layers() with a JsonReader
+ * object while parsing a Lottie animation.
+ *
+ * For ease of manipulation, OttieComposition implements
+ * the GListModel interface.
+ */
+
 #define GDK_ARRAY_ELEMENT_TYPE OttieLayer *
 #define GDK_ARRAY_FREE_FUNC g_object_unref
 #define GDK_ARRAY_TYPE_NAME OttieLayerList

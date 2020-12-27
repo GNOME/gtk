@@ -23,6 +23,12 @@
 
 #include "ottierenderobserverprivate.h"
 
+/*
+ * OttieRender is the renderer object that is used for
+ * turning a Lottie animation plus a timestamp into a
+ * render node. It handles caching for expensive parts
+ * of the rendering, such as paths.
+ */
 void
 ottie_render_init (OttieRender         *self,
                    OttieRenderObserver *observer)
