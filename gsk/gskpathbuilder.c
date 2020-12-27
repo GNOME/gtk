@@ -339,6 +339,55 @@ gsk_path_builder_add_path (GskPathBuilder *builder,
 }
 
 /**
+ * gsk_path_builder_add_cairo_path:
+ * @self: a #GskPathBuilder
+ *
+ * Adds a Cairo path to the builder.
+ *
+ * You can use cairo_copy_path() to access the path from a Cairo context.
+ **/
+void
+gsk_path_builder_add_cairo_path (GskPathBuilder     *self,
+                                 const cairo_path_t *path)
+{
+  gsize i;
+
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (path != NULL);
+
+  for (i = 0; i < path->num_data; i += path->data[i].header.length)
+    {
+      const cairo_path_data_t *data = &path->data[i];
+
+      switch (data->header.type)
+      {
+        case CAIRO_PATH_MOVE_TO:
+          gsk_path_builder_move_to (self, data[1].point.x, data[1].point.y);
+          break;
+
+        case CAIRO_PATH_LINE_TO:
+          gsk_path_builder_line_to (self, data[1].point.x, data[1].point.y);
+          break;
+
+        case CAIRO_PATH_CURVE_TO:
+          gsk_path_builder_curve_to (self,
+                                     data[1].point.x, data[1].point.y,
+                                     data[2].point.x, data[2].point.y,
+                                     data[3].point.x, data[3].point.y);
+          break;
+
+        case CAIRO_PATH_CLOSE_PATH:
+          gsk_path_builder_close (self);
+          break;
+
+        default:
+          g_assert_not_reached ();
+          break;
+      }
+    }
+}
+
+/**
  * gsk_path_builder_add_rect:
  * @builder: A #GskPathBuilder
  * @rect: The rectangle to create a path for
@@ -957,18 +1006,14 @@ gsk_path_builder_add_layout (GskPathBuilder *builder,
   cairo_surface_t *surface;
   cairo_t *cr;
   cairo_path_t *cairo_path;
-  GskPath *path;
 
   surface = cairo_recording_surface_create (CAIRO_CONTENT_COLOR_ALPHA, NULL);
   cr = cairo_create (surface);
 
   pango_cairo_layout_path (cr, layout);
   cairo_path = cairo_copy_path (cr);
-  path = gsk_path_new_from_cairo (cairo_path);
 
-  gsk_path_builder_add_path (builder, path);
-
-  gsk_path_unref (path);
+  gsk_path_builder_add_cairo_path (builder, cairo_path);
 
   cairo_path_destroy (cairo_path);
   cairo_destroy (cr);

@@ -321,7 +321,6 @@ GskPath
 gsk_path_ref
 gsk_path_unref
 gsk_path_new_rect
-gsk_path_new_from_cairo
 gsk_path_parse
 <SUBSECTION>
 gsk_path_print
@@ -357,6 +356,7 @@ gsk_path_builder_add_rounded_rect
 gsk_path_builder_add_circle
 gsk_path_builder_add_ellipse
 gsk_path_builder_add_path
+gsk_path_builder_add_cairo_path
 gtk_path_builder_add_segment
 gtk_path_builder_add_layout
 <SUBSECTION>

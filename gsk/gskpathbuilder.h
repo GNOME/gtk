@@ -53,6 +53,9 @@ GDK_AVAILABLE_IN_ALL
 void                    gsk_path_builder_add_path               (GskPathBuilder         *builder,
                                                                  GskPath                *path);
 GDK_AVAILABLE_IN_ALL
+void                    gsk_path_builder_add_cairo_path         (GskPathBuilder         *self,
+                                                                 const cairo_path_t     *path);
+GDK_AVAILABLE_IN_ALL
 void                    gsk_path_builder_add_layout             (GskPathBuilder         *builder,
                                                                  PangoLayout            *layout);
 
