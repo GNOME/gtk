@@ -723,7 +723,7 @@ if cairogobj_pkg_found
 endif
 
 if vulkan_pkg_found
-  gdk_packages += 'vulkan'
+  gdk_packages += ' vulkan'
 endif
 
 pkgconf.set('GDK_PACKAGES', gdk_packages)
