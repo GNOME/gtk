@@ -189,31 +189,20 @@ create_hexagon (GtkWidget *widget)
 static GskPath *
 create_path_from_text (GtkWidget *widget)
 {
-  cairo_surface_t *surface;
-  cairo_t *cr;
-  cairo_path_t *path;
   PangoLayout *layout;
   PangoFontDescription *desc;
-  GskPath *result;
-
-  surface = cairo_recording_surface_create (CAIRO_CONTENT_COLOR_ALPHA, NULL);
-  cr = cairo_create (surface);
+  GskPathBuilder *builder;
 
   layout = gtk_widget_create_pango_layout (widget, "Pango power!\nPango power!\nPango power!");
   desc = pango_font_description_from_string ("sans bold 36");
   pango_layout_set_font_description (layout, desc);
   pango_font_description_free (desc);
 
-  pango_cairo_layout_path (cr, layout);
-  path = cairo_copy_path_flat (cr);
-  result = gsk_path_new_from_cairo (path);
+  builder = gsk_path_builder_new ();
 
-  cairo_path_destroy (path);
-  g_object_unref (layout);
-  cairo_destroy (cr);
-  cairo_surface_destroy (surface);
+  gsk_path_builder_add_layout (builder, layout);
 
-  return result;
+  return gsk_path_builder_free_to_path (builder);
 }
 
 static gboolean
