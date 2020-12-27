@@ -111,6 +111,13 @@ gtk_gst_memory_format_from_video (GstVideoFormat format)
   }
 }
 
+static void
+video_frame_free (GstVideoFrame *frame)
+{
+  gst_video_frame_unmap (frame);
+  g_free (frame);
+}
+
 static GdkTexture *
 gtk_gst_sink_texture_from_buffer (GtkGstSink *self,
                                   GstBuffer  *buffer)
@@ -124,15 +131,14 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink *self,
 
   bytes = g_bytes_new_with_free_func (frame.data[0],
                                       frame.info.width * frame.info.stride[0],
-                                      (GDestroyNotify) gst_buffer_unref,
-                                      gst_buffer_ref (buffer));
+                                      (GDestroyNotify) video_frame_free,
+                                      g_memdup (&frame, sizeof (frame)));
   texture = gdk_memory_texture_new (frame.info.width,
                                     frame.info.height,
                                     gtk_gst_memory_format_from_video (GST_VIDEO_FRAME_FORMAT (&frame)),
                                     bytes,
                                     frame.info.stride[0]);
   g_bytes_unref (bytes);
-  gst_video_frame_unmap (&frame);
 
   return texture;
 }
