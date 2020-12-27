@@ -71,7 +71,7 @@ struct _GtkViewport
 
   GtkAdjustment  *hadjustment;
   GtkAdjustment  *vadjustment;
- 
+
   /* GtkScrollablePolicy needs to be checked when
    * driving the scrollable adjustment values */
   guint hscroll_policy : 1;
@@ -244,9 +244,7 @@ gtk_viewport_measure (GtkWidget      *widget,
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
 
-  *minimum = *natural = 0;
-
-  if (viewport->child && gtk_widget_get_visible (viewport->child))
+  if (viewport->child)
     gtk_widget_measure (viewport->child,
                         orientation,
                         for_size,
