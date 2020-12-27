@@ -114,44 +114,20 @@ gtk_picture_snapshot (GtkWidget   *widget,
                       GtkSnapshot *snapshot)
 {
   GtkPicture *self = GTK_PICTURE (widget);
-  double ratio;
-  int x, y, width, height;
-  double w, h;
+  graphene_rect_t bounds;
 
   if (self->paintable == NULL)
     return;
 
-  width = gtk_widget_get_width (widget);
-  height = gtk_widget_get_height (widget);
-  ratio = gdk_paintable_get_intrinsic_aspect_ratio (self->paintable);
+  gtk_picture_get_paintable_bounds (self, &bounds);
 
-  if (!self->keep_aspect_ratio || ratio == 0)
-    {
-      gdk_paintable_snapshot (self->paintable, snapshot, width, height);
-    }
-  else
-    {
-      double picture_ratio = (double) width / height;
-
-      if (ratio > picture_ratio)
-        {
-          w = width;
-          h = width / ratio;
-        }
-      else
-        {
-          w = height * ratio;
-          h = height;
-        }
-
-      x = (width - ceil (w)) / 2;
-      y = floor(height - ceil (h)) / 2;
-
-      gtk_snapshot_save (snapshot);
-      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
-      gdk_paintable_snapshot (self->paintable, snapshot, w, h);
-      gtk_snapshot_restore (snapshot);
-    }
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_translate (snapshot, &bounds.origin);
+  gdk_paintable_snapshot (self->paintable,
+                          snapshot,
+                          bounds.size.width,
+                          bounds.size.height);
+  gtk_snapshot_restore (snapshot);
 }
 
 static GtkSizeRequestMode
@@ -1005,5 +981,59 @@ gtk_picture_get_alternative_text (GtkPicture *self)
   g_return_val_if_fail (GTK_IS_PICTURE (self), NULL);
 
   return self->alternative_text;
+}
+
+/**
+ * gtk_picture_get_paintable_bounds:
+ * @self: a #GtkPicture
+ * @bounds: (out) (caller-allocates): Set to the bounds of the
+ *     paintable
+ *
+ * Gets the area inside @self that the paintable will be drawn
+ * to. This can be used to map coordinates of gestures back to
+ * the paintable.
+ *
+ * If @self contains no paintable, the empty rect is returned.
+ **/
+void
+gtk_picture_get_paintable_bounds (GtkPicture      *self,
+                                  graphene_rect_t *bounds)
+{
+  double ratio, picture_ratio;
+  int x, y, width, height;
+  double w, h;
+
+  if (self->paintable == NULL)
+    {
+      graphene_rect_init (bounds, 0, 0, 0, 0);
+      return;
+    }
+
+  width = gtk_widget_get_width (GTK_WIDGET (self));
+  height = gtk_widget_get_height (GTK_WIDGET (self));
+  ratio = gdk_paintable_get_intrinsic_aspect_ratio (self->paintable);
+
+  if (!self->keep_aspect_ratio || ratio == 0)
+    {
+      graphene_rect_init (bounds, 0, 0, width, height);
+      return;
+    }
+
+  picture_ratio = (double) width / height;
+  if (ratio > picture_ratio)
+    {
+      w = width;
+      h = width / ratio;
+    }
+  else
+    {
+      w = height * ratio;
+      h = height;
+    }
+
+  x = (width - ceil (w)) / 2;
+  y = floor(height - ceil (h)) / 2;
+
+  graphene_rect_init (bounds, x, y, w, h);
 }
 

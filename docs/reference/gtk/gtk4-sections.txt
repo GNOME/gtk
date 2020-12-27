@@ -2209,6 +2209,7 @@ gtk_picture_set_can_shrink
 gtk_picture_get_can_shrink
 gtk_picture_set_alternative_text
 gtk_picture_get_alternative_text
+gtk_picture_get_paintable_bounds
 <SUBSECTION Standard>
 GTK_PICTURE
 GTK_IS_PICTURE
