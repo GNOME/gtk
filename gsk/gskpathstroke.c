@@ -369,11 +369,11 @@ path_builder_add_curve (GskPathBuilder *builder,
 }
 
 static gboolean
-add_op (GskPathOperation        op,
-        const graphene_point_t *pts,
-        gsize                   n_pts,
-        float                   weight,
-        gpointer                user_data)
+append_reverse_op (GskPathOperation        op,
+                   const graphene_point_t *pts,
+                   gsize                   n_pts,
+                   float                   weight,
+                   gpointer                user_data)
 {
   GskCurve c;
   GskCurve *curve;
@@ -392,15 +392,15 @@ add_op (GskPathOperation        op,
 }
 
 static void
-path_builder_add_reverse_path (GskPathBuilder *builder,
-                               GskPath        *path)
+path_builder_append_reverse_path (GskPathBuilder *builder,
+                                  GskPath        *path)
 {
   GList *l, *ops;
 
   ops = NULL;
   gsk_path_foreach (path,
                     GSK_PATH_FOREACH_ALLOW_CURVE | GSK_PATH_FOREACH_ALLOW_CONIC,
-                    add_op,
+                    append_reverse_op,
                     &ops);
   for (l = ops; l; l = l->next)
     {
@@ -408,6 +408,35 @@ path_builder_add_reverse_path (GskPathBuilder *builder,
       path_builder_add_curve (builder, curve);
     }
   g_list_free_full (ops, g_free);
+}
+
+static gboolean
+add_op (GskPathOperation        op,
+        const graphene_point_t *pts,
+        gsize                   n_pts,
+        float                   weight,
+        gpointer                user_data)
+{
+  GskCurve c;
+  GskPathBuilder *builder = user_data;
+
+  if (op == GSK_PATH_MOVE)
+    return TRUE;
+
+  gsk_curve_init_foreach (&c, op, pts, n_pts, weight);
+  path_builder_add_curve (builder, &c);
+
+  return TRUE;
+}
+
+static void
+path_builder_append_path (GskPathBuilder *builder,
+                          GskPath        *path)
+{
+  gsk_path_foreach (path,
+                    GSK_PATH_FOREACH_ALLOW_CURVE | GSK_PATH_FOREACH_ALLOW_CONIC,
+                    add_op,
+                    builder);
 }
 
 /* Draw a circular arc from the current point to e,
@@ -691,7 +720,7 @@ find_cusps (const GskCurve *curve,
 static void
 add_line_join (GskPathBuilder         *builder,
                GskLineJoin             line_join,
-               float                   line_width,
+               float                   width,
                float                   miter_limit,
                const graphene_point_t *c,
                const GskCurve         *aa,
@@ -705,7 +734,7 @@ add_line_join (GskPathBuilder         *builder,
   float ml, w;
 
   ml = MAX (miter_limit, 1);
-  w = line_width / 2;
+  w = width;
 
   a = gsk_curve_get_end_point (aa);
   gsk_curve_get_end_tangent (aa, &ta);
@@ -741,7 +770,7 @@ again:
             goto again;
           }
 
-        if (ka > 2 / line_width || kb > 2 / line_width)
+        if (ka > 1 / w || kb > 1 / w)
           {
             line_join = GSK_LINE_JOIN_ROUND;
             goto again;
@@ -1209,7 +1238,7 @@ again:
 
     case GSK_LINE_JOIN_ROUND:
       gsk_path_builder_svg_arc_to (builder,
-                                   line_width / 2, line_width / 2,
+                                   w, w,
                                    0, 0, angle > 0 ? 1 : 0,
                                    b->x, b->y);
       break;
@@ -1299,6 +1328,27 @@ add_line_cap (GskPathBuilder         *builder,
  * We rely on the ability to offset, subdivide, intersect
  * and reverse curves.
  */
+
+typedef struct
+{
+  GskPathBuilder *builder;
+  float distance;
+  GskLineJoin line_join;
+  float miter_limit;
+
+  GskPathBuilder *offset;
+
+  gboolean has_current_point;
+  gboolean has_current_curve;
+  gboolean is_first_curve;
+
+  GskCurve c;
+  GskCurve o;
+
+  GskCurve c0;
+  GskCurve o0;
+} OffsetData;
+
 typedef struct
 {
   GskPathBuilder *builder;  // builder that collects the stroke
@@ -1443,7 +1493,7 @@ add_segments (StrokeData     *stroke_data,
 
           add_line_join (stroke_data->left,
                          line_join,
-                         stroke_data->stroke->line_width,
+                         stroke_data->stroke->line_width / 2,
                          stroke_data->stroke->miter_limit,
                          gsk_curve_get_start_point (curve),
                          &stroke_data->l,
@@ -1457,7 +1507,7 @@ add_segments (StrokeData     *stroke_data,
 
           add_line_join (stroke_data->right,
                          line_join,
-                         stroke_data->stroke->line_width,
+                         stroke_data->stroke->line_width / 2,
                          stroke_data->stroke->miter_limit,
                          gsk_curve_get_start_point (curve),
                          &stroke_data->r,
@@ -1487,6 +1537,117 @@ add_segments (StrokeData     *stroke_data,
   stroke_data->r = *r;
   stroke_data->l = *l;
   stroke_data->is_first_curve = FALSE;
+}
+
+static void
+append_offset (OffsetData     *offset_data,
+               const GskCurve *curve)
+{
+  if (offset_data->is_first_curve)
+    {
+      offset_data->o0 = *curve;
+      path_builder_move_to_point (offset_data->offset, gsk_curve_get_end_point (curve));
+    }
+  else
+    path_builder_add_curve (offset_data->offset, curve);
+}
+
+static void
+add_offset_segment (OffsetData     *offset_data,
+                    const GskCurve *curve,
+                    GskCurve       *o,
+                    gboolean        force_round_join)
+{
+  float angle;
+  float t1, t2;
+  graphene_vec2_t tangent1, tangent2;
+  graphene_point_t p;
+  GskLineJoin line_join;
+
+  if (!offset_data->has_current_curve)
+    {
+      offset_data->c0 = *curve;
+      offset_data->o0 = *o;
+      path_builder_move_to_point (offset_data->offset, gsk_curve_get_start_point (o));
+
+      offset_data->c = *curve;
+      offset_data->o = *o;
+
+      offset_data->has_current_curve = TRUE;
+      offset_data->is_first_curve = TRUE;
+      return;
+    }
+
+  gsk_curve_get_end_tangent (&offset_data->c, &tangent1);
+  gsk_curve_get_start_tangent (curve, &tangent2);
+  angle = angle_between (&tangent1, &tangent2);
+
+  if (force_round_join || fabs (angle) < DEG_TO_RAD (5))
+    line_join = GSK_LINE_JOIN_ROUND;
+  else
+    line_join = offset_data->line_join;
+
+  if (fabs (angle) < DEG_TO_RAD (1))
+    {
+      /* Close enough to a straight line */
+      append_offset (offset_data, &offset_data->o);
+    }
+  else
+    {
+      if (fabs (M_PI - fabs (angle)) < DEG_TO_RAD (1))
+        {
+          /* For 180 turns, we look at the whole curves to
+           * decide if they are left or right turns
+           */
+          get_tangent (gsk_curve_get_start_point (&offset_data->c),
+                       gsk_curve_get_end_point (&offset_data->c),
+                       &tangent1);
+          get_tangent (gsk_curve_get_start_point (curve),
+                       gsk_curve_get_end_point (curve),
+                       &tangent2);
+          angle = angle_between (&tangent1, &tangent2);
+        }
+
+      if ((angle > 0) == (offset_data->distance > 0))
+        {
+          /* Turn towards the offset */
+          if (gsk_curve_intersect (&offset_data->o, o, &t1, &t2, &p, 1) > 0)
+            {
+              GskCurve c1, c2;
+
+              gsk_curve_split (&offset_data->o, t1, &c1, &c2);
+              offset_data->o = c1;
+              gsk_curve_split (o, t2, &c1, &c2);
+              *o = c2;
+
+              append_offset (offset_data, &offset_data->o);
+            }
+          else
+            {
+              append_offset (offset_data, &offset_data->o);
+              path_builder_line_to_point (offset_data->offset, gsk_curve_get_start_point (o));
+            }
+        }
+      else
+        {
+          /* Turn away */
+          append_offset (offset_data, &offset_data->o);
+
+          add_line_join (offset_data->offset,
+                         line_join,
+                         offset_data->distance,
+                         offset_data->miter_limit,
+                         gsk_curve_get_start_point (curve),
+                         &offset_data->o,
+                         o,
+                         angle);
+
+        }
+    }
+
+  offset_data->c = *curve;
+  offset_data->o = *o;
+  offset_data->is_first_curve = FALSE;
 }
 
 #ifdef STROKE_DEBUG
@@ -1530,15 +1691,20 @@ add_debug (StrokeData     *stroke_data,
 }
 #endif
 
+typedef void (*AddCurveFunc) (const GskCurve *curve,
+                              gboolean        force_round_join,
+                              gpointer        user_data);
+
 /* Add a curve to the in-progress stroke. We look at the angle between
  * the previous curve and this one to determine on which side we need
  * to intersect the curves, and on which to add a join.
  */
 static void
-add_curve (StrokeData     *stroke_data,
-           const GskCurve *curve,
-           gboolean        force_round_join)
+add_curve (const GskCurve *curve,
+           gboolean        force_round_join,
+           gpointer        user_data)
 {
+  StrokeData *stroke_data = user_data;
   GskCurve l, r;
 
   if (curve_is_ignorable (curve))
@@ -1554,6 +1720,22 @@ add_curve (StrokeData     *stroke_data,
   add_segments (stroke_data, curve, &r, &l, force_round_join);
 }
 
+static void
+add_offset_curve (const GskCurve *curve,
+                  gboolean        force_round_join,
+                  gpointer        user_data)
+{
+  OffsetData *offset_data = user_data;
+  GskCurve c;
+
+  if (curve_is_ignorable (curve))
+    return;
+
+  gsk_curve_offset (curve, offset_data->distance, &c);
+
+  add_offset_segment (offset_data, curve, &c, force_round_join);
+}
+
 static int
 cmpfloat (const void *p1, const void *p2)
 {
@@ -1565,19 +1747,20 @@ cmpfloat (const void *p1, const void *p2)
 #define MAX_SUBDIVISION 3
 
 static void
-subdivide_and_add_curve (StrokeData     *stroke_data,
-                         const GskCurve *curve,
+subdivide_and_add_curve (const GskCurve *curve,
                          int             level,
-                         gboolean        force_round_join)
+                         gboolean        force_round_join,
+                         AddCurveFunc    add_curve_cb,
+                         gpointer        data)
 {
   GskCurve c1, c2;
   float t[5];
   int n;
 
   if (level == 0)
-    add_curve (stroke_data, curve, force_round_join);
+    add_curve_cb (curve, force_round_join, data);
   else if (level < MAX_SUBDIVISION && cubic_is_simple (curve))
-    add_curve (stroke_data, curve, force_round_join);
+    add_curve_cb (curve, force_round_join, data);
   else if (level == MAX_SUBDIVISION && (n = find_cusps (curve, t)) > 0)
     {
       t[n++] = 0;
@@ -1586,7 +1769,10 @@ subdivide_and_add_curve (StrokeData     *stroke_data,
       for (int i = 0; i + 1 < n; i++)
         {
           gsk_curve_segment (curve, t[i], t[i + 1], &c1);
-          subdivide_and_add_curve (stroke_data, &c1, level - 1, i == 0 ? force_round_join : TRUE);
+          subdivide_and_add_curve (&c1,
+                                   level - 1,
+                                   i == 0 ? force_round_join : TRUE,
+                                   add_curve_cb, data);
         }
     }
   else
@@ -1604,23 +1790,33 @@ subdivide_and_add_curve (StrokeData     *stroke_data,
       if (n == 2)
         {
           gsk_curve_split (curve, 0.5, &c1, &c2);
-          subdivide_and_add_curve (stroke_data, &c1, level - 1, force_round_join);
-          subdivide_and_add_curve (stroke_data, &c2, level - 1, TRUE);
+          subdivide_and_add_curve (&c1,
+                                   level - 1,
+                                   force_round_join,
+                                   add_curve_cb, data);
+          subdivide_and_add_curve (&c2,
+                                   level - 1,
+                                   TRUE,
+                                   add_curve_cb, data);
         }
       else
         {
           for (int i = 0; i + 1 < n; i++)
             {
               gsk_curve_segment (curve, t[i], t[i+1], &c1);
-              subdivide_and_add_curve (stroke_data, &c1, level - 1, i == 0 ? force_round_join : TRUE);
+              subdivide_and_add_curve (&c1,
+                                       level - 1,
+                                       i == 0 ? force_round_join : TRUE,
+                                       add_curve_cb, data);
             }
         }
     }
 }
 
 static void
-add_degenerate_conic (StrokeData     *stroke_data,
-                      const GskCurve *curve)
+add_degenerate_conic (const GskCurve *curve,
+                      AddCurveFunc    add_curve_cb,
+                      gpointer        data)
 {
   GskCurve c;
   graphene_point_t p[2];
@@ -1628,31 +1824,38 @@ add_degenerate_conic (StrokeData     *stroke_data,
   p[0] = *gsk_curve_get_start_point (curve);
   gsk_curve_get_point (curve, 0.5, &p[1]);
   gsk_curve_init_foreach (&c, GSK_PATH_LINE, p, 2, 0);
-  add_curve (stroke_data, &c, FALSE);
+  add_curve_cb (&c, FALSE, data);
 
   p[0] = p[1];
   p[1] = *gsk_curve_get_end_point (curve);
   gsk_curve_init_foreach (&c, GSK_PATH_LINE, p, 2, 0);
-  add_curve (stroke_data, &c, TRUE);
+  add_curve_cb (&c, TRUE, data);
 }
 
 static void
-subdivide_and_add_conic (StrokeData     *stroke_data,
-                         const GskCurve *curve,
+subdivide_and_add_conic (const GskCurve *curve,
                          int             level,
-                         gboolean        force_round_join)
+                         gboolean        force_round_join,
+                         AddCurveFunc    add_curve_cb,
+                         gpointer        data)
 {
   if (level == MAX_SUBDIVISION && conic_is_degenerate (curve))
-    add_degenerate_conic (stroke_data, curve);
+    add_degenerate_conic (curve, add_curve_cb, data);
   else if (level == 0 || (level < MAX_SUBDIVISION && conic_is_simple (curve)))
-    add_curve (stroke_data, curve, force_round_join);
+    add_curve_cb (curve, force_round_join, data);
   else
     {
       GskCurve c1, c2;
 
       gsk_curve_split (curve, 0.5, &c1, &c2);
-      subdivide_and_add_conic (stroke_data, &c1, level - 1, force_round_join);
-      subdivide_and_add_conic (stroke_data, &c2, level - 1, TRUE);
+      subdivide_and_add_conic (&c1,
+                               level - 1,
+                               force_round_join,
+                               add_curve_cb, data);
+      subdivide_and_add_conic (&c2,
+                               level - 1,
+                               TRUE,
+                               add_curve_cb, data);
     }
 }
 
@@ -1692,7 +1895,7 @@ cap_and_connect_contours (StrokeData *stroke_data)
       GskCurve c;
 
       path = gsk_path_builder_free_to_path (stroke_data->left);
-      path_builder_add_reverse_path (stroke_data->right, path);
+      path_builder_append_reverse_path (stroke_data->right, path);
       gsk_path_unref (path);
 
       if (!stroke_data->is_first_curve)
@@ -1755,7 +1958,7 @@ close_contours (StrokeData *stroke_data)
   builder = gsk_path_builder_new ();
   path_builder_move_to_point (builder, gsk_path_builder_get_current_point (stroke_data->left));
   path = gsk_path_builder_free_to_path (stroke_data->left);
-  path_builder_add_reverse_path (builder, path);
+  path_builder_append_reverse_path (builder, path);
   gsk_path_unref (path);
   gsk_path_builder_close (builder);
 
@@ -1803,7 +2006,7 @@ stroke_op (GskPathOperation        op,
           if (!graphene_point_near (&pts[0], &pts[1], 0.001))
             {
               gsk_curve_init_foreach (&curve, GSK_PATH_LINE, pts, n_pts, weight);
-              add_curve (stroke_data, &curve, FALSE);
+              add_curve (&curve, FALSE, stroke_data);
             }
           close_contours (stroke_data);
         }
@@ -1814,17 +2017,17 @@ stroke_op (GskPathOperation        op,
 
     case GSK_PATH_LINE:
       gsk_curve_init_foreach (&curve, op, pts, n_pts, weight);
-      add_curve (stroke_data, &curve, FALSE);
+      add_curve (&curve, FALSE, stroke_data);
       break;
 
     case GSK_PATH_CURVE:
       gsk_curve_init_foreach (&curve, op, pts, n_pts, weight);
-      subdivide_and_add_curve (stroke_data, &curve, MAX_SUBDIVISION, FALSE);
+      subdivide_and_add_curve (&curve, MAX_SUBDIVISION, FALSE, add_curve, stroke_data);
       break;
 
     case GSK_PATH_CONIC:
       gsk_curve_init_foreach (&curve, op, pts, n_pts, weight);
-      subdivide_and_add_conic (stroke_data, &curve, MAX_SUBDIVISION, FALSE);
+      subdivide_and_add_conic (&curve, MAX_SUBDIVISION, FALSE, add_curve, stroke_data);
       break;
 
     default:
@@ -1874,6 +2077,136 @@ gsk_contour_default_add_stroke (const GskContour *contour,
   gsk_path_builder_add_path (builder, path);
   gsk_path_unref (path);
 #endif
+}
+
+/* }}} */
+/* {{{ Offset implementation */
+
+static void
+finish_offset_contour (OffsetData *offset_data)
+{
+  GskPath *path;
+
+  if (offset_data->has_current_curve)
+    {
+      path_builder_move_to_point (offset_data->builder, gsk_curve_get_start_point (&offset_data->o0));
+      path_builder_add_curve (offset_data->builder, &offset_data->o0);
+
+      path = gsk_path_builder_free_to_path (offset_data->offset);
+      path_builder_append_path (offset_data->builder, path);
+      gsk_path_unref (path);
+
+      path_builder_add_curve (offset_data->builder, &offset_data->o);
+    }
+  else
+    {
+       gsk_path_builder_unref (offset_data->offset);
+    }
+
+  offset_data->offset = NULL;
+}
+
+static void
+close_offset_contour (OffsetData *offset_data)
+{
+  GskPath *path;
+
+  if (offset_data->has_current_curve)
+    {
+      /* add final join and first segment */
+      add_offset_segment (offset_data, &offset_data->c0, &offset_data->o0, FALSE);
+      path_builder_add_curve (offset_data->offset, &offset_data->o);
+    }
+
+  gsk_path_builder_close (offset_data->offset);
+
+  path = gsk_path_builder_free_to_path (offset_data->offset);
+  gsk_path_builder_add_path (offset_data->builder, path);
+  gsk_path_unref (path);
+
+  offset_data->offset = NULL;
+}
+
+static gboolean
+offset_op (GskPathOperation        op,
+           const graphene_point_t *pts,
+           gsize                   n_pts,
+           float                   weight,
+           gpointer                user_data)
+{
+  OffsetData *offset_data = user_data;
+  GskCurve curve;
+
+  switch (op)
+    {
+    case GSK_PATH_MOVE:
+      if (offset_data->has_current_point)
+        finish_offset_contour (offset_data);
+
+      offset_data->offset = gsk_path_builder_new ();
+
+      offset_data->has_current_point = TRUE;
+      offset_data->has_current_curve = FALSE;
+      break;
+
+    case GSK_PATH_CLOSE:
+      if (offset_data->has_current_point)
+        {
+          if (!graphene_point_near (&pts[0], &pts[1], 0.001))
+            {
+              gsk_curve_init_foreach (&curve, GSK_PATH_LINE, pts, n_pts, weight);
+              add_offset_curve (&curve, FALSE, offset_data);
+            }
+
+          close_offset_contour (offset_data);
+        }
+
+      offset_data->has_current_point = FALSE;
+      offset_data->has_current_curve = FALSE;
+      break;
+
+    case GSK_PATH_LINE:
+      gsk_curve_init_foreach (&curve, op, pts, n_pts, weight);
+      add_offset_curve (&curve, FALSE, offset_data);
+      break;
+
+    case GSK_PATH_CURVE:
+      gsk_curve_init_foreach (&curve, op, pts, n_pts, weight);
+      subdivide_and_add_curve (&curve, MAX_SUBDIVISION, FALSE, add_offset_curve, offset_data);
+      break;
+
+    case GSK_PATH_CONIC:
+      gsk_curve_init_foreach (&curve, op, pts, n_pts, weight);
+      subdivide_and_add_conic (&curve, MAX_SUBDIVISION, FALSE, add_offset_curve, offset_data);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  return TRUE;
+}
+
+void
+gsk_contour_default_offset (const GskContour *contour,
+                            GskPathBuilder   *builder,
+                            float             distance,
+                            GskLineJoin       line_join,
+                            float             miter_limit)
+{
+  OffsetData offset_data;
+
+  memset (&offset_data, 0, sizeof (OffsetData));
+
+  offset_data.builder = builder;
+  offset_data.distance = distance;
+  offset_data.line_join = line_join;
+  offset_data.miter_limit = miter_limit;
+
+  gsk_contour_foreach (contour, GSK_PATH_TOLERANCE_DEFAULT, offset_op, &offset_data);
+
+  if (offset_data.has_current_point)
+    finish_offset_contour (&offset_data);
 }
 
 /* }}} */
