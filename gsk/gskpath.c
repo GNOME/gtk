@@ -1264,3 +1264,36 @@ gsk_path_stroke (GskPath   *self,
 
   return gsk_path_builder_free_to_path (builder);
 }
+
+/**
+ * gsk_path_offset:
+ * @self: a `GskPath`
+ * @distance: the distance to offset the path by
+ * @line_join: how joins are supposed to be drawn
+ * @miter_limit: miter limit for joins
+ *
+ * Create a new path that is offset from @self by @distance.
+ *
+ * The offset can be positive (to the right) or negative.
+ * The @line_join and @miter_limit arguments influence how
+ * joins between the offset path segments are made.
+ *
+ * Returns: a new `GskPath`
+ */
+GskPath *
+gsk_path_offset (GskPath     *self,
+                 float        distance,
+                 GskLineJoin  line_join,
+                 float        miter_limit)
+{
+  GskPathBuilder *builder;
+
+  builder = gsk_path_builder_new ();
+
+  for (int i = 0; i < self->n_contours; i++)
+    gsk_contour_offset (gsk_path_get_contour (self, i), builder, distance, line_join, miter_limit);
+
+  return gsk_path_builder_free_to_path (builder);
+}
+
+
