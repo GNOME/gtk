@@ -23,6 +23,7 @@
 #include <glib-object.h>
 
 #include "ottie/ottietypesprivate.h"
+#include "ottie/ottieprinterprivate.h"
 
 G_BEGIN_DECLS
 
@@ -46,6 +47,9 @@ struct _OttieObject
 struct _OttieObjectClass
 {
   GObjectClass parent_class;
+
+  void (*print) (OttieObject  *self,
+                 OttiePrinter *printer);
 };
 
 GType                   ottie_object_get_type                   (void) G_GNUC_CONST;
@@ -57,6 +61,10 @@ const char *            ottie_object_get_name                   (OttieObject    
 void                    ottie_object_set_match_name             (OttieObject            *self,
                                                                  const char             *match_name);
 const char *            ottie_object_get_match_name             (OttieObject            *self);
+
+void                    ottie_object_print                      (OttieObject            *self,
+                                                                 const char             *name,
+                                                                 OttiePrinter           *printer);
 
 #define OTTIE_PARSE_OPTIONS_OBJECT \
     { "nm", ottie_parser_option_string, G_STRUCT_OFFSET (OttieObject, name) }, \

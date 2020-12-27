@@ -52,6 +52,33 @@ ottie_layer_default_render (OttieLayer  *self,
 }
 
 static void
+ottie_layer_print (OttieObject  *obj,
+                   OttiePrinter *printer)
+{
+  OttieLayer *self = OTTIE_LAYER (obj);
+
+  OTTIE_OBJECT_CLASS (ottie_layer_parent_class)->print (obj, printer);
+
+  if (self->auto_orient != 0)
+    ottie_printer_add_int (printer, "ao", self->auto_orient);
+  if (self->blend_mode != GSK_BLEND_MODE_DEFAULT)
+    ottie_printer_add_int (printer, "bm", self->blend_mode);
+  if (self->layer_name != NULL)
+    ottie_printer_add_string (printer, "ln", self->layer_name);
+  ottie_object_print (OTTIE_OBJECT (self->transform), "ks", printer);
+  ottie_printer_add_double (printer, "ip", self->start_frame);
+  ottie_printer_add_int (printer, "op", self->end_frame);
+  if (self->index != OTTIE_INT_UNSET)
+    ottie_printer_add_int (printer, "ind", self->index);
+  if (self->parent_index != OTTIE_INT_UNSET)
+    ottie_printer_add_int (printer, "parent", self->parent_index);
+  ottie_printer_add_double (printer, "st", self->start_time);
+  if (self->stretch != 1)
+    ottie_printer_add_double (printer, "sr", self->stretch);
+  ottie_printer_add_int (printer, "ddd", 0);
+}
+
+static void
 ottie_layer_dispose (GObject *object)
 {
   OttieLayer *self = OTTIE_LAYER (object);
@@ -66,11 +93,14 @@ static void
 ottie_layer_class_init (OttieLayerClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  OttieObjectClass *oobject_class = OTTIE_OBJECT_CLASS (klass);
 
   klass->update = ottie_layer_default_update;
   klass->render = ottie_layer_default_render;
 
   gobject_class->dispose = ottie_layer_dispose;
+
+  oobject_class->print = ottie_layer_print;
 }
 
 static void
@@ -109,4 +139,3 @@ ottie_layer_render (OttieLayer  *self,
 
   ottie_render_end_object (render, OTTIE_OBJECT (self));
 }
-

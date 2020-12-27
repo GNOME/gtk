@@ -92,6 +92,21 @@ ottie_composition_layer_render (OttieLayer  *layer,
 }
 
 static void
+ottie_composition_layer_print (OttieObject  *obj,
+                               OttiePrinter *printer)
+{
+  OttieCompositionLayer *self = OTTIE_COMPOSITION_LAYER (obj);
+
+  OTTIE_OBJECT_CLASS (ottie_composition_layer_parent_class)->print (obj, printer);
+
+  if (self->ref_id)
+    ottie_printer_add_string (printer, "refId", self->ref_id);
+
+  ottie_printer_add_double (printer, "w", self->width);
+  ottie_printer_add_double (printer, "h", self->height);
+}
+
+static void
 ottie_composition_layer_dispose (GObject *object)
 {
   OttieCompositionLayer *self = OTTIE_COMPOSITION_LAYER (object);
@@ -106,8 +121,11 @@ ottie_composition_layer_dispose (GObject *object)
 static void
 ottie_composition_layer_class_init (OttieCompositionLayerClass *klass)
 {
+  OttieObjectClass *oobject_class = OTTIE_OBJECT_CLASS (klass);
   OttieLayerClass *layer_class = OTTIE_LAYER_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  oobject_class->print = ottie_composition_layer_print;
 
   layer_class->update = ottie_composition_layer_update;
   layer_class->render = ottie_composition_layer_render;

@@ -45,6 +45,10 @@ gboolean                ottie_group_shape_parse_shapes          (JsonReader     
                                                                  gsize                   offset,
                                                                  gpointer                data);
 
+void                    ottie_group_shape_print_shapes          (OttieShape             *shape,
+                                                                 const char             *name,
+                                                                 OttiePrinter           *printer);
+
 G_END_DECLS
 
 #endif /* __OTTIE_GROUP_SHAPE_PRIVATE_H__ */

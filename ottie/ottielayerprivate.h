@@ -24,6 +24,7 @@
 #include "ottie/ottieobjectprivate.h"
 #include "ottie/ottieparserprivate.h"
 #include "ottie/ottierenderprivate.h"
+#include "ottie/ottieprinterprivate.h"
 
 G_BEGIN_DECLS
 
@@ -61,6 +62,8 @@ struct _OttieLayerClass
   void                  (* render)                           (OttieLayer                *layer,
                                                               OttieRender               *render,
                                                               double                     timestamp);
+  void                 (* print)                             (OttieLayer                *layer,
+                                                              OttiePrinter              *printer);
 };
 
 GType                   ottie_layer_get_type                 (void) G_GNUC_CONST;

@@ -22,6 +22,7 @@
 
 #include <json-glib/json-glib.h>
 #include <graphene.h>
+#include "ottieprinterprivate.h"
 
 G_BEGIN_DECLS
 
@@ -47,6 +48,10 @@ void                    ottie_point_value_get                   (OttiePointValue
 gboolean                ottie_point_value_parse                 (JsonReader                     *reader,
                                                                  gsize                           offset,
                                                                  gpointer                        data);
+void                    ottie_point_value_print                 (OttiePointValue                *self,
+                                                                 const char                     *name,
+                                                                 OttiePrinter                   *printer);
+
 
 G_END_DECLS
 

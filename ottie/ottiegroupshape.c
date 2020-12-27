@@ -114,6 +114,19 @@ ottie_group_shape_render (OttieShape  *shape,
 }
 
 static void
+ottie_group_shape_print (OttieObject  *obj,
+                         OttiePrinter *printer)
+{
+  OttieGroupShape *self = OTTIE_GROUP_SHAPE (obj);
+
+  OTTIE_OBJECT_CLASS (ottie_group_shape_parent_class)->print (obj, printer);
+
+  ottie_printer_add_string (printer, "ty", "gr");
+  ottie_printer_add_int (printer, "bm", self->blend_mode);
+  ottie_group_shape_print_shapes (OTTIE_SHAPE (self), "it", printer);
+}
+
+static void
 ottie_group_shape_dispose (GObject *object)
 {
   OttieGroupShape *self = OTTIE_GROUP_SHAPE (object);
@@ -126,8 +139,11 @@ ottie_group_shape_dispose (GObject *object)
 static void
 ottie_group_shape_class_init (OttieGroupShapeClass *klass)
 {
+  OttieObjectClass *oobject_class = OTTIE_OBJECT_CLASS (klass);
   OttieShapeClass *shape_class = OTTIE_SHAPE_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  oobject_class->print = ottie_group_shape_print;
 
   shape_class->render = ottie_group_shape_render;
 
@@ -243,5 +259,23 @@ ottie_group_shape_parse (JsonReader *reader)
     }
 
   return self;
+}
+
+void
+ottie_group_shape_print_shapes (OttieShape   *shape,
+                                const char   *name,
+                                OttiePrinter *printer)
+{
+  OttieGroupShape *self = OTTIE_GROUP_SHAPE (shape);
+
+  ottie_printer_start_array (printer, name);
+
+  for (gsize i = 0; i < ottie_shape_list_get_size (&self->shapes); i++)
+    {
+      OttieObject *obj = OTTIE_OBJECT (ottie_shape_list_get (&self->shapes, i));
+      ottie_object_print (obj, NULL, printer);
+    }
+
+  ottie_printer_end_array (printer);
 }
 

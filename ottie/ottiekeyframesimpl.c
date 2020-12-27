@@ -364,6 +364,63 @@ ottie_keyframes(parse) (JsonReader *reader)
   return parse.keyframes;
 }
 
+static inline void
+ottie_keyframes(print_control_point) (OttiePrinter            *printer,
+                                      const char              *name,
+                                      const OttieControlPoint *c)
+{
+  ottie_printer_start_object (printer, name);
+  ottie_printer_indent (printer);
+  g_string_append_printf (printer->str, "\"x\" : [");
+  for (int i = 0; i < OTTIE_KEYFRAMES_DIMENSIONS; i++)
+    {
+      if (i > 0)
+        g_string_append (printer->str, ",");
+      g_string_append_printf (printer->str, " %g", c->x[i]);
+    }
+  g_string_append_printf (printer->str, " ],\n");
+  ottie_printer_indent (printer);
+  g_string_append_printf (printer->str, "\"y\" : [");
+  for (int i = 0; i < OTTIE_KEYFRAMES_DIMENSIONS; i++)
+    {
+      if (i > 0)
+        g_string_append (printer->str, ",");
+      g_string_append_printf (printer->str, " %g", c->x[i]);
+    }
+  g_string_append_printf (printer->str, " ]");
+  printer->has_member = TRUE;
+  ottie_printer_end_object (printer);
+}
+
+#ifdef OTTIE_KEYFRAMES_PRINT_FUNC
+static inline void
+ottie_keyframes(print) (OttieKeyframes *self,
+                        OttiePrinter   *printer)
+{
+  ottie_printer_start_array (printer, "k");
+  for (int i = 0; i < self->n_items; i++)
+    {
+      const OttieKeyframe *keyframe = &self->items[i];
+
+      ottie_printer_start_object (printer, NULL);
+
+#ifdef OTTIE_KEYFRAMES_BY_VALUE
+      OTTIE_KEYFRAMES_PRINT_FUNC (printer, "s", &keyframe->start_value);
+      OTTIE_KEYFRAMES_PRINT_FUNC (printer, "e", &keyframe->end_value);
+#else
+      OTTIE_KEYFRAMES_PRINT_FUNC (printer, "s", keyframe->start_value);
+      OTTIE_KEYFRAMES_PRINT_FUNC (printer, "e", keyframe->end_value);
+#endif
+      ottie_printer_add_double (printer, "t", keyframe->start_time);
+      ottie_keyframes(print_control_point) (printer, "i", &keyframe->in);
+      ottie_keyframes(print_control_point) (printer, "o", &keyframe->out);
+
+      ottie_printer_end_object (printer);
+    }
+  ottie_printer_end_array (printer);
+}
+#endif
+
 #ifndef OTTIE_KEYFRAMES_NO_UNDEF
 
 #undef _T_
@@ -374,6 +431,7 @@ ottie_keyframes(parse) (JsonReader *reader)
 
 #undef OTTIE_KEYFRAMES_COPY_FUNC
 #undef OTTIE_KEYFRAMES_PARSE_FUNC
+#undef OTTIE_KEYFRAMES_PRINT_FUNC
 #undef OTTIE_KEYFRAMES_BY_VALUE
 #undef OTTIE_KEYFRAMES_ELEMENT_TYPE
 #undef OTTIE_KEYFRAMES_FREE_FUNC

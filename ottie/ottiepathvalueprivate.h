@@ -23,6 +23,7 @@
 #include <json-glib/json-glib.h>
 
 #include <gsk/gsk.h>
+#include "ottieprinterprivate.h"
 
 G_BEGIN_DECLS
 
@@ -47,6 +48,10 @@ GskPath *                 ottie_path_value_get                  (OttiePathValue 
 gboolean                  ottie_path_value_parse                (JsonReader             *reader,
                                                                  gsize                   offset,
                                                                  gpointer                data);
+void                      ottie_path_value_print                (OttiePathValue         *self,
+                                                                 const char             *name,
+                                                                 OttiePrinter           *printer);
+
 
 G_END_DECLS
 

@@ -63,6 +63,24 @@ ottie_transform_render (OttieShape  *shape,
 }
 
 static void
+ottie_transform_print (OttieObject  *obj,
+                       OttiePrinter *printer)
+{
+  OttieTransform *self = OTTIE_TRANSFORM (obj);
+
+  OTTIE_OBJECT_CLASS (ottie_transform_parent_class)->print (obj, printer);
+
+  ottie_printer_add_string (printer, "ty", "tr");
+  ottie_double_value_print (&self->opacity, "o", printer);
+  ottie_double_value_print (&self->rotation, "r", printer);
+  ottie_double_value_print (&self->skew, "sk", printer);
+  ottie_double_value_print (&self->skew_angle, "sa", printer);
+  ottie_point3d_value_print (&self->anchor, "a", printer);
+  ottie_point3d_value_print (&self->position, "p", printer);
+  ottie_point3d_value_print (&self->scale, "s", printer);
+}
+
+static void
 ottie_transform_dispose (GObject *object)
 {
   OttieTransform *self = OTTIE_TRANSFORM (object);
@@ -89,8 +107,11 @@ ottie_transform_finalize (GObject *object)
 static void
 ottie_transform_class_init (OttieTransformClass *klass)
 {
+  OttieObjectClass *oobject_class = OTTIE_OBJECT_CLASS (klass);
   OttieShapeClass *shape_class = OTTIE_SHAPE_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  oobject_class->print = ottie_transform_print;
 
   shape_class->render = ottie_transform_render;
 
@@ -125,7 +146,6 @@ ottie_transform_value_parse_scale (JsonReader *reader,
 {
   return ottie_point3d_value_parse (reader, 100, offset, data);
 }
-
 
 OttieShape *
 ottie_transform_parse (JsonReader *reader)

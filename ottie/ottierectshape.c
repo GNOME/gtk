@@ -164,6 +164,21 @@ ottie_rect_shape_render (OttieShape  *shape,
 }
 
 static void
+ottie_rect_shape_print (OttieObject  *obj,
+                        OttiePrinter *printer)
+{
+  OttieRectShape *self = OTTIE_RECT_SHAPE (obj);
+
+  OTTIE_OBJECT_CLASS (ottie_rect_shape_parent_class)->print (obj, printer);
+
+  ottie_printer_add_string (printer, "ty", "rc");
+  ottie_printer_add_double (printer, "d", self->direction);
+  ottie_point_value_print (&self->position, "p", printer);
+  ottie_point_value_print (&self->size, "s", printer);
+  ottie_double_value_print (&self->rounded, "r", printer);
+}
+
+static void
 ottie_rect_shape_dispose (GObject *object)
 {
   OttieRectShape *self = OTTIE_RECT_SHAPE (object);
@@ -178,8 +193,11 @@ ottie_rect_shape_dispose (GObject *object)
 static void
 ottie_rect_shape_class_init (OttieRectShapeClass *klass)
 {
+  OttieObjectClass *oobject_class = OTTIE_OBJECT_CLASS (klass);
   OttieShapeClass *shape_class = OTTIE_SHAPE_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  oobject_class->print = ottie_rect_shape_print;
 
   shape_class->render = ottie_rect_shape_render;
 

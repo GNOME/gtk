@@ -130,6 +130,21 @@ ottie_trim_shape_render (OttieShape  *shape,
 }
 
 static void
+ottie_trim_shape_print (OttieObject  *obj,
+                        OttiePrinter *printer)
+{
+  OttieTrimShape *self = OTTIE_TRIM_SHAPE (obj);
+
+  OTTIE_OBJECT_CLASS (ottie_trim_shape_parent_class)->print (obj, printer);
+
+  ottie_printer_add_string (printer, "ty", "tm");
+  ottie_double_value_print (&self->start, "s", printer);
+  ottie_double_value_print (&self->end, "e", printer);
+  ottie_double_value_print (&self->offset, "o", printer);
+  ottie_printer_add_int (printer, "m", self->mode);
+}
+
+static void
 ottie_trim_shape_dispose (GObject *object)
 {
   OttieTrimShape *self = OTTIE_TRIM_SHAPE (object);
@@ -144,8 +159,11 @@ ottie_trim_shape_dispose (GObject *object)
 static void
 ottie_trim_shape_class_init (OttieTrimShapeClass *klass)
 {
+  OttieObjectClass *oobject_class = OTTIE_OBJECT_CLASS (klass);
   OttieShapeClass *shape_class = OTTIE_SHAPE_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  oobject_class->print = ottie_trim_shape_print;
 
   shape_class->render = ottie_trim_shape_render;
 

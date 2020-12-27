@@ -22,6 +22,7 @@
 #include "ottiepathvalueprivate.h"
 
 #include "ottieparserprivate.h"
+#include "ottie/ottieprinterprivate.h"
 
 #include <glib/gi18n-lib.h>
 
@@ -289,6 +290,7 @@ ottie_path_interpolate (const OttiePath *start,
 #define OTTIE_KEYFRAMES_FREE_FUNC ottie_path_unref
 #define OTTIE_KEYFRAMES_PARSE_FUNC ottie_path_value_parse_one
 #define OTTIE_KEYFRAMES_INTERPOLATE_FUNC ottie_path_interpolate
+#define OTTIE_KEYFRAMES_PRINT_FUNC ottie_printer_add_path
 #include "ottiekeyframesimpl.c"
 
 void
@@ -398,5 +400,69 @@ ottie_path_value_parse (JsonReader *reader,
   json_reader_end_member (reader);
 
   return TRUE;
+}
+
+static inline void
+ottie_printer_add_curves (OttiePrinter *printer,
+                          OttieContour *contour,
+                          const char   *name,
+                          gsize         offset)
+{
+  ottie_printer_start_array (printer, name);
+  for (int i = 0; i < contour->n_curves; i++)
+    {
+      guchar *curve = (guchar *)&contour->curves[i];
+      double *p = (double *)(curve + offset);
+
+      ottie_printer_start_array (printer, NULL);
+      ottie_printer_indent (printer);
+      g_string_append_printf (printer->str, "%g,\n", p[0]);
+      ottie_printer_indent (printer);
+      g_string_append_printf (printer->str, "%g\n", p[1]);
+      ottie_printer_end_array (printer);
+    }
+  ottie_printer_end_array (printer);
+}
+
+static void
+ottie_printer_add_contour (OttiePrinter *printer,
+                           OttieContour *contour)
+{
+  ottie_printer_start_object (printer, NULL);
+  ottie_printer_add_boolean (printer, "c", contour->closed);
+  ottie_printer_add_curves (printer, contour, "v", G_STRUCT_OFFSET (OttieCurve, point));
+  ottie_printer_add_curves (printer, contour, "i", G_STRUCT_OFFSET (OttieCurve, in));
+  ottie_printer_add_curves (printer, contour, "o", G_STRUCT_OFFSET (OttieCurve, out));
+  ottie_printer_end_object (printer);
+}
+
+void
+ottie_printer_add_path (OttiePrinter *printer,
+                        const char   *name,
+                        gpointer      value)
+{
+  OttiePath *path = value;
+
+  ottie_printer_start_array (printer, name);
+  for (int i = 0; i < path->n_contours; i++)
+    ottie_printer_add_contour (printer, path->contours[i]);
+  ottie_printer_end_array (printer);
+  printer->has_member = TRUE;
+}
+
+void
+ottie_path_value_print (OttiePathValue *self,
+                        const char     *name,
+                        OttiePrinter   *printer)
+{
+  ottie_printer_start_object (printer, name);
+
+  ottie_printer_add_boolean (printer, "a", !self->is_static);
+  if (self->is_static)
+    ottie_printer_add_path (printer, "k", self->static_value);
+  else
+    ottie_path_keyframes_print (self->keyframes, printer);
+
+  ottie_printer_end_object (printer);
 }
 

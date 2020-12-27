@@ -64,6 +64,9 @@ GDK_AVAILABLE_IN_ALL
 gboolean                ottie_creation_is_prepared              (OttieCreation          *self);
 
 GDK_AVAILABLE_IN_ALL
+GBytes *                ottie_creation_to_bytes                 (OttieCreation          *self);
+
+GDK_AVAILABLE_IN_ALL
 const char *            ottie_creation_get_name                 (OttieCreation          *self);
 GDK_AVAILABLE_IN_ALL
 double                  ottie_creation_get_frame_rate           (OttieCreation          *self);

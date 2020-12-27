@@ -86,6 +86,20 @@ ottie_ellipse_shape_render (OttieShape  *shape,
 }
 
 static void
+ottie_ellipse_shape_print (OttieObject  *obj,
+                           OttiePrinter *printer)
+{
+  OttieEllipseShape *self = OTTIE_ELLIPSE_SHAPE (obj);
+
+  OTTIE_OBJECT_CLASS (ottie_ellipse_shape_parent_class)->print (obj, printer);
+
+  ottie_printer_add_string (printer, "ty", "el");
+  ottie_printer_add_double (printer, "d", self->diellipseion);
+  ottie_point_value_print (&self->position, "p", printer);
+  ottie_point_value_print (&self->size, "s", printer);
+}
+
+static void
 ottie_ellipse_shape_dispose (GObject *object)
 {
   OttieEllipseShape *self = OTTIE_ELLIPSE_SHAPE (object);
@@ -99,8 +113,11 @@ ottie_ellipse_shape_dispose (GObject *object)
 static void
 ottie_ellipse_shape_class_init (OttieEllipseShapeClass *klass)
 {
+  OttieObjectClass *oobject_class = OTTIE_OBJECT_CLASS (klass);
   OttieShapeClass *shape_class = OTTIE_SHAPE_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  oobject_class->print = ottie_ellipse_shape_print;
 
   shape_class->render = ottie_ellipse_shape_render;
 

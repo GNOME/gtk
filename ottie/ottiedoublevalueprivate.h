@@ -21,6 +21,7 @@
 #define __OTTIE_DOUBLE_VALUE_PRIVATE_H__
 
 #include <json-glib/json-glib.h>
+#include "ottie/ottieprinterprivate.h"
 
 G_BEGIN_DECLS
 
@@ -46,6 +47,10 @@ double                    ottie_double_value_get                (OttieDoubleValu
 gboolean                  ottie_double_value_parse              (JsonReader             *reader,
                                                                  gsize                   offset,
                                                                  gpointer                data);
+
+void                      ottie_double_value_print              (OttieDoubleValue       *self,
+                                                                 const char             *name,
+                                                                 OttiePrinter           *printer);
 
 static inline gboolean
 ottie_double_value_is_static (OttieDoubleValue *self)

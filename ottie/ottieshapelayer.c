@@ -59,6 +59,18 @@ ottie_shape_layer_render (OttieLayer  *layer,
 }
 
 static void
+ottie_shape_layer_print (OttieObject  *obj,
+                         OttiePrinter *printer)
+{
+  OttieShapeLayer *self = OTTIE_SHAPE_LAYER (obj);
+
+  OTTIE_OBJECT_CLASS (ottie_shape_layer_parent_class)->print (obj, printer);
+
+  ottie_printer_add_int (printer, "ty", 4);
+  ottie_group_shape_print_shapes (self->shapes, "shapes", printer);
+}
+
+static void
 ottie_shape_layer_dispose (GObject *object)
 {
   OttieShapeLayer *self = OTTIE_SHAPE_LAYER (object);
@@ -71,8 +83,11 @@ ottie_shape_layer_dispose (GObject *object)
 static void
 ottie_shape_layer_class_init (OttieShapeLayerClass *klass)
 {
+  OttieObjectClass *oobject_class = OTTIE_OBJECT_CLASS (klass);
   OttieLayerClass *layer_class = OTTIE_LAYER_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  oobject_class->print = ottie_shape_layer_print;
 
   layer_class->render = ottie_shape_layer_render;
 

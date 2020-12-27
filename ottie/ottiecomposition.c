@@ -276,3 +276,13 @@ ottie_composition_parse_layers (JsonReader *reader,
   return TRUE;
 }
 
+void
+ottie_composition_print (OttiePrinter     *printer,
+                         OttieComposition *composition)
+{
+  for (int i = 0; i < ottie_layer_list_get_size (&composition->layers); i++)
+    {
+      OttieObject *obj = OTTIE_OBJECT (ottie_layer_list_get (&composition->layers, i));
+      ottie_object_print (obj, NULL, printer);
+    }
+}

@@ -581,7 +581,7 @@ ottie_parser_option_transform (JsonReader *reader,
   t = ottie_transform_parse (reader);
   if (t == NULL)
     return FALSE;
-  
+
   target = (OttieShape **) ((guint8 *) data + offset);
 
   g_clear_object (target);

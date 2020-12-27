@@ -24,6 +24,7 @@
 #include "ottielayerprivate.h"
 #include "ottieparserprivate.h"
 #include "ottiecompositionprivate.h"
+#include "ottieprinterprivate.h"
 
 #include <glib/gi18n-lib.h>
 #include <json-glib/json-glib.h>
@@ -758,3 +759,53 @@ ottie_creation_get_composition (OttieCreation *self)
   return self->layers;
 }
 
+static void
+ottie_creation_print (OttiePrinter  *printer,
+                      OttieCreation *self)
+{
+  const char *id;
+  OttieComposition *composition;
+  GHashTableIter iter;
+
+  ottie_printer_start_object (printer, NULL);
+
+  ottie_printer_add_double (printer, "fr", self->frame_rate);
+  ottie_printer_add_double (printer, "w", self->width);
+  ottie_printer_add_double (printer, "h", self->height);
+  ottie_printer_add_string (printer, "nm", self->name);
+  ottie_printer_add_double (printer, "ip", self->start_frame);
+  ottie_printer_add_double (printer, "op", self->end_frame);
+  ottie_printer_add_int (printer, "ddd", 0);
+
+  ottie_printer_start_array (printer, "assets");
+  g_hash_table_iter_init (&iter, self->composition_assets);
+  while (g_hash_table_iter_next (&iter, (gpointer *)&id, (gpointer *)&composition))
+    {
+      ottie_printer_start_object (printer, NULL);
+      ottie_printer_add_string (printer, "id", id);
+      ottie_printer_start_array (printer, "layers");
+      ottie_composition_print (printer, composition);
+      ottie_printer_end_array (printer);
+      ottie_printer_end_object (printer);
+    }
+
+  ottie_printer_end_array (printer);
+
+  ottie_printer_start_array (printer, "layers");
+  ottie_composition_print (printer, self->layers);
+  ottie_printer_end_array (printer);
+
+  ottie_printer_end_object (printer);
+}
+
+GBytes *
+ottie_creation_to_bytes (OttieCreation *self)
+{
+  OttiePrinter p;
+
+  ottie_printer_init (&p);
+
+  ottie_creation_print (&p, self);
+
+  return g_string_free_to_bytes (p.str);
+}

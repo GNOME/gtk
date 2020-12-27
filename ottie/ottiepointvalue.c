@@ -22,6 +22,7 @@
 #include "ottiepointvalueprivate.h"
 
 #include "ottieparserprivate.h"
+#include "ottieprinterprivate.h"
 
 #include <glib/gi18n-lib.h>
 
@@ -50,6 +51,7 @@ ottie_point_value_parse_value (JsonReader *reader,
 #define OTTIE_KEYFRAMES_DIMENSIONS 2
 #define OTTIE_KEYFRAMES_PARSE_FUNC ottie_point_value_parse_value
 #define OTTIE_KEYFRAMES_INTERPOLATE_FUNC graphene_point_interpolate
+#define OTTIE_KEYFRAMES_PRINT_FUNC ottie_printer_add_point
 #include "ottiekeyframesimpl.c"
 
 void
@@ -138,3 +140,18 @@ ottie_point_value_parse (JsonReader *reader,
   return TRUE;
 }
 
+void
+ottie_point_value_print (OttiePointValue *self,
+                         const char      *name,
+                         OttiePrinter    *printer)
+{
+  ottie_printer_start_object (printer, name);
+
+  ottie_printer_add_boolean (printer, "a", !self->is_static);
+  if (self->is_static)
+    ottie_printer_add_point (printer, "k", &self->static_value);
+  else
+    ottie_point_keyframes_print (self->keyframes, printer);
+
+  ottie_printer_end_object (printer);
+}

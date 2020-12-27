@@ -56,6 +56,19 @@ ottie_path_shape_render (OttieShape  *shape,
 }
 
 static void
+ottie_path_shape_print (OttieObject  *obj,
+                        OttiePrinter *printer)
+{
+  OttiePathShape *self = OTTIE_PATH_SHAPE (obj);
+
+  OTTIE_OBJECT_CLASS (ottie_path_shape_parent_class)->print (obj, printer);
+
+  ottie_printer_add_string (printer, "ty", "sh");
+  ottie_printer_add_double (printer, "d", self->direction);
+  ottie_path_value_print (&self->path, "ks", printer);
+}
+
+static void
 ottie_path_shape_dispose (GObject *object)
 {
   OttiePathShape *self = OTTIE_PATH_SHAPE (object);
@@ -68,8 +81,11 @@ ottie_path_shape_dispose (GObject *object)
 static void
 ottie_path_shape_class_init (OttiePathShapeClass *klass)
 {
+  OttieObjectClass *oobject_class = OTTIE_OBJECT_CLASS (klass);
   OttieShapeClass *shape_class = OTTIE_SHAPE_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  oobject_class->print = ottie_path_shape_print;
 
   shape_class->render = ottie_path_shape_render;
 

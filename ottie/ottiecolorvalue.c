@@ -22,6 +22,7 @@
 #include "ottiecolorvalueprivate.h"
 
 #include "ottieparserprivate.h"
+#include "ottieprinterprivate.h"
 
 #include <glib/gi18n-lib.h>
 
@@ -69,6 +70,7 @@ ottie_color_value_interpolate (const GdkRGBA *start,
 #define OTTIE_KEYFRAMES_DIMENSIONS 4
 #define OTTIE_KEYFRAMES_PARSE_FUNC ottie_color_value_parse_one
 #define OTTIE_KEYFRAMES_INTERPOLATE_FUNC ottie_color_value_interpolate
+#define OTTIE_KEYFRAMES_PRINT_FUNC ottie_printer_add_color
 #include "ottiekeyframesimpl.c"
 
 void
@@ -147,3 +149,18 @@ ottie_color_value_parse (JsonReader *reader,
   return TRUE;
 }
 
+void
+ottie_color_value_print (OttieColorValue *self,
+                         const char      *name,
+                         OttiePrinter    *printer)
+{
+  ottie_printer_start_object (printer, name);
+
+  ottie_printer_add_boolean (printer, "a", !self->is_static);
+  if (self->is_static)
+    ottie_printer_add_color (printer, "k", &self->static_value);
+  else
+    ottie_color_keyframes_print (self->keyframes, printer);
+
+  ottie_printer_end_object (printer);
+}

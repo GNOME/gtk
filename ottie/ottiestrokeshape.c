@@ -92,6 +92,24 @@ ottie_stroke_shape_render (OttieShape  *shape,
 }
 
 static void
+ottie_stroke_shape_print (OttieObject  *obj,
+                          OttiePrinter *printer)
+{
+  OttieStrokeShape *self = OTTIE_STROKE_SHAPE (obj);
+
+  OTTIE_OBJECT_CLASS (ottie_stroke_shape_parent_class)->print (obj, printer);
+
+  ottie_printer_add_string (printer, "ty", "st");
+  ottie_double_value_print (&self->line_width, "w", printer);
+  ottie_double_value_print (&self->opacity, "o", printer);
+  ottie_color_value_print (&self->color, "c", printer);
+  ottie_printer_add_int (printer, "lc", self->line_cap);
+  ottie_printer_add_int (printer, "lj", self->line_join);
+  ottie_printer_add_double (printer, "ml", self->miter_limit);
+  ottie_printer_add_int (printer, "bm", self->blend_mode);
+}
+
+static void
 ottie_stroke_shape_dispose (GObject *object)
 {
   OttieStrokeShape *self = OTTIE_STROKE_SHAPE (object);
@@ -106,8 +124,11 @@ ottie_stroke_shape_dispose (GObject *object)
 static void
 ottie_stroke_shape_class_init (OttieStrokeShapeClass *klass)
 {
+  OttieObjectClass *oobject_class = OTTIE_OBJECT_CLASS (klass);
   OttieShapeClass *shape_class = OTTIE_SHAPE_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  oobject_class->print = ottie_stroke_shape_print;
 
   shape_class->render = ottie_stroke_shape_render;
 

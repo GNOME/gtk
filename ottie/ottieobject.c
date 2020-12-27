@@ -105,6 +105,17 @@ ottie_object_dispose (GObject *object)
 }
 
 static void
+ottie_object_default_print (OttieObject  *self,
+                            OttiePrinter *printer)
+{
+  if (self->name != NULL)
+    ottie_printer_add_string (printer, "nm", self->name);
+
+  if (self->match_name != NULL)
+    ottie_printer_add_string (printer, "mn", self->match_name);
+}
+
+static void
 ottie_object_class_init (OttieObjectClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
@@ -112,6 +123,8 @@ ottie_object_class_init (OttieObjectClass *class)
   gobject_class->set_property = ottie_object_set_property;
   gobject_class->get_property = ottie_object_get_property;
   gobject_class->dispose = ottie_object_dispose;
+
+  class->print = ottie_object_default_print;
 
   properties[PROP_NAME] =
     g_param_spec_string ("name",
@@ -181,4 +194,14 @@ ottie_object_get_match_name (OttieObject *self)
   return self->match_name;
 }
 
+void
+ottie_object_print (OttieObject  *self,
+                    const char   *name,
+                    OttiePrinter *printer)
+{
+  ottie_printer_start_object (printer, name);
 
+  OTTIE_OBJECT_GET_CLASS (self)->print (self, printer);
+
+  ottie_printer_end_object (printer);
+}

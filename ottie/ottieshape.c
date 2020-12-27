@@ -45,6 +45,18 @@
 G_DEFINE_TYPE (OttieShape, ottie_shape, OTTIE_TYPE_OBJECT)
 
 static void
+ottie_shape_print (OttieObject  *obj,
+                   OttiePrinter *printer)
+{
+  OttieShape *self = OTTIE_SHAPE (obj);
+
+  OTTIE_OBJECT_CLASS (ottie_shape_parent_class)->print (obj, printer);
+
+  if (self->hidden)
+    ottie_printer_add_boolean (printer, "hd", self->hidden);
+}
+
+static void
 ottie_shape_dispose (GObject *object)
 {
   //OttieShape *self = OTTIE_SHAPE (object);
@@ -56,8 +68,11 @@ static void
 ottie_shape_class_init (OttieShapeClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+  OttieObjectClass *oobject_class = OTTIE_OBJECT_CLASS (class);
 
   gobject_class->dispose = ottie_shape_dispose;
+
+  oobject_class->print = ottie_shape_print;
 }
 
 static void

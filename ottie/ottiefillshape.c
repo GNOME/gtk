@@ -78,6 +78,21 @@ ottie_fill_shape_render (OttieShape  *shape,
 }
 
 static void
+ottie_fill_shape_print (OttieObject  *obj,
+                        OttiePrinter *printer)
+{
+  OttieFillShape *self = OTTIE_FILL_SHAPE (obj);
+
+  OTTIE_OBJECT_CLASS (ottie_fill_shape_parent_class)->print (obj, printer);
+
+  ottie_printer_add_string (printer, "ty", "fl");
+  ottie_double_value_print (&self->opacity, "o", printer);
+  ottie_color_value_print (&self->color, "c", printer);
+  ottie_printer_add_int (printer, "bm", self->blend_mode);
+  ottie_printer_add_int (printer, "r", self->fill_rule);
+}
+
+static void
 ottie_fill_shape_dispose (GObject *object)
 {
   OttieFillShape *self = OTTIE_FILL_SHAPE (object);
@@ -91,8 +106,11 @@ ottie_fill_shape_dispose (GObject *object)
 static void
 ottie_fill_shape_class_init (OttieFillShapeClass *klass)
 {
+  OttieObjectClass *oobject_class = OTTIE_OBJECT_CLASS (klass);
   OttieShapeClass *shape_class = OTTIE_SHAPE_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  oobject_class->print = ottie_fill_shape_print;
 
   shape_class->render = ottie_fill_shape_render;
 

@@ -22,6 +22,7 @@
 
 #include <json-glib/json-glib.h>
 
+#include "ottieprinterprivate.h"
 #include <gdk/gdk.h>
 
 G_BEGIN_DECLS
@@ -48,6 +49,9 @@ void                      ottie_color_value_get                 (OttieColorValue
 gboolean                  ottie_color_value_parse               (JsonReader             *reader,
                                                                  gsize                   offset,
                                                                  gpointer                data);
+void                      ottie_color_value_print               (OttieColorValue        *self,
+                                                                 const char             *name,
+                                                                 OttiePrinter           *printer);
 
 G_END_DECLS
 

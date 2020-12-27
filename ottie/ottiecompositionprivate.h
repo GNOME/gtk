@@ -21,6 +21,7 @@
 #define __OTTIE_COMPOSITION_PRIVATE_H__
 
 #include "ottielayerprivate.h"
+#include "ottieprinterprivate.h"
 
 #include <json-glib/json-glib.h>
 
@@ -40,6 +41,9 @@ GType                   ottie_composition_get_type          (void) G_GNUC_CONST;
 gboolean                ottie_composition_parse_layers      (JsonReader                 *reader,
                                                              gsize                       offset,
                                                              gpointer                    data);
+
+void                    ottie_composition_print             (OttiePrinter               *printer,
+                                                             OttieComposition           *composition);
 
 G_END_DECLS
 
