@@ -114,6 +114,12 @@ GDK_AVAILABLE_IN_ALL
 GskPath *               gsk_path_stroke                         (GskPath              *path,
                                                                  GskStroke            *stroke);
 
+GDK_AVAILABLE_IN_ALL
+GskPath *               gsk_path_offset                         (GskPath              *path,
+                                                                 float                 distance,
+                                                                 GskLineJoin           line_join,
+                                                                 float                 miter_limit);
+
 
 G_END_DECLS
 

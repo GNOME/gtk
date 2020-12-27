@@ -89,6 +89,11 @@ struct _GskContourClass
   void                  (* add_stroke)          (const GskContour       *contour,
                                                  GskPathBuilder         *builder,
                                                  GskStroke              *stroke);
+  void                  (* offset)              (const GskContour       *contour,
+                                                 GskPathBuilder         *builder,
+                                                 float                   distance,
+                                                 GskLineJoin             line_join,
+                                                 float                   miter_limit);
 };
 
 static gsize
@@ -498,8 +503,8 @@ gsk_rect_contour_get_stroke_bounds (const GskContour       *contour,
 static gboolean
 stroke_is_simple (GskStroke *stroke)
 {
-  if (stroke->line_join != GSK_LINE_JOIN_MITER &&
-      stroke->line_join != GSK_LINE_JOIN_MITER_CLIP)
+  if (stroke->line_join == GSK_LINE_JOIN_ROUND ||
+      stroke->line_join == GSK_LINE_JOIN_BEVEL)
     return FALSE;
 
   if (stroke->miter_limit < 1.5)
@@ -536,6 +541,15 @@ gsk_rect_contour_add_stroke (const GskContour *contour,
     gsk_contour_default_add_stroke (contour, builder, stroke);
 }
 
+static void
+gsk_rect_contour_offset (const GskContour *contour,
+                         GskPathBuilder   *builder,
+                         float             distance,
+                         GskLineJoin       line_join,
+                         float             miter_limit)
+{
+}
+
 static const GskContourClass GSK_RECT_CONTOUR_CLASS =
 {
   sizeof (GskRectContour),
@@ -554,7 +568,8 @@ static const GskContourClass GSK_RECT_CONTOUR_CLASS =
   gsk_rect_contour_add_segment,
   gsk_rect_contour_get_winding,
   gsk_rect_contour_get_stroke_bounds,
-  gsk_rect_contour_add_stroke
+  gsk_rect_contour_add_stroke,
+  gsk_rect_contour_offset
 };
 
 GskContour *
@@ -911,6 +926,15 @@ gsk_circle_contour_add_stroke (const GskContour *contour,
     gsk_contour_default_add_stroke (contour, builder, stroke);
 }
 
+static void
+gsk_circle_contour_offset (const GskContour *contour,
+                           GskPathBuilder   *builder,
+                           float             distance,
+                           GskLineJoin       line_join,
+                           float             miter_limit)
+{
+}
+
 static const GskContourClass GSK_CIRCLE_CONTOUR_CLASS =
 {
   sizeof (GskCircleContour),
@@ -929,7 +953,8 @@ static const GskContourClass GSK_CIRCLE_CONTOUR_CLASS =
   gsk_circle_contour_add_segment,
   gsk_circle_contour_get_winding,
   gsk_circle_contour_get_stroke_bounds,
-  gsk_circle_contour_add_stroke
+  gsk_circle_contour_add_stroke,
+  gsk_circle_contour_offset
 };
 
 GskContour *
@@ -1625,6 +1650,15 @@ gsk_standard_contour_add_stroke (const GskContour *contour,
   gsk_contour_default_add_stroke (contour, builder, stroke);
 }
 
+static void
+gsk_standard_contour_offset (const GskContour *contour,
+                             GskPathBuilder   *builder,
+                             float             distance,
+                             GskLineJoin       line_join,
+                             float             miter_limit)
+{
+}
+
 static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
 {
   sizeof (GskStandardContour),
@@ -1643,7 +1677,8 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   gsk_standard_contour_add_segment,
   gsk_standard_contour_get_winding,
   gsk_standard_contour_get_stroke_bounds,
-  gsk_standard_contour_add_stroke
+  gsk_standard_contour_add_stroke,
+  gsk_standard_contour_offset
 };
 
 /* You must ensure the contour has enough size allocated,
@@ -1821,6 +1856,16 @@ gsk_contour_add_stroke (const GskContour *self,
                         GskStroke        *stroke)
 {
   self->klass->add_stroke (self, builder, stroke);
+}
+
+void
+gsk_contour_offset (const GskContour *self,
+                    GskPathBuilder   *builder,
+                    float             distance,
+                    GskLineJoin       line_join,
+                    float             miter_limit)
+{
+  self->klass->offset (self, builder, distance, line_join, miter_limit);
 }
 
 void
