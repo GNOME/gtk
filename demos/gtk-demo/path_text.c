@@ -48,32 +48,26 @@ G_DEFINE_TYPE (GtkPathWidget, gtk_path_widget, GTK_TYPE_WIDGET)
 
 static GskPath *
 create_path_from_text (GtkWidget  *widget,
-                       const char *text)
+                       const char *text,
+                       graphene_point_t *out_offset)
 {
-  cairo_surface_t *surface;
-  cairo_t *cr;
-  cairo_path_t *path;
   PangoLayout *layout;
   PangoFontDescription *desc;
+  GskPathBuilder *builder;
   GskPath *result;
-
-  surface = cairo_recording_surface_create (CAIRO_CONTENT_COLOR_ALPHA, NULL);
-  cr = cairo_create (surface);
 
   layout = gtk_widget_create_pango_layout (widget, text);
   desc = pango_font_description_from_string ("sans bold 36");
   pango_layout_set_font_description (layout, desc);
   pango_font_description_free (desc);
 
-  cairo_move_to (cr, 0, - pango_layout_get_baseline (layout) / (double) PANGO_SCALE);
-  pango_cairo_layout_path (cr, layout);
-  path = cairo_copy_path_flat (cr);
-  result = gsk_path_new_from_cairo (path);
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_layout (builder, layout);
+  result = gsk_path_builder_free_to_path (builder);
 
-  cairo_path_destroy (path);
+  if (out_offset)
+    graphene_point_init (out_offset, 0, - pango_layout_get_baseline (layout) / (double) PANGO_SCALE);
   g_object_unref (layout);
-  cairo_destroy (cr);
-  cairo_surface_destroy (surface);
 
   return result;
 }
@@ -82,21 +76,23 @@ typedef struct
 {
   GskPathMeasure *measure;
   GskPathBuilder *builder;
+  graphene_point_t offset;
   double scale;
 } GtkPathTransform;
 
 static void
 gtk_path_transform_point (GskPathMeasure         *measure,
                           const graphene_point_t *pt,
+                          const graphene_point_t *offset,
                           float                   scale,
                           graphene_point_t       *res)
 {
   graphene_vec2_t tangent;
 
-  gsk_path_measure_get_point (measure, pt->x * scale, res, &tangent);
+  gsk_path_measure_get_point (measure, (pt->x + offset->x) * scale, res, &tangent);
 
-  res->x -= pt->y * scale * graphene_vec2_get_y (&tangent);
-  res->y += pt->y * scale * graphene_vec2_get_x (&tangent);
+  res->x -= (pt->y + offset->y) * scale * graphene_vec2_get_y (&tangent);
+  res->y += (pt->y + offset->y) * scale * graphene_vec2_get_x (&tangent);
 }
 
 static gboolean
@@ -113,7 +109,7 @@ gtk_path_transform_op (GskPathOperation        op,
     case GSK_PATH_MOVE:
       {
         graphene_point_t res;
-        gtk_path_transform_point (transform->measure, &pts[0], transform->scale, &res);
+        gtk_path_transform_point (transform->measure, &pts[0], &transform->offset, transform->scale, &res);
         gsk_path_builder_move_to (transform->builder, res.x, res.y);
       }
       break;
@@ -121,7 +117,7 @@ gtk_path_transform_op (GskPathOperation        op,
     case GSK_PATH_LINE:
       {
         graphene_point_t res;
-        gtk_path_transform_point (transform->measure, &pts[1], transform->scale, &res);
+        gtk_path_transform_point (transform->measure, &pts[1], &transform->offset, transform->scale, &res);
         gsk_path_builder_line_to (transform->builder, res.x, res.y);
       }
       break;
@@ -129,9 +125,9 @@ gtk_path_transform_op (GskPathOperation        op,
     case GSK_PATH_CURVE:
       {
         graphene_point_t res[3];
-        gtk_path_transform_point (transform->measure, &pts[1], transform->scale, &res[0]);
-        gtk_path_transform_point (transform->measure, &pts[2], transform->scale, &res[1]);
-        gtk_path_transform_point (transform->measure, &pts[3], transform->scale, &res[2]);
+        gtk_path_transform_point (transform->measure, &pts[1], &transform->offset, transform->scale, &res[0]);
+        gtk_path_transform_point (transform->measure, &pts[2], &transform->offset, transform->scale, &res[1]);
+        gtk_path_transform_point (transform->measure, &pts[3], &transform->offset, transform->scale, &res[2]);
         gsk_path_builder_curve_to (transform->builder, res[0].x, res[0].y, res[1].x, res[1].y, res[2].x, res[2].y);
       }
       break;
@@ -139,8 +135,8 @@ gtk_path_transform_op (GskPathOperation        op,
     case GSK_PATH_CONIC:
       {
         graphene_point_t res[2];
-        gtk_path_transform_point (transform->measure, &pts[1], transform->scale, &res[0]);
-        gtk_path_transform_point (transform->measure, &pts[2], transform->scale, &res[1]);
+        gtk_path_transform_point (transform->measure, &pts[1], &transform->offset, transform->scale, &res[0]);
+        gtk_path_transform_point (transform->measure, &pts[2], &transform->offset, transform->scale, &res[1]);
         gsk_path_builder_conic_to (transform->builder, res[0].x, res[0].y, res[1].x, res[1].y, weight);
       }
       break;
@@ -158,10 +154,11 @@ gtk_path_transform_op (GskPathOperation        op,
 }
 
 static GskPath *
-gtk_path_transform (GskPathMeasure *measure,
-                    GskPath        *path)
+gtk_path_transform (GskPathMeasure         *measure,
+                    GskPath                *path,
+                    const graphene_point_t *offset)
 {
-  GtkPathTransform transform = { measure, gsk_path_builder_new () };
+  GtkPathTransform transform = { measure, gsk_path_builder_new (), *offset };
   graphene_rect_t bounds;
 
   gsk_path_get_bounds (path, &bounds);
@@ -194,14 +191,15 @@ static void
 gtk_path_widget_create_text_path (GtkPathWidget *self)
 {
   GskPath *path;
+  graphene_point_t offset;
 
   gtk_path_widget_clear_text_path (self);
 
   if (self->line_measure == NULL)
     return;
 
-  path = create_path_from_text (GTK_WIDGET (self), self->text);
-  self->text_path = gtk_path_transform (self->line_measure, path);
+  path = create_path_from_text (GTK_WIDGET (self), self->text, &offset);
+  self->text_path = gtk_path_transform (self->line_measure, path, &offset);
 
   gsk_path_unref (path);
 }
