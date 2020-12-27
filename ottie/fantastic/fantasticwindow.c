@@ -173,23 +173,23 @@ save_response_cb (GtkWidget        *dialog,
 
   if (response == GTK_RESPONSE_ACCEPT)
     {
-#if 0
       GFile *file;
-      char *text;
-#endif
+      GBytes *bytes;
+      const char *text;
+      gsize length;
+
       GError *error = NULL;
 
-#if 0
-      text = get_current_text (self->text_buffer);
+      bytes = ottie_creation_to_bytes (self->creation);
+      text = g_bytes_get_data (bytes, &length);
 
       file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
-      g_file_replace_contents (file, text, strlen (text),
+      g_file_replace_contents (file, text, length,
                                NULL, FALSE,
                                G_FILE_CREATE_NONE,
                                NULL,
                                NULL,
                                &error);
-#endif
 
       if (error != NULL)
         {
@@ -207,10 +207,8 @@ save_response_cb (GtkWidget        *dialog,
           g_error_free (error);
         }
 
-#if 0
-      g_free (text);
+      g_bytes_unref (bytes);
       g_object_unref (file);
-#endif
     }
 
   gtk_window_destroy (GTK_WINDOW (dialog));
