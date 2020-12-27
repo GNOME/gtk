@@ -618,6 +618,7 @@ static GQuark           quark_auto_children = 0;
 static GQuark           quark_action_muxer = 0;
 static GQuark           quark_font_options = 0;
 static GQuark           quark_font_map = 0;
+static GQuark           quark_builder_set_id = 0;
 
 GType
 gtk_widget_get_type (void)
@@ -8311,11 +8312,6 @@ gtk_widget_accessible_interface_init (GtkAccessibleInterface *iface)
   iface->get_at_context = gtk_widget_accessible_get_at_context;
   iface->get_platform_state = gtk_widget_accessible_get_platform_state;
 }
-
-/*
- * GtkBuildable implementation
- */
-static GQuark            quark_builder_set_id = 0;
 
 static void
 gtk_widget_buildable_add_child (GtkBuildable  *buildable,
