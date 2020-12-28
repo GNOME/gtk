@@ -1,7 +1,6 @@
 include $(top_srcdir)/Makefile.decl
 
-EXTRA_DIST +=	\
-	Directory.Build.props	\
+EXTRA_DIST_COPIED =	\
 	README.txt	\
 	gtk+.sln	\
 	gtk3-prebuild.vcxproj	\
@@ -41,7 +40,8 @@ EXTRA_DIST +=	\
 	gtk3-install.props	\
 	gtk3-version-paths.props
 
-DISTCLEANFILES = $(EXTRA_DIST)
+DISTCLEANFILES = $(EXTRA_DIST_COPIED)
+EXTRA_DIST += $(EXTRA_DIST_COPIED) Directory.Build.props
 
 MSVC_VER = 15
 MSVC_VER_LONG = 15
@@ -51,5 +51,6 @@ MSVC_FORMAT_VER = 12
 include $(top_srcdir)/win32/Makefile-newvs.am
 
 Directory.Build.props:
+	@true
 
 -include $(top_srcdir)/git.mk
