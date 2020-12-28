@@ -120,7 +120,8 @@ video_frame_free (GstVideoFrame *frame)
 
 static GdkTexture *
 gtk_gst_sink_texture_from_buffer (GtkGstSink *self,
-                                  GstBuffer  *buffer)
+                                  GstBuffer  *buffer,
+                                  double     *pixel_aspect_ratio)
 {
   GstVideoFrame frame;
   GdkTexture *texture;
@@ -140,6 +141,8 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink *self,
                                     frame.info.stride[0]);
   g_bytes_unref (bytes);
 
+  *pixel_aspect_ratio = ((double) frame.info.par_n) / ((double) frame.info.par_d);
+
   return texture;
 }
 
@@ -148,6 +151,7 @@ gtk_gst_sink_show_frame (GstVideoSink * vsink, GstBuffer * buf)
 {
   GtkGstSink *self;
   GdkTexture *texture;
+  double pixel_aspect_ratio;
 
   GST_TRACE ("rendering buffer:%p", buf);
 
@@ -155,10 +159,10 @@ gtk_gst_sink_show_frame (GstVideoSink * vsink, GstBuffer * buf)
 
   GST_OBJECT_LOCK (self);
 
-  texture = gtk_gst_sink_texture_from_buffer (self, buf);
+  texture = gtk_gst_sink_texture_from_buffer (self, buf, &pixel_aspect_ratio);
   if (texture)
     {
-      gtk_gst_paintable_queue_set_texture (self->paintable, texture);
+      gtk_gst_paintable_queue_set_texture (self->paintable, texture, pixel_aspect_ratio);
       g_object_unref (texture);
     }
 
