@@ -95,143 +95,7 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GdkVulkanContext, gdk_vulkan_context, GDK_TYPE
 const char *
 gdk_vulkan_strerror (VkResult result)
 {
-  /* If your compiler brought you here with a warning about missing
-   * enumeration values, you're running a newer Vulkan version than
-   * the GTK developers (or you are a GTK developer) and have
-   * encountered a newly added Vulkan error message.
-   * You want to add it to this enum now.
-   *
-   * Because the Vulkan people don't make adding this too easy, here's
-   * the process to manage it:
-   * 1. go to
-   *    https://github.com/KhronosGroup/Vulkan-Headers/blob/master/include/vulkan/vulkan_core.h
-   * 2. Find the line where this enum value was added.
-   * 3. Click the commit that added this line.
-   * 4. The commit you're looking at now should also change
-   *    VK_HEADER_VERSION, find that number.
-   * 5. Use that number in the #ifdef when adding the enum value to
-   *    this enum.
-   * 6. For the error message, look at the specification (the one
-   *    that includes all extensions) at
-   *    https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkResult
-   * 7. If this value has not been added to the specification yet,
-   *    search for the error message in the text of specification.
-   *    Often it will have a description that can be used as an error
-   *    message.
-   * 8. If that didn't lead to one (or you are lazy), just use the
-   *    literal string of the enum value as the error message. A
-   *    GTK developer will add the correct one once it's added to the
-   *    specification.
-   */
-  switch (result)
-  {
-    case VK_SUCCESS:
-      return "Command successfully completed.";
-    case VK_NOT_READY:
-      return "A fence or query has not yet completed.";
-    case VK_TIMEOUT:
-      return "A wait operation has not completed in the specified time.";
-    case VK_EVENT_SET:
-      return "An event is signaled.";
-    case VK_EVENT_RESET:
-      return "An event is unsignaled.";
-    case VK_INCOMPLETE:
-      return "A return array was too small for the result.";
-    case VK_SUBOPTIMAL_KHR:
-      return "A swapchain no longer matches the surface properties exactly, but can still be used to present to the surface successfully.";
-    case VK_ERROR_OUT_OF_HOST_MEMORY:
-      return "A host memory allocation has failed.";
-    case VK_ERROR_OUT_OF_DEVICE_MEMORY:
-      return "A device memory allocation has failed.";
-    case VK_ERROR_INITIALIZATION_FAILED:
-      return "Initialization of an object could not be completed for implementation-specific reasons.";
-    case VK_ERROR_DEVICE_LOST:
-      return "The logical or physical device has been lost.";
-    case VK_ERROR_MEMORY_MAP_FAILED:
-      return "Mapping of a memory object has failed.";
-    case VK_ERROR_LAYER_NOT_PRESENT:
-      return "A requested layer is not present or could not be loaded.";
-    case VK_ERROR_EXTENSION_NOT_PRESENT:
-      return "A requested extension is not supported.";
-    case VK_ERROR_FEATURE_NOT_PRESENT:
-      return "A requested feature is not supported.";
-    case VK_ERROR_INCOMPATIBLE_DRIVER:
-      return "The requested version of Vulkan is not supported by the driver or is otherwise incompatible for implementation-specific reasons.";
-    case VK_ERROR_TOO_MANY_OBJECTS:
-      return "Too many objects of the type have already been created.";
-    case VK_ERROR_FORMAT_NOT_SUPPORTED:
-      return "A requested format is not supported on this device.";
-#if VK_HEADER_VERSION >= 24
-    case VK_ERROR_FRAGMENTED_POOL:
-      return "A requested pool allocation has failed due to fragmentation of the pool’s memory.";
-#endif
-    case VK_ERROR_SURFACE_LOST_KHR:
-      return "A surface is no longer available.";
-    case VK_ERROR_NATIVE_WINDOW_IN_USE_KHR:
-      return "The requested window is already in use by Vulkan or another API in a manner which prevents it from being used again.";
-    case VK_ERROR_OUT_OF_DATE_KHR:
-      return "A surface has changed in such a way that it is no longer compatible with the swapchain.";
-    case VK_ERROR_INCOMPATIBLE_DISPLAY_KHR:
-      return "The display used by a swapchain does not use the same presentable image layout, or is incompatible in a way that prevents sharing an image.";
-    case VK_ERROR_VALIDATION_FAILED_EXT:
-      return "The application caused the validation layer to fail.";
-    case VK_ERROR_INVALID_SHADER_NV:
-      return "One or more shaders failed to compile or link.";
-#if VK_HEADER_VERSION >= 39
-    case VK_ERROR_OUT_OF_POOL_MEMORY_KHR:
-      return "A pool memory allocation has failed.";
-#endif
-#if VK_HEADER_VERSION >= 54
-    case VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR:
-      return "An external handle is not a valid handle of the specified type.";
-#endif
-#if VK_HEADER_VERSION >= 64
-    case VK_ERROR_NOT_PERMITTED_EXT:
-      return "The caller does not have sufficient privileges.";
-#endif
-#if VK_HEADER_VERSION >= 72
-    case VK_ERROR_FRAGMENTATION_EXT:
-      return "A descriptor pool creation has failed due to fragmentation";
-#endif
-#if VK_HEADER_VERSION >= 89
-    case VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT:
-      return "Invalid DRM format modifier plane layout";
-#endif
-#if VK_HEADER_VERSION >= 97
-    case VK_ERROR_INVALID_DEVICE_ADDRESS_EXT:
-      return "Invalid device address";
-#endif
-#if VK_HEADER_VERSION >= 105
-    case VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT:
-      return "An operation on a swapchain created with VK_FULL_SCREEN_EXCLUSIVE_APPLICATION_CONTROLLED_EXT failed as it did not have exclusive full-screen access.";
-#endif
-#if VK_HEADER_VERSION >= 131
-    case VK_ERROR_UNKNOWN:
-      return "An unknown error has occurred; either the application has provided invalid input, or an implementation failure has occurred.";
-#endif
-#if VK_HEADER_VERSION >= 135
-#if VK_HEADER_VERSION < 162
-    case VK_ERROR_INCOMPATIBLE_VERSION_KHR:
-      return "This error was removed by the Vulkan gods.";
-#endif
-    case VK_THREAD_IDLE_KHR:
-      return "A deferred operation is not complete but there is currently no work for this thread to do at the time of this call.";
-    case VK_THREAD_DONE_KHR:
-      return "A deferred operation is not complete but there is no work remaining to assign to additional threads.";
-    case VK_OPERATION_DEFERRED_KHR:
-      return "A deferred operation was requested and at least some of the work was deferred.";
-    case VK_OPERATION_NOT_DEFERRED_KHR:
-      return "A deferred operation was requested and no operations were deferred.";
-    case VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT:
-      return "A requested pipeline creation would have required compilation, but the application requested compilation to not be performed.";
-#endif
-#if VK_HEADER_VERSION < 142
-    case VK_RESULT_RANGE_SIZE:
-#endif
-    case VK_RESULT_MAX_ENUM:
-    default:
-      return "Unknown Vulkan error.";
-  }
+  return "Unknown Vulkan error.";
 }
 
 static void
@@ -306,7 +170,7 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
   if (res != VK_SUCCESS)
     {
       g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
-                   "Could not query surface capabilities: %s", gdk_vulkan_strerror (res));
+                   "Could not query surface capabilities: %d", res);
       return FALSE;
     }
 
@@ -403,7 +267,7 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
   else
     {
       g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
-                   "Could not create swapchain for this surface: %s", gdk_vulkan_strerror (res));
+                   "Could not create swapchain for this surface: %d", res);
       priv->swapchain = VK_NULL_HANDLE;
       return FALSE;
     }
@@ -579,7 +443,7 @@ gdk_vulkan_context_real_init (GInitable     *initable,
   if (res != VK_SUCCESS)
     {
       g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
-                   "Could not create surface for this surface: %s", gdk_vulkan_strerror (res));
+                   "Could not create surface for this surface: %d", res);
       return FALSE;
     }
 
@@ -590,7 +454,7 @@ gdk_vulkan_context_real_init (GInitable     *initable,
   if (res != VK_SUCCESS)
     {
       g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
-                   "Could not check if queue family supports this surface: %s", gdk_vulkan_strerror (res));
+                   "Could not check if queue family supports this surface: %d", res);
     }
   else if (!supported)
     {
@@ -1118,7 +982,7 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
   if (res != VK_SUCCESS)
     {
       g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_UNSUPPORTED,
-                   "Could not create a Vulkan instance: %s", gdk_vulkan_strerror (res));
+                   "Could not create a Vulkan instance: %d", res);
       return FALSE;
     }
 
