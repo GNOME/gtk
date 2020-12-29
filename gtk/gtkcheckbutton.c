@@ -34,6 +34,7 @@
 #include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkprivate.h"
+#include "gtkshortcuttrigger.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkmodelbuttonprivate.h"
@@ -94,6 +95,7 @@ enum {
 
 enum {
   TOGGLED,
+  ACTIVATE,
   LAST_SIGNAL
 };
 
@@ -443,16 +445,33 @@ gtk_check_button_focus (GtkWidget         *widget,
 }
 
 static void
+gtk_check_button_real_activate (GtkCheckButton *check_button)
+{
+  gtk_check_button_set_active (check_button,
+                               !gtk_check_button_get_active (check_button));
+}
+
+static void
 gtk_check_button_class_init (GtkCheckButtonClass *class)
 {
+  const guint activate_keyvals[] = {
+    GDK_KEY_space,
+    GDK_KEY_KP_Space,
+    GDK_KEY_Return,
+    GDK_KEY_ISO_Enter,
+    GDK_KEY_KP_Enter
+  };
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  GtkShortcutAction *activate_action;
 
   object_class->dispose = gtk_check_button_dispose;
   object_class->set_property = gtk_check_button_set_property;
   object_class->get_property = gtk_check_button_get_property;
 
   widget_class->focus = gtk_check_button_focus;
+
+  class->activate = gtk_check_button_real_activate;
 
   props[PROP_ACTIVE] =
       g_param_spec_boolean ("active",
@@ -506,6 +525,37 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
                   NULL, NULL,
                   NULL,
                   G_TYPE_NONE, 0);
+
+  /**
+   * GtkCheckButton::activate:
+   * @widget: the object which received the signal.
+   *
+   * The ::activate signal on GtkCheckButton is an action signal and
+   * emitting it causes the button to animate press then release.
+   * Applications should never connect to this signal, but use the
+   * #GtkCheckButton::toggled signal.
+   */
+  signals[ACTIVATE] =
+      g_signal_new (I_ ("activate"),
+                    G_OBJECT_CLASS_TYPE (object_class),
+                    G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                    G_STRUCT_OFFSET (GtkCheckButtonClass, activate),
+                    NULL, NULL,
+                    NULL,
+                    G_TYPE_NONE, 0);
+
+  gtk_widget_class_set_activate_signal (widget_class, signals[ACTIVATE]);
+
+  activate_action = gtk_signal_action_new ("activate");
+  for (guint i = 0; i < G_N_ELEMENTS (activate_keyvals); i++)
+    {
+      GtkShortcut *activate_shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (activate_keyvals[i], 0),
+                                                         g_object_ref (activate_action));
+
+      gtk_widget_class_add_shortcut (widget_class, activate_shortcut);
+      g_object_unref (activate_shortcut);
+    }
+  g_object_unref (activate_action);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("checkbutton"));

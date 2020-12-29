@@ -56,9 +56,10 @@ struct _GtkCheckButtonClass
   GtkWidgetClass parent_class;
 
   void (* toggled) (GtkCheckButton *check_button);
+  void (* activate) (GtkCheckButton *check_button);
 
   /*< private >*/
-  gpointer padding[8];
+  gpointer padding[7];
 };
 
 
