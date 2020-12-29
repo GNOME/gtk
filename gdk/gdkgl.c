@@ -107,6 +107,9 @@ make_program (GdkGLContextProgram *program,
 
   glLinkProgram (program->program);
 
+  glDetachShader (program->program, vertex_shader);
+  glDetachShader (program->program, fragment_shader);
+
   glDeleteShader (vertex_shader);
   glDeleteShader (fragment_shader);
 

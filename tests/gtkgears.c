@@ -787,6 +787,8 @@ gtk_gears_realize (GtkWidget *widget)
   glLinkProgram(program);
   glGetProgramInfoLog(program, sizeof msg, NULL, msg);
   g_print ("program info: %s\n", msg);
+  glDetachShader (program, v);
+  glDetachShader (program, f);
   glDeleteShader (v);
   glDeleteShader (f);
 
