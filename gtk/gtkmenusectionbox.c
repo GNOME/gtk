@@ -319,6 +319,7 @@ gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
 
           widget = g_object_new (GTK_TYPE_MODEL_BUTTON,
                                  "popover", submenu,
+                                 "indicator-size-group", box->indicators,
                                  NULL);
           g_object_bind_property (item, "label", widget, "text", G_BINDING_SYNC_CREATE);
           g_object_bind_property (item, "icon", widget, "icon", G_BINDING_SYNC_CREATE);
