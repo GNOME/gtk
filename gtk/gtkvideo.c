@@ -688,7 +688,13 @@ gtk_video_set_file (GtkVideo *self,
       stream = gtk_media_file_new ();
 
       if (gtk_widget_get_realized (GTK_WIDGET (self)))
-        gtk_media_file_set_file (GTK_MEDIA_FILE (stream), file);
+        {
+          GdkSurface *surface;
+
+          surface = gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (self)));
+          gtk_media_stream_realize (stream, surface);
+          gtk_media_file_set_file (GTK_MEDIA_FILE (stream), file);
+        }
       gtk_video_set_media_stream (self, stream);
 
       g_object_unref (stream);
