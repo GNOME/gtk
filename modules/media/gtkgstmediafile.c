@@ -298,6 +298,24 @@ gtk_gst_media_file_update_audio (GtkMediaStream *stream,
 }
 
 static void
+gtk_gst_media_file_realize (GtkMediaStream *stream,
+                            GdkSurface     *surface)
+{
+  GtkGstMediaFile *self = GTK_GST_MEDIA_FILE (stream);
+
+  gtk_gst_paintable_realize (GTK_GST_PAINTABLE (self->paintable), surface);
+}
+
+static void
+gtk_gst_media_file_unrealize (GtkMediaStream *stream,
+                              GdkSurface     *surface)
+{
+  GtkGstMediaFile *self = GTK_GST_MEDIA_FILE (stream);
+
+  gtk_gst_paintable_unrealize (GTK_GST_PAINTABLE (self->paintable), surface);
+}
+
+static void
 gtk_gst_media_file_dispose (GObject *object)
 {
   GtkGstMediaFile *self = GTK_GST_MEDIA_FILE (object);
@@ -327,6 +345,8 @@ gtk_gst_media_file_class_init (GtkGstMediaFileClass *klass)
   stream_class->pause = gtk_gst_media_file_pause;
   stream_class->seek = gtk_gst_media_file_seek;
   stream_class->update_audio = gtk_gst_media_file_update_audio;
+  stream_class->realize = gtk_gst_media_file_realize;
+  stream_class->unrealize = gtk_gst_media_file_unrealize;
 
   gobject_class->dispose = gtk_gst_media_file_dispose;
 }
