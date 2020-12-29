@@ -383,11 +383,13 @@ gtk_message_dialog_set_property (GObject      *object,
 	if (txt)
 	  {
 	    priv->has_secondary_text = TRUE;
+            gtk_widget_add_css_class (priv->label, "title");
 	    gtk_widget_show (priv->secondary_label);
 	  }
 	else
 	  {
 	    priv->has_secondary_text = FALSE;
+            gtk_widget_remove_css_class (priv->label, "title");
 	    gtk_widget_hide (priv->secondary_label);
 	  }
       }
@@ -621,6 +623,7 @@ gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
   if (message_format)
     {
       priv->has_secondary_text = TRUE;
+      gtk_widget_add_css_class (priv->label, "title");
 
       va_start (args, message_format);
       msg = g_strdup_vprintf (message_format, args);
@@ -634,6 +637,7 @@ gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
   else
     {
       priv->has_secondary_text = FALSE;
+      gtk_widget_remove_css_class (priv->label, "title");
       gtk_widget_hide (priv->secondary_label);
     }
 }
@@ -677,6 +681,7 @@ gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
   if (message_format)
     {
       priv->has_secondary_text = TRUE;
+      gtk_widget_add_css_class (priv->label, "title");
 
       va_start (args, message_format);
       msg = g_strdup_vprintf (message_format, args);
@@ -690,6 +695,7 @@ gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
   else
     {
       priv->has_secondary_text = FALSE;
+      gtk_widget_remove_css_class (priv->label, "title");
       gtk_widget_hide (priv->secondary_label);
     }
 }
