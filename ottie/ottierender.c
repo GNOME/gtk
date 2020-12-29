@@ -109,6 +109,14 @@ void
 ottie_render_add_path (OttieRender *self,
                        GskPath     *path)
 {
+  ottie_render_add_transformed_path (self, path, NULL);
+}
+
+void
+ottie_render_add_transformed_path (OttieRender  *self,
+                                   GskPath      *path,
+                                   GskTransform *transform)
+{
   g_clear_pointer (&self->cached_path, gsk_path_unref);
 
   if (gsk_path_is_empty (path))
@@ -116,11 +124,10 @@ ottie_render_add_path (OttieRender *self,
       gsk_path_unref (path);
       return;
     }
-
-  ottie_render_paths_append (&self->paths, &(OttieRenderPath) { path, NULL });
+  ottie_render_paths_append (&self->paths, &(OttieRenderPath) { path, transform });
 }
 
-typedef struct 
+typedef struct
 {
   GskPathBuilder *builder;
   GskTransform *transform;

@@ -75,6 +75,9 @@ void                    ottie_render_merge                      (OttieRender    
 
 void                    ottie_render_add_path                   (OttieRender            *self,
                                                                  GskPath                *path);
+void                    ottie_render_add_transformed_path       (OttieRender            *self,
+                                                                 GskPath                *path,
+                                                                 GskTransform           *transform);
 GskPath *               ottie_render_get_path                   (OttieRender            *self);
 void                    ottie_render_clear_path                 (OttieRender            *self);
 gsize                   ottie_render_get_n_subpaths             (OttieRender            *self);

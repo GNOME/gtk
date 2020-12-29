@@ -33,6 +33,13 @@ typedef enum
   OTTIE_DIRECTION_BACKWARD
 } OttieDirection;
 
+typedef enum
+{
+  OTTIE_TEXT_JUSTIFY_LEFT,
+  OTTIE_TEXT_JUSTIFY_RIGHT,
+  OTTIE_TEXT_JUSTIFY_CENTER
+} OttieTextJustify;
+
 typedef struct _OttieParserOption OttieParserOption;
 
 typedef gboolean (* OttieParseFunc) (JsonReader *reader, gsize offset, gpointer data);
@@ -107,6 +114,12 @@ gboolean                ottie_parser_option_fill_rule          (JsonReader      
                                                                 gsize                    offset,
                                                                 gpointer                 data);
 gboolean                ottie_parser_option_transform          (JsonReader              *reader,
+                                                                gsize                    offset,
+                                                                gpointer                 data);
+gboolean                ottie_parser_option_color              (JsonReader              *reader,
+                                                                gsize                    offset,
+                                                                gpointer                 data);
+gboolean                ottie_parser_option_text_justify       (JsonReader              *reader,
                                                                 gsize                    offset,
                                                                 gpointer                 data);
 

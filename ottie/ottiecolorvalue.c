@@ -26,31 +26,6 @@
 
 #include <glib/gi18n-lib.h>
 
-static gboolean
-ottie_color_value_parse_one (JsonReader *reader,
-                             gsize       offset,
-                             gpointer    data)
-{
-  GdkRGBA *rgba = (GdkRGBA *) ((guint8 *) data + offset);
-  double d[3];
-
-  if (!ottie_parser_parse_array (reader, "color value",
-                                 3, 3, NULL,
-                                 0, sizeof (double),
-                                 ottie_parser_option_double,
-                                 d))
-    {
-      d[0] = d[1] = d[2] = 0;
-    }
-
-  rgba->red = d[0];
-  rgba->green = d[1];
-  rgba->blue = d[2];
-  rgba->alpha = 1;
-
-  return TRUE;
-}
-
 static void
 ottie_color_value_interpolate (const GdkRGBA *start,
                                const GdkRGBA *end,
@@ -68,7 +43,7 @@ ottie_color_value_interpolate (const GdkRGBA *start,
 #define OTTIE_KEYFRAMES_ELEMENT_TYPE GdkRGBA
 #define OTTIE_KEYFRAMES_BY_VALUE 1
 #define OTTIE_KEYFRAMES_DIMENSIONS 4
-#define OTTIE_KEYFRAMES_PARSE_FUNC ottie_color_value_parse_one
+#define OTTIE_KEYFRAMES_PARSE_FUNC ottie_parser_option_color
 #define OTTIE_KEYFRAMES_INTERPOLATE_FUNC ottie_color_value_interpolate
 #define OTTIE_KEYFRAMES_PRINT_FUNC ottie_printer_add_color
 #include "ottiekeyframesimpl.c"
@@ -127,7 +102,7 @@ ottie_color_value_parse (JsonReader *reader,
       if (is_static)
         {
           self->is_static = TRUE;
-          ottie_color_value_parse_one (reader, 0, &self->static_value);
+          ottie_parser_option_color (reader, 0, &self->static_value);
         }
       else
         {

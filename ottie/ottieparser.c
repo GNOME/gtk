@@ -590,3 +590,67 @@ ottie_parser_option_transform (JsonReader *reader,
   return TRUE;
 }
 
+gboolean
+ottie_parser_option_color (JsonReader *reader,
+                           gsize       offset,
+                           gpointer    data)
+{
+  GdkRGBA *rgba = (GdkRGBA *) ((guint8 *) data + offset);
+  double d[3];
+
+  if (!ottie_parser_parse_array (reader, "color value",
+                                 3, 3, NULL,
+                                 0, sizeof (double),
+                                 ottie_parser_option_double,
+                                 d))
+    {
+      d[0] = d[1] = d[2] = 0;
+    }
+
+  rgba->red = d[0];
+  rgba->green = d[1];
+  rgba->blue = d[2];
+  rgba->alpha = 1;
+
+  return TRUE;
+}
+
+gboolean
+ottie_parser_option_text_justify (JsonReader *reader,
+                                  gsize       offset,
+                                  gpointer    data)
+{
+  OttieTextJustify justify;
+  gint64 i;
+
+  i = json_reader_get_int_value (reader);
+  if (json_reader_get_error (reader))
+    {
+      ottie_parser_emit_error (reader, json_reader_get_error (reader));
+      return FALSE;
+    }
+
+  switch (i)
+  {
+    case 0:
+      justify = OTTIE_TEXT_JUSTIFY_LEFT;
+      break;
+
+    case 1:
+      justify = OTTIE_TEXT_JUSTIFY_RIGHT;
+      break;
+
+    case 2:
+      justify = OTTIE_TEXT_JUSTIFY_CENTER;
+      break;
+
+    default:
+      ottie_parser_error_value (reader, "%"G_GINT64_FORMAT" is not a known text justification", i);
+      return FALSE;
+  }
+
+  *(OttieTextJustify *) ((guint8 *) data + offset) = justify;
+
+  return TRUE;
+}
+

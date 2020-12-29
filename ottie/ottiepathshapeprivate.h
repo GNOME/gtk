@@ -22,6 +22,8 @@
 
 #include "ottieshapeprivate.h"
 
+#include <gsk/gsk.h>
+
 #include <json-glib/json-glib.h>
 
 G_BEGIN_DECLS

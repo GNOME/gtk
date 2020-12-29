@@ -26,9 +26,13 @@ ottie_private_sources = files([
   'ottieshape.c',
   'ottieshapelayer.c',
   'ottiestrokeshape.c',
+  'ottietextlayer.c',
+  'ottietextvalue.c',
   'ottietransform.c',
   'ottietrimshape.c',
   'ottieprinter.c',
+  'ottiefont.c',
+  'ottiechar.c',
 ])
 
 ottie_public_headers = files([

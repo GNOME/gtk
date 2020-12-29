@@ -25,6 +25,7 @@
 #include "ottiecompositionlayerprivate.h"
 #include "ottienulllayerprivate.h"
 #include "ottieshapelayerprivate.h"
+#include "ottietextlayerprivate.h"
 
 #include <glib/gi18n-lib.h>
 #include <gsk/gsk.h>
@@ -98,13 +99,15 @@ G_DEFINE_TYPE_WITH_CODE (OttieComposition, ottie_composition, OTTIE_TYPE_LAYER,
 
 static void
 ottie_composition_update (OttieLayer *layer,
-                          GHashTable *compositions)
+                          GHashTable *compositions,
+                          GHashTable *fonts,
+                          GHashTable *chars)
 {
   OttieComposition *self = OTTIE_COMPOSITION (layer);
 
   for (gsize i = ottie_layer_list_get_size (&self->layers); i-- > 0; )
     {
-      ottie_layer_update (ottie_layer_list_get (&self->layers, i), compositions);
+      ottie_layer_update (ottie_layer_list_get (&self->layers, i), compositions, fonts, chars);
     }
 }
 
@@ -234,6 +237,10 @@ ottie_composition_parse_layer (JsonReader *reader,
 
     case 4:
       layer = ottie_shape_layer_parse (reader);
+      break;
+
+    case 5:
+      layer = ottie_text_layer_parse (reader);
       break;
 
     default:

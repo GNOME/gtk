@@ -40,7 +40,9 @@ G_DEFINE_TYPE (OttieLayer, ottie_layer, OTTIE_TYPE_OBJECT)
 
 static void
 ottie_layer_default_update (OttieLayer *self,
-                            GHashTable *compositions)
+                            GHashTable *compositions,
+                            GHashTable *fonts,
+                            GHashTable *chars)
 {
 }
 
@@ -116,9 +118,11 @@ ottie_layer_init (OttieLayer *self)
 
 void
 ottie_layer_update (OttieLayer *self,
-                    GHashTable *compositions)
+                    GHashTable *compositions,
+                    GHashTable *fonts,
+                    GHashTable *chars)
 {
-  OTTIE_LAYER_GET_CLASS (self)->update (self, compositions);
+  OTTIE_LAYER_GET_CLASS (self)->update (self, compositions, fonts, chars);
 }
 
 void

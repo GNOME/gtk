@@ -46,7 +46,9 @@ G_DEFINE_TYPE (OttieCompositionLayer, ottie_composition_layer, OTTIE_TYPE_LAYER)
 
 static void
 ottie_composition_layer_update (OttieLayer *layer,
-                                GHashTable *compositions)
+                                GHashTable *compositions,
+                                GHashTable *fonts,
+                                GHashTable *chars)
 {
   OttieCompositionLayer *self = OTTIE_COMPOSITION_LAYER (layer);
 

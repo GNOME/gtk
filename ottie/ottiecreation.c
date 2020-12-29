@@ -25,6 +25,9 @@
 #include "ottieparserprivate.h"
 #include "ottiecompositionprivate.h"
 #include "ottieprinterprivate.h"
+#include "ottiegroupshapeprivate.h"
+#include "ottiefontprivate.h"
+#include "ottiecharprivate.h"
 
 #include <glib/gi18n-lib.h>
 #include <json-glib/json-glib.h>
@@ -56,6 +59,8 @@ struct _OttieCreation
 
   OttieComposition *layers;
   GHashTable *composition_assets;
+  GHashTable *fonts;
+  GHashTable *chars;
 
   GCancellable *cancellable;
 };
@@ -164,6 +169,8 @@ ottie_creation_reset (OttieCreation *self)
 {
   g_clear_object (&self->layers);
   g_hash_table_remove_all (self->composition_assets);
+  g_hash_table_remove_all (self->fonts);
+  g_hash_table_remove_all (self->chars);
 
   g_clear_pointer (&self->name, g_free);
   self->frame_rate = 0;
@@ -190,6 +197,8 @@ ottie_creation_finalize (GObject *object)
   OttieCreation *self = OTTIE_CREATION (object);
 
   g_hash_table_unref (self->composition_assets);
+  g_hash_table_unref (self->fonts);
+  g_hash_table_unref (self->chars);
 
   G_OBJECT_CLASS (ottie_creation_parent_class)->finalize (object);
 }
@@ -307,6 +316,11 @@ static void
 ottie_creation_init (OttieCreation *self)
 {
   self->composition_assets = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
+  self->fonts = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                       g_free, (GDestroyNotify)ottie_font_free);
+  self->chars = g_hash_table_new_full ((GHashFunc)ottie_char_key_hash,
+                                       (GEqualFunc)ottie_char_key_equal,
+                                       NULL, (GDestroyNotify)ottie_char_free);
 }
 
 /**
@@ -436,6 +450,130 @@ ottie_creation_parse_markers (JsonReader *reader,
 }
 
 static gboolean
+ottie_creation_parse_font (JsonReader *reader,
+                           gsize       offset,
+                           gpointer    data)
+{
+  OttieParserOption options[] = {
+    { "fName", ottie_parser_option_string, G_STRUCT_OFFSET (OttieFont, name) },
+    { "fFamily", ottie_parser_option_string, G_STRUCT_OFFSET (OttieFont, family) },
+    { "fStyle", ottie_parser_option_string, G_STRUCT_OFFSET (OttieFont, style) },
+    { "ascent", ottie_parser_option_double, G_STRUCT_OFFSET (OttieFont, ascent) },
+  };
+  OttieCreation *self = data;
+  OttieFont font = { };
+  gboolean result;
+
+  result = ottie_parser_parse_object (reader, "font", options, G_N_ELEMENTS (options), &font);
+
+  if (result)
+    {
+      if (font.name == NULL)
+        ottie_parser_error_syntax (reader, "No name given to font");
+      else if (g_hash_table_contains (self->fonts, font.name))
+        ottie_parser_error_syntax (reader, "Duplicate font name: %s", font.name);
+      else
+        g_hash_table_insert (self->fonts, g_strdup (font.name), ottie_font_copy (&font));
+    }
+
+  g_clear_pointer (&font.name, g_free);
+  g_clear_pointer (&font.family, g_free);
+  g_clear_pointer (&font.style, g_free);
+
+  return result;
+}
+
+static gboolean
+ottie_creation_parse_font_list (JsonReader *reader,
+                                gsize       offset,
+                                gpointer    data)
+{
+  return ottie_parser_parse_array (reader, "assets",
+                                   0, G_MAXUINT, NULL,
+                                   offset, 0,
+                                   ottie_creation_parse_font,
+                                   data);
+}
+
+static gboolean
+ottie_creation_parse_fonts (JsonReader *reader,
+                            gsize       offset,
+                            gpointer    data)
+{
+  OttieParserOption options[] = {
+    { "list", ottie_creation_parse_font_list, 0 }
+  };
+
+  return ottie_parser_parse_object (reader, "fonts",
+                                    options, G_N_ELEMENTS (options),
+                                    data);
+}
+
+static gboolean
+ottie_creation_parse_char_data (JsonReader *reader,
+                                gsize       offset,
+                                gpointer    data)
+{
+  OttieParserOption options[] = {
+    { "shapes", ottie_group_shape_parse_shapes, 0 }
+  };
+  OttieChar *ch = data;
+
+  ch->shapes = ottie_group_shape_new ();
+
+  return ottie_parser_parse_object (reader, "char data",
+                                    options, G_N_ELEMENTS (options),
+                                    ch->shapes);
+}
+
+static gboolean
+ottie_creation_parse_char (JsonReader *reader,
+                           gsize       offset,
+                           gpointer    data)
+{
+  OttieParserOption options[] = {
+    { "ch", ottie_parser_option_string, G_STRUCT_OFFSET (OttieCharKey, ch) },
+    { "fFamily", ottie_parser_option_string, G_STRUCT_OFFSET (OttieCharKey, family) },
+    { "style", ottie_parser_option_string, G_STRUCT_OFFSET (OttieCharKey, style) },
+    { "size", ottie_parser_option_double, G_STRUCT_OFFSET (OttieChar, size) },
+    { "w", ottie_parser_option_double, G_STRUCT_OFFSET (OttieChar, width) },
+    { "data", ottie_creation_parse_char_data, G_STRUCT_OFFSET (OttieChar, shapes) },
+  };
+  OttieCreation *self = data;
+  OttieChar ch = { };
+  gboolean result;
+
+  result = ottie_parser_parse_object (reader, "char", options, G_N_ELEMENTS (options), &ch);
+
+  if (result)
+    {
+      if (ch.key.ch == NULL)
+        ottie_parser_error_syntax (reader, "Char without \"ch\"");
+      else if (ch.shapes == NULL)
+        ottie_parser_error_syntax (reader, "Char without \"data\"");
+      else if (g_hash_table_contains (self->chars, &ch))
+        ottie_parser_error_syntax (reader, "Duplicate char: %s/%s/%s", ch.key.ch, ch.key.family, ch.key.style);
+      else
+        g_hash_table_add (self->chars, ottie_char_copy (&ch));
+    }
+
+  ottie_char_clear (&ch);
+
+  return result;
+}
+static gboolean
+ottie_creation_parse_chars (JsonReader *reader,
+                            gsize       offset,
+                            gpointer    data)
+{
+  return ottie_parser_parse_array (reader, "chars",
+                                   0, G_MAXUINT, NULL,
+                                   offset, 0,
+                                   ottie_creation_parse_char,
+                                   data);
+}
+
+static gboolean
 ottie_creation_load_from_reader (OttieCreation *self,
                                  JsonReader    *reader)
 {
@@ -451,6 +589,8 @@ ottie_creation_load_from_reader (OttieCreation *self,
     { "layers", ottie_composition_parse_layers, G_STRUCT_OFFSET (OttieCreation, layers) },
     { "assets", ottie_creation_parse_assets, 0 },
     { "markers", ottie_creation_parse_markers, 0 },
+    { "fonts", ottie_creation_parse_fonts, 0 },
+    { "chars", ottie_creation_parse_chars, 0 },
   };
 
   return ottie_parser_parse_object (reader, "toplevel", options, G_N_ELEMENTS (options), self);
@@ -465,9 +605,9 @@ ottie_creation_update_layers (OttieCreation *self)
   g_hash_table_iter_init (&iter, self->composition_assets);
 
   while (g_hash_table_iter_next (&iter, NULL, &layer))
-    ottie_layer_update (layer, self->composition_assets);
+    ottie_layer_update (layer, self->composition_assets, self->fonts, self->chars);
 
-  ottie_layer_update (OTTIE_LAYER (self->layers), self->composition_assets);
+  ottie_layer_update (OTTIE_LAYER (self->layers), self->composition_assets, self->fonts, self->chars);
 }
 
 static void
@@ -766,6 +906,9 @@ ottie_creation_print (OttiePrinter  *printer,
   const char *id;
   OttieComposition *composition;
   GHashTableIter iter;
+  const char *name;
+  OttieFont *font;
+  OttieChar *ch;
 
   ottie_printer_start_object (printer, NULL);
 
@@ -788,12 +931,49 @@ ottie_creation_print (OttiePrinter  *printer,
       ottie_printer_end_array (printer);
       ottie_printer_end_object (printer);
     }
-
   ottie_printer_end_array (printer);
 
   ottie_printer_start_array (printer, "layers");
   ottie_composition_print (printer, self->layers);
   ottie_printer_end_array (printer);
+
+  if (g_hash_table_size (self->fonts) > 0)
+    {
+      ottie_printer_start_object (printer, "fonts");
+      ottie_printer_start_array (printer, "list");
+      g_hash_table_iter_init (&iter, self->fonts);
+      while (g_hash_table_iter_next (&iter, (gpointer *)&name, (gpointer *)&font))
+        {
+          ottie_printer_start_object (printer, NULL);
+          ottie_printer_add_string (printer, "fName", font->name);
+          ottie_printer_add_string (printer, "fFamily", font->family);
+          ottie_printer_add_string (printer, "fStyle", font->style);
+          ottie_printer_add_double (printer, "ascent", font->ascent);
+          ottie_printer_end_object (printer);
+        }
+      ottie_printer_end_array (printer);
+      ottie_printer_end_object (printer);
+    }
+
+  if (g_hash_table_size (self->chars) > 0)
+    {
+      ottie_printer_start_array (printer, "chars");
+      g_hash_table_iter_init (&iter, self->chars);
+      while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&ch))
+        {
+          ottie_printer_start_object (printer, NULL);
+          ottie_printer_add_string (printer, "ch", ch->key.ch);
+          ottie_printer_add_string (printer, "fFamily", ch->key.family);
+          ottie_printer_add_string (printer, "style", ch->key.style);
+          ottie_printer_add_double (printer, "size", ch->size);
+          ottie_printer_add_double (printer, "w", ch->width);
+          ottie_printer_start_object (printer, "data");
+          ottie_group_shape_print_shapes (ch->shapes, "shapes", printer);
+          ottie_printer_end_object (printer);
+          ottie_printer_end_object (printer);
+        }
+      ottie_printer_end_array (printer);
+    }
 
   ottie_printer_end_object (printer);
 }

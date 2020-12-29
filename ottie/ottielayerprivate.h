@@ -58,7 +58,9 @@ struct _OttieLayerClass
   OttieObjectClass parent_class;
 
   void                  (* update)                           (OttieLayer                *layer,
-                                                              GHashTable                *compositions);
+                                                              GHashTable                *compositions,
+                                                              GHashTable                *fonts,
+                                                              GHashTable                *chars);
   void                  (* render)                           (OttieLayer                *layer,
                                                               OttieRender               *render,
                                                               double                     timestamp);
@@ -69,7 +71,9 @@ struct _OttieLayerClass
 GType                   ottie_layer_get_type                 (void) G_GNUC_CONST;
 
 void                    ottie_layer_update                   (OttieLayer                *self,
-                                                              GHashTable                *compositions);
+                                                              GHashTable                *compositions,
+                                                              GHashTable                *fonts,
+                                                              GHashTable                *chars);
 void                    ottie_layer_render                   (OttieLayer                *self,
                                                               OttieRender               *render,
                                                               double                     timestamp);
