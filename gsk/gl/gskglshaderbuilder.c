@@ -232,6 +232,8 @@ gsk_gl_shader_builder_create_program (GskGLShaderBuilder  *self,
   glBindAttribLocation (program_id, 0, "aPosition");
   glBindAttribLocation (program_id, 1, "vUv");
   glLinkProgram (program_id);
+  glDetachShader (program_id, vertex_id);
+  glDetachShader (program_id, fragment_id);
 
   glGetProgramiv (program_id, GL_LINK_STATUS, &status);
   if (status == GL_FALSE)
@@ -252,14 +254,9 @@ gsk_gl_shader_builder_create_program (GskGLShaderBuilder  *self,
 
       glDeleteProgram (program_id);
       program_id = -1;
-
-      goto out;
     }
 
-  glDetachShader (program_id, vertex_id);
   glDeleteShader (vertex_id);
-
-  glDetachShader (program_id, fragment_id);
   glDeleteShader (fragment_id);
 
 out:
