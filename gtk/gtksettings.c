@@ -95,11 +95,6 @@
  * to use gtk_widget_get_settings().
  */
 
-
-#define DEFAULT_TIMEOUT_INITIAL 500
-#define DEFAULT_TIMEOUT_REPEAT   50
-#define DEFAULT_TIMEOUT_EXPAND  500
-
 typedef struct _GtkSettingsClass GtkSettingsClass;
 typedef struct _GtkSettingsPropertyValue GtkSettingsPropertyValue;
 typedef struct _GtkSettingsValuePrivate GtkSettingsValuePrivate;
