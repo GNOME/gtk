@@ -249,7 +249,7 @@ struct _GtkExpressionWatch
 GType \
 type_name ## _get_type (void) \
 { \
-  static volatile gsize gtk_define_expression_type_id__volatile; \
+  static gsize gtk_define_expression_type_id__volatile; \
   if (g_once_init_enter (&gtk_define_expression_type_id__volatile)) \
     { \
       GType gtk_define_expression_type_id = \
@@ -490,7 +490,7 @@ param_expression_values_cmp (GParamSpec   *pspec,
 GType
 gtk_param_expression_get_type (void)
 {
-  static volatile gsize param_expression_type__volatile;
+  static gsize param_expression_type__volatile;
 
   if (g_once_init_enter (&param_expression_type__volatile))
     {
@@ -598,7 +598,7 @@ gtk_expression_init (GtkExpression *self)
 GType
 gtk_expression_get_type (void)
 {
-  static volatile gsize expression_type__volatile;
+  static gsize expression_type__volatile;
 
   if (g_once_init_enter (&expression_type__volatile))
     {

@@ -1713,7 +1713,7 @@ gtk_print_operation_run_with_dialog (GtkPrintOperation *op,
   GtkPrintOperationPrivate *priv;
   IPrintDialogCallback *callback;
   HPROPSHEETPAGE prop_page;
-  static volatile gsize common_controls_initialized = 0;
+  static gsize common_controls_initialized = 0;
 
   if (g_once_init_enter (&common_controls_initialized))
     {

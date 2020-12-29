@@ -5649,7 +5649,7 @@ gsk_render_node_init_types_once (void)
 void
 gsk_render_node_init_types (void)
 {
-  static volatile gsize register_types__volatile;
+  static gsize register_types__volatile;
 
   if (g_once_init_enter (&register_types__volatile))
     {

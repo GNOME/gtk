@@ -22,7 +22,7 @@ static guint gsk_debug_flags;
 static void
 init_debug_flags (void)
 {
-  static volatile gsize gsk_debug_flags__set;
+  static gsize gsk_debug_flags__set;
 
   if (g_once_init_enter (&gsk_debug_flags__set))
     {
