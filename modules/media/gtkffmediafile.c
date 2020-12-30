@@ -217,7 +217,7 @@ gtk_ff_media_file_set_ffmpeg_error (GtkFfMediaFile *video,
     return;
 
   if (av_strerror (av_errnum, s, sizeof (s) != 0))
-    snprintf (s, sizeof (s), _("Unspecified error decoding video"));
+    g_snprintf (s, sizeof (s), _("Unspecified error decoding video"));
 
   gtk_media_stream_error (GTK_MEDIA_STREAM (video),
                           G_IO_ERROR,
