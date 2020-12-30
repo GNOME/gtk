@@ -40,7 +40,6 @@ xfail = [
 ]
 
 is_debug = get_option('buildtype').startswith('debug')
-
 test_cargs = []
 
 foreach flag: common_cflags
@@ -58,34 +57,37 @@ test_env.set('GIO_USE_VFS', 'local')
 test_env.set('GSETTINGS_BACKEND', 'memory')
 test_env.set('G_ENABLE_DIAGNOSTIC', '0')
 
-foreach t : tests
-  test_name = t.get('name')
-  test_srcs = ['@0@.c'.format(test_name)] + t.get('sources', [])
-  test_extra_cargs = t.get('c_args', [])
-  test_extra_ldflags = t.get('link_args', [])
-  test_extra_suites = t.get('suites', [])
-  test_timeout = 60
+# Visual Studio 2013 could not cope with '__value' for C sources
+if cc.get_id() != 'msvc' or cc.version().version_compare('>=19')
+  foreach t : tests
+    test_name = t.get('name')
+    test_srcs = ['@0@.c'.format(test_name)] + t.get('sources', [])
+    test_extra_cargs = t.get('c_args', [])
+    test_extra_ldflags = t.get('link_args', [])
+    test_extra_suites = t.get('suites', [])
+    test_timeout = 60
 
-  test_exe = executable(test_name, test_srcs,
-    c_args: test_cargs + test_extra_cargs,
-    link_args: test_extra_ldflags,
-    dependencies: libgtk_dep,
-    install: get_option('install-tests'),
-    install_dir: testexecdir,
-  )
+    test_exe = executable(test_name, test_srcs,
+      c_args: test_cargs + test_extra_cargs,
+      link_args: test_extra_ldflags,
+      dependencies: libgtk_dep,
+      install: get_option('install-tests'),
+      install_dir: testexecdir,
+    )
 
-  expect_fail = xfail.contains(test_name)
+    expect_fail = xfail.contains(test_name)
 
-  if test_extra_suites.contains('slow')
-    test_timeout = 90
-  endif
+    if test_extra_suites.contains('slow')
+      test_timeout = 90
+    endif
 
-  test(test_name, test_exe,
-    args: [ '--tap', '-k' ],
-    protocol: 'tap',
-    timeout: test_timeout,
-    env: test_env,
-    suite: ['a11y'] + test_extra_suites,
-    should_fail: expect_fail,
-  )
-endforeach
+    test(test_name, test_exe,
+      args: [ '--tap', '-k' ],
+      protocol: 'tap',
+      timeout: test_timeout,
+      env: test_env,
+      suite: ['a11y'] + test_extra_suites,
+      should_fail: expect_fail,
+    )
+  endforeach
+endif
