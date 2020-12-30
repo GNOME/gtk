@@ -25,6 +25,7 @@
 #pragma once
 
 #include <stdlib.h>
+#include <glib.h>
 
 /*
  * Main functionality
