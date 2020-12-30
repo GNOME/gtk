@@ -4209,7 +4209,7 @@ gdk_wayland_surface_get_wl_output (GdkSurface *surface)
   return NULL;
 }
 
-struct wl_egl_window *
+static struct wl_egl_window *
 gdk_wayland_surface_get_wl_egl_window (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
