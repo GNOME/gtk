@@ -62,9 +62,6 @@ GType                    gdk_wayland_popup_get_type               (void);
 GDK_AVAILABLE_IN_ALL
 struct wl_surface       *gdk_wayland_surface_get_wl_surface       (GdkSurface *surface);
 
-GDK_AVAILABLE_IN_ALL
-struct wl_egl_window    *gdk_wayland_surface_get_wl_egl_window    (GdkSurface *surface);
-
 typedef void (*GdkWaylandToplevelExported) (GdkToplevel *toplevel,
                                             const char  *handle,
                                             gpointer     user_data);
