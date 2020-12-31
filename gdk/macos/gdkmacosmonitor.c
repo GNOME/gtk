@@ -145,6 +145,7 @@ GetSubpixelLayout (CGDirectDisplayID screen_id)
 static char *
 GetLocalizedName (NSScreen *screen)
 {
+#ifdef AVAILABLE_MAC_OS_X_VERSION_10_15_AND_LATER
   GDK_BEGIN_MACOS_ALLOC_POOL;
 
   NSString *str;
@@ -158,6 +159,9 @@ GetLocalizedName (NSScreen *screen)
   GDK_END_MACOS_ALLOC_POOL;
 
   return g_steal_pointer (&name);
+#else
+  return NULL;
+#endif
 }
 
 static char *
