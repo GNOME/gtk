@@ -236,6 +236,7 @@ static void
 gtk_settings_init (GtkSettings *settings)
 {
   GParamSpec **pspecs, **p;
+  guint n_pspecs;
   guint i = 0;
   char *path;
   const char * const *config_dirs;
@@ -250,14 +251,11 @@ gtk_settings_init (GtkSettings *settings)
    * notification for them (at least notification for internal properties
    * will instantly be caught)
    */
-  pspecs = g_object_class_list_properties (G_OBJECT_GET_CLASS (settings), NULL);
-  for (p = pspecs; *p; p++)
-    if ((*p)->owner_type == G_OBJECT_TYPE (settings))
-      i++;
-  settings->property_values = g_new0 (GtkSettingsPropertyValue, i);
-  i = 0;
+  pspecs = g_object_class_list_properties (G_OBJECT_GET_CLASS (settings), &n_pspecs);
+  settings->property_values = g_new0 (GtkSettingsPropertyValue, n_pspecs);
   g_object_freeze_notify (G_OBJECT (settings));
 
+  i = 0;
   for (p = pspecs; *p; p++)
     {
       GParamSpec *pspec = *p;
