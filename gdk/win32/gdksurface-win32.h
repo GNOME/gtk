@@ -265,16 +265,16 @@ struct _GdkWin32Surface
   int initial_y;
 
   /* left/right/top/bottom width of the shadow/resize-grip around the window */
-  RECT margins;
+  RECT shadow;
 
-  /* left+right and top+bottom from @margins */
-  int margins_x;
-  int margins_y;
+  /* left+right and top+bottom from @shadow */
+  int shadow_x;
+  int shadow_y;
 
-  /* Set to TRUE when GTK tells us that margins are 0 everywhere.
-   * We don't actually set margins to 0, we just set this bit.
+  /* Set to TRUE when GTK tells us that shadow are 0 everywhere.
+   * We don't actually set shadow to 0, we just set this bit.
    */
-  guint zero_margins : 1;
+  guint zero_shadow : 1;
   guint inhibit_configure : 1;
 
   /* Set to TRUE if window is using true layered mode adjustments
