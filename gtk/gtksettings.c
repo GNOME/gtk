@@ -275,27 +275,23 @@ gtk_settings_init (GtkSettings *settings)
   g_free (pspecs);
 
   path = g_build_filename (_gtk_get_data_prefix (), "share", "gtk-4.0", "settings.ini", NULL);
-  if (g_file_test (path, G_FILE_TEST_EXISTS))
-    gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_DEFAULT);
+  gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_DEFAULT);
   g_free (path);
 
   path = g_build_filename (_gtk_get_sysconfdir (), "gtk-4.0", "settings.ini", NULL);
-  if (g_file_test (path, G_FILE_TEST_EXISTS))
-    gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_DEFAULT);
+  gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_DEFAULT);
   g_free (path);
 
   config_dirs = g_get_system_config_dirs ();
   for (i = 0; config_dirs[i] != NULL; i++)
     {
       path = g_build_filename (config_dirs[i], "gtk-4.0", "settings.ini", NULL);
-      if (g_file_test (path, G_FILE_TEST_EXISTS))
-        gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_DEFAULT);
+      gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_DEFAULT);
       g_free (path);
     }
 
   path = g_build_filename (g_get_user_config_dir (), "gtk-4.0", "settings.ini", NULL);
-  if (g_file_test (path, G_FILE_TEST_EXISTS))
-    gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_DEFAULT);
+  gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_DEFAULT);
   g_free (path);
 
   g_object_thaw_notify (G_OBJECT (settings));
@@ -1690,8 +1686,7 @@ settings_update_theme (GtkSettings *settings)
   if (theme_dir)
     {
       path = g_build_filename (theme_dir, "settings.ini", NULL);
-      if (g_file_test (path, G_FILE_TEST_EXISTS))
-        gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_THEME);
+      gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_THEME);
       g_free (path);
     }
 
@@ -1728,13 +1723,18 @@ gtk_settings_load_from_key_file (GtkSettings       *settings,
   char **keys;
   gsize n_keys;
   int i;
+  char *contents;
+  gsize contents_len;
+
+  if (!g_file_get_contents (path, &contents, &contents_len, NULL))
+    return;
 
   error = NULL;
   keys = NULL;
 
   keyfile = g_key_file_new ();
 
-  if (!g_key_file_load_from_file (keyfile, path, G_KEY_FILE_NONE, &error))
+  if (!g_key_file_load_from_data (keyfile, contents, contents_len, G_KEY_FILE_NONE, &error))
     {
       g_warning ("Failed to parse %s: %s", path, error->message);
 
@@ -1845,6 +1845,7 @@ gtk_settings_load_from_key_file (GtkSettings       *settings,
     }
 
  out:
+  g_free (contents);
   g_strfreev (keys);
   g_key_file_free (keyfile);
 }
