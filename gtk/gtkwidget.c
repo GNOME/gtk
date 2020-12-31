@@ -3425,21 +3425,18 @@ void
 gtk_widget_get_surface_allocation (GtkWidget     *widget,
                                   GtkAllocation *allocation)
 {
-  GtkWidget *parent;
+  GtkNative *native;
   graphene_rect_t bounds;
   double nx, ny;
 
-  /* Don't consider the parent == widget case here. */
-  parent = _gtk_widget_get_parent (widget);
-  while (parent && !GTK_IS_NATIVE (parent))
-    parent = _gtk_widget_get_parent (parent);
+  native = gtk_widget_get_native (widget);
 
-  g_assert (GTK_IS_WINDOW (parent) || GTK_IS_POPOVER (parent));
-  gtk_native_get_surface_transform (GTK_NATIVE (parent), &nx, &ny);
+  g_assert (GTK_IS_WINDOW (native) || GTK_IS_POPOVER (native));
+  gtk_native_get_surface_transform (native, &nx, &ny);
 
-  if (gtk_widget_compute_bounds (widget, parent, &bounds))
+  if (gtk_widget_compute_bounds (widget, GTK_WIDGET (native), &bounds))
     {
-      *allocation = (GtkAllocation){
+      *allocation = (GtkAllocation) {
         floorf (bounds.origin.x) + nx,
         floorf (bounds.origin.y) + ny,
         ceilf (bounds.size.width),
