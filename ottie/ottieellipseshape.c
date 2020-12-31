@@ -32,7 +32,6 @@ struct _OttieEllipseShape
 {
   OttieShape parent;
 
-  double diellipseion;
   OttiePointValue position;
   OttiePointValue size;
 };
@@ -119,7 +118,6 @@ ottie_ellipse_shape_parse (JsonReader *reader)
 {
   OttieParserOption options[] = {
     OTTIE_PARSE_OPTIONS_SHAPE,
-    { "d", ottie_parser_option_double, G_STRUCT_OFFSET (OttieEllipseShape, diellipseion) },
     { "p", ottie_point_value_parse, G_STRUCT_OFFSET (OttieEllipseShape, position) },
     { "s", ottie_point_value_parse, G_STRUCT_OFFSET (OttieEllipseShape, size) },
   };
