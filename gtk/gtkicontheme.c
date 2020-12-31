@@ -3133,7 +3133,7 @@ scan_directory (GtkIconTheme  *self,
 
 static GHashTable *
 scan_resource_directory (GtkIconTheme  *self,
-                         char          *full_dir,
+                         const char    *full_dir,
                          GtkStringSet  *set)
 {
   GHashTable *icons = NULL;
