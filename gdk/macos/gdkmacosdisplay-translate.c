@@ -762,7 +762,7 @@ get_surface_from_ns_event (GdkMacosDisplay *self,
   GdkSurface *surface = NULL;
   NSWindow *nswindow = [nsevent window];
 
-  if (nswindow)
+  if (GDK_IS_MACOS_WINDOW (nswindow))
     {
       GdkMacosBaseView *view;
       NSPoint point, view_point;
@@ -974,10 +974,10 @@ find_surface_for_ns_event (GdkMacosDisplay *self,
   g_assert (x != NULL);
   g_assert (y != NULL);
 
-  view = (GdkMacosBaseView *)[[nsevent window] contentView];
-
   if (!(surface = get_surface_from_ns_event (self, nsevent, &point, x, y)))
     return NULL;
+
+  view = (GdkMacosBaseView *)[GDK_MACOS_SURFACE (surface)->window contentView];
 
   _gdk_macos_display_from_display_coords (self, point.x, point.y, &x_tmp, &y_tmp);
 
