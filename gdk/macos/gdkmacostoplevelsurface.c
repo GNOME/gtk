@@ -81,7 +81,7 @@ _gdk_macos_toplevel_surface_unmaximize (GdkMacosToplevelSurface *self)
     [window zoom:window];
 }
 
-static gboolean
+static void
 _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
                                      GdkToplevelLayout *layout)
 {
@@ -230,8 +230,6 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
   _gdk_macos_surface_show (GDK_MACOS_SURFACE (self));
 
   GDK_MACOS_SURFACE (self)->did_initial_present = TRUE;
-
-  return TRUE;
 }
 
 static gboolean
