@@ -354,6 +354,13 @@ struct _GdkWin32Surface
   int unscaled_width;
   int unscaled_height;
 
+  GdkToplevelLayout *toplevel_layout;
+  struct {
+    int configured_width;
+    int configured_height;
+  } next_layout;
+  gboolean resized;
+
 #ifdef GDK_WIN32_ENABLE_EGL
   EGLSurface egl_surface;
   EGLSurface egl_dummy_surface;
