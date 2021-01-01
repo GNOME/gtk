@@ -152,7 +152,9 @@ gtk_video_map (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_video_parent_class)->map (widget);
 
-  if (self->autoplay && self->media_stream)
+  if (self->autoplay &&
+      self->media_stream &&
+      gtk_media_stream_is_prepared (self->media_stream))
     gtk_media_stream_play (self->media_stream);
 }
 
@@ -560,7 +562,9 @@ gtk_video_notify_cb (GtkMediaStream *stream,
     gtk_video_update_playing (self);
   if (g_str_equal (pspec->name, "prepared"))
     {
-      if (self->autoplay && gtk_media_stream_is_prepared (stream))
+      if (self->autoplay &&
+          gtk_media_stream_is_prepared (stream) &&
+          gtk_widget_get_mapped (GTK_WIDGET (self)))
         gtk_media_stream_play (stream);
     }
 }
@@ -618,7 +622,9 @@ gtk_video_set_media_stream (GtkVideo       *self,
                         "notify",
                         G_CALLBACK (gtk_video_notify_cb),
                         self);
-      if (self->autoplay)
+      if (self->autoplay &&
+          gtk_media_stream_is_prepared (stream) &&
+          gtk_widget_get_mapped (GTK_WIDGET (self)))
         gtk_media_stream_play (stream);
     }
 
