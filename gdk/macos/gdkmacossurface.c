@@ -150,6 +150,12 @@ _gdk_macos_surface_set_shadow (GdkMacosSurface *surface,
 
   g_assert (GDK_IS_MACOS_SURFACE (self));
 
+  if (self->shadow_top == top &&
+      self->shadow_right == right &&
+      self->shadow_bottom == bottom &&
+      self->shadow_left == left)
+    return;
+
   self->shadow_top = top;
   self->shadow_right = right;
   self->shadow_bottom = bottom;
