@@ -61,6 +61,7 @@ struct _GdkMacosSurface
   gint64 pending_frame_counter;
 
   guint did_initial_present : 1;
+  guint geometry_dirty : 1;
 };
 
 struct _GdkMacosSurfaceClass
