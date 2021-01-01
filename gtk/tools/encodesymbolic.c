@@ -35,8 +35,11 @@
 
 static char *output_dir = NULL;
 
+static gboolean debug;
+
 static GOptionEntry args[] = {
   { "output", 'o', 0, G_OPTION_ARG_FILENAME, &output_dir, N_("Output to this directory instead of cwd"), NULL },
+  { "debug", 0, 0, G_OPTION_ARG_NONE, &debug, N_("Generate debug output") },
   { NULL }
 };
 
@@ -65,7 +68,7 @@ main (int argc, char **argv)
 
   g_set_prgname ("gtk-encode-symbolic-svg");
 
-  context = g_option_context_new ("PATH WIDTHxHEIGHT");
+  context = g_option_context_new ("[OPTION…] PATH WIDTHxHEIGHT");
   g_option_context_add_main_entries (context, args, GETTEXT_PACKAGE);
 
   g_option_context_parse (context, &argc, &argv, NULL);
@@ -104,7 +107,9 @@ main (int argc, char **argv)
       return 1;
     }
 
-  symbolic = gtk_make_symbolic_pixbuf_from_data (data, len, width, height, 1.0, &error);
+  basename = g_path_get_basename (path);
+
+  symbolic = gtk_make_symbolic_pixbuf_from_data (data, len, width, height, 1.0, debug ? basename : NULL, &error);
   if (symbolic == NULL)
     {
       g_printerr (_("Can’t load file: %s\n"), error->message);
@@ -112,8 +117,6 @@ main (int argc, char **argv)
     }
 
   g_free (data);
-
-  basename = g_path_get_basename (path);
 
   dot = strrchr (basename, '.');
   if (dot != NULL)

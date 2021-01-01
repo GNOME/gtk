@@ -429,6 +429,7 @@ gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
                                     int          width,
                                     int          height,
                                     double       scale,
+                                    const char  *debug_output_basename,
                                     GError     **error)
 
 {
@@ -491,6 +492,16 @@ gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
       if (loaded == NULL)
         goto out;
 
+      if (debug_output_basename)
+        {
+          char *filename;
+
+          filename = g_strdup_printf ("%s.debug%d.png", debug_output_basename, plane);
+          g_print ("Writing %s\n", filename);
+          gdk_pixbuf_save (loaded, filename, "png", NULL, NULL);
+          g_free (filename);
+        }
+
       if (pixbuf == NULL)
         {
           pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8,
@@ -534,7 +545,7 @@ gtk_make_symbolic_pixbuf_from_resource (const char  *path,
 
   data = g_bytes_get_data (bytes, &size);
 
-  pixbuf = gtk_make_symbolic_pixbuf_from_data (data, size, width, height, scale, error);
+  pixbuf = gtk_make_symbolic_pixbuf_from_data (data, size, width, height, scale, NULL, error);
 
   g_bytes_unref (bytes);
 
@@ -555,7 +566,7 @@ gtk_make_symbolic_pixbuf_from_path (const char  *path,
   if (!g_file_get_contents (path, &data, &size, error))
     return NULL;
 
-  pixbuf = gtk_make_symbolic_pixbuf_from_data (data, size, width, height, scale, error);
+  pixbuf = gtk_make_symbolic_pixbuf_from_data (data, size, width, height, scale, NULL, error);
 
   g_free (data);
 
@@ -576,7 +587,7 @@ gtk_make_symbolic_pixbuf_from_file (GFile       *file,
   if (!g_file_load_contents (file, NULL, &data, &size, NULL, error))
     return NULL;
 
-  pixbuf = gtk_make_symbolic_pixbuf_from_data (data, size, width, height, scale, error);
+  pixbuf = gtk_make_symbolic_pixbuf_from_data (data, size, width, height, scale, NULL, error);
 
   g_free (data);
 
