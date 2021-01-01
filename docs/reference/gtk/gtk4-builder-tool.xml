@@ -42,34 +42,40 @@
   on GtkBuilder .ui files.
 </para>
 <para>
+  The <option>validate</option> command validates the .ui file and reports
+  errors to stderr.
+</para>
+<para>
+  The <option>enumerate</option> command lists all the named objects that
+  are created in the .ui file.
+</para>
+<para>
+  The <option>preview</option> command displays the .ui file. This command
+  accepts options to specify the ID of the toplevel object and a .css file
+  to use.
+</para>
+<para>
+  The <option>simplify</option> command simplifies the .ui file by removing
+  properties that are set to their default values and writes the resulting XML
+  to stdout, or back to the input file.
+</para>
+<para>
+  When the <option>--3to4</option> is specified, <option>simplify</option>
+  interprets the input as a GTK 3 ui file and attempts to convert it to GTK 4
+  equivalents. It performs various conversions, such as renaming properties,
+  translating child properties to layout properties, rewriting the setup for
+  GtkNotebook, GtkStack, GtkAssistant  or changing toolbars into boxes.
+</para>
+<para>
   You should always test the modified .ui files produced by gtk4-builder-tool
   before using them in production.
 </para>
-</refsect1>
-
-<refsect1><title>Commands</title>
-  <para>The following commands are understood:</para>
-  <variablelist>
-    <varlistentry>
-    <term><option>validate</option></term>
-      <listitem><para>Validates the .ui file and report errors to stderr.</para></listitem>
-    </varlistentry>
-    <varlistentry>
-    <term><option>simplify</option></term>
-      <listitem><para>Simplifies the .ui file by removing properties that
-      are set to their default values and write the resulting XML to stdout,
-      or back to the input file.</para></listitem>
-    </varlistentry>
-    <varlistentry>
-    <term><option>enumerate</option></term>
-      <listitem><para>Lists all the named objects that are created in the .ui file.</para></listitem>
-    </varlistentry>
-    <varlistentry>
-    <term><option>preview</option></term>
-      <listitem><para>Preview the .ui file. This command accepts options
-                to specify the ID of an object and a .css file to use.</para></listitem>
-    </varlistentry>
-  </variablelist>
+<para>
+  Note in particular that the conversion
+  done with <option>--3to4</option> is meant as a starting point for a port
+  from GTK 3 to GTK 4. It is expected that you will have to do manual fixups
+  after the initial conversion.
+</para>
 </refsect1>
 
 <refsect1><title>Simplify Options</title>
