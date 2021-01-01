@@ -307,7 +307,8 @@ GtkPageSetup           *gtk_print_run_page_setup_dialog            (GtkWindow   
 
 /**
  * GtkPageSetupDoneFunc:
- * @page_setup: the #GtkPageSetup that has been
+ * @page_setup: the #GtkPageSetup that has been passed to
+ *     gtk_print_run_page_setup_dialog_async()
  * @data: (closure): user data that has been passed to
  *     gtk_print_run_page_setup_dialog_async()
  *
