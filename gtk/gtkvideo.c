@@ -131,6 +131,9 @@ gtk_video_unrealize (GtkWidget *widget)
 {
   GtkVideo *self = GTK_VIDEO (widget);
 
+  if (self->autoplay && self->media_stream)
+    gtk_media_stream_pause (self->media_stream);
+
   if (self->media_stream)
     {
       GdkSurface *surface;
@@ -165,9 +168,18 @@ gtk_video_unmap (GtkWidget *widget)
       gtk_revealer_set_reveal_child (GTK_REVEALER (self->controls_revealer), FALSE);
     }
 
-  /* XXX: pause video here? */
-
   GTK_WIDGET_CLASS (gtk_video_parent_class)->unmap (widget);
+}
+
+static void
+gtk_video_hide (GtkWidget *widget)
+{
+  GtkVideo *self = GTK_VIDEO (widget);
+
+  if (self->autoplay && self->media_stream)
+    gtk_media_stream_pause (self->media_stream);
+
+  GTK_WIDGET_CLASS (gtk_video_parent_class)->hide (widget);
 }
 
 static void
@@ -268,6 +280,7 @@ gtk_video_class_init (GtkVideoClass *klass)
   widget_class->unrealize = gtk_video_unrealize;
   widget_class->map = gtk_video_map;
   widget_class->unmap = gtk_video_unmap;
+  widget_class->hide = gtk_video_hide;
   widget_class->set_focus_child = gtk_video_set_focus_child;
 
   gobject_class->dispose = gtk_video_dispose;
