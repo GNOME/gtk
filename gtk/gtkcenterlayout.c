@@ -177,7 +177,7 @@ gtk_center_layout_distribute (GtkCenterLayout  *self,
         center_pos = size - center_size - end_size - spacing;
       else if (center_expand)
         {
-          center_size = size - 2 * MAX (start_size, end_size);
+          center_size = size - 2 * (MAX (start_size, end_size) + spacing);
           center_pos = (size / 2) - (center_size / 2) + spacing;
         }
 
