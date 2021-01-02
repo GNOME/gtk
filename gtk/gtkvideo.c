@@ -36,12 +36,19 @@
  * SECTION:gtkvideo
  * @title: GtkVideo
  * @short_description: A widget for displaying video
- * @see_also: #GtkMediaControls
+ * @see_also: #GtkMediaControls, #GtkMediaStream
  *
- * GtkVideo is a widget to show a #GtkMediaStream.
+ * GtkVideo is a widget to show a #GtkMediaStream with media controls
+ * as provided by #GtkMediaControls. If you just want to display a
+ * video without controls, you can treat it like any other paintable
+ * and for example put it into a #GtkPicture.
  *
- * It is commonly combined with #GtkMediaControls to give the
- * user a way to control the playback.
+ * GtkVideo aims to cover use cases such as previews, embedded animations,
+ * etc. It supports autoplay, looping, and simple media controls. It does
+ * not have support for video overlays, multichannel audio, device
+ * selection, or input. If you are writing a full-fledged video player,
+ * you may want to use the #GdkPaintable API and a media framework such
+ * as Gstreamer directly.
  */
 
 struct _GtkVideo
