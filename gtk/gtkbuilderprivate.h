@@ -286,8 +286,5 @@ GObject *_gtk_builder_lookup_object       (GtkBuilder                *builder,
                                            int                        col);
 gboolean _gtk_builder_lookup_failed       (GtkBuilder                *builder,
                                            GError                   **error);
-GModule *gtk_builder_get_module           (GtkBuilder                *builder);
-
-
 
 #endif /* __GTK_BUILDER_PRIVATE_H__ */
