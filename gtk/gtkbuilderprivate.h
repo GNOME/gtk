@@ -173,7 +173,7 @@ typedef struct {
   const char *last_element;
   GtkBuilder *builder;
   char *domain;
-  GSList *stack;
+  GPtrArray *stack;
   SubParser *subparser;
   GtkBuildableParseContext ctx;
   const char *filename;

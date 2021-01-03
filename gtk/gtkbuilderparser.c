@@ -365,16 +365,17 @@ static void free_object_info (ObjectInfo *info);
 static inline void
 state_push (ParserData *data, gpointer info)
 {
-  data->stack = g_slist_prepend (data->stack, info);
+  g_ptr_array_add (data->stack, info);
 }
 
 static inline gpointer
 state_peek (ParserData *data)
 {
-  if (!data->stack)
+  if (!data->stack ||
+      data->stack->len == 0)
     return NULL;
 
-  return data->stack->data;
+  return g_ptr_array_index (data->stack, data->stack->len - 1);
 }
 
 static inline gpointer
@@ -384,8 +385,9 @@ state_pop (ParserData *data)
 
   g_assert (data->stack);
 
-  old = data->stack->data;
-  data->stack = g_slist_delete_link (data->stack, data->stack);
+  old = state_peek (data);
+  g_assert (old);
+  data->stack->len --;
   return old;
 }
 #define state_peek_info(data, st) ((st*)state_peek(data))
@@ -2077,7 +2079,7 @@ text (GtkBuildableParseContext  *context,
       return;
     }
 
-  if (!data->stack)
+  if (!data->stack || data->stack->len == 0)
     return;
 
   info = state_peek_info (data, CommonInfo);
@@ -2118,41 +2120,6 @@ text (GtkBuildableParseContext  *context,
     }
 }
 
-static void
-free_info (CommonInfo *info)
-{
-  switch (info->tag_type)
-    {
-      case TAG_OBJECT:
-      case TAG_TEMPLATE:
-        free_object_info ((ObjectInfo *)info);
-        break;
-      case TAG_CHILD:
-        free_child_info ((ChildInfo *)info);
-        break;
-      case TAG_BINDING:
-        _free_binding_info ((BindingInfo *)info, NULL);
-        break;
-      case TAG_BINDING_EXPRESSION:
-        free_binding_expression_info ((BindingExpressionInfo *) info);
-        break;
-      case TAG_PROPERTY:
-        free_property_info ((PropertyInfo *)info);
-        break;
-      case TAG_SIGNAL:
-        _free_signal_info ((SignalInfo *)info, NULL);
-        break;
-      case TAG_REQUIRES:
-        free_requires_info ((RequiresInfo *)info, NULL);
-        break;
-      case TAG_EXPRESSION:
-        free_expression_info ((ExpressionInfo *)info);
-        break;
-      default:
-        g_assert_not_reached ();
-    }
-}
-
 static const GtkBuildableParser parser = {
   start_element,
   end_element,
@@ -2186,6 +2153,7 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   data.domain = g_strdup (domain);
   data.object_ids = g_hash_table_new_full (g_str_hash, g_str_equal,
                                            (GDestroyNotify)g_free, NULL);
+  data.stack = g_ptr_array_new ();
 
   if (requested_objs)
     {
@@ -2237,11 +2205,11 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
 
  out:
 
-  g_slist_free_full (data.stack, (GDestroyNotify)free_info);
   g_slist_free_full (data.custom_finalizers, (GDestroyNotify)free_subparser);
   g_slist_free (data.finalizers);
   g_free (data.domain);
   g_hash_table_destroy (data.object_ids);
+  g_ptr_array_free (data.stack, TRUE);
   gtk_buildable_parse_context_free (&data.ctx);
 
   /* restore the original domain */
