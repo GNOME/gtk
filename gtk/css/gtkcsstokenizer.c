@@ -30,6 +30,7 @@ struct _GtkCssTokenizer
 {
   int                    ref_count;
   GBytes                *bytes;
+  GString               *name_buffer;
 
   const char            *data;
   const char            *end;
@@ -565,6 +566,7 @@ gtk_css_tokenizer_new (GBytes *bytes)
   tokenizer = g_slice_new0 (GtkCssTokenizer);
   tokenizer->ref_count = 1;
   tokenizer->bytes = g_bytes_ref (bytes);
+  tokenizer->name_buffer = g_string_new (NULL);
 
   tokenizer->data = g_bytes_get_data (bytes, NULL);
   tokenizer->end = tokenizer->data + g_bytes_get_size (bytes);
@@ -589,6 +591,7 @@ gtk_css_tokenizer_unref (GtkCssTokenizer *tokenizer)
   if (tokenizer->ref_count > 0)
     return;
 
+  g_string_free (tokenizer->name_buffer, TRUE);
   g_bytes_unref (tokenizer->bytes);
   g_slice_free (GtkCssTokenizer, tokenizer);
 }
@@ -599,11 +602,7 @@ gtk_css_tokenizer_get_location (GtkCssTokenizer *tokenizer)
   return &tokenizer->position;
 }
 
-static void
-gtk_css_tokenizer_parse_error (GError     **error,
-                               const char  *format,
-                               ...) G_GNUC_PRINTF(2, 3);
-static void
+static void G_GNUC_PRINTF(2, 3)
 gtk_css_tokenizer_parse_error (GError     **error,
                                const char  *format,
                                ...)
@@ -874,7 +873,7 @@ gtk_css_tokenizer_read_escape (GtkCssTokenizer *tokenizer)
 static char *
 gtk_css_tokenizer_read_name (GtkCssTokenizer *tokenizer)
 {
-  GString *string = g_string_new (NULL);
+  g_string_set_size (tokenizer->name_buffer, 0);
 
   do {
       if (*tokenizer->data == '\\')
@@ -882,7 +881,7 @@ gtk_css_tokenizer_read_name (GtkCssTokenizer *tokenizer)
           if (gtk_css_tokenizer_has_valid_escape (tokenizer))
             {
               gunichar value = gtk_css_tokenizer_read_escape (tokenizer);
-              g_string_append_unichar (string, value);
+              g_string_append_unichar (tokenizer->name_buffer, value);
             }
           else
             {
@@ -890,16 +889,16 @@ gtk_css_tokenizer_read_name (GtkCssTokenizer *tokenizer)
 
               if (tokenizer->data == tokenizer->end)
                 {
-                  g_string_append_unichar (string, 0xFFFD);
+                  g_string_append_unichar (tokenizer->name_buffer, 0xFFFD);
                   break;
                 }
 
-              gtk_css_tokenizer_consume_char (tokenizer, string);
+              gtk_css_tokenizer_consume_char (tokenizer, tokenizer->name_buffer);
             }
         }
       else if (is_name (*tokenizer->data))
         {
-          gtk_css_tokenizer_consume_char (tokenizer, string);
+          gtk_css_tokenizer_consume_char (tokenizer, tokenizer->name_buffer);
         }
       else
         {
@@ -908,7 +907,7 @@ gtk_css_tokenizer_read_name (GtkCssTokenizer *tokenizer)
     }
   while (tokenizer->data != tokenizer->end);
 
-  return g_string_free (string, FALSE);
+  return g_strndup (tokenizer->name_buffer->str, tokenizer->name_buffer->len);
 }
 
 static void
