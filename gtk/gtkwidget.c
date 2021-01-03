@@ -10735,43 +10735,6 @@ get_auto_child_hash (GtkWidget *widget,
   return auto_child_hash;
 }
 
-static gboolean
-setup_template_child (GtkWidgetTemplate   *template_data,
-                      GType                class_type,
-                      AutomaticChildClass *child_class,
-                      GtkWidget           *widget,
-                      GtkBuilder          *builder)
-{
-  GHashTable *auto_child_hash;
-  GObject    *object;
-
-  object = gtk_builder_get_object (builder, child_class->name);
-  if (!object)
-    {
-      g_critical ("Unable to retrieve object '%s' from class template for type '%s' while building a '%s'",
-                  child_class->name, g_type_name (class_type), G_OBJECT_TYPE_NAME (widget));
-      return FALSE;
-    }
-
-  /* Insert into the hash so that it can be fetched with
-   * gtk_widget_get_template_child() and also in automated
-   * implementations of GtkBuildable.get_internal_child()
-   */
-  auto_child_hash = get_auto_child_hash (widget, class_type, TRUE);
-  g_hash_table_insert (auto_child_hash, child_class->name, g_object_ref (object));
-
-  if (child_class->offset != 0)
-    {
-      gpointer field_p;
-
-      /* Assign 'object' to the specified offset in the instance (or private) data */
-      field_p = G_STRUCT_MEMBER_P (widget, child_class->offset);
-      (* (gpointer *) field_p) = object;
-    }
-
-  return TRUE;
-}
-
 /**
  * gtk_widget_init_template:
  * @widget: a #GtkWidget
@@ -10816,49 +10779,62 @@ gtk_widget_init_template (GtkWidget *widget)
   if (template->scope)
     gtk_builder_set_scope (builder, template->scope);
 
-  gtk_builder_set_current_object (builder, G_OBJECT (widget));
+  gtk_builder_set_current_object (builder, object);
 
   /* This will build the template XML as children to the widget instance, also it
    * will validate that the template is created for the correct GType and assert that
    * there is no infinite recursion.
    */
-  if (!gtk_builder_extend_with_template (builder, G_OBJECT (widget), class_type,
+  if (!gtk_builder_extend_with_template (builder, object, class_type,
                                          (const char *)g_bytes_get_data (template->data, NULL),
                                          g_bytes_get_size (template->data),
                                          &error))
     {
-      g_critical ("Error building template class '%s' for an instance of type '%s': %s",
-                  g_type_name (class_type), G_OBJECT_TYPE_NAME (object), error->message);
-      g_error_free (error);
-
       /* This should never happen, if the template XML cannot be built
        * then it is a critical programming error.
        */
-      g_object_unref (builder);
-      return;
+      g_critical ("Error building template class '%s' for an instance of type '%s': %s",
+                  g_type_name (class_type), G_OBJECT_TYPE_NAME (object), error->message);
+      g_error_free (error);
+      goto out;
     }
 
-  /* Build the automatic child data
-   */
+  /* Build the automatic child data */
   for (l = template->children; l; l = l->next)
     {
       AutomaticChildClass *child_class = l->data;
+      GHashTable *auto_child_hash;
+      GObject *child;
 
       /* This will setup the pointer of an automated child, and cause
        * it to be available in any GtkBuildable.get_internal_child()
-       * invocations which may follow by reference in child classes.
-       */
-      if (!setup_template_child (template,
-                                 class_type,
-                                 child_class,
-                                 widget,
-                                 builder))
+       * invocations which may follow by reference in child classes. */
+      child = gtk_builder_get_object (builder, child_class->name);
+      if (!child)
         {
-          g_object_unref (builder);
-          return;
+          g_critical ("Unable to retrieve child object '%s' from class "
+                      "template for type '%s' while building a '%s'",
+                      child_class->name, g_type_name (class_type), G_OBJECT_TYPE_NAME (widget));
+          goto out;
+        }
+
+      /* Insert into the hash so that it can be fetched with
+       * gtk_widget_get_template_child() and also in automated
+       * implementations of GtkBuildable.get_internal_child() */
+      auto_child_hash = get_auto_child_hash (widget, class_type, TRUE);
+      g_hash_table_insert (auto_child_hash, child_class->name, g_object_ref (child));
+
+      if (child_class->offset != 0)
+        {
+          gpointer field_p;
+
+          /* Assign 'object' to the specified offset in the instance (or private) data */
+          field_p = G_STRUCT_MEMBER_P (widget, child_class->offset);
+          (* (gpointer *) field_p) = child;
         }
     }
 
+out:
   g_object_unref (builder);
 }
 
