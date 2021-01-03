@@ -97,6 +97,7 @@
 
 #include "config.h"
 
+#include "gtkcssshadowvalueprivate.h"
 #include "gtkpopoverprivate.h"
 #include "gtkpopovermenuprivate.h"
 #include "gtknative.h"
@@ -217,6 +218,37 @@ gtk_popover_native_get_renderer (GtkNative *native)
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   return priv->renderer;
+}
+
+static void
+get_shadow_width (GtkPopover *popover,
+                  GtkBorder  *shadow_width)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+  GtkCssStyle *style;
+  int tail_height = priv->has_arrow ? TAIL_HEIGHT : 0;
+
+  style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (priv->contents_widget)));
+
+  gtk_css_shadow_value_get_extents (style->background->box_shadow, shadow_width);
+
+  switch (priv->final_position)
+    {
+    case GTK_POS_TOP:
+      shadow_width->bottom = MAX (shadow_width->bottom, tail_height);
+      break;
+    case GTK_POS_BOTTOM:
+      shadow_width->top = MAX (shadow_width->top, tail_height);
+      break;
+    case GTK_POS_LEFT:
+      shadow_width->right = MAX (shadow_width->right, tail_height);
+      break;
+    case GTK_POS_RIGHT:
+      shadow_width->left = MAX (shadow_width->left, tail_height);
+      break;
+    default:
+      break;
+    }
 }
 
 static void
@@ -432,6 +464,9 @@ create_popup_layout (GtkPopover *popover)
   GdkAnchorHints anchor_hints;
   GdkPopupLayout *layout;
   GtkWidget *parent;
+  GtkBorder shadow_width;
+  int x_offset, y_offset;
+  int tail_height = priv->has_arrow ? TAIL_HEIGHT : 0;
 
   parent = gtk_widget_get_parent (GTK_WIDGET (popover));
   gtk_widget_get_surface_allocation (parent, &rect);
@@ -443,6 +478,11 @@ create_popup_layout (GtkPopover *popover)
       rect.height = priv->pointing_to.height;
     }
 
+  x_offset = priv->x_offset;
+  y_offset = priv->y_offset;
+
+  get_shadow_width (popover, &shadow_width);
+
   switch (priv->position)
     {
     case GTK_POS_LEFT:
@@ -451,11 +491,13 @@ create_popup_layout (GtkPopover *popover)
         case GTK_ALIGN_START:
           parent_anchor = GDK_GRAVITY_NORTH_WEST;
           surface_anchor = GDK_GRAVITY_NORTH_EAST;
+          y_offset -= shadow_width.top;
           break;
 
         case GTK_ALIGN_END:
           parent_anchor = GDK_GRAVITY_SOUTH_WEST;
           surface_anchor = GDK_GRAVITY_SOUTH_EAST;
+          y_offset += shadow_width.bottom;
           break;
 
         case GTK_ALIGN_FILL:
@@ -466,6 +508,7 @@ create_popup_layout (GtkPopover *popover)
           surface_anchor = GDK_GRAVITY_EAST;
           break;
         }
+      x_offset += shadow_width.right - tail_height;
       anchor_hints = GDK_ANCHOR_FLIP_X | GDK_ANCHOR_SLIDE_Y;
       break;
 
@@ -475,11 +518,13 @@ create_popup_layout (GtkPopover *popover)
         case GTK_ALIGN_START:
           parent_anchor = GDK_GRAVITY_NORTH_EAST;
           surface_anchor = GDK_GRAVITY_NORTH_WEST;
+          y_offset -= shadow_width.top;
           break;
 
         case GTK_ALIGN_END:
           parent_anchor = GDK_GRAVITY_SOUTH_EAST;
           surface_anchor = GDK_GRAVITY_SOUTH_WEST;
+          y_offset += shadow_width.bottom;
           break;
 
         case GTK_ALIGN_FILL:
@@ -490,6 +535,7 @@ create_popup_layout (GtkPopover *popover)
           surface_anchor = GDK_GRAVITY_WEST;
           break;
         }
+      x_offset -= shadow_width.left - tail_height;
       anchor_hints = GDK_ANCHOR_FLIP_X | GDK_ANCHOR_SLIDE_Y;
       break;
 
@@ -499,11 +545,13 @@ create_popup_layout (GtkPopover *popover)
         case GTK_ALIGN_START:
           parent_anchor = GDK_GRAVITY_NORTH_WEST;
           surface_anchor = GDK_GRAVITY_SOUTH_WEST;
+          x_offset -= shadow_width.left;
           break;
 
         case GTK_ALIGN_END:
           parent_anchor = GDK_GRAVITY_NORTH_EAST;
           surface_anchor = GDK_GRAVITY_SOUTH_EAST;
+          x_offset += shadow_width.right;
           break;
 
         case GTK_ALIGN_FILL:
@@ -514,6 +562,7 @@ create_popup_layout (GtkPopover *popover)
           surface_anchor = GDK_GRAVITY_SOUTH;
           break;
         }
+      y_offset += shadow_width.bottom - tail_height;
       anchor_hints = GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_SLIDE_X;
       break;
 
@@ -523,11 +572,13 @@ create_popup_layout (GtkPopover *popover)
         case GTK_ALIGN_START:
           parent_anchor = GDK_GRAVITY_SOUTH_WEST;
           surface_anchor = GDK_GRAVITY_NORTH_WEST;
+          x_offset -= shadow_width.left;
           break;
 
         case GTK_ALIGN_END:
           parent_anchor = GDK_GRAVITY_SOUTH_EAST;
           surface_anchor = GDK_GRAVITY_NORTH_EAST;
+          x_offset += shadow_width.right;
           break;
 
         case GTK_ALIGN_FILL:
@@ -538,6 +589,7 @@ create_popup_layout (GtkPopover *popover)
           surface_anchor = GDK_GRAVITY_NORTH;
           break;
         }
+      y_offset -= shadow_width.top - tail_height;
       anchor_hints = GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_SLIDE_X;
       break;
 
@@ -550,8 +602,8 @@ create_popup_layout (GtkPopover *popover)
                                  surface_anchor);
   gdk_popup_layout_set_anchor_hints (layout, anchor_hints);
 
-  if (priv->x_offset || priv->y_offset)
-    gdk_popup_layout_set_offset (layout, priv->x_offset, priv->y_offset);
+  if (x_offset || y_offset)
+    gdk_popup_layout_set_offset (layout, x_offset, y_offset);
 
   return layout;
 }
@@ -1303,7 +1355,7 @@ get_minimal_size (GtkPopover     *popover,
   int minimal_size;
   int tail_gap_width = priv->has_arrow ? TAIL_GAP_WIDTH : 0;
 
-  minimal_size = 2 * get_border_radius (GTK_WIDGET (popover));
+  minimal_size = 2 * get_border_radius (GTK_WIDGET (priv->contents_widget));
   pos = priv->position;
 
   if ((orientation == GTK_ORIENTATION_HORIZONTAL && POS_IS_VERTICAL (pos)) ||
@@ -1326,9 +1378,12 @@ gtk_popover_measure (GtkWidget      *widget,
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   int minimal_size;
   int tail_height = priv->has_arrow ? TAIL_HEIGHT : 0;
+  GtkBorder shadow_width;
 
   if (for_size >= 0)
     for_size -= tail_height;
+
+  get_shadow_width (popover, &shadow_width);
 
   gtk_widget_measure (priv->contents_widget,
                       orientation, for_size,
@@ -1339,8 +1394,13 @@ gtk_popover_measure (GtkWidget      *widget,
   *minimum = MAX (*minimum, minimal_size);
   *natural = MAX (*natural, minimal_size);
 
-  *minimum += tail_height;
-  *natural += tail_height;
+  if (orientation == GTK_ORIENTATION_HORIZONTAL) {
+    *minimum += shadow_width.left + shadow_width.right;
+    *natural += shadow_width.left + shadow_width.right;
+  } else {
+    *minimum += shadow_width.top + shadow_width.bottom;
+    *natural += shadow_width.top + shadow_width.bottom;
+  }
 }
 
 static void
@@ -1352,32 +1412,14 @@ gtk_popover_size_allocate (GtkWidget *widget,
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkAllocation child_alloc;
-  int tail_height = priv->has_arrow ? TAIL_HEIGHT : 0;
+  GtkBorder shadow_width;
 
-  switch (priv->final_position)
-    {
-    case GTK_POS_TOP:
-      child_alloc.x = tail_height / 2;
-      child_alloc.y = 0;
-      break;
-    case GTK_POS_BOTTOM:
-      child_alloc.x = tail_height / 2;
-      child_alloc.y = tail_height;
-      break;
-    case GTK_POS_LEFT:
-      child_alloc.x = 0;
-      child_alloc.y = tail_height / 2;
-      break;
-    case GTK_POS_RIGHT:
-      child_alloc.x = tail_height;
-      child_alloc.y = tail_height / 2;
-      break;
-    default:
-      break;
-    }
+  get_shadow_width (popover, &shadow_width);
 
-  child_alloc.width = width - tail_height;
-  child_alloc.height = height - tail_height;
+  child_alloc.x = shadow_width.left;
+  child_alloc.y = shadow_width.top;
+  child_alloc.width = width - shadow_width.left - shadow_width.right;
+  child_alloc.height = height - shadow_width.top - shadow_width.bottom;
 
   gtk_widget_size_allocate (priv->contents_widget, &child_alloc, baseline);
 
