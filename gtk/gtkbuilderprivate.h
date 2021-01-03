@@ -190,8 +190,6 @@ typedef struct {
   GHashTable *object_ids;
 } ParserData;
 
-typedef GType (*GTypeGetFunc) (void);
-
 /* Things only GtkBuilder should use */
 GBytes * _gtk_buildable_parser_precompile (const char               *text,
                                            gssize                    text_len,
