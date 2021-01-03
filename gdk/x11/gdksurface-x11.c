@@ -291,7 +291,7 @@ compute_toplevel_size (GdkSurface *surface,
       GdkGeometry geometry;
       GdkSurfaceHints mask;
 
-      if (gdk_toplevel_layout_get_resizable (impl->toplevel_layout))
+      if (!impl->toplevel_layout || gdk_toplevel_layout_get_resizable (impl->toplevel_layout))
         {
           geometry.min_width = size.min_width;
           geometry.min_height = size.min_height;
