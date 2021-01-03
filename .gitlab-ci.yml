@@ -158,6 +158,7 @@ macos:
     - meson -Dx11-backend=false
             -Dintrospection=disabled
             -Dcpp_std=c++11
+            -Dpixman:tests=disabled
             _build
     - ninja -C _build
   artifacts:
