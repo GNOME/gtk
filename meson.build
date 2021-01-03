@@ -348,7 +348,8 @@ endif
 gmodule_dep    = dependency('gmodule-2.0', version: glib_req,
                             fallback : ['glib', 'libgmodule_dep'])
 cairo_dep      = dependency('cairo', version: cairo_req,
-                            fallback : ['cairo', 'libcairo_dep'])
+                            fallback : ['cairo', 'libcairo_dep'],
+                            default_options: ['zlib=enabled'])
 cairogobj_dep  = dependency('cairo-gobject', version: cairo_req,
                             fallback : ['cairo', 'libcairogobject_dep'])
 pango_dep      = dependency('pango', version: pango_req,
