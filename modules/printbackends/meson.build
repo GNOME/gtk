@@ -1,18 +1,5 @@
 print_backends = []
 
-if not cc.has_header('cairo-pdf.h', dependencies : cairo_dep)
-  error('Cannot find cairo-pdf.h. You must build Cairo with the pdf backend enabled.')
-endif
-
-if os_unix
-  if not cc.has_header('cairo-ps.h', dependencies : cairo_dep)
-    error('Cannot find cairo-ps.h. You must build Cairo with the postscript backend enabled.')
-  endif
-  if not cc.has_header('cairo-svg.h', dependencies : cairo_dep)
-    error('Cannot find cairo-svg.h. You must build Cairo with the svg backend enabled.')
-  endif
-endif
-
 printbackends_subdir = 'gtk-4.0/@0@/printbackends'.format(gtk_binary_version)
 printbackends_install_dir = join_paths(get_option('libdir'), printbackends_subdir)
 
