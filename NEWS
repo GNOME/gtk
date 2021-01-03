@@ -1,3 +1,66 @@
+Overview of Changes
+===================
+
+* GtkPopover
+ - Center titles
+ - Fix menu item alignment with submenus
+
+* GtkVideo
+ - Fix up autoplay semantics
+ - Respect pixel aspect ratio
+
+* GtkCenterLayout
+ - Fix handling of expanding center child
+
+* GtkSettings
+ - Change gtk-cursor-aspect-ratio to double
+ - Fix the default value of gtk-print-backends
+
+* GtkGestureStylus
+ - Convert motion history to surface coordinates
+
+* GL renderer
+ - Various optimizations
+ - Avoid leaking shader objects
+
+* Adwaita
+ - Fine-tune flat buttons
+
+* Docs
+ - Add various missing types
+ - Add DND examples
+ - Correct css docs for several widgets
+ - Improve GtkVideo docs
+
+* gtk4-builder-tool
+ - Remove GtkCheckButton::draw-indicator
+ - Fix a buffer overrun
+
+* Demos
+ - Don't put the search bar in the scroll area
+ - Make the OpenGL demos work with OpenGL ES
+
+* Build
+ - Fix vulkan reference in pc file
+ - Fix build with certain Vulkan versions
+
+* OS X:
+ - Fix build on OS X
+ - Fix crash on Mojave
+ - Fix a window sizing issue
+
+* Translation updates:
+ Basque
+ Brazilian Portuguese
+ Catalan
+ Galician
+ Japanese
+ Persian
+ Punjabi
+ Romanian
+ Ukrainian
+
+
 Overview of Changes in GTK 4.0
 ==============================
 
