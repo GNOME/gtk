@@ -158,6 +158,8 @@
  * instead.
  */
 
+typedef struct _GtkWindowGeometryInfo GtkWindowGeometryInfo;
+
 typedef struct
 {
   GtkWidget             *child;
