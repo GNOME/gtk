@@ -380,7 +380,8 @@ pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
 epoxy_dep      = dependency('epoxy', version: epoxy_req,
                             fallback: ['libepoxy', 'libepoxy_dep'])
 harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false,
-                            fallback: ['harfbuzz', 'libharfbuzz_dep'])
+                            fallback: ['harfbuzz', 'libharfbuzz_dep'],
+                            default_options: ['coretext=enabled'])
 xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
 if os_darwin
   graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
