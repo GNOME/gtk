@@ -1831,7 +1831,10 @@ popover.background {
       background-color: transparent;
     }
 
-    separator { margin: 3px; }
+    separator {
+      background-color: mix($bg_color, $borders_color, 30%);
+      margin: 3px;
+    }
 
     list separator { margin: 0; }
   }
