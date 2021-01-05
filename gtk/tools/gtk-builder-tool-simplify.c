@@ -1726,6 +1726,20 @@ rewrite_toolbar (Element      *element,
   for (l = element->children; l; l = l->next)
     {
       Element *child = l->data;
+
+      if (g_str_equal (child->element_name, "property") &&
+          (has_attribute (child, "name", "toolbar_style") ||
+           has_attribute (child, "name", "toolbar-style")))
+        {
+          element->children = g_list_remove (element->children, child);
+          free_element (child);
+          break;
+        }
+    }
+
+  for (l = element->children; l; l = l->next)
+    {
+      Element *child = l->data;
       Element *object = NULL;
       Element *packing = NULL;
 
