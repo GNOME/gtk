@@ -407,7 +407,7 @@ and gdk_keymap_get_entries_for_keyval().
 GTK 3 has the idea that use of modifiers may differ between different
 platforms, and has a #GdkModifierIntent api to let platforms provide
 hint about how modifiers are expected to be used. It also promoted
-the use of <Primary> instead of <Control> to specify accelerators that
+the use of `<Primary>` instead of `<Control>` to specify accelerators that
 adapt to platform conventions.
 
 In GTK 4, the meaning of modifiers has been fixed, and backends are
@@ -426,13 +426,13 @@ GDK_CONTROL_MASK|GDK_ALT_MASK
  : Prevent text input
 
 Consequently, #GdkModifierIntent and related APIs have been removed,
-and <Control> is preferred over <Primary> in accelerators.
+and `<Control>` is preferred over `<Primary>` in accelerators.
 
 A related change is that GTK 4 no longer supports the use of archaic
 X11 'real' modifiers with the names Mod1,..., Mod5, and %GDK_MOD1_MASK
 has been renamed to %GDK_ALT_MASK.
 
-### Stop using gtk_get_current_... APIs
+### Stop using `gtk_get_current_...` APIs
 
 The function gtk_get_current_event() and its variants have been
 replaced by equivalent event controller APIs:
