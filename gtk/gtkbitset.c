@@ -107,7 +107,7 @@ gtk_bitset_unref (GtkBitset *self)
  * @self: a #GtkBitset
  * @value: the value to check
  *
- * Checks if the given @value has been added to @bitset
+ * Checks if the given @value has been added to @self
  *
  * Returns: %TRUE if @self contains @value
  **/
