@@ -51,11 +51,16 @@
  *
  * ![Sliding popups](popup-slide.png)
  *
- * These hints may be combined, but it is ultimatively up to the windowing
- * system to determine the position and size of the popup. You can learn
- * about the result by calling gdk_popup_get_position_x(),
- * gdk_popup_get_position_y(), gdk_popup_get_rect_anchor() and
- * gdk_popup_get_surface_anchor() after the popup has been presented.
+ * These hints may be combined.
+ *
+ * Ultimatively, it is up to the windowing system to determine the position
+ * and size of the popup. You can learn about the result by calling
+ * gdk_popup_get_position_x(), gdk_popup_get_position_y(),
+ * gdk_popup_get_rect_anchor() and gdk_popup_get_surface_anchor() after the
+ * popup has been presented. This can be used to adjust the rendering. For
+ * example, GtkPopover changes its arrow position accordingly. But you have
+ * to be careful avoid changing the size of the popover, or it has to be
+ * presented again.
  */
 
 struct _GdkPopupLayout

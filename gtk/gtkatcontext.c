@@ -541,24 +541,26 @@ gtk_at_context_create (GtkAccessibleRole  accessible_role,
       gtk_a11y_env = g_getenv ("GTK_A11Y");
       if (gtk_a11y_env == NULL)
         gtk_a11y_env = "0";
+
+      if (g_ascii_strcasecmp (gtk_a11y_env, "help") == 0)
+        {
+          g_print ("Supported arguments for GTK_A11Y environment variable:\n");
+
+#if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND)
+          g_print ("   atspi - Use the AT-SPI accessibility backend\n");
+#endif
+          g_print ("    test - Use the test accessibility backend\n");
+          g_print ("    none - Disable the accessibility backend\n");
+          g_print ("    help - Print this help\n\n");
+          g_print ("Other arguments will cause a warning and be ignored.\n");
+
+          gtk_a11y_env = "0";
+        }
     }
 
   /* Short-circuit disabling the accessibility support */
   if (g_ascii_strcasecmp (gtk_a11y_env, "none") == 0)
     return NULL;
-
-  if (g_ascii_strcasecmp (gtk_a11y_env, "help") == 0)
-    {
-      g_print ("Supported arguments for GTK_A11Y environment variable:\n");
-
-#if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND)
-      g_print ("   atspi - Use the AT-SPI accessibility backend\n");
-#endif
-      g_print ("    test - Use the test accessibility backend\n");
-      g_print ("    none - Disable the accessibility backend\n");
-      g_print ("    help - Print this help\n\n");
-      g_print ("Other arguments will cause a warning and be ignored.\n");
-    }
 
   GtkATContext *res = NULL;
 

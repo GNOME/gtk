@@ -98,6 +98,9 @@ create_page1 (GtkWidget *assistant)
   gtk_box_append (GTK_BOX (box), label);
 
   entry = gtk_entry_new ();
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (entry),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, label, NULL,
+                                  -1);
   gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
   gtk_widget_set_valign (entry, GTK_ALIGN_CENTER);
   gtk_box_append (GTK_BOX (box), entry);
