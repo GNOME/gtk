@@ -119,13 +119,12 @@ create_label (void)
 static GtkWidget *
 create_video (void)
 {
-  GtkMediaStream *stream = gtk_media_file_new_for_resource ("/images/gtk-logo.webm");
-  GtkWidget *w = gtk_picture_new_for_paintable (GDK_PAINTABLE (stream));
+  GtkWidget *w = gtk_video_new ();
 
   gtk_widget_set_size_request (w, 64, 64);
-  gtk_media_stream_set_loop (stream, TRUE);
-  gtk_media_stream_play (stream);
-  g_object_unref (stream);
+  gtk_video_set_loop (GTK_VIDEO (w), TRUE);
+  gtk_video_set_autoplay (GTK_VIDEO (w), TRUE);
+  gtk_video_set_resource (GTK_VIDEO (w), "/images/gtk-logo.webm");
 
   return w;
 }

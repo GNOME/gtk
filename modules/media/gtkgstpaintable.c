@@ -20,10 +20,11 @@
 #include "config.h"
 
 #include "gtkgstpaintableprivate.h"
-
 #include "gtkgstsinkprivate.h"
 
+#include <gtk/gtk.h>
 #include <gst/player/gstplayer-video-renderer.h>
+#include <gsk/gl/gskglrenderer.h>
 
 #include <math.h>
 
@@ -33,6 +34,8 @@ struct _GtkGstPaintable
 
   GdkPaintable *image;
   double pixel_aspect_ratio;
+
+  GdkGLContext *context;
 };
 
 struct _GtkGstPaintableClass
@@ -113,10 +116,21 @@ gtk_gst_paintable_video_renderer_create_video_sink (GstPlayerVideoRenderer *rend
                                                     GstPlayer              *player)
 {
   GtkGstPaintable *self = GTK_GST_PAINTABLE (renderer);
+  GstElement *sink, *glsinkbin;
 
-  return g_object_new (GTK_TYPE_GST_SINK,
+  sink = g_object_new (GTK_TYPE_GST_SINK,
                        "paintable", self,
+                       "gl-context", self->context,
                        NULL);
+
+  if (self->context == NULL)
+    return sink;
+
+  glsinkbin = gst_element_factory_make ("glsinkbin", NULL);
+
+  g_object_set (glsinkbin, "sink", sink, NULL);
+
+  return glsinkbin;
 }
 
 static void
@@ -158,6 +172,57 @@ GdkPaintable *
 gtk_gst_paintable_new (void)
 {
   return g_object_new (GTK_TYPE_GST_PAINTABLE, NULL);
+}
+
+void
+gtk_gst_paintable_realize (GtkGstPaintable *self,
+                           GdkSurface      *surface)
+{
+  GError *error = NULL;
+  GtkNative *native;
+  GskRenderer *renderer;
+
+  if (self->context)
+    return;
+
+  native = gtk_native_get_for_surface (surface);
+  renderer = gtk_native_get_renderer (native);
+  if (!GSK_IS_GL_RENDERER (renderer))
+    {
+      GST_INFO ("not using GL with a %s renderer\n", G_OBJECT_TYPE_NAME (renderer));
+      return;
+    }
+
+  self->context = gdk_surface_create_gl_context (surface, &error);
+  if (self->context == NULL)
+    {
+      GST_INFO ("failed to create GDK GL context: %s", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  if (!gdk_gl_context_realize (self->context, &error))
+    {
+      GST_INFO ("failed to realize GDK GL context: %s", error->message);
+      g_clear_object (&self->context);
+      g_error_free (error);
+      return;
+    }
+}
+
+void
+gtk_gst_paintable_unrealize (GtkGstPaintable *self,
+                             GdkSurface      *surface)
+{
+  /* XXX: We could be smarter here and:
+   * - track how often we were realized with that surface
+   * - track alternate surfaces
+   */
+  if (self->context == NULL)
+    return;
+
+  if (gdk_gl_context_get_surface (self->context) == surface)
+    g_clear_object (&self->context);
 }
 
 static void
