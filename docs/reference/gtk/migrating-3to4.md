@@ -407,7 +407,7 @@ and gdk_keymap_get_entries_for_keyval().
 GTK 3 has the idea that use of modifiers may differ between different
 platforms, and has a #GdkModifierIntent api to let platforms provide
 hint about how modifiers are expected to be used. It also promoted
-the use of <Primary> instead of <Control> to specify accelerators that
+the use of `<Primary>` instead of `<Control>` to specify accelerators that
 adapt to platform conventions.
 
 In GTK 4, the meaning of modifiers has been fixed, and backends are
@@ -426,13 +426,88 @@ GDK_CONTROL_MASK|GDK_ALT_MASK
  : Prevent text input
 
 Consequently, #GdkModifierIntent and related APIs have been removed,
-and <Control> is preferred over <Primary> in accelerators.
+and `<Control>` is preferred over `<Primary>` in accelerators.
 
 A related change is that GTK 4 no longer supports the use of archaic
 X11 'real' modifiers with the names Mod1,..., Mod5, and %GDK_MOD1_MASK
 has been renamed to %GDK_ALT_MASK.
 
-### Stop using gtk_get_current_... APIs
+### Replace GtkClipboard with GdkClipboard
+
+The `GtkClipboard` API has been removed, and replaced by #GdkClipboard.
+There is not direct 1:1 mapping between the old an the new API, so it cannot
+be a mechanical replacement; the new API is based on object types and #GValue
+like object properties, instead of opaque identifiers, so it should be easier
+to use.
+
+For instance, the example below copies the contents of an entry into the
+clipboard:
+
+```
+static void
+copy_text (GtkWidget *widget)
+{
+  GtkEditable *editable = GTK_EDITABLE (widget);
+
+  // Initialize a GValue with the contents of the widget
+  GValue value = G_VALUE_INIT;
+  g_value_init (&value, G_TYPE_STRING);
+  g_value_set_string (&value, gtk_editable_get_text (editable));
+
+  // Store the value in the clipboard object
+  GdkClipboard *clipboard = gtk_widget_get_clipboard (widget);
+  gdk_clipboard_set_value (clipboard, &value);
+
+  g_value_unset (&value);
+}
+```
+
+whereas the example below pastes the contents into the entry:
+
+```
+static void
+paste_text (GtkWidget *widget)
+{
+  GtkEditable *editable = GTK_EDITABLE (widget);
+
+  // Initialize a GValue to receive text
+  GValue value = G_VALUE_INIT;
+  g_value_init (&value, G_TYPE_STRING);
+
+  // Get the content provider for the clipboard, and ask it for text
+  GdkClipboard *clipboard = gtk_widget_get_clipboard (widget);
+  GdkContentProvider *provider = gdk_clipboard_get_content (clipboard);
+
+  // If the content provider does not contain text, we are not interested
+  if (!gdk_content_provider_get_value (provider, &value, NULL))
+    return;
+
+  const char *str = g_value_get_string (&value);
+
+  gtk_editable_set_text (editable, str);
+
+  g_value_unset (&value);
+}
+```
+
+The convenience API for specific target types in `GtkClipboard` has been
+replaced by their corresponding GType:
+
+| GtkClipboard                         | GType                 |
+| ----------------------------------- | ---------------------- |
+| `gtk_clipboard_request_text()`      | `G_TYPE_STRING`        |
+| `gtk_clipboard_request_rich_text()` | `GTK_TYPE_TEXT_BUFFER` |
+| `gtk_clipboard_request_image()`     | `GDK_TYPE_PIXBUF`      |
+| `gtk_clipboard_request_uris()`      |` GDK_TYPE_FILE_LIST`   |
+
+**Note**: Support for rich text serialization across different processes
+for #GtkTextBuffer is not available any more.
+
+If you are copying the contents of an image, it is recommended to use
+GDK_TYPE_PAINTABLE instead of GDK_TYPE_PIXBUF, to minimize the amount of
+potential copies.
+
+### Stop using `gtk_get_current_...` APIs
 
 The function gtk_get_current_event() and its variants have been
 replaced by equivalent event controller APIs:
