@@ -30,6 +30,32 @@
  * Popups are positioned relative to their parent surface.
  * The GdkPopupLayout struct contains information that is
  * necessary to do so.
+ *
+ * The positioning requires a negotiation with the windowing system,
+ * since it depends on external constraints, such as the position of
+ * the parent surface, and the screen dimensions.
+ *
+ * The basic ingredients are a rectangle on the parent surface,
+ * and the anchor on both that rectangle and the popup. The anchors
+ * specify a side or corner to place next to each other.
+ *
+ * ![Popup anchors](popup-anchors.png)
+ *
+ * For cases where placing the anchors next to each other would make
+ * the popup extend offscreen, the layout includes some hints for how
+ * to resolve this problem. The hints may suggest to flip the anchor
+ * position to the other side, or to 'slide' the popup along a side,
+ * or to resize it.
+ *
+ * ![Flipping popups](popup-flip.png)
+ *
+ * ![Sliding popups](popup-slide.png)
+ *
+ * These hints may be combined, but it is ultimatively up to the windowing
+ * system to determine the position and size of the popup. You can learn
+ * about the result by calling gdk_popup_get_position_x(),
+ * gdk_popup_get_position_y(), gdk_popup_get_rect_anchor() and
+ * gdk_popup_get_surface_anchor() after the popup has been presented.
  */
 
 struct _GdkPopupLayout

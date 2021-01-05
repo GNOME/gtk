@@ -146,6 +146,9 @@ images = [
   'images/nwse_resize_cursor.png',
   'images/zoom_in_cursor.png',
   'images/zoom_out_cursor.png',
+  'images/popup-anchors.png',
+  'images/popup-flip.png',
+  'images/popup-slide.png',
 ]
 
 src_dir = [ gdkinc ]
