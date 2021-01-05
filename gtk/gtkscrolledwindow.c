@@ -1087,11 +1087,7 @@ static void
 indicator_set_over (Indicator *indicator,
                     gboolean   over)
 {
-  if (indicator->over_timeout_id)
-    {
-      g_source_remove (indicator->over_timeout_id);
-      indicator->over_timeout_id = 0;
-    }
+  g_clear_handle_id (&indicator->over_timeout_id, g_source_remove);
 
   if (indicator->over == over)
     return;
@@ -1170,11 +1166,8 @@ check_update_scrollbar_proximity (GtkScrolledWindow *sw,
                          gtk_widget_is_ancestor (target, priv->hindicator.scrollbar) ||
                          gtk_widget_is_ancestor (target, priv->vindicator.scrollbar)));
 
-  if (indicator->over_timeout_id)
-    {
-      g_source_remove (indicator->over_timeout_id);
-      indicator->over_timeout_id = 0;
-    }
+
+  g_clear_handle_id (&indicator->over_timeout_id, g_source_remove);
 
   if (on_scrollbar)
     indicator_set_over (indicator, TRUE);
@@ -1374,11 +1367,7 @@ scrolled_window_scroll (GtkScrolledWindow        *scrolled_window,
                                                  new_value);
     }
 
-  if (priv->scroll_events_overshoot_id)
-    {
-      g_source_remove (priv->scroll_events_overshoot_id);
-      priv->scroll_events_overshoot_id = 0;
-    }
+  g_clear_handle_id (&priv->scroll_events_overshoot_id, g_source_remove);
 
   if (!priv->smooth_scroll &&
       _gtk_scrolled_window_get_overshoot (scrolled_window, NULL, NULL))
@@ -2610,12 +2599,7 @@ gtk_scrolled_window_dispose (GObject *object)
 
   g_clear_pointer (&priv->hscrolling, gtk_kinetic_scrolling_free);
   g_clear_pointer (&priv->vscrolling, gtk_kinetic_scrolling_free);
-
-  if (priv->scroll_events_overshoot_id)
-    {
-      g_source_remove (priv->scroll_events_overshoot_id);
-      priv->scroll_events_overshoot_id = 0;
-    }
+  g_clear_handle_id (&priv->scroll_events_overshoot_id, g_source_remove);
 
   G_OBJECT_CLASS (gtk_scrolled_window_parent_class)->dispose (object);
 }
@@ -3547,17 +3531,8 @@ gtk_scrolled_window_map (GtkWidget *widget)
 static void
 indicator_reset (Indicator *indicator)
 {
-  if (indicator->conceil_timer)
-    {
-      g_source_remove (indicator->conceil_timer);
-      indicator->conceil_timer = 0;
-    }
-
-  if (indicator->over_timeout_id)
-    {
-      g_source_remove (indicator->over_timeout_id);
-      indicator->over_timeout_id = 0;
-    }
+  g_clear_handle_id (&indicator->conceil_timer, g_source_remove);
+  g_clear_handle_id (&indicator->over_timeout_id, g_source_remove);
 
   if (indicator->scrollbar && indicator->tick_id)
     {

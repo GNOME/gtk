@@ -759,7 +759,7 @@ gtk_gesture_class_init (GtkGestureClass *klass)
                                                          "to trigger the gesture"),
                                                       1, G_MAXUINT, 1,
                                                       GTK_PARAM_READWRITE |
-						      G_PARAM_CONSTRUCT_ONLY));
+                                                      G_PARAM_CONSTRUCT_ONLY));
   /**
    * GtkGesture::begin:
    * @gesture: the object which received the signal

@@ -108,24 +108,11 @@ gtk_shortcut_manager_default_remove_controller (GtkShortcutManager    *self,
   if (model)
     {
       GListModel *store;
-      guint position, len;
+      guint position;
 
       store = gtk_flatten_list_model_get_model (model);
-#if 0 && GLIB_CHECK_VERSION(2,64,0)
-      if (_g_list_store_find (G_LIST_STORE (store), controller, &position))
+      if (g_list_store_find (G_LIST_STORE (store), controller, &position))
         g_list_store_remove (G_LIST_STORE (store), position);
-#else
-      for (position = 0, len = g_list_model_get_n_items (store); position < len; position++)
-        {
-          GtkShortcutController *item = g_list_model_get_item (store, position);
-          g_object_unref (item);
-          if (item == controller)
-            {
-              g_list_store_remove (G_LIST_STORE (store), position);
-              break;
-            }
-        }
-#endif
     }
 }
 

@@ -346,7 +346,7 @@ gtk_box_new (GtkOrientation orientation,
  */
 void
 gtk_box_set_homogeneous (GtkBox  *box,
-			 gboolean homogeneous)
+                         gboolean homogeneous)
 {
   GtkBoxLayout *box_layout;
 
@@ -393,7 +393,7 @@ gtk_box_get_homogeneous (GtkBox *box)
  */
 void
 gtk_box_set_spacing (GtkBox *box,
-		     int     spacing)
+                     int     spacing)
 {
   GtkBoxLayout *box_layout;
 
@@ -441,7 +441,7 @@ gtk_box_get_spacing (GtkBox *box)
  */
 void
 gtk_box_set_baseline_position (GtkBox             *box,
-			       GtkBaselinePosition position)
+                               GtkBaselinePosition position)
 {
   GtkBoxLayout *box_layout;
 

@@ -3298,7 +3298,6 @@ bad things might happen.</property>
       </object>
     </child>
   </object>
-  <object class="GtkSizeGroup" id="basement-indicators"/>
   <menu id="new_style_menu_model">
     <section>
       <attribute name="display-hint">circular-buttons</attribute>

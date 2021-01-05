@@ -368,32 +368,6 @@ gtk_render_layout (GtkStyleContext *context,
   gsk_render_node_unref (node);
 }
 
-static void
-gtk_do_render_line (GtkStyleContext *context,
-                    cairo_t         *cr,
-                    double           x0,
-                    double           y0,
-                    double           x1,
-                    double           y1)
-{
-  const GdkRGBA *color;
-
-  cairo_save (cr);
-
-  color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
-
-  cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
-  cairo_set_line_width (cr, 1);
-
-  cairo_move_to (cr, x0 + 0.5, y0 + 0.5);
-  cairo_line_to (cr, x1 + 0.5, y1 + 0.5);
-
-  gdk_cairo_set_source_rgba (cr, color);
-  cairo_stroke (cr);
-
-  cairo_restore (cr);
-}
-
 /**
  * gtk_render_line:
  * @context: a #GtkStyleContext
@@ -413,10 +387,25 @@ gtk_render_line (GtkStyleContext *context,
                  double           x1,
                  double           y1)
 {
+  const GdkRGBA *color;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
-  gtk_do_render_line (context, cr, x0, y0, x1, y1);
+  cairo_save (cr);
+
+  color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
+
+  cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
+  cairo_set_line_width (cr, 1);
+
+  cairo_move_to (cr, x0 + 0.5, y0 + 0.5);
+  cairo_line_to (cr, x1 + 0.5, y1 + 0.5);
+
+  gdk_cairo_set_source_rgba (cr, color);
+  cairo_stroke (cr);
+
+  cairo_restore (cr);
 }
 
 /**

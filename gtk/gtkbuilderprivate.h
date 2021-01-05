@@ -173,7 +173,7 @@ typedef struct {
   const char *last_element;
   GtkBuilder *builder;
   char *domain;
-  GSList *stack;
+  GPtrArray *stack;
   SubParser *subparser;
   GtkBuildableParseContext ctx;
   const char *filename;
@@ -189,8 +189,6 @@ typedef struct {
 
   GHashTable *object_ids;
 } ParserData;
-
-typedef GType (*GTypeGetFunc) (void);
 
 /* Things only GtkBuilder should use */
 GBytes * _gtk_buildable_parser_precompile (const char               *text,
@@ -286,8 +284,5 @@ GObject *_gtk_builder_lookup_object       (GtkBuilder                *builder,
                                            int                        col);
 gboolean _gtk_builder_lookup_failed       (GtkBuilder                *builder,
                                            GError                   **error);
-GModule *gtk_builder_get_module           (GtkBuilder                *builder);
-
-
 
 #endif /* __GTK_BUILDER_PRIVATE_H__ */

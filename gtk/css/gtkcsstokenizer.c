@@ -30,6 +30,7 @@ struct _GtkCssTokenizer
 {
   int                    ref_count;
   GBytes                *bytes;
+  GString               *name_buffer;
 
   const char            *data;
   const char            *end;
@@ -95,45 +96,13 @@ gtk_css_token_clear (GtkCssToken *token)
 }
 
 static void
-gtk_css_token_initv (GtkCssToken     *token,
-                     GtkCssTokenType  type,
-                     va_list          args)
+gtk_css_token_init (GtkCssToken     *token,
+                    GtkCssTokenType  type)
 {
   token->type = type;
 
-  switch (type)
+  switch ((guint)type)
     {
-    case GTK_CSS_TOKEN_STRING:
-    case GTK_CSS_TOKEN_IDENT:
-    case GTK_CSS_TOKEN_FUNCTION:
-    case GTK_CSS_TOKEN_AT_KEYWORD:
-    case GTK_CSS_TOKEN_HASH_UNRESTRICTED:
-    case GTK_CSS_TOKEN_HASH_ID:
-    case GTK_CSS_TOKEN_URL:
-      token->string.string = va_arg (args, char *);
-      break;
-
-    case GTK_CSS_TOKEN_DELIM:
-      token->delim.delim = va_arg (args, gunichar);
-      break;
-
-    case GTK_CSS_TOKEN_SIGNED_INTEGER:
-    case GTK_CSS_TOKEN_SIGNLESS_INTEGER:
-    case GTK_CSS_TOKEN_SIGNED_NUMBER:
-    case GTK_CSS_TOKEN_SIGNLESS_NUMBER:
-    case GTK_CSS_TOKEN_PERCENTAGE:
-      token->number.number = va_arg (args, double);
-      break;
-
-    case GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION:
-    case GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION:
-    case GTK_CSS_TOKEN_DIMENSION:
-      token->dimension.value = va_arg (args, double);
-      token->dimension.dimension = va_arg (args, char *);
-      break;
-
-    default:
-      g_assert_not_reached ();
     case GTK_CSS_TOKEN_EOF:
     case GTK_CSS_TOKEN_WHITESPACE:
     case GTK_CSS_TOKEN_OPEN_PARENS:
@@ -157,6 +126,8 @@ gtk_css_token_initv (GtkCssToken     *token,
     case GTK_CSS_TOKEN_BAD_URL:
     case GTK_CSS_TOKEN_COMMENT:
       break;
+    default:
+      g_assert_not_reached ();
     }
 }
 
@@ -515,15 +486,76 @@ gtk_css_token_to_string (const GtkCssToken *token)
 }
 
 static void
-gtk_css_token_init (GtkCssToken     *token,
-                    GtkCssTokenType  type,
-                    ...)
+gtk_css_token_init_string (GtkCssToken     *token,
+                           GtkCssTokenType  type,
+                           char            *string)
 {
-  va_list args;
+  token->type = type;
 
-  va_start (args, type);
-  gtk_css_token_initv (token, type, args);
-  va_end (args);
+  switch ((guint)type)
+    {
+    case GTK_CSS_TOKEN_STRING:
+    case GTK_CSS_TOKEN_IDENT:
+    case GTK_CSS_TOKEN_FUNCTION:
+    case GTK_CSS_TOKEN_AT_KEYWORD:
+    case GTK_CSS_TOKEN_HASH_UNRESTRICTED:
+    case GTK_CSS_TOKEN_HASH_ID:
+    case GTK_CSS_TOKEN_URL:
+      token->string.string = string;
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static void
+gtk_css_token_init_delim (GtkCssToken *token,
+                          gunichar     delim)
+{
+  token->type = GTK_CSS_TOKEN_DELIM;
+  token->delim.delim = delim;
+}
+
+static void
+gtk_css_token_init_number (GtkCssToken     *token,
+                           GtkCssTokenType  type,
+                           double           value)
+{
+  token->type = type;
+
+  switch ((guint)type)
+    {
+    case GTK_CSS_TOKEN_SIGNED_INTEGER:
+    case GTK_CSS_TOKEN_SIGNLESS_INTEGER:
+    case GTK_CSS_TOKEN_SIGNED_NUMBER:
+    case GTK_CSS_TOKEN_SIGNLESS_NUMBER:
+    case GTK_CSS_TOKEN_PERCENTAGE:
+      token->number.number = value;
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static void
+gtk_css_token_init_dimension (GtkCssToken     *token,
+                              GtkCssTokenType  type,
+                              double           value,
+                              char            *dimension)
+{
+  token->type = type;
+
+  switch ((guint)type)
+    {
+    case GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION:
+    case GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION:
+    case GTK_CSS_TOKEN_DIMENSION:
+      token->dimension.value = value;
+      token->dimension.dimension = dimension;
+      break;
+    default:
+      g_assert_not_reached ();
+    }
 }
 
 GtkCssTokenizer *
@@ -534,6 +566,7 @@ gtk_css_tokenizer_new (GBytes *bytes)
   tokenizer = g_slice_new0 (GtkCssTokenizer);
   tokenizer->ref_count = 1;
   tokenizer->bytes = g_bytes_ref (bytes);
+  tokenizer->name_buffer = g_string_new (NULL);
 
   tokenizer->data = g_bytes_get_data (bytes, NULL);
   tokenizer->end = tokenizer->data + g_bytes_get_size (bytes);
@@ -558,6 +591,7 @@ gtk_css_tokenizer_unref (GtkCssTokenizer *tokenizer)
   if (tokenizer->ref_count > 0)
     return;
 
+  g_string_free (tokenizer->name_buffer, TRUE);
   g_bytes_unref (tokenizer->bytes);
   g_slice_free (GtkCssTokenizer, tokenizer);
 }
@@ -568,11 +602,7 @@ gtk_css_tokenizer_get_location (GtkCssTokenizer *tokenizer)
   return &tokenizer->position;
 }
 
-static void
-gtk_css_tokenizer_parse_error (GError     **error,
-                               const char  *format,
-                               ...) G_GNUC_PRINTF(2, 3);
-static void
+static void G_GNUC_PRINTF(2, 3)
 gtk_css_tokenizer_parse_error (GError     **error,
                                const char  *format,
                                ...)
@@ -843,7 +873,7 @@ gtk_css_tokenizer_read_escape (GtkCssTokenizer *tokenizer)
 static char *
 gtk_css_tokenizer_read_name (GtkCssTokenizer *tokenizer)
 {
-  GString *string = g_string_new (NULL);
+  g_string_set_size (tokenizer->name_buffer, 0);
 
   do {
       if (*tokenizer->data == '\\')
@@ -851,7 +881,7 @@ gtk_css_tokenizer_read_name (GtkCssTokenizer *tokenizer)
           if (gtk_css_tokenizer_has_valid_escape (tokenizer))
             {
               gunichar value = gtk_css_tokenizer_read_escape (tokenizer);
-              g_string_append_unichar (string, value);
+              g_string_append_unichar (tokenizer->name_buffer, value);
             }
           else
             {
@@ -859,16 +889,16 @@ gtk_css_tokenizer_read_name (GtkCssTokenizer *tokenizer)
 
               if (tokenizer->data == tokenizer->end)
                 {
-                  g_string_append_unichar (string, 0xFFFD);
+                  g_string_append_unichar (tokenizer->name_buffer, 0xFFFD);
                   break;
                 }
 
-              gtk_css_tokenizer_consume_char (tokenizer, string);
+              gtk_css_tokenizer_consume_char (tokenizer, tokenizer->name_buffer);
             }
         }
       else if (is_name (*tokenizer->data))
         {
-          gtk_css_tokenizer_consume_char (tokenizer, string);
+          gtk_css_tokenizer_consume_char (tokenizer, tokenizer->name_buffer);
         }
       else
         {
@@ -877,7 +907,7 @@ gtk_css_tokenizer_read_name (GtkCssTokenizer *tokenizer)
     }
   while (tokenizer->data != tokenizer->end);
 
-  return g_string_free (string, FALSE);
+  return g_strndup (tokenizer->name_buffer->str, tokenizer->name_buffer->len);
 }
 
 static void
@@ -970,7 +1000,7 @@ gtk_css_tokenizer_read_url (GtkCssTokenizer  *tokenizer,
         }
     }
 
-  gtk_css_token_init (token, GTK_CSS_TOKEN_URL, g_string_free (url, FALSE));
+  gtk_css_token_init_string (token, GTK_CSS_TOKEN_URL, g_string_free (url, FALSE));
 
   return TRUE;
 }
@@ -999,12 +1029,12 @@ gtk_css_tokenizer_read_ident_like (GtkCssTokenizer  *tokenizer,
             }
         }
 
-      gtk_css_token_init (token, GTK_CSS_TOKEN_FUNCTION, name);
+      gtk_css_token_init_string (token, GTK_CSS_TOKEN_FUNCTION, name);
       return TRUE;
     }
   else
     {
-      gtk_css_token_init (token, GTK_CSS_TOKEN_IDENT, name);
+      gtk_css_token_init_string (token, GTK_CSS_TOKEN_IDENT, name);
       return TRUE;
     }
 }
@@ -1017,6 +1047,7 @@ gtk_css_tokenizer_read_numeric (GtkCssTokenizer *tokenizer,
   gint64 integer, fractional = 0, fractional_length = 1, exponent = 0;
   gboolean is_int = TRUE, has_sign = FALSE;
   const char *data = tokenizer->data;
+  double value;
 
   if (*data == '-')
     {
@@ -1082,27 +1113,34 @@ gtk_css_tokenizer_read_numeric (GtkCssTokenizer *tokenizer,
 
   gtk_css_tokenizer_consume (tokenizer, data - tokenizer->data, data - tokenizer->data);
 
+  value = sign * (integer + ((double) fractional / fractional_length)) * pow (10, exponent_sign * exponent);
+
   if (gtk_css_tokenizer_has_identifier (tokenizer))
     {
-      gtk_css_token_init (token,
-                          is_int ? (has_sign ? GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION : GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION)
-                                 : GTK_CSS_TOKEN_DIMENSION,
-                          sign * (integer + ((double) fractional / fractional_length)) * pow (10, exponent_sign * exponent),
-                          gtk_css_tokenizer_read_name (tokenizer));
+      GtkCssTokenType type;
+
+      if (is_int)
+        type = has_sign ? GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION : GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION;
+      else
+        type = GTK_CSS_TOKEN_DIMENSION;
+
+      gtk_css_token_init_dimension (token, type, value, gtk_css_tokenizer_read_name (tokenizer));
     }
   else if (gtk_css_tokenizer_remaining (tokenizer) > 0 && *tokenizer->data == '%')
     {
-      gtk_css_token_init (token,
-                          GTK_CSS_TOKEN_PERCENTAGE,
-                          sign * (integer + ((double) fractional / fractional_length)) * pow (10, exponent_sign * exponent));
+      gtk_css_token_init_number (token, GTK_CSS_TOKEN_PERCENTAGE, value);
       gtk_css_tokenizer_consume_ascii (tokenizer);
     }
   else
     {
-      gtk_css_token_init (token,
-                          is_int ? (has_sign ? GTK_CSS_TOKEN_SIGNED_INTEGER : GTK_CSS_TOKEN_SIGNLESS_INTEGER)
-                                 : (has_sign ? GTK_CSS_TOKEN_SIGNED_NUMBER : GTK_CSS_TOKEN_SIGNLESS_NUMBER),
-                          sign * (integer + ((double) fractional / fractional_length)) * pow (10, exponent_sign * exponent));
+      GtkCssTokenType type;
+
+      if (is_int)
+        type = has_sign ? GTK_CSS_TOKEN_SIGNED_INTEGER : GTK_CSS_TOKEN_SIGNLESS_INTEGER;
+      else
+        type = has_sign ? GTK_CSS_TOKEN_SIGNED_NUMBER : GTK_CSS_TOKEN_SIGNLESS_NUMBER;
+
+      gtk_css_token_init_number (token, type,value);
     }
 }
 
@@ -1110,7 +1148,7 @@ static void
 gtk_css_tokenizer_read_delim (GtkCssTokenizer *tokenizer,
                               GtkCssToken     *token)
 {
-  gtk_css_token_init (token, GTK_CSS_TOKEN_DELIM, g_utf8_get_char (tokenizer->data));
+  gtk_css_token_init_delim (token, g_utf8_get_char (tokenizer->data));
   gtk_css_tokenizer_consume_char (tokenizer, NULL);
 }
 
@@ -1194,8 +1232,8 @@ gtk_css_tokenizer_read_string (GtkCssTokenizer  *tokenizer,
           gtk_css_tokenizer_consume_char (tokenizer, string);
         }
     }
-  
-  gtk_css_token_init (token, GTK_CSS_TOKEN_STRING, g_string_free (string, FALSE));
+
+  gtk_css_token_init_string (token, GTK_CSS_TOKEN_STRING, g_string_free (string, FALSE));
 
   return TRUE;
 }
@@ -1279,13 +1317,13 @@ gtk_css_tokenizer_read_token (GtkCssTokenizer  *tokenizer,
           else
             type = GTK_CSS_TOKEN_HASH_UNRESTRICTED;
 
-          gtk_css_token_init (token,
-                              type,
-                              gtk_css_tokenizer_read_name (tokenizer));
+          gtk_css_token_init_string (token,
+                                     type,
+                                     gtk_css_tokenizer_read_name (tokenizer));
         }
       else
         {
-          gtk_css_token_init (token, GTK_CSS_TOKEN_DELIM, '#');
+          gtk_css_token_init_delim (token, '#');
         }
       return TRUE;
 
@@ -1361,13 +1399,13 @@ gtk_css_tokenizer_read_token (GtkCssTokenizer  *tokenizer,
       gtk_css_tokenizer_consume_ascii (tokenizer);
       if (gtk_css_tokenizer_has_identifier (tokenizer))
         {
-          gtk_css_token_init (token,
-                              GTK_CSS_TOKEN_AT_KEYWORD,
-                              gtk_css_tokenizer_read_name (tokenizer));
+          gtk_css_token_init_string (token,
+                                     GTK_CSS_TOKEN_AT_KEYWORD,
+                                     gtk_css_tokenizer_read_name (tokenizer));
         }
       else
         {
-          gtk_css_token_init (token, GTK_CSS_TOKEN_DELIM, '@');
+          gtk_css_token_init_delim (token, '@');
         }
       return TRUE;
 
@@ -1383,7 +1421,7 @@ gtk_css_tokenizer_read_token (GtkCssTokenizer  *tokenizer,
         }
       else
         {
-          gtk_css_token_init (token, GTK_CSS_TOKEN_DELIM, '\\');
+          gtk_css_token_init_delim (token, '\\');
           gtk_css_tokenizer_consume_ascii (tokenizer);
           gtk_css_tokenizer_parse_error (error, "Newline may not follow '\' escape character");
           return FALSE;

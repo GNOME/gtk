@@ -114,9 +114,6 @@ static void gtk_frame_size_allocate (GtkWidget  *widget,
                                      int         width,
                                      int         height,
                                      int         baseline);
-
-static void gtk_frame_compute_child_allocation      (GtkFrame      *frame,
-                                                     GtkAllocation *child_allocation);
 static void gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
                                                      GtkAllocation *child_allocation);
 
@@ -497,7 +494,7 @@ gtk_frame_size_allocate (GtkWidget *widget,
   GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
   GtkAllocation new_allocation;
 
-  gtk_frame_compute_child_allocation (frame, &new_allocation);
+  GTK_FRAME_GET_CLASS (frame)->compute_child_allocation (frame, &new_allocation);
 
   if (priv->label_widget &&
       gtk_widget_get_visible (priv->label_widget))
@@ -527,16 +524,6 @@ gtk_frame_size_allocate (GtkWidget *widget,
 
   if (priv->child && gtk_widget_get_visible (priv->child))
     gtk_widget_size_allocate (priv->child, &new_allocation, -1);
-}
-
-static void
-gtk_frame_compute_child_allocation (GtkFrame      *frame,
-                                    GtkAllocation *child_allocation)
-{
-  g_return_if_fail (GTK_IS_FRAME (frame));
-  g_return_if_fail (child_allocation != NULL);
-
-  GTK_FRAME_GET_CLASS (frame)->compute_child_allocation (frame, child_allocation);
 }
 
 static void

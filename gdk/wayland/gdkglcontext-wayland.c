@@ -242,14 +242,22 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "wayland", "swap buffers");
   if (display_wayland->have_egl_swap_buffers_with_damage)
     {
+      EGLint stack_rects[4 * 4]; /* 4 rects */
+      EGLint *heap_rects = NULL;
       int i, j, n_rects = cairo_region_num_rectangles (painted);
-      EGLint *rects = g_new (EGLint, n_rects * 4);
-      cairo_rectangle_int_t rect;
       int surface_height = gdk_surface_get_height (surface);
       int scale = gdk_surface_get_scale_factor (surface);
+      EGLint *rects;
+
+      if (n_rects < G_N_ELEMENTS (stack_rects) / 4)
+        rects = (EGLint *)&stack_rects;
+      else
+        heap_rects = rects = g_new (EGLint, n_rects * 4);
 
       for (i = 0, j = 0; i < n_rects; i++)
         {
+          cairo_rectangle_int_t rect;
+
           cairo_region_get_rectangle (painted, i, &rect);
           rects[j++] = rect.x * scale;
           rects[j++] = (surface_height - rect.height - rect.y) * scale;
@@ -257,7 +265,7 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
           rects[j++] = rect.height * scale;
         }
       eglSwapBuffersWithDamageEXT (display_wayland->egl_display, egl_surface, rects, n_rects);
-      g_free (rects);
+      g_free (heap_rects);
     }
   else
     eglSwapBuffers (display_wayland->egl_display, egl_surface);
@@ -293,27 +301,27 @@ gdk_wayland_get_display (GdkWaylandDisplay *display_wayland)
   if (epoxy_has_egl_extension (NULL, "EGL_KHR_platform_base"))
     {
       PFNEGLGETPLATFORMDISPLAYPROC getPlatformDisplay =
-	(void *) eglGetProcAddress ("eglGetPlatformDisplay");
+        (void *) eglGetProcAddress ("eglGetPlatformDisplay");
 
       if (getPlatformDisplay)
-	dpy = getPlatformDisplay (EGL_PLATFORM_WAYLAND_EXT,
-				  display_wayland->wl_display,
-				  NULL);
+        dpy = getPlatformDisplay (EGL_PLATFORM_WAYLAND_EXT,
+                                  display_wayland->wl_display,
+                                  NULL);
       if (dpy)
-	return dpy;
+        return dpy;
     }
 
   if (epoxy_has_egl_extension (NULL, "EGL_EXT_platform_base"))
     {
       PFNEGLGETPLATFORMDISPLAYEXTPROC getPlatformDisplay =
-	(void *) eglGetProcAddress ("eglGetPlatformDisplayEXT");
+        (void *) eglGetProcAddress ("eglGetPlatformDisplayEXT");
 
       if (getPlatformDisplay)
-	dpy = getPlatformDisplay (EGL_PLATFORM_WAYLAND_EXT,
-				  display_wayland->wl_display,
-				  NULL);
+        dpy = getPlatformDisplay (EGL_PLATFORM_WAYLAND_EXT,
+                                  display_wayland->wl_display,
+                                  NULL);
       if (dpy)
-	return dpy;
+        return dpy;
     }
 
   return eglGetDisplay ((EGLNativeDisplayType) display_wayland->wl_display);
@@ -386,7 +394,7 @@ find_eglconfig_for_surface (GdkSurface  *surface,
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   EGLint attrs[MAX_EGL_ATTRS];
   EGLint count;
-  EGLConfig *configs;
+  EGLConfig config;
   int i = 0;
 
   attrs[i++] = EGL_SURFACE_TYPE;
@@ -407,39 +415,26 @@ find_eglconfig_for_surface (GdkSurface  *surface,
   attrs[i++] = EGL_NONE;
   g_assert (i < MAX_EGL_ATTRS);
 
-  if (!eglChooseConfig (display_wayland->egl_display, attrs, NULL, 0, &count) || count < 1)
-    {
-      g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_UNSUPPORTED_FORMAT,
-                           _("No available configurations for the given pixel format"));
-      return FALSE;
-    }
-
-  configs = g_new (EGLConfig, count);
-
-  if (!eglChooseConfig (display_wayland->egl_display, attrs, configs, count, &count) || count < 1)
-    {
-      g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_UNSUPPORTED_FORMAT,
-                           _("No available configurations for the given pixel format"));
-      return FALSE;
-    }
-
   /* Pick first valid configuration i guess? */
+  if (!eglChooseConfig (display_wayland->egl_display, attrs, &config, 1, &count) || count < 1)
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_UNSUPPORTED_FORMAT,
+                           _("No available configurations for the given pixel format"));
+      return FALSE;
+    }
 
-  if (egl_config_out != NULL)
-    *egl_config_out = configs[0];
-
-  g_free (configs);
+  g_assert (egl_config_out);
+  *egl_config_out = config;
 
   return TRUE;
 }
 
 GdkGLContext *
 gdk_wayland_surface_create_gl_context (GdkSurface     *surface,
-				      gboolean       attached,
-                                      GdkGLContext  *share,
-                                      GError       **error)
+                                       gboolean       attached,
+                                       GdkGLContext  *share,
+                                       GError       **error)
 {
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
@@ -526,10 +521,10 @@ gdk_wayland_display_make_gl_context_current (GdkDisplay   *display,
   else
     {
       if (display_wayland->have_egl_surfaceless_context)
-	egl_surface = EGL_NO_SURFACE;
+        egl_surface = EGL_NO_SURFACE;
       else
-	egl_surface = gdk_wayland_surface_get_dummy_egl_surface (surface,
-								context_wayland->egl_config);
+        egl_surface = gdk_wayland_surface_get_dummy_egl_surface (surface,
+                                                                 context_wayland->egl_config);
     }
 
   if (!eglMakeCurrent (display_wayland->egl_display, egl_surface,
