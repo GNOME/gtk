@@ -38,6 +38,10 @@
 #include "gdkmonitorprivate.h"
 #include "gdksurfaceprivate.h"
 
+#ifndef AVAILABLE_MAC_OS_X_VERSION_10_15_AND_LATER
+typedef NSString *CALayerContentsGravity;
+#endif
+
 @implementation GdkMacosWindow
 
 -(BOOL)windowShouldClose:(id)sender
