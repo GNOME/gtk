@@ -700,7 +700,7 @@ get_surface_point_from_screen_point (GdkSurface *surface,
   NSPoint point;
 
   nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (surface));
-  point = [nswindow convertPointFromScreen:screen_point];
+  point = convert_nspoint_from_screen (nswindow, screen_point);
 
   *x = point.x;
   *y = surface->height - point.y;
@@ -821,7 +821,7 @@ get_surface_from_ns_event (GdkMacosDisplay *self,
         }
       else
         {
-          *screen_point = [(GdkMacosWindow *)[nsevent window] convertPointToScreen:point];
+          *screen_point = convert_nspoint_to_screen ([nsevent window], point);
           *x = point.x;
           *y = surface->height - point.y;
         }
