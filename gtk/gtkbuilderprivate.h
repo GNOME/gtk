@@ -48,7 +48,7 @@ typedef struct {
   char *constructor;
 
   GPtrArray *properties;
-  GSList *signals;
+  GPtrArray *signals;
   GSList *bindings;
 
   GObject *object;
@@ -220,7 +220,7 @@ void      _gtk_builder_add_object (GtkBuilder  *builder,
 void      _gtk_builder_add (GtkBuilder *builder,
                             ChildInfo *child_info);
 void      _gtk_builder_add_signals (GtkBuilder *builder,
-				    GSList     *signals);
+                                    GPtrArray  *signals);
 gboolean  _gtk_builder_finish (GtkBuilder  *builder,
                                GError     **error);
 void _free_signal_info (SignalInfo *info,

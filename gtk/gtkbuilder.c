@@ -260,7 +260,7 @@ typedef struct
   char *domain;
   GHashTable *objects;
   GSList *delayed_properties;
-  GSList *signals;
+  GPtrArray *signals;
   GSList *bindings;
   char *filename;
   char *resource_prefix;
@@ -375,8 +375,8 @@ gtk_builder_finalize (GObject *object)
 #endif
 
   g_hash_table_destroy (priv->objects);
-
-  g_slist_free_full (priv->signals, (GDestroyNotify)_free_signal_info);
+  if (priv->signals)
+    g_ptr_array_free (priv->signals, TRUE);
 
   G_OBJECT_CLASS (gtk_builder_parent_class)->finalize (object);
 }
@@ -1020,12 +1020,14 @@ _gtk_builder_add (GtkBuilder *builder,
 
 void
 _gtk_builder_add_signals (GtkBuilder *builder,
-                          GSList     *signals)
+                          GPtrArray  *signals)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
 
-  priv->signals = g_slist_concat (priv->signals,
-                                  g_slist_copy (signals));
+  if (G_UNLIKELY (!priv->signals))
+    priv->signals = g_ptr_array_new_with_free_func ((GDestroyNotify)_free_signal_info);
+
+  g_ptr_array_extend_and_steal (priv->signals, signals);
 }
 
 static gboolean
@@ -1853,18 +1855,17 @@ gtk_builder_connect_signals (GtkBuilder  *builder,
                              GError     **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
-  GSList *l;
   GObject *object;
   GObject *connect_object;
-  gboolean result = FALSE;
+  gboolean result = TRUE;
 
-  if (!priv->signals)
+  if (!priv->signals ||
+      priv->signals->len == 0)
     return TRUE;
 
-  priv->signals = g_slist_reverse (priv->signals);
-  for (l = priv->signals; l; l = l->next)
+  for (guint i = 0; i < priv->signals->len; i++)
     {
-      SignalInfo *signal = (SignalInfo*)l->data;
+      SignalInfo *signal = g_ptr_array_index (priv->signals, i);
       GClosure *closure;
 
       g_assert (signal != NULL);
@@ -1897,7 +1898,10 @@ gtk_builder_connect_signals (GtkBuilder  *builder,
                                             error);
 
       if (closure == NULL)
-        break;
+        {
+          result = false;
+          break;
+        }
 
       g_signal_connect_closure_by_id (object,
                                       signal->id,
@@ -1905,10 +1909,8 @@ gtk_builder_connect_signals (GtkBuilder  *builder,
                                       closure,
                                       signal->flags & G_CONNECT_AFTER ? TRUE : FALSE);
     }
-  if (l == NULL)
-    result = TRUE;
 
-  g_slist_free_full (priv->signals, (GDestroyNotify)_free_signal_info);
+  g_ptr_array_free (priv->signals, TRUE);
   priv->signals = NULL;
 
   return result;

@@ -797,7 +797,8 @@ free_object_info (ObjectInfo *info)
 {
   /* Do not free the signal items, which GtkBuilder takes ownership of */
   g_type_class_unref (info->oclass);
-  g_slist_free (info->signals);
+  if (info->signals)
+    g_ptr_array_free (info->signals, TRUE);
   if (info->properties)
     g_ptr_array_free (info->properties, TRUE);
   g_free (info->constructor);
@@ -1955,7 +1956,12 @@ end_element (GtkBuildableParseContext  *context,
       if (GTK_IS_BUILDABLE (object_info->object) &&
           GTK_BUILDABLE_GET_IFACE (object_info->object)->parser_finished)
         data->finalizers = g_slist_prepend (data->finalizers, object_info->object);
-      _gtk_builder_add_signals (data->builder, object_info->signals);
+
+      if (object_info->signals)
+        {
+          _gtk_builder_add_signals (data->builder, object_info->signals);
+          object_info->signals = NULL;
+        }
 
       free_object_info (object_info);
     }
@@ -1973,7 +1979,11 @@ end_element (GtkBuildableParseContext  *context,
       ObjectInfo *object_info = (ObjectInfo*)state_peek_info (data, CommonInfo);
       g_assert (object_info != NULL);
       signal_info->object_name = g_strdup (object_info->id);
-      object_info->signals = g_slist_prepend (object_info->signals, signal_info);
+
+      if (G_UNLIKELY (!object_info->signals))
+        object_info->signals = g_ptr_array_new ();
+
+      g_ptr_array_add (object_info->signals, signal_info);
     }
   else if (strcmp (element_name, "constant") == 0 ||
            strcmp (element_name, "closure") == 0 ||
