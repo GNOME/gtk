@@ -32,7 +32,8 @@
 #include <string.h>
 
 
-typedef struct {
+typedef struct
+{
   const GtkBuildableParser *last_parser;
   gpointer last_user_data;
   int last_depth;
@@ -41,9 +42,8 @@ typedef struct {
 static void
 pop_subparser_stack (GtkBuildableParseContext *context)
 {
-  GtkBuildableParserStack *stack =
-    &g_array_index (context->subparser_stack, GtkBuildableParserStack,
-                    context->subparser_stack->len - 1);
+  GtkBuildableParserStack *stack = &g_array_index (context->subparser_stack, GtkBuildableParserStack,
+                                                   context->subparser_stack->len - 1);
 
   context->awaiting_pop = TRUE;
   context->held_user_data = context->user_data;
@@ -57,15 +57,17 @@ pop_subparser_stack (GtkBuildableParseContext *context)
 static void
 possibly_finish_subparser (GtkBuildableParseContext *context)
 {
-  if (context->subparser_stack->len > 0)
-    {
-      GtkBuildableParserStack *stack =
-        &g_array_index (context->subparser_stack, GtkBuildableParserStack,
-                        context->subparser_stack->len - 1);
+  GtkBuildableParserStack *stack;
 
-      if (stack->last_depth ==  context->tag_stack->len)
-        pop_subparser_stack (context);
-    }
+  if (!context->subparser_stack ||
+      context->subparser_stack->len == 0)
+    return;
+
+  stack = &g_array_index (context->subparser_stack, GtkBuildableParserStack,
+                          context->subparser_stack->len - 1);
+
+  if (stack->last_depth == context->tag_stack->len)
+    pop_subparser_stack (context);
 }
 
 static void
@@ -128,6 +130,9 @@ proxy_error (GMarkupParseContext *gm_context,
 
   /* report the error all the way up to free all the user-data */
 
+  if (!context->subparser_stack)
+    return;
+
   while (context->subparser_stack->len > 0)
     {
       pop_subparser_stack (context);
@@ -157,7 +162,7 @@ gtk_buildable_parse_context_init (GtkBuildableParseContext *context,
   context->parser = parser;
   context->user_data = user_data;
 
-  context->subparser_stack = g_array_new (FALSE, FALSE, sizeof (GtkBuildableParserStack));
+  context->subparser_stack = NULL;
   context->tag_stack = g_ptr_array_new ();
   context->held_user_data = NULL;
   context->awaiting_pop = FALSE;
@@ -166,7 +171,9 @@ gtk_buildable_parse_context_init (GtkBuildableParseContext *context,
 static void
 gtk_buildable_parse_context_free (GtkBuildableParseContext *context)
 {
-  g_array_unref (context->subparser_stack);
+  if (context->subparser_stack)
+    g_array_unref (context->subparser_stack);
+
   g_ptr_array_unref (context->tag_stack);
 }
 
@@ -244,6 +251,9 @@ gtk_buildable_parse_context_push (GtkBuildableParseContext *context,
 
   context->parser = parser;
   context->user_data = user_data;
+
+  if (!context->subparser_stack)
+    context->subparser_stack = g_array_new (FALSE, FALSE, sizeof (GtkBuildableParserStack));
 
   g_array_append_val (context->subparser_stack, stack);
 }
