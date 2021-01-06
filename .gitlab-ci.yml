@@ -170,6 +170,10 @@ macos:
             -Dpixman:tests=disabled
             _build
     - ninja -C _build
+    - meson test -C _build
+                 --print-errorlogs
+                 --suite=gtk
+                 --no-suite=gsk-compare-opengl
   artifacts:
     when: always
     paths:
