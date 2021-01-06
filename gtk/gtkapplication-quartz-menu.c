@@ -324,7 +324,9 @@ icon_loaded (GObject      *object,
 
 - (void)didChangeToggled
 {
-  [self setState:gtk_menu_tracker_item_get_toggled (trackerItem) ? NSControlStateValueOn : NSControlStateValueOff];
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  [self setState:gtk_menu_tracker_item_get_toggled (trackerItem) ? NSOnState : NSOffState];
+  G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 - (void)didChangeAccel
