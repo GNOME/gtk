@@ -4644,6 +4644,9 @@ pointer_surface_update_scale (GdkDevice *device)
       return;
     }
 
+  if (!pointer->pointer_surface_outputs)
+    return;
+
   scale = 1;
   for (l = pointer->pointer_surface_outputs; l != NULL; l = l->next)
     {
@@ -4653,6 +4656,8 @@ pointer_surface_update_scale (GdkDevice *device)
       scale = MAX (scale, output_scale);
     }
 
+  if (pointer->current_output_scale == scale)
+    return;
   pointer->current_output_scale = scale;
 
   if (pointer->cursor)
