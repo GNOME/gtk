@@ -20,3 +20,5 @@ $insensitive_borders_color: mix($borders_color, $bg_color, 80%);
 //focus rings
 $focus_border_color: if($variant == 'light', transparentize($selected_bg_color, 0.2), transparentize(white, 0.4));
 $alt_focus_border_color: if($variant == 'light', white, transparentize(white,0.4));
+
+$dim_label_opacity: 0.9;
