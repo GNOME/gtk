@@ -167,7 +167,7 @@ create_window_controls (GtkHeaderBar *bar)
   g_object_bind_property (controls, "empty",
                           controls, "visible",
                           G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
-  gtk_box_append (GTK_BOX (bar->start_box), controls);
+  gtk_box_prepend (GTK_BOX (bar->start_box), controls);
   bar->start_window_controls = controls;
 
   controls = gtk_window_controls_new (GTK_PACK_END);
