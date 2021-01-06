@@ -289,7 +289,7 @@ msgstr "Estat"
 
 #: gdk/macos/gdkmacosdrag.c:599 gdk/macos/gdkmacosdrag.c:600
 msgid "Drag Surface"
-msgstr "Superfície per arrossegar"
+msgstr "Superfície per a arrossegar"
 
 #: gdk/win32/gdkcursor-win32.c:235
 msgid "The display that will use this cursor"
@@ -317,7 +317,7 @@ msgstr "Codi d'operació"
 
 #: gdk/x11/gdkdevicemanager-xi2.c:158
 msgid "Opcode for XInput2 requests"
-msgstr "Codi d'operació per a les sol·licituds d'XInput2"
+msgstr "Codi d'operació per a les sol·licituds XInput2"
 
 #: gdk/x11/gdkdevicemanager-xi2.c:165
 msgid "Major"
@@ -3035,7 +3035,7 @@ msgstr "Giny etiqueta"
 
 #: gtk/gtkexpander.c:346
 msgid "A widget to display in place of the usual expander label"
-msgstr "Un giny per visualitzar en lloc de la típica etiqueta expansora"
+msgstr "Un giny per a visualitzar en lloc de la típica etiqueta expansora"
 
 #: gtk/gtkexpander.c:359
 msgid "Resize toplevel"
@@ -3323,7 +3323,7 @@ msgstr "Nombre de punts"
 
 #: gtk/gtkgesture.c:758
 msgid "Number of points needed to trigger the gesture"
-msgstr "El nombre de punts necessaris per activar aquest gest"
+msgstr "El nombre de punts necessaris per a activar aquest gest"
 
 #: gtk/gtkgesturelongpress.c:281
 msgid "Delay factor"
@@ -4443,7 +4443,7 @@ msgid ""
 "you can use to go to a page"
 msgstr ""
 "Si és «TRUE» (cert), prement el botó dret del ratolí sobre la llibreta "
-"apareixerà un menú que podreu utilitzar per anar a una pàgina"
+"apareixerà un menú que podreu utilitzar per a anar a una pàgina"
 
 #: gtk/gtknotebook.c:1106
 msgid "Group Name"
