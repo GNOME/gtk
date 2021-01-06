@@ -25,9 +25,9 @@
  * dvalue=-1: generate random value within value range
  * dvalue=+2: initialize value from default_value
  */
-#define ASSIGN_VALUE(__g_value_set_func, __value, PSPECTYPE, __pspec, __default_value, __minimum, __maximum, __dvalue) do { \
+#define ASSIGN_VALUE(__g_value_set_func, value__, PSPECTYPE, __pspec, __default_value, __minimum, __maximum, __dvalue) do { \
   PSPECTYPE __p = (PSPECTYPE) __pspec; \
-  __g_value_set_func (__value, SELECT_VALUE (__dvalue, __p->__default_value, __p->__minimum, __p->__maximum)); \
+  __g_value_set_func (value__, SELECT_VALUE (__dvalue, __p->__default_value, __p->__minimum, __p->__maximum)); \
 } while (0)
 #define SELECT_VALUE(__dvalue, __default_value, __minimum, __maximum) ( \
   __dvalue >= 0 && __dvalue <= 1 ? __minimum * (1 - __dvalue) + __dvalue * __maximum : \
