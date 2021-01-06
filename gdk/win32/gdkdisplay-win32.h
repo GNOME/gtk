@@ -102,6 +102,9 @@ struct _GdkWin32Display
   guint hasWglARBPixelFormat : 1;
   guint hasWglARBmultisample : 1;
 
+  /* compensate around Intel OpenGL driver issues on blitting, see issue #3487 */
+  guint needIntelGLWorkaround : 1; 
+
 #ifdef GDK_WIN32_ENABLE_EGL
   guint hasEglKHRCreateContext : 1;
   guint hasEglSurfacelessContext : 1;

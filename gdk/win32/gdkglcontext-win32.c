@@ -123,21 +123,34 @@ gdk_win32_gl_context_init (GdkWin32GLContext *self)
 }
 
 static void
-gdk_gl_blit_region (GdkWindow *window, cairo_region_t *region)
+gdk_gl_blit_region (GdkWindow      *window,
+                    cairo_region_t *region,
+                    gboolean        use_intel_workaround)
 {
-  int n_rects, i;
+  int n_rects, i, j;
   int scale = gdk_window_get_scale_factor (window);
   int wh = gdk_window_get_height (window);
   cairo_rectangle_int_t rect;
+  int retries = 0;
+
+  if (use_intel_workaround)
+    retries = 1;
 
   n_rects = cairo_region_num_rectangles (region);
-  for (i = 0; i < n_rects; i++)
+
+  for (i = 0; i <= retries; i ++)
     {
-      cairo_region_get_rectangle (region, i, &rect);
-      glScissor (rect.x * scale, (wh - rect.y - rect.height) * scale, rect.width * scale, rect.height * scale);
-      glBlitFramebuffer (rect.x * scale, (wh - rect.y - rect.height) * scale, (rect.x + rect.width) * scale, (wh - rect.y) * scale,
-                         rect.x * scale, (wh - rect.y - rect.height) * scale, (rect.x + rect.width) * scale, (wh - rect.y) * scale,
-                         GL_COLOR_BUFFER_BIT, GL_NEAREST);
+      for (j = 0; j < n_rects; j++)
+        {
+          cairo_region_get_rectangle (region, j, &rect);
+          glScissor (rect.x * scale, (wh - rect.y - rect.height) * scale, rect.width * scale, rect.height * scale);
+          glBlitFramebuffer (rect.x * scale, (wh - rect.y - rect.height) * scale, (rect.x + rect.width) * scale, (wh - rect.y) * scale,
+                             rect.x * scale, (wh - rect.y - rect.height) * scale, (rect.x + rect.width) * scale, (wh - rect.y) * scale,
+                             GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        }
+
+      if (retries > 0 && i < retries)
+        glFlush ();
     }
 }
 
@@ -206,7 +219,7 @@ _gdk_win32_gl_context_end_frame (GdkGLContext *context,
         {
           glDrawBuffer(GL_FRONT);
           glReadBuffer(GL_BACK);
-          gdk_gl_blit_region (window, painted);
+          gdk_gl_blit_region (window, painted, display->needIntelGLWorkaround);
           glDrawBuffer(GL_BACK);
           glFlush();
 
@@ -224,7 +237,7 @@ _gdk_win32_gl_context_end_frame (GdkGLContext *context,
       gboolean force_egl_redraw_all = _get_is_egl_force_redraw (window);
 
       if (context_win32->do_blit_swap && !force_egl_redraw_all)
-        gdk_gl_blit_region (window, painted);
+        gdk_gl_blit_region (window, painted, FALSE);
       else if (force_egl_redraw_all)
         {
           GdkRectangle rect = {0, 0, gdk_window_get_width (window), gdk_window_get_height (window)};
@@ -616,10 +629,13 @@ _gdk_win32_display_init_gl (GdkDisplay *display,
         epoxy_has_wgl_extension (dummy.hdc, "WGL_ARB_pixel_format");
       display_win32->hasWglARBmultisample =
         epoxy_has_wgl_extension (dummy.hdc, "WGL_ARB_multisample");
+      display_win32->needIntelGLWorkaround =
+        (g_ascii_strcasecmp (glGetString (GL_VENDOR), "intel") == 0);
 
       GDK_NOTE (OPENGL,
                 g_print ("WGL API version %d.%d found\n"
                          " - Vendor: %s\n"
+                         " - Intel OpenGL workaround: %s\n"
                          " - Checked extensions:\n"
                          "\t* WGL_ARB_pixel_format: %s\n"
                          "\t* WGL_ARB_create_context: %s\n"
@@ -629,6 +645,7 @@ _gdk_win32_display_init_gl (GdkDisplay *display,
                          display_win32->gl_version / 10,
                          display_win32->gl_version % 10,
                          glGetString (GL_VENDOR),
+                         display_win32->needIntelGLWorkaround ? "yes" : "no",
                          display_win32->hasWglARBPixelFormat ? "yes" : "no",
                          display_win32->hasWglARBCreateContext ? "yes" : "no",
                          display_win32->hasWglEXTSwapControl ? "yes" : "no",
