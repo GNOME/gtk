@@ -148,6 +148,9 @@ macos:
   stage: build
   tags:
     - macos
+  only:
+    - master
+    - merge_requests
   needs: []
   before_script:
     - bash .gitlab-ci/show-execution-environment.sh
