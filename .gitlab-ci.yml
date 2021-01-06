@@ -144,6 +144,31 @@ msys2-mingw64:
     MSYSTEM: "MINGW64"
     CHERE_INVOKING: "yes"
 
+macos:
+  stage: build
+  tags:
+    - macos
+  only:
+    - master
+    - merge_requests
+  needs: []
+  before_script:
+    - bash .gitlab-ci/show-execution-environment.sh
+    - pip3 install --user meson==0.56
+    - pip3 install --user ninja
+    - export PATH=/Users/gitlabrunner/Library/Python/3.7/bin:$PATH
+  script:
+    - meson -Dx11-backend=false
+            -Dintrospection=disabled
+            -Dcpp_std=c++11
+            -Dpixman:tests=disabled
+            _build
+    - ninja -C _build
+  artifacts:
+    when: always
+    paths:
+      - "${CI_PROJECT_DIR}/_build/meson-logs"
+
 .flatpak-defaults:
   image: $FLATPAK_IMAGE
   stage: flatpak

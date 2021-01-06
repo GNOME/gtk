@@ -348,7 +348,8 @@ endif
 gmodule_dep    = dependency('gmodule-2.0', version: glib_req,
                             fallback : ['glib', 'libgmodule_dep'])
 cairo_dep      = dependency('cairo', version: cairo_req,
-                            fallback : ['cairo', 'libcairo_dep'])
+                            fallback : ['cairo', 'libcairo_dep'],
+                            default_options: ['zlib=enabled'])
 cairogobj_dep  = dependency('cairo-gobject', version: cairo_req,
                             fallback : ['cairo', 'libcairogobject_dep'])
 pango_dep      = dependency('pango', version: pango_req,
@@ -379,10 +380,17 @@ pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
 epoxy_dep      = dependency('epoxy', version: epoxy_req,
                             fallback: ['libepoxy', 'libepoxy_dep'])
 harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false,
-                            fallback: ['harfbuzz', 'libharfbuzz_dep'])
+                            fallback: ['harfbuzz', 'libharfbuzz_dep'],
+                            default_options: ['coretext=enabled'])
 xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
-graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
-                            fallback: ['graphene', 'graphene_dep'])
+if os_darwin
+  graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
+                              fallback: ['graphene', 'graphene_dep'],
+                              default_options: ['introspection=false'])
+else
+  graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
+                              fallback: ['graphene', 'graphene_dep'])
+endif
 iso_codes_dep  = dependency('iso-codes', required: false)
 
 gtk_doc_dep    = dependency('gtk-doc', version: '>=1.33',

@@ -79,7 +79,7 @@ static inline gboolean  gtk_counting_bloom_filter_may_contain   (const GtkCounti
  *
  * The filter does not need to be freed.
  */
-#define GTK_COUNTING_BLOOM_FILTER_INIT { 0, }
+#define GTK_COUNTING_BLOOM_FILTER_INIT {{0}}
 
 /*
  * gtk_counting_bloom_filter_add:

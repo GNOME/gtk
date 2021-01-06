@@ -38,6 +38,10 @@
 #include "gdkmonitorprivate.h"
 #include "gdksurfaceprivate.h"
 
+#ifndef AVAILABLE_MAC_OS_X_VERSION_10_15_AND_LATER
+typedef NSString *CALayerContentsGravity;
+#endif
+
 @implementation GdkMacosWindow
 
 -(BOOL)windowShouldClose:(id)sender
@@ -466,7 +470,7 @@
 
   inTrackManualResize = YES;
 
-  mouse_location = [self convertPointToScreen:[self mouseLocationOutsideOfEventStream]];
+  mouse_location = convert_nspoint_to_screen (self, [self mouseLocationOutsideOfEventStream]);
   mdx = initialResizeLocation.x - mouse_location.x;
   mdy = initialResizeLocation.y - mouse_location.y;
 
@@ -588,7 +592,7 @@
     }
 
   initialResizeFrame = [self frame];
-  initialResizeLocation = [self convertPointToScreen:[self mouseLocationOutsideOfEventStream]];
+  initialResizeLocation = convert_nspoint_to_screen (self, [self mouseLocationOutsideOfEventStream]);
 }
 
 -(NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender

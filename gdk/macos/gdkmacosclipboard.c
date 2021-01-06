@@ -40,7 +40,55 @@ typedef struct
   guint                done : 1;
 } WriteRequest;
 
+enum {
+  TYPE_STRING,
+  TYPE_PBOARD,
+  TYPE_URL,
+  TYPE_FILE_URL,
+  TYPE_COLOR,
+  TYPE_TIFF,
+  TYPE_PNG,
+  TYPE_LAST
+};
+
+#define PTYPE(k) (get_pasteboard_type(TYPE_##k))
+
+static NSPasteboardType pasteboard_types[TYPE_LAST];
+
 G_DEFINE_TYPE (GdkMacosClipboard, _gdk_macos_clipboard, GDK_TYPE_CLIPBOARD)
+
+static NSPasteboardType
+get_pasteboard_type (int type)
+{
+  static gsize initialized = FALSE;
+
+  g_assert (type >= 0);
+  g_assert (type < TYPE_LAST);
+
+  if (g_once_init_enter (&initialized))
+    {
+      pasteboard_types[TYPE_PNG] = NSPasteboardTypePNG;
+      pasteboard_types[TYPE_STRING] = NSPasteboardTypeString;
+      pasteboard_types[TYPE_TIFF] = NSPasteboardTypeTIFF;
+      pasteboard_types[TYPE_COLOR] = NSPasteboardTypeColor;
+
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+      pasteboard_types[TYPE_PBOARD] = NSStringPboardType;
+      G_GNUC_END_IGNORE_DEPRECATIONS
+
+#ifdef AVAILABLE_MAC_OS_X_VERSION_10_13_AND_LATER
+      pasteboard_types[TYPE_URL] = NSPasteboardTypeURL;
+      pasteboard_types[TYPE_FILE_URL] = NSPasteboardTypeFileURL;
+#else
+      pasteboard_types[TYPE_URL] = [[NSString alloc] initWithUTF8String:"public.url"];
+      pasteboard_types[TYPE_FILE_URL] = [[NSString alloc] initWithUTF8String:"public.file-url"];
+#endif
+
+      g_once_init_leave (&initialized, TRUE);
+    }
+
+  return pasteboard_types[type];
+}
 
 static void
 write_request_free (WriteRequest *wr)
@@ -56,17 +104,17 @@ _gdk_macos_clipboard_from_ns_type (NSPasteboardType type)
 {
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
-  if ([type isEqualToString:NSPasteboardTypeString] ||
-      [type isEqualToString:NSStringPboardType])
+  if ([type isEqualToString:PTYPE(STRING)] ||
+      [type isEqualToString:PTYPE(PBOARD)])
     return g_intern_string ("text/plain;charset=utf-8");
-  else if ([type isEqualToString:NSPasteboardTypeURL] ||
-           [type isEqualToString:NSPasteboardTypeFileURL])
+  else if ([type isEqualToString:PTYPE(URL)] ||
+           [type isEqualToString:PTYPE(FILE_URL)])
     return g_intern_string ("text/uri-list");
-  else if ([type isEqualToString:NSPasteboardTypeColor])
+  else if ([type isEqualToString:PTYPE(COLOR)])
     return g_intern_string ("application/x-color");
-  else if ([type isEqualToString:NSPasteboardTypeTIFF])
+  else if ([type isEqualToString:PTYPE(TIFF)])
     return g_intern_string ("image/tiff");
-  else if ([type isEqualToString:NSPasteboardTypePNG])
+  else if ([type isEqualToString:PTYPE(PNG)])
     return g_intern_string ("image/png");
 
   G_GNUC_END_IGNORE_DEPRECATIONS;
@@ -83,25 +131,25 @@ _gdk_macos_clipboard_to_ns_type (const char       *mime_type,
 
   if (g_strcmp0 (mime_type, "text/plain;charset=utf-8") == 0)
     {
-      return NSPasteboardTypeString;
+      return PTYPE(STRING);
     }
   else if (g_strcmp0 (mime_type, "text/uri-list") == 0)
     {
       if (alternate)
-        *alternate = NSPasteboardTypeURL;
-      return NSPasteboardTypeFileURL;
+        *alternate = PTYPE(URL);
+      return PTYPE(FILE_URL);
     }
   else if (g_strcmp0 (mime_type, "application/x-color") == 0)
     {
-      return NSPasteboardTypeColor;
+      return PTYPE(COLOR);
     }
   else if (g_strcmp0 (mime_type, "image/tiff") == 0)
     {
-      return NSPasteboardTypeTIFF;
+      return PTYPE(TIFF);
     }
   else if (g_strcmp0 (mime_type, "image/png") == 0)
     {
-      return NSPasteboardTypePNG;
+      return PTYPE(PNG);
     }
 
   return nil;
@@ -220,7 +268,7 @@ _gdk_macos_clipboard_read_async (GdkClipboard        *clipboard,
     {
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
-      if ([[self->pasteboard types] containsObject:NSPasteboardTypeFileURL])
+      if ([[self->pasteboard types] containsObject:PTYPE(FILE_URL)])
         {
           GString *str = g_string_new (NULL);
           NSArray *files = [self->pasteboard propertyListForType:NSFilenamesPboardType];
@@ -267,12 +315,12 @@ _gdk_macos_clipboard_read_async (GdkClipboard        *clipboard,
     }
   else if (strcmp (mime_type, "image/tiff") == 0)
     {
-      NSData *data = [self->pasteboard dataForType:NSPasteboardTypeTIFF];
+      NSData *data = [self->pasteboard dataForType:PTYPE(TIFF)];
       stream = create_stream_from_nsdata (data);
     }
   else if (strcmp (mime_type, "image/png") == 0)
     {
-      NSData *data = [self->pasteboard dataForType:NSPasteboardTypePNG];
+      NSData *data = [self->pasteboard dataForType:PTYPE(PNG)];
       stream = create_stream_from_nsdata (data);
     }
 
