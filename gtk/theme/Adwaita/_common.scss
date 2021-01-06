@@ -2350,6 +2350,8 @@ switch {
 
   @include focus-ring($offset: 0, $outer: true);
 
+  headerbar & { background-color: darken($dark_fill,8%); } //3504
+
   &:checked {
     color: $selected_fg_color;
     border-color: $switch_borders_color;
@@ -2546,6 +2548,8 @@ treeview.view radio:selected { &:focus, & { @extend %radio; }} // This is a work
   border: 1px solid $borders_color;
   border-radius: 3px;
   background-color: $dark_fill;
+
+  headerbar & { background-color: darken($dark_fill,8%); } //3504
 
   &:disabled {
    background-color: $insensitive_bg_color;
