@@ -30,7 +30,7 @@
  * @line_chars: Number of characters parsed since the last line
  *     break
  *
- * @GtkCssLocation is used to present a location in a file - or other
+ * #GtkCssLocation is used to present a location in a file - or other
  * source of data parsed by the CSS engine.
  * 
  * The @bytes and @line_bytes offsets are meant to be used to
