@@ -46,9 +46,11 @@ typedef struct {
   GObjectClass *oclass;
   char *id;
   char *constructor;
-  GSList *properties;
+
+  GPtrArray *properties;
   GSList *signals;
   GSList *bindings;
+
   GObject *object;
   CommonInfo *parent;
   gboolean applied_properties;

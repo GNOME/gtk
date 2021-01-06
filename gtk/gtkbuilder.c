@@ -527,19 +527,21 @@ static void
 gtk_builder_get_parameters (GtkBuilder         *builder,
                             GType               object_type,
                             const char         *object_name,
-                            GSList             *properties,
+                            GPtrArray          *properties,
                             GParamFlags         filter_flags,
                             ObjectProperties   *parameters,
                             ObjectProperties   *filtered_parameters)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
-  GSList *l;
   DelayedProperty *property;
   GError *error = NULL;
 
-  for (l = properties; l; l = l->next)
+  if (!properties)
+    return;
+
+  for (guint i = 0; i < properties->len; i++)
     {
-      PropertyInfo *prop = (PropertyInfo*)l->data;
+      PropertyInfo *prop = g_ptr_array_index (properties, i);
       const char *property_name = g_intern_string (prop->pspec->name);
       GValue property_value = G_VALUE_INIT;
 

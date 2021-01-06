@@ -471,8 +471,6 @@ builder_construct (ParserData  *data,
   if (object_info->object && object_info->applied_properties)
     return object_info->object;
 
-  object_info->properties = g_slist_reverse (object_info->properties);
-
   if (object_info->object == NULL)
     {
       object = _gtk_builder_construct (data->builder, object_info, error);
@@ -800,18 +798,19 @@ free_object_info (ObjectInfo *info)
   /* Do not free the signal items, which GtkBuilder takes ownership of */
   g_type_class_unref (info->oclass);
   g_slist_free (info->signals);
-  g_slist_free_full (info->properties, (GDestroyNotify)free_property_info);
+  if (info->properties)
+    g_ptr_array_free (info->properties, TRUE);
   g_free (info->constructor);
   g_free (info->id);
   g_slice_free (ObjectInfo, info);
 }
 
 static void
-parse_child (ParserData   *data,
-             const char   *element_name,
+parse_child (ParserData  *data,
+             const char  *element_name,
              const char **names,
              const char **values,
-             GError      **error)
+             GError     **error)
 
 {
   ObjectInfo* object_info;
@@ -1707,7 +1706,6 @@ parse_custom (GtkBuildableParseContext  *context,
       ObjectInfo* object_info = (ObjectInfo*)parent_info;
       if (!object_info->object)
         {
-          object_info->properties = g_slist_reverse (object_info->properties);
           object_info->object = _gtk_builder_construct (data->builder,
                                                         object_info,
                                                         error);
@@ -1885,7 +1883,10 @@ end_element (GtkBuildableParseContext  *context,
               g_string_assign (prop_info->text, translated);
             }
 
-          object_info->properties = g_slist_prepend (object_info->properties, prop_info);
+          if (G_UNLIKELY (!object_info->properties))
+            object_info->properties = g_ptr_array_new_with_free_func ((GDestroyNotify)free_property_info);
+
+          g_ptr_array_add (object_info->properties, prop_info);
         }
       else
         g_assert_not_reached ();
