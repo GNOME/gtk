@@ -2497,7 +2497,11 @@ gtk_widget_unparent (GtkWidget *widget)
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (priv->parent == NULL)
-    return;
+    {
+      g_warning ("Attempted to unparent %s %p, but it already has no parent.",
+                 G_OBJECT_TYPE_NAME (widget), widget);
+      return;
+    }
 
   gtk_widget_push_verify_invariants (widget);
 
