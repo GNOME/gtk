@@ -611,17 +611,7 @@ _gdk_device_set_associated_device (GdkDevice *device,
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (associated == NULL || GDK_IS_DEVICE (associated));
 
-  if (device->associated == associated)
-    return;
-
-  if (device->associated)
-    {
-      g_object_unref (device->associated);
-      device->associated = NULL;
-    }
-
-  if (associated)
-    device->associated = g_object_ref (associated);
+  g_set_object (&device->associated, associated);
 }
 
 /*
