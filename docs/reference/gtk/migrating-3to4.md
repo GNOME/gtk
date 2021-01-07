@@ -533,6 +533,23 @@ Another is that #GtkGestureMultiPress has been renamed to #GtkGestureClick,
 and has lost its area property. A #GtkEventControllerFocus has been
 split off from #GtkEventcontrollerKey.
 
+In GTK 3, #GtkEventController:widget was a construct-only property, so
+a #GtkWidget was provided whenever constructing a #GtkEventController.
+In GTK 4, #GtkEventController:widget is now read-only. Use
+gtk_widget_add_controller() to add an event controller to a widget.
+
+In GTK 3, widgets did not own their event controllers, and event
+controllers did not own their widgets, so developers were responsible
+for manually keeping event controllers alive for the lifetime of their
+associated widgets. In GTK 4, widgets own their event controllers.
+gtk_widget_add_controller() takes ownership of the event controller, so
+there is no longer any need to store a reference to the event controller
+after it has been added to a widget.
+
+Although not normally needed, an event controller could be removed from
+a widget in GTK 3 by destroying the event controller with g_object_unref().
+In GTK 4, you must use gtk_widget_remove_controller().
+
 ### Focus handling changes
 
 The semantics of the #GtkWidget:can-focus property have changed.
