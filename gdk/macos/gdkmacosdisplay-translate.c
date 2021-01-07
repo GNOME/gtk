@@ -28,6 +28,7 @@
 #include "gdkmacosdisplay-private.h"
 #include "gdkmacoskeymap-private.h"
 #include "gdkmacossurface-private.h"
+#include "gdkmacosseat-private.h"
 
 #define GDK_MOD2_MASK (1 << 4)
 #define GRIP_WIDTH 15
@@ -205,6 +206,9 @@ fill_button_event (GdkMacosDisplay *display,
   GdkSeat *seat;
   GdkEventType type;
   GdkModifierType state;
+  GdkDevice *pointer = NULL;
+  GdkDeviceTool *tool = NULL;
+  double *axes = NULL;
 
   g_assert (GDK_IS_MACOS_DISPLAY (display));
   g_assert (GDK_IS_MACOS_SURFACE (surface));
@@ -241,16 +245,22 @@ fill_button_event (GdkMacosDisplay *display,
        y < 0 || y > GDK_SURFACE (surface)->height))
     return NULL;
 
+  if (([nsevent subtype] == NSEventSubtypeTabletPoint) &&
+      _gdk_macos_seat_get_tablet (GDK_MACOS_SEAT (seat), &pointer, &tool))
+    axes = _gdk_macos_seat_get_tablet_axes_from_nsevent (GDK_MACOS_SEAT (seat), nsevent);
+  else
+    pointer = gdk_seat_get_pointer (seat);
+
   return gdk_button_event_new (type,
                                GDK_SURFACE (surface),
-                               gdk_seat_get_pointer (seat),
-                               NULL,
+                               pointer,
+                               tool,
                                get_time_from_ns_event (nsevent),
                                state,
                                get_mouse_button_from_ns_event (nsevent),
                                x,
                                y,
-                               NULL);
+                               axes);
 }
 
 static GdkEvent *
@@ -557,6 +567,9 @@ fill_motion_event (GdkMacosDisplay *display,
 {
   GdkSeat *seat;
   GdkModifierType state;
+  GdkDevice *pointer = NULL;
+  GdkDeviceTool *tool = NULL;
+  double *axes = NULL;
 
   g_assert (GDK_IS_MACOS_SURFACE (surface));
   g_assert (nsevent != NULL);
@@ -566,14 +579,20 @@ fill_motion_event (GdkMacosDisplay *display,
   state = get_keyboard_modifiers_from_ns_event (nsevent) |
           _gdk_macos_display_get_current_mouse_modifiers (display);
 
+  if (([nsevent subtype] == NSEventSubtypeTabletPoint) &&
+      _gdk_macos_seat_get_tablet (GDK_MACOS_SEAT (seat), &pointer, &tool))
+    axes = _gdk_macos_seat_get_tablet_axes_from_nsevent (GDK_MACOS_SEAT (seat), nsevent);
+  else
+    pointer = gdk_seat_get_pointer (seat);
+
   return gdk_motion_event_new (GDK_SURFACE (surface),
-                               gdk_seat_get_pointer (seat),
-                               NULL,
+                               pointer,
+                               tool,
                                get_time_from_ns_event (nsevent),
                                state,
                                x,
                                y,
-                               NULL);
+                               axes);
 }
 
 static GdkEvent *
@@ -1048,6 +1067,23 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
        */
 
       /* Leave all AppKit events to AppKit. */
+      return NULL;
+    }
+
+  /* We need to register the proximity event from any point on the screen
+   * to properly register the devices
+   * FIXME: is there a better way to detect if a tablet has been plugged?
+   */
+  if (event_type == NSEventTypeTabletProximity)
+    {
+      GdkSeat *seat = gdk_display_get_default_seat (GDK_DISPLAY (self));
+
+      _gdk_macos_seat_handle_tablet_tool_event (GDK_MACOS_SEAT (seat), nsevent);
+
+      /* FIXME: we might want to cache this proximity event and propagate it
+       * but proximity events in gdk work at a window level while on macos
+       * works at a screen level. For now we just skip them.
+       */
       return NULL;
     }
 
