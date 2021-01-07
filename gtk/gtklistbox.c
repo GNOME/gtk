@@ -2232,7 +2232,8 @@ gtk_list_box_update_header (GtkListBox    *box,
           if (new_header != NULL)
             {
               g_hash_table_insert (box->header_hash, new_header, row);
-              gtk_widget_unparent (new_header);
+              if (gtk_widget_get_parent (new_header) != NULL)
+                gtk_widget_unparent (new_header);
               gtk_widget_set_parent (new_header, GTK_WIDGET (box));
               gtk_widget_show (new_header);
             }
