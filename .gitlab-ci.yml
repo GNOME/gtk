@@ -148,6 +148,8 @@ msys2-mingw64:
 
 macos:
   extends: .only-default
+  only:
+    - branches@GNOME/gtk
   stage: build
   tags:
     - macos
