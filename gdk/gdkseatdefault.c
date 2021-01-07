@@ -442,7 +442,7 @@ gdk_seat_default_remove_tool (GdkSeatDefault *seat,
 
   priv = gdk_seat_default_get_instance_private (seat);
 
-  if (tool != gdk_seat_get_tool (GDK_SEAT (seat), tool->serial, tool->hw_id))
+  if (tool != gdk_seat_get_tool (GDK_SEAT (seat), tool->serial, tool->hw_id, tool->type))
     return;
 
   g_signal_emit_by_name (seat, "tool-removed", tool);

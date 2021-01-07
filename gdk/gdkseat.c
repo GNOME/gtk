@@ -436,9 +436,10 @@ gdk_seat_tool_removed (GdkSeat       *seat,
 }
 
 GdkDeviceTool *
-gdk_seat_get_tool (GdkSeat *seat,
-                   guint64  serial,
-                   guint64  hw_id)
+gdk_seat_get_tool (GdkSeat          *seat,
+                   guint64           serial,
+                   guint64           hw_id,
+                   GdkDeviceToolType type)
 {
   GdkDeviceTool *match = NULL;
   GList *tools, *l;
@@ -449,7 +450,7 @@ gdk_seat_get_tool (GdkSeat *seat,
     {
       GdkDeviceTool *tool = l->data;
 
-      if (tool->serial == serial && tool->hw_id == hw_id)
+      if (tool->serial == serial && tool->hw_id == hw_id && tool->type == type)
         {
           match = tool;
           break;

@@ -1097,15 +1097,16 @@ handle_property_change (GdkX11DeviceManagerXI2 *device_manager,
       if (ev->what != XIPropertyDeleted &&
           device_get_tool_serial_and_id (device, &serial_id, &tool_id))
         {
+          GdkDeviceToolType tool_type;
+
           seat = gdk_device_get_seat (device);
-          tool = gdk_seat_get_tool (seat, serial_id, tool_id);
+          tool_type = device_get_tool_type (device);
 
-          if (!tool && serial_id > 0)
+          if (tool_type != GDK_DEVICE_TOOL_TYPE_UNKNOWN)
             {
-              GdkDeviceToolType tool_type;
+              tool = gdk_seat_get_tool (seat, serial_id, tool_id, tool_type);
 
-              tool_type = device_get_tool_type (device);
-              if (tool_type != GDK_DEVICE_TOOL_TYPE_UNKNOWN)
+              if (!tool && serial_id > 0)
                 {
                   tool = gdk_device_tool_new (serial_id, tool_id, tool_type, 0);
                   gdk_seat_default_add_tool (GDK_SEAT_DEFAULT (seat), tool);
