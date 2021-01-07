@@ -75,9 +75,10 @@ void gdk_seat_tool_removed   (GdkSeat       *seat,
                               GdkDeviceTool *tool);
 
 GdkDeviceTool *
-     gdk_seat_get_tool       (GdkSeat   *seat,
-                              guint64    serial,
-                              guint64    hw_id);
+     gdk_seat_get_tool       (GdkSeat          *seat,
+                              guint64           serial,
+                              guint64           hw_id,
+                              GdkDeviceToolType type);
 
 GdkGrabStatus  gdk_seat_grab             (GdkSeat                *seat,
                                           GdkSurface              *surface,
