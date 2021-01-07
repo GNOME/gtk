@@ -523,6 +523,25 @@ option. You should always review the resulting changes.
 The <requires> tag now supports for the 'lib' attribute the
 'gtk' value only, instead of the 'gtk+' one previously.
 
+## Adapt to GtkBuilder API changes
+
+gtk_builder_connect_signals() no longer exists. Instead, signals are
+always connected automatically. If you need to add user data to your
+signals, gtk_builder_set_current_object() must be called. An important
+caveat is that you have to do this before loading any XML. This means if
+you need to use gtk_builder_set_current_object(), you can no longer use
+gtk_builder_new_from_file(), gtk_builder_new_from_resource(), or
+gtk_builder_new_from_string(). Instead, you must use vanilla gtk_builder_new(),
+then call gtk_builder_set_current_object(), then load the XML using
+gtk_builder_add_from_file(), gtk_builder_add_from_resource(), or
+gtk_builder_add_from_string(). You must check the return value for
+failure and manually abort with g_error() if something went wrong.
+
+You only have to worry about this if you were previously using
+gtk_builder_connect_signals(). If you are using templates, then
+gtk_widget_init_template() will call gtk_builder_set_current_object()
+for you, so templates work like before.
+
 ### Adapt to event controller API changes
 
 A few changes to the event controller and #GtkGesture APIs
