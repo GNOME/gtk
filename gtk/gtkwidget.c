@@ -7187,7 +7187,13 @@ gtk_widget_dispose (GObject *object)
     gtk_list_list_model_clear (priv->controller_observer);
 
   if (priv->parent)
-    gtk_widget_unparent (widget);
+    {
+      g_critical ("%s %p has a parent %s %p during dispose. Parents hold a reference, so this should not happen.\n"
+                  "Did you call g_object_unref() instead of gtk_widget_unparent()?",
+                  G_OBJECT_TYPE_NAME (widget), widget,
+                  G_OBJECT_TYPE_NAME (priv->parent), priv->parent);
+      priv->parent = NULL;
+    }
 
   while (priv->paintables)
     gtk_widget_paintable_set_widget (priv->paintables->data, NULL);
