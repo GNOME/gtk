@@ -1153,9 +1153,6 @@ gtk_builder_create_bindings (GtkBuilder  *builder,
  * or gtk_builder_add_from_string() in order to merge multiple UI
  * descriptions into a single builder.
  *
- * Most users will probably want to use gtk_builder_new_from_file(),
- * gtk_builder_new_from_resource() or gtk_builder_new_from_string().
- *
  * Returns: a new (empty) #GtkBuilder object
  **/
 GtkBuilder *
@@ -1173,7 +1170,9 @@ gtk_builder_new (void)
  * Parses a file containing a [GtkBuilder UI definition][BUILDER-UI]
  * and merges it with the current contents of @builder.
  *
- * Most users will probably want to use gtk_builder_new_from_file().
+ * This function is useful if you need to call gtk_builder_set_current_object()
+ * to add user data to callbacks before loading GtkBuilder UI.
+ * Otherwise, you probably want gtk_builder_new_from_file() instead.
  *
  * If an error occurs, 0 will be returned and @error will be assigned a
  * #GError from the #GTK_BUILDER_ERROR, #G_MARKUP_ERROR or #G_FILE_ERROR
@@ -1367,7 +1366,9 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
  * Parses a resource file containing a [GtkBuilder UI definition][BUILDER-UI]
  * and merges it with the current contents of @builder.
  *
- * Most users will probably want to use gtk_builder_new_from_resource().
+ * This function is useful if you need to call gtk_builder_set_current_object()
+ * to add user data to callbacks before loading GtkBuilder UI.
+ * Otherwise, you probably want gtk_builder_new_from_resource() instead.
  *
  * If an error occurs, 0 will be returned and @error will be assigned a
  * #GError from the #GTK_BUILDER_ERROR, #G_MARKUP_ERROR or #G_RESOURCE_ERROR
@@ -1517,7 +1518,9 @@ gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
  * Parses a string containing a [GtkBuilder UI definition][BUILDER-UI]
  * and merges it with the current contents of @builder.
  *
- * Most users will probably want to use gtk_builder_new_from_string().
+ * This function is useful if you need to call gtk_builder_set_current_object()
+ * to add user data to callbacks before loading GtkBuilder UI.
+ * Otherwise, you probably want gtk_builder_new_from_string() instead.
  *
  * Upon errors %FALSE will be returned and @error will be assigned a
  * #GError from the #GTK_BUILDER_ERROR, #G_MARKUP_ERROR or
