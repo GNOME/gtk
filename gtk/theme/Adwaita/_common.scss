@@ -1397,7 +1397,7 @@ windowcontrols {
     min-height: 0;
     &:hover {
       //special case hover colors inside a headerbar
-      @include button(undecorated-hover,$c:darken($headerbar_bg_color,10%));
+      @include button(undecorated-hover,$c:darken($headerbar_bg_color,6%));
     }
     &:active,
     &:checked { @include button(undecorated-active,$c:darken($headerbar_bg_color,10%)); }
