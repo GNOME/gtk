@@ -49,7 +49,7 @@ struct _GdkSeatDefaultPrivate
 G_DEFINE_TYPE_WITH_PRIVATE (GdkSeatDefault, gdk_seat_default, GDK_TYPE_SEAT)
 
 static void
-gdk_seat_dispose (GObject *object)
+gdk_seat_default_dispose (GObject *object)
 {
   GdkSeatDefault *seat = GDK_SEAT_DEFAULT (object);
   GdkSeatDefaultPrivate *priv = gdk_seat_default_get_instance_private (seat);
@@ -307,7 +307,7 @@ gdk_seat_default_class_init (GdkSeatDefaultClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkSeatClass *seat_class = GDK_SEAT_CLASS (klass);
 
-  object_class->dispose = gdk_seat_dispose;
+  object_class->dispose = gdk_seat_default_dispose;
 
   seat_class->get_capabilities = gdk_seat_default_get_capabilities;
 
