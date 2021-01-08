@@ -105,11 +105,11 @@
 
 @function _border_color($c, $darker: false) {
   @if $darker == true { @return darken($c, 20%); }
-  @else { @return darken($c, 10%); }
+  @else { @return darken($c, 15%); }
 }
 
 
-@mixin button($t, $c:$bg_color, $tc:$fg_color) {
+@mixin button($t, $c:lighten($bg_color,2%), $tc:$fg_color) {
 //
 // Button drawing function
 //
@@ -130,9 +130,9 @@
   //
     color: $tc;
     outline-color: if($c != $bg_color, $alt_focus_border_color, $focus_border_color);
-    border-color: if($c != $bg_color, _border_color($c), $borders_color);
+    border-color: _border_color($c);
     border-bottom-color: if($c != $bg_color, _border_color($c, true), $alt_borders_color);
-    background-image: if($variant == 'light', linear-gradient(to top, darken($c, 4%) 2px, $c),
+    background-image: if($variant == 'light', linear-gradient(to top, darken($c, 2%) 2px, $c),
                                               linear-gradient(to top, darken($c,1%) 2px, $c));
     @include _shadows($_button_shadow);
   }
