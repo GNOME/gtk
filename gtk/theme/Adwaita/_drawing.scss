@@ -118,7 +118,7 @@
 // $tc:   optional text color for colored* types
 //
 // possible $t values:
-// normal, hover, active, insensitive, insensitive-active,
+// normal, hover, active, checked-hover, checked-active, insensitive, insensitive-active,
 // backdrop, backdrop-active, backdrop-insensitive, backdrop-insensitive-active,
 // osd, osd-hover, osd-active, osd-insensitive, osd-backdrop, undecorated
 //
@@ -178,6 +178,26 @@
     color: $tc;
     border-color: if($c != $bg_color, _border_color($c), $borders_color);
     background-image: if($variant == 'light', image(darken($c, 14%)), image(darken($c, 9%)));
+    box-shadow: none;
+  }
+
+  @else if $t==checked-hover {
+  //
+  // pushed togglebutton hover
+  //
+    color: $tc;
+    border-color: if($c != $bg_color, _border_color($c), $borders_color);
+    background-image: if($variant == 'light', image(darken($c, 18%)), image(darken($c, 12%)));
+    box-shadow: none;
+  }
+
+  @else if $t==checked-active {
+  //
+  // pushed togglebutton pushed further :)
+  //
+    color: $tc;
+    border-color: if($c != $bg_color, _border_color($c), $borders_color);
+    background-image: if($variant == 'light', image(darken($c, 22%)), image(darken($c, 14%)));
     box-shadow: none;
   }
 
