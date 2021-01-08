@@ -79,11 +79,7 @@ gdk_seat_default_dispose (GObject *object)
       g_object_unref (l->data);
     }
 
-  if (priv->tools)
-    {
-      g_ptr_array_unref (priv->tools);
-      priv->tools = NULL;
-    }
+  g_clear_pointer (&priv->tools, g_ptr_array_unref);
 
   g_list_free (priv->physical_pointers);
   g_list_free (priv->physical_keyboards);
