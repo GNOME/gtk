@@ -2540,7 +2540,7 @@ treeview.view radio:selected { &:focus, & { @extend %radio; }} // This is a work
  * GtkScale *
  ************/
 %scale_trough {
-  border: 1px solid $borders_color;
+  border: 1px solid $dark_fill;
   border-radius: 3px;
   background-color: $dark_fill;
 
@@ -2569,7 +2569,7 @@ treeview.view radio:selected { &:focus, & { @extend %radio; }} // This is a work
 }
 
 %scale_highlight {
-  border: 1px solid $selected_borders_color;
+  border: 1px solid $selected_bg_color;
   border-radius: 3px;
   background-color: $selected_bg_color;
 
@@ -2653,7 +2653,6 @@ scale {
   > trough > fill {
     @extend %scale_trough;
 
-    &:backdrop, & { background-color: $borders_color; }
 
     &:disabled {
       border-color: transparent;
@@ -3117,24 +3116,24 @@ levelbar {
     border: 1px solid;
 
     &.low {
-      border-color: if($variant == 'light', darken($warning_color, 10%), $borders_color);
+      border-color: $warning_color;
       background-color: $warning_color;
     }
 
     &.high,
     &:not(.empty) {
-      border-color: if($variant == 'light', darken($selected_bg_color, 10%), $borders_color);
+      border-color: $selected_bg_color;
       background-color: $selected_bg_color;
     }
 
     &.full {
-      border-color: if($variant == 'light', darken($success_color, 10%), $borders_color);
+      border-color: $success_color;
       background-color: $success_color;
     }
 
     &.empty {
       background-color: darken($bg_color, 5%);
-      border-color: $borders_color;
+      border-color: darken($bg_color, 5%);
     }
   }
 }
