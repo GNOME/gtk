@@ -3013,25 +3013,25 @@ progressbar {
     }
 
     border-radius: 1.5px;
-
+    $_progress-radius: 5px;
     &.left {
-      border-top-left-radius: 2px;
-      border-bottom-left-radius: 2px;
+      border-top-left-radius: $_progress-radius;
+      border-bottom-left-radius: $_progress-radius;
     }
 
     &.right {
-      border-top-right-radius: 2px;
-      border-bottom-right-radius: 2px;
+      border-top-right-radius: $_progress-radius;
+      border-bottom-right-radius: $_progress-radius;
     }
 
     &.top {
-      border-top-right-radius: 2px;
-      border-top-left-radius: 2px;
+      border-top-right-radius: $_progress-radius;
+      border-top-left-radius: $_progress-radius;
     }
 
     &.bottom {
-      border-bottom-right-radius: 2px;
-      border-bottom-left-radius: 2px;
+      border-bottom-right-radius: $_progress-radius;
+      border-bottom-left-radius: $_progress-radius;
     }
   }
 
@@ -3060,25 +3060,25 @@ progressbar {
  * Level Bar *
  *************/
 
-$levelbar_size: 9px;
-$levelbar_border_radius: 3px;
+$_levelbar_size: 9px;
+$_levelbar_border_radius: 5px;
 
 levelbar {
   &.horizontal {
     trough > block {
-      min-height: $levelbar_size;
-      border-radius: $levelbar_border_radius;
+      min-height: $_levelbar_size;
+      border-radius: $_levelbar_border_radius;
 
       &:dir(rtl) {
-        border-radius: 0 $levelbar_border_radius $levelbar_border_radius 0;
+        border-radius: 0 $_levelbar_border_radius $_levelbar_border_radius 0;
       }
 
       &:dir(ltr) {
-        border-radius: $levelbar_border_radius 0 0 $levelbar_border_radius;
+        border-radius: $_levelbar_border_radius 0 0 $_levelbar_border_radius;
       }
 
       &.empty,&.full {
-        border-radius: $levelbar_border_radius;
+        border-radius: $_levelbar_border_radius;
       }
     }
 
@@ -3099,12 +3099,12 @@ levelbar {
 
   &.vertical {
     trough > block {
-      min-width: $levelbar_size;
-      border-radius: $levelbar_border_radius;
+      min-width: $_levelbar_size;
+      border-radius: $_levelbar_border_radius;
     }
 
     &.discrete > trough > block {
-      min-width: $levelbar_size - 7px;
+      min-width: $_levelbar_size - 7px;
       margin: 1px 0;
       min-height: 32px;
     }
