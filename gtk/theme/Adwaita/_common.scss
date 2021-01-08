@@ -206,7 +206,6 @@ window.assistant {
   border: none;
   background-color: $osd_bg_color;
   background-clip: padding-box;
-  text-shadow: 0 1px black;
   -gtk-icon-shadow: 0 1px black;
 
 }
@@ -644,8 +643,7 @@ button {
     &.flat {
       @include button(undecorated);
 
-      box-shadow: none; //FIXME respect no edge on the button mixin
-      text-shadow: 0 1px black;
+      box-shadow: none;
       -gtk-icon-shadow: 0 1px black;
 
       &:hover { @include button(osd-hover); }
@@ -2345,7 +2343,6 @@ switch {
   border-radius: 14px;
   color: $fg_color;
   background-color: $dark_fill;
-  text-shadow: 0 1px transparentize(black, 0.9);
   transition: $focus_transition;
 
   @include focus-ring($offset: 0, $outer: true);
@@ -2356,8 +2353,6 @@ switch {
     color: $selected_fg_color;
     border-color: $switch_borders_color;
     background-color: $switch_bg_color;
-    text-shadow: 0 1px transparentize($switch_borders_color, 0.5),
-                 0 0 2px transparentize(white, 0.4);
   }
 
   &:disabled {
@@ -2376,13 +2371,13 @@ switch {
     border-radius: 50%;
     transition: $button_transition;
 
-    @include button(normal, $edge: $shadow_color);
+    @include button(normal);
   }
   
   > image { color: transparent; } /* only show i / o for the accessible theme */
 
   &:hover > slider {
-    @include button(hover, $edge: $shadow_color);
+    @include button(hover);
   }
 
   &:checked > slider { border: 1px solid $switch_borders_color; }
@@ -2677,14 +2672,14 @@ scale {
   }
 
   > trough > slider {
-    @include button(normal-alt, $edge: $shadow_color);
+    @include button(normal-alt);
 
     border: 1px solid darken($alt_borders_color, 3%);
     border-radius: 100%;
     transition: $button_transition;
     transition-property: background, border, box-shadow;
 
-    &:hover { @include button(hover, $edge: $shadow_color); }
+    &:hover { @include button(hover); }
 
     &:active { border-color: $selected_borders_color; }
 
