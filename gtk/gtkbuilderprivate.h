@@ -179,7 +179,7 @@ typedef struct {
   SubParser *subparser;
   GtkBuildableParseContext ctx;
   const char *filename;
-  GSList *finalizers;
+  GPtrArray *finalizers;
   GSList *custom_finalizers;
 
   const char **requested_objects; /* NULL if all the objects are requested */

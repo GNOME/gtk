@@ -1955,7 +1955,7 @@ end_element (GtkBuildableParseContext  *context,
 
       if (GTK_IS_BUILDABLE (object_info->object) &&
           GTK_BUILDABLE_GET_IFACE (object_info->object)->parser_finished)
-        data->finalizers = g_slist_prepend (data->finalizers, object_info->object);
+        g_ptr_array_add (data->finalizers, object_info->object);
 
       if (object_info->signals)
         {
@@ -2175,6 +2175,7 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   data.object_ids = g_hash_table_new_full (g_str_hash, g_str_equal,
                                            (GDestroyNotify)g_free, NULL);
   data.stack = g_ptr_array_new ();
+  data.finalizers = g_ptr_array_new ();
 
   if (requested_objs)
     {
@@ -2214,10 +2215,9 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
     }
 
   /* Common parser_finished, for all created objects */
-  data.finalizers = g_slist_reverse (data.finalizers);
-  for (l = data.finalizers; l; l = l->next)
+  for (guint i = 0; i < data.finalizers->len; i++)
     {
-      GtkBuildable *buildable = (GtkBuildable*)l->data;
+      GtkBuildable *buildable = g_ptr_array_index (data.finalizers, i);
 
       gtk_buildable_parser_finished (GTK_BUILDABLE (buildable), builder);
       if (_gtk_builder_lookup_failed (builder, error))
@@ -2227,10 +2227,10 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
  out:
 
   g_slist_free_full (data.custom_finalizers, (GDestroyNotify)free_subparser);
-  g_slist_free (data.finalizers);
   g_free (data.domain);
   g_hash_table_destroy (data.object_ids);
   g_ptr_array_free (data.stack, TRUE);
+  g_ptr_array_free (data.finalizers, TRUE);
   gtk_buildable_parse_context_free (&data.ctx);
 
   /* restore the original domain */
