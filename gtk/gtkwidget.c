@@ -9123,14 +9123,12 @@ GtkAlign
 gtk_widget_get_halign (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GtkAlign align;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_ALIGN_FILL);
 
-  align = priv->halign;
-  if (align == GTK_ALIGN_BASELINE)
+  if (priv->halign == GTK_ALIGN_BASELINE)
     return GTK_ALIGN_FILL;
-  return align;
+  return priv->halign;
 }
 
 /**
