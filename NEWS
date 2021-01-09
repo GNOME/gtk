@@ -1,5 +1,5 @@
-Overview of Changes
-===================
+Overview of Changes in 4.0.1
+============================
 
 * GtkPopover
  - Center titles
@@ -8,6 +8,7 @@ Overview of Changes
 * GtkVideo
  - Fix up autoplay semantics
  - Respect pixel aspect ratio
+ - Get GL textures from gstreamer
 
 * GtkCenterLayout
  - Fix handling of expanding center child
@@ -25,36 +26,52 @@ Overview of Changes
 
 * Adwaita
  - Fine-tune flat buttons
+ - Improve contrast of dim-label
+ - Improve contrast of controls in headers
 
 * Docs
  - Add various missing types
  - Add DND examples
  - Correct css docs for several widgets
  - Improve GtkVideo docs
+ - Update migration docs for GtkClipboard
+ - Improve migration docs for event controllers
+ - Add migration docs for GtkBuilder
 
 * gtk4-builder-tool
  - Remove GtkCheckButton::draw-indicator
  - Fix a buffer overrun
+ - Remove GtkToolbar::toolbar-style
 
 * Demos
  - Don't put the search bar in the scroll area
  - Make the OpenGL demos work with OpenGL ES
 
+* X11
+ - Fix a possible crash
+
 * Build
  - Fix vulkan reference in pc file
  - Fix build with certain Vulkan versions
+
+* Windows:
+ - Fix build with Visual Studio 2013
 
 * OS X:
  - Fix build on OS X
  - Fix crash on Mojave
  - Fix a window sizing issue
+ - Fix build on OS X 10.12
+ - Add a CI build
 
 * Translation updates:
  Basque
  Brazilian Portuguese
  Catalan
  Galician
+ German
  Japanese
+ Lithuanian
  Persian
  Punjabi
  Romanian
