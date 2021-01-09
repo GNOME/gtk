@@ -496,12 +496,12 @@ gtk_accessible_update_relation_value (GtkAccessible         *self,
                                       GtkAccessibleRelation  relations[],
                                       const GValue           values[])
 {
+  GtkATContext *context;
+
   g_return_if_fail (GTK_IS_ACCESSIBLE (self));
   g_return_if_fail (n_relations > 0);
 
-  GtkATContext *context = gtk_accessible_get_at_context (self);
-  if (context == NULL)
-    return;
+  context = gtk_accessible_get_at_context (self);
 
   for (int i = 0; i < n_relations; i++)
     {
@@ -520,13 +520,15 @@ gtk_accessible_update_relation_value (GtkAccessible         *self,
           break;
         }
 
-      gtk_at_context_set_accessible_relation (context, relation, real_value);
+      if (context)
+        gtk_at_context_set_accessible_relation (context, relation, real_value);
 
       if (real_value != NULL)
         gtk_accessible_value_unref (real_value);
     }
 
-  gtk_at_context_update (context);
+  if (context)
+    gtk_at_context_update (context);
 }
 
 /**
