@@ -169,6 +169,12 @@ const GtkTextLineSegmentClass gtk_text_paintable_type = {
 GtkTextLineSegment *
 _gtk_paintable_segment_new (GdkPaintable *paintable)
 {
+  /* gcc-11 issues a diagnostic here because the size allocated
+     for SEG does not cover the entire size of a GtkTextLineSegment
+     and gcc has no way to know that the union will only be used
+     for limited types and the additional space is not needed.  */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
   GtkTextLineSegment *seg;
   guint flags;
 
@@ -204,6 +210,7 @@ _gtk_paintable_segment_new (GdkPaintable *paintable)
   g_object_ref (paintable);
 
   return seg;
+#pragma GCC diagnostic pop
 }
 
 
@@ -280,6 +287,12 @@ const GtkTextLineSegmentClass gtk_text_child_type = {
 GtkTextLineSegment *
 _gtk_widget_segment_new (GtkTextChildAnchor *anchor)
 {
+  /* gcc-11 issues a diagnostic here because the size allocated
+     for SEG does not cover the entire size of a GtkTextLineSegment
+     and gcc has no way to know that the union will only be used
+     for limited types and the additional space is not needed.  */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
   GtkTextLineSegment *seg;
 
   seg = g_slice_alloc (WIDGET_SEG_SIZE);
@@ -303,6 +316,7 @@ _gtk_widget_segment_new (GtkTextChildAnchor *anchor)
   g_object_ref (anchor);
   
   return seg;
+#pragma GCC diagnostic pop
 }
 
 void
