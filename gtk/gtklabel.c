@@ -3500,7 +3500,10 @@ no_uline:
       /* Extract the text to display */
       if (!pango_parse_markup (new_text, -1, '_',
                                do_mnemonics ? &attrs : NULL, &text, NULL, &error))
-        goto error_set;
+        {
+          g_free (new_text);
+          goto error_set;
+        }
 
       if (do_mnemonics)
         {
