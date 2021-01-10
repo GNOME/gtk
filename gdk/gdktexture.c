@@ -316,9 +316,9 @@ gdk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
  * @resource_path: the path of the resource file
  *
  * Creates a new texture by loading an image from a resource.
- * The file format is detected automatically, and can be any
- * format that is supported by the gdk-pixbuf library, such as
- * JPEG or PNG.
+ * The file format is detected automatically.
+ * The supported formats are PNG and JPEG, though more formats might be
+ * available.
  *
  * It is a fatal error if @resource_path does not specify a valid
  * image resource and the program will abort if that happens.
@@ -352,9 +352,9 @@ gdk_texture_new_from_resource (const char *resource_path)
  * @error: Return location for an error
  *
  * Creates a new texture by loading an image from a file.
- * The file format is detected automatically, and can be any
- * format that is supported by the gdk-pixbuf library, such as
- * JPEG or PNG.
+ * The file format is detected automatically.
+ * The supported formats are PNG and JPEG, though more formats might be
+ * available.
  *
  * If %NULL is returned, then @error will be set.
  *
