@@ -1644,8 +1644,8 @@ render_clipped_child (GskGLRenderer         *self,
       /* well fuck */
       const float scale_x = builder->scale_x;
       const float scale_y = builder->scale_y;
-      const GskRoundedRect scaled_clip = GSK_ROUNDED_RECT_INIT (clip->origin.x * scale_x,
-                                                                clip->origin.y * scale_y,
+      const GskRoundedRect scaled_clip = GSK_ROUNDED_RECT_INIT ((builder->dx + clip->origin.x) * scale_x,
+                                                                (builder->dy + clip->origin.y) * scale_y,
                                                                 clip->size.width * scale_x,
                                                                 clip->size.height * scale_y);
       gboolean is_offscreen;
@@ -1746,7 +1746,6 @@ render_rounded_clip_node (GskGLRenderer       *self,
     }
   else
     {
-      GskRoundedRect scaled_clip;
       gboolean is_offscreen;
       TextureRegion region;
       /* NOTE: We are *not* transforming the clip by the current modelview here.
@@ -1755,19 +1754,7 @@ render_rounded_clip_node (GskGLRenderer       *self,
        *
        *       We do, however, apply the scale factor to the child clip of course.
        */
-      scaled_clip.bounds.origin.x = clip->bounds.origin.x * scale_x;
-      scaled_clip.bounds.origin.y = clip->bounds.origin.y * scale_y;
-      scaled_clip.bounds.size.width = clip->bounds.size.width * scale_x;
-      scaled_clip.bounds.size.height = clip->bounds.size.height * scale_y;
-
-      /* Increase corner radius size by scale factor */
-      for (i = 0; i < 4; i ++)
-        {
-          scaled_clip.corner[i].width = clip->corner[i].width * scale_x;
-          scaled_clip.corner[i].height = clip->corner[i].height * scale_y;
-        }
-
-      ops_push_clip (builder, &scaled_clip);
+      ops_push_clip (builder, &transformed_clip);
       if (!add_offscreen_ops (self, builder, &node->bounds,
                               child,
                               &region, &is_offscreen,
@@ -3831,9 +3818,9 @@ add_offscreen_ops (GskGLRenderer         *self,
                    gboolean              *is_offscreen,
                    guint                  flags)
 {
-  float width, height;
   const float dx = builder->dx;
   const float dy = builder->dy;
+  float width, height;
   float scale_x;
   float scale_y;
   int render_target;
@@ -3932,8 +3919,8 @@ add_offscreen_ops (GskGLRenderer         *self,
                                           render_target);
     }
 
-  viewport = GRAPHENE_RECT_INIT (bounds->origin.x * scale_x,
-                                 bounds->origin.y * scale_y,
+  viewport = GRAPHENE_RECT_INIT ((bounds->origin.x + dx) * scale_x,
+                                 (bounds->origin.y + dy) * scale_y,
                                  width, height);
 
   init_projection_matrix (&item_proj, &viewport);
@@ -3946,8 +3933,8 @@ add_offscreen_ops (GskGLRenderer         *self,
   if (flags & RESET_CLIP)
     ops_push_clip (builder, &GSK_ROUNDED_RECT_INIT_FROM_RECT (viewport));
 
-  builder->dx = 0;
-  builder->dy = 0;
+  builder->dx = dx;
+  builder->dy = dy;
 
   prev_opacity = ops_set_opacity (builder, 1.0);
 
