@@ -4,12 +4,12 @@
 # Joseba Bidaurrazaga van Dierdonck <gcpbivaj@lg.ehu.es>, 1999-2000.
 # Hizkuntza Politikarako Sailburuordetza <hizpol@ej-gv.es>, 2004.
 # Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2004 - 2015, 2016, 2017.
-# Asier Sarasua Garmendia  <asiersarasua@ni.eus>, 2019, 2020.
+# Asier Sarasua Garmendia  <asiersarasua@ni.eus>, 2019, 2020, 2021.
 #
 msgid ""
 msgstr "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2020-12-27 16:35+0000\n"
+"POT-Creation-Date: 2021-01-10 13:47+0000\n"
 "PO-Revision-Date: 2020-12-27 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
@@ -444,14 +444,14 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Eseki"
 
-#: gdk/macos/gdkmacosclipboard.c:203 gdk/wayland/gdkclipboard-wayland.c:231
+#: gdk/macos/gdkmacosclipboard.c:251 gdk/wayland/gdkclipboard-wayland.c:231
 #: gdk/wayland/gdkdrop-wayland.c:204 gdk/wayland/gdkprimary-wayland.c:312
 #: gdk/win32/gdkdrop-win32.c:1279 gdk/win32/gdkdrop-win32.c:1324
 #: gdk/x11/gdkclipboard-x11.c:763 gdk/x11/gdkdrop-x11.c:196
 msgid "No compatible transfer format found"
 msgstr "Ez da transferentziarako formatu bateragarririk aurkitu"
 
-#: gdk/macos/gdkmacosclipboard.c:289
+#: gdk/macos/gdkmacosclipboard.c:337
 #, c-format
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Huts egin du '%s' mime mota duten edukiak deskodetzeak"
@@ -462,41 +462,40 @@ msgstr "Huts egin du '%s' mime mota duten edukiak deskodetzeak"
 msgid "Unable to create a GL context"
 msgstr "Ezin da GL testuingurua sortu"
 
-#: gdk/wayland/gdkglcontext-wayland.c:414
-#: gdk/wayland/gdkglcontext-wayland.c:424 gdk/win32/gdkglcontext-win32.c:788
+#: gdk/wayland/gdkglcontext-wayland.c:423 gdk/win32/gdkglcontext-win32.c:788
 #: gdk/win32/gdkglcontext-win32.c:798 gdk/win32/gdkglcontext-win32.c:913
 #: gdk/x11/gdkglcontext-x11.c:879
 msgid "No available configurations for the given pixel format"
 msgstr "Ez dago emandako pixel formatuaren konfiguraziorik erabilgarri"
 
-#: gdk/wayland/gdkglcontext-wayland.c:453 gdk/win32/gdkglcontext-win32.c:1072
+#: gdk/wayland/gdkglcontext-wayland.c:448 gdk/win32/gdkglcontext-win32.c:1072
 #: gdk/x11/gdkglcontext-x11.c:1182
 msgid "No GL implementation is available"
 msgstr "Ez dago GL inplementaziorik erabilgarri"
 
-#: gdk/wayland/gdkglcontext-wayland.c:461
+#: gdk/wayland/gdkglcontext-wayland.c:456
 msgid "Core GL is not available on EGL implementation"
 msgstr "GL nukleoa ez dago erabilgarri EGL inplementazioan"
 
 #: gdk/win32/gdkclipdrop-win32.c:717
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
-msgstr "Ezin izan da arbelaren jabetza aldarrikatu. OpenClipboard() denbora-mugara iritsi da."
+msgstr "Ezin izan da arbelaren jabetza galdegin. OpenClipboard() denbora-mugara iritsi da."
 
 #: gdk/win32/gdkclipdrop-win32.c:727
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
-msgstr "Ezin izan da arbelaren jabetza aldarrikatu. Beste prozesu batek aldarrikatu du guk baino lehenago."
+msgstr "Ezin izan da arbelaren jabetza galdegin. Beste prozesu batek aldarrikatu du guk baino lehenago."
 
 #: gdk/win32/gdkclipdrop-win32.c:741
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
-msgstr "Ezin izan da arbelaren jabetza aldarrikatu. OpenClipboard() prozesuak huts egin du: 0x%lx."
+msgstr "Ezin izan da arbelaren jabetza galdegin. OpenClipboard() prozesuak huts egin du: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:753
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
-msgstr "Ezin izan da arbelaren jabetza aldarrikatu. EmptyClipboard() prozesuak huts egin du: 0x%lx."
+msgstr "Ezin izan da arbelaren jabetza galdegin. EmptyClipboard() prozesuak huts egin du: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:796
 #, c-format
@@ -506,7 +505,7 @@ msgstr "Ezin izan da arbelaren datuak ezarri. OpenClipboard() denbora-mugara iri
 #: gdk/win32/gdkclipdrop-win32.c:806 gdk/win32/gdkclipdrop-win32.c:837
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
-msgstr "Ezin izan da arbelaren datuak ezarri. Beste prozesu batek aldarrikatu du guk baino lehenago."
+msgstr "Ezin izan da arbelaren datuak ezarri. Beste prozesu batek galdegin du guk baino lehenago."
 
 #: gdk/win32/gdkclipdrop-win32.c:820
 #, c-format
@@ -1750,6 +1749,7 @@ msgid "Very Light Brown"
 msgstr "Marroi oso argia"
 
 #: gtk/gtkcolorchooserwidget.c:466
+msgctxt "Color name"
 msgid "Light Brown"
 msgstr "Marroi argia"
 
@@ -1846,7 +1846,7 @@ msgstr "default:mm"
 msgid "Margins from Printer…"
 msgstr "Marjinak inprimagailutik…"
 
-#: gtk/gtkcustompaperunixdialog.c:348 gtk/gtkmessagedialog.c:737
+#: gtk/gtkcustompaperunixdialog.c:348 gtk/gtkmessagedialog.c:161
 #: gtk/ui/gtkassistant.ui:40
 msgid "_Close"
 msgstr "It_xi"
@@ -1935,19 +1935,19 @@ msgstr "Fitxategi-izenak ezin du '/' karaktererik eduki"
 
 #: gtk/gtkfilechoosererrorstack.c:89
 msgid "Folder names should not begin with a space"
-msgstr "Karpetaren izena ez luke zuriune batekin hasi behar"
+msgstr "Karpeta-izenek ez dute zuriune batekin çhasi behar"
 
 #: gtk/gtkfilechoosererrorstack.c:93
 msgid "File names should not begin with a space"
-msgstr "Fitxategiaren izena ez luke zuriune batekin hasi behar"
+msgstr "Fitxategi-izenek ez dute zuriune batekin hasi behar"
 
 #: gtk/gtkfilechoosererrorstack.c:97
 msgid "Folder names should not end with a space"
-msgstr "Karpetaren izena ez luke zuriune batekin amaitu behar"
+msgstr "Karpeta-izenek ez dute zuriune batekin amaitu behar"
 
 #: gtk/gtkfilechoosererrorstack.c:101
 msgid "File names should not end with a space"
-msgstr "Fitxategiaren izena ez luke zuriune batekin amaitu behar"
+msgstr "Fitxategi-izenek ez dute zuriune batekin amaitu behar"
 
 #: gtk/gtkfilechoosererrorstack.c:105
 msgid "Folder names starting with a “.” are hidden"
@@ -1967,11 +1967,11 @@ msgstr "Izen hori duen fitxategia badago lehendik ere"
 
 #: gtk/gtkfilechoosernative.c:504 gtk/gtkfilechoosernative.c:575
 #: gtk/gtkfilechooserwidget.c:1212 gtk/gtkfilechooserwidget.c:5762
-#: gtk/gtkmessagedialog.c:741 gtk/gtkmessagedialog.c:750
+#: gtk/gtkmessagedialog.c:165 gtk/gtkmessagedialog.c:174
 #: gtk/gtkmountoperation.c:608 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:643 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:626 gtk/gtkprintunixdialog.c:782
-#: gtk/gtkwindow.c:5948 gtk/inspector/css-editor.c:248
+#: gtk/gtkwindow.c:5950 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1238 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
@@ -2062,7 +2062,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Elementu bat ezabatzen baduzu, betirako galduko duzu."
 
 #: gtk/gtkfilechooserwidget.c:1213 gtk/gtkfilechooserwidget.c:1829
-#: gtk/gtklabel.c:5419 gtk/gtktext.c:5960 gtk/gtktextview.c:8564
+#: gtk/gtklabel.c:5416 gtk/gtktext.c:5960 gtk/gtktextview.c:8564
 msgid "_Delete"
 msgstr "Ez_abatu"
 
@@ -2334,27 +2334,27 @@ msgstr "Karaktere-aldaerak"
 msgid "OpenGL context creation failed"
 msgstr "Huts egin du OpenGL-ren testuingurua sortzean"
 
-#: gtk/gtklabel.c:5416 gtk/gtktext.c:5948 gtk/gtktextview.c:8552
+#: gtk/gtklabel.c:5413 gtk/gtktext.c:5948 gtk/gtktextview.c:8552
 msgid "Cu_t"
 msgstr "_Ebaki"
 
-#: gtk/gtklabel.c:5417 gtk/gtktext.c:5952 gtk/gtktextview.c:8556
+#: gtk/gtklabel.c:5414 gtk/gtktext.c:5952 gtk/gtktextview.c:8556
 msgid "_Copy"
 msgstr "_Kopiatu"
 
-#: gtk/gtklabel.c:5418 gtk/gtktext.c:5956 gtk/gtktextview.c:8560
+#: gtk/gtklabel.c:5415 gtk/gtktext.c:5956 gtk/gtktextview.c:8560
 msgid "_Paste"
 msgstr "_Itsatsi"
 
-#: gtk/gtklabel.c:5424 gtk/gtktext.c:5969 gtk/gtktextview.c:8585
+#: gtk/gtklabel.c:5421 gtk/gtktext.c:5969 gtk/gtktextview.c:8585
 msgid "Select _All"
 msgstr "Hautatu _dena"
 
-#: gtk/gtklabel.c:5429
+#: gtk/gtklabel.c:5426
 msgid "_Open Link"
 msgstr "_Ireki esteka"
 
-#: gtk/gtklabel.c:5433
+#: gtk/gtklabel.c:5430
 msgid "Copy _Link Address"
 msgstr "Kopiatu _estekaren helbidea"
 
@@ -2452,16 +2452,16 @@ msgctxt "short time format"
 msgid "%d:%02d"
 msgstr "%d:%02d"
 
-#: gtk/gtkmessagedialog.c:733 gtk/gtkmessagedialog.c:751
-#: gtk/gtkprintbackend.c:644 gtk/gtkwindow.c:5949
+#: gtk/gtkmessagedialog.c:157 gtk/gtkmessagedialog.c:175
+#: gtk/gtkprintbackend.c:644 gtk/gtkwindow.c:5951
 msgid "_OK"
 msgstr "_Ados"
 
-#: gtk/gtkmessagedialog.c:745
+#: gtk/gtkmessagedialog.c:169
 msgid "_No"
 msgstr "_Ez"
 
-#: gtk/gtkmessagedialog.c:746
+#: gtk/gtkmessagedialog.c:170
 msgid "_Yes"
 msgstr "_Bai"
 
@@ -3355,12 +3355,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%%%d"
 
-#: gtk/gtkwindow.c:5936
+#: gtk/gtkwindow.c:5938
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Nahi duzu GTK ikuskatzailea erabili?"
 
-#: gtk/gtkwindow.c:5938
+#: gtk/gtkwindow.c:5940
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3368,7 +3368,7 @@ msgid ""
 "break or crash."
 msgstr "GTK ikuskatzailea arazketa elkarreragile bat da, edozer GTk aplikazioren barnekoak arakatzea eta aldatzea baimentzen dizu. Hori erabiltzean aplikazioa hondatu edo kraskatu dezakezu."
 
-#: gtk/gtkwindow.c:5943
+#: gtk/gtkwindow.c:5945
 msgid "Don’t show this message again"
 msgstr "Ez erakutsi mezu hau berriro"
 
@@ -6503,26 +6503,30 @@ msgctxt "Script"
 msgid "Yezidi"
 msgstr "Yezidia"
 
-#: gtk/tools/encodesymbolic.c:39
+#: gtk/tools/encodesymbolic.c:41
 msgid "Output to this directory instead of cwd"
 msgstr "Atera direktorio honetara 'cwd'-ra ordez"
 
-#: gtk/tools/encodesymbolic.c:91
+#: gtk/tools/encodesymbolic.c:42
+msgid "Generate debug output"
+msgstr "Sortu arazketaren irteera"
+
+#: gtk/tools/encodesymbolic.c:94
 #, c-format
 msgid "Invalid size %s\n"
 msgstr "%s tamaina baliogabea\n"
 
-#: gtk/tools/encodesymbolic.c:103 gtk/tools/encodesymbolic.c:110
+#: gtk/tools/encodesymbolic.c:106 gtk/tools/encodesymbolic.c:115
 #, c-format
 msgid "Can’t load file: %s\n"
 msgstr "Ezin da fitxategia kargatu: %s\n"
 
-#: gtk/tools/encodesymbolic.c:140 gtk/tools/encodesymbolic.c:146
+#: gtk/tools/encodesymbolic.c:143 gtk/tools/encodesymbolic.c:149
 #, c-format
 msgid "Can’t save file %s: %s\n"
 msgstr "Ezin da “%s” fitxategia gorde: %s\n"
 
-#: gtk/tools/encodesymbolic.c:152
+#: gtk/tools/encodesymbolic.c:155
 #, c-format
 msgid "Can’t close stream"
 msgstr "Ezin da korrontea itxi"
@@ -6577,32 +6581,32 @@ msgstr "%s:%d: Ezin izan da '%s' propietatearen balioa analizatu: %s\n"
 msgid "%s:%d: %sproperty %s::%s not found\n"
 msgstr "%s:%d: %spropietatea %s::%s ez da aurkitu\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:2189
+#: gtk/tools/gtk-builder-tool-simplify.c:2203
 #, c-format
 msgid "Can’t load “%s”: %s\n"
 msgstr "Ezin da “%s” kargatu: %s\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:2200
+#: gtk/tools/gtk-builder-tool-simplify.c:2214
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
 msgstr "Ezin da “%s” analizatu: %s\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:2224
+#: gtk/tools/gtk-builder-tool-simplify.c:2238
 #, c-format
 msgid "Failed to read “%s”: %s\n"
 msgstr "Huts egin du “%s” irakurtzeak: %s\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:2230
+#: gtk/tools/gtk-builder-tool-simplify.c:2244
 #, c-format
 msgid "Failed to write %s: “%s”\n"
 msgstr "Huts egin du %s idazteak: “%s”\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:2270
+#: gtk/tools/gtk-builder-tool-simplify.c:2284
 #, c-format
 msgid "No .ui file specified\n"
 msgstr "Ez da .ui fitxategirik zehaztu\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:2276
+#: gtk/tools/gtk-builder-tool-simplify.c:2290
 #, c-format
 msgid "Can only simplify a single .ui file without --replace\n"
 msgstr ".ui fitxategi bakarra sinplifikatu daiteke --replace erabili gabe\n"
