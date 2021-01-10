@@ -1779,7 +1779,8 @@ render_rounded_clip_node (GskGLRenderer       *self,
       ops_set_program (builder, &self->programs->blit_program);
       ops_set_texture (builder, region.texture_id);
 
-      load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder);
+      load_vertex_data_with_region (ops_draw (builder, NULL), &node->bounds, builder,
+                                    &region, is_offscreen);
     }
 }
 
