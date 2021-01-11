@@ -1165,12 +1165,6 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
       /* Normal desired width */
       *minimum_size = smallest_rect.width;
       *natural_size = widest_rect.width;
-
-      if (minimum_baseline)
-        *minimum_baseline = -1;
-
-      if (natural_baseline)
-        *natural_baseline = -1;
     }
   else /* GTK_ORIENTATION_VERTICAL */
     {
@@ -1178,19 +1172,15 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
         {
           *minimum_size = smallest_rect.height;
           *natural_size = widest_rect.height;
-          if (minimum_baseline)
-            *minimum_baseline = smallest_baseline;
-          if (natural_baseline)
-            *natural_baseline = widest_baseline;
+          *minimum_baseline = smallest_baseline;
+          *natural_baseline = widest_baseline;
         }
       else
         {
           *minimum_size = widest_rect.height;
           *natural_size = smallest_rect.height;
-          if (minimum_baseline)
-            *minimum_baseline = widest_baseline;
-          if (natural_baseline)
-            *natural_baseline = smallest_baseline;
+          *minimum_baseline = widest_baseline;
+          *natural_baseline = smallest_baseline;
         }
     }
 }
