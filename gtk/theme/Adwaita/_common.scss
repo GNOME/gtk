@@ -200,6 +200,10 @@ window.assistant {
   }
 }
 
+window.aboutdialog image.large-icons {
+  -gtk-icon-size: 128px;
+}
+
 %osd,
 .osd {
   color: $osd_fg_color;

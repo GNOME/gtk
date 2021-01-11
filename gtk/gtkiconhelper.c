@@ -348,7 +348,8 @@ gtk_icon_helper_invalidate_for_change (GtkIconHelper     *self,
                                        GtkCssStyleChange *change)
 {
   if (change == NULL ||
-      gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_TEXTURE))
+      gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_TEXTURE |
+                                            GTK_CSS_AFFECTS_ICON_SIZE))
     {
       /* Avoid the queue_resize in gtk_icon_helper_invalidate */
       g_clear_object (&self->paintable);

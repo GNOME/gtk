@@ -2,6 +2,9 @@
 <interface domain="gtk40">
   <template class="GtkAboutDialog" parent="GtkWindow">
     <property name="resizable">0</property>
+    <style>
+      <class name="aboutdialog"/>
+    </style>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="headerbar1">
         <child type="title">
@@ -32,6 +35,7 @@
             <child>
               <object class="GtkImage" id="logo_image">
                 <property name="icon-name">image-missing</property>
+                <property name="icon-size">large</property>
                 <style>
                   <class name="icon-dropshadow"/>
                 </style>
