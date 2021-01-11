@@ -1721,8 +1721,8 @@ _gdk_win32_surface_fill_min_max_info (GdkSurface  *window,
           mmi->ptMaxSize.y = nearest_info.rcWork.bottom - nearest_info.rcWork.top;
         }
 
-      mmi->ptMaxTrackSize.x = GetSystemMetrics (SM_CXVIRTUALSCREEN) + impl->margins_x * impl->surface_scale;
-      mmi->ptMaxTrackSize.y = GetSystemMetrics (SM_CYVIRTUALSCREEN) + impl->margins_y * impl->surface_scale;
+      mmi->ptMaxTrackSize.x = GetSystemMetrics (SM_CXVIRTUALSCREEN) + impl->shadow_x * impl->surface_scale;
+      mmi->ptMaxTrackSize.y = GetSystemMetrics (SM_CYVIRTUALSCREEN) + impl->shadow_y * impl->surface_scale;
     }
 
   return TRUE;
@@ -2354,9 +2354,7 @@ gdk_event_translate (MSG *msg,
 
 
       if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
-        {
-          gdk_win32_surface_do_move_resize_drag (window, current_root_x, current_root_y);
-        }
+        gdk_win32_surface_do_move_resize_drag (window, current_root_x, current_root_y);
       else if (_gdk_input_ignore_core == 0)
 	{
 	  current_x = (gint16) GET_X_LPARAM (msg->lParam) / impl->surface_scale;
@@ -2834,6 +2832,16 @@ gdk_event_translate (MSG *msg,
 	    set_bits |= GDK_TOPLEVEL_STATE_MAXIMIZED;
 	  else
 	    unset_bits |= GDK_TOPLEVEL_STATE_MAXIMIZED;
+
+      /*
+       * If we are minizing, pause all surface layout computations, and re-start the
+       * computation once we are coming out of a minimized state
+       */
+      if (!(old_state & GDK_TOPLEVEL_STATE_MINIMIZED) && set_bits & GDK_TOPLEVEL_STATE_MINIMIZED)
+        gdk_surface_freeze_updates (window);
+
+      if (old_state & GDK_TOPLEVEL_STATE_MINIMIZED && unset_bits & GDK_TOPLEVEL_STATE_MINIMIZED)
+        gdk_surface_thaw_updates (window);
 
 	  gdk_surface_set_is_mapped (window, !!IsWindowVisible (msg->hwnd));
 	  gdk_synthesize_surface_state (window, unset_bits, set_bits);
