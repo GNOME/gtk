@@ -35,6 +35,7 @@
             <child>
               <object class="GtkImage" id="logo_image">
                 <property name="icon-name">image-missing</property>
+                <property name="icon-size">large</property>
                 <style>
                   <class name="icon-dropshadow"/>
                 </style>
