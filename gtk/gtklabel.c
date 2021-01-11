@@ -1223,45 +1223,38 @@ get_layout_location (GtkLabel  *self,
                      int       *yp)
 {
   GtkWidget *widget = GTK_WIDGET (self);
-  int layout_width, layout_height, x, y;
-  float xalign, yalign;
+  const int widget_width = gtk_widget_get_width (widget);
+  const int widget_height = gtk_widget_get_height (widget);
   PangoRectangle logical;
-  int baseline, layout_baseline, baseline_offset;
-  int widget_width, widget_height;
+  float xalign;
+  int baseline;
+  int x, y;
+
+  g_assert (xp);
+  g_assert (yp);
 
   xalign = self->xalign;
-  yalign = self->yalign;
 
   if (_gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
     xalign = 1.0 - xalign;
 
   pango_layout_get_pixel_extents (self->layout, NULL, &logical);
-
-  layout_width  = logical.width;
-  layout_height = logical.height;
-
-  widget_width = gtk_widget_get_width (widget);
-  widget_height = gtk_widget_get_height (widget);
+  x = floor ((xalign * (widget_width - logical.width)) - logical.x);
 
   baseline = gtk_widget_get_allocated_baseline (widget);
-
-  x = floor ((xalign * (widget_width - layout_width)) - logical.x);
-
-  baseline_offset = 0;
   if (baseline != -1)
     {
-      layout_baseline = pango_layout_get_baseline (self->layout) / PANGO_SCALE;
-      baseline_offset = baseline - layout_baseline;
-      yalign = 0.0; /* Can't support yalign while baseline aligning */
+      int layout_baseline = pango_layout_get_baseline (self->layout) / PANGO_SCALE;
+      /* yalign is 0 because we can't support yalign while baseline aligning */
+      y = baseline - layout_baseline;
+    }
+  else
+    {
+      y = floor ((widget_height - logical.height) * self->yalign);
     }
 
-  y = floor ((widget_height - layout_height) * yalign) + baseline_offset;
-
-  if (xp)
-    *xp = x;
-
-  if (yp)
-    *yp = y;
+  *xp = x;
+  *yp = y;
 }
 
 static void
@@ -4981,11 +4974,17 @@ gtk_label_get_layout_offsets (GtkLabel *self,
                               int      *x,
                               int      *y)
 {
+  int local_x, local_y;
   g_return_if_fail (GTK_IS_LABEL (self));
 
   gtk_label_ensure_layout (self);
+  get_layout_location (self, &local_x, &local_y);
 
-  get_layout_location (self, x, y);
+  if (x)
+    *x = local_x;
+
+  if (y)
+    *y = local_y;
 }
 
 /**
