@@ -2675,8 +2675,8 @@ scale {
 
   > trough > slider {
     @include button(normal);
-
-    border: 1px solid darken($alt_borders_color, 3%);
+    border-width: 1px;
+    border-style: solid;
     border-radius: 100%;
     transition: $button_transition;
     transition-property: background, border, box-shadow;
