@@ -1554,7 +1554,7 @@ rounded_inner_rect_contains_rect (const GskRoundedRect  *rounded,
                       MAX (rounded->corner[GSK_CORNER_BOTTOM_LEFT].height,
                            rounded->corner[GSK_CORNER_BOTTOM_RIGHT].height);
 
-  return graphene_rect_contains_rect (&inner, rect);
+  return _graphene_rect_contains_rect (&inner, rect);
 }
 
 /* Current clip is NOT rounded but new one is definitely! */
