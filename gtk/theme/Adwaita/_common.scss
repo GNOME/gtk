@@ -2778,9 +2778,7 @@ scale {
       @each $state, $state_infix in ('', ''),
                                     (':hover', '-hover'),
                                     (':active', '-active'),
-                                    (':disabled', '-insensitive'),
-                                    (':backdrop', '-backdrop'),
-                                    (':backdrop:disabled', '-backdrop-insensitive') {
+                                    (':disabled', '-insensitive') {
         &.#{$dir_class}.#{$marks_class} {
 
           > trough > slider {
