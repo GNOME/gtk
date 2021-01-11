@@ -224,7 +224,7 @@ gsk_gl_shader_builder_create_program (GskGLShaderBuilder  *self,
       goto out;
     }
 
-  print_shader_info ("Fragment shader", vertex_id, resource_path);
+  print_shader_info ("Fragment shader", fragment_id, resource_path);
 
   program_id = glCreateProgram ();
   glAttachShader (program_id, vertex_id);
