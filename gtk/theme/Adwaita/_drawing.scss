@@ -430,10 +430,10 @@
     box-shadow: none;
     text-shadow: none;
     @if $variant == 'light' {
-      background-color: darken($c,30%);
+      background-color: darken($c,20%);
     }
     @else {
-      background-color: darken($c,14%);
+      background-color: darken($c,5%);
     }
   }
 }
