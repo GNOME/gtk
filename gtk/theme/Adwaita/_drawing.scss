@@ -108,8 +108,8 @@
   @else { @return darken($c, 15%); }
 }
 
-
-@mixin button($t, $c:lighten($bg_color,2%), $tc:$fg_color) {
+$_default_button_c: lighten($bg_color,2%);
+@mixin button($t, $c:$_default_button_c, $tc:$fg_color) {
 //
 // Button drawing function
 //
@@ -129,9 +129,8 @@
   // normal button
   //
     color: $tc;
-    outline-color: if($c != $bg_color, $alt_focus_border_color, $focus_border_color);
-    border-color: _border_color($c);
-    border-bottom-color: if($c != $bg_color, _border_color($c, true), $alt_borders_color);
+    outline-color: if($c != $_default_button_c, $alt_focus_border_color, $focus_border_color);
+    border-color: if($c!=$_default_button_c, _border_color($c, true), $borders_color); //tint if not default button color
     background-image: if($variant == 'light', linear-gradient(to top, darken($c, 2%) 2px, $c),
                                               linear-gradient(to top, darken($c,1%) 2px, $c));
     @include _shadows($_button_shadow);
@@ -142,8 +141,7 @@
   // hovered button
   //
     color: $tc;
-    border-color: if($c != $bg_color, _border_color($c), $borders_color);
-    border-bottom-color: if($c != $bg_color, _border_color($c, true), $alt_borders_color);
+    border-color: if($c != $_default_button_c, _border_color($c), $borders_color);
     @if $variant == 'light' {
       background-image: linear-gradient(to top, darken($c,16%), darken($c,8%) 1px);
       @include _shadows($_button_shadow);
@@ -154,29 +152,12 @@
     }
   }
 
-  @if $t==normal-alt {
-  //
-  // normal button alternative look
-  //
-    color: $tc;
-    outline-color: if($c != $bg_color, $alt_focus_border_color, $focus_border_color);
-    border-color: if($c != $bg_color, _border_color($c, true), $alt_borders_color); //colored buttons
-    @if $variant == 'light' {
-      background-image: linear-gradient(to bottom, lighten($c, 5%) 20%, $c 90%);
-      @include _shadows($_button_shadow);
-    }
-    @else {
-      background-image: linear-gradient(to bottom, darken($c, 3%) 20%, darken($c, 6%) 90%);
-      @include _shadows($_button_shadow);
-    }
-  }
-
   @else if $t==active {
   //
   // pushed button
   //
     color: $tc;
-    border-color: if($c != $bg_color, _border_color($c), $borders_color);
+    border-color: if($c != $_default_button_c, _border_color($c), $borders_color);
     background-image: if($variant == 'light', image(darken($c, 14%)), image(darken($c, 9%)));
     box-shadow: none;
   }
@@ -186,7 +167,7 @@
   // pushed togglebutton hover
   //
     color: $tc;
-    border-color: if($c != $bg_color, _border_color($c), $borders_color);
+    border-color: if($c != $_default_button_c, _border_color($c), $borders_color);
     background-image: if($variant == 'light', image(darken($c, 18%)), image(darken($c, 12%)));
     box-shadow: none;
   }
@@ -196,7 +177,7 @@
   // pushed togglebutton pushed further :)
   //
     color: $tc;
-    border-color: if($c != $bg_color, _border_color($c), $borders_color);
+    border-color: if($c != $_default_button_c, _border_color($c), $borders_color);
     background-image: if($variant == 'light', image(darken($c, 22%)), image(darken($c, 14%)));
     box-shadow: none;
   }
@@ -205,10 +186,10 @@
   //
   // insensitive button
   //
-    $_bg: if($c != $bg_color, mix($c, $base_color, 85%), $insensitive_bg_color);
+    $_bg: if($c != $_default_button_c, mix($c, $base_color, 85%), $insensitive_bg_color);
 
     color: if($tc != $fg_color, mix($tc, $_bg, 50%), $insensitive_fg_color);
-    border-color: if($c != $bg_color, _border_color($c), $insensitive_borders_color);
+    border-color: if($c != $_default_button_c, _border_color($c), $insensitive_borders_color);
     background-image: image($_bg);
   }
 
@@ -217,9 +198,9 @@
   // insensitive pushed button
   //
     $_bg: if($variant == 'light', darken(mix($c, $base_color, 85%), 8%), darken(mix($c, $base_color, 85%), 6%));
-    $_bc: if($c != $bg_color, _border_color($c), $insensitive_borders_color);
+    $_bc: if($c != $_default_button_c, _border_color($c), $insensitive_borders_color);
 
-    color: if($c != $bg_color, mix($tc, $_bg, 60%), $insensitive_fg_color);
+    color: if($c != $_default_button_c, mix($tc, $_bg, 60%), $insensitive_fg_color);
     border-color: $_bc;
     background-image: image($_bg);
     box-shadow: none;
@@ -229,11 +210,11 @@
   //
   // backdrop button
   //
-    $_bg: if($c != $bg_color, $c, $backdrop_bg_color);
+    $_bg: if($c != $_default_button_c, $c, $backdrop_bg_color);
     $_bc: if($variant == 'light', $c, _border_color($c));
 
     color: if($tc != $fg_color, mix($tc, $_bg, 80%), $backdrop_fg_color);
-    border-color: if($c != $bg_color, $_bc, $backdrop_borders_color);
+    border-color: if($c != $_default_button_c, $_bc, $backdrop_borders_color);
     background-image: image($_bg);
     box-shadow: none;
   }
@@ -246,7 +227,7 @@
     $_bc: if($variant == 'light', $_bg ,_border_color($c));
 
     color: if($tc != $fg_color, mix($tc, $_bg, 80%), $backdrop_fg_color);
-    border-color: if($c != $bg_color, $_bc, $backdrop_borders_color);
+    border-color: if($c != $_default_button_c, $_bc, $backdrop_borders_color);
     background-image: image($_bg);
     box-shadow: none;
   }
@@ -256,11 +237,11 @@
   // backdrop insensitive button
   //
 
-    $_bg: if($c != $bg_color, mix($c, $base_color, 85%), $insensitive_bg_color);
+    $_bg: if($c != $_default_button_c, mix($c, $base_color, 85%), $insensitive_bg_color);
     $_bc: if($variant == 'light', $_bg,_border_color($c));
 
-    color: if($c != $bg_color, mix($tc, $_bg, 35%), $backdrop_insensitive_color);
-    border-color: if($c != $bg_color, $_bc, $backdrop_borders_color);
+    color: if($c != $_default_button_c, mix($tc, $_bg, 35%), $backdrop_insensitive_color);
+    border-color: if($c != $_default_button_c, $_bc, $backdrop_borders_color);
     background-image: image($_bg);
     box-shadow: none;
   }
@@ -273,8 +254,8 @@
     $_bg: if($variant == 'light', darken(mix($c, $base_color, 85%), 8%), darken(mix($c, $base_color, 85%), 4%));
     $_bc: if($variant == 'light', $_bg, _border_color($c));
 
-    color: if($c != $bg_color, mix($tc, $_bg, 35%), $backdrop_insensitive_color);
-    border-color: if($c != $bg_color, $_bc, $backdrop_borders_color);
+    color: if($c != $_default_button_c, mix($tc, $_bg, 35%), $backdrop_insensitive_color);
+    border-color: if($c != $_default_button_c, $_bc, $backdrop_borders_color);
     background-image: image($_bg);
     box-shadow: none;
   }
@@ -283,10 +264,10 @@
   //
   // normal osd button
   //
-    $_bg: if($c != $bg_color, transparentize($c, 0.5), $osd_bg_color);
+    $_bg: if($c != $_default_button_c, transparentize($c, 0.5), $osd_bg_color);
 
     color: $osd_fg_color;
-    outline-color: if($c != $bg_color, $alt_focus_border_color, $focus_border_color);
+    outline-color: if($c != $_default_button_c, $alt_focus_border_color, $focus_border_color);
     border-color: $osd_borders_color;
     background-color: transparent;
     background-image: image($_bg);
@@ -297,7 +278,7 @@
   //
   // active osd button
   //
-    $_bg: if($c != $bg_color, transparentize($c, 0.3), darken($osd_bg_color, 10%));
+    $_bg: if($c != $_default_button_c, transparentize($c, 0.3), darken($osd_bg_color, 10%));
 
     color: white;
     border-color: $osd_borders_color;
@@ -310,7 +291,7 @@
   //
   // active osd button
   //
-    $_bg: if($c != $bg_color, $c, darken($osd_bg_color, 20%));
+    $_bg: if($c != $_default_button_c, $c, darken($osd_bg_color, 20%));
 
     color: white;
     border-color: $osd_borders_color;
@@ -335,7 +316,7 @@
   //
   // backdrop osd button
   //
-    $_bg: if($c != $bg_color, transparentize($c, 0.5), $osd_bg_color);
+    $_bg: if($c != $_default_button_c, transparentize($c, 0.5), $osd_bg_color);
 
     color: $osd_fg_color;
     border-color: $osd_borders_color;

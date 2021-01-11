@@ -2366,6 +2366,8 @@ switch {
   }
 
   > slider {
+    @include button(normal);
+
     margin: -1px;
     min-width: 24px;
     min-height: 24px;
@@ -2373,8 +2375,6 @@ switch {
     border-color: $borders_color;
     border-radius: 50%;
     transition: $button_transition;
-
-    @include button(normal);
   }
   
   > image { color: transparent; } /* only show i / o for the accessible theme */
@@ -2674,7 +2674,7 @@ scale {
   }
 
   > trough > slider {
-    @include button(normal-alt);
+    @include button(normal);
 
     border: 1px solid darken($alt_borders_color, 3%);
     border-radius: 100%;
