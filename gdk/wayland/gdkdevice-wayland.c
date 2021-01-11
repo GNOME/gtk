@@ -2357,6 +2357,9 @@ touch_handle_down (void              *data,
 
   _gdk_wayland_display_update_serial (display, serial);
 
+  if (!wl_surface)
+    return;
+
   touch = gdk_wayland_seat_add_touch (seat, id, wl_surface);
   touch->x = wl_fixed_to_double (x);
   touch->y = wl_fixed_to_double (y);
@@ -2404,6 +2407,9 @@ touch_handle_up (void            *data,
   _gdk_wayland_display_update_serial (display, serial);
 
   touch = gdk_wayland_seat_get_touch (seat, id);
+  if (!touch)
+    return;
+
   event = gdk_touch_event_new (GDK_TOUCH_END,
                                GDK_SLOT_TO_EVENT_SEQUENCE (touch->id),
                                touch->surface,
@@ -2442,6 +2448,9 @@ touch_handle_motion (void            *data,
   GdkEvent *event;
 
   touch = gdk_wayland_seat_get_touch (seat, id);
+  if (!touch)
+    return;
+
   touch->x = wl_fixed_to_double (x);
   touch->y = wl_fixed_to_double (y);
 
@@ -3381,8 +3390,13 @@ tablet_tool_handle_proximity_in (void                      *data,
   GdkWaylandTabletData *tablet = zwp_tablet_v2_get_user_data (wp_tablet);
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (tablet->seat);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
-  GdkSurface *surface = wl_surface_get_user_data (wsurface);
+  GdkSurface *surface;
   GdkEvent *event;
+
+  if (!wsurface)
+    return;
+
+  surface = wl_surface_get_user_data (wsurface);
 
   if (!surface)
       return;
@@ -3426,6 +3440,9 @@ tablet_tool_handle_proximity_out (void                      *data,
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
   GdkEvent *event;
+
+  if (!tablet)
+    return;
 
   GDK_SEAT_NOTE (tool->seat, EVENTS,
             g_message ("proximity out, seat %p, tool %d", tool->seat,
@@ -3490,7 +3507,7 @@ tablet_tool_handle_down (void                      *data,
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (tool->seat);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
 
-  if (!tablet->pointer_info.focus)
+  if (!tablet || !tablet->pointer_info.focus)
     return;
 
   _gdk_wayland_display_update_serial (display_wayland, serial);
@@ -3507,7 +3524,7 @@ tablet_tool_handle_up (void                      *data,
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
 
-  if (!tablet->pointer_info.focus)
+  if (!tablet || !tablet->pointer_info.focus)
     return;
 
   tablet_create_button_event_frame (tablet, GDK_BUTTON_RELEASE, GDK_BUTTON_PRIMARY);
@@ -3523,6 +3540,9 @@ tablet_tool_handle_motion (void                      *data,
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
   GdkEvent *event;
+
+  if (!tablet)
+    return;
 
   tablet->pointer_info.surface_x = wl_fixed_to_double (sx);
   tablet->pointer_info.surface_y = wl_fixed_to_double (sy);
@@ -3551,7 +3571,12 @@ tablet_tool_handle_pressure (void                      *data,
 {
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
-  int axis_index = tablet->axis_indices[GDK_AXIS_PRESSURE];
+  int axis_index;
+
+  if (!tablet)
+    return;
+
+  axis_index = tablet->axis_indices[GDK_AXIS_PRESSURE];
 
   _gdk_device_translate_axis (tablet->stylus_device, axis_index,
                               pressure, &tablet->axes[GDK_AXIS_PRESSURE]);
@@ -3568,7 +3593,12 @@ tablet_tool_handle_distance (void                      *data,
 {
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
-  int axis_index = tablet->axis_indices[GDK_AXIS_DISTANCE];
+  int axis_index;
+
+  if (!tablet)
+    return;
+
+  axis_index = tablet->axis_indices[GDK_AXIS_DISTANCE];
 
   _gdk_device_translate_axis (tablet->stylus_device, axis_index,
                               distance, &tablet->axes[GDK_AXIS_DISTANCE]);
@@ -3586,8 +3616,14 @@ tablet_tool_handle_tilt (void                      *data,
 {
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
-  int xtilt_axis_index = tablet->axis_indices[GDK_AXIS_XTILT];
-  int ytilt_axis_index = tablet->axis_indices[GDK_AXIS_YTILT];
+  int xtilt_axis_index;
+  int ytilt_axis_index;
+
+  if (!tablet)
+    return;
+
+  xtilt_axis_index = tablet->axis_indices[GDK_AXIS_XTILT];
+  ytilt_axis_index = tablet->axis_indices[GDK_AXIS_YTILT];
 
   _gdk_device_translate_axis (tablet->stylus_device, xtilt_axis_index,
                               wl_fixed_to_double (xtilt),
@@ -3614,7 +3650,7 @@ tablet_tool_handle_button (void                      *data,
   GdkEventType evtype;
   guint n_button;
 
-  if (!tablet->pointer_info.focus)
+  if (!tablet || !tablet->pointer_info.focus)
     return;
 
   tablet->pointer_info.press_serial = serial;
@@ -3645,7 +3681,12 @@ tablet_tool_handle_rotation (void                      *data,
 {
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
-  int axis_index = tablet->axis_indices[GDK_AXIS_ROTATION];
+  int axis_index;
+
+  if (!tablet)
+    return;
+
+  axis_index = tablet->axis_indices[GDK_AXIS_ROTATION];
 
   _gdk_device_translate_axis (tablet->stylus_device, axis_index,
                               wl_fixed_to_double (degrees),
@@ -3664,7 +3705,12 @@ tablet_tool_handle_slider (void                      *data,
 {
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
-  int axis_index = tablet->axis_indices[GDK_AXIS_SLIDER];
+  int axis_index;
+
+  if (!tablet)
+    return;
+
+  axis_index = tablet->axis_indices[GDK_AXIS_SLIDER];
 
   _gdk_device_translate_axis (tablet->stylus_device, axis_index,
                               position, &tablet->axes[GDK_AXIS_SLIDER]);
@@ -3682,8 +3728,13 @@ tablet_tool_handle_wheel (void                      *data,
 {
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
-  GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (tablet->seat);
+  GdkWaylandSeat *seat;
   GdkEvent *event;
+
+  if (!tablet)
+    return;
+
+  seat = GDK_WAYLAND_SEAT (tablet->seat);
 
   GDK_SEAT_NOTE (seat, EVENTS,
             g_message ("tablet tool %d wheel %d/%d",
@@ -3723,6 +3774,9 @@ tablet_tool_handle_frame (void                      *data,
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
   GdkEvent *frame_event;
+
+  if (!tablet)
+    return;
 
   GDK_SEAT_NOTE (tablet->seat, EVENTS,
             g_message ("tablet frame, time %d", time));
