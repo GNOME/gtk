@@ -1,6 +1,6 @@
 #! /bin/bash
 
-INKSCAPE="flatpak run org.inkscape.Inkscape"
+INKSCAPE="/usr/bin/inkscape"
 OPTIPNG="/usr/bin/optipng"
 
 SRC_FILE="assets.svg"

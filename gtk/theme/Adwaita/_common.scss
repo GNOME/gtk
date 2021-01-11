@@ -206,7 +206,6 @@ window.assistant {
   border: none;
   background-color: $osd_bg_color;
   background-clip: padding-box;
-  text-shadow: 0 1px black;
   -gtk-icon-shadow: 0 1px black;
 
 }
@@ -496,6 +495,9 @@ button {
       transition-duration: 50ms;
     }
 
+    &:checked:hover { @include button(checked-hover); }
+    &:checked:active { @include button(checked-active); }
+
     &:backdrop {
       &.flat, & {
         @include button(backdrop);
@@ -644,8 +646,7 @@ button {
     &.flat {
       @include button(undecorated);
 
-      box-shadow: none; //FIXME respect no edge on the button mixin
-      text-shadow: 0 1px black;
+      box-shadow: none;
       -gtk-icon-shadow: 0 1px black;
 
       &:hover { @include button(osd-hover); }
@@ -2345,7 +2346,6 @@ switch {
   border-radius: 14px;
   color: $fg_color;
   background-color: $dark_fill;
-  text-shadow: 0 1px transparentize(black, 0.9);
   transition: $focus_transition;
 
   @include focus-ring($offset: 0, $outer: true);
@@ -2356,8 +2356,6 @@ switch {
     color: $selected_fg_color;
     border-color: $switch_borders_color;
     background-color: $switch_bg_color;
-    text-shadow: 0 1px transparentize($switch_borders_color, 0.5),
-                 0 0 2px transparentize(white, 0.4);
   }
 
   &:disabled {
@@ -2368,6 +2366,8 @@ switch {
   }
 
   > slider {
+    @include button(normal);
+
     margin: -1px;
     min-width: 24px;
     min-height: 24px;
@@ -2375,14 +2375,12 @@ switch {
     border-color: $borders_color;
     border-radius: 50%;
     transition: $button_transition;
-
-    @include button(normal, $edge: $shadow_color);
   }
   
   > image { color: transparent; } /* only show i / o for the accessible theme */
 
   &:hover > slider {
-    @include button(hover, $edge: $shadow_color);
+    @include button(hover);
   }
 
   &:checked > slider { border: 1px solid $switch_borders_color; }
@@ -2545,7 +2543,7 @@ treeview.view radio:selected { &:focus, & { @extend %radio; }} // This is a work
  * GtkScale *
  ************/
 %scale_trough {
-  border: 1px solid $borders_color;
+  border: 1px solid $dark_fill;
   border-radius: 3px;
   background-color: $dark_fill;
 
@@ -2574,7 +2572,7 @@ treeview.view radio:selected { &:focus, & { @extend %radio; }} // This is a work
 }
 
 %scale_highlight {
-  border: 1px solid $selected_borders_color;
+  border: 1px solid $selected_bg_color;
   border-radius: 3px;
   background-color: $selected_bg_color;
 
@@ -2658,7 +2656,6 @@ scale {
   > trough > fill {
     @extend %scale_trough;
 
-    &:backdrop, & { background-color: $borders_color; }
 
     &:disabled {
       border-color: transparent;
@@ -2677,14 +2674,14 @@ scale {
   }
 
   > trough > slider {
-    @include button(normal-alt, $edge: $shadow_color);
-
-    border: 1px solid darken($alt_borders_color, 3%);
+    @include button(normal);
+    border-width: 1px;
+    border-style: solid;
     border-radius: 100%;
     transition: $button_transition;
     transition-property: background, border, box-shadow;
 
-    &:hover { @include button(hover, $edge: $shadow_color); }
+    &:hover { @include button(hover); }
 
     &:active { border-color: $selected_borders_color; }
 
@@ -2781,9 +2778,7 @@ scale {
       @each $state, $state_infix in ('', ''),
                                     (':hover', '-hover'),
                                     (':active', '-active'),
-                                    (':disabled', '-insensitive'),
-                                    (':backdrop', '-backdrop'),
-                                    (':backdrop:disabled', '-backdrop-insensitive') {
+                                    (':disabled', '-insensitive') {
         &.#{$dir_class}.#{$marks_class} {
 
           > trough > slider {
@@ -3016,25 +3011,25 @@ progressbar {
     }
 
     border-radius: 1.5px;
-
+    $_progress-radius: 5px;
     &.left {
-      border-top-left-radius: 2px;
-      border-bottom-left-radius: 2px;
+      border-top-left-radius: $_progress-radius;
+      border-bottom-left-radius: $_progress-radius;
     }
 
     &.right {
-      border-top-right-radius: 2px;
-      border-bottom-right-radius: 2px;
+      border-top-right-radius: $_progress-radius;
+      border-bottom-right-radius: $_progress-radius;
     }
 
     &.top {
-      border-top-right-radius: 2px;
-      border-top-left-radius: 2px;
+      border-top-right-radius: $_progress-radius;
+      border-top-left-radius: $_progress-radius;
     }
 
     &.bottom {
-      border-bottom-right-radius: 2px;
-      border-bottom-left-radius: 2px;
+      border-bottom-right-radius: $_progress-radius;
+      border-bottom-left-radius: $_progress-radius;
     }
   }
 
@@ -3063,25 +3058,25 @@ progressbar {
  * Level Bar *
  *************/
 
-$levelbar_size: 9px;
-$levelbar_border_radius: 3px;
+$_levelbar_size: 9px;
+$_levelbar_border_radius: 5px;
 
 levelbar {
   &.horizontal {
     trough > block {
-      min-height: $levelbar_size;
-      border-radius: $levelbar_border_radius;
+      min-height: $_levelbar_size;
+      border-radius: $_levelbar_border_radius;
 
       &:dir(rtl) {
-        border-radius: 0 $levelbar_border_radius $levelbar_border_radius 0;
+        border-radius: 0 $_levelbar_border_radius $_levelbar_border_radius 0;
       }
 
       &:dir(ltr) {
-        border-radius: $levelbar_border_radius 0 0 $levelbar_border_radius;
+        border-radius: $_levelbar_border_radius 0 0 $_levelbar_border_radius;
       }
 
       &.empty,&.full {
-        border-radius: $levelbar_border_radius;
+        border-radius: $_levelbar_border_radius;
       }
     }
 
@@ -3102,12 +3097,12 @@ levelbar {
 
   &.vertical {
     trough > block {
-      min-width: $levelbar_size;
-      border-radius: $levelbar_border_radius;
+      min-width: $_levelbar_size;
+      border-radius: $_levelbar_border_radius;
     }
 
     &.discrete > trough > block {
-      min-width: $levelbar_size - 7px;
+      min-width: $_levelbar_size - 7px;
       margin: 1px 0;
       min-height: 32px;
     }
@@ -3122,24 +3117,24 @@ levelbar {
     border: 1px solid;
 
     &.low {
-      border-color: if($variant == 'light', darken($warning_color, 10%), $borders_color);
+      border-color: $warning_color;
       background-color: $warning_color;
     }
 
     &.high,
     &:not(.empty) {
-      border-color: if($variant == 'light', darken($selected_bg_color, 10%), $borders_color);
+      border-color: $selected_bg_color;
       background-color: $selected_bg_color;
     }
 
     &.full {
-      border-color: if($variant == 'light', darken($success_color, 10%), $borders_color);
+      border-color: $success_color;
       background-color: $success_color;
     }
 
     &.empty {
       background-color: darken($bg_color, 5%);
-      border-color: $borders_color;
+      border-color: darken($bg_color, 5%);
     }
   }
 }
