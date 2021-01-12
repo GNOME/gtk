@@ -9,10 +9,8 @@ if [ -d ${release_build_dir} ]; then
   exit 1
 fi
 
-# we include gtk-doc since we need the gtk-doc-for-gtk4 branch
-meson setup ${release_build_dir} || exit
-
 # make the release tarball
+meson setup ${release_build_dir} || exit
 meson dist -C${release_build_dir} || exit
 
 # now build the docs
