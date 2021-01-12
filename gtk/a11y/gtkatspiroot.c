@@ -680,6 +680,8 @@ gtk_at_spi_root_constructed (GObject *gobject)
                                      "/a11y",
                                      NULL);
 
+      g_free (base_name);
+
       /* Turn potentially invalid program names into something that can be
        * used as a DBus path
        */
