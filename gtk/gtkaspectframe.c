@@ -32,17 +32,16 @@
  * @Short_description: A frame that constrains its child to a particular aspect ratio
  * @Title: GtkAspectFrame
  *
- * The #GtkAspectFrame is useful when you want
- * pack a widget so that it can resize but always retains
- * the same aspect ratio. For instance, one might be
- * drawing a small preview of a larger image. #GtkAspectFrame
- * derives from #GtkFrame, so it can draw a label and
- * a frame around the child. The frame will be
- * “shrink-wrapped” to the size of the child.
+ * GtkAspectFrame is useful when you want pack a widget so that it can resize
+ * while retaining the same aspect ratio. For instance, one might be drawing a
+ * small preview of a larger image.
+ *
+ * The frame can respect the aspect ratio of the child widget, or use its own
+ * aspect ratio.
  *
  * # CSS nodes
  *
- * GtkAspectFrame uses a CSS node with name frame.
+ * GtkAspectFrame uses a CSS node with name `frame`.
  */
 
 #include "config.h"
@@ -138,6 +137,12 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
   widget_class->compute_expand = gtk_aspect_frame_compute_expand;
   widget_class->get_request_mode = gtk_aspect_frame_get_request_mode;
 
+  /**
+   * GtkAspectFrame:xalign:
+   *
+   * The horizontal alignment of the #GtkAspectFrame:child widget
+   * of the aspect frame.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_XALIGN,
                                    g_param_spec_float ("xalign",
@@ -145,6 +150,12 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
                                                        P_("X alignment of the child"),
                                                        0.0, 1.0, 0.5,
                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  /**
+   * GtkAspectFrame:yalign:
+   *
+   * The vertical alignment of the #GtkAspectFrame:child widget
+   * of the aspect frame.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_YALIGN,
                                    g_param_spec_float ("yalign",
@@ -152,6 +163,14 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
                                                        P_("Y alignment of the child"),
                                                        0.0, 1.0, 0.5,
                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  /**
+   * GtkAspectFrame:ratio:
+   *
+   * The aspect ratio to be used by the #GtkAspectFrame.
+   *
+   * This property is only used if #GtkAspectFrame:obey-child is
+   * set to %FALSE.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_RATIO,
                                    g_param_spec_float ("ratio",
@@ -159,6 +178,12 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
                                                        P_("Aspect ratio if obey_child is FALSE"),
                                                        MIN_RATIO, MAX_RATIO, 1.0,
                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  /**
+   * GtkAspectFrame:obey-child:
+   *
+   * Whether the #GtkAspectFrame should use the aspect ratio of
+   * its #GtkAspectFrame:child widget.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_OBEY_CHILD,
                                    g_param_spec_boolean ("obey-child",
@@ -166,7 +191,11 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
                                                          P_("Force aspect ratio to match that of the frame’s child"),
                                                          TRUE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-
+  /**
+   * GtkAspectFrame:child:
+   *
+   * The child widget of the #GtkAspectFrame.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_CHILD,
                                    g_param_spec_object ("child",
@@ -429,7 +458,8 @@ gtk_aspect_frame_set_ratio (GtkAspectFrame *self,
  * gtk_aspect_frame_get_ratio:
  * @self: a #GtkAspectFrame
  *
- * Returns the desired aspect ratio of the child.
+ * Returns the desired aspect ratio of the child set using
+ * gtk_aspect_frame_set_ratio().
  *
  * Returns: the desired aspect ratio
  */
