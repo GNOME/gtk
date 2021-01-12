@@ -667,8 +667,16 @@ gtk_at_spi_root_constructed (GObject *gobject)
     {
       const char *program_name = g_get_prgname ();
 
+      char *base_name = NULL;
+      if (program_name == NULL || *program_name == 0)
+        base_name = g_strdup ("unknown");
+      else if (*program_name == '/')
+        base_name = g_path_get_basename (program_name);
+      else
+        base_name = g_strdup (program_name);
+
       self->base_path = g_strconcat ("/org/gtk/application/",
-                                     program_name != NULL ? program_name : "unknown",
+                                     base_name,
                                      "/a11y",
                                      NULL);
 
