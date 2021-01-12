@@ -458,7 +458,8 @@ gtk_aspect_frame_set_ratio (GtkAspectFrame *self,
  * gtk_aspect_frame_get_ratio:
  * @self: a #GtkAspectFrame
  *
- * Returns the desired aspect ratio of the child.
+ * Returns the desired aspect ratio of the child set using
+ * gtk_aspect_frame_set_ratio().
  *
  * Returns: the desired aspect ratio
  */
