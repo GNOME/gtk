@@ -23,12 +23,23 @@
 #include <AppKit/AppKit.h>
 
 #include "gdkmacosdisplay.h"
+#include "gdkmacosseat.h"
 
 #include "gdkseatprivate.h"
 
 G_BEGIN_DECLS
 
 GdkSeat *_gdk_macos_seat_new (GdkMacosDisplay *display);
+
+void _gdk_macos_seat_handle_tablet_tool_event (GdkMacosSeat *seat,
+                                               NSEvent      *nsevent);
+
+gboolean _gdk_macos_seat_get_tablet (GdkMacosSeat   *seat,
+                                     GdkDevice     **device,
+                                     GdkDeviceTool **tool);
+
+double *_gdk_macos_seat_get_tablet_axes_from_nsevent (GdkMacosSeat *seat,
+                                                      NSEvent      *nsevent);
 
 G_END_DECLS
 

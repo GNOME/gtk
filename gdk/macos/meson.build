@@ -33,6 +33,7 @@ gdk_macos_public_headers = files([
   'gdkmacosglcontext.h',
   'gdkmacoskeymap.h',
   'gdkmacosmonitor.h',
+  'gdkmacosseat.h',
   'gdkmacossurface.h',
 ])
 
