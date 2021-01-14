@@ -1836,6 +1836,7 @@ settings_portal_changed (GDBusProxy *proxy,
           char *a = g_variant_print (value, FALSE);
           g_debug ("Using changed portal setting %s %s: %s", namespace, name, a);
           g_free (a);
+          entry->valid = TRUE;
           apply_portal_setting (entry, value, display);
           gdk_display_setting_changed (display, entry->setting);
         }
