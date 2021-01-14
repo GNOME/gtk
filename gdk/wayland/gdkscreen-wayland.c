@@ -765,6 +765,7 @@ init_settings (GdkScreen *screen)
                   char *a = g_variant_print (v, FALSE);
                   g_debug ("Using portal setting for %s %s: %s\n", schema, key, a);
                   g_free (a);
+                  entry->valid = TRUE;
                   apply_portal_setting (entry, v, screen);
                 }
               else
