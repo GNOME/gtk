@@ -165,11 +165,11 @@ for this change.
 | ::key-release-event | #GtkEventControllerKey |
 | ::enter-notify-event | #GtkEventControllerMotion |
 | ::leave-notify-event | #GtkEventControllerMotion |
-| ::configure-event | replaced by #GdkSurface::layout |
+| ::configure-event | - |
 | ::focus-in-event | #GtkEventControllerFocus |
 | ::focus-out-event | #GtkEventControllerFocus |
-| ::map-event | replaced by #GdkSurface:mapped |
-| ::unmap-event | replaced by #GdkSurface:mapped |
+| ::map-event | - |
+| ::unmap-event | - |
 | ::property-notify-event | replaced by #GdkClipboard |
 | ::selection-clear-event | replaced by #GdkClipboard |
 | ::selection-request-event | replaced by #GdkClipboard |
@@ -178,9 +178,16 @@ for this change.
 | ::proximity-in-event | #GtkGestureStylus |
 | ::proximity-out-event | #GtkGestureStylus |
 | ::visibility-notify-event | - |
-| ::window-state-event | replaced by #GdkToplevel:state |
+| ::window-state-event | - |
 | ::damage-event | - |
 | ::grab-broken-event | - |
+
+Event signals which are not directly related to input have to be dealt
+with on a one-by-one basis. If you were using ::configure-event and
+::window-state-event to save window state, you should use property
+notification for corresponding GtkWindow properties, such as
+#GtkWindow:default-width, #GtkWindow:default-height, #GtkWindow:maximized
+or #GtkWindow:fullscreened.
 
 ### Set a proper application ID
 
@@ -854,7 +861,8 @@ to get it.
 The ::size-allocate signal has been removed, since it is easy
 to misuse. If you need to learn about sizing changes of custom
 drawing widgets, use the #GtkDrawingArea::resize or #GtkGLArea::resize
-signals.
+signals. If you want to track the size of toplevel windows, use
+property notification for #GtkWindow:default-width and #GtkWindow:default-height.
 
 ### Switch to GtkWidget's children APIs
 
