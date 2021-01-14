@@ -522,7 +522,7 @@ option. You should always review the resulting changes.
 The <requires> tag now supports for the 'lib' attribute the
 'gtk' value only, instead of the 'gtk+' one previously.
 
-## Adapt to GtkBuilder API changes
+### Adapt to GtkBuilder API changes
 
 gtk_builder_connect_signals() no longer exists. Instead, signals are
 always connected automatically. If you need to add user data to your
