@@ -1,4 +1,13 @@
+<!--
+  Please, read the CONTRIBUTING.md guide on how to file a new issue.
+
+  https://gitlab.gnome.org/GNOME/gtk/-/blob/master/CONTRIBUTING.md
+-->
 ## Steps to reproduce
+<!--
+  Please, explain the sequence of actions necessary to reproduce the
+  bug
+-->
 
  1. ...
  2. ...
@@ -32,5 +41,8 @@
 ## Additional information
 <!--
  - Screenshots or screen recordings are useful for visual errors
+  - Attaching a screenshot or a video without explaining the current
+    behavior and the actions necessary to reproduce the bug will lead
+    to the bug being closed
  - Please report any warning or message printed on the terminal
 -->
