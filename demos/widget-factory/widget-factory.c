@@ -50,32 +50,19 @@ change_theme_state (GSimpleAction *action,
   GtkSettings *settings = gtk_settings_get_default ();
   const char *s;
   const char *theme;
-  gboolean prefer_dark = FALSE;
 
   g_simple_action_set_state (action, state);
 
   s = g_variant_get_string (state, NULL);
 
-  if (strcmp (s, "adwaita") == 0)
-    {
-      theme = "Adwaita";
-      prefer_dark = FALSE;
-    }
-  else if (strcmp (s, "adwaita-dark") == 0)
-    {
-      theme = "Adwaita";
-      prefer_dark = TRUE;
-    }
-  else if (strcmp (s, "highcontrast") == 0)
-    {
-      theme = "HighContrast";
-      prefer_dark = FALSE;
-    }
-  else if (strcmp (s, "highcontrast-inverse") == 0)
-    {
-      theme = "HighContrastInverse";
-      prefer_dark = FALSE;
-    }
+  if (strcmp (s, "default") == 0)
+    theme = "Default";
+  else if (strcmp (s, "dark") == 0)
+    theme = "Default-dark";
+  else if (strcmp (s, "hc") == 0)
+    theme = "Default-hc";
+  else if (strcmp (s, "hc-dark") == 0)
+    theme = "Default-hc-dark";
   else if (strcmp (s, "current") == 0)
     {
       gtk_settings_reset_property (settings, "gtk-theme-name");
@@ -87,7 +74,7 @@ change_theme_state (GSimpleAction *action,
 
   g_object_set (G_OBJECT (settings),
                 "gtk-theme-name", theme,
-                "gtk-application-prefer-dark-theme", prefer_dark,
+                "gtk-application-prefer-dark-theme", FALSE,
                 NULL);
 }
 

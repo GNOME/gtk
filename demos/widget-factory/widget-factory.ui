@@ -15,24 +15,24 @@
             <attribute name="target">current</attribute>
           </item>
           <item>
-            <attribute name="label" translatable="yes">Adwaita</attribute>
+            <attribute name="label" translatable="yes">Default</attribute>
             <attribute name="action">win.theme</attribute>
-            <attribute name="target">adwaita</attribute>
+            <attribute name="target">default</attribute>
           </item>
           <item>
-            <attribute name="label" translatable="yes">Adwaita dark</attribute>
+            <attribute name="label" translatable="yes">Dark</attribute>
             <attribute name="action">win.theme</attribute>
-            <attribute name="target">adwaita-dark</attribute>
+            <attribute name="target">dark</attribute>
           </item>
           <item>
-            <attribute name="label" translatable="yes">High contrast</attribute>
+            <attribute name="label" translatable="yes">Highcontrast</attribute>
             <attribute name="action">win.theme</attribute>
-            <attribute name="target">highcontrast</attribute>
+            <attribute name="target">hc</attribute>
           </item>
           <item>
-            <attribute name="label" translatable="yes">High contrast inverse</attribute>
+            <attribute name="label" translatable="yes">Highcontrast inverse</attribute>
             <attribute name="action">win.theme</attribute>
-            <attribute name="target">highcontrast-inverse</attribute>
+            <attribute name="target">hc-dark</attribute>
           </item>
         </section>
       </submenu>
