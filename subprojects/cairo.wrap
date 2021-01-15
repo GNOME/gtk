@@ -1,6 +1,6 @@
 [wrap-git]
 directory=cairo
-url=https://github.com/matthiasclasen/cairo.git
+url=https://gitlab.freedesktop.org/cairo/cairo.git
 push-url=ssh://git@gitlab.freedesktop.org:cairo/cairo.git
-revision=fix-osx-build
+revision=master
 depth=1
