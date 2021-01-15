@@ -23,7 +23,7 @@
 
 G_BEGIN_DECLS
 
-#define DEFAULT_THEME_NAME      "Adwaita"
+#define DEFAULT_THEME_NAME      "Default"
 #define DEFAULT_ICON_THEME      "Adwaita"
 
 const cairo_font_options_t *
