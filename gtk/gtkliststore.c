@@ -2248,9 +2248,9 @@ gtk_list_store_insert_with_values (GtkListStore *list_store,
 
 
 /**
- * gtk_list_store_insert_with_valuesv:
+ * gtk_list_store_insert_with_valuesv: (rename-to gtk_list_store_insert_with_values)
  * @list_store: A #GtkListStore
- * @iter: (out) (allow-none): An unset #GtkTreeIter to set to the new row, or %NULL.
+ * @iter: (out) (optional): An unset #GtkTreeIter to set to the new row
  * @position: position to insert the new row, or -1 for last
  * @columns: (array length=n_values): an array of column numbers
  * @values: (array length=n_values): an array of GValues 
