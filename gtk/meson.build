@@ -848,12 +848,10 @@ endif
 if sassc.found()
   sassc_opts = [ '-a', '-M', '-t', 'compact' ]
 
-  subdir('theme/Adwaita')
-  subdir('theme/HighContrast')
+  subdir('theme/Default')
 
   theme_deps = [
-    adwaita_theme_deps,
-    hc_theme_deps,
+    default_theme_deps,
   ]
 else
   theme_deps = []
