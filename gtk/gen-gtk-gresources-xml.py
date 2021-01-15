@@ -46,12 +46,6 @@ xml += '''
     <file>theme/Default/Default-dark.css</file>
     <file>theme/Default/Default-hc.css</file>
     <file>theme/Default/Default-hc-dark.css</file>
-    <file alias='theme/Adwaita/gtk.css'>theme/Default/gtk.css</file>
-    <file alias='theme/Adwaita/gtk-dark.css'>theme/Default/gtk-dark.css</file>
-    <file alias='theme/Adwaita-dark/gtk.css'>theme/Default/gtk-dark.css</file>
-    <file alias='theme/HighContrast/gtk.css'>theme/Default/gtk-hc.css</file>
-    <file alias='theme/HighContrast/gtk-dark.css'>theme/Default/gtk-hc-dark.css</file>
-    <file alias='theme/HighContrastInverse/gtk.css'>theme/Default/gtk-hc-dark.css</file>
 '''
 
 for f in get_files('theme/Default/assets', '.png'):
