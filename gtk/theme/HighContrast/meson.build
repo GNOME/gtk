@@ -3,7 +3,7 @@ hc_scss_files = files([
 ])
 
 hc_theme_variants = [
-  'inverse',
+  'dark',
 ]
 
 hc_theme_deps = [
