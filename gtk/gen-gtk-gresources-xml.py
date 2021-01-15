@@ -32,7 +32,12 @@ def get_files(subdir,extension):
 
 xml += '''
     <file>theme/Empty/gtk.css</file>
+
     <file>theme/Default/gtk.css</file>
+    <file alias='theme/Default-dark/gtk.css'>theme/Default/gtk-dark.css</file>
+    <file alias='theme/Default-hc/gtk.css'>theme/Default/gtk-hc.css</file>
+    <file alias='theme/Default-hc-dark/gtk.css'>theme/Default/gtk-hc-dark.css</file>
+
     <file>theme/Default/gtk-light.css</file>
     <file>theme/Default/gtk-dark.css</file>
     <file>theme/Default/gtk-hc.css</file>
