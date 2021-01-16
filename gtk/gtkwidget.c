@@ -3900,7 +3900,10 @@ gtk_widget_allocate (GtkWidget    *widget,
   priv->allocated_height = height;
   priv->allocated_size_baseline = baseline;
 
-  adjusted.x = priv->margin.left;
+  if (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+    adjusted.x = priv->margin.left;
+  else
+    adjusted.x = priv->margin.right;
   adjusted.y = priv->margin.top;
   adjusted.width = width - priv->margin.left - priv->margin.right;
   adjusted.height = height - priv->margin.top - priv->margin.bottom;
