@@ -44,7 +44,7 @@
  * SECTION:gtkimage
  * @Short_description: A widget displaying an image
  * @Title: GtkImage
- * @SeeAlso: #GdkTexture
+ * @SeeAlso: #GdkTexture, #GtkPicture
  *
  * The #GtkImage widget displays an image. Various kinds of object
  * can be displayed as an image; most typically, you would load a
@@ -66,6 +66,10 @@
  * files, such as image files. See the documentation of #GResource for details.
  * In this case, the #GtkImage:resource, gtk_image_new_from_resource() and
  * gtk_image_set_from_resource() should be used.
+ *
+ * GtkImage displays its image as an icon, with a size that is determined
+ * by the application. See #GtkPicture if you want to show an image at is
+ * actual size.
  *
  * # CSS nodes
  *
