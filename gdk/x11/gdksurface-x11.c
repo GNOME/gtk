@@ -2013,6 +2013,8 @@ _gdk_x11_surface_set_surface_scale (GdkSurface *surface,
                  surface->height * impl->surface_scale);
 
   gdk_surface_invalidate_rect (surface, NULL);
+
+  g_object_notify (G_OBJECT (surface), "scale-factor");
 }
 
 void
