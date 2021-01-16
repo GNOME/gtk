@@ -59,3 +59,27 @@ picture.dark {
 picture.light {
   background: white;
 }
+
+#css-padding-color {
+  background-color: rgba(70%, 0%, 70%, 0.6);
+  min-width: 10px;
+  min-height: 10px;
+}
+
+#css-border-color {
+  background-color: rgba(0, 0, 0, 0.0);
+  min-width: 10px;
+  min-height: 10px;
+}
+
+#css-margin-color {
+  background-color: rgba(70%, 70%, 0%, 0.6);
+  min-width: 10px;
+  min-height: 10px;
+}
+
+#widget-margin-color {
+  background-color: rgba(70%, 0%, 0%, 0.6);
+  min-width: 10px;
+  min-height: 10px;
+}
