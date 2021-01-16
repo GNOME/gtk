@@ -268,13 +268,16 @@ foreach test : focus_chain_tests
   )
 endforeach
 
-if get_option('introspection').enabled()
+if build_gir
+  python = find_program ('python3')
   env = environment()
-  env.set('LD_LIBRARY_PATH', meson.project_build_root() + '/gtk')
-  env.set('GI_TYPELIB_DIR', meson.project_build_root() + '/gtk')
-  test('testgir',
-        env: env)
-fi
+  env.set('LD_LIBRARY_PATH', join_paths(meson.build_root(), 'gtk'))
+  env.set('GI_TYPELIB_DIR', join_paths(meson.build_root(), 'gtk'))
+  test('testgir', python,
+       args: [ join_paths(meson.current_source_dir(), 'testgir') ],
+       env: env,
+       suite: [ 'gtk', 'gir' ])
+endif
 
 if get_option('install-tests')
   foreach t : tests
