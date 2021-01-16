@@ -1,0 +1,15 @@
+#! /usr/bin/python
+
+import gi
+gi.require_version('Gtk', '4.0')
+from gi.repository import GLib
+from gi.repository import Gtk
+
+def quit(win):
+  win.destroy()
+
+win = Gtk.Window()
+win.show()
+GLib.timeout_add(2000, quit, win)
+while win.get_visible():
+  GLib.MainContext().default().iteration(True)
