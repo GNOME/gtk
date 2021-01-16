@@ -480,11 +480,111 @@
                               <object class="GtkBox">
                                 <property name="spacing">40</property>
                                 <child>
-                                  <object class="GtkLabel" id="layout_label">
-                                    <property name="label" translatable="yes">Show Layout Borders</property>
-                                    <property name="halign">start</property>
-                                    <property name="valign">baseline</property>
-                                    <property name="xalign">0.0</property>
+                                  <object class="GtkBox" id="layout_label_box">
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkLabel" id="layout_label">
+                                        <property name="label" translatable="yes">Show Layout Borders</property>
+                                        <property name="halign">start</property>
+                                        <property name="valign">baseline</property>
+                                        <property name="xalign">0.0</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkMenuButton">
+                                        <property name="icon-name">dialog-question-symbolic</property>
+                                        <property name="popover">
+                                          <object class="GtkPopover">
+                                            <child>
+                                              <object class="GtkGrid">
+                                                <property name="margin-top">10</property>
+                                                <property name="margin-bottom">10</property>
+                                                <property name="margin-start">10</property>
+                                                <property name="margin-end">10</property>
+                                                <property name="row-spacing">4</property>
+                                                <property name="column-spacing">4</property>
+                                                <child>
+                                                  <object class="GtkDrawingArea">
+                                                    <property name="name">css-padding-color</property>
+                                                    <layout>
+                                                      <property name="column">0</property>
+                                                      <property name="row">0</property>
+                                                    </layout>
+                                                  </object>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkDrawingArea">
+                                                    <property name="name">css-border-color</property>
+                                                    <layout>
+                                                      <property name="column">0</property>
+                                                      <property name="row">1</property>
+                                                    </layout>
+                                                  </object>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkDrawingArea">
+                                                    <property name="name">css-margin-color</property>
+                                                    <layout>
+                                                      <property name="column">0</property>
+                                                      <property name="row">2</property>
+                                                    </layout>
+                                                  </object>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkDrawingArea">
+                                                    <property name="name">widget-margin-color</property>
+                                                    <layout>
+                                                      <property name="column">0</property>
+                                                      <property name="row">3</property>
+                                                    </layout>
+                                                  </object>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLabel">
+                                                    <property name="label" translatable="yes">CSS Padding</property>
+                                                    <property name="xalign">0</property>
+                                                    <layout>
+                                                      <property name="column">1</property>
+                                                      <property name="row">0</property>
+                                                    </layout>
+                                                  </object>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLabel">
+                                                    <property name="label" translatable="yes">CSS Border</property>
+                                                    <property name="xalign">0</property>
+                                                    <layout>
+                                                      <property name="column">1</property>
+                                                      <property name="row">1</property>
+                                                    </layout>
+                                                  </object>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLabel">
+                                                    <property name="label" translatable="yes">CSS Margin</property>
+                                                    <property name="xalign">0</property>
+                                                    <layout>
+                                                      <property name="column">1</property>
+                                                      <property name="row">2</property>
+                                                    </layout>
+                                                  </object>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLabel">
+                                                    <property name="label" translatable="yes">Widget Margin</property>
+                                                    <property name="xalign">0</property>
+                                                    <layout>
+                                                      <property name="column">1</property>
+                                                      <property name="row">3</property>
+                                                    </layout>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                                 <child>
@@ -612,7 +712,7 @@
       <widget name="updates_label"/>
       <widget name="fallback_label"/>
       <widget name="baselines_label"/>
-      <widget name="layout_label"/>
+      <widget name="layout_label_box"/>
       <widget name="focus_label"/>
       <widget name="touchscreen_label"/>
       <widget name="software_gl_label"/>
