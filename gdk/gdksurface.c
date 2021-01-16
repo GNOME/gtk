@@ -2545,8 +2545,7 @@ gdk_surface_get_frame_clock (GdkSurface *surface)
  * value can be used to determine whether to use a pixel resource
  * with higher resolution data.
  *
- * The scale of a surface may change during runtime, if this happens
- * a configure event will be sent to the toplevel surface.
+ * The scale of a surface may change during runtime.
  *
  * Returns: the scale factor
  */
