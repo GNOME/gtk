@@ -56,6 +56,9 @@
  * In this case, gtk_picture_new_for_resource() and gtk_picture_set_resource()
  * should be used.
  *
+ * GtkPicture displays an image at its natural size. See #GtkImage if you want
+ * to display a fixed-size image, such as an icon.
+ *
  * # Sizing the paintable
  *
  * You can influence how the paintable is displayed inside the #GtkPicture.
