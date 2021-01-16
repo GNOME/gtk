@@ -432,25 +432,14 @@ gtk_overlay_layout_allocate (GtkLayoutManager *layout_manager,
     }
 }
 
-static GtkLayoutChild *
-gtk_overlay_layout_create_layout_child (GtkLayoutManager *manager,
-                                        GtkWidget        *widget,
-                                        GtkWidget        *for_child)
-{
-  return g_object_new (GTK_TYPE_OVERLAY_LAYOUT_CHILD,
-                       "layout-manager", manager,
-                       "child-widget", for_child,
-                       NULL);
-}
-
 static void
 gtk_overlay_layout_class_init (GtkOverlayLayoutClass *klass)
 {
   GtkLayoutManagerClass *layout_class = GTK_LAYOUT_MANAGER_CLASS (klass);
 
+  layout_class->layout_child_type = GTK_TYPE_OVERLAY_LAYOUT_CHILD;
   layout_class->measure = gtk_overlay_layout_measure;
   layout_class->allocate = gtk_overlay_layout_allocate;
-  layout_class->create_layout_child = gtk_overlay_layout_create_layout_child;
 }
 
 static void
