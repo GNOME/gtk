@@ -404,6 +404,9 @@ recordings_list_row_selected (GtkListBox           *box,
 {
   GtkInspectorRecording *recording;
 
+  if (recorder->recordings == NULL)
+    return;
+
   if (row)
     recording = g_list_model_get_item (recorder->recordings, gtk_list_box_row_get_index (row));
   else
