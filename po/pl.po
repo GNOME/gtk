@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-01-10 13:47+0000\n"
-"PO-Revision-Date: 2021-01-10 18:25+0100\n"
+"POT-Creation-Date: 2021-01-16 18:38+0000\n"
+"PO-Revision-Date: 2021-01-17 12:37+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -849,108 +849,108 @@ msgstr "Błędnie sformatowany adres URL typu „data:”"
 msgid "Could not unescape string"
 msgstr "Nie można przetworzyć ciągu"
 
-#: gtk/gtkaboutdialog.c:114 gtk/ui/gtkaboutdialog.ui:159
+#: gtk/gtkaboutdialog.c:120 gtk/ui/gtkaboutdialog.ui:163
 msgid "License"
 msgstr "Licencja"
 
-#: gtk/gtkaboutdialog.c:115
+#: gtk/gtkaboutdialog.c:121
 msgid "Custom License"
 msgstr "Niestandardowa licencja"
 
-#: gtk/gtkaboutdialog.c:116
+#: gtk/gtkaboutdialog.c:122
 msgid "GNU General Public License, version 2 or later"
 msgstr "Powszechna licencja publiczna GNU, wersja 2 lub późniejsza"
 
-#: gtk/gtkaboutdialog.c:117
+#: gtk/gtkaboutdialog.c:123
 msgid "GNU General Public License, version 3 or later"
 msgstr "Powszechna licencja publiczna GNU, wersja 3 lub późniejsza"
 
-#: gtk/gtkaboutdialog.c:118
+#: gtk/gtkaboutdialog.c:124
 msgid "GNU Lesser General Public License, version 2.1 or later"
 msgstr ""
 "Pomniejsza powszechna licencja publiczna GNU, wersja 2.1 lub późniejsza"
 
-#: gtk/gtkaboutdialog.c:119
+#: gtk/gtkaboutdialog.c:125
 msgid "GNU Lesser General Public License, version 3 or later"
 msgstr "Pomniejsza powszechna licencja publiczna GNU, wersja 3 lub późniejsza"
 
-#: gtk/gtkaboutdialog.c:120
+#: gtk/gtkaboutdialog.c:126
 msgid "BSD 2-Clause License"
 msgstr "2-klauzulowa licencja BSD"
 
-#: gtk/gtkaboutdialog.c:121
+#: gtk/gtkaboutdialog.c:127
 msgid "The MIT License (MIT)"
 msgstr "Licencja MIT"
 
-#: gtk/gtkaboutdialog.c:122
+#: gtk/gtkaboutdialog.c:128
 msgid "Artistic License 2.0"
 msgstr "Licencja twórcza 2.0"
 
-#: gtk/gtkaboutdialog.c:123
+#: gtk/gtkaboutdialog.c:129
 msgid "GNU General Public License, version 2 only"
 msgstr "Powszechna licencja publiczna GNU, tylko w wersji 2"
 
-#: gtk/gtkaboutdialog.c:124
+#: gtk/gtkaboutdialog.c:130
 msgid "GNU General Public License, version 3 only"
 msgstr "Powszechna licencja publiczna GNU, tylko w wersji 3"
 
-#: gtk/gtkaboutdialog.c:125
+#: gtk/gtkaboutdialog.c:131
 msgid "GNU Lesser General Public License, version 2.1 only"
 msgstr "Pomniejsza powszechna licencja publiczna GNU, tylko w wersji 2.1"
 
-#: gtk/gtkaboutdialog.c:126
+#: gtk/gtkaboutdialog.c:132
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr "Pomniejsza powszechna licencja publiczna GNU, tylko w wersji 3"
 
-#: gtk/gtkaboutdialog.c:127
+#: gtk/gtkaboutdialog.c:133
 msgid "GNU Affero General Public License, version 3 or later"
 msgstr "Powszechna licencja publiczna GNU Affero, wersja 3 lub późniejsza"
 
-#: gtk/gtkaboutdialog.c:128
+#: gtk/gtkaboutdialog.c:134
 msgid "GNU Affero General Public License, version 3 only"
 msgstr "Powszechna licencja publiczna GNU Affero, tylko w wersji 3"
 
-#: gtk/gtkaboutdialog.c:129
+#: gtk/gtkaboutdialog.c:135
 msgid "BSD 3-Clause License"
 msgstr "3-klauzulowa licencja BSD"
 
-#: gtk/gtkaboutdialog.c:130
+#: gtk/gtkaboutdialog.c:136
 msgid "Apache License, Version 2.0"
 msgstr "Licencja Apache w wersji 2.0"
 
-#: gtk/gtkaboutdialog.c:131
+#: gtk/gtkaboutdialog.c:137
 msgid "Mozilla Public License 2.0"
 msgstr "Licencja publiczna Mozilli 2.0"
 
-#: gtk/gtkaboutdialog.c:927
+#: gtk/gtkaboutdialog.c:933
 msgid "Website"
 msgstr "Witryna"
 
-#: gtk/gtkaboutdialog.c:964 gtk/ui/gtkapplication-quartz.ui:6
+#: gtk/gtkaboutdialog.c:970 gtk/ui/gtkapplication-quartz.ui:6
 #, c-format
 msgid "About %s"
 msgstr "O programie %s"
 
-#: gtk/gtkaboutdialog.c:2102
+#: gtk/gtkaboutdialog.c:2074
 msgid "Created by"
 msgstr "Program"
 
-#: gtk/gtkaboutdialog.c:2105
+#: gtk/gtkaboutdialog.c:2077
 msgid "Documented by"
 msgstr "Dokumentacja"
 
-#: gtk/gtkaboutdialog.c:2115
+#: gtk/gtkaboutdialog.c:2087
 msgid "Translated by"
 msgstr "Tłumaczenie"
 
-#: gtk/gtkaboutdialog.c:2120
+#: gtk/gtkaboutdialog.c:2092
 msgid "Design by"
 msgstr "Projekt"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2283
+#: gtk/gtkaboutdialog.c:2255
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -4039,19 +4039,35 @@ msgstr "Wyświetlanie rysowania zapasowego"
 msgid "Show Baselines"
 msgstr "Wyświetlanie linii bazowych"
 
-#: gtk/inspector/visual.ui:484
+#: gtk/inspector/visual.ui:487
 msgid "Show Layout Borders"
 msgstr "Wyświetlanie krawędzi układu"
 
-#: gtk/inspector/visual.ui:509
+#: gtk/inspector/visual.ui:544
+msgid "CSS Padding"
+msgstr "Wypełnienie CSS"
+
+#: gtk/inspector/visual.ui:554
+msgid "CSS Border"
+msgstr "Krawędź CSS"
+
+#: gtk/inspector/visual.ui:564
+msgid "CSS Margin"
+msgstr "Margines CSS"
+
+#: gtk/inspector/visual.ui:574
+msgid "Widget Margin"
+msgstr "Margines widżetu"
+
+#: gtk/inspector/visual.ui:609
 msgid "Show Focus"
 msgstr "Wyświetlanie aktywności"
 
-#: gtk/inspector/visual.ui:548
+#: gtk/inspector/visual.ui:648
 msgid "Simulate Touchscreen"
 msgstr "Symulacja ekranu dotykowego"
 
-#: gtk/inspector/visual.ui:572
+#: gtk/inspector/visual.ui:672
 msgid "Software GL"
 msgstr "Programowe GL"
 
@@ -6839,15 +6855,15 @@ msgstr ""
 "Jeżeli naprawdę potrzeba utworzyć pamięć podręczną ikon, proszę użyć opcji --"
 "ignore-theme-index.\n"
 
-#: gtk/ui/gtkaboutdialog.ui:58
+#: gtk/ui/gtkaboutdialog.ui:62
 msgid "About"
 msgstr "O programie"
 
-#: gtk/ui/gtkaboutdialog.ui:119
+#: gtk/ui/gtkaboutdialog.ui:123
 msgid "Credits"
 msgstr "Zasługi"
 
-#: gtk/ui/gtkaboutdialog.ui:202
+#: gtk/ui/gtkaboutdialog.ui:206
 msgid "System"
 msgstr "System"
 
