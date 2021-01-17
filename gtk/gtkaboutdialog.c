@@ -316,6 +316,17 @@ stack_visible_child_notify (GtkStack       *stack,
 }
 
 static void
+gtk_about_dialog_map (GtkWidget *widget)
+{
+  GtkAboutDialog *about = GTK_ABOUT_DIALOG (widget);
+
+  if (gtk_widget_get_visible (about->stack_switcher))
+    gtk_widget_grab_focus (gtk_widget_get_first_child (about->stack_switcher));
+
+  GTK_WIDGET_CLASS (gtk_about_dialog_parent_class)->map (widget);
+}
+
+static void
 gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 {
   GObjectClass *object_class;
@@ -328,6 +339,8 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   object_class->get_property = gtk_about_dialog_get_property;
 
   object_class->finalize = gtk_about_dialog_finalize;
+
+  widget_class->map = gtk_about_dialog_map;
 
   klass->activate_link = gtk_about_dialog_activate_link;
 
