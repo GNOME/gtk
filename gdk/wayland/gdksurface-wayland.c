@@ -389,10 +389,13 @@ gdk_wayland_surface_update_size (GdkSurface *surface,
                                  int         scale)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  gboolean width_changed, height_changed, scale_changed;
 
-  if ((surface->width == width) &&
-      (surface->height == height) &&
-      (impl->scale == scale))
+  width_changed = surface->width != width;
+  height_changed = surface->height != height;
+  scale_changed = impl->scale != scale;
+
+  if (!width_changed && !height_changed && !scale_changed)
     return;
 
   surface->width = width;
@@ -405,6 +408,13 @@ gdk_wayland_surface_update_size (GdkSurface *surface,
     wl_surface_set_buffer_scale (impl->display_server.wl_surface, scale);
 
   gdk_surface_invalidate_rect (surface, NULL);
+
+  if (width_changed)
+    g_object_notify (G_OBJECT (surface), "width");
+  if (height_changed)
+    g_object_notify (G_OBJECT (surface), "height");
+  if (scale_changed)
+    g_object_notify (G_OBJECT (surface), "scale-factor");
 }
 
 static const char *

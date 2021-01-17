@@ -92,6 +92,7 @@ enum {
   PROP_MAPPED,
   PROP_WIDTH,
   PROP_HEIGHT,
+  PROP_SCALE_FACTOR,
   LAST_PROP
 };
 
@@ -551,6 +552,13 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                         0, G_MAXINT, 0,
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
+  properties[PROP_SCALE_FACTOR] =
+      g_param_spec_int ("scale-factor",
+                        P_("Scale factor"),
+                        P_("Scale factor"),
+                        1, G_MAXINT, 1,
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   /**
@@ -780,6 +788,10 @@ gdk_surface_get_property (GObject    *object,
 
     case PROP_HEIGHT:
       g_value_set_int (value, surface->height);
+      break;
+
+    case PROP_SCALE_FACTOR:
+      g_value_set_int (value, gdk_surface_get_scale_factor (surface));
       break;
 
     default:

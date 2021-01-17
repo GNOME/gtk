@@ -30,6 +30,7 @@ typedef struct _GtkNativePrivate
 {
   gulong update_handler_id;
   gulong layout_handler_id;
+  gulong scale_changed_handler_id;
 } GtkNativePrivate;
 
 static GQuark quark_gtk_native_private;
@@ -109,12 +110,21 @@ surface_layout_cb (GdkSurface *surface,
 }
 
 static void
+scale_changed_cb (GdkSurface *surface,
+                  GParamSpec *pspec,
+                  GtkNative  *native)
+{
+  _gtk_widget_scale_changed (GTK_WIDGET (native));
+}
+
+static void
 verify_priv_unrealized (gpointer user_data)
 {
   GtkNativePrivate *priv = user_data;
 
   g_warn_if_fail (priv->update_handler_id == 0);
   g_warn_if_fail (priv->layout_handler_id == 0);
+  g_warn_if_fail (priv->scale_changed_handler_id == 0);
 
   g_free (priv);
 }
@@ -146,6 +156,11 @@ gtk_native_realize (GtkNative *self)
   priv->layout_handler_id = g_signal_connect (surface, "layout",
                                               G_CALLBACK (surface_layout_cb),
                                               self);
+
+  priv->scale_changed_handler_id = g_signal_connect (surface, "notify::scale-factor",
+                                                     G_CALLBACK (scale_changed_cb),
+                                                     self);
+
   g_object_set_qdata_full (G_OBJECT (self),
                            quark_gtk_native_private,
                            priv,
@@ -174,6 +189,7 @@ gtk_native_unrealize (GtkNative *self)
 
   g_clear_signal_handler (&priv->update_handler_id, clock);
   g_clear_signal_handler (&priv->layout_handler_id, surface);
+  g_clear_signal_handler (&priv->scale_changed_handler_id, surface);
 
   g_object_set_qdata (G_OBJECT (self), quark_gtk_native_private, NULL);
 }
