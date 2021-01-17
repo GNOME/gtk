@@ -33,8 +33,8 @@ G_BEGIN_DECLS
 /**
  * GtkShortcutFunc:
  * @widget: The widget passed to the activation
- * @args: The arguments passed to the activation
- * @user_data: The user data provided when activating the action
+ * @args: (nullable): The arguments passed to the activation
+ * @user_data: (nullable): The user data provided when activating the action
  *
  * Prototype for shortcuts based on user callbacks.
  */

@@ -46,9 +46,11 @@ typedef struct {
   GObjectClass *oclass;
   char *id;
   char *constructor;
-  GSList *properties;
-  GSList *signals;
+
+  GPtrArray *properties;
+  GPtrArray *signals;
   GSList *bindings;
+
   GObject *object;
   CommonInfo *parent;
   gboolean applied_properties;
@@ -177,7 +179,7 @@ typedef struct {
   SubParser *subparser;
   GtkBuildableParseContext ctx;
   const char *filename;
-  GSList *finalizers;
+  GPtrArray *finalizers;
   GSList *custom_finalizers;
 
   const char **requested_objects; /* NULL if all the objects are requested */
@@ -218,7 +220,7 @@ void      _gtk_builder_add_object (GtkBuilder  *builder,
 void      _gtk_builder_add (GtkBuilder *builder,
                             ChildInfo *child_info);
 void      _gtk_builder_add_signals (GtkBuilder *builder,
-				    GSList     *signals);
+                                    GPtrArray  *signals);
 gboolean  _gtk_builder_finish (GtkBuilder  *builder,
                                GError     **error);
 void _free_signal_info (SignalInfo *info,

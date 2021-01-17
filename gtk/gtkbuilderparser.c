@@ -32,7 +32,8 @@
 #include <string.h>
 
 
-typedef struct {
+typedef struct
+{
   const GtkBuildableParser *last_parser;
   gpointer last_user_data;
   int last_depth;
@@ -41,9 +42,8 @@ typedef struct {
 static void
 pop_subparser_stack (GtkBuildableParseContext *context)
 {
-  GtkBuildableParserStack *stack =
-    &g_array_index (context->subparser_stack, GtkBuildableParserStack,
-                    context->subparser_stack->len - 1);
+  GtkBuildableParserStack *stack = &g_array_index (context->subparser_stack, GtkBuildableParserStack,
+                                                   context->subparser_stack->len - 1);
 
   context->awaiting_pop = TRUE;
   context->held_user_data = context->user_data;
@@ -57,15 +57,17 @@ pop_subparser_stack (GtkBuildableParseContext *context)
 static void
 possibly_finish_subparser (GtkBuildableParseContext *context)
 {
-  if (context->subparser_stack->len > 0)
-    {
-      GtkBuildableParserStack *stack =
-        &g_array_index (context->subparser_stack, GtkBuildableParserStack,
-                        context->subparser_stack->len - 1);
+  GtkBuildableParserStack *stack;
 
-      if (stack->last_depth ==  context->tag_stack->len)
-        pop_subparser_stack (context);
-    }
+  if (!context->subparser_stack ||
+      context->subparser_stack->len == 0)
+    return;
+
+  stack = &g_array_index (context->subparser_stack, GtkBuildableParserStack,
+                          context->subparser_stack->len - 1);
+
+  if (stack->last_depth == context->tag_stack->len)
+    pop_subparser_stack (context);
 }
 
 static void
@@ -128,6 +130,9 @@ proxy_error (GMarkupParseContext *gm_context,
 
   /* report the error all the way up to free all the user-data */
 
+  if (!context->subparser_stack)
+    return;
+
   while (context->subparser_stack->len > 0)
     {
       pop_subparser_stack (context);
@@ -157,7 +162,7 @@ gtk_buildable_parse_context_init (GtkBuildableParseContext *context,
   context->parser = parser;
   context->user_data = user_data;
 
-  context->subparser_stack = g_array_new (FALSE, FALSE, sizeof (GtkBuildableParserStack));
+  context->subparser_stack = NULL;
   context->tag_stack = g_ptr_array_new ();
   context->held_user_data = NULL;
   context->awaiting_pop = FALSE;
@@ -166,7 +171,9 @@ gtk_buildable_parse_context_init (GtkBuildableParseContext *context,
 static void
 gtk_buildable_parse_context_free (GtkBuildableParseContext *context)
 {
-  g_array_unref (context->subparser_stack);
+  if (context->subparser_stack)
+    g_array_unref (context->subparser_stack);
+
   g_ptr_array_unref (context->tag_stack);
 }
 
@@ -244,6 +251,9 @@ gtk_buildable_parse_context_push (GtkBuildableParseContext *context,
 
   context->parser = parser;
   context->user_data = user_data;
+
+  if (!context->subparser_stack)
+    context->subparser_stack = g_array_new (FALSE, FALSE, sizeof (GtkBuildableParserStack));
 
   g_array_append_val (context->subparser_stack, stack);
 }
@@ -460,8 +470,6 @@ builder_construct (ParserData  *data,
 
   if (object_info->object && object_info->applied_properties)
     return object_info->object;
-
-  object_info->properties = g_slist_reverse (object_info->properties);
 
   if (object_info->object == NULL)
     {
@@ -789,19 +797,21 @@ free_object_info (ObjectInfo *info)
 {
   /* Do not free the signal items, which GtkBuilder takes ownership of */
   g_type_class_unref (info->oclass);
-  g_slist_free (info->signals);
-  g_slist_free_full (info->properties, (GDestroyNotify)free_property_info);
+  if (info->signals)
+    g_ptr_array_free (info->signals, TRUE);
+  if (info->properties)
+    g_ptr_array_free (info->properties, TRUE);
   g_free (info->constructor);
   g_free (info->id);
   g_slice_free (ObjectInfo, info);
 }
 
 static void
-parse_child (ParserData   *data,
-             const char   *element_name,
+parse_child (ParserData  *data,
+             const char  *element_name,
              const char **names,
              const char **values,
-             GError      **error)
+             GError     **error)
 
 {
   ObjectInfo* object_info;
@@ -1697,7 +1707,6 @@ parse_custom (GtkBuildableParseContext  *context,
       ObjectInfo* object_info = (ObjectInfo*)parent_info;
       if (!object_info->object)
         {
-          object_info->properties = g_slist_reverse (object_info->properties);
           object_info->object = _gtk_builder_construct (data->builder,
                                                         object_info,
                                                         error);
@@ -1875,7 +1884,10 @@ end_element (GtkBuildableParseContext  *context,
               g_string_assign (prop_info->text, translated);
             }
 
-          object_info->properties = g_slist_prepend (object_info->properties, prop_info);
+          if (G_UNLIKELY (!object_info->properties))
+            object_info->properties = g_ptr_array_new_with_free_func ((GDestroyNotify)free_property_info);
+
+          g_ptr_array_add (object_info->properties, prop_info);
         }
       else
         g_assert_not_reached ();
@@ -1943,8 +1955,13 @@ end_element (GtkBuildableParseContext  *context,
 
       if (GTK_IS_BUILDABLE (object_info->object) &&
           GTK_BUILDABLE_GET_IFACE (object_info->object)->parser_finished)
-        data->finalizers = g_slist_prepend (data->finalizers, object_info->object);
-      _gtk_builder_add_signals (data->builder, object_info->signals);
+        g_ptr_array_add (data->finalizers, object_info->object);
+
+      if (object_info->signals)
+        {
+          _gtk_builder_add_signals (data->builder, object_info->signals);
+          object_info->signals = NULL;
+        }
 
       free_object_info (object_info);
     }
@@ -1962,7 +1979,11 @@ end_element (GtkBuildableParseContext  *context,
       ObjectInfo *object_info = (ObjectInfo*)state_peek_info (data, CommonInfo);
       g_assert (object_info != NULL);
       signal_info->object_name = g_strdup (object_info->id);
-      object_info->signals = g_slist_prepend (object_info->signals, signal_info);
+
+      if (G_UNLIKELY (!object_info->signals))
+        object_info->signals = g_ptr_array_new ();
+
+      g_ptr_array_add (object_info->signals, signal_info);
     }
   else if (strcmp (element_name, "constant") == 0 ||
            strcmp (element_name, "closure") == 0 ||
@@ -2154,6 +2175,7 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   data.object_ids = g_hash_table_new_full (g_str_hash, g_str_equal,
                                            (GDestroyNotify)g_free, NULL);
   data.stack = g_ptr_array_new ();
+  data.finalizers = g_ptr_array_new ();
 
   if (requested_objs)
     {
@@ -2193,10 +2215,9 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
     }
 
   /* Common parser_finished, for all created objects */
-  data.finalizers = g_slist_reverse (data.finalizers);
-  for (l = data.finalizers; l; l = l->next)
+  for (guint i = 0; i < data.finalizers->len; i++)
     {
-      GtkBuildable *buildable = (GtkBuildable*)l->data;
+      GtkBuildable *buildable = g_ptr_array_index (data.finalizers, i);
 
       gtk_buildable_parser_finished (GTK_BUILDABLE (buildable), builder);
       if (_gtk_builder_lookup_failed (builder, error))
@@ -2206,10 +2227,10 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
  out:
 
   g_slist_free_full (data.custom_finalizers, (GDestroyNotify)free_subparser);
-  g_slist_free (data.finalizers);
   g_free (data.domain);
   g_hash_table_destroy (data.object_ids);
   g_ptr_array_free (data.stack, TRUE);
+  g_ptr_array_free (data.finalizers, TRUE);
   gtk_buildable_parse_context_free (&data.ctx);
 
   /* restore the original domain */
