@@ -1,4 +1,4 @@
-FROM registry.gitlab.gnome.org/gnome/gtk/fedora-base:v25
+FROM registry.gitlab.gnome.org/gnome/gtk/fedora-base:v26
 
 # Enable sudo for wheel users
 RUN sed -i -e 's/# %wheel/%wheel/' -e '0,/%wheel/{s/%wheel/# %wheel/}' /etc/sudoers

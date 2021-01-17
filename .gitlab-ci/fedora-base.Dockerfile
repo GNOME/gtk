@@ -71,6 +71,7 @@ RUN dnf -y install \
     pcre-devel \
     pcre-static \
     python3 \
+    python3-gobject \
     python3-jinja2 \
     python3-pip \
     python3-pygments \
