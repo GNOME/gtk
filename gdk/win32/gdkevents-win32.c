@@ -1495,15 +1495,6 @@ handle_dpi_changed (GdkSurface *window,
 
       monitor = gdk_display_get_monitor_at_surface (display, window);
       gdk_monitor_set_scale_factor (monitor, impl->surface_scale);
-
-      if (impl->layered)
-        {
-          /* We only need to set the cairo surface device scale here ourselves for layered windows */
-          if (impl->cache_surface != NULL)
-            cairo_surface_set_device_scale (impl->cache_surface,
-                                            impl->surface_scale,
-                                            impl->surface_scale);
-        }
     }
 
   _gdk_win32_adjust_client_rect (window, rect);

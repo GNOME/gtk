@@ -63,12 +63,6 @@ gdk_win32_vulkan_context_create_surface (GdkVulkanContext *context,
                          NULL,
                          surface);
 
-  if (result == VK_SUCCESS)
-    win32_surface->suppress_layered ++;
-
-  if (win32_surface->suppress_layered == 1)
-    _gdk_win32_surface_update_style_bits (window);
-
   return result;
 }
 

@@ -44,10 +44,6 @@ struct _GdkWin32CairoContext
    * code that is unaffected by this flag.
    */
   guint            double_buffered : 1;
-  /* Re-set to the same value as GdkSurfaceImplWin32->layered
-   * every frame (since layeredness can change at runtime).
-   */
-  guint            layered : 1;
 
   /* The a surface for double-buffering. We keep it
    * around between repaints, and only re-allocate it
@@ -56,12 +52,11 @@ struct _GdkWin32CairoContext
   int              db_width;
   int              db_height;
 
-  /* Surface for the window DC (in non-layered mode).
-   * A reference of the cache surface (in layered mode). */
+  /* Surface for the window DC */
   cairo_surface_t *window_surface;
   /* A reference to db_surface (when double-buffering).
-   * When not using double-buffering or in layered mode
-   * this is a reference to window_surface.
+   * When not using double-buffering this is a reference
+   * to window_surface.
    */
   cairo_surface_t *paint_surface;
 };
