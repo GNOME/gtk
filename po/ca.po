@@ -861,7 +861,7 @@ msgstr "Curs_iva"
 #: gtk/a11y/gtkimageaccessible.c:88 gtk/deprecated/gtkstock.c:392
 msgctxt "Stock label"
 msgid "_Jump to"
-msgstr "_Vés-hi"
+msgstr "_Ves-hi"
 
 #. This is about text justification, "centered text"
 #: gtk/a11y/gtkimageaccessible.c:89 gtk/deprecated/gtkstock.c:394
