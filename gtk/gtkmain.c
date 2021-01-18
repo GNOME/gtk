@@ -167,7 +167,6 @@ typedef struct {
 
 DisplayDebugFlags debug_flags[N_DEBUG_DISPLAYS];
 
-#ifdef G_ENABLE_DEBUG
 static const GDebugKey gtk_debug_keys[] = {
   { "misc", GTK_DEBUG_MISC },
   { "plugsocket", GTK_DEBUG_PLUGSOCKET },
@@ -192,7 +191,6 @@ static const GDebugKey gtk_debug_keys[] = {
   { "resize", GTK_DEBUG_RESIZE },
   { "layout", GTK_DEBUG_LAYOUT }
 };
-#endif /* G_ENABLE_DEBUG */
 
 /**
  * gtk_get_major_version:
@@ -660,12 +658,15 @@ do_pre_parse_initialization (int    *argc,
   env_string = g_getenv ("GTK_DEBUG");
   if (env_string != NULL)
     {
-#ifdef G_ENABLE_DEBUG
       debug_flags[0].flags = g_parse_debug_string (env_string,
                                                    gtk_debug_keys,
                                                    G_N_ELEMENTS (gtk_debug_keys));
-#else
-      g_warning ("GTK_DEBUG set but ignored because gtk isn't built with G_ENABLE_DEBUG");
+#ifndef G_ENABLE_DEBUG
+      /* No need to print the warning for "interactive" since it's kept anyway. */
+      if (debug_flags[0].flags != GTK_DEBUG_INTERACTIVE)
+        g_warning ("GTK_DEBUG set but ignored because gtk isn't built with G_ENABLE_DEBUG");
+      /* Only keep "interactive" if not with G_ENABLE_DEBUG. */
+      debug_flags[0].flags &= GTK_DEBUG_INTERACTIVE;
 #endif  /* G_ENABLE_DEBUG */
       env_string = NULL;
     }
