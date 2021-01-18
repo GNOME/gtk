@@ -51,11 +51,36 @@ any license fees or royalties.</description>
       <gnome:userid>matthiasc</gnome:userid>
     </foaf:Person>
   </maintainer>
+
   <maintainer>
     <foaf:Person>
-      <foaf:name>Tim Janik</foaf:name>
-      <foaf:mbox rdf:resource="mailto:timj@gtk.org"/>
-      <gnome:userid>timj</gnome:userid>
+      <foaf:name>Emmanuele Bassi</foaf:name>
+      <foaf:mbox rdf:resource="mailto:ebassi@gnome.org"/>
+      <gnome:userid>ebassi</gnome:userid>
+    </foaf:Person>
+  </maintainer>
+
+  <maintainer>
+    <foaf:Person>
+      <foaf:name>Timm Baeder</foaf:name>
+      <foaf:mbox rdf:resource="mailto:mail@baedert.org"/>
+      <gnome:userid>baedert</gnome:userid>
+    </foaf:Person>
+  </maintainer>
+
+  <maintainer>
+    <foaf:Person>
+      <foaf:name>Benjamin Otte</foaf:name>
+      <foaf:mbox rdf:resource="mailto:otte@gnome.org"/>
+      <gnome:userid>otte</gnome:userid>
+    </foaf:Person>
+  </maintainer>
+
+  <maintainer>
+    <foaf:Person>
+      <foaf:name>Carlos Garnacho</foaf:name>
+      <foaf:mbox rdf:resource="mailto:carlosg@gnome.org"/>
+      <gnome:userid>carlosg</gnome:userid>
     </foaf:Person>
   </maintainer>
 
