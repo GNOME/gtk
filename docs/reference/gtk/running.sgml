@@ -134,9 +134,9 @@ additional environment variables.
   <title><envar>GTK_DEBUG</envar></title>
 
   <para>
-  Unless GTK+ has been configured with <option>--enable-debug=no</option>,
-  this variable can be set to a list of debug options, which cause GTK+
-  to print out different types of debugging information.
+  This variable can be set to a list of debug options, which cause GTK to
+  print out different types of debugging information. Some of these options
+  are only available when GTK has been configured with <option>--enable-debug=yes</option>.
   <variablelist>
     <varlistentry>
       <term>actions</term>
