@@ -1766,6 +1766,17 @@ treeview.view {
         color: $fg_color;
         transition: none; //I shouldn't need this
       }
+      sort-indicator {
+        &.ascending {
+          -gtk-icon-source: -gtk-icontheme('pan-up-symbolic');
+        }
+        &.descending {
+          -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
+        }
+
+        min-height: 16px;
+        min-width: 16px;
+      }
     }
   }
 

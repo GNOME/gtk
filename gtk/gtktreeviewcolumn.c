@@ -38,6 +38,7 @@
 #include "gtkgesturedrag.h"
 #include "gtkeventcontrollerfocus.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtkbuiltiniconprivate.h"
 
 #include <string.h>
 
@@ -52,12 +53,13 @@
  *   [GtkTreeView drag-and-drop][gtk3-GtkTreeView-drag-and-drop]
  *
  * The GtkTreeViewColumn object represents a visible column in a #GtkTreeView widget.
- * It allows to set properties of the column header, and functions as a holding pen for
- * the cell renderers which determine how the data in the column is displayed.
+ * It allows to set properties of the column header, and functions as a holding pen
+ * for the cell renderers which determine how the data in the column is displayed.
  *
  * Please refer to the [tree widget conceptual overview][TreeWidget]
- * for an overview of all the objects and data types related to the tree widget and how
- * they work together.
+ * for an overview of all the objects and data types related to the tree widget and
+ * how they work together, and to the #GtkTreeView documentation for specifics about
+ * the CSS node structure for treeviews and their headers.
  */
 
 
@@ -879,7 +881,7 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
   gtk_widget_set_halign (priv->frame, GTK_ALIGN_START);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
-  priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic");
+  priv->arrow = gtk_builtin_icon_new ("sort-indicator");
 
   if (priv->child)
     child = priv->child;
@@ -905,7 +907,7 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
   gtk_button_set_child (GTK_BUTTON (priv->button), hbox);
 }
 
-static void 
+static void
 gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
 {
   GtkTreeViewColumnPrivate *priv = tree_column->priv;
@@ -914,7 +916,6 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
   GtkWidget *frame;
   GtkWidget *arrow;
   GtkWidget *current_child;
-  const char *icon_name = "missing-image";
   GtkTreeModel *model;
 
   if (priv->tree_view)
@@ -948,17 +949,17 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
       g_return_if_fail (GTK_IS_LABEL (current_child));
 
       if (priv->title)
-	gtk_label_set_text_with_mnemonic (GTK_LABEL (current_child),
-					  priv->title);
+        gtk_label_set_text_with_mnemonic (GTK_LABEL (current_child),
+                                          priv->title);
       else
-	gtk_label_set_text_with_mnemonic (GTK_LABEL (current_child),
-					  "");
+        gtk_label_set_text_with_mnemonic (GTK_LABEL (current_child),
+                                          "");
     }
 
   if (GTK_IS_TREE_SORTABLE (model))
     gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (model),
-					  &sort_column_id,
-					  NULL);
+                                          &sort_column_id,
+                                          NULL);
 
   if (priv->show_sort_indicator)
     {
@@ -971,23 +972,18 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
       else
         alternative = FALSE;
 
-      switch (priv->sort_order)
+      if ((!alternative && priv->sort_order == GTK_SORT_ASCENDING) ||
+          (alternative && priv->sort_order == GTK_SORT_DESCENDING))
         {
-	  case GTK_SORT_ASCENDING:
-            icon_name = alternative ? "pan-up-symbolic" : "pan-down-symbolic";
-	    break;
-
-	  case GTK_SORT_DESCENDING:
-            icon_name = alternative ? "pan-down-symbolic" : "pan-up-symbolic";
-	    break;
-
-	  default:
-	    g_warning (G_STRLOC": bad sort order");
-	    break;
-	}
+          gtk_widget_remove_css_class (arrow, "descending");
+          gtk_widget_add_css_class (arrow, "ascending");
+        }
+      else
+        {
+          gtk_widget_remove_css_class (arrow, "ascending");
+          gtk_widget_add_css_class (arrow, "descending");
+        }
     }
-
-  gtk_image_set_from_icon_name (GTK_IMAGE (arrow), icon_name);
 
   /* Put arrow on the right if the text is left-or-center justified, and on the
    * left otherwise; do this by packing boxes, so flipping text direction will
