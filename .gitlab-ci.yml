@@ -22,7 +22,7 @@ stages:
 variables:
   COMMON_MESON_FLAGS: "-Dwerror=true -Dglib:werror=false -Dpango:werror=false -Dgtk-doc:werror=false -Dwayland-protocols:werror=false -Dsysprof:werror=false"
   BACKEND_FLAGS: "-Dx11-backend=true -Dwayland-backend=true -Dbroadway-backend=true"
-  FEATURE_FLAGS: "-Dvulkan=enabled -Dcloudproviders=enabled"
+  FEATURE_FLAGS: "-Dvulkan=enabled -Dcloudproviders=enabled -Dintrospection=enabled"
   MESON_TEST_TIMEOUT_MULTIPLIER: 3
   FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v26"
   FLATPAK_IMAGE: "registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master"
