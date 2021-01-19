@@ -547,6 +547,20 @@ _gdk_macos_display_surface_resigned_key (GdkMacosDisplay *self,
   _gdk_macos_display_clear_sorting (self);
 }
 
+/* Raises a transient window.
+ */
+static void
+raise_transient (GdkMacosSurface *surface)
+{
+  GdkMacosSurface *parent_surface = GDK_MACOS_SURFACE (GDK_SURFACE (surface)->transient_for);
+
+  NSWindow *parent = _gdk_macos_surface_get_native (parent_surface);
+  NSWindow *window = _gdk_macos_surface_get_native (surface);
+
+  [parent removeChildWindow:window];
+  [parent addChildWindow:window ordered:NSWindowAbove];
+}
+
 void
 _gdk_macos_display_surface_became_main (GdkMacosDisplay *self,
                                         GdkMacosSurface *surface)
@@ -558,6 +572,9 @@ _gdk_macos_display_surface_became_main (GdkMacosDisplay *self,
     g_queue_unlink (&self->main_surfaces, &surface->main);
 
   g_queue_push_head_link (&self->main_surfaces, &surface->main);
+
+  if (GDK_SURFACE (surface)->transient_for)
+    raise_transient (surface);
 
   _gdk_macos_display_clear_sorting (self);
 }
