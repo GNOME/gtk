@@ -1586,31 +1586,32 @@ icon_released_cb (GtkGestureClick *gesture,
 
 static void
 icon_drag_update_cb (GtkGestureDrag *gesture,
-                     double          x,
-                     double          y,
+                     double          offset_x,
+                     double          offset_y,
                      GtkEntry       *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-  double start_x, start_y;
   GtkEntryIconPosition pos;
   EntryIconInfo *icon_info;
 
-  gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
   pos = get_icon_position_from_controller (entry, GTK_EVENT_CONTROLLER (gesture));
   icon_info = priv->icons[pos];
 
   if (icon_info->content != NULL &&
-      gtk_drag_check_threshold (icon_info->widget, start_x, start_y, x, y))
+      gtk_drag_check_threshold (icon_info->widget, 0, 0, offset_x, offset_y))
     {
       GdkPaintable *paintable;
       GdkSurface *surface;
       GdkDevice *device;
       GdkDrag *drag;
+      double start_x, start_y;
 
       icon_info->in_drag = TRUE;
 
       surface = gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (entry)));
       device = gtk_gesture_get_device (GTK_GESTURE (gesture));
+
+      gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
 
       drag = gdk_drag_begin (surface, device, icon_info->content, icon_info->actions, start_x, start_y);
       paintable = gtk_widget_paintable_new (icon_info->widget);
