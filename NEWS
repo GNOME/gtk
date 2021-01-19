@@ -1,3 +1,52 @@
+Overview of Changes in 4.0.2
+============================
+
+* GtkAboutDialog:
+ - Set icon size for the logo
+ - Fix initial focus to be the same as in GTK 3
+
+* GtkImage:
+ - Update icons on scale change
+
+* Wayland: Fix crashes with touch and tablet events
+
+* Windows:
+ - Fix surface and geometry computation
+ - Remove layered window usage
+
+* MacOS: Support stylus devices
+
+* Themes:
+ - Adwaita: Remove edge highlights
+ - Adwaita: Update image assets
+ - Make Adwaita-dark available as standalone theme
+ - Make HighContrastInverse the dark variant of HighContrast
+
+* Docs:
+ - Complete GtkAspectFrame docs
+ - Clarify migration docs for widget signals
+
+* Inspector:
+ - Fix a critical with the recorder
+ - Fix a crash with treeviews
+ - Show overlay layout properties
+ - Add a legend for the layout overlay
+
+* Build:
+ - Fix build with gcc 11
+ - Support building without sassc
+
+* Translation updates:
+ Basque
+ Czech
+ Friulian
+ Polish
+ Romanian
+ Spanish
+ Swedish
+ Ukrainian
+
+
 Overview of Changes in 4.0.1
 ============================
 
