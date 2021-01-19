@@ -20,6 +20,7 @@
 #include "gtkcellrenderertoggle.h"
 
 #include "gtkcssnumbervalueprivate.h"
+#include "gtkcsstransientnodeprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
@@ -126,24 +127,10 @@ gtk_cell_renderer_toggle_init (GtkCellRendererToggle *celltoggle)
   priv->active = FALSE;
   priv->radio = FALSE;
 
-  priv->cssnode = gtk_css_node_new ();
-  gtk_css_node_set_name (priv->cssnode, g_quark_from_static_string ("check"));
-
   g_object_set (celltoggle, "mode", GTK_CELL_RENDERER_MODE_ACTIVATABLE, NULL);
   gtk_cell_renderer_set_padding (GTK_CELL_RENDERER (celltoggle), 2, 2);
 
   priv->inconsistent = FALSE;
-}
-
-static void
-gtk_cell_renderer_toggle_dispose (GObject *object)
-{
-  GtkCellRendererToggle *celltoggle = GTK_CELL_RENDERER_TOGGLE (object);
-  GtkCellRendererTogglePrivate *priv = gtk_cell_renderer_toggle_get_instance_private (celltoggle);
-
-  g_clear_object (&priv->cssnode);
-
-  G_OBJECT_CLASS (gtk_cell_renderer_toggle_parent_class)->dispose (object);
 }
 
 static GtkSizeRequestMode
@@ -196,7 +183,6 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 
   object_class->get_property = gtk_cell_renderer_toggle_get_property;
   object_class->set_property = gtk_cell_renderer_toggle_set_property;
-  object_class->dispose = gtk_cell_renderer_toggle_dispose;
 
   cell_class->get_request_mode = gtk_cell_renderer_toggle_get_request_mode;
   cell_class->get_preferred_width = gtk_cell_renderer_toggle_get_preferred_width;
@@ -356,29 +342,30 @@ gtk_cell_renderer_toggle_new (void)
 
 static GtkStyleContext *
 gtk_cell_renderer_toggle_save_context (GtkCellRendererToggle *cell,
-                                       GtkWidget       *widget)
+                                       GtkWidget             *widget)
 {
   GtkCellRendererTogglePrivate *priv = gtk_cell_renderer_toggle_get_instance_private (cell);
   GtkStyleContext *context;
+  GtkCssNode *cssnode;
 
   context = gtk_widget_get_style_context (widget);
 
-  gtk_css_node_set_parent (priv->cssnode, gtk_widget_get_css_node (widget));
-  gtk_style_context_save_to_node (context, priv->cssnode);
+  cssnode = gtk_css_transient_node_new (gtk_widget_get_css_node (widget));
+  if (priv->radio)
+    gtk_css_node_set_name (cssnode, g_quark_from_static_string ("radio"));
+  else
+    gtk_css_node_set_name (cssnode, g_quark_from_static_string ("check"));
+  gtk_style_context_save_to_node (context, cssnode);
+  g_object_unref (cssnode);
 
   return context;
 }
 
-static GtkStyleContext *
+static void
 gtk_cell_renderer_toggle_restore_context (GtkCellRendererToggle *cell,
                                           GtkStyleContext       *context)
 {
-  GtkCellRendererTogglePrivate *priv = gtk_cell_renderer_toggle_get_instance_private (cell);
-
   gtk_style_context_restore (context);
-  gtk_css_node_set_parent (priv->cssnode, NULL);
-
-  return context;
 }
 
 static int
@@ -564,10 +551,6 @@ gtk_cell_renderer_toggle_set_radio (GtkCellRendererToggle *toggle,
   g_return_if_fail (GTK_IS_CELL_RENDERER_TOGGLE (toggle));
 
   priv->radio = radio;
-  if (radio)
-    gtk_css_node_set_name (priv->cssnode, g_quark_from_static_string ("radio"));
-  else
-    gtk_css_node_set_name (priv->cssnode, g_quark_from_static_string ("check"));
 }
 
 /**
