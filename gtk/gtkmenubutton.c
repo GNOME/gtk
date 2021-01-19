@@ -107,11 +107,18 @@
  * |[<!-- language="plain" -->
  * menubutton
  * ╰── button.toggle
- *     ╰── [content]
+ *     ╰── <content>
+ *          ╰── [arrow]
  *]|
  *
  * GtkMenuButton has a single CSS node with name menubutton
  * which contains a toggle button node.
+ *
+ * Inside the toggle button content, there is an arrow node for
+ * the indicator, which will carry one of the .none, .up, .down,
+ * .left or .right style classes to indicate the direction that
+ * the menu will appear in. The CSS is expected to provide a suitable
+ * image for each of these cases using the -gtk-icon-source property.
  *
  * # Accessibility
  *
@@ -121,7 +128,7 @@
 #include "config.h"
 
 #include "gtkactionable.h"
-#include "gtkimage.h"
+#include "gtkbuiltiniconprivate.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmenubutton.h"
@@ -440,35 +447,40 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
 }
 
 static void
-set_arrow_type (GtkImage     *image,
+set_arrow_type (GtkWidget    *arrow,
                 GtkArrowType  arrow_type,
                 gboolean      visible)
 {
+  gtk_widget_remove_css_class (arrow, "none");
+  gtk_widget_remove_css_class (arrow, "down");
+  gtk_widget_remove_css_class (arrow, "up");
+  gtk_widget_remove_css_class (arrow, "left");
+  gtk_widget_remove_css_class (arrow, "right");
   switch (arrow_type)
     {
     case GTK_ARROW_NONE:
-      gtk_image_set_from_icon_name (image, "open-menu-symbolic");
+      gtk_widget_add_css_class (arrow, "none");
       break;
     case GTK_ARROW_DOWN:
-      gtk_image_set_from_icon_name (image, "pan-down-symbolic");
+      gtk_widget_add_css_class (arrow, "down");
       break;
     case GTK_ARROW_UP:
-      gtk_image_set_from_icon_name (image, "pan-up-symbolic");
+      gtk_widget_add_css_class (arrow, "up");
       break;
     case GTK_ARROW_LEFT:
-      gtk_image_set_from_icon_name (image, "pan-start-symbolic");
+      gtk_widget_add_css_class (arrow, "left");
       break;
     case GTK_ARROW_RIGHT:
-      gtk_image_set_from_icon_name (image, "pan-end-symbolic");
+      gtk_widget_add_css_class (arrow, "right");
       break;
     default:
       break;
     }
 
   if (visible)
-    gtk_widget_show (GTK_WIDGET (image));
+    gtk_widget_show (arrow);
   else
-    gtk_widget_hide (GTK_WIDGET (image));
+    gtk_widget_hide (arrow);
 }
 
 static void
@@ -476,8 +488,8 @@ add_arrow (GtkMenuButton *self)
 {
   GtkWidget *arrow;
 
-  arrow = gtk_image_new ();
-  set_arrow_type (GTK_IMAGE (arrow), self->arrow_type, TRUE);
+  arrow = gtk_builtin_icon_new ("arrow");
+  set_arrow_type (arrow, self->arrow_type, TRUE);
   gtk_button_set_child (GTK_BUTTON (self->button), arrow);
   self->arrow_widget = arrow;
 }
@@ -668,7 +680,7 @@ gtk_menu_button_set_direction (GtkMenuButton *menu_button,
   if (is_image_button && (menu_button->arrow_widget != gtk_button_get_child (GTK_BUTTON (menu_button->button))))
     return;
 
-  set_arrow_type (GTK_IMAGE (menu_button->arrow_widget),
+  set_arrow_type (menu_button->arrow_widget,
                   menu_button->arrow_type,
                   is_image_button || (menu_button->arrow_type != GTK_ARROW_NONE));
   update_popover_direction (menu_button);
@@ -848,9 +860,9 @@ gtk_menu_button_set_label (GtkMenuButton *menu_button,
                                gtk_button_get_use_underline (GTK_BUTTON (menu_button->button)));
   gtk_widget_set_hexpand (label_widget, TRUE);
   gtk_widget_set_halign (label_widget, GTK_ALIGN_CENTER);
-  arrow = gtk_image_new ();
+  arrow = gtk_builtin_icon_new ("arrow");
   menu_button->arrow_widget = arrow;
-  set_arrow_type (GTK_IMAGE (arrow), menu_button->arrow_type, menu_button->arrow_type != GTK_ARROW_NONE);
+  set_arrow_type (arrow, menu_button->arrow_type, menu_button->arrow_type != GTK_ARROW_NONE);
   gtk_box_append (GTK_BOX (box), label_widget);
   gtk_box_append (GTK_BOX (box), arrow);
   gtk_button_set_child (GTK_BUTTON (menu_button->button), box);

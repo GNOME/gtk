@@ -28,7 +28,7 @@
 #include "gtklabel.h"
 #include "gtkwidgetprivate.h"
 #include "gtkbox.h"
-#include "gtkimage.h"
+#include "gtkbuiltiniconprivate.h"
 #include "gtkgestureclick.h"
 #include "gtkpopovermenu.h"
 #include "gtknative.h"
@@ -266,7 +266,7 @@ gtk_column_view_title_init (GtkColumnViewTitle *self)
   self->title = gtk_label_new (NULL);
   gtk_box_append (GTK_BOX (self->box), self->title);
 
-  self->sort = gtk_image_new ();
+  self->sort = gtk_builtin_icon_new ("sort-indicator");
   gtk_box_append (GTK_BOX (self->box), self->sort);
 
   gesture = gtk_gesture_click_new ();
@@ -308,15 +308,15 @@ gtk_column_view_title_update (GtkColumnViewTitle *self)
       active = gtk_column_view_sorter_get_sort_column (view_sorter, &inverted);
 
       gtk_widget_show (self->sort);
-      if (self->column == active)
-        {
-          if (inverted)
-            gtk_image_set_from_icon_name (GTK_IMAGE (self->sort), "pan-down-symbolic");
-          else
-            gtk_image_set_from_icon_name (GTK_IMAGE (self->sort), "pan-up-symbolic");
-        }
+      gtk_widget_remove_css_class (self->sort, "ascending");
+      gtk_widget_remove_css_class (self->sort, "descending");
+      gtk_widget_remove_css_class (self->sort, "unsorted");
+      if (self->column != active)
+        gtk_widget_add_css_class (self->sort, "unsorted");
+      else if (inverted)
+        gtk_widget_add_css_class (self->sort, "descending");
       else
-        gtk_image_clear (GTK_IMAGE (self->sort));
+        gtk_widget_add_css_class (self->sort, "ascending");
     }
   else
     gtk_widget_hide (self->sort);

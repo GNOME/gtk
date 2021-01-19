@@ -143,9 +143,11 @@
  * |[<!-- language="plain" -->
  * treeview.view
  * ├── header
- * │   ├── <column header>
+ * │   ├── button
+ * │   │   ╰── [sort-indicator]
  * ┊   ┊
- * │   ╰── <column header>
+ * │   ╰── button
+ * │       ╰── [sort-indicator]
  * │
  * ├── [rubberband]
  * ╰── [dndtarget]
@@ -154,6 +156,11 @@
  * GtkTreeView has a main CSS node with name treeview and style class .view.
  * It has a subnode with name header, which is the parent for all the column
  * header widgets' CSS nodes.
+ *
+ * Each column header consists of a button, which among other content, has a
+ * child with name sort-indicator, which carries the .ascending or .descending
+ * style classes when the column header should show a sort indicator. The CSS
+ * is expected to provide a suitable image using the -gtk-icon-source property.
  *
  * For rubberband selection, a subnode with name rubberband is used.
  *
