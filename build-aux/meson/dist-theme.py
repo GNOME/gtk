@@ -7,7 +7,7 @@ import subprocess
 stylesheets = [ 'gtk/theme/Adwaita/Adwaita.css',
                 'gtk/theme/Adwaita/Adwaita-dark.css',
                 'gtk/theme/HighContrast/HighContrast.css',
-                'gtk/theme/HighContrast/HighContrast-inverse.css' ]
+                'gtk/theme/HighContrast/HighContrast-dark.css' ]
 
 sourceroot = os.environ.get('MESON_SOURCE_ROOT')
 distroot = os.environ.get('MESON_DIST_ROOT')
