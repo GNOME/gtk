@@ -24,13 +24,8 @@
 #include "gtkdropdown.h"
 #include "gtkbox.h"
 #include "gtkcustomsorter.h"
-#include "gtkflattenlistmodel.h"
-#include "gtkframe.h"
 #include "gtkgesture.h"
 #include "gtklabel.h"
-#include "gtklistbox.h"
-#include "gtkmaplistmodel.h"
-#include "gtkpropertylookuplistmodelprivate.h"
 #include "gtkscrolledwindow.h"
 #include "gtksortlistmodel.h"
 #include "gtkstack.h"
@@ -277,6 +272,7 @@ gtk_inspector_controllers_set_object (GtkInspectorControllers *self,
 
   if (!GTK_IS_WIDGET (object))
     {
+      gtk_column_view_set_model (GTK_COLUMN_VIEW (self->view), NULL);
       g_object_set (page, "visible", FALSE, NULL);
       return;
     }
