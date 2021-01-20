@@ -40,6 +40,7 @@
 #include "gtkrevealer.h"
 #include "gtksearchentryprivate.h"
 #include "gtksnapshot.h"
+#include "gtktextview.h"
 #include "gtkwidgetprivate.h"
 
 /**
@@ -520,12 +521,26 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
                             GtkSearchBar          *bar)
 {
   gboolean handled;
+  GtkWidget *focus;
 
   if (!gtk_widget_get_mapped (GTK_WIDGET (bar)))
     return GDK_EVENT_PROPAGATE;
 
   if (bar->reveal_child)
     return GDK_EVENT_PROPAGATE;
+
+  focus = gtk_root_get_focus (gtk_widget_get_root (GTK_WIDGET (bar->capture_widget)));
+
+  /* Make sure type-to-search does not interfere with entries or text views */
+  if (GTK_IS_EDITABLE (focus) || GTK_IS_TEXT_VIEW (focus)) {
+    gboolean editable;
+
+    /* Take a shortcut as both GtkEditable and GtkTextView have this property */
+    g_object_get (focus, "editable", &editable, NULL);
+
+    if (editable)
+      return GDK_EVENT_PROPAGATE;
+  }
 
   if (bar->entry == NULL)
     {
