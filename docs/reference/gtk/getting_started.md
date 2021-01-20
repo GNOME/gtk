@@ -343,20 +343,19 @@ Many widgets, like buttons, do all their drawing themselves. You just tell
 them the label you want to see, and they figure out what font to use, draw
 the button outline and focus rectangle, etc. Sometimes, it is necessary to
 do some custom drawing. In that case, a GtkDrawingArea might be the right
-widget to use. It offers a canvas on which you can draw by connecting to
-the ::draw signal.
+widget to use. It offers a canvas on which you can draw by setting its
+draw function.
 
 The contents of a widget often need to be partially or fully redrawn,
 e.g. when another window is moved and uncovers part of the widget, or
 when the window containing it is resized. It is also possible to explicitly
-cause part or all of the widget to be redrawn, by calling
-gtk_widget_queue_draw() or its variants. GTK takes care of most of the
-details by providing a ready-to-use cairo context to the ::draw signal
-handler.
+cause a widget to be redrawn, by calling gtk_widget_queue_draw(). GTK takes
+care of most of the details by providing a ready-to-use cairo context to the
+draw function.
 
-The following example shows a ::draw signal handler. It is a bit more
-complicated than the previous examples, since it also demonstrates
-input event handling by means of event controllers.
+The following example shows how to use a draw function with GtkDrawingArea.
+It is a bit more complicated than the previous examples, since it also
+demonstrates input event handling with event controllers.
 
 ![Drawing](drawing.png)
 
