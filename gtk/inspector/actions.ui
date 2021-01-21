@@ -64,8 +64,8 @@
                 <property name="expand">1</property>
                 <property name="factory">
                   <object class="GtkSignalListItemFactory">
+                    <signal name="setup" handler="setup_changes_cb"/>
                     <signal name="bind" handler="bind_changes_cb"/>
-                    <signal name="unbind" handler="unbind_changes_cb"/>
                   </object>
                 </property>
               </object>

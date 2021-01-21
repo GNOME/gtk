@@ -238,8 +238,11 @@ dispose (GObject *object)
   g_free (r->name);
   if (r->state_type)
     g_variant_type_free (r->state_type);
-  g_signal_handlers_disconnect_by_func (r->owner, action_enabled_changed_cb, r);
-  g_signal_handlers_disconnect_by_func (r->owner, action_state_changed_cb, r);
+  if (r->owner)
+    {
+      g_signal_handlers_disconnect_by_func (r->owner, action_enabled_changed_cb, r);
+      g_signal_handlers_disconnect_by_func (r->owner, action_state_changed_cb, r);
+    }
 
   while ((child = gtk_widget_get_first_child (GTK_WIDGET (r))))
     gtk_widget_unparent (child);
@@ -323,18 +326,9 @@ gtk_inspector_action_editor_class_init (GtkInspectorActionEditorClass *klass)
 }
 
 GtkWidget *
-gtk_inspector_action_editor_new (GObject    *owner,
-                                 const char *name)
+gtk_inspector_action_editor_new (void)
 {
-  GtkInspectorActionEditor *self;
-
-  self = g_object_new (GTK_TYPE_INSPECTOR_ACTION_EDITOR,
-                       "owner", owner,
-                       "name", name,
-                       NULL);
-  update_widgets (self);
-
-  return GTK_WIDGET (self);
+  return g_object_new (GTK_TYPE_INSPECTOR_ACTION_EDITOR, NULL);
 }
 
 void
@@ -342,10 +336,7 @@ gtk_inspector_action_editor_set (GtkInspectorActionEditor *self,
                                  GObject                  *owner,
                                  const char               *name)
 {
-  g_object_set (self,
-                "owner", owner,
-                "name", name,
-                NULL);
+  g_object_set (self, "owner", owner, "name", name, NULL);
   update_widgets (self);
 }
 
