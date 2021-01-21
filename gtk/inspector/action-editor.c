@@ -19,6 +19,7 @@
 #include <glib/gi18n-lib.h>
 
 #include "action-editor.h"
+#include "variant-editor.h"
 
 #include "gtksizegroup.h"
 #include "gtktogglebutton.h"
@@ -69,138 +70,6 @@ gtk_inspector_action_editor_init (GtkInspectorActionEditor *editor)
   gtk_box_layout_set_spacing (layout, 10);
 }
 
-typedef void (*VariantEditorChanged) (GtkWidget *editor, gpointer data);
-
-typedef struct
-{
-  GtkWidget *editor;
-  VariantEditorChanged callback;
-  gpointer   data;
-} VariantEditorData;
-
-static void
-variant_editor_changed_cb (GObject           *obj,
-                           GParamSpec        *pspec,
-                           VariantEditorData *data)
-{
-  data->callback (data->editor, data->data);
-}
-
-static GtkWidget *
-variant_editor_new (const GVariantType   *type,
-                    VariantEditorChanged  callback,
-                    gpointer              data)
-{
-  GtkWidget *editor;
-  GtkWidget *label;
-  GtkWidget *entry;
-  VariantEditorData *d;
-
-  d = g_new (VariantEditorData, 1);
-  d->callback = callback;
-  d->data = data;
-
-  if (g_variant_type_equal (type, G_VARIANT_TYPE_BOOLEAN))
-    {
-      editor = gtk_toggle_button_new_with_label ("FALSE");
-      g_signal_connect (editor, "notify::active", G_CALLBACK (variant_editor_changed_cb), d);
-    }
-  else if (g_variant_type_equal (type, G_VARIANT_TYPE_STRING))
-    {
-      editor = gtk_entry_new ();
-      gtk_editable_set_width_chars (GTK_EDITABLE (editor), 10);
-      g_signal_connect (editor, "notify::text", G_CALLBACK (variant_editor_changed_cb), d);
-    }
-  else
-    {
-      editor = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-      entry = gtk_entry_new ();
-      gtk_editable_set_width_chars (GTK_EDITABLE (entry), 10);
-      gtk_box_append (GTK_BOX (editor), entry);
-      label = gtk_label_new (g_variant_type_peek_string (type));
-      gtk_box_append (GTK_BOX (editor), label);
-      g_signal_connect (entry, "notify::text", G_CALLBACK (variant_editor_changed_cb), d);
-    }
-
-  g_object_set_data (G_OBJECT (editor), "type", (gpointer)type);
-  d->editor = editor;
-  g_object_set_data_full (G_OBJECT (editor), "callback", d, g_free);
-
-  return editor;
-}
-
-static void
-variant_editor_set_value (GtkWidget *editor,
-                          GVariant  *value)
-{
-  const GVariantType *type;
-  gpointer data;
-
-  data = g_object_get_data (G_OBJECT (editor), "callback");
-  g_signal_handlers_block_by_func (editor, variant_editor_changed_cb, data);
-
-  type = g_variant_get_type (value);
-  if (g_variant_type_equal (type, G_VARIANT_TYPE_BOOLEAN))
-    {
-      GtkToggleButton *tb = GTK_TOGGLE_BUTTON (editor);
-      GtkWidget *child;
-
-      gtk_toggle_button_set_active (tb, g_variant_get_boolean (value));
-      child = gtk_button_get_child (GTK_BUTTON (tb));
-      gtk_label_set_text (GTK_LABEL (child),
-                          g_variant_get_boolean (value) ? "TRUE" : "FALSE");
-    }
-  else if (g_variant_type_equal (type, G_VARIANT_TYPE_STRING))
-    {
-      GtkEntry *entry = GTK_ENTRY (editor);
-      gtk_editable_set_text (GTK_EDITABLE (entry), g_variant_get_string (value, NULL));
-    }
-  else
-    {
-      GtkWidget *entry;
-      char *text;
-
-      entry = gtk_widget_get_first_child (editor);
-
-      text = g_variant_print (value, FALSE);
-      gtk_editable_set_text (GTK_EDITABLE (entry), text);
-      g_free (text);
-    }
-
-  g_signal_handlers_unblock_by_func (editor, variant_editor_changed_cb, data);
-}
-
-static GVariant *
-variant_editor_get_value (GtkWidget *editor)
-{
-  const GVariantType *type;
-  GVariant *value;
-
-  type = (const GVariantType *) g_object_get_data (G_OBJECT (editor), "type");
-  if (g_variant_type_equal (type, G_VARIANT_TYPE_BOOLEAN))
-    {
-      GtkToggleButton *tb = GTK_TOGGLE_BUTTON (editor);
-      value = g_variant_new_boolean (gtk_toggle_button_get_active (tb));
-    }
-  else if (g_variant_type_equal (type, G_VARIANT_TYPE_STRING))
-    {
-      GtkEntry *entry = GTK_ENTRY (editor);
-      value = g_variant_new_string (gtk_editable_get_text (GTK_EDITABLE (entry)));
-    }
-  else
-    {
-      GtkWidget *entry;
-      const char *text;
-
-      entry = gtk_widget_get_first_child (editor);
-      text = gtk_editable_get_text (GTK_EDITABLE (entry));
-
-      value = g_variant_parse (type, text, NULL, NULL, NULL);
-    }
-
-  return value;
-}
-
 static void
 activate_action (GtkWidget                *button,
                  GtkInspectorActionEditor *r)
@@ -208,7 +77,7 @@ activate_action (GtkWidget                *button,
   GVariant *parameter = NULL;
 
   if (r->parameter_entry)
-    parameter = variant_editor_get_value (r->parameter_entry);
+    parameter = gtk_inspector_variant_editor_get_value (r->parameter_entry);
   if (G_IS_ACTION_GROUP (r->owner))
     g_action_group_activate_action (G_ACTION_GROUP (r->owner), r->name, parameter);
   else if (GTK_IS_ACTION_MUXER (r->owner))
@@ -222,7 +91,7 @@ parameter_changed (GtkWidget *editor,
   GtkInspectorActionEditor *r = data;
   GVariant *value;
 
-  value = variant_editor_get_value (editor);
+  value = gtk_inspector_variant_editor_get_value (editor);
   gtk_widget_set_sensitive (r->activate_button, r->enabled && value != NULL);
   if (value)
     g_variant_unref (value);
@@ -235,7 +104,7 @@ state_changed (GtkWidget *editor,
   GtkInspectorActionEditor *r = data;
   GVariant *value;
 
-  value = variant_editor_get_value (editor);
+  value = gtk_inspector_variant_editor_get_value (editor);
   if (value)
     {
       if (G_IS_ACTION_GROUP (r->owner))
@@ -274,7 +143,7 @@ update_state (GtkInspectorActionEditor *r,
               GVariant                 *state)
 {
   if (r->state_entry)
-    variant_editor_set_value (r->state_entry, state);
+    gtk_inspector_variant_editor_set_value (r->state_entry, state);
 }
 
 static void
@@ -321,7 +190,7 @@ constructed (GObject *object)
 
   if (r->parameter_type)
     {
-      r->parameter_entry = variant_editor_new (r->parameter_type, parameter_changed, r);
+      r->parameter_entry = gtk_inspector_variant_editor_new (r->parameter_type, parameter_changed, r);
       gtk_widget_set_sensitive (r->parameter_entry, r->enabled);
       gtk_box_append (GTK_BOX (activate), r->parameter_entry);
     }
@@ -336,8 +205,8 @@ constructed (GObject *object)
       if (r->sg)
         gtk_size_group_add_widget (r->sg, label);
       gtk_box_append (GTK_BOX (row), label);
-      r->state_entry = variant_editor_new (r->state_type, state_changed, r);
-      variant_editor_set_value (r->state_entry, state);
+      r->state_entry = gtk_inspector_variant_editor_new (r->state_type, state_changed, r);
+      gtk_inspector_variant_editor_set_value (r->state_entry, state);
       gtk_box_append (GTK_BOX (row), r->state_entry);
       gtk_widget_set_parent (row, GTK_WIDGET (r));
     }
