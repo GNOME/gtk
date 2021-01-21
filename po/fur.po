@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-28 14:20+0000\n"
-"PO-Revision-Date: 2020-12-31 11:22+0100\n"
+"POT-Creation-Date: 2021-01-19 20:25+0000\n"
+"PO-Revision-Date: 2021-01-21 07:40+0100\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <fur@li.org>\n"
 "Language: fur\n"
@@ -72,7 +72,7 @@ msgstr "Opzion di debug GDK di stabilî"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:241 gdk/gdk.c:244 gtk/gtkmain.c:471 gtk/gtkmain.c:474
+#: gdk/gdk.c:241 gdk/gdk.c:244 gtk/gtkmain.c:469 gtk/gtkmain.c:472
 msgid "FLAGS"
 msgstr "OPZIONS"
 
@@ -471,19 +471,19 @@ msgid "Unable to create a GL pixel format"
 msgstr "Impussibil creâ un formât di pixel GL"
 
 #: gdk/quartz/gdkglcontext-quartz.c:133 gdk/wayland/gdkglcontext-wayland.c:208
-#: gdk/win32/gdkglcontext-win32.c:1072 gdk/win32/gdkglcontext-win32.c:1112
+#: gdk/win32/gdkglcontext-win32.c:1089 gdk/win32/gdkglcontext-win32.c:1129
 #: gdk/x11/gdkglcontext-x11.c:724 gdk/x11/gdkglcontext-x11.c:774
 msgid "Unable to create a GL context"
 msgstr "Impussibil creâ un contest GL"
 
 #: gdk/wayland/gdkglcontext-wayland.c:418
-#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:910
-#: gdk/win32/gdkglcontext-win32.c:920 gdk/win32/gdkglcontext-win32.c:1037
+#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:927
+#: gdk/win32/gdkglcontext-win32.c:937 gdk/win32/gdkglcontext-win32.c:1054
 #: gdk/x11/gdkglcontext-x11.c:975
 msgid "No available configurations for the given pixel format"
 msgstr "Nissune configurazion disponibile pal formât pixel furnît"
 
-#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1179
+#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1196
 #: gdk/x11/gdkglcontext-x11.c:1281
 msgid "No GL implementation is available"
 msgstr "Nissune implementazion GL disponibile"
@@ -2083,20 +2083,14 @@ msgid "Very Dark Purple"
 msgstr "Viole une vore scûr"
 
 #: gtk/gtkcolorchooserwidget.c:476
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Brown"
-msgstr "Grîs une vore clâr"
+msgstr "Maron une vore clâr"
 
 #: gtk/gtkcolorchooserwidget.c:477
-#, fuzzy
-#| msgctxt "output-bin"
-#| msgid "Right Bin"
 msgctxt "Color name"
 msgid "Light Brown"
-msgstr "Cassele a diestre"
+msgstr "Maron clâr"
 
 #: gtk/gtkcolorchooserwidget.c:478
 msgctxt "Color name"
@@ -2104,20 +2098,14 @@ msgid "Brown"
 msgstr "Maron"
 
 #: gtk/gtkcolorchooserwidget.c:479
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Dark Butter"
 msgctxt "Color name"
 msgid "Dark Brown"
-msgstr "Spongje scure"
+msgstr "Maron scûr"
 
 #: gtk/gtkcolorchooserwidget.c:480
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Brown"
-msgstr "Grîs une vore scûr"
+msgstr "Maron une vore scûr"
 
 #: gtk/gtkcolorchooserwidget.c:481
 msgctxt "Color name"
@@ -2125,68 +2113,44 @@ msgid "White"
 msgstr "Blanc"
 
 #: gtk/gtkcolorchooserwidget.c:482
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 1"
-msgstr "Grîs clâr"
+msgstr "Grîs clâr 1"
 
 #: gtk/gtkcolorchooserwidget.c:483
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 2"
-msgstr "Grîs clâr"
+msgstr "Grîs clâr 2"
 
 #: gtk/gtkcolorchooserwidget.c:484
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 3"
-msgstr "Grîs clâr"
+msgstr "Grîs clâr 3"
 
 #: gtk/gtkcolorchooserwidget.c:485
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 4"
-msgstr "Grîs clâr"
+msgstr "Grîs clâr 4"
 
 #: gtk/gtkcolorchooserwidget.c:486
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 1"
-msgstr "Grîs scûr"
+msgstr "Grîs scûr 1"
 
 #: gtk/gtkcolorchooserwidget.c:487
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 2"
-msgstr "Grîs scûr"
+msgstr "Grîs scûr 2"
 
 #: gtk/gtkcolorchooserwidget.c:488
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 3"
-msgstr "Grîs scûr"
+msgstr "Grîs scûr 3"
 
 #: gtk/gtkcolorchooserwidget.c:489
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 4"
-msgstr "Grîs scûr"
+msgstr "Grîs scûr 4"
 
 #: gtk/gtkcolorchooserwidget.c:490
 msgctxt "Color name"
@@ -2395,26 +2359,14 @@ msgid "The folder could not be created"
 msgstr "La cartele no pues jessi creade"
 
 #: gtk/gtkfilechooserwidget.c:821
-#, fuzzy
-#| msgid ""
-#| "The folder could not be created, as a file with the same name already "
-#| "exists.  Try using a different name for the folder, or rename the file "
-#| "first."
 msgid ""
 "The folder could not be created, as a file with the same name already exists."
 msgstr ""
-"Impussibil creâ la cartele, viodût che un file cul stes non al esist za.  "
-"Cîr di doprâ un non diferent pe cartele opûr prime cambie il non dal file."
+"Impussibil creâ la cartele, viodût che un file cul stes non al esist za."
 
 #: gtk/gtkfilechooserwidget.c:823
-#, fuzzy
-#| msgid ""
-#| "The folder could not be created, as a file with the same name already "
-#| "exists.  Try using a different name for the folder, or rename the file "
-#| "first."
 msgid "Try using a different name for the folder, or rename the file first."
 msgstr ""
-"Impussibil creâ la cartele, viodût che un file cul stes non al esist za.  "
 "Cîr di doprâ un non diferent pe cartele opûr prime cambie il non dal file."
 
 #: gtk/gtkfilechooserwidget.c:836
@@ -2568,10 +2520,8 @@ msgid "Show _Size Column"
 msgstr "Mostre colone _Dimension"
 
 #: gtk/gtkfilechooserwidget.c:2341
-#, fuzzy
-#| msgid "Show _Size Column"
 msgid "Show T_ype Column"
-msgstr "Mostre colone _Dimension"
+msgstr "Mostre colone _Gjenar"
 
 #: gtk/gtkfilechooserwidget.c:2342
 msgid "Show _Time"
@@ -2648,11 +2598,8 @@ msgid "Program"
 msgstr "Program"
 
 #: gtk/gtkfilechooserwidget.c:5010
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "AudioMute"
 msgid "Audio"
-msgstr "AudioCidin"
+msgstr "Audio"
 
 #: gtk/gtkfilechooserwidget.c:5011 gtk/inspector/visual.ui:230
 #: gtk/ui/gtkfontbutton.ui:13
@@ -2664,11 +2611,8 @@ msgid "Image"
 msgstr "Imagjin"
 
 #: gtk/gtkfilechooserwidget.c:5013
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Arch A"
 msgid "Archive"
-msgstr "Arch A"
+msgstr "Archivi"
 
 #: gtk/gtkfilechooserwidget.c:5014
 msgid "Markup"
@@ -2687,22 +2631,16 @@ msgid "Contacts"
 msgstr "Contats"
 
 #: gtk/gtkfilechooserwidget.c:5020
-#, fuzzy
-#| msgid "calendar:MY"
 msgid "Calendar"
-msgstr "calendar:MY"
+msgstr "Calendari"
 
 #: gtk/gtkfilechooserwidget.c:5021
-#, fuzzy
-#| msgid "Documented by"
 msgid "Document"
-msgstr "Documentât di"
+msgstr "Document"
 
 #: gtk/gtkfilechooserwidget.c:5022
-#, fuzzy
-#| msgid "_Orientation:"
 msgid "Presentation"
-msgstr "_Orientament:"
+msgstr "Presentazion"
 
 #: gtk/gtkfilechooserwidget.c:5023
 msgid "Spreadsheet"
@@ -2994,40 +2932,40 @@ msgstr ""
 "Contatâ l'aministradôr di sisteme"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:464
+#: gtk/gtkmain.c:462
 msgid "Load additional GTK+ modules"
 msgstr "Cjarie i modui GTK+ adizionâi"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:465
+#: gtk/gtkmain.c:463
 msgid "MODULES"
 msgstr "MODUI"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:467
+#: gtk/gtkmain.c:465
 msgid "Make all warnings fatal"
 msgstr "Fâs deventâ ducj i avertiments fatâi"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:470
+#: gtk/gtkmain.c:468
 msgid "GTK+ debugging flags to set"
 msgstr "Opzion di debug GDK di stabilî"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:473
+#: gtk/gtkmain.c:471
 msgid "GTK+ debugging flags to unset"
 msgstr "Opzions di debug GDK di no stabilî"
 
-#: gtk/gtkmain.c:810 gtk/gtkmain.c:1004
+#: gtk/gtkmain.c:811 gtk/gtkmain.c:1005
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Impussibil vierzi il display: %s"
 
-#: gtk/gtkmain.c:922
+#: gtk/gtkmain.c:923
 msgid "GTK+ Options"
 msgstr "Opzions GTK+"
 
-#: gtk/gtkmain.c:922
+#: gtk/gtkmain.c:923
 msgid "Show GTK+ Options"
 msgstr "Mostre opzions GTK+"
 
@@ -3036,7 +2974,7 @@ msgstr "Mostre opzions GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:1275
+#: gtk/gtkmain.c:1276
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -4833,11 +4771,9 @@ msgid "General"
 msgstr "Gjenerâl"
 
 #: gtk/open-type-layout.h:13
-#, fuzzy
-#| msgid "Accessible name"
 msgctxt "OpenType layout"
 msgid "Access All Alternates"
-msgstr "Non acessibil"
+msgstr "Acès a dutis lis alternativis"
 
 #: gtk/open-type-layout.h:14
 msgctxt "OpenType layout"
@@ -5100,7 +5036,6 @@ msgid "Standard Ligatures"
 msgstr "Leaduris standard"
 
 #: gtk/open-type-layout.h:66
-#, fuzzy
 msgctxt "OpenType layout"
 msgid "Leading Jamo Forms"
 msgstr "Formis principâls Jamo"
@@ -5263,7 +5198,7 @@ msgstr "Formis Rakar"
 #: gtk/open-type-layout.h:98
 msgctxt "OpenType layout"
 msgid "Required Ligatures"
-msgstr ""
+msgstr "Leaduris domandadis"
 
 #: gtk/open-type-layout.h:99
 msgctxt "OpenType layout"
@@ -5293,12 +5228,12 @@ msgstr ""
 #: gtk/open-type-layout.h:104
 msgctxt "OpenType layout"
 msgid "Required Variation Alternates"
-msgstr ""
+msgstr "Alternativis di variazions domandadis"
 
 #: gtk/open-type-layout.h:105
 msgctxt "OpenType layout"
 msgid "Stylistic Alternates"
-msgstr ""
+msgstr "Alternativis di stilistiche"
 
 #: gtk/open-type-layout.h:106
 msgctxt "OpenType layout"
