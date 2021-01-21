@@ -3806,6 +3806,8 @@ gtk_window_map (GtkWidget *widget)
 
   if (priv->application)
     gtk_application_handle_window_map (priv->application, window);
+
+  gtk_widget_realize_at_context (widget);
 }
 
 static void
@@ -3817,6 +3819,8 @@ gtk_window_unmap (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unmap (widget);
   gdk_surface_hide (priv->surface);
+
+  gtk_widget_unrealize_at_context (widget);
 
   if (priv->title_box != NULL)
     gtk_widget_unmap (priv->title_box);
