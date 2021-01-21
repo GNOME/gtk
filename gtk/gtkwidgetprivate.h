@@ -373,6 +373,9 @@ gboolean gtk_widget_focus_self       (GtkWidget        *widget,
 void    gtk_widget_update_orientation   (GtkWidget      *widget,
                                          GtkOrientation  orientation);
 
+void    gtk_widget_realize_at_context   (GtkWidget *widget);
+void    gtk_widget_unrealize_at_context (GtkWidget *widget);
+
 /* inline getters */
 
 static inline GtkWidget *
