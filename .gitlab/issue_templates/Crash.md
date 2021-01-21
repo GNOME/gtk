@@ -1,4 +1,14 @@
+<!--
+  Please, read the CONTRIBUTING.md guide on how to file a new issue.
+
+  https://gitlab.gnome.org/GNOME/gtk/-/blob/master/CONTRIBUTING.md
+-->
+
 ## Steps to reproduce
+<!--
+  Please, explain the sequence of actions necessary to reproduce the
+  crash
+-->
 
  1. ...
  2. ...

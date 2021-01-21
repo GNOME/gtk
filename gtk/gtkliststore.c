@@ -2149,7 +2149,7 @@ gtk_list_store_has_default_sort_func (GtkTreeSortable *sortable)
 /**
  * gtk_list_store_insert_with_values:
  * @list_store: A #GtkListStore
- * @iter: (out) (allow-none): An unset #GtkTreeIter to set to the new row, or %NULL
+ * @iter: (out) (optional): An unset #GtkTreeIter to set to the new row
  * @position: position to insert the new row, or -1 to append after existing
  *     rows
  * @...: pairs of column number and value, terminated with -1
@@ -2161,7 +2161,8 @@ gtk_list_store_has_default_sort_func (GtkTreeSortable *sortable)
  *
  * Calling
  * `gtk_list_store_insert_with_values (list_store, iter, position...)`
- * has the same effect as calling
+ * has the same effect as calling:
+ *
  * |[<!-- language="C" -->
  * static void
  * insert_value (GtkListStore *list_store,
@@ -2175,12 +2176,15 @@ gtk_list_store_has_default_sort_func (GtkTreeSortable *sortable)
  *                       );
  * }
  * ]|
- * with the difference that the former will only emit a row_inserted signal,
- * while the latter will emit row_inserted, row_changed and, if the list store
- * is sorted, rows_reordered. Since emitting the rows_reordered signal
- * repeatedly can affect the performance of the program,
- * gtk_list_store_insert_with_values() should generally be preferred when
- * inserting rows in a sorted list store.
+ *
+ * with the difference that the former will only emit #GtkTreeModel::row-inserted
+ * once, while the latter will emit #GtkTreeModel::row-inserted,
+ * #GtkTreeModel::row-changed and, if the list store is sorted,
+ * #GtkTreeModel::rows-reordered for every inserted value.
+ *
+ * Since emitting the #GtkTreeModel::rows-reordered signal repeatedly can
+ * affect the performance of the program, gtk_list_store_insert_with_values()
+ * should generally be preferred when inserting rows in a sorted list store.
  */
 void
 gtk_list_store_insert_with_values (GtkListStore *list_store,
@@ -2244,9 +2248,9 @@ gtk_list_store_insert_with_values (GtkListStore *list_store,
 
 
 /**
- * gtk_list_store_insert_with_valuesv:
+ * gtk_list_store_insert_with_valuesv: (rename-to gtk_list_store_insert_with_values)
  * @list_store: A #GtkListStore
- * @iter: (out) (allow-none): An unset #GtkTreeIter to set to the new row, or %NULL.
+ * @iter: (out) (optional): An unset #GtkTreeIter to set to the new row
  * @position: position to insert the new row, or -1 for last
  * @columns: (array length=n_values): an array of column numbers
  * @values: (array length=n_values): an array of GValues 
@@ -2254,8 +2258,9 @@ gtk_list_store_insert_with_values (GtkListStore *list_store,
  * 
  * A variant of gtk_list_store_insert_with_values() which
  * takes the columns and values as two arrays, instead of
- * varargs. This function is mainly intended for 
- * language-bindings.
+ * varargs.
+ *
+ * This function is mainly intended for language-bindings.
  */
 void
 gtk_list_store_insert_with_valuesv (GtkListStore *list_store,
