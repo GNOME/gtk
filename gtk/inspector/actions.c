@@ -243,7 +243,7 @@ bind_changes_cb (GtkSignalListItemFactory *factory,
   owner = action_holder_get_owner (ACTION_HOLDER (item));
   name = action_holder_get_name (ACTION_HOLDER (item));
 
-  editor = gtk_inspector_action_editor_new (owner, name, NULL);
+  editor = gtk_inspector_action_editor_new (owner, name);
   gtk_widget_add_css_class (editor, "cell");
   gtk_list_item_set_child (list_item, editor);
 }

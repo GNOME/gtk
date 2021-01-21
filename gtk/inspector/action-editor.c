@@ -21,7 +21,6 @@
 #include "action-editor.h"
 #include "variant-editor.h"
 
-#include "gtksizegroup.h"
 #include "gtktogglebutton.h"
 #include "gtkentry.h"
 #include "gtklabel.h"
@@ -42,7 +41,6 @@ struct _GtkInspectorActionEditor
   GtkWidget *activate_button;
   GtkWidget *parameter_entry;
   GtkWidget *state_entry;
-  GtkSizeGroup *sg;
 };
 
 typedef struct
@@ -179,8 +177,6 @@ constructed (GObject *object)
   row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   activate = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_box_append (GTK_BOX (row), activate);
-  if (r->sg)
-    gtk_size_group_add_widget (r->sg, activate);
 
   r->activate_button = gtk_button_new_with_label (_("Activate"));
   g_signal_connect (r->activate_button, "clicked", G_CALLBACK (activate_action), r);
@@ -202,8 +198,6 @@ constructed (GObject *object)
       r->state_type = g_variant_type_copy (g_variant_get_type (state));
       row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       label = gtk_label_new (_("Set State"));
-      if (r->sg)
-        gtk_size_group_add_widget (r->sg, label);
       gtk_box_append (GTK_BOX (row), label);
       r->state_entry = gtk_inspector_variant_editor_new (r->state_type, state_changed, r);
       gtk_inspector_variant_editor_set_value (r->state_entry, state);
@@ -227,7 +221,6 @@ dispose (GObject *object)
   GtkWidget *child;
 
   g_free (r->name);
-  g_clear_object (&r->sg);
   if (r->state_type)
     g_variant_type_free (r->state_type);
   g_signal_handlers_disconnect_by_func (r->owner, action_enabled_changed_cb, r);
@@ -257,10 +250,6 @@ get_property (GObject    *object,
       g_value_set_string (value, r->name);
       break;
 
-    case PROP_SIZEGROUP:
-      g_value_set_object (value, r->sg);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -284,10 +273,6 @@ set_property (GObject      *object,
     case PROP_NAME:
       g_free (r->name);
       r->name = g_value_dup_string (value);
-      break;
-
-    case PROP_SIZEGROUP:
-      r->sg = g_value_dup_object (value);
       break;
 
     default:
@@ -314,22 +299,17 @@ gtk_inspector_action_editor_class_init (GtkInspectorActionEditorClass *klass)
   g_object_class_install_property (object_class, PROP_NAME,
       g_param_spec_string ("name", "Name", "The action name",
                            NULL, G_PARAM_READWRITE|G_PARAM_CONSTRUCT));
-  g_object_class_install_property (object_class, PROP_SIZEGROUP,
-      g_param_spec_object ("sizegroup", "Size Group", "The Size Group for activate", 
-                           GTK_TYPE_SIZE_GROUP, G_PARAM_READWRITE|G_PARAM_CONSTRUCT));
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
 }
 
 GtkWidget *
-gtk_inspector_action_editor_new (GObject      *owner,
-                                 const char   *name,
-                                 GtkSizeGroup *activate)
+gtk_inspector_action_editor_new (GObject    *owner,
+                                 const char *name)
 {
   return g_object_new (GTK_TYPE_INSPECTOR_ACTION_EDITOR,
                        "owner", owner,
                        "name", name,
-                       "sizegroup", activate,
                        NULL);
 }
 
