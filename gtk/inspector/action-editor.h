@@ -33,10 +33,11 @@ typedef struct _GtkInspectorActionEditor GtkInspectorActionEditor;
 G_BEGIN_DECLS
 
 GType      gtk_inspector_action_editor_get_type (void);
-GtkWidget *gtk_inspector_action_editor_new      (GObject      *owner,
-                                                 const char   *name,
-                                                 GtkSizeGroup *activate);
-void       gtk_inspector_action_editor_update   (GtkInspectorActionEditor *r,
+GtkWidget *gtk_inspector_action_editor_new      (void);
+void       gtk_inspector_action_editor_set      (GtkInspectorActionEditor *self,
+                                                 GObject                  *owner,
+                                                 const char               *name);
+void       gtk_inspector_action_editor_update   (GtkInspectorActionEditor *self,
                                                  gboolean                  enabled,
                                                  GVariant                 *state);
 

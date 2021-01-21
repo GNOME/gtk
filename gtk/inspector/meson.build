@@ -1,6 +1,7 @@
 inspector_sources = files(
   'a11y.c',
   'action-editor.c',
+  'action-holder.c',
   'actions.c',
   'baselineoverlay.c',
   'cellrenderergraph.c',
@@ -24,10 +25,12 @@ inspector_sources = files(
   'misc-info.c',
   'object-tree.c',
   'prop-editor.c',
+  'prop-holder.c',
   'prop-list.c',
   'recorder.c',
   'recording.c',
   'renderrecording.c',
+  'resource-holder.c',
   'resource-list.c',
   'shortcuts.c',
   'size-groups.c',
@@ -38,9 +41,7 @@ inspector_sources = files(
   'treewalk.c',
   'type-info.c',
   'updatesoverlay.c',
+  'variant-editor.c',
   'visual.c',
   'window.c',
-  'prop-holder.c',
-  'resource-holder.c',
-  'action-holder.c'
 )

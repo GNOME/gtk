@@ -46,6 +46,7 @@ struct _GtkInspectorActions
   GObject *object;
 
   GListStore *actions;
+  GtkSortListModel *sorted;
   GtkColumnViewColumn *name;
 };
 
@@ -90,6 +91,7 @@ setup_name_cb (GtkSignalListItemFactory *factory,
 
   label = gtk_label_new (NULL);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+  gtk_widget_add_css_class (label, "cell");
   gtk_list_item_set_child (list_item, label);
 }
 
@@ -114,6 +116,7 @@ setup_enabled_cb (GtkSignalListItemFactory *factory,
 
   label = gtk_label_new (NULL);
   gtk_label_set_xalign (GTK_LABEL (label), 0.5);
+  gtk_widget_add_css_class (label, "cell");
   gtk_list_item_set_child (list_item, label);
 }
 
@@ -149,8 +152,8 @@ setup_parameter_cb (GtkSignalListItemFactory *factory,
 
   label = gtk_label_new (NULL);
   gtk_label_set_xalign (GTK_LABEL (label), 0.5);
-  gtk_list_item_set_child (list_item, label);
   gtk_widget_add_css_class (label, "cell");
+  gtk_list_item_set_child (list_item, label);
 }
 
 static void
@@ -189,8 +192,8 @@ setup_state_cb (GtkSignalListItemFactory *factory,
   gtk_widget_set_margin_start (label, 5);
   gtk_widget_set_margin_end (label, 5);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_list_item_set_child (list_item, label);
   gtk_widget_add_css_class (label, "cell");
+  gtk_list_item_set_child (list_item, label);
 }
 
 static void
@@ -202,7 +205,6 @@ bind_state_cb (GtkSignalListItemFactory *factory,
   GObject *owner;
   const char *name;
   GVariant *state;
-  char *state_string;
 
   item = gtk_list_item_get_item (list_item);
   label = gtk_list_item_get_child (list_item);
@@ -218,15 +220,27 @@ bind_state_cb (GtkSignalListItemFactory *factory,
     state = NULL;
 
   if (state)
-    state_string = g_variant_print (state, FALSE);
+    {
+      char *state_string;
+
+      state_string = g_variant_print (state, FALSE);
+      gtk_label_set_label (GTK_LABEL (label), state_string);
+      g_free (state_string);
+      g_variant_unref (state);
+    }
   else
-    state_string = g_strdup ("");
+    gtk_label_set_label (GTK_LABEL (label), "");
+}
 
-  gtk_label_set_label (GTK_LABEL (label), state_string);
+static void
+setup_changes_cb (GtkSignalListItemFactory *factory,
+                  GtkListItem              *list_item)
+{
+  GtkWidget *editor;
 
-  g_free (state_string);
-  if (state)
-    g_variant_unref (state);
+  editor = gtk_inspector_action_editor_new ();
+  gtk_widget_add_css_class (editor, "cell");
+  gtk_list_item_set_child (list_item, editor);
 }
 
 static void
@@ -239,20 +253,14 @@ bind_changes_cb (GtkSignalListItemFactory *factory,
   GtkWidget *editor;
 
   item = gtk_list_item_get_item (list_item);
+  editor = gtk_list_item_get_child (list_item);
 
   owner = action_holder_get_owner (ACTION_HOLDER (item));
   name = action_holder_get_name (ACTION_HOLDER (item));
 
-  editor = gtk_inspector_action_editor_new (owner, name, NULL);
-  gtk_widget_add_css_class (editor, "cell");
-  gtk_list_item_set_child (list_item, editor);
-}
-
-static void
-unbind_changes_cb (GtkSignalListItemFactory *factory,
-                   GtkListItem              *list_item)
-{
-  gtk_list_item_set_child (list_item, NULL);
+  gtk_inspector_action_editor_set (GTK_INSPECTOR_ACTION_EDITOR (editor),
+                                   owner,
+                                   name);
 }
 
 static void
@@ -284,12 +292,15 @@ add_muxer (GtkInspectorActions *sl,
 static gboolean
 reload (GtkInspectorActions *sl)
 {
-  g_list_store_remove_all (sl->actions);
+  gboolean loaded = FALSE;
+
+  g_object_unref (sl->actions);
+  sl->actions = g_list_store_new (ACTION_TYPE_HOLDER);
 
   if (GTK_IS_APPLICATION (sl->object))
     {
       add_group (sl, G_ACTION_GROUP (sl->object));
-      return TRUE;
+      loaded = TRUE;
     }
   else if (GTK_IS_WIDGET (sl->object))
     {
@@ -299,11 +310,13 @@ reload (GtkInspectorActions *sl)
       if (muxer)
         {
           add_muxer (sl, muxer);
-          return TRUE;
+          loaded = TRUE;
         }
     }
 
-  return FALSE;
+  gtk_sort_list_model_set_model (sl->sorted, G_LIST_MODEL (sl->actions));
+
+  return loaded;
 }
 
 static void
@@ -325,10 +338,10 @@ gtk_inspector_actions_set_object (GtkInspectorActions *sl,
   gtk_stack_page_set_visible (page, FALSE);
 
   g_set_object (&sl->object, object);
-  loaded = reload (sl);
-  gtk_stack_page_set_visible (page, loaded);
 
   gtk_column_view_sort_by_column (GTK_COLUMN_VIEW (sl->list), sl->name, GTK_SORT_ASCENDING);
+  loaded = reload (sl);
+  gtk_stack_page_set_visible (page, loaded);
 }
 
 static void
@@ -382,7 +395,6 @@ constructed (GObject *object)
 {
   GtkInspectorActions *sl = GTK_INSPECTOR_ACTIONS (object);
   GtkSorter *sorter;
-  GListModel *sorted;
   GListModel *model;
 
   g_signal_connect_swapped (sl->button, "clicked",
@@ -397,9 +409,9 @@ constructed (GObject *object)
   g_object_unref (sorter);
 
   sl->actions = g_list_store_new (ACTION_TYPE_HOLDER);
-  sorted = G_LIST_MODEL (gtk_sort_list_model_new (g_object_ref (G_LIST_MODEL (sl->actions)),
-                                                  g_object_ref (gtk_column_view_get_sorter (GTK_COLUMN_VIEW (sl->list)))));
-  model = G_LIST_MODEL (gtk_no_selection_new (sorted));
+  sl->sorted = gtk_sort_list_model_new (g_object_ref (G_LIST_MODEL (sl->actions)),
+                                        g_object_ref (gtk_column_view_get_sorter (GTK_COLUMN_VIEW (sl->list))));
+  model = G_LIST_MODEL (gtk_no_selection_new (g_object_ref (G_LIST_MODEL (sl->sorted))));
   gtk_column_view_set_model (GTK_COLUMN_VIEW (sl->list), GTK_SELECTION_MODEL (model));
   g_object_unref (model);
 }
@@ -410,6 +422,7 @@ dispose (GObject *object)
   GtkInspectorActions *sl = GTK_INSPECTOR_ACTIONS (object);
   GtkWidget *child;
 
+  g_clear_object (&sl->sorted);
   g_clear_object (&sl->actions);
   g_clear_object (&sl->object);
 
@@ -445,8 +458,8 @@ gtk_inspector_actions_class_init (GtkInspectorActionsClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, bind_parameter_cb);
   gtk_widget_class_bind_template_callback (widget_class, setup_state_cb);
   gtk_widget_class_bind_template_callback (widget_class, bind_state_cb);
+  gtk_widget_class_bind_template_callback (widget_class, setup_changes_cb);
   gtk_widget_class_bind_template_callback (widget_class, bind_changes_cb);
-  gtk_widget_class_bind_template_callback (widget_class, unbind_changes_cb);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
 }
