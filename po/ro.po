@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-01-16 18:38+0000\n"
-"PO-Revision-Date: 2021-01-18 15:05+0200\n"
+"POT-Creation-Date: 2021-01-21 18:17+0000\n"
+"PO-Revision-Date: 2021-01-21 20:26+0100\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28@gmail.com>\n"
 "Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -60,15 +60,15 @@ msgstr "Tragerea-și-plasarea din alte aplicații nu este suportată."
 msgid "No compatible formats to transfer contents."
 msgstr "Niciun format compatibil pentru transferarea conținutului."
 
-#: gdk/gdksurface.c:1090
+#: gdk/gdksurface.c:1102
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Suportul GL dezactivat via GDK_DEBUG"
 
-#: gdk/gdksurface.c:1101
+#: gdk/gdksurface.c:1113
 msgid "The current backend does not support OpenGL"
 msgstr "Suportul curent nu suportă OpenGL"
 
-#: gdk/gdksurface.c:1209
+#: gdk/gdksurface.c:1221
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Suportul Vulkan dezactivat via GDK_DEBUG"
 
@@ -461,19 +461,19 @@ msgstr "Niciun format de transfer compatibil nu a fost găsit"
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Nu s-a putut decoda conținutul cu tipul mime de „%s”"
 
-#: gdk/wayland/gdkglcontext-wayland.c:151 gdk/win32/gdkglcontext-win32.c:947
-#: gdk/win32/gdkglcontext-win32.c:988 gdk/x11/gdkglcontext-x11.c:581
+#: gdk/wayland/gdkglcontext-wayland.c:151 gdk/win32/gdkglcontext-win32.c:934
+#: gdk/win32/gdkglcontext-win32.c:975 gdk/x11/gdkglcontext-x11.c:581
 #: gdk/x11/gdkglcontext-x11.c:631
 msgid "Unable to create a GL context"
 msgstr "Nu s-a putut crea un context GL"
 
-#: gdk/wayland/gdkglcontext-wayland.c:423 gdk/win32/gdkglcontext-win32.c:788
-#: gdk/win32/gdkglcontext-win32.c:798 gdk/win32/gdkglcontext-win32.c:913
+#: gdk/wayland/gdkglcontext-wayland.c:423 gdk/win32/gdkglcontext-win32.c:775
+#: gdk/win32/gdkglcontext-win32.c:785 gdk/win32/gdkglcontext-win32.c:900
 #: gdk/x11/gdkglcontext-x11.c:879
 msgid "No available configurations for the given pixel format"
 msgstr "Nu sunt configurații disponibile pentru formatul de pixel dat"
 
-#: gdk/wayland/gdkglcontext-wayland.c:448 gdk/win32/gdkglcontext-win32.c:1072
+#: gdk/wayland/gdkglcontext-wayland.c:448 gdk/win32/gdkglcontext-win32.c:1048
 #: gdk/x11/gdkglcontext-x11.c:1182
 msgid "No GL implementation is available"
 msgstr "Nicio implementare GL nu este disponibilă"
@@ -908,35 +908,35 @@ msgstr "Licență Apache, versiunea 2.0"
 msgid "Mozilla Public License 2.0"
 msgstr "Licență publică Mozilla 2.0"
 
-#: gtk/gtkaboutdialog.c:933
+#: gtk/gtkaboutdialog.c:946
 msgid "Website"
 msgstr "Pagină web"
 
-#: gtk/gtkaboutdialog.c:970 gtk/ui/gtkapplication-quartz.ui:6
+#: gtk/gtkaboutdialog.c:983 gtk/ui/gtkapplication-quartz.ui:6
 #, c-format
 msgid "About %s"
 msgstr "Despre %s"
 
-#: gtk/gtkaboutdialog.c:2074
+#: gtk/gtkaboutdialog.c:2087
 msgid "Created by"
 msgstr "Creat de"
 
-#: gtk/gtkaboutdialog.c:2077
+#: gtk/gtkaboutdialog.c:2090
 msgid "Documented by"
 msgstr "Documentat de"
 
-#: gtk/gtkaboutdialog.c:2087
+#: gtk/gtkaboutdialog.c:2100
 msgid "Translated by"
 msgstr "Tradus de"
 
-#: gtk/gtkaboutdialog.c:2092
+#: gtk/gtkaboutdialog.c:2105
 msgid "Design by"
 msgstr "Conceput de"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2255
+#: gtk/gtkaboutdialog.c:2268
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -1030,392 +1030,392 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Bară oblică inversă"
 
-#: gtk/gtkaccessible.c:556
+#: gtk/gtkaccessible.c:558
 msgctxt "accessibility"
 msgid "alert"
 msgstr "alertă"
 
-#: gtk/gtkaccessible.c:557
+#: gtk/gtkaccessible.c:559
 msgctxt "accessibility"
 msgid "alert dialog"
 msgstr "dialog de alertă"
 
-#: gtk/gtkaccessible.c:558
+#: gtk/gtkaccessible.c:560
 msgctxt "accessibility"
 msgid "banner"
 msgstr "steag"
 
-#: gtk/gtkaccessible.c:559
+#: gtk/gtkaccessible.c:561
 msgctxt "accessibility"
 msgid "button"
 msgstr "buton"
 
-#: gtk/gtkaccessible.c:560
+#: gtk/gtkaccessible.c:562
 msgctxt "accessibility"
 msgid "caption"
 msgstr "legendă"
 
-#: gtk/gtkaccessible.c:561
+#: gtk/gtkaccessible.c:563
 msgctxt "accessibility"
 msgid "cell"
 msgstr "celulă"
 
-#: gtk/gtkaccessible.c:562
+#: gtk/gtkaccessible.c:564
 msgctxt "accessibility"
 msgid "checkbox"
 msgstr "căsuță de bifare"
 
-#: gtk/gtkaccessible.c:563
+#: gtk/gtkaccessible.c:565
 msgctxt "accessibility"
 msgid "column header"
 msgstr "antet de coloană"
 
-#: gtk/gtkaccessible.c:564
+#: gtk/gtkaccessible.c:566
 msgctxt "accessibility"
 msgid "combo box"
 msgstr "listă de selecție"
 
-#: gtk/gtkaccessible.c:565
+#: gtk/gtkaccessible.c:567
 msgctxt "accessibility"
 msgid "command"
 msgstr "comandă"
 
-#: gtk/gtkaccessible.c:566
+#: gtk/gtkaccessible.c:568
 msgctxt "accessibility"
 msgid "composite"
 msgstr "compozit"
 
-#: gtk/gtkaccessible.c:567
+#: gtk/gtkaccessible.c:569
 msgctxt "accessibility"
 msgid "dialog"
 msgstr "dialog"
 
-#: gtk/gtkaccessible.c:568
+#: gtk/gtkaccessible.c:570
 msgctxt "accessibility"
 msgid "document"
 msgstr "document"
 
-#: gtk/gtkaccessible.c:569
+#: gtk/gtkaccessible.c:571
 msgctxt "accessibility"
 msgid "feed"
 msgstr "flux"
 
-#: gtk/gtkaccessible.c:570
+#: gtk/gtkaccessible.c:572
 msgctxt "accessibility"
 msgid "form"
 msgstr "formă"
 
-#: gtk/gtkaccessible.c:571
+#: gtk/gtkaccessible.c:573
 msgctxt "accessibility"
 msgid "generic"
 msgstr "generic"
 
-#: gtk/gtkaccessible.c:572
+#: gtk/gtkaccessible.c:574
 msgctxt "accessibility"
 msgid "grid"
 msgstr "grilă"
 
-#: gtk/gtkaccessible.c:573
+#: gtk/gtkaccessible.c:575
 msgctxt "accessibility"
 msgid "grid cell"
 msgstr "celulă de grilă"
 
-#: gtk/gtkaccessible.c:574
+#: gtk/gtkaccessible.c:576
 msgctxt "accessibility"
 msgid "group"
 msgstr "grup"
 
-#: gtk/gtkaccessible.c:575
+#: gtk/gtkaccessible.c:577
 msgctxt "accessibility"
 msgid "heading"
 msgstr "antet"
 
-#: gtk/gtkaccessible.c:576
+#: gtk/gtkaccessible.c:578
 msgctxt "accessibility"
 msgid "image"
 msgstr "imagine"
 
-#: gtk/gtkaccessible.c:577
+#: gtk/gtkaccessible.c:579
 msgctxt "accessibility"
 msgid "input"
 msgstr "intrare"
 
-#: gtk/gtkaccessible.c:578
+#: gtk/gtkaccessible.c:580
 msgctxt "accessibility"
 msgid "label"
 msgstr "etichetă"
 
-#: gtk/gtkaccessible.c:579
+#: gtk/gtkaccessible.c:581
 msgctxt "accessibility"
 msgid "landmark"
 msgstr "reper"
 
-#: gtk/gtkaccessible.c:580
+#: gtk/gtkaccessible.c:582
 msgctxt "accessibility"
 msgid "legend"
 msgstr "legendă"
 
-#: gtk/gtkaccessible.c:581
+#: gtk/gtkaccessible.c:583
 msgctxt "accessibility"
 msgid "link"
 msgstr "legătură"
 
-#: gtk/gtkaccessible.c:582
+#: gtk/gtkaccessible.c:584
 msgctxt "accessibility"
 msgid "list"
 msgstr "listă"
 
-#: gtk/gtkaccessible.c:583
+#: gtk/gtkaccessible.c:585
 msgctxt "accessibility"
 msgid "list box"
 msgstr "căsuță de tip listă"
 
-#: gtk/gtkaccessible.c:584
+#: gtk/gtkaccessible.c:586
 msgctxt "accessibility"
 msgid "list item"
 msgstr "element de tip listă"
 
-#: gtk/gtkaccessible.c:585
+#: gtk/gtkaccessible.c:587
 msgctxt "accessibility"
 msgid "log"
 msgstr "istoric"
 
-#: gtk/gtkaccessible.c:586
+#: gtk/gtkaccessible.c:588
 msgctxt "accessibility"
 msgid "main"
 msgstr "principal"
 
-#: gtk/gtkaccessible.c:587
+#: gtk/gtkaccessible.c:589
 msgctxt "accessibility"
 msgid "marquee"
 msgstr "marcă"
 
-#: gtk/gtkaccessible.c:588
+#: gtk/gtkaccessible.c:590
 msgctxt "accessibility"
 msgid "math"
 msgstr "matematică"
 
-#: gtk/gtkaccessible.c:589
+#: gtk/gtkaccessible.c:591
 msgctxt "accessibility"
 msgid "meter"
 msgstr "metru"
 
-#: gtk/gtkaccessible.c:590
+#: gtk/gtkaccessible.c:592
 msgctxt "accessibility"
 msgid "menu"
 msgstr "meniu"
 
-#: gtk/gtkaccessible.c:591
+#: gtk/gtkaccessible.c:593
 msgctxt "accessibility"
 msgid "menu bar"
 msgstr "bară de meniu"
 
-#: gtk/gtkaccessible.c:592
+#: gtk/gtkaccessible.c:594
 msgctxt "accessibility"
 msgid "menu item"
 msgstr "element de meniu"
 
-#: gtk/gtkaccessible.c:593
+#: gtk/gtkaccessible.c:595
 msgctxt "accessibility"
 msgid "menu item checkbox"
 msgstr "căsuță de bifare de element de meniu"
 
-#: gtk/gtkaccessible.c:594
+#: gtk/gtkaccessible.c:596
 msgctxt "accessibility"
 msgid "menu item radio"
 msgstr "buton radio de element de meniu"
 
-#: gtk/gtkaccessible.c:595
+#: gtk/gtkaccessible.c:597
 msgctxt "accessibility"
 msgid "navigation"
 msgstr "navigare"
 
-#: gtk/gtkaccessible.c:596
+#: gtk/gtkaccessible.c:598
 msgctxt "accessibility"
 msgid "none"
 msgstr "nimic"
 
-#: gtk/gtkaccessible.c:597
+#: gtk/gtkaccessible.c:599
 msgctxt "accessibility"
 msgid "note"
 msgstr "notiță"
 
-#: gtk/gtkaccessible.c:598
+#: gtk/gtkaccessible.c:600
 msgctxt "accessibility"
 msgid "option"
 msgstr "opțiune"
 
-#: gtk/gtkaccessible.c:599
+#: gtk/gtkaccessible.c:601
 msgctxt "accessibility"
 msgid "presentation"
 msgstr "prezentare"
 
-#: gtk/gtkaccessible.c:600
+#: gtk/gtkaccessible.c:602
 msgctxt "accessibility"
 msgid "progress bar"
 msgstr "bară de progres"
 
-#: gtk/gtkaccessible.c:601
+#: gtk/gtkaccessible.c:603
 msgctxt "accessibility"
 msgid "radio"
 msgstr "buton radio"
 
-#: gtk/gtkaccessible.c:602
+#: gtk/gtkaccessible.c:604
 msgctxt "accessibility"
 msgid "radio group"
 msgstr "grup de butoane radio"
 
-#: gtk/gtkaccessible.c:603
+#: gtk/gtkaccessible.c:605
 msgctxt "accessibility"
 msgid "range"
 msgstr "interval"
 
-#: gtk/gtkaccessible.c:604
+#: gtk/gtkaccessible.c:606
 msgctxt "accessibility"
 msgid "region"
 msgstr "regiune"
 
-#: gtk/gtkaccessible.c:605
+#: gtk/gtkaccessible.c:607
 msgctxt "accessibility"
 msgid "row"
 msgstr "rând"
 
-#: gtk/gtkaccessible.c:606
+#: gtk/gtkaccessible.c:608
 msgctxt "accessibility"
 msgid "row group"
 msgstr "grup de rând"
 
-#: gtk/gtkaccessible.c:607
+#: gtk/gtkaccessible.c:609
 msgctxt "accessibility"
 msgid "row header"
 msgstr "antet de rând"
 
-#: gtk/gtkaccessible.c:608
+#: gtk/gtkaccessible.c:610
 msgctxt "accessibility"
 msgid "scroll bar"
 msgstr "bară de derulare"
 
-#: gtk/gtkaccessible.c:609
+#: gtk/gtkaccessible.c:611
 msgctxt "accessibility"
 msgid "search"
 msgstr "căutare"
 
-#: gtk/gtkaccessible.c:610
+#: gtk/gtkaccessible.c:612
 msgctxt "accessibility"
 msgid "search box"
 msgstr "căsuță de căutare"
 
-#: gtk/gtkaccessible.c:611
+#: gtk/gtkaccessible.c:613
 msgctxt "accessibility"
 msgid "section"
 msgstr "secțiune"
 
-#: gtk/gtkaccessible.c:612
+#: gtk/gtkaccessible.c:614
 msgctxt "accessibility"
 msgid "section head"
 msgstr "antet de secțiune"
 
-#: gtk/gtkaccessible.c:613
+#: gtk/gtkaccessible.c:615
 msgctxt "accessibility"
 msgid "select"
 msgstr "selectează"
 
-#: gtk/gtkaccessible.c:614
+#: gtk/gtkaccessible.c:616
 msgctxt "accessibility"
 msgid "separator"
 msgstr "separator"
 
-#: gtk/gtkaccessible.c:615
+#: gtk/gtkaccessible.c:617
 msgctxt "accessibility"
 msgid "slider"
 msgstr "glisor"
 
-#: gtk/gtkaccessible.c:616
+#: gtk/gtkaccessible.c:618
 msgctxt "accessibility"
 msgid "spin button"
 msgstr "buton incremental"
 
-#: gtk/gtkaccessible.c:617
+#: gtk/gtkaccessible.c:619
 msgctxt "accessibility"
 msgid "status"
 msgstr "stare"
 
-#: gtk/gtkaccessible.c:618
+#: gtk/gtkaccessible.c:620
 msgctxt "accessibility"
 msgid "structure"
 msgstr "structură"
 
-#: gtk/gtkaccessible.c:619
+#: gtk/gtkaccessible.c:621
 msgctxt "accessibility"
 msgid "switch"
 msgstr "întrerupător"
 
-#: gtk/gtkaccessible.c:620
+#: gtk/gtkaccessible.c:622
 msgctxt "accessibility"
 msgid "tab"
 msgstr "filă"
 
-#: gtk/gtkaccessible.c:621
+#: gtk/gtkaccessible.c:623
 msgctxt "accessibility"
 msgid "table"
 msgstr "tabel"
 
-#: gtk/gtkaccessible.c:622
+#: gtk/gtkaccessible.c:624
 msgctxt "accessibility"
 msgid "tab list"
 msgstr "listă de file"
 
-#: gtk/gtkaccessible.c:623
+#: gtk/gtkaccessible.c:625
 msgctxt "accessibility"
 msgid "tab panel"
 msgstr "panou de file"
 
-#: gtk/gtkaccessible.c:624
+#: gtk/gtkaccessible.c:626
 msgctxt "accessibility"
 msgid "text box"
 msgstr "căsuță text"
 
-#: gtk/gtkaccessible.c:625
+#: gtk/gtkaccessible.c:627
 msgctxt "accessibility"
 msgid "time"
 msgstr "timp"
 
-#: gtk/gtkaccessible.c:626
+#: gtk/gtkaccessible.c:628
 msgctxt "accessibility"
 msgid "timer"
 msgstr "cronometru"
 
-#: gtk/gtkaccessible.c:627
+#: gtk/gtkaccessible.c:629
 msgctxt "accessibility"
 msgid "tool bar"
 msgstr "bară de unelte"
 
-#: gtk/gtkaccessible.c:628
+#: gtk/gtkaccessible.c:630
 msgctxt "accessibility"
 msgid "tool tip"
 msgstr "indiciu"
 
-#: gtk/gtkaccessible.c:629
+#: gtk/gtkaccessible.c:631
 msgctxt "accessibility"
 msgid "tree"
 msgstr "arbore"
 
-#: gtk/gtkaccessible.c:630
+#: gtk/gtkaccessible.c:632
 msgctxt "accessibility"
 msgid "tree grid"
 msgstr "grilă de arbore"
 
-#: gtk/gtkaccessible.c:631
+#: gtk/gtkaccessible.c:633
 msgctxt "accessibility"
 msgid "tree item"
 msgstr "element de arbore"
 
-#: gtk/gtkaccessible.c:632
+#: gtk/gtkaccessible.c:634
 msgctxt "accessibility"
 msgid "widget"
 msgstr "widget"
 
-#: gtk/gtkaccessible.c:633
+#: gtk/gtkaccessible.c:635
 msgctxt "accessibility"
 msgid "window"
 msgstr "fereastră"
@@ -2002,7 +2002,7 @@ msgstr "Un fișier cu acel nume există deja"
 #: gtk/gtkprintbackend.c:643 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:626 gtk/gtkprintunixdialog.c:782
 #: gtk/gtkwindow.c:5950 gtk/inspector/css-editor.c:248
-#: gtk/inspector/recorder.c:1238 gtk/ui/gtkappchooserdialog.ui:45
+#: gtk/inspector/recorder.c:1241 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
 msgid "_Cancel"
@@ -2015,7 +2015,7 @@ msgid "_Open"
 msgstr "_Deschide"
 
 #: gtk/gtkfilechoosernative.c:569 gtk/inspector/css-editor.c:249
-#: gtk/inspector/recorder.c:1239
+#: gtk/inspector/recorder.c:1242
 msgid "_Save"
 msgstr "_Salvează"
 
@@ -2094,7 +2094,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Dacă ștergeți un element, acesta va fi pierdut permanent."
 
 #: gtk/gtkfilechooserwidget.c:1213 gtk/gtkfilechooserwidget.c:1829
-#: gtk/gtklabel.c:5416 gtk/gtktext.c:5960 gtk/gtktextview.c:8564
+#: gtk/gtklabel.c:5408 gtk/gtktext.c:5960 gtk/gtktextview.c:8564
 msgid "_Delete"
 msgstr "Șt_erge"
 
@@ -2367,27 +2367,27 @@ msgstr "Variante de caractere"
 msgid "OpenGL context creation failed"
 msgstr "Crearea contextului OpenGL a eșuat"
 
-#: gtk/gtklabel.c:5413 gtk/gtktext.c:5948 gtk/gtktextview.c:8552
+#: gtk/gtklabel.c:5405 gtk/gtktext.c:5948 gtk/gtktextview.c:8552
 msgid "Cu_t"
 msgstr "_Taie"
 
-#: gtk/gtklabel.c:5414 gtk/gtktext.c:5952 gtk/gtktextview.c:8556
+#: gtk/gtklabel.c:5406 gtk/gtktext.c:5952 gtk/gtktextview.c:8556
 msgid "_Copy"
 msgstr "_Copiază"
 
-#: gtk/gtklabel.c:5415 gtk/gtktext.c:5956 gtk/gtktextview.c:8560
+#: gtk/gtklabel.c:5407 gtk/gtktext.c:5956 gtk/gtktextview.c:8560
 msgid "_Paste"
 msgstr "_Lipește"
 
-#: gtk/gtklabel.c:5421 gtk/gtktext.c:5969 gtk/gtktextview.c:8585
+#: gtk/gtklabel.c:5413 gtk/gtktext.c:5969 gtk/gtktextview.c:8585
 msgid "Select _All"
 msgstr "Selectează tot"
 
-#: gtk/gtklabel.c:5426
+#: gtk/gtklabel.c:5418
 msgid "_Open Link"
 msgstr "_Deschide linkul"
 
-#: gtk/gtklabel.c:5430
+#: gtk/gtklabel.c:5422
 msgid "Copy _Link Address"
 msgstr "Copiază adresa _linkului"
 
@@ -3463,11 +3463,11 @@ msgstr "Atribut"
 msgid "Value"
 msgstr "Valoare"
 
-#: gtk/inspector/action-editor.c:316
+#: gtk/inspector/action-editor.c:123
 msgid "Activate"
 msgstr "Activează"
 
-#: gtk/inspector/action-editor.c:335
+#: gtk/inspector/action-editor.c:135
 msgid "Set State"
 msgstr "Stabilește starea"
 
@@ -3484,25 +3484,30 @@ msgstr "Tip de parametru"
 msgid "State"
 msgstr "Stare"
 
-#: gtk/inspector/controllers.c:144
+#: gtk/inspector/controllers.c:126
 msgctxt "event phase"
 msgid "None"
 msgstr "Niciuna"
 
-#: gtk/inspector/controllers.c:145
+#: gtk/inspector/controllers.c:129
 msgctxt "event phase"
 msgid "Capture"
 msgstr "Capturează"
 
-#: gtk/inspector/controllers.c:146
+#: gtk/inspector/controllers.c:132
 msgctxt "event phase"
 msgid "Bubble"
 msgstr "Sferă"
 
-#: gtk/inspector/controllers.c:147
+#: gtk/inspector/controllers.c:135
 msgctxt "event phase"
 msgid "Target"
 msgstr "Țintă"
+
+#: gtk/inspector/controllers.c:156
+msgctxt "propagation limit"
+msgid "Native"
+msgstr "Nativ"
 
 #: gtk/inspector/css-editor.c:129
 msgid "You can type here any CSS rule recognized by GTK."
@@ -3825,7 +3830,7 @@ msgstr "Sursă:"
 msgid "Defined At"
 msgstr "Definit la"
 
-#: gtk/inspector/recorder.c:1209
+#: gtk/inspector/recorder.c:1212
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Salvarea RenderNode a eșuat"
