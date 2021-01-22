@@ -13,6 +13,7 @@ testdatadir = join_paths(installed_test_datadir, 'css')
 test_change = executable(
   'test-css-change',
   'test-css-change.c',
+  '../../testutils.c',
   c_args: common_cflags,
   dependencies: libgtk_dep,
   install: get_option('install-tests'),
