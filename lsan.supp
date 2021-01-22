@@ -1,6 +1,5 @@
 leak:g_quark_init
 leak:xdg_mime_init
-leak:libc.so
 leak:libfontconfig.so
 leak:libEGL_mesa.so
 leak:iris_dri.so
