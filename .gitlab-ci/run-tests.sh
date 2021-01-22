@@ -9,6 +9,7 @@ backend=$2
 
 # Ignore memory leaks lower in dependencies
 export LSAN_OPTIONS=suppressions=$srcdir/lsan.supp
+export G_SLICE=always-malloc
 
 case "${backend}" in
   x11)
