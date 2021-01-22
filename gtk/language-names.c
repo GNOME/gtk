@@ -164,7 +164,7 @@ languages_parse_start_tag (GMarkupParseContext  *ctx,
   for (i = 0; i < G_N_ELEMENTS (long_names); i++)
     {
       if (g_str_has_prefix (display_name, long_names[i]))
-        display_name[strlen (long_names[i]) + 1] = '\0';
+        display_name[strlen (long_names[i])] = '\0';
     }
 
 

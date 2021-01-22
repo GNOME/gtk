@@ -100,6 +100,8 @@ gdk_array(test_splice) (void)
       sum -= gdk_array(get) (&v, i);
     }
   g_assert_cmpint (sum, ==, 0);
+
+  gdk_array(clear) (&v);
 }
 
 #undef _T_
