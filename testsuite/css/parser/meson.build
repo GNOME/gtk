@@ -1,7 +1,7 @@
 testexecdir = join_paths(installed_test_bindir, 'css', 'parser')
 testdatadir = join_paths(installed_test_datadir, 'css')
 
-test_parser = executable('test-css-parser', 'test-css-parser.c',
+test_parser = executable('test-css-parser', 'test-css-parser.c', '../../testutils.c',
                          c_args: common_cflags,
                          install: get_option('install-tests'),
                          install_dir: testexecdir,

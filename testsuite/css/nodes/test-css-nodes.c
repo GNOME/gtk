@@ -21,6 +21,7 @@
 #include <string.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
+#include "testsuite/testutils.h"
 
 #ifdef G_OS_WIN32
 # include <io.h>
@@ -46,54 +47,6 @@ test_get_reference_file (const char *ui_file)
     }
 
   return g_string_free (file, FALSE);
-}
-
-static char *
-diff_with_file (const char  *file1,
-                char        *text,
-                gssize       len,
-                GError     **error)
-{
-  const char *command[] = { "diff", "-u", file1, NULL, NULL };
-  char *diff, *tmpfile;
-  int fd;
-
-  diff = NULL;
-
-  if (len < 0)
-    len = strlen (text);
-  
-  /* write the text buffer to a temporary file */
-  fd = g_file_open_tmp (NULL, &tmpfile, error);
-  if (fd < 0)
-    return NULL;
-
-  if (write (fd, text, len) != (int) len)
-    {
-      close (fd);
-      g_set_error (error,
-                   G_FILE_ERROR, G_FILE_ERROR_FAILED,
-                   "Could not write data to temporary file '%s'", tmpfile);
-      goto done;
-    }
-  close (fd);
-  command[3] = tmpfile;
-
-  /* run diff command */
-  g_spawn_sync (NULL, 
-                (char **) command,
-                NULL,
-                G_SPAWN_SEARCH_PATH,
-                NULL, NULL,
-	        &diff,
-                NULL, NULL,
-                error);
-
-done:
-  g_unlink (tmpfile);
-  g_free (tmpfile);
-
-  return diff;
 }
 
 static void

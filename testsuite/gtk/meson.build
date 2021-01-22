@@ -250,7 +250,7 @@ focus_chain_tests = [
 
 focus_chain = executable(
   'test-focus-chain',
-  sources: ['test-focus-chain.c'],
+  sources: ['test-focus-chain.c', '../testutils.c'],
   dependencies: libgtk_dep,
   c_args: common_cflags,
   install: get_option('install-tests'),

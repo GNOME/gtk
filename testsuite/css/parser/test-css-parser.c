@@ -25,6 +25,7 @@
 #include <string.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
+#include "testsuite/testutils.h"
 
 #ifdef G_OS_WIN32
 # include <io.h>
@@ -70,51 +71,6 @@ test_get_errors_file (const char *css_file)
     }
 
   return g_string_free (file, FALSE);
-}
-
-static GBytes *
-diff_with_file (const char  *file1,
-                char        *text,
-                gssize       len,
-                GError     **error)
-{
-  GSubprocess *process;
-  GBytes *input, *output;
-
-  process = g_subprocess_new (G_SUBPROCESS_FLAGS_STDIN_PIPE
-                              | G_SUBPROCESS_FLAGS_STDOUT_PIPE,
-                              error,
-                              "diff", "-u", file1, "-", NULL);
-  if (process == NULL)
-    return NULL;
-
-  input = g_bytes_new_static (text, len >= 0 ? len : strlen (text));
-  if (!g_subprocess_communicate (process,
-                                 input,
-                                 NULL,
-                                 &output,
-                                 NULL,
-                                 error))
-    {
-      g_object_unref (process);
-      g_bytes_unref (input);
-      return NULL;
-    }
-
-  if (!g_subprocess_get_successful (process) &&
-      /* this is the condition when the files differ */
-      !(g_subprocess_get_if_exited (process) && g_subprocess_get_exit_status (process) == 1))
-    {
-      g_clear_pointer (&output, g_bytes_unref);
-      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
-                   "The `diff' process exited with error status %d",
-                   g_subprocess_get_exit_status (process));
-    }
-
-  g_object_unref (process);
-  g_bytes_unref (input);
-
-  return output;
 }
 
 static void
@@ -167,7 +123,7 @@ parse_css_file (GFile *file, gboolean generate)
   GtkCssProvider *provider;
   char *css, *css_file, *reference_file, *errors_file;
   GString *errors;
-  GBytes *diff;
+  char *diff;
   GError *error = NULL;
 
   css_file = g_file_get_path (file);
@@ -193,14 +149,13 @@ parse_css_file (GFile *file, gboolean generate)
   diff = diff_with_file (reference_file, css, -1, &error);
   g_assert_no_error (error);
 
-  if (diff && g_bytes_get_size (diff) > 0)
+  if (diff && diff[0])
     {
-      g_test_message ("Resulting CSS doesn't match reference:\n%s",
-                      (const char *) g_bytes_get_data (diff, NULL));
+      g_test_message ("Resulting CSS doesn't match reference:\n%s", diff);
       g_test_fail ();
     }
   g_free (reference_file);
-  g_clear_pointer (&diff, g_bytes_unref);
+  g_free (diff);
 
   errors_file = test_get_errors_file (css_file);
 
@@ -209,13 +164,12 @@ parse_css_file (GFile *file, gboolean generate)
       diff = diff_with_file (errors_file, errors->str, errors->len, &error);
       g_assert_no_error (error);
 
-      if (diff && g_bytes_get_size (diff) > 0)
+      if (diff && diff[0])
         {
-          g_test_message ("Errors don't match expected errors:\n%s",
-                          (const char *) g_bytes_get_data (diff, NULL));
+          g_test_message ("Errors don't match expected errors:\n%s", diff);
           g_test_fail ();
         }
-      g_clear_pointer (&diff, g_bytes_unref);
+      g_free (diff);
     }
   else if (errors->str[0])
     {
