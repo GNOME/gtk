@@ -236,6 +236,9 @@ struct _GdkWindowImplWayland
 
   struct zxdg_imported_v1 *imported_transient_for;
   GHashTable *shortcuts_inhibitors;
+
+  struct wl_callback *surface_callback;
+  GHashTable *frame_callback_surfaces;
 };
 
 struct _GdkWindowImplWaylandClass
@@ -572,9 +575,25 @@ frame_callback (void               *data,
   GdkFrameClock *clock = gdk_window_get_frame_clock (window);
   GdkFrameTimings *timings;
 
-  GDK_NOTE (EVENTS,
-            g_message ("frame %p", window));
+  if (callback == impl->surface_callback)
+    {
+      impl->surface_callback = NULL;
+    }
+  else
+    {
+      GHashTableIter iter;
+      gpointer surface_callback;
 
+      g_hash_table_iter_init (&iter, impl->frame_callback_surfaces);
+      while (g_hash_table_iter_next (&iter, NULL, &surface_callback))
+        {
+          if (callback == surface_callback)
+            {
+              g_hash_table_iter_replace (&iter, NULL);
+              break;
+            }
+        }
+    }
   wl_callback_destroy (callback);
 
   if (GDK_WINDOW_DESTROYED (window))
@@ -582,6 +601,9 @@ frame_callback (void               *data,
 
   if (!impl->awaiting_frame)
     return;
+
+  GDK_NOTE (EVENTS,
+            g_message ("frame %p", window));
 
   impl->awaiting_frame = FALSE;
   _gdk_frame_clock_thaw (clock);
@@ -660,6 +682,8 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   struct wl_callback *callback;
+  GHashTableIter iter;
+  gpointer surface, surface_callback;
 
   if (!impl->pending_commit)
     return;
@@ -667,8 +691,6 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
   if (window->update_freeze_count > 0)
     return;
 
-  callback = wl_surface_frame (impl->display_server.wl_surface);
-  wl_callback_add_listener (callback, &frame_listener, window);
   _gdk_frame_clock_freeze (clock);
 
   /* Before we commit a new buffer, make sure we've backfilled
@@ -676,6 +698,24 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
    */
   if (impl->pending_buffer_attached)
     read_back_cairo_surface (window);
+
+  if (impl->surface_callback == NULL)
+    {
+      callback = wl_surface_frame (impl->display_server.wl_surface);
+      wl_callback_add_listener (callback, &frame_listener, window);
+      impl->surface_callback = callback;
+    }
+
+  g_hash_table_iter_init (&iter, impl->frame_callback_surfaces);
+  while (g_hash_table_iter_next (&iter, &surface, &surface_callback))
+    {
+      if (surface_callback)
+        continue;
+
+      callback = wl_surface_frame (surface);
+      wl_callback_add_listener (callback, &frame_listener, window);
+      g_hash_table_iter_replace (&iter, callback);
+    }
 
   /* From this commit forward, we can't write to the buffer,
    * it's "live".  In the future, if we need to stage more changes
@@ -756,6 +796,8 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
   impl->wrapper = GDK_WINDOW (window);
   impl->shortcuts_inhibitors = g_hash_table_new (NULL, NULL);
   impl->using_csd = TRUE;
+  impl->surface_callback = NULL;
+  impl->frame_callback_surfaces = g_hash_table_new (NULL, NULL);
 
   if (window->width > 65535)
     {
@@ -1067,6 +1109,7 @@ gdk_window_impl_wayland_finalize (GObject *object)
   g_clear_pointer (&impl->staged_updates_region, cairo_region_destroy);
 
   g_clear_pointer (&impl->shortcuts_inhibitors, g_hash_table_unref);
+  g_clear_pointer (&impl->frame_callback_surfaces, g_hash_table_unref);
 
   G_OBJECT_CLASS (_gdk_window_impl_wayland_parent_class)->finalize (object);
 }
@@ -3352,6 +3395,7 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
 
       wl_surface_destroy (impl->display_server.wl_surface);
       impl->display_server.wl_surface = NULL;
+      impl->surface_callback = NULL;
 
       g_slist_free (impl->display_server.outputs);
       impl->display_server.outputs = NULL;
@@ -5397,3 +5441,71 @@ gdk_wayland_window_restore_shortcuts (GdkWindow *window,
   g_hash_table_remove (impl->shortcuts_inhibitors, seat);
 }
 
+/**
+ * gdk_wayland_window_add_frame_callback_surface:
+ * @window: the #GdkWindow requesting callbacks
+ * @surface: the wl_surface to add
+ *
+ * Add @surface to a list of surfaces for which frame callback
+ * listeners will get set up, additionally to the one of @window.
+ *
+ * This is useful when clients use subsurfaces independently of GDK.
+ * For example if a client creates a subsurface that covers @window
+ * entirely. If this subsurface is opaque, Wayland compositors may not
+ * emit callbacks for the surface of @window any more.
+ * Adding the covering subsurface via this function ensures the
+ * @window will continue to update.
+ *
+ * A single callback is sufficient to trigger the next update. If more
+ * than one are triggered, the later ones will get ignored.
+ *
+ * Before @surface gets destroyed it must get removed again using
+ * gdk_wayland_window_remove_frame_callback_surface().
+ *
+ * Note that the client is responsible to commit the @surface.
+ * One way to archive this is to always commit after the
+ * #GdkSurface::after-paint signal was triggered.
+ *
+ * Since: 3.24.25
+ */
+void
+gdk_wayland_window_add_frame_callback_surface (GdkWindow         *window,
+                                               struct wl_surface *surface)
+{
+  GdkWindowImplWayland *impl;
+
+  g_return_if_fail (GDK_IS_WAYLAND_WINDOW (window));
+  g_return_if_fail (GDK_IS_WINDOW_IMPL_WAYLAND (window->impl));
+  g_return_if_fail (surface != NULL);
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  g_hash_table_insert (impl->frame_callback_surfaces, surface, NULL);
+}
+
+/**
+ * gdk_wayland_window_remove_frame_callback_surface:
+ * @window: the #GdkWindow requesting callbacks
+ * @surface: the surface to remove
+ *
+ * Remove @surface from the list of surfaces again that got added via
+ * gdk_wayland_window_add_frame_callback_surface().
+ *
+ * This function must be called before @surface gets destroyed.
+ *
+ * Since: 3.24.25
+ */
+void
+gdk_wayland_window_remove_frame_callback_surface (GdkWindow         *window,
+                                                  struct wl_surface *surface)
+{
+  GdkWindowImplWayland *impl;
+
+  g_return_if_fail (GDK_IS_WAYLAND_WINDOW (window));
+  g_return_if_fail (GDK_IS_WINDOW_IMPL_WAYLAND (window->impl));
+  g_return_if_fail (surface != NULL);
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  g_hash_table_remove (impl->frame_callback_surfaces, surface);
+}

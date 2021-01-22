@@ -1279,6 +1279,8 @@ GdkWaylandWindowExported
 gdk_wayland_window_export_handle
 gdk_wayland_window_unexport_handle
 gdk_wayland_window_set_transient_for_exported
+gdk_wayland_window_add_frame_callback_surface
+gdk_wayland_window_remove_frame_callback_surface
 
 <SUBSECTION Standard>
 GDK_TYPE_WAYLAND_DEVICE
