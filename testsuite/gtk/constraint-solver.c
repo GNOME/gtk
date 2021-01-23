@@ -1,5 +1,6 @@
 #include <locale.h>
 
+#include <gtk/gtk.h>
 #include "../../gtk/gtkconstrainttypesprivate.h"
 #include "../../gtk/gtkconstraintsolverprivate.h"
 #include "../../gtk/gtkconstraintexpressionprivate.h"

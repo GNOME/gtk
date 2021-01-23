@@ -1274,7 +1274,7 @@ libgtk_dep = declare_dependency(sources: gtk_dep_sources,
 libgtk_static_dep = declare_dependency(sources: gtk_dep_sources,
   include_directories: [confinc, gtkinc],
   dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep],
-  link_with: libgtk_static,
+  link_with: [libgtk_static, libgtk_css, libgdk, libgsk ],
   link_args: common_ldflags,
 )
 
