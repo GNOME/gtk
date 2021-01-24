@@ -4,13 +4,13 @@
 #
 # Amanpreet Singh Alam <amanlinux@netscape.net>, 2004.
 # Amanpreet Singh Alam <aalam@users.sf.net>, 2005,2006,2007, 2008, 2009.
-# A S Alam <aalam@users.sf.net>, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2020.
+# A S Alam <aalam@users.sf.net>, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2020-12-18 05:07+0000\n"
-"PO-Revision-Date: 2020-12-19 22:13-0800\n"
+"POT-Creation-Date: 2021-01-23 10:58+0000\n"
+"PO-Revision-Date: 2021-01-24 14:40-0800\n"
 "Last-Translator: A S Alam <aalam.yellow@gmail.com>\n"
 "Language-Team: Punjabi <punjabi-users@list.sf.net>\n"
 "Language: pa\n"
@@ -35,18 +35,16 @@ msgstr "ਕਾਲੀ ਕਲਿੱਪਬੋਰਡ ਤੋਂ ਪੜ੍ਹਿਆ �
 
 #: gdk/gdkclipboard.c:325 gdk/gdkclipboard.c:1137 gdk/gdkdrag.c:638
 msgid "No compatible formats to transfer clipboard contents."
-msgstr ""
+msgstr "ਕਲਿੱਪਬੋਰਡ ਸਮੱਗਰੀ ਟਰਾਂਸਫਰ ਕਰਨ ਲਈ ਕੋਈ ਅਨੁਕੂਲ ਫਾਰਮੈਟ ਨਹੀਂ ਹੈ।"
 
 #: gdk/gdkcontentprovider.c:108 gdk/gdkcontentproviderimpl.c:311
 #: gdk/gdkcontentproviderimpl.c:531
 #, c-format
-#| msgid "Could not read the contents of %s"
 msgid "Cannot provide contents as “%s”"
 msgstr "ਸਮੱਗਰੀ ”%s” ਵਜੋਂ ਦਿੱਤੀ ਨਹੀਂ ਜਾ ਸਕਦੀ ਹੈ"
 
 #: gdk/gdkcontentprovider.c:129
 #, c-format
-#| msgid "Could not read the contents of %s"
 msgid "Cannot provide contents as %s"
 msgstr "ਸਮੱਗਰੀ %s ਵਜੋਂ ਦਿੱਤੀ ਨਹੀਂ ਜਾ ਸਕਦੀ ਹੈ"
 
@@ -58,15 +56,15 @@ msgstr "ਹੋਰ ਐਪਲੀਕੇਸ਼ਨਾਂ ਤੋਂ ਖਿੱਚ ਕੇ �
 msgid "No compatible formats to transfer contents."
 msgstr "ਸਮੱਗਰੀ ਟਰਾਂਸਫਰ ਕਰਨ ਲਈ ਕੋਈ ਢੁੱਕਵਾਂ ਫਾਰਮੈਟ ਨਹੀਂ ਹੈ।"
 
-#: gdk/gdksurface.c:1090
+#: gdk/gdksurface.c:1102
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "GDK_DEBUG ਰਾਹੀਂ GL ਸਹਿਯੋਗ ਬੰਦ ਕੀਤਾ ਹੈ"
 
-#: gdk/gdksurface.c:1101
+#: gdk/gdksurface.c:1113
 msgid "The current backend does not support OpenGL"
 msgstr "ਮੌਜੂਦਾ ਬੈਕਐੰਡ OpenGL ਲਈ ਸਹਾਇਕ ਨਹੀਂ ਹੈ"
 
-#: gdk/gdksurface.c:1209
+#: gdk/gdksurface.c:1221
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "GDK_DEBUG ਰਾਹੀਂ ਵੁਲਕਾਨ ਸਹਿਯੋਗ ਬੰਦ ਕੀਤਾ ਹੈ"
 
@@ -348,7 +346,6 @@ msgid "AudioMedia"
 msgstr "AudioMedia"
 
 #: gdk/keyname-table.h:6897
-#| msgid "_Eject"
 msgctxt "keyboard label"
 msgid "Eject"
 msgstr "ਬਾਹਰ ਕੱਢੋ"
@@ -374,7 +371,6 @@ msgid "WWW"
 msgstr "WWW"
 
 #: gdk/keyname-table.h:6902
-#| msgid "Search"
 msgctxt "keyboard label"
 msgid "Search"
 msgstr "ਖੋਜੋ"
@@ -449,37 +445,36 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "ਸਸਪੈਂਡ"
 
-#: gdk/macos/gdkmacosclipboard.c:203 gdk/wayland/gdkclipboard-wayland.c:231
+#: gdk/macos/gdkmacosclipboard.c:251 gdk/wayland/gdkclipboard-wayland.c:231
 #: gdk/wayland/gdkdrop-wayland.c:204 gdk/wayland/gdkprimary-wayland.c:312
 #: gdk/win32/gdkdrop-win32.c:1279 gdk/win32/gdkdrop-win32.c:1324
 #: gdk/x11/gdkclipboard-x11.c:763 gdk/x11/gdkdrop-x11.c:196
 msgid "No compatible transfer format found"
 msgstr "ਕੋਈ ਅਨੁਕੂਲ ਟਰਾਂਸਫਰ ਫਾਰਮੈਟ ਨਹੀਂ ਲੱਭਿਆ"
 
-#: gdk/macos/gdkmacosclipboard.c:289
+#: gdk/macos/gdkmacosclipboard.c:337
 #, c-format
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "'%s' ਦੀ ਮਾਈਮ-ਕਿਸਮ ਨਾਲ ਸਮੱਗਰੀਆਂ ਡੀਕੋਡ ਕਰਨ ਲਈ ਅਸਫ਼ਲ ਹੈ"
 
-#: gdk/wayland/gdkglcontext-wayland.c:151 gdk/win32/gdkglcontext-win32.c:947
-#: gdk/win32/gdkglcontext-win32.c:988 gdk/x11/gdkglcontext-x11.c:581
+#: gdk/wayland/gdkglcontext-wayland.c:151 gdk/win32/gdkglcontext-win32.c:934
+#: gdk/win32/gdkglcontext-win32.c:975 gdk/x11/gdkglcontext-x11.c:581
 #: gdk/x11/gdkglcontext-x11.c:631
 msgid "Unable to create a GL context"
 msgstr "GL ਪ੍ਰਸੰਗ ਬਣਾਉਣ ਲਈ ਅਸਮਰੱਥ"
 
-#: gdk/wayland/gdkglcontext-wayland.c:414
-#: gdk/wayland/gdkglcontext-wayland.c:424 gdk/win32/gdkglcontext-win32.c:788
-#: gdk/win32/gdkglcontext-win32.c:798 gdk/win32/gdkglcontext-win32.c:913
+#: gdk/wayland/gdkglcontext-wayland.c:423 gdk/win32/gdkglcontext-win32.c:775
+#: gdk/win32/gdkglcontext-win32.c:785 gdk/win32/gdkglcontext-win32.c:900
 #: gdk/x11/gdkglcontext-x11.c:879
 msgid "No available configurations for the given pixel format"
 msgstr "ਦਿੱਤੇ ਪਿਕਸਲ ਫਾਰਮੈਟ ਲਈ ਸੰਰਚਨਾ ਮੌਜੂਦ ਨਹੀਂ"
 
-#: gdk/wayland/gdkglcontext-wayland.c:453 gdk/win32/gdkglcontext-win32.c:1072
+#: gdk/wayland/gdkglcontext-wayland.c:448 gdk/win32/gdkglcontext-win32.c:1048
 #: gdk/x11/gdkglcontext-x11.c:1182
 msgid "No GL implementation is available"
 msgstr "ਕੋਈ GL ਸਥਾਪਨ ਮੌਜੂਦ ਨਹੀਂ"
 
-#: gdk/wayland/gdkglcontext-wayland.c:461
+#: gdk/wayland/gdkglcontext-wayland.c:456
 msgid "Core GL is not available on EGL implementation"
 msgstr "EGL ਸਥਾਪਨ ਉੱਤੇ ਕੋਰ GL ਮੌਜੂਦ ਨਹੀਂ"
 
@@ -487,113 +482,130 @@ msgstr "EGL ਸਥਾਪਨ ਉੱਤੇ ਕੋਰ GL ਮੌਜੂਦ ਨਹੀ�
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
 msgstr ""
+"ਕਲਿੱਪਬੋਰਡ ਮਾਲਕੀ ਉੱਤੇ ਦਾਅਵਾ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ। OpenClipboard() ਲਈ ਸਮਾਂ ਸਮਾਪਤ"
+" ਹੋਇਆ।"
 
 #: gdk/win32/gdkclipdrop-win32.c:727
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr ""
+"ਕਲਿੱਪਬੋਰਡ ਮਾਲਕੀ ਉੱਤੇ ਦਾਅਵਾ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ। ਹੋਰ ਕਾਰਵਾਈ ਨੇ ਇਸ ਉੱਤੇ ਸਾਥੋਂ"
+" ਪਹਿਲਾਂ ਦਾਅਵਾ ਕੀਤਾ।"
 
 #: gdk/win32/gdkclipdrop-win32.c:741
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr ""
+"ਕਲਿੱਪਬੋਰਡ ਮਾਲਕੀ ਉੱਤੇ ਦਾਅਵਾ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ। OpenClipboard() ਅਸਫ਼ਲ: 0x%lx"
 
 #: gdk/win32/gdkclipdrop-win32.c:753
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr ""
+"ਕਲਿੱਪਬੋਰਡ ਮਾਲਕੀ ਉੱਤੇ ਦਾਅਵਾ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ। EmptyClipboard() ਅਸਫ਼ਲ: 0x%lx"
 
 #: gdk/win32/gdkclipdrop-win32.c:796
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
 msgstr ""
+"ਕਲਿੱਪਬੋਰਡ ਡਾਟਾ ਸੈੱਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ। OpenClipboard() ਲਈ ਸਮਾਂ ਸਮਾਪਤ ਹੈ।"
 
 #: gdk/win32/gdkclipdrop-win32.c:806 gdk/win32/gdkclipdrop-win32.c:837
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
 msgstr ""
+"ਕਲਿੱਪਬੋਰਡ ਡਾਟਾ ਸੈੱਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ। ਹੋਰ ਕਾਰਵਾਈ ਨੇ ਇਸ ਉੱਤੇ ਸਾਥੋਂ ਪਹਿਲਾਂ"
+" ਦਾਅਵਾ ਕੀਤਾ।"
 
 #: gdk/win32/gdkclipdrop-win32.c:820
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
-msgstr ""
+msgstr "ਕਲਿੱਪਬੋਰਡ ਡਾਟਾ ਸੈੱਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ। OpenClipboard() ਅਸਫ਼ਲ: 0x%lx"
 
 #: gdk/win32/gdkclipdrop-win32.c:872
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
-msgstr ""
+msgstr "ਕਲਿੱਪਬੋਰਡ ਡਾਟਾ ਲਿਆ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ। GlobalLock(0x%p) ਅਸਫ਼ਲ ਹੈ: 0x%lx"
 
 #: gdk/win32/gdkclipdrop-win32.c:883
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
-msgstr ""
+msgstr "ਕਲਿੱਪਬੋਰਡ ਡਾਟਾ ਲਿਆ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ। GlobalSize(x%p) ਅਸਫ਼ਲ ਹੈ: 0x%lx"
 
 #: gdk/win32/gdkclipdrop-win32.c:896
 #, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
 msgstr ""
+"ਕਲਿੱਪਬੋਰਡ ਡਾਟਾ ਲਿਆ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ। ਡਾਟਾ ਸਟੋਰ ਕਰਨ ਲਈ %s ਬਾਈਟ ਜਾਰੀ ਕਰਨ ਲਈ"
+" ਅਸਫ਼ਲ ਹੈ।"
 
 #: gdk/win32/gdkclipdrop-win32.c:928
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
 msgstr ""
+"ਕਲਿੱਪਬੋਰਡ ਡਾਟਾ ਲਿਆ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ। OpenClipboard() ਲਈ ਸਮਾਂ ਸਮਾਪਤ ਹੈ।"
 
 #: gdk/win32/gdkclipdrop-win32.c:938
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
-msgstr ""
+msgstr "ਕਲਿੱਪਬੋਰਡ ਡਾਟਾ ਲਿਆ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ। ਕਲਿੱਪਬੋਰਡ ਦੀ ਮਾਲਕੀ ਬਦਲੀ ਗਈ।"
 
 #: gdk/win32/gdkclipdrop-win32.c:948
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
 msgstr ""
+"ਕਲਿੱਪਬੋਰਡ ਡਾਟਾ ਲਿਆ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ। ਕਲਿੱਪਬੋਰਡ ਡਾਟਾ ਸਾਡੇ ਵਲੋਂ ਇਹ ਲੈਣ ਤੋਂ"
+" ਪਹਿਲਾਂ ਹੀ ਬਦਲਿਆ ਗਿਆ ਹੈ।"
 
 #: gdk/win32/gdkclipdrop-win32.c:965
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
-msgstr ""
+msgstr "ਕਲਿੱਪਬੋਰਡ ਡਾਟਾ ਲਿਆ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ। OpenClipboard() ਅਸਫ਼ਲ: 0x%lx"
 
 #: gdk/win32/gdkclipdrop-win32.c:990
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr ""
+"ਕਲਿੱਪਬੋਰਡ ਡਾਟਾ ਲਿਆ ਨਹੀਂ ਜਾ ਸਕਦਾ ਹੈ। ਕੋਈ ਅਨੁਕੂਲ ਟਰਾਂਸਫਰ ਫਾਰਮੈਟ ਨਹੀਂ ਲੱਭਿਆ ਹੈ।"
 
 #: gdk/win32/gdkclipdrop-win32.c:1000
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr ""
+"ਕਲਿੱਪਬੋਰਡ ਡਾਟਾ ਲਿਆ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ। GetClipboardData() ਅਸਫ਼ਲ ਹੈ: 0x%lx"
 
 #: gdk/win32/gdkdrop-win32.c:1210
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
-msgstr ""
+msgstr "DnD ਡਾਟਾ ਲਿਆ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ। GlobalLock(0x%p) ਅਸਫ਼ਲ ਹੈ: 0x%lx"
 
 #: gdk/win32/gdkdrop-win32.c:1219
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
-msgstr ""
+msgstr "DnD ਡਾਟਾ ਲਿਆ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ। GlobalSize(x%p) ਅਸਫ਼ਲ ਹੈ: 0x%lx"
 
 #: gdk/win32/gdkdrop-win32.c:1230
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
+"DnD ਡਾਟਾ ਲਿਆ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ। ਡਾਟਾ ਸਟੋਰ ਕਰਨ ਲਈ %s ਬਾਈਟ ਜਾਰੀ ਕਰਨ ਲਈ ਅਸਫ਼ਲ ਹੈ।"
 
 #: gdk/win32/gdkdrop-win32.c:1298
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
-msgstr ""
+msgstr "GDK ਸਤ੍ਹਾ 0x%p ਸੁੱਟਣ ਟੀਚੇ ਵਜੋਂ ਰਜਿਸਟਰ ਨਹੀਂ ਹੈ"
 
 #: gdk/win32/gdkdrop-win32.c:1305
 #, c-format
 msgid "Target context record 0x%p has no data object"
-msgstr ""
+msgstr "ਟੀਚਾ ਪ੍ਰਸੰਗ ਰਿਕਾਰਡ 0x%p ਡਾਟਾ ਆਬਜੈਕਟ ਨਹੀਂ ਹੈ"
 
 #: gdk/win32/gdkdrop-win32.c:1343
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
-msgstr ""
+msgstr "IDataObject_GetData (0x%x) ਅਸਫ਼ਲ, 0x%lx ਵਾਪਸ ਕਰ ਰਿਹਾ ਹੈ"
 
 #: gdk/win32/gdkdrop-win32.c:1375
 #, c-format
@@ -601,7 +613,6 @@ msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr ""
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:64
-#| msgid "Error writing to image stream"
 msgid "writing a closed stream"
 msgstr "ਬੰਦ ਸਟਰੀਮ ਨੂੰ ਲਿਖਿਆ ਜਾ ਰਿਹਾ ਹੈ"
 
@@ -637,13 +648,11 @@ msgstr "GlobalAlloc() ਫੇਲ੍ਹ ਹੈ: "
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:290
 #, c-format
-#| msgid "Starting %s"
 msgid "Starting “%s”"
 msgstr "“%s” ਸ਼ੁਰੂ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:303
 #, c-format
-#| msgid "Opening “%s”."
 msgid "Opening “%s”"
 msgstr "”%s” ਨੂੰ ਖੋਲ੍ਹਿਆ ਜਾ ਰਿਹਾ ਹੈ"
 
@@ -669,18 +678,16 @@ msgstr "ਦਿੱਤੇ RGBA ਪਿਕਸਲ ਫਾਰਮੈਟ ਲਈ ਸੰਰ
 
 #: gdk/x11/gdkselectioninputstream-x11.c:462
 #, c-format
-#| msgid "Image type '%s' is not supported"
 msgid "Format %s not supported"
 msgstr "%s ਫਾਰਮੈਟ ਸਹਾਇਕ ਨਹੀਂ ਹੈ"
 
 #: gdk/x11/gdktextlistconverter-x11.c:65 gdk/x11/gdktextlistconverter-x11.c:105
-#| msgid "Not enough memory to load animation"
 msgid "Not enough space in destination"
 msgstr "ਟਿਕਾਣੇ ਉੱਤੇ ਲੋੜੀਦੀ ਥਾਂ ਨਹੀਂ ਹੈ"
 
 #: gdk/x11/gdktextlistconverter-x11.c:91 gdk/x11/gdktextlistconverter-x11.c:195
 msgid "Need complete input to do conversion"
-msgstr ""
+msgstr "ਤਬਾਦਲਾ ਕਰਨ ਲਈ ਪੂਰੀ ਇਨਪੁੱਟ ਦੀ ਲੋੜ ਹੈ"
 
 #: gdk/x11/gdktextlistconverter-x11.c:216
 #: gdk/x11/gdktextlistconverter-x11.c:250
@@ -693,48 +700,35 @@ msgstr ""
 
 #: gdk/x11/gdktextlistconverter-x11.c:259
 #, c-format
-#| msgid "Opening “%s”."
 msgid "Unsupported encoding “%s”"
 msgstr "ਗ਼ੈਰ-ਸਹਾਇਕ ਇੰਕੋਡਿੰਗ “%s”"
 
 #: gtk/a11y/gtkatspiaction.c:243
-#| msgctxt "Action name"
-#| msgid "Click"
 msgctxt "accessibility"
 msgid "Click"
 msgstr "ਕਲਿੱਕ"
 
 #: gtk/a11y/gtkatspiaction.c:244
-#| msgctxt "Action description"
-#| msgid "Clicks the button"
 msgctxt "accessibility"
 msgid "Clicks the button"
 msgstr "ਬਟਨ ਨੂੰ ਕਲਿੱਕ ਕਰਦਾ ਹੈ"
 
 #: gtk/a11y/gtkatspiaction.c:294
-#| msgctxt "Action name"
-#| msgid "Toggle"
 msgctxt "accessibility"
 msgid "Toggle"
 msgstr "ਬਦਲੋ"
 
 #: gtk/a11y/gtkatspiaction.c:295
-#| msgctxt "Action description"
-#| msgid "Toggles the switch"
 msgctxt "accessibility"
 msgid "Toggles the switch"
 msgstr "ਸਵਿੱਚ ਨੂੰ ਬਦਲਦਾ ਹੈ"
 
 #: gtk/a11y/gtkatspiaction.c:375
-#| msgctxt "Action name"
-#| msgid "Select"
 msgctxt "accessibility"
 msgid "Select"
 msgstr "ਚੁਣੋ"
 
 #: gtk/a11y/gtkatspiaction.c:376
-#| msgctxt "Action description"
-#| msgid "Selects the color"
 msgctxt "accessibility"
 msgid "Selects the color"
 msgstr "ਰੰਗ ਨੂੰ ਚੁਣਦਾ ਹੈ"
@@ -742,43 +736,32 @@ msgstr "ਰੰਗ ਨੂੰ ਚੁਣਦਾ ਹੈ"
 #: gtk/a11y/gtkatspiaction.c:383 gtk/a11y/gtkatspiaction.c:443
 #: gtk/a11y/gtkatspiaction.c:499 gtk/a11y/gtkatspiaction.c:607
 #: gtk/a11y/gtkatspiaction.c:694
-#| msgid "Activate"
 msgctxt "accessibility"
 msgid "Activate"
 msgstr "ਸਰਗਰਮ"
 
 #: gtk/a11y/gtkatspiaction.c:384
-#| msgctxt "Action description"
-#| msgid "Activates the color"
 msgctxt "accessibility"
 msgid "Activates the color"
 msgstr "ਰੰਗ ਸਰਗਰਮ ਕਰੋ"
 
 #: gtk/a11y/gtkatspiaction.c:391
-#| msgctxt "Action name"
-#| msgid "Customize"
 msgctxt "accessibility"
 msgid "Customize"
 msgstr "ਪਸੰਦੀਦਾ"
 
 #: gtk/a11y/gtkatspiaction.c:392
-#| msgctxt "Action description"
-#| msgid "Customizes the color"
 msgctxt "accessibility"
 msgid "Customizes the color"
 msgstr "ਪਸੰਦੀਦਾ ਰੰਗ"
 
 #: gtk/a11y/gtkatspiaction.c:444
-#| msgctxt "Action description"
-#| msgid "Activates the expander"
 msgctxt "accessibility"
 msgid "Activates the expander"
 msgstr "ਐਕਸਪੈਂਡਰ ਸਰਗਰਮ ਕਰਦਾ ਹੈ"
 
 #: gtk/a11y/gtkatspiaction.c:500 gtk/a11y/gtkatspiaction.c:608
 #: gtk/a11y/gtkatspiaction.c:695
-#| msgctxt "Action description"
-#| msgid "Activates the entry"
 msgctxt "accessibility"
 msgid "Activates the entry"
 msgstr "ਐਂਟਰੀ ਸਰਗਰਮ ਕਰਦਾ ਹੈ"
@@ -789,22 +772,16 @@ msgid "Activate primary icon"
 msgstr "ਮੁੱਢਲਾ ਆਈਕਾਨ ਸਰਗਰਮ ਕਰੋ"
 
 #: gtk/a11y/gtkatspiaction.c:508
-#| msgctxt "Action description"
-#| msgid "Activates the entry"
 msgctxt "accessibility"
 msgid "Activates the primary icon of the entry"
 msgstr "ਐਂਟਰੀ ਦੇ ਮੁੱਢਲੇ ਆਈਕਾਨ ਨੂੰ ਸਰਗਰਮ ਕਰੋ"
 
 #: gtk/a11y/gtkatspiaction.c:515
-#| msgctxt "Action description"
-#| msgid "Activates the color"
 msgctxt "accessibility"
 msgid "Activate secondary icon"
 msgstr "ਸੈਕੰਡਰੀ ਆਈਕਾਨ ਸਰਗਰਮ ਕਰੋ"
 
 #: gtk/a11y/gtkatspiaction.c:516
-#| msgctxt "Action description"
-#| msgid "Activates the entry"
 msgctxt "accessibility"
 msgid "Activates the secondary icon of the entry"
 msgstr "ਐਂਟਰੀ ਦੇ ਸੈਕੰਡਰੀ ਆਈਕਾਨ ਨੂੰ ਸਰਗਰਮ ਕਰੋ"
@@ -815,26 +792,21 @@ msgid "Peek"
 msgstr "ਪੀਕ"
 
 #: gtk/a11y/gtkatspiaction.c:616
-#| msgid "Browse the contents of the network"
 msgctxt "accessibility"
 msgid "Shows the contents of the password entry"
 msgstr "ਪਾਸਵਰਡ ਐਂਟਰੀ ਦੀਆਂ ਸਮੱਗਰੀਆਂ ਵਿਖਾਉਂਦਾ ਹੈ"
 
 #: gtk/a11y/gtkatspiaction.c:702
-#| msgctxt "Stock label"
-#| msgid "_Clear"
 msgctxt "accessibility"
 msgid "Clear"
 msgstr "ਸਾਫ਼ ਕਰੋ"
 
 #: gtk/a11y/gtkatspiaction.c:703
-#| msgid "Browse the contents of the network"
 msgctxt "accessibility"
 msgid "Clears the contents of the entry"
 msgstr "ਐਂਟਰੀ ਦੀਆਂ ਸਮੱਗਰੀਆਂ ਵਿਖਾਉਂਦਾ ਹੈ"
 
 #: gtk/a11y/gtkatspiroot.c:254
-#| msgid "Application"
 msgctxt "accessibility"
 msgid "application"
 msgstr "ਐਪਲੀਕੇਸ਼ਨ"
@@ -850,115 +822,112 @@ msgid "Malformed data: URL"
 msgstr "ਨਿਕਾਰਾ ਡਾਟਾ: URL"
 
 #: gtk/css/gtkcssdataurl.c:141
-#, fuzzy, c-format
+#, c-format
 #| msgid "Could not clear list"
 msgid "Could not unescape string"
-msgstr "ਲਿਸਟ ਸਾਫ਼ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕੀ"
+msgstr ""
 
-#: gtk/gtkaboutdialog.c:114 gtk/ui/gtkaboutdialog.ui:159
+#: gtk/gtkaboutdialog.c:120 gtk/ui/gtkaboutdialog.ui:163
 msgid "License"
 msgstr "ਲਸੰਸ"
 
-#: gtk/gtkaboutdialog.c:115
+#: gtk/gtkaboutdialog.c:121
 msgid "Custom License"
 msgstr "ਪਸੰਦੀਦਾ ਲਸੰਸ"
 
-#: gtk/gtkaboutdialog.c:116
+#: gtk/gtkaboutdialog.c:122
 msgid "GNU General Public License, version 2 or later"
 msgstr "ਗਨੂ ਜਰਨਲ ਪਬਲਿਕ ਲਸੰਸ, ਵਰਜ਼ਨ 2 ਜਾਂ ਨਵਾਂ"
 
-#: gtk/gtkaboutdialog.c:117
+#: gtk/gtkaboutdialog.c:123
 msgid "GNU General Public License, version 3 or later"
 msgstr "ਗਨੂ ਜਰਨਲ ਪਬਲਿਕ ਲਸੰਸ, ਵਰਜ਼ਨ 3 ਜਾਂ ਨਵਾਂ"
 
-#: gtk/gtkaboutdialog.c:118
+#: gtk/gtkaboutdialog.c:124
 msgid "GNU Lesser General Public License, version 2.1 or later"
 msgstr "ਗਨੂ ਜਰਨਲ ਪਬਲਿਕ ਲਸੰਸ, ਵਰਜ਼ਨ 2.1 ਜਾਂ ਨਵਾਂ"
 
-#: gtk/gtkaboutdialog.c:119
+#: gtk/gtkaboutdialog.c:125
 msgid "GNU Lesser General Public License, version 3 or later"
 msgstr "ਗਨੂ ਲੈਸਰ ਜਰਨਲ ਪਬਲਿਕ ਲਸੰਸ, ਵਰਜ਼ਨ 3 ਜਾਂ ਨਵਾਂ"
 
-#: gtk/gtkaboutdialog.c:120
+#: gtk/gtkaboutdialog.c:126
 msgid "BSD 2-Clause License"
 msgstr "BSD 2-Clause ਲਸੰਸ"
 
-#: gtk/gtkaboutdialog.c:121
+#: gtk/gtkaboutdialog.c:127
 msgid "The MIT License (MIT)"
 msgstr " MIT ਲਸੰਸ (MIT)"
 
-#: gtk/gtkaboutdialog.c:122
+#: gtk/gtkaboutdialog.c:128
 msgid "Artistic License 2.0"
 msgstr "ਆਰਟੈਸਟਿਕ ਲਸੰਸ 2.0"
 
-#: gtk/gtkaboutdialog.c:123
+#: gtk/gtkaboutdialog.c:129
 msgid "GNU General Public License, version 2 only"
 msgstr "GNU ਜਰਨਲ ਪਬਲਿਕ ਲਸੰਸ ਵਰਜ਼ਨ ਕੇਵਲ 2 ਹੀ"
 
-#: gtk/gtkaboutdialog.c:124
+#: gtk/gtkaboutdialog.c:130
 msgid "GNU General Public License, version 3 only"
 msgstr "GNU ਜਰਨਲ ਪਬਲਿਕ ਲਸੰਸ ਵਰਜ਼ਨ ਕੇਵਲ 3 ਹੀ"
 
-#: gtk/gtkaboutdialog.c:125
+#: gtk/gtkaboutdialog.c:131
 msgid "GNU Lesser General Public License, version 2.1 only"
 msgstr "GNU ਲੈਸਰ ਜਰਨਲ ਪਬਲਿਕ ਲਸੰਸ ਵਰਜ਼ਨ ਕੇਵਲ 2.1 ਹੀ"
 
-#: gtk/gtkaboutdialog.c:126
+#: gtk/gtkaboutdialog.c:132
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr "GNU ਲੈਸਰ ਜਰਨਲ ਪਬਲਿਕ ਲਸੰਸ ਵਰਜ਼ਨ ਕੇਵਲ 3 ਹੀ"
 
-#: gtk/gtkaboutdialog.c:127
+#: gtk/gtkaboutdialog.c:133
 msgid "GNU Affero General Public License, version 3 or later"
 msgstr "ਗਨੂ ਅਫੇਰੋ ਜਰਨਲ ਪਬਲਿਕ ਲਸੰਸ, ਵਰਜ਼ਨ 3 ਜਾਂ ਨਵਾਂ"
 
-#: gtk/gtkaboutdialog.c:128
-#| msgid "GNU General Public License, version 3 only"
+#: gtk/gtkaboutdialog.c:134
 msgid "GNU Affero General Public License, version 3 only"
 msgstr "GNU ਅਫੇਰੋ ਜਰਨਲ ਪਬਲਿਕ ਲਸੰਸ ਵਰਜ਼ਨ ਕੇਵਲ 3 ਹੀ"
 
-#: gtk/gtkaboutdialog.c:129
-#| msgid "BSD 2-Clause License"
+#: gtk/gtkaboutdialog.c:135
 msgid "BSD 3-Clause License"
 msgstr "BSD 3-Clause ਲਸੰਸ"
 
-#: gtk/gtkaboutdialog.c:130
+#: gtk/gtkaboutdialog.c:136
 msgid "Apache License, Version 2.0"
 msgstr "ਅਪਾਚੇ ਲਸੰਸ, ਵਰਜ਼ਨ 2.0"
 
-#: gtk/gtkaboutdialog.c:131
-#| msgid "Artistic License 2.0"
+#: gtk/gtkaboutdialog.c:137
 msgid "Mozilla Public License 2.0"
 msgstr "ਮੋਜ਼ੀਲਾ ਪਬਲਿਕ ਲਸੰਸ 2.0"
 
-#: gtk/gtkaboutdialog.c:927
+#: gtk/gtkaboutdialog.c:946
 msgid "Website"
 msgstr "ਵੈੱਬਸਾਈਟ"
 
-#: gtk/gtkaboutdialog.c:964 gtk/ui/gtkapplication-quartz.ui:6
+#: gtk/gtkaboutdialog.c:983 gtk/ui/gtkapplication-quartz.ui:6
 #, c-format
 msgid "About %s"
 msgstr "%s ਬਾਰੇ"
 
-#: gtk/gtkaboutdialog.c:2102
+#: gtk/gtkaboutdialog.c:2087
 msgid "Created by"
 msgstr "ਬਣਾਇਆ"
 
-#: gtk/gtkaboutdialog.c:2105
+#: gtk/gtkaboutdialog.c:2090
 msgid "Documented by"
 msgstr "ਦਸਤਾਵੇਜ਼ ਲਿਖੇ"
 
-#: gtk/gtkaboutdialog.c:2115
+#: gtk/gtkaboutdialog.c:2100
 msgid "Translated by"
 msgstr "ਉਲੱਥਾ ਕੀਤਾ"
 
-#: gtk/gtkaboutdialog.c:2120
+#: gtk/gtkaboutdialog.c:2105
 msgid "Design by"
 msgstr "ਡਿਜ਼ਾਇਨ ਬਣਾਇਆ"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2283
+#: gtk/gtkaboutdialog.c:2268
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -1052,426 +1021,392 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "ਪਿੱਛੇ ਡੰਡਾ"
 
-#: gtk/gtkaccessible.c:556
+#: gtk/gtkaccessible.c:558
 msgctxt "accessibility"
 msgid "alert"
 msgstr "ਚੇਤਾਵਨੀ"
 
-#: gtk/gtkaccessible.c:557
+#: gtk/gtkaccessible.c:559
 msgctxt "accessibility"
 msgid "alert dialog"
 msgstr "ਚੇਤਾਵਨੀ ਡਾਈਲਾਗ"
 
-#: gtk/gtkaccessible.c:558
-#| msgctxt "throbbing progress animation widget"
-#| msgid "Spinner"
+#: gtk/gtkaccessible.c:560
 msgctxt "accessibility"
 msgid "banner"
 msgstr "ਬੈਨਰ"
 
-#: gtk/gtkaccessible.c:559
+#: gtk/gtkaccessible.c:561
 msgctxt "accessibility"
 msgid "button"
 msgstr "ਬਟਨ"
 
-#: gtk/gtkaccessible.c:560
-#| msgid "Location"
+#: gtk/gtkaccessible.c:562
 msgctxt "accessibility"
 msgid "caption"
 msgstr "ਸੁਰਖੀ"
 
-#: gtk/gtkaccessible.c:561
+#: gtk/gtkaccessible.c:563
 msgctxt "accessibility"
 msgid "cell"
 msgstr "ਸੈੱਲ"
 
-#: gtk/gtkaccessible.c:562
+#: gtk/gtkaccessible.c:564
 msgctxt "accessibility"
 msgid "checkbox"
 msgstr "ਚੋਣ ਬਕਸਾ"
 
-#: gtk/gtkaccessible.c:563
+#: gtk/gtkaccessible.c:565
 msgctxt "accessibility"
 msgid "column header"
 msgstr "ਕਾਲਮ ਹੈੱਡਰ"
 
-#: gtk/gtkaccessible.c:564
+#: gtk/gtkaccessible.c:566
 msgctxt "accessibility"
 msgid "combo box"
 msgstr "ਕੰਬੋ ਬਕਸਾ"
 
-#: gtk/gtkaccessible.c:565
-#| msgid "Top Command"
+#: gtk/gtkaccessible.c:567
 msgctxt "accessibility"
 msgid "command"
 msgstr "ਕਮਾਂਡ"
 
-#: gtk/gtkaccessible.c:566
-#| msgid "Composited"
+#: gtk/gtkaccessible.c:568
 msgctxt "accessibility"
 msgid "composite"
 msgstr "ਸੰਯੁਕਤ"
 
-#: gtk/gtkaccessible.c:567
+#: gtk/gtkaccessible.c:569
 msgctxt "accessibility"
 msgid "dialog"
 msgstr "ਡਾਈਲਾਗ"
 
-#: gtk/gtkaccessible.c:568
-#| msgid "Documented by"
+#: gtk/gtkaccessible.c:570
 msgctxt "accessibility"
 msgid "document"
 msgstr "ਦਸਤਾਵੇਜ਼"
 
-#: gtk/gtkaccessible.c:569
+#: gtk/gtkaccessible.c:571
 msgctxt "accessibility"
 msgid "feed"
 msgstr "ਫੀਡ"
 
-#: gtk/gtkaccessible.c:570
+#: gtk/gtkaccessible.c:572
 msgctxt "accessibility"
 msgid "form"
 msgstr "ਰੂਪ"
 
-#: gtk/gtkaccessible.c:571
+#: gtk/gtkaccessible.c:573
 msgctxt "accessibility"
 msgid "generic"
 msgstr "ਸਧਾਰਨ"
 
-#: gtk/gtkaccessible.c:572
+#: gtk/gtkaccessible.c:574
 msgctxt "accessibility"
 msgid "grid"
 msgstr "ਗਰਿੱਡ"
 
-#: gtk/gtkaccessible.c:573
+#: gtk/gtkaccessible.c:575
 msgctxt "accessibility"
 msgid "grid cell"
 msgstr "ਗਰਿੱਡ ਸੈੱਲ"
 
-#: gtk/gtkaccessible.c:574
+#: gtk/gtkaccessible.c:576
 msgctxt "accessibility"
 msgid "group"
 msgstr "ਗਰੁੱਪ"
 
-#: gtk/gtkaccessible.c:575
-#| msgid "Recording"
+#: gtk/gtkaccessible.c:577
 msgctxt "accessibility"
 msgid "heading"
 msgstr "ਸਿਰਲੇਖ"
 
-#: gtk/gtkaccessible.c:576
-#| msgid "Image"
+#: gtk/gtkaccessible.c:578
 msgctxt "accessibility"
 msgid "image"
 msgstr "ਚਿੱਤਰ"
 
-#: gtk/gtkaccessible.c:577
-#| msgid "Input"
+#: gtk/gtkaccessible.c:579
 msgctxt "accessibility"
 msgid "input"
 msgstr "ਇੰਪੁੱਟ"
 
-#: gtk/gtkaccessible.c:578
-#| msgid "Label"
+#: gtk/gtkaccessible.c:580
 msgctxt "accessibility"
 msgid "label"
 msgstr "ਲੇਬਲ"
 
-#: gtk/gtkaccessible.c:579
+#: gtk/gtkaccessible.c:581
 msgctxt "accessibility"
 msgid "landmark"
 msgstr "ਲੈਂਡਮਾਰਕ"
 
-#: gtk/gtkaccessible.c:580
+#: gtk/gtkaccessible.c:582
 msgctxt "accessibility"
 msgid "legend"
 msgstr "ਸੰਕੇਤ"
 
-#: gtk/gtkaccessible.c:581
+#: gtk/gtkaccessible.c:583
 msgctxt "accessibility"
 msgid "link"
 msgstr "ਲਿੰਕ"
 
-#: gtk/gtkaccessible.c:582
+#: gtk/gtkaccessible.c:584
 msgctxt "accessibility"
 msgid "list"
 msgstr "ਸੂਚੀ"
 
-#: gtk/gtkaccessible.c:583
+#: gtk/gtkaccessible.c:585
 msgctxt "accessibility"
 msgid "list box"
 msgstr "ਸੂਚੀ ਬਾਕਸ"
 
-#: gtk/gtkaccessible.c:584
-#| msgctxt "Action description"
-#| msgid "Clicks the menuitem"
+#: gtk/gtkaccessible.c:586
 msgctxt "accessibility"
 msgid "list item"
 msgstr "ਸੂਚੀ ਚੀਜ਼"
 
-#: gtk/gtkaccessible.c:585
+#: gtk/gtkaccessible.c:587
 msgctxt "accessibility"
 msgid "log"
 msgstr "ਲਾਗ"
 
-#: gtk/gtkaccessible.c:586
-#| msgid "_Domain"
+#: gtk/gtkaccessible.c:588
 msgctxt "accessibility"
 msgid "main"
 msgstr "ਮੁੱਖ"
 
-#: gtk/gtkaccessible.c:587
+#: gtk/gtkaccessible.c:589
 msgctxt "accessibility"
 msgid "marquee"
 msgstr ""
 
-#: gtk/gtkaccessible.c:588
+#: gtk/gtkaccessible.c:590
 msgctxt "accessibility"
 msgid "math"
 msgstr "ਗਣਿਤ"
 
-#: gtk/gtkaccessible.c:589
+#: gtk/gtkaccessible.c:591
 msgctxt "accessibility"
 msgid "meter"
 msgstr "ਮੀਟਰ"
 
-#: gtk/gtkaccessible.c:590
+#: gtk/gtkaccessible.c:592
 msgctxt "accessibility"
 msgid "menu"
 msgstr "ਮੇਨੂ"
 
-#: gtk/gtkaccessible.c:591
+#: gtk/gtkaccessible.c:593
 msgctxt "accessibility"
 msgid "menu bar"
 msgstr "ਮੇਨੂ ਪੱਟੀ"
 
-#: gtk/gtkaccessible.c:592
+#: gtk/gtkaccessible.c:594
 msgctxt "accessibility"
 msgid "menu item"
 msgstr "ਮੇਨੂ ਚੀਜ਼"
 
-#: gtk/gtkaccessible.c:593
+#: gtk/gtkaccessible.c:595
 msgctxt "accessibility"
 msgid "menu item checkbox"
 msgstr "ਮੇਨੂ ਚੀਜ਼ ਚੋਣ-ਬਾਕਸ"
 
-#: gtk/gtkaccessible.c:594
+#: gtk/gtkaccessible.c:596
 msgctxt "accessibility"
 msgid "menu item radio"
 msgstr "ਮੇਨੂ ਚੀਜ਼ ਰੇਡੀਓ"
 
-#: gtk/gtkaccessible.c:595
-#| msgid "Animations"
+#: gtk/gtkaccessible.c:597
 msgctxt "accessibility"
 msgid "navigation"
 msgstr "ਨੇਵੀਗੇਸ਼ਨ"
 
-#: gtk/gtkaccessible.c:596
-#| msgid "none"
+#: gtk/gtkaccessible.c:598
 msgctxt "accessibility"
 msgid "none"
 msgstr "ਕੋਈ ਨਹੀਂ"
 
-#: gtk/gtkaccessible.c:597
+#: gtk/gtkaccessible.c:599
 msgctxt "accessibility"
 msgid "note"
 msgstr "ਨੋਟ"
 
-#: gtk/gtkaccessible.c:598
-#| msgid "Location"
+#: gtk/gtkaccessible.c:600
 msgctxt "accessibility"
 msgid "option"
 msgstr "ਚੋਣ"
 
-#: gtk/gtkaccessible.c:599
-#| msgid "_Orientation:"
+#: gtk/gtkaccessible.c:601
 msgctxt "accessibility"
 msgid "presentation"
 msgstr "ਪੇਸ਼ਕਾਰੀ"
 
-#: gtk/gtkaccessible.c:600
+#: gtk/gtkaccessible.c:602
 msgctxt "accessibility"
 msgid "progress bar"
 msgstr "ਤਰੱਕੀ ਪੱਟੀ"
 
-#: gtk/gtkaccessible.c:601
+#: gtk/gtkaccessible.c:603
 msgctxt "accessibility"
 msgid "radio"
 msgstr "ਰੇਡੀਓ"
 
-#: gtk/gtkaccessible.c:602
+#: gtk/gtkaccessible.c:604
 msgctxt "accessibility"
 msgid "radio group"
 msgstr "ਰੇਡੀਓ ਗਰੁੱਪ"
 
-#: gtk/gtkaccessible.c:603
-#| msgctxt "Color name"
-#| msgid "Orange"
+#: gtk/gtkaccessible.c:605
 msgctxt "accessibility"
 msgid "range"
 msgstr "ਰੇਜ਼"
 
-#: gtk/gtkaccessible.c:604
+#: gtk/gtkaccessible.c:606
 msgctxt "accessibility"
 msgid "region"
 msgstr "ਖੇਤਰ"
 
-#: gtk/gtkaccessible.c:605
-#| msgid "Low"
+#: gtk/gtkaccessible.c:607
 msgctxt "accessibility"
 msgid "row"
 msgstr "ਕਤਾਰ"
 
-#: gtk/gtkaccessible.c:606
+#: gtk/gtkaccessible.c:608
 msgctxt "accessibility"
 msgid "row group"
 msgstr "ਕਤਾਰ ਗਰੁੱਪ"
 
-#: gtk/gtkaccessible.c:607
+#: gtk/gtkaccessible.c:609
 msgctxt "accessibility"
 msgid "row header"
 msgstr "ਕਤਾਰ ਹੈੱਡਰ"
 
-#: gtk/gtkaccessible.c:608
+#: gtk/gtkaccessible.c:610
 msgctxt "accessibility"
 msgid "scroll bar"
 msgstr "ਸਕਰੋਲ ਪੱਟੀ"
 
-#: gtk/gtkaccessible.c:609
-#| msgid "Search"
+#: gtk/gtkaccessible.c:611
 msgctxt "accessibility"
 msgid "search"
 msgstr "ਖੋਜ"
 
-#: gtk/gtkaccessible.c:610
-#| msgid "Search"
+#: gtk/gtkaccessible.c:612
 msgctxt "accessibility"
 msgid "search box"
 msgstr "ਖੋਜ ਬਾਕਸ"
 
-#: gtk/gtkaccessible.c:611
-#| msgid "Action"
+#: gtk/gtkaccessible.c:613
 msgctxt "accessibility"
 msgid "section"
 msgstr "ਭਾਗ"
 
-#: gtk/gtkaccessible.c:612
+#: gtk/gtkaccessible.c:614
 msgctxt "accessibility"
 msgid "section head"
 msgstr "ਭਾਗ ਹੈੱਡ"
 
-#: gtk/gtkaccessible.c:613
-#| msgctxt "Action name"
-#| msgid "Select"
+#: gtk/gtkaccessible.c:615
 msgctxt "accessibility"
 msgid "select"
 msgstr "ਚੁਣੋ"
 
-#: gtk/gtkaccessible.c:614
+#: gtk/gtkaccessible.c:616
 msgctxt "accessibility"
 msgid "separator"
 msgstr "ਵੱਖਰੇਵਾਂ"
 
-#: gtk/gtkaccessible.c:615
+#: gtk/gtkaccessible.c:617
 msgctxt "accessibility"
 msgid "slider"
 msgstr "ਸਲਾਈਡਰ"
 
-#: gtk/gtkaccessible.c:616
+#: gtk/gtkaccessible.c:618
 msgctxt "accessibility"
 msgid "spin button"
 msgstr "ਸਪਿਨ ਬਟਨ"
 
-#: gtk/gtkaccessible.c:617
-#| msgid "Status"
+#: gtk/gtkaccessible.c:619
 msgctxt "accessibility"
 msgid "status"
 msgstr "ਹਾਲਤ"
 
-#: gtk/gtkaccessible.c:618
+#: gtk/gtkaccessible.c:620
 msgctxt "accessibility"
 msgid "structure"
 msgstr "ਢਾਂਚਾ"
 
-#: gtk/gtkaccessible.c:619
-#| msgctxt "light switch widget"
-#| msgid "Switch"
+#: gtk/gtkaccessible.c:621
 msgctxt "accessibility"
 msgid "switch"
 msgstr "ਬਦਲੋ"
 
-#: gtk/gtkaccessible.c:620
-#| msgctxt "keyboard label"
-#| msgid "Tab"
+#: gtk/gtkaccessible.c:622
 msgctxt "accessibility"
 msgid "tab"
 msgstr "ਟੈਬ"
 
-#: gtk/gtkaccessible.c:621
-#| msgid "Enabled"
+#: gtk/gtkaccessible.c:623
 msgctxt "accessibility"
 msgid "table"
 msgstr "ਟੇਬਲ"
 
-#: gtk/gtkaccessible.c:622
+#: gtk/gtkaccessible.c:624
 msgctxt "accessibility"
 msgid "tab list"
 msgstr "ਟੈਬ ਸੂਚੀ"
 
-#: gtk/gtkaccessible.c:623
+#: gtk/gtkaccessible.c:625
 msgctxt "accessibility"
 msgid "tab panel"
 msgstr "ਟੈਬ ਪੈਨਲ"
 
-#: gtk/gtkaccessible.c:624
+#: gtk/gtkaccessible.c:626
 msgctxt "accessibility"
 msgid "text box"
 msgstr "ਲਿਖਤ ਬਾਕਸ"
 
-#: gtk/gtkaccessible.c:625
+#: gtk/gtkaccessible.c:627
 msgctxt "accessibility"
 msgid "time"
 msgstr "ਸਮਾਂ"
 
-#: gtk/gtkaccessible.c:626
+#: gtk/gtkaccessible.c:628
 msgctxt "accessibility"
 msgid "timer"
 msgstr "ਟਾਈਮਰ"
 
-#: gtk/gtkaccessible.c:627
+#: gtk/gtkaccessible.c:629
 msgctxt "accessibility"
 msgid "tool bar"
 msgstr "ਟੂਲ ਪੱਟੀ"
 
-#: gtk/gtkaccessible.c:628
+#: gtk/gtkaccessible.c:630
 msgctxt "accessibility"
 msgid "tool tip"
 msgstr "ਟੂਲ ਟਿੱਪ"
 
-#: gtk/gtkaccessible.c:629
+#: gtk/gtkaccessible.c:631
 msgctxt "accessibility"
 msgid "tree"
 msgstr "ਲੜੀ"
 
-#: gtk/gtkaccessible.c:630
+#: gtk/gtkaccessible.c:632
 msgctxt "accessibility"
 msgid "tree grid"
 msgstr "ਲੜੀ ਗਰਿੱਡ"
 
-#: gtk/gtkaccessible.c:631
-#| msgid "Could not remove item"
+#: gtk/gtkaccessible.c:633
 msgctxt "accessibility"
 msgid "tree item"
 msgstr "ਲੜੀ ਚੀਜ਼"
 
-#: gtk/gtkaccessible.c:632
+#: gtk/gtkaccessible.c:634
 msgctxt "accessibility"
 msgid "widget"
 msgstr "ਵਿਜੈਟ"
 
-#: gtk/gtkaccessible.c:633
-#| msgctxt "Stock label, media"
-#| msgid "R_ewind"
+#: gtk/gtkaccessible.c:635
 msgctxt "accessibility"
 msgid "window"
 msgstr "ਵਿੰਡੋ"
@@ -1659,16 +1594,16 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkcolorbutton.c:165 gtk/gtkcolorbutton.c:267
+#: gtk/gtkcolorbutton.c:172 gtk/gtkcolorbutton.c:274
 msgid "Pick a Color"
 msgstr "ਇੱਕ ਰੰਗ ਚੁਣੋ"
 
-#: gtk/gtkcolorbutton.c:456 gtk/gtkcolorchooserwidget.c:307
+#: gtk/gtkcolorbutton.c:463 gtk/gtkcolorchooserwidget.c:307
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "ਲਾਲ %d%%, ਹਰਾ %d%%, ਨੀਲਾ %d%%, ਐਲਫ਼ਾ %d%%"
 
-#: gtk/gtkcolorbutton.c:462 gtk/gtkcolorchooserwidget.c:313
+#: gtk/gtkcolorbutton.c:469 gtk/gtkcolorchooserwidget.c:313
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "ਲਾਲ %d%%, ਹਰਾ %d%%, ਨੀਲਾ %d%%"
@@ -1679,83 +1614,61 @@ msgid "Color: %s"
 msgstr "ਰੰਗ: %s"
 
 #: gtk/gtkcolorchooserwidget.c:435
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Blue"
 msgstr "ਬਹੁਤ ਹਲਕਾ ਨੀਲਾ"
 
 #: gtk/gtkcolorchooserwidget.c:436
-#| msgctxt "Color name"
-#| msgid "Light Sky Blue"
 msgctxt "Color name"
 msgid "Light Blue"
 msgstr "ਹਲਕਾ ਨੀਲਾ"
 
 #: gtk/gtkcolorchooserwidget.c:437
-#| msgid "_Blue:"
 msgctxt "Color name"
 msgid "Blue"
 msgstr "ਨੀਲਾ"
 
 #: gtk/gtkcolorchooserwidget.c:438
-#| msgctxt "Color name"
-#| msgid "Dark Sky Blue"
 msgctxt "Color name"
 msgid "Dark Blue"
 msgstr "ਗੂੜਾ ਨੀਲਾ"
 
 #: gtk/gtkcolorchooserwidget.c:439
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Blue"
 msgstr "ਬਹੁਤ ਗੂੜਾ ਨੀਲਾ"
 
 #: gtk/gtkcolorchooserwidget.c:440
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Green"
 msgstr "ਬਹੁਤ ਹਲਕਾ ਹਰਾ"
 
 #: gtk/gtkcolorchooserwidget.c:441
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Green"
 msgstr "ਹਲਕਾ ਹਰਾ"
 
 #: gtk/gtkcolorchooserwidget.c:442
-#| msgid "_Green:"
 msgctxt "Color name"
 msgid "Green"
 msgstr "ਹਰਾ"
 
 #: gtk/gtkcolorchooserwidget.c:443
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Green"
 msgstr "ਗੂੜਾ ਹਰਾ"
 
 #: gtk/gtkcolorchooserwidget.c:444
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Green"
 msgstr "ਬਹੁਤ ਗੂੜਾ ਹਰਾ"
 
 #: gtk/gtkcolorchooserwidget.c:445
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Yellow"
 msgstr "ਬਹੁਤ ਹਲਕਾ ਪੀਲਾ"
 
 #: gtk/gtkcolorchooserwidget.c:446
-#| msgctxt "Color name"
-#| msgid "Light Chameleon"
 msgctxt "Color name"
 msgid "Light Yellow"
 msgstr "ਹਲਕਾ ਪੀਲਾ"
@@ -1766,22 +1679,16 @@ msgid "Yellow"
 msgstr "ਪੀਲਾ"
 
 #: gtk/gtkcolorchooserwidget.c:448
-#| msgctxt "Color name"
-#| msgid "Dark Chameleon"
 msgctxt "Color name"
 msgid "Dark Yellow"
 msgstr "ਗੂੜ੍ਹਾ ਪੀਲਾ"
 
 #: gtk/gtkcolorchooserwidget.c:449
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Yellow"
 msgstr "ਬਹੁਤ ਗੂੜਾ ਪੀਲਾ"
 
 #: gtk/gtkcolorchooserwidget.c:450
-#| msgctxt "Color name"
-#| msgid "Light Orange"
 msgctxt "Color name"
 msgid "Very Light Orange"
 msgstr "ਬਹੁਤ ਹਲਕਾ ਸੰਤਰੀ"
@@ -1802,56 +1709,41 @@ msgid "Dark Orange"
 msgstr "ਗੂੜ੍ਹਾ ਸੰਤਰੀ"
 
 #: gtk/gtkcolorchooserwidget.c:454
-#| msgctxt "Color name"
-#| msgid "Dark Orange"
 msgctxt "Color name"
 msgid "Very Dark Orange"
 msgstr "ਬਹੁਤ ਗੂੜ੍ਹਾ ਸੰਤਰੀ"
 
 #: gtk/gtkcolorchooserwidget.c:455
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Red"
 msgstr "ਬਹੁਤ ਹਲਕਾ ਲਾਲ"
 
 #: gtk/gtkcolorchooserwidget.c:456
-#| msgctxt "Color name"
-#| msgid "Light Scarlet Red"
 msgctxt "Color name"
 msgid "Light Red"
 msgstr "ਹਲਕਾ ਲਾਲ"
 
 #: gtk/gtkcolorchooserwidget.c:457
-#| msgid "_Red:"
 msgctxt "Color name"
 msgid "Red"
 msgstr "ਲਾਲ"
 
 #: gtk/gtkcolorchooserwidget.c:458
-#| msgctxt "Color name"
-#| msgid "Dark Scarlet Red"
 msgctxt "Color name"
 msgid "Dark Red"
 msgstr "ਗੂੜ੍ਹਾ ਲਾਲ"
 
 #: gtk/gtkcolorchooserwidget.c:459
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Red"
 msgstr "ਬਹੁਤ ਗੂੜਾ ਲਾਲ"
 
 #: gtk/gtkcolorchooserwidget.c:460
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Purple"
 msgstr "ਬਹੁਤ ਹਲਕਾ ਵੈਂਗਣੀ"
 
 #: gtk/gtkcolorchooserwidget.c:461
-#| msgctxt "Color name"
-#| msgid "Light Plum"
 msgctxt "Color name"
 msgid "Light Purple"
 msgstr "ਹਲਕਾ ਵੈਂਗਣੀ"
@@ -1862,29 +1754,21 @@ msgid "Purple"
 msgstr "ਵੈਂਗਣੀ"
 
 #: gtk/gtkcolorchooserwidget.c:463
-#| msgctxt "Color name"
-#| msgid "Dark Plum"
 msgctxt "Color name"
 msgid "Dark Purple"
 msgstr "ਗੂੜ੍ਹਾ ਵੈਂਗਣੀ"
 
 #: gtk/gtkcolorchooserwidget.c:464
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Purple"
 msgstr "ਬਹੁਤ ਗੂੜਾ ਵੈਂਗਣੀ"
 
 #: gtk/gtkcolorchooserwidget.c:465
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Brown"
 msgstr "ਬਹੁਤ ਹਲਕਾ ਭੂਰਾ"
 
 #: gtk/gtkcolorchooserwidget.c:466
-#| msgctxt "output-bin"
-#| msgid "Right Bin"
 msgctxt "Color name"
 msgid "Light Brown"
 msgstr "ਹਲਕਾ ਭੂਰਾ"
@@ -1895,15 +1779,11 @@ msgid "Brown"
 msgstr "ਭੂਰਾ"
 
 #: gtk/gtkcolorchooserwidget.c:468
-#| msgctxt "Color name"
-#| msgid "Dark Butter"
 msgctxt "Color name"
 msgid "Dark Brown"
 msgstr "ਗੂੜ੍ਹਾ ਭੂਰਾ"
 
 #: gtk/gtkcolorchooserwidget.c:469
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Brown"
 msgstr "ਬਹੁਤ ਗੂੜਾ ਭੂਰਾ"
@@ -1914,57 +1794,41 @@ msgid "White"
 msgstr "ਚਿੱਟਾ"
 
 #: gtk/gtkcolorchooserwidget.c:471
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 1"
 msgstr "ਹਲਕਾ ਸਲੇਟੀ 1"
 
 #: gtk/gtkcolorchooserwidget.c:472
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 2"
 msgstr "ਹਲਕਾ ਸਲੇਟੀ 2"
 
 #: gtk/gtkcolorchooserwidget.c:473
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 3"
 msgstr "ਹਲਕਾ ਸਲੇਟੀ 3"
 
 #: gtk/gtkcolorchooserwidget.c:474
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 4"
 msgstr "ਹਲਕਾ ਸਲੇਟੀ 4"
 
 #: gtk/gtkcolorchooserwidget.c:475
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 1"
 msgstr "ਗੂੜਾ ਸਲੇਟੀ 1"
 
 #: gtk/gtkcolorchooserwidget.c:476
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 2"
 msgstr "ਗੂੜਾ ਸਲੇਟੀ 2"
 
 #: gtk/gtkcolorchooserwidget.c:477
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 3"
 msgstr "ਗੂੜਾ ਸਲੇਟੀ 3"
 
 #: gtk/gtkcolorchooserwidget.c:478
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 4"
 msgstr "ਗੂੜਾ ਸਲੇਟੀ 4"
@@ -1985,8 +1849,6 @@ msgid "Custom color %d: %s"
 msgstr "ਪਸੰਦੀਦਾ ਰੰਗ %d: %s"
 
 #: gtk/gtkcolorswatch.c:230
-#| msgctxt "Action name"
-#| msgid "Customize"
 msgid "Customize"
 msgstr "ਪਸੰਦੀਦਾ"
 
@@ -2004,7 +1866,7 @@ msgstr "default:mm"
 msgid "Margins from Printer…"
 msgstr "…ਪਰਿੰਟਰ ਤੋਂ ਹਾਸ਼ੀਆ"
 
-#: gtk/gtkcustompaperunixdialog.c:348 gtk/gtkmessagedialog.c:737
+#: gtk/gtkcustompaperunixdialog.c:348 gtk/gtkmessagedialog.c:161
 #: gtk/ui/gtkassistant.ui:40
 msgid "_Close"
 msgstr "ਬੰਦ ਕਰੋ(_C)"
@@ -2060,8 +1922,6 @@ msgid "Paper Margins"
 msgstr "ਸਫ਼ਾ ਹਾਸ਼ੀਆ"
 
 #: gtk/gtkentry.c:3637
-#| msgctxt "keyboard label"
-#| msgid "Insert"
 msgid "Insert Emoji"
 msgstr "ਈਮੋਜ਼ੀ ਪਾਓ"
 
@@ -2127,12 +1987,12 @@ msgstr "ਉਸ ਨਾ ਨਾਲ ਫਾਇਲ ਪਹਿਲਾਂ ਹੀ ਮੌਜ
 
 #: gtk/gtkfilechoosernative.c:504 gtk/gtkfilechoosernative.c:575
 #: gtk/gtkfilechooserwidget.c:1212 gtk/gtkfilechooserwidget.c:5762
-#: gtk/gtkmessagedialog.c:741 gtk/gtkmessagedialog.c:750
+#: gtk/gtkmessagedialog.c:165 gtk/gtkmessagedialog.c:174
 #: gtk/gtkmountoperation.c:608 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:643 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:626 gtk/gtkprintunixdialog.c:782
-#: gtk/gtkwindow.c:5948 gtk/inspector/css-editor.c:248
-#: gtk/inspector/recorder.c:1242 gtk/ui/gtkappchooserdialog.ui:45
+#: gtk/gtkwindow.c:5950 gtk/inspector/css-editor.c:248
+#: gtk/inspector/recorder.c:1241 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
 msgid "_Cancel"
@@ -2145,7 +2005,7 @@ msgid "_Open"
 msgstr "ਖੋਲ੍ਹੋ(_O)"
 
 #: gtk/gtkfilechoosernative.c:569 gtk/inspector/css-editor.c:249
-#: gtk/inspector/recorder.c:1243
+#: gtk/inspector/recorder.c:1242
 msgid "_Save"
 msgstr "ਸੰਭਾਲੋ(_S)"
 
@@ -2224,7 +2084,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "ਜੇ ਤੁਸੀਂ ਇਹ ਆਈਟਮ ਨੂੰ ਹਟਾਇਆ ਤਾਂ ਇਸ ਨੂੰ ਪੱਕੇ ਤੌਰ ਉਤੇ ਹਟਾਇਆ ਜਾਵੇਗਾ।"
 
 #: gtk/gtkfilechooserwidget.c:1213 gtk/gtkfilechooserwidget.c:1829
-#: gtk/gtklabel.c:5445 gtk/gtktext.c:5960 gtk/gtktextview.c:8564
+#: gtk/gtklabel.c:5408 gtk/gtktext.c:5960 gtk/gtktextview.c:8564
 msgid "_Delete"
 msgstr "ਹਟਾਓ(_D)"
 
@@ -2270,7 +2130,6 @@ msgid "Show _Size Column"
 msgstr "ਅਕਾਰ ਕਾਲਮ ਵੇਖੋ(_S)"
 
 #: gtk/gtkfilechooserwidget.c:1850
-#| msgid "Show _Size Column"
 msgid "Show T_ype Column"
 msgstr "ਕਿਸਮ ਕਾਲਮ ਵੇਖੋ(_y)"
 
@@ -2279,7 +2138,6 @@ msgid "Show _Time"
 msgstr "ਸਮਾਂ ਵੇਖੋ(_T)"
 
 #: gtk/gtkfilechooserwidget.c:1858
-#| msgid "Sort _Folders before Files"
 msgid "Sort _Folders Before Files"
 msgstr "ਫਾਇਲਾਂ ਤੋਂ ਪਹਿਲਾਂ ਫੋਲਡਰ ਲੜੀਬੱਧ(_F)"
 
@@ -2347,12 +2205,10 @@ msgid "Program"
 msgstr "ਪਰੋਗਰਾਮ"
 
 #: gtk/gtkfilechooserwidget.c:4306
-#| msgctxt "keyboard label"
-#| msgid "AudioMute"
 msgid "Audio"
 msgstr "ਆਡੀਓ"
 
-#: gtk/gtkfilechooserwidget.c:4307 gtk/gtkfontbutton.c:549
+#: gtk/gtkfilechooserwidget.c:4307 gtk/gtkfontbutton.c:556
 #: gtk/inspector/visual.ui:187
 msgid "Font"
 msgstr "ਫ਼ੋਂਟ"
@@ -2362,8 +2218,6 @@ msgid "Image"
 msgstr "ਚਿੱਤਰ"
 
 #: gtk/gtkfilechooserwidget.c:4309
-#| msgctxt "paper size"
-#| msgid "Arch A"
 msgid "Archive"
 msgstr "ਅਕਾਇਵ"
 
@@ -2384,17 +2238,14 @@ msgid "Contacts"
 msgstr "ਸੰਪਰਕ"
 
 #: gtk/gtkfilechooserwidget.c:4316
-#| msgid "calendar:MY"
 msgid "Calendar"
 msgstr "ਕੈਲੰਡਰ"
 
 #: gtk/gtkfilechooserwidget.c:4317
-#| msgid "Documented by"
 msgid "Document"
 msgstr "ਦਸਤਾਵੇਜ਼"
 
 #: gtk/gtkfilechooserwidget.c:4318
-#| msgid "_Orientation:"
 msgid "Presentation"
 msgstr "ਪੇਸ਼ਕਾਰੀ"
 
@@ -2443,33 +2294,28 @@ msgstr "ਖੋਜ ਮੰਗ ਭੇਜੀ ਨਹੀਂ ਜਾ ਸਕੀ"
 msgid "Accessed"
 msgstr "ਪਹੁੰਚ ਕੀਤੀ"
 
-#: gtk/gtkfontbutton.c:386
+#: gtk/gtkfontbutton.c:393
 msgid "Sans 12"
 msgstr "Sans ੧੨"
 
-#: gtk/gtkfontbutton.c:479 gtk/gtkfontbutton.c:573
+#: gtk/gtkfontbutton.c:486 gtk/gtkfontbutton.c:580
 msgid "Pick a Font"
 msgstr "ਫੋਂਟ ਚੁਣੋ"
 
-#: gtk/gtkfontbutton.c:1293
+#: gtk/gtkfontbutton.c:1300
 msgctxt "font"
 msgid "None"
 msgstr "ਕੋਈ ਨਹੀਂ"
 
 #: gtk/gtkfontchooserwidget.c:1551
-#| msgid "_Width:"
 msgid "Width"
 msgstr "ਚੌੜਾਈ"
 
 #: gtk/gtkfontchooserwidget.c:1552
-#| msgctxt "keyboard label"
-#| msgid "Right"
 msgid "Weight"
 msgstr "ਭਾਰ"
 
 #: gtk/gtkfontchooserwidget.c:1553
-#| msgctxt "Stock label"
-#| msgid "_Italic"
 msgid "Italic"
 msgstr "ਤਿਰਛਾ"
 
@@ -2486,14 +2332,10 @@ msgid "Default"
 msgstr "ਡਿਫਾਲਟ"
 
 #: gtk/gtkfontchooserwidget.c:2147
-#| msgctxt "event phase"
-#| msgid "Capture"
 msgid "Ligatures"
 msgstr "ਸੰਯੋਜਕ"
 
 #: gtk/gtkfontchooserwidget.c:2148
-#| msgctxt "paper size"
-#| msgid "US Letter Plus"
 msgid "Letter Case"
 msgstr "ਪੱਤਰ ਕੇਸ"
 
@@ -2510,7 +2352,6 @@ msgid "Number Formatting"
 msgstr "ਨੰਬਰ ਫਾਰਮੈਟ"
 
 #: gtk/gtkfontchooserwidget.c:2152
-#| msgid "Dark Variant"
 msgid "Character Variants"
 msgstr "ਅੱਖਰਾਂ ਦਾ ਬਦਲ"
 
@@ -2518,32 +2359,31 @@ msgstr "ਅੱਖਰਾਂ ਦਾ ਬਦਲ"
 msgid "OpenGL context creation failed"
 msgstr "OpenGL ਪ੍ਰਸੰਗ ਬਣਾਉਣ ਲਈ ਫੇਲ੍ਹ ਹੈ"
 
-#: gtk/gtklabel.c:5442 gtk/gtktext.c:5948 gtk/gtktextview.c:8552
+#: gtk/gtklabel.c:5405 gtk/gtktext.c:5948 gtk/gtktextview.c:8552
 msgid "Cu_t"
 msgstr "ਕੱਟੋ(_t)"
 
-#: gtk/gtklabel.c:5443 gtk/gtktext.c:5952 gtk/gtktextview.c:8556
+#: gtk/gtklabel.c:5406 gtk/gtktext.c:5952 gtk/gtktextview.c:8556
 msgid "_Copy"
 msgstr "ਕਾਪੀ ਕਰੋ(_C)"
 
-#: gtk/gtklabel.c:5444 gtk/gtktext.c:5956 gtk/gtktextview.c:8560
+#: gtk/gtklabel.c:5407 gtk/gtktext.c:5956 gtk/gtktextview.c:8560
 msgid "_Paste"
 msgstr "ਚੇਪੋ(_P)"
 
-#: gtk/gtklabel.c:5450 gtk/gtktext.c:5969 gtk/gtktextview.c:8585
+#: gtk/gtklabel.c:5413 gtk/gtktext.c:5969 gtk/gtktextview.c:8585
 msgid "Select _All"
 msgstr "ਸਭ ਚੁਣੋ(_A)"
 
-#: gtk/gtklabel.c:5455
+#: gtk/gtklabel.c:5418
 msgid "_Open Link"
 msgstr "ਲਿੰਕ ਖੋਲ੍ਹੋ(_O)"
 
-#: gtk/gtklabel.c:5459
+#: gtk/gtklabel.c:5422
 msgid "Copy _Link Address"
 msgstr "ਲਿੰਕ ਐਡਰੈੱਸ ਕਾਪੀ ਕਰੋ(_L)"
 
 #: gtk/gtklinkbutton.c:258
-#| msgid "Copy URL"
 msgid "_Copy URL"
 msgstr "URL ਕਾਪੀ ਕਰੋ(_C)"
 
@@ -2640,16 +2480,16 @@ msgctxt "short time format"
 msgid "%d:%02d"
 msgstr "%d:%02d"
 
-#: gtk/gtkmessagedialog.c:733 gtk/gtkmessagedialog.c:751
-#: gtk/gtkprintbackend.c:644 gtk/gtkwindow.c:5949
+#: gtk/gtkmessagedialog.c:157 gtk/gtkmessagedialog.c:175
+#: gtk/gtkprintbackend.c:644 gtk/gtkwindow.c:5951
 msgid "_OK"
 msgstr "ਠੀਕ ਹੈ(_O)"
 
-#: gtk/gtkmessagedialog.c:745
+#: gtk/gtkmessagedialog.c:169
 msgid "_No"
 msgstr "ਨਹੀਂ(_N)"
 
-#: gtk/gtkmessagedialog.c:746
+#: gtk/gtkmessagedialog.c:170
 msgid "_Yes"
 msgstr "ਹਾਂ(_Y)"
 
@@ -2678,7 +2518,6 @@ msgid "_Domain"
 msgstr "ਡੋਮੇਨ(_D)"
 
 #: gtk/gtkmountoperation.c:711
-#| msgid "Volume Up"
 msgid "Volume type"
 msgstr "ਆਵਾਜ਼ ਕਿਸਮ"
 
@@ -2687,8 +2526,6 @@ msgid "_Hidden"
 msgstr "ਲੁਕਵਾਂ(_H)"
 
 #: gtk/gtkmountoperation.c:724
-#| msgctxt "input method menu"
-#| msgid "Windows IME"
 msgid "_Windows system"
 msgstr "ਵਿੰਡੋਜ਼ ਸਿਸਟਮ(_W)"
 
@@ -2759,26 +2596,21 @@ msgstr "PID %d ਨਾਲ ਪਰੋਸੈਸ ਖਤਮ ਨਹੀਂ ਕੀਤਾ 
 
 #: gtk/gtknomediafile.c:48
 msgid "GTK could not find a media module. Check your installation."
-msgstr ""
+msgstr "GTK ਨੂੰ ਮੀਡੀਆ ਮੋਡੀਊਲ ਨਹੀਂ ਲੱਭਿਆ। ਆਪਣੀ ਇੰਸਟਾਲੇਸ਼ਨ ਦੀ ਜਾਂਚ ਕਰੋ।"
 
 #: gtk/gtknotebook.c:1428
 msgid "Tab list"
 msgstr "ਟੈਬ ਸੂਚੀ"
 
 #: gtk/gtknotebook.c:3147
-#| msgctxt "Stock label, media"
-#| msgid "Pre_vious"
 msgid "Previous tab"
 msgstr "ਪਿਛਲੀ ਟੈਬ"
 
 #: gtk/gtknotebook.c:3151
-#| msgid "_Next"
 msgid "Next tab"
 msgstr "ਅਗਲੀ ਟੈਬ"
 
 #: gtk/gtknotebook.c:3971
-#| msgctxt "keyboard label"
-#| msgid "Tab"
 msgid "Tab"
 msgstr "ਟੈਬ"
 
@@ -2828,12 +2660,10 @@ msgid "Page Setup"
 msgstr "ਸਫ਼ਾ ਸੈੱਟਅੱਪ"
 
 #: gtk/gtkpasswordentry.c:165
-#| msgid "Hide Others"
 msgid "Hide text"
 msgstr "ਲਿਖਤ ਲੁਕਾਓ"
 
 #: gtk/gtkpasswordentry.c:170 gtk/gtkpasswordentry.c:586
-#| msgid "Show data"
 msgid "Show text"
 msgstr "ਲਿਖਤ ਵੇਖਾਓ"
 
@@ -2842,14 +2672,12 @@ msgid "Caps Lock is on"
 msgstr "ਕੈਪਸ ਲਾਕ ਚਾਲੂ ਹੈ"
 
 #: gtk/gtkpasswordentry.c:658
-#| msgid "Show _Time"
 msgid "_Show Text"
 msgstr "ਲਿਖਤ ਵੇਖਾਓ(_S)"
 
 #. translators: %s is the name of a cloud provider for files
 #: gtk/gtkplacessidebar.c:913
 #, c-format
-#| msgid "Open '%s'"
 msgid "Open %s"
 msgstr "%s ਖੋਲ੍ਹੋ"
 
@@ -2862,7 +2690,6 @@ msgid "Recent files"
 msgstr "ਤਾਜ਼ਾ ਫਾਇਲਾਂ"
 
 #: gtk/gtkplacessidebar.c:1014
-#| msgid "_Start"
 msgid "Starred"
 msgstr "ਤਾਰਾ ਲਾਏ"
 
@@ -2934,7 +2761,6 @@ msgstr "“%s” ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਅਸਮਰੱਥ"
 #.
 #: gtk/gtkplacessidebar.c:1996
 #, c-format
-#| msgid "Opening “%s”."
 msgid "Error unlocking “%s”"
 msgstr "”%s” ਅਣ-ਲਾਕ ਕਰਨ ਲਈ ਗ਼ਲਤੀ"
 
@@ -3435,7 +3261,6 @@ msgid "No registered application with name “%s” for item with URI “%s” f
 msgstr "URI “%2$s“ ਵਾਲੀ ਆਈਟਮ ਲਈ “%1$s“ ਨਾਂ ਦੀ ਕੋਈ ਰਜਿਸਟਰ ਹੋਈ ਐਪਲੀਕੇਸ਼ਨ ਨਹੀਂ ਹੈ"
 
 #: gtk/gtksearchentry.c:578
-#| msgid "_Clear List"
 msgid "Clear entry"
 msgstr "ਐਂਟਰੀ ਸਾਫ਼ ਕਰੋ"
 
@@ -3525,20 +3350,14 @@ msgid "Could not show link"
 msgstr "ਲਿੰਕ ਵੇਖਾਇਆ ਨਹੀਂ ਜਾ ਸਕਿਆ"
 
 #: gtk/gtktext.c:5974 gtk/gtktextview.c:8590
-#| msgctxt "keyboard label"
-#| msgid "Insert"
 msgid "Insert _Emoji"
 msgstr "ਈਮੋਜ਼ੀ ਪਾਓ(_E)"
 
 #: gtk/gtktextview.c:8572
-#| msgctxt "Stock label"
-#| msgid "_Undo"
 msgid "_Undo"
 msgstr "ਵਾਪਸ(_U)"
 
 #: gtk/gtktextview.c:8576
-#| msgctxt "Stock label"
-#| msgid "_Redo"
 msgid "_Redo"
 msgstr "ਮੁੜ-ਵਾਪਸ(_R)"
 
@@ -3565,18 +3384,13 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:5936
+#: gtk/gtkwindow.c:5938
 #, c-format
-#| msgid "Do you want to use GTK+ Inspector?"
 msgid "Do you want to use GTK Inspector?"
 msgstr "ਕੀ ਤੁਸੀਂ GTK+ ਇੰਸਪੈਕਟਰ ਵਰਤਣਾ ਚਾਹੁੰਦੇ ਹੋ?"
 
-#: gtk/gtkwindow.c:5938
+#: gtk/gtkwindow.c:5940
 #, c-format
-#| msgid ""
-#| "GTK+ Inspector is an interactive debugger that lets you explore and "
-#| "modify the internals of any GTK+ application. Using it may cause the "
-#| "application to break or crash."
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK application. Using it may cause the application to "
@@ -3587,7 +3401,7 @@ msgstr ""
 "ਛਾਣਬੀਣ ਕਰਨ ਅਤੇ ਸੋਧਣ ਲਈ ਸਹਾਇਕ ਹੈ। ਇਸ ਦੀ ਵਰਤੋਂ ਨਾਲ ਐਪਲੀਕੇਸ਼ਨ ਬਰੇਕ ਜਾਂ ਨਸ਼ਟ ਹੋ"
 " ਸਕਦੀ ਹੈ।"
 
-#: gtk/gtkwindow.c:5943
+#: gtk/gtkwindow.c:5945
 msgid "Don’t show this message again"
 msgstr "ਇਹ ਸੁਨੇਹਾ ਫੇਰ ਨਾ ਦਿਖਾਓ"
 
@@ -3624,7 +3438,6 @@ msgid "Role"
 msgstr "ਰੋਲ"
 
 #: gtk/inspector/a11y.ui:40
-#| msgid "Object"
 msgid "Object path"
 msgstr "ਆਬਜੈਕਟ ਮਾਰਗ"
 
@@ -3642,7 +3455,6 @@ msgid "Activate"
 msgstr "ਸਰਗਰਮ"
 
 #: gtk/inspector/action-editor.c:335
-#| msgid "State"
 msgid "Set State"
 msgstr "ਹਾਲਤ ਸੈੱਟ ਕਰੋ"
 
@@ -3680,7 +3492,6 @@ msgid "Target"
 msgstr "ਟਾਰਗੇਟ"
 
 #: gtk/inspector/css-editor.c:129
-#| msgid "You can type here any CSS rule recognized by GTK+."
 msgid "You can type here any CSS rule recognized by GTK."
 msgstr "ਤੁਸੀਂ GTK ਵਲੋਂ ਪਛਾਣ ਕੀਤੇ CSS ਨਿਯਮ ਨੂੰ ਇੱਥੇ ਲਿਖ ਸਕਦੇ ਹੋ।"
 
@@ -3733,21 +3544,16 @@ msgid "None"
 msgstr "ਕੋਈ ਨਹੀਂ"
 
 #: gtk/inspector/general.c:447
-#| msgctxt "font"
-#| msgid "None"
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "ਕੋਈ ਨਹੀਂ"
 
 #: gtk/inspector/general.c:448 gtk/inspector/general.c:449
-#| msgctxt "font"
-#| msgid "None"
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "ਕੋਈ ਨਹੀਂ"
 
 #: gtk/inspector/general.ui:32
-#| msgid "GTK+ Version"
 msgid "GTK Version"
 msgstr "GTK ਵਰਜ਼ਨ"
 
@@ -3756,7 +3562,6 @@ msgid "GDK Backend"
 msgstr "GDK ਬੈਕਐਂਡ"
 
 #: gtk/inspector/general.ui:84
-#| msgid "GL Rendering"
 msgid "GSK Renderer"
 msgstr "GSK ਰੈਂਡਰਰ"
 
@@ -3765,7 +3570,6 @@ msgid "Pango Fontmap"
 msgstr "ਪੈਂਗੋ ਫ਼ੋਂਟ-ਮੈਪ"
 
 #: gtk/inspector/general.ui:136
-#| msgid "GDK Backend"
 msgid "Media Backend"
 msgstr "ਮੀਡੀਆ ਬੈਕਐਂਡ"
 
@@ -3794,7 +3598,6 @@ msgid "GL Vendor"
 msgstr "GL ਵੇਂਡਰ"
 
 #: gtk/inspector/general.ui:549
-#| msgid "_Unlock Device"
 msgid "Vulkan Device"
 msgstr "ਵੁਲਕਨ ਡਿਵਾਈਸ"
 
@@ -3870,7 +3673,6 @@ msgid "Properties"
 msgstr "ਵਿਸ਼ੇਸ਼ਤਾ"
 
 #: gtk/inspector/misc-info.ui:336
-#| msgid "Rendering Mode"
 msgid "Renderer"
 msgstr "ਰੈਂਡਰਰ"
 
@@ -3917,7 +3719,7 @@ msgstr "ਪਰਿੰਟਰ: %p"
 #: gtk/inspector/prop-editor.c:788
 #, c-format
 msgid "%s with value \"%s\""
-msgstr ""
+msgstr "\"%2$s\" ਮੁੱਲ ਨਾਲ %1$s"
 
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with type GObject
@@ -3925,7 +3727,7 @@ msgstr ""
 #: gtk/inspector/prop-editor.c:799
 #, c-format
 msgid "%s with type %s"
-msgstr ""
+msgstr "%2$s ਕਿਸਮ ਨਾਲ %1$s"
 
 #. Translators: Both %s are type names, for example
 #. * GtkObjectExpression for GtkStringObject 0x23456789
@@ -3933,7 +3735,7 @@ msgstr ""
 #: gtk/inspector/prop-editor.c:812
 #, c-format
 msgid "%s for %s %p"
-msgstr ""
+msgstr "%2$s %3$p ਲਈ %1$s"
 
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with value type: gchararray
@@ -3941,7 +3743,7 @@ msgstr ""
 #: gtk/inspector/prop-editor.c:842
 #, c-format
 msgid "%s with value type %s"
-msgstr ""
+msgstr "%2$s ਮੁੱਲ ਕਿਸਮ ਨਾਲ %1$s"
 
 #: gtk/inspector/prop-editor.c:1122
 #, c-format
@@ -3949,19 +3751,15 @@ msgid "Uneditable property type: %s"
 msgstr "%s: ਨਾ-ਸੋਧਣਯੋਗ ਵਿਸ਼ੇਸ਼ਤਾ ਕਿਸਮ"
 
 #: gtk/inspector/prop-editor.c:1266
-#| msgctxt "font"
-#| msgid "None"
 msgctxt "column number"
 msgid "None"
 msgstr "ਕੋਈ ਨਹੀਂ"
 
 #: gtk/inspector/prop-editor.c:1303
-#| msgid "Attribute"
 msgid "Attribute:"
 msgstr "ਗੁਣ:"
 
 #: gtk/inspector/prop-editor.c:1306
-#| msgid "Model:"
 msgid "Model"
 msgstr "ਮਾਡਲ"
 
@@ -3974,7 +3772,6 @@ msgstr "ਕਾਲਮ"
 #.
 #: gtk/inspector/prop-editor.c:1410
 #, c-format
-#| msgid "Object: %p (%s)"
 msgid "Action from: %p (%s)"
 msgstr "ਇਸ ਤੋਂ ਕਾਰਵਾਈ: %p (%s)"
 
@@ -3983,31 +3780,26 @@ msgid "Reset"
 msgstr "ਮੁੜ-ਸੈੱਟ ਕਰੋ"
 
 #: gtk/inspector/prop-editor.c:1473
-#| msgid "Default"
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "ਡਿਫਾਲਟ"
 
 #: gtk/inspector/prop-editor.c:1476
-#| msgid "Theme"
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "ਥੀਮ"
 
 #: gtk/inspector/prop-editor.c:1479
-#| msgid "XSettings"
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "XSettings"
 
 #: gtk/inspector/prop-editor.c:1483
-#| msgid "Application"
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "ਐਪਲੀਕੇਸ਼ਨ"
 
 #: gtk/inspector/prop-editor.c:1486
-#| msgid "Unknown"
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "ਅਣਪਛਾਤਾ"
@@ -4020,13 +3812,12 @@ msgstr "ਸਰੋਤ:"
 msgid "Defined At"
 msgstr "ਪਰਿਭਾਸ਼ਿਤ ਹੈ"
 
-#: gtk/inspector/recorder.c:1213
+#: gtk/inspector/recorder.c:1212
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "ਰੈਂਡਰਨੋਡ ਨੂੰ ਸੰਭਾਲਣਾ ਅਸਫ਼ਲ ਹੈ"
 
 #: gtk/inspector/recorder.ui:18
-#| msgid "Recorder"
 msgid "Record frames"
 msgstr "ਫਰੇਮ ਰਿਕਾਰਡ ਕਰੋ"
 
@@ -4043,7 +3834,6 @@ msgid "Use a dark background"
 msgstr "ਗੂੜ੍ਹੀ ਬੈਕਗਰਾਊਂਡ ਵਰਤੋਂ"
 
 #: gtk/inspector/recorder.ui:53
-#| msgid "Select a folder"
 msgid "Save selected node"
 msgstr "ਚੁਣੀ ਗਈ ਨੋਡ ਨੂੰ ਸੰਭਾਲੋ"
 
@@ -4105,7 +3895,6 @@ msgid "Mode"
 msgstr "ਮੋਡ"
 
 #: gtk/inspector/statistics.c:400
-#| msgid "GLib must be configured with --enable-debug"
 msgid "GLib must be configured with -Dbuildtype=debug"
 msgstr "GLib ਨੂੰ -Dbuildtype=debug ਨਾਲ ਸੰਰਚਿਤ ਕਰਨਾ ਚਾਹੀਦਾ ਹੈ"
 
@@ -4162,7 +3951,6 @@ msgid "GL rendering is disabled"
 msgstr "GL ਰੈਂਡਰਿੰਗ ਅਸਮਰੱਥ ਹੈ"
 
 #: gtk/inspector/visual.ui:59
-#| msgid "GTK+ Theme"
 msgid "GTK Theme"
 msgstr "GTK ਥੀਮ"
 
@@ -4212,7 +4000,7 @@ msgstr "ਹੌਲੀ"
 
 #: gtk/inspector/visual.ui:384
 msgid "Show fps overlay"
-msgstr ""
+msgstr "FPS ਪਰਤ ਵੇਖਾਓ"
 
 #: gtk/inspector/visual.ui:409
 msgid "Show Graphic Updates"
@@ -4220,25 +4008,44 @@ msgstr "ਗਰਾਫਿਕਸ ਅੱਪਡੇਟ ਵੇਖੋ"
 
 #: gtk/inspector/visual.ui:434
 msgid "Show Fallback Rendering"
-msgstr ""
+msgstr "ਫਾਲਬੈਕ ਰੈਂਡਰਿੰਗ ਵੇਖਾਓ"
 
 #: gtk/inspector/visual.ui:459
 msgid "Show Baselines"
 msgstr "ਬੇਸਲਾਈਨ ਵੇਖੋ"
 
-#: gtk/inspector/visual.ui:484
+#: gtk/inspector/visual.ui:487
 msgid "Show Layout Borders"
 msgstr "ਖਾਕਾ ਹਾਸ਼ੀਏ ਵੇਖੋ"
 
-#: gtk/inspector/visual.ui:509
+#: gtk/inspector/visual.ui:544
+msgid "CSS Padding"
+msgstr "CSS ਚਿਨ੍ਹਣਾ"
+
+#: gtk/inspector/visual.ui:554
+#| msgid "CSS Nodes"
+msgid "CSS Border"
+msgstr "CSS ਹੱਦ"
+
+#: gtk/inspector/visual.ui:564
+#| msgid "Paper Margins"
+msgid "CSS Margin"
+msgstr "CSS ਹਾਸ਼ੀਆ"
+
+#: gtk/inspector/visual.ui:574
+#| msgid "Paper Margins"
+msgid "Widget Margin"
+msgstr "ਵਿਜੈਟ ਹਾਸ਼ੀਆ"
+
+#: gtk/inspector/visual.ui:609
 msgid "Show Focus"
 msgstr "ਫੋਕਸ ਵੇਖਾਓ"
 
-#: gtk/inspector/visual.ui:548
+#: gtk/inspector/visual.ui:648
 msgid "Simulate Touchscreen"
 msgstr "ਟੱਚ-ਸਕਰੀਨ ਦੀ ਨਕਲ ਕਰੋ"
 
-#: gtk/inspector/visual.ui:572
+#: gtk/inspector/visual.ui:672
 msgid "Software GL"
 msgstr "ਸਾਫਟਵੇਅ GL"
 
@@ -4267,29 +4074,22 @@ msgid "Objects"
 msgstr "ਆਬਜੈਕਟ"
 
 #: gtk/inspector/window.ui:220
-#| msgctxt "printing option"
-#| msgid "Two Sided"
 msgid "Toggle Sidebar"
 msgstr "ਬਾਹੀ ਨੂੰ ਬਦਲੋ"
 
 #: gtk/inspector/window.ui:252
 msgid "Refresh action state"
-msgstr ""
+msgstr "ਕਾਰਵਾਈ ਹਾਲਤ ਤਾਜ਼ਾ ਕਰੋ"
 
 #: gtk/inspector/window.ui:337
-#| msgctxt "Stock label, media"
-#| msgid "Pre_vious"
 msgid "Previous object"
 msgstr "ਪਿਛਲਾ ਆਬਜੈਕਟ"
 
 #: gtk/inspector/window.ui:347
-#| msgid "Child Properties"
 msgid "Child object"
 msgstr "ਚਲਾਈਡ ਆਬਜੈਕਟ"
 
 #: gtk/inspector/window.ui:357
-#| msgctxt "Stock label, media"
-#| msgid "Pre_vious"
 msgid "Previous sibling"
 msgstr ""
 
@@ -4338,7 +4138,6 @@ msgid "Magnifier"
 msgstr "ਵੱਡਦਰਸ਼ੀ"
 
 #: gtk/inspector/window.ui:527
-#| msgid "Accessible Role"
 msgid "Accessibility"
 msgstr "ਅਸੈਸਬਿਲਟੀ"
 
@@ -4351,7 +4150,6 @@ msgid "Information"
 msgstr "ਜਾਣਕਾਰੀ"
 
 #: gtk/inspector/window.ui:573
-#| msgid "XSettings"
 msgid "Settings"
 msgstr "ਸੈਟਿੰਗਾਂ"
 
@@ -4383,24 +4181,23 @@ msgstr "ਸਾਰੇ ਬਦਲਾਂ ਲਈ ਪਹੁੰਚ"
 #: gtk/open-type-layout.h:14
 msgctxt "OpenType layout"
 msgid "Above-base Forms"
-msgstr ""
+msgstr "ਮੂਲ-ਉੱਤੇ ਰੂਪ"
 
 #: gtk/open-type-layout.h:15
 msgctxt "OpenType layout"
 msgid "Above-base Mark Positioning"
-msgstr ""
+msgstr "ਮੂਲ-ਉੱਤੇ ਚਿੰਨ੍ਹ ਸਥਿਤੀ"
 
 #: gtk/open-type-layout.h:16
 msgctxt "OpenType layout"
 msgid "Above-base Substitutions"
-msgstr "ਮੂਲ ਉੱਤੇ ਬਦਲ"
+msgstr "ਮੂਲ-ਉੱਤੇ ਤਬਾਦਲਾ"
 
 #: gtk/open-type-layout.h:17
-#, fuzzy
 #| msgid "Authentication"
 msgctxt "OpenType layout"
 msgid "Alternative Fractions"
-msgstr "ਪਰਮਾਣਕਿਤਾ"
+msgstr "ਬਦਲਵੇਂ ਭਾਗ"
 
 #: gtk/open-type-layout.h:18
 msgctxt "OpenType layout"
@@ -4410,17 +4207,17 @@ msgstr "ਅਖੰਡ"
 #: gtk/open-type-layout.h:19
 msgctxt "OpenType layout"
 msgid "Below-base Forms"
-msgstr "ਮੂਲ ਹੇਠਲੇ ਰੂਪ"
+msgstr "ਮੂਲ-ਹੇਠਾਂ ਰੂਪ"
 
 #: gtk/open-type-layout.h:20
 msgctxt "OpenType layout"
 msgid "Below-base Mark Positioning"
-msgstr ""
+msgstr "ਮੂਲ-ਹੇਠਾਂ ਚਿੰਨ੍ਹ ਸਥਿਤੀ"
 
 #: gtk/open-type-layout.h:21
 msgctxt "OpenType layout"
 msgid "Below-base Substitutions"
-msgstr "ਮੂਲ ਹੇਠਲੇ ਬਦਲੇ"
+msgstr "ਮੂਲ-ਹੇਠਾਂ ਤਬਾਦਲੇ"
 
 #: gtk/open-type-layout.h:22
 msgctxt "OpenType layout"
@@ -4430,12 +4227,12 @@ msgstr ""
 #: gtk/open-type-layout.h:23
 msgctxt "OpenType layout"
 msgid "Case-Sensitive Forms"
-msgstr ""
+msgstr "ਅੱਖਰ-ਆਕਾਰ ਸੰਵੇਦਨਸ਼ੀਲ ਰੂਪ"
 
 #: gtk/open-type-layout.h:24
 msgctxt "OpenType layout"
 msgid "Glyph Composition / Decomposition"
-msgstr ""
+msgstr "ਗਲਿਫ਼ ਰਚਨਾ / ਵੰਡਣਾ"
 
 #: gtk/open-type-layout.h:25
 msgctxt "OpenType layout"
@@ -4445,12 +4242,12 @@ msgstr ""
 #: gtk/open-type-layout.h:26
 msgctxt "OpenType layout"
 msgid "Conjunct Forms"
-msgstr ""
+msgstr "ਸੰਯੁਕਤ ਰੂਪ"
 
 #: gtk/open-type-layout.h:27
 msgctxt "OpenType layout"
 msgid "Contextual Ligatures"
-msgstr ""
+msgstr "ਸੰਯੋਜਕ ਲਿਗੇਚਰ"
 
 #: gtk/open-type-layout.h:28
 msgctxt "OpenType layout"
@@ -4500,12 +4297,12 @@ msgstr ""
 #: gtk/open-type-layout.h:37
 msgctxt "OpenType layout"
 msgid "Dotless Forms"
-msgstr ""
+msgstr "ਬਿਨਾਂ-ਬਿੰਦੀ ਰੂਪ"
 
 #: gtk/open-type-layout.h:38
 msgctxt "OpenType layout"
 msgid "Expert Forms"
-msgstr ""
+msgstr "ਮਾਹਰ ਰੂਪ"
 
 #: gtk/open-type-layout.h:39
 msgctxt "OpenType layout"
@@ -4513,19 +4310,16 @@ msgid "Final Glyph on Line Alternates"
 msgstr ""
 
 #: gtk/open-type-layout.h:40
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms #2"
 msgstr "ਟਰਮੀਨਲ ਰੂਪ #2"
 
 #: gtk/open-type-layout.h:41
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms #3"
 msgstr "ਟਰਮੀਨਲ ਰੂਪ #3"
 
 #: gtk/open-type-layout.h:42
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms"
 msgstr "ਟਰਮੀਨਲ ਰੂਪ"
@@ -4536,13 +4330,11 @@ msgid "Flattened accent forms"
 msgstr ""
 
 #: gtk/open-type-layout.h:44
-#| msgid "Actions"
 msgctxt "OpenType layout"
 msgid "Fractions"
 msgstr "ਭਿੰਨਾਂ"
 
 #: gtk/open-type-layout.h:45
-#| msgid "Focus Widget"
 msgctxt "OpenType layout"
 msgid "Full Widths"
 msgstr "ਪੂਰੀਆ ਚੌੜਾਈਆਂ"
@@ -4570,12 +4362,12 @@ msgstr "ਇਤਿਹਾਸਿਕ ਰੂਪ"
 #: gtk/open-type-layout.h:50
 msgctxt "OpenType layout"
 msgid "Horizontal Kana Alternates"
-msgstr ""
+msgstr "ਲੇਟਵੇਂ ਕਾਨਾ ਬਦਲ"
 
 #: gtk/open-type-layout.h:51
 msgctxt "OpenType layout"
 msgid "Historical Ligatures"
-msgstr ""
+msgstr "ਇਤਹਾਸਿਕ ਲਿਗੇਚਰ"
 
 #: gtk/open-type-layout.h:52
 msgctxt "OpenType layout"
@@ -4593,8 +4385,6 @@ msgid "Half Widths"
 msgstr "ਅੱਧੀ ਚੌੜਾਈ"
 
 #: gtk/open-type-layout.h:55
-#| msgctxt "print operation status"
-#| msgid "Initial state"
 msgctxt "OpenType layout"
 msgid "Initial Forms"
 msgstr "ਸ਼ੁਰੂਆਤੀ ਰੂਪ"
@@ -4605,8 +4395,6 @@ msgid "Isolated Forms"
 msgstr "ਅੱਡ ਕੀਤੇ ਰੂਪ"
 
 #: gtk/open-type-layout.h:57
-#| msgctxt "Stock label"
-#| msgid "_Italic"
 msgctxt "OpenType layout"
 msgid "Italics"
 msgstr "ਤਿਰਛੇ"
@@ -4619,45 +4407,42 @@ msgstr ""
 #: gtk/open-type-layout.h:59
 msgctxt "OpenType layout"
 msgid "JIS78 Forms"
-msgstr ""
+msgstr "JIS78 ਰੂਪ"
 
 #: gtk/open-type-layout.h:60
 msgctxt "OpenType layout"
 msgid "JIS83 Forms"
-msgstr ""
+msgstr "JIS83 ਰੂਪ"
 
 #: gtk/open-type-layout.h:61
 msgctxt "OpenType layout"
 msgid "JIS90 Forms"
-msgstr ""
+msgstr "JIS90 ਰੂਪ"
 
 #: gtk/open-type-layout.h:62
 msgctxt "OpenType layout"
 msgid "JIS2004 Forms"
-msgstr ""
+msgstr "JIS2004 ਰੂਪ"
 
 #: gtk/open-type-layout.h:63
-#, fuzzy
 #| msgid "Warning"
 msgctxt "OpenType layout"
 msgid "Kerning"
-msgstr "ਚੇਤਾਵਨੀ"
+msgstr "ਕਰਨਿੰਗ"
 
 #: gtk/open-type-layout.h:64
-#, fuzzy
 #| msgctxt "output-bin"
 #| msgid "Left Bin"
 msgctxt "OpenType layout"
 msgid "Left Bounds"
-msgstr "ਖੱਬਾ ਡੱਬਾ"
+msgstr "ਖੱਬੇ ਬਾਊਂਡ"
 
 #: gtk/open-type-layout.h:65
-#, fuzzy
 #| msgctxt "cover page"
 #| msgid "Standard"
 msgctxt "OpenType layout"
 msgid "Standard Ligatures"
-msgstr "ਸਟੈਂਡਰਡ"
+msgstr "ਸਟੈਂਡਰਡ ਲਿਗੇਚਰ"
 
 #: gtk/open-type-layout.h:66
 msgctxt "OpenType layout"
@@ -4675,22 +4460,20 @@ msgid "Localized Forms"
 msgstr "ਇਲਾਕੀਕਰਨ ਕੀਤੇ ਰੂਪ"
 
 #: gtk/open-type-layout.h:69
-#| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right alternates"
 msgstr "ਖੱਬੇ-ਤੋਂ-ਸੱਜੇ ਬਦਲ"
 
 #: gtk/open-type-layout.h:70
-#, fuzzy
 #| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right mirrored forms"
-msgstr "_LRM ਖੱਬੇ ਤੋਂ ਸੱਜਾ ਨਿਸ਼ਾਨ"
+msgstr "ਖੱਬੇ ਤੋਂ ਸੱਜੇ ਮਿੱਰਰ ਕੀਤੇ ਰੂਪ"
 
 #: gtk/open-type-layout.h:71
 msgctxt "OpenType layout"
 msgid "Mark Positioning"
-msgstr ""
+msgstr "ਚਿੰਨ੍ਹ ਸਥਿਤੀ"
 
 #: gtk/open-type-layout.h:72
 msgctxt "OpenType layout"
@@ -4710,7 +4493,7 @@ msgstr "ਗਣਿਤ ਗਰੀਕ"
 #: gtk/open-type-layout.h:75
 msgctxt "OpenType layout"
 msgid "Mark to Mark Positioning"
-msgstr ""
+msgstr "ਚਿੰਨ੍ਹ-ਤੋਂ-ਚਿੰਨ੍ਹ ਸਥਿਤੀ"
 
 #: gtk/open-type-layout.h:76
 msgctxt "OpenType layout"
@@ -4725,7 +4508,7 @@ msgstr ""
 #: gtk/open-type-layout.h:78
 msgctxt "OpenType layout"
 msgid "NLC Kanji Forms"
-msgstr ""
+msgstr "NLC ਕਾਂਜੀ ਰੂਪ"
 
 #: gtk/open-type-layout.h:79
 msgctxt "OpenType layout"
@@ -4748,21 +4531,20 @@ msgid "Optical Bounds"
 msgstr ""
 
 #: gtk/open-type-layout.h:83
-#, fuzzy
 #| msgid "Signals"
 msgctxt "OpenType layout"
 msgid "Ordinals"
-msgstr "ਸਿਗਨਲ"
+msgstr "ਕ੍ਰਮਸੂਚਕ"
 
 #: gtk/open-type-layout.h:84
 msgctxt "OpenType layout"
 msgid "Ornaments"
-msgstr ""
+msgstr "ਅਲੰਕਾਰ"
 
 #: gtk/open-type-layout.h:85
 msgctxt "OpenType layout"
 msgid "Proportional Alternate Widths"
-msgstr ""
+msgstr "ਅਨੁਪਾਤੀ ਬਦਲੀਆਂ ਚੌੜਾਈਆਂ"
 
 #: gtk/open-type-layout.h:86
 msgctxt "OpenType layout"
@@ -4772,49 +4554,48 @@ msgstr ""
 #: gtk/open-type-layout.h:87
 msgctxt "OpenType layout"
 msgid "Proportional Kana"
-msgstr ""
+msgstr "ਅਨੁਪਾਤੀ ਕਾਨਾ"
 
 #: gtk/open-type-layout.h:88
-#, fuzzy
 #| msgid "Properties"
 msgctxt "OpenType layout"
 msgid "Proportional Figures"
-msgstr "ਵਿਸ਼ੇਸ਼ਤਾ"
+msgstr "ਅਨੁਪਾਤੀ ਸ਼ਕਲਾਂ"
 
 #: gtk/open-type-layout.h:89
 msgctxt "OpenType layout"
 msgid "Pre-Base Forms"
-msgstr ""
+msgstr "ਮੂਲ-ਤੋਂ-ਪਹਿਲਾਂ ਦੇ ਰੂਪ"
 
 #: gtk/open-type-layout.h:90
 msgctxt "OpenType layout"
 msgid "Pre-base Substitutions"
-msgstr ""
+msgstr "ਮੂਲ-ਤੋਂ-ਪਹਿਲਾਂ ਬਦਲ"
 
 #: gtk/open-type-layout.h:91
 msgctxt "OpenType layout"
 msgid "Post-base Forms"
-msgstr ""
+msgstr "ਮੂਲ-ਤੋਂ-ਬਾਦ ਦੇ ਰੂਪ"
 
 #: gtk/open-type-layout.h:92
 msgctxt "OpenType layout"
 msgid "Post-base Substitutions"
-msgstr ""
+msgstr "ਮੂਲ-ਤੋਂ-ਬਾਦ ਦੇ ਤਬਾਦਲੇ"
 
 #: gtk/open-type-layout.h:93
 msgctxt "OpenType layout"
 msgid "Proportional Widths"
-msgstr ""
+msgstr "ਅਨੁਪਾਤੀ ਚੌੜਾਈਆਂ"
 
 #: gtk/open-type-layout.h:94
 msgctxt "OpenType layout"
 msgid "Quarter Widths"
-msgstr ""
+msgstr "ਚੌੜਾਈ ਚੌੜਾਈਆਂ"
 
 #: gtk/open-type-layout.h:95
 msgctxt "OpenType layout"
 msgid "Randomize"
-msgstr ""
+msgstr "ਰਲਵੇਂ"
 
 #: gtk/open-type-layout.h:96
 msgctxt "OpenType layout"
@@ -4829,34 +4610,31 @@ msgstr "ਰੱਕਰ ਰੂਪ"
 #: gtk/open-type-layout.h:98
 msgctxt "OpenType layout"
 msgid "Required Ligatures"
-msgstr ""
+msgstr "ਚਾਹਦੇ ਲਿਗੇਚਰ"
 
 #: gtk/open-type-layout.h:99
 msgctxt "OpenType layout"
 msgid "Reph Forms"
-msgstr ""
+msgstr "ਰੇਫ ਰੂਪ"
 
 #: gtk/open-type-layout.h:100
-#, fuzzy
 #| msgctxt "output-bin"
 #| msgid "Right Bin"
 msgctxt "OpenType layout"
 msgid "Right Bounds"
-msgstr "ਸੱਜਾ ਡੱਬਾ"
+msgstr "ਸੱਜੇ ਬਾਊਂਡ"
 
 #: gtk/open-type-layout.h:101
-#, fuzzy
 #| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left alternates"
-msgstr "_RLM ਸੱਜੇ ਤੋਂ ਖੱਬਾ ਨਿਸ਼ਾਨ"
+msgstr "ਸੱਜੇ-ਤੋਂ-ਖੱਬੇ ਬਦਲ"
 
 #: gtk/open-type-layout.h:102
-#, fuzzy
 #| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left mirrored forms"
-msgstr "_RLM ਸੱਜੇ ਤੋਂ ਖੱਬਾ ਨਿਸ਼ਾਨ"
+msgstr "ਸੱਜੇ-ਤੋਂ-ਖੱਬੇ ਮਿੱਰਰ ਕੀਤੇ ਰੂਪ"
 
 #: gtk/open-type-layout.h:103
 msgctxt "OpenType layout"
@@ -4891,114 +4669,113 @@ msgstr ""
 #: gtk/open-type-layout.h:109
 msgctxt "OpenType layout"
 msgid "Simplified Forms"
-msgstr ""
+msgstr "ਸਧਾਰਨ ਕੀਤੇ ਰੂਪ"
 
 #: gtk/open-type-layout.h:110
 msgctxt "OpenType layout"
 msgid "Stylistic Set 1"
-msgstr ""
+msgstr "ਸਟਾਈਲਿਸਟ ਸੈੱਟ ੧"
 
 #: gtk/open-type-layout.h:111
 msgctxt "OpenType layout"
 msgid "Stylistic Set 2"
-msgstr ""
+msgstr "ਸਟਾਈਲਿਸਟ ਸੈੱਟ ੨"
 
 #: gtk/open-type-layout.h:112
 msgctxt "OpenType layout"
 msgid "Stylistic Set 3"
-msgstr ""
+msgstr "ਸਟਾਈਲਿਸਟ ਸੈੱਟ ੩"
 
 #: gtk/open-type-layout.h:113
 msgctxt "OpenType layout"
 msgid "Stylistic Set 4"
-msgstr ""
+msgstr "ਸਟਾਈਲਿਸਟ ਸੈੱਟ ੪"
 
 #: gtk/open-type-layout.h:114
 msgctxt "OpenType layout"
 msgid "Stylistic Set 5"
-msgstr ""
+msgstr "ਸਟਾਈਲਿਸਟ ਸੈੱਟ ੫"
 
 #: gtk/open-type-layout.h:115
 msgctxt "OpenType layout"
 msgid "Stylistic Set 6"
-msgstr ""
+msgstr "ਸਟਾਈਲਿਸਟ ਸੈੱਟ ੬"
 
 #: gtk/open-type-layout.h:116
 msgctxt "OpenType layout"
 msgid "Stylistic Set 7"
-msgstr ""
+msgstr "ਸਟਾਈਲਿਸਟ ਸੈੱਟ ੭"
 
 #: gtk/open-type-layout.h:117
 msgctxt "OpenType layout"
 msgid "Stylistic Set 8"
-msgstr ""
+msgstr "ਸਟਾਈਲਿਸਟ ਸੈੱਟ ੮"
 
 #: gtk/open-type-layout.h:118
 msgctxt "OpenType layout"
 msgid "Stylistic Set 9"
-msgstr ""
+msgstr "ਸਟਾਈਲਿਸਟ ਸੈੱਟ ੯"
 
 #: gtk/open-type-layout.h:119
 msgctxt "OpenType layout"
 msgid "Stylistic Set 10"
-msgstr ""
+msgstr "ਸਟਾਈਲਿਸਟ ਸੈੱਟ ੧੦"
 
 #: gtk/open-type-layout.h:120
 msgctxt "OpenType layout"
 msgid "Stylistic Set 11"
-msgstr ""
+msgstr "ਸਟਾਈਲਿਸਟ ਸੈੱਟ ੧੧"
 
 #: gtk/open-type-layout.h:121
 msgctxt "OpenType layout"
 msgid "Stylistic Set 12"
-msgstr ""
+msgstr "ਸਟਾਈਲਿਸਟ ਸੈੱਟ ੧੨"
 
 #: gtk/open-type-layout.h:122
 msgctxt "OpenType layout"
 msgid "Stylistic Set 13"
-msgstr ""
+msgstr "ਸਟਾਈਲਿਸਟ ਸੈੱਟ ੧੩"
 
 #: gtk/open-type-layout.h:123
 msgctxt "OpenType layout"
 msgid "Stylistic Set 14"
-msgstr ""
+msgstr "ਸਟਾਈਲਿਸਟ ਸੈੱਟ ੧੪"
 
 #: gtk/open-type-layout.h:124
 msgctxt "OpenType layout"
 msgid "Stylistic Set 15"
-msgstr ""
+msgstr "ਸਟਾਈਲਿਸਟ ਸੈੱਟ ੧੫"
 
 #: gtk/open-type-layout.h:125
 msgctxt "OpenType layout"
 msgid "Stylistic Set 16"
-msgstr ""
+msgstr "ਸਟਾਈਲਿਸਟ ਸੈੱਟ ੧੬"
 
 #: gtk/open-type-layout.h:126
 msgctxt "OpenType layout"
 msgid "Stylistic Set 17"
-msgstr ""
+msgstr "ਸਟਾਈਲਿਸਟ ਸੈੱਟ ੧੭"
 
 #: gtk/open-type-layout.h:127
 msgctxt "OpenType layout"
 msgid "Stylistic Set 18"
-msgstr ""
+msgstr "ਸਟਾਈਲਿਸਟ ਸੈੱਟ ੧੮"
 
 #: gtk/open-type-layout.h:128
 msgctxt "OpenType layout"
 msgid "Stylistic Set 19"
-msgstr ""
+msgstr "ਸਟਾਈਲਿਸਟ ਸੈੱਟ ੧੯"
 
 #: gtk/open-type-layout.h:129
-#, fuzzy
 #| msgid "Artistic License 2.0"
 msgctxt "OpenType layout"
 msgid "Stylistic Set 20"
-msgstr "ਆਰਟੈਸਟਿਕ ਲਾਈਸੈਂਸ 2.0"
+msgstr "ਸਟਾਈਲਿਸਟ ਸੈੱਟ ੨੦"
 
 #: gtk/open-type-layout.h:130
 msgctxt "OpenType layout"
 msgid "Math script style alternates"
-msgstr ""
+msgstr "ਗਣਿਤ ਸਕ੍ਰਿਪਟ ਸ਼ੈਲੀ ਬਦਲ"
 
 #: gtk/open-type-layout.h:131
 msgctxt "OpenType layout"
@@ -5006,14 +4783,11 @@ msgid "Stretching Glyph Decomposition"
 msgstr ""
 
 #: gtk/open-type-layout.h:132
-#| msgid "PostScript"
 msgctxt "OpenType layout"
 msgid "Subscript"
 msgstr "ਸਬ-ਸਕ੍ਰਿਪਟ"
 
 #: gtk/open-type-layout.h:133
-#| msgctxt "keyboard label"
-#| msgid "Super"
 msgctxt "OpenType layout"
 msgid "Superscript"
 msgstr "ਸੁਪਰ-ਸਕ੍ਰਿਪਟ"
@@ -5021,7 +4795,7 @@ msgstr "ਸੁਪਰ-ਸਕ੍ਰਿਪਟ"
 #: gtk/open-type-layout.h:134
 msgctxt "OpenType layout"
 msgid "Swash"
-msgstr ""
+msgstr "ਸਵਾਸ਼"
 
 #: gtk/open-type-layout.h:135
 msgctxt "OpenType layout"
@@ -5061,17 +4835,14 @@ msgstr "ਯੂਨੀਕੇਸ"
 #: gtk/open-type-layout.h:142
 msgctxt "OpenType layout"
 msgid "Alternate Vertical Metrics"
-msgstr ""
+msgstr "ਬਦਲਵੇਂ ਖੜ੍ਹਵੇਂ ਮੈਟਰਿਕਸ"
 
 #: gtk/open-type-layout.h:143
-#| msgid "Dark Variant"
 msgctxt "OpenType layout"
 msgid "Vattu Variants"
 msgstr "ਵੱਟੂ ਬਦਲ"
 
 #: gtk/open-type-layout.h:144
-#| msgctxt "sizegroup mode"
-#| msgid "Vertical"
 msgctxt "OpenType layout"
 msgid "Vertical Writing"
 msgstr "ਲੰਬਕਾਰੀ ਲਿਖਣਾ"
@@ -5079,7 +4850,7 @@ msgstr "ਲੰਬਕਾਰੀ ਲਿਖਣਾ"
 #: gtk/open-type-layout.h:145
 msgctxt "OpenType layout"
 msgid "Alternate Vertical Half Metrics"
-msgstr ""
+msgstr "ਬਦਲਵੇਂ ਖੜ੍ਹਵੇਂ ਅਰਧ ਮੈਟਰਿਕਸ"
 
 #: gtk/open-type-layout.h:146
 msgctxt "OpenType layout"
@@ -5089,15 +4860,14 @@ msgstr ""
 #: gtk/open-type-layout.h:147
 msgctxt "OpenType layout"
 msgid "Vertical Kana Alternates"
-msgstr ""
+msgstr "ਖੜ੍ਹਵੇਂ ਕਾਨਾ ਬਦਲ"
 
 #: gtk/open-type-layout.h:148
-#, fuzzy
 #| msgctxt "sizegroup mode"
 #| msgid "Vertical"
 msgctxt "OpenType layout"
 msgid "Vertical Kerning"
-msgstr "ਲੰਬਕਾਰੀ"
+msgstr "ਲੰਬਕਾਰੀ ਕਰਨਿੰਗ"
 
 #: gtk/open-type-layout.h:149
 msgctxt "OpenType layout"
@@ -5107,12 +4877,12 @@ msgstr ""
 #: gtk/open-type-layout.h:150
 msgctxt "OpenType layout"
 msgid "Vertical Alternates and Rotation"
-msgstr ""
+msgstr "ਖੜ੍ਹਵੇਂ ਬਦਲੇ ਅਤੇ ਘੁੰਮਾਉਣਾ"
 
 #: gtk/open-type-layout.h:151
 msgctxt "OpenType layout"
 msgid "Vertical Alternates for Rotation"
-msgstr ""
+msgstr "ਘੁੰਮਾਉਣ ਲਈ ਖੜ੍ਹਵੇਂ ਬਦਲ"
 
 #: gtk/open-type-layout.h:152
 msgctxt "OpenType layout"
@@ -6082,15 +5852,14 @@ msgstr "ਈਥੋਪਿਕ"
 #: gtk/script-names.c:26
 msgctxt "Script"
 msgid "Georgian"
-msgstr ""
+msgstr "ਜਾਰਜੀਆਈ"
 
 #: gtk/script-names.c:27
 msgctxt "Script"
 msgid "Gothic"
-msgstr ""
+msgstr "ਗੋਥਿਕ"
 
 #: gtk/script-names.c:28
-#| msgid "_Green:"
 msgctxt "Script"
 msgid "Greek"
 msgstr "ਗਰੀਕ"
@@ -6141,7 +5910,6 @@ msgid "Khmer"
 msgstr "ਖਮੀਰ"
 
 #: gtk/script-names.c:38
-#| msgid "Low"
 msgctxt "Script"
 msgid "Lao"
 msgstr "ਲਿਓ"
@@ -6172,8 +5940,6 @@ msgid "Ogham"
 msgstr "ਓਗਹਾਮ"
 
 #: gtk/script-names.c:44
-#| msgctxt "Stock label"
-#| msgid "_Italic"
 msgctxt "Script"
 msgid "Old Italic"
 msgstr "ਪੁਰਾਣਾ ਤਿਰਛੇ"
@@ -6199,7 +5965,6 @@ msgid "Syriac"
 msgstr "ਸੀਰੀਅਕ"
 
 #: gtk/script-names.c:49
-#| msgid "_Family:"
 msgctxt "Script"
 msgid "Tamil"
 msgstr "ਤਾਮਿਲ"
@@ -6215,8 +5980,6 @@ msgid "Thaana"
 msgstr "ਥੱਨਾ"
 
 #: gtk/script-names.c:52
-#| msgctxt "input method menu"
-#| msgid "Thai-Lao"
 msgctxt "Script"
 msgid "Thai"
 msgstr "ਥਾਈ"
@@ -6264,7 +6027,7 @@ msgstr "ਬਰਾਇਲ"
 #: gtk/script-names.c:61
 msgctxt "Script"
 msgid "Cypriot"
-msgstr ""
+msgstr "ਸਿਪਰਿਟ"
 
 #: gtk/script-names.c:62
 msgctxt "Script"
@@ -6282,8 +6045,6 @@ msgid "Shavian"
 msgstr "ਸ਼ਾਵਿਨ"
 
 #: gtk/script-names.c:65
-#| msgctxt "output-bin"
-#| msgid "Rear Bin"
 msgctxt "Script"
 msgid "Linear B"
 msgstr "ਰੇਖਿਕ B"
@@ -6334,13 +6095,11 @@ msgid "Kharoshthi"
 msgstr "ਖਾਰੋਸ਼ਥੀ"
 
 #: gtk/script-names.c:75
-#| msgid "Unknown"
 msgctxt "Script"
 msgid "Unknown"
 msgstr "ਅਣਪਛਾਤਾ"
 
 #: gtk/script-names.c:76
-#| msgid "Baseline"
 msgctxt "Script"
 msgid "Balinese"
 msgstr "ਬਾਲਿਨੀਸੀ"
@@ -6363,12 +6122,12 @@ msgstr "ਫਾਗਸ-ਪਾ"
 #: gtk/script-names.c:80
 msgctxt "Script"
 msgid "N'Ko"
-msgstr ""
+msgstr "ਨਕੋ"
 
 #: gtk/script-names.c:81
 msgctxt "Script"
 msgid "Kayah Li"
-msgstr ""
+msgstr "ਕਿਆਹ ਲੀ"
 
 #: gtk/script-names.c:82
 msgctxt "Script"
@@ -6378,7 +6137,7 @@ msgstr "ਲੀਪਚਾ"
 #: gtk/script-names.c:83
 msgctxt "Script"
 msgid "Rejang"
-msgstr ""
+msgstr "ਰਿਜਾਂਗ"
 
 #: gtk/script-names.c:84
 msgctxt "Script"
@@ -6388,11 +6147,9 @@ msgstr "ਸੁਡਾਨੀਆਈ"
 #: gtk/script-names.c:85
 msgctxt "Script"
 msgid "Saurashtra"
-msgstr ""
+msgstr "ਸੌਰਾਸ਼ਟਰਾ"
 
 #: gtk/script-names.c:86
-#| msgctxt "Color name"
-#| msgid "Chameleon"
 msgctxt "Script"
 msgid "Cham"
 msgstr "ਚਾਮ"
@@ -6410,17 +6167,17 @@ msgstr "ਵੈਸਾ"
 #: gtk/script-names.c:89
 msgctxt "Script"
 msgid "Carian"
-msgstr ""
+msgstr "ਕਾਰੀਆਨ"
 
 #: gtk/script-names.c:90
 msgctxt "Script"
 msgid "Lycian"
-msgstr ""
+msgstr "ਲਾਇਸੀਅਨ"
 
 #: gtk/script-names.c:91
 msgctxt "Script"
 msgid "Lydian"
-msgstr ""
+msgstr "ਲਾਇਡੀਅਨ"
 
 #: gtk/script-names.c:92
 msgctxt "Script"
@@ -6430,17 +6187,17 @@ msgstr "ਅਵੇਸਟਾਨ"
 #: gtk/script-names.c:93
 msgctxt "Script"
 msgid "Bamum"
-msgstr ""
+msgstr "ਬਾਮੁਮ"
 
 #: gtk/script-names.c:94
 msgctxt "Script"
 msgid "Egyptian Hieroglyphs"
-msgstr ""
+msgstr "ਮਿਸਰੀ ਹਾਇਰੋਗਿਲਫ਼"
 
 #: gtk/script-names.c:95
 msgctxt "Script"
 msgid "Imperial Aramaic"
-msgstr ""
+msgstr "ਇੰਪਿਅਰਲ ਅਰਾਮਿਕ"
 
 #: gtk/script-names.c:96
 msgctxt "Script"
@@ -6460,7 +6217,7 @@ msgstr "ਜਾਵਾਨੀਆਈ"
 #: gtk/script-names.c:99
 msgctxt "Script"
 msgid "Kaithi"
-msgstr ""
+msgstr "ਕਾਈਥੀ"
 
 #: gtk/script-names.c:100
 msgctxt "Script"
@@ -6515,7 +6272,7 @@ msgstr "ਮੈਂਡਾਇਕ"
 #: gtk/script-names.c:110
 msgctxt "Script"
 msgid "Chakma"
-msgstr ""
+msgstr "ਚਾਕਮਾ"
 
 #: gtk/script-names.c:111
 msgctxt "Script"
@@ -6530,7 +6287,7 @@ msgstr ""
 #: gtk/script-names.c:113
 msgctxt "Script"
 msgid "Miao"
-msgstr ""
+msgstr "ਮੀਆਓ"
 
 #: gtk/script-names.c:114
 msgctxt "Script"
@@ -6540,7 +6297,7 @@ msgstr "ਸ਼ਾਰਦਾ"
 #: gtk/script-names.c:115
 msgctxt "Script"
 msgid "Sora Sompeng"
-msgstr ""
+msgstr "ਸੋਰਾ ਸੋਮਪੇਂਗ"
 
 #: gtk/script-names.c:116
 msgctxt "Script"
@@ -6555,12 +6312,12 @@ msgstr "ਬੱਸਾ"
 #: gtk/script-names.c:118
 msgctxt "Script"
 msgid "Caucasian Albanian"
-msgstr ""
+msgstr "ਕਾਕੇਸੀਅਨ ਅਲਬਾਨੀਆਈ"
 
 #: gtk/script-names.c:119
 msgctxt "Script"
 msgid "Duployan"
-msgstr ""
+msgstr "ਡੁਪਲੋਇਆਨ"
 
 #: gtk/script-names.c:120
 msgctxt "Script"
@@ -6595,15 +6352,14 @@ msgstr "ਮਹਾਜਾਨੀ"
 #: gtk/script-names.c:126
 msgctxt "Script"
 msgid "Manichaean"
-msgstr ""
+msgstr "ਮੇਨੀਕਿਅਨ"
 
 #: gtk/script-names.c:127
 msgctxt "Script"
 msgid "Mende Kikakui"
-msgstr ""
+msgstr "ਮੇਂਡੇ ਕਿਕਾਕੁਈ"
 
 #: gtk/script-names.c:128
-#| msgid "Modified"
 msgctxt "Script"
 msgid "Modi"
 msgstr "ਮੋਦੀ"
@@ -6616,7 +6372,7 @@ msgstr "ਮਰੋ"
 #: gtk/script-names.c:130
 msgctxt "Script"
 msgid "Nabataean"
-msgstr ""
+msgstr "ਨਾਬਾਟਾਇਨ"
 
 #: gtk/script-names.c:131
 msgctxt "Script"
@@ -6626,7 +6382,7 @@ msgstr "ਪੁਰਾਣੀ ਉੱਤਰੀ ਅਰਬੀ"
 #: gtk/script-names.c:132
 msgctxt "Script"
 msgid "Old Permic"
-msgstr ""
+msgstr "ਪੁਰਾਣੀ ਪਰਮਿਕ"
 
 #: gtk/script-names.c:133
 msgctxt "Script"
@@ -6636,12 +6392,12 @@ msgstr "ਪਾਹਾਵ ਹਮੋਂਗ"
 #: gtk/script-names.c:134
 msgctxt "Script"
 msgid "Palmyrene"
-msgstr ""
+msgstr "ਪਾਲਮਿਰੇਨੇ"
 
 #: gtk/script-names.c:135
 msgctxt "Script"
 msgid "Pau Cin Hau"
-msgstr ""
+msgstr "ਪਾਉ ਚਿਨ ਹਾਊ"
 
 #: gtk/script-names.c:136
 msgctxt "Script"
@@ -6661,26 +6417,24 @@ msgstr "ਤਿਰਹੁਤਾ"
 #: gtk/script-names.c:139
 msgctxt "Script"
 msgid "Warang Citi"
-msgstr ""
+msgstr "ਵਾਰਾਂਗ ਸਿਟੀ"
 
 #: gtk/script-names.c:140
 msgctxt "Script"
 msgid "Ahom"
-msgstr ""
+msgstr "ਓਹੋਮ"
 
 #: gtk/script-names.c:141
 msgctxt "Script"
 msgid "Anatolian Hieroglyphs"
-msgstr ""
+msgstr "ਅਨਟੋਲੀਅਨ ਹਾਇਰੋਗਿਲਫ਼"
 
 #: gtk/script-names.c:142
 msgctxt "Script"
 msgid "Hatran"
-msgstr ""
+msgstr "ਹਾਟਰਾਨ"
 
 #: gtk/script-names.c:143
-#| msgctxt "keyboard label"
-#| msgid "Multi_key"
 msgctxt "Script"
 msgid "Multani"
 msgstr "ਮੁਲਤਾਨੀ"
@@ -6691,8 +6445,6 @@ msgid "Old Hungarian"
 msgstr "ਪੁਰਾਣੀ ਹੰਗਰੀਅਨ"
 
 #: gtk/script-names.c:145
-#| msgctxt "print operation status"
-#| msgid "Printing"
 msgctxt "Script"
 msgid "Signwriting"
 msgstr "ਸਾਈਨਰਾਈਟਿੰਗ"
@@ -6708,11 +6460,10 @@ msgid "Bhaiksuki"
 msgstr "ਭਾਈਕਸੁਕੀ"
 
 #: gtk/script-names.c:148
-#, fuzzy
 #| msgid "Searching"
 msgctxt "Script"
 msgid "Marchen"
-msgstr "ਖੋਜ ਜਾਰੀ ਹੈ"
+msgstr "ਮਾਰਚੇਨ"
 
 #: gtk/script-names.c:149
 msgctxt "Script"
@@ -6732,7 +6483,7 @@ msgstr "ਤੰਗੁਤ"
 #: gtk/script-names.c:152
 msgctxt "Script"
 msgid "Masaram Gondi"
-msgstr ""
+msgstr "ਮਾਸਾਰਾਮ ਗੋਂਡੀ"
 
 #: gtk/script-names.c:153
 msgctxt "Script"
@@ -6747,7 +6498,7 @@ msgstr "ਸੋਯੋਮਬੋ"
 #: gtk/script-names.c:155
 msgctxt "Script"
 msgid "Zanabazar Square"
-msgstr ""
+msgstr "ਜਾਨਾਬਾਜ਼ਾਰ ਵਰਗ"
 
 #: gtk/script-names.c:156
 msgctxt "Script"
@@ -6777,17 +6528,17 @@ msgstr ""
 #: gtk/script-names.c:161
 msgctxt "Script"
 msgid "Old Sogdian"
-msgstr ""
+msgstr "ਪੁਰਾਣੀ ਸੋਗਡੀਅਨ"
 
 #: gtk/script-names.c:162
 msgctxt "Script"
 msgid "Sogdian"
-msgstr ""
+msgstr "ਸੋਗਡੀਅਨ"
 
 #: gtk/script-names.c:165 gtk/script-names.c:170
 msgctxt "Script"
 msgid "Elym"
-msgstr ""
+msgstr "ਇਲਿਮ"
 
 #: gtk/script-names.c:166 gtk/script-names.c:171
 msgctxt "Script"
@@ -6817,39 +6568,43 @@ msgstr ""
 #: gtk/script-names.c:178 gtk/script-names.c:183
 msgctxt "Script"
 msgid "Khitan small script"
-msgstr ""
+msgstr "ਖਾਤਾਨ ਛੋਟੀ ਲਿਪੀ"
 
 #: gtk/script-names.c:179 gtk/script-names.c:184
 msgctxt "Script"
 msgid "Yezidi"
 msgstr "ਯੇਜ਼ੀਡੀ"
 
-#: gtk/tools/encodesymbolic.c:39
+#: gtk/tools/encodesymbolic.c:41
 msgid "Output to this directory instead of cwd"
 msgstr "cwd ਦੀ ਬਜਾਏ ਇਸ ਡਾਇਰੈਕਟਰੀ ਦੀ ਆਉਟਪੁੱਟ"
 
-#: gtk/tools/encodesymbolic.c:91
+#: gtk/tools/encodesymbolic.c:42
+msgid "Generate debug output"
+msgstr "ਡੀਬੱਗ ਆਉਟਪੁੱਟ ਬਣਾਓ"
+
+#: gtk/tools/encodesymbolic.c:94
 #, c-format
 msgid "Invalid size %s\n"
 msgstr "ਗਲਤ ਆਕਾਰ %s\n"
 
-#: gtk/tools/encodesymbolic.c:103 gtk/tools/encodesymbolic.c:110
+#: gtk/tools/encodesymbolic.c:106 gtk/tools/encodesymbolic.c:115
 #, c-format
 msgid "Can’t load file: %s\n"
 msgstr "ਫਾਇਲ ਨੂੰ ਲੋਡ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ: %s\n"
 
-#: gtk/tools/encodesymbolic.c:140 gtk/tools/encodesymbolic.c:146
+#: gtk/tools/encodesymbolic.c:143 gtk/tools/encodesymbolic.c:149
 #, c-format
 msgid "Can’t save file %s: %s\n"
 msgstr "ਫਾਇਲ %s ਨੂੰ ਸੰਭਾਲਿਆ ਨਹੀਂ ਜਾ ਸਕਦਾ: %s\n"
 
-#: gtk/tools/encodesymbolic.c:152
+#: gtk/tools/encodesymbolic.c:155
 #, c-format
 msgid "Can’t close stream"
 msgstr "ਸਟਰੀਮ ਨੂੰ ਬੰਦ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ"
 
 #: gtk/tools/gtk-builder-tool.c:34
-#, fuzzy, c-format
+#, c-format
 #| msgid ""
 #| "Usage:\n"
 #| "  gtk-builder-tool [COMMAND] FILE\n"
@@ -6889,65 +6644,61 @@ msgid ""
 "Perform various tasks on GtkBuilder .ui files.\n"
 msgstr ""
 "ਵਰਤੋਂ:\n"
-"  gtk-builder-tool [COMMAND] FILE\n"
+"  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
 "\n"
 "ਕਮਾਂਡਾਂ:\n"
-"  validate           Validate the file\n"
-"  simplify [OPTIONS] Simplify the file\n"
-"  enumerate          List all named objects\n"
-"  preview [OPTIONS]  Preview the file\n"
+"  validate     Validate the file\n"
+"  simplify     Simplify the file\n"
+"  enumerate    List all named objects\n"
+"  preview      Preview the file\n"
 "\n"
-"ਸੌਖੀ ਚੋਣਾਂ:\n"
-"  --replace          Replace the file\n"
+"ਸਧਾਰਨ ਚੋਣਾਂ:\n"
+"  --replace    Replace the file\n"
+"  --3to4       Convert from GTK 3 to GTK 4\n"
 "\n"
 "ਝਲਕ ਚੋਣਾਂ:\n"
-"  --id=ID            Preview only the named object\n"
-"  --css=FILE         Use style from CSS file\n"
+"  --id=ID      Preview only the named object\n"
+"  --css=FILE   Use style from CSS file\n"
 "\n"
-"GtkBuilder .ui ਫਾਇਲਾਂ 'ਤੇ ਵੱਖ-ਵੱਖ ਕੰਮ ਕਰੋ।\n"
+"GtkBuilder .ui ਫਾਇਲਾਂ ਉੱਤੇ ਕਈ ਕੰਮ ਕਰਦੀ ਹੈ।\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:436
-#, fuzzy, c-format
+#, c-format
 #| msgid "Couldn’t parse value for %s::%s: %s\n"
 msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
-msgstr "%s::%s ਲਈ ਮੁੱਲ ਨੂੰ ਪਾਰਸ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ: %s\n"
+msgstr "%s:%d: ਵਿਸ਼ੇਸ਼ਤਾ '%s' ਲਈ ਮੁੱਲ ਨੂੰ ਪਾਰਸ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ: %s\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:591
 #, c-format
-#| msgid "Property %s::%s not found\n"
 msgid "%s:%d: %sproperty %s::%s not found\n"
 msgstr "%s:%d: %sਵਿਸ਼ੇਸ਼ਤਾ %s::%s ਨਹੀਂ ਲੱਭੀ\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:2188
+#: gtk/tools/gtk-builder-tool-simplify.c:2203
 #, c-format
-#| msgid "Can’t load file: %s\n"
 msgid "Can’t load “%s”: %s\n"
 msgstr "“%s” ਨੂੰ ਲੋਡ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ: %s\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:2199
+#: gtk/tools/gtk-builder-tool-simplify.c:2214
 #, c-format
-#| msgid "Can’t parse file: %s\n"
 msgid "Can’t parse “%s”: %s\n"
 msgstr "“%s” ਨੂੰ ਪਾਰਸ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ: %s\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:2223
+#: gtk/tools/gtk-builder-tool-simplify.c:2238
 #, c-format
-#| msgid "Failed to open file %s : %s\n"
 msgid "Failed to read “%s”: %s\n"
 msgstr "“%s” ਪੜ੍ਹਨ ਲਈ ਅਸਫ਼ਲ: %s\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:2229
+#: gtk/tools/gtk-builder-tool-simplify.c:2244
 #, c-format
-#| msgid "Failed to open file %s : %s\n"
 msgid "Failed to write %s: “%s”\n"
 msgstr "%s ਲਿਖਣ ਲਈ ਅਸਫ਼ਲ: “%s”\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:2269
+#: gtk/tools/gtk-builder-tool-simplify.c:2284
 #, c-format
 msgid "No .ui file specified\n"
-msgstr ""
+msgstr "ਕੋਈ .ui ਫਾਇਲ ਨਹੀਂ ਦਿੱਤੀ\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:2275
+#: gtk/tools/gtk-builder-tool-simplify.c:2290
 #, c-format
 msgid "Can only simplify a single .ui file without --replace\n"
 msgstr ""
@@ -7115,15 +6866,15 @@ msgstr ""
 "“%s“ ਵਿੱਚ ਕੋਈ ਥੀਮ ਇੰਡੈਕਸ ਫਾਇਲ ਨਹੀਂ ਹੈ।\n"
 "ਜੇਕਰ ਤੁਸੀਂ ਇੱਥੇ ਆਈਕਾਨ ਕੈਸ਼ੇ ਬਣਾਉਣੀ ਚਾਹੁੰਦੇ ਹੋ ਤਾਂ --ignore-theme-index ਵਰਤੋਂ\n"
 
-#: gtk/ui/gtkaboutdialog.ui:58
+#: gtk/ui/gtkaboutdialog.ui:62
 msgid "About"
 msgstr "ਇਸ ਬਾਰੇ"
 
-#: gtk/ui/gtkaboutdialog.ui:119
+#: gtk/ui/gtkaboutdialog.ui:123
 msgid "Credits"
 msgstr "ਮਾਣ"
 
-#: gtk/ui/gtkaboutdialog.ui:202
+#: gtk/ui/gtkaboutdialog.ui:206
 msgid "System"
 msgstr "ਸਿਸਟਮ"
 
@@ -7187,19 +6938,17 @@ msgstr "ਸਕਰੀਨ ਤੋਂ ਰੰਗ ਚੁਣੋ"
 
 #: gtk/ui/gtkcoloreditor.ui:80
 msgid "Hexadecimal color or color name"
-msgstr ""
+msgstr "ਹੈਕਸਾ-ਡੈਸੀਮਲ ਰੰਗ ਜਾਂ ਰੰਗ ਦਾ ਨਾਂ"
 
 #: gtk/ui/gtkcoloreditor.ui:95
 msgid "Hue"
 msgstr "ਰੰਗਤ"
 
 #: gtk/ui/gtkcoloreditor.ui:114
-#| msgid "Alpha"
 msgid "Alpha value"
 msgstr "ਐਲਫਾ ਮੁੱਲ"
 
 #: gtk/ui/gtkcoloreditor.ui:132
-#| msgid "Saturation"
 msgid "Saturation and value"
 msgstr "ਸੰਤ੍ਰਿਪਤ ਅਤੇ ਮੁੱਲ"
 
@@ -7228,7 +6977,6 @@ msgid "(None)"
 msgstr "(ਕੋਈ ਨਹੀਂ)"
 
 #: gtk/ui/gtkdropdown.ui:70
-#| msgid "Search"
 msgid "Search…"
 msgstr "ਖੋਜ..."
 
@@ -7258,13 +7006,11 @@ msgid "Travel & Places"
 msgstr "ਸੈਰ ਸਪਾਟਾ"
 
 #: gtk/ui/gtkemojichooser.ui:161 gtk/ui/gtkemojichooser.ui:281
-#| msgid "Activate"
 msgctxt "emoji category"
 msgid "Activities"
 msgstr "ਸਰਗਰਮੀਆਂ"
 
 #: gtk/ui/gtkemojichooser.ui:175 gtk/ui/gtkemojichooser.ui:290
-#| msgid "Objects"
 msgctxt "emoji category"
 msgid "Objects"
 msgstr "ਆਬਜੈਕਟ"
@@ -7280,7 +7026,6 @@ msgid "Flags"
 msgstr "ਝੰਡੇ"
 
 #: gtk/ui/gtkemojichooser.ui:227
-#| msgid "Recent"
 msgctxt "emoji category"
 msgid "Recent"
 msgstr "ਤਾਜ਼ਾ"
@@ -7326,8 +7071,6 @@ msgid "Preview text"
 msgstr "ਲਿਖਤ ਦੀ ਝਲਕ"
 
 #: gtk/ui/gtkfontchooserwidget.ui:194 gtk/ui/gtkfontchooserwidget.ui:224
-#| msgctxt "sizegroup mode"
-#| msgid "Horizontal"
 msgid "horizontal"
 msgstr "ਖਿਤਿਜੀ"
 
@@ -7591,22 +7334,18 @@ msgstr "ਡਾਈਲਾਗ ਵਿੱਚ ਕੁਝ ਸੈਟਿੰਗ ਵਿੱ�
 
 #: modules/media/gtkffmediafile.c:220
 #, c-format
-#| msgid "Unspecified error"
 msgid "Unspecified error decoding video"
 msgstr "ਵੀਡੀਓ ਡੀਕੋਡ ਕਰਨ ਦੌਰਾਨ ਨਾ-ਨਿਰਧਾਰਤ ਗਲਤੀ"
 
 #: modules/media/gtkffmediafile.c:322 modules/media/gtkffmediafile.c:496
-#| msgid "Not enough free memory"
 msgid "Not enough memory"
 msgstr "ਲੋੜੀਦੀ ਮੈਮੋਰੀ ਨਹੀਂ ਹੈ"
 
 #: modules/media/gtkffmediafile.c:519
-#| msgid "Not a valid page setup file"
 msgid "Not a video file"
 msgstr "ਵੀਡੀਓ ਫਾਇਲ ਨਹੀਂ ਹੈ"
 
 #: modules/media/gtkffmediafile.c:538
-#| msgid "Unsupported icon type"
 msgid "Unsupported video codec"
 msgstr "ਗ਼ੈਰ ਸਹਾਇਕ ਵੀਡੀਓ ਕੋਡਕ"
 
