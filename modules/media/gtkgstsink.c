@@ -35,6 +35,8 @@
 #include <gst/gl/wayland/gstgldisplay_wayland.h>
 #endif
 
+#include <gst/gl/gstglfuncs.h>
+
 enum {
   PROP_0,
   PROP_PAINTABLE,
@@ -204,6 +206,7 @@ gtk_gst_sink_propose_allocation (GstBaseSink *bsink,
 
       config = gst_buffer_pool_get_config (pool);
       gst_buffer_pool_config_set_params (config, caps, size, 0, 0);
+      gst_buffer_pool_config_add_option (config, GST_BUFFER_POOL_OPTION_GL_SYNC_META);
 
       if (!gst_buffer_pool_set_config (pool, config))
         {
@@ -220,6 +223,9 @@ gtk_gst_sink_propose_allocation (GstBaseSink *bsink,
 
   /* we also support various metadata */
   gst_query_add_allocation_meta (query, GST_VIDEO_META_API_TYPE, 0);
+
+  if (self->gst_context->gl_vtable->FenceSync)
+    gst_query_add_allocation_meta (query, GST_GL_SYNC_META_API_TYPE, 0);
 
   return TRUE;
 }
@@ -265,6 +271,14 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink *self,
   if (self->gdk_context &&
       gst_video_frame_map (frame, &self->v_info, buffer, GST_MAP_READ | GST_MAP_GL))
     {
+      GstGLSyncMeta *sync_meta;
+
+      sync_meta = gst_buffer_get_gl_sync_meta (buffer);
+      if (sync_meta) {
+        gst_gl_sync_meta_set_sync_point (sync_meta, self->gst_context);
+        gst_gl_sync_meta_wait (sync_meta, self->gst_context);
+      }
+
       texture = gdk_gl_texture_new (self->gdk_context,
                                     *(guint *) frame->data[0],
                                     frame->info.width,
