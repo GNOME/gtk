@@ -159,11 +159,12 @@ done with
 |-gtk-icon-source| [Image](https://www.w3.org/TR/css-backgrounds-3/#typedef-image), `builtin` or `none` | used for builtin icons in buttons and expanders |
 |-gtk-icon-size| [Length](https://www.w3.org/TR/css3-values/#length-value) | size used for builtin icons in buttons and expanders |
 |-gtk-icon-style| `requested`, `regular` or `symbolic` | preferred style for application-loaded icons |
-|-gtk-icon-transform| [Transform list](https://drafts.csswg.org/css-transforms-1/#typedef-transform-list) or `none` | applied to builtin and application-loaded icons |
+|-gtk-icon-transform| [Transform list](https://www.w3.org/TR/css-transforms-1/#typedef-transform-list) or `none` | applied to builtin and application-loaded icons |
 |-gtk-icon-palette| Color palette, as explained above | used to recolor symbolic icons |
 |-gtk-icon-shadow| [Shadow](https://www.w3.org/TR/css-backgrounds-3/#typedef-shadow) or `none` | applied to builtin and application-loaded icons |
 |-gtk-icon-filter| [Filter value list](https://www.w3.org/TR/filter-effects-1/#typedef-filter-value-list) or `none` | applied to builtin and application-loaded icons |
-|transform| [CSS Transforms Level 2](https://drafts.csswg.org/css-transforms-2/) | |
+|transform| [CSS Transforms Level 1](https://www.w3.org/TR/css-transforms-1/#transform-property) | |
+|transform-origin| [CSS Transforms Level 1](https://www.w3.org/TR/css-transforms-1/#transform-origin-property) | CSS allows specifying a z component|
 |min-width| [CSS Box Model Level 3](https://www.w3.org/TR/css3-box/#min-width) | CSS allows percentages |
 |min-height| [CSS Box Model Level 3](https://www.w3.org/TR/css3-box/#min-height) | CSS allows percentages |
 |margin-top| [CSS Box Model Level 3](https://www.w3.org/TR/css3-box/#margin-top) | CSS allows percentages or auto |

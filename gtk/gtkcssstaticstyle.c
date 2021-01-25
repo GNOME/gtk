@@ -163,6 +163,7 @@ static const int other_props[] = {
   GTK_CSS_PROPERTY_ICON_TRANSFORM,
   GTK_CSS_PROPERTY_ICON_FILTER,
   GTK_CSS_PROPERTY_TRANSFORM,
+  GTK_CSS_PROPERTY_TRANSFORM_ORIGIN,
   GTK_CSS_PROPERTY_OPACITY,
   GTK_CSS_PROPERTY_FILTER,
 };
@@ -593,6 +594,9 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *sstyle,
     case GTK_CSS_PROPERTY_TRANSFORM:
       gtk_css_take_value (&style->other->transform, value);
       break;
+    case GTK_CSS_PROPERTY_TRANSFORM_ORIGIN:
+      gtk_css_take_value (&style->other->transform_origin, value);
+      break;
     case GTK_CSS_PROPERTY_MIN_WIDTH:
       gtk_css_take_value (&style->size->min_width, value);
       break;
@@ -880,6 +884,7 @@ gtk_css_other_create_initial_values (void)
   values->icon_transform = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_ICON_TRANSFORM, NULL, NULL, NULL);
   values->icon_filter = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_ICON_FILTER, NULL, NULL, NULL);
   values->transform = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TRANSFORM, NULL, NULL, NULL);
+  values->transform_origin = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TRANSFORM_ORIGIN, NULL, NULL, NULL);
   values->opacity = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OPACITY, NULL, NULL, NULL);
   values->filter = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FILTER, NULL, NULL, NULL);
 

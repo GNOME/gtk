@@ -36,6 +36,7 @@
 #include "gtkcssboxesprivate.h"
 #include "gtkcssfiltervalueprivate.h"
 #include "gtkcsstransformvalueprivate.h"
+#include "gtkcsspositionvalueprivate.h"
 #include "gtkcssfontvariationsvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
@@ -3937,12 +3938,17 @@ gtk_widget_allocate (GtkWidget    *widget,
 
   if (css_transform)
     {
+      double origin_x, origin_y;
+
+      origin_x = _gtk_css_position_value_get_x (style->other->transform_origin, adjusted.width);
+      origin_y = _gtk_css_position_value_get_y (style->other->transform_origin, adjusted.height);
+
       transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (adjusted.x, adjusted.y));
       adjusted.x = adjusted.y = 0;
 
-      transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (adjusted.width / 2, adjusted.height / 2));
+      transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (origin_x, origin_y));
       transform = gsk_transform_transform (transform, css_transform);
-      transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (- adjusted.width / 2, - adjusted.height / 2));
+      transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (- origin_x, - origin_y));
 
       gsk_transform_unref (css_transform);
     }

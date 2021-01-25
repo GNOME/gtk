@@ -235,6 +235,8 @@ gtk_css_style_get_value (GtkCssStyle *style,
       return style->size->border_spacing;
     case GTK_CSS_PROPERTY_TRANSFORM:
       return style->other->transform;
+    case GTK_CSS_PROPERTY_TRANSFORM_ORIGIN:
+      return style->other->transform_origin;
     case GTK_CSS_PROPERTY_MIN_WIDTH:
       return style->size->min_width;
     case GTK_CSS_PROPERTY_MIN_HEIGHT:

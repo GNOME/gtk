@@ -208,6 +208,7 @@ struct _GtkCssOtherValues {
   GtkCssValue *icon_transform;
   GtkCssValue *icon_filter;
   GtkCssValue *transform;
+  GtkCssValue *transform_origin;
   GtkCssValue *opacity;
   GtkCssValue *filter;
 };
