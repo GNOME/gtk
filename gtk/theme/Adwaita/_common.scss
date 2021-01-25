@@ -2282,11 +2282,11 @@ scrollbar {
   &.right { border-left: 1px solid $borders_color; }
 
   > range > trough > slider {
-    min-width: 6px;
-    min-height: 6px;
+    min-width: 10px;
+    min-height: 10px;
     margin: -1px;
     border: 4px solid transparent;
-    border-radius: 8px;
+    border-radius: 10px;
     background-clip: padding-box;
     background-color: $scrollbar_slider_color;
 
@@ -2299,12 +2299,12 @@ scrollbar {
 
   > range.fine-tune {
     > trough > slider {
-      min-width: 4px;
-      min-height: 4px;
+      min-width: 6px;
+      min-height: 6px;
     }
 
-    &.horizontal > trough > slider { border-width: 5px 4px; }
-    &.vertical > trough > slider { border-width: 4px 5px; }
+    &.horizontal > trough > slider { border-width: 6px 4px; }
+    &.vertical > trough > slider { border-width: 4px 6px; }
   }
 
   &.overlay-indicator {
