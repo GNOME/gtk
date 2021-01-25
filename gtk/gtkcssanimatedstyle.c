@@ -440,6 +440,10 @@ gtk_css_animated_style_set_animated_value (GtkCssAnimatedStyle *animated,
       unshare_other (animated);
       gtk_css_take_value (&style->other->transform, value);
       break;
+    case GTK_CSS_PROPERTY_TRANSFORM_ORIGIN:
+      unshare_other (animated);
+      gtk_css_take_value (&style->other->transform_origin, value);
+      break;
     case GTK_CSS_PROPERTY_MIN_WIDTH:
       unshare_size (animated);
       gtk_css_take_value (&style->size->min_width, value);

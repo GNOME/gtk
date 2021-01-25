@@ -164,6 +164,7 @@ done with
 |-gtk-icon-shadow| [Shadow](https://www.w3.org/TR/css-backgrounds-3/#typedef-shadow) or `none` | applied to builtin and application-loaded icons |
 |-gtk-icon-filter| [Filter value list](https://www.w3.org/TR/filter-effects-1/#typedef-filter-value-list) or `none` | applied to builtin and application-loaded icons |
 |transform| [CSS Transforms Level 1](https://www.w3.org/TR/css-transforms-1/#transform-property) | |
+|transform-origin| [CSS Transforms Level 1](https://www.w3.org/TR/css-transforms-1/#transform-origin-property) | CSS allows specifying a z component|
 |min-width| [CSS Box Model Level 3](https://www.w3.org/TR/css3-box/#min-width) | CSS allows percentages |
 |min-height| [CSS Box Model Level 3](https://www.w3.org/TR/css3-box/#min-height) | CSS allows percentages |
 |margin-top| [CSS Box Model Level 3](https://www.w3.org/TR/css3-box/#margin-top) | CSS allows percentages or auto |

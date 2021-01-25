@@ -790,6 +790,13 @@ background_position_parse (GtkCssStyleProperty *property,
   return _gtk_css_array_value_parse (parser, _gtk_css_position_value_parse);
 }
 
+static GtkCssValue *
+transform_origin_parse (GtkCssStyleProperty *property,
+                        GtkCssParser        *parser)
+{
+  return _gtk_css_position_value_parse (parser);
+}
+
 /*** REGISTRATION ***/
 
 G_STATIC_ASSERT (GTK_CSS_PROPERTY_COLOR == 0);
@@ -1248,6 +1255,13 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_TRANSFORM,
                                           transform_value_parse,
                                           _gtk_css_transform_value_new_none ());
+  gtk_css_style_property_register        ("transform-origin",
+                                          GTK_CSS_PROPERTY_TRANSFORM_ORIGIN,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
+                                          GTK_CSS_AFFECTS_TRANSFORM,
+                                          transform_origin_parse,
+                                          _gtk_css_position_value_new (_gtk_css_number_value_new (50, GTK_CSS_PERCENT),
+                                                                       _gtk_css_number_value_new (50, GTK_CSS_PERCENT)));
   gtk_css_style_property_register        ("min-width",
                                           GTK_CSS_PROPERTY_MIN_WIDTH,
                                           GTK_STYLE_PROPERTY_ANIMATED,
