@@ -259,44 +259,43 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink *self,
                                   GstBuffer  *buffer,
                                   double     *pixel_aspect_ratio)
 {
-  GstVideoFrame frame;
+  GstVideoFrame *frame = g_new (GstVideoFrame, 1);
   GdkTexture *texture;
 
   if (self->gdk_context &&
-      gst_video_frame_map (&frame, &self->v_info, buffer, GST_MAP_READ | GST_MAP_GL))
+      gst_video_frame_map (frame, &self->v_info, buffer, GST_MAP_READ | GST_MAP_GL))
     {
       texture = gdk_gl_texture_new (self->gdk_context,
-                                    *(guint *) frame.data[0],
-                                    frame.info.width,
-                                    frame.info.height,
-                                    (GDestroyNotify) gst_buffer_unref,
-                                    gst_buffer_ref (buffer));
+                                    *(guint *) frame->data[0],
+                                    frame->info.width,
+                                    frame->info.height,
+                                    (GDestroyNotify) video_frame_free,
+                                    frame);
 
-     *pixel_aspect_ratio = ((double) frame.info.par_n) / ((double) frame.info.par_d);
-
-      gst_video_frame_unmap (&frame);
+      *pixel_aspect_ratio = ((double) frame->info.par_n) / ((double) frame->info.par_d);
     }
-  else if (gst_video_frame_map (&frame, &self->v_info, buffer, GST_MAP_READ))
+  else if (gst_video_frame_map (frame, &self->v_info, buffer, GST_MAP_READ))
     {
       GBytes *bytes;
 
-      bytes = g_bytes_new_with_free_func (frame.data[0],
-                                          frame.info.height * frame.info.stride[0],
+      bytes = g_bytes_new_with_free_func (frame->data[0],
+                                          frame->info.height * frame->info.stride[0],
                                           (GDestroyNotify) video_frame_free,
-                                          g_memdup (&frame, sizeof (frame)));
-      texture = gdk_memory_texture_new (frame.info.width,
-                                        frame.info.height,
-                                        gtk_gst_memory_format_from_video (GST_VIDEO_FRAME_FORMAT (&frame)),
+                                          frame);
+      texture = gdk_memory_texture_new (frame->info.width,
+                                        frame->info.height,
+                                        gtk_gst_memory_format_from_video (GST_VIDEO_FRAME_FORMAT (frame)),
                                         bytes,
-                                        frame.info.stride[0]);
+                                        frame->info.stride[0]);
       g_bytes_unref (bytes);
 
-     *pixel_aspect_ratio = ((double) frame.info.par_n) / ((double) frame.info.par_d);
+      *pixel_aspect_ratio = ((double) frame->info.par_n) / ((double) frame->info.par_d);
     }
   else
     {
       GST_ERROR_OBJECT (self, "Could not convert buffer to texture.");
       texture = NULL;
+      g_free (frame);
     }
 
   return texture;
