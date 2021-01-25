@@ -172,6 +172,7 @@ gtk_gst_sink_propose_allocation (GstBaseSink *bsink,
   GstCaps *caps;
   guint size;
   gboolean need_pool;
+  GstVideoInfo info;
 
   if (!self->gst_context)
     return FALSE;
@@ -187,21 +188,19 @@ gtk_gst_sink_propose_allocation (GstBaseSink *bsink,
   if (!gst_caps_features_contains (gst_caps_get_features (caps, 0), GST_CAPS_FEATURE_MEMORY_GL_MEMORY))
     return FALSE;
 
+  if (!gst_video_info_from_caps (&info, caps))
+    {
+      GST_DEBUG_OBJECT (self, "invalid caps specified");
+      return FALSE;
+    }
+
+  /* the normal size of a frame */
+  size = info.size;
+
   if (need_pool)
     {
-      GstVideoInfo info;
-
-      if (!gst_video_info_from_caps (&info, caps))
-        {
-          GST_DEBUG_OBJECT (self, "invalid caps specified");
-          return FALSE;
-        }
-
       GST_DEBUG_OBJECT (self, "create new pool");
       pool = gst_gl_buffer_pool_new (self->gst_context);
-
-      /* the normal size of a frame */
-      size = info.size;
 
       config = gst_buffer_pool_get_config (pool);
       gst_buffer_pool_config_set_params (config, caps, size, 0, 0);
@@ -212,11 +211,12 @@ gtk_gst_sink_propose_allocation (GstBaseSink *bsink,
           gst_object_unref (pool);
           return FALSE;
         }
-
-      /* we need at least 2 buffer because we hold on to the last one */
-      gst_query_add_allocation_pool (query, pool, size, 2, 0);
-      gst_object_unref (pool);
     }
+
+  /* we need at least 2 buffer because we hold on to the last one */
+  gst_query_add_allocation_pool (query, pool, size, 2, 0);
+  if (pool)
+    gst_object_unref (pool);
 
   /* we also support various metadata */
   gst_query_add_allocation_meta (query, GST_VIDEO_META_API_TYPE, 0);
