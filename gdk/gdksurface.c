@@ -2960,8 +2960,8 @@ gdk_surface_request_motion (GdkSurface *surface)
  * gdk_surface_translate_coordinates:
  * @from: the origin surface
  * @to: the target surface
- * @x: (out): coordinates to translate
- * @y: (out): coordinates to translate
+ * @x: (inout): coordinates to translate
+ * @y: (inout): coordinates to translate
  *
  * Translates the given coordinates from being
  * relative to the @from surface to being relative
@@ -2980,8 +2980,17 @@ gdk_surface_translate_coordinates (GdkSurface *from,
                                    double     *x,
                                    double     *y)
 {
+  double in_x, in_y, out_x, out_y;
   int x1, y1, x2, y2;
   GdkSurface *f, *t;
+
+  g_return_val_if_fail (GDK_IS_SURFACE (from), FALSE);
+  g_return_val_if_fail (GDK_IS_SURFACE (to), FALSE);
+  g_return_val_if_fail (x != NULL, FALSE);
+  g_return_val_if_fail (y != NULL, FALSE);
+
+  in_x = *x;
+  in_y = *y;
 
   x1 = 0;
   y1 = 0;
@@ -3006,8 +3015,11 @@ gdk_surface_translate_coordinates (GdkSurface *from,
   if (f != t)
     return FALSE;
 
-  *x += x1 - x2;
-  *y += y1 - y2;
+  out_x = in_x + (x1 - x2);
+  out_y = in_y + (y1 - y2);
+
+  *x = out_x;
+  *y = out_y;
 
   return TRUE;
 }
