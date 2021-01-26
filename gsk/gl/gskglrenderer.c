@@ -3074,6 +3074,10 @@ static inline void
 apply_conic_gradient_op (const Program         *program,
                          const OpConicGradient *op)
 {
+  float angle;
+  float bias;
+  float scale;
+
   OP_PRINT (" -> Conic gradient");
   if (op->n_color_stops.send)
     glUniform1i (program->conic_gradient.num_color_stops_location, op->n_color_stops.value);
@@ -3083,8 +3087,15 @@ apply_conic_gradient_op (const Program         *program,
                   op->n_color_stops.value * 5,
                   (float *)op->color_stops.value);
 
-  glUniform1f (program->conic_gradient.rotation_location, op->rotation);
-  glUniform2f (program->conic_gradient.center_location, op->center[0], op->center[1]);
+  angle = 90.0f - op->rotation;
+  angle = M_PI * angle / 180.0f;
+  angle = fmodf (angle, 2.0f * M_PI);
+  if (angle < 0.0f)
+    angle += 2.0f * M_PI;
+
+  scale = 0.5f * M_1_PI;
+  bias = angle * scale + 2.0f;
+  glUniform4f (program->conic_gradient.geometry_location, op->center[0], op->center[1], scale, bias);
 }
 
 static inline void
@@ -3385,8 +3396,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   /* conic gradient */
   INIT_PROGRAM_UNIFORM_LOCATION (conic_gradient, color_stops);
   INIT_PROGRAM_UNIFORM_LOCATION (conic_gradient, num_color_stops);
-  INIT_PROGRAM_UNIFORM_LOCATION (conic_gradient, center);
-  INIT_PROGRAM_UNIFORM_LOCATION (conic_gradient, rotation);
+  INIT_PROGRAM_UNIFORM_LOCATION (conic_gradient, geometry);
 
   /* blur */
   INIT_PROGRAM_UNIFORM_LOCATION (blur, blur_radius);

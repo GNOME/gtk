@@ -129,8 +129,7 @@ struct _Program
     struct {
       int num_color_stops_location;
       int color_stops_location;
-      int center_location;
-      int rotation_location;
+      int geometry_location;
     } conic_gradient;
     struct {
       int blur_radius_location;
