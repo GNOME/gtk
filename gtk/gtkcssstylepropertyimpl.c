@@ -317,14 +317,38 @@ parse_letter_spacing (GtkCssStyleProperty *property,
   return _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH);
 }
 
+static gboolean
+value_is_done_parsing (GtkCssParser *parser)
+{
+  return gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF) ||
+         gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA) ||
+         gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SEMICOLON) ||
+         gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_CLOSE_CURLY);
+}
+
 static GtkCssValue *
 parse_text_decoration_line (GtkCssStyleProperty *property,
                             GtkCssParser        *parser)
 {
-  GtkCssValue *value = _gtk_css_text_decoration_line_value_try_parse (parser);
+  GtkCssValue *value = NULL;
+  GtkTextDecorationLine line;
 
+  line = 0;
+  do {
+    GtkTextDecorationLine parsed;
+
+    parsed = _gtk_css_text_decoration_line_try_parse_one (parser, line);
+    if (parsed == 0 || parsed == line)
+      {
+        gtk_css_parser_error_syntax (parser, "Not a valid value");
+        return NULL;
+      }
+    line = parsed;
+  } while (!value_is_done_parsing (parser));
+
+  value = _gtk_css_text_decoration_line_value_new (line);
   if (value == NULL)
-    gtk_css_parser_error_syntax (parser, "unknown text decoration line value");
+    gtk_css_parser_error_syntax (parser, "Invalid combination of values");
 
   return value;
 }
@@ -351,15 +375,6 @@ parse_font_kerning (GtkCssStyleProperty *property,
     gtk_css_parser_error_syntax (parser, "unknown font kerning value");
 
   return value;
-}
-
-static gboolean
-value_is_done_parsing (GtkCssParser *parser)
-{
-  return gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF) ||
-         gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA) ||
-         gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SEMICOLON) ||
-         gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_CLOSE_CURLY);
 }
 
 static GtkCssValue *

@@ -865,16 +865,26 @@ parse_text_decoration (GtkCssShorthandProperty  *shorthand,
                        GtkCssValue             **values,
                        GtkCssParser             *parser)
 {
+  GtkTextDecorationLine line = 0;
+
   do
   {
-    if (values[0] == NULL &&
-        (values[0] = _gtk_css_text_decoration_line_value_try_parse (parser)))
+    GtkTextDecorationLine parsed_line;
+
+    parsed_line = _gtk_css_text_decoration_line_try_parse_one (parser, line);
+
+    if (parsed_line == 0 && line != 0)
       {
-        if (values[0] == NULL)
-          return FALSE;
+        gtk_css_parser_error_value (parser, "Invalid combination of text-decoration-line values");
+        return FALSE;
+      }
+
+    if (parsed_line != line)
+      {
+        line = parsed_line;
       }
     else if (values[1] == NULL &&
-        (values[1] = _gtk_css_text_decoration_style_value_try_parse (parser)))
+             (values[1] = _gtk_css_text_decoration_style_value_try_parse (parser)))
       {
         if (values[1] == NULL)
           return FALSE;
@@ -894,6 +904,16 @@ parse_text_decoration (GtkCssShorthandProperty  *shorthand,
       }
   }
   while (!value_is_done_parsing (parser));
+
+  if (line != 0)
+    {
+      values[0] = _gtk_css_text_decoration_line_value_new (line);
+      if (values[0] == NULL)
+        {
+          gtk_css_parser_error_value (parser, "Invalid combination of text-decoration-line values");
+          return FALSE;
+        }
+    }
 
   return TRUE;
 }
