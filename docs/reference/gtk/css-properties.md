@@ -235,4 +235,4 @@ done with
 |animation-delay| [CSS Animations Level 1](https://www.w3.org/TR/css3-animations/#animation-delay) | |
 |animation-fill-mode| [CSS Animations Level 1](https://www.w3.org/TR/css3-animations/#animation-fill-mode) | |
 |animation| [CSS Animations Level 1](https://www.w3.org/TR/css3-animations/#animation) | |
-|border-spacing| [CSS Table Level 3](https://www.w3.org/TR/css-tables-3/#border-spacing-property) | respected by GtkBox and GtkGrid |
+|border-spacing| [CSS Table Level 3](https://www.w3.org/TR/css-tables-3/#border-spacing-property) | respected by GtkBoxLayout, GtkGridLayout, GtkCenterLayout |
