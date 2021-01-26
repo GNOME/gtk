@@ -2980,8 +2980,12 @@ gdk_surface_translate_coordinates (GdkSurface *from,
                                    double     *x,
                                    double     *y)
 {
+  double in_x, in_y, out_x, out_y;
   int x1, y1, x2, y2;
   GdkSurface *f, *t;
+
+  in_x = *x;
+  in_y = *y;
 
   x1 = 0;
   y1 = 0;
@@ -3006,8 +3010,11 @@ gdk_surface_translate_coordinates (GdkSurface *from,
   if (f != t)
     return FALSE;
 
-  *x += x1 - x2;
-  *y += y1 - y2;
+  out_x = in_x + (x1 - x2);
+  out_y = in_y + (y1 - y2);
+
+  *x = out_x;
+  *y = out_y;
 
   return TRUE;
 }
