@@ -397,6 +397,12 @@ get_pango_underline_from_style (GtkTextDecorationStyle style)
   g_return_val_if_reached (PANGO_UNDERLINE_SINGLE);
 }
 
+static PangoOverline
+get_pango_overline_from_style (GtkTextDecorationStyle style)
+{
+  return PANGO_OVERLINE_SINGLE;
+}
+
 static PangoAttrList *
 add_pango_attr (PangoAttrList  *attrs,
                 PangoAttribute *attr)
@@ -453,6 +459,13 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
         attrs = add_pango_attr (attrs, pango_attr_underline_color_new (decoration_color->red * 65535. + 0.5,
                                                                        decoration_color->green * 65535. + 0.5,
                                                                        decoration_color->blue * 65535. + 0.5));
+      break;
+    case GTK_CSS_TEXT_DECORATION_LINE_OVERLINE:
+      attrs = add_pango_attr (attrs, pango_attr_overline_new (get_pango_overline_from_style (decoration_style)));
+      if (!gdk_rgba_equal (color, decoration_color))
+        attrs = add_pango_attr (attrs, pango_attr_overline_color_new (decoration_color->red * 65535. + 0.5,
+                                                                      decoration_color->green * 65535. + 0.5,
+                                                                      decoration_color->blue * 65535. + 0.5));
       break;
     case GTK_CSS_TEXT_DECORATION_LINE_LINE_THROUGH:
       attrs = add_pango_attr (attrs, pango_attr_strikethrough_new (TRUE));
