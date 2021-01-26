@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
   <template class="GtkEmojiChooser" parent="GtkPopover">
+    <property name="height-request">410</property>
     <style>
       <class name="emoji-picker"/>
     </style>
@@ -33,7 +34,6 @@
                       <object class="GtkScrolledWindow" id="scrolled_window">
                         <property name="vexpand">1</property>
                         <property name="hscrollbar-policy">never</property>
-                        <property name="min-content-height">250</property>
                         <style>
                           <class name="view"/>
                         </style>
@@ -217,7 +217,9 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkFlowBox">
+                        <property name="min-children-per-line">3</property>
+                        <property name="max-children-per-line">10</property>
                         <style>
                           <class name="emoji-toolbar"/>
                         </style>

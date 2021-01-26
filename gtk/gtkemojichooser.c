@@ -1081,15 +1081,34 @@ keynav_failed (GtkWidget        *box,
                GtkEmojiChooser  *chooser)
 {
   EmojiSection *next;
-  GtkWidget *focus; 
+  GtkWidget *focus;
   GtkWidget *child;
   GtkWidget *sibling;
   int i;
   int column;
+  int n_columns = 7;
+  int child_x;
 
   focus = gtk_root_get_focus (gtk_widget_get_root (box));
   if (focus == NULL)
     return FALSE;
+
+  /* determine the number of columns */
+  child_x = -1;
+  for (i = 0; i < 20; i++)
+    {
+      GtkAllocation alloc;
+
+      gtk_widget_get_allocation (GTK_WIDGET (gtk_flow_box_get_child_at_index (GTK_FLOW_BOX (box), i)),
+                                 &alloc);
+      if (alloc.x > child_x)
+        child_x = alloc.x;
+      else
+        {
+          n_columns = i;
+          break;
+        }
+    }
 
   child = gtk_widget_get_ancestor (focus, GTK_TYPE_EMOJI_CHOOSER_CHILD);
 
@@ -1099,7 +1118,7 @@ keynav_failed (GtkWidget        *box,
        sibling = gtk_widget_get_next_sibling (sibling))
     i++;
 
-  column = i % 7;
+  column = i % n_columns;
 
   if (direction == GTK_DIR_DOWN)
     {
@@ -1131,7 +1150,7 @@ keynav_failed (GtkWidget        *box,
            sibling;
            sibling = gtk_widget_get_next_sibling (sibling), i++)
         {
-          if ((i % 7) == column)
+          if ((i % n_columns) == column)
             child = sibling;
         }
       if (child)
