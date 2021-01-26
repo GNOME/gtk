@@ -2960,8 +2960,8 @@ gdk_surface_request_motion (GdkSurface *surface)
  * gdk_surface_translate_coordinates:
  * @from: the origin surface
  * @to: the target surface
- * @x: coordinates to translate
- * @y: coordinates to translate
+ * @x: (out): coordinates to translate
+ * @y: (out): coordinates to translate
  *
  * Translates the given coordinates from being
  * relative to the @from surface to being relative
