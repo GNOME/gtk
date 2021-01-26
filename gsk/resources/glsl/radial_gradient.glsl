@@ -1,31 +1,18 @@
 // VERTEX_SHADER
-uniform float u_start;
-uniform float u_end;
-uniform float u_color_stops[6 * 5];
-uniform int u_num_color_stops;
-uniform vec2 u_radius;
-uniform vec2 u_center;
+uniform vec4 u_geometry;
 
-_OUT_ vec2 center;
-_OUT_ vec4 color_stops[6];
-_OUT_ float color_offsets[6];
-_OUT_ float start;
-_OUT_ float end;
+_NOPERSPECTIVE_ _OUT_ vec2 coord;
 
 void main() {
-  gl_Position = u_projection * u_modelview * vec4(aPosition, 0.0, 1.0);
+  gl_Position = u_projection * (u_modelview * vec4(aPosition, 0.0, 1.0));
 
-  center = (u_modelview * vec4(u_center, 0, 1)).xy;
-  start = u_start;
-  end = u_end;
+  vec2 mv0 = u_modelview[0].xy;
+  vec2 mv1 = u_modelview[1].xy;
+  vec2 offset = aPosition - u_geometry.xy;
+  vec2 dir = vec2(dot(mv0, offset),
+                  dot(mv1, offset));
 
-  for (int i = 0; i < u_num_color_stops; i ++) {
-    color_offsets[i] = u_color_stops[(i * 5) + 0];
-    color_stops[i] = gsk_premultiply(vec4(u_color_stops[(i * 5) + 1],
-                                          u_color_stops[(i * 5) + 2],
-                                          u_color_stops[(i * 5) + 3],
-                                          u_color_stops[(i * 5) + 4]));
-  }
+  coord = dir * u_geometry.zw;
 }
 
 // FRAGMENT_SHADER:
@@ -35,50 +22,48 @@ uniform int u_num_color_stops;
 uniform highp int u_num_color_stops;
 #endif
 
-uniform vec2 u_radius;
-uniform float u_end;
+uniform vec2 u_range;
+uniform float u_color_stops[6 * 5];
 
-_IN_ vec2 center;
-_IN_ vec4 color_stops[6];
-_IN_ float color_offsets[6];
-_IN_ float start;
-_IN_ float end;
+_NOPERSPECTIVE_ _IN_ vec2 coord;
 
-// The offsets in the color stops are relative to the
-// start and end values of the gradient.
-float abs_offset(float offset)  {
-  return start + ((end - start) * offset);
+float get_offset(int index) {
+  return u_color_stops[5 * index];
+}
+
+vec4 get_color(int index) {
+  int base = 5 * index + 1;
+
+  return vec4(u_color_stops[base],
+              u_color_stops[base + 1],
+              u_color_stops[base + 2],
+              u_color_stops[base + 3]);
 }
 
 void main() {
-  vec2 pixel = gsk_get_frag_coord();
-  vec2 rel = (center - pixel) / (u_radius);
-  float d = sqrt(dot(rel, rel));
+  // Reverse scale
+  float offset = length(coord) * u_range.x + u_range.y;
 
-  if (d < abs_offset (color_offsets[0])) {
-    gskSetOutputColor(color_stops[0] * u_alpha);
+  if (offset < get_offset(0)) {
+    gskSetOutputColor(gsk_scaled_premultiply(get_color(0), u_alpha));
     return;
   }
 
-  if (d > end) {
-    gskSetOutputColor(color_stops[u_num_color_stops - 1] * u_alpha);
-    return;
-  }
+  int n = u_num_color_stops - 1;
+  for (int i = 0; i < n; i++) {
+    float curr_offset = get_offset(i);
+    float next_offset = get_offset(i + 1);
 
-  vec4 color = vec4(0, 0, 0, 0);
-  for (int i = 1; i < u_num_color_stops; i++) {
-    float last_offset = abs_offset(color_offsets[i - 1]);
-    float this_offset = abs_offset(color_offsets[i]);
+    if (offset >= curr_offset && offset < next_offset) {
+      float f = (offset - curr_offset) / (next_offset - curr_offset);
+      vec4 curr_color = gsk_premultiply(get_color(i));
+      vec4 next_color = gsk_premultiply(get_color(i + 1));
+      vec4 color = mix(curr_color, next_color, f);
 
-    // We have color_stops[i - 1] at last_offset and color_stops[i] at this_offset.
-    // We now need to map `d` between those two offsets and simply mix linearly between them
-    if (d >= last_offset && d <= this_offset) {
-      float f = (d - last_offset) / (this_offset - last_offset);
-
-      color = mix(color_stops[i - 1], color_stops[i], f);
-      break;
+      gskSetOutputColor(color * u_alpha);
+      return;
     }
   }
 
-  gskSetOutputColor(color * u_alpha);
+  gskSetOutputColor(gsk_scaled_premultiply(get_color(n), u_alpha));
 }

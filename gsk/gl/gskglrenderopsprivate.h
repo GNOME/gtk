@@ -123,10 +123,8 @@ struct _Program
     struct {
       int num_color_stops_location;
       int color_stops_location;
-      int center_location;
-      int start_location;
-      int end_location;
-      int radius_location;
+      int geometry_location;
+      int range_location;
     } radial_gradient;
     struct {
       int num_color_stops_location;

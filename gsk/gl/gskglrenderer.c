@@ -3050,6 +3050,9 @@ static inline void
 apply_radial_gradient_op (const Program          *program,
                           const OpRadialGradient *op)
 {
+  float scale;
+  float bias;
+
   OP_PRINT (" -> Radial gradient");
   if (op->n_color_stops.send)
     glUniform1i (program->radial_gradient.num_color_stops_location, op->n_color_stops.value);
@@ -3059,10 +3062,12 @@ apply_radial_gradient_op (const Program          *program,
                   op->n_color_stops.value * 5,
                   (float *)op->color_stops.value);
 
-  glUniform1f (program->radial_gradient.start_location, op->start);
-  glUniform1f (program->radial_gradient.end_location, op->end);
-  glUniform2f (program->radial_gradient.radius_location, op->radius[0], op->radius[1]);
-  glUniform2f (program->radial_gradient.center_location, op->center[0], op->center[1]);
+  scale = 1.0f / (op->end - op->start);
+  bias = -op->start * scale;
+  glUniform2f (program->radial_gradient.range_location, scale, bias);
+  glUniform4f (program->radial_gradient.geometry_location,
+               op->center[0], op->center[1],
+               1.0f / op->radius[0], 1.0f / op->radius[1]);
 }
 
 static inline void
@@ -3374,10 +3379,8 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   /* radial gradient */
   INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, color_stops);
   INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, num_color_stops);
-  INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, center);
-  INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, start);
-  INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, end);
-  INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, radius);
+  INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, geometry);
+  INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, range);
 
   /* conic gradient */
   INIT_PROGRAM_UNIFORM_LOCATION (conic_gradient, color_stops);
