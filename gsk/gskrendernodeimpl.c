@@ -782,6 +782,7 @@ struct _GskConicGradientNode
 
   graphene_point_t center;
   float rotation;
+  float angle;
 
   gsize n_stops;
   GskColorStop *stops;
@@ -1023,6 +1024,12 @@ gsk_conic_gradient_node_new (const graphene_rect_t  *bounds,
   self->stops = g_malloc_n (n_color_stops, sizeof (GskColorStop));
   memcpy (self->stops, color_stops, n_color_stops * sizeof (GskColorStop));
 
+  self->angle = 90.f - self->rotation;
+  self->angle = G_PI * self->angle / 180.f;
+  self->angle = fmodf (self->angle, 2.f * G_PI);
+  if (self->angle < 0.f)
+    self->angle += 2.f * G_PI;
+
   return node;
 }
 
@@ -1093,6 +1100,26 @@ gsk_conic_gradient_node_get_rotation (GskRenderNode *node)
   GskConicGradientNode *self = (GskConicGradientNode *) node;
 
   return self->rotation;
+}
+
+/**
+ * gsk_conic_gradient_node_get_angle:
+ * @node: (type GskConicGradientNode): a #GskRenderNode for a conic gradient
+ *
+ * Retrieves the angle for the gradient in radians, normalized in [0, 2 * PI]
+ *
+ * The angle is starting at the top and going clockwise, as expressed
+ * in the css specification:
+ * angle = 90 - gsk_conic_gradient_node_get_rotation()
+ *
+ * Returns: the angle for the gradient
+ */
+float
+gsk_conic_gradient_node_get_angle (GskRenderNode *node)
+{
+  GskConicGradientNode *self = (GskConicGradientNode *) node;
+
+  return self->angle;
 }
 
 /*** GSK_BORDER_NODE ***/

@@ -337,7 +337,7 @@ void              ops_set_conic_gradient  (RenderOpBuilder        *self,
                                            const GskColorStop     *color_stops,
                                            float                   center_x,
                                            float                   center_y,
-                                           float                   rotation);
+                                           float                   angle);
 
 GskQuadVertex *   ops_draw               (RenderOpBuilder        *builder,
                                           const GskQuadVertex     vertex_data[GL_N_VERTICES]);

@@ -1512,7 +1512,7 @@ render_conic_gradient_node (GskGLRenderer   *self,
     {
       const GskColorStop *stops = gsk_conic_gradient_node_get_color_stops (node, NULL);
       const graphene_point_t *center = gsk_conic_gradient_node_get_center (node);
-      const float rotation = gsk_conic_gradient_node_get_rotation (node);
+      const float angle = gsk_conic_gradient_node_get_angle (node);
 
       ops_set_program (builder, &self->programs->conic_gradient_program);
       ops_set_conic_gradient (builder,
@@ -1520,7 +1520,7 @@ render_conic_gradient_node (GskGLRenderer   *self,
                               stops,
                               builder->dx + center->x,
                               builder->dy + center->y,
-                              rotation);
+                              angle);
 
       load_vertex_data (ops_draw (builder, NULL), &node->bounds, builder);
     }
@@ -3079,7 +3079,6 @@ static inline void
 apply_conic_gradient_op (const Program         *program,
                          const OpConicGradient *op)
 {
-  float angle;
   float bias;
   float scale;
 
@@ -3092,14 +3091,8 @@ apply_conic_gradient_op (const Program         *program,
                   op->n_color_stops.value * 5,
                   (float *)op->color_stops.value);
 
-  angle = 90.0f - op->rotation;
-  angle = M_PI * angle / 180.0f;
-  angle = fmodf (angle, 2.0f * M_PI);
-  if (angle < 0.0f)
-    angle += 2.0f * M_PI;
-
   scale = 0.5f * M_1_PI;
-  bias = angle * scale + 2.0f;
+  bias = op->angle * scale + 2.0f;
   glUniform4f (program->conic_gradient.geometry_location, op->center[0], op->center[1], scale, bias);
 }
 

@@ -165,7 +165,7 @@ typedef struct
   ColorStopUniformValue color_stops;
   IntUniformValue n_color_stops;
   float center[2];
-  float rotation;
+  float angle;
 } OpConicGradient;
 
 typedef struct

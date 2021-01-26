@@ -957,7 +957,7 @@ ops_set_conic_gradient (RenderOpBuilder    *self,
                         const GskColorStop *color_stops,
                         float               center_x,
                         float               center_y,
-                        float               rotation)
+                        float               angle)
 {
   const guint real_n_color_stops = MIN (GL_MAX_GRADIENT_STOPS, n_color_stops);
   OpConicGradient *op;
@@ -971,6 +971,6 @@ ops_set_conic_gradient (RenderOpBuilder    *self,
   op->color_stops.send = true;
   op->center[0] = center_x;
   op->center[1] = center_y;
-  op->rotation = rotation;
+  op->angle = angle;
 }
 
