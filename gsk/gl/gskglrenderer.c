@@ -3041,8 +3041,9 @@ apply_linear_gradient_op (const Program          *program,
                   op->n_color_stops.value * 5,
                   (float *)op->color_stops.value);
 
-  glUniform2f (program->linear_gradient.start_point_location, op->start_point[0], op->start_point[1]);
-  glUniform2f (program->linear_gradient.end_point_location, op->end_point[0], op->end_point[1]);
+  glUniform4f (program->linear_gradient.points_location,
+               op->start_point[0], op->start_point[1],
+               op->end_point[0] - op->start_point[0], op->end_point[1] - op->start_point[1]);
 }
 
 static inline void
@@ -3368,8 +3369,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   /* linear gradient */
   INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient, color_stops);
   INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient, num_color_stops);
-  INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient, start_point);
-  INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient, end_point);
+  INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient, points);
 
   /* radial gradient */
   INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, color_stops);

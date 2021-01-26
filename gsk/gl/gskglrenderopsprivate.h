@@ -118,8 +118,7 @@ struct _Program
     struct {
       int num_color_stops_location;
       int color_stops_location;
-      int start_point_location;
-      int end_point_location;
+      int points_location;
     } linear_gradient;
     struct {
       int num_color_stops_location;

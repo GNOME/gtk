@@ -1,35 +1,41 @@
 // VERTEX_SHADER
-uniform vec2 u_start_point;
-uniform vec2 u_end_point;
-uniform float u_color_stops[6 * 5];
-uniform int u_num_color_stops;
+uniform vec4 u_points;
 
-_OUT_ vec2 startPoint;
-_OUT_ vec2 endPoint;
-_OUT_ float maxDist;
-_OUT_ vec2 gradient;
-_OUT_ float gradientLength;
-_OUT_ vec4 color_stops[6];
-_OUT_ float color_offsets[6];
+_NOPERSPECTIVE_ _OUT_ vec4 info;
 
 void main() {
-  gl_Position = u_projection * u_modelview * vec4(aPosition, 0.0, 1.0);
+  gl_Position = u_projection * (u_modelview * vec4(aPosition, 0.0, 1.0));
 
-  startPoint = (u_modelview * vec4(u_start_point, 0, 1)).xy;
-  endPoint   = (u_modelview * vec4(u_end_point,   0, 1)).xy;
-  maxDist    = length(endPoint - startPoint);
+  vec2 mv0 = u_modelview[0].xy;
+  vec2 mv1 = u_modelview[1].xy;
+  vec2 offset = aPosition - u_points.xy;
+  vec2 coord = vec2(dot(mv0, offset),
+                    dot(mv1, offset));
 
-  // Gradient direction
-  gradient = endPoint - startPoint;
-  gradientLength = length(gradient);
+  // Original equation:
+  // VS | maxDist = length(end - start);
+  // VS | gradient = end - start;
+  // VS | gradientLength = length(gradient);
+  // FS | pos = frag_coord - start
+  // FS | proj = (dot(gradient, pos) / (gradientLength * gradientLength)) * gradient
+  // FS | offset = length(proj) / maxDist
 
-  for (int i = 0; i < u_num_color_stops; i ++) {
-    color_offsets[i] = u_color_stops[(i * 5) + 0];
-    color_stops[i] = gsk_premultiply(vec4(u_color_stops[(i * 5) + 1],
-                                          u_color_stops[(i * 5) + 2],
-                                          u_color_stops[(i * 5) + 3],
-                                          u_color_stops[(i * 5) + 4]));
-  }
+  // Simplified formula derivation:
+  // 1. Notice that maxDist = gradientLength:
+  // offset = length(proj) / gradientLength
+  // 2. Let gnorm = gradient / gradientLength, then:
+  // proj = (dot(gnorm * gradientLength, pos) / (gradientLength * gradientLength)) * (gnorm * gradientLength) =
+  //      = dot(gnorm, pos) * gnorm
+  // 3. Since gnorm is unit length then:
+  // length(proj) = length(dot(gnorm, pos) * gnorm) = dot(gnorm, pos)
+  // 4. We can avoid the FS division by passing a scaled pos from the VS:
+  // offset = dot(gnorm, pos) / gradientLength = dot(gnorm, pos / gradientLength)
+  // 5. 1.0 / length(gradient) is inversesqrt(dot(gradient, gradient)) in GLSL
+  vec2 gradient = vec2(dot(mv0, u_points.zw),
+                       dot(mv1, u_points.zw));
+  float rcp_gradient_length = inversesqrt(dot(gradient, gradient));
+
+  info = rcp_gradient_length * vec4(coord, gradient);
 }
 
 // FRAGMENT_SHADER:
@@ -39,32 +45,46 @@ uniform int u_num_color_stops;
 uniform highp int u_num_color_stops; // Why? Because it works like this.
 #endif
 
-_IN_ vec2 startPoint;
-_IN_ vec2 endPoint;
-_IN_ float maxDist;
-_IN_ vec2 gradient;
-_IN_ float gradientLength;
-_IN_ vec4 color_stops[6];
-_IN_ float color_offsets[6];
+uniform float u_color_stops[6 * 5];
+
+_NOPERSPECTIVE_ _IN_ vec4 info;
+
+float get_offset(int index) {
+  return u_color_stops[5 * index];
+}
+
+vec4 get_color(int index) {
+  int base = 5 * index + 1;
+
+  return vec4(u_color_stops[base],
+              u_color_stops[base + 1],
+              u_color_stops[base + 2],
+              u_color_stops[base + 3]);
+}
 
 void main() {
-  // Position relative to startPoint
-  vec2 pos = gsk_get_frag_coord() - startPoint;
+  float offset = dot(info.xy, info.zw);
 
-  // Current pixel, projected onto the line between the start point and the end point
-  // The projection will be relative to the start point!
-  vec2 proj = (dot(gradient, pos) / (gradientLength * gradientLength)) * gradient;
+  if (offset < get_offset(0)) {
+    gskSetOutputColor(gsk_scaled_premultiply(get_color(0), u_alpha));
+    return;
+  }
 
-  // Offset of the current pixel
-  float offset = length(proj) / maxDist;
+  int n = u_num_color_stops - 1;
+  for (int i = 0; i < n; i++) {
+    float curr_offset = get_offset(i);
+    float next_offset = get_offset(i + 1);
 
-  vec4 color = color_stops[0];
-  for (int i = 1; i < u_num_color_stops; i ++) {
-    if (offset >= color_offsets[i - 1])  {
-      float o = (offset - color_offsets[i - 1]) / (color_offsets[i] - color_offsets[i - 1]);
-      color = mix(color_stops[i - 1], color_stops[i], clamp(o, 0.0, 1.0));
+    if (offset >= curr_offset && offset < next_offset) {
+      float f = (offset - curr_offset) / (next_offset - curr_offset);
+      vec4 curr_color = gsk_premultiply(get_color(i));
+      vec4 next_color = gsk_premultiply(get_color(i + 1));
+      vec4 color = mix(curr_color, next_color, f);
+
+      gskSetOutputColor(color * u_alpha);
+      return;
     }
   }
 
-  gskSetOutputColor(color * u_alpha);
+  gskSetOutputColor(gsk_scaled_premultiply(get_color(n), u_alpha));
 }
