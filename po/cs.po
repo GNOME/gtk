@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-01-14 18:35+0000\n"
-"PO-Revision-Date: 2021-01-15 16:16+0100\n"
+"POT-Creation-Date: 2021-01-26 15:13+0000\n"
+"PO-Revision-Date: 2021-01-26 16:20+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -66,15 +66,15 @@ msgstr "„Táhni a upusť“ z jiné aplikace není podporováno."
 msgid "No compatible formats to transfer contents."
 msgstr "Není k dispozici žádný kompatibilní formát pro přenos obsahu."
 
-#: gdk/gdksurface.c:1090
+#: gdk/gdksurface.c:1102
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Podpora GL je zakázána skrz GDK_DEBUG"
 
-#: gdk/gdksurface.c:1101
+#: gdk/gdksurface.c:1113
 msgid "The current backend does not support OpenGL"
 msgstr "Aktuální podpůrná vrstva nepodporuje OpenGL"
 
-#: gdk/gdksurface.c:1209
+#: gdk/gdksurface.c:1221
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Podpora technologie Vulkan je zakázána skrz GDK_DEBUG"
 
@@ -467,19 +467,19 @@ msgstr "Nebyl nalezen žádný kompatibilní přenosový formát"
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Selhalo dekódování obsahu s typem MIME „%s“"
 
-#: gdk/wayland/gdkglcontext-wayland.c:151 gdk/win32/gdkglcontext-win32.c:947
-#: gdk/win32/gdkglcontext-win32.c:988 gdk/x11/gdkglcontext-x11.c:581
+#: gdk/wayland/gdkglcontext-wayland.c:151 gdk/win32/gdkglcontext-win32.c:934
+#: gdk/win32/gdkglcontext-win32.c:975 gdk/x11/gdkglcontext-x11.c:581
 #: gdk/x11/gdkglcontext-x11.c:631
 msgid "Unable to create a GL context"
 msgstr "Nelze vytvořit kontext GL"
 
-#: gdk/wayland/gdkglcontext-wayland.c:423 gdk/win32/gdkglcontext-win32.c:788
-#: gdk/win32/gdkglcontext-win32.c:798 gdk/win32/gdkglcontext-win32.c:913
+#: gdk/wayland/gdkglcontext-wayland.c:423 gdk/win32/gdkglcontext-win32.c:775
+#: gdk/win32/gdkglcontext-win32.c:785 gdk/win32/gdkglcontext-win32.c:900
 #: gdk/x11/gdkglcontext-x11.c:879
 msgid "No available configurations for the given pixel format"
 msgstr "Není dostupné žádné nastavení pro daný pixelový fotmát"
 
-#: gdk/wayland/gdkglcontext-wayland.c:448 gdk/win32/gdkglcontext-win32.c:1072
+#: gdk/wayland/gdkglcontext-wayland.c:448 gdk/win32/gdkglcontext-win32.c:1048
 #: gdk/x11/gdkglcontext-x11.c:1182
 msgid "No GL implementation is available"
 msgstr "Není k dispozici žádná implementace GL"
@@ -925,35 +925,35 @@ msgstr "Apache License, verze 2.0"
 msgid "Mozilla Public License 2.0"
 msgstr "Mozilla Public License 2.0"
 
-#: gtk/gtkaboutdialog.c:933
+#: gtk/gtkaboutdialog.c:946
 msgid "Website"
 msgstr "Webové stránky"
 
-#: gtk/gtkaboutdialog.c:970 gtk/ui/gtkapplication-quartz.ui:6
+#: gtk/gtkaboutdialog.c:983 gtk/ui/gtkapplication-quartz.ui:6
 #, c-format
 msgid "About %s"
 msgstr "O aplikaci %s"
 
-#: gtk/gtkaboutdialog.c:2074
+#: gtk/gtkaboutdialog.c:2087
 msgid "Created by"
 msgstr "Vytvořili"
 
-#: gtk/gtkaboutdialog.c:2077
+#: gtk/gtkaboutdialog.c:2090
 msgid "Documented by"
 msgstr "Zdokumentovali"
 
-#: gtk/gtkaboutdialog.c:2087
+#: gtk/gtkaboutdialog.c:2100
 msgid "Translated by"
 msgstr "Přeložili"
 
-#: gtk/gtkaboutdialog.c:2092
+#: gtk/gtkaboutdialog.c:2105
 msgid "Design by"
 msgstr "Vzhled navrhli"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2255
+#: gtk/gtkaboutdialog.c:2268
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -1047,392 +1047,392 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Zpětné lomítko"
 
-#: gtk/gtkaccessible.c:556
+#: gtk/gtkaccessible.c:558
 msgctxt "accessibility"
 msgid "alert"
 msgstr "výstraha"
 
-#: gtk/gtkaccessible.c:557
+#: gtk/gtkaccessible.c:559
 msgctxt "accessibility"
 msgid "alert dialog"
 msgstr "dialogové okno s výstrahou"
 
-#: gtk/gtkaccessible.c:558
+#: gtk/gtkaccessible.c:560
 msgctxt "accessibility"
 msgid "banner"
 msgstr "cedule"
 
-#: gtk/gtkaccessible.c:559
+#: gtk/gtkaccessible.c:561
 msgctxt "accessibility"
 msgid "button"
 msgstr "tlačítko"
 
-#: gtk/gtkaccessible.c:560
+#: gtk/gtkaccessible.c:562
 msgctxt "accessibility"
 msgid "caption"
 msgstr "titule"
 
-#: gtk/gtkaccessible.c:561
+#: gtk/gtkaccessible.c:563
 msgctxt "accessibility"
 msgid "cell"
 msgstr "buňka"
 
-#: gtk/gtkaccessible.c:562
+#: gtk/gtkaccessible.c:564
 msgctxt "accessibility"
 msgid "checkbox"
 msgstr "zaškrtávací políčko"
 
-#: gtk/gtkaccessible.c:563
+#: gtk/gtkaccessible.c:565
 msgctxt "accessibility"
 msgid "column header"
 msgstr "záhlaví sloupce"
 
-#: gtk/gtkaccessible.c:564
+#: gtk/gtkaccessible.c:566
 msgctxt "accessibility"
 msgid "combo box"
 msgstr "rozbalovací seznam"
 
-#: gtk/gtkaccessible.c:565
+#: gtk/gtkaccessible.c:567
 msgctxt "accessibility"
 msgid "command"
 msgstr "příkaz"
 
-#: gtk/gtkaccessible.c:566
+#: gtk/gtkaccessible.c:568
 msgctxt "accessibility"
 msgid "composite"
 msgstr "složený"
 
-#: gtk/gtkaccessible.c:567
+#: gtk/gtkaccessible.c:569
 msgctxt "accessibility"
 msgid "dialog"
 msgstr "dialogové okno"
 
-#: gtk/gtkaccessible.c:568
+#: gtk/gtkaccessible.c:570
 msgctxt "accessibility"
 msgid "document"
 msgstr "dokument"
 
-#: gtk/gtkaccessible.c:569
+#: gtk/gtkaccessible.c:571
 msgctxt "accessibility"
 msgid "feed"
 msgstr "seznam článků"
 
-#: gtk/gtkaccessible.c:570
+#: gtk/gtkaccessible.c:572
 msgctxt "accessibility"
 msgid "form"
 msgstr "formulář"
 
-#: gtk/gtkaccessible.c:571
+#: gtk/gtkaccessible.c:573
 msgctxt "accessibility"
 msgid "generic"
 msgstr "obecný"
 
-#: gtk/gtkaccessible.c:572
+#: gtk/gtkaccessible.c:574
 msgctxt "accessibility"
 msgid "grid"
 msgstr "mřížka"
 
-#: gtk/gtkaccessible.c:573
+#: gtk/gtkaccessible.c:575
 msgctxt "accessibility"
 msgid "grid cell"
 msgstr "buňka mřížky"
 
-#: gtk/gtkaccessible.c:574
+#: gtk/gtkaccessible.c:576
 msgctxt "accessibility"
 msgid "group"
 msgstr "skupina"
 
-#: gtk/gtkaccessible.c:575
+#: gtk/gtkaccessible.c:577
 msgctxt "accessibility"
 msgid "heading"
 msgstr "záhlaví"
 
-#: gtk/gtkaccessible.c:576
+#: gtk/gtkaccessible.c:578
 msgctxt "accessibility"
 msgid "image"
 msgstr "obrázek"
 
-#: gtk/gtkaccessible.c:577
+#: gtk/gtkaccessible.c:579
 msgctxt "accessibility"
 msgid "input"
 msgstr "vstup"
 
-#: gtk/gtkaccessible.c:578
+#: gtk/gtkaccessible.c:580
 msgctxt "accessibility"
 msgid "label"
 msgstr "popisek"
 
-#: gtk/gtkaccessible.c:579
+#: gtk/gtkaccessible.c:581
 msgctxt "accessibility"
 msgid "landmark"
 msgstr "záchytný bod"
 
-#: gtk/gtkaccessible.c:580
+#: gtk/gtkaccessible.c:582
 msgctxt "accessibility"
 msgid "legend"
 msgstr "legenda"
 
-#: gtk/gtkaccessible.c:581
+#: gtk/gtkaccessible.c:583
 msgctxt "accessibility"
 msgid "link"
 msgstr "odkaz"
 
-#: gtk/gtkaccessible.c:582
+#: gtk/gtkaccessible.c:584
 msgctxt "accessibility"
 msgid "list"
 msgstr "seznam"
 
-#: gtk/gtkaccessible.c:583
+#: gtk/gtkaccessible.c:585
 msgctxt "accessibility"
 msgid "list box"
 msgstr "pole se seznamem"
 
-#: gtk/gtkaccessible.c:584
+#: gtk/gtkaccessible.c:586
 msgctxt "accessibility"
 msgid "list item"
 msgstr "položka seznamu"
 
-#: gtk/gtkaccessible.c:585
+#: gtk/gtkaccessible.c:587
 msgctxt "accessibility"
 msgid "log"
 msgstr "záznam"
 
-#: gtk/gtkaccessible.c:586
+#: gtk/gtkaccessible.c:588
 msgctxt "accessibility"
 msgid "main"
 msgstr "hlavní obsah"
 
-#: gtk/gtkaccessible.c:587
+#: gtk/gtkaccessible.c:589
 msgctxt "accessibility"
 msgid "marquee"
 msgstr "posouvající se text"
 
-#: gtk/gtkaccessible.c:588
+#: gtk/gtkaccessible.c:590
 msgctxt "accessibility"
 msgid "math"
 msgstr "matematika"
 
-#: gtk/gtkaccessible.c:589
+#: gtk/gtkaccessible.c:591
 msgctxt "accessibility"
 msgid "meter"
 msgstr "hodnota z rozsahu"
 
-#: gtk/gtkaccessible.c:590
+#: gtk/gtkaccessible.c:592
 msgctxt "accessibility"
 msgid "menu"
 msgstr "nabídka"
 
-#: gtk/gtkaccessible.c:591
+#: gtk/gtkaccessible.c:593
 msgctxt "accessibility"
 msgid "menu bar"
 msgstr "nabídková lišta"
 
-#: gtk/gtkaccessible.c:592
+#: gtk/gtkaccessible.c:594
 msgctxt "accessibility"
 msgid "menu item"
 msgstr "položka nabídky"
 
-#: gtk/gtkaccessible.c:593
+#: gtk/gtkaccessible.c:595
 msgctxt "accessibility"
 msgid "menu item checkbox"
 msgstr "zaškrtávací položka nabídky"
 
-#: gtk/gtkaccessible.c:594
+#: gtk/gtkaccessible.c:596
 msgctxt "accessibility"
 msgid "menu item radio"
 msgstr "skupinová položka nabídky"
 
-#: gtk/gtkaccessible.c:595
+#: gtk/gtkaccessible.c:597
 msgctxt "accessibility"
 msgid "navigation"
 msgstr "navigace"
 
-#: gtk/gtkaccessible.c:596
+#: gtk/gtkaccessible.c:598
 msgctxt "accessibility"
 msgid "none"
 msgstr "nic"
 
-#: gtk/gtkaccessible.c:597
+#: gtk/gtkaccessible.c:599
 msgctxt "accessibility"
 msgid "note"
 msgstr "poznámka"
 
-#: gtk/gtkaccessible.c:598
+#: gtk/gtkaccessible.c:600
 msgctxt "accessibility"
 msgid "option"
 msgstr "volba"
 
-#: gtk/gtkaccessible.c:599
+#: gtk/gtkaccessible.c:601
 msgctxt "accessibility"
 msgid "presentation"
 msgstr "prezentace"
 
-#: gtk/gtkaccessible.c:600
+#: gtk/gtkaccessible.c:602
 msgctxt "accessibility"
 msgid "progress bar"
 msgstr "ukazatel průběhu"
 
-#: gtk/gtkaccessible.c:601
+#: gtk/gtkaccessible.c:603
 msgctxt "accessibility"
 msgid "radio"
 msgstr "skupinový přepínač"
 
-#: gtk/gtkaccessible.c:602
+#: gtk/gtkaccessible.c:604
 msgctxt "accessibility"
 msgid "radio group"
 msgstr "skupina skupinového přepínače"
 
-#: gtk/gtkaccessible.c:603
+#: gtk/gtkaccessible.c:605
 msgctxt "accessibility"
 msgid "range"
 msgstr "rozsah"
 
-#: gtk/gtkaccessible.c:604
+#: gtk/gtkaccessible.c:606
 msgctxt "accessibility"
 msgid "region"
 msgstr "oblast"
 
-#: gtk/gtkaccessible.c:605
+#: gtk/gtkaccessible.c:607
 msgctxt "accessibility"
 msgid "row"
 msgstr "řádek"
 
-#: gtk/gtkaccessible.c:606
+#: gtk/gtkaccessible.c:608
 msgctxt "accessibility"
 msgid "row group"
 msgstr "skupina řádků"
 
-#: gtk/gtkaccessible.c:607
+#: gtk/gtkaccessible.c:609
 msgctxt "accessibility"
 msgid "row header"
 msgstr "záhlaví řídku"
 
-#: gtk/gtkaccessible.c:608
+#: gtk/gtkaccessible.c:610
 msgctxt "accessibility"
 msgid "scroll bar"
 msgstr "posuvník"
 
-#: gtk/gtkaccessible.c:609
+#: gtk/gtkaccessible.c:611
 msgctxt "accessibility"
 msgid "search"
 msgstr "hledání"
 
-#: gtk/gtkaccessible.c:610
+#: gtk/gtkaccessible.c:612
 msgctxt "accessibility"
 msgid "search box"
 msgstr "vyhledávací pole"
 
-#: gtk/gtkaccessible.c:611
+#: gtk/gtkaccessible.c:613
 msgctxt "accessibility"
 msgid "section"
 msgstr "oddíl"
 
-#: gtk/gtkaccessible.c:612
+#: gtk/gtkaccessible.c:614
 msgctxt "accessibility"
 msgid "section head"
 msgstr "záhlaví oddílu"
 
-#: gtk/gtkaccessible.c:613
+#: gtk/gtkaccessible.c:615
 msgctxt "accessibility"
 msgid "select"
 msgstr "výběr"
 
-#: gtk/gtkaccessible.c:614
+#: gtk/gtkaccessible.c:616
 msgctxt "accessibility"
 msgid "separator"
 msgstr "čitatelé"
 
-#: gtk/gtkaccessible.c:615
+#: gtk/gtkaccessible.c:617
 msgctxt "accessibility"
 msgid "slider"
 msgstr "táhlo"
 
-#: gtk/gtkaccessible.c:616
+#: gtk/gtkaccessible.c:618
 msgctxt "accessibility"
 msgid "spin button"
 msgstr "číselník"
 
-#: gtk/gtkaccessible.c:617
+#: gtk/gtkaccessible.c:619
 msgctxt "accessibility"
 msgid "status"
 msgstr "stav"
 
-#: gtk/gtkaccessible.c:618
+#: gtk/gtkaccessible.c:620
 msgctxt "accessibility"
 msgid "structure"
 msgstr "struktura"
 
-#: gtk/gtkaccessible.c:619
+#: gtk/gtkaccessible.c:621
 msgctxt "accessibility"
 msgid "switch"
 msgstr "vypínač"
 
-#: gtk/gtkaccessible.c:620
+#: gtk/gtkaccessible.c:622
 msgctxt "accessibility"
 msgid "tab"
 msgstr "karta"
 
-#: gtk/gtkaccessible.c:621
+#: gtk/gtkaccessible.c:623
 msgctxt "accessibility"
 msgid "table"
 msgstr "tabulka"
 
-#: gtk/gtkaccessible.c:622
+#: gtk/gtkaccessible.c:624
 msgctxt "accessibility"
 msgid "tab list"
 msgstr "seznam karet"
 
-#: gtk/gtkaccessible.c:623
+#: gtk/gtkaccessible.c:625
 msgctxt "accessibility"
 msgid "tab panel"
 msgstr "panel karty"
 
-#: gtk/gtkaccessible.c:624
+#: gtk/gtkaccessible.c:626
 msgctxt "accessibility"
 msgid "text box"
 msgstr "textové pole"
 
-#: gtk/gtkaccessible.c:625
+#: gtk/gtkaccessible.c:627
 msgctxt "accessibility"
 msgid "time"
 msgstr "čas"
 
-#: gtk/gtkaccessible.c:626
+#: gtk/gtkaccessible.c:628
 msgctxt "accessibility"
 msgid "timer"
 msgstr "časovač"
 
-#: gtk/gtkaccessible.c:627
+#: gtk/gtkaccessible.c:629
 msgctxt "accessibility"
 msgid "tool bar"
 msgstr "nástrojová lišta"
 
-#: gtk/gtkaccessible.c:628
+#: gtk/gtkaccessible.c:630
 msgctxt "accessibility"
 msgid "tool tip"
 msgstr "vysvětlivka"
 
-#: gtk/gtkaccessible.c:629
+#: gtk/gtkaccessible.c:631
 msgctxt "accessibility"
 msgid "tree"
 msgstr "strom"
 
-#: gtk/gtkaccessible.c:630
+#: gtk/gtkaccessible.c:632
 msgctxt "accessibility"
 msgid "tree grid"
 msgstr "mřížka stromu"
 
-#: gtk/gtkaccessible.c:631
+#: gtk/gtkaccessible.c:633
 msgctxt "accessibility"
 msgid "tree item"
 msgstr "položka stromu"
 
-#: gtk/gtkaccessible.c:632
+#: gtk/gtkaccessible.c:634
 msgctxt "accessibility"
 msgid "widget"
 msgstr "widget"
 
-#: gtk/gtkaccessible.c:633
+#: gtk/gtkaccessible.c:635
 msgctxt "accessibility"
 msgid "window"
 msgstr "okno"
@@ -2017,8 +2017,8 @@ msgstr "Soubor s tímto názvem již existuje"
 #: gtk/gtkmountoperation.c:608 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:643 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:626 gtk/gtkprintunixdialog.c:782
-#: gtk/gtkwindow.c:5950 gtk/inspector/css-editor.c:248
-#: gtk/inspector/recorder.c:1238 gtk/ui/gtkappchooserdialog.ui:45
+#: gtk/gtkwindow.c:5959 gtk/inspector/css-editor.c:248
+#: gtk/inspector/recorder.c:1241 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
 msgid "_Cancel"
@@ -2031,7 +2031,7 @@ msgid "_Open"
 msgstr "_Otevřít"
 
 #: gtk/gtkfilechoosernative.c:569 gtk/inspector/css-editor.c:249
-#: gtk/inspector/recorder.c:1239
+#: gtk/inspector/recorder.c:1242
 msgid "_Save"
 msgstr "_Uložit"
 
@@ -2108,7 +2108,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Pokud smažete položku, bude natrvalo ztracena."
 
 #: gtk/gtkfilechooserwidget.c:1213 gtk/gtkfilechooserwidget.c:1829
-#: gtk/gtklabel.c:5416 gtk/gtktext.c:5960 gtk/gtktextview.c:8564
+#: gtk/gtklabel.c:5408 gtk/gtktext.c:5960 gtk/gtktextview.c:8564
 msgid "_Delete"
 msgstr "_Smazat"
 
@@ -2381,27 +2381,27 @@ msgstr "Varianty znaků"
 msgid "OpenGL context creation failed"
 msgstr "Vytvoření kontextu GL selhalo"
 
-#: gtk/gtklabel.c:5413 gtk/gtktext.c:5948 gtk/gtktextview.c:8552
+#: gtk/gtklabel.c:5405 gtk/gtktext.c:5948 gtk/gtktextview.c:8552
 msgid "Cu_t"
 msgstr "_Vyjmout"
 
-#: gtk/gtklabel.c:5414 gtk/gtktext.c:5952 gtk/gtktextview.c:8556
+#: gtk/gtklabel.c:5406 gtk/gtktext.c:5952 gtk/gtktextview.c:8556
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: gtk/gtklabel.c:5415 gtk/gtktext.c:5956 gtk/gtktextview.c:8560
+#: gtk/gtklabel.c:5407 gtk/gtktext.c:5956 gtk/gtktextview.c:8560
 msgid "_Paste"
 msgstr "V_ložit"
 
-#: gtk/gtklabel.c:5421 gtk/gtktext.c:5969 gtk/gtktextview.c:8585
+#: gtk/gtklabel.c:5413 gtk/gtktext.c:5969 gtk/gtktextview.c:8585
 msgid "Select _All"
 msgstr "Vybr_at vše"
 
-#: gtk/gtklabel.c:5426
+#: gtk/gtklabel.c:5418
 msgid "_Open Link"
 msgstr "_Otevřít odkaz"
 
-#: gtk/gtklabel.c:5430
+#: gtk/gtklabel.c:5422
 msgid "Copy _Link Address"
 msgstr "Ko_pírovat adresu odkazu"
 
@@ -2503,7 +2503,7 @@ msgid "%d:%02d"
 msgstr "%d∶%02d"
 
 #: gtk/gtkmessagedialog.c:157 gtk/gtkmessagedialog.c:175
-#: gtk/gtkprintbackend.c:644 gtk/gtkwindow.c:5951
+#: gtk/gtkprintbackend.c:644 gtk/gtkwindow.c:5960
 msgid "_OK"
 msgstr "_Budiž"
 
@@ -3360,12 +3360,12 @@ msgstr "Výsledky hledání"
 msgid "Search Shortcuts"
 msgstr "hledat zkratku"
 
-#: gtk/gtkshortcutswindow.c:969 gtk/ui/gtkemojichooser.ui:346
+#: gtk/gtkshortcutswindow.c:969 gtk/ui/gtkemojichooser.ui:348
 #: gtk/ui/gtkfilechooserwidget.ui:296
 msgid "No Results Found"
 msgstr "Nebyly nalezeny žádné výsledky"
 
-#: gtk/gtkshortcutswindow.c:975 gtk/ui/gtkemojichooser.ui:359
+#: gtk/gtkshortcutswindow.c:975 gtk/ui/gtkemojichooser.ui:361
 #: gtk/ui/gtkfilechooserwidget.ui:309 gtk/ui/gtkplacesview.ui:230
 msgid "Try a different search"
 msgstr "Zkuste zadat jiný termín k vyhledání"
@@ -3409,12 +3409,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:5938
+#: gtk/gtkwindow.c:5947
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Chcete použít Inspectora GTK?"
 
-#: gtk/gtkwindow.c:5940
+#: gtk/gtkwindow.c:5949
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3425,7 +3425,7 @@ msgstr ""
 "změnit vnitřní strukturu jakékoliv aplikace GTK. Použití tohoto programu "
 "může vést k přerušení běhu nebo pádu aplikace."
 
-#: gtk/gtkwindow.c:5945
+#: gtk/gtkwindow.c:5954
 msgid "Don’t show this message again"
 msgstr "Tuto zprávu znovu nezobrazovat"
 
@@ -3474,11 +3474,11 @@ msgstr "Atribut"
 msgid "Value"
 msgstr "Hodnota"
 
-#: gtk/inspector/action-editor.c:316
+#: gtk/inspector/action-editor.c:123
 msgid "Activate"
 msgstr "Aktivovat"
 
-#: gtk/inspector/action-editor.c:335
+#: gtk/inspector/action-editor.c:135
 msgid "Set State"
 msgstr "Nastavený stav"
 
@@ -3495,25 +3495,30 @@ msgstr "Typ parametru"
 msgid "State"
 msgstr "Stav"
 
-#: gtk/inspector/controllers.c:144
+#: gtk/inspector/controllers.c:126
 msgctxt "event phase"
 msgid "None"
 msgstr "Nic"
 
-#: gtk/inspector/controllers.c:145
+#: gtk/inspector/controllers.c:129
 msgctxt "event phase"
 msgid "Capture"
 msgstr "Zachytit"
 
-#: gtk/inspector/controllers.c:146
+#: gtk/inspector/controllers.c:132
 msgctxt "event phase"
 msgid "Bubble"
 msgstr "Bublina"
 
-#: gtk/inspector/controllers.c:147
+#: gtk/inspector/controllers.c:135
 msgctxt "event phase"
 msgid "Target"
 msgstr "Cíl"
+
+#: gtk/inspector/controllers.c:156
+msgctxt "propagation limit"
+msgid "Native"
+msgstr "Přirozené"
 
 #: gtk/inspector/css-editor.c:129
 msgid "You can type here any CSS rule recognized by GTK."
@@ -3835,7 +3840,7 @@ msgstr "Zdroj:"
 msgid "Defined At"
 msgstr "Definováno v"
 
-#: gtk/inspector/recorder.c:1209
+#: gtk/inspector/recorder.c:1212
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Uložení RenderNode selhalo"
@@ -4037,19 +4042,35 @@ msgstr "Zobrazovat záložní vykreslování"
 msgid "Show Baselines"
 msgstr "Zobrazovat účaří"
 
-#: gtk/inspector/visual.ui:484
+#: gtk/inspector/visual.ui:487
 msgid "Show Layout Borders"
 msgstr "Zobrazovat hranice rozvržení"
 
-#: gtk/inspector/visual.ui:509
+#: gtk/inspector/visual.ui:544
+msgid "CSS Padding"
+msgstr "Odsazení CSS"
+
+#: gtk/inspector/visual.ui:554
+msgid "CSS Border"
+msgstr "Ohraničení CSS"
+
+#: gtk/inspector/visual.ui:564
+msgid "CSS Margin"
+msgstr "Okraje CSS"
+
+#: gtk/inspector/visual.ui:574
+msgid "Widget Margin"
+msgstr "Okraje widgetu"
+
+#: gtk/inspector/visual.ui:609
 msgid "Show Focus"
 msgstr "Zobrazovat zaměření"
 
-#: gtk/inspector/visual.ui:548
+#: gtk/inspector/visual.ui:648
 msgid "Simulate Touchscreen"
 msgstr "Simulovat dotykovou obrazovku"
 
-#: gtk/inspector/visual.ui:572
+#: gtk/inspector/visual.ui:672
 msgid "Software GL"
 msgstr "Softwarové GL"
 
@@ -6950,52 +6971,52 @@ msgstr "(žádný)"
 msgid "Search…"
 msgstr "hledat…"
 
-#: gtk/ui/gtkemojichooser.ui:69 gtk/ui/gtkemojichooser.ui:236
+#: gtk/ui/gtkemojichooser.ui:69 gtk/ui/gtkemojichooser.ui:238
 msgctxt "emoji category"
 msgid "Smileys & People"
 msgstr "Smajlíci a lidé"
 
-#: gtk/ui/gtkemojichooser.ui:94 gtk/ui/gtkemojichooser.ui:245
+#: gtk/ui/gtkemojichooser.ui:94 gtk/ui/gtkemojichooser.ui:247
 msgctxt "emoji category"
 msgid "Body & Clothing"
 msgstr "Tělo a oblečení"
 
-#: gtk/ui/gtkemojichooser.ui:119 gtk/ui/gtkemojichooser.ui:254
+#: gtk/ui/gtkemojichooser.ui:119 gtk/ui/gtkemojichooser.ui:256
 msgctxt "emoji category"
 msgid "Animals & Nature"
 msgstr "Zvířata a příroda"
 
-#: gtk/ui/gtkemojichooser.ui:133 gtk/ui/gtkemojichooser.ui:263
+#: gtk/ui/gtkemojichooser.ui:133 gtk/ui/gtkemojichooser.ui:265
 msgctxt "emoji category"
 msgid "Food & Drink"
 msgstr "Jídlo a pití"
 
-#: gtk/ui/gtkemojichooser.ui:147 gtk/ui/gtkemojichooser.ui:272
+#: gtk/ui/gtkemojichooser.ui:147 gtk/ui/gtkemojichooser.ui:274
 msgctxt "emoji category"
 msgid "Travel & Places"
 msgstr "Cestování a místa"
 
-#: gtk/ui/gtkemojichooser.ui:161 gtk/ui/gtkemojichooser.ui:281
+#: gtk/ui/gtkemojichooser.ui:161 gtk/ui/gtkemojichooser.ui:283
 msgctxt "emoji category"
 msgid "Activities"
 msgstr "Činnosti"
 
-#: gtk/ui/gtkemojichooser.ui:175 gtk/ui/gtkemojichooser.ui:290
+#: gtk/ui/gtkemojichooser.ui:175 gtk/ui/gtkemojichooser.ui:292
 msgctxt "emoji category"
 msgid "Objects"
 msgstr "Objekty"
 
-#: gtk/ui/gtkemojichooser.ui:189 gtk/ui/gtkemojichooser.ui:299
+#: gtk/ui/gtkemojichooser.ui:189 gtk/ui/gtkemojichooser.ui:301
 msgctxt "emoji category"
 msgid "Symbols"
 msgstr "Symboly"
 
-#: gtk/ui/gtkemojichooser.ui:203 gtk/ui/gtkemojichooser.ui:308
+#: gtk/ui/gtkemojichooser.ui:203 gtk/ui/gtkemojichooser.ui:310
 msgctxt "emoji category"
 msgid "Flags"
 msgstr "Vlajky"
 
-#: gtk/ui/gtkemojichooser.ui:227
+#: gtk/ui/gtkemojichooser.ui:229
 msgctxt "emoji category"
 msgid "Recent"
 msgstr "Naposledy použité"
