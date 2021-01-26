@@ -746,6 +746,7 @@ button {
 
   .linked.vertical > & { @extend %linked_vertical; }
 
+  menubutton.circular &,
   &.circular { // force circular button shape
     min-width: 32px;
     min-height: 32px;

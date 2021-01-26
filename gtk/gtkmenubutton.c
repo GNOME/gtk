@@ -120,6 +120,9 @@
  * the menu will appear in. The CSS is expected to provide a suitable
  * image for each of these cases using the -gtk-icon-source property.
  *
+ * Optionally, the menubutton node can carry the .circular style class
+ * to request a round appearance.
+ *
  * # Accessibility
  *
  * GtkMenuButton uses the #GTK_ACCESSIBLE_ROLE_BUTTON role.
