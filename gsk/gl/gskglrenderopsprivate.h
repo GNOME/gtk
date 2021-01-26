@@ -126,6 +126,7 @@ struct _Program
       int color_stops_location;
       int geometry_location;
       int range_location;
+      int repeat_location;
     } radial_gradient;
     struct {
       int num_color_stops_location;
@@ -324,6 +325,7 @@ void              ops_set_linear_gradient (RenderOpBuilder     *self,
 void              ops_set_radial_gradient (RenderOpBuilder        *self,
                                            guint                   n_color_stops,
                                            const GskColorStop     *color_stops,
+                                           bool                    repeat,
                                            float                   center_x,
                                            float                   center_y,
                                            float                   start,

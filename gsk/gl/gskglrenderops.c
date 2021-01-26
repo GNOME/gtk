@@ -924,6 +924,7 @@ void
 ops_set_radial_gradient (RenderOpBuilder    *self,
                          guint               n_color_stops,
                          const GskColorStop *color_stops,
+                         bool                repeat,
                          float               center_x,
                          float               center_y,
                          float               start,
@@ -947,6 +948,7 @@ ops_set_radial_gradient (RenderOpBuilder    *self,
   op->radius[1] = vradius;
   op->start = start;
   op->end = end;
+  op->repeat = repeat;
 }
 
 void

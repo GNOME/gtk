@@ -22,6 +22,7 @@ uniform int u_num_color_stops;
 uniform highp int u_num_color_stops;
 #endif
 
+uniform bool u_repeat;
 uniform vec2 u_range;
 uniform float u_color_stops[6 * 5];
 
@@ -43,6 +44,10 @@ vec4 get_color(int index) {
 void main() {
   // Reverse scale
   float offset = length(coord) * u_range.x + u_range.y;
+
+  if (u_repeat) {
+    offset = fract(offset);
+  }
 
   if (offset < get_offset(0)) {
     gskSetOutputColor(gsk_scaled_premultiply(get_color(0), u_alpha));

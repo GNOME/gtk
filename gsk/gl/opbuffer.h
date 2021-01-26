@@ -157,6 +157,7 @@ typedef struct
   float end;
   float radius[2];
   float center[2];
+  bool repeat;
 } OpRadialGradient;
 
 typedef struct
