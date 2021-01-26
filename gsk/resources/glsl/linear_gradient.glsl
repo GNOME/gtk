@@ -46,6 +46,7 @@ uniform highp int u_num_color_stops; // Why? Because it works like this.
 #endif
 
 uniform float u_color_stops[6 * 5];
+uniform bool u_repeat;
 
 _NOPERSPECTIVE_ _IN_ vec4 info;
 
@@ -64,6 +65,10 @@ vec4 get_color(int index) {
 
 void main() {
   float offset = dot(info.xy, info.zw);
+
+  if (u_repeat) {
+    offset = fract(offset);
+  }
 
   if (offset < get_offset(0)) {
     gskSetOutputColor(gsk_scaled_premultiply(get_color(0), u_alpha));

@@ -1452,6 +1452,7 @@ render_linear_gradient_node (GskGLRenderer   *self,
       ops_set_linear_gradient (builder,
                                n_color_stops,
                                stops,
+                               gsk_render_node_get_node_type (node) == GSK_REPEATING_LINEAR_GRADIENT_NODE,
                                builder->dx + start->x,
                                builder->dy + start->y,
                                builder->dx + end->x,
@@ -3044,6 +3045,7 @@ apply_linear_gradient_op (const Program          *program,
   glUniform4f (program->linear_gradient.points_location,
                op->start_point[0], op->start_point[1],
                op->end_point[0] - op->start_point[0], op->end_point[1] - op->start_point[1]);
+  glUniform1i (program->linear_gradient.repeat_location, op->repeat);
 }
 
 static inline void
@@ -3385,6 +3387,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   /* linear gradient */
   INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient, color_stops);
   INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient, num_color_stops);
+  INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient, repeat);
   INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient, points);
 
   /* radial gradient */
@@ -3742,6 +3745,8 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     break;
 
     case GSK_LINEAR_GRADIENT_NODE:
+      /* Intentional fall-through */
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
       render_linear_gradient_node (self, node, builder);
     break;
 
@@ -3812,7 +3817,6 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       render_gl_shader_node (self, node, builder);
     break;
 
-    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_REPEATING_RADIAL_GRADIENT_NODE:
     case GSK_CAIRO_NODE:
     default:

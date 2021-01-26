@@ -859,6 +859,7 @@ void
 ops_set_linear_gradient (RenderOpBuilder     *self,
                          guint                n_color_stops,
                          const GskColorStop  *color_stops,
+                         bool                 repeat,
                          float                start_x,
                          float                start_y,
                          float                end_x,
@@ -912,6 +913,7 @@ ops_set_linear_gradient (RenderOpBuilder     *self,
               sizeof (GskColorStop) * real_n_color_stops);
     }
 
+  op->repeat = repeat;
   op->start_point[0] = start_x;
   op->start_point[1] = start_y;
   op->end_point[0] = end_x;

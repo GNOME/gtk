@@ -119,6 +119,7 @@ struct _Program
       int num_color_stops_location;
       int color_stops_location;
       int points_location;
+      int repeat_location;
     } linear_gradient;
     struct {
       int num_color_stops_location;
@@ -315,6 +316,7 @@ void              ops_set_unblurred_outset_shadow   (RenderOpBuilder         *se
 void              ops_set_linear_gradient (RenderOpBuilder     *self,
                                            guint                n_color_stops,
                                            const GskColorStop  *color_stops,
+                                           bool                 repeat,
                                            float                start_x,
                                            float                start_y,
                                            float                end_x,

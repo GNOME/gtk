@@ -146,6 +146,7 @@ typedef struct
   IntUniformValue n_color_stops;
   float start_point[2];
   float end_point[2];
+  bool repeat;
 } OpLinearGradient;
 
 typedef struct
