@@ -2984,6 +2984,11 @@ gdk_surface_translate_coordinates (GdkSurface *from,
   int x1, y1, x2, y2;
   GdkSurface *f, *t;
 
+  g_return_val_if_fail (GDK_IS_SURFACE (from), FALSE);
+  g_return_val_if_fail (GDK_IS_SURFACE (to), FALSE);
+  g_return_val_if_fail (x != NULL, FALSE);
+  g_return_val_if_fail (y != NULL, FALSE);
+
   in_x = *x;
   in_y = *y;
 
