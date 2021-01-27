@@ -25,6 +25,9 @@
 #include "gtkcssimagecrossfadeprivate.h"
 
 #include "gtkcssnumbervalueprivate.h"
+#include "gtkcssimagefallbackprivate.h"
+#include "gtkcsscolorvalueprivate.h"
+
 
 typedef struct _CrossFadeEntry CrossFadeEntry;
 
@@ -308,8 +311,19 @@ parse_image (GtkCssParser *parser,
 {
   GtkCssImage **image = option_data;
 
-  *image = _gtk_css_image_new_parse (parser);
-  if (*image == NULL)
+  if (_gtk_css_image_can_parse (parser))
+    *image = _gtk_css_image_new_parse (parser);
+  else if (gtk_css_color_value_can_parse (parser))
+    {
+      GtkCssValue *color;
+
+      color = _gtk_css_color_value_parse (parser);
+      if (color == NULL)
+        return FALSE;
+
+      *image = _gtk_css_image_fallback_new_for_color (color);
+    }
+  else
     return FALSE;
 
   return TRUE;
@@ -325,7 +339,7 @@ gtk_css_image_cross_fade_parse_arg (GtkCssParser *parser,
   GtkCssImage *image = NULL;
   GtkCssParseOption options[] =
     {
-      { (void *) gtk_css_number_value_can_parse, parse_progress, &progress },
+      { (void *)gtk_css_number_value_can_parse, parse_progress, &progress },
       { NULL, parse_image, &image },
     };
 

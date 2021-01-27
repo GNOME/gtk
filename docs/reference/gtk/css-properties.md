@@ -18,9 +18,9 @@ Length
 Percentage
  : %, calc()
 Angle
- : deg | grad | turn, calc()
+ : deg, grad, turn, calc()
 Time
- : s | ms, calc()
+ : s, ms, calc()
 
 Length values with the em or ex units are resolved using the font
 size value, unless they occur in setting the font-size itself, in
@@ -32,7 +32,7 @@ not quite the same as the CSS definition of rem.
 The calc() notation adds considerable expressive power. There are limits
 on what types can be combined in such an expression (e.g. it does not make
 sense to add a number and a time). For the full details, see the
-[CSS3 VAlues and Units](https://www.w3.org/TR/css3-values/#calc-notation)
+[CSS3 Values and Units](https://www.w3.org/TR/css3-values/#calc-notation)
 spec.
 
 A common pattern among shorthand properties (called 'four sides') is one
@@ -218,7 +218,7 @@ done with
 |background-size| [CSS Backgrounds and Borders Level 3](https://www.w3.org/TR/css3-background/#background-size) | |
 |background-position| [CSS Backgrounds and Borders Level 3](https://www.w3.org/TR/css3-background/#background-position) | |
 |background-repeat| [CSS Backgrounds and Borders Level 3](https://www.w3.org/TR/css3-background/#background-repeat) | |
-|background-image| [CSS Backgrounds and Borders Level 3](https://www.w3.org/TR/css3-background/#background-image) | not supported: urls without quotes, colors in crossfades |
+|background-image| [CSS Backgrounds and Borders Level 3](https://www.w3.org/TR/css3-background/#background-image) | not supported: urls without quotes |
 |box-shadow| [CSS Backgrounds and Borders Level 3](https://www.w3.org/TR/css3-background/#box-shadow) | |
 |background-blend-mode| [CSS Compositing and Blending Level 1](https://www.w3.org/TR/compositing-1/#propdef-background-blend-mode) | only affects multiple backgrounds |
 |background| [CSS Backgrounds and Borders Level 3](https://www.w3.org/TR/css3-background/#background) | |
