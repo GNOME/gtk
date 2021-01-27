@@ -5436,7 +5436,7 @@ gtk_widget_set_name (GtkWidget  *widget,
  * Retrieves the name of a widget. See gtk_widget_set_name() for the
  * significance of widget names.
  *
- * Returns: (nullable): name of the widget. This string is owned by GTK and
+ * Returns: name of the widget. This string is owned by GTK and
  * should not be modified or freed
  **/
 const char *
