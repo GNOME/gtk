@@ -1079,6 +1079,11 @@ that wants to override the default handling, you can provide an
 implementation of the default.activate action in your widgets' action
 groups.
 
+### Stop using gtk_widget_grab_default()
+
+The function gtk_widget_grab_default() has been removed. If you need
+to mark a widget as default, use gtk_window_set_default_widget() directly.
+
 ### Stop setting ::has-default and ::has-focus in .ui files
 
 The special handling for the ::has-default and ::has-focus properties
