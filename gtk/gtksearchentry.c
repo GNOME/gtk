@@ -667,6 +667,14 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
  * If the entry is part of a #GtkSearchBar, it is preferable
  * to call gtk_search_bar_set_key_capture_widget() instead, which
  * will reveal the entry in addition to triggering the search entry.
+ *
+ * Note that despite the name of this function, the events
+ * are only 'captured' in the bubble phase, which means that
+ * editable child widgets of @widget will receive text input
+ * before it gets captured. If that is not desired, you can
+ * capture and forward the events yourself with
+ * gtk_event_controller_key_forward().
+
  **/
 void
 gtk_search_entry_set_key_capture_widget (GtkSearchEntry *entry,
@@ -692,7 +700,7 @@ gtk_search_entry_set_key_capture_widget (GtkSearchEntry *entry,
 
       entry->capture_widget_controller = gtk_event_controller_key_new ();
       gtk_event_controller_set_propagation_phase (entry->capture_widget_controller,
-                                                  GTK_PHASE_CAPTURE);
+                                                  GTK_PHASE_BUBBLE);
       g_signal_connect (entry->capture_widget_controller, "key-pressed",
                         G_CALLBACK (capture_widget_key_handled), entry);
       g_signal_connect (entry->capture_widget_controller, "key-released",
