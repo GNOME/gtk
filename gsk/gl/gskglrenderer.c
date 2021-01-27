@@ -3742,13 +3742,11 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     break;
 
     case GSK_LINEAR_GRADIENT_NODE:
-      /* Intentional fall-through */
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
       render_linear_gradient_node (self, node, builder);
     break;
 
     case GSK_RADIAL_GRADIENT_NODE:
-      /* Intentional fall-through */
     case GSK_REPEATING_RADIAL_GRADIENT_NODE:
       render_radial_gradient_node (self, node, builder);
     break;
