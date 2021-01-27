@@ -52,7 +52,9 @@ struct _GtkCssImageFallbackClass
   GtkCssImageClass parent_class;
 };
 
-GType          _gtk_css_image_fallback_get_type             (void) G_GNUC_CONST;
+GType        _gtk_css_image_fallback_get_type      (void) G_GNUC_CONST;
+
+GtkCssImage *_gtk_css_image_fallback_new_for_color (GtkCssValue *color);
 
 G_END_DECLS
 

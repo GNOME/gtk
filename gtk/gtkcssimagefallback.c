@@ -148,11 +148,11 @@ gtk_css_image_fallback_compute (GtkCssImage      *image,
       GtkCssValue *computed_color = NULL;
 
       if (fallback->color)
-          computed_color= _gtk_css_value_compute (fallback->color,
-                                                  property_id,
-                                                  provider,
-                                                  style,
-                                                  parent_style);
+        computed_color = _gtk_css_value_compute (fallback->color,
+                                                 property_id,
+                                                 provider,
+                                                 style,
+                                                 parent_style);
 
       /* image($color) that didn't change */
       if (computed_color && !fallback->images &&
@@ -330,4 +330,15 @@ static void
 _gtk_css_image_fallback_init (GtkCssImageFallback *image_fallback)
 {
   image_fallback->used = -1;
+}
+
+GtkCssImage *
+_gtk_css_image_fallback_new_for_color (GtkCssValue *color)
+{
+  GtkCssImageFallback *image;
+
+  image = g_object_new (GTK_TYPE_CSS_IMAGE_FALLBACK, NULL);
+  image->color = gtk_css_value_ref (color);
+
+  return (GtkCssImage *)image;
 }
