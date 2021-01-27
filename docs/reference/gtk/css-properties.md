@@ -218,7 +218,7 @@ done with
 |background-size| [CSS Backgrounds and Borders Level 3](https://www.w3.org/TR/css3-background/#background-size) | |
 |background-position| [CSS Backgrounds and Borders Level 3](https://www.w3.org/TR/css3-background/#background-position) | |
 |background-repeat| [CSS Backgrounds and Borders Level 3](https://www.w3.org/TR/css3-background/#background-repeat) | |
-|background-image| [CSS Backgrounds and Borders Level 3](https://www.w3.org/TR/css3-background/#background-image) | not supported: urls without quotes, colors in crossfades |
+|background-image| [CSS Backgrounds and Borders Level 3](https://www.w3.org/TR/css3-background/#background-image) | not supported: urls without quotes |
 |box-shadow| [CSS Backgrounds and Borders Level 3](https://www.w3.org/TR/css3-background/#box-shadow) | |
 |background-blend-mode| [CSS Compositing and Blending Level 1](https://www.w3.org/TR/compositing-1/#propdef-background-blend-mode) | only affects multiple backgrounds |
 |background| [CSS Backgrounds and Borders Level 3](https://www.w3.org/TR/css3-background/#background) | |
