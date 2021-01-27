@@ -719,7 +719,8 @@ maybe_rename_property (Element *element, MyParserData *data)
     { "GtkWidget", "margin-right", GTK_TYPE_WIDGET, PROP_KIND_OBJECT, "margin-end", { NULL, NULL, NULL } },
     { "GtkHeaderBar", "show-close-button", GTK_TYPE_HEADER_BAR, PROP_KIND_OBJECT, "show-title-buttons", { NULL, NULL, NULL } },
     { "GtkHeaderBar", "custom-title", GTK_TYPE_HEADER_BAR, PROP_KIND_OBJECT, "title-widget", { NULL, NULL, NULL } },
-    { "GtkStack", "homogeneous", GTK_TYPE_STACK, PROP_KIND_OBJECT, "hhomogeneous", { "vhomogeneous", NULL, NULL } }
+    { "GtkStack", "homogeneous", GTK_TYPE_STACK, PROP_KIND_OBJECT, "hhomogeneous", { "vhomogeneous", NULL, NULL } },
+    { "GtkImage", "pixbuf", GTK_TYPE_IMAGE, PROP_KIND_OBJECT, "file", { NULL, NULL, NULL } },
   };
   int i, k, l;
   PropKind kind;
