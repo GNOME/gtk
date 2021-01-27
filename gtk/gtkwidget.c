@@ -4385,12 +4385,26 @@ gtk_widget_can_activate (GtkWidget *self)
 }
 
 static gboolean
+get_effective_can_focus (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  if (!priv->can_focus)
+    return FALSE;
+
+  if (priv->parent)
+    return get_effective_can_focus (priv->parent);
+
+  return TRUE;
+}
+
+static gboolean
 gtk_widget_real_mnemonic_activate (GtkWidget *widget,
                                    gboolean   group_cycling)
 {
   if (!group_cycling && gtk_widget_can_activate (widget))
     gtk_widget_activate (widget);
-  else if (gtk_widget_get_can_focus (widget))
+  else if (get_effective_can_focus (widget))
     return gtk_widget_grab_focus (widget);
   else
     {
@@ -4776,7 +4790,7 @@ gtk_widget_grab_focus (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   if (!gtk_widget_is_sensitive (widget) ||
-      !gtk_widget_get_can_focus (widget) ||
+      !get_effective_can_focus (widget) ||
       widget->priv->root == NULL)
     return FALSE;
 
