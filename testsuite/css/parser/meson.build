@@ -423,6 +423,8 @@ test_data = [
   'string-values.css',
   'string-values.ref.css',
   'test.png',
+  'text-decoration.css',
+  'text-decoration.ref.css',
   'text-decoration-color.css',
   'text-decoration-color.ref.css',
   'text-decoration-line.css',

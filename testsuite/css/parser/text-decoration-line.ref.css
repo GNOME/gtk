@@ -21,3 +21,11 @@ e {
 f {
   text-decoration-line: line-through;
 }
+
+g {
+  text-decoration-line: overline;
+}
+
+h {
+  text-decoration-line: underline overline;
+}
