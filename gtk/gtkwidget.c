@@ -256,7 +256,7 @@
  * If the parent widget uses a #GtkLayoutManager, #GtkWidget supports a
  * custom `<layout>` element, used to define layout properties:
  *
- * |[
+ * |[<!-- language="xml" -->
  * <object class="MyGrid" id="grid1">
  *   <child>
  *     <object class="GtkLabel" id="label1">
@@ -284,7 +284,8 @@
  *
  * GtkWidget allows style information such as style classes to
  * be associated with widgets, using the custom `<style>` element:
- * |[
+ *
+ * |[<!-- language="xml" -->
  * <object class="GtkButton" id="button1">
  *   <style>
  *     <class name="my-special-button-class"/>
@@ -295,7 +296,8 @@
  *
  * GtkWidget allows defining accessibility information, such as properties,
  * relations, and states, using the custom `<accessibility>` element:
- * |[
+ *
+ * |[<!-- language="xml" -->
  * <object class="GtkButton" id="button1">
  *   <accessibility>
  *     <property name="label">Download</property>
@@ -338,7 +340,8 @@
  * `<template>` tag.
  *
  * An example of a GtkBuilder Template Definition:
- * |[
+ *
+ * |[<!-- language="xml" -->
  * <interface>
  *   <template class="FooWidget" parent="GtkBox">
  *     <property name="orientation">horizontal</property>
