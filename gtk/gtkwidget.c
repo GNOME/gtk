@@ -6305,8 +6305,10 @@ update_pango_context (GtkWidget    *widget,
 
   font_desc = gtk_css_style_get_pango_font (style);
   pango_context_set_font_description (context, font_desc);
-
   pango_font_description_free (font_desc);
+
+  if (cairo_version () >= CAIRO_VERSION_ENCODE (1, 17, 4))
+    pango_context_set_round_glyph_positions (context, FALSE);
 
   pango_context_set_base_dir (context,
                               _gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ?
