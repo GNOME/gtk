@@ -910,6 +910,26 @@ node_editor_window_init (NodeEditorWindow *self)
   self->text_buffer = gtk_text_buffer_new (self->tag_table);
   g_signal_connect (self->text_buffer, "changed", G_CALLBACK (text_changed), self);
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (self->text_view), self->text_buffer);
+
+  /* Default */
+  gtk_text_buffer_set_text (self->text_buffer,
+         "shadow {\n"
+         "  child: texture {\n"
+         "    bounds: 0 0 128 128;\n"
+         "    texture: url(\"resource:///org/gtk/gtk4/node-editor/icons/apps/org.gtk.gtk4.NodeEditor.Devel.svg\");\n"
+         "  }\n"
+         "  shadows: rgba(0,0,0,0.5) 0 1 12;\n"
+         "}\n"
+         "\n"
+         "transform {\n"
+         "  child: text {\n"
+         "    color: rgb(46,52,54);\n"
+         "    font: \"Cantarell Bold 11\";\n"
+         "    glyphs: \"GTK Node Editor\";\n"
+         "    offset: 8 14.418;\n"
+         "  }\n"
+         "  transform: translate(0, 140);\n"
+         "}", -1);
 }
 
 NodeEditorWindow *
