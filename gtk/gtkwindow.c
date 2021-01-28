@@ -36,7 +36,6 @@
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssshadowvalueprivate.h"
-#include "gtkcssstylepropertyprivate.h"
 #include "gtkdroptargetasync.h"
 #include "gtkeventcontrollerlegacy.h"
 #include "gtkeventcontrollerkey.h"

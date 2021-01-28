@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include "gtkstylecontextprivate.h"
+#include "gtkcssnodeprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkbuiltiniconprivate.h"
 #include "gtkwidgetprivate.h"
@@ -80,10 +80,11 @@ gtk_builtin_icon_measure (GtkWidget      *widget,
                           int            *minimum_baseline,
                           int            *natural_baseline)
 {
-  GtkCssValue *icon_size;
+  GtkCssStyle *style;
 
-  icon_size = _gtk_style_context_peek_property (gtk_widget_get_style_context (widget), GTK_CSS_PROPERTY_ICON_SIZE);
-  *minimum = *natural = _gtk_css_number_value_get (icon_size, 100);
+  style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
+
+  *minimum = *natural = _gtk_css_number_value_get (style->icon->icon_size, 100);
 }
 
 static void

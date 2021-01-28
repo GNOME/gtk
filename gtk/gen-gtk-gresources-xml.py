@@ -63,17 +63,12 @@ xml += '\n'
 for f in get_files('theme/HighContrast/assets', '.svg'):
   xml += '    <file>theme/HighContrast/assets/{0}</file>\n'.format(f)
 
-for f in get_files('gesture', '.symbolic.png'):
-  xml += '    <file alias=\'icons/64x64/actions/{0}\'>gesture/{0}</file>\n'.format(f)
-
-xml += '\n'
-
 for f in get_files('ui', '.ui'):
   xml += '    <file preprocess=\'xml-stripblanks\'>ui/{0}</file>\n'.format(f)
 
 xml += '\n'
 
-for s in ['16x16', '24x24', '32x32', '48x48', 'scalable']:
+for s in ['16x16', '32x32', '64x64', 'scalable']:
   for c in ['actions', 'categories', 'emblems', 'emotes', 'devices', 'mimetypes', 'places', 'status']:
     icons_dir = 'icons/{0}/{1}'.format(s,c)
     if os.path.exists(os.path.join(srcdir,icons_dir)):
@@ -86,7 +81,6 @@ for f in get_files('inspector', '.ui'):
   xml += '    <file preprocess=\'xml-stripblanks\'>inspector/{0}</file>\n'.format(f)
 
 xml += '''
-    <file>inspector/logo.png</file>
     <file>inspector/inspector.css</file>
     <file>emoji/en.data</file>
   </gresource>

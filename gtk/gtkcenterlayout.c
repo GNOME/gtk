@@ -23,8 +23,8 @@
 #include "gtklayoutchild.h"
 #include "gtkprivate.h"
 #include "gtksizerequest.h"
-#include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcssnodeprivate.h"
 
 /**
  * SECTION:gtkcenterlayout
@@ -58,12 +58,13 @@ G_DEFINE_TYPE (GtkCenterLayout, gtk_center_layout, GTK_TYPE_LAYOUT_MANAGER)
 
 static int
 get_spacing (GtkCenterLayout *self,
-             GtkStyleContext *style_context)
+             GtkCssNode      *node)
 {
+  GtkCssStyle *style = gtk_css_node_get_style (node);
   GtkCssValue *border_spacing;
   int css_spacing;
 
-  border_spacing = _gtk_style_context_peek_property (style_context, GTK_CSS_PROPERTY_BORDER_SPACING);
+  border_spacing = style->size->border_spacing;
   if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
     css_spacing = _gtk_css_position_value_get_x (border_spacing, 100);
   else
@@ -226,7 +227,7 @@ gtk_center_layout_measure_orientation (GtkCenterLayout *self,
   int spacing;
   int i;
 
-  spacing = get_spacing (self, _gtk_widget_get_style_context (widget));
+  spacing = get_spacing (self, gtk_widget_get_css_node (widget));
 
   for (i = 0; i < 3; i ++)
     {
@@ -386,7 +387,7 @@ gtk_center_layout_allocate (GtkLayoutManager *layout_manager,
   int i;
   int spacing;
 
-  spacing = get_spacing (self, _gtk_widget_get_style_context (widget));
+  spacing = get_spacing (self, gtk_widget_get_css_node (widget));
 
   if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
     {

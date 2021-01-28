@@ -49,7 +49,6 @@
 #include "gtkicontheme.h"
 #include "gtkmain.h"
 #include "gtksettings.h"
-#include "gtkstylecontextprivate.h"
 #include "gtkdialogprivate.h"
 #include "gtkgestureclick.h"
 #include "gtkmodelbuttonprivate.h"

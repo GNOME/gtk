@@ -127,7 +127,6 @@
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
 #include "gtkprivate.h"
-#include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 
 #include <string.h>

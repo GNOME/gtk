@@ -54,7 +54,6 @@
 #include "gtkprogressbar.h"
 #include "gtksettings.h"
 #include "gtksnapshot.h"
-#include "gtkstylecontextprivate.h"
 #include "gtktextprivate.h"
 #include "gtktexthandleprivate.h"
 #include "gtktextutil.h"

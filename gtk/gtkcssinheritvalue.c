@@ -20,7 +20,7 @@
 #include "gtkcssinheritvalueprivate.h"
 
 #include "gtkcssinitialvalueprivate.h"
-#include "gtkstylecontextprivate.h"
+#include "gtkcssstyleprivate.h"
 
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE

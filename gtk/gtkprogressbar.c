@@ -27,15 +27,12 @@
 #include "gtkprogressbar.h"
 
 #include "gtkboxlayout.h"
-#include "gtkcssnumbervalueprivate.h"
-#include "gtkcssstylepropertyprivate.h"
 #include "gtkgizmoprivate.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkorientable.h"
 #include "gtkprogresstrackerprivate.h"
 #include "gtkprivate.h"
-#include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 
 #include <string.h>

@@ -70,7 +70,6 @@
 #include "gtkprivate.h"
 #include "gtkprogresstrackerprivate.h"
 #include "gtksettingsprivate.h"
-#include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 
 typedef struct _GtkSwitchClass   GtkSwitchClass;

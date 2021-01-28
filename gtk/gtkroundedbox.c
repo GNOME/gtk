@@ -22,7 +22,6 @@
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcsstypesprivate.h"
-#include "gtkstylecontextprivate.h"
 
 #include <string.h>
 

@@ -67,7 +67,6 @@
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtksizerequest.h"
-#include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 
 

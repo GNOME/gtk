@@ -34,7 +34,6 @@
 #include "gtkintl.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcssstyleprivate.h"
-#include "gtkstylepropertyprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 
 #define DRAG_ICON_MAX_WIDTH 250
@@ -165,7 +164,6 @@ set_attributes_from_style (GtkWidget         *widget,
                            GtkTextAttributes *values)
 {
   GtkCssStyle *style;
-  GtkStyleContext *context;
   const GdkRGBA black = { 0, };
 
   if (!values->appearance.bg_rgba)
@@ -173,8 +171,7 @@ set_attributes_from_style (GtkWidget         *widget,
   if (!values->appearance.fg_rgba)
     values->appearance.fg_rgba = gdk_rgba_copy (&black);
 
-  context = gtk_widget_get_style_context (widget);
-  style = gtk_style_context_lookup_style (context);
+  style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
 
   *values->appearance.bg_rgba = *gtk_css_color_value_get_rgba (style->background->background_color);
   *values->appearance.fg_rgba = *gtk_css_color_value_get_rgba (style->core->color);

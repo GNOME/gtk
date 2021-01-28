@@ -29,7 +29,7 @@
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtksizerequest.h"
-#include "gtkstylecontextprivate.h"
+#include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"
 
 

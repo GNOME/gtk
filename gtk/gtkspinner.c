@@ -34,7 +34,7 @@
 #include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtkstylecontextprivate.h"
+#include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkrendericonprivate.h"

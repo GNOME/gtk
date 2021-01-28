@@ -39,7 +39,6 @@
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkcssfontvariationsvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
-#include "gtkcssstylepropertyprivate.h"
 #include "gtkcsswidgetnodeprivate.h"
 #include "gtkdebug.h"
 #include "gtkgesturedrag.h"

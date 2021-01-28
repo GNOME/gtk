@@ -45,7 +45,6 @@
 #include "gtkscrolledwindow.h"
 #include "gtksearchentry.h"
 #include "gtkspinbutton.h"
-#include "gtkstylecontextprivate.h"
 #include "gtktextview.h"
 #include "gtkwidgetprivate.h"
 #include "gtksettings.h"

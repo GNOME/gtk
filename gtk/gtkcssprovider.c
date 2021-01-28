@@ -30,7 +30,6 @@
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtkstyleprovider.h"
-#include "gtkstylecontextprivate.h"
 #include "gtkstylepropertyprivate.h"
 #include "gtkstyleproviderprivate.h"
 #include "gtkmarshalers.h"
