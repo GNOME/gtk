@@ -64,8 +64,10 @@ prepend_line_numbers (char    *code,
 }
 
 static gboolean
-check_shader_error (int     shader_id,
-                    GError **error)
+check_shader_error (int          shader_id,
+                    int          shader_type,
+                    const char  *resource_path,
+                    GError     **error)
 {
   int status;
   int log_len;
@@ -91,7 +93,9 @@ check_shader_error (int     shader_id,
   prepend_line_numbers (code, s);
 
   g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_COMPILATION_FAILED,
-               "Compilation failure in shader.\nSource Code: %s\n\nError Message:\n%s\n\n",
+               "Compilation failure in %s shader %s.\nSource Code:\n%s\n\nError Message:\n%s\n\n",
+               (shader_type == GL_FRAGMENT_SHADER ? "fragment" : "vertex"),
+               resource_path,
                s->str,
                buffer);
 
@@ -184,7 +188,7 @@ gsk_gl_shader_builder_create_program (GskGLShaderBuilder  *self,
                   });
   glCompileShader (vertex_id);
 
-  if (!check_shader_error (vertex_id, error))
+  if (!check_shader_error (vertex_id, GL_VERTEX_SHADER, resource_path, error))
     {
       glDeleteShader (vertex_id);
       goto out;
@@ -218,7 +222,7 @@ gsk_gl_shader_builder_create_program (GskGLShaderBuilder  *self,
                   });
   glCompileShader (fragment_id);
 
-  if (!check_shader_error (fragment_id, error))
+  if (!check_shader_error (fragment_id, GL_FRAGMENT_SHADER, resource_path, error))
     {
       glDeleteShader (fragment_id);
       goto out;
