@@ -15,7 +15,7 @@ gtk_cargs = [
 # introspected
 gtk_private_sources = files([
   'fnmatch.c',
-  'tools/gdkpixbufutils.c',
+  'gdkpixbufutils.c',
   'gsettings-mapping.c',
   'gtkaccessibleattributeset.c',
   'gtkaccessiblevalue.c',
@@ -113,7 +113,7 @@ gtk_private_sources = files([
   'gtkgladecatalog.c',
   'gtkhsla.c',
   'gtkiconcache.c',
-  'tools/gtkiconcachevalidator.c',
+  'gtkiconcachevalidator.c',
   'gtkiconhelper.c',
   'gtkkineticscrolling.c',
   'gtkmagnifier.c',
@@ -1277,5 +1277,3 @@ libgtk_static_dep = declare_dependency(sources: gtk_dep_sources,
   link_with: [libgtk_static, libgtk_css, libgdk, libgsk ],
   link_args: common_ldflags,
 )
-
-subdir('tools')
