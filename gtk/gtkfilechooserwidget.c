@@ -66,7 +66,6 @@
 #include "gtkshow.h"
 #include "gtkmain.h"
 #include "gtkscrollable.h"
-#include "gtkstylecontextprivate.h"
 #include "gtkpopover.h"
 #include "gtkrevealer.h"
 #include "gtkspinner.h"

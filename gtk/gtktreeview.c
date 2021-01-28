@@ -28,7 +28,6 @@
 #include "gtkcellrenderer.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
-#include "gtkcssstylepropertyprivate.h"
 #include "gtkdragsource.h"
 #include "gtkdragicon.h"
 #include "gtkdroptargetasync.h"

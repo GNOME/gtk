@@ -38,8 +38,6 @@
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkrangeprivate.h"
-#include "gtkstylecontextprivate.h"
-#include "gtkstylepropertyprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 

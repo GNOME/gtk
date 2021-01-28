@@ -31,7 +31,6 @@
 #include "gtkboxlayout.h"
 #include "gtkbuildable.h"
 #include "gtkbutton.h"
-#include "gtkcssstylepropertyprivate.h"
 #include "gtkdroptarget.h"
 #include "gtkdragicon.h"
 #include "gtkdropcontrollermotion.h"

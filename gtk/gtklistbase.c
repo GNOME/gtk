@@ -34,7 +34,6 @@
 #include "gtkscrollable.h"
 #include "gtksingleselection.h"
 #include "gtksnapshot.h"
-#include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 

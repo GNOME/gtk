@@ -35,7 +35,7 @@
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcsspositionvalueprivate.h"
-#include "gtkstylecontextprivate.h"
+#include "gtkcssnodeprivate.h"
 
 
 /**

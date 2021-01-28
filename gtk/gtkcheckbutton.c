@@ -35,7 +35,7 @@
 #include "gtklabel.h"
 #include "gtkprivate.h"
 #include "gtkshortcuttrigger.h"
-#include "gtkstylecontextprivate.h"
+#include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkmodelbuttonprivate.h"
 

@@ -34,7 +34,6 @@
 #include "gtkpopovermenu.h"
 #include "gtkprivate.h"
 #include "gtksnapshot.h"
-#include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtknative.h"

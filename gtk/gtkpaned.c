@@ -27,7 +27,6 @@
 #include "gtkpaned.h"
 
 #include "gtkcssboxesprivate.h"
-#include "gtkcssstylepropertyprivate.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkgesturepan.h"
 #include "gtkgesturesingle.h"
@@ -37,7 +36,7 @@
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkrendericonprivate.h"
-#include "gtkstylecontextprivate.h"
+#include "gtkcssnodeprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcssboxesprivate.h"

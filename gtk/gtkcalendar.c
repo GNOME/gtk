@@ -103,7 +103,6 @@
 #include "gtkprivate.h"
 #include "gtkrendericonprivate.h"
 #include "gtksnapshot.h"
-#include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkgestureclick.h"
 #include "gtkgesturedrag.h"

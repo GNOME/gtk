@@ -26,7 +26,6 @@
 
 #include "gtkimageprivate.h"
 
-#include "gtkcssstylepropertyprivate.h"
 #include "gtkiconhelperprivate.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"

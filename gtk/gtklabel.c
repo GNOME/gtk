@@ -28,7 +28,6 @@
 
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
-#include "gtkcssstylepropertyprivate.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerfocus.h"
 #include "gtkgesturedrag.h"

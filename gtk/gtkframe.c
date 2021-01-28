@@ -31,8 +31,6 @@
 #include "gtkintl.h"
 #include "gtkbuildable.h"
 #include "gtkwidgetprivate.h"
-#include "gtkstylecontextprivate.h"
-#include "gtkcssstylepropertyprivate.h"
 #include "gtklabel.h"
 
 /**

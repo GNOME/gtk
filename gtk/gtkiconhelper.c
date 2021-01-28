@@ -26,7 +26,6 @@
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssstyleprivate.h"
-#include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstransientnodeprivate.h"
 #include "gtkiconthemeprivate.h"
 #include "gtkrendericonprivate.h"
