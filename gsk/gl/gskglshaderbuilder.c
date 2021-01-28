@@ -230,7 +230,7 @@ gsk_gl_shader_builder_create_program (GskGLShaderBuilder  *self,
   glAttachShader (program_id, vertex_id);
   glAttachShader (program_id, fragment_id);
   glBindAttribLocation (program_id, 0, "aPosition");
-  glBindAttribLocation (program_id, 1, "vUv");
+  glBindAttribLocation (program_id, 1, "aUv");
   glLinkProgram (program_id);
   glDetachShader (program_id, vertex_id);
   glDetachShader (program_id, fragment_id);
