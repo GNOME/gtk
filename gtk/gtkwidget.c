@@ -318,24 +318,24 @@
  * is slightly different from regular #GtkBuilder XML.
  *
  * Unlike regular interface descriptions, gtk_widget_class_set_template() will
- * expect a <template> tag as a direct child of the toplevel <interface>
- * tag. The <template> tag must specify the “class” attribute which must be
+ * expect a `<template>` tag as a direct child of the toplevel `<interface>`
+ * tag. The `<template>` tag must specify the “class” attribute which must be
  * the type name of the widget. Optionally, the “parent” attribute may be
  * specified to specify the direct parent type of the widget type, this is
  * ignored by the GtkBuilder but required for Glade to introspect what kind
  * of properties and internal children exist for a given type when the actual
  * type does not exist.
  *
- * The XML which is contained inside the <template> tag behaves as if it were
- * added to the <object> tag defining @widget itself. You may set properties
- * on @widget by inserting <property> tags into the <template> tag, and also
- * add <child> tags to add children and extend @widget in the normal way you
- * would with <object> tags.
+ * The XML which is contained inside the `<template>` tag behaves as if it were
+ * added to the `<object>` tag defining @widget itself. You may set properties
+ * on @widget by inserting `<property>` tags into the `<template>` tag, and also
+ * add `<child>` tags to add children and extend @widget in the normal way you
+ * would with `<object>` tags.
  *
- * Additionally, <object> tags can also be added before and after the initial
- * <template> tag in the normal way, allowing one to define auxiliary objects
+ * Additionally, `<object>` tags can also be added before and after the initial
+ * `<template>` tag in the normal way, allowing one to define auxiliary objects
  * which might be referenced by other widgets declared as children of the
- * <template> tag.
+ * `<template>` tag.
  *
  * An example of a GtkBuilder Template Definition:
  * |[
