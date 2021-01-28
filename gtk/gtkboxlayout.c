@@ -25,9 +25,9 @@
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtksizerequest.h"
-#include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcssnodeprivate.h"
 
 /**
  * SECTION:gtkboxlayout
