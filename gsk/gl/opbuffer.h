@@ -146,6 +146,7 @@ typedef struct
   IntUniformValue n_color_stops;
   float start_point[2];
   float end_point[2];
+  gboolean repeat;
 } OpLinearGradient;
 
 typedef struct
@@ -156,6 +157,7 @@ typedef struct
   float end;
   float radius[2];
   float center[2];
+  gboolean repeat;
 } OpRadialGradient;
 
 typedef struct
@@ -163,7 +165,7 @@ typedef struct
   ColorStopUniformValue color_stops;
   IntUniformValue n_color_stops;
   float center[2];
-  float rotation;
+  float angle;
 } OpConicGradient;
 
 typedef struct

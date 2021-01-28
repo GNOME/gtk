@@ -118,22 +118,20 @@ struct _Program
     struct {
       int num_color_stops_location;
       int color_stops_location;
-      int start_point_location;
-      int end_point_location;
+      int points_location;
+      int repeat_location;
     } linear_gradient;
     struct {
       int num_color_stops_location;
       int color_stops_location;
-      int center_location;
-      int start_location;
-      int end_location;
-      int radius_location;
+      int geometry_location;
+      int range_location;
+      int repeat_location;
     } radial_gradient;
     struct {
       int num_color_stops_location;
       int color_stops_location;
-      int center_location;
-      int rotation_location;
+      int geometry_location;
     } conic_gradient;
     struct {
       int blur_radius_location;
@@ -319,6 +317,7 @@ void              ops_set_unblurred_outset_shadow   (RenderOpBuilder         *se
 void              ops_set_linear_gradient (RenderOpBuilder     *self,
                                            guint                n_color_stops,
                                            const GskColorStop  *color_stops,
+                                           gboolean             repeat,
                                            float                start_x,
                                            float                start_y,
                                            float                end_x,
@@ -326,6 +325,7 @@ void              ops_set_linear_gradient (RenderOpBuilder     *self,
 void              ops_set_radial_gradient (RenderOpBuilder        *self,
                                            guint                   n_color_stops,
                                            const GskColorStop     *color_stops,
+                                           gboolean                repeat,
                                            float                   center_x,
                                            float                   center_y,
                                            float                   start,
@@ -337,7 +337,7 @@ void              ops_set_conic_gradient  (RenderOpBuilder        *self,
                                            const GskColorStop     *color_stops,
                                            float                   center_x,
                                            float                   center_y,
-                                           float                   rotation);
+                                           float                   angle);
 
 GskQuadVertex *   ops_draw               (RenderOpBuilder        *builder,
                                           const GskQuadVertex     vertex_data[GL_N_VERTICES]);

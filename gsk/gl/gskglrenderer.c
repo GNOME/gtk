@@ -1452,6 +1452,7 @@ render_linear_gradient_node (GskGLRenderer   *self,
       ops_set_linear_gradient (builder,
                                n_color_stops,
                                stops,
+                               gsk_render_node_get_node_type (node) == GSK_REPEATING_LINEAR_GRADIENT_NODE,
                                builder->dx + start->x,
                                builder->dy + start->y,
                                builder->dx + end->x,
@@ -1485,6 +1486,7 @@ render_radial_gradient_node (GskGLRenderer   *self,
       ops_set_radial_gradient (builder,
                                n_color_stops,
                                stops,
+                               gsk_render_node_get_node_type (node) == GSK_REPEATING_RADIAL_GRADIENT_NODE,
                                builder->dx + center->x,
                                builder->dy + center->y,
                                start, end,
@@ -1510,7 +1512,7 @@ render_conic_gradient_node (GskGLRenderer   *self,
     {
       const GskColorStop *stops = gsk_conic_gradient_node_get_color_stops (node, NULL);
       const graphene_point_t *center = gsk_conic_gradient_node_get_center (node);
-      const float rotation = gsk_conic_gradient_node_get_rotation (node);
+      const float angle = gsk_conic_gradient_node_get_angle (node);
 
       ops_set_program (builder, &self->programs->conic_gradient_program);
       ops_set_conic_gradient (builder,
@@ -1518,7 +1520,7 @@ render_conic_gradient_node (GskGLRenderer   *self,
                               stops,
                               builder->dx + center->x,
                               builder->dy + center->y,
-                              rotation);
+                              angle);
 
       load_vertex_data (ops_draw (builder, NULL), &node->bounds, builder);
     }
@@ -3041,14 +3043,19 @@ apply_linear_gradient_op (const Program          *program,
                   op->n_color_stops.value * 5,
                   (float *)op->color_stops.value);
 
-  glUniform2f (program->linear_gradient.start_point_location, op->start_point[0], op->start_point[1]);
-  glUniform2f (program->linear_gradient.end_point_location, op->end_point[0], op->end_point[1]);
+  glUniform4f (program->linear_gradient.points_location,
+               op->start_point[0], op->start_point[1],
+               op->end_point[0] - op->start_point[0], op->end_point[1] - op->start_point[1]);
+  glUniform1i (program->linear_gradient.repeat_location, op->repeat);
 }
 
 static inline void
 apply_radial_gradient_op (const Program          *program,
                           const OpRadialGradient *op)
 {
+  float scale;
+  float bias;
+
   OP_PRINT (" -> Radial gradient");
   if (op->n_color_stops.send)
     glUniform1i (program->radial_gradient.num_color_stops_location, op->n_color_stops.value);
@@ -3058,16 +3065,23 @@ apply_radial_gradient_op (const Program          *program,
                   op->n_color_stops.value * 5,
                   (float *)op->color_stops.value);
 
-  glUniform1f (program->radial_gradient.start_location, op->start);
-  glUniform1f (program->radial_gradient.end_location, op->end);
-  glUniform2f (program->radial_gradient.radius_location, op->radius[0], op->radius[1]);
-  glUniform2f (program->radial_gradient.center_location, op->center[0], op->center[1]);
+  scale = 1.0f / (op->end - op->start);
+  bias = -op->start * scale;
+
+  glUniform1i (program->radial_gradient.repeat_location, op->repeat);
+  glUniform2f (program->radial_gradient.range_location, scale, bias);
+  glUniform4f (program->radial_gradient.geometry_location,
+               op->center[0], op->center[1],
+               1.0f / op->radius[0], 1.0f / op->radius[1]);
 }
 
 static inline void
 apply_conic_gradient_op (const Program         *program,
                          const OpConicGradient *op)
 {
+  float bias;
+  float scale;
+
   OP_PRINT (" -> Conic gradient");
   if (op->n_color_stops.send)
     glUniform1i (program->conic_gradient.num_color_stops_location, op->n_color_stops.value);
@@ -3077,8 +3091,9 @@ apply_conic_gradient_op (const Program         *program,
                   op->n_color_stops.value * 5,
                   (float *)op->color_stops.value);
 
-  glUniform1f (program->conic_gradient.rotation_location, op->rotation);
-  glUniform2f (program->conic_gradient.center_location, op->center[0], op->center[1]);
+  scale = 0.5f * M_1_PI;
+  bias = op->angle * scale + 2.0f;
+  glUniform4f (program->conic_gradient.geometry_location, op->center[0], op->center[1], scale, bias);
 }
 
 static inline void
@@ -3368,22 +3383,20 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   /* linear gradient */
   INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient, color_stops);
   INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient, num_color_stops);
-  INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient, start_point);
-  INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient, end_point);
+  INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient, repeat);
+  INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient, points);
 
   /* radial gradient */
   INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, color_stops);
   INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, num_color_stops);
-  INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, center);
-  INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, start);
-  INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, end);
-  INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, radius);
+  INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, repeat);
+  INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, geometry);
+  INIT_PROGRAM_UNIFORM_LOCATION (radial_gradient, range);
 
   /* conic gradient */
   INIT_PROGRAM_UNIFORM_LOCATION (conic_gradient, color_stops);
   INIT_PROGRAM_UNIFORM_LOCATION (conic_gradient, num_color_stops);
-  INIT_PROGRAM_UNIFORM_LOCATION (conic_gradient, center);
-  INIT_PROGRAM_UNIFORM_LOCATION (conic_gradient, rotation);
+  INIT_PROGRAM_UNIFORM_LOCATION (conic_gradient, geometry);
 
   /* blur */
   INIT_PROGRAM_UNIFORM_LOCATION (blur, blur_radius);
@@ -3729,10 +3742,12 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     break;
 
     case GSK_LINEAR_GRADIENT_NODE:
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
       render_linear_gradient_node (self, node, builder);
     break;
 
     case GSK_RADIAL_GRADIENT_NODE:
+    case GSK_REPEATING_RADIAL_GRADIENT_NODE:
       render_radial_gradient_node (self, node, builder);
     break;
 
@@ -3799,8 +3814,6 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       render_gl_shader_node (self, node, builder);
     break;
 
-    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
-    case GSK_REPEATING_RADIAL_GRADIENT_NODE:
     case GSK_CAIRO_NODE:
     default:
       {

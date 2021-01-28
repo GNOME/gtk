@@ -859,6 +859,7 @@ void
 ops_set_linear_gradient (RenderOpBuilder     *self,
                          guint                n_color_stops,
                          const GskColorStop  *color_stops,
+                         gboolean             repeat,
                          float                start_x,
                          float                start_y,
                          float                end_x,
@@ -912,6 +913,7 @@ ops_set_linear_gradient (RenderOpBuilder     *self,
               sizeof (GskColorStop) * real_n_color_stops);
     }
 
+  op->repeat = repeat;
   op->start_point[0] = start_x;
   op->start_point[1] = start_y;
   op->end_point[0] = end_x;
@@ -922,6 +924,7 @@ void
 ops_set_radial_gradient (RenderOpBuilder    *self,
                          guint               n_color_stops,
                          const GskColorStop *color_stops,
+                         gboolean            repeat,
                          float               center_x,
                          float               center_y,
                          float               start,
@@ -945,6 +948,7 @@ ops_set_radial_gradient (RenderOpBuilder    *self,
   op->radius[1] = vradius;
   op->start = start;
   op->end = end;
+  op->repeat = repeat;
 }
 
 void
@@ -953,7 +957,7 @@ ops_set_conic_gradient (RenderOpBuilder    *self,
                         const GskColorStop *color_stops,
                         float               center_x,
                         float               center_y,
-                        float               rotation)
+                        float               angle)
 {
   const guint real_n_color_stops = MIN (GL_MAX_GRADIENT_STOPS, n_color_stops);
   OpConicGradient *op;
@@ -967,6 +971,6 @@ ops_set_conic_gradient (RenderOpBuilder    *self,
   op->color_stops.send = true;
   op->center[0] = center_x;
   op->center[1] = center_y;
-  op->rotation = rotation;
+  op->angle = angle;
 }
 

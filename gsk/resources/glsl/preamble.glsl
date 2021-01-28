@@ -5,10 +5,12 @@ precision highp float;
 #if defined(GSK_GLES) || defined(GSK_LEGACY)
 #define _OUT_ varying
 #define _IN_ varying
+#define _NOPERSPECTIVE_
 #define _GSK_ROUNDED_RECT_UNIFORM_ vec4[3]
 #else
 #define _OUT_ out
 #define _IN_ in
+#define _NOPERSPECTIVE_ noperspective
 #define _GSK_ROUNDED_RECT_UNIFORM_ GskRoundedRect
 #endif
 
@@ -38,4 +40,12 @@ gsk_create_rect(vec4[3] data)
 
 vec4 gsk_premultiply(vec4 c) {
   return vec4(c.rgb * c.a, c.a);
+}
+
+vec4 gsk_scaled_premultiply(vec4 c, float s) {
+  // Fast version of gsk_premultiply(c) * s
+  // 4 muls instead of 7
+  float a = s * c.a;
+
+  return vec4(c.rgb * a, a);
 }

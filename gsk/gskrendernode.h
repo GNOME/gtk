@@ -257,6 +257,8 @@ const graphene_point_t * gsk_conic_gradient_node_get_center         (GskRenderNo
 GDK_AVAILABLE_IN_ALL
 float                    gsk_conic_gradient_node_get_rotation       (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
+float                    gsk_conic_gradient_node_get_angle          (GskRenderNode            *node);
+GDK_AVAILABLE_IN_ALL
 gsize                    gsk_conic_gradient_node_get_n_color_stops  (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
 const GskColorStop *     gsk_conic_gradient_node_get_color_stops    (GskRenderNode            *node,

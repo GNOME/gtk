@@ -1,34 +1,17 @@
 // VERTEX_SHADER
-uniform vec2 u_center;
-uniform float u_rotation;
-uniform float u_color_stops[6 * 5];
-uniform int u_num_color_stops;
+uniform vec4 u_geometry;
 
-const float PI = 3.1415926535897932384626433832795;
-
-_OUT_ vec2 center;
-_OUT_ float rotation;
-_OUT_ vec4 color_stops[6];
-_OUT_ float color_offsets[6];
+_NOPERSPECTIVE_ _OUT_ vec2 coord;
 
 void main() {
-  gl_Position = u_projection * u_modelview * vec4(aPosition, 0.0, 1.0);
+  gl_Position = u_projection * (u_modelview * vec4(aPosition, 0.0, 1.0));
 
-  // The -90 is because conics point to the top by default
-  rotation = mod (u_rotation - 90.0, 360.0);
-  if (rotation < 0.0)
-    rotation += 360.0;
-  rotation = PI / 180.0 * rotation;
+  vec2 mv0 = u_modelview[0].xy;
+  vec2 mv1 = u_modelview[1].xy;
+  vec2 offset = aPosition - u_geometry.xy;
 
-  center = (u_modelview * vec4(u_center, 0, 1)).xy;
-
-  for (int i = 0; i < u_num_color_stops; i ++) {
-    color_offsets[i] = u_color_stops[(i * 5) + 0];
-    color_stops[i] = gsk_premultiply(vec4(u_color_stops[(i * 5) + 1],
-                                          u_color_stops[(i * 5) + 2],
-                                          u_color_stops[(i * 5) + 3],
-                                          u_color_stops[(i * 5) + 4]));
-  }
+  coord = vec2(dot(mv0, offset),
+               dot(mv1, offset));
 }
 
 // FRAGMENT_SHADER:
@@ -38,32 +21,53 @@ uniform int u_num_color_stops;
 uniform highp int u_num_color_stops; // Why? Because it works like this.
 #endif
 
-const float PI = 3.1415926535897932384626433832795;
+uniform vec4 u_geometry;
+uniform float u_color_stops[6 * 5];
 
-_IN_ vec2 center;
-_IN_ float rotation;
-_IN_ vec4 color_stops[6];
-_IN_ float color_offsets[6];
+_NOPERSPECTIVE_ _IN_ vec2 coord;
+
+float get_offset(int index) {
+  return u_color_stops[5 * index];
+}
+
+vec4 get_color(int index) {
+  int base = 5 * index + 1;
+
+  return vec4(u_color_stops[base],
+              u_color_stops[base + 1],
+              u_color_stops[base + 2],
+              u_color_stops[base + 3]);
+}
 
 void main() {
-  // Position relative to center
-  vec2 pos = gsk_get_frag_coord() - center;
-
   // direction of point in range [-PI, PI]
-  float angle = atan (pos.y, pos.x);
-  // rotate, it's now [-2 * PI, PI]
-  angle -= rotation;
+  vec2 pos = floor(coord);
+  float angle = atan(pos.y, pos.x);
+
   // fract() does the modulo here, so now we have progress
   // into the current conic
-  float offset = fract (angle / 2.0 / PI + 2.0);
+  float offset = fract(angle * u_geometry.z + u_geometry.w);
 
-  vec4 color = color_stops[0];
-  for (int i = 1; i < u_num_color_stops; i ++) {
-    if (offset >= color_offsets[i - 1])  {
-      float o = (offset - color_offsets[i - 1]) / (color_offsets[i] - color_offsets[i - 1]);
-      color = mix(color_stops[i - 1], color_stops[i], clamp(o, 0.0, 1.0));
+  if (offset < get_offset(0)) {
+    gskSetOutputColor(gsk_scaled_premultiply(get_color(0), u_alpha));
+    return;
+  }
+
+  int n = u_num_color_stops - 1;
+  for (int i = 0; i < n; i++) {
+    float curr_offset = get_offset(i);
+    float next_offset = get_offset(i + 1);
+
+    if (offset >= curr_offset && offset < next_offset) {
+      float f = (offset - curr_offset) / (next_offset - curr_offset);
+      vec4 curr_color = gsk_premultiply(get_color(i));
+      vec4 next_color = gsk_premultiply(get_color(i + 1));
+      vec4 color = mix(curr_color, next_color, f);
+
+      gskSetOutputColor(color * u_alpha);
+      return;
     }
   }
 
-  gskSetOutputColor(color * u_alpha);
+  gskSetOutputColor(gsk_scaled_premultiply(get_color(n), u_alpha));
 }
