@@ -2232,7 +2232,6 @@ gtk_entry_get_overwrite_mode (GtkEntry *entry)
  *
  * This is equivalent to getting @entry's #GtkEntryBuffer and
  * calling gtk_entry_buffer_set_max_length() on it.
- * ]|
  **/
 void
 gtk_entry_set_max_length (GtkEntry     *entry,
