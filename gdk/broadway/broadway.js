@@ -134,6 +134,7 @@ grab.window = null;
 grab.ownerEvents = false;
 grab.implicit = false;
 var keyDownList = [];
+var inputList = [];
 var lastSerial = 0;
 var lastX = 0;
 var lastY = 0;
@@ -574,6 +575,7 @@ function cmdPutBuffer(id, w, h, compressed)
     var data = inflate.decompress();
 
     var imageData = decodeBuffer (context, surface.imageData, w, h, data, debugDecoding);
+    context.imageSmoothingEnabled = false;
     context.putImageData(imageData, 0, 0);
 
     if (debugDecoding)
@@ -830,8 +832,15 @@ function getEffectiveEventTarget (id) {
 function updateKeyboardStatus() {
     if (fakeInput != null && showKeyboardChanged) {
         showKeyboardChanged = false;
-        if (showKeyboard)
+        if (showKeyboard) {
+	    if (isAndroidChrome) {
+		fakeInput.blur();
+		fakeInput.value = ' '.repeat(80); // TODO: Should be exchange with broadway server
+		                                  // to bring real value here.
+	    }
             fakeInput.focus();
+	    //if (isAndroidChrome) fakeInput.click();
+	}
         else
             fakeInput.blur();
     }
@@ -2383,6 +2392,19 @@ function pushKeyEvent(fev) {
     keyDownList.push(fev);
 }
 
+function copyInputEvent(ev) {
+    var members = ['inputType', 'data'], i, obj = {};
+    for (i = 0; i < members.length; i++) {
+	if (typeof ev[members[i]] !== "undefined")
+	    obj[members[i]] = ev[members[i]];
+    }
+    return obj;
+}
+
+function pushInputEvent(fev) {
+    inputList.push(fev);
+}
+
 function getKeyEvent(keyCode, pop) {
     var i, fev = null;
     for (i = keyDownList.length-1; i >= 0; i--) {
@@ -2420,8 +2442,9 @@ function handleKeyDown(e) {
 	// If it is a key or key combination that might trigger
 	// browser behaviors or it has no corresponding keyPress
 	// event, then send it immediately
-	if (!ignoreKeyEvent(ev))
+	if (!ignoreKeyEvent(ev)) {
 	    sendInput("k", [keysym, lastState]);
+	}
 	suppress = true;
     }
 
@@ -2465,8 +2488,9 @@ function handleKeyPress(e) {
     }
 
     // Send the translated keysym
-    if (keysym > 0)
+    if (keysym > 0) {
 	sendInput ("k", [keysym, lastState]);
+    }
 
     // Stop keypress events just in case
     return cancelEvent(ev);
@@ -2481,11 +2505,45 @@ function handleKeyUp(e) {
 	keysym = fev.keysym;
     else {
 	//log("Key event (keyCode = " + ev.keyCode + ") not found on keyDownList");
+	if (isAndroidChrome && (ev.keyCode == 229)) {
+	    var i, fev = null, len = inputList.length, str;
+	    for (i = 0; i < len; i++) {
+		fev = inputList[i];
+		switch(fev.inputType) {
+		case "deleteContentBackward":
+		    sendInput ("k", [65288, lastState]);
+		    sendInput ("K", [65288, lastState]);
+		    break;
+		case "insertText":
+		    if (fev.data !== undefined) {
+			for (let sym of fev.data) {
+			    sendInput ("k", [sym.codePointAt(0), lastState]);
+			    sendInput ("K", [sym.codePointAt(0), lastState]);
+			}
+		    }
+		    break;
+		default:
+		    break;
+		}
+	    }
+	    inputList.splice(0, len);
+	}
 	keysym = 0;
     }
 
-    if (keysym > 0)
+    if (keysym > 0) {
 	sendInput ("K", [keysym, lastState]);
+    }
+    return cancelEvent(ev);
+}
+
+function handleInput (e)  {
+    var fev = null, ev = (e ? e : window.event), keysym = null, suppress = false;
+
+    fev = copyInputEvent(ev);
+    pushInputEvent(fev);
+
+    // Stop keypress events just in case
     return cancelEvent(ev);
 }
 
@@ -2502,6 +2560,11 @@ function onKeyPress(ev) {
 function onKeyUp (ev) {
     updateForEvent(ev);
     return handleKeyUp(ev);
+}
+
+function onInput (ev) {
+    updateForEvent(ev);
+    return handleInput(ev);
 }
 
 function cancelEvent(ev)
@@ -2687,12 +2750,14 @@ function connect()
     };
 
     var iOS = /(iPad|iPhone|iPod)/g.test( navigator.userAgent );
-    if (iOS) {
+    if (iOS || isAndroidChrome) {
         fakeInput = document.createElement("input");
         fakeInput.type = "text";
         fakeInput.style.position = "absolute";
         fakeInput.style.left = "-1000px";
         fakeInput.style.top = "-1000px";
         document.body.appendChild(fakeInput);
+	if (isAndroidChrome)
+	    fakeInput.addEventListener('input', onInput, passiveSupported ? { passive: false, capture: false } : false);
     }
 }
