@@ -22,6 +22,7 @@ struct _GtkNodeView
   GtkWidget parent_instance;
 
   GskRenderNode *node;
+  GFileMonitor *file_monitor;
 };
 
 struct _GtkNodeViewClass
@@ -33,6 +34,73 @@ GType gtk_node_view_get_type (void) G_GNUC_CONST;
 
 
 G_DEFINE_TYPE(GtkNodeView, gtk_node_view, GTK_TYPE_WIDGET)
+
+static void
+deserialize_error_func (const GskParseLocation *start,
+                        const GskParseLocation *end,
+                        const GError           *error,
+                        gpointer                user_data)
+{
+  GString *string = g_string_new ("<data>");
+
+  g_string_append_printf (string, ":%zu:%zu",
+                          start->lines + 1, start->line_chars + 1);
+  if (start->lines != end->lines || start->line_chars != end->line_chars)
+    {
+      g_string_append (string, "-");
+      if (start->lines != end->lines)
+        g_string_append_printf (string, "%zu:", end->lines + 1);
+      g_string_append_printf (string, "%zu", end->line_chars + 1);
+    }
+
+  g_warning ("Error at %s: %s", string->str, error->message);
+
+  g_string_free (string, TRUE);
+}
+
+static void
+load_file_contents (GtkNodeView *self,
+                    GFile       *file)
+{
+  GBytes *bytes;
+  GError *error = NULL;
+
+  bytes = g_file_load_bytes (file, NULL, NULL, NULL);
+  if (bytes == NULL)
+    return;
+
+  if (!g_utf8_validate (g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes), NULL))
+    {
+      g_bytes_unref (bytes);
+      return;
+    }
+
+  self->node = gsk_render_node_deserialize (bytes, deserialize_error_func, &error);
+
+  if (error)
+    {
+      g_critical ("Invalid node file: %s", error->message);
+      g_clear_error (&error);
+      return;
+    }
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+
+  g_bytes_unref (bytes);
+}
+
+static void
+file_changed_cb (GFileMonitor      *monitor,
+                 GFile             *file,
+                 GFile             *other_file,
+                 GFileMonitorEvent  event_type,
+                 gpointer           user_data)
+{
+  GtkNodeView *self = user_data;
+
+  if (event_type == G_FILE_MONITOR_EVENT_CHANGED)
+    load_file_contents (self, file);
+}
 
 static void
 gtk_node_view_measure (GtkWidget      *widget,
@@ -102,29 +170,6 @@ gtk_node_view_class_init (GtkNodeViewClass *klass)
 }
 
 static void
-deserialize_error_func (const GskParseLocation *start,
-                        const GskParseLocation *end,
-                        const GError           *error,
-                        gpointer                user_data)
-{
-  GString *string = g_string_new ("<data>");
-
-  g_string_append_printf (string, ":%zu:%zu",
-                          start->lines + 1, start->line_chars + 1);
-  if (start->lines != end->lines || start->line_chars != end->line_chars)
-    {
-      g_string_append (string, "-");
-      if (start->lines != end->lines)
-        g_string_append_printf (string, "%zu:", end->lines + 1);
-      g_string_append_printf (string, "%zu", end->line_chars + 1);
-    }
-
-  g_warning ("Error at %s: %s", string->str, error->message);
-
-  g_string_free (string, TRUE);
-}
-
-static void
 quit_cb (GtkWidget *widget,
          gpointer   data)
 {
@@ -140,13 +185,11 @@ main (int argc, char **argv)
 {
   GtkWidget *window;
   GtkWidget *nodeview;
-  char *contents;
-  gsize len;
-  GBytes *bytes;
   graphene_rect_t node_bounds;
   GOptionContext *option_context;
   GError *error = NULL;
   gboolean done = FALSE;
+  GFile *file;
 
   option_context = g_option_context_new ("NODE-FILE [-o OUTPUT] [--compare]");
   g_option_context_add_main_entries (option_context, options, NULL);
@@ -175,23 +218,19 @@ main (int argc, char **argv)
 
   gtk_window_set_decorated (GTK_WINDOW (window), FALSE);
 
-  g_file_get_contents (argv[1], &contents, &len, &error);
+  file = g_file_new_for_path (argv[1]);
+  load_file_contents (GTK_NODE_VIEW (nodeview), file);
+  GTK_NODE_VIEW (nodeview)->file_monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &error);
+  g_object_unref (file);
+
   if (error)
     {
       g_warning ("%s", error->message);
       return -1;
     }
 
-  bytes = g_bytes_new_take (contents, len);
-  GTK_NODE_VIEW (nodeview)->node = gsk_render_node_deserialize (bytes, deserialize_error_func, &error);
-  g_bytes_unref (bytes);
-
-  if (GTK_NODE_VIEW (nodeview)->node == NULL)
-    {
-      g_critical ("Invalid node file: %s", error->message);
-      g_clear_error (&error);
-      return -1;
-    }
+  g_signal_connect (GTK_NODE_VIEW (nodeview)->file_monitor,
+                    "changed", G_CALLBACK (file_changed_cb), nodeview);
 
   if (write_to_filename != NULL)
     {
