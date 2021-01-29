@@ -65,6 +65,7 @@ RUN dnf -y install \
     libxslt \
     mesa-dri-drivers \
     mesa-libEGL-devel \
+    mesa-libGLES-devel \
     mesa-libwayland-egl-devel \
     ninja-build \
     pango-devel \
