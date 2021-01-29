@@ -3833,7 +3833,7 @@ add_offscreen_ops (GskGLRenderer         *self,
 {
   const float dx = builder->dx;
   const float dy = builder->dy;
-  float width, height;
+  float scaled_width, scaled_height;
   float scale_x;
   float scale_y;
   int render_target;
@@ -3889,8 +3889,6 @@ add_offscreen_ops (GskGLRenderer         *self,
       return TRUE;
     }
 
-  width = bounds->size.width;
-  height = bounds->size.height;
   scale_x = builder->scale_x;
   scale_y = builder->scale_y;
 
@@ -3901,23 +3899,23 @@ add_offscreen_ops (GskGLRenderer         *self,
   {
     const int max_texture_size = gsk_gl_driver_get_max_texture_size (self->gl_driver);
 
-    width = ceilf (width * scale_x);
-    if (width > max_texture_size)
+    scaled_width = ceilf (bounds->size.width * scale_x);
+    if (scaled_width > max_texture_size)
       {
-        scale_x *= (float)max_texture_size / width;
-        width = max_texture_size;
+        scale_x *= (float)max_texture_size / scaled_width;
+        scaled_width = max_texture_size;
       }
 
-    height = ceilf (height * scale_y);
-    if (height > max_texture_size)
+    scaled_height = ceilf (bounds->size.height * scale_y);
+    if (scaled_height > max_texture_size)
       {
-        scale_y *= (float)max_texture_size / height;
-        height = max_texture_size;
+        scale_y *= (float)max_texture_size / scaled_height;
+        scaled_height = max_texture_size;
       }
   }
 
   gsk_gl_driver_create_render_target (self->gl_driver,
-                                      width, height,
+                                      scaled_width, scaled_height,
                                       filter, filter,
                                       &texture_id, &render_target);
   if (gdk_gl_context_has_debug (self->gl_context))
@@ -3932,9 +3930,11 @@ add_offscreen_ops (GskGLRenderer         *self,
                                           render_target);
     }
 
-  viewport = GRAPHENE_RECT_INIT ((bounds->origin.x + dx) * scale_x,
-                                 (bounds->origin.y + dy) * scale_y,
-                                 width, height);
+  ops_transform_bounds_modelview (builder, bounds, &viewport);
+  /* Code above will scale the size with the scale we use in the render ops,
+   * but for the viewport size, we need our own size limited by the texture size */
+  viewport.size.width = scaled_width;
+  viewport.size.height = scaled_height;
 
   init_projection_matrix (&item_proj, &viewport);
   prev_render_target = ops_set_render_target (builder, render_target);
@@ -3962,7 +3962,7 @@ add_offscreen_ops (GskGLRenderer         *self,
                                              g_type_name_from_instance ((GTypeInstance *) child_node),
                                              child_node,
                                              k ++),
-                            width, height);
+                            scaled_width, scaled_height);
     }
 #endif
 

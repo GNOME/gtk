@@ -75,6 +75,7 @@ compare_render_tests = [
   'clip-in-rounded-clip1',
   'clip-in-rounded-clip2',
   'clip-in-rounded-clip3',
+  'issue-3615'
 ]
 
 # these are too sensitive to differences in the renderers
