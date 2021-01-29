@@ -798,14 +798,21 @@ subdir('po-properties')
 subdir('docs/tools')
 subdir('docs/reference')
 
-# Keep this in sync with post-install.sh expected arguments
 if not meson.is_cross_build()
-  meson.add_install_script('build-aux/meson/post-install.py',
-                           gtk_api_version,
-                           gtk_binary_version,
-                           gtk_libdir,
-                           gtk_datadir,
-                           gtk_bindir)
+  if meson.version().version_compare('>=0.57.0')
+    gnome.post_install(
+      glib_compile_schemas: true,
+      gio_querymodules: gio_module_dirs,
+      gtk_update_icon_cache: true,
+    )
+  else
+    meson.add_install_script('build-aux/meson/post-install.py',
+                             gtk_api_version,
+                             gtk_binary_version,
+                             gtk_libdir,
+                             gtk_datadir,
+                             gtk_bindir)
+  endif
 else
   message('Not executing post-install steps automatically when cross compiling')
 endif

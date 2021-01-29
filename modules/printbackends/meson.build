@@ -2,6 +2,7 @@ print_backends = []
 
 printbackends_subdir = 'gtk-4.0/@0@/printbackends'.format(gtk_binary_version)
 printbackends_install_dir = join_paths(get_option('libdir'), printbackends_subdir)
+gio_module_dirs += printbackends_install_dir
 
 printbackends_args = [
   '-DGTK_COMPILATION',

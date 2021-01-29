@@ -1,3 +1,4 @@
+gio_module_dirs = []
 if os_unix
   subdir('printbackends')
 else

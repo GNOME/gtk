@@ -51,6 +51,7 @@ foreach tool: gtk_tools
   )
 
   set_variable(tool_name.underscorify(), exe) # used in testsuites
+  meson.override_find_program(tool_name, exe)
 endforeach
 
 # Data to install
