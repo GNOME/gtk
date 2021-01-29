@@ -2967,7 +2967,11 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
 
       if (impl->display_server.gtk_surface)
         {
-          gtk_surface1_destroy (impl->display_server.gtk_surface);
+          if (display_wayland->gtk_shell_version >=
+              GTK_SURFACE1_RELEASE_SINCE_VERSION)
+            gtk_surface1_release (impl->display_server.gtk_surface);
+          else
+            gtk_surface1_destroy (impl->display_server.gtk_surface);
           impl->display_server.gtk_surface = NULL;
           impl->application.was_set = FALSE;
         }
