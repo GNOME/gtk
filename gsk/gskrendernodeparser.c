@@ -689,14 +689,16 @@ create_ascii_glyphs (PangoFont *font)
   for (i = MIN_ASCII_GLYPH; i < MAX_ASCII_GLYPH; i++)
     {
       const char text[2] = { i, 0 };
+      PangoShapeFlags flags = 0;
 
-      pango_shape_with_flags (text,
-                              1,
-                              text,
-                              1,
+      if (cairo_version () < CAIRO_VERSION_ENCODE (1, 17, 4))
+        flags = PANGO_SHAPE_ROUND_POSITIONS;
+
+      pango_shape_with_flags (text, 1,
+                              text, 1,
                               &not_a_hack,
                               glyph_string,
-                              PANGO_SHAPE_ROUND_POSITIONS);
+                              flags);
 
       if (glyph_string->num_glyphs != 1)
         {
