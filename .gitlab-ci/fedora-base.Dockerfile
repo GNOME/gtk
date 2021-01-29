@@ -47,6 +47,7 @@ RUN dnf -y install \
     libcloudproviders-devel \
     libepoxy-devel \
     libffi-devel \
+    libglvnd-devel \
     libmount-devel \
     librsvg2 \
     libselinux-devel \
