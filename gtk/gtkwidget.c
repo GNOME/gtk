@@ -257,7 +257,7 @@
  * custom `<layout>` element, used to define layout properties:
  *
  * |[<!-- language="xml" -->
- * <object class="MyGrid" id="grid1">
+ * <object class="GtkGrid" id="my_grid">
  *   <child>
  *     <object class="GtkLabel" id="label1">
  *       <property name="label">Description</property>
