@@ -724,13 +724,13 @@ gtk_list_box_init (GtkListBox *box)
  * gtk_list_box_get_selected_row:
  * @box: a #GtkListBox
  *
- * Gets the selected row.
+ * Gets the selected row, or %NULL if no rows are selected.
  *
  * Note that the box may allow multiple selection, in which
  * case you should use gtk_list_box_selected_foreach() to
  * find all selected rows.
  *
- * Returns: (transfer none): the selected row
+ * Returns: (transfer none) (nullable): the selected row or %NULL
  */
 GtkListBoxRow *
 gtk_list_box_get_selected_row (GtkListBox *box)
@@ -746,7 +746,7 @@ gtk_list_box_get_selected_row (GtkListBox *box)
  * @index_: the index of the row
  *
  * Gets the n-th child in the list (not counting headers).
- * If @_index is negative or larger than the number of items in the
+ * If @index_ is negative or larger than the number of items in the
  * list, %NULL is returned.
  *
  * Returns: (transfer none) (nullable): the child #GtkWidget or %NULL
