@@ -1,3 +1,58 @@
+Overview of Changes in 4.1.0
+============================
+
+* GtkCheckButton:
+ - Add back an activate signal
+
+* GtkSearchBar, GtkSearchEntry:
+ - Capture events in the bubble phase
+
+* GtkEmojiChooser:
+ - Adapt to small screen sizes
+
+* GtkVideo:
+ - Fix issues with GL support
+
+* Themes:
+ - Set sort arrows in CSS
+ - Set menu button arrows in CSS
+ - Make scrollbars larger
+ - Supprt circular menubuttons
+
+* CSS:
+ - Implement transform-origin
+ - Support overlines on text
+ - Support colors in cross-fade()
+ - More complete text-decoration-line support
+
+* Text layout:
+ - Use subpixel positioning with new enough cairo
+
+* Inspector:
+ - Fix slowness in navigation
+ - Redo the controllers and shortcuts pages
+
+* Accessibility:
+ - Create AT context objects lazily
+
+* Wayland:
+ - Fix decoration negotiation under kwin
+
+* GSK:
+ - Optimize gradient shaders
+ - Implement repeating gradients in shaders
+
+* Translation updates
+ - Czech
+ - Greek
+ - Hungarian
+ - Persian
+ - Punjabi
+ - Romanian
+ - Swedish
+ - Ukrainian
+
+
 Overview of Changes in 4.0.2
 ============================
 
