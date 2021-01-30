@@ -1570,7 +1570,7 @@ static void
 gdk_wayland_surface_configure_popup (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  GdkWaylandSurface *parent_impl = GDK_WAYLAND_SURFACE (surface->parent);
+  GdkRectangle parent_geometry;
   int x, y, width, height;
 
   if (impl->display_server.xdg_popup)
@@ -1610,8 +1610,9 @@ gdk_wayland_surface_configure_popup (GdkSurface *surface)
   width = impl->pending.popup.width;
   height = impl->pending.popup.height;
 
-  x += parent_impl->shadow_left;
-  y += parent_impl->shadow_top;
+  gdk_wayland_surface_get_window_geometry (surface->parent, &parent_geometry);
+  x += parent_geometry.x;
+  y += parent_geometry.y;
 
   update_popup_layout_state (surface,
                              x, y,
@@ -2518,6 +2519,7 @@ create_dynamic_positioner (GdkSurface     *surface,
   GdkGravity rect_anchor;
   GdkGravity surface_anchor;
   GdkAnchorHints anchor_hints;
+  GdkRectangle parent_geometry;
   int shadow_left;
   int shadow_right;
   int shadow_top;
@@ -2535,9 +2537,11 @@ create_dynamic_positioner (GdkSurface     *surface,
     .height = height - (shadow_top + shadow_bottom),
   };
 
+  gdk_wayland_surface_get_window_geometry (surface->parent, &parent_geometry);
+
   anchor_rect = gdk_popup_layout_get_anchor_rect (layout);
-  real_anchor_rect_x = anchor_rect->x - parent_impl->shadow_left;
-  real_anchor_rect_y = anchor_rect->y - parent_impl->shadow_top;
+  real_anchor_rect_x = anchor_rect->x - parent_geometry.x;
+  real_anchor_rect_y = anchor_rect->y - parent_geometry.y;
 
   anchor_rect_width = MAX (anchor_rect->width, 1);
   anchor_rect_height = MAX (anchor_rect->height, 1);
@@ -2596,17 +2600,9 @@ create_dynamic_positioner (GdkSurface     *surface,
             xdg_positioner_get_version (positioner) >=
             XDG_POSITIONER_SET_PARENT_CONFIGURE_SINCE_VERSION)
           {
-            int parent_width;
-            int parent_height;
-
-            parent_width = parent->width - (parent_impl->shadow_left +
-                                            parent_impl->shadow_right);
-            parent_height = parent->height - (parent_impl->shadow_top +
-                                              parent_impl->shadow_bottom);
-
             xdg_positioner_set_parent_size (positioner,
-                                            parent_width,
-                                            parent_height);
+                                            parent_geometry.width,
+                                            parent_geometry.height);
             xdg_positioner_set_parent_configure (positioner,
                                                  parent_impl->last_configure_serial);
           }
