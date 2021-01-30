@@ -68,10 +68,6 @@ struct _GtkNativeDialogPrivate
 
   guint visible : 1;
   guint modal : 1;
-
-  /* Run state */
-  int run_response_id;
-  GMainLoop *run_loop; /* Non-NULL when in run */
 };
 
 enum {
@@ -346,9 +342,6 @@ gtk_native_dialog_hide (GtkNativeDialog *self)
   g_return_if_fail (klass->hide != NULL);
 
   klass->hide (self);
-
-  if (priv->run_loop && g_main_loop_is_running (priv->run_loop))
-    g_main_loop_quit (priv->run_loop);
 
   g_object_notify_by_pspec (G_OBJECT (self), native_props[PROP_VISIBLE]);
 }
