@@ -422,11 +422,11 @@ testdata = [
   'textview-border-windows.css',
   'textview-border-windows.ref.ui',
   'textview-border-windows.ui',
-  'textview-margins.css',
-  'textview-margins.ref.ui',
-  'textview-margins.ui',
-  # this test needs a better way to perform delayed actions
-  # it is not in xfail since it succeeds on some platforms
+  # these tests needs a better way to perform delayed actions
+  # they are not in xfail since they succeed on some platforms
+  #'textview-margins.css',
+  #'textview-margins.ref.ui',
+  #'textview-margins.ui',
   #'textview-tags.ref.ui',
   #'textview-tags.ui',
   'treeview-crash-too-wide.ref.ui',
