@@ -225,6 +225,9 @@ typedef struct
 
   guint    hide_on_close             : 1;
   guint    in_emit_close_request     : 1;
+  guint    move_focus                : 1;
+  guint    unset_default             : 1;
+
 
   GtkGesture *click_gesture;
   GtkEventController *application_shortcut_controller;
@@ -4547,12 +4550,33 @@ surface_size_changed (GtkWidget *widget,
   gtk_widget_queue_allocate (widget);
 }
 
+static void
+maybe_unset_focus_and_default (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  if (priv->move_focus)
+    {
+      gtk_widget_child_focus (GTK_WIDGET (window), GTK_DIR_TAB_FORWARD);
+      priv->move_focus = FALSE;
+    }
+
+  if (priv->unset_default)
+    {
+      gtk_window_set_default_widget (window, NULL);
+      priv->unset_default = FALSE;
+    }
+}
+
 static gboolean
 surface_render (GdkSurface     *surface,
                 cairo_region_t *region,
                 GtkWidget      *widget)
 {
+  GtkWindow *window = GTK_WINDOW (widget);
+
   gtk_widget_render (widget, surface, region);
+  maybe_unset_focus_and_default (window);
 
   return TRUE;
 }
@@ -4991,39 +5015,14 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *child;
-  GtkWidget *parent;
-  GtkWidget *focus;
 
-  g_object_ref (window);
-  g_object_ref (widget);
-
-  focus = priv->focus_widget;
-  if (focus && (focus == widget || gtk_widget_is_ancestor (focus, widget)))
-    {
-      parent = _gtk_widget_get_parent (widget);
-
-      while (parent)
-        {
-          if (_gtk_widget_get_visible (parent))
-            {
-              if (gtk_widget_grab_focus (parent))
-                break;
-            }
-
-          parent = gtk_widget_get_parent (parent);
-        }
-    }
+  child = priv->focus_widget;
+  if (child && (child == widget || gtk_widget_is_ancestor (child, widget)))
+    priv->move_focus = TRUE;
 
   child = priv->default_widget;
-
-  while (child && child != widget)
-    child = _gtk_widget_get_parent (child);
-
-  if (child == widget)
-    gtk_window_set_default_widget (window, NULL);
-
-  g_object_unref (widget);
-  g_object_unref (window);
+  if (child && (child == widget || gtk_widget_is_ancestor (child, widget)))
+    priv->unset_default = TRUE;
 }
 
 #undef INCLUDE_CSD_SIZE
