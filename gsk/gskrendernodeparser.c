@@ -1394,7 +1394,7 @@ parse_cairo_node (GtkCssParser *parser)
   if (surface != NULL)
     {
       cairo_t *cr = gsk_cairo_node_get_draw_context (node);
-      cairo_set_source_surface (cr, surface, 0, 0);
+      cairo_set_source_surface (cr, surface, bounds.origin.x, bounds.origin.y);
       cairo_paint (cr);
       cairo_destroy (cr);
     }
