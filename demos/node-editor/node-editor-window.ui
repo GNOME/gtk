@@ -139,6 +139,15 @@
             <property name="icon-name">open-menu-symbolic</property>
           </object>
         </child>
+        <child type="end">
+          <object class="GtkToggleButton" id="dark_bg_button">
+            <property name="valign">center</property>
+            <property name="has-frame">0</property>
+            <property name="icon-name">display-brightness-symbolic</property>
+            <property name="tooltip-text" translatable="yes">Use a dark background</property>
+            <signal name="notify::active" handler="dark_mode_cb" swapped="0"/>
+          </object>
+        </child>
       </object>
     </child>
     <child>

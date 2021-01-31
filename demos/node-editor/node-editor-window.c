@@ -701,6 +701,16 @@ out:
 }
 
 static void
+dark_mode_cb (GtkToggleButton *button,
+              GParamSpec      *pspec,
+              NodeEditorWindow *self)
+{
+  g_object_set (gtk_widget_get_settings (GTK_WIDGET (self)),
+                "gtk-application-prefer-dark-theme", gtk_toggle_button_get_active (button),
+                NULL);
+}
+
+static void
 node_editor_window_finalize (GObject *object)
 {
   NodeEditorWindow *self = (NodeEditorWindow *)object;
@@ -814,6 +824,7 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
   gtk_widget_class_bind_template_callback (widget_class, export_image_cb);
   gtk_widget_class_bind_template_callback (widget_class, testcase_save_clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class, testcase_name_entry_changed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, dark_mode_cb);
 }
 
 static GtkWidget *
