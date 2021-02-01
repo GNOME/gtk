@@ -174,8 +174,7 @@ gtk_im_context_simple_init_compose_table (void)
       g_free (path);
       return;
     }
-  g_free (path);
-  path = NULL;
+  g_clear_pointer (&path, g_free);
 
   home = g_get_home_dir ();
   if (home == NULL)
@@ -190,8 +189,7 @@ gtk_im_context_simple_init_compose_table (void)
       g_free (path);
       return;
     }
-  g_free (path);
-  path = NULL;
+  g_clear_pointer (&path, g_free);
 
   locale = g_getenv ("LC_CTYPE");
   if (locale == NULL)
@@ -224,8 +222,7 @@ gtk_im_context_simple_init_compose_table (void)
 
       if (g_file_test (path, G_FILE_TEST_EXISTS))
         break;
-      g_free (path);
-      path = NULL;
+      g_clear_pointer (&path, g_free);
     }
 
   g_free (x11_compose_file_dir);
@@ -237,8 +234,7 @@ gtk_im_context_simple_init_compose_table (void)
       global_tables = gtk_compose_table_list_add_file (global_tables, path);
       G_UNLOCK (global_tables);
     }
-  g_free (path);
-  path = NULL;
+  g_clear_pointer (&path, g_free);
 }
 
 static void
