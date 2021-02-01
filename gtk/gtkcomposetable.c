@@ -218,7 +218,10 @@ parse_compose_line (GList       **compose_list,
     return;
 
   if (g_str_has_prefix (line, "include "))
-    return;
+    {
+      g_warning ("include in Compose files not supported: %s", line);
+      return;
+    }
 
   components = g_strsplit (line, ":", 2);
 
