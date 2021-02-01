@@ -455,61 +455,6 @@ gtk_compose_data_compare (gpointer a,
   return 0;
 }
 
-static void
-gtk_compose_list_print (GList *compose_list,
-                        int    max_compose_len,
-                        int    n_index_stride)
-{
-  GList *list;
-  int i, j;
-  GtkComposeData *compose_data;
-  int total_size = 0;
-  gunichar upper;
-  gunichar lower;
-  const char *comment;
-  const char *keyval;
-
-  for (list = compose_list; list != NULL; list = list->next)
-    {
-      compose_data = list->data;
-      g_printf ("  ");
-
-      for (i = 0; i < max_compose_len; i++)
-        {
-          if (compose_data->sequence[i] == 0)
-            {
-              for (j = i; j < max_compose_len; j++)
-                {
-                    if (j == max_compose_len - 1)
-                      g_printf ("0,\n");
-                    else
-                      g_printf ("0, ");
-                }
-              break;
-            }
-
-          keyval = gdk_keyval_name (compose_data->sequence[i]);
-          if (i == max_compose_len - 1)
-            g_printf ("%s,\n", keyval ? keyval : "(null)");
-          else
-            g_printf ("%s, ", keyval ? keyval : "(null)");
-        }
-      upper = compose_data->value[0];
-      lower = compose_data->value[1];
-      comment = compose_data->comment;
-
-      if (list == g_list_last (compose_list))
-        g_printf ("    %#06X, %#06X  /* %s */\n", upper, lower, comment);
-      else
-        g_printf ("    %#06X, %#06X, /* %s */\n", upper, lower, comment);
-
-      total_size += n_index_stride;
-    }
-
-  g_printerr ("TOTAL_SIZE: %d\nMAX_COMPOSE_LEN: %d\nN_INDEX_STRIDE: %d\n",
-              total_size, max_compose_len, n_index_stride);
-}
-
 /* Implemented from g_str_hash() */
 static guint32
 gtk_compose_table_data_hash (gconstpointer v, int length)
@@ -834,9 +779,6 @@ gtk_compose_table_new_with_file (const char *compose_file)
       g_warning ("compose file %s does not include any keys besides keys in en-us compose file", compose_file);
       return NULL;
     }
-
-  if (g_getenv ("GTK_COMPOSE_TABLE_PRINT") != NULL)
-    gtk_compose_list_print (compose_list, max_compose_len, n_index_stride);
 
   compose_table = gtk_compose_table_new_with_list (compose_list,
                                                    max_compose_len,
