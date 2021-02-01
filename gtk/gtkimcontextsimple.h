@@ -27,10 +27,9 @@
 
 G_BEGIN_DECLS
 
-/**
- * GTK_MAX_COMPOSE_LEN:
- *
- * The maximum length of sequences in compose tables.
+/*
+ * No longer used by GTK, just left here on the off chance that some
+ * 3rd party code used this define.
  */
 #define GTK_MAX_COMPOSE_LEN 7
 
