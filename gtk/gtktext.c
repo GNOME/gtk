@@ -29,7 +29,7 @@
 #include "gtkbutton.h"
 #include "gtkdebug.h"
 #include "gtkdragicon.h"
-#include "gtkdragsource.h"
+#include "gtkdragsourceprivate.h"
 #include "gtkdroptarget.h"
 #include "gtkeditable.h"
 #include "gtkemojichooser.h"
@@ -2941,9 +2941,7 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
   if (priv->in_drag)
     {
       if (gtk_text_get_display_mode (self) == DISPLAY_NORMAL &&
-          gtk_drag_check_threshold (widget,
-                                    priv->drag_start_x, priv->drag_start_y,
-                                    x, y))
+          gtk_drag_check_threshold_double (widget, 0, 0, offset_x, offset_y))
         {
           int *ranges;
           int n_ranges;

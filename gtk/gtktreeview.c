@@ -28,7 +28,7 @@
 #include "gtkcellrenderer.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
-#include "gtkdragsource.h"
+#include "gtkdragsourceprivate.h"
 #include "gtkdragicon.h"
 #include "gtkdroptargetasync.h"
 #include "gtkentryprivate.h"
@@ -7052,7 +7052,7 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView *tree_view)
   gtk_gesture_drag_get_offset (GTK_GESTURE_DRAG (priv->drag_gesture),
                                &offset_x, &offset_y);
 
-  if (!gtk_drag_check_threshold (widget, 0, 0, offset_x, offset_y))
+  if (!gtk_drag_check_threshold_double (widget, 0, 0, offset_x, offset_y))
     goto out;
 
   model = gtk_tree_view_get_model (tree_view);

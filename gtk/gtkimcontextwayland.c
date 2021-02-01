@@ -21,6 +21,7 @@
 #include <string.h>
 #include <wayland-client-protocol.h>
 
+#include "gtk/gtkdragsourceprivate.h"
 #include "gtk/gtkimcontextwayland.h"
 #include "gtk/gtkintl.h"
 #include "gtk/gtkimmoduleprivate.h"
@@ -524,10 +525,10 @@ released_cb (GtkGestureClick     *gesture,
   if (global->focused &&
       n_press == 1 &&
       (hints & GTK_INPUT_HINT_INHIBIT_OSK) == 0 &&
-      !gtk_drag_check_threshold (context->widget,
-                                 context->press_x,
-                                 context->press_y,
-                                 x, y))
+      !gtk_drag_check_threshold_double (context->widget,
+                                        context->press_x,
+                                        context->press_y,
+                                        x, y))
     {
       zwp_text_input_v3_enable (global->text_input);
       g_signal_emit_by_name (global->current, "retrieve-surrounding", &result);

@@ -26,7 +26,7 @@
 #include "gtkcellrenderer.h"
 #include "gtkcellrendererpixbuf.h"
 #include "gtkcellrenderertext.h"
-#include "gtkdragsource.h"
+#include "gtkdragsourceprivate.h"
 #include "gtkentry.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
@@ -5884,10 +5884,10 @@ gtk_icon_view_maybe_begin_drag (GtkIconView *icon_view,
   if (icon_view->priv->pressed_button < 0)
     goto out;
 
-  if (!gtk_drag_check_threshold (GTK_WIDGET (icon_view),
-                                 icon_view->priv->press_start_x,
-                                 icon_view->priv->press_start_y,
-                                 x, y))
+  if (!gtk_drag_check_threshold_double (GTK_WIDGET (icon_view),
+                                        icon_view->priv->press_start_x,
+                                        icon_view->priv->press_start_y,
+                                        x, y))
     goto out;
 
   model = gtk_icon_view_get_model (icon_view);

@@ -32,6 +32,7 @@
 #include "gtkadjustmentprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkdebug.h"
+#include "gtkdragsourceprivate.h"
 #include "gtkdropcontrollermotion.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
@@ -7232,7 +7233,7 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
       /* If no data is attached, the initial press happened within the current
        * text selection, check for drag and drop to be initiated.
        */
-      if (gtk_drag_check_threshold (GTK_WIDGET (text_view), start_x, start_y, x, y))
+      if (gtk_drag_check_threshold_double (GTK_WIDGET (text_view), 0, 0, offset_x, offset_y))
         {
           if (!is_touchscreen)
             {
@@ -7366,7 +7367,7 @@ gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
     gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
 
   if ((is_touchscreen || clicked_in_selection) &&
-      !gtk_drag_check_threshold (GTK_WIDGET (text_view), start_x, start_y, x, y))
+      !gtk_drag_check_threshold_double (GTK_WIDGET (text_view), 0, 0, offset_x, offset_y))
     {
       GtkTextIter iter;
 

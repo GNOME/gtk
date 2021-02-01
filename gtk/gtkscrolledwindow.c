@@ -29,7 +29,7 @@
 #include "gtkadjustment.h"
 #include "gtkadjustmentprivate.h"
 #include "gtkbuildable.h"
-#include "gtkdragsource.h"
+#include "gtkdragsourceprivate.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerscroll.h"
 #include "gtkeventcontrollerprivate.h"
@@ -953,8 +953,8 @@ scrolled_window_drag_update_cb (GtkScrolledWindow *scrolled_window,
   GtkAdjustment *vadjustment;
   double dx, dy;
 
-  if (!gtk_drag_check_threshold (GTK_WIDGET (scrolled_window),
-                                 0, 0, offset_x, offset_y))
+  if (!gtk_drag_check_threshold_double (GTK_WIDGET (scrolled_window),
+                                        0, 0, offset_x, offset_y))
     return;
 
   gtk_scrolled_window_invalidate_overshoot (scrolled_window);

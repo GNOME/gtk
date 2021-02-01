@@ -39,7 +39,7 @@
 #include "gtkadjustment.h"
 #include "gtkgesturedrag.h"
 #include "gtkeventcontrollermotion.h"
-#include "gtkdragsource.h"
+#include "gtkdragsourceprivate.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkgestureclick.h"
 
@@ -1128,7 +1128,7 @@ header_drag_update (GtkGestureDrag *gesture,
 
   if (!self->in_column_resize && !self->in_column_reorder)
     {
-      if (gtk_drag_check_threshold (GTK_WIDGET (self), 0, 0, offset_x, 0))
+      if (gtk_drag_check_threshold_double (GTK_WIDGET (self), 0, 0, offset_x, 0))
         {
           GtkColumnViewColumn *column;
           GtkWidget *header;

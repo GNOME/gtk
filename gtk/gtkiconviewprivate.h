@@ -133,8 +133,8 @@ struct _GtkIconViewPrivate
   /* Drag-and-drop. */
   GdkModifierType start_button_mask;
   int pressed_button;
-  int press_start_x;
-  int press_start_y;
+  double press_start_x;
+  double press_start_y;
 
   GdkContentFormats *source_formats;
   GtkDropTargetAsync *dest;

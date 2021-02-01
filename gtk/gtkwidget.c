@@ -11304,39 +11304,6 @@ gtk_widget_remove_controller (GtkWidget          *widget,
     gtk_list_list_model_item_removed (priv->controller_observer, before);
 }
 
-gboolean
-gtk_widget_consumes_motion (GtkWidget        *widget,
-                            GtkWidget        *parent,
-                            GdkEventSequence *sequence)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  while (widget != NULL && widget != parent)
-    {
-      GList *l;
-
-      for (l = priv->event_controllers; l; l = l->next)
-        {
-          GtkEventController *controller = l->data;
-
-          if (controller == NULL ||
-              !GTK_IS_GESTURE (controller))
-            continue;
-
-          if ((!GTK_IS_GESTURE_SINGLE (controller) ||
-               GTK_IS_GESTURE_DRAG (controller) ||
-               GTK_IS_GESTURE_SWIPE (controller)) &&
-              gtk_gesture_handles_sequence (GTK_GESTURE (controller), sequence))
-            return TRUE;
-        }
-
-      widget = priv->parent;
-      priv = gtk_widget_get_instance_private (widget);
-    }
-
-  return FALSE;
-}
-
 void
 gtk_widget_reset_controllers (GtkWidget *widget)
 {

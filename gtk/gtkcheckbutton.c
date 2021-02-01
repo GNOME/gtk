@@ -278,8 +278,6 @@ click_pressed_cb (GtkGestureClick *gesture,
 {
   if (gtk_widget_get_focus_on_click (widget) && !gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
-
-  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
 static void
@@ -294,6 +292,8 @@ click_released_cb (GtkGestureClick *gesture,
 
   if (priv->active && (priv->group_prev || priv->group_next))
     return;
+
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
   gtk_check_button_set_active (self, !priv->active);
 

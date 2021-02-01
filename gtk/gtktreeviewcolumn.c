@@ -24,7 +24,7 @@
 #include "gtkcellareabox.h"
 #include "gtkcellareacontext.h"
 #include "gtkcelllayout.h"
-#include "gtkdragsource.h"
+#include "gtkdragsourceprivate.h"
 #include "gtkframe.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
@@ -1072,7 +1072,7 @@ column_button_drag_update (GtkGestureDrag    *gesture,
 {
   GtkTreeViewColumnPrivate *priv = column->priv;
 
-  if (gtk_drag_check_threshold (priv->button, 0, 0, offset_x, offset_y))
+  if (gtk_drag_check_threshold_double (priv->button, 0, 0, offset_x, offset_y))
     {
       gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
       _gtk_tree_view_column_start_drag (GTK_TREE_VIEW (priv->tree_view), column,
