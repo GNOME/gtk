@@ -424,15 +424,13 @@ check_table (GtkIMContextSimple    *context_simple,
   return FALSE;
 }
 
-/* Checks if a keysym is a dead key. Dead key keysym values are defined in
- * ../gdk/gdkkeysyms.h and the first is GDK_KEY_dead_grave. As X.Org is updated,
- * more dead keys are added and we need to update the upper limit.
- * Currently, the upper limit is GDK_KEY_dead_dasia+1. The +1 has to do with
- * a temporary issue in the X.Org header files.
- * In future versions it will be just the keysym (no +1).
+/* Checks if a keysym is a dead key.
+ * Dead key keysym values are defined in ../gdk/gdkkeysyms.h and the
+ * first is GDK_KEY_dead_grave. As X.Org is updated, more dead keys
+ * are added and we need to update the upper limit.
  */
 #define IS_DEAD_KEY(k) \
-    ((k) >= GDK_KEY_dead_grave && (k) <= (GDK_KEY_dead_dasia+1))
+    ((k) >= GDK_KEY_dead_grave && (k) <= GDK_KEY_dead_greek)
 
 gboolean
 gtk_check_compact_table (const GtkComposeTableCompact  *table,
@@ -624,49 +622,66 @@ gtk_check_algorithmically (const guint16       *compose_buffer,
       combination_buffer[n_compose] = 0;
       i--;
       while (i >= 0)
-	{
-	  switch (compose_buffer[i])
-	    {
+        {
+          switch (compose_buffer[i])
+            {
 #define CASE(keysym, unicode) \
-	    case GDK_KEY_dead_##keysym: combination_buffer[i+1] = unicode; break
+            case GDK_KEY_dead_##keysym: combination_buffer[i+1] = unicode; break
 
-	    CASE (grave, 0x0300);
-	    CASE (acute, 0x0301);
-	    CASE (circumflex, 0x0302);
-	    CASE (tilde, 0x0303);	/* Also used with perispomeni, 0x342. */
-	    CASE (macron, 0x0304);
-	    CASE (breve, 0x0306);
-	    CASE (abovedot, 0x0307);
-	    CASE (diaeresis, 0x0308);
-	    CASE (hook, 0x0309);
-	    CASE (abovering, 0x030A);
-	    CASE (doubleacute, 0x030B);
-	    CASE (caron, 0x030C);
-	    CASE (abovecomma, 0x0313);         /* Equivalent to psili */
-	    CASE (abovereversedcomma, 0x0314); /* Equivalent to dasia */
-	    CASE (horn, 0x031B);	/* Legacy use for psili, 0x313 (or 0x343). */
-	    CASE (belowdot, 0x0323);
-	    CASE (cedilla, 0x0327);
-	    CASE (ogonek, 0x0328);	/* Legacy use for dasia, 0x314.*/
-	    CASE (iota, 0x0345);
-	    CASE (voiced_sound, 0x3099);	/* Per Markus Kuhn keysyms.txt file. */
-	    CASE (semivoiced_sound, 0x309A);	/* Per Markus Kuhn keysyms.txt file. */
-
-	    /* The following cases are to be removed once xkeyboard-config,
- 	     * xorg are fully updated.
- 	     */
-            /* Workaround for typo in 1.4.x xserver-xorg */
-	    case 0xfe66: combination_buffer[i+1] = 0x314; break;
-	    /* CASE (dasia, 0x314); */
-	    /* CASE (perispomeni, 0x342); */
-	    /* CASE (psili, 0x343); */
+            CASE (grave, 0x0300);
+            CASE (acute, 0x0301);
+            CASE (circumflex, 0x0302);
+            CASE (tilde, 0x0303);       /* Also used with perispomeni, 0x342. */
+            CASE (macron, 0x0304);
+            CASE (breve, 0x0306);
+            CASE (abovedot, 0x0307);
+            CASE (diaeresis, 0x0308);
+            CASE (abovering, 0x30A);
+            CASE (hook, 0x0309);
+            CASE (doubleacute, 0x030B);
+            CASE (caron, 0x030C);
+            CASE (cedilla, 0x0327);
+            CASE (ogonek, 0x0328);      /* Legacy use for dasia, 0x314.*/
+            CASE (iota, 0x0345);
+            CASE (voiced_sound, 0x3099);        /* Per Markus Kuhn keysyms.txt file. */
+            CASE (semivoiced_sound, 0x309A);    /* Per Markus Kuhn keysyms.txt file. */
+            CASE (belowdot, 0x0323);
+            CASE (horn, 0x031B);        /* Legacy use for psili, 0x313 (or 0x343). */
+            CASE (stroke, 0x335);
+            CASE (abovecomma, 0x0313);  /* Equivalent to psili */
+            CASE (abovereversedcomma, 0x0314); /* Equivalent to dasia */
+            CASE (doublegrave, 0x30F);
+            CASE (belowring, 0x325);
+            CASE (belowmacron, 0x331);
+            CASE (belowcircumflex, 0x32D);
+            CASE (belowtilde, 0x330);
+            CASE (belowbreve, 0x32e);
+            CASE (belowdiaeresis, 0x324);
+            CASE (invertedbreve, 0x32f);
+            CASE (belowcomma, 0x326);
+            CASE (lowline, 0x332);
+            CASE (aboveverticalline, 0x30D);
+            CASE (belowverticalline, 0x329);
+            CASE (longsolidusoverlay, 0x338);
+            CASE (a, 0x363);
+            CASE (A, 0x363);
+            CASE (e, 0x364);
+            CASE (E, 0x364);
+            CASE (i, 0x365);
+            CASE (I, 0x365);
+            CASE (o, 0x366);
+            CASE (O, 0x366);
+            CASE (u, 0x367);
+            CASE (U, 0x367);
+            CASE (small_schwa, 0x1DEA);
+            CASE (capital_schwa, 0x1DEA);
 #undef CASE
-	    default:
-	      combination_buffer[i+1] = gdk_keyval_to_unicode (compose_buffer[i]);
-	    }
-	  i--;
-	}
-      
+            default:
+              combination_buffer[i+1] = gdk_keyval_to_unicode (compose_buffer[i]);
+            }
+          i--;
+        }
+
       /* If the buffer normalizes to a single character, then modify the order
        * of combination_buffer accordingly, if necessary, and return TRUE.
        */
