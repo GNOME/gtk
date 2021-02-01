@@ -189,7 +189,7 @@ parse_compose_sequence (GtkComposeData *compose_data,
     }
 
   g_strfreev (words);
-  if (0 == n || n >= GTK_MAX_COMPOSE_LEN)
+  if (0 == n || n > GTK_MAX_COMPOSE_LEN)
     {
       g_warning ("The max length of compose sequences is %d: %s",
                  GTK_MAX_COMPOSE_LEN, line);
