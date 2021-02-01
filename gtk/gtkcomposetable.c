@@ -82,6 +82,7 @@ parse_compose_value (GtkComposeData *compose_data,
 {
   char **words = g_strsplit (val, "\"", 3);
   gunichar uch;
+  char *endp;
 
   if (g_strv_length (words) < 3)
     {
@@ -102,21 +103,32 @@ parse_compose_value (GtkComposeData *compose_data,
 
       /* The escaped string "\"" is separated with '\\' and '"'. */
       if (uch == '\0' && words[2][0] == '"')
-        uch = '"';
+        {
+          uch = '"';
+        }
       /* The escaped octal */
       else if (uch >= '0' && uch < '8')
-        uch = g_ascii_strtoll (words[1] + 1, NULL, 8);
+        {
+          uch = g_ascii_strtoll (words[1] + 1, &endp, 8);
+          if (*endp != '\0')
+            {
+              g_warning ("GTK supports to output one char only: %s: %s", val, line);
+              goto fail;
+            }
+        }
       /* If we need to handle other escape sequences. */
       else if (uch != '\\')
         {
           g_warning ("Invalid escape sequence: %s: %s", val, line);
         }
     }
-
-  if (g_utf8_get_char (g_utf8_next_char (words[1])) > 0)
+  else
     {
-      g_warning ("GTK supports to output one char only: %s: %s", val, line);
-      goto fail;
+      if (g_utf8_get_char (g_utf8_next_char (words[1])) > 0)
+        {
+          g_warning ("GTK supports to output one char only: %s: %s", val, line);
+          goto fail;
+        }
     }
 
   compose_data->value[1] = uch;
