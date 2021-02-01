@@ -61,7 +61,8 @@
 
 struct _GtkIMContextSimplePrivate
 {
-  guint16        compose_buffer[GTK_MAX_COMPOSE_LEN + 1];
+  guint16       *compose_buffer;
+  int            compose_buffer_len;
   gunichar       tentative_match;
   int            tentative_match_len;
 
@@ -267,14 +268,24 @@ init_compose_table_async (GCancellable         *cancellable,
 }
 
 static void
-gtk_im_context_simple_init (GtkIMContextSimple *im_context_simple)
+gtk_im_context_simple_init (GtkIMContextSimple *context_simple)
 {
-  im_context_simple->priv = gtk_im_context_simple_get_instance_private (im_context_simple); 
+  GtkIMContextSimplePrivate *priv;
+
+  priv = context_simple->priv = gtk_im_context_simple_get_instance_private (context_simple);
+
+  priv->compose_buffer_len = gtk_compose_table_compact.max_seq_len + 1;
+  priv->compose_buffer = g_new0 (guint16, priv->compose_buffer_len);
 }
 
 static void
 gtk_im_context_simple_finalize (GObject *obj)
 {
+  GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (obj);
+  GtkIMContextSimplePrivate *priv = context_simple->priv;;
+
+  g_free (priv->compose_buffer);
+
   G_OBJECT_CLASS (gtk_im_context_simple_parent_class)->finalize (obj);
 }
 
@@ -534,14 +545,17 @@ gtk_check_compact_table (const GtkComposeTableCompact  *table,
  * permutations of the diacritic marks, then attempt to normalize.
  */
 static gboolean
-check_normalize_nfc (gunichar* combination_buffer, int n_compose)
+check_normalize_nfc (gunichar *combination_buffer,
+                     int       n_compose)
 {
-  gunichar combination_buffer_temp[GTK_MAX_COMPOSE_LEN];
+  gunichar *combination_buffer_temp;
   char *combination_utf8_temp = NULL;
   char *nfc_temp = NULL;
   int n_combinations;
   gunichar temp_swap;
   int i;
+
+  combination_buffer_temp = g_alloca (n_compose * sizeof (gunichar));
 
   n_combinations = 1;
 
@@ -559,7 +573,7 @@ check_normalize_nfc (gunichar* combination_buffer, int n_compose)
           combination_buffer[i] = 0x342;
     }
 
-  memcpy (combination_buffer_temp, combination_buffer, GTK_MAX_COMPOSE_LEN * sizeof (gunichar) );
+  memcpy (combination_buffer_temp, combination_buffer, n_compose * sizeof (gunichar) );
 
   for (i = 0; i < n_combinations; i++ )
     {
@@ -569,7 +583,7 @@ check_normalize_nfc (gunichar* combination_buffer, int n_compose)
 
       if (g_utf8_strlen (nfc_temp, -1) == 1)
         {
-          memcpy (combination_buffer, combination_buffer_temp, GTK_MAX_COMPOSE_LEN * sizeof (gunichar) );
+          memcpy (combination_buffer, combination_buffer_temp, n_compose * sizeof (gunichar) );
 
           g_free (combination_utf8_temp);
           g_free (nfc_temp);
@@ -594,20 +608,19 @@ check_normalize_nfc (gunichar* combination_buffer, int n_compose)
 }
 
 gboolean
-gtk_check_algorithmically (const guint16       *compose_buffer,
-                           int                  n_compose,
-                           gunichar            *output_char)
+gtk_check_algorithmically (const guint16 *compose_buffer,
+                           int            n_compose,
+                           gunichar      *output_char)
 
 {
   int i;
-  gunichar combination_buffer[GTK_MAX_COMPOSE_LEN];
+  gunichar *combination_buffer;
   char *combination_utf8, *nfc;
+
+  combination_buffer = alloca (sizeof (gunichar) * (n_compose + 1));
 
   if (output_char)
     *output_char = 0;
-
-  if (n_compose >= GTK_MAX_COMPOSE_LEN)
-    return FALSE;
 
   for (i = 0; i < n_compose && IS_DEAD_KEY (compose_buffer[i]); i++)
     ;
@@ -809,9 +822,11 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
     {
       int len = priv->tentative_match_len;
       int i;
-      guint16 compose_buffer[GTK_MAX_COMPOSE_LEN + 1];
+      guint16 *compose_buffer;
 
-      memcpy (compose_buffer, priv->compose_buffer, sizeof (compose_buffer));
+      compose_buffer = alloca (sizeof (guint16) * priv->compose_buffer_len);
+
+      memcpy (compose_buffer, priv->compose_buffer, sizeof (guint16) * priv->compose_buffer_len);
 
       gtk_im_context_simple_commit_char (context, priv->tentative_match);
       
@@ -938,7 +953,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   gunichar output_char;
   guint keyval, state;
 
-  while (priv->compose_buffer[n_compose] != 0)
+  while (priv->compose_buffer[n_compose] != 0 && n_compose < priv->compose_buffer_len)
     n_compose++;
 
   keyval = gdk_key_event_get_keyval (event);
@@ -1102,7 +1117,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   /* Then, check for compose sequences */
   if (priv->in_hex_sequence)
     {
-      if (hex_keyval)
+      if (hex_keyval && n_compose < 6)
 	priv->compose_buffer[n_compose++] = hex_keyval;
       else if (is_escape)
 	{
@@ -1111,13 +1126,21 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	}
       else if (!is_hex_end)
 	{
-	  /* non-hex character in hex sequence */
+	  /* non-hex character in hex sequence, or sequence too long */
 	  beep_surface (surface);
 	  return TRUE;
 	}
     }
   else
-    priv->compose_buffer[n_compose++] = keyval;
+    {
+      if (n_compose + 1 == priv->compose_buffer_len)
+        {
+          priv->compose_buffer_len += 1;
+          priv->compose_buffer = g_renew (guint16, priv->compose_buffer, priv->compose_buffer_len);
+        }
+
+      priv->compose_buffer[n_compose++] = keyval;
+    }
 
   priv->compose_buffer[n_compose] = 0;
 
@@ -1341,8 +1364,7 @@ gtk_im_context_simple_add_compose_file (GtkIMContextSimple *context_simple,
 
   G_LOCK (global_tables);
 
-  global_tables = gtk_compose_table_list_add_file (global_tables,
-                                                   compose_file);
+  global_tables = gtk_compose_table_list_add_file (global_tables, compose_file);
 
   G_UNLOCK (global_tables);
 }
