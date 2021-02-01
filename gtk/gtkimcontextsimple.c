@@ -297,7 +297,7 @@ gtk_im_context_simple_new (void)
 
 static void
 gtk_im_context_simple_commit_char (GtkIMContext *context,
-				   gunichar ch)
+                                   gunichar      ch)
 {
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
   GtkIMContextSimplePrivate *priv = context_simple->priv;
@@ -309,14 +309,13 @@ gtk_im_context_simple_commit_char (GtkIMContext *context,
   len = g_unichar_to_utf8 (ch, buf);
   buf[len] = '\0';
 
-  if (priv->tentative_match || priv->in_hex_sequence)
-    {
-      priv->in_hex_sequence = FALSE;
-      priv->tentative_match = 0;
-      priv->tentative_match_len = 0;
-      g_signal_emit_by_name (context_simple, "preedit-changed");
-      g_signal_emit_by_name (context_simple, "preedit-end");
-    }
+  priv->in_hex_sequence = FALSE;
+  priv->tentative_match = 0;
+  priv->tentative_match_len = 0;
+  priv->compose_buffer[0] = 0;
+
+  g_signal_emit_by_name (context, "preedit-changed");
+  g_signal_emit_by_name (context, "preedit-end");
 
   g_signal_emit_by_name (context, "commit", &buf);
 }
@@ -415,9 +414,12 @@ check_table (GtkIMContextSimple    *context_simple,
 	    }
 
 	  gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
-	  priv->compose_buffer[0] = 0;
+
+          return TRUE;
 	}
       
+      g_signal_emit_by_name (context_simple, "preedit-changed");
+
       return TRUE;
     }
 
@@ -811,14 +813,16 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
     {
       int len = priv->tentative_match_len;
       int i;
-      
+      guint16 compose_buffer[GTK_MAX_COMPOSE_LEN + 1];
+
+      memcpy (compose_buffer, priv->compose_buffer, sizeof (compose_buffer));
+
       gtk_im_context_simple_commit_char (context, priv->tentative_match);
-      priv->compose_buffer[0] = 0;
       
       for (i = 0; i < n_compose - len - 1; i++)
 	{
           GdkTranslatedKey translated;
-          translated.keyval = priv->compose_buffer[len + i];
+          translated.keyval = compose_buffer[len + i];
           translated.consumed = 0;
           translated.layout = 0;
           translated.level = 0;
@@ -826,7 +830,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
                                                    gdk_event_get_surface (event),
                                                    gdk_event_get_device (event),
                                                    gdk_event_get_time (event),
-                                                   priv->compose_buffer[len + i],
+                                                   compose_buffer[len + i],
                                                    gdk_event_get_modifier_state (event),
                                                    FALSE,
                                                    &translated,
@@ -846,6 +850,8 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
       if (n_compose > 1)		/* Invalid sequence */
 	{
 	  beep_surface (gdk_event_get_surface (event));
+          g_signal_emit_by_name (context, "preedit-changed");
+          g_signal_emit_by_name (context, "preedit-end");
 	  return TRUE;
 	}
   
@@ -952,7 +958,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	      g_unichar_validate (priv->tentative_match))
 	    {
 	      gtk_im_context_simple_commit_char (context, priv->tentative_match);
-	      priv->compose_buffer[0] = 0;
 
 	      return TRUE;
 	    }
@@ -1051,6 +1056,19 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       return TRUE;
     }
 
+  if (!priv->in_hex_sequence && n_compose > 0 && is_backspace)
+    {
+      n_compose--;
+      priv->compose_buffer[n_compose] = 0;
+
+      g_signal_emit_by_name (context_simple, "preedit-changed");
+
+      if (n_compose == 0)
+        g_signal_emit_by_name (context_simple, "preedit-end");
+
+      return TRUE;
+    }
+
   /* Check for hex sequence restart */
   if (priv->in_hex_sequence && have_hex_mods && is_hex_start)
     {
@@ -1058,7 +1076,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	  g_unichar_validate (priv->tentative_match))
 	{
 	  gtk_im_context_simple_commit_char (context, priv->tentative_match);
-	  priv->compose_buffer[0] = 0;
 	}
       else
 	{
@@ -1120,7 +1137,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 		  g_unichar_validate (priv->tentative_match))
 		{
 		  gtk_im_context_simple_commit_char (context, priv->tentative_match);
-		  priv->compose_buffer[0] = 0;
 		}
 	      else
 		{
@@ -1176,7 +1192,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
                 {
                   gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple),
                                                      output_char);
-                  priv->compose_buffer[0] = 0;
                 }
             }
           else
@@ -1186,8 +1201,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
                   priv->tentative_match = output_char;
                   priv->tentative_match_len = n_compose;
                 }
-              if (output_char)
-                g_signal_emit_by_name (context_simple, "preedit-changed");
+              g_signal_emit_by_name (context_simple, "preedit-changed");
             }
 
           return TRUE;
@@ -1199,7 +1213,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
             {
               gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple),
                                                  output_char);
-              priv->compose_buffer[0] = 0;
             }
 	  return TRUE;
         }
@@ -1227,56 +1240,59 @@ gtk_im_context_simple_reset (GtkIMContext *context)
     }
 }
 
-static void     
+static void
 gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
-					  char          **str,
-					  PangoAttrList **attrs,
-					  int            *cursor_pos)
+                                          char          **str,
+                                          PangoAttrList **attrs,
+                                          int            *cursor_pos)
 {
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
   GtkIMContextSimplePrivate *priv = context_simple->priv;
-  char outbuf[37]; /* up to 6 hex digits */
-  int len = 0;
+  GString *s;
+  int i;
+
+  s = g_string_new ("");
 
   if (priv->in_hex_sequence)
     {
-      int hexchars = 0;
-         
-      outbuf[0] = 'u';
-      len = 1;
+      g_string_append_c (s, 'u');
 
-      while (priv->compose_buffer[hexchars] != 0)
-	{
-	  len += g_unichar_to_utf8 (gdk_keyval_to_unicode (priv->compose_buffer[hexchars]),
-				    outbuf + len);
-	  ++hexchars;
-	}
-
-      g_assert (len < 25);
+      for (i = 0; priv->compose_buffer[i]; i++)
+        g_string_append_unichar (s, gdk_keyval_to_unicode (priv->compose_buffer[i]));
     }
-  else if (priv->tentative_match)
-    len = g_unichar_to_utf8 (priv->tentative_match, outbuf);
+  else if (priv->tentative_match && priv->compose_buffer[0] != 0)
+    {
+       g_string_append_unichar (s, priv->tentative_match);
+    }
+  else
+    {
+      for (i = 0; priv->compose_buffer[i]; i++)
+        {
+          if (priv->compose_buffer[i] == GDK_KEY_Multi_key)
+            g_string_append_unichar (s, 0x2384); /* U+2384 COMPOSITION SYMBOL */
+          else
+            g_string_append_unichar (s, gdk_keyval_to_unicode (priv->compose_buffer[i]));
+        }
+    }
 
-  outbuf[len] = '\0';
-
-  if (str)
-    *str = g_strdup (outbuf);
+  if (cursor_pos)
+    *cursor_pos = s->len;
 
   if (attrs)
     {
       *attrs = pango_attr_list_new ();
-      
-      if (len)
-	{
-	  PangoAttribute *attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
-	  attr->start_index = 0;
-          attr->end_index = len;
-	  pango_attr_list_insert (*attrs, attr);
-	}
+
+      if (s->len)
+        {
+          PangoAttribute *attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
+          attr->start_index = 0;
+          attr->end_index = s->len;
+          pango_attr_list_insert (*attrs, attr);
+        }
     }
 
-  if (cursor_pos)
-    *cursor_pos = len;
+  if (str)
+    *str = g_string_free (s, FALSE);
 }
 
 /**
