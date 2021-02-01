@@ -32,6 +32,10 @@
 #define GTK_COMPOSE_TABLE_MAGIC "GtkComposeTable"
 #define GTK_COMPOSE_TABLE_VERSION (1)
 
+/* Maximum length of sequences we parse */
+
+#define MAX_COMPOSE_LEN 20
+
 typedef struct {
   gunichar     *sequence;
   gunichar      value[2];
@@ -189,10 +193,10 @@ parse_compose_sequence (GtkComposeData *compose_data,
     }
 
   g_strfreev (words);
-  if (0 == n || n > GTK_MAX_COMPOSE_LEN)
+  if (0 == n || n > MAX_COMPOSE_LEN)
     {
-      g_warning ("The max length of compose sequences is %d: %s",
-                 GTK_MAX_COMPOSE_LEN, line);
+      g_warning ("Suspicious compose sequence length (%d). Are you sure this is right?: %s",
+                 n, line);
       return FALSE;
     }
 
@@ -279,7 +283,7 @@ gtk_compose_list_check_duplicated (GList *compose_list)
 
   for (list = compose_list; list != NULL; list = list->next)
     {
-      static guint16 keysyms[GTK_MAX_COMPOSE_LEN + 1];
+      static guint16 keysyms[MAX_COMPOSE_LEN + 1];
       int i;
       int n_compose = 0;
       gboolean compose_finish;
@@ -287,10 +291,10 @@ gtk_compose_list_check_duplicated (GList *compose_list)
 
       compose_data = list->data;
 
-      for (i = 0; i < GTK_MAX_COMPOSE_LEN + 1; i++)
+      for (i = 0; i < MAX_COMPOSE_LEN + 1; i++)
         keysyms[i] = 0;
 
-      for (i = 0; i < GTK_MAX_COMPOSE_LEN + 1; i++)
+      for (i = 0; i < MAX_COMPOSE_LEN + 1; i++)
         {
           gunichar codepoint = compose_data->sequence[i];
           keysyms[i] = (guint16) codepoint;
@@ -343,7 +347,7 @@ gtk_compose_list_check_uint16 (GList *compose_list)
       int i;
 
       compose_data = list->data;
-      for (i = 0; i < GTK_MAX_COMPOSE_LEN; i++)
+      for (i = 0; i < MAX_COMPOSE_LEN; i++)
         {
           gunichar codepoint = compose_data->sequence[i];
 
@@ -384,7 +388,7 @@ gtk_compose_list_format_for_gtk (GList *compose_list,
   for (list = compose_list; list != NULL; list = list->next)
     {
       compose_data = list->data;
-      for (i = 0; i < GTK_MAX_COMPOSE_LEN + 1; i++)
+      for (i = 0; i < MAX_COMPOSE_LEN + 1; i++)
         {
           codepoint = compose_data->sequence[i];
           if (codepoint == 0)
@@ -841,9 +845,10 @@ gtk_compose_table_list_add_array (GSList        *compose_tables,
   guint16 *gtk_compose_seqs = NULL;
 
   g_return_val_if_fail (data != NULL, compose_tables);
-  g_return_val_if_fail (max_seq_len <= GTK_MAX_COMPOSE_LEN, compose_tables);
+  g_return_val_if_fail (max_seq_len >= 0, compose_tables);
+  g_return_val_if_fail (n_seqs >= 0, compose_tables);
 
-  n_index_stride = MIN (max_seq_len, GTK_MAX_COMPOSE_LEN) + 2;
+  n_index_stride = max_seq_len + 2;
   if (!g_size_checked_mul (&length, n_index_stride, n_seqs))
     {
       g_critical ("Overflow in the compose sequences");
@@ -869,7 +874,7 @@ gtk_compose_table_list_add_array (GSList        *compose_tables,
 }
 
 GSList *
-gtk_compose_table_list_add_file (GSList      *compose_tables,
+gtk_compose_table_list_add_file (GSList     *compose_tables,
                                  const char *compose_file)
 {
   guint32 hash;
