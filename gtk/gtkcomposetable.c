@@ -100,8 +100,8 @@ parse_compose_value (GtkComposeData *compose_data,
       if (uch == '\0' && words[2][0] == '"')
         uch = '"';
       /* The escaped octal */
-      else if (uch >= '0' && uch <= '8')
-        uch = g_ascii_strtoll(words[1] + 1, NULL, 8);
+      else if (uch >= '0' && uch < '8')
+        uch = g_ascii_strtoll (words[1] + 1, NULL, 8);
       /* If we need to handle other escape sequences. */
       else if (uch != '\\')
         {
