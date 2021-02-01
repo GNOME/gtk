@@ -60,6 +60,11 @@
  * Showing, hiding and running the dialog is handled by the #GtkNativeDialog
  * functions.
  *
+ * Note that unlike #GtkFileChooserDialog, #GtkFileChooserNative objects are
+ * not toplevel widgets, and GTK does not keep them alive. It is your
+ * responsibility to keep a reference until you are done with the
+ * object.
+
  * ## Typical usage ## {#gtkfilechoosernative-typical-usage}
  *
  * In the simplest of cases, you can the following code to use
