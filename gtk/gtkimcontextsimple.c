@@ -297,7 +297,7 @@ gtk_im_context_simple_new (void)
 
 static void
 gtk_im_context_simple_commit_char (GtkIMContext *context,
-				   gunichar ch)
+                                   gunichar      ch)
 {
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
   GtkIMContextSimplePrivate *priv = context_simple->priv;
@@ -309,14 +309,13 @@ gtk_im_context_simple_commit_char (GtkIMContext *context,
   len = g_unichar_to_utf8 (ch, buf);
   buf[len] = '\0';
 
-  if (priv->tentative_match || priv->in_hex_sequence)
-    {
-      priv->in_hex_sequence = FALSE;
-      priv->tentative_match = 0;
-      priv->tentative_match_len = 0;
-      g_signal_emit_by_name (context_simple, "preedit-changed");
-      g_signal_emit_by_name (context_simple, "preedit-end");
-    }
+  priv->in_hex_sequence = FALSE;
+  priv->tentative_match = 0;
+  priv->tentative_match_len = 0;
+  priv->compose_buffer[0] = 0;
+
+  g_signal_emit_by_name (context, "preedit-changed");
+  g_signal_emit_by_name (context, "preedit-end");
 
   g_signal_emit_by_name (context, "commit", &buf);
 }
@@ -415,24 +414,25 @@ check_table (GtkIMContextSimple    *context_simple,
 	    }
 
 	  gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
-	  priv->compose_buffer[0] = 0;
+
+          return TRUE;
 	}
       
+      g_signal_emit_by_name (context_simple, "preedit-changed");
+
       return TRUE;
     }
 
   return FALSE;
 }
 
-/* Checks if a keysym is a dead key. Dead key keysym values are defined in
- * ../gdk/gdkkeysyms.h and the first is GDK_KEY_dead_grave. As X.Org is updated,
- * more dead keys are added and we need to update the upper limit.
- * Currently, the upper limit is GDK_KEY_dead_dasia+1. The +1 has to do with
- * a temporary issue in the X.Org header files.
- * In future versions it will be just the keysym (no +1).
+/* Checks if a keysym is a dead key.
+ * Dead key keysym values are defined in ../gdk/gdkkeysyms.h and the
+ * first is GDK_KEY_dead_grave. As X.Org is updated, more dead keys
+ * are added and we need to update the upper limit.
  */
 #define IS_DEAD_KEY(k) \
-    ((k) >= GDK_KEY_dead_grave && (k) <= (GDK_KEY_dead_dasia+1))
+    ((k) >= GDK_KEY_dead_grave && (k) <= GDK_KEY_dead_greek)
 
 gboolean
 gtk_check_compact_table (const GtkComposeTableCompact  *table,
@@ -624,49 +624,66 @@ gtk_check_algorithmically (const guint16       *compose_buffer,
       combination_buffer[n_compose] = 0;
       i--;
       while (i >= 0)
-	{
-	  switch (compose_buffer[i])
-	    {
+        {
+          switch (compose_buffer[i])
+            {
 #define CASE(keysym, unicode) \
-	    case GDK_KEY_dead_##keysym: combination_buffer[i+1] = unicode; break
+            case GDK_KEY_dead_##keysym: combination_buffer[i+1] = unicode; break
 
-	    CASE (grave, 0x0300);
-	    CASE (acute, 0x0301);
-	    CASE (circumflex, 0x0302);
-	    CASE (tilde, 0x0303);	/* Also used with perispomeni, 0x342. */
-	    CASE (macron, 0x0304);
-	    CASE (breve, 0x0306);
-	    CASE (abovedot, 0x0307);
-	    CASE (diaeresis, 0x0308);
-	    CASE (hook, 0x0309);
-	    CASE (abovering, 0x030A);
-	    CASE (doubleacute, 0x030B);
-	    CASE (caron, 0x030C);
-	    CASE (abovecomma, 0x0313);         /* Equivalent to psili */
-	    CASE (abovereversedcomma, 0x0314); /* Equivalent to dasia */
-	    CASE (horn, 0x031B);	/* Legacy use for psili, 0x313 (or 0x343). */
-	    CASE (belowdot, 0x0323);
-	    CASE (cedilla, 0x0327);
-	    CASE (ogonek, 0x0328);	/* Legacy use for dasia, 0x314.*/
-	    CASE (iota, 0x0345);
-	    CASE (voiced_sound, 0x3099);	/* Per Markus Kuhn keysyms.txt file. */
-	    CASE (semivoiced_sound, 0x309A);	/* Per Markus Kuhn keysyms.txt file. */
-
-	    /* The following cases are to be removed once xkeyboard-config,
- 	     * xorg are fully updated.
- 	     */
-            /* Workaround for typo in 1.4.x xserver-xorg */
-	    case 0xfe66: combination_buffer[i+1] = 0x314; break;
-	    /* CASE (dasia, 0x314); */
-	    /* CASE (perispomeni, 0x342); */
-	    /* CASE (psili, 0x343); */
+            CASE (grave, 0x0300);
+            CASE (acute, 0x0301);
+            CASE (circumflex, 0x0302);
+            CASE (tilde, 0x0303);       /* Also used with perispomeni, 0x342. */
+            CASE (macron, 0x0304);
+            CASE (breve, 0x0306);
+            CASE (abovedot, 0x0307);
+            CASE (diaeresis, 0x0308);
+            CASE (abovering, 0x30A);
+            CASE (hook, 0x0309);
+            CASE (doubleacute, 0x030B);
+            CASE (caron, 0x030C);
+            CASE (cedilla, 0x0327);
+            CASE (ogonek, 0x0328);      /* Legacy use for dasia, 0x314.*/
+            CASE (iota, 0x0345);
+            CASE (voiced_sound, 0x3099);        /* Per Markus Kuhn keysyms.txt file. */
+            CASE (semivoiced_sound, 0x309A);    /* Per Markus Kuhn keysyms.txt file. */
+            CASE (belowdot, 0x0323);
+            CASE (horn, 0x031B);        /* Legacy use for psili, 0x313 (or 0x343). */
+            CASE (stroke, 0x335);
+            CASE (abovecomma, 0x0313);  /* Equivalent to psili */
+            CASE (abovereversedcomma, 0x0314); /* Equivalent to dasia */
+            CASE (doublegrave, 0x30F);
+            CASE (belowring, 0x325);
+            CASE (belowmacron, 0x331);
+            CASE (belowcircumflex, 0x32D);
+            CASE (belowtilde, 0x330);
+            CASE (belowbreve, 0x32e);
+            CASE (belowdiaeresis, 0x324);
+            CASE (invertedbreve, 0x32f);
+            CASE (belowcomma, 0x326);
+            CASE (lowline, 0x332);
+            CASE (aboveverticalline, 0x30D);
+            CASE (belowverticalline, 0x329);
+            CASE (longsolidusoverlay, 0x338);
+            CASE (a, 0x363);
+            CASE (A, 0x363);
+            CASE (e, 0x364);
+            CASE (E, 0x364);
+            CASE (i, 0x365);
+            CASE (I, 0x365);
+            CASE (o, 0x366);
+            CASE (O, 0x366);
+            CASE (u, 0x367);
+            CASE (U, 0x367);
+            CASE (small_schwa, 0x1DEA);
+            CASE (capital_schwa, 0x1DEA);
 #undef CASE
-	    default:
-	      combination_buffer[i+1] = gdk_keyval_to_unicode (compose_buffer[i]);
-	    }
-	  i--;
-	}
-      
+            default:
+              combination_buffer[i+1] = gdk_keyval_to_unicode (compose_buffer[i]);
+            }
+          i--;
+        }
+
       /* If the buffer normalizes to a single character, then modify the order
        * of combination_buffer accordingly, if necessary, and return TRUE.
        */
@@ -796,14 +813,16 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
     {
       int len = priv->tentative_match_len;
       int i;
-      
+      guint16 compose_buffer[GTK_MAX_COMPOSE_LEN + 1];
+
+      memcpy (compose_buffer, priv->compose_buffer, sizeof (compose_buffer));
+
       gtk_im_context_simple_commit_char (context, priv->tentative_match);
-      priv->compose_buffer[0] = 0;
       
       for (i = 0; i < n_compose - len - 1; i++)
 	{
           GdkTranslatedKey translated;
-          translated.keyval = priv->compose_buffer[len + i];
+          translated.keyval = compose_buffer[len + i];
           translated.consumed = 0;
           translated.layout = 0;
           translated.level = 0;
@@ -811,7 +830,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
                                                    gdk_event_get_surface (event),
                                                    gdk_event_get_device (event),
                                                    gdk_event_get_time (event),
-                                                   priv->compose_buffer[len + i],
+                                                   compose_buffer[len + i],
                                                    gdk_event_get_modifier_state (event),
                                                    FALSE,
                                                    &translated,
@@ -831,6 +850,8 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
       if (n_compose > 1)		/* Invalid sequence */
 	{
 	  beep_surface (gdk_event_get_surface (event));
+          g_signal_emit_by_name (context, "preedit-changed");
+          g_signal_emit_by_name (context, "preedit-end");
 	  return TRUE;
 	}
   
@@ -937,7 +958,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	      g_unichar_validate (priv->tentative_match))
 	    {
 	      gtk_im_context_simple_commit_char (context, priv->tentative_match);
-	      priv->compose_buffer[0] = 0;
 
 	      return TRUE;
 	    }
@@ -1036,6 +1056,19 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       return TRUE;
     }
 
+  if (!priv->in_hex_sequence && n_compose > 0 && is_backspace)
+    {
+      n_compose--;
+      priv->compose_buffer[n_compose] = 0;
+
+      g_signal_emit_by_name (context_simple, "preedit-changed");
+
+      if (n_compose == 0)
+        g_signal_emit_by_name (context_simple, "preedit-end");
+
+      return TRUE;
+    }
+
   /* Check for hex sequence restart */
   if (priv->in_hex_sequence && have_hex_mods && is_hex_start)
     {
@@ -1043,7 +1076,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	  g_unichar_validate (priv->tentative_match))
 	{
 	  gtk_im_context_simple_commit_char (context, priv->tentative_match);
-	  priv->compose_buffer[0] = 0;
 	}
       else
 	{
@@ -1105,7 +1137,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 		  g_unichar_validate (priv->tentative_match))
 		{
 		  gtk_im_context_simple_commit_char (context, priv->tentative_match);
-		  priv->compose_buffer[0] = 0;
 		}
 	      else
 		{
@@ -1161,7 +1192,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
                 {
                   gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple),
                                                      output_char);
-                  priv->compose_buffer[0] = 0;
                 }
             }
           else
@@ -1171,8 +1201,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
                   priv->tentative_match = output_char;
                   priv->tentative_match_len = n_compose;
                 }
-              if (output_char)
-                g_signal_emit_by_name (context_simple, "preedit-changed");
+              g_signal_emit_by_name (context_simple, "preedit-changed");
             }
 
           return TRUE;
@@ -1184,7 +1213,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
             {
               gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple),
                                                  output_char);
-              priv->compose_buffer[0] = 0;
             }
 	  return TRUE;
         }
@@ -1212,56 +1240,59 @@ gtk_im_context_simple_reset (GtkIMContext *context)
     }
 }
 
-static void     
+static void
 gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
-					  char          **str,
-					  PangoAttrList **attrs,
-					  int            *cursor_pos)
+                                          char          **str,
+                                          PangoAttrList **attrs,
+                                          int            *cursor_pos)
 {
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
   GtkIMContextSimplePrivate *priv = context_simple->priv;
-  char outbuf[37]; /* up to 6 hex digits */
-  int len = 0;
+  GString *s;
+  int i;
+
+  s = g_string_new ("");
 
   if (priv->in_hex_sequence)
     {
-      int hexchars = 0;
-         
-      outbuf[0] = 'u';
-      len = 1;
+      g_string_append_c (s, 'u');
 
-      while (priv->compose_buffer[hexchars] != 0)
-	{
-	  len += g_unichar_to_utf8 (gdk_keyval_to_unicode (priv->compose_buffer[hexchars]),
-				    outbuf + len);
-	  ++hexchars;
-	}
-
-      g_assert (len < 25);
+      for (i = 0; priv->compose_buffer[i]; i++)
+        g_string_append_unichar (s, gdk_keyval_to_unicode (priv->compose_buffer[i]));
     }
-  else if (priv->tentative_match)
-    len = g_unichar_to_utf8 (priv->tentative_match, outbuf);
+  else if (priv->tentative_match && priv->compose_buffer[0] != 0)
+    {
+       g_string_append_unichar (s, priv->tentative_match);
+    }
+  else
+    {
+      for (i = 0; priv->compose_buffer[i]; i++)
+        {
+          if (priv->compose_buffer[i] == GDK_KEY_Multi_key)
+            g_string_append_unichar (s, 0x2384); /* U+2384 COMPOSITION SYMBOL */
+          else
+            g_string_append_unichar (s, gdk_keyval_to_unicode (priv->compose_buffer[i]));
+        }
+    }
 
-  outbuf[len] = '\0';
-
-  if (str)
-    *str = g_strdup (outbuf);
+  if (cursor_pos)
+    *cursor_pos = s->len;
 
   if (attrs)
     {
       *attrs = pango_attr_list_new ();
-      
-      if (len)
-	{
-	  PangoAttribute *attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
-	  attr->start_index = 0;
-          attr->end_index = len;
-	  pango_attr_list_insert (*attrs, attr);
-	}
+
+      if (s->len)
+        {
+          PangoAttribute *attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
+          attr->start_index = 0;
+          attr->end_index = s->len;
+          pango_attr_list_insert (*attrs, attr);
+        }
     }
 
-  if (cursor_pos)
-    *cursor_pos = len;
+  if (str)
+    *str = g_string_free (s, FALSE);
 }
 
 /**
@@ -1289,6 +1320,7 @@ gtk_im_context_simple_add_table (GtkIMContextSimple *context_simple,
 				 int                 n_seqs)
 {
   g_return_if_fail (GTK_IS_IM_CONTEXT_SIMPLE (context_simple));
+  g_return_if_fail (max_seq_len <= GTK_MAX_COMPOSE_LEN);
 
   G_LOCK (global_tables);
 
