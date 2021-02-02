@@ -28,7 +28,7 @@
 
 
 #define GTK_COMPOSE_TABLE_MAGIC "GtkComposeTable"
-#define GTK_COMPOSE_TABLE_VERSION (1)
+#define GTK_COMPOSE_TABLE_VERSION (2)
 
 /* Maximum length of sequences we parse */
 
@@ -496,6 +496,7 @@ gtk_compose_table_serialize (GtkComposeTable *compose_table,
   guint16 max_seq_len = compose_table->max_seq_len;
   guint16 index_stride = max_seq_len + 2;
   guint16 n_seqs = compose_table->n_seqs;
+  guint16 n_chars = compose_table->n_chars;
   guint32 i;
 
   g_return_val_if_fail (compose_table != NULL, NULL);
@@ -503,7 +504,7 @@ gtk_compose_table_serialize (GtkComposeTable *compose_table,
   g_return_val_if_fail (index_stride > 0, NULL);
 
   length = strlen (header);
-  total_length = length + sizeof (guint16) * (3 + index_stride * n_seqs);
+  total_length = length + sizeof (guint16) * (4 + index_stride * n_seqs) + n_chars;
   if (count)
     *count = total_length;
 
@@ -512,35 +513,25 @@ gtk_compose_table_serialize (GtkComposeTable *compose_table,
   memcpy (p, header, length);
   p += length;
 
-  /* Copy by byte for endian */
-#define BYTE_COPY_FROM_BUF(element)                                           \
-  bytes = GUINT16_TO_BE ((element));                                          \
-  memcpy (p, &bytes, length);                                                 \
-  p += length;                                                                \
-  if (p - contents > total_length)                                            \
-    {                                                                         \
-      g_warning ("data size %lld is bigger than %" G_GSIZE_FORMAT,            \
-                 (long long) (p - contents), total_length);                   \
-      g_free (contents);                                                      \
-      if (count)                                                              \
-        {                                                                     \
-          *count = 0;                                                         \
-        }                                                                     \
-      return NULL;                                                            \
-    }
+#define APPEND_GUINT16(elt) \
+  bytes = GUINT16_TO_BE (elt); \
+  memcpy (p, &bytes, sizeof (guint16)); \
+  p += sizeof (guint16);
 
-  length = sizeof (guint16);
-
-  BYTE_COPY_FROM_BUF (version);
-  BYTE_COPY_FROM_BUF (max_seq_len);
-  BYTE_COPY_FROM_BUF (n_seqs);
+  APPEND_GUINT16 (version);
+  APPEND_GUINT16 (max_seq_len);
+  APPEND_GUINT16 (n_seqs);
+  APPEND_GUINT16 (n_chars);
 
   for (i = 0; i < (guint32) index_stride * n_seqs; i++)
     {
-      BYTE_COPY_FROM_BUF (compose_table->data[i]);
+      APPEND_GUINT16 (compose_table->data[i]);
     }
 
-#undef BYTE_COPY_FROM_BUF
+  if (compose_table->n_chars > 0)
+    memcpy (p, compose_table->char_data, compose_table->n_chars);
+
+#undef APPEND_GUINT16
 
   return contents;
 }
@@ -564,16 +555,17 @@ gtk_compose_table_load_cache (const char *compose_file)
   GStatBuf original_buf;
   GStatBuf cache_buf;
   gsize total_length;
-  gsize length;
   GError *error = NULL;
   guint16 bytes;
   guint16 version;
   guint16 max_seq_len;
   guint16 index_stride;
   guint16 n_seqs;
+  guint16 n_chars;
   guint32 i;
   guint16 *gtk_compose_seqs = NULL;
   GtkComposeTable *retval;
+  char *char_data = NULL;
 
   hash = g_str_hash (compose_file);
   if ((path = gtk_compose_hash_get_cache_path (hash)) == NULL)
@@ -592,16 +584,10 @@ gtk_compose_table_load_cache (const char *compose_file)
       goto out_load_cache;
     }
 
-  /* Copy by byte for endian */
-#define BYTE_COPY_TO_BUF(element)                                       \
-  memcpy (&bytes, p, length);                                           \
-  element = GUINT16_FROM_BE (bytes);                                    \
-  p += length;                                                          \
-  if (p - contents > total_length)                                      \
-    {                                                                   \
-      g_warning ("Broken cache content %s in %s", path, #element);      \
-      goto out_load_cache;                                              \
-    }
+#define GET_GUINT16(elt) \
+  memcpy (&bytes, p, sizeof (guint16)); \
+  elt = GUINT16_FROM_BE (bytes); \
+  p += sizeof (guint16);
 
   p = contents;
   if (g_ascii_strncasecmp (p, GTK_COMPOSE_TABLE_MAGIC,
@@ -610,6 +596,7 @@ gtk_compose_table_load_cache (const char *compose_file)
       g_warning ("The file is not a GtkComposeTable cache file %s", path);
       goto out_load_cache;
     }
+
   p += strlen (GTK_COMPOSE_TABLE_MAGIC);
   if (p - contents > total_length)
     {
@@ -617,9 +604,7 @@ gtk_compose_table_load_cache (const char *compose_file)
       goto out_load_cache;
     }
 
-  length = sizeof (guint16);
-
-  BYTE_COPY_TO_BUF (version);
+  GET_GUINT16 (version);
   if (version != GTK_COMPOSE_TABLE_VERSION)
     {
       g_warning ("cache version is different %u != %u",
@@ -627,8 +612,9 @@ gtk_compose_table_load_cache (const char *compose_file)
       goto out_load_cache;
     }
 
-  BYTE_COPY_TO_BUF (max_seq_len);
-  BYTE_COPY_TO_BUF (n_seqs);
+  GET_GUINT16 (max_seq_len);
+  GET_GUINT16 (n_seqs);
+  GET_GUINT16 (n_chars);
 
   if (max_seq_len == 0 || n_seqs == 0)
     {
@@ -641,13 +627,22 @@ gtk_compose_table_load_cache (const char *compose_file)
 
   for (i = 0; i < (guint32) index_stride * n_seqs; i++)
     {
-      BYTE_COPY_TO_BUF (gtk_compose_seqs[i]);
+      GET_GUINT16 (gtk_compose_seqs[i]);
+    }
+
+  if (n_chars > 0)
+    {
+      char_data = g_new (char, n_chars + 1);
+      memcpy (char_data, p, n_chars);
+      char_data[n_chars] = '\0';
     }
 
   retval = g_new0 (GtkComposeTable, 1);
   retval->data = gtk_compose_seqs;
   retval->max_seq_len = max_seq_len;
   retval->n_seqs = n_seqs;
+  retval->char_data = char_data;
+  retval->n_chars = n_chars;
   retval->id = hash;
 
   g_free (contents);
@@ -655,10 +650,11 @@ gtk_compose_table_load_cache (const char *compose_file)
 
   return retval;
 
-#undef BYTE_COPY_TO_BUF
+#undef GET_GUINT16
 
 out_load_cache:
   g_free (gtk_compose_seqs);
+  g_free (char_data);
   g_free (contents);
   g_free (path);
   return NULL;
@@ -853,18 +849,14 @@ gtk_compose_table_list_add_file (GSList     *compose_tables,
   if (g_slist_find_custom (compose_tables, GINT_TO_POINTER (hash), gtk_compose_table_find) != NULL)
     return compose_tables;
 
-#if 0
   compose_table = gtk_compose_table_load_cache (compose_file);
   if (compose_table != NULL)
     return g_slist_prepend (compose_tables, compose_table);
-#endif
 
   if ((compose_table = gtk_compose_table_new_with_file (compose_file)) == NULL)
     return compose_tables;
 
-#if 0
   gtk_compose_table_save_cache (compose_table);
-#endif
   return g_slist_prepend (compose_tables, compose_table);
 }
 
