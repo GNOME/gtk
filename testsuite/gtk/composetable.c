@@ -5,6 +5,34 @@
 #include "../gtk/gtkimcontextsimpleseqs.h"
 #include "testsuite/testutils.h"
 
+static void
+append_escaped (GString    *str,
+                const char *s)
+{
+  for (const char *p = s; *p; p = g_utf8_next_char (p))
+    {
+      gunichar ch = g_utf8_get_char (p);
+      if (ch == '"')
+        g_string_append (str, "\\\"");
+      else if (ch == '\\')
+        g_string_append (str, "\\\\");
+      else if (g_unichar_isprint (ch))
+        g_string_append_unichar (str, ch);
+      else
+        {
+          guint n[8] = { 0, };
+          int i = 0;
+          while (ch != 0)
+            {
+              n[i++] = ch & 7;
+              ch = ch >> 3;
+            }
+          for (; i >= 0; i--)
+            g_string_append_printf (str, "\\%o", n[i]);
+        }
+    }
+}
+
 static char *
 gtk_compose_table_print (GtkComposeTable *table)
 {
@@ -21,15 +49,26 @@ gtk_compose_table_print (GtkComposeTable *table)
   for (i = 0, seq = table->data; i < table->n_seqs; i++, seq += table->max_seq_len + 2)
     {
       gunichar value;
-      char buf[7] = { 0 };
+      char buf[8] = { 0 };
 
       for (j = 0; j < table->max_seq_len; j++)
         g_string_append_printf (str, "<U%x> ", seq[j]);
 
-      value = 0x10000 * seq[table->max_seq_len] + seq[table->max_seq_len + 1];
-      g_unichar_to_utf8 (value, buf);
+      value = (seq[table->max_seq_len] << 16) | seq[table->max_seq_len + 1];
+      if ((value & (1 << 31)) != 0)
+        {
+          const char *out = &table->char_data[value & ~(1 << 31)];
 
-      g_string_append_printf (str, ": \"%s\" # U%x\n", buf, value);
+          g_string_append (str, ": \"");
+          append_escaped (str, out);
+          g_string_append (str, "\"\n");
+        }
+      else
+        {
+          g_unichar_to_utf8 (value, buf);
+          g_string_append_printf (str, ": \"%s\" # U%x\n", buf, value);
+        }
+
     }
 
   return g_string_free (str, FALSE);
@@ -271,6 +310,7 @@ main (int argc, char *argv[])
   g_test_add_data_func ("/compose-table/octal", "octal", compose_table_compare);
   g_test_add_data_func ("/compose-table/codepoint", "codepoint", compose_table_compare);
   g_test_add_data_func ("/compose-table/multi", "multi", compose_table_compare);
+  g_test_add_data_func ("/compose-table/strings", "strings", compose_table_compare);
   g_test_add_func ("/compose-table/match", compose_table_match);
   g_test_add_func ("/compose-table/match-compact", compose_table_match_compact);
   g_test_add_func ("/compose-table/match-algorithmic", match_algorithmic);
