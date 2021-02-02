@@ -84,6 +84,73 @@ compose_table_compare (gconstpointer data)
   g_free (expected);
 }
 
+static void
+compose_table_match (void)
+{
+  GSList *tables = NULL;
+  GtkComposeTable *table;
+  char *file;
+  guint16 buffer[8] = { 0, };
+  gboolean finish, match, ret;
+  gunichar ch;
+
+  file = g_build_filename (g_test_get_dir (G_TEST_DIST), "compose", "match", NULL);
+
+  tables = gtk_compose_table_list_add_file (tables, file);
+
+  g_assert_true (g_slist_length (tables) == 1);
+
+  table = tables->data;
+
+  buffer[0] = GDK_KEY_Multi_key;
+  buffer[1] = 0;
+  ret = gtk_compose_table_check (table, buffer, 1, &finish, &match, &ch);
+  g_assert_true (ret);
+  g_assert_false (finish);
+  g_assert_false (match);
+  g_assert_true (ch == 0);
+
+  buffer[0] = GDK_KEY_a;
+  buffer[1] = 0;
+  ret = gtk_compose_table_check (table, buffer, 1, &finish, &match, &ch);
+  g_assert_false (ret);
+  g_assert_false (finish);
+  g_assert_false (match);
+  g_assert_true (ch == 0);
+
+  buffer[0] = GDK_KEY_Multi_key;
+  buffer[1] = GDK_KEY_s;
+  buffer[2] = GDK_KEY_e;
+  ret = gtk_compose_table_check (table, buffer, 3, &finish, &match, &ch);
+  g_assert_true (ret);
+  g_assert_false (finish);
+  g_assert_false (match);
+  g_assert_true (ch == 0);
+
+  buffer[0] = GDK_KEY_Multi_key;
+  buffer[1] = GDK_KEY_s;
+  buffer[2] = GDK_KEY_e;
+  buffer[3] = GDK_KEY_q;
+  ret = gtk_compose_table_check (table, buffer, 4, &finish, &match, &ch);
+  g_assert_true (ret);
+  g_assert_false (finish);
+  g_assert_true (match);
+  g_assert_true (ch == '!');
+
+  buffer[0] = GDK_KEY_Multi_key;
+  buffer[1] = GDK_KEY_s;
+  buffer[2] = GDK_KEY_e;
+  buffer[3] = GDK_KEY_q;
+  buffer[4] = GDK_KEY_u;
+  ret = gtk_compose_table_check (table, buffer, 5, &finish, &match, &ch);
+  g_assert_true (ret);
+  g_assert_true (finish);
+  g_assert_true (match);
+  g_assert_true (ch == '?');
+
+  g_free (file);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -108,6 +175,7 @@ main (int argc, char *argv[])
   g_test_add_data_func ("/compose-table/octal", "octal", compose_table_compare);
   g_test_add_data_func ("/compose-table/codepoint", "codepoint", compose_table_compare);
   g_test_add_data_func ("/compose-table/multi", "multi", compose_table_compare);
+  g_test_add_func ("/compose-table/match", compose_table_match);
 
   return g_test_run ();
 }
