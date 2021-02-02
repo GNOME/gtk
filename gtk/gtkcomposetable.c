@@ -853,3 +853,106 @@ gtk_compose_table_list_add_file (GSList     *compose_tables,
   gtk_compose_table_save_cache (compose_table);
   return g_slist_prepend (compose_tables, compose_table);
 }
+
+static int
+compare_seq (const void *key, const void *value)
+{
+  int i = 0;
+  const guint16 *keysyms = key;
+  const guint16 *seq = value;
+
+  while (keysyms[i])
+    {
+      if (keysyms[i] < seq[i])
+        return -1;
+      else if (keysyms[i] > seq[i])
+        return 1;
+
+      i++;
+    }
+
+  return 0;
+}
+
+/*
+ * gtk_compose_table_check:
+ * @table: the table to check
+ * @compose_buffer: the key vals to match
+ * @n_compose: number of non-zero key vals in @compose_buffer
+ * @compose_finish: (out): return location for whether there may be longer matches
+ * @compose_match: (out): return location for whether there is a match
+ * @output_value: (out): return location for the match value
+ *
+ * Looks for matches for a key sequence in @table.
+ *
+ * Returns: %TRUE if there were any matches, %FALSE otherwise
+ */
+gboolean
+gtk_compose_table_check (const GtkComposeTable *table,
+                         guint16               *compose_buffer,
+                         int                    n_compose,
+                         gboolean              *compose_finish,
+                         gboolean              *compose_match,
+                         gunichar              *output_value)
+{
+  int row_stride = table->max_seq_len + 2;
+  guint16 *seq;
+
+  *compose_finish = FALSE;
+  *compose_match = FALSE;
+  *output_value = 0;
+
+  /* Will never match, if the sequence in the compose buffer is longer
+   * than the sequences in the table.  Further, compare_seq (key, val)
+   * will overrun val if key is longer than val.
+   */
+  if (n_compose > table->max_seq_len)
+    return FALSE;
+
+  seq = bsearch (compose_buffer,
+                 table->data, table->n_seqs,
+                 sizeof (guint16) * row_stride,
+                 compare_seq);
+
+  if (seq)
+    {
+      guint16 *prev_seq;
+
+      /* Back up to the first sequence that matches to make sure
+       * we find the exact match if there is one.
+       */
+      while (seq > table->data)
+        {
+          prev_seq = seq - row_stride;
+          if (compare_seq (compose_buffer, prev_seq) != 0)
+            break;
+          seq = prev_seq;
+        }
+
+      if (n_compose == table->max_seq_len ||
+          seq[n_compose] == 0) /* complete sequence */
+        {
+          guint16 *next_seq;
+
+          *output_value = 0x10000 * seq[table->max_seq_len] + seq[table->max_seq_len + 1];
+          *compose_match = TRUE;
+
+          /* We found a tentative match. See if there are any longer
+           * sequences containing this subsequence
+           */
+          next_seq = seq + row_stride;
+          if (next_seq < table->data + row_stride * table->n_seqs)
+            {
+              if (compare_seq (compose_buffer, next_seq) == 0)
+                return TRUE;
+            }
+
+          *compose_finish = TRUE;
+          return TRUE;
+        }
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
