@@ -503,11 +503,11 @@ gtk_compose_table_serialize (GtkComposeTable *compose_table,
   g_return_val_if_fail (index_stride > 0, NULL);
 
   length = strlen (header);
-  total_length = length + sizeof (guint16) * (3 +  index_stride * n_seqs);
+  total_length = length + sizeof (guint16) * (3 + index_stride * n_seqs);
   if (count)
     *count = total_length;
 
-  p = contents = g_slice_alloc (total_length);
+  p = contents = g_malloc (total_length);
 
   memcpy (p, header, length);
   p += length;
@@ -689,7 +689,7 @@ gtk_compose_table_save_cache (GtkComposeTable *compose_table)
     }
 
 out_save_cache:
-  g_slice_free1 (length, contents);
+  g_free (contents);
   g_free (path);
 }
 
