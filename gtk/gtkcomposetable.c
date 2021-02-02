@@ -37,7 +37,6 @@
 typedef struct {
   gunichar *sequence;
   char *value;
-  char *comment;
 } GtkComposeData;
 
 
@@ -46,7 +45,6 @@ gtk_compose_data_free (GtkComposeData *compose_data)
 {
   g_free (compose_data->sequence);
   g_free (compose_data->value);
-  g_free (compose_data->comment);
   g_slice_free (GtkComposeData, compose_data);
 }
 
@@ -79,72 +77,66 @@ parse_compose_value (GtkComposeData *compose_data,
                      const char     *val,
                      const char     *line)
 {
-  char **words = g_strsplit (val, "\"", 3);
-  gunichar uch;
+  char *word;
+  const char *p;
+  gsize len;
+  GString *value;
+  gunichar ch;
   char *endp;
-  char buf[8] = { 0, };
 
-  if (g_strv_length (words) < 3)
+  len = strlen (val);
+  if (val[0] != '"' || val[len - 1] != '"')
     {
       g_warning ("Need to double-quote the value: %s: %s", val, line);
       goto fail;
     }
 
-  uch = g_utf8_get_char (words[1]);
+  word = g_strndup (val + 1, len - 2);
 
-  if (uch == 0)
-    {
-      g_warning ("Invalid value: %s: %s", val, line);
-      goto fail;
-    }
-  else if (uch == '\\')
-    {
-      uch = words[1][1];
+  value = g_string_new ("");
 
-      /* The escaped string "\"" is separated with '\\' and '"'. */
-      if (uch == '\0' && words[2][0] == '"')
+  p = word;
+  while (*p)
+    {
+      if (*p == '\\')
         {
-          uch = '"';
-        }
-      /* The escaped octal */
-      else if (uch >= '0' && uch < '8')
-        {
-          uch = g_ascii_strtoll (words[1] + 1, &endp, 8);
-          if (*endp != '\0')
+          if (p[1] == '"')
             {
-              g_warning ("GTK supports to output one char only: %s: %s", val, line);
+              g_string_append_c (value, '"');
+              p += 2;
+            }
+          else if (p[1] == '\\')
+            {
+              g_string_append_c (value, '\\');
+              p += 2;
+            }
+          else if (p[1] >= '0' && p[1] < '8')
+            {
+              ch = g_ascii_strtoll (p + 1, &endp, 8);
+              g_string_append_unichar (value, ch);
+              p = endp;
+            }
+          else
+            {
+              g_warning ("Invalid escape sequence: %s: %s", val, line);
               goto fail;
             }
         }
-      /* If we need to handle other escape sequences. */
-      else if (uch != '\\')
+      else
         {
-          g_warning ("Invalid escape sequence: %s: %s", val, line);
-        }
-    }
-  else
-    {
-      if (g_utf8_get_char (g_utf8_next_char (words[1])) > 0)
-        {
-          g_warning ("GTK supports to output one char only: %s: %s", val, line);
-          goto fail;
+          ch = g_utf8_get_char (p);
+          g_string_append_unichar (value, ch);
+          p = g_utf8_next_char (p);
         }
     }
 
-  g_unichar_to_utf8 (uch, buf);
-  compose_data->value = g_strdup (buf);
+  compose_data->value = g_string_free (value, FALSE);
 
-  if (uch == '"')
-    compose_data->comment = g_strdup (g_strstrip (words[2] + 1));
-  else
-    compose_data->comment = g_strdup (g_strstrip (words[2]));
-
-  g_strfreev (words);
+  g_free (word);
 
   return TRUE;
 
 fail:
-  g_strfreev (words);
   return FALSE;
 }
 
