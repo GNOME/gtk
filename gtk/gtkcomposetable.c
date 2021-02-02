@@ -880,7 +880,7 @@ compare_seq (const void *key, const void *value)
  * @n_compose: number of non-zero key vals in @compose_buffer
  * @compose_finish: (out): return location for whether there may be longer matches
  * @compose_match: (out): return location for whether there is a match
- * @output_value: (out): return location for the match value
+ * @output: (out) (caller-allocates): return location for the match values
  *
  * Looks for matches for a key sequence in @table.
  *
@@ -892,14 +892,15 @@ gtk_compose_table_check (const GtkComposeTable *table,
                          int                    n_compose,
                          gboolean              *compose_finish,
                          gboolean              *compose_match,
-                         gunichar              *output_value)
+                         GString               *output)
 {
   int row_stride = table->max_seq_len + 2;
   guint16 *seq;
 
   *compose_finish = FALSE;
   *compose_match = FALSE;
-  *output_value = 0;
+
+  g_string_set_size (output, 0);
 
   /* Will never match, if the sequence in the compose buffer is longer
    * than the sequences in the table.  Further, compare_seq (key, val)
@@ -932,8 +933,11 @@ gtk_compose_table_check (const GtkComposeTable *table,
           seq[n_compose] == 0) /* complete sequence */
         {
           guint16 *next_seq;
+          gunichar value;
 
-          *output_value = 0x10000 * seq[table->max_seq_len] + seq[table->max_seq_len + 1];
+          value = 0x10000 * seq[table->max_seq_len] + seq[table->max_seq_len + 1];
+          g_string_append_unichar (output, value);
+
           *compose_match = TRUE;
 
           /* We found a tentative match. See if there are any longer

@@ -55,7 +55,7 @@ gboolean          gtk_compose_table_check          (const GtkComposeTable *table
                                                     int                    n_compose,
                                                     gboolean              *compose_finish,
                                                     gboolean              *compose_match,
-                                                    gunichar              *output_value);
+                                                    GString               *output);
 
 gboolean          gtk_compose_table_compact_check  (const GtkComposeTableCompact  *table,
                                                     const guint16                 *compose_buffer,
