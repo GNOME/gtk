@@ -1096,7 +1096,7 @@ check_normalize_nfc (gunichar *combination_buffer,
 
   n_combinations = 1;
 
-  for (i = 1; i < n_compose; i++ )
+  for (i = 1; i < n_compose; i++)
      n_combinations *= i;
 
   /* Xorg reuses dead_tilde for the perispomeni diacritic mark.
@@ -1112,10 +1112,10 @@ check_normalize_nfc (gunichar *combination_buffer,
 
   memcpy (combination_buffer_temp, combination_buffer, n_compose * sizeof (gunichar) );
 
-  for (i = 0; i < n_combinations; i++ )
+  for (i = 0; i < n_combinations; i++)
     {
       g_unicode_canonical_ordering (combination_buffer_temp, n_compose);
-      combination_utf8_temp = g_ucs4_to_utf8 (combination_buffer_temp, -1, NULL, NULL, NULL);
+      combination_utf8_temp = g_ucs4_to_utf8 (combination_buffer_temp, n_compose, NULL, NULL, NULL);
       nfc_temp = g_utf8_normalize (combination_utf8_temp, -1, G_NORMALIZE_NFC);
 
       if (g_utf8_strlen (nfc_temp, -1) == 1)
