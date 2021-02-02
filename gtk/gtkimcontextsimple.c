@@ -363,69 +363,34 @@ compare_seq (const void *key, const void *value)
 
 static gboolean
 check_table (GtkIMContextSimple    *context_simple,
-	     const GtkComposeTable *table,
-	     int                    n_compose)
+             const GtkComposeTable *table,
+             int                    n_compose)
 {
   GtkIMContextSimplePrivate *priv = context_simple->priv;
-  int row_stride = table->max_seq_len + 2; 
-  guint16 *seq; 
-  
-  /* Will never match, if the sequence in the compose buffer is longer
-   * than the sequences in the table.  Further, compare_seq (key, val)
-   * will overrun val if key is longer than val. */
-  if (n_compose > table->max_seq_len)
-    return FALSE;
-  
-  seq = bsearch (priv->compose_buffer,
-		 table->data, table->n_seqs,
-		 sizeof (guint16) *  row_stride, 
-		 compare_seq);
+  gboolean compose_finish;
+  gboolean compose_match;
+  gunichar output_value;
 
-  if (seq)
+  if (gtk_compose_table_check (table,
+                               priv->compose_buffer, n_compose,
+                               &compose_finish,
+                               &compose_match,
+                               &output_value))
     {
-      guint16 *prev_seq;
-
-      /* Back up to the first sequence that matches to make sure
-       * we find the exact match if there is one.
-       */
-      while (seq > table->data)
-	{
-	  prev_seq = seq - row_stride;
-	  if (compare_seq (priv->compose_buffer, prev_seq) != 0)
-	    break;
-	  seq = prev_seq;
-	}
-      
-      if (n_compose == table->max_seq_len ||
-	  seq[n_compose] == 0) /* complete sequence */
-	{
-	  guint16 *next_seq;
-	  gunichar value = 
-	    0x10000 * seq[table->max_seq_len] + seq[table->max_seq_len + 1];
-
-	  /* We found a tentative match. See if there are any longer
-	   * sequences containing this subsequence
-	   */
-	  next_seq = seq + row_stride;
-	  if (next_seq < table->data + row_stride * table->n_seqs)
-	    {
-	      if (compare_seq (priv->compose_buffer, next_seq) == 0)
-		{
-		  priv->tentative_match = value;
-		  priv->tentative_match_len = n_compose;
-
-		  g_signal_emit_by_name (context_simple, "preedit-changed");
-
-		  return TRUE;
-		}
-	    }
-
-	  gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
-
-          return TRUE;
-	}
-      
-      g_signal_emit_by_name (context_simple, "preedit-changed");
+      if (compose_finish)
+        {
+          if (compose_match)
+            gtk_im_context_simple_commit_char (context_simple, output_value);
+        }
+      else
+        {
+          if (compose_match)
+            {
+              priv->tentative_match = output_value;
+              priv->tentative_match_len = n_compose;
+            }
+          g_signal_emit_by_name (context_simple, "preedit-changed");
+        }
 
       return TRUE;
     }
