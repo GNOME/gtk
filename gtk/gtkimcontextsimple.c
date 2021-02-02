@@ -326,43 +326,6 @@ gtk_im_context_simple_commit_char (GtkIMContext *context,
   g_signal_emit_by_name (context, "commit", &buf);
 }
 
-static gboolean
-check_table (GtkIMContextSimple    *context_simple,
-             const GtkComposeTable *table,
-             int                    n_compose)
-{
-  GtkIMContextSimplePrivate *priv = context_simple->priv;
-  gboolean compose_finish;
-  gboolean compose_match;
-  gunichar output_value;
-
-  if (gtk_compose_table_check (table,
-                               priv->compose_buffer, n_compose,
-                               &compose_finish,
-                               &compose_match,
-                               &output_value))
-    {
-      if (compose_finish)
-        {
-          if (compose_match)
-            gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), output_value);
-        }
-      else
-        {
-          if (compose_match)
-            {
-              priv->tentative_match = output_value;
-              priv->tentative_match_len = n_compose;
-            }
-          g_signal_emit_by_name (context_simple, "preedit-changed");
-        }
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
 /* In addition to the table-driven sequences, we allow Unicode hex
  * codes to be entered. The method chosen here is similar to the
  * one recommended in ISO 14755, but not exactly the same, since we
@@ -836,11 +799,30 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       tmp_list = global_tables;
       while (tmp_list)
         {
-          if (check_table (context_simple, tmp_list->data, n_compose))
+          if (gtk_compose_table_check ((GtkComposeTable *)tmp_list->data,
+                                       priv->compose_buffer, n_compose,
+                                       &compose_finish, &compose_match,
+                                       &output_char))
             {
+              if (compose_finish)
+                {
+                  if (compose_match)
+                    gtk_im_context_simple_commit_char (context, output_char);
+                }
+              else
+                {
+                  if (compose_match)
+                    {
+                      priv->tentative_match = output_char;
+                      priv->tentative_match_len = n_compose;
+                    }
+                  g_signal_emit_by_name (context_simple, "preedit-changed");
+                }
+
               success = TRUE;
               break;
             }
+
           tmp_list = tmp_list->next;
         }
 
@@ -850,17 +832,14 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
         return TRUE;
 
       if (gtk_compose_table_compact_check (&gtk_compose_table_compact,
-                                           priv->compose_buffer,
-                                           n_compose, &compose_finish,
-                                           &compose_match, &output_char))
+                                           priv->compose_buffer, n_compose,
+                                           &compose_finish, &compose_match,
+                                           &output_char))
         {
           if (compose_finish)
             {
               if (compose_match)
-                {
-                  gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple),
-                                                     output_char);
-                }
+                gtk_im_context_simple_commit_char (context, output_char);
             }
           else
             {
@@ -874,18 +853,15 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 
           return TRUE;
         }
-  
+
       if (gtk_check_algorithmically (priv->compose_buffer, n_compose, &output_char))
         {
           if (output_char)
-            {
-              gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple),
-                                                 output_char);
-            }
-	  return TRUE;
+            gtk_im_context_simple_commit_char (context, output_char);
+          return TRUE;
         }
     }
-  
+
   /* The current compose_buffer doesn't match anything */
   return no_sequence_matches (context_simple, n_compose, (GdkEvent *)event);
 }
