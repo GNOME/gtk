@@ -62,7 +62,7 @@ struct _GtkIMContextSimplePrivate
 {
   guint16       *compose_buffer;
   int            compose_buffer_len;
-  gunichar       tentative_match;
+  GString       *tentative_match;
   int            tentative_match_len;
 
   guint          in_hex_sequence : 1;
@@ -275,6 +275,8 @@ gtk_im_context_simple_init (GtkIMContextSimple *context_simple)
 
   priv->compose_buffer_len = gtk_compose_table_compact.max_seq_len + 1;
   priv->compose_buffer = g_new0 (guint16, priv->compose_buffer_len);
+  priv->tentative_match = g_string_new ("");
+  priv->tentative_match_len = 0;
 }
 
 static void
@@ -284,6 +286,7 @@ gtk_im_context_simple_finalize (GObject *obj)
   GtkIMContextSimplePrivate *priv = context_simple->priv;;
 
   g_free (priv->compose_buffer);
+  g_string_free (priv->tentative_match, TRUE);
 
   G_OBJECT_CLASS (gtk_im_context_simple_parent_class)->finalize (obj);
 }
@@ -302,28 +305,29 @@ gtk_im_context_simple_new (void)
 }
 
 static void
-gtk_im_context_simple_commit_char (GtkIMContext *context,
-                                   gunichar      ch)
+gtk_im_context_simple_commit_string (GtkIMContextSimple *context_simple,
+                                     const char         *str)
 {
-  GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
   GtkIMContextSimplePrivate *priv = context_simple->priv;
-  char buf[10];
-  int len;
-
-  g_return_if_fail (g_unichar_validate (ch));
-
-  len = g_unichar_to_utf8 (ch, buf);
-  buf[len] = '\0';
-
   priv->in_hex_sequence = FALSE;
-  priv->tentative_match = 0;
+  g_string_set_size (priv->tentative_match, 0);
   priv->tentative_match_len = 0;
   priv->compose_buffer[0] = 0;
 
-  g_signal_emit_by_name (context, "preedit-changed");
-  g_signal_emit_by_name (context, "preedit-end");
+  g_signal_emit_by_name (context_simple, "preedit-changed");
+  g_signal_emit_by_name (context_simple, "preedit-end");
+  g_signal_emit_by_name (context_simple, "commit", str);
+}
 
-  g_signal_emit_by_name (context, "commit", &buf);
+static void
+gtk_im_context_simple_commit_char (GtkIMContextSimple *context_simple,
+                                   gunichar            ch)
+{
+  char buf[8] = { 0, };
+
+  g_unichar_to_utf8 (ch, buf);
+
+  gtk_im_context_simple_commit_string (context_simple, buf);
 }
 
 /* In addition to the table-driven sequences, we allow Unicode hex
@@ -354,7 +358,7 @@ check_hex (GtkIMContextSimple *context_simple,
   char *nptr = NULL;
   char buf[7];
 
-  priv->tentative_match = 0;
+  g_string_set_size (priv->tentative_match, 0);
   priv->tentative_match_len = 0;
 
   str = g_string_new (NULL);
@@ -394,7 +398,8 @@ check_hex (GtkIMContextSimple *context_simple,
 
   if (g_unichar_validate (n))
     {
-      priv->tentative_match = n;
+      g_string_set_size (priv->tentative_match, 0);
+      g_string_append_unichar (priv->tentative_match, n);
       priv->tentative_match_len = n_compose;
     }
   
@@ -430,20 +435,23 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
   /* No compose sequences found, check first if we have a partial
    * match pending.
    */
-  if (priv->tentative_match)
+  if (priv->tentative_match_len > 0)
     {
       int len = priv->tentative_match_len;
       int i;
       guint16 *compose_buffer;
+      char *str;
 
       compose_buffer = alloca (sizeof (guint16) * priv->compose_buffer_len);
 
       memcpy (compose_buffer, priv->compose_buffer, sizeof (guint16) * priv->compose_buffer_len);
 
-      gtk_im_context_simple_commit_char (context, priv->tentative_match);
-      
+      str = g_strdup (priv->tentative_match->str);
+      gtk_im_context_simple_commit_string (context_simple, str);
+      g_free (str);
+
       for (i = 0; i < n_compose - len - 1; i++)
-	{
+        {
           GdkTranslatedKey translated;
           translated.keyval = compose_buffer[len + i];
           translated.consumed = 0;
@@ -481,7 +489,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
       ch = gdk_keyval_to_unicode (keyval);
       if (ch != 0 && !g_unichar_iscntrl (ch))
 	{
-	  gtk_im_context_simple_commit_char (context, ch);
+	  gtk_im_context_simple_commit_char (context_simple, ch);
 	  return TRUE;
 	}
       else
@@ -577,10 +585,11 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
           (keyval == GDK_KEY_Control_L || keyval == GDK_KEY_Control_R ||
 	   keyval == GDK_KEY_Shift_L || keyval == GDK_KEY_Shift_R))
 	{
-          if (priv->tentative_match &&
-	      g_unichar_validate (priv->tentative_match))
+          if (priv->tentative_match->len > 0)
 	    {
-	      gtk_im_context_simple_commit_char (context, priv->tentative_match);
+              char *str = g_strdup (priv->tentative_match->str);
+	      gtk_im_context_simple_commit_string (context_simple, str);
+              g_free (str);
 
 	      return TRUE;
 	    }
@@ -595,7 +604,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	      /* invalid hex sequence */
 	      beep_surface (surface);
 
-	      priv->tentative_match = 0;
+              g_string_set_size (priv->tentative_match, 0);
 	      priv->in_hex_sequence = FALSE;
 	      priv->compose_buffer[0] = 0;
 
@@ -695,10 +704,11 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   /* Check for hex sequence restart */
   if (priv->in_hex_sequence && have_hex_mods && is_hex_start)
     {
-      if (priv->tentative_match &&
-	  g_unichar_validate (priv->tentative_match))
+      if (priv->tentative_match->len > 0)
 	{
-	  gtk_im_context_simple_commit_char (context, priv->tentative_match);
+          char *str = g_strdup (priv->tentative_match->str);
+	  gtk_im_context_simple_commit_string (context_simple, str);
+          g_free (str);
 	}
       else
 	{
@@ -706,7 +716,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	  if (n_compose > 0)
 	    beep_surface (surface);
 
-	  priv->tentative_match = 0;
+          g_string_set_size (priv->tentative_match, 0);
 	  priv->in_hex_sequence = FALSE;
 	  priv->compose_buffer[0] = 0;
 	}
@@ -718,7 +728,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       priv->compose_buffer[0] = 0;
       priv->in_hex_sequence = TRUE;
       priv->modifiers_dropped = FALSE;
-      priv->tentative_match = 0;
+      g_string_set_size (priv->tentative_match, 0);
 
       g_signal_emit_by_name (context_simple, "preedit-start");
       g_signal_emit_by_name (context_simple, "preedit-changed");
@@ -764,17 +774,18 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
           /* space or return ends the sequence, and we eat the key */
           if (n_compose > 0 && is_hex_end)
             {
-	      if (priv->tentative_match &&
-		  g_unichar_validate (priv->tentative_match))
+	      if (priv->tentative_match->len > 0)
 		{
-		  gtk_im_context_simple_commit_char (context, priv->tentative_match);
+                  char *str = g_strdup (priv->tentative_match->str);
+		  gtk_im_context_simple_commit_string (context_simple, str);
+                  g_free (str);
 		}
 	      else
 		{
 		  /* invalid hex sequence */
 		  beep_surface (surface);
 
-		  priv->tentative_match = 0;
+                  g_string_set_size (priv->tentative_match, 0);
 		  priv->in_hex_sequence = FALSE;
 		  priv->compose_buffer[0] = 0;
 		}
@@ -793,6 +804,9 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   else
     {
       gboolean success = FALSE;
+      GString *output;
+
+      output = g_string_new ("");
 
       G_LOCK (global_tables);
 
@@ -802,18 +816,18 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
           if (gtk_compose_table_check ((GtkComposeTable *)tmp_list->data,
                                        priv->compose_buffer, n_compose,
                                        &compose_finish, &compose_match,
-                                       &output_char))
+                                       output))
             {
               if (compose_finish)
                 {
                   if (compose_match)
-                    gtk_im_context_simple_commit_char (context, output_char);
+                    gtk_im_context_simple_commit_string (context_simple, output->str);
                 }
               else
                 {
                   if (compose_match)
                     {
-                      priv->tentative_match = output_char;
+                      g_string_assign (priv->tentative_match, output->str);
                       priv->tentative_match_len = n_compose;
                     }
                   g_signal_emit_by_name (context_simple, "preedit-changed");
@@ -828,6 +842,8 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 
       G_UNLOCK (global_tables);
 
+      g_string_free (output, TRUE);
+
       if (success)
         return TRUE;
 
@@ -839,13 +855,14 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
           if (compose_finish)
             {
               if (compose_match)
-                gtk_im_context_simple_commit_char (context, output_char);
+                gtk_im_context_simple_commit_char (context_simple, output_char);
             }
           else
             {
               if (compose_match)
                 {
-                  priv->tentative_match = output_char;
+                  g_string_set_size (priv->tentative_match, 0);
+                  g_string_append_unichar (priv->tentative_match, output_char);
                   priv->tentative_match_len = n_compose;
                 }
               g_signal_emit_by_name (context_simple, "preedit-changed");
@@ -857,7 +874,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       if (gtk_check_algorithmically (priv->compose_buffer, n_compose, &output_char))
         {
           if (output_char)
-            gtk_im_context_simple_commit_char (context, output_char);
+            gtk_im_context_simple_commit_char (context_simple, output_char);
           return TRUE;
         }
     }
@@ -874,10 +891,10 @@ gtk_im_context_simple_reset (GtkIMContext *context)
 
   priv->compose_buffer[0] = 0;
 
-  if (priv->tentative_match || priv->in_hex_sequence)
+  if (priv->tentative_match->len > 0 || priv->in_hex_sequence)
     {
       priv->in_hex_sequence = FALSE;
-      priv->tentative_match = 0;
+      g_string_set_size (priv->tentative_match, 0);
       priv->tentative_match_len = 0;
       g_signal_emit_by_name (context_simple, "preedit-changed");
       g_signal_emit_by_name (context_simple, "preedit-end");
@@ -904,9 +921,9 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
       for (i = 0; priv->compose_buffer[i]; i++)
         g_string_append_unichar (s, gdk_keyval_to_unicode (priv->compose_buffer[i]));
     }
-  else if (priv->tentative_match && priv->compose_buffer[0] != 0)
+  else if (priv->tentative_match->len > 0 && priv->compose_buffer[0] != 0)
     {
-       g_string_append_unichar (s, priv->tentative_match);
+       g_string_append (s, priv->tentative_match->str);
     }
   else
     {
