@@ -2273,7 +2273,6 @@ snap_up (GdkSurface *window)
   impl = GDK_WIN32_SURFACE (window);
 
   impl->snap_state = GDK_WIN32_AEROSNAP_STATE_FULLUP;
-  impl->resized = FALSE;
 
   stash_window (window, impl);
 
@@ -2311,7 +2310,6 @@ snap_left (GdkSurface  *window,
   impl = GDK_WIN32_SURFACE (window);
 
   impl->snap_state = GDK_WIN32_AEROSNAP_STATE_HALFLEFT;
-  impl->resized = FALSE;
 
   gdk_win32_monitor_get_workarea (snap_monitor, &rect);
 
@@ -2340,7 +2338,6 @@ snap_right (GdkSurface  *window,
   impl = GDK_WIN32_SURFACE (window);
 
   impl->snap_state = GDK_WIN32_AEROSNAP_STATE_HALFRIGHT;
-  impl->resized = FALSE;
 
   gdk_win32_monitor_get_workarea (snap_monitor, &rect);
 
@@ -3952,7 +3949,6 @@ gdk_win32_surface_do_move_resize_drag (GdkSurface *window,
           impl->unscaled_height = new_rect.bottom - new_rect.top;
           impl->next_layout.configured_width = (impl->unscaled_width + scale - 1) / scale;
           impl->next_layout.configured_height = (impl->unscaled_height + scale - 1) / scale;
-          impl->resized = TRUE;
         }
 
       context->native_move_resize_pending = TRUE;
@@ -4105,7 +4101,6 @@ gdk_win32_surface_maximize (GdkSurface *window)
 			   _gdk_win32_surface_state_to_string (window->state)));
 
   impl = GDK_WIN32_SURFACE (window);
-  impl->resized = FALSE;
 
   if (GDK_SURFACE_IS_MAPPED (window))
     GtkShowWindow (window, SW_MAXIMIZE);
@@ -4550,7 +4545,7 @@ _gdk_win32_surface_request_layout (GdkSurface *surface)
   int scale = impl->surface_scale;
   RECT rect;
 
-  if (GDK_IS_TOPLEVEL (surface) && impl->resized)
+  if (GDK_IS_TOPLEVEL (surface) && impl->drag_move_resize_context.native_move_resize_pending)
     {
       surface->width = impl->next_layout.configured_width;
       surface->height = impl->next_layout.configured_height;
@@ -4578,7 +4573,7 @@ _gdk_win32_surface_compute_size (GdkSurface *surface)
   if (GDK_IS_TOPLEVEL (surface))
     compute_toplevel_size (surface, TRUE, &width, &height);
 
-  if (!impl->resized)
+  if (!impl->drag_move_resize_context.native_move_resize_pending)
     {
       surface->width = impl->next_layout.configured_width;
       surface->height = impl->next_layout.configured_height;
