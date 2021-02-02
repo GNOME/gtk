@@ -343,7 +343,6 @@ struct _GdkWin32Surface
     int configured_width;
     int configured_height;
   } next_layout;
-  gboolean resized;
 
 #ifdef GDK_WIN32_ENABLE_EGL
   EGLSurface egl_surface;
