@@ -308,6 +308,7 @@ main (int argc, char *argv[])
   g_test_add_data_func ("/compose-table/basic", "basic", compose_table_compare);
   g_test_add_data_func ("/compose-table/long", "long", compose_table_compare);
   g_test_add_data_func ("/compose-table/octal", "octal", compose_table_compare);
+  g_test_add_data_func ("/compose-table/hex", "hex", compose_table_compare);
   g_test_add_data_func ("/compose-table/codepoint", "codepoint", compose_table_compare);
   g_test_add_data_func ("/compose-table/multi", "multi", compose_table_compare);
   g_test_add_data_func ("/compose-table/strings", "strings", compose_table_compare);

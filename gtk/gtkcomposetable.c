@@ -113,6 +113,22 @@ parse_compose_value (GtkComposeData *compose_data,
           else if (p[1] >= '0' && p[1] < '8')
             {
               ch = g_ascii_strtoll (p + 1, &endp, 8);
+              if (ch == 0)
+                {
+                  g_warning ("Invalid escape sequence: %s: %s", val, line);
+                  goto fail;
+                }
+              g_string_append_unichar (value, ch);
+              p = endp;
+            }
+          else if (p[1] == 'x' || p[1] == 'X')
+            {
+              ch = g_ascii_strtoll (p + 2, &endp, 16);
+              if (ch == 0)
+                {
+                  g_warning ("Invalid escape sequence: %s: %s", val, line);
+                  goto fail;
+                }
               g_string_append_unichar (value, ch);
               p = endp;
             }
