@@ -149,12 +149,6 @@ gdk_toplevel_size_validate (GdkToplevelSize *size)
 {
   int geometry_width, geometry_height;
 
-  if (size->min_width > size->bounds_width ||
-      size->min_height > size->bounds_height)
-    g_warning ("GdkToplevelSize: min_size (%d, %d) exceeds bounds (%d, %d)",
-               size->min_width, size->min_height,
-               size->bounds_width, size->bounds_height);
-
   geometry_width = size->width;
   geometry_height = size->height;
   if (size->shadow.is_valid)
@@ -162,15 +156,4 @@ gdk_toplevel_size_validate (GdkToplevelSize *size)
       geometry_width -= size->shadow.left + size->shadow.right;
       geometry_height -= size->shadow.top + size->shadow.bottom;
     }
-  if (geometry_width > size->bounds_width ||
-      geometry_height > size->bounds_height)
-    g_warning ("GdkToplevelSize: geometry size (%d, %d) exceeds bounds (%d, %d)",
-               size->width, size->height,
-               size->bounds_width, size->bounds_height);
-
-  if (size->min_width > size->width ||
-      size->min_height > size->height)
-    g_warning ("GdkToplevelSize: min_size (%d, %d) exceeds size (%d, %d)",
-               size->min_width, size->min_height,
-               size->width, size->height);
 }
