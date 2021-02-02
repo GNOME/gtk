@@ -103,6 +103,13 @@ tests = [
 # Tests that test private apis and therefore are linked against libgtk-4.a
 internal_tests = [
   { 'name': 'bitmask' },
+  {
+    'name': 'composetable',
+    'sources': [
+      'composetable.c',
+      '../testutils.c'
+    ],
+  },
   { 'name': 'constraint-solver' },
   { 'name': 'rbtree-crash' },
   { 'name': 'propertylookuplistmodel' },

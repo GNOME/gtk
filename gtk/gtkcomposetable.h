@@ -29,8 +29,10 @@ typedef struct _GtkComposeTableCompact GtkComposeTableCompact;
 struct _GtkComposeTable
 {
   guint16 *data;
+  char *char_data;
   int max_seq_len;
   int n_seqs;
+  int n_chars;
   guint32 id;
 };
 
@@ -42,13 +44,32 @@ struct _GtkComposeTableCompact
   int n_index_stride;
 };
 
-GtkComposeTable * gtk_compose_table_new_with_file (const char    *compose_file);
-GSList *gtk_compose_table_list_add_array          (GSList        *compose_tables,
-                                                   const guint16 *data,
-                                                   int            max_seq_len,
-                                                   int            n_seqs);
-GSList *gtk_compose_table_list_add_file           (GSList        *compose_tables,
-                                                   const char    *compose_file);
+GtkComposeTable * gtk_compose_table_new_with_file  (const char      *compose_file);
+GSList          * gtk_compose_table_list_add_array (GSList          *compose_tables,
+                                                    const guint16   *data,
+                                                    int              max_seq_len,
+                                                    int              n_seqs);
+GSList          * gtk_compose_table_list_add_file  (GSList          *compose_tables,
+                                                    const char      *compose_file);
+
+gboolean          gtk_compose_table_check          (const GtkComposeTable *table,
+                                                    const guint16         *compose_buffer,
+                                                    int                    n_compose,
+                                                    gboolean              *compose_finish,
+                                                    gboolean              *compose_match,
+                                                    GString               *output);
+
+gboolean          gtk_compose_table_compact_check  (const GtkComposeTableCompact  *table,
+                                                    const guint16                 *compose_buffer,
+                                                    int                            n_compose,
+                                                    gboolean                      *compose_finish,
+                                                    gboolean                      *compose_match,
+                                                    gunichar                      *output_char);
+
+gboolean          gtk_check_algorithmically        (const guint16                 *compose_buffer,
+                                                    int                            n_compose,
+                                                    gunichar                      *output);
+
 
 G_END_DECLS
 
