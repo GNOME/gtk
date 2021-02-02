@@ -35,9 +35,9 @@
 #define MAX_COMPOSE_LEN 20
 
 typedef struct {
-  gunichar     *sequence;
-  gunichar      value[2];
-  char         *comment;
+  gunichar *sequence;
+  char *value;
+  char *comment;
 } GtkComposeData;
 
 
@@ -45,6 +45,7 @@ static void
 gtk_compose_data_free (GtkComposeData *compose_data)
 {
   g_free (compose_data->sequence);
+  g_free (compose_data->value);
   g_free (compose_data->comment);
   g_slice_free (GtkComposeData, compose_data);
 }
@@ -81,6 +82,7 @@ parse_compose_value (GtkComposeData *compose_data,
   char **words = g_strsplit (val, "\"", 3);
   gunichar uch;
   char *endp;
+  char buf[8] = { 0, };
 
   if (g_strv_length (words) < 3)
     {
@@ -129,7 +131,8 @@ parse_compose_value (GtkComposeData *compose_data,
         }
     }
 
-  compose_data->value[1] = uch;
+  g_unichar_to_utf8 (uch, buf);
+  compose_data->value = g_strdup (buf);
 
   if (uch == '"')
     compose_data->comment = g_strdup (g_strstrip (words[2] + 1));
@@ -303,6 +306,7 @@ gtk_compose_list_check_duplicated (GList *compose_list)
       int n_compose = 0;
       gboolean compose_finish;
       gunichar output_char;
+      char buf[8] = { 0, };
 
       compose_data = list->data;
 
@@ -327,12 +331,14 @@ gtk_compose_list_check_duplicated (GList *compose_list)
                                            &output_char) &&
           compose_finish)
         {
-          if (compose_data->value[1] == output_char)
+          g_unichar_to_utf8 (output_char, buf);
+          if (strcmp (compose_data->value, buf) == 0)
             removed_list = g_list_prepend (removed_list, compose_data);
         }
       else if (gtk_check_algorithmically (keysyms, n_compose, &output_char))
         {
-          if (compose_data->value[1] == output_char)
+          g_unichar_to_utf8 (output_char, buf);
+          if (strcmp (compose_data->value, buf) == 0)
             removed_list = g_list_prepend (removed_list, compose_data);
         }
     }
@@ -418,17 +424,6 @@ gtk_compose_list_format_for_gtk (GList *compose_list,
     *p_max_compose_len = max_compose_len;
   if (p_n_index_stride)
     *p_n_index_stride = max_compose_len + 2;
-
-  for (list = compose_list; list != NULL; list = list->next)
-    {
-      compose_data = list->data;
-      codepoint = compose_data->value[1];
-      if (codepoint > 0xffff)
-        {
-          compose_data->value[0] = codepoint / 0x10000;
-          compose_data->value[1] = codepoint - codepoint / 0x10000 * 0x10000;
-        }
-    }
 
   return compose_list;
 }
@@ -719,6 +714,7 @@ gtk_compose_table_new_with_list (GList   *compose_list,
   GList *list;
   GtkComposeData *compose_data;
   GtkComposeTable *retval = NULL;
+  gunichar codepoint;
 
   g_return_val_if_fail (compose_list != NULL, NULL);
 
@@ -739,8 +735,18 @@ gtk_compose_table_new_with_list (GList   *compose_list,
             }
           gtk_compose_seqs[n++] = (guint16) compose_data->sequence[i];
         }
-      gtk_compose_seqs[n++] = (guint16) compose_data->value[0];
-      gtk_compose_seqs[n++] = (guint16) compose_data->value[1];
+
+      codepoint = g_utf8_get_char (compose_data->value);
+      if (codepoint > 0xffff)
+        {
+          gtk_compose_seqs[n++] = codepoint / 0x10000;
+          gtk_compose_seqs[n++] = codepoint - codepoint / 0x10000 * 0x10000;
+        }
+      else
+        {
+          gtk_compose_seqs[n++] = 0;
+          gtk_compose_seqs[n++] = codepoint;
+        }
     }
 
   retval = g_new0 (GtkComposeTable, 1);
