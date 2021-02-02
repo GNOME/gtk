@@ -707,12 +707,15 @@ gtk_compose_table_new_with_list (GList   *compose_list,
   GtkComposeData *compose_data;
   GtkComposeTable *retval = NULL;
   gunichar codepoint;
+  GString *char_data;
 
   g_return_val_if_fail (compose_list != NULL, NULL);
 
   length = g_list_length (compose_list);
 
   gtk_compose_seqs = g_new0 (guint16, length * n_index_stride);
+
+  char_data = g_string_new ("");
 
   for (list = compose_list; list != NULL; list = list->next)
     {
@@ -728,17 +731,23 @@ gtk_compose_table_new_with_list (GList   *compose_list,
           gtk_compose_seqs[n++] = (guint16) compose_data->sequence[i];
         }
 
-      codepoint = g_utf8_get_char (compose_data->value);
-      if (codepoint > 0xffff)
+      if (g_utf8_strlen (compose_data->value, -1) > 1)
         {
-          gtk_compose_seqs[n++] = codepoint / 0x10000;
-          gtk_compose_seqs[n++] = codepoint - codepoint / 0x10000 * 0x10000;
+          if (char_data->len > 0)
+            g_string_append_c (char_data, 0);
+
+          codepoint = char_data->len | (1 << 31);
+
+          g_string_append (char_data, compose_data->value);
         }
       else
         {
-          gtk_compose_seqs[n++] = 0;
-          gtk_compose_seqs[n++] = codepoint;
+          codepoint = g_utf8_get_char (compose_data->value);
+          g_assert ((codepoint & (1 << 31)) == 0);
         }
+
+      gtk_compose_seqs[n++] = (codepoint & 0xffff0000) >> 16;
+      gtk_compose_seqs[n++] = codepoint & 0xffff;
     }
 
   retval = g_new0 (GtkComposeTable, 1);
@@ -746,6 +755,8 @@ gtk_compose_table_new_with_list (GList   *compose_list,
   retval->max_seq_len = max_compose_len;
   retval->n_seqs = length;
   retval->id = hash;
+  retval->n_chars = char_data->len;
+  retval->char_data = g_string_free (char_data, FALSE);
 
   return retval;
 }
@@ -823,6 +834,8 @@ gtk_compose_table_list_add_array (GSList        *compose_tables,
   compose_table->max_seq_len = max_seq_len;
   compose_table->n_seqs = n_seqs;
   compose_table->id = hash;
+  compose_table->char_data = NULL;
+  compose_table->n_chars = 0;
 
   return g_slist_prepend (compose_tables, compose_table);
 }
@@ -840,14 +853,18 @@ gtk_compose_table_list_add_file (GSList     *compose_tables,
   if (g_slist_find_custom (compose_tables, GINT_TO_POINTER (hash), gtk_compose_table_find) != NULL)
     return compose_tables;
 
+#if 0
   compose_table = gtk_compose_table_load_cache (compose_file);
   if (compose_table != NULL)
     return g_slist_prepend (compose_tables, compose_table);
+#endif
 
   if ((compose_table = gtk_compose_table_new_with_file (compose_file)) == NULL)
     return compose_tables;
 
+#if 0
   gtk_compose_table_save_cache (compose_table);
+#endif
   return g_slist_prepend (compose_tables, compose_table);
 }
 
@@ -933,8 +950,11 @@ gtk_compose_table_check (const GtkComposeTable *table,
           guint16 *next_seq;
           gunichar value;
 
-          value = 0x10000 * seq[table->max_seq_len] + seq[table->max_seq_len + 1];
-          g_string_append_unichar (output, value);
+          value = (seq[table->max_seq_len] << 16) | seq[table->max_seq_len + 1];
+          if ((value & (1 << 31)) != 0)
+            g_string_append (output, &table->char_data[value & ~(1 << 31)]);
+          else
+            g_string_append_unichar (output, value);
 
           *compose_match = TRUE;
 

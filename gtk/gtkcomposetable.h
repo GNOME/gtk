@@ -29,8 +29,10 @@ typedef struct _GtkComposeTableCompact GtkComposeTableCompact;
 struct _GtkComposeTable
 {
   guint16 *data;
+  char *char_data;
   int max_seq_len;
   int n_seqs;
+  int n_chars;
   guint32 id;
 };
 
