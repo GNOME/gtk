@@ -26,8 +26,6 @@
 #include "gtkcomposetable.h"
 #include "gtkimcontextsimple.h"
 
-#include "gtkimcontextsimpleprivate.h"
-
 
 #define GTK_COMPOSE_TABLE_MAGIC "GtkComposeTable"
 #define GTK_COMPOSE_TABLE_VERSION (1)
@@ -263,6 +261,8 @@ fail:
     gtk_compose_data_free (compose_data);
 }
 
+extern const GtkComposeTableCompact gtk_compose_table_compact;
+
 static GList *
 gtk_compose_list_parse_file (const char *compose_file)
 {
@@ -320,12 +320,11 @@ gtk_compose_list_check_duplicated (GList *compose_list)
           n_compose++;
         }
 
-      if (gtk_check_compact_table (&gtk_compose_table_compact,
-                                   keysyms,
-                                   n_compose,
-                                   &compose_finish,
-                                   NULL,
-                                   &output_char) &&
+      if (gtk_compose_table_compact_check (&gtk_compose_table_compact,
+                                           keysyms, n_compose,
+                                           &compose_finish,
+                                           NULL,
+                                           &output_char) &&
           compose_finish)
         {
           if (compose_data->value[1] == output_char)
@@ -889,7 +888,7 @@ compare_seq (const void *key, const void *value)
  */
 gboolean
 gtk_compose_table_check (const GtkComposeTable *table,
-                         guint16               *compose_buffer,
+                         const guint16         *compose_buffer,
                          int                    n_compose,
                          gboolean              *compose_finish,
                          gboolean              *compose_match,
@@ -956,3 +955,299 @@ gtk_compose_table_check (const GtkComposeTable *table,
 
   return FALSE;
 }
+
+static int
+compare_seq_index (const void *key, const void *value)
+{
+  const guint16 *keysyms = key;
+  const guint16 *seq = value;
+
+  if (keysyms[0] < seq[0])
+    return -1;
+  else if (keysyms[0] > seq[0])
+    return 1;
+
+  return 0;
+}
+
+gboolean
+gtk_compose_table_compact_check (const GtkComposeTableCompact  *table,
+                                 const guint16                 *compose_buffer,
+                                 int                            n_compose,
+                                 gboolean                      *compose_finish,
+                                 gboolean                      *compose_match,
+                                 gunichar                      *output_char)
+{
+  int row_stride;
+  guint16 *seq_index;
+  guint16 *seq;
+  int i;
+  gboolean match;
+  gunichar value;
+
+  if (compose_finish)
+    *compose_finish = FALSE;
+  if (compose_match)
+    *compose_match = FALSE;
+  if (output_char)
+    *output_char = 0;
+
+  /* Will never match, if the sequence in the compose buffer is longer
+   * than the sequences in the table.  Further, compare_seq (key, val)
+   * will overrun val if key is longer than val.
+   */
+  if (n_compose > table->max_seq_len)
+    return FALSE;
+
+  seq_index = bsearch (compose_buffer,
+                       table->data,
+                       table->n_index_size,
+                       sizeof (guint16) * table->n_index_stride,
+                       compare_seq_index);
+
+  if (!seq_index)
+    return FALSE;
+
+  if (seq_index && n_compose == 1)
+    return TRUE;
+
+  seq = NULL;
+  match = FALSE;
+  value = 0;
+
+  for (i = n_compose - 1; i < table->max_seq_len; i++)
+    {
+      row_stride = i + 1;
+
+      if (seq_index[i + 1] - seq_index[i] > 0)
+        {
+          seq = bsearch (compose_buffer + 1,
+                         table->data + seq_index[i],
+                         (seq_index[i + 1] - seq_index[i]) / row_stride,
+                         sizeof (guint16) *  row_stride,
+                         compare_seq);
+
+          if (seq)
+            {
+              if (i == n_compose - 1)
+                {
+                  value = seq[row_stride - 1];
+                  match = TRUE;
+                }
+              else
+                {
+                  if (output_char)
+                    *output_char = value;
+                  if (match)
+                    {
+                      if (compose_match)
+                        *compose_match = TRUE;
+                    }
+
+                  return TRUE;
+                }
+            }
+        }
+    }
+
+  if (match)
+    {
+      if (compose_match)
+        *compose_match = TRUE;
+      if (compose_finish)
+        *compose_finish = TRUE;
+      if (output_char)
+        *output_char = value;
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+/* Checks if a keysym is a dead key.
+ * Dead key keysym values are defined in ../gdk/gdkkeysyms.h and the
+ * first is GDK_KEY_dead_grave. As X.Org is updated, more dead keys
+ * are added and we need to update the upper limit.
+ */
+#define IS_DEAD_KEY(k) \
+    ((k) >= GDK_KEY_dead_grave && (k) <= GDK_KEY_dead_greek)
+
+/* This function receives a sequence of Unicode characters and tries to
+ * normalize it (NFC). We check for the case where the resulting string
+ * has length 1 (single character).
+ * NFC normalisation normally rearranges diacritic marks, unless these
+ * belong to the same Canonical Combining Class.
+ * If they belong to the same canonical combining class, we produce all
+ * permutations of the diacritic marks, then attempt to normalize.
+ */
+static gboolean
+check_normalize_nfc (gunichar *combination_buffer,
+                     int       n_compose)
+{
+  gunichar *combination_buffer_temp;
+  char *combination_utf8_temp = NULL;
+  char *nfc_temp = NULL;
+  int n_combinations;
+  gunichar temp_swap;
+  int i;
+
+  combination_buffer_temp = g_alloca (n_compose * sizeof (gunichar));
+
+  n_combinations = 1;
+
+  for (i = 1; i < n_compose; i++ )
+     n_combinations *= i;
+
+  /* Xorg reuses dead_tilde for the perispomeni diacritic mark.
+   * We check if base character belongs to Greek Unicode block,
+   * and if so, we replace tilde with perispomeni.
+   */
+  if (combination_buffer[0] >= 0x390 && combination_buffer[0] <= 0x3FF)
+    {
+      for (i = 1; i < n_compose; i++ )
+        if (combination_buffer[i] == 0x303)
+          combination_buffer[i] = 0x342;
+    }
+
+  memcpy (combination_buffer_temp, combination_buffer, n_compose * sizeof (gunichar) );
+
+  for (i = 0; i < n_combinations; i++ )
+    {
+      g_unicode_canonical_ordering (combination_buffer_temp, n_compose);
+      combination_utf8_temp = g_ucs4_to_utf8 (combination_buffer_temp, -1, NULL, NULL, NULL);
+      nfc_temp = g_utf8_normalize (combination_utf8_temp, -1, G_NORMALIZE_NFC);
+
+      if (g_utf8_strlen (nfc_temp, -1) == 1)
+        {
+          memcpy (combination_buffer, combination_buffer_temp, n_compose * sizeof (gunichar) );
+
+          g_free (combination_utf8_temp);
+          g_free (nfc_temp);
+
+          return TRUE;
+        }
+
+      g_free (combination_utf8_temp);
+      g_free (nfc_temp);
+
+      if (n_compose > 2)
+        {
+          temp_swap = combination_buffer_temp[i % (n_compose - 1) + 1];
+          combination_buffer_temp[i % (n_compose - 1) + 1] = combination_buffer_temp[(i+1) % (n_compose - 1) + 1];
+          combination_buffer_temp[(i+1) % (n_compose - 1) + 1] = temp_swap;
+        }
+      else
+        break;
+    }
+
+  return FALSE;
+}
+
+gboolean
+gtk_check_algorithmically (const guint16 *compose_buffer,
+                           int            n_compose,
+                           gunichar      *output_char)
+
+{
+  int i;
+  gunichar *combination_buffer;
+  char *combination_utf8, *nfc;
+
+  combination_buffer = alloca (sizeof (gunichar) * (n_compose + 1));
+
+  if (output_char)
+    *output_char = 0;
+
+  for (i = 0; i < n_compose && IS_DEAD_KEY (compose_buffer[i]); i++)
+    ;
+  if (i == n_compose)
+    return TRUE;
+
+  if (i > 0 && i == n_compose - 1)
+    {
+      combination_buffer[0] = gdk_keyval_to_unicode (compose_buffer[i]);
+      combination_buffer[n_compose] = 0;
+      i--;
+      while (i >= 0)
+        {
+          switch (compose_buffer[i])
+            {
+#define CASE(keysym, unicode) \
+            case GDK_KEY_dead_##keysym: combination_buffer[i+1] = unicode; break
+
+            CASE (grave, 0x0300);
+            CASE (acute, 0x0301);
+            CASE (circumflex, 0x0302);
+            CASE (tilde, 0x0303);       /* Also used with perispomeni, 0x342. */
+            CASE (macron, 0x0304);
+            CASE (breve, 0x0306);
+            CASE (abovedot, 0x0307);
+            CASE (diaeresis, 0x0308);
+            CASE (abovering, 0x30A);
+            CASE (hook, 0x0309);
+            CASE (doubleacute, 0x030B);
+            CASE (caron, 0x030C);
+            CASE (cedilla, 0x0327);
+            CASE (ogonek, 0x0328);      /* Legacy use for dasia, 0x314.*/
+            CASE (iota, 0x0345);
+            CASE (voiced_sound, 0x3099);        /* Per Markus Kuhn keysyms.txt file. */
+            CASE (semivoiced_sound, 0x309A);    /* Per Markus Kuhn keysyms.txt file. */
+            CASE (belowdot, 0x0323);
+            CASE (horn, 0x031B);        /* Legacy use for psili, 0x313 (or 0x343). */
+            CASE (stroke, 0x335);
+            CASE (abovecomma, 0x0313);  /* Equivalent to psili */
+            CASE (abovereversedcomma, 0x0314); /* Equivalent to dasia */
+            CASE (doublegrave, 0x30F);
+            CASE (belowring, 0x325);
+            CASE (belowmacron, 0x331);
+            CASE (belowcircumflex, 0x32D);
+            CASE (belowtilde, 0x330);
+            CASE (belowbreve, 0x32e);
+            CASE (belowdiaeresis, 0x324);
+            CASE (invertedbreve, 0x32f);
+            CASE (belowcomma, 0x326);
+            CASE (lowline, 0x332);
+            CASE (aboveverticalline, 0x30D);
+            CASE (belowverticalline, 0x329);
+            CASE (longsolidusoverlay, 0x338);
+            CASE (a, 0x363);
+            CASE (A, 0x363);
+            CASE (e, 0x364);
+            CASE (E, 0x364);
+            CASE (i, 0x365);
+            CASE (I, 0x365);
+            CASE (o, 0x366);
+            CASE (O, 0x366);
+            CASE (u, 0x367);
+            CASE (U, 0x367);
+            CASE (small_schwa, 0x1DEA);
+            CASE (capital_schwa, 0x1DEA);
+#undef CASE
+            default:
+              combination_buffer[i+1] = gdk_keyval_to_unicode (compose_buffer[i]);
+            }
+          i--;
+        }
+
+      /* If the buffer normalizes to a single character, then modify the order
+       * of combination_buffer accordingly, if necessary, and return TRUE.
+       */
+      if (check_normalize_nfc (combination_buffer, n_compose))
+        {
+          combination_utf8 = g_ucs4_to_utf8 (combination_buffer, -1, NULL, NULL, NULL);
+          nfc = g_utf8_normalize (combination_utf8, -1, G_NORMALIZE_NFC);
+
+          if (output_char)
+            *output_char = g_utf8_get_char (nfc);
+
+          g_free (combination_utf8);
+          g_free (nfc);
+
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+

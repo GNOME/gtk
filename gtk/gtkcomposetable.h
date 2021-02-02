@@ -51,11 +51,23 @@ GSList          * gtk_compose_table_list_add_file  (GSList          *compose_tab
                                                     const char      *compose_file);
 
 gboolean          gtk_compose_table_check          (const GtkComposeTable *table,
-                                                    guint16               *compose_buffer,
+                                                    const guint16         *compose_buffer,
                                                     int                    n_compose,
                                                     gboolean              *compose_finish,
                                                     gboolean              *compose_match,
                                                     gunichar              *output_value);
+
+gboolean          gtk_compose_table_compact_check  (const GtkComposeTableCompact  *table,
+                                                    const guint16                 *compose_buffer,
+                                                    int                            n_compose,
+                                                    gboolean                      *compose_finish,
+                                                    gboolean                      *compose_match,
+                                                    gunichar                      *output_char);
+
+gboolean          gtk_check_algorithmically        (const guint16                 *compose_buffer,
+                                                    int                            n_compose,
+                                                    gunichar                      *output);
+
 
 G_END_DECLS
 
