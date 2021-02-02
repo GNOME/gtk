@@ -197,6 +197,51 @@ compose_table_match_compact (void)
   g_assert_true (ch == 0x24d9); /* CIRCLED LATIN SMALL LETTER J */
 }
 
+static void
+match_algorithmic (void)
+{
+  guint16 buffer[8] = { 0, };
+  gboolean ret;
+  gunichar ch;
+
+  buffer[0] = GDK_KEY_a;
+  buffer[1] = GDK_KEY_b;
+
+  ret = gtk_check_algorithmically (buffer, 2, &ch);
+  g_assert_false (ret);
+  g_assert_true (ch == 0);
+
+  buffer[0] = GDK_KEY_dead_abovering;
+  buffer[1] = GDK_KEY_A;
+
+  ret = gtk_check_algorithmically (buffer, 2, &ch);
+  g_assert_true (ret);
+  g_assert_true (ch == 0xc5);
+
+  buffer[0] = GDK_KEY_A;
+  buffer[1] = GDK_KEY_dead_abovering;
+
+  ret = gtk_check_algorithmically (buffer, 2, &ch);
+  g_assert_false (ret);
+  g_assert_true (ch == 0);
+
+  buffer[0] = GDK_KEY_dead_dasia;
+  buffer[1] = GDK_KEY_dead_perispomeni;
+  buffer[2] = GDK_KEY_Greek_alpha;
+
+  ret = gtk_check_algorithmically (buffer, 3, &ch);
+  g_assert_true (ret);
+  g_assert_true (ch == 0x1f07);
+
+  buffer[0] = GDK_KEY_dead_perispomeni;
+  buffer[1] = GDK_KEY_dead_dasia;
+  buffer[2] = GDK_KEY_Greek_alpha;
+
+  ret = gtk_check_algorithmically (buffer, 3, &ch);
+  g_assert_true (ret);
+  g_assert_true (ch == 0x1f07);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -223,6 +268,7 @@ main (int argc, char *argv[])
   g_test_add_data_func ("/compose-table/multi", "multi", compose_table_compare);
   g_test_add_func ("/compose-table/match", compose_table_match);
   g_test_add_func ("/compose-table/match-compact", compose_table_match_compact);
+  g_test_add_func ("/compose-table/match-algorithmic", match_algorithmic);
 
   return g_test_run ();
 }
