@@ -2,6 +2,7 @@
 #include <locale.h>
 
 #include "../gtk/gtkcomposetable.h"
+#include "../gtk/gtkimcontextsimpleseqs.h"
 #include "testsuite/testutils.h"
 
 static char *
@@ -84,6 +85,7 @@ compose_table_compare (gconstpointer data)
   g_free (expected);
 }
 
+/* Check matching against a small table */
 static void
 compose_table_match (void)
 {
@@ -151,6 +153,50 @@ compose_table_match (void)
   g_free (file);
 }
 
+/* just check some random sequences */
+static void
+compose_table_match_compact (void)
+{
+  const GtkComposeTableCompact table = {
+    gtk_compose_seqs_compact,
+    5,
+    30,
+    6
+  };
+  guint16 buffer[8] = { 0, };
+  gboolean finish, match, ret;
+  gunichar ch;
+
+  buffer[0] = GDK_KEY_Multi_key;
+
+  ret = gtk_compose_table_compact_check (&table, buffer, 1, &finish, &match, &ch);
+  g_assert_true (ret);
+  g_assert_false (finish);
+  g_assert_false (match);
+  g_assert_true (ch == 0);
+
+  buffer[0] = GDK_KEY_a;
+  buffer[1] = GDK_KEY_b;
+  buffer[2] = GDK_KEY_c;
+
+  ret = gtk_compose_table_compact_check (&table, buffer, 3, &finish, &match, &ch);
+  g_assert_false (ret);
+  g_assert_false (finish);
+  g_assert_false (match);
+  g_assert_true (ch == 0);
+
+  buffer[0] = GDK_KEY_Multi_key;
+  buffer[1] = GDK_KEY_parenleft;
+  buffer[2] = GDK_KEY_j;
+  buffer[3] = GDK_KEY_parenright;
+
+  ret = gtk_compose_table_compact_check (&table, buffer, 4, &finish, &match, &ch);
+  g_assert_true (ret);
+  g_assert_true (finish);
+  g_assert_true (match);
+  g_assert_true (ch == 0x24d9); /* CIRCLED LATIN SMALL LETTER J */
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -176,6 +222,7 @@ main (int argc, char *argv[])
   g_test_add_data_func ("/compose-table/codepoint", "codepoint", compose_table_compare);
   g_test_add_data_func ("/compose-table/multi", "multi", compose_table_compare);
   g_test_add_func ("/compose-table/match", compose_table_match);
+  g_test_add_func ("/compose-table/match-compact", compose_table_match_compact);
 
   return g_test_run ();
 }
