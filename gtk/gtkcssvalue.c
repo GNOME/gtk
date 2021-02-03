@@ -260,8 +260,8 @@ _gtk_css_value_transition (GtkCssValue *start,
                            guint        property_id,
                            double       progress)
 {
-  gtk_internal_return_val_if_fail (start != NULL, FALSE);
-  gtk_internal_return_val_if_fail (end != NULL, FALSE);
+  gtk_internal_return_val_if_fail (start != NULL, NULL);
+  gtk_internal_return_val_if_fail (end != NULL, NULL);
 
   if (start->class != end->class)
     return NULL;
