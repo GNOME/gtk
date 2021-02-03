@@ -45,14 +45,14 @@ test('data', test_data,
   suite: 'css',
 )
 
-test_parser = executable('test-css-value', 'test-css-value.c',
+transition = executable('transition', 'transition.c',
   c_args: common_cflags,
   dependencies: libgtk_static_dep,
   install: get_option('install-tests'),
   install_dir: testexecdir,
 )
 
-test('css value', test_parser,
+test('transition', transition,
      args: [ '--tap', '-k' ],
      protocol: 'tap',
      env: csstest_env,
@@ -64,6 +64,22 @@ if get_option('install-tests')
   conf.set('libexecdir', gtk_libexecdir)
   configure_file(input: 'api.test.in',
     output: 'api.test',
+    configuration: conf,
+    install_dir: testdatadir,
+  )
+
+  conf = configuration_data()
+  conf.set('libexecdir', gtk_libexecdir)
+  configure_file(input: 'data.test.in',
+    output: 'data.test',
+    configuration: conf,
+    install_dir: testdatadir,
+  )
+
+  conf = configuration_data()
+  conf.set('libexecdir', gtk_libexecdir)
+  configure_file(input: 'transition.test.in',
+    output: 'transition.test',
     configuration: conf,
     install_dir: testdatadir,
   )
