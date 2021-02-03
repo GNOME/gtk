@@ -77,6 +77,25 @@ value_is_near (int          prop,
   return FALSE;
 }
 
+static void
+assert_css_value (int          prop,
+                  GtkCssValue *result,
+                  GtkCssValue *expected)
+{
+  if (!value_is_near (prop, result, expected))
+    {
+      char *r = _gtk_css_value_to_string (result);
+      char *e = _gtk_css_value_to_string (expected);
+      g_print ("Expected %s got %s\n", e, r);
+      g_free (r);
+      g_free (e);
+
+      g_assert_not_reached ();
+    }
+}
+
+/* Tests for css transitions */
+
 typedef struct {
   int prop;
   const char *value1;
@@ -87,9 +106,27 @@ typedef struct {
 
 static ValueTransitionTest tests[] = {
   { GTK_CSS_PROPERTY_COLOR, "transparent", "rgb(255,0,0)", 0.25, "rgba(255,0,0,0.25)" },
-  { GTK_CSS_PROPERTY_BOX_SHADOW, "none", "2px 2px 10px 4px rgb(200,200,200)", 0.5, "1px 1px 5px 2px rgb(100,100,100)" },
-  { GTK_CSS_PROPERTY_BOX_SHADOW, "2px 2px 10px 4px rgb(200,200,200)", "none", 0.5, "1px 1px 5px 2px rgb(100,100,100)" },
+  { GTK_CSS_PROPERTY_BOX_SHADOW, "none", "2px 2px 10px 4px rgb(200,200,200)", 0.5, "1px 1px 5px 2px rgba(200,200,200,0.5)" },
+  { GTK_CSS_PROPERTY_BOX_SHADOW, "2px 2px 10px 4px rgb(200,200,200)", "none", 0.5, "1px 1px 5px 2px rgba(200,200,200,0.5)" },
+  { GTK_CSS_PROPERTY_BOX_SHADOW, "2px 2px 10px 4px rgb(200,200,200), 0px 10px 8px 6px rgb(200,100,0)", "none", 0.5, "1px 1px 5px 2px rgba(200,200,200,0.5), 0px 5px 4px 3px rgba(200,100,0,0.5)" },
 };
+
+static GtkCssValue *
+value_from_string (GtkStyleProperty *prop,
+                   const char       *str)
+{
+  GBytes *bytes;
+  GtkCssParser *parser;
+  GtkCssValue *value;
+
+  bytes = g_bytes_new_static (str, strlen (str));
+  parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL, NULL);
+  value = _gtk_style_property_parse_value (prop, parser);
+  gtk_css_parser_unref (parser);
+  g_bytes_unref (bytes);
+
+  return value;
+}
 
 static void
 test_transition (gconstpointer data)
@@ -100,31 +137,19 @@ test_transition (gconstpointer data)
   GtkCssValue *value2;
   GtkCssValue *expected;
   GtkCssValue *result;
-  GtkCssParser *parser;
-  GBytes *bytes;
 
   prop = (GtkStyleProperty *)_gtk_css_style_property_lookup_by_id (test->prop);
 
-  bytes = g_bytes_new_static (test->value1, strlen (test->value1));
-  parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL, NULL);
-  value1 = _gtk_style_property_parse_value (prop, parser);
-  gtk_css_parser_unref (parser);
-  g_bytes_unref (bytes);
-
-  bytes = g_bytes_new_static (test->value1, strlen (test->value2));
-  parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL, NULL);
-  value2 = _gtk_style_property_parse_value (prop, parser);
-  gtk_css_parser_unref (parser);
-  g_bytes_unref (bytes);
-
-  bytes = g_bytes_new_static (test->value1, strlen (test->expected));
-  parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL, NULL);
-  expected = _gtk_style_property_parse_value (prop, parser);
-  gtk_css_parser_unref (parser);
-  g_bytes_unref (bytes);
+  value1 = value_from_string (prop, test->value1);
+  g_assert_nonnull (value1);
+  value2 = value_from_string (prop, test->value2);
+  g_assert_nonnull (value1);
+  expected = value_from_string (prop, test->expected);
+  g_assert_nonnull (value1);
 
   result = _gtk_css_value_transition (value1, value2, test->prop, test->progress);
-  g_assert_true (value_is_near (test->prop, result, expected));
+  g_assert_nonnull (result);
+  assert_css_value (test->prop, result, expected);
 
   gtk_css_value_unref (value1);
   gtk_css_value_unref (value2);
