@@ -29,10 +29,10 @@ test('api', test_api,
   suite: 'css',
 )
 
-test_data = executable('data', ['data.c', '../../gtk/css/gtkcssdataurl.c'],
+test_data = executable('data', 'data.c',
   c_args: common_cflags,
   include_directories: [confinc, ],
-  dependencies: gtk_deps,
+  dependencies: libgtk_static_dep,
   install: get_option('install-tests'),
   install_dir: testexecdir,
 )
