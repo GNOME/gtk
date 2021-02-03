@@ -1710,27 +1710,10 @@ GTK_UPDATE_ICON_CACHE_MANIFEST = gtk-update-icon-cache.exe.manifest
 GTK_UPDATE_ICON_CACHE_RC = gtk-update-icon-cache.rc
 GTK_UPDATE_ICON_CACHE_MANIFEST_OBJECT = gtk-update-icon-cache_manifest.o
 
-$(GTK_UPDATE_ICON_CACHE_MANIFEST):
-	(echo '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' ; \
-	 echo '<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">' ; \
-	 echo '  <assemblyIdentity version="1.0.0.0"' ; \
-	 echo '     processorArchitecture="'$(EXE_MANIFEST_ARCHITECTURE)'"' ; \
-	 echo '     name="gtk-update-icon-cache.exe"' ; \
-	 echo '     type="win32"/>' ; \
-	 echo '  <!-- Identify the application security requirements. -->' ; \
-	 echo '  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">' ; \
-	 echo '    <security>' ; \
-	 echo '      <requestedPrivileges>' ; \
-	 echo '        <requestedExecutionLevel' ; \
-	 echo '          level="asInvoker"' ; \
-	 echo '          uiAccess="false"/>' ; \
-	 echo '        </requestedPrivileges>' ; \
-	 echo '       </security>' ; \
-	 echo '  </trustInfo>' ; \
-	 echo '</assembly>' ) >$@
+$(GTK_UPDATE_ICON_CACHE_MANIFEST): Makefile generate-uac-manifest.py
+	$(PYTHON) $(srcdir)/generate-uac-manifest.py -p=gtk3 -n=gtk-update-icon-cache --pkg-version=$(GTK_VERSION) --output-dir=$(builddir)
 
-$(GTK_UPDATE_ICON_CACHE_RC):
-	(echo -e '#include <winuser.h>\nCREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST '$(GTK_UPDATE_ICON_CACHE_MANIFEST)) >$@
+$(GTK_UPDATE_ICON_CACHE_RC): $(GTK_UPDATE_ICON_CACHE_MANIFEST)
 
 $(GTK_UPDATE_ICON_CACHE_MANIFEST_OBJECT): $(GTK_UPDATE_ICON_CACHE_RC) $(GTK_UPDATE_ICON_CACHE_MANIFEST)
 	$(WINDRES) --input $< --output $@ --output-format=coff
@@ -1793,6 +1776,7 @@ EXTRA_DIST +=                   \
 	meson.build \
 	gen-gtk-gresources-xml.py \
 	gen-rc.py \
+	generate-uac-manifest.py \
 	gentypefuncs.py \
 	a11y/meson.build \
 	deprecated/meson.build \
