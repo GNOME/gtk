@@ -2941,52 +2941,59 @@ gtk_list_box_row_focus (GtkWidget        *widget,
   GtkListBoxRow *row = GTK_LIST_BOX_ROW (widget);
   gboolean had_focus = FALSE;
   GtkWidget *child = ROW_PRIV (row)->child;
+  GtkWidget *focus_child = gtk_widget_get_focus_child (widget);
 
   g_object_get (widget, "has-focus", &had_focus, NULL);
-  if (had_focus)
+
+  /* If a child has focus, always try to navigate within that first. */
+  if (focus_child != NULL)
     {
-      /* If on row, going right, enter into possible container */
-      if (child &&
-          (direction == GTK_DIR_RIGHT || direction == GTK_DIR_TAB_FORWARD))
+      if (gtk_widget_child_focus (focus_child, direction))
+        return TRUE;
+    }
+
+  /* Otherwise, decide based on the direction. */
+  if (direction == GTK_DIR_RIGHT || direction == GTK_DIR_TAB_FORWARD)
+    {
+      /* If a child was focused and focus couldn't be moved within that (see
+       * above), let focus leave. */
+      if (focus_child != NULL)
+        return FALSE;
+
+      /* If the row is not focused, try to focus it. */
+      if (!had_focus && gtk_widget_grab_focus (widget))
         {
-          if (gtk_widget_child_focus (GTK_WIDGET (child), direction))
-            return TRUE;
+          gtk_list_box_row_set_focus (row);
+          return TRUE;
         }
+
+      /* Finally, try to move focus into the child. */
+      if (child != NULL && gtk_widget_child_focus (child, direction))
+        return TRUE;
 
       return FALSE;
     }
-  else if (gtk_widget_get_focus_child (widget) != NULL)
+  else if (direction == GTK_DIR_LEFT || direction == GTK_DIR_TAB_BACKWARD)
     {
-      /* Child has focus, always navigate inside it first */
-      if (gtk_widget_child_focus (gtk_widget_get_focus_child (widget), direction))
+      /* If the row itself is focused, let focus leave it. */
+      if (had_focus)
+        return FALSE;
+
+      /* Otherwise, let focus enter the child widget, if possible. */
+      if (child != NULL && gtk_widget_child_focus (child, direction))
         return TRUE;
 
-      /* If exiting child container to the left, select row  */
-      if (direction == GTK_DIR_LEFT || direction == GTK_DIR_TAB_BACKWARD)
+      /* If that didn't work, try to focus the row itself. */
+      if (gtk_widget_grab_focus (widget))
         {
-          /* grab focus explicitly, since gtk_list_box_row_set_focus()
-           * refuses to steal it from a child
-           */
-          gtk_widget_grab_focus (GTK_WIDGET (row));
           gtk_list_box_row_set_focus (row);
           return TRUE;
         }
 
       return FALSE;
     }
-  else
-    {
-      /* If coming from the left, enter into possible container */
-      if (child &&
-          (direction == GTK_DIR_LEFT || direction == GTK_DIR_TAB_BACKWARD))
-        {
-          if (gtk_widget_child_focus (child, direction))
-            return TRUE;
-        }
 
-      gtk_list_box_row_set_focus (row);
-      return TRUE;
-    }
+  return FALSE;
 }
 
 static void
@@ -3422,12 +3429,15 @@ gtk_list_box_row_grab_focus (GtkWidget *widget)
 
   g_return_val_if_fail (box != NULL, FALSE);
 
-  gtk_widget_grab_focus_self (widget);
+  if (gtk_widget_grab_focus_self (widget))
+    {
+      if (box->cursor_row != row)
+        gtk_list_box_update_cursor (box, row, FALSE);
 
-  if (box->cursor_row != row)
-    gtk_list_box_update_cursor (box, row, FALSE);
+      return TRUE;
+    }
 
-  return TRUE;
+  return FALSE;
 }
 
 static void
