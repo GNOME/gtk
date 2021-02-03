@@ -89,10 +89,14 @@ assert_css_value (int          prop,
                   GtkCssValue *result,
                   GtkCssValue *expected)
 {
-  if (!value_is_near (prop, result, expected))
+  if (result == expected)
+    return;
+
+  if (((result == NULL) != (expected == NULL)) ||
+      !value_is_near (prop, result, expected))
     {
-      char *r = _gtk_css_value_to_string (result);
-      char *e = _gtk_css_value_to_string (expected);
+      char *r = result ? _gtk_css_value_to_string (result) : g_strdup ("(nil)");
+      char *e = expected ? _gtk_css_value_to_string (expected) : g_strdup ("(nil)");
       g_print ("Expected %s got %s\n", e, r);
       g_free (r);
       g_free (e);
@@ -118,6 +122,15 @@ static ValueTransitionTest tests[] = {
   { GTK_CSS_PROPERTY_BOX_SHADOW, "2px 2px 10px 4px rgb(200,200,200), 0px 10px 8px 6px rgb(200,100,0)", "none", 0.5, "1px 1px 5px 2px rgba(200,200,200,0.5), 0px 5px 4px 3px rgba(200,100,0,0.5)" },
   { GTK_CSS_PROPERTY_FONT_SIZE, "12px", "16px", 0.25, "13px" },
   { GTK_CSS_PROPERTY_FONT_SIZE, "10px", "10pt", 0.5, "11.66666667px" },
+  { GTK_CSS_PROPERTY_FONT_FAMILY, "cantarell", "sans", 0, "cantarell"},
+  { GTK_CSS_PROPERTY_FONT_FAMILY, "cantarell", "sans", 1, "sans" },
+  { GTK_CSS_PROPERTY_FONT_FAMILY, "cantarell", "sans", 0.5, NULL },
+  { GTK_CSS_PROPERTY_BACKGROUND_POSITION, "20px 10px", "40px", 0.5, "30px calc(5px + 25%)" },
+  //TODO We don't currently transition border-image-width
+  //{ GTK_CSS_PROPERTY_BORDER_IMAGE_WIDTH, "10px 20px", "0px", 0.5, "5px 10px 0.5px 0.5px" },
+  { GTK_CSS_PROPERTY_FILTER, "none", "blur(6px)", 0.5, "blur(3px)" },
+  { GTK_CSS_PROPERTY_FILTER, "none", "blur(6px),contrast(0.6)", 0.5, "blur(3px),contrast(0.3)" },
+  { GTK_CSS_PROPERTY_FILTER, "contrast(0.6)", "blur(6px)", 0.5, NULL},
 };
 
 static GtkCssValue *
@@ -159,24 +172,33 @@ test_transition (gconstpointer data)
 
   value1 = value_from_string (prop, test->value1);
   g_assert_nonnull (value1);
+  computed1 = _gtk_css_value_compute (value1, test->prop, provider, style, NULL);
+
   value2 = value_from_string (prop, test->value2);
   g_assert_nonnull (value1);
-  value3 = value_from_string (prop, test->value3);
-  g_assert_nonnull (value3);
-
-  computed1 = _gtk_css_value_compute (value1, test->prop, provider, style, NULL);
   computed2 = _gtk_css_value_compute (value2, test->prop, provider, style, NULL);
-  computed3 = _gtk_css_value_compute (value3, test->prop, provider, style, NULL);
+
+  if (test->value3)
+    {
+      value3 = value_from_string (prop, test->value3);
+      computed3 = _gtk_css_value_compute (value3, test->prop, provider, style, NULL);
+    }
+  else
+    {
+      value3 = computed3 = NULL;
+    }
+
   result = _gtk_css_value_transition (computed1, computed2, test->prop, test->progress);
-  g_assert_nonnull (result);
   assert_css_value (test->prop, result, computed3);
 
   gtk_css_value_unref (value1);
   gtk_css_value_unref (value2);
-  gtk_css_value_unref (value3);
+  if (value3)
+    gtk_css_value_unref (value3);
   gtk_css_value_unref (computed1);
   gtk_css_value_unref (computed2);
-  gtk_css_value_unref (computed3);
+  if (computed3)
+    gtk_css_value_unref (computed3);
   gtk_css_value_unref (result);
 }
 
