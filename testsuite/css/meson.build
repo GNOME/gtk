@@ -44,6 +44,20 @@ test('data', test_data,
   suite: 'css',
 )
 
+test_parser = executable('test-css-value', 'test-css-value.c',
+  c_args: common_cflags,
+  dependencies: libgtk_static_dep,
+  install: get_option('install-tests'),
+  install_dir: testexecdir,
+)
+
+test('css value', test_parser,
+     args: [ '--tap', '-k' ],
+     protocol: 'tap',
+     env: csstest_env,
+     suite: 'css'
+)
+
 if get_option('install-tests')
   conf = configuration_data()
   conf.set('libexecdir', gtk_libexecdir)
