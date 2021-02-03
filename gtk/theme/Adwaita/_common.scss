@@ -932,6 +932,14 @@ list > row button.image-button:not(.flat) {
   &:hover { @include button(hover); }
   &:active,
   &:checked { @include button(active); }
+
+  @each $b_type, $b_color in (suggested-action, $selected_bg_color),
+                         (destructive-action, $destructive_color) {
+    &.#{$b_type} { // allow colored buttons in lists #3643
+      @include button(normal, $b_color, white);
+      @include focus-ring($fc: $alt_focus_border_color);
+    }
+  }
 }
 
 /*********
