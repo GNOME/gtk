@@ -29,10 +29,10 @@ test('api', test_api,
   suite: 'css',
 )
 
-test_data = executable('data', ['data.c', '../../gtk/css/gtkcssdataurl.c'],
+test_data = executable('data', 'data.c',
   c_args: common_cflags,
   include_directories: [confinc, ],
-  dependencies: gtk_deps,
+  dependencies: libgtk_static_dep,
   install: get_option('install-tests'),
   install_dir: testexecdir,
 )
@@ -42,6 +42,20 @@ test('data', test_data,
   protocol: 'tap',
   env: csstest_env,
   suite: 'css',
+)
+
+test_parser = executable('test-css-value', 'test-css-value.c',
+  c_args: common_cflags,
+  dependencies: libgtk_static_dep,
+  install: get_option('install-tests'),
+  install_dir: testexecdir,
+)
+
+test('css value', test_parser,
+     args: [ '--tap', '-k' ],
+     protocol: 'tap',
+     env: csstest_env,
+     suite: 'css'
 )
 
 if get_option('install-tests')
