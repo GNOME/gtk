@@ -1,4 +1,27 @@
 # Installed tools
+
+extra_update_icon_cache_objs = []
+if win32_enabled
+  gen_uac_manifest = find_program('generate-uac-manifest.py')
+
+  uac_exe_pkg = 'gtk4'
+  uac_exe_name = '@0@-update-icon-cache'.format(uac_exe_pkg)
+
+  # Well, we have to forgo the xxx.exe.manifest in the output listing, since
+  # compile_resources doesn't like to consume targets with multiple outputs,
+  # and the xxx.exe.manifest and xxx.rc are tied together
+  uac_rc = custom_target(
+    'gtk/tools/@0@.rc'.format(uac_exe_name),
+    output: ['@0@.rc'.format(uac_exe_name)],
+    command: [gen_uac_manifest,
+              '-p=@0@'.format(uac_exe_pkg),
+              '-n=@0@'.format(uac_exe_name),
+              '--pkg-version=@0@'.format(meson.project_version()),
+              '--output-dir=@OUTDIR@'],
+  )
+  extra_update_icon_cache_objs = import('windows').compile_resources(uac_rc)
+endif
+
 gtk_tools = [
   ['gtk4-query-settings', ['gtk-query-settings.c']],
   ['gtk4-builder-tool', ['gtk-builder-tool.c',
@@ -6,7 +29,7 @@ gtk_tools = [
                          'gtk-builder-tool-validate.c',
                          'gtk-builder-tool-enumerate.c',
                          'gtk-builder-tool-preview.c']],
-  ['gtk4-update-icon-cache', ['updateiconcache.c', 'gtkiconcachevalidator.c']],
+  ['gtk4-update-icon-cache', ['updateiconcache.c', 'gtkiconcachevalidator.c'] + extra_update_icon_cache_objs],
   ['gtk4-encode-symbolic-svg', ['encodesymbolic.c', 'gdkpixbufutils.c']],
 ]
 
