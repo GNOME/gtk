@@ -1065,9 +1065,32 @@ gtk_builder_tool = executable(
   install: true
 )
 
+extra_update_icon_cache_objs = []
+if win32_enabled
+  gen_uac_manifest = find_program('generate-uac-manifest.py')
+
+  uac_exe_pkg = 'gtk3'
+  uac_exe_name = 'gtk-update-icon-cache'
+
+  # Well, we have to forgo the xxx.exe.manifest in the output listing, since
+  # compile_resources doesn't like to consume targets with multiple outputs,
+  # and the xxx.exe.manifest and xxx.rc are tied together
+  uac_rc = custom_target(
+    'gtk/@0@.rc'.format(uac_exe_name),
+    output: ['@0@.rc'.format(uac_exe_name)],
+    command: [gen_uac_manifest,
+              '-p=@0@'.format(uac_exe_pkg),
+              '-n=@0@'.format(uac_exe_name),
+              '--pkg-version=@0@'.format(meson.project_version()),
+              '--output-dir=@OUTDIR@'],
+  )
+  extra_update_icon_cache_objs = import('windows').compile_resources(uac_rc)
+endif
+
 gtk_update_icon_cache = executable(
   'gtk-update-icon-cache',
   'updateiconcache.c',
+  extra_update_icon_cache_objs,
   c_args: gtk_cargs,
   dependencies: libgtk_dep,
   install: true
