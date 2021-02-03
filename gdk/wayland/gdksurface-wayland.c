@@ -1721,6 +1721,52 @@ static const struct xdg_surface_listener xdg_surface_listener = {
 };
 
 static void
+zxdg_surface_v6_configure (void                   *data,
+                           struct zxdg_surface_v6 *xdg_surface,
+                           uint32_t                serial)
+{
+  GdkSurface *surface = GDK_SURFACE (data);
+
+  gdk_wayland_surface_handle_configure (surface, serial);
+}
+
+static const struct zxdg_surface_v6_listener zxdg_surface_v6_listener = {
+  zxdg_surface_v6_configure,
+};
+
+static void
+gdk_wayland_surface_create_xdg_surface_resources (GdkSurface *surface)
+{
+  GdkWaylandDisplay *display =
+    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  switch (display->shell_variant)
+    {
+    case GDK_WAYLAND_SHELL_VARIANT_XDG_SHELL:
+      impl->display_server.xdg_surface =
+        xdg_wm_base_get_xdg_surface (display->xdg_wm_base,
+                                     impl->display_server.wl_surface);
+      wl_proxy_set_queue ((struct wl_proxy *) impl->display_server.xdg_surface,
+                          impl->event_queue);
+      xdg_surface_add_listener (impl->display_server.xdg_surface,
+                                &xdg_surface_listener,
+                                surface);
+      break;
+    case GDK_WAYLAND_SHELL_VARIANT_ZXDG_SHELL_V6:
+      impl->display_server.zxdg_surface_v6 =
+        zxdg_shell_v6_get_xdg_surface (display->zxdg_shell_v6,
+                                       impl->display_server.wl_surface);
+      zxdg_surface_v6_add_listener (impl->display_server.zxdg_surface_v6,
+                                    &zxdg_surface_v6_listener,
+                                    surface);
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static void
 xdg_toplevel_configure (void                *data,
                         struct xdg_toplevel *xdg_toplevel,
                         int32_t              width,
@@ -1779,18 +1825,7 @@ static const struct xdg_toplevel_listener xdg_toplevel_listener = {
 static void
 create_xdg_toplevel_resources (GdkSurface *surface)
 {
-  GdkWaylandDisplay *display_wayland =
-    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-
-  impl->display_server.xdg_surface =
-    xdg_wm_base_get_xdg_surface (display_wayland->xdg_wm_base,
-                                 impl->display_server.wl_surface);
-  wl_proxy_set_queue ((struct wl_proxy *) impl->display_server.xdg_surface,
-                      impl->event_queue);
-  xdg_surface_add_listener (impl->display_server.xdg_surface,
-                            &xdg_surface_listener,
-                            surface);
 
   impl->display_server.xdg_toplevel =
     xdg_surface_get_toplevel (impl->display_server.xdg_surface);
@@ -1798,20 +1833,6 @@ create_xdg_toplevel_resources (GdkSurface *surface)
                              &xdg_toplevel_listener,
                              surface);
 }
-
-static void
-zxdg_surface_v6_configure (void                   *data,
-                           struct zxdg_surface_v6 *xdg_surface,
-                           uint32_t                serial)
-{
-  GdkSurface *surface = GDK_SURFACE (data);
-
-  gdk_wayland_surface_handle_configure (surface, serial);
-}
-
-static const struct zxdg_surface_v6_listener zxdg_surface_v6_listener = {
-  zxdg_surface_v6_configure,
-};
 
 static void
 zxdg_toplevel_v6_configure (void                    *data,
@@ -1872,16 +1893,7 @@ static const struct zxdg_toplevel_v6_listener zxdg_toplevel_v6_listener = {
 static void
 create_zxdg_toplevel_v6_resources (GdkSurface *surface)
 {
-  GdkWaylandDisplay *display_wayland =
-    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-
-  impl->display_server.zxdg_surface_v6 =
-    zxdg_shell_v6_get_xdg_surface (display_wayland->zxdg_shell_v6,
-                                   impl->display_server.wl_surface);
-  zxdg_surface_v6_add_listener (impl->display_server.zxdg_surface_v6,
-                                &zxdg_surface_v6_listener,
-                                surface);
 
   impl->display_server.zxdg_toplevel_v6 =
     zxdg_surface_v6_get_toplevel (impl->display_server.zxdg_surface_v6);
@@ -1941,6 +1953,7 @@ gdk_wayland_surface_create_xdg_toplevel (GdkSurface *surface)
   const char *app_id;
 
   gdk_surface_freeze_updates (surface);
+  gdk_wayland_surface_create_xdg_surface_resources (surface);
 
   switch (display_wayland->shell_variant)
     {
@@ -2716,19 +2729,11 @@ gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
   gdk_surface_freeze_updates (surface);
 
   positioner = create_dynamic_positioner (surface, width, height, layout, FALSE);
+  gdk_wayland_surface_create_xdg_surface_resources (surface);
 
   switch (display->shell_variant)
     {
     case GDK_WAYLAND_SHELL_VARIANT_XDG_SHELL:
-      impl->display_server.xdg_surface =
-        xdg_wm_base_get_xdg_surface (display->xdg_wm_base,
-                                     impl->display_server.wl_surface);
-
-      wl_proxy_set_queue ((struct wl_proxy *) impl->display_server.xdg_surface,
-                          impl->event_queue);
-      xdg_surface_add_listener (impl->display_server.xdg_surface,
-                                &xdg_surface_listener,
-                                surface);
       impl->display_server.xdg_popup =
         xdg_surface_get_popup (impl->display_server.xdg_surface,
                                parent_impl->display_server.xdg_surface,
@@ -2739,12 +2744,6 @@ gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
       xdg_positioner_destroy (positioner);
       break;
     case GDK_WAYLAND_SHELL_VARIANT_ZXDG_SHELL_V6:
-      impl->display_server.zxdg_surface_v6 =
-        zxdg_shell_v6_get_xdg_surface (display->zxdg_shell_v6,
-                                       impl->display_server.wl_surface);
-      zxdg_surface_v6_add_listener (impl->display_server.zxdg_surface_v6,
-                                    &zxdg_surface_v6_listener,
-                                    surface);
       impl->display_server.zxdg_popup_v6 =
         zxdg_surface_v6_get_popup (impl->display_server.zxdg_surface_v6,
                                    parent_impl->display_server.zxdg_surface_v6,
