@@ -23,7 +23,9 @@
 #include <gtk/gtk.h>
 #include "gtk/gtkcssvalueprivate.h"
 #include "gtk/gtkcsscolorvalueprivate.h"
+#include "gtk/gtkcssnumbervalueprivate.h"
 #include "gtk/gtkcssstylepropertyprivate.h"
+#include "gtk/gtkcssstaticstyleprivate.h"
 
 static gboolean
 color_is_near (const GdkRGBA *color1,
@@ -52,21 +54,26 @@ value_is_near (int          prop,
     {
     case GTK_CSS_PROPERTY_COLOR:
       {
-        GtkCssValue *v1, *v2;
         const GdkRGBA *c1, *c2;
         gboolean res;
 
-        v1 = _gtk_css_value_compute (value1, prop, NULL, NULL, NULL);
-        v2 = _gtk_css_value_compute (value2, prop, NULL, NULL, NULL);
-        c1 = gtk_css_color_value_get_rgba (v1);
-        c2 = gtk_css_color_value_get_rgba (v2);
+        c1 = gtk_css_color_value_get_rgba (value1);
+        c2 = gtk_css_color_value_get_rgba (value2);
 
         res = color_is_near (c1, c2);
 
-        gtk_css_value_unref (v1);
-        gtk_css_value_unref (v2);
-
         return res;
+      }
+      break;
+
+    case GTK_CSS_PROPERTY_FONT_SIZE:
+      {
+        double n1, n2;
+
+        n1 = _gtk_css_number_value_get (value1, 100);
+        n2 = _gtk_css_number_value_get (value2, 100);
+
+        return fabs (n1 - n2) < FLT_EPSILON;
       }
       break;
 
@@ -101,7 +108,7 @@ typedef struct {
   const char *value1;
   const char *value2;
   double progress;
-  const char *expected;
+  const char *value3;
 } ValueTransitionTest;
 
 static ValueTransitionTest tests[] = {
@@ -109,6 +116,8 @@ static ValueTransitionTest tests[] = {
   { GTK_CSS_PROPERTY_BOX_SHADOW, "none", "2px 2px 10px 4px rgb(200,200,200)", 0.5, "1px 1px 5px 2px rgba(200,200,200,0.5)" },
   { GTK_CSS_PROPERTY_BOX_SHADOW, "2px 2px 10px 4px rgb(200,200,200)", "none", 0.5, "1px 1px 5px 2px rgba(200,200,200,0.5)" },
   { GTK_CSS_PROPERTY_BOX_SHADOW, "2px 2px 10px 4px rgb(200,200,200), 0px 10px 8px 6px rgb(200,100,0)", "none", 0.5, "1px 1px 5px 2px rgba(200,200,200,0.5), 0px 5px 4px 3px rgba(200,100,0,0.5)" },
+  { GTK_CSS_PROPERTY_FONT_SIZE, "12px", "16px", 0.25, "13px" },
+  { GTK_CSS_PROPERTY_FONT_SIZE, "10px", "10pt", 0.5, "11.66666667px" },
 };
 
 static GtkCssValue *
@@ -135,8 +144,16 @@ test_transition (gconstpointer data)
   GtkStyleProperty *prop;
   GtkCssValue *value1;
   GtkCssValue *value2;
-  GtkCssValue *expected;
+  GtkCssValue *value3;
+  GtkCssValue *computed1;
+  GtkCssValue *computed2;
+  GtkCssValue *computed3;
   GtkCssValue *result;
+  GtkStyleProvider *provider;
+  GtkCssStyle *style;
+
+  provider = GTK_STYLE_PROVIDER (gtk_settings_get_default ());
+  style = gtk_css_static_style_get_default ();
 
   prop = (GtkStyleProperty *)_gtk_css_style_property_lookup_by_id (test->prop);
 
@@ -144,16 +161,22 @@ test_transition (gconstpointer data)
   g_assert_nonnull (value1);
   value2 = value_from_string (prop, test->value2);
   g_assert_nonnull (value1);
-  expected = value_from_string (prop, test->expected);
-  g_assert_nonnull (value1);
+  value3 = value_from_string (prop, test->value3);
+  g_assert_nonnull (value3);
 
-  result = _gtk_css_value_transition (value1, value2, test->prop, test->progress);
+  computed1 = _gtk_css_value_compute (value1, test->prop, provider, style, NULL);
+  computed2 = _gtk_css_value_compute (value2, test->prop, provider, style, NULL);
+  computed3 = _gtk_css_value_compute (value3, test->prop, provider, style, NULL);
+  result = _gtk_css_value_transition (computed1, computed2, test->prop, test->progress);
   g_assert_nonnull (result);
-  assert_css_value (test->prop, result, expected);
+  assert_css_value (test->prop, result, computed3);
 
   gtk_css_value_unref (value1);
   gtk_css_value_unref (value2);
-  gtk_css_value_unref (expected);
+  gtk_css_value_unref (value3);
+  gtk_css_value_unref (computed1);
+  gtk_css_value_unref (computed2);
+  gtk_css_value_unref (computed3);
   gtk_css_value_unref (result);
 }
 
