@@ -94,7 +94,7 @@ void            gsk_render_node_diff_impossible         (GskRenderNode          
                                                          GskRenderNode               *node2,
                                                          cairo_region_t              *region);
 
-bool            gsk_border_node_get_uniform             (GskRenderNode               *self);
+bool            gsk_border_node_get_uniform             (const GskRenderNode         *self);
 
 void            gsk_text_node_serialize_glyphs          (GskRenderNode               *self,
                                                          GString                     *str);
