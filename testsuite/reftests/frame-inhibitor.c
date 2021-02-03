@@ -30,6 +30,7 @@ tick_callback_for_1_frame (GtkWidget     *widget,
                            gpointer       unused)
 {
   reftest_uninhibit_snapshot ();
+  gtk_widget_queue_draw (widget);
 
   return G_SOURCE_REMOVE;
 }
