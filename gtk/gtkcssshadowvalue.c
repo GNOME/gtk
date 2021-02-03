@@ -172,9 +172,6 @@ gtk_css_value_shadow_transition (GtkCssValue *start,
   guint i, len;
   ShadowValue *shadows;
 
-  if (start->n_shadows != end->n_shadows)
-    return NULL;
-
   if (start->n_shadows > end->n_shadows)
     len = start->n_shadows;
   else
