@@ -28,6 +28,8 @@
 #include "gsktransformprivate.h"
 
 #include "gdk/gdktextureprivate.h"
+#include "gdk/gdk-private.h"
+
 #include <cairo-ft.h>
 
 static inline void
@@ -1744,7 +1746,7 @@ draw_shadow_corner (cairo_t               *cr,
       cairo_fill (mask_cr);
       gsk_cairo_blur_surface (mask, radius, GSK_BLUR_X | GSK_BLUR_Y);
       cairo_destroy (mask_cr);
-      g_hash_table_insert (corner_mask_cache, g_memdup (&key, sizeof (key)), mask);
+      g_hash_table_insert (corner_mask_cache, g_memdup2 (&key, sizeof (key)), mask);
     }
 
   gdk_cairo_set_source_rgba (cr, color);
