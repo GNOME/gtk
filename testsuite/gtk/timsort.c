@@ -21,6 +21,10 @@
 
 #include "gtk/timsort/gtktimsortprivate.h"
 
+#if !GLIB_CHECK_VERSION (2, 67, 3)
+# define g_memdup2(mem,size)    g_memdup((mem), (size))
+#endif
+
 #define assert_sort_equal(a, b, size, n) \
   g_assert_cmpmem (a, sizeof (size) * n, b, sizeof (size) * n)
 
@@ -70,7 +74,9 @@ run_comparison (gpointer         a,
   gint64 start, mid, end;
   gpointer b;
 
-  b = g_memdup (a, element_size * n);
+  g_assert (n <= G_MAXSIZE / element_size);
+
+  b = g_memdup2 (a, element_size * n);
 
   start = g_get_monotonic_time ();
   gtk_tim_sort (a, n, element_size, compare_func, data);
@@ -209,7 +215,7 @@ test_steps (void)
   a = g_new (int, n);
   for (i = 0; i < n; i++)
     a[i] = g_test_rand_int ();
-  b = g_memdup (a, sizeof (int) * n);
+  b = g_memdup2 (a, sizeof (int) * n);
 
   gtk_tim_sort_init (&sort, a, n, sizeof (int), compare_int, NULL);
   gtk_tim_sort_set_max_merge_size (&sort, g_test_rand_int_range (512, 2048));
