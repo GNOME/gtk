@@ -257,8 +257,8 @@ static void              gtk_text_btree_rebalance                (GtkTextBTree  
 static GtkTextLine     * get_last_line                           (GtkTextBTree     *tree);
 static void              post_insert_fixup                       (GtkTextBTree     *tree,
                                                                   GtkTextLine      *insert_line,
-                                                                  int               char_count_delta,
-                                                                  int               line_count_delta);
+                                                                  int               line_count_delta,
+                                                                  int               char_count_delta);
 static void              gtk_text_btree_node_adjust_toggle_count (GtkTextBTreeNode *node,
                                                                   GtkTextTagInfo   *info,
                                                                   int               adjust);
