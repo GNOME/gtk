@@ -4100,6 +4100,9 @@ window {
 
       &:backdrop { box-shadow: inset 0 0 0 3px $backdrop_bg_color, inset 0 1px $top_hilight; }
     }
+
+    &.maximized,
+    &.fullscreen { box-shadow: none; }
   }
 
   &.maximized,
