@@ -1038,7 +1038,7 @@ gtk_compose_table_compact_check (const GtkComposeTableCompact  *table,
   if (!seq_index)
     return FALSE;
 
-  if (seq_index && n_compose == 1)
+  if (n_compose == 1)
     return TRUE;
 
   seq = NULL;
