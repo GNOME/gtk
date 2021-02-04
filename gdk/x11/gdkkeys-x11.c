@@ -1383,7 +1383,7 @@ gdk_x11_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 
       tmp_keyval = translate_keysym (keymap_x11, hardware_keycode,
                                      group, state,
-                                     level, effective_group);
+                                     effective_group, level);
     }
 
   if (consumed_modifiers)
