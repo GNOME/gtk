@@ -252,7 +252,7 @@ void     _gdk_win32_clipboard_default_output_done                  (GObject     
 gboolean _gdk_win32_transmute_contentformat                        (const char                  *from_contentformat,
                                                                     UINT                         to_w32format,
                                                                     const guchar                *data,
-                                                                    int                          length,
+                                                                    gsize                        length,
                                                                     guchar                     **set_data,
                                                                     gsize                       *set_data_length);
 
