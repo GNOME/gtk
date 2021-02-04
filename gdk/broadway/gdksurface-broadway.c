@@ -41,6 +41,7 @@
 #include "gdksurfaceprivate.h"
 #include "gdktextureprivate.h"
 #include "gdktoplevelprivate.h"
+#include "gdk-private.h"
 
 #include <graphene.h>
 #include <stdlib.h>
@@ -1025,7 +1026,7 @@ _gdk_broadway_moveresize_handle_event (GdkDisplay *display,
                 *mv_resize->moveresize_pending_event = *event;
               else
                 mv_resize->moveresize_pending_event =
-                  g_memdup (event, sizeof (BroadwayInputMsg));
+                  g_memdup2 (event, sizeof (BroadwayInputMsg));
 
               break;
             }
@@ -1043,7 +1044,7 @@ _gdk_broadway_moveresize_handle_event (GdkDisplay *display,
             *mv_resize->moveresize_pending_event = *event;
           else
             mv_resize->moveresize_pending_event =
-              g_memdup (event, sizeof (BroadwayInputMsg));
+              g_memdup2 (event, sizeof (BroadwayInputMsg));
 
           break;
         }

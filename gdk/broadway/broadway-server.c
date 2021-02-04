@@ -36,6 +36,10 @@
 #include <string.h>
 #endif
 
+#if !GLIB_CHECK_VERSION (2, 67, 3)
+# define g_memdup2(mem,size)    g_memdup((mem), (size))
+#endif
+
 typedef struct {
   int id;
   guint32 tag;
@@ -605,7 +609,7 @@ update_future_pointer_info (BroadwayServer *server, BroadwayInputPointerMsg *dat
 static void
 queue_input_message (BroadwayServer *server, BroadwayInputMsg *msg)
 {
-  server->input_messages = g_list_append (server->input_messages, g_memdup (msg, sizeof (BroadwayInputMsg)));
+  server->input_messages = g_list_append (server->input_messages, g_memdup2 (msg, sizeof (BroadwayInputMsg)));
 }
 
 static void
