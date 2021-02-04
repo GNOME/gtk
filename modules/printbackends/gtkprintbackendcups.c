@@ -87,6 +87,10 @@ typedef struct _GtkPrintBackendCupsClass GtkPrintBackendCupsClass;
 #define _CUPS_MAP_ATTR_INT(attr, v, a) {if (!g_ascii_strcasecmp (attr->name, (a))) v = attr->values[0].integer;}
 #define _CUPS_MAP_ATTR_STR(attr, v, a) {if (!g_ascii_strcasecmp (attr->name, (a))) v = attr->values[0].string.text;}
 
+#if !GLIB_CHECK_VERSION (2, 67, 3)
+# define g_memdup2(mem,size)    g_memdup((mem), (size))
+#endif
+
 typedef void (* GtkPrintCupsResponseCallbackFunc) (GtkPrintBackend *print_backend,
                                                    GtkCupsResult   *result,
                                                    gpointer         user_data);
@@ -6568,8 +6572,8 @@ localtime_to_utctime (const char *local_time)
       time_t rawtime;
       time (&rawtime);
 
-      actual_utc_time = g_memdup (gmtime (&rawtime), sizeof (struct tm));
-      actual_local_time = g_memdup (localtime (&rawtime), sizeof (struct tm));
+      actual_utc_time = g_memdup2 (gmtime (&rawtime), sizeof (struct tm));
+      actual_local_time = g_memdup2 (localtime (&rawtime), sizeof (struct tm));
 
       diff_time.tm_hour = actual_utc_time->tm_hour - actual_local_time->tm_hour;
       diff_time.tm_min  = actual_utc_time->tm_min  - actual_local_time->tm_min;
