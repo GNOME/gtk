@@ -75,14 +75,6 @@ if get_option('install-tests')
     configuration: conf,
     install_dir: testdatadir,
   )
-
-  conf = configuration_data()
-  conf.set('libexecdir', gtk_libexecdir)
-  configure_file(input: 'transition.test.in',
-    output: 'transition.test',
-    configuration: conf,
-    install_dir: testdatadir,
-  )
 endif
 
 if false and get_option ('profiler')
