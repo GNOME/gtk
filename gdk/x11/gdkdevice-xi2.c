@@ -26,6 +26,8 @@
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"
 
+#include "gdk-private.h"
+
 #include <stdlib.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -760,7 +762,7 @@ gdk_x11_device_xi2_store_axes (GdkX11DeviceXI2 *device,
   g_free (device->last_axes);
 
   if (axes && n_axes)
-    device->last_axes = g_memdup (axes, sizeof (double) * n_axes);
+    device->last_axes = g_memdup2 (axes, sizeof (double) * n_axes);
   else
     device->last_axes = NULL;
 }
