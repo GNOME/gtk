@@ -39,6 +39,8 @@
 #include "gdkdropprivate.h"
 #include "gdkprimary-wayland.h"
 #include "gdkseatprivate.h"
+#include "gdk-private.h"
+
 #include "pointer-gestures-unstable-v1-client-protocol.h"
 #include "tablet-unstable-v2-client-protocol.h"
 
@@ -3472,8 +3474,7 @@ tablet_tool_handle_proximity_out (void                      *data,
 static double *
 tablet_copy_axes (GdkWaylandTabletData *tablet)
 {
-  return g_memdup (tablet->axes,
-                   sizeof (double) * GDK_AXIS_LAST);
+  return g_memdup2 (tablet->axes, sizeof (double) * GDK_AXIS_LAST);
 }
 
 static void
