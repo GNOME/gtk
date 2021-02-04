@@ -389,7 +389,7 @@ gsk_render_node_unref (GskRenderNode *node)
  * Returns: the type of the #GskRenderNode
  */
 GskRenderNodeType
-gsk_render_node_get_node_type (GskRenderNode *node)
+gsk_render_node_get_node_type (const GskRenderNode *node)
 {
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), GSK_NOT_A_RENDER_NODE);
 

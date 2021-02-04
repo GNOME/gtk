@@ -118,7 +118,7 @@ GDK_AVAILABLE_IN_ALL
 void                    gsk_render_node_unref                   (GskRenderNode *node);
 
 GDK_AVAILABLE_IN_ALL
-GskRenderNodeType       gsk_render_node_get_node_type           (GskRenderNode *node);
+GskRenderNodeType       gsk_render_node_get_node_type           (const GskRenderNode *node);
 
 GDK_AVAILABLE_IN_ALL
 void                    gsk_render_node_get_bounds              (GskRenderNode   *node,
