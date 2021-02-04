@@ -332,7 +332,7 @@ gdk_event_type_register_static (const char             *type_name,
   info.base_finalize = NULL;
   info.class_init = gdk_event_generic_class_init;
   info.class_finalize = NULL;
-  info.class_data = g_memdup (type_info, sizeof (GdkEventTypeInfo));
+  info.class_data = g_memdup2 (type_info, sizeof (GdkEventTypeInfo));
 
   info.instance_size = type_info->instance_size;
   info.n_preallocs = 0;
@@ -1146,7 +1146,7 @@ gdk_event_dup_axes (GdkEvent *event)
 
   if (gdk_event_get_axes (event, &axes, &n_axes))
     {
-      double *axes_copy = g_memdup (axes, n_axes * sizeof (double));
+      double *axes_copy = g_memdup2 (axes, n_axes * sizeof (double));
 
       return axes_copy;
     }

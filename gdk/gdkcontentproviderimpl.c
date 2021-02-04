@@ -27,6 +27,8 @@
 #include "gdkintl.h"
 #include "gdkcontentproviderimpl.h"
 
+#include "gdk-private.h"
+
 #define GDK_TYPE_CONTENT_PROVIDER_VALUE            (gdk_content_provider_value_get_type ())
 #define GDK_CONTENT_PROVIDER_VALUE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_CONTENT_PROVIDER_VALUE, GdkContentProviderValue))
 #define GDK_IS_CONTENT_PROVIDER_VALUE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_CONTENT_PROVIDER_VALUE))
@@ -426,7 +428,7 @@ gdk_content_provider_new_union (GdkContentProvider **providers,
   result = g_object_new (GDK_TYPE_CONTENT_PROVIDER_UNION, NULL);
 
   result->n_providers = n_providers;
-  result->providers = g_memdup (providers, sizeof (GdkContentProvider *) * n_providers);
+  result->providers = g_memdup2 (providers, sizeof (GdkContentProvider *) * n_providers);
 
   for (i = 0; i < n_providers; i++)
     {
