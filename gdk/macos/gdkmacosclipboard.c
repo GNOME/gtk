@@ -23,6 +23,7 @@
 
 #include "gdkmacosclipboard-private.h"
 #include "gdkmacosutils-private.h"
+#include "gdk-private.h"
 
 struct _GdkMacosClipboard
 {
@@ -213,7 +214,7 @@ create_stream_from_nsdata (NSData *data)
   const guint8 *bytes = [data bytes];
   gsize len = [data length];
 
-  return g_memory_input_stream_new_from_data (g_memdup (bytes, len), len, g_free);
+  return g_memory_input_stream_new_from_data (g_memdup2 (bytes, len), len, g_free);
 }
 
 static void
@@ -309,7 +310,7 @@ _gdk_macos_clipboard_read_async (GdkClipboard        *clipboard,
       color[2] = 0xffff * [nscolor blueComponent];
       color[3] = 0xffff * [nscolor alphaComponent];
 
-      stream = g_memory_input_stream_new_from_data (g_memdup (&color, sizeof color),
+      stream = g_memory_input_stream_new_from_data (g_memdup2 (&color, sizeof color),
                                                     sizeof color,
                                                     g_free);
     }
