@@ -139,7 +139,7 @@ gtk_show_uri_full (GtkWindow           *parent,
  * @result: #GAsyncResult that was passed to @callback
  * @error: return location for an error
  *
- * Finished the gtk_show_uri() call and returns the result
+ * Finishes the gtk_show_uri() call and returns the result
  * of the operation.
  *
  * Returns: %TRUE if the URI was shown successfully.
