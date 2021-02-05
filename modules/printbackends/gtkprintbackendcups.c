@@ -152,6 +152,9 @@ struct _GtkPrintBackendCups
   gboolean      secrets_service_available;
   guint         secrets_service_watch_id;
   GCancellable *secrets_service_cancellable;
+
+  GList *temporary_queues_in_construction;
+  GList *temporary_queues_removed;
 };
 
 static GObjectClass *backend_parent_class;
@@ -287,6 +290,11 @@ gtk_print_backend_cups_new (void)
 
   return g_object_new (GTK_TYPE_PRINT_BACKEND_CUPS, NULL);
 }
+
+static void                 create_temporary_queue                  (GtkPrintBackendCups *backend,
+                                                                     const gchar         *printer_name,
+                                                                     const gchar         *printer_uri,
+                                                                     const gchar         *device_uri);
 
 static void
 gtk_print_backend_cups_class_init (GtkPrintBackendCupsClass *class)
@@ -891,6 +899,9 @@ gtk_print_backend_cups_init (GtkPrintBackendCups *backend_cups)
     gtk_cups_secrets_service_watch (secrets_service_appeared_cb,
                                     secrets_service_vanished_cb,
                                     backend_cups);
+
+  backend_cups->temporary_queues_in_construction = NULL;
+  backend_cups->temporary_queues_removed = NULL;
 }
 
 static void
@@ -926,6 +937,12 @@ gtk_print_backend_cups_finalize (GObject *object)
     {
       g_bus_unwatch_name (backend_cups->secrets_service_watch_id);
     }
+
+  g_list_free_full (backend_cups->temporary_queues_in_construction, g_free);
+  backend_cups->temporary_queues_in_construction = NULL;
+
+  g_list_free_full (backend_cups->temporary_queues_removed, g_free);
+  backend_cups->temporary_queues_removed = NULL;
 
   backend_parent_class->finalize (object);
 }
@@ -1844,8 +1861,28 @@ static void
 mark_printer_inactive (GtkPrinter      *printer,
                        GtkPrintBackend *backend)
 {
-  gtk_printer_set_is_active (printer, FALSE);
-  g_signal_emit_by_name (backend, "printer-removed", printer);
+  GtkPrinterCups *cups_printer = GTK_PRINTER_CUPS (printer);
+  GList          *iter;
+
+  if (cups_printer->is_temporary)
+    {
+      /* Do not recreate printers which disappeared from Avahi. */
+      iter = g_list_find_custom (GTK_PRINT_BACKEND_CUPS (backend)->temporary_queues_removed,
+                                 gtk_printer_get_name (printer), (GCompareFunc) g_strcmp0);
+      if (iter == NULL)
+        {
+          /* Recreate temporary queue since they are created for 60 seconds only. */
+          create_temporary_queue (GTK_PRINT_BACKEND_CUPS (backend),
+                                  gtk_printer_get_name (printer),
+                                  cups_printer->printer_uri,
+                                  cups_printer->temporary_queue_device_uri);
+        }
+    }
+  else
+    {
+      gtk_printer_set_is_active (printer, FALSE);
+      g_signal_emit_by_name (backend, "printer-removed", printer);
+    }
 }
 
 static int
@@ -1896,7 +1933,8 @@ static const char * const printer_attrs[] =
     "multiple-document-handling-supported",
     "copies-supported",
     "number-up-supported",
-    "device-uri"
+    "device-uri",
+    "printer-is-temporary"
   };
 
 /* Attributes we're interested in for printers without PPD */
@@ -1993,6 +2031,7 @@ typedef struct
   char     *output_bin_default;
   GList    *output_bin_supported;
   char     *original_device_uri;
+  gboolean  is_temporary;
 } PrinterSetupInfo;
 
 static void
@@ -2378,6 +2417,13 @@ cups_printer_handle_attribute (GtkPrintBackendCups *cups_backend,
     {
       info->original_device_uri = g_strdup (ippGetString (attr, 0, NULL));
     }
+  else if (strcmp (ippGetName (attr), "printer-is-temporary") == 0)
+    {
+      if (ippGetBoolean (attr, 0) == 1)
+        info->is_temporary = TRUE;
+      else
+        info->is_temporary = FALSE;
+    }
   else
     {
       GTK_NOTE (PRINTING,
@@ -2413,12 +2459,7 @@ cups_create_printer (GtkPrintBackendCups *cups_backend,
   cups_printer = gtk_printer_cups_new (info->printer_name, backend, NULL);
 #endif
 
-  if (info->avahi_printer)
-    {
-      cups_printer->device_uri = g_strdup_printf ("/%s",
-                                                  info->avahi_resource_path);
-    }
-  else
+  if (!info->avahi_printer)
     {
       cups_printer->device_uri = g_strdup_printf ("/printers/%s",
                                                   info->printer_name);
@@ -2780,6 +2821,8 @@ cups_request_printer_info_cb (GtkPrintBackendCups *cups_backend,
           GTK_PRINTER_CUPS (printer)->output_bin_default = info->output_bin_default;
           GTK_PRINTER_CUPS (printer)->output_bin_supported = info->output_bin_supported;
 
+          GTK_PRINTER_CUPS (printer)->is_temporary = info->is_temporary;
+
           gtk_printer_set_has_details (printer, TRUE);
           g_signal_emit_by_name (printer, "details-acquired", TRUE);
 
@@ -2845,8 +2888,10 @@ cups_request_printer_info (GtkPrinterCups *printer)
 typedef struct
 {
   char                *printer_uri;
+  char                *device_uri;
   char                *location;
-  char                *host;
+  char                *address;
+  char                *hostname;
   int                  port;
   char                *printer_name;
   char                *name;
@@ -2903,6 +2948,88 @@ find_printer_by_uuid (GtkPrintBackendCups *backend,
   return result;
 }
 
+static void
+cups_create_local_printer_cb (GtkPrintBackendCups *print_backend,
+                              GtkCupsResult       *result,
+                              gpointer             user_data)
+{
+  ipp_attribute_t *attr;
+  gchar           *printer_name = NULL;
+  ipp_t           *response;
+  GList           *iter;
+
+  response = gtk_cups_result_get_response (result);
+
+  if (ippGetStatusCode (response) <= IPP_OK_CONFLICT)
+    {
+      if ((attr = ippFindAttribute (response, "printer-uri-supported", IPP_TAG_URI)) != NULL)
+        {
+          printer_name = g_strdup (g_strrstr (ippGetString (attr, 0, NULL), "/") + 1);
+        }
+
+      GTK_NOTE (PRINTING,
+                g_print ("CUPS Backend: Created local printer %s\n", printer_name));
+    }
+  else
+    {
+      GTK_NOTE (PRINTING,
+                g_print ("CUPS Backend: Creating of local printer failed: %d\n", ippGetStatusCode (response)));
+    }
+
+  iter = g_list_find_custom (print_backend->temporary_queues_in_construction, printer_name, (GCompareFunc) g_strcmp0);
+  if (iter != NULL)
+    {
+      g_free (iter->data);
+      print_backend->temporary_queues_in_construction = g_list_delete_link (print_backend->temporary_queues_in_construction, iter);
+    }
+
+  g_free (printer_name);
+}
+
+/*
+ *  Create CUPS temporary queue.
+ */
+static void
+create_temporary_queue (GtkPrintBackendCups *backend,
+                        const gchar         *printer_name,
+                        const gchar         *printer_uri,
+                        const gchar         *device_uri)
+{
+  GtkCupsRequest *request;
+  GList          *iter;
+
+  /* There can be several queues with the same name (ipp and ipps versions of the same printer) */
+  iter = g_list_find_custom (backend->temporary_queues_in_construction, printer_name, (GCompareFunc) g_strcmp0);
+  if (iter != NULL)
+    return;
+
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: Creating local printer %s\n", printer_name));
+
+  backend->temporary_queues_in_construction = g_list_prepend (backend->temporary_queues_in_construction, g_strdup (printer_name));
+
+  request = gtk_cups_request_new_with_username (NULL,
+                                                GTK_CUPS_POST,
+                                                IPP_OP_CUPS_CREATE_LOCAL_PRINTER,
+                                                NULL,
+                                                NULL,
+                                                NULL,
+                                                NULL);
+
+  gtk_cups_request_ipp_add_string (request, IPP_TAG_OPERATION, IPP_TAG_URI,
+                                   "printer-uri", NULL, printer_uri);
+  gtk_cups_request_ipp_add_string (request, IPP_TAG_PRINTER, IPP_TAG_NAME,
+                                   "printer-name", NULL, printer_name);
+  gtk_cups_request_ipp_add_string (request, IPP_TAG_PRINTER, IPP_TAG_URI,
+                                   "device-uri", NULL, device_uri);
+
+  cups_request_execute (backend,
+                        request,
+                        (GtkPrintCupsResponseCallbackFunc) cups_create_local_printer_cb,
+                        NULL,
+                        NULL);
+}
+
 /*
  *  Create new GtkPrinter from information included in TXT records.
  */
@@ -2911,6 +3038,15 @@ create_cups_printer_from_avahi_data (AvahiConnectionTestData *data)
 {
   PrinterSetupInfo *info = g_slice_new0 (PrinterSetupInfo);
   GtkPrinter       *printer;
+
+  printer = gtk_print_backend_find_printer (GTK_PRINT_BACKEND (data->backend), data->printer_name);
+  if (printer != NULL)
+    {
+      /* A printer with this name is already present in this backend. It is probably the same printer
+       * on another protocol (IPv4 vs IPv6).
+       */
+      return;
+    }
 
   info->avahi_printer = TRUE;
   info->printer_name = data->printer_name;
@@ -2976,8 +3112,9 @@ create_cups_printer_from_avahi_data (AvahiConnectionTestData *data)
       GTK_PRINTER_CUPS (printer)->avahi_type = g_strdup (data->type);
       GTK_PRINTER_CUPS (printer)->avahi_domain = g_strdup (data->domain);
       GTK_PRINTER_CUPS (printer)->printer_uri = g_strdup (data->printer_uri);
+      GTK_PRINTER_CUPS (printer)->temporary_queue_device_uri = g_strdup (data->device_uri);
       g_free (GTK_PRINTER_CUPS (printer)->hostname);
-      GTK_PRINTER_CUPS (printer)->hostname = g_strdup (data->host);
+      GTK_PRINTER_CUPS (printer)->hostname = g_strdup (data->hostname);
       GTK_PRINTER_CUPS (printer)->port = data->port;
       gtk_printer_set_location (printer, data->location);
       gtk_printer_set_state_message (printer, info->state_msg);
@@ -3010,10 +3147,11 @@ avahi_connection_test_cb (GObject      *source_object,
 {
   AvahiConnectionTestData *data = (AvahiConnectionTestData *) user_data;
   GSocketConnection       *connection;
+  GError                  *error = NULL;
 
   connection = g_socket_client_connect_to_host_finish (G_SOCKET_CLIENT (source_object),
                                                        res,
-                                                       NULL);
+                                                       &error);
   g_object_unref (source_object);
 
   if (connection != NULL)
@@ -3023,15 +3161,25 @@ avahi_connection_test_cb (GObject      *source_object,
 
       create_cups_printer_from_avahi_data (data);
     }
+  else
+    {
+      GTK_NOTE (PRINTING,
+                g_warning ("CUPS Backend: Can not connect to %s: %s\n",
+                           data->address,
+                           error->message));
+      g_error_free (error);
+    }
 
   g_free (data->printer_uri);
   g_free (data->location);
-  g_free (data->host);
+  g_free (data->address);
+  g_free (data->hostname);
   g_free (data->printer_name);
   g_free (data->name);
   g_free (data->resource_path);
   g_free (data->type);
   g_free (data->domain);
+  g_free (data->device_uri);
   g_free (data);
 }
 
@@ -3070,17 +3218,17 @@ avahi_service_resolver_cb (GObject      *source_object,
   AvahiConnectionTestData *data;
   GtkPrintBackendCups     *backend;
   const char              *name;
-  const char              *host;
+  const char              *hostname;
   const char              *type;
   const char              *domain;
   const char              *address;
-  const char              *protocol_string;
   GVariant                *output;
   GVariant                *txt;
   GVariant                *child;
   guint32                  flags;
   guint16                  port;
   GError                  *error = NULL;
+  GList                   *iter;
   char                    *tmp;
   char                    *printer_name;
   char                   **printer_name_strv;
@@ -3107,7 +3255,7 @@ avahi_service_resolver_cb (GObject      *source_object,
                      &name,
                      &type,
                      &domain,
-                     &host,
+                     &hostname,
                      &aprotocol,
                      &address,
                      &port,
@@ -3172,51 +3320,50 @@ avahi_service_resolver_cb (GObject      *source_object,
 
       if (data->resource_path != NULL)
         {
-          if (data->got_printer_type &&
-              (g_str_has_prefix (data->resource_path, "printers/") ||
-               g_str_has_prefix (data->resource_path, "classes/")))
-            {
-              /* This is a CUPS printer advertised via Avahi */
-              printer_name = g_strrstr (data->resource_path, "/");
-              if (printer_name != NULL && printer_name[0] != '\0')
-                data->printer_name = g_strdup (printer_name + 1);
-              else
-                data->printer_name = g_strdup (data->resource_path);
-            }
-          else
-            {
-              printer_name = g_strdup (name);
-              g_strcanon (printer_name, PRINTER_NAME_ALLOWED_CHARACTERS, '-');
+          /*
+           * Create name of temporary queue from the name of the discovered service.
+           * This emulates the way how CUPS creates the name.
+           */
+          printer_name = g_strdup_printf ("%s", name);
+          g_strcanon (printer_name, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", '_');
 
-              printer_name_strv = g_strsplit_set (printer_name, "-", -1);
-              printer_name_compressed_strv = g_new0 (char *, g_strv_length (printer_name_strv) + 1);
-              for (i = 0, j = 0; printer_name_strv[i] != NULL; i++)
+          printer_name_strv = g_strsplit_set (printer_name, "_", -1);
+          printer_name_compressed_strv = g_new0 (gchar *, g_strv_length (printer_name_strv) + 1);
+          for (i = 0, j = 0; printer_name_strv[i] != NULL; i++)
+            {
+              if (printer_name_strv[i][0] != '\0')
                 {
-                  if (printer_name_strv[i][0] != '\0')
-                    {
-                      printer_name_compressed_strv[j] = printer_name_strv[i];
-                      j++;
-                    }
+                  printer_name_compressed_strv[j] = printer_name_strv[i];
+                  j++;
                 }
+            }
 
-              data->printer_name = g_strjoinv ("-", printer_name_compressed_strv);
+          data->printer_name = g_strjoinv ("_", printer_name_compressed_strv);
 
-              g_strfreev (printer_name_strv);
-              g_free (printer_name_compressed_strv);
-              g_free (printer_name);
+
+          g_strfreev (printer_name_strv);
+          g_free (printer_name_compressed_strv);
+          g_free (printer_name);
+          iter = g_list_find_custom (backend->temporary_queues_removed, data->printer_name, (GCompareFunc) g_strcmp0);
+          if (iter != NULL)
+            {
+              g_free (iter->data);
+              backend->temporary_queues_removed = g_list_delete_link (backend->temporary_queues_removed, iter);
             }
 
           if (g_strcmp0 (type, "_ipp._tcp") == 0)
-            protocol_string = "ipp";
+            {
+              data->printer_uri = g_strdup_printf ("ipp://localhost/printers/%s", data->printer_name);
+              data->device_uri = g_strdup_printf ("ipp://%s:%d/%s", hostname, port, data->resource_path);
+            }
           else
-            protocol_string = "ipps";
+            {
+              data->printer_uri = g_strdup_printf ("ipps://localhost/printers/%s", data->printer_name);
+              data->device_uri = g_strdup_printf ("ipps://%s:%d/%s", hostname, port, data->resource_path);
+            }
 
-          if (aprotocol == AVAHI_PROTO_INET6)
-            data->printer_uri = g_strdup_printf ("%s://[%s]:%u/%s", protocol_string, address, port, data->resource_path);
-          else
-            data->printer_uri = g_strdup_printf ("%s://%s:%u/%s", protocol_string, address, port, data->resource_path);
-
-          data->host = g_strdup (address);
+          data->address = g_strdup (address);
+          data->hostname = g_strdup (hostname);
           data->port = port;
 
           data->name = g_strdup (name);
@@ -3330,6 +3477,9 @@ avahi_service_browser_signal_handler (GDBusConnection *connection,
                                  backend->avahi_default_printer) == 0)
                     g_clear_pointer (&backend->avahi_default_printer, g_free);
 
+                  backend->temporary_queues_removed = g_list_prepend (backend->temporary_queues_removed,
+                    g_strdup (gtk_printer_get_name (GTK_PRINTER (printer))));
+
                   g_signal_emit_by_name (backend, "printer-removed", printer);
                   gtk_print_backend_remove_printer (GTK_PRINT_BACKEND (backend),
                                                     GTK_PRINTER (printer));
@@ -3442,7 +3592,6 @@ avahi_create_browsers (GObject      *source_object,
                                          avahi_service_browser_signal_handler,
                                          cups_backend,
                                          NULL);
-
   /*
    * Create service browsers for _ipp._tcp and _ipps._tcp services.
    */
@@ -3568,6 +3717,12 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
             continue;
         }
 
+      /* Do not show printer for queue which was removed from Avahi. */
+      iter = g_list_find_custom (GTK_PRINT_BACKEND_CUPS (backend)->temporary_queues_removed,
+                                 info->printer_name, (GCompareFunc) g_strcmp0);
+      if (iter != NULL)
+        continue;
+
       if (info->got_printer_type)
         {
           if (info->default_printer && !cups_backend->got_default_printer)
@@ -3603,7 +3758,24 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 	  printer = cups_create_printer (cups_backend, info);
 	  list_has_changed = TRUE;
 	}
+      else if (GTK_PRINTER_CUPS (printer)->avahi_browsed && info->is_temporary)
+        {
+          /*
+           * A temporary queue was created for a printer found via Avahi.
+           * We modify the placeholder GtkPrinter to point to the temporary queue
+           * instead of removing the placeholder GtkPrinter and creating new GtkPrinter.
+           */
 
+          g_object_ref (printer);
+
+          GTK_PRINTER_CUPS (printer)->avahi_browsed = FALSE;
+          GTK_PRINTER_CUPS (printer)->is_temporary = TRUE;
+          g_free (GTK_PRINTER_CUPS (printer)->device_uri);
+          GTK_PRINTER_CUPS (printer)->device_uri = g_strdup_printf ("/printers/%s",
+                                                                    info->printer_name);
+          gtk_printer_set_has_details (printer, FALSE);
+          cups_printer_request_details (printer);
+        }
       else
 	g_object_ref (printer);
 
@@ -3635,6 +3807,7 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       GTK_PRINTER_CUPS (printer)->number_of_covers = info->number_of_covers;
       g_clear_pointer (&(GTK_PRINTER_CUPS (printer)->covers), g_strfreev);
       GTK_PRINTER_CUPS (printer)->covers = g_strdupv (info->covers);
+      GTK_PRINTER_CUPS (printer)->is_temporary = info->is_temporary;
       status_changed = gtk_printer_set_job_count (printer, info->job_count);
       status_changed |= gtk_printer_set_location (printer, info->location);
       status_changed |= gtk_printer_set_description (printer,
@@ -3950,7 +4123,10 @@ cups_request_ppd (GtkPrinter *printer)
     }
   else
     {
-      hostname = cups_printer->hostname;
+      if (cups_printer->is_temporary)
+        hostname = cupsServer ();
+      else
+        hostname = cups_printer->hostname;
       port = cups_printer->port;
       resource = g_strdup_printf ("/printers/%s.ppd",
                                   gtk_printer_cups_get_ppd_name (GTK_PRINTER_CUPS (printer)));
@@ -4317,8 +4493,16 @@ cups_printer_request_details (GtkPrinter *printer)
   GtkPrinterCups *cups_printer;
 
   cups_printer = GTK_PRINTER_CUPS (printer);
-  if (!cups_printer->reading_ppd &&
-      gtk_printer_cups_get_ppd (cups_printer) == NULL)
+
+  if (cups_printer->avahi_browsed)
+    {
+      create_temporary_queue (GTK_PRINT_BACKEND_CUPS (gtk_printer_get_backend (printer)),
+                              gtk_printer_get_name (printer),
+                              cups_printer->printer_uri,
+                              cups_printer->temporary_queue_device_uri);
+    }
+  else if (!cups_printer->reading_ppd &&
+           gtk_printer_cups_get_ppd (cups_printer) == NULL)
     {
       if (cups_printer->remote && !cups_printer->avahi_browsed)
         {
