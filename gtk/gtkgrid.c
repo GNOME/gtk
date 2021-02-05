@@ -48,6 +48,65 @@
  * from the grid, use gtk_grid_remove(). The behaviour of GtkGrid when
  * several children occupy the same grid cell is undefined.
  *
+ * # GtkGrid as GtkBuildable
+ *
+ * Every child in a GtkGrid has access to a custom #GtkBuildable element, called ´<layout>´.
+ * It can by used to specify a position in the grid and optionally spans.
+ * All properties that can be used in the ´<layout>´ element are implemented by #GtkGridLayoutChild.
+ *
+ * It is implemented by #GtkWidget using #GtkLayoutManager.
+ *
+ * To showcase it, here is a simple example:
+ *
+ * |[
+ * <object class="GtkGrid" id="my_grid">
+ *   <child>
+ *     <object class="GtkButton" id="button1">
+ *       <property name="label">Button 1</property>
+ *       <layout>
+ *         <property name="column">0</property>
+ *         <property name="row">0</property>
+ *       </layout>
+ *     </object>
+ *   </child>
+ *   <child>
+ *     <object class="GtkButton" id="button2">
+ *       <property name="label">Button 2</property>
+ *       <layout>
+ *         <property name="column">1</property>
+ *         <property name="row">0</property>
+ *       </layout>
+ *     </object>
+ *   </child>
+ *   <child>
+ *     <object class="GtkButton" id="button3">
+ *       <property name="label">Button 3</property>
+ *       <layout>
+ *         <property name="column">2</property>
+ *         <property name="row">0</property>
+ *         <property name="row-span">2</property>
+ *       </layout>
+ *     </object>
+ *   </child>
+ *   <child>
+ *     <object class="GtkButton" id="button4">
+ *       <property name="label">Button 4</property>
+ *       <layout>
+ *         <property name="column">0</property>
+ *         <property name="row">1</property>
+ *         <property name="column-span">2</property>
+ *       </layout>
+ *     </object>
+ *   </child>
+ * </object>
+ * ]|
+ *
+ * It organizes the first two buttons side-by-side in one cell each.
+ * The third button is in the last column but spans across two rows.
+ * This is defined by the ´row-span´ property.
+ * The last button is located in the second row and spans across two columns,
+ * which is defined by the ´column-span´ property.
+ *
  * # CSS nodes
  *
  * GtkGrid uses a single CSS node with name `grid`.
