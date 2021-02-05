@@ -35,6 +35,7 @@ if ffmpeg_found
     sources: 'gtkffmediafile.c',
     c_args: extra_c_args,
     dependencies: [ libgtk_dep, ffmpeg_deps ],
+    name_suffix: module_suffix,
     install_dir: media_install_dir,
     install: true,
   )
@@ -56,6 +57,7 @@ if gstplayer_dep.found() and gstgl_dep.found()
     ],
     c_args: extra_c_args,
     dependencies: [ libm, libgtk_dep, gstplayer_dep, gstgl_dep ],
+    name_suffix: module_suffix,
     install_dir: media_install_dir,
     install: true,
   )

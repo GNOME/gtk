@@ -85,6 +85,13 @@ gtk_library_version = '1.@0@.@1@'.format(gtk_binary_age - gtk_interface_age, gtk
 
 gtk_api_version = '4.0'
 
+module_suffix = []
+# GModule requires file extension to be .so, not .dylib on Mac.
+# https://gitlab.gnome.org/GNOME/glib/issues/520
+if ['darwin', 'ios'].contains(host_machine.system())
+  module_suffix = 'so'
+endif
+
 x11_enabled      = get_option('x11-backend')
 wayland_enabled  = get_option('wayland-backend')
 broadway_enabled = get_option('broadway-backend')
