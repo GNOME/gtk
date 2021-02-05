@@ -22,6 +22,7 @@ if cups_dep.found()
     ],
     c_args: printbackends_args,
     dependencies: [libgtk_dep, cups_dep, colord_dep],
+    name_suffix: module_suffix,
     install_dir: printbackends_install_dir,
     install: true,
   )
@@ -32,6 +33,7 @@ else
     sources: 'gtkprintbackendlpr.c',
     c_args: printbackends_args,
     dependencies: libgtk_dep,
+    name_suffix: module_suffix,
     install_dir: printbackends_install_dir,
     install: true,
   )
@@ -49,6 +51,7 @@ if rest_dep.found() and json_glib_dep.found()
     ],
     c_args: printbackends_args,
     dependencies: [ libgtk_dep, rest_dep, json_glib_dep ],
+    name_suffix: module_suffix,
     install_dir: printbackends_install_dir,
     install: true)
 endif
@@ -59,6 +62,7 @@ shared_module('printbackend-file',
   sources: 'gtkprintbackendfile.c',
   c_args: printbackends_args,
   dependencies: libgtk_dep,
+  name_suffix: module_suffix,
   install_dir: printbackends_install_dir,
   install: true,
 )
