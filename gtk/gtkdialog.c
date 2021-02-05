@@ -48,20 +48,32 @@
  * SECTION:gtkdialog
  * @Short_description: Create popup windows
  * @Title: GtkDialog
- * @See_also: #GtkBox, #GtkWindow, #GtkButton
+ * @See_also: #GtkWindow, #GtkMessageDialog
  *
- * Dialog boxes are a convenient way to prompt the user for a small amount
+ * Dialogs are a convenient way to prompt the user for a small amount
  * of input, e.g. to display a message, ask a question, or anything else
  * that does not require extensive effort on the user’s part.
  *
- * GTK treats a dialog as a window split vertically. The top section is a
- * #GtkBox, and is where widgets such as a #GtkLabel or a #GtkEntry should
- * be packed. The bottom area is known as the
- * “action area”. This is generally used for
- * packing buttons into the dialog which may perform functions such as
- * cancel, ok, or apply.
+ * The main area of a GtkDialog is called the "content area", and is yours
+ * to populate with widgets such a #GtkLabel or #GtkEntry, to present
+ * your information, questions, or tasks to the user. In addition, dialogs
+ * allow you to add "action widgets". Most commonly, action widgets are
+ * buttons. Depending on the platform, action widgets may be presented
+ * in the header bar at the top of the window, or at the bottom of the window.
+ * To add action widgets, use GtkDialog using gtk_dialog_new_with_buttons(),
+ * gtk_dialog_add_button(), gtk_dialog_add_buttons(), or
+ * gtk_dialog_add_action_widget().
  *
- * #GtkDialog boxes are created with a call to gtk_dialog_new() or
+ * Clicking a button that was added as an action widget will emit the
+ * #GtkDialog::response signal with a response ID that you specified.
+ * GTK will never assign a meaning to positive response IDs; these are
+ * entirely user-defined. But for convenience, you can use the response
+ * IDs in the #GtkResponseType enumeration (these all have values less
+ * than zero). If a dialog receives a delete event, the
+ * #GtkDialog::response signal will be emitted with the
+ * #GTK_RESPONSE_DELETE_EVENT response ID.
+ *
+ * Dialogs are created with a call to gtk_dialog_new() or
  * gtk_dialog_new_with_buttons(). gtk_dialog_new_with_buttons() is
  * recommended; it allows you to set the dialog title, some convenient
  * flags, and add simple buttons.
@@ -72,20 +84,9 @@
  * gtk_dialog_new() into a #GtkWindow. When using gtk_dialog_new_with_buttons()
  * you can also pass the #GTK_DIALOG_MODAL flag to make a dialog modal.
  *
- * If you add buttons to #GtkDialog using gtk_dialog_new_with_buttons(),
- * gtk_dialog_add_button(), gtk_dialog_add_buttons(), or
- * gtk_dialog_add_action_widget(), clicking the button will emit a signal
- * called #GtkDialog::response with a response ID that you specified. GTK
- * will never assign a meaning to positive response IDs; these are entirely
- * user-defined. But for convenience, you can use the response IDs in the
- * #GtkResponseType enumeration (these all have values less than zero). If
- * a dialog receives a delete event, the #GtkDialog::response signal will
- * be emitted with a response ID of #GTK_RESPONSE_DELETE_EVENT.
- *
- * For the simple dialog in the following example, in reality you’d probably
- * use #GtkMessageDialog to save yourself some effort. But you’d need to
- * create the dialog contents manually if you had more than a simple message
- * in the dialog.
+ * For the simple dialog in the following example, a #GtkMessageDialog would
+ * save some effort. But you’d need to create the dialog contents manually if
+ * you had more than a simple message in the dialog.
  *
  * An example for simple GtkDialog usage:
  * |[<!-- language="C" -->
@@ -124,8 +125,7 @@
  * # GtkDialog as GtkBuildable
  *
  * The GtkDialog implementation of the #GtkBuildable interface exposes the
- * @content_area and @action_area as internal children with the names
- * “content_area” and “action_area”.
+ * @content_area as an internal child with the name “content_area”.
  *
  * GtkDialog supports a custom <action-widgets> element, which can contain
  * multiple <action-widget> elements. The “response” attribute specifies a
