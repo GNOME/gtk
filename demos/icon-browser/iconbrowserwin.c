@@ -279,11 +279,31 @@ drag_prepare_texture (GtkDragSource *source,
                       GtkWidget     *widget)
 {
   GdkPaintable *paintable = get_image_paintable (GTK_IMAGE (widget));
+  GtkSnapshot *snapshot;
+  double width, height;
+  GskRenderNode *node;
+  GskRenderer *renderer;
+  GdkTexture *texture;
+  GdkContentProvider *ret;
 
   if (!GDK_IS_PAINTABLE (paintable))
     return NULL;
 
-  return gdk_content_provider_new_typed (GDK_TYPE_PAINTABLE, paintable);
+  snapshot = gtk_snapshot_new ();
+  width = gdk_paintable_get_intrinsic_width (paintable);
+  height = gdk_paintable_get_intrinsic_height (paintable);
+  gdk_paintable_snapshot (paintable, snapshot, width, height);
+  node = gtk_snapshot_free_to_node (snapshot);
+
+  renderer = gtk_native_get_renderer (gtk_widget_get_native (widget));
+  texture = gsk_renderer_render_texture (renderer, node, &GRAPHENE_RECT_INIT (0, 0, width, height));
+
+  ret = gdk_content_provider_new_typed (GDK_TYPE_TEXTURE, texture);
+
+  g_object_unref (texture);
+  gsk_render_node_unref (node);
+
+  return ret;
 }
 
 static GdkContentProvider *
