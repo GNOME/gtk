@@ -150,6 +150,7 @@ struct _GtkPrintBackendCups
   guint avahi_service_browser_subscription_ids[2];
   char *avahi_service_browser_paths[2];
   GCancellable *avahi_cancellable;
+  guint unsubscribe_general_subscription_id;
 
   gboolean      secrets_service_available;
   guint         secrets_service_watch_id;
@@ -1007,6 +1008,12 @@ gtk_print_backend_cups_dispose (GObject *object)
       g_dbus_connection_signal_unsubscribe (backend_cups->dbus_connection,
                                             backend_cups->avahi_service_browser_subscription_id);
       backend_cups->avahi_service_browser_subscription_id = 0;
+    }
+
+  if (backend_cups->unsubscribe_general_subscription_id > 0)
+    {
+      g_source_remove (backend_cups->unsubscribe_general_subscription_id);
+      backend_cups->unsubscribe_general_subscription_id = 0;
     }
 
   backend_parent_class->dispose (object);
@@ -3514,6 +3521,19 @@ avahi_service_browser_signal_handler (GDBusConnection *connection,
     }
 }
 
+static gboolean
+unsubscribe_general_subscription_cb (gpointer user_data)
+{
+  GtkPrintBackendCups *cups_backend = user_data;
+
+  g_dbus_connection_signal_unsubscribe (cups_backend->dbus_connection,
+                                        cups_backend->avahi_service_browser_subscription_id);
+  cups_backend->avahi_service_browser_subscription_id = 0;
+  cups_backend->unsubscribe_general_subscription_id = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 avahi_service_browser_new_cb (GObject      *source_object,
                               GAsyncResult *res,
@@ -3555,9 +3575,10 @@ avahi_service_browser_new_cb (GObject      *source_object,
           cups_backend->avahi_service_browser_paths[1] &&
           cups_backend->avahi_service_browser_subscription_id > 0)
         {
-          g_dbus_connection_signal_unsubscribe (cups_backend->dbus_connection,
-                                                cups_backend->avahi_service_browser_subscription_id);
-          cups_backend->avahi_service_browser_subscription_id = 0;
+          /* We need to unsubscribe in idle since signals in queue destined for emit
+           * are emitted in idle and check whether the subscriber is still subscribed.
+           */
+          cups_backend->unsubscribe_general_subscription_id = g_idle_add (unsubscribe_general_subscription_cb, cups_backend);
         }
 
       g_variant_unref (output);
