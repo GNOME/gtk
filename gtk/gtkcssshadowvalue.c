@@ -308,6 +308,7 @@ gtk_css_shadow_value_new (ShadowValue *shadows,
   memcpy (retval->shadows, shadows, sizeof (ShadowValue) * n_shadows);
 
   retval->is_computed = TRUE;
+
   for (i = 0; i < n_shadows; i++)
     {
       const ShadowValue *shadow = &retval->shadows[i];
@@ -706,7 +707,6 @@ gtk_css_shadow_value_push_snapshot (const GtkCssValue *value,
   gboolean need_shadow = FALSE;
   guint i;
 
-  /* TODO: We can save this as a flag once and then reuse it */
   for (i = 0; i < value->n_shadows; i++)
     {
       const ShadowValue *shadow = &value->shadows[i];
@@ -736,4 +736,26 @@ gtk_css_shadow_value_push_snapshot (const GtkCssValue *value,
     }
 
   return need_shadow;
+}
+
+void
+gtk_css_shadow_value_pop_snapshot (const GtkCssValue *value,
+                                   GtkSnapshot       *snapshot)
+{
+  gboolean need_shadow = FALSE;
+  guint i;
+
+  for (i = 0; i < value->n_shadows; i++)
+    {
+      const ShadowValue *shadow = &value->shadows[i];
+
+      if (!gdk_rgba_is_clear (gtk_css_color_value_get_rgba (shadow->color)))
+        {
+          need_shadow = TRUE;
+          break;
+        }
+    }
+
+  if (need_shadow)
+    gtk_snapshot_pop (snapshot);
 }
