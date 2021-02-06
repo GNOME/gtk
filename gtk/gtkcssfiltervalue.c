@@ -24,6 +24,7 @@
 
 #include "gtkcssfiltervalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
+#include "gtkcssshadowvalueprivate.h"
 
 typedef union _GtkCssFilter GtkCssFilter;
 
@@ -46,7 +47,7 @@ union _GtkCssFilter {
   struct {
     GtkCssFilterType     type;
     GtkCssValue         *value;
-  }            brightness, contrast, grayscale, hue_rotate, invert, opacity, saturate, sepia, blur;
+  }            blur, brightness, contrast, drop_shadow, grayscale, hue_rotate, invert, opacity, saturate, sepia;
 };
 
 struct _GtkCssValue {
@@ -90,8 +91,10 @@ gtk_css_filter_clear (GtkCssFilter *filter)
     case GTK_CSS_FILTER_BLUR:
       _gtk_css_value_unref (filter->blur.value);
       break;
-    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_DROP_SHADOW:
+      _gtk_css_value_unref (filter->drop_shadow.value);
+      break;
+    case GTK_CSS_FILTER_NONE:
     default:
       g_assert_not_reached ();
       break;
@@ -131,8 +134,10 @@ gtk_css_filter_init_identity (GtkCssFilter     *filter,
     case GTK_CSS_FILTER_BLUR:
       filter->blur.value = _gtk_css_number_value_new (0, GTK_CSS_PX);
       break;
-    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_DROP_SHADOW:
+      filter->drop_shadow.value = gtk_css_shadow_value_new_filter ();
+      break;
+    case GTK_CSS_FILTER_NONE:
     default:
       g_assert_not_reached ();
       break;
@@ -347,8 +352,11 @@ gtk_css_filter_compute (GtkCssFilter     *dest,
       dest->blur.value = _gtk_css_value_compute (src->blur.value, property_id, provider, style, parent_style);
       return dest->blur.value == src->blur.value;
 
-    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_DROP_SHADOW:
+      dest->drop_shadow.value = _gtk_css_value_compute (src->drop_shadow.value, property_id, provider, style, parent_style);
+      return dest->drop_shadow.value == src->drop_shadow.value;
+
+    case GTK_CSS_FILTER_NONE:
     default:
       g_assert_not_reached ();
       return FALSE;
@@ -428,8 +436,10 @@ gtk_css_filter_equal (const GtkCssFilter *filter1,
     case GTK_CSS_FILTER_BLUR:
       return _gtk_css_value_equal (filter1->blur.value, filter2->blur.value);
 
-    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_DROP_SHADOW:
+      return _gtk_css_value_equal (filter1->drop_shadow.value, filter2->drop_shadow.value);
+
+    case GTK_CSS_FILTER_NONE:
     default:
       g_assert_not_reached ();
       return FALSE;
@@ -517,8 +527,11 @@ gtk_css_filter_transition (GtkCssFilter       *result,
       result->blur.value = _gtk_css_value_transition (start->blur.value, end->blur.value, property_id, progress);
       break;
 
-    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_DROP_SHADOW:
+      result->drop_shadow.value = _gtk_css_value_transition (start->drop_shadow.value, end->drop_shadow.value, property_id, progress);
+      break;
+
+    case GTK_CSS_FILTER_NONE:
     default:
       g_assert_not_reached ();
       break;
@@ -663,8 +676,13 @@ gtk_css_filter_print (const GtkCssFilter *filter,
       g_string_append (string, ")");
       break;
 
-    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_DROP_SHADOW:
+      g_string_append (string, "drop_shadow(");
+      _gtk_css_value_print (filter->drop_shadow.value, string);
+      g_string_append (string, ")");
+      break;
+
+    case GTK_CSS_FILTER_NONE:
     default:
       g_assert_not_reached ();
       break;
@@ -709,12 +727,12 @@ static GtkCssValue *
 gtk_css_filter_value_alloc (guint n_filters)
 {
   GtkCssValue *result;
-           
+
   g_return_val_if_fail (n_filters > 0, NULL);
-         
+
   result = _gtk_css_value_alloc (&GTK_CSS_VALUE_FILTER, sizeof (GtkCssValue) + sizeof (GtkCssFilter) * (n_filters - 1));
   result->n_filters = n_filters;
-            
+
   return result;
 }
 
@@ -766,6 +784,20 @@ gtk_css_filter_parse_angle (GtkCssParser *parser,
   GtkCssValue **values = data;
 
   values[n] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
+  if (values[n] == NULL)
+    return 0;
+
+  return 1;
+}
+
+static guint
+gtk_css_filter_parse_shadow (GtkCssParser *parser,
+                             guint         n,
+                             gpointer      data)
+{
+  GtkCssValue **values = data;
+
+  values[n] = _gtk_css_shadow_value_parse_filter (parser);
   if (values[n] == NULL)
     return 0;
 
@@ -861,6 +893,14 @@ gtk_css_filter_value_parse (GtkCssParser *parser)
           filter.type = GTK_CSS_FILTER_SEPIA;
           computed = computed && gtk_css_value_is_computed (filter.sepia.value);
         }
+      else if (gtk_css_parser_has_function (parser, "drop-shadow"))
+        {
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_filter_parse_shadow, &filter.drop_shadow.value))
+            goto fail;
+
+          filter.type = GTK_CSS_FILTER_DROP_SHADOW;
+          computed = computed && gtk_css_value_is_computed (filter.drop_shadow.value);
+        }
       else
         {
           break;
@@ -909,9 +949,7 @@ gtk_css_filter_value_push_snapshot (const GtkCssValue *filter,
     {
       j = gtk_css_filter_value_compute_matrix (filter, i, &matrix, &offset);
       if (i < j)
-        gtk_snapshot_push_color_matrix (snapshot,
-                                        &matrix,
-                                        &offset);
+        gtk_snapshot_push_color_matrix (snapshot, &matrix, &offset);
 
       if (j < filter->n_filters)
         {
@@ -919,6 +957,11 @@ gtk_css_filter_value_push_snapshot (const GtkCssValue *filter,
             {
               radius = _gtk_css_number_value_get (filter->filters[j].blur.value, 100.0);
               gtk_snapshot_push_blur (snapshot, radius);
+            }
+          else if (filter->filters[j].type == GTK_CSS_FILTER_DROP_SHADOW)
+            {
+              if (!gtk_css_shadow_value_push_snapshot (filter->filters[j].drop_shadow.value, snapshot))
+                gtk_snapshot_push_debug (snapshot, "Shadow Filter omitted");
             }
           else
             g_warning ("Don't know how to handle filter type %d", filter->filters[j].type);
@@ -942,7 +985,8 @@ gtk_css_filter_value_pop_snapshot (const GtkCssValue *filter,
     {
       for (j = i; j < filter->n_filters; j++)
         {
-          if (filter->filters[j].type == GTK_CSS_FILTER_BLUR)
+          if (filter->filters[j].type == GTK_CSS_FILTER_BLUR ||
+              filter->filters[j].type == GTK_CSS_FILTER_DROP_SHADOW)
             break;
         }
 
