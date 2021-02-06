@@ -431,9 +431,9 @@ parse_color (GtkCssParser *parser,
 }
 
 static gboolean
-_gtk_css_shadow_value_parse_one (GtkCssParser *parser,
-                                 gboolean      box_shadow_mode,
-                                 ShadowValue  *result)
+gtk_css_shadow_value_parse_one (GtkCssParser *parser,
+                                gboolean      box_shadow_mode,
+                                ShadowValue  *result)
 {
   GtkCssValue *values[N_VALUES] = { NULL, };
   GtkCssValue *color = NULL;
@@ -479,8 +479,8 @@ fail:
 
 #define MAX_SHADOWS 64
 GtkCssValue *
-_gtk_css_shadow_value_parse (GtkCssParser *parser,
-                             gboolean      box_shadow_mode)
+gtk_css_shadow_value_parse (GtkCssParser *parser,
+                            gboolean      box_shadow_mode)
 {
   ShadowValue shadows[MAX_SHADOWS];
   int n_shadows = 0;
@@ -490,7 +490,7 @@ _gtk_css_shadow_value_parse (GtkCssParser *parser,
     return gtk_css_shadow_value_new_none ();
 
   do {
-    if (_gtk_css_shadow_value_parse_one (parser, box_shadow_mode, &shadows[n_shadows]))
+    if (gtk_css_shadow_value_parse_one (parser, box_shadow_mode, &shadows[n_shadows]))
       n_shadows++;
 
     if (n_shadows > MAX_SHADOWS)
