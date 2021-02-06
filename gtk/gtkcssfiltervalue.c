@@ -755,7 +755,7 @@ gtk_css_filter_parse_number (GtkCssParser *parser,
 {
   GtkCssValue **values = data;
 
-  values[n] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER | GTK_CSS_PARSE_PERCENT);
+  values[n] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER | GTK_CSS_PARSE_PERCENT | GTK_CSS_POSITIVE_ONLY);
   if (values[n] == NULL)
     return 0;
 
@@ -769,7 +769,7 @@ gtk_css_filter_parse_length (GtkCssParser *parser,
 {
   GtkCssValue **values = data;
 
-  values[n] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH);
+  values[n] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH | GTK_CSS_POSITIVE_ONLY);
   if (values[n] == NULL)
     return 0;
 
