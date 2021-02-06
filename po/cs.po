@@ -97,7 +97,7 @@ msgstr "Backspace"
 #: gdk/keyname-table.h:6844
 msgctxt "keyboard label"
 msgid "Tab"
-msgstr "Tabulátor"
+msgstr "Tab"
 
 #: gdk/keyname-table.h:6845
 msgctxt "keyboard label"
@@ -122,7 +122,7 @@ msgstr "Sys_Req"
 #: gdk/keyname-table.h:6849
 msgctxt "keyboard label"
 msgid "Escape"
-msgstr "Escape"
+msgstr "Esc"
 
 #: gdk/keyname-table.h:6850
 msgctxt "keyboard label"
