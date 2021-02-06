@@ -514,19 +514,14 @@ fail:
 }
 
 GtkCssValue *
-_gtk_css_shadow_value_parse_filter (GtkCssParser *parser)
+gtk_css_shadow_value_parse_filter (GtkCssParser *parser)
 {
-  GtkCssValue *result;
+  ShadowValue shadow;
 
-  result = _gtk_css_shadow_value_parse (parser, FALSE);
-
-  if (result && result->n_shadows != 1)
-    {
-      gtk_css_parser_error_syntax (parser, "A single shadow is required");
-      g_clear_pointer (&result, gtk_css_value_unref);
-    }
-
-  return result;
+  if (gtk_css_shadow_value_parse_one (parser, FALSE, &shadow))
+    return gtk_css_shadow_value_new (&shadow, 1);
+  else
+    return NULL;
 }
 
 void
