@@ -326,6 +326,21 @@ gtk_css_shadow_value_new (ShadowValue *shadows,
   return retval;
 }
 
+GtkCssValue *
+gtk_css_shadow_value_new_filter (void)
+{
+  ShadowValue value;
+
+  value.inset = FALSE;
+  value.hoffset = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
+  value.voffset = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
+  value.radius = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
+  value.spread = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
+  value.color = _gtk_css_color_value_new_current_color ();
+
+  return gtk_css_shadow_value_new (&value, 1);
+}
+
 enum {
   HOFFSET,
   VOFFSET,
@@ -495,6 +510,22 @@ fail:
       shadow_value_unref (shadow);
     }
   return NULL;
+}
+
+GtkCssValue *
+_gtk_css_shadow_value_parse_filter (GtkCssParser *parser)
+{
+  GtkCssValue *result;
+
+  result = _gtk_css_shadow_value_parse (parser, FALSE);
+
+  if (result && result->n_shadows != 1)
+    {
+      gtk_css_parser_error_syntax (parser, "A single shadow is required");
+      g_clear_pointer (&result, gtk_css_value_unref);
+    }
+
+  return result;
 }
 
 void
