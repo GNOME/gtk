@@ -80,6 +80,31 @@ and in some cases a number as arguments.
 
 ## Images
 
+CSS allows to specify images in various forms, the most simple one being
+a url for an image file. Beyond that, images can be specified as
+
+`linear-gradient(Angle, ColorStops)`
+`repeating-linear-gradient(Angle, ColorStops)`
+: creates a linear gradient.
+
+`radial-gradient(Shape, ColorStops)`
+`repeating-radial-gradient(Shape, ColorStops)`
+: creates a radial gradient.
+
+`conic-gradient(Angle, ColorStops)`
+: creates a conic gradient.
+
+`cross-fade(Percentage Image,…)`
+: combines two or more images.
+
+`image(Image,… Color)`
+: falls back to the first valid image, or to a solid color.
+
+`filter(Image, Filters)`
+: applies filters to an image.
+
+For more details, see [CSS Image Level 4](https://www.w3.org/TR/css-images-4/).
+
 GTK extends the CSS syntax for images and also uses it for specifying icons.
 To load a themed icon, use
 
