@@ -512,14 +512,14 @@ static GtkCssValue *
 box_shadow_value_parse (GtkCssStyleProperty *property,
                         GtkCssParser        *parser)
 {
-  return _gtk_css_shadow_value_parse (parser, TRUE);
+  return gtk_css_shadow_value_parse (parser, TRUE);
 }
 
 static GtkCssValue *
 shadow_value_parse (GtkCssStyleProperty *property,
                     GtkCssParser        *parser)
 {
-  return _gtk_css_shadow_value_parse (parser, FALSE);
+  return gtk_css_shadow_value_parse (parser, FALSE);
 }
 
 static GtkCssValue *

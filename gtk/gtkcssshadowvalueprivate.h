@@ -34,10 +34,12 @@
 
 G_BEGIN_DECLS
 
-GtkCssValue *   gtk_css_shadow_value_new_none            (void);
+GtkCssValue *   gtk_css_shadow_value_new_none         (void);
+GtkCssValue *   gtk_css_shadow_value_new_filter       (void);
 
-GtkCssValue *   _gtk_css_shadow_value_parse           (GtkCssParser             *parser,
+GtkCssValue *   gtk_css_shadow_value_parse            (GtkCssParser             *parser,
                                                        gboolean                  box_shadow_mode);
+GtkCssValue *   gtk_css_shadow_value_parse_filter     (GtkCssParser             *parser);
 
 void            gtk_css_shadow_value_get_extents      (const GtkCssValue        *shadow,
                                                        GtkBorder                *border);
@@ -52,6 +54,8 @@ gboolean        gtk_css_shadow_value_is_clear         (const GtkCssValue        
 gboolean        gtk_css_shadow_value_is_none          (const GtkCssValue        *shadow) G_GNUC_PURE;
 
 gboolean        gtk_css_shadow_value_push_snapshot    (const GtkCssValue        *value,
+                                                       GtkSnapshot              *snapshot);
+void            gtk_css_shadow_value_pop_snapshot     (const GtkCssValue        *value,
                                                        GtkSnapshot              *snapshot);
 
 G_END_DECLS
