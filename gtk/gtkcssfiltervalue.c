@@ -939,7 +939,6 @@ gtk_css_filter_value_push_snapshot (const GtkCssValue *filter,
   graphene_matrix_t matrix;
   graphene_vec4_t offset;
   int i, j;
-  double radius;
 
   if (gtk_css_filter_value_is_none (filter))
     return;
@@ -955,8 +954,8 @@ gtk_css_filter_value_push_snapshot (const GtkCssValue *filter,
         {
           if (filter->filters[j].type == GTK_CSS_FILTER_BLUR)
             {
-              radius = _gtk_css_number_value_get (filter->filters[j].blur.value, 100.0);
-              gtk_snapshot_push_blur (snapshot, radius);
+              double std_dev = _gtk_css_number_value_get (filter->filters[j].blur.value, 100.0);
+              gtk_snapshot_push_blur (snapshot, 2 * std_dev);
             }
           else if (filter->filters[j].type == GTK_CSS_FILTER_DROP_SHADOW)
             {
