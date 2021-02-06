@@ -677,7 +677,7 @@ gtk_css_filter_print (const GtkCssFilter *filter,
       break;
 
     case GTK_CSS_FILTER_DROP_SHADOW:
-      g_string_append (string, "drop_shadow(");
+      g_string_append (string, "drop-shadow(");
       _gtk_css_value_print (filter->drop_shadow.value, string);
       g_string_append (string, ")");
       break;
@@ -797,7 +797,7 @@ gtk_css_filter_parse_shadow (GtkCssParser *parser,
 {
   GtkCssValue **values = data;
 
-  values[n] = _gtk_css_shadow_value_parse_filter (parser);
+  values[n] = gtk_css_shadow_value_parse_filter (parser);
   if (values[n] == NULL)
     return 0;
 
@@ -960,8 +960,7 @@ gtk_css_filter_value_push_snapshot (const GtkCssValue *filter,
             }
           else if (filter->filters[j].type == GTK_CSS_FILTER_DROP_SHADOW)
             {
-              if (!gtk_css_shadow_value_push_snapshot (filter->filters[j].drop_shadow.value, snapshot))
-                gtk_snapshot_push_debug (snapshot, "Shadow Filter omitted");
+              gtk_css_shadow_value_push_snapshot (filter->filters[j].drop_shadow.value, snapshot);
             }
           else
             g_warning ("Don't know how to handle filter type %d", filter->filters[j].type);
@@ -993,8 +992,10 @@ gtk_css_filter_value_pop_snapshot (const GtkCssValue *filter,
       if (i < j)
         gtk_snapshot_pop (snapshot);
 
-      if (j < filter->n_filters)
+      if (filter->filters[j].type == GTK_CSS_FILTER_BLUR)
         gtk_snapshot_pop (snapshot);
+      else if (filter->filters[j].type == GTK_CSS_FILTER_DROP_SHADOW)
+        gtk_css_shadow_value_pop_snapshot (filter->filters[j].drop_shadow.value, snapshot);
 
       i = j + 1;
     }
