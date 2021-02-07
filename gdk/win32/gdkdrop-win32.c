@@ -477,7 +477,7 @@ _gdk_win32_local_drop_target_dragenter (GdkDrag        *drag,
   drop = gdk_drop_new (display,
                        gdk_seat_get_pointer (gdk_display_get_default_seat (display)),
                        drag,
-                       gdk_content_formats_ref (gdk_drag_get_formats (drag)),
+                       gdk_drag_get_formats (drag),
                        dest_surface,
                        GDK_DRAG_PROTO_LOCAL);
   drop_win32 = GDK_WIN32_DROP (drop);
@@ -519,6 +519,7 @@ idroptarget_dragenter (LPDROPTARGET This,
   GdkDrag *drag;
   GdkDragAction source_actions;
   GdkDragAction dest_actions;
+  GdkContentFormats *formats;
 
   GDK_NOTE (DND, g_print ("idroptarget_dragenter %p @ %ld : %ld"
                           " for dest window 0x%p"
@@ -538,15 +539,17 @@ idroptarget_dragenter (LPDROPTARGET This,
     drag = _gdk_win32_find_drag_for_dest_window (GDK_SURFACE_HWND (ctx->surface));
 
   display = gdk_surface_get_display (ctx->surface);
+
+  formats = query_object_formats (pDataObj, NULL);
   drop = gdk_drop_new (display,
                        gdk_seat_get_pointer (gdk_display_get_default_seat (display)),
                        drag,
-                       query_object_formats (pDataObj, NULL),
+                       formats,
                        ctx->surface,
                        GDK_DRAG_PROTO_OLE2);
   drop_win32 = GDK_WIN32_DROP (drop);
   g_array_set_size (drop_win32->droptarget_w32format_contentformat_map, 0);
-  gdk_content_formats_unref (query_object_formats (pDataObj, drop_win32->droptarget_w32format_contentformat_map));
+  gdk_content_formats_unref (formats);
 
   ctx->drop = drop;
 
