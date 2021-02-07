@@ -160,24 +160,10 @@ _gtk_get_module_path (const char *type)
   count = 0;
   for (path = get_module_path (); *path; path++)
     {
-      int use_version, use_host;
-      
-      for (use_version = TRUE; use_version >= FALSE; use_version--)
-	for (use_host = TRUE; use_host >= FALSE; use_host--)
-	  {
-	    char *tmp_dir;
-	    
-	    if (use_version && use_host)
-	      tmp_dir = g_build_filename (*path, GTK_BINARY_VERSION, GTK_HOST, type, NULL);
-	    else if (use_version)
-	      tmp_dir = g_build_filename (*path, GTK_BINARY_VERSION, type, NULL);
-	    else if (use_host)
-	      tmp_dir = g_build_filename (*path, GTK_HOST, type, NULL);
-	    else
-	      tmp_dir = g_build_filename (*path, type, NULL);
-
-	    result[count++] = tmp_dir;
-	  }
+      result[count++] = g_build_filename (*path, GTK_BINARY_VERSION, GTK_HOST, type, NULL);
+      result[count++] = g_build_filename (*path, GTK_BINARY_VERSION, type, NULL);
+      result[count++] = g_build_filename (*path, GTK_HOST, type, NULL);
+      result[count++] = g_build_filename (*path, type, NULL);
     }
 
   result[count++] = NULL;

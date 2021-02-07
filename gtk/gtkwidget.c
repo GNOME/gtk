@@ -256,7 +256,7 @@
  * If the parent widget uses a #GtkLayoutManager, #GtkWidget supports a
  * custom `<layout>` element, used to define layout properties:
  *
- * |[
+ * |[<!-- language="xml" -->
  * <object class="MyGrid" id="grid1">
  *   <child>
  *     <object class="GtkLabel" id="label1">
@@ -284,7 +284,8 @@
  *
  * GtkWidget allows style information such as style classes to
  * be associated with widgets, using the custom `<style>` element:
- * |[
+ *
+ * |[<!-- language="xml" -->
  * <object class="GtkButton" id="button1">
  *   <style>
  *     <class name="my-special-button-class"/>
@@ -295,7 +296,8 @@
  *
  * GtkWidget allows defining accessibility information, such as properties,
  * relations, and states, using the custom `<accessibility>` element:
- * |[
+ *
+ * |[<!-- language="xml" -->
  * <object class="GtkButton" id="button1">
  *   <accessibility>
  *     <property name="label">Download</property>
@@ -318,27 +320,28 @@
  * is slightly different from regular #GtkBuilder XML.
  *
  * Unlike regular interface descriptions, gtk_widget_class_set_template() will
- * expect a <template> tag as a direct child of the toplevel <interface>
- * tag. The <template> tag must specify the “class” attribute which must be
+ * expect a `<template>` tag as a direct child of the toplevel `<interface>`
+ * tag. The `<template>` tag must specify the “class” attribute which must be
  * the type name of the widget. Optionally, the “parent” attribute may be
  * specified to specify the direct parent type of the widget type, this is
  * ignored by the GtkBuilder but required for Glade to introspect what kind
  * of properties and internal children exist for a given type when the actual
  * type does not exist.
  *
- * The XML which is contained inside the <template> tag behaves as if it were
- * added to the <object> tag defining @widget itself. You may set properties
- * on @widget by inserting <property> tags into the <template> tag, and also
- * add <child> tags to add children and extend @widget in the normal way you
- * would with <object> tags.
+ * The XML which is contained inside the `<template>` tag behaves as if it were
+ * added to the `<object>` tag defining @widget itself. You may set properties
+ * on @widget by inserting `<property>` tags into the `<template>` tag, and also
+ * add `<child>` tags to add children and extend @widget in the normal way you
+ * would with `<object>` tags.
  *
- * Additionally, <object> tags can also be added before and after the initial
- * <template> tag in the normal way, allowing one to define auxiliary objects
+ * Additionally, `<object>` tags can also be added before and after the initial
+ * `<template>` tag in the normal way, allowing one to define auxiliary objects
  * which might be referenced by other widgets declared as children of the
- * <template> tag.
+ * `<template>` tag.
  *
  * An example of a GtkBuilder Template Definition:
- * |[
+ *
+ * |[<!-- language="xml" -->
  * <interface>
  *   <template class="FooWidget" parent="GtkBox">
  *     <property name="orientation">horizontal</property>
@@ -2374,7 +2377,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->at_context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (widget));
 }
 
-static void
+void
 gtk_widget_realize_at_context (GtkWidget *self)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (self);
@@ -2382,10 +2385,6 @@ gtk_widget_realize_at_context (GtkWidget *self)
 
   if (priv->at_context == NULL || gtk_at_context_is_realized (priv->at_context))
     return;
-
-  /* Realize the root ATContext first */
-  if (!GTK_IS_ROOT (self))
-    gtk_widget_realize_at_context (GTK_WIDGET (priv->root));
 
   /* Reset the accessible role to its current value */
   if (role == GTK_ACCESSIBLE_ROLE_WIDGET)
@@ -2398,6 +2397,18 @@ gtk_widget_realize_at_context (GtkWidget *self)
   gtk_at_context_set_accessible_role (priv->at_context, role);
   gtk_at_context_set_display (priv->at_context, gtk_root_get_display (priv->root));
   gtk_at_context_realize (priv->at_context);
+}
+
+void
+gtk_widget_unrealize_at_context (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  if (priv->at_context != NULL)
+    {
+      gtk_at_context_set_display (priv->at_context, gdk_display_get_default ());
+      gtk_at_context_unrealize (priv->at_context);
+    }
 }
 
 void
@@ -2428,8 +2439,6 @@ gtk_widget_root (GtkWidget *widget)
   if (priv->layout_manager)
     gtk_layout_manager_set_root (priv->layout_manager, priv->root);
 
-  gtk_widget_realize_at_context (widget);
-
   GTK_WIDGET_GET_CLASS (widget)->root (widget);
 
   if (!GTK_IS_ROOT (widget))
@@ -2453,12 +2462,6 @@ gtk_widget_unroot (GtkWidget *widget)
   _gtk_widget_update_parent_muxer (widget);
 
   GTK_WIDGET_GET_CLASS (widget)->unroot (widget);
-
-  if (priv->at_context != NULL)
-    {
-      gtk_at_context_set_display (priv->at_context, gdk_display_get_default ());
-      gtk_at_context_unrealize (priv->at_context);
-    }
 
   if (priv->context)
     gtk_style_context_set_display (priv->context, gdk_display_get_default ());
@@ -4385,12 +4388,26 @@ gtk_widget_can_activate (GtkWidget *self)
 }
 
 static gboolean
+get_effective_can_focus (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  if (!priv->can_focus)
+    return FALSE;
+
+  if (priv->parent)
+    return get_effective_can_focus (priv->parent);
+
+  return TRUE;
+}
+
+static gboolean
 gtk_widget_real_mnemonic_activate (GtkWidget *widget,
                                    gboolean   group_cycling)
 {
   if (!group_cycling && gtk_widget_can_activate (widget))
     gtk_widget_activate (widget);
-  else if (gtk_widget_get_can_focus (widget))
+  else if (get_effective_can_focus (widget))
     return gtk_widget_grab_focus (widget);
   else
     {
@@ -4776,7 +4793,7 @@ gtk_widget_grab_focus (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   if (!gtk_widget_is_sensitive (widget) ||
-      !gtk_widget_get_can_focus (widget) ||
+      !get_effective_can_focus (widget) ||
       widget->priv->root == NULL)
     return FALSE;
 

@@ -1073,11 +1073,8 @@ parse_n_plus_b (GtkCssParser *parser,
       *a = 0;
       return TRUE;
     }
-  
-  gtk_css_parser_error_syntax (parser, "Not a valid an+b type");
-  return FALSE;
 }
-                
+
 static gboolean
 parse_a_n_plus_b (GtkCssParser *parser,
                   int           seen_sign,

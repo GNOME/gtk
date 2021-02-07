@@ -218,7 +218,7 @@ _gtk_css_border_value_parse (GtkCssParser           *parser,
     }
 
   result->is_computed = TRUE;
-  for (; i < 4; i++)
+  for (i = 0; i < 4; i++)
     if (result->values[i] && !gtk_css_value_is_computed (result->values[i]))
       {
         result->is_computed = FALSE;

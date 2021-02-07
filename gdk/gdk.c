@@ -173,7 +173,7 @@ stash_desktop_startup_notification_id (void)
       if (!g_utf8_validate (desktop_startup_id, -1, NULL))
         g_warning ("DESKTOP_STARTUP_ID contains invalid UTF-8");
       else
-        startup_notification_id = g_strdup (desktop_startup_id ? desktop_startup_id : "");
+        startup_notification_id = g_strdup (desktop_startup_id);
     }
 
   /* Clear the environment variable so it won't be inherited by

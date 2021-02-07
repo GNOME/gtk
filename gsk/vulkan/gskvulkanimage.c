@@ -718,7 +718,7 @@ gsk_vulkan_image_upload_regions (GskVulkanImage    *self,
         }
       else
         {
-          for (gsize r = 0; r < regions[i].height; i++)
+          for (gsize r = 0; r < regions[i].height; r++)
             memcpy (m + r * regions[i].width * 4, regions[i].data + r * regions[i].stride, regions[i].width * 4);
         }
 

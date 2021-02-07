@@ -46,7 +46,7 @@ set_texture (GtkWidget *button,
 
   if (gtk_check_button_get_active (GTK_CHECK_BUTTON (button)))
     {
-      texture = gdk_texture_new_from_resource ("/org/gtk/libgtk/inspector/logo.png");
+      texture = gdk_texture_new_from_resource ("/org/gtk/libgtk/icons/32x32/places/network-workgroup.png");
       gtk_entry_set_icon_from_paintable (entry, GTK_ENTRY_ICON_SECONDARY, GDK_PAINTABLE (texture));
       g_object_unref (texture);
     }

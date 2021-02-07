@@ -58,6 +58,9 @@ struct _GtkAtSpiCache
 
   /* HashTable<GtkAtSpiContext, str> */
   GHashTable *contexts_to_path;
+
+  /* Re-entrancy guard */
+  gboolean in_get_items;
 };
 
 enum
@@ -250,9 +253,16 @@ handle_cache_method (GDBusConnection       *connection,
     {
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("(" GET_ITEMS_SIGNATURE ")"));
 
+      /* Prevent the emission os signals while collecting accessible
+       * objects as the result of walking the accessible tree
+       */
+      self->in_get_items = TRUE;
+
       g_variant_builder_open (&builder, G_VARIANT_TYPE (GET_ITEMS_SIGNATURE));
       collect_cached_objects (self, &builder);
       g_variant_builder_close (&builder);
+
+      self->in_get_items = FALSE;
 
       g_dbus_method_invocation_return_value (invocation, g_variant_builder_end (&builder));
     }
@@ -371,7 +381,11 @@ gtk_at_spi_cache_add_context (GtkAtSpiCache   *self,
 
   GTK_NOTE (A11Y, g_message ("Adding context '%s' to cache", path_key));
 
-  emit_add_accessible (self, context);
+  /* GetItems is safe from re-entrancy, but we still don't want to
+   * emit an unnecessary signal while we're collecting ATContexts
+   */
+  if (!self->in_get_items)
+    emit_add_accessible (self, context);
 }
 
 void

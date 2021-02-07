@@ -2223,6 +2223,24 @@ gdk_wayland_toplevel_announce_csd (GdkToplevel *toplevel)
                                                 ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_CLIENT);
 }
 
+void
+gdk_wayland_toplevel_announce_ssd (GdkToplevel *toplevel)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (toplevel)));
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (toplevel);
+
+  g_return_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel));
+
+  if (!display_wayland->server_decoration_manager)
+    return;
+  impl->display_server.server_decoration =
+    org_kde_kwin_server_decoration_manager_create (display_wayland->server_decoration_manager,
+                                                  impl->display_server.wl_surface);
+  if (impl->display_server.server_decoration)
+    org_kde_kwin_server_decoration_request_mode (impl->display_server.server_decoration,
+                                                ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_SERVER);
+}
+
 gboolean
 gdk_wayland_toplevel_inhibit_idle (GdkToplevel *toplevel)
 {
@@ -2949,7 +2967,11 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
 
       if (impl->display_server.gtk_surface)
         {
-          gtk_surface1_destroy (impl->display_server.gtk_surface);
+          if (display_wayland->gtk_shell_version >=
+              GTK_SURFACE1_RELEASE_SINCE_VERSION)
+            gtk_surface1_release (impl->display_server.gtk_surface);
+          else
+            gtk_surface1_destroy (impl->display_server.gtk_surface);
           impl->display_server.gtk_surface = NULL;
           impl->application.was_set = FALSE;
         }

@@ -456,8 +456,6 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
 
   priv->has_primary_markup = FALSE;
   priv->has_secondary_text = FALSE;
-  priv->has_primary_markup = FALSE;
-  priv->has_secondary_text = FALSE;
   priv->message_type = GTK_MESSAGE_OTHER;
 
   gtk_widget_add_css_class (GTK_WIDGET (dialog), "message");

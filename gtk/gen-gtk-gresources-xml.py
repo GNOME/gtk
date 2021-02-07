@@ -86,7 +86,6 @@ for f in get_files('inspector', '.ui'):
   xml += '    <file preprocess=\'xml-stripblanks\'>inspector/{0}</file>\n'.format(f)
 
 xml += '''
-    <file>inspector/logo.png</file>
     <file>inspector/inspector.css</file>
     <file>emoji/en.data</file>
   </gresource>

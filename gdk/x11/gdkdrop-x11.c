@@ -39,6 +39,7 @@
 #include "gdkscreen-x11.h"
 #include "gdkselectioninputstream-x11.h"
 #include "gdkselectionoutputstream-x11.h"
+#include "gdktextlistconverter-x11.h"
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -103,6 +104,49 @@ static const struct {
 
 G_DEFINE_TYPE (GdkX11Drop, gdk_x11_drop, GDK_TYPE_DROP)
 
+static GInputStream *
+text_list_convert (GdkDisplay   *display,
+                   GInputStream *stream,
+                   const char   *encoding,
+                   int           format)
+{
+  GInputStream *converter_stream;
+  GConverter *converter;
+
+  converter = gdk_x11_text_list_converter_to_utf8_new (display, encoding, format);
+  converter_stream = g_converter_input_stream_new (stream, converter);
+
+  g_object_unref (converter);
+  g_object_unref (stream);
+
+  return converter_stream;
+}
+
+static GInputStream *
+no_convert (GdkDisplay   *display,
+            GInputStream *stream,
+            const char   *encoding,
+            int           format)
+{
+  return stream;
+}
+
+static const struct {
+  const char *x_target;
+  const char *mime_type;
+  GInputStream * (* convert) (GdkDisplay *, GInputStream *, const char *, int);
+  const char *type;
+  int format;
+} special_targets[] = {
+  { "UTF8_STRING",   "text/plain;charset=utf-8", no_convert,        "UTF8_STRING",   8 },
+  { "COMPOUND_TEXT", "text/plain;charset=utf-8", text_list_convert, "COMPOUND_TEXT", 8 },
+  { "TEXT",          "text/plain;charset=utf-8", text_list_convert, "STRING",        8 },
+  { "STRING",        "text/plain;charset=utf-8", text_list_convert, "STRING",        8 },
+  { "TARGETS",       NULL,                       NULL,              "ATOM",          32 },
+  { "TIMESTAMP",     NULL,                       NULL,              "INTEGER",       32 },
+  { "SAVE_TARGETS",  NULL,                       NULL,              "NULL",          32 }
+};
+
 static void
 gdk_x11_drop_read_got_stream (GObject      *source,
                               GAsyncResult *res,
@@ -145,9 +189,9 @@ gdk_x11_drop_read_got_stream (GObject      *source,
     }
   else
     {
-#if 0
       gsize i;
       const char *mime_type = ((GSList *) g_task_get_task_data (task))->data;
+      GdkDrop *drop = GDK_DROP (g_task_get_source_object (task));
 
       for (i = 0; i < G_N_ELEMENTS (special_targets); i++)
         {
@@ -155,15 +199,12 @@ gdk_x11_drop_read_got_stream (GObject      *source,
             {
               g_assert (special_targets[i].mime_type != NULL);
 
-              GDK_DISPLAY_NOTE (CLIPBOARD, g_printerr ("%s: reading with converter from %s to %s\n",
-                                              cb->selection, mime_type, special_targets[i].mime_type));
               mime_type = g_intern_string (special_targets[i].mime_type);
               g_task_set_task_data (task, g_slist_prepend (NULL, (gpointer) mime_type), (GDestroyNotify) g_slist_free);
-              stream = special_targets[i].convert (cb, stream, type, format);
+              stream = special_targets[i].convert (gdk_drop_get_display (drop), stream, type, format);
               break;
             }
         }
-#endif
 
       GDK_NOTE (DND, g_printerr ("reading DND as %s now\n",
                                  (const char *)((GSList *) g_task_get_task_data (task))->data));

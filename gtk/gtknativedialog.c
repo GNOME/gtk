@@ -52,6 +52,11 @@
  * various common properties on the dialog, as well as show and hide
  * it and get a #GtkNativeDialog::response signal when the user finished
  * with the dialog.
+ *
+ * Note that unlike #GtkDialog, #GtkNativeDialog objects are not
+ * toplevel widgets, and GTK does not keep them alive. It is your
+ * responsibility to keep a reference until you are done with the
+ * object.
  */
 
 typedef struct _GtkNativeDialogPrivate GtkNativeDialogPrivate;

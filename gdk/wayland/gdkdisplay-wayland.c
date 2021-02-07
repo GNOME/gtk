@@ -94,7 +94,7 @@
 
 #define MIN_SYSTEM_BELL_DELAY_MS 20
 
-#define GTK_SHELL1_VERSION       3
+#define GTK_SHELL1_VERSION       4
 #define OUTPUT_VERSION_WITH_DONE 2
 #define NO_XDG_OUTPUT_DONE_SINCE_VERSION 3
 
@@ -1350,21 +1350,23 @@ _gdk_wayland_display_create_shm_surface (GdkWaylandDisplay *display,
   data->buffer = NULL;
   data->scale = scale;
 
-  stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, width*scale);
+  stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, width * scale);
 
   data->pool = create_shm_pool (display->shm,
-                                height*scale*stride,
+                                height * scale * stride,
                                 &data->buf_length,
                                 &data->buf);
+  if (G_UNLIKELY (data->pool == NULL))
+    g_error ("Unable to create shared memory pool");
 
   surface = cairo_image_surface_create_for_data (data->buf,
                                                  CAIRO_FORMAT_ARGB32,
-                                                 width*scale,
-                                                 height*scale,
+                                                 width * scale,
+                                                 height * scale,
                                                  stride);
 
   data->buffer = wl_shm_pool_create_buffer (data->pool, 0,
-                                            width*scale, height*scale,
+                                            width * scale, height * scale,
                                             stride, WL_SHM_FORMAT_ARGB8888);
 
   cairo_surface_set_user_data (surface, &gdk_wayland_shm_surface_cairo_key,

@@ -3285,9 +3285,6 @@ gtk_tree_model_filter_iter_children (GtkTreeModel *model,
 
       return TRUE;
     }
-
-  iter->stamp = 0;
-  return FALSE;
 }
 
 static gboolean

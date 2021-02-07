@@ -129,7 +129,7 @@ done with
 |:-----------|:----------|:------|
 |color       | [CSS Color Level 3](https://www.w3.org/TR/css3-color/#foreground) | |
 |opacity     | [CSS Color Level 3](https://www.w3.org/TR/css3-color/#opacity) | |
-|filter      | [CSS Filter Effect Level 1](https://drafts.fxtf.org/filters/#FilterProperty) | |
+|filter      | [CSS Filter Effect Level 1](https://drafts.fxtf.org/filters/#FilterProperty) | CSS allows drop-shadow |
 |font-family | [CSS Fonts Level 3](https://www.w3.org/TR/css3-fonts/#font-family-prop) | defaults to gtk-font-name setting |
 |font-size   | [CSS Fonts Level 3](https://www.w3.org/TR/css3-fonts/#font-size-prop) | defaults to gtk-font-name setting |
 |font-style  | [CSS Fonts Level 3](https://www.w3.org/TR/css3-fonts/#font-style-prop) | |
@@ -235,4 +235,4 @@ done with
 |animation-delay| [CSS Animations Level 1](https://www.w3.org/TR/css3-animations/#animation-delay) | |
 |animation-fill-mode| [CSS Animations Level 1](https://www.w3.org/TR/css3-animations/#animation-fill-mode) | |
 |animation| [CSS Animations Level 1](https://www.w3.org/TR/css3-animations/#animation) | |
-|border-spacing| [CSS Table Level 3](https://www.w3.org/TR/css-tables-3/#border-spacing-property) | respected by GtkBox and GtkGrid |
+|border-spacing| [CSS Table Level 3](https://www.w3.org/TR/css-tables-3/#border-spacing-property) | respected by GtkBoxLayout, GtkGridLayout, GtkCenterLayout |

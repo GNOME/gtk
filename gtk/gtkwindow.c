@@ -3806,6 +3806,8 @@ gtk_window_map (GtkWidget *widget)
 
   if (priv->application)
     gtk_application_handle_window_map (priv->application, window);
+
+  gtk_widget_realize_at_context (widget);
 }
 
 static void
@@ -3817,6 +3819,8 @@ gtk_window_unmap (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unmap (widget);
   gdk_surface_hide (priv->surface);
+
+  gtk_widget_unrealize_at_context (widget);
 
   if (priv->title_box != NULL)
     gtk_widget_unmap (priv->title_box);
@@ -4200,8 +4204,13 @@ gtk_window_realize (GtkWidget *widget)
   gdk_toplevel_set_deletable (GDK_TOPLEVEL (surface), priv->deletable);
 
 #ifdef GDK_WINDOWING_WAYLAND
-  if (priv->client_decorated && GDK_IS_WAYLAND_SURFACE (surface))
-    gdk_wayland_toplevel_announce_csd (GDK_TOPLEVEL (surface));
+  if (GDK_IS_WAYLAND_SURFACE (surface))
+    {
+      if (priv->client_decorated)
+        gdk_wayland_toplevel_announce_csd (GDK_TOPLEVEL (surface));
+      else
+        gdk_wayland_toplevel_announce_ssd (GDK_TOPLEVEL (surface));
+    }
 #endif
 
   gdk_toplevel_set_modal (GDK_TOPLEVEL (surface), priv->modal);

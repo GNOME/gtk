@@ -152,11 +152,11 @@ gtk_css_value_shadow_equal (const GtkCssValue *value1,
       const ShadowValue *shadow2 = &value2->shadows[i];
 
       if (shadow1->inset != shadow2->inset ||
-          _gtk_css_value_equal (shadow1->hoffset, shadow2->hoffset) ||
-          _gtk_css_value_equal (shadow1->voffset, shadow2->voffset) ||
-          _gtk_css_value_equal (shadow1->radius, shadow2->radius) ||
-          _gtk_css_value_equal (shadow1->spread, shadow2->spread) ||
-          _gtk_css_value_equal (shadow1->color, shadow2->color))
+          !_gtk_css_value_equal (shadow1->hoffset, shadow2->hoffset) ||
+          !_gtk_css_value_equal (shadow1->voffset, shadow2->voffset) ||
+          !_gtk_css_value_equal (shadow1->radius, shadow2->radius) ||
+          !_gtk_css_value_equal (shadow1->spread, shadow2->spread) ||
+          !_gtk_css_value_equal (shadow1->color, shadow2->color))
         return FALSE;
     }
 
@@ -172,9 +172,6 @@ gtk_css_value_shadow_transition (GtkCssValue *start,
 
   guint i, len;
   ShadowValue *shadows;
-
-  if (start->n_shadows != end->n_shadows)
-    return NULL;
 
   if (start->n_shadows > end->n_shadows)
     len = start->n_shadows;

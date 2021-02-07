@@ -68,10 +68,8 @@ action_handle_method (GtkAtSpiContext        *self,
 
       g_variant_get (parameters, "(i)", &idx);
 
-      const Action *action = &actions[idx];
-
       if (idx >= 0 && idx < n_actions)
-        g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", action->name));
+        g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", actions[idx].name));
       else
         g_dbus_method_invocation_return_error (invocation,
                                                G_IO_ERROR,
@@ -129,10 +127,8 @@ action_handle_method (GtkAtSpiContext        *self,
 
       g_variant_get (parameters, "(i)", &idx);
 
-      const Action *action = &actions[idx];
-
       if (idx >= 0 && idx < n_actions)
-        g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", action->keybinding));
+        g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", actions[idx].keybinding));
       else
         g_dbus_method_invocation_return_error (invocation,
                                                G_IO_ERROR,
