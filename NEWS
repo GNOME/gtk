@@ -1,3 +1,57 @@
+Overview of Changes in 4.0.3
+============================
+
+* GtkWidget:
+ - Enforce the can-focus property
+
+* GtkVideo:
+ - Avoid tearing when using gstreamer with GL
+
+* Accessibility:
+ - Speed up cache population
+ - Make context realization lazier
+
+* CSS:
+ - Fix shadow transitions
+
+* Themes:
+ - Adwaita: Allow suggested and destructive action in lists
+
+* GDK:
+ - Remove warnings about exceeding size bounds
+
+* Vulkan:
+ - Fix uploading image regions
+
+* Wayland:
+ - Abort if the shared memory pool cannot be created
+ - Explicitly announce ssd for kwin
+ - Signal gtk-shell surface destruction to mutter
+
+* X11:
+ - Fix several DND problems
+
+* Windows:
+ - Avoid UAC in gtk4-update-icon-cache on 32bit Windows
+
+* MacOS:
+ - Use correct module file extension
+
+* tools:
+ - Make gtk-builder-tool translate GtkImage:pixbuf to :file
+
+* Translation updates:
+ Brazilian Portuguese
+ Czech
+ Galician
+ Greek
+ Portuguese
+ Punjabi
+ Slovenian
+ Spanish
+ Swedish
+
+
 Overview of Changes in 4.0.2
 ============================
 
