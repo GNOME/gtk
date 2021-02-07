@@ -296,15 +296,20 @@ gdk_x11_drag_find (GdkDisplay *display,
 static void
 precache_target_list (GdkDrag *drag)
 {
-  GdkContentFormats *formats = gdk_drag_get_formats (drag);
+  GdkContentFormats *formats;
   const char * const *atoms;
   gsize n_atoms;
+
+  formats = gdk_content_formats_ref (gdk_drag_get_formats (drag));
+  formats = gdk_content_formats_union_serialize_mime_types (formats);
 
   atoms = gdk_content_formats_get_mime_types (formats, &n_atoms);
 
   _gdk_x11_precache_atoms (gdk_drag_get_display (drag),
                            (const char **) atoms,
                            n_atoms);
+
+  gdk_content_formats_unref (formats);
 }
 
 /* Utility functions */
@@ -917,8 +922,12 @@ xdnd_set_targets (GdkX11Drag *drag_x11)
   const char * const *atoms;
   gsize i, n_atoms;
   GdkDisplay *display = gdk_drag_get_display (drag);
+  GdkContentFormats *formats;
 
-  atoms = gdk_content_formats_get_mime_types (gdk_drag_get_formats (drag), &n_atoms);
+  formats = gdk_content_formats_ref (gdk_drag_get_formats (drag));
+  formats = gdk_content_formats_union_serialize_mime_types (formats);
+
+  atoms = gdk_content_formats_get_mime_types (formats, &n_atoms);
   atomlist = g_new (Atom, n_atoms);
   for (i = 0; i < n_atoms; i++)
     atomlist[i] = gdk_x11_get_xatom_by_name_for_display (display, atoms[i]);
@@ -932,6 +941,8 @@ xdnd_set_targets (GdkX11Drag *drag_x11)
   g_free (atomlist);
 
   drag_x11->xdnd_targets_set = 1;
+
+  gdk_content_formats_unref (formats);
 }
 
 static void
