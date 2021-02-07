@@ -1095,6 +1095,8 @@ xdnd_send_enter (GdkX11Drag *drag_x11)
     }
 
   xdnd_send_xevent (drag_x11, &xev);
+
+  gdk_content_formats_unref (formats);
 }
 
 static void
