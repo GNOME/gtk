@@ -56,7 +56,9 @@ struct _GtkPrinterCups
   char *original_hostname;
   char *original_resource;
   int original_port;
-  gboolean request_original_uri; /* Request PPD from original host */
+  gboolean request_original_uri;     /* Request PPD from original hostname */
+  gboolean is_temporary;             /* This printer is temporary queue */
+  gchar *temporary_queue_device_uri; /* Device uri of temporary queue for this printer */
 
   ipp_pstate_t state;
   gboolean reading_ppd;
