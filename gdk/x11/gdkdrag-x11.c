@@ -1687,6 +1687,7 @@ gdk_x11_drag_xevent (GdkDisplay   *display,
 
     case SelectionRequest:
       {
+        GdkContentFormats *formats;
 #ifdef G_ENABLE_DEBUG
         const char *target, *property;
 #endif
@@ -1705,23 +1706,30 @@ gdk_x11_drag_xevent (GdkDisplay   *display,
         if (xevent->xselectionrequest.requestor == None)
           {
             GDK_DISPLAY_NOTE (display, CLIPBOARD, g_printerr ("got SelectionRequest for %s @ %s with NULL window, ignoring\n",
-                                            target, property));
+                              target, property));
             return TRUE;
           }
         
         GDK_DISPLAY_NOTE (display, CLIPBOARD, g_printerr ("got SelectionRequest for %s @ %s\n",
-                                        target, property));
+                          target, property));
+
+        formats = gdk_content_formats_ref (gdk_drag_get_formats (drag));
+        formats = gdk_content_formats_union_serialize_mime_types (formats);
 
         gdk_x11_selection_output_streams_create (display,
-                                                 gdk_drag_get_formats (drag),
+                                                 formats,
                                                  xevent->xselectionrequest.requestor,
                                                  xevent->xselectionrequest.selection,
                                                  xevent->xselectionrequest.target,
-                                                 xevent->xselectionrequest.property ? xevent->xselectionrequest.property
-                                                                                    : xevent->xselectionrequest.target,
+                                                 xevent->xselectionrequest.property
+                                                   ? xevent->xselectionrequest.property
+                                                   : xevent->xselectionrequest.target,
                                                  xevent->xselectionrequest.time,
                                                  gdk_x11_drag_default_output_handler,
                                                  drag);
+
+        gdk_content_formats_unref (formats);
+
         return TRUE;
       }
 
