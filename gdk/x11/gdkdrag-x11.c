@@ -1095,6 +1095,8 @@ xdnd_send_enter (GdkX11Drag *drag_x11)
     }
 
   xdnd_send_xevent (drag_x11, &xev);
+
+  gdk_content_formats_unref (formats);
 }
 
 static void
@@ -1334,7 +1336,7 @@ _gdk_x11_display_get_drag_protocol (GdkDisplay      *display,
 
 static GdkSurfaceCache *
 drag_find_window_cache (GdkX11Drag *drag_x11,
-                                GdkDisplay        *display)
+                        GdkDisplay *display)
 {
   if (!drag_x11->cache)
     drag_x11->cache = gdk_surface_cache_get (display);
@@ -1365,7 +1367,7 @@ gdk_x11_drag_find_surface (GdkDrag         *drag,
                                       drag_surface && GDK_IS_X11_SURFACE (drag_surface) ?
                                       GDK_SURFACE_XID (drag_surface) : None,
                                       x_root * screen_x11->surface_scale,
-				      y_root * screen_x11->surface_scale);
+                                      y_root * screen_x11->surface_scale);
 
   if (drag_x11->dest_xid != dest)
     {
@@ -1395,8 +1397,8 @@ gdk_x11_drag_find_surface (GdkDrag         *drag,
 
 static void
 move_drag_surface (GdkDrag *drag,
-                  guint           x_root,
-                  guint           y_root)
+                   guint    x_root,
+                   guint    y_root)
 {
   GdkX11Drag *drag_x11 = GDK_X11_DRAG (drag);
 
@@ -1407,14 +1409,14 @@ move_drag_surface (GdkDrag *drag,
 }
 
 static gboolean
-gdk_x11_drag_drag_motion (GdkDrag *drag,
-                                  Window          proxy_xid,
-                                  GdkDragProtocol protocol,
-                                  int             x_root,
-                                  int             y_root,
-                                  GdkDragAction   suggested_action,
-                                  GdkDragAction   possible_actions,
-                                  guint32         time)
+gdk_x11_drag_drag_motion (GdkDrag         *drag,
+                          Window           proxy_xid,
+                          GdkDragProtocol  protocol,
+                          int              x_root,
+                          int              y_root,
+                          GdkDragAction    suggested_action,
+                          GdkDragAction    possible_actions,
+                          guint32          time)
 {
   GdkX11Drag *drag_x11 = GDK_X11_DRAG (drag);
 
@@ -1606,8 +1608,8 @@ gdk_x11_drag_get_drag_surface (GdkDrag *drag)
 
 static void
 gdk_x11_drag_set_hotspot (GdkDrag *drag,
-                                  int             hot_x,
-                                  int             hot_y)
+                          int      hot_x,
+                          int      hot_y)
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
 
@@ -1623,8 +1625,8 @@ gdk_x11_drag_set_hotspot (GdkDrag *drag,
 
 static void
 gdk_x11_drag_default_output_done (GObject      *drag,
-                                          GAsyncResult *result,
-                                          gpointer      user_data)
+                                  GAsyncResult *result,
+                                  gpointer      user_data)
 {
   GError *error = NULL;
 
@@ -1636,17 +1638,17 @@ gdk_x11_drag_default_output_done (GObject      *drag,
 }
 
 static void
-gdk_x11_drag_default_output_handler (GOutputStream   *stream,
-                                             const char      *mime_type,
-                                             gpointer         user_data)
+gdk_x11_drag_default_output_handler (GOutputStream *stream,
+                                     const char    *mime_type,
+                                     gpointer       user_data)
 {
   gdk_drag_write_async (GDK_DRAG (user_data),
-                                mime_type,
-                                stream,
-                                G_PRIORITY_DEFAULT,
-                                NULL,
-                                gdk_x11_drag_default_output_done,
-                                NULL);
+                        mime_type,
+                        stream,
+                        G_PRIORITY_DEFAULT,
+                        NULL,
+                        gdk_x11_drag_default_output_done,
+                        NULL);
   g_object_unref (stream);
 }
 
@@ -1675,7 +1677,7 @@ gdk_x11_drag_xevent (GdkDisplay   *display,
       if (xevent->xselectionclear.time < x11_drag->timestamp)
         {
           GDK_DISPLAY_NOTE (display, CLIPBOARD, g_printerr ("ignoring SelectionClear with too old timestamp (%lu vs %lu)\n",
-                                          xevent->xselectionclear.time, x11_drag->timestamp));
+                            xevent->xselectionclear.time, x11_drag->timestamp));
           return FALSE;
         }
 
@@ -1685,6 +1687,7 @@ gdk_x11_drag_xevent (GdkDisplay   *display,
 
     case SelectionRequest:
       {
+        GdkContentFormats *formats;
 #ifdef G_ENABLE_DEBUG
         const char *target, *property;
 #endif
@@ -1703,23 +1706,30 @@ gdk_x11_drag_xevent (GdkDisplay   *display,
         if (xevent->xselectionrequest.requestor == None)
           {
             GDK_DISPLAY_NOTE (display, CLIPBOARD, g_printerr ("got SelectionRequest for %s @ %s with NULL window, ignoring\n",
-                                            target, property));
+                              target, property));
             return TRUE;
           }
         
         GDK_DISPLAY_NOTE (display, CLIPBOARD, g_printerr ("got SelectionRequest for %s @ %s\n",
-                                        target, property));
+                          target, property));
+
+        formats = gdk_content_formats_ref (gdk_drag_get_formats (drag));
+        formats = gdk_content_formats_union_serialize_mime_types (formats);
 
         gdk_x11_selection_output_streams_create (display,
-                                                 gdk_drag_get_formats (drag),
+                                                 formats,
                                                  xevent->xselectionrequest.requestor,
                                                  xevent->xselectionrequest.selection,
                                                  xevent->xselectionrequest.target,
-                                                 xevent->xselectionrequest.property ? xevent->xselectionrequest.property
-                                                                                    : xevent->xselectionrequest.target,
+                                                 xevent->xselectionrequest.property
+                                                   ? xevent->xselectionrequest.property
+                                                   : xevent->xselectionrequest.target,
                                                  xevent->xselectionrequest.time,
                                                  gdk_x11_drag_default_output_handler,
                                                  drag);
+
+        gdk_content_formats_unref (formats);
+
         return TRUE;
       }
 
