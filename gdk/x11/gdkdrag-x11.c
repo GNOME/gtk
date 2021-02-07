@@ -1334,7 +1334,7 @@ _gdk_x11_display_get_drag_protocol (GdkDisplay      *display,
 
 static GdkSurfaceCache *
 drag_find_window_cache (GdkX11Drag *drag_x11,
-                                GdkDisplay        *display)
+                        GdkDisplay *display)
 {
   if (!drag_x11->cache)
     drag_x11->cache = gdk_surface_cache_get (display);
@@ -1365,7 +1365,7 @@ gdk_x11_drag_find_surface (GdkDrag         *drag,
                                       drag_surface && GDK_IS_X11_SURFACE (drag_surface) ?
                                       GDK_SURFACE_XID (drag_surface) : None,
                                       x_root * screen_x11->surface_scale,
-				      y_root * screen_x11->surface_scale);
+                                      y_root * screen_x11->surface_scale);
 
   if (drag_x11->dest_xid != dest)
     {
@@ -1395,8 +1395,8 @@ gdk_x11_drag_find_surface (GdkDrag         *drag,
 
 static void
 move_drag_surface (GdkDrag *drag,
-                  guint           x_root,
-                  guint           y_root)
+                   guint    x_root,
+                   guint    y_root)
 {
   GdkX11Drag *drag_x11 = GDK_X11_DRAG (drag);
 
@@ -1407,14 +1407,14 @@ move_drag_surface (GdkDrag *drag,
 }
 
 static gboolean
-gdk_x11_drag_drag_motion (GdkDrag *drag,
-                                  Window          proxy_xid,
-                                  GdkDragProtocol protocol,
-                                  int             x_root,
-                                  int             y_root,
-                                  GdkDragAction   suggested_action,
-                                  GdkDragAction   possible_actions,
-                                  guint32         time)
+gdk_x11_drag_drag_motion (GdkDrag         *drag,
+                          Window           proxy_xid,
+                          GdkDragProtocol  protocol,
+                          int              x_root,
+                          int              y_root,
+                          GdkDragAction    suggested_action,
+                          GdkDragAction    possible_actions,
+                          guint32          time)
 {
   GdkX11Drag *drag_x11 = GDK_X11_DRAG (drag);
 
@@ -1606,8 +1606,8 @@ gdk_x11_drag_get_drag_surface (GdkDrag *drag)
 
 static void
 gdk_x11_drag_set_hotspot (GdkDrag *drag,
-                                  int             hot_x,
-                                  int             hot_y)
+                          int      hot_x,
+                          int      hot_y)
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
 
@@ -1623,8 +1623,8 @@ gdk_x11_drag_set_hotspot (GdkDrag *drag,
 
 static void
 gdk_x11_drag_default_output_done (GObject      *drag,
-                                          GAsyncResult *result,
-                                          gpointer      user_data)
+                                  GAsyncResult *result,
+                                  gpointer      user_data)
 {
   GError *error = NULL;
 
@@ -1636,17 +1636,17 @@ gdk_x11_drag_default_output_done (GObject      *drag,
 }
 
 static void
-gdk_x11_drag_default_output_handler (GOutputStream   *stream,
-                                             const char      *mime_type,
-                                             gpointer         user_data)
+gdk_x11_drag_default_output_handler (GOutputStream *stream,
+                                     const char    *mime_type,
+                                     gpointer       user_data)
 {
   gdk_drag_write_async (GDK_DRAG (user_data),
-                                mime_type,
-                                stream,
-                                G_PRIORITY_DEFAULT,
-                                NULL,
-                                gdk_x11_drag_default_output_done,
-                                NULL);
+                        mime_type,
+                        stream,
+                        G_PRIORITY_DEFAULT,
+                        NULL,
+                        gdk_x11_drag_default_output_done,
+                        NULL);
   g_object_unref (stream);
 }
 
@@ -1675,7 +1675,7 @@ gdk_x11_drag_xevent (GdkDisplay   *display,
       if (xevent->xselectionclear.time < x11_drag->timestamp)
         {
           GDK_DISPLAY_NOTE (display, CLIPBOARD, g_printerr ("ignoring SelectionClear with too old timestamp (%lu vs %lu)\n",
-                                          xevent->xselectionclear.time, x11_drag->timestamp));
+                            xevent->xselectionclear.time, x11_drag->timestamp));
           return FALSE;
         }
 
