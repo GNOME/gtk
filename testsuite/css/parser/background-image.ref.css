@@ -73,3 +73,11 @@ r {
 s {
   background-image: -gtk-scaled(-gtk-icontheme("object-select-symbolic"),1,linear-gradient(rgb(255,255,0), rgb(0,0,255)),2);
 }
+
+t {
+  background-image: cross-fade(10% image(rgb(255,0,0)), 20% image(rgb(255,255,0)), linear-gradient(rgb(0,0,255), rgb(0,0,0)));
+}
+
+u {
+  background-image: filter(none /* FIXME */,grayscale(100%) invert(50%));
+}

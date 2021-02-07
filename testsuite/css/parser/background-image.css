@@ -74,3 +74,11 @@ r {
 s {
   background-image: -gtk-scaled(-gtk-icontheme("object-select-symbolic"),linear-gradient(yellow, blue));
 }
+
+t {
+  background-image: cross-fade(10% image(red), 20% image(yellow), linear-gradient(blue, black));
+}
+
+u {
+  background-image: filter(url("test.png"), grayscale(100%) invert(50%));
+}
