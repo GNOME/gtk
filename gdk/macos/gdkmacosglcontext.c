@@ -136,7 +136,7 @@ ensure_gl_view (GdkMacosGLContext *self)
   nsview = _gdk_macos_surface_get_view (surface);
   nswindow = _gdk_macos_surface_get_native (surface);
 
-  if (!GDK_IS_MACOS_GL_VIEW (nsview))
+  if G_UNLIKELY (!GDK_IS_MACOS_GL_VIEW (nsview))
     {
       NSRect frame;
 
