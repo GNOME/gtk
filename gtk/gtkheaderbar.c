@@ -743,8 +743,17 @@ gtk_header_bar_set_show_title_buttons (GtkHeaderBar *bar,
     create_window_controls (bar);
   else
     {
-      g_clear_pointer (&bar->start_window_controls, gtk_widget_unparent);
-      g_clear_pointer (&bar->end_window_controls, gtk_widget_unparent);
+      if (bar->start_window_controls)
+        {
+          gtk_box_remove (GTK_BOX (bar->start_box), bar->start_window_controls);
+          bar->start_window_controls = NULL;
+        }
+
+      if (ar->end_window_controls)
+        {
+          gtk_box_remove (GTK_BOX (bar->end_box), bar->end_window_controls);
+          bar->end_window_controls = NULL;
+        }
     }
 
   g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_SHOW_TITLE_BUTTONS]);
