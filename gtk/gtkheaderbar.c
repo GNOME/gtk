@@ -743,13 +743,13 @@ gtk_header_bar_set_show_title_buttons (GtkHeaderBar *bar,
     create_window_controls (bar);
   else
     {
-      if (bar->start_window_controls)
+      if (bar->start_box && bar->start_window_controls)
         {
           gtk_box_remove (GTK_BOX (bar->start_box), bar->start_window_controls);
           bar->start_window_controls = NULL;
         }
 
-      if (ar->end_window_controls)
+      if (bar->end_box && bar->end_window_controls)
         {
           gtk_box_remove (GTK_BOX (bar->end_box), bar->end_window_controls);
           bar->end_window_controls = NULL;
