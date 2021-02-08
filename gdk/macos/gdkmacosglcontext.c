@@ -362,7 +362,8 @@ gdk_macos_gl_context_end_frame (GdkDrawContext *context,
 
   GDK_DRAW_CONTEXT_CLASS (gdk_macos_gl_context_parent_class)->end_frame (context, painted);
 
-  [self->gl_context flushBuffer];
+  if (!self->is_attached)
+    [self->gl_context flushBuffer];
 }
 
 static void
