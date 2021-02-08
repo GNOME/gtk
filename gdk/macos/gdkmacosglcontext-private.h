@@ -45,7 +45,6 @@ struct _GdkMacosGLContext
   NSView *dummy_view;
 
   cairo_region_t *damage;
-  cairo_rectangle_int_t flush_rect;
 
   guint is_attached : 1;
   guint needs_resize : 1;

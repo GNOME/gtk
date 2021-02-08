@@ -73,23 +73,23 @@ void    gdk_profiler_set_int_counter    (guint  id,
                                          gint64 value);
 
 #ifndef HAVE_SYSPROF
-#define gdk_profiler_add_mark(b, d, n, m)
-#define gdk_profiler_end_mark(b, n, m)
+#define gdk_profiler_add_mark(b, d, n, m) G_STMT_START {} G_STMT_END
+#define gdk_profiler_end_mark(b, n, m) G_STMT_START {} G_STMT_END
 /* Optimise the whole call out */
 #if defined(G_HAVE_ISO_VARARGS)
-#define gdk_profiler_add_markf(b, d, n, m, ...)
-#define gdk_profiler_end_markf(b, n, m, ...)
+#define gdk_profiler_add_markf(b, d, n, m, ...) G_STMT_START {} G_STMT_END
+#define gdk_profiler_end_markf(b, n, m, ...) G_STMT_START {} G_STMT_END
 #elif defined(G_HAVE_GNUC_VARARGS)
-#define gdk_profiler_add_markf(b, d, n, m...)
-#define gdk_profiler_end_markf(b, n, m...)
+#define gdk_profiler_add_markf(b, d, n, m...) G_STMT_START {} G_STMT_END
+#define gdk_profiler_end_markf(b, n, m...) G_STMT_START {} G_STMT_END
 #else
 /* no varargs macro support; the call will have to be optimised out by the compiler */
 #endif
 
 #define gdk_profiler_define_counter(n, d) 0
 #define gdk_profiler_define_int_counter(n, d) 0
-#define gdk_profiler_set_counter(i, v)
-#define gdk_profiler_set_int_counter(i, v)
+#define gdk_profiler_set_counter(i, v) G_STMT_START {} G_STMT_END
+#define gdk_profiler_set_int_counter(i, v) G_STMT_START {} G_STMT_END
 #endif
 
 G_END_DECLS
