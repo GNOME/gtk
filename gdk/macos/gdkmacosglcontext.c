@@ -278,6 +278,9 @@ gdk_macos_gl_context_begin_frame (GdkDrawContext *context,
 
   surface = gdk_draw_context_get_surface (context);
 
+  g_clear_pointer (&self->damage, cairo_region_destroy);
+  self->damage = cairo_region_copy (painted);
+
   /* If begin frame is called, that means we are trying to draw to
    * the NSWindow using our view. That might be a GdkMacosCairoView
    * but we need it to be a GL view. Also, only in this case do we
@@ -286,28 +289,7 @@ gdk_macos_gl_context_begin_frame (GdkDrawContext *context,
    */
   if (!self->is_attached &&
       gdk_gl_context_get_shared_context (GDK_GL_CONTEXT (context)))
-    {
-      CGLContextObj glctx = [self->gl_context CGLContextObj];
-      GLint swapRect[4];
-
-      ensure_gl_view (self);
-
-      g_clear_pointer (&self->damage, cairo_region_destroy);
-      self->damage = cairo_region_copy (painted);
-
-      cairo_region_get_extents (painted, &self->flush_rect);
-
-      /* Coordinates are in display coordinates, where as flush_rect is
-       * in GDK coordinates. Must flip Y to match display coordinates where
-       * 0,0 is the bottom-left corner.
-       */
-      swapRect[0] = self->flush_rect.x;                   /* left */
-      swapRect[1] = surface->height - self->flush_rect.y; /* bottom */
-      swapRect[2] = self->flush_rect.width;               /* width */
-      swapRect[3] = self->flush_rect.height;              /* height */
-
-      CGLSetParameter (glctx, kCGLCPSwapRectangle, swapRect);
-    }
+    ensure_gl_view (self);
 
   if (self->needs_resize)
     {
@@ -363,7 +345,25 @@ gdk_macos_gl_context_end_frame (GdkDrawContext *context,
   GDK_DRAW_CONTEXT_CLASS (gdk_macos_gl_context_parent_class)->end_frame (context, painted);
 
   if (!self->is_attached)
-    [self->gl_context flushBuffer];
+    {
+      GdkSurface *surface = gdk_draw_context_get_surface (context);
+      CGLContextObj glctx = [self->gl_context CGLContextObj];
+      cairo_rectangle_int_t flush_rect;
+      GLint swapRect[4];
+
+      /* Coordinates are in display coordinates, where as flush_rect is
+       * in GDK coordinates. Must flip Y to match display coordinates where
+       * 0,0 is the bottom-left corner.
+       */
+      cairo_region_get_extents (painted, &flush_rect);
+      swapRect[0] = flush_rect.x;                   /* left */
+      swapRect[1] = surface->height - flush_rect.y; /* bottom */
+      swapRect[2] = flush_rect.width;               /* width */
+      swapRect[3] = flush_rect.height;              /* height */
+      CGLSetParameter (glctx, kCGLCPSwapRectangle, swapRect);
+
+      [self->gl_context flushBuffer];
+    }
 }
 
 static void
