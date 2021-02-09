@@ -4108,7 +4108,7 @@ window {
   &.tiled-top,
   &.tiled-left,
   &.tiled-right,
-  &.tiled-bottom { border-radius: 0; }
+  &.tiled-bottom { border-radius: 0; box-shadow: none; }
 
   &.popup { box-shadow: none; }
 
