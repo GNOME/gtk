@@ -4100,9 +4100,6 @@ window {
 
       &:backdrop { box-shadow: inset 0 0 0 3px $backdrop_bg_color, inset 0 1px $top_hilight; }
     }
-
-    &.maximized,
-    &.fullscreen { box-shadow: none; }
   }
 
   &.maximized,
@@ -4111,7 +4108,7 @@ window {
   &.tiled-top,
   &.tiled-left,
   &.tiled-right,
-  &.tiled-bottom { border-radius: 0; }
+  &.tiled-bottom { border-radius: 0; box-shadow: none; }
 
   &.popup { box-shadow: none; }
 
