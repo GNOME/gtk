@@ -110,6 +110,9 @@ static void     gtk_im_context_simple_get_preedit_string (GtkIMContext          
 							  char                    **str,
 							  PangoAttrList           **attrs,
 							  int                      *cursor_pos);
+static void     gtk_im_context_simple_set_client_window  (GtkIMContext             *context,
+                                                          GdkWindow                *window);
+
 
 static void init_compose_table_async (GCancellable         *cancellable,
                                       GAsyncReadyCallback   callback,
@@ -126,6 +129,7 @@ gtk_im_context_simple_class_init (GtkIMContextSimpleClass *class)
   im_context_class->filter_keypress = gtk_im_context_simple_filter_keypress;
   im_context_class->reset = gtk_im_context_simple_reset;
   im_context_class->get_preedit_string = gtk_im_context_simple_get_preedit_string;
+  im_context_class->set_client_window = gtk_im_context_simple_set_client_window;
   gobject_class->finalize = gtk_im_context_simple_finalize;
 
   init_compose_table_async (NULL, NULL, NULL);
@@ -925,6 +929,12 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
 
   if (str)
     *str = g_string_free (s, FALSE);
+}
+
+static void
+gtk_im_context_simple_set_client_window  (GtkIMContext *context,
+                                          GdkWindow    *window)
+{
 }
 
 /**
