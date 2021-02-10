@@ -656,7 +656,7 @@ activate_about (GSimpleAction *action,
                          "website", "http://www.gtk.org",
                          "comments", "Program to demonstrate GTK printing",
                          "authors", authors,
-                         "logo-icon-name", "org.gtk.PrintEditor4.Devel",
+                         "logo-icon-name", "org.gtk.PrintEditor4",
                          "title", "About GTK Print Editor",
                          "system-information", sysinfo->str,
                          NULL);
