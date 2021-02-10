@@ -4579,7 +4579,7 @@ decoration {
   .tiled-top &,
   .tiled-right &,
   .tiled-bottom &,
-  .tiled-left & { border-radius: 0; }
+  .tiled-left & { border-radius: 0; box-shadow: none; }
 
   .popup & { box-shadow: none; }
 
