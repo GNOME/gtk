@@ -927,7 +927,7 @@ node_editor_window_init (NodeEditorWindow *self)
          "shadow {\n"
          "  child: texture {\n"
          "    bounds: 0 0 128 128;\n"
-         "    texture: url(\"resource:///org/gtk/gtk4/node-editor/icons/apps/org.gtk.gtk4.NodeEditor.Devel.svg\");\n"
+         "    texture: url(\"resource:///org/gtk/gtk4/node-editor/icons/apps/org.gtk.gtk4.NodeEditor.svg\");\n"
          "  }\n"
          "  shadows: rgba(0,0,0,0.5) 0 1 12;\n"
          "}\n"
