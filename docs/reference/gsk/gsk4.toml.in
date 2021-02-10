@@ -1,0 +1,41 @@
+[library]
+version = "@version@"
+browse_url = "https://gitlab.gnome.org/GNOME/gtk/"
+repository_url = "https://gitlab.gnome.org/GNOME/gtk.git"
+website_url = "https://www.gtk.org"
+authors = "GTK Development Team"
+logo_url = "gtk-logo.svg"
+license = "GPL-2.1-or-later"
+description = "The GTK toolkit"
+dependencies = [ "GObject-2.0", "Graphene-1.0", "Pango-1.0", "Gdk-4.0" ]
+
+  [dependencies."GObject-2.0"]
+  name = "GObject"
+  description = "The base type system library"
+  docs_url = "https://developer.gnome.org/gobject/stable"
+
+  [dependencies."Graphene-1.0"]
+  name = "Graphene"
+  description = "A thin layer of mathematical types for 3D libraries"
+  docs_url = "https://ebassi.github.io/graphene/docs"
+
+  [dependencies."Pango-1.0"]
+  name = "Pango"
+  description = "Text shaping and rendering"
+  docs_url = "https://developer.gnome.org/pango/stable"
+
+  [dependencies."Gdk-4.0"]
+  name = "GDK"
+  description = "The GTK windowing system abstraction"
+  docs_url = "../../Gdk/4.0/"
+
+[theme]
+name = "basic"
+
+[source-location]
+base_url = "https://gitlab.gnome.org/GNOME/gtk/-/blob/master/"
+
+[extra]
+content_images = [
+  "gtk-logo.svg",
+]

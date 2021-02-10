@@ -17,6 +17,11 @@ if get_option('gtk_doc')
   src_dir_conf.set('SRC_DIR', meson.source_root())
 endif
 
+toml_conf = configuration_data()
+toml_conf.set('version', meson.project_version())
+
+gidocgen = find_program('gi-docgen', required: get_option('gtk_doc'))
+
 subdir('gdk')
 subdir('gsk')
 subdir('gtk')

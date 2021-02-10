@@ -1,91 +1,21 @@
-private_headers = [
-  'gsk-autocleanup.h',
-
-  'gskcairoblurprivate.h',
-  'gskcairorendererprivate.h',
-  'gskdebugprivate.h',
-  'gskdiffprivate.h',
-  'gskglshaderprivate.h',
-  'gskprivate.h',
-  'gskprofilerprivate.h',
-  'gskrendererprivate.h',
-  'gskrendernodeprivate.h',
-  'gskrendernodeparserprivate.h',
-  'gskroundedrectprivate.h',
-  'gsktransformprivate.h',
-
-  # gsk/gl
-  'glutilsprivate.h',
-  'gskgldriverprivate.h',
-  'gskglglyphcacheprivate.h',
-  'gskgliconcacheprivate.h',
-  'gskglimageprivate.h',
-  'gskglnodesampleprivate.h',
-  'gskglprofilerprivate.h',
-  'gskglrendererprivate.h',
-  'gskglrenderopsprivate.h',
-  'gskglshaderbuilderprivate.h',
-  'gskglshadowcacheprivate.h',
-  'gskgltextureatlasprivate.h',
-  'opbuffer.h',
-  'stb_rect_pack.h',
-
-  # gsk/vulkan
-  'gskvulkanblendmodepipelineprivate.h',
-  'gskvulkanblurpipelineprivate.h',
-  'gskvulkanborderpipelineprivate.h',
-  'gskvulkanboxshadowpipelineprivate.h',
-  'gskvulkanbufferprivate.h',
-  'gskvulkanclipprivate.h',
-  'gskvulkancolorpipelineprivate.h',
-  'gskvulkancolortextpipelineprivate.h',
-  'gskvulkancommandpoolprivate.h',
-  'gskvulkancrossfadepipelineprivate.h',
-  'gskvulkaneffectpipelineprivate.h',
-  'gskvulkanglyphcacheprivate.h',
-  'gskvulkanimageprivate.h',
-  'gskvulkanlineargradientpipelineprivate.h',
-  'gskvulkanmemoryprivate.h',
-  'gskvulkanpipelineprivate.h',
-  'gskvulkanpushconstantsprivate.h',
-  'gskvulkanrendererprivate.h',
-  'gskvulkanrenderpassprivate.h',
-  'gskvulkanrenderprivate.h',
-  'gskvulkanshaderprivate.h',
-  'gskvulkantextpipelineprivate.h',
-  'gskvulkantexturepipelineprivate.h',
-]
-
-images = [
-]
+gsk4_toml = configure_file(input: 'gsk4.toml.in', output: 'gsk4.toml', configuration: toml_conf)
 
 if get_option('gtk_doc')
-  configure_file(input: 'version.xml.in', output: 'version.xml', configuration: version_conf)
-
-  gnome.gtkdoc('gsk4',
-    mode: 'none',
-    main_xml: 'gsk4-docs.xml',
-    src_dir: [
-      gskinc,
+  custom_target('gsk4-doc',
+    input: [ gsk4_toml, gsk_gir[0] ],
+    output: 'gsk4',
+    command: [
+      gidocgen,
+      'generate',
+      '--add-include-path=@0@'.format(meson.current_build_dir() / '../../../gtk'),
+      '--config=@INPUT0@',
+      '--output-dir=@OUTPUT@',
+      '--no-namespace-dir',
+      '--content-dir=@0@'.format(meson.current_source_dir()),
+      '@INPUT1@',
     ],
-    dependencies: libgtk_dep,
-    gobject_typesfile: join_paths(meson.current_source_dir(), 'gsk4.types'),
-    scan_args: [
-      '--ignore-decorators=_GDK_EXTERN',
-      '--ignore-headers=' + ' '.join(private_headers),
-    ],
-    mkdb_args: [
-      '--ignore-files=' + ' '.join(private_headers),
-    ],
-    fixxref_args: [
-      '--html-dir=@0@'.format(docpath),
-      '--extra-dir=@0@'.format(join_paths(glib_docpath, 'glib')),
-      '--extra-dir=@0@'.format(join_paths(glib_docpath, 'gobject')),
-      '--extra-dir=@0@'.format(join_paths(glib_docpath, 'gio')),
-      '--extra-dir=@0@'.format(cairo_docpath),
-      '--extra-dir=../gdk',
-    ],
-    html_assets: images,
-    install: true,
+    depends: [ gdk_gir[0] ],
+    depend_files: [ expand_content_md_files ],
+    build_by_default: true,
   )
 endif

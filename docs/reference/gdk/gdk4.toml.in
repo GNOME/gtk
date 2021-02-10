@@ -1,0 +1,74 @@
+[library]
+version = "@version@"
+browse_url = "https://gitlab.gnome.org/GNOME/gtk/"
+repository_url = "https://gitlab.gnome.org/GNOME/gtk.git"
+website_url = "https://www.gtk.org"
+authors = "GTK Development Team"
+logo_url = "gtk-logo.svg"
+license = "GPL-2.1-or-later"
+description = "The GTK toolkit"
+dependencies = [ "GObject-2.0", "Graphene-1.0", "Pango-1.0" ]
+
+  [dependencies."GObject-2.0"]
+  name = "GObject"
+  description = "The base type system library"
+  docs_url = "https://developer.gnome.org/gobject/stable"
+
+  [dependencies."Graphene-1.0"]
+  name = "Graphene"
+  description = "A thin layer of mathematical types for 3D libraries"
+  docs_url = "https://ebassi.github.io/graphene/docs"
+
+  [dependencies."Pango-1.0"]
+  name = "Pango"
+  description = "Text shaping and rendering"
+  docs_url = "https://developer.gnome.org/pango/stable"
+
+[theme]
+name = "basic"
+
+[source-location]
+base_url = "https://gitlab.gnome.org/GNOME/gtk/-/blob/master/"
+
+[extra]
+content_images = [
+  "images/gtk-logo.svg",
+  "images/rotated-text.png",
+  "images/default_cursor.png",
+  "images/help_cursor.png",
+  "images/pointer_cursor.png",
+  "images/context_menu_cursor.png",
+  "images/progress_cursor.png",
+  "images/wait_cursor.png",
+  "images/cell_cursor.png",
+  "images/crosshair_cursor.png",
+  "images/text_cursor.png",
+  "images/vertical_text_cursor.png",
+  "images/alias_cursor.png",
+  "images/copy_cursor.png",
+  "images/no_drop_cursor.png",
+  "images/move_cursor.png",
+  "images/not_allowed_cursor.png",
+  "images/grab_cursor.png",
+  "images/grabbing_cursor.png",
+  "images/all_scroll_cursor.png",
+  "images/col_resize_cursor.png",
+  "images/row_resize_cursor.png",
+  "images/n_resize_cursor.png",
+  "images/e_resize_cursor.png",
+  "images/s_resize_cursor.png",
+  "images/w_resize_cursor.png",
+  "images/ne_resize_cursor.png",
+  "images/nw_resize_cursor.png",
+  "images/sw_resize_cursor.png",
+  "images/se_resize_cursor.png",
+  "images/ew_resize_cursor.png",
+  "images/ns_resize_cursor.png",
+  "images/nesw_resize_cursor.png",
+  "images/nwse_resize_cursor.png",
+  "images/zoom_in_cursor.png",
+  "images/zoom_out_cursor.png",
+  "images/popup-anchors.png",
+  "images/popup-flip.png",
+  "images/popup-slide.png",
+]
