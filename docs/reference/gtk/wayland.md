@@ -1,4 +1,5 @@
-# Using GTK with Wayland {#gtk-wayland}
+Title: Using GTK with Wayland
+Slug: gtk-wayland
 
 The GDK Wayland backend provides support for running GTK applications
 under a Wayland compositor. To run your application in this way, select

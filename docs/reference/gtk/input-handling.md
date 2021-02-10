@@ -1,4 +1,5 @@
-# Overview of GTK input and event handling {#input-overview}
+Title: Overview of GTK input and event handling
+Slug: input-overview
 
 This chapter describes in detail how GTK handles input. If you are interested
 in what happens to translate a key press or mouse motion of the users into a

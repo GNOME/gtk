@@ -1,4 +1,5 @@
-# GTK Accessibility {#gtk-accessibility}
+Title: GTK Accessibility
+Slug: gtk-accessibility
 
 ## The standard accessibility interface
 

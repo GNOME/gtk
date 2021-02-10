@@ -1,4 +1,5 @@
-# List Widget Overview {#ListWidget}
+Title: List Widget Overview
+Slug: gtk-list-widget
 
 GTK provides powerful widgets to display and edit lists of data. This document
 gives an overview over the concepts and how they work together to allow

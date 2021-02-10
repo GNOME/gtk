@@ -1,4 +1,5 @@
-# Compiling the GTK Libraries {#gtk-building}
+Title: Compiling the GTK Libraries
+Slug: gtk-building
 
 ## Building GTK
 

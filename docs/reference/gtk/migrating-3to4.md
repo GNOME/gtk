@@ -1,4 +1,5 @@
-# Migrating from GTK 3.x to GTK 4 {#gtk-migrating-3-to-4}
+Title: Migrating from GTK 3.x to GTK 4
+Slug: gtk-migrating-3-to-4
 
 GTK 4 is a major new version of GTK that breaks both API and ABI
 compared to GTK 3.x. Thankfully, most of the changes are not hard

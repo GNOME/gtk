@@ -1,4 +1,5 @@
-# Using GTK on Windows {#gtk-windows}
+Title: Using GTK on Windows
+Slug: gtk-windows
 
 The Windows port of GTK is an implementation of GDK (and therefore GTK)
 on top of the Win32 API. When compiling GTK on Windows, this backend is

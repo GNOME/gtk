@@ -1,4 +1,5 @@
-# Running and debugging GTK Applications {#gtk-running}
+Title: Running and debugging GTK Applications
+Slug: gtk-running
 
 ## Environment variables
 

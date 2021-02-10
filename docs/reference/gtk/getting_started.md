@@ -1,4 +1,5 @@
-# Getting Started with GTK {#gtk-getting-started}
+Title: Getting Started with GTK
+Slug: gtk-getting-started
 
 GTK is a [widget toolkit](http://en.wikipedia.org/wiki/Widget_toolkit).
 Each user interface created by GTK consists of widgets. This is implemented

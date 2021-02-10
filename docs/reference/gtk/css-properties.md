@@ -1,4 +1,5 @@
-# GTK CSS Properties
+Title: GTK CSS Properties
+Slug: css-properties
 
 GTK supports CSS properties and shorthands as far as they can be applied
 in the context of widgets, and adds its own properties only when needed.

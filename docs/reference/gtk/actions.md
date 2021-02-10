@@ -1,4 +1,5 @@
-# Overview of actions in GTK {#actions-overview}
+Title: Overview of actions in GTK
+Slug: actions
 
 This chapter describes in detail how GTK uses actions to connect
 activatable UI elements to callbacks. GTK inherits the underlying

@@ -1,4 +1,5 @@
-# Contact information and bug reports {#gtk-resources}
+Title: Contact information and bug reports
+Slug: gtk-resources
 
 ## Opening a bug or feature request
 

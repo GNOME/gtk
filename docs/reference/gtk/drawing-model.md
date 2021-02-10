@@ -1,4 +1,5 @@
-# Overview of the drawing model {#drawing-overview}
+Title: Overview of the drawing model
+Slug: drawing-overview
 
 This chapter describes the GTK drawing model in detail.  If you
 are interested in the procedure which GTK follows to draw its

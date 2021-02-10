@@ -1,4 +1,5 @@
-# Using GTK on Apple macOS {#gtk-osx}
+Title: Using GTK on Apple macOS
+Slug: gtk-osx
 
 The Apple macOS port of GTK is an implementation of GDK (and therefore GTK)
 on top of the Quartz API.
