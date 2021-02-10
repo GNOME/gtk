@@ -89,7 +89,7 @@ about_activated (GSimpleAction *action,
                          "website", "http://www.gtk.org",
                          "comments", "Program to browse themed icons",
                          "authors", authors,
-                         "logo-icon-name", "org.gtk.Demo4",
+                         "logo-icon-name", "org.gtk.IconBrowser4",
                          "title", "About GTK Icon Browser",
                          "system-information", s->str,
                          NULL);
