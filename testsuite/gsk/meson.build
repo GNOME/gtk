@@ -75,6 +75,7 @@ compare_render_tests = [
   'clip-in-rounded-clip1',
   'clip-in-rounded-clip2',
   'clip-in-rounded-clip3',
+  'rounded-clip-in-clip-3d', # not really 3d, but cairo fails it
   'issue-3615'
 ]
 

@@ -1741,7 +1741,6 @@ render_rounded_clip_node (GskGLRenderer       *self,
           return;
         }
 
-      /* TODO: Intersect current and new clip */
       ops_push_clip (builder, &transformed_clip);
       gsk_gl_renderer_add_render_ops (self, child, builder);
       ops_pop_clip (builder);
@@ -1750,19 +1749,13 @@ render_rounded_clip_node (GskGLRenderer       *self,
     {
       gboolean is_offscreen;
       TextureRegion region;
-      /* NOTE: We are *not* transforming the clip by the current modelview here.
-       *       We instead draw the untransformed clip to a texture and then transform
-       *       that texture.
-       *
-       *       We do, however, apply the scale factor to the child clip of course.
-       */
+
       ops_push_clip (builder, &transformed_clip);
       if (!add_offscreen_ops (self, builder, &node->bounds,
                               child,
                               &region, &is_offscreen,
-                              0))
+                              FORCE_OFFSCREEN))
         g_assert_not_reached ();
-
       ops_pop_clip (builder);
 
       ops_set_program (builder, &self->programs->blit_program);
