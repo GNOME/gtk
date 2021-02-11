@@ -28,6 +28,15 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GskTransformClass GskTransformClass;
+
+struct _GskTransform
+{
+  const GskTransformClass *transform_class;
+
+  GskTransformCategory category;
+  GskTransform *next;
+};
 
 gboolean                gsk_transform_parser_parse              (GtkCssParser           *parser,
                                                                  GskTransform          **out_transform);
@@ -44,6 +53,8 @@ void gsk_matrix_transform_bounds  (const graphene_matrix_t  *m,
 void gsk_matrix_transform_rect    (const graphene_matrix_t  *m,
                                    const graphene_rect_t    *r,
                                    graphene_quad_t          *res);
+
+#define gsk_transform_get_category(t) ((t) ? (t)->category : GSK_TRANSFORM_CATEGORY_IDENTITY)
 
 G_END_DECLS
 

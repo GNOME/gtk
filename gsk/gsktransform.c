@@ -37,16 +37,6 @@
 
 #include "gsktransformprivate.h"
 
-typedef struct _GskTransformClass GskTransformClass;
-
-struct _GskTransform
-{
-  const GskTransformClass *transform_class;
-
-  GskTransformCategory category;
-  GskTransform *next;
-};
-
 struct _GskTransformClass
 {
   gsize struct_size;
@@ -1747,7 +1737,7 @@ gsk_transform_equal (GskTransform *first,
  * Returns: The category of the transform
  **/
 GskTransformCategory
-gsk_transform_get_category (GskTransform *self)
+(gsk_transform_get_category) (GskTransform *self)
 {
   if (self == NULL)
     return GSK_TRANSFORM_CATEGORY_IDENTITY;
