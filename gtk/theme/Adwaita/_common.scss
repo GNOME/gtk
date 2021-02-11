@@ -4574,12 +4574,18 @@ decoration {
   }
 
   .maximized &,
-  .fullscreen &,
+  .fullscreen & { border-radius: 0; box-shadow: none; }
+
   .tiled &,
   .tiled-top &,
   .tiled-right &,
   .tiled-bottom &,
-  .tiled-left & { border-radius: 0; box-shadow: none; }
+  .tiled-left & {
+    border-radius: 0;
+    box-shadow: 0 0 0 1px $_wm_border_backdrop;
+
+    &:backdrop { box-shadow: 0 0 0 1px $_wm_border_backdrop; }
+   }
 
   .popup & { box-shadow: none; }
 
