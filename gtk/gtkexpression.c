@@ -22,6 +22,9 @@
 
 #include "gtkexpression.h"
 
+/* XXX: For g_memdup2() */
+#include "gtkprivate.h"
+
 #include <gobject/gvaluecollector.h>
 
 /**
@@ -685,7 +688,7 @@ gtk_expression_type_register_static (const char                  *type_name,
   info.base_finalize = NULL;
   info.class_init = gtk_expression_generic_class_init;
   info.class_finalize = NULL;
-  info.class_data = g_memdup (type_info, sizeof (GtkExpressionTypeInfo));
+  info.class_data = g_memdup2 (type_info, sizeof (GtkExpressionTypeInfo));
 
   info.instance_size = type_info->instance_size;
   info.n_preallocs = 0;

@@ -20,6 +20,7 @@
 #include "gtktreednd.h"
 #include "gtkintl.h"
 
+#include "gtkprivate.h"
 
 /**
  * SECTION:gtktreednd
@@ -245,7 +246,7 @@ struct _GtkTreeRowData
 static GtkTreeRowData *
 gtk_tree_row_data_copy (GtkTreeRowData *src)
 {
-  return g_memdup (src, sizeof (GtkTreeRowData) + strlen (src->path) + 1 -
+  return g_memdup2 (src, sizeof (GtkTreeRowData) + strlen (src->path) + 1 -
     (sizeof (GtkTreeRowData) - G_STRUCT_OFFSET (GtkTreeRowData, path)));
 }
 

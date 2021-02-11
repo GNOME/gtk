@@ -2831,7 +2831,7 @@ _gtk_range_get_stop_positions (GtkRange  *range,
   gtk_range_calc_marks (range);
 
   if (values)
-    *values = g_memdup (priv->mark_pos, priv->n_marks * sizeof (int));
+    *values = g_memdup2 (priv->mark_pos, priv->n_marks * sizeof (int));
 
   return priv->n_marks;
 }

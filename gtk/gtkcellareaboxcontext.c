@@ -25,6 +25,9 @@
 #include "gtkcellareaboxcontextprivate.h"
 #include "gtkorientable.h"
 
+/* XXX: For g_memdup2() */
+#include "gtkprivate.h"
+
 /* GObjectClass */
 static void      _gtk_cell_area_box_context_finalize              (GObject               *object);
 
@@ -407,6 +410,7 @@ _gtk_cell_area_box_init_groups (GtkCellAreaBoxContext *box_context,
                                 gboolean              *align_groups)
 {
   GtkCellAreaBoxContextPrivate *priv;
+  gsize groups_size;
 
   g_return_if_fail (GTK_IS_CELL_AREA_BOX_CONTEXT (box_context));
   g_return_if_fail (n_groups == 0 || expand_groups != NULL);
@@ -420,11 +424,13 @@ _gtk_cell_area_box_init_groups (GtkCellAreaBoxContext *box_context,
   g_array_set_size (priv->base_widths,  n_groups);
   g_array_set_size (priv->base_heights, n_groups);
 
+  groups_size = n_groups * sizeof (gboolean);
+
   g_free (priv->expand);
-  priv->expand = g_memdup (expand_groups, n_groups * sizeof (gboolean));
+  priv->expand = g_memdup2 (expand_groups, groups_size);
 
   g_free (priv->align);
-  priv->align = g_memdup (align_groups, n_groups * sizeof (gboolean));
+  priv->align = g_memdup2 (align_groups, groups_size);
 }
 
 void

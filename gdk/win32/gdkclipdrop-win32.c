@@ -284,6 +284,7 @@ Otherwise it's similar to how the clipboard works. Only the DnD server
 #include "gdkwin32dnd-private.h"
 #include "gdkwin32.h"
 #include "gdkintl.h"
+#include "gdk-private.h"
 
 #define HIDA_GetPIDLFolder(pida) (LPCITEMIDLIST)(((LPBYTE)pida)+(pida)->aoffset[0])
 #define HIDA_GetPIDLItem(pida, i) (LPCITEMIDLIST)(((LPBYTE)pida)+(pida)->aoffset[i+1])
@@ -2073,7 +2074,7 @@ _gdk_win32_add_w32format_to_pairs (UINT                      w32format,
 
 static void
 transmute_cf_unicodetext_to_utf8_string (const guchar    *data,
-                                         int              length,
+                                         gsize            length,
                                          guchar         **set_data,
                                          gsize           *set_data_length,
                                          GDestroyNotify  *set_data_destroy)
@@ -2113,7 +2114,7 @@ transmute_cf_unicodetext_to_utf8_string (const guchar    *data,
 
 static void
 transmute_utf8_string_to_cf_unicodetext (const guchar    *data,
-                                         int              length,
+                                         gsize            length,
                                          guchar         **set_data,
                                          gsize           *set_data_length,
                                          GDestroyNotify  *set_data_destroy)
@@ -2188,7 +2189,7 @@ wchar_to_str (const wchar_t  *wstr,
 
 static void
 transmute_utf8_string_to_cf_text (const guchar    *data,
-                                  int              length,
+                                  gsize            length,
                                   guchar         **set_data,
                                   gsize           *set_data_length,
                                   GDestroyNotify  *set_data_destroy)
@@ -2274,7 +2275,7 @@ str_to_wchar (const char  *str,
 
 static void
 transmute_cf_text_to_utf8_string (const guchar    *data,
-                                  int              length,
+                                  gsize            length,
                                   guchar         **set_data,
                                   gsize           *set_data_length,
                                   GDestroyNotify  *set_data_destroy)
@@ -2320,7 +2321,7 @@ transmute_cf_text_to_utf8_string (const guchar    *data,
 
 static void
 transmute_cf_dib_to_image_bmp (const guchar    *data,
-                               int              length,
+                               gsize            length,
                                guchar         **set_data,
                                gsize           *set_data_length,
                                GDestroyNotify  *set_data_destroy)
@@ -2354,8 +2355,8 @@ transmute_cf_dib_to_image_bmp (const guchar    *data,
   BITMAPINFOHEADER *bi = (BITMAPINFOHEADER *) data;
   BITMAPFILEHEADER *bf;
   gpointer result;
-  int data_length = length;
-  int new_length;
+  gsize data_length = length;
+  gsize new_length;
   gboolean make_dibv5 = FALSE;
   BITMAPV5HEADER *bV5;
   guchar *p;
@@ -2473,11 +2474,11 @@ transmute_cf_dib_to_image_bmp (const guchar    *data,
   memcpy (p, ((char *) bi) + bi->biSize,
           data_length - sizeof (BITMAPINFOHEADER));
 
-  for (i = 0; i < bV5->bV5SizeImage/4; i++)
+  for (i = 0; i < bV5->bV5SizeImage / 4; i++)
     {
       if (p[3] != 0)
         {
-          double inverse_alpha = 255./p[3];
+          double inverse_alpha = 255. / p[3];
 
           p[0] = p[0] * inverse_alpha + 0.5;
           p[1] = p[1] * inverse_alpha + 0.5;
@@ -2490,7 +2491,7 @@ transmute_cf_dib_to_image_bmp (const guchar    *data,
 
 static void
 transmute_cf_shell_id_list_to_text_uri_list (const guchar    *data,
-                                             int              length,
+                                             gsize            length,
                                              guchar         **set_data,
                                              gsize           *set_data_length,
                                              GDestroyNotify  *set_data_destroy)
@@ -2540,12 +2541,12 @@ transmute_cf_shell_id_list_to_text_uri_list (const guchar    *data,
 
 void
 transmute_image_bmp_to_cf_dib (const guchar    *data,
-                               int              length,
+                               gsize            length,
                                guchar         **set_data,
                                gsize           *set_data_length,
                                GDestroyNotify  *set_data_destroy)
 {
-  int size;
+  gsize size;
   guchar *ptr;
 
   g_return_if_fail (length >= sizeof (BITMAPFILEHEADER));
@@ -2572,7 +2573,9 @@ _gdk_win32_transmute_windows_data (UINT          from_w32format,
                                    gsize        *set_data_length)
 {
   const guchar *data;
-  SIZE_T        length;
+  SIZE_T hdata_length;
+  gsize length;
+  gboolean res = FALSE;
 
   /* FIXME: error reporting */
 
@@ -2581,7 +2584,11 @@ _gdk_win32_transmute_windows_data (UINT          from_w32format,
       return FALSE;
     }
 
-  length = GlobalSize (hdata);
+  hdata_length = GlobalSize (hdata);
+  if (hdata_length > G_MAXSIZE)
+    goto out;
+
+  length = (gsize) hdata_length;
 
   if ((to_contentformat == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_IMAGE_PNG) &&
        from_w32format == _gdk_win32_clipdrop_cf (GDK_WIN32_CF_INDEX_PNG)) ||
@@ -2591,46 +2598,51 @@ _gdk_win32_transmute_windows_data (UINT          from_w32format,
        from_w32format == _gdk_win32_clipdrop_cf (GDK_WIN32_CF_INDEX_GIF)))
     {
       /* No transmutation needed */
-      *set_data = g_memdup (data, length);
+      *set_data = g_memdup2 (data, length);
       *set_data_length = length;
     }
   else if (to_contentformat == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_TEXT_PLAIN_UTF8) &&
            from_w32format == CF_UNICODETEXT)
     {
       transmute_cf_unicodetext_to_utf8_string (data, length, set_data, set_data_length, NULL);
+      res = TRUE;
     }
   else if (to_contentformat == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_TEXT_PLAIN_UTF8) &&
            from_w32format == CF_TEXT)
     {
       transmute_cf_text_to_utf8_string (data, length, set_data, set_data_length, NULL);
+      res = TRUE;
     }
   else if (to_contentformat == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_IMAGE_BMP) &&
            (from_w32format == CF_DIB || from_w32format == CF_DIBV5))
     {
       transmute_cf_dib_to_image_bmp (data, length, set_data, set_data_length, NULL);
+      res = TRUE;
     }
   else if (to_contentformat == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_TEXT_URI_LIST) &&
            from_w32format == _gdk_win32_clipdrop_cf (GDK_WIN32_CF_INDEX_CFSTR_SHELLIDLIST))
     {
       transmute_cf_shell_id_list_to_text_uri_list (data, length, set_data, set_data_length, NULL);
+      res = TRUE;
     }
   else
     {
       g_warning ("Don't know how to transmute W32 format 0x%x to content format 0x%p (%s)",
                  from_w32format, to_contentformat, to_contentformat);
-      return FALSE;
+      goto out;
     }
 
+out:
   GlobalUnlock (hdata);
 
-  return TRUE;
+  return res;
 }
 
 gboolean
 _gdk_win32_transmute_contentformat (const char    *from_contentformat,
                                     UINT           to_w32format,
                                     const guchar  *data,
-                                    int            length,
+                                    gsize          length,
                                     guchar       **set_data,
                                     gsize         *set_data_length)
 {
@@ -2642,7 +2654,7 @@ _gdk_win32_transmute_contentformat (const char    *from_contentformat,
        to_w32format == _gdk_win32_clipdrop_cf (GDK_WIN32_CF_INDEX_GIF)))
     {
       /* No conversion needed */
-      *set_data = g_memdup (data, length);
+      *set_data = g_memdup2 (data, length);
       *set_data_length = length;
     }
   else if (from_contentformat == _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_TEXT_PLAIN_UTF8) &&
