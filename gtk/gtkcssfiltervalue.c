@@ -991,10 +991,13 @@ gtk_css_filter_value_pop_snapshot (const GtkCssValue *filter,
       if (i < j)
         gtk_snapshot_pop (snapshot);
 
-      if (filter->filters[j].type == GTK_CSS_FILTER_BLUR)
-        gtk_snapshot_pop (snapshot);
-      else if (filter->filters[j].type == GTK_CSS_FILTER_DROP_SHADOW)
-        gtk_css_shadow_value_pop_snapshot (filter->filters[j].drop_shadow.value, snapshot);
+      if (j < filter->n_filters)
+        {
+          if (filter->filters[j].type == GTK_CSS_FILTER_BLUR)
+            gtk_snapshot_pop (snapshot);
+          else if (filter->filters[j].type == GTK_CSS_FILTER_DROP_SHADOW)
+            gtk_css_shadow_value_pop_snapshot (filter->filters[j].drop_shadow.value, snapshot);
+        }
 
       i = j + 1;
     }
