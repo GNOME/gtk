@@ -1586,7 +1586,7 @@ void
 gtk_snapshot_gl_shader_pop_texture (GtkSnapshot *snapshot)
 {
   GtkSnapshotState *state = gtk_snapshot_get_current_state (snapshot);
-  GskRenderNode *node;
+  G_GNUC_UNUSED GskRenderNode *node;
 
   if (state->collect_func != gtk_snapshot_collect_gl_shader_texture)
     {
