@@ -146,7 +146,9 @@ msys2-mingw64:
     MSYSTEM: "MINGW64"
     CHERE_INVOKING: "yes"
 
-macos:
+# FIXME: Temporarily disabled while the macOS runner is offline
+# See https://gitlab.gnome.org/Infrastructure/GitLab/-/issues/495
+.macos:
   extends: .only-default
   only:
     - branches@GNOME/gtk
