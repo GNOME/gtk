@@ -198,7 +198,7 @@ check_functions = [
   '_lock_file',
   'flockfile',
   'mkstemp',
-  'mallinfo',
+  'mallinfo2',
   'sincos',
   'sincosf',
 ]
