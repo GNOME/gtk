@@ -167,6 +167,8 @@ foreach flag: common_cflags
   endif
 endforeach
 
+gtkdemo_deps += [ demo_conf_h ]
+
 executable('gtk4-demo',
   sources: [demos, demos_h, extra_demo_sources, gtkdemo_resources],
   c_args: gtkdemo_args + demo_cflags,

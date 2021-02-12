@@ -111,6 +111,12 @@ option('demos',
        value: 'true',
        description : 'Build demo programs')
 
+option('profile',
+       type: 'combo',
+       choices: [ 'default', 'devel' ],
+       value: 'default',
+       description : 'Profile to use for demos')
+
 option('build-examples',
        type: 'boolean',
        value: 'true',

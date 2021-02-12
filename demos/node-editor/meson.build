@@ -12,7 +12,7 @@ node_editor_resources = gnome.compile_resources('node_editor_resources',
 
 executable('gtk4-node-editor',
   sources: [node_editor_sources, node_editor_resources],
-  dependencies: libgtk_dep,
+  dependencies: [ libgtk_dep, demo_conf_h ],
   include_directories: confinc,
   c_args: [
     '-DNODE_EDITOR_SOURCE_DIR="@0@/../../testsuite/gsk/compare/"'.format(meson.current_source_dir())
