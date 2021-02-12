@@ -1,3 +1,47 @@
+Overview of Changes in GTK+ 3.24.25
+===================================
+
+* Settings:
+ - Make cursor aspect ratio setting work
+
+* Broadway:
+ - Fix touchscreen event handling
+ - Support Android / Chrome on-screen keyboard
+
+* Windows:
+ - Fix issues with Intel graphics drivers
+ - Avoid UAC for gtk-update-icon-cache
+
+* Wayland:
+ - Avoid crashes with tablet input
+ - Add api to support clients with subsurfaces better
+
+* Inspector:
+ - Make the inspector available in non-debug builds
+
+* Theme:
+ - Make scrollbars larger
+ - Disable shadows on maximized, fullscreen and tiled windows
+
+* Printing:
+ - Support Avahi-discovered printers better
+
+* Input:
+ - Show preedit for compose sequences
+ - Support long compose sequences
+ - Support compose sequences producing multiple characters
+
+* Translation updates
+ Belarusian
+ British English
+ Catalan
+ Friulian
+ Galician
+ Japanese
+ Persian
+ Serbian
+
+
 Overview of Changes in GTK+ 3.24.24
 ===================================
 
