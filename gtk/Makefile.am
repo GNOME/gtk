@@ -510,7 +510,6 @@ gtk_private_h_sources =		\
 	gtkiconviewprivate.h	\
 	gtkimagedefinitionprivate.h	\
 	gtkimageprivate.h	\
-	gtkimcontextsimpleprivate.h	\
 	gtkimmoduleprivate.h	\
 	gtkimcontextsimpleseqs.h \
 	gtkintl.h		\
