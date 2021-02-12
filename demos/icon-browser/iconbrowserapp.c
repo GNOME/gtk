@@ -4,6 +4,8 @@
 #include "iconbrowserapp.h"
 #include "iconbrowserwin.h"
 
+#include "demo_conf.h"
+
 struct _IconBrowserApp
 {
   GtkApplication parent;
@@ -75,16 +77,20 @@ about_activated (GSimpleAction *action,
                           gtk_get_minor_version (),
                           gtk_get_micro_version ());
   g_string_append_printf (s, "\nIcon theme\n\t%s", icon_theme);
-  version = g_strdup_printf ("%s\nRunning against GTK %d.%d.%d",
+  version = g_strdup_printf ("%s%s%s\nRunning against GTK %d.%d.%d",
                              PACKAGE_VERSION,
+                             g_strcmp0 (PROFILE, "devel") == 0 ? "-" : "",
+                             g_strcmp0 (PROFILE, "devel") == 0 ? VCS_TAG : "",
                              gtk_get_major_version (),
                              gtk_get_minor_version (),
                              gtk_get_micro_version ());
 
   gtk_show_about_dialog (GTK_WINDOW (gtk_application_get_active_window (app)),
-                         "program-name", "GTK Icon Browser",
+                         "program-name", g_strcmp0 (PROFILE, "devel") == 0
+                                         ? "GTK Icon Browser (Development)"
+                                         : "GTK Icon Browser",
                          "version", version,
-                         "copyright", "© 1997—2020 The GTK Team",
+                         "copyright", "© 1997—2021 The GTK Team",
                          "license-type", GTK_LICENSE_LGPL_2_1,
                          "website", "http://www.gtk.org",
                          "comments", "Program to browse themed icons",
@@ -129,6 +135,10 @@ icon_browser_app_activate (GApplication *app)
   IconBrowserWindow *win;
 
   win = icon_browser_window_new (ICON_BROWSER_APP (app));
+
+  if (g_strcmp0 (PROFILE, "devel") == 0)
+    gtk_widget_add_css_class (GTK_WIDGET (win), "devel");
+
   gtk_window_present (GTK_WINDOW (win));
 }
 

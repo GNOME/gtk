@@ -4,6 +4,8 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
+#include "demo_conf.h"
+
 static GtkWidget *main_window;
 static GFile *filename = NULL;
 static GtkPageSetup *page_setup = NULL;
@@ -641,17 +643,21 @@ activate_about (GSimpleAction *action,
   g_strfreev (backends);
   g_free (setting);
 
-  version = g_strdup_printf ("%s\nRunning against GTK %d.%d.%d",
+  version = g_strdup_printf ("%s%s%s\nRunning against GTK %d.%d.%d",
                              PACKAGE_VERSION,
+                             g_strcmp0 (PROFILE, "devel") == 0 ? "-" : "",
+                             g_strcmp0 (PROFILE, "devel") == 0 ? VCS_TAG : "",
                              gtk_get_major_version (),
                              gtk_get_minor_version (),
                              gtk_get_micro_version ());
 
   dialog = g_object_new (GTK_TYPE_ABOUT_DIALOG,
                          "transient-for", main_window,
-                         "program-name", "GTK Print Editor",
+                         "program-name", g_strcmp0 (PROFILE, "devel") == 0
+                                         ? "GTK Print Editor (Development)"
+                                         : "GTK Print Editor",
                          "version", version,
-                         "copyright", "© 2006-2020 Red Hat, Inc",
+                         "copyright", "© 2006-2021 Red Hat, Inc",
                          "license-type", GTK_LICENSE_LGPL_2_1,
                          "website", "http://www.gtk.org",
                          "comments", "Program to demonstrate GTK printing",
@@ -807,6 +813,10 @@ activate (GApplication *app)
   GtkWidget *contents;
 
   main_window = gtk_application_window_new (GTK_APPLICATION (app));
+
+  if (g_strcmp0 (PROFILE, "devel") == 0)
+    gtk_widget_add_css_class (GTK_WIDGET (main_window), "devel");
+
   gtk_window_set_icon_name (GTK_WINDOW (main_window), "text-editor");
   gtk_window_set_default_size (GTK_WINDOW (main_window), 400, 600);
   gtk_application_window_set_show_menubar (GTK_APPLICATION_WINDOW (main_window), TRUE);

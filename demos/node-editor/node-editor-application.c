@@ -23,6 +23,8 @@
 
 #include "node-editor-window.h"
 
+#include "demo_conf.h"
+
 static const char *css =
 "textview.editor {"
 "  color: rgb(192, 197, 206);"
@@ -94,17 +96,21 @@ activate_about (GSimpleAction *action,
 
   g_string_append_printf (s, "\nRenderer\n\t%s", renderer);
 
-  version = g_strdup_printf ("%s\nRunning against GTK %d.%d.%d",
+  version = g_strdup_printf ("%s%s%s\nRunning against GTK %d.%d.%d",
                              PACKAGE_VERSION,
+                             g_strcmp0 (PROFILE, "devel") == 0 ? "-" : "",
+                             g_strcmp0 (PROFILE, "devel") == 0 ? VCS_TAG : "",
                              gtk_get_major_version (),
                              gtk_get_minor_version (),
                              gtk_get_micro_version ());
 
   dialog = g_object_new (GTK_TYPE_ABOUT_DIALOG,
                          "transient-for", gtk_application_get_active_window (app),
-                         "program-name", "GTK Node Editor",
+                         "program-name", g_strcmp0 (PROFILE, "devel") == 0
+                                         ? "GTK Node Editor (Development)"
+                                         : "GTK Node Editor",
                          "version", version,
-                         "copyright", "© 2019—2020 The GTK Team",
+                         "copyright", "© 2019—2021 The GTK Team",
                          "license-type", GTK_LICENSE_LGPL_2_1,
                          "website", "http://www.gtk.org",
                          "comments", "Program to test GTK rendering",
@@ -207,6 +213,10 @@ node_editor_application_activate (GApplication *app)
   NodeEditorWindow *win;
 
   win = node_editor_window_new (NODE_EDITOR_APPLICATION (app));
+
+  if (g_strcmp0 (PROFILE, "devel") == 0)
+    gtk_widget_add_css_class (GTK_WIDGET (win), "devel");
+
   gtk_window_present (GTK_WINDOW (win));
 }
 

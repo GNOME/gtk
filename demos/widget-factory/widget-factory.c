@@ -25,6 +25,8 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
+#include "demo_conf.h"
+
 static void
 change_dark_state (GSimpleAction *action,
                     GVariant      *state,
@@ -300,8 +302,10 @@ activate_about (GSimpleAction *action,
                           gtk_get_micro_version ());
   g_string_append_printf (s, "\nA link can appear here: <http://www.gtk.org>");
 
-  version = g_strdup_printf ("%s\nRunning against GTK %d.%d.%d",
+  version = g_strdup_printf ("%s%s%s\nRunning against GTK %d.%d.%d",
                              PACKAGE_VERSION,
+                             g_strcmp0 (PROFILE, "devel") == 0 ? "-" : "",
+                             g_strcmp0 (PROFILE, "devel") == 0 ? VCS_TAG : "",
                              gtk_get_major_version (),
                              gtk_get_minor_version (),
                              gtk_get_micro_version ());
@@ -309,9 +313,11 @@ activate_about (GSimpleAction *action,
   dialog = g_object_new (GTK_TYPE_ABOUT_DIALOG,
                          "transient-for", gtk_application_get_active_window (app),
                          "modal", TRUE,
-                         "program-name", "GTK Widget Factory",
+                         "program-name", g_strcmp0 (PROFILE, "devel") == 0
+                                         ? "GTK Widget Factory (Development)"
+                                         : "GTK Widget Factory",
                          "version", version,
-                         "copyright", "© 1997—2020 The GTK Team",
+                         "copyright", "© 1997—2021 The GTK Team",
                          "license-type", GTK_LICENSE_LGPL_2_1,
                          "website", "http://www.gtk.org",
                          "comments", "Program to demonstrate GTK themes and widgets",
@@ -2065,6 +2071,10 @@ activate (GApplication *app)
     }
 
   window = (GtkWindow *)gtk_builder_get_object (builder, "window");
+
+  if (g_strcmp0 (PROFILE, "devel") == 0)
+    gtk_widget_add_css_class (GTK_WIDGET (window), "devel");
+
   gtk_application_add_window (GTK_APPLICATION (app), window);
   g_action_map_add_action_entries (G_ACTION_MAP (window),
                                    win_entries, G_N_ELEMENTS (win_entries),

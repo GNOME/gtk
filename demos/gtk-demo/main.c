@@ -25,6 +25,8 @@
 #include "demos.h"
 #include "fontify.h"
 
+#include "demo_conf.h"
+
 static GtkWidget *info_view;
 static GtkWidget *source_view;
 
@@ -196,16 +198,20 @@ activate_about (GSimpleAction *action,
                           gtk_get_micro_version ());
   g_string_append_printf (s, "\nA link can appear here: <http://www.gtk.org>");
 
-  version = g_strdup_printf ("%s\nRunning against GTK %d.%d.%d",
+  version = g_strdup_printf ("%s%s%s\nRunning against GTK %d.%d.%d",
                              PACKAGE_VERSION,
+                             g_strcmp0 (PROFILE, "devel") == 0 ? "-" : "",
+                             g_strcmp0 (PROFILE, "devel") == 0 ? VCS_TAG : "",
                              gtk_get_major_version (),
                              gtk_get_minor_version (),
                              gtk_get_micro_version ());
 
   gtk_show_about_dialog (GTK_WINDOW (gtk_application_get_active_window (app)),
-                         "program-name", "GTK Demo",
+                         "program-name", g_strcmp0 (PROFILE, "devel") == 0
+                                         ? "GTK Demo (Development)"
+                                         : "GTK Demo",
                          "version", version,
-                         "copyright", "© 1997—2020 The GTK Team",
+                         "copyright", "© 1997—2021 The GTK Team",
                          "license-type", GTK_LICENSE_LGPL_2_1,
                          "website", "http://www.gtk.org",
                          "comments", "Program to demonstrate GTK widgets",
@@ -900,6 +906,9 @@ activate (GApplication *app)
 
   window = (GtkWidget *)gtk_builder_get_object (builder, "window");
   gtk_application_add_window (GTK_APPLICATION (app), GTK_WINDOW (window));
+
+  if (g_strcmp0 (PROFILE, "devel") == 0)
+    gtk_widget_add_css_class (window, "devel");
 
   action = g_simple_action_new ("run", NULL);
   g_signal_connect (action, "activate", G_CALLBACK (activate_run), window);

@@ -64,43 +64,15 @@
             ]
         },
         {
-            "name" : "libsass",
-            "buildsystem" : "meson",
-            "builddir" : true,
-            "config-opts" : [
-                "--libdir=/app/lib"
-            ],
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://github.com/lazka/libsass.git",
-                    "branch" : "meson"
-                }
-            ]
-        },
-        {
-            "name" : "sassc",
-            "buildsystem" : "meson",
-            "builddir" : true,
-            "config-opts" : [
-                "--libdir=/app/lib"
-            ],
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://github.com/lazka/sassc.git",
-                    "branch" : "meson"
-                }
-            ]
-        },
-        {
             "name" : "gtk",
             "buildsystem" : "meson",
             "builddir" : true,
             "config-opts" : [
                 "--libdir=/app/lib",
                 "-Denable_vulkan=no",
-                "-Dbuildtype=debugoptimized"
+                "-Dsassc=disabled",
+                "-Dbuildtype=debugoptimized",
+                "-Dprofile=devel"
             ],
             "sources" : [
                 {
