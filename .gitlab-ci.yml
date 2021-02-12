@@ -146,9 +146,7 @@ msys2-mingw64:
     MSYSTEM: "MINGW64"
     CHERE_INVOKING: "yes"
 
-# FIXME: Temporarily disabled while the macOS runner is offline
-# See https://gitlab.gnome.org/Infrastructure/GitLab/-/issues/495
-.macos:
+macos:
   extends: .only-default
   only:
     - branches@GNOME/gtk
@@ -161,6 +159,7 @@ msys2-mingw64:
     - pip3 install --user meson==0.56
     - pip3 install --user ninja
     - export PATH=/Users/gitlabrunner/Library/Python/3.7/bin:$PATH
+    - export MESON_FORCE_BACKTRACE=1
   script:
     - meson -Dx11-backend=false
             -Dintrospection=disabled
