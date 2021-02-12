@@ -24,7 +24,7 @@ variables:
   BACKEND_FLAGS: "-Dx11-backend=true -Dwayland-backend=true -Dbroadway-backend=true"
   FEATURE_FLAGS: "-Dvulkan=enabled -Dcloudproviders=enabled"
   MESON_TEST_TIMEOUT_MULTIPLIER: 3
-  FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v27"
+  FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v28"
   FLATPAK_IMAGE: "registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master"
   DOCS_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora-docs:v25"
 

@@ -1,4 +1,4 @@
-FROM fedora:31
+FROM fedora:33
 
 RUN dnf -y install \
     adwaita-icon-theme \
@@ -66,7 +66,7 @@ RUN dnf -y install \
     mesa-dri-drivers \
     mesa-libEGL-devel \
     mesa-libGLES-devel \
-    mesa-libwayland-egl-devel \
+    meson \
     ninja-build \
     pango-devel \
     pcre-devel \
@@ -87,6 +87,3 @@ RUN dnf -y install \
     which \
     xorg-x11-server-Xvfb \
  && dnf clean all
-
-RUN pip3 install meson==0.55.3
-
