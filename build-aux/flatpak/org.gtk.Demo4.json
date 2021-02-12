@@ -70,7 +70,8 @@
             "config-opts" : [
                 "--libdir=/app/lib",
                 "-Denable_vulkan=no",
-                "-Dbuildtype=debugoptimized"
+                "-Dbuildtype=debugoptimized",
+                "-Dprofile=devel"
             ],
             "sources" : [
                 {
