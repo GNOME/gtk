@@ -87,6 +87,14 @@ void gdk_wayland_window_announce_csd                        (GdkWindow *window);
 GDK_AVAILABLE_IN_3_24
 void gdk_wayland_window_announce_ssd                        (GdkWindow *window);
 
+GDK_AVAILABLE_IN_3_24
+void gdk_wayland_window_add_frame_callback_surface (GdkWindow         *window,
+                                                    struct wl_surface *surface);
+
+GDK_AVAILABLE_IN_3_24
+void gdk_wayland_window_remove_frame_callback_surface (GdkWindow         *window,
+                                                       struct wl_surface *surface);
+
 G_END_DECLS
 
 #endif /* __GDK_WAYLAND_WINDOW_H__ */
