@@ -35,6 +35,13 @@
 #include <gst/gl/wayland/gstgldisplay_wayland.h>
 #endif
 
+#if GST_GL_HAVE_WINDOW_WIN32 && GST_GL_HAVE_PLATFORM_WGL && defined (GDK_WINDOWING_WIN32)
+#include <gdk/win32/gdkwin32.h>
+#include <GL/gl.h>
+
+extern HGLRC _gdk_win32_gl_context_get_hglrc (GdkGLContext *context);
+#endif
+
 #include <gst/gl/gstglfuncs.h>
 
 enum {
@@ -341,27 +348,85 @@ gtk_gst_sink_show_frame (GstVideoSink *vsink,
   return GST_FLOW_OK;
 }
 
+static guintptr
+gtk_gst_sink_gl_context_make_current (GdkGLContext  *context,
+                                      GstGLPlatform  platform)
+{
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+
+#if !GST_GL_HAVE_WINDOW_WIN32 || !GST_GL_HAVE_PLATFORM_WGL || !defined (GDK_WINDOWING_WIN32)
+  gdk_gl_context_make_current (context);
+  return gst_gl_context_get_current_gl_context (platform);
+#else
+  if (platform == GST_GL_PLATFORM_WGL)
+    {
+      HGLRC hglrc = _gdk_win32_gl_context_get_hglrc (context);
+      HWND hwnd = GDK_SURFACE_HWND (gdk_gl_context_get_surface (context));
+
+      wglMakeCurrent (GetDC (hwnd), hglrc);
+
+      return (guintptr)hglrc;
+    }
+  else
+    {
+      g_message ("EGL support not implemented for Windows yet");
+      return 0;
+    }
+#endif
+}
+
+#if GST_GL_HAVE_WINDOW_WIN32 && GST_GL_HAVE_PLATFORM_WGL && defined (GDK_WINDOWING_WIN32)
+static void
+gtk_gst_gl_sink_win32_deactivate_gl_context (GdkGLContext *context)
+{
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+
+  if (GDK_IS_WIN32_DISPLAY (display) && !gdk_gl_context_get_use_es (context))
+    {
+      HWND hwnd = GDK_SURFACE_HWND (gdk_gl_context_get_surface (context));
+
+      wglMakeCurrent (GetDC (hwnd), NULL);
+    }
+}
+
+static void
+gtk_gst_gl_sink_win32_reactivate_gl_context (GdkGLContext *context)
+{
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+
+  if (GDK_IS_WIN32_DISPLAY (display) && !gdk_gl_context_get_use_es (context))
+    gtk_gst_sink_gl_context_make_current (context, GST_GL_PLATFORM_WGL);
+}
+
+#define GTK_GST_GL_SINK_DEACTIVATE(c) gtk_gst_gl_sink_win32_deactivate_gl_context (c)
+#define GTK_GST_GL_SINK_REACTIVATE(c) gtk_gst_gl_sink_win32_reactivate_gl_context (c)
+
+#else
+#define GTK_GST_GL_SINK_DEACTIVATE(c)
+#define GTK_GST_GL_SINK_REACTIVATE(c)
+#endif
+
 static void
 gtk_gst_sink_initialize_gl (GtkGstSink *self)
 {
   GdkDisplay *display;
   GError *error = NULL;
+  GstGLPlatform platform = GST_GL_PLATFORM_NONE;
+  GstGLAPI gl_api = GST_GL_API_NONE;
+  guintptr gl_handle = 0;
 
   display = gdk_gl_context_get_display (self->gdk_context);
-
-  gdk_gl_context_make_current (self->gdk_context);
 
 #if GST_GL_HAVE_WINDOW_X11 && GST_GL_HAVE_PLATFORM_GLX && defined (GDK_WINDOWING_X11)
   if (GDK_IS_X11_DISPLAY (display))
     {
-      GstGLPlatform platform = GST_GL_PLATFORM_GLX;
-      GstGLAPI gl_api;
-      guintptr gl_handle;
+      platform = GST_GL_PLATFORM_GLX;
 
       GST_DEBUG_OBJECT (self, "got GLX on X11!");
 
+      gl_handle = gtk_gst_sink_gl_context_make_current (self->gdk_context, platform);
       gl_api = gst_gl_context_get_current_gl_api (platform, NULL, NULL);
-      gl_handle = gst_gl_context_get_current_gl_context (platform);
+
       if (gl_handle)
         {
           self->gst_display = GST_GL_DISPLAY (gst_gl_display_x11_new_with_display (gdk_x11_display_get_xdisplay (display)));
@@ -378,15 +443,12 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
 #if GST_GL_HAVE_WINDOW_WAYLAND && GST_GL_HAVE_PLATFORM_EGL && defined (GDK_WINDOWING_WAYLAND)
   if (GDK_IS_WAYLAND_DISPLAY (display))
     {
-      GstGLPlatform platform = GST_GL_PLATFORM_GLX;
-      GstGLAPI gl_api;
-      guintptr gl_handle;
+      platform = GST_GL_PLATFORM_EGL;
 
       GST_DEBUG_OBJECT (self, "got EGL on Wayland!");
 
-      platform = GST_GL_PLATFORM_EGL;
+      gl_handle = gtk_gst_sink_gl_context_make_current (self->gdk_context, platform);
       gl_api = gst_gl_context_get_current_gl_api (platform, NULL, NULL);
-      gl_handle = gst_gl_context_get_current_gl_context (platform);
 
       if (gl_handle)
         {
@@ -404,6 +466,30 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
     }
   else
 #endif
+#if GST_GL_HAVE_WINDOW_WIN32 && GST_GL_HAVE_PLATFORM_WGL && defined (GDK_WINDOWING_WIN32)
+  if (GDK_IS_WIN32_DISPLAY (display) &&
+      !gdk_gl_context_get_use_es (self->gdk_context))
+    {
+      platform = GST_GL_PLATFORM_WGL;
+
+      GST_DEBUG_OBJECT (self, "got WGL on Win32!");
+
+      gl_handle = gtk_gst_sink_gl_context_make_current (self->gdk_context, platform);
+      gl_api = gst_gl_context_get_current_gl_api (platform, NULL, NULL);
+
+      if (gl_handle)
+        {
+          self->gst_display = gst_gl_display_new ();
+          self->gst_app_context = gst_gl_context_new_wrapped (self->gst_display, gl_handle, platform, gl_api);
+        }
+      else
+        {
+          GST_ERROR_OBJECT (self, "Failed to get handle from GdkGLContext, not using WGL");
+	      return;
+        }
+    }
+  else
+#endif
     {
       GST_INFO_OBJECT (self, "Unsupported GDK display %s for GL", G_OBJECT_TYPE_NAME (display));
       return;
@@ -412,6 +498,7 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
   g_assert (self->gst_app_context != NULL);
 
   gst_gl_context_activate (self->gst_app_context, TRUE);
+
   if (!gst_gl_context_fill_info (self->gst_app_context, &error))
     {
       GST_ERROR_OBJECT (self, "failed to retrieve GDK context info: %s", error->message);
@@ -422,6 +509,7 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
     }
   else
     {
+      GTK_GST_GL_SINK_DEACTIVATE(self->gdk_context);
       gst_gl_context_activate (self->gst_app_context, FALSE);
     }
 
@@ -431,8 +519,11 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
       g_error_free (error);
       g_clear_object (&self->gst_app_context);
       g_clear_object (&self->gst_display);
+      GTK_GST_GL_SINK_REACTIVATE (self->gdk_context);
       return;
     }
+
+  GTK_GST_GL_SINK_REACTIVATE (self->gdk_context);
 }
 
 static void

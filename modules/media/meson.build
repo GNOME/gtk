@@ -47,6 +47,11 @@ gstgl_dep = dependency('gstreamer-gl-1.0', version: '>= 1.12.3',
                        required: get_option('media-gstreamer'))
 
 if gstplayer_dep.found() and gstgl_dep.found()
+  platform_gl_deps = []
+  if os_win32
+    platform_gl_deps = cc.find_library('opengl32')
+  endif
+
   media_backends += 'gstreamer'
   cdata.set('HAVE_GSTREAMER', 1)
   shared_module('media-gstreamer',
@@ -56,7 +61,7 @@ if gstplayer_dep.found() and gstgl_dep.found()
       'gtkgstsink.c',
     ],
     c_args: extra_c_args,
-    dependencies: [ libm, libgtk_dep, gstplayer_dep, gstgl_dep ],
+    dependencies: [ libm, libgtk_dep, gstplayer_dep, gstgl_dep, platform_gl_deps ],
     name_suffix: module_suffix,
     install_dir: media_install_dir,
     install: true,
