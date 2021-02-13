@@ -652,13 +652,26 @@ _create_gl_context (HDC           hdc,
           goto gl_fail;
         }
 
+      /* try to request for a GL 4.1 core profile,
+       * for use with the GL support in the gstreamer media backend,
+       * since some drivers might just request a GL version as is,
+       * without using the max supported version
+       */
       hglrc = _create_gl_context_with_attribs (hdc,
                                                hglrc_base,
                                                share,
                                                flags,
-                                               major,
-                                               minor,
+                                               4,
+                                               1,
                                                is_legacy);
+      if (hglrc == NULL)
+        hglrc = _create_gl_context_with_attribs (hdc,
+                                                 hglrc_base,
+                                                 share,
+                                                 flags,
+                                                 major,
+                                                 minor,
+                                                 is_legacy);
 
       /* return the legacy context we have if it could be setup properly, in case the 3.0+ context creation failed */
       if (hglrc == NULL)
@@ -1222,4 +1235,10 @@ _gdk_win32_surface_invalidate_egl_framebuffer (GdkSurface *surface)
       impl->egl_force_redraw_all = TRUE;
     }
 #endif
+}
+
+_GDK_EXTERN
+HGLRC _gdk_win32_gl_context_get_hglrc (GdkGLContext *context)
+{
+  return GDK_WIN32_GL_CONTEXT (context)->hglrc;
 }
