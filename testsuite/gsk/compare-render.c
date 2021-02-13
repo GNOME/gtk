@@ -232,11 +232,19 @@ main (int argc, char **argv)
     }
   else
     {
+      guint max_diff = 0;
+      guint pixels_changed = 0;
+      guint pixels = 0;
+
       /* Now compare the two */
-      diff_surface = reftest_compare_surfaces (rendered_surface, reference_surface);
+      diff_surface = reftest_compare_surfaces (rendered_surface, reference_surface,
+                                               &max_diff, &pixels_changed, &pixels);
 
       if (diff_surface)
         {
+          g_print ("%u (out of %u) pixels differ from reference by up to %u levels\n",
+                   pixels_changed, pixels, max_diff);
+
           save_image (diff_surface, node_file, ".diff.png");
           cairo_surface_destroy (diff_surface);
           success = FALSE;

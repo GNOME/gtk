@@ -296,6 +296,9 @@ test_ui_file (GFile *file)
   char *ui_file, *reference_file;
   cairo_surface_t *ui_image, *reference_image, *diff_image;
   GtkStyleProvider *provider;
+  guint max_diff = 0;
+  guint pixels_changed = 0;
+  guint pixels = 0;
 
   ui_file = g_file_get_path (file);
 
@@ -315,12 +318,16 @@ test_ui_file (GFile *file)
     }
   g_free (reference_file);
 
-  diff_image = reftest_compare_surfaces (ui_image, reference_image);
+  diff_image = reftest_compare_surfaces (ui_image, reference_image,
+                                         &max_diff, &pixels_changed, &pixels);
 
   save_image (ui_image, ui_file, ".out.png");
   save_image (reference_image, ui_file, ".ref.png");
+
   if (diff_image)
     {
+      g_test_message ("%u (out of %u) pixels differ from reference by up to %u levels",
+                      pixels_changed, pixels, max_diff);
       save_image (diff_image, ui_file, ".diff.png");
       g_test_fail ();
     }
