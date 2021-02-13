@@ -3,7 +3,7 @@ testdatadir = join_paths(installed_test_datadir, 'gsk')
 
 compare_render = executable(
   'compare-render',
-  ['compare-render.c', 'reftest-compare.c'],
+  ['compare-render.c', '../reftests/reftest-compare.c'],
   dependencies: libgtk_dep,
   c_args: common_cflags,
   install: get_option('install-tests'),
