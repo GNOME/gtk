@@ -41,7 +41,7 @@ main (int argc, char **argv)
   image1 = cairo_image_surface_create_from_png (argv[1]);
   image2 = cairo_image_surface_create_from_png (argv[2]);
 
-  diff = reftest_compare_surfaces (image1, image2);
+  diff = reftest_compare_surfaces (image1, image2, NULL, NULL, NULL);
 
   if (opt_filename && diff)
     cairo_surface_write_to_png (diff, opt_filename);

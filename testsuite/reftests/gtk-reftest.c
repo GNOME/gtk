@@ -290,6 +290,12 @@ save_image (cairo_surface_t *surface,
   g_free (filename);
 }
 
+static char *
+get_test_keyfile (const char *ui_file)
+{
+  return get_test_file (ui_file, ".keyfile", TRUE);
+}
+
 static void
 test_ui_file (GFile *file)
 {
@@ -326,10 +332,43 @@ test_ui_file (GFile *file)
 
   if (diff_image)
     {
+      char *keyfile_path = get_test_keyfile (ui_file);
+      GKeyFile *keyfile = g_key_file_new ();
+      guint64 tolerated_diff = 0;
+      guint64 tolerated_pixels = 0;
+      guint64 accepted_diff = 0;
+      guint64 accepted_pixels = 0;
+
+      if (keyfile_path != NULL)
+        {
+          GError *error = NULL;
+          g_key_file_load_from_file (keyfile, keyfile_path, G_KEY_FILE_NONE, &error);
+          g_assert_no_error (error);
+          accepted_diff = g_key_file_get_uint64 (keyfile, "reftest", "accepted-diff-level", NULL);
+          g_test_message ("Maximum difference accepted: %" G_GUINT64_FORMAT " levels", accepted_diff);
+          accepted_pixels = g_key_file_get_uint64 (keyfile, "reftest", "accepted-diff-pixels", NULL);
+          g_test_message ("Different pixels accepted: %" G_GUINT64_FORMAT, accepted_pixels);
+          tolerated_diff = g_key_file_get_uint64 (keyfile, "reftest", "tolerated-diff-level", NULL);
+          g_test_message ("Maximum difference tolerated: %" G_GUINT64_FORMAT " levels", tolerated_diff);
+          tolerated_pixels = g_key_file_get_uint64 (keyfile, "reftest", "tolerated-diff-pixels", NULL);
+          g_test_message ("Different pixels tolerated: %" G_GUINT64_FORMAT, tolerated_pixels);
+        }
+
       g_test_message ("%u (out of %u) pixels differ from reference by up to %u levels",
                       pixels_changed, pixels, max_diff);
-      save_image (diff_image, ui_file, ".diff.png");
-      g_test_fail ();
+
+      if (max_diff > accepted_diff || pixels_changed > accepted_pixels)
+        save_image (diff_image, ui_file, ".diff.png");
+
+      if (max_diff <= accepted_diff && pixels_changed <= accepted_pixels)
+        g_test_message ("differences are within acceptable range");
+      else if (max_diff <= tolerated_diff && pixels_changed <= tolerated_pixels)
+        g_test_incomplete ("not right, but close enough");
+      else
+        g_test_fail ();
+
+      g_key_file_unref (keyfile);
+      g_free (keyfile_path);
     }
 
   remove_extra_css (provider);

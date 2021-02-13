@@ -98,6 +98,12 @@ get_output_file (const char *file,
   return result;
 }
 
+static char *
+get_test_keyfile (const char *node_file)
+{
+  return file_replace_extension (node_file, ".node", ".keyfile");
+}
+
 static void
 save_image (cairo_surface_t *surface,
             const char      *test_name,
@@ -242,12 +248,45 @@ main (int argc, char **argv)
 
       if (diff_surface)
         {
+          char *keyfile_path = get_test_keyfile (node_file);
+          GKeyFile *keyfile = g_key_file_new ();
+          guint64 tolerated_diff = 0;
+          guint64 tolerated_pixels = 0;
+          guint64 accepted_diff = 0;
+          guint64 accepted_pixels = 0;
+
+          if (keyfile_path != NULL && g_file_test (keyfile_path, G_FILE_TEST_EXISTS))
+            {
+              GError *error = NULL;
+              g_key_file_load_from_file (keyfile, keyfile_path, G_KEY_FILE_NONE, &error);
+              g_assert_no_error (error);
+              accepted_diff = g_key_file_get_uint64 (keyfile, "reftest", "accepted-diff-level", NULL);
+              g_print ("Maximum difference accepted: %" G_GUINT64_FORMAT " levels\n", accepted_diff);
+              accepted_pixels = g_key_file_get_uint64 (keyfile, "reftest", "accepted-diff-pixels", NULL);
+              g_print ("Different pixels accepted: %" G_GUINT64_FORMAT "\n", accepted_pixels);
+              tolerated_diff = g_key_file_get_uint64 (keyfile, "reftest", "tolerated-diff-level", NULL);
+              g_print ("Maximum difference tolerated: %" G_GUINT64_FORMAT " levels\n", tolerated_diff);
+              tolerated_pixels = g_key_file_get_uint64 (keyfile, "reftest", "tolerated-diff-pixels", NULL);
+              g_print ("Different pixels tolerated: %" G_GUINT64_FORMAT "\n", tolerated_pixels);
+            }
+
           g_print ("%u (out of %u) pixels differ from reference by up to %u levels\n",
                    pixels_changed, pixels, max_diff);
 
-          save_image (diff_surface, node_file, ".diff.png");
+          if (max_diff > accepted_diff || pixels_changed > accepted_pixels)
+            save_image (diff_surface, node_file, ".diff.png");
+
           cairo_surface_destroy (diff_surface);
-          success = FALSE;
+
+          if (max_diff <= accepted_diff && pixels_changed <= accepted_pixels)
+            g_print ("differences are within acceptable range\n");
+          else if (max_diff <= tolerated_diff && pixels_changed <= tolerated_pixels)
+            g_print ("not right, but close enough\n");
+          else
+            g_test_fail ();
+
+          g_key_file_unref (keyfile);
+          g_free (keyfile_path);
         }
     }
 
