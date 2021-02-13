@@ -118,18 +118,6 @@ gtk_gst_paintable_video_renderer_create_video_sink (GstPlayerVideoRenderer *rend
   GtkGstPaintable *self = GTK_GST_PAINTABLE (renderer);
   GstElement *sink, *glsinkbin;
 
-#if GST_GL_HAVE_WINDOW_WIN32 && GST_GL_HAVE_PLATFORM_WGL && defined (GDK_WINDOWING_WIN32)
-  /*
-   * Unfortunately, we can't connect the GstGLContext with our GDKGLContext,
-   * since gdk_gl_context_make_current(), which calls wglMakeCurrent(), does not
-   * allow us to share WGL contexts across threads, which will cause a crash.
-   * See MR !3034, so no WGL in the gstreamer media backend :(
-   */
-  sink = g_object_new (GTK_TYPE_GST_SINK,
-                       "paintable", self,
-                       NULL);
-  return sink;
-#else
   sink = g_object_new (GTK_TYPE_GST_SINK,
                        "paintable", self,
                        "gl-context", self->context,
@@ -143,7 +131,6 @@ gtk_gst_paintable_video_renderer_create_video_sink (GstPlayerVideoRenderer *rend
   g_object_set (glsinkbin, "sink", sink, NULL);
 
   return glsinkbin;
-#endif
 }
 
 static void
