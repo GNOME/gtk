@@ -77,28 +77,40 @@ parse_compose_value (GtkComposeData *compose_data,
                      const char     *val,
                      const char     *line)
 {
-  char *word;
   const char *p;
-  gsize len;
   GString *value;
   gunichar ch;
   char *endp;
 
-  len = strlen (val);
-  if (val[0] != '"' || val[len - 1] != '"')
+  if (val[0] != '"')
     {
       g_warning ("Need to double-quote the value: %s: %s", val, line);
       goto fail;
     }
 
-  word = g_strndup (val + 1, len - 2);
-
   value = g_string_new ("");
 
-  p = word;
+  p = val + 1;
   while (*p)
     {
-      if (*p == '\\')
+      if (*p == '\0')
+        {
+          g_warning ("Missing closing '\"': %s: %s", val, line);
+          goto fail;
+        }
+      else if (*p == '\"')
+        {
+          p++;
+          while (*p && g_ascii_isspace (*p))
+            p++;
+          if (*p != '\0' && *p != '#')
+            {
+              g_warning ("Garbage after closing '\"': %s: %s", val, line);
+              goto fail;
+            }
+          break;
+        }
+      else if (*p == '\\')
         {
           if (p[1] == '"')
             {
@@ -147,8 +159,6 @@ parse_compose_value (GtkComposeData *compose_data,
     }
 
   compose_data->value = g_string_free (value, FALSE);
-
-  g_free (word);
 
   return TRUE;
 
