@@ -22,19 +22,20 @@
  * @Title: GtkConstraint
  * @Short_description: The description of a constraint
  *
- * #GtkConstraint describes a constraint between an attribute on a widget
+ * `GtkConstraint` describes a constraint between an attribute on a widget
  * and another attribute on another widget, expressed as a linear equation
  * like:
  *
- * |[
+ * ```
  *   target.attr1 = source.attr2 × multiplier + constant
- * ]|
+ * ```
  *
- * Each #GtkConstraint is part of a system that will be solved by a
- * #GtkConstraintLayout in order to allocate and position each child widget.
+ * Each `GtkConstraint` is part of a system that will be solved by a
+ * [class@Gtk.ConstraintLayout] in order to allocate and position each
+ * child widget or guide.
  *
- * The source and target widgets, as well as their attributes, of a
- * #GtkConstraint instance are immutable after creation.
+ * The source and target, as well as their attributes, of a `GtkConstraint`
+ * instance are immutable after creation.
  */
 
 #include "config.h"
