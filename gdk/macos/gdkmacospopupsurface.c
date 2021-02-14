@@ -66,6 +66,12 @@ gdk_macos_popup_surface_layout (GdkMacosPopupSurface *self,
     monitor = _gdk_macos_surface_get_best_monitor (GDK_MACOS_SURFACE (self));
   gdk_macos_monitor_get_workarea (monitor, &bounds);
 
+  gdk_popup_layout_get_shadow_width (layout,
+                                     &self->parent_instance.shadow_left,
+                                     &self->parent_instance.shadow_right,
+                                     &self->parent_instance.shadow_top,
+                                     &self->parent_instance.shadow_bottom);
+
   gdk_surface_layout_popup_helper (GDK_SURFACE (self),
                                    width,
                                    height,
