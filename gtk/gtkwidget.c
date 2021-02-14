@@ -93,10 +93,12 @@
  * @Short_description: Base class for all widgets
  * @Title: GtkWidget
  *
- * GtkWidget is the base class all widgets in GTK derive from. It manages the
- * widget lifecycle, states and style.
+ * The base class for all widgets
  *
- * # Height-for-width Geometry Management # {#geometry-management}
+ * `GtkWidget` is the base class all widgets in GTK derive from. It manages the
+ * widget lifecycle, layout, states and style.
+ *
+ * ### Height-for-width Geometry Management
  *
  * GTK uses a height-for-width (and width-for-height) geometry management
  * system. Height-for-width means that a widget can change how much
@@ -108,36 +110,36 @@
  * Height-for-width geometry management is implemented in GTK by way
  * of two virtual methods:
  *
- * - #GtkWidgetClass.get_request_mode()
- * - #GtkWidgetClass.measure()
+ * - `GtkWidgetClass.get_request_mode()`
+ * - `GtkWidgetClass.measure()`
  *
  * There are some important things to keep in mind when implementing
  * height-for-width and when using it in widget implementations.
  *
- * If you implement a direct #GtkWidget subclass that supports
+ * If you implement a direct `GtkWidget` subclass that supports
  * height-for-width or width-for-height geometry management for
- * itself or its child widgets, the #GtkWidgetClass.get_request_mode()
+ * itself or its child widgets, the `GtkWidgetClass.get_request_mode()`
  * virtual function must be implemented as well and return the widget's
  * preferred request mode. The default implementation of this virtual function
  * returns %GTK_SIZE_REQUEST_CONSTANT_SIZE, which means that the widget will
- * only ever get -1 passed as the for_size value to its #GtkWidgetClass.measure()
+ * only ever get -1 passed as the for_size value to its `GtkWidgetClass.measure()`
  * implementation.
  *
  * The geometry management system will query a widget hierarchy in
  * only one orientation at a time. When widgets are initially queried
  * for their minimum sizes it is generally done in two initial passes
- * in the #GtkSizeRequestMode chosen by the toplevel.
+ * in the [enum@Gtk.SizeRequestMode] chosen by the toplevel.
  *
- * For example, when queried in the normal
- * %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH mode:
- * First, the default minimum and natural width for each widget
- * in the interface will be computed using gtk_widget_measure() with an
+ * For example, when queried in the normal %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH mode:
+ *
+ *  - First, the default minimum and natural width for each widget
+ * in the interface will be computed using [id@gtk_widget_measure] with an
  * orientation of %GTK_ORIENTATION_HORIZONTAL and a for_size of -1.
  * Because the preferred widths for each widget depend on the preferred
  * widths of their children, this information propagates up the hierarchy,
  * and finally a minimum and natural width is determined for the entire
  * toplevel. Next, the toplevel will use the minimum width to query for the
- * minimum height contextual to that width using gtk_widget_measure() with an
+ * minimum height contextual to that width using [id@gtk_widget_measure] with an
  * orientation of %GTK_ORIENTATION_VERTICAL and a for_size of the just computed
  * width. This will also be a highly recursive operation. The minimum height
  * for the minimum width is normally used to set the minimum size constraint
@@ -145,16 +147,16 @@
  *
  * After the toplevel window has initially requested its size in both
  * dimensions it can go on to allocate itself a reasonable size (or a size
- * previously specified with gtk_window_set_default_size()). During the
+ * previously specified with [method@Gtk.Window.set_default_size]). During the
  * recursive allocation process it’s important to note that request cycles
  * will be recursively executed while widgets allocate their children.
  * Each widget, once allocated a size, will go on to first share the
  * space in one orientation among its children and then request each child's
  * height for its target allocated width or its width for allocated height,
- * depending. In this way a #GtkWidget will typically be requested its size
+ * depending. In this way a `GtkWidget` will typically be requested its size
  * a number of times before actually being allocated a size. The size a
  * widget is finally allocated can of course differ from the size it has
- * requested. For this reason, #GtkWidget caches a  small number of results
+ * requested. For this reason, `GtkWidget` caches a  small number of results
  * to avoid re-querying for the same sizes in one allocation cycle.
  *
  * If a widget does move content around to intelligently use up the
@@ -162,8 +164,8 @@
  * #GtkSizeRequestModes even if the widget in question only
  * trades sizes in a single orientation.
  *
- * For instance, a #GtkLabel that does height-for-width word wrapping
- * will not expect to have #GtkWidgetClass.measure() with an orientation of
+ * For instance, a [class@Gtk.Label] that does height-for-width word wrapping
+ * will not expect to have `GtkWidgetClass.measure()` with an orientation of
  * %GTK_ORIENTATION_VERTICAL called because that call is specific to a
  * width-for-height request. In this
  * case the label must return the height required for its own minimum
@@ -174,7 +176,7 @@
  * Here are some examples of how a %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH widget
  * generally deals with width-for-height requests:
  *
- * |[<!-- language="C" -->
+ * ```c
  * static void
  * foo_widget_measure (GtkWidget      *widget,
  *                     GtkOrientation  orientation,
@@ -209,7 +211,7 @@
  *          }
  *    }
  * }
- * ]|
+ * ```
  *
  * Often a widget needs to get its own request during size request or
  * allocation. For example, when computing height it may need to also
@@ -218,19 +220,20 @@
  * be careful to call its virtual methods directly, like in the code
  * example above.
  *
- * It will not work to use the wrapper function gtk_widget_measure()
- * inside your own #GtkWidgetClass.size-allocate() implementation.
- * These return a request adjusted by #GtkSizeGroup, the widget's align and expand flags
- * as well as its CSS style.
+ * It will not work to use the wrapper function [method@Gtk.Widget.measure]
+ * inside your own `GtkWidgetClass.size_allocate()` implementation.
+ * These return a request adjusted by [class@Gtk.SizeGroup], the widget's
+ * align and expand flags, as well as its CSS style.
+ *
  * If a widget used the wrappers inside its virtual method implementations,
  * then the adjustments (such as widget margins) would be applied
  * twice. GTK therefore does not allow this and will warn if you try
  * to do it.
  *
- * Of course if you are getting the size request for
- * another widget, such as a child widget, you must use gtk_widget_measure().
- * Otherwise, you would not properly consider widget margins,
- * #GtkSizeGroup, and so forth.
+ * Of course if you are getting the size request for another widget, such
+ * as a child widget, you must use [id@gtk_widget_measure]; otherwise, you
+ * would not properly consider widget margins, [class@Gtk.SizeGroup], and
+ * so forth.
  *
  * GTK also supports baseline vertical alignment of widgets. This
  * means that widgets are positioned such that the typographical baseline of
@@ -239,24 +242,25 @@
  * that supports baselines and has a natural “row” that it aligns to the baseline,
  * or a baseline assigned to it by the grandparent.
  *
- * Baseline alignment support for a widget is also done by the #GtkWidgetClass.measure()
+ * Baseline alignment support for a widget is also done by the `GtkWidgetClass.measure()`
  * virtual function. It allows you to report both a minimum and natural size.
  *
- * If a widget ends up baseline aligned it will be allocated all the space in the parent
- * as if it was %GTK_ALIGN_FILL, but the selected baseline can be found via gtk_widget_get_allocated_baseline().
- * If this has a value other than -1 you need to align the widget such that the baseline
+ * If a widget ends up baseline aligned it will be allocated all the space in
+ * the parent as if it was %GTK_ALIGN_FILL, but the selected baseline can be
+ * found via [id@gtk_widget_get_allocated_baseline]. If the baseline has a
+ * value other than -1 you need to align the widget such that the baseline
  * appears at the position.
  *
- * # GtkWidget as GtkBuildable
+ * ### GtkWidget as GtkBuildable
  *
- * The GtkWidget implementation of the #GtkBuildable interface supports a
- * custom elements to specify various aspects of widgets that are not
- * directly expressed as properties.
+ * The `GtkWidget` implementation of the [iface@Gtk.Buildable] interface
+ * supports various custom elements to specify additional aspects of widgets
+ * that are not directly expressed as properties.
  *
- * If the parent widget uses a #GtkLayoutManager, #GtkWidget supports a
- * custom `<layout>` element, used to define layout properties:
+ * If the widget uses a [class@Gtk.LayoutManager], `GtkWidget` supports
+ * a custom `<layout>` element, used to define layout properties:
  *
- * |[<!-- language="xml" -->
+ * ```xml
  * <object class="GtkGrid" id="my_grid">
  *   <child>
  *     <object class="GtkLabel" id="label1">
@@ -280,58 +284,57 @@
  *     </object>
  *   </child>
  * </object>
- * ]|
+ * ```
  *
- * GtkWidget allows style information such as style classes to
+ * `GtkWidget` allows style information such as style classes to
  * be associated with widgets, using the custom `<style>` element:
  *
- * |[<!-- language="xml" -->
+ * ```xml
  * <object class="GtkButton" id="button1">
  *   <style>
  *     <class name="my-special-button-class"/>
  *     <class name="dark-button"/>
  *   </style>
  * </object>
- * ]|
+ * ```
  *
- * GtkWidget allows defining accessibility information, such as properties,
+ * `GtkWidget` allows defining accessibility information, such as properties,
  * relations, and states, using the custom `<accessibility>` element:
  *
- * |[<!-- language="xml" -->
+ * ```xml
  * <object class="GtkButton" id="button1">
  *   <accessibility>
  *     <property name="label">Download</property>
  *     <relation name="labelled-by">label1</relation>
  *   </accessibility>
  * </object>
- * ]|
+ * ```
  *
- * # Building composite widgets from template XML ## {#composite-templates}
+ * ### Building composite widgets from template XML
  *
- * GtkWidget exposes some facilities to automate the procedure
- * of creating composite widgets using #GtkBuilder interface description
- * language.
+ * `GtkWidget `exposes some facilities to automate the procedure
+ * of creating composite widgets using "templates".
  *
  * To create composite widgets with #GtkBuilder XML, one must associate
  * the interface description with the widget class at class initialization
- * time using gtk_widget_class_set_template().
+ * time using `gtk_widget_class_set_template()`.
  *
  * The interface description semantics expected in composite template descriptions
- * is slightly different from regular #GtkBuilder XML.
+ * is slightly different from regular [class@Gtk.Builder] XML.
  *
- * Unlike regular interface descriptions, gtk_widget_class_set_template() will
+ * Unlike regular interface descriptions, `gtk_widget_class_set_template()` will
  * expect a `<template>` tag as a direct child of the toplevel `<interface>`
  * tag. The `<template>` tag must specify the “class” attribute which must be
  * the type name of the widget. Optionally, the “parent” attribute may be
  * specified to specify the direct parent type of the widget type, this is
- * ignored by the GtkBuilder but required for Glade to introspect what kind
- * of properties and internal children exist for a given type when the actual
- * type does not exist.
+ * ignored by [class@Gtk.Builder] but required for UI design tools like
+ * [Glade](https://glade.gnome.org/) to introspect what kind of properties and
+ * internal children exist for a given type when the actual type does not exist.
  *
  * The XML which is contained inside the `<template>` tag behaves as if it were
- * added to the `<object>` tag defining @widget itself. You may set properties
- * on @widget by inserting `<property>` tags into the `<template>` tag, and also
- * add `<child>` tags to add children and extend @widget in the normal way you
+ * added to the `<object>` tag defining the widget itself. You may set properties
+ * on a widget by inserting `<property>` tags into the `<template>` tag, and also
+ * add `<child>` tags to add children and extend a widget in the normal way you
  * would with `<object>` tags.
  *
  * Additionally, `<object>` tags can also be added before and after the initial
@@ -339,9 +342,9 @@
  * which might be referenced by other widgets declared as children of the
  * `<template>` tag.
  *
- * An example of a GtkBuilder Template Definition:
+ * An example of a template definition:
  *
- * |[<!-- language="xml" -->
+ * ```xml
  * <interface>
  *   <template class="FooWidget" parent="GtkBox">
  *     <property name="orientation">horizontal</property>
@@ -359,14 +362,14 @@
  *     </child>
  *   </template>
  * </interface>
- * ]|
+ * ```
  *
  * Typically, you'll place the template fragment into a file that is
  * bundled with your project, using #GResource. In order to load the
  * template, you need to call gtk_widget_class_set_template_from_resource()
  * from the class initialization of your #GtkWidget type:
  *
- * |[<!-- language="C" -->
+ * ```c
  * static void
  * foo_widget_class_init (FooWidgetClass *klass)
  * {
@@ -375,27 +378,27 @@
  *   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (klass),
  *                                                "/com/example/ui/foowidget.ui");
  * }
- * ]|
+ * ```
  *
  * You will also need to call gtk_widget_init_template() from the instance
  * initialization function:
  *
- * |[<!-- language="C" -->
+ * ```c
  * static void
  * foo_widget_init (FooWidget *self)
  * {
  *   // ...
  *   gtk_widget_init_template (GTK_WIDGET (self));
  * }
- * ]|
+ * ```
  *
  * You can access widgets defined in the template using the
- * gtk_widget_get_template_child() function, but you will typically declare
+ * [id@gtk_widget_get_template_child] function, but you will typically declare
  * a pointer in the instance private data structure of your type using the same
  * name as the widget in the template definition, and call
- * gtk_widget_class_bind_template_child_private() with that name, e.g.
+ * `gtk_widget_class_bind_template_child_private()` with that name, e.g.
  *
- * |[<!-- language="C" -->
+ * ```c
  * typedef struct {
  *   GtkWidget *hello_button;
  *   GtkWidget *goodbye_button;
@@ -420,13 +423,13 @@
  * {
  *
  * }
- * ]|
+ * ```
  *
- * You can also use gtk_widget_class_bind_template_callback() to connect a signal
+ * You can also use `gtk_widget_class_bind_template_callback()` to connect a signal
  * callback defined in the template with a function visible in the scope of the
  * class, e.g.
  *
- * |[<!-- language="C" -->
+ * ```c
  * // the signal handler has the instance and user data swapped
  * // because of the swapped="yes" attribute in the template XML
  * static void
@@ -444,7 +447,7 @@
  *                                                "/com/example/ui/foowidget.ui");
  *   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (klass), hello_button_clicked);
  * }
- * ]|
+ * ```
  */
 
 #define GTK_STATE_FLAGS_DO_SET_PROPAGATE   (GTK_STATE_FLAG_INSENSITIVE | \
