@@ -75,6 +75,10 @@
     <title>Index of all symbols</title>
     <xi:include href="xml/api-index-full.xml"><xi:fallback /></xi:include>
   </index>
+  <index id="api-index-4-2" role="4.2">
+    <title>Index of new symbols in 4.2</title>
+    <xi:include href="xml/api-index-4.2.xml"><xi:fallback /></xi:include>
+  </index>
   <index id="api-index-deprecated" role="deprecated">
     <title>Index of deprecated symbols</title>
     <xi:include href="xml/api-index-deprecated.xml"><xi:fallback /></xi:include>

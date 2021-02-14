@@ -627,6 +627,8 @@ gdk_popup_layout_set_anchor_hints
 gdk_popup_layout_get_anchor_hints
 gdk_popup_layout_set_offset
 gdk_popup_layout_get_offset
+gdk_popup_layout_set_shadow_width
+gdk_popup_layout_get_shadow_width
 <SUBSECTION Standard>
 GDK_TYPE_POPUP_LAYOUT
 gdk_popup_layout_get_type

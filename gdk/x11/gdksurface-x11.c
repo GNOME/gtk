@@ -1814,6 +1814,12 @@ gdk_x11_surface_layout_popup (GdkSurface     *surface,
                                             gdk_x11_monitor_get_workarea);
   gdk_x11_monitor_get_workarea (monitor, &bounds);
 
+  gdk_popup_layout_get_shadow_width (layout,
+                                     &impl->shadow_left,
+                                     &impl->shadow_right,
+                                     &impl->shadow_top,
+                                     &impl->shadow_bottom);
+
   gdk_surface_layout_popup_helper (surface,
                                    width,
                                    height,

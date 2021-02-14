@@ -137,6 +137,20 @@ void                    gdk_popup_layout_get_offset             (GdkPopupLayout 
                                                                  int                    *dx,
                                                                  int                    *dy);
 
+GDK_AVAILABLE_IN_4_2
+void                    gdk_popup_layout_set_shadow_width       (GdkPopupLayout     *layout,
+                                                                 int                 left,
+                                                                 int                 right,
+                                                                 int                 top,
+                                                                 int                 bottom);
+GDK_AVAILABLE_IN_4_2
+void                    gdk_popup_layout_get_shadow_width       (GdkPopupLayout     *layout,
+                                                                 int                *left,
+                                                                 int                *right,
+                                                                 int                *top,
+                                                                 int                *bottom);
+
+
 G_END_DECLS
 
 #endif /* __GDK_POPUP_LAYOUT_H__ */
