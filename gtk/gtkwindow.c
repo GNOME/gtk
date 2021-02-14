@@ -114,7 +114,7 @@
  * # CSS nodes
  *
  * |[<!-- language="plain" -->
- * window.background
+ * window.background [.csd / .solid-csd / .ssd] [.maximized / .fullscreen / .tiled]
  * ├── <child>
  * ╰── <titlebar child>.titlebar [.default-decoration]
  * ]|
@@ -125,9 +125,11 @@
  * client-side decorations are in use), .solid-csd (for client-side decorations
  * without invisible borders), .ssd (used by mutter when rendering server-side
  * decorations). GtkWindow also represents window states with the following
- * style classes on the main node: .tiled, .maximized, .fullscreen. Specialized
- * types of window often add their own discriminating style classes, such as
- * .popup or .tooltip.
+ * style classes on the main node: .maximized, .fullscreen, .tiled (when supported,
+ * also .tiled-top, .tiled-left, .tiled-right, .tiled-bottom).
+ *
+ * GtkWindow subclasses often add their own discriminating style classes,
+ * such as .dialog, .popup or .tooltip.
  *
  * Generally, some CSS properties don't make sense on the toplevel window node,
  * such as margins or padding. When client-side decorations without invisible
