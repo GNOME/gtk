@@ -390,14 +390,8 @@ harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false,
                             fallback: ['harfbuzz', 'libharfbuzz_dep'],
                             default_options: ['coretext=enabled'])
 xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
-if os_darwin
-  graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
-                              fallback: ['graphene', 'graphene_dep'],
-                              default_options: ['introspection=false'])
-else
-  graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
-                              fallback: ['graphene', 'graphene_dep'])
-endif
+graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
+                            fallback: ['graphene', 'graphene_dep'])
 iso_codes_dep  = dependency('iso-codes', required: false)
 
 gtk_doc_dep    = dependency('gtk-doc', version: '>=1.33',
