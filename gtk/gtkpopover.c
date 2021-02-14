@@ -83,14 +83,15 @@
  * to differentiate from plain popovers.
  *
  * When styling a popover directly, the popover node should usually
- * not have any background.
+ * not have any background. The visible part of the popover can have a shadow.
+ * To specify it in CSS, set the box-shadow of the contents node.
  *
  * Note that, in order to accomplish appropriate arrow visuals, #GtkPopover uses
  * custom drawing for the arrow node. This makes it possible for the arrow to
  * change its shape dynamically, but it also limits the possibilities of styling
  * it using CSS. In particular, the arrow gets drawn over the content node's
- * border so they look like one shape, which means that the border-width of
- * the content node and the arrow node should be the same. The arrow also does
+ * shadow border so they look like one shape, which means that the border width
+ * of the content node and the arrow node should be the same. The arrow also does
  * not support any border shape other than solid, no border-radius, only one
  * border width (border-bottom-width is used) and no box-shadow.
  */
