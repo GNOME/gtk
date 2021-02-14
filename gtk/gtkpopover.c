@@ -880,6 +880,15 @@ node_style_changed_cb (GtkCssNode        *node,
 }
 
 static void
+contents_css_changed (GtkGizmo          *contents,
+                      GtkCssStyleChange *change)
+{
+  if (change == NULL ||
+      gtk_css_style_change_changes_property (change, GTK_CSS_PROPERTY_BOX_SHADOW))
+    gtk_widget_queue_resize (gtk_widget_get_parent (GTK_WIDGET (contents)));
+}
+
+static void
 gtk_popover_init (GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
@@ -914,6 +923,7 @@ gtk_popover_init (GtkPopover *popover)
   priv->contents_widget = gtk_gizmo_new ("contents", NULL, NULL, NULL, NULL,
                                          (GtkGizmoFocusFunc)gtk_widget_focus_child,
                                          (GtkGizmoGrabFocusFunc)gtk_widget_grab_focus_child);
+  gtk_gizmo_set_css_changed_func (GTK_GIZMO (priv->contents_widget), contents_css_changed);
   gtk_widget_set_layout_manager (priv->contents_widget, gtk_bin_layout_new ());
   gtk_widget_set_parent (priv->contents_widget, GTK_WIDGET (popover));
   gtk_widget_set_overflow (priv->contents_widget, GTK_OVERFLOW_HIDDEN);
