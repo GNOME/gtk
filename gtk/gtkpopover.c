@@ -642,7 +642,7 @@ gtk_popover_native_layout (GtkNative *native,
       gtk_widget_allocate (widget, width, height, -1, NULL);
 
       /* This fake motion event is needed for getting up to date pointer focus
-       * and coordinates when tho pointer didn't move but the layout changed
+       * and coordinates when the pointer didn't move but the layout changed
        * within the popover.
        */
       maybe_request_motion_event (popover);
@@ -2013,6 +2013,8 @@ gtk_popover_set_position (GtkPopover      *popover,
   priv->final_position = position;
 
   g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_POSITION]);
+
+  gtk_widget_queue_resize (GTK_WIDGET (popover));
 
   if (gtk_widget_is_visible (GTK_WIDGET (popover)))
     present_popup (popover);
