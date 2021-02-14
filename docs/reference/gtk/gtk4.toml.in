@@ -50,6 +50,7 @@ content_files = [
   "running.md",
   "question_index.md",
   "resources.md",
+  "initialization.md",
   "actions.md",
   "input-handling.md",
   "drawing-model.md",
