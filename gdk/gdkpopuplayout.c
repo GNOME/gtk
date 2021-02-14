@@ -74,6 +74,10 @@ struct _GdkPopupLayout
   GdkAnchorHints anchor_hints;
   int dx;
   int dy;
+  int shadow_left;
+  int shadow_right;
+  int shadow_top;
+  int shadow_bottom;
 };
 
 G_DEFINE_BOXED_TYPE (GdkPopupLayout, gdk_popup_layout,
@@ -165,6 +169,10 @@ gdk_popup_layout_copy (GdkPopupLayout *layout)
   new_layout->anchor_hints = layout->anchor_hints;
   new_layout->dx = layout->dx;
   new_layout->dy = layout->dy;
+  new_layout->shadow_left = layout->shadow_left;
+  new_layout->shadow_right = layout->shadow_right;
+  new_layout->shadow_top = layout->shadow_top;
+  new_layout->shadow_bottom = layout->shadow_bottom;
 
   return new_layout;
 }
@@ -191,7 +199,11 @@ gdk_popup_layout_equal (GdkPopupLayout *layout,
           layout->surface_anchor == other->surface_anchor &&
           layout->anchor_hints == other->anchor_hints &&
           layout->dx == other->dx &&
-          layout->dy == other->dy);
+          layout->dy == other->dy &&
+          layout->shadow_left == other->shadow_left &&
+          layout->shadow_right == other->shadow_right &&
+          layout->shadow_top == other->shadow_top &&
+          layout->shadow_bottom == other->shadow_bottom);
 }
 
 /**
@@ -345,4 +357,60 @@ gdk_popup_layout_get_offset (GdkPopupLayout *layout,
     *dx = layout->dx;
   if (dy)
     *dy = layout->dy;
+}
+
+/**
+ * gdk_popup_layout_set_shadow_width:
+ * @layout: a #GdkPopupLayout
+ * @left: width of the left part of the shadow
+ * @right: width of the right part of the shadow
+ * @top: height of the top part of the shadow
+ * @bottom: height of the bottom part of the shadow
+ *
+ * The shadow width corresponds to the part of the computed surface size
+ * that would consist of the shadow margin surrounding the window, would
+ * there be any.
+ *
+ * Since: 4.2
+ */
+void
+gdk_popup_layout_set_shadow_width (GdkPopupLayout *layout,
+                                   int             left,
+                                   int             right,
+                                   int             top,
+                                   int             bottom)
+{
+  layout->shadow_left = left;
+  layout->shadow_right = right;
+  layout->shadow_top = top;
+  layout->shadow_bottom = bottom;
+}
+
+/**
+ * gdk_popup_layout_get_shadow_width:
+ * @layout: a #GdkPopupLayout
+ * @left: (out): return location for the left shadow width
+ * @right: (out): return location for the right shadow width
+ * @top: (out): return location for the top shadow width
+ * @bottom: (out): return location for the bottom shadow width
+ *
+ * Obtains the shadow widths of this layout.
+ *
+ * Since: 4.2
+ */
+void
+gdk_popup_layout_get_shadow_width (GdkPopupLayout *layout,
+                                   int            *left,
+                                   int            *right,
+                                   int            *top,
+                                   int            *bottom)
+{
+  if (left)
+    *left = layout->shadow_left;
+  if (right)
+    *right = layout->shadow_right;
+  if (top)
+    *top = layout->shadow_top;
+  if (bottom)
+    *bottom = layout->shadow_bottom;
 }
