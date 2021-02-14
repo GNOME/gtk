@@ -630,12 +630,19 @@ static void
 configure_popup_geometry (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  int x, y;
+  int width, height;
 
-  gdk_wayland_surface_move_resize (surface,
-                                   impl->next_layout.popup.x,
-                                   impl->next_layout.popup.y,
-                                   impl->next_layout.configured_width,
-                                   impl->next_layout.configured_height);
+  x = impl->next_layout.popup.x - impl->shadow_left;
+  y = impl->next_layout.popup.y - impl->shadow_top;
+  width =
+    impl->next_layout.configured_width +
+    (impl->shadow_left + impl->shadow_right);
+  height =
+    impl->next_layout.configured_height +
+    (impl->shadow_top + impl->shadow_bottom);
+
+  gdk_wayland_surface_move_resize (surface, x, y, width, height);
 }
 
 static void
@@ -2289,12 +2296,17 @@ calculate_popup_rect (GdkSurface     *surface,
   int width, height;
   GdkRectangle anchor_rect;
   int dx, dy;
+  int shadow_left, shadow_right, shadow_top, shadow_bottom;
   int x = 0, y = 0;
 
-  width = (impl->popup.unconstrained_width -
-           (impl->shadow_left + impl->shadow_right));
-  height = (impl->popup.unconstrained_height -
-            (impl->shadow_top + impl->shadow_bottom));
+  gdk_popup_layout_get_shadow_width (layout,
+                                     &shadow_left,
+                                     &shadow_right,
+                                     &shadow_top,
+                                     &shadow_bottom);
+
+  width = (impl->popup.unconstrained_width - (shadow_left + shadow_right));
+  height = (impl->popup.unconstrained_height - (shadow_top + shadow_bottom));
 
   anchor_rect = *gdk_popup_layout_get_anchor_rect (layout);
   gdk_popup_layout_get_offset (layout, &dx, &dy);
@@ -2478,7 +2490,6 @@ create_dynamic_positioner (GdkSurface     *surface,
                            GdkPopupLayout *layout,
                            gboolean        ack_parent_configure)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkSurface *parent = surface->parent;
   GdkWaylandSurface *parent_impl = GDK_WAYLAND_SURFACE (parent);
   GdkWaylandDisplay *display =
@@ -2493,12 +2504,21 @@ create_dynamic_positioner (GdkSurface     *surface,
   GdkGravity rect_anchor;
   GdkGravity surface_anchor;
   GdkAnchorHints anchor_hints;
+  int shadow_left;
+  int shadow_right;
+  int shadow_top;
+  int shadow_bottom;
 
+  gdk_popup_layout_get_shadow_width (layout,
+                                     &shadow_left,
+                                     &shadow_right,
+                                     &shadow_top,
+                                     &shadow_bottom);
   geometry = (GdkRectangle) {
-    .x = impl->shadow_left,
-    .y = impl->shadow_top,
-    .width = width - (impl->shadow_left + impl->shadow_right),
-    .height = height - (impl->shadow_top + impl->shadow_bottom),
+    .x = shadow_left,
+    .y = shadow_top,
+    .width = width - (shadow_left + shadow_right),
+    .height = height - (shadow_top + shadow_bottom),
   };
 
   anchor_rect = gdk_popup_layout_get_anchor_rect (layout);
@@ -2723,6 +2743,12 @@ gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
     default:
       g_assert_not_reached ();
     }
+
+  gdk_popup_layout_get_shadow_width (layout,
+                                     &impl->shadow_left,
+                                     &impl->shadow_right,
+                                     &impl->shadow_top,
+                                     &impl->shadow_bottom);
 
   if (grab_input_seat)
     {
