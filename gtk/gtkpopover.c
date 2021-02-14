@@ -2014,6 +2014,8 @@ gtk_popover_set_position (GtkPopover      *popover,
 
   g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_POSITION]);
 
+  gtk_widget_queue_resize (GTK_WIDGET (popover));
+
   if (gtk_widget_is_visible (GTK_WIDGET (popover)))
     present_popup (popover);
 }
