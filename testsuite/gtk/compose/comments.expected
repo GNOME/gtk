@@ -1,0 +1,5 @@
+# n_seqs: 3
+# max_seq_len: 2
+<Uff20> <U61> : "a" # U61
+<Uff20> <U62> : "#" # U23
+<Uff20> <U63> : "a" # U61
