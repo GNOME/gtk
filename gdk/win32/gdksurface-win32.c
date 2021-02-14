@@ -1201,6 +1201,12 @@ gdk_win32_surface_move (GdkSurface *surface,
   gdk_win32_surface_move_resize_internal (surface, TRUE, x, y, -1, -1);
 }
 
+static void gdk_win32_surface_set_shadow_width (GdkSurface *window,
+                                                int        left,
+                                                int        right,
+                                                int        top,
+                                                int        bottom);
+
 static void
 gdk_win32_surface_layout_popup (GdkSurface     *surface,
                                 int             width,
@@ -1212,10 +1218,22 @@ gdk_win32_surface_layout_popup (GdkSurface     *surface,
   GdkRectangle bounds;
   GdkRectangle final_rect;
   int x, y;
+  int shadow_left, shadow_right, shadow_top, shadow_bottom;
 
   monitor = gdk_surface_get_layout_monitor (surface, layout,
                                             gdk_win32_monitor_get_workarea);
   gdk_win32_monitor_get_workarea (monitor, &bounds);
+
+  gdk_popup_layout_get_shadow_width (layout,
+                                     &shadow_left,
+                                     &shadow_right,
+                                     &shadow_top,
+                                     &shadow_bottom);
+  gdk_win32_surface_set_shadow_width (surface,
+                                      shadow_left,
+                                      shadow_right,
+                                      shadow_top,
+                                      shadow_bottom);
 
   gdk_surface_layout_popup_helper (surface,
                                    width,
