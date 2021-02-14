@@ -135,7 +135,7 @@ These functions are not supported in GTK 4. Instead, either use
 backend-specific APIs, or render your widgets using
 #GtkWidgetClass.snapshot() (once you are using GTK 4).
 
-Stop using GtkButton's image-related API
+### Stop using GtkButton's image-related API
 
 The functions and properties related to automatically add a GtkImage
 to a GtkButton, and using a GtkSetting to control its visibility, are
