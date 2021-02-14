@@ -1779,9 +1779,8 @@ gtk_recent_info_get_application_info (GtkRecentInfo  *info,
  *
  * Retrieves the list of applications that have registered this resource.
  *
- * Returns: (array length=length zero-terminated=1) (transfer full):
- *     a newly allocated %NULL-terminated array of strings.
- *     Use g_strfreev() to free it.
+ * Returns: (array length=length zero-terminated=1) (transfer full): a newly
+ *   allocated %NULL-terminated array of strings. Use g_strfreev() to free it.
  */
 char **
 gtk_recent_info_get_applications (GtkRecentInfo *info,
