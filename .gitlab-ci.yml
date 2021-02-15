@@ -290,11 +290,13 @@ reference:
     EXTRA_MESON_FLAGS: "--buildtype=release"
   script:
     - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} -Dgtk_doc=true _build
-    - ninja -C _build gdk4-doc gsk4-doc gtk4-doc
+    - meson compile -C _build
     - mkdir -p _reference/
-    - mv _build/docs/reference/gdk/html/ _reference/gdk/
-    - mv _build/docs/reference/gsk/html/ _reference/gsk/
-    - mv _build/docs/reference/gtk/html/ _reference/gtk/
+    - mv _build/docs/reference/gdk/gdk4/ _reference/gdk4/
+    - mv _build/docs/reference/gdk/gdk4-x11/ _reference/gdk4-x11/
+    - mv _build/docs/reference/gdk/gdk4-wayland/ _reference/gdk4-wayland/
+    - mv _build/docs/reference/gsk/gsk4/ _reference/gsk4/
+    - mv _build/docs/reference/gtk/gtk4/ _reference/gtk4/
   artifacts:
     paths:
       - _reference
