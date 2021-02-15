@@ -17,8 +17,8 @@ branch, as well as their available versions.
 ### Checklist for Updating a CI image
 
  - [ ] Update the `${image}.Dockerfile` file with the dependencies
- - [ ] Run `./run-docker.sh build --base ${image} --base-version ${number}`
- - [ ] Run `./run-docker.sh push --base ${image} --base-version ${number}`
+ - [ ] Run `./run-docker.sh build --base ${image} --version ${number}`
+ - [ ] Run `./run-docker.sh push --base ${image} --version ${number}`
    once the Docker image is built; you may need to log in by using
    `docker login` or `podman login`
  - [ ] Update the `image` keys in the `.gitlab-ci.yml` file with the new
@@ -30,8 +30,8 @@ branch, as well as their available versions.
  - [ ] Write a new `${image}.Dockerfile` with the instructions to set up
    a build environment
  - [ ] Add the `pip3 install meson` incantation
- - [ ] Run `./run-docker.sh build --base ${image} --base-version ${number}`
- - [ ] Run `./run-docker.sh push --base ${image} --base-version ${number}`
+ - [ ] Run `./run-docker.sh build --base ${image} --version ${number}`
+ - [ ] Run `./run-docker.sh push --base ${image} --version ${number}`
  - [ ] Add the new job to `.gitlab-ci.yml` referencing the image
  - [ ] Open a merge request with your changes and let it run
 
