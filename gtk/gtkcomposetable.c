@@ -82,33 +82,34 @@ parse_compose_value (GtkComposeData *compose_data,
   gunichar ch;
   char *endp;
 
+  value = g_string_new ("");
+
   if (val[0] != '"')
     {
-      g_warning ("Need to double-quote the value: %s: %s", val, line);
+      g_warning ("Only strings supported after ':': %s: %s", val, line);
       goto fail;
     }
-
-  value = g_string_new ("");
 
   p = val + 1;
   while (*p)
     {
-      if (*p == '\0')
-        {
-          g_warning ("Missing closing '\"': %s: %s", val, line);
-          goto fail;
-        }
-      else if (*p == '\"')
+      if (*p == '\"')
         {
           p++;
           while (*p && g_ascii_isspace (*p))
             p++;
+
           if (*p != '\0' && *p != '#')
-            {
-              g_warning ("Garbage after closing '\"': %s: %s", val, line);
-              goto fail;
-            }
-          break;
+            g_warning ("Ignoring keysym after string: %s: %s", val, line);
+
+          compose_data->value = g_string_free (value, FALSE);
+          return TRUE;
+        }
+
+      if (p[1] == '\0')
+        {
+          g_warning ("Missing closing '\"': %s: %s", val, line);
+          goto fail;
         }
       else if (*p == '\\')
         {
@@ -158,11 +159,9 @@ parse_compose_value (GtkComposeData *compose_data,
         }
     }
 
-  compose_data->value = g_string_free (value, FALSE);
-
-  return TRUE;
-
 fail:
+  g_string_free (value, TRUE);
+
   return FALSE;
 }
 
