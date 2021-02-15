@@ -2640,6 +2640,8 @@ notebook {
  **************/
 scrollbar {
   $_slider_min_length: 40px;
+  $_slider_width: 8px;
+  $_scrollbar_transition: all 300ms $ease-out-quad;
 
   // disable steppers
   @at-root * {
@@ -2648,7 +2650,7 @@ scrollbar {
   }
 
   background-color: $scrollbar_bg_color;
-  transition: 300ms $ease-out-quad;
+  transition: $_scrollbar_transition;
 
   // scrollbar border
   &.top { border-bottom: 1px solid $borders_color; }
@@ -2664,13 +2666,14 @@ scrollbar {
 
   // slider
   slider {
-    min-width: 10px;
-    min-height: 10px;
+    min-width: $_slider_width;
+    min-height: $_slider_width;
     margin: -1px;
     border: 4px solid transparent;
     border-radius: 10px;
     background-clip: padding-box;
     background-color: $scrollbar_slider_color;
+    transition: $_scrollbar_transition;
 
     &:hover { background-color: $scrollbar_slider_hover_color; }
 
@@ -2683,8 +2686,8 @@ scrollbar {
 
   &.fine-tune {
     slider {
-      min-width: 6px;
-      min-height: 6px;
+      min-width: $_slider_width - 2;
+      min-height: $_slider_width - 2;
     }
 
     &.horizontal slider { border-width: 6px 4px; }
