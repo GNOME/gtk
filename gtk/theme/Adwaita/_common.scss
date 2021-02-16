@@ -2283,6 +2283,7 @@ scrollbar {
   $_slider_min_length: 40px;
   $_slider_width: 8px;
   $_scrollbar_transition: all 300ms $ease-out-quad;
+  $_fine-tune_slider_border: $_slider_width - 3; //#3672
 
   background-color: $scrollbar_bg_color;
   transition: $_scrollbar_transition;
@@ -2312,12 +2313,13 @@ scrollbar {
 
   > range.fine-tune {
     > trough > slider {
-      min-width: $_slider_width - 2;
-      min-height: $_slider_width - 2;
+      transition: none;
+      min-width: $_fine-tune_slider_border+1;
+      min-height: $_fine-tune_slider_border+1;
     }
 
-    &.horizontal > trough > slider { border-width: 6px 4px; }
-    &.vertical > trough > slider { border-width: 4px 6px; }
+    &.horizontal > trough > slider { border-width: $_fine-tune_slider_border 4px; }
+    &.vertical > trough > slider { border-width: 4px $_fine-tune_slider_border; }
   }
 
   &.overlay-indicator {
