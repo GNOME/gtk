@@ -17,14 +17,14 @@
 #
 # spin button : bouton compteur
 # spinner : indicateur d'activité
-# Charles Monzat <charles.monzat@free.fr>, 2018-2019.
+# Charles Monzat <charles.monzat@free.fr>, 2018-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+_properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-06 09:26+0000\n"
-"PO-Revision-Date: 2020-09-06 13:14+0200\n"
+"POT-Creation-Date: 2020-09-17 20:06+0000\n"
+"PO-Revision-Date: 2020-09-18 11:36+0200\n"
 "Last-Translator: Charles Monzat <charles.monzat@free.fr>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "Language: fr\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
-"X-Generator: Gtranslator 3.32.1\n"
+"X-Generator: Gtranslator 3.36.0\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
 #: gdk/gdkglcontext.c:317 gdk/gdkseat.c:202 gdk/gdkseat.c:203
@@ -3033,7 +3033,7 @@ msgstr "Couleur actuelle, sous la forme GdkRGBA"
 msgid "Whether alpha should be shown"
 msgstr "Indique si la valeur alpha doit être affichée"
 
-#: gtk/gtkcolorchooserdialog.c:213 gtk/gtkcolorchooserwidget.c:704
+#: gtk/gtkcolorchooserdialog.c:213 gtk/gtkcolorchooserwidget.c:699
 msgid "Show editor"
 msgstr "Afficher l’éditeur"
 
@@ -4894,7 +4894,7 @@ msgstr "URI"
 
 #: gtk/gtklinkbutton.c:169
 msgid "The URI bound to this button"
-msgstr "L’URI lié au bouton"
+msgstr "L’URI liée au bouton"
 
 #: gtk/gtklinkbutton.c:184
 msgid "Visited"
