@@ -994,11 +994,11 @@ scrollbar slider:backdrop { background-color: #5a5a59; }
 
 scrollbar slider:disabled { background-color: transparent; }
 
-scrollbar.fine-tune slider { min-width: 6px; min-height: 6px; }
+scrollbar.fine-tune slider { transition: none; min-width: 6px; min-height: 6px; }
 
-scrollbar.fine-tune.horizontal slider { border-width: 6px 4px; }
+scrollbar.fine-tune.horizontal slider { border-width: 5px 4px; }
 
-scrollbar.fine-tune.vertical slider { border-width: 4px 6px; }
+scrollbar.fine-tune.vertical slider { border-width: 4px 5px; }
 
 scrollbar.overlay-indicator:not(.dragging):not(.hovering) { border-color: transparent; opacity: 0.4; background-color: transparent; }
 
