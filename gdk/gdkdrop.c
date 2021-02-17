@@ -17,6 +17,28 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
+/**
+ * SECTION:gdkdrop
+ * @Title: Drag And Drop
+ * @Short_description: Functions for controlling drag and drop handling
+ *
+ * These functions provide a low-level interface for drag and drop.
+ *
+ * The `GdkDrop` object represents the target side of an ongoing DND operation.
+ * Possible drop sites get informed about the status of the ongoing drag operation
+ * with events of type %GDK_DRAG_ENTER, %GDK_DRAG_LEAVE, %GDK_DRAG_MOTION and
+ * %GDK_DROP_START. The `GdkDrop` object can be obtained from these
+ * [class@Gdk.Event] types using [method@Gdk.DndEvent.get_drop].
+ *
+ * The actual data transfer is initiated from the target side via an async
+ * read, using one of the `GdkDrop` methods for this purpose:
+ * [method@Gdk.Drop.read_async] or [method@Gdk.Drop.read_value_async].
+ *
+ * GTK provides a higher level abstraction based on top of these functions,
+ * and so they are not normally needed in GTK applications. See the
+ * "Drag and Drop" section of the GTK documentation for more information.
+ */
+
 #include "config.h"
 
 #include "gdkdropprivate.h"
