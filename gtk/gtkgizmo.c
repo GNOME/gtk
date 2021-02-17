@@ -83,16 +83,6 @@ gtk_gizmo_grab_focus (GtkWidget *widget)
 }
 
 static void
-gtk_gizmo_css_changed (GtkWidget         *widget,
-                       GtkCssStyleChange *change)
-{
-  GtkGizmo *self = GTK_GIZMO (widget);
-
-  if (self->css_changed_func)
-    self->css_changed_func (self, change);
-}
-
-static void
 gtk_gizmo_finalize (GObject *object)
 {
   GtkGizmo *self = GTK_GIZMO (object);
@@ -125,7 +115,6 @@ gtk_gizmo_class_init (GtkGizmoClass *klass)
   widget_class->contains = gtk_gizmo_contains;
   widget_class->grab_focus = gtk_gizmo_grab_focus;
   widget_class->focus = gtk_gizmo_focus;
-  widget_class->css_changed = gtk_gizmo_css_changed;
 }
 
 static void
@@ -175,13 +164,4 @@ gtk_gizmo_new_with_role (const char            *css_name,
   gizmo->grab_focus_func = grab_focus_func;
 
   return GTK_WIDGET (gizmo);
-}
-
-void
-gtk_gizmo_set_css_changed_func (GtkGizmo               *gizmo,
-                                GtkGizmoCssChangedFunc  css_changed_func)
-{
-  g_return_if_fail (!gtk_widget_get_realized (GTK_WIDGET (gizmo)));
-
-  gizmo->css_changed_func = css_changed_func;
 }
