@@ -24,22 +24,6 @@
 #include <math.h>
 
 /**
- * SECTION:cairo_interaction
- * @Short_description: Functions to support using cairo
- * @Title: Cairo Interaction
- *
- * [Cairo](http://cairographics.org) is a graphics
- * library that supports vector graphics and image compositing that
- * can be used with GDK and GTK.
- *
- * GDK does not wrap the cairo API, instead it allows to create cairo
- * contexts which can be used to draw on #GdkSurfaces. Additional
- * functions allow use #GdkRectangles with cairo and to use #GdkRGBAs,
- * #GdkPixbufs and #GdkSurfaces as sources for drawing operations.
- */
-
-
-/**
  * gdk_cairo_set_source_rgba:
  * @cr: a cairo context
  * @rgba: a #GdkRGBA

@@ -31,6 +31,9 @@ name = "basic"
 base_url = "https://gitlab.gnome.org/GNOME/gtk/-/blob/master/"
 
 [extra]
+content_files = [
+  "cairo.md",
+]
 content_images = [
   "images/gtk-logo.svg",
   "images/rotated-text.png",
