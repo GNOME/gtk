@@ -127,6 +127,7 @@ gtk_private_sources = files([
   'gtkplacesview.c',
   'gtkplacesviewrow.c',
   'gtkpointerfocus.c',
+  'gtkpopovercontent.c',
   'gtkprintutils.c',
   'gtkprivate.c',
   'gtkprogresstracker.c',

@@ -33,9 +33,7 @@ typedef gboolean (* GtkGizmoContainsFunc) (GtkGizmo  *gizmo,
                                            double     y);
 typedef gboolean (* GtkGizmoFocusFunc)    (GtkGizmo         *gizmo,
                                            GtkDirectionType  direction);
-typedef gboolean (* GtkGizmoGrabFocusFunc) (GtkGizmo         *gizmo);
-typedef void     (* GtkGizmoCssChangedFunc) (GtkGizmo          *gizmo,
-                                             GtkCssStyleChange *change);
+typedef gboolean (* GtkGizmoGrabFocusFunc)(GtkGizmo         *gizmo);
 
 struct _GtkGizmo
 {
@@ -47,7 +45,6 @@ struct _GtkGizmo
   GtkGizmoContainsFunc  contains_func;
   GtkGizmoFocusFunc     focus_func;
   GtkGizmoGrabFocusFunc grab_focus_func;
-  GtkGizmoCssChangedFunc css_changed_func;
 };
 
 struct _GtkGizmoClass
@@ -74,7 +71,5 @@ GtkWidget *gtk_gizmo_new_with_role (const char            *css_name,
                                     GtkGizmoFocusFunc      focus_func,
                                     GtkGizmoGrabFocusFunc  grab_focus_func);
 
-void gtk_gizmo_set_css_changed_func (GtkGizmo               *gizmo,
-                                     GtkGizmoCssChangedFunc  css_changed_func);
 
 #endif
