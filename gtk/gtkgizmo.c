@@ -88,8 +88,6 @@ gtk_gizmo_css_changed (GtkWidget         *widget,
 {
   GtkGizmo *self = GTK_GIZMO (widget);
 
-  GTK_WIDGET_CLASS (gtk_gizmo_parent_class)->css_changed (widget, change);
-
   if (self->css_changed_func)
     self->css_changed_func (self, change);
 }
