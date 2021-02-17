@@ -596,7 +596,9 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     if (event->keyval == gtk_compose_ignore[i])
       return FALSE;
 
-  hex_mod_mask = GDK_CONTROL_MASK|GDK_SHIFT_MASK;
+  hex_mod_mask = gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
+                                               GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
+  hex_mod_mask |= GDK_SHIFT_MASK;
 
   if (priv->in_hex_sequence && priv->modifiers_dropped)
     have_hex_mods = TRUE;
