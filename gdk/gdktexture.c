@@ -17,7 +17,7 @@
  */
 
 /**
- * SECTION:textures
+ * SECTION:gdktexture
  * @Title: GdkTexture
  * @Short_description: Pixel data
  *
