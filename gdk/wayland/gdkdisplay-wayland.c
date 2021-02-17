@@ -58,40 +58,6 @@
 
 #include "gdk/gdk-private.h"
 
-/**
- * SECTION:wayland_interaction
- * @Short_description: Wayland backend-specific functions
- * @Title: Wayland Interaction
- * @Include: gdk/wayland/gdkwayland.h
- *
- * The functions in this section are specific to the GDK Wayland backend.
- * To use them, you need to include the `<gdk/wayland/gdkwayland.h>` header and
- * use the Wayland-specific pkg-config `gtk4-wayland` file to build your
- * application.
- *
- * To make your code compile with other GDK backends, guard backend-specific
- * calls by an ifdef as follows. Since GDK may be built with multiple
- * backends, you should also check for the backend that is in use (e.g. by
- * using the GDK_IS_WAYLAND_DISPLAY() macro).
- * |[<!-- language="C" -->
- * #ifdef GDK_WINDOWING_WAYLAND
- *   if (GDK_IS_WAYLAND_DISPLAY (display))
- *     {
- *       // make Wayland-specific calls here
- *     }
- *   else
- * #endif
- * #ifdef GDK_WINDOWING_X11
- *   if (GDK_IS_X11_DISPLAY (display))
- *     {
- *       // make X11-specific calls here
- *     }
- *   else
- * #endif
- *   g_error ("Unsupported GDK backend");
- * ]|
- */
-
 #define MIN_SYSTEM_BELL_DELAY_MS 20
 
 #define GTK_SHELL1_VERSION       4

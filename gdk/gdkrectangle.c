@@ -29,23 +29,24 @@
 
 
 /**
- * SECTION:regions
+ * SECTION:gdkregion
  * @Short_description: Simple graphical data type
  * @Title: GdkRectangle
  *
- * GDK provides a #GdkRectangle data type for representing rectangles.
- * Together with Cairo’s #cairo_region_t data type, these are the central
+ * GDK provides a `GdkRectangle` data type for representing rectangles.
+ * Together with Cairo’s `cairo_region_t` data type, these are the central
  * types for representing sets of pixels.
  *
  * A #GdkRectangle represents the position and size of a rectangle.
+ *
  * The intersection of two rectangles can be computed with
- * gdk_rectangle_intersect(). To find the union of two rectangles use
- * gdk_rectangle_union().
+ * [method@Gdk.Rectangle.intersect]; to find the union of two rectangles use
+ * [method@Gdk.Rectangle.union].
  *
- * #cairo_region_t is usually used for managing clipping of graphical
- * operations.
+ * The `cairo_region_t` type provided by Cairo is usually used for managing
+ * non-rectangular clipping of graphical operations.
  *
- * The graphene library has a number of other data types for regions and
+ * The Graphene library has a number of other data types for regions and
  * volumes in 2D and 3D.
  */
 

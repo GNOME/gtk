@@ -31,7 +31,7 @@
 #include <math.h>
 
 /**
- * SECTION:rgba_colors
+ * SECTION:gdkrgba
  * @Title: GdkRGBA
  * @Short_description: RGBA colors
  *

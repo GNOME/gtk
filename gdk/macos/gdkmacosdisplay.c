@@ -38,40 +38,6 @@
 #include "gdkmacossurface-private.h"
 #include "gdkmacosutils-private.h"
 
-/**
- * SECTION:macos_interaction
- * @Short_description: macOS backend-specific functions
- * @Title: macOS Interaction
- * @Include: gdk/macos/gdkmacos.h
- *
- * The functions in this section are specific to the GDK macOS backend.
- * To use them, you need to include the `<gdk/macos/gdkmacos.h>` header and
- * use the macOS-specific pkg-config `gtk4-macos` file to build your
- * application.
- *
- * To make your code compile with other GDK backends, guard backend-specific
- * calls by an ifdef as follows. Since GDK may be built with multiple
- * backends, you should also check for the backend that is in use (e.g. by
- * using the GDK_IS_MACOS_DISPLAY() macro).
- * |[<!-- language="C" -->
- * #ifdef GDK_WINDOWING_MACOS
- *   if (GDK_IS_MACOS_DISPLAY (display))
- *     {
- *       // make macOS-specific calls here
- *     }
- *   else
- * #endif
- * #ifdef GDK_WINDOWING_X11
- *   if (GDK_IS_X11_DISPLAY (display))
- *     {
- *       // make X11-specific calls here
- *     }
- *   else
- * #endif
- *   g_error ("Unsupported GDK backend");
- * ]|
- */
-
 G_DEFINE_TYPE (GdkMacosDisplay, gdk_macos_display, GDK_TYPE_DISPLAY)
 
 #define EVENT_MAP_MAX_SIZE 10

@@ -32,7 +32,13 @@ base_url = "https://gitlab.gnome.org/GNOME/gtk/-/blob/master/"
 
 [extra]
 content_files = [
+  "events.md",
+  "keys.md",
   "cairo.md",
+  "pango.md",
+  "wayland.md",
+  "x11.md",
+  "macos.md",
 ]
 content_images = [
   "images/gtk-logo.svg",

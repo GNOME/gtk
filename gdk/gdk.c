@@ -48,27 +48,6 @@
 
 
 /**
- * SECTION:general
- * @Short_description: Library initialization and versioning
- * @Title: General
- *
- * This section describes miscellaneous macros and utility functions
- * related to library versioning, as well as deprecation facilities.
- *
- * The GDK and GTK headers annotate deprecated APIs in a way that produces
- * compiler warnings if these deprecated APIs are used. The warnings
- * can be turned off by defining the macro %GDK_DISABLE_DEPRECATION_WARNINGS
- * before including the glib.h header.
- *
- * GDK and GTK also provide support for building applications against
- * defined subsets of deprecated or new APIs. Define the macro
- * %GDK_VERSION_MIN_REQUIRED to specify up to what version
- * you want to receive warnings about deprecated APIs. Define the
- * macro %GDK_VERSION_MAX_ALLOWED to specify the newest version
- * whose API you want to use.
- */
-
-/**
  * GDK_WINDOWING_X11:
  *
  * The #GDK_WINDOWING_X11 macro is defined if the X11 backend

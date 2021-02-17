@@ -46,39 +46,6 @@
 #include <X11/XKBlib.h>
 #endif
 
-/**
- * SECTION:x_interaction
- * @Short_description: X backend-specific functions
- * @Title: X Window System Interaction
- * @Include: gdk/x11/gdkx.h
- *
- * The functions in this section are specific to the GDK X11 backend.
- * To use them, you need to include the `<gdk/x11/gdkx.h>` header and use
- * the X11-specific pkg-config file `gtk4-x11` to build your application.
- *
- * To make your code compile with other GDK backends, guard backend-specific
- * calls by an ifdef as follows. Since GDK may be built with multiple
- * backends, you should also check for the backend that is in use (e.g. by
- * using the GDK_IS_X11_DISPLAY() macro).
- * |[
- * #ifdef GDK_WINDOWING_X11
- *   if (GDK_IS_X11_DISPLAY (display))
- *     {
- *       // make X11-specific calls here
- *     }
- *   else
- * #endif
- * #ifdef GDK_WINDOWING_MACOS
- *   if (GDK_IS_MACOS_DISPLAY (display))
- *     {
- *       // make MacOS-specific calls here
- *     }
- *   else
- * #endif
- *   g_error ("Unsupported GDK backend");
- * ]|
- */
-
 /* non-GDK previous error handler */
 typedef int (*GdkXErrorHandler) (Display *, XErrorEvent *);
 static GdkXErrorHandler _gdk_old_error_handler;

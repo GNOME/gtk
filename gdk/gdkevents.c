@@ -39,19 +39,6 @@
 #include <math.h>
 
 /**
- * SECTION:events
- * @Short_description: Functions for handling events from the window system
- * @Title: Events
- *
- * This section describes functions dealing with events from the window
- * system.
- *
- * In GTK applications the events are handled automatically by toplevel
- * widgets and passed on to the event controllers of appropriate widgets,
- * so these functions are rarely needed.
- */
-
-/**
  * GdkEvent: (ref-func gdk_event_ref) (unref-func gdk_event_unref)
  *
  * The GdkEvent struct contains only private fields and
