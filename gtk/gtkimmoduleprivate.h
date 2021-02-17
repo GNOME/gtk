@@ -24,6 +24,8 @@
 
 G_BEGIN_DECLS
 
+void          gtk_im_modules_init (void);
+
 void           gtk_im_module_ensure_extension_point  (void);
 GtkIMContext * _gtk_im_module_create                 (const char *context_id);
 const char   * _gtk_im_module_get_default_context_id (GdkDisplay *display);

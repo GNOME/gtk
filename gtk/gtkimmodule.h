@@ -22,8 +22,6 @@
 
 G_BEGIN_DECLS
 
-void          gtk_im_modules_init (void);
-
 #define GTK_IM_MODULE_EXTENSION_POINT_NAME "gtk-im-module"
 
 G_END_DECLS

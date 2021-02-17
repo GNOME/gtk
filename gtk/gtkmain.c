@@ -129,7 +129,7 @@
 #include "gtkwindowprivate.h"
 #include "gtkwindowgroup.h"
 #include "gtkprintbackendprivate.h"
-#include "gtkimmodule.h"
+#include "gtkimmoduleprivate.h"
 #include "gtkroot.h"
 #include "gtknative.h"
 #include "gtkpopcountprivate.h"
