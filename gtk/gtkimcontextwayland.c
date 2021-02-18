@@ -606,10 +606,23 @@ gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
 
   if (attrs)
     {
+      PangoAttribute *attr;
+      guint len = strlen (preedit_str);
+
       if (!*attrs)
         *attrs = pango_attr_list_new ();
-      pango_attr_list_insert (*attrs,
-                              pango_attr_underline_new (PANGO_UNDERLINE_SINGLE));
+
+      attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
+      attr->start_index = 0;
+      attr->end_index = len;
+      pango_attr_list_insert (*attrs, attr);
+
+      /* enable fallback, since IBus will send us things like ⎄ */
+      attr = pango_attr_fallback_new (TRUE);
+      attr->start_index = 0;
+      attr->end_index = len;
+      pango_attr_list_insert (*attrs, attr);
+
       if (context_wayland->current_preedit.cursor_begin
           != context_wayland->current_preedit.cursor_end)
         {

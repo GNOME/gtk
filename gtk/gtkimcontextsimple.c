@@ -945,7 +945,14 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
 
       if (s->len)
         {
-          PangoAttribute *attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
+          PangoAttribute *attr;
+
+          attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
+          attr->start_index = 0;
+          attr->end_index = s->len;
+          pango_attr_list_insert (*attrs, attr);
+
+          attr = pango_attr_fallback_new (TRUE);
           attr->start_index = 0;
           attr->end_index = s->len;
           pango_attr_list_insert (*attrs, attr);
