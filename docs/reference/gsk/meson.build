@@ -7,6 +7,7 @@ if get_option('gtk_doc')
     command: [
       gidocgen,
       'generate',
+      '--quiet',
       '--add-include-path=@0@'.format(meson.current_build_dir() / '../../../gtk'),
       '--config=@INPUT0@',
       '--output-dir=@OUTPUT@',
