@@ -1548,15 +1548,11 @@ update_xft_settings (GdkDisplay *display)
     }
   else
     {
-      GSettingsSchemaSource *source;
-      GSettingsSchema *schema;
+      TranslationEntry *entry;
 
-      source = g_settings_schema_source_get_default ();
-      schema = g_settings_schema_source_lookup (source,
-                                                "org.gnome.desktop.interface",
-                                                FALSE);
+      entry = find_translation_entry_by_schema ("org.gnome.desktop.interface", "font-antialiasing");
 
-      if (schema && g_settings_schema_has_key (schema, "font-antialiasing"))
+      if (entry && entry->valid)
         {
           settings = g_hash_table_lookup (display_wayland->settings,
                                           "org.gnome.desktop.interface");
@@ -1579,9 +1575,6 @@ update_xft_settings (GdkDisplay *display)
           hinting = GSD_FONT_HINTING_MEDIUM;
           order = GSD_FONT_RGBA_ORDER_RGB;
         }
-
-      if (schema)
-        g_settings_schema_unref (schema);
 
       dpi = get_dpi_from_gsettings (display_wayland) * 1024;
     }
