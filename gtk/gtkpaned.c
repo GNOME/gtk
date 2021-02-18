@@ -30,16 +30,13 @@
 #include "gtkeventcontrollermotion.h"
 #include "gtkgesturepan.h"
 #include "gtkgesturesingle.h"
-#include "gtkgizmoprivate.h"
+#include "gtkpanedhandleprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"
-#include "gtkrendericonprivate.h"
-#include "gtkcssnodeprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
-#include "gtkcssboxesprivate.h"
 #include "gtkbuildable.h"
 
 #include <math.h>
@@ -298,26 +295,6 @@ get_handle_area (GtkPaned        *paned,
     extra = HANDLE_EXTRA_SIZE;
 
   graphene_rect_inset (area, - extra, - extra);
-}
-
-static gboolean
-gtk_paned_handle_contains (GtkGizmo *handle,
-                           double    x,
-                           double    y)
-{
-  GtkWidget *paned;
-  GtkCssBoxes boxes;
-  graphene_rect_t area;
-
-  gtk_css_boxes_init (&boxes, GTK_WIDGET (handle));
-
-  graphene_rect_init_from_rect (&area, gtk_css_boxes_get_border_rect (&boxes));
-
-  paned = gtk_widget_get_parent (GTK_WIDGET (handle));
-  if (!gtk_paned_get_wide_handle (GTK_PANED (paned)))
-    graphene_rect_inset (&area, - HANDLE_EXTRA_SIZE, - HANDLE_EXTRA_SIZE);
-
-  return graphene_rect_contains_point (&area, &GRAPHENE_POINT_INIT (x, y));
 }
 
 static void
@@ -1408,21 +1385,6 @@ gtk_paned_unrealize (GtkWidget *widget)
 }
 
 static void
-gtk_paned_render_handle (GtkGizmo    *gizmo,
-                         GtkSnapshot *snapshot)
-{
-  GtkWidget *widget = GTK_WIDGET (gizmo);
-  GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
-  int width, height;
-
-  width = gtk_widget_get_width (widget);
-  height = gtk_widget_get_height (widget);
-
-  if (width > 0 && height > 0)
-    gtk_css_style_snapshot_icon (style, snapshot, width, height);
-}
-
-static void
 connect_drag_gesture_signals (GtkPaned   *paned,
                               GtkGesture *gesture)
 {
@@ -1479,7 +1441,7 @@ gtk_paned_init (GtkPaned *paned)
   gtk_widget_add_controller (GTK_WIDGET (paned), GTK_EVENT_CONTROLLER (gesture));
   paned->drag_gesture = gesture;
 
-  paned->handle_widget = gtk_gizmo_new ("separator", NULL, NULL, gtk_paned_render_handle, gtk_paned_handle_contains, NULL, NULL);
+  paned->handle_widget = gtk_paned_handle_new ();
   gtk_widget_set_parent (paned->handle_widget, GTK_WIDGET (paned));
   gtk_widget_set_cursor_from_name (paned->handle_widget, "col-resize");
 }
