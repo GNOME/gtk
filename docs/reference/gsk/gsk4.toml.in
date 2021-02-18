@@ -31,6 +31,7 @@ dependencies = [ "GObject-2.0", "Graphene-1.0", "Pango-1.0", "Gdk-4.0" ]
 
 [theme]
 name = "basic"
+show_index_summary = true
 
 [source-location]
 base_url = "https://gitlab.gnome.org/GNOME/gtk/-/blob/master/"
