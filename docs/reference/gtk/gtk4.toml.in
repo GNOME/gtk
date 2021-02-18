@@ -43,6 +43,7 @@ base_url = "https://gitlab.gnome.org/GNOME/gtk/-/blob/master/"
 [extra]
 # The same order will be used when generating the index
 content_files = [
+  "overview.md",
   "getting_started.md",
   "building.md",
   "compiling.md",

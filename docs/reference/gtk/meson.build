@@ -1,11 +1,13 @@
 # XXX: gi-docgen needs a deps file
 expand_content_md_files = [
+  'overview.md',
   'broadway.md',
   'osx.md',
   'wayland.md',
   'windows.md',
   'x11.md',
   'getting_started.md',
+  'initialization.md',
   'resources.md',
   'building.md',
   'compiling.md',

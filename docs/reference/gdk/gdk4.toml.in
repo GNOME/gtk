@@ -14,10 +14,10 @@ dependencies = [ "GObject-2.0", "Graphene-1.0", "Pango-1.0" ]
   description = "The base type system library"
   docs_url = "https://developer.gnome.org/gobject/stable"
 
-  [dependencies."Graphene-1.0"]
-  name = "Graphene"
-  description = "A thin layer of mathematical types for 3D libraries"
-  docs_url = "https://ebassi.github.io/graphene/docs"
+  [dependencies."cairo-1.0"]
+  name = "Cairo"
+  description = "A 2D graphics library with support for multiple output devices"
+  docs_url = "https://www.cairographics.org/manual/"
 
   [dependencies."Pango-1.0"]
   name = "Pango"
