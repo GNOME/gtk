@@ -609,7 +609,7 @@ gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
                                            int            *cursor_pos)
 {
   GtkIMContextWayland *context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
-  const char *preedit_str;
+  char *preedit_str;
 
   if (attrs)
     *attrs = NULL;
@@ -628,10 +628,8 @@ gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
     }
 
   preedit_str =
-    context_wayland->current_preedit.text ? context_wayland->current_preedit.text : "";
+    tweak_preedit (context_wayland->current_preedit.text ? context_wayland->current_preedit.text : "");
 
-  if (str)
-    *str = tweak_preedit (preedit_str);
   if (cursor_pos)
     *cursor_pos = g_utf8_strlen (preedit_str,
                                  context_wayland->current_preedit.cursor_begin);
@@ -665,6 +663,10 @@ gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
           pango_attr_list_insert (*attrs, cursor);
         }
     }
+  if (str)
+    *str = preedit_str;
+  else
+    g_free (preedit_str);
 }
 
 static gboolean
