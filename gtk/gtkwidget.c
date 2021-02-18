@@ -7748,16 +7748,22 @@ gtk_widget_propagate_state (GtkWidget          *widget,
 
   if (old_flags != new_flags)
     {
-      GtkWindowGroup *window_group;
       GtkRoot *root;
-      GtkWidget *grab;
+      GtkWidget *grab = NULL;
       gboolean shadowed;
 
       g_object_ref (widget);
 
       root = gtk_widget_get_root (widget);
-      window_group = gtk_window_get_group (GTK_WINDOW (root));
-      grab = gtk_window_group_get_current_grab (window_group);
+
+      if (GTK_IS_WINDOW (root))
+        {
+          GtkWindowGroup *window_group;
+
+          window_group = gtk_window_get_group (GTK_WINDOW (root));
+          grab = gtk_window_group_get_current_grab (window_group);
+        }
+
       shadowed = grab && grab != widget && !gtk_widget_is_ancestor (widget, grab);
 
       if (!gtk_widget_is_sensitive (widget) && gtk_widget_has_grab (widget))
