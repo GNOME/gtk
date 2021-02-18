@@ -45,40 +45,45 @@
  * @Title: GtkImage
  * @SeeAlso: #GdkTexture, #GtkPicture
  *
- * The #GtkImage widget displays an image. Various kinds of object
- * can be displayed as an image; most typically, you would load a
- * #GdkTexture from a file, and then display that.
- * There’s a convenience function to do this, gtk_image_new_from_file(),
- * used as follows:
- * |[<!-- language="C" -->
- *   GtkWidget *image;
- *   image = gtk_image_new_from_file ("myfile.png");
- * ]|
+ * The `GtkImage` widget displays an image.
+ *
+ * ![](image.png)
+ *
+ * Various kinds of object can be displayed as an image; most typically,
+ * you would load a `GdkTexture` from a file, using the convenience function
+ * [ctor@Gtk.Image.new_from_file], for instance:
+ *
+ * ```c
+ *   GtkWidget *image = gtk_image_new_from_file ("myfile.png");
+ * ```
+ *
  * If the file isn’t loaded successfully, the image will contain a
  * “broken image” icon similar to that used in many web browsers.
+ *
  * If you want to handle errors in loading the file yourself,
  * for example by displaying an error message, then load the image with
- * gdk_texture_new_from_file(), then create the #GtkImage with
- * gtk_image_new_from_paintable().
+ * `gdk_texture_new_from_file()`, then create the `GtkImage` with
+ * [ctor@Gtk.Image.new_from_paintable].
  *
  * Sometimes an application will want to avoid depending on external data
- * files, such as image files. See the documentation of #GResource for details.
- * In this case, the #GtkImage:resource, gtk_image_new_from_resource() and
- * gtk_image_set_from_resource() should be used.
+ * files, such as image files. See the documentation of `GResource` inside
+ * GIO, for details. In this case, [property@Gtk.Image:resource],
+ * [ctor@Gtk.Image.new_from_resource], and [method@Gtk.Image.set_from_resource]
+ * should be used.
  *
- * GtkImage displays its image as an icon, with a size that is determined
- * by the application. See #GtkPicture if you want to show an image at is
- * actual size.
+ * `GtkImage` displays its image as an icon, with a size that is determined
+ * by the application. See [class@Gtk.Picture] if you want to show an image
+ * at is actual size.
  *
- * # CSS nodes
+ * ## CSS nodes
  *
- * GtkImage has a single CSS node with the name image. The style classes
- * .normal-icons or .large-icons may appear, depending on the #GtkImage:icon-size
- * property.
+ * `GtkImage` has a single CSS node with the name `image`. The style classes
+ * `.normal-icons` or `.large-icons` may appear, depending on the
+ * [property@Gtk.Image:icon-size] property.
  *
- * # Accessibility
+ * ## Accessibility
  *
- * GtkImage uses the #GTK_ACCESSIBLE_ROLE_IMG role.
+ * `GtkImage` uses the `GTK_ACCESSIBLE_ROLE_IMG` role.
  */
 
 typedef struct _GtkImageClass GtkImageClass;
