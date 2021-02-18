@@ -1214,7 +1214,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * [keybinding signal][GtkSignalAction] 
    * which gets emitted when the user initiates a text deletion.
    *
-   * If the @type is %GTK_DELETE_CHARS, GTK+ deletes the selection
+   * If the @type is %GTK_DELETE_CHARS, GTK deletes the selection
    * if there is one, otherwise it deletes the requested number
    * of characters.
    *
@@ -8243,7 +8243,7 @@ gtk_text_view_preedit_changed_handler (GtkIMContext *context,
 
   /* Keypress events are passed to input method even if cursor position is
    * not editable; so beep here if it's multi-key input sequence, input
-   * method will be reset in when the event is handled by GTK+.
+   * method will be reset in when the event is handled by GTK.
    */
   gtk_im_context_get_preedit_string (context, &str, &attrs, &cursor_pos);
 

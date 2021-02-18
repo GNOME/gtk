@@ -53,7 +53,7 @@
  * @short_description: Application class
  *
  * #GtkApplication is a class that handles many important aspects
- * of a GTK+ application in a convenient fashion, without enforcing
+ * of a GTK application in a convenient fashion, without enforcing
  * a one-size-fits-all application model.
  *
  * Currently, GtkApplication handles GTK initialization, application
@@ -594,7 +594,7 @@ gtk_application_class_init (GtkApplicationClass *class)
    * GtkApplication:register-session:
    *
    * Set this property to %TRUE to register with the session manager.
-   * This will make GTK+ track the session state (such as the
+   * This will make GTK track the session state (such as the
    * #GtkApplication:screensaver-active property).
    */
   gtk_application_props[PROP_REGISTER_SESSION] =
@@ -607,8 +607,8 @@ gtk_application_class_init (GtkApplicationClass *class)
   /**
    * GtkApplication:screensaver-active:
    *
-   * This property is %TRUE if GTK+ believes that the screensaver is
-   * currently active. GTK+ only tracks session state (including this)
+   * This property is %TRUE if GTK believes that the screensaver is
+   * currently active. GTK only tracks session state (including this)
    * when #GtkApplication:register-session is set to %TRUE.
    *
    * Tracking the screensaver state is supported on Linux.
@@ -650,13 +650,13 @@ gtk_application_class_init (GtkApplicationClass *class)
  *
  * Concretely, gtk_init() is called in the default handler for the
  * #GApplication::startup signal. Therefore, #GtkApplication subclasses should
- * chain up in their #GApplication::startup handler before using any GTK+ API.
+ * chain up in their #GApplication::startup handler before using any GTK API.
  *
  * Note that commandline arguments are not passed to gtk_init().
- * All GTK+ functionality that is available via commandline arguments
+ * All GTK functionality that is available via commandline arguments
  * can also be achieved by setting suitable environment variables
  * such as `G_DEBUG`, so this should not be a big
- * problem. If you absolutely must support GTK+ commandline arguments,
+ * problem. If you absolutely must support GTK commandline arguments,
  * you can explicitly call gtk_init() before creating the application
  * instance.
  *
@@ -698,7 +698,7 @@ gtk_application_new (const char        *application_id,
  * will remain until the window is destroyed, but you can explicitly
  * remove it with gtk_application_remove_window().
  *
- * GTK+ will keep the @application running as long as it has
+ * GTK will keep the @application running as long as it has
  * any windows.
  **/
 void

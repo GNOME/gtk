@@ -50,8 +50,9 @@ G_BEGIN_DECLS
  *   pages when printing multiple pages per sheet
  *
  * An enum for specifying which features the print dialog should offer.
+ *
  * If neither %GTK_PRINT_CAPABILITY_GENERATE_PDF nor
- * %GTK_PRINT_CAPABILITY_GENERATE_PS is specified, GTK+ assumes that all
+ * %GTK_PRINT_CAPABILITY_GENERATE_PS is specified, GTK assumes that all
  * formats are supported.
  */
 typedef enum

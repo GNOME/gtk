@@ -42,13 +42,15 @@
  * @title: GtkStatusbar
  * @short_description: Report messages of minor importance to the user
  *
- * A #GtkStatusbar is usually placed along the bottom of an application's
- * main #GtkWindow. It may provide a regular commentary of the application's
+ * A `GtkStatusbar` widget is usually placed along the bottom of an application's
+ * main [class@Gtk.Window].
+ *
+ * A `GtkStatusBar` may provide a regular commentary of the application's
  * status (as is usually the case in a web browser, for example), or may be
  * used to simply output a message when the status changes, (when an upload
  * is complete in an FTP client, for example).
  *
- * Status bars in GTK+ maintain a stack of messages. The message at
+ * Status bars in GTK maintain a stack of messages. The message at
  * the top of the each bar’s stack is the one that will currently be displayed.
  *
  * Any messages added to a statusbar’s stack must specify a
@@ -72,9 +74,9 @@
  * stack if its message id was recorded at the time it was added. This
  * is done using gtk_statusbar_remove().
  *
- * # CSS node
+ * ## CSS node
  *
- * GtkStatusbar has a single CSS node with name statusbar.
+ * `GtkStatusbar` has a single CSS node with name `statusbar`.
  */
 
 typedef struct _GtkStatusbarMsg GtkStatusbarMsg;

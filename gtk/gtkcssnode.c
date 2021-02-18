@@ -68,7 +68,7 @@
  *   warrant their existence change.
  * - Keep the state of all your nodes up-to-date. This probably requires
  *   a ::state-flags-changed (and possibly ::direction-changed) handler,
- *   as well as code to update the state in other places. Note that GTK+
+ *   as well as code to update the state in other places. Note that GTK
  *   does this automatically for the widget's main CSS node.
  * - The sibling ordering in the CSS node tree is supposed to correspond
  *   to the visible order of content: top-to-bottom and left-to-right.
