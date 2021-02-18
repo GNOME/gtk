@@ -46,10 +46,12 @@
  * @Title: GtkTextBuffer
  * @See_also: #GtkTextView, #GtkTextIter, #GtkTextMark
  *
- * You may wish to begin by reading the
- * [text widget conceptual overview][TextWidget]
- * which gives an overview of all the objects and data
- * types related to the text widget and how they work together.
+ * Stores text (with or without attributes) for display in a
+ * [class@Gtk.TextView] widget.
+ *
+ * You may wish to begin by reading the [text widget conceptual overview][TextWidget]
+ * which gives an overview of all the objects and data types related to the
+ * text widget and how they work together.
  */
 
 typedef struct _GtkTextLogAttrCache GtkTextLogAttrCache;

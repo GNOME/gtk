@@ -40,6 +40,8 @@
  * @Short_description: Add tips to your widgets
  * @Title: GtkTooltip
  *
+ * An object representing a widget tooltip.
+ *
  * Basic tooltips can be realized simply by using gtk_widget_set_tooltip_text()
  * or gtk_widget_set_tooltip_markup() without any explicit tooltip object.
  *

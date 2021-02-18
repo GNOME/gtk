@@ -49,12 +49,10 @@
  * @Title: GtkComboBox
  * @See_also: #GtkComboBoxText, #GtkTreeModel, #GtkCellRenderer
  *
- * A GtkComboBox is a widget that allows the user to choose from a list of
- * valid choices. The GtkComboBox displays the selected choice. When
- * activated, the GtkComboBox displays a popup which allows the user to
- * make a new choice. The style in which the selected value is displayed,
- * and the style of the popup is determined by the current theme. It may
- * be similar to a Windows-style combo box.
+ * A `GtkComboBox` is a widget that allows the user to choose from a list of
+ * valid choices. The `GtkComboBox` displays the selected choice; when
+ * activated, the `GtkComboBox` displays a popup which allows the user to
+ * make a new choice.
  *
  * The GtkComboBox uses the model-view pattern; the list of valid choices
  * is specified in the form of a tree model, and the display of the choices
@@ -73,7 +71,7 @@
  * simple alternative. Both GtkComboBox and #GtkComboBoxText can contain
  * an entry.
  *
- * # CSS nodes
+ * ## CSS nodes
  *
  * |[<!-- language="plain" -->
  * combobox

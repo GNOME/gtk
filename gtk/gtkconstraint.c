@@ -23,8 +23,9 @@
  * @Short_description: The description of a constraint
  *
  * `GtkConstraint` describes a constraint between an attribute on a widget
- * and another attribute on another widget, expressed as a linear equation
- * like:
+ * and another attribute on another widget, expressed as a linear equation.
+ *
+ * For instance:
  *
  * ```
  *   target.attr1 = source.attr2 × multiplier + constant

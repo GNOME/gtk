@@ -63,12 +63,14 @@
  * @Title: GtkTextView
  * @See_also: #GtkTextBuffer, #GtkTextIter
  *
+ * A widget that displays the contents of a [class@Gtk.TextBuffer].
+ *
  * You may wish to begin by reading the
  * [text widget conceptual overview][TextWidget]
  * which gives an overview of all the objects and data
  * types related to the text widget and how they work together.
  *
- * # CSS nodes
+ * ## CSS nodes
  *
  * |[<!-- language="plain" -->
  * textview.view
@@ -91,7 +93,7 @@
  * If a context menu is opened, the window node will appear as a subnode
  * of the main node.
  *
- * # Accessibility
+ * ## Accessibility
  *
  * GtkTextView uses the #GTK_ACCESSIBLE_ROLE_TEXT_BOX role.
  */

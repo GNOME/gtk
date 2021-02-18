@@ -34,10 +34,12 @@
  *
  * GtkLockButton is a widget that can be used in control panels or
  * preference dialogs to allow users to obtain and revoke authorizations
- * needed to operate the controls. The required authorization is represented
- * by a #GPermission object. Concrete implementations of #GPermission may use
- * PolicyKit or some other authorization framework. To obtain a PolicyKit-based
- * #GPermission, use polkit_permission_new().
+ * needed to operate the controls.
+ *
+ * The required authorization is represented by a #GPermission object.
+ * Concrete implementations of #GPermission may use PolicyKit or some
+ * other authorization framework. To obtain a PolicyKit-based
+ * #GPermission, use `polkit_permission_new()`.
  *
  * If the user is not currently allowed to perform the action, but can obtain
  * the permission, the widget looks like this:

@@ -53,10 +53,11 @@
  * @modifiers: modifier mask
  *
  * Determines whether a given keyval and modifier mask constitute
- * a valid keyboard accelerator. For example, the #GDK_KEY_a keyval
- * plus #GDK_CONTROL_MASK is valid - this is a “Ctrl+a” accelerator.
- * But, you can't, for instance, use the #GDK_KEY_Control_L keyval
- * as an accelerator.
+ * a valid keyboard accelerator.
+ *
+ * For example, the %GDK_KEY_a keyval plus %GDK_CONTROL_MASK mark is valid,
+ * and matches the “Ctrl+a” accelerator. But, you can't, for instance, use
+ * the %GDK_KEY_Control_L keyval as an accelerator.
  *
  * Returns: %TRUE if the accelerator is valid
  */
@@ -558,13 +559,15 @@ gtk_accelerator_name_with_keycode (GdkDisplay      *display,
  * @accelerator_mods: accelerator modifier mask
  *
  * Converts an accelerator keyval and modifier mask into a string
- * parseable by gtk_accelerator_parse(). For example, if you pass in
- * #GDK_KEY_q and #GDK_CONTROL_MASK, this function returns “<Control>q”.
+ * parseable by gtk_accelerator_parse().
+ *
+ * For example, if you pass in %GDK_KEY_q and %GDK_CONTROL_MASK,
+ * this function returns `<Control>q`.
  *
  * If you need to display accelerators in the user interface,
  * see gtk_accelerator_get_label().
  *
- * Returns: a newly-allocated accelerator name
+ * Returns: (transfer full): a newly-allocated accelerator name
  */
 char *
 gtk_accelerator_name (guint           accelerator_key,

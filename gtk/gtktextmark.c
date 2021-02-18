@@ -58,6 +58,8 @@
  * @Short_description: A position in the buffer preserved across buffer modifications
  * @Title: GtkTextMark
  *
+ * A position in a [class@Gtk.TextBuffer] preserved across modifications.
+ *
  * You may wish to begin by reading the
  * [text widget conceptual overview][TextWidget]
  * which gives an overview of all the objects and data

@@ -41,6 +41,8 @@
  * @Short_description: Collection of tags that can be used together
  * @Title: GtkTextTagTable
  *
+ * The collection of tags in a [class@Gtk.TextBuffer].
+ *
  * You may wish to begin by reading the
  * [text widget conceptual overview][TextWidget]
  * which gives an overview of all the objects and

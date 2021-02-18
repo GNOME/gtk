@@ -36,14 +36,16 @@
  * @Title: GtkPicture
  * @SeeAlso: #GdkPaintable, #GtkImage
  *
- * The #GtkPicture widget displays a #GdkPaintable. Many convenience functions
- * are provided to make pictures simple to use. For example, if you want to load
- * an image from a file, and then display that, there’s a convenience function
- * to do this:
- * |[<!-- language="C" -->
- *   GtkWidget *widget;
- *   widget = gtk_picture_new_for_filename ("myfile.png");
- * ]|
+ * The `GtkPicture` widget displays a `GdkPaintable`.
+ *
+ * Many convenience functions are provided to make pictures simple to use.
+ * For example, if you want to load an image from a file, and then display
+ * it, there’s a convenience function to do this:
+ *
+ * ```c
+ *   GtkWidget *widget = gtk_picture_new_for_filename ("myfile.png");
+ * ```
+ *
  * If the file isn’t loaded successfully, the picture will contain a
  * “broken image” icon similar to that used in many web browsers.
  * If you want to handle errors in loading the file yourself,
@@ -59,7 +61,7 @@
  * GtkPicture displays an image at its natural size. See #GtkImage if you want
  * to display a fixed-size image, such as an icon.
  *
- * # Sizing the paintable
+ * ## Sizing the paintable
  *
  * You can influence how the paintable is displayed inside the #GtkPicture.
  * By turning off #GtkPicture:keep-aspect-ratio you can allow the paintable
@@ -71,13 +73,13 @@
  * sure the paintable doesn't fill all available space but is instead displayed
  * at its original size.
  *
- * # CSS nodes
+ * ## CSS nodes
  *
- * GtkPicture has a single CSS node with the name picture.
+ * `GtkPicture` has a single CSS node with the name `picture`.
  *
- * # Accessibility
+ * ## Accessibility
  *
- * GtkPicture uses the #GTK_ACCESSIBLE_ROLE_IMG role.
+ * `GtkPicture` uses the `GTK_ACCESSIBLE_ROLE_IMG` role.
  */
 
 enum

@@ -25,8 +25,9 @@
  * @See_also: #GtkGesture
  *
  * #GtkEventController is a base, low-level implementation for event
- * controllers. Those react to a series of #GdkEvents, and possibly trigger
- * actions as a consequence of those.
+ * controllers: ancillary object associated to widgets, which react
+ * to a series of #GdkEvents, and possibly trigger actions as a
+ * consequence.
  */
 
 #include "config.h"

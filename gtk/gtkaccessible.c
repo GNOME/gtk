@@ -25,7 +25,9 @@
  *
  * GtkAccessible provides an interface for describing a UI element, like a
  * #GtkWidget, in a way that can be consumed by Assistive Technologies, or
- * “AT”. Every accessible implementation has:
+ * “AT”.
+ *
+ * Every accessible implementation has:
  *
  *  - a “role”, represented by a value of the #GtkAccessibleRole enumeration
  *  - an “attribute”, represented by a set of #GtkAccessibleState,

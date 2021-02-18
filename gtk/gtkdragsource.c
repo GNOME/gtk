@@ -46,8 +46,10 @@
  * @Short_description: Event controller to initiate DND operations
  * @Title: GtkDragSource
  *
- * GtkDragSource is an auxiliary object that is used to initiate
- * Drag-And-Drop operations. It can be set up with the necessary
+ * GtkDragSource is an event controller that is used to initiate
+ * Drag-And-Drop operations.
+ *
+ * GtkDragSource can be set up with the necessary
  * ingredients for a DND operation ahead of time. This includes
  * the source for the data that is being transferred, in the form
  * of a #GdkContentProvider, the desired action, and the icon to

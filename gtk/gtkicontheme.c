@@ -69,10 +69,11 @@
  * @Title: GtkIconTheme
  *
  * #GtkIconTheme provides a facility for looking up icons by name
- * and size. The main reason for using a name rather than simply
- * providing a filename is to allow different icons to be used
- * depending on what “icon theme” is selected
- * by the user. The operation of icon themes on Linux and Unix
+ * and size.
+ *
+ * The main reason for using a name rather than simply providing a filename
+ * is to allow different icons to be used depending on what “icon theme” is
+ * selected by the user. The operation of icon themes on Linux and Unix
  * follows the [Icon Theme Specification](http://www.freedesktop.org/Standards/icon-theme-spec)
  * There is a fallback icon theme, named `hicolor`, where applications
  * should install their icons, but additional icon themes can be installed

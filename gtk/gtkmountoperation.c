@@ -63,9 +63,13 @@
 #include <glib/gprintf.h>
 
 /**
- * SECTION:filesystem
+ * SECTION:gtkmountoperation
  * @short_description: Functions for working with GIO
  * @Title: Filesystem utilities
+ *
+ * `GtkMountOperation` is an implementation of `GMountOperation` that
+ * can use a graphical user interface when requiring information from
+ * the user, like passwords or other information.
  *
  * The functions and objects described here make working with GTK and
  * GIO more convenient.

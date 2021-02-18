@@ -28,8 +28,7 @@
  * @Title: GtkButton
  *
  * The #GtkButton widget is generally used to trigger a callback function that is
- * called when the button is pressed.  The various signals and how to use them
- * are outlined below.
+ * called when the button is pressed.
  *
  * The #GtkButton widget can hold any valid child widget.  That is, it can hold
  * almost any other standard #GtkWidget.  The most commonly used child is the

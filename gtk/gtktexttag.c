@@ -52,6 +52,8 @@
  * @Title: GtkTextTag
  * @Short_description: A tag that can be applied to text in a GtkTextBuffer
  *
+ * A tag that can be applied to text contained in a [class@Gtk.TextBuffer].
+ *
  * You may wish to begin by reading the
  * [text widget conceptual overview][TextWidget]
  * which gives an overview of all the objects and

@@ -43,6 +43,9 @@
  * @Title: GtkHeaderBar
  * @See_also: #GtkBox, #GtkActionBar
  *
+ * `GtkHeaderBar` is a widget for creating custom title bars for
+ * [class@Gtk.Window].
+ *
  * GtkHeaderBar is similar to a horizontal #GtkBox. It allows children to 
  * be placed at the start or the end. In addition, it allows the window
  * title to be displayed. The title will be centered with respect to the

@@ -38,6 +38,8 @@
  * @Short_description: Text buffer iterator
  * @Title: GtkTextIter
  *
+ * An iterator for the contents of a [class@Gtk.TextBuffer]
+ *
  * You may wish to begin by reading the
  * [text widget conceptual overview][TextWidget]
  * which gives an overview of all the objects and data
