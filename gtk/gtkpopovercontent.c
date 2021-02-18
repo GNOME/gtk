@@ -18,10 +18,13 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include "gtkpopovercontentprivate.h"
 #include "gtkstylecontextprivate.h"
 
 #include "gtkwidgetprivate.h"
+#include "gtkintl.h"
 
 /* A private class used as the child of GtkPopover. The only thing
  * special here is that we need to queue a resize on the popover when
@@ -71,6 +74,8 @@ gtk_popover_content_class_init (GtkPopoverContentClass *klass)
   widget_class->focus = gtk_widget_focus_child;
   widget_class->grab_focus = gtk_widget_grab_focus_child;
   widget_class->css_changed = gtk_popover_content_css_changed;
+
+  gtk_widget_class_set_css_name (widget_class, I_("contents"));
 }
 
 static void
@@ -81,8 +86,5 @@ gtk_popover_content_init (GtkPopoverContent *self)
 GtkWidget *
 gtk_popover_content_new (void)
 {
-  return g_object_new (GTK_TYPE_POPOVER_CONTENT,
-                       "css-name", "contents",
-                       "accessible-role", GTK_ACCESSIBLE_ROLE_WIDGET,
-                       NULL);
+  return g_object_new (GTK_TYPE_POPOVER_CONTENT, NULL);
 }
