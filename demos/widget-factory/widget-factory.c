@@ -2329,10 +2329,10 @@ activate (GApplication *app)
 static void
 print_version (void)
 {
-  g_print ("gtk4-widget-factory %d.%d.%d\n",
-           gtk_get_major_version (),
-           gtk_get_minor_version (),
-           gtk_get_micro_version ());
+  g_print ("gtk4-widget-factory %s%s%s\n",
+           PACKAGE_VERSION,
+           g_strcmp0 (PROFILE, "devel") == 0 ? "-" : "",
+           g_strcmp0 (PROFILE, "devel") == 0 ? VCS_TAG : "");
 }
 
 static int
