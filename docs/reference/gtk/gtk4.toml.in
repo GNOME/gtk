@@ -68,6 +68,7 @@ content_files = [
   "wayland.md",
   "windows.md",
   "x11.md",
+  "visual_index.md",
 ]
 content_images = [
   "images/aboutdialog.png",

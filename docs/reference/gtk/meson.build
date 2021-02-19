@@ -24,6 +24,7 @@ expand_content_md_files = [
   'section-tree-widget.md',
   'section-list-widget.md',
   'question_index.md',
+  'visual_index.md'
 ]
 
 gtk4_toml = configure_file(input: 'gtk4.toml.in', output: 'gtk4.toml', configuration: toml_conf)
