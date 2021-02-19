@@ -57,12 +57,14 @@
 #include <string.h>
 
 /**
- * SECTION:gtklabel
- * @Short_description: A widget that displays a small to medium amount of text
- * @Title: GtkLabel
+ * GtkLabel:
  *
- * The #GtkLabel widget displays a small amount of text. As the name
- * implies, most labels are used to label another widget such as a #GtkButton.
+ * The `GtkLabel` widget displays a small amount of text.
+ *
+ * As the name implies, most labels are used to label another widget
+ * such as a [class@Button].
+ *
+ * ![An example GtkLabel](label.png)
  *
  * # CSS nodes
  *
@@ -74,9 +76,9 @@
  * ╰── [link]
  * ]|
  *
- * GtkLabel has a single CSS node with the name label. A wide variety
+ * `GtkLabel` has a single CSS node with the name label. A wide variety
  * of style classes may be applied to labels, such as .title, .subtitle,
- * .dim-label, etc. In the #GtkShortcutsWindow, labels are used with the
+ * .dim-label, etc. In the `GtkShortcutsWindow`, labels are used with the
  * .keycap style class.
  *
  * If the label has a selection, it gets a subnode with name selection.
@@ -90,18 +92,18 @@
  * The GtkLabel implementation of the GtkBuildable interface supports a
  * custom <attributes> element, which supports any number of <attribute>
  * elements. The <attribute> element has attributes named “name“, “value“,
- * “start“ and “end“ and allows you to specify #PangoAttribute values for
- * this label.
+ * “start“ and “end“ and allows you to specify [class@Pango.Attribute]
+ * values for this label.
  *
  * An example of a UI definition fragment specifying Pango attributes:
- * |[
+ * ```xml
  * <object class="GtkLabel">
  *   <attributes>
  *     <attribute name="weight" value="PANGO_WEIGHT_BOLD"/>
  *     <attribute name="background" value="red" start="5" end="10"/>
  *   </attributes>
  * </object>
- * ]|
+ * ```
  *
  * The start and end attributes specify the range of characters to which the
  * Pango attribute applies. If start and end are not specified, the attribute is
@@ -111,136 +113,131 @@
  *
  * # Accessibility
  *
- * GtkLabel uses the #GTK_ACCESSIBLE_ROLE_LABEL role.
+ * `GtkLabel` uses the #GTK_ACCESSIBLE_ROLE_LABEL role.
  *
  * # Mnemonics
  *
- * Labels may contain “mnemonics”. Mnemonics are
- * underlined characters in the label, used for keyboard navigation.
- * Mnemonics are created by providing a string with an underscore before
- * the mnemonic character, such as `"_File"`, to the
- * functions gtk_label_new_with_mnemonic() or
- * gtk_label_set_text_with_mnemonic().
+ * Labels may contain “mnemonics”. Mnemonics are underlined characters in the
+ * label, used for keyboard navigation. Mnemonics are created by providing a
+ * string with an underscore before the mnemonic character, such as `"_File"`,
+ * to the functions [ctor@Gtk.Label.new_with_mnemonic] or
+ * [method@Gtk.Label.set_text_with_mnemonic].
  *
  * Mnemonics automatically activate any activatable widget the label is
- * inside, such as a #GtkButton; if the label is not inside the
+ * inside, such as a [class@Gtk.Button]; if the label is not inside the
  * mnemonic’s target widget, you have to tell the label about the target
- * using gtk_label_set_mnemonic_widget(). Here’s a simple example where
+ * using [class@Gtk.Label.set_mnemonic_widget]. Here’s a simple example where
  * the label is inside a button:
  *
- * |[<!-- language="C" -->
- *   // Pressing Alt+H will activate this button
- *   GtkWidget *button = gtk_button_new ();
- *   GtkWidget *label = gtk_label_new_with_mnemonic ("_Hello");
- *   gtk_button_set_child (GTK_BUTTON (button), label);
- * ]|
+ * ```c
+ * // Pressing Alt+H will activate this button
+ * GtkWidget *button = gtk_button_new ();
+ * GtkWidget *label = gtk_label_new_with_mnemonic ("_Hello");
+ * gtk_button_set_child (GTK_BUTTON (button), label);
+ * ```
  *
  * There’s a convenience function to create buttons with a mnemonic label
  * already inside:
  *
- * |[<!-- language="C" -->
- *   // Pressing Alt+H will activate this button
- *   GtkWidget *button = gtk_button_new_with_mnemonic ("_Hello");
- * ]|
+ * ```c
+ * // Pressing Alt+H will activate this button
+ * GtkWidget *button = gtk_button_new_with_mnemonic ("_Hello");
+ * ```
  *
  * To create a mnemonic for a widget alongside the label, such as a
- * #GtkEntry, you have to point the label at the entry with
- * gtk_label_set_mnemonic_widget():
+ * [class@Gtk.Entry], you have to point the label at the entry with
+ * [method@Gtk.Label.set_mnemonic_widget]:
  *
- * |[<!-- language="C" -->
- *   // Pressing Alt+H will focus the entry
- *   GtkWidget *entry = gtk_entry_new ();
- *   GtkWidget *label = gtk_label_new_with_mnemonic ("_Hello");
- *   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
- * ]|
+ * ```c
+ * // Pressing Alt+H will focus the entry
+ * GtkWidget *entry = gtk_entry_new ();
+ * GtkWidget *label = gtk_label_new_with_mnemonic ("_Hello");
+ * gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
+ * ```
  *
  * # Markup (styled text)
  *
  * To make it easy to format text in a label (changing colors,
  * fonts, etc.), label text can be provided in a simple
- * [markup format][PangoMarkupFormat].
+ * markup format:
  *
  * Here’s how to create a label with a small font:
- * |[<!-- language="C" -->
- *   GtkWidget *label = gtk_label_new (NULL);
- *   gtk_label_set_markup (GTK_LABEL (label), "<small>Small text</small>");
- * ]|
+ * ```c
+ * GtkWidget *label = gtk_label_new (NULL);
+ * gtk_label_set_markup (GTK_LABEL (label), "<small>Small text</small>");
+ * ```
  *
- * (See [complete documentation][PangoMarkupFormat] of available
- * tags in the Pango manual.)
+ * (See the Pango manual for complete documentation] of available
+ * tags, [func@Pango.parse_markup])
  *
  * The markup passed to gtk_label_set_markup() must be valid; for example,
  * literal <, > and & characters must be escaped as &lt;, &gt;, and &amp;.
  * If you pass text obtained from the user, file, or a network to
- * gtk_label_set_markup(), you’ll want to escape it with
+ * [method@Gtk.Label.set_markup], you’ll want to escape it with
  * g_markup_escape_text() or g_markup_printf_escaped().
  *
- * Markup strings are just a convenient way to set the #PangoAttrList on
- * a label; gtk_label_set_attributes() may be a simpler way to set
- * attributes in some cases. Be careful though; #PangoAttrList tends to
- * cause internationalization problems, unless you’re applying attributes
+ * Markup strings are just a convenient way to set the [class@Pango.AttrList]
+ * on a label; [method@Gtk.Label.set_attributes] may be a simpler way to set
+ * attributes in some cases. Be careful though; [class@Pango.AttrList] tends
+ * to cause internationalization problems, unless you’re applying attributes
  * to the entire string (i.e. unless you set the range of each attribute
  * to [0, %G_MAXINT)). The reason is that specifying the start_index and
- * end_index for a #PangoAttribute requires knowledge of the exact string
- * being displayed, so translations will cause problems.
+ * end_index for a [class@Pango.Attribute] requires knowledge of the exact
+ * string being displayed, so translations will cause problems.
  *
  * # Selectable labels
  *
- * Labels can be made selectable with gtk_label_set_selectable().
+ * Labels can be made selectable with [method@Gtk.Label.set_selectable].
  * Selectable labels allow the user to copy the label contents to
  * the clipboard. Only labels that contain useful-to-copy information
  * — such as error messages — should be made selectable.
  *
- * # Text layout # {#label-text-layout}
+ * # Text layout
  *
  * A label can contain any number of paragraphs, but will have
  * performance problems if it contains more than a small number.
  * Paragraphs are separated by newlines or other paragraph separators
  * understood by Pango.
  *
- * Labels can automatically wrap text if you call
- * gtk_label_set_wrap().
+ * Labels can automatically wrap text if you call [method@Gtk.Label.set_wrap].
  *
- * gtk_label_set_justify() sets how the lines in a label align
- * with one another. If you want to set how the label as a whole
- * aligns in its available space, see the #GtkWidget:halign and
- * #GtkWidget:valign properties.
+ * [method@Gtk.Label.set_justify] sets how the lines in a label align
+ * with one another. If you want to set how the label as a whole aligns
+ * in its available space, see the [property@Gtk.Widget:halign] and
+ * [property@Gtk.Widget:valign] properties.
  *
- * The #GtkLabel:width-chars and #GtkLabel:max-width-chars properties
- * can be used to control the size allocation of ellipsized or wrapped
- * labels. For ellipsizing labels, if either is specified (and less
+ * The [property@Gtk.Label:width-chars] and [property@Gtk.Label:max-width-chars]
+ * properties can be used to control the size allocation of ellipsized or
+ * wrapped labels. For ellipsizing labels, if either is specified (and less
  * than the actual text size), it is used as the minimum width, and the actual
  * text size is used as the natural width of the label. For wrapping labels,
  * width-chars is used as the minimum width, if specified, and max-width-chars
  * is used as the natural width. Even if max-width-chars specified, wrapping
  * labels will be rewrapped to use all of the available width.
  *
- * Note that the interpretation of #GtkLabel:width-chars and
- * #GtkLabel:max-width-chars has changed a bit with the introduction of
- * [width-for-height geometry management.][geometry-management]
- *
  * # Links
  *
- * GTK supports markup for clickable hyperlinks in addition
- * to regular Pango markup. The markup for links is borrowed from HTML,
- * using the `<a>` with “href“, “title“ and “class“ attributes. GTK renders links
- * similar to the way they appear in web browsers, with colored, underlined
- * text. The “title“ attribute is displayed as a tooltip on the link. The “class“
- * attribute is used as style class on the CSS node for the link.
+ * GTK supports markup for clickable hyperlinks in addition to regular Pango
+ * markup. The markup for links is borrowed from HTML, using the `<a>` with
+ * “href“, “title“ and “class“ attributes. GTK renders links similar to the
+ * way they appear in web browsers, with colored, underlined text. The “title“
+ * attribute is displayed as a tooltip on the link. The “class“ attribute is
+ * used as style class on the CSS node for the link.
  *
  * An example looks like this:
  *
- * |[<!-- language="C" -->
+ * ```c
  * const char *text =
  * "Go to the"
  * "<a href=\"http://www.gtk.org title=\"&lt;i&gt;Our&lt;/i&gt; website\">"
  * "GTK website</a> for more...";
  * GtkWidget *label = gtk_label_new (NULL);
  * gtk_label_set_markup (GTK_LABEL (label), text);
- * ]|
+ * ```
  *
- * It is possible to implement custom handling for links and their tooltips with
- * the #GtkLabel::activate-link signal and the gtk_label_get_current_uri() function.
+ * It is possible to implement custom handling for links and their tooltips
+ * with the [signal@Gtk.Label::activate-link] signal and the
+ * [method@Gtk.Label.get_current_uri] function.
  */
 
 typedef struct _GtkLabelClass         GtkLabelClass;
@@ -940,13 +937,14 @@ nope:
  * @existing_layout: %NULL or an existing layout already in use.
  * @width: the width to measure with in pango units, or -1 for infinite
  *
- * Gets a layout that can be used for measuring sizes. The returned
- * layout will be identical to the label’s layout except for the
- * layout’s width, which will be set to @width. Do not modify the returned
- * layout.
+ * Gets a layout that can be used for measuring sizes.
+ *
+ * The returned layout will be identical to the label’s layout except for
+ * the layout’s width, which will be set to @width. Do not modify the
+ * returned layout.
  *
  * Returns: a new reference to a pango layout
- **/
+ */
 static PangoLayout *
 gtk_label_get_measuring_layout (GtkLabel    *self,
                                 PangoLayout *existing_layout,
@@ -2075,11 +2073,11 @@ gtk_label_class_init (GtkLabelClass *class)
    * @count: the number of @step units to move
    * @extend_selection: %TRUE if the move should extend the selection
    *
-   * The ::move-cursor signal is a
-   * [keybinding signal][GtkSignalAction]
-   * which gets emitted when the user initiates a cursor movement.
-   * If the cursor is not visible in @entry, this signal causes
-   * the viewport to be moved instead.
+   * Gets emitted when the user initiates a cursor movement.
+   *
+   * The ::move-cursor signal is a [keybinding signal](class.SignalAction.html).
+   * If the cursor is not visible in @entry, this signal causes the viewport to
+   * be moved instead.
    *
    * Applications should not connect to it, but may emit it with
    * g_signal_emit_by_name() if they need to control the cursor
@@ -2109,9 +2107,9 @@ gtk_label_class_init (GtkLabelClass *class)
    * GtkLabel::copy-clipboard:
    * @self: the object which received the signal
    *
-   * The ::copy-clipboard signal is a
-   * [keybinding signal][GtkSignalAction]
-   * which gets emitted to copy the selection to the clipboard.
+   * Gets emitted to copy the slection to the clipboard.
+   *
+   * The ::copy-clipboard signal is a [keybinding signal](class.SignalAction.html).
    *
    * The default binding for this signal is Ctrl-c.
    */
@@ -2128,8 +2126,9 @@ gtk_label_class_init (GtkLabelClass *class)
      * GtkLabel::activate-current-link:
      * @self: The label on which the signal was emitted
      *
-     * A [keybinding signal][GtkSignalAction]
-     * which gets emitted when the user activates a link in the label.
+     * Gets emitted when the user activates a link in the label.
+     *
+     * The ::activate-current-link is a [keybinding signal](class.SignalAction.html).
      *
      * Applications may also emit the signal with g_signal_emit_by_name()
      * if they need to control activation of URIs programmatically.
@@ -2150,7 +2149,8 @@ gtk_label_class_init (GtkLabelClass *class)
      * @self: The label on which the signal was emitted
      * @uri: the URI that is activated
      *
-     * The signal which gets emitted to activate a URI.
+     * Gets emitted to activate a URI.
+     *
      * Applications may connect to it to override the default behaviour,
      * which is to call gtk_show_uri().
      *
@@ -2170,15 +2170,16 @@ gtk_label_class_init (GtkLabelClass *class)
    *
    * The contents of the label.
    *
-   * If the string contains [Pango XML markup][PangoMarkupFormat], you will
-   * have to set the #GtkLabel:use-markup property to %TRUE in order for the
-   * label to display the markup attributes. See also gtk_label_set_markup()
-   * for a convenience function that sets both this property and the
-   * #GtkLabel:use-markup property at the same time.
+   * If the string contains Pango markup (see [func@Pango.parse_markup]),
+   * you will have to set the [property@Gtk.Label:use-markup] property to
+   * %TRUE in order for the label to display the markup attributes. See also
+   * [method@Gtk.Label.set_markup] for a convenience function that sets both
+   * this property and the [property@Gtk.Label:use-markup] property at the
+   * same time.
    *
    * If the string contains underlines acting as mnemonics, you will have to
-   * set the #GtkLabel:use-underline property to %TRUE in order for the label
-   * to display them.
+   * set the [property@Gtk.Label:use-underline] property to %TRUE in order
+   * for the label to display them.
    */
   label_props[PROP_LABEL] =
       g_param_spec_string ("label",
@@ -2187,6 +2188,11 @@ gtk_label_class_init (GtkLabelClass *class)
                            "",
                            GTK_PARAM_READWRITE);
 
+  /**
+   * GtkLabel:attributes:
+   *
+   * A list of style attributes to apply to the text of the label.
+   */
   label_props[PROP_ATTRIBUTES] =
       g_param_spec_boxed ("attributes",
                           P_("Attributes"),
@@ -2194,6 +2200,13 @@ gtk_label_class_init (GtkLabelClass *class)
                           PANGO_TYPE_ATTR_LIST,
                           GTK_PARAM_READWRITE);
 
+  /**
+   * GtkLabel:use-markup:
+   *
+   * %TRUE if the text of the label includes Pango markup.
+   *
+   * See [func@Pango.parse_markup].
+   */
   label_props[PROP_USE_MARKUP] =
       g_param_spec_boolean ("use-markup",
                             P_("Use markup"),
@@ -2201,6 +2214,11 @@ gtk_label_class_init (GtkLabelClass *class)
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkLabel:use-underline:
+   *
+   * %TRUE if the text of the label indicates a mnemonic with _.
+   */
   label_props[PROP_USE_UNDERLINE] =
       g_param_spec_boolean ("use-underline",
                             P_("Use underline"),
@@ -2208,6 +2226,14 @@ gtk_label_class_init (GtkLabelClass *class)
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkLabel:justify:
+   *
+   * The alignment of the lines in the text of the label, relative to each other.
+   *
+   * This does *not* affect the alignment of the label within its allocation.
+   * See [property@Gtk.Label:xalign] for that.
+   */
   label_props[PROP_JUSTIFY] =
       g_param_spec_enum ("justify",
                          P_("Justification"),
@@ -2219,10 +2245,10 @@ gtk_label_class_init (GtkLabelClass *class)
   /**
    * GtkLabel:xalign:
    *
-   * The xalign property determines the horizontal alignment of the label text
-   * inside the labels size allocation. Compare this to #GtkWidget:halign,
-   * which determines how the labels size allocation is positioned in the
-   * space available for the label.
+   * The horizontal alignment of the label text inside its size allocation.
+   *
+   * Compare this to [property@Gtk.Widget:halign], which determines how the
+   * labels size allocation is positioned in the space available for the label.
    */
   label_props[PROP_XALIGN] =
       g_param_spec_float ("xalign",
@@ -2235,10 +2261,10 @@ gtk_label_class_init (GtkLabelClass *class)
   /**
    * GtkLabel:yalign:
    *
-   * The yalign property determines the vertical alignment of the label text
-   * inside the labels size allocation. Compare this to #GtkWidget:valign,
-   * which determines how the labels size allocation is positioned in the
-   * space available for the label.
+   * The vertical alignment of the label text inside its size allocation.
+   *
+   * Compare this to [property@Gtk.Widget:valign], which determines how the
+   * labels size allocation is positioned in the space available for the label.
    */
   label_props[PROP_YALIGN] =
       g_param_spec_float ("yalign",
@@ -2248,6 +2274,11 @@ gtk_label_class_init (GtkLabelClass *class)
                           0.5,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkLabel:wrap:
+   *
+   * %TRUE if the label text will wrap if it gets too wide.
+   */
   label_props[PROP_WRAP] =
       g_param_spec_boolean ("wrap",
                             P_("Line wrap"),
@@ -2258,9 +2289,11 @@ gtk_label_class_init (GtkLabelClass *class)
   /**
    * GtkLabel:wrap-mode:
    *
-   * If line wrapping is on (see the #GtkLabel:wrap property) this controls
-   * how the line wrapping is done. The default is %PANGO_WRAP_WORD, which
-   * means wrap on word boundaries.
+   * Controls how the line wrapping is done.
+   *
+   * This only affects the formatting if line wrapping is on (see the
+   * [property@Gtk.Label:wrap] property). The default is %PANGO_WRAP_WORD,
+   * which means wrap on word boundaries.
    */
   label_props[PROP_WRAP_MODE] =
       g_param_spec_enum ("wrap-mode",
@@ -2270,6 +2303,11 @@ gtk_label_class_init (GtkLabelClass *class)
                          PANGO_WRAP_WORD,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkLabel:selectable:
+   *
+   * Whether the label text can be selected with the mouse.
+   */
   label_props[PROP_SELECTABLE] =
       g_param_spec_boolean ("selectable",
                             P_("Selectable"),
@@ -2277,6 +2315,11 @@ gtk_label_class_init (GtkLabelClass *class)
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkLabel:mnemonic-keyval:
+   *
+   * The mnemonic accelerator key for the label.
+   */
   label_props[PROP_MNEMONIC_KEYVAL] =
       g_param_spec_uint ("mnemonic-keyval",
                          P_("Mnemonic key"),
@@ -2285,6 +2328,11 @@ gtk_label_class_init (GtkLabelClass *class)
                          GDK_KEY_VoidSymbol,
                          GTK_PARAM_READABLE);
 
+  /**
+   * GtkLabel:mnemonic-widget:
+   *
+   * The widget to be activated when the labels mnemonic key is pressed.
+   */
   label_props[PROP_MNEMONIC_WIDGET] =
       g_param_spec_object ("mnemonic-widget",
                            P_("Mnemonic widget"),
@@ -2296,16 +2344,15 @@ gtk_label_class_init (GtkLabelClass *class)
    * GtkLabel:ellipsize:
    *
    * The preferred place to ellipsize the string, if the label does
-   * not have enough room to display the entire string, specified as a
-   * #PangoEllipsizeMode.
+   * not have enough room to display the entire string.
    *
    * Note that setting this property to a value other than
    * %PANGO_ELLIPSIZE_NONE has the side-effect that the label requests
    * only enough space to display the ellipsis "...". In particular, this
    * means that ellipsizing labels do not work well in notebook tabs, unless
-   * the #GtkNotebook tab-expand child property is set to %TRUE. Other ways
-   * to set a label's width are gtk_widget_set_size_request() and
-   * gtk_label_set_width_chars().
+   * the [property@Gtk.NotebookPage:tab-expand] child property is set to %TRUE.
+   * Other ways to set a label's width are [method@Gtk.Widget.set_size_request]
+   * and [method@Gtk.Label.set_width_chars].
    */
   label_props[PROP_ELLIPSIZE] =
       g_param_spec_enum ("ellipsize",
@@ -2318,13 +2365,14 @@ gtk_label_class_init (GtkLabelClass *class)
   /**
    * GtkLabel:width-chars:
    *
-   * The desired width of the label, in characters. If this property is set to
-   * -1, the width will be calculated automatically.
+   * The desired width of the label, in characters.
    *
-   * See the section on [text layout][label-text-layout]
-   * for details of how #GtkLabel:width-chars and #GtkLabel:max-width-chars
+   * If this property is set to -1, the width will be calculated automatically.
+   *
+   * See the section on [text layout][label-text-layout] for details of how
+   * [property@Gtk.Label:width-chars] and [property@Gtk.Label:max-width-chars]
    * determine the width of ellipsized and wrapped labels.
-   **/
+   */
   label_props[PROP_WIDTH_CHARS] =
       g_param_spec_int ("width-chars",
                         P_("Width In Characters"),
@@ -2336,12 +2384,13 @@ gtk_label_class_init (GtkLabelClass *class)
   /**
    * GtkLabel:single-line-mode:
    *
-   * Whether the label is in single line mode. In single line mode,
-   * the height of the label does not depend on the actual text, it
-   * is always set to ascent + descent of the font. This can be an
-   * advantage in situations where resizing the label because of text
-   * changes would be distracting, e.g. in a statusbar.
-   **/
+   * Whether the label is in single line mode.
+   *
+   * In single line mode, the height of the label does not depend on the
+   * actual text, it is always set to ascent + descent of the font. This
+   * can be an advantage in situations where resizing the label because
+   * of text changes would be distracting, e.g. in a statusbar.
+   */
   label_props[PROP_SINGLE_LINE_MODE] =
       g_param_spec_boolean ("single-line-mode",
                             P_("Single Line Mode"),
@@ -2352,13 +2401,14 @@ gtk_label_class_init (GtkLabelClass *class)
   /**
    * GtkLabel:max-width-chars:
    *
-   * The desired maximum width of the label, in characters. If this property
-   * is set to -1, the width will be calculated automatically.
+   * The desired maximum width of the label, in characters.
    *
-   * See the section on [text layout][label-text-layout]
-   * for details of how #GtkLabel:width-chars and #GtkLabel:max-width-chars
+   * If this property is set to -1, the width will be calculated automatically.
+   *
+   * See the section on [text layout][label-text-layout] for details of how
+   * [property@Gtk.Label:width-chars] and [property@Gtk.Label:max-width-chars]
    * determine the width of ellipsized and wrapped labels.
-   **/
+   */
   label_props[PROP_MAX_WIDTH_CHARS] =
       g_param_spec_int ("max-width-chars",
                         P_("Maximum Width In Characters"),
@@ -2371,9 +2421,10 @@ gtk_label_class_init (GtkLabelClass *class)
    * GtkLabel:lines:
    *
    * The number of lines to which an ellipsized, wrapping label
-   * should be limited. This property has no effect if the
-   * label is not wrapping or ellipsized. Set this property to
-   * -1 if you don't want to limit the number of lines.
+   * should be limited.
+   *
+   * This property has no effect if the label is not wrapping or ellipsized.
+   * Set this property to -1 if you don't want to limit the number of lines.
    */
   label_props[PROP_LINES] =
       g_param_spec_int ("lines",
@@ -2386,8 +2437,7 @@ gtk_label_class_init (GtkLabelClass *class)
   /**
    * GtkLabel:extra-menu:
    *
-   * A menu model whose contents will be appended to
-   * the context menu.
+   * A menu model whose contents will be appended to the context menu.
    */
   label_props[PROP_EXTRA_MENU] =
       g_param_spec_object ("extra-menu",
@@ -2586,10 +2636,11 @@ gtk_label_class_init (GtkLabelClass *class)
  * gtk_label_new:
  * @str: (nullable): The text of the label
  *
- * Creates a new label with the given text inside it. You can
- * pass %NULL to get an empty label widget.
+ * Creates a new label with the given text inside it.
  *
- * Returns: the new #GtkLabel
+ * You can pass %NULL to get an empty label widget.
+ *
+ * Returns: the new `GtkLabel`
  **/
 GtkWidget*
 gtk_label_new (const char *str)
@@ -2609,22 +2660,22 @@ gtk_label_new (const char *str)
  * @str: (nullable): The text of the label, with an underscore in front of the
  *       mnemonic character
  *
- * Creates a new #GtkLabel, containing the text in @str.
+ * Creates a new `GtkLabel`, containing the text in @str.
  *
  * If characters in @str are preceded by an underscore, they are
  * underlined. If you need a literal underscore character in a label, use
  * '__' (two underscores). The first underlined character represents a
  * keyboard accelerator called a mnemonic. The mnemonic key can be used
  * to activate another widget, chosen automatically, or explicitly using
- * gtk_label_set_mnemonic_widget().
+ * [method@Gtk.Label.set_mnemonic_widget].
  *
- * If gtk_label_set_mnemonic_widget() is not called, then the first
- * activatable ancestor of the #GtkLabel will be chosen as the mnemonic
+ * If [method@Gtk.Label.set_mnemonic_widget] is not called, then the first
+ * activatable ancestor of the `GtkLabel` will be chosen as the mnemonic
  * widget. For instance, if the label is inside a button or menu item,
  * the button or menu item will automatically become the mnemonic widget
  * and be activated by the mnemonic.
  *
- * Returns: the new #GtkLabel
+ * Returns: the new `GtkLabel`
  **/
 GtkWidget*
 gtk_label_new_with_mnemonic (const char *str)
@@ -2752,24 +2803,27 @@ label_mnemonic_widget_weak_notify (gpointer      data,
 
 /**
  * gtk_label_set_mnemonic_widget:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  * @widget: (nullable): the target #GtkWidget, or %NULL to unset
  *
+ * Associate the label with its mnemonic target.
+ *
  * If the label has been set so that it has a mnemonic key (using
- * i.e. gtk_label_set_markup_with_mnemonic(),
- * gtk_label_set_text_with_mnemonic(), gtk_label_new_with_mnemonic()
- * or the “use_underline” property) the label can be associated with a
- * widget that is the target of the mnemonic. When the label is inside
- * a widget (like a #GtkButton or a #GtkNotebook tab) it is
- * automatically associated with the correct widget, but sometimes
- * (i.e. when the target is a #GtkEntry next to the label) you need to
- * set it explicitly using this function.
+ * i.e. [method@Gtk.Label.set_markup_with_mnemonic],
+ * [method@Gtk.Label.set_text_with_mnemonic],
+ * [ctor@Gtk.Label.new_with_mnemonic]
+ * or the [property@Gtk.Label:use_underline] property) the label can be
+ * associated with a widget that is the target of the mnemonic. When the
+ * label is inside a widget (like a [class@Gtk.Button] or a
+ * [class@Gtk.Notebook] tab) it is automatically associated with the correct
+ * widget, but sometimes (i.e. when the target is a [class@Gtk.Entry] next to
+ * the label) you need to set it explicitly using this function.
  *
  * The target widget will be accelerated by emitting the
- * GtkWidget::mnemonic-activate signal on it. The default handler for
+ * [signal@GtkWidget::mnemonic-activate] signal on it. The default handler for
  * this signal will activate the widget if there are no mnemonic collisions
  * and toggle focus between the colliding widgets otherwise.
- **/
+ */
 void
 gtk_label_set_mnemonic_widget (GtkLabel  *self,
                                GtkWidget *widget)
@@ -2800,10 +2854,12 @@ gtk_label_set_mnemonic_widget (GtkLabel  *self,
 
 /**
  * gtk_label_get_mnemonic_widget:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  *
  * Retrieves the target of the mnemonic (keyboard shortcut) of this
- * label. See gtk_label_set_mnemonic_widget().
+ * label.
+ *
+ * See [method@Gtk.Label.set_mnemonic_widget].
  *
  * Returns: (nullable) (transfer none): the target of the label’s mnemonic,
  *     or %NULL if none has been set and the default algorithm will be used.
@@ -2818,13 +2874,15 @@ gtk_label_get_mnemonic_widget (GtkLabel *self)
 
 /**
  * gtk_label_get_mnemonic_keyval:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
+ *
+ * Return the mnemonic accelerator.
  *
  * If the label has been set so that it has a mnemonic key this function
  * returns the keyval used for the mnemonic accelerator. If there is no
- * mnemonic set up it returns #GDK_KEY_VoidSymbol.
+ * mnemonic set up it returns `GDK_KEY_VoidSymbol`.
  *
- * Returns: GDK keyval usable for accelerators, or #GDK_KEY_VoidSymbol
+ * Returns: GDK keyval usable for accelerators, or `GDK_KEY_VoidSymbol`
  **/
 guint
 gtk_label_get_mnemonic_keyval (GtkLabel *self)
@@ -2936,20 +2994,22 @@ gtk_label_recalculate (GtkLabel *self)
 
 /**
  * gtk_label_set_text:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  * @str: The text you want to set
  *
- * Sets the text within the #GtkLabel widget. It overwrites any text that
- * was there before.
+ * Sets the text within the `GtkLabel` widget.
  *
- * This function will clear any previously set mnemonic accelerators, and
- * set the #GtkLabel:use-underline property to %FALSE as a side effect.
+ * It overwrites any text that was there before.
  *
- * This function will set the #GtkLabel:use-markup property to %FALSE
- * as a side effect.
+ * This function will clear any previously set mnemonic accelerators,
+ * and set the [property@Gtk.Label:use-underline property] to %FALSE as
+ * a side effect.
  *
- * See also: gtk_label_set_markup()
- **/
+ * This function will set the [property@Gtk.Label:use-markup] property
+ * to %FALSE as a side effect.
+ *
+ * See also: [method@Gtk.Label.set_markup]
+ */
 void
 gtk_label_set_text (GtkLabel    *self,
                     const char *str)
@@ -2972,19 +3032,18 @@ gtk_label_set_text (GtkLabel    *self,
 
 /**
  * gtk_label_set_attributes:
- * @self: a #GtkLabel
- * @attrs: (nullable): a #PangoAttrList, or %NULL
+ * @self: a `GtkLabel`
+ * @attrs: (nullable): a [class@Pango.AttrList], or %NULL
  *
- * Sets a #PangoAttrList; the attributes in the list are applied to the
- * label text.
+ * Apply attributes to the label text.
  *
- * The attributes set with this function will be applied
- * and merged with any other attributes previously effected by way
- * of the #GtkLabel:use-underline or #GtkLabel:use-markup properties.
- * While it is not recommended to mix markup strings with manually set
- * attributes, if you must; know that the attributes will be applied
- * to the label after the markup string is parsed.
- **/
+ * The attributes set with this function will be applied and merged with
+ * any other attributes previously effected by way of the
+ * [property@Gtk.Label:use-underline] or [property@Gtk.Label:use-markup]
+ * properties. While it is not recommended to mix markup strings with
+ * manually set attributes, if you must; know that the attributes will
+ * be applied to the label after the markup string is parsed.
+ */
 void
 gtk_label_set_attributes (GtkLabel         *self,
                           PangoAttrList    *attrs)
@@ -3009,18 +3068,20 @@ gtk_label_set_attributes (GtkLabel         *self,
 
 /**
  * gtk_label_get_attributes:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  *
- * Gets the attribute list that was set on the label using
- * gtk_label_set_attributes(), if any. This function does
- * not reflect attributes that come from the labels markup
- * (see gtk_label_set_markup()). If you want to get the
- * effective attributes for the label, use
- * pango_layout_get_attribute (gtk_label_get_layout (self)).
+ * Gets the labels attribute list.
+ *
+ * This is the [class@Pango.AttrList] that was set on the label using
+ * [method@Gtk.Label.set_attributes], if any. This function does not
+ * reflect attributes that come from the labels markup (see
+ * [method@Gtk.Label.set_markup]). If you want to get the effective
+ * attributes for the label, use
+ * `pango_layout_get_attribute (gtk_label_get_layout (self))`.
  *
  * Returns: (nullable) (transfer none): the attribute list, or %NULL
  *     if none was set.
- **/
+ */
 PangoAttrList *
 gtk_label_get_attributes (GtkLabel *self)
 {
@@ -3031,14 +3092,15 @@ gtk_label_get_attributes (GtkLabel *self)
 
 /**
  * gtk_label_set_label:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  * @str: the new text to set for the label
  *
- * Sets the text of the label. The label is interpreted as
- * including embedded underlines and/or Pango markup depending
- * on the values of the #GtkLabel:use-underline and
- * #GtkLabel:use-markup properties.
- **/
+ * Sets the text of the label.
+ *
+ * The label is interpreted as including embedded underlines and/or Pango
+ * markup depending on the values of the [property@Gtk.Label:use-underline]
+ * and [property@Gtk.Label:use-markup] properties.
+ */
 void
 gtk_label_set_label (GtkLabel    *self,
                      const char *str)
@@ -3055,15 +3117,16 @@ gtk_label_set_label (GtkLabel    *self,
 
 /**
  * gtk_label_get_label:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  *
- * Fetches the text from a label widget including any embedded
- * underlines indicating mnemonics and Pango markup. (See
- * gtk_label_get_text()).
+ * Fetches the text from a label.
+ *
+ * The returned text includes any embedded underlines indicating
+ * mnemonics and Pango markup. (See [method@Gtk.Label.get_text]).
  *
  * Returns: the text of the label widget. This string is
  *   owned by the widget and must not be modified or freed.
- **/
+ */
 const char *
 gtk_label_get_label (GtkLabel *self)
 {
@@ -3487,17 +3550,18 @@ error_set:
 
 /**
  * gtk_label_set_markup:
- * @self: a #GtkLabel
- * @str: a markup string (see [Pango markup format][PangoMarkupFormat])
+ * @self: a `GtkLabel`
+ * @str: a markup string
  *
- * Parses @str which is marked up with the
- * [Pango text markup language][PangoMarkupFormat], setting the
- * label’s text and attribute list based on the parse results.
+ * Sets the labels text and attributes from markup.
  *
- * If the @str is external data, you may need to escape it with
- * g_markup_escape_text() or g_markup_printf_escaped():
+ * The string must be marked up with Pango markup
+ * (see [func@Pango.parse_markup]).
  *
- * |[<!-- language="C" -->
+ * If the @str is external data, you may need to escape it
+ * with g_markup_escape_text() or g_markup_printf_escaped():
+ *
+ * ```c
  * GtkWidget *self = gtk_label_new (NULL);
  * const char *str = "...";
  * const char *format = "<span style=\"italic\">\%s</span>";
@@ -3506,17 +3570,17 @@ error_set:
  * markup = g_markup_printf_escaped (format, str);
  * gtk_label_set_markup (GTK_LABEL (self), markup);
  * g_free (markup);
- * ]|
+ * ```
  *
- * This function will set the #GtkLabel:use-markup property to %TRUE as
- * a side effect.
+ * This function will set the [property@Gtk.Label:use-markup] property
+ * to %TRUE as a side effect.
  *
- * If you set the label contents using the #GtkLabel:label property you
- * should also ensure that you set the #GtkLabel:use-markup property
- * accordingly.
+ * If you set the label contents using the [property@Gtk.Label:label]
+ * property you should also ensure that you set the
+ * [property@Gtk.Label:use-markup] property accordingly.
  *
- * See also: gtk_label_set_text()
- **/
+ * See also: [method@Gtk.Label.set_text]
+ */
 void
 gtk_label_set_markup (GtkLabel    *self,
                       const char *str)
@@ -3539,18 +3603,18 @@ gtk_label_set_markup (GtkLabel    *self,
 
 /**
  * gtk_label_set_markup_with_mnemonic:
- * @self: a #GtkLabel
- * @str: a markup string (see
- *     [Pango markup format][PangoMarkupFormat])
+ * @self: a `GtkLabel`
+ * @str: a markup string
  *
- * Parses @str which is marked up with the
- * [Pango text markup language][PangoMarkupFormat],
+ * Sets the labels text, attributes and mnemonic from markup.
+ *
+ * Parses @str which is marked up with Pango markup (see [func@Pango.parse_markup]),
  * setting the label’s text and attribute list based on the parse results.
  * If characters in @str are preceded by an underscore, they are underlined
  * indicating that they represent a keyboard accelerator called a mnemonic.
  *
  * The mnemonic key can be used to activate another widget, chosen
- * automatically, or explicitly using gtk_label_set_mnemonic_widget().
+ * automatically, or explicitly using method@Gtk.Label.set_mnemonic_widget].
  */
 void
 gtk_label_set_markup_with_mnemonic (GtkLabel    *self,
@@ -3574,11 +3638,13 @@ gtk_label_set_markup_with_mnemonic (GtkLabel    *self,
 
 /**
  * gtk_label_get_text:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  *
- * Fetches the text from a label widget, as displayed on the
- * screen. This does not include any embedded underlines
- * indicating mnemonics or Pango markup. (See gtk_label_get_label())
+ * Fetches the text from a label.
+ *
+ * The returned text is as it appears on screen. This does not include
+ * any embedded underlines indicating mnemonics or Pango markup. (See
+ * [method@Gtk.Label.get_label])
  *
  * Returns: the text in the label widget. This is the internal
  *   string used by the label, and must not be modified.
@@ -3593,15 +3659,17 @@ gtk_label_get_text (GtkLabel *self)
 
 /**
  * gtk_label_set_justify:
- * @self: a #GtkLabel
- * @jtype: a #GtkJustification
+ * @self: a `GtkLabel`
+ * @jtype: a `GtkJustification`
  *
  * Sets the alignment of the lines in the text of the label relative to
- * each other. %GTK_JUSTIFY_LEFT is the default value when the widget is
- * first created with gtk_label_new(). If you instead want to set the
- * alignment of the label as a whole, use gtk_widget_set_halign() instead.
- * gtk_label_set_justify() has no effect on labels containing only a
- * single line.
+ * each other.
+ *
+ * %GTK_JUSTIFY_LEFT is the default value when the widget is first created
+ * with [ctor@Gtk.Label.new]. If you instead want to set the alignment of
+ * the label as a whole, use [method@Gtk.Widget.set_halign] instead.
+ * [method@Gtk.Label.set_justify] has no effect on labels containing
+ * only a single line.
  */
 void
 gtk_label_set_justify (GtkLabel        *self,
@@ -3624,11 +3692,13 @@ gtk_label_set_justify (GtkLabel        *self,
 
 /**
  * gtk_label_get_justify:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  *
- * Returns the justification of the label. See gtk_label_set_justify().
+ * Returns the justification of the label.
  *
- * Returns: #GtkJustification
+ * See [method@Gtk.Label.set_justify].
+ *
+ * Returns: `GtkJustification`
  **/
 GtkJustification
 gtk_label_get_justify (GtkLabel *self)
@@ -3640,12 +3710,14 @@ gtk_label_get_justify (GtkLabel *self)
 
 /**
  * gtk_label_set_ellipsize:
- * @self: a #GtkLabel
- * @mode: a #PangoEllipsizeMode
+ * @self: a `GtkLabel`
+ * @mode: a `PangoEllipsizeMode`
  *
- * Sets the mode used to ellipsize (add an ellipsis: "...") to the text
- * if there is not enough space to render the entire string.
- **/
+ * Sets the mode used to ellipsizei the text.
+ *
+ * The text will be ellipsized if there is not enough space
+ * to render the entire string.
+ */
 void
 gtk_label_set_ellipsize (GtkLabel          *self,
                          PangoEllipsizeMode mode)
@@ -3667,12 +3739,14 @@ gtk_label_set_ellipsize (GtkLabel          *self,
 
 /**
  * gtk_label_get_ellipsize:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  *
- * Returns the ellipsizing position of the label. See gtk_label_set_ellipsize().
+ * Returns the ellipsizing position of the label.
  *
- * Returns: #PangoEllipsizeMode
- **/
+ * See [method@Gtk.Label.set_ellipsize].
+ *
+ * Returns: `PangoEllipsizeMode`
+ **/     
 PangoEllipsizeMode
 gtk_label_get_ellipsize (GtkLabel *self)
 {
@@ -3683,11 +3757,11 @@ gtk_label_get_ellipsize (GtkLabel *self)
 
 /**
  * gtk_label_set_width_chars:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  * @n_chars: the new desired width, in characters.
  *
  * Sets the desired width in characters of @label to @n_chars.
- **/
+ */
 void
 gtk_label_set_width_chars (GtkLabel *self,
                            int       n_chars)
@@ -3704,13 +3778,14 @@ gtk_label_set_width_chars (GtkLabel *self,
 
 /**
  * gtk_label_get_width_chars:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  *
- * Retrieves the desired width of @label, in characters. See
- * gtk_label_set_width_chars().
+ * Retrieves the desired width of @label, in characters.
+ *
+ * See [method@Gtk.Label.set_width_chars].
  *
  * Returns: the width of the label in characters.
- **/
+ */
 int
 gtk_label_get_width_chars (GtkLabel *self)
 {
@@ -3721,11 +3796,11 @@ gtk_label_get_width_chars (GtkLabel *self)
 
 /**
  * gtk_label_set_max_width_chars:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  * @n_chars: the new desired maximum width, in characters.
  *
  * Sets the desired maximum width in characters of @label to @n_chars.
- **/
+ */
 void
 gtk_label_set_max_width_chars (GtkLabel *self,
                                int       n_chars)
@@ -3743,10 +3818,11 @@ gtk_label_set_max_width_chars (GtkLabel *self,
 
 /**
  * gtk_label_get_max_width_chars:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  *
- * Retrieves the desired maximum width of @label, in characters. See
- * gtk_label_set_width_chars().
+ * Retrieves the desired maximum width of @label, in characters.
+ *
+ * See [method@Gtk.Label.set_width_chars].
  *
  * Returns: the maximum width of the label in characters.
  **/
@@ -3760,19 +3836,21 @@ gtk_label_get_max_width_chars (GtkLabel *self)
 
 /**
  * gtk_label_set_wrap:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  * @wrap: the setting
  *
- * Toggles line wrapping within the #GtkLabel widget. %TRUE makes it break
- * lines if text exceeds the widget’s size. %FALSE lets the text get cut off
- * by the edge of the widget if it exceeds the widget size.
+ * Toggles line wrapping within the `GtkLabel` widget.
+ *
+ * %TRUE makes it break lines if text exceeds the widget’s size.
+ * %FALSE lets the text get cut off by the edge of the widget if
+ * it exceeds the widget size.
  *
  * Note that setting line wrapping to %TRUE does not make the label
  * wrap at its parent container’s width, because GTK widgets
  * conceptually can’t make their requisition depend on the parent
  * container’s size. For a label that wraps at a specific position,
- * set the label’s width using gtk_widget_set_size_request().
- **/
+ * set the label’s width using [method@Gtk.Widget.set_size_request].
+ */
 void
 gtk_label_set_wrap (GtkLabel *self,
                     gboolean  wrap)
@@ -3793,10 +3871,11 @@ gtk_label_set_wrap (GtkLabel *self,
 
 /**
  * gtk_label_get_wrap:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  *
  * Returns whether lines in the label are automatically wrapped.
- * See gtk_label_set_wrap().
+ *
+ * See [method@Gtk.Label.set_wrap].
  *
  * Returns: %TRUE if the lines of the label are automatically wrapped.
  */
@@ -3810,13 +3889,15 @@ gtk_label_get_wrap (GtkLabel *self)
 
 /**
  * gtk_label_set_wrap_mode:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  * @wrap_mode: the line wrapping mode
  *
- * If line wrapping is on (see gtk_label_set_wrap()) this controls how
- * the line wrapping is done. The default is %PANGO_WRAP_WORD which means
- * wrap on word boundaries.
- **/
+ * Controls how line wrapping is done.
+ *
+ * This only affects the label if line wrapping is on. (See
+ * [method@Gtk.Label.set_wrap]) The default is %PANGO_WRAP_WORD
+ * which means wrap on word boundaries.
+ */
 void
 gtk_label_set_wrap_mode (GtkLabel *self,
                          PangoWrapMode wrap_mode)
@@ -3834,9 +3915,11 @@ gtk_label_set_wrap_mode (GtkLabel *self,
 
 /**
  * gtk_label_get_wrap_mode:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  *
- * Returns line wrap mode used by the label. See gtk_label_set_wrap_mode().
+ * Returns line wrap mode used by the label.
+ *
+ * See [method@Gtk.Label.set_wrap_mode].
  *
  * Returns: %TRUE if the lines of the label are automatically wrapped.
  */
@@ -3901,15 +3984,16 @@ gtk_label_ensure_layout (GtkLabel *self)
 
 /**
  * gtk_label_set_text_with_mnemonic:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  * @str: a string
  *
  * Sets the label’s text from the string @str.
+ *
  * If characters in @str are preceded by an underscore, they are underlined
  * indicating that they represent a keyboard accelerator called a mnemonic.
  * The mnemonic key can be used to activate another widget, chosen
- * automatically, or explicitly using gtk_label_set_mnemonic_widget().
- **/
+ * automatically, or explicitly using [method@Gtk.Label.set_mnemonic_widget].
+ */
 void
 gtk_label_set_text_with_mnemonic (GtkLabel    *self,
                                   const char *str)
@@ -4605,12 +4689,14 @@ gtk_label_clear_select_info (GtkLabel *self)
 
 /**
  * gtk_label_set_selectable:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  * @setting: %TRUE to allow selecting text in the label
  *
- * Selectable labels allow the user to select text from the label, for
- * copy-and-paste.
- **/
+ * Makes text in the label selectable.
+ *
+ * Selectable labels allow the user to select text from the label,
+ * for copy-and-paste.
+ */
 void
 gtk_label_set_selectable (GtkLabel *self,
                           gboolean  setting)
@@ -4650,12 +4736,12 @@ gtk_label_set_selectable (GtkLabel *self,
 
 /**
  * gtk_label_get_selectable:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  *
- * Gets the value set by gtk_label_set_selectable().
+ * Returns whether the label is selectable.
  *
  * Returns: %TRUE if the user can copy text from the label
- **/
+ */
 gboolean
 gtk_label_get_selectable (GtkLabel *self)
 {
@@ -4779,15 +4865,16 @@ gtk_label_select_region_index (GtkLabel *self,
 
 /**
  * gtk_label_select_region:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  * @start_offset: start offset (in characters not bytes)
  * @end_offset: end offset (in characters not bytes)
  *
  * Selects a range of characters in the label, if the label is selectable.
- * See gtk_label_set_selectable(). If the label is not selectable,
+ *
+ * See [method@Gtk.Label.set_selectable]. If the label is not selectable,
  * this function has no effect. If @start_offset or
  * @end_offset are -1, then the end of the label will be substituted.
- **/
+ */
 void
 gtk_label_select_region  (GtkLabel *self,
                           int       start_offset,
@@ -4811,12 +4898,11 @@ gtk_label_select_region  (GtkLabel *self,
 
 /**
  * gtk_label_get_selection_bounds:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  * @start: (out): return location for start of selection, as a character offset
  * @end: (out): return location for end of selection, as a character offset
  *
- * Gets the selected range of characters in the label, returning %TRUE
- * if there’s a selection.
+ * Gets the selected range of characters in the label.
  *
  * Returns: %TRUE if selection is non-empty
  **/
@@ -4879,17 +4965,18 @@ gtk_label_get_selection_bounds (GtkLabel  *self,
 
 /**
  * gtk_label_get_layout:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  *
- * Gets the #PangoLayout used to display the label.
- * The layout is useful to e.g. convert text positions to
- * pixel positions, in combination with gtk_label_get_layout_offsets().
+ * Gets the `PangoLayout` used to display the label.
+ *
+ * The layout is useful to e.g. convert text positions to pixel
+ * positions, in combination with [method@Gtk.Label.get_layout_offsets].
  * The returned layout is owned by the @label so need not be
- * freed by the caller. The @label is free to recreate its layout at
- * any time, so it should be considered read-only.
+ * freed by the caller. The @label is free to recreate its layout
+ * at any time, so it should be considered read-only.
  *
- * Returns: (transfer none): the #PangoLayout for this label
- **/
+ * Returns: (transfer none): the [class@Pango.Layout] for this label
+ */
 PangoLayout*
 gtk_label_get_layout (GtkLabel *self)
 {
@@ -4902,17 +4989,18 @@ gtk_label_get_layout (GtkLabel *self)
 
 /**
  * gtk_label_get_layout_offsets:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  * @x: (out) (optional): location to store X offset of layout, or %NULL
  * @y: (out) (optional): location to store Y offset of layout, or %NULL
  *
- * Obtains the coordinates where the label will draw the #PangoLayout
- * representing the text in the label; useful to convert mouse events
- * into coordinates inside the #PangoLayout, e.g. to take some action
- * if some part of the label is clicked. Remember
- * when using the #PangoLayout functions you need to convert to
- * and from pixels using PANGO_PIXELS() or #PANGO_SCALE.
- **/
+ * Obtains the coordinates where the label will draw its `PangoLayout`.
+ *
+ * The coordinates are useful to convert mouse events into coordinates
+ * inside the [class@Pango.Layout], e.g. to take some action if some part
+ * of the label is clicked. Remember when using the [class@Pango.Layout]
+ * functions you need to convert to and from pixels using PANGO_PIXELS()
+ * or [constant@Pango.SCALE].
+ */
 void
 gtk_label_get_layout_offsets (GtkLabel *self,
                               int      *x,
@@ -4933,13 +5021,13 @@ gtk_label_get_layout_offsets (GtkLabel *self,
 
 /**
  * gtk_label_set_use_markup:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  * @setting: %TRUE if the label’s text should be parsed for markup.
  *
- * Sets whether the text of the label contains markup in
- * [Pango’s text markup language][PangoMarkupFormat].
- * See gtk_label_set_markup().
- **/
+ * Sets whether the text of the label contains markup.
+ *
+ * See [method@Gtk.Label.set_markup].
+ */
 void
 gtk_label_set_use_markup (GtkLabel *self,
                           gboolean  setting)
@@ -4956,14 +5044,14 @@ gtk_label_set_use_markup (GtkLabel *self,
 
 /**
  * gtk_label_get_use_markup:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  *
- * Returns whether the label’s text is interpreted as marked up with
- * the [Pango text markup language][PangoMarkupFormat].
- * See gtk_label_set_use_markup ().
+ * Returns whether the label’s text is interpreted as Pango markup.
+ *
+ * See [method@Gtk.Label.set_use_markup].
  *
  * Returns: %TRUE if the label’s text will be parsed for markup.
- **/
+ */
 gboolean
 gtk_label_get_use_markup (GtkLabel *self)
 {
@@ -4974,11 +5062,10 @@ gtk_label_get_use_markup (GtkLabel *self)
 
 /**
  * gtk_label_set_use_underline:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  * @setting: %TRUE if underlines in the text indicate mnemonics
  *
- * If true, an underline in the text indicates the next character should be
- * used for the mnemonic accelerator key.
+ * Sets whether underlines in the text indicate mnemonics.
  */
 void
 gtk_label_set_use_underline (GtkLabel *self,
@@ -4996,14 +5083,15 @@ gtk_label_set_use_underline (GtkLabel *self,
 
 /**
  * gtk_label_get_use_underline:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  *
- * Returns whether an embedded underline in the label indicates a
- * mnemonic. See gtk_label_set_use_underline().
+ * Returns whether an embedded underlines in the label indicate mnemonics.
+ *
+ * See [method@Gtk.Label.set_use_underline].
  *
  * Returns: %TRUE whether an embedded underline in the label indicates
- *               the mnemonic accelerator keys.
- **/
+ *   the mnemonic accelerator keys.
+ */
 gboolean
 gtk_label_get_use_underline (GtkLabel *self)
 {
@@ -5014,7 +5102,7 @@ gtk_label_get_use_underline (GtkLabel *self)
 
 /**
  * gtk_label_set_single_line_mode:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  * @single_line_mode: %TRUE if the label should be in single line mode
  *
  * Sets whether the label is in single line mode.
@@ -5040,7 +5128,7 @@ gtk_label_set_single_line_mode (GtkLabel *self,
 
 /**
  * gtk_label_get_single_line_mode:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  *
  * Returns whether the label is in single line mode.
  *
@@ -5054,7 +5142,7 @@ gtk_label_get_single_line_mode  (GtkLabel *self)
   return self->single_line_mode;
 }
 
-/* Compute the X position for an offset that corresponds to the "more important
+/* Compute the X position for an offset that corresponds to the more important
  * cursor position for that offset. We use this when trying to guess to which
  * end of the selection we should go to when the user hits the left or
  * right arrow key.
@@ -5429,15 +5517,16 @@ gtk_label_do_popup (GtkLabel *self,
 
 /**
  * gtk_label_get_current_uri:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  *
  * Returns the URI for the currently active link in the label.
+ *
  * The active link is the one under the mouse pointer or, in a
  * selectable label, the link in which the text cursor is currently
  * positioned.
  *
- * This function is intended for use in a #GtkLabel::activate-link handler
- * or for use in a #GtkWidget::query-tooltip handler.
+ * This function is intended for use in a [signal@Gtk.Label::activate-link]
+ * handler or for use in a [signal@Gtk.Widget::query-tooltip] handler.
  *
  * Returns: (nullable): the currently active URI or %NULL if there is none.
  *   The string is owned by GTK and must not be freed or modified.
@@ -5485,13 +5574,14 @@ _gtk_label_get_selection_bound (GtkLabel *self)
 
 /**
  * gtk_label_set_lines:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  * @lines: the desired number of lines, or -1
  *
  * Sets the number of lines to which an ellipsized, wrapping label
- * should be limited. This has no effect if the label is not wrapping
- * or ellipsized. Set this to -1 if you don’t want to limit the
- * number of lines.
+ * should be limited.
+ *
+ * This has no effect if the label is not wrapping or ellipsized.
+ * Set this to -1 if you don’t want to limit the number of lines.
  */
 void
 gtk_label_set_lines (GtkLabel *self,
@@ -5510,10 +5600,12 @@ gtk_label_set_lines (GtkLabel *self,
 
 /**
  * gtk_label_get_lines:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  *
  * Gets the number of lines to which an ellipsized, wrapping
- * label should be limited. See gtk_label_set_lines().
+ * label should be limited.
+ *
+ * See [method@Gtk.Label.set_lines].
  *
  * Returns: The number of lines
  */
@@ -5527,10 +5619,12 @@ gtk_label_get_lines (GtkLabel *self)
 
 /**
  * gtk_label_set_xalign:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  * @xalign: the new xalign value, between 0 and 1
  *
- * Sets the #GtkLabel:xalign property for @label.
+ * Sets the `xalign` of the label.
+ *
+ * See the [property@Gtk.Label:xalign] property.
  */
 void
 gtk_label_set_xalign (GtkLabel *self,
@@ -5551,9 +5645,11 @@ gtk_label_set_xalign (GtkLabel *self,
 
 /**
  * gtk_label_get_xalign:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  *
- * Gets the #GtkLabel:xalign property for @label.
+ * Gets the `xalign` of the label.
+ *
+ * See the [property@Gtk.Label:xalign] property.
  *
  * Returns: the xalign property
  */
@@ -5567,10 +5663,12 @@ gtk_label_get_xalign (GtkLabel *self)
 
 /**
  * gtk_label_set_yalign:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  * @yalign: the new yalign value, between 0 and 1
  *
- * Sets the #GtkLabel:yalign property for @label.
+ * Sets the `yalign` of the label.
+ *
+ * See the [property@Gtk.Label:yalign] property.
  */
 void
 gtk_label_set_yalign (GtkLabel *self,
@@ -5591,9 +5689,11 @@ gtk_label_set_yalign (GtkLabel *self,
 
 /**
  * gtk_label_get_yalign:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  *
- * Gets the #GtkLabel:yalign property for @label.
+ * Gets the `yalign` of the label.
+ *
+ * See the [property@Gtk.Label:yalign] property.
  *
  * Returns: the yalign property
  */
@@ -5607,8 +5707,8 @@ gtk_label_get_yalign (GtkLabel *self)
 
 /**
  * gtk_label_set_extra_menu:
- * @self: a #GtkLabel
- * @model: (allow-none): a #GMenuModel
+ * @self: a `GtkLabel`
+ * @model: (allow-none): a `GMenuModel`
  *
  * Sets a menu model to add when constructing
  * the context menu for @label.
@@ -5628,9 +5728,11 @@ gtk_label_set_extra_menu (GtkLabel   *self,
 
 /**
  * gtk_label_get_extra_menu:
- * @self: a #GtkLabel
+ * @self: a `GtkLabel`
  *
- * Gets the menu model set with gtk_label_set_extra_menu().
+ * Gets the extra menu model of @label.
+ *
+ * See [method@Gtk.Label.set_extra_menu].
  *
  * Returns: (transfer none) (nullable): the menu model
  */
