@@ -66,8 +66,9 @@
  * @Title: GtkAboutDialog
  *
  * The `GtkAboutDialog` offers a simple way to display information about
- * a program like its logo, name, copyright, website and license. It is
- * also possible to give credits to the authors, documenters, translators
+ * a program like its logo, name, copyright, website and license.
+ *
+ * It is also possible to give credits to the authors, documenters, translators
  * and artists who have worked on the program. An about dialog is typically
  * opened when the user selects the `About` option from the `Help` menu.
  * All parts of the dialog are optional.
