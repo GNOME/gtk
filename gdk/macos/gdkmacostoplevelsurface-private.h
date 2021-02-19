@@ -33,8 +33,9 @@ typedef struct _GdkMacosToplevelSurfaceClass GdkMacosToplevelSurfaceClass;
 
 struct _GdkMacosToplevelSurface
 {
-  GdkMacosSurface parent_instance;
-  guint           decorated : 1;
+  GdkMacosSurface    parent_instance;
+  GdkToplevelLayout *layout;
+  guint              decorated : 1;
 };
 
 struct _GdkMacosToplevelSurfaceClass
