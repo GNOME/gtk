@@ -48,6 +48,7 @@ struct _GdkMacosSurface
   GdkMacosWindow *window;
   GPtrArray *monitors;
   cairo_region_t *input_region;
+  cairo_region_t *opaque_region;
   char *title;
 
   int root_x;
