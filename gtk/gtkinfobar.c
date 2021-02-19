@@ -56,7 +56,7 @@
  * `GtkInfoBar` is a widget that can be used to show messages to
  * the user without showing a dialog.
  *
- * ![An example GtkInfoBar](infobar.png)
+ * ![An example GtkInfoBar](info-bar.png)
  *
  * It is often temporarily shown at the top or bottom of a document.
  * In contrast to [class@Gtk.Dialog], which has an action area at the
