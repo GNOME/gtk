@@ -23,12 +23,14 @@
  * @Title: GtkLevelBar
  * @Short_description: A bar that can used as a level indicator
  *
- * The #GtkLevelBar is a bar widget that can be used
+ * The `GtkLevelBar` is a bar widget that can be used
  * as a level indicator. Typical use cases are displaying the strength
  * of a password, or showing the charge level of a battery.
  *
- * Use gtk_level_bar_set_value() to set the current value, and
- * gtk_level_bar_add_offset_value() to set the value offsets at which
+ * ![An example GtkLevelBar](levelbar.png)
+ *
+ * Use [method@Gtk.LevelBar.set_value] to set the current value, and
+ * [method@Gtk.LevelBar.add_offset_value] to set the value offsets at which
  * the bar will be considered in a different state. GTK will add a few
  * offsets by default on the level bar: #GTK_LEVEL_BAR_OFFSET_LOW,
  * #GTK_LEVEL_BAR_OFFSET_HIGH and #GTK_LEVEL_BAR_OFFSET_FULL, with
@@ -40,8 +42,7 @@
  *
  * ## Adding a custom offset on the bar
  *
- * |[<!-- language="C" -->
- *
+ * ```c
  * static GtkWidget *
  * create_level_bar (void)
  * {
@@ -71,25 +72,25 @@
  *
  *   return widget;
  * }
- * ]|
+ * ```
  *
- * The default interval of values is between zero and one, but it’s possible to
- * modify the interval using gtk_level_bar_set_min_value() and
- * gtk_level_bar_set_max_value(). The value will be always drawn in proportion to
- * the admissible interval, i.e. a value of 15 with a specified interval between
- * 10 and 20 is equivalent to a value of 0.5 with an interval between 0 and 1.
- * When #GTK_LEVEL_BAR_MODE_DISCRETE is used, the bar level is rendered
- * as a finite number of separated blocks instead of a single one. The number
- * of blocks that will be rendered is equal to the number of units specified by
- * the admissible interval.
+ * The default interval of values is between zero and one, but it’s possible
+ * to modify the interval using [method@Gtk.LevelBar.set_min_value] and
+ * [method@Gtk.LevelBar.set_max_value]. The value will be always drawn in
+ * proportion to the admissible interval, i.e. a value of 15 with a specified
+ * interval between 10 and 20 is equivalent to a value of 0.5 with an interval
+ * between 0 and 1. When #GTK_LEVEL_BAR_MODE_DISCRETE is used, the bar level
+ * is rendered as a finite number of separated blocks instead of a single one.
+ * The number of blocks that will be rendered is equal to the number of units
+ * specified by the admissible interval.
  *
  * For instance, to build a bar rendered with five blocks, it’s sufficient to
- * set the minimum value to 0 and the maximum value to 5 after changing the indicator
- * mode to discrete.
+ * set the minimum value to 0 and the maximum value to 5 after changing the
+ * indicator mode to discrete.
  *
  * # GtkLevelBar as GtkBuildable
  *
- * The GtkLevelBar implementation of the GtkBuildable interface supports a
+ * The `GtkLevelBar` implementation of the `GtkBuildable` interface supports a
  * custom <offsets> element, which can contain any number of <offset> elements,
  * each of which must have name and value attributes.
  *
@@ -104,7 +105,7 @@
  *     ┊
  * ]|
  *
- * GtkLevelBar has a main CSS node with name levelbar and one of the style
+ * `GtkLevelBar` has a main CSS node with name levelbar and one of the style
  * classes .discrete or .continuous and a subnode with name trough. Below the
  * trough node are a number of nodes with name block and style class .filled
  * or .empty. In continuous mode, there is exactly one node of each, in discrete
@@ -117,7 +118,7 @@
  *
  * # Accessibility
  *
- * GtkLevelBar uses the #GTK_ACCESSIBLE_ROLE_METER role.
+ * `GtkLevelBar` uses the #GTK_ACCESSIBLE_ROLE_METER role.
  */
 #include "config.h"
 
@@ -913,11 +914,13 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
 
   /**
    * GtkLevelBar::offset-changed:
-   * @self: a #GtkLevelBar
+   * @self: a `GtkLevelBar`
    * @name: the name of the offset that changed value
    *
-   * Emitted when an offset specified on the bar changes value as an
-   * effect to gtk_level_bar_add_offset_value() being called.
+   * Emitted when an offset specified on the bar changes value.
+   *
+   * This typically is the result of a [method@Gtk.LevelBar.add_offset_value]
+   * call.
    *
    * The signal supports detailed connections; you can connect to the
    * detailed signal "changed::x" in order to only receive callbacks when
@@ -936,8 +939,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
   /**
    * GtkLevelBar:value:
    *
-   * The #GtkLevelBar:value property determines the currently
-   * filled value of the level bar.
+   * Determines the currently filled value of the level bar.
    */
   properties[PROP_VALUE] =
     g_param_spec_double ("value",
@@ -949,8 +951,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
   /**
    * GtkLevelBar:min-value:
    *
-   * The #GtkLevelBar:min-value property determines the minimum value of
-   * the interval that can be displayed by the bar.
+   * Determines the minimum value of the interval that can be displayed by the bar.
    */
   properties[PROP_MIN_VALUE] =
     g_param_spec_double ("min-value",
@@ -962,8 +963,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
   /**
    * GtkLevelBar:max-value:
    *
-   * The #GtkLevelBar:max-value property determaxes the maximum value of
-   * the interval that can be displayed by the bar.
+   * Determines the maximum value of the interval that can be displayed by the bar.
    */
   properties[PROP_MAX_VALUE] =
     g_param_spec_double ("max-value",
@@ -975,14 +975,16 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
   /**
    * GtkLevelBar:mode:
    *
-   * The #GtkLevelBar:mode property determines the way #GtkLevelBar
-   * interprets the value properties to draw the level fill area.
+   * Determines the way `GtkLevelBar` interprets the value properties to draw the
+   * level fill area.
+   *
    * Specifically, when the value is #GTK_LEVEL_BAR_MODE_CONTINUOUS,
-   * #GtkLevelBar will draw a single block representing the current value in
+   * `GtkLevelBar` will draw a single block representing the current value in
    * that area; when the value is #GTK_LEVEL_BAR_MODE_DISCRETE,
    * the widget will draw a succession of separate blocks filling the
    * draw area, with the number of blocks being equal to the units separating
-   * the integral roundings of #GtkLevelBar:min-value and #GtkLevelBar:max-value.
+   * the integral roundings of [property@Gtk.LevelBar:min-value] and
+   * [property@Gtk.LevelBar:max-value].
    */
   properties[PROP_MODE] =
     g_param_spec_enum ("mode",
@@ -994,6 +996,8 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
 
   /**
    * GtkLevelBar:inverted:
+   *
+   * Whether the `GtkLeveBar` is inverted.
    *
    * Level bars normally grow from top to bottom or left to right.
    * Inverted level bars grow in the opposite direction.
@@ -1056,9 +1060,9 @@ gtk_level_bar_init (GtkLevelBar *self)
 /**
  * gtk_level_bar_new:
  *
- * Creates a new #GtkLevelBar.
+ * Creates a new `GtkLevelBar`.
  *
- * Returns: a #GtkLevelBar.
+ * Returns: a `GtkLevelBar`.
  */
 GtkWidget *
 gtk_level_bar_new (void)
@@ -1071,10 +1075,9 @@ gtk_level_bar_new (void)
  * @min_value: a positive value
  * @max_value: a positive value
  *
- * Utility constructor that creates a new #GtkLevelBar for the specified
- * interval.
+ * Creates a new `GtkLevelBar` for the specified interval.
  *
- * Returns: a #GtkLevelBar
+ * Returns: a `GtkLevelBar`
  */
 GtkWidget *
 gtk_level_bar_new_for_interval (double min_value,
@@ -1088,9 +1091,9 @@ gtk_level_bar_new_for_interval (double min_value,
 
 /**
  * gtk_level_bar_get_min_value:
- * @self: a #GtkLevelBar
+ * @self: a `GtkLevelBar`
  *
- * Returns the value of the #GtkLevelBar:min-value property.
+ * Returns the `min-value of the `GtkLevelBar`.
  *
  * Returns: a positive value
  */
@@ -1104,9 +1107,9 @@ gtk_level_bar_get_min_value (GtkLevelBar *self)
 
 /**
  * gtk_level_bar_get_max_value:
- * @self: a #GtkLevelBar
+ * @self: a `GtkLevelBar`
  *
- * Returns the value of the #GtkLevelBar:max-value property.
+ * Returns the `max-value` of the `GtkLevelBar`.
  *
  * Returns: a positive value
  */
@@ -1120,12 +1123,12 @@ gtk_level_bar_get_max_value (GtkLevelBar *self)
 
 /**
  * gtk_level_bar_get_value:
- * @self: a #GtkLevelBar
+ * @self: a `GtkLevelBar`
  *
- * Returns the value of the #GtkLevelBar:value property.
+ * Returns the `value` of the `GtkLevelBar`.
  *
  * Returns: a value in the interval between
- *     #GtkLevelBar:min-value and #GtkLevelBar:max-value
+ *     `GtkLevelBar`:min-value and `GtkLevelBar`:max-value
  */
 double
 gtk_level_bar_get_value (GtkLevelBar *self)
@@ -1148,10 +1151,10 @@ gtk_level_bar_set_value_internal (GtkLevelBar *self,
 
 /**
  * gtk_level_bar_set_min_value:
- * @self: a #GtkLevelBar
+ * @self: a `GtkLevelBar`
  * @value: a positive value
  *
- * Sets the value of the #GtkLevelBar:min-value property.
+ * Sets the `min-value` of the `GtkLevelBar`.
  *
  * You probably want to update preexisting level offsets after calling
  * this function.
@@ -1184,10 +1187,10 @@ gtk_level_bar_set_min_value (GtkLevelBar *self,
 
 /**
  * gtk_level_bar_set_max_value:
- * @self: a #GtkLevelBar
+ * @self: a `GtkLevelBar`
  * @value: a positive value
  *
- * Sets the value of the #GtkLevelBar:max-value property.
+ * Sets the `max-value` of the `GtkLevelBar`.
  *
  * You probably want to update preexisting level offsets after calling
  * this function.
@@ -1221,11 +1224,11 @@ gtk_level_bar_set_max_value (GtkLevelBar *self,
 
 /**
  * gtk_level_bar_set_value:
- * @self: a #GtkLevelBar
+ * @self: a `GtkLevelBar`
  * @value: a value in the interval between
- *     #GtkLevelBar:min-value and #GtkLevelBar:max-value
+ *     [property@Gtk.LevelBar:min-value] and [property@Gtk.LevelBar:max-value]
  *
- * Sets the value of the #GtkLevelBar:value property.
+ * Sets the value of the `GtkLevelBar`.
  */
 void
 gtk_level_bar_set_value (GtkLevelBar *self,
@@ -1246,11 +1249,11 @@ gtk_level_bar_set_value (GtkLevelBar *self,
 
 /**
  * gtk_level_bar_get_mode:
- * @self: a #GtkLevelBar
+ * @self: a `GtkLevelBar`
  *
- * Returns the value of the #GtkLevelBar:mode property.
+ * Returns the `mode` of the `GtkLevelBar`.
  *
- * Returns: a #GtkLevelBarMode
+ * Returns: a `GtkLevelBarMode`
  */
 GtkLevelBarMode
 gtk_level_bar_get_mode (GtkLevelBar *self)
@@ -1262,10 +1265,10 @@ gtk_level_bar_get_mode (GtkLevelBar *self)
 
 /**
  * gtk_level_bar_set_mode:
- * @self: a #GtkLevelBar
- * @mode: a #GtkLevelBarMode
+ * @self: a `GtkLevelBar`
+ * @mode: a `GtkLevelBarMode`
  *
- * Sets the value of the #GtkLevelBar:mode property.
+ * Sets the `mode` of the `GtkLevelBar`.
  */
 void
 gtk_level_bar_set_mode (GtkLevelBar     *self,
@@ -1288,9 +1291,9 @@ gtk_level_bar_set_mode (GtkLevelBar     *self,
 
 /**
  * gtk_level_bar_get_inverted:
- * @self: a #GtkLevelBar
+ * @self: a `GtkLevelBar`
  *
- * Return the value of the #GtkLevelBar:inverted property.
+ * Returns whether the levelbar is inverted.
  *
  * Returns: %TRUE if the level bar is inverted
  */
@@ -1304,10 +1307,10 @@ gtk_level_bar_get_inverted (GtkLevelBar *self)
 
 /**
  * gtk_level_bar_set_inverted:
- * @self: a #GtkLevelBar
+ * @self: a `GtkLevelBar`
  * @inverted: %TRUE to invert the level bar
  *
- * Sets the value of the #GtkLevelBar:inverted property.
+ * Sets whether the `GtkLevelBar` is inverted.
  */
 void
 gtk_level_bar_set_inverted (GtkLevelBar *self,
@@ -1326,11 +1329,13 @@ gtk_level_bar_set_inverted (GtkLevelBar *self,
 
 /**
  * gtk_level_bar_remove_offset_value:
- * @self: a #GtkLevelBar
+ * @self: a `GtkLevelBar`
  * @name: (allow-none): the name of an offset in the bar
  *
- * Removes an offset marker previously added with
- * gtk_level_bar_add_offset_value().
+ * Removes an offset marker from a `GtkLevelBar`.
+ *
+ * The marker must have been previously added with
+ * [method@Gtk.LevelBar.add_offset_value].
  */
 void
 gtk_level_bar_remove_offset_value (GtkLevelBar *self,
@@ -1352,15 +1357,17 @@ gtk_level_bar_remove_offset_value (GtkLevelBar *self,
 
 /**
  * gtk_level_bar_add_offset_value:
- * @self: a #GtkLevelBar
+ * @self: a `GtkLevelBar`
  * @name: the name of the new offset
  * @value: the value for the new offset
  *
  * Adds a new offset marker on @self at the position specified by @value.
+ *
  * When the bar value is in the interval topped by @value (or between @value
- * and #GtkLevelBar:max-value in case the offset is the last one on the bar)
- * a style class named `level-`@name will be applied
+ * and [property@Gtk.LevelBar:max-value] in case the offset is the last one
+ * on the bar) a style class named `level-`@name will be applied
  * when rendering the level bar fill.
+ *
  * If another offset marker named @name exists, its value will be
  * replaced by @value.
  */
@@ -1384,12 +1391,11 @@ gtk_level_bar_add_offset_value (GtkLevelBar *self,
 
 /**
  * gtk_level_bar_get_offset_value:
- * @self: a #GtkLevelBar
+ * @self: a `GtkLevelBar`
  * @name: (allow-none): the name of an offset in the bar
  * @value: (out): location where to store the value
  *
- * Fetches the value specified for the offset marker @name in @self,
- * returning %TRUE in case an offset named @name was found.
+ * Fetches the value specified for the offset marker @name in @self.
  *
  * Returns: %TRUE if the specified offset is found
  */
