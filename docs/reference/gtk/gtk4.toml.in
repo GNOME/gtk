@@ -8,6 +8,7 @@ logo_url = "gtk-logo.svg"
 license = "GPL-2.1-or-later"
 description = "The GTK toolkit"
 dependencies = [ "GObject-2.0", "Graphene-1.0", "Pango-1.0", "Gdk-4.0", "Gsk-4.0" ]
+devhelp = true
 
   [dependencies."GObject-2.0"]
   name = "GObject"
