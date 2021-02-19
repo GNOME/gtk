@@ -47,15 +47,17 @@
  * @See_also: #GtkCellRendererSpinner, #GtkProgressBar
  *
  * A GtkSpinner widget displays an icon-size spinning animation.
- * It is often used as an alternative to a #GtkProgressBar for
+ * It is often used as an alternative to a [class@Gtk.ProgressBar] for
  * displaying indefinite activity, instead of actual progress.
  *
- * To start the animation, use gtk_spinner_start(), to stop it
- * use gtk_spinner_stop().
+ * ![An example GtkSpinner](spinner.png)
+ *
+ * To start the animation, use [method@Gtk.Spinner.start], to stop it
+ * use [method@Gtk.Spinner.stop].
  *
  * # CSS nodes
  *
- * GtkSpinner has a single CSS node with the name spinner.
+ * `GtkSpinner` has a single CSS node with the name spinner.
  * When the animation is active, the :checked pseudoclass is
  * added to this node.
  */
