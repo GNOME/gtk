@@ -2125,7 +2125,9 @@ fail:
  * @out_transform: (out): The location to put the transform in
  *
  * Parses the given @string into a transform and puts it in
- * @out_transform. Strings printed via gsk_transform_to_string()
+ * @out_transform.
+ *
+ * Strings printed via [method@Gsk.Transform.to_string]
  * can be read in again successfully using this function.
  *
  * If @string does not describe a valid transform, %FALSE is

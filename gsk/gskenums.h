@@ -201,9 +201,10 @@ typedef enum {
  * @GSK_TRANSFORM_CATEGORY_2D_TRANSLATE: The matrix is a 2D translation.
  * @GSK_TRANSFORM_CATEGORY_IDENTITY: The matrix is the identity matrix.
  *
- * The categories of matrices relevant for GSK and GTK. Note that any
- * category includes matrices of all later categories. So if you want
- * to for example check if a matrix is a 2D matrix,
+ * The categories of matrices relevant for GSK and GTK.
+ *
+ * Note that any category includes matrices of all later categories.
+ * So if you want to for example check if a matrix is a 2D matrix,
  * `category >= GSK_TRANSFORM_CATEGORY_2D` is the way to do this.
  *
  * Also keep in mind that rounding errors may cause matrices to not
@@ -233,8 +234,10 @@ typedef enum
  * @GSK_GL_UNIFORM_TYPE_VEC3: A GLSL vec3 / graphene_vec3_t uniform
  * @GSK_GL_UNIFORM_TYPE_VEC4: A GLSL vec4 / graphene_vec4_t uniform
  *
- * This defines the types of the uniforms that #GskGLShaders
- * declare. It defines both what the type is called in the GLSL shader
+ * This defines the types of the uniforms that `GskGLShaders`
+ * declare.
+ *
+ * It defines both what the type is called in the GLSL shader
  * code, and what the corresponding C type is on the Gtk side.
  */
 typedef enum

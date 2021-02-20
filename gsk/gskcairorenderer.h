@@ -34,6 +34,14 @@ G_BEGIN_DECLS
 #define GSK_IS_CAIRO_RENDERER_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), GSK_TYPE_CAIRO_RENDERER))
 #define GSK_CAIRO_RENDERER_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), GSK_TYPE_CAIRO_RENDERER, GskCairoRendererClass))
 
+/**
+ * GskCairoRenderer:
+ *
+ * A GSK renderer that is using cairo.
+ *
+ * Since it is using cairo, this renderer cannot support
+ * 3D transformations.
+ */
 typedef struct _GskCairoRenderer                GskCairoRenderer;
 typedef struct _GskCairoRendererClass           GskCairoRendererClass;
 
