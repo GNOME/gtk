@@ -15,13 +15,16 @@ spec.
 The following units are supported for basic datatypes:
 
 Length
- : px, pt, em, ex, rem, pc, in, cm, mm, calc()
+: px, pt, em, ex, rem, pc, in, cm, mm, calc()
+
 Percentage
- : %, calc()
+: %, calc()
+
 Angle
- : deg, grad, turn, calc()
+: deg, grad, turn, calc()
+
 Time
- : s, ms, calc()
+: s, ms, calc()
 
 Length values with the em or ex units are resolved using the font
 size value, unless they occur in setting the font-size itself, in
@@ -42,13 +45,16 @@ side of an area. In this case, the specified values are interpreted as
 follows:
 
 4 values:
- : top right bottom left
+: top right bottom left
+
 3 values:
- : top horizontal bottom
+: top horizontal bottom
+
 2 values:
- : vertical horizontal
+: vertical horizontal
+
 1 value:
- : all
+: all
 
 ## Colors
 
