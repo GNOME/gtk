@@ -9,7 +9,7 @@ More information about GTK on Windows, including detailed build
 instructions, binary downloads, etc, can be found
 [online](https://wiki.gnome.org/Projects/GTK/Win32).
 
-## Windows-specific environment variables {#win32-envar}
+## Windows-specific environment variables
 
 The Win32 GDK backend can be influenced with some additional environment
 variables.
@@ -23,7 +23,7 @@ If this variable is set, GTK doesn't use the Wintab API for tablet support.
 If this variable is set, GTK uses the Wintab API for tablet support.
 This is the default.
 
-## Windows-specific handling of cursors {#win32-cursors}
+## Windows-specific handling of cursors
 
 By default the "system" cursor theme is used. This makes GTK prefer cursors
 that Windows currently uses, falling back to Adwaita cursors and (as the last
