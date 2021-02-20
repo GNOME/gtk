@@ -37,19 +37,22 @@
  * @Short_description: A separator widget
  * @Title: GtkSeparator
  *
- * GtkSeparator is a horizontal or vertical separator widget, depending on the
- * value of the #GtkOrientable:orientation property, used to group the widgets
- * within a window. It displays a line with a shadow to make it appear sunken
- * into the interface.
+ * `GtkSeparator` is a horizontal or vertical separator widget.
+ *
+ * ![An example GtkSeparator](separators.png)
+ *
+ * A `GtkSeparator` can be used to group the widgets within a window.
+ * It displays a line with a shadow to make it appear sunken into the
+ * interface.
  *
  * # CSS nodes
  *
- * GtkSeparator has a single CSS node with name separator. The node
+ * `GtkSeparator` has a single CSS node with name separator. The node
  * gets one of the .horizontal or .vertical style classes.
  *
  * # Accessibility
  *
- * GtkSeparator uses the #GTK_ACCESSIBLE_ROLE_SEPARATOR role.
+ * `GtkSeparator` uses the #GTK_ACCESSIBLE_ROLE_SEPARATOR role.
  */
 
 typedef struct _GtkSeparatorClass GtkSeparatorClass;
@@ -160,9 +163,9 @@ gtk_separator_class_init (GtkSeparatorClass *class)
  * gtk_separator_new:
  * @orientation: the separator’s orientation.
  *
- * Creates a new #GtkSeparator with the given orientation.
+ * Creates a new `GtkSeparator` with the given orientation.
  *
- * Returns: a new #GtkSeparator.
+ * Returns: a new `GtkSeparator`.
  */
 GtkWidget *
 gtk_separator_new (GtkOrientation orientation)
