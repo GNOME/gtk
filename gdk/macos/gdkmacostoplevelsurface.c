@@ -102,6 +102,12 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
   g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
   g_assert (GDK_IS_MACOS_WINDOW (nswindow));
 
+  if (layout != self->layout)
+    {
+      g_clear_pointer (&self->layout, gdk_toplevel_layout_unref);
+      self->layout = gdk_toplevel_layout_copy (layout);
+    }
+
   _gdk_macos_toplevel_surface_attach_to_parent (self);
 
   style_mask = [nswindow styleMask];
@@ -374,7 +380,6 @@ static gboolean
 _gdk_macos_toplevel_surface_compute_size (GdkSurface *surface)
 {
   GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)surface;
-  NSWindow *nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
   GdkToplevelSize size;
   GdkDisplay *display;
   GdkMonitor *monitor;
@@ -382,7 +387,6 @@ _gdk_macos_toplevel_surface_compute_size (GdkSurface *surface)
   int width, height;
   GdkGeometry geometry;
   GdkSurfaceHints mask;
-  NSWindowStyleMask style_mask;
 
   g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
 
@@ -393,7 +397,6 @@ _gdk_macos_toplevel_surface_compute_size (GdkSurface *surface)
 
   display = gdk_surface_get_display (surface);
   monitor = gdk_display_get_monitor_at_surface (display, surface);
-  style_mask = [nswindow styleMask];
 
   if (monitor)
     {
@@ -415,10 +418,11 @@ _gdk_macos_toplevel_surface_compute_size (GdkSurface *surface)
   g_warn_if_fail (size.width > 0);
   g_warn_if_fail (size.height > 0);
 
-  width = size.width;
-  height = size.height;
+  width = surface->width;
+  height = surface->height;
 
-  if (style_mask & NSWindowStyleMaskResizable)
+  if (self->layout != NULL &&
+      gdk_toplevel_layout_get_resizable (self->layout))
     {
       geometry.min_width = size.min_width;
       geometry.min_height = size.min_height;
@@ -426,8 +430,8 @@ _gdk_macos_toplevel_surface_compute_size (GdkSurface *surface)
     }
   else
     {
-      geometry.max_width = geometry.min_width = width;
-      geometry.max_height = geometry.min_height = height;
+      geometry.max_width = geometry.min_width = size.width;
+      geometry.max_height = geometry.min_height = size.height;
       mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE;
     }
 
@@ -438,8 +442,9 @@ _gdk_macos_toplevel_surface_compute_size (GdkSurface *surface)
                                    size.shadow.bottom,
                                    size.shadow.left);
 
-  _gdk_macos_surface_set_geometry_hints (GDK_MACOS_SURFACE (self), &geometry, mask);
   gdk_surface_constrain_size (&geometry, mask, width, height, &width, &height);
+
+  _gdk_macos_surface_set_geometry_hints (GDK_MACOS_SURFACE (self), &geometry, mask);
   _gdk_macos_surface_resize (GDK_MACOS_SURFACE (self), width, height);
 
   return FALSE;
@@ -458,6 +463,7 @@ _gdk_macos_toplevel_surface_destroy (GdkSurface *surface,
   GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)surface;
 
   g_clear_object (&GDK_SURFACE (self)->transient_for);
+  g_clear_pointer (&self->layout, gdk_toplevel_layout_unref);
 
   GDK_SURFACE_CLASS (_gdk_macos_toplevel_surface_parent_class)->destroy (surface, foreign_destroy);
 }
