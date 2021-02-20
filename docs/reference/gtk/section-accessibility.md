@@ -3,22 +3,22 @@ Slug: gtk-accessibility
 
 ## The standard accessibility interface
 
-The #GtkAccessible interface provides the accessibility information about
+The `GtkAccessible` interface provides the accessibility information about
 an application's user interface elements. Assistive technology (AT)
 applications, like Orca, convey this information to users with disabilities,
 or reduced abilities, to help them use the application.
 
 Standard GTK controls implement the #GtkAccessible interface and are thus
 accessible to ATs by default. This means that if you use GTK controls such
-as #GtkButton, #GtkEntry, or #GtkListView, you only need to supply
+as `GtkButton`, `GtkEntry`, or `GtkListView`, you only need to supply
 application-specific details when the defaults values are incomplete. You
-can do this by setting the appropriate properties in your #GtkBuilder
+can do this by setting the appropriate properties in your `GtkBuilder`
 template and UI definition files, or by setting the properties defined by
-the #GtkAccessible interface.
+the `GtkAccessible` interface.
 
-If you are implementing your own #GtkWidget derived type, you will need to
-set the #GtkAccessible properties yourself, and provide an implementation
-of the #GtkAccessible virtual functions.
+If you are implementing your own `GtkWidget` derived type, you will need to
+set the `GtkAccessible` properties yourself, and provide an implementation
+of the `GtkAccessible` virtual functions.
 
 ## Accessible roles and attributes
 
@@ -46,39 +46,39 @@ Each role name is part of the #GtkAccessibleRole enumeration.
 
 | Role name | Description | Related GTK widget |
 |-----------|-------------|--------------------|
-| `BUTTON` | A control that performs an action when pressed | #GtkButton, #GtkLinkButton, #GtkExpander |
-| `CHECKBOX` | A control that has three possible value: `true`, `false`, or `undefined` | #GtkCheckButton |
-| `COMBOBOX` | A control that can be expanded to show a list of possible values to select | #GtkComboBox |
-| `COLUMN_HEADER` | A header in a columned list | #GtkColumnView |
-| `DIALOG` | A dialog that prompts the user to enter information or require a response | #GtkDialog and subclasses |
-| `GRID` | A grid of items | #GtkFlowBox, #GtkGridView |
-| `GRID_CELL` | An item in a grid | #GtkFlowBoxChild, #GtkGridView, #GtkColumnView |
-| `IMG` | An image | #GtkImage, #GtkPicture |
-| `LABEL` | A visible name or caption for a user interface component | #GtkLabel |
-| `LINK` | A clickable hyperlink | #GtkLinkButton |
-| `LIST` | A list of items | #GtkListBox |
-| `LIST_ITEM` | An item in a list | #GtkListBoxRow |
-| `MENU` | A menu | #GtkPopoverMenu |
-| `MENU_BAR` | A menubar | #GtkPopoverMenuBar |
-| `MENU_ITEM` | A menu item | Items in #GtkPopoverMenu |
-| `MENU_ITEM_CHECKBOX` | Check menu item | Items in #GtkPopoverMenu |
-| `MENU_ITEM_RADIO` | Radio menu item | Items in #GtkPopoverMenu |
-| `METER` | Represents a value within a known range | #GtkLevelBar |
-| `NONE` | Not represented in the accessibility tree | the slider of a #GtkScale |
-| `PROGRESS_BAR` | An element that display progress | #GtkProgressBar |
-| `RADIO` | A checkable input in a group of radio roles | #GtkCheckButton |
-| `ROW` | A row in a columned list | #GtkColumnView |
-| `SCROLLBAR` | A graphical object controlling the scrolling of content | #GtkScrollbar |
-| `SEARCH_BOX` | A text box for entering search criteria | #GtkSearchEntry |
-| `SEPARATOR` | A divider that separates sections of content or groups of items | #GtkSeparator |
-| `SPIN_BUTTON` | A range control that allows seelcting among discrete choices | #GtkSpinButton |
-| `SWITCH` | A control that represents on/off values | #GtkSwitch |
-| `TAB` | A tab in a list of tabs for switching pages | #GtkStackSwitcher, #GtkNotebook |
-| `TAB_LIST` | A list of tabs for switching pages | #GtkStackSwitcher, #GtkNotebook |
-| `TAB_PANEL` | A page in a notebook or stack | #GtkStack |
-| `TEXT_BOX` | A type of input that allows free-form text as its value. | #GtkEntry, #GtkPasswordEntry, #GtkTextView |
-| `TREE_GRID` | A treeview-like columned list | #GtkColumnView |
-| `WINDOW` | An application window | #GtkWindow |
+| `BUTTON` | A control that performs an action when pressed | [class@Gtk.Button], [class@Gtk.LinkButton], [class@Gtk.Expander] |
+| `CHECKBOX` | A control that has three possible value: `true`, `false`, or `undefined` | [class@Gtk.CheckButton] |
+| `COMBOBOX` | A control that can be expanded to show a list of possible values to select | [class@Gtk.ComboBox] |
+| `COLUMN_HEADER` | A header in a columned list | [class@Gtk.ColumnView] |
+| `DIALOG` | A dialog that prompts the user to enter information or require a response | [class@Gtk.Dialog] and subclasses |
+| `GRID` | A grid of items | [class@Gtk.FlowBox], [class@Gtk.GridView] |
+| `GRID_CELL` | An item in a grid | [class@Gtk.FlowBoxChild], [class@Gtk.GridView], [class@Gtk.ColumnView] |
+| `IMG` | An image | [class@Gtk.Image], [class@Gtk.Picture] |
+| `LABEL` | A visible name or caption for a user interface component | [class@Gtk.Label] |
+| `LINK` | A clickable hyperlink | [class@Gtk.LinkButton] |
+| `LIST` | A list of items | [class@Gtk.ListBox] |
+| `LIST_ITEM` | An item in a list | [class@Gtk.ListBoxRow] |
+| `MENU` | A menu | [class@Gtk.PopoverMenu] |
+| `MENU_BAR` | A menubar | [class@Gtk.PopoverMenuBar] |
+| `MENU_ITEM` | A menu item | Items in [class@Gtk.PopoverMenu] |
+| `MENU_ITEM_CHECKBOX` | Check menu item | Items in [class@Gtk.PopoverMenu] |
+| `MENU_ITEM_RADIO` | Radio menu item | Items in [class@Gtk.PopoverMenu] |
+| `METER` | Represents a value within a known range | [class@Gtk.LevelBar] |
+| `NONE` | Not represented in the accessibility tree | the slider of a [class@Gtk.Scale] |
+| `PROGRESS_BAR` | An element that display progress | [class@Gtk.ProgressBar] |
+| `RADIO` | A checkable input in a group of radio roles | [class@Gtk.CheckButton] |
+| `ROW` | A row in a columned list | [class@Gtk.ColumnView] |
+| `SCROLLBAR` | A graphical object controlling the scrolling of content | [class@Gtk.Scrollbar] |
+| `SEARCH_BOX` | A text box for entering search criteria | [class@Gtk.SearchEntry] |
+| `SEPARATOR` | A divider that separates sections of content or groups of items | [class@Gtk.Separator] |
+| `SPIN_BUTTON` | A range control that allows seelcting among discrete choices | [class@Gtk.SpinButton] |
+| `SWITCH` | A control that represents on/off values | [class@Gtk.Switch] |
+| `TAB` | A tab in a list of tabs for switching pages | [class@Gtk.StackSwitcher], [class@Gtk.Notebook] |
+| `TAB_LIST` | A list of tabs for switching pages | [class@Gtk.StackSwitcher], [class@Gtk.Notebook] |
+| `TAB_PANEL` | A page in a notebook or stack | [class@Gtk.Stack] |
+| `TEXT_BOX` | A type of input that allows free-form text as its value. | [class@Gtk.Entry], [class@Gtk.PasswordEntry], [class@Gtk.TextView] |
+| `TREE_GRID` | A treeview-like columned list | [class@Gtk.ColumnView] |
+| `WINDOW` | An application window | [class@Gtk.Window] |
 | `...` | … |
 
 See the [WAI-ARIA](https://www.w3.org/WAI/PF/aria/appendices#quickref) list
@@ -90,11 +90,11 @@ Attributes provide specific information about an accessible UI
 control, and describe it for the assistive technology applications. GTK
 divides the accessible attributes into three categories:
 
- - *properties*, described by the values of the #GtkAccessibleProperty
+ - *properties*, described by the values of the `GtkAccessibleProperty`
    enumeration
- - *relations*, described by the values of the #GtkAccessibleRelation
+ - *relations*, described by the values of the `GtkAccessibleRelation`
    enumeration
- - *states*, described by the values of the #GtkAccessibleState enumeration
+ - *states*, described by the values of the `GtkAccessibleState` enumeration
 
 Each attribute accepts a value of a specific type.
 
@@ -121,12 +121,12 @@ Each state name is part of the #GtkAccessibleState enumeration.
 | State name | ARIA attribute | Value type | Notes |
 |------------|----------------|------------|-------|
 | %GTK_ACCESSIBLE_STATE_BUSY | “aria-busy” | boolean |
-| %GTK_ACCESSIBLE_STATE_CHECKED | “aria-checked” | #GtkAccessibleTristate | Indicates the current state of a #GtkCheckButton |
-| %GTK_ACCESSIBLE_STATE_DISABLED | “aria-disabled” | boolean | Corresponds to the #GtkWidget:sensitive property on #GtkWidget |
-| %GTK_ACCESSIBLE_STATE_EXPANDED | “aria-expanded” | boolean or undefined | Corresponds to the  #GtkExpander:expanded property on #GtkExpander |
-| %GTK_ACCESSIBLE_STATE_HIDDEN | “aria-hidden” | boolean | Corresponds to the #GtkWidget:visible property on #GtkWidget |
+| %GTK_ACCESSIBLE_STATE_CHECKED | “aria-checked” | #GtkAccessibleTristate | Indicates the current state of a [class@Gtk.CheckButton] |
+| %GTK_ACCESSIBLE_STATE_DISABLED | “aria-disabled” | boolean | Corresponds to the [property@Gtk.Widget:sensitive] property on [class@Gtk.Widget] |
+| %GTK_ACCESSIBLE_STATE_EXPANDED | “aria-expanded” | boolean or undefined | Corresponds to the  [property@Gtk.Expander:expanded] property on [class@Gtk.Expander] |
+| %GTK_ACCESSIBLE_STATE_HIDDEN | “aria-hidden” | boolean | Corresponds to the [property@Gtk.Widget:visible] property on [class@Gtk.Widget] |
 | %GTK_ACCESSIBLE_STATE_INVALID | “aria-invalid” | #GtkAccessibleInvalidState | Set when a widget is showing an error |
-| %GTK_ACCESSIBLE_STATE_PRESSED | “aria-pressed” | #GtkAccessibleTristate | Indicates the current state of a #GtkToggleButton |
+| %GTK_ACCESSIBLE_STATE_PRESSED | “aria-pressed” | #GtkAccessibleTristate | Indicates the current state of a [class@Gtk.ToggleButton] |
 | %GTK_ACCESSIBLE_STATE_SELECTED | “aria-selected” | boolean or undefined | Set when a widget is selected |
 
 #### List of accessible properties
@@ -181,7 +181,7 @@ Each relation name is part of the #GtkAccessibleRelation enumeration.
 | %GTK_ACCESSIBLE_RELATION_SET_SIZE | “aria-setsize” | integer |
 
 *Note*: When using gtk_accessible_update_relation() with a relation that
-requires a list of #GtkAccessible instances, you should pass every
+requires a list of `GtkAccessible` instances, you should pass every
 accessible object separately, followed by %NULL. 
 
 ## Application development rules
@@ -233,12 +233,12 @@ which acts as a proxy to the specific platform's accessibility API:
 Additionally, an ad hoc accessibility backend is available for the GTK
 testsuite, to ensure reproducibility of issues in the CI pipeline.
 
-## Authoring practices {#authoring-practices}
+## Authoring practices
 
 The authoring practices are aimed at application developers, as well as
 developers of GUI elements based on GTK.
 
-Functionally, #GtkAccessible roles, states, properties, and relations are
+Functionally, `GtkAccessible` roles, states, properties, and relations are
 analogous to a CSS for assistive technologies. For screen reader users, for
 instance, the various accessible attributes control the rendering of their
 non-visual experience. Incorrect roles and attributes may result in a
@@ -254,7 +254,7 @@ gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_BUTTON);
 
 is a promise that the widget being created will provide the same keyboard
 interactions expected for a button. An accessible role of a button will not
-turn automatically any widget into a #GtkButton; but if your widget behaves
+turn automatically any widget into a `GtkButton`; but if your widget behaves
 like a button, using the %GTK_ACCESSIBLE_ROLE_BUTTON will allow any
 assistive technology to handle it like they would a #GtkButton.
 
@@ -320,7 +320,7 @@ as well.
 ### Buttons
 
 A button is a widget that enables users to trigger an action. While it is
-recommended you use #GtkButton for anything that looks and behaves like a
+recommended you use `GtkButton` for anything that looks and behaves like a
 button, it is possible to apply a button behavior to UI elements like images
 by using a #GtkGestureClick gesture. When doing so, you should:
 
@@ -330,16 +330,16 @@ by using a #GtkGestureClick gesture. When doing so, you should:
 ### Custom entries
 
 For custom entries, it is highly recommended that you implement the
-#GtkEditable interface by using a #GtkText widget as delegate. If you
+`GtkEditable` interface by using a `GtkText` widget as delegate. If you
 do this, GTK will make your widgets text editing functionality accessible
-in the same way as a #GtkSpinButton or #GtkSearchEntry.
+in the same way as a `GtkSpinButton` or `GtkSearchEntry`.
 
 ### Tab-based UI
 
 If you make a tab-based interface, you should consider using #GtkStack
 as the core, and just make a custom tab widget to control the active
 stack page. When doing so, the following extra steps will ensure that
-your tabs are accessible in the same way as #GtkStackSwitcher or #GtkNotebook:
+your tabs are accessible in the same way as `GtkStackSwitcher` or `GtkNotebook`:
 
 - Give your tab container the role %GTK_ACCESSIBLE_ROLE_TAB_LIST
 - Give your tab widgets the role %GTK_ACCESSIBLE_ROLE_TAB
