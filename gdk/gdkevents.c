@@ -41,8 +41,12 @@
 /**
  * GdkEvent: (ref-func gdk_event_ref) (unref-func gdk_event_unref)
  *
- * The GdkEvent struct contains only private fields and
- * should not be accessed directly.
+ * `GdkEvent` and its derived types are immutable data structures,
+ * created by GTK itself to represent windowing system events.
+ *
+ * In GTK applications the events are handled automatically by toplevel
+ * widgets and passed on to the event controllers of appropriate widgets,
+ * so using `GdkEvent` and its related API is rarely needed.
  */
 
 /**

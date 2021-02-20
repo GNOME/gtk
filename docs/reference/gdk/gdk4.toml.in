@@ -34,7 +34,6 @@ base_url = "https://gitlab.gnome.org/GNOME/gtk/-/blob/master/"
 
 [extra]
 content_files = [
-  "events.md",
   "keys.md",
   "cairo.md",
   "pango.md",
