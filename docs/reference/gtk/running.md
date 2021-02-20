@@ -10,55 +10,70 @@ to determine paths to look for certain files. The [X11](#x11-envar),
 [Broadway](#broadway-envar) GDK backends use some additional
 environment variables.
 
-### GTK_DEBUG {#GTK_Debug-Options}
+### GTK_DEBUG
 
 This variable can be set to a list of debug options, which cause GTK to
 print out different types of debugging information. Some of these options
 are only available when GTK has been configured with `-Ddebug=true`.
 
 actions
- : Actions and menu models
+: Actions and menu models
+
 builder
- : GtkBuilder support
+: GtkBuilder support
+
 geometry
- : Size allocation
+: Size allocation
+
 icontheme
- : Icon themes
+: Icon themes
+
 keybindings
- : Keybindings
+: Keybindings
+
 modules
- : Loading of modules
+: Loading of modules
+
 printing
- : Printing support
+: Printing support
+
 size-request
- : Size requests
+: Size requests
+
 text
- : Text widget internals
+: Text widget internals
+
 tree
- : Tree widget internals
- 
-  A number of keys are influencing behavior instead of just logging:
-  
+: Tree widget internals
+
+A number of keys are influencing behavior instead of just logging:
+
 interactive
- : Open the [interactive debugger](#interactive-debugging)
+: Open the [interactive debugger](#interactive-debugging)
+
 no-css-cache
- : Bypass caching for CSS style properties
+: Bypass caching for CSS style properties
+
 touchscreen
- : Pretend the pointer is a touchscreen device
+: Pretend the pointer is a touchscreen device
+
 updates
- : Visual feedback about window updates
+: Visual feedback about window updates
+
 resize
- : Highlight resizing widgets
+: Highlight resizing widgets
+
 layout
- : Show layout borders
+: Show layout borders
+
 snapshot
- : Include debug render nodes in the generated snapshots
- 
+: Include debug render nodes in the generated snapshots
+
 The special value `all` can be used to turn on all debug options.
 The special value `help` can be used to obtain a list of all
 supported debug options.
 
-### GTK_PATH {#gtk-path}
+### GTK_PATH
 
 Specifies a list of directories to search when GTK is looking for
 dynamically loaded objects such as input method modules and print
@@ -101,7 +116,7 @@ available on the system.
 
 ### GTK_MEDIA
 
-Specifies what backend to load for #GtkMediaFile. The possible values
+Specifies what backend to load for [class@Gtk.MediaFile]. The possible values
 depend on what options GTK was built with, and can include 'gstreamer',
 'ffmpeg' and 'none'. If set to 'none', media playback will be unavailable.
 The special value 'help' can be used to obtain a list of all supported
@@ -147,86 +162,114 @@ print out different types of debugging information. Some of these options
 are only available when GTK has been configured with `-Ddebug=true`.
 
 cursor
- : Information about cursor objects (only win32)
+: Information about cursor objects (only win32)
+
 eventloop
- : Information about event loop operation (mostly Quartz)
+: Information about event loop operation (mostly Quartz)
+
 misc
- : Miscellaneous information
+: Miscellaneous information
+
 frames
- : Information about the frame clock
+: Information about the frame clock
+
 settings
- : Information about xsettings
+: Information about xsettings
+
 selection
- : Information about selections
+: Information about selections
+
 clipboard
- : Information about clipboards
+: Information about clipboards
+
 dnd
- : Information about drag-and-drop
+: Information about drag-and-drop
+
 opengl
- : Information about OpenGL
+: Information about OpenGL
+
 vulkan
- : Information about Vulkan
- 
+: Information about Vulkan
+
 A number of options affect behavior instead of logging:
 
 nograbs
- : Turn off all pointer and keyboard grabs
+: Turn off all pointer and keyboard grabs
+
 gl-disable
- : Disable OpenGL support
+: Disable OpenGL support
+
 gl-software
- : Force OpenGL software rendering
+: Force OpenGL software rendering
+
 gl-texture-rect
- : Use the OpenGL texture rectangle extension, if available
+: Use the OpenGL texture rectangle extension, if available
+
 gl-legacy
- : Use a legacy OpenGL context
+: Use a legacy OpenGL context
+
 gl-gles
- : Use a GLES OpenGL context
+: Use a GLES OpenGL context
+
 vulkan-disable
- : Disable Vulkan support
+: Disable Vulkan support
+
 vulkan-validate
- : Load the Vulkan validation layer, if available
- 
+: Load the Vulkan validation layer, if available
+
 The special value `all` can be used to turn on all
 debug options. The special value `help` can be used
 to obtain a list of all supported debug options.
 
-### GSK_DEBUG {#GSK-Debug-Options}
+### GSK_DEBUG
 
 This variable can be set to a list of debug options, which cause GSK to
 print out different types of debugging information. Some of these options
 are only available when GTK has been configured with `-Ddebug=true`.
 
 renderer
- : General renderer information
-cairo
- : cairo renderer information
-opengl
- : OpenGL renderer information
-shaders
- : Shaders
-surface
- : Surfaces
-vulkan
- : Vulkan renderer information
-fallback
- : Information about fallbacks
-glyphcache
- : Information about glyph caching
+: General renderer information
 
-  A number of options affect behavior instead of logging:
+cairo
+: cairo renderer information
+
+opengl
+: OpenGL renderer information
+
+shaders
+: Shaders
+
+surface
+: Surfaces
+
+vulkan
+: Vulkan renderer information
+
+fallback
+: Information about fallbacks
+
+glyphcache
+: Information about glyph caching
+
+A number of options affect behavior instead of logging:
 
 diff
- : Show differences
+: Show differences
+
 geometry
- : Show borders
+: Show borders
+
 full-redraw
- : Force full redraws for every frame
+: Force full redraws for every frame
+
 sync
- : Sync after each frame
+: Sync after each frame
+
 vulkan-staging-image
- : Use a staging image for Vulkan texture upload
+: Use a staging image for Vulkan texture upload
+
 vulkan-staging-buffer
- : Use a staging buffer for Vulkan texture upload
+: Use a staging buffer for Vulkan texture upload
 
 The special value `all` can be used to turn on all
 debug options. The special value `help` can be used
@@ -240,22 +283,26 @@ The following backends can be selected, provided they are
 included in the GDK libraries you are using:
 
 quartz
- : Selects the native Quartz backend
+: Selects the native Quartz backend
+
 win32
- : Selects the native backend for Microsoft Windows
+: Selects the native backend for Microsoft Windows
+
 x11
- : Selects the native backend for connecting to X11 servers
+: Selects the native backend for connecting to X11 servers
+
 broadway
- : Selects the Broadway backend for display in web browsers
+: Selects the Broadway backend for display in web browsers
+
 wayland
- : Selects the Wayland backend for connecting to Wayland compositors
+: Selects the Wayland backend for connecting to Wayland compositors
 
 This environment variable can contain a comma-separated list of
 backend names, which are tried in order. The list may also contain
 a *, which means: try all remaining backends. The special value
 `help` can be used to make GDK print out a list of all available
 backends. For more information about selecting backends,
-see the gdk_display_manager_get() function.
+see the [method@Gdk.DisplayManager.get] function.
 
 ### GDK_VULKAN_DEVICE
 
@@ -271,15 +318,19 @@ be selected, provided they are included in the GTK library you are
 using and the GDK backend supports them:
 
 help
- : Prints information about available options
+: Prints information about available options
+
 broadway
- : Selects the Broadway-backend specific renderer
+: Selects the Broadway-backend specific renderer
+
 cairo
- : Selects the fallback Cairo renderer
+: Selects the fallback Cairo renderer
+
 gl
- : Selects the default OpenGL renderer
+: Selects the default OpenGL renderer
+
 vulkan
- : Selects the Vulkan renderer
+: Selects the Vulkan renderer
 
 ### GTK_CSD
 
@@ -300,13 +351,16 @@ backends can be selected, provided they are included in the GTK
 library you are using:
 
 help
- : Prints information about available options
+: Prints information about available options
+
 atspi
- : Selects the AT-SPI accessibility backend
+: Selects the AT-SPI accessibility backend
+
 test
- : Selects the test backend
+: Selects the test backend
+
 none
- : Disables the accessibility backend
+: Disables the accessibility backend
 
 The `test` accessibility backend is recommended for test suites and remote
 continuous integration pipelines.
@@ -328,7 +382,7 @@ it (to keep it from leaking to child processes). So, if you need its
 value for your own purposes, you have to read it before calling
 gtk_init().
 
-## Interactive debugging {#interactive-debugging}
+## Interactive debugging
 
 ![The inspector](inspector.png)
 
@@ -358,7 +412,7 @@ the GTK inspector. The keyboard shortcuts can be disabled with the
 `enable-inspector-keybinding` key in the `org.gtk.Settings.Debug`
 GSettings schema.
 
-## Profiling {#profiling}
+## Profiling
 
 GTK supports profiling with sysprof. It exports timing information
 about frameclock phases and various characteristics of GskRenderers
