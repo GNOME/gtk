@@ -42,18 +42,23 @@
  * @Title: GtkScrollbar
  * @See_also: #GtkAdjustment, #GtkScrolledWindow
  *
- * The #GtkScrollbar widget is a horizontal or vertical scrollbar,
- * depending on the value of the #GtkOrientable:orientation property.
+ * The `GtkScrollbar` widget is a horizontal or vertical scrollbar.
+ *
+ * ![An example GtkScrollbar](scrollbar.png)
  *
  * Its position and movement are controlled by the adjustment that is passed to
- * or created by gtk_scrollbar_new(). See #GtkAdjustment for more details. The
- * #GtkAdjustment:value field sets the position of the thumb and must be between
- * #GtkAdjustment:lower and #GtkAdjustment:upper - #GtkAdjustment:page-size. The
- * #GtkAdjustment:page-size represents the size of the visible scrollable area.
- * The fields #GtkAdjustment:step-increment and #GtkAdjustment:page-increment
- * fields are added to or subtracted from the #GtkAdjustment:value when the user
- * asks to move by a step (using e.g. the cursor arrow keys) or by a page (using
- * e.g. the Page Down/Up keys).
+ * or created by [ctor@Gtk.Scrollbar.new]. See [class.Gtk.Adjustment] for more
+ * details. The [property@Gtk.Adjustment:value] field sets the position of the
+ * thumb and must be between [property@Gtk.Adjustment:lower] and
+ * [property@Gtk.Adjustment:upper] - [property@Gtk.Adjustment:page-size].
+ * The [property@Gtk.Adjustment:page-size] represents the size of the visible
+ * scrollable area.
+ *
+ * The fields [property@Gtk.Adjustment:step-increment] and
+ * [property@Gtk.Adjustment:page-increment] fields are added to or subtracted
+ * from the [property@Gtk.Adjustment:value] when the user asks to move by a step
+ * (using e.g. the cursor arrow keys) or by a page (using e.g. the Page Down/Up
+ * keys).
  *
  * # CSS nodes
  *
@@ -64,20 +69,21 @@
  *         ╰── slider
  * ]|
  *
- * GtkScrollbar has a main CSS node with name scrollbar and a subnode for its
- * contents. The main node gets the .horizontal or .vertical
- * style classes applied, depending on the scrollbar's orientation.
+ * `GtkScrollbar` has a main CSS node with name scrollbar and a subnode for its
+ * contents. The main node gets the .horizontal or .vertical style classes applied,
+ * depending on the scrollbar's orientation.
  *
  * The range node gets the style class .fine-tune added when the scrollbar is
  * in 'fine-tuning' mode.
  *
- * Other style classes that may be added to scrollbars inside #GtkScrolledWindow
- * include the positional classes (.left, .right, .top, .bottom) and style
- * classes related to overlay scrolling (.overlay-indicator, .dragging, .hovering).
+ * Other style classes that may be added to scrollbars inside
+ * [class@Gtk.ScrolledWindow] include the positional classes (.left, .right,
+ * .top, .bottom) and style classes related to overlay scrolling (.overlay-indicator,
+ * .dragging, .hovering).
  *
  * # Accessibility
  *
- * GtkScrollbar uses the #GTK_ACCESSIBLE_ROLE_SCROLLBAR role.
+ * `GtkScrollbar` uses the #GTK_ACCESSIBLE_ROLE_SCROLLBAR role.
  */
 
 typedef struct _GtkScrollbarClass   GtkScrollbarClass;
@@ -208,6 +214,11 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
   object_class->set_property = gtk_scrollbar_set_property;
   object_class->dispose = gtk_scrollbar_dispose;
 
+  /**
+   * GtkScrollbar:adjustment:
+   *
+   * The `GtkAdjustment` controlled by this scrollbar.
+   */
   props[PROP_ADJUSTMENT] =
       g_param_spec_object ("adjustment",
                            P_("Adjustment"),
@@ -244,12 +255,13 @@ gtk_scrollbar_init (GtkScrollbar *self)
 /**
  * gtk_scrollbar_new:
  * @orientation: the scrollbar’s orientation.
- * @adjustment: (allow-none): the #GtkAdjustment to use, or %NULL to create a new adjustment.
+ * @adjustment: (allow-none): the [class@Gtk.Adjustment] to use, or %NULL
+ *   to create a new adjustment.
  *
  * Creates a new scrollbar with the given orientation.
  *
- * Returns:  the new #GtkScrollbar.
- **/
+ * Returns:  the new `GtkScrollbar`.
+ */
 GtkWidget *
 gtk_scrollbar_new (GtkOrientation  orientation,
                    GtkAdjustment  *adjustment)
@@ -288,7 +300,7 @@ gtk_scrollbar_adjustment_value_changed (GtkAdjustment *adjustment,
 
 /**
  * gtk_scrollbar_set_adjustment:
- * @self: a #GtkScrollbar
+ * @self: a `GtkScrollbar`
  * @adjustment: (nullable): the adjustment to set
  *
  * Makes the scrollbar use the given adjustment.
@@ -331,7 +343,7 @@ gtk_scrollbar_set_adjustment (GtkScrollbar  *self,
 
 /**
  * gtk_scrollbar_get_adjustment:
- * @self: a #GtkScrollbar
+ * @self: a `GtkScrollbar`
  *
  * Returns the scrollbar's adjustment.
  *
