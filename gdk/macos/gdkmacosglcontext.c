@@ -267,6 +267,34 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
   return TRUE;
 }
 
+static gboolean
+opaque_region_covers_surface (GdkMacosGLContext *self)
+{
+  GdkSurface *surface;
+  cairo_region_t *region;
+
+  g_assert (GDK_IS_MACOS_GL_CONTEXT (self));
+
+  surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self));
+  region = GDK_MACOS_SURFACE (surface)->opaque_region;
+
+  if (region != NULL &&
+      cairo_region_num_rectangles (region) == 1)
+    {
+      cairo_rectangle_int_t extents;
+
+      cairo_region_get_extents (region, &extents);
+
+      if (extents.x == 0 &&
+          extents.y == 0 &&
+          extents.width == surface->width &&
+          extents.height == surface->height)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 gdk_macos_gl_context_begin_frame (GdkDrawContext *context,
                                   cairo_region_t *painted)
@@ -314,6 +342,10 @@ gdk_macos_gl_context_begin_frame (GdkDrawContext *context,
         opaque = GDK_MACOS_TOPLEVEL_SURFACE (surface)->decorated;
       else
         opaque = FALSE;
+
+      /* If we are maximized, we might be able to make it opaque */
+      if (opaque == FALSE)
+        opaque = opaque_region_covers_surface (self);
 
       CGLSetParameter (cgl_context, kCGLCPSurfaceOpacity, &opaque);
 
