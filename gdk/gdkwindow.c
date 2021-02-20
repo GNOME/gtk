@@ -10200,7 +10200,7 @@ gdk_window_create_similar_surface (GdkWindow *     window,
  * gdk_window_create_similar_image_surface:
  * @window: (nullable): window to make new surface similar to, or
  *   %NULL if none
- * @format: (type int): the format for the new surface
+ * @format: the format for the new surface
  * @width: width of the new surface
  * @height: height of the new surface
  * @scale: the scale of the new surface, or 0 to use same as @window
