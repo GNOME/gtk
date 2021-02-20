@@ -8,7 +8,7 @@ the Wayland backend by setting `GDK_BACKEND=wayland`.
 On UNIX, the Wayland backend is enabled by default, so you don't need to
 do anything special when compiling it, and everything should "just work."
 
-## Wayland-specific environment variables {#wayland-envar}
+## Wayland-specific environment variables
 
 ### WAYLAND_DISPLAY
 
