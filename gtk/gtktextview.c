@@ -903,7 +903,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkTextview:wrap-mode:
+   * GtkTextview:justification:
    *
    * Left, right, or center justification.
    */
