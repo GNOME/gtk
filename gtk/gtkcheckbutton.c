@@ -40,12 +40,42 @@
 #include "gtkmodelbuttonprivate.h"
 
 /**
- * SECTION:gtkcheckbutton
- * @Short_description: Create widgets with a discrete toggle button
- * @Title: GtkCheckButton
- * @See_also: #GtkButton, #GtkToggleButton
+ * GtkCheckButton:
  *
- * A #GtkCheckButton places a label next to an indicator.
+ * A `GtkCheckButton` places a label next to an indicator.
+ *
+ * ![Example GtkCheckButtons](check-button.png)
+ *
+ * A `GtkCheckButton` is created by calling either [ctor@Gtk.CheckButton.new] or
+ * [ctor@Gtk.CheckButton.new_with_label].
+ *
+ * The state of a `GtkCheckButton` can be set specifically using
+ * [method@Gtk.CheckButton.set_active], and retrieved using
+ * [method@Gtk.CheckButton.get_active].
+ *
+ * # Inconsistent state
+ *
+ * In addition to "on" and "off", check buttons can be an
+ * "in between" state that is neither on nor off. This can be used
+ * e.g. when the user has selected a range of elements (such as some
+ * text or spreadsheet cells) that are affected by a check button,
+ * and the current values in that range are inconsistent.
+ *
+ * To set a `GtkCheckButton` to inconsistent state, use
+ * [method@Gtk.CheckButton.set_inconsistent].
+ *
+ * # Grouping
+ *
+ * Check buttons can be grouped together, to form mutually exclusive
+ * groups - only one of the buttons can be toggled at a time, and toggling
+ * another one will switch the currently toggled one off.
+ *
+ * Grouped check buttons use a different indicator, and are commonly referred
+ * to as *radio buttons*.
+ *
+ * ![Example GtkCheckButtons](radio-button.png)
+ *
+ * To add a `GtkCheckButton` to a group, use [method@Gtk.CheckButton.set_group].
  *
  * # CSS nodes
  *
@@ -55,14 +85,14 @@
  * ╰── [label]
  * ]|
  *
- * A #GtkCheckButton has a main node with name checkbutton. If the
- * #GtkCheckButton:label property is set, it contains a label child.
- * The indicator node is named check when no group is set, and radio
- * if the checkbutton is grouped together with other checkbuttons.
+ * A `GtkCheckButton` has a main node with name checkbutton. If the
+ * [property@Gtk.CheckButton:label] property is set, it contains a label
+ * child. The indicator node is named check when no group is set, and
+ * radio if the checkbutton is grouped together with other checkbuttons.
  *
  * # Accessibility
  *
- * GtkCheckButton uses the #GTK_ACCESSIBLE_ROLE_CHECKBOX role.
+ * `GtkCheckButton` uses the #GTK_ACCESSIBLE_ROLE_CHECKBOX role.
  */
 
 typedef struct {
@@ -473,18 +503,35 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
 
   class->activate = gtk_check_button_real_activate;
 
+  /**
+   * GtkCheckButton:active:
+   *
+   * If the check button is active.
+   */
   props[PROP_ACTIVE] =
       g_param_spec_boolean ("active",
                             P_("Active"),
                             P_("If the toggle button should be pressed in"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkCheckButton:group:
+   *
+   * The check button whose group this widget belongs to.
+   */
   props[PROP_GROUP] =
       g_param_spec_object ("group",
                            P_("Group"),
                            P_("The check button whose group this widget belongs to."),
                            GTK_TYPE_CHECK_BUTTON,
                            GTK_PARAM_WRITABLE);
+
+  /**
+   * GtkCheckButton:label:
+   *
+   * Text of the label inside the check button, if it contains a label widget.
+   */
   props[PROP_LABEL] =
     g_param_spec_string ("label",
                          P_("Label"),
@@ -492,6 +539,11 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
                          NULL,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkCheckButton:inconsistent:
+   *
+   * If the check button is in an “in between” state.
+   */
   props[PROP_INCONSISTENT] =
       g_param_spec_boolean ("inconsistent",
                             P_("Inconsistent"),
@@ -499,6 +551,12 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkCheckButton:use-underline:
+   *
+   * If set, an underline in the text indicates that the following character
+   * is to be used as mnemonic.
+   */
   props[PROP_USE_UNDERLINE] =
       g_param_spec_boolean ("use-underline",
                             P_("Use underline"),
@@ -511,11 +569,10 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   g_object_class_override_property (object_class, PROP_ACTION_NAME, "action-name");
   g_object_class_override_property (object_class, PROP_ACTION_TARGET, "action-target");
 
-
   /**
    * GtkCheckButton::toggled:
    *
-   * Emitted when the buttons's #GtkCheckButton:active flag changes.
+   * Emitted when the buttons's [property@Gtk.CheckButton:active] property changes.
    */
   signals[TOGGLED] =
     g_signal_new (I_("toggled"),
@@ -530,10 +587,13 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
    * GtkCheckButton::activate:
    * @widget: the object which received the signal.
    *
-   * The ::activate signal on GtkCheckButton is an action signal and
+   * Emitted to when the check button is activated.
+   *
+   * The `::activate` signal on `GtkCheckButton` is an action signal and
    * emitting it causes the button to animate press then release.
+   *
    * Applications should never connect to this signal, but use the
-   * #GtkCheckButton::toggled signal.
+   * [signal@Gtk.CheckButton::toggled] signal.
    *
    * Since: 4.2
    */
@@ -593,9 +653,9 @@ gtk_check_button_init (GtkCheckButton *self)
 /**
  * gtk_check_button_new:
  *
- * Creates a new #GtkCheckButton.
+ * Creates a new `GtkCheckButton`.
  *
- * Returns: a #GtkWidget.
+ * Returns: a new `GtkCheckButton`
  */
 GtkWidget *
 gtk_check_button_new (void)
@@ -607,10 +667,9 @@ gtk_check_button_new (void)
  * gtk_check_button_new_with_label:
  * @label: (nullable): the text for the check button.
  *
- * Creates a new #GtkCheckButton with a #GtkLabel next to it, if
- * @label is non-%NULL.
+ * Creates a new `GtkCheckButton` with the given text.
  *
- * Returns: a new #GtkCheckButton
+ * Returns: a new `GtkCheckButton`
  */
 GtkWidget*
 gtk_check_button_new_with_label (const char *label)
@@ -620,13 +679,12 @@ gtk_check_button_new_with_label (const char *label)
 
 /**
  * gtk_check_button_new_with_mnemonic:
- * @label: (nullable): The text of the button, with an underscore in front of the
- *   mnemonic character
+ * @label: (nullable): The text of the button, with an underscore
+ *   in front of the mnemonic character
  *
- * Creates a new #GtkCheckButton containing a label. Underscores
- * in @label indicate the mnemonic for the check button.
+ * Creates a new `GtkCheckButton` with the given text and a mnemonic.
  *
- * Returns: a new #GtkCheckButton
+ * Returns: a new `GtkCheckButton`
  */
 GtkWidget*
 gtk_check_button_new_with_mnemonic (const char *label)
@@ -639,16 +697,15 @@ gtk_check_button_new_with_mnemonic (const char *label)
 
 /**
  * gtk_check_button_set_inconsistent:
- * @check_button: a #GtkCheckButton
+ * @check_button: a `GtkCheckButton`
  * @inconsistent: %TRUE if state is inconsistent
  *
- * If the user has selected a range of elements (such as some text or
- * spreadsheet cells) that are affected by a check button, and the
- * current values in that range are inconsistent, you may want to
- * display the toggle in an "in between" state. Normally you would
- * turn off the inconsistent state again if the user checks the
- * check button. This has to be done manually,
- * gtk_check_button_set_inconsistent only affects visual appearance,
+ * Sets the `GtkCheckButton` to inconsistent state.
+ *
+ * You shoud turn off the inconsistent state again if the user checks
+ * the check button. This has to be done manually.
+ *
+ * gtk_check_button_set_inconsistent() only affects visual appearance,
  * not the semantics of the button.
  */
 void
@@ -683,11 +740,11 @@ gtk_check_button_set_inconsistent (GtkCheckButton *check_button,
 
 /**
  * gtk_check_button_get_inconsistent:
- * @check_button: a #GtkCheckButton
+ * @check_button: a `GtkCheckButton`
  *
  * Returns whether the check button is in an inconsistent state.
  *
- * Returns: %TRUE if @check_button is currently in an 'in between' state, %FALSE otherwise.
+ * Returns: %TRUE if @check_button is currently in an inconsistent state
  */
 gboolean
 gtk_check_button_get_inconsistent (GtkCheckButton *check_button)
@@ -701,12 +758,11 @@ gtk_check_button_get_inconsistent (GtkCheckButton *check_button)
 
 /**
  * gtk_check_button_get_active:
- * @self: a #GtkCheckButton
+ * @self: a `GtkCheckButton`
  *
- * Returns the current value of the #GtkCheckButton:active property.
+ * Returns whether the check button is active.
  *
- * Returns: The value of the #GtkCheckButton:active property.
- *   See gtk_check_button_set_active() for details on how to set a new value.
+ * Returns: The value of the [property@Gtk.CheckButton:active] property
  */
 gboolean
 gtk_check_button_get_active (GtkCheckButton *self)
@@ -720,14 +776,14 @@ gtk_check_button_get_active (GtkCheckButton *self)
 
 /**
  * gtk_check_button_set_active:
- * @self: a #GtkCheckButton
+ * @self: a `GtkCheckButton`
  * @setting: the new value to set
  *
- * Sets the new value of the #GtkCheckButton:active property.
- * See also gtk_check_button_get_active().
+ * Changes the check buttons active state.
  *
- * Setting #GtkCheckButton:active to %TRUE will add the `:checked:` state to
- * both the checkbutton and the indicator CSS node.
+ * Setting [property@Gtk.CheckButton:active] to %TRUE will add
+ * the `:checked:` state to both the checkbutton and the indicator
+ * CSS node.
  */
 void
 gtk_check_button_set_active (GtkCheckButton *self,
@@ -776,12 +832,12 @@ gtk_check_button_set_active (GtkCheckButton *self,
 
 /**
  * gtk_check_button_get_label:
- * @self: a #GtkCheckButton
+ * @self: a `GtkCheckButton`
  *
- * Returns the label of the checkbutton.
+ * Returns the label of the check button.
  *
- * Returns: (nullable) (transfer none): The label @self shows next to the indicator.
- *   If no label is shown, %NULL will be returned.
+ * Returns: (nullable) (transfer none): The label @self shows next
+ *   to the indicator. If no label is shown, %NULL will be returned.
  */
 const char *
 gtk_check_button_get_label (GtkCheckButton *self)
@@ -798,14 +854,15 @@ gtk_check_button_get_label (GtkCheckButton *self)
 
 /**
  * gtk_check_button_set_label:
- * @self: a #GtkCheckButton
+ * @self: a `GtkCheckButton`
  * @label: (nullable): The text shown next to the indicator, or %NULL
  *   to show no text
  *
- * Sets the text of @self. If #GtkCheckButton:use-underline is %TRUE,
- * the underscore in @label is interpreted as mnemonic indicator,
- * see gtk_check_button_set_use_underline() for details on this behavior.
+ * Sets the text of @self.
  *
+ * If [property@Gtk.CheckButton:use-underline] is %TRUE, an underscore
+ * in @label is interpreted as mnemonic indicator, see
+ * [method@Gtk.CheckButton.set_use_underline] for details on this behavior.
  */
 void
 gtk_check_button_set_label (GtkCheckButton *self,
@@ -843,21 +900,21 @@ gtk_check_button_set_label (GtkCheckButton *self,
 
 /**
  * gtk_check_button_set_group:
- * @self: a #GtkCheckButton
- * @group: (nullable) (transfer none): another #GtkCheckButton to
+ * @self: a `GtkCheckButton`
+ * @group: (nullable) (transfer none): another `GtkCheckButton` to
  *   form a group with
  *
- * Adds @self to the group of @group. In a group of multiple check buttons,
- * only one button can be active at a time.
+ * Adds @self to the group of @group.
+ *
+ * In a group of multiple check buttons, only one button can be active
+ * at a time. The behavior of a checkbutton in a group is also commonly
+ * known as a *radio button*.
  *
  * Setting the group of a check button also changes the css name of the
  * indicator widget's CSS node to 'radio'.
  *
- * The behavior of a checkbutton in a group is also commonly known as
- * a 'radio button'.
- *
- * Note that the same effect can be achieved via the #GtkActionable
- * api, by using the same action with parameter type and state type 's'
+ * Note that the same effect can be achieved via the [interface@Gtk.Actionable]
+ * API, by using the same action with parameter type and state type 's'
  * for all buttons in the group, and giving each button its own target
  * value.
  */
@@ -920,12 +977,13 @@ gtk_check_button_set_group (GtkCheckButton *self,
 
 /**
  * gtk_check_button_get_use_underline:
- * @self: a #GtkCheckButton
+ * @self: a `GtkCheckButton`
  *
- * Returns the current value of the #GtkCheckButton:use-underline property.
+ * Returns whether underlines in the label indicate mnemonics.
  *
- * Returns: The value of the #GtkCheckButton:use-underline property.
- *   See gtk_check_button_set_use_underline() for details on how to set a new value.
+ * Returns: The value of the [property@Gtk.CheckButton:use-underline] property.
+ *   See [method@Gtk.CheckButton.set_use_underline] for details on how to set
+ *   a new value.
  */
 gboolean
 gtk_check_button_get_use_underline (GtkCheckButton *self)
@@ -939,14 +997,14 @@ gtk_check_button_get_use_underline (GtkCheckButton *self)
 
 /**
  * gtk_check_button_set_use_underline:
- * @self: a #GtkCheckButton
+ * @self: a `GtkCheckButton`
  * @setting: the new value to set
  *
- * Sets the new value of the #GtkCheckButton:use-underline property.
- * See also gtk_check_button_get_use_underline().
+ * Sets whether underlines in the label indicate mnemonics.
  *
- * If @setting is %TRUE, an underscore character in @self's label indicates
- * a mnemonic accelerator key. This behavior is similar to #GtkLabel:use-underline.
+ * If @setting is %TRUE, an underscore character in @self's label
+ * indicates a mnemonic accelerator key. This behavior is similar
+ * to [property@Gtk.Label:use-underline].
  */
 void
 gtk_check_button_set_use_underline (GtkCheckButton *self,
