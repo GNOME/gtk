@@ -219,6 +219,7 @@ gtk/gtkpadcontroller.c
 gtk/gtkpagesetup.c
 gtk/gtkpagesetupunixdialog.c
 gtk/gtkpaned.c
+gtk/gtkpanedhandle.c
 gtk/gtkpapersize.c
 gtk/gtkpasswordentry.c
 gtk/gtkpathbar.c
@@ -227,6 +228,7 @@ gtk/gtkplacessidebar.c
 gtk/gtkplacesview.c
 gtk/gtkplacesviewrow.c
 gtk/gtkpopover.c
+gtk/gtkpopovercontent.c
 gtk/gtkpopovermenubar.c
 gtk/gtkpopovermenu.c
 gtk/gtkprintbackend.c
