@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-02-21 16:25+0000\n"
-"PO-Revision-Date: 2021-02-21 19:23+0300\n"
+"POT-Creation-Date: 2021-02-21 16:29+0000\n"
+"PO-Revision-Date: 2021-02-21 20:49+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -1391,7 +1391,7 @@ msgstr "Ayarlama"
 
 #: gtk/gtkcellrendererspin.c:133 gtk/gtkspinbutton.c:372
 msgid "The adjustment that holds the value of the spin button"
-msgstr "Çevirme düğmesinin değerini tutan ayar"
+msgstr "Değiştirici düğmenin değerini tutan ayar"
 
 #: gtk/gtkcellrendererspin.c:146
 msgid "Climb rate"
@@ -6099,7 +6099,7 @@ msgid ""
 "Whether erroneous values are automatically changed to a spin button’s "
 "nearest step increment"
 msgstr ""
-"Hatalı değerlerin, döndürme düğmesinin en yakın adım artışına kendiliğinden "
+"Hatalı değerlerin, değiştirici düğmenin en yakın adım artışına kendiliğinden "
 "değiştirilip değiştirilmemesi"
 
 #: gtk/gtkspinbutton.c:399
@@ -6116,7 +6116,7 @@ msgstr "Dür"
 
 #: gtk/gtkspinbutton.c:407
 msgid "Whether a spin button should wrap upon reaching its limits"
-msgstr "Döndürme düğmesinin sınır değere ulaştığında başa dönmesi"
+msgstr "Değiştirici düğmenin sınır değere ulaştığında başa dönmesi"
 
 #: gtk/gtkspinbutton.c:413
 msgid "Update Policy"
@@ -6126,7 +6126,7 @@ msgstr "Güncelleme Kuralı"
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
-"Döndürme düğmesinin her zaman güncel olması ya da yalnızca değer uygunsa"
+"Değiştirici düğmenin her zaman güncel olması ya da yalnızca değer uygunsa"
 
 #: gtk/gtkspinbutton.c:422
 msgid "Reads the current value, or sets a new value"
@@ -6134,11 +6134,11 @@ msgstr "Ya geçerli değer okunur ya da yeni değer atanır"
 
 #: gtk/gtkspinner.c:238
 msgid "Spinning"
-msgstr "Bükme"
+msgstr "Çark"
 
 #: gtk/gtkspinner.c:239
 msgid "Whether the spinner is spinning"
-msgstr "Bükücünün bükülmesi"
+msgstr "Çarkın dönmesi"
 
 #: gtk/gtkstack.c:405
 msgid "The child of the page"
