@@ -7,7 +7,7 @@ authors = "GTK Development Team"
 logo_url = "gtk-logo.svg"
 license = "GPL-2.1-or-later"
 description = "The GTK toolkit"
-dependencies = [ "GObject-2.0", "Graphene-1.0", "Pango-1.0" ]
+dependencies = [ "GObject-2.0", "cairo-1.0", "Pango-1.0", "GdkWayland-4.0",  "GdkX11-4.0" ]
 devhelp = true
 
   [dependencies."GObject-2.0"]
@@ -24,6 +24,16 @@ devhelp = true
   name = "Pango"
   description = "Text shaping and rendering"
   docs_url = "https://developer.gnome.org/pango/stable"
+
+  [dependencies."GdkWayland-4.0"]
+  name = "GdkWayland"
+  description = "GDK Wayland Backend"
+  docs_url = "https://developer.gnome.org/gtk4/stable" # fixme
+
+  [dependencies."GdkX11-4.0"]
+  name = "GdkX11"
+  description = "GDK X11 Backend"
+  docs_url = "https://developer.gnome.org/gtk4/stable" # fixme
 
 [theme]
 name = "basic"
