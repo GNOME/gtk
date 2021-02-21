@@ -2,6 +2,8 @@ expand_content_md_files = [
 ]
 
 gdk4_toml = configure_file(input: 'gdk4.toml.in', output: 'gdk4.toml', configuration: toml_conf)
+gdk4x11_toml = configure_file(input: 'gdk4-x11.toml.in', output: 'gdk4-x11.toml', configuration: toml_conf)
+gdk4wayland_toml = configure_file(input: 'gdk4-wayland.toml.in', output: 'gdk4-wayland.toml', configuration: toml_conf)
 
 if get_option('gtk_doc')
   custom_target('gdk4-doc',
@@ -24,7 +26,7 @@ if get_option('gtk_doc')
 
   if x11_enabled
     custom_target('gdk4-x11-doc',
-      input: [ gdk4_toml, gdk_x11_gir[0] ],
+      input: [ gdk4x11_toml, gdk_x11_gir[0] ],
       output: 'gdk4-x11',
       command: [
         gidocgen,
@@ -38,14 +40,14 @@ if get_option('gtk_doc')
         '@INPUT1@',
       ],
       depends: [ gdk_gir[0] ],
-      depend_files: [ expand_content_md_files ],
+      depend_files: [ ],
       build_by_default: true,
     )
   endif
 
   if wayland_enabled
     custom_target('gdk4-wayland-doc',
-      input: [ gdk4_toml, gdk_wayland_gir[0] ],
+      input: [ gdk4wayland_toml, gdk_wayland_gir[0] ],
       output: 'gdk4-wayland',
       command: [
         gidocgen,
@@ -59,7 +61,7 @@ if get_option('gtk_doc')
         '@INPUT1@',
       ],
       depends: [ gdk_gir[0] ],
-      depend_files: [ expand_content_md_files ],
+      depend_files: [ ],
       build_by_default: true,
     )
   endif
