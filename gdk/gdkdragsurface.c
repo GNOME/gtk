@@ -26,14 +26,13 @@
 /**
  * GdkDragSurface:
  *
- * A #GdkDragSurface is an interface implemented by #GdkSurfaces used
- * during a DND operation.
+ * A #GdkDragSurface is an interface for surfaces used during DND.
  */
 
 /**
  * GdkDragSurfaceInterface:
  *
- * The #GdkDragSurfaceInterface implementation is private to GDK.
+ * The `GdkDragSurfaceInterface` implementation is private to GDK.
  */
 
 G_DEFINE_INTERFACE (GdkDragSurface, gdk_drag_surface, GDK_TYPE_SURFACE)
@@ -54,7 +53,7 @@ gdk_drag_surface_default_init (GdkDragSurfaceInterface *iface)
 
 /**
  * gdk_drag_surface_present:
- * @drag_surface: the #GdkDragSurface to show
+ * @drag_surface: the `GdkDragSurface` to show
  * @width: the unconstrained drag_surface width to layout
  * @height: the unconstrained drag_surface height to layout
  *

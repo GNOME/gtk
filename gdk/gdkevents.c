@@ -41,8 +41,8 @@
 /**
  * GdkEvent: (ref-func gdk_event_ref) (unref-func gdk_event_unref)
  *
- * `GdkEvent` and its derived types are immutable data structures,
- * created by GTK itself to represent windowing system events.
+ * `GdkEvent`s are immutable data structures, created by GDK to
+ * represent windowing system events.
  *
  * In GTK applications the events are handled automatically by toplevel
  * widgets and passed on to the event controllers of appropriate widgets,
@@ -52,7 +52,7 @@
 /**
  * GdkEventSequence:
  *
- * GdkEventSequence is an opaque type representing a sequence
+ * `GdkEventSequence` is an opaque type representing a sequence
  * of related touch events.
  */
 
@@ -338,9 +338,9 @@ static GType gdk_event_types[GDK_EVENT_LAST];
 
 /*< private >
  * GDK_EVENT_TYPE_SLOT:
- * @ETYPE: a #GdkEventType
+ * @ETYPE: a `GdkEvent`Type
  *
- * Associates a #GdkEvent type with the given #GdkEventType enumeration.
+ * Associates a `GdkEvent` type with the given `GdkEvent`Type enumeration.
  *
  * This macro can only be used with %GDK_DEFINE_EVENT_TYPE.
  */
@@ -350,10 +350,10 @@ static GType gdk_event_types[GDK_EVENT_LAST];
  * GDK_DEFINE_EVENT_TYPE:
  * @TypeName: the type name, in camel case
  * @type_name: the type name, in snake case
- * @type_info: the address of the #GdkEventTypeInfo for the event type
+ * @type_info: the address of the `GdkEvent`TypeInfo for the event type
  * @_C_: custom code to call after registering the event type
  *
- * Registers a new #GdkEvent subclass with the given @TypeName and @type_info.
+ * Registers a new `GdkEvent` subclass with the given @TypeName and @type_info.
  *
  * Similarly to %G_DEFINE_TYPE_WITH_CODE, this macro will generate a `get_type()`
  * function that registers the event type.
@@ -381,15 +381,15 @@ type_name ## _get_type (void) \
 
 /*< private >
  * gdk_event_alloc:
- * @event_type: the #GdkEventType to allocate
+ * @event_type: the `GdkEvent`Type to allocate
  * @surface: (nullable): the #GdkSurface of the event
  * @device: (nullable): the #GdkDevice of the event
  * @time_: the event serial
  *
- * Allocates a #GdkEvent for the given @event_type, and sets its
+ * Allocates a `GdkEvent` for the given @event_type, and sets its
  * common fields with the given parameters.
  *
- * Returns: (transfer full): the newly allocated #GdkEvent instance
+ * Returns: (transfer full): the newly allocated `GdkEvent` instance
  */
 static gpointer
 gdk_event_alloc (GdkEventType event_type,
@@ -820,7 +820,7 @@ _gdk_event_queue_flush (GdkDisplay *display)
 
 /**
  * gdk_event_ref:
- * @event: a #GdkEvent
+ * @event: a `GdkEvent`
  *
  * Increase the ref count of @event.
  *
@@ -838,10 +838,11 @@ gdk_event_ref (GdkEvent *event)
 
 /**
  * gdk_event_unref:
- * @event: (transfer full): a #GdkEvent
+ * @event: (transfer full): a `GdkEvent`
  *
- * Decrease the ref count of @event, and free it
- * if the last reference is dropped.
+ * Decrease the ref count of @event.
+ *
+ * If the last reference is dropped, the structure is freed.
  */
 void
 gdk_event_unref (GdkEvent *event)
@@ -854,10 +855,11 @@ gdk_event_unref (GdkEvent *event)
 
 /**
  * gdk_event_get_pointer_emulated:
- * @event: a #GdkEvent
+ * @event: a `GdkEvent`
  *
- * Returns whether this event is an 'emulated' pointer event (typically
- * from a touch event), as opposed to a real one.
+ * Returns whether this event is an 'emulated' pointer event.
+ *
+ * Emulated pointer events typically originate from a touch events.
  *
  * Returns: %TRUE if this event is emulated
  */
@@ -893,7 +895,7 @@ gdk_event_get_pointer_emulated (GdkEvent *event)
 
 /**
  * gdk_event_get_axis:
- * @event: a #GdkEvent
+ * @event: a `GdkEvent`
  * @axis_use: the axis use to look for
  * @value: (out): location to store the value found
  *
@@ -901,7 +903,7 @@ gdk_event_get_pointer_emulated (GdkEvent *event)
  * an event structure.
  *
  * Returns: %TRUE if the specified axis was found, otherwise %FALSE
- **/
+ */
 gboolean
 gdk_event_get_axis (GdkEvent   *event,
 		    GdkAxisUse  axis_use,
@@ -936,17 +938,18 @@ gdk_event_get_axis (GdkEvent   *event,
 
 /**
  * gdk_event_triggers_context_menu:
- * @event: a #GdkEvent, currently only button events are meaningful values
+ * @event: a `GdkEvent`, currently only button events are meaningful values
  *
- * This function returns whether a #GdkEvent should trigger a
- * context menu, according to platform conventions. The right
- * mouse button always triggers context menus.
+ * Returns whether a `GdkEvent` should trigger a context menu,
+ * according to platform conventions.
+ *
+ * The right mouse button typically triggers context menus.
  *
  * This function should always be used instead of simply checking for
  * event->button == %GDK_BUTTON_SECONDARY.
  *
  * Returns: %TRUE if the event should trigger a context menu.
- **/
+ */
 gboolean
 gdk_event_triggers_context_menu (GdkEvent *event)
 {
@@ -997,12 +1000,14 @@ gdk_events_get_axis_distances (GdkEvent *event1,
 
 /**
  * gdk_events_get_distance:
- * @event1: first #GdkEvent
- * @event2: second #GdkEvent
+ * @event1: first `GdkEvent`
+ * @event2: second `GdkEvent`
  * @distance: (out): return location for the distance
  *
- * If both events have X/Y information, the distance between both coordinates
- * (as in a straight line going from @event1 to @event2) will be returned.
+ * Returns the distance between the event locations.
+ *
+ * This assumes that both events have X/Y information.
+ * If not, this function returns %FALSE.
  *
  * Returns: %TRUE if the distance could be calculated.
  **/
@@ -1018,17 +1023,21 @@ gdk_events_get_distance (GdkEvent *event1,
 
 /**
  * gdk_events_get_angle:
- * @event1: first #GdkEvent
- * @event2: second #GdkEvent
+ * @event1: first `GdkEvent`
+ * @event2: second `GdkEvent`
  * @angle: (out): return location for the relative angle between both events
  *
- * If both events contain X/Y information, this function will return %TRUE
- * and return in @angle the relative angle from @event1 to @event2. The rotation
- * direction for positive angles is from the positive X axis towards the positive
- * Y axis.
+ * Returns the relative angle from @event1 to @event2.
+ *
+ * The relative angle is the angle between the X axis and the line
+ * through both events' positions. The rotation direction for positive
+ * angles is from the positive X axis towards the positive Y axis.
+ *
+ * This assumes that both events have X/Y information.
+ * If not, this function returns %FALSE.
  *
  * Returns: %TRUE if the angle could be calculated.
- **/
+ */
 gboolean
 gdk_events_get_angle (GdkEvent *event1,
                       GdkEvent *event2,
@@ -1060,16 +1069,18 @@ gdk_events_get_angle (GdkEvent *event1,
 
 /**
  * gdk_events_get_center:
- * @event1: first #GdkEvent
- * @event2: second #GdkEvent
+ * @event1: first `GdkEvent`
+ * @event2: second `GdkEvent`
  * @x: (out): return location for the X coordinate of the center
  * @y: (out): return location for the Y coordinate of the center
  *
- * If both events contain X/Y information, the center of both coordinates
- * will be returned in @x and @y.
+ * Returns the point halfway between the events' positions.
+ *
+ * This assumes that both events have X/Y information.
+ * If not, this function returns %FALSE.
  *
  * Returns: %TRUE if the center could be calculated.
- **/
+ */
 gboolean
 gdk_events_get_center (GdkEvent *event1,
                        GdkEvent *event2,
@@ -1111,14 +1122,14 @@ G_DEFINE_BOXED_TYPE (GdkEventSequence, gdk_event_sequence,
 
 /**
  * gdk_event_get_axes:
- * @event: a #GdkEvent
+ * @event: a `GdkEvent`
  * @axes: (transfer none) (out) (array length=n_axes): the array of values for all axes
  * @n_axes: (out): the length of array
  *
  * Extracts all axis values from an event.
  *
  * Returns: %TRUE on success, otherwise %FALSE
- **/
+ */
 gboolean
 gdk_event_get_axes (GdkEvent  *event,
                     double   **axes,
@@ -1147,11 +1158,11 @@ gdk_event_dup_axes (GdkEvent *event)
 
 /**
  * gdk_event_get_event_type:
- * @event: a #GdkEvent
+ * @event: a `GdkEvent`
  *
  * Retrieves the type of the event.
  *
- * Returns: a #GdkEventType
+ * Returns: a `GdkEvent`Type
  */
 GdkEventType
 gdk_event_get_event_type (GdkEvent *event)
@@ -1163,9 +1174,9 @@ gdk_event_get_event_type (GdkEvent *event)
 
 /**
  * gdk_event_get_surface:
- * @event: a #GdkEvent
+ * @event: a `GdkEvent`
  *
- * Extracts the #GdkSurface associated with an event.
+ * Extracts the surface associated with an event.
  *
  * Returns: (transfer none): The #GdkSurface associated with the event
  */
@@ -1179,7 +1190,7 @@ gdk_event_get_surface (GdkEvent *event)
 
 /**
  * gdk_event_get_seat:
- * @event: a #GdkEvent
+ * @event: a `GdkEvent`
  *
  * Returns the seat that originated the event.
  *
@@ -1195,7 +1206,7 @@ gdk_event_get_seat (GdkEvent *event)
 
 /**
  * gdk_event_get_device:
- * @event: a #GdkEvent.
+ * @event: a `GdkEvent`.
  *
  * Returns the device of an event.
  *
@@ -1211,16 +1222,18 @@ gdk_event_get_device (GdkEvent *event)
 
 /**
  * gdk_event_get_device_tool:
- * @event: a #GdkEvent
+ * @event: a `GdkEvent`
  *
- * If the event was generated by a device that supports
- * different tools (eg. a tablet), this function will
- * return a #GdkDeviceTool representing the tool that
- * caused the event. Otherwise, %NULL will be returned.
+ * Returns a `GdkDeviceTool` representing the tool that
+ * caused the event.
  *
- * Note: the #GdkDeviceTools will be constant during
+ * If the was not generated by a device that supports
+ * different tools (such as a tablet), this function will
+ * return %NULL.
+ *
+ * Note: the `GdkDeviceTool` will be constant during
  * the application lifetime, if settings must be stored
- * persistently across runs, see gdk_device_tool_get_serial()
+ * persistently across runs, see [method@Gdk.DeviceTool.get_serial].
  *
  * Returns: (transfer none) (nullable): The current device tool, or %NULL
  **/
@@ -1234,13 +1247,15 @@ gdk_event_get_device_tool (GdkEvent *event)
 
 /**
  * gdk_event_get_time:
- * @event: a #GdkEvent
+ * @event: a `GdkEvent`
  *
- * Returns the time stamp from @event, if there is one; otherwise
- * returns #GDK_CURRENT_TIME.
+ * Returns the timestamp of @event.
  *
- * Returns: time stamp field from @event
- **/
+ * Not all events have timestamps. In that case, this function
+ * returns %GDK_CURRENT_TIME.
+ *
+ * Returns: timestamp field from @event
+ */
 guint32
 gdk_event_get_time (GdkEvent *event)
 {
@@ -1251,9 +1266,9 @@ gdk_event_get_time (GdkEvent *event)
 
 /**
  * gdk_event_get_display:
- * @event: a #GdkEvent
+ * @event: a `GdkEvent`
  *
- * Retrieves the #GdkDisplay associated to the @event.
+ * Retrieves the display associated to the @event.
  *
  * Returns: (transfer none) (nullable): a #GdkDisplay
  */
@@ -1270,10 +1285,12 @@ gdk_event_get_display (GdkEvent *event)
 
 /**
  * gdk_event_get_event_sequence:
- * @event: a #GdkEvent
+ * @event: a `GdkEvent`
  *
- * If @event is a touch event, returns the #GdkEventSequence
- * to which the event belongs. Otherwise, return %NULL.
+ * Retuns the event sequence to which the event belongs.
+ *
+ * Related touch events are connected in a sequence. Other
+ * events typically don't have event sequence information.
  *
  * Returns: (transfer none): the event sequence that the event belongs to
  */
@@ -1287,12 +1304,12 @@ gdk_event_get_event_sequence (GdkEvent *event)
 
 /**
  * gdk_event_get_modifier_state:
- * @event: a #GdkEvent
+ * @event: a `GdkEvent`
  *
  * Returns the modifier state field of an event.
  *
  * Returns: the modifier state of @event
- **/
+ */
 GdkModifierType
 gdk_event_get_modifier_state (GdkEvent *event)
 {
@@ -1303,12 +1320,12 @@ gdk_event_get_modifier_state (GdkEvent *event)
 
 /**
  * gdk_event_get_position:
- * @event: a #GdkEvent
+ * @event: a `GdkEvent`
  * @x: (out): location to put event surface x coordinate
  * @y: (out): location to put event surface y coordinate
  *
  * Extract the event surface relative x/y coordinates from an event.
- **/
+ */
 gboolean
 gdk_event_get_position (GdkEvent *event,
                         double   *x,
@@ -1324,7 +1341,7 @@ gdk_event_get_position (GdkEvent *event,
 /**
  * GdkButtonEvent:
  *
- * An event related to a button on a pointer device/
+ * An event related to a button on a pointer device.
  */
 
 static void
@@ -1484,8 +1501,8 @@ GDK_DEFINE_EVENT_TYPE (GdkKeyEvent, gdk_key_event,
 /*< private >
  * gdk_key_event_new:
  * @type: the event type, either %GDK_KEY_PRESS or %GDK_KEY_RELEASE
- * @surface: the #GdkSurface of the event
- * @device: the #GdkDevice related to the event
+ * @surface: the surface of the event
+ * @device: the device related to the event
  * @time: the event's timestamp
  * @keycode: the keycode of the event
  * @state: the modifiers state
@@ -1493,9 +1510,9 @@ GDK_DEFINE_EVENT_TYPE (GdkKeyEvent, gdk_key_event,
  * @translated: the translated key data for the given @state
  * @no_lock: the translated key data without the given @state
  *
- * Creates a new #GdkKeyEvent.
+ * Creates a new `GdkKeyEvent`.
  *
- * Returns: (transfer full) (type GdkKeyEvent): the newly created #GdkEvent
+ * Returns: (transfer full) (type GdkKeyEvent): the newly created `GdkEvent`
  */
 GdkEvent *
 gdk_key_event_new (GdkEventType      type,
@@ -1671,17 +1688,20 @@ gdk_key_event_is_modifier (GdkEvent *event)
 
 /**
  * gdk_key_event_matches:
- * @event: (type GdkKeyEvent): a key #GdkEvent
+ * @event: (type GdkKeyEvent): a key `GdkEvent`
  * @keyval: the keyval to match
  * @modifiers: the modifiers to match
  *
- * Matches a key event against a keyboard shortcut that is specified
- * as a keyval and modifiers. Partial matches are possible where the
- * combination matches if the currently active group is ignored.
+ * Matches a key event against a keyval and modifiers.
+ *
+ * This is typically used to trigger keyboard shortcuts such as Ctrl-C.
+ *
+ * Partial matches are possible where the combination matches
+ * if the currently active group is ignored.
  *
  * Note that we ignore Caps Lock for matching.
  *
- * Returns: a GdkKeyMatch value describing whether @event matches
+ * Returns: a `GdkKeyMatch` value describing whether @event matches
  */
 GdkKeyMatch
 gdk_key_event_matches (GdkEvent        *event,
@@ -1773,12 +1793,14 @@ gdk_key_event_matches (GdkEvent        *event,
 
 /**
  * gdk_key_event_get_match:
- * @event: (type GdkKeyEvent): a key #GdkEvent
+ * @event: (type GdkKeyEvent): a key `GdkEvent`
  * @keyval: (out): return location for a keyval
  * @modifiers: (out): return location for modifiers
  *
- * Gets a keyval and modifier combination that will cause
- * gdk_key_event_matches() to successfully match the given event.
+ * Gets a keyval and modifier combination that will match
+ * the event.
+ *
+ * See [method@Gdk.KeyEvent.matches].
  *
  * Returns: %TRUE on success
  */
@@ -2153,7 +2175,7 @@ gdk_delete_event_new (GdkSurface *surface)
 /**
  * GdkFocusEvent:
  *
- * An event related to a focus change.
+ * An event related to a keyboard focus change.
  */
 
 static const GdkEventTypeInfo gdk_focus_event_info = {
@@ -2345,11 +2367,13 @@ gdk_scroll_event_get_deltas (GdkEvent *event,
  * gdk_scroll_event_is_stop:
  * @event: (type GdkScrollEvent): a scroll event
  *
- * Check whether a scroll event is a stop scroll event. Scroll sequences
- * with smooth scroll information may provide a stop scroll event once the
- * interaction with the device finishes, e.g. by lifting a finger. This
- * stop scroll event is the signal that a widget may trigger kinetic
- * scrolling based on the current velocity.
+ * Check whether a scroll event is a stop scroll event.
+ *
+ * Scroll sequences with smooth scroll information may provide
+ * a stop scroll event once the interaction with the device finishes,
+ * e.g. by lifting a finger. This stop scroll event is the signal
+ * that a widget may trigger kinetic scrolling based on the current
+ * velocity.
  *
  * Stop scroll events always have a delta of 0/0.
  *
@@ -2373,7 +2397,12 @@ gdk_scroll_event_is_stop (GdkEvent *event)
 /**
  * GdkTouchpadEvent:
  *
- * An event related to a touchpad device.
+ * An event related to a gesture on a touchpad device.
+ *
+ * Unlike touchscreens, where the windowing system sends basic
+ * sequences of begin, update, end events, and leaves gesture
+ * recognition to the clients, touchpad gestures are typically
+ * processed by the system, resulting in these events.
  */
 
 static GdkModifierType
@@ -2469,7 +2498,7 @@ gdk_touchpad_event_new_pinch (GdkSurface *surface,
 
 /**
  * gdk_touchpad_event_get_gesture_phase:
- * @event: (type GdkTouchpadEvent): a touchpad #GdkEvent
+ * @event: (type GdkTouchpadEvent): a touchpad event
  *
  * Extracts the touchpad gesture phase from a touchpad event.
  *
@@ -2514,7 +2543,7 @@ gdk_touchpad_event_get_n_fingers (GdkEvent *event)
  * @dy: (out): return location for y
  *
  * Extracts delta information from a touchpad event.
- **/
+ */
 void
 gdk_touchpad_event_get_deltas (GdkEvent *event,
                                double   *dx,
@@ -2680,7 +2709,7 @@ gdk_pad_event_new_group_mode (GdkSurface *surface,
  * a pad event.
  *
  * Returns: the button of @event
- **/
+ */
 guint
 gdk_pad_event_get_button (GdkEvent *event)
 {
@@ -2700,7 +2729,7 @@ gdk_pad_event_get_button (GdkEvent *event)
  * @value: (out): Return location for the axis value
  *
  * Extracts the information from a pad strip or ring event.
- **/
+ */
 void
 gdk_pad_event_get_axis_value (GdkEvent *event,
                               guint    *index,
@@ -2723,7 +2752,7 @@ gdk_pad_event_get_axis_value (GdkEvent *event,
  * @mode: (out): return location for the mode
  *
  * Extracts group and mode information from a pad event.
- **/
+ */
 void
 gdk_pad_event_get_group_mode (GdkEvent *event,
                               guint    *group,
@@ -2850,16 +2879,17 @@ gdk_motion_event_new (GdkSurface      *surface,
 
 /**
  * gdk_event_get_history:
- * @event: a motion or scroll #GdkEvent
+ * @event: a motion or scroll event
  * @out_n_coords: (out): Return location for the length of the returned array
  *
- * Retrieves the history of the @event, as a list of time and coordinates.
+ * Retrieves the history of the device that @event is for, as a list of
+ * time and coordinates.
  *
- * The history includes events that are not delivered to the application
- * because they occurred in the same frame as @event.
+ * The history includes positions that are not delivered as separate events
+ * to the application because they occurred in the same frame as @event.
  *
  * Note that only motion and scroll events record history, and motion
- * events only if one of the mouse buttons is down.
+ * events do it only if one of the mouse buttons is down.
  *
  * Returns: (transfer container) (array length=out_n_coords) (nullable): an
  *   array of time and coordinates
@@ -3053,7 +3083,7 @@ gdk_dnd_event_new (GdkEventType  type,
  * gdk_dnd_event_get_drop:
  * @event: (type GdkDNDEvent): a DND event
  *
- * Gets the #GdkDrop from a DND event.
+ * Gets the `GdkDrop` object from a DND event.
  *
  * Returns: (transfer none) (nullable): the drop
  **/

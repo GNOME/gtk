@@ -30,18 +30,6 @@
 #include <errno.h>
 #include <math.h>
 
-/**
- * SECTION:gdkrgba
- * @Title: GdkRGBA
- * @Short_description: RGBA colors
- *
- * #GdkRGBA is a convenient way to pass colors around.
- * It’s based on cairo’s way to deal with colors and mirrors its behavior.
- * All values are in the range from 0.0 to 1.0 inclusive. So the color
- * (0.0, 0.0, 0.0, 0.0) represents transparent black and
- * (1.0, 1.0, 1.0, 1.0) is opaque white. Other values will be clamped
- * to this range when drawing.
- */
 
 G_DEFINE_BOXED_TYPE (GdkRGBA, gdk_rgba,
                      gdk_rgba_copy, gdk_rgba_free)
@@ -54,19 +42,26 @@ G_DEFINE_BOXED_TYPE (GdkRGBA, gdk_rgba,
  * @alpha: The opacity of the color from 0.0 for completely translucent to
  *   1.0 for opaque
  *
- * A #GdkRGBA is used to represent a (possibly translucent)
- * color, in a way that is compatible with cairo’s notion of color.
+ * A `GdkRGBA` is used to represent a color, in a way that is compatible
+ * with cairo’s notion of color.
+ *
+ * `GdkRGBA` is a convenient way to pass colors around. It’s based on
+ * cairo’s way to deal with colors and mirrors its behavior. All values
+ * are in the range from 0.0 to 1.0 inclusive. So the color
+ * (0.0, 0.0, 0.0, 0.0) represents transparent black and
+ * (1.0, 1.0, 1.0, 1.0) is opaque white. Other values will
+ * be clamped to this range when drawing.
  */
 
 /**
  * gdk_rgba_copy:
- * @rgba: a #GdkRGBA
+ * @rgba: a `GdkRGBA`
  *
- * Makes a copy of a #GdkRGBA.
+ * Makes a copy of a `GdkRGBA`.
  *
- * The result must be freed through gdk_rgba_free().
+ * The result must be freed through [method@Gdk.RGBA.free].
  *
- * Returns: A newly allocated #GdkRGBA, with the same contents as @rgba
+ * Returns: A newly allocated `GdkRGBA`, with the same contents as @rgba
  */
 GdkRGBA *
 gdk_rgba_copy (const GdkRGBA *rgba)
@@ -76,9 +71,9 @@ gdk_rgba_copy (const GdkRGBA *rgba)
 
 /**
  * gdk_rgba_free:
- * @rgba: a #GdkRGBA
+ * @rgba: a `GdkRGBA`
  *
- * Frees a #GdkRGBA created with gdk_rgba_copy()
+ * Frees a `GdkRGBA`.
  */
 void
 gdk_rgba_free (GdkRGBA *rgba)
@@ -88,10 +83,11 @@ gdk_rgba_free (GdkRGBA *rgba)
 
 /**
  * gdk_rgba_is_clear:
- * @rgba: a #GdkRGBA
+ * @rgba: a `GdkRGBA`
  *
- * Checks if an @rgba value is transparent. That is, drawing with the value
- * would not produce any change.
+ * Checks if an @rgba value is transparent.
+ *
+ * That is, drawing with the value would not produce any change.
  *
  * Returns: %TRUE if the @rgba is clear
  */
@@ -103,10 +99,12 @@ gdk_rgba_is_clear (const GdkRGBA *rgba)
 
 /**
  * gdk_rgba_is_opaque:
- * @rgba: a #GdkRGBA
+ * @rgba: a `GdkRGBA`
  *
- * Checks if an @rgba value is opaque. That is, drawing with the value
- * will not retain any results from previous contents.
+ * Checks if an @rgba value is opaque.
+ *
+ * That is, drawing with the value will not retain any results
+ * from previous contents.
  *
  * Returns: %TRUE if the @rgba is opaque
  */
@@ -160,26 +158,27 @@ parse_rgb_value (const char   *str,
 
 /**
  * gdk_rgba_parse:
- * @rgba: the #GdkRGBA to fill in
+ * @rgba: the `GdkRGBA` to fill in
  * @spec: the string specifying the color
  *
- * Parses a textual representation of a color, filling in
- * the @red, @green, @blue and @alpha fields of the @rgba #GdkRGBA.
+ * Parses a textual representation of a color.
  *
  * The string can be either one of:
+ *
  * - A standard name (Taken from the X11 rgb.txt file).
  * - A hexadecimal value in the form “\#rgb”, “\#rrggbb”,
  *   “\#rrrgggbbb” or ”\#rrrrggggbbbb”
  * - A hexadecimal value in the form “\#rgba”, “\#rrggbbaa”,
  *   or ”\#rrrrggggbbbbaaaa”
- * - A RGB color in the form “rgb(r,g,b)” (In this case the color will
- *   have full opacity)
+ * - A RGB color in the form “rgb(r,g,b)” (In this case the color
+ *   will have full opacity)
  * - A RGBA color in the form “rgba(r,g,b,a)”
  *
- * Where “r”, “g”, “b” and “a” are respectively the red, green, blue and
- * alpha color values. In the last two cases, “r”, “g”, and “b” are either
- * integers in the range 0 to 255 or percentage values in the range 0% to
- * 100%, and a is a floating point value in the range 0 to 1.
+ * Where “r”, “g”, “b” and “a” are respectively the red, green,
+ * blue and alpha color values. In the last two cases, “r”, “g”,
+ * and “b” are either integers in the range 0 to 255 or percentage
+ * values in the range 0% to 100%, and a is a floating point value
+ * in the range 0 to 1.
  *
  * Returns: %TRUE if the parsing succeeded
  */
@@ -306,10 +305,10 @@ gdk_rgba_parse (GdkRGBA    *rgba,
 
 /**
  * gdk_rgba_hash:
- * @p: (type GdkRGBA): a #GdkRGBA pointer
+ * @p: (type GdkRGBA): a `GdkRGBA`
  *
  * A hash function suitable for using for a hash
- * table that stores #GdkRGBAs.
+ * table that stores `GdkRGBA`s.
  *
  * Returns: The hash value for @p
  */
@@ -326,10 +325,10 @@ gdk_rgba_hash (gconstpointer p)
 
 /**
  * gdk_rgba_equal:
- * @p1: (type GdkRGBA): a #GdkRGBA pointer
- * @p2: (type GdkRGBA): another #GdkRGBA pointer
+ * @p1: (type GdkRGBA): a `GdkRGBA`
+ * @p2: (type GdkRGBA): another `GdkRGBA`
  *
- * Compares two RGBA colors.
+ * Compares two `GdkRGBA` colors.
  *
  * Returns: %TRUE if the two colors compare equal
  */
@@ -353,23 +352,21 @@ gdk_rgba_equal (gconstpointer p1,
 
 /**
  * gdk_rgba_to_string:
- * @rgba: a #GdkRGBA
+ * @rgba: a `GdkRGBA`
  *
  * Returns a textual specification of @rgba in the form
- * `rgb(r,g,b)` or
- * `rgba(r,g,b,a)`,
- * where “r”, “g”, “b” and “a” represent the red, green,
- * blue and alpha values respectively. “r”, “g”, and “b” are
- * represented as integers in the range 0 to 255, and “a”
- * is represented as a floating point value in the range 0 to 1.
+ * `rgb(r,g,b)` or `rgba(r,g,b,a)`, where “r”, “g”, “b” and
+ * “a” represent the red, green, blue and alpha values
+ * respectively. “r”, “g”, and “b” are represented as integers
+ * in the range 0 to 255, and “a” is represented as a floating
+ * point value in the range 0 to 1.
  *
  * These string forms are string forms that are supported by
- * the CSS3 colors module, and can be parsed by gdk_rgba_parse().
+ * the CSS3 colors module, and can be parsed by [method@Gdk.RGBA.parse].
  *
- * Note that this string representation may lose some
- * precision, since “r”, “g” and “b” are represented as 8-bit
- * integers. If this is a concern, you should use a
- * different representation.
+ * Note that this string representation may lose some precision,
+ * since “r”, “g” and “b” are represented as 8-bit integers. If
+ * this is a concern, you should use a different representation.
  *
  * Returns: A newly allocated text string
  */
@@ -578,4 +575,3 @@ gdk_rgba_parser_parse (GtkCssParser *parser,
       return FALSE;
     }
 }
-

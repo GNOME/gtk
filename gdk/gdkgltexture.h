@@ -33,11 +33,6 @@ G_BEGIN_DECLS
 #define GDK_GL_TEXTURE(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_GL_TEXTURE, GdkGLTexture))
 #define GDK_IS_GL_TEXTURE(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_GL_TEXTURE))
 
-/**
- * GdkGLTexture:
- *
- * A #GdkTexture representing a GL texture object.
- */
 typedef struct _GdkGLTexture            GdkGLTexture;
 typedef struct _GdkGLTextureClass       GdkGLTextureClass;
 

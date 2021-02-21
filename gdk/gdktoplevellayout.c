@@ -23,16 +23,16 @@
 #include "gdkmonitor.h"
 
 /**
- * SECTION:gdktoplevellayout
- * @Title: GdkToplevelLayout
- * @Short_description: Information for presenting toplevels
+ * GdkToplevelLayout:
+ *
+ * The `GdkToplevelLayout` struct contains information that
+ * is necessary to present a sovereign window on screen.
+ *
+ * The `GdkToplevelLayout` gdk_toplevel_present().
  *
  * Toplevel surfaces are sovereign windows that can be presented
  * to the user in various states (maximized, on all workspaces,
  * etc).
- *
- * The GdkToplevelLayout struct contains information that
- * is necessary to do so, and is passed to gdk_toplevel_present().
  */
 struct _GdkToplevelLayout
 {

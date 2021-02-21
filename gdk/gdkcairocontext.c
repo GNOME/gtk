@@ -28,23 +28,14 @@
 #include "gdkinternals.h"
 
 /**
- * SECTION:gdkcairocontext
- * @Title: GdkCairoContext
- * @Short_description: Cairo draw context
- *
- * #GdkCairoContext is an object representing the platform-specific
- * draw context.
- *
- * #GdkCairoContexts are created for a #GdkDisplay using
- * gdk_surface_create_cairo_context(), and the context can then be used
- * to draw on that #GdkSurface.
- */
-
-/**
  * GdkCairoContext:
  *
- * The GdkCairoContext struct contains only private fields and should not
- * be accessed directly.
+ * `GdkCairoContext` is an object representing the platform-specific
+ * draw context.
+ *
+ * `GdkCairoContext`s are created for a surface using
+ * [method@Gdk.Surface.create_cairo_context], and the context can then be used
+ * to draw on that surface.
  */
 
 typedef struct _GdkCairoContextPrivate GdkCairoContextPrivate;
@@ -70,15 +61,17 @@ gdk_cairo_context_init (GdkCairoContext *self)
  * gdk_cairo_context_cairo_create:
  * @self: a #GdkCairoContext that is currently drawing
  *
- * Retrieves a Cairo context to be used to draw on the #GdkSurface
- * of @context. A call to gdk_draw_context_begin_frame() with this
+ * Retrieves a Cairo context to be used to draw on the `GdkSurface`
+ * of @context.
+ *
+ * A call to [method@Gdk.DrawContext.begin_frame] with this
  * @context must have been done or this function will return %NULL.
  *
  * The returned context is guaranteed to be valid until
- * gdk_draw_context_end_frame() is called.
+ * [method@Gdk.DrawContext.end_frame] is called.
  *
  * Returns: (transfer full) (nullable): a Cairo context to be used
- *   to draw the contents of the #GdkSurface. %NULL is returned
+ *   to draw the contents of the `GdkSurface`. %NULL is returned
  *   when @context is not drawing.
  */
 cairo_t *

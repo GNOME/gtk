@@ -26,21 +26,15 @@
 #include "gdkenumtypes.h"
 
 /**
- * SECTION:gdkmonitor
- * @Title: GdkMonitor
- * @Short_description: Object representing an output
- *
- * GdkMonitor objects represent the individual outputs that are
- * associated with a #GdkDisplay. GdkDisplay keeps a #GListModel to enumerate
- * and monitor monitors with gdk_display_get_monitors().  
- * You can use gdk_display_get_monitor_at_surface() to find a particular monitor.
- */
-
-/**
  * GdkMonitor:
  *
- * The GdkMonitor struct contains only private fields and should not
- * be accessed directly.
+ * `GdkMonitor` objects represent the individual outputs that are
+ * associated with a `GdkDisplay`.
+ *
+ * `GdkDisplay` keeps a `GListModel` to enumerate and monitor
+ * monitors with [method@Gdk.Display.get_monitors]. You can use
+ * [method@Gdk.Display.get_monitor_at_surface] to find a particular
+ * monitor.
  */
 
 enum {
@@ -176,30 +170,59 @@ gdk_monitor_class_init (GdkMonitorClass *class)
   object_class->get_property = gdk_monitor_get_property;
   object_class->set_property = gdk_monitor_set_property;
 
+  /**
+   * GdkMonitor:display:
+   *
+   * The `GdkDisplay` of the monitor.
+   */
   props[PROP_DISPLAY] =
     g_param_spec_object ("display",
                          "Display",
                          "The display of the monitor",
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkMonitor:manufacturer:
+   *
+   * The manufacturer name.
+   */
   props[PROP_MANUFACTURER] =
     g_param_spec_string ("manufacturer",
                          "Manufacturer",
                          "The manufacturer name",
                          NULL,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkMonitor:model:
+   *
+   * The model name.
+   */
   props[PROP_MODEL] =
     g_param_spec_string ("model",
                          "Model",
                          "The model name",
                          NULL,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkMonitor:connector:
+   *
+   * The connector name.
+   */
   props[PROP_CONNECTOR] =
     g_param_spec_string ("connector",
                          "Connector",
                          "The connector name",
                          NULL,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkMonitor:scale-factor:
+   *
+   * The scale factor.
+   */
   props[PROP_SCALE_FACTOR] =
     g_param_spec_int ("scale-factor",
                       "Scale factor",
@@ -207,12 +230,24 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                       0, G_MAXINT,
                       1,
                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkMonitor:geometry:
+   *
+   * The geometry of the monitor.
+   */
   props[PROP_GEOMETRY] =
     g_param_spec_boxed ("geometry",
                         "Geometry",
                         "The geometry of the monitor",
                         GDK_TYPE_RECTANGLE,
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkMonitor:width-mm:
+   *
+   * The width of the monitor, in millimeters.
+   */
   props[PROP_WIDTH_MM] =
     g_param_spec_int ("width-mm",
                       "Physical width",
@@ -220,6 +255,12 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                       0, G_MAXINT,
                       0,
                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkMonitor:height-mm:
+   *
+   * The height of the monitor, in millimeters.
+   */
   props[PROP_HEIGHT_MM] =
     g_param_spec_int ("height-mm",
                       "Physical height",
@@ -227,6 +268,12 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                       0, G_MAXINT,
                       0,
                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkMonitor:refresh-rate:
+   *
+   * The refresh rate, in milli-Hertz.
+   */
   props[PROP_REFRESH_RATE] =
     g_param_spec_int ("refresh-rate",
                       "Refresh rate",
@@ -234,6 +281,12 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                       0, G_MAXINT,
                       0,
                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkMonitor:subpixel-layout:
+   *
+   * The subpixel layout.
+   */
   props[PROP_SUBPIXEL_LAYOUT] =
     g_param_spec_enum ("subpixel-layout",
                        "Subpixel layout",
@@ -241,6 +294,12 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                        GDK_TYPE_SUBPIXEL_LAYOUT,
                        GDK_SUBPIXEL_LAYOUT_UNKNOWN,
                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkMonitor:valid:
+   *
+   * Whether the object is still valid.
+   */ 
   props[PROP_VALID] =
     g_param_spec_boolean ("valid",
                           "Valid",
@@ -254,8 +313,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    * GdkMonitor::invalidate:
    * @monitor: the object on which this signal was emitted
    *
-   * The ::invalidate signal gets emitted when the output represented
-   * by @monitor gets disconnected.
+   * Emitted when the output represented by @monitor gets disconnected.
    */
   signals[INVALIDATE] = g_signal_new (g_intern_static_string ("invalidate"),
                                       G_TYPE_FROM_CLASS (object_class),
@@ -268,7 +326,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
 
 /**
  * gdk_monitor_get_display:
- * @monitor: a #GdkMonitor
+ * @monitor: a `GdkMonitor`
  *
  * Gets the display that this monitor belongs to.
  *
@@ -284,12 +342,14 @@ gdk_monitor_get_display (GdkMonitor *monitor)
 
 /**
  * gdk_monitor_get_geometry:
- * @monitor: a #GdkMonitor
- * @geometry: (out): a #GdkRectangle to be filled with the monitor geometry
+ * @monitor: a `GdkMonitor`
+ * @geometry: (out): a `GdkRectangle` to be filled with the monitor geometry
  *
- * Retrieves the size and position of an individual monitor within the
- * display coordinate space. The returned geometry is in  ”application pixels”,
- * not in ”device pixels” (see gdk_monitor_get_scale_factor()).
+ * Retrieves the size and position of the monitor within the
+ * display coordinate space.
+ *
+ * The returned geometry is in  ”application pixels”, not in
+ * ”device pixels” (see [method@Gdk.Monitor.get_scale_factor]).
  */
 void
 gdk_monitor_get_geometry (GdkMonitor   *monitor,
@@ -303,7 +363,7 @@ gdk_monitor_get_geometry (GdkMonitor   *monitor,
 
 /**
  * gdk_monitor_get_width_mm:
- * @monitor: a #GdkMonitor
+ * @monitor: a `GdkMonitor`
  *
  * Gets the width in millimeters of the monitor.
  *
@@ -319,7 +379,7 @@ gdk_monitor_get_width_mm (GdkMonitor *monitor)
 
 /**
  * gdk_monitor_get_height_mm:
- * @monitor: a #GdkMonitor
+ * @monitor: a `GdkMonitor`
  *
  * Gets the height in millimeters of the monitor.
  *
@@ -335,7 +395,7 @@ gdk_monitor_get_height_mm (GdkMonitor *monitor)
 
 /**
  * gdk_monitor_get_connector:
- * @monitor: a #GdkMonitor
+ * @monitor: a `GdkMonitor`
  *
  * Gets the name of the monitor's connector, if available.
  *
@@ -351,16 +411,18 @@ gdk_monitor_get_connector (GdkMonitor *monitor)
 
 /**
  * gdk_monitor_get_manufacturer:
- * @monitor: a #GdkMonitor
+ * @monitor: a `GdkMonitor`
  *
- * Gets the name or PNP ID of the monitor's manufacturer, if available.
+ * Gets the name or PNP ID of the monitor's manufacturer.
  *
  * Note that this value might also vary depending on actual
  * display backend.
  *
- * PNP ID registry is located at https://uefi.org/pnp_id_list
+ * The PNP ID registry is located at
+ * [https://uefi.org/pnp_id_list](https://uefi.org/pnp_id_list).
  *
- * Returns: (transfer none) (nullable): the name of the manufacturer, or %NULL
+ * Returns: (transfer none) (nullable): the name of the manufacturer,
+ *   or %NULL
  */
 const char *
 gdk_monitor_get_manufacturer (GdkMonitor *monitor)
@@ -372,7 +434,7 @@ gdk_monitor_get_manufacturer (GdkMonitor *monitor)
 
 /**
  * gdk_monitor_get_model:
- * @monitor: a #GdkMonitor
+ * @monitor: a `GdkMonitor`
  *
  * Gets the string identifying the monitor model, if available.
  *
@@ -388,15 +450,17 @@ gdk_monitor_get_model (GdkMonitor *monitor)
 
 /**
  * gdk_monitor_get_scale_factor:
- * @monitor: a #GdkMonitor
+ * @monitor: a `GdkMonitor`
  *
  * Gets the internal scale factor that maps from monitor coordinates
- * to the actual device pixels. On traditional systems this is 1, but
- * on very high density outputs this can be a higher value (often 2).
+ * to device pixels.
+ *
+ * On traditional systems this is 1, but on very high density outputs
+ * it can be a higher value (often 2).
  *
  * This can be used if you want to create pixel based data for a
  * particular monitor, but most of the time you’re drawing to a surface
- * where it is better to use gdk_surface_get_scale_factor() instead.
+ * where it is better to use [method@Gdk.Surface.get_scale_factor] instead.
  *
  * Returns: the scale factor
  */
@@ -410,7 +474,7 @@ gdk_monitor_get_scale_factor (GdkMonitor *monitor)
 
 /**
  * gdk_monitor_get_refresh_rate:
- * @monitor: a #GdkMonitor
+ * @monitor: a `GdkMonitor`
  *
  * Gets the refresh rate of the monitor, if available.
  *
@@ -429,10 +493,10 @@ gdk_monitor_get_refresh_rate (GdkMonitor *monitor)
 
 /**
  * gdk_monitor_get_subpixel_layout:
- * @monitor: a #GdkMonitor
+ * @monitor: a `GdkMonitor`
  *
  * Gets information about the layout of red, green and blue
- * primaries for each pixel in this monitor, if available.
+ * primaries for pixels.
  *
  * Returns: the subpixel layout
  */
@@ -561,11 +625,13 @@ gdk_monitor_invalidate (GdkMonitor *monitor)
 
 /**
  * gdk_monitor_is_valid:
- * @monitor: a #GdkMonitor
+ * @monitor: a `GdkMonitor`
  *
  * Returns %TRUE if the @monitor object corresponds to a
- * physical monitor. The @monitor becomes invalid when the
- * physical monitor is unplugged or removed.
+ * physical monitor.
+ *
+ * The @monitor becomes invalid when the physical monitor
+ * is unplugged or removed.
  *
  * Returns: %TRUE if the object corresponds to a physical monitor
  */

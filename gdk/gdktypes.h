@@ -53,16 +53,6 @@ G_BEGIN_DECLS
  */
 #define GDK_CURRENT_TIME     0L
 
-/**
- * GdkRectangle:
- * @x: the x coordinate of the top left corner
- * @y: the y coordinate of the top left corner
- * @width: the width of the rectangle
- * @height: the height of the rectangle
- *
- * Defines the position and size of a rectangle. It is identical to
- * #cairo_rectangle_int_t.
- */
 #ifdef __GI_SCANNER__
 /* The introspection scanner is currently unable to lookup how
  * cairo_rectangle_int_t is actually defined. This prevents
@@ -243,9 +233,7 @@ typedef enum {
  * @GDK_AXIS_SLIDER: the axis is used for pen slider information
  * @GDK_AXIS_LAST: a constant equal to the numerically highest axis value.
  *
- * An enumeration describing the way in which a device
- * axis (valuator) maps onto the predefined valuator
- * types that GTK understands.
+ * Defines how device axes are interpreted by GTK.
  *
  * Note that the X and Y axes are not really needed; pointer devices
  * report their location via the x/y members of events regardless. Whether
@@ -303,13 +291,13 @@ typedef enum
  * GdkDragAction:
  * @GDK_ACTION_COPY: Copy the data.
  * @GDK_ACTION_MOVE: Move the data, i.e. first copy it, then delete
- *  it from the source using the DELETE target of the X selection protocol.
+ *   it from the source using the DELETE target of the X selection protocol.
  * @GDK_ACTION_LINK: Add a link to the data. Note that this is only
- *  useful if source and destination agree on what it means, and is not
- *  supported on all platforms.
+ *   useful if source and destination agree on what it means, and is not
+ *   supported on all platforms.
  * @GDK_ACTION_ASK: Ask the user what to do with the data.
  *
- * Used in #GdkDrop and #GdkDrag to indicate the actions that the
+ * Used in `GdkDrop` and `GdkDrag` to indicate the actions that the
  * destination can and should do with the dropped data.
  */
 typedef enum
@@ -323,9 +311,10 @@ typedef enum
 /**
  * GDK_ACTION_ALL:
  *
- * Defines all possible DND actions. This can be used in gdk_drop_status()
- * messages when any drop can be accepted or a more specific drop method
- * is not yet known.
+ * Defines all possible DND actions.
+ *
+ * This can be used in [method@Gdk.Drop.status] messages when any drop
+ * can be accepted or a more specific drop method is not yet known.
  */
 #define GDK_ACTION_ALL (GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK)
 
@@ -385,7 +374,7 @@ typedef struct _GdkKeymapKey GdkKeymapKey;
  *   letter at level 0, and an uppercase letter at level 1, though only the
  *   uppercase letter is printed.
  *
- * A #GdkKeymapKey is a hardware key that can be mapped to a keyval.
+ * A `GdkKeymapKey` is a hardware key that can be mapped to a keyval.
  */
 struct _GdkKeymapKey
 {

@@ -27,17 +27,13 @@
 #include <math.h>
 
 /**
- * SECTION:gdktoplevel
- * @Short_description: Interface for toplevel surfaces
- * @Title: Toplevels
- * @See_also: #GdkSurface, #GdkPopup
+ * GdkToplevel:
  *
- * A #GdkToplevel is a freestanding toplevel surface.
+ * A `GdkToplevel` is a freestanding toplevel surface.
  *
- * The #GdkToplevel interface provides useful APIs for
- * interacting with the windowing system, such as controlling
- * maximization and size of the surface, setting icons and
- * transient parents for dialogs.
+ * The `GdkToplevel` interface provides useful APIs for interacting with
+ * the windowing system, such as controlling maximization and size of the
+ * surface, setting icons and transient parents for dialogs.
  */
 
 G_DEFINE_INTERFACE (GdkToplevel, gdk_toplevel, GDK_TYPE_SURFACE)
@@ -119,53 +115,109 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
   iface->inhibit_system_shortcuts = gdk_toplevel_default_inhibit_system_shortcuts;
   iface->restore_system_shortcuts = gdk_toplevel_default_restore_system_shortcuts;
 
+  /**
+   * GdkToplevel:state:
+   *
+   * The state of the toplevel.
+   */
   g_object_interface_install_property (iface,
       g_param_spec_flags ("state",
                           P_("State"),
                           P_("State"),
                           GDK_TYPE_TOPLEVEL_STATE, 0,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * GdkToplevel:title:
+   *
+   * The title of the surface.
+   */
   g_object_interface_install_property (iface,
       g_param_spec_string ("title",
                            "Title",
                            "The title of the surface",
                            NULL,
                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
+   * GdkToplevel:startup-id:
+   *
+   * The startup ID of the surface.
+   *
+   * See [class@Gdk.AppLaunchContext] for more information about
+   * startup feedback.
+   */
   g_object_interface_install_property (iface,
       g_param_spec_string ("startup-id",
                            "Startup ID",
                            "The startup ID of the surface",
                            NULL,
                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
+   * GdkToplevel:transient-for:
+   *
+   * The transient parent of the surface.
+   */
   g_object_interface_install_property (iface,
       g_param_spec_object ("transient-for",
                            "Transient For",
                            "The transient parent of the surface",
                            GDK_TYPE_SURFACE,
                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
+   * GdkToplevel:modal:
+   *
+   * Whether the surface is modal.
+   */
   g_object_interface_install_property (iface,
       g_param_spec_boolean ("modal",
                             "Modal",
                             "Whether the surface is modal",
                             FALSE,
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
+   * GdkToplevel:icon-list:
+   *
+   * A list of textures to use as icon.
+   */
   g_object_interface_install_property (iface,
       g_param_spec_pointer ("icon-list",
                             "Icon List",
                             "The list of icon textures",
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
+   * GdkToplevel:decorated:
+   *
+   * Whether the window manager should add decorations.
+   */
   g_object_interface_install_property (iface,
       g_param_spec_boolean ("decorated",
                             "Decorated",
                             "Decorated",
                             FALSE,
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
+   * GdkToplevel:deletable:
+   *
+   * Whether the window manager should allow to close the surface.
+   */
   g_object_interface_install_property (iface,
       g_param_spec_boolean ("deletable",
                             "Deletable",
                             "Deletable",
                             FALSE,
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
+   * GdkToplevel:fullscreen-mode:
+   *
+   * The fullscreen mode of the surface.
+   */
   g_object_interface_install_property (iface,
       g_param_spec_enum ("fullscreen-mode",
                          "Fullscreen mode",
@@ -173,6 +225,12 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
                          GDK_TYPE_FULLSCREEN_MODE,
                          GDK_FULLSCREEN_ON_CURRENT_MONITOR,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
+   * GdkToplevel:shortcuts-inhibited:
+   *
+   * Whether the surface should inhibit keyboard shortcuts.
+   */
   g_object_interface_install_property (iface,
       g_param_spec_boolean ("shortcuts-inhibited",
                             "Shortcuts inhibited",
@@ -182,19 +240,21 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
 
   /**
    * GdkToplevel::compute-size:
-   * @toplevel: a #GdkToplevel
-   * @size: (type Gdk.ToplevelSize) (out caller-allocates): a #GdkToplevelSize
+   * @toplevel: a `GdkToplevel`
+   * @size: (type Gdk.ToplevelSize) (out caller-allocates): a `GdkToplevelSize`
    *
-   * Compute the desired size of the toplevel, given the information passed via
-   * the #GdkToplevelSize object.
+   * Emitted when the size for the surface needs to be computed, when
+   * it is present.
    *
-   * It will normally be emitted during or after gdk_toplevel_present(),
-   * depending on the configuration received by the windowing system. It may
-   * also be emitted at any other point in time, in response to the windowing
-   * system spontaneously changing the configuration.
+   * It will normally be emitted during or after [method@Gdk.Toplevel.present],
+   * depending on the configuration received by the windowing system.
+   * It may also be emitted at any other point in time, in response
+   * to the windowing system spontaneously changing the configuration.
    *
-   * It is the responsibility of the GdkToplevel user to handle this signal;
-   * failing to do so will result in an arbitrary size being used as a result.
+   * It is the responsibility of the toplevel user to handle this signal
+   * and compute the desired size of the toplevel, given the information
+   * passed via the [struct@Gdk.ToplevelSize] object. Failing to do so
+   * will result in an arbitrary size being used as a result.
    */
   signals[COMPUTE_SIZE] =
     g_signal_new ("compute-size",
@@ -227,16 +287,17 @@ gdk_toplevel_install_properties (GObjectClass *object_class,
 
 /**
  * gdk_toplevel_present:
- * @toplevel: the #GdkToplevel to show
- * @layout: the #GdkToplevelLayout object used to layout
+ * @toplevel: the `GdkToplevel` to show
+ * @layout: the `GdkToplevelLayout` object used to layout
  *
- * Present @toplevel after having processed the #GdkToplevelLayout rules.
+ * Present @toplevel after having processed the `GdkToplevelLayout` rules.
+ *
  * If the toplevel was previously not showing, it will be showed,
  * otherwise it will change layout according to @layout.
  *
- * GDK may emit the 'compute-size' signal to let the user of this toplevel
- * compute the preferred size of the toplevel surface. See
- * #GdkToplevel::compute-size for details.
+ * GDK may emit the [signal@Gdk.Toplevel::compute-size] signal to let
+ * the user of this toplevel compute the preferred size of the toplevel
+ * surface.
  *
  * Presenting is asynchronous and the specified layout parameters are not
  * guaranteed to be respected.
@@ -253,7 +314,7 @@ gdk_toplevel_present (GdkToplevel       *toplevel,
 
 /**
  * gdk_toplevel_minimize:
- * @toplevel: a #GdkToplevel
+ * @toplevel: a `GdkToplevel`
  *
  * Asks to minimize the @toplevel.
  *
@@ -271,7 +332,7 @@ gdk_toplevel_minimize (GdkToplevel *toplevel)
 
 /**
  * gdk_toplevel_lower:
- * @toplevel: a #GdkToplevel
+ * @toplevel: a `GdkToplevel`
  *
  * Asks to lower the @toplevel below other windows.
  *
@@ -289,13 +350,13 @@ gdk_toplevel_lower (GdkToplevel *toplevel)
 
 /**
  * gdk_toplevel_focus:
- * @toplevel: a #GdkToplevel
+ * @toplevel: a `GdkToplevel`
  * @timestamp: timestamp of the event triggering the surface focus
  *
  * Sets keyboard focus to @surface.
  *
- * In most cases, gtk_window_present_with_time() should be used
- * on a #GtkWindow, rather than calling this function.
+ * In most cases, [method@Gtk.Window.present_with_time] should be
+ * used on a [class@Gtk.Window], rather than calling this function.
  */
 void
 gdk_toplevel_focus (GdkToplevel *toplevel,
@@ -308,10 +369,10 @@ gdk_toplevel_focus (GdkToplevel *toplevel,
 
 /**
  * gdk_toplevel_get_state:
- * @toplevel: a #GdkToplevel
+ * @toplevel: a `GdkToplevel`
  *
- * Gets the bitwise OR of the currently active surface state flags,
- * from the #GdkToplevelState enumeration.
+ * Gets the bitwise or of the currently active surface state flags,
+ * from the `GdkToplevelState` enumeration.
  *
  * Returns: surface state bitfield
  */
@@ -329,10 +390,12 @@ gdk_toplevel_get_state (GdkToplevel *toplevel)
 
 /**
  * gdk_toplevel_set_title:
- * @toplevel: a #GdkToplevel
+ * @toplevel: a `GdkToplevel`
  * @title: title of @surface
  *
- * Sets the title of a toplevel surface, to be displayed in the titlebar,
+ * Sets the title of a toplevel surface.
+ *
+ * The title maybe be displayed in the titlebar,
  * in lists of windows, etc.
  */
 void
@@ -346,11 +409,14 @@ gdk_toplevel_set_title (GdkToplevel *toplevel,
 
 /**
  * gdk_toplevel_set_startup_id:
- * @toplevel: a #GdkToplevel
+ * @toplevel: a `GdkToplevel`
  * @startup_id: a string with startup-notification identifier
  *
- * When using GTK, typically you should use gtk_window_set_startup_id()
- * instead of this low-level function.
+ * Sets the startup notification ID.
+ *
+ * When using GTK, typically you should use
+ * [method@Gtk.Window.set_startup_id] instead of this
+ * low-level function.
  */
 void
 gdk_toplevel_set_startup_id (GdkToplevel *toplevel,
@@ -363,16 +429,18 @@ gdk_toplevel_set_startup_id (GdkToplevel *toplevel,
 
 /**
  * gdk_toplevel_set_transient_for:
- * @toplevel: a #GdkToplevel
- * @parent: another toplevel #GdkSurface
+ * @toplevel: a `GdkToplevel`
+ * @parent: another toplevel `GdkSurface`
  *
- * Indicates to the window manager that @surface is a transient dialog
- * associated with the application surface @parent. This allows the
- * window manager to do things like center @surface on @parent and
- * keep @surface above @parent.
+ * Sets a transient-for parent.
  *
- * See gtk_window_set_transient_for() if you’re using #GtkWindow or
- * #GtkDialog.
+ * Indicates to the window manager that @surface is a transient
+ * dialog associated with the application surface @parent. This
+ * allows the window manager to do things like center @surface
+ * on @parent and keep @surface above @parent.
+ *
+ * See [method@Gtk.Window.set_transient_for] if you’re using
+ * [class@Gtk.Window] or [class@Gtk.Dialog].
  */
 void
 gdk_toplevel_set_transient_for (GdkToplevel *toplevel,
@@ -385,8 +453,10 @@ gdk_toplevel_set_transient_for (GdkToplevel *toplevel,
 
 /**
  * gdk_toplevel_set_modal:
- * @toplevel: A toplevel surface
+ * @toplevel: a `GdkToplevel`
  * @modal: %TRUE if the surface is modal, %FALSE otherwise.
+ *
+ * Sets the toplevel to be modal.
  *
  * The application can use this hint to tell the
  * window manager that a certain surface has modal
@@ -394,7 +464,7 @@ gdk_toplevel_set_transient_for (GdkToplevel *toplevel,
  * to handle modal surfaces in a special way.
  *
  * You should only use this on surfaces for which you have
- * previously called gdk_toplevel_set_transient_for().
+ * previously called [method@Gdk.Toplevel.set_transient_for].
  */
 void
 gdk_toplevel_set_modal (GdkToplevel *toplevel,
@@ -407,9 +477,9 @@ gdk_toplevel_set_modal (GdkToplevel *toplevel,
 
 /**
  * gdk_toplevel_set_icon_list:
- * @toplevel: a #GdkToplevel
+ * @toplevel: a `GdkToplevel`
  * @surfaces: (transfer none) (element-type GdkTexture):
- *     A list of textures to use as icon, of different sizes
+ *   A list of textures to use as icon, of different sizes
  *
  * Sets a list of icons for the surface.
  *
@@ -432,8 +502,8 @@ gdk_toplevel_set_icon_list (GdkToplevel *toplevel,
 
 /**
  * gdk_toplevel_show_window_menu:
- * @toplevel: a #GdkToplevel
- * @event: a #GdkEvent to show the menu for
+ * @toplevel: a `GdkToplevel`
+ * @event: a `GdkEvent` to show the menu for
  *
  * Asks the windowing system to show the window menu.
  *
@@ -455,8 +525,10 @@ gdk_toplevel_show_window_menu (GdkToplevel *toplevel,
 
 /**
  * gdk_toplevel_set_decorated:
- * @toplevel: a #GdkToplevel
+ * @toplevel: a `GdkToplevel`
  * @decorated: %TRUE to request decorations
+ *
+ * Sets the toplevel to be decorated.
  *
  * Setting @decorated to %FALSE hints the desktop environment
  * that the surface has its own, client-side decorations and
@@ -473,8 +545,10 @@ gdk_toplevel_set_decorated (GdkToplevel *toplevel,
 
 /**
  * gdk_toplevel_set_deletable:
- * @toplevel: a #GdkToplevel
+ * @toplevel: a `GdkToplevel`
  * @deletable: %TRUE to request a delete button
+ *
+ * Sets the toplevel to be deletable.
  *
  * Setting @deletable to %TRUE hints the desktop environment
  * that it should offer the user a way to close the surface.
@@ -490,7 +564,7 @@ gdk_toplevel_set_deletable (GdkToplevel *toplevel,
 
 /**
  * gdk_toplevel_supports_edge_constraints:
- * @toplevel: a #GdkToplevel
+ * @toplevel: a `GdkToplevel`
  *
  * Returns whether the desktop environment supports
  * tiled window states.
@@ -508,17 +582,18 @@ gdk_toplevel_supports_edge_constraints (GdkToplevel *toplevel)
 
 /**
  * gdk_toplevel_inhibit_system_shortcuts:
- * @toplevel: the #GdkToplevel requesting system keyboard shortcuts
- * @event: (nullable): the #GdkEvent that is triggering the inhibit
- *         request, or %NULL if none is available.
+ * @toplevel: a `GdkToplevel`
+ * @event: (nullable): the `GdkEvent` that is triggering the inhibit
+ *   request, or %NULL if none is available
  *
- * Requests that the @toplevel inhibit the system shortcuts, asking the
- * desktop environment/windowing system to let all keyboard events reach
- * the surface, as long as it is focused, instead of triggering system
- * actions.
+ * Requests that the @toplevel inhibit the system shortcuts.
+ *
+ * This is asking the desktop environment/windowing system to let all
+ * keyboard events reach the surface, as long as it is focused, instead
+ * of triggering system actions.
  *
  * If granted, the rerouting remains active until the default shortcuts
- * processing is restored with gdk_toplevel_restore_system_shortcuts(),
+ * processing is restored with [method@Gdk.Toplevel.restore_system_shortcuts],
  * or the request is revoked by the desktop environment, windowing system
  * or the user.
  *
@@ -531,8 +606,7 @@ gdk_toplevel_supports_edge_constraints (GdkToplevel *toplevel)
  * or deny the request or even choose to ignore the request entirely.
  *
  * The caller can be notified whenever the request is granted or revoked
- * by listening to the GdkToplevel::shortcuts-inhibited property.
- *
+ * by listening to the [property@Gdk.Toplevel:shortcuts-inhibited] property.
  */
 void
 gdk_toplevel_inhibit_system_shortcuts (GdkToplevel *toplevel,
@@ -546,10 +620,12 @@ gdk_toplevel_inhibit_system_shortcuts (GdkToplevel *toplevel,
 
 /**
  * gdk_toplevel_restore_system_shortcuts:
- * @toplevel: a #GdkToplevel
+ * @toplevel: a `GdkToplevel`
  *
  * Restore default system keyboard shortcuts which were previously
- * requested to be inhibited by gdk_toplevel_inhibit_system_shortcuts().
+ * inhibited.
+ *
+ * This undoes the effect of [method@Gdk.Toplevel.inhibit_system_shortcuts].
  */
 void
 gdk_toplevel_restore_system_shortcuts (GdkToplevel *toplevel)
@@ -561,15 +637,17 @@ gdk_toplevel_restore_system_shortcuts (GdkToplevel *toplevel)
 
 /**
  * gdk_toplevel_begin_resize:
- * @toplevel: a #GdkToplevel
+ * @toplevel: a `GdkToplevel`
  * @edge: the edge or corner from which the drag is started
  * @device: (nullable): the device used for the operation
  * @button: the button being used to drag, or 0 for a keyboard-initiated drag
  * @x: surface X coordinate of mouse click that began the drag
  * @y: surface Y coordinate of mouse click that began the drag
- * @timestamp: timestamp of mouse click that began the drag (use gdk_event_get_time())
+ * @timestamp: timestamp of mouse click that began the drag (use
+ *   [method@Gdk.Event.get_time])
  *
- * Begins an interactive resize operation (for a toplevel surface).
+ * Begins an interactive resize operation.
+ *
  * You might use this function to implement a “window resize grip.”
  */
 void
@@ -607,9 +685,11 @@ gdk_toplevel_begin_resize (GdkToplevel    *toplevel,
  * @button: the button being used to drag, or 0 for a keyboard-initiated drag
  * @x: surface X coordinate of mouse click that began the drag
  * @y: surface Y coordinate of mouse click that began the drag
- * @timestamp: timestamp of mouse click that began the drag
+ * @timestamp: timestamp of mouse click that began the drag (use
+ *   [method@Gdk.Event.get_time])
  *
- * Begins an interactive move operation (for a toplevel surface).
+ * Begins an interactive move operation.
+ *
  * You might use this function to implement draggable titlebars.
  */
 void

@@ -31,25 +31,21 @@ G_BEGIN_DECLS
 
 #define GDK_TYPE_PAINTABLE               (gdk_paintable_get_type ())
 
-/**
- * GdkPaintable:
- *
- * Interface for paintable objects.
- */
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (GdkPaintable, gdk_paintable, GDK, PAINTABLE, GObject)
 
 /**
  * GdkPaintableFlags:
  * @GDK_PAINTABLE_STATIC_SIZE: The size is immutable.
- *     The #GdkPaintable::invalidate-size signal will never be
+ *     The [signal@GdkPaintable::invalidate-size] signal will never be
  *     emitted.
  * @GDK_PAINTABLE_STATIC_CONTENTS: The content is immutable.
- *     The #GdkPaintable::invalidate-contents signal will never be
+ *     The [signal@GdkPaintable::invalidate-contents] signal will never be
  *     emitted.
  *
- * Flags about this object. Implementations use these for optimizations
- * such as caching.
+ * Flags about a paintable object.
+ *
+ * Implementations use these for optimizations such as caching.
  */
 typedef enum {
   GDK_PAINTABLE_STATIC_SIZE = 1 << 0,
@@ -78,14 +74,15 @@ typedef enum {
  *     #GdkPaintableInterface.get_intrinsic_height() return non-zero values,
  *     this function should return the aspect ratio computed from those.
  *
- * The list of functions that can be implemented for the #GdkPaintable interface.
+ * The list of functions that can be implemented for the `GdkPaintable`
+ * interface.
  *
- * Note that apart from the #GdkPaintableInterface.snapshot() function, no virtual
- * function of this interface is mandatory to implement, though it is a good idea
- * to implement #GdkPaintableInterface.get_current_image() for non-static paintables
- * and #GdkPaintableInterface.get_flags() if the image is not dynamic as the default
- * implementation returns no flags and that will make the implementation likely
- * quite slow.
+ * Note that apart from the #GdkPaintableInterface.snapshot() function, no
+ * virtual function of this interface is mandatory to implement, though it
+ * is a good idea to implement #GdkPaintableInterface.get_current_image()
+ * for non-static paintables and #GdkPaintableInterface.get_flags() if the
+ * image is not dynamic as the default implementation returns no flags and
+ * that will make the implementation likely quite slow.
  */
 struct _GdkPaintableInterface
 {
