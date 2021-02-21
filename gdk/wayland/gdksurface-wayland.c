@@ -4590,7 +4590,7 @@ static const struct zxdg_imported_v1_listener xdg_imported_listener = {
  * @parent_handle_str refers.
  *
  * Typically, the handle will originate from a
- * [method@WaylandToplevel.export_handle] call in another process.
+ * [method@GdkWayland.WaylandToplevel.export_handle] call in another process.
  *
  * Note that this API depends on an unstable Wayland protocol,
  * and thus may require changes in the future.
