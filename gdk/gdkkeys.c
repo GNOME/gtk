@@ -135,8 +135,9 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
    * GdkKeymap::direction-changed:
    * @keymap: the object on which the signal is emitted
    *
-   * The ::direction-changed signal gets emitted when the direction
-   * of the keymap changes. See gdk_keymap_get_direction().
+   * Emitted when the direction of the keymap changes.
+   *
+   * See gdk_keymap_get_direction().
    */
   signals[DIRECTION_CHANGED] =
     g_signal_new (g_intern_static_string ("direction-changed"),
@@ -147,6 +148,7 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
 		  NULL,
 		  G_TYPE_NONE,
 		  0);
+
   /**
    * GdkKeymap::keys-changed:
    * @keymap: the object on which the signal is emitted
@@ -305,6 +307,7 @@ gdk_keyval_is_lower (guint keyval)
  * @keymap: a #GdkKeymap
  *
  * Returns the direction of effective layout of the keymap.
+ *
  * The direction of a layout is the direction of the majority of its
  * symbols. See pango_unichar_direction().
  *
@@ -678,6 +681,7 @@ gdk_keyval_from_name (const char *keyval_name)
  * @upper: (out): return location for uppercase version of @symbol
  *
  * Obtains the upper- and lower-case versions of the keyval @symbol.
+ *
  * Examples of keyvals are #GDK_KEY_a, #GDK_KEY_Enter, #GDK_KEY_F1, etc.
  */
 void

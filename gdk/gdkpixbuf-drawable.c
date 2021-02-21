@@ -30,17 +30,6 @@
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
-/**
- * SECTION:pixbufs
- * @Short_description: Functions for obtaining pixbufs
- * @Title: GdkPixbuf Interaction
- *
- * Pixbufs are client-side images. For details on how to create
- * and manipulate pixbufs, see the #GdkPixbuf API documentation.
- *
- * The functions described here allow to obtain pixbufs from
- * #GdkSurfaces and cairo surfaces.
- */
 
 static cairo_format_t
 gdk_cairo_format_for_content (cairo_content_t content)
@@ -157,9 +146,10 @@ convert_no_alpha (guchar *dest_data,
  * @width: Width in pixels of region to get
  * @height: Height in pixels of region to get
  *
- * Transfers image data from a #cairo_surface_t and converts it to an RGB(A)
- * representation inside a #GdkPixbuf. This allows you to efficiently read
- * individual pixels from cairo surfaces.
+ * Transfers image data from a `cairo_surface_t` and converts it
+ * to a `GdkPixbuf`.
+ *
+ * This allows you to efficiently read individual pixels from cairo surfaces.
  *
  * This function will create an RGB pixbuf with 8 bits per channel.
  * The pixbuf will contain an alpha channel if the @surface contains one.
@@ -227,11 +217,13 @@ gdk_pixbuf_get_from_surface  (cairo_surface_t *surface,
 
 /**
  * gdk_pixbuf_get_from_texture:
- * @texture: a #GdkTexture
+ * @texture: a `GdkTexture`
  *
- * Creates a new pixbuf from @texture. This should generally not be used
- * in newly written code as later stages will almost certainly convert
- * the pixbuf back into a texture to draw it on screen.
+ * Creates a new pixbuf from @texture.
+ *
+ * This should generally not be used in newly written code as later
+ * stages will almost certainly convert the pixbuf back into a texture
+ * to draw it on screen.
  *
  * Returns: (transfer full) (nullable): a new #GdkPixbuf or %NULL
  *   in case of an error

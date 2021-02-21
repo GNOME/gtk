@@ -21,8 +21,9 @@
  * GdkDevicePad:
  *
  * `GdkDevicePad` is an interface implemented by devices of type
- * %GDK_SOURCE_TABLET_PAD, it allows querying the features provided
- * by the pad device.
+ * %GDK_SOURCE_TABLET_PAD
+ *
+ * It allows querying the features provided by the pad device.
  *
  * Tablet pads may contain one or more groups, each containing a subset
  * of the buttons/rings/strips available. [method@Gdk.DevicePad.get_n_groups]

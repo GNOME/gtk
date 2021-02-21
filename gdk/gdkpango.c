@@ -90,31 +90,32 @@ layout_iter_get_line_clip_region (PangoLayoutIter *iter,
 
 /**
  * gdk_pango_layout_line_get_clip_region: (skip)
- * @line: a #PangoLayoutLine 
+ * @line: a `PangoLayoutLine`
  * @x_origin: X pixel where you intend to draw the layout line with this clip
  * @y_origin: baseline pixel where you intend to draw the layout line with this clip
  * @index_ranges: (array): array of byte indexes into the layout,
  *     where even members of array are start indexes and odd elements
  *     are end indexes
  * @n_ranges: number of ranges in @index_ranges, i.e. half the size of @index_ranges
- * 
+ *
  * Obtains a clip region which contains the areas where the given
- * ranges of text would be drawn. @x_origin and @y_origin are the top left
- * position of the layout. @index_ranges
- * should contain ranges of bytes in the layout’s text. The clip
- * region will include space to the left or right of the line (to the
- * layout bounding box) if you have indexes above or below the indexes
- * contained inside the line. This is to draw the selection all the way
- * to the side of the layout. However, the clip region is in line coordinates,
- * not layout coordinates.
+ * ranges of text would be drawn.
+ *
+ * @x_origin and @y_origin are the top left position of the layout.
+ * @index_ranges should contain ranges of bytes in the layout’s text.
+ * The clip region will include space to the left or right of the line
+ * (to the layout bounding box) if you have indexes above or below the
+ * indexes contained inside the line. This is to draw the selection all
+ * the way to the side of the layout. However, the clip region is in line
+ * coordinates, not layout coordinates.
  *
  * Note that the regions returned correspond to logical extents of the text
  * ranges, not ink extents. So the drawn line may in fact touch areas out of
  * the clip region.  The clip region is mainly useful for highlightling parts
  * of text, such as when text is selected.
- * 
+ *
  * Returns: a clip region containing the given ranges
- **/
+ */
 cairo_region_t*
 gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
                                        int              x_origin,
@@ -141,24 +142,25 @@ gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
 
 /**
  * gdk_pango_layout_get_clip_region: (skip)
- * @layout: a #PangoLayout 
+ * @layout: a `PangoLayout`
  * @x_origin: X pixel where you intend to draw the layout with this clip
  * @y_origin: Y pixel where you intend to draw the layout with this clip
  * @index_ranges: array of byte indexes into the layout, where even members of array are start indexes and odd elements are end indexes
  * @n_ranges: number of ranges in @index_ranges, i.e. half the size of @index_ranges
- * 
+ *
  * Obtains a clip region which contains the areas where the given ranges
- * of text would be drawn. @x_origin and @y_origin are the top left point
- * to center the layout. @index_ranges should contain
- * ranges of bytes in the layout’s text.
- * 
+ * of text would be drawn.
+ *
+ * @x_origin and @y_origin are the top left point to center the layout.
+ * @index_ranges should contain ranges of bytes in the layout’s text.
+ *
  * Note that the regions returned correspond to logical extents of the text
  * ranges, not ink extents. So the drawn layout may in fact touch areas out of
  * the clip region.  The clip region is mainly useful for highlightling parts
  * of text, such as when text is selected.
- * 
+ *
  * Returns: a clip region containing the given ranges
- **/
+ */
 cairo_region_t*
 gdk_pango_layout_get_clip_region (PangoLayout *layout,
                                   int          x_origin,

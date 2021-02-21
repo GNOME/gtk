@@ -148,9 +148,11 @@ typedef enum
  * @GDK_HYPER_MASK: the Hyper modifier
  * @GDK_META_MASK: the Meta modifier
  *
- * A set of bit-flags to indicate the state of modifier keys and mouse buttons
- * in various event types. Typical modifier keys are Shift, Control, Meta,
- * Super, Hyper, Alt, Compose, Apple, CapsLock or ShiftLock.
+ * Flags to indicate the state of modifier keys and mouse buttons
+ * in events.
+ *
+ * Typical modifier keys are Shift, Control, Meta, Super, Hyper, Alt, Compose,
+ * Apple, CapsLock or ShiftLock.
  *
  * Note that GDK may add internal values to events which include values outside
  * of this enumeration. Your code should preserve and ignore them.  You can use
@@ -178,7 +180,7 @@ typedef enum
 /**
  * GDK_MODIFIER_MASK:
  *
- * A mask covering all entries in #GdkModifierType.
+ * A mask covering all entries in `GdkModifierType`.
  */
 #define GDK_MODIFIER_MASK (GDK_SHIFT_MASK|GDK_LOCK_MASK|GDK_CONTROL_MASK| \
                            GDK_ALT_MASK|GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK| \
@@ -194,7 +196,7 @@ typedef enum
  * @GDK_GL_ERROR_COMPILATION_FAILED: The shader compilation failed
  * @GDK_GL_ERROR_LINK_FAILED: The shader linking failed
  *
- * Error enumeration for #GdkGLContext.
+ * Error enumeration for `GdkGLContext`.
  */
 typedef enum {
   GDK_GL_ERROR_NOT_AVAILABLE,

@@ -39,30 +39,24 @@
 #include <glib.h>
 
 /**
- * SECTION:gdkdisplay
- * @Short_description: Controls a set of monitors and their associated input devices
- * @Title: GdkDisplay
+ * GdkDisplay:
  *
- * GdkDisplay objects are the GDK representation of a workstation.
+ * `GdkDisplay` objects are the GDK representation of a workstation.
  *
  * Their purpose are two-fold:
+ *
  * - To manage and provide information about input devices (pointers, keyboards, etc)
  * - To manage and provide information about output devices (monitors, projectors, etc)
  *
- * Most of the input device handling has been factored out into separate #GdkSeat
- * objects. Every display has a one or more seats, which can be accessed with
- * gdk_display_get_default_seat() and gdk_display_list_seats().
+ * Most of the input device handling has been factored out into separate
+ * [class@Gdk.Seat] objects. Every display has a one or more seats, which
+ * can be accessed with [method@Gdk.Display.get_default_seat] and
+ * [method@Gdk.Display.list_seats].
  *
- * Output devices are represented by #GdkMonitor objects, which can be accessed
- * with gdk_display_get_monitor_at_surface() and similar APIs.
+ * Output devices are represented by [class@Gdk.Monitor] objects, which can
+ * be accessed with [method@Gdk.Display.get_monitor_at_surface] and similar APIs.
  */
 
-/**
- * GdkDisplay:
- *
- * The GdkDisplay struct contains only private fields and should not
- * be accessed directly.
- */
 enum
 {
   PROP_0,
@@ -158,7 +152,8 @@ gdk_display_class_init (GdkDisplayClass *class)
    * GdkDisplay:composited:
    *
    * %TRUE if the display properly composites the alpha channel.
-   * See gdk_display_is_composited() for details.
+   *
+   * See [method@Gdk.Display.is_composited] for details.
    */
   props[PROP_COMPOSITED] =
     g_param_spec_boolean ("composited",
@@ -170,8 +165,9 @@ gdk_display_class_init (GdkDisplayClass *class)
   /**
    * GdkDisplay:rgba:
    *
-   * %TRUE if the display supports an alpha channel. See gdk_display_is_rgba()
-   * for details.
+   * %TRUE if the display supports an alpha channel.
+   *
+   * See [method@Gdk.Display.is_rgba] for details.
    */
   props[PROP_RGBA] =
     g_param_spec_boolean ("rgba",
@@ -183,8 +179,9 @@ gdk_display_class_init (GdkDisplayClass *class)
   /**
    * GdkDisplay:input-shapes:
    *
-   * %TRUE if the display supports input shapes. See
-   * gdk_display_supports_input_shapes() for details.
+   * %TRUE if the display supports input shapes.
+   *
+   * See [method@Gdk.Display.supports_input_shapes] for details.
    */
   props[PROP_INPUT_SHAPES] =
     g_param_spec_boolean ("input-shapes",
@@ -199,8 +196,7 @@ gdk_display_class_init (GdkDisplayClass *class)
    * GdkDisplay::opened:
    * @display: the object on which the signal is emitted
    *
-   * The ::opened signal is emitted when the connection to the windowing
-   * system for @display is opened.
+   * Emitted when the connection to the windowing system for @display is opened.
    */
   signals[OPENED] =
     g_signal_new (g_intern_static_string ("opened"),
@@ -216,9 +212,8 @@ gdk_display_class_init (GdkDisplayClass *class)
    * @display: the object on which the signal is emitted
    * @is_error: %TRUE if the display was closed due to an error
    *
-   * The ::closed signal is emitted when the connection to the windowing
-   * system for @display is closed.
-   */   
+   * Emitted when the connection to the windowing system for @display is closed.
+   */
   signals[CLOSED] =
     g_signal_new (g_intern_static_string ("closed"),
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -235,8 +230,7 @@ gdk_display_class_init (GdkDisplayClass *class)
    * @display: the object on which the signal is emitted
    * @seat: the seat that was just added
    *
-   * The ::seat-added signal is emitted whenever a new seat is made
-   * known to the windowing system.
+   * Emitted whenever a new seat is made known to the windowing system.
    */
   signals[SEAT_ADDED] =
     g_signal_new (g_intern_static_string ("seat-added"),
@@ -251,8 +245,7 @@ gdk_display_class_init (GdkDisplayClass *class)
    * @display: the object on which the signal is emitted
    * @seat: the seat that was just removed
    *
-   * The ::seat-removed signal is emitted whenever a seat is removed
-   * by the windowing system.
+   * Emitted whenever a seat is removed by the windowing system.
    */
   signals[SEAT_REMOVED] =
     g_signal_new (g_intern_static_string ("seat-removed"),
@@ -267,8 +260,7 @@ gdk_display_class_init (GdkDisplayClass *class)
    * @display: the object on which the signal is emitted
    * @setting: the name of the setting that changed
    *
-   * The ::setting-changed signal is emitted whenever a setting
-   * changes its value.
+   * Emitted whenever a setting changes its value.
    */
   signals[SETTING_CHANGED] =
     g_signal_new (g_intern_static_string ("setting-changed"),
@@ -356,10 +348,11 @@ gdk_display_finalize (GObject *object)
 
 /**
  * gdk_display_close:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  *
- * Closes the connection to the windowing system for the given display,
- * and cleans up associated resources.
+ * Closes the connection to the windowing system for the given display.
+ *
+ * This cleans up associated resources.
  */
 void
 gdk_display_close (GdkDisplay *display)
@@ -379,7 +372,7 @@ gdk_display_close (GdkDisplay *display)
 
 /**
  * gdk_display_is_closed:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  *
  * Finds out if the display has been closed.
  *
@@ -395,12 +388,12 @@ gdk_display_is_closed  (GdkDisplay  *display)
 
 /*<private>
  * gdk_display_get_event:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  *
- * Gets the next #GdkEvent to be processed for @display, fetching events from the
+ * Gets the next `GdkEvent` to be processed for @display, fetching events from the
  * windowing system if necessary.
  *
- * Returns: (nullable) (transfer full): the next #GdkEvent to be processed,
+ * Returns: (nullable) (transfer full): the next `GdkEvent` to be processed,
  *   or %NULL if no events are pending
  */
 GdkEvent *
@@ -416,8 +409,8 @@ gdk_display_get_event (GdkDisplay *display)
 
 /**
  * gdk_display_put_event:
- * @display: a #GdkDisplay
- * @event: (transfer none): a #GdkEvent
+ * @display: a `GdkDisplay`
+ * @event: (transfer none): a `GdkEvent`
  *
  * Appends the given event onto the front of the event
  * queue for @display.
@@ -853,13 +846,13 @@ gdk_device_grab_info (GdkDisplay  *display,
 
 /**
  * gdk_display_device_is_grabbed:
- * @display: a #GdkDisplay
- * @device: a #GdkDevice
+ * @display: a `GdkDisplay`
+ * @device: a `GdkDevice`
  *
  * Returns %TRUE if there is an ongoing grab on @device for @display.
  *
  * Returns: %TRUE if there is a grab in effect for @device.
- **/
+ */
 gboolean
 gdk_display_device_is_grabbed (GdkDisplay *display,
                                GdkDevice  *device)
@@ -879,12 +872,12 @@ gdk_display_device_is_grabbed (GdkDisplay *display,
 
 /**
  * gdk_display_get_name:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  *
  * Gets the name of the display.
  *
  * Returns: a string representing the display name. This string is owned
- * by GDK and should not be modified or freed.
+ *   by GDK and should not be modified or freed.
  */
 const char *
 gdk_display_get_name (GdkDisplay *display)
@@ -896,7 +889,7 @@ gdk_display_get_name (GdkDisplay *display)
 
 /**
  * gdk_display_beep:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  *
  * Emits a short beep on @display
  */
@@ -910,14 +903,15 @@ gdk_display_beep (GdkDisplay *display)
 
 /**
  * gdk_display_sync:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  *
  * Flushes any requests queued for the windowing system and waits until all
- * requests have been handled. This is often used for making sure that the
- * display is synchronized with the current state of the program. Calling
- * gdk_display_sync() before gdk_x11_display_error_trap_pop() makes sure
- * that any errors generated from earlier requests are handled before the
- * error trap is removed.
+ * requests have been handled.
+ *
+ * This is often used for making sure that the display is synchronized
+ * with the current state of the program. Calling [method@Gdk.Display.sync]
+ * before [method@GdkX11.Display.error_trap_pop] makes sure that any errors
+ * generated from earlier requests are handled before the error trap is removed.
  *
  * This is most useful for X11. On windowing systems where requests are
  * handled synchronously, this function will do nothing.
@@ -932,12 +926,13 @@ gdk_display_sync (GdkDisplay *display)
 
 /**
  * gdk_display_flush:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  *
- * Flushes any requests queued for the windowing system; this happens automatically
- * when the main loop blocks waiting for new events, but if your application
- * is drawing without returning control to the main loop, you may need
- * to call this function explicitly. A common case where this function
+ * Flushes any requests queued for the windowing system.
+ *
+ * This happens automatically when the main loop blocks waiting for new events,
+ * but if your application is drawing without returning control to the main loop,
+ * you may need to call this function explicitly. A common case where this function
  * needs to be called is when an application is executing drawing commands
  * from a thread other than the thread where the main loop is running.
  *
@@ -954,7 +949,7 @@ gdk_display_flush (GdkDisplay *display)
 
 /**
  * gdk_display_get_clipboard:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  *
  * Gets the clipboard used for copy/paste operations.
  *
@@ -973,11 +968,12 @@ gdk_display_get_clipboard (GdkDisplay *display)
 
 /**
  * gdk_display_get_primary_clipboard:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  *
- * Gets the clipboard used for the primary selection. On backends where the
- * primary clipboard is not supported natively, GDK emulates this clipboard
- * locally.
+ * Gets the clipboard used for the primary selection.
+ *
+ * On backends where the primary clipboard is not supported natively,
+ * GDK emulates this clipboard locally.
  *
  * Returns: (transfer none): the primary clipboard
  */
@@ -994,9 +990,11 @@ gdk_display_get_primary_clipboard (GdkDisplay *display)
 
 /**
  * gdk_display_supports_input_shapes:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  *
- * Returns %TRUE if gdk_surface_set_input_region() can
+ * Returns %TRUE if the display supports input shapes.
+ *
+ * This means that [method@Gdk.Surface.set_input_region] can
  * be used to modify the input shape of surfaces on @display.
  *
  * On modern displays, this value is always %TRUE.
@@ -1039,12 +1037,12 @@ gdk_display_real_get_app_launch_context (GdkDisplay *display)
 
 /**
  * gdk_display_get_app_launch_context:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  *
- * Returns a #GdkAppLaunchContext suitable for launching
+ * Returns a `GdkAppLaunchContext` suitable for launching
  * applications on the given display.
  *
- * Returns: (transfer full): a new #GdkAppLaunchContext for @display.
+ * Returns: (transfer full): a new `GdkAppLaunchContext` for @display.
  *     Free with g_object_unref() when done
  */
 GdkAppLaunchContext *
@@ -1061,7 +1059,7 @@ gdk_display_get_app_launch_context (GdkDisplay *display)
  *
  * Opens a display.
  *
- * Returns: (nullable) (transfer none): a #GdkDisplay, or %NULL if the
+ * Returns: (nullable) (transfer none): a `GdkDisplay`, or %NULL if the
  *     display could not be opened
  */
 GdkDisplay *
@@ -1079,17 +1077,17 @@ _gdk_display_get_next_serial (GdkDisplay *display)
 
 /**
  * gdk_display_notify_startup_complete:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  * @startup_id: a startup-notification identifier, for which
  *     notification process should be completed
  *
  * Indicates to the GUI environment that the application has
  * finished loading, using a given identifier.
  *
- * GTK will call this function automatically for #GtkWindow
+ * GTK will call this function automatically for [class@Gtk.Window]
  * with custom startup-notification identifier unless
- * gtk_window_set_auto_startup_notification() is called to
- * disable that feature.
+ * [method@Gtk.Window.set_auto_startup_notification]
+ * is called to disable that feature.
  */
 void
 gdk_display_notify_startup_complete (GdkDisplay  *display,
@@ -1102,7 +1100,7 @@ gdk_display_notify_startup_complete (GdkDisplay  *display,
 
 /**
  * gdk_display_get_startup_notification_id:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  *
  * Gets the startup notification ID for a Wayland display, or %NULL
  * if no ID has been defined.
@@ -1151,7 +1149,7 @@ gdk_display_create_surface (GdkDisplay     *display,
 
 /**
  * gdk_display_get_keymap:
- * @display: the #GdkDisplay
+ * @display: the `GdkDisplay`
  *
  * Returns the #GdkKeymap attached to @display.
  *
@@ -1195,21 +1193,23 @@ gdk_display_set_debug_flags (GdkDisplay    *display,
 
 /**
  * gdk_display_is_composited:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  *
  * Returns whether surfaces can reasonably be expected to have
- * their alpha channel drawn correctly on the screen. Check
- * gdk_display_is_rgba() for whether the display supports an
- * alpha channel.
+ * their alpha channel drawn correctly on the screen.
+ *
+ * Check [method@Gdk.Display.is_rgba] for whether the display
+ * supports an alpha channel.
  *
  * On X11 this function returns whether a compositing manager is
  * compositing on @display.
  *
  * On modern displays, this value is always %TRUE.
  *
- * Returns: Whether surfaces with RGBA visuals can reasonably be
- * expected to have their alpha channels drawn correctly on the screen.
- **/
+ * Returns: Whether surfaces with RGBA visuals can reasonably
+ *   be expected to have their alpha channels drawn correctly
+ *   on the screen.
+ */
 gboolean
 gdk_display_is_composited (GdkDisplay *display)
 {
@@ -1234,7 +1234,7 @@ gdk_display_set_composited (GdkDisplay *display,
 
 /**
  * gdk_display_is_rgba:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  *
  * Returns whether surfaces on this @display are created with an
  * alpha channel.
@@ -1243,14 +1243,14 @@ gdk_display_set_composited (GdkDisplay *display,
  * surface’s alpha channel won’t be honored when displaying the
  * surface on the screen: in particular, for X an appropriate
  * windowing manager and compositing manager must be running to
- * provide appropriate display. Use gdk_display_is_composited()
+ * provide appropriate display. Use [method@Gdk.Display.is_composited]
  * to check if that is the case.
  *
  * On modern displays, this value is always %TRUE.
  *
  * Returns: %TRUE if surfaces are created with an alpha channel or
  *     %FALSE if the display does not support this functionality.
- **/
+ */
 gboolean
 gdk_display_is_rgba (GdkDisplay *display)
 {
@@ -1321,9 +1321,9 @@ gdk_display_remove_seat (GdkDisplay *display,
 
 /**
  * gdk_display_get_default_seat:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  *
- * Returns the default #GdkSeat for this display.
+ * Returns the default `GdkSeat` for this display.
  *
  * Note that a display may not have a seat. In this case,
  * this function will return %NULL.
@@ -1344,12 +1344,12 @@ gdk_display_get_default_seat (GdkDisplay *display)
 
 /**
  * gdk_display_list_seats:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  *
  * Returns the list of seats known to @display.
  *
  * Returns: (transfer container) (element-type GdkSeat): the
- *          list of seats known to the #GdkDisplay
+ *          list of seats known to the `GdkDisplay`
  **/
 GList *
 gdk_display_list_seats (GdkDisplay *display)
@@ -1361,17 +1361,17 @@ gdk_display_list_seats (GdkDisplay *display)
 
 /**
  * gdk_display_get_monitors:
- * @self: a #GdkDisplay
+ * @self: a `GdkDisplay`
  *
  * Gets the list of monitors associated with this display.
  *
- * Subsequent calls to this function will always return the same list for the
- * same display.
+ * Subsequent calls to this function will always return the
+ * same list for the same display.
  *
- * You can listen to the GListModel::items-changed signal on this list
- * to monitor changes to the monitor of this display.
+ * You can listen to the GListModel::items-changed signal on
+ * this list to monitor changes to the monitor of this display.
  *
- * Returns: (transfer none): a #GListModel of #GdkMonitor
+ * Returns: (transfer none): a #GListModel of `GdkMonitor`
  */
 GListModel *
 gdk_display_get_monitors (GdkDisplay *self)
@@ -1383,14 +1383,17 @@ gdk_display_get_monitors (GdkDisplay *self)
 
 /**
  * gdk_display_get_monitor_at_surface:
- * @display: a #GdkDisplay
- * @surface: a #GdkSurface
+ * @display: a `GdkDisplay`
+ * @surface: a `GdkSurface`
  *
  * Gets the monitor in which the largest area of @surface
- * resides, or a monitor close to @surface if it is outside
+ * resides.
+ *
+ * Returns a monitor close to @surface if it is outside
  * of all monitors.
  *
- * Returns: (transfer none): the monitor with the largest overlap with @surface
+ * Returns: (transfer none): the monitor with the largest
+ *   overlap with @surface
  */
 GdkMonitor *
 gdk_display_get_monitor_at_surface (GdkDisplay *display,
@@ -1448,7 +1451,7 @@ gdk_display_emit_opened (GdkDisplay *display)
 
 /**
  * gdk_display_get_setting:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  * @name: the name of the setting
  * @value: location to store the value of the setting
  *
@@ -1502,23 +1505,24 @@ gdk_display_set_cursor_theme (GdkDisplay *display,
 
 /**
  * gdk_display_map_keyval:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  * @keyval: a keyval, such as %GDK_KEY_a, %GDK_KEY_Up, %GDK_KEY_Return, etc.
  * @keys: (out) (array length=n_keys) (transfer full): return location
- *     for an array of #GdkKeymapKey
+ *     for an array of `GdkKeymapKey`
  * @n_keys: return location for number of elements in returned array
  *
  * Obtains a list of keycode/group/level combinations that will
- * generate @keyval. Groups and levels are two kinds of keyboard mode;
- * in general, the level determines whether the top or bottom symbol
- * on a key is used, and the group determines whether the left or
- * right symbol is used.
+ * generate @keyval.
+ *
+ * Groups and levels are two kinds of keyboard mode; in general, the level
+ * determines whether the top or bottom symbol on a key is used, and the
+ * group determines whether the left or right symbol is used.
  *
  * On US keyboards, the shift key changes the keyboard level, and there
  * are no groups. A group switch key might convert a keyboard between
  * Hebrew to English modes, for example.
  *
- * #GdkEventKey contains a %group field that indicates the active
+ * `GdkEventKey` contains a %group field that indicates the active
  * keyboard group. The level is computed from the modifier mask.
  *
  * The returned array should be freed with g_free().
@@ -1539,16 +1543,17 @@ gdk_display_map_keyval (GdkDisplay    *display,
 
 /**
  * gdk_display_map_keycode:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  * @keycode: a keycode
  * @keys: (out) (array length=n_entries) (transfer full) (optional): return
- *     location for array of #GdkKeymapKey, or %NULL
+ *     location for array of `GdkKeymapKey`, or %NULL
  * @keyvals: (out) (array length=n_entries) (transfer full) (optional): return
  *     location for array of keyvals, or %NULL
  * @n_entries: length of @keys and @keyvals
  *
- * Returns the keyvals bound to @keycode. The Nth #GdkKeymapKey
- * in @keys is bound to the Nth keyval in @keyvals.
+ * Returns the keyvals bound to @keycode.
+ *
+ * The Nth `GdkKeymapKey` in @keys is bound to the Nth keyval in @keyvals.
  *
  * When a keycode is pressed by the user, the keyval from
  * this list of entries is selected by considering the effective
@@ -1574,7 +1579,7 @@ gdk_display_map_keycode (GdkDisplay    *display,
 
 /**
  * gdk_display_translate_key:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  * @keycode: a keycode
  * @state: a modifier state
  * @group: active keyboard group
@@ -1585,23 +1590,25 @@ gdk_display_map_keycode (GdkDisplay    *display,
  * @consumed: (out) (optional): return location for modifiers
  *     that were used to determine the group or level, or %NULL
  *
- * Translates the contents of a #GdkEventKey (ie @keycode, @state, and @group)
- * into a keyval, effective group, and level. Modifiers that affected the
- * translation and are thus unavailable for application use are returned in
- * @consumed_modifiers.
+ * Translates the contents of a `GdkEventKey` into a keyval, effective group,
+ * and level.
  *
- * The @effective_group is the group that was actually used for the translation;
- * some keys such as Enter are not affected by the active keyboard group.
- * The @level is derived from @state.
+ * Modifiers that affected the translation and are thus unavailable for
+ * application use are returned in @consumed_modifiers.
  *
- * @consumed_modifiers gives modifiers that should be masked outfrom @state
- * when comparing this key press to a keyboard shortcut. For instance, on a US
- * keyboard, the `plus` symbol is shifted, so when comparing a key press to a
- * `<Control>plus` accelerator `<Shift>` should be masked out.
+ * The @effective_group is the group that was actually used for the
+ * translation; some keys such as Enter are not affected by the active
+ * keyboard group. The @level is derived from @state.
  *
- * This function should rarely be needed, since #GdkEventKey already contains
- * the translated keyval. It is exported for the benefit of virtualized test
- * environments.
+ * @consumed_modifiers gives modifiers that should be masked out
+ * from @state when comparing this key press to a keyboard shortcut.
+ * For instance, on a US keyboard, the `plus` symbol is shifted, so
+ * when comparing a key press to a `<Control>plus` accelerator `<Shift>`
+ * should be masked out.
+ *
+ * This function should rarely be needed, since `GdkEventKey` already
+ * contains the translated keyval. It is exported for the benefit of
+ * virtualized test environments.
  *
  * Returns: %TRUE if there was a keyval bound to keycode/state/group.
  */
