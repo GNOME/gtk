@@ -13,13 +13,13 @@
 # Gökhan Gurbetoğlu <ggurbet@gmail.com>, 2015.
 # Muhammet Kara <muhammetk@gmail.com>, 2015, 2017.
 # Serdar Sağlam <teknomobil@msn.com>, 2019.
-# Emin Tufan Çetin <etcetin@gmail.com>, 2017, 2018, 2020.
+# Emin Tufan Çetin <etcetin@gmail.com>, 2017, 2018, 2020, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-02-19 14:25+0000\n"
+"POT-Creation-Date: 2021-02-21 16:25+0000\n"
 "PO-Revision-Date: 2021-02-21 19:23+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
