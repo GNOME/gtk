@@ -140,7 +140,6 @@ create_check_button (void)
 {
   GtkWidget *widget;
   GtkWidget *button;
-  GtkWidget *group;
 
   widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
@@ -153,6 +152,20 @@ create_check_button (void)
   button = gtk_check_button_new_with_mnemonic ("_Check Button");
   gtk_box_append (GTK_BOX (widget), button);
 
+  return new_widget_info ("check-button", widget, SMALL);
+}
+
+static WidgetInfo *
+create_radio_button (void)
+{
+  GtkWidget *widget;
+  GtkWidget *button;
+  GtkWidget *group;
+
+  widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+
   button = gtk_check_button_new_with_mnemonic ("Radio Button");
   gtk_check_button_set_active (GTK_CHECK_BUTTON (button), TRUE);
   gtk_box_append (GTK_BOX (widget), button);
@@ -162,7 +175,7 @@ create_check_button (void)
   gtk_box_append (GTK_BOX (widget), button);
   gtk_check_button_set_group (GTK_CHECK_BUTTON (button), GTK_CHECK_BUTTON (group));
 
-  return new_widget_info ("check-button", widget, MEDIUM);
+  return new_widget_info ("radio-button", widget, SMALL);
 }
 
 static WidgetInfo *
@@ -174,7 +187,7 @@ create_link_button (void)
   gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
 
-  return new_widget_info ("link-button", widget, SMALL);
+  return new_widget_info ("link-button", widget, MEDIUM);
 }
 
 static WidgetInfo *
@@ -2102,6 +2115,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_about_dialog ());
   retval = g_list_prepend (retval, create_button ());
   retval = g_list_prepend (retval, create_check_button ());
+  retval = g_list_prepend (retval, create_radio_button ());
   retval = g_list_prepend (retval, create_color_button ());
   retval = g_list_prepend (retval, create_combo_box ());
   retval = g_list_prepend (retval, create_combo_box_entry ());

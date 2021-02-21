@@ -25,6 +25,7 @@ Title: Widget Gallery
 [![togglebutton](toggle-button.png)](class.ToggleButton.html)
 [![linkbutton](link-button.png)](class.LinkButton.html)
 [![checkbutton](check-button.png)](class.CheckButton.html)
+[![checkbutton](radio-button.png)](class.CheckButton.html)
 [![menubutton](menu-button.png)](class.MenuButton.html)
 [![lockbutton](lockbutton.png)](class.LockButton.html)
 [![volumebutton](volumebutton.png)](class.VolumeButton.html)
