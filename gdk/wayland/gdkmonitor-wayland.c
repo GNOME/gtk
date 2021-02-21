@@ -23,6 +23,16 @@
 
 #include "gdkmonitor-wayland.h"
 
+/**
+ * GdkWaylandMonitor:
+ *
+ * The Wayland implementation of `GdkMonitor`.
+ *
+ * Beyond the [class@Gdk.Monitor] API, the Wayland implementation
+ * offers access to the Wayland `wl_output` object with
+ * [method@GdkWayland.WaylandMonitor.get_wl_output].
+ */
+
 G_DEFINE_TYPE (GdkWaylandMonitor, gdk_wayland_monitor, GDK_TYPE_MONITOR)
 
 static void
@@ -50,11 +60,11 @@ gdk_wayland_monitor_class_init (GdkWaylandMonitorClass *class)
 
 /**
  * gdk_wayland_monitor_get_wl_output: (skip)
- * @monitor: (type GdkWaylandMonitor): a #GdkMonitor
+ * @monitor: (type GdkWaylandMonitor): a `GdkMonitor`
  *
- * Returns the Wayland wl_output of a #GdkMonitor.
+ * Returns the Wayland `wl_output` of a `GdkMonitor`.
  *
- * Returns: (transfer none): a Wayland wl_output
+ * Returns: (transfer none): a Wayland `wl_output`
  */
 struct wl_output *
 gdk_wayland_monitor_get_wl_output (GdkMonitor *monitor)

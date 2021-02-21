@@ -35,6 +35,12 @@
 
 #include "gdkintl.h"
 
+/**
+ * GdkWaylandGLContext:
+ *
+ * The Wayland implementation of `GdkGLContext`.
+ */
+
 G_DEFINE_TYPE (GdkWaylandGLContext, gdk_wayland_gl_context, GDK_TYPE_GL_CONTEXT)
 
 static void gdk_wayland_gl_context_dispose (GObject *gobject);
