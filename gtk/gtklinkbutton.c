@@ -22,35 +22,34 @@
  */
 
 /**
- * SECTION:gtklinkbutton
- * @Title: GtkLinkButton
- * @Short_description: Create buttons bound to a URL
- * @See_also: #GtkButton
+ * GtkLinkButton:
  *
- * A GtkLinkButton is a #GtkButton with a hyperlink, similar to the one
- * used by web browsers, which triggers an action when clicked. It is useful
- * to show quick links to resources.
+ * A `GtkLinkButton` is a button with a hyperlink.
  *
- * A link button is created by calling either gtk_link_button_new() or
- * gtk_link_button_new_with_label(). If using the former, the URI you pass
- * to the constructor is used as a label for the widget.
+ * ![An example GtkLinkButton](link-button.png)
  *
- * The URI bound to a GtkLinkButton can be set specifically using
- * gtk_link_button_set_uri(), and retrieved using gtk_link_button_get_uri().
+ * It is useful to show quick links to resources.
  *
- * By default, GtkLinkButton calls gtk_show_uri() when the button is
- * clicked. This behaviour can be overridden by connecting to the
- * #GtkLinkButton::activate-link signal and returning %TRUE from the
- * signal handler.
+ * A link button is created by calling either [ctor@Gtk.LinkButton.new] or
+ * [ctor@Gtk.LinkButton.new_with_label]. If using the former, the URI you
+ * pass to the constructor is used as a label for the widget.
+ *
+ * The URI bound to a `GtkLinkButton` can be set specifically using
+ * [method@Gtk.LinkButton.set_uri].
+ *
+ * By default, `GtkLinkButton` calls [func@Gtk.show_uri] when the button
+ * is clicked. This behaviour can be overridden by connecting to the
+ * [signal@Gtk.LinkButton::activate-link] signal and returning %TRUE from
+ * the signal handler.
  *
  * # CSS nodes
  *
- * GtkLinkButton has a single CSS node with name button. To differentiate
- * it from a plain #GtkButton, it gets the .link style class.
+ * `GtkLinkButton` has a single CSS node with name button. To differentiate
+ * it from a plain `GtkButton`, it gets the .link style class.
  *
  * # Accessibility
  *
- * GtkLinkButton uses the #GTK_ACCESSIBLE_ROLE_LINK role.
+ * `GtkLinkButton` uses the #GTK_ACCESSIBLE_ROLE_LINK role.
  */
 
 #include "config.h"
@@ -185,8 +184,9 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
   /**
    * GtkLinkButton:visited:
    *
-   * The 'visited' state of this button. A visited link is drawn in a
-   * different color.
+   * The 'visited' state of this button.
+   *
+   * A visited link is drawn in a different color.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_VISITED,
@@ -200,15 +200,16 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
    * GtkLinkButton::activate-link:
    * @button: the #GtkLinkButton that emitted the signal
    *
-   * The ::activate-link signal is emitted each time the #GtkLinkButton
-   * has been clicked.
+   * Emitted each time the #GtkLinkButton is clicked.
    *
-   * The default handler will call gtk_show_uri() with the URI stored inside
-   * the #GtkLinkButton:uri property.
+   * The default handler will call [func@Gtk.show_uri] with the URI
+   * stored inside the [property@Gtk.LinkButton:uri] property.
    *
-   * To override the default behavior, you can connect to the ::activate-link
-   * signal and stop the propagation of the signal by returning %TRUE from
-   * your handler.
+   * To override the default behavior, you can connect to the
+   * ::activate-link signal and stop the propagation of the signal
+   * by returning %TRUE from your handler.
+   *
+   * Returns: %TRUE if the signal has been handled
    */
   link_signals[ACTIVATE_LINK] =
     g_signal_new (I_("activate-link"),
@@ -511,7 +512,7 @@ gtk_link_button_popup_menu (GtkWidget  *widget,
  * gtk_link_button_new:
  * @uri: a valid URI
  *
- * Creates a new #GtkLinkButton with the URI as its text.
+ * Creates a new `GtkLinkButton` with the URI as its text.
  *
  * Returns: a new link button widget.
  */
@@ -559,7 +560,7 @@ gtk_link_button_new (const char *uri)
  * @uri: a valid URI
  * @label: (allow-none): the text of the button
  *
- * Creates a new #GtkLinkButton containing a label.
+ * Creates a new `GtkLinkButton` containing a label.
  *
  * Returns: (transfer none): a new link button widget.
  */
@@ -614,11 +615,12 @@ gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
 
 /**
  * gtk_link_button_set_uri:
- * @link_button: a #GtkLinkButton
+ * @link_button: a `GtkLinkButton`
  * @uri: a valid URI
  *
- * Sets @uri as the URI where the #GtkLinkButton points. As a side-effect
- * this unsets the “visited” state of the button.
+ * Sets @uri as the URI where the `GtkLinkButton` points.
+ *
+ * As a side-effect this unsets the “visited” state of the button.
  */
 void
 gtk_link_button_set_uri (GtkLinkButton *link_button,
@@ -637,11 +639,11 @@ gtk_link_button_set_uri (GtkLinkButton *link_button,
 
 /**
  * gtk_link_button_get_uri:
- * @link_button: a #GtkLinkButton
+ * @link_button: a `GtkLinkButton`
  *
- * Retrieves the URI set using gtk_link_button_set_uri().
+ * Retrieves the URI of the `GtkLinkButton`.
  *
- * Returns: a valid URI.  The returned string is owned by the link button
+ * Returns: a valid URI. The returned string is owned by the link button
  *   and should not be modified or freed.
  */
 const char *
@@ -654,11 +656,12 @@ gtk_link_button_get_uri (GtkLinkButton *link_button)
 
 /**
  * gtk_link_button_set_visited:
- * @link_button: a #GtkLinkButton
+ * @link_button: a `GtkLinkButton`
  * @visited: the new “visited” state
  *
- * Sets the “visited” state of the URI where the #GtkLinkButton
- * points.  See gtk_link_button_get_visited() for more details.
+ * Sets the “visited” state of the `GtkLinkButton`.
+ *
+ * See [method@Gtk.LinkButton.get_visited] for more details.
  */
 void
 gtk_link_button_set_visited (GtkLinkButton *link_button,
@@ -689,13 +692,14 @@ gtk_link_button_set_visited (GtkLinkButton *link_button,
 
 /**
  * gtk_link_button_get_visited:
- * @link_button: a #GtkLinkButton
+ * @link_button: a `GtkLinkButton`
  *
- * Retrieves the “visited” state of the URI where the #GtkLinkButton
- * points. The button becomes visited when it is clicked. If the URI
+ * Retrieves the “visited” state of the `GtkLinkButton`.
+ *
+ * The button becomes visited when it is clicked. If the URI
  * is changed on the button, the “visited” state is unset again.
  *
- * The state may also be changed using gtk_link_button_set_visited().
+ * The state may also be changed using [method@Gtk.LinkButton.set_visited].
  *
  * Returns: %TRUE if the link has been visited, %FALSE otherwise
  */
