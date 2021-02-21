@@ -28,21 +28,22 @@
 #include "gtkstack.h"
 
 /**
- * SECTION:gtklockbutton
- * @title: GtkLockButton
- * @short_description: A widget to unlock or lock privileged operations
+ * GtkLockButton:
  *
- * GtkLockButton is a widget that can be used in control panels or
- * preference dialogs to allow users to obtain and revoke authorizations
+ * `GtkLockButton` is a widget to obtain and revoke authorizations
  * needed to operate the controls.
  *
- * The required authorization is represented by a #GPermission object.
- * Concrete implementations of #GPermission may use PolicyKit or some
- * other authorization framework. To obtain a PolicyKit-based
- * #GPermission, use `polkit_permission_new()`.
+ * ![An example GtkLockButton](lock-button.png)
  *
- * If the user is not currently allowed to perform the action, but can obtain
- * the permission, the widget looks like this:
+ * It is typically used in preference dialogs or control panels.
+ *
+ * The required authorization is represented by a `GPermission` object.
+ * Concrete implementations of `GPermission` may use PolicyKit or some
+ * other authorization framework. To obtain a PolicyKit-based
+ * `GPermission`, use `polkit_permission_new()`.
+ *
+ * If the user is not currently allowed to perform the action, but can
+ * obtain the permission, the widget looks like this:
  *
  * ![](lockbutton-locked.png)
  *
@@ -61,9 +62,11 @@
  * If the user has the permission and cannot drop it, the button is hidden.
  *
  * The text (and tooltips) that are shown in the various cases can be adjusted
- * with the #GtkLockButton:text-lock, #GtkLockButton:text-unlock,
- * #GtkLockButton:tooltip-lock, #GtkLockButton:tooltip-unlock and
- * #GtkLockButton:tooltip-not-authorized properties.
+ * with the [property@Gtk.LockButton:text-lock],
+ * [property@Gtk.LockButton:text-unlock],
+ * [property@Gtk.LockButton:tooltip-lock],
+ * [property@Gtk.LockButton:tooltip-unlock] and
+ * [property@Gtk.LockButton:tooltip-not-authorized] properties.
  */
 
 struct _GtkLockButton
@@ -261,6 +264,11 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
 
   button_class->clicked = gtk_lock_button_clicked;
 
+  /**
+   * GtkLockButton:permission:
+   *
+   * The `GPermission object controlling this button.
+   */
   g_object_class_install_property (gobject_class, PROP_PERMISSION,
     g_param_spec_object ("permission",
                          P_("Permission"),
@@ -269,6 +277,11 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
                          G_PARAM_READWRITE |
                          G_PARAM_STATIC_STRINGS));
 
+  /**
+   * GtkLockButton:text-lock:
+   *
+   * The text to display when prompting the user to lock.
+   */
   g_object_class_install_property (gobject_class, PROP_TEXT_LOCK,
     g_param_spec_string ("text-lock",
                          P_("Lock Text"),
@@ -278,6 +291,11 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
                          G_PARAM_CONSTRUCT |
                          G_PARAM_STATIC_STRINGS));
 
+  /**
+   * GtkLockButton:text-unlock:
+   *
+   * The text to display when prompting the user to unlock.
+   */
   g_object_class_install_property (gobject_class, PROP_TEXT_UNLOCK,
     g_param_spec_string ("text-unlock",
                          P_("Unlock Text"),
@@ -287,6 +305,11 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
                          G_PARAM_CONSTRUCT |
                          G_PARAM_STATIC_STRINGS));
 
+  /**
+   * GtkLockButton:tooltip-lock:
+   *
+   * The tooltip to display when prompting the user to lock.
+   */
   g_object_class_install_property (gobject_class, PROP_TOOLTIP_LOCK,
     g_param_spec_string ("tooltip-lock",
                          P_("Lock Tooltip"),
@@ -296,6 +319,11 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
                          G_PARAM_CONSTRUCT |
                          G_PARAM_STATIC_STRINGS));
 
+  /**
+   * GtkLockButton:tooltip-unlock:
+   *
+   * The tooltip to display when prompting the user to unlock.
+   */
   g_object_class_install_property (gobject_class, PROP_TOOLTIP_UNLOCK,
     g_param_spec_string ("tooltip-unlock",
                          P_("Unlock Tooltip"),
@@ -305,6 +333,11 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
                          G_PARAM_CONSTRUCT |
                          G_PARAM_STATIC_STRINGS));
 
+  /**
+   * GtkLockButton:tooltip-not-authorized:
+   *
+   * The tooltip to display when the user cannot obtain authorization.
+   */
   g_object_class_install_property (gobject_class, PROP_TOOLTIP_NOT_AUTHORIZED,
     g_param_spec_string ("tooltip-not-authorized",
                          P_("Not Authorized Tooltip"),
@@ -482,11 +515,11 @@ gtk_lock_button_clicked (GtkButton *widget)
 
 /**
  * gtk_lock_button_new:
- * @permission: (allow-none): a #GPermission
+ * @permission: (allow-none): a `GPermission`
  *
  * Creates a new lock button which reflects the @permission.
  *
- * Returns: a new #GtkLockButton
+ * Returns: a new `GtkLockButton`
  */
 GtkWidget *
 gtk_lock_button_new (GPermission *permission)
@@ -498,11 +531,11 @@ gtk_lock_button_new (GPermission *permission)
 
 /**
  * gtk_lock_button_get_permission:
- * @button: a #GtkLockButton
+ * @button: a `GtkLockButton`
  *
- * Obtains the #GPermission object that controls @button.
+ * Obtains the `GPermission` object that controls @button.
  *
- * Returns: (transfer none): the #GPermission of @button
+ * Returns: (transfer none): the `GPermission` of @button
  */
 GPermission *
 gtk_lock_button_get_permission (GtkLockButton *button)
@@ -514,10 +547,10 @@ gtk_lock_button_get_permission (GtkLockButton *button)
 
 /**
  * gtk_lock_button_set_permission:
- * @button: a #GtkLockButton
- * @permission: (allow-none): a #GPermission object, or %NULL
+ * @button: a `GtkLockButton`
+ * @permission: (allow-none): a `GPermission` object, or %NULL
  *
- * Sets the #GPermission object that controls @button.
+ * Sets the `GPermission` object that controls @button.
  */
 void
 gtk_lock_button_set_permission (GtkLockButton *button,
