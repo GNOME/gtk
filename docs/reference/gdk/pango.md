@@ -9,17 +9,18 @@ GDK.
 
 Creating a `PangoLayout` object is the first step in rendering text,
 and requires getting a handle to a `PangoContext`. For GTK programs,
-you’ll usually want to use `gtk_widget_get_pango_context()`, or
-`gtk_widget_create_pango_layout()`. Once you have a `PangoLayout`,
+you’ll usually want to use [method@Gtk.Widget.get_pango_context], or
+[method@Gtk.Widget.create_pango_layout]. Once you have a `PangoLayout`,
 you can set the text and attributes of it with Pango functions like
-`pango_layout_set_text()` and get its size with `pango_layout_get_size()`.
+[method@Pango.Layout.set_text] and get its size with
+[method@Pango.Layout.get_size].
 
 *Note*: Pango uses a fixed point system internally, so converting
 between Pango units and pixels using `PANGO_SCALE` or the `PANGO_PIXELS()`
 macro.
 
-Rendering a Pango layout is done most simply with `pango_cairo_show_layout()`;
-you can also draw pieces of the layout with `pango_cairo_show_layout_line()`.
+Rendering a Pango layout is done most simply with [func@PangoCairo.show_layout];
+you can also draw pieces of the layout with [func@PangoCairo.show_layout_line].
 
 ### Draw transformed text with Pango and cairo
 
