@@ -29,39 +29,41 @@
 #include <string.h>
 
 /**
- * SECTION:gtkcomboboxtext
- * @Short_description: A simple, text-only combo box
- * @Title: GtkComboBoxText
- * @See_also: #GtkComboBox
+ * GtkComboBoxText:
  *
- * A GtkComboBoxText is a simple variant of #GtkComboBox that hides
- * the model-view complexity for simple text-only use cases.
+ * A `GtkComboBoxText` is a simple variant of `GtkComboBox` for text-only
+ * use cases.
  *
- * To create a GtkComboBoxText, use gtk_combo_box_text_new() or
- * gtk_combo_box_text_new_with_entry().
+ * ![An example GtkComboBoxText](combo-box-text.png)
  *
- * You can add items to a GtkComboBoxText with
- * gtk_combo_box_text_append_text(), gtk_combo_box_text_insert_text()
- * or gtk_combo_box_text_prepend_text() and remove options with
- * gtk_combo_box_text_remove().
+ * `GtkComboBoxText` hides the model-view complexity of `GtkComboBox`.
  *
- * If the GtkComboBoxText contains an entry (via the “has-entry” property),
- * its contents can be retrieved using gtk_combo_box_text_get_active_text().
- * The entry itself can be accessed by calling gtk_bin_get_child() on the
- * combo box.
+ * To create a `GtkComboBoxText`, use [ctor@Gtk.ComboBoxText.new] or
+ * [ctor@Gtk.ComboBoxText.new_with_entry].
  *
- * You should not call gtk_combo_box_set_model() or attempt to pack more cells
- * into this combo box via its GtkCellLayout interface.
+ * You can add items to a `GtkComboBoxText` with
+ * [method@Gtk.ComboBoxText.append_text],
+ * [method@Gtk.ComboBoxText.insert_text] or
+ * [method@Gtk.ComboBoxText.prepend_text] and remove options with
+ * [method@Gtk.ComboBoxText.remove].
+ *
+ * If the `GtkComboBoxText` contains an entry (via the
+ * [property@Gtk.ComboBox:has-entry] property), its contents can be retrieved
+ * using [method@Gtk.ComboBoxText.get_active_text]. The entry itself can be
+ * accessed by calling [method@Gtk.ComboBox.get_child] on the combo box.
+ *
+ * You should not call [method@Gtk.ComboBox.set_model] or attempt to pack more
+ * cells into this combo box via its [interface@Gtk.CellLayout] interface.
  *
  * # GtkComboBoxText as GtkBuildable
  *
- * The GtkComboBoxText implementation of the GtkBuildable interface supports
+ * The `GtkComboBoxText` implementation of the `GtkBuildable` interface supports
  * adding items directly using the <items> element and specifying <item>
  * elements for each item. Each <item> element can specify the “id”
  * corresponding to the appended text and also supports the regular
  * translation attributes “translatable”, “context” and “comments”.
  *
- * Here is a UI definition fragment specifying GtkComboBoxText items:
+ * Here is a UI definition fragment specifying `GtkComboBoxText` items:
  * |[
  * <object class="GtkComboBoxText">
  *   <items>
@@ -82,7 +84,7 @@
  *     ╰── window.popup
  * ]|
  *
- * GtkComboBoxText has a single CSS node with name combobox. It adds
+ * `GtkComboBoxText` has a single CSS node with name combobox. It adds
  * the style class .combo to the main CSS nodes of its entry and button
  * children, and the .linked class to the node of its internal box.
  */
@@ -346,10 +348,9 @@ gtk_combo_box_text_buildable_custom_finished (GtkBuildable *buildable,
 /**
  * gtk_combo_box_text_new:
  *
- * Creates a new #GtkComboBoxText, which is a #GtkComboBox just displaying
- * strings.
+ * Creates a new `GtkComboBoxText`.
  *
- * Returns: A new #GtkComboBoxText
+ * Returns: A new `GtkComboBoxText`
  */
 GtkWidget *
 gtk_combo_box_text_new (void)
@@ -361,10 +362,9 @@ gtk_combo_box_text_new (void)
 /**
  * gtk_combo_box_text_new_with_entry:
  *
- * Creates a new #GtkComboBoxText, which is a #GtkComboBox just displaying
- * strings. The combo box created by this function has an entry.
+ * Creates a new `GtkComboBoxText` with an entry.
  *
- * Returns: a new #GtkComboBoxText
+ * Returns: a new `GtkComboBoxText`
  */
 GtkWidget *
 gtk_combo_box_text_new_with_entry (void)
@@ -376,13 +376,13 @@ gtk_combo_box_text_new_with_entry (void)
 
 /**
  * gtk_combo_box_text_append_text:
- * @combo_box: A #GtkComboBoxText
+ * @combo_box: A `GtkComboBoxText`
  * @text: A string
  *
  * Appends @text to the list of strings stored in @combo_box.
  *
- * This is the same as calling gtk_combo_box_text_insert_text() with a
- * position of -1.
+ * This is the same as calling [method@Gtk.ComboBoxText.insert_text]
+ * with a position of -1.
  */
 void
 gtk_combo_box_text_append_text (GtkComboBoxText *combo_box,
@@ -393,13 +393,13 @@ gtk_combo_box_text_append_text (GtkComboBoxText *combo_box,
 
 /**
  * gtk_combo_box_text_prepend_text:
- * @combo_box: A #GtkComboBox
+ * @combo_box: A `GtkComboBox`
  * @text: A string
  *
  * Prepends @text to the list of strings stored in @combo_box.
  *
- * This is the same as calling gtk_combo_box_text_insert_text() with a
- * position of 0.
+ * This is the same as calling [method@Gtk.ComboBoxText.insert_text]
+ * with a position of 0.
  */
 void
 gtk_combo_box_text_prepend_text (GtkComboBoxText *combo_box,
@@ -410,7 +410,7 @@ gtk_combo_box_text_prepend_text (GtkComboBoxText *combo_box,
 
 /**
  * gtk_combo_box_text_insert_text:
- * @combo_box: A #GtkComboBoxText
+ * @combo_box: A `GtkComboBoxText`
  * @position: An index to insert @text
  * @text: A string
  *
@@ -418,8 +418,8 @@ gtk_combo_box_text_prepend_text (GtkComboBoxText *combo_box,
  *
  * If @position is negative then @text is appended.
  *
- * This is the same as calling gtk_combo_box_text_insert() with a %NULL
- * ID string.
+ * This is the same as calling [method@Gtk.ComboBoxText.insert]
+ * with a %NULL ID string.
  */
 void
 gtk_combo_box_text_insert_text (GtkComboBoxText *combo_box,
@@ -431,15 +431,16 @@ gtk_combo_box_text_insert_text (GtkComboBoxText *combo_box,
 
 /**
  * gtk_combo_box_text_append:
- * @combo_box: A #GtkComboBoxText
+ * @combo_box: A `GtkComboBoxText`
  * @id: (allow-none): a string ID for this value, or %NULL
  * @text: A string
  *
  * Appends @text to the list of strings stored in @combo_box.
+ *
  * If @id is non-%NULL then it is used as the ID of the row.
  *
- * This is the same as calling gtk_combo_box_text_insert() with a
- * position of -1.
+ * This is the same as calling [method@Gtk.ComboBoxText.insert]
+ * with a position of -1.
  */
 void
 gtk_combo_box_text_append (GtkComboBoxText *combo_box,
@@ -451,15 +452,16 @@ gtk_combo_box_text_append (GtkComboBoxText *combo_box,
 
 /**
  * gtk_combo_box_text_prepend:
- * @combo_box: A #GtkComboBox
+ * @combo_box: A `GtkComboBox`
  * @id: (allow-none): a string ID for this value, or %NULL
  * @text: a string
  *
  * Prepends @text to the list of strings stored in @combo_box.
+ *
  * If @id is non-%NULL then it is used as the ID of the row.
  *
- * This is the same as calling gtk_combo_box_text_insert() with a
- * position of 0.
+ * This is the same as calling [method@Gtk.ComboBoxText.insert]
+ * with a position of 0.
  */
 void
 gtk_combo_box_text_prepend (GtkComboBoxText *combo_box,
@@ -472,14 +474,15 @@ gtk_combo_box_text_prepend (GtkComboBoxText *combo_box,
 
 /**
  * gtk_combo_box_text_insert:
- * @combo_box: A #GtkComboBoxText
+ * @combo_box: A `GtkComboBoxText`
  * @position: An index to insert @text
  * @id: (allow-none): a string ID for this value, or %NULL
  * @text: A string to display
  *
  * Inserts @text at @position in the list of strings stored in @combo_box.
- * If @id is non-%NULL then it is used as the ID of the row.  See
- * #GtkComboBox:id-column.
+ *
+ * If @id is non-%NULL then it is used as the ID of the row.
+ * See [property@Gtk.ComboBox:id-column].
  *
  * If @position is negative then @text is appended.
  */
@@ -529,7 +532,7 @@ gtk_combo_box_text_insert (GtkComboBoxText *combo_box,
 
 /**
  * gtk_combo_box_text_remove:
- * @combo_box: A #GtkComboBox
+ * @combo_box: A `GtkComboBox`
  * @position: Index of the item to remove
  *
  * Removes the string at @position from @combo_box.
@@ -555,7 +558,7 @@ gtk_combo_box_text_remove (GtkComboBoxText *combo_box,
 
 /**
  * gtk_combo_box_text_remove_all:
- * @combo_box: A #GtkComboBoxText
+ * @combo_box: A `GtkComboBoxText`
  *
  * Removes all the text entries from the combo box.
  */
@@ -572,15 +575,18 @@ gtk_combo_box_text_remove_all (GtkComboBoxText *combo_box)
 
 /**
  * gtk_combo_box_text_get_active_text:
- * @combo_box: A #GtkComboBoxText
+ * @combo_box: A `GtkComboBoxText`
  *
- * Returns the currently active string in @combo_box, or %NULL
- * if none is selected. If @combo_box contains an entry, this
- * function will return its contents (which will not necessarily
+ * Returns the currently active string in @combo_box.
+ *
+ * If no row is currently selected, %NULL is returned.
+ * If @combo_box contains an entry, this function will
+ * return its contents (which will not necessarily
  * be an item from the list).
  *
- * Returns: (nullable) (transfer full): a newly allocated string containing the
- *     currently active text. Must be freed with g_free().
+ * Returns: (nullable) (transfer full): a newly allocated
+ *   string containing the currently active text.
+ *   Must be freed with g_free().
  */
 char *
 gtk_combo_box_text_get_active_text (GtkComboBoxText *combo_box)
