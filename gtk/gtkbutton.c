@@ -23,35 +23,36 @@
  */
 
 /**
- * SECTION:gtkbutton
- * @Short_description: A widget that emits a signal when clicked on
- * @Title: GtkButton
+ * GtkButton:
  *
- * The #GtkButton widget is generally used to trigger a callback function that is
+ * The `GtkButton` widget is generally used to trigger a callback function that is
  * called when the button is pressed.
  *
- * The #GtkButton widget can hold any valid child widget.  That is, it can hold
- * almost any other standard #GtkWidget.  The most commonly used child is the
- * #GtkLabel.
+ * ![An example GtkButton](button.png)
+ *
+ * The `GtkButton` widget can hold any valid child widget.  That is, it can hold
+ * almost any other standard `GtkWidget`. The most commonly used child is the
+ * `GtkLabel`.
  *
  * # CSS nodes
  *
- * GtkButton has a single CSS node with name button. The node will get the
+ * `GtkButton` has a single CSS node with name button. The node will get the
  * style classes .image-button or .text-button, if the content is just an
  * image or label, respectively. It may also receive the .flat style class.
  *
- * Other style classes that are commonly used with GtkButton include
+ * Other style classes that are commonly used with `GtkButton` include
  * .suggested-action and .destructive-action. In special cases, buttons
  * can be made round by adding the .circular style class.
  *
- * Button-like widgets like #GtkToggleButton, #GtkMenuButton, #GtkVolumeButton,
- * #GtkLockButton, #GtkColorButton or #GtkFontButton use style classes such as
- * .toggle, .popup, .scale, .lock, .color on the button node
- * to differentiate themselves from a plain GtkButton.
+ * Button-like widgets like [class@Gtk.ToggleButton], [class@Gtk.MenuButton],
+ * [class@Gtk.VolumeButton], [class@Gtk.LockButton], [class@Gtk.ColorButton]
+ * or [class@Gtk.FontButton] use style classes such as .toggle, .popup, .scale,
+ * .lock, .color on the button node to differentiate themselves from a plain
+ * `GtkButton`.
  *
  * # Accessibility
  *
- * GtkButton uses the #GTK_ACCESSIBLE_ROLE_BUTTON role.
+ * `GtkButton` uses the #GTK_ACCESSIBLE_ROLE_BUTTON role.
  */
 
 #include "config.h"
@@ -209,6 +210,11 @@ gtk_button_class_init (GtkButtonClass *klass)
   klass->clicked = NULL;
   klass->activate = gtk_real_button_activate;
 
+  /**
+   * GtkButton:label:
+   *
+   * Text of the label inside the button, if the button contains a label widget.
+   */
   props[PROP_LABEL] =
     g_param_spec_string ("label",
                          P_("Label"),
@@ -216,6 +222,12 @@ gtk_button_class_init (GtkButtonClass *klass)
                          NULL,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkButton:use-underline:
+   *
+   * If set, an underline in the text indicates that the following character is
+   * to be used as mnemonic.
+   */
   props[PROP_USE_UNDERLINE] =
     g_param_spec_boolean ("use-underline",
                           P_("Use underline"),
@@ -223,6 +235,11 @@ gtk_button_class_init (GtkButtonClass *klass)
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkButton:has-frame:
+   *
+   * Whether the button has a frame.
+   */
   props[PROP_HAS_FRAME] =
     g_param_spec_boolean ("has-frame",
                           P_("Has Frame"),
@@ -230,6 +247,11 @@ gtk_button_class_init (GtkButtonClass *klass)
                           TRUE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkButton:icon-name:
+   *
+   * The name of the icon used to automatically populate the button.
+   */
   props[PROP_ICON_NAME] =
     g_param_spec_string ("icon-name",
                          P_("Icon Name"),
@@ -237,6 +259,11 @@ gtk_button_class_init (GtkButtonClass *klass)
                          NULL,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkButton:child:
+   *
+   * The child widget.
+   */
   props[PROP_CHILD] =
     g_param_spec_object ("child",
                          P_("Child"),
@@ -268,10 +295,10 @@ gtk_button_class_init (GtkButtonClass *klass)
    * GtkButton::activate:
    * @widget: the object which received the signal.
    *
-   * The ::activate signal on GtkButton is an action signal and
-   * emitting it causes the button to animate press then release.
-   * Applications should never connect to this signal, but use the
-   * #GtkButton::clicked signal.
+   * Emitted to animate press then release.
+   *
+   * This is an action signal. Applications should never connect
+   * to this signal, but use the [signal@Gtk.Button::clicked] signal.
    */
   button_signals[ACTIVATE] =
     g_signal_new (I_("activate"),
@@ -583,10 +610,11 @@ gtk_button_buildable_iface_init (GtkBuildableIface *iface)
 /**
  * gtk_button_new:
  *
- * Creates a new #GtkButton widget. To add a child widget to the button,
- * use gtk_button_set_child().
+ * Creates a new `GtkButton` widget.
  *
- * Returns: The newly created #GtkButton widget.
+ * To add a child widget to the button, use [method@Gtk.Button.set_child].
+ *
+ * Returns: The newly created `GtkButton` widget.
  */
 GtkWidget*
 gtk_button_new (void)
@@ -596,12 +624,11 @@ gtk_button_new (void)
 
 /**
  * gtk_button_new_with_label:
- * @label: The text you want the #GtkLabel to hold.
+ * @label: The text you want the `GtkLabel` to hold
  *
- * Creates a #GtkButton widget with a #GtkLabel child containing the given
- * text.
+ * Creates a `GtkButton` widget with a `GtkLabel` child.
  *
- * Returns: The newly created #GtkButton widget.
+ * Returns: The newly created `GtkButton` widget
  */
 GtkWidget*
 gtk_button_new_with_label (const char *label)
@@ -619,7 +646,7 @@ gtk_button_new_with_label (const char *label)
  * displayed instead. If the current icon theme is changed, the icon
  * will be updated appropriately.
  *
- * Returns: a new #GtkButton displaying the themed icon
+ * Returns: a new `GtkButton` displaying the themed icon
  */
 GtkWidget*
 gtk_button_new_from_icon_name (const char *icon_name)
@@ -638,14 +665,14 @@ gtk_button_new_from_icon_name (const char *icon_name)
  * @label: The text of the button, with an underscore in front of the
  *         mnemonic character
  *
- * Creates a new #GtkButton containing a label.
+ * Creates a new `GtkButton` containing a label.
+ *
  * If characters in @label are preceded by an underscore, they are underlined.
  * If you need a literal underscore character in a label, use “__” (two
  * underscores). The first underlined character represents a keyboard
- * accelerator called a mnemonic.
- * Pressing Alt and that key activates the button.
+ * accelerator called a mnemonic. Pressing Alt and that key activates the button.
  *
- * Returns: a new #GtkButton
+ * Returns: a new `GtkButton`
  */
 GtkWidget*
 gtk_button_new_with_mnemonic (const char *label)
@@ -655,11 +682,12 @@ gtk_button_new_with_mnemonic (const char *label)
 
 /**
  * gtk_button_set_has_frame:
- * @button: a #GtkButton
+ * @button: a `GtkButton`
  * @has_frame: whether the button should have a visible frame
  *
- * Sets the style of the button. Buttons can has a flat appearance
- * or have a frame drawn around them.
+ * Sets the style of the button.
+ *
+ * Buttons can has a flat appearance or have a frame drawn around them.
  */
 void
 gtk_button_set_has_frame (GtkButton *button,
@@ -681,7 +709,7 @@ gtk_button_set_has_frame (GtkButton *button,
 
 /**
  * gtk_button_get_has_frame:
- * @button: a #GtkButton
+ * @button: a `GtkButton`
  *
  * Returns whether the button has a frame.
  *
@@ -773,7 +801,7 @@ gtk_button_finish_activate (GtkButton *button,
 
 /**
  * gtk_button_set_label:
- * @button: a #GtkButton
+ * @button: a `GtkButton`
  * @label: a string
  *
  * Sets the text of the label of the button to @label.
@@ -817,13 +845,13 @@ gtk_button_set_label (GtkButton   *button,
 
 /**
  * gtk_button_get_label:
- * @button: a #GtkButton
+ * @button: a `GtkButton`
  *
- * Fetches the text from the label of the button, as set by
- * gtk_button_set_label(). If the label text has not
- * been set the return value will be %NULL. This will be the
- * case if you create an empty button with gtk_button_new() to
- * use as a container.
+ * Fetches the text from the label of the button.
+ *
+ * If the label text has not been set with [method@Gtk.Button.set_label]
+ * the return value will be %NULL. This will be the case if you create
+ * an empty button with [ctor@Gtk.Button.new] to use as a container.
  *
  * Returns: (nullable): The text of the label widget. This string is owned
  * by the widget and must not be modified or freed.
@@ -843,8 +871,10 @@ gtk_button_get_label (GtkButton *button)
 
 /**
  * gtk_button_set_use_underline:
- * @button: a #GtkButton
+ * @button: a `GtkButton`
  * @use_underline: %TRUE if underlines in the text indicate mnemonics
+ *
+ * Sets whether to use underlines as mnemonics.
  *
  * If true, an underline in the text of the button label indicates
  * the next character should be used for the mnemonic accelerator key.
@@ -874,13 +904,14 @@ gtk_button_set_use_underline (GtkButton *button,
 
 /**
  * gtk_button_get_use_underline:
- * @button: a #GtkButton
+ * @button: a `GtkButton`
  *
- * Returns whether an embedded underline in the button label indicates a
- * mnemonic. See gtk_button_set_use_underline().
+ * gets whether underlines are interpreted as mnemonics.
+ *
+ * See [method@Gtk.Button.set_use_underline].
  *
  * Returns: %TRUE if an embedded underline in the button label
- *               indicates the mnemonic accelerator keys.
+ *   indicates the mnemonic accelerator keys.
  */
 gboolean
 gtk_button_get_use_underline (GtkButton *button)
@@ -904,12 +935,13 @@ gtk_button_state_flags_changed (GtkWidget     *widget,
 
 /**
  * gtk_button_set_icon_name:
- * @button: A #GtkButton
+ * @button: A `GtkButton`
  * @icon_name: An icon name
  *
- * Adds a #GtkImage with the given icon name as a child. If @button already
- * contains a child widget, that child widget will be removed and replaced
- * with the image.
+ * Adds a `GtkImage` with the given icon name as a child.
+ *
+ * If @button already contains a child widget, that child widget will
+ * be removed and replaced with the image.
  */
 void
 gtk_button_set_icon_name (GtkButton  *button,
@@ -946,11 +978,15 @@ gtk_button_set_icon_name (GtkButton  *button,
 
 /**
  * gtk_button_get_icon_name:
- * @button: A #GtkButton
+ * @button: A `GtkButton`
  *
- * Returns the icon name set via gtk_button_set_icon_name().
+ * Returns the icon name of the button.
  *
- * Returns: (nullable): The icon name set via gtk_button_set_icon_name()
+ * If the icon name has not been set with [method@Gtk.Button.set_icon_name]
+ * the return value will be %NULL. This will be the case if you create
+ * an empty button with [ctor@Gtk.Button.new] to use as a container.
+ *
+ * Returns: (nullable): The icon name set via [method@Gtk.Button.set_icon_name]
  */
 const char *
 gtk_button_get_icon_name (GtkButton *button)
@@ -975,7 +1011,7 @@ gtk_button_get_gesture (GtkButton *button)
 
 /**
  * gtk_button_set_child:
- * @button: a #GtkButton
+ * @button: a `GtkButton`
  * @child: (allow-none): the child widget
  *
  * Sets the child widget of @button.
@@ -1002,7 +1038,7 @@ gtk_button_set_child (GtkButton *button,
 
 /**
  * gtk_button_get_child:
- * @button: a #GtkButton
+ * @button: a `GtkButton`
  *
  * Gets the child widget of @button.
  *
@@ -1017,4 +1053,3 @@ gtk_button_get_child (GtkButton *button)
 
   return priv->child;
 }
-
