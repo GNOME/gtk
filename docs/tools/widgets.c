@@ -118,9 +118,17 @@ static WidgetInfo *
 create_toggle_button (void)
 {
   GtkWidget *widget;
+  GtkWidget *button;
 
-  widget = gtk_toggle_button_new_with_mnemonic ("_Toggle Button");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+  widget = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_box_set_homogeneous (GTK_BOX (widget), TRUE);
+  gtk_widget_add_css_class (widget, "linked");
+  button = gtk_toggle_button_new_with_label ("Toggle");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+  gtk_box_append (GTK_BOX (widget), button);
+  button = gtk_toggle_button_new_with_label ("Button");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
+  gtk_box_append (GTK_BOX (widget), button);
   gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
 
