@@ -232,6 +232,10 @@ struct _GtkExpressionWatch
   guchar                 sub[0];
 };
 
+G_DEFINE_BOXED_TYPE (GtkExpressionWatch, gtk_expression_watch,
+                     gtk_expression_watch_ref,
+                     gtk_expression_watch_unref)
+
 #define GTK_EXPRESSION_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_EXPRESSION, GtkExpressionClass))
 
 /*< private >
