@@ -26,7 +26,7 @@
  * GdkPopupLayout:
  *
  * The `GdkPopupLayout` struct contains information that is
- * necessary position a `GdkPopup` relaive to its parent.
+ * necessary position a [interface@Gdk.Popup] relative to its parent.
  *
  * The positioning requires a negotiation with the windowing system,
  * since it depends on external constraints, such as the position of

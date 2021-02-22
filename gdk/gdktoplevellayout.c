@@ -28,7 +28,8 @@
  * The `GdkToplevelLayout` struct contains information that
  * is necessary to present a sovereign window on screen.
  *
- * The `GdkToplevelLayout` gdk_toplevel_present().
+ * The `GdkToplevelLayout` struct is necessary for using
+ * [method@Gdk.Toplevel.present].
  *
  * Toplevel surfaces are sovereign windows that can be presented
  * to the user in various states (maximized, on all workspaces,

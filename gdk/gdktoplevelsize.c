@@ -24,7 +24,7 @@
  * GdkToplevelSize:
  *
  * The `GdkToplevelSize` struct contains information that is useful
- * to compute the size of a toplevel size.
+ * to compute the size of a toplevel.
  */
 
 G_DEFINE_POINTER_TYPE (GdkToplevelSize, gdk_toplevel_size)
