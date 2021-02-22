@@ -47,7 +47,7 @@ G_BEGIN_DECLS
 #define GDK_IS_EVENT_TYPE(event, type)  (gdk_event_get_event_type ((event)) == (type))
 
 /**
- * GDK_PRIORITY_EVENTS: (value: 0)
+ * GDK_PRIORITY_EVENTS: (value 0)
  *
  * This is the priority that events from the X server are given in the main loop.
  */
