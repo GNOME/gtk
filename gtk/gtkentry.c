@@ -526,7 +526,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:invisible=char:
+   * GtkEntry:invisible-char:
    *
    * The character to use when masking entry contents (“password mode”).
    */
