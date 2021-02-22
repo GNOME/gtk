@@ -44,13 +44,15 @@
 
 
 /**
- * SECTION:gtksearchentry
- * @Short_description: An entry which shows a search icon
- * @Title: GtkSearchEntry
+ * GtkSearchEntry:
  *
- * #GtkSearchEntry is an entry widget that has been tailored for use
- * as a search entry. The main aPI for interacting with a GtkSearchEntry
- * as entry is the #GtkEditable interface.
+ * `GtkSearchEntry` is an entry widget that has been tailored for use
+ * as a search entry.
+ *
+ * The main API for interacting with a `GtkSearchEntry` as entry
+ * is the `GtkEditable` interface.
+ *
+ * ![An example GtkSearchEntry](search-entry.png)
  *
  * It will show an inactive symbolic “find” icon when the search
  * entry is empty, and a symbolic “clear” icon when there is text.
@@ -58,32 +60,33 @@
  *
  * To make filtering appear more reactive, it is a good idea to
  * not react to every change in the entry text immediately, but
- * only after a short delay. To support this, #GtkSearchEntry
- * emits the #GtkSearchEntry::search-changed signal which can
- * be used instead of the #GtkEditable::changed signal.
+ * only after a short delay. To support this, `GtkSearchEntry`
+ * emits the [signal@Gtk.SearchEntry::search-changed] signal which
+ * can be used instead of the [signal@Gtk.Editable::changed] signal.
  *
- * The #GtkSearchEntry::previous-match, #GtkSearchEntry::next-match
- * and #GtkSearchEntry::stop-search signals can be used to implement
- * moving between search results and ending the search.
+ * The [signal@Gtk.SearchEntry::previous-match],
+ * [signal@Gtk.SearchEntry::next-match] and
+ * [signal@Gtk.SearchEntry::stop-search] signals can be used to
+ * implement moving between search results and ending the search.
  *
- * Often, GtkSearchEntry will be fed events by means of being
- * placed inside a #GtkSearchBar. If that is not the case,
- * you can use gtk_search_entry_set_key_capture_widget() to let it
- * capture key input from another widget.
+ * Often, `GtkSearchEntry` will be fed events by means of being
+ * placed inside a [class@Gtk.SearchBar]. If that is not the case,
+ * you can use [method@Gtk.SearchEntry.set_key_capture_widget] to
+ * let it capture key input from another widget.
  *
- * # CSS Nodes
+ * ## CSS Nodes
  *
  * |[<!-- language="plain" -->
  * entry.search
  * ╰── text
  * ]|
  *
- * GtkSearchEntry has a single CSS node with name entry that carries
- * a .search style class, and the text node is a child of that.
+ * `GtkSearchEntry` has a single CSS node with name entry that carries
+ * a `.search` style class, and the text node is a child of that.
  *
- * # Accessibility
+ * ## Accessibility
  *
- * GtkSearchEntry uses the #GTK_ACCESSIBLE_ROLE_SEARCH_BOX role.
+ * `GtkSearchEntry` uses the %GTK_ACCESSIBLE_ROLE_SEARCH_BOX role.
  */
 
 enum {
@@ -284,6 +287,12 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
 
   klass->stop_search = gtk_search_entry_stop_search;
 
+  /**
+   * GtkSearchEntry:placeholder-text:
+   *
+   * The text that will be displayed in the `GtkSearchEntry`
+   * when it is empty and unfocused.
+   */
   props[PROP_PLACEHOLDER_TEXT] =
       g_param_spec_string ("placeholder-text",
                            P_("Placeholder text"),
@@ -291,6 +300,11 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
                            NULL,
                            GTK_PARAM_READWRITE);
 
+  /**
+   * GtkSearchEntry:activates-default:
+   *
+   * Whether to activate the default widget when Enter is pressed.
+   */
   props[PROP_ACTIVATES_DEFAULT] =
       g_param_spec_boolean ("activates-default",
                             P_("Activates default"),
@@ -305,9 +319,9 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    * GtkSearchEntry::activate:
    * @self: The widget on which the signal is emitted
    *
-   * The ::activate signal is forwarded from the
-   * #GtkText::activated signal, which is a keybinding
-   * signal for all forms of the Enter key.
+   * Emitted when the entry is activated.
+   *
+   * The keybindings for this signal are all forms of the Enter key.
    */
   signals[ACTIVATE] =
     g_signal_new (I_("activate"),
@@ -322,8 +336,8 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    * GtkSearchEntry::search-changed:
    * @entry: the entry on which the signal was emitted
    *
-   * The #GtkSearchEntry::search-changed signal is emitted with a short
-   * delay of 150 milliseconds after the last change to the entry text.
+   * Emitted with a short delay of 150 milliseconds after the
+   * last change to the entry text.
    */
   signals[SEARCH_CHANGED] =
     g_signal_new (I_("search-changed"),
@@ -338,12 +352,13 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    * GtkSearchEntry::next-match:
    * @entry: the entry on which the signal was emitted
    *
-   * The ::next-match signal is a [keybinding signal][GtkSignalAction]
-   * which gets emitted when the user initiates a move to the next match
+   * Emitted when the user initiates a move to the next match
    * for the current search string.
    *
-   * Applications should connect to it, to implement moving between
-   * matches.
+   * This is a [keybinding signal](class.SignalAction.html).
+   *
+   * Applications should connect to it, to implement moving
+   * between matches.
    *
    * The default bindings for this signal is Ctrl-g.
    */
@@ -360,12 +375,13 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    * GtkSearchEntry::previous-match:
    * @entry: the entry on which the signal was emitted
    *
-   * The ::previous-match signal is a [keybinding signal][GtkSignalAction]
-   * which gets emitted when the user initiates a move to the previous match
+   * Emitted when the user initiates a move to the previous match
    * for the current search string.
    *
-   * Applications should connect to it, to implement moving between
-   * matches.
+   * This is a [keybinding signal](class.SignalAction.html).
+   *
+   * Applications should connect to it, to implement moving
+   * between matches.
    *
    * The default bindings for this signal is Ctrl-Shift-g.
    */
@@ -382,11 +398,12 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    * GtkSearchEntry::stop-search:
    * @entry: the entry on which the signal was emitted
    *
-   * The ::stop-search signal is a [keybinding signal][GtkSignalAction]
-   * which gets emitted when the user stops a search via keyboard input.
+   * Emitted when the user stops a search via keyboard input.
    *
-   * Applications should connect to it, to implement hiding the search
-   * entry in this case.
+   * This is a [keybinding signal](class.SignalAction.html).
+   *
+   * Applications should connect to it, to implement hiding
+   * the search entry in this case.
    *
    * The default bindings for this signal is Escape.
    */
@@ -403,8 +420,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    * GtkSearchEntry::search-started:
    * @entry: the entry on which the signal was emitted
    *
-   * The ::search-started signal gets emitted when the user initiated
-   * a search on the entry.
+   * Emitted when the user initiated a search on the entry.
    */
   signals[SEARCH_STARTED] =
     g_signal_new (I_("search-started"),
@@ -589,10 +605,9 @@ gtk_search_entry_init (GtkSearchEntry *entry)
 /**
  * gtk_search_entry_new:
  *
- * Creates a #GtkSearchEntry, with a find icon when the search field is
- * empty, and a clear icon when it isn't.
+ * Creates a `GtkSearchEntry`.
  *
- * Returns: a new #GtkSearchEntry
+ * Returns: a new `GtkSearchEntry`
  */
 GtkWidget *
 gtk_search_entry_new (void)
@@ -656,7 +671,7 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
 
 /**
  * gtk_search_entry_set_key_capture_widget:
- * @entry: a #GtkSearchEntry
+ * @entry: a `GtkSearchEntry`
  * @widget: (nullable) (transfer none): a #GtkWidget
  *
  * Sets @widget as the widget that @entry will capture key events from.
@@ -664,18 +679,18 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
  * Key events are consumed by the search entry to start or
  * continue a search.
  *
- * If the entry is part of a #GtkSearchBar, it is preferable
- * to call gtk_search_bar_set_key_capture_widget() instead, which
- * will reveal the entry in addition to triggering the search entry.
+ * If the entry is part of a `GtkSearchBar`, it is preferable
+ * to call [method@Gtk.SearchBar.set_key_capture_widget] instead,
+ * which will reveal the entry in addition to triggering the
+ * search entry.
  *
  * Note that despite the name of this function, the events
  * are only 'captured' in the bubble phase, which means that
  * editable child widgets of @widget will receive text input
  * before it gets captured. If that is not desired, you can
  * capture and forward the events yourself with
- * gtk_event_controller_key_forward().
-
- **/
+ * [method@Gtk.EventControllerKey.forward].
+ */
 void
 gtk_search_entry_set_key_capture_widget (GtkSearchEntry *entry,
                                          GtkWidget      *widget)
@@ -711,12 +726,12 @@ gtk_search_entry_set_key_capture_widget (GtkSearchEntry *entry,
 
 /**
  * gtk_search_entry_get_key_capture_widget:
- * @entry: a #GtkSearchEntry
+ * @entry: a `GtkSearchEntry`
  *
  * Gets the widget that @entry is capturing key events from.
  *
  * Returns: (transfer none): The key capture widget.
- **/
+ */
 GtkWidget *
 gtk_search_entry_get_key_capture_widget (GtkSearchEntry *entry)
 {
