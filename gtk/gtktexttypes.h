@@ -30,6 +30,13 @@
 
 G_BEGIN_DECLS
 
+/*
+ * This is the PUBLIC representation of a text buffer.
+ * GtkTextBTree is the PRIVATE internal representation of it.
+ */
+
+typedef struct _GtkTextBTree GtkTextBTree;
+
 typedef struct _GtkTextCounter GtkTextCounter;
 typedef struct _GtkTextLineSegment GtkTextLineSegment;
 typedef struct _GtkTextLineSegmentClass GtkTextLineSegmentClass;

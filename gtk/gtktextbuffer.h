@@ -37,13 +37,6 @@
 
 G_BEGIN_DECLS
 
-/*
- * This is the PUBLIC representation of a text buffer.
- * GtkTextBTree is the PRIVATE internal representation of it.
- */
-
-typedef struct _GtkTextBTree GtkTextBTree;
-
 #define GTK_TYPE_TEXT_BUFFER            (gtk_text_buffer_get_type ())
 #define GTK_TEXT_BUFFER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TEXT_BUFFER, GtkTextBuffer))
 #define GTK_TEXT_BUFFER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_BUFFER, GtkTextBufferClass))

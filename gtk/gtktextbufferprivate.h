@@ -19,9 +19,9 @@
 #define __GTK_TEXT_BUFFER_PRIVATE_H__
 
 #include <gtk/gtktextbuffer.h>
+#include "gtktexttypes.h"
 
 G_BEGIN_DECLS
-
 
 void            _gtk_text_buffer_spew                  (GtkTextBuffer      *buffer);
 
