@@ -39,7 +39,7 @@ create_application_list (void)
 }
 
 /* This is the function we use for setting up new listitems to display.
- * We add just an #GtkImage and a #GtkKabel here to display the application's
+ * We add just an #GtkImage and a #GtkLabel here to display the application's
  * icon and name, as this is just a simple demo.
  */
 static void
