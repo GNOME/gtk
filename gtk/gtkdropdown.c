@@ -47,35 +47,35 @@
 #include "gtkbox.h"
 
 /**
- * SECTION:gtkdropdown
- * @Title: GtkDropDown
- * @Short_description: Choose an item from a list
- * @See_also: #GtkComboBox
+ * GtkDropDown:
  *
- * GtkDropDown is a widget that allows the user to choose an item
- * from a list of options. The GtkDropDown displays the selected
- * choice.
+ * `GtkDropDown` is a widget that allows the user to choose an item
+ * from a list of options.
  *
- * The options are given to GtkDropDown in the form of #GListModel,
+ * ![An example GtkDropDown](drop-down.png)
+ *
+ * The `GtkDropDown` displays the selected choice.
+ *
+ * The options are given to `GtkDropDown` in the form of `GListModel`
  * and how the individual options are represented is determined by
- * a #GtkListItemFactory. The default factory displays simple strings.
+ * a [class@Gtk.ListItemFactory]. The default factory displays simple strings.
  *
- * GtkDropDown knows how to obtain strings from the items in a
- * #GtkStringList; for other models, you have to provide an expression
- * to find the strings via gtk_drop_down_set_expression().
+ * `GtkDropDown` knows how to obtain strings from the items in a
+ * [class@Gtk.StringList]; for other models, you have to provide an expression
+ * to find the strings via [method@Gtk.DropDown.set_expression].
  *
- * GtkDropDown can optionally allow search in the popup, which is
+ * `GtkDropDown` can optionally allow search in the popup, which is
  * useful if the list of options is long. To enable the search entry,
- * use gtk_drop_down_set_enable_search().
+ * use [method@Gtk.DropDown.set_enable_search].
  *
  * # CSS nodes
  *
- * GtkDropDown has a single CSS node with name dropdown,
+ * `GtkDropDown` has a single CSS node with name dropdown,
  * with the button and popover nodes as children.
  *
  * # Accessibility
  *
- * GtkDropDown uses the #GTK_ACCESSIBLE_ROLE_COMBO_BOX role.
+ * `GtkDropDown` uses the #GTK_ACCESSIBLE_ROLE_COMBO_BOX role.
  */
 
 struct _GtkDropDown
@@ -440,7 +440,7 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
    *
    * The factory for populating list items in the popup.
    *
-   * If this is not set, #GtkDropDown:factory is used.
+   * If this is not set, [property@Gtk.DropDown:factory] is used.
    */
   properties[PROP_LIST_FACTORY] =
     g_param_spec_object ("list-factory",
@@ -464,8 +464,10 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
   /**
    * GtkDropDown:selected:
    *
-   * The position of the selected item in #GtkDropDown:model,
-   * or #GTK_INVALID_LIST_POSITION if no item is selected.
+   * The position of the selected item.
+   *
+   * If no item is selected, the property has the value
+   * %GTK_INVALID_LIST_POSITION.
    */
   properties[PROP_SELECTED] =
     g_param_spec_uint ("selected",
@@ -491,7 +493,8 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
    *
    * Whether to show a search entry in the popup.
    *
-   * Note that search requires #GtkDropDown:expression to be set.
+   * Note that search requires [property@Gtk.DropDown:expression]
+   * to be set.
    */
   properties[PROP_ENABLE_SEARCH] =
     g_param_spec_boolean  ("enable-search",
@@ -504,9 +507,11 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
    * GtkDropDown:expression: (type GtkExpression)
    *
    * An expression to evaluate to obtain strings to match against the search
-   * term (see #GtkDropDown:enable-search). If #GtkDropDown:factory is not set,
-   * the expression is also used to bind strings to labels produced by a
-   * default factory.
+   * term.
+   *
+   * See [property@Gtk.DropDown:enable-search] for how to enable search.
+   * If [property@Gtk.DropDown:factory] is not set, the expression is also
+   * used to bind strings to labels produced by a default factory.
    */
   properties[PROP_EXPRESSION] =
     gtk_param_spec_expression ("expression",
@@ -660,12 +665,12 @@ gtk_drop_down_init (GtkDropDown *self)
  * @model: (transfer full) (allow-none): the model to use or %NULL for none
  * @expression: (transfer full) (allow-none): the expression to use or %NULL for none
  *
- * Creates a new #GtkDropDown.
+ * Creates a new `GtkDropDown`.
  *
- * You may want to call gtk_drop_down_set_factory()
+ * You may want to call [method@Gtk.DropDown.set_factory]
  * to set up a way to map its items to widgets.
  *
- * Returns: a new #GtkDropDown
+ * Returns: a new `GtkDropDown`
  **/
 GtkWidget *
 gtk_drop_down_new (GListModel    *model,
@@ -689,10 +694,10 @@ gtk_drop_down_new (GListModel    *model,
  * gtk_drop_down_new_from_strings:
  * @strings: (array zero-terminated=1): The strings to put in the dropdown
  *
- * Creates a new #GtkDropDown that is populated with
- * the strings in @strings.
+ * Creates a new `GtkDropDown` that is populated with
+ * the strings.
  *
- * Returns: a new #GtkDropDown
+ * Returns: a new `GtkDropDown`
  */
 GtkWidget *
 gtk_drop_down_new_from_strings (const char * const *strings)
@@ -702,12 +707,12 @@ gtk_drop_down_new_from_strings (const char * const *strings)
 
 /**
  * gtk_drop_down_get_model:
- * @self: a #GtkDropDown
+ * @self: a `GtkDropDown`
  *
  * Gets the model that provides the displayed items.
  *
  * Returns: (nullable) (transfer none): The model in use
- **/
+ */
 GListModel *
 gtk_drop_down_get_model (GtkDropDown *self)
 {
@@ -718,10 +723,10 @@ gtk_drop_down_get_model (GtkDropDown *self)
 
 /**
  * gtk_drop_down_set_model:
- * @self: a #GtkDropDown
+ * @self: a `GtkDropDown`
  * @model: (allow-none) (transfer none): the model to use or %NULL for none
  *
- * Sets the #GListModel to use.
+ * Sets the `GListModel` to use.
  */
 void
 gtk_drop_down_set_model (GtkDropDown *self,
@@ -772,16 +777,16 @@ gtk_drop_down_set_model (GtkDropDown *self,
 
 /**
  * gtk_drop_down_get_factory:
- * @self: a #GtkDropDown
+ * @self: a `GtkDropDown`
  *
  * Gets the factory that's currently used to populate list items.
  *
  * The factory returned by this function is always used for the
  * item in the button. It is also used for items in the popup
- * if #GtkDropDown:list-factory is not set.
+ * if [property@Gtk.DropDown:list-factory] is not set.
  *
  * Returns: (nullable) (transfer none): The factory in use
- **/
+ */
 GtkListItemFactory *
 gtk_drop_down_get_factory (GtkDropDown *self)
 {
@@ -792,10 +797,10 @@ gtk_drop_down_get_factory (GtkDropDown *self)
 
 /**
  * gtk_drop_down_set_factory:
- * @self: a #GtkDropDown
+ * @self: a `GtkDropDown`
  * @factory: (allow-none) (transfer none): the factory to use or %NULL for none
  *
- * Sets the #GtkListItemFactory to use for populating list items.
+ * Sets the `GtkListItemFactory` to use for populating list items.
  **/
 void
 gtk_drop_down_set_factory (GtkDropDown        *self,
@@ -816,7 +821,7 @@ gtk_drop_down_set_factory (GtkDropDown        *self,
 
 /**
  * gtk_drop_down_get_list_factory:
- * @self: a #GtkDropDown
+ * @self: a `GtkDropDown`
  *
  * Gets the factory that's currently used to populate list items in the popup.
  *
@@ -832,11 +837,11 @@ gtk_drop_down_get_list_factory (GtkDropDown *self)
 
 /**
  * gtk_drop_down_set_list_factory:
- * @self: a #GtkDropDown
+ * @self: a `GtkDropDown`
  * @factory: (allow-none) (transfer none): the factory to use or %NULL for none
  *
- * Sets the #GtkListItemFactory to use for populating list items in the popup.
- **/
+ * Sets the `GtkListItemFactory` to use for populating list items in the popup.
+ */
 void
 gtk_drop_down_set_list_factory (GtkDropDown        *self,
                                 GtkListItemFactory *factory)
@@ -857,11 +862,11 @@ gtk_drop_down_set_list_factory (GtkDropDown        *self,
 
 /**
  * gtk_drop_down_set_selected:
- * @self: a #GtkDropDown
- * @position: the position of the item to select, or #GTK_INVALID_LIST_POSITION
+ * @self: a `GtkDropDown`
+ * @position: the position of the item to select, or %GTK_INVALID_LIST_POSITION
  *
  * Selects the item at the given position.
- **/
+ */
 void
 gtk_drop_down_set_selected (GtkDropDown *self,
                             guint        position)
@@ -879,13 +884,13 @@ gtk_drop_down_set_selected (GtkDropDown *self,
 
 /**
  * gtk_drop_down_get_selected:
- * @self: a #GtkDropDown
+ * @self: a `GtkDropDown`
  *
  * Gets the position of the selected item.
  *
- * Returns: the position of the selected item, or #GTK_INVALID_LIST_POSITION
+ * Returns: the position of the selected item, or %GTK_INVALID_LIST_POSITION
  *     if not item is selected
- **/
+ */
 guint
 gtk_drop_down_get_selected (GtkDropDown *self)
 {
@@ -899,7 +904,7 @@ gtk_drop_down_get_selected (GtkDropDown *self)
 
 /**
  * gtk_drop_down_get_selected_item:
- * @self: a #GtkDropDown
+ * @self: a `GtkDropDown`
  *
  * Gets the selected item. If no item is selected, %NULL is returned.
  *
@@ -918,14 +923,15 @@ gtk_drop_down_get_selected_item (GtkDropDown *self)
 
 /**
  * gtk_drop_down_set_enable_search:
- * @self: a #GtkDropDown
+ * @self: a `GtkDropDown`
  * @enable_search: whether to enable search
  *
  * Sets whether a search entry will be shown in the popup that
  * allows to search for items in the list.
  *
- * Note that #GtkDropDown:expression must be set for search to work.
- **/
+ * Note that [property@Gtk.DropDown:expression] must be set for
+ * search to work.
+ */
 void
 gtk_drop_down_set_enable_search (GtkDropDown *self,
                                  gboolean     enable_search)
@@ -945,7 +951,7 @@ gtk_drop_down_set_enable_search (GtkDropDown *self,
 
 /**
  * gtk_drop_down_get_enable_search:
- * @self: a #GtkDropDown
+ * @self: a `GtkDropDown`
  *
  * Returns whether search is enabled.
  *
@@ -961,12 +967,13 @@ gtk_drop_down_get_enable_search (GtkDropDown *self)
 
 /**
  * gtk_drop_down_set_expression:
- * @self: a #GtkDropDown
- * @expression: (nullable): a #GtkExpression, or %NULL
+ * @self: a `GtkDropDown`
+ * @expression: (nullable): a `GtkExpression`, or %NULL
  *
- * Sets the expression that gets evaluated to obtain strings from items
- * when searching in the popup. The expression must have a value type of
- * #G_TYPE_STRING.
+ * Sets the expression that gets evaluated to obtain strings from items.
+ *
+ * This is used for search in the popup. The expression must have
+ * a value type of %G_TYPE_STRING.
  */
 void
 gtk_drop_down_set_expression (GtkDropDown   *self,
@@ -992,11 +999,13 @@ gtk_drop_down_set_expression (GtkDropDown   *self,
 
 /**
  * gtk_drop_down_get_expression:
- * @self: a #GtkDropDown
+ * @self: a `GtkDropDown`
  *
- * Gets the expression set with gtk_drop_down_set_expression().
+ * Gets the expression set that is used to obtain strings from items.
  *
- * Returns: (nullable) (transfer none): a #GtkExpression or %NULL
+ * See [method@Gtk.DropDown.set_expression].
+ *
+ * Returns: (nullable) (transfer none): a `GtkExpression` or %NULL
  */
 GtkExpression *
 gtk_drop_down_get_expression (GtkDropDown *self)
