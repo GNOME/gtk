@@ -36,13 +36,12 @@
 
 
 /**
- * SECTION:gtkvolumebutton
- * @Short_description: A button which pops up a volume control
- * @Title: GtkVolumeButton
+ * GtkVolumeButton:
  *
- * #GtkVolumeButton is a subclass of #GtkScaleButton that has
- * been tailored for use as a volume control widget with suitable
- * icons, tooltips and accessible labels.
+ * `GtkVolumeButton` is a `GtkScaleButton` subclass tailored for
+ * volume control.
+ *
+ * ![An example GtkVolumeButton](volumebutton.png)
  */
 
 typedef struct _GtkVolumeButtonClass  GtkVolumeButtonClass;
@@ -163,10 +162,10 @@ gtk_volume_button_class_init (GtkVolumeButtonClass *klass)
   /**
    * GtkVolumeButton:use-symbolic:
    *
-   * Whether to use symbolic icons as the icons. Note that
-   * if the symbolic icons are not available in your installed
-   * theme, then the normal (potentially colorful) icons will
-   * be used.
+   * Whether to use symbolic icons as the icons.
+   *
+   * Note that if the symbolic icons are not available in your installed
+   * theme, then the normal (potentially colorful) icons will be used.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_SYMBOLIC,
@@ -194,11 +193,13 @@ gtk_volume_button_init (GtkVolumeButton *button)
 /**
  * gtk_volume_button_new:
  *
- * Creates a #GtkVolumeButton, with a range between 0.0 and 1.0, with
- * a stepping of 0.02. Volume values can be obtained and modified using
- * the functions from #GtkScaleButton.
+ * Creates a `GtkVolumeButton`.
  *
- * Returns: a new #GtkVolumeButton
+ * The button has a range between 0.0 and 1.0, with a stepping of 0.02.
+ * Volume values can be obtained and modified using the functions from
+ * [class@Gtk.ScaleButton].
+ *
+ * Returns: a new `GtkVolumeButton`
  */
 GtkWidget *
 gtk_volume_button_new (void)
