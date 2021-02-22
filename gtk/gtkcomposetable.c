@@ -99,9 +99,6 @@ parse_compose_value (GtkComposeData *compose_data,
           while (*p && g_ascii_isspace (*p))
             p++;
 
-          if (*p != '\0' && *p != '#')
-            g_warning ("Ignoring keysym after string: %s: %s", val, line);
-
           compose_data->value = g_string_free (value, FALSE);
           return TRUE;
         }
@@ -248,10 +245,7 @@ parse_compose_line (GList       **compose_list,
     return;
 
   if (g_str_has_prefix (line, "include "))
-    {
-      g_warning ("include in Compose files not supported: %s", line);
-      return;
-    }
+    return;
 
   components = g_strsplit (line, ":", 2);
 
