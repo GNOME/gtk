@@ -95,9 +95,34 @@
  * to use gtk_widget_get_settings().
  */
 
+/* --- typedefs --- */
+typedef struct _GtkSettingsValue GtkSettingsValue;
+
+/*< private >
+ * GtkSettingsValue:
+ * @origin: Origin should be something like “filename:linenumber” for
+ *    rc files, or e.g. “XProperty” for other sources.
+ * @value: Valid types are LONG, DOUBLE and STRING corresponding to
+ *    the token parsed, or a GSTRING holding an unparsed statement
+ */
+struct _GtkSettingsValue
+{
+  /* origin should be something like "filename:linenumber" for rc files,
+   * or e.g. "XProperty" for other sources
+   */
+  char *origin;
+
+  /* valid types are LONG, DOUBLE and STRING corresponding to the token parsed,
+   * or a GSTRING holding an unparsed statement
+   */
+  GValue value;
+
+  /* the settings source */
+  GtkSettingsSource source;
+};
+
 typedef struct _GtkSettingsClass GtkSettingsClass;
 typedef struct _GtkSettingsPropertyValue GtkSettingsPropertyValue;
-typedef struct _GtkSettingsValuePrivate GtkSettingsValuePrivate;
 
 struct _GtkSettings
 {
@@ -117,12 +142,6 @@ struct _GtkSettings
 struct _GtkSettingsClass
 {
   GObjectClass parent_class;
-};
-
-struct _GtkSettingsValuePrivate
-{
-  GtkSettingsValue public;
-  GtkSettingsSource source;
 };
 
 struct _GtkSettingsPropertyValue
@@ -1291,14 +1310,14 @@ _gtk_settings_parse_convert (const GValue       *src_value,
 }
 
 static void
-apply_queued_setting (GtkSettings             *settings,
-                      GParamSpec              *pspec,
-                      GtkSettingsValuePrivate *qvalue)
+apply_queued_setting (GtkSettings      *settings,
+                      GParamSpec       *pspec,
+                      GtkSettingsValue *qvalue)
 {
   GValue tmp_value = G_VALUE_INIT;
 
   g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
-  if (_gtk_settings_parse_convert (&qvalue->public.value,
+  if (_gtk_settings_parse_convert (&qvalue->value,
                                    pspec, &tmp_value))
     {
       if (settings->property_values[pspec->param_id - 1].source <= qvalue->source)
@@ -1311,10 +1330,10 @@ apply_queued_setting (GtkSettings             *settings,
     }
   else
     {
-      char *debug = g_strdup_value_contents (&qvalue->public.value);
+      char *debug = g_strdup_value_contents (&qvalue->value);
 
       g_message ("%s: failed to retrieve property '%s' of type '%s' from rc file value \"%s\" of type '%s'",
-                 qvalue->public.origin ? qvalue->public.origin : "(for origin information, set GTK_DEBUG)",
+                 qvalue->origin ? qvalue->origin : "(for origin information, set GTK_DEBUG)",
                  pspec->name,
                  g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
                  debug,
@@ -1365,7 +1384,7 @@ settings_install_property_parser (GtkSettingsClass   *class,
   for (node = object_list; node; node = node->next)
     {
       GtkSettings *settings = node->data;
-      GtkSettingsValuePrivate *qvalue;
+      GtkSettingsValue *qvalue;
 
       settings->property_values = g_renew (GtkSettingsPropertyValue, settings->property_values, class_n_properties);
       settings->property_values[class_n_properties - 1].value.g_type = 0;
@@ -1391,11 +1410,11 @@ settings_install_property_parser (GtkSettingsClass   *class,
 static void
 free_value (gpointer data)
 {
-  GtkSettingsValuePrivate *qvalue = data;
+  GtkSettingsValue *qvalue = data;
 
-  g_value_unset (&qvalue->public.value);
-  g_free (qvalue->public.origin);
-  g_slice_free (GtkSettingsValuePrivate, qvalue);
+  g_value_unset (&qvalue->value);
+  g_free (qvalue->origin);
+  g_slice_free (GtkSettingsValue, qvalue);
 }
 
 static void
@@ -1404,7 +1423,7 @@ gtk_settings_set_property_value_internal (GtkSettings            *settings,
                                           const GtkSettingsValue *new_value,
                                           GtkSettingsSource       source)
 {
-  GtkSettingsValuePrivate *qvalue;
+  GtkSettingsValue *qvalue;
   GParamSpec *pspec;
   char *name;
   GQuark name_quark;
@@ -1426,17 +1445,17 @@ gtk_settings_set_property_value_internal (GtkSettings            *settings,
   qvalue = g_datalist_id_dup_data (&settings->queued_settings, name_quark, NULL, NULL);
   if (!qvalue)
     {
-      qvalue = g_slice_new0 (GtkSettingsValuePrivate);
+      qvalue = g_slice_new0 (GtkSettingsValue);
       g_datalist_id_set_data_full (&settings->queued_settings, name_quark, qvalue, free_value);
     }
   else
     {
-      g_free (qvalue->public.origin);
-      g_value_unset (&qvalue->public.value);
+      g_free (qvalue->origin);
+      g_value_unset (&qvalue->value);
     }
-  qvalue->public.origin = g_strdup (new_value->origin);
-  g_value_init (&qvalue->public.value, G_VALUE_TYPE (&new_value->value));
-  g_value_copy (&new_value->value, &qvalue->public.value);
+  qvalue->origin = g_strdup (new_value->origin);
+  g_value_init (&qvalue->value, G_VALUE_TYPE (&new_value->value));
+  g_value_copy (&new_value->value, &qvalue->value);
   qvalue->source = source;
   pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), g_quark_to_string (name_quark));
   if (pspec)
@@ -1754,7 +1773,7 @@ gtk_settings_load_from_key_file (GtkSettings       *settings,
       char *key;
       GParamSpec *pspec;
       GType value_type;
-      GtkSettingsValue svalue = { NULL, { 0, }, };
+      GtkSettingsValue svalue = { NULL, G_VALUE_INIT, GTK_SETTINGS_SOURCE_DEFAULT };
 
       key = keys[i];
       pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), key);
