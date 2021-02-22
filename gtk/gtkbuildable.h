@@ -45,7 +45,7 @@ typedef struct _GtkBuildableParser GtkBuildableParser;
  * @text: function called for character data
  * @error: function called on error
  *
- * A sub-parser for #GtkBuildable implementations.
+ * A sub-parser for `GtkBuildable` implementations.
  */
 struct _GtkBuildableParser
 {
@@ -85,22 +85,22 @@ struct _GtkBuildableParser
 /**
  * GtkBuildableIface:
  * @g_iface: the parent class
- * @set_id: Stores the id attribute given in the GtkBuilder UI definition.
- *  #GtkWidget stores the name as object data. Implement this method if your
- *  object has some notion of “ID” and it makes sense to map the XML id
- *  attribute to it.
+ * @set_id: Stores the id attribute given in the `GtkBuilder` UI definition.
+ *   `GtkWidget` stores the name as object data. Implement this method if your
+ *   object has some notion of “ID” and it makes sense to map the XML id
+ *   attribute to it.
  * @get_id: The getter corresponding to @set_id. Implement this
- *  if you implement @set_id.
+ *   if you implement @set_id.
  * @add_child: Adds a child. The @type parameter can be used to
- *  differentiate the kind of child. #GtkWidget implements this
- *  to add event controllers to the widget, #GtkNotebook uses
- *  the @type to distinguish between page labels (of type "page-label")
- *  and normal children.
+ *   differentiate the kind of child. `GtkWidget` implements this
+ *   to add event controllers to the widget, `GtkNotebook` uses
+ *   the @type to distinguish between page labels (of type "page-label")
+ *   and normal children.
  * @set_buildable_property: Sets a property of a buildable object.
  *  It is normally not necessary to implement this, g_object_set_property()
- *  is used by default. #GtkWindow implements this to delay showing itself
- *  (i.e. setting the #GtkWidget:visible property) until the whole interface
- *  is created.
+ *  is used by default. `GtkWindow` implements this to delay showing itself
+ *  (i.e. setting the [property@GtkWidget:visible] property) until the whole
+ *  interface is created.
  * @construct_child: Constructs a child of a buildable that has been
  *  specified as “constructor” in the UI definition. This can be used to
  *  reference a widget created in a <ui> tag which is outside
@@ -121,14 +121,14 @@ struct _GtkBuildableParser
  *  unless you need to perform special cleanup actions. #GtkWindow sets
  *  the #GtkWidget:visible property here.
  * @get_internal_child: Returns an internal child of a buildable.
- *  #GtkDialog implements this to give access to its @vbox, making
+ *  `GtkDialog` implements this to give access to its @vbox, making
  *  it possible to add children to the vbox in a UI definition.
  *  Implement this if the buildable has internal children that may
  *  need to be accessed from a UI definition.
  *
- * The #GtkBuildableIface interface contains method that are
- * necessary to allow #GtkBuilder to construct an object from
- * a #GtkBuilder UI definition.
+ * The `GtkBuildableIface` interface contains methods that are
+ * necessary to allow `GtkBuilder` to construct an object from
+ * a `GtkBuilder` UI definition.
  */
 struct _GtkBuildableIface
 {
