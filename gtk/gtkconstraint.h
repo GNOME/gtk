@@ -31,9 +31,10 @@ typedef struct _GtkConstraintTarget GtkConstraintTarget;
 /**
  * GtkConstraintTarget:
  *
- * The GtkConstraintTarget interface is implemented by objects that
- * can be used as source or target in #GtkConstraints. Besides
- * #GtkWidget, it is also implemented by #GtkConstraintGuide.
+ * The `GtkConstraintTarget` interface is implemented by objects that
+ * can be used as source or target in `GtkConstraint`s.
+ *
+ * Besides `GtkWidget`, it is also implemented by `GtkConstraintGuide`.
  */
 
 GDK_AVAILABLE_IN_ALL
