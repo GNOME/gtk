@@ -32,11 +32,11 @@
  * [property@Gtk.MenuButton:icon-name] property) or a label (set with the
  * [property@Gtk.MenuButton:label] property). If neither is explicitly set,
  * a [class@Gtk.Image] is automatically created, using an arrow image oriented
- * according to [class@Gtk.MenuButton:direction] or the generic “open-menu-symbolic”
+ * according to [property@Gtk.MenuButton:direction] or the generic “open-menu-symbolic”
  * icon if the direction is not set.
  *
  * The positioning of the popup is determined by the
- * [method@Gtk.MenuButton:direction] property of the menu button.
+ * [property@Gtk.MenuButton:direction] property of the menu button.
  *
  * For menus, the [property@Gtk.Widget:halign] and [property@Gtk.Widget:valign]
  * properties of the menu are also taken into account. For example, when the
