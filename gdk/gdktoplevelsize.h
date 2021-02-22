@@ -28,11 +28,6 @@
 
 G_BEGIN_DECLS
 
-/**
- * GdkToplevelSize:
- *
- * Struct containing information for computing the size of a #GdkToplevel.
- */
 typedef struct _GdkToplevelSize GdkToplevelSize;
 
 #define GDK_TYPE_TOPLEVEL_SIZE (gdk_toplevel_size_get_type ())
