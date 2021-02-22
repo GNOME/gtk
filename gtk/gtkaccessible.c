@@ -19,27 +19,25 @@
  */
 
 /**
- * SECTION:gtkaccessible
- * @Title: GtkAccessible
- * @Short_description: Accessible interface
+ * GtkAccessible:
  *
- * GtkAccessible provides an interface for describing a UI element, like a
- * #GtkWidget, in a way that can be consumed by Assistive Technologies, or
- * “AT”.
+ * `GtkAccessible` provides an interface for describing a UI elements
+ * for Assistive Technologies.
  *
  * Every accessible implementation has:
  *
- *  - a “role”, represented by a value of the #GtkAccessibleRole enumeration
- *  - an “attribute”, represented by a set of #GtkAccessibleState,
- *    #GtkAccessibleProperty and #GtkAccessibleRelation values
+ *  - a “role”, represented by a value of the [enum@Gtk.AccessibleRole]
+ *    enumeration
+ *  - an “attribute”, represented by a set of [enum@Gtk.AccessibleState],
+ *    [enum@Gtk.AccessibleProperty] and [enum@Gtk.AccessibleRelation] values
  *
- * The role cannot be changed after instantiating a #GtkAccessible
+ * The role cannot be changed after instantiating a `GtkAccessible`
  * implementation.
  *
- * The attributes are updated every time a UI element's state changes in a way that
- * should be reflected by assistive technologies. For instance, if a #GtkWidget
- * visibility changes, the %GTK_ACCESSIBLE_STATE_HIDDEN state will also change
- * to reflect the #GtkWidget:visible property.
+ * The attributes are updated every time a UI element's state changes in
+ * a way that should be reflected by assistive technologies. For instance,
+ * if a `GtkWidget` visibility changes, the %GTK_ACCESSIBLE_STATE_HIDDEN
+ * state will also change to reflect the [property@Gtk.Widget:visible] property.
  */
 
 #include "config.h"
@@ -63,7 +61,7 @@ gtk_accessible_default_init (GtkAccessibleInterface *iface)
   /**
    * GtkAccessible:accessible-role:
    *
-   * The accessible role of the given #GtkAccessible implementation.
+   * The accessible role of the given `GtkAccessible` implementation.
    *
    * The accessible role cannot be changed once set.
    */
@@ -83,9 +81,9 @@ gtk_accessible_default_init (GtkAccessibleInterface *iface)
  * gtk_accessible_get_at_context:
  * @self: a #GtkAccessible
  *
- * Retrieves the #GtkATContext for the given #GtkAccessible.
+ * Retrieves the `GtkATContext` for the given `GtkAccessible`.
  *
- * Returns: (transfer none): the #GtkATContext
+ * Returns: (transfer none): the `GtkATContext`
  */
 GtkATContext *
 gtk_accessible_get_at_context (GtkAccessible *self)
@@ -97,11 +95,11 @@ gtk_accessible_get_at_context (GtkAccessible *self)
 
 /**
  * gtk_accessible_get_accessible_role:
- * @self: a #GtkAccessible
+ * @self: a `GtkAccessible`
  *
- * Retrieves the #GtkAccessibleRole for the given #GtkAccessible.
+ * Retrieves the `GtkAccessibleRole` for the given `GtkAccessible`.
  *
- * Returns: a #GtkAccessibleRole
+ * Returns: a `GtkAccessibleRole`
  */
 GtkAccessibleRole
 gtk_accessible_get_accessible_role (GtkAccessible *self)
@@ -121,23 +119,23 @@ gtk_accessible_get_accessible_role (GtkAccessible *self)
 
 /**
  * gtk_accessible_update_state:
- * @self: a #GtkAccessible
- * @first_state: the first #GtkAccessibleState
+ * @self: a `GtkAccessible`
+ * @first_state: the first `GtkAccessibleState`
  * @...: a list of state and value pairs, terminated by -1
  *
- * Updates a list of accessible states. See the #GtkAccessibleState
+ * Updates a list of accessible states. See the [enum@Gtk.AccessibleState]
  * documentation for the value types of accessible states.
  *
- * This function should be called by #GtkWidget types whenever an accessible
+ * This function should be called by `GtkWidget` types whenever an accessible
  * state change must be communicated to assistive technologies.
  *
  * Example:
- * |[
- *   value = GTK_ACCESSIBLE_TRISTATE_MIXED;
- *   gtk_accessible_update_state (GTK_ACCESSIBLE (check_button),
- *                                GTK_ACCESSIBLE_STATE_CHECKED, value,
- *                                -1);
- * ]|
+ * ```c
+ * value = GTK_ACCESSIBLE_TRISTATE_MIXED;
+ * gtk_accessible_update_state (GTK_ACCESSIBLE (check_button),
+ *                              GTK_ACCESSIBLE_STATE_CHECKED, value,
+ *                              -1);
+ * ```
  */
 void
 gtk_accessible_update_state (GtkAccessible      *self,
@@ -189,14 +187,14 @@ out:
 
 /**
  * gtk_accessible_update_state_value: (rename-to gtk_accessible_update_state)
- * @self: a #GtkAccessible
+ * @self: a `GtkAccessible`
  * @n_states: the number of accessible states to set
- * @states: (array length=n_states): an array of #GtkAccessibleState
- * @values: (array length=n_states): an array of #GValues, one for each state
+ * @states: (array length=n_states): an array of `GtkAccessibleState`
+ * @values: (array length=n_states): an array of `GValues`, one for each state
  *
  * Updates an array of accessible states.
  *
- * This function should be called by #GtkWidget types whenever an accessible
+ * This function should be called by `GtkWidget` types whenever an accessible
  * state change must be communicated to assistive technologies.
  *
  * This function is meant to be used by language bindings.
@@ -242,8 +240,8 @@ gtk_accessible_update_state_value (GtkAccessible      *self,
 
 /**
  * gtk_accessible_reset_state:
- * @self: a #GtkAccessible
- * @state: a #GtkAccessibleState
+ * @self: a `GtkAccessible`
+ * @state: a `GtkAccessibleState`
  *
  * Resets the accessible @state to its default value.
  */
@@ -265,23 +263,26 @@ gtk_accessible_reset_state (GtkAccessible      *self,
 
 /**
  * gtk_accessible_update_property:
- * @self: a #GtkAccessible
- * @first_property: the first #GtkAccessibleProperty
+ * @self: a `GtkAccessible`
+ * @first_property: the first `GtkAccessibleProperty`
  * @...: a list of property and value pairs, terminated by -1
  *
- * Updates a list of accessible properties. See the #GtkAccessibleProperty
- * documentation for the value types of accessible properties.
+ * Updates a list of accessible properties.
  *
- * This function should be called by #GtkWidget types whenever an accessible
- * property change must be communicated to assistive technologies.
+ * See the [enum@Gtk.AccessibleProperty] documentation for the
+ * value types of accessible properties.
+ *
+ * This function should be called by `GtkWidget` types whenever
+ * an accessible property change must be communicated to assistive
+ * technologies.
  *
  * Example:
- * |[
- *   value = gtk_adjustment_get_value (adjustment);
- *   gtk_accessible_update_property (GTK_ACCESSIBLE (spin_button),
-                                     GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, value,
-                                     -1);
- * ]|
+ * ```c
+ * value = gtk_adjustment_get_value (adjustment);
+ * gtk_accessible_update_property (GTK_ACCESSIBLE (spin_button),
+                                   GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, value,
+                                   -1);
+ * ```
  */
 void
 gtk_accessible_update_property (GtkAccessible         *self,
@@ -333,14 +334,14 @@ out:
 
 /**
  * gtk_accessible_update_property_value: (rename-to gtk_accessible_update_property)
- * @self: a #GtkAccessible
+ * @self: a `GtkAccessible`
  * @n_properties: the number of accessible properties to set
- * @properties: (array length=n_properties): an array of #GtkAccessibleProperty
- * @values: (array length=n_properties): an array of #GValues, one for each property
+ * @properties: (array length=n_properties): an array of `GtkAccessibleProperty`
+ * @values: (array length=n_properties): an array of `GValues`, one for each property
  *
  * Updates an array of accessible properties.
  *
- * This function should be called by #GtkWidget types whenever an accessible
+ * This function should be called by `GtkWidget` types whenever an accessible
  * property change must be communicated to assistive technologies.
  *
  * This function is meant to be used by language bindings.
@@ -386,8 +387,8 @@ gtk_accessible_update_property_value (GtkAccessible         *self,
 
 /**
  * gtk_accessible_reset_property:
- * @self: a #GtkAccessible
- * @property: a #GtkAccessibleProperty
+ * @self: a `GtkAccessible`
+ * @property: a `GtkAccessibleProperty`
  *
  * Resets the accessible @property to its default value.
  */
@@ -409,26 +410,26 @@ gtk_accessible_reset_property (GtkAccessible         *self,
 
 /**
  * gtk_accessible_update_relation:
- * @self: a #GtkAccessible
- * @first_relation: the first #GtkAccessibleRelation
+ * @self: a `GtkAccessible`
+ * @first_relation: the first `GtkAccessibleRelation`
  * @...: a list of relation and value pairs, terminated by -1
  *
  * Updates a list of accessible relations.
  *
- * This function should be called by #GtkWidget types whenever an accessible
+ * This function should be called by `GtkWidget` types whenever an accessible
  * relation change must be communicated to assistive technologies.
  *
- * If the #GtkAccessibleRelation requires a list of references, you should
- * pass each reference individually, followed by %NULL, e.g.
+ * If the [enum@Gtk.AccessibleRelation] requires a list of references,
+ * you should pass each reference individually, followed by %NULL, e.g.
  *
- * |[<!-- language="C" -->
- *   gtk_accessible_update_relation (accessible,
- *                                   GTK_ACCESSIBLE_RELATION_CONTROLS,
- *                                     ref1, NULL,
- *                                   GTK_ACCESSIBLE_LABELLED_BY,
- *                                     ref1, ref2, ref3, NULL,
- *                                   -1);
- * ]|
+ * ```c
+ * gtk_accessible_update_relation (accessible,
+ *                                 GTK_ACCESSIBLE_RELATION_CONTROLS,
+ *                                   ref1, NULL,
+ *                                 GTK_ACCESSIBLE_LABELLED_BY,
+ *                                   ref1, ref2, ref3, NULL,
+ *                                 -1);
+ * ```
  */
 void
 gtk_accessible_update_relation (GtkAccessible         *self,
@@ -480,14 +481,14 @@ out:
 
 /**
  * gtk_accessible_update_relation_value: (rename-to gtk_accessible_update_relation)
- * @self: a #GtkAccessible
+ * @self: a `GtkAccessible`
  * @n_relations: the number of accessible relations to set
- * @relations: (array length=n_relations): an array of #GtkAccessibleRelation
- * @values: (array length=n_relations): an array of #GValues, one for each relation
+ * @relations: (array length=n_relations): an array of `GtkAccessibleRelation`
+ * @values: (array length=n_relations): an array of `GValues`, one for each relation
  *
  * Updates an array of accessible relations.
  *
- * This function should be called by #GtkWidget types whenever an accessible
+ * This function should be called by `GtkWidget` types whenever an accessible
  * relation change must be communicated to assistive technologies.
  *
  * This function is meant to be used by language bindings.
@@ -535,8 +536,8 @@ gtk_accessible_update_relation_value (GtkAccessible         *self,
 
 /**
  * gtk_accessible_reset_relation:
- * @self: a #GtkAccessible
- * @relation: a #GtkAccessibleRelation
+ * @self: a `GtkAccessible`
+ * @relation: a `GtkAccessibleRelation`
  *
  * Resets the accessible @relation to its default value.
  */
@@ -639,10 +640,10 @@ static const char *role_names[] = {
 
 /*< private >
  * gtk_accessible_role_to_name:
- * @role: a #GtkAccessibleRole
+ * @role: a `GtkAccessibleRole`
  * @domain: (nullable): the translation domain
  *
- * Converts a #GtkAccessibleRole value to the equivalent role name.
+ * Converts a `GtkAccessibleRole` value to the equivalent role name.
  *
  * If @domain is not %NULL, the returned string will be localized.
  *
@@ -660,16 +661,17 @@ gtk_accessible_role_to_name (GtkAccessibleRole  role,
 
 /*<private>
  * gtk_accessible_platform_changed:
- * @self: a #GtkAccessible
+ * @self: a `GtkAccessible`
  * @change: the platform state change to report
  *
- * ARIA discriminates between author-controlled states
- * and 'platform' states, which are not. This function
- * can be used by widgets to inform ATs that a platform
- * state, such as focus, has changed.
+ * Notify accessible technologies that a platform value has changed.
+ *
+ * ARIA discriminates between author-controlled states and 'platform'
+ * states, which are not. This function can be used by widgets to
+ * inform ATs that a platform state, such as focus, has changed.
  *
  * Note that the state itself is not included in this API.
- * AT backends should use gtk_accessible_get_platform_state()
+ * AT backends should use [method@Gtk.Accessible.get_platform_state]
  * to obtain the actual state.
  */
 void
@@ -697,14 +699,14 @@ gtk_accessible_platform_changed (GtkAccessible               *self,
 
 /*<private>
  * gtk_accessible_get_platform_state:
- * @self: a #GtkAccessible
+ * @self: a `GtkAccessible`
  * @state: platform state to query
  *
  * Query a platform state, such as focus.
  *
  * See gtk_accessible_platform_changed().
  *
- * This functionality can be overridden by #GtkAccessible
+ * This functionality can be overridden by `GtkAccessible`
  * implementations, e.g. to get platform state from an ignored
  * child widget, as is the case for #GtkText wrappers.
  *
@@ -719,7 +721,7 @@ gtk_accessible_get_platform_state (GtkAccessible              *self,
 
 /*<private>
  * gtk_accessible_bounds_changed:
- * @self: a #GtkAccessible
+ * @self: a `GtkAccessible`
  *
  * This function can be used to inform ATs that an
  * accessibles bounds (ie its screen extents) have
@@ -746,7 +748,7 @@ gtk_accessible_bounds_changed (GtkAccessible *self)
 
 /*<private>
  * gtk_accessible_should_present:
- * @self: a #GtkAccessible
+ * @self: a `GtkAccessible`
  *
  * Returns whether this accessible should be represented to ATs.
  *
