@@ -256,7 +256,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDevice:direction:
+   * GdkDevice:has-bidi-layouts:
    *
    * Whether the device has both right-to-left and left-to-right layouts.
    *
