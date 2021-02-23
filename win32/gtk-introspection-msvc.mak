@@ -22,6 +22,8 @@ built_install_typelibs =	\
 
 !if "$(PLAT)" == "x64"
 AT_PLAT=x86_64
+!elseif "$(PLAT)" == "arm64"
+AT_PLAT=aarch64
 !else
 AT_PLAT=i686
 !endif
