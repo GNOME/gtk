@@ -114,7 +114,7 @@ if exist .\Debug\$(Platform)\bin\Gtk-3.0.typelib copy .\Debug\$(Platform)\bin\Gt
 copy ..\gdk-3.0.pc $(CopyDir)\lib\pkgconfig
 copy ..\gdk-3.0.pc $(CopyDir)\lib\pkgconfig\gdk-win32-3.0.pc
 copy "..\gtk+-3.0.pc" $(CopyDir)\lib\pkgconfig
-copy "..\gtk+-3.0.pc" "$(CopyDir)\lib\pkgconfig\gtk+-3.0.pc"
+copy "..\gtk+-3.0.pc" "$(CopyDir)\lib\pkgconfig\gtk+-win32-3.0.pc"
 copy ..\gail-3.0.pc $(CopyDir)\lib\pkgconfig
     </GtkDoInstallBin>
     <GtkDoInstall>
