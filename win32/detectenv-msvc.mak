@@ -77,6 +77,8 @@ CFLAGS_ADD = /MDd /Od $(CFLAGS_BASE)
 
 !if "$(PLAT)" == "x64"
 LDFLAGS_ARCH = /machine:x64
+!elseif "$(PLAT)" == "arm64"
+LDFLAGS_ARCH = /machine:arm64
 !else
 LDFLAGS_ARCH = /machine:x86
 !endif
