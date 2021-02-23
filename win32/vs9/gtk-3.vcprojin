@@ -96,7 +96,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\gtk;..\..\gdk;..\..\gdk\win32"
-				PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;$(GtkDefines)"
+				PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;$(GtkDefinesX64)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -128,7 +128,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..\..\gtk;..\..\gdk;..\..\gdk\win32"
-				PreprocessorDefinitions="$(GtkDefines)"
+				PreprocessorDefinitions="$(GtkDefinesX64)"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"

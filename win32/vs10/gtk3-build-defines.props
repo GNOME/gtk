@@ -9,7 +9,10 @@
     <GtkPrefixDefine>GTK_PREFIX=\"$(GtkDummyPrefix)\"</GtkPrefixDefine>
     <GdkDefines>GDK_COMPILATION;G_LOG_DOMAIN="Gdk"</GdkDefines>
     <GtkIncludedImmodulesDefines>INCLUDE_IM_am_et;INCLUDE_IM_cedilla;INCLUDE_IM_cyrillic_translit;INCLUDE_IM_ime;INCLUDE_IM_inuktitut;INCLUDE_IM_ipa;INCLUDE_IM_multipress;INCLUDE_IM_thai;INCLUDE_IM_ti_er;INCLUDE_IM_ti_et;INCLUDE_IM_viqr</GtkIncludedImmodulesDefines>
-    <GtkDefines>GTK_COMPILATION;G_LOG_DOMAIN="Gtk";GTK_HOST="i686-pc-vs$(VSVer)";GTK_PRINT_BACKENDS="file";GTK_PRINT_BACKEND_ENABLE_UNSUPPORTED;$(GtkIncludedImmodulesDefines);GTK_LIBDIR="$(GtkDummyPrefix)/lib";GTK_DATADIR="$(GtkDummyPrefix)/share";GTK_DATA_PREFIX="$(GtkDummyPrefix)";GTK_SYSCONFDIR="$(GtkDummyPrefix)/etc";MULTIPRESS_CONFDIR="$(GtkDummyPrefix)/etc/gtk-$(ApiVersion)";MULTIPRESS_LOCALEDIR="$(GtkDummyPrefix)/share/locale";GTK_VERSION="$(GtkVersion)/etc";GTK_BINARY_VERSION="$(GtkBinaryVersion)/etc";GDK_DISABLE_DEPRECATED;ISOLATION_AWARE_ENABLED</GtkDefines>
+    <GtkHostMachine Condition="'$(Platform)' == 'Win32'">i686</GtkHostMachine>
+    <GtkHostMachine Condition="'$(Platform)' == 'x64'">x86_64</GtkHostMachine>
+    <GtkHostMachine Condition="'$(Platform)' == 'arm64'">aarch64</GtkHostMachine>
+    <GtkDefines>GTK_COMPILATION;G_LOG_DOMAIN="Gtk";GTK_HOST="$(GtkHostMachine)-pc-vs$(VSVer)";GTK_PRINT_BACKENDS="file";GTK_PRINT_BACKEND_ENABLE_UNSUPPORTED;$(GtkIncludedImmodulesDefines);GTK_LIBDIR="$(GtkDummyPrefix)/lib";GTK_DATADIR="$(GtkDummyPrefix)/share";GTK_DATA_PREFIX="$(GtkDummyPrefix)";GTK_SYSCONFDIR="$(GtkDummyPrefix)/etc";MULTIPRESS_CONFDIR="$(GtkDummyPrefix)/etc/gtk-$(ApiVersion)";MULTIPRESS_LOCALEDIR="$(GtkDummyPrefix)/share/locale";GTK_VERSION="$(GtkVersion)/etc";GTK_BINARY_VERSION="$(GtkBinaryVersion)/etc";GDK_DISABLE_DEPRECATED;ISOLATION_AWARE_ENABLED</GtkDefines>
     <CommonARM64SystemLibs Condition="'$(VisualStudioVersion)|$(Platform)' == '15.0|arm64'">ole32.lib;advapi32.lib;shell32.lib;gdi32.lib</CommonARM64SystemLibs>
     <GtkGdkCommonLibs>pangowin32-1.0.lib;fribidi.lib;imm32.lib;$(CommonARM64SystemLibs)</GtkGdkCommonLibs>
     <GdkAdditionalLibs>winmm.lib;dwmapi.lib;setupapi.lib;$(GtkGdkCommonLibs)</GdkAdditionalLibs>
@@ -61,6 +64,9 @@ nmake -f gtk-introspection-msvc.mak CFG=$(Configuration) PREFIX=$(GlibEtcInstall
     </BuildMacro>
     <BuildMacro Include="GtkIncludedImmodulesDefines">
       <Value>$(GtkIncludedImmodulesDefines)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkHostMachine">
+      <Value>$(GtkHostMachine)</Value>
     </BuildMacro>
     <BuildMacro Include="GtkDefines">
       <Value>$(GtkDefines)</Value>
