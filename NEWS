@@ -1,3 +1,23 @@
+Overview of Changes in GTK+ 3.24.26
+===================================
+
+* Input:
+ - Fix a few oversights in Compose file parsing
+ - Fine-tune Compose preedit display
+
+* Theme:
+ - Fine-tune scrollbar size and transitions
+ - Reinstate invisible borders for tiled windows
+
+* Wayland:
+ - Fix a problem with font settings not being found
+
+* Translation updates
+ French
+ Hungarian
+ Turkish
+
+
 Overview of Changes in GTK+ 3.24.25
 ===================================
 
