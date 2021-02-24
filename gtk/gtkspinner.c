@@ -41,12 +41,9 @@
 
 
 /**
- * SECTION:gtkspinner
- * @Short_description: Show a spinner animation
- * @Title: GtkSpinner
- * @See_also: #GtkCellRendererSpinner, #GtkProgressBar
+ * GtkSpinner:
  *
- * A GtkSpinner widget displays an icon-size spinning animation.
+ * A `GtkSpinner` widget displays an icon-size spinning animation.
  * It is often used as an alternative to a [class@Gtk.ProgressBar] for
  * displaying indefinite activity, instead of actual progress.
  *
@@ -140,8 +137,8 @@ gtk_spinner_css_changed (GtkWidget         *widget,
 }
 
 /**
- * gtk_spinner_get_spinning:
- * @spinner: a #GtkSpinner
+ * gtk_spinner_get_spinning: (attributes org.gtk.Method.get_property=spinning)
+ * @spinner: a `GtkSpinner`
  *
  * Returns whether the spinner is spinning.
  *
@@ -156,8 +153,8 @@ gtk_spinner_get_spinning (GtkSpinner *spinner)
 }
 
 /**
- * gtk_spinner_set_spinning:
- * @spinner: a #GtkSpinner
+ * gtk_spinner_set_spinning: (attributes org.gtk.Method.set_property=spinning)
+ * @spinner: a `GtkSpinner`
  * @spinning: whether the spinner should be spinning
  *
  * Sets the activity of the spinner.
@@ -230,7 +227,8 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
   widget_class->measure = gtk_spinner_measure;
   widget_class->css_changed = gtk_spinner_css_changed;
 
-  /* GtkSpinner:spinning:
+  /**
+   * GtkSpinner:spinning: (attributes org.gtk.Property.get=gtk_spinner_get_spinning org.gtk.Property.set=gtk_spinner_set_spinning)
    *
    * Whether the spinner is spinning
    */
@@ -255,7 +253,7 @@ gtk_spinner_init (GtkSpinner *spinner)
  *
  * Returns a new spinner widget. Not yet started.
  *
- * Returns: a new #GtkSpinner
+ * Returns: a new `GtkSpinner`
  */
 GtkWidget *
 gtk_spinner_new (void)
@@ -265,7 +263,7 @@ gtk_spinner_new (void)
 
 /**
  * gtk_spinner_start:
- * @spinner: a #GtkSpinner
+ * @spinner: a `GtkSpinner`
  *
  * Starts the animation of the spinner.
  */
@@ -279,7 +277,7 @@ gtk_spinner_start (GtkSpinner *spinner)
 
 /**
  * gtk_spinner_stop:
- * @spinner: a #GtkSpinner
+ * @spinner: a `GtkSpinner`
  *
  * Stops the animation of the spinner.
  */
