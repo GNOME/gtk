@@ -170,7 +170,7 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
   object_class->finalize = gdk_cursor_finalize;
 
   /**
-   * GdkCursor:fallback:
+   * GdkCursor:fallback: (attributes org.gtk.Property.get=gdk_cursor_get_fallback)
    *
    * Cursor to fall back to if this cursor cannot be displayed.
    */
@@ -184,7 +184,7 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
                                                         G_PARAM_STATIC_STRINGS));
 
   /**
-   * GdkCursor:hotspot-x:
+   * GdkCursor:hotspot-x: (attributes org.gtk.Property.get=gdk_cursor_get_hotspot_x)
    *
    * X position of the cursor hotspot in the cursor image.
    */
@@ -198,7 +198,7 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
                                                      G_PARAM_STATIC_STRINGS));
 
   /**
-   * GdkCursor:hotspot-y:
+   * GdkCursor:hotspot-y: (attributes org.gtk.Property.get=gdk_cursor_get_hotspot_y)
    *
    * Y position of the cursor hotspot in the cursor image.
    */
@@ -212,7 +212,7 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
                                                      G_PARAM_STATIC_STRINGS));
 
   /**
-   * GdkCursor:name:
+   * GdkCursor:name: (attributes org.gtk.Property.get=gdk_cursor_get_name)
    *
    * Name of this this cursor.
    *
@@ -392,7 +392,7 @@ gdk_cursor_new_from_texture (GdkTexture *texture,
 }
 
 /**
- * gdk_cursor_get_fallback:
+ * gdk_cursor_get_fallback: (attributes org.gtk.Method.get_property=fallback)
  * @cursor: a `GdkCursor`
  *
  * Returns the fallback for this @cursor.
@@ -415,7 +415,7 @@ gdk_cursor_get_fallback (GdkCursor *cursor)
 }
 
 /**
- * gdk_cursor_get_name:
+ * gdk_cursor_get_name: (attributes org.gtk.Method.get_property=name)
  * @cursor: a `GdkCursor`
  *
  * Returns the name of the cursor.
@@ -453,7 +453,7 @@ gdk_cursor_get_texture (GdkCursor *cursor)
 }
 
 /**
- * gdk_cursor_get_hotspot_x:
+ * gdk_cursor_get_hotspot_x: (attributes org.gtk.Method.get_property=hotspot-x)
  * @cursor: a `GdkCursor`
  *
  * Returns the horizontal offset of the hotspot.
@@ -475,7 +475,7 @@ gdk_cursor_get_hotspot_x (GdkCursor *cursor)
 }
 
 /**
- * gdk_cursor_get_hotspot_y:
+ * gdk_cursor_get_hotspot_y: (attributes org.gtk.Method.get_property=hotspot-y)
  * @cursor: a `GdkCursor`
  *
  * Returns the vertical offset of the hotspot.
