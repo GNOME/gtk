@@ -38,9 +38,7 @@
 #include "gtkwidgetprivate.h"
 
 /**
- * SECTION:gtkstatusbar
- * @title: GtkStatusbar
- * @short_description: Report messages of minor importance to the user
+ * `GtkStatusbar:
  *
  * A `GtkStatusbar` widget is usually placed along the bottom of an application's
  * main [class@Gtk.Window].
