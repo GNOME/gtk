@@ -5,6 +5,7 @@
 # First Version: 1999-08-30 18:49+0200
 # Based on es.po by Pablo Saratxaga <srtxg@chanae.alphanet.ch>
 # and pt.po by Nuno Ferreira <nmrf@rnl.ist.utl.pt>
+#
 # Jesus Bravo Alvarez <jba@pobox.com>, 1999, 2000.
 # Ignacio Casal Quinteiro <nacho.resa@gmail.com>, 2005, 2006.
 # Ignacio Casal Quinteiro <icq@svn.gnome.org>, 2008.
@@ -14,15 +15,14 @@
 # Fran Diéguez <frandieguez@gnome.org>, 2009, 2010, 2011, 2012.
 # Leandro Regueiro <leandro.regueiro@gmail.com>, 2012.
 # Fran Dieguez <frandieguez@gnome.org>, 2012-2021.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-01-23 10:58+0000\n"
-"PO-Revision-Date: 2021-01-25 19:43+0100\n"
+"POT-Creation-Date: 2021-02-21 19:52+0000\n"
+"PO-Revision-Date: 2021-02-23 20:51+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
-"Language-Team: Galician <Proxecto Trasno <proxecto@trasno.gal>>\n"
+"Language-Team: Proxecto Trasno <proxecto@trasno.gal>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -459,7 +459,7 @@ msgstr "Suspender"
 #: gdk/macos/gdkmacosclipboard.c:251 gdk/wayland/gdkclipboard-wayland.c:231
 #: gdk/wayland/gdkdrop-wayland.c:204 gdk/wayland/gdkprimary-wayland.c:312
 #: gdk/win32/gdkdrop-win32.c:1279 gdk/win32/gdkdrop-win32.c:1324
-#: gdk/x11/gdkclipboard-x11.c:763 gdk/x11/gdkdrop-x11.c:196
+#: gdk/x11/gdkclipboard-x11.c:763 gdk/x11/gdkdrop-x11.c:237
 msgid "No compatible transfer format found"
 msgstr "Non se atopou un formato de transferencia compatíbel"
 
@@ -728,105 +728,105 @@ msgstr "Formatos non válidos na conversión de texto composto."
 msgid "Unsupported encoding “%s”"
 msgstr "Codificación non admitida «%s»."
 
-#: gtk/a11y/gtkatspiaction.c:243
+#: gtk/a11y/gtkatspiaction.c:239
 msgctxt "accessibility"
 msgid "Click"
 msgstr "Clic"
 
-#: gtk/a11y/gtkatspiaction.c:244
+#: gtk/a11y/gtkatspiaction.c:240
 msgctxt "accessibility"
 msgid "Clicks the button"
 msgstr "Preme o botón"
 
-#: gtk/a11y/gtkatspiaction.c:294
+#: gtk/a11y/gtkatspiaction.c:290
 msgctxt "accessibility"
 msgid "Toggle"
 msgstr "Trocar"
 
-#: gtk/a11y/gtkatspiaction.c:295
+#: gtk/a11y/gtkatspiaction.c:291
 msgctxt "accessibility"
 msgid "Toggles the switch"
 msgstr "Troca o interruptor"
 
-#: gtk/a11y/gtkatspiaction.c:375
+#: gtk/a11y/gtkatspiaction.c:371
 msgctxt "accessibility"
 msgid "Select"
 msgstr "Seleccionar"
 
-#: gtk/a11y/gtkatspiaction.c:376
+#: gtk/a11y/gtkatspiaction.c:372
 msgctxt "accessibility"
 msgid "Selects the color"
 msgstr "Selecciona unha cor"
 
-#: gtk/a11y/gtkatspiaction.c:383 gtk/a11y/gtkatspiaction.c:443
-#: gtk/a11y/gtkatspiaction.c:499 gtk/a11y/gtkatspiaction.c:607
-#: gtk/a11y/gtkatspiaction.c:694
+#: gtk/a11y/gtkatspiaction.c:379 gtk/a11y/gtkatspiaction.c:439
+#: gtk/a11y/gtkatspiaction.c:495 gtk/a11y/gtkatspiaction.c:603
+#: gtk/a11y/gtkatspiaction.c:690
 msgctxt "accessibility"
 msgid "Activate"
 msgstr "Activar"
 
-#: gtk/a11y/gtkatspiaction.c:384
+#: gtk/a11y/gtkatspiaction.c:380
 msgctxt "accessibility"
 msgid "Activates the color"
 msgstr "Activa a cor"
 
-#: gtk/a11y/gtkatspiaction.c:391
+#: gtk/a11y/gtkatspiaction.c:387
 msgctxt "accessibility"
 msgid "Customize"
 msgstr "Personalizar"
 
-#: gtk/a11y/gtkatspiaction.c:392
+#: gtk/a11y/gtkatspiaction.c:388
 msgctxt "accessibility"
 msgid "Customizes the color"
 msgstr "Personaliza a cor"
 
-#: gtk/a11y/gtkatspiaction.c:444
+#: gtk/a11y/gtkatspiaction.c:440
 msgctxt "accessibility"
 msgid "Activates the expander"
 msgstr "Activa o expansor"
 
-#: gtk/a11y/gtkatspiaction.c:500 gtk/a11y/gtkatspiaction.c:608
-#: gtk/a11y/gtkatspiaction.c:695
+#: gtk/a11y/gtkatspiaction.c:496 gtk/a11y/gtkatspiaction.c:604
+#: gtk/a11y/gtkatspiaction.c:691
 msgctxt "accessibility"
 msgid "Activates the entry"
 msgstr "Activa a entrada"
 
-#: gtk/a11y/gtkatspiaction.c:507
+#: gtk/a11y/gtkatspiaction.c:503
 msgctxt "accessibility"
 msgid "Activate primary icon"
 msgstr "Activa a icona primaria"
 
-#: gtk/a11y/gtkatspiaction.c:508
+#: gtk/a11y/gtkatspiaction.c:504
 msgctxt "accessibility"
 msgid "Activates the primary icon of the entry"
 msgstr "Activa a icona primaria da entrada"
 
-#: gtk/a11y/gtkatspiaction.c:515
+#: gtk/a11y/gtkatspiaction.c:511
 msgctxt "accessibility"
 msgid "Activate secondary icon"
 msgstr "Activa a icona secundaria"
 
-#: gtk/a11y/gtkatspiaction.c:516
+#: gtk/a11y/gtkatspiaction.c:512
 msgctxt "accessibility"
 msgid "Activates the secondary icon of the entry"
 msgstr "Activa a icona secundaria da entrada"
 
-#: gtk/a11y/gtkatspiaction.c:615
+#: gtk/a11y/gtkatspiaction.c:611
 msgctxt "accessibility"
 msgid "Peek"
 msgstr "Vistazo"
 
-#: gtk/a11y/gtkatspiaction.c:616
+#: gtk/a11y/gtkatspiaction.c:612
 msgctxt "accessibility"
 msgid "Shows the contents of the password entry"
 msgstr "Mostra os contidos da entrada de contrasinal"
 
-#: gtk/a11y/gtkatspiaction.c:702
+#: gtk/a11y/gtkatspiaction.c:698
 msgctxt "accessibility"
 msgid "Clear"
 msgstr "Limpar"
 
-#: gtk/a11y/gtkatspiaction.c:703
+#: gtk/a11y/gtkatspiaction.c:699
 msgctxt "accessibility"
 msgid "Clears the contents of the entry"
 msgstr "Limpa os contidos da entrada"
@@ -1945,7 +1945,7 @@ msgstr "_Dereito:"
 msgid "Paper Margins"
 msgstr "Marxes do papel"
 
-#: gtk/gtkentry.c:3637
+#: gtk/gtkentry.c:3636
 msgid "Insert Emoji"
 msgstr "Inserir emoticono"
 
@@ -2009,26 +2009,26 @@ msgstr "Xa existe un cartafol con ese nome"
 msgid "A file with that name already exists"
 msgstr "Xa existe un ficheiro con ese nome"
 
-#: gtk/gtkfilechoosernative.c:504 gtk/gtkfilechoosernative.c:575
+#: gtk/gtkfilechoosernative.c:509 gtk/gtkfilechoosernative.c:580
 #: gtk/gtkfilechooserwidget.c:1212 gtk/gtkfilechooserwidget.c:5762
 #: gtk/gtkmessagedialog.c:165 gtk/gtkmessagedialog.c:174
 #: gtk/gtkmountoperation.c:608 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:643 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:626 gtk/gtkprintunixdialog.c:782
-#: gtk/gtkwindow.c:5950 gtk/inspector/css-editor.c:248
+#: gtk/gtkwindow.c:5959 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1241 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
 msgid "_Cancel"
 msgstr "_Cancelar"
 
-#: gtk/gtkfilechoosernative.c:505 gtk/gtkfilechoosernative.c:569
+#: gtk/gtkfilechoosernative.c:510 gtk/gtkfilechoosernative.c:574
 #: gtk/gtkplacessidebar.c:3126 gtk/gtkplacessidebar.c:3211
 #: gtk/gtkplacesview.c:1650
 msgid "_Open"
 msgstr "_Abrir"
 
-#: gtk/gtkfilechoosernative.c:569 gtk/inspector/css-editor.c:249
+#: gtk/gtkfilechoosernative.c:574 gtk/inspector/css-editor.c:249
 #: gtk/inspector/recorder.c:1242
 msgid "_Save"
 msgstr "_Gardar"
@@ -2504,7 +2504,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:157 gtk/gtkmessagedialog.c:175
-#: gtk/gtkprintbackend.c:644 gtk/gtkwindow.c:5951
+#: gtk/gtkprintbackend.c:644 gtk/gtkwindow.c:5960
 msgid "_OK"
 msgstr "_Aceptar"
 
@@ -3411,12 +3411,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:5938
+#: gtk/gtkwindow.c:5947
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Desexa usar o Inspector de GTK?"
 
-#: gtk/gtkwindow.c:5940
+#: gtk/gtkwindow.c:5949
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3427,7 +3427,7 @@ msgstr ""
 "modificar propiedades internas de calquera aplicación GTK+. Ao usalo pode "
 "causar que a aplicación se rompa ou se interrompa."
 
-#: gtk/gtkwindow.c:5945
+#: gtk/gtkwindow.c:5954
 msgid "Don’t show this message again"
 msgstr "Non mostrar este mensaxe de novo"
 
@@ -4049,17 +4049,14 @@ msgid "CSS Padding"
 msgstr "Espaciado CSS"
 
 #: gtk/inspector/visual.ui:554
-#| msgid "CSS Nodes"
 msgid "CSS Border"
 msgstr "Bordo CSS"
 
 #: gtk/inspector/visual.ui:564
-#| msgid "Paper Margins"
 msgid "CSS Margin"
 msgstr "Marxe CSS"
 
 #: gtk/inspector/visual.ui:574
-#| msgid "Paper Margins"
 msgid "Widget Margin"
 msgstr "Marxe do trebello"
 
@@ -6586,7 +6583,7 @@ msgstr "Yezidi"
 
 #: gtk/tools/encodesymbolic.c:41
 msgid "Output to this directory instead of cwd"
-msgstr "Saída a este directorio no lugar de cwdº"
+msgstr "Saída a este directorio no lugar de cwd"
 
 #: gtk/tools/encodesymbolic.c:42
 msgid "Generate debug output"
@@ -6659,32 +6656,32 @@ msgstr "%s:%d: Non foi posíbel analizar o valor para «%s»: %s\n"
 msgid "%s:%d: %sproperty %s::%s not found\n"
 msgstr "%s:%d: %spropiedade %s::%s non atopada\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:2203
+#: gtk/tools/gtk-builder-tool-simplify.c:2204
 #, c-format
 msgid "Can’t load “%s”: %s\n"
 msgstr "Non foi posíbel cargar o ficheiro «%s»: %s\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:2214
+#: gtk/tools/gtk-builder-tool-simplify.c:2215
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
 msgstr "Non é posíbel analizar o ficheiro «%s»: %s\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:2238
+#: gtk/tools/gtk-builder-tool-simplify.c:2239
 #, c-format
 msgid "Failed to read “%s”: %s\n"
 msgstr "Produciuse un erro ao ler «%s» : %s\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:2244
+#: gtk/tools/gtk-builder-tool-simplify.c:2245
 #, c-format
 msgid "Failed to write %s: “%s”\n"
 msgstr "Produciuse un erro ao escribir %s : «%s»\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:2284
+#: gtk/tools/gtk-builder-tool-simplify.c:2285
 #, c-format
 msgid "No .ui file specified\n"
 msgstr "Non se especificou ningún ficheiro .ui\n"
 
-#: gtk/tools/gtk-builder-tool-simplify.c:2290
+#: gtk/tools/gtk-builder-tool-simplify.c:2291
 #, c-format
 msgid "Can only simplify a single .ui file without --replace\n"
 msgstr "Só pode simplificar un ficheiro .ui sen --replace\n"
