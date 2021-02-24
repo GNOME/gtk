@@ -48,10 +48,7 @@
 #include "gtkgestureclick.h"
 
 /**
- * SECTION:gtkinfobar
- * @short_description: Report important messages to the user
- * @include: gtk/gtk.h
- * @see_also: #GtkStatusbar, #GtkMessageDialog
+ * GtkInfoBar:
  *
  * `GtkInfoBar` is a widget that can be used to show messages to
  * the user without showing a dialog.
