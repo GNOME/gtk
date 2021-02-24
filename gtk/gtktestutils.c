@@ -41,6 +41,7 @@
 #define GTK_COMPILATION
 
 #include <gsk/gl/gskglrenderer.h>
+#include <gsk/ngl/gsknglrenderer.h>
 
 #ifdef GDK_WINDOWING_BROADWAY
 #include <gsk/broadway/gskbroadwayrenderer.h>

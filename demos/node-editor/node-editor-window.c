@@ -25,6 +25,7 @@
 
 #include "gsk/gskrendernodeparserprivate.h"
 #include "gsk/gl/gskglrenderer.h"
+#include "gsk/ngl/gsknglrenderer.h"
 #ifdef GDK_WINDOWING_BROADWAY
 #include "gsk/broadway/gskbroadwayrenderer.h"
 #endif
@@ -762,6 +763,9 @@ node_editor_window_realize (GtkWidget *widget)
   node_editor_window_add_renderer (self,
                                    gsk_gl_renderer_new (),
                                    "OpenGL");
+  node_editor_window_add_renderer (self,
+                                   gsk_ngl_renderer_new (),
+                                   "NGL");
 #ifdef GDK_RENDERING_VULKAN
   node_editor_window_add_renderer (self,
                                    gsk_vulkan_renderer_new (),
