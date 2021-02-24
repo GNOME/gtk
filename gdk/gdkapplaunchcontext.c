@@ -121,6 +121,11 @@ gdk_app_launch_context_class_init (GdkAppLaunchContextClass *klass)
   context_class->get_startup_notify_id = gdk_app_launch_context_get_startup_notify_id;
   context_class->launch_failed = gdk_app_launch_context_launch_failed;
 
+  /**
+   * GdkAppLaunchContext:display: (attributes org.gtk.Property.get=gdk_app_launch_context_get_display)
+   *
+   * The display that the `GdkAppLaunchContext` is on.
+   */
   g_object_class_install_property (gobject_class, PROP_DISPLAY,
     g_param_spec_object ("display", P_("Display"), P_("Display"),
                          GDK_TYPE_DISPLAY,
@@ -166,7 +171,7 @@ gdk_app_launch_context_get_display_name (GAppLaunchContext *context,
 }
 
 /**
- * gdk_app_launch_context_get_display:
+ * gdk_app_launch_context_get_display: (attributes org.gtk.Method.get_property=display)
  * @context: a `GdkAppLaunchContext`
  *
  * Gets the `GdkDisplay` that @context is for.
