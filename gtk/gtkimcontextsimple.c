@@ -66,6 +66,7 @@ struct _GtkIMContextSimplePrivate
   int            tentative_match_len;
 
   guint          in_hex_sequence : 1;
+  guint          in_compose_sequence : 1;
   guint          modifiers_dropped : 1;
 };
 
@@ -309,13 +310,21 @@ gtk_im_context_simple_commit_string (GtkIMContextSimple *context_simple,
                                      const char         *str)
 {
   GtkIMContextSimplePrivate *priv = context_simple->priv;
-  priv->in_hex_sequence = FALSE;
-  g_string_set_size (priv->tentative_match, 0);
-  priv->tentative_match_len = 0;
-  priv->compose_buffer[0] = 0;
 
-  g_signal_emit_by_name (context_simple, "preedit-changed");
-  g_signal_emit_by_name (context_simple, "preedit-end");
+  if (priv->in_hex_sequence ||
+      priv->tentative_match_len > 0 ||
+      priv->compose_buffer[0] != 0)
+    {
+      g_string_set_size (priv->tentative_match, 0);
+      priv->tentative_match_len = 0;
+      priv->in_hex_sequence = FALSE;
+      priv->in_compose_sequence = FALSE;
+      priv->compose_buffer[0] = 0;
+
+      g_signal_emit_by_name (context_simple, "preedit-changed");
+      g_signal_emit_by_name (context_simple, "preedit-end");
+    }
+
   g_signal_emit_by_name (context_simple, "commit", str);
 }
 
@@ -432,6 +441,8 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
 
   context = GTK_IM_CONTEXT (context_simple);
   
+  priv->in_compose_sequence = FALSE;
+
   /* No compose sequences found, check first if we have a partial
    * match pending.
    */
@@ -736,7 +747,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       return TRUE;
     }
   
-  /* Then, check for compose sequences */
   if (priv->in_hex_sequence)
     {
       if (hex_keyval && n_compose < 6)
@@ -779,6 +789,8 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
                   char *str = g_strdup (priv->tentative_match->str);
 		  gtk_im_context_simple_commit_string (context_simple, str);
                   g_free (str);
+
+                  return TRUE;
 		}
 	      else
 		{
@@ -801,7 +813,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	  return TRUE;
         }
     }
-  else
+  else /* Then, check for compose sequences */
     {
       gboolean success = FALSE;
       GString *output;
@@ -818,6 +830,12 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
                                        &compose_finish, &compose_match,
                                        output))
             {
+              if (!priv->in_compose_sequence)
+                {
+                  priv->in_compose_sequence = TRUE;
+                  g_signal_emit_by_name (context_simple, "preedit-start");
+                }
+
               if (compose_finish)
                 {
                   if (compose_match)
@@ -852,6 +870,12 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
                                            &compose_finish, &compose_match,
                                            &output_char))
         {
+          if (!priv->in_compose_sequence)
+            {
+              priv->in_compose_sequence = TRUE;
+              g_signal_emit_by_name (context_simple, "preedit-start");
+            }
+
           if (compose_finish)
             {
               if (compose_match)
@@ -873,8 +897,15 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 
       if (gtk_check_algorithmically (priv->compose_buffer, n_compose, &output_char))
         {
+          if (!priv->in_compose_sequence)
+            {
+              priv->in_compose_sequence = TRUE;
+              g_signal_emit_by_name (context_simple, "preedit-start");
+            }
+
           if (output_char)
             gtk_im_context_simple_commit_char (context_simple, output_char);
+
           return TRUE;
         }
     }
@@ -921,106 +952,109 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
       for (i = 0; priv->compose_buffer[i]; i++)
         g_string_append_unichar (s, gdk_keyval_to_unicode (priv->compose_buffer[i]));
     }
-  else if (priv->tentative_match->len > 0 && priv->compose_buffer[0] != 0)
+  else if (priv->in_compose_sequence)
     {
-       g_string_append (s, priv->tentative_match->str);
-    }
-  else
-    {
-      for (i = 0; priv->compose_buffer[i]; i++)
+      if (priv->tentative_match_len > 0 && priv->compose_buffer[0] != 0)
         {
-          if (priv->compose_buffer[i] == GDK_KEY_Multi_key)
+          g_string_append (s, priv->tentative_match->str);
+        }
+      else
+        {
+          for (i = 0; priv->compose_buffer[i]; i++)
             {
-              /* We only show the Compose key visibly when it is the
-               * only glyph in the preedit, or when it occurs in the
-               * middle of the sequence. Sadly, the official character,
-               * U+2384, COMPOSITION SYMBOL, is bit too distracting, so
-               * we use U+00B7, MIDDLE DOT.
-               */
-              if (priv->compose_buffer[1] == 0 || i > 0)
-                g_string_append (s, "·");
-            }
-          else
-            {
-              gunichar ch;
-              gboolean need_space;
-
-              if (GDK_KEY_dead_grave <= priv->compose_buffer[i] && priv->compose_buffer[i] <= GDK_KEY_dead_greek)
+              if (priv->compose_buffer[i] == GDK_KEY_Multi_key)
                 {
-                  /* Sadly, not all the dead keysyms have spacing mark equivalents
-                   * in Unicode. For those that don't, we use space + the non-spacing
-                   * mark as an approximation
+                  /* We only show the Compose key visibly when it is the
+                   * only glyph in the preedit, or when it occurs in the
+                   * middle of the sequence. Sadly, the official character,
+                   * U+2384, COMPOSITION SYMBOL, is bit too distracting, so
+                   * we use U+00B7, MIDDLE DOT.
                    */
-                  switch (priv->compose_buffer[i])
-                    {
-#define CASE(keysym, unicode, sp) \
-                    case GDK_KEY_dead_##keysym: ch = unicode; need_space = sp; break
-
-                    CASE (grave, 0x60, 0);
-                    CASE (acute, 0xb4, 0);
-                    CASE (circumflex, 0x5e, 0);
-                    CASE (tilde, 0x7e, 0);
-                    CASE (macron, 0xaf, 0);
-                    CASE (breve, 0x2d8, 0);
-                    CASE (abovedot, 0x307, 1);
-                    CASE (diaeresis, 0xa8, 0);
-                    CASE (abovering, 0x2da, 0);
-                    CASE (hook, 0x2c0, 0);
-                    CASE (doubleacute, 0x2dd, 0);
-                    CASE (caron, 0x2c7, 0);
-                    CASE (cedilla, 0xb8, 0);
-                    CASE (ogonek, 0x2db, 0);
-                    CASE (iota, 0x37a, 0);
-                    CASE (voiced_sound, 0x3099, 1);
-                    CASE (semivoiced_sound, 0x309a, 1);
-                    CASE (belowdot, 0x323, 1);
-                    CASE (horn, 0x31b, 1);
-                    CASE (stroke, 0x335, 1);
-                    CASE (abovecomma, 0x2bc, 0);
-                    CASE (abovereversedcomma, 0x2bd, 1);
-                    CASE (doublegrave, 0x30f, 1);
-                    CASE (belowring, 0x2f3, 0);
-                    CASE (belowmacron, 0x2cd, 0);
-                    CASE (belowcircumflex, 0x32d, 1);
-                    CASE (belowtilde, 0x330, 1);
-                    CASE (belowbreve, 0x32e, 1);
-                    CASE (belowdiaeresis, 0x324, 1);
-                    CASE (invertedbreve, 0x32f, 1);
-                    CASE (belowcomma, 0x326, 1);
-                    CASE (lowline, 0x5f, 0);
-                    CASE (aboveverticalline, 0x2c8, 0);
-                    CASE (belowverticalline, 0x2cc, 0);
-                    CASE (longsolidusoverlay, 0x338, 1);
-                    CASE (a, 0x363, 1);
-                    CASE (A, 0x363, 1);
-                    CASE (e, 0x364, 1);
-                    CASE (E, 0x364, 1);
-                    CASE (i, 0x365, 1);
-                    CASE (I, 0x365, 1);
-                    CASE (o, 0x366, 1);
-                    CASE (O, 0x366, 1);
-                    CASE (u, 0x367, 1);
-                    CASE (U, 0x367, 1);
-                    CASE (small_schwa, 0x1dea, 1);
-                    CASE (capital_schwa, 0x1dea, 1);
-#undef CASE
-                    default:
-                      need_space = FALSE;
-                      ch = gdk_keyval_to_unicode (priv->compose_buffer[i]);
-                      break;
-                    }
-                  if (ch)
-                    {
-                      if (need_space)
-                        g_string_append_c (s, ' ');
-                      g_string_append_unichar (s, ch);
-                    }
+                  if (priv->compose_buffer[1] == 0 || i > 0)
+                    g_string_append (s, "·");
                 }
               else
                 {
-                  ch = gdk_keyval_to_unicode (priv->compose_buffer[i]);
-                  if (ch)
-                    g_string_append_unichar (s, ch);
+                  gunichar ch;
+                  gboolean need_space;
+
+                  if (GDK_KEY_dead_grave <= priv->compose_buffer[i] && priv->compose_buffer[i] <= GDK_KEY_dead_greek)
+                    {
+                      /* Sadly, not all the dead keysyms have spacing mark equivalents
+                       * in Unicode. For those that don't, we use space + the non-spacing
+                       * mark as an approximation
+                       */
+                      switch (priv->compose_buffer[i])
+                        {
+    #define CASE(keysym, unicode, sp) \
+                        case GDK_KEY_dead_##keysym: ch = unicode; need_space = sp; break
+
+                        CASE (grave, 0x60, 0);
+                        CASE (acute, 0xb4, 0);
+                        CASE (circumflex, 0x5e, 0);
+                        CASE (tilde, 0x7e, 0);
+                        CASE (macron, 0xaf, 0);
+                        CASE (breve, 0x2d8, 0);
+                        CASE (abovedot, 0x307, 1);
+                        CASE (diaeresis, 0xa8, 0);
+                        CASE (abovering, 0x2da, 0);
+                        CASE (hook, 0x2c0, 0);
+                        CASE (doubleacute, 0x2dd, 0);
+                        CASE (caron, 0x2c7, 0);
+                        CASE (cedilla, 0xb8, 0);
+                        CASE (ogonek, 0x2db, 0);
+                        CASE (iota, 0x37a, 0);
+                        CASE (voiced_sound, 0x3099, 1);
+                        CASE (semivoiced_sound, 0x309a, 1);
+                        CASE (belowdot, 0x323, 1);
+                        CASE (horn, 0x31b, 1);
+                        CASE (stroke, 0x335, 1);
+                        CASE (abovecomma, 0x2bc, 0);
+                        CASE (abovereversedcomma, 0x2bd, 1);
+                        CASE (doublegrave, 0x30f, 1);
+                        CASE (belowring, 0x2f3, 0);
+                        CASE (belowmacron, 0x2cd, 0);
+                        CASE (belowcircumflex, 0x32d, 1);
+                        CASE (belowtilde, 0x330, 1);
+                        CASE (belowbreve, 0x32e, 1);
+                        CASE (belowdiaeresis, 0x324, 1);
+                        CASE (invertedbreve, 0x32f, 1);
+                        CASE (belowcomma, 0x326, 1);
+                        CASE (lowline, 0x5f, 0);
+                        CASE (aboveverticalline, 0x2c8, 0);
+                        CASE (belowverticalline, 0x2cc, 0);
+                        CASE (longsolidusoverlay, 0x338, 1);
+                        CASE (a, 0x363, 1);
+                        CASE (A, 0x363, 1);
+                        CASE (e, 0x364, 1);
+                        CASE (E, 0x364, 1);
+                        CASE (i, 0x365, 1);
+                        CASE (I, 0x365, 1);
+                        CASE (o, 0x366, 1);
+                        CASE (O, 0x366, 1);
+                        CASE (u, 0x367, 1);
+                        CASE (U, 0x367, 1);
+                        CASE (small_schwa, 0x1dea, 1);
+                        CASE (capital_schwa, 0x1dea, 1);
+    #undef CASE
+                        default:
+                          need_space = FALSE;
+                          ch = gdk_keyval_to_unicode (priv->compose_buffer[i]);
+                          break;
+                        }
+                      if (ch)
+                        {
+                          if (need_space)
+                            g_string_append_c (s, ' ');
+                          g_string_append_unichar (s, ch);
+                        }
+                    }
+                  else
+                    {
+                      ch = gdk_keyval_to_unicode (priv->compose_buffer[i]);
+                      if (ch)
+                        g_string_append_unichar (s, ch);
+                    }
                 }
             }
         }
