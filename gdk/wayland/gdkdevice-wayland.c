@@ -2534,7 +2534,7 @@ emit_gesture_swipe_event (GdkWaylandSeat          *seat,
   seat->pointer_info.time = _time;
 
   event = gdk_touchpad_event_new_swipe (seat->pointer_info.focus,
-                                        seat->pointer,
+                                        seat->logical_pointer,
                                         _time,
                                         device_get_modifiers (seat->logical_pointer),
                                         phase,
@@ -2630,7 +2630,7 @@ emit_gesture_pinch_event (GdkWaylandSeat          *seat,
   seat->pointer_info.time = _time;
 
   event = gdk_touchpad_event_new_pinch (seat->pointer_info.focus,
-                                        seat->pointer,
+                                        seat->logical_pointer,
                                         _time,
                                         device_get_modifiers (seat->logical_pointer),
                                         phase,
