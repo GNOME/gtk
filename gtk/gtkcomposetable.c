@@ -95,10 +95,6 @@ parse_compose_value (GtkComposeData *compose_data,
     {
       if (*p == '\"')
         {
-          p++;
-          while (*p && g_ascii_isspace (*p))
-            p++;
-
           compose_data->value = g_string_free (value, FALSE);
           return TRUE;
         }
