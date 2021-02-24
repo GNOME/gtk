@@ -1,3 +1,62 @@
+Overview of Changes in 4.1.1
+============================
+
+* Popover:
+ - Support shadows on popover > contents
+
+* Input:
+ - Show preedit for compose sequences
+ - Support long compose sequences
+ - Support compose sequences producing multiple characters
+
+* Themes:
+ - Allow suggested and destructive actions in lists
+ - Disable shadows on maximized, fullscreen and tiled windows
+ - Fine-tune scrollbar transitions and size
+
+* CSS:
+ - Support drop-shadow filters
+ - Correct blur filter spread interpretation
+
+* Documentation:
+ - Improvements and updates for dialogs and native dialog
+
+* Printing:
+ - Support Avahi-discovered printers better
+
+* GSK:
+ - Add another OpenGL render. It is not the default yet.
+   To try it, use GSK_RENDERER=ngl
+
+* Build:
+ - Lots of static analysis fixes found by pvs
+ - Add a -Dprofile=devel option for devel styling and
+   use it for nightly flatpaks
+
+* X11:
+ - Fix DND of X11-specific types
+
+* Wayland:
+ - Fix lookup of font settings in flatpaks
+
+* Windows:
+ - Fix window resizing
+ - Avoid UAC for gtk-update-icon-cache
+
+* MacOs:
+ - Use correct module file extension
+ - Make OpenGL context opaque when possible
+ - Fix window resizing
+
+* Translation updates:
+ British English
+ Czech
+ Danish
+ Galician
+ Hungarian
+ Turkish
+
+
 Overview of Changes in 4.1.0
 ============================
 
