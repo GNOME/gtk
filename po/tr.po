@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2021-02-25 12:24+0000\n"
-"PO-Revision-Date: 2021-02-25 17:02+0300\n"
+"PO-Revision-Date: 2021-02-25 17:22+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -2017,7 +2017,7 @@ msgstr "%2$s üzerindeki %1$s"
 
 #: gtk/gtkfilechooserwidget.c:320
 msgid "Type name of new folder"
-msgstr "Yeni klasörün adını girin"
+msgstr "Yeni klasörün adını gir"
 
 #: gtk/gtkfilechooserwidget.c:725
 msgid "The folder could not be created"
@@ -2154,7 +2154,7 @@ msgstr "Arama"
 
 #: gtk/gtkfilechooserwidget.c:2906
 msgid "Enter location or URL"
-msgstr "Konum ya da URL girin"
+msgstr "Konum ya da URL gir"
 
 #: gtk/gtkfilechooserwidget.c:3794 gtk/gtkfilechooserwidget.c:6596
 #: gtk/ui/gtkfilechooserwidget.ui:225
@@ -2396,7 +2396,7 @@ msgid ""
 "Click to prevent further changes"
 msgstr ""
 "Pencere kilidi kaldırıldı.\n"
-"Daha çok değişikliği önlemek için tıklayın"
+"Gelecek değişiklikleri önlemek için tıkla"
 
 #: gtk/gtklockbutton.c:301
 msgid ""
@@ -2404,7 +2404,7 @@ msgid ""
 "Click to make changes"
 msgstr ""
 "Pencere kilitlendi.\n"
-"Değişiklik yapmak için tıklayın"
+"Değişiklik yapmak için tıkla"
 
 #: gtk/gtklockbutton.c:310
 msgid ""
@@ -2534,7 +2534,7 @@ msgstr "Parolayı _anında unut"
 
 #: gtk/gtkmountoperation.c:764
 msgid "Remember password until you _logout"
-msgstr "Parolayı _çıkış yapana kadar anımsa"
+msgstr "Parolayı _çıkış yapana dek anımsa"
 
 #: gtk/gtkmountoperation.c:775
 msgid "Remember _forever"
@@ -2702,7 +2702,7 @@ msgstr "Masaüstünüzün içeriğini klasörde açın"
 
 #: gtk/gtkplacessidebar.c:1056
 msgid "Enter Location"
-msgstr "Konum Girin"
+msgstr "Konum Gir"
 
 #: gtk/gtkplacessidebar.c:1058
 msgid "Manually enter a location"
@@ -3073,12 +3073,12 @@ msgstr "%d yazdırılıyor"
 #: gtk/gtkprintoperation.c:2888
 #, c-format
 msgid "Error creating print preview"
-msgstr "Baskı önizleme oluşturulurken hata"
+msgstr "Baskı ön izleme oluşturulurken hata"
 
 #: gtk/gtkprintoperation.c:2891
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
-msgstr "En olası nedeni geçici dosyanın oluşturulamamış olmasıdır."
+msgstr "En olası nedeni geçici dosyanın oluşturulamamasıdır."
 
 #. window
 #: gtk/gtkprintoperation-portal.c:236 gtk/gtkprintoperation-portal.c:554
@@ -3106,7 +3106,7 @@ msgstr "Duraklatıldı"
 
 #: gtk/gtkprintoperation-win32.c:640
 msgid "Need user intervention"
-msgstr "Kullanıcı müdahalesi gerekiyor"
+msgstr "Kullanıcı girişimi gerekli"
 
 #: gtk/gtkprintoperation-win32.c:747
 msgid "Custom size"
@@ -3127,7 +3127,7 @@ msgstr "StartDocʼtan hata"
 #: gtk/gtkprintoperation-win32.c:1759 gtk/gtkprintoperation-win32.c:1782
 #: gtk/gtkprintoperation-win32.c:1830
 msgid "Not enough free memory"
-msgstr "Yeteri kadar boş bellek yok"
+msgstr "Yeterince boş bellek yok"
 
 #: gtk/gtkprintoperation-win32.c:1835
 msgid "Invalid argument to PrintDlgEx"
@@ -3147,7 +3147,7 @@ msgstr "Belirsiz hata"
 
 #: gtk/gtkprintunixdialog.c:781
 msgid "Pre_view"
-msgstr "Ö_nizleme"
+msgstr "Ön İzl_e"
 
 #: gtk/gtkprintunixdialog.c:783
 msgid "_Print"
@@ -3705,7 +3705,7 @@ msgstr "Görünür Çocuk"
 #: gtk/inspector/prop-editor.c:656
 #, c-format
 msgid "Pointer: %p"
-msgstr "İşaretçi: %p"
+msgstr "İmleç: %p"
 
 #. Translators: %s is a type name, for example
 #. * GtkPropertyExpression with value \"2.5\"
@@ -7679,17 +7679,17 @@ msgstr ""
 "  validate              Dosyayı doğrula\n"
 "  simplify [SEÇENEKLER] Dosyayı basitleştir\n"
 "  enumerate             Tüm nesneleri listele\n"
-"  preview [SEÇENEKLER]  Dosyayı önizle\n"
+"  preview [SEÇENEKLER]  Dosyayı ön izle\n"
 "\n"
 "Basitleştirme Seçenekleri:\n"
 "  --replace             Dosyayı değiştir\n"
 "  --3to4                GTK3'ten GTK4'e dönüştür\n"
 "\n"
-"Önizleme Seçenekleri:\n"
-"  --id=KİMLİK           Yalnızca adı verilen nesneyi önizle\n"
+"Ön İzleme Seçenekleri:\n"
+"  --id=KİMLİK           Yalnızca adı verilen nesneyi ön izle\n"
 "  --css=DOSYA           CSS dosyasından biçem kullan\n"
 "\n"
-"GtkBuilder .ui dosyaları üzerinde çeşitli görevler gerçekleştir.\n"
+"GtkBuilder .ui dosyaları üzerinde türlü görevler gerçekleştir.\n"
 
 #: tools/gtk-builder-tool-simplify.c:436
 #, c-format
