@@ -211,7 +211,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   klass->activate = gtk_real_button_activate;
 
   /**
-   * GtkButton:label:
+   * GtkButton:label: (attributes org.gtk.Property.get=gtk_button_get_label org.gtk.Property.set=gtk_button_set_label)
    *
    * Text of the label inside the button, if the button contains a label widget.
    */
@@ -223,7 +223,7 @@ gtk_button_class_init (GtkButtonClass *klass)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkButton:use-underline:
+   * GtkButton:use-underline: (attributes org.gtk.Property.get=gtk_button_get_use_underline org.gtk.Property.set=gtk_button_set_use_underline)
    *
    * If set, an underline in the text indicates that the following character is
    * to be used as mnemonic.
@@ -236,7 +236,7 @@ gtk_button_class_init (GtkButtonClass *klass)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkButton:has-frame:
+   * GtkButton:has-frame: (attributes org.gtk.Property.get=gtk_button_get_has_frame org.gtk.Property.set=gtk_button_set_has_frame)
    *
    * Whether the button has a frame.
    */
@@ -248,7 +248,7 @@ gtk_button_class_init (GtkButtonClass *klass)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkButton:icon-name:
+   * GtkButton:icon-name: (attributes org.gtk.Property.get=gtk_button_get_icon_name org.gtk.Property.set=gtk_button_set_icon_name)
    *
    * The name of the icon used to automatically populate the button.
    */
@@ -260,7 +260,7 @@ gtk_button_class_init (GtkButtonClass *klass)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkButton:child:
+   * GtkButton:child: (attributes org.gtk.Property.get=gtk_button_get_child org.gtk.Property.set=gtk_button_set_child)
    *
    * The child widget.
    */
@@ -681,7 +681,7 @@ gtk_button_new_with_mnemonic (const char *label)
 }
 
 /**
- * gtk_button_set_has_frame:
+ * gtk_button_set_has_frame: (attributes org.gtk.Method.set_property=has-frame)
  * @button: a `GtkButton`
  * @has_frame: whether the button should have a visible frame
  *
@@ -708,7 +708,7 @@ gtk_button_set_has_frame (GtkButton *button,
 }
 
 /**
- * gtk_button_get_has_frame:
+ * gtk_button_get_has_frame: (attributes org.gtk.Method.get_property=has-frame)
  * @button: a `GtkButton`
  *
  * Returns whether the button has a frame.
@@ -800,7 +800,7 @@ gtk_button_finish_activate (GtkButton *button,
 }
 
 /**
- * gtk_button_set_label:
+ * gtk_button_set_label: (attributes org.gtk.Method.set_property=label)
  * @button: a `GtkButton`
  * @label: a string
  *
@@ -844,7 +844,7 @@ gtk_button_set_label (GtkButton   *button,
 }
 
 /**
- * gtk_button_get_label:
+ * gtk_button_get_label: (attributes org.gtk.Method.get_property=label)
  * @button: a `GtkButton`
  *
  * Fetches the text from the label of the button.
@@ -870,7 +870,7 @@ gtk_button_get_label (GtkButton *button)
 }
 
 /**
- * gtk_button_set_use_underline:
+ * gtk_button_set_use_underline: (attributes org.gtk.Method.set_property=use-underline)
  * @button: a `GtkButton`
  * @use_underline: %TRUE if underlines in the text indicate mnemonics
  *
@@ -903,7 +903,7 @@ gtk_button_set_use_underline (GtkButton *button,
 }
 
 /**
- * gtk_button_get_use_underline:
+ * gtk_button_get_use_underline: (attributes org.gtk.Method.get_property=use-underline)
  * @button: a `GtkButton`
  *
  * gets whether underlines are interpreted as mnemonics.
@@ -934,7 +934,7 @@ gtk_button_state_flags_changed (GtkWidget     *widget,
 }
 
 /**
- * gtk_button_set_icon_name:
+ * gtk_button_set_icon_name: (attributes org.gtk.Method.set_property=icon-name)
  * @button: A `GtkButton`
  * @icon_name: An icon name
  *
@@ -977,7 +977,7 @@ gtk_button_set_icon_name (GtkButton  *button,
 }
 
 /**
- * gtk_button_get_icon_name:
+ * gtk_button_get_icon_name: (attributes org.gtk.Method.get_property=icon-name)
  * @button: A `GtkButton`
  *
  * Returns the icon name of the button.
@@ -1010,7 +1010,7 @@ gtk_button_get_gesture (GtkButton *button)
 }
 
 /**
- * gtk_button_set_child:
+ * gtk_button_set_child: (attributes org.gtk.Method.set_property=child)
  * @button: a `GtkButton`
  * @child: (allow-none): the child widget
  *
@@ -1037,7 +1037,7 @@ gtk_button_set_child (GtkButton *button,
 }
 
 /**
- * gtk_button_get_child:
+ * gtk_button_get_child: (attributes org.gtk.Method.get_property=child)
  * @button: a `GtkButton`
  *
  * Gets the child widget of @button.
