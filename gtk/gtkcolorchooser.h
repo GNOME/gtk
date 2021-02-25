@@ -55,7 +55,8 @@ struct _GtkColorChooserInterface
   void (* color_activated) (GtkColorChooser *chooser,
                             const GdkRGBA   *color);
 
-  /* Padding */
+  /*< private >*/
+  /* Padding; remove in GTK-next */
   gpointer padding[12];
 };
 

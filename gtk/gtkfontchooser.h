@@ -97,7 +97,8 @@ struct _GtkFontChooserIface
                                                  PangoFontMap     *fontmap);
   PangoFontMap *    (* get_font_map)            (GtkFontChooser   *fontchooser);
 
-   /* Padding */
+  /*< private >*/
+  /* Padding; remove in GTK-next */
   gpointer padding[10];
 };
 
