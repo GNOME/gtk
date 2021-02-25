@@ -33,9 +33,7 @@
 #include "gtkwidgetprivate.h"
 
 /**
- * SECTION:gtkseparator
- * @Short_description: A separator widget
- * @Title: GtkSeparator
+ * GtkSeparator:
  *
  * `GtkSeparator` is a horizontal or vertical separator widget.
  *
