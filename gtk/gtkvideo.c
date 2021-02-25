@@ -33,15 +33,13 @@
 #include "gtkwidgetprivate.h"
 
 /**
- * SECTION:gtkvideo
- * @title: GtkVideo
- * @short_description: A widget for displaying video
- * @see_also: #GtkMediaControls, #GtkMediaStream
+ * GtkVideo:
  *
  * `GtkVideo` is a widget to show a `GtkMediaStream` with media controls.
  *
  * ![An example GtkVideo](video.png)
  *
+ * The controls are available separately as [class@Gtk.MediaControls].
  * If you just want to display a video without controls, you can treat it
  * like any other paintable and for example put it into a [class@Gtk.Picture].
  *
@@ -299,7 +297,7 @@ gtk_video_class_init (GtkVideoClass *klass)
   gobject_class->set_property = gtk_video_set_property;
 
   /**
-   * GtkVideo:autoplay:
+   * GtkVideo:autoplay: (attributes org.gtk.Property.get=gtk_video_get_autoplay org.gtk.Property.set=gtk_video_set_autoplay)
    *
    * If the video should automatically begin playing.
    */
@@ -311,7 +309,7 @@ gtk_video_class_init (GtkVideoClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkVideo:file:
+   * GtkVideo:file: (attributes org.gtk.Property.get=gtk_video_get_file org.gtk.Property.set=gtk_video_set_file)
    *
    * The file played by this video if the video is playing a file.
    */
@@ -323,7 +321,7 @@ gtk_video_class_init (GtkVideoClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkVideo:loop:
+   * GtkVideo:loop: (attributes org.gtk.Property.get=gtk_video_get_loop org.gtk.Property.set=gtk_video_set_loop)
    *
    * If new media files should be set to loop.
    */
@@ -335,7 +333,7 @@ gtk_video_class_init (GtkVideoClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkVideo:media-stream:
+   * GtkVideo:media-stream: (attributes org.gtk.Property.get=gtk_video_get_media_stream org.gtk.Property.set=gtk_video_set_media_stream)
    *
    * The media-stream played
    */
@@ -488,7 +486,7 @@ gtk_video_new_for_resource (const char *resource_path)
 }
 
 /**
- * gtk_video_get_media_stream:
+ * gtk_video_get_media_stream: (attributes org.gtk.Method.get_property=media-stream)
  * @self: a `GtkVideo`
  *
  * Gets the media stream managed by @self or %NULL if none.
@@ -579,7 +577,7 @@ gtk_video_notify_cb (GtkMediaStream *stream,
 }
 
 /**
- * gtk_video_set_media_stream:
+ * gtk_video_set_media_stream: (attributes org.gtk.Method.set_property=media-stream)
  * @self: a `GtkVideo`
  * @stream: (allow-none): The media stream to play or %NULL to unset
  *
@@ -650,7 +648,7 @@ gtk_video_set_media_stream (GtkVideo       *self,
 }
 
 /**
- * gtk_video_get_file:
+ * gtk_video_get_file: (attributes org.gtk.Method.get_propert=file)
  * @self: a `GtkVideo`
  *
  * Gets the file played by @self or %NULL if not playing back
@@ -667,7 +665,7 @@ gtk_video_get_file (GtkVideo *self)
 }
 
 /**
- * gtk_video_set_file:
+ * gtk_video_set_file: (attributes org.gtk.Method.set_property=file)
  * @self: a `GtkVideo`
  * @file: (allow-none): the file to play
  *
@@ -782,7 +780,7 @@ gtk_video_set_resource (GtkVideo   *self,
 }
 
 /**
- * gtk_video_get_autoplay:
+ * gtk_video_get_autoplay: (attributes org.gtk.Method.get_property=autoplay)
  * @self: a `GtkVideo`
  *
  * Returns %TRUE if videos have been set to loop.
@@ -798,7 +796,7 @@ gtk_video_get_autoplay (GtkVideo *self)
 }
 
 /**
- * gtk_video_set_autoplay:
+ * gtk_video_set_autoplay: (attributes org.gtk.Method.set_property=autoplay)
  * @self: a `GtkVideo`
  * @autoplay: whether media streams should autoplay
  *
@@ -820,7 +818,7 @@ gtk_video_set_autoplay (GtkVideo *self,
 }
 
 /**
- * gtk_video_get_loop:
+ * gtk_video_get_loop: (attributes org.gtk.Method.get_property=loop)
  * @self: a `GtkVideo`
  *
  * Returns %TRUE if videos have been set to loop.
@@ -836,7 +834,7 @@ gtk_video_get_loop (GtkVideo *self)
 }
 
 /**
- * gtk_video_set_loop:
+ * gtk_video_set_loop: (attributes org.gtk.Method.set_property=loop)
  * @self: a `GtkVideo`
  * @loop: whether media streams should loop
  *
