@@ -38,7 +38,7 @@
 #include "gtkwidgetprivate.h"
 
 /**
- * `GtkStatusbar:
+ * GtkStatusbar:
  *
  * A `GtkStatusbar` widget is usually placed along the bottom of an application's
  * main [class@Gtk.Window].
