@@ -26,9 +26,7 @@
  */
 
 /**
- * SECTION:gtkcalendar
- * @Short_description: Displays a calendar and allows the user to select a date
- * @Title: GtkCalendar
+ * GtkCalendar:
  *
  * `GtkCalendar` is a widget that displays a Gregorian calendar, one month
  * at a time.
@@ -412,7 +410,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                      G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkCalendar:show-heading:
+   * GtkCalendar:show-heading: (attributes org.gtk.Property.get=gtk_calendar_get_show_heading org.gtk.Property.set=gtk_calendar_set_show_heading)
    *
    * Determines whether a heading is displayed.
    */
@@ -425,7 +423,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkCalendar:show-day-names:
+   * GtkCalendar:show-day-names: (attributes org.gtk.Property.get=gtk_calendar_get_show_day_names org.gtk.Property.set=gtk_calendar_set_show_day_names)
    *
    * Determines whether day names are displayed.
    */
@@ -437,7 +435,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                          TRUE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   /**
-   * GtkCalendar:show-week-numbers:
+   * GtkCalendar:show-week-numbers: (attributes org.gtk.Property.get=gtk_calendar_get_show_week_numbers org.gtk.Property.set=gtk_calendar_set_show_week_numbers)
    *
    * Determines whether week numbers are displayed.
    */
@@ -1630,7 +1628,7 @@ gtk_calendar_get_date (GtkCalendar *self)
 }
 
 /**
- * gtk_calendar_set_show_week_numbers:
+ * gtk_calendar_set_show_week_numbers: (attributes org.gtk.Method.set_property=show-week-numbers)
  * @self: a `GtkCalendar`
  * @value: whether to show week numbers on the left of the days
  *
@@ -1656,7 +1654,7 @@ gtk_calendar_set_show_week_numbers (GtkCalendar *self,
 }
 
 /**
- * gtk_calendar_get_show_week_numbers:
+ * gtk_calendar_get_show_week_numbers: (attributes org.gtk.Method.get_property=show-week-numbers)
  * @self: a `GtkCalendar`
  *
  * Returns whether @self is showing week numbers right
@@ -1676,7 +1674,7 @@ gtk_calendar_get_show_week_numbers (GtkCalendar *self)
 }
 
 /**
- * gtk_calendar_set_show_heading:
+ * gtk_calendar_set_show_heading: (attributes org.gtk.Method.set_property=show-heading)
  * @self: a `GtkCalendar`
  * @value: Whether to show the heading in the calendar
  *
@@ -1702,7 +1700,7 @@ gtk_calendar_set_show_heading (GtkCalendar *self,
 }
 
 /**
- * gtk_calendar_get_show_heading:
+ * gtk_calendar_get_show_heading: (attributes org.gtk.Method.get_property=show-heading)
  * @self: a `GtkCalendar`
  *
  * Returns whether @self is currently showing the heading.
@@ -1721,7 +1719,7 @@ gtk_calendar_get_show_heading (GtkCalendar *self)
 }
 
 /**
- * gtk_calendar_set_show_day_names:
+ * gtk_calendar_set_show_day_names: (attributes org.gtk.Method.set_property=show-day-names)
  * @self: a `GtkCalendar`
  * @value: Whether to show day names above the day numbers
  *
@@ -1747,7 +1745,7 @@ gtk_calendar_set_show_day_names (GtkCalendar *self,
 }
 
 /**
- * gtk_calendar_get_show_day_names:
+ * gtk_calendar_get_show_day_names: (attributes org.gtk.Method.get_property=show-day-names)
  * @self: a `GtkCalendar`
  *
  * Returns whether @self is currently showing the names
