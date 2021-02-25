@@ -2419,7 +2419,7 @@ gtk_entry_get_has_frame (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_set_alignment:
+ * gtk_entry_set_alignment: (attributes org.gtk.Method.set_property=alignment)
  * @entry: a `GtkEntry`
  * @xalign: The horizontal alignment, from 0 (left) to 1 (right).
  *   Reversed for RTL layouts
@@ -2443,7 +2443,7 @@ gtk_entry_set_alignment (GtkEntry *entry,
 }
 
 /**
- * gtk_entry_get_alignment:
+ * gtk_entry_get_alignment: (attributes org.gtk.Method.get_property=alignment)
  * @entry: a `GtkEntry`
  *
  * Gets the value set by gtk_entry_set_alignment().
