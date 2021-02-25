@@ -194,7 +194,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
   gobject_class->dispose = gdk_texture_dispose;
 
   /**
-   * GdkTexture:width:
+   * GdkTexture:width: (attributes org.gtk.Property.get=gdk_texture_get_width)
    *
    * The width of the texture, in pixels.
    */
@@ -211,7 +211,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
                       G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkTexture:height:
+   * GdkTexture:height: (attributes org.gtk.Property.get=gdk_texture_get_height)
    *
    * The height of the texture, in pixels.
    */
@@ -382,7 +382,7 @@ gdk_texture_new_from_file (GFile   *file,
 }
 
 /**
- * gdk_texture_get_width:
+ * gdk_texture_get_width: (attributes org.gtk.Method.get_property=width)
  * @texture: a `GdkTexture`
  *
  * Returns the width of @texture, in pixels.
@@ -398,7 +398,7 @@ gdk_texture_get_width (GdkTexture *texture)
 }
 
 /**
- * gdk_texture_get_height:
+ * gdk_texture_get_height: (attributes org.gtk.Method.get_property=height)
  * @texture: a `GdkTexture`
  *
  * Returns the height of the @texture, in pixels.
