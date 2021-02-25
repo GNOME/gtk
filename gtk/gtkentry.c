@@ -2419,7 +2419,7 @@ gtk_entry_get_has_frame (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_set_alignment: (attributes org.gtk.Method.set_property=alignment)
+ * gtk_entry_set_alignment:
  * @entry: a `GtkEntry`
  * @xalign: The horizontal alignment, from 0 (left) to 1 (right).
  *   Reversed for RTL layouts
@@ -2429,7 +2429,7 @@ gtk_entry_get_has_frame (GtkEntry *entry)
  * This controls the horizontal positioning of the contents when
  * the displayed text is shorter than the width of the entry.
  *
- * See also: [property@Gtk.Editable:alignment], [method@Gtk.Editable.set_alignment]
+ * See also: [property@Gtk.Editable:xalign]
  */
 void
 gtk_entry_set_alignment (GtkEntry *entry,
@@ -2443,12 +2443,12 @@ gtk_entry_set_alignment (GtkEntry *entry,
 }
 
 /**
- * gtk_entry_get_alignment: (attributes org.gtk.Method.get_property=alignment)
+ * gtk_entry_get_alignment:
  * @entry: a `GtkEntry`
  *
  * Gets the value set by gtk_entry_set_alignment().
  *
- * See also: [property@Gtk.Editable:alignment], [method@Gtk.Editable.get_alignment]
+ * See also: [property@Gtk.Editable:xalign]
  *
  * Returns: the alignment
  */
