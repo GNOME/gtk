@@ -365,7 +365,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   class->change_value = gtk_spin_button_real_change_value;
 
   /**
-   * GtkSpinButton:adjustment:
+   * GtkSpinButton:adjustment: (attributes org.gtk.Property.get=gtk_spin_button_get_adjustment org.gtk.Property.set=gtk_spin_button_set_adjustment)
    *
    * The adjustment that holds the value of the spin button.
    */
@@ -377,7 +377,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                          GTK_PARAM_READWRITE);
 
   /**
-   * GtkSpinButton:climb-rate:
+   * GtkSpinButton:climb-rate: (attributes org.gtk.Property.get=gtk_spin_button_get_climb_rate org.gtk.Property.set=gtk_spin_button_set_climb_rate)
    *
    * The acceleration rate when you hold down a button or key.
    */
@@ -389,7 +389,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSpinButton:digits:
+   * GtkSpinButton:digits: (attributes org.gtk.Property.get=gtk_spin_button_get_digits org.gtk.Property.set=gtk_spin_button_set_digits)
    *
    * The number of decimal places to display.
    */
@@ -401,7 +401,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSpinButton:snap-to-ticks:
+   * GtkSpinButton:snap-to-ticks: (attributes org.gtk.Property.get=gtk_spin_button_get_snap_to_ticks org.gtk.Property.set=gtk_spin_button_set_snap_to_ticks)
    *
    * Whether erroneous values are automatically changed to the spin buttons
    * nearest step increment.
@@ -414,7 +414,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSpinButton:numeric:
+   * GtkSpinButton:numeric: (attributes org.gtk.Property.get=gtk_spin_button_get_numeric org.gtk.Property.set=gtk_spin_button_set_numeric)
    *
    * Whether non-numeric characters should be ignored.
    */
@@ -426,9 +426,9 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSpinButton:wrap:
+   * GtkSpinButton:wrap: (attributes org.gtk.Property.get=gtk_spin_button_get_wrap org.gtk.Property.set=gtk_spin_button_set_wrap)
    *
-   * Whehter a spin button should wrap upon reaching its limits.
+   * Whether a spin button should wrap upon reaching its limits.
    */
   spinbutton_props[PROP_WRAP] =
     g_param_spec_boolean ("wrap",
@@ -438,10 +438,10 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSpinButton:update-policy:
+   * GtkSpinButton:update-policy: (attributes org.gtk.Property.get=gtk_spin_button_get_update_policy org.gtk.Property.set=gtk_spin_button_set_update_policy)
    *
    * Whether the spin button should update always, or only when the value
-   * is acceptable..
+   * is acceptable.
    */
   spinbutton_props[PROP_UPDATE_POLICY] =
     g_param_spec_enum ("update-policy",
@@ -452,7 +452,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSpinButton:value:
+   * GtkSpinButton:value: (attributes org.gtk.Property.get=gtk_spin_button_get_value org.gtk.Property.set=gtk_spin_button_set_value)
    *
    * The current value.
    */
@@ -1132,14 +1132,16 @@ gtk_spin_button_realize (GtkWidget *widget)
 
   /* If output wasn't processed explicitly by the method connected to the
    * 'output' signal; and if we don't have any explicit 'text' set initially,
-   * fallback to the default output. */
+   * fallback to the default output.
+   */
   text = gtk_editable_get_text (GTK_EDITABLE (spin_button->entry));
   if (!return_val && (spin_button->numeric || text == NULL || *text == '\0'))
     gtk_spin_button_default_output (spin_button);
 }
 
 /* This is called when :value, :wrap, or the bounds of the adjustment change,
- * as the combination of those determines if our up|down_button are sensitive */
+ * as the combination of those determines if our up|down_button are sensitive
+ */
 static void
 update_buttons_sensitivity (GtkSpinButton *spin_button)
 {
@@ -1154,7 +1156,8 @@ update_buttons_sensitivity (GtkSpinButton *spin_button)
 }
 
 /* Callback used when the spin button's adjustment changes.
- * We need to reevaluate our size request & up|down_button sensitivity. */
+ * We need to reevaluate our size request & up|down_button sensitivity.
+ */
 static void
 adjustment_changed_cb (GtkAdjustment *adjustment, gpointer data)
 {
@@ -1849,7 +1852,7 @@ gtk_spin_button_new_with_range (double min,
 }
 
 /**
- * gtk_spin_button_set_adjustment:
+ * gtk_spin_button_set_adjustment: (attributes org.gtk.Method.set_property=adjustment)
  * @spin_button: a `GtkSpinButton`
  * @adjustment: a `GtkAdjustment` to replace the existing adjustment
  *
@@ -1871,13 +1874,13 @@ gtk_spin_button_set_adjustment (GtkSpinButton *spin_button,
 }
 
 /**
- * gtk_spin_button_get_adjustment:
+ * gtk_spin_button_get_adjustment: (attributes org.gtk.Method.get_property=adjustment)
  * @spin_button: a `GtkSpinButton`
  *
  * Get the adjustment associated with a `GtkSpinButton`.
  *
  * Returns: (transfer none): the `GtkAdjustment` of @spin_button
- **/
+ */
 GtkAdjustment *
 gtk_spin_button_get_adjustment (GtkSpinButton *spin_button)
 {
@@ -1887,7 +1890,7 @@ gtk_spin_button_get_adjustment (GtkSpinButton *spin_button)
 }
 
 /**
- * gtk_spin_button_set_digits:
+ * gtk_spin_button_set_digits: (attributes org.gtk.Method.set_property=digits)
  * @spin_button: a `GtkSpinButton`
  * @digits: the number of digits after the decimal point to be
  *   displayed for the spin button’s value
@@ -1914,12 +1917,10 @@ gtk_spin_button_set_digits (GtkSpinButton *spin_button,
 }
 
 /**
- * gtk_spin_button_get_digits:
+ * gtk_spin_button_get_digits: (attributes org.gtk.Method.get_property=digits)
  * @spin_button: a `GtkSpinButton`
  *
  * Fetches the precision of @spin_button.
- *
- * See [method@Gtk.SpinButton.set_digits].
  *
  * Returns: the current precision
  **/
@@ -2037,7 +2038,7 @@ gtk_spin_button_get_range (GtkSpinButton *spin_button,
 }
 
 /**
- * gtk_spin_button_get_value:
+ * gtk_spin_button_get_value: (attributes org.gtk.Method.get_property=value)
  * @spin_button: a `GtkSpinButton`
  *
  * Get the value in the @spin_button.
@@ -2075,7 +2076,7 @@ gtk_spin_button_get_value_as_int (GtkSpinButton *spin_button)
 }
 
 /**
- * gtk_spin_button_set_value:
+ * gtk_spin_button_set_value: (attributes org.gtk.Method.set_property=value)
  * @spin_button: a `GtkSpinButton`
  * @value: the new value
  *
@@ -2099,7 +2100,7 @@ gtk_spin_button_set_value (GtkSpinButton *spin_button,
 }
 
 /**
- * gtk_spin_button_set_update_policy:
+ * gtk_spin_button_set_update_policy: (attributes org.gtk.Method.set_property=update-policy)
  * @spin_button: a `GtkSpinButton`
  * @policy: a `GtkSpinButtonUpdatePolicy` value
  *
@@ -2122,7 +2123,7 @@ gtk_spin_button_set_update_policy (GtkSpinButton             *spin_button,
 }
 
 /**
- * gtk_spin_button_get_update_policy:
+ * gtk_spin_button_get_update_policy: (attributes org.gtk.Method.get_property=update-policy)
  * @spin_button: a `GtkSpinButton`
  *
  * Gets the update behavior of a spin button.
@@ -2140,7 +2141,7 @@ gtk_spin_button_get_update_policy (GtkSpinButton *spin_button)
 }
 
 /**
- * gtk_spin_button_set_numeric:
+ * gtk_spin_button_set_numeric: (attributes org.gtk.Method.set_property=numeric)
  * @spin_button: a `GtkSpinButton`
  * @numeric: flag indicating if only numeric entry is allowed
  *
@@ -2163,12 +2164,10 @@ gtk_spin_button_set_numeric (GtkSpinButton *spin_button,
 }
 
 /**
- * gtk_spin_button_get_numeric:
+ * gtk_spin_button_get_numeric: (attributes org.gtk.Method.get_property=numeric)
  * @spin_button: a `GtkSpinButton`
  *
  * Returns whether non-numeric text can be typed into the spin button.
- *
- * See [method@Gtk.SpinButton.set_numeric].
  *
  * Returns: %TRUE if only numeric text can be entered
  */
@@ -2181,7 +2180,7 @@ gtk_spin_button_get_numeric (GtkSpinButton *spin_button)
 }
 
 /**
- * gtk_spin_button_set_wrap:
+ * gtk_spin_button_set_wrap: (attributes org.gtk.Method.set_property=wrap)
  * @spin_button: a `GtkSpinButton`
  * @wrap: a flag indicating if wrapping behavior is performed
  *
@@ -2207,14 +2206,12 @@ gtk_spin_button_set_wrap (GtkSpinButton  *spin_button,
 }
 
 /**
- * gtk_spin_button_get_wrap:
+ * gtk_spin_button_get_wrap: (attributes org.gtk.Method.get_property=wrap)
  * @spin_button: a `GtkSpinButton`
  *
  * Returns whether the spin button’s value wraps around to the
  * opposite limit when the upper or lower limit of the range is
  * exceeded.
- *
- * See [method@Gtk.SpinButton.set_wrap].
  *
  * Returns: %TRUE if the spin button wraps around
  */
@@ -2227,7 +2224,7 @@ gtk_spin_button_get_wrap (GtkSpinButton *spin_button)
 }
 
 /**
- * gtk_spin_button_set_snap_to_ticks:
+ * gtk_spin_button_set_snap_to_ticks: (attributes org.gtk.Method.set_property=snap-to-ticks)
  * @spin_button: a `GtkSpinButton`
  * @snap_to_ticks: a flag indicating if invalid values should be corrected
  *
@@ -2256,12 +2253,10 @@ gtk_spin_button_set_snap_to_ticks (GtkSpinButton *spin_button,
 }
 
 /**
- * gtk_spin_button_get_snap_to_ticks:
+ * gtk_spin_button_get_snap_to_ticks: (attributes org.gtk.Method.get_property=snap-to-ticks)
  * @spin_button: a `GtkSpinButton`
  *
  * Returns whether the values are corrected to the nearest step.
- *
- * See [method@Gtk.SpinButton.set_snap_to_ticks].
  *
  * Returns: %TRUE if values are snapped to the nearest step
  */
@@ -2274,7 +2269,7 @@ gtk_spin_button_get_snap_to_ticks (GtkSpinButton *spin_button)
 }
 
 /**
- * gtk_spin_button_set_climb_rate:
+ * gtk_spin_button_set_climb_rate: (attributes org.gtk.Method.set_property=climb-rate)
  * @spin_button: a `GtkSpinButton`
  * @climb_rate: the rate of acceleration, must be >= 0
  *
@@ -2297,7 +2292,7 @@ gtk_spin_button_set_climb_rate (GtkSpinButton  *spin_button,
 }
 
 /**
- * gtk_spin_button_get_climb_rate:
+ * gtk_spin_button_get_climb_rate: (attributes org.gtk.Method.get_property=climb-rate)
  * @spin_button: a `GtkSpinButton`
  *
  * Returns the acceleration rate for repeated changes.
