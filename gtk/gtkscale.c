@@ -46,9 +46,7 @@
 
 
 /**
- * SECTION:gtkscale
- * @Short_description: A slider widget for selecting a value from a range
- * @Title: GtkScale
+ * GtkScale:
  *
  * A `GtkScale` is a slider control used to select a numeric value.
  *
