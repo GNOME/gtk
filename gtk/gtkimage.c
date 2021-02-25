@@ -40,10 +40,7 @@
 #include <cairo-gobject.h>
 
 /**
- * SECTION:gtkimage
- * @Short_description: A widget displaying an image
- * @Title: GtkImage
- * @SeeAlso: #GdkTexture, #GtkPicture
+ * GtkImage:
  *
  * The `GtkImage` widget displays an image.
  *
@@ -54,7 +51,7 @@
  * [ctor@Gtk.Image.new_from_file], for instance:
  *
  * ```c
- *   GtkWidget *image = gtk_image_new_from_file ("myfile.png");
+ * GtkWidget *image = gtk_image_new_from_file ("myfile.png");
  * ```
  *
  * If the file isn’t loaded successfully, the image will contain a
@@ -172,7 +169,7 @@ gtk_image_class_init (GtkImageClass *class)
   widget_class->system_setting_changed = gtk_image_system_setting_changed;
 
   /**
-   * GtkImage:paintable:
+   * GtkImage:paintable: (attributes org.gtk.Property.get=gtk_image_get_paintable org.gtk.Property.set=gtk_image_set_from_paintable)
    *
    * The `GdkPaintable` to display.
    */
@@ -184,7 +181,7 @@ gtk_image_class_init (GtkImageClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkImage:file:
+   * GtkImage:file: (attributes org.gtk.Property.set=gtk_image_set_from_file)
    *
    * The `GFile to display.
    */
@@ -196,7 +193,7 @@ gtk_image_class_init (GtkImageClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkImage:icon-size:
+   * GtkImage:icon-size: (attributes org.gtk.Property.get=gtk_image_get_icon_size org.gtk.Property.set=gtk_image_set_icon_size org.gtk.Property.set=gtk_image_set_icon_size)
    *
    * The symbolic size to display icons at.
    */
@@ -209,7 +206,7 @@ gtk_image_class_init (GtkImageClass *class)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkImage:pixel-size:
+   * GtkImage:pixel-size: (attributes org.gtk.Property.get=gtk_image_get_pixel_size org.gtk.Property.set=gtk_image_set_pixel_size)
    *
    * The size in pixels to display icons at.
    *
@@ -226,7 +223,7 @@ gtk_image_class_init (GtkImageClass *class)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkImage:icon-name:
+   * GtkImage:icon-name: (attributes org.gtk.Property.get=gtk_image_get_icon_name org.gtk.Property.set=gtk_image_set_from_icon_name)
    *
    * The name of the icon in the icon theme.
    *
@@ -240,7 +237,7 @@ gtk_image_class_init (GtkImageClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkImage:gicon:
+   * GtkImage:gicon: (attributes org.gtk.Property.get=gtk_image_get_gicon org.gtk.Property.set=gtk_image_set_from_gicon)
    *
    * The `GIcon` displayed in the GtkImage.
    *
@@ -255,7 +252,7 @@ gtk_image_class_init (GtkImageClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkImage:resource:
+   * GtkImage:resource: (attributes org.gtk.Property.set=gtk_image_set_from_resource)
    *
    * A path to a resource file to display.
    */
@@ -267,7 +264,7 @@ gtk_image_class_init (GtkImageClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkImage:storage-tyle:
+   * GtkImage:storage-type: (attributes org.gtk.Property.get=gtk_image_get_storage_type)
    *
    * The representation being used for image data.
    */
@@ -675,7 +672,7 @@ load_scalable_with_loader (GtkImage    *image,
 }
 
 /**
- * gtk_image_set_from_file:
+ * gtk_image_set_from_file: (attributes org.gtk.Method.set_property=file)
  * @image: a `GtkImage`
  * @filename: (type filename) (allow-none): a filename or %NULL
  *
@@ -759,7 +756,7 @@ out:
 }
 
 /**
- * gtk_image_set_from_resource:
+ * gtk_image_set_from_resource: (attributes org.gtk.Method.set_property=resource)
  * @image: a `GtkImage`
  * @resource_path: (allow-none): a resource path or %NULL
  *
@@ -824,11 +821,11 @@ gtk_image_set_from_resource (GtkImage    *image,
 
 
 /**
- * gtk_image_set_from_pixbuf:
+ * gtk_image_set_from_pixbuf: (attributes org.gtk.Method.set_property=paintable)
  * @image: a `GtkImage`
- * @pixbuf: (allow-none): a `GdkPixbuf` or %NULL
+ * @pixbuf: (allow-none): a `GdkPixbuf` or `NULL`
  *
- * Sets a `GtkImage` to show a `GdkPixbuf.
+ * Sets a `GtkImage` to show a `GdkPixbuf`.
  *
  * See [ctor@Gtk.Image.new_from_pixbuf] for details.
  *
@@ -857,7 +854,7 @@ gtk_image_set_from_pixbuf (GtkImage  *image,
 }
 
 /**
- * gtk_image_set_from_icon_name:
+ * gtk_image_set_from_icon_name: (attributes org.gtk.Method.set_property=icon-name)
  * @image: a `GtkImage`
  * @icon_name: (nullable): an icon name or %NULL
  *
@@ -884,7 +881,7 @@ gtk_image_set_from_icon_name  (GtkImage    *image,
 }
 
 /**
- * gtk_image_set_from_gicon:
+ * gtk_image_set_from_gicon: (attributes org.gtk.Method.set_property=gicon)
  * @image: a `GtkImage`
  * @icon: an icon
  *
@@ -931,7 +928,7 @@ gtk_image_paintable_invalidate_size (GdkPaintable *paintable,
 }
 
 /**
- * gtk_image_set_from_paintable:
+ * gtk_image_set_from_paintable: (attributes org.gtk.Method.set_property=paintable)
  * @image: a `GtkImage`
  * @paintable: (nullable): a `GdkPaintable` or %NULL
  *
@@ -979,7 +976,7 @@ gtk_image_set_from_paintable (GtkImage     *image,
 }
 
 /**
- * gtk_image_get_storage_type:
+ * gtk_image_get_storage_type: (attributes org.gtk.Method.get_property=storage-type)
  * @image: a `GtkImage`
  *
  * Gets the type of representation being used by the `GtkImage`
@@ -999,7 +996,7 @@ gtk_image_get_storage_type (GtkImage *image)
 }
 
 /**
- * gtk_image_get_paintable:
+ * gtk_image_get_paintable: (attributes org.gtk.Method.get_property=paintable)
  * @image: a `GtkImage`
  *
  * Gets the image `GdkPaintable` being displayed by the `GtkImage`.
@@ -1021,7 +1018,7 @@ gtk_image_get_paintable (GtkImage *image)
 }
 
 /**
- * gtk_image_get_icon_name:
+ * gtk_image_get_icon_name: (attributes org.gtk.Method.get_property=icon-name)
  * @image: a `GtkImage`
  *
  * Gets the icon name and size being displayed by the `GtkImage`.
@@ -1042,7 +1039,7 @@ gtk_image_get_icon_name (GtkImage *image)
 }
 
 /**
- * gtk_image_get_gicon:
+ * gtk_image_get_gicon: (attributes org.gtk.Method.get_property=gicon)
  * @image: a `GtkImage`
  *
  * Gets the `GIcon` being displayed by the `GtkImage`.
@@ -1314,7 +1311,7 @@ gtk_image_system_setting_changed (GtkWidget        *widget,
 }
 
 /**
- * gtk_image_set_pixel_size:
+ * gtk_image_set_pixel_size: (attributes org.gtk.Method.set_property=pixel-size)
  * @image: a `GtkImage`
  * @pixel_size: the new pixel size
  *
@@ -1338,7 +1335,7 @@ gtk_image_set_pixel_size (GtkImage *image,
 }
 
 /**
- * gtk_image_get_pixel_size:
+ * gtk_image_get_pixel_size: (attributes org.gtk.Method.get_property=pixel-size)
  * @image: a `GtkImage`
  *
  * Gets the pixel size used for named icons.
@@ -1354,7 +1351,7 @@ gtk_image_get_pixel_size (GtkImage *image)
 }
 
 /**
- * gtk_image_set_icon_size:
+ * gtk_image_set_icon_size: (attributes org.gtk.Method.set_property=icon-size)
  * @image: a `GtkImage`
  * @icon_size: the new icon size
  *
@@ -1375,7 +1372,7 @@ gtk_image_set_icon_size (GtkImage    *image,
 }
 
 /**
- * gtk_image_get_icon_size:
+ * gtk_image_get_icon_size: (attributes org.gtk.Method.get_property=icon-size)
  * @image: a `GtkImage`
  *
  * Gets the icon size used by the @image when rendering icons.
