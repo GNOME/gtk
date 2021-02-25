@@ -171,7 +171,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
   object_class->set_property = gdk_monitor_set_property;
 
   /**
-   * GdkMonitor:display:
+   * GdkMonitor:display: (attributes org.gtk.Property.get=gdk_monitor_get_display)
    *
    * The `GdkDisplay` of the monitor.
    */
@@ -183,7 +183,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkMonitor:manufacturer:
+   * GdkMonitor:manufacturer: (attributes org.gtk.Property.get=gdk_monitor_get_manufacturer)
    *
    * The manufacturer name.
    */
@@ -195,7 +195,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkMonitor:model:
+   * GdkMonitor:model: (attributes org.gtk.Property.get=gdk_monitor_get_model)
    *
    * The model name.
    */
@@ -207,7 +207,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkMonitor:connector:
+   * GdkMonitor:connector: (attributes org.gtk.Property.get=gdk_monitor_get_connector)
    *
    * The connector name.
    */
@@ -219,7 +219,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkMonitor:scale-factor:
+   * GdkMonitor:scale-factor: (attributes org.gtk.Property.get=gdk_monitor_get_scale_factor)
    *
    * The scale factor.
    */
@@ -232,7 +232,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkMonitor:geometry:
+   * GdkMonitor:geometry: (attributes org.gtk.Property.get=gdk_monitor_get_geometry)
    *
    * The geometry of the monitor.
    */
@@ -244,7 +244,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkMonitor:width-mm:
+   * GdkMonitor:width-mm: (attributes org.gtk.Property.get=gdk_monitor_get_width_mm)
    *
    * The width of the monitor, in millimeters.
    */
@@ -257,7 +257,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkMonitor:height-mm:
+   * GdkMonitor:height-mm: (attributes org.gtk.Property.get=gdk_monitor_get_height_mm)
    *
    * The height of the monitor, in millimeters.
    */
@@ -270,7 +270,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkMonitor:refresh-rate:
+   * GdkMonitor:refresh-rate: (attributes org.gtk.Property.get=gdk_monitor_get_refresh_rate)
    *
    * The refresh rate, in milli-Hertz.
    */
@@ -283,7 +283,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkMonitor:subpixel-layout:
+   * GdkMonitor:subpixel-layout: (attributes org.gtk.Property.get=gdk_monitor_get_subpixel_layout)
    *
    * The subpixel layout.
    */
@@ -296,7 +296,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkMonitor:valid:
+   * GdkMonitor:valid: (attributes org.gtk.Property.get=gdk_monitor_is_valid)
    *
    * Whether the object is still valid.
    */ 
@@ -325,7 +325,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
 }
 
 /**
- * gdk_monitor_get_display:
+ * gdk_monitor_get_display: (attributes org.gtk.Method.get_property=display)
  * @monitor: a `GdkMonitor`
  *
  * Gets the display that this monitor belongs to.
@@ -341,7 +341,7 @@ gdk_monitor_get_display (GdkMonitor *monitor)
 }
 
 /**
- * gdk_monitor_get_geometry:
+ * gdk_monitor_get_geometry: (attributes org.gtk.Method.get_property=geometry)
  * @monitor: a `GdkMonitor`
  * @geometry: (out): a `GdkRectangle` to be filled with the monitor geometry
  *
@@ -362,7 +362,7 @@ gdk_monitor_get_geometry (GdkMonitor   *monitor,
 }
 
 /**
- * gdk_monitor_get_width_mm:
+ * gdk_monitor_get_width_mm: (attributes org.gtk.Method.get_property=width-mm)
  * @monitor: a `GdkMonitor`
  *
  * Gets the width in millimeters of the monitor.
@@ -378,7 +378,7 @@ gdk_monitor_get_width_mm (GdkMonitor *monitor)
 }
 
 /**
- * gdk_monitor_get_height_mm:
+ * gdk_monitor_get_height_mm: (attributes org.gtk.Method.get_property=height-mm)
  * @monitor: a `GdkMonitor`
  *
  * Gets the height in millimeters of the monitor.
@@ -394,7 +394,7 @@ gdk_monitor_get_height_mm (GdkMonitor *monitor)
 }
 
 /**
- * gdk_monitor_get_connector:
+ * gdk_monitor_get_connector: (attributes org.gtk.Method.get_property=connector)
  * @monitor: a `GdkMonitor`
  *
  * Gets the name of the monitor's connector, if available.
@@ -410,7 +410,7 @@ gdk_monitor_get_connector (GdkMonitor *monitor)
 }
 
 /**
- * gdk_monitor_get_manufacturer:
+ * gdk_monitor_get_manufacturer: (attributes org.gtk.Method.get_property=manufacturer)
  * @monitor: a `GdkMonitor`
  *
  * Gets the name or PNP ID of the monitor's manufacturer.
@@ -433,7 +433,7 @@ gdk_monitor_get_manufacturer (GdkMonitor *monitor)
 }
 
 /**
- * gdk_monitor_get_model:
+ * gdk_monitor_get_model: (attributes org.gtk.Method.get_property=model)
  * @monitor: a `GdkMonitor`
  *
  * Gets the string identifying the monitor model, if available.
@@ -449,7 +449,7 @@ gdk_monitor_get_model (GdkMonitor *monitor)
 }
 
 /**
- * gdk_monitor_get_scale_factor:
+ * gdk_monitor_get_scale_factor: (attributes org.gtk.Method.get_prooperty=scale-factor)
  * @monitor: a `GdkMonitor`
  *
  * Gets the internal scale factor that maps from monitor coordinates
@@ -473,7 +473,7 @@ gdk_monitor_get_scale_factor (GdkMonitor *monitor)
 }
 
 /**
- * gdk_monitor_get_refresh_rate:
+ * gdk_monitor_get_refresh_rate: (attributes org.gtk.Method.get_property=refresh-rate)
  * @monitor: a `GdkMonitor`
  *
  * Gets the refresh rate of the monitor, if available.
@@ -492,7 +492,7 @@ gdk_monitor_get_refresh_rate (GdkMonitor *monitor)
 }
 
 /**
- * gdk_monitor_get_subpixel_layout:
+ * gdk_monitor_get_subpixel_layout: (attributes org.gtk.Method.get_property=subpixel-layout)
  * @monitor: a `GdkMonitor`
  *
  * Gets information about the layout of red, green and blue
@@ -624,7 +624,7 @@ gdk_monitor_invalidate (GdkMonitor *monitor)
 }
 
 /**
- * gdk_monitor_is_valid:
+ * gdk_monitor_is_valid: (attributes org.gtk.Method.get_property=valid)
  * @monitor: a `GdkMonitor`
  *
  * Returns %TRUE if the @monitor object corresponds to a
