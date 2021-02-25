@@ -149,11 +149,9 @@ gdk_display_class_init (GdkDisplayClass *class)
   class->get_default_seat = gdk_display_real_get_default_seat;
 
   /**
-   * GdkDisplay:composited:
+   * GdkDisplay:composited: (attributes org.gtk.Property.get=gdk_display_is_composited)
    *
    * %TRUE if the display properly composites the alpha channel.
-   *
-   * See [method@Gdk.Display.is_composited] for details.
    */
   props[PROP_COMPOSITED] =
     g_param_spec_boolean ("composited",
@@ -163,11 +161,9 @@ gdk_display_class_init (GdkDisplayClass *class)
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDisplay:rgba:
+   * GdkDisplay:rgba: (attributes org.gtk.Property.get=gdk_display_is_rgba)
    *
    * %TRUE if the display supports an alpha channel.
-   *
-   * See [method@Gdk.Display.is_rgba] for details.
    */
   props[PROP_RGBA] =
     g_param_spec_boolean ("rgba",
@@ -177,11 +173,9 @@ gdk_display_class_init (GdkDisplayClass *class)
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDisplay:input-shapes:
+   * GdkDisplay:input-shapes: (attributes org.gtk.Property.get=gdk_display_supports_input_shapes)
    *
    * %TRUE if the display supports input shapes.
-   *
-   * See [method@Gdk.Display.supports_input_shapes] for details.
    */
   props[PROP_INPUT_SHAPES] =
     g_param_spec_boolean ("input-shapes",
@@ -989,7 +983,7 @@ gdk_display_get_primary_clipboard (GdkDisplay *display)
 }
 
 /**
- * gdk_display_supports_input_shapes:
+ * gdk_display_supports_input_shapes: (attributes org.gtk.Method.get_property=input-shapes)
  * @display: a `GdkDisplay`
  *
  * Returns %TRUE if the display supports input shapes.
@@ -1192,7 +1186,7 @@ gdk_display_set_debug_flags (GdkDisplay    *display,
 }
 
 /**
- * gdk_display_is_composited:
+ * gdk_display_is_composited: (attributes org.gtk.Method.get_property=composited)
  * @display: a `GdkDisplay`
  *
  * Returns whether surfaces can reasonably be expected to have
@@ -1233,7 +1227,7 @@ gdk_display_set_composited (GdkDisplay *display,
 }
 
 /**
- * gdk_display_is_rgba:
+ * gdk_display_is_rgba: (attributes org.gtk.Method.get_property=rgba)
  * @display: a `GdkDisplay`
  *
  * Returns whether surfaces on this @display are created with an
