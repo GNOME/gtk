@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-02-21 16:25+0000\n"
+"POT-Creation-Date: 2021-02-21 19:52+0000\n"
 "PO-Revision-Date: 2021-02-21 20:52+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
@@ -7181,15 +7181,15 @@ msgstr "Ö_lçek:"
 
 #: gtk/ui/gtkprintunixdialog.ui:556
 msgid "Paper"
-msgstr "Sayfa"
+msgstr "Kağıt"
 
 #: gtk/ui/gtkprintunixdialog.ui:571
 msgid "Paper _type:"
-msgstr "Sayfa _türü:"
+msgstr "Kağıt _türü:"
 
 #: gtk/ui/gtkprintunixdialog.ui:593
 msgid "Paper _source:"
-msgstr "Sayfa _kaynağı:"
+msgstr "Kağıt _kaynağı:"
 
 #: gtk/ui/gtkprintunixdialog.ui:615
 msgid "Output t_ray:"
