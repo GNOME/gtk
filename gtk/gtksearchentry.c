@@ -74,6 +74,9 @@
  * you can use [method@Gtk.SearchEntry.set_key_capture_widget] to
  * let it capture key input from another widget.
  *
+ * `GtkSearchEntry` provides only minimal API and should be used with
+ * the [iface@Gtk.Editable] API.
+ *
  * ## CSS Nodes
  *
  * |[<!-- language="plain" -->
@@ -674,7 +677,8 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
  * @entry: a `GtkSearchEntry`
  * @widget: (nullable) (transfer none): a #GtkWidget
  *
- * Sets @widget as the widget that @entry will capture key events from.
+ * Sets @widget as the widget that @entry will capture key
+ * events from.
  *
  * Key events are consumed by the search entry to start or
  * continue a search.
