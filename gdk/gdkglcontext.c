@@ -412,7 +412,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   draw_context_class->surface_resized = gdk_gl_context_surface_resized;
 
   /**
-   * GdkGLContext:shared-context:
+   * GdkGLContext:shared-context: (attributes org.gtk.Property.get=gdk_gl_context_get_shared_context)
    *
    * The `GdkGLContext` that this context is sharing data with, or %NULL
    */
@@ -1154,7 +1154,7 @@ gdk_gl_context_get_surface (GdkGLContext *context)
 }
 
 /**
- * gdk_gl_context_get_shared_context:
+ * gdk_gl_context_get_shared_context: (attributes org.gtk.Method.get_property=shared-context)
  * @context: a `GdkGLContext`
  *
  * Retrieves the `GdkGLContext` that this @context share data with.
