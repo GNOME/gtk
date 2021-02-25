@@ -39,11 +39,6 @@ G_BEGIN_DECLS
 typedef struct _GtkGLArea               GtkGLArea;
 typedef struct _GtkGLAreaClass          GtkGLAreaClass;
 
-/**
- * GtkGLArea:
- *
- * A #GtkWidget used for drawing with OpenGL.
- */
 struct _GtkGLArea
 {
   /*< private >*/
