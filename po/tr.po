@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-02-21 17:51+0000\n"
-"PO-Revision-Date: 2021-02-21 20:55+0300\n"
+"POT-Creation-Date: 2021-02-25 12:24+0000\n"
+"PO-Revision-Date: 2021-02-25 17:02+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -2004,7 +2004,7 @@ msgstr "_Kaydet"
 
 #: gtk/gtkfilechoosernativequartz.c:338 gtk/ui/gtkfilechooserwidget.ui:345
 msgid "Select which types of files are shown"
-msgstr "Hangi türdeki dosyaların gösterileceğini seçin"
+msgstr "Hangi türdeki dosyaların gösterileceğini seç"
 
 #. Translators: the first string is a path and the second string
 #. * is a hostname. Nautilus and the panel contain the same string
@@ -3527,22 +3527,22 @@ msgstr "Biçem Sınıfları"
 msgid "CSS Property"
 msgstr "CSS Özelliği"
 
-#: gtk/inspector/general.c:345
+#: gtk/inspector/general.c:347
 msgctxt "GL version"
 msgid "None"
 msgstr "Hiçbiri"
 
-#: gtk/inspector/general.c:346
+#: gtk/inspector/general.c:348
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Hiçbiri"
 
-#: gtk/inspector/general.c:447
+#: gtk/inspector/general.c:449
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Hiçbiri"
 
-#: gtk/inspector/general.c:448 gtk/inspector/general.c:449
+#: gtk/inspector/general.c:450 gtk/inspector/general.c:451
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Hiçbiri"
@@ -6751,7 +6751,7 @@ msgstr "Dil"
 
 #: gtk/ui/gtkfontchooserwidget.ui:191 gtk/ui/gtkfontchooserwidget.ui:328
 msgid "Preview text"
-msgstr "Metni önizle"
+msgstr "Metni ön izle"
 
 #: gtk/ui/gtkfontchooserwidget.ui:194 gtk/ui/gtkfontchooserwidget.ui:224
 msgid "horizontal"
@@ -6767,7 +6767,7 @@ msgstr "_Biçimlenecek:"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:51 gtk/ui/gtkprintunixdialog.ui:637
 msgid "_Paper size:"
-msgstr "_Sayfa boyutu:"
+msgstr "_Kağıt boyutu:"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:86
 msgid "_Orientation:"
@@ -6821,7 +6821,7 @@ msgstr "_Sunucuya Bağlan"
 
 #: gtk/ui/gtkplacesview.ui:277
 msgid "Enter server address…"
-msgstr "Sunucu adresini girin…"
+msgstr "Sunucu adresini gir…"
 
 #. this is the header for the printer status column in the print dialog
 #: gtk/ui/gtkprintunixdialog.ui:147
@@ -6842,7 +6842,7 @@ msgstr "_Geçerli Sayfa"
 
 #: gtk/ui/gtkprintunixdialog.ui:239
 msgid "Se_lection"
-msgstr "Se_çim"
+msgstr "Seçi_m"
 
 #: gtk/ui/gtkprintunixdialog.ui:252
 msgid "Pag_es:"
@@ -6910,15 +6910,15 @@ msgstr "Ö_lçek:"
 
 #: gtk/ui/gtkprintunixdialog.ui:556
 msgid "Paper"
-msgstr "Sayfa"
+msgstr "Kağıt"
 
 #: gtk/ui/gtkprintunixdialog.ui:571
 msgid "Paper _type:"
-msgstr "Sayfa _türü:"
+msgstr "Kağıt _türü:"
 
 #: gtk/ui/gtkprintunixdialog.ui:593
 msgid "Paper _source:"
-msgstr "Sayfa _kaynağı:"
+msgstr "Kağıt _kaynağı:"
 
 #: gtk/ui/gtkprintunixdialog.ui:615
 msgid "Output t_ray:"
@@ -6971,7 +6971,7 @@ msgstr "_Beklemede"
 
 #: gtk/ui/gtkprintunixdialog.ui:866 gtk/ui/gtkprintunixdialog.ui:867
 msgid "Hold the job until it is explicitly released"
-msgstr "Özellikle bırakılmadığı müddetçe görevi tut"
+msgstr "Özellikle bırakılmadıkça görevi tut"
 
 #: gtk/ui/gtkprintunixdialog.ui:894
 msgid "Add Cover Page"
@@ -6994,7 +6994,7 @@ msgstr "Görev"
 #. This will appear as a tab label in the print dialog.
 #: gtk/ui/gtkprintunixdialog.ui:989
 msgid "Image Quality"
-msgstr "Resim Kalitesi"
+msgstr "Görüntü Niteliği"
 
 #. This will appear as a tab label in the print dialog.
 #: gtk/ui/gtkprintunixdialog.ui:1018
@@ -7773,8 +7773,7 @@ msgstr "%s: eksik uygulama adı"
 #, c-format
 msgid "Creating AppInfo from id not supported on non unix operating systems"
 msgstr ""
-"Kimlikten UygulamaBilgisi oluşturma Unix olmayan işletim sistemlerinde "
-"desteklenmiyor"
+"Kimlikten AppInfo oluşturma Unix olmayan işletim sistemlerinde desteklenmiyor"
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
@@ -7843,7 +7842,7 @@ msgstr "%s dosyası geri %s olarak yeniden adlandırılamadı: %s\n"
 #: tools/updateiconcache.c:1619
 #, c-format
 msgid "Cache file created successfully.\n"
-msgstr "Ön bellek dosyası başarıyla oluşturuldu.\n"
+msgstr "Önbellek dosyası başarıyla oluşturuldu.\n"
 
 #: tools/updateiconcache.c:1658
 msgid "Overwrite an existing cache, even if up to date"
@@ -7859,7 +7858,7 @@ msgstr "Önbellekte görüntü verisini içerme"
 
 #: tools/updateiconcache.c:1661
 msgid "Include image data in the cache"
-msgstr "Önbelleğe görüntü verisini dahil et"
+msgstr "Önbellekte görüntü verisini içer"
 
 #: tools/updateiconcache.c:1662
 msgid "Output a C header file"
