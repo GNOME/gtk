@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-21 18:01+0000\n"
-"PO-Revision-Date: 2021-02-21 20:59+0300\n"
+"POT-Creation-Date: 2021-02-25 13:49+0000\n"
+"PO-Revision-Date: 2021-02-25 17:25+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -945,7 +945,7 @@ msgstr "_Yazdır"
 #: gtk/a11y/gtkimageaccessible.c:107 gtk/deprecated/gtkstock.c:435
 msgctxt "Stock label"
 msgid "Print Pre_view"
-msgstr "Yazıcı Ö_nizleme"
+msgstr "Yazıcı Ö_n İzleme"
 
 #: gtk/a11y/gtkimageaccessible.c:108 gtk/deprecated/gtkstock.c:436
 msgctxt "Stock label"
@@ -1282,7 +1282,7 @@ msgstr "Bo_yut:"
 #. create the text entry widget
 #: gtk/deprecated/gtkfontsel.c:577
 msgid "_Preview:"
-msgstr "_Önizleme:"
+msgstr "_Ön İzleme:"
 
 #: gtk/deprecated/gtkfontsel.c:1693 gtk/gtkpagesetupunixdialog.c:198
 #: gtk/ui/gtkassistant.ui:50
@@ -1800,16 +1800,16 @@ msgstr ""
 "  validate              Dosyayı doğrula\n"
 "  simplify [SEÇENEKLER] Dosyayı basitleştir\n"
 "  enumerate             Tüm nesneleri listele\n"
-"  preview [SEÇENEKLER]  Dosyayı önizle\n"
+"  preview [SEÇENEKLER]  Dosyayı ön izle\n"
 "\n"
 "Simplify (Basitleştir) Seçenekleri:\n"
 "  --replace             Dosyayı değiştir\n"
 "\n"
-"Preview (Önizle) Seçenekleri:\n"
-"  --id=KİMLİK           Yalnızca adı verilen nesneyi önizle\n"
+"Ön İzleme Seçenekleri:\n"
+"  --id=KİMLİK           Yalnızca adı verilen nesneyi ön izle\n"
 "  --css=DOSYA           CSS dosyasından biçem kullan\n"
 "\n"
-"GtkBuilder .ui dosyaları üzerinde çeşitli görevler gerçekleştir.\n"
+"GtkBuilder .ui dosyaları üzerinde türlü görevler gerçekleştir.\n"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -2346,7 +2346,7 @@ msgstr "_Kaydet"
 
 #: gtk/gtkfilechoosernativequartz.c:331 gtk/ui/gtkfilechooserwidget.ui:405
 msgid "Select which types of files are shown"
-msgstr "Hangi türdeki dosyaların gösterileceğini seçin"
+msgstr "Hangi türdeki dosyaların gösterileceğini seç"
 
 #. Translators: the first string is a path and the second string
 #. * is a hostname. Nautilus and the panel contain the same string
@@ -2359,7 +2359,7 @@ msgstr "%2$s üzerindeki %1$s"
 
 #: gtk/gtkfilechooserwidget.c:385
 msgid "Type name of new folder"
-msgstr "Yeni klasörün adını girin"
+msgstr "Yeni klasörün adını gir"
 
 #: gtk/gtkfilechooserwidget.c:809
 msgid "The folder could not be created"
@@ -2556,11 +2556,11 @@ msgstr "Arama"
 
 #: gtk/gtkfilechooserwidget.c:3370
 msgid "Enter location"
-msgstr "Konum girin"
+msgstr "Konum gir"
 
 #: gtk/gtkfilechooserwidget.c:3372
 msgid "Enter location or URL"
-msgstr "Konum ya da URL girin"
+msgstr "Konum ya da URL gir"
 
 #: gtk/gtkfilechooserwidget.c:4450 gtk/gtkfilechooserwidget.c:7492
 #: gtk/ui/gtkfilechooserwidget.ui:248
@@ -2877,8 +2877,7 @@ msgstr "%s: eksik uygulama adı"
 #, c-format
 msgid "Creating AppInfo from id not supported on non unix operating systems"
 msgstr ""
-"Kimlikten UygulamaBilgisi oluşturma Unix olmayan işletim sistemlerinde "
-"desteklenmiyor"
+"Kimlikten AppInfo oluşturma Unix olmayan işletim sistemlerinde desteklenmiyor"
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
@@ -2916,7 +2915,7 @@ msgid ""
 "Click to prevent further changes"
 msgstr ""
 "Pencere kilidi kaldırıldı.\n"
-"Daha çok değişikliği önlemek için tıklayın"
+"Gelecek değişiklikleri önlemek için tıkla"
 
 #: gtk/gtklockbutton.c:302
 msgid ""
@@ -2924,7 +2923,7 @@ msgid ""
 "Click to make changes"
 msgstr ""
 "Pencere kilitlendi.\n"
-"Değişiklik yapmak için tıklayın"
+"Değişiklik yapmak için tıkla"
 
 #: gtk/gtklockbutton.c:311
 msgid ""
@@ -3039,7 +3038,7 @@ msgstr "Parolayı _anında unut"
 
 #: gtk/gtkmountoperation.c:765
 msgid "Remember password until you _logout"
-msgstr "Parolayı _çıkış yapana kadar anımsa"
+msgstr "Parolayı _çıkış yapana dek anımsa"
 
 #: gtk/gtkmountoperation.c:775
 msgid "Remember _forever"
@@ -3168,7 +3167,7 @@ msgstr "Masaüstünüzün içeriğini bir klasör içerisinde açın"
 
 #: gtk/gtkplacessidebar.c:1125
 msgid "Enter Location"
-msgstr "Konum Girin"
+msgstr "Konum Gir"
 
 #: gtk/gtkplacessidebar.c:1127
 msgid "Manually enter a location"
@@ -3545,12 +3544,12 @@ msgstr "%d yazdırılıyor"
 #: gtk/gtkprintoperation.c:3038
 #, c-format
 msgid "Error creating print preview"
-msgstr "Baskı önizleme oluşturulurken hata"
+msgstr "Baskı ön izleme oluşturulurken hata"
 
 #: gtk/gtkprintoperation.c:3041
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
-msgstr "En olası sebebi geçici dosyanın oluşturulamamış olmasıdır."
+msgstr "En olası nedeni geçici dosyanın oluşturulamamasıdır."
 
 #. window
 #: gtk/gtkprintoperation-portal.c:231 gtk/gtkprintoperation-portal.c:549
@@ -3574,7 +3573,7 @@ msgstr "Durduruldu"
 
 #: gtk/gtkprintoperation-win32.c:637
 msgid "Need user intervention"
-msgstr "Kullanıcı müdahalesi gerekiyor"
+msgstr "Kullanıcı girişimi gerekli"
 
 #: gtk/gtkprintoperation-win32.c:742
 msgid "Custom size"
@@ -3595,7 +3594,7 @@ msgstr "StartDoc'tan hata"
 #: gtk/gtkprintoperation-win32.c:1777 gtk/gtkprintoperation-win32.c:1800
 #: gtk/gtkprintoperation-win32.c:1848
 msgid "Not enough free memory"
-msgstr "Yeteri kadar boş bellek yok"
+msgstr "Yeterince boş bellek yok"
 
 #: gtk/gtkprintoperation-win32.c:1853
 msgid "Invalid argument to PrintDlgEx"
@@ -3615,7 +3614,7 @@ msgstr "Belirsiz hata"
 
 #: gtk/gtkprintunixdialog.c:746
 msgid "Pre_view"
-msgstr "Ö_nizleme"
+msgstr "Ön İzl_e"
 
 #: gtk/gtkprintunixdialog.c:748
 msgid "_Print"
@@ -3989,11 +3988,11 @@ msgstr "Dönüştürülen veri bozulmuş. İlk bölüm GTKTEXTBUFFERCONTENTS-000
 
 #: gtk/gtktextutil.c:57
 msgid "LRM _Left-to-right mark"
-msgstr "LRM _Soldan sağa işaretleme"
+msgstr "LRM _Soldan sağa imi"
 
 #: gtk/gtktextutil.c:58
 msgid "RLM _Right-to-left mark"
-msgstr "RLM _Sağdan sola işaretleme"
+msgstr "RLM _Sağdan sola imi"
 
 #: gtk/gtktextutil.c:59
 msgid "LRE Left-to-right _embedding"
@@ -4331,7 +4330,7 @@ msgstr "Nesne"
 #: gtk/inspector/prop-editor.c:679
 #, c-format
 msgid "Pointer: %p"
-msgstr "İşaretçi: %p"
+msgstr "İmleç: %p"
 
 #: gtk/inspector/prop-editor.c:694
 msgctxt "type name"
@@ -4628,7 +4627,7 @@ msgstr "Yerleşim Sınırlarını Göster"
 
 #: gtk/inspector/visual.ui:615
 msgid "Show Pixel Cache"
-msgstr "Piksel Ön Belleğini Göster"
+msgstr "Piksel Önbelleğini Göster"
 
 #: gtk/inspector/visual.ui:649
 msgid "Show Widget Resizes"
@@ -7247,7 +7246,7 @@ msgstr "Yazı Tipi Ailesi"
 
 #: gtk/ui/gtkfontchooserwidget.ui:121 gtk/ui/gtkfontchooserwidget.ui:248
 msgid "Preview text"
-msgstr "Metni önizle"
+msgstr "Metni ön izle"
 
 #: gtk/ui/gtkfontchooserwidget.ui:201
 msgid "No Fonts Found"
@@ -7322,7 +7321,7 @@ msgstr "_Sunucuya Bağlan"
 
 #: gtk/ui/gtkplacesview.ui:340
 msgid "Enter server address…"
-msgstr "Sunucu adresini girin…"
+msgstr "Sunucu adresini gir…"
 
 #: gtk/ui/gtkprintunixdialog.ui:112
 msgid "Printer"
@@ -7347,7 +7346,7 @@ msgstr "_Geçerli Sayfa"
 
 #: gtk/ui/gtkprintunixdialog.ui:233
 msgid "Se_lection"
-msgstr "Se_çim"
+msgstr "Seçi_m"
 
 #: gtk/ui/gtkprintunixdialog.ui:249
 msgid "Pag_es:"
@@ -7486,7 +7485,7 @@ msgstr "_Beklemede"
 
 #: gtk/ui/gtkprintunixdialog.ui:1054 gtk/ui/gtkprintunixdialog.ui:1055
 msgid "Hold the job until it is explicitly released"
-msgstr "Özellikle bırakılmadığı müddetçe görevi tut"
+msgstr "Özellikle bırakılmadıkça görevi tut"
 
 #: gtk/ui/gtkprintunixdialog.ui:1092
 msgid "Add Cover Page"
@@ -7509,7 +7508,7 @@ msgstr "Görev"
 #. This will appear as a tab label in the print dialog.
 #: gtk/ui/gtkprintunixdialog.ui:1214
 msgid "Image Quality"
-msgstr "Resim Kalitesi"
+msgstr "Görüntü Niteliği"
 
 #. This will appear as a tab label in the print dialog.
 #: gtk/ui/gtkprintunixdialog.ui:1247
@@ -7531,7 +7530,7 @@ msgstr "Penceredeki kimi ayarlar çakışıyor"
 
 #: gtk/ui/gtkrecentchooserdefault.ui:78
 msgid "Select which type of documents are shown"
-msgstr "Hangi tür belgelerin görüntüleneceğini seçin"
+msgstr "Hangi tür belgelerin görüntüleneceğini seç"
 
 #: gtk/ui/gtkvolumebutton.ui:24
 msgid "Volume"
@@ -7610,7 +7609,7 @@ msgstr "%s dosyası geri %s olarak yeniden adlandırılamadı: %s\n"
 #: gtk/updateiconcache.c:1615
 #, c-format
 msgid "Cache file created successfully.\n"
-msgstr "Ön bellek dosyası başarıyla oluşturuldu.\n"
+msgstr "Önbellek dosyası başarıyla oluşturuldu.\n"
 
 #: gtk/updateiconcache.c:1654
 msgid "Overwrite an existing cache, even if up to date"
@@ -7626,7 +7625,7 @@ msgstr "Önbellekte görüntü verisini içerme"
 
 #: gtk/updateiconcache.c:1657
 msgid "Include image data in the cache"
-msgstr "Önbelleğe görüntü verisini dahil et"
+msgstr "Önbellekte görüntü verisini içer"
 
 #: gtk/updateiconcache.c:1658
 msgid "Output a C header file"
