@@ -51,15 +51,19 @@ typedef struct _GtkFlowBoxChildClass  GtkFlowBoxChildClass;
 
 struct _GtkFlowBoxChild
 {
+  /*< private >*/
   GtkWidget parent_instance;
 };
 
 struct _GtkFlowBoxChildClass
 {
+  /*< private >*/
   GtkWidgetClass parent_class;
 
+  /*< public >*/
   void (* activate) (GtkFlowBoxChild *child);
 
+  /*< private >*/
   gpointer padding[8];
 };
 
