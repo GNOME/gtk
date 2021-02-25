@@ -116,7 +116,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
   iface->restore_system_shortcuts = gdk_toplevel_default_restore_system_shortcuts;
 
   /**
-   * GdkToplevel:state:
+   * GdkToplevel:state: (attributes org.gtk.Property.get=gdk_toplevel_get_state)
    *
    * The state of the toplevel.
    */
@@ -128,7 +128,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   /**
-   * GdkToplevel:title:
+   * GdkToplevel:title: (attributes org.gtk.Property.set=gdk_toplevel_set_title)
    *
    * The title of the surface.
    */
@@ -140,7 +140,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GdkToplevel:startup-id:
+   * GdkToplevel:startup-id: (attributes org.gtk.Property.set=gdk_toplevel_set_startup_id)
    *
    * The startup ID of the surface.
    *
@@ -155,7 +155,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GdkToplevel:transient-for:
+   * GdkToplevel:transient-for: (attributes org.gtk.Property.set=gdk_toplevel_set_transient_for)
    *
    * The transient parent of the surface.
    */
@@ -167,7 +167,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GdkToplevel:modal:
+   * GdkToplevel:modal: (attributes org.gtk.Property.set=gdk_toplevel_set_modal)
    *
    * Whether the surface is modal.
    */
@@ -179,7 +179,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GdkToplevel:icon-list:
+   * GdkToplevel:icon-list: (attributes org.gtk.Property.set=gdk_toplevel_set_icon_list)
    *
    * A list of textures to use as icon.
    */
@@ -190,7 +190,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GdkToplevel:decorated:
+   * GdkToplevel:decorated: (attributes org.gtk.Property.set=gdk_toplevel_set_decorated)
    *
    * Whether the window manager should add decorations.
    */
@@ -202,7 +202,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GdkToplevel:deletable:
+   * GdkToplevel:deletable: (attributes org.gtk.Property.set=gdk_toplevel_set_deletable)
    *
    * Whether the window manager should allow to close the surface.
    */
@@ -368,7 +368,7 @@ gdk_toplevel_focus (GdkToplevel *toplevel,
 }
 
 /**
- * gdk_toplevel_get_state:
+ * gdk_toplevel_get_state: (attributes org.gtk.Method.get_property=state)
  * @toplevel: a `GdkToplevel`
  *
  * Gets the bitwise or of the currently active surface state flags,
@@ -389,7 +389,7 @@ gdk_toplevel_get_state (GdkToplevel *toplevel)
 }
 
 /**
- * gdk_toplevel_set_title:
+ * gdk_toplevel_set_title: (attributes org.gtk.Method.set_property=title)
  * @toplevel: a `GdkToplevel`
  * @title: title of @surface
  *
@@ -408,7 +408,7 @@ gdk_toplevel_set_title (GdkToplevel *toplevel,
 }
 
 /**
- * gdk_toplevel_set_startup_id:
+ * gdk_toplevel_set_startup_id: (attributes org.gtk.Method.set_property=startup-id)
  * @toplevel: a `GdkToplevel`
  * @startup_id: a string with startup-notification identifier
  *
@@ -428,7 +428,7 @@ gdk_toplevel_set_startup_id (GdkToplevel *toplevel,
 }
 
 /**
- * gdk_toplevel_set_transient_for:
+ * gdk_toplevel_set_transient_for: (attributes org.gtk.Method.set_property=transient-for)
  * @toplevel: a `GdkToplevel`
  * @parent: another toplevel `GdkSurface`
  *
@@ -452,7 +452,7 @@ gdk_toplevel_set_transient_for (GdkToplevel *toplevel,
 }
 
 /**
- * gdk_toplevel_set_modal:
+ * gdk_toplevel_set_modal: (attributes org.gtk.Method.set_property=modal)
  * @toplevel: a `GdkToplevel`
  * @modal: %TRUE if the surface is modal, %FALSE otherwise.
  *
@@ -476,7 +476,7 @@ gdk_toplevel_set_modal (GdkToplevel *toplevel,
 }
 
 /**
- * gdk_toplevel_set_icon_list:
+ * gdk_toplevel_set_icon_list: (attributes org.gtk.Method.set_property=icon-list)
  * @toplevel: a `GdkToplevel`
  * @surfaces: (transfer none) (element-type GdkTexture):
  *   A list of textures to use as icon, of different sizes
@@ -524,7 +524,7 @@ gdk_toplevel_show_window_menu (GdkToplevel *toplevel,
 }
 
 /**
- * gdk_toplevel_set_decorated:
+ * gdk_toplevel_set_decorated: (attributes org.gtk.Method.set_property=decorated)
  * @toplevel: a `GdkToplevel`
  * @decorated: %TRUE to request decorations
  *
@@ -544,7 +544,7 @@ gdk_toplevel_set_decorated (GdkToplevel *toplevel,
 }
 
 /**
- * gdk_toplevel_set_deletable:
+ * gdk_toplevel_set_deletable: (attributes org.gtk.Method.set_property=deletable)
  * @toplevel: a `GdkToplevel`
  * @deletable: %TRUE to request a delete button
  *
