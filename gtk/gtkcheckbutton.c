@@ -504,9 +504,12 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   class->activate = gtk_check_button_real_activate;
 
   /**
-   * GtkCheckButton:active:
+   * GtkCheckButton:active: (attributes org.gtk.Property.get=gtk_check_button_get_active org.gtk.Property.set=gtk_check_button_set_active)
    *
    * If the check button is active.
+   *
+   * Setting `active` to %TRUE will add the `:checked:` state to both
+   * the check button and the indicator CSS node.
    */
   props[PROP_ACTIVE] =
       g_param_spec_boolean ("active",
@@ -516,7 +519,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkCheckButton:group:
+   * GtkCheckButton:group: (attributes org.gtk.Property.set=gtk_check_button_set_group)
    *
    * The check button whose group this widget belongs to.
    */
@@ -528,7 +531,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
                            GTK_PARAM_WRITABLE);
 
   /**
-   * GtkCheckButton:label:
+   * GtkCheckButton:label: (attributes org.gtk.Property.get=gtk_check_button_get_label org.gtk.Property.set=gtk_check_button_set_label)
    *
    * Text of the label inside the check button, if it contains a label widget.
    */
@@ -540,9 +543,12 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkCheckButton:inconsistent:
+   * GtkCheckButton:inconsistent: (attributes org.gtk.Property.get=gtk_check_button_get_inconsistent org.gtk.Property.set=gtk_check_button_set_inconsistent)
    *
    * If the check button is in an “in between” state.
+   *
+   * The inconsistent state only affects visual appearance,
+   * not the semantics of the button.
    */
   props[PROP_INCONSISTENT] =
       g_param_spec_boolean ("inconsistent",
@@ -552,10 +558,10 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkCheckButton:use-underline:
+   * GtkCheckButton:use-underline: (attributes org.gtk.Property.get=gtk_check_button_get_use_underline org.gtk.Property.set=gtk_check_button_set_use_underline)
    *
-   * If set, an underline in the text indicates that the following character
-   * is to be used as mnemonic.
+   * If set, an underline in the text indicates that the following
+   * character is to be used as mnemonic.
    */
   props[PROP_USE_UNDERLINE] =
       g_param_spec_boolean ("use-underline",
@@ -572,7 +578,8 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   /**
    * GtkCheckButton::toggled:
    *
-   * Emitted when the buttons's [property@Gtk.CheckButton:active] property changes.
+   * Emitted when the buttons's [property@Gtk.CheckButton:active]
+   * property changes.
    */
   signals[TOGGLED] =
     g_signal_new (I_("toggled"),
@@ -696,7 +703,7 @@ gtk_check_button_new_with_mnemonic (const char *label)
 }
 
 /**
- * gtk_check_button_set_inconsistent:
+ * gtk_check_button_set_inconsistent: (attributes org.gtk.Method.set_property=inconsistent)
  * @check_button: a `GtkCheckButton`
  * @inconsistent: %TRUE if state is inconsistent
  *
@@ -704,9 +711,6 @@ gtk_check_button_new_with_mnemonic (const char *label)
  *
  * You shoud turn off the inconsistent state again if the user checks
  * the check button. This has to be done manually.
- *
- * gtk_check_button_set_inconsistent() only affects visual appearance,
- * not the semantics of the button.
  */
 void
 gtk_check_button_set_inconsistent (GtkCheckButton *check_button,
@@ -739,7 +743,7 @@ gtk_check_button_set_inconsistent (GtkCheckButton *check_button,
 }
 
 /**
- * gtk_check_button_get_inconsistent:
+ * gtk_check_button_get_inconsistent: (attributes org.gtk.Method.get_property=inconsistent)
  * @check_button: a `GtkCheckButton`
  *
  * Returns whether the check button is in an inconsistent state.
@@ -757,12 +761,12 @@ gtk_check_button_get_inconsistent (GtkCheckButton *check_button)
 }
 
 /**
- * gtk_check_button_get_active:
+ * gtk_check_button_get_active: (attributes org.gtk.Method.get_property=active)
  * @self: a `GtkCheckButton`
  *
  * Returns whether the check button is active.
  *
- * Returns: The value of the [property@Gtk.CheckButton:active] property
+ * Returns: whether the check button is active
  */
 gboolean
 gtk_check_button_get_active (GtkCheckButton *self)
@@ -775,15 +779,11 @@ gtk_check_button_get_active (GtkCheckButton *self)
 }
 
 /**
- * gtk_check_button_set_active:
+ * gtk_check_button_set_active: (attributes org.gtk.Method.set_property=active)
  * @self: a `GtkCheckButton`
  * @setting: the new value to set
  *
  * Changes the check buttons active state.
- *
- * Setting [property@Gtk.CheckButton:active] to %TRUE will add
- * the `:checked:` state to both the checkbutton and the indicator
- * CSS node.
  */
 void
 gtk_check_button_set_active (GtkCheckButton *self,
@@ -831,7 +831,7 @@ gtk_check_button_set_active (GtkCheckButton *self,
 }
 
 /**
- * gtk_check_button_get_label:
+ * gtk_check_button_get_label: (attributes org.gtk.Method.get_property=label)
  * @self: a `GtkCheckButton`
  *
  * Returns the label of the check button.
@@ -853,7 +853,7 @@ gtk_check_button_get_label (GtkCheckButton *self)
 }
 
 /**
- * gtk_check_button_set_label:
+ * gtk_check_button_set_label: (attributes org.gtk.Method.set_property=label)
  * @self: a `GtkCheckButton`
  * @label: (nullable): The text shown next to the indicator, or %NULL
  *   to show no text
@@ -899,7 +899,7 @@ gtk_check_button_set_label (GtkCheckButton *self,
 }
 
 /**
- * gtk_check_button_set_group:
+ * gtk_check_button_set_group: (attributes org.gtk.Method.set_property=group)
  * @self: a `GtkCheckButton`
  * @group: (nullable) (transfer none): another `GtkCheckButton` to
  *   form a group with
@@ -976,7 +976,7 @@ gtk_check_button_set_group (GtkCheckButton *self,
 }
 
 /**
- * gtk_check_button_get_use_underline:
+ * gtk_check_button_get_use_underline: (attributes org.gtk.Method.get_property=use-underline)
  * @self: a `GtkCheckButton`
  *
  * Returns whether underlines in the label indicate mnemonics.
@@ -996,7 +996,7 @@ gtk_check_button_get_use_underline (GtkCheckButton *self)
 }
 
 /**
- * gtk_check_button_set_use_underline:
+ * gtk_check_button_set_use_underline: (attributes org.gtk.Method.set_property=use-underline)
  * @self: a `GtkCheckButton`
  * @setting: the new value to set
  *
