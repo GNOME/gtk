@@ -79,12 +79,23 @@ gdk_popup_default_init (GdkPopupInterface *iface)
   iface->get_position_x = gdk_popup_default_get_position_x;
   iface->get_position_y = gdk_popup_default_get_position_y;
 
+  /**
+   * GdkPopup:parent: (attributes org.gtk.Property.get=gdk_popup_get_parent)
+   *
+   * The parent surface.
+   */
   g_object_interface_install_property (iface,
       g_param_spec_object ("parent",
                            P_("Parent"),
                            P_("The parent surface"),
                            GDK_TYPE_SURFACE,
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * GdkPopup:autohide: (attributes org.gtk.Property.get=gdk_popup_get_autohide)
+   *
+   * Whether to hide on outside clicks.
+   */
   g_object_interface_install_property (iface,
       g_param_spec_boolean ("autohide",
                            P_("Autohide"),
@@ -171,7 +182,7 @@ gdk_popup_get_rect_anchor (GdkPopup *popup)
 }
 
 /**
- * gdk_popup_get_parent:
+ * gdk_popup_get_parent: (attributes org.gtk.Method.get_property=parent)
  * @popup: a `GdkPopup`
  *
  * Returns the parent surface of a popup.
@@ -226,7 +237,7 @@ gdk_popup_get_position_y (GdkPopup *popup)
 }
 
 /**
- * gdk_popup_get_autohide:
+ * gdk_popup_get_autohide: (attributes org.gtk.Method.get_property=autohide)
  * @popup: a `GdkPopup`
  *
  * Returns whether this popup is set to hide on outside clicks.
