@@ -41,11 +41,6 @@ typedef struct _GskShaderArgsBuilder GskShaderArgsBuilder;
 
 #define GSK_TYPE_GL_SHADER (gsk_gl_shader_get_type ())
 
-/**
- * GskGLShader:
- *
- * An object representing a GL shader program.
- */
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GskGLShader, gsk_gl_shader, GSK, GL_SHADER, GObject)
 

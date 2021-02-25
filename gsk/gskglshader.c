@@ -17,9 +17,7 @@
  */
 
 /**
- * SECTION:gskglshader
- * @Title: GskGLShader
- * @Short_description: Fragment shaders for GSK
+ * GskGLShader:
  *
  * A `GskGLShader` is a snippet of GLSL that is meant to run in the
  * fragment shader of the rendering pipeline.
@@ -442,7 +440,7 @@ gsk_gl_shader_class_init (GskGLShaderClass *klass)
   object_class->constructed = gsk_gl_shader_constructed;
 
   /**
-   * GskGLShader:sourcecode:
+   * GskGLShader:sourcecode: (attributes org.gtk.Property.get=gsk_gl_shader_get_source)
    *
    * The source code for the shader, as a `GBytes`.
    */
@@ -456,7 +454,7 @@ gsk_gl_shader_class_init (GskGLShaderClass *klass)
                         G_PARAM_STATIC_STRINGS);
 
   /**
-   * GskGLShader:resource:
+   * GskGLShader:resource: (attributes org.gtk.Property.get=gsk_gl_shader_get_resource)
    *
    * Resource containing the source code for the shader.
    *
@@ -483,9 +481,9 @@ gsk_gl_shader_init (GskGLShader *shader)
 
 /**
  * gsk_gl_shader_new_from_bytes:
- * @sourcecode: GLSL sourcecode for the shader, as a #GBytes
+ * @sourcecode: GLSL sourcecode for the shader, as a `GBytes`
  *
- * Creates a #GskGLShader that will render pixels using the specified code.
+ * Creates a `GskGLShader` that will render pixels using the specified code.
  *
  * Returns: (transfer full): A new `GskGLShader`
  */
@@ -520,8 +518,8 @@ gsk_gl_shader_new_from_resource (const char *resource_path)
 
 /**
  * gsk_gl_shader_compile:
- * @shader: a #GskGLShader
- * @renderer: a #GskRenderer
+ * @shader: a `GskGLShader`
+ * @renderer: a `GskRenderer`
  * @error: location to store error in
  *
  * Tries to compile the @shader for the given @renderer.
@@ -558,7 +556,7 @@ gsk_gl_shader_compile (GskGLShader  *shader,
 
 
 /**
- * gsk_gl_shader_get_source:
+ * gsk_gl_shader_get_source: (attributes org.gtk.Method.get_property=source)
  * @shader: a `GskGLShader`
  *
  * Gets the GLSL sourcecode being used to render this shader.
@@ -574,7 +572,7 @@ gsk_gl_shader_get_source (GskGLShader *shader)
 }
 
 /**
- * gsk_gl_shader_get_resource:
+ * gsk_gl_shader_get_resource: (attributes org.gtk.Method.get_property=resource)
  * @shader: a `GskGLShader`
  *
  * Gets the resource path for the GLSL sourcecode being used
