@@ -58,10 +58,7 @@ enum {
 static guint signals[LAST_SIGNAL] = { 0, };
 
 /**
- * SECTION:gtkdrawingarea
- * @Short_description: A simple widget for drawing with cairo
- * @Title: GtkDrawingArea
- * @See_also: #GtkImage
+ * GtkDrawingArea:
  *
  * `GtkDrawingArea` is a widget that allows drawing with cairo.
  *
@@ -284,11 +281,9 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
   widget_class->snapshot = gtk_drawing_area_snapshot;
 
   /**
-   * GtkDrawingArea:content-width
+   * GtkDrawingArea:content-width: (attributes org.gtk.Property.get=gtk_drawing_area_get_content_width org.gtk.Property.set=gtk_drawing_area_set_content_width)
    *
    * The content width.
-   *
-   * See [method@Gtk.DrawingArea.set_content_width] for details.
    */
   props[PROP_CONTENT_WIDTH] =
     g_param_spec_int ("content-width",
@@ -298,11 +293,9 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkDrawingArea:content-height
+   * GtkDrawingArea:content-height: (attributes org.gtk.Property.get=gtk_drawing_area_get_content_height org.gtk.Property.set=gtk_drawing_area_set_content_height)
    *
    * The content height.
-   *
-   * See [method@Gtk.DrawingArea.set_content_height] for details.
    */
   props[PROP_CONTENT_HEIGHT] =
     g_param_spec_int ("content-height",
@@ -358,7 +351,7 @@ gtk_drawing_area_new (void)
 }
 
 /**
- * gtk_drawing_area_set_content_width:
+ * gtk_drawing_area_set_content_width: (attributes org.gtk.Method.set_property=content-width)
  * @self: a `GtkDrawingArea`
  * @width: the width of contents
  *
@@ -390,7 +383,7 @@ gtk_drawing_area_set_content_width (GtkDrawingArea *self,
 }
 
 /**
- * gtk_drawing_area_get_content_width:
+ * gtk_drawing_area_get_content_width: (attributes org.gtk.Method.get_property=content-width)
  * @self: a `GtkDrawingArea`
  *
  * Retrieves the content width of the `GtkDrawingArea`.
@@ -408,7 +401,7 @@ gtk_drawing_area_get_content_width (GtkDrawingArea *self)
 }
 
 /**
- * gtk_drawing_area_set_content_height:
+ * gtk_drawing_area_set_content_height: (attributes org.gtk.Method.set_property=content-height)
  * @self: a `GtkDrawingArea`
  * @height: the height of contents
  *
@@ -440,7 +433,7 @@ gtk_drawing_area_set_content_height (GtkDrawingArea *self,
 }
 
 /**
- * gtk_drawing_area_get_content_height:
+ * gtk_drawing_area_get_content_height: (attributes org.gtk.Method.get_property=content-height)
  * @self: a `GtkDrawingArea`
  *
  * Retrieves the content height of the `GtkDrawingArea`.
