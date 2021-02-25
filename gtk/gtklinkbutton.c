@@ -169,7 +169,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
   klass->activate_link = gtk_link_button_activate_link;
 
   /**
-   * GtkLinkButton:uri:
+   * GtkLinkButton:uri: (attributes org.gtk.Property.get=gtk_link_button_get_uri org.gtk.Property.set=gtk_link_button_set_uri)
    *
    * The URI bound to this button.
    */
@@ -182,7 +182,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
                                                         GTK_PARAM_READWRITE));
 
   /**
-   * GtkLinkButton:visited:
+   * GtkLinkButton:visited: (attributes org.gtk.Property.get=gtk_link_button_get_visited org.gtk.Property.set=gtk_link_button_set_visited)
    *
    * The 'visited' state of this button.
    *
@@ -200,7 +200,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
    * GtkLinkButton::activate-link:
    * @button: the #GtkLinkButton that emitted the signal
    *
-   * Emitted each time the #GtkLinkButton is clicked.
+   * Emitted each time the `GtkLinkButton` is clicked.
    *
    * The default handler will call [func@Gtk.show_uri] with the URI
    * stored inside the [property@Gtk.LinkButton:uri] property.
@@ -611,10 +611,8 @@ gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
   return FALSE;
 }
 
-
-
 /**
- * gtk_link_button_set_uri:
+ * gtk_link_button_set_uri: (attributes org.gtk.Method.set_property=uri)
  * @link_button: a `GtkLinkButton`
  * @uri: a valid URI
  *
@@ -638,7 +636,7 @@ gtk_link_button_set_uri (GtkLinkButton *link_button,
 }
 
 /**
- * gtk_link_button_get_uri:
+ * gtk_link_button_get_uri: (attributes org.gtk.Method.get_property=uri)
  * @link_button: a `GtkLinkButton`
  *
  * Retrieves the URI of the `GtkLinkButton`.
@@ -655,7 +653,7 @@ gtk_link_button_get_uri (GtkLinkButton *link_button)
 }
 
 /**
- * gtk_link_button_set_visited:
+ * gtk_link_button_set_visited: (attributes org.gtk.Method.set_property=visited)
  * @link_button: a `GtkLinkButton`
  * @visited: the new “visited” state
  *
@@ -691,7 +689,7 @@ gtk_link_button_set_visited (GtkLinkButton *link_button,
 }
 
 /**
- * gtk_link_button_get_visited:
+ * gtk_link_button_get_visited: (attributes org.gtk.Method.get_property=visited)
  * @link_button: a `GtkLinkButton`
  *
  * Retrieves the “visited” state of the `GtkLinkButton`.
