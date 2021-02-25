@@ -489,12 +489,9 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   klass->beep = gdk_surface_real_beep;
 
   /**
-   * GdkSurface:cursor:
+   * GdkSurface:cursor: (attributes org.gtk.Property.get=gdk_surface_get_cursor org.gtk.Property.set=gdk_surface_set_cursor)
    *
    * The mouse pointer for the `GdkSurface`.
-   *
-   * See [method@Gdk.Surface.set_cursor] and
-   * [method@Gdk.Surface.get_cursor] for details.
    */
   properties[PROP_CURSOR] =
       g_param_spec_object ("cursor",
@@ -504,11 +501,9 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkSurface:display:
+   * GdkSurface:display: (attributes org.gtk.Property.get=gdk_surface_get_display)
    *
    * The `GdkDisplay` connection of the surface.
-   *
-   * See [method@Gdk.Surface.get_display] for details.
    */
   properties[PROP_DISPLAY] =
       g_param_spec_object ("display",
@@ -518,7 +513,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkSurface:frame-clock:
+   * GdkSurface:frame-clock: (attributes org.gtk.Property.get=gdk_surface_get_frame_clock)
    *
    * The `GdkFrameClock` of the surface.
    */
@@ -530,7 +525,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkSurface:mapped:
+   * GdkSurface:mapped: (attributes org.gtk.Property.get=gdk_surface_get_mapped)
    *
    * Whether the surface is mapped.
    */
@@ -542,7 +537,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkSurface:width:
+   * GdkSurface:width: (attributes org.gtk.Property.get=gdk_surface_get_width)
    *
    * The width of the surface in pixels.
    */
@@ -554,7 +549,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkSurface:height:
+   * GdkSurface:height: (attributes org.gtk.Property.get=gdk_surface_get_height)
    *
    * The height of the surface, in pixels.
    */
@@ -566,7 +561,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkSurface:scale-factor:
+   * GdkSurface:scale-factor: (attributes org.gtk.Property.get=gdk_surface_get_scale_factor)
    *
    * The scale factor of the surface.
    */
@@ -1023,7 +1018,7 @@ gdk_surface_get_widget (GdkSurface *surface)
 }
 
 /**
- * gdk_surface_get_display:
+ * gdk_surface_get_display: (attributes org.gtk.Method.get_property=display)
  * @surface: a `GdkSurface`
  *
  * Gets the `GdkDisplay` associated with a `GdkSurface`.
@@ -1052,7 +1047,7 @@ gdk_surface_is_destroyed (GdkSurface *surface)
 }
 
 /**
- * gdk_surface_get_mapped:
+ * gdk_surface_get_mapped: (attributes org.gtk.Method.get_property=mapped)
  * @surface: a `GdkSurface`
  *
  * Checks whether the surface has been mapped.
@@ -1836,7 +1831,7 @@ gdk_surface_set_cursor_internal (GdkSurface *surface,
 }
 
 /**
- * gdk_surface_get_cursor:
+ * gdk_surface_get_cursor: (attributes org.gtk.Method.get_property=cursor)
  * @surface: a `GdkSurface`
  *
  * Retrieves a `GdkCursor` pointer for the cursor currently set on the
@@ -1859,7 +1854,7 @@ gdk_surface_get_cursor (GdkSurface *surface)
 }
 
 /**
- * gdk_surface_set_cursor:
+ * gdk_surface_set_cursor: (attributes org.gtk.Method.set_property=cursor)
  * @surface: a `GdkSurface`
  * @cursor: (allow-none): a `GdkCursor`
  *
@@ -2020,7 +2015,7 @@ gdk_surface_get_geometry (GdkSurface *surface,
 }
 
 /**
- * gdk_surface_get_width:
+ * gdk_surface_get_width: (attributes org.gtk.Method.get_property=width)
  * @surface: a `GdkSurface`
  *
  * Returns the width of the given @surface.
@@ -2039,7 +2034,7 @@ gdk_surface_get_width (GdkSurface *surface)
 }
 
 /**
- * gdk_surface_get_height:
+ * gdk_surface_get_height: (attributes org.gtk.Method.get_property=height)
  * @surface: a `GdkSurface`
  *
  * Returns the height of the given @surface.
@@ -2562,7 +2557,7 @@ gdk_surface_set_frame_clock (GdkSurface     *surface,
 }
 
 /**
- * gdk_surface_get_frame_clock:
+ * gdk_surface_get_frame_clock: (attributes org.gtk.Method.get_property=frame-clock)
  * @surface: surface to get frame clock for
  *
  * Gets the frame clock for the surface.
@@ -2581,7 +2576,7 @@ gdk_surface_get_frame_clock (GdkSurface *surface)
 }
 
 /**
- * gdk_surface_get_scale_factor:
+ * gdk_surface_get_scale_factor: (attributes org.gtk.Method.get_property=scale-factor)
  * @surface: surface to get scale factor for
  *
  * Returns the internal scale factor that maps from surface coordinates
