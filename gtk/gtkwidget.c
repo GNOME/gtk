@@ -1207,7 +1207,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->contains = gtk_widget_real_contains;
 
   /**
-   * GtkWidget:name:
+   * GtkWidget:name: (attributes org.gtk.Property.get=gtk_widget_get_name org.gtk.Property.set=gtk_widget_set_name)
    *
    * The name of the widget.
    */
@@ -1219,7 +1219,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkWidget:parent:
+   * GtkWidget:parent: (attributes org.gtk.Property.get=gtk_widget_get_parent)
    *
    * The parent widget of this widget.
    */
@@ -1231,7 +1231,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                            GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:root:
+   * GtkWidget:root: (attributes org.gtk.Property.get=gtk_widget_get_root)
    *
    * The `GtkRoot` widget of the widget tree containing this widget.
    *
@@ -1275,7 +1275,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:visible:
+   * GtkWidget:visible: (attributes org.gtk.Property.get=gtk_widget_get_visible org.gtk.Property.set=gtk_widget_set_visible)
    *
    * Whether the widget is visible.
    */
@@ -1287,7 +1287,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:sensitive:
+   * GtkWidget:sensitive: (attributes org.gtk.Property.get=gtk_widget_get_sensitive org.gtk.Property.set=gtk_widget_set_sensitive)
    *
    * Whether the widget responds to input.
    */
@@ -1299,7 +1299,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:can-focus:
+   * GtkWidget:can-focus: (attributes org.gtk.Property.get=gtk_widget_get_can_focus org.gtk.Property.set=gtk_widget_set_can_focus)
    *
    * Whether the widget or any of its descendents can accept
    * the input focus.
@@ -1315,7 +1315,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:focusable:
+   * GtkWidget:focusable: (attributes org.gtk.Property.get=gtk_widget_get_focusable org.gtk.Property.set=gtk_widget_set_focusable)
    *
    * Whether this widget itself will accept the input focus.
    */
@@ -1327,7 +1327,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:has-focus:
+   * GtkWidget:has-focus: (attributes org.gtk.Property.get=gtk_widget_has_focus)
    *
    * Whether the widget has the input focus.
    */
@@ -1339,7 +1339,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:can-target:
+   * GtkWidget:can-target: (attributes org.gtk.Property.get=gtk_widget_get_can_target org.gtk.Property.set=gtk_widget_set_can_target)
    *
    * Whether the widget can receive pointer events.
    */
@@ -1351,7 +1351,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:focus-on-click:
+   * GtkWidget:focus-on-click: (attributes org.gtk.Property.get=gtk_widget_get_focus_on_click org.gtk.Property.set=gtk_widget_set_focus_on_click)
    *
    * Whether the widget should grab focus when it is clicked with the mouse.
    *
@@ -1365,7 +1365,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:has-default:
+   * GtkWidget:has-default: (attributes org.gtk.Property.get=gtk_widget_has_default)
    *
    * Whether the widget is the default widget.
    */
@@ -1377,7 +1377,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:receives-default:
+   * GtkWidget:receives-default: (attributes org.gtk.Property.get=gtk_widget_get_receives_default org.gtk.Property.set=gtk_widget_set_receives_default)
    *
    * Whether the widget will receive the default action when it is focused.
    */
@@ -1389,11 +1389,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
 /**
- * GtkWidget:cursor:
+ * GtkWidget:cursor: (attributes org.gtk.Property.get=gtk_widget_get_cursor org.gtk.Property.set=gtk_widget_set_cursor)
  *
  * The cursor used by @widget.
- *
- * See [method@Gtk.Widget.set_cursor] for details.
  */
   widget_props[PROP_CURSOR] =
       g_param_spec_object("cursor",
@@ -1403,7 +1401,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
 /**
- * GtkWidget:has-tooltip:
+ * GtkWidget:has-tooltip: (attributes org.gtk.Property.get=gtk_widget_get_has_tooltip org.gtk.Property.set=gtk_widget_set_has_tooltip)
  *
  * Enables or disables the emission of the ::query-tooltip signal on @widget.
  *
@@ -1419,7 +1417,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:tooltip-text:
+   * GtkWidget:tooltip-text: (attributes org.gtk.Property.get=gtk_widget_get_tooltip_text org.gtk.Property.set=gtk_widget_set_tooltip_text)
    *
    * Sets the text of tooltip to be the given string.
    *
@@ -1442,7 +1440,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:tooltip-markup:
+   * GtkWidget:tooltip-markup: (attributes org.gtk.Property.get=gtk_widget_get_tooltip_markup org.gtk.Property.set=gtk_widget_set_tooltip_markup)
    *
    * Sets the text of tooltip to be the given string, which is marked up
    * with Pango markup.
@@ -1466,7 +1464,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:halign:
+   * GtkWidget:halign: (attributes org.gtk.Property.get=gtk_widget_get_halign org.gtk.Property.set=gtk_widget_set_halign)
    *
    * How to distribute horizontal space if widget gets extra space.
    */
@@ -1479,7 +1477,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:valign:
+   * GtkWidget:valign: (attributes org.gtk.Property.get=gtk_widget_get_valign org.gtk.Property.set=gtk_widget_set_valign)
    *
    * How to distribute vertical space if widget gets extra space.
    */
@@ -1492,7 +1490,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:margin-start:
+   * GtkWidget:margin-start: (attributes org.gtk.Property.get=gtk_widget_get_margin_start org.gtk.Property.set=gtk_widget_set_margin_start)
    *
    * Margin on start of widget, horizontally.
    *
@@ -1512,7 +1510,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:margin-end:
+   * GtkWidget:margin-end: (attributes org.gtk.Property.get=gtk_widget_get_margin_end org.gtk.Property.set=gtk_widget_set_margin_end)
    *
    * Margin on end of widget, horizontally.
    *
@@ -1532,7 +1530,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:margin-top:
+   * GtkWidget:margin-top: (attributes org.gtk.Property.get=gtk_widget_get_margin_top org.gtk.Property.set=gtk_widget_set_margin_top)
    *
    * Margin on top side of widget.
    *
@@ -1549,7 +1547,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:margin-bottom:
+   * GtkWidget:margin-bottom: (attributes org.gtk.Property.get=gtk_widget_get_margin_bottom org.gtk.Property.set=gtk_widget_set_margin_bottom)
    *
    * Margin on bottom side of widget.
    *
@@ -1566,11 +1564,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:hexpand:
+   * GtkWidget:hexpand: (attributes org.gtk.Property.get=gtk_widget_get_hexpand org.gtk.Property.set=gtk_widget_set_hexpand)
    *
    * Whether to expand horizontally.
-   *
-   * See [method@Gtk.Widget.set_hexpand].
    */
   widget_props[PROP_HEXPAND] =
       g_param_spec_boolean ("hexpand",
@@ -1580,11 +1576,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:hexpand-set:
+   * GtkWidget:hexpand-set: (attributes org.gtk.Property.get=gtk_widget_get_hexpand_set org.gtk.Property.set=gtk_widget_set_hexpand_set)
    *
    * Whether to use the `hexpand` property.
-   *
-   * See [method@Gtk.Widget.get_hexpand_set].
    */
   widget_props[PROP_HEXPAND_SET] =
       g_param_spec_boolean ("hexpand-set",
@@ -1594,11 +1588,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:vexpand:
+   * GtkWidget:vexpand: (attributes org.gtk.Property.get=gtk_widget_get_vexpand org.gtk.Property.set=gtk_widget_set_vexpand)
    *
    * Whether to expand vertically.
-   *
-   * See [method@Gtk.Widget.set_vexpand].
    */
   widget_props[PROP_VEXPAND] =
       g_param_spec_boolean ("vexpand",
@@ -1608,11 +1600,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:vexpand-set:
+   * GtkWidget:vexpand-set: (attributes org.gtk.Property.get=gtk_widget_get_vexpand_set org.gtk.Property.set=gtk_widget_set_vexpand_set)
    *
    * Whether to use the `vexpand` property.
-   *
-   * See [method@Gtk.Widget.get_vexpand_set].
    */
   widget_props[PROP_VEXPAND_SET] =
       g_param_spec_boolean ("vexpand-set",
@@ -1622,12 +1612,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:opacity:
+   * GtkWidget:opacity: (attributes org.gtk.Property.get=gtk_widget_get_opacity org.gtk.Widget.set=gtk_widget_set_opacity)
    *
    * The requested opacity of the widget.
-   *
-   * See [method@Gtk.Widget.set_opacity] for more details
-   * about window opacity.
    */
   widget_props[PROP_OPACITY] =
       g_param_spec_double ("opacity",
@@ -1638,7 +1625,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:overflow:
+   * GtkWidget:overflow: (attributes org.gtk.Property.get=gtk_widget_get_overflow org.gtk.Property.set=gtk_widget_set_overflow)
    *
    * How content outside the widget's content area is treated.
    *
@@ -1654,12 +1641,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:scale-factor:
+   * GtkWidget:scale-factor: (attributes org.gtk.Property.get=gtk_widget_get_scale_factor)
    *
    * The scale factor of the widget.
-   *
-   * See [method@Gtk.Widget.get_scale_factor] for
-   * more details about widget scaling.
    */
   widget_props[PROP_SCALE_FACTOR] =
       g_param_spec_int ("scale-factor",
@@ -1670,7 +1654,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                         GTK_PARAM_READABLE);
 
   /**
-   * GtkWidget:css-name:
+   * GtkWidget:css-name: (attributes org.gtk.Property.get=gtk_widget_get_css_name)
    *
    * The name of this widget in the CSS tree.
    *
@@ -1685,7 +1669,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
   /**
-   * GtkWidget:css-classes:
+   * GtkWidget:css-classes: (attributes org.gtk.Property.get=gtk_widget_get_css_classes org.gtk.Property.set=gtk_widget_set_css_classes)
    *
    * A list of css classes applied to this widget.
    */
@@ -1697,7 +1681,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                           GTK_PARAM_READWRITE);
 
   /**
-   * GtkWidget:layout-manager:
+   * GtkWidget:layout-manager: (attributes org.gtk.Property.get=gtk_widget_get_layout_manager org.gtk.Property.set=gtk_widget_set_layout_manager)
    *
    * The `GtkLayoutManager` instance to use to compute the preferred size
    * of the widget, and allocate its children.
@@ -5156,7 +5140,7 @@ gtk_widget_real_keynav_failed (GtkWidget        *widget,
 }
 
 /**
- * gtk_widget_set_can_focus:
+ * gtk_widget_set_can_focus: (attributes org.gtk.Method.set_property=can-focus)
  * @widget: a `GtkWidget`
  * @can_focus: whether or not the input focus can enter
  *     the widget or any of its children
@@ -5194,7 +5178,7 @@ gtk_widget_set_can_focus (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_get_can_focus:
+ * gtk_widget_get_can_focus: (attributes org.gtk.Method.get_property=can-focus)
  * @widget: a `GtkWidget`
  *
  * Determines whether the input focus can enter @widget or any
@@ -5215,7 +5199,7 @@ gtk_widget_get_can_focus (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_focusable:
+ * gtk_widget_set_focusable: (attributes org.gtk.Method.set_property=focusable)
  * @widget: a `GtkWidget`
  * @focusable: whether or not @widget can own the input focus
  *
@@ -5254,7 +5238,7 @@ gtk_widget_set_focusable (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_get_focusable:
+ * gtk_widget_get_focusable: (attributes org.gtk.Method.get_property=focusable)
  * @widget: a `GtkWidget`
  *
  * Determines whether @widget can own the input focus.
@@ -5274,7 +5258,7 @@ gtk_widget_get_focusable (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_has_focus:
+ * gtk_widget_has_focus: (attributes org.gtk.Method.get_property=has-focus)
  * @widget: a `GtkWidget`
  *
  * Determines if the widget has the global input focus.
@@ -5363,7 +5347,7 @@ gtk_widget_is_focus (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_focus_on_click:
+ * gtk_widget_set_focus_on_click: (attributes org.gtk.Method.set_property=focus-on-click)
  * @widget: a `GtkWidget`
  * @focus_on_click: whether the widget should grab focus when clicked
  *   with the mouse
@@ -5394,7 +5378,7 @@ gtk_widget_set_focus_on_click (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_get_focus_on_click:
+ * gtk_widget_get_focus_on_click: (attributes org.gtk.Method.get_property=focus-on-click)
  * @widget: a `GtkWidget`
  *
  * Returns whether the widget should grab focus when it is clicked
@@ -5416,7 +5400,7 @@ gtk_widget_get_focus_on_click (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_has_default:
+ * gtk_widget_has_default: (attributes org.gtk.Method.get_property=has-default)
  * @widget: a `GtkWidget`
  *
  * Determines whether @widget is the current default widget
@@ -5450,7 +5434,7 @@ _gtk_widget_set_has_default (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_set_receives_default:
+ * gtk_widget_set_receives_default: (attributes org.gtk.Method.set_property=receives-default)
  * @widget: a `GtkWidget`
  * @receives_default: whether or not @widget can be a default widget.
  *
@@ -5475,7 +5459,7 @@ gtk_widget_set_receives_default (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_get_receives_default:
+ * gtk_widget_get_receives_default: (attributes org.gtk.Method.get_property=receives-default)
  * @widget: a `GtkWidget`
  *
  * Determines whether @widget is always treated as the default widget
@@ -5528,7 +5512,7 @@ _gtk_widget_set_has_grab (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_set_name:
+ * gtk_widget_set_name: (attributes org.gtk.Method.set_property=name)
  * @widget: a `GtkWidget`
  * @name: name for the widget
  *
@@ -5561,7 +5545,7 @@ gtk_widget_set_name (GtkWidget  *widget,
 }
 
 /**
- * gtk_widget_get_name:
+ * gtk_widget_get_name: (attributes org.gtk.Method.get_property=name)
  * @widget: a `GtkWidget`
  *
  * Retrieves the name of a widget.
@@ -5704,7 +5688,7 @@ gtk_widget_get_state_flags (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_visible:
+ * gtk_widget_set_visible: (attributes org.gtk.Method.set_property=visible)
  * @widget: a `GtkWidget`
  * @visible: whether the widget should be shown or not
  *
@@ -5751,7 +5735,7 @@ _gtk_widget_set_visible_flag (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_get_visible:
+ * gtk_widget_get_visible: (attributes org.gtk.Method.get_property=visible)
  * @widget: a `GtkWidget`
  *
  * Determines whether the widget is visible.
@@ -5865,7 +5849,7 @@ gtk_widget_get_mapped (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_sensitive:
+ * gtk_widget_set_sensitive: (attributes org.gtk.Method.set_property=sensitive)
  * @widget: a `GtkWidget`
  * @sensitive: %TRUE to make the widget sensitive
  *
@@ -5930,7 +5914,7 @@ gtk_widget_set_sensitive (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_get_sensitive:
+ * gtk_widget_get_sensitive: (attributes org.gtk.Method.get_property=sensitive)
  * @widget: a `GtkWidget`
  *
  * Returns the widget’s sensitivity.
@@ -6127,7 +6111,7 @@ gtk_widget_reposition_after (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_set_parent:
+ * gtk_widget_set_parent: (attributes org.gtk.Method.set_property=parent)
  * @widget: a `GtkWidget`
  * @parent: parent widget
  *
@@ -6154,7 +6138,7 @@ gtk_widget_set_parent (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_get_parent:
+ * gtk_widget_get_parent: (attributes org.gtk.Method.get_property=parent)
  * @widget: a `GtkWidget`
  *
  * Returns the parent widget of @widget.
@@ -6173,7 +6157,7 @@ gtk_widget_get_parent (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_get_root:
+ * gtk_widget_get_root: (attributes org.gtk.Method.get_property=root)
  * @widget: a `GtkWidget`
  *
  * Returns the `GtkRoot` widget of @widget.
@@ -6792,7 +6776,7 @@ _gtk_widget_scale_changed (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_get_scale_factor:
+ * gtk_widget_get_scale_factor: (attributes org.gtk.Method.get_property=scale-factor)
  * @widget: a `GtkWidget`
  *
  * Retrieves the internal scale factor that maps from window
@@ -7647,14 +7631,6 @@ gtk_widget_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_widget_parent_class)->finalize (object);
 }
 
-/*****************************************
- * gtk_widget_real_map:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
 static void
 gtk_widget_real_map (GtkWidget *widget)
 {
@@ -7678,14 +7654,6 @@ gtk_widget_real_map (GtkWidget *widget)
         }
     }
 }
-
-/*****************************************
- * gtk_widget_real_unmap:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
 
 static void
 gtk_widget_real_unmap (GtkWidget *widget)
@@ -7712,14 +7680,6 @@ gtk_widget_real_unmap (GtkWidget *widget)
     }
 }
 
-/*****************************************
- * gtk_widget_real_realize:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
 static void
 gtk_widget_real_realize (GtkWidget *widget)
 {
@@ -7740,14 +7700,6 @@ gtk_widget_real_realize (GtkWidget *widget)
 
   gtk_css_node_invalidate_frame_clock (priv->cssnode, FALSE);
 }
-
-/*****************************************
- * gtk_widget_real_unrealize:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
 
 static void
 gtk_widget_real_unrealize (GtkWidget *widget)
@@ -8272,7 +8224,7 @@ gtk_widget_set_expand_set (GtkWidget      *widget,
 }
 
 /**
- * gtk_widget_get_hexpand:
+ * gtk_widget_get_hexpand: (attributes org.gtk.Method.get_property=hexpand)
  * @widget: the widget
  *
  * Gets whether the widget would like any available extra horizontal
@@ -8305,7 +8257,7 @@ gtk_widget_get_hexpand (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_hexpand:
+ * gtk_widget_set_hexpand: (attributes org.gtk.Method.set_property=hexpand)
  * @widget: the widget
  * @expand: whether to expand
  *
@@ -8347,7 +8299,7 @@ gtk_widget_set_hexpand (GtkWidget      *widget,
 }
 
 /**
- * gtk_widget_get_hexpand_set:
+ * gtk_widget_get_hexpand_set: (attributes org.gtk.Method.get_property=hexpand-set)
  * @widget: the widget
  *
  * Gets whether gtk_widget_set_hexpand() has been used
@@ -8374,7 +8326,7 @@ gtk_widget_get_hexpand_set (GtkWidget      *widget)
 }
 
 /**
- * gtk_widget_set_hexpand_set:
+ * gtk_widget_set_hexpand_set: (attributes org.gtk.Method.set_property=hexpand-set)
  * @widget: the widget
  * @set: value for hexpand-set property
  *
@@ -8404,7 +8356,7 @@ gtk_widget_set_hexpand_set (GtkWidget      *widget,
 
 
 /**
- * gtk_widget_get_vexpand:
+ * gtk_widget_get_vexpand: (attributes org.gtk.Method.get_property=vexpand)
  * @widget: the widget
  *
  * Gets whether the widget would like any available extra vertical
@@ -8425,7 +8377,7 @@ gtk_widget_get_vexpand (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_vexpand:
+ * gtk_widget_set_vexpand: (attributes org.gtk.Method.set_property=vexpand)
  * @widget: the widget
  * @expand: whether to expand
  *
@@ -8444,7 +8396,7 @@ gtk_widget_set_vexpand (GtkWidget      *widget,
 }
 
 /**
- * gtk_widget_get_vexpand_set:
+ * gtk_widget_get_vexpand_set: (attributes org.gtk.Method.get_property=vexpand-set)
  * @widget: the widget
  *
  * Gets whether gtk_widget_set_vexpand() has been used to
@@ -8465,7 +8417,7 @@ gtk_widget_get_vexpand_set (GtkWidget      *widget)
 }
 
 /**
- * gtk_widget_set_vexpand_set:
+ * gtk_widget_set_vexpand_set: (attributes org.gtk.Method.set_property=vexpand-set)
  * @widget: the widget
  * @set: value for vexpand-set property
  *
@@ -9335,12 +9287,10 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
 }
 
 /**
- * gtk_widget_get_halign:
+ * gtk_widget_get_halign: (attributes org.gtk.Method.get_property=halign)
  * @widget: a `GtkWidget`
  *
  * Gets the horizontal alignment of @widget.
- *
- * This is the value of the [property@Gtk.Widget:halign] property.
  *
  * For backwards compatibility reasons this method will never return
  * %GTK_ALIGN_BASELINE, but instead it will convert it to
@@ -9362,13 +9312,11 @@ gtk_widget_get_halign (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_halign:
+ * gtk_widget_set_halign: (attributes org.gtk.Method.set_property=halign)
  * @widget: a `GtkWidget`
  * @align: the horizontal alignment
  *
  * Sets the horizontal alignment of @widget.
- *
- * See the [property@Gtk.Widget:halign] property.
  */
 void
 gtk_widget_set_halign (GtkWidget *widget,
@@ -9387,12 +9335,10 @@ gtk_widget_set_halign (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_get_valign:
+ * gtk_widget_get_valign: (attributes org.gtk.Method.get_property=valign)
  * @widget: a `GtkWidget`
  *
  * Gets the vertical alignment of @widget.
- *
- * This is the value of the [property@Gtk.Widget:valign] property.
  *
  * Returns: the vertical alignment of @widget
  */
@@ -9407,13 +9353,11 @@ gtk_widget_get_valign (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_valign:
+ * gtk_widget_set_valign: (attributes org.gtk.Method.set_property=valign)
  * @widget: a `GtkWidget`
  * @align: the vertical alignment
  *
  * Sets the vertical alignment of @widget.
- *
- * See the [property@Gtk.Widget:valign] property.
  */
 void
 gtk_widget_set_valign (GtkWidget *widget,
@@ -9432,12 +9376,10 @@ gtk_widget_set_valign (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_get_margin_start:
+ * gtk_widget_get_margin_start: (attributes org.gtk.Method.get_property=margin-start)
  * @widget: a `GtkWidget`
  *
  * Gets the start margin of @widget.
- *
- * This is the value of the [property@Gtk.Widget:margin-start] property.
  *
  * Returns: The start margin of @widget
  */
@@ -9452,13 +9394,11 @@ gtk_widget_get_margin_start (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_margin_start:
+ * gtk_widget_set_margin_start: (attributes org.gtk.Method.set_property=margin-start)
  * @widget: a `GtkWidget`
  * @margin: the start margin
  *
  * Sets the start margin of @widget.
- *
- * See the [property@Gtk.Widget:margin-start] property.
  */
 void
 gtk_widget_set_margin_start (GtkWidget *widget,
@@ -9480,12 +9420,10 @@ gtk_widget_set_margin_start (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_get_margin_end:
+ * gtk_widget_get_margin_end: (attributes org.gtk.Method.get_property=margin-end)
  * @widget: a `GtkWidget`
  *
  * Gets the end margin of @widget.
- *
- * This is the value of the [property@Gtk.Widget:margin-end] property.
  *
  * Returns: The end margin of @widget
  */
@@ -9500,13 +9438,11 @@ gtk_widget_get_margin_end (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_margin_end:
+ * gtk_widget_set_margin_end: (attributes org.gtk.Method.set_property=margin-end)
  * @widget: a `GtkWidget`
  * @margin: the end margin
  *
  * Sets the end margin of @widget.
- *
- * See the [property@Gtk.Widget:margin-end] property.
  */
 void
 gtk_widget_set_margin_end (GtkWidget *widget,
@@ -9528,12 +9464,10 @@ gtk_widget_set_margin_end (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_get_margin_top:
+ * gtk_widget_get_margin_top: (attributes org.gtk.Method.get_property=margin-top)
  * @widget: a `GtkWidget`
  *
  * Gets the top margin of @widget.
- *
- * This is the value of the [property@Gtk.Widget:margin-top] property.
  *
  * Returns: The top margin of @widget
  */
@@ -9548,13 +9482,11 @@ gtk_widget_get_margin_top (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_margin_top:
+ * gtk_widget_set_margin_top: (attributes org.gtk.Method.set_property=margin-top)
  * @widget: a `GtkWidget`
  * @margin: the top margin
  *
  * Sets the top margin of @widget.
- *
- * See the [property@Gtk.Widget:margin-top] property.
  */
 void
 gtk_widget_set_margin_top (GtkWidget *widget,
@@ -9574,12 +9506,10 @@ gtk_widget_set_margin_top (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_get_margin_bottom:
+ * gtk_widget_get_margin_bottom: (attributes org.gtk.Method.get_property=margin-bottom)
  * @widget: a `GtkWidget`
  *
  * Gets the bottom margin of @widget.
- *
- * This is the value of the [property@Gtk.Widget:margin-bottom] property.
  *
  * Returns: The bottom margin of @widget
  */
@@ -9594,13 +9524,11 @@ gtk_widget_get_margin_bottom (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_margin_bottom:
+ * gtk_widget_set_margin_bottom: (attributes org.gtk.Method.set_property=margin-bottom)
  * @widget: a `GtkWidget`
  * @margin: the bottom margin
  *
  * Sets the bottom margin of @widget.
- *
- * See the [property@Gtk.Widget:margin-bottom] property.
  */
 void
 gtk_widget_set_margin_bottom (GtkWidget *widget,
@@ -9798,7 +9726,7 @@ gtk_widget_trigger_tooltip_query (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_tooltip_text:
+ * gtk_widget_set_tooltip_text: (attributes org.gtk.Method.set_property=tooltip-text)
  * @widget: a `GtkWidget`
  * @text: (nullable): the contents of the tooltip for @widget
  *
@@ -9811,8 +9739,7 @@ gtk_widget_trigger_tooltip_query (GtkWidget *widget)
  * and of the default handler for the
  * [signal@Gtk.Widget::query-tooltip] signal.
  *
- * See also the [property@Gtk.Widget:tooltip-text] property and
- * [method@Gtk.Tooltip.set_text].
+ * See also [method@Gtk.Tooltip.set_text].
  */
 void
 gtk_widget_set_tooltip_text (GtkWidget  *widget,
@@ -9862,7 +9789,7 @@ gtk_widget_set_tooltip_text (GtkWidget  *widget,
 }
 
 /**
- * gtk_widget_get_tooltip_text:
+ * gtk_widget_get_tooltip_text: (attributes org.gtk.Method.get_property=tooltip-text)
  * @widget: a `GtkWidget`
  *
  * Gets the contents of the tooltip for @widget.
@@ -9884,7 +9811,7 @@ gtk_widget_get_tooltip_text (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_tooltip_markup:
+ * gtk_widget_set_tooltip_markup: (attributes org.gtk.Method.set_property=tooltip-markup)
  * @widget: a `GtkWidget`
  * @markup: (nullable): the contents of the tooltip for @widget
  *
@@ -9895,8 +9822,7 @@ gtk_widget_get_tooltip_text (GtkWidget *widget)
  * [property@Gtk.Widget:has-tooltip] as a side effect, and of the
  * default handler for the [signal@Gtk.Widget::query-tooltip] signal.
  *
- * See also the [property@Gtk.Widget:tooltip-markup] property and
- * [method@Gtk.Tooltip.set_markup].
+ * See also [method@Gtk.Tooltip.set_markup].
  */
 void
 gtk_widget_set_tooltip_markup (GtkWidget  *widget,
@@ -9950,7 +9876,7 @@ gtk_widget_set_tooltip_markup (GtkWidget  *widget,
 }
 
 /**
- * gtk_widget_get_tooltip_markup:
+ * gtk_widget_get_tooltip_markup: (attributes org.gtk.Method.get_property=tooltip-markup)
  * @widget: a `GtkWidget`
  *
  * Gets the contents of the tooltip for @widget.
@@ -9972,13 +9898,11 @@ gtk_widget_get_tooltip_markup (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_has_tooltip:
+ * gtk_widget_set_has_tooltip: (attributes org.gtk.Method.set_property=has-tooltip)
  * @widget: a `GtkWidget`
  * @has_tooltip: whether or not @widget has a tooltip.
  *
  * Sets the `has-tooltip` property on @widget to @has_tooltip.
- *
- * See [property@Gtk.Widget:has-tooltip] for more information.
  */
 void
 gtk_widget_set_has_tooltip (GtkWidget *widget,
@@ -9999,12 +9923,10 @@ gtk_widget_set_has_tooltip (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_get_has_tooltip:
+ * gtk_widget_get_has_tooltip: (attributes org.gtk.Method.get_property=has-tooltip)
  * @widget: a `GtkWidget`
  *
  * Returns the current value of the `has-tooltip` property.
- *
- * See [property@Gtk.Widget:has-tooltip] for more information.
  *
  * Returns: current value of `has-tooltip` on @widget.
  */
@@ -10431,7 +10353,7 @@ gtk_widget_get_allocated_baseline (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_opacity:
+ * gtk_widget_set_opacity: (attributes org.gtk.Method.set_property=opacity)
  * @widget: a `GtkWidget`
  * @opacity: desired opacity, between 0 and 1
  *
@@ -10482,7 +10404,7 @@ gtk_widget_set_opacity (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_get_opacity:
+ * gtk_widget_get_opacity: (attributes org.gtk.Method.get_property=opacity)
  * @widget: a `GtkWidget`
  *
  * #Fetches the requested opacity for this widget.
@@ -10502,7 +10424,7 @@ gtk_widget_get_opacity (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_overflow:
+ * gtk_widget_set_overflow: (attributes org.gtk.Method.set_property=overflow)
  * @widget: a `GtkWidget`
  * @overflow: desired overflow
  *
@@ -10535,12 +10457,10 @@ gtk_widget_set_overflow (GtkWidget   *widget,
 }
 
 /**
- * gtk_widget_get_overflow:
+ * gtk_widget_get_overflow: (attributes org.gtk.Method.get_property=overflow)
  * @widget: a `GtkWidget`
  *
  * Returns the widgets overflow value.
- *
- * This is the value of the [property@Gtk.Widget:overflow] property.
  *
  * Returns: The widget's overflow.
  **/
@@ -12195,7 +12115,7 @@ gtk_widget_get_focus_child (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_cursor:
+ * gtk_widget_set_cursor: (attributes org.gtk.Method.set_property=cursor)
  * @widget: a `GtkWidget`
  * @cursor: (allow-none): the new cursor or %NULL to use
  *   the default cursor
@@ -12265,7 +12185,7 @@ gtk_widget_set_cursor_from_name (GtkWidget  *widget,
 }
 
 /**
- * gtk_widget_get_cursor:
+ * gtk_widget_get_cursor: (attributes org.gtk.Method.get_property=cursor)
  * @widget: a `GtkWidget`
  *
  * Queries the cursor set on @widget.
@@ -12286,7 +12206,7 @@ gtk_widget_get_cursor (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_can_target:
+ * gtk_widget_set_can_target: (attributes org.gtk.Method.set_property=can-target)
  * @widget: a `GtkWidget`
  * @can_target: whether this widget should be able to
  *   receive pointer events
@@ -12310,7 +12230,7 @@ gtk_widget_set_can_target (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_get_can_target:
+ * gtk_widget_get_can_target: (attributes org.gtk.Method.get_property=can-target)
  * @widget: a `GtkWidget`
  *
  * Queries whether @widget can be the target of pointer events.
@@ -12454,7 +12374,7 @@ gtk_widget_class_get_layout_manager_type (GtkWidgetClass *widget_class)
 }
 
 /**
- * gtk_widget_set_layout_manager:
+ * gtk_widget_set_layout_manager: (attributes org.gtk.Method.set_property=layout-manager)
  * @widget: a `GtkWidget`
  * @layout_manager: (nullable) (transfer full): a `GtkLayoutManager`
  *
@@ -12491,7 +12411,7 @@ gtk_widget_set_layout_manager (GtkWidget        *widget,
 }
 
 /**
- * gtk_widget_get_layout_manager:
+ * gtk_widget_get_layout_manager: (attributes org.gtk.Method.get_property=layout-manager)
  * @widget: a `GtkWidget`
  *
  * Retrieves the layout manager used by @widget
@@ -12755,7 +12675,7 @@ gtk_widget_class_query_action (GtkWidgetClass      *widget_class,
 }
 
 /**
- * gtk_widget_get_css_name:
+ * gtk_widget_get_css_name: (attributes org.gtk.Method.get_property=css-name)
  * @self: a `GtkWidget`
  *
  * Returns the CSS name that is used for @self.
@@ -12859,7 +12779,7 @@ gtk_widget_has_css_class (GtkWidget  *widget,
 }
 
 /**
- * gtk_widget_get_css_classes:
+ * gtk_widget_get_css_classes: (attributes org.gtk.Method.get_property=css-classes)
  * @widget: a `GtkWidget`
  *
  * Returns the list of style classes applied to @widget.
@@ -12891,7 +12811,7 @@ gtk_widget_get_css_classes (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_css_classes:
+ * gtk_widget_set_css_classes: (attributes org.gtk.Method.set_property=css-classes)
  * @widget: a `GtkWidget`
  * @classes: (transfer none) (array zero-terminated=1):
  *   %NULL-terminated list of style classes to apply to @widget.
