@@ -14,10 +14,10 @@ Title: Widget Gallery
 [![separator](separator.png)](class.Separator.html)
 [![textview](multiline-text.png)](class.TextView.html)
 [![scale](scales.png)](class.Scale.html)
-[![calendar](calendar.png)](class.Calendar.html)
 [![glarea](glarea.png)](class.GLArea.html)
 [![drawingarea](drawingarea.png)](class.DrawingArea.html)
 [![video](video.png)](class.Video.html)
+[![calendar](calendar.png)](class.Calendar.html)
 
 ## Buttons
 
