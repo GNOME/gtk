@@ -19,16 +19,15 @@
 
 
 /**
- * SECTION:GskTransform
- * @Title: GskTransform
- * @Short_description: A description for transform operations
+ * GskTransform: (ref-func gsk_transform_ref) (unref-func gsk_transform_unref)
  *
- * #GskTransform is an object to describe transform matrices. Unlike
- * #graphene_matrix_t, #GskTransform retains the steps in how a transform was
- * constructed, and allows inspecting them. It is modeled after the way
- * CSS describes transforms.
+ * `GskTransform` is an object to describe transform matrices.
  *
- * #GskTransform objects are immutable and cannot be changed after creation.
+ * Unlike `graphene_matrix_t`, `GskTransform` retains the steps in how
+ * a transform was constructed, and allows inspecting them. It is modeled
+ * after the way CSS describes transforms.
+ *
+ * `GskTransform` objects are immutable and cannot be changed after creation.
  * This means code can safely expose them as properties of objects without
  * having to worry about others changing them.
  */
@@ -71,11 +70,6 @@ struct _GskTransformClass
                                                  GskTransform           *second_transform);
 };
 
-/**
- * GskTransform: (ref-func gsk_transform_ref) (unref-func gsk_transform_unref)
- *
- * The `GskTransform` structure contains only private data.
- */
 
 G_DEFINE_BOXED_TYPE (GskTransform, gsk_transform,
                      gsk_transform_ref,
@@ -614,7 +608,7 @@ static const GskTransformClass GSK_TRANSLATE_TRANSFORM_CLASS =
  * @next: (allow-none) (transfer full): the next transform
  * @point: the point to translate the transform by
  *
- * Translates @next in 2dimensional space by @point.
+ * Translates @next in 2-dimensional space by @point.
  *
  * Returns: The new transform
  **/
@@ -849,10 +843,10 @@ normalize_angle (float angle)
  * @next: (allow-none) (transfer full): the next transform
  * @angle: the rotation angle, in degrees (clockwise)
  *
- * Rotates @next @angle degrees in 2D - or in 3Dspeak, around the z axis.
+ * Rotates @next @angle degrees in 2D - or in 3D-speak, around the z axis.
  *
  * Returns: The new transform
- **/
+ */
 GskTransform *
 gsk_transform_rotate (GskTransform *next,
                       float         angle)
@@ -976,10 +970,10 @@ static const GskTransformClass GSK_ROTATE3D_TRANSFORM_CLASS =
  *
  * Rotates @next @angle degrees around @axis.
  *
- * For a rotation in 2D space, use gsk_transform_rotate().
+ * For a rotation in 2D space, use [method@Gsk.Transform.rotate]
  *
  * Returns: The new transform
- **/
+ */
 GskTransform *
 gsk_transform_rotate_3d (GskTransform          *next,
                          float                  angle,
@@ -1148,7 +1142,8 @@ static const GskTransformClass GSK_SCALE_TRANSFORM_CLASS =
  * @factor_y: scaling factor on the Y axis
  *
  * Scales @next in 2-dimensional space by the given factors.
- * Use gsk_transform_scale_3d() to scale in all 3 dimensions.
+ *
+ * Use [method@Gsk.Transform.scale_3d] to scale in all 3 dimensions.
  *
  * Returns: The new transform
  **/
@@ -1296,14 +1291,15 @@ static const GskTransformClass GSK_PERSPECTIVE_TRANSFORM_CLASS =
  *     flattened pyramid and therefore a more pronounced
  *     perspective effect.
  *
- * Applies a perspective projection transform. This transform
- * scales points in X and Y based on their Z value, scaling
- * points with positive Z values away from the origin, and
+ * Applies a perspective projection transform.
+ *
+ * This transform scales points in X and Y based on their Z value,
+ * scaling points with positive Z values away from the origin, and
  * those with negative Z values towards the origin. Points
  * on the z=0 plane are unchanged.
  *
  * Returns: The new transform
- **/
+ */
 GskTransform *
 gsk_transform_perspective (GskTransform *next,
                            float         depth)
@@ -1339,11 +1335,11 @@ gsk_transform_finalize (GskTransform *self)
 
 /**
  * gsk_transform_ref:
- * @self: (allow-none): a #GskTransform
+ * @self: (allow-none): a `GskTransform`
  *
- * Acquires a reference on the given #GskTransform.
+ * Acquires a reference on the given `GskTransform`.
  *
- * Returns: (transfer none): the #GskTransform with an additional reference
+ * Returns: (transfer none): the `GskTransform` with an additional reference
  */
 GskTransform *
 gsk_transform_ref (GskTransform *self)
@@ -1356,9 +1352,9 @@ gsk_transform_ref (GskTransform *self)
 
 /**
  * gsk_transform_unref:
- * @self: (allow-none): a #GskTransform
+ * @self: (allow-none): a `GskTransform`
  *
- * Releases a reference on the given #GskTransform.
+ * Releases a reference on the given `GskTransform`.
  *
  * If the reference was the last, the resources associated to the @self are
  * freed.
@@ -1374,12 +1370,15 @@ gsk_transform_unref (GskTransform *self)
 
 /**
  * gsk_transform_print:
- * @self: (allow-none): a #GskTransform
+ * @self: (allow-none): a `GskTransform`
  * @string:  The string to print into
  *
  * Converts @self into a human-readable string representation suitable
- * for printing that can later be parsed with gsk_transform_parse().
- **/
+ * for printing.
+ *
+ * The result of this function can later be parsed with
+ * [func@Gsk.Transform.parse].
+ */
 void
 gsk_transform_print (GskTransform *self,
                      GString      *string)
@@ -1405,14 +1404,14 @@ gsk_transform_print (GskTransform *self,
  * gsk_transform_to_string:
  * @self: (allow-none): a #GskTransform
  *
- * Converts a matrix into a string that is suitable for
- * printing and can later be parsed with gsk_transform_parse().
+ * Converts a matrix into a string that is suitable for printing.
  *
- * This is a wrapper around gsk_transform_print(), see that function
- * for details.
+ * The resulting string can be parsed with [func@Gsk.Transform.parse].
+ *
+ * This is a wrapper around [method@Gsk.Transform.print].
  *
  * Returns: A new string for @self
- **/
+ */
 char *
 gsk_transform_to_string (GskTransform *self)
 {
@@ -1427,12 +1426,13 @@ gsk_transform_to_string (GskTransform *self)
 
 /**
  * gsk_transform_to_matrix:
- * @self: (allow-none): a #GskTransform
+ * @self: (allow-none): a `GskTransform`
  * @out_matrix: (out caller-allocates): The matrix to set
  *
  * Computes the actual value of @self and stores it in @out_matrix.
+ *
  * The previous value of @out_matrix will be ignored.
- **/
+ */
 void
 gsk_transform_to_matrix (GskTransform      *self,
                          graphene_matrix_t *out_matrix)
@@ -1460,21 +1460,21 @@ gsk_transform_to_matrix (GskTransform      *self,
  * @out_dx: (out): return location for the x0 member
  * @out_dy: (out): return location for the y0 member
  *
- * Converts a #GskTransform to a 2D transformation
- * matrix.
+ * Converts a `GskTransform` to a 2D transformation matrix.
+ *
  * @self must be a 2D transformation. If you are not
- * sure, use gsk_transform_get_category() >= 
+ * sure, use gsk_transform_get_category() >=
  * %GSK_TRANSFORM_CATEGORY_2D to check.
  *
  * The returned values have the following layout:
  *
- * |[<!-- language="plain" -->
+ * ```
  *   | xx yx |   |  a  b  0 |
  *   | xy yy | = |  c  d  0 |
  *   | dx dy |   | tx ty  1 |
- * ]|
+ * ```
  *
- * This function can be used to convert between a #GskTransform
+ * This function can be used to convert between a `GskTransform`
  * and a matrix type from other 2D drawing libraries, in particular
  * Cairo.
  */
@@ -1518,7 +1518,7 @@ gsk_transform_to_2d (GskTransform *self,
 
 /**
  * gsk_transform_to_affine:
- * @self: a #GskTransform
+ * @self: a `GskTransform`
  * @out_scale_x: (out): return location for the scale
  *     factor in the x direction
  * @out_scale_y: (out): return location for the scale
@@ -1528,8 +1528,8 @@ gsk_transform_to_2d (GskTransform *self,
  * @out_dy: (out): return location for the translation
  *     in the y direction
  *
- * Converts a #GskTransform to 2D affine transformation
- * factors.
+ * Converts a `GskTransform` to 2D affine transformation factors.
+ *
  * @self must be a 2D transformation. If you are not
  * sure, use gsk_transform_get_category() >=
  * %GSK_TRANSFORM_CATEGORY_2D_AFFINE to check.
@@ -1584,13 +1584,14 @@ gsk_transform_to_affine (GskTransform *self,
 
 /**
  * gsk_transform_to_translate:
- * @self: a #GskTransform
+ * @self: a `GskTransform`
  * @out_dx: (out): return location for the translation
  *     in the x direction
  * @out_dy: (out): return location for the translation
  *     in the y direction
  *
- * Converts a #GskTransform to a translation operation.
+ * Converts a `GskTransform` to a translation operation.
+ *
  * @self must be a 2D transformation. If you are not
  * sure, use gsk_transform_get_category() >= 
  * %GSK_TRANSFORM_CATEGORY_2D_TRANSLATE to check.
@@ -1638,10 +1639,10 @@ gsk_transform_to_translate (GskTransform *self,
  * @next: (allow-none) (transfer full): Transform to apply @other to
  * @other: (allow-none):  Transform to apply
  *
- * Applies all the operations from @other to @next. 
+ * Applies all the operations from @other to @next.
  *
  * Returns: The new transform
- **/
+ */
 GskTransform *
 gsk_transform_transform (GskTransform *next,
                          GskTransform *other)
@@ -1678,7 +1679,7 @@ gsk_transform_transform (GskTransform *next,
  *
  * Returns: (nullable): The inverted transform or %NULL if the transform
  *     cannot be inverted.
- **/
+ */
 GskTransform *
 gsk_transform_invert (GskTransform *self)
 {
@@ -1705,7 +1706,7 @@ gsk_transform_invert (GskTransform *self)
  * Checks two transforms for equality.
  *
  * Returns: %TRUE if the two transforms perform the same operation.
- **/
+ */
 gboolean
 gsk_transform_equal (GskTransform *first,
                      GskTransform *second)
@@ -1748,11 +1749,13 @@ GskTransformCategory
 /*
  * gsk_transform_new: (constructor):
  *
- * Creates a new identity transform. This function is meant to be used by language
+ * Creates a new identity transform.
+ *
+ * This function is meant to be used by language
  * bindings. For C code, this is equivalent to using %NULL.
  *
  * Returns: A new identity transform
- **/
+ */
 GskTransform *
 gsk_transform_new (void)
 {
@@ -1761,14 +1764,15 @@ gsk_transform_new (void)
 
 /**
  * gsk_transform_transform_bounds:
- * @self: a #GskTransform
- * @rect: a #graphene_rect_t
+ * @self: a `GskTransform`
+ * @rect: a `graphene_rect_t`
  * @out_rect: (out caller-allocates): return location for the bounds
  *   of the transformed rectangle
  *
- * Transforms a #graphene_rect_t using the given transform @self.
+ * Transforms a `graphene_rect_t` using the given transform @self.
+ *
  * The result is the bounding box containing the coplanar quad.
- **/
+ */
 void
 gsk_transform_transform_bounds (GskTransform          *self,
                                 const graphene_rect_t *rect,
@@ -1824,12 +1828,12 @@ gsk_transform_transform_bounds (GskTransform          *self,
 
 /**
  * gsk_transform_transform_point:
- * @self: a #GskTransform
- * @point: a #graphene_point_t
+ * @self: a `GskTransform`
+ * @point: a `graphene_point_t`
  * @out_point: (out caller-allocates): return location for
  *   the transformed point
  *
- * Transforms a #graphene_point_t using the given transform @self.
+ * Transforms a `graphene_point_t` using the given transform @self.
  */
 void
 gsk_transform_transform_point (GskTransform           *self,
@@ -2134,7 +2138,7 @@ fail:
  * returned and %NULL is put in @out_transform.
  *
  * Returns: %TRUE if @string described a valid transform.
- **/
+ */
 gboolean
 gsk_transform_parse (const char    *string,
                      GskTransform **out_transform)
