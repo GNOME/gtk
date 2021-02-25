@@ -476,7 +476,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   quark_entry_completion = g_quark_from_static_string ("gtk-entry-completion-key");
 
   /**
-   * GtkEntry:buffer
+   * GtkEntry:buffer: (attributes org.gtk.Property.get=gtk_entry_get_buffer org.gtk.Property.set=gtk_entry_set_buffer)
    *
    * The buffer object which actually stores the text.
    */
@@ -488,7 +488,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:max-length:
+   * GtkEntry:max-length: (attributes org.gtk.Property.get=gtk_entry_get_max_length org.gtk.Property.set=gtk_entry_set_max_length)
    *
    * Maximum number of characters for this entry.
    */
@@ -501,7 +501,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:visibility:
+   * GtkEntry:visibility: (attributes org.gtk.Property.get=gtk_entry_get_visibility org.gtk.Property.set=gtk_entry_set_visibility)
    *
    * Whether the entry should show the “invisible char” instead of the
    * actual text (“password mode”).
@@ -514,7 +514,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:has-frame:
+   * GtkEntry:has-frame: (attributes org.gtk.Property.get=gtk_entry_get_has_frame org.gtk.Property.set=gtk_entry_set_has_frame)
    *
    * Whehter the entry should draw a frame.
    */
@@ -526,7 +526,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:invisible-char:
+   * GtkEntry:invisible-char: (attributes org.gtk.Property.get=gtk_entry_get_invisible_char org.gtk.Property.set=gtk_entry_set_invisible_char)
    *
    * The character to use when masking entry contents (“password mode”).
    */
@@ -538,7 +538,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:activates-default:
+   * GtkEntry:activates-default: (attributes org.gtk.Property.get=gtk_entry_get_activates_default org.gtk.Property.set=gtk_entry_set_activates_default)
    *
    * Whether to activate the default widget when Enter is pressed.
    */
@@ -575,7 +575,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:overwrite-mode:
+   * GtkEntry:overwrite-mode: (attributes org.gtk.Property.get=gtk_entry_get_overwrite_mode org.gtk.Property.set=gtk_entry_set_overwrite_mode)
    *
    * If text is overwritten when typing in the `GtkEntry`.
    */
@@ -587,7 +587,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:text-length:
+   * GtkEntry:text-length: (attributes org.gtk.Property.get=gtk_entry_get_text_length)
    *
    * The length of the text in the `GtkEntry`.
    */
@@ -612,7 +612,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                             GTK_PARAM_READWRITE);
 
   /**
-   * GtkEntry:progress-fraction:
+   * GtkEntry:progress-fraction: (attributes org.gtk.Property.get=gtk_entry_get_progress_fraction org.gtk.Property.set=gtk_entry_set_progress_fraction)
    *
    * The current fraction of the task that's been completed.
    */
@@ -625,7 +625,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:progress-pulse-step:
+   * GtkEntry:progress-pulse-step: (attributes org.gtk.Property.get=gtk_entry_get_progress_pulse_step org.gtk.Property.set=gtk_entry_set_progress_pulse_step)
    *
    * The fraction of total entry width to move the progress
    * bouncing block for each pulse.
@@ -641,7 +641,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-  * GtkEntry:placeholder-text:
+  * GtkEntry:placeholder-text: (attributes org.gtk.Property.get=gtk_entry_get_placeholder_text org.gtk.Property.set=gtk_entry_set_placeholder_text)
   *
   * The text that will be displayed in the `GtkEntry` when it is empty
   * and unfocused.
@@ -902,7 +902,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:completion:
+   * GtkEntry:completion: (attributes org.gtk.Property.get=gtk_entry_get_completion org.gtk.Property.set=gtk_entry_set_completion)
    *
    * The auxiliary completion object to use with the entry.
    */
@@ -914,7 +914,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:input-purpose:
+   * GtkEntry:input-purpose: (attributes org.gtk.Property.get=gtk_entry_get_input_purpose org.gtk.Property.set=gtk_entry_set_input_purpose)
    *
    * The purpose of this text field.
    *
@@ -934,7 +934,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:input-hints:
+   * GtkEntry:input-hints: (attributes org.gtk.Property.get=gtk_entry_get_input_hints org.gtk.Property.set=gtk_entry_set_input_hints)
    *
    * Additional hints that allow input methods to fine-tune their behavior.
    *
@@ -949,7 +949,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:attributes:
+   * GtkEntry:attributes: (attributes org.gtk.Property.get=gtk_entry_get_attributes org.gtk.Property.set=gtk_entry_set_attributes)
    *
    * A list of Pango attributes to apply to the text of the entry.
    *
@@ -966,7 +966,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry::tabs:
+   * GtkEntry::tabs: (attributes org.gtk.Property.get=gtk_entry_get_tabs org.gtk.Property.set=gtk_entry_set_tabs)
    *
    * A list of tabstops to apply to the text of the entry.
    */
@@ -978,7 +978,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry::show-emoji-icon:
+   * GtkEntry::show-emoji-icon: 
    *
    * Whether the entry will sohw an Emoji icon in the secondary icon position
    * to open the Emoji chooser.
@@ -991,7 +991,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:extra-menu:
+   * GtkEntry:extra-menu: (attributes org.gtk.Property.get=gtk_entry_get_extra_menu org.gtk.Property.set=gtk_entry_set_extra_menu)
    *
    * A menu model whose contents will be appended to the context menu.
    */
@@ -1002,6 +1002,12 @@ gtk_entry_class_init (GtkEntryClass *class)
                            G_TYPE_MENU_MODEL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkEntry:enable-emoji-completion:
+   *
+   * Whether to suggest Emoji replacements for :-delimited names
+   * like `:heart:`.
+   */
   entry_props[PROP_ENABLE_EMOJI_COMPLETION] =
       g_param_spec_boolean ("enable-emoji-completion",
                             P_("Enable Emoji completion"),
@@ -2073,7 +2079,7 @@ get_buffer (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_get_buffer:
+ * gtk_entry_get_buffer: (attributes org.gtk.Method.get_property=buffer)
  * @entry: a `GtkEntry`
  *
  * Get the `GtkEntryBuffer` object which holds the text for
@@ -2090,7 +2096,7 @@ gtk_entry_get_buffer (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_set_buffer:
+ * gtk_entry_set_buffer: (attributes org.gtk.Method.set_property=buffer)
  * @entry: a `GtkEntry`
  * @buffer: a `GtkEntryBuffer`
  *
@@ -2109,7 +2115,7 @@ gtk_entry_set_buffer (GtkEntry       *entry,
 }
 
 /**
- * gtk_entry_set_visibility:
+ * gtk_entry_set_visibility: (attributes org.gtk.Method.set_property=visibility)
  * @entry: a `GtkEntry`
  * @visible: %TRUE if the contents of the entry are displayed
  *           as plaintext
@@ -2141,7 +2147,7 @@ gtk_entry_set_visibility (GtkEntry *entry,
 }
 
 /**
- * gtk_entry_get_visibility:
+ * gtk_entry_get_visibility: (attributes org.gtk.Method.get_property=visibility)
  * @entry: a `GtkEntry`
  *
  * Retrieves whether the text in @entry is visible.
@@ -2161,7 +2167,7 @@ gtk_entry_get_visibility (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_set_invisible_char:
+ * gtk_entry_set_invisible_char: (attributes org.gtk.Method.sets_property=invisible-char)
  * @entry: a `GtkEntry`
  * @ch: a Unicode character
  *
@@ -2188,7 +2194,7 @@ gtk_entry_set_invisible_char (GtkEntry *entry,
 }
 
 /**
- * gtk_entry_get_invisible_char:
+ * gtk_entry_get_invisible_char: (attributes org.gtk.Method.get_property=invisible-char)
  * @entry: a `GtkEntry`
  *
  * Retrieves the character displayed in place of the actual text
@@ -2225,7 +2231,7 @@ gtk_entry_unset_invisible_char (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_set_overwrite_mode:
+ * gtk_entry_set_overwrite_mode: (attributes org.gtk.Method.set_property=overwrite-mode)
  * @entry: a `GtkEntry`
  * @overwrite: new value
  *
@@ -2243,7 +2249,7 @@ gtk_entry_set_overwrite_mode (GtkEntry *entry,
 }
 
 /**
- * gtk_entry_get_overwrite_mode:
+ * gtk_entry_get_overwrite_mode: (attributes org.gtk.Method.get_property=overwrite-mode)
  * @entry: a `GtkEntry`
  *
  * Gets whether the `GtkEntry` is in overwrite mode.
@@ -2262,7 +2268,7 @@ gtk_entry_get_overwrite_mode (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_set_max_length:
+ * gtk_entry_set_max_length: (attributes org.gtk.Method.set_property=max-length)
  * @entry: a `GtkEntry`
  * @max: the maximum length of the entry, or 0 for no maximum.
  *   (other than the maximum length of entries.) The value passed in will
@@ -2288,7 +2294,7 @@ gtk_entry_set_max_length (GtkEntry     *entry,
 }
 
 /**
- * gtk_entry_get_max_length:
+ * gtk_entry_get_max_length: (attributes org.gtk.Method.get_property=max-length)
  * @entry: a `GtkEntry`
  *
  * Retrieves the maximum allowed length of the text in @entry.
@@ -2309,7 +2315,7 @@ gtk_entry_get_max_length (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_get_text_length:
+ * gtk_entry_get_text_length: (attributes org.gtk.Method.get_property=text-length)
  * @entry: a `GtkEntry`
  *
  * Retrieves the current length of the text in @entry.
@@ -2331,7 +2337,7 @@ gtk_entry_get_text_length (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_set_activates_default:
+ * gtk_entry_set_activates_default: (attributes org.gtk.Method.set_property=activates-default)
  * @entry: a `GtkEntry`
  * @setting: %TRUE to activate window’s default widget on Enter keypress
  *
@@ -2353,7 +2359,7 @@ gtk_entry_set_activates_default (GtkEntry *entry,
 }
 
 /**
- * gtk_entry_get_activates_default:
+ * gtk_entry_get_activates_default: (attributes org.gtk.Method.get_property=activates-default)
  * @entry: a `GtkEntry`
  *
  * Retrieves the value set by gtk_entry_set_activates_default().
@@ -2371,7 +2377,7 @@ gtk_entry_get_activates_default (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_set_has_frame:
+ * gtk_entry_set_has_frame: (attributes org.gtk.Method.set_property=has-frame)
  * @entry: a `GtkEntry`
  * @setting: new value
  *
@@ -2397,7 +2403,7 @@ gtk_entry_set_has_frame (GtkEntry *entry,
 }
 
 /**
- * gtk_entry_get_has_frame:
+ * gtk_entry_get_has_frame: (attributes org.gtk.Method.get_property=has-frame)
  * @entry: a `GtkEntry`
  *
  * Gets the value set by gtk_entry_set_has_frame().
@@ -2422,6 +2428,8 @@ gtk_entry_get_has_frame (GtkEntry *entry)
  *
  * This controls the horizontal positioning of the contents when
  * the displayed text is shorter than the width of the entry.
+ *
+ * See also: [property@Gtk.Editable:alignment], [method@Gtk.Editable.set_alignment]
  */
 void
 gtk_entry_set_alignment (GtkEntry *entry,
@@ -2439,6 +2447,8 @@ gtk_entry_set_alignment (GtkEntry *entry,
  * @entry: a `GtkEntry`
  *
  * Gets the value set by gtk_entry_set_alignment().
+ *
+ * See also: [property@Gtk.Editable:alignment], [method@Gtk.Editable.get_alignment]
  *
  * Returns: the alignment
  */
@@ -3248,7 +3258,7 @@ gtk_entry_query_tooltip (GtkWidget  *widget,
 }
 
 /**
- * gtk_entry_set_completion:
+ * gtk_entry_set_completion: (attributes org.gtk.Method.set_property=completion)
  * @entry: A `GtkEntry`
  * @completion: (allow-none): The `GtkEntryCompletion` or %NULL
  *
@@ -3296,7 +3306,7 @@ gtk_entry_set_completion (GtkEntry           *entry,
 }
 
 /**
- * gtk_entry_get_completion:
+ * gtk_entry_get_completion: (attributes org.gtk.Method.get_property=completion)
  * @entry: A `GtkEntry`
  *
  * Returns the auxiliary completion object currently
@@ -3336,7 +3346,7 @@ gtk_entry_ensure_progress_widget (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_set_progress_fraction:
+ * gtk_entry_set_progress_fraction: (attributes org.gtk.Method.set_property=progress-fraction)
  * @entry: a `GtkEntry`
  * @fraction: fraction of the task that’s been completed
  *
@@ -3368,7 +3378,7 @@ gtk_entry_set_progress_fraction (GtkEntry *entry,
 }
 
 /**
- * gtk_entry_get_progress_fraction:
+ * gtk_entry_get_progress_fraction: (attributes org.gtk.Method.get_property=progress-fraction)
  * @entry: a `GtkEntry`
  *
  * Returns the current fraction of the task that’s been completed.
@@ -3391,7 +3401,7 @@ gtk_entry_get_progress_fraction (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_set_progress_pulse_step:
+ * gtk_entry_set_progress_pulse_step: (attributes org.gtk.Method.set_property=progress-pulse-step)
  * @entry: a `GtkEntry`
  * @fraction: fraction between 0.0 and 1.0
  *
@@ -3421,7 +3431,7 @@ gtk_entry_set_progress_pulse_step (GtkEntry *entry,
 }
 
 /**
- * gtk_entry_get_progress_pulse_step:
+ * gtk_entry_get_progress_pulse_step: (attributes org.gtk.Method.get_property=progress-pulse-step)
  * @entry: a `GtkEntry`
  *
  * Retrieves the pulse step set with
@@ -3467,7 +3477,7 @@ gtk_entry_progress_pulse (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_set_placeholder_text:
+ * gtk_entry_set_placeholder_text: (attributes org.gtk.Method.set_property=placeholder-text)
  * @entry: a `GtkEntry`
  * @text: (nullable): a string to be displayed when @entry is
  *   empty and unfocused, or %NULL
@@ -3493,7 +3503,7 @@ gtk_entry_set_placeholder_text (GtkEntry    *entry,
 }
 
 /**
- * gtk_entry_get_placeholder_text:
+ * gtk_entry_get_placeholder_text: (attributes org.gtk.Method.get_property=placeholder-text)
  * @entry: a `GtkEntry`
  *
  * Retrieves the text that will be displayed when @entry
@@ -3516,7 +3526,7 @@ gtk_entry_get_placeholder_text (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_set_input_purpose:
+ * gtk_entry_set_input_purpose: (attributes org.gtk.Method.set_property=input-purpose)
  * @entry: a `GtkEntry`
  * @purpose: the purpose
  *
@@ -3536,10 +3546,12 @@ gtk_entry_set_input_purpose (GtkEntry        *entry,
 }
 
 /**
- * gtk_entry_get_input_purpose:
+ * gtk_entry_get_input_purpose: (attributes org.gtk.Method.get_property=input-purpose)
  * @entry: a `GtkEntry`
  *
  * Gets the input purpose of the `GtkEntry`.
+ *
+ * Returns: the input purpose
  */
 GtkInputPurpose
 gtk_entry_get_input_purpose (GtkEntry *entry)
@@ -3552,7 +3564,7 @@ gtk_entry_get_input_purpose (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_set_input_hints:
+ * gtk_entry_set_input_hints: (attributes org.gtk.Method.set_property=input-hints)
  * @entry: a `GtkEntry`
  * @hints: the hints
  *
@@ -3572,10 +3584,12 @@ gtk_entry_set_input_hints (GtkEntry      *entry,
 }
 
 /**
- * gtk_entry_get_input_hints:
+ * gtk_entry_get_input_hints: (attributes org.gtk.Method.get_property=input-hints)
  * @entry: a `GtkEntry`
  *
  * Gets the input hints of this `GtkEntry`.
+ *
+ * Returns: the input hints
  */
 GtkInputHints
 gtk_entry_get_input_hints (GtkEntry *entry)
@@ -3588,7 +3602,7 @@ gtk_entry_get_input_hints (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_set_attributes:
+ * gtk_entry_set_attributes: (attributes org.gtk.Method.set_property=attributes)
  * @entry: a `GtkEntry`
  * @attrs: a `PangoAttrList`
  *
@@ -3612,7 +3626,7 @@ gtk_entry_set_attributes (GtkEntry      *entry,
 }
 
 /**
- * gtk_entry_get_attributes:
+ * gtk_entry_get_attributes: (attributes org.gtk.Method.get_property=attributes)
  * @entry: a `GtkEntry`
  *
  * Gets the attribute list of the `GtkEntry`.
@@ -3633,7 +3647,7 @@ gtk_entry_get_attributes (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_set_tabs:
+ * gtk_entry_set_tabs: (attributes org.gtk.Method.set_property=tabs)
  * @entry: a `GtkEntry`
  * @tabs: (nullable): a `PangoTabArray`
  *
@@ -3654,7 +3668,7 @@ gtk_entry_set_tabs (GtkEntry      *entry,
 }
 
 /**
- * gtk_entry_get_tabs:
+ * gtk_entry_get_tabs: (attributes org.gtk.Method.get_property=tabs)
  * @entry: a `GtkEntry`
  *
  * Gets the tabstops of the `GtkEntry.
@@ -3755,7 +3769,7 @@ gtk_entry_get_text_widget (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_set_extra_menu:
+ * gtk_entry_set_extra_menu: (attributes org.gtk.Method.set_property=extra-menu)
  * @entry: a `GtkEntry`
  * @model: (allow-none): a `GMenuModel`
  *
@@ -3776,7 +3790,7 @@ gtk_entry_set_extra_menu (GtkEntry   *entry,
 }
 
 /**
- * gtk_entry_get_extra_menu:
+ * gtk_entry_get_extra_menu: (attributes org.gtk.Method.get_property=extra-menu)
  * @entry: a `GtkEntry`
  *
  * Gets the menu model set with gtk_entry_set_extra_menu().
