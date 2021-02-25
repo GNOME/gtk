@@ -32,8 +32,8 @@
  * [property@Gtk.MenuButton:icon-name] property) or a label (set with the
  * [property@Gtk.MenuButton:label] property). If neither is explicitly set,
  * a [class@Gtk.Image] is automatically created, using an arrow image oriented
- * according to [property@Gtk.MenuButton:direction] or the generic “open-menu-symbolic”
- * icon if the direction is not set.
+ * according to [property@Gtk.MenuButton:direction] or the generic
+ * “open-menu-symbolic” icon if the direction is not set.
  *
  * The positioning of the popup is determined by the
  * [property@Gtk.MenuButton:direction] property of the menu button.
@@ -376,7 +376,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   widget_class->grab_focus = gtk_menu_button_grab_focus;
 
   /**
-   * GtkMenuButton:menu-model:
+   * GtkMenuButton:menu-model: (attributes org.gtk.Property.get=gtk_menu_button_get_menu_model org.gtk.Property.set=gtk_menu_button_set_menu_model)
    *
    * The `GMenuModel` from which the popup will be created.
    *
@@ -391,7 +391,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkMenuButton:direction:
+   * GtkMenuButton:direction: (attributes org.gtk.Property.get=gtk_menu_button_get_direction org.gtk.Property.set=gtk_menu_button_set_direction)
    *
    * The `GtkArrowType` representing the direction in which the
    * menu or popover will be popped out.
@@ -405,7 +405,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkMenuButton:popover:
+   * GtkMenuButton:popover: (attributes org.gtk.Property.get=gtk_menu_button_get_popover org.gtk.Property.set=gtk_menu_button_set_popover)
    *
    * The `GtkPopover` that will be popped up when the button is clicked.
    */
@@ -417,7 +417,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                            G_PARAM_READWRITE);
 
   /**
-   * GtkMenuButton:icon-name:
+   * GtkMenuButton:icon-name: (attributes org.gtk.Property.get=gtk_menu_button_get_icon_name org.gtk.Property.set=gtk_menu_button_set_icon_name)
    *
    * The name of the icon used to automatically populate the button.
    */
@@ -429,7 +429,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkMenuButton:label:
+   * GtkMenuButton:label: (attributes org.gtk.Property.get=gtk_menu_button_get_label org.gtk.Property.set=gtk_menu_button_set_label)
    *
    * The label for the button.
    */
@@ -441,7 +441,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkMenuButton:use-underline:
+   * GtkMenuButton:use-underline: (attributes org.gtk.Property.get=gtk_menu_button_get_use_underline org.gtk.Property.set=gtk_menu_button_set_use_underline)
    *
    * If set an underscore in the text indicates a mnemonic.
    */
@@ -453,7 +453,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkMenuButton:has-frame:
+   * GtkMenuButton:has-frame: (attributes org.gtk.Property.get=gtk_menu_button_get_has_frame org.gtk.Property.set=gtk_menu_button_set_has_frame)
    *
    * Whether the button has a frame.
    */
@@ -580,7 +580,7 @@ menu_deactivate_cb (GtkMenuButton *self)
 }
 
 /**
- * gtk_menu_button_set_menu_model:
+ * gtk_menu_button_set_menu_model: (attributes org.gtk.Method.set_property=menu-model)
  * @menu_button: a `GtkMenuButton`
  * @menu_model: (nullable): a `GMenuModel`, or %NULL to unset and disable the
  *   button
@@ -593,8 +593,8 @@ menu_deactivate_cb (GtkMenuButton *self)
  * [ctor@Gtk.PopoverMenu.new_from_model]. Actions will be connected
  * as documented for this function.
  *
- * If [property@Gtk.MenuButton:popover] is already set, it will be dissociated
- * from the @menu_button, and the property is set to %NULL.
+ * If [property@Gtk.MenuButton:popover] is already set, it will be
+ * dissociated from the @menu_button, and the property is set to %NULL.
  */
 void
 gtk_menu_button_set_menu_model (GtkMenuButton *menu_button,
@@ -627,7 +627,7 @@ gtk_menu_button_set_menu_model (GtkMenuButton *menu_button,
 }
 
 /**
- * gtk_menu_button_get_menu_model:
+ * gtk_menu_button_get_menu_model: (attributes org.gtk.Method.get_property=menu-model)
  * @menu_button: a `GtkMenuButton`
  *
  * Returns the `GMenuModel` used to generate the popup.
@@ -675,7 +675,7 @@ popover_destroy_cb (GtkMenuButton *menu_button)
 }
 
 /**
- * gtk_menu_button_set_direction:
+ * gtk_menu_button_set_direction: (attributes org.gtk.Method.set_property=direction)
  * @menu_button: a `GtkMenuButton`
  * @direction: a `GtkArrowType`
  *
@@ -716,7 +716,7 @@ gtk_menu_button_set_direction (GtkMenuButton *menu_button,
 }
 
 /**
- * gtk_menu_button_get_direction:
+ * gtk_menu_button_get_direction: (attributes org.gtk.Method.get_property=direction)
  * @menu_button: a `GtkMenuButton`
  *
  * Returns the direction the popup will be pointing at when popped up.
@@ -758,7 +758,7 @@ gtk_menu_button_dispose (GObject *object)
 }
 
 /**
- * gtk_menu_button_set_popover:
+ * gtk_menu_button_set_popover: (attributes org.gtk.Method.set_property=popover)
  * @menu_button: a `GtkMenuButton`
  * @popover: (nullable): a `GtkPopover`, or %NULL to unset and disable the button
  *
@@ -815,7 +815,7 @@ gtk_menu_button_set_popover (GtkMenuButton *menu_button,
 }
 
 /**
- * gtk_menu_button_get_popover:
+ * gtk_menu_button_get_popover: (attributes org.gtk.Method.get_property=popover)
  * @menu_button: a `GtkMenuButton`
  *
  * Returns the `GtkPopover` that pops out of the button.
@@ -834,7 +834,7 @@ gtk_menu_button_get_popover (GtkMenuButton *menu_button)
 }
 
 /**
- * gtk_menu_button_set_icon_name:
+ * gtk_menu_button_set_icon_name: (attributes org.gtk.Method.set_property=icon-name)
  * @menu_button: a `GtkMenuButton`
  * @icon_name: the icon name
  *
@@ -851,7 +851,7 @@ gtk_menu_button_set_icon_name (GtkMenuButton *menu_button,
 }
 
 /**
- * gtk_menu_button_get_icon_name:
+ * gtk_menu_button_get_icon_name: (attributes org.gtk.Method.get_property=icon-name)
  * @menu_button: a `GtkMenuButton`
  *
  * Gets the name of the icon shown in the button.
@@ -867,7 +867,7 @@ gtk_menu_button_get_icon_name (GtkMenuButton *menu_button)
 }
 
 /**
- * gtk_menu_button_set_label:
+ * gtk_menu_button_set_label: (attributes org.gtk.Method.set_property=label)
  * @menu_button: a `GtkMenuButton`
  * @label: the label
  *
@@ -903,7 +903,7 @@ gtk_menu_button_set_label (GtkMenuButton *menu_button,
 }
 
 /**
- * gtk_menu_button_get_label:
+ * gtk_menu_button_get_label: (attributes org.gtk.Method.get_property=label)
  * @menu_button: a `GtkMenuButton`
  *
  * Gets the label shown in the button
@@ -928,7 +928,7 @@ gtk_menu_button_get_label (GtkMenuButton *menu_button)
 }
 
 /**
- * gtk_menu_button_set_has_frame:
+ * gtk_menu_button_set_has_frame: (attributes org.gtk.Method.set_property=has-frame)
  * @menu_button: a `GtkMenuButton`
  * @has_frame: whether the button should have a visible frame
  *
@@ -948,7 +948,7 @@ gtk_menu_button_set_has_frame (GtkMenuButton *menu_button,
 }
 
 /**
- * gtk_menu_button_get_has_frame:
+ * gtk_menu_button_get_has_frame: (attributes org.gtk.Method.get_property=has-frame)
  * @menu_button: a `GtkMenuButton`
  *
  * Returns whether the button has a frame.
@@ -1032,7 +1032,7 @@ gtk_menu_button_set_create_popup_func (GtkMenuButton                *menu_button
 }
 
 /**
- * gtk_menu_button_set_use_underline:
+ * gtk_menu_button_set_use_underline: (attributes org.gtk.Method.set_property=use-underline)
  * @menu_button: a `GtkMenuButton`
  * @use_underline: %TRUE if underlines in the text indicate mnemonics
  *
@@ -1055,10 +1055,10 @@ gtk_menu_button_set_use_underline (GtkMenuButton *menu_button,
 }
 
 /**
- * gtk_menu_button_get_use_underline:
+ * gtk_menu_button_get_use_underline: (attributes org.gtk.Method.get_property=use-underline)
  * @menu_button: a `GtkMenuButton`
  *
- * Returns whether an dwembedded underline in the text indicates a
+ * Returns whether an embedded underline in the text indicates a
  * mnemonic.
  *
  * Returns: %TRUE whether an embedded underline in the text indicates
