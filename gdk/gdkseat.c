@@ -180,7 +180,7 @@ gdk_seat_class_init (GdkSeatClass *klass)
                   GDK_TYPE_DEVICE_TOOL);
 
   /**
-   * GdkSeat:display:
+   * GdkSeat:display: (attributes org.gtk.Property.get=gdk_seat_get_display)
    *
    * `GdkDisplay` of this seat.
    */
@@ -393,7 +393,7 @@ gdk_seat_device_removed (GdkSeat   *seat,
 }
 
 /**
- * gdk_seat_get_display:
+ * gdk_seat_get_display: (attributes org.gtk.Method.get_property=display)
  * @seat: a `GdkSeat`
  *
  * Returns the `GdkDisplay` this seat belongs to.
