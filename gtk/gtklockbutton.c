@@ -265,7 +265,7 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
   button_class->clicked = gtk_lock_button_clicked;
 
   /**
-   * GtkLockButton:permission:
+   * GtkLockButton:permission: (attributes org.gtk.Property.get=gtk_lock_button_get_permission org.gtk.Property.set=gtk_lock_button_set_permission)
    *
    * The `GPermission object controlling this button.
    */
@@ -530,7 +530,7 @@ gtk_lock_button_new (GPermission *permission)
 }
 
 /**
- * gtk_lock_button_get_permission:
+ * gtk_lock_button_get_permission: (attributes org.gtk.Method.get_property=permission)
  * @button: a `GtkLockButton`
  *
  * Obtains the `GPermission` object that controls @button.
@@ -546,7 +546,7 @@ gtk_lock_button_get_permission (GtkLockButton *button)
 }
 
 /**
- * gtk_lock_button_set_permission:
+ * gtk_lock_button_set_permission: (attributes org.gtk.Method.set_property=permission)
  * @button: a `GtkLockButton`
  * @permission: (allow-none): a `GPermission` object, or %NULL
  *
