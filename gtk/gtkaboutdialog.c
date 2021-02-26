@@ -61,9 +61,7 @@
 
 
 /**
- * SECTION:gtkaboutdialog
- * @Short_description: Display information about an application
- * @Title: GtkAboutDialog
+ * GtkAboutDialog:
  *
  * The `GtkAboutDialog` offers a simple way to display information about
  * a program like its logo, name, copyright, website and license.
@@ -353,7 +351,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * @label: The object on which the signal was emitted
    * @uri: the URI that is activated
    *
-   * A signal emitted every time a URL is activated.
+   * Emitted every time a URL is activated.
    *
    * Applications may connect to it to override the default behaviour,
    * which is to call [func@Gtk.show_uri].
@@ -370,7 +368,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                   G_TYPE_BOOLEAN, 1, G_TYPE_STRING);
 
   /**
-   * GtkAboutDialog:program-name:
+   * GtkAboutDialog:program-name: (attributes org.gtk.Property.get=gtk_about_dialog_get_program_name org.gtk.Property.set=gtk_about_dialog_set_program_name)
    *
    * The name of the program.
    *
@@ -384,7 +382,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkAboutDialog:version:
+   * GtkAboutDialog:version: (attributes org.gtk.Property.get=gtk_about_dialog_get_version org.gtk.Property.set=gtk_about_dialog_set_version)
    *
    * The version of the program.
    */
@@ -396,7 +394,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkAboutDialog:copyright:
+   * GtkAboutDialog:copyright: (attributes org.gtk.Property.get=gtk_about_dialog_get_copyright org.gtk.Property.set=gtk_about_dialog_set_copyright)
    *
    * Copyright information for the program.
    */
@@ -408,7 +406,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkAboutDialog:comments:
+   * GtkAboutDialog:comments: (attributes org.gtk.Property.get=gtk_about_dialog_get_comments org.gtk.Property.set=gtk_about_dialog_set_comments)
    *
    * Comments about the program.
    *
@@ -424,7 +422,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkAboutDialog:license:
+   * GtkAboutDialog:license: (attributes org.gtk.Property.get=gtk_about_dialog_get_license org.gtk.Property.set=gtk_about_dialog_set_license)
    *
    * The license of the program, as free form text.
    *
@@ -449,7 +447,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkAboutDialog:system-information:
+   * GtkAboutDialog:system-information: (attributes org.gtk.Property.get=gtk_about_dialog_get_system_information org.gtk.Property.set=gtk_about_dialog_set_system_information)
    *
    * Information about the system on which the program is running.
    *
@@ -469,9 +467,9 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkAboutDialog:license-type:
+   * GtkAboutDialog:license-type: (attributes org.gtk.Property.get=gtk_about_dialog_get_license_type org.gtk.Property.set=gtk_about_dialog_set_license_type)
    *
-   * The license of the program, as a value of the [enum@Gtk.License] enumeration.
+   * The license of the program.
    *
    * The `GtkAboutDialog` will automatically fill out a standard disclaimer
    * and link the user to the appropriate online resource for the license
@@ -496,7 +494,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkAboutDialog:website:
+   * GtkAboutDialog:website: (attributes org.gtk.Property.get=gtk_about_dialog_get_website org.gtk.Property.set=gtk_about_dialog_set_website)
    *
    * The URL for the link to the website of the program.
    *
@@ -510,7 +508,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkAboutDialog:website-label:
+   * GtkAboutDialog:website-label: (attributes org.gtk.Property.get=gtk_about_dialog_get_website_label org.gtk.Property.set=gtk_about_dialog_set_website_label)
    *
    * The label for the link to the website of the program.
    */
@@ -522,7 +520,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkAboutDialog:authors:
+   * GtkAboutDialog:authors: (attributes org.gtk.Property.get=gtk_about_dialog_get_authors org.gtk.Property.set=gtk_about_dialog_set_authors)
    *
    * The authors of the program, as a `NULL`-terminated array of strings.
    *
@@ -537,7 +535,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkAboutDialog:documenters:
+   * GtkAboutDialog:documenters: (attributes org.gtk.Property.get=gtk_about_dialog_get_documenters org.gtk.Property.set=gtk_about_dialog_set_documenters)
    *
    * The people documenting the program, as a `NULL`-terminated array of strings.
    *
@@ -552,7 +550,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkAboutDialog:artists:
+   * GtkAboutDialog:artists: (attributes org.gtk.Property.get=gtk_about_dialog_get_artists org.gtk.Property.set=gtk_about_dialog_set_artists)
    *
    * The people who contributed artwork to the program, as a `NULL`-terminated
    * array of strings.
@@ -568,9 +566,11 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkAboutDialog:translator-credits:
+   * GtkAboutDialog:translator-credits: (attributes org.gtk.Property.get=gtk_about_dialog_get_translator_credits org.gtk.Property.set=gtk_about_dialog_set_translator_credits)
    *
-   * Credits to the translators. This string should be marked as translatable.
+   * Credits to the translators.
+   *
+   * This string should be marked as translatable.
    *
    * The string may contain email addresses and URLs, which will be displayed
    * as links, see the introduction for more details.
@@ -583,7 +583,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkAboutDialog:logo:
+   * GtkAboutDialog:logo: (attributes org.gtk.Property.get=gtk_about_dialog_get_logo org.gtk.Property.set=gtk_about_dialog_set_logo)
    *
    * A logo for the about box.
    *
@@ -598,7 +598,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkAboutDialog:logo-icon-name:
+   * GtkAboutDialog:logo-icon-name: (attributes org.gtk.Property.get=gtk_about_dialog_get_logo_icon_name org.gtk.Property.set=gtk_about_dialog_set_logo_icon_name)
    *
    * A named icon to use as the logo for the about box.
    *
@@ -612,7 +612,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkAboutDialog:wrap-license:
+   * GtkAboutDialog:wrap-license: (attributes org.gtk.Property.get=gtk_about_dialog_get_wrap_license org.gtk.Property.set=gtk_about_dialog_set_wrap_license)
    *
    * Whether to wrap the text in the license dialog.
    */
@@ -979,7 +979,7 @@ update_website (GtkAboutDialog *about)
 }
 
 /**
- * gtk_about_dialog_get_program_name:
+ * gtk_about_dialog_get_program_name: (attributes org.gtk.Method.get_property=program-name)
  * @about: a `GtkAboutDialog`
  *
  * Returns the program name displayed in the about dialog.
@@ -1019,7 +1019,7 @@ update_name_version (GtkAboutDialog *about)
 }
 
 /**
- * gtk_about_dialog_set_program_name:
+ * gtk_about_dialog_set_program_name: (attributes org.gtk.Method.set_property=program-name)
  * @about: a `GtkAboutDialog`
  * @name: (nullable): the program name
  *
@@ -1046,7 +1046,7 @@ gtk_about_dialog_set_program_name (GtkAboutDialog *about,
 
 
 /**
- * gtk_about_dialog_get_version:
+ * gtk_about_dialog_get_version: (attributes org.gtk.Method.get_property=version)
  * @about: a `GtkAboutDialog`
  *
  * Returns the version string.
@@ -1063,7 +1063,7 @@ gtk_about_dialog_get_version (GtkAboutDialog *about)
 }
 
 /**
- * gtk_about_dialog_set_version:
+ * gtk_about_dialog_set_version: (attributes org.gtk.Method.set_property=version)
  * @about: a `GtkAboutDialog`
  * @version: (nullable): the version string
  *
@@ -1087,7 +1087,7 @@ gtk_about_dialog_set_version (GtkAboutDialog *about,
 }
 
 /**
- * gtk_about_dialog_get_copyright:
+ * gtk_about_dialog_get_copyright: (attributes org.gtk.Method.get_property=copyright)
  * @about: a `GtkAboutDialog`
  *
  * Returns the copyright string.
@@ -1104,7 +1104,7 @@ gtk_about_dialog_get_copyright (GtkAboutDialog *about)
 }
 
 /**
- * gtk_about_dialog_set_copyright:
+ * gtk_about_dialog_set_copyright: (attributes org.gtk.Method.set_property=copyright)
  * @about: a `GtkAboutDialog`
  * @copyright: (nullable): the copyright string
  *
@@ -1140,7 +1140,7 @@ gtk_about_dialog_set_copyright (GtkAboutDialog *about,
 }
 
 /**
- * gtk_about_dialog_get_comments:
+ * gtk_about_dialog_get_comments: (attributes org.gtk.Method.set_property=comments)
  * @about: a `GtkAboutDialog`
  *
  * Returns the comments string.
@@ -1157,7 +1157,7 @@ gtk_about_dialog_get_comments (GtkAboutDialog *about)
 }
 
 /**
- * gtk_about_dialog_set_comments:
+ * gtk_about_dialog_set_comments: (attributes org.gtk.Method.set_property=comments)
  * @about: a `GtkAboutDialog`
  * @comments: (nullable): a comments string
  *
@@ -1191,7 +1191,7 @@ gtk_about_dialog_set_comments (GtkAboutDialog *about,
 }
 
 /**
- * gtk_about_dialog_get_license:
+ * gtk_about_dialog_get_license: (attributes org.gtk.Method.get_property=license)
  * @about: a `GtkAboutDialog`
  *
  * Returns the license information.
@@ -1208,7 +1208,7 @@ gtk_about_dialog_get_license (GtkAboutDialog *about)
 }
 
 /**
- * gtk_about_dialog_set_license:
+ * gtk_about_dialog_set_license: (attributes org.gtk.Method.set_property=license)
  * @about: a `GtkAboutDialog`
  * @license: (nullable): the license information
  *
@@ -1247,7 +1247,7 @@ gtk_about_dialog_set_license (GtkAboutDialog *about,
 }
 
 /**
- * gtk_about_dialog_get_system_information:
+ * gtk_about_dialog_get_system_information: (attributes org.gtk.Method.get_property=system-information)
  * @about: a `GtkAboutDialog`
  *
  * Returns the system information that is shown in the about dialog.
@@ -1263,7 +1263,7 @@ gtk_about_dialog_get_system_information (GtkAboutDialog *about)
 }
 
 /**
- * gtk_about_dialog_set_system_information:
+ * gtk_about_dialog_set_system_information: (attributes org.gtk.Method.set_property=system-information)
  * @about: a `GtkAboutDialog`
  * @system_information: (nullable): system information
  *
@@ -1289,7 +1289,7 @@ gtk_about_dialog_set_system_information (GtkAboutDialog *about,
 }
 
 /**
- * gtk_about_dialog_get_wrap_license:
+ * gtk_about_dialog_get_wrap_license: (attributes org.gtk.Method.get_property=wrap-license)
  * @about: a `GtkAboutDialog`
  *
  * Returns whether the license text in the about dialog is
@@ -1306,7 +1306,7 @@ gtk_about_dialog_get_wrap_license (GtkAboutDialog *about)
 }
 
 /**
- * gtk_about_dialog_set_wrap_license:
+ * gtk_about_dialog_set_wrap_license: (attributes org.gtk.Method.set_property=wrap-license)
  * @about: a `GtkAboutDialog`
  * @wrap_license: whether to wrap the license
  *
@@ -1330,7 +1330,7 @@ gtk_about_dialog_set_wrap_license (GtkAboutDialog *about,
 }
 
 /**
- * gtk_about_dialog_get_website:
+ * gtk_about_dialog_get_website: (attributes org.gtk.Method.get_property=website)
  * @about: a `GtkAboutDialog`
  *
  * Returns the website URL.
@@ -1346,7 +1346,7 @@ gtk_about_dialog_get_website (GtkAboutDialog *about)
 }
 
 /**
- * gtk_about_dialog_set_website:
+ * gtk_about_dialog_set_website: (attributes org.gtk.Method.set_property=website)
  * @about: a `GtkAboutDialog`
  * @website: (nullable): a URL string starting with `http://`
  *
@@ -1370,7 +1370,7 @@ gtk_about_dialog_set_website (GtkAboutDialog *about,
 }
 
 /**
- * gtk_about_dialog_get_website_label:
+ * gtk_about_dialog_get_website_label: (attributes org.gtk.Method.get_property=website-label)
  * @about: a `GtkAboutDialog`
  *
  * Returns the label used for the website link.
@@ -1386,7 +1386,7 @@ gtk_about_dialog_get_website_label (GtkAboutDialog *about)
 }
 
 /**
- * gtk_about_dialog_set_website_label:
+ * gtk_about_dialog_set_website_label: (attributes org.gtk.Method.set_property=website-label)
  * @about: a `GtkAboutDialog`
  * @website_label: the label used for the website link
  *
@@ -1410,7 +1410,7 @@ gtk_about_dialog_set_website_label (GtkAboutDialog *about,
 }
 
 /**
- * gtk_about_dialog_get_authors:
+ * gtk_about_dialog_get_authors: (attributes org.gtk.Method.get_property=authors)
  * @about: a `GtkAboutDialog`
  *
  * Returns the string which are displayed in the authors tab
@@ -1429,7 +1429,7 @@ gtk_about_dialog_get_authors (GtkAboutDialog *about)
 }
 
 /**
- * gtk_about_dialog_set_authors:
+ * gtk_about_dialog_set_authors: (attributes org.gtk.Method.set_property=authors)
  * @about: a `GtkAboutDialog`
  * @authors: (array zero-terminated=1): the authors of the application
  *
@@ -1454,7 +1454,7 @@ gtk_about_dialog_set_authors (GtkAboutDialog  *about,
 }
 
 /**
- * gtk_about_dialog_get_documenters:
+ * gtk_about_dialog_get_documenters: (attributes org.gtk.Method.get_property=documenters)
  * @about: a `GtkAboutDialog`
  *
  * Returns the string which are displayed in the "Documenters"
@@ -1473,7 +1473,7 @@ gtk_about_dialog_get_documenters (GtkAboutDialog *about)
 }
 
 /**
- * gtk_about_dialog_set_documenters:
+ * gtk_about_dialog_set_documenters: (attributes org.gtk.Method.set_property=documenters)
  * @about: a `GtkAboutDialog`
  * @documenters: (array zero-terminated=1): the authors of the documentation
  *   of the application
@@ -1499,7 +1499,7 @@ gtk_about_dialog_set_documenters (GtkAboutDialog *about,
 }
 
 /**
- * gtk_about_dialog_get_artists:
+ * gtk_about_dialog_get_artists: (attributes org.gtk.Method.get_property=artists)
  * @about: a `GtkAboutDialog`
  *
  * Returns the string which are displayed in the "Artists" tab
@@ -1518,7 +1518,7 @@ gtk_about_dialog_get_artists (GtkAboutDialog *about)
 }
 
 /**
- * gtk_about_dialog_set_artists:
+ * gtk_about_dialog_set_artists: (attributes org.gtk.Method.set_property=artists)
  * @about: a `GtkAboutDialog`
  * @artists: (array zero-terminated=1): the authors of the artwork
  *   of the application
@@ -1544,7 +1544,7 @@ gtk_about_dialog_set_artists (GtkAboutDialog *about,
 }
 
 /**
- * gtk_about_dialog_get_translator_credits:
+ * gtk_about_dialog_get_translator_credits: (attributes org.gtk.Method.get_property=translator-credits)
  * @about: a `GtkAboutDialog`
  *
  * Returns the translator credits string which is displayed
@@ -1561,7 +1561,7 @@ gtk_about_dialog_get_translator_credits (GtkAboutDialog *about)
 }
 
 /**
- * gtk_about_dialog_set_translator_credits:
+ * gtk_about_dialog_set_translator_credits: (attributes org.gtk.Method.set_property=translator-credits)
  * @about: a `GtkAboutDialog`
  * @translator_credits: (nullable): the translator credits
  *
@@ -1602,7 +1602,7 @@ gtk_about_dialog_set_translator_credits (GtkAboutDialog *about,
 }
 
 /**
- * gtk_about_dialog_get_logo:
+ * gtk_about_dialog_get_logo: (attributes org.gtk.Method.get_property=logo)
  * @about: a `GtkAboutDialog`
  *
  * Returns the paintable displayed as logo in the about dialog.
@@ -1624,7 +1624,7 @@ gtk_about_dialog_get_logo (GtkAboutDialog *about)
 }
 
 /**
- * gtk_about_dialog_set_logo:
+ * gtk_about_dialog_set_logo: (attributes org.gtk.Method.set_property=logo)
  * @about: a `GtkAboutDialog`
  * @logo: (nullable): a `GdkPaintable`
  *
@@ -1650,7 +1650,7 @@ gtk_about_dialog_set_logo (GtkAboutDialog *about,
 }
 
 /**
- * gtk_about_dialog_get_logo_icon_name:
+ * gtk_about_dialog_get_logo_icon_name: (attributes org.gtk.Method.get_property=logo-icon-name)
  * @about: a `GtkAboutDialog`
  *
  * Returns the icon name displayed as logo in the about dialog.
@@ -1671,7 +1671,7 @@ gtk_about_dialog_get_logo_icon_name (GtkAboutDialog *about)
 }
 
 /**
- * gtk_about_dialog_set_logo_icon_name:
+ * gtk_about_dialog_set_logo_icon_name: (attributes org.gtk.Method.set_property=logo-icon-name)
  * @about: a `GtkAboutDialog`
  * @icon_name: (nullable): an icon name
  *
@@ -2251,7 +2251,7 @@ gtk_show_about_dialog (GtkWindow   *parent,
 }
 
 /**
- * gtk_about_dialog_set_license_type:
+ * gtk_about_dialog_set_license_type: (attributes org.gtk.Method.set_property=license-type)
  * @about: a `GtkAboutDialog`
  * @license_type: the type of license
  *
@@ -2321,10 +2321,10 @@ gtk_about_dialog_set_license_type (GtkAboutDialog *about,
 }
 
 /**
- * gtk_about_dialog_get_license_type:
+ * gtk_about_dialog_get_license_type: (attributes org.gtk.Method.get_property=license-type)
  * @about: a `GtkAboutDialog`
  *
- * Retrieves the license set using [method@Gtk.AboutDialog.set_license_type].
+ * Retrieves the license type.
  *
  * Returns: a [enum@Gtk.License] value
  */
