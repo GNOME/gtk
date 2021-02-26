@@ -38,62 +38,63 @@
 #include <string.h>
 
 /**
- * SECTION:gtkmessagedialog
- * @Short_description: A convenient message window
- * @Title: GtkMessageDialog
- * @See_also:#GtkDialog
+ * GtkMessageDialog:
  *
- * #GtkMessageDialog presents a dialog with some message text. It’s simply a
- * convenience widget; you could construct the equivalent of #GtkMessageDialog
- * from #GtkDialog without too much effort, but #GtkMessageDialog saves typing.
+ * `GtkMessageDialog` presents a dialog with some message text.
+ *
+ * ![An example GtkMessageDialog](messagedialog.png)
+ *
+ * It’s simply a convenience widget; you could construct the equivalent of
+ * `GtkMessageDialog` from `GtkDialog` without too much effort, but
+ * `GtkMessageDialog` saves typing.
  *
  * The easiest way to do a modal message dialog is to use the %GTK_DIALOG_MODAL
- * flag, which will call gtk_window_set_modal() internally. The dialog will
+ * flag, which will call [method@Gtk.Window.set_modal] internally. The dialog will
  * prevent interaction with the parent window until it's hidden or destroyed.
- * You can use the #GtkDialog::response signal to know when the user dismissed
- * the dialog.
+ * You can use the [signal@Gtk.Dialog::response] signal to know when the user
+ * dismissed the dialog.
  *
  * An example for using a modal dialog:
- * |[<!-- language="C" -->
- *  GtkDialogFlags flags = GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL;
- *  dialog = gtk_message_dialog_new (parent_window,
- *                                   flags,
- *                                   GTK_MESSAGE_ERROR,
- *                                   GTK_BUTTONS_CLOSE,
- *                                   "Error reading “%s”: %s",
- *                                   filename,
- *                                   g_strerror (errno));
- *  // Destroy the dialog when the user responds to it
- *  // (e.g. clicks a button)
+ * ```c
+ * GtkDialogFlags flags = GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL;
+ * dialog = gtk_message_dialog_new (parent_window,
+ *                                  flags,
+ *                                  GTK_MESSAGE_ERROR,
+ *                                  GTK_BUTTONS_CLOSE,
+ *                                  "Error reading “%s”: %s",
+ *                                  filename,
+ *                                  g_strerror (errno));
+ * // Destroy the dialog when the user responds to it
+ * // (e.g. clicks a button)
  *
- *  g_signal_connect (dialog, "response",
- *                    G_CALLBACK (gtk_window_destroy),
- *                    NULL);
- * ]|
+ * g_signal_connect (dialog, "response",
+ *                   G_CALLBACK (gtk_window_destroy),
+ *                   NULL);
+ * ```
  *
- * You might do a non-modal #GtkMessageDialog simply by omitting the
+ * You might do a non-modal `GtkMessageDialog` simply by omitting the
  * %GTK_DIALOG_MODAL flag:
  *
- * |[<!-- language="C" -->
- *  GtkDialogFlags flags = GTK_DIALOG_DESTROY_WITH_PARENT;
- *  dialog = gtk_message_dialog_new (parent_window,
- *                                   flags,
- *                                   GTK_MESSAGE_ERROR,
- *                                   GTK_BUTTONS_CLOSE,
- *                                   "Error reading “%s”: %s",
- *                                   filename,
- *                                   g_strerror (errno));
+ * ```c
+ * GtkDialogFlags flags = GTK_DIALOG_DESTROY_WITH_PARENT;
+ * dialog = gtk_message_dialog_new (parent_window,
+ *                                  flags,
+ *                                  GTK_MESSAGE_ERROR,
+ *                                  GTK_BUTTONS_CLOSE,
+ *                                  "Error reading “%s”: %s",
+ *                                  filename,
+ *                                  g_strerror (errno));
  *
- *  // Destroy the dialog when the user responds to it
- *  // (e.g. clicks a button)
- *  g_signal_connect (dialog, "response",
- *                    G_CALLBACK (gtk_window_destroy),
- *                    NULL);
- * ]|
+ * // Destroy the dialog when the user responds to it
+ * // (e.g. clicks a button)
+ * g_signal_connect (dialog, "response",
+ *                   G_CALLBACK (gtk_window_destroy),
+ *                   NULL);
+ * ```
  *
  * # GtkMessageDialog as GtkBuildable
  *
- * The GtkMessageDialog implementation of the GtkBuildable interface exposes
+ * The `GtkMessageDialog` implementation of the `GtkBuildable` interface exposes
  * the message area as an internal child with the name “message_area”.
  */
 
@@ -377,8 +378,9 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
   /**
    * GtkMessageDialog:text:
    *
-   * The primary text of the message dialog. If the dialog has
-   * a secondary text, this will appear as the title.
+   * The primary text of the message dialog.
+   *
+   * If the dialog has a secondary text, this will appear as the title.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_TEXT,
@@ -391,7 +393,8 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
    * GtkMessageDialog:use-markup:
    *
    * %TRUE if the primary text of the dialog includes Pango markup.
-   * See pango_parse_markup().
+   *
+   * See [func@Pango.parse_markup].
    */
   g_object_class_install_property (gobject_class,
                                    PROP_USE_MARKUP,
@@ -416,7 +419,8 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
    * GtkMessageDialog:secondary-use-markup:
    *
    * %TRUE if the secondary text of the dialog includes Pango markup.
-   * See pango_parse_markup().
+   *
+   * See [func@Pango.parse_markup].
    */
   g_object_class_install_property (gobject_class,
                                    PROP_SECONDARY_USE_MARKUP,
@@ -428,9 +432,10 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
   /**
    * GtkMessageDialog:message-area:
    *
-   * The #GtkBox that corresponds to the message area of this dialog.  See
-   * gtk_message_dialog_get_message_area() for a detailed description of this
-   * area.
+   * The `GtkBox` that corresponds to the message area of this dialog.
+   *
+   * See [method@Gtk.MessageDialog.get_message_area] for a detailed
+   * description of this area.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_MESSAGE_AREA,
@@ -480,12 +485,14 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
  * @message_format: (allow-none): printf()-style format string, or %NULL
  * @...: arguments for @message_format
  *
- * Creates a new message dialog, which is a simple dialog with some text
- * the user may want to see. When the user clicks a button a “response”
- * signal is emitted with response IDs from #GtkResponseType. See
- * #GtkDialog for more details.
+ * Creates a new message dialog.
  *
- * Returns: (transfer none): a new #GtkMessageDialog
+ * This is a simple dialog with some text the user may want to see.
+ * When the user clicks a button a “response” signal is emitted with
+ * response IDs from [enum@Gtk.ResponseType]. See [class@Gtk.Dialog]
+ * for more details.
+ *
+ * Returns: (transfer none): a new `GtkMessageDialog`
  */
 GtkWidget*
 gtk_message_dialog_new (GtkWindow     *parent,
@@ -542,33 +549,36 @@ gtk_message_dialog_new (GtkWindow     *parent,
  * @message_format: (allow-none): printf()-style format string, or %NULL
  * @...: arguments for @message_format
  *
- * Creates a new message dialog, which is a simple dialog with some text that
- * is marked up with the [Pango text markup language][PangoMarkupFormat].
- * When the user clicks a button a “response” signal is emitted with
- * response IDs from #GtkResponseType. See #GtkDialog for more details.
+ * Creates a new message dialog.
+ *
+ * This is a simple dialog with some text that is marked up with
+ * Pango markup. When the user clicks a button a “response” signal
+ * is emitted with response IDs from [enum@Gtk.ResponseType]. See
+ * [class@Gtk.Dialog] for more details.
  *
  * Special XML characters in the printf() arguments passed to this
  * function will automatically be escaped as necessary.
  * (See g_markup_printf_escaped() for how this is implemented.)
  * Usually this is what you want, but if you have an existing
  * Pango markup string that you want to use literally as the
- * label, then you need to use gtk_message_dialog_set_markup()
+ * label, then you need to use [method@Gtk.MessageDialog.set_markup]
  * instead, since you can’t pass the markup string either
  * as the format (it might contain “%” characters) or as a string
  * argument.
- * |[<!-- language="C" -->
- *  GtkWidget *dialog;
- *  GtkDialogFlags flags = GTK_DIALOG_DESTROY_WITH_PARENT;
- *  dialog = gtk_message_dialog_new (parent_window,
- *                                   flags,
- *                                   GTK_MESSAGE_ERROR,
- *                                   GTK_BUTTONS_CLOSE,
- *                                   NULL);
- *  gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog),
- *                                 markup);
- * ]|
  *
- * Returns: a new #GtkMessageDialog
+ * ```c
+ * GtkWidget *dialog;
+ * GtkDialogFlags flags = GTK_DIALOG_DESTROY_WITH_PARENT;
+ * dialog = gtk_message_dialog_new (parent_window,
+ *                                  flags,
+ *                                  GTK_MESSAGE_ERROR,
+ *                                  GTK_BUTTONS_CLOSE,
+ *                                  NULL);
+ * gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog),
+ *                                markup);
+ * ```
+ *
+ * Returns: a new `GtkMessageDialog`
  **/
 GtkWidget*
 gtk_message_dialog_new_with_markup (GtkWindow     *parent,
@@ -602,12 +612,11 @@ gtk_message_dialog_new_with_markup (GtkWindow     *parent,
 
 /**
  * gtk_message_dialog_set_markup:
- * @message_dialog: a #GtkMessageDialog
- * @str: markup string (see [Pango markup format][PangoMarkupFormat])
+ * @message_dialog: a `GtkMessageDialog`
+ * @str: string with Pango markup
  *
- * Sets the text of the message dialog to be @str, which is marked
- * up with the [Pango text markup language][PangoMarkupFormat].
- **/
+ * Sets the text of the message dialog.
+ */
 void
 gtk_message_dialog_set_markup (GtkMessageDialog *message_dialog,
                                const char       *str)
@@ -622,12 +631,11 @@ gtk_message_dialog_set_markup (GtkMessageDialog *message_dialog,
 
 /**
  * gtk_message_dialog_format_secondary_text:
- * @message_dialog: a #GtkMessageDialog
+ * @message_dialog: a `GtkMessageDialog`
  * @message_format: (allow-none): printf()-style format string, or %NULL
  * @...: arguments for @message_format
  *
- * Sets the secondary text of the message dialog to be @message_format
- * (with printf()-style).
+ * Sets the secondary text of the message dialog.
  */
 void
 gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
@@ -664,28 +672,27 @@ gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
 
 /**
  * gtk_message_dialog_format_secondary_markup:
- * @message_dialog: a #GtkMessageDialog
- * @message_format: printf()-style markup string (see
-     [Pango markup format][PangoMarkupFormat]), or %NULL
+ * @message_dialog: a `GtkMessageDialog`
+ * @message_format: printf()-style string with Pango markup
  * @...: arguments for @message_format
  *
- * Sets the secondary text of the message dialog to be @message_format (with
- * printf()-style), which is marked up with the
- * [Pango text markup language][PangoMarkupFormat].
+ * Sets the secondary text of the message dialog.
  *
- * Due to an oversight, this function does not escape special XML characters
- * like gtk_message_dialog_new_with_markup() does. Thus, if the arguments
- * may contain special XML characters, you should use g_markup_printf_escaped()
- * to escape it.
-
- * |[<!-- language="C" -->
+ * The @message_format is assumed to contain Pango markup.
+ *
+ * Due to an oversight, this function does not escape special
+ * XML characters like [ctor@Gtk.MessageDialog.new_with_markup]
+ * does. Thus, if the arguments may contain special XML characters,
+ * you should use g_markup_printf_escaped() to escape it.
+ *
+ * ```c
  * char *msg;
  *
  * msg = g_markup_printf_escaped (message_format, ...);
  * gtk_message_dialog_format_secondary_markup (message_dialog,
  *                                             "%s", msg);
  * g_free (msg);
- * ]|
+ * ```
  */
 void
 gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
@@ -722,17 +729,18 @@ gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
 
 /**
  * gtk_message_dialog_get_message_area:
- * @message_dialog: a #GtkMessageDialog
+ * @message_dialog: a `GtkMessageDialog`
  *
- * Returns the message area of the dialog. This is the box where the
- * dialog’s primary and secondary labels are packed. You can add your
- * own extra content to that box and it will appear below those labels.
- * See gtk_dialog_get_content_area() for the corresponding
- * function in the parent #GtkDialog.
+ * Returns the message area of the dialog.
  *
- * Returns: (transfer none): A #GtkBox corresponding to the
+ * This is the box where the dialog’s primary and secondary labels
+ * are packed. You can add your own extra content to that box and it
+ * will appear below those labels. See [method@Gtk.Dialog.get_content_area]
+ * for the corresponding function in the parent [class@Gtk.Dialog].
+ *
+ * Returns: (transfer none): A `GtkBox` corresponding to the
  *     “message area” in the @message_dialog.
- **/
+ */
 GtkWidget *
 gtk_message_dialog_get_message_area (GtkMessageDialog *message_dialog)
 {
@@ -742,4 +750,3 @@ gtk_message_dialog_get_message_area (GtkMessageDialog *message_dialog)
 
   return priv->message_area;
 }
-
