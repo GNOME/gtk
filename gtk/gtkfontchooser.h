@@ -36,7 +36,9 @@ G_BEGIN_DECLS
  * @data: (closure): user data passed to gtk_font_chooser_set_filter_func()
  *
  * The type of function that is used for deciding what fonts get
- * shown in a #GtkFontChooser. See gtk_font_chooser_set_filter_func().
+ * shown in a `GtkFontChooser`.
+ *
+ * See [method@Gtk.FontChooser.set_filter_func].
  *
  * Returns: %TRUE if the font should be displayed
  */
@@ -52,8 +54,8 @@ typedef gboolean (*GtkFontFilterFunc) (const PangoFontFamily *family,
  * @GTK_FONT_CHOOSER_LEVEL_VARIATIONS: Allow changing OpenType font variation axes
  * @GTK_FONT_CHOOSER_LEVEL_FEATURES: Allow selecting specific OpenType font features
  *
- * This enumeration specifies the granularity of font selection
- * that is desired in a font chooser.
+ * Specifies the granularity of font selection
+ * that is desired in a `GtkFontChooser`.
  *
  * This enumeration may be extended in the future; applications should
  * ignore unknown values.
