@@ -878,19 +878,27 @@ create_about_dialog (void)
     "and many more...",
     NULL
   };
+  GFile *file;
+  GdkTexture *logo;
+
+  file = g_file_new_for_path ("docs/tools/gtk-logo.png");
+  logo = gdk_texture_new_from_file (file, NULL);
 
   widget = gtk_about_dialog_new ();
   g_object_set (widget,
                 "program-name", "GTK Code Demos",
                 "version", PACKAGE_VERSION,
-                "copyright", "© 1997-2013 The GTK Team",
+                "copyright", "© 1997-2021 The GTK Team",
                 "website", "http://www.gtk.org",
                 "comments", "Program to demonstrate GTK functions.",
-                "logo-icon-name", "help-about",
+                "logo", logo,
                 "title", "About GTK Code Demos",
                 "authors", authors,
 		NULL);
-  gtk_window_set_icon_name (GTK_WINDOW (widget), "help-about");
+
+  g_object_unref (logo);
+  g_object_unref (file);
+
   return new_widget_info ("aboutdialog", widget, ASIS);
 }
 
