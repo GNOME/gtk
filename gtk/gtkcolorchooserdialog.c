@@ -36,7 +36,7 @@
  *
  * ![An example GtkColorChooserDialog](colorchooser.png)
  *
- * `GtkColorChooserDialog` implements the `GtkColorChooser` interface
+ * `GtkColorChooserDialog` implements the [iface@Gtk.ColorChooser] interface
  * and does not provide much API of its own.
  *
  * To create a `GtkColorChooserDialog`, use [ctor@Gtk.ColorChooserDialog.new].
