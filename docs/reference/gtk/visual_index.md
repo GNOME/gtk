@@ -71,6 +71,7 @@ Title: Widget Gallery
 ## Windows
 
 [![window](window.png)](class.Window.html)
+[![dialog](dialog.png)](class.Dialog.html)
 [![messagedialog](messagedialog.png)](class.MessageDialog.html)
 [![aboutdialog](aboutdialog.png)](class.AboutDialog.html)
 [![assistant](assistant.png)](class.Assistant.html)

@@ -101,6 +101,7 @@ content_images = [
   "images/combo-box-entry.png",
   "images/combo-box.png",
   "images/combo-box-text.png",
+  "images/dialog.png",
   "images/down-center.png",
   "images/down-end.png",
   "images/down-start.png",

@@ -838,6 +838,36 @@ create_message_dialog (void)
 }
 
 static WidgetInfo *
+create_dialog (void)
+{
+  GtkWidget *widget;
+  GtkWidget *content;
+  GtkWidget *label;
+
+  widget = g_object_new (GTK_TYPE_DIALOG, "use-header-bar", TRUE, NULL);
+  gtk_window_set_title (GTK_WINDOW (widget), "Dialog");
+
+  gtk_dialog_add_button (GTK_DIALOG (widget), "Accept", GTK_RESPONSE_OK);
+  gtk_dialog_add_button (GTK_DIALOG (widget), "Cancel", GTK_RESPONSE_CANCEL);
+
+  gtk_dialog_set_default_response (GTK_DIALOG (widget), GTK_RESPONSE_OK);
+
+  content = gtk_dialog_get_content_area (GTK_DIALOG (widget));
+  label = gtk_label_new ("Content");
+  g_object_set (label,
+                "margin-start", 20,
+                "margin-end", 20,
+                "margin-top", 20,
+                "margin-bottom", 20,
+                NULL);
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
+  gtk_box_append (GTK_BOX (content), label);
+
+  return new_widget_info ("dialog", widget, ASIS);
+}
+
+static WidgetInfo *
 create_about_dialog (void)
 {
   GtkWidget *widget;
@@ -2120,6 +2150,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_combo_box ());
   retval = g_list_prepend (retval, create_combo_box_entry ());
   retval = g_list_prepend (retval, create_combo_box_text ());
+  retval = g_list_prepend (retval, create_dialog ());
   retval = g_list_prepend (retval, create_entry ());
   retval = g_list_prepend (retval, create_font_button ());
   retval = g_list_prepend (retval, create_frame ());
