@@ -19,32 +19,31 @@
  */
 
 /**
- * SECTION:gtkcenterbox
- * @Short_description: A centering container
- * @Title: GtkCenterBox
- * @See_also: #GtkBox
+ * GtkCenterBox:
  *
- * The GtkCenterBox widget arranges three children in a horizontal
- * or vertical arrangement, keeping the middle child centered as well
- * as possible.
+ * `GtkCenterBox` arranges three children in a row, keeping the middle child
+ * centered as well as possible.
  *
- * To add children to GtkCenterBox, use gtk_center_box_set_start_widget(),
- * gtk_center_box_set_center_widget() and gtk_center_box_set_end_widget().
+ * ![An example GtkCenterBox](centerbox.png)
+ *
+ * To add children to `GtkCenterBox`, use [method@Gtk.CenterBox.set_start_widget],
+ * [method@Gtk.CenterBox.set_center_widget] and
+ * [method@Gtk.CenterBox.set_end_widget].
  *
  * The sizing and positioning of children can be influenced with the
  * align and expand properties of the children.
  *
  * # GtkCenterBox as GtkBuildable
  *
- * The GtkCenterBox implementation of the #GtkBuildable interface supports
- * placing children in the 3 positions by specifying “start”, “center” or
- * “end” as the “type” attribute of a <child> element.
+ * The `GtkCenterBox` implementation of the [iface@Gtk.Buildable] interface
+ * supports placing children in the 3 positions by specifying “start”, “center”
+ * or “end” as the “type” attribute of a <child> element.
  *
  * # CSS nodes
  *
- * GtkCenterBox uses a single CSS node with the name “box”,
+ * `GtkCenterBox` uses a single CSS node with the name “box”,
  *
- * The first child of the #GtkCenterBox will be allocated depending on the
+ * The first child of the `GtkCenterBox` will be allocated depending on the
  * text direction, i.e. in left-to-right layouts it will be allocated on the
  * left and in right-to-left layouts on the right.
  *
@@ -53,7 +52,7 @@
  *
  * # Accessibility
  *
- * GtkCenterBox uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
+ * `GtkCenterBox` uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
  */
 
 #include "config.h"
@@ -203,6 +202,11 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
 
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
+  /**
+   * GtkCenterBox:baseline-position: (attributes org.gtk.Property.get=gtk_center_box_get_baseline_position org.gtk.Property.set=gtk_center_box_set_baseline_position)
+   *
+   * The position of the baseline aligned widget if extra space is available.
+   */
   g_object_class_install_property (object_class, PROP_BASELINE_POSITION,
           g_param_spec_enum ("baseline-position",
                              P_("Baseline position"),
@@ -228,9 +232,9 @@ gtk_center_box_init (GtkCenterBox *self)
 /**
  * gtk_center_box_new:
  *
- * Creates a new #GtkCenterBox.
+ * Creates a new `GtkCenterBox`.
  *
- * Returns: the new #GtkCenterBox.
+ * Returns: the new `GtkCenterBox`.
  */
 GtkWidget *
 gtk_center_box_new (void)
@@ -240,10 +244,12 @@ gtk_center_box_new (void)
 
 /**
  * gtk_center_box_set_start_widget:
- * @self: a #GtkCenterBox
+ * @self: a `GtkCenterBox`
  * @child: (nullable): the new start widget, or %NULL
  *
- * Sets the start widget. To remove the existing start widget, pass %NULL.
+ * Sets the start widget.
+ *
+ * To remove the existing start widget, pass %NULL.
  */
 void
 gtk_center_box_set_start_widget (GtkCenterBox *self,
@@ -264,10 +270,12 @@ gtk_center_box_set_start_widget (GtkCenterBox *self,
 
 /**
  * gtk_center_box_set_center_widget:
- * @self: a #GtkCenterBox
+ * @self: a `GtkCenterBox`
  * @child: (nullable): the new center widget, or %NULL
  *
- * Sets the center widget. To remove the existing center widget, pas %NULL.
+ * Sets the center widget.
+ *
+ * To remove the existing center widget, pas %NULL.
  */
 void
 gtk_center_box_set_center_widget (GtkCenterBox *self,
@@ -288,10 +296,12 @@ gtk_center_box_set_center_widget (GtkCenterBox *self,
 
 /**
  * gtk_center_box_set_end_widget:
- * @self: a #GtkCenterBox
+ * @self: a `GtkCenterBox`
  * @child: (nullable): the new end widget, or %NULL
  *
- * Sets the end widget. To remove the existing end widget, pass %NULL.
+ * Sets the end widget.
+ *
+ * To remove the existing end widget, pass %NULL.
  */
 void
 gtk_center_box_set_end_widget (GtkCenterBox *self,
@@ -312,7 +322,7 @@ gtk_center_box_set_end_widget (GtkCenterBox *self,
 
 /**
  * gtk_center_box_get_start_widget:
- * @self: a #GtkCenterBox
+ * @self: a `GtkCenterBox`
  *
  * Gets the start widget, or %NULL if there is none.
  *
@@ -326,7 +336,7 @@ gtk_center_box_get_start_widget (GtkCenterBox *self)
 
 /**
  * gtk_center_box_get_center_widget:
- * @self: a #GtkCenterBox
+ * @self: a `GtkCenterBox`
  *
  * Gets the center widget, or %NULL if there is none.
  *
@@ -340,7 +350,7 @@ gtk_center_box_get_center_widget (GtkCenterBox *self)
 
 /**
  * gtk_center_box_get_end_widget:
- * @self: a #GtkCenterBox
+ * @self: a `GtkCenterBox`
  *
  * Gets the end widget, or %NULL if there is none.
  *
@@ -353,9 +363,9 @@ gtk_center_box_get_end_widget (GtkCenterBox *self)
 }
 
 /**
- * gtk_center_box_set_baseline_position:
- * @self: a #GtkCenterBox
- * @position: a #GtkBaselinePosition
+ * gtk_center_box_set_baseline_position: (attributes org.gtk.Method.set_property=baseline-position)
+ * @self: a `GtkCenterBox`
+ * @position: a `GtkBaselinePosition`
  *
  * Sets the baseline position of a center box.
  *
@@ -385,8 +395,8 @@ gtk_center_box_set_baseline_position (GtkCenterBox        *self,
 }
 
 /**
- * gtk_center_box_get_baseline_position:
- * @self: a #GtkCenterBox
+ * gtk_center_box_get_baseline_position: (attributes org.gtk.Method.get_property=baseline-position)
+ * @self: a `GtkCenterBox`
  *
  * Gets the value set by gtk_center_box_set_baseline_position().
  *
