@@ -73,28 +73,25 @@
 #include "open-type-layout.h"
 
 /**
- * SECTION:gtkfontchooserwidget
- * @Short_description: A widget for selecting fonts
- * @Title: GtkFontChooserWidget
- * @See_also: #GtkFontChooserDialog
+ * GtkFontChooserWidget:
  *
- * The #GtkFontChooserWidget widget lists the available fonts,
- * styles and sizes, allowing the user to select a font. It is
- * used in the #GtkFontChooserDialog widget to provide a
- * dialog box for selecting fonts.
+ * The `GtkFontChooserWidget` widget lets the user select a font.
+ *
+ * It is used in the `GtkFontChooserDialog` widget to provide a
+ * dialog for selecting fonts.
  *
  * To set the font which is initially selected, use
- * gtk_font_chooser_set_font() or gtk_font_chooser_set_font_desc().
+ * [method@Gtk.FontChooser.set_font] or [method@Gtk.FontChooser.set_font_desc].
  *
- * To get the selected font use gtk_font_chooser_get_font() or
- * gtk_font_chooser_get_font_desc().
+ * To get the selected font use [method@Gtk.FontChooser.get_font] or
+ * [method@Gtk.FontChooser.get_font_desc].
  *
  * To change the text which is shown in the preview area, use
- * gtk_font_chooser_set_preview_text().
+ * [method@Gtk.FontChooser.set_preview_text].
  *
  * # CSS nodes
  *
- * GtkFontChooserWidget has a single CSS node with name fontchooser.
+ * `GtkFontChooserWidget` has a single CSS node with name fontchooser.
  */
 
 typedef struct _GtkFontChooserWidgetClass         GtkFontChooserWidgetClass;
@@ -1308,9 +1305,9 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *self)
 /**
  * gtk_font_chooser_widget_new:
  *
- * Creates a new #GtkFontChooserWidget.
+ * Creates a new `GtkFontChooserWidget`.
  *
- * Returns: a new #GtkFontChooserWidget
+ * Returns: a new `GtkFontChooserWidget`
  */
 GtkWidget *
 gtk_font_chooser_widget_new (void)
