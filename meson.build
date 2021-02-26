@@ -810,7 +810,9 @@ else
   message('Not executing post-install steps automatically when cross compiling')
 endif
 
-meson.add_dist_script('build-aux/meson/dist-theme.py')
+if not meson.is_subproject()
+    meson.add_dist_script('build-aux/meson/dist-theme.py')
+endif
 
 if host_machine.system() != 'windows'
   # Install Valgrind suppression files (except on Windows,
