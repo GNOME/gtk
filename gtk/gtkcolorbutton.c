@@ -320,7 +320,7 @@ gtk_color_button_finalize (GObject *object)
  *
  * This returns a widget in the form of a small button containing
  * a swatch representing the current selected color. When the button
- * is clicked, a color-selection dialog will open, allowing the user
+ * is clicked, a color chooser dialog will open, allowing the user
  * to select a color. The swatch will be updated to reflect the new
  * color when the user finishes.
  *
@@ -334,7 +334,7 @@ gtk_color_button_new (void)
 
 /**
  * gtk_color_button_new_with_rgba:
- * @rgba: A #GdkRGBA to set the current color with
+ * @rgba: A `GdkRGBA` to set the current color with
  *
  * Creates a new color button showing the given color.
  *
