@@ -60,6 +60,8 @@
  * `GtkPrintUnixDialog` implements a print dialog for platforms
  * which don’t provide a native print dialog, like Unix.
  *
+ * ![An example GtkPrintUnixDialog](printdialog.png)
+ *
  * It can be used very much like any other GTK dialog, at the cost of
  * the portability offered by the high-level printing API with
  * [class@Gtk.PrintOperation].
