@@ -23,19 +23,20 @@
  */
 
 /**
- * SECTION:gtkappchooserdialog
- * @Title: GtkAppChooserDialog
- * @Short_description: An application chooser dialog
+ * GtkAppChooserDialog:
  *
- * #GtkAppChooserDialog shows a #GtkAppChooserWidget inside a #GtkDialog.
+ * `GtkAppChooserDialog` shows a `GtkAppChooserWidget` inside a `GtkDialog`.
  *
- * Note that #GtkAppChooserDialog does not have any interesting methods
- * of its own. Instead, you should get the embedded #GtkAppChooserWidget
- * using gtk_app_chooser_dialog_get_widget() and call its methods if
- * the generic #GtkAppChooser interface is not sufficient for your needs.
+ * ![An example GtkAppChooserDialog](appchooserdialog.png)
  *
- * To set the heading that is shown above the #GtkAppChooserWidget,
- * use gtk_app_chooser_dialog_set_heading().
+ * Note that `GtkAppChooserDialog` does not have any interesting methods
+ * of its own. Instead, you should get the embedded `GtkAppChooserWidget`
+ * using [method@Gtk.AppChooserDialog.get_widget] and call its methods if
+ * the generic [iface@Gtk.AppChooser] interface is not sufficient for
+ * your needs.
+ *
+ * To set the heading that is shown above the `GtkAppChooserWidget`,
+ * use [method@Gtk.AppChooserDialog.set_heading].
  */
 #include "config.h"
 
@@ -592,9 +593,10 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
   /**
    * GtkAppChooserDialog:gfile:
    *
-   * The GFile used by the #GtkAppChooserDialog.
-   * The dialog's #GtkAppChooserWidget content type will be guessed from the
-   * file, if present.
+   * The GFile used by the `GtkAppChooserDialog`.
+   *
+   * The dialog's `GtkAppChooserWidget` content type will
+   * be guessed from the file, if present.
    */
   pspec = g_param_spec_object ("gfile",
                                P_("GFile"),
@@ -605,9 +607,10 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
   g_object_class_install_property (gobject_class, PROP_GFILE, pspec);
 
   /**
-   * GtkAppChooserDialog:heading:
+   * GtkAppChooserDialog:heading: (attributes org.gtk.Property.get=gtk_app_chooser_dialog_get_heading org.gtk.Property.set=gtk_app_chooser_dialog_set_heading)
    *
    * The text to show at the top of the dialog.
+   *
    * The string may contain Pango markup.
    */
   pspec = g_param_spec_string ("heading",
@@ -663,15 +666,16 @@ set_parent_and_flags (GtkWidget      *dialog,
 
 /**
  * gtk_app_chooser_dialog_new:
- * @parent: (allow-none): a #GtkWindow, or %NULL
+ * @parent: (allow-none): a `GtkWindow`, or %NULL
  * @flags: flags for this dialog
- * @file: a #GFile
+ * @file: a `GFile`
  *
- * Creates a new #GtkAppChooserDialog for the provided #GFile,
- * to allow the user to select an application for it.
+ * Creates a new `GtkAppChooserDialog` for the provided `GFile`.
  *
- * Returns: a newly created #GtkAppChooserDialog
- **/
+ * The dialog will show applications that can open the file.
+ *
+ * Returns: a newly created `GtkAppChooserDialog`
+ */
 GtkWidget *
 gtk_app_chooser_dialog_new (GtkWindow      *parent,
                             GtkDialogFlags  flags,
@@ -692,15 +696,16 @@ gtk_app_chooser_dialog_new (GtkWindow      *parent,
 
 /**
  * gtk_app_chooser_dialog_new_for_content_type:
- * @parent: (allow-none): a #GtkWindow, or %NULL
+ * @parent: (allow-none): a `GtkWindow`, or %NULL
  * @flags: flags for this dialog
  * @content_type: a content type string
  *
- * Creates a new #GtkAppChooserDialog for the provided content type,
- * to allow the user to select an application for it.
+ * Creates a new `GtkAppChooserDialog` for the provided content type.
  *
- * Returns: a newly created #GtkAppChooserDialog
- **/
+ * The dialog will show applications that can open the content type.
+ *
+ * Returns: a newly created `GtkAppChooserDialog`
+ */
 GtkWidget *
 gtk_app_chooser_dialog_new_for_content_type (GtkWindow      *parent,
                                              GtkDialogFlags  flags,
@@ -721,11 +726,11 @@ gtk_app_chooser_dialog_new_for_content_type (GtkWindow      *parent,
 
 /**
  * gtk_app_chooser_dialog_get_widget:
- * @self: a #GtkAppChooserDialog
+ * @self: a `GtkAppChooserDialog`
  *
- * Returns the #GtkAppChooserWidget of this dialog.
+ * Returns the `GtkAppChooserWidget` of this dialog.
  *
- * Returns: (transfer none): the #GtkAppChooserWidget of @self
+ * Returns: (transfer none): the `GtkAppChooserWidget` of @self
  */
 GtkWidget *
 gtk_app_chooser_dialog_get_widget (GtkAppChooserDialog *self)
@@ -736,11 +741,12 @@ gtk_app_chooser_dialog_get_widget (GtkAppChooserDialog *self)
 }
 
 /**
- * gtk_app_chooser_dialog_set_heading:
- * @self: a #GtkAppChooserDialog
+ * gtk_app_chooser_dialog_set_heading: (attributes org.gtk.Method.set_property=heading)
+ * @self: a `GtkAppChooserDialog`
  * @heading: a string containing Pango markup
  *
  * Sets the text to display at the top of the dialog.
+ *
  * If the heading is not set, the dialog displays a default text.
  */
 void
@@ -769,13 +775,13 @@ gtk_app_chooser_dialog_set_heading (GtkAppChooserDialog *self,
 }
 
 /**
- * gtk_app_chooser_dialog_get_heading:
- * @self: a #GtkAppChooserDialog
+ * gtk_app_chooser_dialog_get_heading: (attributes org.gtk.Method.get_property=heading)
+ * @self: a `GtkAppChooserDialog`
  *
  * Returns the text to display at the top of the dialog.
  *
- * Returns: (nullable): the text to display at the top of the dialog, or %NULL, in which
- *     case a default text is displayed
+ * Returns: (nullable): the text to display at the top of the dialog,
+ *   or %NULL, in which case a default text is displayed
  */
 const char *
 gtk_app_chooser_dialog_get_heading (GtkAppChooserDialog *self)
