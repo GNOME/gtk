@@ -41,17 +41,18 @@
 #include "gtkprivate.h"
 
 /**
- * SECTION:gtkemojichooser
- * @Title: GtkEmojiChooser
- * @Short_description: A popover to choose an Emoji character
+ * GtkEmojiChooser:
  *
- * The #GtkEmojiChooser popover is used by text widgets such as #GtkEntry or
- * #GtkTextView to offer users a convenient way to insert Emoji characters.
+ * The `GtkEmojiChooser` is used by text widgets such as `GtkEntry` or
+ * `GtkTextView` to let users insert Emoji characters.
  *
- * GtkEmojiChooser emits the #GtkEmojiChooser::emoji-picked signal when an
- * Emoji is selected.
+ * ![An example GtkEmojiChooser](emojichooser.png)
+ *
+ * `GtkEmojiChooser` emits the [signal@Gtk.EmojiChooser::emoji-picked]
+ * signal when an Emoji is selected.
  *
  * # CSS nodes
+ *
  * |[<!-- language="plain" -->
  * popover
  * ├── box.emoji-searchbar
@@ -62,7 +63,7 @@
  *     ╰── button.image-button.emoji-section
  * ]|
  *
- * Every #GtkEmojiChooser consists of a main node called popover.
+ * Every `GtkEmojiChooser` consists of a main node called popover.
  * The contents of the popover are largely implementation defined
  * and supposed to inherit general styles.
  * The top searchbar used to search emoji and gets the .emoji-searchbar
@@ -70,7 +71,6 @@
  * The bottom toolbar used to switch between different emoji categories
  * consists of buttons with the .emoji-section style class and gets the
  * .emoji-toolbar style class itself.
- *
  */
 
 #define BOX_SPACE 6
@@ -1185,11 +1185,10 @@ gtk_emoji_chooser_class_init (GtkEmojiChooserClass *klass)
 
   /**
    * GtkEmojiChooser::emoji-picked:
-   * @chooser: the #GtkEmojiChooser
+   * @chooser: the `GtkEmojiChooser`
    * @text: the Unicode sequence for the picked Emoji, in UTF-8
    *
-   * The ::emoji-picked signal is emitted when the user selects an
-   * Emoji.
+   * Emitted when the user selects an Emoji.
    */
   signals[EMOJI_PICKED] = g_signal_new ("emoji-picked",
                                         G_OBJECT_CLASS_TYPE (object_class),
@@ -1269,9 +1268,9 @@ gtk_emoji_chooser_class_init (GtkEmojiChooserClass *klass)
 /**
  * gtk_emoji_chooser_new:
  *
- * Creates a new #GtkEmojiChooser.
+ * Creates a new `GtkEmojiChooser`.
  *
- * Returns: a new #GtkEmojiChooser
+ * Returns: a new `GtkEmojiChooser`
  */
 GtkWidget *
 gtk_emoji_chooser_new (void)
