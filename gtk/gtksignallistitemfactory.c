@@ -26,50 +26,48 @@
 #include "gtklistitem.h"
 
 /**
- * SECTION:gtksignallistitemfactory
- * @title: GtkSignalListItemFactory
- * @short_description: A listitem factory providing signals
- * @see_also: #GtkListItemFactory
+ * GtkSignalListItemFactory:
  *
- * #GtkSignalListItemFactory is a #GtkListItemFactory that provides signals
- * that user code can connect to to manage listitems.
+ * `GtkSignalListItemFactory` is a `GtkListItemFactory` that emits signals
+ * to to manage listitems.
+ *
  * Signals are emitted for every listitem in the same order:
  *
- *  1. #GtkSignalListItemFactory::setup is emitted to set up permanent things
- *  on the listitem. This usually means constructing the widgets used in the
- *  row and adding them to the listitem.
+ *  1. [signal@Gtk.SignalListItemFactory::setup] is emitted to set up permanent
+ *  things on the listitem. This usually means constructing the widgets used in
+ *  the row and adding them to the listitem.
  *
- *  2. #GtkSignalListItemFactory::bind is emitted to bind the item passed via
- *  #GtkListItem:item to the widgets that have been created in step 1 or to
- *  add item-specific widgets. Signals are connected to listen to changes -
- *  both to changes in the item to update the widgets or to changes in the
- *  widgets to update the item. After this signal has been called, the
+ *  2. [signal@Gtk.SignalListItemFactory::bind] is emitted to bind the item passed
+ *  via [property@Gtk.ListItem:item] to the widgets that have been created in
+ *  step 1 or to add item-specific widgets. Signals are connected to listen to
+ *  changes - both to changes in the item to update the widgets or to changes
+ *  in the widgets to update the item. After this signal has been called, the
  *  listitem may be shown in a list widget.
  *
- *  3. #GtkSignalListItemFactory::unbind is emitted to undo everything done
- *  in step 2. Usually this means disconnecting signal handlers. Once this
+ *  3. [signal@Gtk.SignalListItemFactory::unbind] is emitted to undo everything
+ *  done in step 2. Usually this means disconnecting signal handlers. Once this
  *  signal has been called, the listitem will no longer be used in a list
  *  widget.
  *
- *  4. #GtkSignalListItemFactory::bind and #GtkSignalListItemFactory::unbind
- *  may be emitted multiple times again to bind the listitem for use with
- *  new items. By reusing listitems, potentially costly setup can be
- *  avoided. However, it means code needs to make sure to properly clean
- *  up the listitem in step 3 so that no information from the previous
- *  use leaks into the next use.
+ *  4. [signal@Gtk.SignalListItemFactory::bind] and
+ *  [signal@Gtk.SignalListItemFactory::unbind] may be emitted multiple times
+ *  again to bind the listitem for use with new items. By reusing listitems,
+ *  potentially costly setup can be avoided. However, it means code needs to
+ *  make sure to properly clean up the listitem in step 3 so that no information
+ *  from the previous use leaks into the next use.
  *
- * 5. #GtkSignalListItemFactory::teardown is emitted to allow undoing the
- * effects of #GtkSignalListItemFactory::setup. After this signal was emitted
- * on a listitem, the listitem will be destroyed and not be used again.
+ * 5. [signal@Gtk.SignalListItemFactory::teardown] is emitted to allow undoing
+ * the effects of [signal@Gtk.SignalListItemFactory::setup]. After this signal
+ * was emitted on a listitem, the listitem will be destroyed and not be used again.
  *
  * Note that during the signal emissions, changing properties on the
  * #GtkListItems passed will not trigger notify signals as the listitem's
  * notifications are frozen. See g_object_freeze_notify() for details.
  *
- * For tracking changes in other properties in the #GtkListItem, the
- * #GtkListItem::notify signal is recommended. The signal can be connected
- * in the #GtkSignalListItemFactory::setup signal and removed again during
- * #GtkSignalListItemFactory::teardown.
+ * For tracking changes in other properties in the `GtkListItem`, the
+ * ::notify signal is recommended. The signal can be connected in the
+ * [signal@Gtk.SignalListItemFactory::setup] signal and removed again during
+ * [signal@Gtk.SignalListItemFactory::teardown].
  */
 
 struct _GtkSignalListItemFactory
@@ -157,14 +155,15 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
 
   /**
    * GtkSignalListItemFactory::setup:
-   * @self: The #GtkSignalListItemFactory
+   * @self: The `GtkSignalListItemFactory`
    * @listitem: The #GtkListItem to set up
    *
-   * The ::setup signal is emitted when a new listitem has been created and
-   * needs to be setup for use. It is the first signal emitted for every listitem.
+   * Emitted when a new listitem has been created and needs to be setup for use.
    *
-   * The #GtkSignalListItemFactory::teardown signal is the opposite of this signal
-   * and can be used to undo everything done in this signal.
+   * It is the first signal emitted for every listitem.
+   *
+   * The [signal@Gtk.SignalListItemFactory::teardown] signal is the opposite
+   * of this signal and can be used to undo everything done in this signal.
    */
   signals[SETUP] =
     g_signal_new (I_("setup"),
@@ -181,17 +180,18 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
 
   /**
    * GtkSignalListItemFactory::bind:
-   * @self: The #GtkSignalListItemFactory
+   * @self: The `GtkSignalListItemFactory`
    * @listitem: The #GtkListItem to bind
    *
-   * The ::bind signal is emitted when a new #GtkListItem:item has been set
+   * Emitted when a new [property@Gtk.ListItem:item] has been set
    * on the @listitem and should be bound for use.
    *
-   * After this signal was emitted, the listitem might be shown in a #GtkListView
-   * or other list widget.
+   * After this signal was emitted, the listitem might be shown in
+   * a [class@Gtk.ListView] or other list widget.
    *
-   * The #GtkSignalListItemFactory::unbind signal is the opposite of this signal
-   * and can be used to undo everything done in this signal.
+   * The [signal@Gtk.SignalListItemFactory::unbind] signal is the
+   * opposite of this signal and can be used to undo everything done
+   * in this signal.
    */
   signals[BIND] =
     g_signal_new (I_("bind"),
@@ -208,14 +208,14 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
 
   /**
    * GtkSignalListItemFactory::unbind:
-   * @self: The #GtkSignalListItemFactory
+   * @self: The `GtkSignalListItemFactory`
    * @listitem: The #GtkListItem to unbind
    *
-   * The ::unbind signal is emitted when a listitem has been removed from use
-   * in a list widget and its new #GtkListItem:item is about to be unset.
+   * Emitted when a listitem has been removed from use in a list widget
+   * and its new [property@Gtk.ListItem:item] is about to be unset.
    *
-   * This signal is the opposite of the #GtkSignalListItemFactory::bind signal
-   * and should be used to undo everything done in that signal.
+   * This signal is the opposite of the [signal@Gtk.SignalListItemFactory::bind]
+   * signal and should be used to undo everything done in that signal.
    */
   signals[UNBIND] =
     g_signal_new (I_("unbind"),
@@ -232,14 +232,15 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
 
   /**
    * GtkSignalListItemFactory::teardown:
-   * @self: The #GtkSignalListItemFactory
+   * @self: The `GtkSignalListItemFactory`
    * @listitem: The #GtkListItem to teardown
    *
-   * The ::teardown signal is emitted when a listitem is about to be destroyed.
+   * Emitted when a listitem is about to be destroyed.
+   *
    * It is the last signal ever emitted for this @listitem.
    *
-   * This signal is the opposite of the #GtkSignalListItemFactory::setup signal
-   * and should be used to undo everything done in that signal.
+   * This signal is the opposite of the [signal@Gtk.SignalListItemFactory::setup]
+   * signal and should be used to undo everything done in that signal.
    */
   signals[TEARDOWN] =
     g_signal_new (I_("teardown"),
@@ -263,14 +264,14 @@ gtk_signal_list_item_factory_init (GtkSignalListItemFactory *self)
 /**
  * gtk_signal_list_item_factory_new:
  *
- * Creates a new #GtkSignalListItemFactory. You need to connect signal
- * handlers before you use it.
+ * Creates a new `GtkSignalListItemFactory`.
  *
- * Returns: a new #GtkSignalListItemFactory
+ * You need to connect signal handlers before you use it.
+ *
+ * Returns: a new `GtkSignalListItemFactory`
  **/
 GtkListItemFactory *
 gtk_signal_list_item_factory_new (void)
 {
   return g_object_new (GTK_TYPE_SIGNAL_LIST_ITEM_FACTORY, NULL);
 }
-
