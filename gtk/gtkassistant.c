@@ -24,8 +24,7 @@
 /**
  * GtkAssistant:
  *
- * `GtkAssistant` is used to represent a generally complex
- * operation split up into several steps.
+ * `GtkAssistant` is used to represent a complex as a series of steps.
  *
  * ![An example GtkAssistant](assistant.png)
  *
@@ -61,6 +60,12 @@
  *
  * `GtkAssistant` has a single CSS node with the name window and style
  * class .assistant.
+ */
+
+/**
+ * GtkAssistantPage:
+ *
+ * `GtkAssistantPage` is an auxiliary object used by `GtkAssistant.
  */
 
 #include "config.h"
