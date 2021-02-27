@@ -17,7 +17,12 @@ Title: Widget Gallery
 [![glarea](glarea.png)](class.GLArea.html)
 [![drawingarea](drawingarea.png)](class.DrawingArea.html)
 [![video](video.png)](class.Video.html)
+[![mediacontrols](media-controls.png)](class.MediaControls.html)
+[![windowcontrols](windowcontrols.png)](class.WindowControls.html)
+[![menubar](menubar.png)](class.PopoverMenuBar.html)
 [![calendar](calendar.png)](class.Calendar.html)
+[![emojichooser](emojichooser.png)](class.EmojiChooser.html)
+[![menu](menu.png)](class.PopoverMenu.html)
 
 ## Buttons
 
