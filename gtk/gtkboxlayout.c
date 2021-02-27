@@ -30,22 +30,22 @@
 #include "gtkcssnodeprivate.h"
 
 /**
- * SECTION:gtkboxlayout
- * @Title: GtkBoxLayout
- * @Short_description: Layout manager for placing all children in a single row or column
+ * GtkBoxLayout:
  *
- * A GtkBoxLayout is a layout manager that arranges the children of any
- * widget using it into a single row or column, depending on the value
- * of its #GtkOrientable:orientation property. Within the other dimension
- * all children all allocated the same size. The GtkBoxLayout will respect
- * the #GtkWidget:halign and #GtkWidget:valign properties of each child
- * widget.
+ * `GtkBoxLayout` is a layout manager that arranges children in a single
+ * row or column.
+ *
+ * Whether it is a row or column depends on the value of its
+ * [property@Gtk.Orientable:orientation] property. Within the other dimension
+ * all children all allocated the same size. The `GtkBoxLayout` will respect
+ * the [property@Gtk.Widget:halign] and [property@Gtk.Widget:valign]
+ * properties of each child widget.
  *
  * If you want all children to be assigned the same size, you can use
- * the #GtkBoxLayout:homogeneous property.
+ * the [property@Gtk.BoxLayout:homogeneous] property.
  *
  * If you want to specify the amount of space placed between each child,
- * you can use the #GtkBoxLayout:spacing property.
+ * you can use the [property@Gtk.BoxLayout:spacing] property.
  */
 
 struct _GtkBoxLayout
@@ -697,11 +697,10 @@ gtk_box_layout_class_init (GtkBoxLayoutClass *klass)
   layout_manager_class->allocate = gtk_box_layout_allocate;
 
   /**
-   * GtkBoxLayout:homogeneous:
+   * GtkBoxLayout:homogeneous: (attributes org.gtk.Property.get=gtk_box_layout_get_homogeneous org.gtk.Property.set=gtk_box_layout_set_homogeneous)
    *
    * Whether the box layout should distribute the available space
-   * homogeneously among the children of the widget using it as a
-   * layout manager.
+   * equally among the children.
    */
   box_layout_props[PROP_HOMOGENEOUS] =
     g_param_spec_boolean ("homogeneous",
@@ -712,10 +711,9 @@ gtk_box_layout_class_init (GtkBoxLayoutClass *klass)
                           G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkBoxLayout:spacing:
+   * GtkBoxLayout:spacing: (attributes org.gtk.Property.get=gtk_box_layout_get_spacing org.gtk.Property.set=gtk_box_layout_set_spacing)
    *
-   * The space between each child of the widget using the box
-   * layout as its layout manager.
+   * The space to put between the children.
    */
   box_layout_props[PROP_SPACING] =
     g_param_spec_int ("spacing",
@@ -726,11 +724,10 @@ gtk_box_layout_class_init (GtkBoxLayoutClass *klass)
                       G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkBoxLayout:baseline-position:
+   * GtkBoxLayout:baseline-position: (attributes org.gtk.Property.get=gtk_box_layout_get_baseline_position org.gtk.Property.set=gtk_box_layout_set_baseline_position)
    *
    * The position of the allocated baseline within the extra space
-   * allocated to each child of the widget using a box layout
-   * manager.
+   * allocated to each child.
    *
    * This property is only relevant for horizontal layouts containing
    * at least one child with a baseline alignment.
@@ -761,7 +758,7 @@ gtk_box_layout_init (GtkBoxLayout *self)
  * gtk_box_layout_new:
  * @orientation: the orientation for the new layout
  *
- * Creates a new box layout.
+ * Creates a new `GtkBoxLayout`.
  *
  * Returns: a new box layout
  */
@@ -774,8 +771,8 @@ gtk_box_layout_new (GtkOrientation orientation)
 }
 
 /**
- * gtk_box_layout_set_homogeneous:
- * @box_layout: a #GtkBoxLayout
+ * gtk_box_layout_set_homogeneous: (attributes org.gtk.Method.set_property=homogeneous)
+ * @box_layout: a `GtkBoxLayout`
  * @homogeneous: %TRUE to set the box layout as homogeneous
  *
  * Sets whether the box layout will allocate the same
@@ -798,8 +795,8 @@ gtk_box_layout_set_homogeneous (GtkBoxLayout *box_layout,
 }
 
 /**
- * gtk_box_layout_get_homogeneous:
- * @box_layout: a #GtkBoxLayout
+ * gtk_box_layout_get_homogeneous: (attributes org.gtk.Method.get_property=homogeneous)
+ * @box_layout: a `GtkBoxLayout`
  *
  * Returns whether the layout is set to be homogeneous.
  *
@@ -814,8 +811,8 @@ gtk_box_layout_get_homogeneous (GtkBoxLayout *box_layout)
 }
 
 /**
- * gtk_box_layout_set_spacing:
- * @box_layout: a #GtkBoxLayout
+ * gtk_box_layout_set_spacing: (attributes org.gtk.Method.set_property=spacing)
+ * @box_layout: a `GtkBoxLayout`
  * @spacing: the spacing to apply between children
  *
  * Sets how much spacing to put between children.
@@ -836,8 +833,8 @@ gtk_box_layout_set_spacing (GtkBoxLayout *box_layout,
 }
 
 /**
- * gtk_box_layout_get_spacing:
- * @box_layout: a #GtkBoxLayout
+ * gtk_box_layout_get_spacing: (attributes org.gtk.Method.get_property=spacing)
+ * @box_layout: a `GtkBoxLayout`
  *
  * Returns the space that @box_layout puts between children.
  *
@@ -852,9 +849,9 @@ gtk_box_layout_get_spacing (GtkBoxLayout *box_layout)
 }
 
 /**
- * gtk_box_layout_set_baseline_position:
- * @box_layout: a #GtkBoxLayout
- * @position: a #GtkBaselinePosition
+ * gtk_box_layout_set_baseline_position: (attributes org.gtk.Method.set_property=baseline-position)
+ * @box_layout: a `GtkBoxLayout`
+ * @position: a `GtkBaselinePosition`
  *
  * Sets the baseline position of a box layout.
  *
@@ -881,8 +878,8 @@ gtk_box_layout_set_baseline_position (GtkBoxLayout        *box_layout,
 }
 
 /**
- * gtk_box_layout_get_baseline_position:
- * @box_layout: a #GtkBoxLayout
+ * gtk_box_layout_get_baseline_position: (attributes org.gtk.Method.get_property=baseline-position)
+ * @box_layout: a `GtkBoxLayout`
  *
  * Gets the value set by gtk_box_layout_set_baseline_position().
  *
