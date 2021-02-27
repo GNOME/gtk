@@ -43,6 +43,7 @@ typedef struct _GtkPrintJob          GtkPrintJob;
  *     of the print job failed, otherwise %NULL
  *
  * The type of callback that is passed to gtk_print_job_send().
+ *
  * It is called when the print job has been completely sent.
  */
 typedef void (*GtkPrintJobCompleteFunc) (GtkPrintJob  *print_job,
