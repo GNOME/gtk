@@ -34,35 +34,33 @@
 #include "gtktypebuiltins.h"
 
 /**
- * SECTION:gtkprintoperation
- * @Title: GtkPrintOperation
- * @Short_description: High-level Printing API
- * @See_also: #GtkPrintContext, #GtkPrintUnixDialog
+ * GtkPrintOperation:
  *
- * GtkPrintOperation is the high-level, portable printing API.
+ * `GtkPrintOperation` is the high-level, portable printing API.
+ *
  * It looks a bit different than other GTK dialogs such as the
- * #GtkFileChooser, since some platforms don’t expose enough
+ * `GtkFileChooser`, since some platforms don’t expose enough
  * infrastructure to implement a good print dialog. On such
- * platforms, GtkPrintOperation uses the native print dialog.
+ * platforms, `GtkPrintOperation` uses the native print dialog.
  * On platforms which do not provide a native print dialog, GTK
- * uses its own, see #GtkPrintUnixDialog.
+ * uses its own, see [class@Gtk.PrintUnixDialog].
  *
  * The typical way to use the high-level printing API is to create
- * a GtkPrintOperation object with gtk_print_operation_new() when
- * the user selects to print. Then you set some properties on it,
- * e.g. the page size, any #GtkPrintSettings from previous print
+ * a `GtkPrintOperation` object with [ctor@Gtk.PrintOperation.new]
+ * when the user selects to print. Then you set some properties on it,
+ * e.g. the page size, any [class@Gtk.PrintSettings] from previous print
  * operations, the number of pages, the current page, etc.
  *
- * Then you start the print operation by calling gtk_print_operation_run().
- * It will then show a dialog, let the user select a printer and
- * options. When the user finished the dialog various signals will
- * be emitted on the #GtkPrintOperation, the main one being
- * #GtkPrintOperation::draw-page, which you are supposed to catch
- * and render the page on the provided #GtkPrintContext using Cairo.
+ * Then you start the print operation by calling [method@Gtk.PrintOperation.run].
+ * It will then show a dialog, let the user select a printer and options.
+ * When the user finished the dialog, various signals will be emitted on
+ * the `GtkPrintOperation`, the main one being
+ * [signal@Gtk.PrintOperation::draw-page], which you are supposed to handle
+ * and render the page on the provided [class@Gtk.PrintContext] using Cairo.
  *
  * # The high-level printing API
  *
- * |[<!-- language="C" -->
+ * ```c
  * static GtkPrintSettings *settings = NULL;
  *
  * static void
@@ -91,14 +89,14 @@
  *
  *   g_object_unref (print);
  * }
- * ]|
+ * ```
  *
- * By default GtkPrintOperation uses an external application to do
+ * By default `GtkPrintOperation` uses an external application to do
  * print preview. To implement a custom print preview, an application
  * must connect to the preview signal. The functions
- * gtk_print_operation_preview_render_page(),
- * gtk_print_operation_preview_end_preview() and
- * gtk_print_operation_preview_is_selected()
+ * [method@Gtk.PrintOperationPreview.render_page],
+ * [method@Gtk.PrintOperationPreview.end_preview] and
+ * [method@Gtk.PrintOperationPreview.is_selected]
  * are useful when implementing a print preview.
  */
 
@@ -165,9 +163,9 @@ G_DEFINE_TYPE_WITH_CODE (GtkPrintOperation, gtk_print_operation, G_TYPE_OBJECT,
 /**
  * gtk_print_error_quark:
  *
- * Registers an error quark for #GtkPrintOperation if necessary.
+ * Registers an error quark for `GtkPrintOperation` if necessary.
  * 
- * Returns: The error quark used for #GtkPrintOperation errors.
+ * Returns: The error quark used for `GtkPrintOperation` errors.
  **/
 GQuark     
 gtk_print_error_quark (void)
@@ -754,19 +752,19 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 
   /**
    * GtkPrintOperation::done:
-   * @operation: the #GtkPrintOperation on which the signal was emitted
+   * @operation: the `GtkPrintOperation` on which the signal was emitted
    * @result: the result of the print operation
    *
    * Emitted when the print operation run has finished doing
-   * everything required for printing. 
+   * everything required for printing.
    *
-   * @result gives you information about what happened during the run. 
+   * @result gives you information about what happened during the run.
    * If @result is %GTK_PRINT_OPERATION_RESULT_ERROR then you can call
-   * gtk_print_operation_get_error() for more information.
+   * [method@Gtk.PrintOperation.get_error] for more information.
    *
-   * If you enabled print status tracking then 
-   * gtk_print_operation_is_finished() may still return %FALSE 
-   * after #GtkPrintOperation::done was emitted.
+   * If you enabled print status tracking then
+   * [method@Gtk.PrintOperation.is_finished] may still return %FALSE
+   * after the ::done signal was emitted.
    */
   signals[DONE] =
     g_signal_new (I_("done"),
@@ -779,15 +777,16 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 
   /**
    * GtkPrintOperation::begin-print:
-   * @operation: the #GtkPrintOperation on which the signal was emitted
-   * @context: the #GtkPrintContext for the current operation
+   * @operation: the `GtkPrintOperation` on which the signal was emitted
+   * @context: the `GtkPrintContext` for the current operation
    *
    * Emitted after the user has finished changing print settings
-   * in the dialog, before the actual rendering starts. 
+   * in the dialog, before the actual rendering starts.
    *
    * A typical use for ::begin-print is to use the parameters from the
-   * #GtkPrintContext and paginate the document accordingly, and then
-   * set the number of pages with gtk_print_operation_set_n_pages().
+   * [class@Gtk.PrintContext] and paginate the document accordingly,
+   * and then set the number of pages with
+   * [method@Gtk.PrintOperation.set_n_pages].
    */
   signals[BEGIN_PRINT] =
     g_signal_new (I_("begin-print"),
@@ -800,17 +799,18 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 
    /**
    * GtkPrintOperation::paginate:
-   * @operation: the #GtkPrintOperation on which the signal was emitted
-   * @context: the #GtkPrintContext for the current operation
+   * @operation: the `GtkPrintOperation` on which the signal was emitted
+   * @context: the `GtkPrintContext` for the current operation
    *
-   * Emitted after the #GtkPrintOperation::begin-print signal, but before 
-   * the actual rendering starts. It keeps getting emitted until a connected 
-   * signal handler returns %TRUE.
+   * Emitted after the ::begin-print signal, but before the actual rendering
+   * starts.
+   *
+   * It keeps getting emitted until a connected signal handler returns %TRUE.
    *
    * The ::paginate signal is intended to be used for paginating a document
    * in small chunks, to avoid blocking the user interface for a long
    * time. The signal handler should update the number of pages using
-   * gtk_print_operation_set_n_pages(), and return %TRUE if the document
+   * [method@Gtk.PrintOperation.set_n_pages], and return %TRUE if the document
    * has been completely paginated.
    *
    * If you don't need to do pagination in chunks, you can simply do
@@ -831,14 +831,16 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 
   /**
    * GtkPrintOperation::request-page-setup:
-   * @operation: the #GtkPrintOperation on which the signal was emitted
-   * @context: the #GtkPrintContext for the current operation
+   * @operation: the `GtkPrintOperation` on which the signal was emitted
+   * @context: the `GtkPrintContext` for the current operation
    * @page_nr: the number of the currently printed page (0-based)
-   * @setup: the #GtkPageSetup 
-   * 
-   * Emitted once for every page that is printed, to give
-   * the application a chance to modify the page setup. Any changes 
-   * done to @setup will be in force only for printing this page.
+   * @setup: the `GtkPageSetup`
+   *
+   * Emitted once for every page that is printed.
+   *
+   * This gives the application a chance to modify the page setup.
+   * Any changes done to @setup will be in force only for printing
+   * this page.
    */
   signals[REQUEST_PAGE_SETUP] =
     g_signal_new (I_("request-page-setup"),
@@ -854,14 +856,17 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 
   /**
    * GtkPrintOperation::draw-page:
-   * @operation: the #GtkPrintOperation on which the signal was emitted
-   * @context: the #GtkPrintContext for the current operation
+   * @operation: the `GtkPrintOperation` on which the signal was emitted
+   * @context: the `GtkPrintContext` for the current operation
    * @page_nr: the number of the currently printed page (0-based)
    *
-   * Emitted for every page that is printed. The signal handler
-   * must render the @page_nr's page onto the cairo context obtained
-   * from @context using gtk_print_context_get_cairo_context().
-   * |[<!-- language="C" -->
+   * Emitted for every page that is printed.
+   *
+   * The signal handler must render the @page_nr's page onto the cairo
+   * context obtained from @context using
+   * [method@Gtk.PrintContext.get_cairo_context].
+   *
+   * ```c
    * static void
    * draw_page (GtkPrintOperation *operation,
    *            GtkPrintContext   *context,
@@ -900,12 +905,12 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    *   
    *   g_object_unref (layout);
    * }
-   * ]|
+   * ```
    *
-   * Use gtk_print_operation_set_use_full_page() and 
-   * gtk_print_operation_set_unit() before starting the print operation
-   * to set up the transformation of the cairo context according to your
-   * needs.
+   * Use [method@Gtk.PrintOperation.set_use_full_page] and
+   * [method@Gtk.PrintOperation.set_unit] before starting the print
+   * operation to set up the transformation of the cairo context
+   * according to your needs.
    */
   signals[DRAW_PAGE] =
     g_signal_new (I_("draw-page"),
@@ -920,12 +925,13 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 
   /**
    * GtkPrintOperation::end-print:
-   * @operation: the #GtkPrintOperation on which the signal was emitted
-   * @context: the #GtkPrintContext for the current operation
+   * @operation: the `GtkPrintOperation` on which the signal was emitted
+   * @context: the `GtkPrintContext` for the current operation
    *
-   * Emitted after all pages have been rendered. 
+   * Emitted after all pages have been rendered.
+   *
    * A handler for this signal can clean up any resources that have
-   * been allocated in the #GtkPrintOperation::begin-print handler.
+   * been allocated in the [signal@Gtk.PrintOperation::begin-print] handler.
    */
   signals[END_PRINT] =
     g_signal_new (I_("end-print"),
@@ -938,11 +944,12 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 
   /**
    * GtkPrintOperation::status-changed:
-   * @operation: the #GtkPrintOperation on which the signal was emitted
+   * @operation: the `GtkPrintOperation` on which the signal was emitted
    *
    * Emitted at between the various phases of the print operation.
-   * See #GtkPrintStatus for the phases that are being discriminated.
-   * Use gtk_print_operation_get_status() to find out the current
+   *
+   * See [enum@Gtk.PrintStatus] for the phases that are being discriminated.
+   * Use [method@Gtk.PrintOperation.get_status] to find out the current
    * status.
    */
   signals[STATUS_CHANGED] =
@@ -957,21 +964,22 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 
   /**
    * GtkPrintOperation::create-custom-widget:
-   * @operation: the #GtkPrintOperation on which the signal was emitted
+   * @operation: the `GtkPrintOperation` on which the signal was emitted
    *
-   * Emitted when displaying the print dialog. If you return a
-   * widget in a handler for this signal it will be added to a custom
-   * tab in the print dialog. You typically return a container widget
-   * with multiple widgets in it.
+   * Emitted when displaying the print dialog.
    *
-   * The print dialog owns the returned widget, and its lifetime is not 
-   * controlled by the application. However, the widget is guaranteed 
-   * to stay around until the #GtkPrintOperation::custom-widget-apply 
-   * signal is emitted on the operation. Then you can read out any 
+   * If you return a widget in a handler for this signal it will be
+   * added to a custom tab in the print dialog. You typically return a
+   * container widget with multiple widgets in it.
+   *
+   * The print dialog owns the returned widget, and its lifetime is not
+   * controlled by the application. However, the widget is guaranteed
+   * to stay around until the [signal@Gtk.PrintOperation::custom-widget-apply]
+   * signal is emitted on the operation. Then you can read out any
    * information you need from the widgets.
    *
    * Returns: (transfer none): A custom widget that gets embedded in
-   *          the print dialog, or %NULL
+   *   the print dialog, or %NULL
    */
   signals[CREATE_CUSTOM_WIDGET] =
     g_signal_new (I_("create-custom-widget"),
@@ -984,14 +992,15 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 
   /**
    * GtkPrintOperation::update-custom-widget:
-   * @operation: the #GtkPrintOperation on which the signal was emitted
-   * @widget: the custom widget added in create-custom-widget
+   * @operation: the `GtkPrintOperation` on which the signal was emitted
+   * @widget: the custom widget added in ::create-custom-widget
    * @setup: actual page setup
    * @settings: actual print settings
    *
-   * Emitted after change of selected printer. The actual page setup and
-   * print settings are passed to the custom widget, which can actualize
-   * itself according to this change.
+   * Emitted after change of selected printer.
+   *
+   * The actual page setup and print settings are passed to the custom
+   * widget, which can actualize itself according to this change.
    */
   signals[UPDATE_CUSTOM_WIDGET] =
     g_signal_new (I_("update-custom-widget"),
@@ -1004,13 +1013,14 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 
   /**
    * GtkPrintOperation::custom-widget-apply:
-   * @operation: the #GtkPrintOperation on which the signal was emitted
-   * @widget: the custom widget added in create-custom-widget
+   * @operation: the `GtkPrintOperation` on which the signal was emitted
+   * @widget: the custom widget added in ::create-custom-widget
    *
-   * Emitted right before #GtkPrintOperation::begin-print if you added
-   * a custom widget in the #GtkPrintOperation::create-custom-widget handler. 
-   * When you get this signal you should read the information from the 
-   * custom widgets, as the widgets are not guaraneed to be around at a 
+   * Emitted right before ::begin-print if you added
+   * a custom widget in the ::create-custom-widget handler.
+   *
+   * When you get this signal you should read the information from the
+   * custom widgets, as the widgets are not guaranteed to be around at a
    * later time.
    */
   signals[CUSTOM_WIDGET_APPLY] =
@@ -1024,26 +1034,27 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 
    /**
    * GtkPrintOperation::preview:
-   * @operation: the #GtkPrintOperation on which the signal was emitted
-   * @preview: the #GtkPrintOperationPreview for the current operation
-   * @context: the #GtkPrintContext that will be used
-   * @parent: (allow-none): the #GtkWindow to use as window parent, or %NULL
+   * @operation: the `GtkPrintOperation` on which the signal was emitted
+   * @preview: the `GtkPrintOperationPreview` for the current operation
+   * @context: the `GtkPrintContext` that will be used
+   * @parent: (allow-none): the `GtkWindow` to use as window parent, or %NULL
    *
    * Gets emitted when a preview is requested from the native dialog.
    *
-   * The default handler for this signal uses an external viewer 
+   * The default handler for this signal uses an external viewer
    * application to preview.
    *
    * To implement a custom print preview, an application must return
    * %TRUE from its handler for this signal. In order to use the
    * provided @context for the preview implementation, it must be
-   * given a suitable cairo context with gtk_print_context_set_cairo_context().
-   * 
-   * The custom preview implementation can use 
-   * gtk_print_operation_preview_is_selected() and 
-   * gtk_print_operation_preview_render_page() to find pages which
+   * given a suitable cairo context with
+   * [method@Gtk.PrintContext.set_cairo_context].
+   *
+   * The custom preview implementation can use
+   * [method@Gtk.PrintOperationPreview.is_selected] and
+   * [method@Gtk.PrintOperationPreview.render_page] to find pages which
    * are selected for print and render them. The preview must be
-   * finished by calling gtk_print_operation_preview_end_preview()
+   * finished by calling [method@Gtk.PrintOperationPreview.end_preview]
    * (typically in response to the user clicking a close button).
    *
    * Returns: %TRUE if the listener wants to take over control of the preview
@@ -1060,15 +1071,14 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 		  GTK_TYPE_PRINT_CONTEXT,
 		  GTK_TYPE_WINDOW);
 
-  
   /**
-   * GtkPrintOperation:default-page-setup:
+   * GtkPrintOperation:default-page-setup: (attributes org.gtk.Property.get=gtk_print_operation_get_default_page_setup org.gtk.Property.set=gtk_print_operation_set_default_page_setup)
    *
-   * The #GtkPageSetup used by default.
-   * 
-   * This page setup will be used by gtk_print_operation_run(),
+   * The `GtkPageSetup` used by default.
+   *
+   * This page setup will be used by [method@Gtk.PrintOperation.run],
    * but it can be overridden on a per-page basis by connecting
-   * to the #GtkPrintOperation::request-page-setup signal.
+   * to the [signal@Gtk.PrintOperation::request-page-setup] signal.
    */
   g_object_class_install_property (gobject_class,
 				   PROP_DEFAULT_PAGE_SETUP,
@@ -1079,13 +1089,13 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							GTK_PARAM_READWRITE));
 
   /**
-   * GtkPrintOperation:print-settings:
+   * GtkPrintOperation:print-settings: (attributes org.gtk.Property.get=gtk_print_operation_get_print_settings org.gtk.Property.set=gtk_print_operation_set_print_settings)
    *
-   * The #GtkPrintSettings used for initializing the dialog.
+   * The `GtkPrintSettings` used for initializing the dialog.
    *
-   * Setting this property is typically used to re-establish 
-   * print settings from a previous print operation, see 
-   * gtk_print_operation_run().
+   * Setting this property is typically used to re-establish
+   * print settings from a previous print operation, see
+   * [method@Gtk.PrintOperation.run].
    */
   g_object_class_install_property (gobject_class,
 				   PROP_PRINT_SETTINGS,
@@ -1094,14 +1104,14 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							P_("The GtkPrintSettings used for initializing the dialog"),
 							GTK_TYPE_PRINT_SETTINGS,
 							GTK_PARAM_READWRITE));
-  
+
   /**
-   * GtkPrintOperation:job-name:
+   * GtkPrintOperation:job-name: (attributes org.gtk.Property.set=gtk_print_operation_set_job_name)
    *
-   * A string used to identify the job (e.g. in monitoring 
-   * applications like eggcups). 
-   * 
-   * If you don't set a job name, GTK picks a default one 
+   * A string used to identify the job (e.g. in monitoring
+   * applications like eggcups).
+   *
+   * If you don't set a job name, GTK picks a default one
    * by numbering successive print jobs.
    */
   g_object_class_install_property (gobject_class,
@@ -1113,18 +1123,18 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							GTK_PARAM_READWRITE));
 
   /**
-   * GtkPrintOperation:n-pages:
+   * GtkPrintOperation:n-pages: (attributes org.gtk.Property.set=gtk_print_operation_set_n_pages)
    *
-   * The number of pages in the document. 
+   * The number of pages in the document.
    *
-   * This must be set to a positive number
-   * before the rendering starts. It may be set in a 
-   * #GtkPrintOperation::begin-print signal handler.
+   * This must be set to a positive number before the rendering
+   * starts. It may be set in a [signal@Gtk.PrintOperation::begin-print]
+   * signal handler.
    *
-   * Note that the page numbers passed to the 
-   * #GtkPrintOperation::request-page-setup and 
-   * #GtkPrintOperation::draw-page signals are 0-based, i.e. if 
-   * the user chooses to print all pages, the last ::draw-page signal 
+   * Note that the page numbers passed to the
+   * [signal@Gtk.PrintOperation::request-page-setup] and
+   * [signal@Gtk.PrintOperation::draw-page] signals are 0-based, i.e.
+   * if the user chooses to print all pages, the last ::draw-page signal
    * will be for page @n_pages - 1.
    */
   g_object_class_install_property (gobject_class,
@@ -1138,11 +1148,11 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkPrintOperation:current-page:
+   * GtkPrintOperation:current-page: (attributes org.gtk.Property.set=gtk_print_operation_set_current_page)
    *
    * The current page in the document.
    *
-   * If this is set before gtk_print_operation_run(), 
+   * If this is set before [method@Gtk.PrintOperation.run],
    * the user will be able to select to print only the current page.
    *
    * Note that this only makes sense for pre-paginated documents.
@@ -1156,16 +1166,18 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 						     G_MAXINT,
 						     -1,
 						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  
+
   /**
-   * GtkPrintOperation:use-full-page:
+   * GtkPrintOperation:use-full-page: (attributes org.gtk.Property.set=gtk_print_operation_set_use_full_page)
    *
-   * If %TRUE, the transformation for the cairo context obtained 
-   * from #GtkPrintContext puts the origin at the top left corner 
-   * of the page (which may not be the top left corner of the sheet, 
-   * depending on page orientation and the number of pages per sheet). 
-   * Otherwise, the origin is at the top left corner of the imageable 
-   * area (i.e. inside the margins).
+   * If %TRUE, the transformation for the cairo context obtained
+   * from `GtkPrintContext` puts the origin at the top left corner
+   * of the page.
+   *
+   * This may not be the top left corner of the sheet, depending on
+   * page orientation and the number of pages per sheet. Otherwise,
+   * the origin is at the top left corner of the imageable area (i.e.
+   * inside the margins).
    */
   g_object_class_install_property (gobject_class,
 				   PROP_USE_FULL_PAGE,
@@ -1174,16 +1186,16 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							 P_("TRUE if the origin of the context should be at the corner of the page and not the corner of the imageable area"),
 							 FALSE,
 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  
 
   /**
-   * GtkPrintOperation:track-print-status:
+   * GtkPrintOperation:track-print-status: (attributes org.gtk.Property.set=gtk_print_operation_set_track_print_status)
    *
-   * If %TRUE, the print operation will try to continue report on 
-   * the status of the print job in the printer queues and printer. 
-   * This can allow your application to show things like “out of paper” 
-   * issues, and when the print job actually reaches the printer. 
-   * However, this is often implemented using polling, and should 
+   * If %TRUE, the print operation will try to continue report on
+   * the status of the print job in the printer queues and printer.
+   *
+   * This can allow your application to show things like “out of paper”
+   * issues, and when the print job actually reaches the printer.
+   * However, this is often implemented using polling, and should
    * not be enabled unless needed.
    */
   g_object_class_install_property (gobject_class,
@@ -1193,13 +1205,12 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							 P_("TRUE if the print operation will continue to report on the print job status after the print data has been sent to the printer or print server."),
 							 FALSE,
 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  
 
   /**
-   * GtkPrintOperation:unit:
+   * GtkPrintOperation:unit: (attributes org.gtk.Property.set=gtk_print_operation_set_unit)
    *
    * The transformation for the cairo context obtained from
-   * #GtkPrintContext is set up in such a way that distances 
+   * `GtkPrintContext` is set up in such a way that distances
    * are measured in units of @unit.
    */
   g_object_class_install_property (gobject_class,
@@ -1210,12 +1221,11 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 						      GTK_TYPE_UNIT,
 						      GTK_UNIT_NONE,
 						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  
-  
+
   /**
-   * GtkPrintOperation:show-progress:
+   * GtkPrintOperation:show-progress: (attributes org.gtk.Property.set=gtk_print_operation_set_show_progress)
    *
-   * Determines whether to show a progress dialog during the 
+   * Determines whether to show a progress dialog during the
    * print operation.
    */
   g_object_class_install_property (gobject_class,
@@ -1227,17 +1237,17 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkPrintOperation:allow-async:
+   * GtkPrintOperation:allow-async: (attributes org.gtk.Property.set=gtk_print_operation_set_allow_async)
    *
    * Determines whether the print operation may run asynchronously or not.
    *
    * Some systems don't support asynchronous printing, but those that do
    * will return %GTK_PRINT_OPERATION_RESULT_IN_PROGRESS as the status, and
-   * emit the #GtkPrintOperation::done signal when the operation is actually 
-   * done.
+   * emit the [signal@Gtk.PrintOperation::done] signal when the operation
+   * is actually done.
    *
-   * The Windows port does not support asynchronous operation at all (this 
-   * is unlikely to change). On other platforms, all actions except for 
+   * The Windows port does not support asynchronous operation at all (this
+   * is unlikely to change). On other platforms, all actions except for
    * %GTK_PRINT_OPERATION_ACTION_EXPORT support asynchronous operation.
    */
   g_object_class_install_property (gobject_class,
@@ -1247,18 +1257,19 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							 P_("TRUE if print process may run asynchronous."),
 							 FALSE,
 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  
+
   /**
-   * GtkPrintOperation:export-filename:
+   * GtkPrintOperation:export-filename: (attributes org.gtk.Property.set=gtk_print_operation_set_export_filename)
    *
-   * The name of a file to generate instead of showing the print dialog. 
+   * The name of a file to generate instead of showing the print dialog.
+   *
    * Currently, PDF is the only supported format.
    *
-   * The intended use of this property is for implementing 
+   * The intended use of this property is for implementing
    * “Export to PDF” actions.
    *
    * “Print to PDF” support is independent of this and is done
-   * by letting the user pick the “Print to PDF” item from the 
+   * by letting the user pick the “Print to PDF” item from the
    * list of printers in the print dialog.
    */
   g_object_class_install_property (gobject_class,
@@ -1268,9 +1279,9 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							P_("Export filename"),
 							NULL,
 							GTK_PARAM_READWRITE));
-  
+
   /**
-   * GtkPrintOperation:status:
+   * GtkPrintOperation:status: (attributes org.gtk.Property.get=gtk_print_operation_get_status)
    *
    * The status of the print operation.
    */
@@ -1282,16 +1293,17 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 						      GTK_TYPE_PRINT_STATUS,
 						      GTK_PRINT_STATUS_INITIAL,
 						      GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY));
-  
+
   /**
-   * GtkPrintOperation:status-string:
+   * GtkPrintOperation:status-string: (attributes org.gtk.Property.get=gtk_print_operation_get_status_string)
    *
-   * A string representation of the status of the print operation. 
-   * The string is translated and suitable for displaying the print 
-   * status e.g. in a #GtkStatusbar.
+   * A string representation of the status of the print operation.
    *
-   * See the #GtkPrintOperation:status property for a status value that 
-   * is suitable for programmatic use. 
+   * The string is translated and suitable for displaying the print
+   * status e.g. in a `GtkStatusbar`.
+   *
+   * See the [property@Gtk.PrintOperation:status] property for a status
+   * value that is suitable for programmatic use.
    */
   g_object_class_install_property (gobject_class,
 				   PROP_STATUS_STRING,
@@ -1303,11 +1315,12 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
   
 
   /**
-   * GtkPrintOperation:custom-tab-label:
+   * GtkPrintOperation:custom-tab-label: (attributes org.gtk.Property.set=gtk_print_operation_set_custom_tab_label)
    *
    * Used as the label of the tab containing custom widgets.
+   *
    * Note that this property may be ignored on some platforms.
-   * 
+   *
    * If this is %NULL, GTK uses a default label.
    */
   g_object_class_install_property (gobject_class,
@@ -1319,9 +1332,10 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							GTK_PARAM_READWRITE));
 
   /**
-   * GtkPrintOperation:support-selection:
+   * GtkPrintOperation:support-selection: (attributes org.gtk.Property.get=gtk_print_operation_get_support_selection org.gtk.Property.set=gtk_print_operation_set_support_selection)
    *
    * If %TRUE, the print operation will support print of selection.
+   *
    * This allows the print dialog to show a "Selection" button.
    */
   g_object_class_install_property (gobject_class,
@@ -1333,9 +1347,10 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkPrintOperation:has-selection:
+   * GtkPrintOperation:has-selection: (attributes org.gtk.Property.get=gtk_print_operation_get_has_selection org.gtk.Property.set=gtk_print_operation_set_has_selection)
    *
    * Determines whether there is a selection in your application.
+   *
    * This can allow your application to print the selection.
    * This is typically used to make a "Selection" button sensitive.
    */
@@ -1349,9 +1364,10 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 
 
   /**
-   * GtkPrintOperation:embed-page-setup:
+   * GtkPrintOperation:embed-page-setup: (attributes org.gtk.Property.get=gtk_print_operation_get_embed_page_setup org.gtk.Property.set=gtk_print_operation_set_embed_page_setup)
    *
-   * If %TRUE, page size combo box and orientation combo box are embedded into page setup page.
+   * If %TRUE, page size combo box and orientation combo box
+   * are embedded into page setup page.
    */
   g_object_class_install_property (gobject_class,
 				   PROP_EMBED_PAGE_SETUP,
@@ -1360,17 +1376,19 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							 P_("TRUE if page setup combos are embedded in GtkPrintUnixDialog"),
 							 FALSE,
 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
   /**
-   * GtkPrintOperation:n-pages-to-print:
+   * GtkPrintOperation:n-pages-to-print: (attributes org.gtk.Property.get=gtk_print_operation_get_n_pages_to_print)
    *
    * The number of pages that will be printed.
    *
    * Note that this value is set during print preparation phase
    * (%GTK_PRINT_STATUS_PREPARING), so this value should never be
    * get before the data generation phase (%GTK_PRINT_STATUS_GENERATING_DATA).
-   * You can connect to the #GtkPrintOperation::status-changed signal
-   * and call gtk_print_operation_get_n_pages_to_print() when
+   * You can connect to the [signal@Gtk.PrintOperation::status-changed] signal
+   * and call [method@Gtk.PrintOperation.get_n_pages_to_print] when
    * print status is %GTK_PRINT_STATUS_GENERATING_DATA.
+   *
    * This is typically used to track the progress of print operation.
    */
   g_object_class_install_property (gobject_class,
@@ -1387,9 +1405,9 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 /**
  * gtk_print_operation_new:
  *
- * Creates a new #GtkPrintOperation. 
+ * Creates a new `GtkPrintOperation`.
  *
- * Returns: a new #GtkPrintOperation
+ * Returns: a new `GtkPrintOperation`
  */
 GtkPrintOperation *
 gtk_print_operation_new (void)
@@ -1402,15 +1420,15 @@ gtk_print_operation_new (void)
 }
 
 /**
- * gtk_print_operation_set_default_page_setup:
- * @op: a #GtkPrintOperation
- * @default_page_setup: (allow-none): a #GtkPageSetup, or %NULL
+ * gtk_print_operation_set_default_page_setup: (attributes org.gtk.Method.set_property=default-page-setup)
+ * @op: a `GtkPrintOperation`
+ * @default_page_setup: (allow-none): a `GtkPageSetup`, or %NULL
  *
  * Makes @default_page_setup the default page setup for @op.
  *
- * This page setup will be used by gtk_print_operation_run(),
+ * This page setup will be used by [method@Gtk.PrintOperation.run],
  * but it can be overridden on a per-page basis by connecting
- * to the #GtkPrintOperation::request-page-setup signal.
+ * to the [signal@Gtk.PrintOperation::request-page-setup] signal.
  **/
 void
 gtk_print_operation_set_default_page_setup (GtkPrintOperation *op,
@@ -1437,11 +1455,10 @@ gtk_print_operation_set_default_page_setup (GtkPrintOperation *op,
 }
 
 /**
- * gtk_print_operation_get_default_page_setup:
- * @op: a #GtkPrintOperation
+ * gtk_print_operation_get_default_page_setup: (attributes org.gtk.Method.get_property=default-page-setup)
+ * @op: a `GtkPrintOperation`
  *
- * Returns the default page setup, see
- * gtk_print_operation_set_default_page_setup().
+ * Returns the default page setup.
  *
  * Returns: (transfer none): the default page setup
  */
@@ -1455,14 +1472,15 @@ gtk_print_operation_get_default_page_setup (GtkPrintOperation *op)
 
 
 /**
- * gtk_print_operation_set_print_settings:
- * @op: a #GtkPrintOperation
- * @print_settings: (allow-none): #GtkPrintSettings
+ * gtk_print_operation_set_print_settings: (attributes org.gtk.Method.set_property=print-settings)
+ * @op: a `GtkPrintOperation`
+ * @print_settings: (allow-none): `GtkPrintSettings`
  *
- * Sets the print settings for @op. This is typically used to
- * re-establish print settings from a previous print operation,
- * see gtk_print_operation_run().
- **/
+ * Sets the print settings for @op.
+ *
+ * This is typically used to re-establish print settings
+ * from a previous print operation, see [method@Gtk.PrintOperation.run].
+ */
 void
 gtk_print_operation_set_print_settings (GtkPrintOperation *op,
 					GtkPrintSettings  *print_settings)
@@ -1488,14 +1506,14 @@ gtk_print_operation_set_print_settings (GtkPrintOperation *op,
 }
 
 /**
- * gtk_print_operation_get_print_settings:
- * @op: a #GtkPrintOperation
+ * gtk_print_operation_get_print_settings: (attributes org.gtk.Method.get_property=print-settings)
+ * @op: a `GtkPrintOperation`
  *
  * Returns the current print settings.
  *
  * Note that the return value is %NULL until either
- * gtk_print_operation_set_print_settings() or
- * gtk_print_operation_run() have been called.
+ * [method@Gtk.PrintOperation.set_print_settings] or
+ * [method@Gtk.PrintOperation.run] have been called.
  *
  * Returns: (transfer none): the current print settings of @op.
  **/
@@ -1508,16 +1526,18 @@ gtk_print_operation_get_print_settings (GtkPrintOperation *op)
 }
 
 /**
- * gtk_print_operation_set_job_name:
- * @op: a #GtkPrintOperation
+ * gtk_print_operation_set_job_name: (attributes org.gtk.Method.set_property=job-name)
+ * @op: a `GtkPrintOperation`
  * @job_name: a string that identifies the print job
- * 
- * Sets the name of the print job. The name is used to identify 
- * the job (e.g. in monitoring applications like eggcups). 
- * 
- * If you don’t set a job name, GTK picks a default one by 
+ *
+ * Sets the name of the print job.
+ *
+ * The name is used to identify the job (e.g. in monitoring
+ * applications like eggcups).
+ *
+ * If you don’t set a job name, GTK picks a default one by
  * numbering successive print jobs.
- **/
+ */
 void
 gtk_print_operation_set_job_name (GtkPrintOperation *op,
 				  const char        *job_name)
@@ -1537,22 +1557,22 @@ gtk_print_operation_set_job_name (GtkPrintOperation *op,
 }
 
 /**
- * gtk_print_operation_set_n_pages:
- * @op: a #GtkPrintOperation
+ * gtk_print_operation_set_n_pages: (attributes org.gtk.Method.set_property=n-pages)
+ * @op: a `GtkPrintOperation`
  * @n_pages: the number of pages
- * 
- * Sets the number of pages in the document. 
  *
- * This must be set to a positive number
- * before the rendering starts. It may be set in a 
- * #GtkPrintOperation::begin-print signal handler.
+ * Sets the number of pages in the document.
  *
- * Note that the page numbers passed to the 
- * #GtkPrintOperation::request-page-setup 
- * and #GtkPrintOperation::draw-page signals are 0-based, i.e. if 
- * the user chooses to print all pages, the last ::draw-page signal 
+ * This must be set to a positive number before the rendering
+ * starts. It may be set in a [signal@Gtk.PrintOperation::begin-print]
+ * signal handler.
+ *
+ * Note that the page numbers passed to the
+ * [signal@Gtk.PrintOperation::request-page-setup]
+ * and [signal@Gtk.PrintOperation::draw-page] signals are 0-based, i.e.
+ * if the user chooses to print all pages, the last ::draw-page signal
  * will be for page @n_pages - 1.
- **/
+ */
 void
 gtk_print_operation_set_n_pages (GtkPrintOperation *op,
 				 int                n_pages)
@@ -1573,17 +1593,17 @@ gtk_print_operation_set_n_pages (GtkPrintOperation *op,
 }
 
 /**
- * gtk_print_operation_set_current_page:
- * @op: a #GtkPrintOperation
+ * gtk_print_operation_set_current_page: (attributes org.gtk.Method.set_property=current-page)
+ * @op: a `GtkPrintOperation`
  * @current_page: the current page, 0-based
  *
  * Sets the current page.
  *
- * If this is called before gtk_print_operation_run(), 
+ * If this is called before [method@Gtk.PrintOperation.run],
  * the user will be able to select to print only the current page.
  *
  * Note that this only makes sense for pre-paginated documents.
- **/
+ */
 void
 gtk_print_operation_set_current_page (GtkPrintOperation *op,
 				      int                current_page)
@@ -1604,16 +1624,17 @@ gtk_print_operation_set_current_page (GtkPrintOperation *op,
 }
 
 /**
- * gtk_print_operation_set_use_full_page:
- * @op: a #GtkPrintOperation
- * @full_page: %TRUE to set up the #GtkPrintContext for the full page
- * 
- * If @full_page is %TRUE, the transformation for the cairo context 
- * obtained from #GtkPrintContext puts the origin at the top left 
- * corner of the page (which may not be the top left corner of the 
- * sheet, depending on page orientation and the number of pages per 
- * sheet). Otherwise, the origin is at the top left corner of the
- * imageable area (i.e. inside the margins).
+ * gtk_print_operation_set_use_full_page: (attributes org.gtk.Method.set_property=use-full-page)
+ * @op: a `GtkPrintOperation`
+ * @full_page: %TRUE to set up the `GtkPrintContext` for the full page
+ *
+ * If @full_page is %TRUE, the transformation for the cairo context
+ * obtained from `GtkPrintContext` puts the origin at the top left
+ * corner of the page.
+ *
+ * This may not be the top left corner of the sheet, depending on page
+ * orientation and the number of pages per sheet). Otherwise, the origin
+ * is at the top left corner of the imageable area (i.e. inside the margins).
  */
 void
 gtk_print_operation_set_use_full_page (GtkPrintOperation *op,
@@ -1634,12 +1655,12 @@ gtk_print_operation_set_use_full_page (GtkPrintOperation *op,
 }
 
 /**
- * gtk_print_operation_set_unit:
- * @op: a #GtkPrintOperation
+ * gtk_print_operation_set_unit: (attributes org.gtk.Method.set_property=unit)
+ * @op: a `GtkPrintOperation`
  * @unit: the unit to use
- * 
+ *
  * Sets up the transformation for the cairo context obtained from
- * #GtkPrintContext in such a way that distances are measured in 
+ * `GtkPrintContext` in such a way that distances are measured in
  * units of @unit.
  */
 void
@@ -1659,17 +1680,18 @@ gtk_print_operation_set_unit (GtkPrintOperation *op,
 }
 
 /**
- * gtk_print_operation_set_track_print_status:
- * @op: a #GtkPrintOperation
+ * gtk_print_operation_set_track_print_status: (attributes org.gtk.Method.set_property=track-print-status)
+ * @op: a `GtkPrintOperation`
  * @track_status: %TRUE to track status after printing
- * 
- * If track_status is %TRUE, the print operation will try to continue report
- * on the status of the print job in the printer queues and printer. This
- * can allow your application to show things like “out of paper” issues,
- * and when the print job actually reaches the printer.
- * 
- * This function is often implemented using some form of polling, so it should
- * not be enabled unless needed.
+ *
+ * If track_status is %TRUE, the print operation will try to continue
+ * report on the status of the print job in the printer queues and printer.
+ *
+ * This can allow your application to show things like “out of paper”
+ * issues, and when the print job actually reaches the printer.
+ *
+ * This function is often implemented using some form of polling,
+ * so it should not be enabled unless needed.
  */
 void
 gtk_print_operation_set_track_print_status (GtkPrintOperation  *op,
@@ -1727,14 +1749,15 @@ _gtk_print_operation_set_status (GtkPrintOperation *op,
 
 
 /**
- * gtk_print_operation_get_status:
- * @op: a #GtkPrintOperation
- * 
- * Returns the status of the print operation. 
- * Also see gtk_print_operation_get_status_string().
- * 
+ * gtk_print_operation_get_status: (attributes org.gtk.Method.get_property=status)
+ * @op: a `GtkPrintOperation`
+ *
+ * Returns the status of the print operation.
+ *
+ * Also see [method@Gtk.PrintOperation.get_status_string].
+ *
  * Returns: the status of the print operation
- **/
+ */
 GtkPrintStatus
 gtk_print_operation_get_status (GtkPrintOperation *op)
 {
@@ -1745,19 +1768,21 @@ gtk_print_operation_get_status (GtkPrintOperation *op)
 }
 
 /**
- * gtk_print_operation_get_status_string:
- * @op: a #GtkPrintOperation
- * 
- * Returns a string representation of the status of the 
- * print operation. The string is translated and suitable
- * for displaying the print status e.g. in a #GtkStatusbar.
+ * gtk_print_operation_get_status_string: (attributes org.gtk.Method.get_property=status-string)
+ * @op: a `GtkPrintOperation`
  *
- * Use gtk_print_operation_get_status() to obtain a status
- * value that is suitable for programmatic use. 
- * 
+ * Returns a string representation of the status of the
+ * print operation.
+ *
+ * The string is translated and suitable for displaying
+ * the print status e.g. in a `GtkStatusbar`.
+ *
+ * Use [method@Gtk.PrintOperation.get_status] to obtain
+ * a status value that is suitable for programmatic use.
+ *
  * Returns: a string representation of the status
  *    of the print operation
- **/
+ */
 const char *
 gtk_print_operation_get_status_string (GtkPrintOperation *op)
 {
@@ -1768,18 +1793,20 @@ gtk_print_operation_get_status_string (GtkPrintOperation *op)
 
 /**
  * gtk_print_operation_is_finished:
- * @op: a #GtkPrintOperation
- * 
+ * @op: a `GtkPrintOperation`
+ *
  * A convenience function to find out if the print operation
- * is finished, either successfully (%GTK_PRINT_STATUS_FINISHED)
- * or unsuccessfully (%GTK_PRINT_STATUS_FINISHED_ABORTED).
- * 
+ * is finished.
+ *
+ * a print operation is finished if its status is either
+ * %GTK_PRINT_STATUS_FINISHED or %GTK_PRINT_STATUS_FINISHED_ABORTED.
+ *
  * Note: when you enable print status tracking the print operation
  * can be in a non-finished state even after done has been called, as
  * the operation status then tracks the print job status on the printer.
- * 
+ *
  * Returns: %TRUE, if the print operation is finished.
- **/
+ */
 gboolean
 gtk_print_operation_is_finished (GtkPrintOperation *op)
 {
@@ -1793,12 +1820,12 @@ gtk_print_operation_is_finished (GtkPrintOperation *op)
 }
 
 /**
- * gtk_print_operation_set_show_progress:
- * @op: a #GtkPrintOperation
+ * gtk_print_operation_set_show_progress: (attributes org.gtk.Method.set_property=show-progress)
+ * @op: a `GtkPrintOperation`
  * @show_progress: %TRUE to show a progress dialog
- * 
- * If @show_progress is %TRUE, the print operation will show a 
- * progress dialog during the print operation.
+ *
+ * If @show_progress is %TRUE, the print operation will show
+ * a progress dialog during the print operation.
  */
 void
 gtk_print_operation_set_show_progress (GtkPrintOperation  *op,
@@ -1819,13 +1846,15 @@ gtk_print_operation_set_show_progress (GtkPrintOperation  *op,
 }
 
 /**
- * gtk_print_operation_set_allow_async:
- * @op: a #GtkPrintOperation
+ * gtk_print_operation_set_allow_async: (attributes org.gtk.Method.set_property=allow-async)
+ * @op: a `GtkPrintOperation`
  * @allow_async: %TRUE to allow asynchronous operation
  *
- * Sets whether the gtk_print_operation_run() may return
- * before the print operation is completed. Note that
- * some platforms may not allow asynchronous operation.
+ * Sets whether gtk_print_operation_run() may return
+ * before the print operation is completed.
+ *
+ * Note that some platforms may not allow asynchronous
+ * operation.
  */
 void
 gtk_print_operation_set_allow_async (GtkPrintOperation  *op,
@@ -1847,8 +1876,8 @@ gtk_print_operation_set_allow_async (GtkPrintOperation  *op,
 
 
 /**
- * gtk_print_operation_set_custom_tab_label:
- * @op: a #GtkPrintOperation
+ * gtk_print_operation_set_custom_tab_label: (attributes org.gtk.Method.set_property=custom-tab-label)
+ * @op: a `GtkPrintOperation`
  * @label: (allow-none): the label to use, or %NULL to use the default label
  *
  * Sets the label for the tab holding custom widgets.
@@ -1869,14 +1898,16 @@ gtk_print_operation_set_custom_tab_label (GtkPrintOperation  *op,
 
 
 /**
- * gtk_print_operation_set_export_filename:
- * @op: a #GtkPrintOperation
+ * gtk_print_operation_set_export_filename: (attributes org.gtk.Method.set_property=export-filename)
+ * @op: a `GtkPrintOperation`
  * @filename: (type filename): the filename for the exported file
- * 
- * Sets up the #GtkPrintOperation to generate a file instead
- * of showing the print dialog. The intended use of this function
- * is for implementing “Export to PDF” actions. Currently, PDF
- * is the only supported format.
+ *
+ * Sets up the `GtkPrintOperation` to generate a file instead
+ * of showing the print dialog.
+ *
+ * The intended use of this function is for implementing
+ * “Export to PDF” actions. Currently, PDF is the only supported
+ * format.
  *
  * “Print to PDF” support is independent of this and is done
  * by letting the user pick the “Print to PDF” item from the list
@@ -2253,14 +2284,16 @@ update_progress (PrintPagesData *data)
 
 /**
  * gtk_print_operation_set_defer_drawing:
- * @op: a #GtkPrintOperation
- * 
- * Sets up the #GtkPrintOperation to wait for calling of
- * gtk_print_operation_draw_page_finish() from application. It can
- * be used for drawing page in another thread.
+ * @op: a `GtkPrintOperation`
  *
- * This function must be called in the callback of “draw-page” signal.
- **/
+ * Sets up the `GtkPrintOperation` to wait for calling of
+ * [method@Gtk.PrintOperation.draw_page_finish from application.
+ *
+ * This can be used for drawing page in another thread.
+ *
+ * This function must be called in the callback of the
+ * [signal@Gtk.PrintOperation::draw-page] signal.
+ */
 void
 gtk_print_operation_set_defer_drawing (GtkPrintOperation *op)
 {
@@ -2272,13 +2305,14 @@ gtk_print_operation_set_defer_drawing (GtkPrintOperation *op)
 }
 
 /**
- * gtk_print_operation_set_embed_page_setup:
- * @op: a #GtkPrintOperation
- * @embed: %TRUE to embed page setup selection in the #GtkPrintUnixDialog
+ * gtk_print_operation_set_embed_page_setup: (attributes org.gtk.Method.set_property=embed-page-setup)
+ * @op: a `GtkPrintOperation`
+ * @embed: %TRUE to embed page setup selection in the `GtkPrintUnixDialog`
  *
  * Embed page size combo box and orientation combo box into page setup page.
- * Selected page setup is stored as default page setup in #GtkPrintOperation.
- **/
+ *
+ * Selected page setup is stored as default page setup in `GtkPrintOperation`.
+ */
 void
 gtk_print_operation_set_embed_page_setup (GtkPrintOperation  *op,
                                           gboolean            embed)
@@ -2296,11 +2330,11 @@ gtk_print_operation_set_embed_page_setup (GtkPrintOperation  *op,
 }
 
 /**
- * gtk_print_operation_get_embed_page_setup:
- * @op: a #GtkPrintOperation
+ * gtk_print_operation_get_embed_page_setup: (attributes org.gtk.Method.get_property=embed-page-setup)
+ * @op: a `GtkPrintOperation`
  *
- * Gets the value of #GtkPrintOperation:embed-page-setup property.
- * 
+ * Gets whether page setup selection combos are embedded
+ *
  * Returns: whether page setup selection combos are embedded
  */
 gboolean
@@ -2315,16 +2349,15 @@ gtk_print_operation_get_embed_page_setup (GtkPrintOperation *op)
 
 /**
  * gtk_print_operation_draw_page_finish:
- * @op: a #GtkPrintOperation
- * 
- * Signalize that drawing of particular page is complete.
+ * @op: a `GtkPrintOperation`
  *
- * It is called after completion of page drawing (e.g. drawing in another
- * thread).
- * If gtk_print_operation_set_defer_drawing() was called before, then this function
- * has to be called by application. In another case it is called by the library
- * itself.
- **/
+ * Signal that drawing of particular page is complete.
+ *
+ * It is called after completion of page drawing (e.g. drawing
+ * in another thread). If [method@Gtk.PrintOperation.set_defer_drawing]
+ * was called before, then this function has to be called by application.
+ * Otherwise it is called by GTK itself.
+ */
 void
 gtk_print_operation_draw_page_finish (GtkPrintOperation *op)
 {
@@ -2950,14 +2983,18 @@ print_pages (GtkPrintOperation       *op,
 
 /**
  * gtk_print_operation_get_error:
- * @op: a #GtkPrintOperation
+ * @op: a `GtkPrintOperation`
  * @error: return location for the error
- * 
+ *
  * Call this when the result of a print operation is
- * %GTK_PRINT_OPERATION_RESULT_ERROR, either as returned by 
- * gtk_print_operation_run(), or in the #GtkPrintOperation::done signal 
- * handler. The returned #GError will contain more details on what went wrong.
- **/
+ * %GTK_PRINT_OPERATION_RESULT_ERROR.
+ *
+ * It can be called either after [method@Gtk.PrintOperation.run]
+ * returns, or in the [signal@Gtk.PrintOperation::done] signal
+ * handler.
+ *
+ * The returned `GError` will contain more details on what went wrong.
+ */
 void
 gtk_print_operation_get_error (GtkPrintOperation  *op,
 			       GError            **error)
@@ -2972,43 +3009,43 @@ gtk_print_operation_get_error (GtkPrintOperation  *op,
 
 /**
  * gtk_print_operation_run:
- * @op: a #GtkPrintOperation
+ * @op: a `GtkPrintOperation`
  * @action: the action to start
  * @parent: (allow-none): Transient parent of the dialog
  * @error: (allow-none): Return location for errors, or %NULL
  *
- * Runs the print operation, by first letting the user modify
- * print settings in the print dialog, and then print the document.
+ * Runs the print operation.
  *
- * Normally that this function does not return until the rendering of all 
- * pages is complete. You can connect to the 
- * #GtkPrintOperation::status-changed signal on @op to obtain some 
- * information about the progress of the print operation. 
+ * Normally that this function does not return until the rendering
+ * of all pages is complete. You can connect to the
+ * [signal@Gtk.PrintOperation::status-changed] signal on @op to obtain
+ * some information about the progress of the print operation.
+ *
  * Furthermore, it may use a recursive mainloop to show the print dialog.
  *
- * If you call gtk_print_operation_set_allow_async() or set the 
- * #GtkPrintOperation:allow-async property the operation will run 
- * asynchronously if this is supported on the platform. The 
- * #GtkPrintOperation::done signal will be emitted with the result of the 
- * operation when the it is done (i.e. when the dialog is canceled, or when 
- * the print succeeds or fails).
- * |[<!-- language="C" -->
+ * If you set the [Gtk.PrintOperation:allow-async] property, the operation
+ * will run asynchronously if this is supported on the platform. The
+ * [signal@Gtk.PrintOperation::done] signal will be emitted with the result
+ * of the operation when the it is done (i.e. when the dialog is canceled,
+ * or when the print succeeds or fails).
+ *
+ * ```c
  * if (settings != NULL)
  *   gtk_print_operation_set_print_settings (print, settings);
- *   
+ *
  * if (page_setup != NULL)
  *   gtk_print_operation_set_default_page_setup (print, page_setup);
- *   
- * g_signal_connect (print, "begin-print", 
+ *
+ * g_signal_connect (print, "begin-print",
  *                   G_CALLBACK (begin_print), &data);
- * g_signal_connect (print, "draw-page", 
+ * g_signal_connect (print, "draw-page",
  *                   G_CALLBACK (draw_page), &data);
- *  
- * res = gtk_print_operation_run (print, 
- *                                GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, 
- *                                parent, 
+ *
+ * res = gtk_print_operation_run (print,
+ *                                GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
+ *                                parent,
  *                                &error);
- *  
+ *
  * if (res == GTK_PRINT_OPERATION_RESULT_ERROR)
  *  {
  *    error_dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
@@ -3017,7 +3054,7 @@ gtk_print_operation_get_error (GtkPrintOperation  *op,
  * 					     GTK_BUTTONS_CLOSE,
  * 					     "Error printing file:\n%s",
  * 					     error->message);
- *    g_signal_connect (error_dialog, "response", 
+ *    g_signal_connect (error_dialog, "response",
  *                      G_CALLBACK (gtk_window_destroy), NULL);
  *    gtk_widget_show (error_dialog);
  *    g_error_free (error);
@@ -3028,20 +3065,21 @@ gtk_print_operation_get_error (GtkPrintOperation  *op,
  *	g_object_unref (settings);
  *    settings = g_object_ref (gtk_print_operation_get_print_settings (print));
  *  }
- * ]|
+ * ```
  *
  * Note that gtk_print_operation_run() can only be called once on a
- * given #GtkPrintOperation.
+ * given `GtkPrintOperation`.
  *
- * Returns: the result of the print operation. A return value of 
+ * Returns: the result of the print operation. A return value of
  *   %GTK_PRINT_OPERATION_RESULT_APPLY indicates that the printing was
- *   completed successfully. In this case, it is a good idea to obtain 
- *   the used print settings with gtk_print_operation_get_print_settings() 
+ *   completed successfully. In this case, it is a good idea to obtain
+ *   the used print settings with
+ *   [method@Gtk.PrintOperation.get_print_settings]
  *   and store them for reuse with the next print operation. A value of
  *   %GTK_PRINT_OPERATION_RESULT_IN_PROGRESS means the operation is running
- *   asynchronously, and will emit the #GtkPrintOperation::done signal when 
- *   done.
- **/
+ *   asynchronously, and will emit the [signal@Gtk.PrintOperation::done]
+ *   signal when done.
+ */
 GtkPrintOperationResult
 gtk_print_operation_run (GtkPrintOperation        *op,
 			 GtkPrintOperationAction   action,
@@ -3128,13 +3166,13 @@ gtk_print_operation_run (GtkPrintOperation        *op,
 
 /**
  * gtk_print_operation_cancel:
- * @op: a #GtkPrintOperation
+ * @op: a `GtkPrintOperation`
  *
- * Cancels a running print operation. This function may
- * be called from a #GtkPrintOperation::begin-print, 
- * #GtkPrintOperation::paginate or #GtkPrintOperation::draw-page
- * signal handler to stop the currently running print 
- * operation.
+ * Cancels a running print operation.
+ *
+ * This function may be called from a [signal@Gtk.PrintOperation::begin-print],
+ * [signal@Gtk.PrintOperation::paginate] or [signal@Gtk.PrintOperation::draw-page]
+ * signal handler to stop the currently running print operation.
  */
 void
 gtk_print_operation_cancel (GtkPrintOperation *op)
@@ -3145,11 +3183,11 @@ gtk_print_operation_cancel (GtkPrintOperation *op)
 }
 
 /**
- * gtk_print_operation_set_support_selection:
- * @op: a #GtkPrintOperation
+ * gtk_print_operation_set_support_selection: (attributes org.gtk.Method.set_property=support-selection)
+ * @op: a `GtkPrintOperation`
  * @support_selection: %TRUE to support selection
  *
- * Sets whether selection is supported by #GtkPrintOperation.
+ * Sets whether selection is supported by `GtkPrintOperation`.
  */
 void
 gtk_print_operation_set_support_selection (GtkPrintOperation  *op,
@@ -3168,11 +3206,11 @@ gtk_print_operation_set_support_selection (GtkPrintOperation  *op,
 }
 
 /**
- * gtk_print_operation_get_support_selection:
- * @op: a #GtkPrintOperation
+ * gtk_print_operation_get_support_selection: (attributes org.gtk.Method.get_property=support-selection)
+ * @op: a `GtkPrintOperation`
  *
- * Gets the value of #GtkPrintOperation:support-selection property.
- * 
+ * Gets whether the application supports print of selection
+ *
  * Returns: whether the application supports print of selection
  */
 gboolean
@@ -3186,15 +3224,15 @@ gtk_print_operation_get_support_selection (GtkPrintOperation *op)
 }
 
 /**
- * gtk_print_operation_set_has_selection:
- * @op: a #GtkPrintOperation
+ * gtk_print_operation_set_has_selection: (attributes org.gtk.Method.set_property=has-selection)
+ * @op: a `GtkPrintOperation`
  * @has_selection: %TRUE indicates that a selection exists
  *
  * Sets whether there is a selection to print.
  *
  * Application has to set number of pages to which the selection
- * will draw by gtk_print_operation_set_n_pages() in a callback of
- * #GtkPrintOperation::begin-print.
+ * will draw by [method@Gtk.PrintOperation.set_n_pages] in a handler
+ * for the [signal@Gtk.PrintOperation::begin-print] signal.
  */
 void
 gtk_print_operation_set_has_selection (GtkPrintOperation  *op,
@@ -3213,11 +3251,11 @@ gtk_print_operation_set_has_selection (GtkPrintOperation  *op,
 }
 
 /**
- * gtk_print_operation_get_has_selection:
- * @op: a #GtkPrintOperation
+ * gtk_print_operation_get_has_selection: (attributes org.gtk.Method.get_property=has-selection)
+ * @op: a `GtkPrintOperation`
  *
- * Gets the value of #GtkPrintOperation:has-selection property.
- * 
+ * Gets whether there is a selection.
+ *
  * Returns: whether there is a selection
  */
 gboolean
@@ -3231,21 +3269,22 @@ gtk_print_operation_get_has_selection (GtkPrintOperation *op)
 }
 
 /**
- * gtk_print_operation_get_n_pages_to_print:
- * @op: a #GtkPrintOperation
+ * gtk_print_operation_get_n_pages_to_print: (attributes org.gtk.Method.get_property=n-pages-to-print)
+ * @op: a `GtkPrintOperation`
  *
  * Returns the number of pages that will be printed.
  *
  * Note that this value is set during print preparation phase
  * (%GTK_PRINT_STATUS_PREPARING), so this function should never be
  * called before the data generation phase (%GTK_PRINT_STATUS_GENERATING_DATA).
- * You can connect to the #GtkPrintOperation::status-changed signal
- * and call gtk_print_operation_get_n_pages_to_print() when
+ * You can connect to the [signal@Gtk.PrintOperation::status-changed]
+ * signal and call gtk_print_operation_get_n_pages_to_print() when
  * print status is %GTK_PRINT_STATUS_GENERATING_DATA.
+ *
  * This is typically used to track the progress of print operation.
  *
  * Returns: the number of pages that will be printed
- **/
+ */
 int
 gtk_print_operation_get_n_pages_to_print (GtkPrintOperation *op)
 {
