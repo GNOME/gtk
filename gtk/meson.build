@@ -1242,11 +1242,11 @@ if build_gir
   ]
 
   if os_unix
-    gtk_introspection_sources += gtk_unix_print_sources
+    gtk_introspection_sources += [ gtk_unix_print_headers, gtk_unix_print_sources ]
   endif
 
   if os_win32
-    gtk_introspection_sources += gtk_win32_print_sources
+    gtk_introspection_sources += [ gtk_win32_print_headers, gtk_win32_print_sources ]
   endif
 
   gtk_gir = gnome.generate_gir(libgtk,
