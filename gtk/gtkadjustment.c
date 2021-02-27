@@ -33,12 +33,14 @@
 /**
  * GtkAdjustment:
  *
- * The `GtkAdjustment` object represents a value which has an associated lower
- * and upper bound.
+ * `GtkAdjustment` is a model for a numeric value.
  *
- * It also contains step and page increments, and a page size. It is used
- * within several GTK widgets, including [class@Gtk.SpinButton],
- * [class@Gtk.Viewport], [class@Gtk.Scrollbar] and [class@Gtk.Scale].
+ * The `GtkAdjustment has an associated lower and upper bound.
+ * It also contains step and page increments, and a page size.
+ *
+ * Adjustments are used within several GTK widgets, including
+ * [class@Gtk.SpinButton], [class@Gtk.Viewport], [class@Gtk.Scrollbar]
+ * and [class@Gtk.Scale].
  *
  * The `GtkAdjustment` object does not update the value itself. Instead
  * it is left up to the owner of the `GtkAdjustment` to control the value.
