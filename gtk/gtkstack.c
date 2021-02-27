@@ -38,31 +38,33 @@
 #include <string.h>
 
 /**
- * SECTION:gtkstack
- * @Short_description: A stacking container
- * @Title: GtkStack
- * @See_also: #GtkNotebook, #GtkStackSwitcher
+ * GtkStack:
  *
- * The GtkStack widget is a container which only shows
- * one of its children at a time. In contrast to GtkNotebook,
- * GtkStack does not provide a means for users to change the
- * visible child. Instead, the #GtkStackSwitcher widget can be
- * used with GtkStack to provide this functionality.
+ * `GtkStack` is a container which only shows one of its children
+ * at a time.
  *
- * Transitions between pages can be animated as slides or
- * fades. This can be controlled with gtk_stack_set_transition_type().
- * These animations respect the #GtkSettings:gtk-enable-animations
+ * In contrast to `GtkNotebook`, `GtkStack` does not provide a means
+ * for users to change the visible child. Instead, a separate widget
+ * such as [class@Gtk.StackSwitcher] or [class@Gtk.StackSidebar] can
+ * be used with `GtkStack` to provide this functionality.
+ *
+ * Transitions between pages can be animated as slides or fades. This
+ * can be controlled with [method@Gtk.Stack.set_transition_type].
+ * These animations respect the [property@Gtk.Settings:gtk-enable-animations]
  * setting.
  *
- * GtkStack maintains a #GtkStackPage object for each added
+ * `GtkStack` maintains a [class@Gtk.StackPage] object for each added
  * child, which holds additional per-child properties. You
- * obtain the #GtkStackPage for a child with gtk_stack_get_page().
+ * obtain the `GtkStackPage` for a child with [method@Gtk.Stack.get_page]
+ * and you can obtain a `GtkSelectionModel` containing all the pages
+ * with [method@Gtk.Stack.get_pages].
  *
  * # GtkStack as GtkBuildable
  *
- * To set child-specific properties in a .ui file, create GtkStackPage
+ * To set child-specific properties in a .ui file, create `GtkStackPage`
  * objects explicitly, and set the child widget as a property on it:
- * |[
+ *
+ * ```xml
  *   <object class="GtkStack" id="stack">
  *     <child>
  *       <object class="GtkStackPage">
@@ -75,15 +77,15 @@
  *         </property>
  *       </object>
  *     </child>
- * ]|
+ * ```
  *
  * # CSS nodes
  *
- * GtkStack has a single CSS node named stack.
+ * `GtkStack` has a single CSS node named stack.
  *
  * # Accessibility
  *
- * GtkStack uses the #GTK_ACCESSIBLE_ROLE_TAB_PANEL for the stack
+ * `GtkStack` uses the %GTK_ACCESSIBLE_ROLE_TAB_PANEL for the stack
  * pages, which are the accessible parent objects of the child widgets.
  */
 
@@ -113,10 +115,15 @@
  * @GTK_STACK_TRANSITION_TYPE_ROTATE_RIGHT: Pretend the pages are sides of a cube and rotate that cube to the right
  * @GTK_STACK_TRANSITION_TYPE_ROTATE_LEFT_RIGHT: Pretend the pages are sides of a cube and rotate that cube to the left or right according to the children order
  *
- * These enumeration values describe the possible transitions
- * between pages in a #GtkStack widget.
+ * Possible transitions between pages in a `GtkStack` widget.
  *
  * New values may be added to this enumeration over time.
+ */
+
+/**
+ * GtkStackPage:
+ *
+ * `GtkStackPage` is an auxiliary class used by `GtkStack`.
  */
 
 /* TODO:
@@ -399,6 +406,11 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
   object_class->get_property = gtk_stack_page_get_property;
   object_class->set_property = gtk_stack_page_set_property;
 
+  /**
+   * GtkStackPage:child: (attributes org.gtk.Property.get=gtk_stack_page_get_child)
+   *
+   * The child that this page is for.
+   */
   stack_page_props[CHILD_PROP_CHILD] =
     g_param_spec_object ("child",
                          P_("Child"),
@@ -406,6 +418,11 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
                          GTK_TYPE_WIDGET,
                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
+  /**
+   * GtkStackPage:name: (attributes org.gtk.Property.get=gtk_stack_page_get_name org.gtk.Property.set=gtk_stack_page_set_name)
+   *
+   * The name of the child page.
+   */
   stack_page_props[CHILD_PROP_NAME] =
     g_param_spec_string ("name",
                          P_("Name"),
@@ -413,6 +430,11 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
                          NULL,
                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
+  /**
+   * GtkStackPage:title: (attributes org.gtk.Property.get=gtk_stack_page_get_title org.gtk.Property.set=gtk_stack_page_set_title)
+   *
+   * The title of the child page.
+   */
   stack_page_props[CHILD_PROP_TITLE] =
     g_param_spec_string ("title",
                          P_("Title"),
@@ -420,6 +442,11 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
                          NULL,
                          GTK_PARAM_READWRITE);
 
+  /**
+   * GtkStackPage:icon-name: (attributes org.gtk.Property.get=gtk_stack_page_get_icon_name org.gtk.Property.set=gtk_stack_page_set_icon_name)
+   *
+   * The icon name of the child page.
+   */
   stack_page_props[CHILD_PROP_ICON_NAME] =
     g_param_spec_string ("icon-name",
                          P_("Icon name"),
@@ -428,12 +455,13 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
                          GTK_PARAM_READWRITE);
 
   /**
-   * GtkStackPage:needs-attention:
+   * GtkStackPage:needs-attention: (attributes org.gtk.Property.get=gtk_stack_page_get_needs_attention org.gtk.Property.set=gtk_stack_page_set_needs_attention)
    *
-   * Sets a flag specifying whether the page requires the user attention.
-   * This is used by the #GtkStackSwitcher to change the appearance of the
-   * corresponding button when a page needs attention and it is not the
-   * current one.
+   * Whether the page requires the user attention.
+   *
+   * This is used by the [class@Gtk.StackSwitcher] to change the
+   * appearance of the corresponding button when a page needs
+   * attention and it is not the current one.
    */
   stack_page_props[CHILD_PROP_NEEDS_ATTENTION] =
     g_param_spec_boolean ("needs-attention",
@@ -442,6 +470,11 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
                          FALSE,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkStackPage:visible: (attributes org.gtk.Property.get=gtk_stack_page_get_visible org.gtk.Property.set=gtk_stack_page_set_visible)
+   *
+   * Whether this page is visible.
+   */
   stack_page_props[CHILD_PROP_VISIBLE] =
     g_param_spec_boolean ("visible",
                          P_("Visible"),
@@ -449,6 +482,11 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
                          TRUE,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkStackPage:use-underline: (attributes org.gtk.Property.get=gtk_stack_page_get_use_underline org.gtk.Property.set=gtk_stack_page_set_use_underline)
+   *
+   * If set, an underline in the title indicates a mnemonic.
+   */
   stack_page_props[CHILD_PROP_USE_UNDERLINE] =
     g_param_spec_boolean ("use-underline",
                          P_("Use underline"),
@@ -771,7 +809,7 @@ gtk_stack_class_init (GtkStackClass *klass)
   widget_class->get_request_mode = gtk_stack_get_request_mode;
 
   /**
-   * GtkStack:hhomogeneous:
+   * GtkStack:hhomogeneous: (attributes org.gtk.Property.get=gtk_stack_get_hhomogeneous org.gtk.Property.set=gtk_stack_set_hhomogeneous)
    *
    * %TRUE if the stack allocates the same width for all children.
    */
@@ -781,7 +819,7 @@ gtk_stack_class_init (GtkStackClass *klass)
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkStack:vhomogeneous:
+   * GtkStack:vhomogeneous: (attributes org.gtk.Property.get=gtk_stack_get_vhomogeneous org.gtk.Property.set=gtk_stack_set_vhomogeneous)
    *
    * %TRUE if the stack allocates the same height for all children.
    */
@@ -789,31 +827,72 @@ gtk_stack_class_init (GtkStackClass *klass)
       g_param_spec_boolean ("vhomogeneous", P_("Vertically homogeneous"), P_("Vertically homogeneous sizing"),
                             TRUE,
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkStack:visible-child: (attributes org.gtk.Property.get=gtk_stack_get_visible_child org.gtk.Property.set=gtk_stack_set_visible_child)
+   *
+   * The widget currently visible in the stack.
+   */
   stack_props[PROP_VISIBLE_CHILD] =
       g_param_spec_object ("visible-child", P_("Visible child"), P_("The widget currently visible in the stack"),
                            GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkStack:visible-child-name: (attributes org.gtk.Property.get=gtk_stack_get_visible_child_name org.gtk.Poperty.set=gtk_stack_set_visible_child_name)
+   *
+   * The name of the widget currently visible in the stack.
+   */
   stack_props[PROP_VISIBLE_CHILD_NAME] =
       g_param_spec_string ("visible-child-name", P_("Name of visible child"), P_("The name of the widget currently visible in the stack"),
                            NULL,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkStack:transition-duration: (attributes org.gtk.Property.get=gtk_stack_get_transition_duration org.gtk.Property.set=gtk_stack_set_transition_duration)
+   *
+   * The animation duration, in milliseconds.
+   */
   stack_props[PROP_TRANSITION_DURATION] =
       g_param_spec_uint ("transition-duration", P_("Transition duration"), P_("The animation duration, in milliseconds"),
                          0, G_MAXUINT, 200,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkStack:transition-type: (attributes org.gtk.Property.get=gtk_stack_get_transition_type org.gtk.Property.set=gtk_stack_set_transition_type)
+   *
+   * The type of animation used to transition.
+   */
   stack_props[PROP_TRANSITION_TYPE] =
       g_param_spec_enum ("transition-type", P_("Transition type"), P_("The type of animation used to transition"),
                          GTK_TYPE_STACK_TRANSITION_TYPE, GTK_STACK_TRANSITION_TYPE_NONE,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkStack:transition-running: (attributes org.gtk.Property.get=gtk_stack_get_transition_running)
+   *
+   * Whether or not the transition is currently running.
+   */
   stack_props[PROP_TRANSITION_RUNNING] =
       g_param_spec_boolean ("transition-running", P_("Transition running"), P_("Whether or not the transition is currently running"),
                             FALSE,
                             GTK_PARAM_READABLE);
+
+  /**
+   * GtkStack:interpolate-size: (attributes org.gtk.Property.get=gtk_stack_get_interpolate_size org.gtk.Property.set=gtk_stack_set_interpolate_size)
+   *
+   * Whether or not the size should smoothly change during the transition.
+   */
   stack_props[PROP_INTERPOLATE_SIZE] =
       g_param_spec_boolean ("interpolate-size", P_("Interpolate size"), P_("Whether or not the size should smoothly change when changing between differently sized children"),
                             FALSE,
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkStack:pages: (attributes org.gtk.Property.get=gtk_stack_get_pages)
+   *
+   * A selection model with the stack pages.
+   */
   stack_props[PROP_PAGES] =
       g_param_spec_object ("pages", P_("Pages"), P_("A selection model with the stacks pages"),
                            GTK_TYPE_SELECTION_MODEL,
@@ -828,9 +907,9 @@ gtk_stack_class_init (GtkStackClass *klass)
 /**
  * gtk_stack_new:
  *
- * Creates a new #GtkStack container.
+ * Creates a new `GtkStack`.
  *
- * Returns: a new #GtkStack
+ * Returns: a new `GtkStack`
  */
 GtkWidget *
 gtk_stack_new (void)
@@ -1346,17 +1425,18 @@ stack_child_visibility_notify_cb (GObject    *obj,
 
 /**
  * gtk_stack_add_titled:
- * @stack: a #GtkStack
+ * @stack: a `GtkStack`
  * @child: the widget to add
  * @name: (nullable): the name for @child
  * @title: a human-readable title for @child
  *
  * Adds a child to @stack.
+ *
  * The child is identified by the @name. The @title
- * will be used by #GtkStackSwitcher to represent
+ * will be used by `GtkStackSwitcher` to represent
  * @child in a tab bar, so it should be short.
  *
- * Returns: (transfer none): the #GtkStackPage for @child
+ * Returns: (transfer none): the `GtkStackPage` for @child
  */
 GtkStackPage *
 gtk_stack_add_titled (GtkStack   *stack,
@@ -1372,12 +1452,12 @@ gtk_stack_add_titled (GtkStack   *stack,
 
 /**
  * gtk_stack_add_child:
- * @stack: a #GtkStack
+ * @stack: a `GtkStack`
  * @child: the widget to add
  *
  * Adds a child to @stack.
  *
- * Returns: (transfer none): the #GtkStackPage for @child
+ * Returns: (transfer none): the `GtkStackPage` for @child
  */
 GtkStackPage *
 gtk_stack_add_child (GtkStack   *stack,
@@ -1391,14 +1471,15 @@ gtk_stack_add_child (GtkStack   *stack,
 
 /**
  * gtk_stack_add_named:
- * @stack: a #GtkStack
+ * @stack: a `GtkStack`
  * @child: the widget to add
  * @name: (nullable): the name for @child or %NULL
  *
  * Adds a child to @stack.
+ *
  * The child is identified by the @name.
  *
- * Returns: (transfer none): the #GtkStackPage for @child
+ * Returns: (transfer none): the `GtkStackPage` for @child
  */
 GtkStackPage *
 gtk_stack_add_named (GtkStack   *stack,
@@ -1519,7 +1600,7 @@ stack_remove (GtkStack  *stack,
 
 /**
  * gtk_stack_remove:
- * @stack: a #GtkStack
+ * @stack: a `GtkStack`
  * @child: the child to remove
  *
  * Removes a child widget from @stack.
@@ -1551,12 +1632,12 @@ gtk_stack_remove (GtkStack  *stack,
 
 /**
  * gtk_stack_get_page:
- * @stack: a #GtkStack
+ * @stack: a `GtkStack`
  * @child: a child of @stack
  *
- * Returns the #GtkStackPage object for @child.
- * 
- * Returns: (transfer none): the #GtkStackPage for @child
+ * Returns the `GtkStackPage` object for @child.
+ *
+ * Returns: (transfer none): the `GtkStackPage` for @child
  */
 GtkStackPage *
 gtk_stack_get_page (GtkStack  *stack,
@@ -1567,14 +1648,15 @@ gtk_stack_get_page (GtkStack  *stack,
 
 /**
  * gtk_stack_get_child_by_name:
- * @stack: a #GtkStack
+ * @stack: a `GtkStack`
  * @name: the name of the child to find
  *
- * Finds the child of the #GtkStack with the name given as
- * the argument. Returns %NULL if there is no child with this
- * name.
+ * Finds the child with the name given as the argument.
  *
- * Returns: (transfer none) (nullable): the requested child of the #GtkStack
+ * Returns %NULL if there is no child with this name.
+ *
+ * Returns: (transfer none) (nullable): the requested child
+ *   of the `GtkStack`
  */
 GtkWidget *
 gtk_stack_get_child_by_name (GtkStack    *stack,
@@ -1598,8 +1680,8 @@ gtk_stack_get_child_by_name (GtkStack    *stack,
 }
 
 /**
- * gtk_stack_page_get_child:
- * @self: a #GtkStackPage
+ * gtk_stack_page_get_child: (attributes org.gtk.Method.get_property=child)
+ * @self: a `GtkStackPage`
  *
  * Returns the stack child to which @self belongs.
  *
@@ -1612,12 +1694,13 @@ gtk_stack_page_get_child (GtkStackPage *self)
 }
 
 /**
- * gtk_stack_set_hhomogeneous:
- * @stack: a #GtkStack
+ * gtk_stack_set_hhomogeneous: (attributes org.gtk.Method.set_property=hhomogeneous)
+ * @stack: a `GtkStack`
  * @hhomogeneous: %TRUE to make @stack horizontally homogeneous
  *
- * Sets the #GtkStack to be horizontally homogeneous or not.
- * If it is homogeneous, the #GtkStack will request the same
+ * Sets the `GtkStack` to be horizontally homogeneous or not.
+ *
+ * If it is homogeneous, the `GtkStack` will request the same
  * width for all its children. If it isn't, the stack
  * may change width when a different child becomes visible.
  */
@@ -1643,11 +1726,10 @@ gtk_stack_set_hhomogeneous (GtkStack *stack,
 }
 
 /**
- * gtk_stack_get_hhomogeneous:
- * @stack: a #GtkStack
+ * gtk_stack_get_hhomogeneous: (attributes org.gtk.Method.get_property=hhomogeneous)
+ * @stack: a `GtkStack`
  *
  * Gets whether @stack is horizontally homogeneous.
- * See gtk_stack_set_hhomogeneous().
  *
  * Returns: whether @stack is horizontally homogeneous.
  */
@@ -1662,12 +1744,13 @@ gtk_stack_get_hhomogeneous (GtkStack *stack)
 }
 
 /**
- * gtk_stack_set_vhomogeneous:
- * @stack: a #GtkStack
+ * gtk_stack_set_vhomogeneous: (attributes org.gtk.Method.set_property=vhomogeneous)
+ * @stack: a `GtkStack`
  * @vhomogeneous: %TRUE to make @stack vertically homogeneous
  *
  * Sets the #GtkStack to be vertically homogeneous or not.
- * If it is homogeneous, the #GtkStack will request the same
+ *
+ * If it is homogeneous, the `GtkStack` will request the same
  * height for all its children. If it isn't, the stack
  * may change height when a different child becomes visible.
  */
@@ -1693,11 +1776,10 @@ gtk_stack_set_vhomogeneous (GtkStack *stack,
 }
 
 /**
- * gtk_stack_get_vhomogeneous:
- * @stack: a #GtkStack
+ * gtk_stack_get_vhomogeneous: (attributes org.gtk.Method.get_property=vhomogeneous)
+ * @stack: a `GtkStack`
  *
  * Gets whether @stack is vertically homogeneous.
- * See gtk_stack_set_vhomogeneous().
  *
  * Returns: whether @stack is vertically homogeneous.
  */
@@ -1712,8 +1794,8 @@ gtk_stack_get_vhomogeneous (GtkStack *stack)
 }
 
 /**
- * gtk_stack_get_transition_duration:
- * @stack: a #GtkStack
+ * gtk_stack_get_transition_duration: (attributes org.gtk.Method.get_property=transition-duration)
+ * @stack: a `GtkStack`
  *
  * Returns the amount of time (in milliseconds) that
  * transitions between pages in @stack will take.
@@ -1731,8 +1813,8 @@ gtk_stack_get_transition_duration (GtkStack *stack)
 }
 
 /**
- * gtk_stack_set_transition_duration:
- * @stack: a #GtkStack
+ * gtk_stack_set_transition_duration: (attributes org.gtk.Method.set_property=transition-duration)
+ * @stack: a `GtkStack`
  * @duration: the new duration, in milliseconds
  *
  * Sets the duration that transitions between pages in @stack
@@ -1755,8 +1837,8 @@ gtk_stack_set_transition_duration (GtkStack *stack,
 }
 
 /**
- * gtk_stack_get_transition_type:
- * @stack: a #GtkStack
+ * gtk_stack_get_transition_type: (attributes org.gtk.Method.get_property=transition-type)
+ * @stack: a `GtkStack`
  *
  * Gets the type of animation that will be used
  * for transitions between pages in @stack.
@@ -1774,13 +1856,14 @@ gtk_stack_get_transition_type (GtkStack *stack)
 }
 
 /**
- * gtk_stack_set_transition_type:
- * @stack: a #GtkStack
+ * gtk_stack_set_transition_type: (attributes org.gtk.Method.set_property=transition-type)
+ * @stack: a `GtkStack`
  * @transition: the new transition type
  *
  * Sets the type of animation that will be used for
- * transitions between pages in @stack. Available
- * types include various kinds of fades and slides.
+ * transitions between pages in @stack.
+ *
+ * Available types include various kinds of fades and slides.
  *
  * The transition type can be changed without problems
  * at runtime, so it is possible to change the animation
@@ -1803,8 +1886,8 @@ gtk_stack_set_transition_type (GtkStack              *stack,
 }
 
 /**
- * gtk_stack_get_transition_running:
- * @stack: a #GtkStack
+ * gtk_stack_get_transition_running: (attributes org.gtk.Method.get_property=transition-running)
+ * @stack: a `GtkStack`
  *
  * Returns whether the @stack is currently in a transition from one page to
  * another.
@@ -1822,15 +1905,17 @@ gtk_stack_get_transition_running (GtkStack *stack)
 }
 
 /**
- * gtk_stack_set_interpolate_size:
- * @stack: A #GtkStack
+ * gtk_stack_set_interpolate_size: (attributes org.gtk.Method.set_property=interpolate-size)
+ * @stack: A `GtkStack`
  * @interpolate_size: the new value
  *
  * Sets whether or not @stack will interpolate its size when
- * changing the visible child. If the #GtkStack:interpolate-size
- * property is set to %TRUE, @stack will interpolate its size between
- * the current one and the one it'll take after changing the
- * visible child, according to the set transition duration.
+ * changing the visible child.
+ *
+ * If the [property@Gtk.Stack:interpolate-size] property is set
+ * to %TRUE, @stack will interpolate its size between the current
+ * one and the one it'll take after changing the visible child,
+ * according to the set transition duration.
  */
 void
 gtk_stack_set_interpolate_size (GtkStack *stack,
@@ -1850,8 +1935,8 @@ gtk_stack_set_interpolate_size (GtkStack *stack,
 }
 
 /**
- * gtk_stack_get_interpolate_size:
- * @stack: A #GtkStack
+ * gtk_stack_get_interpolate_size: (attributes org.gtk.Method.get_property=interpolate-size)
+ * @stack: A `GtkStack`
  *
  * Returns whether the #GtkStack is set up to interpolate between
  * the sizes of children on page switch.
@@ -1870,13 +1955,14 @@ gtk_stack_get_interpolate_size (GtkStack *stack)
 
 
 /**
- * gtk_stack_get_visible_child:
- * @stack: a #GtkStack
+ * gtk_stack_get_visible_child: (attributes org.gtk.Method.get_property=visible-child)
+ * @stack: a `GtkStack`
  *
- * Gets the currently visible child of @stack, or %NULL if
- * there are no visible children.
+ * Gets the currently visible child of @stack.
  *
- * Returns: (transfer none) (nullable): the visible child of the #GtkStack
+ * Returns %NULL if there are no visible children.
+ *
+ * Returns: (transfer none) (nullable): the visible child of the `GtkStack`
  */
 GtkWidget *
 gtk_stack_get_visible_child (GtkStack *stack)
@@ -1889,13 +1975,15 @@ gtk_stack_get_visible_child (GtkStack *stack)
 }
 
 /**
- * gtk_stack_get_visible_child_name:
- * @stack: a #GtkStack
+ * gtk_stack_get_visible_child_name: (attributes org.gtk.Method.get_property=visible-child-name)
+ * @stack: a `GtkStack`
  *
- * Returns the name of the currently visible child of @stack, or
- * %NULL if there is no visible child.
+ * Returns the name of the currently visible child of @stack.
  *
- * Returns: (transfer none) (nullable): the name of the visible child of the #GtkStack
+ * Returns %NULL if there is no visible child.
+ *
+ * Returns: (transfer none) (nullable): the name of the visible child
+ *   of the `GtkStack`
  */
 const char *
 gtk_stack_get_visible_child_name (GtkStack *stack)
@@ -1911,19 +1999,18 @@ gtk_stack_get_visible_child_name (GtkStack *stack)
 }
 
 /**
- * gtk_stack_set_visible_child:
- * @stack: a #GtkStack
+ * gtk_stack_set_visible_child: (attributes org.gtk.Method.set_property=visible-child)
+ * @stack: a `GtkStack`
  * @child: a child of @stack
  *
  * Makes @child the visible child of @stack.
  *
- * If @child is different from the currently
- * visible child, the transition between the
- * two will be animated with the current
- * transition type of @stack.
+ * If @child is different from the currently visible child,
+ * the transition between the two will be animated with the
+ * current transition type of @stack.
  *
  * Note that the @child widget has to be visible itself
- * (see gtk_widget_show()) in order to become the visible
+ * (see [method@Gtk.Widget.show]) in order to become the visible
  * child of @stack.
  */
 void
@@ -1951,19 +2038,18 @@ gtk_stack_set_visible_child (GtkStack  *stack,
 }
 
 /**
- * gtk_stack_set_visible_child_name:
- * @stack: a #GtkStack
+ * gtk_stack_set_visible_child_name: (attributes org.gtk.Method.set_property=visible-child-name)
+ * @stack: a `GtkStack`
  * @name: the name of the child to make visible
  *
  * Makes the child with the given name visible.
  *
- * If @child is different from the currently
- * visible child, the transition between the
- * two will be animated with the current
- * transition type of @stack.
+ * If @child is different from the currently visible child,
+ * the transition between the two will be animated with the
+ * current transition type of @stack.
  *
  * Note that the child widget has to be visible itself
- * (see gtk_widget_show()) in order to become the visible
+ * (see [method@Gtk.Widget.show]) in order to become the visible
  * child of @stack.
  */
 void
@@ -1979,14 +2065,14 @@ gtk_stack_set_visible_child_name (GtkStack   *stack,
 
 /**
  * gtk_stack_set_visible_child_full:
- * @stack: a #GtkStack
+ * @stack: a `GtkStack`
  * @name: the name of the child to make visible
  * @transition: the transition type to use
  *
  * Makes the child with the given name visible.
  *
  * Note that the child widget has to be visible itself
- * (see gtk_widget_show()) in order to become the visible
+ * (see [method@Gtk.Widget.show]) in order to become the visible
  * child of @stack.
  */
 void
@@ -2526,15 +2612,16 @@ gtk_stack_init (GtkStack *stack)
 }
 
 /**
- * gtk_stack_get_pages:
- * @stack: a #GtkStack
+ * gtk_stack_get_pages: (attributes org.gtk.Method.get_property=pages)
+ * @stack: a `GtkStack`
  *
- * Returns a #GListModel that contains the pages of the stack,
- * and can be used to keep an up-to-date view. The model also
- * implements #GtkSelectionModel and can be used to track and
- * modify the visible page.
+ * Returns a `GListModel` that contains the pages of the stack.
  *
- * Returns: (transfer full): a #GtkSelectionModel for the stack's children
+ * This can be used to keep an up-to-date view. The model also
+ * implements [iface@Gtk.SelectionModel] and can be used to track
+ * and modify the visible page.
+ *
+ * Returns: (transfer full): a `GtkSelectionModel` for the stack's children
  */
 GtkSelectionModel *
 gtk_stack_get_pages (GtkStack *stack)
@@ -2553,12 +2640,13 @@ gtk_stack_get_pages (GtkStack *stack)
 }
 
 /**
- * gtk_stack_page_get_visible:
- * @self: a #GtkStackPage
+ * gtk_stack_page_get_visible: (attributes org.gtk.Method.get_property=visible)
+ * @self: a `GtkStackPage`
  *
- * Returns whether @page is visible in its #GtkStack.
- * This is independent from the #GtkWidget:visible value of its
- * #GtkWidget.
+ * Returns whether @page is visible in its `GtkStack`.
+ *
+ * This is independent from the [property@Gtk.Widget:visible]
+ * property of its widget.
  *
  * Returns: %TRUE if @page is visible
  */
@@ -2571,12 +2659,11 @@ gtk_stack_page_get_visible (GtkStackPage *self)
 }
 
 /**
- * gtk_stack_page_set_visible:
- * @self: a #GtkStackPage
+ * gtk_stack_page_set_visible: (attributes org.gtk.Method.set_property=visible)
+ * @self: a `GtkStackPage`
  * @visible: The new property value
  *
- * Sets the new value of the #GtkStackPage:visible property
- * to @visible.
+ * Sets whether @page is visible in its `GtkStack`.
  */
 void
 gtk_stack_page_set_visible (GtkStackPage *self,
@@ -2598,13 +2685,13 @@ gtk_stack_page_set_visible (GtkStackPage *self,
 }
 
 /**
- * gtk_stack_page_get_needs_attention:
- * @self: a #GtkStackPage
+ * gtk_stack_page_get_needs_attention: (attributes org.gtk.Method.get_property=needs-attention)
+ * @self: a `GtkStackPage`
  *
- * Returns the current value of the #GtkStackPage:needs-attention property.
+ * Returns whether the page is marked as “needs attention”.
  *
- * Returns: The value of the #GtkStackPage:needs-attention property.
- *   See gtk_stack_page_set_needs_attention() for details on how to set a new value.
+ * Returns: The value of the [property@Gtk.StackPage:needs-attention]
+ *   property.
  */
 gboolean
 gtk_stack_page_get_needs_attention (GtkStackPage *self)
@@ -2613,13 +2700,11 @@ gtk_stack_page_get_needs_attention (GtkStackPage *self)
 }
 
 /**
- * gtk_stack_page_set_needs_attention:
- * @self: a #GtkStackPage
+ * gtk_stack_page_set_needs_attention: (attributes org.gtk.Method.set_property=needs-attention)
+ * @self: a `GtkStackPage`
  * @setting: the new value to set
  *
- * Sets the new value of the #GtkStackPage:needs-attention property.
- * See also gtk_stack_page_get_needs_attention()
- *
+ * Sets whether the page is marked as “needs attention”.
  */
 void
 gtk_stack_page_set_needs_attention (GtkStackPage *self,
@@ -2635,13 +2720,12 @@ gtk_stack_page_set_needs_attention (GtkStackPage *self,
 }
 
 /**
- * gtk_stack_page_get_use_underline:
- * @self: a #GtkStackPage
+ * gtk_stack_page_get_use_underline: (attributes org.gtk.Method.get_property=use-underline)
+ * @self: a `GtkStackPage`
  *
- * Returns the current value of the #GtkStackPage:use-underline property.
+ * Gets whether underlines in the page title indicate mnemonics.
  *
- * Returns: The value of the #GtkStackPage:use-underline property.
- *   See gtk_stack_page_set_use_underline() for details on how to set a new value.
+ * Returns: The value of the [property@Gtk.StackPage:use-underline] property
  */
 gboolean
 gtk_stack_page_get_use_underline (GtkStackPage *self)
@@ -2650,13 +2734,11 @@ gtk_stack_page_get_use_underline (GtkStackPage *self)
 }
 
 /**
- * gtk_stack_page_set_use_underline:
- * @self: a #GtkStackPage
+ * gtk_stack_page_set_use_underline: (attributes org.gtk.Method.set_property=use-underline)
+ * @self: a `GtkStackPage`
  * @setting: the new value to set
  *
- * Sets the new value of the #GtkStackPage:use-underline property.
- * See also gtk_stack_page_get_use_underline()
- *
+ * Sets whether underlines in the page title indicate mnemonics.
  */
 void
 gtk_stack_page_set_use_underline (GtkStackPage *self,
@@ -2673,13 +2755,12 @@ gtk_stack_page_set_use_underline (GtkStackPage *self,
 
 
 /**
- * gtk_stack_page_get_name:
- * @self: a #GtkStackPage
+ * gtk_stack_page_get_name: (attributes org.gtk.Method.get_property=name)
+ * @self: a `GtkStackPage`
  *
- * Returns the current value of the #GtkStackPage:name property.
+ * Returns the name of the page.
  *
- * Returns: (nullable): The value of the #GtkStackPage:name property.
- *   See gtk_stack_page_set_name() for details on how to set a new value.
+ * Returns: (nullable): The value of the [property@Gtk.StackPage:name] property
  */
 const char *
 gtk_stack_page_get_name (GtkStackPage *self)
@@ -2690,12 +2771,11 @@ gtk_stack_page_get_name (GtkStackPage *self)
 }
 
 /**
- * gtk_stack_page_set_name:
- * @self: a #GtkStackPage
+ * gtk_stack_page_set_name: (attributes org.gtk.Method.set_property=name)
+ * @self: a `GtkStackPage`
  * @setting: (transfer none): the new value to set
  *
- * Sets the new value of the #GtkStackPage:name property.
- * See also gtk_stack_page_get_name()
+ * Sets the name of the page.
  */
 void
 gtk_stack_page_set_name (GtkStackPage *self,
@@ -2742,13 +2822,12 @@ gtk_stack_page_set_name (GtkStackPage *self,
 }
 
 /**
- * gtk_stack_page_get_title:
- * @self: a #GtkStackPage
+ * gtk_stack_page_get_title: (attributes org.gtk.Method.get_property=title)
+ * @self: a `GtkStackPage`
  *
- * Returns the current value of the #GtkStackPage:title property.
+ * Gets the page title.
  *
- * Returns: (nullable): The value of the #GtkStackPage:title property.
- *   See gtk_stack_page_set_title() for details on how to set a new value.
+ * Returns: (nullable): The value of the [property@Gtk.StackPage:title] property
  */
 const char *
 gtk_stack_page_get_title (GtkStackPage *self)
@@ -2759,12 +2838,11 @@ gtk_stack_page_get_title (GtkStackPage *self)
 }
 
 /**
- * gtk_stack_page_set_title:
- * @self: a #GtkStackPage
+ * gtk_stack_page_set_title: (attributes org.gtk.Method.set_property=title)
+ * @self: a `GtkStackPage`
  * @setting: (transfer none): the new value to set
  *
- * Sets the new value of the #GtkStackPage:title property.
- * See also gtk_stack_page_get_title()
+ * Sets the page title.
  */
 void
 gtk_stack_page_set_title (GtkStackPage *self,
@@ -2784,15 +2862,13 @@ gtk_stack_page_set_title (GtkStackPage *self,
                                   -1);
 }
 
-
 /**
- * gtk_stack_page_get_icon_name:
- * @self: a #GtkStackPage
+ * gtk_stack_page_get_icon_name: (attributes org.gtk.Method.get_property=icon-name)
+ * @self: a `GtkStackPage`
  *
- * Returns the current value of the #GtkStackPage:icon-name property.
+ * Returns the icon name of the page.
  *
- * Returns: (nullable): The value of the #GtkStackPage:icon-name property.
- *   See gtk_stack_page_set_icon_name() for details on how to set a new value.
+ * Returns: (nullable): The value of the [property@Gtk.StackPage:icon-name] property
  */
 const char *
 gtk_stack_page_get_icon_name (GtkStackPage *self)
@@ -2803,12 +2879,11 @@ gtk_stack_page_get_icon_name (GtkStackPage *self)
 }
 
 /**
- * gtk_stack_page_set_icon_name:
- * @self: a #GtkStackPage
+ * gtk_stack_page_set_icon_name: (attributes org.gtk.Method.set_property=icon-name)
+ * @self: a `GtkStackPage`
  * @setting: (transfer none): the new value to set
  *
- * Sets the new value of the #GtkStackPage:icon-name property.
- * See also gtk_stack_page_get_icon_name()
+ * Sets the icon name of the page.
  */
 void
 gtk_stack_page_set_icon_name (GtkStackPage *self,
