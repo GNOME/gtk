@@ -30,15 +30,15 @@
 
 
 /**
- * SECTION:gtkprintsettings
- * @Short_description: Stores print settings
- * @Title: GtkPrintSettings
+ * GtkPrintSettings:
  *
- * A GtkPrintSettings object represents the settings of a print dialog in
- * a system-independent way. The main use for this object is that once
- * you’ve printed you can get a settings object that represents the settings
- * the user chose, and the next time you print you can pass that object in so
- * that the user doesn’t have to re-set all his settings.
+ * A `GtkPrintSettings` object represents the settings of a print dialog in
+ * a system-independent way.
+ *
+ * The main use for this object is that once you’ve printed you can get a
+ * settings object that represents the settings the user chose, and the next
+ * time you print you can pass that object in so that the user doesn’t have
+ * to re-set all his settings.
  *
  * Its also possible to enumerate the settings so that you can easily save
  * the settings for the next time your app runs, or even store them in a
@@ -95,10 +95,10 @@ gtk_print_settings_class_init (GtkPrintSettingsClass *class)
 
 /**
  * gtk_print_settings_new:
- * 
- * Creates a new #GtkPrintSettings object.
- *  
- * Returns: a new #GtkPrintSettings object
+ *
+ * Creates a new `GtkPrintSettings` object.
+ *
+ * Returns: a new `GtkPrintSettings` object
  */
 GtkPrintSettings *
 gtk_print_settings_new (void)
@@ -122,9 +122,9 @@ copy_hash_entry  (gpointer  key,
 
 /**
  * gtk_print_settings_copy:
- * @other: a #GtkPrintSettings
+ * @other: a `GtkPrintSettings`
  *
- * Copies a #GtkPrintSettings object.
+ * Copies a `GtkPrintSettings` object.
  *
  * Returns: (transfer full): a newly allocated copy of @other
  */
@@ -149,11 +149,11 @@ gtk_print_settings_copy (GtkPrintSettings *other)
 
 /**
  * gtk_print_settings_get:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @key: a key
- * 
+ *
  * Looks up the string value associated with @key.
- * 
+ *
  * Returns: the string value for @key
  */
 const char *
@@ -165,7 +165,7 @@ gtk_print_settings_get (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_set:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @key: a key
  * @value: (allow-none): a string value, or %NULL
  *
@@ -186,10 +186,11 @@ gtk_print_settings_set (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_unset:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @key: a key
- * 
- * Removes any value associated with @key. 
+ *
+ * Removes any value associated with @key.
+ *
  * This has the same effect as setting the value to %NULL.
  */
 void
@@ -201,11 +202,11 @@ gtk_print_settings_unset (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_has_key:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @key: a key
- * 
+ *
  * Returns %TRUE, if a value is associated with @key.
- * 
+ *
  * Returns: %TRUE, if @key has a value
  */
 gboolean        
@@ -218,17 +219,17 @@ gtk_print_settings_has_key (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_bool:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @key: a key
- * 
- * Returns the boolean represented by the value
- * that is associated with @key. 
  *
- * The string “true” represents %TRUE, any other 
+ * Returns the boolean represented by the value
+ * that is associated with @key.
+ *
+ * The string “true” represents %TRUE, any other
  * string %FALSE.
  *
  * Returns: %TRUE, if @key maps to a true value.
- **/
+ */
 gboolean
 gtk_print_settings_get_bool (GtkPrintSettings *settings,
 			     const char       *key)
@@ -244,10 +245,10 @@ gtk_print_settings_get_bool (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_bool_with_default:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @key: a key
  * @default_val: the default value
- * 
+ *
  * Returns the boolean represented by the value
  * that is associated with @key, or @default_val
  * if the value does not represent a boolean.
@@ -276,10 +277,10 @@ gtk_print_settings_get_bool_with_default (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_set_bool:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @key: a key
  * @value: a boolean
- * 
+ *
  * Sets @key to a boolean value.
  */
 void
@@ -295,11 +296,11 @@ gtk_print_settings_set_bool (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_double_with_default:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @key: a key
  * @def: the default value
- * 
- * Returns the floating point number represented by 
+ *
+ * Returns the floating point number represented by
  * the value that is associated with @key, or @default_val
  * if the value does not represent a floating point number.
  *
@@ -323,11 +324,11 @@ gtk_print_settings_get_double_with_default (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_double:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @key: a key
- * 
+ *
  * Returns the double value associated with @key, or 0.
- * 
+ *
  * Returns: the double value of @key
  */
 double
@@ -339,10 +340,10 @@ gtk_print_settings_get_double (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_set_double:
- * @settings: a #GtkPrintSettings
- * @key: a key 
+ * @settings: a `GtkPrintSettings`
+ * @key: a key
  * @value: a double value
- * 
+ *
  * Sets @key to a double value.
  */
 void
@@ -358,13 +359,15 @@ gtk_print_settings_set_double (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_length:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @key: a key
  * @unit: the unit of the return value
- * 
+ *
  * Returns the value associated with @key, interpreted
- * as a length. The returned value is converted to @units.
- * 
+ * as a length.
+ *
+ * The returned value is converted to @units.
+ *
  * Returns: the length value of @key, converted to @unit
  */
 double
@@ -378,11 +381,11 @@ gtk_print_settings_get_length (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_set_length:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @key: a key
  * @value: a length
  * @unit: the unit of @length
- * 
+ *
  * Associates a length in units of @unit with @key.
  */
 void
@@ -397,13 +400,13 @@ gtk_print_settings_set_length (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_int_with_default:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @key: a key
  * @def: the default value
- * 
+ *
  * Returns the value of @key, interpreted as
  * an integer, or the default value.
- * 
+ *
  * Returns: the integer value of @key
  */
 int
@@ -422,12 +425,12 @@ gtk_print_settings_get_int_with_default (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_int:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @key: a key
- * 
+ *
  * Returns the integer value of @key, or 0.
- * 
- * Returns: the integer value of @key 
+ *
+ * Returns: the integer value of @key
  */
 int
 gtk_print_settings_get_int (GtkPrintSettings *settings,
@@ -438,10 +441,10 @@ gtk_print_settings_get_int (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_set_int:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @key: a key
- * @value: an integer 
- * 
+ * @value: an integer
+ *
  * Sets @key to an integer value.
  */
 void
@@ -456,7 +459,7 @@ gtk_print_settings_set_int (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_foreach:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @func: (scope call): the function to call
  * @user_data: (closure): user data for @func
  *
@@ -472,9 +475,9 @@ gtk_print_settings_foreach (GtkPrintSettings    *settings,
 
 /**
  * gtk_print_settings_get_printer:
- * @settings: a #GtkPrintSettings
- * 
- * Convenience function to obtain the value of 
+ * @settings: a `GtkPrintSettings`
+ *
+ * Convenience function to obtain the value of
  * %GTK_PRINT_SETTINGS_PRINTER.
  *
  * Returns: the printer name
@@ -488,9 +491,9 @@ gtk_print_settings_get_printer (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_set_printer:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @printer: the printer name
- * 
+ *
  * Convenience function to set %GTK_PRINT_SETTINGS_PRINTER
  * to @printer.
  */
@@ -503,11 +506,11 @@ gtk_print_settings_set_printer (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_orientation:
- * @settings: a #GtkPrintSettings
- * 
- * Get the value of %GTK_PRINT_SETTINGS_ORIENTATION, 
- * converted to a #GtkPageOrientation.
- * 
+ * @settings: a `GtkPrintSettings`
+ *
+ * Get the value of %GTK_PRINT_SETTINGS_ORIENTATION,
+ * converted to a `GtkPageOrientation`.
+ *
  * Returns: the orientation
  */
 GtkPageOrientation
@@ -534,9 +537,9 @@ gtk_print_settings_get_orientation (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_set_orientation:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @orientation: a page orientation
- * 
+ *
  * Sets the value of %GTK_PRINT_SETTINGS_ORIENTATION.
  */
 void
@@ -566,11 +569,11 @@ gtk_print_settings_set_orientation (GtkPrintSettings   *settings,
 
 /**
  * gtk_print_settings_get_paper_size:
- * @settings: a #GtkPrintSettings
- * 
- * Gets the value of %GTK_PRINT_SETTINGS_PAPER_FORMAT, 
- * converted to a #GtkPaperSize.
- * 
+ * @settings: a `GtkPrintSettings`
+ *
+ * Gets the value of %GTK_PRINT_SETTINGS_PAPER_FORMAT,
+ * converted to a `GtkPaperSize`.
+ *
  * Returns: the paper size
  */
 GtkPaperSize *     
@@ -597,9 +600,9 @@ gtk_print_settings_get_paper_size (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_set_paper_size:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @paper_size: a paper size
- * 
+ *
  * Sets the value of %GTK_PRINT_SETTINGS_PAPER_FORMAT,
  * %GTK_PRINT_SETTINGS_PAPER_WIDTH and
  * %GTK_PRINT_SETTINGS_PAPER_HEIGHT.
@@ -638,12 +641,12 @@ gtk_print_settings_set_paper_size (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_paper_width:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @unit: the unit for the return value
- * 
+ *
  * Gets the value of %GTK_PRINT_SETTINGS_PAPER_WIDTH,
- * converted to @unit. 
- * 
+ * converted to @unit.
+ *
  * Returns: the paper width, in units of @unit
  */
 double
@@ -655,10 +658,10 @@ gtk_print_settings_get_paper_width (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_set_paper_width:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @width: the paper width
  * @unit: the units of @width
- * 
+ *
  * Sets the value of %GTK_PRINT_SETTINGS_PAPER_WIDTH.
  */
 void
@@ -671,12 +674,12 @@ gtk_print_settings_set_paper_width (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_paper_height:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @unit: the unit for the return value
- * 
+ *
  * Gets the value of %GTK_PRINT_SETTINGS_PAPER_HEIGHT,
- * converted to @unit. 
- * 
+ * converted to @unit.
+ *
  * Returns: the paper height, in units of @unit
  */
 double
@@ -690,10 +693,10 @@ gtk_print_settings_get_paper_height (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_set_paper_height:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @height: the paper height
  * @unit: the units of @height
- * 
+ *
  * Sets the value of %GTK_PRINT_SETTINGS_PAPER_HEIGHT.
  */
 void
@@ -708,10 +711,10 @@ gtk_print_settings_set_paper_height (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_use_color:
- * @settings: a #GtkPrintSettings
- * 
+ * @settings: a `GtkPrintSettings`
+ *
  * Gets the value of %GTK_PRINT_SETTINGS_USE_COLOR.
- * 
+ *
  * Returns: whether to use color
  */
 gboolean
@@ -724,9 +727,9 @@ gtk_print_settings_get_use_color (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_set_use_color:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @use_color: whether to use color
- * 
+ *
  * Sets the value of %GTK_PRINT_SETTINGS_USE_COLOR.
  */
 void
@@ -740,10 +743,10 @@ gtk_print_settings_set_use_color (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_collate:
- * @settings: a #GtkPrintSettings
- * 
+ * @settings: a `GtkPrintSettings`
+ *
  * Gets the value of %GTK_PRINT_SETTINGS_COLLATE.
- * 
+ *
  * Returns: whether to collate the printed pages
  */
 gboolean
@@ -756,9 +759,9 @@ gtk_print_settings_get_collate (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_set_collate:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @collate: whether to collate the output
- * 
+ *
  * Sets the value of %GTK_PRINT_SETTINGS_COLLATE.
  */
 void
@@ -772,10 +775,10 @@ gtk_print_settings_set_collate (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_reverse:
- * @settings: a #GtkPrintSettings
- * 
+ * @settings: a `GtkPrintSettings`
+ *
  * Gets the value of %GTK_PRINT_SETTINGS_REVERSE.
- * 
+ *
  * Returns: whether to reverse the order of the printed pages
  */
 gboolean
@@ -787,9 +790,9 @@ gtk_print_settings_get_reverse (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_set_reverse:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @reverse: whether to reverse the output
- * 
+ *
  * Sets the value of %GTK_PRINT_SETTINGS_REVERSE.
  */
 void
@@ -803,10 +806,10 @@ gtk_print_settings_set_reverse (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_duplex:
- * @settings: a #GtkPrintSettings
- * 
+ * @settings: a `GtkPrintSettings`
+ *
  * Gets the value of %GTK_PRINT_SETTINGS_DUPLEX.
- * 
+ *
  * Returns: whether to print the output in duplex.
  */
 GtkPrintDuplex
@@ -830,9 +833,9 @@ gtk_print_settings_get_duplex (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_set_duplex:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @duplex: a #GtkPrintDuplex value
- * 
+ *
  * Sets the value of %GTK_PRINT_SETTINGS_DUPLEX.
  */
 void
@@ -860,10 +863,10 @@ gtk_print_settings_set_duplex (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_quality:
- * @settings: a #GtkPrintSettings
- * 
+ * @settings: a `GtkPrintSettings`
+ *
  * Gets the value of %GTK_PRINT_SETTINGS_QUALITY.
- * 
+ *
  * Returns: the print quality
  */
 GtkPrintQuality
@@ -890,7 +893,7 @@ gtk_print_settings_get_quality (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_set_quality:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @quality: a #GtkPrintQuality value
  * 
  * Sets the value of %GTK_PRINT_SETTINGS_QUALITY.
@@ -923,10 +926,10 @@ gtk_print_settings_set_quality (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_page_set:
- * @settings: a #GtkPrintSettings
- * 
+ * @settings: a `GtkPrintSettings`
+ *
  * Gets the value of %GTK_PRINT_SETTINGS_PAGE_SET.
- * 
+ *
  * Returns: the set of pages to print
  */
 GtkPageSet
@@ -950,9 +953,9 @@ gtk_print_settings_get_page_set (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_set_page_set:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @page_set: a #GtkPageSet value
- * 
+ *
  * Sets the value of %GTK_PRINT_SETTINGS_PAGE_SET.
  */
 void
@@ -980,10 +983,10 @@ gtk_print_settings_set_page_set (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_number_up_layout:
- * @settings: a #GtkPrintSettings
- * 
+ * @settings: a `GtkPrintSettings`
+ *
  * Gets the value of %GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT.
- * 
+ *
  * Returns: layout of page in number-up mode
  */
 GtkNumberUpLayout
@@ -1019,9 +1022,9 @@ gtk_print_settings_get_number_up_layout (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_set_number_up_layout:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @number_up_layout: a #GtkNumberUpLayout value
- * 
+ *
  * Sets the value of %GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT.
  */
 void
@@ -1043,7 +1046,7 @@ gtk_print_settings_set_number_up_layout (GtkPrintSettings  *settings,
 
 /**
  * gtk_print_settings_get_n_copies:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * 
  * Gets the value of %GTK_PRINT_SETTINGS_N_COPIES.
  * 
@@ -1057,9 +1060,9 @@ gtk_print_settings_get_n_copies (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_set_n_copies:
- * @settings: a #GtkPrintSettings
- * @num_copies: the number of copies 
- * 
+ * @settings: a `GtkPrintSettings`
+ * @num_copies: the number of copies
+ *
  * Sets the value of %GTK_PRINT_SETTINGS_N_COPIES.
  */
 void
@@ -1072,10 +1075,10 @@ gtk_print_settings_set_n_copies (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_number_up:
- * @settings: a #GtkPrintSettings
- * 
+ * @settings: a `GtkPrintSettings`
+ *
  * Gets the value of %GTK_PRINT_SETTINGS_NUMBER_UP.
- * 
+ *
  * Returns: the number of pages per sheet
  */
 int
@@ -1086,9 +1089,9 @@ gtk_print_settings_get_number_up (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_set_number_up:
- * @settings: a #GtkPrintSettings
- * @number_up: the number of pages per sheet 
- * 
+ * @settings: a `GtkPrintSettings`
+ * @number_up: the number of pages per sheet
+ *
  * Sets the value of %GTK_PRINT_SETTINGS_NUMBER_UP.
  */
 void
@@ -1101,10 +1104,10 @@ gtk_print_settings_set_number_up (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_resolution:
- * @settings: a #GtkPrintSettings
- * 
+ * @settings: a `GtkPrintSettings`
+ *
  * Gets the value of %GTK_PRINT_SETTINGS_RESOLUTION.
- * 
+ *
  * Returns: the resolution in dpi
  */
 int
@@ -1115,11 +1118,11 @@ gtk_print_settings_get_resolution (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_set_resolution:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @resolution: the resolution in dpi
- * 
+ *
  * Sets the values of %GTK_PRINT_SETTINGS_RESOLUTION,
- * %GTK_PRINT_SETTINGS_RESOLUTION_X and 
+ * %GTK_PRINT_SETTINGS_RESOLUTION_X and
  * %GTK_PRINT_SETTINGS_RESOLUTION_Y.
  */
 void
@@ -1136,10 +1139,10 @@ gtk_print_settings_set_resolution (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_resolution_x:
- * @settings: a #GtkPrintSettings
- * 
+ * @settings: a `GtkPrintSettings`
+ *
  * Gets the value of %GTK_PRINT_SETTINGS_RESOLUTION_X.
- * 
+ *
  * Returns: the horizontal resolution in dpi
  */
 int
@@ -1150,10 +1153,10 @@ gtk_print_settings_get_resolution_x (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_get_resolution_y:
- * @settings: a #GtkPrintSettings
- * 
+ * @settings: a `GtkPrintSettings`
+ *
  * Gets the value of %GTK_PRINT_SETTINGS_RESOLUTION_Y.
- * 
+ *
  * Returns: the vertical resolution in dpi
  */
 int
@@ -1164,10 +1167,10 @@ gtk_print_settings_get_resolution_y (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_set_resolution_xy:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @resolution_x: the horizontal resolution in dpi
  * @resolution_y: the vertical resolution in dpi
- * 
+ *
  * Sets the values of %GTK_PRINT_SETTINGS_RESOLUTION,
  * %GTK_PRINT_SETTINGS_RESOLUTION_X and
  * %GTK_PRINT_SETTINGS_RESOLUTION_Y.
@@ -1187,10 +1190,10 @@ gtk_print_settings_set_resolution_xy (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_printer_lpi:
- * @settings: a #GtkPrintSettings
- * 
+ * @settings: a `GtkPrintSettings`
+ *
  * Gets the value of %GTK_PRINT_SETTINGS_PRINTER_LPI.
- * 
+ *
  * Returns: the resolution in lpi (lines per inch)
  */
 double
@@ -1201,9 +1204,9 @@ gtk_print_settings_get_printer_lpi (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_set_printer_lpi:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @lpi: the resolution in lpi (lines per inch)
- * 
+ *
  * Sets the value of %GTK_PRINT_SETTINGS_PRINTER_LPI.
  */
 void
@@ -1216,10 +1219,10 @@ gtk_print_settings_set_printer_lpi (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_scale:
- * @settings: a #GtkPrintSettings
- * 
+ * @settings: a `GtkPrintSettings`
+ *
  * Gets the value of %GTK_PRINT_SETTINGS_SCALE.
- * 
+ *
  * Returns: the scale in percent
  */
 double
@@ -1232,7 +1235,7 @@ gtk_print_settings_get_scale (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_set_scale:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @scale: the scale in percent
  * 
  * Sets the value of %GTK_PRINT_SETTINGS_SCALE.
@@ -1247,7 +1250,7 @@ gtk_print_settings_set_scale (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_print_pages:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * 
  * Gets the value of %GTK_PRINT_SETTINGS_PRINT_PAGES.
  * 
@@ -1277,7 +1280,7 @@ gtk_print_settings_get_print_pages (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_set_print_pages:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @pages: a #GtkPrintPages value
  * 
  * Sets the value of %GTK_PRINT_SETTINGS_PRINT_PAGES.
@@ -1310,14 +1313,14 @@ gtk_print_settings_set_print_pages (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_page_ranges:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @num_ranges: (out): return location for the length of the returned array
  *
  * Gets the value of %GTK_PRINT_SETTINGS_PAGE_RANGES.
  *
  * Returns: (array length=num_ranges) (transfer full): an array
- *     of #GtkPageRanges.  Use g_free() to free the array when
- *     it is no longer needed.
+ *   of `GtkPageRange`s. Use g_free() to free the array when
+ *   it is no longer needed.
  */
 GtkPageRange *
 gtk_print_settings_get_page_ranges (GtkPrintSettings *settings,
@@ -1371,10 +1374,10 @@ gtk_print_settings_get_page_ranges (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_set_page_ranges:
- * @settings: a #GtkPrintSettings
- * @page_ranges: (array length=num_ranges): an array of #GtkPageRanges
+ * @settings: a `GtkPrintSettings`
+ * @page_ranges: (array length=num_ranges): an array of `GtkPageRange`s
  * @num_ranges: the length of @page_ranges
- * 
+ *
  * Sets the value of %GTK_PRINT_SETTINGS_PAGE_RANGES.
  */
 void
@@ -1408,7 +1411,7 @@ gtk_print_settings_set_page_ranges  (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_default_source:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * 
  * Gets the value of %GTK_PRINT_SETTINGS_DEFAULT_SOURCE.
  * 
@@ -1422,7 +1425,7 @@ gtk_print_settings_get_default_source (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_set_default_source:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @default_source: the default source
  * 
  * Sets the value of %GTK_PRINT_SETTINGS_DEFAULT_SOURCE.
@@ -1436,7 +1439,7 @@ gtk_print_settings_set_default_source (GtkPrintSettings *settings,
      
 /**
  * gtk_print_settings_get_media_type:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * 
  * Gets the value of %GTK_PRINT_SETTINGS_MEDIA_TYPE.
  *
@@ -1452,7 +1455,7 @@ gtk_print_settings_get_media_type (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_set_media_type:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @media_type: the media type
  * 
  * Sets the value of %GTK_PRINT_SETTINGS_MEDIA_TYPE.
@@ -1468,7 +1471,7 @@ gtk_print_settings_set_media_type (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_get_dither:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * 
  * Gets the value of %GTK_PRINT_SETTINGS_DITHER.
  * 
@@ -1482,7 +1485,7 @@ gtk_print_settings_get_dither (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_set_dither:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @dither: the dithering that is used
  * 
  * Sets the value of %GTK_PRINT_SETTINGS_DITHER.
@@ -1496,7 +1499,7 @@ gtk_print_settings_set_dither (GtkPrintSettings *settings,
      
 /**
  * gtk_print_settings_get_finishings:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * 
  * Gets the value of %GTK_PRINT_SETTINGS_FINISHINGS.
  * 
@@ -1510,7 +1513,7 @@ gtk_print_settings_get_finishings (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_set_finishings:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @finishings: the finishings
  * 
  * Sets the value of %GTK_PRINT_SETTINGS_FINISHINGS.
@@ -1524,7 +1527,7 @@ gtk_print_settings_set_finishings (GtkPrintSettings *settings,
      
 /**
  * gtk_print_settings_get_output_bin:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * 
  * Gets the value of %GTK_PRINT_SETTINGS_OUTPUT_BIN.
  * 
@@ -1538,7 +1541,7 @@ gtk_print_settings_get_output_bin (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_set_output_bin:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @output_bin: the output bin
  * 
  * Sets the value of %GTK_PRINT_SETTINGS_OUTPUT_BIN.
@@ -1552,13 +1555,16 @@ gtk_print_settings_set_output_bin (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_load_file:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @file_name: (type filename): the filename to read the settings from
  * @error: (allow-none): return location for errors, or %NULL
  *
- * Reads the print settings from @file_name. If the file could not be loaded
- * then error is set to either a #GFileError or #GKeyFileError.
- * See gtk_print_settings_to_file().
+ * Reads the print settings from @file_name.
+ *
+ * If the file could not be loaded then error is set to either
+ * a `GFileError` or `GKeyFileError`.
+ *
+ * See [method@Gtk.PrintSettings.to_file].
  *
  * Returns: %TRUE on success
  */
@@ -1588,13 +1594,16 @@ gtk_print_settings_load_file (GtkPrintSettings *settings,
  * gtk_print_settings_new_from_file:
  * @file_name: (type filename): the filename to read the settings from
  * @error: (allow-none): return location for errors, or %NULL
- * 
- * Reads the print settings from @file_name. Returns a new #GtkPrintSettings
- * object with the restored settings, or %NULL if an error occurred. If the
- * file could not be loaded then error is set to either a #GFileError or
- * #GKeyFileError.  See gtk_print_settings_to_file().
  *
- * Returns: the restored #GtkPrintSettings
+ * Reads the print settings from @file_name.
+ *
+ * Returns a new `GtkPrintSettings` object with the restored settings,
+ * or %NULL if an error occurred. If the file could not be loaded then
+ * error is set to either a `GFileError` or `GKeyFileError`.
+ *
+ * See [method@Gtk.PrintSettings.to_file].
+ *
+ * Returns: the restored `GtkPrintSettings`
  */
 GtkPrintSettings *
 gtk_print_settings_new_from_file (const char   *file_name,
@@ -1613,15 +1622,16 @@ gtk_print_settings_new_from_file (const char   *file_name,
 
 /**
  * gtk_print_settings_load_key_file:
- * @settings: a #GtkPrintSettings
- * @key_file: the #GKeyFile to retrieve the settings from
- * @group_name: (allow-none): the name of the group to use, or %NULL to use the default
- *     “Print Settings”
+ * @settings: a `GtkPrintSettings`
+ * @key_file: the `GKeyFile` to retrieve the settings from
+ * @group_name: (allow-none): the name of the group to use, or %NULL
+ *   to use the default “Print Settings”
  * @error: (allow-none): return location for errors, or %NULL
- * 
- * Reads the print settings from the group @group_name in @key_file. If the
- * file could not be loaded then error is set to either a #GFileError or
- * #GKeyFileError.
+ *
+ * Reads the print settings from the group @group_name in @key_file.
+ *
+ * If the file could not be loaded then error is set to either a
+ * `GFileError` or `GKeyFileError`.
  *
  * Returns: %TRUE on success
  */
@@ -1673,17 +1683,18 @@ gtk_print_settings_load_key_file (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_new_from_key_file:
- * @key_file: the #GKeyFile to retrieve the settings from
+ * @key_file: the `GKeyFile` to retrieve the settings from
  * @group_name: (allow-none): the name of the group to use, or %NULL to use
  *     the default “Print Settings”
  * @error: (allow-none): return location for errors, or %NULL
  *
- * Reads the print settings from the group @group_name in @key_file.  Returns a
- * new #GtkPrintSettings object with the restored settings, or %NULL if an
- * error occurred. If the file could not be loaded then error is set to either
- * a #GFileError or #GKeyFileError.
+ * Reads the print settings from the group @group_name in @key_file.
  *
- * Returns: the restored #GtkPrintSettings
+ * Returns a new `GtkPrintSettings` object with the restored settings,
+ * or %NULL if an error occurred. If the file could not be loaded then
+ * error is set to either `GFileError` or `GKeyFileError`.
+ *
+ * Returns: the restored `GtkPrintSettings`
  */
 GtkPrintSettings *
 gtk_print_settings_new_from_key_file (GKeyFile     *key_file,
@@ -1704,14 +1715,15 @@ gtk_print_settings_new_from_key_file (GKeyFile     *key_file,
 
 /**
  * gtk_print_settings_to_file:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  * @file_name: (type filename): the file to save to
  * @error: (allow-none): return location for errors, or %NULL
- * 
- * This function saves the print settings from @settings to @file_name. If the
- * file could not be loaded then error is set to either a #GFileError or
- * #GKeyFileError.
- * 
+ *
+ * This function saves the print settings from @settings to @file_name.
+ *
+ * If the file could not be written then error is set to either a
+ * `GFileError` or `GKeyFileError`.
+ *
  * Returns: %TRUE on success
  */
 gboolean
@@ -1762,8 +1774,8 @@ add_value_to_key_file (const char   *key,
 
 /**
  * gtk_print_settings_to_key_file:
- * @settings: a #GtkPrintSettings
- * @key_file: the #GKeyFile to save the print settings to
+ * @settings: a `GtkPrintSettings`
+ * @key_file: the `GKeyFile` to save the print settings to
  * @group_name: (nullable): the group to add the settings to in @key_file, or
  *     %NULL to use the default “Print Settings”
  *
@@ -1801,11 +1813,11 @@ add_to_variant (const char *key,
 
 /**
  * gtk_print_settings_to_gvariant:
- * @settings: a #GtkPrintSettings
+ * @settings: a `GtkPrintSettings`
  *
  * Serialize print settings to an a{sv} variant.
  *
- * Returns: (transfer none): a new, floating, #GVariant
+ * Returns: (transfer none): a new, floating, `GVariant`
  */
 GVariant *
 gtk_print_settings_to_gvariant (GtkPrintSettings *settings)
@@ -1820,12 +1832,14 @@ gtk_print_settings_to_gvariant (GtkPrintSettings *settings)
 
 /**
  * gtk_print_settings_new_from_gvariant:
- * @variant: an a{sv} #GVariant
+ * @variant: an a{sv} `GVariant`
  *
- * Deserialize print settings from an a{sv} variant in
- * the format produced by gtk_print_settings_to_gvariant().
+ * Deserialize print settings from an a{sv} variant.
  *
- * Returns: (transfer full): a new #GtkPrintSettings object
+ * The variant must be in the format produced by
+ * [method@Gtk.PrintSettings.to_gvariant].
+ *
+ * Returns: (transfer full): a new `GtkPrintSettings` object
  */
 GtkPrintSettings *
 gtk_print_settings_new_from_gvariant (GVariant *variant)
