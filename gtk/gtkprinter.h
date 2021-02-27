@@ -49,7 +49,7 @@ G_BEGIN_DECLS
  * @GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT: Print dialog will allow to rearrange
  *   pages when printing multiple pages per sheet
  *
- * An enum for specifying which features the print dialog should offer.
+ * Specifies which features the print dialog should offer.
  *
  * If neither %GTK_PRINT_CAPABILITY_GENERATE_PDF nor
  * %GTK_PRINT_CAPABILITY_GENERATE_PS is specified, GTK assumes that all
@@ -146,6 +146,7 @@ gboolean                 gtk_printer_get_hard_margins_for_paper_size (GtkPrinter
  * @data: (closure): user data passed to gtk_enumerate_printers()
  *
  * The type of function passed to gtk_enumerate_printers().
+ *
  * Note that you need to ref @printer, if you want to keep
  * a reference to it after the function has returned.
  *
