@@ -235,7 +235,7 @@ static void
 parse_all_input (GdkBroadwayServer *server)
 {
   guint8 *p, *end;
-  size_t size;
+  guint32 size;
   BroadwayReply *reply;
 
   p = server->recv_buffer;
