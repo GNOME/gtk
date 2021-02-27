@@ -37,20 +37,23 @@
 /**
  * GtkMultiFilter:
  *
- * `GtkMultiFilter` is the base type that implements support for handling
- * multiple filters.
+ * `GtkMultiFilter` is the base class for filters that combine multiple filters.
  */
 
 /**
  * GtkAnyFilter:
  *
  * `GtkAnyFilter` matches an item when at least one of its filters matches.
+ *
+ * To add filters to a `GtkAnyFilter`, use [method@Gtk.MultiFilter.append].
  */
 
 /**
  * GtkEveryFilter:
  *
  * `GtkEveryFilter` matches an item when each of its filters matches.
+ *
+ * To add filters to a `GtkEveryFilter`, use [method@Gtk.MultiFilter.append].
  */
 
 struct _GtkMultiFilter
