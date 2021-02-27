@@ -48,13 +48,12 @@
  */
 
 /**
- * SECTION:gtkapplication
- * @title: GtkApplication
- * @short_description: Application class
+ * GtkApplication:
  *
- * `GtkApplication` is a class that handles many important aspects
- * of a GTK application in a convenient fashion, without enforcing
- * a one-size-fits-all application model.
+ * `GtkApplication` is a high-level API for writing applications.
+ *
+ * It supports many aspects of writing a GTK application in a convenient
+ * fashion, without enforcing a one-size-fits-all model.
  *
  * Currently, `GtkApplication` handles GTK initialization, application
  * uniqueness, session management, provides some basic scriptability and
@@ -67,7 +66,7 @@
  *
  * ## Automatic resources
  *
- * #GtkApplication will automatically load menus from the [class@Gtk.Builder]
+ * `GtkApplication` will automatically load menus from the `GtkBuilder`
  * resource located at "gtk/menus.ui", relative to the application's
  * resource base path (see `g_application_set_resource_base_path()`).
  * The menu with the ID "menubar" is taken as the application's
@@ -85,9 +84,9 @@
  * information.
  *
  * If there is a resource located at "gtk/help-overlay.ui" which
- * defines a [class@Gtk.ShortcutsWindow] with ID "help_overlay" then `GtkApplication`
- * associates an instance of this shortcuts window with each
- * [class@Gtk.ApplicationWindow] and sets up the keyboard accelerator
+ * defines a [class@Gtk.ShortcutsWindow] with ID "help_overlay" then
+ * `GtkApplication` associates an instance of this shortcuts window with
+ * each [class@Gtk.ApplicationWindow] and sets up the keyboard accelerator
  * <kbd>Control</kbd>+<kbd>?</kbd> to open it. To create a menu item that
  * displays the shortcuts window, associate the item with the action
  * `win.show-help-overlay`.
@@ -97,8 +96,8 @@
  * [A simple example](https://gitlab.gnome.org/GNOME/gtk/tree/master/examples/bp/bloatpad.c)
  * is available in the GTK source code repository
  *
- * `GtkApplication` optionally registers with a session manager
- * of the users session (if you set the [property@Gtk.Application:register-session]
+ * `GtkApplication` optionally registers with a session manager of the
+ * users session (if you set the [property@Gtk.Application:register-session]
  * property) and offers various functionality related to the session
  * life-cycle.
  *
@@ -557,9 +556,10 @@ gtk_application_class_init (GtkApplicationClass *class)
    * @application: the `GtkApplication` which emitted the signal
    * @window: the [class@Gtk.Window] that is being removed
    *
-   * Emitted when a [class@Gtk.Window] is removed from `application`,
-   * either as a side-effect of being destroyed or explicitly
-   * through [method@Gtk.Application.remove_window].
+   * Emitted when a [class@Gtk.Window] is removed from `application`.
+   *
+   * This can happen as a side-effect of the window being destroyed
+   * or explicitly through [method@Gtk.Application.remove_window].
    */
   gtk_application_signals[WINDOW_REMOVED] =
     g_signal_new (I_("window-removed"), GTK_TYPE_APPLICATION, G_SIGNAL_RUN_FIRST,
@@ -572,11 +572,12 @@ gtk_application_class_init (GtkApplicationClass *class)
    * GtkApplication::query-end:
    * @application: the `GtkApplication` which emitted the signal
    *
-   * Emitted when the session manager is about to end the session, only
-   * if [property@Gtk.Application:register-session] is `TRUE`. Applications can
-   * connect to this signal and call [method@Gtk.Application.inhibit] with
-   * `GTK_APPLICATION_INHIBIT_LOGOUT` to delay the end of the session
-   * until state has been saved.
+   * Emitted when the session manager is about to end the session.
+   *
+   * This signal is only emitted if [property@Gtk.Application:register-session]
+   * is `TRUE`. Applications can connect to this signal and call
+   * [method@Gtk.Application.inhibit] with `GTK_APPLICATION_INHIBIT_LOGOUT`
+   * to delay the end of the session until state has been saved.
    */
   gtk_application_signals[QUERY_END] =
     g_signal_new (I_("query-end"), GTK_TYPE_APPLICATION, G_SIGNAL_RUN_FIRST,
@@ -584,10 +585,12 @@ gtk_application_class_init (GtkApplicationClass *class)
                   NULL, NULL,
                   NULL,
                   G_TYPE_NONE, 0);
+
   /**
    * GtkApplication:register-session:
    *
    * Set this property to `TRUE` to register with the session manager.
+   *
    * This will make GTK track the session state (such as the
    * [property@Gtk.Application:screensaver-active] property).
    */
@@ -602,8 +605,10 @@ gtk_application_class_init (GtkApplicationClass *class)
    * GtkApplication:screensaver-active:
    *
    * This property is `TRUE` if GTK believes that the screensaver is
-   * currently active. GTK only tracks session state (including this)
-   * when [property@Gtk.Application:register-session] is set to %TRUE.
+   * currently active.
+   *
+   * GTK only tracks session state (including this) when
+   * [property@Gtk.Application:register-session] is set to %TRUE.
    *
    * Tracking the screensaver state is currently only supported on
    * Linux.
@@ -616,7 +621,7 @@ gtk_application_class_init (GtkApplicationClass *class)
                           G_PARAM_READABLE|G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkApplication:menubar:
+   * GtkApplication:menubar: (attributes org.gtk.Property.get=gtk_application_get_menubar org.gtk.Property.set=gtk_application_set_menubar)
    *
    * The `GMenuModel` to be used for the application's menu bar.
    */
@@ -628,7 +633,7 @@ gtk_application_class_init (GtkApplicationClass *class)
                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkApplication:active-window:
+   * GtkApplication:active-window: (attributes org.gtk.Property.get=gtk_application_get_active_window)
    *
    * The currently focused window of the application.
    */
@@ -809,7 +814,7 @@ gtk_application_get_window_by_id (GtkApplication *application,
 }
 
 /**
- * gtk_application_get_active_window:
+ * gtk_application_get_active_window: (attributes org.gtk.Method.get_property=active-window)
  * @application: a `GtkApplication`
  *
  * Gets the “active” window for the application.
@@ -842,7 +847,7 @@ gtk_application_update_accels (GtkApplication *application)
 }
 
 /**
- * gtk_application_set_menubar:
+ * gtk_application_set_menubar: (attributes org.gtk.Method.set_property=menubar)
  * @application: a `GtkApplication`
  * @menubar: (nullable): a `GMenuModel`
  *
@@ -885,7 +890,7 @@ gtk_application_set_menubar (GtkApplication *application,
 }
 
 /**
- * gtk_application_get_menubar:
+ * gtk_application_get_menubar: (attributes org.gtk.Method.get_property=menubar)
  * @application: a `GtkApplication`
  *
  * Returns the menu model that has been set with
@@ -913,7 +918,9 @@ gtk_application_get_menubar (GtkApplication *application)
  * @GTK_APPLICATION_INHIBIT_IDLE: Inhibit the session being
  *     marked as idle (and possibly locked)
  *
- * Types of user actions that may be blocked by [method@Gtk.Application.inhibit].
+ * Types of user actions that may be blocked by `GtkApplication`.
+ *
+ * See [method@Gtk.Application.inhibit].
  */
 
 /**
@@ -925,8 +932,10 @@ gtk_application_get_menubar (GtkApplication *application)
  *   why these operations are inhibited
  *
  * Inform the session manager that certain types of actions should be
- * inhibited. This is not guaranteed to work on all platforms and for
- * all types of actions.
+ * inhibited.
+ *
+ * This is not guaranteed to work on all platforms and for all types of
+ * actions.
  *
  * Applications should invoke this method when they begin an operation
  * that should not be interrupted, such as creating a CD or DVD. The
@@ -971,7 +980,9 @@ gtk_application_inhibit (GtkApplication             *application,
  * @application: the `GtkApplication`
  * @cookie: a cookie that was returned by [method@Gtk.Application.inhibit]
  *
- * Removes an inhibitor that has been established with [method@Gtk.Application.inhibit].
+ * Removes an inhibitor that has been previously established.
+ *
+ * See [method@Gtk.Application.inhibit].
  *
  * Inhibitors are also cleared when the application exits.
  */
@@ -1013,6 +1024,7 @@ gtk_application_get_application_accels (GtkApplication *application)
  * @application: a `GtkApplication`
  *
  * Lists the detailed action names which have associated accelerators.
+ *
  * See [method@Gtk.Application.set_accels_for_action].
  *
  * Returns: (transfer full) (array zero-terminated=1): the detailed action names
