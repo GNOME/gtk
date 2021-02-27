@@ -38,7 +38,7 @@ typedef struct _GtkShortcutsShortcutClass GtkShortcutsShortcutClass;
 /**
  * GtkShortcutType:
  * @GTK_SHORTCUT_ACCELERATOR:
- *   The shortcut is a keyboard accelerator. The #GtkShortcutsShortcut:accelerator
+ *   The shortcut is a keyboard accelerator. The GtkShortcutsShortcut:accelerator
  *   property will be used.
  * @GTK_SHORTCUT_GESTURE_PINCH:
  *   The shortcut is a pinch gesture. GTK provides an icon and subtitle.
@@ -53,7 +53,7 @@ typedef struct _GtkShortcutsShortcutClass GtkShortcutsShortcutClass;
  * @GTK_SHORTCUT_GESTURE_TWO_FINGER_SWIPE_RIGHT:
  *   The shortcut is a two-finger swipe gesture. GTK provides an icon and subtitle.
  * @GTK_SHORTCUT_GESTURE:
- *   The shortcut is a gesture. The #GtkShortcutsShortcut:icon property will be
+ *   The shortcut is a gesture. The GtkShortcutsShortcut:icon property will be
  *   used.
  * @GTK_SHORTCUT_GESTURE_SWIPE_LEFT:
  *   The shortcut is a swipe gesture. GTK provides an icon and subtitle.

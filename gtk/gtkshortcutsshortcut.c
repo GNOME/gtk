@@ -32,12 +32,12 @@
 #include "gtktypebuiltins.h"
 
 /**
- * SECTION:gtkshortcutsshortcut
- * @Title: GtkShortcutsShortcut
- * @Short_description: Represents a keyboard shortcut in a GtkShortcutsWindow
+ * GtkShortcutsShortcut:
  *
- * A GtkShortcutsShortcut represents a single keyboard shortcut or gesture
- * with a short text. This widget is only meant to be used with #GtkShortcutsWindow.
+ * A `GtkShortcutsShortcut` represents a single keyboard shortcut or gesture
+ * with a short text.
+ *
+ * This widget is only meant to be used with `GtkShortcutsWindow`.
  */
 
 struct _GtkShortcutsShortcut
@@ -551,24 +551,30 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
   /**
    * GtkShortcutsShortcut:accelerator:
    *
-   * The accelerator(s) represented by this object. This property is used
-   * if #GtkShortcutsShortcut:shortcut-type is set to #GTK_SHORTCUT_ACCELERATOR.
+   * The accelerator(s) represented by this object.
    *
-   * The syntax of this property is (an extension of) the syntax understood by
-   * gtk_accelerator_parse(). Multiple accelerators can be specified by separating
-   * them with a space, but keep in mind that the available width is limited.
-   * It is also possible to specify ranges of shortcuts, using ... between the keys.
-   * Sequences of keys can be specified using a + or & between the keys.
+   * This property is used if [property@Gtk.ShortcutsShortcut:shortcut-type]
+   * is set to %GTK_SHORTCUT_ACCELERATOR.
+   *
+   * The syntax of this property is (an extension of) the syntax understood
+   * by [func@Gtk.accelerator_parse]. Multiple accelerators can be specified
+   * by separating them with a space, but keep in mind that the available width
+   * is limited.
+   *
+   * It is also possible to specify ranges of shortcuts, using "..." between
+   * the keys. Sequences of keys can be specified using a "+" or "&" between
+   * the keys.
    *
    * Examples:
+   *
    * - A single shortcut: <ctl><alt>delete
    * - Two alternative shortcuts: <shift>a Home
    * - A range of shortcuts: <alt>1...<alt>9
    * - Several keys pressed together: Control_L&Control_R
    * - A sequence of shortcuts or keys: <ctl>c+<ctl>x
    *
-   * Use + instead of & when the keys may (or have to be) pressed sequentially (e.g
-   * use t+t for 'press the t key twice').
+   * Use "+" instead of "&" when the keys may (or have to be) pressed
+   * sequentially (e.g use "t+t" for 'press the t key twice').
    *
    * Note that <, > and & need to be escaped as &lt;, &gt; and &amp; when used
    * in .ui files.
@@ -583,8 +589,11 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
   /**
    * GtkShortcutsShortcut:icon:
    *
-   * An icon to represent the shortcut or gesture. This property is used if
-   * #GtkShortcutsShortcut:shortcut-type is set to #GTK_SHORTCUT_GESTURE.
+   * An icon to represent the shortcut or gesture.
+   *
+   * This property is used if [property@Gtk.ShortcutsShortcut:shortcut-type]
+   * is set to %GTK_SHORTCUT_GESTURE.
+   *
    * For the other predefined gesture types, GTK provides an icon on its own.
    */
   properties[PROP_ICON] =
@@ -610,7 +619,9 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * GtkShortcutsShortcut:title:
    *
    * The textual description for the shortcut or gesture represented by
-   * this object. This should be a short string that can fit in a single line.
+   * this object.
+   *
+   * This should be a short string that can fit in a single line.
    */
   properties[PROP_TITLE] =
     g_param_spec_string ("title",
@@ -678,9 +689,10 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
   /**
    * GtkShortcutsShortcut:direction:
    *
-   * The text direction for which this shortcut is active. If the shortcut
-   * is used regardless of the text direction, set this property to
-   * #GTK_TEXT_DIR_NONE.
+   * The text direction for which this shortcut is active.
+   *
+   * If the shortcut is used regardless of the text direction,
+   * set this property to %GTK_TEXT_DIR_NONE.
    */
   properties[PROP_DIRECTION] =
     g_param_spec_enum ("direction",
@@ -706,11 +718,12 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
   /**
    * GtkShortcutsShortcut:action-name:
    *
-   * A detailed action name. If this is set for a shortcut
-   * of type %GTK_SHORTCUT_ACCELERATOR, then GTK will use
-   * the accelerators that are associated with the action
-   * via gtk_application_set_accels_for_action(), and setting
-   * #GtkShortcutsShortcut:accelerator is not necessary.
+   * A detailed action name.
+   *
+   * If this is set for a shortcut of type %GTK_SHORTCUT_ACCELERATOR,
+   * then GTK will use the accelerators that are associated with the
+   * action via [method@Gtk.Application.set_accels_for_action], and
+   * setting [property@Gtk.ShortcutsShortcut:accelerator] is not necessary.
    */
   properties[PROP_ACTION_NAME] =
     g_param_spec_string ("action-name",

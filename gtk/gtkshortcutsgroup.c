@@ -30,16 +30,16 @@
 #include "gtksizegroup.h"
 
 /**
- * SECTION:gtkshortcutsgroup
- * @Title: GtkShortcutsGroup
- * @Short_description: Represents a group of shortcuts in a GtkShortcutsWindow
+ * GtkShortcutsGroup:
  *
- * A GtkShortcutsGroup represents a group of related keyboard shortcuts
- * or gestures. The group has a title. It may optionally be associated with
- * a view of the application, which can be used to show only relevant shortcuts
+ * A `GtkShortcutsGroup` represents a group of related keyboard shortcuts
+ * or gestures.
+ *
+ * The group has a title. It may optionally be associated with a view
+ * of the application, which can be used to show only relevant shortcuts
  * depending on the application context.
  *
- * This widget is only meant to be used with #GtkShortcutsWindow.
+ * This widget is only meant to be used with [class@Gtk.ShortcutsWindow].
  */
 
 struct _GtkShortcutsGroup
@@ -284,8 +284,9 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
    * GtkShortcutsGroup:view:
    *
    * An optional view that the shortcuts in this group are relevant for.
-   * The group will be hidden if the #GtkShortcutsWindow:view-name property
-   * does not match the view of this group.
+   *
+   * The group will be hidden if the [property@Gtk.ShortcutsWindow:view-name]
+   * property does not match the view of this group.
    *
    * Set this to %NULL to make the group always visible.
    */
