@@ -35,24 +35,21 @@
 #include "gtkintl.h"
 
 /**
- * SECTION:gtkstacksidebar
- * @Title: GtkStackSidebar
- * @Short_description: An automatic sidebar widget
+ * GtkStackSidebar:
  *
- * A GtkStackSidebar enables you to quickly and easily provide a
- * consistent "sidebar" object for your user interface.
+ * A `GtkStackSidebar` uses a sidebar to switch between `GtkStack` pages.
  *
- * In order to use a GtkStackSidebar, you simply use a GtkStack to
+ * In order to use a `GtkStackSidebar`, you simply use a `GtkStack` to
  * organize your UI flow, and add the sidebar to your sidebar area. You
- * can use gtk_stack_sidebar_set_stack() to connect the #GtkStackSidebar
- * to the #GtkStack.
+ * can use [method@Gtk.StackSidebar.set_stack] to connect the `GtkStackSidebar`
+ * to the `GtkStack`.
  *
  * # CSS nodes
  *
- * GtkStackSidebar has a single CSS node with name stacksidebar and
+ * `GtkStackSidebar` has a single CSS node with name stacksidebar and
  * style class .sidebar.
  *
- * When circumstances require it, GtkStackSidebar adds the
+ * When circumstances require it, `GtkStackSidebar` adds the
  * .needs-attention style class to the widgets representing the stack
  * pages.
  */
@@ -363,6 +360,11 @@ gtk_stack_sidebar_class_init (GtkStackSidebarClass *klass)
   object_class->set_property = gtk_stack_sidebar_set_property;
   object_class->get_property = gtk_stack_sidebar_get_property;
 
+   /**
+   * GtkStackSidebar:stack: (attributes org.gtk.Property.get=gtk_stack_sidebar_get_stack org.gtk.Property.set=gtk_stack_sidebar_set_stack)
+   *
+   * The stack.
+   */
   obj_properties[PROP_STACK] =
       g_param_spec_object (I_("stack"), P_("Stack"),
                            P_("Associated stack for this GtkStackSidebar"),
@@ -378,9 +380,9 @@ gtk_stack_sidebar_class_init (GtkStackSidebarClass *klass)
 /**
  * gtk_stack_sidebar_new:
  *
- * Creates a new sidebar.
+ * Creates a new `GtkStackSidebar`.
  *
- * Returns: the new #GtkStackSidebar
+ * Returns: the new `GtkStackSidebar`
  */
 GtkWidget *
 gtk_stack_sidebar_new (void)
@@ -389,14 +391,14 @@ gtk_stack_sidebar_new (void)
 }
 
 /**
- * gtk_stack_sidebar_set_stack:
- * @self: a #GtkStackSidebar
- * @stack: a #GtkStack
+ * gtk_stack_sidebar_set_stack: (attributes org.gtk.Method.set_property=stack)
+ * @self: a `GtkStackSidebar`
+ * @stack: a `GtkStack`
  *
- * Set the #GtkStack associated with this #GtkStackSidebar.
+ * Set the `GtkStack` associated with this `GtkStackSidebar`.
  *
- * The sidebar widget will automatically update according to the order
- * (packing) and items within the given #GtkStack.
+ * The sidebar widget will automatically update according to
+ * the order and items within the given `GtkStack`.
  */
 void
 gtk_stack_sidebar_set_stack (GtkStackSidebar *self,
@@ -418,11 +420,10 @@ gtk_stack_sidebar_set_stack (GtkStackSidebar *self,
 }
 
 /**
- * gtk_stack_sidebar_get_stack:
- * @self: a #GtkStackSidebar
+ * gtk_stack_sidebar_get_stack: (attributes org.gtk.Method.get_property=stack)
+ * @self: a `GtkStackSidebar`
  *
  * Retrieves the stack.
- * See gtk_stack_sidebar_set_stack().
  *
  * Returns: (nullable) (transfer none): the associated #GtkStack or
  *     %NULL if none has been set explicitly
