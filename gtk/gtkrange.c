@@ -49,16 +49,17 @@
 #include <math.h>
 
 /**
- * SECTION:gtkrange
- * @Short_description: Base class for widgets which visualize an adjustment
- * @Title: GtkRange
+ * GtkRange:
  *
- * #GtkRange is the common base class for widgets which visualize an
- * adjustment, e.g #GtkScale or #GtkScrollbar.
+ * `GtkRange` is the common base class for widgets which visualize an
+ * adjustment.
+ *
+ * Widgets that are derived from `GtkRange` include
+ * [class@Gtk.Scale] and [class@Gtk.Scrollbar].
  *
  * Apart from signals for monitoring the parameters of the adjustment,
- * #GtkRange provides properties and methods for setting a
- * “fill level” on range widgets. See gtk_range_set_fill_level().
+ * `GtkRange` provides properties and methods for setting a
+ * “fill level” on range widgets. See [method@Gtk.Range.set_fill_level].
  */
 
 
@@ -276,7 +277,7 @@ gtk_range_class_init (GtkRangeClass *class)
 
   /**
    * GtkRange::value-changed:
-   * @range: the #GtkRange that received the signal
+   * @range: the `GtkRange` that received the signal
    *
    * Emitted when the range value changes.
    */
@@ -291,7 +292,7 @@ gtk_range_class_init (GtkRangeClass *class)
 
   /**
    * GtkRange::adjust-bounds:
-   * @range: the #GtkRange that received the signal
+   * @range: the `GtkRange` that received the signal
    * @value: the value before we clamp
    *
    * Emitted before clamping a value, to give the application a
@@ -309,10 +310,12 @@ gtk_range_class_init (GtkRangeClass *class)
 
   /**
    * GtkRange::move-slider:
-   * @range: the #GtkRange that received the signal
+   * @range: the `GtkRange` that received the signal
    * @step: how to move the slider
    *
-   * Virtual function that moves the slider. Used for keybindings.
+   * Virtual function that moves the slider.
+   *
+   * Used for keybindings.
    */
   signals[MOVE_SLIDER] =
     g_signal_new (I_("move-slider"),
@@ -326,22 +329,22 @@ gtk_range_class_init (GtkRangeClass *class)
 
   /**
    * GtkRange::change-value:
-   * @range: the #GtkRange that received the signal
+   * @range: the `GtkRange` that received the signal
    * @scroll: the type of scroll action that was performed
    * @value: the new value resulting from the scroll action
    *
-   * The #GtkRange::change-value signal is emitted when a scroll action is
-   * performed on a range.  It allows an application to determine the
-   * type of scroll event that occurred and the resultant new value.
-   * The application can handle the event itself and return %TRUE to
-   * prevent further processing.  Or, by returning %FALSE, it can pass
-   * the event to other handlers until the default GTK handler is
-   * reached.
+   * Emitted when a scroll action is performed on a range.
    *
-   * The value parameter is unrounded.  An application that overrides
-   * the GtkRange::change-value signal is responsible for clamping the
-   * value to the desired number of decimal digits; the default GTK
-   * handler clamps the value based on #GtkRange:round-digits.
+   * It allows an application to determine the type of scroll event
+   * that occurred and the resultant new value. The application can
+   * handle the event itself and return %TRUE to prevent further
+   * processing. Or, by returning %FALSE, it can pass the event to
+   * other handlers until the default GTK handler is reached.
+   *
+   * The value parameter is unrounded. An application that overrides
+   * the ::change-value signal is responsible for clamping the value
+   * to the desired number of decimal digits; the default GTK
+   * handler clamps the value based on [property@Gtk.Range:round-digits].
    *
    * Returns: %TRUE to prevent other handlers from being invoked for
    *     the signal, %FALSE to propagate the signal further
@@ -359,6 +362,11 @@ gtk_range_class_init (GtkRangeClass *class)
 
   g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
 
+  /**
+   * GtkRange:adjustment: (attributes org.gtk.Property.get=gtk_range_get_adjustment org.gtk.Property.set=gtk_range_set_adjustment)
+   *
+   * The adjustment that is controlled by the range.
+   */
   properties[PROP_ADJUSTMENT] =
       g_param_spec_object ("adjustment",
                            P_("Adjustment"),
@@ -366,6 +374,11 @@ gtk_range_class_init (GtkRangeClass *class)
                            GTK_TYPE_ADJUSTMENT,
                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT);
 
+  /**
+   * GtkRange:inverted: (attributes org.gtk.Property.get=gtk_range_get_inverted org.gtk.Property.set=gtk_range_set_inverted)
+   *
+   * If %TRUE, the direction in which the slider moves is inverted.
+   */
   properties[PROP_INVERTED] =
       g_param_spec_boolean ("inverted",
                             P_("Inverted"),
@@ -374,12 +387,11 @@ gtk_range_class_init (GtkRangeClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkRange:show-fill-level:
+   * GtkRange:show-fill-level: (attributes org.gtk.Property.get=gtk_range_get_show_fill_level org.gtk.Property.set=gtk_range_set_show_fill_level)
    *
-   * The show-fill-level property controls whether fill level indicator
-   * graphics are displayed on the trough. See
-   * gtk_range_set_show_fill_level().
-   **/
+   * Controls whether fill level indicator graphics are displayed
+   * on the trough.
+   */
   properties[PROP_SHOW_FILL_LEVEL] =
       g_param_spec_boolean ("show-fill-level",
                             P_("Show Fill Level"),
@@ -388,12 +400,11 @@ gtk_range_class_init (GtkRangeClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkRange:restrict-to-fill-level:
+   * GtkRange:restrict-to-fill-level: (attributes org.gtk.Property.get=gtk_range_get_restrict_to_fill_level org.gtk.Property.set=gtk_range_set_restrict_to_fill_level)
    *
-   * The restrict-to-fill-level property controls whether slider
-   * movement is restricted to an upper boundary set by the
-   * fill level. See gtk_range_set_restrict_to_fill_level().
-   **/
+   * Controls whether slider movement is restricted to an
+   * upper boundary set by the fill level.
+   */
   properties[PROP_RESTRICT_TO_FILL_LEVEL] =
       g_param_spec_boolean ("restrict-to-fill-level",
                             P_("Restrict to Fill Level"),
@@ -402,11 +413,10 @@ gtk_range_class_init (GtkRangeClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkRange:fill-level:
+   * GtkRange:fill-level: (attributes org.gtk.Property.get=gtk_range_get_fill_level org.gtk.Property.set=gtk_range_set_fill_level)
    *
    * The fill level (e.g. prebuffering of a network stream).
-   * See gtk_range_set_fill_level().
-   **/
+   */
   properties[PROP_FILL_LEVEL] =
       g_param_spec_double ("fill-level",
                            P_("Fill Level"),
@@ -416,10 +426,12 @@ gtk_range_class_init (GtkRangeClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkRange:round-digits:
+   * GtkRange:round-digits: (attributes org.gtk.Property.get=gtk_range_get_round_digits org.gtk.Property.set=gtk_range_set_round_digits)
    *
    * The number of digits to round the value to when
-   * it changes, or -1. See #GtkRange::change-value.
+   * it changes.
+   *
+   * See [signal@Gtk.Range::change-value].
    */
   properties[PROP_ROUND_DIGITS] =
       g_param_spec_int ("round-digits",
@@ -604,15 +616,12 @@ gtk_range_set_orientation (GtkRange       *range,
 }
 
 /**
- * gtk_range_get_adjustment:
- * @range: a #GtkRange
- * 
- * Get the #GtkAdjustment which is the “model” object for #GtkRange.
- * See gtk_range_set_adjustment() for details.
- * The return value does not have a reference added, so should not
- * be unreferenced.
- * 
- * Returns: (transfer none): a #GtkAdjustment
+ * gtk_range_get_adjustment: (attributes org.gtk.Method.get_property=adjustment)
+ * @range: a `GtkRange`
+ *
+ * Get the adjustment which is the “model” object for `GtkRange`.
+ *
+ * Returns: (transfer none): a `GtkAdjustment`
  **/
 GtkAdjustment*
 gtk_range_get_adjustment (GtkRange *range)
@@ -628,18 +637,20 @@ gtk_range_get_adjustment (GtkRange *range)
 }
 
 /**
- * gtk_range_set_adjustment:
- * @range: a #GtkRange
- * @adjustment: a #GtkAdjustment
+ * gtk_range_set_adjustment: (attributes org.gtk.Method.set_property=adjustment)
+ * @range: a `GtkRange`
+ * @adjustment: a `GtkAdjustment`
  *
- * Sets the adjustment to be used as the “model” object for this range
- * widget. The adjustment indicates the current range value, the
- * minimum and maximum range values, the step/page increments used
- * for keybindings and scrolling, and the page size. The page size
- * is normally 0 for #GtkScale and nonzero for #GtkScrollbar, and
- * indicates the size of the visible area of the widget being scrolled.
+ * Sets the adjustment to be used as the “model” object for the `GtkRange`
+ *
+ * The adjustment indicates the current range value, the minimum and
+ * maximum range values, the step/page increments used for keybindings
+ * and scrolling, and the page size.
+ *
+ * The page size is normally 0 for `GtkScale` and nonzero for `GtkScrollbar`,
+ * and indicates the size of the visible area of the widget being scrolled.
  * The page size affects the size of the scrollbar slider.
- **/
+ */
 void
 gtk_range_set_adjustment (GtkRange      *range,
 			  GtkAdjustment *adjustment)
@@ -762,15 +773,17 @@ update_fill_position (GtkRange *range)
 }
 
 /**
- * gtk_range_set_inverted:
- * @range: a #GtkRange
+ * gtk_range_set_inverted: (attributes org.gtk.Method.set_property=inverted)
+ * @range: a `GtkRange`
  * @setting: %TRUE to invert the range
+ *
+ * Sets whether to invert the range.
  *
  * Ranges normally move from lower to higher values as the
  * slider moves from top to bottom or left to right. Inverted
- * ranges have higher values at the top or on the right rather than
- * on the bottom or left.
- **/
+ * ranges have higher values at the top or on the right rather
+ * than on the bottom or left.
+ */
 void
 gtk_range_set_inverted (GtkRange *range,
                         gboolean  setting)
@@ -795,13 +808,15 @@ gtk_range_set_inverted (GtkRange *range,
 }
 
 /**
- * gtk_range_get_inverted:
- * @range: a #GtkRange
- * 
- * Gets the value set by gtk_range_set_inverted().
- * 
+ * gtk_range_get_inverted: (attributes org.gtk.Method.get_property=inverted)
+ * @range: a `GtkRange`
+ *
+ * Gets whether the range is inverted.
+ *
+ * See [method@Gtk.Range.set_inverted].
+ *
  * Returns: %TRUE if the range is inverted
- **/
+ */
 gboolean
 gtk_range_get_inverted (GtkRange *range)
 {
@@ -814,14 +829,16 @@ gtk_range_get_inverted (GtkRange *range)
 
 /**
  * gtk_range_set_flippable:
- * @range: a #GtkRange
+ * @range: a `GtkRange`
  * @flippable: %TRUE to make the range flippable
  *
- * If a range is flippable, it will switch its direction if it is
- * horizontal and its direction is %GTK_TEXT_DIR_RTL.
+ * Sets whether the `GtkRange` respects text direction.
  *
- * See gtk_widget_get_direction().
- **/
+ * If a range is flippable, it will switch its direction
+ * if it is horizontal and its direction is %GTK_TEXT_DIR_RTL.
+ *
+ * See [method@Gtk.Widget.get_direction].
+ */
 void
 gtk_range_set_flippable (GtkRange *range,
                          gboolean  flippable)
@@ -844,12 +861,14 @@ gtk_range_set_flippable (GtkRange *range,
 
 /**
  * gtk_range_get_flippable:
- * @range: a #GtkRange
+ * @range: a `GtkRange`
  *
- * Gets the value set by gtk_range_set_flippable().
+ * Gets whether the `GtkRange` respects text direction.
+ *
+ * See [method@Gtk.Range.set_flippable].
  *
  * Returns: %TRUE if the range is flippable
- **/
+ */
 gboolean
 gtk_range_get_flippable (GtkRange *range)
 {
@@ -862,14 +881,14 @@ gtk_range_get_flippable (GtkRange *range)
 
 /**
  * gtk_range_set_slider_size_fixed:
- * @range: a #GtkRange
+ * @range: a `GtkRange`
  * @size_fixed: %TRUE to make the slider size constant
  *
  * Sets whether the range’s slider has a fixed size, or a size that
  * depends on its adjustment’s page size.
  *
- * This function is useful mainly for #GtkRange subclasses.
- **/
+ * This function is useful mainly for `GtkRange` subclasses.
+ */
 void
 gtk_range_set_slider_size_fixed (GtkRange *range,
                                  gboolean  size_fixed)
@@ -889,14 +908,14 @@ gtk_range_set_slider_size_fixed (GtkRange *range,
 
 /**
  * gtk_range_get_slider_size_fixed:
- * @range: a #GtkRange
+ * @range: a `GtkRange`
  *
- * This function is useful mainly for #GtkRange subclasses.
+ * This function is useful mainly for `GtkRange` subclasses.
  *
- * See gtk_range_set_slider_size_fixed().
+ * See [method@Gtk.Range.set_slider_size_fixed].
  *
  * Returns: whether the range’s slider has a fixed size.
- **/
+ */
 gboolean
 gtk_range_get_slider_size_fixed (GtkRange *range)
 {
@@ -909,14 +928,14 @@ gtk_range_get_slider_size_fixed (GtkRange *range)
 
 /**
  * gtk_range_get_range_rect:
- * @range: a #GtkRange
+ * @range: a `GtkRange`
  * @range_rect: (out): return location for the range rectangle
  *
  * This function returns the area that contains the range’s trough,
  * in coordinates relative to @range's origin.
  *
- * This function is useful mainly for #GtkRange subclasses.
- **/
+ * This function is useful mainly for `GtkRange` subclasses.
+ */
 void
 gtk_range_get_range_rect (GtkRange     *range,
                           GdkRectangle *range_rect)
@@ -944,7 +963,7 @@ gtk_range_get_range_rect (GtkRange     *range,
 
 /**
  * gtk_range_get_slider_range:
- * @range: a #GtkRange
+ * @range: a `GtkRange`
  * @slider_start: (out) (allow-none): return location for the slider's
  *     start, or %NULL
  * @slider_end: (out) (allow-none): return location for the slider's
@@ -953,8 +972,8 @@ gtk_range_get_range_rect (GtkRange     *range,
  * This function returns sliders range along the long dimension,
  * in widget->window coordinates.
  *
- * This function is useful mainly for #GtkRange subclasses.
- **/
+ * This function is useful mainly for `GtkRange` subclasses.
+ */
 void
 gtk_range_get_slider_range (GtkRange *range,
                             int      *slider_start,
@@ -992,15 +1011,16 @@ gtk_range_get_slider_range (GtkRange *range,
 
 /**
  * gtk_range_set_increments:
- * @range: a #GtkRange
+ * @range: a `GtkRange`
  * @step: step size
  * @page: page size
  *
  * Sets the step and page sizes for the range.
- * The step size is used when the user clicks the #GtkScrollbar
- * arrows or moves #GtkScale via arrow keys. The page size
+ *
+ * The step size is used when the user clicks the `GtkScrollbar`
+ * arrows or moves a `GtkScale` via arrow keys. The page size
  * is used for example when moving via Page Up or Page Down keys.
- **/
+ */
 void
 gtk_range_set_increments (GtkRange *range,
                           double    step,
@@ -1024,14 +1044,16 @@ gtk_range_set_increments (GtkRange *range,
 
 /**
  * gtk_range_set_range:
- * @range: a #GtkRange
+ * @range: a `GtkRange`
  * @min: minimum range value
  * @max: maximum range value
- * 
- * Sets the allowable values in the #GtkRange, and clamps the range
- * value to be between @min and @max. (If the range has a non-zero
- * page size, it is clamped between @min and @max - page-size.)
- **/
+ *
+ * Sets the allowable values in the `GtkRange`.
+ *
+ * The range value is clamped to be between @min and @max.
+ * (If the range has a non-zero page size, it is clamped
+ * between @min and @max - page-size.)
+ */
 void
 gtk_range_set_range (GtkRange *range,
                      double    min,
@@ -1062,14 +1084,15 @@ gtk_range_set_range (GtkRange *range,
 
 /**
  * gtk_range_set_value:
- * @range: a #GtkRange
+ * @range: a `GtkRange`
  * @value: new value of the range
  *
- * Sets the current value of the range; if the value is outside the
- * minimum or maximum range values, it will be clamped to fit inside
- * them. The range emits the #GtkRange::value-changed signal if the 
- * value changes.
- **/
+ * Sets the current value of the range.
+ *
+ * If the value is outside the minimum or maximum range values,
+ * it will be clamped to fit inside them. The range emits the
+ * [signal@Gtk.Range::value-changed] signal if the value changes.
+ */
 void
 gtk_range_set_value (GtkRange *range,
                      double    value)
@@ -1087,12 +1110,12 @@ gtk_range_set_value (GtkRange *range,
 
 /**
  * gtk_range_get_value:
- * @range: a #GtkRange
- * 
+ * @range: a `GtkRange`
+ *
  * Gets the current value of the range.
- * 
+ *
  * Returns: current value of the range.
- **/
+ */
 double
 gtk_range_get_value (GtkRange *range)
 {
@@ -1104,14 +1127,15 @@ gtk_range_get_value (GtkRange *range)
 }
 
 /**
- * gtk_range_set_show_fill_level:
- * @range:           A #GtkRange
+ * gtk_range_set_show_fill_level: (attributes org.gtk.Method.set_property=show-fill-level)
+ * @range: A `GtkRange`
  * @show_fill_level: Whether a fill level indicator graphics is shown.
  *
- * Sets whether a graphical fill level is show on the trough. See
- * gtk_range_set_fill_level() for a general description of the fill
- * level concept.
- **/
+ * Sets whether a graphical fill level is show on the trough.
+ *
+ * See [method@Gtk.Range.set_fill_level] for a general description
+ * of the fill level concept.
+ */
 void
 gtk_range_set_show_fill_level (GtkRange *range,
                                gboolean  show_fill_level)
@@ -1143,13 +1167,13 @@ gtk_range_set_show_fill_level (GtkRange *range,
 }
 
 /**
- * gtk_range_get_show_fill_level:
- * @range: A #GtkRange
+ * gtk_range_get_show_fill_level: (attributes org.gtk.Method.get_property=show-fill-level)
+ * @range: A `GtkRange`
  *
  * Gets whether the range displays the fill level graphically.
  *
  * Returns: %TRUE if @range shows the fill level.
- **/
+ */
 gboolean
 gtk_range_get_show_fill_level (GtkRange *range)
 {
@@ -1161,14 +1185,15 @@ gtk_range_get_show_fill_level (GtkRange *range)
 }
 
 /**
- * gtk_range_set_restrict_to_fill_level:
- * @range:                  A #GtkRange
+ * gtk_range_set_restrict_to_fill_level: (attributes org.gtk.Method.set_property=restrict-to-fill-level)
+ * @range: A `GtkRange`
  * @restrict_to_fill_level: Whether the fill level restricts slider movement.
  *
- * Sets whether the slider is restricted to the fill level. See
- * gtk_range_set_fill_level() for a general description of the fill
- * level concept.
- **/
+ * Sets whether the slider is restricted to the fill level.
+ *
+ * See [method@Gtk.Range.set_fill_level] for a general description
+ * of the fill level concept.
+ */
 void
 gtk_range_set_restrict_to_fill_level (GtkRange *range,
                                       gboolean  restrict_to_fill_level)
@@ -1189,8 +1214,8 @@ gtk_range_set_restrict_to_fill_level (GtkRange *range,
 }
 
 /**
- * gtk_range_get_restrict_to_fill_level:
- * @range: A #GtkRange
+ * gtk_range_get_restrict_to_fill_level: (attributes org.gtk.Method.get_property=restrict-to-fill-level)
+ * @range: A `GtkRange`
  *
  * Gets whether the range is restricted to the fill level.
  *
@@ -1207,8 +1232,8 @@ gtk_range_get_restrict_to_fill_level (GtkRange *range)
 }
 
 /**
- * gtk_range_set_fill_level:
- * @range: a #GtkRange
+ * gtk_range_set_fill_level: (attributes org.gtk.Method.set_property=fill-level)
+ * @range: a `GtkRange`
  * @fill_level: the new position of the fill level indicator
  *
  * Set the new position of the fill level indicator.
@@ -1221,14 +1246,14 @@ gtk_range_get_restrict_to_fill_level (GtkRange *range)
  *
  * This amount of prebuffering can be displayed on the range’s trough
  * and is themeable separately from the trough. To enable fill level
- * display, use gtk_range_set_show_fill_level(). The range defaults
+ * display, use [method@Gtk.Range.set_show_fill_level]. The range defaults
  * to not showing the fill level.
  *
  * Additionally, it’s possible to restrict the range’s slider position
- * to values which are smaller than the fill level. This is controller
- * by gtk_range_set_restrict_to_fill_level() and is by default
+ * to values which are smaller than the fill level. This is controlled
+ * by [method@Gtk.Range.set_restrict_to_fill_level] and is by default
  * enabled.
- **/
+ */
 void
 gtk_range_set_fill_level (GtkRange *range,
                           double    fill_level)
@@ -1251,13 +1276,13 @@ gtk_range_set_fill_level (GtkRange *range,
 }
 
 /**
- * gtk_range_get_fill_level:
- * @range: A #GtkRange
+ * gtk_range_get_fill_level: (attributes org.gtk.Method.get_property=fill-level)
+ * @range: A `GtkRange`
  *
  * Gets the current position of the fill level indicator.
  *
  * Returns: The current fill level
- **/
+ */
 double
 gtk_range_get_fill_level (GtkRange *range)
 {
@@ -2837,12 +2862,14 @@ _gtk_range_get_stop_positions (GtkRange  *range,
 }
 
 /**
- * gtk_range_set_round_digits:
- * @range: a #GtkRange
+ * gtk_range_set_round_digits: (attributes org.gtk.Method.set_property=round-digits)
+ * @range: a `GtkRange`
  * @round_digits: the precision in digits, or -1
  *
  * Sets the number of digits to round the value to when
- * it changes. See #GtkRange::change-value.
+ * it changes.
+ *
+ * See [signal@Gtk.Range::change-value].
  */
 void
 gtk_range_set_round_digits (GtkRange *range,
@@ -2861,11 +2888,13 @@ gtk_range_set_round_digits (GtkRange *range,
 }
 
 /**
- * gtk_range_get_round_digits:
- * @range: a #GtkRange
+ * gtk_range_get_round_digits: (attributes org.gtk.Method.get_property=round-digits)
+ * @range: a `GtkRange`
  *
  * Gets the number of digits to round the value to when
- * it changes. See #GtkRange::change-value.
+ * it changes.
+ *
+ * See [signal@Gtk.Range::change-value].
  *
  * Returns: the number of digits to round to
  */
