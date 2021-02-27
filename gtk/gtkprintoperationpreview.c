@@ -23,6 +23,17 @@
 #include "gtkintl.h"
 
 
+/**
+ * GtkPrintOperationPreview:
+ *
+ * `GtkPrintOperationPreview` is the interface that is used to
+ * implement print preview.
+ *
+ * A `GtkPrintOperationPreview` object is passed to the
+ * [signal@Gtk.PrintOperation::preview] signal by
+ * [class@Gtk.PrintOperation].
+ */
+
 static void gtk_print_operation_preview_base_init (gpointer g_iface);
 
 GType
@@ -84,15 +95,14 @@ gtk_print_operation_preview_base_init (gpointer g_iface)
       /**
        * GtkPrintOperationPreview::got-page-size:
        * @preview: the object on which the signal is emitted
-       * @context: the current #GtkPrintContext
-       * @page_setup: the #GtkPageSetup for the current page
+       * @context: the current `GtkPrintContext`
+       * @page_setup: the `GtkPageSetup` for the current page
        *
-       * The ::got-page-size signal is emitted once for each page
-       * that gets rendered to the preview. 
+       * Emitted once for each page that gets rendered to the preview.
        *
        * A handler for this signal should update the @context
        * according to @page_setup and set up a suitable cairo
-       * context, using gtk_print_context_set_cairo_context().
+       * context, using [method@Gtk.PrintContext.set_cairo_context].
        */
       g_signal_new (I_("got-page-size"),
 		    GTK_TYPE_PRINT_OPERATION_PREVIEW,
@@ -110,18 +120,20 @@ gtk_print_operation_preview_base_init (gpointer g_iface)
 
 /**
  * gtk_print_operation_preview_render_page:
- * @preview: a #GtkPrintOperationPreview
+ * @preview: a `GtkPrintOperationPreview`
  * @page_nr: the page to render
  *
- * Renders a page to the preview, using the print context that
- * was passed to the #GtkPrintOperation::preview handler together
+ * Renders a page to the preview.
+ *
+ * This is using the print context that was passed to the
+ * [signal@Gtk.PrintOperation::preview] handler together
  * with @preview.
  *
- * A custom iprint preview should use this function in its ::expose
- * handler to render the currently selected page.
- * 
- * Note that this function requires a suitable cairo context to 
- * be associated with the print context. 
+ * A custom print preview should use this function to render
+ * the currently selected page.
+ *
+ * Note that this function requires a suitable cairo context to
+ * be associated with the print context.
  */
 void    
 gtk_print_operation_preview_render_page (GtkPrintOperationPreview *preview,
@@ -135,9 +147,9 @@ gtk_print_operation_preview_render_page (GtkPrintOperationPreview *preview,
 
 /**
  * gtk_print_operation_preview_end_preview:
- * @preview: a #GtkPrintOperationPreview
+ * @preview: a `GtkPrintOperationPreview`
  *
- * Ends a preview. 
+ * Ends a preview.
  *
  * This function must be called to finish a custom print preview.
  */
@@ -151,12 +163,12 @@ gtk_print_operation_preview_end_preview (GtkPrintOperationPreview *preview)
 
 /**
  * gtk_print_operation_preview_is_selected:
- * @preview: a #GtkPrintOperationPreview
+ * @preview: a `GtkPrintOperationPreview`
  * @page_nr: a page number
  *
  * Returns whether the given page is included in the set of pages that
  * have been selected for printing.
- * 
+ *
  * Returns: %TRUE if the page has been selected for printing
  */
 gboolean
