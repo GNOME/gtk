@@ -26,17 +26,16 @@
 #include "gtkprivate.h"
 
 /**
- * SECTION:gtkbookmarklist
- * @title: GtkBookmarkList
- * @short_description: A list model for recently used files
- * @see_also: #GListModel, #GBookmarkFile
+ * GtkBookmarkList:
  *
- * #GtkBookmarkList is a list model that wraps GBookmarkFile.
- * It presents a #GListModel and fills it asynchronously with the #GFileInfos
- * returned from that function.
+ * `GtkBookmarkList` is a list model that wraps `GBookmarkFile`.
  *
- * The #GFileInfos in the list have some attributes in the recent namespace
- * added: recent::private (boolean) and recent:applications (stringv).
+ * It presents a `GListModel` and fills it asynchronously with the
+ * `GFileInfo`s returned from that function.
+ *
+ * The `GFileInfo`s in the list have some attributes in the recent
+ * namespace added: `recent::private` (boolean) and `recent:applications`
+ * (stringv).
  */
 
 enum {
@@ -208,6 +207,11 @@ gtk_bookmark_list_class_init (GtkBookmarkListClass *class)
   gobject_class->get_property = gtk_bookmark_list_get_property;
   gobject_class->dispose = gtk_bookmark_list_dispose;
 
+  /**
+   * GtkBookmarkList:filename: (attributes org.gtk.Property.get=gtk_bookmark_list_get_filename)
+   *
+   * The bookmark file to load.
+   */
   properties[PROP_FILENAME] =
       g_param_spec_string ("filename",
                            P_("Filename"),
@@ -215,9 +219,9 @@ gtk_bookmark_list_class_init (GtkBookmarkListClass *class)
                            NULL,
                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
   /**
-   * GtkBookmarkList:attributes:
+   * GtkBookmarkList:attributes: (attributes org.gtk.Property.get=gtk_bookmark_list_get_attributes org.gtk.Property.set=gtk_bookmark_list_set_attributes)
    *
-   * The attributes to query
+   * The attributes to query.
    */
   properties[PROP_ATTRIBUTES] =
       g_param_spec_string ("attributes",
@@ -227,9 +231,9 @@ gtk_bookmark_list_class_init (GtkBookmarkListClass *class)
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkBookmarkList:io-priority:
+   * GtkBookmarkList:io-priority: (attributes org.gtk.Property.get=gtk_bookmark_list_get_io_priority org.gtk.Property.set=gtk_bookmark_list_set_io_priority)
    *
-   * Priority used when loading
+   * Priority used when loading.
    */
   properties[PROP_IO_PRIORITY] =
       g_param_spec_int ("io-priority",
@@ -239,9 +243,9 @@ gtk_bookmark_list_class_init (GtkBookmarkListClass *class)
                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkBookmarkList:loading:
+   * GtkBookmarkList:loading: (attributes org.gtk.Property.get=gtk_bookmark_list_is_loading)
    *
-   * %TRUE if files are being loaded
+   * %TRUE if files are being loaded.
    */
   properties[PROP_LOADING] =
       g_param_spec_boolean ("loading",
@@ -435,8 +439,8 @@ gtk_bookmark_list_set_filename (GtkBookmarkList *self,
 }
 
 /**
- * gtk_bookmark_list_get_filename:
- * @self: a #GtkBookmarkList
+ * gtk_bookmark_list_get_filename: (attributes org.gtk.Method.get_property=filename)
+ * @self: a `GtkBookmarkList`
  *
  * Returns the filename of the bookmark file that
  * this list is loading.
@@ -456,10 +460,10 @@ gtk_bookmark_list_get_filename (GtkBookmarkList *self)
  * @filename: (allow-none): The bookmark file to load
  * @attributes: (allow-none): The attributes to query
  *
- * Creates a new #GtkBookmarkList with the given @attributes.
+ * Creates a new `GtkBookmarkList` with the given @attributes.
  *
- * Returns: a new #GtkBookmarkList
- **/
+ * Returns: a new `GtkBookmarkList`
+ */
 GtkBookmarkList *
 gtk_bookmark_list_new (const char *filename,
                        const char *attributes)
@@ -471,8 +475,8 @@ gtk_bookmark_list_new (const char *filename,
 }
 
 /**
- * gtk_bookmark_list_set_attributes:
- * @self: a #GtkBookmarkList
+ * gtk_bookmark_list_set_attributes: (attributes org.gtk.Method.set_property=attributes)
+ * @self: a `GtkBookmarkList`
  * @attributes: (allow-none): the attributes to enumerate
  *
  * Sets the @attributes to be enumerated and starts the enumeration.
@@ -502,8 +506,8 @@ gtk_bookmark_list_set_attributes (GtkBookmarkList *self,
 }
 
 /**
- * gtk_bookmark_list_get_attributes:
- * @self: a #GtkBookmarkList
+ * gtk_bookmark_list_get_attributes: (attributes org.gtk.Method.get_property=attributes)
+ * @self: a `GtkBookmarkList`
  *
  * Gets the attributes queried on the children.
  *
@@ -518,8 +522,8 @@ gtk_bookmark_list_get_attributes (GtkBookmarkList *self)
 }
 
 /**
- * gtk_bookmark_list_set_io_priority:
- * @self: a #GtkBookmarkList
+ * gtk_bookmark_list_set_io_priority: (attributes org.gtk.Method.set_property=io-priority)
+ * @self: a `GtkBookmarkList`
  * @io_priority: IO priority to use
  *
  * Sets the IO priority to use while loading files.
@@ -541,10 +545,10 @@ gtk_bookmark_list_set_io_priority (GtkBookmarkList *self,
 }
 
 /**
- * gtk_bookmark_list_get_io_priority:
- * @self: a #GtkBookmarkList
+ * gtk_bookmark_list_get_io_priority: (attributes org.gtk.Method.get_property=io-priority)
+ * @self: a `GtkBookmarkList`
  *
- * Gets the IO priority set via gtk_bookmark_list_set_io_priority().
+ * Gets the IO priority to use while loading file.
  *
  * Returns: The IO priority.
  */
@@ -557,8 +561,8 @@ gtk_bookmark_list_get_io_priority (GtkBookmarkList *self)
 }
 
 /**
- * gtk_bookmark_list_is_loading:
- * @self: a #GtkBookmarkList
+ * gtk_bookmark_list_is_loading: (attributes org.gtk.Method.get_property=loading)
+ * @self: a `GtkBookmarkList`
  *
  * Returns %TRUE if the files are currently being loaded.
  *
