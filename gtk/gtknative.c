@@ -36,15 +36,23 @@ typedef struct _GtkNativePrivate
 static GQuark quark_gtk_native_private;
 
 /**
- * SECTION:gtknative
- * @Title: GtkNative
- * @Short_description: Interface for widgets having surfaces
- * @See_also: #GtkRoot
+ * GtkNative:
  *
- * #GtkNative is the interface implemented by all widgets that can provide
- * a GdkSurface for widgets to render on.
+ * `GtkNative` is the interface implemented by all widgets that have
+ * their own `GdkSurface`.
  *
- * The obvious example of a #GtkNative is #GtkWindow.
+ * The obvious example of a `GtkNative` is `GtkWindow`.
+ *
+ * Every widget that is not itself a `GtkNative` is contained in one,
+ * and you can get it with [method@Gtk.Widget.get_native].
+ *
+ * To get the surface of a `GtkNative`, use [method@Gtk.Native.get_surface].
+ * It is also possible to find the `GtkNative` to which a surface
+ * belongs, with [func@Gtk.Native.get_for_surface].
+ *
+ * In addition to a [class@Gdk.Surface], a `GtkNative` also provides
+ * a [class@Gsk.Renderer] for rendering on that surface. To get the
+ * renderer, use [method@Gtk.Native.get_renderer].
  */
 
 G_DEFINE_INTERFACE (GtkNative, gtk_native, GTK_TYPE_WIDGET)
@@ -131,9 +139,11 @@ verify_priv_unrealized (gpointer user_data)
 
 /**
  * gtk_native_realize:
- * @self: a #GtkNative
+ * @self: a `GtkNative`
  *
- * Realizes a #GtkNative.
+ * Realizes a `GtkNative`.
+ *
+ * This should only be used by subclasses.
  */
 void
 gtk_native_realize (GtkNative *self)
@@ -169,9 +179,11 @@ gtk_native_realize (GtkNative *self)
 
 /**
  * gtk_native_unrealize:
- * @self: a #GtkNative
+ * @self: a `GtkNative`
  *
- * Unrealizes a #GtkNative.
+ * Unrealizes a `GtkNative`.
+ *
+ * This should only be used by subclasses.
  */
 void
 gtk_native_unrealize (GtkNative *self)
@@ -196,9 +208,9 @@ gtk_native_unrealize (GtkNative *self)
 
 /**
  * gtk_native_get_surface:
- * @self: a #GtkNative
+ * @self: a `GtkNative`
  *
- * Returns the surface of this #GtkNative.
+ * Returns the surface of this `GtkNative`.
  *
  * Returns: (transfer none): the surface of @self
  */
@@ -212,9 +224,9 @@ gtk_native_get_surface (GtkNative *self)
 
 /**
  * gtk_native_get_renderer:
- * @self: a #GtkNative
+ * @self: a `GtkNative`
  *
- * Returns the renderer that is used for this #GtkNative.
+ * Returns the renderer that is used for this `GtkNative`.
  *
  * Returns: (transfer none): the renderer for @self
  */
@@ -228,12 +240,14 @@ gtk_native_get_renderer (GtkNative *self)
 
 /**
  * gtk_native_get_surface_transform:
- * @self: a @GtkNative
+ * @self: a `GtkNative`
  * @x: (out): return location for the x coordinate
  * @y: (out): return location for the y coordinate
  *
- * Retrieves the surface transform of @self. This is the translation
- * from @self's surface coordinates into @self's widget coordinates.
+ * Retrieves the surface transform of @self.
+ *
+ * This is the translation from @self's surface coordinates into
+ * @self's widget coordinates.
  */
 void
 gtk_native_get_surface_transform (GtkNative *self,
@@ -249,11 +263,11 @@ gtk_native_get_surface_transform (GtkNative *self,
 
 /**
  * gtk_native_get_for_surface:
- * @surface: a #GdkSurface
+ * @surface: a `GdkSurface`
  *
- * Finds the GtkNative associated with the surface.
+ * Finds the `GtkNative` associated with the surface.
  *
- * Returns: (transfer none): the #GtkNative that is associated with @surface
+ * Returns: (transfer none): the `GtkNative` that is associated with @surface
  */
 GtkNative *
 gtk_native_get_for_surface (GdkSurface *surface)
