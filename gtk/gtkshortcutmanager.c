@@ -35,6 +35,9 @@
  *
  * Examples for widgets implementing `GtkShortcutManager` are
  * [class@Gtk.Window] and [class@Gtk.Popover].
+ *
+ * Every widget that implements `GtkShortcutManager` will be used as a
+ * %GTK_SHORTCUT_SCOPE_MANAGED.
  */
 
 G_DEFINE_INTERFACE (GtkShortcutManager, gtk_shortcut_manager, G_TYPE_OBJECT)
