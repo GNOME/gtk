@@ -74,7 +74,7 @@
  *
  * ## CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * combobox
  * ├── box.linked
  * │   ╰── button.combo
@@ -82,13 +82,13 @@
  * │           ├── cellview
  * │           ╰── arrow
  * ╰── window.popup
- * ]|
+ * ```
  *
  * A normal combobox contains a box with the .linked class, a button
  * with the .combo class and inside those buttons, there are a cellview and
  * an arrow.
  *
- * |[<!-- language="plain" -->
+ * ```
  * combobox
  * ├── box.linked
  * │   ├── entry.combo
@@ -96,7 +96,7 @@
  * │       ╰── box
  * │           ╰── arrow
  * ╰── window.popup
- * ]|
+ * ```
  *
  * A `GtkComboBox` with an entry has a single CSS node with name combobox.
  * It contains a box with the .linked class. That box contains an entry and
@@ -105,7 +105,7 @@
  *
  * # Accessibility
  *
- * `GtkComboBox` uses the #GTK_ACCESSIBLE_ROLE_COMBO_BOX role.
+ * `GtkComboBox` uses the %GTK_ACCESSIBLE_ROLE_COMBO_BOX role.
  */
 
 typedef struct
