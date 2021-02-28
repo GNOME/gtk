@@ -19,16 +19,14 @@
  */
 
 /**
- * SECTION:gtkatcontext
- * @Title: GtkATContext
- * @Short_description: An object communicating to Assistive Technologies
+ * GtkATContext:
  *
- * GtkATContext is an abstract class provided by GTK to communicate to
+ * `GtkATContext` is an abstract class provided by GTK to communicate to
  * platform-specific assistive technologies API.
  *
- * Each platform supported by GTK implements a #GtkATContext subclass, and
+ * Each platform supported by GTK implements a `GtkATContext` subclass, and
  * is responsible for updating the accessible state in response to state
- * changes in #GtkAccessible.
+ * changes in `GtkAccessible`.
  */
 
 #include "config.h"
@@ -203,7 +201,7 @@ gtk_at_context_class_init (GtkATContextClass *klass)
   klass->child_change = gtk_at_context_real_child_change;
 
   /**
-   * GtkATContext:accessible-role:
+   * GtkATContext:accessible-role: (attributes org.gtk.Property.get=gtk_at_context_get_accessible_role)
    *
    * The accessible role used by the AT context.
    *
@@ -221,9 +219,9 @@ gtk_at_context_class_init (GtkATContextClass *klass)
                        G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkATContext:accessible:
+   * GtkATContext:accessible: (attributes org.gtk.Property.get=gtk_at_context_get_accessible)
    *
-   * The #GtkAccessible that created the #GtkATContext instance.
+   * The `GtkAccessible` that created the `GtkATContext` instance.
    */
   obj_props[PROP_ACCESSIBLE] =
     g_param_spec_object ("accessible",
@@ -237,7 +235,7 @@ gtk_at_context_class_init (GtkATContextClass *klass)
   /**
    * GtkATContext:display:
    *
-   * The #GdkDisplay for the #GtkATContext.
+   * The `GdkDisplay` for the `GtkATContext`.
    */
   obj_props[PROP_DISPLAY] =
     g_param_spec_object ("display",
@@ -250,10 +248,10 @@ gtk_at_context_class_init (GtkATContextClass *klass)
 
   /**
    * GtkATContext::state-change:
-   * @self: the #GtkATContext
+   * @self: the `GtkATContext`
    *
    * Emitted when the attributes of the accessible for the
-   * #GtkATContext instance change.
+   * `GtkATContext` instance change.
    */
   obj_signals[STATE_CHANGE] =
     g_signal_new ("state-change",
@@ -295,9 +293,9 @@ static const char *property_attrs[] = {
 
 /*< private >
  * gtk_accessible_property_get_attribute_name:
- * @property: a #GtkAccessibleProperty
+ * @property: a `GtkAccessibleProperty`
  *
- * Retrieves the name of a #GtkAccessibleProperty.
+ * Retrieves the name of a `GtkAccessibleProperty`.
  *
  * Returns: (transfer none): the name of the accessible property
  */
@@ -334,9 +332,9 @@ static const char *relation_attrs[] = {
 
 /*< private >
  * gtk_accessible_relation_get_attribute_name:
- * @relation: a #GtkAccessibleRelation
+ * @relation: a `GtkAccessibleRelation`
  *
- * Retrieves the name of a #GtkAccessibleRelation.
+ * Retrieves the name of a `GtkAccessibleRelation`.
  *
  * Returns: (transfer none): the name of the accessible relation
  */
@@ -363,9 +361,9 @@ static const char *state_attrs[] = {
 
 /*< private >
  * gtk_accessible_state_get_attribute_name:
- * @state: a #GtkAccessibleState
+ * @state: a `GtkAccessibleState`
  *
- * Retrieves the name of a #GtkAccessibleState.
+ * Retrieves the name of a `GtkAccessibleState`.
  *
  * Returns: (transfer none): the name of the accessible state
  */
@@ -399,12 +397,12 @@ gtk_at_context_init (GtkATContext *self)
 }
 
 /**
- * gtk_at_context_get_accessible:
- * @self: a #GtkATContext
+ * gtk_at_context_get_accessible: (attributes org.gtk.Method.get_property=accessible)
+ * @self: a `GtkATContext`
  *
- * Retrieves the #GtkAccessible using this context.
+ * Retrieves the `GtkAccessible` using this context.
  *
- * Returns: (transfer none): a #GtkAccessible
+ * Returns: (transfer none): a `GtkAccessible`
  */
 GtkAccessible *
 gtk_at_context_get_accessible (GtkATContext *self)
@@ -416,12 +414,12 @@ gtk_at_context_get_accessible (GtkATContext *self)
 
 /*< private >
  * gtk_at_context_set_accessible_role:
- * @self: a #GtkATContext
+ * @self: a `GtkATContext`
  * @role: the accessible role for the context
  *
- * Sets the accessible role for the given #GtkATContext.
+ * Sets the accessible role for the given `GtkATContext`.
  *
- * This function can only be called if the #GtkATContext is unrealized.
+ * This function can only be called if the `GtkATContext` is unrealized.
  */
 void
 gtk_at_context_set_accessible_role (GtkATContext      *self,
@@ -439,12 +437,12 @@ gtk_at_context_set_accessible_role (GtkATContext      *self,
 }
 
 /**
- * gtk_at_context_get_accessible_role:
- * @self: a #GtkATContext
+ * gtk_at_context_get_accessible_role: (attributes org.gtk.Method.get_property=accessible-role)
+ * @self: a `GtkATContext`
  *
  * Retrieves the accessible role of this context.
  *
- * Returns: a #GtkAccessibleRole
+ * Returns: a `GtkAccessibleRole`
  */
 GtkAccessibleRole
 gtk_at_context_get_accessible_role (GtkATContext *self)
@@ -456,12 +454,12 @@ gtk_at_context_get_accessible_role (GtkATContext *self)
 
 /*< private >
  * gtk_at_context_set_display:
- * @self: a #GtkATContext
- * @display: a #GdkDisplay
+ * @self: a `GtkATContext`
+ * @display: a `GdkDisplay`
  *
- * Sets the #GdkDisplay used by the #GtkATContext.
+ * Sets the `GdkDisplay` used by the `GtkATContext`.
  *
- * This function can only be called if the #GtkATContext is
+ * This function can only be called if the `GtkATContext` is
  * not realized.
  */
 void
@@ -484,11 +482,11 @@ gtk_at_context_set_display (GtkATContext *self,
 
 /*< private >
  * gtk_at_context_get_display:
- * @self: a #GtkATContext
+ * @self: a `GtkATContext`
  *
- * Retrieves the #GdkDisplay used to create the context.
+ * Retrieves the `GdkDisplay` used to create the context.
  *
- * Returns: (transfer none): a #GdkDisplay
+ * Returns: (transfer none): a `GdkDisplay`
  */
 GdkDisplay *
 gtk_at_context_get_display (GtkATContext *self)
@@ -517,17 +515,17 @@ static const struct {
 
 /**
  * gtk_at_context_create: (constructor)
- * @accessible_role: the accessible role used by the #GtkATContext
- * @accessible: the #GtkAccessible implementation using the #GtkATContext
- * @display: the #GdkDisplay used by the #GtkATContext
+ * @accessible_role: the accessible role used by the `GtkATContext`
+ * @accessible: the `GtkAccessible` implementation using the `GtkATContext`
+ * @display: the `GdkDisplay` used by the `GtkATContext`
  *
- * Creates a new #GtkATContext instance for the given accessible role,
+ * Creates a new `GtkATContext` instance for the given accessible role,
  * accessible instance, and display connection.
  *
- * The #GtkATContext implementation being instantiated will depend on the
+ * The `GtkATContext` implementation being instantiated will depend on the
  * platform.
  *
- * Returns: (nullable) (transfer full): the #GtkATContext
+ * Returns: (nullable) (transfer full): the `GtkATContext`
  */
 GtkATContext *
 gtk_at_context_create (GtkAccessibleRole  accessible_role,
@@ -594,7 +592,7 @@ gtk_at_context_create (GtkAccessibleRole  accessible_role,
 
 /*< private >
  * gtk_at_context_clone: (constructor)
- * @self: the #GtkATContext to clone
+ * @self: the `GtkATContext` to clone
  * @role: the accessible role of the clone, or %GTK_ACCESSIBLE_ROLE_NONE to
  *   use the same accessible role of @self
  * @accessible: (nullable): the accessible creating the context, or %NULL to
@@ -602,12 +600,12 @@ gtk_at_context_create (GtkAccessibleRole  accessible_role,
  * @display: (nullable): the display connection, or %NULL to use the same
  *   #GdkDisplay of @self
  *
- * Clones the state of the given #GtkATContext, using @role, @accessible,
+ * Clones the state of the given `GtkATContext`, using @role, @accessible,
  * and @display.
  *
- * If @self is realized, the returned #GtkATContext will also be realized.
+ * If @self is realized, the returned `GtkATContext` will also be realized.
  *
- * Returns: (transfer full): the newly created #GtkATContext
+ * Returns: (transfer full): the newly created `GtkATContext`
  */
 GtkATContext *
 gtk_at_context_clone (GtkATContext      *self,
@@ -679,9 +677,9 @@ gtk_at_context_unrealize (GtkATContext *self)
 
 /*< private >
  * gtk_at_context_update:
- * @self: a #GtkATContext
+ * @self: a `GtkATContext`
  *
- * Notifies the AT connected to this #GtkATContext that the accessible
+ * Notifies the AT connected to this `GtkATContext` that the accessible
  * state and its properties have changed.
  */
 void
@@ -717,11 +715,11 @@ gtk_at_context_update (GtkATContext *self)
 
 /*< private >
  * gtk_at_context_set_accessible_state:
- * @self: a #GtkATContext
- * @state: a #GtkAccessibleState
+ * @self: a `GtkATContext`
+ * @state: a `GtkAccessibleState`
  * @value: (nullable): #GtkAccessibleValue
  *
- * Sets the @value for the given @state of a #GtkATContext.
+ * Sets the @value for the given @state of a `GtkATContext`.
  *
  * If @value is %NULL, the state is unset.
  *
@@ -748,10 +746,10 @@ gtk_at_context_set_accessible_state (GtkATContext       *self,
 
 /*< private >
  * gtk_at_context_has_accessible_state:
- * @self: a #GtkATContext
- * @state: a #GtkAccessibleState
+ * @self: a `GtkATContext`
+ * @state: a `GtkAccessibleState`
  *
- * Checks whether a #GtkATContext has the given @state set.
+ * Checks whether a `GtkATContext` has the given @state set.
  *
  * Returns: %TRUE, if the accessible state is set
  */
@@ -766,10 +764,10 @@ gtk_at_context_has_accessible_state (GtkATContext       *self,
 
 /*< private >
  * gtk_at_context_get_accessible_state:
- * @self: a #GtkATContext
- * @state: a #GtkAccessibleState
+ * @self: a `GtkATContext`
+ * @state: a `GtkAccessibleState`
  *
- * Retrieves the value for the accessible state of a #GtkATContext.
+ * Retrieves the value for the accessible state of a `GtkATContext`.
  *
  * Returns: (transfer none): the value for the given state
  */
@@ -784,11 +782,11 @@ gtk_at_context_get_accessible_state (GtkATContext       *self,
 
 /*< private >
  * gtk_at_context_set_accessible_property:
- * @self: a #GtkATContext
- * @property: a #GtkAccessibleProperty
- * @value: (nullable): #GtkAccessibleValue
+ * @self: a `GtkATContext`
+ * @property: a `GtkAccessibleProperty`
+ * @value: (nullable): `GtkAccessibleValue`
  *
- * Sets the @value for the given @property of a #GtkATContext.
+ * Sets the @value for the given @property of a `GtkATContext`.
  *
  * If @value is %NULL, the property is unset.
  *
@@ -815,10 +813,10 @@ gtk_at_context_set_accessible_property (GtkATContext          *self,
 
 /*< private >
  * gtk_at_context_has_accessible_property:
- * @self: a #GtkATContext
- * @property: a #GtkAccessibleProperty
+ * @self: a `GtkATContext`
+ * @property: a `GtkAccessibleProperty`
  *
- * Checks whether a #GtkATContext has the given @property set.
+ * Checks whether a `GtkATContext` has the given @property set.
  *
  * Returns: %TRUE, if the accessible property is set
  */
@@ -833,10 +831,10 @@ gtk_at_context_has_accessible_property (GtkATContext          *self,
 
 /*< private >
  * gtk_at_context_get_accessible_property:
- * @self: a #GtkATContext
- * @property: a #GtkAccessibleProperty
+ * @self: a `GtkATContext`
+ * @property: a `GtkAccessibleProperty`
  *
- * Retrieves the value for the accessible property of a #GtkATContext.
+ * Retrieves the value for the accessible property of a `GtkATContext`.
  *
  * Returns: (transfer none): the value for the given property
  */
@@ -851,11 +849,11 @@ gtk_at_context_get_accessible_property (GtkATContext          *self,
 
 /*< private >
  * gtk_at_context_set_accessible_relation:
- * @self: a #GtkATContext
- * @relation: a #GtkAccessibleRelation
- * @value: (nullable): #GtkAccessibleValue
+ * @self: a `GtkATContext`
+ * @relation: a `GtkAccessibleRelation`
+ * @value: (nullable): `GtkAccessibleValue`
  *
- * Sets the @value for the given @relation of a #GtkATContext.
+ * Sets the @value for the given @relation of a `GtkATContext`.
  *
  * If @value is %NULL, the relation is unset.
  *
@@ -882,10 +880,10 @@ gtk_at_context_set_accessible_relation (GtkATContext          *self,
 
 /*< private >
  * gtk_at_context_has_accessible_relation:
- * @self: a #GtkATContext
- * @relation: a #GtkAccessibleRelation
+ * @self: a `GtkATContext`
+ * @relation: a `GtkAccessibleRelation`
  *
- * Checks whether a #GtkATContext has the given @relation set.
+ * Checks whether a `GtkATContext` has the given @relation set.
  *
  * Returns: %TRUE, if the accessible relation is set
  */
@@ -900,10 +898,10 @@ gtk_at_context_has_accessible_relation (GtkATContext          *self,
 
 /*< private >
  * gtk_at_context_get_accessible_relation:
- * @self: a #GtkATContext
- * @relation: a #GtkAccessibleRelation
+ * @self: a `GtkATContext`
+ * @relation: a `GtkAccessibleRelation`
  *
- * Retrieves the value for the accessible relation of a #GtkATContext.
+ * Retrieves the value for the accessible relation of a `GtkATContext`.
  *
  * Returns: (transfer none): the value for the given relation
  */
@@ -1094,13 +1092,13 @@ gtk_at_context_get_description_accumulate (GtkATContext *self,
 
 /*< private >
  * gtk_at_context_get_name:
- * @self: a #GtkATContext
+ * @self: a `GtkATContext`
  *
- * Retrieves the accessible name of the #GtkATContext.
+ * Retrieves the accessible name of the `GtkATContext`.
  *
- * This is a convenience function meant to be used by #GtkATContext implementations.
+ * This is a convenience function meant to be used by `GtkATContext` implementations.
  *
- * Returns: (transfer full): the label of the #GtkATContext
+ * Returns: (transfer full): the label of the `GtkATContext`
  */
 char *
 gtk_at_context_get_name (GtkATContext *self)
@@ -1133,13 +1131,13 @@ gtk_at_context_get_name (GtkATContext *self)
 
 /*< private >
  * gtk_at_context_get_description:
- * @self: a #GtkATContext
+ * @self: a `GtkATContext`
  *
- * Retrieves the accessible description of the #GtkATContext.
+ * Retrieves the accessible description of the `GtkATContext`.
  *
- * This is a convenience function meant to be used by #GtkATContext implementations.
+ * This is a convenience function meant to be used by `GtkATContext` implementations.
  *
- * Returns: (transfer full): the label of the #GtkATContext
+ * Returns: (transfer full): the label of the `GtkATContext`
  */
 char *
 gtk_at_context_get_description (GtkATContext *self)
