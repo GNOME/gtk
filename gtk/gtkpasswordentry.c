@@ -58,12 +58,12 @@
  *
  * # CSS Nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * entry.password
  * ╰── text
  *     ├── image.caps-lock-indicator
  *     ┊
- * ]|
+ * ```
  *
  * `GtkPasswordEntry` has a single CSS node with name entry that carries
  * a .passwordstyle class. The text Css node below it has a child with
