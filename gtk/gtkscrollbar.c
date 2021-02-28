@@ -62,12 +62,12 @@
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * scrollbar
  * ╰── range[.fine-tune]
  *     ╰── trough
  *         ╰── slider
- * ]|
+ * ```
  *
  * `GtkScrollbar` has a main CSS node with name scrollbar and a subnode for its
  * contents. The main node gets the .horizontal or .vertical style classes applied,
