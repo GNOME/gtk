@@ -79,10 +79,10 @@
  *
  * ## CSS Nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * entry.search
  * ╰── text
- * ]|
+ * ```
  *
  * `GtkSearchEntry` has a single CSS node with name entry that carries
  * a `.search` style class, and the text node is a child of that.
