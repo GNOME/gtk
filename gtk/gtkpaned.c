@@ -76,12 +76,12 @@
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * paned
  * ├── <child>
  * ├── separator[.wide]
  * ╰── <child>
- * ]|
+ * ```
  *
  * `GtkPaned` has a main CSS node with name paned, and a subnode for
  * the separator with name separator. The subnode gets a .wide style
