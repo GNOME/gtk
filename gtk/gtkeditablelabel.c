@@ -51,12 +51,12 @@
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * editablelabel[.editing]
  * ╰── stack
  *     ├── label
  *     ╰── text
- * ]|
+ * ```
  *
  * `GtkEditableLabel` has a main node with the name editablelabel.
  * When the entry is in editing mode, it gets the .editing style
