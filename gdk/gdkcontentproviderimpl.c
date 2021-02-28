@@ -108,12 +108,12 @@ gdk_content_provider_value_init (GdkContentProviderValue *content)
 
 /**
  * gdk_content_provider_new_for_value:
- * @value: a #GValue
+ * @value: a `GValue`
  *
  * Create a content provider that provides the given @value.
  *
- * Returns: a new #GdkContentProvider
- **/
+ * Returns: a new `GdkContentProvider`
+ */
 GdkContentProvider *
 gdk_content_provider_new_for_value (const GValue *value)
 {
@@ -139,8 +139,8 @@ gdk_content_provider_new_for_value (const GValue *value)
  * The value is provided using G_VALUE_COLLECT(), so the same rules
  * apply as when calling g_object_new() or g_object_set().
  *
- * Returns: a new #GdkContentProvider
- **/
+ * Returns: a new `GdkContentProvider`
+ */
 GdkContentProvider *
 gdk_content_provider_new_typed (GType type,
                                 ...)
@@ -406,16 +406,15 @@ gdk_content_provider_union_init (GdkContentProviderUnion *self)
  * This allows an easy way to support providing data in different formats.
  * For example, an image may be provided by its file and by the image
  * contents with a call such as
- * |[<!-- language="C" -->
+ * ```c
  * gdk_content_provider_new_union ((GdkContentProvider *[2]) {
  *                                   gdk_content_provider_new_typed (G_TYPE_FILE, file),
  *                                   gdk_content_provider_new_typed (G_TYPE_TEXTURE, texture)
  *                                 }, 2);
- * ]|
+ * ```
  *
- *
- * Returns: a new #GdkContentProvider
- **/
+ * Returns: a new `GdkContentProvider`
+ */
 GdkContentProvider *
 gdk_content_provider_new_union (GdkContentProvider **providers,
                                 gsize                n_providers)
@@ -576,13 +575,13 @@ gdk_content_provider_bytes_init (GdkContentProviderBytes *content)
 /**
  * gdk_content_provider_new_for_bytes:
  * @mime_type: the mime type
- * @bytes: (transfer none): a #GBytes with the data for @mime_type
+ * @bytes: (transfer none): a `GBytes` with the data for @mime_type
  *
  * Create a content provider that provides the given @bytes as data for
  * the given @mime_type.
  *
- * Returns: a new #GdkContentProvider
- **/
+ * Returns: a new `GdkContentProvider`
+ */
 GdkContentProvider *
 gdk_content_provider_new_for_bytes (const char *mime_type,
                                     GBytes     *bytes)
