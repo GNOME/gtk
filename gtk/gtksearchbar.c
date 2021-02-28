@@ -73,13 +73,13 @@
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * searchbar
  * ╰── revealer
  *     ╰── box
  *          ├── [child]
  *          ╰── [button.close]
- * ]|
+ * ```
  *
  * `GtkSearchBar` has a main CSS node with name searchbar. It has a child
  * node with name revealer that contains a node with name box. The box node
