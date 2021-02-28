@@ -21,7 +21,7 @@
 /**
  * GtkMenuButton:
  *
- * The `GtkMenuButton` widget is used to display a popup when clicked on.
+ * The `GtkMenuButton` widget is used to display a popup when clicked.
  *
  * ![An example GtkMenuButton](menu-button.png)
  *
@@ -47,70 +47,21 @@
  * menu is popped up above the button instead. If the alignment would move
  * part of the menu offscreen, it is “pushed in”.
  *
- * ## Direction = Down
- *
- * - halign = start
- *
- *     ![](down-start.png)
- *
- * - halign = center
- *
- *     ![](down-center.png)
- *
- * - halign = end
- *
- *     ![](down-end.png)
- *
- * ## Direction = Up
- *
- * - halign = start
- *
- *     ![](up-start.png)
- *
- * - halign = center
- *
- *     ![](up-center.png)
- *
- * - halign = end
- *
- *     ![](up-end.png)
- *
- * ## Direction = Left
- *
- * - valign = start
- *
- *     ![](left-start.png)
- *
- * - valign = center
- *
- *     ![](left-center.png)
- *
- * - valign = end
- *
- *     ![](left-end.png)
- *
- * ## Direction = Right
- *
- * - valign = start
- *
- *     ![](right-start.png)
- *
- * - valign = center
- *
- *     ![](right-center.png)
- *
- * - valign = end
- *
- *     ![](right-end.png)
+ * |           | start                | center                | end                |
+ * | -         | ---                  | ---                   | ---                |
+ * | **down**  | ![](down-start.png)  | ![](down-center.png)  | ![](down-end.png)  |
+ * | **up**    | ![](up-start.png)    | ![](up-center.png)    | ![](up-end.png)    |
+ * | **left**  | ![](left-start.png)  | ![](left-center.png)  | ![](left-end.png)  |
+ * | **right** | ![](right-start.png) | ![](right-center.png) | ![](right-end.png) |
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * menubutton
  * ╰── button.toggle
  *     ╰── <content>
  *          ╰── [arrow]
- *]|
+ * ```
  *
  * `GtkMenuButton` has a single CSS node with name `menubutton`
  * which contains a `button` node with a `.toggle` style class.
