@@ -35,12 +35,6 @@ G_BEGIN_DECLS
 #define GTK_IS_GRID_VIEW_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GTK_TYPE_GRID_VIEW))
 #define GTK_GRID_VIEW_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_GRID_VIEW, GtkGridViewClass))
 
-/**
- * GtkGridView:
- *
- * GtkGridView is a list widget implementation that arranges its items in
- * a grid.
- */
 typedef struct _GtkGridView GtkGridView;
 typedef struct _GtkGridViewClass GtkGridViewClass;
 
