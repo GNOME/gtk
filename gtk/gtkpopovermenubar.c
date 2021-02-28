@@ -31,13 +31,13 @@
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * menubar
  * ├── item[.active]
  * ┊   ╰── popover
  * ╰── item
  *     ╰── popover
- * ]|
+ * ```
  *
  * `GtkPopoverMenuBar` has a single CSS node with name menubar, below which
  * each item has its CSS node, and below that the corresponding popover.
