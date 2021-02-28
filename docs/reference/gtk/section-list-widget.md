@@ -124,7 +124,7 @@ the number of listitems they create such as with gtk_grid_view_set_max_columns()
 and developers running into performance problems should definitely study the
 tradeoffs of those and experiment with them.
 
-## Choosing the right model {#model-choosing}
+## Choosing the right model
 
 GTK offers a wide variety of wrapping models which change or supplement an
 existing model (or models) in some way. But when it comes to storing your
@@ -150,7 +150,7 @@ For asymptotic performance comparisons between tree- and array-based
 implementations, see this
 [article](https://en.wikipedia.org/wiki/Dynamic_array#Performance).
 
-## Displaying trees {#displaying-trees}
+## Displaying trees
 
 While #GtkTreeView provided built-in support for trees, the list widgets, and
 in particular #GListModel do not. This was a design choice because the common
@@ -166,7 +166,7 @@ rows and provide a similar experience to #GtkTreeView.
 Developers should refer to those objects' API reference for more discussion
 on the topic.
 
-## List styles {#list-styles}
+## List styles
 
 One of the advantages of the new list widgets over #GtkTreeViews and cell
 renderers is that they are fully themable using GTK CSS. This provides a
