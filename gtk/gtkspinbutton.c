@@ -157,23 +157,23 @@
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * spinbutton.horizontal
  * ├── text
  * │    ├── undershoot.left
  * │    ╰── undershoot.right
  * ├── button.down
  * ╰── button.up
- * ]|
+ * ```
  *
- * |[<!-- language="plain" -->
+ * ```
  * spinbutton.vertical
  * ├── button.up
  * ├── text
  * │    ├── undershoot.left
  * │    ╰── undershoot.right
  * ╰── button.down
- * ]|
+ * ```
  *
  * `GtkSpinButton`s main CSS node has the name spinbutton. It creates subnodes
  * for the entry and the two buttons, with these names. The button nodes have
