@@ -48,27 +48,26 @@
  */
 
 /**
- * SECTION:gtktexttag
- * @Title: GtkTextTag
- * @Short_description: A tag that can be applied to text in a GtkTextBuffer
+ * GtkTextTag:
  *
- * A tag that can be applied to text contained in a [class@Gtk.TextBuffer].
+ * A tag that can be applied to text contained in a `GtkTextBuffer`.
  *
  * You may wish to begin by reading the
- * [text widget conceptual overview][TextWidget]
- * which gives an overview of all the objects and
- * data types related to the text widget and how they work together.
+ * [text widget conceptual overview](section-text-widget.html),
+ * which gives an overview of all the objects and data types
+ * related to the text widget and how they work together.
  *
- * Tags should be in the #GtkTextTagTable for a given #GtkTextBuffer
- * before using them with that buffer.
+ * Tags should be in the [class@Gtk.TextTagTable] for a given
+ * `GtkTextBuffer` before using them with that buffer.
  *
- * gtk_text_buffer_create_tag() is the best way to create tags.
+ * [method@Gtk.TextBuffer.create_tag] is the best way to create tags.
  * See “gtk4-demo” for numerous examples.
  *
- * For each property of #GtkTextTag, there is a “set” property, e.g.
+ * For each property of `GtkTextTag`, there is a “set” property, e.g.
  * “font-set” corresponds to “font”. These “set” properties reflect
  * whether a property has been set or not.
- * They are maintained by GTK+ and you should not set them independently.
+ *
+ * They are maintained by GTK and you should not set them independently.
  */
 
 #include "config.h"
@@ -201,6 +200,13 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   object_class->finalize = gtk_text_tag_finalize;
 
   /* Construct */
+  /**
+   * GtkTextTag:name:
+   *
+   * The name used to refer to the tag.
+   *
+   * %NULL for anonymous tags.
+   */
   g_object_class_install_property (object_class,
                                    PROP_NAME,
                                    g_param_spec_string ("name",
@@ -211,6 +217,11 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
 
   /* Style args */
 
+  /**
+   * GtkTextTag:background:
+   *
+   * Background color as a string.
+   */
   g_object_class_install_property (object_class,
                                    PROP_BACKGROUND,
                                    g_param_spec_string ("background",
@@ -222,7 +233,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   /**
    * GtkTextTag:background-rgba:
    *
-   * Background color as a #GdkRGBA.
+   * Background color as a `GdkRGBA`.
    */
   g_object_class_install_property (object_class,
                                    PROP_BACKGROUND_RGBA,
@@ -232,6 +243,12 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                        GDK_TYPE_RGBA,
                                                        GTK_PARAM_READWRITE));
 
+  /**
+   * GtkTextTag:background-full-height:
+   *
+   * Whether the background color fills the entire line height
+   * or only the height of the tagged characters.
+   */
   g_object_class_install_property (object_class,
                                    PROP_BACKGROUND_FULL_HEIGHT,
                                    g_param_spec_boolean ("background-full-height",
@@ -239,7 +256,12 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                          P_("Whether the background color fills the entire line height or only the height of the tagged characters"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
-  
+
+  /**
+   * GtkTextTag:foreground:
+   *
+   * Foreground color as a string.
+   */
   g_object_class_install_property (object_class,
                                    PROP_FOREGROUND,
                                    g_param_spec_string ("foreground",
@@ -251,7 +273,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   /**
    * GtkTextTag:foreground-rgba:
    *
-   * Foreground color as a #GdkRGBA.
+   * Foreground color as a `GdkRGBA`.
    */
   g_object_class_install_property (object_class,
                                    PROP_FOREGROUND_RGBA,
@@ -261,6 +283,11 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                        GDK_TYPE_RGBA,
                                                        GTK_PARAM_READWRITE));
 
+  /**
+   * GtkTextTag:direction:
+   *
+   * Text direction, e.g. right-to-left or left-to-right.
+   */
   g_object_class_install_property (object_class,
                                    PROP_DIRECTION,
                                    g_param_spec_enum ("direction",
@@ -270,6 +297,11 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                       GTK_TEXT_DIR_NONE,
                                                       GTK_PARAM_READWRITE));
 
+  /**
+   * GtkTextTag:editable:
+   *
+   * Whether the text can be modified by the user.
+   */
   g_object_class_install_property (object_class,
                                    PROP_EDITABLE,
                                    g_param_spec_boolean ("editable",
@@ -281,10 +313,10 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   /**
    * GtkTextTag:font:
    *
-   * Font description as string, e.g. \"Sans Italic 12\". 
+   * Font description as string, e.g. \"Sans Italic 12\".
    *
    * Note that the initial value of this property depends on
-   * the internals of #PangoFontDescription.
+   * the internals of `PangoFontDescription`.
    */
   g_object_class_install_property (object_class,
                                    PROP_FONT,
@@ -294,6 +326,11 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                         NULL,
                                                         GTK_PARAM_READWRITE));
 
+  /**
+   * GtkTextTag:font-desc:
+   *
+   * Font description as a `PangoFontDescription`.
+   */
   g_object_class_install_property (object_class,
                                    PROP_FONT_DESC,
                                    g_param_spec_boxed ("font-desc",
@@ -301,7 +338,12 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                        P_("Font description as a PangoFontDescription struct"),
                                                        PANGO_TYPE_FONT_DESCRIPTION,
                                                        GTK_PARAM_READWRITE));
-  
+
+  /**
+   * GtkTextTag:family:
+   *
+   * Name of the font family, e.g. Sans, Helvetica, Times, Monospace.
+   */
   g_object_class_install_property (object_class,
                                    PROP_FAMILY,
                                    g_param_spec_string ("family",
@@ -310,6 +352,11 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                         NULL,
                                                         GTK_PARAM_READWRITE));
 
+  /**
+   * GtkTextTag:style:
+   *
+   * Font style as a `PangoStyle`, e.g. %PANGO_STYLE_ITALIC.
+   */
   g_object_class_install_property (object_class,
                                    PROP_STYLE,
                                    g_param_spec_enum ("style",
@@ -319,6 +366,11 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                       PANGO_STYLE_NORMAL,
                                                       GTK_PARAM_READWRITE));
 
+  /**
+   * GtkTextTag:variant:
+   *
+   * Font variant as a `PangoVariant`, e.g. %PANGO_VARIANT_SMALL_CAPS.
+   */
   g_object_class_install_property (object_class,
                                    PROP_VARIANT,
                                    g_param_spec_enum ("variant",
@@ -327,7 +379,11 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                       PANGO_TYPE_VARIANT,
                                                       PANGO_VARIANT_NORMAL,
                                                       GTK_PARAM_READWRITE));
-  
+  /**
+   * GtkTextTag:weight:
+   *
+   * Font weight as an integer.
+   */
   g_object_class_install_property (object_class,
                                    PROP_WEIGHT,
                                    g_param_spec_int ("weight",
@@ -337,8 +393,12 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      G_MAXINT,
                                                      PANGO_WEIGHT_NORMAL,
                                                      GTK_PARAM_READWRITE));
-  
 
+  /**
+   * GtkTextTag:stretch:
+   *
+   * Font stretch as a `PangoStretch`, e.g. %PANGO_STRETCH_CONDENSED.
+   */
   g_object_class_install_property (object_class,
                                    PROP_STRETCH,
                                    g_param_spec_enum ("stretch",
@@ -347,7 +407,12 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                       PANGO_TYPE_STRETCH,
                                                       PANGO_STRETCH_NORMAL,
                                                       GTK_PARAM_READWRITE));
-  
+
+  /**
+   * GtkTextTag:size:
+   *
+   * Font size in Pango units.
+   */
   g_object_class_install_property (object_class,
                                    PROP_SIZE,
                                    g_param_spec_int ("size",
@@ -358,6 +423,14 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      0,
                                                      GTK_PARAM_READWRITE));
 
+  /**
+   * GtkTextTag:scale:
+   *
+   * Font size as a scale factor relative to the default font size.
+   *
+   * This properly adapts to theme changes, etc. so is recommended.
+   * Pango predefines some scales such as %PANGO_SCALE_X_LARGE.
+   */
   g_object_class_install_property (object_class,
                                    PROP_SCALE,
                                    g_param_spec_double ("scale",
@@ -367,7 +440,12 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                         G_MAXDOUBLE,
                                                         1.0,
                                                         GTK_PARAM_READWRITE));
-  
+
+  /**
+   * GtkTextTag:size-points:
+   *
+   * Font size in points.
+   */
   g_object_class_install_property (object_class,
                                    PROP_SIZE_POINTS,
                                    g_param_spec_double ("size-points",
@@ -378,6 +456,11 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                         0.0,
                                                         GTK_PARAM_READWRITE));  
 
+  /**
+   * GtkTextTag:justification:
+   *
+   * Lett, right, or center justification.
+   */
   g_object_class_install_property (object_class,
                                    PROP_JUSTIFICATION,
                                    g_param_spec_enum ("justification",
@@ -390,12 +473,13 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   /**
    * GtkTextTag:language:
    *
-   * The language this text is in, as an ISO code. Pango can use this as a 
-   * hint when rendering the text. If not set, an appropriate default will be 
-   * used.
+   * The language this text is in, as an ISO code.
    *
-   * Note that the initial value of this property depends on the current
-   * locale, see also gtk_get_default_language().
+   * Pango can use this as a hint when rendering the text.
+   * If not set, an appropriate default will be used.
+   *
+   * Note that the initial value of this property depends
+   * on the current locale, see also [func@Gtk.get_default_language].
    */
   g_object_class_install_property (object_class,
                                    PROP_LANGUAGE,
@@ -405,6 +489,11 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                         NULL,
                                                         GTK_PARAM_READWRITE));  
 
+  /**
+   * GtkTextTag:left-margin:
+   *
+   * Width of the left margin in pixels.
+   */
   g_object_class_install_property (object_class,
                                    PROP_LEFT_MARGIN,
                                    g_param_spec_int ("left-margin",
@@ -415,6 +504,11 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      0,
                                                      GTK_PARAM_READWRITE));
 
+  /**
+   * GtkTextTag:right-margin:
+   *
+   * Width of the right margin, in pixels.
+   */
   g_object_class_install_property (object_class,
                                    PROP_RIGHT_MARGIN,
                                    g_param_spec_int ("right-margin",
@@ -425,7 +519,11 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      0,
                                                      GTK_PARAM_READWRITE));
 
-  
+  /**
+   * GtkTextTag:indent:
+   *
+   * Amount to indent the paragraph, in pixels.
+   */
   g_object_class_install_property (object_class,
                                    PROP_INDENT,
                                    g_param_spec_int ("indent",
@@ -436,7 +534,13 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      0,
                                                      GTK_PARAM_READWRITE));
 
-  
+  /**
+   * GtkTextTag:rise:
+   *
+   * Offset of text above the baseline, in Pango units.
+   *
+   * Negative values go below the baseline.
+   */
   g_object_class_install_property (object_class,
                                    PROP_RISE,
                                    g_param_spec_int ("rise",
@@ -447,6 +551,11 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      0,
                                                      GTK_PARAM_READWRITE));
 
+  /**
+   * GtkTextTag:pixels-above-lines:
+   *
+   * Pixels of blank space above paragraphs.
+   */
   g_object_class_install_property (object_class,
                                    PROP_PIXELS_ABOVE_LINES,
                                    g_param_spec_int ("pixels-above-lines",
@@ -456,7 +565,12 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      G_MAXINT,
                                                      0,
                                                      GTK_PARAM_READWRITE));
-  
+
+  /**
+   * GtkTextTag:pixels-below-lines:
+   *
+   * Pixels of blank space below paragraphs.
+   */
   g_object_class_install_property (object_class,
                                    PROP_PIXELS_BELOW_LINES,
                                    g_param_spec_int ("pixels-below-lines",
@@ -467,6 +581,11 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      0,
                                                      GTK_PARAM_READWRITE));
 
+  /**
+   * GtkTextTag:pixels-inside-wrap:
+   *
+   * Pixels of blank space between wrapped lines in a paragraph.
+   */
   g_object_class_install_property (object_class,
                                    PROP_PIXELS_INSIDE_WRAP,
                                    g_param_spec_int ("pixels-inside-wrap",
@@ -477,6 +596,11 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      0,
                                                      GTK_PARAM_READWRITE));
 
+  /**
+   * GtkTextTag:strikethrough:
+   *
+   * Whether to strike through the text.
+   */
   g_object_class_install_property (object_class,
                                    PROP_STRIKETHROUGH,
                                    g_param_spec_boolean ("strikethrough",
@@ -484,7 +608,12 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                          P_("Whether to strike through the text"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
-  
+
+  /**
+   * GtkTextTag:underline:
+   *
+   * Style of underline for this text.
+   */
   g_object_class_install_property (object_class,
                                    PROP_UNDERLINE,
                                    g_param_spec_enum ("underline",
@@ -497,12 +626,13 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   /**
    * GtkTextTag:underline-rgba:
    *
-   * This property modifies the color of underlines. If not set, underlines
-   * will use the foreground color.
+   * This property modifies the color of underlines.
    *
-   * If #GtkTextTag:underline is set to %PANGO_UNDERLINE_ERROR, an alternate
-   * color may be applied instead of the foreground. Setting this property
-   * will always override those defaults.
+   * If not set, underlines will use the foreground color.
+   *
+   * If [property@Gtk.TextTag:underline] is set to %PANGO_UNDERLINE_ERROR,
+   * an alternate color may be applied instead of the foreground. Setting
+   * this property will always override those defaults.
    */
   g_object_class_install_property (object_class,
                                    PROP_UNDERLINE_RGBA,
@@ -512,6 +642,11 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                        GDK_TYPE_RGBA,
                                                        GTK_PARAM_READWRITE));
 
+  /**
+   * GtkTextTag:oerline:
+   *
+   * Style of overline for this text.
+   */
   g_object_class_install_property (object_class,
                                    PROP_OVERLINE,
                                    g_param_spec_enum ("overline",
@@ -521,6 +656,13 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                       PANGO_OVERLINE_NONE,
                                                       GTK_PARAM_READWRITE));
 
+  /**
+   * GtkTextTag:overline-rgba:
+   *
+   * This property modifies the color of overlines.
+   *
+   * If not set, overlines will use the foreground color.
+   */
   g_object_class_install_property (object_class,
                                    PROP_OVERLINE_RGBA,
                                    g_param_spec_boxed ("overline-rgba",
@@ -532,8 +674,9 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   /**
    * GtkTextTag:strikethrough-rgba:
    *
-   * This property modifies the color of strikeouts. If not set, strikeouts
-   * will use the foreground color.
+   * This property modifies the color of strikeouts.
+   *
+   * If not set, strikeouts will use the foreground color.
    */
   g_object_class_install_property (object_class,
                                    PROP_STRIKETHROUGH_RGBA,
@@ -543,6 +686,12 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                        GDK_TYPE_RGBA,
                                                        GTK_PARAM_READWRITE));
 
+  /**
+   * GtkTextTag:wrap-mode:
+   *
+   * Whether to wrap lines never, at word boundaries, or
+   * at character boundaries.
+   */
   g_object_class_install_property (object_class,
                                    PROP_WRAP_MODE,
                                    g_param_spec_enum ("wrap-mode",
@@ -551,8 +700,12 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                       GTK_TYPE_WRAP_MODE,
                                                       GTK_WRAP_NONE,
                                                       GTK_PARAM_READWRITE));
-  
 
+  /**
+   * GtkTextTag:tabs:
+   *
+   * Custom tabs for this text.
+   */
   g_object_class_install_property (object_class,
                                    PROP_TABS,
                                    g_param_spec_boxed ("tabs",
@@ -566,9 +719,9 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    *
    * Whether this text is hidden.
    *
-   * Note that there may still be problems with the support for invisible 
+   * Note that there may still be problems with the support for invisible
    * text, in particular when navigating programmatically inside a buffer
-   * containing invisible segments. 
+   * containing invisible segments.
    */
   g_object_class_install_property (object_class,
                                    PROP_INVISIBLE,
@@ -594,7 +747,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   /**
    * GtkTextTag:paragraph-background-rgba:
    *
-   * The paragraph background color as a #GdkRGBA.
+   * The paragraph background color as a `GdkRGBA`.
    */
   g_object_class_install_property (object_class,
                                    PROP_PARAGRAPH_BACKGROUND_RGBA,
@@ -646,6 +799,11 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                         NULL,
                                                         GTK_PARAM_READWRITE));
 
+  /**
+   * GtkTextTag:allow-breaks:
+   *
+   * Whether breaks are allowed.
+   */
   g_object_class_install_property (object_class,
                                    PROP_ALLOW_BREAKS,
                                    g_param_spec_boolean ("allow-breaks",
@@ -654,6 +812,11 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                          TRUE,
                                                          GTK_PARAM_READWRITE));
 
+  /**
+   * GtkTextTag:show-spaces:
+   *
+   * How to render invisible characters.
+   */
   g_object_class_install_property (object_class,
                                    PROP_SHOW_SPACES,
                                    g_param_spec_flags ("show-spaces",
@@ -663,6 +826,11 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                          PANGO_SHOW_NONE,
                                                          GTK_PARAM_READWRITE));
 
+  /**
+   * GtkTextTag:insert-hyphens:
+   *
+   * Whether to insert hyphens at breaks.
+   */
   g_object_class_install_property (object_class,
                                    PROP_INSERT_HYPHENS,
                                    g_param_spec_boolean ("insert-hyphens",
@@ -676,8 +844,8 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    *
    * Whether the margins accumulate or override each other.
    *
-   * When set to %TRUE the margins of this tag are added to the margins 
-   * of any other non-accumulative margins present. When set to %FALSE 
+   * When set to %TRUE the margins of this tag are added to the margins
+   * of any other non-accumulative margins present. When set to %FALSE
    * the margins override one another (the default).
    */
   g_object_class_install_property (object_class,
@@ -857,12 +1025,11 @@ gtk_text_tag_init (GtkTextTag *text_tag)
 /**
  * gtk_text_tag_new:
  * @name: (allow-none): tag name, or %NULL
- * 
- * Creates a #GtkTextTag. Configure the tag using object arguments,
- * i.e. using g_object_set().
- * 
- * Returns: a new #GtkTextTag
- **/
+ *
+ * Creates a `GtkTextTag`.
+ *
+ * Returns: a new `GtkTextTag`
+ */
 GtkTextTag*
 gtk_text_tag_new (const char *name)
 {
@@ -2131,12 +2298,12 @@ delta_priority_foreach (GtkTextTag *tag, gpointer user_data)
 
 /**
  * gtk_text_tag_get_priority:
- * @tag: a #GtkTextTag
- * 
+ * @tag: a `GtkTextTag`
+ *
  * Get the tag priority.
- * 
+ *
  * Returns: The tag’s priority.
- **/
+ */
 int
 gtk_text_tag_get_priority (GtkTextTag *tag)
 {
@@ -2147,21 +2314,24 @@ gtk_text_tag_get_priority (GtkTextTag *tag)
 
 /**
  * gtk_text_tag_set_priority:
- * @tag: a #GtkTextTag
+ * @tag: a `GtkTextTag`
  * @priority: the new priority
  *
- * Sets the priority of a #GtkTextTag. Valid priorities
- * start at 0 and go to one less than gtk_text_tag_table_get_size().
- * Each tag in a table has a unique priority; setting the priority
- * of one tag shifts the priorities of all the other tags in the
- * table to maintain a unique priority for each tag. Higher priority
- * tags “win” if two tags both set the same text attribute. When adding
- * a tag to a tag table, it will be assigned the highest priority in
- * the table by default; so normally the precedence of a set of tags
- * is the order in which they were added to the table, or created with
- * gtk_text_buffer_create_tag(), which adds the tag to the buffer’s table
- * automatically.
- **/
+ * Sets the priority of a `GtkTextTag`.
+ *
+ * Valid priorities start at 0 and go to one less than
+ * [method@Gtk.TextTagTable.get_size]. Each tag in a table
+ * has a unique priority; setting the priority of one tag shifts
+ * the priorities of all the other tags in the table to maintain
+ * a unique priority for each tag.
+ *
+ * Higher priority tags “win” if two tags both set the same text
+ * attribute. When adding a tag to a tag table, it will be assigned
+ * the highest priority in the table by default; so normally the
+ * precedence of a set of tags is the order in which they were added
+ * to the table, or created with [method@Gtk.TextBuffer.create_tag],
+ * which adds the tag to the buffer’s table automatically.
+ */
 void
 gtk_text_tag_set_priority (GtkTextTag *tag,
                            int         priority)
@@ -2202,14 +2372,14 @@ gtk_text_tag_set_priority (GtkTextTag *tag,
 
 /**
  * gtk_text_tag_changed:
- * @tag: a #GtkTextTag.
- * @size_changed: whether the change affects the #GtkTextView layout.
+ * @tag: a `GtkTextTag`
+ * @size_changed: whether the change affects the `GtkTextView` layout
  *
- * Emits the #GtkTextTagTable::tag-changed signal on the #GtkTextTagTable where
- * the tag is included.
+ * Emits the [signal@Gtk.TextTagTable::tag-changed] signal on the
+ * `GtkTextTagTable` where the tag is included.
  *
- * The signal is already emitted when setting a #GtkTextTag property. This
- * function is useful for a #GtkTextTag subclass.
+ * The signal is already emitted when setting a `GtkTextTag` property.
+ * This function is useful for a `GtkTextTag` subclass.
  */
 void
 gtk_text_tag_changed (GtkTextTag *tag,
