@@ -53,7 +53,7 @@
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * popover
  * ├── box.emoji-searchbar
  * │   ╰── entry.search
@@ -61,7 +61,7 @@
  *     ├── button.image-button.emoji-section
  *     ├── ...
  *     ╰── button.image-button.emoji-section
- * ]|
+ * ```
  *
  * Every `GtkEmojiChooser` consists of a main node called popover.
  * The contents of the popover are largely implementation defined
