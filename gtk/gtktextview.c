@@ -1175,15 +1175,19 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * g_signal_emit_by_name() if they need to control the cursor
    * programmatically.
    *
+   *
    * The default bindings for this signal come in two variants,
-   * the variant with the Shift modifier extends the selection,
-   * the variant without the Shift modifier does not.
+   * the variant with the <kbd>Shift</kbd> modifier extends the
+   * selection, the variant without it does not.
    * There are too many key combinations to list them all here.
-   * - Arrow keys move by individual characters/lines
-   * - Ctrl-arrow key combinations move by words/paragraphs
-   * - Home/End keys move to the ends of the buffer
-   * - PageUp/PageDown keys move vertically by pages
-   * - Ctrl-PageUp/PageDown keys move horizontally by pages
+   *
+   * - <kbd>←</kbd>, <kbd>→</kbd>, <kbd>↑</kbd>, <kbd>↓</kbd>
+   *   move by individual characters/lines
+   * - <kbd>Ctrl</kbd>-<kbd>→</kbd>, etc. move by words/paragraphs
+   * - <kbd>Home</kbd>, <kbd>End</kbd> move to the ends of the buffer
+   * - <kbd>PgUp</kbd>, <kbd>PgDn</kbd> move vertically by pages
+   * - <kbd>Ctrl</kbd>-<kbd>PgUp</kbd>, <kbd>Ctrl</kbd>-<kbd>PgDn</kbd>
+   *   move horizontally by pages
    */
   signals[MOVE_CURSOR] = 
     g_signal_new (I_("move-cursor"),
@@ -1287,9 +1291,10 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * if there is one, otherwise it deletes the requested number
    * of characters.
    *
-   * The default bindings for this signal are Delete for deleting a
-   * character, Ctrl-Delete for deleting a word and Ctrl-Backspace
-   * for deleting a word backwards.
+   * The default bindings for this signal are <kbd>Delete</kbd> for
+   * deleting a character, <kbd>Ctrl</kbd>-<kbd>Delete</kbd> for
+   * deleting a word and <kbd>Ctrl</kbd>-<kbd>Backspace</kbd> for
+   * deleting a word backwards.
    */
   signals[DELETE_FROM_CURSOR] =
     g_signal_new (I_("delete-from-cursor"),
@@ -1314,7 +1319,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * The ::backspace signal is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * Backspace and Shift-Backspace.
+   * <kbd>Backspace</kbd> and <kbd>Shift</kbd>-<kbd>Backspace</kbd>.
    */
   signals[BACKSPACE] =
     g_signal_new (I_("backspace"),
@@ -1334,7 +1339,8 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * The ::cut-clipboard signal is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * Ctrl-x and Shift-Delete.
+   * <kbd>Ctrl</kbd>-<kbd>x</kbd> and
+   * <kbd>Shift</kbd>-<kbd>Delete</kbd>.
    */
   signals[CUT_CLIPBOARD] =
     g_signal_new (I_("cut-clipboard"),
@@ -1354,7 +1360,8 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * The ::copy-clipboard signal is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * Ctrl-c and Ctrl-Insert.
+   * <kbd>Ctrl</kbd>-<kbd>c</kbd> and
+   * <kbd>Ctrl</kbd>-<kbd>Insert</kbd>.
    */
   signals[COPY_CLIPBOARD] =
     g_signal_new (I_("copy-clipboard"),
@@ -1375,7 +1382,8 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * The ::paste-clipboard signal is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * Ctrl-v and Shift-Insert.
+   * <kbd>Ctrl</kbd>-<kbd>v</kbd> and
+   * <kbd>Shift</kbd>-<kbd>Insert</kbd>.
    */
   signals[PASTE_CLIPBOARD] =
     g_signal_new (I_("paste-clipboard"),
@@ -1394,7 +1402,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    *
    * The ::toggle-overwrite signal is a [keybinding signal](class.SignalAction.html).
    *
-   * The default bindings for this signal is Insert.
+   * The default binding for this signal is <kbd>Insert</kbd>.
    */
   signals[TOGGLE_OVERWRITE] =
     g_signal_new (I_("toggle-overwrite"),
@@ -1414,8 +1422,11 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    *
    * The ::select-all signal is a [keybinding signal](class.SignalAction.html).
    *
-   * The default bindings for this signal are Ctrl-a and Ctrl-/
-   * for selecting and Shift-Ctrl-a and Ctrl-\ for unselecting.
+   * The default bindings for this signal are
+   * <kbd>Ctrl</kbd>-<kbd>a</kbd> and
+   * <kbd>Ctrl</kbd>-<kbd>/</kbd> for selecting and
+   * <kbd>Shift</kbd>-<kbd>Ctrl</kbd>-<kbd>a</kbd> and
+   * <kbd>Ctrl</kbd>-<kbd>\</kbd> for unselecting.
    */
   signals[SELECT_ALL] =
     g_signal_new_class_handler (I_("select-all"),
@@ -1435,7 +1446,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * The ::toggle-cursor-visible signal is a
    * [keybinding signal](class.SignalAction.html).
    *
-   * The default binding for this signal is F7.
+   * The default binding for this signal is <kbd>F7</kbd>.
    */
   signals[TOGGLE_CURSOR_VISIBLE] =
     g_signal_new_class_handler (I_("toggle-cursor-visible"),
@@ -1507,7 +1518,9 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    *
    * The ::insert-emoji signal is a [keybinding signal](class.SignalAction.html).
    *
-   * The default bindings for this signal are Ctrl-. and Ctrl-;
+   * The default bindings for this signal are
+   * <kbd>Ctrl</kbd>-<kbd>.</kbd> and
+   * <kbd>Ctrl</kbd>-<kbd>;</kbd>
    */
   signals[INSERT_EMOJI] =
     g_signal_new (I_("insert-emoji"),
