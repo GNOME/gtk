@@ -114,13 +114,13 @@
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * entry[.flat][.warning][.error]
  * ├── text[.readonly]
  * ├── image.left
  * ├── image.right
  * ╰── [progress[.pulse]]
- * ]|
+ * ```
  *
  * `GtkEntry` has a main node with the name entry. Depending on the properties
  * of the entry, the style classes .read-only and .flat may appear. The style
@@ -144,14 +144,14 @@
  * this label.
  *
  * An example of a UI definition fragment specifying Pango attributes:
- * |[
+ * ```xml
  * <object class="GtkEnry">
  *   <attributes>
  *     <attribute name="weight" value="PANGO_WEIGHT_BOLD"/>
  *     <attribute name="background" value="red" start="5" end="10"/>
  *   </attributes>
  * </object>
- * ]|
+ * ```
  *
  * The start and end attributes specify the range of characters to which the
  * Pango attribute applies. If start and end are not specified, the attribute
