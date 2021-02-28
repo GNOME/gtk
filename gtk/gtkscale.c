@@ -74,7 +74,7 @@
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * scale[.fine-tune][.marks-before][.marks-after]
  * ├── [value][.top][.right][.bottom][.left]
  * ├── marks.top
@@ -93,7 +93,7 @@
  *     ├── [fill]
  *     ├── [highlight]
  *     ╰── slider
- * ]|
+ * ```
  *
  * `GtkScale` has a main CSS node with name scale and a subnode for its contents,
  * with subnodes named trough and slider.
@@ -127,7 +127,7 @@
  *
  * # Accessibility
  *
- * `GtkScale` uses the #GTK_ACCESSIBLE_ROLE_SLIDER role.
+ * `GtkScale` uses the %GTK_ACCESSIBLE_ROLE_SLIDER role.
  */
 
 
