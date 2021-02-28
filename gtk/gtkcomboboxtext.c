@@ -64,7 +64,7 @@
  * translation attributes “translatable”, “context” and “comments”.
  *
  * Here is a UI definition fragment specifying `GtkComboBoxText` items:
- * |[
+ * ```xml
  * <object class="GtkComboBoxText">
  *   <items>
  *     <item translatable="yes" id="factory">Factory</item>
@@ -72,17 +72,17 @@
  *     <item translatable="yes" id="subway">Subway</item>
  *   </items>
  * </object>
- * ]|
+ * ```
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * combobox
  * ╰── box.linked
  *     ├── entry.combo
  *     ├── button.combo
  *     ╰── window.popup
- * ]|
+ * ```
  *
  * `GtkComboBoxText` has a single CSS node with name combobox. It adds
  * the style class .combo to the main CSS nodes of its entry and button
