@@ -64,13 +64,13 @@
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * windowcontrols
  * ├── [image.icon]
  * ├── [button.minimize]
  * ├── [button.maximize]
  * ╰── [button.close]
- * ]|
+ * ```
  *
  * A `GtkWindowControls`' CSS node is called windowcontrols. It contains
  * subnodes corresponding to each title button. Which of the title buttons
