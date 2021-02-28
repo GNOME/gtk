@@ -23,18 +23,15 @@
  */
 
 /**
- * SECTION:gtkfixed
- * @Short_description: A container which allows you to position
- * widgets at fixed coordinates
- * @Title: GtkFixed
+ * GtkFixed:
  *
- * The #GtkFixed widget is a container which can place child widgets
- * at fixed positions and with fixed sizes, given in pixels. #GtkFixed
- * performs no automatic layout management.
+ * `GtkFixed` places its child widgets at fixed positions and with fixed sizes.
+ *
+ * `GtkFixed` performs no automatic layout management.
  *
  * For most applications, you should not use this container! It keeps
- * you from having to learn about the other GTK+ containers, but it
- * results in broken applications.  With #GtkFixed, the following
+ * you from having to learn about the other GTK containers, but it
+ * results in broken applications.  With `GtkFixed`, the following
  * things will result in truncated text, overlapping widgets, and
  * other display bugs:
  *
@@ -49,21 +46,21 @@
  *   display of non-English text will use a different font in many
  *   cases.
  *
- * In addition, #GtkFixed does not pay attention to text direction and thus may
- * produce unwanted results if your app is run under right-to-left languages
- * such as Hebrew or Arabic. That is: normally GTK will order containers
- * appropriately for the text direction, e.g. to put labels to the right of the
- * thing they label when using an RTL language, but it can’t do that with
- * #GtkFixed. So if you need to reorder widgets depending on the text direction,
- * you would need to manually detect it and adjust child positions accordingly.
+ * In addition, `GtkFixed` does not pay attention to text direction and
+ * thus may produce unwanted results if your app is run under right-to-left
+ * languages such as Hebrew or Arabic. That is: normally GTK will order
+ * containers appropriately for the text direction, e.g. to put labels to
+ * the right of the thing they label when using an RTL language, but it can’t
+ * do that with `GtkFixed`. So if you need to reorder widgets depending on
+ * the text direction, you would need to manually detect it and adjust child
+ * positions accordingly.
  *
  * Finally, fixed positioning makes it kind of annoying to add/remove
- * GUI elements, since you have to reposition all the other
- * elements. This is a long-term maintenance problem for your
- * application.
+ * UI elements, since you have to reposition all the other elements. This
+ * is a long-term maintenance problem for your application.
  *
  * If you know none of these things are an issue for your application,
- * and prefer the simplicity of #GtkFixed, by all means use the
+ * and prefer the simplicity of `GtkFixed`, by all means use the
  * widget. But you should be aware of the tradeoffs.
  */
 
@@ -203,9 +200,9 @@ gtk_fixed_init (GtkFixed *self)
 /**
  * gtk_fixed_new:
  *
- * Creates a new #GtkFixed.
+ * Creates a new `GtkFixed`.
  *
- * Returns: a new #GtkFixed.
+ * Returns: a new `GtkFixed`.
  */
 GtkWidget*
 gtk_fixed_new (void)
@@ -215,13 +212,12 @@ gtk_fixed_new (void)
 
 /**
  * gtk_fixed_put:
- * @fixed: a #GtkFixed.
- * @widget: the widget to add.
- * @x: the horizontal position to place the widget at.
- * @y: the vertical position to place the widget at.
+ * @fixed: a `GtkFixed`
+ * @widget: the widget to add
+ * @x: the horizontal position to place the widget at
+ * @y: the vertical position to place the widget at
  *
- * Adds a widget to a #GtkFixed container and assigns a translation
- * transformation to the given @x and @y coordinates to it.
+ * Adds a widget to a `GtkFixed` at the given position.
  */
 void
 gtk_fixed_put (GtkFixed  *fixed,
@@ -248,15 +244,15 @@ gtk_fixed_put (GtkFixed  *fixed,
 
 /**
  * gtk_fixed_get_child_position:
- * @fixed: a #GtkFixed
+ * @fixed: a `GtkFixed`
  * @widget: a child of @fixed
  * @x: (out): the horizontal position of the @widget
  * @y: (out): the vertical position of the @widget
  *
- * Retrieves the translation transformation of the given child #GtkWidget
- * in the given #GtkFixed container.
+ * Retrieves the translation transformation of the
+ * given child `GtkWidget` in the `GtkFixed`.
  *
- * See also: gtk_fixed_get_child_transform().
+ * See also: [method@Gtk.Fixed.get_child_transform].
  */
 void
 gtk_fixed_get_child_position (GtkFixed  *fixed,
@@ -275,15 +271,16 @@ gtk_fixed_get_child_position (GtkFixed  *fixed,
 
 /**
  * gtk_fixed_set_child_transform:
- * @fixed: a #GtkFixed
- * @widget: a #GtkWidget, child of @fixed
+ * @fixed: a `GtkFixed`
+ * @widget: a `GtkWidget`, child of @fixed
  * @transform: (nullable): the transformation assigned to @widget or %NULL
  *   to reset @widget's transform
  *
  * Sets the transformation for @widget.
  *
- * This is a convenience function that retrieves the #GtkFixedLayoutChild
- * instance associated to @widget and calls gtk_fixed_layout_child_set_transform().
+ * This is a convenience function that retrieves the
+ * [class@Gtk.FixedLayoutChild] instance associated to
+ * @widget and calls [method@Gtk.FixedLayoutChild.set_transform].
  */
 void
 gtk_fixed_set_child_transform (GtkFixed     *fixed,
@@ -303,13 +300,13 @@ gtk_fixed_set_child_transform (GtkFixed     *fixed,
 
 /**
  * gtk_fixed_get_child_transform:
- * @fixed: a #GtkFixed
- * @widget: a #GtkWidget, child of @fixed
+ * @fixed: a `GtkFixed`
+ * @widget: a `GtkWidget`, child of @fixed
  *
  * Retrieves the transformation for @widget set using
  * gtk_fixed_set_child_transform().
  *
- * Returns: (transfer none) (nullable): a #GskTransform or %NULL
+ * Returns: (transfer none) (nullable): a `GskTransform` or %NULL
  *   in case no transform has been set on @widget
  */
 GskTransform *
@@ -329,13 +326,13 @@ gtk_fixed_get_child_transform (GtkFixed  *fixed,
 
 /**
  * gtk_fixed_move:
- * @fixed: a #GtkFixed.
- * @widget: the child widget.
- * @x: the horizontal position to move the widget to.
- * @y: the vertical position to move the widget to.
+ * @fixed: a `GtkFixed`
+ * @widget: the child widget
+ * @x: the horizontal position to move the widget to
+ * @y: the vertical position to move the widget to
  *
- * Sets a translation transformation to the given @x and @y coordinates to
- * the child @widget of the given #GtkFixed container.
+ * Sets a translation transformation to the given @x and @y
+ * coordinates to the child @widget of the `GtkFixed`.
  */
 void
 gtk_fixed_move (GtkFixed  *fixed,
@@ -360,11 +357,10 @@ gtk_fixed_move (GtkFixed  *fixed,
 
 /**
  * gtk_fixed_remove:
- * @fixed: a #GtkFixed
+ * @fixed: a `GtkFixed`
  * @widget: the child widget to remove
  *
- * Removes a child from @fixed, after it has been added
- * with gtk_fixed_put().
+ * Removes a child from @fixed.
  */
 void
 gtk_fixed_remove (GtkFixed  *fixed,
