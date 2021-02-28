@@ -46,8 +46,8 @@
  *
  * ![Example GtkCheckButtons](check-button.png)
  *
- * A `GtkCheckButton` is created by calling either [ctor@Gtk.CheckButton.new] or
- * [ctor@Gtk.CheckButton.new_with_label].
+ * A `GtkCheckButton` is created by calling either [ctor@Gtk.CheckButton.new]
+ * or [ctor@Gtk.CheckButton.new_with_label].
  *
  * The state of a `GtkCheckButton` can be set specifically using
  * [method@Gtk.CheckButton.set_active], and retrieved using
@@ -79,11 +79,11 @@
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * checkbutton[.text-button]
  * ├── check
  * ╰── [label]
- * ]|
+ * ```
  *
  * A `GtkCheckButton` has a main node with name checkbutton. If the
  * [property@Gtk.CheckButton:label] property is set, it contains a label
@@ -92,7 +92,7 @@
  *
  * # Accessibility
  *
- * `GtkCheckButton` uses the #GTK_ACCESSIBLE_ROLE_CHECKBOX role.
+ * `GtkCheckButton` uses the %GTK_ACCESSIBLE_ROLE_CHECKBOX role.
  */
 
 typedef struct {
