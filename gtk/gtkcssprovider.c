@@ -51,33 +51,37 @@
 #include "gdk/gdkarrayimpl.c"
 
 /**
- * SECTION:gtkcssprovider
- * @Short_description: CSS-like styling for widgets
- * @Title: GtkCssProvider
- * @See_also: #GtkStyleContext, #GtkStyleProvider
+ * GtkCssProvider:
  *
- * GtkCssProvider is an object implementing the #GtkStyleProvider interface.
- * It is able to parse [CSS-like][css-overview] input in order to style widgets.
+ * `GtkCssProvider` is an object implementing the `GtkStyleProvider` interface
+ * for CSS.
+ *
+ * It is able to parse CSS-like input in order to style widgets.
  *
  * An application can make GTK parse a specific CSS style sheet by calling
- * gtk_css_provider_load_from_file() or gtk_css_provider_load_from_resource()
- * and adding the provider with gtk_style_context_add_provider() or
- * gtk_style_context_add_provider_for_display().
+ * [method@Gtk.CssProvider.load_from_file] or
+ * [method@Gtk.CssProvider.load_from_resource]
+ * and adding the provider with [method@Gtk.StyleContext.add_provider] or
+ * [func@Gtk.StyleContext.add_provider_for_display].
 
- * In addition, certain files will be read when GTK is initialized. First, the
- * file `$XDG_CONFIG_HOME/gtk-4.0/gtk.css` is loaded if it exists. Then, GTK
- * loads the first existing file among
+ * In addition, certain files will be read when GTK is initialized.
+ * First, the file `$XDG_CONFIG_HOME/gtk-4.0/gtk.css` is loaded if it
+ * exists. Then, GTK loads the first existing file among
  * `XDG_DATA_HOME/themes/THEME/gtk-VERSION/gtk-VARIANT.css`,
  * `$HOME/.themes/THEME/gtk-VERSION/gtk-VARIANT.css`,
  * `$XDG_DATA_DIRS/themes/THEME/gtk-VERSION/gtk-VARIANT.css` and
  * `DATADIR/share/themes/THEME/gtk-VERSION/gtk-VARIANT.css`,
- * where `THEME` is the name of the current theme (see the #GtkSettings:gtk-theme-name
- * setting), VARIANT is the variant to load (see the
- * #GtkSettings:gtk-application-prefer-dark-theme setting), `DATADIR`
- * is the prefix configured when GTK was compiled (unless overridden by the
- * `GTK_DATA_PREFIX` environment variable), and `VERSION` is the GTK version number.
- * If no file is found for the current version, GTK tries older versions all the
- * way back to 4.0.
+ * where `THEME` is the name of the current theme (see the
+ * [property@Gtk.Settings:gtk-theme-name] setting), `VARIANT` is the
+ * variant to load (see the
+ * [property@Gtk.Settings:gtk-application-prefer-dark-theme] setting),
+ * `DATADIR` is the prefix configured when GTK was compiled (unless
+ * overridden by the `GTK_DATA_PREFIX` environment variable), and
+ * `VERSION` is the GTK version number. If no file is found for the
+ * current version, GTK tries older versions all the way back to 4.0.
+ *
+ * To track errors while loading CSS, connect to the
+ * [signal@Gtk.CssProvider::parsing-error] signal.
  */
 
 #define MAX_SELECTOR_LIST_LENGTH 64
@@ -207,12 +211,14 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
    * @section: section the error happened in
    * @error: The parsing error
    *
-   * Signals that a parsing error occurred. the @path, @line and @position
-   * describe the actual location of the error as accurately as possible.
+   * Signals that a parsing error occurred.
+   *
+   * The @path, @line and @position describe the actual location of
+   * the error as accurately as possible.
    *
    * Parsing errors are never fatal, so the parsing will resume after
-   * the error. Errors may however cause parts of the given
-   * data or even all of it to not be parsed at all. So it is a useful idea
+   * the error. Errors may however cause parts of the given data or
+   * even all of it to not be parsed at all. So it is a useful idea
    * to check that the parsing succeeds by connecting to this signal.
    *
    * Note that this signal may be emitted at any time as the css provider
@@ -546,10 +552,10 @@ gtk_css_provider_finalize (GObject *object)
 /**
  * gtk_css_provider_new:
  *
- * Returns a newly created #GtkCssProvider.
+ * Returns a newly created `GtkCssProvider`.
  *
- * Returns: A new #GtkCssProvider
- **/
+ * Returns: A new `GtkCssProvider`
+ */
 GtkCssProvider *
 gtk_css_provider_new (void)
 {
@@ -1078,15 +1084,16 @@ gtk_css_provider_load_internal (GtkCssProvider *self,
 
 /**
  * gtk_css_provider_load_from_data:
- * @css_provider: a #GtkCssProvider
+ * @css_provider: a `GtkCssProvider`
  * @data: (array length=length) (element-type guint8): CSS data loaded in memory
  * @length: the length of @data in bytes, or -1 for NUL terminated strings. If
  *   @length is not -1, the code will assume it is not NUL terminated and will
  *   potentially do a copy.
  *
- * Loads @data into @css_provider, and by doing so clears any previously loaded
- * information.
- **/
+ * Loads @data into @css_provider.
+ *
+ * This clears any previously loaded information.
+ */
 void
 gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
                                  const char      *data,
@@ -1113,12 +1120,13 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
 
 /**
  * gtk_css_provider_load_from_file:
- * @css_provider: a #GtkCssProvider
- * @file: #GFile pointing to a file to load
+ * @css_provider: a `GtkCssProvider`
+ * @file: `GFile` pointing to a file to load
  *
- * Loads the data contained in @file into @css_provider, making it
- * clear any previously loaded information.
- **/
+ * Loads the data contained in @file into @css_provider.
+ *
+ * This clears any previously loaded information.
+ */
 void
 gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
                                  GFile           *file)
@@ -1135,12 +1143,13 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
 
 /**
  * gtk_css_provider_load_from_path:
- * @css_provider: a #GtkCssProvider
+ * @css_provider: a `GtkCssProvider`
  * @path: the path of a filename to load, in the GLib filename encoding
  *
- * Loads the data contained in @path into @css_provider, making it clear
- * any previously loaded information.
- **/
+ * Loads the data contained in @path into @css_provider.
+ *
+ * This clears any previously loaded information.
+ */
 void
 gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
                                  const char      *path)
@@ -1159,14 +1168,13 @@ gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
 
 /**
  * gtk_css_provider_load_from_resource:
- * @css_provider: a #GtkCssProvider
- * @resource_path: a #GResource resource path
+ * @css_provider: a `GtkCssProvider`
+ * @resource_path: a `GResource` resource path
  *
  * Loads the data contained in the resource at @resource_path into
- * the #GtkCssProvider, clearing any previously loaded information.
+ * the @css_provider.
  *
- * To track errors while loading CSS, connect to the
- * #GtkCssProvider::parsing-error signal.
+ * This clears any previously loaded information.
  */
 void
 gtk_css_provider_load_from_resource (GtkCssProvider *css_provider,
@@ -1308,16 +1316,17 @@ _gtk_css_find_theme (const char *name,
 
 /**
  * gtk_css_provider_load_named:
- * @provider: a #GtkCssProvider
+ * @provider: a `GtkCssProvider`
  * @name: A theme name
  * @variant: (allow-none): variant to load, for example, "dark", or
  *     %NULL for the default
  *
- * Loads a theme from the usual theme paths. The actual process of
- * finding the theme might change between releases, but it is
- * guaranteed that this function uses the same mechanism to load the
- * theme that GTK uses for loading its own theme.
- **/
+ * Loads a theme from the usual theme paths.
+ *
+ * The actual process of finding the theme might change between
+ * releases, but it is guaranteed that this function uses the same
+ * mechanism to load the theme that GTK uses for loading its own theme.
+ */
 void
 gtk_css_provider_load_named (GtkCssProvider *provider,
                              const char     *name,
@@ -1495,13 +1504,13 @@ gtk_css_provider_print_keyframes (GHashTable *keyframes,
  * Converts the @provider into a string representation in CSS
  * format.
  *
- * Using gtk_css_provider_load_from_data() with the return value
- * from this function on a new provider created with
- * gtk_css_provider_new() will basically create a duplicate of
- * this @provider.
+ * Using [method@Gtk.CssProvider.load_from_data] with the return
+ * value from this function on a new provider created with
+ * [ctor@Gtk.CssProvider.new] will basically create a duplicate
+ * of this @provider.
  *
  * Returns: a new string representing the @provider.
- **/
+ */
 char *
 gtk_css_provider_to_string (GtkCssProvider *provider)
 {
