@@ -87,7 +87,7 @@
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * headerbar
  * ╰── windowhandle
  *     ╰── box
@@ -98,7 +98,7 @@
  *         ╰── box.end
  *             ├── [other children]
  *             ╰── windowcontrols.end
- * ]|
+ * ```
  *
  * A `GtkHeaderBar`'s CSS node is called `headerbar`. It contains a `windowhandle`
  * subnode, which contains a `box` subnode, which contains two `box` subnodes at
