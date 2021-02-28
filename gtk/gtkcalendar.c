@@ -53,7 +53,7 @@
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * calendar.view
  * ├── header
  * │   ├── button
@@ -64,7 +64,7 @@
  * │   ╰── button
  * ╰── grid
  *     ╰── label[.day-name][.week-number][.day-number][.other-month][.today]
- * ]|
+ * ```
  *
  * `GtkCalendar` has a main node with name calendar. It contains a subnode
  * called header containing the widgets for switching between years and months.
