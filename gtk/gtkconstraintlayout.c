@@ -18,10 +18,9 @@
  */
 
 /**
- * SECTION: gtkconstraintlayout
- * @Title: GtkConstraintLayout
+ * GtkConstraintLayout:
  *
- * A layout manager using constraints
+ * A layout manager using constraints to describe relations between widgets.
  *
  * `GtkConstraintLayout` is a layout manager that uses relations between
  * widget attributes, expressed via [class@Gtk.Constraint] instances, to
@@ -184,6 +183,12 @@
  *   // divided by 2 plus 12
  *   [button1(button2 / 2 + 12)]
  * ```
+ */
+
+/**
+ * GtkConstraintLayoutChild:
+ *
+ * `GtkLayoutChild` subclass for children in a `GtkConstraintLayout`.
  */
 
 #include "config.h"
@@ -1740,7 +1745,7 @@ gtk_constraint_layout_new (void)
  * @layout: a `GtkConstraintLayout`
  * @constraint: (transfer full): a [class@Gtk.Constraint]
  *
- * Adds a [class@Gtk.Constraint] to the layout manager.
+ * Adds a constraint to the layout manager.
  *
  * The [property@Gtk.Constraint:source] and [property@Gtk.Constraint:target]
  * properties of `constraint` can be:
@@ -1848,9 +1853,10 @@ gtk_constraint_layout_remove_all_constraints (GtkConstraintLayout *layout)
  * @layout: a `GtkConstraintLayout`
  * @guide: (transfer full): a [class@Gtk.ConstraintGuide] object
  *
- * Adds a guide to `layout`. A guide can be used as
- * the source or target of constraints, like a widget,
- * but it is not visible.
+ * Adds a guide to `layout`.
+ *
+ * A guide can be used as the source or target of constraints,
+ * like a widget, but it is not visible.
  *
  * The `layout` acquires the ownership of `guide` after calling
  * this function.
@@ -1932,7 +1938,7 @@ gtk_constraint_vfl_parser_error_quark (void)
 
 /**
  * gtk_constraint_layout_add_constraints_from_descriptionv: (rename-to gtk_constraint_layout_add_constraints_from_description)
- * @layout: a #GtkConstraintLayout
+ * @layout: a `GtkConstraintLayout`
  * @lines: (array length=n_lines): an array of Visual Format Language lines
  *   defining a set of constraints
  * @n_lines: the number of lines
@@ -1944,10 +1950,9 @@ gtk_constraint_vfl_parser_error_quark (void)
  *   or guides
  * @error: return location for a `GError`
  *
- * Creates a list of constraints from a formal description using a compact
- * description syntax called VFL, or "Visual Format Language".
+ * Creates a list of constraints from a VFL description.
  *
- * The Visual Format Language is based on Apple's AutoLayout [VFL](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/VisualFormatLanguage.html).
+ * The Visual Format Language, VFL, is based on Apple's AutoLayout [VFL](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/VisualFormatLanguage.html).
  *
  * The `views` dictionary is used to match [iface@Gtk.ConstraintTarget]
  * instances to the symbolic view name inside the VFL.
@@ -2127,7 +2132,7 @@ gtk_constraint_layout_add_constraints_from_descriptionv (GtkConstraintLayout *la
 
 /**
  * gtk_constraint_layout_add_constraints_from_description:
- * @layout: a #GtkConstraintLayout
+ * @layout: a `GtkConstraintLayout`
  * @lines: (array length=n_lines): an array of Visual Format Language lines
  *   defining a set of constraints
  * @n_lines: the number of lines
@@ -2138,8 +2143,7 @@ gtk_constraint_layout_add_constraints_from_descriptionv (GtkConstraintLayout *la
  *   [iface@Gtk.ConstraintTarget] to which it maps
  * @...: a `NULL`-terminated list of view names and [class@Gtk.ConstraintTarget]s
  *
- * Creates a list of constraints they formal description using a compact
- * description syntax called VFL, or "Visual Format Language".
+ * Creates a list of constraints from a VFL description.
  *
  * This function is a convenience wrapper around
  * [method@Gtk.ConstraintLayout.add_constraints_from_descriptionv], using
@@ -2204,9 +2208,9 @@ gtk_constraint_layout_add_constraints_from_description (GtkConstraintLayout *lay
 
 /**
  * gtk_constraint_layout_observe_constraints:
- * @layout: a #GtkConstraintLayout
+ * @layout: a `GtkConstraintLayout`
  * 
- * Returns a #GListModel to track the constraints that are
+ * Returns a `GListModel` to track the constraints that are
  * part of the layout.
  * 
  * Calling this function will enable extra internal bookkeeping
@@ -2217,7 +2221,7 @@ gtk_constraint_layout_add_constraints_from_description (GtkConstraintLayout *lay
  * because of the slowdowns.
  *
  * Returns: (transfer full) (attributes element-type=GtkConstraint): a
- *   #GListModel tracking the layout's constraints
+ *   `GListModel` tracking the layout's constraints
  */
 GListModel *
 gtk_constraint_layout_observe_constraints (GtkConstraintLayout *layout)
@@ -2244,9 +2248,9 @@ gtk_constraint_layout_observe_constraints (GtkConstraintLayout *layout)
 
 /**
  * gtk_constraint_layout_observe_guides:
- * @layout: a #GtkConstraintLayout
+ * @layout: a `GtkConstraintLayout`
  * 
- * Returns a #GListModel to track the guides that are
+ * Returns a `GListModel` to track the guides that are
  * part of the layout.
  * 
  * Calling this function will enable extra internal bookkeeping
@@ -2257,7 +2261,7 @@ gtk_constraint_layout_observe_constraints (GtkConstraintLayout *layout)
  * because of the slowdowns.
  *
  * Returns: (transfer full) (attributes element-type=GtkConstraintGuide): a
- *   #GListModel tracking the layout's guides
+ *   `GListModel` tracking the layout's guides
  */
 GListModel *
 gtk_constraint_layout_observe_guides (GtkConstraintLayout *layout)

@@ -28,20 +28,9 @@ G_BEGIN_DECLS
 #define GTK_TYPE_CONSTRAINT_LAYOUT_CHILD (gtk_constraint_layout_child_get_type ())
 #define GTK_CONSTRAINT_VFL_PARSER_ERROR (gtk_constraint_vfl_parser_error_quark ())
 
-/**
- * GtkConstraintLayoutChild:
- *
- * A #GtkLayoutChild in a #GtkConstraintLayout.
- */
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkConstraintLayoutChild, gtk_constraint_layout_child, GTK, CONSTRAINT_LAYOUT_CHILD, GtkLayoutChild)
 
-/**
- * GtkConstraintLayout:
- *
- * A layout manager using #GtkConstraint to describe
- * relations between widgets.
- */
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkConstraintLayout, gtk_constraint_layout, GTK, CONSTRAINT_LAYOUT, GtkLayoutManager)
 
