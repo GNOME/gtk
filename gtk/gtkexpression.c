@@ -28,11 +28,9 @@
 #include <gobject/gvaluecollector.h>
 
 /**
- * SECTION:gtkexpression
- * @Short_description: Expressions to values
- * @Title: GtkExpression
+ * GtkExpression: (ref-func gtk_expression_ref) (unref-func gtk_expression_unref) (set-value-func gtk_value_set_expression) (get-value-func gtk_value_get_expression)
  *
- * GtkExpression provides a way to describe references to values.
+ * `GtkExpression` provides a way to describe references to values.
  *
  * An important aspect of expressions is that the value can be obtained
  * from a source that is several steps away. For example, an expression
@@ -97,13 +95,13 @@
  * `GObject` class being defined; for instance:
  *
  * ```c
- *   obj_props[PROP_EXPRESSION] =
- *     gtk_param_spec_expression ("expression",
- *                                "Expression",
- *                                "The expression used by the widget",
- *                                G_PARAM_READWRITE |
- *                                G_PARAM_STATIC_STRINGS |
- *                                G_PARAM_EXPLICIT_NOTIFY);
+ * obj_props[PROP_EXPRESSION] =
+ *   gtk_param_spec_expression ("expression",
+ *                              "Expression",
+ *                              "The expression used by the widget",
+ *                              G_PARAM_READWRITE |
+ *                              G_PARAM_STATIC_STRINGS |
+ *                              G_PARAM_EXPLICIT_NOTIFY);
  * ```
  *
  * When implementing the `GObjectClass.set_property` and `GObjectClass.get_property`
@@ -161,12 +159,6 @@
  * ```
  */
 
-
-/**
- * GtkExpression: (ref-func gtk_expression_ref) (unref-func gtk_expression_unref) (set-value-func gtk_value_set_expression) (get-value-func gtk_value_get_expression)
- *
- * The `GtkExpression` structure contains only private data.
- */
 
 typedef struct _GtkExpressionClass GtkExpressionClass;
 typedef struct _GtkExpressionSubWatch GtkExpressionSubWatch;
@@ -227,7 +219,7 @@ struct _GtkExpressionTypeInfo
 /**
  * GtkExpressionWatch:
  *
- * An opaque structure representing a watched [class@Gtk.Expression].
+ * An opaque structure representing a watched `GtkExpression`.
  *
  * The contents of `GtkExpressionWatch` should only be accessed through the
  * provided API.
@@ -1654,7 +1646,7 @@ gtk_closure_expression_new (GType                value_type,
 /**
  * GtkCClosureExpression:
  *
- * A variant of [class@Gtk.ClosureExpression] using a C closure.
+ * A variant of `GtkClosureExpression` using a C closure.
  */
 struct _GtkCClosureExpression
 {
@@ -1774,11 +1766,13 @@ gtk_expression_unref (GtkExpression *self)
  * gtk_expression_get_value_type:
  * @self: a `GtkExpression`
  *
- * Gets the `GType` that this expression evaluates to. This type
- * is constant and will not change over the lifetime of this expression.
+ * Gets the `GType` that this expression evaluates to.
+ *
+ * This type is constant and will not change over the lifetime
+ * of this expression.
  *
  * Returns: The type returned from [method@Gtk.Expression.evaluate]
- **/
+ */
 GType
 gtk_expression_get_value_type (GtkExpression *self)
 {
@@ -1824,7 +1818,7 @@ gtk_expression_evaluate (GtkExpression *self,
  *
  * Checks if the expression is static.
  *
- * A static expression will never change its result when 
+ * A static expression will never change its result when
  * [method@Gtk.Expression.evaluate] is called on it with the same arguments.
  *
  * That means a call to [method@Gtk.Expression.watch] is not necessary because
@@ -1965,8 +1959,11 @@ gtk_expression_watch_unref (GtkExpressionWatch *watch)
  * gtk_expression_watch_unwatch:
  * @watch: (transfer none): watch to release
  *
- * Stops watching an expression that was established via [method@Gtk.Expression.watch].
- **/
+ * Stops watching an expression.
+ *
+ * See [method@Gtk.Expression.watch] for how the watch
+ * was established.
+ */
 void
 gtk_expression_watch_unwatch (GtkExpressionWatch *watch)
 {
