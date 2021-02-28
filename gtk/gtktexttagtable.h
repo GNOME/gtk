@@ -35,23 +35,17 @@ G_BEGIN_DECLS
 
 /**
  * GtkTextTagTableForeach:
- * @tag: the #GtkTextTag
+ * @tag: the `GtkTextTag`
  * @data: (closure): data passed to gtk_text_tag_table_foreach()
  *
- * A function used with gtk_text_tag_table_foreach(), to iterate over every
- * #GtkTextTag inside a #GtkTextTagTable.
+ * A function used with gtk_text_tag_table_foreach(),
+ * to iterate over every `GtkTextTag` inside a `GtkTextTagTable`.
  */
 typedef void (* GtkTextTagTableForeach) (GtkTextTag *tag, gpointer data);
 
 #define GTK_TYPE_TEXT_TAG_TABLE            (gtk_text_tag_table_get_type ())
 #define GTK_TEXT_TAG_TABLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TEXT_TAG_TABLE, GtkTextTagTable))
 #define GTK_IS_TEXT_TAG_TABLE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TEXT_TAG_TABLE))
-
-/**
- * GtkTextTagTable:
- *
- * An object holding all the #GtkTextTag instances for a #GtkTextBuffer.
- */
 
 GDK_AVAILABLE_IN_ALL
 GType          gtk_text_tag_table_get_type (void) G_GNUC_CONST;
