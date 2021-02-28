@@ -27,16 +27,6 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_CONSTRAINT_GUIDE (gtk_constraint_guide_get_type ())
 
-/**
- * GtkConstraintGuide:
- *
- * An object that can be added to a #GtkConstraintLayout and be
- * used in constraints like a widget, without being drawn.
- *
- * Guides have a minimum, maximum and natural size. Depending
- * on the constraints that are applied, they can act like a
- * guideline that widgets can be aligned to, or like 'flexible space'.
- */
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkConstraintGuide, gtk_constraint_guide, GTK, CONSTRAINT_GUIDE, GObject)
 
