@@ -114,11 +114,11 @@
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * window.background [.csd / .solid-csd / .ssd] [.maximized / .fullscreen / .tiled]
  * ├── <child>
  * ╰── <titlebar child>.titlebar [.default-decoration]
- * ]|
+ * ```
  *
  * `GtkWindow` has a main CSS node with name window and style class .background.
  *
