@@ -46,7 +46,7 @@
  * is to use the [class@Gtk.PopoverMenu] subclass which supports being
  * populated from a `GMenuModel` with [ctor@Gtk.PopoverMenu.new_from_model].
  *
- * ```c
+ * ```xml
  * <section>
  *   <attribute name="display-hint">horizontal-buttons</attribute>
  *   <item>
@@ -69,12 +69,12 @@
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * popover[.menu]
  * ├── arrow
  * ╰── contents.background
  *     ╰── <child>
- * ]|
+ * ```
  *
  * The contents child node always gets the .background style class
  * and the popover itself gets the .menu style class if the popover
