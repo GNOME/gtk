@@ -58,11 +58,11 @@
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * colorbutton
  * ╰── button.color
  *     ╰── [content]
- *]|
+ * ```
  *
  * `GtkColorButton` has a single CSS node with name colorbutton which
  * contains a button node. To differentiate it from a plain `GtkButton`,
