@@ -97,14 +97,14 @@
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * expander
  * ╰── box
  *     ├── title
  *     │   ├── arrow
  *     │   ╰── <label widget>
  *     ╰── <child>
- * ]|
+ * ```
  *
  * `GtkExpander` has three CSS nodes, the main node with the name expander,
  * a subnode with name title and node below it with name arrow. The arrow of an
@@ -112,7 +112,7 @@
  *
  * # Accessibility
  *
- * `GtkExpander` uses the #GTK_ACCESSIBLE_ROLE_BUTTON role.
+ * `GtkExpander` uses the %GTK_ACCESSIBLE_ROLE_BUTTON role.
  */
 
 #include "config.h"
