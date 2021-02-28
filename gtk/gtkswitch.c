@@ -38,12 +38,12 @@
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * switch
  * ├── label
  * ├── label
  * ╰── slider
- * ]|
+ * ```
  *
  * `GtkSwitch` has four css nodes, the main node with the name switch and
  * subnodes for the slider and the on and off labels. Neither of them is
@@ -51,7 +51,7 @@
  *
  * # Accessibility
  *
- * `GtkSwitch` uses the #GTK_ACCESSIBLE_ROLE_SWITCH role.
+ * `GtkSwitch` uses the %GTK_ACCESSIBLE_ROLE_SWITCH role.
  */
 
 #include "config.h"
