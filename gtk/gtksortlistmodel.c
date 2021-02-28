@@ -53,22 +53,19 @@
 #define GTK_SORT_STEP_TIME_US (1000) /* 1 millisecond */
 
 /**
- * SECTION:gtksortlistmodel
- * @title: GtkSortListModel
- * @short_description: A list model that sorts its items
- * @see_also: #GListModel, #GtkSorter
+ * GtkSortListModel:
  *
- * #GtkSortListModel is a list model that takes a list model and
- * sorts its elements according to a #GtkSorter.
+ * `GtkSortListModel` is a list model that sorts the elements of
+ * the underlying model according to a `GtkSorter`.
  *
  * The model can be set up to do incremental sorting, so that
  * sorting long lists doesn't block the UI. See
- * gtk_sort_list_model_set_incremental() for details.
+ * [method@Gtk.SortListModel.set_incremental] for details.
  *
- * #GtkSortListModel is a generic model and because of that it
+ * `GtkSortListModel` is a generic model and because of that it
  * cannot take advantage of any external knowledge when sorting.
- * If you run into performance issues with #GtkSortListModel, it
- * is strongly recommended that you write your own sorting list
+ * If you run into performance issues with `GtkSortListModel`,
+ * it is strongly recommended that you write your own sorting list
  * model.
  */
 
@@ -775,9 +772,9 @@ gtk_sort_list_model_class_init (GtkSortListModelClass *class)
   gobject_class->dispose = gtk_sort_list_model_dispose;
 
   /**
-   * GtkSortListModel:incremental:
+   * GtkSortListModel:incremental: (attributes org.gtk.Property.get=gtk_sort_list_model_get_incremental org.gtk.Property.set=gtk_sort_list_model_set_incremental)
    *
-   * If the model should sort items incrementally
+   * If the model should sort items incrementally.
    */
   properties[PROP_INCREMENTAL] =
       g_param_spec_boolean ("incremental",
@@ -787,9 +784,9 @@ gtk_sort_list_model_class_init (GtkSortListModelClass *class)
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSortListModel:model:
+   * GtkSortListModel:model: (attributes org.gtk.Property.get=gtk_sort_list_model_get_model org.gtk.Property.set=gtk_sort_list_model_set_model)
    *
-   * The model being sorted
+   * The model being sorted.
    */
   properties[PROP_MODEL] =
       g_param_spec_object ("model",
@@ -799,9 +796,9 @@ gtk_sort_list_model_class_init (GtkSortListModelClass *class)
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSortListModel:pending:
+   * GtkSortListModel:pending: (attributes org.gtk.Property.get=gtk_sort_list_model_get_pending)
    *
-   * Estimate of unsorted items remaining
+   * Estimate of unsorted items remaining.
    */
   properties[PROP_PENDING] =
       g_param_spec_uint ("pending",
@@ -811,9 +808,9 @@ gtk_sort_list_model_class_init (GtkSortListModelClass *class)
                          GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSortListModel:sorter:
+   * GtkSortListModel:sorter: (attributes org.gtk.Property.get=gtk_sort_list_model_get_sorter org.gtk.Property.set=gtk_sort_list_model_set_sorter)
    *
-   * The sorter for this model
+   * The sorter for this model.
    */
   properties[PROP_SORTER] =
       g_param_spec_object ("sorter",
@@ -833,12 +830,12 @@ gtk_sort_list_model_init (GtkSortListModel *self)
 /**
  * gtk_sort_list_model_new:
  * @model: (allow-none) (transfer full): the model to sort, or %NULL
- * @sorter: (allow-none) (transfer full): the #GtkSorter to sort @model with, or %NULL
+ * @sorter: (allow-none) (transfer full): the `GtkSorter` to sort @model with, or %NULL
  *
  * Creates a new sort list model that uses the @sorter to sort @model.
  *
- * Returns: a new #GtkSortListModel
- **/
+ * Returns: a new `GtkSortListModel`
+ */
 GtkSortListModel *
 gtk_sort_list_model_new (GListModel *model,
                          GtkSorter  *sorter)
@@ -861,13 +858,14 @@ gtk_sort_list_model_new (GListModel *model,
 }
 
 /**
- * gtk_sort_list_model_set_model:
- * @self: a #GtkSortListModel
+ * gtk_sort_list_model_set_model: (attributes org.gtk.Method.set_property=model)
+ * @self: a `GtkSortListModel`
  * @model: (allow-none): The model to be sorted
  *
- * Sets the model to be sorted. The @model's item type must conform to
- * the item type of @self.
- **/
+ * Sets the model to be sorted.
+ *
+ * The @model's item type must conform to the item type of @self.
+ */
 void
 gtk_sort_list_model_set_model (GtkSortListModel *self,
                                GListModel       *model)
@@ -906,13 +904,13 @@ gtk_sort_list_model_set_model (GtkSortListModel *self,
 }
 
 /**
- * gtk_sort_list_model_get_model:
- * @self: a #GtkSortListModel
+ * gtk_sort_list_model_get_model: (attributes org.gtk.Method.get_property=model)
+ * @self: a `GtkSortListModel`
  *
  * Gets the model currently sorted or %NULL if none.
  *
  * Returns: (nullable) (transfer none): The model that gets sorted
- **/
+ */
 GListModel *
 gtk_sort_list_model_get_model (GtkSortListModel *self)
 {
@@ -922,9 +920,9 @@ gtk_sort_list_model_get_model (GtkSortListModel *self)
 }
 
 /**
- * gtk_sort_list_model_set_sorter:
- * @self: a #GtkSortListModel
- * @sorter: (allow-none): the #GtkSorter to sort @model with
+ * gtk_sort_list_model_set_sorter: (attributes org.gtk.Method.set_property=sorter)
+ * @self: a `GtkSortListModel`
+ * @sorter: (allow-none): the `GtkSorter` to sort @model with
  *
  * Sets a new sorter on @self.
  */
@@ -949,8 +947,8 @@ gtk_sort_list_model_set_sorter (GtkSortListModel *self,
 }
 
 /**
- * gtk_sort_list_model_get_sorter:
- * @self: a #GtkSortListModel
+ * gtk_sort_list_model_get_sorter: (attributes org.gtk.Method.get_property=sorter)
+ * @self: a `GtkSortListModel`
  *
  * Gets the sorter that is used to sort @self.
  *
@@ -965,13 +963,13 @@ gtk_sort_list_model_get_sorter (GtkSortListModel *self)
 }
 
 /**
- * gtk_sort_list_model_set_incremental:
- * @self: a #GtkSortListModel
+ * gtk_sort_list_model_set_incremental: (attributes org.gtk.Method.set_property=incremental)
+ * @self: a `GtkSortListModel`
  * @incremental: %TRUE to sort incrementally
  *
  * Sets the sort model to do an incremental sort.
  *
- * When incremental sorting is enabled, the sortlistmodel will not do
+ * When incremental sorting is enabled, the `GtkSortListModel` will not do
  * a complete sort immediately, but will instead queue an idle handler that
  * incrementally sorts the items towards their correct position. This of
  * course means that items do not instantly appear in the right place. It
@@ -983,7 +981,7 @@ gtk_sort_list_model_get_sorter (GtkSortListModel *self)
  *
  * By default, incremental sorting is disabled.
  *
- * See gtk_sort_list_model_get_pending() for progress information
+ * See [method@Gtk.SortListModel.get_pending] for progress information
  * about an ongoing incremental sorting operation.
  */
 void
@@ -1010,11 +1008,12 @@ gtk_sort_list_model_set_incremental (GtkSortListModel *self,
 }
 
 /**
- * gtk_sort_list_model_get_incremental:
- * @self: a #GtkSortListModel
+ * gtk_sort_list_model_get_incremental: (attributes org.gtk.Method.get_property=incremental)
+ * @self: a `GtkSortListModel`
  *
- * Returns whether incremental sorting was enabled via
- * gtk_sort_list_model_set_incremental().
+ * Returns whether incremental sorting is enabled.
+ *
+ * See [method@Gtk.SortListModel.set_incremental].
  *
  * Returns: %TRUE if incremental sorting is enabled
  */
@@ -1027,10 +1026,10 @@ gtk_sort_list_model_get_incremental (GtkSortListModel *self)
 }
 
 /**
- * gtk_sort_list_model_get_pending:
- * @self: a #GtkSortListModel
+ * gtk_sort_list_model_get_pending: (attributes org.gtk.Method.get_property=pending)
+ * @self: a `GtkSortListModel`
  *
- * Estimates progress of an ongoing sorting operation
+ * Estimates progress of an ongoing sorting operation.
  *
  * The estimate is the number of items that would still need to be
  * sorted to finish the sorting operation if this was a linear
@@ -1038,17 +1037,18 @@ gtk_sort_list_model_get_incremental (GtkSortListModel *self)
  * already correctly sorted.
  *
  * If you want to estimate the progress, you can use code like this:
- * |[<!-- language="C" -->
- *   pending = gtk_sort_list_model_get_pending (self);
- *   model = gtk_sort_list_model_get_model (self);
- *   progress = 1.0 - pending / (double) MAX (1, g_list_model_get_n_items (model));
- * ]|
+ * ```c
+ * pending = gtk_sort_list_model_get_pending (self);
+ * model = gtk_sort_list_model_get_model (self);
+ * progress = 1.0 - pending / (double) MAX (1, g_list_model_get_n_items (model));
+ * ```
  *
  * If no sort operation is ongoing - in particular when
- * #GtkSortListModel:incremental is %FALSE - this function returns 0.
+ * [property@Gtk.SortListModel:incremental] is %FALSE - this
+ * function returns 0.
  *
  * Returns: a progress estimate of remaining items to sort
- **/
+ */
 guint
 gtk_sort_list_model_get_pending (GtkSortListModel *self)
 {
