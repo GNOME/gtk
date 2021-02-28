@@ -30,7 +30,7 @@
  *
  * ![An example GtkButton](button.png)
  *
- * The `GtkButton` widget can hold any valid child widget.  That is, it can hold
+ * The `GtkButton` widget can hold any valid child widget. That is, it can hold
  * almost any other standard `GtkWidget`. The most commonly used child is the
  * `GtkLabel`.
  *
@@ -52,7 +52,7 @@
  *
  * # Accessibility
  *
- * `GtkButton` uses the #GTK_ACCESSIBLE_ROLE_BUTTON role.
+ * `GtkButton` uses the %GTK_ACCESSIBLE_ROLE_BUTTON role.
  */
 
 #include "config.h"
