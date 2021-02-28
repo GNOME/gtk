@@ -35,7 +35,7 @@
  *
  * # GtkCenterBox as GtkBuildable
  *
- * The `GtkCenterBox` implementation of the [iface@Gtk.Buildable] interface
+ * The `GtkCenterBox` implementation of the `GtkBuildable` interface
  * supports placing children in the 3 positions by specifying “start”, “center”
  * or “end” as the “type” attribute of a <child> element.
  *
