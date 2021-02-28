@@ -18,20 +18,17 @@
  */
 
 /**
- * SECTION:gtkdropcontrollermotion
- * @Short_description: Event controller for motion events during a drop
- * @Title: GtkDropControllerMotion
- * @See_also: #GtkDropControllerMotion, #GdkDrop, #GtkDropTarget
+ * GtkDropControllerMotion:
  *
- * #GtkDropControllerMotion is an event controller meant for tracking
- * the pointer hovering over a widget during a drag and drop operation.
+ * `GtkDropControllerMotion` is an event controller tracking
+ * the pointer during Drag-and-Drop operations.
  *
- * It is modeled after #GtkEventControllerMotion so if you have used
- * that, this should feel really familiar.
+ * It is modeled after [class@Gtk.EventControllerMotion] so if you
+ * have used that, this should feel really familiar.
  *
- * The drop controller is not able to accept drops, use #GtkDropTarget
+ * This controller is not able to accept drops, use [class@Gtk.DropTarget]
  * for that purpose.
- **/
+ */
 
 #include "config.h"
 
@@ -211,15 +208,16 @@ gtk_drop_controller_motion_class_init (GtkDropControllerMotionClass *klass)
   controller_class->handle_crossing = gtk_drop_controller_motion_handle_crossing;
 
   /**
-   * GtkDropControllerMotion:contains-pointer:
+   * GtkDropControllerMotion:contains-pointer: (attributes org.gtk.Property.get=gtk_drop_controller_motion_contains_pointer)
    *
-   * Whether the pointer of a drag and drop operation is in the controller's
-   * widget or a descendant.
-   * See also #GtkDropControllerMotion:is-pointer.
+   * Whether the pointer of a Drag-and-Drop operation is in
+   * the controller's widget or a descendant.
+   *
+   * See also [property@Gtk.DropControllerMotion:is-pointer].
    *
    * When handling crossing events, this property is updated
-   * before #GtkDropControllerMotion::enter but after
-   * #GtkDropControllerMotion::leave is emitted.
+   * before [signal@Gtk.DropControllerMotion::enter], but after
+   * [signal@Gtk.DropControllerMotion::leave] is emitted.
    */
   props[PROP_CONTAINS_POINTER] =
       g_param_spec_boolean ("contains-pointer",
@@ -229,17 +227,19 @@ gtk_drop_controller_motion_class_init (GtkDropControllerMotionClass *klass)
                             G_PARAM_READABLE);
 
   /**
-   * GtkDropControllerMotion:drop:
+   * GtkDropControllerMotion:drop: (attributes org.gtk.Property.get=gtk_drop_controller_motion_get_drop)
    *
-   * The ongoing drop operation over the controller's widget or its descendant.  
+   * The ongoing drop operation over the controller's widget or
+   * its descendant.
+   *
    * If no drop operation is going on, this property returns %NULL.
    *
-   * The event controller should not modify the @drop, but it might want to query
-   * its properties.
+   * The event controller should not modify the @drop, but it might
+   * want to query its properties.
    *
    * When handling crossing events, this property is updated
-   * before #GtkDropControllerMotion::enter but after
-   * #GtkDropControllerMotion::leave is emitted.
+   * before [signal@Gtk.DropControllerMotion::enter], but after
+   * [signal@Gtk.DropControllerMotion::leave] is emitted.
    */
   props[PROP_DROP] =
       g_param_spec_object ("drop",
@@ -249,15 +249,16 @@ gtk_drop_controller_motion_class_init (GtkDropControllerMotionClass *klass)
                            G_PARAM_READABLE);
 
   /**
-   * GtkDropControllerMotion:is-pointer:
+   * GtkDropControllerMotion:is-pointer: (attributes org.gtk.Property.get=gtk_drop_controller_motion_is_pointer)
    *
    * Whether the pointer is in the controllers widget itself,
-   * as opposed to in a descendent widget. See also
-   * #GtkDropControllerMotion:contains-pointer.
+   * as opposed to in a descendent widget.
+   *
+   * See also [property@Gtk.DropControllerMotion:contains-pointer].
    *
    * When handling crossing events, this property is updated
-   * before #GtkDropControllerMotion::enter but after
-   * #GtkDropControllerMotion::leave is emitted.
+   * before [signal@Gtk.DropControllerMotion::enter], but after
+   * [signal@Gtk.DropControllerMotion::leave] is emitted.
    */
   props[PROP_IS_POINTER] =
       g_param_spec_boolean ("is-pointer",
@@ -336,7 +337,7 @@ gtk_drop_controller_motion_init (GtkDropControllerMotion *self)
  * Creates a new event controller that will handle pointer motion
  * events during drag and drop.
  *
- * Returns: a new #GtkDropControllerMotion
+ * Returns: a new `GtkDropControllerMotion`
  **/
 GtkEventController *
 gtk_drop_controller_motion_new (void)
@@ -346,10 +347,11 @@ gtk_drop_controller_motion_new (void)
 }
 
 /**
- * gtk_drop_controller_motion_contains_pointer:
- * @self: a #GtkDropControllerMotion
+ * gtk_drop_controller_motion_contains_pointer: (attributes org.gtk.Method.get_property=contains-pointer)
+ * @self: a `GtkDropControllerMotion`
  *
- * Returns the value of the GtkDropControllerMotion:contains-pointer property.
+ * Returns if a Drag-and-Drop operation is within the widget
+ * @self or one of its children.
  *
  * Returns: %TRUE if a dragging pointer is within @self or one of its children.
  */
@@ -362,13 +364,14 @@ gtk_drop_controller_motion_contains_pointer (GtkDropControllerMotion *self)
 }
 
 /**
- * gtk_drop_controller_motion_get_drop:
- * @self: a #GtkDropControllerMotion
+ * gtk_drop_controller_motion_get_drop: (attributes org.gtk.Method.get_property=drop)
+ * @self: a `GtkDropControllerMotion`
  *
- * Returns the value of the GtkDropControllerMotion:drop property.
+ * Returns the `GdkDrop` of a current Drag-and-Drop operation
+ * over the widget of @self.
  *
- * Returns: (transfer none) (nullable): The #GdkDrop currently happening
- *   within @self or %NULL if none
+ * Returns: (transfer none) (nullable): The `GdkDrop` currently
+ *   happening within @self or %NULL if none
  */
 GdkDrop *
 gtk_drop_controller_motion_get_drop (GtkDropControllerMotion *self)
@@ -379,12 +382,14 @@ gtk_drop_controller_motion_get_drop (GtkDropControllerMotion *self)
 }
 
 /**
- * gtk_drop_controller_motion_is_pointer:
- * @self: a #GtkEventControllerKey
+ * gtk_drop_controller_motion_is_pointer: (attributes org.gtk.Method.get_property=is-pointer)
+ * @self: a `GtkDropControllerMotion`
  *
- * Returns the value of the GtkDropControllerMotion:is-pointer property.
+ * Returns if a Drag-and-Drop operation is within the widget
+ * @self, not one of its children.
  *
- * Returns: %TRUE if a dragging pointer is within @self but not one of its children
+ * Returns: %TRUE if a dragging pointer is within @self but
+ *   not one of its children
  */
 gboolean
 gtk_drop_controller_motion_is_pointer (GtkDropControllerMotion *self)
