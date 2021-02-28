@@ -75,7 +75,7 @@
  *
  * # Accessibility
  *
- * `GtkDropDown` uses the #GTK_ACCESSIBLE_ROLE_COMBO_BOX role.
+ * `GtkDropDown` uses the %GTK_ACCESSIBLE_ROLE_COMBO_BOX role.
  */
 
 struct _GtkDropDown
