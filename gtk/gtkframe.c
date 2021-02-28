@@ -69,11 +69,11 @@
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * frame
  * ├── <label widget>
  * ╰── <child>
- * ]|
+ * ```
  *
  * `GtkFrame` has a main CSS node with name “frame”, which is used to draw the
  * visible border. You can set the appearance of the border using CSS properties
