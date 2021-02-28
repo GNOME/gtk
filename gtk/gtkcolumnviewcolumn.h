@@ -36,11 +36,6 @@ G_BEGIN_DECLS
 #define GTK_IS_COLUMN_VIEW_COLUMN_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GTK_TYPE_COLUMN_VIEW_COLUMN))
 #define GTK_COLUMN_VIEW_COLUMN_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_COLUMN_VIEW_COLUMN, GtkColumnViewColumnClass))
 
-/**
- * GtkColumnViewColumn:
- *
- * GtkColumnViewColumns are added to #GtkColumnViews.
- */
 typedef struct _GtkColumnViewColumnClass GtkColumnViewColumnClass;
 
 GDK_AVAILABLE_IN_ALL

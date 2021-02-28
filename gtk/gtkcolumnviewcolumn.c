@@ -35,19 +35,20 @@
 #include "gtksorter.h"
 
 /**
- * SECTION:gtkcolumnviewcolumn
- * @title: GtkColumnViewColumn
- * @short_description: The column added to GtkColumnView
- * @see_also: #GtkColumnView
+ * GtkColumnViewColumn:
  *
- * GtkColumnViewColumn represents the columns being added to #GtkColumnView.
+ * `GtkColumnViewColumn` represents the columns being added to `GtkColumnView`.
+ *
+ * The main ingredient for a `GtkColumnViewColumn` is the `GtkListItemFactory`
+ * that tells the columnview how to create cells for this column from items in
+ * the model.
  *
  * Columns have a title, and can optionally have a header menu set
- * with gtk_column_view_column_set_header_menu().
+ * with [method@Gtk.ColumnViewColumn.set_header_menu].
  *
  * A sorter can be associated with a column using
- * gtk_column_view_column_set_sorter(), to let users influence sorting by
- * clicking on the column header.
+ * [method@Gtk.ColumnViewColumn.set_sorter], to let users influence sorting
+ * by clicking on the column header.
  */
 
 struct _GtkColumnViewColumn
@@ -231,9 +232,9 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
   gobject_class->set_property = gtk_column_view_column_set_property;
 
   /**
-   * GtkColumnViewColumn:column-view:
+   * GtkColumnViewColumn:column-view: (attributes org.gtk.Property.get=gtk_column_view_column_get_column_view)
    *
-   * #GtkColumnView this column is a part of
+   * The `GtkColumnView` this column is a part of.
    */
   properties[PROP_COLUMN_VIEW] =
     g_param_spec_object ("column-view",
@@ -243,9 +244,9 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewColumn:factory:
+   * GtkColumnViewColumn:factory: (attributes org.gtk.Property.get=gtk_column_view_column_get_factory org.gtk.Property.set=gtk_column_view_column_set_factory)
    *
-   * Factory for populating list items
+   * Factory for populating list items.
    */
   properties[PROP_FACTORY] =
     g_param_spec_object ("factory",
@@ -255,9 +256,9 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewColumn:title:
+   * GtkColumnViewColumn:title: (attributes org.gtk.Property.get=gtk_column_view_column_get_title org.gtk.Property.set=gtk_column_view_column_set_title)
    *
-   * Title displayed in the header
+   * Title displayed in the header.
    */
   properties[PROP_TITLE] =
     g_param_spec_string ("title",
@@ -267,9 +268,9 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkColumnViewColumn:sorter:
+   * GtkColumnViewColumn:sorter: (attributes org.gtk.Property.get=gtk_column_view_column_get_sorter org.gtk.Property.set=gtk_column_view_column_set_sorter)
    *
-   * Sorter for sorting items according to this column
+   * Sorter for sorting items according to this column.
    */
   properties[PROP_SORTER] =
     g_param_spec_object ("sorter",
@@ -279,9 +280,9 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewColumn:visible:
+   * GtkColumnViewColumn:visible: (attributes org.gtk.Property.get=gtk_column_view_column_get_visible org.gtk.Property.set=gtk_column_view_column_set_visible)
    *
-   * Whether this column is visible
+   * Whether this column is visible.
    */
   properties[PROP_VISIBLE] =
     g_param_spec_boolean ("visible",
@@ -291,7 +292,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewColumn:header-menu:
+   * GtkColumnViewColumn:header-menu: (attributes org.gtk.Property.get=gtk_column_view_column_get_header_menu org.gtk.Property.set=gtk_column_view_column_set_header_menu)
    *
    * Menu model used to create the context menu for the column header.
    */
@@ -303,9 +304,9 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewColumn:resizable:
+   * GtkColumnViewColumn:resizable: (attributes org.gtk.Property.get=gtk_column_view_column_get_resizable org.gtk.Property.set=gtk_column_view_column_set_resizable)
    *
-   * Whether this column is resizable
+   * Whether this column is resizable.
    */
   properties[PROP_RESIZABLE] =
     g_param_spec_boolean ("resizable",
@@ -315,9 +316,9 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewColumn:expand:
+   * GtkColumnViewColumn:expand: (attributes org.gtk.Property.get=gtk_column_view_column_get_expand org.gtk.Property.set=gtk_column_view_column_set_expand)
    *
-   * Column gets share of extra width allocated to the view
+   * Column gets share of extra width allocated to the view.
    */
   properties[PROP_EXPAND] =
     g_param_spec_boolean ("expand",
@@ -327,7 +328,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewColumn:fixed-width:
+   * GtkColumnViewColumn:fixed-width: (attributes org.gtk.Property.get=gtk_column_view_column_get_fixed_width org.gtk.Property.set=gtk_column_view_column_set_fixed_width)
    *
    * If not -1, this is the width that the column is allocated,
    * regardless of the size of its content.
@@ -358,20 +359,20 @@ gtk_column_view_column_init (GtkColumnViewColumn *self)
  * @title: (nullable): Title to use for this column
  * @factory: (transfer full) (nullable): The factory to populate items with
  *
- * Creates a new #GtkColumnViewColumn that uses the given @factory for
+ * Creates a new `GtkColumnViewColumn` that uses the given @factory for
  * mapping items to widgets.
  *
- * You most likely want to call gtk_column_add_column() next.
+ * You most likely want to call [method@Gtk.ColumnView.append_column] next.
  *
- * The function takes ownership of the
- * argument, so you can write code like
- * ```
- *   column = gtk_column_view_column_new (_("Name"),
- *     gtk_builder_list_item_factory_new_from_resource ("/name.ui"));
+ * The function takes ownership of the argument, so you can write code like:
+ *
+ * ```c
+ * column = gtk_column_view_column_new (_("Name"),
+ *   gtk_builder_list_item_factory_new_from_resource ("/name.ui"));
  * ```
  *
- * Returns: a new #GtkColumnViewColumn using the given @factory
- **/
+ * Returns: a new `GtkColumnViewColumn` using the given @factory
+ */
 GtkColumnViewColumn *
 gtk_column_view_column_new (const char         *title,
                             GtkListItemFactory *factory)
@@ -581,15 +582,15 @@ gtk_column_view_column_ensure_cells (GtkColumnViewColumn *self)
 }
 
 /**
- * gtk_column_view_column_get_column_view:
- * @self: a #GtkColumnViewColumn
+ * gtk_column_view_column_get_column_view: (attributes org.gtk.Method.get_property=column-view)
+ * @self: a `GtkColumnViewColumn`
  *
  * Gets the column view that's currently displaying this column.
  *
  * If @self has not been added to a column view yet, %NULL is returned.
  *
  * Returns: (nullable) (transfer none): The column view displaying @self.
- **/
+ */
 GtkColumnView *
 gtk_column_view_column_get_column_view (GtkColumnViewColumn *self)
 {
@@ -635,8 +636,8 @@ gtk_column_view_column_set_position (GtkColumnViewColumn *self,
 }
 
 /**
- * gtk_column_view_column_get_factory:
- * @self: a #GtkColumnViewColumn
+ * gtk_column_view_column_get_factory: (attributes org.gtk.Method.get_property=factory)
+ * @self: a `GtkColumnViewColumn`
  *
  * Gets the factory that's currently used to populate list items for
  * this column.
@@ -652,13 +653,13 @@ gtk_column_view_column_get_factory (GtkColumnViewColumn *self)
 }
 
 /**
- * gtk_column_view_column_set_factory:
- * @self: a #GtkColumnViewColumn
+ * gtk_column_view_column_set_factory: (attributes org.gtk.Method.set_property=factory)
+ * @self: a `GtkColumnViewColumn`
  * @factory: (allow-none) (transfer none): the factory to use or %NULL for none
  *
- * Sets the #GtkListItemFactory to use for populating list items for this
+ * Sets the `GtkListItemFactory` to use for populating list items for this
  * column.
- **/
+ */
 void
 gtk_column_view_column_set_factory (GtkColumnViewColumn *self,
                                     GtkListItemFactory  *factory)
@@ -673,12 +674,14 @@ gtk_column_view_column_set_factory (GtkColumnViewColumn *self,
 }
 
 /**
- * gtk_column_view_column_set_title:
- * @self: a #GtkColumnViewColumn
+ * gtk_column_view_column_set_title: (attributes org.gtk.Method.set_property=title)
+ * @self: a `GtkColumnViewColumn`
  * @title: (nullable): Title to use for this column
  *
- * Sets the title of this column. The title is displayed in the header of a
- * #GtkColumnView for this column and is therefore user-facing text that should
+ * Sets the title of this column.
+ *
+ * The title is displayed in the header of a `GtkColumnView`
+ * for this column and is therefore user-facing text that should
  * be translated.
  */
 void
@@ -700,8 +703,8 @@ gtk_column_view_column_set_title (GtkColumnViewColumn *self,
 }
 
 /**
- * gtk_column_view_column_get_title:
- * @self: a #GtkColumnViewColumn
+ * gtk_column_view_column_get_title: (attributes org.gtk.Method.get_property=title)
+ * @self: a `GtkColumnViewColumn`
  *
  * Returns the title set with gtk_column_view_column_set_title().
  *
@@ -736,9 +739,9 @@ gtk_column_view_column_remove_from_sorter (GtkColumnViewColumn *self)
 }
 
 /**
- * gtk_column_view_column_set_sorter:
- * @self: a #GtkColumnViewColumn
- * @sorter: (nullable): the #GtkSorter to associate with @column
+ * gtk_column_view_column_set_sorter: (attributes org.gtk.Method.set_property=sorter)
+ * @self: a `GtkColumnViewColumn`
+ * @sorter: (nullable): the `GtkSorter` to associate with @column
  *
  * Associates a sorter with the column.
  *
@@ -746,10 +749,10 @@ gtk_column_view_column_remove_from_sorter (GtkColumnViewColumn *self)
  * the sorting by clicking on its header.
  *
  * This sorter can be made active by clicking on the column
- * header, or by calling gtk_column_view_sort_by_column().
+ * header, or by calling [method@Gtk.ColumnView.sort_by_column].
  *
- * See gtk_column_view_get_sorter() for the necessary steps
- * for setting up customizable sorting for #GtkColumnView.
+ * See [method@Gtk.ColumnView.get_sorter] for the necessary steps
+ * for setting up customizable sorting for [class@Gtk.ColumnView].
  */
 void
 gtk_column_view_column_set_sorter (GtkColumnViewColumn *self,
@@ -770,12 +773,12 @@ gtk_column_view_column_set_sorter (GtkColumnViewColumn *self,
 }
 
 /**
- * gtk_column_view_column_get_sorter:
- * @self: a #GtkColumnViewColumn
+ * gtk_column_view_column_get_sorter: (attributes org.gtk.Method.get_property=sorter)
+ * @self: a `GtkColumnViewColumn`
  *
  * Returns the sorter that is associated with the column.
  *
- * Returns: (nullable) (transfer none): the #GtkSorter of @self
+ * Returns: (nullable) (transfer none): the `GtkSorter` of @self
  */
 GtkSorter *
 gtk_column_view_column_get_sorter (GtkColumnViewColumn *self)
@@ -793,8 +796,8 @@ gtk_column_view_column_notify_sort (GtkColumnViewColumn *self)
 }
 
 /**
- * gtk_column_view_column_set_visible:
- * @self: a #GtkColumnViewColumn
+ * gtk_column_view_column_set_visible: (attributes org.gtk.Method.set_property=visible)
+ * @self: a `GtkColumnViewColumn`
  * @visible: whether this column should be visible
  *
  * Sets whether this column should be visible in views.
@@ -827,8 +830,8 @@ gtk_column_view_column_set_visible (GtkColumnViewColumn *self,
 }
 
 /**
- * gtk_column_view_column_get_visible:
- * @self: a #GtkColumnViewColumn
+ * gtk_column_view_column_get_visible: (attributes org.gtk.Method.get_property=visible)
+ * @self: a `GtkColumnViewColumn`
  *
  * Returns whether this column is visible.
  *
@@ -843,9 +846,9 @@ gtk_column_view_column_get_visible (GtkColumnViewColumn *self)
 }
 
 /**
- * gtk_column_view_column_set_header_menu:
- * @self: a #GtkColumnViewColumn
- * @menu: (allow-none): a #GMenuModel, or %NULL
+ * gtk_column_view_column_set_header_menu: (attributes org.gtk.Method.set_property=header-menu)
+ * @self: a `GtkColumnViewColumn`
+ * @menu: (allow-none): a `GMenuModel`, or %NULL
  *
  * Sets the menu model that is used to create the context menu
  * for the column header.
@@ -867,8 +870,8 @@ gtk_column_view_column_set_header_menu (GtkColumnViewColumn *self,
 }
 
 /**
- * gtk_column_view_column_get_header_menu:
- * @self: a #GtkColumnViewColumn
+ * gtk_column_view_column_get_header_menu: (attributes org.gtk.Method.get_property=header-menu)
+ * @self: a `GtkColumnViewColumn`
  *
  * Gets the menu model that is used to create the context menu
  * for the column header.
@@ -884,8 +887,8 @@ gtk_column_view_column_get_header_menu (GtkColumnViewColumn *self)
 }
 
 /**
- * gtk_column_view_column_set_expand:
- * @self: a #GtkColumnViewColumn
+ * gtk_column_view_column_set_expand: (attributes org.gtk.Method.set_property=expand)
+ * @self: a `GtkColumnViewColumn`
  * @expand: %TRUE if this column should expand to fill available sace
  *
  * Sets the column to take available extra space.
@@ -911,8 +914,8 @@ gtk_column_view_column_set_expand (GtkColumnViewColumn *self,
 }
 
 /**
- * gtk_column_view_column_get_expand:
- * @self: a #GtkColumnViewColumn
+ * gtk_column_view_column_get_expand: (attributes org.gtk.Method.get_property=expand)
+ * @self: a `GtkColumnViewColumn`
  *
  * Returns whether this column should expand.
  *
@@ -927,8 +930,8 @@ gtk_column_view_column_get_expand (GtkColumnViewColumn *self)
 }
 
 /**
- * gtk_column_view_column_set_resizable:
- * @self: a #GtkColumnViewColumn
+ * gtk_column_view_column_set_resizable: (attributes org.gtk.Method.set_property=resizable)
+ * @self: a `GtkColumnViewColumn`
  * @resizable: whether this column should be resizable
  *
  * Sets whether this column should be resizable by dragging.
@@ -948,8 +951,8 @@ gtk_column_view_column_set_resizable (GtkColumnViewColumn *self,
 }
 
 /**
- * gtk_column_view_column_get_resizable:
- * @self: a #GtkColumnView
+ * gtk_column_view_column_get_resizable: (attributes org.gtk.Method.get_property=resizable)
+ * @self: a `GtkColumnViewColumn`
  *
  * Returns whether this column is resizable.
  *
@@ -964,8 +967,8 @@ gtk_column_view_column_get_resizable (GtkColumnViewColumn *self)
 }
 
 /**
- * gtk_column_view_column_set_fixed_width:
- * @self: a #GtkColumnViewColumn
+ * gtk_column_view_column_set_fixed_width: (attributes org.gtk.Method.set_property=fixed-width)
+ * @self: a `GtkColumnViewColumn`
  * @fixed_width: the new fixed width, or -1
  *
  * If @fixed_width is not -1, sets the fixed width of @column;
@@ -992,8 +995,8 @@ gtk_column_view_column_set_fixed_width (GtkColumnViewColumn *self,
 }
 
 /**
- * gtk_column_view_column_get_fixed_width:
- * @self: a #GtkColumnViewColumn
+ * gtk_column_view_column_get_fixed_width: (attributes org.gtk.Method.get_property=fixed-width)
+ * @self: a `GtkColumnViewColumn`
  *
  * Gets the fixed width of the column.
  *
