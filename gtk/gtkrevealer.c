@@ -33,32 +33,28 @@
 #include "gtkbuildable.h"
 
 /**
- * SECTION:gtkrevealer
- * @Short_description: Hide and show with animation
- * @Title: GtkRevealer
- * @See_also: #GtkExpander
+ * GtkRevealer:
  *
- * The GtkRevealer widget is a container which animates
- * the transition of its child from invisible to visible.
+ * A `GtkRevealer` animates the transition of its child from invisible to visible.
  *
  * The style of transition can be controlled with
- * gtk_revealer_set_transition_type().
+ * [method@Gtk.Revealer.set_transition_type].
  *
- * These animations respect the #GtkSettings:gtk-enable-animations
+ * These animations respect the [property@Gtk.Settings:gtk-enable-animations]
  * setting.
  *
  * # CSS nodes
  *
- * GtkRevealer has a single CSS node with name revealer.
- * When styling #GtkRevealer using CSS, remember that it only hides its contents,
- * not itself. That means applied margin, padding and borders will be
- * visible even when the #GtkRevealer:reveal-child property is set to %FALSE.
+ * `GtkRevealer` has a single CSS node with name revealer.
+ * When styling `GtkRevealer` using CSS, remember that it only hides its contents,
+ * not itself. That means applied margin, padding and borders will be visible even
+ * when the [property@Gtk.Revealer:reveal-child] property is set to %FALSE.
  *
  * # Accessibility
  *
- * GtkRevealer uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
+ * `GtkRevealer` uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
  *
- * The child of GtkRevealer, if set, is always available in the accessibility
+ * The child of `GtkRevealer`, if set, is always available in the accessibility
  * tree, regardless of the state of the revealer widget.
  */
 
@@ -76,7 +72,7 @@
  * @GTK_REVEALER_TRANSITION_TYPE_SWING_DOWN: Floop in from the top
  *
  * These enumeration values describe the possible transitions
- * when the child of a #GtkRevealer widget is shown or hidden.
+ * when the child of a `GtkRevealer` widget is shown or hidden.
  */
 
 struct _GtkRevealer
@@ -313,6 +309,11 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
   widget_class->compute_expand = gtk_revealer_compute_expand;
   widget_class->get_request_mode = gtk_revealer_get_request_mode;
 
+  /**
+   * GtkRevealer:transition-type: (attributes org.gtk.Property.get=gtk_revealer_get_transition_type org.gtk.Property.set=gtk_revealer_set_transition_type)
+   *
+   * The type of animation used to transition.
+   */
   props[PROP_TRANSITION_TYPE] =
     g_param_spec_enum ("transition-type",
                        P_("Transition type"),
@@ -321,6 +322,11 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
                        GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN,
                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkRevealer:transition-duration: (attributes org.gtk.Property.get=gtk_revealer_get_transition_duration org.gtk.Property.set=gtk_revealer_set_transition_duration)
+   *
+   * The animation duration, in milliseconds.
+   */
   props[PROP_TRANSITION_DURATION] =
     g_param_spec_uint ("transition-duration",
                        P_("Transition duration"),
@@ -328,6 +334,11 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
                        0, G_MAXUINT, 250,
                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkRevealer:reveal-child: (attributes org.gtk.Proeprty.get=gtk_revealer_get_reveal_child org.gtk.Property.set=gtk_revealer_set_reveal_child)
+   *
+   * Whether the revealer should reveal the child.
+   */
   props[PROP_REVEAL_CHILD] =
     g_param_spec_boolean ("reveal-child",
                           P_("Reveal Child"),
@@ -335,6 +346,11 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
                           FALSE,
                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkRevealer:child-revealed: (attributes org.gtk.Property.get=gtk_revealer_get_child_revealed)
+   *
+   * Whether the child is revealed and the animation target reached.
+   */
   props[PROP_CHILD_REVEALED] =
     g_param_spec_boolean ("child-revealed",
                           P_("Child Revealed"),
@@ -342,6 +358,11 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
                           FALSE,
                           GTK_PARAM_READABLE);
 
+  /**
+   * GtkRevealer:child: (attributes org.gtk.Property.get=gtk_revealer_get_child org.gtk.Property.set=gtk_revealer_set_child)
+   *
+   * The child widget.
+   */
   props[PROP_CHILD] =
     g_param_spec_object ("child",
                          P_("Child"),
@@ -359,9 +380,9 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
 /**
  * gtk_revealer_new:
  *
- * Creates a new #GtkRevealer.
+ * Creates a new `GtkRevealer`.
  *
- * Returns: a newly created #GtkRevealer
+ * Returns: a newly created `GtkRevealer`
  */
 GtkWidget *
 gtk_revealer_new (void)
@@ -658,11 +679,11 @@ gtk_revealer_start_animation (GtkRevealer *revealer,
 }
 
 /**
- * gtk_revealer_set_reveal_child:
- * @revealer: a #GtkRevealer
+ * gtk_revealer_set_reveal_child: (attributes org.gtk.Method.set_property=reveal-child)
+ * @revealer: a `GtkRevealer`
  * @reveal_child: %TRUE to reveal the child
  *
- * Tells the #GtkRevealer to reveal or conceal its child.
+ * Tells the `GtkRevealer` to reveal or conceal its child.
  *
  * The transition will be animated with the current
  * transition type of @revealer.
@@ -680,16 +701,15 @@ gtk_revealer_set_reveal_child (GtkRevealer *revealer,
 }
 
 /**
- * gtk_revealer_get_reveal_child:
- * @revealer: a #GtkRevealer
+ * gtk_revealer_get_reveal_child: (attributes org.gtk.Method.get_property=reveal-child)
+ * @revealer: a `GtkRevealer`
  *
- * Returns whether the child is currently
- * revealed. See gtk_revealer_set_reveal_child().
+ * Returns whether the child is currently revealed.
  *
  * This function returns %TRUE as soon as the transition
  * is to the revealed state is started. To learn whether
  * the child is fully revealed (ie the transition is completed),
- * use gtk_revealer_get_child_revealed().
+ * use [method@Gtk.Revealer.get_child_revealed].
  *
  * Returns: %TRUE if the child is revealed.
  */
@@ -702,11 +722,13 @@ gtk_revealer_get_reveal_child (GtkRevealer *revealer)
 }
 
 /**
- * gtk_revealer_get_child_revealed:
- * @revealer: a #GtkRevealer
+ * gtk_revealer_get_child_revealed: (attributes org.gtk.Method.get_property=child-revealed)
+ * @revealer: a `GtkRevealer`
  *
- * Returns whether the child is fully revealed, in other words whether
- * the transition to the revealed state is completed.
+ * Returns whether the child is fully revealed.
+ *
+ * In other words, this returns whether the transition
+ * to the revealed state is completed.
  *
  * Returns: %TRUE if the child is fully revealed
  */
@@ -764,8 +786,8 @@ gtk_revealer_measure (GtkWidget      *widget,
 }
 
 /**
- * gtk_revealer_get_transition_duration:
- * @revealer: a #GtkRevealer
+ * gtk_revealer_get_transition_duration: (attributes org.gtk.Method.get_property=transition-duration)
+ * @revealer: a `GtkRevealer`
  *
  * Returns the amount of time (in milliseconds) that
  * transitions will take.
@@ -781,8 +803,8 @@ gtk_revealer_get_transition_duration (GtkRevealer *revealer)
 }
 
 /**
- * gtk_revealer_set_transition_duration:
- * @revealer: a #GtkRevealer
+ * gtk_revealer_set_transition_duration: (attributes org.gtk.Method.set_property=transition-duration)
+ * @revealer: a `GtkRevealer`
  * @duration: the new duration, in milliseconds
  *
  * Sets the duration that transitions will take.
@@ -801,8 +823,8 @@ gtk_revealer_set_transition_duration (GtkRevealer *revealer,
 }
 
 /**
- * gtk_revealer_get_transition_type:
- * @revealer: a #GtkRevealer
+ * gtk_revealer_get_transition_type: (attributes org.gtk.Method.get_property=transition-type)
+ * @revealer: a `GtkRevealer`
  *
  * Gets the type of animation that will be used
  * for transitions in @revealer.
@@ -818,13 +840,14 @@ gtk_revealer_get_transition_type (GtkRevealer *revealer)
 }
 
 /**
- * gtk_revealer_set_transition_type:
- * @revealer: a #GtkRevealer
+ * gtk_revealer_set_transition_type: (attributes org.gtk.Method.set_property=transition-type)
+ * @revealer: a `GtkRevealer`
  * @transition: the new transition type
  *
  * Sets the type of animation that will be used for
- * transitions in @revealer. Available types include
- * various kinds of fades and slides.
+ * transitions in @revealer.
+ *
+ * Available types include various kinds of fades and slides.
  */
 void
 gtk_revealer_set_transition_type (GtkRevealer               *revealer,
@@ -841,8 +864,8 @@ gtk_revealer_set_transition_type (GtkRevealer               *revealer,
 }
 
 /**
- * gtk_revealer_set_child:
- * @revealer: a #GtkRevealer
+ * gtk_revealer_set_child: (attributes org.gtk.Method.set_property=child)
+ * @revealer: a `GtkRevealer`
  * @child: (allow-none): the child widget
  *
  * Sets the child widget of @revealer.
@@ -867,8 +890,8 @@ gtk_revealer_set_child (GtkRevealer *revealer,
 }
 
 /**
- * gtk_revealer_get_child:
- * @revealer: a #GtkRevealer
+ * gtk_revealer_get_child: (attributes org.gtk.Method.get_property=child)
+ * @revealer: a `GtkRevealer`
  *
  * Gets the child widget of @revealer.
  *
