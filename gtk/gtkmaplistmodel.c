@@ -26,37 +26,35 @@
 #include "gtkprivate.h"
 
 /**
- * SECTION:gtkmaplistmodel
- * @title: GtkMapListModel
- * @short_description: A list model that transforms its items
- * @see_also: #GListModel
+ * GtkMapListModel:
  *
- * #GtkMapListModel is a list model that takes a list model and maps the items
- * in that model to different items according to a #GtkMapListModelMapFunc.
+ * A `GtkMapListModel` maps the items in a list model to different items.
  *
- * Example: Create a list of #GtkEventControllers
- * |[
- *   static gpointer
- *   map_to_controllers (gpointer widget,
- *                       gpointer data)
- *  {
- *     gpointer result = gtk_widget_observe_controllers (widget);
- *     g_object_unref (widget);
- *     return result;
- *  }
+ * `GtkMapListModel` uses a [callback@Gtk.MapListModelMapFunc].
  *
- *   widgets = gtk_widget_observe_children (widget);
+ * Example: Create a list of `GtkEventControllers`
+ * ```c
+ * static gpointer
+ * map_to_controllers (gpointer widget,
+ *                     gpointer data)
+ * {
+ *   gpointer result = gtk_widget_observe_controllers (widget);
+ *   g_object_unref (widget);
+ *   return result;
+ * }
  *
- *   controllers = gtk_map_list_model_new (G_TYPE_LIST_MODEL,
- *                                         widgets,
- *                                         map_to_controllers,
- *                                         NULL, NULL);
+ * widgets = gtk_widget_observe_children (widget);
  *
- *   model = gtk_flatten_list_model_new (GTK_TYPE_EVENT_CONTROLLER,
- *                                       controllers);
- * ]|
+ * controllers = gtk_map_list_model_new (G_TYPE_LIST_MODEL,
+ *                                       widgets,
+ *                                       map_to_controllers,
+ *                                       NULL, NULL);
  *
- * #GtkMapListModel will attempt to discard the mapped objects as soon as
+ * model = gtk_flatten_list_model_new (GTK_TYPE_EVENT_CONTROLLER,
+ *                                     controllers);
+ * ```
+ *
+ * `GtkMapListModel` will attempt to discard the mapped objects as soon as
  * they are no longer needed and recreate them if necessary.
  */
 
@@ -354,7 +352,7 @@ gtk_map_list_model_class_init (GtkMapListModelClass *class)
   gobject_class->dispose = gtk_map_list_model_dispose;
 
   /**
-   * GtkMapListModel:has-map:
+   * GtkMapListModel:has-map: (attributes org.gtk.Property.get=gtk_map_list_model_has_map)
    *
    * If a map is set for this model
    */
@@ -366,9 +364,9 @@ gtk_map_list_model_class_init (GtkMapListModelClass *class)
                             GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkMapListModel:model:
+   * GtkMapListModel:model: (attributes org.gtk.Property.get=gtk_map_list_model_get_model org.gtk.Property.set=gtk_map_list_model_set_model)
    *
-   * The model being mapped
+   * The model being mapped.
    */
   properties[PROP_MODEL] =
       g_param_spec_object ("model",
@@ -417,10 +415,10 @@ gtk_map_list_model_augment (GtkRbTree *map,
  * @user_data: (closure): user data passed to @map_func
  * @user_destroy: destroy notifier for @user_data
  *
- * Creates a new #GtkMapListModel for the given arguments.
+ * Creates a new `GtkMapListModel` for the given arguments.
  *
- * Returns: a new #GtkMapListModel
- **/
+ * Returns: a new `GtkMapListModel`
+ */
 GtkMapListModel *
 gtk_map_list_model_new (GListModel             *model,
                         GtkMapListModelMapFunc  map_func,
@@ -489,22 +487,23 @@ gtk_map_list_model_init_items (GtkMapListModel *self)
 
 /**
  * gtk_map_list_model_set_map_func:
- * @self: a #GtkMapListModel
+ * @self: a `GtkMapListModel`
  * @map_func: (allow-none): map function or %NULL to not map items
  * @user_data: (closure): user data passed to @map_func
  * @user_destroy: destroy notifier for @user_data
  *
- * Sets the function used to map items. The function will be called whenever
- * an item needs to be mapped and must return the item to use for the given
- * input item.
+ * Sets the function used to map items.
  *
- * Note that #GtkMapListModel may call this function multiple times on the
- * same item, because it may delete items it doesn't need anymore.
+ * The function will be called whenever an item needs to be mapped
+ * and must return the item to use for the given input item.
+ *
+ * Note that `GtkMapListModel` may call this function multiple times
+ * on the same item, because it may delete items it doesn't need anymore.
  *
  * GTK makes no effort to ensure that @map_func conforms to the item type
  * of @self. It assumes that the caller knows what they are doing and the map
  * function returns items of the appropriate type.
- **/
+ */
 void
 gtk_map_list_model_set_map_func (GtkMapListModel        *self,
                                  GtkMapListModelMapFunc  map_func,
@@ -544,8 +543,8 @@ gtk_map_list_model_set_map_func (GtkMapListModel        *self,
 }
 
 /**
- * gtk_map_list_model_set_model:
- * @self: a #GtkMapListModel
+ * gtk_map_list_model_set_model: (attributes org.gtk.Method.set_property=model)
+ * @self: a `GtkMapListModel`
  * @model: (allow-none): The model to be mapped
  *
  * Sets the model to be mapped.
@@ -553,7 +552,7 @@ gtk_map_list_model_set_map_func (GtkMapListModel        *self,
  * GTK makes no effort to ensure that @model conforms to the item type
  * expected by the map function. It assumes that the caller knows what
  * they are doing and have set up an appropriate map function.
- **/
+ */
 void
 gtk_map_list_model_set_model (GtkMapListModel *self,
                               GListModel      *model)
@@ -589,13 +588,13 @@ gtk_map_list_model_set_model (GtkMapListModel *self,
 }
 
 /**
- * gtk_map_list_model_get_model:
- * @self: a #GtkMapListModel
+ * gtk_map_list_model_get_model: (attributes org.gtk.Method.get_property=model)
+ * @self: a `GtkMapListModel`
  *
  * Gets the model that is currently being mapped or %NULL if none.
  *
  * Returns: (nullable) (transfer none): The model that gets mapped
- **/
+ */
 GListModel *
 gtk_map_list_model_get_model (GtkMapListModel *self)
 {
@@ -605,13 +604,13 @@ gtk_map_list_model_get_model (GtkMapListModel *self)
 }
 
 /**
- * gtk_map_list_model_has_map:
- * @self: a #GtkMapListModel
+ * gtk_map_list_model_has_map: (attributes org.gtk.Method.get_property=has-map)
+ * @self: a `GtkMapListModel`
  *
- * Checks if a map function is currently set on @self
+ * Checks if a map function is currently set on @self.
  *
  * Returns: %TRUE if a map function is set
- **/
+ */
 gboolean
 gtk_map_list_model_has_map (GtkMapListModel *self)
 {
