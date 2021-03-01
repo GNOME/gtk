@@ -49,7 +49,7 @@
  * `GtkDragSource` can be set up with the necessary
  * ingredients for a DND operation ahead of time. This includes
  * the source for the data that is being transferred, in the form
- * of a `GdkContentProvider`, the desired action, and the icon to
+ * of a [class@Gdk.ContentProvider], the desired action, and the icon to
  * use during the drag operation. After setting it up, the drag
  * source must be added to a widget as an event controller, using
  * [method@Gtk.Widget.add_controller].
