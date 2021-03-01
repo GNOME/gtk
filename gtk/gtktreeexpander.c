@@ -31,46 +31,45 @@
 #include "gtktreelistmodel.h"
 
 /**
- * SECTION:gtktreeexpander
- * @title: GtkTreeExpander
- * @short_description: An indenting expander button for use in a tree list
- * @see_also: #GtkTreeListModel
+ * GtkTreeExpander:
  *
- * GtkTreeExpander is a widget that provides an expander for a list.
+ * `GtkTreeExpander` is a widget that provides an expander for a list.
  *
- * It is typically placed as a bottommost child into a #GtkListView to allow
- * users to expand and collapse children in a list with a #GtkTreeListModel.
- * It will provide the common UI elements, gestures and keybindings for this
- * purpose.
+ * It is typically placed as a bottommost child into a `GtkListView`
+ * to allow users to expand and collapse children in a list with a
+ * [class@Gtk.TreeListModel]. `GtkTreeExpander` provides the common UI
+ * elements, gestures and keybindings for this purpose.
  *
  * On top of this, the "listitem.expand", "listitem.collapse" and
- * "listitem.toggle-expand" actions are provided to allow adding custom UI
- * for managing expanded state.
+ * "listitem.toggle-expand" actions are provided to allow adding custom
+ * UI for managing expanded state.
  *
- * The #GtkTreeListModel must be set to not be passthrough. Then it will provide
- * #GtkTreeListRow items which can be set via gtk_tree_expander_set_list_row()
- * on the expander. The expander will then watch that row item automatically.  
- * gtk_tree_expander_set_child() sets the widget that displays the actual row
- * contents.
+ * The `GtkTreeListModel` must be set to not be passthrough. Then it
+ * will provide [class@Gtk.TreeListRow] items which can be set via
+ * [method@Gtk.TreeExpander.set_list_row] on the expander.
+ * The expander will then watch that row item automatically.
+ * [method@Gtk.TreeExpander.set_child] sets the widget that displays
+ * the actual row contents.
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * treeexpander
  * ├── [indent]*
  * ├── [expander]
  * ╰── <child>
- * ]|
+ * ```
  *
- * GtkTreeExpander has zero or one CSS nodes with the name "expander" that should
- * display the expander icon. The node will be `:checked` when it is expanded.
- * If the node is not expandable, an "indent" node will be displayed instead.
+ * `GtkTreeExpander` has zero or one CSS nodes with the name "expander" that
+ * should display the expander icon. The node will be `:checked` when it
+ * is expanded. If the node is not expandable, an "indent" node will be
+ * displayed instead.
  *
  * For every level of depth, another "indent" node is prepended.
  *
  * # Accessibility
  *
- * GtkTreeExpander uses the %GTK_ACCESSIBLE_ROLE_GROUP role. The expander icon
+ * `GtkTreeExpander` uses the %GTK_ACCESSIBLE_ROLE_GROUP role. The expander icon
  * is represented as a %GTK_ACCESSIBLE_ROLE_BUTTON, labelled by the expander's
  * child, and toggling it will change the %GTK_ACCESSIBLE_STATE_EXPANDED state.
  */
@@ -499,9 +498,9 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
   gobject_class->set_property = gtk_tree_expander_set_property;
 
   /**
-   * GtkTreeExpander:child:
+   * GtkTreeExpander:child: (attributes org.gtk.Property.get=gtk_tree_expander_get_child org.gtk.Property.set=gtk_tree_expander_set_child)
    *
-   * The child widget with the actual contents
+   * The child widget with the actual contents.
    */
   properties[PROP_CHILD] =
     g_param_spec_object ("child",
@@ -511,9 +510,9 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkTreeExpander:item:
+   * GtkTreeExpander:item: (attributes org.gtk.Property.get=gtk_tree_expander_get_item)
    *
-   * The item held by this expander's row
+   * The item held by this expander's row.
    */
   properties[PROP_ITEM] =
       g_param_spec_object ("item",
@@ -523,9 +522,9 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
                            G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkTreeExpander:list-row:
+   * GtkTreeExpander:list-row: (attributes org.gtk.Property.get=gtk_tree_expander_get_list_row org.gtk.Property.set=gtk_tree_expander_set_list_row)
    *
-   * The list row to track for expander state
+   * The list row to track for expander state.
    */
   properties[PROP_LIST_ROW] =
     g_param_spec_object ("list-row",
@@ -676,9 +675,9 @@ gtk_tree_expander_init (GtkTreeExpander *self)
 /**
  * gtk_tree_expander_new:
  *
- * Creates a new #GtkTreeExpander
+ * Creates a new `GtkTreeExpander`
  *
- * Returns: a new #GtkTreeExpander
+ * Returns: a new `GtkTreeExpander`
  **/
 GtkWidget *
 gtk_tree_expander_new (void)
@@ -688,8 +687,8 @@ gtk_tree_expander_new (void)
 }
 
 /**
- * gtk_tree_expander_get_child
- * @self: a #GtkTreeExpander
+ * gtk_tree_expander_get_child: (attributes org.gtk.Method.get_property=child)
+ * @self: a `GtkTreeExpander`
  *
  * Gets the child widget displayed by @self.
  *
@@ -704,9 +703,9 @@ gtk_tree_expander_get_child (GtkTreeExpander *self)
 }
 
 /**
- * gtk_tree_expander_set_child:
- * @self: a #GtkTreeExpander widget
- * @child: (nullable): a #GtkWidget, or %NULL
+ * gtk_tree_expander_set_child: (attributes org.gtk.Method.set_property=child)
+ * @self: a `GtkTreeExpander`
+ * @child: (nullable): a `GtkWidget`, or %NULL
  *
  * Sets the content widget to display.
  */
@@ -732,19 +731,19 @@ gtk_tree_expander_set_child (GtkTreeExpander *self,
 }
 
 /**
- * gtk_tree_expander_get_item
- * @self: a #GtkTreeExpander
+ * gtk_tree_expander_get_item: (attributes org.gtk.Method.get_property=item)
+ * @self: a `GtkTreeExpander`
  *
- * Forwards the item set on the #GtkTreeListRow that @self is managing.
+ * Forwards the item set on the `GtkTreeListRow` that @self is managing.
  *
  * This call is essentially equivalent to calling:
  *
- * |[<!-- language="C" -->
- *   gtk_tree_list_row_get_item (gtk_tree_expander_get_list_row (@self));
- * ]|
+ * ```c
+ * gtk_tree_list_row_get_item (gtk_tree_expander_get_list_row (@self));
+ * ```
  *
  * Returns: (nullable) (transfer full) (type GObject): The item of the row
- **/
+ */
 gpointer
 gtk_tree_expander_get_item (GtkTreeExpander *self)
 {
@@ -757,13 +756,13 @@ gtk_tree_expander_get_item (GtkTreeExpander *self)
 }
 
 /**
- * gtk_tree_expander_get_list_row
- * @self: a #GtkTreeExpander
+ * gtk_tree_expander_get_list_row: (attributes org.gtk.Method.get_property=list-row)
+ * @self: a `GtkTreeExpander`
  *
  * Gets the list row managed by @self.
  *
  * Returns: (nullable) (transfer none): The list row displayed by @self
- **/
+ */
 GtkTreeListRow *
 gtk_tree_expander_get_list_row (GtkTreeExpander *self)
 {
@@ -773,9 +772,9 @@ gtk_tree_expander_get_list_row (GtkTreeExpander *self)
 }
 
 /**
- * gtk_tree_expander_set_list_row:
- * @self: a #GtkTreeExpander widget
- * @list_row: (nullable): a #GtkTreeListRow, or %NULL
+ * gtk_tree_expander_set_list_row: (attributes org.gtk.Method.set_property=list-row)
+ * @self: a `GtkTreeExpander` widget
+ * @list_row: (nullable): a `GtkTreeListRow`, or %NULL
  *
  * Sets the tree list row that this expander should manage.
  */
