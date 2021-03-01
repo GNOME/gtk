@@ -43,6 +43,12 @@
  * properties get documented.
  */
 
+/**
+ * GtkOverlayLayoutChild:
+ *
+ * `GtkLayoutChild` subclass for children in a `GtkOverlayLayout`.
+ */
+
 struct _GtkOverlayLayout
 {
   GtkLayoutManager parent_instance;
