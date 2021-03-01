@@ -21,8 +21,8 @@
 /**
  * GtkAccessible:
  *
- * `GtkAccessible` provides an interface for describing a UI elements
- * for Assistive Technologies.
+ * `GtkAccessible` is an interface for describing UI elements for
+ * Assistive Technologies.
  *
  * Every accessible implementation has:
  *
