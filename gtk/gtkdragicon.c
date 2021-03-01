@@ -40,7 +40,7 @@
  *
  * `GtkDragIcon` is a `GtkRoot` implementation for drag icons.
  *
- * A drag icon moves with the pointer during a drag-and-drop operation
+ * A drag icon moves with the pointer during a Drag-and-Drop operation
  * and is destroyed when the drag ends.
  *
  * To set up a drag icon and associate it with an ongoing drag operation,
