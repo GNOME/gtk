@@ -25,13 +25,9 @@
 #include "gtkprivate.h"
 
 /**
- * SECTION:gtkslicelistmodel
- * @title: GtkSliceListModel
- * @short_description: A list model that presents a slice out of a larger list
- * @see_also: #GListModel
+ * GtkSliceListModel:
  *
- * #GtkSliceListModel is a list model that takes a list model and presents a
- * slice of that model.
+ * `GtkSliceListModel` is a list model that presents a slice of another model.
  *
  * This is useful when implementing paging by setting the size to the number
  * of elements per page and updating the offset whenever a different page is
@@ -255,9 +251,9 @@ gtk_slice_list_model_class_init (GtkSliceListModelClass *class)
   gobject_class->dispose = gtk_slice_list_model_dispose;
 
   /**
-   * GtkSliceListModel:model:
+   * GtkSliceListModel:model: (attributes org.gtk.Property.get=gtk_slice_list_model_get_model org.gtk.Property.set=gtk_slice_list_model_set_model)
    *
-   * Child model to take slice from
+   * Child model to take slice from.
    */
   properties[PROP_MODEL] =
       g_param_spec_object ("model",
@@ -267,9 +263,9 @@ gtk_slice_list_model_class_init (GtkSliceListModelClass *class)
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSliceListModel:offset:
+   * GtkSliceListModel:offset: (attributes org.gtk.Property.get=gtk_slice_list_model_get_offset org.gtk.Property.set=gtk_slice_list_model_set_offset)
    *
-   * Offset of slice
+   * Offset of slice.
    */
   properties[PROP_OFFSET] =
       g_param_spec_uint ("offset",
@@ -279,9 +275,9 @@ gtk_slice_list_model_class_init (GtkSliceListModelClass *class)
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSliceListModel:size:
+   * GtkSliceListModel:size: (attributes org.gtk.Property.get=gtk_slice_list_model_get_size org.gtk.Property.set=gtk_slice_list_model_set_size)
    *
-   * Maximum size of slice
+   * Maximum size of slice.
    */
   properties[PROP_SIZE] =
       g_param_spec_uint ("size",
@@ -305,11 +301,13 @@ gtk_slice_list_model_init (GtkSliceListModel *self)
  * @offset: the offset of the slice
  * @size: maximum size of the slice
  *
- * Creates a new slice model that presents the slice from @offset to
- * @offset + @size our of the given @model.
+ * Creates a new slice model.
  *
- * Returns: A new #GtkSliceListModel
- **/
+ * It presents the slice from @offset to offset + @size
+ * of the given @model.
+ *
+ * Returns: A new `GtkSliceListModel`
+ */
 GtkSliceListModel *
 gtk_slice_list_model_new (GListModel *model,
                           guint       offset,
@@ -332,14 +330,14 @@ gtk_slice_list_model_new (GListModel *model,
 }
 
 /**
- * gtk_slice_list_model_set_model:
- * @self: a #GtkSliceListModel
+ * gtk_slice_list_model_set_model: (attributes org.gtk.Method.set_property=model)
+ * @self: a `GtkSliceListModel`
  * @model: (allow-none): The model to be sliced
  *
- * Sets the model to show a slice of. The model's item type must conform
- * to @self's item type.
+ * Sets the model to show a slice of.
  *
- **/
+ * The model's item type must conform to @self's item type.
+ */
 void
 gtk_slice_list_model_set_model (GtkSliceListModel *self,
                                 GListModel      *model)
@@ -373,13 +371,13 @@ gtk_slice_list_model_set_model (GtkSliceListModel *self,
 }
 
 /**
- * gtk_slice_list_model_get_model:
- * @self: a #GtkSliceListModel
+ * gtk_slice_list_model_get_model: (attributes org.gtk.Method.get_property=model)
+ * @self: a `GtkSliceListModel`
  *
  * Gets the model that is currently being used or %NULL if none.
  *
  * Returns: (nullable) (transfer none): The model in use
- **/
+ */
 GListModel *
 gtk_slice_list_model_get_model (GtkSliceListModel *self)
 {
@@ -389,15 +387,15 @@ gtk_slice_list_model_get_model (GtkSliceListModel *self)
 }
 
 /**
- * gtk_slice_list_model_set_offset:
- * @self: a #GtkSliceListModel
+ * gtk_slice_list_model_set_offset: (attributes org.gtk.Method.set_property=offset)
+ * @self: a `GtkSliceListModel`
  * @offset: the new offset to use
  *
  * Sets the offset into the original model for this slice.
  *
  * If the offset is too large for the sliced model,
- * @self will end up empty. 
- **/
+ * @self will end up empty.
+ */
 void
 gtk_slice_list_model_set_offset (GtkSliceListModel *self,
                                  guint              offset)
@@ -422,13 +420,13 @@ gtk_slice_list_model_set_offset (GtkSliceListModel *self,
 }
 
 /**
- * gtk_slice_list_model_get_offset:
- * @self: a #GtkSliceListModel
+ * gtk_slice_list_model_get_offset: (attributes org.gtk.Method.get_property=offset)
+ * @self: a `GtkSliceListModel`
  *
- * Gets the offset set via gtk_slice_list_model_set_offset()
+ * Gets the offset set via gtk_slice_list_model_set_offset().
  *
  * Returns: The offset
- **/
+ */
 guint
 gtk_slice_list_model_get_offset (GtkSliceListModel *self)
 {
@@ -438,15 +436,15 @@ gtk_slice_list_model_get_offset (GtkSliceListModel *self)
 }
 
 /**
- * gtk_slice_list_model_set_size:
- * @self: a #GtkSliceListModel
+ * gtk_slice_list_model_set_size: (attributes org.gtk.Method.set_property=size)
+ * @self: a `GtkSliceListModel`
  * @size: the maximum size
  *
  * Sets the maximum size. @self will never have more items
  * than @size.
  *
- * It can however have fewer items if the offset is too large or
- * the model sliced from doesn't have enough items.
+ * It can however have fewer items if the offset is too large
+ * or the model sliced from doesn't have enough items.
  */
 void
 gtk_slice_list_model_set_size (GtkSliceListModel *self,
@@ -475,13 +473,13 @@ gtk_slice_list_model_set_size (GtkSliceListModel *self,
 }
 
 /**
- * gtk_slice_list_model_get_size:
- * @self: a #GtkSliceListModel
+ * gtk_slice_list_model_get_size: (attributes org.gtk.Method.get_property=size)
+ * @self: a `GtkSliceListModel`
  *
  * Gets the size set via gtk_slice_list_model_set_size().
  *
  * Returns: The size
- **/
+ */
 guint
 gtk_slice_list_model_get_size (GtkSliceListModel *self)
 {
@@ -489,5 +487,3 @@ gtk_slice_list_model_get_size (GtkSliceListModel *self)
 
   return self->size;
 }
-
-
