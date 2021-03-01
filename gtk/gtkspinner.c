@@ -44,8 +44,9 @@
  * GtkSpinner:
  *
  * A `GtkSpinner` widget displays an icon-size spinning animation.
- * It is often used as an alternative to a [class@Gtk.ProgressBar] for
- * displaying indefinite activity, instead of actual progress.
+ *
+ * It is often used as an alternative to a [class@Gtk.ProgressBar]
+ * for displaying indefinite activity, instead of actual progress.
  *
  * ![An example GtkSpinner](spinner.png)
  *
