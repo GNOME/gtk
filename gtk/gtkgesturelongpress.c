@@ -19,17 +19,23 @@
  */
 
 /**
- * SECTION:gtkgesturelongpress
- * @Short_description: "Press and Hold" gesture
- * @Title: GtkGestureLongPress
+ * GtkGestureLongPress:
  *
- * #GtkGestureLongPress is a #GtkGesture implementation able to recognize
- * long presses, triggering the #GtkGestureLongPress::pressed after the
- * timeout is exceeded.
+ * `GtkGestureLongPress` is a `GtkGesture` for long presses.
  *
- * If the touchpoint is lifted before the timeout passes, or if it drifts
- * too far of the initial press point, the #GtkGestureLongPress::cancelled
- * signal will be emitted.
+ * This gesture is also known as “Press and Hold”.
+ *
+ * When the timeout is exceeded, the gesture is triggering the
+ * [signal@Gtk.GestureLongPress::pressed] signal.
+ *
+ * If the touchpoint is lifted before the timeout passes, or if
+ * it drifts too far of the initial press point, the
+ * [signal@Gtk.GestureLongPress::cancelled] signal will be emitted.
+ *
+ * How long the timeout is before the ::pressed signal gets emitted is
+ * determined by the [property@Gtk.Settings:gtk-long-press-time] setting.
+ * It can be modified by the [property@Gtk.GestureLongPress:delay-factor]
+ * property.
  */
 
 #include "config.h"
@@ -275,6 +281,11 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
   gesture_class->cancel = gtk_gesture_long_press_cancel;
   gesture_class->sequence_state_changed = gtk_gesture_long_press_sequence_state_changed;
 
+  /**
+   * GtkGestureLongPress:delay-factor: (attributes org.gtk.Property.get=gtk_gesture_long_press_get_delay_factor org.gtk.Property.set=gtk_gesture_long_press_set_delay_factor)
+   *
+   * Factor by which to modify the default timeout.
+   */
   props[PROP_DELAY_FACTOR] =
     g_param_spec_double ("delay-factor",
                          P_("Delay factor"),
@@ -290,7 +301,7 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
    * @x: the X coordinate where the press happened, relative to the widget allocation
    * @y: the Y coordinate where the press happened, relative to the widget allocation
    *
-   * This signal is emitted whenever a press goes unmoved/unreleased longer than
+   * Emitted whenever a press goes unmoved/unreleased longer than
    * what the GTK defaults tell.
    */
   signals[PRESSED] =
@@ -304,12 +315,13 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
   g_signal_set_va_marshaller (signals[PRESSED],
                               G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_VOID__DOUBLE_DOUBLEv);
+
   /**
    * GtkGestureLongPress::cancelled:
    * @gesture: the object which received the signal
    *
-   * This signal is emitted whenever a press moved too far, or was released
-   * before #GtkGestureLongPress::pressed happened.
+   * Emitted whenever a press moved too far, or was released
+   * before [signal@Gtk.GestureLongPress::pressed] happened.
    */
   signals[CANCELLED] =
     g_signal_new (I_("cancelled"),
@@ -323,10 +335,10 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
 /**
  * gtk_gesture_long_press_new:
  *
- * Returns a newly created #GtkGesture that recognizes long presses.
+ * Returns a newly created `GtkGesture` that recognizes long presses.
  *
- * Returns: a newly created #GtkGestureLongPress
- **/
+ * Returns: a newly created `GtkGestureLongPress`.
+ */
 GtkGesture *
 gtk_gesture_long_press_new (void)
 {
@@ -335,12 +347,14 @@ gtk_gesture_long_press_new (void)
 }
 
 /**
- * gtk_gesture_long_press_set_delay_factor:
- * @gesture: A #GtkGestureLongPress
+ * gtk_gesture_long_press_set_delay_factor: (attributes org.gtk.Method.set_property=delay-factor)
+ * @gesture: A `GtkGestureLongPress`
  * @delay_factor: The delay factor to apply
  *
- * Applies the given delay factor. The default long press time will be
- * multiplied by this value. Valid values are in the range [0.5..2.0].
+ * Applies the given delay factor.
+ *
+ * The default long press time will be multiplied by this value.
+ * Valid values are in the range [0.5..2.0].
  */
 void
 gtk_gesture_long_press_set_delay_factor (GtkGestureLongPress *gesture,
@@ -361,10 +375,10 @@ gtk_gesture_long_press_set_delay_factor (GtkGestureLongPress *gesture,
 }
 
 /**
- * gtk_gesture_long_press_get_delay_factor:
- * @gesture: A #GtkGestureLongPress
+ * gtk_gesture_long_press_get_delay_factor: (attributes org.gtk.Method.get_property=delay-factor)
+ * @gesture: A `GtkGestureLongPress`
  *
- * Returns the delay factor as set by gtk_gesture_long_press_set_delay_factor().
+ * Returns the delay factor.
  *
  * Returns: the delay factor
  */
