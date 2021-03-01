@@ -18,15 +18,15 @@
  */
 
 /**
- * SECTION:gtkgestureclick
- * @Short_description: Multipress gesture
- * @Title: GtkGestureClick
+ * GtkGestureClick:
  *
- * #GtkGestureClick is a #GtkGesture implementation able to recognize
- * multiple clicks on a nearby zone, which can be listened for through
- * the #GtkGestureClick::pressed signal. Whenever time or distance
- * between clicks exceed the GTK defaults, #GtkGestureClick::stopped
- * is emitted, and the click counter is reset.
+ * `GtkGestureClick` is a `GtkGesture` implementation for clicks.
+ *
+ * It is able to recognize multiple clicks on a nearby zone, which
+ * can be listened for through the [signal@Gtk.GestureClick::pressed]
+ * signal. Whenever time or distance between clicks exceed the GTK
+ * defaults, [signal@Gtk.GestureClick::stopped] is emitted, and the
+ * click counter is reset.
  */
 
 #include "config.h"
@@ -349,7 +349,7 @@ gtk_gesture_click_class_init (GtkGestureClickClass *klass)
    * @x: The X coordinate, in widget allocation coordinates
    * @y: The Y coordinate, in widget allocation coordinates
    *
-   * This signal is emitted whenever a button or touch press happens.
+   * Emitted whenever a button or touch press happens.
    */
   signals[PRESSED] =
     g_signal_new (I_("pressed"),
@@ -371,10 +371,12 @@ gtk_gesture_click_class_init (GtkGestureClickClass *klass)
    * @x: The X coordinate, in widget allocation coordinates
    * @y: The Y coordinate, in widget allocation coordinates
    *
-   * This signal is emitted when a button or touch is released. @n_press
-   * will report the number of press that is paired to this event, note
-   * that #GtkGestureClick::stopped may have been emitted between the
-   * press and its release, @n_press will only start over at the next press.
+   * Emitted when a button or touch is released.
+   *
+   * @n_press will report the number of press that is paired to
+   * this event, note that [signal@Gtk.GestureClick::stopped] may
+   * have been emitted between the press and its release, @n_press
+   * will only start over at the next press.
    */
   signals[RELEASED] =
     g_signal_new (I_("released"),
@@ -388,12 +390,12 @@ gtk_gesture_click_class_init (GtkGestureClickClass *klass)
   g_signal_set_va_marshaller (signals[RELEASED],
                               G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_VOID__INT_DOUBLE_DOUBLEv);
+
   /**
    * GtkGestureClick::stopped:
    * @gesture: the object which received the signal
    *
-   * This signal is emitted whenever any time/distance threshold has
-   * been exceeded.
+   * Emitted whenever any time/distance threshold has been exceeded.
    */
   signals[STOPPED] =
     g_signal_new (I_("stopped"),
@@ -411,11 +413,12 @@ gtk_gesture_click_class_init (GtkGestureClickClass *klass)
    * @button: Button being released
    * @sequence: Sequence being released
    *
-   * This signal is emitted whenever the gesture receives a release
-   * event that had no previous corresponding press. Due to implicit
-   * grabs, this can only happen on situations where input is grabbed
-   * elsewhere mid-press or the pressed widget voluntarily relinquishes
-   * its implicit grab.
+   * Emitted whenever the gesture receives a release
+   * event that had no previous corresponding press.
+   *
+   * Due to implicit grabs, this can only happen on situations
+   * where input is grabbed elsewhere mid-press or the pressed
+   * widget voluntarily relinquishes its implicit grab.
    */
   signals[UNPAIRED_RELEASE] =
     g_signal_new (I_("unpaired-release"),
@@ -439,10 +442,10 @@ gtk_gesture_click_init (GtkGestureClick *gesture)
 /**
  * gtk_gesture_click_new:
  *
- * Returns a newly created #GtkGesture that recognizes single and multiple
- * presses.
+ * Returns a newly created `GtkGesture` that recognizes
+ * single and multiple presses.
  *
- * Returns: a newly created #GtkGestureClick
+ * Returns: a newly created `GtkGestureClick`
  **/
 GtkGesture *
 gtk_gesture_click_new (void)
