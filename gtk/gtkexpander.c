@@ -22,7 +22,7 @@
 /**
  * GtkExpander:
  *
- * `GtkExpander` allows the user to hide or show its child by clicking
+ * `GtkExpander` allows the user to reveal its child by clicking
  * on an expander triangle.
  *
  * ![An example GtkExpander](expander.png)
