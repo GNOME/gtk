@@ -39,6 +39,12 @@ typedef struct _GtkBuildableParseContext      GtkBuildableParseContext;
 typedef struct _GtkBuildableParser GtkBuildableParser;
 
 /**
+ * GtkBuildableParseContext:
+ *
+ * An opaque context struct for `GtkBuildableParser`.
+ */
+
+/**
  * GtkBuildableParser:
  * @start_element: function called for open elements
  * @end_element: function called for close elements
