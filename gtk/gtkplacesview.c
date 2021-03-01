@@ -32,11 +32,8 @@
 #include "gtkeventcontrollerkey.h"
 #include "gtkpopovermenu.h"
 
-/*
- * SECTION:gtkplacesview
- * @Short_description: Widget that displays persistent drives and manages mounted networks
- * @Title: GtkPlacesView
- * @See_also: #GtkFileChooser
+/*< private >
+ * GtkPlacesView:
  *
  * #GtkPlacesView is a widget that displays a list of persistent drives
  * such as harddisk partitions and networks.  #GtkPlacesView does not monitor
