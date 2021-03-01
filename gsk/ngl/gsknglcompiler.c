@@ -554,10 +554,10 @@ gsk_ngl_compiler_compile (GskNglCompiler  *self,
     legacy = "#define GSK_LEGACY 1\n";
 
   if (self->gles)
-    gles = "#define GSK_NGLES 1\n";
+    gles = "#define GSK_GLES 1\n";
 
   if (self->gl3)
-    gl3 = "#define GSK_NGL3 1\n";
+    gl3 = "#define GSK_GL3 1\n";
 
   vertex_id = glCreateShader (GL_VERTEX_SHADER);
   glShaderSource (vertex_id,
