@@ -57,6 +57,15 @@
  * ```
  */
 
+/**
+ * GtkStringObject:
+ *
+ * `GtkStringObject` is the type of items in a `GtkStringList`.
+ *
+ * A `GtkStringObject` is a wrapper around a `const char*`; it has
+ * a [property@Gtk.StringObject:string] property.
+ */
+
 #define GDK_ARRAY_ELEMENT_TYPE GtkStringObject *
 #define GDK_ARRAY_NAME objects
 #define GDK_ARRAY_TYPE_NAME Objects
