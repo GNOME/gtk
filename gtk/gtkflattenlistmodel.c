@@ -26,16 +26,12 @@
 #include "gtkprivate.h"
 
 /**
- * SECTION:gtkflattenlistmodel
- * @title: GtkFlattenListModel
- * @short_description: A list model that flattens a list of lists
- * @see_also: #GListModel
+ * GtkFlattenListModel:
  *
- * #GtkFlattenListModel is a list model that takes a list model containing
- * list models and flattens it into a single model.
+ * `GtkFlattenListModel` is a list model that concatenates other list models.
  *
- * Another term for this is concatenation: #GtkFlattenListModel takes a
- * list of lists and concatenates them into a single list.
+ * `GtkFlattenListModel` takes a list model containing list models,
+ *  and flattens it into a single model.
  */
 
 enum {
@@ -404,9 +400,9 @@ gtk_flatten_list_model_class_init (GtkFlattenListModelClass *class)
   gobject_class->dispose = gtk_flatten_list_model_dispose;
 
   /**
-   * GtkFlattenListModel:model:
+   * GtkFlattenListModel:model: (attributes org.gtk.Property.get=gtk_flatten_list_model_get_model org.gtk.Property.set=gtk_flatten_list_model_set_model)
    *
-   * The model being flattened
+   * The model being flattened.
    */
   properties[PROP_MODEL] =
       g_param_spec_object ("model",
@@ -427,10 +423,10 @@ gtk_flatten_list_model_init (GtkFlattenListModel *self)
  * gtk_flatten_list_model_new:
  * @model: (nullable) (transfer full): the model to be flattened
  *
- * Creates a new #GtkFlattenListModel that flattens @list.
+ * Creates a new `GtkFlattenListModel` that flattens @list.
  *
- * Returns: a new #GtkFlattenListModel
- **/
+ * Returns: a new `GtkFlattenListModel`
+ */
 GtkFlattenListModel *
 gtk_flatten_list_model_new (GListModel *model)
 {
@@ -449,12 +445,12 @@ gtk_flatten_list_model_new (GListModel *model)
 }
 
 /**
- * gtk_flatten_list_model_set_model:
- * @self: a #GtkFlattenListModel
+ * gtk_flatten_list_model_set_model: (attributes org.gtk.Method.set_property=model)
+ * @self: a `GtkFlattenListModel`
  * @model: (nullable) (transfer none): the new model or %NULL
  *
  * Sets a new model to be flattened.
- **/
+ */
 void
 gtk_flatten_list_model_set_model (GtkFlattenListModel *self,
                                   GListModel          *model)
@@ -492,8 +488,8 @@ gtk_flatten_list_model_set_model (GtkFlattenListModel *self,
 }
 
 /**
- * gtk_flatten_list_model_get_model:
- * @self: a #GtkFlattenListModel
+ * gtk_flatten_list_model_get_model: (attributes org.gtk.Method.get_property=model)
+ * @self: a `GtkFlattenListModel`
  *
  * Gets the model set via gtk_flatten_list_model_set_model().
  *
@@ -509,7 +505,7 @@ gtk_flatten_list_model_get_model (GtkFlattenListModel *self)
 
 /**
  * gtk_flatten_list_model_get_model_for_item:
- * @self: a #GtkFlattenListModel
+ * @self: a `GtkFlattenListModel`
  * @position: a position
  *
  * Returns the model containing the item at the given position.
