@@ -18,14 +18,18 @@
  */
 
 /**
- * SECTION:gtkeventcontrollermotion
- * @Short_description: Event controller for motion events
- * @Title: GtkEventControllerMotion
- * @See_also: #GtkEventController
+ * GtkEventControllerMotion:
  *
- * #GtkEventControllerMotion is an event controller meant for situations
- * where you need to track the position of the pointer.
- **/
+ * `GtkEventControllerMotion` is an event controller tracking the pointer
+ * position.
+ *
+ * The event controller offers [signal@Gtk.EventControllerMotion::enter]
+ * and [signal@Gtk.EventControllerMotion::leave] signals, as well as
+ * [property@Gtk.EventControllerMotion:is-pointer] and
+ * [property@Gtk.EventControllerMotion:contains-pointer] properties
+ * which are updated to reflect changes in the pointer position as it
+ * moves over the widget.
+ */
 #include "config.h"
 
 #include "gtkintl.h"
@@ -191,15 +195,16 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
   controller_class->handle_crossing = gtk_event_controller_motion_handle_crossing;
 
   /**
-   * GtkEventControllerMotion:is-pointer:
+   * GtkEventControllerMotion:is-pointer: (attributes org.gtk.Property.get=gtk_event_controller_motion_is_pointer)
    *
    * Whether the pointer is in the controllers widget itself,
-   * as opposed to in a descendent widget. See also
-   * #GtkEventControllerMotion:contains-pointer.
+   * as opposed to in a descendent widget.
+   *
+   * See also [property@Gtk.EventControllerMotion:contains-pointer].
    *
    * When handling crossing events, this property is updated
-   * before #GtkEventControllerMotion::enter but after
-   * #GtkEventControllerMotion::leave is emitted.
+   * before [signal@Gtk.EventControllerMotion::enter], but after
+   * [signal@Gtk.EventControllerMotion::leave] is emitted.
    */
   props[PROP_IS_POINTER] =
       g_param_spec_boolean ("is-pointer",
@@ -209,14 +214,15 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
                             G_PARAM_READABLE);
 
   /**
-   * GtkEventControllerMotion:contains-pointer:
+   * GtkEventControllerMotion:contains-pointer: (attributes org.gtk.Property.get=gtk_event_controller_motion_contains_pointer)
    *
    * Whether the pointer is in the controllers widget or a descendant.
-   * See also #GtkEventControllerMotion:is-pointer.
+   *
+   * See also [property@Gtk.EventControllerMotion:is-pointer].
    *
    * When handling crossing events, this property is updated
-   * before #GtkEventControllerMotion::enter but after
-   * #GtkEventControllerMotion::leave is emitted.
+   * before [signal@Gtk.EventControllerMotion::enter], but after
+   * [signal@Gtk.EventControllerMotion::leave] is emitted.
    */
   props[PROP_CONTAINS_POINTER] =
       g_param_spec_boolean ("contains-pointer",
@@ -289,7 +295,7 @@ gtk_event_controller_motion_init (GtkEventControllerMotion *motion)
  *
  * Creates a new event controller that will handle motion events.
  *
- * Returns: a new #GtkEventControllerMotion
+ * Returns: a new `GtkEventControllerMotion`
  **/
 GtkEventController *
 gtk_event_controller_motion_new (void)
@@ -299,10 +305,10 @@ gtk_event_controller_motion_new (void)
 }
 
 /**
- * gtk_event_controller_motion_contains_pointer:
- * @self: a #GtkEventControllerMotion
+ * gtk_event_controller_motion_contains_pointer: (attributes org.gtk.Method.get_property=contains-pointer)
+ * @self: a `GtkEventControllerMotion`
  *
- * Returns the value of the GtkEventControllerMotion:contains-pointer property.
+ * Returns if a pointer is within @self or one of its children.
  *
  * Returns: %TRUE if a pointer is within @self or one of its children
  */
@@ -315,10 +321,10 @@ gtk_event_controller_motion_contains_pointer (GtkEventControllerMotion *self)
 }
 
 /**
- * gtk_event_controller_motion_is_pointer:
- * @self: a #GtkEventControllerMotion
+ * gtk_event_controller_motion_is_pointer: (attributes org.gtk.Method.get_property=is-pointer)
+ * @self: a `GtkEventControllerMotion`
  *
- * Returns the value of the GtkEventControllerMotion:is-pointer property.
+ * Returns if a pointer is within @self, but not one of its children.
  *
  * Returns: %TRUE if a pointer is within @self but not one of its children
  */
