@@ -18,14 +18,18 @@
  */
 
 /**
- * SECTION:gtkeventcontrollerfocus
- * @Short_description: Event controller for focus
- * @Title: GtkEventControllerFocus
- * @See_also: #GtkEventController
+ * GtkEventControllerFocus:
  *
- * #GtkEventControllerFocus is an event controller meant for situations
- * where you need to know where the focus is.
- **/
+ * `GtkEventControllerFocus` is an event controller to keep track of
+ * keyboard focus.
+ *
+ * The event controller offers [signal@Gtk.EventControllerFocus::enter]
+ * and [signal@Gtk.EventControllerFocus::leave] signals, as well as
+ * [property@Gtk.EventControllerFocus:is-focus] and
+ * [property@Gtk.EventControllerFocus:contains-focus] properties
+ * which are updated to reflect focus changes inside the widget hierarchy
+ * that is rooted at the controllers widget.
+ */
 
 #include "config.h"
 
@@ -183,15 +187,16 @@ gtk_event_controller_focus_class_init (GtkEventControllerFocusClass *klass)
   controller_class->handle_crossing = gtk_event_controller_focus_handle_crossing;
 
   /**
-   * GtkEventControllerFocus:is-focus:
+   * GtkEventControllerFocus:is-focus: (attributes org.gtk.Property.get=gtk_event_controller_focus_is_focus)
    *
-   * Whether focus is in the controllers widget itself,
-   * opposed to in a descendent widget. See also
-   * #GtkEventControllerFocus:contains-focus.
+   * %TRUE if focus is in the controllers widget itself,
+   * as opposed to in a descendent widget.
+   *
+   * See also [property@Gtk.EventControllerFocus:contains-focus].
    *
    * When handling focus events, this property is updated
-   * before #GtkEventControllerFocus::enter or
-   * #GtkEventControllerFocus::leave are emitted.
+   * before [signal@Gtk.EventControllerFocus::enter] or
+   * [signal@Gtk.EventControllerFocus::leave] are emitted.
    */
   props[PROP_IS_FOCUS] =
       g_param_spec_boolean ("is-focus",
@@ -201,15 +206,16 @@ gtk_event_controller_focus_class_init (GtkEventControllerFocusClass *klass)
                             G_PARAM_READABLE);
 
   /**
-   * GtkEventControllerFocus:contains-focus:
+   * GtkEventControllerFocus:contains-focus: (attributes org.gtk.Property.get=gtk_event_controller_focus_contains_focus)
    *
-   * Whether focus is contain in the controllers widget. See
-   * See #GtkEventControllerFocus:is-focus for whether the focus is in the widget itself
-   * or inside a descendent.
+   * %TRUE if focus is contained in the controllers widget.
+   *
+   * See [property@Gtk.EventControllerFocus:is-focus] for whether
+   * the focus is in the widget itself or inside a descendent.
    *
    * When handling focus events, this property is updated
-   * before #GtkEventControllerFocus::enter or
-   * #GtkEventControllerFocus::leave are emitted.
+   * before [signal@Gtk.EventControllerFocus::enter] or
+   * [signal@Gtk.EventControllerFocus::leave] are emitted.
    */
   props[PROP_CONTAINS_FOCUS] =
       g_param_spec_boolean ("contains-focus",
@@ -224,14 +230,15 @@ gtk_event_controller_focus_class_init (GtkEventControllerFocusClass *klass)
    * GtkEventControllerFocus::enter:
    * @controller: the object which received the signal
    *
-   * This signal is emitted whenever the focus enters into the
-   * widget or one of its descendents.
+   * Emitted whenever the focus enters into the widget or one
+   * of its descendents.
    *
    * Note that this means you may not get an ::enter signal
    * even though the widget becomes the focus location, in
    * certain cases (such as when the focus moves from a descendent
    * of the widget to the widget itself). If you are interested
-   * in these cases, you can monitor the #GtkEventControllerFocus:is-focus
+   * in these cases, you can monitor the
+   * [property@Gtk.EventControllerFocus:is-focus]
    * property for changes.
    */
   signals[ENTER] =
@@ -246,16 +253,15 @@ gtk_event_controller_focus_class_init (GtkEventControllerFocusClass *klass)
    * GtkEventControllerFocus::leave:
    * @controller: the object which received the signal
    *
-   * This signal is emitted whenever the focus leaves the
-   * widget hierarchy that is rooted at the widget that the
-   * controller is attached to.
+   * Emitted whenever the focus leaves the widget hierarchy
+   * that is rooted at the widget that the controller is attached to.
    *
    * Note that this means you may not get a ::leave signal
    * even though the focus moves away from the widget, in
    * certain cases (such as when the focus moves from the widget
    * to a descendent). If you are interested in these cases, you
-   * can monitor the #GtkEventControllerFocus:is-focus property
-   * for changes.
+   * can monitor the [property@Gtk.EventControllerFocus:is-focus]
+   * property for changes.
    */
   signals[LEAVE] =
     g_signal_new (I_("leave"),
@@ -276,7 +282,7 @@ gtk_event_controller_focus_init (GtkEventControllerFocus *controller)
  *
  * Creates a new event controller that will handle focus events.
  *
- * Returns: a new #GtkEventControllerFocus
+ * Returns: a new `GtkEventControllerFocus`
  **/
 GtkEventController *
 gtk_event_controller_focus_new (void)
@@ -285,10 +291,10 @@ gtk_event_controller_focus_new (void)
 }
 
 /**
- * gtk_event_controller_focus_contains_focus:
- * @self: a #GtkEventControllerFocus
+ * gtk_event_controller_focus_contains_focus: (attributes org.gtk.Method.get_property=contains-focus)
+ * @self: a `GtkEventControllerFocus`
  *
- * Returns the value of the GtkEventControllerFocus:contains-focus property.
+ * Returns %TRUE if focus is within @self or one of its children.
  *
  * Returns: %TRUE if focus is within @self or one of its children
  */
@@ -301,12 +307,12 @@ gtk_event_controller_focus_contains_focus (GtkEventControllerFocus *self)
 }
 
 /**
- * gtk_event_controller_focus_is_focus:
- * @self: a #GtkEventControllerFocus
+ * gtk_event_controller_focus_is_focus: (attributes org.gtk.Method.get_property=is-focus)
+ * @self: a `GtkEventControllerFocus`
  *
- * Returns the value of the GtkEventControllerFocus:is-focus property.
+ * Returns %TRUE if focus is within @self, but not one of its children.
  *
- * Returns: %TRUE if focus is within @self but not one of its children
+ * Returns: %TRUE if focus is within @self, but not one of its children
  */
 gboolean
 gtk_event_controller_focus_is_focus (GtkEventControllerFocus *self)
