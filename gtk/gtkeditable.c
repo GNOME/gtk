@@ -25,8 +25,7 @@
 /**
  * GtkEditable:
  *
- * The `GtkEditable` interface is an interface which should be implemented
- * by text editing widgets.
+ * `GtkEditable` is an interface for text editing widgets.
  *
  * Typical examples of editable widgets are [class@Gtk.Entry] and
  * [class@Gtk.SpinButton]. It contains functions for generically manipulating
