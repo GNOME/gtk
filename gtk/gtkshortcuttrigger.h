@@ -75,7 +75,7 @@ GdkKeyMatch             gtk_shortcut_trigger_trigger            (GtkShortcutTrig
 /**
  * GtkNeverTrigger:
  *
- * A #GtkShortcutTrigger that never triggers.
+ * A `GtkShortcutTrigger` that never triggers.
  */
 GDK_AVAILABLE_IN_ALL
 GDK_DECLARE_INTERNAL_TYPE (GtkNeverTrigger, gtk_never_trigger, GTK, NEVER_TRIGGER, GtkShortcutTrigger)
@@ -88,8 +88,7 @@ GtkShortcutTrigger *    gtk_never_trigger_get                   (void);
 /**
  * GtkKeyvalTrigger:
  *
- * A #GtkShortcutTrigger that triggers when a specific keyval
- * and (optionally) modifiers are pressed.
+ * A `GtkShortcutTrigger` that triggers when a specific keyval and modifiers are pressed.
  */
 
 GDK_AVAILABLE_IN_ALL
@@ -108,8 +107,10 @@ guint                   gtk_keyval_trigger_get_keyval           (GtkKeyvalTrigge
 /**
  * GtkMnemonicTrigger:
  *
- * A #GtkShortcutTrigger that triggers when a specific mnemonic
- * is pressed.
+ * A `GtkShortcutTrigger` that triggers when a specific mnemonic is pressed.
+ *
+ * Mnemonics require a *mnemonic modifier* (typically <kbd>Alt</kbd>) to be
+ * pressed together with the mnemonic key.
  */
 GDK_AVAILABLE_IN_ALL
 GDK_DECLARE_INTERNAL_TYPE (GtkMnemonicTrigger, gtk_mnemonic_trigger, GTK, MNEMONIC_TRIGGER, GtkShortcutTrigger)
@@ -124,8 +125,11 @@ guint                   gtk_mnemonic_trigger_get_keyval         (GtkMnemonicTrig
 /**
  * GtkAlternativeTrigger:
  *
- * A #GtkShortcutTrigger that triggers when either of two
- * #GtkShortcutTriggers trigger.
+ * A `GtkShortcutTrigger` that combines two triggers.
+ *
+ * The `GtkAlternativeTrigger` triggers when either of two trigger.
+ *
+ * This can be cascaded to combine more than two triggers.
  */
 
 GDK_AVAILABLE_IN_ALL
