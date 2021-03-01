@@ -19,22 +19,22 @@
  */
 
 /**
- * SECTION:gtkgesturesingle
- * @Short_description: Base class for mouse/single-touch gestures
- * @Title: GtkGestureSingle
+ * GtkGestureSingle:
  *
- * #GtkGestureSingle is a subclass of #GtkGesture, optimized (although
- * not restricted) for dealing with mouse and single-touch gestures. Under
- * interaction, these gestures stick to the first interacting sequence, which
- * is accessible through gtk_gesture_single_get_current_sequence() while the
- * gesture is being interacted with.
+ * `GtkGestureSingle` is a `GtkGestures` subclass optimized for singe-touch
+ * and mouse gestures.
  *
- * By default gestures react to both %GDK_BUTTON_PRIMARY and touch
- * events, gtk_gesture_single_set_touch_only() can be used to change the
+ * Under interaction, these gestures stick to the first interacting sequence,
+ * which is accessible through [method@Gtk.GestureSingle.get_current_sequence]
+ * while the gesture is being interacted with.
+ *
+ * By default gestures react to both %GDK_BUTTON_PRIMARY and touch events.
+ * [method@Gtk.GestureSingle.set_touch_only] can be used to change the
  * touch behavior. Callers may also specify a different mouse button number
- * to interact with through gtk_gesture_single_set_button(), or react to any
- * mouse button by setting 0. While the gesture is active, the button being
- * currently pressed can be known through gtk_gesture_single_get_current_button().
+ * to interact with through [method@Gtk.GestureSingle.set_button], or react
+ * to any mouse button by setting it to 0. While the gesture is active, the
+ * button being currently pressed can be known through
+ * [method@Gtk.GestureSingle.get_current_button].
  */
 
 #include "config.h"
@@ -256,7 +256,7 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
   gesture_class->cancel = gtk_gesture_single_cancel;
 
   /**
-   * GtkGestureSingle:touch-only:
+   * GtkGestureSingle:touch-only: (attributes org.gtk.Property.get=gtk_gesture_single_get_touch_only org.gtk.Property.set=gtk_gesture_single_set_touch_only)
    *
    * Whether the gesture handles only touch events.
    */
@@ -268,10 +268,11 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGestureSingle:exclusive:
+   * GtkGestureSingle:exclusive: (attributes org.gtk.Property.get=gtk_gesture_single_get_exclusive org.gtk.Property.set=gtk_gesture_single_set_exclusive)
    *
-   * Whether the gesture is exclusive. Exclusive gestures only listen to pointer
-   * and pointer emulated events.
+   * Whether the gesture is exclusive.
+   *
+   * Exclusive gestures only listen to pointer and pointer emulated events.
    */
   properties[PROP_EXCLUSIVE] =
       g_param_spec_boolean ("exclusive",
@@ -281,7 +282,7 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGestureSingle:button:
+   * GtkGestureSingle:button: (attributes org.gtk.Property.get=gtk_gesture_single_get_button org.gtk.Property.set=gtk_gesture_single_set_button)
    *
    * Mouse button number to listen to, or 0 to listen for any button.
    */
@@ -307,13 +308,13 @@ gtk_gesture_single_init (GtkGestureSingle *gesture)
 }
 
 /**
- * gtk_gesture_single_get_touch_only:
- * @gesture: a #GtkGestureSingle
+ * gtk_gesture_single_get_touch_only: (attributes org.gtk.Method.get_property=touch-only)
+ * @gesture: a `GtkGestureSingle`
  *
  * Returns %TRUE if the gesture is only triggered by touch events.
  *
  * Returns: %TRUE if the gesture only handles touch events
- **/
+ */
 gboolean
 gtk_gesture_single_get_touch_only (GtkGestureSingle *gesture)
 {
@@ -327,14 +328,16 @@ gtk_gesture_single_get_touch_only (GtkGestureSingle *gesture)
 }
 
 /**
- * gtk_gesture_single_set_touch_only:
- * @gesture: a #GtkGestureSingle
+ * gtk_gesture_single_set_touch_only: (attributes org.gtk.Method.set_property=touch-only)
+ * @gesture: a `GtkGestureSingle`
  * @touch_only: whether @gesture handles only touch events
  *
+ * Sets whether to handle only touch events.
+ *
  * If @touch_only is %TRUE, @gesture will only handle events of type
- * #GDK_TOUCH_BEGIN, #GDK_TOUCH_UPDATE or #GDK_TOUCH_END. If %FALSE,
+ * %GDK_TOUCH_BEGIN, %GDK_TOUCH_UPDATE or %GDK_TOUCH_END. If %FALSE,
  * mouse events will be handled too.
- **/
+ */
 void
 gtk_gesture_single_set_touch_only (GtkGestureSingle *gesture,
                                    gboolean          touch_only)
@@ -354,14 +357,15 @@ gtk_gesture_single_set_touch_only (GtkGestureSingle *gesture,
 }
 
 /**
- * gtk_gesture_single_get_exclusive:
- * @gesture: a #GtkGestureSingle
+ * gtk_gesture_single_get_exclusive: (attributes org.gtk.Method.get_property=exclusive)
+ * @gesture: a `GtkGestureSingle`
  *
- * Gets whether a gesture is exclusive. For more information, see
- * gtk_gesture_single_set_exclusive().
+ * Gets whether a gesture is exclusive.
+ *
+ * For more information, see [method@Gtk.GestureSingle.set_exclusive].
  *
  * Returns: Whether the gesture is exclusive
- **/
+ */
 gboolean
 gtk_gesture_single_get_exclusive (GtkGestureSingle *gesture)
 {
@@ -375,15 +379,16 @@ gtk_gesture_single_get_exclusive (GtkGestureSingle *gesture)
 }
 
 /**
- * gtk_gesture_single_set_exclusive:
- * @gesture: a #GtkGestureSingle
+ * gtk_gesture_single_set_exclusive: (attributes org.gtk.Method.set_property=exclusive)
+ * @gesture: a `GtkGestureSingle`
  * @exclusive: %TRUE to make @gesture exclusive
  *
- * Sets whether @gesture is exclusive. An exclusive gesture will
- * only handle pointer and "pointer emulated" touch events, so at
- * any given time, there is only one sequence able to interact with
- * those.
- **/
+ * Sets whether @gesture is exclusive.
+ *
+ * An exclusive gesture will only handle pointer and "pointer emulated"
+ * touch events, so at any given time, there is only one sequence able
+ * to interact with those.
+ */
 void
 gtk_gesture_single_set_exclusive (GtkGestureSingle *gesture,
                                   gboolean          exclusive)
@@ -403,14 +408,15 @@ gtk_gesture_single_set_exclusive (GtkGestureSingle *gesture,
 }
 
 /**
- * gtk_gesture_single_get_button:
- * @gesture: a #GtkGestureSingle
+ * gtk_gesture_single_get_button: (attributes org.gtk.Method.get_property=button)
+ * @gesture: a `GtkGestureSingle`
  *
- * Returns the button number @gesture listens for, or 0 if @gesture
- * reacts to any button press.
+ * Returns the button number @gesture listens for.
+ *
+ * If this is 0, the gesture reacts to any button press.
  *
  * Returns: The button number, or 0 for any button
- **/
+ */
 guint
 gtk_gesture_single_get_button (GtkGestureSingle *gesture)
 {
@@ -424,14 +430,16 @@ gtk_gesture_single_get_button (GtkGestureSingle *gesture)
 }
 
 /**
- * gtk_gesture_single_set_button:
- * @gesture: a #GtkGestureSingle
+ * gtk_gesture_single_set_button: (attributes org.gtk.Method.set_property=button)
+ * @gesture: a `GtkGestureSingle`
  * @button: button number to listen to, or 0 for any button
  *
- * Sets the button number @gesture listens to. If non-0, every
- * button press from a different button number will be ignored.
- * Touch events implicitly match with button 1.
- **/
+ * Sets the button number @gesture listens to.
+ *
+ * If non-0, every button press from a different button
+ * number will be ignored. Touch events implicitly match
+ * with button 1.
+ */
 void
 gtk_gesture_single_set_button (GtkGestureSingle *gesture,
                                guint             button)
@@ -451,13 +459,13 @@ gtk_gesture_single_set_button (GtkGestureSingle *gesture,
 
 /**
  * gtk_gesture_single_get_current_button:
- * @gesture: a #GtkGestureSingle
+ * @gesture: a `GtkGestureSingle`
  *
- * Returns the button number currently interacting with @gesture, or 0 if there
- * is none.
+ * Returns the button number currently interacting
+ * with @gesture, or 0 if there is none.
  *
  * Returns: The current button number
- **/
+ */
 guint
 gtk_gesture_single_get_current_button (GtkGestureSingle *gesture)
 {
@@ -472,13 +480,15 @@ gtk_gesture_single_get_current_button (GtkGestureSingle *gesture)
 
 /**
  * gtk_gesture_single_get_current_sequence:
- * @gesture: a #GtkGestureSingle
+ * @gesture: a `GtkGestureSingle`
  *
  * Returns the event sequence currently interacting with @gesture.
- * This is only meaningful if gtk_gesture_is_active() returns %TRUE.
+ *
+ * This is only meaningful if [method@Gtk.Gesture.is_active]
+ * returns %TRUE.
  *
  * Returns: (nullable): the current sequence
- **/
+ */
 GdkEventSequence *
 gtk_gesture_single_get_current_sequence (GtkGestureSingle *gesture)
 {
