@@ -64,12 +64,9 @@
 #include "gdk/gdkarrayimpl.c"
 
 /**
- * SECTION:gtkicontheme
- * @Short_description: Looking up icons by name
- * @Title: GtkIconTheme
+ * GtkIconTheme:
  *
- * #GtkIconTheme provides a facility for looking up icons by name
- * and size.
+ * `GtkIconTheme` provides a facility for loading themed icons.
  *
  * The main reason for using a name rather than simply providing a filename
  * is to allow different icons to be used depending on what “icon theme” is
@@ -79,15 +76,14 @@
  * should install their icons, but additional icon themes can be installed
  * as operating system vendors and users choose.
  *
- * In many cases, named themes are used indirectly, via #GtkImage
- * rather than directly, but looking up icons
- * directly is also simple. The #GtkIconTheme object acts
- * as a database of all the icons in the current theme. You
- * can create new #GtkIconTheme objects, but it’s much more
- * efficient to use the standard icon theme of the #GtkWidget
- * so that the icon information is shared with other people
- * looking up icons.
- * |[<!-- language="C" -->
+ * In many cases, named themes are used indirectly, via [class@Gtk.Image]
+ * rather than directly, but looking up icons directly is also simple. The
+ * `GtkIconTheme` object acts as a database of all the icons in the current
+ * theme. You can create new `GtkIconTheme` objects, but it’s much more
+ * efficient to use the standard icon theme of the `GtkWidget` so that the
+ * icon information is shared with other people looking up icons.
+ *
+ * ```c
  * GtkIconTheme *icon_theme;
  * GtkIconPaintable *icon;
  * GdkPaintable *paintable;
@@ -98,10 +94,10 @@
  *                                    48, // icon size
  *                                    1,  // scale
  *                                    0,  // flags);
- *  paintable = GDK_PAINTABLE (icon);
- *  // Use the paintable
- *  g_object_unref (icon);
- * ]|
+ * paintable = GDK_PAINTABLE (icon);
+ * // Use the paintable
+ * g_object_unref (icon);
+ * ```
  */
 
 
@@ -292,14 +288,11 @@ typedef struct _GtkIconThemeClass     GtkIconThemeClass;
 
 typedef struct _GtkIconThemeRef GtkIconThemeRef;
 
-/**
- * GtkIconTheme:
- *
- * Acts as a database of information about an icon theme.
+/* Acts as a database of information about an icon theme.
  * Normally, you retrieve the icon theme for a particular
  * display using gtk_icon_theme_get_for_display() and it
  * will contain information about current icon theme for
- * that display, but you can also create a new #GtkIconTheme
+ * that display, but you can also create a new `GtkIconTheme`
  * object and set the icon theme name explicitly using
  * gtk_icon_theme_set_theme_name().
  */
@@ -367,8 +360,9 @@ G_LOCK_DEFINE_STATIC(icon_cache);
 /**
  * GtkIconPaintable:
  *
- * Contains information found when looking up an icon in
- * an icon theme and supports painting it as a #GdkPaintable.
+ * Contains information found when looking up an icon in `GtkIconTheme`.
+ *
+ * `GtkIconPaintable` implements `GdkPaintable`.
  */
 struct _GtkIconPaintable
 {
@@ -799,12 +793,14 @@ G_DEFINE_TYPE (GtkIconTheme, gtk_icon_theme, G_TYPE_OBJECT)
 /**
  * gtk_icon_theme_new:
  *
- * Creates a new icon theme object. Icon theme objects are used
- * to lookup up an icon by name in a particular icon theme.
- * Usually, you’ll want to use gtk_icon_theme_get_for_display()
- * rather than creating a new icon theme object for scratch.
+ * Creates a new icon theme object.
  *
- * Returns: the newly created #GtkIconTheme object.
+ * Icon theme objects are used to lookup up an icon by name
+ * in a particular icon theme. Usually, you’ll want to use
+ * [func@Gtk.IconTheme.get_for_display] rather than creating
+ * a new icon theme object for scratch.
+ *
+ * Returns: the newly created `GtkIconTheme` object.
  */
 GtkIconTheme *
 gtk_icon_theme_new (void)
@@ -839,21 +835,20 @@ gtk_icon_theme_load_in_thread (GtkIconTheme *self)
 
 /**
  * gtk_icon_theme_get_for_display:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  *
- * Gets the icon theme object associated with @display; if this
- * function has not previously been called for the given
- * display, a new icon theme object will be created and
- * associated with the display. Icon theme objects are
- * fairly expensive to create, so using this function
- * is usually a better choice than calling than gtk_icon_theme_new()
- * and setting the display yourself; by using this function
- * a single icon theme object will be shared between users.
+ * Gets the icon theme object associated with @display.
  *
- * Returns: (transfer none): A unique #GtkIconTheme associated with
- *  the given display. This icon theme is associated with
- *  the display and can be used as long as the display
- *  is open. Do not ref or unref it.
+ * If this function has not previously been called for the given
+ * display, a new icon theme object will be created and associated
+ * with the display. Icon theme objects are fairly expensive to create,
+ * so using this function is usually a better choice than calling
+ * [ctor@Gtk.IconTheme.new] and setting the display yourself; by using
+ * this function a single icon theme object will be shared between users.
+ *
+ * Returns: (transfer none): A unique `GtkIconTheme` associated with
+ *   the given display. This icon theme is associated with the display
+ *   and can be used as long as the display is open. Do not ref or unref it.
  */
 GtkIconTheme *
 gtk_icon_theme_get_for_display (GdkDisplay *display)
@@ -972,9 +967,11 @@ gtk_icon_theme_class_init (GtkIconThemeClass *klass)
    * GtkIconTheme::changed:
    * @self: the icon theme
    *
-   * Emitted when the current icon theme is switched or GTK detects
-   * that a change has occurred in the contents of the current
-   * icon theme.
+   * Emitted when the icon theme changes.
+   *
+   * This can happen becuase current icon theme is switched or
+   * because GTK detects that a change has occurred in the
+   * contents of the current icon theme.
    */
   signal_changed = g_signal_new (I_("changed"),
                                  G_TYPE_FROM_CLASS (klass),
@@ -988,7 +985,7 @@ gtk_icon_theme_class_init (GtkIconThemeClass *klass)
    * GtkIconTheme:display:
    *
    * The display that this icon theme object is attached to.
-   */ 
+   */
   props[PROP_DISPLAY] =
       g_param_spec_object ("display",
                            P_("Display"),
@@ -1437,13 +1434,14 @@ gtk_icon_theme_finalize (GObject *object)
 
 /**
  * gtk_icon_theme_set_search_path:
- * @self: a #GtkIconTheme
+ * @self: a `GtkIconTheme`
  * @path: (array zero-terminated=1) (element-type filename) (nullable): NULL-terminated
  *   array of directories that are searched for icon themes
  *
- * Sets the search path for the icon theme object. When looking
- * for an icon theme, GTK will search for a subdirectory of
- * one or more of the directories in @path with the same name
+ * Sets the search path for the icon theme object.
+ *
+ * When looking for an icon theme, GTK will search for a subdirectory
+ * of one or more of the directories in @path with the same name
  * as the icon theme containing an index.theme file. (Themes from
  * multiple of the path elements are combined to allow themes to be
  * extended by adding icons in the user’s home directory.)
@@ -1479,10 +1477,12 @@ gtk_icon_theme_set_search_path (GtkIconTheme       *self,
 
 /**
  * gtk_icon_theme_get_search_path:
- * @self: a #GtkIconTheme
+ * @self: a `GtkIconTheme`
  *
- * Gets the current search path. See gtk_icon_theme_set_search_path().
- * 
+ * Gets the current search path.
+ *
+ * See [method@Gtk.IconTheme.set_search_path].
+ *
  * Returns: (transfer full) (array zero-terminated=1) (element-type filename) (nullable):
  *   a list of icon theme path directories or %NULL.
  *   The returned value should be freed with g_strfreev().
@@ -1505,11 +1505,12 @@ gtk_icon_theme_get_search_path (GtkIconTheme  *self)
 
 /**
  * gtk_icon_theme_add_search_path:
- * @self: a #GtkIconTheme
+ * @self: a `GtkIconTheme`
  * @path: (type filename): directory name to append to the icon path
  *
  * Appends a directory to the search path.
- * See gtk_icon_theme_set_search_path().
+ *
+ * See [method@Gtk.IconTheme.set_search_path].
  */
 void
 gtk_icon_theme_add_search_path (GtkIconTheme *self,
@@ -1534,7 +1535,7 @@ gtk_icon_theme_add_search_path (GtkIconTheme *self,
 
 /**
  * gtk_icon_theme_set_resource_path:
- * @self: a #GtkIconTheme
+ * @self: a `GtkIconTheme`
  * @path: NULL-terminated array of resource paths
  *     that are searched for icons
  *
@@ -1573,12 +1574,12 @@ gtk_icon_theme_set_resource_path (GtkIconTheme       *self,
 
 /**
  * gtk_icon_theme_get_resource_path:
- * @self: a #GtkIconTheme
+ * @self: a `GtkIconTheme`
  *
  * Gets the current resource path.
  *
- * See gtk_icon_theme_set_resource_path().
- * 
+ * See [method@Gtk.IconTheme.set_resource_path].
+ *
  * Returns: (transfer full) (array zero-terminated=1) (element-type utf8) (nullable):
  *   A list of resource paths or %NULL.
  *   The returned value should be freed with g_strfreev().
@@ -1601,13 +1602,13 @@ gtk_icon_theme_get_resource_path (GtkIconTheme  *self)
 
 /**
  * gtk_icon_theme_add_resource_path:
- * @self: a #GtkIconTheme
+ * @self: a `GtkIconTheme`
  * @path: a resource path
  *
  * Adds a resource path that will be looked at when looking
  * for icons, similar to search paths.
  *
- * See gtk_icon_theme_set_resource_path().
+ * See [method@Gtk.IconTheme.set_resource_path].
  *
  * This function should be used to make application-specific icons
  * available as part of the icon theme.
@@ -1635,13 +1636,15 @@ gtk_icon_theme_add_resource_path (GtkIconTheme *self,
 
 /**
  * gtk_icon_theme_set_theme_name:
- * @self: a #GtkIconTheme
+ * @self: a `GtkIconTheme`
  * @theme_name: (allow-none): name of icon theme to use instead of
  *   configured theme, or %NULL to unset a previously set custom theme
  *
- * Sets the name of the icon theme that the #GtkIconTheme object uses
- * overriding system configuration. This function cannot be called
- * on the icon theme objects returned from gtk_icon_theme_get_for_display().
+ * Sets the name of the icon theme that the `GtkIconTheme` object uses
+ * overriding system configuration.
+ *
+ * This function cannot be called on the icon theme objects returned
+ * from [type_func@Gtk.IconTheme.get_for_display].
  */
 void
 gtk_icon_theme_set_theme_name (GtkIconTheme *self,
@@ -1679,7 +1682,7 @@ gtk_icon_theme_set_theme_name (GtkIconTheme *self,
 
 /**
  * gtk_icon_theme_get_theme_name:
- * @self: a #GtkIconTheme
+ * @self: a `GtkIconTheme`
  *
  * Gets the current icon theme name.
  *
@@ -2430,7 +2433,7 @@ load_icon_thread (GTask        *task,
 
 /**
  * gtk_icon_theme_lookup_icon:
- * @self: a #GtkIconTheme
+ * @self: a `GtkIconTheme`
  * @icon_name: the name of the icon to lookup
  * @fallbacks: (nullable) (array zero-terminated=1):
  * @size: desired icon size.
@@ -2438,22 +2441,24 @@ load_icon_thread (GTask        *task,
  * @direction: text direction the icon will be displayed in
  * @flags: flags modifying the behavior of the icon lookup
  *
- * Looks up a named icon for a desired size and window scale, returning a
- * #GtkIconPaintable. The icon can then be rendered by using it as a #GdkPaintable,
+ * Looks up a named icon for a desired size and window scale,
+ * returning a `GtkIconPaintable`.
+ *
+ * The icon can then be rendered by using it as a `GdkPaintable`,
  * or you can get information such as the filename and size.
  *
- * If the available @icon_name is not available and @fallbacks are provided,
- * they will be tried in order.
+ * If the available @icon_name is not available and @fallbacks are
+ * provided, they will be tried in order.
  *
  * If no matching icon is found, then a paintable that renders the
  * "missing icon" icon is returned. If you need to do something else
- * for missing icons you need to use gtk_icon_theme_has_icon().
+ * for missing icons you need to use [method@Gtk.IconTheme.has_icon].
  *
  * Note that you probably want to listen for icon theme changes and
  * update the icon. This is usually done by overriding the
- * #GtkWidgetClass.css-changed() function.
+ * GtkWidgetClass.css-changed() function.
  *
- * Returns: (transfer full): a #GtkIconPaintable object
+ * Returns: (transfer full): a `GtkIconPaintable` object
  *     containing the icon.
  */
 GtkIconPaintable *
@@ -2567,7 +2572,7 @@ gtk_icon_theme_lookup_symbolic_colors (GtkCssStyle *style,
 
 /**
  * gtk_icon_theme_has_icon:
- * @self: a #GtkIconTheme
+ * @self: a `GtkIconTheme`
  * @icon_name: the name of an icon
  *
  * Checks whether an icon theme includes an icon
@@ -2619,18 +2624,19 @@ add_size (gpointer key,
 
 /**
  * gtk_icon_theme_get_icon_sizes:
- * @self: a #GtkIconTheme
+ * @self: a `GtkIconTheme`
  * @icon_name: the name of an icon
  *
  * Returns an array of integers describing the sizes at which
- * the icon is available without scaling. A size of -1 means
- * that the icon is available in a scalable format. The array
- * is zero-terminated.
+ * the icon is available without scaling.
+ *
+ * A size of -1 means that the icon is available in a scalable
+ * format. The array is zero-terminated.
  *
  * Returns: (array zero-terminated=1) (transfer full): A newly
- * allocated array describing the sizes at which the icon is
- * available. The array should be freed with g_free() when it is no
- * longer needed.
+ *   allocated array describing the sizes at which the icon is
+ *   available. The array should be freed with g_free() when it is no
+ *   longer needed.
  */
 int *
 gtk_icon_theme_get_icon_sizes (GtkIconTheme *self,
@@ -2693,13 +2699,13 @@ add_key_to_hash (gpointer key,
 
 /**
  * gtk_icon_theme_get_icon_names:
- * @self: a #GtkIconTheme
+ * @self: a `GtkIconTheme`
  *
  * Lists the names of icons in the current icon theme.
  *
  * Returns: (element-type utf8) (transfer full): a string array
- *     holding the names of all the icons in the theme. You must
- *     free the array using g_strfreev().
+ *   holding the names of all the icons in the theme. You must
+ *   free the array using g_strfreev().
  */
 char **
 gtk_icon_theme_get_icon_names (GtkIconTheme *self)
@@ -3566,7 +3572,7 @@ gtk_icon_paintable_class_init (GtkIconPaintableClass *klass)
   gobject_class->finalize = gtk_icon_paintable_finalize;
 
   /**
-   * GtkIconPaintable:file:
+   * GtkIconPaintable:file: (attributes org.gtk.Property.get=gtk_icon_paintable_get_file)
    *
    * The file representing the icon, if any.
    */
@@ -3576,8 +3582,9 @@ gtk_icon_paintable_class_init (GtkIconPaintableClass *klass)
                                                         P_("The file representing the icon"),
                                                         G_TYPE_FILE,
                                                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_BLURB | G_PARAM_STATIC_NICK));
+
   /**
-   * GtkIconPaintable:icon-name:
+   * GtkIconPaintable:icon-name: (attributes org.gtk.Property.get=gtk_icon_paintable_get_icon_name)
    *
    * The icon name that was chosen during lookup.
    */
@@ -3587,8 +3594,9 @@ gtk_icon_paintable_class_init (GtkIconPaintableClass *klass)
                                                         P_("The icon name chosen during lookup"),
                                                         NULL,
                                                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_BLURB | G_PARAM_STATIC_NICK));
+
   /**
-   * GtkIconPaintable:is-symbolic:
+   * GtkIconPaintable:is-symbolic: (attributes org.gtk.Property.get=gtk_icon_paintable_is_symbolic)
    *
    * Whether the icon is symbolic or not.
    */
@@ -3615,11 +3623,12 @@ new_resource_file (const char *filename)
 }
 
 /**
- * gtk_icon_paintable_get_file:
- * @self: a #GtkIconPaintable
+ * gtk_icon_paintable_get_file: (attributes org.gtk.Method.get_property=file)
+ * @self: a `GtkIconPaintable`
  *
- * Gets the #GFile that was used to load the icon, or %NULL if the icon was
- * not loaded from a file.
+ * Gets the `GFile` that was used to load the icon.
+ *
+ * Returns %NULL if the icon was not loaded from a file.
  *
  * Returns: (nullable) (transfer full): the #GFile for the icon, or %NULL.
  *    Free with g_object_unref().
@@ -3639,8 +3648,8 @@ gtk_icon_paintable_get_file (GtkIconPaintable *icon)
 }
 
 /**
- * gtk_icon_paintable_get_icon_name:
- * @self: a #GtkIconPaintable
+ * gtk_icon_paintable_get_icon_name: (attributes org.gtk.Method.get_property=icon-name)
+ * @self: a `GtkIconPaintable`
  *
  * Get the icon name being used for this icon.
  *
@@ -3649,11 +3658,12 @@ gtk_icon_paintable_get_file (GtkIconPaintable *icon)
  * gtk_icon_theme_lookup_icon() or the always-available
  * "image-missing". The icon chosen is returned by this function.
  *
- * If the icon was created without an icon theme, this function returns %NULL.
+ * If the icon was created without an icon theme, this function
+ * returns %NULL.
  *
  *
- * Returns: (nullable) (type filename): the themed icon-name for the icon, or %NULL
- *     if its not a themed icon.
+ * Returns: (nullable) (type filename): the themed icon-name for the
+ *   icon, or %NULL if its not a themed icon.
  */
 const char *
 gtk_icon_paintable_get_icon_name (GtkIconPaintable *icon)
@@ -3664,15 +3674,16 @@ gtk_icon_paintable_get_icon_name (GtkIconPaintable *icon)
 }
 
 /**
- * gtk_icon_paintable_is_symbolic:
- * @self: a #GtkIconPaintable
+ * gtk_icon_paintable_is_symbolic: (attributes org.gtk.Method.get_property=is-symbolic)
+ * @self: a `GtkIconPaintable`
  *
- * Checks if the icon is symbolic or not. This currently uses only
- * the file name and not the file contents for determining this.
- * This behaviour may change in the future.
+ * Checks if the icon is symbolic or not.
  *
- * Note that to render a symbolic #GtkIconPaintable properly (with
- * recoloring), you have to set its icon name on a #GtkImage.
+ * This currently uses only the file name and not the file contents
+ * for determining this. This behaviour may change in the future.
+ *
+ * Note that to render a symbolic `GtkIconPaintable` properly (with
+ * recoloring), you have to set its icon name on a `GtkImage`.
  *
  * Returns: %TRUE if the icon is symbolic, %FALSE otherwise
  */
@@ -3902,21 +3913,24 @@ icon_paintable_snapshot (GdkPaintable *paintable,
 
 /**
  * gtk_icon_paintable_snapshot_with_colors:
- * @icon: a #GtkIconPaintable
- * @snapshot: a #GdkSnapshot to snapshot to
+ * @icon: a `GtkIconPaintable`
+ * @snapshot: a `GdkSnapshot` to snapshot to
  * @width: width to snapshot in
  * @height: height to snapshot in
- * @foreground_color: (allow-none): a #GdkRGBA representing the foreground color
+ * @foreground_color: (allow-none): a `GdkRGBA` representing the foreground color
  *      of the icon or %NULL to use the default color.
- * @success_color: (allow-none): a #GdkRGBA representing the warning color
+ * @success_color: (allow-none): a `GdkRGBA` representing the warning color
  *     of the icon or %NULL to use the default color
- * @warning_color: (allow-none): a #GdkRGBA representing the warning color
+ * @warning_color: (allow-none): a `GdkRGBA` representing the warning color
  *     of the icon or %NULL to use the default color
- * @error_color: (allow-none): a #GdkRGBA representing the error color
+ * @error_color: (allow-none): a `GdkRGBA` representing the error color
  *     of the icon or %NULL to use the default color (allow-none)
  *
- * This is similar to the implementation of gdk_paintable_snapshot(), but if the icon is
- * symbolic it will be recolored with the specified colors (which usually comes from the theme).
+ * Snapshots the `GtkIconPaintable`.
+ *
+ * This is similar to the implementation of [method@Gdk.Paintable.snapshot],
+ * but if the icon is symbolic it will be recolored with the specified colors
+ * (which usually comes from the theme).
  */
 void
 gtk_icon_paintable_snapshot_with_colors (GtkIconPaintable *icon,
@@ -4007,14 +4021,15 @@ icon_paintable_init (GdkPaintableInterface *iface)
 
 /**
  * gtk_icon_paintable_new_for_file:
- * @file: a #GFile
+ * @file: a `GFile`
  * @size: desired icon size
  * @scale: the desired scale
  *
- * Creates a #GtkIconPaintable for a file with a given size and scale
- * #GtkIconPaintable. The icon can then be rendered by using it as a #GdkPaintable.
+ * Creates a `GtkIconPaintable` for a file with a given size and scale.
  *
- * Returns: (transfer full): a #GtkIconPaintable containing
+ * The icon can then be rendered by using it as a `GdkPaintable`.
+ *
+ * Returns: (transfer full): a `GtkIconPaintable` containing
  *     for the icon. Unref with g_object_unref()
  */
 GtkIconPaintable *
@@ -4070,19 +4085,20 @@ gtk_icon_paintable_new_for_pixbuf (GtkIconTheme *icon_theme,
 
 /**
  * gtk_icon_theme_lookup_by_gicon:
- * @self: a #GtkIconTheme
- * @icon: the #GIcon to look up
+ * @self: a `GtkIconTheme`
+ * @icon: the `GIcon` to look up
  * @size: desired icon size
  * @scale: the desired scale
  * @direction: text direction the icon will be displayed in
  * @flags: flags modifying the behavior of the icon lookup
  *
- * Looks up a icon for a desired size and window scale, returning a
- * #GtkIconPaintable. The icon can then be rendered by using it as a #GdkPaintable,
+ * Looks up a icon for a desired size and window scale.
+ *
+ * The icon can then be rendered by using it as a `GdkPaintable`,
  * or you can get information such as the filename and size.
  *
- * Returns: (transfer full): a #GtkIconPaintable containing
- *     information about the icon. Unref with g_object_unref()
+ * Returns: (transfer full): a `GtkIconPaintable` containing
+ *   information about the icon. Unref with g_object_unref()
  */
 GtkIconPaintable *
 gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
@@ -4140,9 +4156,9 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
 
 /**
  * gtk_icon_theme_get_display:
- * @self: a #GtkIconTheme
+ * @self: a `GtkIconTheme`
  *
- * Returns the display that the GtkIconTheme object was
+ * Returns the display that the `GtkIconTheme` object was
  * created for.
  *
  * Returns: (nullable) (transfer none): the display of @icon_theme

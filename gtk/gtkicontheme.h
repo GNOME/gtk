@@ -47,7 +47,7 @@ typedef struct _GtkIconTheme      GtkIconTheme;
  * @GTK_ICON_LOOKUP_PRELOAD: Starts loading the texture in the background
  *   so it is ready when later needed.
  *
- * Used to specify options for gtk_icon_theme_lookup_icon()
+ * Used to specify options for gtk_icon_theme_lookup_icon().
  */
 typedef enum
 {
@@ -68,7 +68,7 @@ typedef enum
  * @GTK_ICON_THEME_NOT_FOUND: The icon specified does not exist in the theme
  * @GTK_ICON_THEME_FAILED: An unspecified error occurred.
  *
- * Error codes for GtkIconTheme operations.
+ * Error codes for `GtkIconTheme` operations.
  **/
 typedef enum {
   GTK_ICON_THEME_NOT_FOUND,
