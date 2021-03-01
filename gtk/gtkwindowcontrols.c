@@ -35,8 +35,10 @@
 /**
  * GtkWindowControls:
  *
- * `GtkWindowControls` shows window frame controls, such as minimize, maximize
- * and close buttons, and the window icon.
+ * `GtkWindowControls` shows window frame controls.
+ *
+ * Typical window frame controls are minimize, maximize and close buttons,
+ * and the window icon.
  *
  * ![An example GtkWindowControls](windowcontrols.png)
  *
