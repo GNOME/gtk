@@ -36,20 +36,16 @@
 
 
 /**
- * SECTION:gtkdroptarget
- * @Short_description: Event controller to receive DND drops
- * @Title: GtkDropTarget
- * @See_also: #GdkDrop, #GtkDropTargetAsync
+ * GtkDropTarget:
  *
- * GtkDropTarget is an event controller implementing a simple way to
- * receive Drag-and-Drop operations.
+ * `GtkDropTarget` is an event controller to receive Drag-and-Drop operations.
  *
- * The most basic way to use a #GtkDropTarget to receive drops on a
- * widget is to create it via gtk_drop_target_new() passing in the
- * #GType of the data you want to receive and connect to the
- * #GtkDropTarget::drop signal to receive the data:
+ * The most basic way to use a `GtkDropTarget` to receive drops on a
+ * widget is to create it via [ctor@Gtk.DropTarget.new], passing in the
+ * `GType` of the data you want to receive and connect to the
+ * [signal@Gtk.DropTarget::drop] signal to receive the data:
  *
- * |[<!-- language="C" -->
+ * ```c
  * static gboolean
  * on_drop (GtkDropTarget *target,
  *          const GValue  *value,
@@ -86,28 +82,32 @@
  *
  *   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (target));
  * }
- * ]|
+ * ```
  *
- * #GtkDropTarget supports more options, such as:
+ * `GtkDropTarget` supports more options, such as:
  *
- *  * rejecting potential drops via the #GtkDropTarget::accept signal
- *    and the gtk_drop_target_reject() function to let other drop
+ *  * rejecting potential drops via the [signal@Gtk.DropTarget::accept] signal
+ *    and the [method@Gtk.DropTarget.reject] function to let other drop
  *    targets handle the drop
  *  * tracking an ongoing drag operation before the drop via the
- *    #GtkDropTarget::enter, #GtkDropTarget::motion and
- *    #GtkDropTarget::leave signals
+ *    [signal@Gtk.DropTarget::enter], [signal@Gtk.DropTarget::motion] and
+ *    [signal@Gtk.DropTarget::leave] signals
  *  * configuring how to receive data by setting the
- *    #GtkDropTarget:preload property and listening for its availability
- *    via the #GtkDropTarget:value property
+ *    [property@Gtk.DropTarget:preload] property and listening for its
+ *    availability via the [property@Gtk.DropTarget:value] property
  *
- * However, #GtkDropTarget is ultimately modeled in a synchronous way
- * and only supports data transferred via #GType.  
- * If you want full control over an ongoing drop, the #GtkDropTargetAsync
- * object gives you this ability.
+ * However, `GtkDropTarget` is ultimately modeled in a synchronous way
+ * and only supports data transferred via `GType`. If you want full control
+ * over an ongoing drop, the [class@Gtk.DropTargetAsync] object gives you
+ * this ability.
  *
  * While a pointer is dragged over the drop target's widget and the drop
  * has not been rejected, that widget will receive the
  * %GTK_STATE_FLAG_DROP_ACTIVE state, which can be used to style the widget.
+ *
+ * If you are not interested in receiving the drop, but just want to update
+ * UI state during a Drag-and-Drop operation (e.g. switching tabs), you can
+ * use [class@Gtk.DropControllerMotion].
  */
 
 struct _GtkDropTarget
@@ -608,10 +608,10 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
   class->drop = gtk_drop_target_drop;
 
   /**
-   * GtkDropTarget:actions:
+   * GtkDropTarget:actions: (attributes org.gtk.Property.get=gtk_drop_target_get_actions org.gtk.Property.set=gtk_drop_target_set_actions)
    *
-   * The #GdkDragActions that this drop target supports
-   */ 
+   * The `GdkDragActions` that this drop target supports.
+   */
   properties[PROP_ACTIONS] =
        g_param_spec_flags ("actions",
                            P_("Actions"),
@@ -620,9 +620,9 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkDropTarget:drop:
+   * GtkDropTarget:drop: (attributes org.gtk.Property.get=gtk_drop_target_get_drop)
    *
-   * The #GdkDrop that is currently being performed
+   * The `GdkDrop` that is currently being performed.
    */
   properties[PROP_DROP] =
        g_param_spec_object ("drop",
@@ -632,9 +632,9 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                             GTK_PARAM_READABLE);
 
   /**
-   * GtkDropTarget:formats:
+   * GtkDropTarget:formats: (attributes org.gtk.Property.get=gtk_drop_target_get_formats)
    *
-   * The #GdkContentFormats that determine the supported data formats
+   * The `GdkContentFormats` that determine the supported data formats.
    */
   properties[PROP_FORMATS] =
        g_param_spec_boxed ("formats",
@@ -644,7 +644,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                            GTK_PARAM_READABLE);
 
   /**
-   * GtkDropTarget:preload:
+   * GtkDropTarget:preload: (attributes org.gtk.Property.get=gtk_drop_target_get_preload org.gtk.Property.set=gtk_drop_target_set_preload)
    *
    * Whether the drop data should be preloaded when the pointer is only
    * hovering over the widget but has not been released.
@@ -653,15 +653,16 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    * drop at the cost of loading more data.
    *
    * The default value for this property is %FALSE to avoid downloading
-   * huge amounts of data by accident.  
+   * huge amounts of data by accident.
+   *
    * For example, if somebody drags a full document of gigabytes of text
    * from a text editor across a widget with a preloading drop target,
    * this data will be downloaded, even if the data is ultimately dropped
    * elsewhere.
    *
    * For a lot of data formats, the amount of data is very small (like
-   * %GDK_TYPE_RGBA), so enabling this property does not hurt at all.  
-   * And for local-only drag'n'drop operations, no data transfer is done,
+   * %GDK_TYPE_RGBA), so enabling this property does not hurt at all.
+   * And for local-only Drag-and-Drop operations, no data transfer is done,
    * so enabling it there is free.
    */
   properties[PROP_PRELOAD] =
@@ -672,14 +673,17 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                              G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkDropTarget:value:
+   * GtkDropTarget:value: (attributes org.gtk.Property.get=gtk_drop_target_get_value)
    *
-   * The value for this drop operation or %NULL if the data has not been
-   * loaded yet or no drop operation is going on.
+   * The value for this drop operation.
    *
-   * Data may be available before the #GtkDropTarget::drop signal gets emitted -
-   * for example when the #GtkDropTarget:preload property is set.
-   * You can use the #GObject::notify signal to be notified of available data.
+   * This is %NULL if the data has not been loaded yet or no drop
+   * operation is going on.
+   *
+   * Data may be available before the [signal@Gtk.DropTarget::drop]
+   * signal gets emitted - for example when the [property@Gtk.DropTarget:preload]
+   * property is set. You can use the ::notify signal to be notified
+   * of available data.
    */
   properties[PROP_VALUE] =
        g_param_spec_boxed ("value",
@@ -692,24 +696,25 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
 
  /**
    * GtkDropTarget::accept:
-   * @self: the #GtkDropTarget
-   * @drop: the #GdkDrop
+   * @self: the `GtkDropTarget`
+   * @drop: the `GdkDrop`
    *
-   * The ::accept signal is emitted on the drop site when a drop operation
-   * is about to begin.
+   * Emitted on the drop site when a drop operation is about to begin.
+   *
    * If the drop is not accepted, %FALSE will be returned and the drop target
    * will ignore the drop. If %TRUE is returned, the drop is accepted for now
-   * but may be rejected later via a call to gtk_drop_target_reject() or
-   * ultimately by returning %FALSE from #GtkDropTarget::drop.
+   * but may be rejected later via a call to [method@Gtk.DropTarget.reject]
+   * or ultimately by returning %FALSE from a [signal@Gtk.DropTarget::drop]
+   * handler.
    *
    * The default handler for this signal decides whether to accept the drop
    * based on the formats provided by the @drop.
    *
    * If the decision whether the drop will be accepted or rejected depends
-   * on the data, this function should return %TRUE, the #GtkDropTarget:preload
-   * property should be set and the value should be inspected via the
-   * #GObject::notify:value signal, calling gtk_drop_target_reject() if
-   * required.
+   * on the data, this function should return %TRUE, the
+   * [property@Gtk.DropTarget:preload] property should be set and the value
+   * should be inspected via the ::notify:value signal, calling
+   * [method@Gtk.DropTarget.reject] if required.
    *
    * Returns: %TRUE if @drop is accepted
    */
@@ -725,15 +730,16 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
 
   /**
    * GtkDropTarget::enter:
-   * @self: the #GtkDropTarget
+   * @self: the `GtkDropTarget`
    * @x: the x coordinate of the current pointer position
    * @y: the y coordinate of the current pointer position
    *
-   * The ::enter signal is emitted on the drop site when the pointer
-   * enters the widget. It can be used to set up custom highlighting.
+   * Emitted on the drop site when the pointer enters the widget.
    *
-   * Returns: Preferred action for this drag operation or 0 if dropping is not
-   *     supported at the current @x,@y location.
+   * It can be used to set up custom highlighting.
+   *
+   * Returns: Preferred action for this drag operation or 0 if
+   *   dropping is not supported at the current @x,@y location.
    */
   signals[ENTER] =
       g_signal_new (I_("enter"),
@@ -747,15 +753,14 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
 
   /**
    * GtkDropTarget::motion:
-   * @self: the #GtkDropTarget
+   * @self: the `GtkDropTarget`
    * @x: the x coordinate of the current pointer position
    * @y: the y coordinate of the current pointer position
    *
-   * The ::motion signal is emitted while the pointer is moving
-   * over the drop target.
+   * Emitted while the pointer is moving over the drop target.
    *
-   * Returns: Preferred action for this drag operation or 0 if dropping is not
-   *     supported at the current @x,@y location.
+   * Returns: Preferred action for this drag operation or 0 if
+   *   dropping is not supported at the current @x,@y location.
    */
   signals[MOTION] =
       g_signal_new (I_("motion"),
@@ -769,11 +774,12 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
 
   /**
    * GtkDropTarget::leave:
-   * @self: the #GtkDropTarget
+   * @self: the `GtkDropTarget`
    *
-   * The ::leave signal is emitted on the drop site when the pointer
-   * leaves the widget. Its main purpose it to undo things done in
-   * #GtkDropTarget::enter.
+   * Emitted on the drop site when the pointer leaves the widget.
+   *
+   * Its main purpose it to undo things done in
+   * [signal@Gtk.DropTarget::enter].
    */
   signals[LEAVE] =
       g_signal_new (I_("leave"),
@@ -786,15 +792,16 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
 
   /**
    * GtkDropTarget::drop:
-   * @self: the #GtkDropTarget
+   * @self: the `GtkDropTarget`
    * @value: the #GValue being dropped
    * @x: the x coordinate of the current pointer position
    * @y: the y coordinate of the current pointer position
    *
-   * The ::drop signal is emitted on the drop site when the user drops
-   * the data onto the widget. The signal handler must determine whether
-   * the pointer position is in a drop zone or not. If it is not in a drop
-   * zone, it returns %FALSE and no further processing is necessary.
+   * Emitted on the drop site when the user drops the data onto the widget.
+   *
+   * The signal handler must determine whether the pointer position is in
+   * a drop zone or not. If it is not in a drop zone, it returns %FALSE
+   * and no further processing is necessary.
    *
    * Otherwise, the handler returns %TRUE. In this case, this handler will
    * accept the drop. The handler is responsible for rading the given @value
@@ -824,13 +831,13 @@ gtk_drop_target_init (GtkDropTarget *self)
  * @type: The supported type or %G_TYPE_INVALID
  * @actions: the supported actions
  *
- * Creates a new #GtkDropTarget object.
+ * Creates a new `GtkDropTarget` object.
  *
  * If the drop target should support more than 1 type, pass
  * %G_TYPE_INVALID for @type and then call
- * gtk_drop_target_set_gtypes().
+ * [method@Gtk.DropTarget.set_gtypes].
  *
- * Returns: the new #GtkDropTarget
+ * Returns: the new `GtkDropTarget`
  */
 GtkDropTarget *
 gtk_drop_target_new (GType         type,
@@ -849,8 +856,8 @@ gtk_drop_target_new (GType         type,
 }
 
 /**
- * gtk_drop_target_get_formats:
- * @self: a #GtkDropTarget
+ * gtk_drop_target_get_formats: (attributes org.gtk.Method.get_property=formats)
+ * @self: a `GtkDropTarget`
  *
  * Gets the data formats that this drop target accepts.
  *
@@ -868,13 +875,13 @@ gtk_drop_target_get_formats (GtkDropTarget *self)
 
 /**
  * gtk_drop_target_set_gtypes:
- * @self: a #GtkDropTarget
+ * @self: a `GtkDropTarget`
  * @types: (nullable) (transfer none) (array length=n_types):
  *     all supported #GTypes that can be dropped
  * @n_types: number of @types
  *
- * Sets the supported #GTypes for this drop target.
- **/
+ * Sets the supported `GTypes` for this drop target.
+ */
 void
 gtk_drop_target_set_gtypes (GtkDropTarget *self,
                             GType         *types,
@@ -899,17 +906,18 @@ gtk_drop_target_set_gtypes (GtkDropTarget *self,
 
 /**
  * gtk_drop_target_get_gtypes:
- * @self: a #GtkDropTarget
+ * @self: a `GtkDropTarget`
  * @n_types: (out) (optional): optional pointer to take the
  *     number of #GTypes contained in the return value
  *
- * Gets the list of supported #GTypes for @self. If no type have been set,
- * %NULL will be returned.
+ * Gets the list of supported `GTypes` for @self.
+ *
+ * If no type have been set, %NULL will be returned.
  *
  * Returns: (transfer none) (nullable) (array length=n_types):
- *      %G_TYPE_INVALID-terminated array of types included in @formats or
- *      %NULL if none.
- **/
+ *   %G_TYPE_INVALID-terminated array of types included in
+ *   @formats or %NULL if none.
+ */
 const GType *
 gtk_drop_target_get_gtypes (GtkDropTarget *self,
                             gsize         *n_types)
@@ -920,8 +928,8 @@ gtk_drop_target_get_gtypes (GtkDropTarget *self,
 }
 
 /**
- * gtk_drop_target_set_actions:
- * @self: a #GtkDropTarget
+ * gtk_drop_target_set_actions: (attributes org.gtk.Method.set_property=actions)
+ * @self: a `GtkDropTarget`
  * @actions: the supported actions
  *
  * Sets the actions that this drop target supports.
@@ -941,8 +949,8 @@ gtk_drop_target_set_actions (GtkDropTarget *self,
 }
 
 /**
- * gtk_drop_target_get_actions:
- * @self: a #GtkDropTarget
+ * gtk_drop_target_get_actions: (attributes org.gtk.Method.get_property=actions)
+ * @self: a `GtkDropTarget`
  *
  * Gets the actions that this drop target supports.
  *
@@ -957,12 +965,12 @@ gtk_drop_target_get_actions (GtkDropTarget *self)
 }
 
 /**
- * gtk_drop_target_set_preload:
- * @self: a #GtkDropTarget
+ * gtk_drop_target_set_preload: (attributes org.gtk.Method.set_property=preload)
+ * @self: a `GtkDropTarget`
  * @preload: %TRUE to preload drop data
  *
- * Sets the GtkDropTarget:preload property.
- **/
+ * Sets whether data should be preloaded on hover.
+ */
 void
 gtk_drop_target_set_preload (GtkDropTarget *self,
                              gboolean       preload)
@@ -978,10 +986,10 @@ gtk_drop_target_set_preload (GtkDropTarget *self,
 }
 
 /**
- * gtk_drop_target_get_preload:
- * @self: a #GtkDropTarget
+ * gtk_drop_target_get_preload: (attributes org.gtk.Method.get_property=preload)
+ * @self: a `GtkDropTarget`
  *
- * Gets the value of the GtkDropTarget:preload property.
+ * Gets whether data should be preloaded on hover.
  *
  * Returns: %TRUE if drop data should be preloaded
  */
@@ -994,15 +1002,15 @@ gtk_drop_target_get_preload (GtkDropTarget *self)
 }
 
 /**
- * gtk_drop_target_get_drop:
- * @self: a #GtkDropTarget
+ * gtk_drop_target_get_drop: (attributes org.gtk.Method.get_property=drop)
+ * @self: a `GtkDropTarget`
  *
  * Gets the currently handled drop operation.
  *
  * If no drop operation is going on, %NULL is returned.
  *
  * Returns: (nullable) (transfer none): The current drop
- **/
+ */
 GdkDrop *
 gtk_drop_target_get_drop (GtkDropTarget *self)
 {
@@ -1012,13 +1020,13 @@ gtk_drop_target_get_drop (GtkDropTarget *self)
 }
 
 /**
- * gtk_drop_target_get_value:
- * @self: a #GtkDropTarget
+ * gtk_drop_target_get_value: (attributes org.gtk.Method.get_property=value)
+ * @self: a `GtkDropTarget`
  *
- * Gets the value of the GtkDropTarget:value property.
+ * Gets the current drop data, as a `GValue`.
  *
  * Returns: (nullable) (transfer none): The current drop data
- **/
+ */
 const GValue *
 gtk_drop_target_get_value (GtkDropTarget *self)
 {
@@ -1032,12 +1040,12 @@ gtk_drop_target_get_value (GtkDropTarget *self)
 
 /**
  * gtk_drop_target_reject:
- * @self: a #GtkDropTarget
+ * @self: a `GtkDropTarget`
  *
  * Rejects the ongoing drop operation.
  *
- * If no drop operation is ongoing - when GdkDropTarget:drop
- * returns %NULL - this function does nothing.
+ * If no drop operation is ongoing, i.e when [property@Gtk.DropTarget:drop]
+ * is %NULL, this function does nothing.
  *
  * This function should be used when delaying the decision
  * on whether to accept a drag or not until after reading
@@ -1053,4 +1061,3 @@ gtk_drop_target_reject (GtkDropTarget *self)
 
   gtk_drop_target_end_drop (self);
 }
-
