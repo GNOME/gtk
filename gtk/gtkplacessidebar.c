@@ -64,9 +64,7 @@
 #include "gtkdragicon.h"
 
 /*< private >
- * SECTION:gtkplacessidebar
- * @Title: GtkPlacesSidebar
- * @Short_description: The locations sidebar for the file selection widget
+ * GtkPlacesSidebar:
  *
  * #GtkPlacesSidebar is a widget that displays a list of frequently-used places in the
  * file system:  the user’s home directory, the user’s bookmarks, and volumes and drives.
