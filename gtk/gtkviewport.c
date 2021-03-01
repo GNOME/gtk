@@ -40,9 +40,8 @@
 /**
  * GtkViewport:
  *
- * The `GtkViewport` widget acts as an adaptor class, implementing
- * scrollability for child widgets that lack their own scrolling
- * capabilities.
+ * `GtkViewport` implements scrollability for widgets that lack their
+ * own scrolling capabilities.
  *
  * Use `GtkViewport` to scroll child widgets such as `GtkGrid`,
  * `GtkBox`, and so on.
