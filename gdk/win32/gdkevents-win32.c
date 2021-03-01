@@ -1838,7 +1838,7 @@ generate_button_event (GdkEventType      type,
                        GdkWindow        *window,
                        MSG              *msg)
 {
-  GdkEvent *event = gdk_event_new (type);
+  GdkEvent *event;
   GdkDeviceManagerWin32 *device_manager;
   GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
@@ -1847,6 +1847,7 @@ generate_button_event (GdkEventType      type,
 
   device_manager = GDK_DEVICE_MANAGER_WIN32 (gdk_display_get_device_manager (gdk_display_get_default ()));
 
+  event = gdk_event_new (type);
   event->button.window = window;
   event->button.time = _gdk_win32_get_next_tick (msg->time);
   event->button.x = current_x = (gint16) GET_X_LPARAM (msg->lParam) / impl->window_scale;
