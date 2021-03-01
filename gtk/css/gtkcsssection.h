@@ -33,9 +33,10 @@ G_BEGIN_DECLS
 /**
  * GtkCssSection:
  *
- * Defines a part of a CSS document. Because sections are nested into
- * one another, you can use gtk_css_section_get_parent() to get the
- * containing region.
+ * Defines a part of a CSS document.
+ *
+ * Because sections are nested into one another, you can use
+ * gtk_css_section_get_parent() to get the containing region.
  */
 typedef struct _GtkCssSection GtkCssSection;
 
