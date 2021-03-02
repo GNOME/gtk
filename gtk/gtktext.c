@@ -806,7 +806,7 @@ gtk_text_class_init (GtkTextClass *class)
   text_props[PROP_SCROLL_OFFSET] =
       g_param_spec_int ("scroll-offset",
                         P_("Scroll offset"),
-                        P_("Number of pixels of the self scrolled off the screen to the left"),
+                        P_("Number of pixels of the text scrolled off the screen to the left"),
                         0, G_MAXINT,
                         0,
                         GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY);
@@ -856,7 +856,7 @@ gtk_text_class_init (GtkTextClass *class)
   text_props[PROP_PLACEHOLDER_TEXT] =
       g_param_spec_string ("placeholder-text",
                            P_("Placeholder text"),
-                           P_("Show text in the self when it’s empty and unfocused"),
+                           P_("Show text in the GtkText when it’s empty and unfocused"),
                            NULL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -915,7 +915,7 @@ gtk_text_class_init (GtkTextClass *class)
   /**
    * GtkText:attributes: (attributes org.gtk.Property.get=gtk_text_get_attributes org.gtk.Property.set=gtk_text_set_attributes)
    *
-   * A list of Pango attributes to apply to the text of the self.
+   * A list of Pango attributes to apply to the text of the `GtkText`.
    *
    * This is mainly useful to change the size or weight of the text.
    *
@@ -925,19 +925,19 @@ gtk_text_class_init (GtkTextClass *class)
   text_props[PROP_ATTRIBUTES] =
       g_param_spec_boxed ("attributes",
                           P_("Attributes"),
-                          P_("A list of style attributes to apply to the text of the self"),
+                          P_("A list of style attributes to apply to the text of the GtkText"),
                           PANGO_TYPE_ATTR_LIST,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkText:tabs: (attributes org.gtk.Property.get=gtk_text_get_tabs org.gtk.Property.set=gtk_text_set_tabs)
    *
-   * A list of tabstops to apply to the text of the self.
+   * A list of tabstops to apply to the text of the `GtkText`.
    */
   text_props[PROP_TABS] =
       g_param_spec_boxed ("tabs",
                           P_("Tabs"),
-                          P_("A list of tabstop locations to apply to the text of the self"),
+                          P_("A list of tabstop locations to apply to the text of the GtkText"),
                           PANGO_TYPE_TAB_ARRAY,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1191,7 +1191,7 @@ gtk_text_class_init (GtkTextClass *class)
    * GtkText::toggle-overwrite:
    * @self: the object which received the signal
    *
-   * Emitted to toggle the overwrite mode of the self.
+   * Emitted to toggle the overwrite mode of the `GtkText`.
    *
    * This is a [keybinding signal](class.SignalAction.html).
    *
@@ -5521,14 +5521,14 @@ gtk_text_set_text (GtkText     *self,
 /**
  * gtk_text_set_visibility: (attributes org.gtk.Method.set_property=visibility)
  * @self: a `GtkText`
- * @visible: %TRUE if the contents of the self are displayed
+ * @visible: %TRUE if the contents of the `GtkText` are displayed
  *   as plaintext
  *
- * Sets whether the contents of the self are visible or not.
+ * Sets whether the contents of the `GtkText` are visible or not.
  *
  * When visibility is set to %FALSE, characters are displayed
  * as the invisible char, and will also appear that way when
- * the text in the self widget is copied to the clipboard.
+ * the text in the widget is copied to the clipboard.
  *
  * By default, GTK picks the best invisible character available
  * in the current font, but it can be changed with
@@ -5720,7 +5720,7 @@ gtk_text_get_overwrite_mode (GtkText *self)
 /**
  * gtk_text_set_max_length: (attributes org.gtk.Method.set_property=max-length)
  * @self: a `GtkText`
- * @length: the maximum length of the self, or 0 for no maximum.
+ * @length: the maximum length of the `GtkText`, or 0 for no maximum.
  *   (other than the maximum length of entries.) The value passed
  *   in will be clamped to the range 0-65536.
  *
@@ -5790,7 +5790,7 @@ gtk_text_get_text_length (GtkText *self)
  * If @activates is %TRUE, pressing Enter in the @self will
  * activate the default widget for the window containing @self.
  *
- * This usually means that the dialog box containing the self
+ * This usually means that the dialog containing the `GtkText`
  * will be closed, since the default widget is usually one of
  * the dialog buttons.
  */
@@ -5817,7 +5817,7 @@ gtk_text_set_activates_default (GtkText  *self,
  *
  * Retrieves the value set by gtk_text_set_activates_default().
  *
- * Returns: %TRUE if the self will activate the default widget
+ * Returns: %TRUE if the `GtkText` will activate the default widget
  */
 gboolean
 gtk_text_get_activates_default (GtkText *self)
@@ -6516,7 +6516,8 @@ blink_cb (GtkWidget     *widget,
     {
       g_warning ("GtkText - did not receive a focus-out event.\n"
                  "If you handle this event, you must return\n"
-                 "GDK_EVENT_PROPAGATE so the self gets the event as well");
+                 "GDK_EVENT_PROPAGATE so the default handler\n"
+                 "gets the event as well");
 
       gtk_text_check_cursor_blink (self);
       return G_SOURCE_REMOVE;
