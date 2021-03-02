@@ -19,9 +19,7 @@
  */
 
 /*< private >
- * SECTION: gtkaccessiblevalue
- * @Title: GtkAccessibleValue
- * @Short_description: Container for accessible state and property values
+ * GtkAccessibleValue:
  *
  * GtkAccessibleValue is a reference counted, generic container for values used
  * to represent the state and properties of a #GtkAccessible implementation.
