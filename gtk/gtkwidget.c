@@ -91,7 +91,7 @@
 /**
  * GtkWidget:
  *
- * The base class for all widgets
+ * The base class for all widgets.
  *
  * `GtkWidget` is the base class all widgets in GTK derive from. It manages the
  * widget lifecycle, layout, states and style.
@@ -108,20 +108,20 @@
  * Height-for-width geometry management is implemented in GTK by way
  * of two virtual methods:
  *
- * - `GtkWidgetClass.get_request_mode()`
- * - `GtkWidgetClass.measure()`
+ * - [vfunc@Gtk.Widget.get_request_mode]
+ * - [vfunc@Gtk.Widget.measure]
  *
  * There are some important things to keep in mind when implementing
  * height-for-width and when using it in widget implementations.
  *
  * If you implement a direct `GtkWidget` subclass that supports
  * height-for-width or width-for-height geometry management for itself
- * or its child widgets, the `GtkWidgetClass.get_request_mode()` virtual
+ * or its child widgets, the [vfunc@Gtk.Widget.get_request_mode] virtual
  * function must be implemented as well and return the widget's preferred
  * request mode. The default implementation of this virtual function
  * returns %GTK_SIZE_REQUEST_CONSTANT_SIZE, which means that the widget will
- * only ever get -1 passed as the for_size value to its `GtkWidgetClass.measure()`
- * implementation.
+ * only ever get -1 passed as the for_size value to its
+ * [vfunc@Gtk.Widget.measure] implementation.
  *
  * The geometry management system will query a widget hierarchy in
  * only one orientation at a time. When widgets are initially queried
@@ -163,7 +163,7 @@
  * trades sizes in a single orientation.
  *
  * For instance, a [class@Gtk.Label] that does height-for-width word wrapping
- * will not expect to have `GtkWidgetClass.measure()` with an orientation of
+ * will not expect to have [vfunc@Gtk.Widget.measure] with an orientation of
  * %GTK_ORIENTATION_VERTICAL called because that call is specific to a
  * width-for-height request. In this case the label must return the height
  * required for its own minimum possible width. By following this rule any
@@ -189,24 +189,24 @@
  *     }
  *   else // VERTICAL
  *     {
- *        if (i_am_in_height_for_width_mode)
- *          {
- *            int min_width, dummy;
+ *       if (i_am_in_height_for_width_mode)
+ *         {
+ *           int min_width, dummy;
  *
- *            // First, get the minimum width of our widget
- *            GTK_WIDGET_GET_CLASS (widget)->measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
- *                                                    &min_width, &dummy, &dummy, &dummy);
+ *           // First, get the minimum width of our widget
+ *           GTK_WIDGET_GET_CLASS (widget)->measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
+ *                                                   &min_width, &dummy, &dummy, &dummy);
  *
- *            // Now use the minimum width to retrieve the minimum and natural height to display
- *            // that width.
- *            GTK_WIDGET_GET_CLASS (widget)->measure (widget, GTK_ORIENTATION_VERTICAL, min_width,
- *                                                    minimum_size, natural_size, &dummy, &dummy);
- *          }
- *        else
- *          {
- *            // ... some widgets do both.
- *          }
- *    }
+ *           // Now use the minimum width to retrieve the minimum and natural height to display
+ *           // that width.
+ *           GTK_WIDGET_GET_CLASS (widget)->measure (widget, GTK_ORIENTATION_VERTICAL, min_width,
+ *                                                   minimum_size, natural_size, &dummy, &dummy);
+ *         }
+ *       else
+ *         {
+ *           // ... some widgets do both.
+ *         }
+ *     }
  * }
  * ```
  *
@@ -218,7 +218,7 @@
  * example above.
  *
  * It will not work to use the wrapper function [method@Gtk.Widget.measure]
- * inside your own `GtkWidgetClass.size_allocate()` implementation.
+ * inside your own [vfunc@Gtk.Widget.size_allocate] implementation.
  * These return a request adjusted by [class@Gtk.SizeGroup], the widget's
  * align and expand flags, as well as its CSS style.
  *
@@ -240,8 +240,8 @@
  * the baseline, or a baseline assigned to it by the grandparent.
  *
  * Baseline alignment support for a widget is also done by the
- * `GtkWidgetClass.measure()` virtual function. It allows you to report both
- * a minimum and natural size.
+ * [vfunc@Gtk.Widget.measure] virtual function. It allows you to report
+ * both a minimum and natural size.
  *
  * If a widget ends up baseline aligned it will be allocated all the space in
  * the parent as if it was %GTK_ALIGN_FILL, but the selected baseline can be
@@ -251,7 +251,7 @@
  *
  * ### GtkWidget as GtkBuildable
  *
- * The `GtkWidget` implementation of the [iface@Gtk.Buildable] interface
+ * The `GtkWidget` implementation of the `GtkBuildable` interface
  * supports various custom elements to specify additional aspects of widgets
  * that are not directly expressed as properties.
  *
@@ -313,19 +313,19 @@
  * `GtkWidget `exposes some facilities to automate the procedure
  * of creating composite widgets using "templates".
  *
- * To create composite widgets with #GtkBuilder XML, one must associate
+ * To create composite widgets with `GtkBuilder` XML, one must associate
  * the interface description with the widget class at class initialization
- * time using `gtk_widget_class_set_template()`.
+ * time using [method@Gtk.WidgetClass.set_template].
  *
  * The interface description semantics expected in composite template descriptions
  * is slightly different from regular [class@Gtk.Builder] XML.
  *
- * Unlike regular interface descriptions, `gtk_widget_class_set_template()` will
+ * Unlike regular interface descriptions, [method@Gtk.WidgetClass.set_template] will
  * expect a `<template>` tag as a direct child of the toplevel `<interface>`
  * tag. The `<template>` tag must specify the “class” attribute which must be
  * the type name of the widget. Optionally, the “parent” attribute may be
  * specified to specify the direct parent type of the widget type, this is
- * ignored by [class@Gtk.Builder] but required for UI design tools like
+ * ignored by `GtkBuilder` but required for UI design tools like
  * [Glade](https://glade.gnome.org/) to introspect what kind of properties and
  * internal children exist for a given type when the actual type does not exist.
  *
@@ -364,7 +364,7 @@
  *
  * Typically, you'll place the template fragment into a file that is
  * bundled with your project, using `GResource`. In order to load the
- * template, you need to call gtk_widget_class_set_template_from_resource()
+ * template, you need to call [method@Gtk.WidgetClass.set_template_from_resource]
  * from the class initialization of your `GtkWidget` type:
  *
  * ```c
@@ -394,7 +394,9 @@
  * [id@gtk_widget_get_template_child] function, but you will typically declare
  * a pointer in the instance private data structure of your type using the same
  * name as the widget in the template definition, and call
- * `gtk_widget_class_bind_template_child_private()` with that name, e.g.
+ * [method@Gtk.WidgetClass.bind_template_child_full] (or one of its wrapper macros
+ * [func@Gtk.widget_class_bind_template_child] and [func@Gtk.widget_class_bind_template_child_private])
+ * with that name, e.g.
  *
  * ```c
  * typedef struct {
@@ -423,7 +425,8 @@
  * }
  * ```
  *
- * You can also use `gtk_widget_class_bind_template_callback()` to connect
+ * You can also use [method@Gtk.WidgetClass.bind_template_callback_full] (or
+ * is wrapper macro [func@Gtk.widget_class_bind_template_callback]) to connect
  * a signal callback defined in the template with a function visible in the
  * scope of the class, e.g.
  *
@@ -6861,17 +6864,19 @@ gtk_widget_get_display (GtkWidget *widget)
  * Called by widgets as the user moves around the window using
  * keyboard shortcuts.
  *
- * @direction indicates what kind of motion is taking place
- * (up, down, left, right, tab forward, tab backward).
- * It calls the GtkWidgetClass.focus() vfunc; widgets override
- * this vfunc in order to implement appropriate focus behavior.
+ * The @direction argument indicates what kind of motion is taking place (up,
+ * down, left, right, tab forward, tab backward).
  *
- * The default focus() vfunc for a widget should return %TRUE if
- * moving in @direction left the focus on a focusable location inside
- * that widget, and %FALSE if moving in @direction moved the focus
- * outside the widget. If returning %TRUE, widgets normally
- * call [method@Gtk.Widget.grab_focus] to place the focus accordingly;
- * if returning %FALSE, they don’t modify the current focus location.
+ * This function calls the [vfunc@Gtk.Widget.focus] virtual function; widgets
+ * can override the virtual function in order to implement appropriate focus
+ * behavior.
+ *
+ * The default `focus()` virtual function for a widget should return `TRUE` if
+ * moving in @direction left the focus on a focusable location inside that
+ * widget, and `FALSE` if moving in @direction moved the focus outside the
+ * widget. When returning `TRUE`, widgets normallycall [method@Gtk.Widget.grab_focus]
+ * to place the focus accordingly; when returning `FALSE`, they don’t modify
+ * the current focus location.
  *
  * This function is used by custom widget implementations; if you're
  * writing an app, you’d use [method@Gtk.Widget.grab_focus] to move
@@ -10948,21 +10953,22 @@ get_auto_child_hash (GtkWidget *widget,
  *
  * This function must be called in the instance initializer
  * for any class which assigned itself a template using
- * gtk_widget_class_set_template().
+ * [method@Gtk.WidgetClass.set_template].
  *
  * It is important to call this function in the instance initializer
- * of a `GtkWidget` subclass and not in #GObject.constructed() or
- * #GObject.constructor() for two reasons.
+ * of a `GtkWidget` subclass and not in `GObject.constructed()` or
+ * `GObject.constructor()` for two reasons:
  *
- * One reason is that generally derived widgets will assume that
- * parent class composite widgets have been created in their instance
- * initializers.
+ *  - derived widgets will assume that the composite widgets
+ *    defined by its parent classes have been created in their
+ *    relative instance initializers
+ *  - when calling `g_object_new()` on a widget with composite templates,
+ *    it’s important to build the composite widgets before the construct
+ *    properties are set. Properties passed to `g_object_new()` should
+ *    take precedence over properties set in the private template XML
  *
- * Another reason is that when calling g_object_new() on a widget
- * with composite templates, it’s important to build the composite
- * widgets before the construct properties are set. Properties passed
- * to g_object_new() should take precedence over properties set in the
- * private template XML.
+ * A good rule of thumb is to call this function as the first thing in
+ * an instance initialization function.
  */
 void
 gtk_widget_init_template (GtkWidget *widget)
@@ -11054,11 +11060,11 @@ out:
  * This should be called at class initialization time to specify
  * the `GtkBuilder` XML to be used to extend a widget.
  *
- * For convenience, gtk_widget_class_set_template_from_resource()
+ * For convenience, [method@Gtk.WidgetClass.set_template_from_resource]
  * is also provided.
  *
  * Note that any class that installs templates must call
- * gtk_widget_init_template() in the widget’s instance initializer.
+ * [method@Gtk.Widget.init_template] in the widget’s instance initializer.
  */
 void
 gtk_widget_class_set_template (GtkWidgetClass *widget_class,
@@ -11098,7 +11104,8 @@ gtk_widget_class_set_template (GtkWidgetClass *widget_class,
  * @widget_class: A `GtkWidgetClass`
  * @resource_name: The name of the resource to load the template from
  *
- * A convenience function to call gtk_widget_class_set_template().
+ * A convenience function that calls [method@Gtk.WidgetClass.set_template]
+ * with the contents of a `GResource`.
  *
  * Note that any class that installs templates must call
  * [method@Gtk.Widget.init_template] in the widget’s instance
@@ -11144,12 +11151,11 @@ gtk_widget_class_set_template_from_resource (GtkWidgetClass    *widget_class,
  * Declares a @callback_symbol to handle @callback_name from
  * the template XML defined for @widget_type.
  *
- * This function is not supported after
- * gtk_widget_class_set_template_scope() has been used on
- * @widget_class. See [method@Gtk.BuilderCScope.add_callback_symbol].
+ * This function is not supported after [method@Gtk.WidgetClass.set_template_scope]
+ * has been used on @widget_class. See [method@Gtk.BuilderCScope.add_callback_symbol].
  *
  * Note that this must be called from a composite widget classes
- * class initializer after calling gtk_widget_class_set_template().
+ * class initializer after calling [method@Gtk.WidgetClass.set_template].
  */
 void
 gtk_widget_class_bind_template_callback_full (GtkWidgetClass *widget_class,
@@ -11206,41 +11212,41 @@ gtk_widget_class_set_template_scope (GtkWidgetClass  *widget_class,
 
 /**
  * gtk_widget_class_bind_template_child_full:
- * @widget_class: A `GtkWidget`Class
+ * @widget_class: A `GtkWidgetClass`
  * @name: The “id” of the child defined in the template XML
  * @internal_child: Whether the child should be accessible as an “internal-child”
- *                  when this class is used in GtkBuilder XML
+ *    when this class is used in GtkBuilder XML
  * @struct_offset: The structure offset into the composite widget’s instance public or private structure
- *                 where the automated child pointer should be set, or 0 to not assign the pointer.
+ *    where the automated child pointer should be set, or 0 to not assign the pointer.
  *
  * Automatically assign an object declared in the class template XML to be
  * set to a location on a freshly built instance’s private data, or
- * alternatively accessible via gtk_widget_get_template_child().
+ * alternatively accessible via [method@Gtk.Widget.get_template_child].
  *
  * The struct can point either into the public instance, then you should
- * use G_STRUCT_OFFSET(WidgetType, member) for @struct_offset, or in the
- * private struct, then you should use G_PRIVATE_OFFSET(WidgetType, member).
+ * use `G_STRUCT_OFFSET(WidgetType, member)` for @struct_offset, or in the
+ * private struct, then you should use `G_PRIVATE_OFFSET(WidgetType, member)`.
  *
  * An explicit strong reference will be held automatically for the duration
  * of your instance’s life cycle, it will be released automatically when
- * GObjectClass.dispose() runs on your instance and if a @struct_offset
- * that is != 0 is specified, then the automatic location in your instance
+ * `GObjectClass.dispose()` runs on your instance and if a @struct_offset
+ * that is `!= 0` is specified, then the automatic location in your instance
  * public or private data will be set to %NULL. You can however access an
- * automated child pointer the first time your classes GObjectClass.dispose()
- * runs, or alternatively in`GtkWidget`Class.destroy().
+ * automated child pointer the first time your classes `GObjectClass.dispose()`
+ * runs, or alternatively in [signal@Gtk.Widget::destroy].
  *
- * If @internal_child is specified, #GtkBuildableIface.get_internal_child()
+ * If @internal_child is specified, [vfunc@Gtk.Buildable.get_internal_child]
  * will be automatically implemented by the `GtkWidget` class so there is no
  * need to implement it manually.
  *
- * The wrapper macros gtk_widget_class_bind_template_child(),
- * gtk_widget_class_bind_template_child_internal(),
- * gtk_widget_class_bind_template_child_private() and
- * gtk_widget_class_bind_template_child_internal_private()
+ * The wrapper macros [func@Gtk.widget_class_bind_template_child],
+ * [func@Gtk.widget_class_bind_template_child_internal],
+ * [func@Gtk.widget_class_bind_template_child_private] and
+ * [func@Gtk.widget_class_bind_template_child_internal_private]
  * might be more convenient to use.
  *
  * Note that this must be called from a composite widget classes class
- * initializer after calling gtk_widget_class_set_template().
+ * initializer after calling [method@Gtk.WidgetClass.set_template].
  */
 void
 gtk_widget_class_bind_template_child_full (GtkWidgetClass *widget_class,
@@ -11271,7 +11277,7 @@ gtk_widget_class_bind_template_child_full (GtkWidgetClass *widget_class,
  * this @widget instance.
  *
  * This will only report children which were previously declared
- * with gtk_widget_class_bind_template_child_full() or one of its
+ * with [method@Gtk.WidgetClass.bind_template_child_full] or one of its
  * variants.
  *
  * This function is only meant to be called for code which is private
@@ -11316,7 +11322,7 @@ gtk_widget_get_template_child (GtkWidget   *widget,
  * inserted.
  *
  * The arguments must match the actions expected parameter type,
- * as returned by g_action_get_parameter_type().
+ * as returned by `g_action_get_parameter_type()`.
  *
  * Returns: %TRUE if the action was activated, %FALSE if the
  *   action does not exist.
@@ -11388,7 +11394,7 @@ gtk_widget_activate_action (GtkWidget  *widget,
  * gtk_widget_activate_default:
  * @widget: a `GtkWidget`
  *
- * Activate the default.activate action from @widget.
+ * Activates the `default.activate` action from @widget.
  */
 void
 gtk_widget_activate_default (GtkWidget *widget)
@@ -12698,10 +12704,13 @@ gtk_widget_get_css_name (GtkWidget *self)
  * @css_class: The style class to add to @widget, without
  *   the leading '.' used for notation of style classes
  *
- * Adds @css_class to @widget.
+ * Adds a style class to @widget.
  *
- * After calling this function, @widget's style will match
- * for @css_class, after the CSS matching rules.
+ * After calling this function, the widgets style will match
+ * for @css_class, according to CSS matching rules.
+ *
+ * Use [method@Gtk.Widget.remove_css_class] to remove the
+ * style again.
  */
 void
 gtk_widget_add_css_class (GtkWidget  *widget,
@@ -12724,7 +12733,7 @@ gtk_widget_add_css_class (GtkWidget  *widget,
  * @css_class: The style class to remove from @widget, without
  *   the leading '.' used for notation of style classes
  *
- * Removes @css_class from @widget.
+ * Removes a style from @widget.
  *
  * After this, the style of @widget will stop matching for @css_class.
  */
@@ -12833,7 +12842,7 @@ gtk_widget_set_css_classes (GtkWidget   *widget,
 
 /*< private >
  * gtk_widget_update_orientation:
- * @widget: a `GtkWidget` implementing #GtkOrientable
+ * @widget: a `GtkWidget` implementing `GtkOrientable`
  * @orientation: the orientation
  *
  * Update the internal state associated to the given

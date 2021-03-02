@@ -461,11 +461,12 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
  *   position for the natural size, or %NULL
  *
  * Measures @widget in the orientation @orientation and for the given @for_size.
- * As an example, if @orientation is %GTK_ORIENTATION_HORIZONTAL and @for_size is 300,
- * this functions will compute the minimum and natural width of @widget if
- * it is allocated at a height of 300 pixels.
  *
- * See [GtkWidget’s geometry management section][geometry-management] for
+ * As an example, if @orientation is %GTK_ORIENTATION_HORIZONTAL and @for_size
+ * is 300, this functions will compute the minimum and natural width of @widget
+ * if it is allocated at a height of 300 pixels.
+ *
+ * See [GtkWidget’s geometry management section](class.Widget.html#height-for-width-geometry-management) for
  * a more details on implementing #GtkWidgetClass.measure().
  */
 void
@@ -545,17 +546,17 @@ gtk_widget_measure (GtkWidget        *widget,
 
 /**
  * gtk_widget_get_request_mode:
- * @widget: a #GtkWidget instance
+ * @widget: a `GtkWidget` instance
  *
  * Gets whether the widget prefers a height-for-width layout
  * or a width-for-height layout.
  *
- * #GtkBin widgets generally propagate the preference of
- * their child, container widgets need to request something either in
- * context of their children or in context of their allocation
- * capabilities.
+ * Single-child widgets generally propagate the preference of
+ * their child, more complex widgets need to request something
+ * either in context of their children or in context of their
+ * allocation capabilities.
  *
- * Returns: The #GtkSizeRequestMode preferred by @widget.
+ * Returns: The `GtkSizeRequestMode` preferred by @widget.
  */
 GtkSizeRequestMode
 gtk_widget_get_request_mode (GtkWidget *widget)
@@ -575,7 +576,7 @@ gtk_widget_get_request_mode (GtkWidget *widget)
 
 /**
  * gtk_widget_get_preferred_size:
- * @widget: a #GtkWidget instance
+ * @widget: a `GtkWidget` instance
  * @minimum_size: (out) (allow-none): location for storing the minimum size, or %NULL
  * @natural_size: (out) (allow-none): location for storing the natural size, or %NULL
  *
@@ -585,15 +586,14 @@ gtk_widget_get_request_mode (GtkWidget *widget)
  * This is used to retrieve a suitable size by container widgets which do
  * not impose any restrictions on the child placement. It can be used
  * to deduce toplevel window and menu sizes as well as child widgets in
- * free-form containers such as GtkLayout.
+ * free-form containers such as `GtkFixed`.
  *
  * Handle with care. Note that the natural height of a height-for-width
- * widget will generally be a smaller size than the minimum height, since the required
- * height for the natural width is generally smaller than the required height for
- * the minimum width.
+ * widget will generally be a smaller size than the minimum height, since
+ * the required height for the natural width is generally smaller than the
+ * required height for the minimum width.
  *
- * Use gtk_widget_measure() if you want to support
- * baseline alignment.
+ * Use [id@gtk_widget_measure] if you want to support baseline alignment.
  */
 void
 gtk_widget_get_preferred_size (GtkWidget      *widget,
@@ -683,7 +683,7 @@ compare_gap (gconstpointer p1,
  * children up to natural size first.
  *
  * The remaining space will be added to the @minimum_size member of the
- * GtkRequestedSize struct. If all sizes reach their natural size then
+ * `GtkRequestedSize` struct. If all sizes reach their natural size then
  * the remaining space is returned.
  *
  * Returns: The remainder of @extra_space after redistributing space
