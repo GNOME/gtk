@@ -104,8 +104,9 @@ gtk_accels_remove (GtkAccels  *accels,
 }
 
 /*< private >
- * SECTION:gtkactionmuxer
- * @short_description: Aggregate and monitor actions from multiple sources
+ * GtkActionMuxer:
+ *
+ * GtkActionMuxer aggregates and monitors actions from multiple sources.
  *
  * #GtkActionMuxer is #GtkActionObservable and #GtkActionObserver that
  * offers a #GActionGroup-like api and is capable of containing other
