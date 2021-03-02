@@ -42,22 +42,20 @@
 #include "gdk/gdkarrayimpl.c"
 
 /**
- * SECTION:gtksnapshot
- * @Short_description: Auxiliary object for snapshots
- * @Title: GtkSnapshot
+ * GtkSnapshot:
  *
- * GtkSnapshot is an auxiliary object that assists in creating #GskRenderNodes
- * in the #GdkPaintableInterface.snapshot() vfunc. It functions in a similar way to
- * a cairo context, and maintains a stack of render nodes and their associated
- * transformations.
+ * `GtkSnapshot` assists in creating `GskRenderNodes` for widgets.
+ *
+ * It functions in a similar way to a cairo context, and maintains a stack
+ * of render nodes and their associated transformations.
  *
  * The node at the top of the stack is the the one that gtk_snapshot_append_…
- * functions operate on. Use the gtk_snapshot_push_… functions and gtk_snapshot_pop()
- * to change the current node.
+ * functions operate on. Use the gtk_snapshot_push_… functions and
+ * gtk_snapshot_pop() to change the current node.
  *
- * The typical way to obtain a GtkSnapshot object is as an argument to
- * the #GtkWidgetClass.snapshot() vfunc. If you need to create your own GtkSnapshot,
- * use gtk_snapshot_new().
+ * The typical way to obtain a `GtkSnapshot` object is as an argument to
+ * the GtkWidgetClass.snapshot() vfunc. If you need to create your own
+ * `GtkSnapshot`, use [ctor@Gtk.Snapshot.new].
  */
 
 typedef struct _GtkSnapshotState GtkSnapshotState;
@@ -273,9 +271,9 @@ gtk_snapshot_state_clear (GtkSnapshotState *state)
 /**
  * gtk_snapshot_new:
  *
- * Creates a new #GtkSnapshot.
+ * Creates a new `GtkSnapshot`.
  *
- * Returns: a newly-allocated #GtkSnapshot
+ * Returns: a newly-allocated `GtkSnapshot`
  */
 GtkSnapshot *
 gtk_snapshot_new (void)
@@ -297,12 +295,12 @@ gtk_snapshot_new (void)
 
 /**
  * gtk_snapshot_free_to_node: (skip)
- * @snapshot: (transfer full): a #GtkSnapshot
+ * @snapshot: (transfer full): a `GtkSnapshot`
  *
  * Returns the node that was constructed by @snapshot
  * and frees @snapshot.
  *
- * Returns: (transfer full): a newly-created #GskRenderNode
+ * Returns: (transfer full): a newly-created `GskRenderNode`
  */
 GskRenderNode *
 gtk_snapshot_free_to_node (GtkSnapshot *snapshot)
@@ -317,14 +315,14 @@ gtk_snapshot_free_to_node (GtkSnapshot *snapshot)
 
 /**
  * gtk_snapshot_free_to_paintable: (skip)
- * @snapshot: (transfer full): a #GtkSnapshot
+ * @snapshot: (transfer full): a `GtkSnapshot`
  * @size: (allow-none): The size of the resulting paintable
  *     or %NULL to use the bounds of the snapshot
  *
  * Returns a paintable for the node that was
  * constructed by @snapshot and frees @snapshot.
  *
- * Returns: (transfer full): a newly-created #GdkPaintable
+ * Returns: (transfer full): a newly-created `GdkPaintable`
  */
 GdkPaintable *
 gtk_snapshot_free_to_paintable (GtkSnapshot           *snapshot,
@@ -403,13 +401,15 @@ gtk_snapshot_clear_debug (GtkSnapshotState *state)
 
 /**
  * gtk_snapshot_push_debug:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @message: a printf-style format string
  * @...: arguments for @message
  *
- * Inserts a debug node with a message. Debug nodes don't affect
- * the rendering at all, but can be helpful in identifying parts
- * of a render node tree dump, for example in the GTK inspector.
+ * Inserts a debug node with a message.
+ *
+ * Debug nodes don't affect the rendering at all, but can be
+ * helpful in identifying parts of a render node tree dump,
+ * for example in the GTK inspector.
  */
 void
 gtk_snapshot_push_debug (GtkSnapshot *snapshot,
@@ -475,12 +475,12 @@ gtk_snapshot_collect_opacity (GtkSnapshot      *snapshot,
 
 /**
  * gtk_snapshot_push_opacity:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @opacity: the opacity to use
  *
  * Modifies the opacity of an image.
  *
- * The image is recorded until the next call to gtk_snapshot_pop().
+ * The image is recorded until the next call to [method@Gtk.Snapshot.pop].
  */
 void
 gtk_snapshot_push_opacity (GtkSnapshot *snapshot,
@@ -523,12 +523,12 @@ gtk_snapshot_collect_blur (GtkSnapshot      *snapshot,
 
 /**
  * gtk_snapshot_push_blur:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @radius: the blur radius to use
  *
  * Blurs an image.
  *
- * The image is recorded until the next call to gtk_snapshot_pop().
+ * The image is recorded until the next call to [method@Gtk.Snapshot.pop].
  */
 void
 gtk_snapshot_push_blur (GtkSnapshot *snapshot,
@@ -631,14 +631,14 @@ gtk_snapshot_collect_color_matrix (GtkSnapshot      *snapshot,
 
 /**
  * gtk_snapshot_push_color_matrix:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @color_matrix: the color matrix to use
  * @color_offset: the color offset to use
  *
  * Modifies the colors of an image by applying an affine transformation
  * in RGB space.
  *
- * The image is recorded until the next call to gtk_snapshot_pop().
+ * The image is recorded until the next call to [method@Gtk.Snapshot.pop].
  */
 void
 gtk_snapshot_push_color_matrix (GtkSnapshot             *snapshot,
@@ -767,14 +767,14 @@ gtk_snapshot_ensure_identity (GtkSnapshot *snapshot)
 
 /**
  * gtk_snapshot_push_repeat:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @bounds: the bounds within which to repeat
  * @child_bounds: (nullable): the bounds of the child or %NULL
  *   to use the full size of the collected child node
  *
  * Creates a node that repeats the child node.
  *
- * The child is recorded until the next call to gtk_snapshot_pop().
+ * The child is recorded until the next call to [method@Gtk.Snapshot.pop].
  */
 void
 gtk_snapshot_push_repeat (GtkSnapshot           *snapshot,
@@ -828,12 +828,12 @@ gtk_snapshot_collect_clip (GtkSnapshot      *snapshot,
 
 /**
  * gtk_snapshot_push_clip:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @bounds: the rectangle to clip to
  *
  * Clips an image to a rectangle.
  *
- * The image is recorded until the next call to gtk_snapshot_pop().
+ * The image is recorded until the next call to [method@Gtk.Snapshot.pop].
  */
 void
 gtk_snapshot_push_clip (GtkSnapshot           *snapshot,
@@ -941,38 +941,45 @@ gtk_snapshot_collect_gl_shader_texture (GtkSnapshot      *snapshot,
 
 /**
  * gtk_snapshot_push_gl_shader:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @shader: The code to run
  * @bounds: the rectangle to render into
  * @take_args: (transfer full): Data block with arguments for the shader.
  *
- * Push a #GskGLShaderNode with a specific #GskGLShader and a set of uniform values
- * to use while rendering. Additionally this takes a list of @n_children other nodes
- * which will be passed to the #GskGLShaderNode.
+ * Push a `GskGLShaderNode`.
+ *
+ * The node uses the given [class@Gsk.GLShader] and uniform values
+ * Additionally this takes a list of @n_children other nodes
+ * which will be passed to the `GskGLShaderNode`.
  *
  * The @take_args argument is a block of data to use for uniform
- * arguments, as per types and offsets defined by the @shader. Normally this is
- * generated by gsk_gl_shader_format_args() or #GskGLShaderArgBuilder.
- * The snapshotter takes ownership of @take_args, so the caller should not free it
- * after this.
+ * arguments, as per types and offsets defined by the @shader.
+ * Normally this is generated by [method@Gsk.GLShader.format_args]
+ * or [struct@Gsk.ShaderArgsBuilder].
  *
- * If the renderer doesn't support GL shaders, or if there is any problem when
- * compiling the shader, then the node will draw pink. You should use
- * gsk_gl_shader_compile() to ensure the @shader will work for the renderer
- * before using it.
+ * The snapshotter takes ownership of @take_args, so the caller should
+ * not free it after this.
  *
- * If the shader requires textures (see gsk_gl_shader_get_n_textures()), then it is
- * expected that you call gtk_snapshot_gl_shader_pop_texture() the number of times that are
- * required. Each of these calls will generate a node that is added as a child to the gl shader
- * node, which in turn will render these offscreen and pass as a texture to the shader.
+ * If the renderer doesn't support GL shaders, or if there is any
+ * problem when compiling the shader, then the node will draw pink.
+ * You should use [method@Gsk.GLShader.compile] to ensure the @shader
+ * will work for the renderer before using it.
  *
- * Once all textures (if any) are pop:ed, you must call the regular gtk_snapshot_pop().
+ * If the shader requires textures (see [method@Gsk.GLShader.get_n_textures]),
+ * then it is expected that you call [method@Gtk.Snapshot.gl_shader_pop_texture]
+ * the number of times that are required. Each of these calls will generate
+ * a node that is added as a child to the `GskGLShaderNode`, which in turn
+ * will render these offscreen and pass as a texture to the shader.
  *
- * If you want to use pre-existing textures as input to the shader rather than
- * rendering new ones, use gtk_snapshot_append_texture() to push a texture node. These
- * will be used directly rather than being re-rendered.
+ * Once all textures (if any) are pop:ed, you must call the regular
+ * [method@Gtk.Snapshot.pop].
  *
- * For details on how to write shaders, see #GskGLShader.
+ * If you want to use pre-existing textures as input to the shader rather
+ * than rendering new ones, use [method@Gtk.Snapshot.append_texture] to
+ * push a texture node. These will be used directly rather than being
+ * re-rendered.
+ *
+ * For details on how to write shaders, see [class@Gsk.GLShader].
  */
 void
 gtk_snapshot_push_gl_shader (GtkSnapshot           *snapshot,
@@ -1056,12 +1063,12 @@ gtk_snapshot_collect_rounded_clip (GtkSnapshot      *snapshot,
 
 /**
  * gtk_snapshot_push_rounded_clip:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @bounds: the rounded rectangle to clip to
  *
  * Clips an image to a rounded rectangle.
  *
- * The image is recorded until the next call to gtk_snapshot_pop().
+ * The image is recorded until the next call to [method@Gtk.Snapshot.pop].
  */
 void
 gtk_snapshot_push_rounded_clip (GtkSnapshot          *snapshot,
@@ -1111,13 +1118,13 @@ gtk_snapshot_clear_shadow (GtkSnapshotState *state)
 
 /**
  * gtk_snapshot_push_shadow:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @shadow: the first shadow specification
  * @n_shadows: number of shadow specifications
  *
  * Applies a shadow to an image.
  *
- * The image is recorded until the next call to gtk_snapshot_pop().
+ * The image is recorded until the next call to [method@Gtk.Snapshot.pop].
  */
 void
 gtk_snapshot_push_shadow (GtkSnapshot     *snapshot,
@@ -1199,17 +1206,19 @@ gtk_snapshot_collect_blend_bottom (GtkSnapshot      *snapshot,
 
 /**
  * gtk_snapshot_push_blend:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @blend_mode: blend mode to use
  *
- * Blends together 2 images with the given blend mode.
+ * Blends together two images with the given blend mode.
  *
- * Until the first call to gtk_snapshot_pop(), the bottom image for the
- * blend operation will be recorded. After that call, the top image to
- * be blended will be recorded until the second call to gtk_snapshot_pop().
+ * Until the first call to [method@Gtk.Snapshot.pop], the
+ * bottom image for the blend operation will be recorded.
+ * After that call, the top image to be blended will be
+ * recorded until the second call to [method@Gtk.Snapshot.pop].
  *
- * Calling this function requires 2 subsequent calls to gtk_snapshot_pop().
- **/
+ * Calling this function requires two subsequent calls
+ * to [method@Gtk.Snapshot.pop].
+ */
 void
 gtk_snapshot_push_blend (GtkSnapshot  *snapshot,
                          GskBlendMode  blend_mode)
@@ -1305,18 +1314,19 @@ gtk_snapshot_collect_cross_fade_start (GtkSnapshot      *snapshot,
 
 /**
  * gtk_snapshot_push_cross_fade:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @progress: progress between 0.0 and 1.0
  *
  * Snapshots a cross-fade operation between two images with the
  * given @progress.
  *
- * Until the first call to gtk_snapshot_pop(), the start image
+ * Until the first call to [method@Gtk.Snapshot.pop], the start image
  * will be snapshot. After that call, the end image will be recorded
- * until the second call to gtk_snapshot_pop().
+ * until the second call to [method@Gtk.Snapshot.pop].
  *
- * Calling this function requires 2 calls to gtk_snapshot_pop().
- **/
+ * Calling this function requires two subsequent calls
+ * to [method@Gtk.Snapshot.pop].
+ */
 void
 gtk_snapshot_push_cross_fade (GtkSnapshot *snapshot,
                               double       progress)
@@ -1433,9 +1443,9 @@ gtk_snapshot_pop_internal (GtkSnapshot *snapshot)
 /**
  * gtk_snapshot_push_collect:
  *
- * PRIVATE.
+ * Private.
  *
- * Puhses state so a later pop_collect call can collect all nodes
+ * Pushes state so a later pop_collect call can collect all nodes
  * appended until that point.
  */
 void
@@ -1457,15 +1467,16 @@ gtk_snapshot_pop_collect (GtkSnapshot *snapshot)
 
 /**
  * gtk_snapshot_to_node:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  *
  * Returns the render node that was constructed
- * by @snapshot. After calling this function, it
- * is no longer possible to add more nodes to
- * @snapshot. The only function that should be
- * called after this is g_object_unref().
+ * by @snapshot.
  *
- * Returns: (transfer full): the constructed #GskRenderNode
+ * After calling this function, it is no longer possible to
+ * add more nodes to @snapshot. The only function that should
+ * be called after this is g_object_unref().
+ *
+ * Returns: (transfer full): the constructed `GskRenderNode`
  */
 GskRenderNode *
 gtk_snapshot_to_node (GtkSnapshot *snapshot)
@@ -1489,15 +1500,16 @@ gtk_snapshot_to_node (GtkSnapshot *snapshot)
 
 /**
  * gtk_snapshot_to_paintable:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @size: (allow-none): The size of the resulting paintable
  *     or %NULL to use the bounds of the snapshot
  *
  * Returns a paintable encapsulating the render node
- * that was constructed by @snapshot. After calling
- * this function, it is no longer possible to add more
- * nodes to @snapshot. The only function that should be
- * called after this is g_object_unref().
+ * that was constructed by @snapshot.
+ *
+ * After calling this function, it is no longer possible to
+ * add more nodes to @snapshot. The only function that should
+ * be called after this is g_object_unref().
  *
  * Returns: (transfer full): a new #GdkPaintable
  */
@@ -1531,7 +1543,7 @@ gtk_snapshot_to_paintable (GtkSnapshot           *snapshot,
 
 /**
  * gtk_snapshot_pop:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  *
  * Removes the top element from the stack of render nodes,
  * and appends it to the node underneath it.
@@ -1553,12 +1565,14 @@ gtk_snapshot_pop (GtkSnapshot *snapshot)
 
 /**
  * gtk_snapshot_gl_shader_pop_texture:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  *
  * Removes the top element from the stack of render nodes and
- * adds it to the nearest GskGLShaderNode below it. This must be called the
- * same number of times as the number of textures is needed for the
- * shader in gtk_snapshot_push_gl_shader().
+ * adds it to the nearest `GskGLShaderNode` below it.
+ *
+ * This must be called the same number of times as the number
+ * of textures is needed for the shader in
+ * [method@Gtk.Snapshot.push_gl_shader].
  */
 void
 gtk_snapshot_gl_shader_pop_texture (GtkSnapshot *snapshot)
@@ -1581,19 +1595,20 @@ gtk_snapshot_gl_shader_pop_texture (GtkSnapshot *snapshot)
 
 /**
  * gtk_snapshot_save:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  *
  * Makes a copy of the current state of @snapshot and saves it
- * on an internal stack of saved states for @snapshot. When
- * gtk_snapshot_restore() is called, @snapshot will be restored to
- * the saved state. Multiple calls to gtk_snapshot_save() and
- * gtk_snapshot_restore() can be nested; each call to
- * gtk_snapshot_restore() restores the state from the matching paired
- * gtk_snapshot_save().
+ * on an internal stack.
  *
- * It is necessary to clear all saved states with corresponding calls
- * to gtk_snapshot_restore().
- **/
+ * When [method@Gtk.Snapshot.restore] is called, @snapshot will
+ * be restored to the saved state. Multiple calls to
+ * gtk_snapshot_save() and gtk_snapshot_restore() can be nested;
+ * each call to gtk_snapshot_restore() restores the state from
+ * the matching paired gtk_snapshot_save().
+ *
+ * It is necessary to clear all saved states with corresponding
+ * calls to gtk_snapshot_restore().
+ */
 void
 gtk_snapshot_save (GtkSnapshot *snapshot)
 {
@@ -1607,12 +1622,12 @@ gtk_snapshot_save (GtkSnapshot *snapshot)
 
 /**
  * gtk_snapshot_restore:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  *
  * Restores @snapshot to the state saved by a preceding call to
  * gtk_snapshot_save() and removes that state from the stack of
  * saved states.
- **/
+ */
 void
 gtk_snapshot_restore (GtkSnapshot *snapshot)
 {
@@ -1640,11 +1655,11 @@ gtk_snapshot_restore (GtkSnapshot *snapshot)
 
 /**
  * gtk_snapshot_transform:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @transform: (allow-none): the transform to apply
  *
  * Transforms @snapshot's coordinate system with the given @transform.
- **/
+ */
 void
 gtk_snapshot_transform (GtkSnapshot  *snapshot,
                         GskTransform *transform)
@@ -1659,11 +1674,11 @@ gtk_snapshot_transform (GtkSnapshot  *snapshot,
 
 /**
  * gtk_snapshot_transform_matrix:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @matrix: the matrix to multiply the transform with
  *
  * Transforms @snapshot's coordinate system with the given @matrix.
- **/
+ */
 void
 gtk_snapshot_transform_matrix (GtkSnapshot             *snapshot,
                                const graphene_matrix_t *matrix)
@@ -1679,7 +1694,7 @@ gtk_snapshot_transform_matrix (GtkSnapshot             *snapshot,
 
 /**
  * gtk_snapshot_translate:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @point: the point to translate the snapshot by
  *
  * Translates @snapshot's coordinate system by @point in 2-dimensional space.
@@ -1699,7 +1714,7 @@ gtk_snapshot_translate (GtkSnapshot            *snapshot,
 
 /**
  * gtk_snapshot_translate_3d:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @point: the point to translate the snapshot by
  *
  * Translates @snapshot's coordinate system by @point.
@@ -1719,11 +1734,13 @@ gtk_snapshot_translate_3d (GtkSnapshot              *snapshot,
 
 /**
  * gtk_snapshot_rotate:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @angle: the rotation angle, in degrees (clockwise)
  *
  * Rotates @@snapshot's coordinate system by @angle degrees in 2D space -
- * or in 3D speak, rotates around the z axis.
+ * or in 3D speak, rotates around the Z axis.
+ *
+ * To rotate around other axes, use [method@Gsk.Transform.rotate_3d].
  */
 void
 gtk_snapshot_rotate (GtkSnapshot *snapshot,
@@ -1739,13 +1756,13 @@ gtk_snapshot_rotate (GtkSnapshot *snapshot,
 
 /**
  * gtk_snapshot_rotate_3d:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @angle: the rotation angle, in degrees (clockwise)
  * @axis: The rotation axis
  *
  * Rotates @snapshot's coordinate system by @angle degrees around @axis.
  *
- * For a rotation in 2D space, use gsk_transform_rotate().
+ * For a rotation in 2D space, use [method@Gsk.Transform.rotate].
  */
 void
 gtk_snapshot_rotate_3d (GtkSnapshot           *snapshot,
@@ -1763,15 +1780,15 @@ gtk_snapshot_rotate_3d (GtkSnapshot           *snapshot,
 
 /**
  * gtk_snapshot_scale:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @factor_x: scaling factor on the X axis
  * @factor_y: scaling factor on the Y axis
  *
  * Scales @snapshot's coordinate system in 2-dimensional space by
  * the given factors.
  *
- * Use gtk_snapshot_scale_3d() to scale in all 3 dimensions.
- **/
+ * Use [method@Gtk.Snapshot.scale_3d] to scale in all 3 dimensions.
+ */
 void
 gtk_snapshot_scale (GtkSnapshot *snapshot,
                     float        factor_x,
@@ -1787,7 +1804,7 @@ gtk_snapshot_scale (GtkSnapshot *snapshot,
 
 /**
  * gtk_snapshot_scale_3d:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @factor_x: scaling factor on the X axis
  * @factor_y: scaling factor on the Y axis
  * @factor_z: scaling factor on the Z axis
@@ -1810,12 +1827,12 @@ gtk_snapshot_scale_3d (GtkSnapshot *snapshot,
 
 /**
  * gtk_snapshot_perspective:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @depth: distance of the z=0 plane
  *
  * Applies a perspective projection transform.
  *
- * See gsk_transform_perspective() for a discussion on the details.
+ * See [method@Gsk.Transform.perspective] for a discussion on the details.
  */
 void
 gtk_snapshot_perspective (GtkSnapshot *snapshot,
@@ -1831,13 +1848,14 @@ gtk_snapshot_perspective (GtkSnapshot *snapshot,
 
 /**
  * gtk_snapshot_append_node:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @node: a #GskRenderNode
  *
  * Appends @node to the current render node of @snapshot,
- * without changing the current node. If @snapshot does
- * not have a current node yet, @node will become the
- * initial node.
+ * without changing the current node.
+ *
+ * If @snapshot does not have a current node yet, @node
+ * will become the initial node.
  */
 void
 gtk_snapshot_append_node (GtkSnapshot   *snapshot,
@@ -1853,14 +1871,14 @@ gtk_snapshot_append_node (GtkSnapshot   *snapshot,
 
 /**
  * gtk_snapshot_append_cairo:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @bounds: the bounds for the new node
  *
- * Creates a new render node and appends it to the current render
- * node of @snapshot, without changing the current node.
+ * Creates a new `GskCairoNode` and appends it to the current
+ * render node of @snapshot, without changing the current node.
  *
- * Returns: a cairo_t suitable for drawing the contents of the newly
- *     created render node
+ * Returns: a `cairo_t` suitable for drawing the contents of
+ *   the newly created render node
  */
 cairo_t *
 gtk_snapshot_append_cairo (GtkSnapshot           *snapshot,
@@ -1891,13 +1909,14 @@ gtk_snapshot_append_cairo (GtkSnapshot           *snapshot,
 
 /**
  * gtk_snapshot_append_texture:
- * @snapshot: a #GtkSnapshot
- * @texture: the #GdkTexture to render
+ * @snapshot: a `GtkSnapshot`
+ * @texture: the `GdkTexture` to render
  * @bounds: the bounds for the new node
  *
- * Creates a new render node drawing the @texture into the given @bounds and appends it
- * to the current render node of @snapshot.
- **/
+ * Creates a new render node drawing the @texture
+ * into the given @bounds and appends it to the
+ * current render node of @snapshot.
+ */
 void
 gtk_snapshot_append_texture (GtkSnapshot           *snapshot,
                              GdkTexture            *texture,
@@ -1920,15 +1939,17 @@ gtk_snapshot_append_texture (GtkSnapshot           *snapshot,
 
 /**
  * gtk_snapshot_append_color:
- * @snapshot: a #GtkSnapshot
- * @color: the #GdkRGBA to draw
+ * @snapshot: a `GtkSnapshot`
+ * @color: the `GdkRGBA` to draw
  * @bounds: the bounds for the new node
  *
- * Creates a new render node drawing the @color into the given @bounds and appends it
- * to the current render node of @snapshot.
+ * Creates a new render node drawing the @color into the
+ * given @bounds and appends it to the current render node
+ * of @snapshot.
  *
- * You should try to avoid calling this function if @color is transparent.
- **/
+ * You should try to avoid calling this function if
+ * @color is transparent.
+ */
 void
 gtk_snapshot_append_color (GtkSnapshot           *snapshot,
                            const GdkRGBA         *color,
@@ -1952,8 +1973,8 @@ gtk_snapshot_append_color (GtkSnapshot           *snapshot,
 
 /**
  * gtk_snapshot_render_background:
- * @snapshot: a #GtkSnapshot
- * @context: the #GtkStyleContext to use
+ * @snapshot: a `GtkSnapshot`
+ * @context: the `GtkStyleContext` to use
  * @x: X origin of the rectangle
  * @y: Y origin of the rectangle
  * @width: rectangle width
@@ -1984,8 +2005,8 @@ gtk_snapshot_render_background (GtkSnapshot     *snapshot,
 
 /**
  * gtk_snapshot_render_frame:
- * @snapshot: a #GtkSnapshot
- * @context: the #GtkStyleContext to use
+ * @snapshot: a `GtkSnapshot`
+ * @context: the `GtkStyleContext` to use
  * @x: X origin of the rectangle
  * @y: Y origin of the rectangle
  * @width: rectangle width
@@ -2016,8 +2037,8 @@ gtk_snapshot_render_frame (GtkSnapshot     *snapshot,
 
 /**
  * gtk_snapshot_render_focus:
- * @snapshot: a #GtkSnapshot
- * @context: the #GtkStyleContext to use
+ * @snapshot: a `GtkSnapshot`
+ * @context: the `GtkStyleContext` to use
  * @x: X origin of the rectangle
  * @y: Y origin of the rectangle
  * @width: rectangle width
@@ -2048,8 +2069,8 @@ gtk_snapshot_render_focus (GtkSnapshot     *snapshot,
 
 /**
  * gtk_snapshot_render_layout:
- * @snapshot: a #GtkSnapshot
- * @context: the #GtkStyleContext to use
+ * @snapshot: a `GtkSnapshot`
+ * @context: the `GtkStyleContext` to use
  * @x: X origin of the rectangle
  * @y: Y origin of the rectangle
  * @layout: the #PangoLayout to render
@@ -2119,11 +2140,12 @@ gtk_snapshot_append_text (GtkSnapshot           *snapshot,
 
 /**
  * gtk_snapshot_append_linear_gradient:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @bounds: the rectangle to render the linear gradient into
  * @start_point: the point at which the linear gradient will begin
  * @end_point: the point at which the linear gradient will finish
- * @stops: (array length=n_stops): a pointer to an array of #GskColorStop defining the gradient
+ * @stops: (array length=n_stops): a pointer to an array of `GskColorStop`
+ *   defining the gradient
  * @n_stops: the number of elements in @stops
  *
  * Appends a linear gradient node with the given stops to @snapshot.
@@ -2182,11 +2204,12 @@ gtk_snapshot_append_linear_gradient (GtkSnapshot            *snapshot,
 
 /**
  * gtk_snapshot_append_repeating_linear_gradient:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @bounds: the rectangle to render the linear gradient into
  * @start_point: the point at which the linear gradient will begin
  * @end_point: the point at which the linear gradient will finish
- * @stops: (array length=n_stops): a pointer to an array of #GskColorStop defining the gradient
+ * @stops: (array length=n_stops): a pointer to an array of `GskColorStop`
+ *   defining the gradient
  * @n_stops: the number of elements in @stops
  *
  * Appends a repeating linear gradient node with the given stops to @snapshot.
@@ -2229,12 +2252,13 @@ gtk_snapshot_append_repeating_linear_gradient (GtkSnapshot            *snapshot,
 
 /**
  * gtk_snapshot_append_conic_gradient:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @bounds: the rectangle to render the gradient into
  * @center: the center point of the conic gradient
- * @rotation: the clockwise rotation in degrees of the starting angle. 0 means the
- *     starting angle is the top.
- * @stops: (array length=n_stops): a pointer to an array of #GskColorStop defining the gradient
+ * @rotation: the clockwise rotation in degrees of the starting angle.
+ *   0 means the starting angle is the top.
+ * @stops: (array length=n_stops): a pointer to an array of `GskColorStop`
+ *   defining the gradient
  * @n_stops: the number of elements in @stops
  *
  * Appends a conic gradient node with the given stops to @snapshot.
@@ -2289,14 +2313,15 @@ gtk_snapshot_append_conic_gradient (GtkSnapshot            *snapshot,
 
 /**
  * gtk_snapshot_append_radial_gradient:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @bounds: the rectangle to render the readial gradient into
  * @center: the center point for the radial gradient
  * @hradius: the horizontal radius
  * @vradius: the vertical radius
  * @start: the start position (on the horizontal axis)
  * @end: the end position (on the horizontal axis)
- * @stops: (array length=n_stops): a pointer to an array of #GskColorStop defining the gradient
+ * @stops: (array length=n_stops): a pointer to an array of `GskColorStop`
+ *   defining the gradient
  * @n_stops: the number of elements in @stops
  *
  * Appends a radial gradient node with the given stops to @snapshot.
@@ -2341,14 +2366,15 @@ gtk_snapshot_append_radial_gradient (GtkSnapshot            *snapshot,
 
 /**
  * gtk_snapshot_append_repeating_radial_gradient:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @bounds: the rectangle to render the readial gradient into
  * @center: the center point for the radial gradient
  * @hradius: the horizontal radius
  * @vradius: the vertical radius
  * @start: the start position (on the horizontal axis)
  * @end: the end position (on the horizontal axis)
- * @stops: (array length=n_stops): a pointer to an array of #GskColorStop defining the gradient
+ * @stops: (array length=n_stops): a pointer to an array of `GskColorStop`
+ *   defining the gradient
  * @n_stops: the number of elements in @stops
  *
  * Appends a repeating radial gradient node with the given stops to @snapshot.
@@ -2393,16 +2419,17 @@ gtk_snapshot_append_repeating_radial_gradient (GtkSnapshot            *snapshot,
 
 /**
  * gtk_snapshot_append_border:
- * @snapshot: a #GtkSnapshot
- * @outline: a #GskRoundedRect describing the outline of the border
+ * @snapshot: a `GtkSnapshot`
+ * @outline: a `GskRoundedRect` describing the outline of the border
  * @border_width: (array fixed-size=4): the stroke width of the border on
  *     the top, right, bottom and left side respectively.
  * @border_color: (array fixed-size=4): the color used on the top, right,
  *     bottom and left side.
  *
- * Appends a stroked border rectangle inside the given @outline. The
- * 4 sides of the border can have different widths and colors.
- **/
+ * Appends a stroked border rectangle inside the given @outline.
+ *
+ * The four sides of the border can have different widths and colors.
+ */
 void
 gtk_snapshot_append_border (GtkSnapshot          *snapshot,
                             const GskRoundedRect *outline,
@@ -2428,7 +2455,7 @@ gtk_snapshot_append_border (GtkSnapshot          *snapshot,
 
 /**
  * gtk_snapshot_append_inset_shadow:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @outline: outline of the region surrounded by shadow
  * @color: color of the shadow
  * @dx: horizontal offset of shadow
@@ -2470,7 +2497,7 @@ gtk_snapshot_append_inset_shadow (GtkSnapshot          *snapshot,
 
 /**
  * gtk_snapshot_append_outset_shadow:
- * @snapshot: a #GtkSnapshot
+ * @snapshot: a `GtkSnapshot`
  * @outline: outline of the region surrounded by shadow
  * @color: color of the shadow
  * @dx: horizontal offset of shadow
@@ -2510,4 +2537,3 @@ gtk_snapshot_append_outset_shadow (GtkSnapshot          *snapshot,
 
   gtk_snapshot_append_node_internal (snapshot, node);
 }
-
