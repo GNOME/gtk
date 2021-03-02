@@ -53,6 +53,12 @@ typedef struct _GskNglTextureAtlas
   void *user_data;
 } GskNglTextureAtlas;
 
+#if defined (_MSC_VER) && !defined (__clang__)
+# define NGL_TRAILING_DATA_SIZE 1
+#else
+# define NGL_TRAILING_DATA_SIZE 0
+#endif
+
 typedef struct _GskNglTextureAtlasEntry
 {
   /* A backreference to either the atlas or texture containing
@@ -89,8 +95,10 @@ typedef struct _GskNglTextureAtlasEntry
   /* Suffix data that is per-library specific. gpointer used to
    * guarantee the alignment for the entries using this.
    */
-  gpointer data[0];
+  gpointer data[NGL_TRAILING_DATA_SIZE];
 } GskNglTextureAtlasEntry;
+
+#undef NGL_TRAILING_DATA_SIZE
 
 typedef struct _GskNglTextureLibrary
 {
