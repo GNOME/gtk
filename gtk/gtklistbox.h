@@ -104,9 +104,10 @@ typedef int (*GtkListBoxSortFunc) (GtkListBoxRow *row1,
  * @user_data: (closure): user data
  *
  * Whenever @row changes or which row is before @row changes this
- * is called, which lets you update the header on @row. You may
- * remove or set a new one via gtk_list_box_row_set_header() or
- * just change the state of the current header widget.
+ * is called, which lets you update the header on @row.
+ *
+ * You may remove or set a new one via [method@Gtk.ListBoxRow.set_header]
+ * or just change the state of the current header widget.
  */
 typedef void (*GtkListBoxUpdateHeaderFunc) (GtkListBoxRow *row,
                                             GtkListBoxRow *before,
@@ -117,10 +118,10 @@ typedef void (*GtkListBoxUpdateHeaderFunc) (GtkListBoxRow *row,
  * @item: (type GObject): the item from the model for which to create a widget for
  * @user_data: (closure): user data
  *
- * Called for list boxes that are bound to a #GListModel with
+ * Called for list boxes that are bound to a `GListModel` with
  * gtk_list_box_bind_model() for each item that gets added to the model.
  *
- * Returns: (transfer full): a #GtkWidget that represents @item
+ * Returns: (transfer full): a `GtkWidget` that represents @item
  */
 typedef GtkWidget * (*GtkListBoxCreateWidgetFunc) (gpointer item,
                                                    gpointer user_data);
