@@ -2338,7 +2338,18 @@ gsk_text_node_serialize_glyphs (GskRenderNode *node,
                   glyphs[i].geometry.y_offset == 0 &&
                   glyphs[i].attr.is_cluster_start)
                 {
-                  g_string_append_c (str, j + MIN_ASCII_GLYPH);
+                  switch (j + MIN_ASCII_GLYPH)
+                    {
+                      case '\\':
+                        g_string_append (str, "\\\\");
+                        break;
+                      case '"':
+                        g_string_append (str, "\\\"");
+                        break;
+                      default:
+                        g_string_append_c (str, j + MIN_ASCII_GLYPH);
+                        break;
+                    }
                   break;
                 }
               else if (glyphs[i].glyph == ascii->glyphs[j].glyph)
