@@ -1095,6 +1095,9 @@ add_languages_from_font (GtkFontChooserWidget *self,
 }
 #endif
 
+static gboolean
+gtk_font_chooser_widget_ensure_matching_selection (GtkFontChooserWidget *self);
+
 /* We incrementally populate our fontlist to prevent blocking
  * the font chooser for a long time with expensive FcFontSort
  * calls in pango for every row in the list).
@@ -1134,6 +1137,9 @@ add_to_fontlist (GtkWidget     *widget,
     n = G_MAXUINT;
 
   gtk_slice_list_model_set_size (model, n);
+
+  if (gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (self->selection)) == GTK_INVALID_LIST_POSITION)
+    gtk_font_chooser_widget_ensure_matching_selection (self);
 
   if (n == G_MAXUINT)
     return G_SOURCE_REMOVE;
@@ -1348,7 +1354,7 @@ my_pango_font_family_equal (const char *familya,
   return g_ascii_strcasecmp (familya, familyb) == 0;
 }
 
-static void
+static gboolean
 gtk_font_chooser_widget_ensure_matching_selection (GtkFontChooserWidget *self)
 {
   const char *desc_family;
@@ -1358,7 +1364,7 @@ gtk_font_chooser_widget_ensure_matching_selection (GtkFontChooserWidget *self)
   if (desc_family == NULL)
     {
       gtk_single_selection_set_selected (self->selection, GTK_INVALID_LIST_POSITION);
-      return;
+      return TRUE;
     }
 
   n = g_list_model_get_n_items (G_LIST_MODEL (self->selection));
@@ -1397,7 +1403,13 @@ gtk_font_chooser_widget_ensure_matching_selection (GtkFontChooserWidget *self)
       pango_font_description_free (merged);
     }
 
-  gtk_single_selection_set_selected (self->selection, i);
+  if (i < n)
+    {
+      gtk_single_selection_set_selected (self->selection, i);
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static PangoFontFace *
@@ -2352,6 +2364,7 @@ gtk_font_chooser_widget_take_font_desc (GtkFontChooserWidget *fontchooser,
   if (mask & (PANGO_FONT_MASK_FAMILY | PANGO_FONT_MASK_STYLE | PANGO_FONT_MASK_VARIANT |
               PANGO_FONT_MASK_WEIGHT | PANGO_FONT_MASK_STRETCH))
     {
+      gtk_single_selection_set_selected (fontchooser->selection, GTK_INVALID_LIST_POSITION);
       gtk_font_chooser_widget_ensure_matching_selection (fontchooser);
     }
 
