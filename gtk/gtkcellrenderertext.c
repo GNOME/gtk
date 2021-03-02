@@ -34,9 +34,9 @@
 #include <stdlib.h>
 
 /**
- * SECTION:gtkcellrenderertext
- * @Short_description: Renders text in a cell
- * @Title: GtkCellRendererText
+ * GtkCellRendererText:
+ *
+ * Renders text in a cell
  *
  * A #GtkCellRendererText renders a given text in its cell, using the font, color and
  * style information provided by its properties. The text will be ellipsized if it is
