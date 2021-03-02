@@ -20,9 +20,7 @@
  */
 
 /*< private >
- * SECTION: gtkconstraintsolver
- * @Title: GtkConstraintSolver
- * @Short_description: An incremental solver for a tableau of linear equations
+ *  GtkConstraintSolver
  *
  * GtkConstraintSolver is an object that encodes constraints into a tableau
  * of linear equations and solves them, using an incremental optimization
