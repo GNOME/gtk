@@ -29,9 +29,9 @@
 
 
 /**
- * SECTION:gtkcellrenderercombo
- * @Short_description: Renders a combobox in a cell
- * @Title: GtkCellRendererCombo
+ * GtkCellRendererCombo:
+ *
+ * Renders a combobox in a cell
  *
  * #GtkCellRendererCombo renders text in a cell like #GtkCellRendererText from
  * which it is derived. But while #GtkCellRendererText offers a simple entry to
