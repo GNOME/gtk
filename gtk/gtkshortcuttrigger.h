@@ -30,12 +30,6 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_SHORTCUT_TRIGGER (gtk_shortcut_trigger_get_type ())
 
-/**
- * GtkShortcutTrigger:
- *
- * A trigger for a key shortcut.
- */
-
 GDK_AVAILABLE_IN_ALL
 GDK_DECLARE_INTERNAL_TYPE (GtkShortcutTrigger, gtk_shortcut_trigger, GTK, SHORTCUT_TRIGGER, GObject)
 
