@@ -44,13 +44,9 @@
 
 
 /**
- * SECTION:gtktreeviewcolumn
- * @Short_description: A visible column in a GtkTreeView widget
- * @Title: GtkTreeViewColumn
- * @See_also: #GtkTreeView, #GtkTreeSelection, #GtkTreeModel, #GtkTreeSortable,
- *   #GtkTreeModelSort, #GtkListStore, #GtkTreeStore, #GtkCellRenderer, #GtkCellEditable,
- *   #GtkCellRendererPixbuf, #GtkCellRendererText, #GtkCellRendererToggle,
- *   [GtkTreeView drag-and-drop][gtk3-GtkTreeView-drag-and-drop]
+ * GtkTreeViewColumn:
+ *
+ * A visible column in a GtkTreeView widget
  *
  * The GtkTreeViewColumn object represents a visible column in a #GtkTreeView widget.
  * It allows to set properties of the column header, and functions as a holding pen
