@@ -92,7 +92,7 @@
  * The GtkLabel implementation of the GtkBuildable interface supports a
  * custom <attributes> element, which supports any number of <attribute>
  * elements. The <attribute> element has attributes named “name“, “value“,
- * “start“ and “end“ and allows you to specify [class@Pango.Attribute]
+ * “start“ and “end“ and allows you to specify [struct@Pango.Attribute]
  * values for this label.
  *
  * An example of a UI definition fragment specifying Pango attributes:
@@ -176,13 +176,13 @@
  * [method@Gtk.Label.set_markup], you’ll want to escape it with
  * g_markup_escape_text() or g_markup_printf_escaped().
  *
- * Markup strings are just a convenient way to set the [class@Pango.AttrList]
+ * Markup strings are just a convenient way to set the [struct@Pango.AttrList]
  * on a label; [method@Gtk.Label.set_attributes] may be a simpler way to set
- * attributes in some cases. Be careful though; [class@Pango.AttrList] tends
+ * attributes in some cases. Be careful though; [struct@Pango.AttrList] tends
  * to cause internationalization problems, unless you’re applying attributes
  * to the entire string (i.e. unless you set the range of each attribute
  * to [0, %G_MAXINT)). The reason is that specifying the start_index and
- * end_index for a [class@Pango.Attribute] requires knowledge of the exact
+ * end_index for a [struct@Pango.Attribute] requires knowledge of the exact
  * string being displayed, so translations will cause problems.
  *
  * # Selectable labels
@@ -3033,7 +3033,7 @@ gtk_label_set_text (GtkLabel    *self,
 /**
  * gtk_label_set_attributes: (attributes org.gtk.Method.set_property=attributes)
  * @self: a `GtkLabel`
- * @attrs: (nullable): a [class@Pango.AttrList], or %NULL
+ * @attrs: (nullable): a [struct@Pango.AttrList], or %NULL
  *
  * Apply attributes to the label text.
  *
@@ -3072,7 +3072,7 @@ gtk_label_set_attributes (GtkLabel         *self,
  *
  * Gets the labels attribute list.
  *
- * This is the [class@Pango.AttrList] that was set on the label using
+ * This is the [struct@Pango.AttrList] that was set on the label using
  * [method@Gtk.Label.set_attributes], if any. This function does not
  * reflect attributes that come from the labels markup (see
  * [method@Gtk.Label.set_markup]). If you want to get the effective
