@@ -33,9 +33,9 @@
 #include <stdlib.h>
 
 /**
- * SECTION:gtkcellrenderertoggle
- * @Short_description: Renders a toggle button in a cell
- * @Title: GtkCellRendererToggle
+ * GtkCellRendererToggle:
+ *
+ * Renders a toggle button in a cell
  *
  * #GtkCellRendererToggle renders a toggle button in a cell. The
  * button is drawn as a radio or a checkbutton, depending on the
