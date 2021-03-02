@@ -56,12 +56,6 @@
 #endif
 
 /**
- * SECTION:gtktesting
- * @Short_description: Utilities for testing GTK applications
- * @Title: Testing
- */
-
-/**
  * gtk_test_init:
  * @argcp: Address of the `argc` parameter of the
  *        main() function. Changed if any arguments were handled.
@@ -74,13 +68,13 @@
  * This function is used to initialize a GTK test program.
  *
  * It will in turn call g_test_init() and gtk_init() to properly
- * initialize the testing framework and graphical toolkit. It’ll 
+ * initialize the testing framework and graphical toolkit. It’ll
  * also set the program’s locale to “C”. This is done to make test
  * program environments as deterministic as possible.
  *
  * Like gtk_init() and g_test_init(), any known arguments will be
  * processed and stripped from @argc and @argv.
- **/
+ */
 void
 gtk_test_init (int    *argcp,
                char ***argvp,
@@ -111,14 +105,15 @@ quit_main_loop_callback (GtkWidget     *widget,
  * gtk_test_widget_wait_for_draw:
  * @widget: the widget to wait for
  *
- * Enters the main loop and waits for @widget to be “drawn”. In this
- * context that means it waits for the frame clock of @widget to have
- * run a full styling, layout and drawing cycle.
+ * Enters the main loop and waits for @widget to be “drawn”.
+ *
+ * In this context that means it waits for the frame clock of
+ * @widget to have run a full styling, layout and drawing cycle.
  *
  * This function is intended to be used for syncing with actions that
  * depend on @widget relayouting or on interaction with the display
  * server.
- **/
+ */
 void
 gtk_test_widget_wait_for_draw (GtkWidget *widget)
 {
