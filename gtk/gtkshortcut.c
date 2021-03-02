@@ -27,26 +27,21 @@
 #include "gtkwidget.h"
 
 /**
- * SECTION:gtkshortcut
- * @title: GtkShortcut
- * @short_description: An object describing a keyboard shortcut
- * @see_also: #GtkShortcutController, #GtkShortcutAction,
- *     #GtkShortcutTrigger
+ * GtkShortcut:
  *
- * GtkShortcut is the low level object used for managing keyboard
- * shortcuts.
+ * A `GtkShortcut` describes a keyboard shortcut.
  *
  * It contains a description of how to trigger the shortcut via a
- * #GtkShortcutTrigger and a way to activate the shortcut on a widget
- * via #GtkShortcutAction.
+ * [class@Gtk.ShortcutTrigger] and a way to activate the shortcut
+ * on a widget via a [class@Gtk.ShortcutAction].
  *
- * The actual work is usually done via #GtkShortcutController, which
- * decides if and when to activate a shortcut. Using that controller
+ * The actual work is usually done via [class@Gtk.ShortcutController],
+ * which decides if and when to activate a shortcut. Using that controller
  * directly however is rarely necessary as various higher level
  * convenience APIs exist on #GtkWidgets that make it easier to use
  * shortcuts in GTK.
  *
- * #GtkShortcut does provide functionality to make it easy for users
+ * `GtkShortcut` does provide functionality to make it easy for users
  * to work with shortcuts, either by providing informational strings
  * for display purposes or by allowing shortcuts to be configured.
  */
@@ -152,7 +147,7 @@ gtk_shortcut_class_init (GtkShortcutClass *klass)
   gobject_class->set_property = gtk_shortcut_set_property;
 
   /**
-   * GtkShortcut:action:
+   * GtkShortcut:action: (attributes org.gtk.Property.get=gtk_shortcut_get_action org.gtk.Property.set=gtk_shortcut_set_action)
    *
    * The action that gets activated by this shortcut.
    */
@@ -166,7 +161,7 @@ gtk_shortcut_class_init (GtkShortcutClass *klass)
                          G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkShortcut:arguments:
+   * GtkShortcut:arguments: (attributes org.gtk.Property.get=gtk_shortcut_get_arguments org.gtk.Property.set=gtk_shortcut_set_arguments)
    *
    * Arguments passed to activation.
    */
@@ -179,7 +174,7 @@ gtk_shortcut_class_init (GtkShortcutClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkShortcut:trigger:
+   * GtkShortcut:trigger: (attributes org.gtk.Property.get=gtk_shortcut_get_trigger org.gtk.Property.set=gtk_shortcut_set_trigger)
    *
    * The trigger that triggers this shortcut.
    */
@@ -208,11 +203,11 @@ gtk_shortcut_init (GtkShortcut *self)
  * @action: (transfer full) (nullable): The action that will be activated upon
  *    triggering
  *
- * Creates a new #GtkShortcut that is triggered by @trigger and then activates
- * @action.
+ * Creates a new `GtkShortcut` that is triggered by
+ * @trigger and then activates @action.
  *
- * Returns: a new #GtkShortcut
- **/
+ * Returns: a new `GtkShortcut`
+ */
 GtkShortcut *
 gtk_shortcut_new (GtkShortcutTrigger *trigger,
                   GtkShortcutAction  *action)
@@ -241,11 +236,11 @@ gtk_shortcut_new (GtkShortcutTrigger *trigger,
  *     no arguments
  * @...: arguments, as given by format string.
  *
- * Creates a new #GtkShortcut that is triggered by @trigger and then activates
+ * Creates a new `GtkShortcut` that is triggered by @trigger and then activates
  * @action with arguments given by @format_string.
  *
- * Returns: a new #GtkShortcut
- **/
+ * Returns: a new `GtkShortcut`
+ */
 GtkShortcut *
 gtk_shortcut_new_with_arguments (GtkShortcutTrigger *trigger,
                                  GtkShortcutAction  *action,
@@ -282,13 +277,13 @@ gtk_shortcut_new_with_arguments (GtkShortcutTrigger *trigger,
 }
 
 /**
- * gtk_shortcut_get_action:
- * @self: a #GtkShortcut
+ * gtk_shortcut_get_action: (attributes org.gtk.Method.get_property=action)
+ * @self: a `GtkShortcut`
  *
  * Gets the action that is activated by this shortcut.
  *
  * Returns: (transfer none) (nullable): the action
- **/
+ */
 GtkShortcutAction *
 gtk_shortcut_get_action (GtkShortcut *self)
 {
@@ -298,13 +293,13 @@ gtk_shortcut_get_action (GtkShortcut *self)
 }
 
 /**
- * gtk_shortcut_set_action:
- * @self: a #GtkShortcut
+ * gtk_shortcut_set_action: (attributes org.gtk.Method.set_property=action)
+ * @self: a `GtkShortcut`
  * @action: (transfer full) (nullable): The new action.
  *     If the @action is %NULL, the nothing action will be used.
  *
  * Sets the new action for @self to be @action.
- **/
+ */
 void
 gtk_shortcut_set_action (GtkShortcut *self,
                          GtkShortcutAction *action)
@@ -322,13 +317,13 @@ gtk_shortcut_set_action (GtkShortcut *self,
 }
 
 /**
- * gtk_shortcut_get_trigger:
- * @self: a #GtkShortcut
+ * gtk_shortcut_get_trigger: (attributes org.gtk.Method.get_property=trigger)
+ * @self: a `GtkShortcut`
  *
  * Gets the trigger used to trigger @self.
  *
  * Returns: (transfer none) (nullable): the trigger used
- **/
+ */
 GtkShortcutTrigger *
 gtk_shortcut_get_trigger (GtkShortcut *self)
 {
@@ -338,13 +333,13 @@ gtk_shortcut_get_trigger (GtkShortcut *self)
 }
 
 /**
- * gtk_shortcut_set_trigger:
- * @self: a #GtkShortcut
+ * gtk_shortcut_set_trigger: (attributes org.gtk.Method.set_property=trigger)
+ * @self: a `GtkShortcut`
  * @trigger: (transfer full) (nullable): The new trigger.
  *     If the @trigger is %NULL, the never trigger will be used.
  *
  * Sets the new trigger for @self to be @trigger.
- **/
+ */
 void
 gtk_shortcut_set_trigger (GtkShortcut *self,
                           GtkShortcutTrigger *trigger)
@@ -362,8 +357,8 @@ gtk_shortcut_set_trigger (GtkShortcut *self,
 }
 
 /**
- * gtk_shortcut_get_arguments:
- * @self: a #GtkShortcut
+ * gtk_shortcut_get_arguments: (attributes org.gtk.Method.get_property=arguments)
+ * @self: a `GtkShortcut`
  *
  * Gets the arguments that are passed when activating the shortcut.
  *
@@ -378,8 +373,8 @@ gtk_shortcut_get_arguments (GtkShortcut *self)
 }
 
 /**
- * gtk_shortcut_set_arguments:
- * @self: a #GtkShortcut
+ * gtk_shortcut_set_arguments: (attributes org.gtk.Method.set_property=arguments)
+ * @self: a `GtkShortcut`
  * @args: (nullable): arguments to pass when activating @self
  *
  * Sets the arguments to pass when activating the shortcut.
