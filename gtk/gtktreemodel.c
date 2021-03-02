@@ -28,12 +28,9 @@
 #include "gtkintl.h"
 
 /**
- * SECTION:gtktreemodel
- * @Title: GtkTreeModel
- * @Short_description: The tree interface used by GtkTreeView
- * @See_also: #GtkTreeView, #GtkTreeStore, #GtkListStore,
- *     [GtkTreeView drag-and-drop][gtk4-GtkTreeView-drag-and-drop]
- *     #GtkTreeSortable
+ * GtkTreeModel:
+ *
+ * The tree interface used by GtkTreeView
  *
  * The #GtkTreeModel interface defines a generic tree interface for
  * use by the #GtkTreeView widget. It is an abstract interface, and
