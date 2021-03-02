@@ -34,9 +34,9 @@
 #include <string.h>
 
 /**
- * SECTION:gtkcellview
- * @Short_description: A widget displaying a single row of a GtkTreeModel
- * @Title: GtkCellView
+ * GtkCellView:
+ *
+ * A widget displaying a single row of a GtkTreeModel
  *
  * A #GtkCellView displays a single row of a #GtkTreeModel using a #GtkCellArea
  * and #GtkCellAreaContext. A #GtkCellAreaContext can be provided to the 
