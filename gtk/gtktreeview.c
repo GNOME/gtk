@@ -71,14 +71,9 @@
 #include <string.h>
 
 /**
- * SECTION:gtktreeview
- * @Short_description: A widget for displaying both trees and lists
- * @Title: GtkTreeView
- * @See_also: #GtkTreeViewColumn, #GtkTreeSelection, #GtkTreeModel,
- *   [GtkTreeView drag-and-drop][gtk3-GtkTreeView-drag-and-drop],
- *   #GtkTreeSortable, #GtkTreeModelSort, #GtkListStore, #GtkTreeStore,
- *   #GtkCellRenderer, #GtkCellEditable, #GtkCellRendererPixbuf,
- *   #GtkCellRendererText, #GtkCellRendererToggle
+ * GtkTreeView:
+ *
+ * A widget for displaying both trees and lists
  *
  * Widget that displays any object that implements the [iface@Gtk.TreeModel] interface.
  *
