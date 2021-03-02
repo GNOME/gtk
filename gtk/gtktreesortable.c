@@ -23,10 +23,9 @@
 
 
 /**
- * SECTION:gtktreesortable
- * @Short_description: The interface for sortable models used by GtkTreeView
- * @Title: GtkTreeSortable
- * @See_also:#GtkTreeModel, #GtkTreeView
+ * GtkTreeSortable:
+ *
+ * The interface for sortable models used by GtkTreeView
  *
  * #GtkTreeSortable is an interface to be implemented by tree models which
  * support sorting. The #GtkTreeView uses the methods provided by this interface
