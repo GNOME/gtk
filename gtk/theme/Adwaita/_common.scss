@@ -1437,7 +1437,6 @@ headerbar {
     border-color: $backdrop_borders_color;
     background-color: $bg_color;
     background-image: none;
-    box-shadow: inset 0 1px $top_hilight;
 
     transition: $backdrop_transition;
   }
@@ -1545,16 +1544,6 @@ headerbar {
     margin-top: 10px;
     margin-bottom: 10px;
   }
-
-  &.titlebar headerbar:not(.titlebar) {
-    // Drop the background of non-titlebar nested headerbars. This is needed to
-    // work around headerbar sliding animation issues without refactoring
-    // Adwaita's support of titlebars and headerbars as it may break
-    // applications.
-    // See https://gitlab.gnome.org/GNOME/gtk/issues/1264 for more information.
-    background: none;
-    box-shadow: none;
-  }
 }
 
 
@@ -1566,7 +1555,6 @@ headerbar {
     background-image: none;
     border-style: none;
     border-color: transparent;
-    box-shadow: none;
   }
 
   separator { background-color: $borders_color; }  // FIXME: use darker border?
