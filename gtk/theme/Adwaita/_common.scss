@@ -1437,7 +1437,6 @@ headerbar {
     border-color: $backdrop_borders_color;
     background-color: $bg_color;
     background-image: none;
-    box-shadow: inset 0 1px $top_hilight;
 
     transition: $backdrop_transition;
   }
@@ -1566,7 +1565,6 @@ headerbar {
     background-image: none;
     border-style: none;
     border-color: transparent;
-    box-shadow: none;
   }
 
   separator { background-color: $borders_color; }  // FIXME: use darker border?
