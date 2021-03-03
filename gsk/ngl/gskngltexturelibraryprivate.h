@@ -85,11 +85,6 @@ typedef struct _GskNglTextureAtlasEntry
 
   /* When true, backref is an atlas, otherwise texture */
   guint is_atlased : 1;
-
-  /* Suffix data that is per-library specific. gpointer used to
-   * guarantee the alignment for the entries using this.
-   */
-  gpointer data[0];
 } GskNglTextureAtlasEntry;
 
 typedef struct _GskNglTextureLibrary
