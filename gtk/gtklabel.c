@@ -3078,7 +3078,76 @@ typedef struct
   GArray *links;
   GString *new_str;
   gsize text_len;
+  gboolean strip_ulines;
+  GString *text_data;
 } UriParserData;
+
+static char *
+strip_ulines (const char *text)
+{
+  char *new_text;
+  const char *p;
+  char *q;
+  gboolean after_uline = FALSE;
+
+  new_text = malloc (strlen (text) + 1);
+
+  q = new_text;
+  for (p = text; *p; p++)
+    {
+      if (*p == '_' && !after_uline)
+        {
+          after_uline = TRUE;
+          continue;
+        }
+
+      *q = *p;
+      q++;
+      after_uline = FALSE;
+    }
+
+  if (after_uline)
+    {
+      *q = '_';
+      q++;
+    }
+
+  *q = '\0';
+
+  return new_text;
+}
+
+static void
+finish_text (UriParserData *pdata)
+{
+  if (pdata->text_data->len > 0)
+    {
+      char *text;
+      gsize text_len;
+      char *newtext;
+
+      if (pdata->strip_ulines && strchr (pdata->text_data->str, '_'))
+        {
+          text = strip_ulines (pdata->text_data->str);
+          text_len = strlen (text);
+        }
+      else
+        {
+          text = pdata->text_data->str;
+          text_len = pdata->text_data->len;
+        }
+
+      newtext = g_markup_escape_text (text, text_len);
+      g_string_append (pdata->new_str, newtext);
+      pdata->text_len += text_len;
+      g_free (newtext);
+
+      if (text != pdata->text_data->str)
+        g_free (text);
+
+      g_string_set_size (pdata->text_data, 0);
+    }
+}
 
 static void
 start_element_handler (GMarkupParseContext  *context,
@@ -3090,6 +3159,8 @@ start_element_handler (GMarkupParseContext  *context,
 {
   UriParserData *pdata = user_data;
   GtkLabel *self = pdata->label;
+
+  finish_text (pdata);
 
   if (strcmp (element_name, "a") == 0)
     {
@@ -3214,6 +3285,8 @@ end_element_handler (GMarkupParseContext  *context,
 {
   UriParserData *pdata = user_data;
 
+  finish_text (pdata);
+
   if (!strcmp (element_name, "a"))
     {
       GtkLabelLink *link = &g_array_index (pdata->links, GtkLabelLink, pdata->links->len - 1);
@@ -3235,12 +3308,8 @@ text_handler (GMarkupParseContext  *context,
               GError              **error)
 {
   UriParserData *pdata = user_data;
-  char *newtext;
 
-  newtext = g_markup_escape_text (text, text_len);
-  g_string_append (pdata->new_str, newtext);
-  pdata->text_len += text_len;
-  g_free (newtext);
+  g_string_append_len (pdata->text_data, text, text_len);
 }
 
 static const GMarkupParser markup_parser =
@@ -3261,8 +3330,9 @@ xml_isspace (char c)
 static gboolean
 parse_uri_markup (GtkLabel      *self,
                   const char    *str,
+                  gboolean       strip_ulines,
                   char         **new_str,
-                  GtkLabelLink  **links,
+                  GtkLabelLink **links,
                   guint         *out_n_links,
                   GError       **error)
 {
@@ -3279,6 +3349,8 @@ parse_uri_markup (GtkLabel      *self,
   pdata.links = NULL;
   pdata.new_str = g_string_sized_new (length);
   pdata.text_len = 0;
+  pdata.strip_ulines = strip_ulines;
+  pdata.text_data = g_string_new ("");
 
   while (p != end && xml_isspace (*p))
     p++;
@@ -3306,6 +3378,8 @@ parse_uri_markup (GtkLabel      *self,
     goto failed;
 
   g_markup_parse_context_free (context);
+
+  g_string_free (pdata.text_data, TRUE);
 
   *new_str = g_string_free (pdata.new_str, FALSE);
 
@@ -3351,83 +3425,10 @@ gtk_label_ensure_has_tooltip (GtkLabel *self)
   gtk_widget_set_has_tooltip (GTK_WIDGET (self), has_tooltip);
 }
 
-/* Reads @text and extracts the accel key, if any.
- * @new_text will be set to the given text with the first _ removed.
- *
- * Returned will be the one underline attribute used for the mnemonic
- * */
 static void
-extract_mnemonic_keyval (const char      *text,
-                         guint           *out_accel_key,
-                         char           **out_new_text,
-                         PangoAttribute **out_mnemonic_attribute)
-{
-  const gsize text_len = strlen (text);
-  gunichar c;
-  const char *p;
-
-  p = text;
-  for (;;)
-    {
-      const char *_index;
-
-      c = g_utf8_get_char (p);
-
-      if (c == '\0')
-        break;
-
-      if (c != '_')
-        {
-          p = g_utf8_next_char (p);
-          continue;
-        }
-
-      _index = p;
-
-      p = g_utf8_next_char (p);
-      c = g_utf8_get_char (p);
-
-      if (c != '_' && c != '\0')
-        {
-          const gsize byte_index = p - text - 1; /* Of the _ */
-
-          /* c is the accel key */
-          if (out_accel_key)
-            *out_accel_key = gdk_keyval_to_lower (gdk_unicode_to_keyval (c));
-          if (out_new_text)
-            {
-              *out_new_text = g_malloc (text_len);
-              memcpy (*out_new_text, text, byte_index);
-              memcpy (*out_new_text + byte_index, p, text_len - byte_index);
-            }
-
-          if (out_mnemonic_attribute)
-            {
-              PangoAttribute *attr = pango_attr_underline_new (PANGO_UNDERLINE_LOW);
-              attr->start_index = _index - text;
-              attr->end_index = p - text;
-              *out_mnemonic_attribute = attr;
-            }
-
-          return;
-        }
-
-      p = g_utf8_next_char (p);
-    }
-
-  /* No accel key found */
-  if (out_accel_key)
-    *out_accel_key = GDK_KEY_VoidSymbol;
-  if (out_new_text)
-    *out_new_text = NULL;
-  if (out_mnemonic_attribute)
-    *out_mnemonic_attribute = NULL;
-}
-
-static void
-gtk_label_set_markup_internal (GtkLabel    *self,
+gtk_label_set_markup_internal (GtkLabel   *self,
                                const char *str,
-                               gboolean     with_uline)
+                               gboolean    with_uline)
 {
   char *text = NULL;
   GError *error = NULL;
@@ -3435,9 +3436,18 @@ gtk_label_set_markup_internal (GtkLabel    *self,
   char *str_for_display = NULL;
   GtkLabelLink *links = NULL;
   guint n_links = 0;
-  PangoAttribute *mnemonic_attr = NULL;
+  guint accel_keyval = 0;
+  gboolean do_mnemonics;
 
-  if (!parse_uri_markup (self, str, &str_for_display, &links, &n_links, &error))
+  do_mnemonics = self->mnemonics_visible &&
+                 gtk_widget_is_sensitive (GTK_WIDGET (self)) &&
+                 (!self->mnemonic_widget || gtk_widget_is_sensitive (self->mnemonic_widget));
+
+  if (!parse_uri_markup (self, str,
+                         with_uline && !do_mnemonics,
+                         &str_for_display,
+                         &links, &n_links,
+                         &error))
     goto error_set;
 
   if (links)
@@ -3449,62 +3459,12 @@ gtk_label_set_markup_internal (GtkLabel    *self,
       gtk_widget_add_css_class (GTK_WIDGET (self), "link");
     }
 
-  if (!with_uline)
-   {
-no_uline:
-      /* Extract the text to display */
-      if (!pango_parse_markup (str_for_display, -1, 0, &attrs, &text, NULL, &error))
-        goto error_set;
-   }
-  else /* Underline AND markup is a little more complicated... */
-   {
-      char *new_text = NULL;
-      guint accel_keyval;
-      gboolean auto_mnemonics = TRUE;
-      gboolean do_mnemonics = self->mnemonics_visible &&
-                              (!auto_mnemonics || gtk_widget_is_sensitive (GTK_WIDGET (self))) &&
-                              (!self->mnemonic_widget || gtk_widget_is_sensitive (self->mnemonic_widget));
-
-      /* Remove the mnemonic underline */
-      extract_mnemonic_keyval (str_for_display,
-                               &accel_keyval,
-                               &new_text,
-                               NULL);
-      if (!new_text) /* No underline found anyway */
-        goto no_uline;
-
-      self->mnemonic_keyval = accel_keyval;
-
-      /* Extract the text to display */
-      if (!pango_parse_markup (new_text, -1, '_',
-                               do_mnemonics ? &attrs : NULL, &text, NULL, &error))
-        {
-          g_free (new_text);
-          goto error_set;
-        }
-
-      if (do_mnemonics)
-        {
-          /* text is now the final text, but we need to parse str_for_display once again
-           * *with* the mnemonic underline so we can remove the markup tags and get the
-           * proper attribute indices */
-          char *text_for_accel;
-
-          if (!pango_parse_markup (str_for_display, -1, 0, NULL, &text_for_accel, NULL, &error))
-            {
-              g_free (new_text);
-              goto error_set;
-            }
-
-          extract_mnemonic_keyval (text_for_accel,
-                                   NULL,
-                                   NULL,
-                                   &mnemonic_attr);
-          g_free (text_for_accel);
-        }
-
-      g_free (new_text);
-   }
+  if (!pango_parse_markup (str_for_display, -1,
+                           with_uline && do_mnemonics ? '_' : 0,
+                           &attrs, &text,
+                           with_uline && do_mnemonics ? &accel_keyval : NULL,
+                           &error))
+    goto error_set;
 
   g_free (str_for_display);
 
@@ -3514,8 +3474,7 @@ no_uline:
   g_clear_pointer (&self->markup_attrs, pango_attr_list_unref);
   self->markup_attrs = attrs;
 
-  if (mnemonic_attr)
-    pango_attr_list_insert_before (self->markup_attrs, mnemonic_attr);
+  self->mnemonic_keyval = accel_keyval;
 
   return;
 
