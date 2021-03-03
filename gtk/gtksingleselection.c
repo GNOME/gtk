@@ -625,7 +625,7 @@ gtk_single_selection_set_selected (GtkSingleSelection *self,
  *
  * If no item is selected, %NULL is returned.
  *
- * Returns: (transfer none): The selected item
+ * Returns: (transfer none) (type GObject) (nullable): The selected item
  */
 gpointer
 gtk_single_selection_get_selected_item (GtkSingleSelection *self)
