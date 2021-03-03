@@ -50,6 +50,7 @@ tests = [
   { 'name': 'grid' },
   { 'name': 'grid-layout' },
   { 'name': 'icontheme' },
+  { 'name': 'label' },
   { 'name': 'listbox' },
   { 'name': 'main' },
   { 'name': 'maplistmodel' },
