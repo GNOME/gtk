@@ -34,7 +34,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-02-14 01:48+0000\n"
+"POT-Creation-Date: 2021-03-02 03:35+0000\n"
 "PO-Revision-Date: 2020-11-25 13:52+0100\n"
 "Last-Translator: Jordi Serratosa <jordis@softcatala.cat>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -4065,7 +4065,7 @@ msgstr "Farciment CSS"
 
 #: gtk/inspector/visual.ui:554
 msgid "CSS Border"
-msgstr "Vora CSS"
+msgstr "Contorn CSS"
 
 #: gtk/inspector/visual.ui:564
 msgid "CSS Margin"
