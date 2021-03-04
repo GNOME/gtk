@@ -83,6 +83,18 @@ struct _GtkIMContextClass
   gboolean (*get_surrounding)     (GtkIMContext   *context,
 				   char          **text,
 				   int            *cursor_index);
+  void     (*set_surrounding_with_selection)
+                                  (GtkIMContext   *context,
+				   const char     *text,
+				   int             len,
+				   int             cursor_index,
+                                   int             anchor_index);
+  gboolean (*get_surrounding_with_selection)
+                                  (GtkIMContext   *context,
+				   char          **text,
+				   int            *cursor_index,
+                                   int            *anchor_index);
+
   /*< private >*/
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
@@ -90,7 +102,6 @@ struct _GtkIMContextClass
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
   void (*_gtk_reserved5) (void);
-  void (*_gtk_reserved6) (void);
 };
 
 GDK_AVAILABLE_IN_ALL
@@ -130,15 +141,28 @@ void     gtk_im_context_set_cursor_location (GtkIMContext       *context,
 GDK_AVAILABLE_IN_ALL
 void     gtk_im_context_set_use_preedit     (GtkIMContext       *context,
 					     gboolean            use_preedit);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_2_FOR(gtk_im_context_set_surrounding_with_selection)
 void     gtk_im_context_set_surrounding     (GtkIMContext       *context,
-					     const char         *text,
-					     int                 len,
-					     int                 cursor_index);
-GDK_AVAILABLE_IN_ALL
+                                             const char         *text,
+                                             int                 len,
+                                             int                 cursor_index);
+GDK_DEPRECATED_IN_4_2_FOR(gtk_im_context_get_surrounding_with_selection)
 gboolean gtk_im_context_get_surrounding     (GtkIMContext       *context,
-					     char              **text,
-					     int                *cursor_index);
+                                             char              **text,
+                                             int                *cursor_index);
+GDK_AVAILABLE_IN_ALL
+void     gtk_im_context_set_surrounding_with_selection
+                                            (GtkIMContext       *context,
+                                             const char         *text,
+                                             int                 len,
+                                             int                 cursor_index,
+                                             int                 anchor_index);
+GDK_AVAILABLE_IN_ALL
+gboolean gtk_im_context_get_surrounding_with_selection
+                                            (GtkIMContext       *context,
+                                             char              **text,
+                                             int                *cursor_index,
+                                             int                *anchor_index);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_im_context_delete_surrounding  (GtkIMContext       *context,
 					     int                 offset,

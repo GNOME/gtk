@@ -128,13 +128,18 @@ static void     gtk_im_context_real_get_preedit_string (GtkIMContext   *context,
 							int            *cursor_pos);
 static gboolean gtk_im_context_real_filter_keypress    (GtkIMContext   *context,
 							GdkEvent       *event);
-static gboolean gtk_im_context_real_get_surrounding    (GtkIMContext   *context,
-							char          **text,
-							int            *cursor_index);
-static void     gtk_im_context_real_set_surrounding    (GtkIMContext   *context,
-							const char     *text,
-							int             len,
-							int             cursor_index);
+
+static gboolean gtk_im_context_real_get_surrounding_with_selection
+                                                       (GtkIMContext   *context,
+                                                        char          **text,
+                                                        int            *cursor_index,
+                                                        int            *selection_bound);
+static void     gtk_im_context_real_set_surrounding_with_selection
+                                                       (GtkIMContext   *context,
+                                                        const char     *text,
+                                                        int             len,
+                                                        int             cursor_index,
+                                                        int             selection_bound);
 
 static void     gtk_im_context_get_property            (GObject        *obj,
                                                         guint           property_id,
@@ -204,6 +209,18 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkIMContext, gtk_im_context, G_TYPE_OBJECT
  *   behavior. The base implementation emits
  *   #GtkIMContext::retrieve-surrounding and records the context received
  *   by the subsequent invocation of @get_surrounding.
+ * @set_surrounding_with_selection: Called via gtk_im_context_set_surrounding_with_selection()
+ *   in response to signal #GtkIMContext::retrieve-surrounding to update the input
+ *   method’s idea of the context around the cursor. It is not necessary to
+ *   override this method even with input methods which implement
+ *   context-dependent behavior. The base implementation is sufficient for
+ *   gtk_im_context_get_surrounding() to work.
+ * @get_surrounding_with_selection: Called via gtk_im_context_get_surrounding_with_selection()
+ *   to update the context around the cursor location. It is not necessary to override
+ *   this method even with input methods which implement context-dependent
+ *   behavior. The base implementation emits
+ *   #GtkIMContext::retrieve-surrounding and records the context received
+ *   by the subsequent invocation of @get_surrounding.
  */
 static void
 gtk_im_context_class_init (GtkIMContextClass *klass)
@@ -215,8 +232,8 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
 
   klass->get_preedit_string = gtk_im_context_real_get_preedit_string;
   klass->filter_keypress = gtk_im_context_real_filter_keypress;
-  klass->get_surrounding = gtk_im_context_real_get_surrounding;
-  klass->set_surrounding = gtk_im_context_real_set_surrounding;
+  klass->get_surrounding_with_selection = gtk_im_context_real_get_surrounding_with_selection;
+  klass->set_surrounding_with_selection = gtk_im_context_real_set_surrounding_with_selection;
 
   /**
    * GtkIMContext::preedit-start:
@@ -381,13 +398,15 @@ typedef struct
 {
   char *text;
   int cursor_index;
+  int selection_bound;
 } SurroundingInfo;
 
 static void
-gtk_im_context_real_set_surrounding (GtkIMContext  *context,
-				     const char    *text,
-				     int            len,
-				     int            cursor_index)
+gtk_im_context_real_set_surrounding_with_selection (GtkIMContext  *context,
+                                                    const char    *text,
+                                                    int            len,
+                                                    int            cursor_index,
+                                                    int            selection_bound)
 {
   SurroundingInfo *info = g_object_get_data (G_OBJECT (context),
                                              "gtk-im-surrounding-info");
@@ -397,13 +416,15 @@ gtk_im_context_real_set_surrounding (GtkIMContext  *context,
       g_free (info->text);
       info->text = g_strndup (text, len);
       info->cursor_index = cursor_index;
+      info->selection_bound = selection_bound;
     }
 }
 
 static gboolean
-gtk_im_context_real_get_surrounding (GtkIMContext *context,
-				     char        **text,
-				     int          *cursor_index)
+gtk_im_context_real_get_surrounding_with_selection (GtkIMContext *context,
+                                                    char        **text,
+                                                    int          *cursor_index,
+                                                    int          *selection_bound)
 {
   gboolean result;
   gboolean info_is_local = FALSE;
@@ -426,11 +447,13 @@ gtk_im_context_real_get_surrounding (GtkIMContext *context,
     {
       *text = g_strdup (info->text ? info->text : "");
       *cursor_index = info->cursor_index;
+      *selection_bound = info->selection_bound;
     }
   else
     {
       *text = NULL;
       *cursor_index = 0;
+      *selection_bound = 0;
     }
 
   if (info_is_local)
@@ -722,20 +745,47 @@ gtk_im_context_set_use_preedit (GtkIMContext *context,
  *        @text.
  * @len: the length of @text, or -1 if @text is nul-terminated
  * @cursor_index: the byte index of the insertion cursor within @text.
- * 
+ *
  * Sets surrounding context around the insertion point and preedit
  * string. This function is expected to be called in response to the
  * GtkIMContext::retrieve_surrounding signal, and will likely have no
  * effect if called at other times.
- **/
+ *
+ * Deprecated: 4.2: Use gtk_im_context_set_surrounding_with_selection() instead
+ */
 void
 gtk_im_context_set_surrounding (GtkIMContext  *context,
-				const char    *text,
-				int            len,
-				int            cursor_index)
+                                const char    *text,
+                                int            len,
+                                int            cursor_index)
+{
+  gtk_im_context_set_surrounding_with_selection (context, text, len, cursor_index, cursor_index);
+}
+
+/**
+ * gtk_im_context_set_surrounding_with_selection:
+ * @context: a #GtkIMContext
+ * @text: text surrounding the insertion point, as UTF-8.
+ *        the preedit string should not be included within
+ *        @text.
+ * @len: the length of @text, or -1 if @text is nul-terminated
+ * @cursor_index: the byte index of the insertion cursor within @text.
+ * @anchor_index: the byte index of the selection bound within @text
+ *
+ * Sets surrounding context around the insertion point and preedit
+ * string. This function is expected to be called in response to the
+ * GtkIMContext::retrieve_surrounding signal, and will likely have no
+ * effect if called at other times.
+ */
+void
+gtk_im_context_set_surrounding_with_selection (GtkIMContext  *context,
+                                               const char    *text,
+                                               int            len,
+                                               int            cursor_index,
+                                               int            anchor_index)
 {
   GtkIMContextClass *klass;
-  
+
   g_return_if_fail (GTK_IS_IM_CONTEXT (context));
   g_return_if_fail (text != NULL || len == 0);
 
@@ -747,7 +797,9 @@ gtk_im_context_set_surrounding (GtkIMContext  *context,
   g_return_if_fail (cursor_index >= 0 && cursor_index <= len);
 
   klass = GTK_IM_CONTEXT_GET_CLASS (context);
-  if (klass->set_surrounding)
+  if (klass->set_surrounding_with_selection)
+    klass->set_surrounding_with_selection (context, text, len, cursor_index, anchor_index);
+  else if (klass->set_surrounding)
     klass->set_surrounding (context, text, len, cursor_index);
 }
 
@@ -760,7 +812,7 @@ gtk_im_context_set_surrounding (GtkIMContext  *context,
  *        stored in this location with g_free().
  * @cursor_index: (out): location to store byte index of the insertion
  *        cursor within @text.
- * 
+ *
  * Retrieves context around the insertion point. Input methods
  * typically want context in order to constrain input text based on
  * existing text; this is important for languages such as Thai where
@@ -776,24 +828,78 @@ gtk_im_context_set_surrounding (GtkIMContext  *context,
  *
  * Returns: %TRUE if surrounding text was provided; in this case
  *    you must free the result stored in *text.
- **/
+ *
+ * Deprecated: 4.2: Use gtk_im_context_get_surrounding_with_selection() instead.
+ */
 gboolean
-gtk_im_context_get_surrounding (GtkIMContext *context,
-				char        **text,
-				int          *cursor_index)
+gtk_im_context_get_surrounding (GtkIMContext  *context,
+                                char         **text,
+                                int           *cursor_index)
+{
+  return gtk_im_context_get_surrounding_with_selection (context,
+                                                        text,
+                                                        cursor_index,
+                                                        NULL);
+}
+
+/**
+ * gtk_im_context_get_surrounding:
+ * @context: a #GtkIMContext
+ * @text: (out) (transfer full): location to store a UTF-8 encoded
+ *        string of text holding context around the insertion point.
+ *        If the function returns %TRUE, then you must free the result
+ *        stored in this location with g_free().
+ * @cursor_index: (out): location to store byte index of the insertion
+ *        cursor within @text.
+ * @anchor_index: (out): location to store byte index of the selection
+ *        bound within @text
+ *
+ * Retrieves context around the insertion point. Input methods
+ * typically want context in order to constrain input text based on
+ * existing text; this is important for languages such as Thai where
+ * only some sequences of characters are allowed.
+ *
+ * This function is implemented by emitting the
+ * GtkIMContext::retrieve_surrounding signal on the input method; in
+ * response to this signal, a widget should provide as much context as
+ * is available, up to an entire paragraph, by calling
+ * gtk_im_context_set_surrounding(). Note that there is no obligation
+ * for a widget to respond to the ::retrieve_surrounding signal, so input
+ * methods must be prepared to function without context.
+ *
+ * Returns: %TRUE if surrounding text was provided; in this case
+ *    you must free the result stored in *text.
+ */
+gboolean
+gtk_im_context_get_surrounding_with_selection (GtkIMContext  *context,
+                                               char         **text,
+                                               int           *cursor_index,
+                                               int           *anchor_index)
 {
   GtkIMContextClass *klass;
   char *local_text = NULL;
   int local_index;
   gboolean result = FALSE;
-  
+
   g_return_val_if_fail (GTK_IS_IM_CONTEXT (context), FALSE);
 
   klass = GTK_IM_CONTEXT_GET_CLASS (context);
-  if (klass->get_surrounding)
-    result = klass->get_surrounding (context,
-				     text ? text : &local_text,
-				     cursor_index ? cursor_index : &local_index);
+  if (klass->get_surrounding_with_selection)
+    result = klass->get_surrounding_with_selection
+                                    (context,
+                                     text ? text : &local_text,
+                                     cursor_index ? cursor_index : &local_index,
+                                     anchor_index ? anchor_index : &local_index);
+  else if (klass->get_surrounding)
+    {
+      result = klass->get_surrounding (context,
+                                       text ? text : &local_text,
+                                       &local_index);
+      if (cursor_index)
+        *cursor_index = local_index;
+      if (anchor_index)
+        *anchor_index = local_index;
+    }
 
   if (result)
     g_free (local_text);

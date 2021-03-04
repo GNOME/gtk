@@ -504,8 +504,10 @@ static void     gtk_text_view_commit_handler               (GtkIMContext  *conte
 							    GtkTextView   *text_view);
 static void     gtk_text_view_commit_text                  (GtkTextView   *text_view,
                                                             const char    *text);
+static void     gtk_text_view_preedit_start_handler        (GtkIMContext  *context,
+                                                            GtkTextView   *text_view);
 static void     gtk_text_view_preedit_changed_handler      (GtkIMContext  *context,
-							    GtkTextView   *text_view);
+                                                            GtkTextView   *text_view);
 static gboolean gtk_text_view_retrieve_surrounding_handler (GtkIMContext  *context,
 							    GtkTextView   *text_view);
 static gboolean gtk_text_view_delete_surrounding_handler   (GtkIMContext  *context,
@@ -1883,6 +1885,8 @@ gtk_text_view_init (GtkTextView *text_view)
 
   g_signal_connect (priv->im_context, "commit",
                     G_CALLBACK (gtk_text_view_commit_handler), text_view);
+  g_signal_connect (priv->im_context, "preedit-start",
+                    G_CALLBACK (gtk_text_view_preedit_start_handler), text_view);
   g_signal_connect (priv->im_context, "preedit-changed",
  		    G_CALLBACK (gtk_text_view_preedit_changed_handler), text_view);
   g_signal_connect (priv->im_context, "retrieve-surrounding",
@@ -8213,6 +8217,13 @@ gtk_text_view_commit_text (GtkTextView   *text_view,
 }
 
 static void
+gtk_text_view_preedit_start_handler (GtkIMContext *context,
+                                     GtkTextView  *self)
+{
+  gtk_text_buffer_delete_selection (self->priv->buffer, TRUE, self->priv->editable);
+}
+
+static void
 gtk_text_view_preedit_changed_handler (GtkIMContext *context,
 				       GtkTextView  *text_view)
 {
@@ -8259,19 +8270,54 @@ gtk_text_view_retrieve_surrounding_handler (GtkIMContext  *context,
 {
   GtkTextIter start;
   GtkTextIter end;
-  int pos;
+  GtkTextIter start1;
+  GtkTextIter end1;
+  int cursor_pos;
+  int anchor_pos;
   char *text;
+  char *pre;
+  char *sel;
+  char *post;
+  gboolean flip;
 
   gtk_text_buffer_get_iter_at_mark (text_view->priv->buffer, &start,
-				    gtk_text_buffer_get_insert (text_view->priv->buffer));
-  end = start;
+                                    gtk_text_buffer_get_insert (text_view->priv->buffer));
+  gtk_text_buffer_get_iter_at_mark (text_view->priv->buffer, &end,
+                                    gtk_text_buffer_get_selection_bound (text_view->priv->buffer));
 
-  pos = gtk_text_iter_get_line_index (&start);
+  flip = gtk_text_iter_compare (&start, &end) < 0;
+
+  gtk_text_iter_order (&start, &end);
+
+  start1 = start;
+  end1 = end;
+
   gtk_text_iter_set_line_offset (&start, 0);
-  gtk_text_iter_forward_to_line_end (&end);
+  gtk_text_iter_forward_to_line_end (&end1);
 
-  text = gtk_text_iter_get_slice (&start, &end);
-  gtk_im_context_set_surrounding (context, text, -1, pos);
+  pre = gtk_text_iter_get_slice (&start1, &start);
+  sel = gtk_text_iter_get_slice (&start, &end);
+  post = gtk_text_iter_get_slice (&end, &end1);
+
+  if (flip)
+    {
+      anchor_pos = strlen (pre);
+      cursor_pos = anchor_pos + strlen (sel);
+    }
+  else
+    {
+      cursor_pos = strlen (pre);
+      anchor_pos = cursor_pos + strlen (sel);
+    }
+
+  text = g_strconcat (pre, sel, post, NULL);
+
+  g_free (pre);
+  g_free (sel);
+  g_free (post);
+
+  gtk_im_context_set_surrounding_with_selection (context, text, -1, cursor_pos, anchor_pos);
+
   g_free (text);
 
   return TRUE;

@@ -909,7 +909,8 @@ static void
 gtk_im_context_wayland_set_surrounding (GtkIMContext *context,
                                         const char   *text,
                                         int           len,
-                                        int           cursor_index)
+                                        int           cursor_index,
+                                        int           selection_bound)
 {
   GtkIMContextWayland *context_wayland;
 
@@ -918,8 +919,7 @@ gtk_im_context_wayland_set_surrounding (GtkIMContext *context,
   g_free (context_wayland->surrounding.text);
   context_wayland->surrounding.text = g_strndup (text, len);
   context_wayland->surrounding.cursor_idx = cursor_index;
-  /* Anchor is not exposed via the set_surrounding interface, emulating. */
-  context_wayland->surrounding.anchor_idx = cursor_index;
+  context_wayland->surrounding.anchor_idx = selection_bound;
 
   notify_surrounding_text (context_wayland);
   /* State changes coming from reset don't have any other opportunity to get
@@ -932,7 +932,8 @@ gtk_im_context_wayland_set_surrounding (GtkIMContext *context,
 static gboolean
 gtk_im_context_wayland_get_surrounding (GtkIMContext  *context,
                                         char         **text,
-                                        int           *cursor_index)
+                                        int           *cursor_index,
+                                        int           *selection_bound)
 {
   GtkIMContextWayland *context_wayland;
 
@@ -943,6 +944,7 @@ gtk_im_context_wayland_get_surrounding (GtkIMContext  *context,
 
   *text = context_wayland->surrounding.text;
   *cursor_index = context_wayland->surrounding.cursor_idx;
+  *selection_bound = context_wayland->surrounding.anchor_idx;
   return TRUE;
 }
 
@@ -962,8 +964,8 @@ gtk_im_context_wayland_class_init (GtkIMContextWaylandClass *klass)
   im_context_class->reset = gtk_im_context_wayland_reset;
   im_context_class->set_cursor_location = gtk_im_context_wayland_set_cursor_location;
   im_context_class->set_use_preedit = gtk_im_context_wayland_set_use_preedit;
-  im_context_class->set_surrounding = gtk_im_context_wayland_set_surrounding;
-  im_context_class->get_surrounding = gtk_im_context_wayland_get_surrounding;
+  im_context_class->set_surrounding_with_selection = gtk_im_context_wayland_set_surrounding;
+  im_context_class->get_surrounding_with_selection = gtk_im_context_wayland_get_surrounding;
 }
 
 static void

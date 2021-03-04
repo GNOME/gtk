@@ -418,6 +418,8 @@ static void     direction_changed           (GdkDevice       *keyboard,
 static void     gtk_text_commit_cb               (GtkIMContext *context,
                                                   const char   *str,
                                                   GtkText      *self);
+static void     gtk_text_preedit_start_cb        (GtkIMContext *context,
+                                                  GtkText      *self);
 static void     gtk_text_preedit_changed_cb      (GtkIMContext *context,
                                                   GtkText      *self);
 static gboolean gtk_text_retrieve_surrounding_cb (GtkIMContext *context,
@@ -1843,6 +1845,8 @@ gtk_text_init (GtkText *self)
    */
   priv->im_context = gtk_im_multicontext_new ();
 
+  g_signal_connect (priv->im_context, "preedit-start",
+                    G_CALLBACK (gtk_text_preedit_start_cb), self);
   g_signal_connect (priv->im_context, "commit",
                     G_CALLBACK (gtk_text_commit_cb), self);
   g_signal_connect (priv->im_context, "preedit-changed",
@@ -3305,6 +3309,9 @@ gtk_text_insert_text (GtkText    *self,
   int n_inserted;
   int n_chars;
 
+  if (length == 0)
+    return;
+
   n_chars = g_utf8_strlen (text, length);
 
   /*
@@ -3333,6 +3340,9 @@ gtk_text_delete_text (GtkText *self,
                       int      end_pos)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
+  if (start_pos == end_pos)
+    return;
 
   begin_change (self);
 
@@ -4151,6 +4161,13 @@ direction_changed (GdkDevice  *device,
  */
 
 static void
+gtk_text_preedit_start_cb (GtkIMContext *context,
+                           GtkText      *self)
+{
+  gtk_text_delete_selection (self);
+}
+
+static void
 gtk_text_commit_cb (GtkIMContext *context,
                     const char   *str,
                     GtkText      *self)
@@ -4200,8 +4217,9 @@ gtk_text_retrieve_surrounding_cb (GtkIMContext *context,
 
   /* XXXX ??? does this even make sense when text is not visible? Should we return FALSE? */
   text = gtk_text_get_display_text (self, 0, -1);
-  gtk_im_context_set_surrounding (context, text, strlen (text), /* Length in bytes */
-                                  g_utf8_offset_to_pointer (text, priv->current_pos) - text);
+  gtk_im_context_set_surrounding_with_selection (context, text, strlen (text), /* Length in bytes */
+                                                 g_utf8_offset_to_pointer (text, priv->current_pos) - text,
+                                                 g_utf8_offset_to_pointer (text, priv->selection_bound) - text);
   g_free (text);
 
   return TRUE;
