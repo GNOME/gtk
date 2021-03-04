@@ -79,7 +79,7 @@
  * ]|
  *
  * GtkSearchEntry has a single CSS node with name entry that carries
- * a .sarch style class, and the text node is a child of that.
+ * a .search style class, and the text node is a child of that.
  *
  * # Accessibility
  *
