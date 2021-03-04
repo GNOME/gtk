@@ -504,8 +504,10 @@ static void     gtk_text_view_commit_handler               (GtkIMContext  *conte
 							    GtkTextView   *text_view);
 static void     gtk_text_view_commit_text                  (GtkTextView   *text_view,
                                                             const char    *text);
+static void     gtk_text_view_preedit_start_handler        (GtkIMContext  *context,
+                                                            GtkTextView   *text_view);
 static void     gtk_text_view_preedit_changed_handler      (GtkIMContext  *context,
-							    GtkTextView   *text_view);
+                                                            GtkTextView   *text_view);
 static gboolean gtk_text_view_retrieve_surrounding_handler (GtkIMContext  *context,
 							    GtkTextView   *text_view);
 static gboolean gtk_text_view_delete_surrounding_handler   (GtkIMContext  *context,
@@ -1883,6 +1885,8 @@ gtk_text_view_init (GtkTextView *text_view)
 
   g_signal_connect (priv->im_context, "commit",
                     G_CALLBACK (gtk_text_view_commit_handler), text_view);
+  g_signal_connect (priv->im_context, "preedit-start",
+                    G_CALLBACK (gtk_text_view_preedit_start_handler), text_view);
   g_signal_connect (priv->im_context, "preedit-changed",
  		    G_CALLBACK (gtk_text_view_preedit_changed_handler), text_view);
   g_signal_connect (priv->im_context, "retrieve-surrounding",
@@ -8210,6 +8214,13 @@ gtk_text_view_commit_text (GtkTextView   *text_view,
   DV(g_print (G_STRLOC": scrolling onscreen\n"));
   gtk_text_view_scroll_mark_onscreen (text_view,
                                       gtk_text_buffer_get_insert (get_buffer (text_view)));
+}
+
+static void
+gtk_text_view_preedit_start_handler (GtkIMContext *context,
+                                     GtkTextView  *self)
+{
+  gtk_text_buffer_delete_selection (self->priv->buffer, TRUE, self->priv->editable);
 }
 
 static void
