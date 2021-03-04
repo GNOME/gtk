@@ -364,3 +364,24 @@ gtk_sorter_changed_with_keys (GtkSorter       *self,
 
   gtk_sorter_changed (self, change);
 }
+
+/* See the comment in gtkenums.h as to why we need to play
+ * games with the introspection scanner for static inline
+ * functions
+ */
+#ifdef __GI_SCANNER__
+/**
+ * gtk_ordering_from_cmpfunc:
+ * @cmpfunc_result: Result of a comparison function
+ *
+ * Converts the result of a `GCompareFunc` like strcmp() to a
+ * `GtkOrdering` value.
+ *
+ * Returns: the corresponding `GtkOrdering`
+ **/
+GtkOrdering
+gtk_ordering_from_cmpfunc (int cmpfunc_result)
+{
+  return (GtkOrdering) ((cmpfunc_result > 0) - (cmpfunc_result < 0));
+}
+#endif

@@ -548,7 +548,7 @@ typedef enum
  * These values can be used with a `GCompareFunc`. However,
  * a `GCompareFunc` is allowed to return any integer values.
  * For converting such a value to a `GtkOrdering` value, use
- * [func@Gtk.ordering_from_cmpfunc].
+ * [func@Gtk.Ordering.from_cmpfunc].
  */
 typedef enum {
   GTK_ORDERING_SMALLER = -1,
@@ -556,6 +556,14 @@ typedef enum {
   GTK_ORDERING_LARGER = 1
 } GtkOrdering;
 
+/* The GI scanner does not handle static inline functions, because
+ * of the `static` keyword; so we clip this out when parsing the
+ * header, and we replace it with a real function in gtksorter.c
+ * that only exists when parsing the source for introspection.
+ */
+#ifdef __GI_SCANNER__
+GtkOrdering     gtk_ordering_from_cmpfunc       (int cmpfunc_result);
+#else
 /**
  * gtk_ordering_from_cmpfunc:
  * @cmpfunc_result: Result of a comparison function
@@ -570,6 +578,7 @@ gtk_ordering_from_cmpfunc (int cmpfunc_result)
 {
   return (GtkOrdering) ((cmpfunc_result > 0) - (cmpfunc_result < 0));
 }
+#endif
 
 /**
  * GtkPageOrientation:
