@@ -3309,6 +3309,9 @@ gtk_text_insert_text (GtkText    *self,
   int n_inserted;
   int n_chars;
 
+  if (length == 0)
+    return;
+
   n_chars = g_utf8_strlen (text, length);
 
   /*
@@ -3337,6 +3340,9 @@ gtk_text_delete_text (GtkText *self,
                       int      end_pos)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
+  if (start_pos == end_pos)
+    return;
 
   begin_change (self);
 
