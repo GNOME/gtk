@@ -4200,8 +4200,9 @@ gtk_text_retrieve_surrounding_cb (GtkIMContext *context,
 
   /* XXXX ??? does this even make sense when text is not visible? Should we return FALSE? */
   text = gtk_text_get_display_text (self, 0, -1);
-  gtk_im_context_set_surrounding (context, text, strlen (text), /* Length in bytes */
-                                  g_utf8_offset_to_pointer (text, priv->current_pos) - text);
+  gtk_im_context_set_surrounding_with_selection (context, text, strlen (text), /* Length in bytes */
+                                                 g_utf8_offset_to_pointer (text, priv->current_pos) - text,
+                                                 g_utf8_offset_to_pointer (text, priv->selection_bound) - text);
   g_free (text);
 
   return TRUE;
