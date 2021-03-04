@@ -74,13 +74,17 @@ static void     gtk_im_multicontext_set_cursor_location (GtkIMContext           
 							GdkRectangle		*area);
 static void     gtk_im_multicontext_set_use_preedit    (GtkIMContext            *context,
 							gboolean                 use_preedit);
-static gboolean gtk_im_multicontext_get_surrounding    (GtkIMContext            *context,
-							char                   **text,
-							int                     *cursor_index);
-static void     gtk_im_multicontext_set_surrounding    (GtkIMContext            *context,
-							const char              *text,
-							int                      len,
-							int                      cursor_index);
+static gboolean gtk_im_multicontext_get_surrounding_with_selection
+                                                       (GtkIMContext            *context,
+                                                        char                   **text,
+                                                        int                     *cursor_index,
+                                                        int                     *anchor_index);
+static void     gtk_im_multicontext_set_surrounding_with_selection
+                                                       (GtkIMContext            *context,
+                                                        const char              *text,
+                                                        int                      len,
+                                                        int                      cursor_index,
+                                                        int                      anchor_index);
 
 static void     gtk_im_multicontext_preedit_start_cb        (GtkIMContext      *delegate,
 							     GtkIMMulticontext *multicontext);
@@ -118,8 +122,8 @@ gtk_im_multicontext_class_init (GtkIMMulticontextClass *class)
   im_context_class->reset = gtk_im_multicontext_reset;
   im_context_class->set_cursor_location = gtk_im_multicontext_set_cursor_location;
   im_context_class->set_use_preedit = gtk_im_multicontext_set_use_preedit;
-  im_context_class->set_surrounding = gtk_im_multicontext_set_surrounding;
-  im_context_class->get_surrounding = gtk_im_multicontext_get_surrounding;
+  im_context_class->set_surrounding_with_selection = gtk_im_multicontext_set_surrounding_with_selection;
+  im_context_class->get_surrounding_with_selection = gtk_im_multicontext_get_surrounding_with_selection;
 
   gobject_class->finalize = gtk_im_multicontext_finalize;
 }
@@ -460,37 +464,41 @@ gtk_im_multicontext_set_use_preedit (GtkIMContext   *context,
 }
 
 static gboolean
-gtk_im_multicontext_get_surrounding (GtkIMContext  *context,
-				     char         **text,
-				     int           *cursor_index)
+gtk_im_multicontext_get_surrounding_with_selection (GtkIMContext  *context,
+                                                    char         **text,
+                                                    int           *cursor_index,
+                                                    int           *anchor_index)
 {
   GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
   GtkIMContext *delegate = gtk_im_multicontext_get_delegate (multicontext);
 
   if (delegate)
-    return gtk_im_context_get_surrounding (delegate, text, cursor_index);
+    return gtk_im_context_get_surrounding_with_selection (delegate, text, cursor_index, anchor_index);
   else
     {
       if (text)
-	*text = NULL;
+        *text = NULL;
       if (cursor_index)
-	*cursor_index = 0;
+        *cursor_index = 0;
+      if (anchor_index)
+        *anchor_index = 0;
 
       return FALSE;
     }
 }
 
 static void
-gtk_im_multicontext_set_surrounding (GtkIMContext *context,
-				     const char   *text,
-				     int           len,
-				     int           cursor_index)
+gtk_im_multicontext_set_surrounding_with_selection (GtkIMContext *context,
+                                                    const char   *text,
+                                                    int           len,
+                                                    int           cursor_index,
+                                                    int           anchor_index)
 {
   GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
   GtkIMContext *delegate = gtk_im_multicontext_get_delegate (multicontext);
 
   if (delegate)
-    gtk_im_context_set_surrounding (delegate, text, len, cursor_index);
+    gtk_im_context_set_surrounding_with_selection (delegate, text, len, cursor_index, anchor_index);
 }
 
 static void
