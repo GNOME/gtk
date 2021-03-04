@@ -418,6 +418,8 @@ static void     direction_changed           (GdkDevice       *keyboard,
 static void     gtk_text_commit_cb               (GtkIMContext *context,
                                                   const char   *str,
                                                   GtkText      *self);
+static void     gtk_text_preedit_start_cb        (GtkIMContext *context,
+                                                  GtkText      *self);
 static void     gtk_text_preedit_changed_cb      (GtkIMContext *context,
                                                   GtkText      *self);
 static gboolean gtk_text_retrieve_surrounding_cb (GtkIMContext *context,
@@ -1843,6 +1845,8 @@ gtk_text_init (GtkText *self)
    */
   priv->im_context = gtk_im_multicontext_new ();
 
+  g_signal_connect (priv->im_context, "preedit-start",
+                    G_CALLBACK (gtk_text_preedit_start_cb), self);
   g_signal_connect (priv->im_context, "commit",
                     G_CALLBACK (gtk_text_commit_cb), self);
   g_signal_connect (priv->im_context, "preedit-changed",
@@ -4149,6 +4153,13 @@ direction_changed (GdkDevice  *device,
 
 /* IM Context Callbacks
  */
+
+static void
+gtk_text_preedit_start_cb (GtkIMContext *context,
+                           GtkText      *self)
+{
+  gtk_text_delete_selection (self);
+}
 
 static void
 gtk_text_commit_cb (GtkIMContext *context,
