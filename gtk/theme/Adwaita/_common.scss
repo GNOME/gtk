@@ -1821,7 +1821,7 @@ popover.background {
 
   > arrow,
   > contents {
-    $_popover_border: if($variant=='light', transparentize(black, 0.77), transparentize($borders_color, 0.1));
+    $_popover_border: if($variant=='light', transparentize(black, 0.77), transparentize(black, 0.25));
 
     background-color: $menu_color;
     background-clip: padding-box;
@@ -4043,8 +4043,8 @@ window {
 
   // this needs to be transparent
   // see bug #722563
-  $_wm_border: if($variant=='light', transparentize(black, 0.77), transparentize($borders_color, 0.1));
-  $_wm_border_backdrop: if($variant=='light', transparentize(black, 0.82), transparentize($borders_color, 0.1));
+  $_wm_border: if($variant=='light', transparentize(black, 0.77), transparentize(black, 0.25));
+  $_wm_border_backdrop: if($variant=='light', transparentize(black, 0.82), transparentize(black, 0.25));
 
   &.csd {
     box-shadow: 0 3px 9px 1px transparentize(black, 0.5),
