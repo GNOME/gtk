@@ -6,22 +6,21 @@ The GTK documentation is divided in two major components:
    source code
  - static pages that provide an overview of specific sections of the API
 
-In both cases, the contents are parsed, converted into DocBook format, and
-cross-linked in order to match types, functions, signals, and properties.
-From the DocBook output, we generate HTML, which can be used to read the
-documentation both offline and online.
+In both cases, the contents are parsed as markdown and cross-linked in order
+to match types, functions, signals, and properties. Ultimatively, we generate
+HTML, which can be used to read the documentation both offline and online.
 
-In both cases, contributing to the GTK documentation requires modifying
-files tracked in the source control repository, and follows the same steps
-as any other code contribution as outlined in the GTK [contribution
-guide][contributing]. Please, refer to that document for any further
-question on the mechanics of contributing to GTK.
+Contributing to the GTK documentation requires modifying files tracked in the
+source control repository, and follows the same steps as any other code
+contribution as outlined in the GTK [contribution guide][contributing].
+Please, refer to that document for any further question on the mechanics
+of contributing to GTK.
 
-GTK uses [gtk-doc][gtkdoc] to generate its documentation. Please, visit the
-gtk-doc website to read the project's documentation.
+GTK uses [gi-docgen][gidocgen] to generate its documentation. Please, visit
+the gi-docgen website to read the project's documentation.
 
 [contributing]: ../../CONTRIBUTING.md
-[gtkdoc]: https://wiki.gnome.org/DocumentationProject/GtkDoc
+[gi-docgen]: https://gitlab.gnome.org/ebassi/gi-docgen
 
 ## Contributing to the API reference
 
@@ -41,7 +40,7 @@ above the type or function declaration. For instance:
  */
 gboolean
 gtk_foo_set_bar (GtkFoo *self,
-		 GtkBar *bar)
+                 GtkBar *bar)
 {
   ...
 ```
@@ -97,6 +96,11 @@ the GTK documentation supports additional link formats, like:
 For more information on the available link formats, see the gi-docgen
 documentation.
 
+Every doc comment should start with a single-sentence paragraph that
+can serve as a summary of sorts (it will often be placed next to a
+link pointing to the full documentation for the symbol/class/etc).
+The summary should not include links.
+
 ### Introspection annotations
 
 The purpose of the annotations for function arguments, properties, signals,
@@ -121,6 +125,7 @@ For widget classes, the description should also contain:
     custom GtkBuildable implementation
   - the CSS element name to be used by selectors
   - the CSS selector hierarchy for children, in case of a composite widget
+  - the accessible role of the class
 
 Each section in a type description can have a heading; it's preferred to use
 second and third level headings only.

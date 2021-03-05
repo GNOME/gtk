@@ -696,27 +696,29 @@ Public macros should not be used unless they evaluate to a constant.
 ### Symbol visibility
 
 Any symbol that is not explicitly annotated using a `GDK_AVAILABLE_IN_*`
-macro is considered internal, and not exported in the shared library.
+or `GDK_DEPRECATED_IN_*` macro is considered internal, and not exported
+in the shared library.
 
 Never export variables as public API, since this is cumbersome on some
 platforms. It is always preferable to add getters and setters instead.
 
 Non-exported functions that are needed in more than one source file
-should be declared in a private header file.
+should be declared in a private header file with a name that ends in
+`private.h`.
 
 Non-exported functions that are only needed in one source file
 should be declared static.
 
 ### Documentation
 
-All public APIs must have gtk-doc comments. For functions, these should
+All public APIs must have doc comments. For functions, these should
 be placed in the source file, directly above the function.
 
 ```c
   /* valid */
   /**
    * gtk_get_flow:
-   * @widget: a #GtkWidget
+   * @widget: a `GtkWidget`
    *
    * Gets the flow of a widget.
    *
@@ -736,28 +738,33 @@ be placed in the source file, directly above the function.
 Doc comments for macros, function types, class structs, etc should be
 placed next to the definitions, typically in headers.
 
-Section introductions should be placed in the source file they describe,
-after the license header:
+The main content of the doc comments uses markdown, which can include
+inline formatting, sections, tables, images, links. For links to
+symbols/classes/etc, we use a markdown extension syntax like this:
+
+[class@Gtk.Widget], [method@Gtk.ListView.get_factory],...
+
+Every doc comment should start with a single-sentence paragraph that
+can serve as a summary of sorts (it will often be placed next to a
+link pointing to the full documentation for the symbol/class/etc).
+The summary should not include links.
+
+Long-form documentation for classes should be included in the doc
+comment for the struct, typically at the top of the source file,
+after the license header and includes:
 
 ```c
-  /* valid */
   /**
-   * SECTION:gtksizerequest
-   * @Short_Description: Height-for-width geometry management
-   * @Title: GtkSizeRequest
+   * GtkSizeRequest:
    *
-   * The GtkSizeRequest interface is GTK's height-for-width (and
-   * width-for-height) geometry management system.
+   * The GtkSizeRequest interface is GTK's height-for-width geometry
+   * geometry management system.
+   *
+   * # Geometry management
+   *
    * ...
    */
 ```
-
-To properly document a new function, macro, function type or struct,
-it needs to be listed in the `sections.txt` file.
-
-To properly document a new class, it needs to be given its own section
-in the sections.txt, needs to be included in the `docs.xml` file, and the
-`get_type` function needs to listed in the `.types` file.
 
 For more information on the documentation style and contribution guidelines,
 please [follow the corresponding contribution guide](./reference/README.md).
