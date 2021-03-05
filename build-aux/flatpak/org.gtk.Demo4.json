@@ -35,10 +35,10 @@
     "modules" : [
         {
             "name" : "wayland",
-            "buildsystem" : "autotools",
+            "buildsystem" : "meson",
             "builddir" : true,
             "config-opts" : [
-                "--disable-documentation"
+                "-Ddocumentation=false"
             ],
             "sources" : [
                 {
