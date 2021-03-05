@@ -4598,7 +4598,9 @@ decoration {
   .popup & { box-shadow: none; }
 
   // server-side decorations as used by mutter
-  .ssd & { box-shadow: 0 0 0 1px $_wm_border; } //just doing borders, wm draws actual shadows
+  // just doing borders, wm draws actual shadows
+  .ssd & { box-shadow: 0 0 0 1px $_wm_border; }
+  .ssd &:backdrop { box-shadow: 0 0 0 1px $_wm_border_backdrop; }
 
   .csd.popup & {
     border-radius: $menu_radius;

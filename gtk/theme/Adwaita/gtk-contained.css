@@ -1864,6 +1864,8 @@ decoration:backdrop { box-shadow: 0 3px 9px 1px transparent, 0 2px 6px 2px rgba(
 
 .ssd decoration { box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.23); }
 
+.ssd decoration:backdrop { box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.18); }
+
 .csd.popup decoration { border-radius: 5px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.13); }
 
 tooltip.csd decoration { border-radius: 5px; box-shadow: none; }
