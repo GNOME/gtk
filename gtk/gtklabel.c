@@ -6755,6 +6755,11 @@ emit_activate_link (GtkLabel     *label,
   GtkStateFlags state;
 
   g_signal_emit (label, signals[ACTIVATE_LINK], 0, link->uri, &handled);
+
+  /* signal handler might have invalidated the layout */
+  if (!priv->layout)
+    return;
+
   if (handled && priv->track_links && !link->visited &&
       priv->select_info && priv->select_info->links)
     {
