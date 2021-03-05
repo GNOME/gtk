@@ -3589,6 +3589,7 @@ stacksidebar {
   }
   row {
     padding: 10px 4px;
+    @include focus-ring();
 
     > label {
       padding-left: 6px;
@@ -3606,11 +3607,6 @@ stacksidebar {
     }
     &:selected:hover:dir(ltr), &:selected:hover:dir(rtl) {
       background-color: darken($menu_selected_color,5%);
-    }
-    &:focus:focus-visible {
-      outline-width: 0;
-      background-color: $selected_bg_color;
-      color: $selected_fg_color;
     }
     &.activatable:active, &.activatable:selected:active {
       box-shadow: none; // #3413
@@ -3639,9 +3635,8 @@ separator.sidebar {
     padding: 0 8px;
     border-radius: $menu-margin;
     margin: 0 $menu-margin 2px;
-
-    &:hover,
-    &:focus-visible:focus-within {
+    @include focus-ring($focus-state: 'focus-visible:focus-within');
+    &:hover {
       background-color: darken($menu_selected_color, 5%);
     }
 
@@ -3653,12 +3648,6 @@ separator.sidebar {
         background-color: darken($menu_selected_color,5%);
       }
 
-      &:focus-visible:focus-within {
-        outline-width: 0;
-        color: $selected_fg_color;
-        background-color: $selected_bg_color;
-        &:hover { background-color: darken($selected_bg_color,10%); }
-      }
     }
 
     &:disabled { color: $insensitive_fg_color; }
