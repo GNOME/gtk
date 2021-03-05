@@ -43,7 +43,7 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://github.com/wayland-project/wayland.git"
+                    "url" : "https://gitlab.freedesktop.org/wayland/wayland.git"
                 }
             ]
         },
@@ -70,7 +70,6 @@
             "config-opts" : [
                 "--libdir=/app/lib",
                 "-Denable_vulkan=no",
-                "-Dsassc=disabled",
                 "-Dbuildtype=debugoptimized",
                 "-Dprofile=devel"
             ],
