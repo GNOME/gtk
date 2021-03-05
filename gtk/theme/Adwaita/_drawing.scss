@@ -10,6 +10,9 @@
 // If $within is true, use focus-within instead of focus:focus-visible
 //
 @mixin focus-ring($target: null, $width: 2px, $offset: -$width, $outer: false, $focus-state: 'focus:focus-visible', $fc: $focus_border_color) {
+  transition-property: outline, outline-width, outline-offset, outline-color;
+  transition-duration: 300ms;
+  animation-timing-function: ease-in-out;
   & #{$target} {
     outline: 0 solid transparent;
     outline-offset: if($outer, $offset + 4px, $offset + $width + 4px);
