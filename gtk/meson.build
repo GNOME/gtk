@@ -778,6 +778,7 @@ if os_unix
 endif
 
 if os_win32
+  gtk_win32_print_headers = []
   gtk_win32_print_sources = files([
     'gtkprint-win32.c',
     'gtkprintoperation-win32.c',
