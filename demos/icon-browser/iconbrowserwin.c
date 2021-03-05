@@ -14,8 +14,10 @@ struct _IconBrowserWindow
   GtkWidget *searchbar;
   GListModel *icon_filter_model;
   GListStore *icon_store;
+  GListModel *context_model;
   GListStore *context_store;
   GtkFilter *name_filter;
+  GtkFilter *search_mode_filter;
   GtkWidget *details;
   GtkWidget *image1;
   GtkWidget *image2;
@@ -355,6 +357,28 @@ setup_scalable_image_dnd (GtkWidget *image)
 }
 
 static void
+search_mode_toggled (GtkSearchBar      *searchbar,
+                     GParamSpec        *pspec,
+                     IconBrowserWindow *win)
+{
+  if (gtk_search_bar_get_search_mode (searchbar))
+    gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (win->context_model), GTK_INVALID_LIST_POSITION);
+  else if (gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (win->context_model)) == GTK_INVALID_LIST_POSITION)
+    gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (win->context_model), 0);
+
+  gtk_filter_changed (win->search_mode_filter, GTK_FILTER_CHANGE_DIFFERENT);
+}
+
+static void
+selected_name_changed (GtkSingleSelection *selection,
+                       GParamSpec         *pspec,
+                       IconBrowserWindow  *win)
+{
+  if (gtk_single_selection_get_selected (selection) != GTK_INVALID_LIST_POSITION)
+    gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (win->searchbar), FALSE);
+}
+
+static void
 icon_browser_window_init (IconBrowserWindow *win)
 {
   GtkFilter *filter;
@@ -380,6 +404,9 @@ icon_browser_window_init (IconBrowserWindow *win)
   win->name_filter = GTK_FILTER (gtk_custom_filter_new (filter_by_icon_name, NULL, NULL));
 
   gtk_multi_filter_append (GTK_MULTI_FILTER (filter), g_object_ref (win->name_filter));
+
+  g_signal_connect (win->searchbar, "notify::search-mode-enabled",  G_CALLBACK (search_mode_toggled), win);
+  g_signal_connect (win->context_model, "notify::selected",  G_CALLBACK (selected_name_changed), win);
 }
 
 static void
@@ -409,6 +436,7 @@ icon_browser_window_class_init (IconBrowserWindowClass *class)
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, searchbar);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, icon_store);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, icon_filter_model);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, context_model);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, context_store);
 
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, details);
@@ -422,6 +450,7 @@ icon_browser_window_class_init (IconBrowserWindowClass *class)
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, image8);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, label8);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, description);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, search_mode_filter);
 
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), item_activated);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), copy_to_clipboard);

@@ -151,19 +151,32 @@
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkStringFilter">
-                                    <property name="ignore-case">0</property>
-                                    <property name="match-mode">exact</property>
-                                    <property name="expression">
-                                      <lookup name="context" type="IbIcon"/>
-                                    </property>
-                                    <binding name="search">
-                                      <lookup name="id" type="IbContext">
-                                        <lookup name="selected-item" type="GtkSingleSelection">
-                                          context_model
-                                        </lookup>
-                                      </lookup>
-                                    </binding>
+                                  <object class="GtkAnyFilter">
+                                    <child>
+                                      <object class="GtkBoolFilter" id="search_mode_filter">
+                                        <property name="expression">
+                                          <lookup name="search-mode-enabled">
+                                             searchbar
+                                          </lookup>
+                                        </property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkStringFilter">
+                                        <property name="ignore-case">0</property>
+                                        <property name="match-mode">exact</property>
+                                        <property name="expression">
+                                          <lookup name="context" type="IbIcon"/>
+                                        </property>
+                                        <binding name="search">
+                                          <lookup name="id" type="IbContext">
+                                            <lookup name="selected-item" type="GtkSingleSelection">
+                                              context_model
+                                            </lookup>
+                                          </lookup>
+                                        </binding>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
