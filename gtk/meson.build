@@ -1152,8 +1152,9 @@ if build_gir
 
   if pango_dep.type_name() == 'internal'
     gdk_gir_inc += subproject('pango').get_variable('pango_gir').get(0)
+    gdk_gir_inc += subproject('pango').get_variable('pangocairo_gir').get(0)
   else
-    gdk_gir_inc += 'Pango-1.0'
+    gdk_gir_inc += ['Pango-1.0', 'PangoCairo-1.0']
   endif
 
   gdk_gir = gnome.generate_gir(libgtk,
