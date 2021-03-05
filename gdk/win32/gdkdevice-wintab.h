@@ -49,8 +49,8 @@ struct _GdkDeviceWintab
   UINT cursor;
   /* The cursor's CSR_PKTDATA */
   WTPKT pktdata;
-  /* Azimuth and altitude axis */
-  AXIS orientation_axes[2];
+  /* Azimuth, altitude and twist axis */
+  AXIS orientation_axes[3];
 };
 
 struct _GdkDeviceWintabClass
