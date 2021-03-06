@@ -3,6 +3,7 @@
 #include "gskvulkanpushconstantsprivate.h"
 
 #include "gskroundedrectprivate.h"
+#include "gsktransform.h"
 
 typedef struct _GskVulkanPushConstantsWire GskVulkanPushConstantsWire;
 
@@ -33,14 +34,18 @@ gsk_vulkan_push_constants_init_copy (GskVulkanPushConstants       *self,
 gboolean
 gsk_vulkan_push_constants_transform (GskVulkanPushConstants       *self,
                                      const GskVulkanPushConstants *src,
-                                     const graphene_matrix_t      *transform,
+                                     GskTransform                 *transform,
                                      const graphene_rect_t        *viewport)
 
 {
+  graphene_matrix_t matrix;
+
   if (!gsk_vulkan_clip_transform (&self->clip, &src->clip, transform, viewport))
     return FALSE;
 
-  graphene_matrix_multiply (transform, &src->mvp, &self->mvp);
+  gsk_transform_to_matrix (transform, &matrix);
+  graphene_matrix_multiply (&matrix, &src->mvp, &self->mvp);
+
   return TRUE;
 }
 

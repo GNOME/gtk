@@ -46,7 +46,7 @@ gboolean                gsk_vulkan_clip_intersect_rounded_rect          (GskVulk
                                                                          const GskRoundedRect   *rounded) G_GNUC_WARN_UNUSED_RESULT;
 gboolean                gsk_vulkan_clip_transform                       (GskVulkanClip          *dest,
                                                                          const GskVulkanClip    *src,
-                                                                         const graphene_matrix_t*transform,
+                                                                         GskTransform           *transform,
                                                                          const graphene_rect_t  *viewport) G_GNUC_WARN_UNUSED_RESULT;
 
 gboolean                gsk_vulkan_clip_contains_rect                   (const GskVulkanClip    *self,

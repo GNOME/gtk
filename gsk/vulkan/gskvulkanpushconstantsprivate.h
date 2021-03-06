@@ -27,7 +27,7 @@ void                    gsk_vulkan_push_constants_init_copy             (GskVulk
 
 gboolean                gsk_vulkan_push_constants_transform             (GskVulkanPushConstants         *self,
                                                                          const GskVulkanPushConstants   *src,
-                                                                         const graphene_matrix_t        *transform,
+                                                                         GskTransform                   *transform,
                                                                          const graphene_rect_t          *viewport);
 gboolean                gsk_vulkan_push_constants_intersect_rect        (GskVulkanPushConstants         *self,
                                                                          const GskVulkanPushConstants   *src,

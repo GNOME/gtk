@@ -558,7 +558,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
         gsk_transform_to_matrix (gsk_transform_node_get_transform (node), &transform);
         graphene_matrix_init_from_matrix (&mv, &self->mv);
         graphene_matrix_multiply (&transform, &mv, &self->mv);
-        if (!gsk_vulkan_push_constants_transform (&op.constants.constants, constants, &transform, &child->bounds))
+        if (!gsk_vulkan_push_constants_transform (&op.constants.constants, constants, gsk_transform_node_get_transform (node), &child->bounds))
           FALLBACK ("Transform nodes can't deal with clip type %u", constants->clip.type);
         op.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS;
         g_array_append_val (self->render_ops, op);
