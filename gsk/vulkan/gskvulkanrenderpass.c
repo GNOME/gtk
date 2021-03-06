@@ -558,7 +558,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
         gsk_transform_to_matrix (gsk_transform_node_get_transform (node), &transform);
         graphene_matrix_init_from_matrix (&mv, &self->mv);
         graphene_matrix_multiply (&transform, &mv, &self->mv);
-        if (!gsk_vulkan_push_constants_transform (&op.constants.constants, constants, &transform, &child->bounds))
+        if (!gsk_vulkan_push_constants_transform (&op.constants.constants, constants, gsk_transform_node_get_transform (node), &child->bounds))
           FALLBACK ("Transform nodes can't deal with clip type %u", constants->clip.type);
         op.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS;
         g_array_append_val (self->render_ops, op);
@@ -858,6 +858,25 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass  *self,
     }
 
   gsk_render_node_draw (node, cr);
+
+#ifdef G_ENABLE_DEBUG
+  if (GSK_RENDERER_DEBUG_CHECK (gsk_vulkan_render_get_renderer (render), FALLBACK))
+    {
+      cairo_rectangle (cr,
+                       op->clip.bounds.origin.x, op->clip.bounds.origin.y,
+                       op->clip.bounds.size.width, op->clip.bounds.size.height);
+      if (gsk_render_node_get_node_type (node) == GSK_CAIRO_NODE)
+        cairo_set_source_rgba (cr, 0.3, 0, 1, 0.25);
+      else
+        cairo_set_source_rgba (cr, 1, 0, 0, 0.25);
+      cairo_fill_preserve (cr);
+      if (gsk_render_node_get_node_type (node) == GSK_CAIRO_NODE)
+        cairo_set_source_rgba (cr, 0.3, 0, 1, 1);
+      else
+        cairo_set_source_rgba (cr, 1, 0, 0, 1);
+      cairo_stroke (cr);
+    }
+#endif
 
   cairo_destroy (cr);
 

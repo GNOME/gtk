@@ -3,6 +3,7 @@
 #include "gskvulkanclipprivate.h"
 
 #include "gskroundedrectprivate.h"
+#include "gsktransform.h"
 
 void
 gsk_vulkan_clip_init_empty (GskVulkanClip         *clip,
@@ -137,10 +138,10 @@ gsk_vulkan_clip_intersect_rounded_rect (GskVulkanClip        *dest,
 }
 
 gboolean
-gsk_vulkan_clip_transform (GskVulkanClip           *dest,
-                           const GskVulkanClip     *src,
-                           const graphene_matrix_t *transform,
-                           const graphene_rect_t   *viewport)
+gsk_vulkan_clip_transform (GskVulkanClip         *dest,
+                           const GskVulkanClip   *src,
+                           GskTransform          *transform,
+                           const graphene_rect_t *viewport)
 {
   switch (src->type)
     {
@@ -159,8 +160,56 @@ gsk_vulkan_clip_transform (GskVulkanClip           *dest,
     case GSK_VULKAN_CLIP_RECT:
     case GSK_VULKAN_CLIP_ROUNDED_CIRCULAR:
     case GSK_VULKAN_CLIP_ROUNDED:
-      /* FIXME: Handle 2D operations, in particular transform and scale */
-      return FALSE;
+      switch (gsk_transform_get_category (transform))
+        {
+        case GSK_TRANSFORM_CATEGORY_IDENTITY:
+          gsk_vulkan_clip_init_copy (dest, src);
+          return TRUE;
+
+        case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
+          {
+            float dx, dy;
+
+            gsk_transform_to_translate (transform, &dx, &dy);
+            gsk_vulkan_clip_init_copy (dest, src);
+            dest->rect.bounds.origin.x -= dx;
+            dest->rect.bounds.origin.y -= dy;
+          }
+          return TRUE;
+
+        case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
+          {
+            float dx, dy, scale_x, scale_y;
+
+            gsk_transform_to_affine (transform, &scale_x, &scale_y, &dx, &dy);
+            scale_x = 1. / scale_x;
+            scale_y = 1. / scale_y;
+            gsk_vulkan_clip_init_copy (dest, src);
+            dest->rect.bounds.origin.x = (dest->rect.bounds.origin.x - dx) * scale_x;
+            dest->rect.bounds.origin.y = (dest->rect.bounds.origin.y - dy) * scale_y;
+            dest->rect.bounds.size.width *= scale_x;
+            dest->rect.bounds.size.height *= scale_y;
+            if (src->type != GSK_VULKAN_CLIP_RECT)
+              {
+                dest->rect.corner[0].width *= scale_x;
+                dest->rect.corner[0].height *= scale_y;
+                dest->rect.corner[1].width *= scale_x;
+                dest->rect.corner[1].height *= scale_y;
+                dest->rect.corner[2].width *= scale_x;
+                dest->rect.corner[2].height *= scale_y;
+                dest->rect.corner[3].width *= scale_x;
+                dest->rect.corner[3].height *= scale_y;
+              }
+          }
+          return TRUE;
+
+        case GSK_TRANSFORM_CATEGORY_UNKNOWN:
+        case GSK_TRANSFORM_CATEGORY_ANY:
+        case GSK_TRANSFORM_CATEGORY_3D:
+        case GSK_TRANSFORM_CATEGORY_2D:
+        default:
+          return FALSE;
+        }
     }
 }
 
