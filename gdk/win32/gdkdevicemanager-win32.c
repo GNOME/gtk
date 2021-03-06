@@ -34,7 +34,7 @@
 
 #define WINTAB32_DLL "Wintab32.dll"
 
-#define PACKETDATA (PK_CONTEXT | PK_CURSOR | PK_BUTTONS | PK_X | PK_Y  | PK_NORMAL_PRESSURE | PK_ORIENTATION)
+#define PACKETDATA (PK_CONTEXT | PK_CURSOR | PK_BUTTONS | PK_X | PK_Y  | PK_NORMAL_PRESSURE | PK_ORIENTATION | PK_TANGENT_PRESSURE)
 /* We want everything in absolute mode */
 #define PACKETMODE (0)
 #include <pktdef.h>
@@ -557,7 +557,7 @@ _wintab_recognize_new_cursors (GdkDeviceManagerWin32 *device_manager,
   UINT ncsrtypes, firstcsr, cursorix;
   BOOL active;
   DWORD physid;
-  AXIS axis_x, axis_y, axis_npressure, axis_or[3];
+  AXIS axis_x, axis_y, axis_npressure, axis_or[3], axis_tpressure;
   GdkDeviceWintab *device;
   LOGCONTEXT lc;
   int num_axes;
@@ -610,6 +610,7 @@ _wintab_recognize_new_cursors (GdkDeviceManagerWin32 *device_manager,
       (*p_WTInfoA) (WTI_DEVICES + devix, DVC_Y, &axis_y);
       (*p_WTInfoA) (WTI_DEVICES + devix, DVC_NPRESSURE, &axis_npressure);
       (*p_WTInfoA) (WTI_DEVICES + devix, DVC_ORIENTATION, axis_or);
+      (*p_WTInfoA) (WTI_DEVICES + devix, DVC_TPRESSURE, &axis_tpressure);
       (*p_WTInfoW) (WTI_CURSORS + cursorix, CSR_NAME, csrname);
       csrname_utf8 = g_utf16_to_utf8 (csrname, -1, NULL, NULL, NULL);
       device_name = g_strconcat (devname_utf8, " ", csrname_utf8, NULL);
@@ -672,8 +673,12 @@ _wintab_recognize_new_cursors (GdkDeviceManagerWin32 *device_manager,
 
       if (device->pktdata & PK_ORIENTATION)
         {
+          if (device->pktdata & PK_TANGENT_PRESSURE) /* If we have a wheel, disable the twist axis */
+            axis_or[2].axResolution = 0;
+
           device->orientation_axes[0] = axis_or[0];
           device->orientation_axes[1] = axis_or[1];
+          device->orientation_axes[2] = axis_or[2];
 
           /* Wintab gives us azimuth and altitude, which
            * we convert to x and y tilt in the -1000..1000 range
@@ -692,6 +697,37 @@ _wintab_recognize_new_cursors (GdkDeviceManagerWin32 *device_manager,
                                 1000,
                                 1000);
           num_axes += 2;
+
+          if (axis_or[2].axResolution != 0) /* If twist is present */
+            {
+              /* Wacom's Wintab driver returns the rotation
+               * of an Art Pen as the orientation twist value.
+               * We're using GDK_AXIS_WHEEL as it's actually
+               * called Wheel/Rotation to the user.
+               * axMin and axMax are back to front on purpose. If you put them
+               * the "correct" way round, rotation will be flipped!
+               */
+               _gdk_device_add_axis (GDK_DEVICE (device),
+                                     GDK_NONE,
+                                     GDK_AXIS_WHEEL,
+                                     axis_or[2].axMax,
+                                     axis_or[2].axMin,
+                                     axis_or[2].axResolution / 65535);
+              num_axes++;
+            }
+        }
+
+      if (device->pktdata & PK_TANGENT_PRESSURE)
+        {
+          /* This is the finger wheel on a Wacom Airbrush
+           */
+          _gdk_device_add_axis (GDK_DEVICE (device),
+                                GDK_NONE,
+                                GDK_AXIS_WHEEL,
+                                axis_tpressure.axMin,
+                                axis_tpressure.axMax,
+                                axis_tpressure.axResolution / 65535);
+          num_axes++;
         }
 
       device->last_axis_data = g_new (gint, num_axes);
@@ -910,29 +946,36 @@ decode_tilt (gint   *axis_data,
    * sensible tilts will need both, so only add the GDK tilt axes
    * if both wintab axes are going to be well-behaved in use.
    */
-  if ((axes == NULL) ||
-      (axes[0].axResolution == 0) ||
+  if (axes == NULL)
+    return;
+
+  if ((axes[0].axResolution == 0) ||
       (axes[1].axResolution == 0))
     {
       axis_data[0] = 0;
       axis_data[1] = 0;
-      return;
+    }
+  else
+    {
+      /*
+       * Tested with a Wacom Intuos 5 touch M (PTH-650) + Wacom drivers 6.3.18-5.
+       * Wintab's reference angle leads gdk's by 90 degrees.
+       */
+      az = TWOPI * packet->pkOrientation.orAzimuth /
+        (axes[0].axResolution / 65536.);
+      az -= G_PI / 2;
+      el = TWOPI * packet->pkOrientation.orAltitude /
+        (axes[1].axResolution / 65536.);
+
+      /* X tilt */
+      axis_data[0] = cos (az) * cos (el) * 1000;
+      /* Y tilt */
+      axis_data[1] = sin (az) * cos (el) * 1000;
     }
 
-  /*
-   * Tested with a Wacom Intuos 5 touch M (PTH-650) + Wacom drivers 6.3.18-5.
-   * Wintab's reference angle leads gdk's by 90 degrees.
-   */
-  az = TWOPI * packet->pkOrientation.orAzimuth /
-    (axes[0].axResolution / 65536.);
-  az -= G_PI / 2;
-  el = TWOPI * packet->pkOrientation.orAltitude /
-    (axes[1].axResolution / 65536.);
-
-  /* X tilt */
-  axis_data[0] = cos (az) * cos (el) * 1000;
-  /* Y tilt */
-  axis_data[1] = sin (az) * cos (el) * 1000;
+  /* Twist (Rotation) if present */
+  if (axes[2].axResolution != 0)
+    axis_data[2] = packet->pkOrientation.orTwist;
 }
 
 /*
@@ -1140,8 +1183,18 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
         {
           decode_tilt (source_device->last_axis_data + num_axes,
                        source_device->orientation_axes, &packet);
-          num_axes += 2;
+          /* we could have 3 axes if twist is present */
+          if (source_device->orientation_axes[2].axResolution == 0)
+            {
+              num_axes += 2;
+            }
+          else
+            {
+              num_axes += 3;
+            }
         }
+      if (source_device->pktdata & PK_TANGENT_PRESSURE)
+        source_device->last_axis_data[num_axes++] = packet.pkTangentPressure;
 
       translated_buttons = button_map[packet.pkButtons & 0x07] | (packet.pkButtons & ~0x07);
 
