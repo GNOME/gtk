@@ -7852,7 +7852,7 @@ msgstr "gl-context"
 
 #: modules/media/gtkgstsink.c:540
 msgid "GL context to use for rendering"
-msgstr "Context GL a usar per a renderitzar"
+msgstr "Context GL a utilitzar per a la renderització"
 
 #: modules/printbackends/gtkprintercloudprint.c:137
 msgid "Cloud Print account"
