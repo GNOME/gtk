@@ -80,6 +80,7 @@ typedef struct _GskNglRenderClip
 {
   GskRoundedRect rect;
   guint          is_rectilinear : 1;
+  guint          is_fully_contained : 1;
 } GskNglRenderClip;
 
 typedef struct _GskNglRenderModelview
@@ -583,6 +584,32 @@ gsk_ngl_render_job_push_clip (GskNglRenderJob      *job,
   clip = &g_array_index (job->clip, GskNglRenderClip, job->clip->len - 1);
   memcpy (&clip->rect, rect, sizeof *rect);
   clip->is_rectilinear = gsk_rounded_rect_is_rectilinear (rect);
+  clip->is_fully_contained = FALSE;
+
+  job->current_clip = clip;
+}
+
+static void
+gsk_ngl_render_job_push_contained_clip (GskNglRenderJob *job)
+{
+  GskNglRenderClip *clip;
+  GskNglRenderClip *old_clip;
+
+  g_assert (job != NULL);
+  g_assert (job->clip != NULL);
+  g_assert (job->clip->len > 0);
+
+  job->driver->stamps[UNIFORM_SHARED_CLIP_RECT]++;
+
+  old_clip = &g_array_index (job->clip, GskNglRenderClip, job->clip->len - 1);
+
+  g_array_set_size (job->clip, job->clip->len + 1);
+
+  clip = &g_array_index (job->clip, GskNglRenderClip, job->clip->len - 1);
+  memcpy (&clip->rect.bounds, &old_clip->rect.bounds, sizeof (graphene_rect_t));
+  memset (clip->rect.corner, 0, sizeof clip->rect.corner);
+  clip->is_rectilinear = TRUE;
+  clip->is_fully_contained = TRUE;
 
   job->current_clip = clip;
 }
@@ -742,13 +769,108 @@ gsk_ngl_render_job_transform_rounded_rect (GskNglRenderJob      *job,
   memcpy (out_rect->corner, rect->corner, sizeof rect->corner);
 }
 
+static inline void
+rounded_rect_get_inner (const GskRoundedRect *rect,
+                        graphene_rect_t      *inner)
+{
+  float left = MAX (rect->corner[GSK_CORNER_TOP_LEFT].width, rect->corner[GSK_CORNER_BOTTOM_LEFT].width);
+  float right = MAX (rect->corner[GSK_CORNER_TOP_RIGHT].width, rect->corner[GSK_CORNER_BOTTOM_RIGHT].width);
+  float top = MAX (rect->corner[GSK_CORNER_TOP_LEFT].height, rect->corner[GSK_CORNER_TOP_RIGHT].height);
+  float bottom = MAX (rect->corner[GSK_CORNER_BOTTOM_LEFT].height, rect->corner[GSK_CORNER_BOTTOM_RIGHT].height);
+
+  inner->origin.x = rect->bounds.origin.x + left;
+  inner->size.width = rect->bounds.size.width - (left + right);
+
+  inner->origin.y = rect->bounds.origin.y + top;
+  inner->size.height = rect->bounds.size.height - (top + bottom);
+}
+
 static inline gboolean
-gsk_ngl_render_job_node_overlaps_clip (GskNglRenderJob     *job,
-                                       const GskRenderNode *node)
+interval_contains (float p1, float w1,
+                   float p2, float w2)
+{
+  if (p2 < p1)
+    return FALSE;
+
+  if (p2 + w2 > p1 + w1)
+    return FALSE;
+
+  return TRUE;
+}
+
+static inline gboolean
+gsk_ngl_render_job_update_clip (GskNglRenderJob     *job,
+                                const GskRenderNode *node,
+                                gboolean            *pushed_clip)
 {
   graphene_rect_t transformed_bounds;
+  gboolean no_clip = FALSE;
+  gboolean rect_clip = FALSE;
+
+  *pushed_clip = FALSE;
+
+  if (job->current_clip->is_fully_contained)
+    {
+      /* Already fully contained - no further checks needed */
+      return TRUE;
+    }
+
   gsk_ngl_render_job_transform_bounds (job, &node->bounds, &transformed_bounds);
-  return rect_intersects (&job->current_clip->rect.bounds, &transformed_bounds);
+
+  if (!rect_intersects (&job->current_clip->rect.bounds, &transformed_bounds))
+    {
+      /* Completely clipped away */
+      return FALSE;
+    }
+
+  if (job->current_clip->is_rectilinear)
+    {
+      if (rect_contains_rect (&job->current_clip->rect.bounds, &transformed_bounds))
+        no_clip = TRUE;
+      else
+        rect_clip = TRUE;
+    }
+  else if (gsk_rounded_rect_contains_rect (&job->current_clip->rect, &transformed_bounds))
+    {
+      no_clip = TRUE;
+    }
+  else
+    {
+      graphene_rect_t inner;
+
+      rounded_rect_get_inner (&job->current_clip->rect, &inner);
+
+      if (interval_contains (inner.origin.x, inner.size.width,
+                             transformed_bounds.origin.x, transformed_bounds.size.width) ||
+          interval_contains (inner.origin.y, inner.size.height,
+                             transformed_bounds.origin.y, transformed_bounds.size.height))
+        rect_clip = TRUE;
+    }
+
+  if (no_clip)
+    {
+      /* This node is completely contained inside the clip.
+       * Record this fact on the clip stack, so we don't do more work
+       * for child nodes.
+       */
+
+      gsk_ngl_render_job_push_contained_clip (job);
+
+      *pushed_clip = TRUE;
+    }
+  else if (rect_clip && !job->current_clip->is_rectilinear)
+    {
+      graphene_rect_t rect;
+
+      /* The clip gets simpler for this node */
+
+      graphene_rect_intersection (&job->current_clip->rect.bounds, &transformed_bounds, &rect);
+      gsk_ngl_render_job_push_clip (job, &GSK_ROUNDED_RECT_INIT_FROM_RECT (rect));
+
+      *pushed_clip = TRUE;
+    }
+
+  return TRUE;
 }
 
 /* load_vertex_data_with_region */
@@ -3243,13 +3365,17 @@ static void
 gsk_ngl_render_job_visit_node (GskNglRenderJob     *job,
                                const GskRenderNode *node)
 {
+  gboolean has_clip;
+
   g_assert (job != NULL);
   g_assert (node != NULL);
   g_assert (GSK_IS_NGL_DRIVER (job->driver));
   g_assert (GSK_IS_NGL_COMMAND_QUEUE (job->command_queue));
 
-  if (node_is_invisible (node) ||
-      !gsk_ngl_render_job_node_overlaps_clip (job, node))
+  if (node_is_invisible (node))
+    return;
+
+  if (!gsk_ngl_render_job_update_clip (job, node, &has_clip))
     return;
 
   switch (gsk_render_node_get_node_type (node))
@@ -3397,6 +3523,9 @@ gsk_ngl_render_job_visit_node (GskNglRenderJob     *job,
       g_assert_not_reached ();
     break;
     }
+
+  if (has_clip)
+    gsk_ngl_render_job_pop_clip (job);
 }
 
 static gboolean
