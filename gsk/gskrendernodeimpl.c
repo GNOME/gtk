@@ -1115,6 +1115,8 @@ gsk_conic_gradient_node_get_rotation (const GskRenderNode *node)
  * angle = 90 - gsk_conic_gradient_node_get_rotation()
  *
  * Returns: the angle for the gradient
+ *
+ * Since: 4.2
  */
 float
 gsk_conic_gradient_node_get_angle (const GskRenderNode *node)

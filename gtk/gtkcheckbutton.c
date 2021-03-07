@@ -534,6 +534,8 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
    * emitting it causes the button to animate press then release.
    * Applications should never connect to this signal, but use the
    * #GtkCheckButton::toggled signal.
+   *
+   * Since: 4.2
    */
   signals[ACTIVATE] =
       g_signal_new (I_ ("activate"),
