@@ -388,8 +388,7 @@ gsk_rounded_rect_locate_point (const GskRoundedRect   *self,
  * @self: a #GskRoundedRect
  * @point: the point to check
  *
- * Checks if the given @point is inside the rounded rectangle. This function
- * returns %FALSE if the point is in the rounded corner areas.
+ * Checks if the given @point is inside the rounded rectangle.
  *
  * Returns: %TRUE if the @point is inside the rounded rectangle
  **/
@@ -406,8 +405,6 @@ gsk_rounded_rect_contains_point (const GskRoundedRect   *self,
  * @rect: the rectangle to check
  *
  * Checks if the given @rect is contained inside the rounded rectangle.
- * This function returns %FALSE if @rect extends into one of the rounded
- * corner areas.
  *
  * Returns: %TRUE if the @rect is fully contained inside the rounded rectangle
  **/
@@ -436,11 +433,9 @@ gsk_rounded_rect_contains_rect (const GskRoundedRect  *self,
  * @rect: the rectangle to check
  *
  * Checks if part of the given @rect is contained inside the rounded rectangle.
- * This function returns %FALSE if @rect only extends into one of the rounded
- * corner areas but not into the rounded rectangle itself.
  *
  * Returns: %TRUE if the @rect intersects with the rounded rectangle
- **/
+ */
 gboolean
 gsk_rounded_rect_intersects_rect (const GskRoundedRect  *self,
                                   const graphene_rect_t *rect)
