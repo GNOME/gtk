@@ -106,7 +106,10 @@ struct _GskNglDriver
 
 #define GSK_NGL_NO_UNIFORMS
 #define GSK_NGL_ADD_UNIFORM(pos, KEY, name)
-#define GSK_NGL_DEFINE_PROGRAM(name, resource, uniforms) GskNglProgram *name;
+#define GSK_NGL_DEFINE_PROGRAM(name, resource, uniforms) \
+  GskNglProgram *name ## _no_clip; \
+  GskNglProgram *name ## _rect_clip; \
+  GskNglProgram *name;
 # include "gsknglprograms.defs"
 #undef GSK_NGL_NO_UNIFORMS
 #undef GSK_NGL_ADD_UNIFORM

@@ -523,6 +523,7 @@ get_shader_string (GBytes *bytes)
 GskNglProgram *
 gsk_ngl_compiler_compile (GskNglCompiler  *self,
                           const char      *name,
+                          const char      *clip,
                           GError         **error)
 {
   char version[32];
@@ -561,9 +562,10 @@ gsk_ngl_compiler_compile (GskNglCompiler  *self,
 
   vertex_id = glCreateShader (GL_VERTEX_SHADER);
   glShaderSource (vertex_id,
-                  9,
+                  10,
                   (const char *[]) {
                     version, debug, legacy, gl3, gles,
+                    clip,
                     get_shader_string (self->all_preamble),
                     get_shader_string (self->vertex_preamble),
                     get_shader_string (self->vertex_source),
@@ -575,6 +577,7 @@ gsk_ngl_compiler_compile (GskNglCompiler  *self,
                     strlen (legacy),
                     strlen (gl3),
                     strlen (gles),
+                    strlen (clip),
                     g_bytes_get_size (self->all_preamble),
                     g_bytes_get_size (self->vertex_preamble),
                     g_bytes_get_size (self->vertex_source),
@@ -592,9 +595,10 @@ gsk_ngl_compiler_compile (GskNglCompiler  *self,
 
   fragment_id = glCreateShader (GL_FRAGMENT_SHADER);
   glShaderSource (fragment_id,
-                  9,
+                  10,
                   (const char *[]) {
                     version, debug, legacy, gl3, gles,
+                    clip,
                     get_shader_string (self->all_preamble),
                     get_shader_string (self->fragment_preamble),
                     get_shader_string (self->fragment_source),
@@ -606,6 +610,7 @@ gsk_ngl_compiler_compile (GskNglCompiler  *self,
                     strlen (legacy),
                     strlen (gl3),
                     strlen (gles),
+                    strlen (clip),
                     g_bytes_get_size (self->all_preamble),
                     g_bytes_get_size (self->fragment_preamble),
                     g_bytes_get_size (self->fragment_source),

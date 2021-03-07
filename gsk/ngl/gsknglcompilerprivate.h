@@ -62,6 +62,7 @@ void            gsk_ngl_compiler_bind_attribute             (GskNglCompiler     
 void            gsk_ngl_compiler_clear_attributes           (GskNglCompiler      *self);
 GskNglProgram  *gsk_ngl_compiler_compile                    (GskNglCompiler      *self,
                                                              const char          *name,
+                                                             const char          *clip,
                                                              GError             **error);
 
 G_END_DECLS
