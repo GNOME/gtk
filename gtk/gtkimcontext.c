@@ -769,7 +769,7 @@ gtk_im_context_set_surrounding (GtkIMContext  *context,
  *        the preedit string should not be included within
  *        @text.
  * @len: the length of @text, or -1 if @text is nul-terminated
- * @cursor_index: the byte index of the insertion cursor within @text.
+ * @cursor_index: the byte index of the insertion cursor within @text
  * @anchor_index: the byte index of the selection bound within @text
  *
  * Sets surrounding context around the insertion point and preedit
@@ -843,7 +843,7 @@ gtk_im_context_get_surrounding (GtkIMContext  *context,
 }
 
 /**
- * gtk_im_context_get_surrounding:
+ * gtk_im_context_get_surrounding_with_selection:
  * @context: a #GtkIMContext
  * @text: (out) (transfer full): location to store a UTF-8 encoded
  *        string of text holding context around the insertion point.
