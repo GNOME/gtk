@@ -36,9 +36,9 @@ G_BEGIN_DECLS
 typedef struct _GskNglRenderer      GskNglRenderer;
 typedef struct _GskNglRendererClass GskNglRendererClass;
 
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_4_2
 GType        gsk_ngl_renderer_get_type (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_4_2
 GskRenderer *gsk_ngl_renderer_new      (void);
 
 G_END_DECLS

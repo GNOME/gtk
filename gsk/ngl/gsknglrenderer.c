@@ -63,6 +63,15 @@ struct _GskNglRenderer
 
 G_DEFINE_TYPE (GskNglRenderer, gsk_ngl_renderer, GSK_TYPE_RENDERER)
 
+/**
+ * gsk_ngl_renderer_new:
+ *
+ * Creates a new #GskRenderer using the new OpenGL renderer.
+ *
+ * Returns: a new NGL renderer
+ *
+ * Since: 4.2
+ */
 GskRenderer *
 gsk_ngl_renderer_new (void)
 {
