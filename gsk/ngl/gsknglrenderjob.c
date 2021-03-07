@@ -742,13 +742,107 @@ gsk_ngl_render_job_transform_rounded_rect (GskNglRenderJob      *job,
   memcpy (out_rect->corner, rect->corner, sizeof rect->corner);
 }
 
+typedef enum {
+  CLIP_ALL_CLIPPED,
+  CLIP_NONE,
+  CLIP_RECT,
+  CLIP_ROUNDED
+} ClipComplexity;
+
+static inline void
+rounded_rect_get_inner (const GskRoundedRect *rect,
+                        graphene_rect_t      *inner)
+{
+  float left = MAX (rect->corner[GSK_CORNER_TOP_LEFT].width, rect->corner[GSK_CORNER_BOTTOM_LEFT].width);
+  float right = MAX (rect->corner[GSK_CORNER_TOP_RIGHT].width, rect->corner[GSK_CORNER_BOTTOM_RIGHT].width);
+  float top = MAX (rect->corner[GSK_CORNER_TOP_LEFT].height, rect->corner[GSK_CORNER_TOP_RIGHT].height);
+  float bottom = MAX (rect->corner[GSK_CORNER_BOTTOM_LEFT].height, rect->corner[GSK_CORNER_BOTTOM_RIGHT].height);
+
+  inner->origin.x = rect->bounds.origin.x + left;
+  inner->size.width = rect->bounds.size.width - (left + right);
+
+  inner->origin.y = rect->bounds.origin.y + top;
+  inner->size.height = rect->bounds.size.height - (top + bottom);
+}
+
+static inline gboolean
+interval_contains (float p1, float w1,
+                   float p2, float w2)
+{
+  if (p2 < p1)
+    return FALSE;
+
+  if (p2 + w2 > p1 + w1)
+    return FALSE;
+
+  return TRUE;
+}
+
+static ClipComplexity
+classify_clip (GskNglRenderJob     *job,
+               const GskRenderNode *node)
+{
+  graphene_rect_t transformed_bounds;
+  graphene_rect_t inner;
+
+  gsk_ngl_render_job_transform_bounds (job, &node->bounds, &transformed_bounds);
+
+  if (!rect_intersects (&job->current_clip->rect.bounds, &transformed_bounds))
+    return CLIP_ALL_CLIPPED;
+
+  if (job->current_clip->is_rectilinear)
+    {
+      if (rect_contains_rect (&job->current_clip->rect.bounds, &transformed_bounds))
+        return CLIP_NONE;
+
+      return CLIP_RECT;
+    }
+
+  if (gsk_rounded_rect_contains_rect (&job->current_clip->rect, &transformed_bounds))
+    return CLIP_NONE;
+
+  rounded_rect_get_inner (&job->current_clip->rect, &inner);
+
+  if (interval_contains (inner.origin.x, inner.size.width,
+                         transformed_bounds.origin.x, transformed_bounds.size.width))
+    return CLIP_RECT;
+
+  if (interval_contains (inner.origin.y, inner.size.height,
+                         transformed_bounds.origin.y, transformed_bounds.size.height))
+    return CLIP_RECT;
+
+  return CLIP_ROUNDED;
+}
+
+static guint64 total_clips;
+static guint64 clips[CLIP_ROUNDED+1];
+
+void dump_clip_stats (void);
+
+void
+dump_clip_stats (void)
+{
+  g_print ("%.2f%% outside\n", clips[CLIP_ALL_CLIPPED] * 100.0 / (double) (total_clips));
+  g_print ("%.2f%% inside\n", clips[CLIP_NONE] * 100.0 / (double) (total_clips));
+  g_print ("%.2f%% rect clip\n", clips[CLIP_RECT] * 100.0 / (double) (total_clips));
+  g_print ("%.2f%% round clip\n", clips[CLIP_ROUNDED] * 100.0 / (double) (total_clips));
+}
+
 static inline gboolean
 gsk_ngl_render_job_node_overlaps_clip (GskNglRenderJob     *job,
                                        const GskRenderNode *node)
 {
-  graphene_rect_t transformed_bounds;
-  gsk_ngl_render_job_transform_bounds (job, &node->bounds, &transformed_bounds);
-  return rect_intersects (&job->current_clip->rect.bounds, &transformed_bounds);
+  ClipComplexity c;
+
+  c = classify_clip (job, node);
+
+  total_clips++;
+  clips[c]++;
+
+  if (c == CLIP_ALL_CLIPPED)
+    return FALSE;
+
+  return TRUE;
 }
 
 /* load_vertex_data_with_region */
