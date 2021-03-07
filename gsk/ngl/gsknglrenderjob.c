@@ -2805,9 +2805,6 @@ gsk_ngl_render_job_visit_blur_node (GskNglRenderJob     *job,
 
   g_assert (blur_radius > 0);
 
-  if (node_is_invisible (child))
-    return;
-
   key.pointer = node;
   key.pointer_is_child = FALSE;
   key.scale_x = job->scale_x;
@@ -2905,9 +2902,6 @@ gsk_ngl_render_job_visit_color_matrix_node (GskNglRenderJob     *job,
   const GskRenderNode *child = gsk_color_matrix_node_get_child (node);
   GskNglRenderOffscreen offscreen = {0};
   float offset[4];
-
-  if (node_is_invisible (child))
-    return;
 
   offscreen.bounds = &node->bounds;
   offscreen.reset_clip = TRUE;
@@ -3361,7 +3355,10 @@ gsk_ngl_render_job_visit_node (GskNglRenderJob     *job,
 
     case GSK_RADIAL_GRADIENT_NODE:
     case GSK_REPEATING_RADIAL_GRADIENT_NODE:
-      gsk_ngl_render_job_visit_radial_gradient_node (job, node);
+      if (gsk_radial_gradient_node_get_n_color_stops (node) < MAX_GRADIENT_STOPS)
+        gsk_ngl_render_job_visit_radial_gradient_node (job, node);
+      else
+        gsk_ngl_render_job_visit_as_fallback (job, node);
     break;
 
     case GSK_REPEAT_NODE:
