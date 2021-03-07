@@ -31,6 +31,7 @@
 #include "gsktransformprivate.h"
 
 #include "gsk/gskrendernodeprivate.h"
+#include "gsk/gskroundedrectprivate.h"
 
 #include "gtk/gskpango.h"
 
@@ -709,29 +710,6 @@ gtk_graphene_rect_scale_affine (const graphene_rect_t *rect,
 }
 
 static void
-gtk_rounded_rect_scale_affine (GskRoundedRect       *dest,
-                               const GskRoundedRect *src,
-                               float                 scale_x,
-                               float                 scale_y,
-                               float                 dx,
-                               float                 dy)
-{
-  guint flip;
-  guint i;
-
-  g_assert (dest != src);
-
-  gtk_graphene_rect_scale_affine (&src->bounds, scale_x, scale_y, dx, dy, &dest->bounds);
-  flip = ((scale_x < 0) ? 1 : 0) + (scale_y < 0 ? 2 : 0);
-
-  for (i = 0; i < 4; i++)
-    {
-      dest->corner[i].width = src->corner[i ^ flip].width * fabsf (scale_x);
-      dest->corner[i].height = src->corner[i ^ flip].height * fabsf (scale_y);
-    }
-}
-
-static void
 gtk_snapshot_ensure_affine (GtkSnapshot *snapshot,
                             float       *scale_x,
                             float       *scale_y,
@@ -1099,7 +1077,7 @@ gtk_snapshot_push_rounded_clip (GtkSnapshot          *snapshot,
                                    gtk_snapshot_collect_rounded_clip,
                                    NULL);
 
-  gtk_rounded_rect_scale_affine (&state->data.rounded_clip.bounds, bounds, scale_x, scale_y, dx, dy);
+  gsk_rounded_rect_scale_affine (&state->data.rounded_clip.bounds, bounds, scale_x, scale_y, dx, dy);
 }
 
 static GskRenderNode *
@@ -2441,7 +2419,7 @@ gtk_snapshot_append_border (GtkSnapshot          *snapshot,
   g_return_if_fail (border_color != NULL);
 
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
-  gtk_rounded_rect_scale_affine (&real_outline, outline, scale_x, scale_y, dx, dy);
+  gsk_rounded_rect_scale_affine (&real_outline, outline, scale_x, scale_y, dx, dy);
 
   node = gsk_border_node_new (&real_outline, border_width, border_color);
 
@@ -2478,7 +2456,7 @@ gtk_snapshot_append_inset_shadow (GtkSnapshot          *snapshot,
   g_return_if_fail (color != NULL);
 
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &x, &y);
-  gtk_rounded_rect_scale_affine (&real_outline, outline, scale_x, scale_y, x, y);
+  gsk_rounded_rect_scale_affine (&real_outline, outline, scale_x, scale_y, x, y);
 
   node = gsk_inset_shadow_node_new (&real_outline,
                                     color,
@@ -2520,7 +2498,7 @@ gtk_snapshot_append_outset_shadow (GtkSnapshot          *snapshot,
   g_return_if_fail (color != NULL);
 
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &x, &y);
-  gtk_rounded_rect_scale_affine (&real_outline, outline, scale_x, scale_y, x, y);
+  gsk_rounded_rect_scale_affine (&real_outline, outline, scale_x, scale_y, x, y);
 
   node = gsk_outset_shadow_node_new (&real_outline,
                                      color,

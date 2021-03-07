@@ -17,6 +17,13 @@ G_BEGIN_DECLS
                      }}
 
 
+void                     gsk_rounded_rect_scale_affine          (GskRoundedRect       *dest,
+                                                                 const GskRoundedRect *src,
+                                                                 float                 scale_x,
+                                                                 float                 scale_y,
+                                                                 float                 dx,
+                                                                 float                 dy);
+
 gboolean                 gsk_rounded_rect_is_circular           (const GskRoundedRect     *self);
 
 void                     gsk_rounded_rect_path                  (const GskRoundedRect     *self,

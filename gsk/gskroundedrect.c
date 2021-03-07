@@ -274,6 +274,31 @@ gsk_rounded_rect_shrink (GskRoundedRect *self,
   return self;
 }
 
+void
+gsk_rounded_rect_scale_affine (GskRoundedRect       *dest,
+                               const GskRoundedRect *src,
+                               float                 scale_x,
+                               float                 scale_y,
+                               float                 dx,
+                               float                 dy)
+{
+  guint flip = ((scale_x < 0) ? 1 : 0) + (scale_y < 0 ? 2 : 0);
+
+  g_assert (dest != src);
+
+  graphene_rect_scale (&src->bounds, scale_x, scale_y, &dest->bounds);
+  graphene_rect_offset (&dest->bounds, dx, dy);
+
+  scale_x = fabs (scale_x);
+  scale_y = fabs (scale_y);
+
+  for (guint i = 0; i < 4; i++)
+    {
+      dest->corner[i].width = src->corner[i ^ flip].width * scale_x;
+      dest->corner[i].height = src->corner[i ^ flip].height * scale_y;
+    }
+}
+
 /* XXX: Find a better name */
 gboolean
 gsk_rounded_rect_is_circular (const GskRoundedRect *self)
