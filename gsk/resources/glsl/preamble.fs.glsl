@@ -75,6 +75,16 @@ gsk_rounded_rect_coverage (GskRoundedRect r, vec2 p)
   return 1.0 - dot(vec4(is_out), corner_coverages);
 }
 
+float
+gsk_rect_coverage (vec4 r, vec2 p)
+{
+  if (p.x < r.x || p.y < r.y ||
+      p.x >= r.z || p.y >= r.w)
+    return 0.0;
+
+  return 1.0;
+}
+
 vec4 GskTexture(sampler2D sampler, vec2 texCoords) {
 #if defined(GSK_GLES) || defined(GSK_LEGACY)
   return texture2D(sampler, texCoords);
@@ -101,14 +111,21 @@ vec2 gsk_get_frag_coord() {
 }
 
 void gskSetOutputColor(vec4 color) {
-  vec2 f = gsk_get_frag_coord();
+  vec4 result;
 
-  // We do *NOT* transform the clip rect here since we already
-  // need to do that on the CPU.
-#if defined(GSK_GLES) || defined(GSK_LEGACY)
-  gl_FragColor = color * gsk_rounded_rect_coverage(gsk_create_rect(u_clip_rect), f);
+#if defined(NO_CLIP)
+  result = color;
+#elif defined(RECT_CLIP)
+  result = color * gsk_rect_coverage(gsk_get_bounds(u_clip_rect),
+                                     gsk_get_frag_coord());
 #else
-  outputColor = color * gsk_rounded_rect_coverage(gsk_create_rect(u_clip_rect), f);
+  result = color * gsk_rounded_rect_coverage(gsk_create_rect(u_clip_rect),
+                                             gsk_get_frag_coord());
 #endif
-  /*outputColor = color;*/
+
+#if defined(GSK_GLES) || defined(GSK_LEGACY)
+  gl_FragColor = result;
+#else
+  outputColor = result;
+#endif
 }
