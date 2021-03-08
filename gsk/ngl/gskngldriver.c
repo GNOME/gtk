@@ -225,6 +225,10 @@ gsk_ngl_driver_dispose (GObject *object)
 #define GSK_NGL_NO_UNIFORMS
 #define GSK_NGL_ADD_UNIFORM(pos, KEY, name)
 #define GSK_NGL_DEFINE_PROGRAM(name, resource, uniforms) \
+  GSK_NGL_DELETE_PROGRAM(name); \
+  GSK_NGL_DELETE_PROGRAM(name ## _no_clip); \
+  GSK_NGL_DELETE_PROGRAM(name ## _rect_clip);
+#define GSK_NGL_DELETE_PROGRAM(name)                    \
   G_STMT_START {                                        \
     if (self->name)                                     \
       gsk_ngl_program_delete (self->name);               \
@@ -349,34 +353,38 @@ gsk_ngl_driver_load_programs (GskNglDriver  *self,
 #define GSK_NGL_ADD_UNIFORM(pos, KEY, name)                                                      \
   gsk_ngl_program_add_uniform (program, #name, UNIFORM_##KEY);
 #define GSK_NGL_DEFINE_PROGRAM(name, resource, uniforms)                                         \
-  G_STMT_START {                                                                                \
+   gsk_ngl_compiler_set_source_from_resource (compiler, GSK_NGL_COMPILER_ALL, resource);         \
+   GSK_NGL_COMPILE_PROGRAM(name ## _no_clip, uniforms, "#define NO_CLIP 1\n");                   \
+   GSK_NGL_COMPILE_PROGRAM(name ## _rect_clip, uniforms, "#define RECT_CLIP 1\n");               \
+   GSK_NGL_COMPILE_PROGRAM(name, uniforms, "");
+#define GSK_NGL_COMPILE_PROGRAM(name, uniforms, clip)                                            \
+  G_STMT_START {                                                                                 \
     GskNglProgram *program;                                                                      \
-    gboolean have_alpha;                                                                        \
-    gboolean have_source;                                                                       \
-                                                                                                \
-    gsk_ngl_compiler_set_source_from_resource (compiler, GSK_NGL_COMPILER_ALL, resource);         \
-                                                                                                \
-    if (!(program = gsk_ngl_compiler_compile (compiler, #name, error)))                          \
-      goto failure;                                                                             \
-                                                                                                \
+    gboolean have_alpha;                                                                         \
+    gboolean have_source;                                                                        \
+                                                                                                 \
+    if (!(program = gsk_ngl_compiler_compile (compiler, #name, clip, error)))                    \
+      goto failure;                                                                              \
+                                                                                                 \
     have_alpha = gsk_ngl_program_add_uniform (program, "u_alpha", UNIFORM_SHARED_ALPHA);         \
     have_source = gsk_ngl_program_add_uniform (program, "u_source", UNIFORM_SHARED_SOURCE);      \
     gsk_ngl_program_add_uniform (program, "u_clip_rect", UNIFORM_SHARED_CLIP_RECT);              \
     gsk_ngl_program_add_uniform (program, "u_viewport", UNIFORM_SHARED_VIEWPORT);                \
     gsk_ngl_program_add_uniform (program, "u_projection", UNIFORM_SHARED_PROJECTION);            \
     gsk_ngl_program_add_uniform (program, "u_modelview", UNIFORM_SHARED_MODELVIEW);              \
-                                                                                                \
-    uniforms                                                                                    \
-                                                                                                \
+                                                                                                 \
+    uniforms                                                                                     \
+                                                                                                 \
     gsk_ngl_program_uniforms_added (program, have_source);                                       \
-                                                                                                \
-    if (have_alpha)                                                                             \
+                                                                                                 \
+    if (have_alpha)                                                                              \
       gsk_ngl_program_set_uniform1f (program, UNIFORM_SHARED_ALPHA, 0, 1.0f);                    \
-                                                                                                \
-    *(GskNglProgram **)(((guint8 *)self) + G_STRUCT_OFFSET (GskNglDriver, name)) =              \
-        g_steal_pointer (&program);                                                             \
+                                                                                                 \
+    *(GskNglProgram **)(((guint8 *)self) + G_STRUCT_OFFSET (GskNglDriver, name)) =               \
+         g_steal_pointer (&program);                                                             \
   } G_STMT_END;
 # include "gsknglprograms.defs"
+#undef GSK_NGL_DEFINE_PROGRAM_CLIP
 #undef GSK_NGL_DEFINE_PROGRAM
 #undef GSK_NGL_ADD_UNIFORM
 
@@ -1038,7 +1046,7 @@ gsk_ngl_driver_lookup_shader (GskNglDriver  *self,
       gsk_ngl_compiler_bind_attribute (compiler, "aPosition", 0);
       gsk_ngl_compiler_bind_attribute (compiler, "aUv", 1);
 
-      if ((program = gsk_ngl_compiler_compile (compiler, NULL, error)))
+      if ((program = gsk_ngl_compiler_compile (compiler, NULL, "", error)))
         {
           gboolean have_alpha;
 

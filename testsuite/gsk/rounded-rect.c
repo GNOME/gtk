@@ -87,6 +87,33 @@ test_intersects_rect (void)
 #undef HALF_THE_POINTS
 }
 
+static void
+test_contains_point (void)
+{
+  GskRoundedRect rect;
+
+  gsk_rounded_rect_init (&rect,
+                         &GRAPHENE_RECT_INIT (0, 0, 100, 100),
+                         &GRAPHENE_SIZE_INIT (0, 0),
+                         &GRAPHENE_SIZE_INIT (10, 10),
+                         &GRAPHENE_SIZE_INIT (10, 20),
+                         &GRAPHENE_SIZE_INIT (20, 10));
+
+  g_assert_true (gsk_rounded_rect_contains_point (&rect, &GRAPHENE_POINT_INIT (50, 50)));
+  g_assert_true (gsk_rounded_rect_contains_point (&rect, &GRAPHENE_POINT_INIT (0, 0)));
+  g_assert_false (gsk_rounded_rect_contains_point (&rect, &GRAPHENE_POINT_INIT (100, 0)));
+  g_assert_false (gsk_rounded_rect_contains_point (&rect, &GRAPHENE_POINT_INIT (100, 100)));
+  g_assert_false (gsk_rounded_rect_contains_point (&rect, &GRAPHENE_POINT_INIT (0, 100)));
+  g_assert_true (gsk_rounded_rect_contains_point (&rect, &GRAPHENE_POINT_INIT (0, 50)));
+  g_assert_true (gsk_rounded_rect_contains_point (&rect, &GRAPHENE_POINT_INIT (50, 0)));
+  g_assert_true (gsk_rounded_rect_contains_point (&rect, &GRAPHENE_POINT_INIT (50, 100)));
+  g_assert_true (gsk_rounded_rect_contains_point (&rect, &GRAPHENE_POINT_INIT (100, 50)));
+
+  g_assert_true (gsk_rounded_rect_contains_point (&rect, &GRAPHENE_POINT_INIT (95, 5)));
+  g_assert_true (gsk_rounded_rect_contains_point (&rect, &GRAPHENE_POINT_INIT (95, 90)));
+  g_assert_true (gsk_rounded_rect_contains_point (&rect, &GRAPHENE_POINT_INIT (10, 95)));
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -95,6 +122,7 @@ main (int   argc,
 
   g_test_add_func ("/rounded-rect/contains-rect", test_contains_rect);
   g_test_add_func ("/rounded-rect/intersects-rect", test_intersects_rect);
+  g_test_add_func ("/rounded-rect/contains-point", test_contains_point);
 
   return g_test_run ();
 }
