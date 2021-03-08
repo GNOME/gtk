@@ -676,7 +676,7 @@ compare_gap (gconstpointer p1,
  * @extra_space: Extra space to redistribute among children after subtracting
  *               minimum sizes and any child padding from the overall allocation
  * @n_requested_sizes: Number of requests to fit into the allocation
- * @sizes: An array of structs with a client pointer and a minimum/natural size
+ * @sizes: (array length=n_requested_sizes): An array of structs with a client pointer and a minimum/natural size
  *         in the orientation of the allocation.
  *
  * Distributes @extra_space to child @sizes by bringing smaller
