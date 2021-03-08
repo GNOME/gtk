@@ -220,6 +220,7 @@ new_window (GApplication *app,
   gtk_window_set_default_size ((GtkWindow*)window, 640, 480);
   g_action_map_add_action_entries (G_ACTION_MAP (window), win_entries, G_N_ELEMENTS (win_entries), window);
   gtk_window_set_title (GTK_WINDOW (window), "Bloatpad");
+  gtk_application_window_set_show_menubar (GTK_APPLICATION_WINDOW (window), TRUE);
 
   grid = gtk_grid_new ();
   gtk_window_set_child (GTK_WINDOW (window), grid);
@@ -536,7 +537,7 @@ bloat_pad_startup (GApplication *application)
 
   menu = gtk_application_get_menu_by_id (GTK_APPLICATION (application), "icon-menu");
 
-  file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/16x16/actions/gtk-select-color.png");
+  file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/16x16/actions/insert-image.png");
   icon = g_file_icon_new (file);
   item = g_menu_item_new ("File Icon", NULL);
   g_menu_item_set_icon (item, icon);
@@ -552,7 +553,7 @@ bloat_pad_startup (GApplication *application)
   g_object_unref (item);
   g_object_unref (icon);
 
-  bytes = g_resources_lookup_data ("/org/gtk/libgtk/icons/16x16/actions/gtk-select-font.png", 0, NULL);
+  bytes = g_resources_lookup_data ("/org/gtk/libgtk/icons/16x16/actions/media-eject.png", 0, NULL);
   icon = g_bytes_icon_new (bytes);
   item = g_menu_item_new ("Bytes Icon", NULL);
   g_menu_item_set_icon (item, icon);
@@ -561,19 +562,19 @@ bloat_pad_startup (GApplication *application)
   g_object_unref (icon);
   g_bytes_unref (bytes);
 
-  icon = G_ICON (gdk_pixbuf_new_from_resource ("/org/gtk/libgtk/icons/16x16/actions/gtk-preferences.png", NULL));
+  icon = G_ICON (gdk_pixbuf_new_from_resource ("/org/gtk/libgtk/icons/16x16/actions/folder-new.png", NULL));
   item = g_menu_item_new ("Pixbuf", NULL);
   g_menu_item_set_icon (item, icon);
   g_menu_append_item (menu, item);
   g_object_unref (item);
   g_object_unref (icon);
 
-  file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/16x16/actions/gtk-page-setup.png");
+  file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/16x16/actions/bookmark-new.png");
   icon = g_file_icon_new (file);
   emblem = g_emblem_new (icon);
   g_object_unref (icon);
   g_object_unref (file);
-  file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/16x16/actions/gtk-orientation-reverse-portrait.png");
+  file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/16x16/actions/dialog-warning.png");
   icon2 = g_file_icon_new (file);
   icon = g_emblemed_icon_new (icon2, emblem);
   item = g_menu_item_new ("Emblemed Icon", NULL);
