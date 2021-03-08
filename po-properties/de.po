@@ -18,22 +18,22 @@
 # Hendrik Knackstedt <hendrik.knackstedt@t-online.de>, 2011.
 # Christian Kirbach <christian.kirbach@gmail.com>, 2009-2013.
 # Benjamin Steinwender <b@stbe.at>, 2014.
-# Tim Sabsch <tim@sabsch.com>, 2018-2020.
+# Tim Sabsch <tim@sabsch.com>, 2018-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-26 19:37+0000\n"
-"PO-Revision-Date: 2020-08-05 05:15+0200\n"
-"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
+"POT-Creation-Date: 2021-03-06 19:27+0000\n"
+"PO-Revision-Date: 2021-03-06 21:58+0100\n"
+"Last-Translator: Tim Sabsch <tim@sabsch.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
 #: gdk/gdkglcontext.c:317 gdk/gdkseat.c:202 gdk/gdkseat.c:203
@@ -894,7 +894,7 @@ msgstr "Der Bildschirm, auf dem dieses Statussymbol angezeigt werden soll"
 msgid "Whether the status icon is visible"
 msgstr "Legt fest, ob das Statussymbol sichtbar sein soll"
 
-#: gtk/deprecated/gtkstatusicon.c:330 gtk/gtkplug.c:196
+#: gtk/deprecated/gtkstatusicon.c:330 gtk/gtkplug.c:198
 msgid "Embedded"
 msgstr "Eingebettet"
 
@@ -2926,7 +2926,7 @@ msgstr "Soll ausreichender Platz für jede Zeile im Modell angefordert werden?"
 msgid "Indicator Size"
 msgstr "Indikatorgröße"
 
-#: gtk/gtkcheckbutton.c:249 gtk/gtkexpander.c:406
+#: gtk/gtkcheckbutton.c:249 gtk/gtkexpander.c:413
 msgid "Indicator Spacing"
 msgstr "Indikatorabstand"
 
@@ -3004,7 +3004,7 @@ msgstr "Aktuelle Farbe als GdkRGBA"
 msgid "Whether alpha should be shown"
 msgstr "Sollen Transparenzbereiche angezeigt werden?"
 
-#: gtk/gtkcolorchooserdialog.c:213 gtk/gtkcolorchooserwidget.c:704
+#: gtk/gtkcolorchooserdialog.c:213 gtk/gtkcolorchooserwidget.c:695
 msgid "Show editor"
 msgstr "Editor anzeigen"
 
@@ -3901,20 +3901,20 @@ msgstr ""
 "Ein Widget, das anstatt der üblichen Ausklapperbeschriftung angezeigt werden "
 "soll"
 
-#: gtk/gtkexpander.c:359
+#: gtk/gtkexpander.c:366
 msgid "Label fill"
 msgstr "Füllung der Beschriftung"
 
-#: gtk/gtkexpander.c:360
+#: gtk/gtkexpander.c:367
 msgid "Whether the label widget should fill all available horizontal space"
 msgstr ""
 "Soll das Beschriftungs-Widget allen verfügbaren horizontalen Platz belegen?"
 
-#: gtk/gtkexpander.c:375
+#: gtk/gtkexpander.c:382
 msgid "Resize toplevel"
 msgstr "Größenänderungsmodus"
 
-#: gtk/gtkexpander.c:376
+#: gtk/gtkexpander.c:383
 msgid ""
 "Whether the expander will resize the toplevel window upon expanding and "
 "collapsing"
@@ -3922,15 +3922,15 @@ msgstr ""
 "Legt fest, ob der Expander die Größe des Fensters der obersten Ebene beim "
 "Aus- und Einklappen anpasst"
 
-#: gtk/gtkexpander.c:389 gtk/gtktoolitemgroup.c:1674 gtk/gtktreeview.c:1234
+#: gtk/gtkexpander.c:396 gtk/gtktoolitemgroup.c:1674 gtk/gtktreeview.c:1234
 msgid "Expander Size"
 msgstr "Ausklappergröße"
 
-#: gtk/gtkexpander.c:390 gtk/gtktoolitemgroup.c:1675 gtk/gtktreeview.c:1235
+#: gtk/gtkexpander.c:397 gtk/gtktoolitemgroup.c:1675 gtk/gtktreeview.c:1235
 msgid "Size of the expander arrow"
 msgstr "Größe des Ausklapppfeils"
 
-#: gtk/gtkexpander.c:407
+#: gtk/gtkexpander.c:414
 msgid "Spacing around expander arrow"
 msgstr "Freiraum um Ausklapppfeil"
 
@@ -3968,7 +3968,7 @@ msgstr ""
 "Der momentan zum Auswählen der anzuzeigenden Dateien zu verwendende Filter"
 
 #: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4836
-#: gtk/gtkplacesview.c:2322
+#: gtk/gtkplacesview.c:2336
 msgid "Local Only"
 msgstr "Nur lokal"
 
@@ -5733,11 +5733,11 @@ msgstr "Zu wählender Ort"
 msgid "The location to highlight in the sidebar"
 msgstr "Der in der Seitenleiste hervorzuhebende Ort"
 
-#: gtk/gtkplacessidebar.c:4805 gtk/gtkplacesview.c:2343
+#: gtk/gtkplacessidebar.c:4805 gtk/gtkplacesview.c:2357
 msgid "Open Flags"
 msgstr "Offene Schalter"
 
-#: gtk/gtkplacessidebar.c:4806 gtk/gtkplacesview.c:2344
+#: gtk/gtkplacessidebar.c:4806 gtk/gtkplacesview.c:2358
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5788,7 +5788,7 @@ msgstr ""
 "Legt fest, ob die Seitenleiste einen eingebauten Link zur manuellen "
 "Ortsangabe enthält"
 
-#: gtk/gtkplacessidebar.c:4837 gtk/gtkplacesview.c:2323
+#: gtk/gtkplacessidebar.c:4837 gtk/gtkplacesview.c:2337
 msgid "Whether the sidebar only includes local files"
 msgstr "Legt fest, ob die Seitenleiste nur lokale Dateien enthalten soll"
 
@@ -5811,15 +5811,15 @@ msgid "Whether the sidebar includes an item to show external locations"
 msgstr ""
 "Legt fest, ob die Seitenleiste ein Objekt zum Anzeigen externer Orte enthält"
 
+# Ich bin mir recht sicher, dass hier das Anführungszeichen in der Originalübersetzung falsch ist und hinter "Starred" stehen sollte. Es geht hier darum, ob eine Seitenleiste das Item "Starred" enthalten soll
 #: gtk/gtkplacessidebar.c:4854
 msgid "Show “Starred Location”"
-msgstr "»Mit Stern markierten Ort« anzeigen"
+msgstr "»Favoriten« anzeigen"
 
 #: gtk/gtkplacessidebar.c:4855
 msgid "Whether the sidebar includes an item to show starred files"
 msgstr ""
-"Legt fest, ob die Seitenleiste ein Objekt zum Anzeigen mit Stern markierter "
-"Orte enthält"
+"Legt fest, ob die Seitenleiste ein Objekt zum Anzeigen der Favoriten enthält"
 
 # GTK+ Ereignisse
 #: gtk/gtkplacessidebar.c:4871
@@ -5828,19 +5828,19 @@ msgstr ""
 "Legt fest, ob ::populate-popup für Einblendfenster gesendet werden soll, die "
 "keine Menüs sind"
 
-#: gtk/gtkplacesview.c:2329
+#: gtk/gtkplacesview.c:2343
 msgid "Loading"
 msgstr "Laden"
 
-#: gtk/gtkplacesview.c:2330
+#: gtk/gtkplacesview.c:2344
 msgid "Whether the view is loading locations"
 msgstr "Gibt an, ob die Ansicht Orte lädt"
 
-#: gtk/gtkplacesview.c:2336
+#: gtk/gtkplacesview.c:2350
 msgid "Fetching networks"
 msgstr "Netzwerke werden eingelesen"
 
-#: gtk/gtkplacesview.c:2337
+#: gtk/gtkplacesview.c:2351
 msgid "Whether the view is fetching networks"
 msgstr "Gibt an, ob die Ansicht Netzwerke einliest"
 
@@ -5896,15 +5896,15 @@ msgstr "Die Datei, die durch die Zeile dargestellt wird, falls vorhanden"
 msgid "Whether the row represents a network location"
 msgstr "Gibt an, ob die Zeile einen Netzwerkort darstellt"
 
-#: gtk/gtkplug.c:197
+#: gtk/gtkplug.c:199
 msgid "Whether the plug is embedded"
 msgstr "Legt fest, ob der Plug eingebettet ist"
 
-#: gtk/gtkplug.c:211
+#: gtk/gtkplug.c:213
 msgid "Socket Window"
 msgstr "Socket-Fenster"
 
-#: gtk/gtkplug.c:212
+#: gtk/gtkplug.c:214
 msgid "The window of the socket the plug is embedded in"
 msgstr "Das Fenster des Sockets, in den der Plug eingebettet ist"
 
@@ -6757,51 +6757,51 @@ msgstr ""
 "Einen zweiten Vorwärtspfeil am gegenüber liegenden Ende der Bildlaufleiste "
 "anzeigen"
 
-#: gtk/gtkscrolledwindow.c:569
+#: gtk/gtkscrolledwindow.c:567
 msgid "Horizontal Adjustment"
 msgstr "Horizontale Stellgröße"
 
-#: gtk/gtkscrolledwindow.c:570
+#: gtk/gtkscrolledwindow.c:568
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "Das GtkAdjustment für die horizontale Position"
 
-#: gtk/gtkscrolledwindow.c:576
+#: gtk/gtkscrolledwindow.c:574
 msgid "Vertical Adjustment"
 msgstr "Vertikale Stellgröße"
 
-#: gtk/gtkscrolledwindow.c:577
+#: gtk/gtkscrolledwindow.c:575
 msgid "The GtkAdjustment for the vertical position"
 msgstr "Das GtkAdjustment für die vertikale Position"
 
-#: gtk/gtkscrolledwindow.c:583
+#: gtk/gtkscrolledwindow.c:581
 msgid "Horizontal Scrollbar Policy"
 msgstr "Horizontale Bildlaufleistenrichtlinie"
 
-#: gtk/gtkscrolledwindow.c:584
+#: gtk/gtkscrolledwindow.c:582
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Wann soll die horizontale Bildlaufleiste angezeigt werden?"
 
-#: gtk/gtkscrolledwindow.c:591
+#: gtk/gtkscrolledwindow.c:589
 msgid "Vertical Scrollbar Policy"
 msgstr "Vertikale Bildlaufleistenrichtlinie"
 
-#: gtk/gtkscrolledwindow.c:592
+#: gtk/gtkscrolledwindow.c:590
 msgid "When the vertical scrollbar is displayed"
 msgstr "Wann soll die vertikale Bildlaufleiste angezeigt werden?"
 
-#: gtk/gtkscrolledwindow.c:599
+#: gtk/gtkscrolledwindow.c:597
 msgid "Window Placement"
 msgstr "Fensterplatzierung"
 
-#: gtk/gtkscrolledwindow.c:600
+#: gtk/gtkscrolledwindow.c:598
 msgid "Where the contents are located with respect to the scrollbars."
 msgstr "Wo soll der Inhalt im Verhältnis zu den Bildlaufleisten liegen."
 
-#: gtk/gtkscrolledwindow.c:618
+#: gtk/gtkscrolledwindow.c:616
 msgid "Window Placement Set"
 msgstr "Fensterplatzierung aktiviert"
 
-#: gtk/gtkscrolledwindow.c:619
+#: gtk/gtkscrolledwindow.c:617
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
@@ -6809,87 +6809,87 @@ msgstr ""
 "Legt fest, ob »window-placement« verwendet wird um die Position des Inhalts "
 "im Verhältnis zu den Bildlaufleisten zu bestimmen."
 
-#: gtk/gtkscrolledwindow.c:625 gtk/gtkspinbutton.c:455
+#: gtk/gtkscrolledwindow.c:623 gtk/gtkspinbutton.c:455
 msgid "Shadow Type"
 msgstr "Schattentyp"
 
-#: gtk/gtkscrolledwindow.c:626
+#: gtk/gtkscrolledwindow.c:624
 msgid "Style of bevel around the contents"
 msgstr "Der Stil der Fase um den Inhalt"
 
-#: gtk/gtkscrolledwindow.c:642
+#: gtk/gtkscrolledwindow.c:640
 msgid "Scrollbars within bevel"
 msgstr "Bildlaufleisten innerhalb der Fase"
 
-#: gtk/gtkscrolledwindow.c:643
+#: gtk/gtkscrolledwindow.c:641
 msgid "Place scrollbars within the scrolled window's bevel"
 msgstr "Bildlaufleisten innerhalb der Fase des Fensters platzieren"
 
-#: gtk/gtkscrolledwindow.c:649
+#: gtk/gtkscrolledwindow.c:647
 msgid "Scrollbar spacing"
 msgstr "Abstand der Bildlaufleisten"
 
-#: gtk/gtkscrolledwindow.c:650
+#: gtk/gtkscrolledwindow.c:648
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr ""
 "Die Anzahl der Pixel zwischen den Bildlaufleisten und dem verschobenen "
 "Fenster"
 
-#: gtk/gtkscrolledwindow.c:665
+#: gtk/gtkscrolledwindow.c:663
 msgid "Minimum Content Width"
 msgstr "Minimale Breite des Inhalts"
 
-#: gtk/gtkscrolledwindow.c:666
+#: gtk/gtkscrolledwindow.c:664
 msgid "The minimum width that the scrolled window will allocate to its content"
 msgstr "Die minimale Breite, die das rollbare Fenster seinem Inhalt zuweist"
 
-#: gtk/gtkscrolledwindow.c:679
+#: gtk/gtkscrolledwindow.c:677
 msgid "Minimum Content Height"
 msgstr "Minimale Höhe des Inhalts"
 
-#: gtk/gtkscrolledwindow.c:680
+#: gtk/gtkscrolledwindow.c:678
 msgid ""
 "The minimum height that the scrolled window will allocate to its content"
 msgstr "Die minimale Höhe, die das rollbare Fenster seinem Inhalt zuweist"
 
-#: gtk/gtkscrolledwindow.c:694
+#: gtk/gtkscrolledwindow.c:692
 msgid "Kinetic Scrolling"
 msgstr "Kinetisches Rollen"
 
-#: gtk/gtkscrolledwindow.c:695
+#: gtk/gtkscrolledwindow.c:693
 msgid "Kinetic scrolling mode."
 msgstr "Kinetischer Rollmodus."
 
-#: gtk/gtkscrolledwindow.c:714
+#: gtk/gtkscrolledwindow.c:712
 msgid "Overlay Scrolling"
 msgstr "Überlagerndes Rollen"
 
-#: gtk/gtkscrolledwindow.c:715
+#: gtk/gtkscrolledwindow.c:713
 msgid "Overlay scrolling mode"
 msgstr "Überlagernder Rollmodus"
 
-#: gtk/gtkscrolledwindow.c:728
+#: gtk/gtkscrolledwindow.c:726
 msgid "Maximum Content Width"
 msgstr "Maximale Breite des Inhalts"
 
-#: gtk/gtkscrolledwindow.c:729
+#: gtk/gtkscrolledwindow.c:727
 msgid "The maximum width that the scrolled window will allocate to its content"
 msgstr "Die maximale Breite, die das rollbare Fenster seinem Inhalt zuweist"
 
-#: gtk/gtkscrolledwindow.c:742
+#: gtk/gtkscrolledwindow.c:740
 msgid "Maximum Content Height"
 msgstr "Maximale Höhe des Inhalts"
 
-#: gtk/gtkscrolledwindow.c:743
+#: gtk/gtkscrolledwindow.c:741
 msgid ""
 "The maximum height that the scrolled window will allocate to its content"
 msgstr "Die maximale Höhe, die das rollbare Fenster seinem Inhalt zuweist"
 
-#: gtk/gtkscrolledwindow.c:760 gtk/gtkscrolledwindow.c:761
+#: gtk/gtkscrolledwindow.c:758 gtk/gtkscrolledwindow.c:759
 msgid "Propagate Natural Width"
 msgstr "Übertragung der natürlichen Breite"
 
-#: gtk/gtkscrolledwindow.c:778 gtk/gtkscrolledwindow.c:779
+#: gtk/gtkscrolledwindow.c:776 gtk/gtkscrolledwindow.c:777
 msgid "Propagate Natural Height"
 msgstr "Übertragung der natürlichen Höhe"
 
