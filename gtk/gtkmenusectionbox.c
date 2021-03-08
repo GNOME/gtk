@@ -293,6 +293,22 @@ open_submenu (GtkWidget *button,
 }
 
 static void
+submenu_shown (GtkPopoverMenu     *popover,
+               GtkMenuTrackerItem *item)
+{
+  if (gtk_menu_tracker_item_get_should_request_show (item))
+    gtk_menu_tracker_item_request_submenu_shown (item, TRUE);
+}
+
+static void
+submenu_hidden (GtkPopoverMenu     *popover,
+                GtkMenuTrackerItem *item)
+{
+  if (gtk_menu_tracker_item_get_should_request_show (item))
+    gtk_menu_tracker_item_request_submenu_shown (item, FALSE);
+}
+
+static void
 gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
                                   int                 position,
                                   gpointer            user_data)
@@ -324,6 +340,9 @@ gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
           g_object_bind_property (item, "label", widget, "text", G_BINDING_SYNC_CREATE);
           g_object_bind_property (item, "icon", widget, "icon", G_BINDING_SYNC_CREATE);
           g_object_bind_property (item, "sensitive", widget, "sensitive", G_BINDING_SYNC_CREATE);
+
+          g_signal_connect (submenu, "show", G_CALLBACK (submenu_shown), item);
+          g_signal_connect (submenu, "hide", G_CALLBACK (submenu_hidden), item);
         }
       else
         {
