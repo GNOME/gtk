@@ -60,6 +60,7 @@
 #include "gtkpopovermenubarprivate.h"
 #include "gtkpopovermenu.h"
 
+#include "gtkbinlayout.h"
 #include "gtkboxlayout.h"
 #include "gtklabel.h"
 #include "gtkmenubutton.h"
@@ -105,6 +106,7 @@ struct _GtkPopoverMenuBarItem
 
   GtkWidget *label;
   GtkPopover *popover;
+  GtkMenuTrackerItem *tracker;
 };
 
 typedef struct _GtkPopoverMenuBarItemClass GtkPopoverMenuBarItemClass;
@@ -116,6 +118,18 @@ struct _GtkPopoverMenuBarItemClass
 };
 
 G_DEFINE_TYPE (GtkPopoverMenuBarItem, gtk_popover_menu_bar_item, GTK_TYPE_WIDGET)
+
+static void
+open_submenu (GtkPopoverMenuBarItem *item)
+{
+  gtk_popover_popup (item->popover);
+}
+
+static void
+close_submenu (GtkPopoverMenuBarItem *item)
+{
+  gtk_popover_popdown (item->popover);
+}
 
 static void
 set_active_item (GtkPopoverMenuBar     *bar,
@@ -133,12 +147,7 @@ set_active_item (GtkPopoverMenuBar     *bar,
     was_popup = FALSE;
 
   if (was_popup && changed)
-    {
-      gtk_accessible_update_state (GTK_ACCESSIBLE (bar->active_item),
-                                   GTK_ACCESSIBLE_STATE_EXPANDED, FALSE,
-                                   -1);
-      gtk_popover_popdown (bar->active_item->popover);
-    }
+    close_submenu (bar->active_item);
 
   if (changed)
     {
@@ -154,12 +163,7 @@ set_active_item (GtkPopoverMenuBar     *bar,
   if (bar->active_item)
     {
       if (popup || (was_popup && changed))
-        {
-          gtk_popover_popup (bar->active_item->popover);
-          gtk_accessible_update_state (GTK_ACCESSIBLE (bar->active_item),
-                                       GTK_ACCESSIBLE_STATE_EXPANDED, FALSE,
-                                       -1);
-        }
+        open_submenu (bar->active_item);
       else if (changed)
         gtk_widget_grab_focus (GTK_WIDGET (bar->active_item));
     }
@@ -280,6 +284,7 @@ gtk_popover_menu_bar_item_dispose (GObject *object)
 {
   GtkPopoverMenuBarItem *item = GTK_POPOVER_MENU_BAR_ITEM (object);
 
+  g_clear_object (&item->tracker);
   g_clear_pointer (&item->label, gtk_widget_unparent);
   g_clear_pointer ((GtkWidget **)&item->popover, gtk_widget_unparent);
 
@@ -290,37 +295,6 @@ static void
 gtk_popover_menu_bar_item_finalize (GObject *object)
 {
   G_OBJECT_CLASS (gtk_popover_menu_bar_item_parent_class)->finalize (object);
-}
-
-static void
-gtk_popover_menu_bar_item_measure (GtkWidget      *widget,
-                                   GtkOrientation  orientation,
-                                   int             for_size,
-                                   int            *minimum,
-                                   int            *natural,
-                                   int            *minimum_baseline,
-                                   int            *natural_baseline)
-{
-  GtkPopoverMenuBarItem *item = GTK_POPOVER_MENU_BAR_ITEM (widget);
-
-  gtk_widget_measure (item->label, orientation, for_size,
-                      minimum, natural,
-                      minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_popover_menu_bar_item_size_allocate (GtkWidget *widget,
-                                         int        width,
-                                         int        height,
-                                         int        baseline)
-{
-  GtkPopoverMenuBarItem *item = GTK_POPOVER_MENU_BAR_ITEM (widget);
-
-  gtk_widget_size_allocate (item->label,
-                            &(GtkAllocation) { 0, 0, width, height },
-                            baseline);
-
-  gtk_popover_present (GTK_POPOVER (item->popover));
 }
 
 static void
@@ -360,8 +334,6 @@ gtk_popover_menu_bar_item_class_init (GtkPopoverMenuBarItemClass *klass)
   object_class->finalize = gtk_popover_menu_bar_item_finalize;
 
   widget_class->root = gtk_popover_menu_bar_item_root;
-  widget_class->measure = gtk_popover_menu_bar_item_measure;
-  widget_class->size_allocate = gtk_popover_menu_bar_item_size_allocate;
 
   klass->activate = gtk_popover_menu_bar_item_activate;
 
@@ -377,6 +349,7 @@ gtk_popover_menu_bar_item_class_init (GtkPopoverMenuBarItemClass *klass)
   gtk_widget_class_set_css_name (widget_class, I_("item"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_MENU_ITEM);
   gtk_widget_class_set_activate_signal (widget_class, activate_signal);
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
 enum
 {
@@ -422,6 +395,30 @@ popover_unmap (GtkPopover        *popover,
 }
 
 static void
+popover_shown (GtkPopover            *popover,
+               GtkPopoverMenuBarItem *item)
+{
+  gtk_accessible_update_state (GTK_ACCESSIBLE (item),
+                               GTK_ACCESSIBLE_STATE_EXPANDED, TRUE,
+                               -1);
+
+  if (gtk_menu_tracker_item_get_should_request_show (item->tracker))
+    gtk_menu_tracker_item_request_submenu_shown (item->tracker, TRUE);
+}
+
+static void
+popover_hidden (GtkPopover            *popover,
+                GtkPopoverMenuBarItem *item)
+{
+  gtk_accessible_update_state (GTK_ACCESSIBLE (item),
+                               GTK_ACCESSIBLE_STATE_EXPANDED, FALSE,
+                               -1);
+
+  if (gtk_menu_tracker_item_get_should_request_show (item->tracker))
+    gtk_menu_tracker_item_request_submenu_shown (item->tracker, FALSE);
+}
+
+static void
 tracker_insert (GtkMenuTrackerItem *item,
                 int                 position,
                 gpointer            user_data)
@@ -450,8 +447,11 @@ tracker_insert (GtkMenuTrackerItem *item,
       gtk_widget_set_halign (GTK_WIDGET (popover), GTK_ALIGN_START);
 
       g_signal_connect (popover, "unmap", G_CALLBACK (popover_unmap), bar);
+      g_signal_connect (popover, "show", G_CALLBACK (popover_shown), widget);
+      g_signal_connect (popover, "hide", G_CALLBACK (popover_hidden), widget);
 
       widget->popover = popover;
+      widget->tracker = g_object_ref (item);
 
       sibling = NULL;
       for (child = gtk_widget_get_first_child (GTK_WIDGET (bar)), i = 1;
