@@ -42,9 +42,9 @@ Creates a node like `gsk_blur_node_new()` with the given properties.
 
 | property | syntax           | default                | printed     |
 | -------- | ---------------- | ---------------------- | ----------- |
-| color    | `<color>{1,4}`   | black                  | non-default |
+| colors   | `<color>{1,4}`   | black                  | non-default |
 | outline  | `<rounded-rect>` | 50                     | always      |
-| width    | `<number>{1,4}`  | 1                      | non-default |
+| widths   | `<number>{1,4}`  | 1                      | non-default |
 
 Creates a node like `gsk_border_node_new()` with the given properties.
 
@@ -121,7 +121,7 @@ Creates a node like `gsk_conic_gradient_node_new()` with the given properties.
 | property | syntax           | default                | printed     |
 | -------- | ---------------- | ---------------------- | ----------- |
 | end      | `<node>`         | color { }              | always      |
-| mode     | `<number>`       | 0.5                    | non-default |
+| progress | `<number>`       | 0.5                    | non-default |
 | start    | `<node>`         | color { }              | always      |
 
 Creates a node like `gsk_cross_fade_node_new()` with the given properties.
@@ -246,7 +246,7 @@ Creates a node like `gsk_rounded_clip_node_new()` with the given properties.
 | property | syntax           | default                | printed     |
 | -------- | ---------------- | ---------------------- | ----------- |
 | child    | `<node>`         | color { }              | always      |
-| shadow   | `<shadow>`       | black 1 1              | always      |
+| shadows  | `<shadow>`       | black 1 1              | always      |
 
 Creates a node like `gsk_shadow_node_new()` with the given properties.
 
