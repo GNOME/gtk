@@ -1565,6 +1565,83 @@ gsk_ngl_render_job_visit_clip_node (GskNglRenderJob     *job,
 }
 
 static inline void
+gsk_ngl_render_job_visit_rounded_color_node (GskNglRenderJob     *job,
+                                             const GskRenderNode *node)
+{
+  const GskRenderNode *child = gsk_rounded_clip_node_get_child (node);
+  const GskRoundedRect *clip = gsk_rounded_clip_node_get_clip (node);
+  const graphene_rect_t *outer;
+  graphene_rect_t inner;
+  graphene_rect_t rect;
+
+  outer = &clip->bounds;
+  rounded_rect_get_inner (clip, &inner);
+
+  gsk_ngl_render_job_begin_draw (job, job->driver->color);
+  gsk_ngl_program_set_uniform_color (job->current_program,
+                                     UNIFORM_COLOR_COLOR, 0,
+                                     gsk_color_node_get_color (child));
+
+  /* top left */
+  rect.origin.x = outer->origin.x;
+  rect.origin.y = outer->origin.y;
+  rect.size.width = inner.origin.x - rect.origin.x;
+  rect.size.height = inner.origin.y - rect.origin.y;
+  gsk_ngl_render_job_draw_rect (job, &rect);
+
+  /* top right */
+  rect.origin.x = inner.origin.x + inner.size.width;
+  rect.origin.y = outer->origin.y;
+  rect.size.width = outer->origin.x + outer->size.width - rect.origin.x;
+  rect.size.height = inner.origin.y - rect.origin.y;
+  gsk_ngl_render_job_draw_rect (job, &rect);
+
+  /* bottom right */
+  rect.origin.x = inner.origin.x + inner.size.width;
+  rect.origin.y = inner.origin.y + inner.size.height;
+  rect.size.width = outer->origin.x + outer->size.width - rect.origin.x;
+  rect.size.height = outer->origin.y + outer->size.height - rect.origin.y;
+  gsk_ngl_render_job_draw_rect (job, &rect);
+
+  /* bottom left */
+  rect.origin.x = outer->origin.x;
+  rect.origin.y = inner.origin.y + inner.size.height;
+  rect.size.width = inner.origin.x - rect.origin.x;
+  rect.size.height = outer->origin.y + outer->size.height - rect.origin.y;
+  gsk_ngl_render_job_draw_rect (job, &rect);
+
+  gsk_ngl_render_job_end_draw (job);
+
+  gsk_ngl_render_job_begin_draw (job, job->driver->color_no_clip);
+  gsk_ngl_program_set_uniform_color (job->current_program,
+                                     UNIFORM_COLOR_COLOR, 0,
+                                     gsk_color_node_get_color (child));
+
+  /* left side */
+  rect.origin.x = outer->origin.x;
+  rect.origin.y = inner.origin.y;
+  rect.size.width = inner.origin.x - rect.origin.x;
+  rect.size.height = inner.size.height;
+  gsk_ngl_render_job_draw_rect (job, &rect);
+
+  /* center */
+  rect.origin.x = inner.origin.x;
+  rect.origin.y = outer->origin.y;
+  rect.size.width = inner.size.width;
+  rect.size.height = outer->size.height;
+  gsk_ngl_render_job_draw_rect (job, &rect);
+
+  /* right side */
+  rect.origin.x = inner.origin.x + inner.size.width;
+  rect.origin.y = inner.origin.y;
+  rect.size.width = outer->origin.x + outer->size.width - rect.origin.x;
+  rect.size.height = inner.size.height;
+  gsk_ngl_render_job_draw_rect (job, &rect);
+
+  gsk_ngl_render_job_end_draw (job);
+}
+
+static inline void
 gsk_ngl_render_job_visit_rounded_clip_node (GskNglRenderJob     *job,
                                             const GskRenderNode *node)
 {
@@ -1584,6 +1661,17 @@ gsk_ngl_render_job_visit_rounded_clip_node (GskNglRenderJob     *job,
     {
       transformed_clip.corner[i].width = clip->corner[i].width * scale_x;
       transformed_clip.corner[i].height = clip->corner[i].height * scale_y;
+    }
+
+  if (gsk_render_node_get_node_type (child) == GSK_COLOR_NODE &&
+      job->current_clip->is_fully_contained &&
+      graphene_rect_equal (&clip->bounds, &child->bounds))
+    {
+      /* special-case CSS backgrounds */
+      gsk_ngl_render_job_push_clip (job, &transformed_clip);
+      gsk_ngl_render_job_visit_rounded_color_node (job, node);
+      gsk_ngl_render_job_pop_clip (job);
+      return;
     }
 
   if (job->current_clip->is_rectilinear)
