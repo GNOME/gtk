@@ -109,6 +109,8 @@ gdk_wayland_cairo_context_buffer_release (void             *_data,
 
   /* Get rid of all the extra ones */
   gdk_wayland_cairo_context_remove_surface (self, cairo_surface);
+  /* Release the reference the compositor held to this surface */
+  cairo_surface_destroy (cairo_surface);
 }
 
 static const struct wl_buffer_listener buffer_listener = {
@@ -194,7 +196,7 @@ gdk_wayland_cairo_context_end_frame (GdkDrawContext *draw_context,
 static void
 gdk_wayland_cairo_context_clear_all_cairo_surfaces (GdkWaylandCairoContext *self)
 {
-  self->cached_surface = NULL;
+  g_clear_pointer (&self->cached_surface, cairo_surface_destroy);
   while (self->surfaces)
     gdk_wayland_cairo_context_remove_surface (self, self->surfaces->data);
 }
@@ -221,6 +223,8 @@ gdk_wayland_cairo_context_dispose (GObject *object)
   GdkWaylandCairoContext *self = GDK_WAYLAND_CAIRO_CONTEXT (object);
 
   gdk_wayland_cairo_context_clear_all_cairo_surfaces (self);
+  g_assert (self->cached_surface == NULL);
+  g_assert (self->paint_surface == NULL);
 
   G_OBJECT_CLASS (gdk_wayland_cairo_context_parent_class)->dispose (object);
 }
