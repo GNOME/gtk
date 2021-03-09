@@ -1684,6 +1684,48 @@ sort_border_sides (const GdkRGBA *colors,
 }
 
 static inline void
+gsk_ngl_render_job_visit_rect_border_node (GskNglRenderJob     *job,
+                                           const GskRenderNode *node)
+{
+  const GdkRGBA *colors = gsk_border_node_get_colors (node);
+  const float *widths = gsk_border_node_get_widths (node);
+  const graphene_point_t *origin = &node->bounds.origin;
+  const graphene_size_t *size = &node->bounds.size;
+
+  gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color));
+
+  gsk_ngl_program_set_uniform_color (job->current_program,
+                                     UNIFORM_COLOR_COLOR, 0,
+                                     &colors[0]);
+
+  gsk_ngl_render_job_draw_rect (job,
+      &GRAPHENE_RECT_INIT (origin->x,
+                           origin->y,
+                           size->width - widths[1],
+                           widths[0]));
+
+  gsk_ngl_render_job_draw_rect (job,
+      &GRAPHENE_RECT_INIT (origin->x + size->width - widths[1],
+                           origin->y,
+                           widths[1],
+                           size->height - widths[2]));
+
+  gsk_ngl_render_job_draw_rect (job,
+      &GRAPHENE_RECT_INIT (origin->x + widths[3],
+                           origin->y + size->height - widths[2],
+                           size->width - widths[1],
+                           widths[2]));
+
+  gsk_ngl_render_job_draw_rect (job,
+      &GRAPHENE_RECT_INIT (origin->x,
+                           origin->y + widths[0],
+                           widths[3],
+                           size->height - widths[0]));
+
+  gsk_ngl_render_job_end_draw (job);
+}
+
+static inline void
 gsk_ngl_render_job_visit_uniform_border_node (GskNglRenderJob     *job,
                                               const GskRenderNode *node)
 {
@@ -3414,7 +3456,10 @@ gsk_ngl_render_job_visit_node (GskNglRenderJob     *job,
     break;
 
     case GSK_BORDER_NODE:
-      if (gsk_border_node_get_uniform (node))
+      if (gsk_border_node_get_uniform_color (node) &&
+          gsk_rounded_rect_is_rectilinear (gsk_border_node_get_outline (node)))
+        gsk_ngl_render_job_visit_rect_border_node (job, node);
+      else if (gsk_border_node_get_uniform (node))
         gsk_ngl_render_job_visit_uniform_border_node (job, node);
       else
         gsk_ngl_render_job_visit_border_node (job, node);
