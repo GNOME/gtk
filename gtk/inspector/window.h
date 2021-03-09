@@ -154,7 +154,8 @@ GskRenderNode *         gtk_inspector_prepare_render                            
                                                                                  GskRenderer            *renderer,
                                                                                  GdkSurface             *surface,
                                                                                  const cairo_region_t   *region,
-                                                                                 GskRenderNode          *node);
+                                                                                 GskRenderNode          *root,
+                                                                                 GskRenderNode          *widget_node);
 gboolean                gtk_inspector_handle_event                              (GdkEvent               *event);
 
 G_END_DECLS
