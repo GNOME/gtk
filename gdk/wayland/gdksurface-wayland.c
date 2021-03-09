@@ -284,11 +284,6 @@ static void gdk_wayland_surface_maybe_resize (GdkSurface *surface,
                                               int         height,
                                               int         scale);
 
-static void gdk_wayland_surface_resize (GdkSurface *surface,
-                                        int         width,
-                                        int         height,
-                                        int         scale);
-
 static void gdk_wayland_surface_configure (GdkSurface *surface);
 
 static void maybe_set_gtk_surface_dbus_properties (GdkWaylandSurface *impl);
@@ -415,6 +410,8 @@ gdk_wayland_surface_update_size (GdkSurface *surface,
     g_object_notify (G_OBJECT (surface), "height");
   if (scale_changed)
     g_object_notify (G_OBJECT (surface), "scale-factor");
+
+  _gdk_surface_update_size (surface);
 }
 
 static const char *
@@ -650,10 +647,10 @@ configure_drag_surface_geometry (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  gdk_wayland_surface_resize (surface,
-                              impl->next_layout.configured_width,
-                              impl->next_layout.configured_height,
-                              impl->scale);
+  gdk_wayland_surface_update_size (surface,
+                                   impl->next_layout.configured_width,
+                                   impl->next_layout.configured_height,
+                                   impl->scale);
 }
 
 static gboolean
@@ -1010,16 +1007,6 @@ is_realized_popup (GdkWaylandSurface *impl)
           impl->display_server.zxdg_popup_v6);
 }
 
-static void
-gdk_wayland_surface_resize (GdkSurface *surface,
-                            int         width,
-                            int         height,
-                            int         scale)
-{
-  gdk_wayland_surface_update_size (surface, width, height, scale);
-  _gdk_surface_update_size (surface);
-}
-
 static void gdk_wayland_surface_show (GdkSurface *surface,
                                       gboolean    already_mapped);
 static void gdk_wayland_surface_hide (GdkSurface *surface);
@@ -1051,7 +1038,7 @@ gdk_wayland_surface_maybe_resize (GdkSurface *surface,
   if (is_xdg_popup && is_visible && !impl->initial_configure_received)
     gdk_wayland_surface_hide (surface);
 
-  gdk_wayland_surface_resize (surface, width, height, scale);
+  gdk_wayland_surface_update_size (surface, width, height, scale);
 
   if (is_xdg_popup && is_visible && !impl->initial_configure_received)
     gdk_wayland_surface_show (surface, FALSE);
@@ -1416,7 +1403,7 @@ configure_toplevel_geometry (GdkSurface *surface)
                                       width, height,
                                       &width, &height);
         }
-      gdk_wayland_surface_resize (surface, width, height, impl->scale);
+      gdk_wayland_surface_update_size (surface, width, height, impl->scale);
 
       if (!impl->next_layout.toplevel.size_is_fixed)
         {
@@ -1434,7 +1421,7 @@ configure_toplevel_geometry (GdkSurface *surface)
       gdk_surface_constrain_size (&geometry, mask,
                                   width, height,
                                   &width, &height);
-      gdk_wayland_surface_resize (surface, width, height, impl->scale);
+      gdk_wayland_surface_update_size (surface, width, height, impl->scale);
     }
 }
 
