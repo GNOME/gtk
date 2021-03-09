@@ -1137,7 +1137,8 @@ struct _GskBorderNode
 {
   GskRenderNode render_node;
 
-  bool uniform: 1;
+  bool uniform_width: 1;
+  bool uniform_color: 1;
   GskRoundedRect outline;
   float border_width[4];
   GdkRGBA border_color[4];
@@ -1286,16 +1287,18 @@ gsk_border_node_diff (GskRenderNode  *node1,
 {
   GskBorderNode *self1 = (GskBorderNode *) node1;
   GskBorderNode *self2 = (GskBorderNode *) node2;
+  gboolean uniform1 = self1->uniform_width && self1->uniform_color;
+  gboolean uniform2 = self2->uniform_width && self2->uniform_color;
 
-  if (self1->uniform &&
-      self2->uniform &&
+  if (uniform1 &&
+      uniform2 &&
       self1->border_width[0] == self2->border_width[0] &&
       gsk_rounded_rect_equal (&self1->outline, &self2->outline) &&
       gdk_rgba_equal (&self1->border_color[0], &self2->border_color[0]))
     return;
 
   /* Different uniformity -> diff impossible */
-  if (self1->uniform ^ self2->uniform)
+  if (uniform1 ^ uniform1)
     {
       gsk_render_node_diff_impossible (node1, node2, region);
       return;
@@ -1401,14 +1404,17 @@ gsk_border_node_new (const GskRoundedRect *outline,
 
   if (border_width[0] == border_width[1] &&
       border_width[0] == border_width[2] &&
-      border_width[0] == border_width[3] &&
-      gdk_rgba_equal (&border_color[0], &border_color[1]) &&
+      border_width[0] == border_width[3])
+    self->uniform_width = TRUE;
+  else
+    self->uniform_width = FALSE;
+
+  if (gdk_rgba_equal (&border_color[0], &border_color[1]) &&
       gdk_rgba_equal (&border_color[0], &border_color[2]) &&
       gdk_rgba_equal (&border_color[0], &border_color[3]))
-    self->uniform = TRUE;
+    self->uniform_color = TRUE;
   else
-    self->uniform = FALSE;
-
+    self->uniform_color = FALSE;
 
   graphene_rect_init_from_rect (&node->bounds, &self->outline.bounds);
 
@@ -1419,7 +1425,15 @@ gsk_border_node_new (const GskRoundedRect *outline,
 bool
 gsk_border_node_get_uniform (const GskRenderNode *self)
 {
-  return ((const GskBorderNode *)self)->uniform;
+  const GskBorderNode *node = (const GskBorderNode *)self;
+  return node->uniform_width && node->uniform_color;
+}
+
+bool
+gsk_border_node_get_uniform_color (const GskRenderNode *self)
+{
+  const GskBorderNode *node = (const GskBorderNode *)self;
+  return node->uniform_color;
 }
 
 /*** GSK_TEXTURE_NODE ***/
