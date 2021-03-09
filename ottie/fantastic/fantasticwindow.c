@@ -22,6 +22,8 @@
 #include "fantasticwindow.h"
 
 #include "fantasticobserver.h"
+#include "fantasticproperty.h"
+#include "fantasticpropertylist.h"
 
 #include "ottie/ottiecreationprivate.h"
 #include "ottie/ottiecompositionlayerprivate.h"
@@ -338,6 +340,10 @@ create_object_children (gpointer item,
   else if (OTTIE_IS_GROUP_SHAPE (item))
     {
       return g_object_ref (item);
+    }
+  else if (!FANTASTIC_IS_PROPERTY (item))
+    {
+      return G_LIST_MODEL (fantastic_property_list_new (item));
     }
   else
     {

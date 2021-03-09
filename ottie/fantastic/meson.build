@@ -2,6 +2,8 @@ fantastic_sources = [
   'main.c',
   'fantasticapplication.c',
   'fantasticobserver.c',
+  'fantasticproperty.c',
+  'fantasticpropertylist.c',
   'fantasticwindow.c',
 ]
 
