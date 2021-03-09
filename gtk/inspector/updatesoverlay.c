@@ -172,14 +172,9 @@ gtk_updates_overlay_snapshot (GtkInspectorOverlay *overlay,
   GtkUpdate *draw;
   gint64 now;
   GList *l;
-  double native_x, native_y;
 
   if (!GTK_IS_NATIVE (widget))
     return;
-
-  /* The coordinates we're getting from GdkSurface API are in GdkSurface coordinate spaces,
-   * but we're snapshotting in widget space, so we need to transform */
-  gtk_native_get_surface_transform (GTK_NATIVE (widget), &native_x, &native_y);
 
   updates = gtk_update_overlay_lookup_for_widget (self, widget, TRUE);
   now = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (widget));
@@ -234,7 +229,7 @@ gtk_updates_overlay_snapshot (GtkInspectorOverlay *overlay,
           cairo_region_get_rectangle (draw->region, i, &rect);
           gtk_snapshot_append_color (snapshot,
                                      &(GdkRGBA) { 1, 0, 0, 0.4 * (1 - progress) },
-                                     &GRAPHENE_RECT_INIT(rect.x - native_x, rect.y - native_y,
+                                     &GRAPHENE_RECT_INIT(rect.x, rect.y,
                                                          rect.width, rect.height));
         }
     }

@@ -780,24 +780,25 @@ gtk_inspector_prepare_render (GtkWidget            *widget,
                               GskRenderer          *renderer,
                               GdkSurface           *surface,
                               const cairo_region_t *region,
-                              GskRenderNode        *node)
+                              GskRenderNode        *root,
+                              GskRenderNode        *widget_node)
 {
   GtkInspectorWindow *iw;
 
   iw = gtk_inspector_window_get_for_display (gtk_widget_get_display (widget));
   if (iw == NULL)
-    return node;
+    return root;
 
   /* sanity check for single-display GDK backends */
   if (GTK_WIDGET (iw) == widget)
-    return node;
+    return root;
 
   gtk_inspector_recorder_record_render (GTK_INSPECTOR_RECORDER (iw->widget_recorder),
                                         widget,
                                         renderer,
                                         surface,
                                         region,
-                                        node);
+                                        root);
 
   if (iw->overlays)
     {
@@ -806,7 +807,7 @@ gtk_inspector_prepare_render (GtkWidget            *widget,
       double native_x, native_y;
 
       snapshot = gtk_snapshot_new ();
-      gtk_snapshot_append_node (snapshot, node);
+      gtk_snapshot_append_node (snapshot, root);
 
       gtk_native_get_surface_transform (GTK_NATIVE (widget), &native_x, &native_y);
 
@@ -815,16 +816,16 @@ gtk_inspector_prepare_render (GtkWidget            *widget,
 
       for (l = iw->overlays; l; l = l->next)
         {
-          gtk_inspector_overlay_snapshot (l->data, snapshot, node, widget);
+          gtk_inspector_overlay_snapshot (l->data, snapshot, widget_node, widget);
         }
 
       gtk_snapshot_restore (snapshot);
 
-      gsk_render_node_unref (node);
-      node = gtk_snapshot_free_to_node (snapshot);
+      gsk_render_node_unref (root);
+      root = gtk_snapshot_free_to_node (snapshot);
     }
 
-  return node;
+  return root;
 }
 
 gboolean

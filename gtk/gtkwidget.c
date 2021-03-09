@@ -11462,6 +11462,7 @@ gtk_widget_render (GtkWidget            *widget,
                    GdkSurface           *surface,
                    const cairo_region_t *region)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkSnapshot *snapshot;
   GskRenderer *renderer;
   GskRenderNode *root;
@@ -11497,7 +11498,8 @@ gtk_widget_render (GtkWidget            *widget,
                                            renderer,
                                            surface,
                                            region,
-                                           root);
+                                           root,
+                                           priv->render_node);
 
       gsk_renderer_render (renderer, root, region);
 
