@@ -2767,13 +2767,13 @@ render_node_print (Printer       *p,
 
         start_node (p, "debug");
 
-        append_node_param (p, "child", gsk_debug_node_get_child (node));
         /* TODO: We potentially need to escape certain characters in the message */
         if (message)
           {
             _indent (p);
             g_string_append_printf (p->str, "message: \"%s\";\n", message);
           }
+        append_node_param (p, "child", gsk_debug_node_get_child (node));
 
         end_node (p);
       }
