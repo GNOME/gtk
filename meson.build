@@ -778,6 +778,7 @@ foreach pkg: pkgs
     subdirs: ['gtk-@0@'.format(gtk_api_version)],
     extra_cflags: gdk_extra_cflags + gsk_extra_cflags + gtk_extra_cflags,
   )
+  meson.override_dependency(pkg, libgtk_dep)
 endforeach
 
 if os_unix
