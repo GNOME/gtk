@@ -874,6 +874,9 @@ gsk_ngl_render_job_update_clip (GskNglRenderJob     *job,
   return TRUE;
 }
 
+static void update_program_counters (GskNglRenderJob *job,
+                                     float width, float height);
+
 /* load_vertex_data_with_region */
 static inline void
 gsk_ngl_render_job_load_vertices_from_offscreen (GskNglRenderJob             *job,
@@ -887,6 +890,8 @@ gsk_ngl_render_job_load_vertices_from_offscreen (GskNglRenderJob             *jo
   float max_y = min_y + bounds->size.height;
   float y1 = offscreen->was_offscreen ? offscreen->area.y2 : offscreen->area.y;
   float y2 = offscreen->was_offscreen ? offscreen->area.y : offscreen->area.y2;
+
+  update_program_counters (job, max_x - min_x, max_y - min_y);
 
   vertices[0].position[0] = min_x;
   vertices[0].position[1] = min_y;
@@ -932,6 +937,8 @@ gsk_ngl_render_job_draw (GskNglRenderJob *job,
   float min_y = job->offset_y + y;
   float max_x = min_x + width;
   float max_y = min_y + height;
+
+  update_program_counters (job, width, height);
 
   vertices[0].position[0] = min_x;
   vertices[0].position[1] = min_y;
@@ -986,6 +993,8 @@ gsk_ngl_render_job_draw_coords (GskNglRenderJob *job,
 {
   GskNglDrawVertex *vertices = gsk_ngl_command_queue_add_vertices (job->command_queue);
 
+  update_program_counters (job, max_x - min_x, max_y - min_y);
+
   vertices[0].position[0] = min_x;
   vertices[0].position[1] = min_y;
   vertices[0].uv[0] = 0;
@@ -1028,6 +1037,68 @@ gsk_ngl_render_job_draw_offscreen_rect (GskNglRenderJob       *job,
   float max_y = min_y + bounds->size.height;
 
   gsk_ngl_render_job_draw_coords (job, min_x, min_y, max_x, max_y);
+}
+
+typedef struct {
+#define GSK_NGL_NO_UNIFORMS
+#define GSK_NGL_ADD_UNIFORM(pos, KEY, name)
+#define GSK_NGL_DEFINE_PROGRAM(name, resource, uniforms) \
+  guint64 name ## _no_clip; \
+  guint64 name ## _rect_clip; \
+  guint64 name;
+# include "gsknglprograms.defs"
+#undef GSK_NGL_NO_UNIFORMS
+#undef GSK_NGL_ADD_UNIFORM
+#undef GSK_NGL_DEFINE_PROGRAM
+} ProgramCounters;
+
+static ProgramCounters counters;
+
+void dump_program_counters (void);
+
+void
+dump_program_counters (void)
+{
+#define GSK_NGL_NO_UNIFORMS
+#define GSK_NGL_ADD_UNIFORM(pos, KEY, name)
+#define PRINT_ONE(name) \
+  g_print ("%lu " #name "\n", counters.name);
+#define GSK_NGL_DEFINE_PROGRAM(name, resource, uniforms) \
+  PRINT_ONE(name ## _no_clip) \
+  PRINT_ONE(name ## _rect_clip) \
+  PRINT_ONE(name)
+# include "gsknglprograms.defs"
+#undef GSK_NGL_NO_UNIFORMS
+#undef GSK_NGL_ADD_UNIFORM
+#undef GSK_NGL_DEFINE_PROGRAM
+}
+
+static void
+update_prog_counters (GskNglRenderJob *job,
+                      GskNglProgram    *program,
+                      float width, float height)
+{
+  guint64 pixels = ceilf (width) * ceilf (height);
+#define GSK_NGL_NO_UNIFORMS
+#define GSK_NGL_ADD_UNIFORM(pos, KEY, name)
+#define GSK_NGL_DEFINE_PROGRAM(name, resource, uniforms) \
+  if (program == job->driver->name) \
+    counters.name += pixels; \
+  else if (program == job->driver->name ## _no_clip) \
+    counters.name ## _no_clip += pixels; \
+  else if (program == job->driver->name ## _rect_clip) \
+    counters.name ## _rect_clip += pixels;
+# include "gsknglprograms.defs"
+#undef GSK_NGL_NO_UNIFORMS
+#undef GSK_NGL_ADD_UNIFORM
+#undef GSK_NGL_DEFINE_PROGRAM
+}
+
+static void
+update_program_counters (GskNglRenderJob *job,
+                         float width, float height)
+{
+  update_prog_counters (job, job->current_program, width, height);
 }
 
 static inline void
@@ -1868,6 +1939,11 @@ gsk_ngl_render_job_visit_border_node (GskNglRenderJob     *job,
     gsk_ngl_render_job_transform_rounded_rect (job, rounded_outline, &outline);
 
     program = CHOOSE_PROGRAM (job, border);
+
+    update_prog_counters (job, program, max_x - min_x, widths[0]);
+    update_prog_counters (job, program, max_y - min_y, widths[1]);
+    update_prog_counters (job, program, max_x - min_x, widths[2]);
+    update_prog_counters (job, program, max_y - min_y, widths[3]);
 
     gsk_ngl_program_set_uniform4fv (program,
                                     UNIFORM_BORDER_WIDTHS, 0,
@@ -2830,6 +2906,8 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
       glyph_y = floorf (y + cy + 0.125) + glyph->ink_rect.y;
       glyph_x2 = glyph_x + glyph->ink_rect.width;
       glyph_y2 = glyph_y + glyph->ink_rect.height;
+
+      update_program_counters (job, glyph->ink_rect.width, glyph->ink_rect.height);
 
       vertices[base+0].position[0] = glyph_x;
       vertices[base+0].position[1] = glyph_y;

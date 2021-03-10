@@ -286,6 +286,8 @@ gsk_ngl_renderer_dispose (GObject *object)
   G_OBJECT_CLASS (gsk_ngl_renderer_parent_class)->dispose (object);
 }
 
+extern void dump_program_counters (void);
+
 static void
 gsk_ngl_renderer_class_init (GskNglRendererClass *klass)
 {
@@ -298,6 +300,8 @@ gsk_ngl_renderer_class_init (GskNglRendererClass *klass)
   renderer_class->unrealize = gsk_ngl_renderer_unrealize;
   renderer_class->render = gsk_ngl_renderer_render;
   renderer_class->render_texture = gsk_ngl_renderer_render_texture;
+
+  g_atexit (dump_program_counters);
 }
 
 static void
