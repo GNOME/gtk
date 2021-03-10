@@ -21,7 +21,10 @@ if WIN32_GLES
 AM_CPPFLAGS += "-DGDK_WIN32_ENABLE_EGL=1"
 endif #WIN32_GLES
 
-LDADDS = $(GDK_DEP_LIBS)
+libgdk_win32_DEP_LIBS = \
+	hid.lib
+
+LDADDS = $(libgdk_win32_DEP_LIBS) $(GDK_DEP_LIBS)
 
 noinst_LTLIBRARIES = libgdk-win32.la
 
@@ -40,6 +43,8 @@ libgdk_win32_la_SOURCES = \
 	gdkdevice-virtual.h \
 	gdkdevice-win32.c \
 	gdkdevice-win32.h \
+	gdkdevice-winpointer.c \
+	gdkdevice-winpointer.h \
 	gdkdevice-wintab.c \
 	gdkdevice-wintab.h \
 	gdkdisplay-win32.c \

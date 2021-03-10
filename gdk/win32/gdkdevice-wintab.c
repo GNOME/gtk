@@ -128,7 +128,7 @@ gdk_device_wintab_query_state (GdkDevice        *device,
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
   hwnd = GDK_WINDOW_HWND (window);
-  GetCursorPos (&point);
+  _gdk_win32_get_cursor_pos (&point);
 
   if (root_x)
     *root_x = point.x / impl->window_scale;

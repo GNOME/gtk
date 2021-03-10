@@ -117,7 +117,7 @@ gdk_device_win32_query_state (GdkDevice        *device,
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
   hwnd = GDK_WINDOW_HWND (window);
-  GetCursorPos (&point);
+  _gdk_win32_get_cursor_pos (&point);
 
   if (root_x)
     *root_x = point.x / impl->window_scale;
@@ -215,7 +215,7 @@ _gdk_device_win32_window_at_position (GdkDevice       *device,
   HWND hwnd;
   RECT rect;
 
-  if (!GetCursorPos (&screen_pt))
+  if (!_gdk_win32_get_cursor_pos (&screen_pt))
     return NULL;
 
   hwnd = WindowFromPoint (screen_pt);

@@ -41,6 +41,8 @@ struct _GdkDeviceManagerWin32
   /* Fake slave devices */
   GdkDevice *system_pointer;
   GdkDevice *system_keyboard;
+
+  GList *winpointer_devices;
   GList *wintab_devices;
 
   /* Bumped up every time a wintab device enters the proximity
@@ -57,11 +59,31 @@ struct _GdkDeviceManagerWin32Class
 
 GType gdk_device_manager_win32_get_type (void) G_GNUC_CONST;
 
-void     _gdk_input_set_tablet_active (void);
-gboolean gdk_input_other_event        (GdkDisplay *display,
-                                       GdkEvent   *event,
-                                       MSG        *msg,
-                                       GdkWindow  *window);
+typedef void
+(*crossing_cb_t)(GdkDisplay *display,
+                 GdkDevice *device,
+                 GdkWindow *window,
+                 POINT *screen_pt,
+                 guint32 time_);
+
+void     gdk_winpointer_initialize_window (GdkWindow *window);
+gboolean gdk_winpointer_should_forward_message (MSG *msg);
+void     gdk_winpointer_input_events (GdkDisplay *display,
+                                      GdkWindow *window,
+                                      crossing_cb_t crossing_cb,
+                                      MSG *msg);
+gboolean gdk_winpointer_get_message_info (GdkDisplay *display,
+                                          MSG *msg,
+                                          GdkDevice **device,
+                                          guint32 *time_);
+void     gdk_winpointer_interaction_ended (MSG *msg);
+void     gdk_winpointer_finalize_window (GdkWindow *window);
+
+void     _gdk_wintab_set_tablet_active (void);
+gboolean gdk_wintab_input_events       (GdkDisplay *display,
+                                        GdkEvent   *event,
+                                        MSG        *msg,
+                                        GdkWindow  *window);
 
 G_END_DECLS
 

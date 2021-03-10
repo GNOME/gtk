@@ -3,6 +3,7 @@ gdk_win32_sources = files(
   'gdkdevicemanager-win32.c',
   'gdkdevice-virtual.c',
   'gdkdevice-win32.c',
+  'gdkdevice-winpointer.c',
   'gdkdevice-wintab.c',
   'gdkdisplay-win32.c',
   'gdkdisplaymanager-win32.c',
@@ -47,7 +48,8 @@ install_headers(gdk_win32_public_headers, subdir: 'gtk-3.0/gdk/win32')
 install_headers('gdkwin32.h', subdir: 'gtk-3.0/gdk')
 
 gdk_win32_deps = [ # FIXME
-    pangowin32_dep
+    pangowin32_dep,
+    meson.get_compiler('c').find_library('hid')
 ]
 
 libgdk_win32 = static_library('gdk-win32',

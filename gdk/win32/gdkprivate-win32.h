@@ -163,9 +163,17 @@ struct _GdkColormapPrivateWin32
   GdkColorInfo *info;
 };
 
+typedef enum {
+  GDK_WIN32_TABLET_INPUT_API_NONE = 0,
+  GDK_WIN32_TABLET_INPUT_API_WINTAB,
+  GDK_WIN32_TABLET_INPUT_API_WINPOINTER
+} GdkWin32TabletInputAPI;
+
 GType _gdk_gc_win32_get_type (void);
 
 gulong _gdk_win32_get_next_tick (gulong suggested_tick);
+
+BOOL _gdk_win32_get_cursor_pos (LPPOINT lpPoint);
 
 void _gdk_window_init_position     (GdkWindow *window);
 void _gdk_window_move_resize_child (GdkWindow *window,
@@ -262,6 +270,8 @@ void    _gdk_other_api_failed        (const gchar *where,
 #define WIN32_GDI_FAILED(api) WIN32_API_FAILED (api)
 #define OTHER_API_FAILED(api) _gdk_other_api_failed (G_STRLOC, api)
 
+#define WIN32_API_FAILED_LOG_ONCE(api) G_STMT_START { static gboolean logged = 0; if (!logged) { _gdk_win32_api_failed (G_STRLOC , api); logged = 1; }} G_STMT_END
+
 /* These two macros call a GDI or other Win32 API and if the return
  * value is zero or NULL, print a warning message. The majority of GDI
  * calls return zero or NULL on failure. The value of the macros is nonzero
@@ -287,6 +297,7 @@ extern HINSTANCE	 _gdk_dll_hinstance;
 extern HINSTANCE	 _gdk_app_hmodule;
 
 extern gint		 _gdk_input_ignore_core;
+extern GdkWin32TabletInputAPI _gdk_win32_tablet_input_api;
 
 /* These are thread specific, but GDK/win32 works OK only when invoked
  * from a single thread anyway.
@@ -326,7 +337,6 @@ void  _gdk_win32_end_modal_call (GdkWin32ModalOpKind kind);
 
 
 /* Options */
-extern gboolean		 _gdk_input_ignore_wintab;
 extern gint		 _gdk_max_colors;
 
 #define GDK_WIN32_COLORMAP_DATA(cmap) ((GdkColormapPrivateWin32 *) GDK_COLORMAP (cmap)->windowing_data)

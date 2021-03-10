@@ -975,6 +975,9 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
   if (attributes_mask & GDK_WA_CURSOR)
     gdk_window_set_cursor (window, attributes->cursor);
 
+  if (_gdk_win32_tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER)
+    gdk_winpointer_initialize_window (window);
+
   _gdk_win32_window_enable_transparency (window);
 }
 

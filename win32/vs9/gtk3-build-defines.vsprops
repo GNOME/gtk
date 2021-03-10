@@ -57,7 +57,7 @@
 	/>
 	<UserMacro
 		Name="GdkAdditionalLibs"
-		Value="winmm.lib dwmapi.lib setupapi.lib $(GtkGdkCommonLibs)"
+		Value="winmm.lib dwmapi.lib setupapi.lib hid.lib $(GtkGdkCommonLibs)"
 	/>
 	<UserMacro
 		Name="GtkAdditionalLibs"
