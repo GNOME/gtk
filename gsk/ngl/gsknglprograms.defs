@@ -57,6 +57,12 @@ GSK_NGL_DEFINE_PROGRAM (linear_gradient,
                         GSK_NGL_ADD_UNIFORM (3, LINEAR_GRADIENT_POINTS, u_points)
                         GSK_NGL_ADD_UNIFORM (4, LINEAR_GRADIENT_REPEAT, u_repeat))
 
+GSK_NGL_DEFINE_PROGRAM (linear_gradient_2,
+                        "/org/gtk/libgsk/glsl/linear_gradient_2.glsl",
+                        GSK_NGL_ADD_UNIFORM (1, LINEAR_GRADIENT_2_COLOR_STOPS, u_color_stops)
+                        GSK_NGL_ADD_UNIFORM (2, LINEAR_GRADIENT_2_POINTS, u_points)
+                        GSK_NGL_ADD_UNIFORM (3, LINEAR_GRADIENT_2_REPEAT, u_repeat))
+
 GSK_NGL_DEFINE_PROGRAM (outset_shadow,
                         "/org/gtk/libgsk/glsl/outset_shadow.glsl",
                         GSK_NGL_ADD_UNIFORM (1, OUTSET_SHADOW_COLOR, u_color)

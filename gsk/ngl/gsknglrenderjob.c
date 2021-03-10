@@ -1494,6 +1494,37 @@ gsk_ngl_render_job_visit_linear_gradient_node (GskNglRenderJob     *job,
 }
 
 static inline void
+gsk_ngl_render_job_visit_linear_gradient_2_node (GskNglRenderJob     *job,
+                                                 const GskRenderNode *node)
+{
+  const GskColorStop *stops = gsk_linear_gradient_node_get_color_stops (node, NULL);
+  const graphene_point_t *start = gsk_linear_gradient_node_get_start (node);
+  const graphene_point_t *end = gsk_linear_gradient_node_get_end (node);
+  int n_color_stops = gsk_linear_gradient_node_get_n_color_stops (node);
+  gboolean repeat = gsk_render_node_get_node_type (node) == GSK_REPEATING_LINEAR_GRADIENT_NODE;
+  float x1 = job->offset_x + start->x;
+  float x2 = job->offset_x + end->x;
+  float y1 = job->offset_y + start->y;
+  float y2 = job->offset_y + end->y;
+
+  g_assert (n_color_stops == 2);
+
+  gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, linear_gradient_2));
+  gsk_ngl_program_set_uniform1fv (job->current_program,
+                                  UNIFORM_LINEAR_GRADIENT_2_COLOR_STOPS, 0,
+                                  n_color_stops * 5,
+                                  (const float *)stops);
+  gsk_ngl_program_set_uniform4f (job->current_program,
+                                 UNIFORM_LINEAR_GRADIENT_2_POINTS, 0,
+                                 x1, y1, x2 - x1, y2 - y1);
+  gsk_ngl_program_set_uniform1i (job->current_program,
+                                 UNIFORM_LINEAR_GRADIENT_2_REPEAT, 0,
+                                 repeat);
+  gsk_ngl_render_job_draw_rect (job, &node->bounds);
+  gsk_ngl_render_job_end_draw (job);
+}
+
+static inline void
 gsk_ngl_render_job_visit_conic_gradient_node (GskNglRenderJob     *job,
                                               const GskRenderNode *node)
 {
@@ -3695,7 +3726,9 @@ gsk_ngl_render_job_visit_node (GskNglRenderJob     *job,
 
     case GSK_LINEAR_GRADIENT_NODE:
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
-      if (gsk_linear_gradient_node_get_n_color_stops (node) < MAX_GRADIENT_STOPS)
+      if (gsk_linear_gradient_node_get_n_color_stops (node) == 2)
+        gsk_ngl_render_job_visit_linear_gradient_2_node (job, node);
+      else if (gsk_linear_gradient_node_get_n_color_stops (node) < MAX_GRADIENT_STOPS)
         gsk_ngl_render_job_visit_linear_gradient_node (job, node);
       else
         gsk_ngl_render_job_visit_as_fallback (job, node);
