@@ -3706,10 +3706,26 @@ gsk_ngl_render_job_visit_node (GskNglRenderJob     *job,
     break;
 
     case GSK_OUTSET_SHADOW_NODE:
-      if (gsk_outset_shadow_node_get_blur_radius (node) > 0)
-        gsk_ngl_render_job_visit_blurred_outset_shadow_node (job, node);
-      else
-        gsk_ngl_render_job_visit_unblurred_outset_shadow_node (job, node);
+      {
+        const GskRoundedRect *outline = gsk_outset_shadow_node_get_outline (node);
+        GskRoundedRect transformed_outline;
+
+        gsk_ngl_render_job_transform_bounds (job, &outline->bounds, &transformed_outline.bounds);
+
+        for (guint i = 0; i < G_N_ELEMENTS (transformed_outline.corner); i++)
+          {
+            transformed_outline.corner[i].width = outline->corner[i].width * job->scale_x;
+            transformed_outline.corner[i].height = outline->corner[i].height * job->scale_y;
+          }
+
+        if (!gsk_rounded_rect_contains_rect (&transformed_outline, &job->current_clip->rect.bounds))
+          {
+            if (gsk_outset_shadow_node_get_blur_radius (node) > 0)
+              gsk_ngl_render_job_visit_blurred_outset_shadow_node (job, node);
+            else
+              gsk_ngl_render_job_visit_unblurred_outset_shadow_node (job, node);
+          }
+      }
     break;
 
     case GSK_RADIAL_GRADIENT_NODE:
