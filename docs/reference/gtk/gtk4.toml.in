@@ -232,3 +232,4 @@ content_images = [
   "images/data-table.png",
   "images/navigation-sidebar.png",
 ]
+urlmap_file = "urlmap.js"

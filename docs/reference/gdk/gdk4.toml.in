@@ -94,3 +94,4 @@ content_images = [
   "images/popup-flip.png",
   "images/popup-slide.png",
 ]
+urlmap_file = "urlmap.js"
