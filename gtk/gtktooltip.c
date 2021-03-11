@@ -548,6 +548,9 @@ gtk_tooltip_run_requery (GtkWidget  **widget,
               double xx = *x;
               double yy = *y;
 
+              if (gtk_widget_get_native (parent) != gtk_widget_get_native (*widget))
+                break;
+
               gtk_widget_translate_coordinates (*widget, parent, xx, yy, &xx, &yy);
 
               *x = xx;
