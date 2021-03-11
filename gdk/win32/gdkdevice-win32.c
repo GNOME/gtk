@@ -174,38 +174,25 @@ _gdk_device_win32_surface_at_position (GdkDevice       *device,
   GdkSurface *window = NULL;
   GdkWin32Surface *impl = NULL;
   POINT screen_pt, client_pt;
-  HWND hwnd, hwndc;
+  HWND hwnd;
   RECT rect;
 
-  GetCursorPos (&screen_pt);
+  if (!GetCursorPos (&screen_pt))
+    return NULL;
 
-  /* Only consider visible children of the desktop to avoid the various
-   * non-visible windows you often find on a running Windows box. These
-   * might overlap our windows and cause our walk to fail. As we assume
-   * WindowFromPoint() can find our windows, we follow similar logic
-   * here, and ignore invisible and disabled windows.
-   */
-  hwnd = GetDesktopWindow ();
-  do {
-    window = gdk_win32_handle_table_lookup (hwnd);
+  /* Use WindowFromPoint instead of ChildWindowFromPoint(Ex).
+  *  Only WindowFromPoint is able to look through transparent
+  *  layered windows.
+  */
+  hwnd = GetAncestor (WindowFromPoint (screen_pt), GA_ROOT);
 
-    if (window != NULL)
-      break;
+  /* Verify that we're really inside the client area of the window */
+  GetClientRect (hwnd, &rect);
+  screen_to_client (hwnd, screen_pt, &client_pt);
+  if (!PtInRect (&rect, client_pt))
+    hwnd = NULL;
 
-    screen_to_client (hwnd, screen_pt, &client_pt);
-    hwndc = ChildWindowFromPointEx (hwnd, client_pt, CWP_SKIPDISABLED  |
-						     CWP_SKIPINVISIBLE);
-
-    /* Verify that we're really inside the client area of the window */
-    if (hwndc != hwnd)
-      {
-	GetClientRect (hwndc, &rect);
-	screen_to_client (hwndc, screen_pt, &client_pt);
-	if (!PtInRect (&rect, client_pt))
-	  hwndc = hwnd;
-      }
-
-  } while (hwndc != hwnd && (hwnd = hwndc, 1));
+  window = gdk_win32_handle_table_lookup (hwnd);
 
   if (window && (win_x || win_y))
     {
