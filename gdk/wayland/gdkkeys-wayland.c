@@ -53,6 +53,8 @@ struct _GdkWaylandKeymap
 
   PangoDirection *direction;
   gboolean bidi;
+
+  char **languages;
 };
 
 struct _GdkWaylandKeymapClass
@@ -362,6 +364,33 @@ gdk_wayland_keymap_get_modifier_state (GdkKeymap *keymap)
   return get_gdk_modifiers (xkb_keymap, mods);
 }
 
+static const char * const *
+gdk_wayland_keymap_get_languages (GdkKeymap *keymap)
+{
+  GdkWaylandKeymap *self = GDK_WAYLAND_KEYMAP (keymap);
+
+  if (self->languages == NULL)
+    {
+      GArray *ar = g_array_new (TRUE, FALSE, sizeof (char *));
+      xkb_layout_index_t n = xkb_keymap_num_layouts (self->xkb_keymap);
+
+      for (xkb_layout_index_t i = 0; i < n; i++)
+        {
+          const char *name = xkb_keymap_layout_get_name (self->xkb_keymap, i);
+
+          if (name != NULL)
+            {
+              char *copy = g_strdup (name);
+              g_array_append_val (ar, copy);
+            }
+        }
+
+      self->languages = (char **)(gpointer)g_array_free (ar, FALSE);
+    }
+
+  return (const char * const *)self->languages;
+}
+
 static void
 _gdk_wayland_keymap_class_init (GdkWaylandKeymapClass *klass)
 {
@@ -380,6 +409,7 @@ _gdk_wayland_keymap_class_init (GdkWaylandKeymapClass *klass)
   keymap_class->lookup_key = gdk_wayland_keymap_lookup_key;
   keymap_class->translate_keyboard_state = gdk_wayland_keymap_translate_keyboard_state;
   keymap_class->get_modifier_state = gdk_wayland_keymap_get_modifier_state;
+  keymap_class->get_languages = gdk_wayland_keymap_get_languages;
 }
 
 static void

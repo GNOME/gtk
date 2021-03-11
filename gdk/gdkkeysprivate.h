@@ -60,6 +60,7 @@ struct _GdkKeymapClass
                                          int             *level,
                                          GdkModifierType *consumed_modifiers);
   guint (* get_modifier_state)          (GdkKeymap *keymap);
+  const char * const * (* get_languages) (GdkKeymap *keymap);
 
 
   /* Signals */
@@ -120,6 +121,9 @@ void           gdk_keymap_get_cached_entries_for_keyval (GdkKeymap     *keymap,
                                                          guint          keyval,
                                                          GdkKeymapKey **keys,
                                                          guint         *n_keys);
+
+const char * const *
+               gdk_keymap_get_languages            (GdkKeymap          *keymap);
 
 G_END_DECLS
 

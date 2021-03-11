@@ -587,7 +587,7 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  *     (state & ~consumed & ALL_ACCELS_MASK) == GDK_CONTROL_MASK)
  *   // Control was pressed
  * ]|
- * 
+ *
  * An older interpretation @consumed_modifiers was that it contained
  * all modifiers that might affect the translation of the key;
  * this allowed accelerators to be stored with irrelevant consumed
@@ -813,4 +813,15 @@ gdk_keyval_convert_case (guint symbol,
     *lower = xlower;
   if (upper)
     *upper = xupper;
+}
+
+const char * const *
+gdk_keymap_get_languages (GdkKeymap *keymap)
+{
+  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), NULL);
+
+  if (GDK_KEYMAP_GET_CLASS (keymap)->get_languages)
+    return GDK_KEYMAP_GET_CLASS (keymap)->get_languages (keymap);
+
+  return NULL;
 }

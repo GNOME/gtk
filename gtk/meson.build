@@ -377,6 +377,7 @@ gtk_public_sources = files([
   'gtksnapshot.c',
   'gtksorter.c',
   'gtksortlistmodel.c',
+  'gtkspellcheck.c',
   'gtkspinbutton.c',
   'gtkspinner.c',
   'gtkstack.c',
@@ -648,6 +649,7 @@ gtk_public_headers = files([
   'gtksnapshot.h',
   'gtksorter.h',
   'gtksortlistmodel.h',
+  'gtkspellcheck.h',
   'gtkspinbutton.h',
   'gtkspinner.h',
   'gtkstack.h',
@@ -1001,6 +1003,7 @@ gtk_deps = [
   epoxy_dep,
   libm,
   graphene_dep,
+  libenchant_dep,
 ]
 
 if harfbuzz_dep.found() and pangoft_dep.found()
