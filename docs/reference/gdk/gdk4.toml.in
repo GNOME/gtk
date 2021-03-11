@@ -29,12 +29,12 @@ search_index = true
   [dependencies."GdkWayland-4.0"]
   name = "GdkWayland"
   description = "GDK Wayland Backend"
-  docs_url = "https://developer.gnome.org/gtk4/stable" # fixme
+  docs_url = "https://gnome.pages.gitlab.gnome.org/gtk/gdk4-wayland/"
 
   [dependencies."GdkX11-4.0"]
   name = "GdkX11"
   description = "GDK X11 Backend"
-  docs_url = "https://developer.gnome.org/gtk4/stable" # fixme
+  docs_url = "https://gnome.pages.gitlab.gnome.org/gtk/gdk4-x11/"
 
 [theme]
 name = "basic"

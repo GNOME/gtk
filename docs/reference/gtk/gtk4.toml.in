@@ -29,12 +29,12 @@ search_index = true
   [dependencies."Gdk-4.0"]
   name = "GDK"
   description = "The GTK windowing system abstraction"
-  docs_url = "../../Gdk/4.0/"
+  docs_url = "https://gnome.pages.gitlab.gnome.org/gtk/gdk4/"
 
   [dependencies."Gsk-4.0"]
   name = "GSK"
   description = "The GTK rendering abstraction"
-  docs_url = "../../Gsk/4.0/"
+  docs_url = "https://gnome.pages.gitlab.gnome.org/gtk/gsk4/"
 
 [theme]
 name = "basic"
