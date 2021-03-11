@@ -45,20 +45,6 @@ G_BEGIN_DECLS
                                                                        GRAPHENE_SIZE_INIT(0, 0),\
                                                                     }}
 
-/**
- * GskRoundedRect:
- * @bounds: the bounds of the rectangle
- * @corner: the size of the 4 rounded corners
- *
- * A rectangular region with rounded corners.
- *
- * Application code should normalize rectangles using gsk_rounded_rect_normalize();
- * this function will ensure that the bounds of the rectangle are normalized
- * and ensure that the corner values are positive and the corners do not overlap.
- * All functions taking a #GskRoundedRect as an argument will internally operate on
- * a normalized copy; all functions returning a #GskRoundedRect will always return
- * a normalized one.
- */
 typedef struct _GskRoundedRect           GskRoundedRect;
 
 struct _GskRoundedRect

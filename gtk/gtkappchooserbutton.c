@@ -19,36 +19,35 @@
  */
 
 /**
- * SECTION:gtkappchooserbutton
- * @Title: GtkAppChooserButton
- * @Short_description: A button to launch an application chooser dialog
+ * GtkAppChooserButton:
  *
- * The #GtkAppChooserButton is a widget that lets the user select
- * an application. It implements the #GtkAppChooser interface.
+ * The `GtkAppChooserButton` lets the user select an application.
  *
- * Initially, a #GtkAppChooserButton selects the first application
+ * ![An example GtkAppChooserButton](appchooserbutton.png)
+ *
+ * Initially, a `GtkAppChooserButton` selects the first application
  * in its list, which will either be the most-recently used application
- * or, if #GtkAppChooserButton:show-default-item is %TRUE, the
+ * or, if [property@Gtk.AppChooserButton:show-default-item] is %TRUE, the
  * default application.
  *
- * The list of applications shown in a #GtkAppChooserButton includes
+ * The list of applications shown in a `GtkAppChooserButton` includes
  * the recommended applications for the given content type. When
- * #GtkAppChooserButton:show-default-item is set, the default application
- * is also included. To let the user chooser other applications,
- * you can set the #GtkAppChooserButton:show-dialog-item property,
- * which allows to open a full #GtkAppChooserDialog.
+ * [property@Gtk.AppChooserButton:show-default-item] is set, the default
+ * application is also included. To let the user chooser other applications,
+ * you can set the [property@Gtk.AppChooserButton:show-dialog-item] property,
+ * which allows to open a full [class@Gtk.AppChooserDialog].
  *
  * It is possible to add custom items to the list, using
- * gtk_app_chooser_button_append_custom_item(). These items cause
- * the #GtkAppChooserButton::custom-item-activated signal to be
+ * [method@Gtk.AppChooserButton.append_custom_item]. These items cause
+ * the [signal@Gtk.AppChooserButton::custom-item-activated] signal to be
  * emitted when they are selected.
  *
  * To track changes in the selected application, use the
- * #GtkAppChooserButton::changed signal.
+ * [signal@Gtk.AppChooserButton::changed] signal.
  *
  * # CSS nodes
  *
- * GtkAppChooserButton has a single CSS node with the name “appchooserbutton”.
+ * `GtkAppChooserButton` has a single CSS node with the name “appchooserbutton”.
  */
 #include "config.h"
 
@@ -667,11 +666,10 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
   g_object_class_override_property (oclass, PROP_CONTENT_TYPE, "content-type");
 
   /**
-   * GtkAppChooserButton:show-dialog-item:
+   * GtkAppChooserButton:show-dialog-item: (attributes org.gtk.Property.get=gtk_app_chooser_button_get_show_dialog_item org.gtk.Property.set=gtk_app_chooser_button_set_show_dialog_item)
    *
-   * The #GtkAppChooserButton:show-dialog-item property determines
-   * whether the dropdown menu should show an item that triggers
-   * a #GtkAppChooserDialog when clicked.
+   * Determines whether the dropdown menu shows an item to open
+   * a `GtkAppChooserDialog`.
    */
   properties[PROP_SHOW_DIALOG_ITEM] =
     g_param_spec_boolean ("show-dialog-item",
@@ -681,10 +679,9 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
                           G_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkAppChooserButton:show-default-item:
+   * GtkAppChooserButton:show-default-item: (attributes org.gtk.Property.get=gtk_app_chooser_button_get_show_default_item org.gtk.Property.set=gtk_app_chooser_button_set_show_default_item)
    *
-   * The #GtkAppChooserButton:show-default-item property determines
-   * whether the dropdown menu should show the default application
+   * Determines whether the dropdown menu shows the default application
    * on top for the provided content type.
    */
   properties[PROP_SHOW_DEFAULT_ITEM] =
@@ -695,10 +692,12 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
                           G_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkAppChooserButton:heading:
+   * GtkAppChooserButton:heading: (attributes org.gtk.Property.get=gtk_app_chooser_button_get_heading org.gtk.Property.set=gtk_app_chooser_button_set_heading)
    *
    * The text to show at the top of the dialog that can be
-   * opened from the button. The string may contain Pango markup.
+   * opened from the button.
+   *
+   * The string may contain Pango markup.
    */
   properties[PROP_HEADING] =
     g_param_spec_string ("heading",
@@ -707,6 +706,11 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
                          NULL,
                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkAppChooserButton:modal: (attributes org.gtk.Property.get=gtk_app_chooser_button_get_modal org.gtk.Property.set=gtk_app_chooser_button_set_modal)
+   *
+   * Whether the app chooser dialog should be modal.
+   */
   properties[PROP_MODAL] =
     g_param_spec_boolean ("modal",
                           P_("Modal"),
@@ -719,8 +723,7 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
    * GtkAppChooserButton::changed:
    * @self: the object which received the signal
    *
-   * Emitted when the active application on the #GtkAppChooserButton
-   * changes.
+   * Emitted when the active application changes.
    */
   signals[SIGNAL_CHANGED] =
     g_signal_new (I_("changed"),
@@ -737,9 +740,10 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
    * @self: the object which received the signal
    * @item_name: the name of the activated item
    *
-   * Emitted when a custom item, previously added with
-   * gtk_app_chooser_button_append_custom_item(), is activated from the
-   * dropdown menu.
+   * Emitted when a custom item is activated.
+   *
+   * Use [method@Gtk.AppChooserButton.append_custom_item],
+   * to add custom items.
    */
   signals[SIGNAL_CUSTOM_ITEM_ACTIVATED] =
     g_signal_new (I_("custom-item-activated"),
@@ -850,10 +854,10 @@ real_insert_separator (GtkAppChooserButton *self,
  * gtk_app_chooser_button_new:
  * @content_type: the content type to show applications for
  *
- * Creates a new #GtkAppChooserButton for applications
+ * Creates a new `GtkAppChooserButton` for applications
  * that can handle content of the given type.
  *
- * Returns: a newly created #GtkAppChooserButton
+ * Returns: a newly created `GtkAppChooserButton`
  */
 GtkWidget *
 gtk_app_chooser_button_new (const char *content_type)
@@ -867,7 +871,7 @@ gtk_app_chooser_button_new (const char *content_type)
 
 /**
  * gtk_app_chooser_button_append_separator:
- * @self: a #GtkAppChooserButton
+ * @self: a `GtkAppChooserButton`
  *
  * Appends a separator to the list of applications that is shown
  * in the popup.
@@ -885,17 +889,20 @@ gtk_app_chooser_button_append_separator (GtkAppChooserButton *self)
 
 /**
  * gtk_app_chooser_button_append_custom_item:
- * @self: a #GtkAppChooserButton
+ * @self: a `GtkAppChooserButton`
  * @name: the name of the custom item
  * @label: the label for the custom item
  * @icon: the icon for the custom item
  *
  * Appends a custom item to the list of applications that is shown
- * in the popup; the item name must be unique per-widget.
- * Clients can use the provided name as a detail for the
- * #GtkAppChooserButton::custom-item-activated signal, to add a
+ * in the popup.
+ *
+ * The item name must be unique per-widget. Clients can use the
+ * provided name as a detail for the
+ * [signal@Gtk.AppChooserButton::custom-item-activated] signal, to add a
  * callback for the activation of a particular custom item in the list.
- * See also gtk_app_chooser_button_append_separator().
+ *
+ * See also [method@Gtk.AppChooserButton.append_separator].
  */
 void
 gtk_app_chooser_button_append_custom_item (GtkAppChooserButton *self,
@@ -914,13 +921,14 @@ gtk_app_chooser_button_append_custom_item (GtkAppChooserButton *self,
 
 /**
  * gtk_app_chooser_button_set_active_custom_item:
- * @self: a #GtkAppChooserButton
+ * @self: a `GtkAppChooserButton`
  * @name: the name of the custom item
  *
- * Selects a custom item previously added with
- * gtk_app_chooser_button_append_custom_item().
+ * Selects a custom item.
  *
- * Use gtk_app_chooser_refresh() to bring the selection
+ * See [method@Gtk.AppChooserButton.append_custom_item].
+ *
+ * Use [method@Gtk.AppChooser.refresh] to bring the selection
  * to its initial state.
  */
 void
@@ -943,13 +951,13 @@ gtk_app_chooser_button_set_active_custom_item (GtkAppChooserButton *self,
 }
 
 /**
- * gtk_app_chooser_button_get_show_dialog_item:
- * @self: a #GtkAppChooserButton
+ * gtk_app_chooser_button_get_show_dialog_item: (attributes org.gtk.Method.get_property=show-dialog-item)
+ * @self: a `GtkAppChooserButton`
  *
- * Returns the current value of the #GtkAppChooserButton:show-dialog-item
- * property.
+ * Returns whether the dropdown menu shows an item
+ * for a `GtkAppChooserDialog`.
  *
- * Returns: the value of #GtkAppChooserButton:show-dialog-item
+ * Returns: the value of [property@Gtk.AppChooserButton:show-dialog-item]
  */
 gboolean
 gtk_app_chooser_button_get_show_dialog_item (GtkAppChooserButton *self)
@@ -960,12 +968,12 @@ gtk_app_chooser_button_get_show_dialog_item (GtkAppChooserButton *self)
 }
 
 /**
- * gtk_app_chooser_button_set_show_dialog_item:
- * @self: a #GtkAppChooserButton
- * @setting: the new value for #GtkAppChooserButton:show-dialog-item
+ * gtk_app_chooser_button_set_show_dialog_item: (attributes org.gtk.Method.set_property=show-dialog-item)
+ * @self: a `GtkAppChooserButton`
+ * @setting: the new value for [property@Gtk.AppChooserButton:show-dialog-item]
  *
  * Sets whether the dropdown menu of this button should show an
- * entry to trigger a #GtkAppChooserDialog.
+ * entry to trigger a `GtkAppChooserDialog`.
  */
 void
 gtk_app_chooser_button_set_show_dialog_item (GtkAppChooserButton *self,
@@ -982,13 +990,13 @@ gtk_app_chooser_button_set_show_dialog_item (GtkAppChooserButton *self,
 }
 
 /**
- * gtk_app_chooser_button_get_show_default_item:
- * @self: a #GtkAppChooserButton
+ * gtk_app_chooser_button_get_show_default_item: (attributes org.gtk.Method.get_property=show-default-item)
+ * @self: a `GtkAppChooserButton`
  *
- * Returns the current value of the #GtkAppChooserButton:show-default-item
- * property.
+ * Returns whether the dropdown menu should show the default
+ * application at the top.
  *
- * Returns: the value of #GtkAppChooserButton:show-default-item
+ * Returns: the value of [property@Gtk.AppChooserButton:show-default-item]
  */
 gboolean
 gtk_app_chooser_button_get_show_default_item (GtkAppChooserButton *self)
@@ -999,9 +1007,9 @@ gtk_app_chooser_button_get_show_default_item (GtkAppChooserButton *self)
 }
 
 /**
- * gtk_app_chooser_button_set_show_default_item:
- * @self: a #GtkAppChooserButton
- * @setting: the new value for #GtkAppChooserButton:show-default-item
+ * gtk_app_chooser_button_set_show_default_item: (attributes org.gtk.Method.set_property=show-default-item)
+ * @self: a `GtkAppChooserButton`
+ * @setting: the new value for [property@Gtk.AppChooserButton:show-default-item]
  *
  * Sets whether the dropdown menu of this button should show the
  * default application for the given content type at top.
@@ -1023,11 +1031,12 @@ gtk_app_chooser_button_set_show_default_item (GtkAppChooserButton *self,
 }
 
 /**
- * gtk_app_chooser_button_set_heading:
- * @self: a #GtkAppChooserButton
+ * gtk_app_chooser_button_set_heading: (attributes org.gtk.Method.set_property=heading)
+ * @self: a `GtkAppChooserButton`
  * @heading: a string containing Pango markup
  *
  * Sets the text to display at the top of the dialog.
+ *
  * If the heading is not set, the dialog displays a default text.
  */
 void
@@ -1043,8 +1052,8 @@ gtk_app_chooser_button_set_heading (GtkAppChooserButton *self,
 }
 
 /**
- * gtk_app_chooser_button_get_heading:
- * @self: a #GtkAppChooserButton
+ * gtk_app_chooser_button_get_heading: (attributes org.gtk.Method.get_property=heading)
+ * @self: a `GtkAppChooserButton`
  *
  * Returns the text to display at the top of the dialog.
  *
@@ -1060,8 +1069,8 @@ gtk_app_chooser_button_get_heading (GtkAppChooserButton *self)
 }
 
 /**
- * gtk_app_chooser_button_set_modal:
- * @self: a #GtkAppChooserButton
+ * gtk_app_chooser_button_set_modal: (attributes org.gtk.Method.set_property=modal)
+ * @self: a `GtkAppChooserButton`
  * @modal: %TRUE to make the dialog modal
  *
  * Sets whether the dialog should be modal.
@@ -1081,8 +1090,8 @@ gtk_app_chooser_button_set_modal (GtkAppChooserButton *self,
 }
 
 /**
- * gtk_app_chooser_button_get_modal:
- * @self: a #GtkAppChooserButton
+ * gtk_app_chooser_button_get_modal: (attributes org.gtk.Method.get_property=modal)
+ * @self: a `GtkAppChooserButton`
  *
  * Gets whether the dialog is modal.
  *

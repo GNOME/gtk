@@ -1,4 +1,5 @@
-# CSS in GTK {#css}
+Title: CSS in GTK
+Slug: css
 
 This chapter describes how GTK uses CSS for styling and layout. 
 It is not meant to be an explanation of CSS from first principles,

@@ -1,4 +1,5 @@
-# Overview of GTK input and event handling {#input-overview}
+Title: Overview of GTK input and event handling
+Slug: input-overview
 
 This chapter describes in detail how GTK handles input. If you are interested
 in what happens to translate a key press or mouse motion of the users into a
@@ -10,7 +11,7 @@ be useful if you decide to implement your own widgets.
 The most basic input devices that every computer user has interacted with are
 keyboards and mice; beyond these, GTK supports touchpads, touchscreens and
 more exotic input devices such as graphics tablets. Inside GTK, every such
-input device is represented by a #GdkDevice object.
+input device is represented by a `GdkDevice` object.
 
 To simplify dealing with the variability between these input devices, GTK
 has a concept of logical and physical devices. The concrete physical devices that
@@ -29,9 +30,9 @@ These are typically directed at a specific surface - for pointer events,
 the surface under the pointer (grabs complicate this), for keyboard events,
 the surface with the keyboard focus.
 
-GDK translates these raw windowing system events into #GdkEvents.
+GDK translates these raw windowing system events into `GdkEvents`.
 Typical input events are button clicks, pointer motion, key presses
-or touch events. These are all represented as #GdkEvents, but you can
+or touch events. These are all represented as `GdkEvents`, but you can
 differentiate between different events by looking at their type, using
 gdk_event_get_event_type().
 
@@ -40,12 +41,12 @@ are connected in to each other in an “event sequence” that
 univocally identifies events that are related to the same
 interaction.
 
-When GTK creates a GdkSurface, it connects to the #GdkSurface::event
+When GTK creates a `GdkSurface`, it connects to the ::event
 signal on it, which receives all of these input events. Surfaces have
 have signals and properties, e.g. to deal with window management
 related events.
 
-## Event propagation {#event-propagation}
+## Event propagation
 
 The function which initially receives input events on the GTK
 side is responsible for a number of tasks.
@@ -56,7 +57,7 @@ side is responsible for a number of tasks.
 3. Send the event to widgets.
 
 An event is propagated down and up the widget hierarchy in three phases
-(see #GtkPropagationPhase) towards a target widget.
+towards a target widget.
 
 ![Event propagation phases](capture-bubble.png)
 
@@ -69,8 +70,8 @@ For pointer events, the target widget is determined by picking
 the widget at the events coordinates (see gtk_widget_pick()).
 
 In the first phase (the “capture” phase) the event is delivered to
-each widget from the top-most (the top-level #GtkWindow or grab widget)
-down to the target #GtkWidget.
+each widget from the top-most (the top-level `GtkWindow` or grab widget)
+down to the target widget.
 [Event controllers](event-controllers-and-gestures) that are attached
 with %GTK_PHASE_CAPTURE get a chance to react to the event.
 
@@ -94,12 +95,11 @@ below to learn more about gestures and sequences.
 
 ## Keyboard input
 
-Every #GtkWindow maintains a single focus location (in
-the #GtkWindow:focus-widget property). The focus widget is the
-target widget for key events sent to the window. Only widgets which
-have #GtkWidget:can-focus set to %TRUE can become the focus. Typically
-these are input controls such as entries or text fields, but e.g.
-buttons can take the focus too.
+Every `GtkWindow` maintains a single focus location (in the :focus-widget
+property). The focus widget is the target widget for key events sent to
+the window. Only widgets which have :focusable set to %TRUE can become
+the focus. Typically these are input controls such as entries or text
+fields, but e.g. buttons can take the focus too.
 
 Input widgets can be given the focus by clicking on them, but focus
 can also be moved around with certain key events (this is known as
@@ -125,7 +125,7 @@ GTK has traditionally supported different kinds of shortcuts:
 - Mnemonics are usually triggered using Alt as a modifier for a letter.
   They are used in places where a label is associated with a control,
   and are indicated by underlining the letter in the label. As a special
-  case, inside menus (i.e. inside #GtkPopoverMenu), mnemonics can be
+  case, inside menus (i.e. inside `GtkPopoverMenu`), mnemonics can be
   triggered without the modifier.
 - Key bindings are specific to individual widgets, such as Ctrl-C or
   Ctrl-V in an entry copy to or paste from the clipboard. They are only
@@ -134,15 +134,15 @@ GTK has traditionally supported different kinds of shortcuts:
 GTK handles accelerators and mnemonics in a global scope, during the
 capture phase, and key bindings locally, during the target phase.
 
-Under the hood, all shortcuts are represented as instances of #GtkShortcut,
-and they are managed by #GtkShortcutController.
+Under the hood, all shortcuts are represented as instances of `GtkShortcut`,
+and they are managed by `GtkShortcutController`.
 
-## Event controllers and gestures {#event-controllers-and-gestures}
+## Event controllers and gestures
 
 Event controllers are standalone objects that can perform
-specific actions upon received #GdkEvents. These are tied
-to a #GtkWidget, and can be told of the event propagation
-phase at which they will manage the events.
+specific actions upon received `GdkEvents`. These are tied
+to a widget, and can be told of the event propagation phase
+at which they will manage the events.
 
 Gestures are a set of specific controllers that are prepared
 to handle pointer and/or touch events, each gesture
@@ -167,10 +167,10 @@ gestures. Some examples of grouping may be:
 - If “press” and “long press” are wanted simultaneously,
   those would need grouping.
 
-Shortcuts are handled by #GtkShortcutController, which is
+Shortcuts are handled by `GtkShortcutController`, which is
 a complex event handler that can either activate shortcuts
 itself, or propagate them to another controller, depending
-on its #GtkShortcutController:scope.
+on its scope.
 
 ## Gesture states
 

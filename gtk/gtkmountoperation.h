@@ -42,11 +42,6 @@ typedef struct _GtkMountOperation         GtkMountOperation;
 typedef struct _GtkMountOperationClass    GtkMountOperationClass;
 typedef struct _GtkMountOperationPrivate  GtkMountOperationPrivate;
 
-/**
- * GtkMountOperation:
- *
- * This should not be accessed directly. Use the accessor functions below.
- */
 struct _GtkMountOperation
 {
   GMountOperation parent_instance;

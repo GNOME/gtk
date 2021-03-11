@@ -54,22 +54,25 @@
 #endif
 
 /**
- * SECTION:gdkdisplaymanager
- * @Short_description: Maintains a list of all open GdkDisplays
- * @Title: GdkDisplayManager
+ * GdkDisplayManager:
  *
- * The purpose of the #GdkDisplayManager singleton object is to offer
- * notification when displays appear or disappear or the default display
- * changes.
+ * A singleton object that offers notification when displays appear or
+ * disappear.
  *
- * You can use gdk_display_manager_get() to obtain the #GdkDisplayManager
+ * You can use [func@Gdk.DisplayManager.get] to obtain the `GdkDisplayManager`
  * singleton, but that should be rarely necessary. Typically, initializing
  * GTK opens a display that you can work with without ever accessing the
- * #GdkDisplayManager.
+ * `GdkDisplayManager`.
  *
  * The GDK library can be built with support for multiple backends.
- * The #GdkDisplayManager object determines which backend is used
+ * The `GdkDisplayManager` object determines which backend is used
  * at runtime.
+ *
+ * In the rare case that you need to influence which of the backends
+ * is being used, you can use [func@Gdk.set_allowed_backends]. Note
+ * that you need to call this function before initializing GTK.
+ *
+ * ## Backend-specific code
  *
  * When writing backend-specific code that is supposed to work with
  * multiple GDK backends, you have to consider both compile time and
@@ -78,9 +81,7 @@
  * you are building your application against. At runtime, use type-check
  * macros like GDK_IS_X11_DISPLAY() to find out which backend is in use:
  *
- * ## Backend-specific code ## {#backend-specific}
- *
- * |[<!-- language="C" -->
+ * ```c
  * #ifdef GDK_WINDOWING_X11
  *   if (GDK_IS_X11_DISPLAY (display))
  *     {
@@ -96,14 +97,7 @@
  *   else
  * #endif
  *   g_error ("Unsupported GDK backend");
- * ]|
- */
-
-/**
- * GdkDisplayManager:
- *
- * The GdkDisplayManager struct contains only private fields and
- * should not be accessed directly.
+ * ```
  */
 
 enum {
@@ -142,7 +136,7 @@ gdk_display_manager_class_init (GdkDisplayManagerClass *klass)
    * @manager: the object on which the signal is emitted
    * @display: the opened display
    *
-   * The ::display-opened signal is emitted when a display is opened.
+   * Emitted when a display is opened.
    */
   signals[DISPLAY_OPENED] =
     g_signal_new (g_intern_static_string ("display-opened"),
@@ -155,6 +149,11 @@ gdk_display_manager_class_init (GdkDisplayManagerClass *klass)
                   1,
                   GDK_TYPE_DISPLAY);
 
+  /**
+   * GdkDisplayManager:default-display: (attributes org.gtk.Property.get=gdk_display_manager_get_default_display)
+   *
+   * The default display.
+   */
   g_object_class_install_property (object_class,
                                    PROP_DEFAULT_DISPLAY,
                                    g_param_spec_object ("default-display",
@@ -218,25 +217,31 @@ static const char *allowed_backends;
  *
  * By default, GDK tries all included backends.
  *
- * For example,
- * |[<!-- language="C" -->
- * gdk_set_allowed_backends ("wayland,quartz,*");
- * ]|
- * instructs GDK to try the Wayland backend first,
- * followed by the Quartz backend, and then all
- * others.
+ * For example:
  *
- * If the `GDK_BACKEND` environment variable
- * is set, it determines what backends are tried in what
- * order, while still respecting the set of allowed backends
- * that are specified by this function.
+ * ```c
+ * gdk_set_allowed_backends ("wayland,macos,*");
+ * ```
  *
- * The possible backend names are x11, win32, quartz,
- * broadway, wayland. You can also include a * in the
- * list to try all remaining backends.
+ * instructs GDK to try the Wayland backend first, followed by the
+ * MacOs backend, and then all others.
  *
- * This call must happen prior to gdk_display_open(),
- * gtk_init(), or gtk_init_check()
+ * If the `GDK_BACKEND` environment variable is set, it determines
+ * what backends are tried in what order, while still respecting the
+ * set of allowed backends that are specified by this function.
+ *
+ * The possible backend names are:
+ *
+ *   - `broadway`
+ *   - `macos`
+ *   - `wayland`.
+ *   - `win32`
+ *   - `x11`
+ *
+ * You can also include a `*` in the list to try all remaining backends.
+ *
+ * This call must happen prior to functions that open a display, such
+ * as [func@Gdk.Display.open], `gtk_init()`, or `gtk_init_check()`
  * in order to take effect.
  */
 void
@@ -275,16 +280,18 @@ static GdkBackend gdk_backends[] = {
 /**
  * gdk_display_manager_get:
  *
- * Gets the singleton #GdkDisplayManager object.
+ * Gets the singleton `GdkDisplayManager` object.
  *
  * When called for the first time, this function consults the
- * `GDK_BACKEND` environment variable to find out which
- * of the supported GDK backends to use (in case GDK has been compiled
- * with multiple backends). Applications can use gdk_set_allowed_backends()
- * to limit what backends can be used.
+ * `GDK_BACKEND` environment variable to find out which of the
+ * supported GDK backends to use (in case GDK has been compiled
+ * with multiple backends).
  *
- * Returns: (transfer none): The global #GdkDisplayManager singleton
- **/
+ * Applications can use [func@set_allowed_backends] to limit what
+ * backends wil be used.
+ *
+ * Returns: (transfer none): The global `GdkDisplayManager` singleton
+ */
 GdkDisplayManager*
 gdk_display_manager_get (void)
 {
@@ -297,12 +304,12 @@ gdk_display_manager_get (void)
 }
 
 /**
- * gdk_display_manager_get_default_display:
- * @manager: a #GdkDisplayManager
+ * gdk_display_manager_get_default_display: (attributes org.gtk.Method.get_property=default-display)
+ * @manager: a `GdkDisplayManager`
  *
- * Gets the default #GdkDisplay.
+ * Gets the default `GdkDisplay`.
  *
- * Returns: (nullable) (transfer none): a #GdkDisplay, or %NULL if
+ * Returns: (nullable) (transfer none): a `GdkDisplay`, or %NULL if
  *     there is no default display.
  */
 GdkDisplay *
@@ -314,12 +321,13 @@ gdk_display_manager_get_default_display (GdkDisplayManager *manager)
 /**
  * gdk_display_get_default:
  *
- * Gets the default #GdkDisplay. This is a convenience
- * function for:
+ * Gets the default `GdkDisplay`.
+ *
+ * This is a convenience function for:
  * `gdk_display_manager_get_default_display (gdk_display_manager_get ())`.
  *
- * Returns: (nullable) (transfer none): a #GdkDisplay, or %NULL if
- *   there is no default display.
+ * Returns: (nullable) (transfer none): a `GdkDisplay`, or %NULL if
+ *   there is no default display
  */
 GdkDisplay *
 gdk_display_get_default (void)
@@ -329,11 +337,11 @@ gdk_display_get_default (void)
 
 /**
  * gdk_display_manager_set_default_display:
- * @manager: a #GdkDisplayManager
- * @display: a #GdkDisplay
+ * @manager: a `GdkDisplayManager`
+ * @display: a `GdkDisplay`
  *
  * Sets @display as the default display.
- **/
+ */
 void
 gdk_display_manager_set_default_display (GdkDisplayManager *manager,
                                          GdkDisplay        *display)
@@ -348,14 +356,14 @@ gdk_display_manager_set_default_display (GdkDisplayManager *manager,
 
 /**
  * gdk_display_manager_list_displays:
- * @manager: a #GdkDisplayManager
+ * @manager: a `GdkDisplayManager`
  *
  * List all currently open displays.
  *
  * Returns: (transfer container) (element-type GdkDisplay): a newly
- *     allocated #GSList of #GdkDisplay objects. Free with g_slist_free()
+ *     allocated `GSList` of `GdkDisplay` objects. Free with g_slist_free()
  *     when you are done with it.
- **/
+ */
 GSList *
 gdk_display_manager_list_displays (GdkDisplayManager *manager)
 {
@@ -364,13 +372,13 @@ gdk_display_manager_list_displays (GdkDisplayManager *manager)
 
 /**
  * gdk_display_manager_open_display:
- * @manager: a #GdkDisplayManager
+ * @manager: a `GdkDisplayManager`
  * @name: the name of the display to open
  *
  * Opens a display.
  *
- * Returns: (nullable) (transfer none): a #GdkDisplay, or %NULL if the
- *     display could not be opened
+ * Returns: (nullable) (transfer none): a `GdkDisplay`, or %NULL
+ *   if the display could not be opened
  */
 GdkDisplay *
 gdk_display_manager_open_display (GdkDisplayManager *manager,

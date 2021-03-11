@@ -19,93 +19,97 @@
  */
 
 /**
- * SECTION:gtkgesture
- * @Short_description: Base class for gestures
- * @Title: GtkGesture
- * @See_also: #GtkEventController, #GtkGestureSingle
+ * GtkGesture:
  *
- * #GtkGesture is the base object for gesture recognition, although this
- * object is quite generalized to serve as a base for multi-touch gestures,
- * it is suitable to implement single-touch and pointer-based gestures (using
- * the special %NULL #GdkEventSequence value for these).
+ * `GtkGesture` is the base class for gesture recognition.
  *
- * The number of touches that a #GtkGesture need to be recognized is controlled
- * by the #GtkGesture:n-points property, if a gesture is keeping track of less
- * or more than that number of sequences, it won't check whether the gesture
- * is recognized.
+ * Although `GtkGesture` is quite generalized to serve as a base for
+ * multi-touch gestures, it is suitable to implement single-touch and
+ * pointer-based gestures (using the special %NULL `GdkEventSequence`
+ * value for these).
+ *
+ * The number of touches that a `GtkGesture` need to be recognized is
+ * controlled by the [property@Gtk.Gesture:n-points] property, if a
+ * gesture is keeping track of less or more than that number of sequences,
+ * it won't check whether the gesture is recognized.
  *
  * As soon as the gesture has the expected number of touches, it will check
  * regularly if it is recognized, the criteria to consider a gesture as
- * "recognized" is left to #GtkGesture subclasses.
+ * "recognized" is left to `GtkGesture` subclasses.
  *
  * A recognized gesture will then emit the following signals:
- * - #GtkGesture::begin when the gesture is recognized.
- * - A number of #GtkGesture::update, whenever an input event is processed.
- * - #GtkGesture::end when the gesture is no longer recognized.
+ *
+ * - [signal@Gtk.Gesture::begin] when the gesture is recognized.
+ * - [signal@Gtk.Gesture::update], whenever an input event is processed.
+ * - [signal@Gtk.Gesture::end] when the gesture is no longer recognized.
  *
  * ## Event propagation
  *
  * In order to receive events, a gesture needs to set a propagation phase
- * through gtk_event_controller_set_propagation_phase().
+ * through [method@Gtk.EventController.set_propagation_phase].
  *
- * In the capture phase, events are propagated from the toplevel down to the
- * target widget, and gestures that are attached to containers above the widget
- * get a chance to interact with the event before it reaches the target.
+ * In the capture phase, events are propagated from the toplevel down
+ * to the target widget, and gestures that are attached to containers
+ * above the widget get a chance to interact with the event before it
+ * reaches the target.
  *
- * In the bubble phase, events are propagated up from the target widget to the
- * toplevel, and gestures that are attached to containers above the widget get
- * a chance to interact with events that have not been handled yet.
+ * In the bubble phase, events are propagated up from the target widget
+ * to the toplevel, and gestures that are attached to containers above
+ * the widget get a chance to interact with events that have not been
+ * handled yet.
  *
- * ## States of a sequence # {#touch-sequence-states}
+ * ## States of a sequence
  *
- * Whenever input interaction happens, a single event may trigger a cascade of
- * #GtkGestures, both across the parents of the widget receiving the event and
- * in parallel within an individual widget. It is a responsibility of the
- * widgets using those gestures to set the state of touch sequences accordingly
- * in order to enable cooperation of gestures around the #GdkEventSequences
- * triggering those.
+ * Whenever input interaction happens, a single event may trigger a cascade
+ * of `GtkGesture`s, both across the parents of the widget receiving the
+ * event and in parallel within an individual widget. It is a responsibility
+ * of the widgets using those gestures to set the state of touch sequences
+ * accordingly in order to enable cooperation of gestures around the
+ * `GdkEventSequence`s triggering those.
  *
- * Within a widget, gestures can be grouped through gtk_gesture_group(),
- * grouped gestures synchronize the state of sequences, so calling
- * gtk_gesture_set_sequence_state() on one will effectively propagate
+ * Within a widget, gestures can be grouped through [method@Gtk.Gesture.group].
+ * Grouped gestures synchronize the state of sequences, so calling
+ * [method@Gtk.Gesture.set_sequence_state] on one will effectively propagate
  * the state throughout the group.
  *
- * By default, all sequences start out in the #GTK_EVENT_SEQUENCE_NONE state,
+ * By default, all sequences start out in the %GTK_EVENT_SEQUENCE_NONE state,
  * sequences in this state trigger the gesture event handler, but event
  * propagation will continue unstopped by gestures.
  *
- * If a sequence enters into the #GTK_EVENT_SEQUENCE_DENIED state, the gesture
+ * If a sequence enters into the %GTK_EVENT_SEQUENCE_DENIED state, the gesture
  * group will effectively ignore the sequence, letting events go unstopped
  * through the gesture, but the "slot" will still remain occupied while
  * the touch is active.
  *
- * If a sequence enters in the #GTK_EVENT_SEQUENCE_CLAIMED state, the gesture
+ * If a sequence enters in the %GTK_EVENT_SEQUENCE_CLAIMED state, the gesture
  * group will grab all interaction on the sequence, by:
- * - Setting the same sequence to #GTK_EVENT_SEQUENCE_DENIED on every other gesture
- *   group within the widget, and every gesture on parent widgets in the propagation
- *   chain.
- * - calling #GtkGesture::cancel on every gesture in widgets underneath in the
- *   propagation chain.
+ *
+ * - Setting the same sequence to %GTK_EVENT_SEQUENCE_DENIED on every other
+ *   gesture group within the widget, and every gesture on parent widgets
+ *   in the propagation chain.
+ * - Emitting [signal@Gtk.Gesture::cancel] on every gesture in widgets
+ *   underneath in the propagation chain.
  * - Stopping event propagation after the gesture group handles the event.
  *
- * Note: if a sequence is set early to #GTK_EVENT_SEQUENCE_CLAIMED on
- * #GDK_TOUCH_BEGIN/#GDK_BUTTON_PRESS (so those events are captured before
- * reaching the event widget, this implies #GTK_PHASE_CAPTURE), one similar
- * event will emulated if the sequence changes to #GTK_EVENT_SEQUENCE_DENIED.
+ * Note: if a sequence is set early to %GTK_EVENT_SEQUENCE_CLAIMED on
+ * %GDK_TOUCH_BEGIN/%GDK_BUTTON_PRESS (so those events are captured before
+ * reaching the event widget, this implies %GTK_PHASE_CAPTURE), one similar
+ * event will emulated if the sequence changes to %GTK_EVENT_SEQUENCE_DENIED.
  * This way event coherence is preserved before event propagation is unstopped
  * again.
  *
- * Sequence states can't be changed freely, see gtk_gesture_set_sequence_state()
- * to know about the possible lifetimes of a #GdkEventSequence.
+ * Sequence states can't be changed freely.
+ * See [method@Gtk.Gesture.set_sequence_state] to know about the possible
+ * lifetimes of a `GdkEventSequence`.
  *
  * ## Touchpad gestures
  *
- * On the platforms that support it, #GtkGesture will handle transparently
- * touchpad gesture events. The only precautions users of #GtkGesture should do
- * to enable this support are:
- * - Enabling %GDK_TOUCHPAD_GESTURE_MASK on their #GdkSurfaces
+ * On the platforms that support it, `GtkGesture` will handle transparently
+ * touchpad gesture events. The only precautions users of `GtkGesture` should
+ * do to enable this support are:
+ *
  * - If the gesture has %GTK_PHASE_NONE, ensuring events of type
- *   %GDK_TOUCHPAD_SWIPE and %GDK_TOUCHPAD_PINCH are handled by the #GtkGesture
+ *   %GDK_TOUCHPAD_SWIPE and %GDK_TOUCHPAD_PINCH are handled by the `GtkGesture`
  */
 
 #include "config.h"
@@ -749,7 +753,8 @@ gtk_gesture_class_init (GtkGestureClass *klass)
   /**
    * GtkGesture:n-points:
    *
-   * The number of touch points that trigger recognition on this gesture,
+   * The number of touch points that trigger
+   * recognition on this gesture.
    */
   g_object_class_install_property (object_class,
                                    PROP_N_POINTS,
@@ -763,14 +768,18 @@ gtk_gesture_class_init (GtkGestureClass *klass)
   /**
    * GtkGesture::begin:
    * @gesture: the object which received the signal
-   * @sequence: (nullable): the #GdkEventSequence that made the gesture to be recognized
+   * @sequence: (nullable): the `GdkEventSequence` that made the gesture
+   *   to be recognized
    *
-   * This signal is emitted when the gesture is recognized. This means the
-   * number of touch sequences matches #GtkGesture:n-points.
+   * Emitted when the gesture is recognized.
    *
-   * Note: These conditions may also happen when an extra touch (eg. a third touch
-   * on a 2-touches gesture) is lifted, in that situation @sequence won't pertain
-   * to the current set of active touches, so don't rely on this being true.
+   * This means the number of touch sequences matches
+   * [property@Gtk.Gesture:n-points].
+   *
+   * Note: These conditions may also happen when an extra touch
+   * (eg. a third touch on a 2-touches gesture) is lifted, in that
+   * situation @sequence won't pertain to the current set of active
+   * touches, so don't rely on this being true.
    */
   signals[BEGIN] =
     g_signal_new (I_("begin"),
@@ -779,19 +788,22 @@ gtk_gesture_class_init (GtkGestureClass *klass)
                   G_STRUCT_OFFSET (GtkGestureClass, begin),
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 1, GDK_TYPE_EVENT_SEQUENCE);
+
   /**
    * GtkGesture::end:
    * @gesture: the object which received the signal
-   * @sequence: (nullable): the #GdkEventSequence that made gesture recognition to finish
+   * @sequence: (nullable): the `GdkEventSequence` that made gesture
+   *   recognition to finish
    *
-   * This signal is emitted when @gesture either stopped recognizing the event
-   * sequences as something to be handled, or the number of touch sequences became
-   * higher or lower than #GtkGesture:n-points.
+   * Emitted when @gesture either stopped recognizing the event
+   * sequences as something to be handled, or the number of touch
+   * sequences became higher or lower than [property@Gtk.Gesture:n-points].
    *
-   * Note: @sequence might not pertain to the group of sequences that were
-   * previously triggering recognition on @gesture (ie. a just pressed touch
-   * sequence that exceeds #GtkGesture:n-points). This situation may be detected
-   * by checking through gtk_gesture_handles_sequence().
+   * Note: @sequence might not pertain to the group of sequences that
+   * were previously triggering recognition on @gesture (ie. a just
+   * pressed touch sequence that exceeds [property@Gtk.Gesture:n-points]).
+   * This situation may be detected by checking through
+   * [method@Gtk.Gesture.handles_sequence].
    */
   signals[END] =
     g_signal_new (I_("end"),
@@ -800,13 +812,15 @@ gtk_gesture_class_init (GtkGestureClass *klass)
                   G_STRUCT_OFFSET (GtkGestureClass, end),
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 1, GDK_TYPE_EVENT_SEQUENCE);
+
   /**
    * GtkGesture::update:
    * @gesture: the object which received the signal
-   * @sequence: (nullable): the #GdkEventSequence that was updated
+   * @sequence: (nullable): the `GdkEventSequence` that was updated
    *
-   * This signal is emitted whenever an event is handled while the gesture is
-   * recognized. @sequence is guaranteed to pertain to the set of active touches.
+   * Emitted whenever an event is handled while the gesture is recognized.
+   *
+   * @sequence is guaranteed to pertain to the set of active touches.
    */
   signals[UPDATE] =
     g_signal_new (I_("update"),
@@ -815,17 +829,22 @@ gtk_gesture_class_init (GtkGestureClass *klass)
                   G_STRUCT_OFFSET (GtkGestureClass, update),
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 1, GDK_TYPE_EVENT_SEQUENCE);
+
   /**
    * GtkGesture::cancel:
    * @gesture: the object which received the signal
-   * @sequence: (nullable): the #GdkEventSequence that was cancelled
+   * @sequence: (nullable): the `GdkEventSequence` that was cancelled
    *
-   * This signal is emitted whenever a sequence is cancelled. This usually
-   * happens on active touches when gtk_event_controller_reset() is called
-   * on @gesture (manually, due to grabs...), or the individual @sequence
-   * was claimed by parent widgets' controllers (see gtk_gesture_set_sequence_state()).
+   * Emitted whenever a sequence is cancelled.
    *
-   * @gesture must forget everything about @sequence as a reaction to this signal.
+   * This usually happens on active touches when
+   * [method@Gtk.EventController.reset] is called on @gesture
+   * (manually, due to grabs...), or the individual @sequence
+   * was claimed by parent widgets' controllers (see
+   * [method@Gtk.Gesture.set_sequence_state]).
+   *
+   * @gesture must forget everything about @sequence as in
+   * response to this signal.
    */
   signals[CANCEL] =
     g_signal_new (I_("cancel"),
@@ -834,15 +853,17 @@ gtk_gesture_class_init (GtkGestureClass *klass)
                   G_STRUCT_OFFSET (GtkGestureClass, cancel),
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 1, GDK_TYPE_EVENT_SEQUENCE);
+
   /**
    * GtkGesture::sequence-state-changed:
    * @gesture: the object which received the signal
-   * @sequence: (nullable): the #GdkEventSequence that was cancelled
+   * @sequence: (nullable): the `GdkEventSequence` that was cancelled
    * @state: the new sequence state
    *
-   * This signal is emitted whenever a sequence state changes. See
-   * gtk_gesture_set_sequence_state() to know more about the expectable
-   * sequence lifetimes.
+   * Emitted whenever a sequence state changes.
+   *
+   * See [method@Gtk.Gesture.set_sequence_state] to know
+   * more about the expectable sequence lifetimes.
    */
   signals[SEQUENCE_STATE_CHANGED] =
     g_signal_new (I_("sequence-state-changed"),
@@ -885,13 +906,15 @@ gtk_gesture_init (GtkGesture *gesture)
 
 /**
  * gtk_gesture_get_device:
- * @gesture: a #GtkGesture
+ * @gesture: a `GtkGesture`
  *
- * Returns the logical #GdkDevice that is currently operating
- * on @gesture, or %NULL if the gesture is not being interacted.
+ * Returns the logical `GdkDevice` that is currently operating
+ * on @gesture.
  *
- * Returns: (nullable) (transfer none): a #GdkDevice, or %NULL
- **/
+ * This returns %NULL if the gesture is not being interacted.
+ *
+ * Returns: (nullable) (transfer none): a `GdkDevice`, or %NULL
+ */
 GdkDevice *
 gtk_gesture_get_device (GtkGesture *gesture)
 {
@@ -906,13 +929,13 @@ gtk_gesture_get_device (GtkGesture *gesture)
 
 /**
  * gtk_gesture_get_sequence_state:
- * @gesture: a #GtkGesture
+ * @gesture: a `GtkGesture`
  * @sequence: a #GdkEventSequence
  *
  * Returns the @sequence state, as seen by @gesture.
  *
  * Returns: The sequence state in @gesture
- **/
+ */
 GtkEventSequenceState
 gtk_gesture_get_sequence_state (GtkGesture       *gesture,
                                 GdkEventSequence *sequence)
@@ -934,29 +957,29 @@ gtk_gesture_get_sequence_state (GtkGesture       *gesture,
 
 /**
  * gtk_gesture_set_sequence_state:
- * @gesture: a #GtkGesture
- * @sequence: a #GdkEventSequence
+ * @gesture: a `GtkGesture`
+ * @sequence: a `GdkEventSequence`
  * @state: the sequence state
  *
- * Sets the state of @sequence in @gesture. Sequences start
- * in state #GTK_EVENT_SEQUENCE_NONE, and whenever they change
- * state, they can never go back to that state. Likewise,
- * sequences in state #GTK_EVENT_SEQUENCE_DENIED cannot turn
- * back to a not denied state. With these rules, the lifetime
- * of an event sequence is constrained to the next four:
+ * Sets the state of @sequence in @gesture.
+ *
+ * Sequences start in state %GTK_EVENT_SEQUENCE_NONE, and whenever
+ * they change state, they can never go back to that state. Likewise,
+ * sequences in state %GTK_EVENT_SEQUENCE_DENIED cannot turn back to
+ * a not denied state. With these rules, the lifetime of an event
+ * sequence is constrained to the next four:
  *
  * * None
  * * None → Denied
  * * None → Claimed
  * * None → Claimed → Denied
  *
- * Note: Due to event handling ordering, it may be unsafe to
- * set the state on another gesture within a #GtkGesture::begin
- * signal handler, as the callback might be executed before
- * the other gesture knows about the sequence. A safe way to
- * perform this could be:
+ * Note: Due to event handling ordering, it may be unsafe to set the
+ * state on another gesture within a [signal@Gtk.Gesture::begin] signal
+ * handler, as the callback might be executed before the other gesture
+ * knows about the sequence. A safe way to perform this could be:
  *
- * |[
+ * ```c
  * static void
  * first_gesture_begin_cb (GtkGesture       *first_gesture,
  *                         GdkEventSequence *sequence,
@@ -974,7 +997,7 @@ gtk_gesture_get_sequence_state (GtkGesture       *gesture,
  *   if (gtk_gesture_get_sequence_state (first_gesture, sequence) == GTK_EVENT_SEQUENCE_CLAIMED)
  *     gtk_gesture_set_sequence_state (second_gesture, sequence, GTK_EVENT_SEQUENCE_DENIED);
  * }
- * ]|
+ * ```
  *
  * If both gestures are in the same group, just set the state on
  * the gesture emitting the event, the sequence will be already
@@ -982,8 +1005,8 @@ gtk_gesture_get_sequence_state (GtkGesture       *gesture,
  * gesture processes the event.
  *
  * Returns: %TRUE if @sequence is handled by @gesture,
- *          and the state is changed successfully
- **/
+ *   and the state is changed successfully
+ */
 gboolean
 gtk_gesture_set_sequence_state (GtkGesture            *gesture,
                                 GdkEventSequence      *sequence,
@@ -1035,15 +1058,17 @@ gtk_gesture_set_sequence_state (GtkGesture            *gesture,
 
 /**
  * gtk_gesture_set_state:
- * @gesture: a #GtkGesture
+ * @gesture: a `GtkGesture`
  * @state: the sequence state
  *
  * Sets the state of all sequences that @gesture is currently
- * interacting with. See gtk_gesture_set_sequence_state()
- * for more details on sequence states.
+ * interacting with.
+ *
+ * See [method@Gtk.Gesture.set_sequence_state] for more details
+ * on sequence states.
  *
  * Returns: %TRUE if the state of at least one sequence
- *     was changed successfully
+ *   was changed successfully
  */
 gboolean
 gtk_gesture_set_state (GtkGesture            *gesture,
@@ -1070,16 +1095,16 @@ gtk_gesture_set_state (GtkGesture            *gesture,
 
 /**
  * gtk_gesture_get_sequences:
- * @gesture: a #GtkGesture
+ * @gesture: a `GtkGesture`
  *
- * Returns the list of #GdkEventSequences currently being interpreted
+ * Returns the list of `GdkEventSequences` currently being interpreted
  * by @gesture.
  *
  * Returns: (transfer container) (element-type GdkEventSequence): A list
- *          of #GdkEventSequences, the list elements are owned by GTK
- *          and must not be freed or modified, the list itself must be deleted
- *          through g_list_free()
- **/
+ *   of `GdkEventSequence`, the list elements are owned by GTK and must
+ *   not be freed or modified, the list itself must be deleted
+ *   through g_list_free()
+ */
 GList *
 gtk_gesture_get_sequences (GtkGesture *gesture)
 {
@@ -1114,12 +1139,12 @@ gtk_gesture_get_sequences (GtkGesture *gesture)
 
 /**
  * gtk_gesture_get_last_updated_sequence:
- * @gesture: a #GtkGesture
+ * @gesture: a `GtkGesture`
  *
- * Returns the #GdkEventSequence that was last updated on @gesture.
+ * Returns the `GdkEventSequence` that was last updated on @gesture.
  *
  * Returns: (transfer none) (nullable): The last updated sequence
- **/
+ */
 GdkEventSequence *
 gtk_gesture_get_last_updated_sequence (GtkGesture *gesture)
 {
@@ -1134,17 +1159,17 @@ gtk_gesture_get_last_updated_sequence (GtkGesture *gesture)
 
 /**
  * gtk_gesture_get_last_event:
- * @gesture: a #GtkGesture
- * @sequence: (nullable): a #GdkEventSequence
+ * @gesture: a `GtkGesture`
+ * @sequence: (nullable): a `GdkEventSequence`
  *
  * Returns the last event that was processed for @sequence.
  *
- * Note that the returned pointer is only valid as long as the @sequence
- * is still interpreted by the @gesture. If in doubt, you should make
- * a copy of the event.
+ * Note that the returned pointer is only valid as long as the
+ * @sequence is still interpreted by the @gesture. If in doubt,
+ * you should make a copy of the event.
  *
  * Returns: (transfer none) (nullable): The last event from @sequence
- **/
+ */
 GdkEvent *
 gtk_gesture_get_last_event (GtkGesture       *gesture,
                             GdkEventSequence *sequence)
@@ -1165,11 +1190,12 @@ gtk_gesture_get_last_event (GtkGesture       *gesture,
 
 /*
  * gtk_gesture_get_last_target:
- * @gesture: a #GtkGesture
+ * @gesture: a `GtkGesture`
  * @sequence: event sequence
  *
  * Returns the widget that the last event was targeted at.
- * See gtk_gesture_get_last_event().
+ *
+ * See [method@Gtk.Gesture.get_last_event].
  *
  * Returns: (transfer none) (nullable): The target of the last event
  */
@@ -1193,18 +1219,19 @@ gtk_gesture_get_last_target (GtkGesture        *gesture,
 
 /**
  * gtk_gesture_get_point:
- * @gesture: a #GtkGesture
- * @sequence: (allow-none): a #GdkEventSequence, or %NULL for pointer events
+ * @gesture: a `GtkGesture`
+ * @sequence: (allow-none): a `GdkEventSequence`, or %NULL for pointer events
  * @x: (out) (allow-none): return location for X axis of the sequence coordinates
  * @y: (out) (allow-none): return location for Y axis of the sequence coordinates
  *
- * If @sequence is currently being interpreted by @gesture, this
- * function returns %TRUE and fills in @x and @y with the last coordinates
- * stored for that event sequence. The coordinates are always relative to the
- * widget allocation.
+ * If @sequence is currently being interpreted by @gesture,
+ * returns %TRUE and fills in @x and @y with the last coordinates
+ * stored for that event sequence.
+ *
+ * The coordinates are always relative to the widget allocation.
  *
  * Returns: %TRUE if @sequence is currently interpreted
- **/
+ */
 gboolean
 gtk_gesture_get_point (GtkGesture       *gesture,
                        GdkEventSequence *sequence,
@@ -1254,13 +1281,14 @@ _gtk_gesture_get_last_update_time (GtkGesture       *gesture,
 
 /**
  * gtk_gesture_get_bounding_box:
- * @gesture: a #GtkGesture
+ * @gesture: a `GtkGesture`
  * @rect: (out): bounding box containing all active touches.
  *
  * If there are touch sequences being currently handled by @gesture,
- * this function returns %TRUE and fills in @rect with the bounding
- * box containing all active touches. Otherwise, %FALSE will be
- * returned.
+ * returns %TRUE and fills in @rect with the bounding box containing
+ * all active touches.
+ *
+ * Otherwise, %FALSE will be returned.
  *
  * Note: This function will yield unexpected results on touchpad
  * gestures. Since there is no correlation between physical and
@@ -1269,7 +1297,7 @@ _gtk_gesture_get_last_update_time (GtkGesture       *gesture,
  * regardless of the number of touchpoints.
  *
  * Returns: %TRUE if there are active touches, %FALSE otherwise
- **/
+ */
 gboolean
 gtk_gesture_get_bounding_box (GtkGesture   *gesture,
                               GdkRectangle *rect)
@@ -1322,17 +1350,18 @@ gtk_gesture_get_bounding_box (GtkGesture   *gesture,
 
 /**
  * gtk_gesture_get_bounding_box_center:
- * @gesture: a #GtkGesture
+ * @gesture: a `GtkGesture`
  * @x: (out): X coordinate for the bounding box center
  * @y: (out): Y coordinate for the bounding box center
  *
  * If there are touch sequences being currently handled by @gesture,
- * this function returns %TRUE and fills in @x and @y with the center
- * of the bounding box containing all active touches. Otherwise, %FALSE
- * will be returned.
+ * returns %TRUE and fills in @x and @y with the center of the bounding
+ * box containing all active touches.
+ *
+ * Otherwise, %FALSE will be returned.
  *
  * Returns: %FALSE if no active touches are present, %TRUE otherwise
- **/
+ */
 gboolean
 gtk_gesture_get_bounding_box_center (GtkGesture *gesture,
                                      double     *x,
@@ -1360,14 +1389,15 @@ gtk_gesture_get_bounding_box_center (GtkGesture *gesture,
 
 /**
  * gtk_gesture_is_active:
- * @gesture: a #GtkGesture
+ * @gesture: a `GtkGesture`
  *
  * Returns %TRUE if the gesture is currently active.
- * A gesture is active meanwhile there are touch sequences
+ *
+ * A gesture is active while there are touch sequences
  * interacting with it.
  *
  * Returns: %TRUE if gesture is active
- **/
+ */
 gboolean
 gtk_gesture_is_active (GtkGesture *gesture)
 {
@@ -1378,14 +1408,15 @@ gtk_gesture_is_active (GtkGesture *gesture)
 
 /**
  * gtk_gesture_is_recognized:
- * @gesture: a #GtkGesture
+ * @gesture: a `GtkGesture`
  *
  * Returns %TRUE if the gesture is currently recognized.
+ *
  * A gesture is recognized if there are as many interacting
  * touch sequences as required by @gesture.
  *
  * Returns: %TRUE if gesture is recognized
- **/
+ */
 gboolean
 gtk_gesture_is_recognized (GtkGesture *gesture)
 {
@@ -1412,14 +1443,14 @@ _gtk_gesture_check (GtkGesture *gesture)
 
 /**
  * gtk_gesture_handles_sequence:
- * @gesture: a #GtkGesture
- * @sequence: (nullable): a #GdkEventSequence or %NULL
+ * @gesture: a `GtkGesture`
+ * @sequence: (nullable): a `GdkEventSequence` or %NULL
  *
- * Returns %TRUE if @gesture is currently handling events corresponding to
- * @sequence.
+ * Returns %TRUE if @gesture is currently handling events
+ * corresponding to @sequence.
  *
  * Returns: %TRUE if @gesture is handling @sequence, %FALSE otherwise
- **/
+ */
 gboolean
 gtk_gesture_handles_sequence (GtkGesture       *gesture,
                               GdkEventSequence *sequence)
@@ -1475,24 +1506,27 @@ _gtk_gesture_get_group_link (GtkGesture *gesture)
 
 /**
  * gtk_gesture_group:
- * @gesture: a #GtkGesture
- * @group_gesture: #GtkGesture to group @gesture with
+ * @gesture: a `GtkGesture`
+ * @group_gesture: `GtkGesture` to group @gesture with
  *
- * Adds @gesture to the same group than @group_gesture. Gestures
- * are by default isolated in their own groups.
+ * Adds @gesture to the same group than @group_gesture.
  *
- * Both gestures must have been added to the same widget before they
- * can be grouped. 
+ * Gestures are by default isolated in their own groups.
  *
- * When gestures are grouped, the state of #GdkEventSequences
- * is kept in sync for all of those, so calling gtk_gesture_set_sequence_state(),
- * on one will transfer the same value to the others.
+ * Both gestures must have been added to the same widget before
+ * they can be grouped.
+ *
+ * When gestures are grouped, the state of `GdkEventSequences`
+ * is kept in sync for all of those, so calling
+ * [method@Gtk.Gesture.set_sequence_state], on one will transfer
+ * the same value to the others.
  *
  * Groups also perform an "implicit grabbing" of sequences, if a
- * #GdkEventSequence state is set to #GTK_EVENT_SEQUENCE_CLAIMED on one group,
- * every other gesture group attached to the same #GtkWidget will switch the
- * state for that sequence to #GTK_EVENT_SEQUENCE_DENIED.
- **/
+ * `GdkEventSequence` state is set to %GTK_EVENT_SEQUENCE_CLAIMED
+ * on one group, every other gesture group attached to the same
+ * `GtkWidget` will switch the state for that sequence to
+ * %GTK_EVENT_SEQUENCE_DENIED.
+ */
 void
 gtk_gesture_group (GtkGesture *gesture,
                    GtkGesture *group_gesture)
@@ -1526,10 +1560,10 @@ gtk_gesture_group (GtkGesture *gesture,
 
 /**
  * gtk_gesture_ungroup:
- * @gesture: a #GtkGesture
+ * @gesture: a `GtkGesture`
  *
  * Separates @gesture into an isolated group.
- **/
+ */
 void
 gtk_gesture_ungroup (GtkGesture *gesture)
 {
@@ -1552,13 +1586,13 @@ gtk_gesture_ungroup (GtkGesture *gesture)
 
 /**
  * gtk_gesture_get_group:
- * @gesture: a #GtkGesture
+ * @gesture: a `GtkGesture`
  *
  * Returns all gestures in the group of @gesture
  *
  * Returns: (element-type GtkGesture) (transfer container): The list
- *   of #GtkGestures, free with g_list_free()
- **/
+ *   of `GtkGesture`s, free with g_list_free()
+ */
 GList *
 gtk_gesture_get_group (GtkGesture *gesture)
 {
@@ -1573,13 +1607,13 @@ gtk_gesture_get_group (GtkGesture *gesture)
 
 /**
  * gtk_gesture_is_grouped_with:
- * @gesture: a #GtkGesture
- * @other: another #GtkGesture
+ * @gesture: a `GtkGesture`
+ * @other: another `GtkGesture`
  *
  * Returns %TRUE if both gestures pertain to the same group.
  *
  * Returns: whether the gestures are grouped
- **/
+ */
 gboolean
 gtk_gesture_is_grouped_with (GtkGesture *gesture,
                              GtkGesture *other)

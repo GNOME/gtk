@@ -32,13 +32,20 @@
 
 
 /**
- * SECTION:gdkcontentserializer
- * @Short_description: Serialize content for transfer
- * @Title: GdkContentSerializer
- * @See_also: #GdkContentDeserializer, #GdkContentProvider
+ * GdkContentSerializer:
  *
- * A GdkContentSerializer is used to serialize content for inter-application
- * data transfers.
+ * A `GdkContentSerializer` is used to serialize content for
+ * inter-application data transfers.
+ *
+ * The `GdkContentSerializer` transforms an object that is identified
+ * by a GType into a serialized form (i.e. a byte stream) that is
+ * identified by a mime type.
+ *
+ * GTK provides serializers and deserializers for common data types
+ * such as text, colors, images or file lists. To register your own
+ * serialization functions, use [func@content_register_serializer].
+ *
+ * Also see [class@Gdk.ContentDeserializer].
  */
 
 typedef struct _Serializer Serializer;
@@ -169,7 +176,7 @@ gdk_content_serializer_run (const char              *mime_type,
 
 /**
  * gdk_content_serializer_get_mime_type:
- * @serializer: a #GdkContentSerializer
+ * @serializer: a `GdkContentSerializer`
  *
  * Gets the mime type to serialize to.
  *
@@ -185,11 +192,11 @@ gdk_content_serializer_get_mime_type (GdkContentSerializer *serializer)
 
 /**
  * gdk_content_serializer_get_gtype:
- * @serializer: a #GdkContentSerializer
+ * @serializer: a `GdkContentSerializer`
  *
- * Gets the GType to of the object to serialize.
+ * Gets the `GType` to of the object to serialize.
  *
- * Returns: the GType for the current operation
+ * Returns: the `GType` for the current operation
  */
 GType
 gdk_content_serializer_get_gtype (GdkContentSerializer *serializer)
@@ -201,11 +208,11 @@ gdk_content_serializer_get_gtype (GdkContentSerializer *serializer)
 
 /**
  * gdk_content_serializer_get_value:
- * @serializer: a #GdkContentSerializer
+ * @serializer: a `GdkContentSerializer`
  *
- * Gets the #GValue to read the object to serialize from.
+ * Gets the `GValue` to read the object to serialize from.
  *
- * Returns: (transfer none): the #GValue for the current operation
+ * Returns: (transfer none): the `GValue` for the current operation
  */
 const GValue *
 gdk_content_serializer_get_value (GdkContentSerializer *serializer)
@@ -217,9 +224,11 @@ gdk_content_serializer_get_value (GdkContentSerializer *serializer)
 
 /**
  * gdk_content_serializer_get_output_stream:
- * @serializer: a #GdkContentSerializer
+ * @serializer: a `GdkContentSerializer`
  *
- * Gets the output stream that was passed to gdk_content_serialize_async().
+ * Gets the output stream for the current operation.
+ *
+ * This is the stream that was passed to [func@content_serialize_async].
  *
  * Returns: (transfer none): the output stream for the current operation
  */
@@ -233,11 +242,13 @@ gdk_content_serializer_get_output_stream (GdkContentSerializer *serializer)
 
 /**
  * gdk_content_serializer_get_priority:
- * @serializer: a #GdkContentSerializer
+ * @serializer: a `GdkContentSerializer`
  *
- * Gets the io priority that was passed to gdk_content_serialize_async().
+ * Gets the I/O priority for the current operation.
  *
- * Returns: the io priority for the current operation
+ * This is the priority that was passed to [func@content_serialize_async].
+ *
+ * Returns: the I/O priority for the current operation
  */
 int
 gdk_content_serializer_get_priority (GdkContentSerializer *serializer)
@@ -249,9 +260,11 @@ gdk_content_serializer_get_priority (GdkContentSerializer *serializer)
 
 /**
  * gdk_content_serializer_get_cancellable:
- * @serializer: a #GdkContentSerializer
+ * @serializer: a `GdkContentSerializer`
  *
- * Gets the cancellable that was passed to gdk_content_serialize_async().
+ * Gets the cancellable for the current operation.
+ *
+ * This is the `GCancellable` that was passed to [content_serialize_async].
  *
  * Returns: (transfer none): the cancellable for the current operation
  */
@@ -265,7 +278,7 @@ gdk_content_serializer_get_cancellable (GdkContentSerializer *serializer)
 
 /**
  * gdk_content_serializer_get_user_data:
- * @serializer: a #GdkContentSerializer
+ * @serializer: a `GdkContentSerializer`
  *
  * Gets the user data that was passed when the serializer was registered.
  *
@@ -281,7 +294,7 @@ gdk_content_serializer_get_user_data (GdkContentSerializer *serializer)
 
 /**
  * gdk_content_serializer_set_task_data:
- * @serializer: a #GdkContentSerializer
+ * @serializer: a `GdkContentSerializer`
  * @data: data to associate with this operation
  * @notify: destroy notify for @data
  *
@@ -303,9 +316,11 @@ gdk_content_serializer_set_task_data (GdkContentSerializer   *serializer,
 
 /**
  * gdk_content_serializer_get_task_data:
- * @serializer: a #GdkContentSerializer
+ * @serializer: a `GdkContentSerializer`
  *
- * Gets the data that was associated with @serializer via gdk_content_serializer_set_task_data().
+ * Gets the data that was associated with the current operation.
+ *
+ * See [method@Gdk.ContentSerializer.set_task_data].
  *
  * Returns: (transfer none): the task data for @serializer
  */
@@ -332,7 +347,7 @@ gdk_content_serializer_emit_callback (gpointer data)
 
 /**
  * gdk_content_serializer_return_success:
- * @serializer: a #GdkContentSerializer
+ * @serializer: a `GdkContentSerializer`
  *
  * Indicate that the serialization has been successfully completed.
  */
@@ -352,10 +367,11 @@ gdk_content_serializer_return_success (GdkContentSerializer *serializer)
 
 /**
  * gdk_content_serializer_return_error:
- * @serializer: a #GdkContentSerializer
- * @error: a #GError
+ * @serializer: a `GdkContentSerializer`
+ * @error: a `GError`
  *
  * Indicate that the serialization has ended with an error.
+ *
  * This function consumes @error.
  */
 void
@@ -379,8 +395,7 @@ gdk_content_serializer_return_error (GdkContentSerializer *serializer,
  * @data: data that @serialize can access
  * @notify: destroy notify for @data
  *
- * Registers a function to convert objects of the given @type to
- * a serialized representation with the given mime type.
+ * Registers a function to serialize objects of a given type.
  */
 void
 gdk_content_register_serializer (GType                    type,
@@ -433,12 +448,12 @@ lookup_serializer (const char *mime_type,
 
 /**
  * gdk_content_formats_union_serialize_gtypes:
- * @formats: (transfer full): a #GdkContentFormats
+ * @formats: (transfer full): a `GdkContentFormats`
  *
  * Add GTypes for the mime types in @formats for which serializers are
  * registered.
  *
- * Return: a new #GdkContentFormats
+ * Return: a new `GdkContentFormats`
  */
 GdkContentFormats *
 gdk_content_formats_union_serialize_gtypes (GdkContentFormats *formats)
@@ -468,12 +483,12 @@ gdk_content_formats_union_serialize_gtypes (GdkContentFormats *formats)
 
 /**
  * gdk_content_formats_union_serialize_mime_types:
- * @formats: (transfer full):  a #GdkContentFormats
+ * @formats: (transfer full):  a `GdkContentFormats`
  *
  * Add mime types for GTypes in @formats for which serializers are
  * registered.
  *
- * Return: a new #GdkContentFormats
+ * Return: a new `GdkContentFormats`
  */
 GdkContentFormats *
 gdk_content_formats_union_serialize_mime_types (GdkContentFormats *formats)
@@ -514,17 +529,21 @@ serialize_not_found (GdkContentSerializer *serializer)
 
 /**
  * gdk_content_serialize_async:
- * @stream: a #GOutputStream to write the serialized content to
+ * @stream: a `GOutputStream` to write the serialized content to
  * @mime_type: the mime type to serialize to
  * @value: the content to serialize
- * @io_priority: the io priority of the operation
+ * @io_priority: the I/O priority of the operation
  * @cancellable: (nullable): optional #GCancellable object
  * @callback: (scope async): callback to call when the operation is done
  * @user_data: (closure): data to pass to the callback function
  *
  * Serialize content and write it to the given output stream, asynchronously.
- * When the operation is finished, @callback will be called. You can then
- * call gdk_content_serialize_finish() to get the result of the operation.
+ *
+ * The default I/O priority is %G_PRIORITY_DEFAULT (i.e. 0), and lower numbers
+ * indicate a higher priority.
+ *
+ * When the operation is finished, @callback will be called. You must then
+ * call [func@content_serialize_finish] to get the result of the operation.
  */
 void
 gdk_content_serialize_async (GOutputStream       *stream,
@@ -556,7 +575,7 @@ gdk_content_serialize_async (GOutputStream       *stream,
 
 /**
  * gdk_content_serialize_finish:
- * @result: the #GAsyncResult
+ * @result: the `GAsyncResult`
  * @error: return location for an error
  *
  * Finishes a content serialization operation.

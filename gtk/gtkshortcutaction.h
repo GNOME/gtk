@@ -49,6 +49,7 @@ typedef gboolean (* GtkShortcutFunc) (GtkWidget *widget,
  *     a future activation may select a different action.
  *
  * List of flags that can be passed to action activation.
+ *
  * More flags may be added in the future.
  **/
 typedef enum {
@@ -77,7 +78,7 @@ gboolean                gtk_shortcut_action_activate            (GtkShortcutActi
 /**
  * GtkNothingAction:
  *
- * A #GtkShortcutAction that does nothing.
+ * A `GtkShortcutAction` that does nothing.
  */
 GDK_AVAILABLE_IN_ALL
 GDK_DECLARE_INTERNAL_TYPE (GtkNothingAction, gtk_nothing_action, GTK, NOTHING_ACTION, GtkShortcutAction)
@@ -90,7 +91,7 @@ GtkShortcutAction *     gtk_nothing_action_get                  (void);
 /**
  * GtkCallbackAction:
  *
- * A #GtkShortcutAction that invokes a callback.
+ * A `GtkShortcutAction` that invokes a callback.
  */
 GDK_AVAILABLE_IN_ALL
 GDK_DECLARE_INTERNAL_TYPE (GtkCallbackAction, gtk_callback_action, GTK, CALLBACK_ACTION, GtkShortcutAction)
@@ -105,7 +106,7 @@ GtkShortcutAction *     gtk_callback_action_new                 (GtkShortcutFunc
 /**
  * GtkMnemonicAction:
  *
- * A #GtkShortcutAction that calls gtk_widget_mnemonic_activate().
+ * A `GtkShortcutAction` that calls gtk_widget_mnemonic_activate().
  */
 GDK_AVAILABLE_IN_ALL
 GDK_DECLARE_INTERNAL_TYPE (GtkMnemonicAction, gtk_mnemonic_action, GTK, MNEMONIC_ACTION, GtkShortcutAction)
@@ -118,7 +119,7 @@ GtkShortcutAction *     gtk_mnemonic_action_get                 (void);
 /**
  * GtkActivateAction:
  *
- * A #GtkShortcutAction that calls gtk_widget_activate().
+ * A `GtkShortcutAction` that calls gtk_widget_activate().
  */
 GDK_AVAILABLE_IN_ALL
 GDK_DECLARE_INTERNAL_TYPE (GtkActivateAction, gtk_activate_action, GTK, ACTIVATE_ACTION, GtkShortcutAction)
@@ -131,7 +132,7 @@ GtkShortcutAction *     gtk_activate_action_get                 (void);
 /**
  * GtkSignalAction:
  *
- * A #GtkShortcutAction that emits a signal.
+ * A `GtkShortcut`Action that emits a signal.
  *
  * Signals that are used in this way are referred to as keybinding signals,
  * and they are expected to be defined with the %G_SIGNAL_ACTION flag.
@@ -149,7 +150,7 @@ const char *            gtk_signal_action_get_signal_name       (GtkSignalAction
 /**
  * GtkNamedAction:
  *
- * A #GtkShortcutAction that activates an action by name.
+ * A `GtkShortcutAction` that activates an action by name.
  */
 GDK_AVAILABLE_IN_ALL
 GDK_DECLARE_INTERNAL_TYPE (GtkNamedAction, gtk_named_action, GTK, NAMED_ACTION, GtkShortcutAction)

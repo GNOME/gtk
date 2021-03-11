@@ -44,13 +44,6 @@ G_BEGIN_DECLS
 #define GTK_NOTEBOOK_PAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_NOTEBOOK_PAGE, GtkNotebookPage))
 #define GTK_IS_NOTEBOOK_PAGE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_NOTEBOOK_PAGE))
 
-/**
- * GtkNotebookPage:
- *
- * A page in the #GtkNotebook.
- *
- * The `GtkNotebookPage` structure only contains private data.
- */
 typedef struct _GtkNotebookPage GtkNotebookPage;
 
 /**
@@ -58,7 +51,7 @@ typedef struct _GtkNotebookPage GtkNotebookPage;
  * @GTK_NOTEBOOK_TAB_FIRST: the first tab in the notebook
  * @GTK_NOTEBOOK_TAB_LAST: the last tab in the notebook
  *
- * The parameter used in the action signals of #GtkNotebook.
+ * The parameter used in the action signals of `GtkNotebook`.
  */
 typedef enum
 {

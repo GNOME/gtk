@@ -44,12 +44,6 @@ G_BEGIN_DECLS
 
 typedef struct _GtkAdjustmentClass    GtkAdjustmentClass;
 
-/**
- * GtkAdjustment:
- *
- * The #GtkAdjustment-struct contains only private fields and
- * should not be directly accessed.
- */
 struct _GtkAdjustment
 {
   GInitiallyUnowned parent_instance;

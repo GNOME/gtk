@@ -63,11 +63,9 @@
 #endif
 
 /**
- * SECTION:gtksettings
- * @Short_description: Sharing settings between applications
- * @Title: Settings
+ * GtkSettings:
  *
- * GtkSettings provide a mechanism to share global settings between
+ * `GtkSettings` provides a mechanism to share global settings between
  * applications.
  *
  * On the X window system, this sharing is realized by an
@@ -81,23 +79,48 @@
  * In the absence of these sharing mechanisms, GTK reads default values for
  * settings from `settings.ini` files in `/etc/gtk-4.0`, `$XDG_CONFIG_DIRS/gtk-4.0`
  * and `$XDG_CONFIG_HOME/gtk-4.0`. These files must be valid key files (see
- * #GKeyFile), and have a section called Settings. Themes can also provide
+ * `GKeyFile`), and have a section called Settings. Themes can also provide
  * default values for settings by installing a `settings.ini` file
  * next to their `gtk.css` file.
  *
  * Applications can override system-wide settings by setting the property
- * of the GtkSettings object with g_object_set(). This should be restricted
- * to special cases though; GtkSettings are not meant as an application
+ * of the `GtkSettings` object with g_object_set(). This should be restricted
+ * to special cases though; `GtkSettings` are not meant as an application
  * configuration facility.
  *
- * There is one GtkSettings instance per display. It can be obtained with
- * gtk_settings_get_for_display(), but in many cases, it is more convenient
- * to use gtk_widget_get_settings().
+ * There is one `GtkSettings` instance per display. It can be obtained with
+ * [type_func@GtkSettings.get_for_display], but in many cases, it is more
+ * convenient to use [method@Gtk.Widget.get_settings].
  */
+
+/* --- typedefs --- */
+typedef struct _GtkSettingsValue GtkSettingsValue;
+
+/*< private >
+ * GtkSettingsValue:
+ * @origin: Origin should be something like “filename:linenumber” for
+ *    rc files, or e.g. “XProperty” for other sources.
+ * @value: Valid types are LONG, DOUBLE and STRING corresponding to
+ *    the token parsed, or a GSTRING holding an unparsed statement
+ */
+struct _GtkSettingsValue
+{
+  /* origin should be something like "filename:linenumber" for rc files,
+   * or e.g. "XProperty" for other sources
+   */
+  char *origin;
+
+  /* valid types are LONG, DOUBLE and STRING corresponding to the token parsed,
+   * or a GSTRING holding an unparsed statement
+   */
+  GValue value;
+
+  /* the settings source */
+  GtkSettingsSource source;
+};
 
 typedef struct _GtkSettingsClass GtkSettingsClass;
 typedef struct _GtkSettingsPropertyValue GtkSettingsPropertyValue;
-typedef struct _GtkSettingsValuePrivate GtkSettingsValuePrivate;
 
 struct _GtkSettings
 {
@@ -117,12 +140,6 @@ struct _GtkSettings
 struct _GtkSettingsClass
 {
   GObjectClass parent_class;
-};
-
-struct _GtkSettingsValuePrivate
-{
-  GtkSettingsValue public;
-  GtkSettingsSource source;
 };
 
 struct _GtkSettingsPropertyValue
@@ -312,6 +329,12 @@ gtk_settings_class_init (GtkSettingsClass *class)
 
   quark_gtk_settings = g_quark_from_static_string ("gtk-settings");
 
+  /**
+   * GtkSettings:gtk-double-click-time:
+   *
+   * The maximum time to allow between two clicks for them to be considered
+   * a double click, in milliseconds.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-double-click-time",
                                                                P_("Double Click Time"),
@@ -319,6 +342,13 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                0, G_MAXINT, 400,
                                                                GTK_PARAM_READWRITE));
   g_assert (result == PROP_DOUBLE_CLICK_TIME);
+
+  /**
+   * GtkSettings:gtk-double-click-distance:
+   *
+   * The maximum distance allowed between two clicks for them to be considered
+   * a double click, in pixels.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-double-click-distance",
                                                                P_("Double Click Distance"),
@@ -332,7 +362,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Whether the cursor should blink.
    *
-   * Also see the #GtkSettings:gtk-cursor-blink-timeout setting,
+   * Also see the [property@Gtk.Settings:gtk-cursor-blink-timeout] setting,
    * which allows more flexible control over cursor blinking.
    */
   result = settings_install_property_parser (class,
@@ -342,6 +372,12 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    TRUE,
                                                                    GTK_PARAM_READWRITE));
   g_assert (result == PROP_CURSOR_BLINK);
+
+  /**
+   * GtkSettings:gtk-cursor-blink-time:
+   *
+   * Length of the cursor blink cycle, in milliseconds.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-cursor-blink-time",
                                                                P_("Cursor Blink Time"),
@@ -354,10 +390,11 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * GtkSettings:gtk-cursor-blink-timeout:
    *
    * Time after which the cursor stops blinking, in seconds.
+   *
    * The timer is reset after each user interaction.
    *
    * Setting this to zero has the same effect as setting
-   * #GtkSettings:gtk-cursor-blink to %FALSE.
+   * [property@Gtk.Settings:gtk-cursor-blink] to %FALSE.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-cursor-blink-timeout",
@@ -366,6 +403,13 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                1, G_MAXINT, 10,
                                                                GTK_PARAM_READWRITE));
   g_assert (result == PROP_CURSOR_BLINK_TIMEOUT);
+
+  /**
+   * GtkSettings:gtk-split-cursor:
+   *
+   * Whether two cursors should be displayed for mixed left-to-right and
+   * right-to-left text.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-split-cursor",
                                                                    P_("Split Cursor"),
@@ -374,6 +418,11 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    GTK_PARAM_READWRITE));
   g_assert (result == PROP_SPLIT_CURSOR);
 
+  /**
+   * GtkSettings:gtk-cursor-aspect-ratio:
+   *
+   * The aspect ratio of the text caret.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_double ("gtk-cursor-aspect-ratio",
                                                                   P_("Cursor Aspect Ratio"),
@@ -382,6 +431,14 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   GTK_PARAM_READWRITE));
   g_assert (result == PROP_CURSOR_ASPECT_RATIO);
 
+  /**
+   * GtkSettings:gtk-theme-name:
+   *
+   * Name of the theme to load.
+   *
+   * See [class@Gtk.CssProvider] for details about how
+   * GTK finds the CSS stylesheet for a theme.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-theme-name",
                                                                    P_("Theme Name"),
@@ -390,6 +447,14 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   GTK_PARAM_READWRITE));
   g_assert (result == PROP_THEME_NAME);
 
+  /**
+   * GtkSettings:gtk-icon-theme-name:
+   *
+   * Name of the icon theme to use.
+   *
+   * See [class@Gtk.IconTheme] for details about how
+   * GTK handles icon themes.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-icon-theme-name",
                                                                   P_("Icon Theme Name"),
@@ -398,6 +463,11 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   GTK_PARAM_READWRITE));
   g_assert (result == PROP_ICON_THEME_NAME);
 
+  /**
+   * GtkSettings:gtk-dnd-drag-threshold:
+   *
+   * The number of pixels the cursor can move before dragging.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-dnd-drag-threshold",
                                                                P_("Drag threshold"),
@@ -409,7 +479,9 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-font-name:
    *
-   * The default font to use. GTK uses the family name and size from this string.
+   * The default font to use.
+   *
+   * GTK uses the family name and size from this string.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-font-name",
@@ -419,6 +491,13 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   GTK_PARAM_READWRITE));
   g_assert (result == PROP_FONT_NAME);
 
+  /**
+   * GtkSettings:gtk-xft-antialias:
+   *
+   * Whether to antialias fonts.
+   *
+   * The values are 0 for no, 1 for yes, or -1 for the system default.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-xft-antialias",
                                                                P_("Xft Antialias"),
@@ -428,6 +507,13 @@ gtk_settings_class_init (GtkSettingsClass *class)
 
   g_assert (result == PROP_XFT_ANTIALIAS);
 
+  /**
+   * GtkSettings:gtk-xft-hinting:
+   *
+   * Whether to enable font hinting.
+   *
+   * The values are 0 for no, 1 for yes, or -1 for the system default.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-xft-hinting",
                                                                P_("Xft Hinting"),
@@ -437,6 +523,14 @@ gtk_settings_class_init (GtkSettingsClass *class)
 
   g_assert (result == PROP_XFT_HINTING);
 
+  /**
+   * GtkSettings:gtk-xft-hintstyle:
+   *
+   * What degree of font hinting to use.
+   *
+   * The possible vaues are hintnone, hintslight,
+   * hintmedium, hintfull.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-xft-hintstyle",
                                                                   P_("Xft Hint Style"),
@@ -446,6 +540,13 @@ gtk_settings_class_init (GtkSettingsClass *class)
 
   g_assert (result == PROP_XFT_HINTSTYLE);
 
+  /**
+   * GtkSettings:gtk-xft-rgba:
+   *
+   * The type of subpixel antialiasing to use.
+   *
+   * The possible values are none, rgb, bgr, vrgb, vbgr.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-xft-rgba",
                                                                   P_("Xft RGBA"),
@@ -455,6 +556,13 @@ gtk_settings_class_init (GtkSettingsClass *class)
 
   g_assert (result == PROP_XFT_RGBA);
 
+  /**
+   * GtkSettings:gtk-xft-dpi:
+   *
+   * The font resolution, in 1024 * dots/inch.
+   *
+   * -1 to use the default value.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-xft-dpi",
                                                                P_("Xft DPI"),
@@ -464,6 +572,13 @@ gtk_settings_class_init (GtkSettingsClass *class)
 
   g_assert (result == PROP_XFT_DPI);
 
+  /**
+   * GtkSettings:gtk-cursor-theme-name:
+   *
+   * Name of the cursor theme to use.
+   *
+   * Use %NULL to use the default theme.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-cursor-theme-name",
                                                                   P_("Cursor theme name"),
@@ -472,6 +587,13 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   GTK_PARAM_READWRITE));
   g_assert (result == PROP_CURSOR_THEME_NAME);
 
+  /**
+   * GtkSettings:gtk-cursor-theme-size:
+   *
+   * The size to use for cursors.
+   *
+   * 0 means to use the default size.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-cursor-theme-size",
                                                                P_("Cursor theme size"),
@@ -481,6 +603,11 @@ gtk_settings_class_init (GtkSettingsClass *class)
 
   g_assert (result == PROP_CURSOR_THEME_SIZE);
 
+  /**
+   * GtkSettings:gtk-alternative-button-order:
+   *
+   * Whether buttons in dialogs should use the alternative button order.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-alternative-button-order",
                                                                    P_("Alternative button order"),
@@ -493,7 +620,9 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * GtkSettings:gtk-alternative-sort-arrows:
    *
    * Controls the direction of the sort indicators in sorted list and tree
-   * views. By default an arrow pointing down means the column is sorted
+   * views.
+   *
+   * By default an arrow pointing down means the column is sorted
    * in ascending order. When set to %TRUE, this order will be inverted.
    */
   result = settings_install_property_parser (class,
@@ -504,6 +633,11 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    GTK_PARAM_READWRITE));
   g_assert (result == PROP_ALTERNATIVE_SORT_ARROWS);
 
+  /**
+   * GtkSettings:gtk-enable-animations:
+   *
+   * Whether to enable toolkit-wide animations.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-enable-animations",
                                                                    P_("Enable Animations"),
@@ -517,10 +651,11 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * GtkSettings:gtk-error-bell:
    *
    * When %TRUE, keyboard navigation and other input-related errors
-   * will cause a beep. Since the error bell is implemented using
-   * gdk_surface_beep(), the windowing system may offer ways to
-   * configure the error bell in many ways, such as flashing the
-   * window or similar visual effects.
+   * will cause a beep.
+   *
+   * Since the error bell is implemented using gdk_surface_beep(), the
+   * windowing system may offer ways to configure the error bell in many
+   * ways, such as flashing the window or similar visual effects.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-error-bell",
@@ -535,7 +670,9 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * GtkSettings:gtk-print-backends:
    *
    * A comma-separated list of print backends to use in the print
-   * dialog. Available print backends depend on the GTK installation,
+   * dialog.
+   *
+   * Available print backends depend on the GTK installation,
    * and may include "file", "cups", "lpr" or "papi".
    */
   result = settings_install_property_parser (class,
@@ -549,15 +686,16 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-print-preview-command:
    *
-   * A command to run for displaying the print preview. The command
-   * should contain a `%f` placeholder, which will get replaced by
-   * the path to the pdf file. The command may also contain a `%s`
-   * placeholder, which will get replaced by the path to a file
-   * containing the print settings in the format produced by
-   * gtk_print_settings_to_file().
+   * A command to run for displaying the print preview.
    *
-   * The preview application is responsible for removing the pdf file
-   * and the print settings file when it is done.
+   * The command should contain a `%f` placeholder, which will get
+   * replaced by the path to the pdf file. The command may also
+   * contain a `%s` placeholder, which will get replaced by the
+   * path to a file containing the print settings in the format
+   * produced by [method@Gtk.PrintSettings.to_file].
+   *
+   * The preview application is responsible for removing the pdf
+   * file and the print settings file when it is done.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-print-preview-command",
@@ -584,13 +722,14 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-im-module:
    *
-   * Which IM (input method) module should be used by default. This is the
-   * input method that will be used if the user has not explicitly chosen
-   * another input method from the IM context menu.
+   * Which IM (input method) module should be used by default.
+   *
+   * This is the input method that will be used if the user has not
+   * explicitly chosen another input method from the IM context menu.
    * This also can be a colon-separated list of input methods, which GTK
    * will try in turn until it finds one available on the system.
    *
-   * See #GtkIMContext.
+   * See [class@Gtk.IMContext].
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-im-module",
@@ -604,9 +743,11 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * GtkSettings:gtk-recent-files-max-age:
    *
    * The maximum age, in days, of the items inside the recently used
-   * resources list. Items older than this setting will be excised
-   * from the list. If set to 0, the list will always be empty; if
-   * set to -1, no item will be removed.
+   * resources list.
+   *
+   * Items older than this setting will be excised from the list.
+   * If set to 0, the list will always be empty; if set to -1, no
+   * item will be removed.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-recent-files-max-age",
@@ -617,6 +758,11 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                GTK_PARAM_READWRITE));
   g_assert (result == PROP_RECENT_FILES_MAX_AGE);
 
+  /**
+   * GtkSettings:gtk-fontconfig-timestamp:
+   *
+   * Timestamp of the curent fontconfig configuration.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_uint ("gtk-fontconfig-timestamp",
                                                                 P_("Fontconfig configuration timestamp"),
@@ -634,8 +780,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * See the [Sound Theme Specifications](http://www.freedesktop.org/wiki/Specifications/sound-theme-spec)
    * for more information on event sounds and sound themes.
    *
-   * GTK itself does not support event sounds, you have to use a loadable
-   * module like the one that comes with libcanberra.
+   * GTK itself does not support event sounds, you have to use
+   * a loadable module like the one that comes with libcanberra.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-sound-theme-name",
@@ -689,12 +835,14 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * If the value of this setting is %TRUE, clicking the primary button in a
    * #GtkRange trough will move the slider, and hence set the range’s value, to
-   * the point that you clicked. If it is %FALSE, a primary click will cause the
-   * slider/value to move by the range’s page-size towards the point clicked.
+   * the point that you clicked.
+   *
+   * If it is %FALSE, a primary click will cause the slider/value to move
+   * by the range’s page-size towards the point clicked.
    *
    * Whichever action you choose for the primary button, the other action will
-   * be available by holding Shift and primary-clicking, or (since GTK 3.22.25)
-   * clicking the middle mouse button.
+   * be available by holding Shift and primary-clicking, or clicking the middle
+   * mouse button.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-primary-button-warps-slider",
@@ -707,17 +855,20 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-application-prefer-dark-theme:
    *
-   * Whether the application prefers to use a dark theme. If a GTK theme
-   * includes a dark variant, it will be used instead of the configured
-   * theme.
+   * Whether the application prefers to use a dark theme.
    *
-   * Some applications benefit from minimizing the amount of light pollution that
-   * interferes with the content. Good candidates for dark themes are photo and
-   * video editors that make the actual content get all the attention and minimize
-   * the distraction of the chrome.
+   * If a GTK theme includes a dark variant, it will be used
+   * instead of the configured theme.
    *
-   * Dark themes should not be used for documents, where large spaces are white/light
-   * and the dark chrome creates too much contrast (web browser, text editor...).
+   * Some applications benefit from minimizing the amount of light
+   * pollution that interferes with the content. Good candidates for
+   * dark themes are photo and video editors that make the actual
+   * content get all the attention and minimize the distraction of
+   * the chrome.
+   *
+   * Dark themes should not be used for documents, where large spaces
+   * are white/light and the dark chrome creates too much contrast
+   * (web browser, text editor...).
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-application-prefer-dark-theme",
@@ -727,6 +878,11 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                  GTK_PARAM_READWRITE));
   g_assert (result == PROP_APPLICATION_PREFER_DARK_THEME);
 
+  /**
+   * GtkSettings:gkt-entry-select-on-focus:
+   *
+   * Whether to select the contents of an entry when it is focused.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-entry-select-on-focus",
                                                                    P_("Select on focus"),
@@ -739,7 +895,9 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * GtkSettings:gtk-entry-password-hint-timeout:
    *
    * How long to show the last input character in hidden
-   * entries. This value is in milliseconds. 0 disables showing the
+   * entries.
+   *
+   * This value is in milliseconds. 0 disables showing the
    * last char. 600 is a good value for enabling it.
    */
   result = settings_install_property_parser (class,
@@ -751,6 +909,12 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                 GTK_PARAM_READWRITE));
   g_assert (result == PROP_ENTRY_PASSWORD_HINT_TIMEOUT);
 
+  /**
+   * GtkSettings:gtk-label-select-on-focus:
+   *
+   * Whether to select the contents of a selectable
+   * label when it is focused.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-label-select-on-focus",
                                                                    P_("Select on focus"),
@@ -759,6 +923,12 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    GTK_PARAM_READWRITE));
   g_assert (result == PROP_LABEL_SELECT_ON_FOCUS);
 
+  /**
+   * GtkSettings:gtk-shell-shows-app-menu:
+   *
+   * Set to %TRUE if the desktop environment is displaying
+   * the app menu, %FALSE if the app should display it itself.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-shell-shows-app-menu",
                                                                    P_("Desktop shell shows app menu"),
@@ -768,6 +938,12 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    FALSE, GTK_PARAM_READWRITE));
   g_assert (result == PROP_SHELL_SHOWS_APP_MENU);
 
+  /**
+   * GtkSettings:gtk-shell-shows-menubar:
+   *
+   * Set to %TRUE if the desktop environment is displaying
+   * the menubar, %FALSE if the app should display it itself.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-shell-shows-menubar",
                                                                    P_("Desktop shell shows the menubar"),
@@ -777,6 +953,12 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    FALSE, GTK_PARAM_READWRITE));
   g_assert (result == PROP_SHELL_SHOWS_MENUBAR);
 
+  /**
+   * GtkSettings:gtk-shell-shows-desktop:
+   *
+   * Set to %TRUE if the desktop environment is displaying
+   * the desktop folder, %FALSE if not.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-shell-shows-desktop",
                                                                    P_("Desktop environment shows the desktop folder"),
@@ -789,7 +971,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-decoration-layout:
    *
-   * This setting determines which buttons should be put in the
+   * Determines which buttons should be put in the
    * titlebar of client-side decorated windows, and whether they
    * should be placed at the left of right.
    *
@@ -808,7 +990,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * that can be closed.
    *
    * Also note that the setting can be overridden with the
-   * #GtkHeaderBar:decoration-layout property.
+   * [property@Gtk.HeaderBar:decoration-layout] property.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-decoration-layout",
@@ -820,7 +1002,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-titlebar-double-click:
    *
-   * This setting determines the action to take when a double-click
+   * Determines the action to take when a double-click
    * occurs on the titlebar of client-side decorated windows.
    *
    * Recognized actions are minimize, toggle-maximize, menu, lower
@@ -836,7 +1018,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-titlebar-middle-click:
    *
-   * This setting determines the action to take when a middle-click
+   * Determines the action to take when a middle-click
    * occurs on the titlebar of client-side decorated windows.
    *
    * Recognized actions are minimize, toggle-maximize, menu, lower
@@ -852,7 +1034,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-titlebar-right-click:
    *
-   * This setting determines the action to take when a right-click
+   * Determines the action to take when a right-click
    * occurs on the titlebar of client-side decorated windows.
    *
    * Recognized actions are minimize, toggle-maximize, menu, lower
@@ -872,7 +1054,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * color chooser or the font chooser will use a header bar at
    * the top to show action widgets, or an action area at the bottom.
    *
-   * This setting does not affect custom dialogs using GtkDialog
+   * This setting does not affect custom dialogs using `GtkDialog`
    * directly, or message dialogs.
    */
   result = settings_install_property_parser (class,
@@ -901,7 +1083,9 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * GtkSettings:gtk-recent-files-enabled:
    *
    * Whether GTK should keep track of items inside the recently used
-   * resources list. If set to %FALSE, the list will always be empty.
+   * resources list.
+   *
+   * If set to %FALSE, the list will always be empty.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-recent-files-enabled",
@@ -914,7 +1098,9 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-long-press-time:
    *
-   * The time for a button or touch press to be considered a "long press".
+   * The time for a button or touch press to be considered a “long press”.
+   *
+   * See [class@Gtk.GestureLongPress].
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_uint ("gtk-long-press-time",
@@ -928,8 +1114,9 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * GtkSettings:gtk-keynav-use-caret:
    *
    * Whether GTK should make sure that text can be navigated with
-   * a caret, even if it is not editable. This is useful when using
-   * a screen reader.
+   * a caret, even if it is not editable.
+   *
+   * This is useful when using a screen reader.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-keynav-use-caret",
@@ -943,6 +1130,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * GtkSettings:gtk-overlay-scrolling:
    *
    * Whether scrolled windows may use overlaid scrolling indicators.
+   *
    * If this is set to %FALSE, scrolled windows will have permanent
    * scrollbars.
    */
@@ -1111,11 +1299,11 @@ gtk_settings_create_for_display (GdkDisplay *display)
 
 /**
  * gtk_settings_get_for_display:
- * @display: a #GdkDisplay.
+ * @display: a `GdkDisplay`
  *
- * Gets the #GtkSettings object for @display, creating it if necessary.
+ * Gets the `GtkSettings` object for @display, creating it if necessary.
  *
- * Returns: (transfer none): a #GtkSettings object.
+ * Returns: (transfer none): a `GtkSettings` object
  */
 GtkSettings *
 gtk_settings_get_for_display (GdkDisplay *display)
@@ -1140,12 +1328,14 @@ gtk_settings_get_for_display (GdkDisplay *display)
 /**
  * gtk_settings_get_default:
  *
- * Gets the #GtkSettings object for the default display, creating
- * it if necessary. See gtk_settings_get_for_display().
+ * Gets the `GtkSettings` object for the default display, creating
+ * it if necessary.
  *
- * Returns: (nullable) (transfer none): a #GtkSettings object. If there is
- * no default display, then returns %NULL.
- **/
+ * See [type_func@Gtk.Settings.get_for_display].
+ *
+ * Returns: (nullable) (transfer none): a `GtkSettings` object. If there is
+ *   no default display, then returns %NULL.
+ */
 GtkSettings*
 gtk_settings_get_default (void)
 {
@@ -1291,14 +1481,14 @@ _gtk_settings_parse_convert (const GValue       *src_value,
 }
 
 static void
-apply_queued_setting (GtkSettings             *settings,
-                      GParamSpec              *pspec,
-                      GtkSettingsValuePrivate *qvalue)
+apply_queued_setting (GtkSettings      *settings,
+                      GParamSpec       *pspec,
+                      GtkSettingsValue *qvalue)
 {
   GValue tmp_value = G_VALUE_INIT;
 
   g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
-  if (_gtk_settings_parse_convert (&qvalue->public.value,
+  if (_gtk_settings_parse_convert (&qvalue->value,
                                    pspec, &tmp_value))
     {
       if (settings->property_values[pspec->param_id - 1].source <= qvalue->source)
@@ -1311,10 +1501,10 @@ apply_queued_setting (GtkSettings             *settings,
     }
   else
     {
-      char *debug = g_strdup_value_contents (&qvalue->public.value);
+      char *debug = g_strdup_value_contents (&qvalue->value);
 
       g_message ("%s: failed to retrieve property '%s' of type '%s' from rc file value \"%s\" of type '%s'",
-                 qvalue->public.origin ? qvalue->public.origin : "(for origin information, set GTK_DEBUG)",
+                 qvalue->origin ? qvalue->origin : "(for origin information, set GTK_DEBUG)",
                  pspec->name,
                  g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
                  debug,
@@ -1365,7 +1555,7 @@ settings_install_property_parser (GtkSettingsClass   *class,
   for (node = object_list; node; node = node->next)
     {
       GtkSettings *settings = node->data;
-      GtkSettingsValuePrivate *qvalue;
+      GtkSettingsValue *qvalue;
 
       settings->property_values = g_renew (GtkSettingsPropertyValue, settings->property_values, class_n_properties);
       settings->property_values[class_n_properties - 1].value.g_type = 0;
@@ -1391,11 +1581,11 @@ settings_install_property_parser (GtkSettingsClass   *class,
 static void
 free_value (gpointer data)
 {
-  GtkSettingsValuePrivate *qvalue = data;
+  GtkSettingsValue *qvalue = data;
 
-  g_value_unset (&qvalue->public.value);
-  g_free (qvalue->public.origin);
-  g_slice_free (GtkSettingsValuePrivate, qvalue);
+  g_value_unset (&qvalue->value);
+  g_free (qvalue->origin);
+  g_slice_free (GtkSettingsValue, qvalue);
 }
 
 static void
@@ -1404,7 +1594,7 @@ gtk_settings_set_property_value_internal (GtkSettings            *settings,
                                           const GtkSettingsValue *new_value,
                                           GtkSettingsSource       source)
 {
-  GtkSettingsValuePrivate *qvalue;
+  GtkSettingsValue *qvalue;
   GParamSpec *pspec;
   char *name;
   GQuark name_quark;
@@ -1426,17 +1616,17 @@ gtk_settings_set_property_value_internal (GtkSettings            *settings,
   qvalue = g_datalist_id_dup_data (&settings->queued_settings, name_quark, NULL, NULL);
   if (!qvalue)
     {
-      qvalue = g_slice_new0 (GtkSettingsValuePrivate);
+      qvalue = g_slice_new0 (GtkSettingsValue);
       g_datalist_id_set_data_full (&settings->queued_settings, name_quark, qvalue, free_value);
     }
   else
     {
-      g_free (qvalue->public.origin);
-      g_value_unset (&qvalue->public.value);
+      g_free (qvalue->origin);
+      g_value_unset (&qvalue->value);
     }
-  qvalue->public.origin = g_strdup (new_value->origin);
-  g_value_init (&qvalue->public.value, G_VALUE_TYPE (&new_value->value));
-  g_value_copy (&new_value->value, &qvalue->public.value);
+  qvalue->origin = g_strdup (new_value->origin);
+  g_value_init (&qvalue->value, G_VALUE_TYPE (&new_value->value));
+  g_value_copy (&new_value->value, &qvalue->value);
   qvalue->source = source;
   pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), g_quark_to_string (name_quark));
   if (pspec)
@@ -1754,7 +1944,7 @@ gtk_settings_load_from_key_file (GtkSettings       *settings,
       char *key;
       GParamSpec *pspec;
       GType value_type;
-      GtkSettingsValue svalue = { NULL, { 0, }, };
+      GtkSettingsValue svalue = { NULL, G_VALUE_INIT, GTK_SETTINGS_SOURCE_DEFAULT };
 
       key = keys[i];
       pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), key);
@@ -1934,13 +2124,14 @@ _gtk_settings_get_setting_source (GtkSettings *settings,
 
 /**
  * gtk_settings_reset_property:
- * @settings: a #GtkSettings object
+ * @settings: a `GtkSettings` object
  * @name: the name of the setting to reset
  *
  * Undoes the effect of calling g_object_set() to install an
- * application-specific value for a setting. After this call,
- * the setting will again follow the session-wide value for
- * this setting.
+ * application-specific value for a setting.
+ *
+ * After this call, the setting will again follow the session-wide
+ * value for this setting.
  */
 void
 gtk_settings_reset_property (GtkSettings *settings,

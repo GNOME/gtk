@@ -69,32 +69,35 @@
 #include <string.h>
 
 /**
- * SECTION:gtktext
- * @Short_description: A simple single-line text entry field
- * @Title: GtkText
- * @See_also: #GtkEntry, #GtkTextView
+ * GtkText:
  *
- * The #GtkText widget is a single line text entry widget.
+ * The `GtkText` widget is a single-line text entry widget.
+ *
+ * `GtkText` is the common implementation of single-line text editing
+ * that is shared between `GtkEntry`, `GtkPasswordEntry, `GtkSpinButton`
+ * and other widgets. In all of these, `GtkText` is used as the delegate
+ * for the [iface@Gtk.Editable] implementation.
  *
  * A fairly large set of key bindings are supported by default. If the
  * entered text is longer than the allocation of the widget, the widget
  * will scroll so that the cursor position is visible.
  *
  * When using an entry for passwords and other sensitive information,
- * it can be put into “password mode” using gtk_text_set_visibility().
+ * it can be put into “password mode” using [method@Gtk.Text.set_visibility].
  * In this mode, entered text is displayed using a “invisible” character.
  * By default, GTK picks the best invisible character that is available
- * in the current font, but it can be changed with gtk_text_set_invisible_char().
+ * in the current font, but it can be changed with
+ * [method@Gtk.Text.set_invisible_char].
  *
  * If you are looking to add icons or progress display in an entry, look
- * at #GtkEntry. There other alternatives for more specialized use cases,
- * such as #GtkSearchEntry.
+ * at `GtkEntry`. There other alternatives for more specialized use cases,
+ * such as `GtkSearchEntry`.
  *
- * If you need multi-line editable text, look at #GtkTextView.
+ * If you need multi-line editable text, look at `GtkTextView`.
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * text[.read-only]
  * ├── placeholder
  * ├── undershoot.left
@@ -102,15 +105,15 @@
  * ├── [selection]
  * ├── [block-cursor]
  * ╰── [window.popup]
- * ]|
+ * ```
  *
- * GtkText has a main node with the name text. Depending on the properties
+ * `GtkText` has a main node with the name text. Depending on the properties
  * of the widget, the .read-only style class may appear.
  *
  * When the entry has a selection, it adds a subnode with the name selection.
  *
- * When the entry is in overwrite mode, it adds a subnode with the name block-cursor
- * that determines how the block cursor is drawn.
+ * When the entry is in overwrite mode, it adds a subnode with the name
+ * block-cursor that determines how the block cursor is drawn.
  *
  * The CSS node for a context menu is added as a subnode below text as well.
  *
@@ -121,13 +124,15 @@
  * When touch is used and touch selection handles are shown, they are using
  * CSS nodes with name cursor-handle. They get the .top or .bottom style class
  * depending on where they are shown in relation to the selection. If there is
- * just a single handle for the text cursor, it gets the style class .insertion-cursor.
+ * just a single handle for the text cursor, it gets the style class
+ * .insertion-cursor.
  *
  * # Accessibility
  *
- * GtkText uses the #GTK_ACCESSIBLE_ROLE_NONE role, which causes it to be skipped
- * for accessibility. This is because GtkText is expected to be used as a delegate
- * for a #GtkEditable implementation that will be represented to accessibility.
+ * `GtkText` uses the %GTK_ACCESSIBLE_ROLE_NONE role, which causes it to be
+ * skipped for accessibility. This is because `GtkText` is expected to be used
+ * as a delegate for a `GtkEditable` implementation that will be represented
+ * to accessibility.
  */
 
 #define NAT_ENTRY_WIDTH  150
@@ -742,6 +747,11 @@ gtk_text_class_init (GtkTextClass *class)
 
   quark_password_hint = g_quark_from_static_string ("gtk-entry-password-hint");
 
+  /**
+   * GtkText:buffer: (attributes org.gtk.Property.get=gtk_text_get_buffer org.gtk.Property.set=gtk_text_set_buffer)
+   *
+   * The `GtkEntryBuffer` object which stores the text.
+   */
   text_props[PROP_BUFFER] =
       g_param_spec_object ("buffer",
                            P_("Text Buffer"),
@@ -749,6 +759,13 @@ gtk_text_class_init (GtkTextClass *class)
                            GTK_TYPE_ENTRY_BUFFER,
                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkText:max-length: (attributes org.gtk.Property.get=gtk_text_get_max_length org.gtk.Property.set=gtk_text_set_max_length)
+   *
+   * Maximum number of characters that are allowed.
+   *
+   * Zero indicates no limit.
+   */
   text_props[PROP_MAX_LENGTH] =
       g_param_spec_int ("max-length",
                         P_("Maximum length"),
@@ -757,6 +774,11 @@ gtk_text_class_init (GtkTextClass *class)
                         0,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkText:invisible-char: (attributes org.gtk.Property.get=gtk_text_set_invisible_char org.gtk.Property.set=gtk_text_set_invisible_char)
+   *
+   * The character to used when masking contents (in “password mode”).
+   */
   text_props[PROP_INVISIBLE_CHAR] =
       g_param_spec_unichar ("invisible-char",
                             P_("Invisible character"),
@@ -764,6 +786,11 @@ gtk_text_class_init (GtkTextClass *class)
                             '*',
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkText:activates-default: (attributes org.gtk.Property.get=gtk_text_get_activates_default org.gtk.Property.set=gtk_text_set_activates_default)
+   *
+   * Whether to activate the default widget when Enter is pressed.
+   */
   text_props[PROP_ACTIVATES_DEFAULT] =
       g_param_spec_boolean ("activates-default",
                             P_("Activates default"),
@@ -771,16 +798,21 @@ gtk_text_class_init (GtkTextClass *class)
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkText:scroll-offset:
+   *
+   * Number of pixels scrolled of the screen to the left.
+   */
   text_props[PROP_SCROLL_OFFSET] =
       g_param_spec_int ("scroll-offset",
                         P_("Scroll offset"),
-                        P_("Number of pixels of the self scrolled off the screen to the left"),
+                        P_("Number of pixels of the text scrolled off the screen to the left"),
                         0, G_MAXINT,
                         0,
                         GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkText:truncate-multiline:
+   * GtkText:truncate-multiline: (attributes org.gtk.Property.get=gtk_text_get_truncate_multiline org.gtk.Property.set=gtk_text_set_truncate_multiline)
    *
    * When %TRUE, pasted multi-line text is truncated to the first line.
    */
@@ -792,9 +824,9 @@ gtk_text_class_init (GtkTextClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkText:overwrite-mode:
+   * GtkText:overwrite-mode: (attributes org.gtk.Property.get=gtk_text_get_overwrite_mode org.gtk.Property.set=gtk_text_set_overwrite_mode)
    *
-   * If text is overwritten when typing in the #GtkText.
+   * If text is overwritten when typing in the `GtkText`.
    */
   text_props[PROP_OVERWRITE_MODE] =
       g_param_spec_boolean ("overwrite-mode",
@@ -806,7 +838,7 @@ gtk_text_class_init (GtkTextClass *class)
   /**
    * GtkText:invisible-char-set:
    *
-   * Whether the invisible char has been set for the #GtkText.
+   * Whether the invisible char has been set for the `GtkText`.
    */
   text_props[PROP_INVISIBLE_CHAR_SET] =
       g_param_spec_boolean ("invisible-char-set",
@@ -816,15 +848,15 @@ gtk_text_class_init (GtkTextClass *class)
                             GTK_PARAM_READWRITE);
 
   /**
-  * GtkText:placeholder-text:
+  * GtkText:placeholder-text: (attributes org.gtk.Property.get=gtk_text_get_placeholder_text org.gtk.Property.set=gtk_text_set_placeholder_text)
   *
-  * The text that will be displayed in the #GtkText when it is empty
+  * The text that will be displayed in the `GtkText` when it is empty
   * and unfocused.
   */
   text_props[PROP_PLACEHOLDER_TEXT] =
       g_param_spec_string ("placeholder-text",
                            P_("Placeholder text"),
-                           P_("Show text in the self when it’s empty and unfocused"),
+                           P_("Show text in the GtkText when it’s empty and unfocused"),
                            NULL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -832,11 +864,12 @@ gtk_text_class_init (GtkTextClass *class)
    * GtkText:im-module:
    *
    * Which IM (input method) module should be used for this self.
-   * See #GtkIMContext.
    *
-   * Setting this to a non-%NULL value overrides the
-   * system-wide IM module setting. See the GtkSettings
-   * #GtkSettings:gtk-im-module property.
+   * See [class@Gtk.IMContext].
+   *
+   * Setting this to a non-%NULL value overrides the system-wide
+   * IM module setting. See the [property@Gtk.Settings:gtk-im-module]
+   * property.
    */
   text_props[PROP_IM_MODULE] =
       g_param_spec_string ("im-module",
@@ -846,7 +879,7 @@ gtk_text_class_init (GtkTextClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkText:input-purpose:
+   * GtkText:input-purpose: (attributes org.gtk.Property.get=gtk_text_get_input_purpose org.gtk.Property.set=gtk_text_set_input_purpose)
    *
    * The purpose of this text field.
    *
@@ -855,7 +888,7 @@ gtk_text_class_init (GtkTextClass *class)
    *
    * Note that setting the purpose to %GTK_INPUT_PURPOSE_PASSWORD or
    * %GTK_INPUT_PURPOSE_PIN is independent from setting
-   * #GtkText:visibility.
+   * [property@Gtk.Text:visibility].
    */
   text_props[PROP_INPUT_PURPOSE] =
       g_param_spec_enum ("input-purpose",
@@ -866,10 +899,10 @@ gtk_text_class_init (GtkTextClass *class)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkText:input-hints:
+   * GtkText:input-hints: (attributes org.gtk.Property.get=gtk_text_get_input_hints org.gtk.Property.set=gtk_text_set_input_hints)
    *
-   * Additional hints (beyond #GtkText:input-purpose) that
-   * allow input methods to fine-tune their behaviour.
+   * Additional hints that allow input methods to fine-tune
+   * their behaviour.
    */
   text_props[PROP_INPUT_HINTS] =
       g_param_spec_flags ("input-hints",
@@ -880,34 +913,39 @@ gtk_text_class_init (GtkTextClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkText:attributes:
+   * GtkText:attributes: (attributes org.gtk.Property.get=gtk_text_get_attributes org.gtk.Property.set=gtk_text_set_attributes)
    *
-   * A list of Pango attributes to apply to the text of the self.
+   * A list of Pango attributes to apply to the text of the `GtkText`.
    *
    * This is mainly useful to change the size or weight of the text.
    *
-   * The #PangoAttribute's @start_index and @end_index must refer to the
-   * #GtkEntryBuffer text, i.e. without the preedit string.
+   * The `PangoAttribute`'s @start_index and @end_index must refer to the
+   * `GtkEntryBuffer` text, i.e. without the preedit string.
    */
   text_props[PROP_ATTRIBUTES] =
       g_param_spec_boxed ("attributes",
                           P_("Attributes"),
-                          P_("A list of style attributes to apply to the text of the self"),
+                          P_("A list of style attributes to apply to the text of the GtkText"),
                           PANGO_TYPE_ATTR_LIST,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkText:tabs:
+   * GtkText:tabs: (attributes org.gtk.Property.get=gtk_text_get_tabs org.gtk.Property.set=gtk_text_set_tabs)
    *
-   * A list of tabstops to apply to the text of the self.
+   * A list of tabstops to apply to the text of the `GtkText`.
    */
   text_props[PROP_TABS] =
       g_param_spec_boxed ("tabs",
                           P_("Tabs"),
-                          P_("A list of tabstop locations to apply to the text of the self"),
+                          P_("A list of tabstop locations to apply to the text of the GtkText"),
                           PANGO_TYPE_TAB_ARRAY,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkText:enable-emoji-completion: (attributes org.gtk.Property.get=gtk_text_get_enable_emoji_completion org.gtk.Property.set=gtk_text_set_enable_emoji_completion)
+   *
+   * Whether to suggest Emoji replacements.
+   */
   text_props[PROP_ENABLE_EMOJI_COMPLETION] =
       g_param_spec_boolean ("enable-emoji-completion",
                             P_("Enable Emoji completion"),
@@ -915,6 +953,11 @@ gtk_text_class_init (GtkTextClass *class)
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkText:visibility: (attributes org.gtk.Property.get=gtk_text_get_visibility org.gtk.Property.set=gtk_text_set_visibility)
+   *
+   * If %FALSE, the text is masked with the “invisible char”.
+   */
   text_props[PROP_VISIBILITY] =
       g_param_spec_boolean ("visibility",
                             P_("Visibility"),
@@ -922,6 +965,11 @@ gtk_text_class_init (GtkTextClass *class)
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkText:propagate-text-width: (attributes org.gtk.Property.get=gtk_text_get_propagate_text_width org.gtk.Property.set=gtk_text_set_propagate_text_width)
+   *
+   * Whether the widget should grow and shrink with the content.
+   */
   text_props[PROP_PROPAGATE_TEXT_WIDTH] =
       g_param_spec_boolean ("propagate-text-width",
                             P_("Propagate text width"),
@@ -930,7 +978,7 @@ gtk_text_class_init (GtkTextClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkText:extra-menu:
+   * GtkText:extra-menu: (attributes org.gtk.Property.get=gtk_text_get_extra_menu org.gtk.Property.set=gtk_text_set_extra_menu)
    *
    * A menu model whose contents will be appended to
    * the context menu.
@@ -952,10 +1000,10 @@ gtk_text_class_init (GtkTextClass *class)
    * GtkText::activate:
    * @self: The widget on which the signal is emitted
    *
-   * The ::activate signal is emitted when the user hits
-   * the Enter key.
+   * Emitted when the user hits the Enter key.
    *
-   * The default bindings for this signal are all forms of the Enter key.
+   * The default bindings for this signal are all forms
+   * of the <kbd>Enter</kbd> key.
    */
   signals[ACTIVATE] =
     g_signal_new (I_("activate"),
@@ -973,23 +1021,26 @@ gtk_text_class_init (GtkTextClass *class)
    * @count: the number of @step units to move
    * @extend: %TRUE if the move should extend the selection
    *
-   * The ::move-cursor signal is a
-   * [keybinding signal][GtkSignalAction]
-   * which gets emitted when the user initiates a cursor movement.
+   * Emitted when the user initiates a cursor movement.
+   *
    * If the cursor is not visible in @self, this signal causes
    * the viewport to be moved instead.
+   *
+   * This is a [keybinding signal](class.SignalAction.html).
    *
    * Applications should not connect to it, but may emit it with
    * g_signal_emit_by_name() if they need to control the cursor
    * programmatically.
    *
    * The default bindings for this signal come in two variants,
-   * the variant with the Shift modifier extends the selection,
-   * the variant without the Shift modifier does not.
+   * the variant with the <kbd>Shift</kbd> modifier extends the
+   * selection, the variant without it does not.
    * There are too many key combinations to list them all here.
-   * - Arrow keys move by individual characters/lines
-   * - Ctrl-arrow key combinations move by words/paragraphs
-   * - Home/End keys move to the ends of the buffer
+   *
+   * - <kbd>←</kbd>, <kbd>→</kbd>, <kbd>↑</kbd>, <kbd>↓</kbd>
+   *   move by individual characters/lines
+   * - <kbd>Ctrl</kbd>-<kbd>→</kbd>, etc. move by words/paragraphs
+   * - <kbd>Home</kbd>, <kbd>End</kbd> move to the ends of the buffer
    */
   signals[MOVE_CURSOR] = 
     g_signal_new (I_("move-cursor"),
@@ -1008,10 +1059,10 @@ gtk_text_class_init (GtkTextClass *class)
    * @self: the object which received the signal
    * @string: the string to insert
    *
-   * The ::insert-at-cursor signal is a
-   * [keybinding signal][GtkSignalAction]
-   * which gets emitted when the user initiates the insertion of a
+   * Emitted when the user initiates the insertion of a
    * fixed string at the cursor.
+   *
+   * This is a [keybinding signal](class.SignalAction.html).
    *
    * This signal has no default bindings.
    */
@@ -1031,17 +1082,17 @@ gtk_text_class_init (GtkTextClass *class)
    * @type: the granularity of the deletion, as a #GtkDeleteType
    * @count: the number of @type units to delete
    *
-   * The ::delete-from-cursor signal is a
-   * [keybinding signal][GtkSignalAction]
-   * which gets emitted when the user initiates a text deletion.
+   * Emitted when the user initiates a text deletion.
+   *
+   * This is a [keybinding signal](class.SignalAction.html).
    *
    * If the @type is %GTK_DELETE_CHARS, GTK deletes the selection
    * if there is one, otherwise it deletes the requested number
    * of characters.
    *
-   * The default bindings for this signal are
-   * Delete for deleting a character and Ctrl-Delete for
-   * deleting a word.
+   * The default bindings for this signal are <kbd>Delete</kbd>
+   * for deleting a character and <kbd>Ctrl</kbd>-<kbd>Delete</kbd>
+   * for deleting a word.
    */
   signals[DELETE_FROM_CURSOR] = 
     g_signal_new (I_("delete-from-cursor"),
@@ -1058,12 +1109,12 @@ gtk_text_class_init (GtkTextClass *class)
    * GtkText::backspace:
    * @self: the object which received the signal
    *
-   * The ::backspace signal is a
-   * [keybinding signal][GtkSignalAction]
-   * which gets emitted when the user asks for it.
+   * Emitted when the user asks for it.
+   *
+   * This is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * Backspace and Shift-Backspace.
+   * <kbd>Backspace</kbd> and <kbd>Shift</kbd>-<kbd>Backspace</kbd>.
    */
   signals[BACKSPACE] =
     g_signal_new (I_("backspace"),
@@ -1078,12 +1129,13 @@ gtk_text_class_init (GtkTextClass *class)
    * GtkText::cut-clipboard:
    * @self: the object which received the signal
    *
-   * The ::cut-clipboard signal is a
-   * [keybinding signal][GtkSignalAction]
-   * which gets emitted to cut the selection to the clipboard.
+   * Emitted to cut the selection to the clipboard.
+   *
+   * This is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * Ctrl-x and Shift-Delete.
+   * <kbd>Ctrl</kbd>-<kbd>x</kbd> and
+   * <kbd>Shift</kbd>-<kbd>Delete</kbd>.
    */
   signals[CUT_CLIPBOARD] =
     g_signal_new (I_("cut-clipboard"),
@@ -1098,12 +1150,13 @@ gtk_text_class_init (GtkTextClass *class)
    * GtkText::copy-clipboard:
    * @self: the object which received the signal
    *
-   * The ::copy-clipboard signal is a
-   * [keybinding signal][GtkSignalAction]
-   * which gets emitted to copy the selection to the clipboard.
+   * Emitted to copy the selection to the clipboard.
+   *
+   * This is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * Ctrl-c and Ctrl-Insert.
+   * <kbd>Ctrl</kbd>-<kbd>c</kbd> and
+   * <kbd>Ctrl</kbd>-<kbd>Insert</kbd>.
    */
   signals[COPY_CLIPBOARD] =
     g_signal_new (I_("copy-clipboard"),
@@ -1118,13 +1171,12 @@ gtk_text_class_init (GtkTextClass *class)
    * GtkText::paste-clipboard:
    * @self: the object which received the signal
    *
-   * The ::paste-clipboard signal is a
-   * [keybinding signal][GtkSignalAction]
-   * which gets emitted to paste the contents of the clipboard
-   * into the text view.
+   * Emitted to paste the contents of the clipboard.
+   *
+   * This is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * Ctrl-v and Shift-Insert.
+   * <kbd>Ctrl</kbd>-<kbd>v</kbd> and <kbd>Shift</kbd>-<kbd>Insert</kbd>.
    */
   signals[PASTE_CLIPBOARD] =
     g_signal_new (I_("paste-clipboard"),
@@ -1139,11 +1191,11 @@ gtk_text_class_init (GtkTextClass *class)
    * GtkText::toggle-overwrite:
    * @self: the object which received the signal
    *
-   * The ::toggle-overwrite signal is a
-   * [keybinding signal][GtkSignalAction]
-   * which gets emitted to toggle the overwrite mode of the self.
+   * Emitted to toggle the overwrite mode of the `GtkText`.
    *
-   * The default bindings for this signal is Insert.
+   * This is a [keybinding signal](class.SignalAction.html).
+   *
+   * The default bindings for this signal is <kbd>Insert</kbd>.
    */
   signals[TOGGLE_OVERWRITE] =
     g_signal_new (I_("toggle-overwrite"),
@@ -1159,6 +1211,8 @@ gtk_text_class_init (GtkTextClass *class)
    * @self: the object which received the signal
    * @preedit: the current preedit string
    *
+   * Emitted when the preedit text changes.
+   *
    * If an input method is used, the typed text will not immediately
    * be committed to the buffer. So if you are interested in the text,
    * connect to this signal.
@@ -1173,16 +1227,17 @@ gtk_text_class_init (GtkTextClass *class)
                                 G_TYPE_NONE, 1,
                                 G_TYPE_STRING);
 
-
   /**
    * GtkText::insert-emoji:
    * @self: the object which received the signal
    *
-   * The ::insert-emoji signal is a
-   * [keybinding signal][GtkSignalAction]
-   * which gets emitted to present the Emoji chooser for the @self.
+   * Emitted to present the Emoji chooser for the @self.
    *
-   * The default bindings for this signal are Ctrl-. and Ctrl-;
+   * This is a [keybinding signal](class.SignalAction.html).
+   *
+   * The default bindings for this signal are
+   * <kbd>Ctrl</kbd>-<kbd>.</kbd> and
+   * <kbd>Ctrl</kbd>-<kbd>;</kbd>
    */
   signals[INSERT_EMOJI] =
     g_signal_new (I_("insert-emoji"),
@@ -1248,7 +1303,7 @@ gtk_text_class_init (GtkTextClass *class)
   /**
    * GtkText|misc.toggle-visibility:
    *
-   * Toggles the #GtkText:visibility property.
+   * Toggles the `GtkText`:visibility property.
    */ 
   gtk_widget_class_install_property_action (widget_class,
                                             "misc.toggle-visibility",
@@ -3231,11 +3286,11 @@ gtk_text_grab_focus (GtkWidget *widget)
 
 /**
  * gtk_text_grab_focus_without_selecting:
- * @self: a #GtkText
+ * @self: a `GtkText`
  *
  * Causes @self to have keyboard focus.
  *
- * It behaves like gtk_widget_grab_focus(),
+ * It behaves like [method@Gtk.Widget.grab_focus],
  * except that it doesn't select the contents of @self.
  * You only want to call this on some special entries
  * which the user usually doesn't want to replace all text in,
@@ -5272,9 +5327,9 @@ gtk_text_update_primary_selection (GtkText *self)
 /**
  * gtk_text_new:
  *
- * Creates a new self.
+ * Creates a new `GtkText`.
  *
- * Returns: a new #GtkText.
+ * Returns: a new `GtkText`.
  */
 GtkWidget *
 gtk_text_new (void)
@@ -5284,11 +5339,11 @@ gtk_text_new (void)
 
 /**
  * gtk_text_new_with_buffer:
- * @buffer: The buffer to use for the new #GtkText.
+ * @buffer: The buffer to use for the new `GtkText`.
  *
- * Creates a new self with the specified text buffer.
+ * Creates a new `GtkText` with the specified text buffer.
  *
- * Returns: a new #GtkText
+ * Returns: a new `GtkText`
  */
 GtkWidget *
 gtk_text_new_with_buffer (GtkEntryBuffer *buffer)
@@ -5315,13 +5370,13 @@ get_buffer (GtkText *self)
 }
 
 /**
- * gtk_text_get_buffer:
- * @self: a #GtkText
+ * gtk_text_get_buffer: (attributes org.gtk.Method.get_property=buffer)
+ * @self: a `GtkText`
  *
- * Get the #GtkEntryBuffer object which holds the text for
+ * Get the `GtkEntryBuffer` object which holds the text for
  * this self.
  *
- * Returns: (transfer none): A #GtkEntryBuffer object.
+ * Returns: (transfer none): A `GtkEntryBuffer` object.
  */
 GtkEntryBuffer *
 gtk_text_get_buffer (GtkText *self)
@@ -5332,11 +5387,11 @@ gtk_text_get_buffer (GtkText *self)
 }
 
 /**
- * gtk_text_set_buffer:
- * @self: a #GtkText
- * @buffer: a #GtkEntryBuffer
+ * gtk_text_set_buffer: (attributes org.gtk.Method.set_property=buffer)
+ * @self: a `GtkText`
+ * @buffer: a `GtkEntryBuffer`
  *
- * Set the #GtkEntryBuffer object which holds the text for
+ * Set the `GtkEntryBuffer` object which holds the text for
  * this widget.
  */
 void
@@ -5464,21 +5519,22 @@ gtk_text_set_text (GtkText     *self,
 }
 
 /**
- * gtk_text_set_visibility:
- * @self: a #GtkText
- * @visible: %TRUE if the contents of the self are displayed
- *           as plaintext
+ * gtk_text_set_visibility: (attributes org.gtk.Method.set_property=visibility)
+ * @self: a `GtkText`
+ * @visible: %TRUE if the contents of the `GtkText` are displayed
+ *   as plaintext
  *
- * Sets whether the contents of the self are visible or not.
+ * Sets whether the contents of the `GtkText` are visible or not.
+ *
  * When visibility is set to %FALSE, characters are displayed
  * as the invisible char, and will also appear that way when
- * the text in the self widget is copied to the clipboard.
+ * the text in the widget is copied to the clipboard.
  *
  * By default, GTK picks the best invisible character available
  * in the current font, but it can be changed with
- * gtk_text_set_invisible_char().
+ * [method@Gtk.Text.set_invisible_char].
  *
- * Note that you probably want to set #GtkText:input-purpose
+ * Note that you probably want to set [property@Gtk.Text:input-purpose]
  * to %GTK_INPUT_PURPOSE_PASSWORD or %GTK_INPUT_PURPOSE_PIN to
  * inform input methods about the purpose of this self,
  * in addition to setting visibility to %FALSE.
@@ -5509,14 +5565,13 @@ gtk_text_set_visibility (GtkText  *self,
 }
 
 /**
- * gtk_text_get_visibility:
- * @self: a #GtkText
+ * gtk_text_get_visibility: (attributes org.gtk.Method.get_property=visibility)
+ * @self: a `GtkText`
  *
  * Retrieves whether the text in @self is visible.
- * See gtk_text_set_visibility().
  *
  * Returns: %TRUE if the text is currently visible
- **/
+ */
 gboolean
 gtk_text_get_visibility (GtkText *self)
 {
@@ -5528,20 +5583,18 @@ gtk_text_get_visibility (GtkText *self)
 }
 
 /**
- * gtk_text_set_invisible_char:
- * @self: a #GtkText
+ * gtk_text_set_invisible_char: (attributes org.gtk.Method.set_property=invisible-char)
+ * @self: a `GtkText`
  * @ch: a Unicode character
- * 
+ *
  * Sets the character to use in place of the actual text when
- * gtk_text_set_visibility() has been called to set text visibility
- * to %FALSE. i.e. this is the character used in “password mode” to
- * show the user how many characters have been typed.
+ * in “password mode”.
  *
  * By default, GTK picks the best invisible char available in the
  * current font. If you set the invisible char to 0, then the user
  * will get no feedback at all; there will be no text on the screen
  * as they type.
- **/
+ */
 void
 gtk_text_set_invisible_char (GtkText  *self,
                              gunichar  ch)
@@ -5565,18 +5618,19 @@ gtk_text_set_invisible_char (GtkText  *self,
 }
 
 /**
- * gtk_text_get_invisible_char:
- * @self: a #GtkText
+ * gtk_text_get_invisible_char: (attributes org.gtk.Method.get_property=invisible-char)
+ * @self: a `GtkText`
  *
  * Retrieves the character displayed in place of the real characters
- * for entries with visibility set to false. Note that GTK does not
- * compute this value unless it needs it, so the value returned by
- * this function is not very useful unless it has been explicitly
- * set with gtk_text_set_invisible_char()
+ * for entries with visibility set to false.
+ *
+ * Note that GTK does not compute this value unless it needs it,
+ * so the value returned by this function is not very useful unless
+ * it has been explicitly set with [method@Gtk.Text.set_invisible_char].
  *
  * Returns: the current invisible char, or 0, if @text does not
- *               show invisible text at all.
- **/
+ *   show invisible text at all.
+ */
 gunichar
 gtk_text_get_invisible_char (GtkText *self)
 {
@@ -5589,12 +5643,13 @@ gtk_text_get_invisible_char (GtkText *self)
 
 /**
  * gtk_text_unset_invisible_char:
- * @self: a #GtkText
+ * @self: a `GtkText`
  *
- * Unsets the invisible char previously set with
- * gtk_text_set_invisible_char(). So that the
- * default invisible char is used again.
- **/
+ * Unsets the invisible char.
+ *
+ * After calling this, the default invisible
+ * char is used again.
+ */
 void
 gtk_text_unset_invisible_char (GtkText *self)
 {
@@ -5620,12 +5675,13 @@ gtk_text_unset_invisible_char (GtkText *self)
 }
 
 /**
- * gtk_text_set_overwrite_mode:
- * @self: a #GtkText
+ * gtk_text_set_overwrite_mode: (attributes org.gtk.Method.set_property=overwrite-mode)
+ * @self: a `GtkText`
  * @overwrite: new value
  *
- * Sets whether the text is overwritten when typing in the #GtkText.
- **/
+ * Sets whether the text is overwritten when typing
+ * in the `GtkText`.
+ */
 void
 gtk_text_set_overwrite_mode (GtkText  *self,
                              gboolean  overwrite)
@@ -5643,13 +5699,13 @@ gtk_text_set_overwrite_mode (GtkText  *self,
 }
 
 /**
- * gtk_text_get_overwrite_mode:
- * @self: a #GtkText
+ * gtk_text_get_overwrite_mode: (attributes org.gtk.Method.get_property=overwrite-mode)
+ * @self: a `GtkText`
  *
  * Gets the value set by gtk_text_set_overwrite_mode().
  *
  * Returns: whether the text is overwritten when typing.
- **/
+ */
 gboolean
 gtk_text_get_overwrite_mode (GtkText *self)
 {
@@ -5662,21 +5718,20 @@ gtk_text_get_overwrite_mode (GtkText *self)
 }
 
 /**
- * gtk_text_set_max_length:
- * @self: a #GtkText
- * @length: the maximum length of the self, or 0 for no maximum.
- *   (other than the maximum length of entries.) The value passed in will
- *   be clamped to the range 0-65536.
+ * gtk_text_set_max_length: (attributes org.gtk.Method.set_property=max-length)
+ * @self: a `GtkText`
+ * @length: the maximum length of the `GtkText`, or 0 for no maximum.
+ *   (other than the maximum length of entries.) The value passed
+ *   in will be clamped to the range 0-65536.
  *
  * Sets the maximum allowed length of the contents of the widget.
  *
  * If the current contents are longer than the given length, then
  * they will be truncated to fit.
  *
- * This is equivalent to getting @self's #GtkEntryBuffer and
- * calling gtk_entry_buffer_set_max_length() on it.
- * ]|
- **/
+ * This is equivalent to getting @self's `GtkEntryBuffer` and
+ * calling [method@Gtk.EntryBuffer.set_max_length] on it.
+ */
 void
 gtk_text_set_max_length (GtkText *self,
                          int      length)
@@ -5686,18 +5741,19 @@ gtk_text_set_max_length (GtkText *self,
 }
 
 /**
- * gtk_text_get_max_length:
- * @self: a #GtkText
+ * gtk_text_get_max_length: (attributes org.gtk.Method.get_property=max-length)
+ * @self: a `GtkText`
  *
- * Retrieves the maximum allowed length of the text in
- * @self. See gtk_text_set_max_length().
+ * Retrieves the maximum allowed length of the text in @self.
  *
- * This is equivalent to getting @self's #GtkEntryBuffer and
- * calling gtk_entry_buffer_get_max_length() on it.
+ * See [method@Gtk.Text.set_max_length].
+ *
+ * This is equivalent to getting @self's `GtkEntryBuffer` and
+ * calling [method@Gtk.EntryBuffer.get_max_length] on it.
  *
  * Returns: the maximum allowed number of characters
- *               in #GtkText, or 0 if there is no maximum.
- **/
+ *   in `GtkText`, or 0 if there is no maximum.
+ */
 int
 gtk_text_get_max_length (GtkText *self)
 {
@@ -5708,18 +5764,16 @@ gtk_text_get_max_length (GtkText *self)
 
 /**
  * gtk_text_get_text_length:
- * @self: a #GtkText
+ * @self: a `GtkText`
  *
- * Retrieves the current length of the text in
- * @self. 
+ * Retrieves the current length of the text in @self.
  *
- * This is equivalent to getting @self's #GtkEntryBuffer and
- * calling gtk_entry_buffer_get_length() on it.
-
+ * This is equivalent to getting @self's `GtkEntryBuffer`
+ * and calling [method@Gtk.EntryBuffer.get_length] on it.
  *
  * Returns: the current number of characters
- *               in #GtkText, or 0 if there are none.
- **/
+ *   in `GtkText`, or 0 if there are none.
+ */
 guint16
 gtk_text_get_text_length (GtkText *self)
 {
@@ -5729,15 +5783,17 @@ gtk_text_get_text_length (GtkText *self)
 }
 
 /**
- * gtk_text_set_activates_default:
- * @self: a #GtkText
+ * gtk_text_set_activates_default: (attributes org.gtk.Method.set_property=activates-default)
+ * @self: a `GtkText`
  * @activates: %TRUE to activate window’s default widget on Enter keypress
  *
- * If @activates is %TRUE, pressing Enter in the @self will activate the default
- * widget for the window containing the self. This usually means that
- * the dialog box containing the self will be closed, since the default
- * widget is usually one of the dialog buttons.
- **/
+ * If @activates is %TRUE, pressing Enter in the @self will
+ * activate the default widget for the window containing @self.
+ *
+ * This usually means that the dialog containing the `GtkText`
+ * will be closed, since the default widget is usually one of
+ * the dialog buttons.
+ */
 void
 gtk_text_set_activates_default (GtkText  *self,
                                 gboolean  activates)
@@ -5756,12 +5812,12 @@ gtk_text_set_activates_default (GtkText  *self,
 }
 
 /**
- * gtk_text_get_activates_default:
- * @self: a #GtkText
+ * gtk_text_get_activates_default: (attributes org.gtk.Method.get_property=activates-default)
+ * @self: a `GtkText`
  *
  * Retrieves the value set by gtk_text_set_activates_default().
  *
- * Returns: %TRUE if the self will activate the default widget
+ * Returns: %TRUE if the `GtkText` will activate the default widget
  */
 gboolean
 gtk_text_get_activates_default (GtkText *self)
@@ -6460,7 +6516,8 @@ blink_cb (GtkWidget     *widget,
     {
       g_warning ("GtkText - did not receive a focus-out event.\n"
                  "If you handle this event, you must return\n"
-                 "GDK_EVENT_PROPAGATE so the self gets the event as well");
+                 "GDK_EVENT_PROPAGATE so the default handler\n"
+                 "gets the event as well");
 
       gtk_text_check_cursor_blink (self);
       return G_SOURCE_REMOVE;
@@ -6538,15 +6595,16 @@ gtk_text_reset_blink_time (GtkText *self)
 }
 
 /**
- * gtk_text_set_placeholder_text:
- * @self: a #GtkText
- * @text: (nullable): a string to be displayed when @self is empty and unfocused, or %NULL
+ * gtk_text_set_placeholder_text: (attributes org.gtk.Method.set_property=placeholder-text)
+ * @self: a `GtkText`
+ * @text: (nullable): a string to be displayed when @self
+ *   is empty and unfocused, or %NULL
  *
  * Sets text to be displayed in @self when it is empty.
  *
  * This can be used to give a visual hint of the expected
- * contents of the self.
- **/
+ * contents of the `GtkText`.
+ */
 void
 gtk_text_set_placeholder_text (GtkText    *self,
                                const char *text)
@@ -6575,16 +6633,18 @@ gtk_text_set_placeholder_text (GtkText    *self,
 }
 
 /**
- * gtk_text_get_placeholder_text:
- * @self: a #GtkText
+ * gtk_text_get_placeholder_text: (attributes org.gtk.Method.get_property=placeholder-text)
+ * @self: a `GtkText`
  *
- * Retrieves the text that will be displayed when @self is empty and unfocused
+ * Retrieves the text that will be displayed when
+ * @self is empty and unfocused
  *
- * Returns: (nullable) (transfer none): a pointer to the placeholder text as a string.
- *   This string points to internally allocated storage in the widget and must
- *   not be freed, modified or stored. If no placeholder text has been set,
- *   %NULL will be returned.
- **/
+ * Returns: (nullable) (transfer none): a pointer
+ *   to the placeholder text as a string. This string
+ *   points to internally allocated storage in the widget
+ *   and must not be freed, modified or stored. If no placeholder
+ *   text has been set, %NULL will be returned.
+ */
 const char *
 gtk_text_get_placeholder_text (GtkText *self)
 {
@@ -6599,13 +6659,14 @@ gtk_text_get_placeholder_text (GtkText *self)
 }
 
 /**
- * gtk_text_set_input_purpose:
- * @self: a #GtkText
+ * gtk_text_set_input_purpose: (attributes org.gtk.Method.set_property=input-purpose)
+ * @self: a `GtkText`
  * @purpose: the purpose
  *
- * Sets the #GtkText:input-purpose property which
- * can be used by on-screen keyboards and other input
- * methods to adjust their behaviour.
+ * Sets the input purpose of the `GtkText`.
+ *
+ * This can be used by on-screen keyboards and other
+ * input methods to adjust their behaviour.
  */
 void
 gtk_text_set_input_purpose (GtkText         *self,
@@ -6626,10 +6687,10 @@ gtk_text_set_input_purpose (GtkText         *self,
 }
 
 /**
- * gtk_text_get_input_purpose:
- * @self: a #GtkText
+ * gtk_text_get_input_purpose: (attributes org.gtk.Method.get_property=input-purpose)
+ * @self: a `GtkText`
  *
- * Gets the value of the #GtkText:input-purpose property.
+ * Gets the input purpose of the `GtkText`.
  */
 GtkInputPurpose
 gtk_text_get_input_purpose (GtkText *self)
@@ -6647,12 +6708,12 @@ gtk_text_get_input_purpose (GtkText *self)
 }
 
 /**
- * gtk_text_set_input_hints:
- * @self: a #GtkText
+ * gtk_text_set_input_hints: (attributes org.gtk.Method.set_property=input-hints)
+ * @self: a `GtkText`
  * @hints: the hints
  *
- * Sets the #GtkText:input-hints property, which
- * allows input methods to fine-tune their behaviour.
+ * Sets input hints that allow input methods
+ * to fine-tune their behaviour.
  */
 void
 gtk_text_set_input_hints (GtkText       *self,
@@ -6675,10 +6736,10 @@ gtk_text_set_input_hints (GtkText       *self,
 }
 
 /**
- * gtk_text_get_input_hints:
- * @self: a #GtkText
+ * gtk_text_get_input_hints: (attributes org.gtk.Method.get_property=input-hints)
+ * @self: a `GtkText`
  *
- * Gets the value of the #GtkText:input-hints property.
+ * Gets the input hints of the `GtkText`.
  */
 GtkInputHints
 gtk_text_get_input_hints (GtkText *self)
@@ -6696,12 +6757,11 @@ gtk_text_get_input_hints (GtkText *self)
 }
 
 /**
- * gtk_text_set_attributes:
- * @self: a #GtkText
- * @attrs: (nullable): a #PangoAttrList or %NULL to unset
+ * gtk_text_set_attributes: (attributes org.gtk.Method.set_property=attributes)
+ * @self: a `GtkText`
+ * @attrs: (nullable): a `PangoAttrList` or %NULL to unset
  *
- * Sets a #PangoAttrList; the attributes in the list are applied to the
- * text.
+ * Sets attributes that are applied to the text.
  */
 void
 gtk_text_set_attributes (GtkText       *self,
@@ -6728,14 +6788,14 @@ gtk_text_set_attributes (GtkText       *self,
 }
 
 /**
- * gtk_text_get_attributes:
- * @self: a #GtkText
+ * gtk_text_get_attributes: (attributes org.gtk.Method.get_property=attributes)
+ * @self: a `GtkText`
  *
- * Gets the attribute list that was set on the self using
- * gtk_text_set_attributes(), if any.
+ * Gets the attribute list that was set on the `GtkText`
+ * using gtk_text_set_attributes().
  *
- * Returns: (transfer none) (nullable): the attribute list, or %NULL
- *     if none was set.
+ * Returns: (transfer none) (nullable): the attribute list,
+ *   or %NULL if none was set.
  */
 PangoAttrList *
 gtk_text_get_attributes (GtkText *self)
@@ -6748,14 +6808,12 @@ gtk_text_get_attributes (GtkText *self)
 }
 
 /**
- * gtk_text_set_tabs:
- * @self: a #GtkText
- * @tabs: (nullable): a #PangoTabArray
+ * gtk_text_set_tabs: (attributes org.gtk.Method.set_property=tabs)
+ * @self: a `GtkText`
+ * @tabs: (nullable): a `PangoTabArray`
  *
- * Sets a #PangoTabArray; the tabstops in the array are applied to the self
- * text.
+ * Sets tabstops that are applied to the text.
  */
-
 void
 gtk_text_set_tabs (GtkText       *self,
                    PangoTabArray *tabs)
@@ -6779,13 +6837,14 @@ gtk_text_set_tabs (GtkText       *self,
 }
 
 /**
- * gtk_text_get_tabs:
- * @self: a #GtkText
+ * gtk_text_get_tabs: (attributes org.gtk.Method.get_property=tabs)
+ * @self: a `GtkText`
  *
- * Gets the tabstops that were set on the self using gtk_text_set_tabs(), if
- * any.
+ * Gets the tabstops that were set on the `GtkText`
+ * using gtk_text_set_tabs().
  *
- * Returns: (nullable) (transfer none): the tabstops, or %NULL if none was set.
+ * Returns: (nullable) (transfer none): the tabstops,
+ *   or %NULL if none was set.
  */
 PangoTabArray *
 gtk_text_get_tabs (GtkText *self)
@@ -6853,9 +6912,9 @@ gtk_text_get_key_controller (GtkText *self)
 }
 
 /**
- * gtk_text_set_extra_menu:
- * @self: a #GtkText
- * @model: (allow-none): a #GMenuModel
+ * gtk_text_set_extra_menu: (attributes org.gtk.Method.set_property=extra-menu)
+ * @self: a `GtkText`
+ * @model: (allow-none): a `GMenuModel`
  *
  * Sets a menu model to add when constructing
  * the context menu for @self.
@@ -6877,8 +6936,8 @@ gtk_text_set_extra_menu (GtkText    *self,
 }
 
 /**
- * gtk_text_get_extra_menu:
- * @self: a #GtkText
+ * gtk_text_get_extra_menu: (attributes org.gtk.Method.get_property=extra-menu)
+ * @self: a `GtkText`
  *
  * Gets the menu model set with gtk_text_set_extra_menu().
  *
@@ -6895,13 +6954,15 @@ gtk_text_get_extra_menu (GtkText *self)
 }
 
 /**
- * gtk_text_set_enable_emoji_completion:
- * @self: a #GtkText
+ * gtk_text_set_enable_emoji_completion: (attributes org.gtk.Method.set_property=enable-emoji-completion)
+ * @self: a `GtkText`
  * @enable_emoji_completion: %TRUE to enable Emoji completion
  *
- * Sets whether Emoji completion is enabled. If it is,
- * typing ':', followed by a recognized keyword, will pop
- * up a window with suggested Emojis matching the keyword.
+ * Sets whether Emoji completion is enabled.
+ *
+ * If it is, typing ':', followed by a recognized keyword,
+ * will pop up a window with suggested Emojis matching the
+ * keyword.
  */
 void
 gtk_text_set_enable_emoji_completion (GtkText  *self,
@@ -6925,11 +6986,11 @@ gtk_text_set_enable_emoji_completion (GtkText  *self,
 }
 
 /**
- * gtk_text_get_enable_emoji_completion:
- * @self: a #GtkText
+ * gtk_text_get_enable_emoji_completion: (attributes org.gtk.Method.get_property=enable-emoji-completion)
+ * @self: a `GtkText`
  *
  * Returns whether Emoji completion is enabled for this
- * GtkText widget.
+ * `GtkText` widget.
  *
  * Returns: %TRUE if Emoji completion is enabled
  */
@@ -6944,11 +7005,11 @@ gtk_text_get_enable_emoji_completion (GtkText *self)
 }
 
 /**
- * gtk_text_set_propagate_text_width:
- * @self: a #GtkText
+ * gtk_text_set_propagate_text_width: (attributes org.gtk.Method.set_property=propagate-text-width)
+ * @self: a `GtkText`
  * @propagate_text_width: %TRUE to propagate the text width
  *
- * Sets whether the GtkText should grow and shrink with the content.
+ * Sets whether the `GtkText` should grow and shrink with the content.
  */
 void
 gtk_text_set_propagate_text_width (GtkText  *self,
@@ -6969,10 +7030,10 @@ gtk_text_set_propagate_text_width (GtkText  *self,
 }
 
 /**
- * gtk_text_get_propagate_text_width:
- * @self: a #GtkText
+ * gtk_text_get_propagate_text_width: (attributes org.gtk.Method.get_property=propagate-text-width)
+ * @self: a `GtkText`
  *
- * Returns whether the #GtkText will grow and shrink
+ * Returns whether the `GtkText` will grow and shrink
  * with the content.
  *
  * Returns: %TRUE if @self will propagate the text width
@@ -6988,11 +7049,11 @@ gtk_text_get_propagate_text_width (GtkText *self)
 }
 
 /**
- * gtk_text_set_truncate_multiline:
- * @self: a #GtkText
+ * gtk_text_set_truncate_multiline: (attributes org.gtk.Method.set_property=truncate-multiline)
+ * @self: a `GtkText`
  * @truncate_multiline: %TRUE to truncate multi-line text
  *
- * Sets whether the GtkText should truncate multi-line text
+ * Sets whether the `GtkText` should truncate multi-line text
  * that is pasted into the widget.
  */
 void
@@ -7012,10 +7073,10 @@ gtk_text_set_truncate_multiline (GtkText  *self,
 }
 
 /**
- * gtk_text_get_truncate_multiline:
- * @self: a #GtkText
+ * gtk_text_get_truncate_multiline: (attributes org.gtk.Method.get_property=truncate-multiline)
+ * @self: a `GtkText`
  *
- * Returns whether the #GtkText will truncate multi-line text
+ * Returns whether the `GtkText` will truncate multi-line text
  * that is pasted into the widget
  *
  * Returns: %TRUE if @self will truncate multi-line text

@@ -1,4 +1,5 @@
-# Common Questions {#gtk-question-index}
+Title: Common Questions
+Slug: gtk-question-index
 
 This is an "index" of the reference manual organized by common "How do
 I..." questions. If you aren't sure which documentation to read for

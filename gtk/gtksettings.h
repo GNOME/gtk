@@ -33,34 +33,6 @@ G_BEGIN_DECLS
 #define GTK_SETTINGS(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SETTINGS, GtkSettings))
 #define GTK_IS_SETTINGS(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SETTINGS))
 
-
-/* --- typedefs --- */
-typedef struct _GtkSettingsValue GtkSettingsValue;
-
-
-/* --- structures --- */
-
-/**
- * GtkSettingsValue:
- * @origin: Origin should be something like “filename:linenumber” for
- *    rc files, or e.g. “XProperty” for other sources.
- * @value: Valid types are LONG, DOUBLE and STRING corresponding to
- *    the token parsed, or a GSTRING holding an unparsed statement
- */
-struct _GtkSettingsValue
-{
-  /* origin should be something like "filename:linenumber" for rc files,
-   * or e.g. "XProperty" for other sources
-   */
-  char *origin;
-
-  /* valid types are LONG, DOUBLE and STRING corresponding to the token parsed,
-   * or a GSTRING holding an unparsed statement
-   */
-  GValue value;
-};
-
-
 /* --- functions --- */
 GDK_AVAILABLE_IN_ALL
 GType           gtk_settings_get_type                (void) G_GNUC_CONST;

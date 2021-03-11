@@ -35,6 +35,11 @@ G_BEGIN_DECLS
 #define GSK_IS_VULKAN_RENDERER_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), GSK_TYPE_VULKAN_RENDERER))
 #define GSK_VULKAN_RENDERER_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), GSK_TYPE_VULKAN_RENDERER, GskVulkanRendererClass))
 
+/**
+ * GskVulkanRenderer:
+ *
+ * A GSK renderer that is using Vulkan.
+ */
 typedef struct _GskVulkanRenderer                GskVulkanRenderer;
 typedef struct _GskVulkanRendererClass           GskVulkanRendererClass;
 

@@ -18,44 +18,43 @@
  */
 
 /**
- * SECTION:gtkeventcontrollerscroll
- * @Short_description: Event controller for scroll events
- * @Title: GtkEventControllerScroll
- * @See_also: #GtkEventController
+ * GtkEventControllerScroll:
  *
- * #GtkEventControllerScroll is an event controller meant to handle
- * scroll events from mice and touchpads. It is capable of handling
- * both discrete and continuous scroll events, abstracting them both
- * on the #GtkEventControllerScroll::scroll signal (deltas in the
- * discrete case are multiples of 1).
+ * `GtkEventControllerScroll` is an event controller that handles scroll
+ * events.
  *
- * In the case of continuous scroll events, #GtkEventControllerScroll
- * encloses all #GtkEventControllerScroll::scroll events between two
- * #GtkEventControllerScroll::scroll-begin and #GtkEventControllerScroll::scroll-end
- * signals.
+ * It is capable of handling both discrete and continuous scroll
+ * events from mice or touchpads, abstracting them both with the
+ * [signal@Gtk.EventControllerScroll::scroll] signal. Deltas in
+ * the discrete case are multiples of 1.
  *
- * The behavior of the event controller can be modified by the
- * flags given at creation time, or modified at a later point through
- * gtk_event_controller_scroll_set_flags() (e.g. because the scrolling
+ * In the case of continuous scroll events, `GtkEventControllerScroll`
+ * encloses all [signal@Gtk.EventControllerScroll::scroll] emissions
+ * between two [signal@Gtk.EventControllerScroll::scroll-begin] and
+ * [signal@Gtk.EventControllerScroll::scroll-end] signals.
+ *
+ * The behavior of the event controller can be modified by the flags
+ * given at creation time, or modified at a later point through
+ * [method@Gtk.EventControllerScroll.set_flags] (e.g. because the scrolling
  * conditions of the widget changed).
  *
  * The controller can be set up to emit motion for either/both vertical
- * and horizontal scroll events through #GTK_EVENT_CONTROLLER_SCROLL_VERTICAL,
- * #GTK_EVENT_CONTROLLER_SCROLL_HORIZONTAL and #GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES.
- * If any axis is disabled, the respective #GtkEventControllerScroll::scroll
+ * and horizontal scroll events through %GTK_EVENT_CONTROLLER_SCROLL_VERTICAL,
+ * %GTK_EVENT_CONTROLLER_SCROLL_HORIZONTAL and %GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES.
+ * If any axis is disabled, the respective [signal@Gtk.EventControllerScroll::scroll]
  * delta will be 0. Vertical scroll events will be translated to horizontal
  * motion for the devices incapable of horizontal scrolling.
  *
- * The event controller can also be forced to emit discrete events on all devices
- * through #GTK_EVENT_CONTROLLER_SCROLL_DISCRETE. This can be used to implement
- * discrete actions triggered through scroll events (e.g. switching across
- * combobox options).
+ * The event controller can also be forced to emit discrete events on all
+ * devices through %GTK_EVENT_CONTROLLER_SCROLL_DISCRETE. This can be used
+ * to implement discrete actions triggered through scroll events (e.g.
+ * switching across combobox options).
  *
- * The #GTK_EVENT_CONTROLLER_SCROLL_KINETIC flag toggles the emission of the
- * #GtkEventControllerScroll::decelerate signal, emitted at the end of scrolling
- * with two X/Y velocity arguments that are consistent with the motion that
- * was received.
- **/
+ * The %GTK_EVENT_CONTROLLER_SCROLL_KINETIC flag toggles the emission of the
+ * [signal@Gtk.EventControllerScroll::decelerate] signal, emitted at the end
+ * of scrolling with two X/Y velocity arguments that are consistent with the
+ * motion that was received.
+ */
 #include "config.h"
 
 #include "gtkintl.h"
@@ -364,10 +363,10 @@ gtk_event_controller_scroll_class_init (GtkEventControllerScrollClass *klass)
   controller_class->handle_event = gtk_event_controller_scroll_handle_event;
 
   /**
-   * GtkEventControllerScroll:flags:
+   * GtkEventControllerScroll:flags: (attributes org.gtk.Property.get=gtk_event_controller_scroll_get_flags org.gtk.Property.set=gtk_event_controller_scroll_set_flags)
    *
-   * The flags affecting event controller behavior
-   **/
+   * The flags affecting event controller behavior.
+   */
   pspecs[PROP_FLAGS] =
     g_param_spec_flags ("flags",
                         P_("Flags"),
@@ -380,9 +379,10 @@ gtk_event_controller_scroll_class_init (GtkEventControllerScrollClass *klass)
    * GtkEventControllerScroll::scroll-begin:
    * @controller: The object that received the signal
    *
-   * Signals that a new scrolling operation has begun. It will
-   * only be emitted on devices capable of it.
-   **/
+   * Signals that a new scrolling operation has begun.
+   *
+   * It will only be emitted on devices capable of it.
+   */
   signals[SCROLL_BEGIN] =
     g_signal_new (I_("scroll-begin"),
                   GTK_TYPE_EVENT_CONTROLLER_SCROLL,
@@ -390,6 +390,7 @@ gtk_event_controller_scroll_class_init (GtkEventControllerScrollClass *klass)
                   0, NULL, NULL,
                   NULL,
                   G_TYPE_NONE, 0);
+
   /**
    * GtkEventControllerScroll::scroll:
    * @controller: The object that received the signal
@@ -399,8 +400,9 @@ gtk_event_controller_scroll_class_init (GtkEventControllerScrollClass *klass)
    * Signals that the widget should scroll by the
    * amount specified by @dx and @dy.
    *
-   * Returns: %TRUE if the scroll event was handled, %FALSE otherwise.
-   **/
+   * Returns: %TRUE if the scroll event was handled,
+   *   %FALSE otherwise.
+   */
   signals[SCROLL] =
     g_signal_new (I_("scroll"),
                   GTK_TYPE_EVENT_CONTROLLER_SCROLL,
@@ -411,13 +413,15 @@ gtk_event_controller_scroll_class_init (GtkEventControllerScrollClass *klass)
   g_signal_set_va_marshaller (signals[SCROLL],
                               G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__DOUBLE_DOUBLEv);
+
   /**
    * GtkEventControllerScroll::scroll-end:
    * @controller: The object that received the signal
    *
-   * Signals that a new scrolling operation has finished. It will
-   * only be emitted on devices capable of it.
-   **/
+   * Signals that a scrolling operation has finished.
+   *
+   * It will only be emitted on devices capable of it.
+   */
   signals[SCROLL_END] =
     g_signal_new (I_("scroll-end"),
                   GTK_TYPE_EVENT_CONTROLLER_SCROLL,
@@ -432,11 +436,13 @@ gtk_event_controller_scroll_class_init (GtkEventControllerScrollClass *klass)
    * @vel_x: X velocity
    * @vel_y: Y velocity
    *
-   * Emitted after scroll is finished if the #GTK_EVENT_CONTROLLER_SCROLL_KINETIC
-   * flag is set. @vel_x and @vel_y express the initial velocity that was
+   * Emitted after scroll is finished if the
+   * %GTK_EVENT_CONTROLLER_SCROLL_KINETIC flag is set.
+   *
+   * @vel_x and @vel_y express the initial velocity that was
    * imprinted by the scroll events. @vel_x and @vel_y are expressed in
    * pixels/ms.
-   **/
+   */
   signals[DECELERATE] =
     g_signal_new (I_("decelerate"),
                   GTK_TYPE_EVENT_CONTROLLER_SCROLL,
@@ -460,12 +466,12 @@ gtk_event_controller_scroll_init (GtkEventControllerScroll *scroll)
 
 /**
  * gtk_event_controller_scroll_new:
- * @flags: behavior flags
+ * @flags: flags affecting the controller behavior
  *
  * Creates a new event controller that will handle scroll events.
  *
- * Returns: a new #GtkEventControllerScroll
- **/
+ * Returns: a new `GtkEventControllerScroll`
+ */
 GtkEventController *
 gtk_event_controller_scroll_new (GtkEventControllerScrollFlags flags)
 {
@@ -475,12 +481,12 @@ gtk_event_controller_scroll_new (GtkEventControllerScrollFlags flags)
 }
 
 /**
- * gtk_event_controller_scroll_set_flags:
- * @scroll: a #GtkEventControllerScroll
- * @flags: behavior flags
+ * gtk_event_controller_scroll_set_flags: (attributes org.gtk.Method.set_property=flags)
+ * @scroll: a `GtkEventControllerScroll`
+ * @flags: flags affecting the controller behavior
  *
  * Sets the flags conditioning scroll controller behavior.
- **/
+ */
 void
 gtk_event_controller_scroll_set_flags (GtkEventControllerScroll      *scroll,
                                        GtkEventControllerScrollFlags  flags)
@@ -495,13 +501,13 @@ gtk_event_controller_scroll_set_flags (GtkEventControllerScroll      *scroll,
 }
 
 /**
- * gtk_event_controller_scroll_get_flags:
- * @scroll: a #GtkEventControllerScroll
+ * gtk_event_controller_scroll_get_flags: (attributes org.gtk.Method.get_property=flags)
+ * @scroll: a `GtkEventControllerScroll`
  *
  * Gets the flags conditioning the scroll controller behavior.
  *
  * Returns: the controller flags.
- **/
+ */
 GtkEventControllerScrollFlags
 gtk_event_controller_scroll_get_flags (GtkEventControllerScroll *scroll)
 {

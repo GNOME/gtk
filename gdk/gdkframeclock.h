@@ -55,10 +55,10 @@ typedef struct _GdkFrameClockClass         GdkFrameClockClass;
  * @GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS: corresponds to GdkFrameClock::resume-events. Should not be handled by applications.
  * @GDK_FRAME_CLOCK_PHASE_AFTER_PAINT: corresponds to GdkFrameClock::after-paint. Should not be handled by applications.
  *
- * #GdkFrameClockPhase is used to represent the different paint clock
- * phases that can be requested. The elements of the enumeration
- * correspond to the signals of #GdkFrameClock.
- **/
+ * Used to represent the different paint clock phases that can be requested.
+ *
+ * The elements of the enumeration correspond to the signals of `GdkFrameClock`.
+ */
 typedef enum {
   GDK_FRAME_CLOCK_PHASE_NONE          = 0,
   GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS  = 1 << 0,

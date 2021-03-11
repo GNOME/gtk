@@ -34,31 +34,35 @@
 
 
 /**
- * SECTION:gtkgrid
- * @Short_description: Pack widgets in rows and columns
- * @Title: GtkGrid
- * @See_also: #GtkBox
+ * GtkGrid:
  *
- * GtkGrid is a container which arranges its child widgets in
- * rows and columns, with arbitrary positions and horizontal/vertical spans.
+ * `GtkGrid` is a container which arranges its child widgets in
+ * rows and columns.
  *
- * Children are added using gtk_grid_attach(). They can span multiple
- * rows or columns. It is also possible to add a child next to an
- * existing child, using gtk_grid_attach_next_to(). To remove a child
- * from the grid, use gtk_grid_remove(). The behaviour of GtkGrid when
- * several children occupy the same grid cell is undefined.
+ * ![An example GtkGrid](grid.png)
+ *
+ * It supports arbitrary positions and horizontal/vertical spans.
+ *
+ * Children are added using [method@Gtk.Grid.attach]. They can span multiple
+ * rows or columns. It is also possible to add a child next to an existing
+ * child, using [method@Gtk.Grid.attach_next_to]. To remove a child from the
+ * grid, use [method@Gtk.Grid.remove].
+ *
+ * The behaviour of `GtkGrid` when several children occupy the same grid
+ * cell is undefined.
  *
  * # GtkGrid as GtkBuildable
  *
- * Every child in a GtkGrid has access to a custom #GtkBuildable element, called ´<layout>´.
- * It can by used to specify a position in the grid and optionally spans.
- * All properties that can be used in the ´<layout>´ element are implemented by #GtkGridLayoutChild.
+ * Every child in a `GtkGrid` has access to a custom [iface@Gtk.Buildable]
+ * element, called ´<layout>´. It can by used to specify a position in the
+ * grid and optionally spans. All properties that can be used in the ´<layout>´
+ * element are implemented by [class@Gtk.GridLayoutChild].
  *
- * It is implemented by #GtkWidget using #GtkLayoutManager.
+ * It is implemented by `GtkWidget` using [class@Gtk.LayoutManager].
  *
  * To showcase it, here is a simple example:
  *
- * |[
+ * ```xml
  * <object class="GtkGrid" id="my_grid">
  *   <child>
  *     <object class="GtkButton" id="button1">
@@ -99,21 +103,21 @@
  *     </object>
  *   </child>
  * </object>
- * ]|
+ * ```
  *
  * It organizes the first two buttons side-by-side in one cell each.
  * The third button is in the last column but spans across two rows.
- * This is defined by the ´row-span´ property.
- * The last button is located in the second row and spans across two columns,
- * which is defined by the ´column-span´ property.
+ * This is defined by the ´row-span´ property. The last button is
+ * located in the second row and spans across two columns, which is
+ * defined by the ´column-span´ property.
  *
  * # CSS nodes
  *
- * GtkGrid uses a single CSS node with name `grid`.
+ * `GtkGrid` uses a single CSS node with name `grid`.
  *
  * # Accessibility
  *
- * GtkGrid uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
+ * `GtkGrid` uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
  */
 
 typedef struct
@@ -420,6 +424,11 @@ gtk_grid_class_init (GtkGridClass *class)
 
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
+  /**
+   * GtkGrid:row-spacing: (attributes org.gtk.Property.get=gtk_grid_get_row_spacing org.gtk.Property.set=gtk_grid_set_row_spacing)
+   *
+   * The amount of space between two consecutive rows.
+   */
   obj_properties[PROP_ROW_SPACING] =
     g_param_spec_int ("row-spacing",
                       P_("Row spacing"),
@@ -427,6 +436,11 @@ gtk_grid_class_init (GtkGridClass *class)
                       0, G_MAXINT16, 0,
                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkGrid:column-spacing: (attributes org.gtk.Property.get=gtk_grid_get_column_spacing org.gtk.Property.set=gtk_grid_set_column_spacing)
+   *
+   * The amount of space between two consecutive columns.
+   */
   obj_properties[PROP_COLUMN_SPACING] =
     g_param_spec_int ("column-spacing",
                       P_("Column spacing"),
@@ -434,6 +448,11 @@ gtk_grid_class_init (GtkGridClass *class)
                       0, G_MAXINT16, 0,
                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkGrid:row-homogeneous: (attributes org.gtk.Property.get=gtk_grid_get_row_homogeneous org.gtk.Property.set=gtk_grid_set_row_homogeneous)
+   *
+   * If %TRUE, the rows are all the same height.
+   */
   obj_properties[PROP_ROW_HOMOGENEOUS] =
     g_param_spec_boolean ("row-homogeneous",
                           P_("Row Homogeneous"),
@@ -441,6 +460,11 @@ gtk_grid_class_init (GtkGridClass *class)
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkGrid:column-homogeneous: (attributes org.gtk.Property.get=gtk_grid_get_column_homogeneous org.gtk.Property.set=gtk_grid_set_column_homogeneous)
+   *
+   * If %TRUE, the columns are all the same width.
+   */
   obj_properties[PROP_COLUMN_HOMOGENEOUS] =
     g_param_spec_boolean ("column-homogeneous",
                           P_("Column Homogeneous"),
@@ -448,6 +472,11 @@ gtk_grid_class_init (GtkGridClass *class)
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkGrid:baseline-row: (attributes org.gtk.Property.get=gtk_grid_get_baseline_row org.gtk.Property.set=gtk_grid_set_baseline_row)
+   *
+   * The row to align to the baseline when valign is %GTK_ALIGN_BASELINE.
+   */
   obj_properties[PROP_BASELINE_ROW] =
     g_param_spec_int ("baseline-row",
                       P_("Baseline Row"),
@@ -507,7 +536,7 @@ gtk_grid_init (GtkGrid *grid)
  *
  * Creates a new grid widget.
  *
- * Returns: the new #GtkGrid
+ * Returns: the new `GtkGrid`
  */
 GtkWidget *
 gtk_grid_new (void)
@@ -517,7 +546,7 @@ gtk_grid_new (void)
 
 /**
  * gtk_grid_attach:
- * @grid: a #GtkGrid
+ * @grid: a `GtkGrid`
  * @child: the widget to add
  * @column: the column number to attach the left side of @child to
  * @row: the row number to attach the top side of @child to
@@ -549,7 +578,7 @@ gtk_grid_attach (GtkGrid   *grid,
 
 /**
  * gtk_grid_attach_next_to:
- * @grid: a #GtkGrid
+ * @grid: a `GtkGrid`
  * @child: the widget to add
  * @sibling: (allow-none): the child of @grid that @child will be placed
  *     next to, or %NULL to place @child at the beginning or end
@@ -646,7 +675,7 @@ gtk_grid_attach_next_to (GtkGrid         *grid,
 
 /**
  * gtk_grid_get_child_at:
- * @grid: a #GtkGrid
+ * @grid: a `GtkGrid`
  * @column: the left edge of the cell
  * @row: the top edge of the cell
  *
@@ -688,11 +717,13 @@ gtk_grid_get_child_at (GtkGrid *grid,
 
 /**
  * gtk_grid_remove:
- * @grid: a #GtkGrid
+ * @grid: a `GtkGrid`
  * @child: the child widget to remove
  *
- * Removes a child from @grid, after it has been added
- * with gtk_grid_attach() or gtk_grid_attach_next_to().
+ * Removes a child from @grid.
+ *
+ * The child must have been added with
+ * [method@Gtk.Grid.attach] or [method@Gtk.Grid.attach_next_to].
  */
 void
 gtk_grid_remove (GtkGrid   *grid,
@@ -707,7 +738,7 @@ gtk_grid_remove (GtkGrid   *grid,
 
 /**
  * gtk_grid_insert_row:
- * @grid: a #GtkGrid
+ * @grid: a `GtkGrid`
  * @position: the position to insert the row at
  *
  * Inserts a row at the specified position.
@@ -745,7 +776,7 @@ gtk_grid_insert_row (GtkGrid *grid,
 
 /**
  * gtk_grid_remove_row:
- * @grid: a #GtkGrid
+ * @grid: a `GtkGrid`
  * @position: the position of the row to remove
  *
  * Removes a row from the grid.
@@ -796,7 +827,7 @@ gtk_grid_remove_row (GtkGrid *grid,
 
 /**
  * gtk_grid_insert_column:
- * @grid: a #GtkGrid
+ * @grid: a `GtkGrid`
  * @position: the position to insert the column at
  *
  * Inserts a column at the specified position.
@@ -834,7 +865,7 @@ gtk_grid_insert_column (GtkGrid *grid,
 
 /**
  * gtk_grid_remove_column:
- * @grid: a #GtkGrid
+ * @grid: a `GtkGrid`
  * @position: the position of the column to remove
  *
  * Removes a column from the grid.
@@ -886,7 +917,7 @@ gtk_grid_remove_column (GtkGrid *grid,
 
 /**
  * gtk_grid_insert_next_to:
- * @grid: a #GtkGrid
+ * @grid: a `GtkGrid`
  * @sibling: the child of @grid that the new row or column will be
  *     placed next to
  * @side: the side of @sibling that @child is positioned next to
@@ -940,8 +971,8 @@ gtk_grid_insert_next_to (GtkGrid         *grid,
 }
 
 /**
- * gtk_grid_set_row_homogeneous:
- * @grid: a #GtkGrid
+ * gtk_grid_set_row_homogeneous: (attributes org.gtk.Method.set_property=row-homogeneous)
+ * @grid: a `GtkGrid`
  * @homogeneous: %TRUE to make rows homogeneous
  *
  * Sets whether all rows of @grid will have the same height.
@@ -964,8 +995,8 @@ gtk_grid_set_row_homogeneous (GtkGrid  *grid,
 }
 
 /**
- * gtk_grid_get_row_homogeneous:
- * @grid: a #GtkGrid
+ * gtk_grid_get_row_homogeneous: (attributes org.gtk.Method.get_property=row-homogeneous)
+ * @grid: a `GtkGrid`
  *
  * Returns whether all rows of @grid have the same height.
  *
@@ -982,8 +1013,8 @@ gtk_grid_get_row_homogeneous (GtkGrid *grid)
 }
 
 /**
- * gtk_grid_set_column_homogeneous:
- * @grid: a #GtkGrid
+ * gtk_grid_set_column_homogeneous: (attributes org.gtk.Method.set_property=column-homogeneous)
+ * @grid: a `GtkGrid`
  * @homogeneous: %TRUE to make columns homogeneous
  *
  * Sets whether all columns of @grid will have the same width.
@@ -1006,8 +1037,8 @@ gtk_grid_set_column_homogeneous (GtkGrid  *grid,
 }
 
 /**
- * gtk_grid_get_column_homogeneous:
- * @grid: a #GtkGrid
+ * gtk_grid_get_column_homogeneous: (attributes org.gtk.Method.get_property=column-homogeneous)
+ * @grid: a `GtkGrid`
  *
  * Returns whether all columns of @grid have the same width.
  *
@@ -1024,8 +1055,8 @@ gtk_grid_get_column_homogeneous (GtkGrid *grid)
 }
 
 /**
- * gtk_grid_set_row_spacing:
- * @grid: a #GtkGrid
+ * gtk_grid_set_row_spacing: (attributes org.gtk.Method.set_property=row-spacing)
+ * @grid: a `GtkGrid`
  * @spacing: the amount of space to insert between rows
  *
  * Sets the amount of space between rows of @grid.
@@ -1049,8 +1080,8 @@ gtk_grid_set_row_spacing (GtkGrid *grid,
 }
 
 /**
- * gtk_grid_get_row_spacing:
- * @grid: a #GtkGrid
+ * gtk_grid_get_row_spacing: (attributes org.gtk.Method.get_property=row-spacing)
+ * @grid: a `GtkGrid`
  *
  * Returns the amount of space between the rows of @grid.
  *
@@ -1067,8 +1098,8 @@ gtk_grid_get_row_spacing (GtkGrid *grid)
 }
 
 /**
- * gtk_grid_set_column_spacing:
- * @grid: a #GtkGrid
+ * gtk_grid_set_column_spacing: (attributes org.gtk.Method.set_property=column-spacing)
+ * @grid: a `GtkGrid`
  * @spacing: the amount of space to insert between columns
  *
  * Sets the amount of space between columns of @grid.
@@ -1092,8 +1123,8 @@ gtk_grid_set_column_spacing (GtkGrid *grid,
 }
 
 /**
- * gtk_grid_get_column_spacing:
- * @grid: a #GtkGrid
+ * gtk_grid_get_column_spacing: (attributes org.gtk.Method.get_property=column-spacing)
+ * @grid: a `GtkGrid`
  *
  * Returns the amount of space between the columns of @grid.
  *
@@ -1111,12 +1142,14 @@ gtk_grid_get_column_spacing (GtkGrid *grid)
 
 /**
  * gtk_grid_set_row_baseline_position:
- * @grid: a #GtkGrid
+ * @grid: a `GtkGrid`
  * @row: a row index
- * @pos: a #GtkBaselinePosition
+ * @pos: a `GtkBaselinePosition`
  *
  * Sets how the baseline should be positioned on @row of the
  * grid, in case that row is assigned more space than is requested.
+ *
+ * The default baseline position is %GTK_BASELINE_POSITION_CENTER.
  */
 void
 gtk_grid_set_row_baseline_position (GtkGrid            *grid,
@@ -1134,12 +1167,12 @@ gtk_grid_set_row_baseline_position (GtkGrid            *grid,
 
 /**
  * gtk_grid_get_row_baseline_position:
- * @grid: a #GtkGrid
+ * @grid: a `GtkGrid`
  * @row: a row index
  *
- * Returns the baseline position of @row as set
- * by gtk_grid_set_row_baseline_position() or the default value
- * %GTK_BASELINE_POSITION_CENTER.
+ * Returns the baseline position of @row.
+ *
+ * See [method@Gtk.Grid.set_row_baseline_position].
  *
  * Returns: the baseline position of @row
  */
@@ -1155,11 +1188,12 @@ gtk_grid_get_row_baseline_position (GtkGrid      *grid,
 }
 
 /**
- * gtk_grid_set_baseline_row:
- * @grid: a #GtkGrid
+ * gtk_grid_set_baseline_row: (attributes org.gtk.Method.set_property=baseline-row)
+ * @grid: a `GtkGrid`
  * @row: the row index
  *
  * Sets which row defines the global baseline for the entire grid.
+ *
  * Each row in the grid can have its own local baseline, but only
  * one of those is global, meaning it will be the baseline in the
  * parent of the @grid.
@@ -1182,8 +1216,8 @@ gtk_grid_set_baseline_row (GtkGrid *grid,
 }
 
 /**
- * gtk_grid_get_baseline_row:
- * @grid: a #GtkGrid
+ * gtk_grid_get_baseline_row: (attributes org.gtk.Method.get_property=baseline-row)
+ * @grid: a `GtkGrid`
  *
  * Returns which row defines the global baseline of @grid.
  *
@@ -1201,14 +1235,14 @@ gtk_grid_get_baseline_row (GtkGrid *grid)
 
 /**
  * gtk_grid_query_child:
- * @grid: a #GtkGrid
- * @child: a #GtkWidget child of @grid
+ * @grid: a `GtkGrid`
+ * @child: a `GtkWidget` child of @grid
  * @column: (out) (optional): the column used to attach the left side of @child
  * @row: (out) (optional): the row used to attach the top side of @child
  * @width: (out) (optional): the number of columns @child spans
  * @height: (out) (optional): the number of rows @child spans
  *
- * Queries the attach points and spans of @child inside the given #GtkGrid.
+ * Queries the attach points and spans of @child inside the given `GtkGrid`.
  */
 void
 gtk_grid_query_child (GtkGrid   *grid,

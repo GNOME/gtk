@@ -39,10 +39,9 @@
 #include <math.h>
 
 /**
- * SECTION:gtkcellrendererspinner
- * @Short_description: Renders a spinning animation in a cell
- * @Title: GtkCellRendererSpinner
- * @See_also: #GtkSpinner, #GtkCellRendererProgress
+ * GtkCellRendererSpinner:
+ *
+ * Renders a spinning animation in a cell
  *
  * GtkCellRendererSpinner renders a spinning animation in a cell, very
  * similar to #GtkSpinner. It can often be used as an alternative

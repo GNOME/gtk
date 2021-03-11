@@ -39,23 +39,27 @@
 
 
 /**
- * SECTION:gtkpopovermenu
- * @Short_description: Popovers to use as menus
- * @Title: GtkPopoverMenu
+ * GtkPopoverMenu:
  *
- * GtkPopoverMenu is a subclass of #GtkPopover that treats its
- * children like menus and allows switching between them. It
- * can open submenus as traditional, nested submenus, or in a
- * more touch-friendly sliding fashion.
+ * `GtkPopoverMenu` is a subclass of `GtkPopover` that implements menu
+ * behavior.
  *
- * GtkPopoverMenu is meant to be used primarily with menu models,
- * using gtk_popover_menu_new_from_model(). If you need to put other
- * widgets such as #GtkSpinButton or #GtkSwitch into a popover,
- * use a plain #GtkPopover.
+ * ![An example GtkPopoverMenu](menu.png)
+ *
+ * `GtkPopoverMenu` treats its children like menus and allows switching
+ * between them. It can open submenus as traditional, nested submenus,
+ * or in a more touch-friendly sliding fashion.
+ *
+ * `GtkPopoverMenu` is meant to be used primarily with menu models,
+ * using [ctor@Gtk.PopoverMenu.new_from_model]. If you need to put
+ * other widgets such as a `GtkSpinButton` or a `GtkSwitch` into a popover,
+ * you can use [method@Gtk.PopoverMenu.add_child].
+ *
+ * For more dialog-like behavior, use a plain `GtkPopover`.
  *
  * ## Menu models
  *
- * The XML format understood by #GtkBuilder for #GMenuModel consists
+ * The XML format understood by `GtkBuilder` for `GMenuModel` consists
  * of a toplevel `<menu>` element, which contains one or more `<item>`
  * elements. Each `<item>` element contains `<attribute>` and `<link>`
  * elements with a mandatory name attribute. `<link>` elements have the
@@ -63,7 +67,7 @@
  * `<link name="section">`, you can use `<submenu>` or `<section>`
  * elements.
  *
- * |[<!-- language="xml" -->
+ * ```xml
  * <menu id='app-menu'>
  *   <section>
  *     <item>
@@ -80,9 +84,9 @@
  *     </item>
  *   </section>
  * </menu>
- * ]|
+ * ```
  *
- * Attribute values can be translated using gettext, like other #GtkBuilder
+ * Attribute values can be translated using gettext, like other `GtkBuilder`
  * content. `<attribute>` elements can be marked for translation with a
  * `translatable="yes"` attribute. It is also possible to specify message
  * context and translator comments, using the context and comments attributes.
@@ -90,6 +94,7 @@
  * domain to use.
  *
  * The following attributes are used when constructing menu items:
+ *
  * - "label": a user-visible string to display
  * - "action": the prefixed name of the action to trigger
  * - "target": the parameter to use when activating the action
@@ -98,39 +103,44 @@
  *      if a submenu can be opened
  * - "hidden-when": a string used to determine when the item will be hidden.
  *      Possible values include "action-disabled", "action-missing", "macos-menubar".
- *      This is mainly useful for exported menus, see gtk_application_set_menubar().
- * - "custom": a string used to match against the ID of a custom child added
- *      with gtk_popover_menu_add_child(), gtk_popover_menu_bar_add_child(), or
- *      in the ui file with `<child type="ID">`.
+ *      This is mainly useful for exported menus, see [method@Gtk.Application.set_menubar].
+ * - "custom": a string used to match against the ID of a custom child added with
+ *      [method@Gtk.PopoverMenu.add_child], [method@Gtk.PopoverMenuBar.add_child],
+ *      or in the ui file with `<child type="ID">`.
  *
  * The following attributes are used when constructing sections:
+ *
  * - "label": a user-visible string to use as section heading
  * - "display-hint": a string used to determine special formatting for the section.
- *     Possible values include "horizontal-buttons", "circular-buttons" and "inline-buttons". They all indicate that section should be
+ *     Possible values include "horizontal-buttons", "circular-buttons" and
+ *     "inline-buttons". They all indicate that section should be
  *     displayed as a horizontal row of buttons.
- * - "text-direction": a string used to determine the #GtkTextDirection to use
+ * - "text-direction": a string used to determine the `GtkTextDirection` to use
  *     when "display-hint" is set to "horizontal-buttons". Possible values
  *     include "rtl", "ltr", and "none".
  *
  * The following attributes are used when constructing submenus:
+ *
  * - "label": a user-visible string to display
  * - "icon": icon name to display
  *
  * Menu items will also show accelerators, which are usually associated
- * with actions via gtk_application_set_accels_for_action(),
- * gtk_widget_class_add_binding_action() or gtk_shortcut_controller_add_shortcut().
+ * with actions via [method@Gtk.Application.set_accels_for_action],
+ * [id@gtk_widget_class_add_binding_action] or
+ * [method@Gtk.ShortcutController.add_shortcut].
  *
  * # CSS Nodes
  *
- * #GtkPopoverMenu is just a subclass of #GtkPopover that adds
- * custom content to it, therefore it has the same CSS nodes.
- * It is one of the cases that add a .menu style class to
- * the popover's main node.
+ * `GtkPopoverMenu` is just a subclass of `GtkPopover` that adds custom content
+ * to it, therefore it has the same CSS nodes. It is one of the cases that add
+ * a .menu style class to the popover's main node.
  *
  * # Accessibility
  *
- * GtkPopoverMenu uses the #GTK_ACCESSIBLE_ROLE_MENU role, and its
- * items use the #GTK_ACCESSIBLE_ROLE_MENU_ITEM, #GTK_ACCESSIBLE_ROLE_MENU_ITEM_CHECKBOX or #GTK_ACCESSIBLE_ROLE_MENU_ITEM_RADIO roles, depending on the
+ * `GtkPopoverMenu` uses the %GTK_ACCESSIBLE_ROLE_MENU role, and its
+ * items use the %GTK_ACCESSIBLE_ROLE_MENU_ITEM,
+ * %GTK_ACCESSIBLE_ROLE_MENU_ITEM_CHECKBOX or
+ * %GTK_ACCESSIBLE_ROLE_MENU_ITEM_RADIO roles, depending on the
  * action they are connected to.
  */
 
@@ -549,6 +559,11 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
   widget_class->show = gtk_popover_menu_show;
   widget_class->move_focus = gtk_popover_menu_move_focus;
 
+  /**
+   * GtkPopoverMenu:visible-submenu:
+   *
+   * The name of the visible submenu.
+   */
   g_object_class_install_property (object_class,
                                    PROP_VISIBLE_SUBMENU,
                                    g_param_spec_string ("visible-submenu",
@@ -557,6 +572,11 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
                                                         NULL,
                                                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * GtkPopoverMenu:menu-model: (attributes org.gtk.Property.get=gtk_popover_menu_get_menu_model org.gtk.Property.set=gtk_popover_menu_set_menu_model)
+   *
+   * The model from which the menu is made.
+   */
   g_object_class_install_property (object_class,
                                    PROP_MENU_MODEL,
                                    g_param_spec_object ("menu-model",
@@ -619,7 +639,7 @@ gtk_popover_menu_buildable_iface_init (GtkBuildableIface *iface)
  *
  * Creates a new popover menu.
  *
- * Returns: a new #GtkPopoverMenu
+ * Returns: a new `GtkPopoverMenu`
  */
 GtkWidget *
 gtk_popover_menu_new (void)
@@ -671,24 +691,23 @@ gtk_popover_menu_add_submenu (GtkPopoverMenu *popover,
 
 /**
  * gtk_popover_menu_new_from_model:
- * @model: (allow-none): a #GMenuModel, or %NULL
+ * @model: (allow-none): a `GMenuModel`, or %NULL
  *
- * Creates a #GtkPopoverMenu and populates it according to
- * @model.
+ * Creates a `GtkPopoverMenu` and populates it according to @model.
  *
  * The created buttons are connected to actions found in the
- * #GtkApplicationWindow to which the popover belongs - typically
+ * `GtkApplicationWindow` to which the popover belongs - typically
  * by means of being attached to a widget that is contained within
- * the #GtkApplicationWindows widget hierarchy.
+ * the `GtkApplicationWindow`s widget hierarchy.
  *
- * Actions can also be added using gtk_widget_insert_action_group()
+ * Actions can also be added using [method@Gtk.Widget.insert_action_group]
  * on the menus attach widget or on any of its parent widgets.
  *
  * This function creates menus with sliding submenus.
- * See gtk_popover_menu_new_from_model_full() for a way
+ * See [ctor@Gtk.PopoverMenu.new_from_model_full] for a way
  * to control this.
  *
- * Returns: the new #GtkPopoverMenu
+ * Returns: the new `GtkPopoverMenu`
  */
 GtkWidget *
 gtk_popover_menu_new_from_model (GMenuModel *model)
@@ -699,23 +718,22 @@ gtk_popover_menu_new_from_model (GMenuModel *model)
 
 /**
  * gtk_popover_menu_new_from_model_full:
- * @model: a #GMenuModel
+ * @model: a `GMenuModel`
  * @flags: flags that affect how the menu is created
  *
- * Creates a #GtkPopoverMenu and populates it according to
- * @model.
+ * Creates a `GtkPopoverMenu` and populates it according to @model.
  *
  * The created buttons are connected to actions found in the
  * action groups that are accessible from the parent widget.
- * This includes the #GtkApplicationWindow to which the popover
- * belongs. Actions can also be added using gtk_widget_insert_action_group()
+ * This includes the `GtkApplicationWindow` to which the popover
+ * belongs. Actions can also be added using [method@Gtk.Widget.insert_action_group]
  * on the parent widget or on any of its parent widgets.
  *
  * The only flag that is supported currently is
- * #GTK_POPOVER_MENU_NESTED, which makes GTK create traditional,
+ * %GTK_POPOVER_MENU_NESTED, which makes GTK create traditional,
  * nested submenus instead of the default sliding submenus.
  *
- * Returns: (transfer full): the new #GtkPopoverMenu
+ * Returns: (transfer full): the new `GtkPopoverMenu`
  */
 GtkWidget *
 gtk_popover_menu_new_from_model_full (GMenuModel          *model,
@@ -733,9 +751,9 @@ gtk_popover_menu_new_from_model_full (GMenuModel          *model,
 }
 
 /**
- * gtk_popover_menu_set_menu_model:
- * @popover: a #GtkPopoverMenu
- * @model: (nullable): a #GMenuModel, or %NULL
+ * gtk_popover_menu_set_menu_model: (attributes org.gtk.Method.set_property=menu-model)
+ * @popover: a `GtkPopoverMenu`
+ * @model: (nullable): a `GMenuModel`, or %NULL
  *
  * Sets a new menu model on @popover.
  *
@@ -767,8 +785,8 @@ gtk_popover_menu_set_menu_model (GtkPopoverMenu *popover,
 }
 
 /**
- * gtk_popover_menu_get_menu_model:
- * @popover: a #GtkPopoverMenu
+ * gtk_popover_menu_get_menu_model: (attributes org.gtk.Method.get_property=menu-model)
+ * @popover: a `GtkPopoverMenu`
  *
  * Returns the menu model used to populate the popover.
  *
@@ -784,14 +802,14 @@ gtk_popover_menu_get_menu_model (GtkPopoverMenu *popover)
 
 /**
  * gtk_popover_menu_add_child:
- * @popover: a #GtkPopoverMenu
- * @child: the #GtkWidget to add
+ * @popover: a `GtkPopoverMenu`
+ * @child: the `GtkWidget` to add
  * @id: the ID to insert @child at
  *
  * Adds a custom widget to a generated menu.
  *
- * For this to work, the menu model of @popover must have an
- * item with a `custom` attribute that matches @id.
+ * For this to work, the menu model of @popover must have
+ * an item with a `custom` attribute that matches @id.
  *
  * Returns: %TRUE if @id was found and the widget added
  */
@@ -810,8 +828,8 @@ gtk_popover_menu_add_child (GtkPopoverMenu *popover,
 
 /**
  * gtk_popover_menu_remove_child:
- * @popover: a #GtkPopoverMenu
- * @child: the #GtkWidget to remove
+ * @popover: a `GtkPopoverMenu`
+ * @child: the `GtkWidget` to remove
  *
  * Removes a widget that has previously been added with
  * gtk_popover_menu_add_child().

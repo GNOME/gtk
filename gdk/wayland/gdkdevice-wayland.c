@@ -54,6 +54,28 @@
 #include <linux/input.h>
 #endif
 
+/**
+ * GdkWaylandDevice:
+ *
+ * The Wayland implementation of `GdkDevice`.
+ *
+ * Beyond the regular [class@Gdk.Device] API, the Wayland implementation
+ * provides access to Wayland objects such as the `wl_seat` with
+ * [method@GdkWayland.WaylandDevice.get_wl_seat], the `wl_keyboard` with
+ * [method@GdkWayland.WaylandDevice.get_wl_keyboard] and the `wl_pointer` with
+ * [method@GdkWayland.WaylandDevice.get_wl_pointer].
+ */
+
+/**
+ * GdkWaylandSeat:
+ *
+ * The Wayland implementation of `GdkSeat`.
+ *
+ * Beyond the regular [class@Gdk.Seat] API, the Wayland implementation
+ * provides access to the Wayland `wl_seat` object with
+ * [method@GdkWayland.WaylandSeat.get_wl_seat].
+ */
+
 #define BUTTON_BASE (BTN_LEFT - 1) /* Used to translate to 1-indexed buttons */
 
 #ifndef BTN_STYLUS3
@@ -945,11 +967,11 @@ gdk_wayland_device_pad_init (GdkWaylandDevicePad *pad)
 
 /**
  * gdk_wayland_device_get_wl_seat: (skip)
- * @device: (type GdkWaylandDevice): a #GdkDevice
+ * @device: (type GdkWaylandDevice): a `GdkDevice`
  *
- * Returns the Wayland wl_seat of a #GdkDevice.
+ * Returns the Wayland `wl_seat` of a `GdkDevice`.
  *
- * Returns: (transfer none): a Wayland wl_seat
+ * Returns: (transfer none): a Wayland `wl_seat`
  */
 struct wl_seat *
 gdk_wayland_device_get_wl_seat (GdkDevice *device)
@@ -964,11 +986,11 @@ gdk_wayland_device_get_wl_seat (GdkDevice *device)
 
 /**
  * gdk_wayland_device_get_wl_pointer: (skip)
- * @device: (type GdkWaylandDevice): a #GdkDevice
+ * @device: (type GdkWaylandDevice): a `GdkDevice`
  *
- * Returns the Wayland wl_pointer of a #GdkDevice.
+ * Returns the Wayland `wl_pointer` of a `GdkDevice`.
  *
- * Returns: (transfer none): a Wayland wl_pointer
+ * Returns: (transfer none): a Wayland `wl_pointer`
  */
 struct wl_pointer *
 gdk_wayland_device_get_wl_pointer (GdkDevice *device)
@@ -983,11 +1005,11 @@ gdk_wayland_device_get_wl_pointer (GdkDevice *device)
 
 /**
  * gdk_wayland_device_get_wl_keyboard: (skip)
- * @device: (type GdkWaylandDevice): a #GdkDevice
+ * @device: (type GdkWaylandDevice): a `GdkDevice`
  *
- * Returns the Wayland wl_keyboard of a #GdkDevice.
+ * Returns the Wayland `wl_keyboard` of a `GdkDevice`.
  *
- * Returns: (transfer none): a Wayland wl_keyboard
+ * Returns: (transfer none): a Wayland `wl_keyboard`
  */
 struct wl_keyboard *
 gdk_wayland_device_get_wl_keyboard (GdkDevice *device)
@@ -5033,9 +5055,11 @@ gdk_wayland_seat_set_drag (GdkSeat *seat,
 
 /**
  * gdk_wayland_device_get_data_device: (skip)
- * @gdk_device: (type GdkWaylandDevice): a #GdkDevice
+ * @gdk_device: (type GdkWaylandDevice): a `GdkDevice`
  *
- * ...
+ * Returns the Wayland `wl_data_device` of a `GdkDevice`.
+ *
+ * Returns: (transfer none): a Wayland `wl_data_device`
  */
 struct wl_data_device *
 gdk_wayland_device_get_data_device (GdkDevice *gdk_device)
@@ -5050,10 +5074,13 @@ gdk_wayland_device_get_data_device (GdkDevice *gdk_device)
 
 /**
  * gdk_wayland_device_set_selection: (skip)
- * @gdk_device: (type GdkWaylandDevice): a #GdkDevice
+ * @gdk_device: (type GdkWaylandDevice): a `GdkDevice`
  * @source: the data source for the selection
  *
- * ...
+ * Sets the selection of the `GdkDevice.
+ *
+ * This is calling wl_data_device_set_selection() on
+ * the `wl_data_device` of @gdk_device.
  */
 void
 gdk_wayland_device_set_selection (GdkDevice             *gdk_device,
@@ -5073,9 +5100,9 @@ gdk_wayland_device_set_selection (GdkDevice             *gdk_device,
 
 /**
  * gdk_wayland_seat_get_wl_seat: (skip)
- * @seat: (type GdkWaylandSeat): a #GdkSeat
+ * @seat: (type GdkWaylandSeat): a `GdkSeat`
  *
- * Returns the Wayland `wl_seat` of a #GdkSeat.
+ * Returns the Wayland `wl_seat` of a `GdkSeat`.
  *
  * Returns: (transfer none): a Wayland `wl_seat`
  */
@@ -5089,18 +5116,19 @@ gdk_wayland_seat_get_wl_seat (GdkSeat *seat)
 
 /**
  * gdk_wayland_device_get_node_path:
- * @device: (type GdkWaylandDevice): a #GdkDevice
+ * @device: (type GdkWaylandDevice): a `GdkDevice`
  *
  * Returns the `/dev/input/event*` path of this device.
  *
- * For #GdkDevices that possibly coalesce multiple hardware
+ * For `GdkDevice`s that possibly coalesce multiple hardware
  * devices (eg. mouse, keyboard, touch,...), this function
  * will return %NULL.
  *
  * This is most notably implemented for devices of type
  * %GDK_SOURCE_PEN, %GDK_SOURCE_TABLET_PAD.
  *
- * Returns: (nullable) (transfer none): the `/dev/input/event*` path of this device
+ * Returns: (nullable) (transfer none): the `/dev/input/event*`
+ *   path of this device
  */
 const char *
 gdk_wayland_device_get_node_path (GdkDevice *device)
@@ -5131,9 +5159,11 @@ gdk_wayland_device_get_node_path (GdkDevice *device)
  * @feature_idx: 0-indexed index of the feature to set the feedback label for
  * @label: Feedback label
  *
- * Sets the feedback label for the given feature/index. This may be used by the
- * compositor to provide user feedback of the actions available/performed.
- **/
+ * Sets the feedback label for the given feature/index.
+ *
+ * This may be used by the compositor to provide user feedback
+ * of the actions available/performed.
+ */
 void
 gdk_wayland_device_pad_set_feedback (GdkDevice           *device,
                                      GdkDevicePadFeature  feature,

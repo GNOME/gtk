@@ -98,8 +98,8 @@ struct _GskParseLocation
  * @error: the error
  * @user_data: user data
  *
- * The type of callback that is called when a parse error occurs
- * during deserialization of node data.
+ * Type of callback that is called when an error occurs
+ * during node deserialization.
  */
 typedef void           (* GskParseErrorFunc)                    (const GskParseLocation *start,
                                                                  const GskParseLocation *end,

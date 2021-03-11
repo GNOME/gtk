@@ -19,18 +19,18 @@
  */
 
 /**
- * SECTION:gtkgestureswipe
- * @Short_description: Swipe gesture
- * @Title: GtkGestureSwipe
+ * GtkGestureSwipe:
  *
- * #GtkGestureSwipe is a #GtkGesture implementation able to recognize
- * swipes, after a press/move/.../move/release sequence happens, the
- * #GtkGestureSwipe::swipe signal will be emitted, providing the velocity
- * and directionality of the sequence at the time it was lifted.
+ * `GtkGestureSwipe` is a `GtkGesture` for swipe gestures.
+ *
+ * After a press/move/.../move/release sequence happens, the
+ * [signal@Gtk.GestureSwipe::swipe] signal will be emitted,
+ * providing the velocity and directionality of the sequence
+ * at the time it was lifted.
  *
  * If the velocity is desired in intermediate points,
- * gtk_gesture_swipe_get_velocity() can be called on eg. a
- * #GtkGesture::update handler.
+ * [method@Gtk.GestureSwipe.get_velocity] can be called in a
+ * [signal@Gtk.Gesture::update] handler.
  *
  * All velocities are reported in pixels/sec units.
  */
@@ -240,8 +240,9 @@ gtk_gesture_swipe_class_init (GtkGestureSwipeClass *klass)
    * @velocity_x: velocity in the X axis, in pixels/sec
    * @velocity_y: velocity in the Y axis, in pixels/sec
    *
-   * This signal is emitted when the recognized gesture is finished, velocity
-   * and direction are a product of previously recorded events.
+   * Emitted when the recognized gesture is finished.
+   *
+   * Velocity and direction are a product of previously recorded events.
    */
   signals[SWIPE] =
     g_signal_new (I_("swipe"),
@@ -268,10 +269,10 @@ gtk_gesture_swipe_init (GtkGestureSwipe *gesture)
 /**
  * gtk_gesture_swipe_new:
  *
- * Returns a newly created #GtkGesture that recognizes swipes.
+ * Returns a newly created `GtkGesture` that recognizes swipes.
  *
- * Returns: a newly created #GtkGestureSwipe
- **/
+ * Returns: a newly created `GtkGestureSwipe`
+ */
 GtkGesture *
 gtk_gesture_swipe_new (void)
 {
@@ -281,16 +282,18 @@ gtk_gesture_swipe_new (void)
 
 /**
  * gtk_gesture_swipe_get_velocity:
- * @gesture: a #GtkGestureSwipe
+ * @gesture: a `GtkGestureSwipe`
  * @velocity_x: (out): return value for the velocity in the X axis, in pixels/sec
  * @velocity_y: (out): return value for the velocity in the Y axis, in pixels/sec
  *
- * If the gesture is recognized, this function returns %TRUE and fill in
- * @velocity_x and @velocity_y with the recorded velocity, as per the
- * last event(s) processed.
+ * Gets the current velocity.
+ *
+ * If the gesture is recognized, this function returns %TRUE and fills
+ * in @velocity_x and @velocity_y with the recorded velocity, as per the
+ * last events processed.
  *
  * Returns: whether velocity could be calculated
- **/
+ */
 gboolean
 gtk_gesture_swipe_get_velocity (GtkGestureSwipe *gesture,
                                 double          *velocity_x,

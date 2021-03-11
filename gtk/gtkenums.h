@@ -32,13 +32,6 @@
 #include <glib-object.h>
 
 
-/**
- * SECTION:gtkenums
- * @Short_description: Public enumerated types used throughout GTK
- * @Title: Standard Enumerations
- */
-
-
 G_BEGIN_DECLS
 
 /**
@@ -54,12 +47,11 @@ G_BEGIN_DECLS
  * @GTK_ALIGN_BASELINE: align the widget according to the baseline. See
  *     #GtkWidget
  *
- * Controls how a widget deals with extra space in a single (x or y)
- * dimension.
+ * Controls how a widget deals with extra space in a single dimension.
  *
  * Alignment only matters if the widget receives a “too large” allocation,
- * for example if you packed the widget with the #GtkWidget:hexpand
- * property inside a #GtkBox, then the widget might get extra space.
+ * for example if you packed the widget with the [property@Gtk.Widget:hexpand]
+ * property inside a `GtkBox`, then the widget might get extra space.
  * If you have for example a 16x16 icon inside a 32x32 space, the icon
  * could be scaled and stretched, it could be centered, or it could be
  * positioned to one side of the space.
@@ -105,11 +97,13 @@ typedef enum
  * @GTK_BASELINE_POSITION_CENTER: Center the baseline
  * @GTK_BASELINE_POSITION_BOTTOM: Align the baseline at the bottom
  *
+ * Baseline position in a row of widgets.
+ *
  * Whenever a container has some form of natural row it may align
  * children in that row along a common typographical baseline. If
  * the amount of vertical space in the row is taller than the total
  * requested height of the baseline-aligned children then it can use a
- * #GtkBaselinePosition to select where to put the baseline inside the
+ * `GtkBaselinePosition` to select where to put the baseline inside the
  * extra available space.
  */
 typedef enum
@@ -136,7 +130,7 @@ typedef enum
  * @GTK_DELETE_PARAGRAPHS: Delete entire line. Like C-k in pico.
  * @GTK_DELETE_WHITESPACE: Delete only whitespace. Like M-\ in Emacs.
  *
- * See also: #GtkEntry::delete-from-cursor.
+ * Passed to various keybinding signals for deleting text.
  */
 typedef enum
 {
@@ -183,9 +177,10 @@ typedef enum
  * Icon sizes default to being inherited. Where they cannot be
  * inherited, text size is the default.
  *
- * All widgets which use GtkIconSize set the normal-icons or large-icons
- * style classes correspondingly, and let themes determine the actual size
- * to be used with the -gtk-icon-size CSS property.
+ * All widgets which use `GtkIconSize` set the normal-icons or
+ * large-icons style classes correspondingly, and let themes
+ * determine the actual size to be used with the
+ * `-gtk-icon-size` CSS property.
  */
 typedef enum
 {
@@ -234,7 +229,7 @@ typedef enum
  * @GTK_JUSTIFY_CENTER: The text is placed in the center of the label.
  * @GTK_JUSTIFY_FILL: The text is placed is distributed across the label.
  *
- * Used for justifying the text inside a #GtkLabel widget.
+ * Used for justifying the text inside a `GtkLabel` widget.
  */
 typedef enum
 {
@@ -252,7 +247,7 @@ typedef enum
  * @GTK_MESSAGE_ERROR: Fatal error message
  * @GTK_MESSAGE_OTHER: None of the above
  *
- * The type of message being displayed in the dialog.
+ * The type of message being displayed in a `GtkMessageDialog`.
  */
 typedef enum
 {
@@ -275,6 +270,9 @@ typedef enum
  * @GTK_MOVEMENT_PAGES:             Move by pages
  * @GTK_MOVEMENT_BUFFER_ENDS:       Move to ends of the buffer
  * @GTK_MOVEMENT_HORIZONTAL_PAGES:  Move horizontally by pages
+ *
+ * Passed as argument to various keybinding signals for moving the
+ * cursor position.
  */
 typedef enum
 {
@@ -298,6 +296,8 @@ typedef enum
  * @GTK_SCROLL_HORIZONTAL_STEPS: Scroll in horizontal steps.
  * @GTK_SCROLL_HORIZONTAL_PAGES: Scroll by horizontal pages.
  * @GTK_SCROLL_HORIZONTAL_ENDS: Scroll to the horizontal ends.
+ *
+ * Passed as argument to various keybinding signals.
  */
 typedef enum
 {
@@ -314,9 +314,9 @@ typedef enum
  * @GTK_ORIENTATION_HORIZONTAL: The element is in horizontal orientation.
  * @GTK_ORIENTATION_VERTICAL: The element is in vertical orientation.
  *
- * Represents the orientation of widgets and other objects which can be switched
- * between horizontal and vertical orientation on the fly, like #GtkBox or
- * #GtkGesturePan.
+ * Represents the orientation of widgets and other objects.
+ *
+ * Typical examples are `GtkBox or `GtkGesturePan`.
  */
 typedef enum
 {
@@ -331,9 +331,11 @@ typedef enum
  * @GTK_OVERFLOW_HIDDEN: Content is clipped to the bounds of the area. Content
  *     outside the area is not drawn and cannot be interacted with.
  *
- * Defines how content overflowing a given area should be handled, such as
- * with gtk_widget_set_overflow(). This property is modeled after the CSS overflow
- * property, but implements it only partially.
+ * Defines how content overflowing a given area should be handled.
+ *
+ * This is used in [method@Gtk.Widget.set_overflow]. The
+ * [property@Gtk.Widget:overflow] property is modeled after the
+ * CSS overflow property, but implements it only partially.
  */
 typedef enum
 {
@@ -347,7 +349,8 @@ typedef enum
  * @GTK_PACK_END: The child is packed into the end of the widget
  *
  * Represents the packing location of a children in its parent.
- * See #GtkWindowControls for example.
+ *
+ * See `GtkWindowControls` for example.
  */
 typedef enum
 {
@@ -362,8 +365,10 @@ typedef enum
  * @GTK_POS_TOP: The feature is at the top edge.
  * @GTK_POS_BOTTOM: The feature is at the bottom edge.
  *
- * Describes which edge of a widget a certain feature is positioned at, e.g.
- * the tabs of a #GtkNotebook, or the label of a #GtkScale.
+ * Describes which edge of a widget a certain feature is positioned at.
+ *
+ * For examples, see the tabs of a `GtkNotebook`, or the label
+ * of a `GtkScale`.
  */
 typedef enum
 {
@@ -540,10 +545,10 @@ typedef enum
  *
  * Describes the way two values can be compared.
  *
- * These values can be used with a #GCompareFunc. However, a
- * #GCompareFunc is allowed to return any integer values.  
- * For converting such a value to a #GtkOrdering, use
- * gtk_ordering_from_cmpfunc().
+ * These values can be used with a `GCompareFunc`. However,
+ * a `GCompareFunc` is allowed to return any integer values.
+ * For converting such a value to a `GtkOrdering` value, use
+ * [func@Gtk.Ordering.from_cmpfunc].
  */
 typedef enum {
   GTK_ORDERING_SMALLER = -1,
@@ -551,19 +556,29 @@ typedef enum {
   GTK_ORDERING_LARGER = 1
 } GtkOrdering;
 
+/* The GI scanner does not handle static inline functions, because
+ * of the `static` keyword; so we clip this out when parsing the
+ * header, and we replace it with a real function in gtksorter.c
+ * that only exists when parsing the source for introspection.
+ */
+#ifdef __GI_SCANNER__
+GtkOrdering     gtk_ordering_from_cmpfunc       (int cmpfunc_result);
+#else
 /**
  * gtk_ordering_from_cmpfunc:
  * @cmpfunc_result: Result of a comparison function
  *
- * Converts the result of a #GCompareFunc like strcmp() to a #GtkOrdering.
+ * Converts the result of a `GCompareFunc` like strcmp() to a
+ * `GtkOrdering` value.
  *
- * Returns: the corresponding #GtkOrdering
+ * Returns: the corresponding `GtkOrdering`
  **/
 static inline GtkOrdering
 gtk_ordering_from_cmpfunc (int cmpfunc_result)
 {
   return (GtkOrdering) ((cmpfunc_result > 0) - (cmpfunc_result < 0));
 }
+#endif
 
 /**
  * GtkPageOrientation:
@@ -717,9 +732,11 @@ typedef enum
  * @GTK_STATE_FLAG_FOCUS_VISIBLE: Widget has the visible focus
  * @GTK_STATE_FLAG_FOCUS_WITHIN: Widget contains the keyboard focus
  *
- * Describes a widget state. Widget states are used to match the widget
- * against CSS pseudo-classes. Note that GTK extends the regular CSS
- * classes and sometimes uses different names.
+ * Describes a widget state.
+ *
+ * Widget states are used to match the widget against CSS pseudo-classes.
+ * Note that GTK extends the regular CSS classes and sometimes uses
+ * different names.
  */
 typedef enum
 {
@@ -774,7 +791,8 @@ typedef enum {
  * @GTK_LEVEL_BAR_MODE_CONTINUOUS: the bar has a continuous mode
  * @GTK_LEVEL_BAR_MODE_DISCRETE: the bar has a discrete mode
  *
- * Describes how #GtkLevelBar contents should be rendered.
+ * Describes how `GtkLevelBar` contents should be rendered.
+ *
  * Note that this enumeration could be extended with additional modes
  * in the future.
  */
@@ -799,9 +817,10 @@ G_END_DECLS
  * @GTK_INPUT_PURPOSE_PIN: Like %GTK_INPUT_PURPOSE_DIGITS, but characters are hidden
  * @GTK_INPUT_PURPOSE_TERMINAL: Allow any character, in addition to control codes
  *
- * Describes primary purpose of the input widget. This information is
- * useful for on-screen keyboards and similar input methods to decide
- * which keys should be presented to the user.
+ * Describes primary purpose of the input widget.
+ *
+ * This information is useful for on-screen keyboards and similar input
+ * methods to decide which keys should be presented to the user.
  *
  * Note that the purpose is not meant to impose a totally strict rule
  * about allowed characters, and does not replace input validation.
@@ -854,8 +873,10 @@ typedef enum
  *    update personalized data (like typing history)
  *
  * Describes hints that might be taken into account by input methods
- * or applications. Note that input methods may already tailor their
- * behaviour according to the #GtkInputPurpose of the entry.
+ * or applications.
+ *
+ * Note that input methods may already tailor their behaviour according
+ * to the `GtkInputPurpose` of the entry.
  *
  * Some common sense is expected when using these flags - mixing
  * %GTK_INPUT_HINT_LOWERCASE with any of the uppercase hints makes no sense.
@@ -894,7 +915,7 @@ typedef enum
  *   note that widget implementations must chain up on button, motion, touch and
  *   grab broken handlers for controllers in this phase to be run.
  *
- * Describes the stage at which events are fed into a #GtkEventController.
+ * Describes the stage at which events are fed into a `GtkEventController`.
  */
 typedef enum
 {
@@ -912,7 +933,7 @@ typedef enum
  *   is in the same #GtkNative as the event controllers widget. Note
  *   that some event types have two targets (origin and destination).
  *
- * Describes limits of a #GtkEventController for handling events
+ * Describes limits of a `GtkEventController` for handling events
  * targeting other widgets.
  */
 typedef enum
@@ -927,7 +948,7 @@ typedef enum
  * @GTK_EVENT_SEQUENCE_CLAIMED: The sequence is handled and grabbed.
  * @GTK_EVENT_SEQUENCE_DENIED: The sequence is denied.
  *
- * Describes the state of a #GdkEventSequence in a #GtkGesture.
+ * Describes the state of a `GdkEventSequence` in a `GtkGesture`.
  */
 typedef enum
 {
@@ -943,7 +964,7 @@ typedef enum
  * @GTK_PAN_DIRECTION_UP: panned upwards
  * @GTK_PAN_DIRECTION_DOWN: panned downwards
  *
- * Describes the panning direction of a #GtkGesturePan
+ * Describes the panning direction of a `GtkGesturePan`
  */
 typedef enum
 {
@@ -962,8 +983,8 @@ typedef enum
  * @GTK_SHORTCUT_SCOPE_GLOBAL: Shortcuts are handled by
  *     the root widget.
  *
- * Describes where #GtkShortcuts added to a
- * #GtkShortcutController get handled.
+ * Describes where `GtkShortcut`s added to a
+ * `GtkShortcutController` get handled.
  */
 typedef enum
 {
@@ -976,9 +997,9 @@ typedef enum
  * GtkPickFlags:
  * @GTK_PICK_DEFAULT: The default behavior, include widgets that are receiving events
  * @GTK_PICK_INSENSITIVE: Include widgets that are insensitive
- * @GTK_PICK_NON_TARGETABLE: Include widgets that are marked as non-targetable. See #GtkWidget:can-target 
- * 
- * Flags that influence the behavior of gtk_widget_pick()
+ * @GTK_PICK_NON_TARGETABLE: Include widgets that are marked as non-targetable. See #GtkWidget:can-target
+ *
+ * Flags that influence the behavior of gtk_widget_pick().
  */
 typedef enum {
   GTK_PICK_DEFAULT        = 0,
@@ -1043,7 +1064,7 @@ typedef enum {
  *   vertical axis
  * @GTK_CONSTRAINT_ATTRIBUTE_BASELINE: The baseline of a widget
  *
- * The widget attributes that can be used when creating a #GtkConstraint.
+ * The widget attributes that can be used when creating a `GtkConstraint`.
  */
 typedef enum {
   GTK_CONSTRAINT_ATTRIBUTE_NONE,
@@ -1094,10 +1115,12 @@ typedef enum {
  *     icons to be looked up again
  *
  * Values that can be passed to the GtkWidgetClass.system_setting_changed
- * vfunc to indicate that a system setting has changed and widgets may
- * need to drop caches, or react otherwise.
+ * vfunc.
  *
- * Most of the values correspond to #GtkSettings properties.
+ * The values indicate which system setting has changed.
+ * Widgets may need to drop caches, or react otherwise.
+ *
+ * Most of the values correspond to `GtkSettings` properties.
  *
  * More values may be added over time.
  */
@@ -1210,7 +1233,7 @@ typedef enum {
  *    interface. This is the role that GTK uses by default for widgets.
  * @GTK_ACCESSIBLE_ROLE_WINDOW: An application window.
  *
- * The accessible role for a #GtkAccessible implementation.
+ * The accessible role for a `GtkAccessible` implementation.
  *
  * Abstract roles are only used as part of the ontology; application
  * developers must not use abstract roles in their code.
@@ -1320,7 +1343,7 @@ typedef enum {
  * @GTK_ACCESSIBLE_STATE_SELECTED: A “selected” state; set when a widget
  *   is selected. Value type: boolean or undefined
  *
- * The possible accessible states of a #GtkAccessible.
+ * The possible accessible states of a `GtkAccessible`.
  */
 typedef enum {
   GTK_ACCESSIBLE_STATE_BUSY,
@@ -1391,7 +1414,7 @@ typedef enum {
  * @GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT: Defines the human readable text alternative
  *    of aria-valuenow for a range widget. Value type: string
  *
- * The possible accessible properties of a #GtkAccessible.
+ * The possible accessible properties of a `GtkAccessible`.
  */
 typedef enum {
   GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE,
@@ -1461,7 +1484,8 @@ typedef enum {
  * @GTK_ACCESSIBLE_RELATION_SET_SIZE: Defines the number of items in the current
  *    set of listitems or treeitems. Value type: integer
  *
- * The possible accessible relations of a #GtkAccessible.
+ * The possible accessible relations of a `GtkAccessible`.
+ *
  * Accessible relations can be references to other widgets,
  * integers or strings.
  */

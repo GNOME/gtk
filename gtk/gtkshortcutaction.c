@@ -18,35 +18,35 @@
 */
 
 /**
-* SECTION:gtkshortcutaction
-* @Title: GtkShortcutAction
-* @Short_description: Tracking if shortcuts should be activated
-* @See_also: #GtkShortcut
+* GtkShortcutAction:
 *
-* #GtkShortcutAction is the object used to describe what a #GtkShortcut should
-* do when triggered. To activate a #GtkShortcutAction manually,
-* gtk_shortcut_action_activate() can be called.
+* `GtkShortcutAction` encodes an action that can be triggered by a
+* keyboard shortcut.
 *
-* #GtkShortcutActions contain functions that allow easy presentation to end
-* users as well as being printed for debugging.
+* `GtkShortcutActions` contain functions that allow easy presentation
+* to end users as well as being printed for debugging.
 *
-* All #GtkShortcutActions are immutable, you can only specify their properties
-* during construction. If you want to change a action, you have to replace it
-* with a new one. If you need to pass arguments to an action, these are specified
-* by the higher-level #GtkShortcut object.
+* All `GtkShortcutActions` are immutable, you can only specify their
+* properties during construction. If you want to change a action, you
+* have to replace it with a new one. If you need to pass arguments to
+* an action, these are specified by the higher-level `GtkShortcut` object.
+*
+* To activate a `GtkShortcutAction` manually, [method@Gtk.ShortcutAction.activate]
+* can be called.
 *
 * GTK provides various actions:
 *
-*  - #GtkMnemonicAction: a shortcut action that calls gtk_widget_mnemonic_activate()
-*  - #GtkCallbackAction: a shortcut action that invokes a given callback
-*  - #GtkSignalAction: a shortcut action that emits a given signal
-*  - #GtkActivateAction: a shortcut action that calls gtk_widget_activate()
-*  - #GtkNamedAction: a shortcut action that calls gtk_widget_activate_action()
-*  - #GtkNothingAction: a shortcut action that does nothing
-*
-* # GtkShortcutAction as GtkBuildable
-*
-* GtkShortcut
+*  - [class@Gtk.MnemonicAction]: a shortcut action that calls
+*    gtk_widget_mnemonic_activate()
+*  - [class@Gtk.CallbackAction]: a shortcut action that invokes
+*    a given callback
+*  - [class@Gtk.SignalAction]: a shortcut action that emits a
+*    given signal
+*  - [class@Gtk.ActivateAction]: a shortcut action that calls
+*    gtk_widget_activate()
+*  - [class@Gtk.NamedAction]: a shortcut action that calls
+*    gtk_widget_activate_action()
+*  - [class@Gtk.NothingAction]: a shortcut action that does nothing
 */
 
 #include "config.h"
@@ -91,11 +91,12 @@ gtk_shortcut_action_init (GtkShortcutAction *self)
 
 /**
  * gtk_shortcut_action_to_string:
- * @self: a #GtkShortcutAction
+ * @self: a `GtkShortcutAction`
  *
  * Prints the given action into a human-readable string.
- * This is a small wrapper around gtk_shortcut_action_print() to help
- * when debugging.
+ *
+ * This is a small wrapper around [method@Gtk.ShortcutAction.print]
+ * to help when debugging.
  *
  * Returns: (transfer full): a new string
  */
@@ -114,10 +115,11 @@ gtk_shortcut_action_to_string (GtkShortcutAction *self)
 
 /**
  * gtk_shortcut_action_print:
- * @self: a #GtkShortcutAction
- * @string: a #GString to print into
+ * @self: a `GtkShortcutAction`
+ * @string: a `GString` to print into
  *
  * Prints the given action into a string for the developer.
+ *
  * This is meant for debugging and logging.
  *
  * The form of the representation may change at any time and is
@@ -135,12 +137,12 @@ gtk_shortcut_action_print (GtkShortcutAction *self,
 
 /**
  * gtk_shortcut_action_activate:
- * @self: a #GtkShortcutAction
+ * @self: a `GtkShortcutAction`
  * @flags: flags to activate with
  * @widget: Target of the activation
  * @args: (allow-none): arguments to pass
  *
- * Activates the action on the @widget with the given @args. 
+ * Activates the action on the @widget with the given @args.
  *
  * Note that some actions ignore the passed in @flags, @widget or @args.
  *
@@ -193,19 +195,20 @@ string_is_function (const char *string,
  * gtk_shortcut_action_parse_string: (constructor)
  * @string: the string to parse
  *
- * Tries to parse the given string into an action. On
- * success, the parsed action is returned. When parsing
+ * Tries to parse the given string into an action.
+ *
+ * On success, the parsed action is returned. When parsing
  * failed, %NULL is returned.
  *
  * The accepted strings are:
  *
- *   - `nothing`, for #GtkNothingAction
- *   - `activate`, for #GtkActivateAction
- *   - `mnemonic-activate`, for #GtkMnemonicAction
- *   - `action(NAME)`, for a #GtkNamedAction for the action named `NAME`
- *   - `signal(NAME)`, for a #GtkSignalAction for the signal `NAME`
+ * - `nothing`, for `GtkNothingAction`
+ * - `activate`, for `GtkActivateAction`
+ * - `mnemonic-activate`, for `GtkMnemonicAction`
+ * - `action(NAME)`, for a `GtkNamedAction` for the action named `NAME`
+ * - `signal(NAME)`, for a `GtkSignalAction` for the signal `NAME`
  *
- * Returns: (nullable) (transfer full): a new #GtkShortcutAction
+ * Returns: (nullable) (transfer full): a new `GtkShortcutAction`
  *     or %NULL on error
  */
 GtkShortcutAction *
@@ -316,7 +319,9 @@ gtk_nothing_action_init (GtkNothingAction *self)
 /**
  * gtk_nothing_action_get:
  *
- * Gets the nothing action. This is an action that does nothing and where
+ * Gets the nothing action.
+ *
+ * This is an action that does nothing and where
  * activating it always fails.
  *
  * Returns: (transfer none) (type GtkNothingAction): The nothing action
@@ -488,7 +493,9 @@ gtk_activate_action_init (GtkActivateAction *self)
 /**
  * gtk_activate_action_get:
  *
- * Gets the activate action. This is an action that calls gtk_widget_activate()
+ * Gets the activate action.
+ *
+ * This is an action that calls gtk_widget_activate()
  * on the given widget upon activation.
  *
  * Returns: (transfer none) (type GtkActivateAction): The activate action
@@ -563,8 +570,10 @@ gtk_mnemonic_action_init (GtkMnemonicAction *self)
 /**
  * gtk_mnemonic_action_get:
  *
- * Gets the mnemonic action. This is an action that calls
- * gtk_widget_mnemonic_activate() on the given widget upon activation.
+ * Gets the mnemonic action.
+ *
+ * This is an action that calls gtk_widget_mnemonic_activate()
+ * on the given widget upon activation.
  *
  * Returns: (transfer none) (type GtkMnemonicAction): The mnemonic action
  */
@@ -933,7 +942,7 @@ gtk_signal_action_class_init (GtkSignalActionClass *klass)
   action_class->print = gtk_signal_action_print;
 
   /**
-   * GtkSignalAction:signal-name:
+   * GtkSignalAction:signal-name: (attributes org.gtk.Property.get=gtk_signal_action_get_signal_name)
    *
    * The name of the signal to emit.
    */
@@ -959,10 +968,11 @@ gtk_signal_action_init (GtkSignalAction *self)
  * @signal_name: name of the signal to emit
  *
  * Creates an action that when activated, emits the given action signal
- * on the provided widget unpacking the given args into arguments passed
- * to the signal.
+ * on the provided widget.
  *
- * Returns: (transfer full) (type GtkSignalAction): a new #GtkShortcutAction
+ * It will also unpack the args into arguments passed to the signal.
+ *
+ * Returns: (transfer full) (type GtkSignalAction): a new `GtkShortcutAction`
  */
 GtkShortcutAction *
 gtk_signal_action_new (const char *signal_name)
@@ -975,13 +985,13 @@ gtk_signal_action_new (const char *signal_name)
 }
 
 /**
- * gtk_signal_action_get_signal_name:
+ * gtk_signal_action_get_signal_name: (attributes org.gtk.Method.get_property=signal-name)
  * @self: a signal action
  *
  * Returns the name of the signal that will be emitted.
  *
  * Returns: (transfer none): the name of the signal to emit
- **/
+ */
 const char *
 gtk_signal_action_get_signal_name (GtkSignalAction *self)
 {
@@ -1174,7 +1184,7 @@ gtk_named_action_class_init (GtkNamedActionClass *klass)
   action_class->print = gtk_named_action_print;
 
   /**
-   * GtkNamedAction:action-name:
+   * GtkNamedAction:action-name: (attributes org.gtk.Property.get=gtk_named_action_get_action_name)
    *
    * The name of the action to activate.
    */
@@ -1199,13 +1209,16 @@ gtk_named_action_init (GtkNamedAction *self)
  * gtk_named_action_new:
  * @name: the detailed name of the action
  *
- * Creates an action that when activated, activates the action given by
- * the detailed @name on the widget passing the given arguments to it.
+ * Creates an action that when activated, activates
+ * the named action on the widget.
  *
- * See gtk_widget_insert_action_group() for how to add actions to widgets.
+ * It also passes the given arguments to it.
  *
- * Returns: (transfer full) (type GtkNamedAction): a new #GtkShortcutAction
- **/
+ * See [method@Gtk.Widget.insert_action_group] for
+ * how to add actions to widgets.
+ *
+ * Returns: (transfer full) (type GtkNamedAction): a new `GtkShortcutAction`
+ */
 GtkShortcutAction *
 gtk_named_action_new (const char *name)
 {
@@ -1217,7 +1230,7 @@ gtk_named_action_new (const char *name)
 }
 
 /**
- * gtk_named_action_get_action_name:
+ * gtk_named_action_get_action_name: (attributes org.gtk.Method.get_property=action-name)
  * @self: a named action
  *
  * Returns the name of the action that will be activated.

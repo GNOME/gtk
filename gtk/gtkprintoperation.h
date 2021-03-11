@@ -88,7 +88,9 @@ typedef enum {
  * @GTK_PRINT_OPERATION_RESULT_IN_PROGRESS: The print operation is not complete
  *     yet. This value will only be returned when running asynchronously.
  *
- * A value of this type is returned by gtk_print_operation_run().
+ * The result of a print operation.
+ *
+ * A value of this type is returned by [method@Gtk.PrintOperation.run].
  */
 typedef enum {
   GTK_PRINT_OPERATION_RESULT_ERROR,
@@ -106,8 +108,9 @@ typedef enum {
  * @GTK_PRINT_OPERATION_ACTION_EXPORT: Export to a file. This requires
  *     the export-filename property to be set.
  *
- * The @action parameter to gtk_print_operation_run()
- * determines what action the print operation should perform.
+ * Determines what action the print operation should perform.
+ *
+ * A parameter of this typs is passed to [method@Gtk.PrintOperation.run].
  */
 typedef enum {
   GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,

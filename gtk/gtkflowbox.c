@@ -24,12 +24,9 @@
 /* Preamble {{{1 */
 
 /**
- * SECTION:gtkflowbox
- * @Short_Description: A container that allows reflowing its children
- * @Title: GtkFlowBox
+ * GtkFlowBox:
  *
- * A GtkFlowBox positions child widgets in sequence according to its
- * orientation.
+ * A `GtkFlowBox` puts child widgets in reflowing grid.
  *
  * For instance, with the horizontal orientation, the widgets will be
  * arranged from left to right, starting a new row under the previous
@@ -41,22 +38,23 @@
  * Reducing the height will require more columns, so a larger width will
  * be requested.
  *
- * The size request of a GtkFlowBox alone may not be what you expect; if you
- * need to be able to shrink it along both axes and dynamically reflow its
- * children, you may have to wrap it in a #GtkScrolledWindow to enable that.
+ * The size request of a `GtkFlowBox` alone may not be what you expect;
+ * if you need to be able to shrink it along both axes and dynamically
+ * reflow its children, you may have to wrap it in a `GtkScrolledWindow`
+ * to enable that.
  *
- * The children of a GtkFlowBox can be dynamically sorted and filtered.
+ * The children of a `GtkFlowBox` can be dynamically sorted and filtered.
  *
- * Although a GtkFlowBox must have only #GtkFlowBoxChild children,
- * you can add any kind of widget to it via gtk_flow_box_insert(), and
- * a GtkFlowBoxChild widget will automatically be inserted between
- * the box and the widget.
+ * Although a `GtkFlowBox` must have only `GtkFlowBoxChild` children, you
+ * can add any kind of widget to it via [method@Gtk.FlowBox.insert], and a
+ * `GtkFlowBoxChild` widget will automatically be inserted between the box
+ * and the widget.
  *
- * Also see #GtkListBox.
+ * Also see [class@Gtk.ListBox].
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * flowbox
  * ├── flowboxchild
  * │   ╰── <child>
@@ -64,16 +62,22 @@
  * │   ╰── <child>
  * ┊
  * ╰── [rubberband]
- * ]|
+ * ```
  *
- * GtkFlowBox uses a single CSS node with name flowbox. GtkFlowBoxChild
- * uses a single CSS node with name flowboxchild.
- * For rubberband selection, a subnode with name rubberband is used.
+ * `GtkFlowBox` uses a single CSS node with name flowbox. `GtkFlowBoxChild`
+ * uses a single CSS node with name flowboxchild. For rubberband selection,
+ * a subnode with name rubberband is used.
  *
  * # Accessibility
  *
- * GtkFlowBox uses the #GTK_ACCESSIBLE_ROLE_GRID role, and GtkFlowBoxChild
- * uses the #GTK_ACCESSIBLE_ROLE_GRID_CELL role.
+ * `GtkFlowBox` uses the %GTK_ACCESSIBLE_ROLE_GRID role, and `GtkFlowBoxChild`
+ * uses the %GTK_ACCESSIBLE_ROLE_GRID_CELL role.
+ */
+
+/**
+ * GtkFlowBoxChild:
+ *
+ * `GtkFlowBoxChild` is the kind of widget that can be added to a `GtkFlowBox`.
  */
 
 #include <config.h>
@@ -245,7 +249,7 @@ path_from_vertical_line_rects (cairo_t      *cr,
     }
   while (end_line < n_lines);
 }
-
+ 
 /* GtkFlowBoxChild {{{1 */
 
 /* GObject boilerplate {{{2 */
@@ -519,6 +523,11 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
 
   class->activate = gtk_flow_box_child_activate;
 
+  /**
+   * GtkFlowBoxChild:child: (attributes org.gtk.Property.get=gtk_flow_box_child_get_child org.gtk.Property.set=gtk_flow_box_child_set_child)
+   *
+   * The child widget.
+   */
   g_object_class_install_property (object_class,
                                    PROP_CHILD,
                                    g_param_spec_object ("child",
@@ -531,13 +540,15 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
    * GtkFlowBoxChild::activate:
    * @child: The child on which the signal is emitted
    *
-   * The ::activate signal is emitted when the user activates
-   * a child widget in a #GtkFlowBox, either by clicking or
-   * double-clicking, or by using the Space or Enter key.
+   * Emitted when the user activates a child widget in a `GtkFlowBox`.
    *
-   * While this signal is used as a
-   * [keybinding signal][GtkSignalAction],
-   * it can be used by applications for their own purposes.
+   * This can be happen either by clicking or double-clicking,
+   * or via a keybinding.
+   *
+   * This is a [keybinding signal](class.SignalAction.html),
+   * but it can be used by applications for their own purposes.
+   *
+   * The default bindings are <kbd>Space</kbd> and <kbd>Enter</kbd>.
    */
   child_signals[CHILD_ACTIVATE] =
     g_signal_new (I_("activate"),
@@ -559,16 +570,17 @@ gtk_flow_box_child_init (GtkFlowBoxChild *child)
 {
   gtk_widget_set_focusable (GTK_WIDGET (child), TRUE);
 }
-
+ 
 /* Public API {{{2 */
 
 /**
  * gtk_flow_box_child_new:
  *
- * Creates a new #GtkFlowBoxChild, to be used as a child
- * of a #GtkFlowBox.
+ * Creates a new `GtkFlowBoxChild`.
  *
- * Returns: a new #GtkFlowBoxChild
+ * This should only be used as a child of a `GtkFlowBox`.
+ *
+ * Returns: a new `GtkFlowBoxChild`
  */
 GtkWidget *
 gtk_flow_box_child_new (void)
@@ -577,8 +589,8 @@ gtk_flow_box_child_new (void)
 }
 
 /**
- * gtk_flow_box_child_set_child:
- * @self: a #GtkFlowBoxChild
+ * gtk_flow_box_child_set_child: (attributes org.gtk.Method.set_property=child)
+ * @self: a `GtkFlowBoxChild`
  * @child: (allow-none): the child widget
  *
  * Sets the child widget of @self.
@@ -598,8 +610,8 @@ gtk_flow_box_child_set_child (GtkFlowBoxChild *self,
 }
 
 /**
- * gtk_flow_box_child_get_child:
- * @self: a #GtkFlowBoxChild
+ * gtk_flow_box_child_get_child: (attributes org.gtk.Method.get_property=child)
+ * @self: a `GtkFlowBoxChild`
  *
  * Gets the child widget of @self.
  *
@@ -615,9 +627,9 @@ gtk_flow_box_child_get_child (GtkFlowBoxChild *self)
 
 /**
  * gtk_flow_box_child_get_index:
- * @child: a #GtkFlowBoxChild
+ * @child: a `GtkFlowBoxChild`
  *
- * Gets the current index of the @child in its #GtkFlowBox container.
+ * Gets the current index of the @child in its `GtkFlowBox` container.
  *
  * Returns: the index of the @child, or -1 if the @child is not
  *     in a flow box.
@@ -639,10 +651,10 @@ gtk_flow_box_child_get_index (GtkFlowBoxChild *child)
 
 /**
  * gtk_flow_box_child_is_selected:
- * @child: a #GtkFlowBoxChild
+ * @child: a `GtkFlowBoxChild`
  *
  * Returns whether the @child is currently selected in its
- * #GtkFlowBox container.
+ * `GtkFlowBox` container.
  *
  * Returns: %TRUE if @child is selected
  */
@@ -656,10 +668,12 @@ gtk_flow_box_child_is_selected (GtkFlowBoxChild *child)
 
 /**
  * gtk_flow_box_child_changed:
- * @child: a #GtkFlowBoxChild
+ * @child: a `GtkFlowBoxChild`
  *
  * Marks @child as changed, causing any state that depends on this
- * to be updated. This affects sorting and filtering.
+ * to be updated.
+ *
+ * This affects sorting and filtering.
  *
  * Note that calls to this method must be in sync with the data
  * used for the sorting and filtering functions. For instance, if
@@ -671,9 +685,10 @@ gtk_flow_box_child_is_selected (GtkFlowBoxChild *child)
  *
  * This generally means that if you don’t fully control the data
  * model, you have to duplicate the data that affects the sorting
- * and filtering functions into the widgets themselves. Another
- * alternative is to call gtk_flow_box_invalidate_sort() on any
- * model change, but that is more expensive.
+ * and filtering functions into the widgets themselves.
+ *
+ * Another alternative is to call [method@Gtk.FlowBox.invalidate_sort]
+ * on any model change, but that is more expensive.
  */
 void
 gtk_flow_box_child_changed (GtkFlowBoxChild *child)
@@ -690,10 +705,10 @@ gtk_flow_box_child_changed (GtkFlowBoxChild *child)
   gtk_flow_box_apply_sort (box, child);
   gtk_flow_box_apply_filter (box, child);
 }
+ 
+/* G tkFlowBox  {{{1 */
 
-/* GtkFlowBox  {{{1 */
-
-/* Constants {{{2 */
+ /* Constants {{{2 */
 
 #define DEFAULT_MAX_CHILDREN_PER_LINE 7
 #define RUBBERBAND_START_DISTANCE 32
@@ -822,7 +837,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkFlowBox, gtk_flow_box, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_flow_box_buildable_iface_init))
-
+ 
 /*  Internal API, utilities {{{2 */ 
 
 #define ORIENTATION_ALIGN(box)                              \
@@ -3021,7 +3036,7 @@ gtk_flow_box_unmap (GtkWidget *widget)
 
 /**
  * gtk_flow_box_remove:
- * @box: a #GtkFlowBox
+ * @box: a `GtkFlowBox`
  * @widget: the child widget to remove
  *
  * Removes a child from @box.
@@ -3588,11 +3603,11 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
   /**
-   * GtkFlowBox:selection-mode:
+   * GtkFlowBox:selection-mode: (attributes org.gtk.Property.get=gtk_flow_box_get_selection_mode org.gtk.Property.set=gtk_flow_box_set_selection_mode)
    *
-   * The selection mode used by the flow  box.
+   * The selection mode used by the flow box.
    */
-  props[PROP_SELECTION_MODE] = 
+  props[PROP_SELECTION_MODE] =
     g_param_spec_enum ("selection-mode",
                        P_("Selection mode"),
                        P_("The selection mode"),
@@ -3601,7 +3616,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFlowBox:activate-on-single-click:
+   * GtkFlowBox:activate-on-single-click: (attributes org.gtk.Property.get=gtk_flow_box_get_activate_on_single_click org.gtk.Property.set=gtk_flow_box_set_activate_on_single_click)
    *
    * Determines whether children can be activated with a single
    * click, or require a double-click.
@@ -3613,6 +3628,11 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                           TRUE,
                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkFlwoBox:accept-unpaired-release:
+   *
+   * Whether to accept unpaired release events.
+   */
   props[PROP_ACCEPT_UNPAIRED_RELEASE] =
     g_param_spec_boolean ("accept-unpaired-release",
                           P_("Accept unpaired release"),
@@ -3621,12 +3641,12 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFlowBox:homogeneous:
+   * GtkFlowBox:homogeneous: (attributes org.gtk.Property.get=gtk_flow_box_get_homogeneous org.gtk.Property.set=gtk_flow_box_set_homogeneous)
    *
    * Determines whether all children should be allocated the
    * same size.
    */
-  props[PROP_HOMOGENEOUS] = 
+  props[PROP_HOMOGENEOUS] =
     g_param_spec_boolean ("homogeneous",
                           P_("Homogeneous"),
                           P_("Whether the children should all be the same size"),
@@ -3634,7 +3654,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFlowBox:min-children-per-line:
+   * GtkFlowBox:min-children-per-line: (attributes org.gtk.Property.get=gtk_flow_box_get_min_children_per_line org.gtk.Property.set=gtk_flow_box_set_min_children_per_line)
    *
    * The minimum number of children to allocate consecutively
    * in the given orientation.
@@ -3652,7 +3672,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFlowBox:max-children-per-line:
+   * GtkFlowBox:max-children-per-line: (attributes org.gtk.Property.get=gtk_flow_box_get_max_children_per_line org.gtk.Property.set=gtk_flow_box_set_max_children_per_line)
    *
    * The maximum amount of children to request space for consecutively
    * in the given orientation.
@@ -3666,7 +3686,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFlowBox:row-spacing:
+   * GtkFlowBox:row-spacing: (attributes org.gtk.Property.get=gtk_flow_box_get_row_spacing org.gtk.Property.set=gtk_flow_box_set_row_spacing)
    *
    * The amount of vertical space between two children.
    */
@@ -3678,7 +3698,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFlowBox:column-spacing:
+   * GtkFlowBox:column-spacing: (attributes org.gtk.Property.get=gtk_flow_box_get_column_spacing org.gtk.Property.set=gtk_flow_box_set_column_spacing)
    *
    * The amount of horizontal space between two children.
    */
@@ -3693,11 +3713,10 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
 
   /**
    * GtkFlowBox::child-activated:
-   * @box: the #GtkFlowBox on which the signal is emitted
+   * @box: the `GtkFlowBox` on which the signal is emitted
    * @child: the child that is activated
    *
-   * The ::child-activated signal is emitted when a child has been
-   * activated by the user.
+   * Emitted when a child has been activated by the user.
    */
   signals[CHILD_ACTIVATED] = g_signal_new (I_("child-activated"),
                                            GTK_TYPE_FLOW_BOX,
@@ -3710,13 +3729,12 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
 
   /**
    * GtkFlowBox::selected-children-changed:
-   * @box: the #GtkFlowBox on which the signal is emitted
+   * @box: the `GtkFlowBox` on which the signal is emitted
    *
-   * The ::selected-children-changed signal is emitted when the
-   * set of selected children changes.
+   * Emitted when the set of selected children changes.
    *
-   * Use gtk_flow_box_selected_foreach() or
-   * gtk_flow_box_get_selected_children() to obtain the
+   * Use [method@Gtk.FlowBox.selected_foreach] or
+   * [method@Gtk.FlowBox.get_selected_children] to obtain the
    * selected children.
    */
   signals[SELECTED_CHILDREN_CHANGED] = g_signal_new (I_("selected-children-changed"),
@@ -3729,11 +3747,11 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
 
   /**
    * GtkFlowBox::activate-cursor-child:
-   * @box: the #GtkFlowBox on which the signal is emitted
+   * @box: the `GtkFlowBox` on which the signal is emitted
    *
-   * The ::activate-cursor-child signal is a
-   * [keybinding signal][GtkSignalAction]
-   * which gets emitted when the user activates the @box.
+   * Emitted when the user activates the @box.
+   *
+   * This is a [keybinding signal](class.SignalAction.html).
    */
   signals[ACTIVATE_CURSOR_CHILD] = g_signal_new (I_("activate-cursor-child"),
                                                  GTK_TYPE_FLOW_BOX,
@@ -3745,13 +3763,13 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
 
   /**
    * GtkFlowBox::toggle-cursor-child:
-   * @box: the #GtkFlowBox on which the signal is emitted
+   * @box: the `GtkFlowBox` on which the signal is emitted
    *
-   * The ::toggle-cursor-child signal is a
-   * [keybinding signal][GtkSignalAction]
-   * which toggles the selection of the child that has the focus.
+   * Emitted to toggle the selection of the child that has the focus.
    *
-   * The default binding for this signal is Ctrl-Space.
+   * This is a [keybinding signal](class.SignalAction.html).
+   *
+   * The default binding for this signal is <kbd>Ctrl</kbd>-<kbd>Space</kbd>.
    */
   signals[TOGGLE_CURSOR_CHILD] = g_signal_new (I_("toggle-cursor-child"),
                                                GTK_TYPE_FLOW_BOX,
@@ -3763,16 +3781,15 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
 
   /**
    * GtkFlowBox::move-cursor:
-   * @box: the #GtkFlowBox on which the signal is emitted
+   * @box: the `GtkFlowBox` on which the signal is emitted
    * @step: the granularity fo the move, as a #GtkMovementStep
    * @count: the number of @step units to move
    * @extend: whether to extend the selection
    * @modify: whether to modify the selection
    *
-   * The ::move-cursor signal is a
-   * [keybinding signal][GtkSignalAction]
-   * which gets emitted when the user initiates a cursor movement.
+   * Emitted when the user initiates a cursor movement.
    *
+   * This is a [keybinding signal](class.SignalAction.html).
    * Applications should not connect to it, but may emit it with
    * g_signal_emit_by_name() if they need to control the cursor
    * programmatically.
@@ -3781,10 +3798,12 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * the variant with the Shift modifier extends the selection,
    * the variant without the Shift modifier does not.
    * There are too many key combinations to list them all here.
-   * - Arrow keys move by individual children
-   * - Home/End keys move to the ends of the box
-   * - PageUp/PageDown keys move vertically by pages
    *
+   * - <kbd>←</kbd>, <kbd>→</kbd>, <kbd>↑</kbd>, <kbd>↓</kbd>
+   *   move by individual children
+   * - <kbd>Home</kbd>, <kbd>End</kbd> move to the ends of the box
+   * - <kbd>PgUp</kbd>, <kbd>PgDn</kbd> move vertically by pages
+
    * Returns: %TRUE to stop other handlers from being invoked for the event.
    * %FALSE to propagate the event further.
    */
@@ -3801,14 +3820,14 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                               _gtk_marshal_BOOLEAN__ENUM_INT_BOOLEAN_BOOLEANv);
   /**
    * GtkFlowBox::select-all:
-   * @box: the #GtkFlowBox on which the signal is emitted
+   * @box: the `GtkFlowBox` on which the signal is emitted
    *
-   * The ::select-all signal is a
-   * [keybinding signal][GtkSignalAction]
-   * which gets emitted to select all children of the box, if
-   * the selection mode permits it.
+   * Emitted to select all children of the box,
+   * if the selection mode permits it.
    *
-   * The default bindings for this signal is Ctrl-a.
+   * This is a [keybinding signal](class.SignalAction.html).
+   *
+   * The default bindings for this signal is <kbd>Ctrl</kbd>-<kbd>a</kbd>.
    */
   signals[SELECT_ALL] = g_signal_new (I_("select-all"),
                                       GTK_TYPE_FLOW_BOX,
@@ -3820,14 +3839,14 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
 
   /**
    * GtkFlowBox::unselect-all:
-   * @box: the #GtkFlowBox on which the signal is emitted
+   * @box: the `GtkFlowBox` on which the signal is emitted
    *
-   * The ::unselect-all signal is a
-   * [keybinding signal][GtkSignalAction]
-   * which gets emitted to unselect all children of the box, if
-   * the selection mode permits it.
+   * Emitted to unselect all children of the box,
+   * if the selection mode permits it.
    *
-   * The default bindings for this signal is Ctrl-Shift-a.
+   * This is a [keybinding signal](class.SignalAction.html).
+   *
+   * The default bindings for this signal is <kbd>Ctrl</kbd>-<kbd>Shift</kbd>-<kbd>a</kbd>.
    */
   signals[UNSELECT_ALL] = g_signal_new (I_("unselect-all"),
                                         GTK_TYPE_FLOW_BOX,
@@ -4019,15 +4038,15 @@ gtk_flow_box_buildable_iface_init (GtkBuildableIface *iface)
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 
   iface->add_child = gtk_flow_box_buildable_add_child;
-}
-  /* Public API {{{2 */
+} 
+   /* Public API {{{2 */
 
 /**
  * gtk_flow_box_new:
  *
- * Creates a GtkFlowBox.
+ * Creates a `GtkFlowBox`.
  *
- * Returns: a new #GtkFlowBox container
+ * Returns: a new `GtkFlowBox`
  */
 GtkWidget *
 gtk_flow_box_new (void)
@@ -4055,8 +4074,8 @@ gtk_flow_box_insert_widget (GtkFlowBox    *box,
 
 /**
  * gtk_flow_box_insert:
- * @box: a #GtkFlowBox
- * @widget: the #GtkWidget to add
+ * @box: a `GtkFlowBox`
+ * @widget: the `GtkWidget` to add
  * @position: the position to insert @child in
  *
  * Inserts the @widget into @box at @position.
@@ -4110,13 +4129,13 @@ gtk_flow_box_insert (GtkFlowBox *box,
 
 /**
  * gtk_flow_box_get_child_at_index:
- * @box: a #GtkFlowBox
+ * @box: a `GtkFlowBox`
  * @idx: the position of the child
  *
  * Gets the nth child in the @box.
  *
  * Returns: (transfer none) (nullable): the child widget, which will
- *     always be a #GtkFlowBoxChild or %NULL in case no child widget
+ *     always be a `GtkFlowBoxChild` or %NULL in case no child widget
  *     with the given index exists.
  */
 GtkFlowBoxChild *
@@ -4136,16 +4155,17 @@ gtk_flow_box_get_child_at_index (GtkFlowBox *box,
 
 /**
  * gtk_flow_box_get_child_at_pos:
- * @box: a #GtkFlowBox
+ * @box: a `GtkFlowBox`
  * @x: the x coordinate of the child
  * @y: the y coordinate of the child
  *
- * Gets the child in the (@x, @y) position. Both @x and @y are
- * assumed to be relative to the origin of @box.
+ * Gets the child in the (@x, @y) position.
+ *
+ * Both @x and @y are assumed to be relative to the origin of @box.
  *
  * Returns: (transfer none) (nullable): the child widget, which will
- *     always be a #GtkFlowBoxChild or %NULL in case no child widget
- *     exists for the given x and y coordinates.
+ *   always be a `GtkFlowBoxChild` or %NULL in case no child widget
+ *   exists for the given x and y coordinates.
  */
 GtkFlowBoxChild *
 gtk_flow_box_get_child_at_pos (GtkFlowBox *box,
@@ -4162,15 +4182,16 @@ gtk_flow_box_get_child_at_pos (GtkFlowBox *box,
 
 /**
  * gtk_flow_box_set_hadjustment:
- * @box: a #GtkFlowBox
+ * @box: a `GtkFlowBox`
  * @adjustment: an adjustment which should be adjusted
  *    when the focus is moved among the descendents of @container
  *
  * Hooks up an adjustment to focus handling in @box.
+ *
  * The adjustment is also used for autoscrolling during
- * rubberband selection. See gtk_scrolled_window_get_hadjustment()
+ * rubberband selection. See [method@Gtk.ScrolledWindow.get_hadjustment]
  * for a typical way of obtaining the adjustment, and
- * gtk_flow_box_set_vadjustment()for setting the vertical
+ * [method@Gtk.FlowBox.set_vadjustment] for setting the vertical
  * adjustment.
  *
  * The adjustments have to be in pixel units and in the same
@@ -4196,15 +4217,16 @@ gtk_flow_box_set_hadjustment (GtkFlowBox    *box,
 
 /**
  * gtk_flow_box_set_vadjustment:
- * @box: a #GtkFlowBox
+ * @box: a `GtkFlowBox`
  * @adjustment: an adjustment which should be adjusted
  *    when the focus is moved among the descendents of @container
  *
  * Hooks up an adjustment to focus handling in @box.
+ *
  * The adjustment is also used for autoscrolling during
- * rubberband selection. See gtk_scrolled_window_get_vadjustment()
+ * rubberband selection. See [method@Gtk.ScrolledWindow.get_vadjustment]
  * for a typical way of obtaining the adjustment, and
- * gtk_flow_box_set_hadjustment()for setting the horizontal
+ * [method@Gtk.FlowBox.set_hadjustment] for setting the horizontal
  * adjustment.
  *
  * The adjustments have to be in pixel units and in the same
@@ -4240,8 +4262,8 @@ gtk_flow_box_check_model_compat (GtkFlowBox *box)
 
 /**
  * gtk_flow_box_bind_model:
- * @box: a #GtkFlowBox
- * @model: (allow-none): the #GListModel to be bound to @box
+ * @box: a `GtkFlowBox`
+ * @model: (allow-none): the `GListModel` to be bound to @box
  * @create_widget_func: a function that creates widgets for items
  * @user_data: (closure): user data passed to @create_widget_func
  * @user_data_free_func: function for freeing @user_data
@@ -4256,11 +4278,10 @@ gtk_flow_box_check_model_compat (GtkFlowBox *box)
  * If @model is %NULL, @box is left empty.
  *
  * It is undefined to add or remove widgets directly (for example, with
- * gtk_flow_box_insert()) while @box is bound to a
- * model.
+ * [method@Gtk.FlowBox.insert]) while @box is bound to a model.
  *
  * Note that using a model is incompatible with the filtering and sorting
- * functionality in GtkFlowBox. When using a model, filtering and sorting
+ * functionality in `GtkFlowBox`. When using a model, filtering and sorting
  * should be implemented by the model.
  */
 void
@@ -4303,14 +4324,13 @@ gtk_flow_box_bind_model (GtkFlowBox                 *box,
   gtk_flow_box_bound_model_changed (model, 0, 0, g_list_model_get_n_items (model), box);
 }
 
-/* Setters and getters {{{2 */
+/*  Setters and getters {{{2 */
 
 /**
- * gtk_flow_box_get_homogeneous:
- * @box: a #GtkFlowBox
+ * gtk_flow_box_get_homogeneous: (attributes org.gtk.Method.get_property=homogeneous)
+ * @box: a `GtkFlowBox`
  *
- * Returns whether the box is homogeneous (all children are the
- * same size). See gtk_box_set_homogeneous().
+ * Returns whether the box is homogeneous.
  *
  * Returns: %TRUE if the box is homogeneous.
  */
@@ -4323,14 +4343,13 @@ gtk_flow_box_get_homogeneous (GtkFlowBox *box)
 }
 
 /**
- * gtk_flow_box_set_homogeneous:
- * @box: a #GtkFlowBox
+ * gtk_flow_box_set_homogeneous: (attributes org.gtk.Method.set_property=homogeneous)
+ * @box: a `GtkFlowBox`
  * @homogeneous: %TRUE to create equal allotments,
  *   %FALSE for variable allotments
  *
- * Sets the #GtkFlowBox:homogeneous property of @box, controlling
- * whether or not all children of @box are given equal space
- * in the box.
+ * Sets whether or not all children of @box are given
+ * equal space in the box.
  */
 void
 gtk_flow_box_set_homogeneous (GtkFlowBox *box,
@@ -4350,12 +4369,11 @@ gtk_flow_box_set_homogeneous (GtkFlowBox *box,
 }
 
 /**
- * gtk_flow_box_set_row_spacing:
- * @box: a #GtkFlowBox
+ * gtk_flow_box_set_row_spacing: (attributes org.gtk.Method.set_property=row-spacing)
+ * @box: a `GtkFlowBox`
  * @spacing: the spacing to use
  *
  * Sets the vertical space to add between children.
- * See the #GtkFlowBox:row-spacing property.
  */
 void
 gtk_flow_box_set_row_spacing (GtkFlowBox *box,
@@ -4373,8 +4391,8 @@ gtk_flow_box_set_row_spacing (GtkFlowBox *box,
 }
 
 /**
- * gtk_flow_box_get_row_spacing:
- * @box: a #GtkFlowBox
+ * gtk_flow_box_get_row_spacing: (attributes org.gtk.Method.get_property=row-spacing)
+ * @box: a `GtkFlowBox`
  *
  * Gets the vertical spacing.
  *
@@ -4389,12 +4407,11 @@ gtk_flow_box_get_row_spacing (GtkFlowBox *box)
 }
 
 /**
- * gtk_flow_box_set_column_spacing:
- * @box: a #GtkFlowBox
+ * gtk_flow_box_set_column_spacing: (attributes org.gtk.Method.set_property=column-spacing)
+ * @box: a `GtkFlowBox`
  * @spacing: the spacing to use
  *
  * Sets the horizontal space to add between children.
- * See the #GtkFlowBox:column-spacing property.
  */
 void
 gtk_flow_box_set_column_spacing (GtkFlowBox *box,
@@ -4412,8 +4429,8 @@ gtk_flow_box_set_column_spacing (GtkFlowBox *box,
 }
 
 /**
- * gtk_flow_box_get_column_spacing:
- * @box: a #GtkFlowBox
+ * gtk_flow_box_get_column_spacing: (attributes org.gtk.Method.get_property=column-spacing)
+ * @box: a `GtkFlowBox`
  *
  * Gets the horizontal spacing.
  *
@@ -4428,8 +4445,8 @@ gtk_flow_box_get_column_spacing (GtkFlowBox *box)
 }
 
 /**
- * gtk_flow_box_set_min_children_per_line:
- * @box: a #GtkFlowBox
+ * gtk_flow_box_set_min_children_per_line: (attributes org.gtk.Method.set_property=min-children-per-line)
+ * @box: a `GtkFlowBox`
  * @n_children: the minimum number of children per line
  *
  * Sets the minimum number of children to line up
@@ -4451,8 +4468,8 @@ gtk_flow_box_set_min_children_per_line (GtkFlowBox *box,
 }
 
 /**
- * gtk_flow_box_get_min_children_per_line:
- * @box: a #GtkFlowBox
+ * gtk_flow_box_get_min_children_per_line: (attributes org.gtk.Method.get_property=min-children-per-line)
+ * @box: a `GtkFlowBox`
  *
  * Gets the minimum number of children per line.
  *
@@ -4467,8 +4484,8 @@ gtk_flow_box_get_min_children_per_line (GtkFlowBox *box)
 }
 
 /**
- * gtk_flow_box_set_max_children_per_line:
- * @box: a #GtkFlowBox
+ * gtk_flow_box_set_max_children_per_line: (attributes org.gtk.Method.set_property=max-children-per-line)
+ * @box: a `GtkFlowBox`
  * @n_children: the maximum number of children per line
  *
  * Sets the maximum number of children to request and
@@ -4495,8 +4512,8 @@ gtk_flow_box_set_max_children_per_line (GtkFlowBox *box,
 }
 
 /**
- * gtk_flow_box_get_max_children_per_line:
- * @box: a #GtkFlowBox
+ * gtk_flow_box_get_max_children_per_line: (attributes org.gtk.Method.get_property=max-children-per-line)
+ * @box: a `GtkFlowBox`
  *
  * Gets the maximum number of children per line.
  *
@@ -4511,8 +4528,8 @@ gtk_flow_box_get_max_children_per_line (GtkFlowBox *box)
 }
 
 /**
- * gtk_flow_box_set_activate_on_single_click:
- * @box: a #GtkFlowBox
+ * gtk_flow_box_set_activate_on_single_click: (attributes org.gtk.Method.set_property=activate-on-single-click)
+ * @box: a `GtkFlowBox`
  * @single: %TRUE to emit child-activated on a single click
  *
  * If @single is %TRUE, children will be activated when you click
@@ -4534,8 +4551,8 @@ gtk_flow_box_set_activate_on_single_click (GtkFlowBox *box,
 }
 
 /**
- * gtk_flow_box_get_activate_on_single_click:
- * @box: a #GtkFlowBox
+ * gtk_flow_box_get_activate_on_single_click: (attributes org.gtk.Method.get_property=activate-on-single-click)
+ * @box: a `GtkFlowBox`
  *
  * Returns whether children activate on single clicks.
  *
@@ -4565,12 +4582,12 @@ gtk_flow_box_set_accept_unpaired_release (GtkFlowBox *box,
 
 /**
  * gtk_flow_box_get_selected_children:
- * @box: a #GtkFlowBox
+ * @box: a `GtkFlowBox`
  *
  * Creates a list of all selected children.
  *
  * Returns: (element-type GtkFlowBoxChild) (transfer container):
- *     A #GList containing the #GtkWidget for each selected child.
+ *     A `GList` containing the `GtkWidget` for each selected child.
  *     Free with g_list_free() when done.
  */
 GList *
@@ -4596,7 +4613,7 @@ gtk_flow_box_get_selected_children (GtkFlowBox *box)
 
 /**
  * gtk_flow_box_select_child:
- * @box: a #GtkFlowBox
+ * @box: a `GtkFlowBox`
  * @child: a child of @box
  *
  * Selects a single child of @box, if the selection
@@ -4614,7 +4631,7 @@ gtk_flow_box_select_child (GtkFlowBox      *box,
 
 /**
  * gtk_flow_box_unselect_child:
- * @box: a #GtkFlowBox
+ * @box: a `GtkFlowBox`
  * @child: a child of @box
  *
  * Unselects a single child of @box, if the selection
@@ -4632,7 +4649,7 @@ gtk_flow_box_unselect_child (GtkFlowBox      *box,
 
 /**
  * gtk_flow_box_select_all:
- * @box: a #GtkFlowBox
+ * @box: a `GtkFlowBox`
  *
  * Select all children of @box, if the selection
  * mode allows it.
@@ -4654,7 +4671,7 @@ gtk_flow_box_select_all (GtkFlowBox *box)
 
 /**
  * gtk_flow_box_unselect_all:
- * @box: a #GtkFlowBox
+ * @box: a `GtkFlowBox`
  *
  * Unselect all children of @box, if the selection
  * mode allows it.
@@ -4677,17 +4694,18 @@ gtk_flow_box_unselect_all (GtkFlowBox *box)
 
 /**
  * GtkFlowBoxForeachFunc:
- * @box: a #GtkFlowBox
- * @child: a #GtkFlowBoxChild
+ * @box: a `GtkFlowBox`
+ * @child: a `GtkFlowBoxChild`
  * @user_data: (closure): user data
  *
  * A function used by gtk_flow_box_selected_foreach().
+ *
  * It will be called on every selected child of the @box.
  */
 
 /**
  * gtk_flow_box_selected_foreach:
- * @box: a #GtkFlowBox
+ * @box: a `GtkFlowBox`
  * @func: (scope call): the function to call for each selected child
  * @data: user data to pass to the function
  *
@@ -4717,12 +4735,11 @@ gtk_flow_box_selected_foreach (GtkFlowBox            *box,
 }
 
 /**
- * gtk_flow_box_set_selection_mode:
- * @box: a #GtkFlowBox
+ * gtk_flow_box_set_selection_mode: (attributes org.gtk.Method.set_property=selection-mode)
+ * @box: a `GtkFlowBox`
  * @mode: the new selection mode
  *
  * Sets how selection works in @box.
- * See #GtkSelectionMode for details.
  */
 void
 gtk_flow_box_set_selection_mode (GtkFlowBox       *box,
@@ -4755,12 +4772,12 @@ gtk_flow_box_set_selection_mode (GtkFlowBox       *box,
 }
 
 /**
- * gtk_flow_box_get_selection_mode:
- * @box: a #GtkFlowBox
+ * gtk_flow_box_get_selection_mode: (attributes org.gtk.Method.get_property=selection-mode)
+ * @box: a `GtkFlowBox`
  *
  * Gets the selection mode of @box.
  *
- * Returns: the #GtkSelectionMode
+ * Returns: the `GtkSelectionMode`
  */
 GtkSelectionMode
 gtk_flow_box_get_selection_mode (GtkFlowBox *box)
@@ -4769,40 +4786,43 @@ gtk_flow_box_get_selection_mode (GtkFlowBox *box)
 
   return BOX_PRIV (box)->selection_mode;
 }
-
+ 
 /* Filtering {{{2 */
 
 /**
  * GtkFlowBoxFilterFunc:
- * @child: a #GtkFlowBoxChild that may be filtered
+ * @child: a `GtkFlowBoxChild` that may be filtered
  * @user_data: (closure): user data
  *
  * A function that will be called whenever a child changes
- * or is added. It lets you control if the child should be
- * visible or not.
+ * or is added.
+ *
+ * It lets you control if the child should be visible or not.
  *
  * Returns: %TRUE if the row should be visible, %FALSE otherwise
  */
 
 /**
  * gtk_flow_box_set_filter_func:
- * @box: a #GtkFlowBox
+ * @box: a `GtkFlowBox`
  * @filter_func: (allow-none): callback that
  *     lets you filter which children to show
  * @user_data: (closure): user data passed to @filter_func
  * @destroy: destroy notifier for @user_data
  *
  * By setting a filter function on the @box one can decide dynamically
- * which of the children to show. For instance, to implement a search
- * function that only shows the children matching the search terms.
+ * which of the children to show.
+ *
+ * For instance, to implement a search function that only shows the
+ * children matching the search terms.
  *
  * The @filter_func will be called for each child after the call, and
  * it will continue to be called each time a child changes (via
- * gtk_flow_box_child_changed()) or when gtk_flow_box_invalidate_filter()
- * is called.
+ * [method@Gtk.FlowBoxChild.changed]) or when
+ * [method@Gtk.FlowBox.invalidate_filter] is called.
  *
  * Note that using a filter function is incompatible with using a model
- * (see gtk_flow_box_bind_model()).
+ * (see [method@Gtk.FlowBox.bind_model]).
  */
 void
 gtk_flow_box_set_filter_func (GtkFlowBox           *box,
@@ -4830,7 +4850,7 @@ gtk_flow_box_set_filter_func (GtkFlowBox           *box,
 
 /**
  * gtk_flow_box_invalidate_filter:
- * @box: a #GtkFlowBox
+ * @box: a `GtkFlowBox`
  *
  * Updates the filtering for all children.
  *
@@ -4848,7 +4868,7 @@ gtk_flow_box_invalidate_filter (GtkFlowBox *box)
   if (BOX_PRIV (box)->filter_func != NULL)
     gtk_flow_box_apply_filter_all (box);
 }
-
+ 
 /* Sorting {{{2 */
 
 /**
@@ -4866,7 +4886,7 @@ gtk_flow_box_invalidate_filter (GtkFlowBox *box)
 
 /**
  * gtk_flow_box_set_sort_func:
- * @box: a #GtkFlowBox
+ * @box: a `GtkFlowBox`
  * @sort_func: (allow-none): the sort function
  * @user_data: (closure): user data passed to @sort_func
  * @destroy: destroy notifier for @user_data
@@ -4877,11 +4897,11 @@ gtk_flow_box_invalidate_filter (GtkFlowBox *box)
  *
  * The @sort_func will be called for each child after the call,
  * and will continue to be called each time a child changes (via
- * gtk_flow_box_child_changed()) and when gtk_flow_box_invalidate_sort()
- * is called.
+ * [method@Gtk.FlowBoxChild.changed]) and when
+ * [method@Gtk.FlowBox.invalidate_sort] is called.
  *
  * Note that using a sort function is incompatible with using a model
- * (see gtk_flow_box_bind_model()).
+ * (see [method@Gtk.FlowBox.bind_model]).
  */
 void
 gtk_flow_box_set_sort_func (GtkFlowBox         *box,
@@ -4932,7 +4952,7 @@ gtk_flow_box_reorder_foreach (gpointer data,
 
 /**
  * gtk_flow_box_invalidate_sort:
- * @box: a #GtkFlowBox
+ * @box: a `GtkFlowBox`
  *
  * Updates the sorting for all children.
  *

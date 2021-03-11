@@ -22,44 +22,50 @@
  */
 
 /**
- * SECTION:gtkassistant
- * @Short_description: A widget used to guide users through multi-step operations
- * @Title: GtkAssistant
+ * GtkAssistant:
  *
- * A #GtkAssistant is a widget used to represent a generally complex
- * operation split up into several steps. Each step consists of one or more
- * pages. GtkAssistant guides the user through the pages, and controls 
- * the page flow to collect the data needed for the operation.
+ * `GtkAssistant` is used to represent a complex as a series of steps.
  *
- * GtkAssistant handles which buttons to show and to make sensitive based 
- * on page sequence knowledge and the [type][GtkAssistantPageType] 
- * of each page in addition to state information like the 
- * [completion][gtk-assistant-set-page-complete]
- * and [committed][gtk-assistant-commit] page statuses.
+ * ![An example GtkAssistant](assistant.png)
  *
- * If you have a case that doesn’t quite fit in #GtkAssistants way of
- * handling buttons, you can use the #GTK_ASSISTANT_PAGE_CUSTOM page
+ * Each step consists of one or more pages. `GtkAssistant` guides the user
+ * through the pages, and controls the page flow to collect the data needed
+ * for the operation.
+ *
+ * `GtkAssistant` handles which buttons to show and to make sensitive based
+ * on page sequence knowledge and the [enum@Gtk.AssistantPageType] of each
+ * page in addition to state information like the *completed* and *committed*
+ * page statuses.
+ *
+ * If you have a case that doesn’t quite fit in `GtkAssistant`s way of
+ * handling buttons, you can use the %GTK_ASSISTANT_PAGE_CUSTOM page
  * type and handle buttons yourself.
  *
- * GtkAssistant maintains a #GtkAssistantPage object for each added
+ * `GtkAssistant` maintains a `GtkAssistantPage` object for each added
  * child, which holds additional per-child properties. You
- * obtain the #GtkAssistantPage for a child with gtk_assistant_get_page().
- * 
+ * obtain the `GtkAssistantPage` for a child with [method@Gtk.Assistant.get_page].
+ *
  * # GtkAssistant as GtkBuildable
  *
- * The GtkAssistant implementation of the #GtkBuildable interface
+ * The `GtkAssistant` implementation of the `GtkBuildable` interface
  * exposes the @action_area as internal children with the name
  * “action_area”.
  *
- * To add pages to an assistant in #GtkBuilder, simply add it as a
- * child to the GtkAssistant object. If you need to set per-object
- * properties, create a #GtkAssistantPage object explicitly, and
+ * To add pages to an assistant in `GtkBuilder`, simply add it as a
+ * child to the `GtkAssistant` object. If you need to set per-object
+ * properties, create a `GtkAssistantPage` object explicitly, and
  * set the child widget as a property on it.
  *
  * # CSS nodes
  *
- * GtkAssistant has a single CSS node with the name window and style
+ * `GtkAssistant` has a single CSS node with the name window and style
  * class .assistant.
+ */
+
+/**
+ * GtkAssistantPage:
+ *
+ * `GtkAssistantPage` is an auxiliary object used by `GtkAssistant.
  */
 
 #include "config.h"
@@ -270,9 +276,10 @@ gtk_assistant_page_class_init (GtkAssistantPageClass *class)
   /**
    * GtkAssistantPage:complete:
    *
-   * Setting the "complete" property to %TRUE marks a page as
-   * complete (i.e.: all the required fields are filled out). GTK uses
-   * this information to control the sensitivity of the navigation buttons.
+   * Whether all required fields are filled in.
+   *
+   * GTK uses this information to control the sensitivity
+   * of the navigation buttons.
    */
   g_object_class_install_property (object_class,
                                    CHILD_PROP_PAGE_COMPLETE,
@@ -281,6 +288,12 @@ gtk_assistant_page_class_init (GtkAssistantPageClass *class)
                                                          P_("Whether all required fields on the page have been filled out"),
                                                          FALSE,
                                                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
+   * GtkAssistantPage:child:
+   *
+   * The child widget.
+   */
   g_object_class_install_property (object_class,
                                    CHILD_PROP_CHILD,
                                    g_param_spec_object ("child",
@@ -485,9 +498,9 @@ gtk_assistant_class_init (GtkAssistantClass *class)
 
   /**
    * GtkAssistant::cancel:
-   * @assistant: the #GtkAssistant
+   * @assistant: the `GtkAssistant`
    *
-   * The ::cancel signal is emitted when then the cancel button is clicked.
+   * Emitted when then the cancel button is clicked.
    */
   signals[CANCEL] =
     g_signal_new (I_("cancel"),
@@ -500,11 +513,11 @@ gtk_assistant_class_init (GtkAssistantClass *class)
 
   /**
    * GtkAssistant::prepare:
-   * @assistant: the #GtkAssistant
+   * @assistant: the `GtkAssistant`
    * @page: the current page
    *
-   * The ::prepare signal is emitted when a new page is set as the
-   * assistant's current page, before making the new page visible.
+   * Emitted when a new page is set as the assistant's current page,
+   * before making the new page visible.
    *
    * A handler for this signal can do any preparations which are
    * necessary before showing @page.
@@ -520,19 +533,19 @@ gtk_assistant_class_init (GtkAssistantClass *class)
 
   /**
    * GtkAssistant::apply:
-   * @assistant: the #GtkAssistant
+   * @assistant: the `GtkAssistant`
    *
-   * The ::apply signal is emitted when the apply button is clicked.
+   * Emitted when the apply button is clicked.
    *
-   * The default behavior of the #GtkAssistant is to switch to the page
+   * The default behavior of the `GtkAssistant` is to switch to the page
    * after the current page, unless the current page is the last one.
    *
    * A handler for the ::apply signal should carry out the actions for
    * which the wizard has collected data. If the action takes a long time
    * to complete, you might consider putting a page of type
    * %GTK_ASSISTANT_PAGE_PROGRESS after the confirmation page and handle
-   * this operation within the #GtkAssistant::prepare signal of the progress
-   * page.
+   * this operation within the [signal@Gtk.Assistant::prepare] signal of
+   * the progress page.
    */
   signals[APPLY] =
     g_signal_new (I_("apply"),
@@ -545,11 +558,11 @@ gtk_assistant_class_init (GtkAssistantClass *class)
 
   /**
    * GtkAssistant::close:
-   * @assistant: the #GtkAssistant
+   * @assistant: the `GtkAssistant`
    *
-   * The ::close signal is emitted either when the close button of
-   * a summary page is clicked, or when the apply button in the last
-   * page in the flow (of type %GTK_ASSISTANT_PAGE_CONFIRM) is clicked.
+   * Emitted either when the close button of a summary page is clicked,
+   * or when the apply button in the last page in the flow (of type
+   * %GTK_ASSISTANT_PAGE_CONFIRM) is clicked.
    */
   signals[CLOSE] =
     g_signal_new (I_("close"),
@@ -562,7 +575,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
 
   /**
    * GtkAssistant::escape
-   * @assistant: the #GtkAssistant
+   * @assistant: the `GtkAssistant`
    *
    * The action signal for the Escape binding.
    */
@@ -597,6 +610,11 @@ gtk_assistant_class_init (GtkAssistantClass *class)
                                                      -1, 1, -1,
                                                      GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
 
+  /**
+   * GtkAssistant:pages:
+   *
+   * `GListModel` containing the pages.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_PAGES,
                                    g_param_spec_object ("pages",
@@ -1404,9 +1422,9 @@ gtk_assistant_close_request (GtkWindow *window)
 /**
  * gtk_assistant_new:
  *
- * Creates a new #GtkAssistant.
+ * Creates a new `GtkAssistant`.
  *
- * Returns: a newly created #GtkAssistant
+ * Returns: a newly created `GtkAssistant`
  */
 GtkWidget*
 gtk_assistant_new (void)
@@ -1420,7 +1438,7 @@ gtk_assistant_new (void)
 
 /**
  * gtk_assistant_get_current_page:
- * @assistant: a #GtkAssistant
+ * @assistant: a `GtkAssistant`
  *
  * Returns the page number of the current page.
  *
@@ -1441,7 +1459,7 @@ gtk_assistant_get_current_page (GtkAssistant *assistant)
 
 /**
  * gtk_assistant_set_current_page:
- * @assistant: a #GtkAssistant
+ * @assistant: a `GtkAssistant`
  * @page_num: index of the page to switch to, starting from 0.
  *     If negative, the last page will be used. If greater
  *     than the number of pages in the @assistant, nothing
@@ -1487,7 +1505,7 @@ gtk_assistant_set_current_page (GtkAssistant *assistant,
 
 /**
  * gtk_assistant_next_page:
- * @assistant: a #GtkAssistant
+ * @assistant: a `GtkAssistant`
  *
  * Navigate to the next page.
  *
@@ -1495,7 +1513,7 @@ gtk_assistant_set_current_page (GtkAssistant *assistant,
  * there is no next page.
  *
  * This function is for use when creating pages of the
- * #GTK_ASSISTANT_PAGE_CUSTOM type.
+ * %GTK_ASSISTANT_PAGE_CUSTOM type.
  */
 void
 gtk_assistant_next_page (GtkAssistant *assistant)
@@ -1510,7 +1528,7 @@ gtk_assistant_next_page (GtkAssistant *assistant)
 
 /**
  * gtk_assistant_previous_page:
- * @assistant: a #GtkAssistant
+ * @assistant: a `GtkAssistant`
  *
  * Navigate to the previous visited page.
  *
@@ -1518,7 +1536,7 @@ gtk_assistant_next_page (GtkAssistant *assistant)
  * no previous page is available.
  *
  * This function is for use when creating pages of the
- * #GTK_ASSISTANT_PAGE_CUSTOM type.
+ * %GTK_ASSISTANT_PAGE_CUSTOM type.
  */
 void
 gtk_assistant_previous_page (GtkAssistant *assistant)
@@ -1547,7 +1565,7 @@ gtk_assistant_previous_page (GtkAssistant *assistant)
 
 /**
  * gtk_assistant_get_n_pages:
- * @assistant: a #GtkAssistant
+ * @assistant: a `GtkAssistant`
  *
  * Returns the number of pages in the @assistant
  *
@@ -1563,7 +1581,7 @@ gtk_assistant_get_n_pages (GtkAssistant *assistant)
 
 /**
  * gtk_assistant_get_nth_page:
- * @assistant: a #GtkAssistant
+ * @assistant: a `GtkAssistant`
  * @page_num: the index of a page in the @assistant,
  *     or -1 to get the last page
  *
@@ -1597,8 +1615,8 @@ gtk_assistant_get_nth_page (GtkAssistant *assistant,
 
 /**
  * gtk_assistant_prepend_page:
- * @assistant: a #GtkAssistant
- * @page: a #GtkWidget
+ * @assistant: a `GtkAssistant`
+ * @page: a `GtkWidget`
  *
  * Prepends a page to the @assistant.
  *
@@ -1616,8 +1634,8 @@ gtk_assistant_prepend_page (GtkAssistant *assistant,
 
 /**
  * gtk_assistant_append_page:
- * @assistant: a #GtkAssistant
- * @page: a #GtkWidget
+ * @assistant: a `GtkAssistant`
+ * @page: a `GtkWidget`
  *
  * Appends a page to the @assistant.
  *
@@ -1635,8 +1653,8 @@ gtk_assistant_append_page (GtkAssistant *assistant,
 
 /**
  * gtk_assistant_insert_page:
- * @assistant: a #GtkAssistant
- * @page: a #GtkWidget
+ * @assistant: a `GtkAssistant`
+ * @page: a `GtkWidget`
  * @position: the index (starting at 0) at which to insert the page,
  *     or -1 to append the page to the @assistant
  *
@@ -1733,7 +1751,7 @@ gtk_assistant_add_page (GtkAssistant *assistant,
 
 /**
  * gtk_assistant_remove_page:
- * @assistant: a #GtkAssistant
+ * @assistant: a `GtkAssistant`
  * @page_num: the index of a page in the @assistant,
  *     or -1 to remove the last page
  *
@@ -1757,8 +1775,8 @@ gtk_assistant_remove_page (GtkAssistant *assistant,
 
 /**
  * gtk_assistant_set_forward_page_func:
- * @assistant: a #GtkAssistant
- * @page_func: (allow-none): the #GtkAssistantPageFunc, or %NULL
+ * @assistant: a `GtkAssistant`
+ * @page_func: (allow-none): the `GtkAssistant`PageFunc, or %NULL
  *     to use the default one
  * @data: user data for @page_func
  * @destroy: destroy notifier for @data
@@ -1814,10 +1832,10 @@ add_to_action_area (GtkAssistant *assistant,
 
 /**
  * gtk_assistant_add_action_widget:
- * @assistant: a #GtkAssistant
- * @child: a #GtkWidget
+ * @assistant: a `GtkAssistant`
+ * @child: a `GtkWidget`
  *
- * Adds a widget to the action area of a #GtkAssistant.
+ * Adds a widget to the action area of a `GtkAssistant`.
  */
 void
 gtk_assistant_add_action_widget (GtkAssistant *assistant,
@@ -1842,10 +1860,10 @@ gtk_assistant_add_action_widget (GtkAssistant *assistant,
 
 /**
  * gtk_assistant_remove_action_widget:
- * @assistant: a #GtkAssistant
- * @child: a #GtkWidget
+ * @assistant: a `GtkAssistant`
+ * @child: a `GtkWidget`
  *
- * Removes a widget from the action area of a #GtkAssistant.
+ * Removes a widget from the action area of a `GtkAssistant`.
  */
 void
 gtk_assistant_remove_action_widget (GtkAssistant *assistant,
@@ -1867,7 +1885,7 @@ gtk_assistant_remove_action_widget (GtkAssistant *assistant,
 
 /**
  * gtk_assistant_set_page_title:
- * @assistant: a #GtkAssistant
+ * @assistant: a `GtkAssistant`
  * @page: a page of @assistant
  * @title: the new title for @page
  *
@@ -1898,7 +1916,7 @@ gtk_assistant_set_page_title (GtkAssistant *assistant,
 
 /**
  * gtk_assistant_get_page_title:
- * @assistant: a #GtkAssistant
+ * @assistant: a `GtkAssistant`
  * @page: a page of @assistant
  *
  * Gets the title for @page.
@@ -1926,7 +1944,7 @@ gtk_assistant_get_page_title (GtkAssistant *assistant,
 
 /**
  * gtk_assistant_set_page_type:
- * @assistant: a #GtkAssistant
+ * @assistant: a `GtkAssistant`
  * @page: a page of @assistant
  * @type: the new type for @page
  *
@@ -1956,7 +1974,7 @@ gtk_assistant_set_page_type (GtkAssistant         *assistant,
 
 /**
  * gtk_assistant_get_page_type:
- * @assistant: a #GtkAssistant
+ * @assistant: a `GtkAssistant`
  * @page: a page of @assistant
  *
  * Gets the page type of @page.
@@ -1984,7 +2002,7 @@ gtk_assistant_get_page_type (GtkAssistant *assistant,
 
 /**
  * gtk_assistant_set_page_complete:
- * @assistant: a #GtkAssistant
+ * @assistant: a `GtkAssistant`
  * @page: a page of @assistant
  * @complete: the completeness status of the page
  *
@@ -2015,7 +2033,7 @@ gtk_assistant_set_page_complete (GtkAssistant *assistant,
 
 /**
  * gtk_assistant_get_page_complete:
- * @assistant: a #GtkAssistant
+ * @assistant: a `GtkAssistant`
  * @page: a page of @assistant
  *
  * Gets whether @page is complete.
@@ -2043,7 +2061,7 @@ gtk_assistant_get_page_complete (GtkAssistant *assistant,
 
 /**
  * gtk_assistant_update_buttons_state:
- * @assistant: a #GtkAssistant
+ * @assistant: a `GtkAssistant`
  *
  * Forces @assistant to recompute the buttons state.
  *
@@ -2065,11 +2083,12 @@ gtk_assistant_update_buttons_state (GtkAssistant *assistant)
 
 /**
  * gtk_assistant_commit:
- * @assistant: a #GtkAssistant
+ * @assistant: a `GtkAssistant`
  *
- * Erases the visited page history so the back button is not
- * shown on the current page, and removes the cancel button
- * from subsequent pages.
+ * Erases the visited page history.
+ *
+ * GTK will then hide the back button on the current page,
+ * and removes the cancel button from subsequent pages.
  *
  * Use this when the information provided up to the current
  * page is hereafter deemed permanent and cannot be modified
@@ -2147,12 +2166,12 @@ gtk_assistant_buildable_custom_finished (GtkBuildable *buildable,
 
 /**
  * gtk_assistant_get_page:
- * @assistant: a #GtkAssistant
+ * @assistant: a `GtkAssistant`
  * @child: a child of @assistant
  *
- * Returns the #GtkAssistantPage object for @child.
+ * Returns the `GtkAssistantPage` object for @child.
  *
- * Returns: (transfer none): the #GtkAssistantPage for @child
+ * Returns: (transfer none): the `GtkAssistantPage` for @child
  */
 GtkAssistantPage *
 gtk_assistant_get_page (GtkAssistant *assistant,
@@ -2164,7 +2183,7 @@ gtk_assistant_get_page (GtkAssistant *assistant,
 
 /**
  * gtk_assistant_page_get_child:
- * @page: a #GtkAssistantPage
+ * @page: a `GtkAssistantPage`
  *
  * Returns the child to which @page belongs.
  *
@@ -2206,7 +2225,7 @@ gtk_assistant_pages_get_n_items (GListModel *model)
 
 static gpointer
 gtk_assistant_pages_get_item (GListModel *model,
-                          guint       position)
+                              guint       position)
 {
   GtkAssistantPages *pages = GTK_ASSISTANT_PAGES (model);
   GtkAssistantPage *page;
@@ -2249,7 +2268,7 @@ gtk_assistant_pages_new (GtkAssistant *assistant)
 
 /**
  * gtk_assistant_get_pages:
- * @assistant: a #GtkAssistant
+ * @assistant: a `GtkAssistant`
  * 
  * Gets a list model of the assistant pages.
  *

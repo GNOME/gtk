@@ -27,28 +27,26 @@
 #include "gtkprivate.h"
 
 /**
- * SECTION:gtkstringlist
- * @title: GtkStringList
- * @short_description: A list model for strings
- * @see_also: #GListModel
+ * GtkStringList:
  *
- * #GtkStringList is a list model that wraps an array of strings.
+ * `GtkStringList` is a list model that wraps an array of strings.
  *
  * The objects in the model have a "string" property.
  *
- * GtkStringList is well-suited for any place where you would
+ * `GtkStringList` is well-suited for any place where you would
  * typically use a `char*[]`, but need a list model.
  *
  * # GtkStringList as GtkBuildable
  *
- * The GtkStringList implementation of the GtkBuildable interface
+ * The `GtkStringList` implementation of the `GtkBuildable` interface
  * supports adding items directly using the <items> element and
  * specifying <item> elements for each item. Each <item> element
  * supports the regular translation attributes “translatable”,
  * “context” and “comments”.
  *
- * Here is a UI definition fragment specifying a GtkStringList
- * |[
+ * Here is a UI definition fragment specifying a `GtkStringList`
+ *
+ * ```xml
  * <object class="GtkStringList">
  *   <items>
  *     <item translatable="yes">Factory</item>
@@ -56,8 +54,16 @@
  *     <item translatable="yes">Subway</item>
  *   </items>
  * </object>
- * ]|
+ * ```
+ */
 
+/**
+ * GtkStringObject:
+ *
+ * `GtkStringObject` is the type of items in a `GtkStringList`.
+ *
+ * A `GtkStringObject` is a wrapper around a `const char*`; it has
+ * a [property@Gtk.StringObject:string] property.
  */
 
 #define GDK_ARRAY_ELEMENT_TYPE GtkStringObject *
@@ -123,6 +129,11 @@ gtk_string_object_class_init (GtkStringObjectClass *class)
   object_class->finalize = gtk_string_object_finalize;
   object_class->get_property = gtk_string_object_get_property;
 
+  /**
+   * GtkStringObject:string: (attributes org.gtk.Property.get=gtk_string_object_get_string)
+   *
+   * The string.
+   */
   pspec = g_param_spec_string ("string", "String", "String",
                                NULL,
                                G_PARAM_READABLE |
@@ -147,10 +158,10 @@ gtk_string_object_new_take (char *string)
  * gtk_string_object_new:
  * @string: (not nullable): The string to wrap
  *
- * Wraps a string in an object for use with #GListModel
+ * Wraps a string in an object for use with `GListModel`.
  *
- * Returns: a new #GtkStringObject
- **/
+ * Returns: a new `GtkStringObject`
+ */
 GtkStringObject *
 gtk_string_object_new (const char *string)
 {
@@ -158,10 +169,10 @@ gtk_string_object_new (const char *string)
 }
 
 /**
- * gtk_string_object_get_string:
- * @self: a #GtkStringObject
+ * gtk_string_object_get_string: (attributes org.gtk.Method.get_property=string)
+ * @self: a `GtkStringObject`
  *
- * Returns the string contained in a #GtkStringObject.
+ * Returns the string contained in a `GtkStringObject`.
  *
  * Returns: the string of @self
  */
@@ -418,9 +429,9 @@ gtk_string_list_init (GtkStringList *self)
  * gtk_string_list_new:
  * @strings: (array zero-terminated=1) (nullable): The strings to put in the model
  *
- * Creates a new #GtkStringList with the given @strings.
+ * Creates a new `GtkStringList` with the given @strings.
  *
- * Returns: a new #GtkStringList
+ * Returns: a new `GtkStringList`
  */
 GtkStringList *
 gtk_string_list_new (const char * const *strings)
@@ -436,7 +447,7 @@ gtk_string_list_new (const char * const *strings)
 
 /**
  * gtk_string_list_splice:
- * @self: a #GtkStringList
+ * @self: a `GtkStringList`
  * @position: the position at which to make the change
  * @n_removals: the number of strings to remove
  * @additions: (array zero-terminated=1) (nullable): The strings to add
@@ -444,9 +455,9 @@ gtk_string_list_new (const char * const *strings)
  * Changes @self by removing @n_removals strings and adding @additions
  * to it.
  *
- * This function is more efficient than gtk_string_list_append() and
- * gtk_string_list_remove(), because it only emits
- * #GListModel::items-changed once for the change.
+ * This function is more efficient than [method@Gtk.StringList.append]
+ * and [method@Gtk.StringList.remove], because it only emits the
+ * ::items-changed signal once for the change.
  *
  * This function copies the strings in @additions.
  *
@@ -484,13 +495,13 @@ gtk_string_list_splice (GtkStringList      *self,
 
 /**
  * gtk_string_list_append:
- * @self: a #GtkStringList
+ * @self: a `GtkStringList`
  * @string: the string to insert
  *
  * Appends @string to @self.
  *
- * The @string will be copied. See gtk_string_list_take()
- * for a way to avoid that.
+ * The @string will be copied. See
+ * [method@Gtk.StringList.take] for a way to avoid that.
  */
 void
 gtk_string_list_append (GtkStringList *self,
@@ -505,18 +516,18 @@ gtk_string_list_append (GtkStringList *self,
 
 /**
  * gtk_string_list_take:
- * @self: a #GtkStringList
+ * @self: a `GtkStringList`
  * @string: (transfer full): the string to insert
  *
  * Adds @string to self at the end, and takes
  * ownership of it.
  *
- * This variant of gtk_string_list_append() is
- * convenient for formatting strings:
+ * This variant of [method@Gtk.StringList.append]
+ * is convenient for formatting strings:
  *
- * |[
+ * ```c
  * gtk_string_list_take (self, g_strdup_print ("%d dollars", lots));
- * ]|
+ * ```
  */
 void
 gtk_string_list_take (GtkStringList *self,
@@ -531,11 +542,13 @@ gtk_string_list_take (GtkStringList *self,
 
 /**
  * gtk_string_list_remove:
- * @self: a #GtkStringList
+ * @self: a `GtkStringList`
  * @position: the position of the string that is to be removed
  *
- * Removes the string at @position from @self. @position must
- * be smaller than the current length of the list.
+ * Removes the string at @position from @self.
+ *
+ * @position must be smaller than the current
+ * length of the list.
  */
 void
 gtk_string_list_remove (GtkStringList *self,
@@ -548,11 +561,12 @@ gtk_string_list_remove (GtkStringList *self,
 
 /**
  * gtk_string_list_get_string:
- * @self: a #GtkStringList
+ * @self: a `GtkStringList`
  * @position: the position to get the string for
  *
- * Gets the string that is at @position in @self. If @self
- * does not contain @position items, %NULL is returned.
+ * Gets the string that is at @position in @self.
+ *
+ * If @self does not contain @position items, %NULL is returned.
  *
  * This function returns the const char *. To get the
  * object wrapping it, use g_list_model_get_item().

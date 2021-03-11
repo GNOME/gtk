@@ -1,4 +1,5 @@
-# Compiling the GTK Libraries {#gtk-building}
+Title: Compiling the GTK Libraries
+Slug: gtk-building
 
 ## Building GTK
 
@@ -75,7 +76,7 @@ PATH="/opt/gtk/bin:$PATH"
 export LD_LIBRARY_PATH PATH
 ```
 
-## Build types {#build-types}
+## Build types
 
 Meson has different build types, exposed by the `buildtype`
 configuration option. GTK enables and disables functionality
@@ -111,7 +112,7 @@ linker flags. Note that with the plain build type, you are also
 responsible for controlling the debugging features of GTK with
 `-DG_ENABLE_DEBUG` and `-DG_DISABLE_CAST_CHECKS`.
 
-## Dependencies {#dependencies}
+## Dependencies
 
 Before you can compile the GTK widget toolkit, you need to have
 various other tools and libraries installed on your
@@ -179,7 +180,7 @@ Other libraries are maintained separately.
   `XDG_DATA_DIRS` set accordingly at configure time. Otherwise,
   gdk-pixbuf falls back to its built-in mime type detection.
 
-## Building and testing GTK {#building}
+## Building and testing GTK
 
 First make sure that you have the necessary external
 dependencies installed: `pkg-config`, Meson, Ninja,
@@ -207,7 +208,7 @@ log that can help you understand the issue you're encountering. If
 all else fails, you can ask for help on the
 [GTK forums](#gtk-resources).
 
-## Extra Configuration Options {#extra-configuration-options}
+## Extra Configuration Options
 
 In addition to the normal options provided by Meson, GTK defines various
 arguments that modify what should be built. All of these options are passed

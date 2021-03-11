@@ -30,13 +30,19 @@
 
 
 /**
- * SECTION:gdkcontentdeserializer
- * @Short_description: Deserialize content for transfer
- * @Title: GdkContentDeserializer
- * @See_also: #GdkContentSerializer
+ * GdkContentDeserializer:
  *
- * A GdkContentDeserializer is used to deserialize content received via
+ * A `GdkContentDeserializer` is used to deserialize content received via
  * inter-application data transfers.
+ *
+ * The `GdkContentDeserializer` transforms serialized content that is
+ * identified by a mime type into an object identified by a GType.
+ *
+ * GTK provides serializers and deserializers for common data types
+ * such as text, colors, images or file lists. To register your own
+ * deserialization functions, use [func@content_register_deserializer].
+ *
+ * Also see [class@Gdk.ContentSerializer].
  */
 
 typedef struct _Deserializer Deserializer;
@@ -166,7 +172,7 @@ gdk_content_deserializer_run (const char                *mime_type,
 
 /**
  * gdk_content_deserializer_get_mime_type:
- * @deserializer: a #GdkContentDeserializer
+ * @deserializer: a `GdkContentDeserializer`
  *
  * Gets the mime type to deserialize from.
  *
@@ -182,7 +188,7 @@ gdk_content_deserializer_get_mime_type (GdkContentDeserializer *deserializer)
 
 /**
  * gdk_content_deserializer_get_gtype:
- * @deserializer: a #GdkContentDeserializer
+ * @deserializer: a `GdkContentDeserializer`
  *
  * Gets the GType to create an instance of.
  *
@@ -198,11 +204,11 @@ gdk_content_deserializer_get_gtype (GdkContentDeserializer *deserializer)
 
 /**
  * gdk_content_deserializer_get_value:
- * @deserializer: a #GdkContentDeserializer
+ * @deserializer: a `GdkContentDeserializer`
  *
- * Gets the #GValue to store the deserialized object in.
+ * Gets the `GValue` to store the deserialized object in.
  *
- * Returns: (transfer none): the #GValue for the current operation
+ * Returns: (transfer none): the `GValue` for the current operation
  */
 GValue *
 gdk_content_deserializer_get_value (GdkContentDeserializer *deserializer)
@@ -214,9 +220,11 @@ gdk_content_deserializer_get_value (GdkContentDeserializer *deserializer)
 
 /**
  * gdk_content_deserializer_get_input_stream:
- * @deserializer: a #GdkContentDeserializer
+ * @deserializer: a `GdkContentDeserializer`
  *
- * Gets the input stream that was passed to gdk_content_deserialize_async().
+ * Gets the input stream for the current operation.
+ *
+ * This is the stream that was passed to [func@content_deserialize_async].
  *
  * Returns: (transfer none): the input stream for the current operation
  */
@@ -230,11 +238,13 @@ gdk_content_deserializer_get_input_stream (GdkContentDeserializer *deserializer)
 
 /**
  * gdk_content_deserializer_get_priority:
- * @deserializer: a #GdkContentDeserializer
+ * @deserializer: a `GdkContentDeserializer`
  *
- * Gets the io priority that was passed to gdk_content_deserialize_async().
+ * Gets the I/O priority for the current operation.
  *
- * Returns: the io priority for the current operation
+ * This is the priority that was passed to [funccontent_deserialize_async].
+ *
+ * Returns: the I/O priority for the current operation
  */
 int
 gdk_content_deserializer_get_priority (GdkContentDeserializer *deserializer)
@@ -246,9 +256,11 @@ gdk_content_deserializer_get_priority (GdkContentDeserializer *deserializer)
 
 /**
  * gdk_content_deserializer_get_cancellable:
- * @deserializer: a #GdkContentDeserializer
+ * @deserializer: a `GdkContentDeserializer`
  *
- * Gets the cancellable that was passed to gdk_content_deserialize_async().
+ * Gets the cancellable for the current operation.
+ *
+ * This is the `GCancellable` that was passed to [func@content_deserialize_async].
  *
  * Returns: (transfer none): the cancellable for the current operation
  */
@@ -262,7 +274,7 @@ gdk_content_deserializer_get_cancellable (GdkContentDeserializer *deserializer)
 
 /**
  * gdk_content_deserializer_get_user_data:
- * @deserializer: a #GdkContentDeserializer
+ * @deserializer: a `GdkContentDeserializer`
  *
  * Gets the user data that was passed when the deserializer was registered.
  *
@@ -278,7 +290,7 @@ gdk_content_deserializer_get_user_data (GdkContentDeserializer *deserializer)
 
 /**
  * gdk_content_deserializer_set_task_data:
- * @deserializer: a #GdkContentDeserializer
+ * @deserializer: a `GdkContentDeserializer`
  * @data: data to associate with this operation
  * @notify: destroy notify for @data
  *
@@ -300,9 +312,11 @@ gdk_content_deserializer_set_task_data (GdkContentDeserializer *deserializer,
 
 /**
  * gdk_content_deserializer_get_task_data:
- * @deserializer: a #GdkContentDeserializer
+ * @deserializer: a `GdkContentDeserializer`
  *
- * Gets the data that was associated with @deserializer via gdk_content_deserializer_set_task_data().
+ * Gets the data that was associated with the current operation.
+ *
+ * See [method@Gdk.ContentDeserializer.set_task_data].
  *
  * Returns: (transfer none): the task data for @deserializer
  */
@@ -329,7 +343,7 @@ gdk_content_deserializer_emit_callback (gpointer data)
 
 /**
  * gdk_content_deserializer_return_success:
- * @deserializer: a #GdkContentDeserializer
+ * @deserializer: a `GdkContentDeserializer`
  *
  * Indicate that the deserialization has been successfully completed.
  */
@@ -349,10 +363,11 @@ gdk_content_deserializer_return_success (GdkContentDeserializer *deserializer)
 
 /**
  * gdk_content_deserializer_return_error:
- * @deserializer: a #GdkContentDeserializer
- * @error: a #GError
+ * @deserializer: a `GdkContentDeserializer`
+ * @error: a `GError`
  *
  * Indicate that the deserialization has ended with an error.
+ *
  * This function consumes @error.
  */
 void
@@ -376,8 +391,7 @@ gdk_content_deserializer_return_error (GdkContentDeserializer *deserializer,
  * @data: data that @deserialize can access
  * @notify: destroy notify for @data
  *
- * Registers a function to create objects of a given @type from
- * a serialized representation with the given mime type.
+ * Registers a function to deserialize object of a given type.
  */
 void
 gdk_content_register_deserializer (const char                *mime_type,
@@ -424,18 +438,18 @@ lookup_deserializer (const char *mime_type,
           deserializer->type == type)
         return deserializer;
     }
-  
+
   return NULL;
 }
 
 /**
  * gdk_content_formats_union_deserialize_gtypes:
- * @formats: (transfer full): a #GdkContentFormats
+ * @formats: (transfer full): a `GdkContentFormats`
  *
  * Add GTypes for mime types in @formats for which deserializers are
  * registered.
  *
- * Return: a new #GdkContentFormats
+ * Return: a new `GdkContentFormats`
  */
 GdkContentFormats *
 gdk_content_formats_union_deserialize_gtypes (GdkContentFormats *formats)
@@ -465,12 +479,12 @@ gdk_content_formats_union_deserialize_gtypes (GdkContentFormats *formats)
 
 /**
  * gdk_content_formats_union_deserialize_mime_types:
- * @formats: (transfer full): a #GdkContentFormats
+ * @formats: (transfer full): a `GdkContentFormats`
  *
  * Add mime types for GTypes in @formats for which deserializers are
  * registered.
  *
- * Return: a new #GdkContentFormats
+ * Return: a new `GdkContentFormats`
  */
 GdkContentFormats *
 gdk_content_formats_union_deserialize_mime_types (GdkContentFormats *formats)
@@ -511,17 +525,21 @@ deserialize_not_found (GdkContentDeserializer *deserializer)
 
 /**
  * gdk_content_deserialize_async:
- * @stream: a #GInputStream to read the serialized content from
+ * @stream: a `GInputStream` to read the serialized content from
  * @mime_type: the mime type to deserialize from
  * @type: the GType to deserialize from
- * @io_priority: the io priority of the operation
- * @cancellable: (nullable): optional #GCancellable object
+ * @io_priority: the I/O priority of the operation
+ * @cancellable: (nullable): optional `GCancellable` object
  * @callback: (scope async): callback to call when the operation is done
  * @user_data: (closure): data to pass to the callback function
  *
  * Read content from the given input stream and deserialize it, asynchronously.
- * When the operation is finished, @callback will be called. You can then
- * call gdk_content_deserialize_finish() to get the result of the operation.
+ *
+ * The default I/O priority is %G_PRIORITY_DEFAULT (i.e. 0), and lower numbers
+ * indicate a higher priority.
+ *
+ * When the operation is finished, @callback will be called. You must then
+ * call [func@content_deserialize_finish] to get the result of the operation.
  */
 void
 gdk_content_deserialize_async (GInputStream        *stream,
@@ -553,14 +571,15 @@ gdk_content_deserialize_async (GInputStream        *stream,
 
 /**
  * gdk_content_deserialize_finish:
- * @result: the #GAsyncResult
+ * @result: the `GAsyncResult`
  * @value: return location for the result of the operation
  * @error: return location for an error
  *
  * Finishes a content deserialization operation.
  *
- * Returns: %TRUE if the operation was successful. In this case, @value is set.
- *          %FALSE if an error occurred. In this case, @error is set
+ * Returns: %TRUE if the operation was successful. In this case,
+ *   @value is set. %FALSE if an error occurred. In this case,
+ *   @error is set
  */
 gboolean
 gdk_content_deserialize_finish (GAsyncResult  *result,

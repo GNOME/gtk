@@ -17,22 +17,21 @@
  */
 
 /**
- * SECTION:gtkbuildable
- * @Short_description: Interface for objects that can be built by GtkBuilder
- * @Title: GtkBuildable
+ * GtkBuildable:
  *
- * GtkBuildable allows objects to extend and customize their deserialization
- * from [GtkBuilder UI descriptions][BUILDER-UI].
- * The interface includes methods for setting names and properties of objects, 
+ * `GtkBuildable` allows objects to extend and customize their deserialization
+ * from ui files.
+ *
+ * The interface includes methods for setting names and properties of objects,
  * parsing custom tags and constructing child objects.
  *
- * The GtkBuildable interface is implemented by all widgets and
+ * The `GtkBuildable` interface is implemented by all widgets and
  * many of the non-widget objects that are provided by GTK. The
- * main user of this interface is #GtkBuilder. There should be
+ * main user of this interface is [class@Gtk.Builder]. There should be
  * very little need for applications to call any of these functions directly.
  *
  * An object only needs to implement this interface if it needs to extend the
- * #GtkBuilder format or run any extra routines at deserialization time.
+ * `GtkBuilder` XML format or run any extra routines at deserialization time.
  */
 
 #include "config.h"
@@ -77,15 +76,14 @@ gtk_buildable_set_buildable_id (GtkBuildable *buildable,
 
 /**
  * gtk_buildable_get_buildable_id:
- * @buildable: a #GtkBuildable
+ * @buildable: a `GtkBuildable`
  *
  * Gets the ID of the @buildable object.
- * 
- * #GtkBuilder sets the name based on the
- * [GtkBuilder UI definition][BUILDER-UI] 
- * used to construct the @buildable.
  *
- * Returns: the ID set with gtk_buildable_set_buildable_id()
+ * `GtkBuilder` sets the name based on the ID attribute
+ * of the <object> tag used to construct the @buildable.
+ *
+ * Returns: the ID of the buildable object
  **/
 const char *
 gtk_buildable_get_buildable_id (GtkBuildable *buildable)
@@ -105,8 +103,8 @@ gtk_buildable_get_buildable_id (GtkBuildable *buildable)
 
 /*< private >
  * gtk_buildable_add_child:
- * @buildable: a #GtkBuildable
- * @builder: a #GtkBuilder
+ * @buildable: a `GtkBuildable`
+ * @builder: a `GtkBuilder`
  * @child: child to add
  * @type: (nullable): kind of child or %NULL
  *
@@ -132,13 +130,14 @@ gtk_buildable_add_child (GtkBuildable *buildable,
 
 /*< private >
  * gtk_buildable_parser_finished:
- * @buildable: a #GtkBuildable
- * @builder: a #GtkBuilder
+ * @buildable: a `GtkBuildable`
+ * @builder: a `GtkBuilder`
  *
- * Called when the builder finishes the parsing of a 
- * [GtkBuilder UI definition][BUILDER-UI]. 
- * Note that this will be called once for each time 
- * gtk_builder_add_from_file() or gtk_builder_add_from_string() 
+ * Called when the builder finishes the parsing of a
+ * GtkBuilder UI definition.
+ *
+ * Note that this will be called once for each time
+ * gtk_builder_add_from_file() or gtk_builder_add_from_string()
  * is called on a builder.
  */
 void
@@ -157,8 +156,8 @@ gtk_buildable_parser_finished (GtkBuildable *buildable,
 
 /*< private >
  * gtk_buildable_construct_child:
- * @buildable: A #GtkBuildable
- * @builder: #GtkBuilder used to construct this object
+ * @buildable: A `GtkBuildable`
+ * @builder: `GtkBuilder` used to construct this object
  * @name: name of child to construct
  *
  * Constructs a child of @buildable with the name @name.
@@ -187,16 +186,16 @@ gtk_buildable_construct_child (GtkBuildable *buildable,
 
 /*< private >
  * gtk_buildable_custom_tag_start:
- * @buildable: a #GtkBuildable
- * @builder: a #GtkBuilder used to construct this object
+ * @buildable: a `GtkBuildable`
+ * @builder: a `GtkBuilder` used to construct this object
  * @child: (allow-none): child object or %NULL for non-child tags
  * @tagname: name of tag
  * @parser: (out): a #GMarkupParser to fill in
- * @data: (out): return location for user data that will be passed in 
+ * @data: (out): return location for user data that will be passed in
  *   to parser functions
  *
  * This is called for each unknown element under <child>.
- * 
+ *
  * Returns: %TRUE if an object has a custom implementation, %FALSE
  *          if it doesn't.
  */
@@ -223,13 +222,13 @@ gtk_buildable_custom_tag_start (GtkBuildable       *buildable,
 
 /*< private >
  * gtk_buildable_custom_tag_end:
- * @buildable: A #GtkBuildable
- * @builder: #GtkBuilder used to construct this object
+ * @buildable: A `GtkBuildable`
+ * @builder: `GtkBuilder` used to construct this object
  * @child: (allow-none): child object or %NULL for non-child tags
  * @tagname: name of tag
  * @data: user data that will be passed in to parser functions
  *
- * This is called at the end of each custom element handled by 
+ * This is called at the end of each custom element handled by
  * the buildable.
  */
 void
@@ -252,8 +251,8 @@ gtk_buildable_custom_tag_end (GtkBuildable  *buildable,
 
 /*< private >
  * gtk_buildable_custom_finished:
- * @buildable: a #GtkBuildable
- * @builder: a #GtkBuilder
+ * @buildable: a `GtkBuildable`
+ * @builder: a `GtkBuilder`
  * @child: (allow-none): child object or %NULL for non-child tags
  * @tagname: the name of the tag
  * @data: user data created in custom_tag_start
@@ -280,8 +279,8 @@ gtk_buildable_custom_finished (GtkBuildable  *buildable,
 
 /*< private >
  * gtk_buildable_get_internal_child:
- * @buildable: a #GtkBuildable
- * @builder: a #GtkBuilder
+ * @buildable: a `GtkBuildable`
+ * @builder: a `GtkBuilder`
  * @childname: name of child
  *
  * Get the internal child called @childname of the @buildable object.

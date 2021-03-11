@@ -43,6 +43,33 @@
 #include <netinet/in.h>
 #include <unistd.h>
 
+/**
+ * GdkWaylandSurface:
+ *
+ * The Wayland implementation of `GdkSurface`.
+ *
+ * Beyond the [class@Gdk.Surface] API, the Wayland implementation offers
+ * access to the Wayland `wl_surface` object with
+ * [method@GdkWayland.WaylandSurface.get_wl_surface].
+ */
+
+/**
+ * GdkWaylandToplevel:
+ *
+ * The Wayland implementation of `GdkToplevel`.
+ *
+ * Beyond the [interface@Gdk.Toplevel] API, the Wayland implementation
+ * has API to set up cross-process parent-child relationships between
+ * surfaces with [method@GdkWayland.WaylandToplevel.export_handle] and
+ * [method@GdkWayland.WaylandToplevel.set_transient_for_exported].
+ */
+
+/**
+ * GdkWaylandPopup:
+ *
+ * The Wayland implementation of `GdkPopup`.
+ */
+
 #define SURFACE_IS_TOPLEVEL(surface)  TRUE
 
 #define MAX_WL_BUFFER_SIZE (4083) /* 4096 minus header, string argument length and NUL byte */
@@ -1865,10 +1892,10 @@ create_zxdg_toplevel_v6_resources (GdkSurface *surface)
 
 /**
  * gdk_wayland_toplevel_set_application_id:
- * @toplevel: (type GdkWaylandToplevel): a #GdkToplevel
+ * @toplevel: (type GdkWaylandToplevel): a `GdkToplevel`
  * @application_id: the application id for the @toplevel
  *
- * Sets the application id on a #GdkToplevel.
+ * Sets the application id on a `GdkToplevel`.
  */
 void
 gdk_wayland_toplevel_set_application_id (GdkToplevel *toplevel,
@@ -4225,11 +4252,11 @@ _gdk_wayland_surface_set_grab_seat (GdkSurface *surface,
 
 /**
  * gdk_wayland_surface_get_wl_surface: (skip)
- * @surface: (type GdkWaylandSurface): a #GdkSurface
+ * @surface: (type GdkWaylandSurface): a `GdkSurface`
  *
- * Returns the Wayland surface of a #GdkSurface.
+ * Returns the Wayland `wl_surface` of a `GdkSurface`.
  *
- * Returns: (transfer none): a Wayland wl_surface
+ * Returns: (transfer none): a Wayland `wl_surface`
  */
 struct wl_surface *
 gdk_wayland_surface_get_wl_surface (GdkSurface *surface)
@@ -4416,14 +4443,17 @@ static const struct zxdg_exported_v1_listener xdg_exported_listener = {
 
 /**
  * GdkWaylandToplevelExported:
- * @toplevel: (type GdkWaylandToplevel): the #GdkToplevel that is exported
+ * @toplevel: (type GdkWaylandToplevel): the `GdkToplevel` that is exported
  * @handle: the handle
- * @user_data: user data that was passed to gdk_wayland_toplevel_export_handle()
+ * @user_data: user data that was passed to [method@GdkWayland.WaylandToplevel.export_handle]
  *
  * Callback that gets called when the handle for a surface has been
- * obtained from the Wayland compositor. The @handle can be passed
- * to other processes, for the purpose of marking surfaces as transient
- * for out-of-process surfaces.
+ * obtained from the Wayland compositor.
+ *
+ * This callback is used in [method@GdkWayland.WaylandToplevel.export_handle].
+ *
+ * The @handle can be passed to other processes, for the purpose of
+ * marking surfaces as transient for out-of-process surfaces.
  */
 
 static gboolean
@@ -4434,24 +4464,25 @@ gdk_wayland_surface_is_exported (GdkWaylandSurface *impl)
 
 /**
  * gdk_wayland_toplevel_export_handle:
- * @toplevel: (type GdkWaylandToplevel): the #GdkToplevel to obtain a handle for
+ * @toplevel: (type GdkWaylandToplevel): the `GdkToplevel` to obtain a handle for
  * @callback: callback to call with the handle
  * @user_data: (closure): user data for @callback
  * @destroy_func: destroy notify for @user_data
  *
  * Asynchronously obtains a handle for a surface that can be passed
- * to other processes. When the handle has been obtained, @callback
- * will be called.
+ * to other processes.
+ *
+ * When the handle has been obtained, @callback will be called.
  *
  * It is an error to call this function on a surface that is already
  * exported.
  *
- * When the handle is no longer needed, gdk_wayland_toplevel_unexport_handle()
+ * When the handle is no longer needed, [method@GdkWayland.WaylandToplevel.unexport_handle]
  * should be called to clean up resources.
  *
  * The main purpose for obtaining a handle is to mark a surface
  * from another surface as transient for this one, see
- * gdk_wayland_toplevel_set_transient_for_exported().
+ * [method@GdkWayland.WaylandToplevel.set_transient_for_exported].
  *
  * Note that this API depends on an unstable Wayland protocol,
  * and thus may require changes in the future.
@@ -4498,7 +4529,7 @@ gdk_wayland_toplevel_export_handle (GdkToplevel                *toplevel,
 
 /**
  * gdk_wayland_toplevel_unexport_handle:
- * @toplevel: (type GdkWaylandToplevel): the #GdkToplevel to unexport
+ * @toplevel: (type GdkWaylandToplevel): the `GdkToplevel` to unexport
  *
  * Destroys the handle that was obtained with
  * gdk_wayland_toplevel_export_handle().
@@ -4552,12 +4583,14 @@ static const struct zxdg_imported_v1_listener xdg_imported_listener = {
 
 /**
  * gdk_wayland_toplevel_set_transient_for_exported:
- * @toplevel: (type GdkWaylandToplevel): the #GdkToplevel to make as transient
+ * @toplevel: (type GdkWaylandToplevel): the `GdkToplevel` to make as transient
  * @parent_handle_str: an exported handle for a surface
  *
  * Marks @toplevel as transient for the surface to which the given
- * @parent_handle_str refers. Typically, the handle will originate
- * from a gdk_wayland_toplevel_export_handle() call in another process.
+ * @parent_handle_str refers.
+ *
+ * Typically, the handle will originate from a
+ * [method@GdkWayland.WaylandToplevel.export_handle] call in another process.
  *
  * Note that this API depends on an unstable Wayland protocol,
  * and thus may require changes in the future.

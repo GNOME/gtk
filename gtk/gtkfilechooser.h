@@ -45,7 +45,7 @@ typedef struct _GtkFileChooser      GtkFileChooser;
  *  selecting folders.  The file chooser will let the user pick an
  *  existing folder.
  *
- * Describes whether a #GtkFileChooser is being used to open existing files
+ * Describes whether a `GtkFileChooser` is being used to open existing files
  * or to save to a possibly new file.
  */
 typedef enum
@@ -62,7 +62,7 @@ GType gtk_file_chooser_get_type (void) G_GNUC_CONST;
 /**
  * GTK_FILE_CHOOSER_ERROR:
  *
- * Used to get the #GError quark for #GtkFileChooser errors.
+ * Used to get the `GError` quark for `GtkFileChooser` errors.
  */
 #define GTK_FILE_CHOOSER_ERROR (gtk_file_chooser_error_quark ())
 
@@ -76,7 +76,7 @@ GType gtk_file_chooser_get_type (void) G_GNUC_CONST;
  *  (e.g. "http://foo" without a slash after that).
  *
  * These identify the various errors that can occur while calling
- * #GtkFileChooser functions.
+ * `GtkFileChooser` functions.
  */
 typedef enum {
   GTK_FILE_CHOOSER_ERROR_NONEXISTENT,

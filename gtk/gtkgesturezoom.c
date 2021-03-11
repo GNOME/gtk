@@ -19,15 +19,13 @@
  */
 
 /**
- * SECTION:gtkgesturezoom
- * @Short_description: Zoom gesture
- * @Title: GtkGestureZoom
- * @See_also: #GtkGestureRotate
+ * GtkGestureZoom:
  *
- * #GtkGestureZoom is a #GtkGesture implementation able to recognize
- * pinch/zoom gestures, whenever the distance between both tracked
- * sequences changes, the #GtkGestureZoom::scale-changed signal is
- * emitted to report the scale factor.
+ * `GtkGestureZoom` is a `GtkGesture` for 2-finger pinch/zoom gestures.
+ *
+ * Whenever the distance between both tracked sequences changes, the
+ * [signal@Gtk.GestureZoom::scale-changed] signal is emitted to report
+ * the scale factor.
  */
 
 #include "config.h"
@@ -204,8 +202,7 @@ gtk_gesture_zoom_class_init (GtkGestureZoomClass *klass)
    * @controller: the object on which the signal is emitted
    * @scale: Scale delta, taking the initial state as 1:1
    *
-   * This signal is emitted whenever the distance between both tracked
-   * sequences changes.
+   * Emitted whenever the distance between both tracked sequences changes.
    */
   signals[SCALE_CHANGED] =
     g_signal_new (I_("scale-changed"),
@@ -219,11 +216,11 @@ gtk_gesture_zoom_class_init (GtkGestureZoomClass *klass)
 /**
  * gtk_gesture_zoom_new:
  *
- * Returns a newly created #GtkGesture that recognizes zoom
- * in/out gestures (usually known as pinch/zoom).
+ * Returns a newly created `GtkGesture` that recognizes
+ * pinch/zoom gestures.
  *
- * Returns: a newly created #GtkGestureZoom
- **/
+ * Returns: a newly created `GtkGestureZoom`
+ */
 GtkGesture *
 gtk_gesture_zoom_new (void)
 {
@@ -233,14 +230,17 @@ gtk_gesture_zoom_new (void)
 
 /**
  * gtk_gesture_zoom_get_scale_delta:
- * @gesture: a #GtkGestureZoom
+ * @gesture: a `GtkGestureZoom`
  *
- * If @gesture is active, this function returns the zooming difference
- * since the gesture was recognized (hence the starting point is
- * considered 1:1). If @gesture is not active, 1 is returned.
+ * Gets the scale delta.
+ *
+ * If @gesture is active, this function returns the zooming
+ * difference since the gesture was recognized (hence the
+ * starting point is considered 1:1). If @gesture is not
+ * active, 1 is returned.
  *
  * Returns: the scale delta
- **/
+ */
 double
 gtk_gesture_zoom_get_scale_delta (GtkGestureZoom *gesture)
 {

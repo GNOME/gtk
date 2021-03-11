@@ -31,10 +31,9 @@
 
 
 /**
- * SECTION:gtkcellrendererspin
- * @Short_description: Renders a spin button in a cell
- * @Title: GtkCellRendererSpin
- * @See_also: #GtkCellRendererText, #GtkSpinButton
+ * GtkCellRendererSpin:
+ *
+ * Renders a spin button in a cell
  *
  * #GtkCellRendererSpin renders text in a cell like #GtkCellRendererText from
  * which it is derived. But while #GtkCellRendererText offers a simple entry to

@@ -29,37 +29,41 @@
 
 
 /**
- * SECTION:regions
- * @Short_description: Simple graphical data type
- * @Title: GdkRectangle
+ * GdkRectangle:
+ * @x: the x coordinate of the top left corner
+ * @y: the y coordinate of the top left corner
+ * @width: the width of the rectangle
+ * @height: the height of the rectangle
  *
- * GDK provides a #GdkRectangle data type for representing rectangles.
- * Together with Cairo’s #cairo_region_t data type, these are the central
- * types for representing sets of pixels.
+ * A `GdkRectangle` data type for representing rectangles.
  *
- * A #GdkRectangle represents the position and size of a rectangle.
+ * `GdkRectangle` is identical to `cairo_rectangle_t`. Together with Cairo’s
+ * `cairo_region_t` data type, these are the central types for representing
+ * sets of pixels.
+ *
  * The intersection of two rectangles can be computed with
- * gdk_rectangle_intersect(). To find the union of two rectangles use
- * gdk_rectangle_union().
+ * [method@Gdk.Rectangle.intersect]; to find the union of two rectangles use
+ * [method@Gdk.Rectangle.union].
  *
- * #cairo_region_t is usually used for managing clipping of graphical
- * operations.
+ * The `cairo_region_t` type provided by Cairo is usually used for managing
+ * non-rectangular clipping of graphical operations.
  *
- * The graphene library has a number of other data types for regions and
+ * The Graphene library has a number of other data types for regions and
  * volumes in 2D and 3D.
  */
 
 
 /**
  * gdk_rectangle_union:
- * @src1: a #GdkRectangle
- * @src2: a #GdkRectangle
+ * @src1: a `GdkRectangle`
+ * @src2: a `GdkRectangle`
  * @dest: (out): return location for the union of @src1 and @src2
  *
  * Calculates the union of two rectangles.
+ *
  * The union of rectangles @src1 and @src2 is the smallest rectangle which
- * includes both @src1 and @src2 within it.
- * It is allowed for @dest to be the same as either @src1 or @src2.
+ * includes both @src1 and @src2 within it. It is allowed for @dest to be
+ * the same as either @src1 or @src2.
  *
  * Note that this function does not ignore 'empty' rectangles (ie. with
  * zero width or height).
@@ -85,17 +89,18 @@ gdk_rectangle_union (const GdkRectangle *src1,
 
 /**
  * gdk_rectangle_intersect:
- * @src1: a #GdkRectangle
- * @src2: a #GdkRectangle
+ * @src1: a `GdkRectangle`
+ * @src2: a `GdkRectangle`
  * @dest: (out caller-allocates) (allow-none): return location for the
- * intersection of @src1 and @src2, or %NULL
+ *   intersection of @src1 and @src2, or %NULL
  *
- * Calculates the intersection of two rectangles. It is allowed for
- * @dest to be the same as either @src1 or @src2. If the rectangles 
- * do not intersect, @dest’s width and height is set to 0 and its x 
- * and y values are undefined. If you are only interested in whether
- * the rectangles intersect, but not in the intersecting area itself,
- * pass %NULL for @dest.
+ * Calculates the intersection of two rectangles.
+ *
+ * It is allowed for @dest to be the same as either @src1 or @src2.
+ * If the rectangles do not intersect, @dest’s width and height is set
+ * to 0 and its x and y values are undefined. If you are only interested
+ * in whether the rectangles intersect, but not in the intersecting area
+ * itself, pass %NULL for @dest.
  *
  * Returns: %TRUE if the rectangles intersect.
  */
@@ -140,7 +145,7 @@ gdk_rectangle_intersect (const GdkRectangle *src1,
 
 /**
  * gdk_rectangle_contains_point:
- * @rect: a #GdkRectangle
+ * @rect: a `GdkRectangle`
  * @x: X coordinate
  * @y: Y coordinate
  *
@@ -163,8 +168,8 @@ gdk_rectangle_contains_point (const GdkRectangle *rect,
 
 /**
  * gdk_rectangle_equal:
- * @rect1: a #GdkRectangle
- * @rect2: a #GdkRectangle
+ * @rect1: a `GdkRectangle`
+ * @rect2: a `GdkRectangle`
  *
  * Checks if the two given rectangles are equal.
  *

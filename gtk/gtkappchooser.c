@@ -20,28 +20,27 @@
  */
 
 /**
- * SECTION:gtkappchooser
- * @Title: GtkAppChooser
- * @Short_description: Interface implemented by widgets for choosing an application
- * @See_also: #GAppInfo
+ * GtkAppChooser:
  *
- * #GtkAppChooser is an interface that can be implemented by widgets which
- * allow the user to choose an application (typically for the purpose of
- * opening a file). The main objects that implement this interface are
- * #GtkAppChooserWidget, #GtkAppChooserDialog and #GtkAppChooserButton.
+ * `GtkAppChooser` is an interface for widgets which allow the user to
+ * choose an application.
  *
- * Applications are represented by GIO #GAppInfo objects here.
+ * The main objects that implement this interface are
+ * [class@Gtk.AppChooserWidget],
+ * [class@Gtk.AppChooserDialog] and [class@Gtk.AppChooserButton].
+ *
+ * Applications are represented by GIO `GAppInfo` objects here.
  * GIO has a concept of recommended and fallback applications for a
  * given content type. Recommended applications are those that claim
  * to handle the content type itself, while fallback also includes
  * applications that handle a more generic content type. GIO also
  * knows the default and last-used application for a given content
- * type. The #GtkAppChooserWidget provides detailed control over
+ * type. The `GtkAppChooserWidget` provides detailed control over
  * whether the shown list of applications should include default,
  * recommended or fallback applications.
  *
- * To obtain the application that has been selected in a #GtkAppChooser,
- * use gtk_app_chooser_get_app_info().
+ * To obtain the application that has been selected in a `GtkAppChooser`,
+ * use [method@Gtk.AppChooser.get_app_info].
  */
 
 #include "config.h"
@@ -62,12 +61,11 @@ gtk_app_chooser_default_init (GtkAppChooserIface *iface)
   GParamSpec *pspec;
 
   /**
-   * GtkAppChooser:content-type:
+   * GtkAppChooser:content-type: (attributes org.gtk.Property.get=gtk_app_chooser_get_content_type)
    *
-   * The content type of the #GtkAppChooser object.
+   * The content type of the `GtkAppChooser` object.
    *
-   * See [GContentType][gio-GContentType]
-   * for more information about content types.
+   * See `GContentType` for more information about content types.
    */
   pspec = g_param_spec_string ("content-type",
                                P_("Content type"),
@@ -80,10 +78,11 @@ gtk_app_chooser_default_init (GtkAppChooserIface *iface)
 
 
 /**
- * gtk_app_chooser_get_content_type:
- * @self: a #GtkAppChooser
+ * gtk_app_chooser_get_content_type: (attributes org.gtk.Method.get_property=content-type)
+ * @self: a `GtkAppChooser`
  *
- * Returns the current value of the #GtkAppChooser:content-type property.
+ * Returns the content type for which the `GtkAppChooser`
+ * shows applications.
  *
  * Returns: the content type of @self. Free with g_free()
  */
@@ -103,12 +102,13 @@ gtk_app_chooser_get_content_type (GtkAppChooser *self)
 
 /**
  * gtk_app_chooser_get_app_info:
- * @self: a #GtkAppChooser
+ * @self: a `GtkAppChooser`
  *
  * Returns the currently selected application.
  *
- * Returns: (nullable) (transfer full): a #GAppInfo for the currently selected
- *     application, or %NULL if none is selected. Free with g_object_unref()
+ * Returns: (nullable) (transfer full): a `GAppInfo` for the
+ *   currently selected application, or %NULL if none is selected.
+ *   Free with g_object_unref()
  */
 GAppInfo *
 gtk_app_chooser_get_app_info (GtkAppChooser *self)
@@ -118,7 +118,7 @@ gtk_app_chooser_get_app_info (GtkAppChooser *self)
 
 /**
  * gtk_app_chooser_refresh:
- * @self: a #GtkAppChooser
+ * @self: a `GtkAppChooser`
  *
  * Reloads the list of applications.
  */

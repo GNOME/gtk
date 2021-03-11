@@ -19,8 +19,7 @@
  */
 
 /*<private>
- * SECTION:data-url
- * @title: data: URLs
+ * # Data URLs
  *
  * These function allow encoding and decoding of data: URLs, see
  * [RFC 2397](http://tools.ietf.org/html/rfc2397) for more information.

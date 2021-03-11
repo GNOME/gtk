@@ -33,22 +33,22 @@
 #include "gtkwidgetprivate.h"
 
 /**
- * SECTION:gtkvideo
- * @title: GtkVideo
- * @short_description: A widget for displaying video
- * @see_also: #GtkMediaControls, #GtkMediaStream
+ * GtkVideo:
  *
- * GtkVideo is a widget to show a #GtkMediaStream with media controls
- * as provided by #GtkMediaControls. If you just want to display a
- * video without controls, you can treat it like any other paintable
- * and for example put it into a #GtkPicture.
+ * `GtkVideo` is a widget to show a `GtkMediaStream` with media controls.
  *
- * GtkVideo aims to cover use cases such as previews, embedded animations,
+ * ![An example GtkVideo](video.png)
+ *
+ * The controls are available separately as [class@Gtk.MediaControls].
+ * If you just want to display a video without controls, you can treat it
+ * like any other paintable and for example put it into a [class@Gtk.Picture].
+ *
+ * `GtkVideo` aims to cover use cases such as previews, embedded animations,
  * etc. It supports autoplay, looping, and simple media controls. It does
  * not have support for video overlays, multichannel audio, device
  * selection, or input. If you are writing a full-fledged video player,
- * you may want to use the #GdkPaintable API and a media framework such
- * as Gstreamer directly.
+ * you may want to use the [class@Gdk.Paintable] API and a media framework
+ * such as Gstreamer directly.
  */
 
 struct _GtkVideo
@@ -297,7 +297,7 @@ gtk_video_class_init (GtkVideoClass *klass)
   gobject_class->set_property = gtk_video_set_property;
 
   /**
-   * GtkVideo:autoplay:
+   * GtkVideo:autoplay: (attributes org.gtk.Property.get=gtk_video_get_autoplay org.gtk.Property.set=gtk_video_set_autoplay)
    *
    * If the video should automatically begin playing.
    */
@@ -309,7 +309,7 @@ gtk_video_class_init (GtkVideoClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkVideo:file:
+   * GtkVideo:file: (attributes org.gtk.Property.get=gtk_video_get_file org.gtk.Property.set=gtk_video_set_file)
    *
    * The file played by this video if the video is playing a file.
    */
@@ -321,7 +321,7 @@ gtk_video_class_init (GtkVideoClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkVideo:loop:
+   * GtkVideo:loop: (attributes org.gtk.Property.get=gtk_video_get_loop org.gtk.Property.set=gtk_video_set_loop)
    *
    * If new media files should be set to loop.
    */
@@ -333,7 +333,7 @@ gtk_video_class_init (GtkVideoClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkVideo:media-stream:
+   * GtkVideo:media-stream: (attributes org.gtk.Property.get=gtk_video_get_media_stream org.gtk.Property.set=gtk_video_set_media_stream)
    *
    * The media-stream played
    */
@@ -367,10 +367,10 @@ gtk_video_init (GtkVideo *self)
 /**
  * gtk_video_new:
  *
- * Creates a new empty #GtkVideo.
+ * Creates a new empty `GtkVideo`.
  *
- * Returns: a new #GtkVideo
- **/
+ * Returns: a new `GtkVideo`
+ */
 GtkWidget *
 gtk_video_new (void)
 {
@@ -379,12 +379,12 @@ gtk_video_new (void)
 
 /**
  * gtk_video_new_for_media_stream:
- * @stream: (allow-none): a #GtkMediaStream
+ * @stream: (allow-none): a `GtkMediaStream`
  *
- * Creates a #GtkVideo to play back the given @stream.
+ * Creates a `GtkVideo` to play back the given @stream.
  *
- * Returns: a new #GtkVideo
- **/
+ * Returns: a new `GtkVideo`
+ */
 GtkWidget *
 gtk_video_new_for_media_stream (GtkMediaStream *stream)
 {
@@ -397,12 +397,12 @@ gtk_video_new_for_media_stream (GtkMediaStream *stream)
 
 /**
  * gtk_video_new_for_file:
- * @file: (allow-none): a #GFile
+ * @file: (allow-none): a `GFile`
  *
- * Creates a #GtkVideo to play back the given @file.
+ * Creates a `GtkVideo` to play back the given @file.
  *
- * Returns: a new #GtkVideo
- **/
+ * Returns: a new `GtkVideo`
+ */
 GtkWidget *
 gtk_video_new_for_file (GFile *file)
 {
@@ -417,13 +417,13 @@ gtk_video_new_for_file (GFile *file)
  * gtk_video_new_for_filename:
  * @filename: (allow-none) (type filename): filename to play back
  *
- * Creates a #GtkVideo to play back the given @filename.
+ * Creates a `GtkVideo` to play back the given @filename.
  *
- * This is a utility function that calls gtk_video_new_for_file(),
+ * This is a utility function that calls [ctor@Gtk.Video.new_for_file],
  * See that function for details.
  *
- * Returns: a new #GtkVideo
- **/
+ * Returns: a new `GtkVideo`
+ */
 GtkWidget *
 gtk_video_new_for_filename (const char *filename)
 {
@@ -447,13 +447,13 @@ gtk_video_new_for_filename (const char *filename)
  * gtk_video_new_for_resource:
  * @resource_path: (allow-none): resource path to play back
  *
- * Creates a #GtkVideo to play back the resource at the
+ * Creates a `GtkVideo` to play back the resource at the
  * given @resource_path.
  *
- * This is a utility function that calls gtk_video_new_for_file(),
+ * This is a utility function that calls [ctor@Gtk.Video.new_for_file].
  *
- * Returns: a new #GtkVideo
- **/
+ * Returns: a new `GtkVideo`
+ */
 GtkWidget *
 gtk_video_new_for_resource (const char *resource_path)
 {
@@ -486,13 +486,13 @@ gtk_video_new_for_resource (const char *resource_path)
 }
 
 /**
- * gtk_video_get_media_stream:
- * @self: a #GtkVideo
+ * gtk_video_get_media_stream: (attributes org.gtk.Method.get_property=media-stream)
+ * @self: a `GtkVideo`
  *
  * Gets the media stream managed by @self or %NULL if none.
  *
  * Returns: (nullable) (transfer none): The media stream managed by @self
- **/
+ */
 GtkMediaStream *
 gtk_video_get_media_stream (GtkVideo *self)
 {
@@ -577,17 +577,19 @@ gtk_video_notify_cb (GtkMediaStream *stream,
 }
 
 /**
- * gtk_video_set_media_stream:
- * @self: a #GtkVideo
+ * gtk_video_set_media_stream: (attributes org.gtk.Method.set_property=media-stream)
+ * @self: a `GtkVideo`
  * @stream: (allow-none): The media stream to play or %NULL to unset
  *
- * Sets the media stream to be played back. @self will take full control
- * of managing the media stream. If you want to manage a media stream
- * yourself, consider using a #GtkImage for display.
+ * Sets the media stream to be played back.
  *
- * If you want to display a file, consider using gtk_video_set_file()
+ * @self will take full control of managing the media stream. If you
+ * want to manage a media stream yourself, consider using a
+ * [class@Gtk.Picture] for display.
+ *
+ * If you want to display a file, consider using [method@Gtk.Video.set_file]
  * instead.
- **/
+ */
 void
 gtk_video_set_media_stream (GtkVideo       *self,
                             GtkMediaStream *stream)
@@ -646,14 +648,14 @@ gtk_video_set_media_stream (GtkVideo       *self,
 }
 
 /**
- * gtk_video_get_file:
- * @self: a #GtkVideo
+ * gtk_video_get_file: (attributes org.gtk.Method.get_propert=file)
+ * @self: a `GtkVideo`
  *
  * Gets the file played by @self or %NULL if not playing back
  * a file.
  *
  * Returns: (nullable) (transfer none): The file played by @self
- **/
+ */
 GFile *
 gtk_video_get_file (GtkVideo *self)
 {
@@ -663,12 +665,12 @@ gtk_video_get_file (GtkVideo *self)
 }
 
 /**
- * gtk_video_set_file:
- * @self: a #GtkVideo
+ * gtk_video_set_file: (attributes org.gtk.Method.set_property=file)
+ * @self: a `GtkVideo`
  * @file: (allow-none): the file to play
  *
  * Makes @self play the given @file.
- **/
+ */
 void
 gtk_video_set_file (GtkVideo *self,
                     GFile    *file)
@@ -711,13 +713,13 @@ gtk_video_set_file (GtkVideo *self,
 
 /**
  * gtk_video_set_filename:
- * @self: a #GtkVideo
+ * @self: a `GtkVideo`
  * @filename: (allow-none): the filename to play
  *
  * Makes @self play the given @filename.
  *
  * This is a utility function that calls gtk_video_set_file(),
- **/
+ */
 void
 gtk_video_set_filename (GtkVideo   *self,
                         const char *filename)
@@ -739,13 +741,13 @@ gtk_video_set_filename (GtkVideo   *self,
 
 /**
  * gtk_video_set_resource:
- * @self: a #GtkVideo
+ * @self: a `GtkVideo`
  * @resource_path: (allow-none): the resource to set
  *
  * Makes @self play the resource at the given @resource_path.
  *
- * This is a utility function that calls gtk_video_set_file(),
- **/
+ * This is a utility function that calls [method@Gtk.Video.set_file].
+ */
 void
 gtk_video_set_resource (GtkVideo   *self,
                         const char *resource_path)
@@ -778,13 +780,13 @@ gtk_video_set_resource (GtkVideo   *self,
 }
 
 /**
- * gtk_video_get_autoplay:
- * @self: a #GtkVideo
+ * gtk_video_get_autoplay: (attributes org.gtk.Method.get_property=autoplay)
+ * @self: a `GtkVideo`
  *
- * Returns %TRUE if videos have been set to loop via gtk_video_set_loop().
+ * Returns %TRUE if videos have been set to loop.
  *
  * Returns: %TRUE if streams should autoplay
- **/
+ */
 gboolean
 gtk_video_get_autoplay (GtkVideo *self)
 {
@@ -794,13 +796,13 @@ gtk_video_get_autoplay (GtkVideo *self)
 }
 
 /**
- * gtk_video_set_autoplay:
- * @self: a #GtkVideo
+ * gtk_video_set_autoplay: (attributes org.gtk.Method.set_property=autoplay)
+ * @self: a `GtkVideo`
  * @autoplay: whether media streams should autoplay
  *
- * Sets whether @self automatically starts playback when it becomes visible
- * or when a new file gets loaded.
- **/
+ * Sets whether @self automatically starts playback when it
+ * becomes visible or when a new file gets loaded.
+ */
 void
 gtk_video_set_autoplay (GtkVideo *self,
                         gboolean  autoplay)
@@ -816,13 +818,13 @@ gtk_video_set_autoplay (GtkVideo *self,
 }
 
 /**
- * gtk_video_get_loop:
- * @self: a #GtkVideo
+ * gtk_video_get_loop: (attributes org.gtk.Method.get_property=loop)
+ * @self: a `GtkVideo`
  *
- * Returns %TRUE if videos have been set to loop via gtk_video_set_loop().
+ * Returns %TRUE if videos have been set to loop.
  *
  * Returns: %TRUE if streams should loop
- **/
+ */
 gboolean
 gtk_video_get_loop (GtkVideo *self)
 {
@@ -832,12 +834,12 @@ gtk_video_get_loop (GtkVideo *self)
 }
 
 /**
- * gtk_video_set_loop:
- * @self: a #GtkVideo
+ * gtk_video_set_loop: (attributes org.gtk.Method.set_property=loop)
+ * @self: a `GtkVideo`
  * @loop: whether media streams should loop
  *
  * Sets whether new files loaded by @self should be set to loop.
- **/
+ */
 void
 gtk_video_set_loop (GtkVideo *self,
                     gboolean  loop)
@@ -851,4 +853,3 @@ gtk_video_set_loop (GtkVideo *self,
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_LOOP]);
 }
-

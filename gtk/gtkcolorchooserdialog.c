@@ -30,13 +30,20 @@
 #include "gtkcolorchooserwidget.h"
 
 /**
- * SECTION:gtkcolorchooserdialog
- * @Short_description: A dialog for choosing colors
- * @Title: GtkColorChooserDialog
- * @See_also: #GtkColorChooser, #GtkDialog
+ * GtkColorChooserDialog:
  *
- * The #GtkColorChooserDialog widget is a dialog for choosing
- * a color. It implements the #GtkColorChooser interface.
+ * A dialog for choosing a color.
+ *
+ * ![An example GtkColorChooserDialog](colorchooser.png)
+ *
+ * `GtkColorChooserDialog` implements the [iface@Gtk.ColorChooser] interface
+ * and does not provide much API of its own.
+ *
+ * To create a `GtkColorChooserDialog`, use [ctor@Gtk.ColorChooserDialog.new].
+ *
+ * To change the initially selected color, use
+ * [method@Gtk.ColorChooser.set_rgba]. To get the selected color use
+ * [method@Gtk.ColorChooser.get_rgba].
  */
 
 typedef struct _GtkColorChooserDialogClass   GtkColorChooserDialogClass;
@@ -272,9 +279,9 @@ gtk_color_chooser_dialog_iface_init (GtkColorChooserInterface *iface)
  * @title: (allow-none): Title of the dialog, or %NULL
  * @parent: (allow-none): Transient parent of the dialog, or %NULL
  *
- * Creates a new #GtkColorChooserDialog.
+ * Creates a new `GtkColorChooserDialog`.
  *
- * Returns: a new #GtkColorChooserDialog
+ * Returns: a new `GtkColorChooserDialog`
  */
 GtkWidget *
 gtk_color_chooser_dialog_new (const char *title,

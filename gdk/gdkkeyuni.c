@@ -880,7 +880,7 @@ static const struct {
  * gdk_keyval_to_unicode:
  * @keyval: a GDK key symbol
  *
- * Convert from a GDK key symbol to the corresponding ISO10646 (Unicode)
+ * Convert from a GDK key symbol to the corresponding Unicode
  * character.
  *
  * Note that the conversion does not take the current locale
@@ -888,8 +888,8 @@ static const struct {
  * keyvals, such as %GDK_KEY_KP_Decimal.
  *
  * Returns: the corresponding unicode character, or 0 if there
- *               is no corresponding character.
- **/
+ *   is no corresponding character.
+ */
 guint32
 gdk_keyval_to_unicode (guint keyval)
 {
@@ -1682,14 +1682,13 @@ static const struct {
 
 /**
  * gdk_unicode_to_keyval:
- * @wc: a ISO10646 encoded character
- * 
- * Convert from a ISO10646 character to a key symbol.
- * 
+ * @wc: a Unicode character
+ *
+ * Convert from a Unicode character to a key symbol.
+ *
  * Returns: the corresponding GDK key symbol, if one exists.
- *               or, if there is no corresponding symbol, 
- *               wc | 0x01000000
- **/
+ *   or, if there is no corresponding symbol, wc | 0x01000000
+ */
 guint
 gdk_unicode_to_keyval (guint32 wc)
 {

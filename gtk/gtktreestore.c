@@ -29,10 +29,9 @@
 
 
 /**
- * SECTION:gtktreestore
- * @Short_description: A tree-like data structure that can be used with the GtkTreeView
- * @Title: GtkTreeStore
- * @See_also: #GtkTreeModel
+ * GtkTreeStore:
+ *
+ * A tree-like data structure that can be used with the GtkTreeView
  *
  * The #GtkTreeStore object is a list model for use with a #GtkTreeView
  * widget.  It implements the #GtkTreeModel interface, and consequently,

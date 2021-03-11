@@ -38,26 +38,24 @@
 
 
 /**
- * SECTION:gtkviewport
- * @Short_description: An adapter which makes widgets scrollable
- * @Title: GtkViewport
- * @See_also:#GtkScrolledWindow, #GtkAdjustment
+ * GtkViewport:
  *
- * The #GtkViewport widget acts as an adaptor class, implementing
- * scrollability for child widgets that lack their own scrolling
- * capabilities. Use GtkViewport to scroll child widgets such as
- * #GtkGrid, #GtkBox, and so on.
+ * `GtkViewport` implements scrollability for widgets that lack their
+ * own scrolling capabilities.
  *
- * The GtkViewport will start scrolling content only if allocated less
- * than the child widget’s minimum size in a given orientation.
+ * Use `GtkViewport` to scroll child widgets such as `GtkGrid`,
+ * `GtkBox`, and so on.
+ *
+ * The `GtkViewport` will start scrolling content only if allocated
+ * less than the child widget’s minimum size in a given orientation.
  *
  * # CSS nodes
  *
- * GtkViewport has a single CSS node with name `viewport`.
+ * `GtkViewport` has a single CSS node with name `viewport`.
  *
  * # Accessibility
  *
- * GtkViewport uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
+ * `GtkViewport` uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
  */
 
 typedef struct _GtkViewportPrivate       GtkViewportPrivate;
@@ -366,6 +364,11 @@ gtk_viewport_class_init (GtkViewportClass *class)
   g_object_class_override_property (gobject_class, PROP_HSCROLL_POLICY, "hscroll-policy");
   g_object_class_override_property (gobject_class, PROP_VSCROLL_POLICY, "vscroll-policy");
 
+  /**
+   * GtkViewport:scroll-to-focus: (attributes org.gtk.Property.get=gtk_viewport_get_scroll_to_focus org.gtk.Property.set=gtk_viewport_set_scroll_to_focus)
+   *
+   * Whether to scroll when the focus changes.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_SCROLL_TO_FOCUS,
                                    g_param_spec_boolean ("scroll-to-focus",
@@ -374,7 +377,11 @@ gtk_viewport_class_init (GtkViewportClass *class)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
-
+  /**
+   * GtkViewport:child: (attributes org.gtk.Property.get=gtk_viewport_get_child org.gtk.Property.set=gtk_viewport_set_child)
+   *
+   * The child widget.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_CHILD,
                                    g_param_spec_object ("child",
@@ -486,10 +493,12 @@ gtk_viewport_init (GtkViewport *viewport)
  * @hadjustment: (allow-none): horizontal adjustment
  * @vadjustment: (allow-none): vertical adjustment
  *
- * Creates a new #GtkViewport with the given adjustments, or with default
+ * Creates a new `GtkViewport`.
+ *
+ * The new viewport uses the given adjustments, or default
  * adjustments if none are given.
  *
- * Returns: a new #GtkViewport
+ * Returns: a new `GtkViewport`
  */
 GtkWidget*
 gtk_viewport_new (GtkAdjustment *hadjustment,
@@ -570,11 +579,11 @@ gtk_viewport_adjustment_value_changed (GtkAdjustment *adjustment,
 }
 
 /**
- * gtk_viewport_get_scroll_to_focus:
- * @viewport: a #GtkViewport
+ * gtk_viewport_get_scroll_to_focus: (attributes org.gtk.Method.get_property=scroll-to-focus)
+ * @viewport: a `GtkViewport`
  *
  * Gets whether the viewport is scrolling to keep the focused
- * child in view. See gtk_viewport_set_scroll_to_focus().
+ * child in view.
  *
  * Returns: %TRUE if the viewport keeps the focus child scrolled to view
  */
@@ -587,8 +596,8 @@ gtk_viewport_get_scroll_to_focus (GtkViewport *viewport)
 }
 
 /**
- * gtk_viewport_set_scroll_to_focus:
- * @viewport: a #GtkViewport
+ * gtk_viewport_set_scroll_to_focus: (attributes org.gtk.Method.set_property=scroll-to-focus)
+ * @viewport: a `GtkViewport`
  * @scroll_to_focus: whether to keep the focus widget scrolled to view
  *
  * Sets whether the viewport should automatically scroll
@@ -691,8 +700,8 @@ clear_focus_change_handler (GtkViewport *viewport)
 }
 
 /**
- * gtk_viewport_set_child:
- * @viewport: a #GtkViewport
+ * gtk_viewport_set_child: (attributes org.gtk.Method.set_property=child)
+ * @viewport: a `GtkViewport`
  * @child: (allow-none): the child widget
  *
  * Sets the child widget of @viewport.
@@ -719,8 +728,8 @@ gtk_viewport_set_child (GtkViewport *viewport,
 }
 
 /**
- * gtk_viewport_get_child:
- * @viewport: a #GtkViewport
+ * gtk_viewport_get_child: (attributes org.gtk.Method.get_property=child)
+ * @viewport: a `GtkViewport`
  *
  * Gets the child widget of @viewport.
  *

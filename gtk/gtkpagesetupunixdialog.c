@@ -40,16 +40,16 @@
 #include "gtkdialogprivate.h"
 
 /**
- * SECTION:gtkpagesetupunixdialog
- * @Short_description: A page setup dialog
- * @Title: GtkPageSetupUnixDialog
- * @Include: gtk/gtkunixprint.h
+ * GtkPageSetupUnixDialog:
  *
- * #GtkPageSetupUnixDialog implements a page setup dialog for platforms
- * which don’t provide a native page setup dialog, like Unix. It can
- * be used very much like any other GTK dialog, at the cost of
- * the portability offered by the
- * [high-level printing API][gtk4-High-level-Printing-API]
+ * `GtkPageSetupUnixDialog` implements a page setup dialog for platforms
+ * which don’t provide a native page setup dialog, like Unix.
+ *
+ * ![An example GtkPageSetupUnixDialog](pagesetupdialog.png)
+ *
+ * It can be used very much like any other GTK dialog, at the
+ * cost of the portability offered by the high-level printing
+ * API in [class@Gtk.PrintOperation].
  */
 
 typedef struct _GtkPageSetupUnixDialogClass    GtkPageSetupUnixDialogClass;
@@ -772,7 +772,7 @@ paper_size_changed (GtkDropDown            *combo_box,
  *
  * Creates a new page setup dialog.
  *
- * Returns: the new #GtkPageSetupUnixDialog
+ * Returns: the new `GtkPageSetupUnixDialog`
  */
 GtkWidget *
 gtk_page_setup_unix_dialog_new (const char *title,
@@ -830,12 +830,12 @@ set_orientation (GtkPageSetupUnixDialog *dialog,
 
 /**
  * gtk_page_setup_unix_dialog_set_page_setup:
- * @dialog: a #GtkPageSetupUnixDialog
- * @page_setup: a #GtkPageSetup
+ * @dialog: a `GtkPageSetupUnixDialog`
+ * @page_setup: a `GtkPageSetup`
  *
- * Sets the #GtkPageSetup from which the page setup
+ * Sets the `GtkPageSetup` from which the page setup
  * dialog takes its values.
- **/
+ */
 void
 gtk_page_setup_unix_dialog_set_page_setup (GtkPageSetupUnixDialog *dialog,
                                            GtkPageSetup           *page_setup)
@@ -849,12 +849,12 @@ gtk_page_setup_unix_dialog_set_page_setup (GtkPageSetupUnixDialog *dialog,
 
 /**
  * gtk_page_setup_unix_dialog_get_page_setup:
- * @dialog: a #GtkPageSetupUnixDialog
+ * @dialog: a `GtkPageSetupUnixDialog`
  *
  * Gets the currently selected page setup from the dialog.
  *
  * Returns: (transfer none): the current page setup
- **/
+ */
 GtkPageSetup *
 gtk_page_setup_unix_dialog_get_page_setup (GtkPageSetupUnixDialog *dialog)
 {
@@ -897,12 +897,12 @@ set_active_printer (GtkPageSetupUnixDialog *dialog,
 
 /**
  * gtk_page_setup_unix_dialog_set_print_settings:
- * @dialog: a #GtkPageSetupUnixDialog
- * @print_settings: a #GtkPrintSettings
+ * @dialog: a `GtkPageSetupUnixDialog`
+ * @print_settings: a `GtkPrintSettings`
  *
- * Sets the #GtkPrintSettings from which the page setup dialog
+ * Sets the `GtkPrintSettings` from which the page setup dialog
  * takes its values.
- **/
+ */
 void
 gtk_page_setup_unix_dialog_set_print_settings (GtkPageSetupUnixDialog *dialog,
                                                GtkPrintSettings       *print_settings)
@@ -931,7 +931,7 @@ gtk_page_setup_unix_dialog_set_print_settings (GtkPageSetupUnixDialog *dialog,
 
 /**
  * gtk_page_setup_unix_dialog_get_print_settings:
- * @dialog: a #GtkPageSetupUnixDialog
+ * @dialog: a `GtkPageSetupUnixDialog`
  *
  * Gets the current print settings from the dialog.
  *

@@ -45,7 +45,7 @@ G_BEGIN_DECLS
  * @GDK_DRAG_CANCEL_USER_CANCELLED: Drag cancelled by the user
  * @GDK_DRAG_CANCEL_ERROR: Unspecified error.
  *
- * Used in #GdkDrag to the reason of a cancelled DND operation.
+ * Used in `GdkDrag` to the reason of a cancelled DND operation.
  */
 typedef enum {
   GDK_DRAG_CANCEL_NO_TARGET,

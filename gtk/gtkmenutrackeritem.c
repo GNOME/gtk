@@ -27,9 +27,7 @@
 #include <string.h>
 
 /*< private >
- * SECTION:gtkmenutrackeritem
- * @Title: GtkMenuTrackerItem
- * @Short_description: Small helper for model menu items
+ * GtkMenuTrackerItem:
  *
  * A #GtkMenuTrackerItem is a small helper class used by #GtkMenuTracker to
  * represent menu items. It has one of three classes: normal item, separator,

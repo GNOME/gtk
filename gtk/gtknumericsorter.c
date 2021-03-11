@@ -28,14 +28,12 @@
 #include <math.h>
 
 /**
- * SECTION:gtknumericsorter
- * @Title: GtkNumericSorter
- * @Short_description: Sort by comparing numbers 
- * @See_also: #GtkExpression
+ * GtkNumericSorter:
  *
- * GtkNumericSorter is a #GtkSorter that compares numbers.
+ * `GtkNumericSorter` is a `GtkSorter` that compares numbers.
  *
- * To obtain the numbers to compare, this sorter evaluates a #GtkExpression.
+ * To obtain the numbers to compare, this sorter evaluates a
+ * [class@Gtk.Expression].
  */
 
 struct _GtkNumericSorter
@@ -541,9 +539,9 @@ gtk_numeric_sorter_class_init (GtkNumericSorterClass *class)
   object_class->dispose = gtk_numeric_sorter_dispose;
 
   /**
-   * GtkNumericSorter:expression: (type GtkExpression)
+   * GtkNumericSorter:expression: (type GtkExpression) (attributes org.gtk.Property.get=gtk_numeric_sorter_get_expression org.gtk.Property.set=gtk_numeric_sorter_set_expression)
    *
-   * The expression to evaluate on items to get a number to compare with
+   * The expression to evaluate on items to get a number to compare with.
    */
   properties[PROP_EXPRESSION] =
     gtk_param_spec_expression ("expression",
@@ -552,9 +550,9 @@ gtk_numeric_sorter_class_init (GtkNumericSorterClass *class)
                                G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkNumericSorter:sort-order:
+   * GtkNumericSorter:sort-order: (attributes org.gtk.Property.get=gtk_numeric_sorter_get_sort_order org.gtk.Property.set=gtk_numeric_sorter_set_sort_order)
    *
-   * Whether the sorter will sort smaller numbers first
+   * Whether the sorter will sort smaller numbers first.
    */
   properties[PROP_SORT_ORDER] =
     g_param_spec_enum ("sort-order",
@@ -585,9 +583,9 @@ gtk_numeric_sorter_init (GtkNumericSorter *self)
  * Creates a new numeric sorter using the given @expression.
  *
  * Smaller numbers will be sorted first. You can call
- * gtk_numeric_sorter_set_sort_order() to change this.
+ * [method@Gtk.NumericSorter.set_sort_order] to change this.
  *
- * Returns: a new #GtkNumericSorter
+ * Returns: a new `GtkNumericSorter`
  */
 GtkNumericSorter *
 gtk_numeric_sorter_new (GtkExpression *expression)
@@ -604,12 +602,12 @@ gtk_numeric_sorter_new (GtkExpression *expression)
 }
 
 /**
- * gtk_numeric_sorter_get_expression:
- * @self: a #GtkNumericSorter
+ * gtk_numeric_sorter_get_expression: (attributes org.gtk.Method.get_property=expression)
+ * @self: a `GtkNumericSorter`
  *
  * Gets the expression that is evaluated to obtain numbers from items.
  *
- * Returns: (transfer none) (nullable): a #GtkExpression, or %NULL
+ * Returns: (transfer none) (nullable): a `GtkExpression`, or %NULL
  */
 GtkExpression *
 gtk_numeric_sorter_get_expression (GtkNumericSorter *self)
@@ -620,9 +618,9 @@ gtk_numeric_sorter_get_expression (GtkNumericSorter *self)
 }
 
 /**
- * gtk_numeric_sorter_set_expression:
- * @self: a #GtkNumericSorter
- * @expression: (nullable) (transfer none): a #GtkExpression, or %NULL
+ * gtk_numeric_sorter_set_expression: (attributes org.gtk.Method.set_property=expression)
+ * @self: a `GtkNumericSorter`
+ * @expression: (nullable) (transfer none): a `GtkExpression`, or %NULL
  *
  * Sets the expression that is evaluated to obtain numbers from items.
  *
@@ -630,7 +628,7 @@ gtk_numeric_sorter_get_expression (GtkNumericSorter *self)
  * compare items as invalid.
  *
  * The expression must have a return type that can be compared
- * numerically, such as #G_TYPE_INT or #G_TYPE_DOUBLE.
+ * numerically, such as %G_TYPE_INT or %G_TYPE_DOUBLE.
  */
 void
 gtk_numeric_sorter_set_expression (GtkNumericSorter *self,
@@ -653,8 +651,8 @@ gtk_numeric_sorter_set_expression (GtkNumericSorter *self,
 }
 
 /**
- * gtk_numeric_sorter_set_sort_order:
- * @self: a #GtkNumericSorter
+ * gtk_numeric_sorter_set_sort_order: (attributes org.gtk.Method.set_property=sort-order)
+ * @self: a `GtkNumericSorter`
  * @sort_order: whether to sort smaller numbers first
  *
  * Sets whether to sort smaller numbers before larger ones.
@@ -678,8 +676,8 @@ gtk_numeric_sorter_set_sort_order (GtkNumericSorter *self,
 }
 
 /**
- * gtk_numeric_sorter_get_sort_order:
- * @self: a #GtkNumericSorter
+ * gtk_numeric_sorter_get_sort_order: (attributes org.gtk.Method.get_property=sort-order)
+ * @self: a `GtkNumericSorter`
  *
  * Gets whether this sorter will sort smaller numbers first.
  *

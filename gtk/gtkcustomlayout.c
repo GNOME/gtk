@@ -1,15 +1,12 @@
 /**
- * SECTION:gtkcustomlayout
- * @Title: GtkCustomLayout
- * @Short_description: A convenience layout manager
+ * GtkCustomLayout:
  *
- * #GtkCustomLayout is a convenience type meant to be used as a transition
- * mechanism between #GtkWidgets implementing a layout policy, and
- * #GtkLayoutManager classes.
+ * `GtkCustomLayout` uses closures for size negotiation.
  *
- * A #GtkCustomLayout uses closures matching to the old #GtkWidget virtual
- * functions for size negotiation, as a convenience API to ease the porting
- * towards the corresponding #GtkLayoutManager virtual functions.
+ * A `GtkCustomLayout `uses closures matching to the old `GtkWidget`
+ * virtual functions for size negotiation, as a convenience API to
+ * ease the porting towards the corresponding `GtkLayoutManager
+ * virtual functions.
  */
 
 #include "config.h"
@@ -98,7 +95,7 @@ gtk_custom_layout_init (GtkCustomLayout *self)
 /**
  * gtk_custom_layout_new:
  * @request_mode: (nullable) (scope call): a function to retrieve
- *   the #GtkSizeRequestMode of the widget using the layout; the
+ *   the `GtkSizeRequestMode` of the widget using the layout; the
  *   default request mode is %GTK_SIZE_REQUEST_CONSTANT_SIZE
  * @measure: (not nullable) (scope call): a function to measure the widget using the layout manager
  * @allocate: (not nullable) (scope call): a function to allocate the children of the widget using
@@ -106,11 +103,11 @@ gtk_custom_layout_init (GtkCustomLayout *self)
  *
  * Creates a new legacy layout manager.
  *
- * Legacy layout managers map to the old #GtkWidget size negotiation
+ * Legacy layout managers map to the old `GtkWidget` size negotiation
  * virtual functions, and are meant to be used during the transition
  * from layout containers to layout manager delegates.
  *
- * Returns: (transfer full): the newly created #GtkCustomLayout
+ * Returns: (transfer full): the newly created `GtkCustomLayout`
  */
 GtkLayoutManager *
 gtk_custom_layout_new (GtkCustomRequestModeFunc request_mode,

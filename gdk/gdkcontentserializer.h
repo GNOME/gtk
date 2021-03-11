@@ -32,11 +32,6 @@ G_BEGIN_DECLS
 #define GDK_CONTENT_SERIALIZER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_CONTENT_SERIALIZER, GdkContentSerializer))
 #define GDK_IS_CONTENT_SERIALIZER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GDK_TYPE_CONTENT_SERIALIZER))
 
-/**
- * GdkContentSerializer:
- *
- * Should not be accessed directly.
- */
 typedef struct _GdkContentSerializer GdkContentSerializer;
 
 /**
@@ -44,6 +39,7 @@ typedef struct _GdkContentSerializer GdkContentSerializer;
  * @serializer: a #GdkContentSerializer
  *
  * The type of a function that can be registered with gdk_content_register_serializer().
+ *
  * When the function gets called to operate on content, it can call functions on the
  * @serializer object to obtain the mime type, output stream, user data, etc. for its
  * operation.

@@ -28,10 +28,9 @@
 #include "gtktypebuiltins.h"
 
 /**
- * SECTION:gtkcellrenderer
- * @Short_description: An object for rendering a single cell
- * @Title: GtkCellRenderer
- * @See_also: #GtkCellEditable
+ * GtkCellRenderer:
+ *
+ * An object for rendering a single cell
  *
  * The #GtkCellRenderer is a base class of a set of objects used for
  * rendering a cell to a #cairo_t.  These objects are used primarily by

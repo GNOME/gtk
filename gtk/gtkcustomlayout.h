@@ -59,7 +59,7 @@ typedef void (* GtkCustomMeasureFunc) (GtkWidget      *widget,
  * @height: the new height of the widget
  * @baseline: the new baseline of the widget, or -1
  *
- * A function to be used by #GtkCustomLayout to allocate a widget.
+ * A function to be used by `GtkCustomLayout` to allocate a widget.
  */
 typedef void (* GtkCustomAllocateFunc) (GtkWidget    *widget,
                                         int           width,

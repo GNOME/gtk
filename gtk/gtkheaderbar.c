@@ -38,34 +38,38 @@
 #include <string.h>
 
 /**
- * SECTION:gtkheaderbar
- * @Short_description: A box with a centered child
- * @Title: GtkHeaderBar
- * @See_also: #GtkBox, #GtkActionBar
+ * GtkHeaderBar:
  *
- * GtkHeaderBar is similar to a horizontal #GtkBox. It allows children to 
- * be placed at the start or the end. In addition, it allows the window
- * title to be displayed. The title will be centered with respect to the
- * width of the box, even if the children at either side take up different
- * amounts of space.
+ * `GtkHeaderBar` is a widget for creating custom title bars for windows.
  *
- * GtkHeaderBar can add typical window frame controls, such as minimize,
+ * ![An example GtkHeaderBar](headerbar.png)
+ *
+ * `GtkHeaderBar` is similar to a horizontal `GtkCenterBox`. It allows
+ * children to be placed at the start or the end. In addition, it allows
+ * the window title to be displayed. The title will be centered with respect
+ * to the width of the box, even if the children at either side take up
+ * different amounts of space.
+ *
+ * `GtkHeaderBar` can add typical window frame controls, such as minimize,
  * maximize and close buttons, or the window icon.
  *
- * For these reasons, GtkHeaderBar is the natural choice for use as the custom
- * titlebar widget of a #GtkWindow (see gtk_window_set_titlebar()), as it gives
- * features typical of titlebars while allowing the addition of child widgets.
+ * For these reasons, `GtkHeaderBar` is the natural choice for use as the
+ * custom titlebar widget of a `GtkWindow (see [method@Gtk.Window.set_titlebar]),
+ * as it gives features typical of titlebars while allowing the addition of
+ * child widgets.
  *
- * The GtkHeaderBar implementation of the #GtkBuildable interface supports
+ * ## GtkHeaderBar as GtkBuildable
+ *
+ * The `GtkHeaderBar` implementation of the `GtkBuildable` interface supports
  * adding children at the start or end sides by specifying “start” or “end” as
  * the “type” attribute of a <child> element, or setting the title widget by
  * specifying “title” value.
  *
- * By default the GtkHeaderBar uses a #GtkLabel displaying the title of the
+ * By default the `GtkHeaderBar` uses a `GtkLabel` displaying the title of the
  * window it is contained in as the title widget, equivalent to the following
  * UI definition:
  *
- * |[
+ * ```xml
  * <object class="GtkHeaderBar">
  *   <property name="title-widget">
  *     <object class="GtkLabel">
@@ -79,11 +83,11 @@
  *     </object>
  *   </property>
  * </object>
- * ]|
+ * ```
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * headerbar
  * ╰── windowhandle
  *     ╰── box
@@ -94,19 +98,19 @@
  *         ╰── box.end
  *             ├── [other children]
  *             ╰── windowcontrols.end
- * ]|
+ * ```
  *
- * A #GtkHeaderBar's CSS node is called `headerbar`. It contains a `windowhandle`
+ * A `GtkHeaderBar`'s CSS node is called `headerbar`. It contains a `windowhandle`
  * subnode, which contains a `box` subnode, which contains two `box` subnodes at
  * the start and end of the header bar, as well as a center node that represents
  * the title.
  *
- * Each of the boxes contains a `windowcontrols` subnode, see #GtkWindowControls
- * for details, as well as other children.
+ * Each of the boxes contains a `windowcontrols` subnode, see
+ * [class@Gtk.WindowControls] for details, as well as other children.
  *
  * # Accessibility
  *
- * GtkHeaderBar uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
+ * `GtkHeaderBar` uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
  */
 
 #define MIN_TITLE_CHARS 5
@@ -279,19 +283,20 @@ construct_title_label (GtkHeaderBar *bar)
 
 /**
  * gtk_header_bar_set_title_widget:
- * @bar: a #GtkHeaderBar
+ * @bar: a `GtkHeaderBar`
  * @title_widget: (allow-none): a widget to use for a title
  *
- * Sets the title for the #GtkHeaderBar.
+ * Sets the title for the `GtkHeaderBar`.
  *
- * When set to %NULL, the headerbar will display the title of the window it is
- * contained in.
+ * When set to %NULL, the headerbar will display the title of
+ * the window it is contained in.
  *
- * The title should help a user identify the current view. To achieve the same
- * style as the builtin title, use the “title” style class.
+ * The title should help a user identify the current view.
+ * To achieve the same style as the builtin title, use the
+ * “title” style class.
  *
- * You should set the title widget to %NULL, for the window title label to be
- * visible again.
+ * You should set the title widget to %NULL, for the window
+ * title label to be visible again.
  */
 void
 gtk_header_bar_set_title_widget (GtkHeaderBar *bar,
@@ -327,13 +332,14 @@ gtk_header_bar_set_title_widget (GtkHeaderBar *bar,
 
 /**
  * gtk_header_bar_get_title_widget:
- * @bar: a #GtkHeaderBar
+ * @bar: a `GtkHeaderBar`
  *
- * Retrieves the title widget of the header. See
- * gtk_header_bar_set_title_widget().
+ * Retrieves the title widget of the header.
+ *
+ * See [method@Gtk.HeaderBar.set_title_widget].
  *
  * Returns: (nullable) (transfer none): the title widget
- *    of the header, or %NULL if none has been set explicitly.
+ *   of the header, or %NULL if none has been set explicitly.
  */
 GtkWidget *
 gtk_header_bar_get_title_widget (GtkHeaderBar *bar)
@@ -472,12 +478,15 @@ gtk_header_bar_pack (GtkHeaderBar *bar,
 
 /**
  * gtk_header_bar_remove:
- * @bar: a #GtkHeaderBar
+ * @bar: a `GtkHeaderBar`
  * @child: the child to remove
  *
- * Removes a child from @bar, after it has been added
- * with gtk_header_bar_pack_start(), gtk_header_bar_pack_end()
- * or gtk_header_bar_set_title_widget().
+ * Removes a child from the `GtkHeaderBar`.
+ *
+ * The child must have been added with
+ * [method@Gtk.HeaderBar.pack_start],
+ * [method@Gtk.HeaderBar.pack_end] or
+ * [method@Gtk.HeaderBar.set_title_widget].
  */
 void
 gtk_header_bar_remove (GtkHeaderBar *bar,
@@ -565,14 +574,14 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkHeaderBar:show-title-buttons:
+   * GtkHeaderBar:show-title-buttons: (attributes org.gtk.Property.get=gtk_header_bar_get_show_title_buttons org.gtk.Property.set=gtk_header_bar_set_show_title_buttons)
    *
    * Whether to show title buttons like close, minimize, maximize.
    *
    * Which buttons are actually shown and where is determined
-   * by the #GtkHeaderBar:decoration-layout property, and by
-   * the state of the window (e.g. a close button will not be
-   * shown if the window can't be closed).
+   * by the [property@Gtk.HeaderBar:decoration-layout] property,
+   * and by the state of the window (e.g. a close button will not
+   * be shown if the window can't be closed).
    */
   header_bar_props[PROP_SHOW_TITLE_BUTTONS] =
       g_param_spec_boolean ("show-title-buttons",
@@ -582,14 +591,12 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkHeaderBar:decoration-layout:
+   * GtkHeaderBar:decoration-layout: (attributes org.gtk.Property.get=gtk_header_bar_get_decoration_layout org.gtk.Property.set=gtk_header_bar_set_decoration_layout)
    *
-   * The decoration layout for buttons. If this property is
-   * not set, the #GtkSettings:gtk-decoration-layout setting
-   * is used.
+   * The decoration layout for buttons.
    *
-   * See gtk_header_bar_set_decoration_layout() for information
-   * about the format of this string.
+   * If this property is not set, the
+   * [property@Gtk.Settings:gtk-decoration-layout] setting is used.
    */
   header_bar_props[PROP_DECORATION_LAYOUT] =
       g_param_spec_string ("decoration-layout",
@@ -660,7 +667,7 @@ gtk_header_bar_buildable_init (GtkBuildableIface *iface)
 
 /**
  * gtk_header_bar_pack_start:
- * @bar: A #GtkHeaderBar
+ * @bar: A `GtkHeaderBar`
  * @child: the #GtkWidget to be added to @bar
  *
  * Adds @child to @bar, packed with reference to the
@@ -675,7 +682,7 @@ gtk_header_bar_pack_start (GtkHeaderBar *bar,
 
 /**
  * gtk_header_bar_pack_end:
- * @bar: A #GtkHeaderBar
+ * @bar: A `GtkHeaderBar`
  * @child: the #GtkWidget to be added to @bar
  *
  * Adds @child to @bar, packed with reference to the
@@ -691,9 +698,9 @@ gtk_header_bar_pack_end (GtkHeaderBar *bar,
 /**
  * gtk_header_bar_new:
  *
- * Creates a new #GtkHeaderBar widget.
+ * Creates a new `GtkHeaderBar` widget.
  *
- * Returns: a new #GtkHeaderBar
+ * Returns: a new `GtkHeaderBar`
  */
 GtkWidget *
 gtk_header_bar_new (void)
@@ -702,8 +709,8 @@ gtk_header_bar_new (void)
 }
 
 /**
- * gtk_header_bar_get_show_title_buttons:
- * @bar: a #GtkHeaderBar
+ * gtk_header_bar_get_show_title_buttons: (attributes org.gtk.Method.get_property=show-title-buttons)
+ * @bar: a `GtkHeaderBar`
  *
  * Returns whether this header bar shows the standard window
  * title buttons.
@@ -719,12 +726,12 @@ gtk_header_bar_get_show_title_buttons (GtkHeaderBar *bar)
 }
 
 /**
- * gtk_header_bar_set_show_title_buttons:
- * @bar: a #GtkHeaderBar
+ * gtk_header_bar_set_show_title_buttons: (attributes org.gtk.Method.set_property=show-title-buttons)
+ * @bar: a `GtkHeaderBar`
  * @setting: %TRUE to show standard title buttons
  *
  * Sets whether this header bar shows the standard window
- * title buttons including close, maximize, and minimize.
+ * title buttons.
  */
 void
 gtk_header_bar_set_show_title_buttons (GtkHeaderBar *bar,
@@ -760,19 +767,20 @@ gtk_header_bar_set_show_title_buttons (GtkHeaderBar *bar,
 }
 
 /**
- * gtk_header_bar_set_decoration_layout:
- * @bar: a #GtkHeaderBar
+ * gtk_header_bar_set_decoration_layout: (attributes org.gtk.Method.set_property=decoration-layout)
+ * @bar: a `GtkHeaderBar`
  * @layout: (allow-none): a decoration layout, or %NULL to
  *     unset the layout
  *
- * Sets the decoration layout for this header bar, overriding
- * the #GtkSettings:gtk-decoration-layout setting. 
+ * Sets the decoration layout for this header bar.
+ *
+ * This property overrides the
+ * [property@Gtk.Settings:gtk-decoration-layout] setting.
  *
  * There can be valid reasons for overriding the setting, such
  * as a header bar design that does not allow for buttons to take
  * room on the right, or only offers room for a single close button.
- * Split header bars are another example for overriding the
- * setting.
+ * Split header bars are another example for overriding the setting.
  *
  * The format of the string is button names, separated by commas.
  * A colon separates the buttons that should appear on the left
@@ -795,11 +803,10 @@ gtk_header_bar_set_decoration_layout (GtkHeaderBar *bar,
 }
 
 /**
- * gtk_header_bar_get_decoration_layout:
- * @bar: a #GtkHeaderBar
+ * gtk_header_bar_get_decoration_layout: (attributes org.gtk.Method.get_property=decoration-layout)
+ * @bar: a `GtkHeaderBar`
  *
- * Gets the decoration layout set with
- * gtk_header_bar_set_decoration_layout().
+ * Gets the decoration layout of the `GtkHeaderBar`.
  *
  * Returns: (nullable): the decoration layout
  */

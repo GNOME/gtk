@@ -25,12 +25,10 @@
 #include "gtktypebuiltins.h"
 
 /**
- * SECTION:gtkcustomsorter
- * @Title: GtkCustomSorter
- * @Short_description: Sorting with a callbacks
+ * GtkCustomSorter:
  *
- * GtkCustomSorter is a #GtkSorter implementation that sorts
- * via a traditional #GCompareDataFunc callback.
+ * `GtkCustomSorter` is a `GtkSorter` implementation that sorts via a callback
+ * function.
  */
 struct _GtkCustomSorter
 {
@@ -101,16 +99,16 @@ gtk_custom_sorter_init (GtkCustomSorter *self)
 
 /**
  * gtk_custom_sorter_new:
- * @sort_func: (nullable): the #GCompareDataFunc to use for sorting
+ * @sort_func: (nullable): the `GCompareDataFunc` to use for sorting
  * @user_data: (nullable): user data to pass to @sort_func
  * @user_destroy: (nullable): destroy notify for @user_data
  *
- * Creates a new #GtkSorter that works by calling
+ * Creates a new `GtkSorter` that works by calling
  * @sort_func to compare items.
  *
  * If @sort_func is %NULL, all items are considered equal.
  *
- * Returns: a new #GtkCustomSorter
+ * Returns: a new `GtkCustomSorter`
  */
 GtkCustomSorter *
 gtk_custom_sorter_new (GCompareDataFunc sort_func,
@@ -128,7 +126,7 @@ gtk_custom_sorter_new (GCompareDataFunc sort_func,
 
 /**
  * gtk_custom_sorter_set_sort_func:
- * @self: a #GtkCustomSorter
+ * @self: a `GtkCustomSorter`
  * @sort_func: (nullable): function to sort items
  * @user_data: (nullable): user data to pass to @match_func
  * @user_destroy: destroy notify for @user_data
@@ -142,7 +140,7 @@ gtk_custom_sorter_new (GCompareDataFunc sort_func,
  *
  * If a previous function was set, its @user_destroy will be
  * called now.
- **/
+ */
 void
 gtk_custom_sorter_set_sort_func (GtkCustomSorter  *self,
                                  GCompareDataFunc  sort_func,

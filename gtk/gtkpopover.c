@@ -19,32 +19,34 @@
  */
 
 /**
- * SECTION:gtkpopover
- * @Short_description: Context dependent bubbles
- * @Title: GtkPopover
+ * GtkPopover:
  *
- * GtkPopover is a bubble-like context window, primarily meant to
- * provide context-dependent information or options. Popovers are
- * attached to a widget, set with gtk_widget_set_parent(). By
- * default they will point to the whole widget area, although this
- * behavior can be changed through gtk_popover_set_pointing_to().
+ * `GtkPopover` is a bubble-like context popup.
+ *
+ * ![An example GtkPopover](popover.png)
+ *
+ * It is primarily meant to provide context-dependent information
+ * or options. Popovers are attached to a parent widget. By default,
+ * they point to the whole widget area, although this behavior can be
+ * changed with [method@Gtk.Popover.set_pointing_to].
  *
  * The position of a popover relative to the widget it is attached to
- * can also be changed through gtk_popover_set_position().
+ * can also be changed with [method@Gtk.Popover.set_position]
  *
- * By default, #GtkPopover performs a grab, in order to ensure input events
- * get redirected to it while it is shown, and also so the popover is dismissed
- * in the expected situations (clicks outside the popover, or the Escape key
- * being pressed). If no such modal behavior is desired on a popover,
- * gtk_popover_set_autohide() may be called on it to tweak its behavior.
+ * By default, `GtkPopover` performs a grab, in order to ensure input
+ * events get redirected to it while it is shown, and also so the popover
+ * is dismissed in the expected situations (clicks outside the popover,
+ * or the Escape key being pressed). If no such modal behavior is desired
+ * on a popover, [method@Gtk.Popover.set_autohide] may be called on it to
+ * tweak its behavior.
  *
  * ## GtkPopover as menu replacement
  *
- * GtkPopover is often used to replace menus. The best was to do this
- * is to use the #GtkPopoverMenu subclass which supports being populated
- * from a #GMenuModel with gtk_popover_menu_new_from_model().
+ * `GtkPopover` is often used to replace menus. The best was to do this
+ * is to use the [class@Gtk.PopoverMenu] subclass which supports being
+ * populated from a `GMenuModel` with [ctor@Gtk.PopoverMenu.new_from_model].
  *
- * |[
+ * ```xml
  * <section>
  *   <attribute name="display-hint">horizontal-buttons</attribute>
  *   <item>
@@ -63,37 +65,38 @@
  *     <attribute name="verb-icon">edit-paste-symbolic</attribute>
  *   </item>
  * </section>
- * ]|
+ * ```
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * popover[.menu]
  * ├── arrow
  * ╰── contents.background
  *     ╰── <child>
- * ]|
+ * ```
  *
- * The contents child node always gets the .background style class and
- * the popover itself gets the .menu style class if the popover is
- * menu-like (i.e. #GtkPopoverMenu).
+ * The contents child node always gets the .background style class
+ * and the popover itself gets the .menu style class if the popover
+ * is menu-like (i.e. `GtkPopoverMenu`).
  *
- * Particular uses of GtkPopover, such as touch selection popups or magnifiers
- * in #GtkEntry or #GtkTextView get style classes like .touch-selection or .magnifier
- * to differentiate from plain popovers.
+ * Particular uses of `GtkPopover`, such as touch selection popups or
+ * magnifiers in `GtkEntry` or `GtkTextView` get style classes like
+ * .touch-selection or .magnifier to differentiate from plain popovers.
  *
  * When styling a popover directly, the popover node should usually
- * not have any background. The visible part of the popover can have a shadow.
- * To specify it in CSS, set the box-shadow of the contents node.
+ * not have any background. The visible part of the popover can have
+ * a shadow. To specify it in CSS, set the box-shadow of the contents node.
  *
- * Note that, in order to accomplish appropriate arrow visuals, #GtkPopover uses
- * custom drawing for the arrow node. This makes it possible for the arrow to
- * change its shape dynamically, but it also limits the possibilities of styling
- * it using CSS. In particular, the arrow gets drawn over the content node's
- * shadow border so they look like one shape, which means that the border width
- * of the content node and the arrow node should be the same. The arrow also does
- * not support any border shape other than solid, no border-radius, only one
- * border width (border-bottom-width is used) and no box-shadow.
+ * Note that, in order to accomplish appropriate arrow visuals, `GtkPopover`
+ * uses custom drawing for the arrow node. This makes it possible for the
+ * arrow to change its shape dynamically, but it also limits the possibilities
+ * of styling it using CSS. In particular, the arrow gets drawn over the
+ * content node's border and shadow, so they look like one shape, which
+ * means that the border width of the content node and the arrow node should
+ * be the same. The arrow also does not support any border shape other than
+ * solid, no border-radius, only one border width (border-bottom-width is
+ * used) and no box-shadow.
  */
 
 #include "config.h"
@@ -593,7 +596,7 @@ present_popup (GtkPopover *popover)
 
 /**
  * gtk_popover_present:
- * @popover: a #GtkPopover
+ * @popover: a `GtkPopover`
  *
  * Presents the popover to the user.
  */
@@ -1741,6 +1744,11 @@ gtk_popover_class_init (GtkPopoverClass *klass)
 
   klass->activate_default = gtk_popover_activate_default;
 
+  /**
+   * GtkPopover:pointing-to: (attributes org.gtk.Property.get=gtk_popover_get_pointing_to org.gtk.Property.set=gtk_popover_set_pointing_to)
+   *
+   * Rectangle in the parent widget that the popover points to.
+   */
   properties[PROP_POINTING_TO] =
       g_param_spec_boxed ("pointing-to",
                           P_("Pointing to"),
@@ -1748,6 +1756,11 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                           GDK_TYPE_RECTANGLE,
                           GTK_PARAM_READWRITE);
 
+  /**
+   * GtkPopover:position: (attributes org.gtk.Property.get=gtk_popover_get_position org.gtk.Property.set=gtk_popover_set_position)
+   *
+   * How to place the popover, relative to its parent.
+   */
   properties[PROP_POSITION] =
       g_param_spec_enum ("position",
                          P_("Position"),
@@ -1755,6 +1768,11 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                          GTK_TYPE_POSITION_TYPE, GTK_POS_BOTTOM,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkPopover:autohide: (attributes org.gtk.Property.get=gtk_popover_get_autohide org.gtk.Property.set=gtk_popover_set_autohide)
+   *
+   * Whether to dismiss the popover on outside clicks.
+   */
   properties[PROP_AUTOHIDE] =
       g_param_spec_boolean ("autohide",
                             P_("Autohide"),
@@ -1762,6 +1780,11 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkPopover:default-widget: (attributes org.gtk.Popover.set=gtk_popover_set_default_widget)
+   *
+   * The default widget inside the popover.
+   */
   properties[PROP_DEFAULT_WIDGET] =
       g_param_spec_object ("default-widget",
                            P_("Default widget"),
@@ -1769,6 +1792,11 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                            GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkPopover:has-arrow: (attributes org.gtk.Popover.get=gtk_popover_get_has_arrow org.gtk.Property.set=gtk_popover_set_has_arrow)
+   *
+   * Whether to draw an arrow.
+   */
   properties[PROP_HAS_ARROW] =
       g_param_spec_boolean ("has-arrow",
                             P_("Has Arrow"),
@@ -1776,6 +1804,11 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkPopover:mnemonics-visible: (attributes org.gtk.Property.get=gtk_popover_get_mnemonics_visible org.gtk.Property.set=gtk_popover_set_mnemonics_visible)
+   *
+   * Whether mnemonics are currently visible in this popover.
+   */
   properties[PROP_MNEMONICS_VISIBLE] =
       g_param_spec_boolean ("mnemonics-visible",
                             P_("Mnemonics visible"),
@@ -1783,6 +1816,11 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkPopover:child: (attributes org.gtk.Property.get=gtk_popover_get_child org.gtk.Property.set=gtk_popover_set_child)
+   *
+   * The child widget.
+   */
   properties[PROP_CHILD] =
       g_param_spec_object ("child",
                            P_("Child"),
@@ -1790,6 +1828,13 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                            GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkPopover:cascade-popdown: (attributes org.gtk.Property.get=gtk_popover_get_cascade_popdown org.gtk.Property.set=gtk_popover_set_cascade_popdown)
+   *
+   * Whether the popover pops down after a child popover.
+   *
+   * This is used to implement the expected behavior of submenus.
+   */
   properties[PROP_CASCADE_POPDOWN] =
       g_param_spec_boolean ("cascade-popdown",
                             P_("Cascade popdown"),
@@ -1801,9 +1846,9 @@ gtk_popover_class_init (GtkPopoverClass *klass)
 
   /**
    * GtkPopover::closed:
-   * @self: the #GtkPopover which received the signal
+   * @self: the `GtkPopover` which received the signal
    *
-   * The ::closed signal is emitted when the popover is closed.
+   * Emitted when the popover is closed.
    */
   signals[CLOSED] =
     g_signal_new (I_("closed"),
@@ -1817,12 +1862,11 @@ gtk_popover_class_init (GtkPopoverClass *klass)
 
   /**
    * GtkPopover::activate-default:
-   * @self: the #GtkPopover which received the signal
+   * @self: the `GtkPopover` which received the signal
    *
-   * The ::activate-default signal is a
-   * [keybinding signal][GtkSignalAction]
-   * which gets emitted when the user activates the default widget
-   * of @self.
+   * Emitted whend the user activates the default widget.
+   *
+   * This is a [keybinding signal](class.SignalAction.html).
    */
   signals[ACTIVATE_DEFAULT] =
     g_signal_new (I_("activate-default"),
@@ -1857,9 +1901,9 @@ gtk_popover_class_init (GtkPopoverClass *klass)
 /**
  * gtk_popover_new:
  *
- * Creates a new popover.
+ * Creates a new `GtkPopover`.
  *
- * Returns: the new popover
+ * Returns: the new `GtkPopover`
  */
 GtkWidget *
 gtk_popover_new (void)
@@ -1868,8 +1912,8 @@ gtk_popover_new (void)
 }
 
 /**
- * gtk_popover_set_child:
- * @popover: a #GtkPopover
+ * gtk_popover_set_child: (attributes org.gtk.Method.set_property=child)
+ * @popover: a `GtkPopover`
  * @child: (allow-none): the child widget
  *
  * Sets the child widget of @popover.
@@ -1898,8 +1942,8 @@ gtk_popover_set_child (GtkPopover *popover,
 }
 
 /**
- * gtk_popover_get_child:
- * @popover: a #GtkPopover
+ * gtk_popover_get_child: (attributes org.gtk.Method.get_property=child)
+ * @popover: a `GtkPopover`
  *
  * Gets the child widget of @popover.
  *
@@ -1917,14 +1961,16 @@ gtk_popover_get_child (GtkPopover *popover)
 
 
 /**
- * gtk_popover_set_default_widget:
- * @popover: a #GtkPopover
+ * gtk_popover_set_default_widget: (attributes org.gtk.Method.set_property=default-widget)
+ * @popover: a `GtkPopover`
  * @widget: (allow-none): a child widget of @popover to set as
- *     the default, or %NULL to unset the default widget for the popover
+ *   the default, or %NULL to unset the default widget for the popover
+ *
+ * Sets the default widget of a `GtkPopover`.
  *
  * The default widget is the widget that’s activated when the user
  * presses Enter in a dialog (for example). This function sets or
- * unsets the default widget for a #GtkPopover.
+ * unsets the default widget for a `GtkPopover`.
  */
 void
 gtk_popover_set_default_widget (GtkPopover *popover,
@@ -1993,13 +2039,14 @@ gtk_popover_buildable_init (GtkBuildableIface *iface)
 }
 
 /**
- * gtk_popover_set_pointing_to:
- * @popover: a #GtkPopover
+ * gtk_popover_set_pointing_to: (attributes org.gtk.Method.set_property=pointing-to)
+ * @popover: a `GtkPopover`
  * @rect: rectangle to point to
  *
- * Sets the rectangle that @popover will point to, in the
- * coordinate space of the @popover parent.
- **/
+ * Sets the rectangle that @popover points to.
+ *
+ * This is in the coordinate space of the @popover parent.
+ */
 void
 gtk_popover_set_pointing_to (GtkPopover         *popover,
                              const GdkRectangle *rect)
@@ -2025,17 +2072,19 @@ gtk_popover_set_pointing_to (GtkPopover         *popover,
 }
 
 /**
- * gtk_popover_get_pointing_to:
- * @popover: a #GtkPopover
+ * gtk_popover_get_pointing_to: (attributes org.gtk.Method.get_property=pointing-to)
+ * @popover: a `GtkPopover`
  * @rect: (out): location to store the rectangle
+ *
+ * Gets the rectangle that the popover points to.
  *
  * If a rectangle to point to has been set, this function will
  * return %TRUE and fill in @rect with such rectangle, otherwise
- * it will return %FALSE and fill in @rect with the attached
+ * it will return %FALSE and fill in @rect with the parent
  * widget coordinates.
  *
  * Returns: %TRUE if a rectangle to point to was set.
- **/
+ */
 gboolean
 gtk_popover_get_pointing_to (GtkPopover   *popover,
                              GdkRectangle *rect)
@@ -2065,17 +2114,19 @@ gtk_popover_get_pointing_to (GtkPopover   *popover,
 }
 
 /**
- * gtk_popover_set_position:
- * @popover: a #GtkPopover
+ * gtk_popover_set_position: (attributes org.gtk.Method.set_property=position)
+ * @popover: a `GtkPopover`
  * @position: preferred popover position
  *
- * Sets the preferred position for @popover to appear. If the @popover
- * is currently visible, it will be immediately updated.
+ * Sets the preferred position for @popover to appear.
+ *
+ * If the @popover is currently visible, it will be immediately
+ * updated.
  *
  * This preference will be respected where possible, although
  * on lack of space (eg. if close to the window edges), the
- * #GtkPopover may choose to appear on the opposite side
- **/
+ * `GtkPopover` may choose to appear on the opposite side.
+ */
 void
 gtk_popover_set_position (GtkPopover      *popover,
                           GtkPositionType  position)
@@ -2099,13 +2150,13 @@ gtk_popover_set_position (GtkPopover      *popover,
 }
 
 /**
- * gtk_popover_get_position:
- * @popover: a #GtkPopover
+ * gtk_popover_get_position: (attributes org.gtk.Method.get_property=position)
+ * @popover: a `GtkPopover`
  *
  * Returns the preferred position of @popover.
  *
  * Returns: The preferred position.
- **/
+ */
 GtkPositionType
 gtk_popover_get_position (GtkPopover *popover)
 {
@@ -2117,19 +2168,20 @@ gtk_popover_get_position (GtkPopover *popover)
 }
 
 /**
- * gtk_popover_set_autohide:
- * @popover: a #GtkPopover
- * @autohide: #TRUE to dismiss the popover on outside clicks
+ * gtk_popover_set_autohide: (attributes org.gtk.Method.set_property=autohide)
+ * @popover: a `GtkPopover`
+ * @autohide: %TRUE to dismiss the popover on outside clicks
  *
  * Sets whether @popover is modal.
  *
  * A modal popover will grab the keyboard focus on it when being
- * displayed. Clicking outside the popover area or pressing Esc will
- * dismiss the popover.
+ * displayed. Clicking outside the popover area or pressing Esc
+ * will dismiss the popover.
  *
- * Called this function on an already showing popup with a new autohide value
- * different from the current one, will cause the popup to be hidden.
- **/
+ * Called this function on an already showing popup with a new
+ * autohide value different from the current one, will cause the
+ * popup to be hidden.
+ */
 void
 gtk_popover_set_autohide (GtkPopover *popover,
                           gboolean    autohide)
@@ -2151,16 +2203,16 @@ gtk_popover_set_autohide (GtkPopover *popover,
 }
 
 /**
- * gtk_popover_get_autohide:
- * @popover: a #GtkPopover
+ * gtk_popover_get_autohide: (attributes org.gtk.Method.get_property=autohide)
+ * @popover: a `GtkPopover`
  *
  * Returns whether the popover is modal.
  *
- * See gtk_popover_set_autohide() for the
+ * See [method@Gtk.Popover.set_autohide] for the
  * implications of this.
  *
- * Returns: #TRUE if @popover is modal
- **/
+ * Returns: %TRUE if @popover is modal
+ */
 gboolean
 gtk_popover_get_autohide (GtkPopover *popover)
 {
@@ -2173,11 +2225,14 @@ gtk_popover_get_autohide (GtkPopover *popover)
 
 /**
  * gtk_popover_popup:
- * @popover: a #GtkPopover
+ * @popover: a `GtkPopover`
  *
- * Pops @popover up. This is different than a gtk_widget_show() call
- * in that it shows the popover with a transition. If you want to show
- * the popover without a transition, use gtk_widget_show().
+ * Pops @popover up.
+ *
+ * This is different from a [method@Gtk.Widget.show() call
+ * in that it may show the popover with a transition. If
+ * you want to show the popover without a transition, just
+ * use [method@Gtk.Widget.show].
  */
 void
 gtk_popover_popup (GtkPopover *popover)
@@ -2214,11 +2269,14 @@ cascade_popdown (GtkPopover *popover)
 
 /**
  * gtk_popover_popdown:
- * @popover: a #GtkPopover
+ * @popover: a `GtkPopover`
  *
- * Pops @popover down.This is different than a gtk_widget_hide() call
- * in that it shows the popover with a transition. If you want to hide
- * the popover without a transition, use gtk_widget_hide().
+ * Pops @popover down.
+ *
+ * This is different from a [method@Gtk.Widget.hide] call
+ * in that it may show the popover with a transition. If
+ * you want to hide the popover without a transition, just
+ * use [method@Gtk.Widget.hide].
  */
 void
 gtk_popover_popdown (GtkPopover *popover)
@@ -2239,8 +2297,8 @@ gtk_popover_get_contents_widget (GtkPopover *popover)
 }
 
 /**
- * gtk_popover_set_has_arrow:
- * @popover: a #GtkPopover
+ * gtk_popover_set_has_arrow: (attributes org.gtk.Method.set_property=has-arrow)
+ * @popover: a `GtkPopover`
  * @has_arrow: %TRUE to draw an arrow
  *
  * Sets whether this popover should draw an arrow
@@ -2264,8 +2322,8 @@ gtk_popover_set_has_arrow (GtkPopover *popover,
 }
 
 /**
- * gtk_popover_get_has_arrow:
- * @popover: a #GtkPopover
+ * gtk_popover_get_has_arrow: (attributes org.gtk.Method.get_property=has-arrow)
+ * @popover: a `GtkPopover`
  *
  * Gets whether this popover is showing an arrow
  * pointing at the widget that it is relative to.
@@ -2283,11 +2341,11 @@ gtk_popover_get_has_arrow (GtkPopover *popover)
 }
 
 /**
- * gtk_popover_set_mnemonics_visible:
- * @popover: a #GtkPopover
+ * gtk_popover_set_mnemonics_visible: (attributes org.gtk.Method.set_property=mnemonics-visible)
+ * @popover: a `GtkPopover`
  * @mnemonics_visible: the new value
  *
- * Sets the #GtkPopover:mnemonics-visible property.
+ * Sets whether mnemonics should be visible.
  */
 void
 gtk_popover_set_mnemonics_visible (GtkPopover *popover,
@@ -2313,12 +2371,13 @@ gtk_popover_set_mnemonics_visible (GtkPopover *popover,
 }
 
 /**
- * gtk_popover_get_mnemonics_visible:
- * @popover: a #GtkPopover
+ * gtk_popover_get_mnemonics_visible: (attributes org.gtk.Method.get_property=mnemonics-visible)
+ * @popover: a `GtkPopover`
  *
- * Gets the value of the #GtkPopover:mnemonics-visible property.
+ * Gets whether mnemonics are visible.
  *
- * Returns: %TRUE if mnemonics are supposed to be visible in this popover 
+ * Returns: %TRUE if mnemonics are supposed to be visible
+ *   in this popover
  */
 gboolean
 gtk_popover_get_mnemonics_visible (GtkPopover *popover)
@@ -2340,14 +2399,15 @@ gtk_popover_disable_auto_mnemonics (GtkPopover *popover)
 
 /**
  * gtk_popover_set_offset:
- * @popover: a #GtkPopover
+ * @popover: a `GtkPopover`
  * @x_offset: the x offset to adjust the position by
  * @y_offset: the y offset to adjust the position by
  *
- * Sets the offset to use when calculating the position of the popover.
+ * Sets the offset to use when calculating the position
+ * of the popover.
  *
- * These values are used when preparing the #GtkPopupLayout for positioning
- * the popover.
+ * These values are used when preparing the [struct@Gdk.PopupLayout]
+ * for positioning the popover.
  */
 void
 gtk_popover_set_offset (GtkPopover *popover,
@@ -2369,7 +2429,7 @@ gtk_popover_set_offset (GtkPopover *popover,
 
 /**
  * gtk_popover_get_offset:
- * @popover: a #GtkPopover
+ * @popover: a `GtkPopover`
  * @x_offset: (out) (nullable): a location for the x_offset
  * @y_offset: (out) (nullable): a location for the y_offset
  *
@@ -2392,13 +2452,15 @@ gtk_popover_get_offset (GtkPopover *popover,
 }
 
 /**
- * gtk_popover_set_cascade_popdown:
- * @popover: A #GtkPopover
- * @cascade_popdown: #TRUE if the popover should follow a child closing
+ * gtk_popover_set_cascade_popdown: (attributes org.gtk.Method.set_property=cascade-popdown)
+ * @popover: A `GtkPopover`
+ * @cascade_popdown: %TRUE if the popover should follow a child closing
  *
- * If @cascade_popdown is #TRUE, the popover will be closed when a child
- * modal popover is closed. If #FALSE, @popover will stay visible.
- **/
+ * If @cascade_popdown is %TRUE, the popover will be
+ * closed when a child modal popover is closed.
+ *
+ * If %FALSE, @popover will stay visible.
+ */
 void
 gtk_popover_set_cascade_popdown (GtkPopover *popover,
                                  gboolean    cascade_popdown)
@@ -2413,13 +2475,13 @@ gtk_popover_set_cascade_popdown (GtkPopover *popover,
 }
 
 /**
- * gtk_popover_get_cascade_popdown:
- * @popover: a #GtkPopover
+ * gtk_popover_get_cascade_popdown: (attributes org.gtk.Method.get_property=cascade-popdown)
+ * @popover: a `GtkPopover`
  *
  * Returns whether the popover will close after a modal child is closed.
  *
- * Returns: #TRUE if @popover will close after a modal child.
- **/
+ * Returns: %TRUE if @popover will close after a modal child.
+ */
 gboolean
 gtk_popover_get_cascade_popdown (GtkPopover *popover)
 {

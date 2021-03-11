@@ -16,16 +16,15 @@
  */
 
 /**
- * SECTION:gtkbinlayout
- * @Title: GtkBinLayout
- * @Short_description: A layout manager for bin-like widgets
- * @Include: gtk/gtk.h
+ * GtkBinLayout:
  *
- * GtkBinLayout is a #GtkLayoutManager subclass useful for create "bins" of
- * widgets. GtkBinLayout will stack each child of a widget on top of each
- * other, using the #GtkWidget:hexpand, #GtkWidget:vexpand, #GtkWidget:halign,
- * and #GtkWidget:valign properties of each child to determine where they
- * should be positioned.
+ * `GtkBinLayout` is a `GtkLayoutManager` subclass useful for create "bins" of
+ * widgets.
+ *
+ * `GtkBinLayout` will stack each child of a widget on top of each other,
+ * using the [property@Gtk.Widget:hexpand], [property@Gtk.Widget:vexpand],
+ * [property@Gtk.Widget:halign], and [property@Gtk.Widget:valign] properties
+ * of each child to determine where they should be positioned.
  */
 
 #include "config.h"
@@ -113,9 +112,9 @@ gtk_bin_layout_init (GtkBinLayout *self)
 /**
  * gtk_bin_layout_new:
  *
- * Creates a new #GtkBinLayout instance.
+ * Creates a new `GtkBinLayout` instance.
  *
- * Returns: the newly created #GtkBinLayout
+ * Returns: the newly created `GtkBinLayout`
  */
 GtkLayoutManager *
 gtk_bin_layout_new (void)

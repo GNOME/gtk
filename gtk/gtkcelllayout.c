@@ -16,9 +16,9 @@
  */
 
 /**
- * SECTION:gtkcelllayout
- * @Short_Description: An interface for packing cells
- * @Title: GtkCellLayout
+ * GtkCellLayout:
+ *
+ * An interface for packing cells
  *
  * #GtkCellLayout is an interface to be implemented by all objects which
  * want to provide a #GtkTreeViewColumn like API for packing cells,

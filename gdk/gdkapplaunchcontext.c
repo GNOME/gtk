@@ -26,18 +26,17 @@
 
 
 /**
- * SECTION:gdkapplaunchcontext
- * @Short_description: Startup notification for applications
- * @Title: Application launching
+ * GdkAppLaunchContext:
  *
- * GdkAppLaunchContext is an implementation of #GAppLaunchContext that
- * handles launching an application in a graphical context. It provides
- * startup notification and allows to launch applications on a specific
- * screen or workspace.
+ * `GdkAppLaunchContext` handles launching an application in a graphical context.
+ *
+ * It is an implementation of `GAppLaunchContext` that provides startup
+ * notification and allows to launch applications on a specific screen
+ * or workspace.
  *
  * ## Launching an application
  *
- * |[<!-- language="C" -->
+ * ```c
  * GdkAppLaunchContext *context;
  *
  * context = gdk_display_get_app_launch_context (display);
@@ -49,14 +48,7 @@
  *   g_warning ("Launching failed: %s\n", error->message);
  *
  * g_object_unref (context);
- * ]|
- */
-
-/**
- * GdkAppLaunchContext:
- *
- * The GdkAppLaunchContext struct contains only private fields
- * and should not be accessed directly.
+ * ```
  */
 
 static void    gdk_app_launch_context_finalize    (GObject           *object);
@@ -129,6 +121,11 @@ gdk_app_launch_context_class_init (GdkAppLaunchContextClass *klass)
   context_class->get_startup_notify_id = gdk_app_launch_context_get_startup_notify_id;
   context_class->launch_failed = gdk_app_launch_context_launch_failed;
 
+  /**
+   * GdkAppLaunchContext:display: (attributes org.gtk.Property.get=gdk_app_launch_context_get_display)
+   *
+   * The display that the `GdkAppLaunchContext` is on.
+   */
   g_object_class_install_property (gobject_class, PROP_DISPLAY,
     g_param_spec_object ("display", P_("Display"), P_("Display"),
                          GDK_TYPE_DISPLAY,
@@ -174,10 +171,10 @@ gdk_app_launch_context_get_display_name (GAppLaunchContext *context,
 }
 
 /**
- * gdk_app_launch_context_get_display:
- * @context: a #GdkAppLaunchContext
+ * gdk_app_launch_context_get_display: (attributes org.gtk.Method.get_property=display)
+ * @context: a `GdkAppLaunchContext`
  *
- * Gets the #GdkDisplay that @context is for.
+ * Gets the `GdkDisplay` that @context is for.
  *
  * Returns: (transfer none): the display of @context
  */
@@ -191,11 +188,12 @@ gdk_app_launch_context_get_display (GdkAppLaunchContext *context)
 
 /**
  * gdk_app_launch_context_set_desktop:
- * @context: a #GdkAppLaunchContext
+ * @context: a `GdkAppLaunchContext`
  * @desktop: the number of a workspace, or -1
  *
- * Sets the workspace on which applications will be launched when
- * using this context when running under a window manager that
+ * Sets the workspace on which applications will be launched.
+ *
+ * This only works when running under a window manager that
  * supports multiple workspaces, as described in the
  * [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec).
  *
@@ -214,11 +212,13 @@ gdk_app_launch_context_set_desktop (GdkAppLaunchContext *context,
 
 /**
  * gdk_app_launch_context_set_timestamp:
- * @context: a #GdkAppLaunchContext
+ * @context: a `GdkAppLaunchContext`
  * @timestamp: a timestamp
  *
- * Sets the timestamp of @context. The timestamp should ideally
- * be taken from the event that triggered the launch.
+ * Sets the timestamp of @context.
+ *
+ * The timestamp should ideally be taken from the event that
+ * triggered the launch.
  *
  * Window managers can use this information to avoid moving the
  * focus to the newly launched application when the user is busy
@@ -236,7 +236,7 @@ gdk_app_launch_context_set_timestamp (GdkAppLaunchContext *context,
 
 /**
  * gdk_app_launch_context_set_icon:
- * @context: a #GdkAppLaunchContext
+ * @context: a `GdkAppLaunchContext`
  * @icon: (allow-none): a #GIcon, or %NULL
  *
  * Sets the icon for applications that are launched with this
@@ -245,7 +245,7 @@ gdk_app_launch_context_set_timestamp (GdkAppLaunchContext *context,
  * Window Managers can use this information when displaying startup
  * notification.
  *
- * See also gdk_app_launch_context_set_icon_name().
+ * See also [method@Gdk.AppLaunchContext.set_icon_name].
  */
 void
 gdk_app_launch_context_set_icon (GdkAppLaunchContext *context,
@@ -266,16 +266,17 @@ gdk_app_launch_context_set_icon (GdkAppLaunchContext *context,
 
 /**
  * gdk_app_launch_context_set_icon_name:
- * @context: a #GdkAppLaunchContext
+ * @context: a `GdkAppLaunchContext`
  * @icon_name: (allow-none): an icon name, or %NULL
  *
  * Sets the icon for applications that are launched with this context.
+ *
  * The @icon_name will be interpreted in the same way as the Icon field
- * in desktop files. See also gdk_app_launch_context_set_icon().
+ * in desktop files. See also [method@Gdk.AppLaunchContext.set_icon()].
  *
  * If both @icon and @icon_name are set, the @icon_name takes priority.
  * If neither @icon or @icon_name is set, the icon is taken from either
- * the file that is passed to launched application or from the #GAppInfo
+ * the file that is passed to launched application or from the `GAppInfo`
  * for the launched application itself.
  */
 void

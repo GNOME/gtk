@@ -46,6 +46,7 @@ typedef struct _GtkEntryCompletion            GtkEntryCompletion;
  *
  * A function which decides whether the row indicated by @iter matches
  * a given @key, and should be displayed as a possible completion for @key.
+ *
  * Note that @key is normalized and case-folded (see g_utf8_normalize()
  * and g_utf8_casefold()). If this is not appropriate, match functions
  * have access to the unmodified key via

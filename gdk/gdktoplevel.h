@@ -60,9 +60,8 @@ typedef enum
  * @GDK_FULLSCREEN_ON_CURRENT_MONITOR: Fullscreen on current monitor only.
  * @GDK_FULLSCREEN_ON_ALL_MONITORS: Span across all monitors when fullscreen.
  *
- * Indicates which monitor (in a multi-head setup) a surface should span over
- * when in fullscreen mode.
- **/
+ * Indicates which monitor a surface should span over when in fullscreen mode.
+ */
 typedef enum
 {
   GDK_FULLSCREEN_ON_CURRENT_MONITOR,
@@ -90,10 +89,11 @@ typedef enum
  *
  * Specifies the state of a toplevel surface.
  *
- * On platforms that support information about individual edges, the %GDK_TOPLEVEL_STATE_TILED
- * state will be set whenever any of the individual tiled states is set. On platforms
- * that lack that support, the tiled state will give an indication of tiledness without
- * any of the per-edge states being set.
+ * On platforms that support information about individual edges, the
+ * %GDK_TOPLEVEL_STATE_TILED state will be set whenever any of the individual
+ * tiled states is set. On platforms that lack that support, the tiled state
+ * will give an indication of tiledness without any of the per-edge states
+ * being set.
  */
 typedef enum
 {
@@ -118,11 +118,6 @@ typedef enum
 
 #define GDK_TYPE_TOPLEVEL (gdk_toplevel_get_type ())
 
-/**
- * GdkToplevel:
- *
- * An interface for top level surfaces.
- */
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (GdkToplevel, gdk_toplevel, GDK, TOPLEVEL, GObject)
 

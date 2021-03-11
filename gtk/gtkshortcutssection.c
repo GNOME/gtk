@@ -38,20 +38,21 @@
 #include "gtkintl.h"
 
 /**
- * SECTION:gtkshortcutssection
- * @Title: GtkShortcutsSection
- * @Short_description: Represents an application mode in a GtkShortcutsWindow
+ * GtkShortcutsSection:
  *
- * A GtkShortcutsSection collects all the keyboard shortcuts and gestures
- * for a major application mode. If your application needs multiple sections,
- * you should give each section a unique #GtkShortcutsSection:section-name and
- * a #GtkShortcutsSection:title that can be shown in the section selector of
- * the GtkShortcutsWindow.
+ * A `GtkShortcutsSection` collects all the keyboard shortcuts and gestures
+ * for a major application mode.
  *
- * The #GtkShortcutsSection:max-height property can be used to influence how
- * the groups in the section are distributed over pages and columns.
+ * If your application needs multiple sections, you should give each
+ * section a unique [property@Gtk.ShortcutsSection:section-name] and
+ * a [property@Gtk.ShortcutsSection:title] that can be shown in the
+ * section selector of the [class@Gtk.ShortcutsWindow].
  *
- * This widget is only meant to be used with #GtkShortcutsWindow.
+ * The [property@Gtk.ShortcutsSection:max-height] property can be used
+ * to influence how the groups in the section are distributed over pages
+ * and columns.
+ *
+ * This widget is only meant to be used with [class@Gtk.ShortcutsWindow].
  */
 
 struct _GtkShortcutsSection
@@ -286,9 +287,10 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
    * GtkShortcutsSection:section-name:
    *
    * A unique name to identify this section among the sections
-   * added to the GtkShortcutsWindow. Setting the #GtkShortcutsWindow:section-name
-   * property to this string will make this section shown in the
-   * GtkShortcutsWindow.
+   * added to the `GtkShortcutsWindow`.
+   *
+   * Setting the [property@Gtk.ShortcutsWindow:section-name] property
+   * to this string will make this section shown in the `GtkShortcutsWindow`.
    */
   properties[PROP_SECTION_NAME] =
     g_param_spec_string ("section-name", P_("Section Name"), P_("Section Name"),
@@ -299,10 +301,12 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
    * GtkShortcutsSection:view-name:
    *
    * A view name to filter the groups in this section by.
-   * See #GtkShortcutsGroup:view.
    *
-   * Applications are expected to use the #GtkShortcutsWindow:view-name
-   * property for this purpose.
+   * See [property@Gtk.ShortcutsGroup:view].
+   *
+   * Applications are expected to use the
+   * [property@Gtk.ShortcutsWindow:view-name] property
+   * for this purpose.
    */
   properties[PROP_VIEW_NAME] =
     g_param_spec_string ("view-name", P_("View Name"), P_("View Name"),
@@ -312,9 +316,11 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
   /**
    * GtkShortcutsSection:title:
    *
-   * The string to show in the section selector of the GtkShortcutsWindow
-   * for this section. If there is only one section, you don't need to
-   * set a title, since the section selector will not be shown in this case.
+   * The string to show in the section selector of the `GtkShortcutsWindow`
+   * for this section.
+   *
+   * If there is only one section, you don't need to set a title,
+   * since the section selector will not be shown in this case.
    */
   properties[PROP_TITLE] =
     g_param_spec_string ("title", P_("Title"), P_("Title"),
@@ -324,10 +330,11 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
   /**
    * GtkShortcutsSection:max-height:
    *
-   * The maximum number of lines to allow per column. This property can
-   * be used to influence how the groups in this section are distributed
-   * across pages and columns. The default value of 15 should work in
-   * most cases.
+   * The maximum number of lines to allow per column.
+   *
+   * This property can be used to influence how the groups in this
+   * section are distributed across pages and columns. The default
+   * value of 15 should work in most cases.
    */
   properties[PROP_MAX_HEIGHT] =
     g_param_spec_uint ("max-height", P_("Maximum Height"), P_("Maximum Height"),

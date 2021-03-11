@@ -32,7 +32,7 @@ while (($# > 0)); do
                 list) list=1;;
                 help) print_help=1;;
                 --base|-b) read_arg base "$@" || shift;;
-                --base-version) read_arg base_version "$@" || shift;;
+                --version|-v) read_arg base_version "$@" || shift;;
                 --no-login) no_login=1;;
                 *) echo -e "\e[1;31mERROR\e[0m: Unknown option '$1'"; exit 1;;
         esac

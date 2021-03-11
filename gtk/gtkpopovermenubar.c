@@ -19,28 +19,27 @@
  */
 
 /**
- * SECTION:gtkpopovermenubar
- * @Title: GtkPopoverMenuBar
- * @Short_description: A menu bar with popovers
- * @See_also: #GtkPopover, #GtkPopoverMenu, #GMenuModel
+ * GtkPopoverMenuBar:
  *
- * GtkPopoverMenuBar presents a horizontal bar of items that pop
+ * `GtkPopoverMenuBar` presents a horizontal bar of items that pop
  * up popover menus when clicked.
  *
- * The only way to create instances of GtkPopoverMenuBar is
- * from a #GMenuModel.
+ * ![An example GtkPopoverMenuBar](menubar.png)
+ *
+ * The only way to create instances of `GtkPopoverMenuBar` is
+ * from a `GMenuModel`.
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * menubar
  * ├── item[.active]
  * ┊   ╰── popover
  * ╰── item
  *     ╰── popover
- * ]|
+ * ```
  *
- * GtkPopoverMenuBar has a single CSS node with name menubar, below which
+ * `GtkPopoverMenuBar` has a single CSS node with name menubar, below which
  * each item has its CSS node, and below that the corresponding popover.
  *
  * The item whose popover is currently open gets the .active
@@ -48,9 +47,9 @@
  *
  * # Accessibility
  *
- * GtkPopoverMenuBar uses the #GTK_ACCESSIBLE_ROLE_MENU_BAR role,
- * the menu items use the #GTK_ACCESSIBLE_ROLE_MENU_ITEM role and
- * the menus use the #GTK_ACCESSIBLE_ROLE_MENU role.
+ * `GtkPopoverMenuBar` uses the %GTK_ACCESSIBLE_ROLE_MENU_BAR role,
+ * the menu items use the %GTK_ACCESSIBLE_ROLE_MENU_ITEM role and
+ * the menus use the %GTK_ACCESSIBLE_ROLE_MENU role.
  */
 
 
@@ -626,9 +625,9 @@ gtk_popover_menu_bar_class_init (GtkPopoverMenuBarClass *klass)
   widget_class->focus = gtk_popover_menu_bar_focus;
 
   /**
-   * GtkPopoverMenuBar:menu-model:
+   * GtkPopoverMenuBar:menu-model: (attributes org.gtk.Property.get=gtk_popover_menu_bar_get_menu_model org.gtk.Property.set=gtk_popover_menu_bar_set_menu_model)
    *
-   * The #GMenuModel from which the menu bar is created.
+   * The `GMenuModel` from which the menu bar is created.
    *
    * The model should only contain submenus as toplevel elements.
    */
@@ -684,11 +683,11 @@ gtk_popover_menu_bar_buildable_iface_init (GtkBuildableIface *iface)
 
 /**
  * gtk_popover_menu_bar_new_from_model:
- * @model: (allow-none): a #GMenuModel, or %NULL
+ * @model: (allow-none): a `GMenuModel`, or %NULL
  *
- * Creates a #GtkPopoverMenuBar from a #GMenuModel.
+ * Creates a `GtkPopoverMenuBar` from a `GMenuModel`.
  *
- * Returns: a new #GtkPopoverMenuBar
+ * Returns: a new `GtkPopoverMenuBar`
  */
 GtkWidget *
 gtk_popover_menu_bar_new_from_model (GMenuModel *model)
@@ -699,9 +698,9 @@ gtk_popover_menu_bar_new_from_model (GMenuModel *model)
 }
 
 /**
- * gtk_popover_menu_bar_set_menu_model:
- * @bar: a #GtkPopoverMenuBar
- * @model: (allow-none): a #GMenuModel, or %NULL
+ * gtk_popover_menu_bar_set_menu_model: (attributes org.gtk.Method.set_property=menu-model)
+ * @bar: a `GtkPopoverMenuBar`
+ * @model: (allow-none): a `GMenuModel`, or %NULL
  *
  * Sets a menu model from which @bar should take
  * its contents.
@@ -742,12 +741,12 @@ gtk_popover_menu_bar_set_menu_model (GtkPopoverMenuBar *bar,
 }
 
 /**
- * gtk_popover_menu_bar_get_menu_model:
- * @bar: a #GtkPopoverMenuBar
+ * gtk_popover_menu_bar_get_menu_model: (attributes org.gtk.Method.get_property=menu-model)
+ * @bar: a `GtkPopoverMenuBar`
  *
  * Returns the model from which the contents of @bar are taken.
  *
- * Returns: (transfer none): a #GMenuModel
+ * Returns: (transfer none): a `GMenuModel`
  */
 GMenuModel *
 gtk_popover_menu_bar_get_menu_model (GtkPopoverMenuBar *bar)
@@ -768,8 +767,8 @@ gtk_popover_menu_bar_select_first (GtkPopoverMenuBar *bar)
 
 /**
  * gtk_popover_menu_bar_add_child:
- * @bar: a #GtkPopoverMenuBar
- * @child: the #GtkWidget to add
+ * @bar: a `GtkPopoverMenuBar`
+ * @child: the `GtkWidget` to add
  * @id: the ID to insert @child at
  *
  * Adds a custom widget to a generated menubar.
@@ -805,7 +804,7 @@ gtk_popover_menu_bar_add_child (GtkPopoverMenuBar *bar,
 
 /**
  * gtk_popover_menu_bar_remove_child:
- * @bar: a #GtkPopoverMenuBar
+ * @bar: a `GtkPopoverMenuBar`
  * @child: the #GtkWidget to remove
  *
  * Removes a widget that has previously been added with
@@ -834,4 +833,3 @@ gtk_popover_menu_bar_remove_child (GtkPopoverMenuBar *bar,
 
   return FALSE;
 }
-

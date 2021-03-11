@@ -1,0 +1,23 @@
+[library]
+version = "@version@"
+browse_url = "https://gitlab.gnome.org/GNOME/gtk/"
+repository_url = "https://gitlab.gnome.org/GNOME/gtk.git"
+website_url = "https://www.gtk.org"
+authors = "GTK Development Team"
+logo_url = "gtk-logo.svg"
+license = "GPL-2.1-or-later"
+description = "The GTK toolkit"
+dependencies = [ "GObject-2.0" ]
+devhelp = true
+
+  [dependencies."GObject-2.0"]
+  name = "GObject"
+  description = "The base type system library"
+  docs_url = "https://developer.gnome.org/gobject/stable"
+
+[theme]
+name = "basic"
+show_index_summary = true
+
+[source-location]
+base_url = "https://gitlab.gnome.org/GNOME/gtk/-/blob/master/"

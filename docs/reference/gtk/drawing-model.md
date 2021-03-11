@@ -1,13 +1,14 @@
-# Overview of the drawing model {#drawing-overview}
+Title: Overview of the drawing model
+Slug: drawing-overview
 
-This chapter describes the GTK drawing model in detail.  If you
+This chapter describes the GTK drawing model in detail. If you
 are interested in the procedure which GTK follows to draw its
 widgets and windows, you should read this chapter; this will be
-useful to know if you decide to implement your own widgets.  This
+useful to know if you decide to implement your own widgets. This
 chapter will also clarify the reasons behind the ways certain
 things are done in GTK.
 
-## Windows and events {#drawing-windows}
+## Windows and events
 
 Applications that use a windowing system generally create
 rectangular regions in the screen called _surfaces_ (GTK is
@@ -27,14 +28,14 @@ windowing system surface. Child widgets such as buttons or
 entries don't have their own surface; they use the surface
 of their toplevel.
 
-Generally, the drawing cycle begins when GTK receives
-a frame event from the underlying windowing system:  if the
-user drags a window over another one, the windowing system will
-tell the underlying surface that it needs to repaint itself.  The
-drawing cycle can also be initiated when a widget itself decides
-that it needs to update its display.  For example, when the user
-types a character in an entry widget, the entry asks GTK to queue
-a redraw operation for itself.
+Generally, the drawing cycle begins when GTK receives a frame event
+from the underlying windowing system: if the user drags a window
+over another one, the windowing system will tell the underlying
+surface that it needs to repaint itself. The drawing cycle can
+also be initiated when a widget itself decides that it needs to
+update its display. For example, when the user types a character
+in an entry widget, the entry asks GTK to queue a redraw operation
+for itself.
 
 The windowing system generates frame events for surfaces. The GDK
 interface to the windowing system translates such events into
@@ -46,7 +47,7 @@ need to be repainted in response to such events, and how widgets
 work internally in terms of the resources they use from the
 windowing system.
 
-## The frame clock {#frameclock}
+## The frame clock
 
 All GTK applications are mainloop-driven, which means that most
 of the time the app is idle inside a loop that just waits for
@@ -112,7 +113,7 @@ happen at higher levels:
 There are also a lot of implicit triggers of these from the
 CSS layer (which does animations, resizes and repaints as needed).
 
-## The scene graph {#scene-graph}
+## The scene graph
 
 The first step in “drawing” a window is that GTK creates
 _render nodes_ for all the widgets in the window. The render
@@ -133,15 +134,15 @@ rendering commands for the drawing API it targets, and arranges
 for the resulting drawing to be associated with the right surface.
 GSK has renderers for OpenGL, Vulkan and cairo.
 
-## Hierarchical drawing {#hierarchical-drawing}
+## Hierarchical drawing
 
-During the Paint phase GTK receives a single #GdkSurface::render
-signal on the toplevel surface. The signal handler will create a
-snapshot object (which is a helper for creating a scene graph) and
-call the #GtkWidget::snapshot() vfunc, which will propagate down
-the widget hierarchy. This lets each widget snapshot its content
-at the right place and time, correctly handling things like partial
-transparencies and overlapping widgets.
+During the Paint phase GTK receives a single ::render signal on the
+toplevel surface. The signal handler will create a snapshot object
+(which is a helper for creating a scene graph) and call the
+GtkWidget snapshot() vfunc, which will propagate down the widget
+hierarchy. This lets each widget snapshot its content at the right
+place and time, correctly handling things like partial transparencies
+and overlapping widgets.
 
 During the snapshotting of each widget, GTK automatically handles
 the CSS rendering according to the CSS box model. It snapshots first

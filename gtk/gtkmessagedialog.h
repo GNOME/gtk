@@ -56,9 +56,10 @@ struct _GtkMessageDialog
  * @GTK_BUTTONS_YES_NO: Yes and No buttons
  * @GTK_BUTTONS_OK_CANCEL: OK and Cancel buttons
  *
- * Prebuilt sets of buttons for the dialog. If
- * none of these choices are appropriate, simply use %GTK_BUTTONS_NONE
- * then call gtk_dialog_add_buttons().
+ * Prebuilt sets of buttons for `GtkDialog`.
+ *
+ * If none of these choices are appropriate, simply use
+ * %GTK_BUTTONS_NONE and call [method@Gtk.Dialog.add_buttons].
  *
  * > Please note that %GTK_BUTTONS_OK, %GTK_BUTTONS_YES_NO
  * > and %GTK_BUTTONS_OK_CANCEL are discouraged by the

@@ -24,26 +24,22 @@
 #include "gtkintl.h"
 
 /**
- * SECTION:gtklistitem
- * @title: GtkListItem
- * @short_description: Object used to represent items of a list model
- * @see_also: #GtkListView, #GListModel
+ * GtkListItem:
  *
- * #GtkListItem is the object that list-handling containers such
- * as #GtkListView use to represent items in a #GListModel. They are
- * managed by the container and cannot be created by application code.
+ * `GtkListItem` is used by list widgets to represent items in a `GListModel`.
  *
- * #GtkListItems need to be populated by application code. This is done by
- * calling gtk_list_item_set_child().
+ * The `GtkListItem`s are managed by the list widget (with its factory)
+ * and cannot be created by applications, but they need to be populated
+ * by application code. This is done by calling [method@Gtk.ListItem.set_child].
  *
- * #GtkListItems exist in 2 stages:
+ * `GtkListItem`s exist in 2 stages:
  *
  * 1. The unbound stage where the listitem is not currently connected to
- *    an item in the list. In that case, the #GtkListItem:item property is
- *    set to %NULL.
+ *    an item in the list. In that case, the [property@Gtk.ListItem:item]
+ *    property is set to %NULL.
  *
  * 2. The bound stage where the listitem references an item from the list.
- *    The #GtkListItem:item property is not %NULL.
+ *    The [property@Gtk.ListItem:item] property is not %NULL.
  */
 
 struct _GtkListItemClass
@@ -164,9 +160,9 @@ gtk_list_item_class_init (GtkListItemClass *klass)
   gobject_class->set_property = gtk_list_item_set_property;
 
   /**
-   * GtkListItem:activatable:
+   * GtkListItem:activatable: (attributes org.gtk.Property.get=gtk_list_item_get_activatable org.gtk.Property.set=gtk_list_item_set_activatable)
    *
-   * If the item can be activated by the user
+   * If the item can be activated by the user.
    */
   properties[PROP_ACTIVATABLE] =
     g_param_spec_boolean ("activatable",
@@ -176,9 +172,9 @@ gtk_list_item_class_init (GtkListItemClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkListItem:child:
+   * GtkListItem:child: (attributes org.gtk.Property.get=gtk_list_item_get_child org.gtk.Property.set=gtk_list_item_set_child)
    *
-   * Widget used for display
+   * Widget used for display.
    */
   properties[PROP_CHILD] =
     g_param_spec_object ("child",
@@ -188,9 +184,9 @@ gtk_list_item_class_init (GtkListItemClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkListItem:item:
+   * GtkListItem:item: (attributes org.gtk.Property.get=gtk_list_item_get_item)
    *
-   * Displayed item
+   * Displayed item.
    */
   properties[PROP_ITEM] =
     g_param_spec_object ("item",
@@ -200,9 +196,9 @@ gtk_list_item_class_init (GtkListItemClass *klass)
                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkListItem:position:
+   * GtkListItem:position: (attributes org.gtk.Property.get=gtk_list_item_get_position)
    *
-   * Position of the item
+   * Position of the item.
    */
   properties[PROP_POSITION] =
     g_param_spec_uint ("position",
@@ -212,9 +208,9 @@ gtk_list_item_class_init (GtkListItemClass *klass)
                        G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkListItem:selectable:
+   * GtkListItem:selectable: (attributes org.gtk.Property.get=gtk_list_item_get_selectable org.gtk.Property.set=gtk_list_item_set_selectable)
    *
-   * If the item can be selected by the user
+   * If the item can be selected by the user.
    */
   properties[PROP_SELECTABLE] =
     g_param_spec_boolean ("selectable",
@@ -224,9 +220,9 @@ gtk_list_item_class_init (GtkListItemClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkListItem:selected:
+   * GtkListItem:selected: (attributes org.gtk.Property.get=gtk_list_item_get_selected)
    *
-   * If the item is currently selected
+   * If the item is currently selected.
    */
   properties[PROP_SELECTED] =
     g_param_spec_boolean ("selected",
@@ -248,16 +244,16 @@ gtk_list_item_init (GtkListItem *self)
 GtkListItem *
 gtk_list_item_new (void)
 {
-  return g_object_new (GTK_TYPE_LIST_ITEM,
-                       NULL);
+  return g_object_new (GTK_TYPE_LIST_ITEM, NULL);
 }
 
 /**
- * gtk_list_item_get_item:
- * @self: a #GtkListItem
+ * gtk_list_item_get_item: (attributes org.gtk.Method.get_property=item)
+ * @self: a `GtkListItem`
  *
- * Gets the item that is currently displayed in model that @self is
- * currently bound to or %NULL if @self is unbound.
+ * Gets the model item that associated with @self.
+ *
+ * If @self is unbound, this function returns %NULL.
  *
  * Returns: (nullable) (transfer none) (type GObject): The item displayed
  **/
@@ -273,14 +269,14 @@ gtk_list_item_get_item (GtkListItem *self)
 }
 
 /**
- * gtk_list_item_get_child:
- * @self: a #GtkListItem
+ * gtk_list_item_get_child: (attributes org.gtk.Method.get_property=child)
+ * @self: a `GtkListItem`
  *
  * Gets the child previously set via gtk_list_item_set_child() or
  * %NULL if none was set.
  *
  * Returns: (transfer none) (nullable): The child
- **/
+ */
 GtkWidget *
 gtk_list_item_get_child (GtkListItem *self)
 {
@@ -290,8 +286,8 @@ gtk_list_item_get_child (GtkListItem *self)
 }
 
 /**
- * gtk_list_item_set_child:
- * @self: a #GtkListItem
+ * gtk_list_item_set_child: (attributes org.gtk.Method.set_property=child)
+ * @self: a `GtkListItem`
  * @child: (nullable): The list item's child or %NULL to unset
  *
  * Sets the child to be used for this listitem.
@@ -299,7 +295,7 @@ gtk_list_item_get_child (GtkListItem *self)
  * This function is typically called by applications when
  * setting up a listitem so that the widget can be reused when
  * binding it multiple times.
- **/
+ */
 void
 gtk_list_item_set_child (GtkListItem *self,
                          GtkWidget   *child)
@@ -328,14 +324,15 @@ gtk_list_item_set_child (GtkListItem *self,
 }
 
 /**
- * gtk_list_item_get_position:
- * @self: a #GtkListItem
+ * gtk_list_item_get_position: (attributes org.gtk.Method.get_property=position)
+ * @self: a `GtkListItem`
  *
  * Gets the position in the model that @self currently displays.
+ *
  * If @self is unbound, %GTK_INVALID_LIST_POSITION is returned.
  *
  * Returns: The position of this item
- **/
+ */
 guint
 gtk_list_item_get_position (GtkListItem *self)
 {
@@ -348,15 +345,16 @@ gtk_list_item_get_position (GtkListItem *self)
 }
 
 /**
- * gtk_list_item_get_selected:
- * @self: a #GtkListItem
+ * gtk_list_item_get_selected: (attributes org.gtk.Method.get_property=selected)
+ * @self: a `GtkListItem`
  *
- * Checks if the item is displayed as selected. The selected state is
- * maintained by the container and its list model and cannot be set
- * otherwise.
+ * Checks if the item is displayed as selected.
+ *
+ * The selected state is maintained by the liste widget and its model
+ * and cannot be set otherwise.
  *
  * Returns: %TRUE if the item is selected.
- **/
+ */
 gboolean
 gtk_list_item_get_selected (GtkListItem *self)
 {
@@ -369,16 +367,16 @@ gtk_list_item_get_selected (GtkListItem *self)
 }
 
 /**
- * gtk_list_item_get_selectable:
- * @self: a #GtkListItem
+ * gtk_list_item_get_selectable: (attributes org.gtk.Method.get_property=selectable)
+ * @self: a `GtkListItem`
  *
  * Checks if a list item has been set to be selectable via
  * gtk_list_item_set_selectable().
  *
- * Do not confuse this function with gtk_list_item_get_selected().
+ * Do not confuse this function with [method@Gtk.ListItem.get_selected].
  *
  * Returns: %TRUE if the item is selectable
- **/
+ */
 gboolean
 gtk_list_item_get_selectable (GtkListItem *self)
 {
@@ -388,22 +386,23 @@ gtk_list_item_get_selectable (GtkListItem *self)
 }
 
 /**
- * gtk_list_item_set_selectable:
- * @self: a #GtkListItem
+ * gtk_list_item_set_selectable: (attributes org.gtk.Method.set_property=selectable)
+ * @self: a `GtkListItem`
  * @selectable: if the item should be selectable
  *
- * Sets @self to be selectable. If an item is selectable, clicking
- * on the item or using the keyboard will try to select or unselect
- * the item. If this succeeds is up to the model to determine, as
- * it is managing the selected state.
+ * Sets @self to be selectable.
+ *
+ * If an item is selectable, clicking on the item or using the keyboard
+ * will try to select or unselect the item. If this succeeds is up to
+ * the model to determine, as it is managing the selected state.
  *
  * Note that this means that making an item non-selectable has no
- * influence on the selected state at all. A non-selectable item 
+ * influence on the selected state at all. A non-selectable item
  * may still be selected.
  *
  * By default, list items are selectable. When rebinding them to
  * a new item, they will also be reset to be selectable by GTK.
- **/
+ */
 void
 gtk_list_item_set_selectable (GtkListItem *self,
                               gboolean     selectable)
@@ -419,14 +418,14 @@ gtk_list_item_set_selectable (GtkListItem *self,
 }
 
 /**
- * gtk_list_item_get_activatable:
- * @self: a #GtkListItem
+ * gtk_list_item_get_activatable: (attributes org.gtk.Method.get_property=activatable)
+ * @self: a `GtkListItem`
  *
  * Checks if a list item has been set to be activatable via
  * gtk_list_item_set_activatable().
  *
  * Returns: %TRUE if the item is activatable
- **/
+ */
 gboolean
 gtk_list_item_get_activatable (GtkListItem *self)
 {
@@ -436,8 +435,8 @@ gtk_list_item_get_activatable (GtkListItem *self)
 }
 
 /**
- * gtk_list_item_set_activatable:
- * @self: a #GtkListItem
+ * gtk_list_item_set_activatable: (attributes org.gtk.Method.set_property=activatable)
+ * @self: a `GtkListItem`
  * @activatable: if the item should be activatable
  *
  * Sets @self to be activatable.
@@ -445,11 +444,11 @@ gtk_list_item_get_activatable (GtkListItem *self)
  * If an item is activatable, double-clicking on the item, using
  * the Return key or calling gtk_widget_activate() will activate
  * the item. Activating instructs the containing view to handle
- * activation. #GtkListView for example will be emitting the
- * #GtkListView::activate signal.
+ * activation. `GtkListView` for example will be emitting the
+ * [signal@Gtk.ListView::activate] signal.
  *
- * By default, list items are activatable
- **/
+ * By default, list items are activatable.
+ */
 void
 gtk_list_item_set_activatable (GtkListItem *self,
                                gboolean     activatable)

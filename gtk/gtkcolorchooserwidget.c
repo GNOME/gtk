@@ -35,31 +35,32 @@
 #include <math.h>
 
 /**
- * SECTION:gtkcolorchooserwidget
- * @Short_description: A widget for choosing colors
- * @Title: GtkColorChooserWidget
- * @See_also: #GtkColorChooserDialog
+ * GtkColorChooserWidget:
  *
- * The #GtkColorChooserWidget widget lets the user select a
- * color. By default, the chooser presents a predefined palette
- * of colors, plus a small number of settable custom colors.
- * It is also possible to select a different color with the
- * single-color editor. To enter the single-color editing mode,
- * use the context menu of any color of the palette, or use the
- * '+' button to add a new custom color.
+ * The `GtkColorChooserWidget` widget lets the user select a color.
+ *
+ * By default, the chooser presents a predefined palette of colors,
+ * plus a small number of settable custom colors. It is also possible
+ * to select a different color with the single-color editor.
+ *
+ * To enter the single-color editing mode, use the context menu of any
+ * color of the palette, or use the '+' button to add a new custom color.
  *
  * The chooser automatically remembers the last selection, as well
  * as custom colors.
  *
- * To change the initially selected color, use gtk_color_chooser_set_rgba().
- * To get the selected color use gtk_color_chooser_get_rgba().
+ * To create a `GtkColorChooserWidget`, use [ctor@Gtk.ColorChooserWidget.new].
  *
- * The #GtkColorChooserWidget is used in the #GtkColorChooserDialog
+ * To change the initially selected color, use
+ * [method@Gtk.ColorChooser.set_rgba]. To get the selected color use
+ * [method@Gtk.ColorChooser.get_rgba].
+ *
+ * The `GtkColorChooserWidget` is used in the [class@Gtk.ColorChooserDialog]
  * to provide a dialog for selecting colors.
  *
  * # CSS names
  *
- * GtkColorChooserWidget has a single CSS node with name colorchooser.
+ * `GtkColorChooserWidget` has a single CSS node with name colorchooser.
  */
 
 typedef struct _GtkColorChooserWidgetClass   GtkColorChooserWidgetClass;
@@ -712,9 +713,9 @@ gtk_color_chooser_widget_class_init (GtkColorChooserWidgetClass *class)
   /**
    * GtkColorChooserWidget:show-editor:
    *
-   * The ::show-editor property is %TRUE when the color chooser
-   * is showing the single-color editor. It can be set to switch
-   * the color chooser into single-color editing mode.
+   * %TRUE when the color chooser is showing the single-color editor.
+   *
+   * It can be set to switch the color chooser into single-color editing mode.
    */
   g_object_class_install_property (object_class, PROP_SHOW_EDITOR,
       g_param_spec_boolean ("show-editor", P_("Show editor"), P_("Show editor"),
@@ -730,7 +731,7 @@ gtk_color_chooser_widget_class_init (GtkColorChooserWidgetClass *class)
    * @blue: the blue value, between 0 and 1
    * @alpha: the alpha value, between 0 and 1
    *
-   * Emits the #GtkColorChooser::color-activated signal for
+   * Emits the [signal@Gtk.ColorChooser::color-activated] signal for
    * the given color.
    */
   gtk_widget_class_install_action (widget_class, "color.select", "(dddd)",
@@ -868,15 +869,15 @@ gtk_color_chooser_widget_iface_init (GtkColorChooserInterface *iface)
   iface->set_rgba = gtk_color_chooser_widget_set_rgba;
   iface->add_palette = gtk_color_chooser_widget_add_palette;
 }
-
-/* Public API {{{1 */
+ 
+ /* Public API {{{1 */
 
 /**
  * gtk_color_chooser_widget_new:
  *
- * Creates a new #GtkColorChooserWidget.
+ * Creates a new `GtkColorChooserWidget`.
  *
- * Returns: a new #GtkColorChooserWidget
+ * Returns: a new `GtkColorChooserWidget`
  */
 GtkWidget *
 gtk_color_chooser_widget_new (void)

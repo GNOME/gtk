@@ -19,14 +19,12 @@
  */
 
 /**
- * SECTION:gtkgesturerotate
- * @Short_description: Rotate gesture
- * @Title: GtkGestureRotate
- * @See_also: #GtkGestureZoom
+ * GtkGestureRotate:
  *
- * #GtkGestureRotate is a #GtkGesture implementation able to recognize
- * 2-finger rotations, whenever the angle between both handled sequences
- * changes, the #GtkGestureRotate::angle-changed signal is emitted.
+ * `GtkGestureRotate` is a `GtkGesture` for 2-finger rotations.
+ *
+ * Whenever the angle between both handled sequences changes, the
+ * [signal@Gtk.GestureRotate::angle-changed] signal is emitted.
  */
 
 #include "config.h"
@@ -238,8 +236,7 @@ gtk_gesture_rotate_class_init (GtkGestureRotateClass *klass)
    * @angle: Current angle in radians
    * @angle_delta: Difference with the starting angle, in radians
    *
-   * This signal is emitted when the angle between both tracked points
-   * changes.
+   * Emitted when the angle between both tracked points changes.
    */
   signals[ANGLE_CHANGED] =
     g_signal_new (I_("angle-changed"),
@@ -257,10 +254,10 @@ gtk_gesture_rotate_class_init (GtkGestureRotateClass *klass)
 /**
  * gtk_gesture_rotate_new:
  *
- * Returns a newly created #GtkGesture that recognizes 2-touch
+ * Returns a newly created `GtkGesture` that recognizes 2-touch
  * rotation gestures.
  *
- * Returns: a newly created #GtkGestureRotate
+ * Returns: a newly created `GtkGestureRotate`
  **/
 GtkGesture *
 gtk_gesture_rotate_new (void)
@@ -271,14 +268,16 @@ gtk_gesture_rotate_new (void)
 
 /**
  * gtk_gesture_rotate_get_angle_delta:
- * @gesture: a #GtkGestureRotate
+ * @gesture: a `GtkGestureRotate`
+ *
+ * Gets the angle delta in radians.
  *
  * If @gesture is active, this function returns the angle difference
  * in radians since the gesture was first recognized. If @gesture is
  * not active, 0 is returned.
  *
  * Returns: the angle delta in radians
- **/
+ */
 double
 gtk_gesture_rotate_get_angle_delta (GtkGestureRotate *gesture)
 {

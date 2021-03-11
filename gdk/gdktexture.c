@@ -17,21 +17,21 @@
  */
 
 /**
- * SECTION:textures
- * @Title: GdkTexture
- * @Short_description: Pixel data
+ * GdkTexture:
  *
- * #GdkTexture is the basic element used to refer to pixel data.
- * It is primarily mean for pixel data that will not change over
+ * `GdkTexture` is the basic element used to refer to pixel data.
+ *
+ * It is primarily meant for pixel data that will not change over
  * multiple frames, and will be used for a long time.
  *
- * There are various ways to create #GdkTexture objects from a
- * #GdkPixbuf, or a Cairo surface, or other pixel data.
+ * There are various ways to create `GdkTexture` objects from a
+ * `GdkPixbuf`, or a Cairo surface, or other pixel data.
  *
- * The ownership of the pixel data is transferred to the #GdkTexture
- * instance; you can only make a copy of it, via gdk_texture_download().
+ * The ownership of the pixel data is transferred to the `GdkTexture`
+ * instance; you can only make a copy of it, via
+ * [method@Gdk.Texture.download].
  *
- * #GdkTexture is an immutable object: That means you cannot change
+ * `GdkTexture` is an immutable object: That means you cannot change
  * anything about it other than increasing the reference count via
  * g_object_ref().
  */
@@ -52,12 +52,6 @@ void
 gtk_snapshot_append_texture (GdkSnapshot            *snapshot,
                              GdkTexture             *texture,
                              const graphene_rect_t  *bounds);
-
-/**
- * GdkTexture:
- *
- * The `GdkTexture` structure contains only private data.
- */
 
 enum {
   PROP_0,
@@ -200,7 +194,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
   gobject_class->dispose = gdk_texture_dispose;
 
   /**
-   * GdkTexture:width:
+   * GdkTexture:width: (attributes org.gtk.Property.get=gdk_texture_get_width)
    *
    * The width of the texture, in pixels.
    */
@@ -217,7 +211,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
                       G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkTexture:height:
+   * GdkTexture:height: (attributes org.gtk.Property.get=gdk_texture_get_height)
    *
    * The height of the texture, in pixels.
    */
@@ -246,9 +240,10 @@ gdk_texture_init (GdkTexture *self)
  * @surface: a cairo image surface
  *
  * Creates a new texture object representing the surface.
+ *
  * @surface must be an image surface with format CAIRO_FORMAT_ARGB32.
  *
- * Returns: a new #GdkTexture
+ * Returns: a new `GdkTexture`
  */
 GdkTexture *
 gdk_texture_new_for_surface (cairo_surface_t *surface)
@@ -279,11 +274,11 @@ gdk_texture_new_for_surface (cairo_surface_t *surface)
 
 /**
  * gdk_texture_new_for_pixbuf:
- * @pixbuf: a #GdkPixbuf
+ * @pixbuf: a `GdkPixbuf`
  *
- * Creates a new texture object representing the #GdkPixbuf.
+ * Creates a new texture object representing the `GdkPixbuf`.
  *
- * Returns: a new #GdkTexture
+ * Returns: a new `GdkTexture`
  */
 GdkTexture *
 gdk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
@@ -316,16 +311,16 @@ gdk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
  * @resource_path: the path of the resource file
  *
  * Creates a new texture by loading an image from a resource.
- * The file format is detected automatically.
- * The supported formats are PNG and JPEG, though more formats might be
- * available.
+ *
+ * The file format is detected automatically. The supported formats
+ * are PNG and JPEG, though more formats might be available.
  *
  * It is a fatal error if @resource_path does not specify a valid
  * image resource and the program will abort if that happens.
  * If you are unsure about the validity of a resource, use
- * gdk_texture_new_from_file() to load it.
+ * [ctor@Gdk.Texture.new_from_file] to load it.
  *
- * Return value: A newly-created texture
+ * Return value: A newly-created `GdkTexture`
  */
 GdkTexture *
 gdk_texture_new_from_resource (const char *resource_path)
@@ -348,18 +343,18 @@ gdk_texture_new_from_resource (const char *resource_path)
 
 /**
  * gdk_texture_new_from_file:
- * @file: #GFile to load
+ * @file: `GFile` to load
  * @error: Return location for an error
  *
  * Creates a new texture by loading an image from a file.
- * The file format is detected automatically.
- * The supported formats are PNG and JPEG, though more formats might be
- * available.
+ *
+ * The file format is detected automatically. The supported formats
+ * are PNG and JPEG, though more formats might be available.
  *
  * If %NULL is returned, then @error will be set.
  *
- * Return value: A newly-created #GdkTexture or %NULL if an error occurred.
- **/
+ * Return value: A newly-created `GdkTexture` or %NULL if an error occurred.
+ */
 GdkTexture *
 gdk_texture_new_from_file (GFile   *file,
                            GError **error)
@@ -387,12 +382,12 @@ gdk_texture_new_from_file (GFile   *file,
 }
 
 /**
- * gdk_texture_get_width:
- * @texture: a #GdkTexture
+ * gdk_texture_get_width: (attributes org.gtk.Method.get_property=width)
+ * @texture: a `GdkTexture`
  *
  * Returns the width of @texture, in pixels.
  *
- * Returns: the width of the #GdkTexture
+ * Returns: the width of the `GdkTexture`
  */
 int
 gdk_texture_get_width (GdkTexture *texture)
@@ -403,12 +398,12 @@ gdk_texture_get_width (GdkTexture *texture)
 }
 
 /**
- * gdk_texture_get_height:
- * @texture: a #GdkTexture
+ * gdk_texture_get_height: (attributes org.gtk.Method.get_property=height)
+ * @texture: a `GdkTexture`
  *
  * Returns the height of the @texture, in pixels.
  *
- * Returns: the height of the #GdkTexture
+ * Returns: the height of the `GdkTexture`
  */
 int
 gdk_texture_get_height (GdkTexture *texture)
@@ -456,21 +451,22 @@ gdk_texture_download_area (GdkTexture         *texture,
 
 /**
  * gdk_texture_download:
- * @texture: a #GdkTexture
+ * @texture: a `GdkTexture`
  * @data: (array): pointer to enough memory to be filled with the
  *     downloaded data of @texture
  * @stride: rowstride in bytes
  *
- * Downloads the @texture into local memory. This may be
- * an expensive operation, as the actual texture data may
- * reside on a GPU or on a remote display server.
+ * Downloads the @texture into local memory.
+ *
+ * This may be an expensive operation, as the actual texture data
+ * may reside on a GPU or on a remote display server.
  *
  * The data format of the downloaded data is equivalent to
  * %CAIRO_FORMAT_ARGB32, so every downloaded pixel requires
  * 4 bytes of memory.
  *
  * Downloading a texture into a Cairo image surface:
- * |[<!-- language="C" -->
+ * ```c
  * surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
  *                                       gdk_texture_get_width (texture),
  *                                       gdk_texture_get_height (texture));
@@ -478,7 +474,7 @@ gdk_texture_download_area (GdkTexture         *texture,
  *                       cairo_image_surface_get_data (surface),
  *                       cairo_image_surface_get_stride (surface));
  * cairo_surface_mark_dirty (surface);
- * ]|
+ * ```
  */
 void
 gdk_texture_download (GdkTexture *texture,
@@ -536,18 +532,18 @@ gdk_texture_get_render_data (GdkTexture  *self,
 
 /**
  * gdk_texture_save_to_png:
- * @texture: a #GdkTexture
+ * @texture: a `GdkTexture`
  * @filename: the filename to store to
  *
  * Store the given @texture to the @filename as a PNG file.
  *
  * This is a utility function intended for debugging and testing.
  * If you want more control over formats, proper error handling or
- * want to store to a #GFile or other location, you might want to
+ * want to store to a `GFile` or other location, you might want to
  * look into using the gdk-pixbuf library.
  *
  * Returns: %TRUE if saving succeeded, %FALSE on failure.
- **/
+ */
 gboolean
 gdk_texture_save_to_png (GdkTexture *texture,
                          const char *filename)

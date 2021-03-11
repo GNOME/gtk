@@ -18,23 +18,23 @@
  */
 
 /**
- * SECTION:gtkconstraint
- * @Title: GtkConstraint
- * @Short_description: The description of a constraint
+ * GtkConstraint:
  *
- * #GtkConstraint describes a constraint between an attribute on a widget
- * and another attribute on another widget, expressed as a linear equation
- * like:
+ * `GtkConstraint` describes a constraint between attributes of two widgets,
+ *  expressed as a linear equation.
  *
- * |[
- *   target.attr1 = source.attr2 × multiplier + constant
- * ]|
+ * The typical equation for a constraint is:
  *
- * Each #GtkConstraint is part of a system that will be solved by a
- * #GtkConstraintLayout in order to allocate and position each child widget.
+ * ```
+ *   target.target_attr = source.source_attr × multiplier + constant
+ * ```
  *
- * The source and target widgets, as well as their attributes, of a
- * #GtkConstraint instance are immutable after creation.
+ * Each `GtkConstraint` is part of a system that will be solved by a
+ * [class@Gtk.ConstraintLayout] in order to allocate and position each
+ * child widget or guide.
+ *
+ * The source and target, as well as their attributes, of a `GtkConstraint`
+ * instance are immutable after creation.
  */
 
 #include "config.h"
@@ -178,13 +178,15 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
   gobject_class->finalize = gtk_constraint_finalize;
 
   /**
-   * GtkConstraint:target:
+   * GtkConstraint:target: (attributes org.gtk.Property.get=gtk_constraint_get_target)
    *
    * The target of the constraint.
    *
    * The constraint will set the #GtkConstraint:target-attribute of the
    * target using the #GtkConstraint:source-attribute of the source
    * widget.
+   *
+   *
    */
   obj_props[PROP_TARGET] =
     g_param_spec_object ("target",
@@ -195,7 +197,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
                          G_PARAM_STATIC_STRINGS |
                          G_PARAM_CONSTRUCT_ONLY);
   /**
-   * GtkConstraint:target-attribute:
+   * GtkConstraint:target-attribute: (attributes org.gtk.Property.get=gtk_constraint_get_target_attribute)
    *
    * The attribute of the #GtkConstraint:target set by the constraint.
    */
@@ -209,7 +211,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
                        G_PARAM_STATIC_STRINGS |
                        G_PARAM_CONSTRUCT_ONLY);
   /**
-   * GtkConstraint:relation:
+   * GtkConstraint:relation: (attributes org.gtk.Property.get=gtk_constraint_get_relation)
    *
    * The order relation between the terms of the constraint.
    */
@@ -223,12 +225,13 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
                        G_PARAM_STATIC_STRINGS |
                        G_PARAM_CONSTRUCT_ONLY);
   /**
-   * GtkConstraint:source:
+   * GtkConstraint:source: (attributes org.gtk.Property.get=gtk_constraint_get_source)
    *
    * The source of the constraint.
    *
-   * The constraint will set the #GtkConstraint:target-attribute of the
-   * target using the #GtkConstraint:source-attribute of the source.
+   * The constraint will set the [property@Gtk.Constraint:target-attribute]
+   * of the target using the [property@Gtk.Constraint:source-attribute]
+   * of the source.
    */
   obj_props[PROP_SOURCE] =
     g_param_spec_object ("source",
@@ -239,9 +242,10 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
                          G_PARAM_STATIC_STRINGS |
                          G_PARAM_CONSTRUCT_ONLY);
   /**
-   * GtkConstraint:source-attribute:
+   * GtkConstraint:source-attribute: (attributes org.gtk.Property.get=gtk_constraint_get_source_attribute)
    *
-   * The attribute of the #GtkConstraint:source read by the constraint.
+   * The attribute of the [property@Gtk.Constraint:source] read by the
+   * constraint.
    */
   obj_props[PROP_SOURCE_ATTRIBUTE] =
     g_param_spec_enum ("source-attribute",
@@ -253,10 +257,10 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
                        G_PARAM_STATIC_STRINGS |
                        G_PARAM_CONSTRUCT_ONLY);
   /**
-   * GtkConstraint:multiplier:
+   * GtkConstraint:multiplier: (attributes org.gtk.Property.get=gtk_constraint_get_multiplier)
    *
-   * The multiplication factor to be applied to the
-   * #GtkConstraint:source-attribute.
+   * The multiplication factor to be applied to
+   * the [property@Gtk.Constraint:source-attribute].
    */
   obj_props[PROP_MULTIPLIER] =
     g_param_spec_double ("multiplier",
@@ -267,9 +271,9 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
                          G_PARAM_STATIC_STRINGS |
                          G_PARAM_CONSTRUCT_ONLY);
   /**
-   * GtkConstraint:constant:
+   * GtkConstraint:constant: (attributes org.gtk.Property.get=gtk_constraint_get_constant)
    *
-   * The constant value to be added to the #GtkConstraint:source-attribute.
+   * The constant value to be added to the [property@Gtk.Constraint:source-attribute].
    */
   obj_props[PROP_CONSTANT] =
     g_param_spec_double ("constant",
@@ -280,12 +284,12 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
                          G_PARAM_STATIC_STRINGS |
                          G_PARAM_CONSTRUCT_ONLY);
   /**
-   * GtkConstraint:strength:
+   * GtkConstraint:strength: (attributes org.gtk.Property.get=gtk_constraint_get_strength)
    *
    * The strength of the constraint.
    *
    * The strength can be expressed either using one of the symbolic values
-   * of the #GtkConstraintStrength enumeration, or any positive integer
+   * of the [enum@Gtk.ConstraintStrength] enumeration, or any positive integer
    * value.
    */
   obj_props[PROP_STRENGTH] =
@@ -314,20 +318,20 @@ gtk_constraint_init (GtkConstraint *self)
 }
 
 /**
- * gtk_constraint_new:
- * @target: (nullable) (type GtkConstraintTarget): a #GtkConstraintTarget
- * @target_attribute: the attribute of @target to be set
- * @relation: the relation equivalence between @target_attribute and @source_attribute
- * @source: (nullable) (type GtkConstraintTarget): a #GtkConstraintTarget
- * @source_attribute: the attribute of @source to be read
- * @multiplier: a multiplication factor to be applied to @source_attribute
- * @constant: a constant factor to be added to @source_attribute
+ * gtk_constraint_new: (constructor)
+ * @target: (nullable) (type GtkConstraintTarget): the target of the constraint
+ * @target_attribute: the attribute of `target` to be set
+ * @relation: the relation equivalence between `target_attribute` and `source_attribute`
+ * @source: (nullable) (type GtkConstraintTarget): the source of the constraint
+ * @source_attribute: the attribute of `source` to be read
+ * @multiplier: a multiplication factor to be applied to `source_attribute`
+ * @constant: a constant factor to be added to `source_attribute`
  * @strength: the strength of the constraint
  *
- * Creates a new #GtkConstraint representing a relation between a layout
+ * Creates a new constraint representing a relation between a layout
  * attribute on a source and a layout attribute on a target.
  *
- * Returns: the newly created #GtkConstraint
+ * Returns: (transfer full): the newly created constraint
  */
 GtkConstraint *
 gtk_constraint_new (gpointer                target,
@@ -355,17 +359,17 @@ gtk_constraint_new (gpointer                target,
 }
 
 /**
- * gtk_constraint_new_constant:
- * @target: (nullable) (type GtkConstraintTarget): a #GtkConstraintTarget
- * @target_attribute: the attribute of @target to be set
- * @relation: the relation equivalence between @target_attribute and @constant
- * @constant: a constant factor to be set on @target_attribute
+ * gtk_constraint_new_constant: (constructor)
+ * @target: (nullable) (type GtkConstraintTarget): a the target of the constraint
+ * @target_attribute: the attribute of `target` to be set
+ * @relation: the relation equivalence between `target_attribute` and `constant`
+ * @constant: a constant factor to be set on `target_attribute`
  * @strength: the strength of the constraint
  *
- * Creates a new #GtkConstraint representing a relation between a layout
+ * Creates a new constraint representing a relation between a layout
  * attribute on a target and a constant value.
  *
- * Returns: the newly created #GtkConstraint
+ * Returns: (transfer full): the newly created constraint
  */
 GtkConstraint *
 gtk_constraint_new_constant (gpointer                target,
@@ -387,13 +391,14 @@ gtk_constraint_new_constant (gpointer                target,
 }
 
 /**
- * gtk_constraint_get_target:
- * @constraint: a #GtkConstraint
+ * gtk_constraint_get_target: (attributes org.gtk.Method.get_property=target)
+ * @constraint: a `GtkConstraint`
  *
- * Retrieves the #GtkConstraintTarget used as the target for @constraint.
+ * Retrieves the [iface@Gtk.ConstraintTarget] used as the target for
+ * the constraint.
  *
- * If the #GtkConstraint:target property is set to %NULL, the @constraint
- * will use the #GtkConstraintLayout's widget.
+ * If the targe is set to `NULL` at creation, the constraint will use
+ * the widget using the [class@Gtk.ConstraintLayout] as the target.
  *
  * Returns: (transfer none) (nullable): a #GtkConstraintTarget
  */
@@ -406,10 +411,10 @@ gtk_constraint_get_target (GtkConstraint *constraint)
 }
 
 /**
- * gtk_constraint_get_target_attribute:
- * @constraint: a #GtkConstraint
+ * gtk_constraint_get_target_attribute: (attributes org.gtk.Method.get_property=target-attribute)
+ * @constraint: a `GtkConstraint`
  *
- * Retrieves the attribute of the target to be set by the @constraint.
+ * Retrieves the attribute of the target to be set by the constraint.
  *
  * Returns: the target's attribute
  */
@@ -422,15 +427,16 @@ gtk_constraint_get_target_attribute (GtkConstraint *constraint)
 }
 
 /**
- * gtk_constraint_get_source:
+ * gtk_constraint_get_source: (attributes org.gtk.Method.get_property=source)
  * @constraint: a #GtkConstraint
  *
- * Retrieves the #GtkConstraintTarget used as the source for @constraint.
+ * Retrieves the [iface@Gtk.ConstraintTarget] used as the source for the
+ * constraint.
  *
- * If the #GtkConstraint:source property is set to %NULL, the @constraint
- * will use the #GtkConstraintLayout's widget.
+ * If the source is set to `NULL` at creation, the constraint will use
+ * the widget using the [class@Gtk.ConstraintLayout] as the source.
  *
- * Returns: (transfer none) (nullable): a #GtkConstraintTarget
+ * Returns: (transfer none) (nullable): the source of the constraint
  */
 GtkConstraintTarget *
 gtk_constraint_get_source (GtkConstraint *constraint)
@@ -441,12 +447,12 @@ gtk_constraint_get_source (GtkConstraint *constraint)
 }
 
 /**
- * gtk_constraint_get_source_attribute:
- * @constraint: a #GtkConstraint
+ * gtk_constraint_get_source_attribute: (attributes org.gtk.Method.get_property=source-attribute)
+ * @constraint: a `GtkConstraint`
  *
- * Retrieves the attribute of the source to be read by the @constraint.
+ * Retrieves the attribute of the source to be read by the constraint.
  *
- * Returns: the target's attribute
+ * Returns: the source's attribute
  */
 GtkConstraintAttribute
 gtk_constraint_get_source_attribute (GtkConstraint *constraint)
@@ -457,12 +463,12 @@ gtk_constraint_get_source_attribute (GtkConstraint *constraint)
 }
 
 /**
- * gtk_constraint_get_relation:
- * @constraint: a #GtkConstraint
+ * gtk_constraint_get_relation: (attributes org.gtk.Method.get_property=relation)
+ * @constraint: a `GtkConstraint`
  *
- * The order relation between the terms of the @constraint.
+ * The order relation between the terms of the constraint.
  *
- * Returns: a #GtkConstraintRelation value
+ * Returns: a relation type
  */
 GtkConstraintRelation
 gtk_constraint_get_relation (GtkConstraint *constraint)
@@ -473,8 +479,8 @@ gtk_constraint_get_relation (GtkConstraint *constraint)
 }
 
 /**
- * gtk_constraint_get_multiplier:
- * @constraint: a #GtkConstraint
+ * gtk_constraint_get_multiplier: (attributes org.gtk.Method.get_property=multiplier)
+ * @constraint: a `GtkConstraint`
  *
  * Retrieves the multiplication factor applied to the source
  * attribute's value.
@@ -490,8 +496,8 @@ gtk_constraint_get_multiplier (GtkConstraint *constraint)
 }
 
 /**
- * gtk_constraint_get_constant:
- * @constraint: a #GtkConstraint
+ * gtk_constraint_get_constant: (attributes org.gtk.Method.get_property=constant)
+ * @constraint: a `GtkConstraint`
  *
  * Retrieves the constant factor added to the source attributes' value.
  *
@@ -506,12 +512,12 @@ gtk_constraint_get_constant (GtkConstraint *constraint)
 }
 
 /**
- * gtk_constraint_get_strength:
- * @constraint: a #GtkConstraint
+ * gtk_constraint_get_strength: (attributes org.gtk.Method.get_property=strength)
+ * @constraint: a `GtkConstraint`
  *
  * Retrieves the strength of the constraint.
  *
- * Returns: the strength of the constraint
+ * Returns: the strength value
  */
 int
 gtk_constraint_get_strength (GtkConstraint *constraint)
@@ -523,9 +529,9 @@ gtk_constraint_get_strength (GtkConstraint *constraint)
 
 /**
  * gtk_constraint_is_required:
- * @constraint: a #GtkConstraint
+ * @constraint: a `GtkConstraint`
  *
- * Checks whether the @constraint is a required relation for solving the
+ * Checks whether the constraint is a required relation for solving the
  * constraint layout.
  *
  * Returns: %TRUE if the constraint is required
@@ -540,12 +546,12 @@ gtk_constraint_is_required (GtkConstraint *constraint)
 
 /**
  * gtk_constraint_is_attached:
- * @constraint: a #GtkConstraint
+ * @constraint: a `GtkConstraint`
  *
- * Checks whether the @constraint is attached to a #GtkConstraintLayout,
+ * Checks whether the constraint is attached to a [class@Gtk.ConstraintLayout],
  * and it is contributing to the layout.
  *
- * Returns: %TRUE if the constraint is attached
+ * Returns: `TRUE` if the constraint is attached
  */
 gboolean
 gtk_constraint_is_attached (GtkConstraint *constraint)
@@ -557,12 +563,12 @@ gtk_constraint_is_attached (GtkConstraint *constraint)
 
 /**
  * gtk_constraint_is_constant:
- * @constraint: a #GtkConstraint
+ * @constraint: a `GtkConstraint`
  *
- * Checks whether the @constraint describes a relation between an attribute
- * on the #GtkConstraint:target and a constant value.
+ * Checks whether the constraint describes a relation between an attribute
+ * on the [property@Gtk.Constraint:target] and a constant value.
  *
- * Returns: %TRUE if the constraint is a constant relation
+ * Returns: `TRUE` if the constraint is a constant relation
  */
 gboolean
 gtk_constraint_is_constant (GtkConstraint *constraint)

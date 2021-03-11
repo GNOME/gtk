@@ -31,9 +31,10 @@ typedef struct _GtkConstraintTarget GtkConstraintTarget;
 /**
  * GtkConstraintTarget:
  *
- * The GtkConstraintTarget interface is implemented by objects that
- * can be used as source or target in #GtkConstraints. Besides
- * #GtkWidget, it is also implemented by #GtkConstraintGuide.
+ * The `GtkConstraintTarget` interface is implemented by objects that
+ * can be used as source or target in `GtkConstraint`s.
+ *
+ * Besides `GtkWidget`, it is also implemented by `GtkConstraintGuide`.
  */
 
 GDK_AVAILABLE_IN_ALL
@@ -41,19 +42,6 @@ G_DECLARE_INTERFACE (GtkConstraintTarget, gtk_constraint_target, GTK, CONSTRAINT
 
 #define GTK_TYPE_CONSTRAINT (gtk_constraint_get_type ())
 
-/**
- * GtkConstraint:
- *
- * An object describing the relation between two widget attributes.
- *
- * All relations are in the form:
- *
- * |[<!-- language=plain -->
- *   target.attr_name = source.attr_name × multiplier + constant
- * ]|
- *
- * A #GtkConstraint is immutable once it's created.
- */
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkConstraint, gtk_constraint, GTK, CONSTRAINT, GObject)
 

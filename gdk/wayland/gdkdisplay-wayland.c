@@ -59,37 +59,17 @@
 #include "gdk/gdk-private.h"
 
 /**
- * SECTION:wayland_interaction
- * @Short_description: Wayland backend-specific functions
- * @Title: Wayland Interaction
- * @Include: gdk/wayland/gdkwayland.h
+ * GdkWaylandDisplay:
  *
- * The functions in this section are specific to the GDK Wayland backend.
- * To use them, you need to include the `<gdk/wayland/gdkwayland.h>` header and
- * use the Wayland-specific pkg-config `gtk4-wayland` file to build your
- * application.
+ * The Wayland implementation of `GdkDisplay`.
  *
- * To make your code compile with other GDK backends, guard backend-specific
- * calls by an ifdef as follows. Since GDK may be built with multiple
- * backends, you should also check for the backend that is in use (e.g. by
- * using the GDK_IS_WAYLAND_DISPLAY() macro).
- * |[<!-- language="C" -->
- * #ifdef GDK_WINDOWING_WAYLAND
- *   if (GDK_IS_WAYLAND_DISPLAY (display))
- *     {
- *       // make Wayland-specific calls here
- *     }
- *   else
- * #endif
- * #ifdef GDK_WINDOWING_X11
- *   if (GDK_IS_X11_DISPLAY (display))
- *     {
- *       // make X11-specific calls here
- *     }
- *   else
- * #endif
- *   g_error ("Unsupported GDK backend");
- * ]|
+ * Beyond the regular [class@Gdk.Display] API, the Wayland implementation
+ * provides access to Wayland objects such as the `wl_display` with
+ * [method@GdkWayland.WaylandDisplay.get_wl_display], the `wl_compositor` with
+ * [method@GdkWayland.WaylandDisplay.get_wl_compositor].
+ *
+ * You can find out what Wayland globals are supported by a display
+ * with [method@GdkWayland.WaylandDisplay.query_registry].
  */
 
 #define MIN_SYSTEM_BELL_DELAY_MS 20
@@ -910,7 +890,7 @@ gdk_wayland_display_get_next_serial (GdkDisplay *display)
 
 /**
  * gdk_wayland_display_get_startup_notification_id:
- * @display: (type GdkWaylandDisplay): a #GdkDisplay
+ * @display: (type GdkWaylandDisplay): a `GdkDisplay`
  *
  * Gets the startup notification ID for a Wayland display, or %NULL
  * if no ID has been defined.
@@ -925,19 +905,19 @@ gdk_wayland_display_get_startup_notification_id (GdkDisplay  *display)
 
 /**
  * gdk_wayland_display_set_startup_notification_id:
- * @display: (type GdkWaylandDisplay): a #GdkDisplay
+ * @display: (type GdkWaylandDisplay): a `GdkDisplay`
  * @startup_id: the startup notification ID (must be valid utf8)
  *
  * Sets the startup notification ID for a display.
  *
- * This is usually taken from the value of the DESKTOP_STARTUP_ID
+ * This is usually taken from the value of the `DESKTOP_STARTUP_ID`
  * environment variable, but in some cases (such as the application not
  * being launched using exec()) it can come from other sources.
  *
  * The startup ID is also what is used to signal that the startup is
  * complete (for example, when opening a window or when calling
- * gdk_display_notify_startup_complete()).
- **/
+ * [method@Gdk.Display.notify_startup_complete]).
+ */
 void
 gdk_wayland_display_set_startup_notification_id (GdkDisplay *display,
                                                  const char *startup_id)
@@ -1117,7 +1097,7 @@ get_cursor_theme (GdkWaylandDisplay *display_wayland,
 
 /**
  * gdk_wayland_display_set_cursor_theme:
- * @display: (type GdkWaylandDisplay): a #GdkDisplay
+ * @display: (type GdkWaylandDisplay): a `GdkDisplay`
  * @name: the new cursor theme
  * @size: the size to use for cursors
  *
@@ -1214,11 +1194,11 @@ _gdk_wayland_display_update_serial (GdkWaylandDisplay *display_wayland,
 
 /**
  * gdk_wayland_display_get_wl_display: (skip)
- * @display: (type GdkWaylandDisplay): a #GdkDisplay
+ * @display: (type GdkWaylandDisplay): a `GdkDisplay`
  *
- * Returns the Wayland wl_display of a #GdkDisplay.
+ * Returns the Wayland `wl_display` of a `GdkDisplay`.
  *
- * Returns: (transfer none): a Wayland wl_display
+ * Returns: (transfer none): a Wayland `wl_display`
  */
 struct wl_display *
 gdk_wayland_display_get_wl_display (GdkDisplay *display)
@@ -1230,11 +1210,11 @@ gdk_wayland_display_get_wl_display (GdkDisplay *display)
 
 /**
  * gdk_wayland_display_get_wl_compositor: (skip)
- * @display: (type GdkWaylandDisplay): a #GdkDisplay
+ * @display: (type GdkWaylandDisplay): a `GdkDisplay`
  *
- * Returns the Wayland global singleton compositor of a #GdkDisplay.
+ * Returns the Wayland `wl_compositor` of a `GdkDisplay`.
  *
- * Returns: (transfer none): a Wayland wl_compositor
+ * Returns: (transfer none): a Wayland `wl_compositor`
  */
 struct wl_compositor *
 gdk_wayland_display_get_wl_compositor (GdkDisplay *display)
@@ -2673,14 +2653,14 @@ gdk_wayland_display_get_output_scale (GdkWaylandDisplay *display_wayland,
 
 /**
  * gdk_wayland_display_query_registry:
- * @display: (type GdkWaylandDisplay): a #GdkDisplay
+ * @display: (type GdkWaylandDisplay): a `GdkDisplay`
  * @global: global interface to query in the registry
  *
  * Returns %TRUE if the the interface was found in the display
  * `wl_registry.global` handler.
  *
  * Returns: %TRUE if the global is offered by the compositor
- **/
+ */
 gboolean
 gdk_wayland_display_query_registry (GdkDisplay  *display,
 				    const char *global)

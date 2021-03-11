@@ -22,9 +22,7 @@
 #include "gtkmenutrackerprivate.h"
 
 /*< private >
- * SECTION:gtkmenutracker
- * @Title: GtkMenuTracker
- * @Short_description: A helper class for interpreting #GMenuModel
+ * GtkMenuTracker:
  *
  * #GtkMenuTracker is a simple object to ease implementations of #GMenuModel.
  * Given a #GtkActionObservable (usually a #GActionMuxer) along with a

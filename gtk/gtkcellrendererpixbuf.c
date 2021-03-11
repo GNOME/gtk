@@ -31,9 +31,9 @@
 #include <stdlib.h>
 
 /**
- * SECTION:gtkcellrendererpixbuf
- * @Short_description: Renders a pixbuf in a cell
- * @Title: GtkCellRendererPixbuf
+ * GtkCellRendererPixbuf:
+ *
+ * Renders a pixbuf in a cell
  *
  * A #GtkCellRendererPixbuf can be used to render an image in a cell. It allows
  * to render either a given #GdkPixbuf (set via the

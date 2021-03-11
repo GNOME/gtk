@@ -31,20 +31,19 @@
 
 
 /**
- * SECTION:gtkwindowgroup
- * @Short_description: Limit the effect of grabs
- * @Title: GtkWindowGroup
+ * GtkWindowGroup:
  *
- * A #GtkWindowGroup restricts the effect of grabs to windows
- * in the same group, thereby making window groups almost behave
- * like separate applications. 
+ * `GtkWindowGroup` makes group of windows behave like separate applications.
+ *
+ * It achieves this by limiting the effect of GTK grabs and modality
+ * to windows in the same group.
  *
  * A window can be a member in at most one window group at a time.
  * Windows that have not been explicitly assigned to a group are
  * implicitly treated like windows of the default window group.
  *
- * GtkWindowGroup objects are referenced by each window in the group,
- * so once you have added all windows to a GtkWindowGroup, you can drop
+ * `GtkWindowGroup` objects are referenced by each window in the group,
+ * so once you have added all windows to a `GtkWindowGroup`, you can drop
  * the initial reference to the window group with g_object_unref(). If the
  * windows in the window group are subsequently destroyed, then they will
  * be removed from the window group and drop their references on the window
@@ -81,13 +80,13 @@ gtk_window_group_class_init (GtkWindowGroupClass *klass)
 
 /**
  * gtk_window_group_new:
- * 
- * Creates a new #GtkWindowGroup object.
+ *
+ * Creates a new `GtkWindowGroup` object.
  *
  * Modality of windows only affects windows
- * within the same #GtkWindowGroup.
+ * within the same `GtkWindowGroup`.
  * 
- * Returns: a new #GtkWindowGroup. 
+ * Returns: a new `GtkWindowGroup`.
  **/
 GtkWindowGroup *
 gtk_window_group_new (void)
@@ -123,11 +122,11 @@ window_group_cleanup_grabs (GtkWindowGroup *group,
 
 /**
  * gtk_window_group_add_window:
- * @window_group: a #GtkWindowGroup
- * @window: the #GtkWindow to add
- * 
- * Adds a window to a #GtkWindowGroup. 
- **/
+ * @window_group: a `GtkWindowGroup`
+ * @window: the `GtkWindow` to add
+ *
+ * Adds a window to a `GtkWindowGroup`.
+ */
 void
 gtk_window_group_add_window (GtkWindowGroup *window_group,
                              GtkWindow      *window)
@@ -157,11 +156,11 @@ gtk_window_group_add_window (GtkWindowGroup *window_group,
 
 /**
  * gtk_window_group_remove_window:
- * @window_group: a #GtkWindowGroup
- * @window: the #GtkWindow to remove
- * 
- * Removes a window from a #GtkWindowGroup.
- **/
+ * @window_group: a `GtkWindowGroup`
+ * @window: the `GtkWindow` to remove
+ *
+ * Removes a window from a `GtkWindowGroup`.
+ */
 void
 gtk_window_group_remove_window (GtkWindowGroup *window_group,
                                 GtkWindow      *window)
@@ -181,13 +180,13 @@ gtk_window_group_remove_window (GtkWindowGroup *window_group,
 
 /**
  * gtk_window_group_list_windows:
- * @window_group: a #GtkWindowGroup
+ * @window_group: a `GtkWindowGroup`
  *
- * Returns a list of the #GtkWindows that belong to @window_group.
+ * Returns a list of the `GtkWindows` that belong to @window_group.
  *
  * Returns: (element-type GtkWindow) (transfer container): A
  *   newly-allocated list of windows inside the group.
- **/
+ */
 GList *
 gtk_window_group_list_windows (GtkWindowGroup *window_group)
 {

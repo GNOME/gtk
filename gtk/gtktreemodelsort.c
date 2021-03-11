@@ -29,10 +29,9 @@
 
 
 /**
- * SECTION:gtktreemodelsort
- * @Short_description: A GtkTreeModel which makes an underlying tree model sortable
- * @Title: GtkTreeModelSort
- * @See_also: #GtkTreeModel, #GtkListStore, #GtkTreeStore, #GtkTreeSortable, #GtkTreeModelFilter
+ * GtkTreeModelSort:
+ *
+ * A GtkTreeModel which makes an underlying tree model sortable
  *
  * The #GtkTreeModelSort is a model which implements the #GtkTreeSortable
  * interface.  It does not hold any data itself, but rather is created with

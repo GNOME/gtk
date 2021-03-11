@@ -32,11 +32,6 @@ G_BEGIN_DECLS
 #define GDK_CONTENT_DESERIALIZER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_CONTENT_DESERIALIZER, GdkContentDeserializer))
 #define GDK_IS_CONTENT_DESERIALIZER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GDK_TYPE_CONTENT_DESERIALIZER))
 
-/**
- * GdkContentDeserializer:
- *
- * Should not be accessed directly.
- */
 typedef struct _GdkContentDeserializer GdkContentDeserializer;
 
 /**
@@ -44,6 +39,7 @@ typedef struct _GdkContentDeserializer GdkContentDeserializer;
  * @deserializer: a #GdkContentDeserializer
  *
  * The type of a function that can be registered with gdk_content_register_deserializer().
+ *
  * When the function gets called to operate on content, it can call functions on the
  * @deserializer object to obtain the mime type, input stream, user data, etc. for its
  * operation.

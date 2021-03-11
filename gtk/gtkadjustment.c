@@ -31,17 +31,19 @@
 
 
 /**
- * SECTION:gtkadjustment
- * @Short_description: A representation of an adjustable bounded value
- * @Title: GtkAdjustment
+ * GtkAdjustment:
  *
- * The #GtkAdjustment object represents a value which has an associated lower
- * and upper bound, together with step and page increments, and a page size.
- * It is used within several GTK+ widgets, including #GtkSpinButton, #GtkViewport,
- * and #GtkRange (which is a base class for #GtkScrollbar and #GtkScale).
+ * `GtkAdjustment` is a model for a numeric value.
  *
- * The #GtkAdjustment object does not update the value itself. Instead
- * it is left up to the owner of the #GtkAdjustment to control the value.
+ * The `GtkAdjustment has an associated lower and upper bound.
+ * It also contains step and page increments, and a page size.
+ *
+ * Adjustments are used within several GTK widgets, including
+ * [class@Gtk.SpinButton], [class@Gtk.Viewport], [class@Gtk.Scrollbar]
+ * and [class@Gtk.Scale].
+ *
+ * The `GtkAdjustment` object does not update the value itself. Instead
+ * it is left up to the owner of the `GtkAdjustment` to control the value.
  */
 
 
@@ -130,7 +132,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
   class->value_changed = NULL;
 
   /**
-   * GtkAdjustment:value:
+   * GtkAdjustment:value: (attributes org.gtk.Property.get=gtk_adjustment_get_value org.gtk.Property.set=gtk_adjustment_set_value)
    *
    * The value of the adjustment.
    */
@@ -143,7 +145,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkAdjustment:lower:
+   * GtkAdjustment:lower: (attributes org.gtk.Property.get=gtk_adjustment_get_lower org.gtk.Property.set=gtk_adjustment_set_lower)
    *
    * The minimum value of the adjustment.
    */
@@ -156,11 +158,11 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkAdjustment:upper:
+   * GtkAdjustment:upper: (attributes org.gtk.Property.get=gtk_adjustment_get_upper org.gtk.Property.set=gtk_adjustment_set_upper)
    *
    * The maximum value of the adjustment.
-   * Note that values will be restricted by
-   * `upper - page-size` if the page-size
+   *
+   * Note that values will be restricted by `upper - page-size` if the page-size
    * property is nonzero.
    */
   adjustment_props[PROP_UPPER] =
@@ -172,7 +174,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkAdjustment:step-increment:
+   * GtkAdjustment:step-increment: (attributes org.gtk.Property.get=gtk_adjustment_get_step_increment org.gtk.Property.set=gtk_adjustment_set_step_increment)
    *
    * The step increment of the adjustment.
    */
@@ -185,7 +187,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkAdjustment:page-increment:
+   * GtkAdjustment:page-increment: (attributes org.gtk.Property.get=gtk_adjustment_get_page_increment org.gtk.Property.set=gtk_adjustment_set_page_increment)
    *
    * The page increment of the adjustment.
    */
@@ -198,12 +200,13 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkAdjustment:page-size:
+   * GtkAdjustment:page-size: (attributes org.gtk.Property.get=gtk_adjustment_get_page_size org.gtk.Property.set=gtk_adjustment_set_page_size)
    *
    * The page size of the adjustment.
+   *
    * Note that the page-size is irrelevant and should be set to zero
    * if the adjustment is used for a simple scalar value, e.g. in a
-   * #GtkSpinButton.
+   * `GtkSpinButton`.
    */
   adjustment_props[PROP_PAGE_SIZE] =
       g_param_spec_double ("page-size",
@@ -219,8 +222,11 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
    * GtkAdjustment::changed:
    * @adjustment: the object which received the signal
    *
-   * Emitted when one or more of the #GtkAdjustment properties have been
-   * changed, other than the #GtkAdjustment:value property.
+   * Emitted when one or more of the `GtkAdjustment` properties have been
+   * changed.
+   *
+   * Note that the [property@Gtk.Adjustment:value] property is
+   * covered by the [signal@Gtk.Adjustment::value-changed] signal.
    */
   adjustment_signals[CHANGED] =
     g_signal_new (I_("changed"),
@@ -235,7 +241,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
    * GtkAdjustment::value-changed:
    * @adjustment: the object which received the signal
    *
-   * Emitted when the #GtkAdjustment:value property has been changed.
+   * Emitted when the value has been changed.
    */
   adjustment_signals[VALUE_CHANGED] =
     g_signal_new (I_("value-changed"),
@@ -368,9 +374,9 @@ gtk_adjustment_dispatch_properties_changed (GObject     *object,
  * @page_increment: the page increment
  * @page_size: the page size
  *
- * Creates a new #GtkAdjustment.
+ * Creates a new `GtkAdjustment`.
  *
- * Returns: a new #GtkAdjustment
+ * Returns: a new `GtkAdjustment`
  */
 GtkAdjustment *
 gtk_adjustment_new (double value,
@@ -391,14 +397,13 @@ gtk_adjustment_new (double value,
 }
 
 /**
- * gtk_adjustment_get_value:
- * @adjustment: a #GtkAdjustment
+ * gtk_adjustment_get_value: (attributes org.gtk.Method.get_property=value)
+ * @adjustment: a `GtkAdjustment`
  *
  * Gets the current value of the adjustment.
- * See gtk_adjustment_set_value().
  *
  * Returns: The current value of the adjustment
- **/
+ */
 double
 gtk_adjustment_get_value (GtkAdjustment *adjustment)
 {
@@ -530,16 +535,19 @@ gtk_adjustment_set_value_internal (GtkAdjustment *adjustment,
 }
 
 /**
- * gtk_adjustment_set_value:
- * @adjustment: a #GtkAdjustment
+ * gtk_adjustment_set_value: (attributes org.gtk.Method.set_property=value)
+ * @adjustment: a `GtkAdjustment`
  * @value: the new value
  *
- * Sets the #GtkAdjustment value. The value is clamped to lie between
- * #GtkAdjustment:lower and #GtkAdjustment:upper.
+ * Sets the `GtkAdjustment` value.
  *
- * Note that for adjustments which are used in a #GtkScrollbar, the
- * effective range of allowed values goes from #GtkAdjustment:lower to
- * #GtkAdjustment:upper - #GtkAdjustment:page-size.
+ * The value is clamped to lie between [property@Gtk.Adjustment:lower]
+ * and [property@Gtk.Adjustment:upper].
+ *
+ * Note that for adjustments which are used in a `GtkScrollbar`,
+ * the effective range of allowed values goes from
+ * [property@Gtk.Adjustment:lower] to
+ * [property@Gtk.Adjustment:upper] - [property@Gtk.Adjustment:page-size].
  */
 void
 gtk_adjustment_set_value (GtkAdjustment *adjustment,
@@ -560,8 +568,8 @@ gtk_adjustment_animate_to_value (GtkAdjustment *adjustment,
 }
 
 /**
- * gtk_adjustment_get_lower:
- * @adjustment: a #GtkAdjustment
+ * gtk_adjustment_get_lower: (attributes org.gtk.Method.get_property=lower)
+ * @adjustment: a `GtkAdjustment`
  *
  * Retrieves the minimum value of the adjustment.
  *
@@ -578,24 +586,24 @@ gtk_adjustment_get_lower (GtkAdjustment *adjustment)
 }
 
 /**
- * gtk_adjustment_set_lower:
- * @adjustment: a #GtkAdjustment
+ * gtk_adjustment_set_lower: (attributes org.gtk.Method.set_property=lower)
+ * @adjustment: a `GtkAdjustment`
  * @lower: the new minimum value
  *
  * Sets the minimum value of the adjustment.
  *
  * When setting multiple adjustment properties via their individual
- * setters, multiple #GtkAdjustment::changed signals will be emitted.
- * However, since the emission of the #GtkAdjustment::changed signal
- * is tied to the emission of the #GObject::notify signals of the changed
- * properties, it’s possible to compress the #GtkAdjustment::changed
- * signals into one by calling g_object_freeze_notify() and
- * g_object_thaw_notify() around the calls to the individual setters.
+ * setters, multiple [signal@Gtk.Adjustment::changed] signals will
+ * be emitted. However, since the emission of the
+ * [signal@Gtk.Adjustment::changed] signal is tied to the emission
+ * of the ::notify signals of the changed properties, it’s possible
+ * to compress the [signal@Gtk.Adjustment::changed] signals into one
+ * by calling g_object_freeze_notify() and g_object_thaw_notify()
+ * around the calls to the individual setters.
  *
  * Alternatively, using a single g_object_set() for all the properties
- * to change, or using gtk_adjustment_configure() has the same effect
- * of compressing #GtkAdjustment::changed emissions.
- **/
+ * to change, or using [method@Gtk.Adjustment.configure] has the same effect.
+ */
 void
 gtk_adjustment_set_lower (GtkAdjustment *adjustment,
                           double         lower)
@@ -612,13 +620,13 @@ gtk_adjustment_set_lower (GtkAdjustment *adjustment,
 }
 
 /**
- * gtk_adjustment_get_upper:
- * @adjustment: a #GtkAdjustment
+ * gtk_adjustment_get_upper: (attributes org.gtk.Method.get_property=upper)
+ * @adjustment: a `GtkAdjustment`
  *
  * Retrieves the maximum value of the adjustment.
  *
  * Returns: The current maximum value of the adjustment
- **/
+ */
 double
 gtk_adjustment_get_upper (GtkAdjustment *adjustment)
 {
@@ -630,8 +638,8 @@ gtk_adjustment_get_upper (GtkAdjustment *adjustment)
 }
 
 /**
- * gtk_adjustment_set_upper:
- * @adjustment: a #GtkAdjustment
+ * gtk_adjustment_set_upper: (attributes org.gtk.Method.set_property=upper)
+ * @adjustment: a `GtkAdjustment`
  * @upper: the new maximum value
  *
  * Sets the maximum value of the adjustment.
@@ -639,10 +647,10 @@ gtk_adjustment_get_upper (GtkAdjustment *adjustment)
  * Note that values will be restricted by `upper - page-size`
  * if the page-size property is nonzero.
  *
- * See gtk_adjustment_set_lower() about how to compress multiple
- * emissions of the #GtkAdjustment::changed signal when setting
- * multiple adjustment properties.
- **/
+ * See [method@Gtk.Adjustment.set_lower] about how to compress
+ * multiple emissions of the [signal@Gtk.Adjustment::changed]
+ * signal when setting multiple adjustment properties.
+ */
 void
 gtk_adjustment_set_upper (GtkAdjustment *adjustment,
                           double         upper)
@@ -659,13 +667,13 @@ gtk_adjustment_set_upper (GtkAdjustment *adjustment,
 }
 
 /**
- * gtk_adjustment_get_step_increment:
- * @adjustment: a #GtkAdjustment
+ * gtk_adjustment_get_step_increment: (attributes org.gtk.Method.get_property=step-increment)
+ * @adjustment: a `GtkAdjustment`
  *
  * Retrieves the step increment of the adjustment.
  *
  * Returns: The current step increment of the adjustment.
- **/
+ */
 double
 gtk_adjustment_get_step_increment (GtkAdjustment *adjustment)
 {
@@ -677,16 +685,16 @@ gtk_adjustment_get_step_increment (GtkAdjustment *adjustment)
 }
 
 /**
- * gtk_adjustment_set_step_increment:
- * @adjustment: a #GtkAdjustment
+ * gtk_adjustment_set_step_increment: (attributes org.gtk.Method.set_property=step-increment)
+ * @adjustment: a `GtkAdjustment`
  * @step_increment: the new step increment
  *
  * Sets the step increment of the adjustment.
  *
- * See gtk_adjustment_set_lower() about how to compress multiple
- * emissions of the #GtkAdjustment::changed signal when setting
- * multiple adjustment properties.
- **/
+ * See [method@Gtk.Adjustment.set_lower] about how to compress
+ * multiple emissions of the [signal@Gtk.Adjustment::changed]
+ * signal when setting multiple adjustment properties.
+ */
 void
 gtk_adjustment_set_step_increment (GtkAdjustment *adjustment,
                                    double         step_increment)
@@ -703,8 +711,8 @@ gtk_adjustment_set_step_increment (GtkAdjustment *adjustment,
 }
 
 /**
- * gtk_adjustment_get_page_increment:
- * @adjustment: a #GtkAdjustment
+ * gtk_adjustment_get_page_increment: (attributes org.gtk.Method.get_property=page-increment)
+ * @adjustment: a `GtkAdjustment`
  *
  * Retrieves the page increment of the adjustment.
  *
@@ -721,16 +729,16 @@ gtk_adjustment_get_page_increment (GtkAdjustment *adjustment)
 }
 
 /**
- * gtk_adjustment_set_page_increment:
- * @adjustment: a #GtkAdjustment
+ * gtk_adjustment_set_page_increment: (attributes org.gtk.Method.set_property=page-increment)
+ * @adjustment: a `GtkAdjustment`
  * @page_increment: the new page increment
  *
  * Sets the page increment of the adjustment.
  *
- * See gtk_adjustment_set_lower() about how to compress multiple
- * emissions of the #GtkAdjustment::changed signal when setting
- * multiple adjustment properties.
- **/
+ * See [method@Gtk.Adjustment.set_lower] about how to compress
+ * multiple emissions of the [signal@Gtk.Adjustment::changed]
+ * signal when setting multiple adjustment properties.
+ */
 void
 gtk_adjustment_set_page_increment (GtkAdjustment *adjustment,
                                    double         page_increment)
@@ -747,8 +755,8 @@ gtk_adjustment_set_page_increment (GtkAdjustment *adjustment,
 }
 
 /**
- * gtk_adjustment_get_page_size:
- * @adjustment: a #GtkAdjustment
+ * gtk_adjustment_get_page_size: (attributes org.gtk.Method.get_property=page-size)
+ * @adjustment: a `GtkAdjustment`
  *
  * Retrieves the page size of the adjustment.
  *
@@ -765,16 +773,16 @@ gtk_adjustment_get_page_size (GtkAdjustment *adjustment)
 }
 
 /**
- * gtk_adjustment_set_page_size:
- * @adjustment: a #GtkAdjustment
+ * gtk_adjustment_set_page_size: (attributes org.gtk.Method.set_property=page-size)
+ * @adjustment: a `GtkAdjustment`
  * @page_size: the new page size
  *
  * Sets the page size of the adjustment.
  *
- * See gtk_adjustment_set_lower() about how to compress multiple
- * emissions of the GtkAdjustment::changed signal when setting
- * multiple adjustment properties.
- **/
+ * See [method@Gtk.Adjustment.set_lower] about how to compress
+ * multiple emissions of the [signal@Gtk.Adjustment::changed]
+ * signal when setting multiple adjustment properties.
+ */
 void
 gtk_adjustment_set_page_size (GtkAdjustment *adjustment,
                               double         page_size)
@@ -792,7 +800,7 @@ gtk_adjustment_set_page_size (GtkAdjustment *adjustment,
 
 /**
  * gtk_adjustment_configure:
- * @adjustment: a #GtkAdjustment
+ * @adjustment: a `GtkAdjustment`
  * @value: the new value
  * @lower: the new minimum value
  * @upper: the new maximum value
@@ -803,10 +811,11 @@ gtk_adjustment_set_page_size (GtkAdjustment *adjustment,
  * Sets all properties of the adjustment at once.
  *
  * Use this function to avoid multiple emissions of the
- * #GtkAdjustment::changed signal. See gtk_adjustment_set_lower()
- * for an alternative way of compressing multiple emissions of
- * #GtkAdjustment::changed into one.
- **/
+ * [signal@Gtk.Adjustment::changed] signal. See
+ * [method@Gtk.Adjustment.set_lower] for an alternative
+ * way of compressing multiple emissions of
+ * [signal@Gtk.Adjustment::changed] into one.
+ */
 void
 gtk_adjustment_configure (GtkAdjustment *adjustment,
                           double         value,
@@ -853,17 +862,19 @@ gtk_adjustment_configure (GtkAdjustment *adjustment,
 
 /**
  * gtk_adjustment_clamp_page:
- * @adjustment: a #GtkAdjustment
+ * @adjustment: a `GtkAdjustment`
  * @lower: the lower value
  * @upper: the upper value
  *
- * Updates the #GtkAdjustment:value property to ensure that the range
- * between @lower and @upper is in the current page (i.e. between
- * #GtkAdjustment:value and #GtkAdjustment:value + #GtkAdjustment:page-size).
- * If the range is larger than the page size, then only the start of it will
- * be in the current page.
+ * Updates the value property to ensure that the range
+ * between @lower and @upper is in the current page.
  *
- * A #GtkAdjustment::value-changed signal will be emitted if the value is changed.
+ * The current page goes from `value` to `value` + `page-size`.
+ * If the range is larger than the page size, then only the
+ * start of it will be in the current page.
+ *
+ * A [signal@Gtk.Adjustment::value-changed] signal will be emitted
+ * if the value is changed.
  */
 void
 gtk_adjustment_clamp_page (GtkAdjustment *adjustment,
@@ -897,7 +908,7 @@ gtk_adjustment_clamp_page (GtkAdjustment *adjustment,
 
 /**
  * gtk_adjustment_get_minimum_increment:
- * @adjustment: a #GtkAdjustment
+ * @adjustment: a `GtkAdjustment`
  *
  * Gets the smaller of step increment and page increment.
  *

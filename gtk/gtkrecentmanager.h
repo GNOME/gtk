@@ -81,12 +81,6 @@ struct _GtkRecentData
   gboolean is_private;
 };
 
-/**
- * GtkRecentManager:
- *
- * #GtkRecentManager-struct contains only private data
- * and should be accessed using the provided API.
- */
 struct _GtkRecentManager
 {
   /*< private >*/

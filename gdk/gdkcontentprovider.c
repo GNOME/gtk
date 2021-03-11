@@ -25,20 +25,17 @@
 #include "gdkintl.h"
 
 /**
- * SECTION:gdkcontentprovider
- * @Short_description: Provides content for data transfer between applications
- * @Title: GdkContentProvider
- * @See_also: #GdkContentSerializer, #GdkContentDeserializer
+ * GdkContentProvider:
  *
- * A GdkContentProvider is used to provide content for the clipboard in
- * a number of formats.
+ * A `GdkContentProvider` is used to provide content for the clipboard or
+ * for drag-and-drop operations in a number of formats.
  *
- * To create a GdkContentProvider, use gdk_content_provider_new_for_value() or
- * gdk_content_provider_new_for_bytes().
+ * To create a `GdkContentProvider`, use [ctor@Gdk.ContentProvider.new_for_value]
+ * or [ctor@Gdk.ContentProvider.new_for_bytes].
  *
  * GDK knows how to handle common text and image formats out-of-the-box. See
- * #GdkContentSerializer and #GdkContentDeserializer if you want to add support
- * for application-specific data formats.
+ * [class@Gdk.ContentSerializer] and [class@Gdk.ContentDeserializer] if you want
+ * to add support for application-specific data formats.
  */
 
 typedef struct _GdkContentProviderPrivate GdkContentProviderPrivate;
@@ -171,7 +168,7 @@ gdk_content_provider_class_init (GdkContentProviderClass *class)
   class->get_value = gdk_content_provider_real_get_value;
 
   /**
-   * GdkContentProvider:formats:
+   * GdkContentProvider:formats: (attributes org.gtk.Property.get=gdk_content_provider_ref_formats)
    *
    * The possible formats that the provider can provide its data in.
    */
@@ -185,7 +182,7 @@ gdk_content_provider_class_init (GdkContentProviderClass *class)
                         G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkContentProvider:storable-formats:
+   * GdkContentProvider:storable-formats: (attributes org.gtk.Property.get=gdk_content_provider_ref_storable_formats)
    *
    * The subset of formats that clipboard managers should store this provider's data in.
    */
@@ -220,13 +217,13 @@ gdk_content_provider_init (GdkContentProvider *provider)
 }
 
 /**
- * gdk_content_provider_ref_formats:
+ * gdk_content_provider_ref_formats: (attributes org.gtk.Method.get_property=formats)
  * @provider: a #GdkContentProvider
  *
  * Gets the formats that the provider can provide its current contents in.
  *
  * Returns: (transfer full): The formats of the provider
- **/
+ */
 GdkContentFormats *
 gdk_content_provider_ref_formats (GdkContentProvider *provider)
 {
@@ -236,17 +233,18 @@ gdk_content_provider_ref_formats (GdkContentProvider *provider)
 }
 
 /**
- * gdk_content_provider_ref_storable_formats:
+ * gdk_content_provider_ref_storable_formats: (attributes org.gtk.Method.get_property=storable-formats)
  * @provider: a #GdkContentProvider
  *
  * Gets the formats that the provider suggests other applications to store
- * the data in.  
+ * the data in.
+ *
  * An example of such an application would be a clipboard manager.
  *
- * This can be assumed to be a subset of gdk_content_provider_ref_formats().
+ * This can be assumed to be a subset of [method@Gdk.ContentProvider.ref_formats].
  *
  * Returns: (transfer full): The storable formats of the provider
- **/
+ */
 GdkContentFormats *
 gdk_content_provider_ref_storable_formats (GdkContentProvider *provider)
 {
@@ -257,9 +255,9 @@ gdk_content_provider_ref_storable_formats (GdkContentProvider *provider)
 
 /**
  * gdk_content_provider_content_changed:
- * @provider: a #GdkContentProvider
+ * @provider: a `GdkContentProvider`
  *
- * Emits the #GdkContentProvider::content-changed signal.
+ * Emits the ::content-changed signal.
  */
 void
 gdk_content_provider_content_changed (GdkContentProvider *provider)
@@ -273,26 +271,27 @@ gdk_content_provider_content_changed (GdkContentProvider *provider)
 
 /**
  * gdk_content_provider_write_mime_type_async:
- * @provider: a #GdkContentProvider
+ * @provider: a `GdkContentProvider`
  * @mime_type: the mime type to provide the data in
- * @stream: the #GOutputStream to write to
- * @io_priority: the [I/O priority][io-priority]
- * of the request. 
- * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
+ * @stream: the `GOutputStream` to write to
+ * @io_priority: I/O priority of the request.
+ * @cancellable: (nullable): optional `GCancellable` object, %NULL to ignore.
  * @callback: (scope async): callback to call when the request is satisfied
  * @user_data: (closure): the data to pass to callback function
  *
  * Asynchronously writes the contents of @provider to @stream in the given
- * @mime_type. When the operation is finished @callback will be called. You
- * can then call gdk_content_provider_write_mime_type_finish() to get the 
- * result of the operation.
+ * @mime_type.
+ *
+ * When the operation is finished @callback will be called. You must then call
+ * [method@Gdk.ContentProvider.write_mime_type_finish] to get the result
+ * of the operation.
  *
  * The given mime type does not need to be listed in the formats returned by
- * gdk_content_provider_ref_formats(). However, if the given #GType is not
- * supported, #G_IO_ERROR_NOT_SUPPORTED will be reported.
+ * [method@Gdk.ContentProvider.ref_formats]. However, if the given `GType` is
+ * not supported, #G_IO_ERROR_NOT_SUPPORTED will be reported.
  *
  * The given @stream will not be closed.
- **/
+ */
 void
 gdk_content_provider_write_mime_type_async (GdkContentProvider  *provider,
                                             const char          *mime_type,
@@ -318,17 +317,17 @@ gdk_content_provider_write_mime_type_async (GdkContentProvider  *provider,
 
 /**
  * gdk_content_provider_write_mime_type_finish:
- * @provider: a #GdkContentProvider
- * @result: a #GAsyncResult
- * @error: a #GError location to store the error occurring, or %NULL to 
- *     ignore.
+ * @provider: a `GdkContentProvider`
+ * @result: a `GAsyncResult`
+ * @error: a `GError` location to store the error occurring, or %NULL to ignore
  *
- * Finishes an asynchronous write operation started with
- * gdk_content_provider_write_mime_type_async().
+ * Finishes an asynchronous write operation.
+ *
+ * See [method@Gdk.ContentProvider.write_mime_type_async].
  *
  * Returns: %TRUE if the operation was completed successfully. Otherwise
  *     @error will be set to describe the failure.
- **/
+ */
 gboolean
 gdk_content_provider_write_mime_type_finish (GdkContentProvider  *provider,
                                              GAsyncResult        *result,
@@ -342,22 +341,21 @@ gdk_content_provider_write_mime_type_finish (GdkContentProvider  *provider,
 
 /**
  * gdk_content_provider_get_value:
- * @provider: a #GdkContentProvider
- * @value: the #GValue to fill
- * @error: a #GError location to store the error occurring, or %NULL to 
- *     ignore.
+ * @provider: a `GdkContentProvider`
+ * @value: the `GValue` to fill
+ * @error: a `GError` location to store the error occurring, or %NULL to ignore
  *
  * Gets the contents of @provider stored in @value.
  *
- * The @value will have been initialized to the #GType the value should be
- * provided in. This given #GType does not need to be listed in the formats
- * returned by gdk_content_provider_ref_formats(). However, if the given
- * #GType is not supported, this operation can fail and
+ * The @value will have been initialized to the `GType` the value should be
+ * provided in. This given `GType` does not need to be listed in the formats
+ * returned by [method@Gdk.ContentProvider.ref_formats]. However, if the
+ * given `GType` is not supported, this operation can fail and
  * #G_IO_ERROR_NOT_SUPPORTED will be reported.
  *
  * Returns: %TRUE if the value was set successfully. Otherwise
  *     @error will be set to describe the failure.
- **/
+ */
 gboolean
 gdk_content_provider_get_value (GdkContentProvider  *provider,
                                 GValue              *value,

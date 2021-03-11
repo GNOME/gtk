@@ -28,13 +28,13 @@
 #include "gtkwidgetprivate.h"
 
 /**
- * SECTION:gtkmediacontrols
- * @title: GtkMediaControls
- * @short_description: A widget showing controls for a media stream
- * @see_also: #GtkVideo
+ * GtkMediaControls:
  *
- * GtkMediaControls is a widget to show controls for a #GtkMediaStream
- * and giving users a way to use it.
+ * `GtkMediaControls` is a widget to show controls for a video.
+ *
+ * ![An example GtkMediaControls](media-controls.png)
+ *
+ * Usually, `GtkMediaControls` is used as part of [class@Gtk.Video].
  */
 
 struct _GtkMediaControls
@@ -267,7 +267,7 @@ gtk_media_controls_class_init (GtkMediaControlsClass *klass)
   gobject_class->set_property = gtk_media_controls_set_property;
 
   /**
-   * GtkMediaControls:media-stream:
+   * GtkMediaControls:media-stream: (attributes org.gtk.Property.get=gtk_media_controls_get_media_stream org.gtk.Property.set=gtk_media_controls_set_media_stream)
    *
    * The media-stream managed by this object or %NULL if none.
    */
@@ -309,10 +309,10 @@ gtk_media_controls_init (GtkMediaControls *controls)
  * @stream: (allow-none) (transfer none): a #GtkMediaStream to
  *     manage or %NULL for none.
  *
- * Creates a new #GtkMediaControls managing the @stream passed to it.
+ * Creates a new `GtkMediaControls` managing the @stream passed to it.
  *
- * Returns: a new #GtkMediaControls
- **/
+ * Returns: a new `GtkMediaControls`
+ */
 GtkWidget *
 gtk_media_controls_new (GtkMediaStream *stream)
 {
@@ -322,13 +322,13 @@ gtk_media_controls_new (GtkMediaStream *stream)
 }
 
 /**
- * gtk_media_controls_get_media_stream:
- * @controls: a #GtkMediaControls
+ * gtk_media_controls_get_media_stream: (attributes org.gtk.Method.get_property=media-stream)
+ * @controls: a `GtkMediaControls`
  *
  * Gets the media stream managed by @controls or %NULL if none.
  *
  * Returns: (nullable) (transfer none): The media stream managed by @controls
- **/
+ */
 GtkMediaStream *
 gtk_media_controls_get_media_stream (GtkMediaControls *controls)
 {
@@ -479,9 +479,9 @@ gtk_media_controls_notify_cb (GtkMediaStream   *stream,
 }
 
 /**
- * gtk_media_controls_set_media_stream:
- * @controls: a #GtkMediaControls widget
- * @stream: (nullable):  a #GtkMediaStream, or %NULL
+ * gtk_media_controls_set_media_stream: (attributes org.gtk.Method.set_property=media-stream)
+ * @controls: a `GtkMediaControls` widget
+ * @stream: (nullable):  a `GtkMediaStream`, or %NULL
  *
  * Sets the stream that is controlled by @controls.
  */
@@ -518,4 +518,3 @@ gtk_media_controls_set_media_stream (GtkMediaControls *controls,
 
   g_object_notify_by_pspec (G_OBJECT (controls), properties[PROP_MEDIA_STREAM]);
 }
-

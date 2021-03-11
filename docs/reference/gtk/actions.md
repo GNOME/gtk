@@ -1,13 +1,14 @@
-# Overview of actions in GTK {#actions-overview}
+Title: Overview of actions in GTK
+Slug: actions
 
 This chapter describes in detail how GTK uses actions to connect
 activatable UI elements to callbacks. GTK inherits the underlying
-architecture of GAction and GMe:u for describing abstract actions
+architecture of `GAction` and `GMenu` for describing abstract actions
 and menus from the GIO library.
 
 ## Basics about actions
 
-A GAction is essentially a way to tell the toolkit about a piece of
+A `GAction` is essentially a way to tell the toolkit about a piece of
 functionality in your program, and to give it a name.
 
 Actions are purely functional. They do not contain any presentational
@@ -76,7 +77,7 @@ state type, and activating them with a particular parameter value is
 equivalent to changing their state to that value.
 
 This approach to handling radio buttons is different than many other
-action systems such as GtkAction. With GAction, there is only one action
+action systems such as `GtkAction`. With `GAction`, there is only one action
 for "text-justify" and "left", "center" and "right" are possible states on
 that action. There are not three separate "justify-left", "justify-center"
 and "justify-right" actions.
@@ -96,7 +97,7 @@ Even though toggle actions have a state, they do not have a parameter.
 Therefore, a target value is not needed when referring to them — they
 will always be toggled on activation.
 
-Most APIs that allow using a GAction (such as GMenuModel and GtkActionable)
+Most APIs that allow using a `GAction` (such as `GMenuModel` and `GtkActionable`)
 allow use of detailed action names. This is a convenient way of specifying
 an action name and an action target with a single string.
 
@@ -140,7 +141,7 @@ separate state for each instance of the action as well as being able to
 control the enabled state of the action on a per-window basis.
 
 Actions are added to their relevant scope (application, window or widget)
-either using the GActionMap interface, or by using
+either using the `GActionMap` interface, or by using
 gtk_widget_insert_action_group(). Actions that will be the same for all
 instances of a widget class can be added globally using
 gtk_widget_class_install_action().
@@ -149,7 +150,7 @@ gtk_widget_class_install_action().
 
 Actions rarely occurs in isolation. It is common to have groups
 of related actions, which are represented by instances of the
-GActionGroup interface.
+`GActionGroup` interface.
 
 Action maps are a variant of action groups that allow to change
 the name of the action as it is looked up. In GTK, the convention
@@ -160,46 +161,46 @@ or "win." for those with window scope.
 When referring to actions on a GActionMap only the name of the
 action itself is used (ie: "quit", not "app.quit"). The
 "app.quit" form is only used when referring to actions from
-places like a GMenu or GtkActionable widget where the scope
+places like a `GMenu` or `GtkActionable` widget where the scope
 of the action is not already known.
 
-GtkApplication and GtkApplicationWindow implement the GActionMap
+`GtkApplication` and `GtkApplicationWindow` implement the `GActionMap`
 interface, so you can just add actions directly to them. For
 other widgets, use gtk_widget_insert_action_group() to add
 actions to it.
 
 If you want to insert several actions at the same time, it is
-typically faster and easier to use GActionEntry.
+typically faster and easier to use `GActionEntry`.
 
 ## Connecting actions to widgets
 
-Any widget that implements the GtkActionable interface can
+Any widget that implements the `GtkActionable` interface can
 be connected to an action just by setting the ::action-name
 property. If the action has a parameter, you will also need
-to set the ::action-target property.
-Widgets that implement GtkActionable include GtkSwitch, GtkButton,
-and their respective subclasses.
+to set the ::action-target property. Widgets that implement
+`GtkActionable` include `GtkSwitch`, `GtkButton`, and their
+respective subclasses.
 
 Another way of obtaining widgets that are connected to actions
-is to create a menu using a GMenu menu model. GMenu provides an
+is to create a menu using a `GMenu` menu model. `GMenu` provides an
 abstract way to describe typical menus: nested groups of items
 where each item can have a label, and icon, and an action.
 
-A typical use of GMenu inside GTK is to set up an application
+A typical use of `GMenu` inside GTK is to set up an application
 menubar with gtk_application_set_menubar(). Another, maybe more
 common use is to create a popover for a menubutton, using
 gtk_menu_button_set_menu_model().
 
 Unlike traditional menus, those created from menu models don't
 have keyboard accelerators associated with menu items. Instead,
-GtkApplication offers the gtk_application_set_accels_for_action()
+`GtkApplication` offers the gtk_application_set_accels_for_action()
 API to associate keyboard shortcuts with actions.
 
 ## Activation
 
 When a widget with a connected action is activated, GTK finds
 the action to activate by walking up the widget hierarchy,
-looking for a matching action, ending up at the GtkApplication.
+looking for a matching action, ending up at the `GtkApplication`.
 
 ## Built-in Actions
 
@@ -209,13 +210,16 @@ you should avoid naming conflicts with them when creating your
 own actions.
 
 default.activate
- :  Activates the default widget in a context (typically a GtkWindow,
-    GtkDialog or GtkPopover)
+: Activates the default widget in a context (typically a `GtkWindow`,
+  `GtkDialog` or `GtkPopover`)
+
 clipboard.cut, clipboard.copy, clipboard.paste
- :  Clipboard operations on entries, text view and labels, typically
-    used in the context menu
+: Clipboard operations on entries, text view and labels, typically
+  used in the context menu
+
 selection.delete, selection.select-all
- : Selection operations on entries, text view and labels
+: Selection operations on entries, text view and labels
+
 color.select, color.customize:
- : Operate on colors in a #GtkColorChooserWidget. These actions are
-   unusual in that they have the non-trivial parameter type (dddd):
+: Operate on colors in a `GtkColorChooserWidget`. These actions are
+  unusual in that they have the non-trivial parameter type (dddd):

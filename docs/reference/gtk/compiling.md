@@ -1,4 +1,5 @@
-# Compiling GTK Applications on UNIX {#gtk-compiling}
+Title: Compiling GTK Applications on UNIX
+Slug: gtk-compiling
 
 To compile a GTK application, you need to tell the compiler where to
 find the GTK header files and libraries. This is done with the

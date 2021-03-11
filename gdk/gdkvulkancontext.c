@@ -29,26 +29,17 @@
 #include "gdkintl.h"
 
 /**
- * SECTION:gdkvulkancontext
- * @Title: GdkVulkanContext
- * @Short_description: Vulkan draw context
- *
- * #GdkVulkanContext is an object representing the platform-specific
- * Vulkan draw context.
- *
- * #GdkVulkanContexts are created for a #GdkSurface using
- * gdk_surface_create_vulkan_context(), and the context will match the
- * the characteristics of the surface.
- *
- * Support for #GdkVulkanContext is platform-specific, context creation
- * can fail, returning %NULL context.
- */
-
-/**
  * GdkVulkanContext:
  *
- * The GdkVulkanContext struct contains only private fields and should not
- * be accessed directly.
+ * `GdkVulkanContext` is an object representing the platform-specific
+ * Vulkan draw context.
+ *
+ * `GdkVulkanContext`s are created for a surface using
+ * [method@Gdk.Surface.create_vulkan_context], and the context will match
+ * the the characteristics of the surface.
+ *
+ * Support for `GdkVulkanContext` is platform-specific and context creation
+ * can fail, returning %NULL context.
  */
 
 typedef struct _GdkVulkanContextPrivate GdkVulkanContextPrivate;
@@ -540,8 +531,9 @@ gdk_vulkan_context_class_init (GdkVulkanContextClass *klass)
    * GdkVulkanContext::images-updated:
    * @context: the object on which the signal is emitted
    *
-   * This signal is emitted when the images managed by this context have
-   * changed. Usually this means that the swapchain had to be recreated,
+   * Emitted when the images managed by this context have changed.
+   *
+   * Usually this means that the swapchain had to be recreated,
    * for example in response to a change of the surface size.
    */
   signals[IMAGES_UPDATED] =
@@ -650,7 +642,7 @@ gdk_vulkan_context_initable_init (GInitableIface *iface)
 
 /**
  * gdk_vulkan_context_get_instance:
- * @context: a #GdkVulkanContext
+ * @context: a `GdkVulkanContext`
  *
  * Gets the Vulkan instance that is associated with @context.
  *
@@ -666,7 +658,7 @@ gdk_vulkan_context_get_instance (GdkVulkanContext *context)
 
 /**
  * gdk_vulkan_context_get_physical_device:
- * @context: a #GdkVulkanContext
+ * @context: a `GdkVulkanContext`
  *
  * Gets the Vulkan physical device that this context is using.
  *
@@ -698,7 +690,7 @@ gdk_vulkan_context_get_device (GdkVulkanContext *context)
 
 /**
  * gdk_vulkan_context_get_queue:
- * @context: a #GdkVulkanContext
+ * @context: a `GdkVulkanContext`
  *
  * Gets the Vulkan queue that this context is using.
  *
@@ -714,9 +706,10 @@ gdk_vulkan_context_get_queue (GdkVulkanContext *context)
 
 /**
  * gdk_vulkan_context_get_queue_family_index:
- * @context: a #GdkVulkanContext
+ * @context: a `GdkVulkanContext`
  *
  * Gets the family index for the queue that this context is using.
+ *
  * See vkGetPhysicalDeviceQueueFamilyProperties().
  *
  * Returns: the index
@@ -731,7 +724,7 @@ gdk_vulkan_context_get_queue_family_index (GdkVulkanContext *context)
 
 /**
  * gdk_vulkan_context_get_image_format:
- * @context: a #GdkVulkanContext
+ * @context: a `GdkVulkanContext`
  *
  * Gets the image format that this context is using.
  *
@@ -749,7 +742,7 @@ gdk_vulkan_context_get_image_format (GdkVulkanContext *context)
 
 /**
  * gdk_vulkan_context_get_n_images:
- * @context: a #GdkVulkanContext
+ * @context: a `GdkVulkanContext`
  *
  * Gets the number of images that this context is using in its swap chain.
  *
@@ -767,7 +760,7 @@ gdk_vulkan_context_get_n_images (GdkVulkanContext *context)
 
 /**
  * gdk_vulkan_context_get_image:
- * @context: a #GdkVulkanContext
+ * @context: a `GdkVulkanContext`
  * @id: the index of the image to return
  *
  * Gets the image with index @id that this context is using.
@@ -788,12 +781,12 @@ gdk_vulkan_context_get_image (GdkVulkanContext *context,
 
 /**
  * gdk_vulkan_context_get_draw_index:
- * @context: a #GdkVulkanContext
+ * @context: a `GdkVulkanContext`
  *
  * Gets the index of the image that is currently being drawn.
  *
- * This function can only be used between gdk_draw_context_begin_frame() and
- * gdk_draw_context_end_frame() calls.
+ * This function can only be used between [method@Gdk.DrawContext.begin_frame]
+ * and [method@Gdk.DrawContext.end_frame] calls.
  *
  * Returns: the index of the images that is being drawn
  */
@@ -810,13 +803,13 @@ gdk_vulkan_context_get_draw_index (GdkVulkanContext *context)
 
 /**
  * gdk_vulkan_context_get_draw_semaphore:
- * @context: a #GdkVulkanContext
+ * @context: a `GdkVulkanContext`
  *
  * Gets the Vulkan semaphore that protects access to the image that is
  * currently being drawn.
  *
- * This function can only be used between gdk_draw_context_begin_frame() and
- * gdk_draw_context_end_frame() calls.
+ * This function can only be used between [method@Gdk.DrawContext.begin_frame]
+ * and [method@Gdk.DrawContext.end_frame] calls.
  *
  * Returns: (transfer none): the VkSemaphore
  */

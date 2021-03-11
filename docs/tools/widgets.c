@@ -118,9 +118,17 @@ static WidgetInfo *
 create_toggle_button (void)
 {
   GtkWidget *widget;
+  GtkWidget *button;
 
-  widget = gtk_toggle_button_new_with_mnemonic ("_Toggle Button");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+  widget = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_box_set_homogeneous (GTK_BOX (widget), TRUE);
+  gtk_widget_add_css_class (widget, "linked");
+  button = gtk_toggle_button_new_with_label ("Toggle");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+  gtk_box_append (GTK_BOX (widget), button);
+  button = gtk_toggle_button_new_with_label ("Button");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
+  gtk_box_append (GTK_BOX (widget), button);
   gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
 
@@ -132,7 +140,6 @@ create_check_button (void)
 {
   GtkWidget *widget;
   GtkWidget *button;
-  GtkWidget *group;
 
   widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
@@ -145,6 +152,20 @@ create_check_button (void)
   button = gtk_check_button_new_with_mnemonic ("_Check Button");
   gtk_box_append (GTK_BOX (widget), button);
 
+  return new_widget_info ("check-button", widget, SMALL);
+}
+
+static WidgetInfo *
+create_radio_button (void)
+{
+  GtkWidget *widget;
+  GtkWidget *button;
+  GtkWidget *group;
+
+  widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+
   button = gtk_check_button_new_with_mnemonic ("Radio Button");
   gtk_check_button_set_active (GTK_CHECK_BUTTON (button), TRUE);
   gtk_box_append (GTK_BOX (widget), button);
@@ -154,7 +175,7 @@ create_check_button (void)
   gtk_box_append (GTK_BOX (widget), button);
   gtk_check_button_set_group (GTK_CHECK_BUTTON (button), GTK_CHECK_BUTTON (group));
 
-  return new_widget_info ("check-button", widget, MEDIUM);
+  return new_widget_info ("radio-button", widget, SMALL);
 }
 
 static WidgetInfo *
@@ -166,7 +187,7 @@ create_link_button (void)
   gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
 
-  return new_widget_info ("link-button", widget, SMALL);
+  return new_widget_info ("link-button", widget, MEDIUM);
 }
 
 static WidgetInfo *
@@ -817,6 +838,36 @@ create_message_dialog (void)
 }
 
 static WidgetInfo *
+create_dialog (void)
+{
+  GtkWidget *widget;
+  GtkWidget *content;
+  GtkWidget *label;
+
+  widget = g_object_new (GTK_TYPE_DIALOG, "use-header-bar", TRUE, NULL);
+  gtk_window_set_title (GTK_WINDOW (widget), "Dialog");
+
+  gtk_dialog_add_button (GTK_DIALOG (widget), "Accept", GTK_RESPONSE_OK);
+  gtk_dialog_add_button (GTK_DIALOG (widget), "Cancel", GTK_RESPONSE_CANCEL);
+
+  gtk_dialog_set_default_response (GTK_DIALOG (widget), GTK_RESPONSE_OK);
+
+  content = gtk_dialog_get_content_area (GTK_DIALOG (widget));
+  label = gtk_label_new ("Content");
+  g_object_set (label,
+                "margin-start", 20,
+                "margin-end", 20,
+                "margin-top", 20,
+                "margin-bottom", 20,
+                NULL);
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
+  gtk_box_append (GTK_BOX (content), label);
+
+  return new_widget_info ("dialog", widget, ASIS);
+}
+
+static WidgetInfo *
 create_about_dialog (void)
 {
   GtkWidget *widget;
@@ -827,19 +878,27 @@ create_about_dialog (void)
     "and many more...",
     NULL
   };
+  GFile *file;
+  GdkTexture *logo;
+
+  file = g_file_new_for_path ("docs/tools/gtk-logo.png");
+  logo = gdk_texture_new_from_file (file, NULL);
 
   widget = gtk_about_dialog_new ();
   g_object_set (widget,
                 "program-name", "GTK Code Demos",
                 "version", PACKAGE_VERSION,
-                "copyright", "© 1997-2013 The GTK Team",
+                "copyright", "© 1997-2021 The GTK Team",
                 "website", "http://www.gtk.org",
                 "comments", "Program to demonstrate GTK functions.",
-                "logo-icon-name", "help-about",
+                "logo", logo,
                 "title", "About GTK Code Demos",
                 "authors", authors,
 		NULL);
-  gtk_window_set_icon_name (GTK_WINDOW (widget), "help-about");
+
+  g_object_unref (logo);
+  g_object_unref (file);
+
   return new_widget_info ("aboutdialog", widget, ASIS);
 }
 
@@ -2094,10 +2153,12 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_about_dialog ());
   retval = g_list_prepend (retval, create_button ());
   retval = g_list_prepend (retval, create_check_button ());
+  retval = g_list_prepend (retval, create_radio_button ());
   retval = g_list_prepend (retval, create_color_button ());
   retval = g_list_prepend (retval, create_combo_box ());
   retval = g_list_prepend (retval, create_combo_box_entry ());
   retval = g_list_prepend (retval, create_combo_box_text ());
+  retval = g_list_prepend (retval, create_dialog ());
   retval = g_list_prepend (retval, create_entry ());
   retval = g_list_prepend (retval, create_font_button ());
   retval = g_list_prepend (retval, create_frame ());

@@ -19,31 +19,28 @@
 
 
 /**
- * SECTION:gtkshortcutcontroller
- * @Short_description: Event controller for shortcuts
- * @Title: GtkShortcutController
- * @See_also: #GtkEventController, #GtkShortcut
+ * GtkShortcutController:
  *
- * #GtkShortcutController is an event controller that manages shortcuts.
+ * `GtkShortcutController` is an event controller that manages shortcuts.
  *
  * Most common shortcuts are using this controller implicitly, e.g. by
- * adding a mnemonic underline to a #GtkLabel, or by installing a key
+ * adding a mnemonic underline to a `GtkLabel`, or by installing a key
  * binding using gtk_widget_class_add_binding(), or by adding accelerators
  * to global actions using gtk_application_set_accels_for_action().
  *
  * But it is possible to create your own shortcut controller, and add
  * shortcuts to it.
  *
- * #GtkShortcutController implements #GListModel for querying the shortcuts that
- * have been added to it.
+ * `GtkShortcutController` implements `GListModel` for querying the
+ * shortcuts that have been added to it.
  *
  * # GtkShortcutController as a GtkBuildable
  *
- * GtkShortcutControllers can be creates in ui files to set up shortcuts
- * in the same place as the widgets.
+ * `GtkShortcutControllers` can be creates in ui files to set up
+ * shortcuts in the same place as the widgets.
  *
- * An example of a UI definition fragment with GtkShortcutController:
- * |[
+ * An example of a UI definition fragment with `GtkShortcutController`:
+ * ```xml
  *   <object class='GtkButton'>
  *     <child>
  *       <object class='GtkShortcutController'>
@@ -57,13 +54,14 @@
  *       </object>
  *     </child>
  *   </object>
- * ]|
+ * ```
  *
- * This example creates a #GtkActivateAction for triggering the `activate`
- * signal of the GtkButton. See gtk_shortcut_action_parse_string() for the syntax
- * for other kinds of #GtkShortcutAction. See gtk_shortcut_trigger_parse_string()
- * to learn more about the syntax for triggers.
- **/
+ * This example creates a [class@Gtk.ActivateAction] for triggering the
+ * `activate` signal of the `GtkButton`. See [ctor@Gtk.ShortcutAction.parse_string]
+ * for the syntax for other kinds of `GtkShortcutAction`. See
+ * [ctor@Gtk.ShortcutTrigger.parse_string] to learn more about the syntax
+ * for triggers.
+ */
 
 #include "config.h"
 
@@ -543,7 +541,7 @@ gtk_shortcut_controller_class_init (GtkShortcutControllerClass *klass)
   controller_class->unset_widget = gtk_shortcut_controller_unset_widget;
 
   /**
-   * GtkShortcutController:mnemonic-modifiers:
+   * GtkShortcutController:mnemonic-modifiers: (attributes org.gtk.Property.get=gtk_shortcut_controller_get_mnemonics_modifiers org.gtk.Property.set=gtk_shortcut_controller_set_mnemonics_modifiers)
    *
    * The modifiers that need to be pressed to allow mnemonics activation.
    */
@@ -558,7 +556,7 @@ gtk_shortcut_controller_class_init (GtkShortcutControllerClass *klass)
   /**
    * GtkShortcutController:model:
    *
-   * A list model to take shortcuts from
+   * A list model to take shortcuts from.
    */
   properties[PROP_MODEL] =
       g_param_spec_object ("model",
@@ -568,7 +566,7 @@ gtk_shortcut_controller_class_init (GtkShortcutControllerClass *klass)
                            G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkShortcutController:scope:
+   * GtkShortcutController:scope: (attributes org.gtk.Property.get=gtk_shortcut_controller_get_scope org.gtk.Property.set=gtk_shortcut_controller_set_scope)
    *
    * What scope the shortcuts will be handled in.
    */
@@ -695,7 +693,7 @@ gtk_shortcut_controller_new (void)
 
 /**
  * gtk_shortcut_controller_new_for_model:
- * @model: a #GListModel containing shortcuts
+ * @model: a `GListModel` containing shortcuts
  *
  * Creates a new shortcut controller that takes its shortcuts from
  * the given list model.
@@ -719,13 +717,13 @@ gtk_shortcut_controller_new_for_model (GListModel *model)
 /**
  * gtk_shortcut_controller_add_shortcut:
  * @self: the controller
- * @shortcut: (transfer full): a #GtkShortcut
+ * @shortcut: (transfer full): a `GtkShortcut`
  *
  * Adds @shortcut to the list of shortcuts handled by @self.
  *
  * If this controller uses an external shortcut list, this
  * function does nothing.
- **/
+ */
 void
 gtk_shortcut_controller_add_shortcut (GtkShortcutController *self,
                                       GtkShortcut           *shortcut)
@@ -756,7 +754,7 @@ gtk_shortcut_controller_add_shortcut (GtkShortcutController *self,
 /**
  * gtk_shortcut_controller_remove_shortcut:
  * @self: the controller
- * @shortcut: a #GtkShortcut
+ * @shortcut: a `GtkShortcut`
  *
  * Removes @shortcut from the list of shortcuts handled by @self.
  *
@@ -800,8 +798,8 @@ gtk_shortcut_controller_remove_shortcut (GtkShortcutController  *self,
 }
 
 /**
- * gtk_shortcut_controller_set_scope:
- * @self: a #GtkShortcutController
+ * gtk_shortcut_controller_set_scope: (attributes org.gtk.Method.set_property=scope)
+ * @self: a `GtkShortcutController`
  * @scope: the new scope to use
  *
  * Sets the controller to have the given @scope.
@@ -813,7 +811,7 @@ gtk_shortcut_controller_remove_shortcut (GtkShortcutController  *self,
  *
  * With %GTK_SHORTCUT_SCOPE_LOCAL, shortcuts will only be activated
  * when the widget has focus.
- **/
+ */
 void
 gtk_shortcut_controller_set_scope (GtkShortcutController *self,
                                    GtkShortcutScope       scope)
@@ -839,14 +837,14 @@ gtk_shortcut_controller_set_scope (GtkShortcutController *self,
 }
 
 /**
- * gtk_shortcut_controller_get_scope:
- * @self: a #GtkShortcutController
+ * gtk_shortcut_controller_get_scope: (attributes org.gtk.Method.get_property=scope)
+ * @self: a `GtkShortcutController`
  *
  * Gets the scope for when this controller activates its shortcuts. See
  * gtk_shortcut_controller_set_scope() for details.
  *
  * Returns: the controller's scope
- **/
+ */
 GtkShortcutScope
 gtk_shortcut_controller_get_scope (GtkShortcutController *self)
 {
@@ -856,8 +854,8 @@ gtk_shortcut_controller_get_scope (GtkShortcutController *self)
 }
 
 /**
- * gtk_shortcut_controller_set_mnemonics_modifiers:
- * @self: a #GtkShortcutController
+ * gtk_shortcut_controller_set_mnemonics_modifiers: (attributes org.gtk.MEthod.set_property=mnemonic-modifiers)
+ * @self: a `GtkShortcutController`
  * @modifiers: the new mnemonics_modifiers to use
  *
  * Sets the controller to have the given @mnemonics_modifiers.
@@ -873,7 +871,7 @@ gtk_shortcut_controller_get_scope (GtkShortcutController *self)
  * This value is only relevant for local shortcut controllers. Global and managed
  * shortcut controllers will have their shortcuts activated from other places which
  * have their own modifiers for activating mnemonics.
- **/
+ */
 void
 gtk_shortcut_controller_set_mnemonics_modifiers (GtkShortcutController *self,
                                                  GdkModifierType        modifiers)
@@ -889,14 +887,13 @@ gtk_shortcut_controller_set_mnemonics_modifiers (GtkShortcutController *self,
 }
 
 /**
- * gtk_shortcut_controller_get_mnemonics_modifiers:
- * @self: a #GtkShortcutController
+ * gtk_shortcut_controller_get_mnemonics_modifiers: (attributes org.gtk.Method.get_property=mnemonic-modifiers)
+ * @self: a `GtkShortcutController`
  *
- * Gets the mnemonics modifiers for when this controller activates its shortcuts. See
- * gtk_shortcut_controller_set_mnemonics_modifiers() for details.
+ * Gets the mnemonics modifiers for when this controller activates its shortcuts.
  *
  * Returns: the controller's mnemonics modifiers
- **/
+ */
 GdkModifierType
 gtk_shortcut_controller_get_mnemonics_modifiers (GtkShortcutController *self)
 {
@@ -904,4 +901,3 @@ gtk_shortcut_controller_get_mnemonics_modifiers (GtkShortcutController *self)
 
   return self->mnemonics_modifiers;
 }
-

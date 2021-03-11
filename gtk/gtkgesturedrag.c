@@ -18,17 +18,17 @@
  */
 
 /**
- * SECTION:gtkgesturedrag
- * @Short_description: Drag gesture
- * @Title: GtkGestureDrag
- * @See_also: #GtkGestureSwipe
+ * GtkGestureDrag:
  *
- * #GtkGestureDrag is a #GtkGesture implementation that recognizes drag
- * operations. The drag operation itself can be tracked throughout the
- * #GtkGestureDrag::drag-begin, #GtkGestureDrag::drag-update and
- * #GtkGestureDrag::drag-end signals, or the relevant coordinates be
- * extracted through gtk_gesture_drag_get_offset() and
- * gtk_gesture_drag_get_start_point().
+ * `GtkGestureDrag` is a `GtkGesture` implementation for drags.
+ *
+ * The drag operation itself can be tracked throughout the
+ * [signal@Gtk.GestureDrag::drag-begin],
+ * [signal@Gtk.GestureDrag::drag-update] and
+ * [signal@Gtk.GestureDrag::drag-end] signals, and the relevant
+ * coordinates can be extracted through
+ * [method@Gtk.GestureDrag.get_offset] and
+ * [method@Gtk.GestureDrag.get_start_point].
  */
 #include "config.h"
 #include "gtkgesturedrag.h"
@@ -148,7 +148,7 @@ gtk_gesture_drag_class_init (GtkGestureDragClass *klass)
    * @start_x: X coordinate, relative to the widget allocation
    * @start_y: Y coordinate, relative to the widget allocation
    *
-   * This signal is emitted whenever dragging starts.
+   * Emitted whenever dragging starts.
    */
   signals[DRAG_BEGIN] =
     g_signal_new (I_("drag-begin"),
@@ -167,7 +167,7 @@ gtk_gesture_drag_class_init (GtkGestureDragClass *klass)
    * @offset_x: X offset, relative to the start point
    * @offset_y: Y offset, relative to the start point
    *
-   * This signal is emitted whenever the dragging point moves.
+   * Emitted whenever the dragging point moves.
    */
   signals[DRAG_UPDATE] =
     g_signal_new (I_("drag-update"),
@@ -186,7 +186,7 @@ gtk_gesture_drag_class_init (GtkGestureDragClass *klass)
    * @offset_x: X offset, relative to the start point
    * @offset_y: Y offset, relative to the start point
    *
-   * This signal is emitted whenever the dragging is finished.
+   * Emitted whenever the dragging is finished.
    */
   signals[DRAG_END] =
     g_signal_new (I_("drag-end"),
@@ -209,9 +209,9 @@ gtk_gesture_drag_init (GtkGestureDrag *gesture)
 /**
  * gtk_gesture_drag_new:
  *
- * Returns a newly created #GtkGesture that recognizes drags.
+ * Returns a newly created `GtkGesture` that recognizes drags.
  *
- * Returns: a newly created #GtkGestureDrag
+ * Returns: a newly created `GtkGestureDrag`
  **/
 GtkGesture *
 gtk_gesture_drag_new (void)
@@ -222,16 +222,18 @@ gtk_gesture_drag_new (void)
 
 /**
  * gtk_gesture_drag_get_start_point:
- * @gesture: a #GtkGesture
+ * @gesture: a `GtkGesture`
  * @x: (out) (nullable): X coordinate for the drag start point
  * @y: (out) (nullable): Y coordinate for the drag start point
  *
+ * Gets the point where the drag started.
+ *
  * If the @gesture is active, this function returns %TRUE
  * and fills in @x and @y with the drag start coordinates,
- * in window-relative coordinates.
+ * in surface-relative coordinates.
  *
  * Returns: %TRUE if the gesture is active
- **/
+ */
 gboolean
 gtk_gesture_drag_get_start_point (GtkGestureDrag *gesture,
                                   double         *x,
@@ -264,12 +266,14 @@ gtk_gesture_drag_get_start_point (GtkGestureDrag *gesture,
  * @x: (out) (nullable): X offset for the current point
  * @y: (out) (nullable): Y offset for the current point
  *
+ * Gets the offset from the start point.
+ *
  * If the @gesture is active, this function returns %TRUE and
  * fills in @x and @y with the coordinates of the current point,
  * as an offset to the starting drag point.
  *
  * Returns: %TRUE if the gesture is active
- **/
+ */
 gboolean
 gtk_gesture_drag_get_offset (GtkGestureDrag *gesture,
                              double         *x,

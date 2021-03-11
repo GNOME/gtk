@@ -799,7 +799,7 @@ delete_text_callback (GtkFileChooserEntry *chooser_entry,
  * @eat_escape: If %TRUE, capture Escape key presses and emit ::hide-entry
  *
  * Creates a new #GtkFileChooserEntry object. #GtkFileChooserEntry
- * is an internal implementation widget for the GTK+ file chooser
+ * is an internal implementation widget for the GTK file chooser
  * which is an entry with completion with respect to a
  * #GtkFileSystem object.
  *

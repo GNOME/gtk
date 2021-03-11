@@ -35,11 +35,6 @@ G_BEGIN_DECLS
 #define GTK_IS_SIGNAL_LIST_ITEM_FACTORY_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GTK_TYPE_SIGNAL_LIST_ITEM_FACTORY))
 #define GTK_SIGNAL_LIST_ITEM_FACTORY_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_SIGNAL_LIST_ITEM_FACTORY, GtkSignalListItemFactoryClass))
 
-/**
- * GtkSignalListItemFactory:
- *
- * The object for the #GtkSignalListItemFactory.
- **/
 typedef struct _GtkSignalListItemFactory GtkSignalListItemFactory;
 typedef struct _GtkSignalListItemFactoryClass GtkSignalListItemFactoryClass;
 

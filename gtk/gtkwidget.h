@@ -62,11 +62,7 @@ typedef struct _GtkWidgetClassPrivate  GtkWidgetClassPrivate;
  * @width: the width of the widget’s allocated area.
  * @height: the height of the widget’s allocated area.
  *
- * A #GtkAllocation-struct of a widget represents region
- * which has been allocated to the widget by its parent. It is a subregion
- * of its parents allocation. See
- * [GtkWidget’s geometry management section][geometry-management] for
- * more information.
+ * The rectangle representing the area allocated for a widget by its parent.
  */
 typedef         GdkRectangle       GtkAllocation;
 

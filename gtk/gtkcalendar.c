@@ -26,22 +26,25 @@
  */
 
 /**
- * SECTION:gtkcalendar
- * @Short_description: Displays a calendar and allows the user to select a date
- * @Title: GtkCalendar
+ * GtkCalendar:
  *
- * #GtkCalendar is a widget that displays a Gregorian calendar, one month
- * at a time. It can be created with gtk_calendar_new().
+ * `GtkCalendar` is a widget that displays a Gregorian calendar, one month
+ * at a time.
+ *
+ * ![An example GtkCalendar](calendar.png)
+ *
+ * A `GtkCalendar` can be created with [ctor@Gtk.Calendar.new].
  *
  * The date that is currently displayed can be altered with
- * gtk_calendar_select_day().
+ * [method@Gtk.Calendar.select_day].
  *
- * To place a visual marker on a particular day, use gtk_calendar_mark_day()
- * and to remove the marker, gtk_calendar_unmark_day(). Alternative, all
- * marks can be cleared with gtk_calendar_clear_marks().
+ * To place a visual marker on a particular day, use
+ * [method@Gtk.Calendar.mark_day] and to remove the marker,
+ * [method@Gtk.Calendar.unmark_day]. Alternative, all
+ * marks can be cleared with [method@Gtk.Calendar.clear_marks].
  *
- * The selected date can be retrieved from a #GtkCalendar using
- * gtk_calendar_get_date().
+ * The selected date can be retrieved from a `GtkCalendar` using
+ * [method@Gtk.Calendar.get_date].
  *
  * Users should be aware that, although the Gregorian calendar is the
  * legal calendar in most countries, it was adopted progressively
@@ -50,7 +53,7 @@
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * calendar.view
  * ├── header
  * │   ├── button
@@ -61,17 +64,17 @@
  * │   ╰── button
  * ╰── grid
  *     ╰── label[.day-name][.week-number][.day-number][.other-month][.today]
- * ]|
+ * ```
  *
- * GtkCalendar has a main node with name calendar. It contains a subnode called header
- * containing the widgets for switching between years and months.
+ * `GtkCalendar` has a main node with name calendar. It contains a subnode
+ * called header containing the widgets for switching between years and months.
  *
- * The grid subnode contains all day labels, including week numbers on the left (marked
- * with the .week-number css class) and day names on top (marked with the .day-name
- * css class).
+ * The grid subnode contains all day labels, including week numbers on the left
+ * (marked with the .week-number css class) and day names on top (marked with the
+ * .day-name css class).
  *
- * Day labels that belong to the previous or next month get the .other-month style class.
- * The label of the current day get the .today style class.
+ * Day labels that belong to the previous or next month get the .other-month
+ * style class. The label of the current day get the .today style class.
  *
  * Marked day labels get the :selected state assigned.
  */
@@ -364,6 +367,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
    * GtkCalendar:year:
    *
    * The selected year.
+   *
    * This property gets initially set to the current year.
    */
   g_object_class_install_property (gobject_class,
@@ -378,6 +382,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
    * GtkCalendar:month:
    *
    * The selected month (as a number between 0 and 11).
+   *
    * This property gets initially set to the current month.
    */
   g_object_class_install_property (gobject_class,
@@ -391,8 +396,9 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   /**
    * GtkCalendar:day:
    *
-   * The selected day (as a number between 1 and 31, or 0
-   * to unselect the currently selected day).
+   * The selected day (as a number between 1 and 31.
+   *
+   * This can be set to 0 to unselect the currently selected day).
    * This property gets initially set to the current day.
    */
   g_object_class_install_property (gobject_class,
@@ -404,7 +410,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                      G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkCalendar:show-heading:
+   * GtkCalendar:show-heading: (attributes org.gtk.Property.get=gtk_calendar_get_show_heading org.gtk.Property.set=gtk_calendar_set_show_heading)
    *
    * Determines whether a heading is displayed.
    */
@@ -417,7 +423,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkCalendar:show-day-names:
+   * GtkCalendar:show-day-names: (attributes org.gtk.Property.get=gtk_calendar_get_show_day_names org.gtk.Property.set=gtk_calendar_set_show_day_names)
    *
    * Determines whether day names are displayed.
    */
@@ -429,7 +435,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                          TRUE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   /**
-   * GtkCalendar:show-week-numbers:
+   * GtkCalendar:show-week-numbers: (attributes org.gtk.Property.get=gtk_calendar_get_show_week_numbers org.gtk.Property.set=gtk_calendar_set_show_week_numbers)
    *
    * Determines whether week numbers are displayed.
    */
@@ -1339,8 +1345,8 @@ gtk_calendar_focus_controller_focus (GtkEventController     *controller,
  *
  * Creates a new calendar, with the current date being selected.
  *
- * Returns: a newly #GtkCalendar widget
- **/
+ * Returns: a newly `GtkCalendar` widget
+ */
 GtkWidget*
 gtk_calendar_new (void)
 {
@@ -1349,11 +1355,11 @@ gtk_calendar_new (void)
 
 /**
  * gtk_calendar_select_day:
- * @self: a #GtkCalendar.
+ * @self: a `GtkCalendar`.
  * @date: (transfer none): a #GDateTime representing the day to select
  *
- * Will switch to @date's year and month and select its day.
- **/
+ * Switches to @date's year and month and select its day.
+ */
 void
 gtk_calendar_select_day (GtkCalendar *calendar,
                          GDateTime   *date)
@@ -1518,10 +1524,10 @@ gtk_calendar_select_day (GtkCalendar *calendar,
 
 /**
  * gtk_calendar_clear_marks:
- * @calendar: a #GtkCalendar
+ * @calendar: a `GtkCalendar`
  *
  * Remove all visual markers.
- **/
+ */
 void
 gtk_calendar_clear_marks (GtkCalendar *calendar)
 {
@@ -1540,7 +1546,7 @@ gtk_calendar_clear_marks (GtkCalendar *calendar)
 
 /**
  * gtk_calendar_mark_day:
- * @calendar: a #GtkCalendar
+ * @calendar: a `GtkCalendar`
  * @day: the day number to mark between 1 and 31.
  *
  * Places a visual marker on a particular day.
@@ -1561,7 +1567,7 @@ gtk_calendar_mark_day (GtkCalendar *calendar,
 
 /**
  * gtk_calendar_get_day_is_marked:
- * @calendar: a #GtkCalendar
+ * @calendar: a `GtkCalendar`
  * @day: the day number between 1 and 31.
  *
  * Returns if the @day of the @calendar is already marked.
@@ -1582,7 +1588,7 @@ gtk_calendar_get_day_is_marked (GtkCalendar *calendar,
 
 /**
  * gtk_calendar_unmark_day:
- * @calendar: a #GtkCalendar.
+ * @calendar: a `GtkCalendar`.
  * @day: the day number to unmark between 1 and 31.
  *
  * Removes the visual marker from a particular day.
@@ -1603,13 +1609,14 @@ gtk_calendar_unmark_day (GtkCalendar *calendar,
 
 /**
  * gtk_calendar_get_date:
- * @self: a #GtkCalendar
+ * @self: a `GtkCalendar`
  *
  * Returns a #GDateTime representing the shown
- * year, month and the selected day, in the local
- * time zone.
+ * year, month and the selected day.
  *
- * Returns: (transfer full): the #GDate representing
+ * The returned date is in the local time zone.
+ *
+ * Returns: (transfer full): the `GDate` representing
  *     the shown date.
  */
 GDateTime *
@@ -1621,8 +1628,8 @@ gtk_calendar_get_date (GtkCalendar *self)
 }
 
 /**
- * gtk_calendar_set_show_week_numbers:
- * @self: a #GtkCalendar
+ * gtk_calendar_set_show_week_numbers: (attributes org.gtk.Method.set_property=show-week-numbers)
+ * @self: a `GtkCalendar`
  * @value: whether to show week numbers on the left of the days
  *
  * Sets whether week numbers are shown in the calendar.
@@ -1647,11 +1654,13 @@ gtk_calendar_set_show_week_numbers (GtkCalendar *self,
 }
 
 /**
- * gtk_calendar_get_show_week_numbers:
- * @self: a #GtkCalendar
+ * gtk_calendar_get_show_week_numbers: (attributes org.gtk.Method.get_property=show-week-numbers)
+ * @self: a `GtkCalendar`
  *
  * Returns whether @self is showing week numbers right
- * now, i.e. the value of the #GtkCalendar:show-week-numbers
+ * now.
+ *
+ * This is the value of the [property@Gtk.Calendar:show-week-numbers]
  * property.
  *
  * Return: Whether the calendar is showing week numbers.
@@ -1665,12 +1674,13 @@ gtk_calendar_get_show_week_numbers (GtkCalendar *self)
 }
 
 /**
- * gtk_calendar_set_show_heading:
- * @self: a #GtkCalendar
+ * gtk_calendar_set_show_heading: (attributes org.gtk.Method.set_property=show-heading)
+ * @self: a `GtkCalendar`
  * @value: Whether to show the heading in the calendar
  *
- * Sets whether the calendar should show a heading
- * containing the current year and month as well as
+ * Sets whether the calendar should show a heading.
+ *
+ * The heading contains the current year and month as well as
  * buttons for changing both.
  */
 void
@@ -1690,11 +1700,13 @@ gtk_calendar_set_show_heading (GtkCalendar *self,
 }
 
 /**
- * gtk_calendar_get_show_heading:
- * @self: a #GtkCalendar
+ * gtk_calendar_get_show_heading: (attributes org.gtk.Method.get_property=show-heading)
+ * @self: a `GtkCalendar`
  *
- * Returns whether @self is currently showing the heading,
- * i.e. the value of the #GtkCalendar:show-heading property.
+ * Returns whether @self is currently showing the heading.
+ *
+ * This is the value of the [property@Gtk.Calendar:show-heading]
+ * property.
  *
  * Return: Whether the calendar is showing a heading.
  */
@@ -1707,8 +1719,8 @@ gtk_calendar_get_show_heading (GtkCalendar *self)
 }
 
 /**
- * gtk_calendar_set_show_day_names:
- * @self: a #GtkCalendar
+ * gtk_calendar_set_show_day_names: (attributes org.gtk.Method.set_property=show-day-names)
+ * @self: a `GtkCalendar`
  * @value: Whether to show day names above the day numbers
  *
  * Sets whether the calendar shows day names.
@@ -1733,12 +1745,14 @@ gtk_calendar_set_show_day_names (GtkCalendar *self,
 }
 
 /**
- * gtk_calendar_get_show_day_names:
- * @self: a #GtkCalendar
+ * gtk_calendar_get_show_day_names: (attributes org.gtk.Method.get_property=show-day-names)
+ * @self: a `GtkCalendar`
  *
  * Returns whether @self is currently showing the names
- * of the week days above the day numbers, i.e. the value
- * of the #GtkCalendar:show-day-names property.
+ * of the week days.
+ *
+ * This is the value of the [property@Gtk.Calendar:show-day-names]
+ * property.
  *
  * Returns: Whether the calendar shows day names.
  */

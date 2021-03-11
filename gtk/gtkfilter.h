@@ -75,11 +75,6 @@ typedef enum {
 
 #define GTK_TYPE_FILTER             (gtk_filter_get_type ())
 
-/**
- * GtkFilter:
- *
- * The object describing a filter.
- */
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (GtkFilter, gtk_filter, GTK, FILTER, GObject)
 

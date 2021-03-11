@@ -27,17 +27,16 @@
 #include "gdk/gdkrgbaprivate.h"
 
 /**
- * SECTION:gtkcolorchooser
- * @Short_description: Interface implemented by widgets for choosing colors
- * @Title: GtkColorChooser
- * @See_also: #GtkColorChooserDialog, #GtkColorChooserWidget, #GtkColorButton
+ * GtkColorChooser:
  *
- * #GtkColorChooser is an interface that is implemented by widgets
- * for choosing colors. Depending on the situation, colors may be
- * allowed to have alpha (translucency).
+ * `GtkColorChooser` is an interface that is implemented by widgets
+ * for choosing colors.
+ *
+ * Depending on the situation, colors may be allowed to have alpha (translucency).
  *
  * In GTK, the main widgets that implement this interface are
- * #GtkColorChooserWidget, #GtkColorChooserDialog and #GtkColorButton.
+ * [class@Gtk.ColorChooserWidget], [class@Gtk.ColorChooserDialog] and
+ * [class@Gtk.ColorButton].
  */
 
 enum
@@ -54,11 +53,12 @@ static void
 gtk_color_chooser_default_init (GtkColorChooserInterface *iface)
 {
   /**
-   * GtkColorChooser:rgba:
+   * GtkColorChooser:rgba: (attributes org.gtk.Property.get=gtk_color_chooser_get_rgba org.gtk.Property.set=gtk_color_chooser_set_rgba)
    *
-   * The ::rgba property contains the currently selected color,
-   * as a #GdkRGBA struct. The property can be set to change
-   * the current selection programmatically.
+   * The currently selected color, as a `GdkRGBA` struct.
+   *
+   * The property can be set to change the current selection
+   * programmatically.
    */
   g_object_interface_install_property (iface,
       g_param_spec_boxed ("rgba",
@@ -68,12 +68,13 @@ gtk_color_chooser_default_init (GtkColorChooserInterface *iface)
                           GTK_PARAM_READWRITE));
 
   /**
-   * GtkColorChooser:use-alpha:
+   * GtkColorChooser:use-alpha: (attributes org.gtk.Property.get=gtk_color_chooser_get_use_alpha org.gtk.Property.set=gtk_color_chooser_set_use_alpha)
    *
-   * When ::use-alpha is %TRUE, colors may have alpha (translucency)
-   * information. When it is %FALSE, the #GdkRGBA struct obtained
-   * via the #GtkColorChooser:rgba property will be forced to have
-   * alpha == 1.
+   * Whether colors may have alpha (translucency).
+   *
+   * When ::use-alpha is %FALSE, the `GdkRGBA` struct obtained
+   * via the [property@Gtk.ColorChooser:rgba] property will be
+   * forced to have alpha == 1.
    *
    * Implementations are expected to show alpha by rendering the color
    * over a non-uniform background (like a checkerboard pattern).
@@ -91,6 +92,7 @@ gtk_color_chooser_default_init (GtkColorChooserInterface *iface)
    * @color: the color
    *
    * Emitted when a color is activated from the color chooser.
+   *
    * This usually happens when the user clicks a color swatch,
    * or a color is selected and the user presses one of the keys
    * Space, Shift+Space, Return or Enter.
@@ -114,9 +116,9 @@ _gtk_color_chooser_color_activated (GtkColorChooser *chooser,
 }
 
 /**
- * gtk_color_chooser_get_rgba:
- * @chooser: a #GtkColorChooser
- * @color: (out): a #GdkRGBA to fill in with the current color
+ * gtk_color_chooser_get_rgba: (attributes org.gtk.Method.get_property=rgba)
+ * @chooser: a `GtkColorChooser`
+ * @color: (out): a `GdkRGBA` to fill in with the current color
  *
  * Gets the currently-selected color.
  */
@@ -130,8 +132,8 @@ gtk_color_chooser_get_rgba (GtkColorChooser *chooser,
 }
 
 /**
- * gtk_color_chooser_set_rgba:
- * @chooser: a #GtkColorChooser
+ * gtk_color_chooser_set_rgba: (attributes org.gtk.Method.set_property=rgba)
+ * @chooser: a `GtkColorChooser`
  * @color: the new color
  *
  * Sets the color.
@@ -147,8 +149,8 @@ gtk_color_chooser_set_rgba (GtkColorChooser *chooser,
 }
 
 /**
- * gtk_color_chooser_get_use_alpha:
- * @chooser: a #GtkColorChooser
+ * gtk_color_chooser_get_use_alpha: (attributes org.gtk.Method.get_property=use-alpha)
+ * @chooser: a `GtkColorChooser`
  *
  * Returns whether the color chooser shows the alpha channel.
  *
@@ -168,8 +170,8 @@ gtk_color_chooser_get_use_alpha (GtkColorChooser *chooser)
 }
 
 /**
- * gtk_color_chooser_set_use_alpha:
- * @chooser: a #GtkColorChooser
+ * gtk_color_chooser_set_use_alpha: (attributes org.gtk.Method.set_property=use-alpha)
+ * @chooser: a `GtkColorChooser`
  * @use_alpha: %TRUE if color chooser should use alpha channel, %FALSE if not
  *
  * Sets whether or not the color chooser should use the alpha channel.
@@ -186,28 +188,28 @@ gtk_color_chooser_set_use_alpha (GtkColorChooser *chooser,
 
 /**
  * gtk_color_chooser_add_palette:
- * @chooser: a #GtkColorChooser
+ * @chooser: a `GtkColorChooser`
  * @orientation: %GTK_ORIENTATION_HORIZONTAL if the palette should
  *     be displayed in rows, %GTK_ORIENTATION_VERTICAL for columns
  * @colors_per_line: the number of colors to show in each row/column
  * @n_colors: the total number of elements in @colors
  * @colors: (allow-none) (array length=n_colors): the colors of the palette, or %NULL
  *
- * Adds a palette to the color chooser. If @orientation is horizontal,
- * the colors are grouped in rows, with @colors_per_line colors
- * in each row. If @horizontal is %FALSE, the colors are grouped
- * in columns instead.
+ * Adds a palette to the color chooser.
  *
- * The default color palette of #GtkColorChooserWidget has
- * 27 colors, organized in columns of 3 colors. The default gray
- * palette has 9 grays in a single row.
+ * If @orientation is horizontal, the colors are grouped in rows,
+ * with @colors_per_line colors in each row. If @horizontal is %FALSE,
+ * the colors are grouped in columns instead.
+ *
+ * The default color palette of [class@Gtk.ColorChooserWidget] has
+ * 45 colors, organized in columns of 5 colors (this includes some
+ * grays).
  *
  * The layout of the color chooser widget works best when the
  * palettes have 9-10 columns.
  *
- * Calling this function for the first time has the
- * side effect of removing the default color and gray palettes
- * from the color chooser.
+ * Calling this function for the first time has the side effect
+ * of removing the default color palette from the color chooser.
  *
  * If @colors is %NULL, removes all previously added palettes.
  */

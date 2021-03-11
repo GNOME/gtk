@@ -19,10 +19,7 @@
 
 
 /*
- * SECTION:gtkpropertylookuplistmodel
- * @Short_description: a List model for property lookups
- * @Title: GtkPropertyLookupListModel
- * @See_also: #GListModel
+ * GtkPropertyLookupListModel:
  *
  * #GtkPropertyLookupListModel is a #GListModel implementation that takes an
  * object and a property and then recursively looks up the next element using

@@ -47,10 +47,9 @@ G_BEGIN_DECLS
 #define GDK_IS_EVENT_TYPE(event, type)  (gdk_event_get_event_type ((event)) == (type))
 
 /**
- * GDK_PRIORITY_EVENTS:
+ * GDK_PRIORITY_EVENTS: (value 0)
  *
- * This is the priority that events from the X server are given in the
- * [GLib Main Loop][glib-The-Main-Event-Loop].
+ * This is the priority that events from the X server are given in the main loop.
  */
 #define GDK_PRIORITY_EVENTS	(G_PRIORITY_DEFAULT)
 
@@ -58,8 +57,7 @@ G_BEGIN_DECLS
  * GDK_PRIORITY_REDRAW: (value 120)
  *
  * This is the priority that the idle handler processing surface updates
- * is given in the
- * [GLib Main Loop][glib-The-Main-Event-Loop].
+ * is given in the main loop.
  */
 #define GDK_PRIORITY_REDRAW     (G_PRIORITY_HIGH_IDLE + 20)
 
@@ -216,9 +214,11 @@ typedef enum
  * @GDK_TOUCHPAD_GESTURE_PHASE_CANCEL: The gesture was cancelled, all
  *   changes should be undone.
  *
- * Specifies the current state of a touchpad gesture. All gestures are
- * guaranteed to begin with an event with phase %GDK_TOUCHPAD_GESTURE_PHASE_BEGIN,
- * followed by 0 or several events with phase %GDK_TOUCHPAD_GESTURE_PHASE_UPDATE.
+ * Specifies the current state of a touchpad gesture.
+ *
+ * All gestures are guaranteed to begin with an event with phase
+ * %GDK_TOUCHPAD_GESTURE_PHASE_BEGIN, followed by 0 or several events
+ * with phase %GDK_TOUCHPAD_GESTURE_PHASE_UPDATE.
  *
  * A finished gesture may have 2 possible outcomes, an event with phase
  * %GDK_TOUCHPAD_GESTURE_PHASE_END will be emitted when the gesture is
@@ -494,8 +494,9 @@ gboolean                gdk_events_get_center           (GdkEvent *event1,
  *     (specifically, the currently active group) is ignored
  * @GDK_KEY_MATCH_EXACT: The key event matches
  *
- * The possible return values from gdk_key_event_matches()
- * describe how well an event matches a given keyval and modifiers.
+ * Describes how well an event matches a given keyval and modifiers.
+ *
+ * `GdkKeyMatch` values are returned by [method@Gdk.KeyEvent.matches].
  */
 typedef enum {
   GDK_KEY_MATCH_NONE,

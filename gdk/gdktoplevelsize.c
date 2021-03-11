@@ -21,13 +21,10 @@
 #include "gdktoplevelsizeprivate.h"
 
 /**
- * SECTION:gdktoplevelsize
- * @Title: GdkToplevelSize
- * @Short_description: Information for computing toplevel size
+ * GdkToplevelSize:
  *
- * The GdkToplevelSIze struct contains information that may be useful
- * for users of GdkToplevel to compute a surface size. It also carries
- * information back with the computational result.
+ * The `GdkToplevelSize` struct contains information that is useful
+ * to compute the size of a toplevel.
  */
 
 G_DEFINE_POINTER_TYPE (GdkToplevelSize, gdk_toplevel_size)
@@ -51,7 +48,7 @@ gdk_toplevel_size_init (GdkToplevelSize *size,
 
 /**
  * gdk_toplevel_size_get_bounds:
- * @size: a #GdkToplevelSize
+ * @size: a `GdkToplevelSize`
  * @bounds_width: (out): return location for width
  * @bounds_height: (out): return location for height
  *
@@ -77,14 +74,16 @@ gdk_toplevel_size_get_bounds (GdkToplevelSize *size,
 
 /**
  * gdk_toplevel_size_set_size:
- * @size: a #GdkToplevelSize
+ * @size: a `GdkToplevelSize`
  * @width: the width
  * @height: the height
  *
- * Sets the size the toplevel prefers to be resized to. The size should be
- * within the bounds (see gdk_toplevel_size_get_bounds()). The set size should
- * be considered as a hint, and should not be assumed to be respected by the
- * windowing system, or backend.
+ * Sets the size the toplevel prefers to be resized to.
+ *
+ * The size should be within the bounds (see
+ * [method@Gdk.ToplevelSize.get_bounds]). The set size should
+ * be considered as a hint, and should not be assumed to be
+ * respected by the windowing system, or backend.
  */
 void
 gdk_toplevel_size_set_size (GdkToplevelSize *size,
@@ -97,17 +96,19 @@ gdk_toplevel_size_set_size (GdkToplevelSize *size,
 
 /**
  * gdk_toplevel_size_set_min_size:
- * @size: a #GdkToplevelSize
+ * @size: a `GdkToplevelSize`
  * @min_width: the minimum width
  * @min_height: the minimum height
  *
+ * Sets the minimum size of the toplevel.
+ *
  * The minimum size corresponds to the limitations the toplevel can be shrunk
- * to, without resulting in incorrect painting. A user of a #GdkToplevel should
+ * to, without resulting in incorrect painting. A user of a `GdkToplevel` should
  * calculate these given both the existing size, and the bounds retrieved from
- * the #GdkToplevelSize object.
+ * the `GdkToplevelSize` object.
  *
  * The minimum size should be within the bounds (see
- * gdk_toplevel_size_get_bounds()).
+ * [method@Gdk.ToplevelSize.get_bounds]).
  */
 void
 gdk_toplevel_size_set_min_size (GdkToplevelSize *size,
@@ -120,11 +121,13 @@ gdk_toplevel_size_set_min_size (GdkToplevelSize *size,
 
 /**
  * gdk_toplevel_size_set_shadow_width:
- * @size: a #GdkToplevelSize
+ * @size: a `GdkToplevelSize`
  * @left: width of the left part of the shadow
  * @right: width of the right part of the shadow
  * @top: height of the top part of the shadow
  * @bottom: height of the bottom part of the shadow
+ *
+ * Sets the shadows size of the toplevel.
  *
  * The shadow width corresponds to the part of the computed surface size
  * that would consist of the shadow margin surrounding the window, would

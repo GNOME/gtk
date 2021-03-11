@@ -1,4 +1,7 @@
-# Using GTK with Broadway {#gtk-broadway}
+Title: The Broadway windowing system
+Slug: broadway
+
+## Using GTK with Broadway
 
 The GDK Broadway backend provides support for displaying GTK
 applications in a web browser, using HTML5 and web sockets. To run
@@ -26,9 +29,9 @@ Start your applications like this:
 GDK_BACKEND=broadway BROADWAY_DISPLAY=:5 gtk4-demo
 ```
 
-## Broadway-specific environment variables {#broadway-envar}
+## Broadway-specific environment variables
 
-### BROADWAY_DISPLAY
+### BROADWAY\_DISPLAY
 
 Specifies the Broadway display number. The default display is 0.
 The display number determines the port to use when connecting

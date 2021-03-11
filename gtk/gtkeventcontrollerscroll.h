@@ -45,11 +45,10 @@ typedef struct _GtkEventControllerScrollClass GtkEventControllerScrollClass;
  * @GTK_EVENT_CONTROLLER_SCROLL_VERTICAL: Emit scroll with vertical deltas.
  * @GTK_EVENT_CONTROLLER_SCROLL_HORIZONTAL: Emit scroll with horizontal deltas.
  * @GTK_EVENT_CONTROLLER_SCROLL_DISCRETE: Only emit deltas that are multiples of 1.
- * @GTK_EVENT_CONTROLLER_SCROLL_KINETIC: Emit #GtkEventControllerScroll::decelerate
- *   after continuous scroll finishes.
+ * @GTK_EVENT_CONTROLLER_SCROLL_KINETIC: Emit ::decelerate after continuous scroll finishes.
  * @GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES: Emit scroll on both axes.
  *
- * Describes the behavior of a #GtkEventControllerScroll.
+ * Describes the behavior of a `GtkEventControllerScroll`.
  **/
 typedef enum {
   GTK_EVENT_CONTROLLER_SCROLL_NONE       = 0,

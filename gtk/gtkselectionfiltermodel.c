@@ -26,13 +26,10 @@
 #include "gtkprivate.h"
 
 /**
- * SECTION:gtkselectionfiltermodel
- * @title: GtkSelectionFilterModel
- * @short_description: A list model that turns a selection in a model
- * @see_also: #GtkSelectionModel
+ * GtkSelectionFilterModel:
  *
- * #GtkSelectionFilterModel is a list model that presents the
- * selected items in a #GtkSelectionModel as its own list model.
+ * `GtkSelectionFilterModel` is a list model that presents the selection from
+ * a `GtkSelectionModel`.
  */
 
 enum {
@@ -218,9 +215,9 @@ gtk_selection_filter_model_class_init (GtkSelectionFilterModelClass *class)
   gobject_class->dispose = gtk_selection_filter_model_dispose;
 
   /**
-   * GtkSelectionFilterModel:model:
+   * GtkSelectionFilterModel:model: (attributes org.gtk.Property.get=gtk_selection_filter_model_get_model org.gtk.Property.set=gtk_selection_filter_model_set_model)
    *
-   * The model being filtered
+   * The model being filtered.
    */
   properties[PROP_MODEL] =
       g_param_spec_object ("model",
@@ -241,11 +238,11 @@ gtk_selection_filter_model_init (GtkSelectionFilterModel *self)
  * gtk_selection_filter_model_new:
  * @model: (allow-none) (transfer none): the selection model to filter, or %NULL
  *
- * Creates a new #GtkSelectionFilterModel that will include the
+ * Creates a new `GtkSelectionFilterModel` that will include the
  * selected items from the underlying selection model.
  *
- * Returns: a new #GtkSelectionFilterModel
- **/
+ * Returns: a new `GtkSelectionFilterModel`
+ */
 GtkSelectionFilterModel *
 gtk_selection_filter_model_new (GtkSelectionModel *model)
 {
@@ -255,8 +252,8 @@ gtk_selection_filter_model_new (GtkSelectionModel *model)
 }
 
 /**
- * gtk_selection_filter_model_set_model:
- * @self: a #GtkSelectionFilterModel
+ * gtk_selection_filter_model_set_model: (attributes org.gtk.Method.set_property=model)
+ * @self: a `GtkSelectionFilterModel`
  * @model: (allow-none): The model to be filtered
  *
  * Sets the model to be filtered.
@@ -304,13 +301,13 @@ gtk_selection_filter_model_set_model (GtkSelectionFilterModel *self,
 }
 
 /**
- * gtk_selection_filter_model_get_model:
- * @self: a #GtkSelectionFilterModel
+ * gtk_selection_filter_model_get_model: (attributes org.gtk.Method.get_property=model)
+ * @self: a `GtkSelectionFilterModel`
  *
  * Gets the model currently filtered or %NULL if none.
  *
  * Returns: (nullable) (transfer none): The model that gets filtered
- **/
+ */
 GtkSelectionModel *
 gtk_selection_filter_model_get_model (GtkSelectionFilterModel *self)
 {

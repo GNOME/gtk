@@ -395,10 +395,9 @@ graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
                             fallback: ['graphene', 'graphene_dep'])
 iso_codes_dep  = dependency('iso-codes', required: false)
 
-gtk_doc_dep    = dependency('gtk-doc', version: '>=1.33',
-                            fallback: ['gtk-doc', 'dummy_dep'],
-                            default_options: ['tests=false', 'yelp_manual=false'],
-                            required: get_option('gtk_doc'))
+gidocgen_dep    = dependency('gi-docgen', version: '>= 2021.1',
+                             fallback: ['gi-docgen', 'dummy_dep'],
+                             required: get_option('gtk_doc'))
 
 fontconfig_dep = [] # only used in x11 backend
 

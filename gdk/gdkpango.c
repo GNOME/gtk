@@ -25,101 +25,6 @@
 #include <pango/pangocairo.h>
 
 
-/**
- * SECTION:pango_interaction
- * @Short_description: Using Pango in GDK
- * @Title: Pango Interaction
- *
- * Pango is the text layout system used by GDK and GTK. The functions
- * and types in this section are used to obtain clip regions for
- * #PangoLayouts, and to get #PangoContexts that can be used with
- * GDK.
- *
- * Creating a #PangoLayout object is the first step in rendering text,
- * and requires getting a handle to a #PangoContext. For GTK programs,
- * you’ll usually want to use gtk_widget_get_pango_context(), or
- * gtk_widget_create_pango_layout(). Once you have a #PangoLayout,
- * you can set the text and attributes of it with Pango functions like
- * pango_layout_set_text() and get its size with pango_layout_get_size().
- * (Note that Pango uses a fixed point system internally, so converting
- * between Pango units and pixels using [PANGO_SCALE][PANGO-SCALE-CAPS]
- * or the PANGO_PIXELS() macro.)
- *
- * Rendering a Pango layout is done most simply with pango_cairo_show_layout();
- * you can also draw pieces of the layout with pango_cairo_show_layout_line().
- *
- * ## Draw transformed text with Pango and cairo ## {#rotated-example}
- *
- * |[<!-- language="C" -->
- * #define RADIUS 100
- * #define N_WORDS 10
- * #define FONT "Sans Bold 18"
- *
- * PangoContext *context;
- * PangoLayout *layout;
- * PangoFontDescription *desc;
- *
- * double radius;
- * int width, height;
- * int i;
- *
- * // Set up a transformation matrix so that the user space coordinates for
- * // where we are drawing are [-RADIUS, RADIUS], [-RADIUS, RADIUS]
- * // We first center, then change the scale
- *
- * width = gdk_surface_get_width (surface);
- * height = gdk_surface_get_height (surface);
- * radius = MIN (width, height) / 2.;
- *
- * cairo_translate (cr,
- *                  radius + (width - 2 * radius) / 2,
- *                  radius + (height - 2 * radius) / 2);
- *                  cairo_scale (cr, radius / RADIUS, radius / RADIUS);
- *
- * // Create a PangoLayout, set the font and text
- * context = gdk_pango_context_get_for_display (display);
- * layout = pango_layout_new (context);
- * pango_layout_set_text (layout, "Text", -1);
- * desc = pango_font_description_from_string (FONT);
- * pango_layout_set_font_description (layout, desc);
- * pango_font_description_free (desc);
- *
- * // Draw the layout N_WORDS times in a circle
- * for (i = 0; i < N_WORDS; i++)
- *   {
- *     double red, green, blue;
- *     double angle = 2 * G_PI * i / n_words;
- *
- *     cairo_save (cr);
- *
- *     // Gradient from red at angle == 60 to blue at angle == 300
- *     red = (1 + cos (angle - 60)) / 2;
- *     green = 0;
- *     blue = 1 - red;
- *
- *     cairo_set_source_rgb (cr, red, green, blue);
- *     cairo_rotate (cr, angle);
- *
- *     // Inform Pango to re-layout the text with the new transformation matrix
- *     pango_cairo_update_layout (cr, layout);
- *
- *     pango_layout_get_size (layout, &width, &height);
- *
- *     cairo_move_to (cr, - width / 2 / PANGO_SCALE, - DEFAULT_TEXT_RADIUS);
- *     pango_cairo_show_layout (cr, layout);
- *
- *     cairo_restore (cr);
- *   }
- *
- * g_object_unref (layout);
- * g_object_unref (context);
- * ]|
- *
- * ## Output of the [example][rotated-example] above.
- *
- * ![](rotated-text.png)
- */
-
 /* Get a clip region to draw only part of a layout. index_ranges
  * contains alternating range starts/stops. The region is the
  * region which contains the given ranges, i.e. if you draw with the
@@ -185,31 +90,32 @@ layout_iter_get_line_clip_region (PangoLayoutIter *iter,
 
 /**
  * gdk_pango_layout_line_get_clip_region: (skip)
- * @line: a #PangoLayoutLine 
+ * @line: a `PangoLayoutLine`
  * @x_origin: X pixel where you intend to draw the layout line with this clip
  * @y_origin: baseline pixel where you intend to draw the layout line with this clip
  * @index_ranges: (array): array of byte indexes into the layout,
  *     where even members of array are start indexes and odd elements
  *     are end indexes
  * @n_ranges: number of ranges in @index_ranges, i.e. half the size of @index_ranges
- * 
+ *
  * Obtains a clip region which contains the areas where the given
- * ranges of text would be drawn. @x_origin and @y_origin are the top left
- * position of the layout. @index_ranges
- * should contain ranges of bytes in the layout’s text. The clip
- * region will include space to the left or right of the line (to the
- * layout bounding box) if you have indexes above or below the indexes
- * contained inside the line. This is to draw the selection all the way
- * to the side of the layout. However, the clip region is in line coordinates,
- * not layout coordinates.
+ * ranges of text would be drawn.
+ *
+ * @x_origin and @y_origin are the top left position of the layout.
+ * @index_ranges should contain ranges of bytes in the layout’s text.
+ * The clip region will include space to the left or right of the line
+ * (to the layout bounding box) if you have indexes above or below the
+ * indexes contained inside the line. This is to draw the selection all
+ * the way to the side of the layout. However, the clip region is in line
+ * coordinates, not layout coordinates.
  *
  * Note that the regions returned correspond to logical extents of the text
  * ranges, not ink extents. So the drawn line may in fact touch areas out of
  * the clip region.  The clip region is mainly useful for highlightling parts
  * of text, such as when text is selected.
- * 
+ *
  * Returns: a clip region containing the given ranges
- **/
+ */
 cairo_region_t*
 gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
                                        int              x_origin,
@@ -236,24 +142,25 @@ gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
 
 /**
  * gdk_pango_layout_get_clip_region: (skip)
- * @layout: a #PangoLayout 
+ * @layout: a `PangoLayout`
  * @x_origin: X pixel where you intend to draw the layout with this clip
  * @y_origin: Y pixel where you intend to draw the layout with this clip
  * @index_ranges: array of byte indexes into the layout, where even members of array are start indexes and odd elements are end indexes
  * @n_ranges: number of ranges in @index_ranges, i.e. half the size of @index_ranges
- * 
+ *
  * Obtains a clip region which contains the areas where the given ranges
- * of text would be drawn. @x_origin and @y_origin are the top left point
- * to center the layout. @index_ranges should contain
- * ranges of bytes in the layout’s text.
- * 
+ * of text would be drawn.
+ *
+ * @x_origin and @y_origin are the top left point to center the layout.
+ * @index_ranges should contain ranges of bytes in the layout’s text.
+ *
  * Note that the regions returned correspond to logical extents of the text
  * ranges, not ink extents. So the drawn layout may in fact touch areas out of
  * the clip region.  The clip region is mainly useful for highlightling parts
  * of text, such as when text is selected.
- * 
+ *
  * Returns: a clip region containing the given ranges
- **/
+ */
 cairo_region_t*
 gdk_pango_layout_get_clip_region (PangoLayout *layout,
                                   int          x_origin,

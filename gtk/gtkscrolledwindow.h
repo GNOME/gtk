@@ -44,17 +44,18 @@ typedef struct _GtkScrolledWindow GtkScrolledWindow;
 /**
  * GtkCornerType:
  * @GTK_CORNER_TOP_LEFT: Place the scrollbars on the right and bottom of the
- *  widget (default behaviour).
+ *   widget (default behaviour).
  * @GTK_CORNER_BOTTOM_LEFT: Place the scrollbars on the top and right of the
- *  widget.
+ *   widget.
  * @GTK_CORNER_TOP_RIGHT: Place the scrollbars on the left and bottom of the
- *  widget.
+ *   widget.
  * @GTK_CORNER_BOTTOM_RIGHT: Place the scrollbars on the top and left of the
- *  widget.
+ *   widget.
  *
  * Specifies which corner a child widget should be placed in when packed into
- * a #GtkScrolledWindow. This is effectively the opposite of where the scroll
- * bars are placed.
+ * a `GtkScrolledWindow.`
+ *
+ * This is effectively the opposite of where the scroll bars are placed.
  */
 typedef enum
 {
@@ -68,14 +69,14 @@ typedef enum
 /**
  * GtkPolicyType:
  * @GTK_POLICY_ALWAYS: The scrollbar is always visible. The view size is
- *  independent of the content.
+ *   independent of the content.
  * @GTK_POLICY_AUTOMATIC: The scrollbar will appear and disappear as necessary.
- *  For example, when all of a #GtkTreeView can not be seen.
+ *   For example, when all of a `GtkTreeView` can not be seen.
  * @GTK_POLICY_NEVER: The scrollbar should never appear. In this mode the
- *  content determines the size.
+ *   content determines the size.
  * @GTK_POLICY_EXTERNAL: Don't show a scrollbar, but don't force the
- *  size to follow the content. This can be used e.g. to make multiple
- *  scrolled windows share a scrollbar.
+ *   size to follow the content. This can be used e.g. to make multiple
+ *   scrolled windows share a scrollbar.
  *
  * Determines how the size should be computed to achieve the one of the
  * visibility mode for the scrollbars.

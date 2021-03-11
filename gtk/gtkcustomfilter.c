@@ -25,12 +25,9 @@
 #include "gtktypebuiltins.h"
 
 /**
- * SECTION:gtkcustomfilter
- * @Title: GtkCustomFilter
- * @Short_description: Filtering with callbacks
+ * GtkCustomFilter:
  *
- * #GtkCustomFilter is a #GtkFilter that uses a callback to determine
- * whether to include an item or not.
+ * `GtkCustomFilter` determines whether to include items with a callback.
  */
 struct _GtkCustomFilter
 {
@@ -108,7 +105,7 @@ gtk_custom_filter_init (GtkCustomFilter *self)
  * If the filter func changes its filtering behavior,
  * gtk_filter_changed() needs to be called.
  *
- * Returns: a new #GtkCustomFilter
+ * Returns: a new `GtkCustomFilter`
  **/
 GtkCustomFilter *
 gtk_custom_filter_new (GtkCustomFilterFunc match_func,
@@ -126,12 +123,12 @@ gtk_custom_filter_new (GtkCustomFilterFunc match_func,
 
 /**
  * gtk_custom_filter_set_filter_func:
- * @self: a #GtkCustomFilter
+ * @self: a `GtkCustomFilter`
  * @match_func: (nullable): function to filter items
  * @user_data: (nullable): user data to pass to @match_func
  * @user_destroy: destroy notify for @user_data
  *
- * Sets (or unsets) the function used for filtering items.
+ * Sets the function used for filtering items.
  *
  * If @match_func is %NULL, the filter matches all items.
  *
@@ -140,7 +137,7 @@ gtk_custom_filter_new (GtkCustomFilterFunc match_func,
  *
  * If a previous function was set, its @user_destroy will be
  * called now.
- **/
+ */
 void
 gtk_custom_filter_set_filter_func (GtkCustomFilter     *self,
                                    GtkCustomFilterFunc  match_func,

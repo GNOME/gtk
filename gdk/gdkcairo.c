@@ -24,22 +24,6 @@
 #include <math.h>
 
 /**
- * SECTION:cairo_interaction
- * @Short_description: Functions to support using cairo
- * @Title: Cairo Interaction
- *
- * [Cairo](http://cairographics.org) is a graphics
- * library that supports vector graphics and image compositing that
- * can be used with GDK and GTK.
- *
- * GDK does not wrap the cairo API, instead it allows to create cairo
- * contexts which can be used to draw on #GdkSurfaces. Additional
- * functions allow use #GdkRectangles with cairo and to use #GdkRGBAs,
- * #GdkPixbufs and #GdkSurfaces as sources for drawing operations.
- */
-
-
-/**
  * gdk_cairo_set_source_rgba:
  * @cr: a cairo context
  * @rgba: a #GdkRGBA
@@ -297,13 +281,13 @@ _gdk_cairo_surface_extents (cairo_surface_t *surface,
  * gdk_cairo_region_create_from_surface:
  * @surface: a cairo surface
  *
- * Creates region that describes covers the area where the given
+ * Creates region that covers the area where the given
  * @surface is more than 50% opaque.
  *
  * This function takes into account device offsets that might be
  * set with cairo_surface_set_device_offset().
  *
- * Returns: A #cairo_region_t; must be freed with cairo_region_destroy()
+ * Returns: A `cairo_region_t`; must be freed with cairo_region_destroy()
  */
 cairo_region_t *
 gdk_cairo_region_create_from_surface (cairo_surface_t *surface)

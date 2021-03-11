@@ -34,16 +34,15 @@
 #include "gtkintl.h"
 
 /**
- * SECTION:gtkeditablelabel
- * @Short_description: A label that can be edited
- * @Title: GtkEditableLabel
- * @See_also: #GtkEditable, #GtkLabel, #GtkEntry
+ * GtkEditableLabel:
  *
- * A GtkEditableLabel is a #GtkLabel that allows users to
- * edit the text by switching the widget to an “edit mode”.
+ * A `GtkEditableLabel` is a label that allows users to
+ * edit the text by switching to an “edit mode”.
  *
- * GtkEditableLabel does not have API of its own, but it
- * implements the #GtkEditable interface.
+ * ![An example GtkEditableLabel](editable-label.png)
+ *
+ * `GtkEditableLabel` does not have API of its own, but it
+ * implements the [iface@Gtk.Editable] interface.
  *
  * The default bindings for activating the edit mode is
  * to click or press the Enter key. The default bindings
@@ -52,19 +51,19 @@
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * editablelabel[.editing]
  * ╰── stack
  *     ├── label
  *     ╰── text
- * ]|
+ * ```
  *
- * GtkEditableLabel has a main node with the name editablelabel.
+ * `GtkEditableLabel` has a main node with the name editablelabel.
  * When the entry is in editing mode, it gets the .editing style
  * class.
  *
  * For all the subnodes added to the text node in various situations,
- * see #GtkText.
+ * see [class@Gtk.Text].
  */
 
 struct _GtkEditableLabel
@@ -363,7 +362,7 @@ gtk_editable_label_class_init (GtkEditableLabelClass *class)
   widget_class->grab_focus = gtk_editable_label_grab_focus;
 
   /**
-   * GtkEditableLabel:editing:
+   * GtkEditableLabel:editing: (attributes org.gtk.Property.get=gtk_editable_label_get_editing)
    *
    * This property is %TRUE while the widget is in edit mode.
    */
@@ -431,9 +430,9 @@ gtk_editable_label_class_init (GtkEditableLabelClass *class)
  * gtk_editable_label_new:
  * @str: the text for the label
  *
- * Creates a new #GtkEditableLabel widget.
+ * Creates a new `GtkEditableLabel` widget.
  *
- * Returns: the new #GtkEditableLabel
+ * Returns: the new `GtkEditableLabel`
  */
 GtkWidget *
 gtk_editable_label_new (const char *str)
@@ -444,8 +443,8 @@ gtk_editable_label_new (const char *str)
 }
 
 /**
- * gtk_editable_label_get_editing:
- * @self: a #GtkEditableLabel
+ * gtk_editable_label_get_editing: (attributes org.gtk.Method.get_property=editing)
+ * @self: a `GtkEditableLabel`
  *
  * Returns whether the label is currently in “editing mode”.
  *
@@ -461,7 +460,7 @@ gtk_editable_label_get_editing (GtkEditableLabel *self)
 
 /**
  * gtk_editable_label_start_editing:
- * @self: a #GtkEditableLabel
+ * @self: a `GtkEditableLabel`
  *
  * Switches the label into “editing mode”.
  */
@@ -483,13 +482,15 @@ gtk_editable_label_start_editing (GtkEditableLabel *self)
 
 /**
  * gtk_editable_label_stop_editing:
- * @self: a #GtkEditableLabel
+ * @self: a `GtkEditableLabel`
  * @commit: whether to set the edited text on the label
  *
- * Switches the label out of “editing mode”. If @commit is %TRUE,
- * the resulting text is kept as the #GtkEditable:text property
- * value, otherwise the resulting text is discarded and the label
- * will keep its previous #GtkEditable:text property value.
+ * Switches the label out of “editing mode”.
+ *
+ * If @commit is %TRUE, the resulting text is kept as the
+ * [property@Gtk.Editable:text] property value, otherwise the
+ * resulting text is discarded and the label will keep its
+ * previous [property@Gtk.Editable:text] property value.
  */
 void
 gtk_editable_label_stop_editing (GtkEditableLabel *self,

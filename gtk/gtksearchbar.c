@@ -43,49 +43,52 @@
 #include "gtkwidgetprivate.h"
 
 /**
- * SECTION:gtksearchbar
- * @Short_description: A toolbar to integrate a search entry with
- * @Title: GtkSearchBar
+ * GtkSearchBar:
  *
- * #GtkSearchBar is a container made to have a search entry (possibly
- * with additional connex widgets, such as drop-down menus, or buttons)
- * built-in. The search bar would appear when a search is started through
- * typing on the keyboard, or the application’s search mode is toggled on.
+ * `GtkSearchBar` is a container made to have a search entry.
+ *
+ * ![An example GtkSearchBar](search-bar.png)
+ *
+ * It can also contain additional widgets, such as drop-down menus,
+ * or buttons.  The search bar would appear when a search is started
+ * through typing on the keyboard, or the application’s search mode
+ * is toggled on.
  *
  * For keyboard presses to start a search, the search bar must be told
  * of a widget to capture key events from through
- * gtk_search_bar_set_key_capture_widget(). This widget will typically
- * be the top-level window, or a parent container of the search bar. Common
- * shortcuts such as Ctrl+F should be handled as an application action, or
- * through the menu items.
+ * [method@Gtk.SearchBar.set_key_capture_widget]. This widget will
+ * typically be the top-level window, or a parent container of the
+ * search bar. Common shortcuts such as Ctrl+F should be handled as an
+ * application action, or through the menu items.
  *
  * You will also need to tell the search bar about which entry you
- * are using as your search entry using gtk_search_bar_connect_entry().
- * The following example shows you how to create a more complex search
- * entry.
+ * are using as your search entry using [method@Gtk.SearchBar.connect_entry].
  *
  * ## Creating a search bar
+ *
+ * The following example shows you how to create a more complex search
+ * entry.
  *
  * [A simple example](https://gitlab.gnome.org/GNOME/gtk/tree/master/examples/search-bar.c)
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * searchbar
  * ╰── revealer
  *     ╰── box
  *          ├── [child]
  *          ╰── [button.close]
- * ]|
+ * ```
  *
- * GtkSearchBar has a main CSS node with name searchbar. It has a child node
- * with name revealer that contains a node with name box. The box node contains both the
- * CSS node of the child widget as well as an optional button node which gets the .close
- * style class applied.
+ * `GtkSearchBar` has a main CSS node with name searchbar. It has a child
+ * node with name revealer that contains a node with name box. The box node
+ * contains both the CSS node of the child widget as well as an optional button
+ * node which gets the .close style class applied.
  *
  * # Accessibility
  *
- * GtkSearchBar uses the %GTK_ACCESSIBLE_ROLE_SEARCH role.
+ * `GtkSearchBar` uses the %GTK_ACCESSIBLE_ROLE_SEARCH role.
  */
 
 typedef struct _GtkSearchBarClass   GtkSearchBarClass;
@@ -300,11 +303,9 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
   widget_class->focus = gtk_widget_focus_child;
 
   /**
-   * GtkSearchBar:search-mode-enabled:
+   * GtkSearchBar:search-mode-enabled: (attributes org.gtk.Property.get=gtk_search_bar_get_search_mode org.gtk.Property.set=gtk_search_bar_set_search_mode)
    *
    * Whether the search mode is on and the search bar shown.
-   *
-   * See gtk_search_bar_set_search_mode() for details.
    */
   widget_props[PROP_SEARCH_MODE_ENABLED] = g_param_spec_boolean ("search-mode-enabled",
                                                                  P_("Search Mode Enabled"),
@@ -313,7 +314,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
                                                                  GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSearchBar:show-close-button:
+   * GtkSearchBar:show-close-button: (attributes org.gtk.Property.get=gtk_search_bar_get_show_close_button org.gtk.Property.set=gtk_search_bar_set_show_close_button)
    *
    * Whether to show the close button in the search bar.
    */
@@ -323,12 +324,22 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
                                                                FALSE,
                                                                GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkSearchBar:child: (attributes org.gtk.Property.get=gtk_search_bar_get_child org.gtk.Property.set=gtk_search_bar_set_child)
+   *
+   * The child widget.
+   */
   widget_props[PROP_CHILD] = g_param_spec_object ("child",
                                                   P_("Child"),
                                                   P_("The child widget"),
                                                   GTK_TYPE_WIDGET,
                                                   GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkSearchBar:key-capture-widget: (attributes org.gtk.Property.get=gtk_search_bar_get_key_capture_widget org.gtk.Property.set=gtk_search_bar_set_key_capture_widget)
+   *
+   * The key capture widget.
+   */
   widget_props[PROP_KEY_CAPTURE_WIDGET]
       = g_param_spec_object ("key-capture-widget",
                              P_("Key Capture Widget"),
@@ -371,11 +382,12 @@ gtk_search_bar_init (GtkSearchBar *bar)
 /**
  * gtk_search_bar_new:
  *
- * Creates a #GtkSearchBar. You will need to tell it about
- * which widget is going to be your text entry using
- * gtk_search_bar_connect_entry().
+ * Creates a `GtkSearchBar`.
  *
- * Returns: a new #GtkSearchBar
+ * You will need to tell it about which widget is going to be your text
+ * entry using [method@Gtk.SearchBar.connect_entry].
+ *
+ * Returns: a new `GtkSearchBar`
  */
 GtkWidget *
 gtk_search_bar_new (void)
@@ -415,13 +427,15 @@ gtk_search_bar_set_entry (GtkSearchBar *bar,
 
 /**
  * gtk_search_bar_connect_entry:
- * @bar: a #GtkSearchBar
- * @entry: a #GtkEditable
+ * @bar: a `GtkSearchBar`
+ * @entry: a `GtkEditable`
  *
- * Connects the #GtkEntry widget passed as the one to be used in
- * this search bar. The entry should be a descendant of the search bar.
- * This is only required if the entry isn’t the direct child of the
- * search bar (as in our main example).
+ * Connects the `GtkEditable widget passed as the one to be used in
+ * this search bar.
+ *
+ * The entry should be a descendant of the search bar. Calling this
+ * function manually is only required if the entry isn’t the direct
+ * child of the search bar (as in our main example).
  */
 void
 gtk_search_bar_connect_entry (GtkSearchBar *bar,
@@ -434,8 +448,8 @@ gtk_search_bar_connect_entry (GtkSearchBar *bar,
 }
 
 /**
- * gtk_search_bar_get_search_mode:
- * @bar: a #GtkSearchBar
+ * gtk_search_bar_get_search_mode: (attributes org.gtk.Method.get_property=search-mode-enabled)
+ * @bar: a `GtkSearchBar`
  *
  * Returns whether the search mode is on or off.
  *
@@ -450,8 +464,8 @@ gtk_search_bar_get_search_mode (GtkSearchBar *bar)
 }
 
 /**
- * gtk_search_bar_set_search_mode:
- * @bar: a #GtkSearchBar
+ * gtk_search_bar_set_search_mode: (attributes org.gtk.Method.set_property=search-mode-enabled)
+ * @bar: a `GtkSearchBar`
  * @search_mode: the new state of the search mode
  *
  * Switches the search mode on or off.
@@ -466,8 +480,8 @@ gtk_search_bar_set_search_mode (GtkSearchBar *bar,
 }
 
 /**
- * gtk_search_bar_get_show_close_button:
- * @bar: a #GtkSearchBar
+ * gtk_search_bar_get_show_close_button: (attributes org.gtk.Method.get_property=show-close-button)
+ * @bar: a `GtkSearchBar`
  *
  * Returns whether the close button is shown.
  *
@@ -482,14 +496,15 @@ gtk_search_bar_get_show_close_button (GtkSearchBar *bar)
 }
 
 /**
- * gtk_search_bar_set_show_close_button:
- * @bar: a #GtkSearchBar
+ * gtk_search_bar_set_show_close_button: (attributes org.gtk.Method.set_property=show-close-button)
+ * @bar: a `GtkSearchBar`
  * @visible: whether the close button will be shown or not
  *
- * Shows or hides the close button. Applications that
- * already have a “search” toggle button should not show a close
- * button in their search bar, as it duplicates the role of the
- * toggle button.
+ * Shows or hides the close button.
+ *
+ * Applications that already have a “search” toggle button should not
+ * show a close button in their search bar, as it duplicates the role
+ * of the toggle button.
  */
 void
 gtk_search_bar_set_show_close_button (GtkSearchBar *bar,
@@ -586,9 +601,9 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
 }
 
 /**
- * gtk_search_bar_set_key_capture_widget:
- * @bar: a #GtkSearchBar
- * @widget: (nullable) (transfer none): a #GtkWidget
+ * gtk_search_bar_set_key_capture_widget: (attributes org.gtk.Method.set_property=key-capture-widget)
+ * @bar: a `GtkSearchBar`
+ * @widget: (nullable) (transfer none): a `GtkWidget`
  *
  * Sets @widget as the widget that @bar will capture key events
  * from.
@@ -601,7 +616,7 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
  * editable child widgets of @widget will receive text input
  * before it gets captured. If that is not desired, you can
  * capture and forward the events yourself with
- * gtk_event_controller_key_forward().
+ * [method@Gtk.EventControllerKey.forward].
  */
 void
 gtk_search_bar_set_key_capture_widget (GtkSearchBar *bar,
@@ -642,8 +657,8 @@ gtk_search_bar_set_key_capture_widget (GtkSearchBar *bar,
 }
 
 /**
- * gtk_search_bar_get_key_capture_widget:
- * @bar: a #GtkSearchBar
+ * gtk_search_bar_get_key_capture_widget: (attributes org.gtk.Method.get_property=key-capture-widget)
+ * @bar: a `GtkSearchBar`
  *
  * Gets the widget that @bar is capturing key events from.
  *
@@ -658,8 +673,8 @@ gtk_search_bar_get_key_capture_widget (GtkSearchBar *bar)
 }
 
 /**
- * gtk_search_bar_set_child:
- * @bar: a #GtkSearchBar
+ * gtk_search_bar_set_child: (attributes org.gtk.Method.set_property=child)
+ * @bar: a `GtkSearchBar`
  * @child: (allow-none): the child widget
  *
  * Sets the child widget of @bar.
@@ -690,8 +705,8 @@ gtk_search_bar_set_child (GtkSearchBar *bar,
 }
 
 /**
- * gtk_search_bar_get_child:
- * @bar: a #GtkSearchBar
+ * gtk_search_bar_get_child: (attributes org.gtk.Method.get_property=child)
+ * @bar: a `GtkSearchBar`
  *
  * Gets the child widget of @bar.
  *

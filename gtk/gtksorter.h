@@ -38,7 +38,7 @@ G_BEGIN_DECLS
  *     return %GTK_ORDERING_EQUAL if an item is compared with itself. Two
  *     different items will never cause this value to be returned.
  *
- * Describes the type of order that a #GtkSorter may describe.
+ * Describes the type of order that a `GtkSorter` may produce.
  */
 typedef enum {
   GTK_SORTER_ORDER_PARTIAL,
@@ -79,7 +79,7 @@ G_DECLARE_DERIVABLE_TYPE (GtkSorter, gtk_sorter, GTK, SORTER, GObject)
  * @get_order: Get the #GtkSorderOrder that applies to the current sorter.
  *     If unimplemented, it returns %GTK_SORTER_ORDER_PARTIAL.
  *
- * The virtual table for #GtkSorter.
+ * The virtual table for `GtkSorter`.
  */
 struct _GtkSorterClass
 {

@@ -30,14 +30,13 @@
 
 
 /**
- * SECTION:gtkorientable
- * @Short_description: An interface for flippable widgets
- * @Title: GtkOrientable
+ * GtkOrientable:
  *
- * The #GtkOrientable interface is implemented by all widgets that can be
- * oriented horizontally or vertically. #GtkOrientable is more flexible in that
- * it allows the orientation to be changed at runtime, allowing the widgets
- * to “flip”.
+ * The `GtkOrientable` interface is implemented by all widgets that can be
+ * oriented horizontally or vertically.
+ *
+ * `GtkOrientable` is more flexible in that it allows the orientation to be
+ * changed at runtime, allowing the widgets to “flip”.
  */
 
 
@@ -48,7 +47,7 @@ static void
 gtk_orientable_default_init (GtkOrientableInterface *iface)
 {
   /**
-   * GtkOrientable:orientation:
+   * GtkOrientable:orientation: (attributes org.gtk.Property.get=gtk_orientable_get_orientation org.gtk.Property.set=gtk_orientable_set_orientation)
    *
    * The orientation of the orientable.
    **/
@@ -62,12 +61,12 @@ gtk_orientable_default_init (GtkOrientableInterface *iface)
 }
 
 /**
- * gtk_orientable_set_orientation:
- * @orientable: a #GtkOrientable
+ * gtk_orientable_set_orientation: (attributes org.gtk.Method.set_property=orientation)
+ * @orientable: a `GtkOrientable`
  * @orientation: the orientable’s new orientation.
  *
  * Sets the orientation of the @orientable.
- **/
+ */
 void
 gtk_orientable_set_orientation (GtkOrientable  *orientable,
                                 GtkOrientation  orientation)
@@ -83,13 +82,13 @@ gtk_orientable_set_orientation (GtkOrientable  *orientable,
 }
 
 /**
- * gtk_orientable_get_orientation:
- * @orientable: a #GtkOrientable
+ * gtk_orientable_get_orientation: (attributes org.gtk.Method.get_property=orientation)
+ * @orientable: a `GtkOrientable`
  *
  * Retrieves the orientation of the @orientable.
  *
  * Returns: the orientation of the @orientable.
- **/
+ */
 GtkOrientation
 gtk_orientable_get_orientation (GtkOrientable *orientable)
 {

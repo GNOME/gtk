@@ -51,15 +51,19 @@ typedef struct _GtkFlowBoxChildClass  GtkFlowBoxChildClass;
 
 struct _GtkFlowBoxChild
 {
+  /*< private >*/
   GtkWidget parent_instance;
 };
 
 struct _GtkFlowBoxChildClass
 {
+  /*< private >*/
   GtkWidgetClass parent_class;
 
+  /*< public >*/
   void (* activate) (GtkFlowBoxChild *child);
 
+  /*< private >*/
   gpointer padding[8];
 };
 
@@ -68,10 +72,11 @@ struct _GtkFlowBoxChildClass
  * @item: (type GObject): the item from the model for which to create a widget for
  * @user_data: (closure): user data from gtk_flow_box_bind_model()
  *
- * Called for flow boxes that are bound to a #GListModel with
- * gtk_flow_box_bind_model() for each item that gets added to the model.
+ * Called for flow boxes that are bound to a `GListModel`.
  *
- * Returns: (transfer full): a #GtkWidget that represents @item
+ * This function is called for each item that gets added to the model.
+ *
+ * Returns: (transfer full): a `GtkWidget` that represents @item
  */
 typedef GtkWidget * (*GtkFlowBoxCreateWidgetFunc) (gpointer item,
                                                    gpointer  user_data);

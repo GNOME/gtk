@@ -1,4 +1,5 @@
-# Tree and List Widget Overview {#TreeWidget}
+Title: Tree and List Widget Overview
+Slug: gtk-treeview
 
 To create a tree or list in GTK, use the #GtkTreeModel interface in
 conjunction with the #GtkTreeView widget.  This widget is designed around

@@ -37,29 +37,29 @@
 
 
 /**
- * SECTION:gtktexttagtable
- * @Short_description: Collection of tags that can be used together
- * @Title: GtkTextTagTable
+ * GtkTextTagTable:
+ *
+ * The collection of tags in a `GtkTextBuffer`
  *
  * You may wish to begin by reading the
- * [text widget conceptual overview][TextWidget]
- * which gives an overview of all the objects and
- * data types related to the text widget and how they work together.
+ * [text widget conceptual overview](section-text-widget.html),
+ * which gives an overview of all the objects and data types
+ * related to the text widget and how they work together.
  *
  * # GtkTextTagTables as GtkBuildable
  *
- * The GtkTextTagTable implementation of the GtkBuildable interface
+ * The `GtkTextTagTable` implementation of the `GtkBuildable` interface
  * supports adding tags by specifying “tag” as the “type” attribute
  * of a <child> element.
  *
  * An example of a UI definition fragment specifying tags:
- * |[
+ * ```xml
  * <object class="GtkTextTagTable">
  *  <child type="tag">
  *    <object class="GtkTextTag"/>
  *  </child>
  * </object>
- * ]|
+ * ```
  */
 
 typedef struct _GtkTextTagTablePrivate       GtkTextTagTablePrivate;
@@ -125,9 +125,9 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
    * GtkTextTagTable::tag-changed:
    * @texttagtable: the object which received the signal.
    * @tag: the changed tag.
-   * @size_changed: whether the change affects the #GtkTextView layout.
+   * @size_changed: whether the change affects the `GtkTextView` layout.
    *
-   * Emitted every time a tag in the #GtkTextTagTable changes.
+   * Emitted every time a tag in the `GtkTextTagTable` changes.
    */
   signals[TAG_CHANGED] =
     g_signal_new (I_("tag-changed"),
@@ -149,7 +149,7 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
    * @texttagtable: the object which received the signal.
    * @tag: the added tag.
    *
-   * Emitted every time a new tag is added in the #GtkTextTagTable.
+   * Emitted every time a new tag is added in the `GtkTextTagTable`.
    */
   signals[TAG_ADDED] =
     g_signal_new (I_("tag-added"),
@@ -167,7 +167,7 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
    * @texttagtable: the object which received the signal.
    * @tag: the removed tag.
    *
-   * Emitted every time a tag is removed from the #GtkTextTagTable.
+   * Emitted every time a tag is removed from the `GtkTextTagTable`.
    *
    * The @tag is still valid by the time the signal is emitted, but
    * it is not associated with a tag table any more.
@@ -209,12 +209,13 @@ check_visible (GtkTextTagTable *table,
 
 /**
  * gtk_text_tag_table_new:
- * 
- * Creates a new #GtkTextTagTable. The table contains no tags by
- * default.
- * 
- * Returns: a new #GtkTextTagTable
- **/
+ *
+ * Creates a new `GtkTextTagTable`.
+ *
+ * The table contains no tags by default.
+ *
+ * Returns: a new `GtkTextTagTable`
+ */
 GtkTextTagTable*
 gtk_text_tag_table_new (void)
 {
@@ -278,17 +279,18 @@ gtk_text_tag_table_buildable_add_child (GtkBuildable        *buildable,
 
 /**
  * gtk_text_tag_table_add:
- * @table: a #GtkTextTagTable
- * @tag: a #GtkTextTag
+ * @table: a `GtkTextTagTable`
+ * @tag: a `GtkTextTag`
  *
- * Add a tag to the table. The tag is assigned the highest priority
- * in the table.
+ * Add a tag to the table.
+ *
+ * The tag is assigned the highest priority in the table.
  *
  * @tag must not be in a tag table already, and may not have
  * the same name as an already-added tag.
  *
  * Returns: %TRUE on success.
- **/
+ */
 gboolean
 gtk_text_tag_table_add (GtkTextTagTable *table,
                         GtkTextTag      *tag)
@@ -336,14 +338,14 @@ gtk_text_tag_table_add (GtkTextTagTable *table,
 
 /**
  * gtk_text_tag_table_lookup:
- * @table: a #GtkTextTagTable 
+ * @table: a `GtkTextTagTable`
  * @name: name of a tag
- * 
+ *
  * Look up a named tag.
- * 
- * Returns: (nullable) (transfer none): The tag, or %NULL if none by that
- * name is in the table.
- **/
+ *
+ * Returns: (nullable) (transfer none): The tag,
+ *   or %NULL if none by that name is in the table.
+ */
 GtkTextTag*
 gtk_text_tag_table_lookup (GtkTextTagTable *table,
                            const char      *name)
@@ -360,14 +362,16 @@ gtk_text_tag_table_lookup (GtkTextTagTable *table,
 
 /**
  * gtk_text_tag_table_remove:
- * @table: a #GtkTextTagTable
- * @tag: a #GtkTextTag
+ * @table: a `GtkTextTagTable`
+ * @tag: a `GtkTextTag`
  *
- * Remove a tag from the table. If a #GtkTextBuffer has @table as its tag table,
- * the tag is removed from the buffer. The table’s reference to the tag is
- * removed, so the tag will end up destroyed if you don’t have a reference to
- * it.
- **/
+ * Remove a tag from the table.
+ *
+ * If a `GtkTextBuffer` has @table as its tag table, the tag is
+ * removed from the buffer. The table’s reference to the tag is
+ * removed, so the tag will end up destroyed if you don’t have
+ * a reference to it.
+ */
 void
 gtk_text_tag_table_remove (GtkTextTagTable *table,
                            GtkTextTag      *tag)
@@ -436,14 +440,15 @@ list_foreach (gpointer data, gpointer user_data)
 
 /**
  * gtk_text_tag_table_foreach:
- * @table: a #GtkTextTagTable
+ * @table: a `GtkTextTagTable`
  * @func: (scope call): a function to call on each tag
  * @data: user data
  *
  * Calls @func on each tag in @table, with user data @data.
- * Note that the table may not be modified while iterating 
+ *
+ * Note that the table may not be modified while iterating
  * over it (you can’t add/remove tags).
- **/
+ */
 void
 gtk_text_tag_table_foreach (GtkTextTagTable       *table,
                             GtkTextTagTableForeach func,
@@ -466,12 +471,12 @@ gtk_text_tag_table_foreach (GtkTextTagTable       *table,
 
 /**
  * gtk_text_tag_table_get_size:
- * @table: a #GtkTextTagTable
- * 
+ * @table: a `GtkTextTagTable`
+ *
  * Returns the size of the table (number of tags)
- * 
+ *
  * Returns: number of tags in @table
- **/
+ */
 int
 gtk_text_tag_table_get_size (GtkTextTagTable *table)
 {

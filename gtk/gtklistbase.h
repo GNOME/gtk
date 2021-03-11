@@ -39,7 +39,7 @@ G_BEGIN_DECLS
 /**
  * GtkListBase:
  *
- * GtkListBase is the abstract base class for GTK's list widgets.
+ * `GtkListBase` is the abstract base class for GTK's list widgets.
  */
 typedef struct _GtkListBase GtkListBase;
 typedef struct _GtkListBaseClass GtkListBaseClass;

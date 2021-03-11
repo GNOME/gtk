@@ -19,13 +19,10 @@
  */
 
 /**
- * SECTION:gtkfixedlayout
- * @Short_description: A layout manager that allows positioning at fixed
- *   coordinates
- * @Title: GtkFixedLayout
+ * GtkFixedLayout:
  *
- * #GtkFixedLayout is a layout manager which can place child widgets
- * at fixed positions, and with fixed sizes.
+ * `GtkFixedLayout` is a layout manager which can place child widgets
+ * at fixed positions.
  *
  * Most applications should never use this layout manager; fixed positioning
  * and sizing requires constant recalculations on where children need to be
@@ -45,16 +42,22 @@
  *   display of non-English text will use a different font in many
  *   cases.
  *
- * In addition, #GtkFixedLayout does not pay attention to text direction and
+ * In addition, `GtkFixedLayout` does not pay attention to text direction and
  * thus may produce unwanted results if your app is run under right-to-left
  * languages such as Hebrew or Arabic. That is: normally GTK will order
  * containers appropriately depending on the text direction, e.g. to put labels
  * to the right of the thing they label when using an RTL language;
- * #GtkFixedLayout won't be able to do that for you.
+ * `GtkFixedLayout` won't be able to do that for you.
  *
- * Finally, fixed positioning makes it kind of annoying to add/remove GUI
+ * Finally, fixed positioning makes it kind of annoying to add/remove UI
  * elements, since you have to reposition all the other  elements. This is a
  * long-term maintenance problem for your application.
+ */
+
+/**
+ * GtkFixedLayoutChild:
+ *
+ * `GtkLayoutChild` subclass for children in a `GtkFixedLayout`.
  */
 
 #include "config.h"
@@ -150,6 +153,11 @@ gtk_fixed_layout_child_class_init (GtkFixedLayoutChildClass *klass)
   gobject_class->get_property = gtk_fixed_layout_child_get_property;
   gobject_class->finalize = gtk_fixed_layout_child_finalize;
 
+  /**
+   * GtkFixedLayoutChild:transform: (attributes org.gtk.Property.get=gtk_fixed_layout_child_get_transform org.gtk.Property.set=gtk_fixed_layout_child_set_transform)
+   *
+   * The transform of the child.
+   */
   child_props[PROP_CHILD_TRANSFORM] =
     g_param_spec_boxed ("transform",
                         P_("transform"),
@@ -168,11 +176,11 @@ gtk_fixed_layout_child_init (GtkFixedLayoutChild *self)
 }
 
 /**
- * gtk_fixed_layout_child_set_transform:
- * @child: a #GtkFixedLayoutChild
- * @transform: a #GskTransform
+ * gtk_fixed_layout_child_set_transform: (attributes org.gtk.Method.set_property=transform)
+ * @child: a `GtkFixedLayoutChild`
+ * @transform: a `GskTransform`
  *
- * Sets the transformation of the child of a #GtkFixedLayout.
+ * Sets the transformation of the child of a `GtkFixedLayout`.
  */
 void
 gtk_fixed_layout_child_set_transform (GtkFixedLayoutChild *child,
@@ -193,11 +201,11 @@ gtk_fixed_layout_child_set_transform (GtkFixedLayoutChild *child,
 
 /**
  * gtk_fixed_layout_child_get_transform:
- * @child: a #GtkFixedLayoutChild
+ * @child: a `GtkFixedLayoutChild`
  *
- * Retrieves the transformation of the child of a #GtkFixedLayout.
+ * Retrieves the transformation of the child.
  *
- * Returns: (transfer none) (nullable): a #GskTransform
+ * Returns: (transfer none) (nullable): a `GskTransform`
  */
 GskTransform *
 gtk_fixed_layout_child_get_transform (GtkFixedLayoutChild *child)
@@ -351,9 +359,9 @@ gtk_fixed_layout_init (GtkFixedLayout *self)
 /**
  * gtk_fixed_layout_new:
  *
- * Creates a new #GtkFixedLayout.
+ * Creates a new `GtkFixedLayout`.
  *
- * Returns: the newly created #GtkFixedLayout
+ * Returns: the newly created `GtkFixedLayout`
  */
 GtkLayoutManager *
 gtk_fixed_layout_new (void)

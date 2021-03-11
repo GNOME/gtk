@@ -25,6 +25,12 @@
 
 #include <epoxy/gl.h>
 
+/**
+ * GdkGLTexture:
+ *
+ * A GdkTexture representing a GL texture object.
+ */
+
 struct _GdkGLTexture {
   GdkTexture parent_instance;
 
@@ -133,14 +139,13 @@ gdk_gl_texture_get_id (GdkGLTexture *self)
 
 /**
  * gdk_gl_texture_release:
- * @self: a #GdkTexture wrapping a GL texture
+ * @self: a `GdkTexture` wrapping a GL texture
  *
- * Releases the GL resources held by a #GdkGLTexture that
- * was created with gdk_gl_texture_new().
+ * Releases the GL resources held by a `GdkGLTexture`.
  *
  * The texture contents are still available via the
- * gdk_texture_download() function, after this function
- * has been called.
+ * [method@Gdk.Texture.download] function, after this
+ * function has been called.
  */
 void
 gdk_gl_texture_release (GdkGLTexture *self)
@@ -177,21 +182,21 @@ gdk_gl_texture_release (GdkGLTexture *self)
 
 /**
  * gdk_gl_texture_new:
- * @context: a #GdkGLContext
+ * @context: a `GdkGLContext`
  * @id: the ID of a texture that was created with @context
  * @width: the nominal width of the texture
  * @height: the nominal height of the texture
  * @destroy: a destroy notify that will be called when the GL resources
- *           are released
+ *   are released
  * @data: data that gets passed to @destroy
  *
  * Creates a new texture for an existing GL texture.
  *
  * Note that the GL texture must not be modified until @destroy is called,
  * which will happen when the GdkTexture object is finalized, or due to
- * an explicit call of gdk_gl_texture_release().
+ * an explicit call of [method@Gdk.GLTexture.release].
  *
- * Return value: (transfer full): A newly-created #GdkTexture
+ * Return value: (transfer full): A newly-created `GdkTexture`
  */
 GdkTexture *
 gdk_gl_texture_new (GdkGLContext   *context,

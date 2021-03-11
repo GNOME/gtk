@@ -23,6 +23,11 @@
 #include "gdkinternals.h"
 #include "gdkintl.h"
 
+/**
+ * GdkDeviceTool:
+ *
+ * A physical tool associated to a `GdkDevice`.
+ */
 
 G_DEFINE_TYPE (GdkDeviceTool, gdk_device_tool, G_TYPE_OBJECT)
 
@@ -101,6 +106,11 @@ gdk_device_tool_class_init (GdkDeviceToolClass *klass)
   object_class->set_property = gdk_device_tool_set_property;
   object_class->get_property = gdk_device_tool_get_property;
 
+  /**
+   * GdkDeviceTool:serial: (attributes org.gtk.Property.get=gdk_device_tool_get_serial)
+   *
+   * The serial number of the tool.
+   */
   tool_props[TOOL_PROP_SERIAL] = g_param_spec_uint64 ("serial",
                                                       "Serial",
                                                       "Serial number",
@@ -108,6 +118,12 @@ gdk_device_tool_class_init (GdkDeviceToolClass *klass)
                                                       G_PARAM_READWRITE |
                                                       G_PARAM_CONSTRUCT_ONLY |
                                                       G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkDeviceTool:tool-type: (attributes org.gtk.Property.get=gdk_device_tool_get_tool_type)
+   *
+   * The type of the tool.
+   */
   tool_props[TOOL_PROP_TOOL_TYPE] = g_param_spec_enum ("tool-type",
                                                        "Tool type",
                                                        "Tool type",
@@ -116,12 +132,24 @@ gdk_device_tool_class_init (GdkDeviceToolClass *klass)
                                                        G_PARAM_READWRITE |
                                                        G_PARAM_CONSTRUCT_ONLY |
                                                        G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkDeviceTool:axes: (attributes org.gtk.Property.get=gdk_device_tool_get_axes)
+   *
+   * The axes of the tool.
+   */
   tool_props[TOOL_PROP_AXES] = g_param_spec_flags ("axes",
                                                    "Axes",
                                                    "Tool axes",
                                                    GDK_TYPE_AXIS_FLAGS, 0,
                                                    G_PARAM_READWRITE |
                                                    G_PARAM_CONSTRUCT_ONLY);
+
+  /**
+   * GdkDeviceTool:hardware-id: (attributes org.gtk.Property.get=gdk_device_tool_get_hardware_id)
+   *
+   * The hardware ID of the tool.
+   */
   tool_props[TOOL_PROP_HARDWARE_ID] = g_param_spec_uint64 ("hardware-id",
                                                            "Hardware ID",
                                                            "Hardware ID",
@@ -153,14 +181,16 @@ gdk_device_tool_new (guint64           serial,
 }
 
 /**
- * gdk_device_tool_get_serial:
- * @tool: a #GdkDeviceTool
+ * gdk_device_tool_get_serial: (attributes org.gtk.Method.get_property=serial)
+ * @tool: a `GdkDeviceTool`
  *
- * Gets the serial of this tool, this value can be used to identify a
- * physical tool (eg. a tablet pen) across program executions.
+ * Gets the serial number of this tool.
+ *
+ * This value can be used to identify a physical tool
+ * (eg. a tablet pen) across program executions.
  *
  * Returns: The serial ID for this tool
- **/
+ */
 guint64
 gdk_device_tool_get_serial (GdkDeviceTool *tool)
 {
@@ -170,21 +200,23 @@ gdk_device_tool_get_serial (GdkDeviceTool *tool)
 }
 
 /**
- * gdk_device_tool_get_hardware_id:
- * @tool: a #GdkDeviceTool
+ * gdk_device_tool_get_hardware_id: (attributes org.gtk.Method.get_property=hardware-id)
+ * @tool: a `GdkDeviceTool`
  *
- * Gets the hardware ID of this tool, or 0 if it's not known. When
- * non-zero, the identificator is unique for the given tool model,
+ * Gets the hardware ID of this tool, or 0 if it's not known.
+ *
+ * When non-zero, the identificator is unique for the given tool model,
  * meaning that two identical tools will share the same @hardware_id,
- * but will have different serial numbers (see gdk_device_tool_get_serial()).
+ * but will have different serial numbers (see
+ * [method@Gdk.DeviceTool.get_serial]).
  *
  * This is a more concrete (and device specific) method to identify
- * a #GdkDeviceTool than gdk_device_tool_get_tool_type(), as a tablet
- * may support multiple devices with the same #GdkDeviceToolType,
- * but having different hardware identificators.
+ * a `GdkDeviceTool` than [method@Gdk.DeviceTool.get_tool_type],
+ * as a tablet may support multiple devices with the same
+ * `GdkDeviceToolType`, but different hardware identificators.
  *
  * Returns: The hardware identificator of this tool.
- **/
+ */
 guint64
 gdk_device_tool_get_hardware_id (GdkDeviceTool *tool)
 {
@@ -194,14 +226,15 @@ gdk_device_tool_get_hardware_id (GdkDeviceTool *tool)
 }
 
 /**
- * gdk_device_tool_get_tool_type:
- * @tool: a #GdkDeviceTool
+ * gdk_device_tool_get_tool_type: (attributes org.gtk.Method.get_property=tool-type)
+ * @tool: a `GdkDeviceTool`
  *
- * Gets the #GdkDeviceToolType of the tool.
+ * Gets the `GdkDeviceToolType` of the tool.
  *
- * Returns: The physical type for this tool. This can be used to figure out what
- * sort of pen is being used, such as an airbrush or a pencil.
- **/
+ * Returns: The physical type for this tool. This can be used to
+ *   figure out what sort of pen is being used, such as an airbrush
+ *   or a pencil.
+ */
 GdkDeviceToolType
 gdk_device_tool_get_tool_type (GdkDeviceTool *tool)
 {
@@ -211,8 +244,8 @@ gdk_device_tool_get_tool_type (GdkDeviceTool *tool)
 }
 
 /**
- * gdk_device_tool_get_axes:
- * @tool: a #GdkDeviceTool
+ * gdk_device_tool_get_axes: (attributes org.gtk.Method.get_property=axes)
+ * @tool: a `GdkDeviceTool`
  *
  * Gets the axes of the tool.
  *

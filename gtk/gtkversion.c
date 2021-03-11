@@ -27,20 +27,11 @@
 #include "gtkversion.h"
 
 /**
- * SECTION:gtkfeatures
- * @Short_description: Variables and functions to check the GTK version
- * @Title: Version Information
- *
- * GTK provides version information, primarily useful in configure checks
- * for builds that have a configure script. Applications will not typically
- * use the features described here.
- */
-
-/**
  * gtk_get_major_version:
  *
  * Returns the major version number of the GTK library.
- * (e.g. in GTK version 3.1.5 this is 3.)
+ *
+ * For example, in GTK version 3.1.5 this is 3.
  *
  * This function is in the library, so it represents the GTK library
  * your code is running against. Contrast with the %GTK_MAJOR_VERSION
@@ -59,7 +50,8 @@ gtk_get_major_version (void)
  * gtk_get_minor_version:
  *
  * Returns the minor version number of the GTK library.
- * (e.g. in GTK version 3.1.5 this is 1.)
+ *
+ * For example, in GTK version 3.1.5 this is 1.
  *
  * This function is in the library, so it represents the GTK library
  * your code is are running against. Contrast with the
@@ -78,7 +70,8 @@ gtk_get_minor_version (void)
  * gtk_get_micro_version:
  *
  * Returns the micro version number of the GTK library.
- * (e.g. in GTK version 3.1.5 this is 5.)
+ *
+ * For example, in GTK version 3.1.5 this is 5.
  *
  * This function is in the library, so it represents the GTK library
  * your code is are running against. Contrast with the
@@ -96,10 +89,9 @@ gtk_get_micro_version (void)
 /**
  * gtk_get_binary_age:
  *
- * Returns the binary age as passed to `libtool`
- * when building the GTK library the process is running against.
- * If `libtool` means nothing to you, don't
- * worry about it.
+ * Returns the binary age as passed to `libtool`.
+ *
+ * If `libtool` means nothing to you, don't worry about it.
  *
  * Returns: the binary age of the GTK library
  */
@@ -112,10 +104,9 @@ gtk_get_binary_age (void)
 /**
  * gtk_get_interface_age:
  *
- * Returns the interface age as passed to `libtool`
- * when building the GTK library the process is running against.
- * If `libtool` means nothing to you, don't
- * worry about it.
+ * Returns the interface age as passed to `libtool`.
+ *
+ * If `libtool` means nothing to you, don't worry about it.
  *
  * Returns: the interface age of the GTK library
  */
@@ -132,12 +123,13 @@ gtk_get_interface_age (void)
  * @required_micro: the required micro version
  *
  * Checks that the GTK library in use is compatible with the
- * given version. Generally you would pass in the constants
- * %GTK_MAJOR_VERSION, %GTK_MINOR_VERSION, %GTK_MICRO_VERSION
- * as the three arguments to this function; that produces
- * a check that the library in use is compatible with
- * the version of GTK the application or module was compiled
- * against.
+ * given version.
+ *
+ * Generally you would pass in the constants %GTK_MAJOR_VERSION,
+ * %GTK_MINOR_VERSION, %GTK_MICRO_VERSION as the three arguments
+ * to this function; that produces a check that the library in
+ * use is compatible with the version of GTK the application or
+ * module was compiled against.
  *
  * Compatibility is defined by two things: first the version
  * of the running library is newer than the version

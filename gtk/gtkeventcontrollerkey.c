@@ -18,14 +18,11 @@
  */
 
 /**
- * SECTION:gtkeventcontrollerkey
- * @Short_description: Event controller for key events
- * @Title: GtkEventControllerKey
- * @See_also: #GtkEventController
+ * GtkEventControllerKey:
  *
- * #GtkEventControllerKey is an event controller meant for situations
- * where you need access to key events.
- **/
+ * `GtkEventControllerKey` is an event controller that provides access
+ * to key events.
+ */
 
 #include "config.h"
 
@@ -199,7 +196,7 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
    * @keycode: the raw code of the pressed key.
    * @state: the bitmask, representing the state of modifier keys and pointer buttons. See #GdkModifierType.
    *
-   * This signal is emitted whenever a key is pressed.
+   * Emitted whenever a key is pressed.
    *
    * Returns: %TRUE if the key press was handled, %FALSE otherwise.
    */
@@ -221,7 +218,7 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
    * @keycode: the raw code of the released key.
    * @state: the bitmask, representing the state of modifier keys and pointer buttons. See #GdkModifierType.
    *
-   * This signal is emitted whenever a key is released.
+   * Emitted whenever a key is released.
    */
   signals[KEY_RELEASED] =
     g_signal_new (I_("key-released"),
@@ -241,8 +238,7 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
    * @state: the bitmask, representing the new state of modifier keys and
    *   pointer buttons. See #GdkModifierType.
    *
-   * This signal is emitted whenever the state of modifier keys and pointer
-   * buttons change.
+   * Emitted whenever the state of modifier keys and pointer buttons change.
    */
   signals[MODIFIERS] =
     g_signal_new (I_("modifiers"),
@@ -260,10 +256,11 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
    * GtkEventControllerKey::im-update:
    * @controller: the object which received the signal
    *
-   * This signal is emitted whenever the input method context filters away a
-   * keypress and prevents the @controller receiving it. See
-   * gtk_event_controller_key_set_im_context() and
-   * gtk_im_context_filter_keypress().
+   * Emitted whenever the input method context filters away
+   * a keypress and prevents the @controller receiving it.
+   *
+   * See [method@Gtk.EventControllerKey.set_im_context] and
+   * [method@Gtk.IMContext.filter_keypress].
    */
   signals[IM_UPDATE] =
     g_signal_new (I_("im-update"),
@@ -285,7 +282,7 @@ gtk_event_controller_key_init (GtkEventControllerKey *controller)
  *
  * Creates a new event controller that will handle key events.
  *
- * Returns: a new #GtkEventControllerKey
+ * Returns: a new `GtkEventControllerKey`
  **/
 GtkEventController *
 gtk_event_controller_key_new (void)
@@ -295,11 +292,11 @@ gtk_event_controller_key_new (void)
 
 /**
  * gtk_event_controller_key_set_im_context:
- * @controller: a #GtkEventControllerKey
- * @im_context: a #GtkIMContext
+ * @controller: a `GtkEventControllerKey`
+ * @im_context: a `GtkIMContext`
  *
  * Sets the input method context of the key @controller.
- **/
+ */
 void
 gtk_event_controller_key_set_im_context (GtkEventControllerKey *controller,
                                          GtkIMContext          *im_context)
@@ -315,11 +312,11 @@ gtk_event_controller_key_set_im_context (GtkEventControllerKey *controller,
 
 /**
  * gtk_event_controller_key_get_im_context:
- * @controller: a #GtkEventControllerKey
+ * @controller: a `GtkEventControllerKey`
  *
  * Gets the input method context of the key @controller.
  *
- * Returns: (transfer none): the #GtkIMContext
+ * Returns: (transfer none): the `GtkIMContext`
  **/
 GtkIMContext *
 gtk_event_controller_key_get_im_context (GtkEventControllerKey *controller)
@@ -331,20 +328,18 @@ gtk_event_controller_key_get_im_context (GtkEventControllerKey *controller)
 
 /**
  * gtk_event_controller_key_forward:
- * @controller: a #GtkEventControllerKey
- * @widget: a #GtkWidget
+ * @controller: a `GtkEventControllerKey`
+ * @widget: a `GtkWidget`
  *
  * Forwards the current event of this @controller to a @widget.
  *
  * This function can only be used in handlers for the
- * #GtkEventControllerKey::key-pressed,
- * #GtkEventControllerKey::key-released
- * or
- * #GtkEventControllerKey::modifiers
- * signals.
+ * [signal@Gtk.EventControllerKey::key-pressed],
+ * [signal@Gtk.EventControllerKey::key-released]
+ * or [signal@Gtk.EventControllerKey::modifiers] signals.
  *
  * Returns: whether the @widget handled the event
- **/
+ */
 gboolean
 gtk_event_controller_key_forward (GtkEventControllerKey *controller,
                                   GtkWidget             *widget)
@@ -373,13 +368,14 @@ gtk_event_controller_key_forward (GtkEventControllerKey *controller,
 
 /**
  * gtk_event_controller_key_get_group:
- * @controller: a #GtkEventControllerKey
+ * @controller: a `GtkEventControllerKey`
  *
  * Gets the key group of the current event of this @controller.
- * See gdk_key_event_get_group().
+ *
+ * See [method@Gdk.KeyEvent.get_layout].
  *
  * Returns: the key group
- **/
+ */
 guint
 gtk_event_controller_key_get_group (GtkEventControllerKey *controller)
 {

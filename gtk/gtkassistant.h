@@ -54,8 +54,9 @@ G_BEGIN_DECLS
  *  appropriate. No buttons will be shown, and the application must
  *  add its own buttons through gtk_assistant_add_action_widget().
  *
- * An enum for determining the page role inside the #GtkAssistant. It's
- * used to handle buttons sensitivity and visibility.
+ * Determines the page role inside a `GtkAssistant`.
+ *
+ * The role is used to handle buttons sensitivity and visibility.
  *
  * Note that an assistant needs to end its page flow with a page of type
  * %GTK_ASSISTANT_PAGE_CONFIRM, %GTK_ASSISTANT_PAGE_SUMMARY or
@@ -87,12 +88,14 @@ typedef struct _GtkAssistantPage GtkAssistantPage;
  * @current_page: The page number used to calculate the next page.
  * @data: (closure): user data.
  *
- * A function used by gtk_assistant_set_forward_page_func() to know which
- * is the next page given a current one. It’s called both for computing the
- * next page when the user presses the “forward” button and for handling
- * the behavior of the “last” button.
+ * Type of callback used to calculate the next page in a `GtkAssistant`.
  *
- * Returns: The next page number.
+ * It’s called both for computing the next page when the user presses the
+ * “forward” button and for handling the behavior of the “last” button.
+ *
+ * See [method@Gtk.Assistant.set_forward_page_func].
+ *
+ * Returns: The next page number
  */
 typedef int (*GtkAssistantPageFunc) (int current_page, gpointer data);
 

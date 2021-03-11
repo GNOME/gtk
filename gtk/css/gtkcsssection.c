@@ -38,11 +38,11 @@ G_DEFINE_BOXED_TYPE (GtkCssSection, gtk_css_section, gtk_css_section_ref, gtk_cs
  * @start: The start location
  * @end: The end location
  *
- * Creates a new #GtkCssSection referring to the section
- * in the given @file from the @start location to the
- * @end location.
+ * Creates a new `GtkCssSection` referring to the section
+ * in the given `file` from the `start` location to the
+ * `end` location.
  *
- * Returns: a new #GtkCssSection
+ * Returns: (transfer full): a new `GtkCssSection`
  **/
 GtkCssSection *
 gtk_css_section_new (GFile                *file,
@@ -68,11 +68,11 @@ gtk_css_section_new (GFile                *file,
 
 /**
  * gtk_css_section_ref:
- * @section: a #GtkCssSection
+ * @section: a `GtkCssSection`
  *
- * Increments the reference count on @section.
+ * Increments the reference count on `section`.
  *
- * Returns: @section itself.
+ * Returns: (transfer full): the CSS section itself.
  **/
 GtkCssSection *
 gtk_css_section_ref (GtkCssSection *section)
@@ -86,9 +86,9 @@ gtk_css_section_ref (GtkCssSection *section)
 
 /**
  * gtk_css_section_unref:
- * @section: a #GtkCssSection
+ * @section: (transfer full): a `GtkCssSection`
  *
- * Decrements the reference count on @section, freeing the
+ * Decrements the reference count on `section`, freeing the
  * structure if the reference count reaches 0.
  **/
 void
@@ -112,15 +112,16 @@ gtk_css_section_unref (GtkCssSection *section)
  * gtk_css_section_get_parent:
  * @section: the section
  *
- * Gets the parent section for the given @section. The parent section is
- * the section that contains this @section. A special case are sections of
- * type #GTK_CSS_SECTION_DOCUMENT. Their parent will either be %NULL
- * if they are the original CSS document that was loaded by
- * gtk_css_provider_load_from_file() or a section of type
- * #GTK_CSS_SECTION_IMPORT if it was loaded with an import rule from
+ * Gets the parent section for the given `section`.
+ *
+ * The parent section is the section that contains this `section`. A special
+ * case are sections of  type `GTK_CSS_SECTION_DOCUMEN`T. Their parent will
+ * either be `NULL` if they are the original CSS document that was loaded by
+ * [method@Gtk.CssProvider.load_from_file] or a section of type
+ * `GTK_CSS_SECTION_IMPORT` if it was loaded with an `@import` rule from
  * a different file.
  *
- * Returns: (nullable) (transfer none): the parent section or %NULL if none
+ * Returns: (nullable) (transfer none): the parent section
  **/
 GtkCssSection *
 gtk_css_section_get_parent (const GtkCssSection *section)
@@ -134,12 +135,13 @@ gtk_css_section_get_parent (const GtkCssSection *section)
  * gtk_css_section_get_file:
  * @section: the section
  *
- * Gets the file that @section was parsed from. If no such file exists,
- * for example because the CSS was loaded via
- * @gtk_css_provider_load_from_data(), then %NULL is returned.
+ * Gets the file that @section was parsed from.
  *
- * Returns: (transfer none): the #GFile that @section was parsed from
- *     or %NULL if @section was parsed from other data
+ * If no such file exists, for example because the CSS was loaded via
+ * [method@Gtk.CssProvider.load_from_data], then `NULL` is returned.
+ *
+ * Returns: (transfer none): the `GFile` from which the `section`
+ *   was parsed
  **/
 GFile *
 gtk_css_section_get_file (const GtkCssSection *section)
@@ -188,9 +190,10 @@ gtk_css_section_get_end_location (const GtkCssSection *section)
  * @section: a section
  * @string: a #GString to print to
  *
- * Prints the @section into @string in a human-readable form. This
- * is a form like `gtk.css:32:1-23` to denote line 32, characters
- * 1 to 23 in the file gtk.css.
+ * Prints the `section` into `string` in a human-readable form.
+ *
+ * This is a form like `gtk.css:32:1-23` to denote line 32, characters
+ * 1 to 23 in the file `gtk.css`.
  **/
 void
 gtk_css_section_print (const GtkCssSection  *section,
@@ -235,7 +238,7 @@ gtk_css_section_print (const GtkCssSection  *section,
  * @section: a #GtkCssSection
  *
  * Prints the section into a human-readable text form using
- * gtk_css_section_print().
+ * [method@Gtk.CssSection.print].
  *
  * Returns: (transfer full): A new string.
  **/

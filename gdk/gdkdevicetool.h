@@ -32,11 +32,6 @@ G_BEGIN_DECLS
 #define GDK_DEVICE_TOOL(o)      (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_DEVICE_TOOL, GdkDeviceTool))
 #define GDK_IS_DEVICE_TOOL(o)   (G_TYPE_CHECK_INSTANCE_TYPE ((o), GDK_TYPE_DEVICE_TOOL))
 
-/**
- * GdkDeviceTool:
- *
- * A physical tool associated to a #GdkDevice.
- */
 typedef struct _GdkDeviceTool GdkDeviceTool;
 
 /**

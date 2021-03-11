@@ -25,11 +25,6 @@ G_BEGIN_DECLS
 #define GTK_TYPE_GRID_LAYOUT (gtk_grid_layout_get_type ())
 #define GTK_TYPE_GRID_LAYOUT_CHILD (gtk_grid_layout_child_get_type ())
 
-/**
- * GtkGridLayout:
- *
- * Layout manager for grid-like widgets.
- */
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkGridLayout, gtk_grid_layout, GTK, GRID_LAYOUT, GtkLayoutManager)
 
@@ -69,11 +64,6 @@ void                    gtk_grid_layout_set_baseline_row                (GtkGrid
 GDK_AVAILABLE_IN_ALL
 int                     gtk_grid_layout_get_baseline_row                (GtkGridLayout       *grid);
 
-/**
- * GtkGridLayoutChild:
- *
- * Layout properties for children of #GtkGridLayout.
- */
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkGridLayoutChild, gtk_grid_layout_child, GTK, GRID_LAYOUT_CHILD, GtkLayoutChild)
 

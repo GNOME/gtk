@@ -28,12 +28,9 @@
 #include "gtkintl.h"
 
 /**
- * SECTION:gtktreemodel
- * @Title: GtkTreeModel
- * @Short_description: The tree interface used by GtkTreeView
- * @See_also: #GtkTreeView, #GtkTreeStore, #GtkListStore,
- *     [GtkTreeView drag-and-drop][gtk4-GtkTreeView-drag-and-drop]
- *     #GtkTreeSortable
+ * GtkTreeModel:
+ *
+ * The tree interface used by GtkTreeView
  *
  * The #GtkTreeModel interface defines a generic tree interface for
  * use by the #GtkTreeView widget. It is an abstract interface, and
@@ -63,20 +60,20 @@
  * Models are accessed on a node/column level of granularity. One can
  * query for the value of a model at a certain node and a certain
  * column on that node. There are two structures used to reference a
- * particular node in a model. They are the #GtkTreePath-struct and
- * the #GtkTreeIter-struct (“iter” is short for iterator). Most of the
- * interface consists of operations on a #GtkTreeIter-struct.
+ * particular node in a model. They are the [struct@Gtk.TreePath] and
+ * the [struct@Gtk.TreeIter] (“iter” is short for iterator). Most of the
+ * interface consists of operations on a [struct@Gtk.TreeIter].
  *
  * A path is essentially a potential node. It is a location on a model
  * that may or may not actually correspond to a node on a specific
- * model. The #GtkTreePath-struct can be converted into either an
+ * model. A [struct@Gtk.TreePath] can be converted into either an
  * array of unsigned integers or a string. The string form is a list
  * of numbers separated by a colon. Each number refers to the offset
  * at that level. Thus, the path `0` refers to the root
  * node and the path `2:4` refers to the fifth child of
  * the third node.
  *
- * By contrast, a #GtkTreeIter-struct is a reference to a specific node on
+ * By contrast, a [struct@Gtk.TreeIter] is a reference to a specific node on
  * a specific model. It is a generic struct with an integer and three
  * generic pointers. These are filled in by the model in a model-specific
  * way. One can convert a path to an iterator by calling
@@ -113,9 +110,9 @@
  * easier, the second is much more common, as you often get paths from
  * callbacks.
  *
- * ## Acquiring a #GtkTreeIter-struct
+ * ## Acquiring a `GtkTreeIter`
  *
- * |[<!-- language="C" -->
+ * ```c
  * // Three ways of getting the iter pointing to the location
  * GtkTreePath *path;
  * GtkTreeIter iter;
@@ -140,7 +137,7 @@
  * parent_iter = iter;
  * gtk_tree_model_iter_nth_child (model, &iter,
  *                                &parent_iter, 5);
- * ]|
+ * ```
  *
  * This second example shows a quick way of iterating through a list
  * and getting a string and an integer from each row. The
@@ -148,9 +145,9 @@
  * shown, as it is specific to the #GtkListStore. For information on
  * how to write such a function, see the #GtkListStore documentation.
  *
- * ## Reading data from a #GtkTreeModel
+ * ## Reading data from a `GtkTreeModel`
  *
- * |[<!-- language="C" -->
+ * ```c
  * enum
  * {
  *   STRING_COLUMN,
@@ -198,7 +195,7 @@
  *                                      &iter);
  *    row_count++;
  *  }
- * ]|
+ * ```
  *
  * The #GtkTreeModel interface contains two methods for reference
  * counting: gtk_tree_model_ref_node() and gtk_tree_model_unref_node().
@@ -252,6 +249,11 @@ enum {
 
 static guint tree_model_signals[LAST_SIGNAL] = { 0 };
 
+/**
+ * GtkTreePath:
+ *
+ * An opaque structure representing a path to a row in a model.
+ */
 struct _GtkTreePath
 {
   int depth;    /* Number of elements */

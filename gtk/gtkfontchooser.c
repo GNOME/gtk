@@ -27,15 +27,14 @@
 #include "gtkprivate.h"
 
 /**
- * SECTION:gtkfontchooser
- * @Short_description: Interface implemented by widgets displaying fonts
- * @Title: GtkFontChooser
- * @See_also: #GtkFontChooserDialog, #GtkFontChooserWidget, #GtkFontButton
+ * GtkFontChooser:
  *
- * #GtkFontChooser is an interface that can be implemented by widgets
- * displaying the list of fonts. In GTK, the main objects
- * that implement this interface are #GtkFontChooserWidget,
- * #GtkFontChooserDialog and #GtkFontButton.
+ * `GtkFontChooser` is an interface that can be implemented by widgets
+ * for choosing fonts.
+ *
+ * In GTK, the main objects that implement this interface are
+ * [class@Gtk.FontChooserWidget], [class@Gtk.FontChooserDialog] and
+ * [class@Gtk.FontButton].
  */
 
 enum
@@ -53,7 +52,7 @@ static void
 gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
 {
   /**
-   * GtkFontChooser:font:
+   * GtkFontChooser:font: (attributes org.gtk.Property.get=gtk_font_chooser_get_font org.gtk.Property.set=gtk_font_chooser_set_font)
    *
    * The font description as a string, e.g. "Sans Italic 12".
    */
@@ -66,9 +65,9 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                            GTK_PARAM_READWRITE));
 
   /**
-   * GtkFontChooser:font-desc:
+   * GtkFontChooser:font-desc: (attributes org.gtk.Property.get=gtk_font_chooser_get_font_desc org.gtk.Property.set=gtk_font_chooser_set_font_desc)
    *
-   * The font description as a #PangoFontDescription.
+   * The font description as a `PangoFontDescription`.
    */
   g_object_interface_install_property
      (iface,
@@ -79,7 +78,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                           GTK_PARAM_READWRITE));
 
   /**
-   * GtkFontChooser:preview-text:
+   * GtkFontChooser:preview-text: (attributes org.gtk.Property.get=gtk_font_chooser_get_preview_text org.gtk.Property.set=gtk_font_chooser_set_preview_text)
    *
    * The string with which to preview the font.
    */
@@ -92,7 +91,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                           GTK_PARAM_READWRITE));
 
   /**
-   * GtkFontChooser:show-preview-entry:
+   * GtkFontChooser:show-preview-entry: (attributes org.gtk.Property.get=gtk_font_chooser_get_show_preview_entry org.gtk.Property.set=gtk_font_chooser_set_show_preview_entry)
    *
    * Whether to show an entry to change the preview text.
    */
@@ -105,7 +104,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkFontChooser:level:
+   * GtkFontChooser:level: (attributes org.gtk.Property.get=gtk_font_chooser_get_level org.gtk.Property.set=gtk_font_chooser_set_level)
    *
    * The level of granularity to offer for selecting fonts.
    */
@@ -121,9 +120,11 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkFontChooser:font-features:
+   * GtkFontChooser:font-features: (attributes org.gtk.Property.get=gtk_font_chooser_get_font_features)
    *
-   * The selected font features, in a format that is compatible with
+   * The selected font features.
+   *
+   * The format of the string is compatible with
    * CSS and with Pango attributes.
    */
   g_object_interface_install_property
@@ -135,11 +136,9 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                           GTK_PARAM_READABLE));
 
   /**
-   * GtkFontChooser:language:
+   * GtkFontChooser:language: (attributes org.gtk.Property.get=gtk_font_chooser_get_language org.gtk.Property.set=gtk_font_chooser_set_language)
    *
-   * The language for which the #GtkFontChooser:font-features were
-   * selected, in a format that is compatible with CSS and with Pango
-   * attributes.
+   * The language for which the font features were selected.
    */
   g_object_interface_install_property
      (iface,
@@ -155,6 +154,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
    * @fontname: the font name
    *
    * Emitted when a font is activated.
+   *
    * This usually happens when the user double clicks an item,
    * or an item is selected and the user presses one of the keys
    * Space, Shift+Space, Return or Enter.
@@ -172,16 +172,17 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
 
 /**
  * gtk_font_chooser_get_font_family:
- * @fontchooser: a #GtkFontChooser
+ * @fontchooser: a `GtkFontChooser`
  *
- * Gets the #PangoFontFamily representing the selected font family.
+ * Gets the `PangoFontFamily` representing the selected font family.
+ *
  * Font families are a collection of font faces.
  *
  * If the selected font is not installed, returns %NULL.
  *
- * Returns: (nullable) (transfer none): A #PangoFontFamily representing the
- *     selected font family, or %NULL. The returned object is owned by @fontchooser
- *     and must not be modified or freed.
+ * Returns: (nullable) (transfer none): A `PangoFontFamily` representing the
+ *   selected font family, or %NULL. The returned object is owned by @fontchooser
+ *   and must not be modified or freed.
  */
 PangoFontFamily *
 gtk_font_chooser_get_font_family (GtkFontChooser *fontchooser)
@@ -193,16 +194,16 @@ gtk_font_chooser_get_font_family (GtkFontChooser *fontchooser)
 
 /**
  * gtk_font_chooser_get_font_face:
- * @fontchooser: a #GtkFontChooser
+ * @fontchooser: a `GtkFontChooser`
  *
- * Gets the #PangoFontFace representing the selected font group
+ * Gets the `PangoFontFace` representing the selected font group
  * details (i.e. family, slant, weight, width, etc).
  *
  * If the selected font is not installed, returns %NULL.
  *
- * Returns: (nullable) (transfer none): A #PangoFontFace representing the
- *     selected font group details, or %NULL. The returned object is owned by
- *     @fontchooser and must not be modified or freed.
+ * Returns: (nullable) (transfer none): A `PangoFontFace` representing the
+ *   selected font group details, or %NULL. The returned object is owned by
+ *   @fontchooser and must not be modified or freed.
  */
 PangoFontFace *
 gtk_font_chooser_get_font_face (GtkFontChooser *fontchooser)
@@ -214,12 +215,12 @@ gtk_font_chooser_get_font_face (GtkFontChooser *fontchooser)
 
 /**
  * gtk_font_chooser_get_font_size:
- * @fontchooser: a #GtkFontChooser
+ * @fontchooser: a `GtkFontChooser`
  *
  * The selected font size.
  *
  * Returns: A n integer representing the selected font size,
- *     or -1 if no font size is selected.
+ *   or -1 if no font size is selected.
  */
 int
 gtk_font_chooser_get_font_size (GtkFontChooser *fontchooser)
@@ -230,23 +231,23 @@ gtk_font_chooser_get_font_size (GtkFontChooser *fontchooser)
 }
 
 /**
- * gtk_font_chooser_get_font:
- * @fontchooser: a #GtkFontChooser
+ * gtk_font_chooser_get_font: (attributes org.gtk.Method.get_property=font)
+ * @fontchooser: a `GtkFontChooser`
  *
  * Gets the currently-selected font name.
  *
  * Note that this can be a different string than what you set with
- * gtk_font_chooser_set_font(), as the font chooser widget may
+ * [method@Gtk.FontChooser.set_font], as the font chooser widget may
  * normalize font names and thus return a string with a different
  * structure. For example, “Helvetica Italic Bold 12” could be
  * normalized to “Helvetica Bold Italic 12”.
  *
- * Use pango_font_description_equal() if you want to compare two
+ * Use [method@Pango.FontDescription.equal] if you want to compare two
  * font descriptions.
  *
  * Returns: (nullable) (transfer full): A string with the name
- *     of the current font, or %NULL if  no font is selected. You must
- *     free this string with g_free().
+ *   of the current font, or %NULL if  no font is selected. You must
+ *   free this string with g_free().
  */
 char *
 gtk_font_chooser_get_font (GtkFontChooser *fontchooser)
@@ -262,8 +263,8 @@ gtk_font_chooser_get_font (GtkFontChooser *fontchooser)
 }
 
 /**
- * gtk_font_chooser_set_font:
- * @fontchooser: a #GtkFontChooser
+ * gtk_font_chooser_set_font: (attributes org.gtk.Method.set_property=font)
+ * @fontchooser: a `GtkFontChooser`
  * @fontname: a font name like “Helvetica 12” or “Times Bold 18”
  *
  * Sets the currently-selected font.
@@ -279,22 +280,22 @@ gtk_font_chooser_set_font (GtkFontChooser *fontchooser,
 }
 
 /**
- * gtk_font_chooser_get_font_desc:
- * @fontchooser: a #GtkFontChooser
+ * gtk_font_chooser_get_font_desc: (attributes org.gtk.Method.get_property=font-desc)
+ * @fontchooser: a `GtkFontChooser`
  *
  * Gets the currently-selected font.
  *
  * Note that this can be a different string than what you set with
- * gtk_font_chooser_set_font(), as the font chooser widget may
+ * [method@Gtk.FontChooser.set_font], as the font chooser widget may
  * normalize font names and thus return a string with a different
  * structure. For example, “Helvetica Italic Bold 12” could be
  * normalized to “Helvetica Bold Italic 12”.
  *
- * Use pango_font_description_equal() if you want to compare two
+ * Use [method@Pango.FontDescription.equal] if you want to compare two
  * font descriptions.
  *
- * Returns: (nullable) (transfer full): A #PangoFontDescription for the
- *     current font, or %NULL if  no font is selected.
+ * Returns: (nullable) (transfer full): A `PangoFontDescription` for the
+ *   current font, or %NULL if  no font is selected.
  */
 PangoFontDescription *
 gtk_font_chooser_get_font_desc (GtkFontChooser *fontchooser)
@@ -309,9 +310,9 @@ gtk_font_chooser_get_font_desc (GtkFontChooser *fontchooser)
 }
 
 /**
- * gtk_font_chooser_set_font_desc:
- * @fontchooser: a #GtkFontChooser
- * @font_desc: a #PangoFontDescription
+ * gtk_font_chooser_set_font_desc: (attributes org.gtk.Method.set_property=font-desc)
+ * @fontchooser: a `GtkFontChooser`
+ * @font_desc: a `PangoFontDescription`
  *
  * Sets the currently-selected font from @font_desc.
  */
@@ -326,13 +327,12 @@ gtk_font_chooser_set_font_desc (GtkFontChooser             *fontchooser,
 }
 
 /**
- * gtk_font_chooser_get_preview_text:
- * @fontchooser: a #GtkFontChooser
+ * gtk_font_chooser_get_preview_text: (attributes org.gtk.Method.get_property=preview-text)
+ * @fontchooser: a `GtkFontChooser`
  *
  * Gets the text displayed in the preview area.
  *
- * Returns: (transfer full): the text displayed in the
- *     preview area
+ * Returns: (transfer full): the text displayed in the preview area
  */
 char *
 gtk_font_chooser_get_preview_text (GtkFontChooser *fontchooser)
@@ -347,11 +347,12 @@ gtk_font_chooser_get_preview_text (GtkFontChooser *fontchooser)
 }
 
 /**
- * gtk_font_chooser_set_preview_text:
- * @fontchooser: a #GtkFontChooser
+ * gtk_font_chooser_set_preview_text: (attributes org.gtk.Method.set_property=preview-text)
+ * @fontchooser: a `GtkFontChooser`
  * @text: (transfer none): the text to display in the preview area
  *
  * Sets the text displayed in the preview area.
+ *
  * The @text is used to show how the selected font looks.
  */
 void
@@ -365,13 +366,12 @@ gtk_font_chooser_set_preview_text (GtkFontChooser *fontchooser,
 }
 
 /**
- * gtk_font_chooser_get_show_preview_entry:
- * @fontchooser: a #GtkFontChooser
+ * gtk_font_chooser_get_show_preview_entry: (attributes org.gtk.Method.get_property=show-preview-entry)
+ * @fontchooser: a `GtkFontChooser`
  *
  * Returns whether the preview entry is shown or not.
  *
- * Returns: %TRUE if the preview entry is shown
- *     or %FALSE if it is hidden.
+ * Returns: %TRUE if the preview entry is shown or %FALSE if it is hidden.
  */
 gboolean
 gtk_font_chooser_get_show_preview_entry (GtkFontChooser *fontchooser)
@@ -386,8 +386,8 @@ gtk_font_chooser_get_show_preview_entry (GtkFontChooser *fontchooser)
 }
 
 /**
- * gtk_font_chooser_set_show_preview_entry:
- * @fontchooser: a #GtkFontChooser
+ * gtk_font_chooser_set_show_preview_entry: (attributes org.gtk.Method.set_property=show-preview-entry)
+ * @fontchooser: a `GtkFontChooser`
  * @show_preview_entry: whether to show the editable preview entry or not
  *
  * Shows or hides the editable preview entry.
@@ -404,8 +404,8 @@ gtk_font_chooser_set_show_preview_entry (GtkFontChooser *fontchooser,
 
 /**
  * gtk_font_chooser_set_filter_func:
- * @fontchooser: a #GtkFontChooser
- * @filter: (allow-none): a #GtkFontFilterFunc, or %NULL
+ * @fontchooser: a `GtkFontChooser`
+ * @filter: (allow-none): a `GtkFontFilterFunc`, or %NULL
  * @user_data: (closure): data to pass to @filter
  * @destroy: function to call to free @data when it is no longer needed
  *
@@ -437,14 +437,15 @@ _gtk_font_chooser_font_activated (GtkFontChooser *chooser,
 
 /**
  * gtk_font_chooser_set_font_map:
- * @fontchooser: a #GtkFontChooser
- * @fontmap: (allow-none): a #PangoFontMap
+ * @fontchooser: a `GtkFontChooser`
+ * @fontmap: (allow-none): a `PangoFontMap`
  *
  * Sets a custom font map to use for this font chooser widget.
+ *
  * A custom font map can be used to present application-specific
  * fonts instead of or in addition to the normal system fonts.
  *
- * |[<!-- language="C" -->
+ * ```c
  * FcConfig *config;
  * PangoFontMap *fontmap;
  *
@@ -455,15 +456,15 @@ _gtk_font_chooser_font_activated (GtkFontChooser *chooser,
  * pango_fc_font_map_set_config (PANGO_FC_FONT_MAP (fontmap), config);
  *
  * gtk_font_chooser_set_font_map (font_chooser, fontmap);
- * ]|
+ * ```
  *
- * Note that other GTK widgets will only be able to use the application-specific
- * font if it is present in the font map they use:
+ * Note that other GTK widgets will only be able to use the
+ * application-specific font if it is present in the font map they use:
  *
- * |[
+ * ```c
  * context = gtk_widget_get_pango_context (label);
  * pango_context_set_font_map (context, fontmap);
- * ]|
+ * ```
  */
 void
 gtk_font_chooser_set_font_map (GtkFontChooser *fontchooser,
@@ -478,12 +479,12 @@ gtk_font_chooser_set_font_map (GtkFontChooser *fontchooser,
 
 /**
  * gtk_font_chooser_get_font_map:
- * @fontchooser: a #GtkFontChooser
+ * @fontchooser: a `GtkFontChooser`
  *
  * Gets the custom font map of this font chooser widget,
  * or %NULL if it does not have one.
  *
- * Returns: (nullable) (transfer full): a #PangoFontMap, or %NULL
+ * Returns: (nullable) (transfer full): a `PangoFontMap`, or %NULL
  */
 PangoFontMap *
 gtk_font_chooser_get_font_map (GtkFontChooser *fontchooser)
@@ -499,8 +500,8 @@ gtk_font_chooser_get_font_map (GtkFontChooser *fontchooser)
 }
 
 /**
- * gtk_font_chooser_set_level:
- * @fontchooser: a #GtkFontChooser
+ * gtk_font_chooser_set_level: (attributes org.gtk.Method.set_property=level)
+ * @fontchooser: a `GtkFontChooser`
  * @level: the desired level of granularity
  *
  * Sets the desired level of granularity for selecting fonts.
@@ -515,8 +516,8 @@ gtk_font_chooser_set_level (GtkFontChooser      *fontchooser,
 }
 
 /**
- * gtk_font_chooser_get_level:
- * @fontchooser: a #GtkFontChooser
+ * gtk_font_chooser_get_level: (attributes org.gtk.Method.get_property=level)
+ * @fontchooser: a `GtkFontChooser`
  *
  * Returns the current level of granularity for selecting fonts.
  *
@@ -535,8 +536,8 @@ gtk_font_chooser_get_level (GtkFontChooser *fontchooser)
 }
 
 /**
- * gtk_font_chooser_get_font_features:
- * @fontchooser: a #GtkFontChooser
+ * gtk_font_chooser_get_font_features: (attributes org.gtk.Method.get_property=font-features)
+ * @fontchooser: a `GtkFontChooser`
  *
  * Gets the currently-selected font features.
  *
@@ -555,8 +556,8 @@ gtk_font_chooser_get_font_features (GtkFontChooser *fontchooser)
 }
 
 /**
- * gtk_font_chooser_get_language:
- * @fontchooser: a #GtkFontChooser
+ * gtk_font_chooser_get_language: (attributes org.gtk.Method.get_property=language)
+ * @fontchooser: a `GtkFontChooser`
  *
  * Gets the language that is used for font features.
  *
@@ -575,8 +576,8 @@ gtk_font_chooser_get_language (GtkFontChooser *fontchooser)
 }
 
 /**
- * gtk_font_chooser_set_language:
- * @fontchooser: a #GtkFontChooser
+ * gtk_font_chooser_set_language: (attributes org.gtk.Method.set_property=language)
+ * @fontchooser: a `GtkFontChooser`
  * @language: a language
  *
  * Sets the language to use for font features.

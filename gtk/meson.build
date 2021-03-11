@@ -778,6 +778,7 @@ if os_unix
 endif
 
 if os_win32
+  gtk_win32_print_headers = []
   gtk_win32_print_sources = files([
     'gtkprint-win32.c',
     'gtkprintoperation-win32.c',
@@ -1152,8 +1153,9 @@ if build_gir
 
   if pango_dep.type_name() == 'internal'
     gdk_gir_inc += subproject('pango').get_variable('pango_gir').get(0)
+    gdk_gir_inc += subproject('pango').get_variable('pangocairo_gir').get(0)
   else
-    gdk_gir_inc += 'Pango-1.0'
+    gdk_gir_inc += ['Pango-1.0', 'PangoCairo-1.0']
   endif
 
   gdk_gir = gnome.generate_gir(libgtk,
@@ -1242,11 +1244,11 @@ if build_gir
   ]
 
   if os_unix
-    gtk_introspection_sources += gtk_unix_print_sources
+    gtk_introspection_sources += [ gtk_unix_print_headers, gtk_unix_print_sources ]
   endif
 
   if os_win32
-    gtk_introspection_sources += gtk_win32_print_sources
+    gtk_introspection_sources += [ gtk_win32_print_headers, gtk_win32_print_sources ]
   endif
 
   gtk_gir = gnome.generate_gir(libgtk,

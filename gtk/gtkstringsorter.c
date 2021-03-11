@@ -26,17 +26,16 @@
 #include "gtktypebuiltins.h"
 
 /**
- * SECTION:gtkstringsorter
- * @Title: GtkStringSorter
- * @Short_description: Sort by comparing strings
- * @See_also: #GtkExpression
+ * GtkStringSorter:
  *
- * GtkStringSorter is a #GtkSorter that compares strings. It does the
- * comparison in a linguistically correct way using the current locale by
- * normalizing Unicode strings and possibly case-folding them before
- * performing the comparison.
+ * `GtkStringSorter` is a `GtkSorter` that compares strings.
  *
- * To obtain the strings to compare, this sorter evaluates a #GtkExpression.
+ * It does the comparison in a linguistically correct way using the
+ * current locale by normalizing Unicode strings and possibly case-folding
+ * them before performing the comparison.
+ *
+ * To obtain the strings to compare, this sorter evaluates a
+ * [class@Gtk.Expression].
  */
 
 struct _GtkStringSorter
@@ -287,9 +286,9 @@ gtk_string_sorter_class_init (GtkStringSorterClass *class)
   object_class->dispose = gtk_string_sorter_dispose;
 
   /**
-   * GtkStringSorter:expression: (type GtkExpression)
+   * GtkStringSorter:expression: (type GtkExpression) (attributes org.gtk.Property.get=gtk_string_sorter_get_expression org.gtk.Property.set=gtk_string_sorter_set_expression)
    *
-   * The expression to evaluate on item to get a string to compare with
+   * The expression to evaluate on item to get a string to compare with.
    */
   properties[PROP_EXPRESSION] =
     gtk_param_spec_expression ("expression",
@@ -298,9 +297,9 @@ gtk_string_sorter_class_init (GtkStringSorterClass *class)
                                G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkStringSorter:ignore-case:
+   * GtkStringSorter:ignore-case: (attributes org.gtk.Property.get=gtk_string_sorter_get_ignore_case org.gtk.Property.set=gtk_string_sorter_set_ignore_case)
    *
-   * If matching is case sensitive
+   * If matching is case sensitive.
    */
   properties[PROP_IGNORE_CASE] =
       g_param_spec_boolean ("ignore-case",
@@ -333,7 +332,7 @@ gtk_string_sorter_init (GtkStringSorter *self)
  * Unless an expression is set on it, this sorter will always
  * compare items as invalid.
  *
- * Returns: a new #GtkStringSorter
+ * Returns: a new `GtkStringSorter`
  */
 GtkStringSorter *
 gtk_string_sorter_new (GtkExpression *expression)
@@ -350,12 +349,12 @@ gtk_string_sorter_new (GtkExpression *expression)
 }
 
 /**
- * gtk_string_sorter_get_expression:
- * @self: a #GtkStringSorter
+ * gtk_string_sorter_get_expression: (attributes org.gtk.Method.get_property=expression)
+ * @self: a `GtkStringSorter`
  *
  * Gets the expression that is evaluated to obtain strings from items.
  *
- * Returns: (transfer none) (nullable): a #GtkExpression, or %NULL
+ * Returns: (transfer none) (nullable): a `GtkExpression`, or %NULL
  */
 GtkExpression *
 gtk_string_sorter_get_expression (GtkStringSorter *self)
@@ -366,13 +365,13 @@ gtk_string_sorter_get_expression (GtkStringSorter *self)
 }
 
 /**
- * gtk_string_sorter_set_expression:
- * @self: a #GtkStringSorter
- * @expression: (nullable) (transfer none): a #GtkExpression, or %NULL
+ * gtk_string_sorter_set_expression: (attributes org.gtk.Method.set_property=expression)
+ * @self: a `GtkStringSorter`
+ * @expression: (nullable) (transfer none): a `GtkExpression`, or %NULL
  *
  * Sets the expression that is evaluated to obtain strings from items.
  *
- * The expression must have the type G_TYPE_STRING.
+ * The expression must have the type %G_TYPE_STRING.
  */
 void
 gtk_string_sorter_set_expression (GtkStringSorter *self,
@@ -396,8 +395,8 @@ gtk_string_sorter_set_expression (GtkStringSorter *self,
 }
 
 /**
- * gtk_string_sorter_get_ignore_case:
- * @self: a #GtkStringSorter
+ * gtk_string_sorter_get_ignore_case: (attributes org.gtk.Method.get_property=ignore-case)
+ * @self: a `GtkStringSorter`
  *
  * Gets whether the sorter ignores case differences.
  *
@@ -412,8 +411,8 @@ gtk_string_sorter_get_ignore_case (GtkStringSorter *self)
 }
 
 /**
- * gtk_string_sorter_set_ignore_case:
- * @self: a #GtkStringSorter
+ * gtk_string_sorter_set_ignore_case: (attributes org.gtk.Method.set_property=ignore-case)
+ * @self: a `GtkStringSorter`
  * @ignore_case: %TRUE to ignore case differences
  *
  * Sets whether the sorter will ignore case differences.

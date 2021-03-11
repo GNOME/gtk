@@ -48,9 +48,7 @@
 #include "gtkaccessibleprivate.h"
 
 /*< private >
- * SECTION:gtkmodelbutton
- * @Short_description: A button that uses a GAction as model
- * @Title: GtkModelButton
+ * GtkModelButton:
  *
  * GtkModelButton is a button class that can use a #GAction as its model.
  * In contrast to #GtkToggleButton or #GtkCheckButton, which can also

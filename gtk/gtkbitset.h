@@ -134,10 +134,11 @@ void                    gtk_bitset_splice                       (GtkBitset      
  * GtkBitsetIter:
  *
  * An opaque, stack-allocated struct for iterating
- * over the elements of a #GtkBitset. Before a GtkBitsetIter
- * can be used, it needs to be initialized with
- * gtk_bitset_iter_init_first(), gtk_bitset_iter_init_last()
- * or gtk_bitset_iter_init_at().
+ * over the elements of a `GtkBitset`.
+ *
+ * Before a `GtkBitsetIter` can be used, it needs to be initialized with
+ * [func@Gtk.BitsetIter.init_first], [func@Gtk.BitsetIter.init_last]
+ * or [func@Gtk.BitsetIter.init_at].
  */
 typedef struct _GtkBitsetIter GtkBitsetIter;
 

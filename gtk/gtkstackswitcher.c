@@ -33,36 +33,35 @@
 #include "gtkwidgetprivate.h"
 
 /**
- * SECTION:gtkstackswitcher
- * @Short_description: A controller for GtkStack
- * @Title: GtkStackSwitcher
- * @See_also: #GtkStack
+ * GtkStackSwitcher:
  *
- * The GtkStackSwitcher widget acts as a controller for a
- * #GtkStack; it shows a row of buttons to switch between
- * the various pages of the associated stack widget.
+ * The `GtkStackSwitcher` shows a row of buttons to switch between `GtkStack`
+ * pages.
  *
- * All the content for the buttons comes from the child properties
- * of the #GtkStack; the button visibility in a #GtkStackSwitcher
- * widget is controlled by the visibility of the child in the
- * #GtkStack.
+ * ![An example GtkStackSwitcher](stackswitcher.png)
  *
- * It is possible to associate multiple #GtkStackSwitcher widgets
- * with the same #GtkStack widget.
+ * It acts as a controller for the associated `GtkStack`.
+ *
+ * All the content for the buttons comes from the properties of the stacks
+ * [class@Gtk.StackPage] objects; the button visibility in a `GtkStackSwitcher`
+ * widget is controlled by the visibility of the child in the `GtkStack`.
+ *
+ * It is possible to associate multiple `GtkStackSwitcher` widgets
+ * with the same `GtkStack` widget.
  *
  * # CSS nodes
  *
- * GtkStackSwitcher has a single CSS node named stackswitcher and
+ * `GtkStackSwitcher` has a single CSS node named stackswitcher and
  * style class .stack-switcher.
  *
- * When circumstances require it, GtkStackSwitcher adds the
+ * When circumstances require it, `GtkStackSwitcher` adds the
  * .needs-attention style class to the widgets representing the
  * stack pages.
  *
  * # Accessibility
  *
- * GtkStackSwitcher uses the #GTK_ACCESSIBLE_ROLE_TAB_LIST role
- * and uses the #GTK_ACCESSIBLE_ROLE_TAB for its buttons.
+ * `GtkStackSwitcher` uses the %GTK_ACCESSIBLE_ROLE_TAB_LIST role
+ * and uses the %GTK_ACCESSIBLE_ROLE_TAB for its buttons.
  */
 
 #define TIMEOUT_EXPAND 500
@@ -392,9 +391,9 @@ unset_stack (GtkStackSwitcher *switcher)
 }
 
 /**
- * gtk_stack_switcher_set_stack:
- * @switcher: a #GtkStackSwitcher
- * @stack: (allow-none): a #GtkStack
+ * gtk_stack_switcher_set_stack: (attributes org.gtk.Method.set_property=stack)
+ * @switcher: a `GtkStackSwitcher`
+ * @stack: (allow-none): a `GtkStack`
  *
  * Sets the stack to control.
  */
@@ -417,11 +416,10 @@ gtk_stack_switcher_set_stack (GtkStackSwitcher *switcher,
 }
 
 /**
- * gtk_stack_switcher_get_stack:
- * @switcher: a #GtkStackSwitcher
+ * gtk_stack_switcher_get_stack: (attributes org.gtk.Method.get_property=stack)
+ * @switcher: a `GtkStackSwitcher`
  *
  * Retrieves the stack.
- * See gtk_stack_switcher_set_stack().
  *
  * Returns: (nullable) (transfer none): the stack, or %NULL if
  *    none has been set explicitly.
@@ -505,6 +503,11 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
   object_class->dispose = gtk_stack_switcher_dispose;
   object_class->finalize = gtk_stack_switcher_finalize;
 
+  /**
+   * GtkStackSwitcher:stack: (attributes org.gtk.Property.get=gtk_stack_switcher_get_stack org.gtk.Property.set=gtk_stack_switcher_set_stack)
+   *
+   * The stack.
+   */
   g_object_class_install_property (object_class,
                                    PROP_STACK,
                                    g_param_spec_object ("stack",
@@ -522,9 +525,9 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
 /**
  * gtk_stack_switcher_new:
  *
- * Create a new #GtkStackSwitcher.
+ * Create a new `GtkStackSwitcher`.
  *
- * Returns: a new #GtkStackSwitcher.
+ * Returns: a new `GtkStackSwitcher`.
  */
 GtkWidget *
 gtk_stack_switcher_new (void)

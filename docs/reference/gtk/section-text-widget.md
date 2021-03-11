@@ -1,4 +1,5 @@
-# Text Widget Overview {#TextWidget}
+Title: Text Widget Overview
+Slug: gtk-textview
 
 GTK has an extremely powerful framework for multiline text editing.  The
 primary objects involved in the process are #GtkTextBuffer, which represents the 

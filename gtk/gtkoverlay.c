@@ -32,35 +32,38 @@
 #include "gtkwidgetprivate.h"
 
 /**
- * SECTION:gtkoverlay
- * @short_description: A container which overlays widgets on top of each other
- * @title: GtkOverlay
+ * GtkOverlay
  *
- * GtkOverlay is a container which contains a single main child, on top
- * of which it can place “overlay” widgets. The position of each overlay
- * widget is determined by its #GtkWidget:halign and #GtkWidget:valign
+ * `GtkOverlay` is a container which contains a single main child, on top
+ * of which it can place “overlay” widgets.
+ *
+ * ![An example GtkOverlay](overlay.png)
+ *
+ * The position of each overlay widget is determined by its
+ * [property@Gtk.Widget:halign] and [property@Gtk.Widget:valign]
  * properties. E.g. a widget with both alignments set to %GTK_ALIGN_START
- * will be placed at the top left corner of the GtkOverlay container,
+ * will be placed at the top left corner of the `GtkOverlay` container,
  * whereas an overlay with halign set to %GTK_ALIGN_CENTER and valign set
- * to %GTK_ALIGN_END will be placed a the bottom edge of the GtkOverlay,
+ * to %GTK_ALIGN_END will be placed a the bottom edge of the `GtkOverlay`,
  * horizontally centered. The position can be adjusted by setting the margin
  * properties of the child to non-zero values.
  *
  * More complicated placement of overlays is possible by connecting
- * to the #GtkOverlay::get-child-position signal.
+ * to the [signal@Gtk.Overlay::get-child-position] signal.
  *
- * An overlay’s minimum and natural sizes are those of its main child. The sizes
- * of overlay children are not considered when measuring these preferred sizes.
+ * An overlay’s minimum and natural sizes are those of its main child.
+ * The sizes of overlay children are not considered when measuring these
+ * preferred sizes.
  *
  * # GtkOverlay as GtkBuildable
  *
- * The GtkOverlay implementation of the GtkBuildable interface
+ * The `GtkOverlay` implementation of the `GtkBuildable` interface
  * supports placing a child as an overlay by specifying “overlay” as
  * the “type” attribute of a `<child>` element.
  *
  * # CSS nodes
  *
- * GtkOverlay has a single CSS node with the name “overlay”. Overlay children
+ * `GtkOverlay` has a single CSS node with the name “overlay”. Overlay children
  * whose alignments cause them to be positioned at an edge get the style classes
  * “.left”, “.right”, “.top”, and/or “.bottom” according to their position.
  */
@@ -327,9 +330,10 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
    * @allocation: (type Gdk.Rectangle) (out caller-allocates): return
    *   location for the allocation
    *
-   * The ::get-child-position signal is emitted to determine
-   * the position and size of any overlay child widgets. A
-   * handler for this signal should fill @allocation with
+   * Emitted to determine the position and size of any overlay
+   * child widgets.
+   *
+   * A handler for this signal should fill @allocation with
    * the desired position and size for @widget, relative to
    * the 'main' child of @overlay.
    *
@@ -338,7 +342,7 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
    * and gives the widget its natural size (except that an
    * alignment of %GTK_ALIGN_FILL will cause the overlay to
    * be full-width/height). If the main child is a
-   * #GtkScrolledWindow, the overlays are placed relative
+   * `GtkScrolledWindow`, the overlays are placed relative
    * to its contents.
    *
    * Returns: %TRUE if the @allocation has been filled
@@ -401,9 +405,9 @@ gtk_overlay_buildable_init (GtkBuildableIface *iface)
 /**
  * gtk_overlay_new:
  *
- * Creates a new #GtkOverlay.
+ * Creates a new `GtkOverlay`.
  *
- * Returns: a new #GtkOverlay object.
+ * Returns: a new `GtkOverlay` object.
  */
 GtkWidget *
 gtk_overlay_new (void)
@@ -413,16 +417,17 @@ gtk_overlay_new (void)
 
 /**
  * gtk_overlay_add_overlay:
- * @overlay: a #GtkOverlay
- * @widget: a #GtkWidget to be added to the container
+ * @overlay: a `GtkOverlay`
+ * @widget: a `GtkWidget` to be added to the container
  *
  * Adds @widget to @overlay.
  *
  * The widget will be stacked on top of the main widget
- * added with gtk_overlay_set_child().
+ * added with [method@Gtk.Overlay.set_child].
  *
  * The position at which @widget is placed is determined
- * from its #GtkWidget:halign and #GtkWidget:valign properties.
+ * from its [property@Gtk.Widget:halign] and
+ * [property@Gtk.Widget:valign] properties.
  */
 void
 gtk_overlay_add_overlay (GtkOverlay *overlay,
@@ -437,8 +442,8 @@ gtk_overlay_add_overlay (GtkOverlay *overlay,
 
 /**
  * gtk_overlay_remove_overlay:
- * @overlay: a #GtkOverlay
- * @widget: a #GtkWidget to be removed
+ * @overlay: a `GtkOverlay`
+ * @widget: a `GtkWidget` to be removed
  *
  * Removes an overlay that was added with gtk_overlay_add_overlay().
  */
@@ -456,8 +461,8 @@ gtk_overlay_remove_overlay (GtkOverlay *overlay,
 
 /**
  * gtk_overlay_set_measure_overlay:
- * @overlay: a #GtkOverlay
- * @widget: an overlay child of #GtkOverlay
+ * @overlay: a `GtkOverlay`
+ * @widget: an overlay child of `GtkOverlay`
  * @measure: whether the child should be measured
  *
  * Sets whether @widget is included in the measured size of @overlay.
@@ -484,8 +489,8 @@ gtk_overlay_set_measure_overlay (GtkOverlay *overlay,
 
 /**
  * gtk_overlay_get_measure_overlay:
- * @overlay: a #GtkOverlay
- * @widget: an overlay child of #GtkOverlay
+ * @overlay: a `GtkOverlay`
+ * @widget: an overlay child of `GtkOverlay`
  *
  * Gets whether @widget's size is included in the measurement of
  * @overlay.
@@ -509,8 +514,8 @@ gtk_overlay_get_measure_overlay (GtkOverlay *overlay,
 
 /**
  * gtk_overlay_set_clip_overlay:
- * @overlay: a #GtkOverlay
- * @widget: an overlay child of #GtkOverlay
+ * @overlay: a `GtkOverlay`
+ * @widget: an overlay child of `GtkOverlay`
  * @clip_overlay: whether the child should be clipped
  *
  * Sets whether @widget should be clipped within the parent.
@@ -533,8 +538,8 @@ gtk_overlay_set_clip_overlay (GtkOverlay *overlay,
 
 /**
  * gtk_overlay_get_clip_overlay:
- * @overlay: a #GtkOverlay
- * @widget: an overlay child of #GtkOverlay
+ * @overlay: a `GtkOverlay`
+ * @widget: an overlay child of `GtkOverlay`
  *
  * Gets whether @widget should be clipped within the parent.
  *
@@ -558,7 +563,7 @@ gtk_overlay_get_clip_overlay (GtkOverlay *overlay,
 
 /**
  * gtk_overlay_set_child:
- * @overlay: a #GtkOverlay
+ * @overlay: a `GtkOverlay`
  * @child: (allow-none): the child widget
  *
  * Sets the child widget of @overlay.
@@ -585,7 +590,7 @@ gtk_overlay_set_child (GtkOverlay *overlay,
 
 /**
  * gtk_overlay_get_child:
- * @overlay: a #GtkOverlay
+ * @overlay: a `GtkOverlay`
  *
  * Gets the child widget of @overlay.
  *

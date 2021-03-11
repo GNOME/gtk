@@ -35,11 +35,6 @@ G_BEGIN_DECLS
 #define GTK_IS_LIST_VIEW_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GTK_TYPE_LIST_VIEW))
 #define GTK_LIST_VIEW_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_LIST_VIEW, GtkListViewClass))
 
-/**
- * GtkListView:
- *
- * GtkListView is the simple list implementation for GTK's list widgets.
- */
 typedef struct _GtkListView GtkListView;
 typedef struct _GtkListViewClass GtkListViewClass;
 

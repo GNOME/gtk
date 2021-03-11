@@ -29,20 +29,10 @@
 #include "gdkinternals.h"
 
 /**
- * SECTION:gdkseat
- * @Short_description: Object representing a user seat
- * @Title: GdkSeat
- * @See_also: #GdkDisplay, #GdkDevice
- *
- * The #GdkSeat object represents a collection of input devices
- * that belong to a user.
- */
-
-/**
  * GdkSeat:
  *
- * The GdkSeat struct contains only private fields and
- * should not be accessed directly.
+ * The `GdkSeat` object represents a collection of input devices
+ * that belong to a user.
  */
 
 typedef struct _GdkSeatPrivate GdkSeatPrivate;
@@ -120,10 +110,9 @@ gdk_seat_class_init (GdkSeatClass *klass)
   /**
    * GdkSeat::device-added:
    * @seat: the object on which the signal is emitted
-   * @device: the newly added #GdkDevice.
+   * @device: the newly added `GdkDevice`.
    *
-   * The ::device-added signal is emitted when a new input
-   * device is related to this seat.
+   * Emitted when a new input device is related to this seat.
    */
   signals [DEVICE_ADDED] =
     g_signal_new (g_intern_static_string ("device-added"),
@@ -138,10 +127,9 @@ gdk_seat_class_init (GdkSeatClass *klass)
   /**
    * GdkSeat::device-removed:
    * @seat: the object on which the signal is emitted
-   * @device: the just removed #GdkDevice.
+   * @device: the just removed `GdkDevice`.
    *
-   * The ::device-removed signal is emitted when an
-   * input device is removed (e.g. unplugged).
+   * Emitted when an input device is removed (e.g. unplugged).
    */
   signals [DEVICE_REMOVED] =
     g_signal_new (g_intern_static_string ("device-removed"),
@@ -156,12 +144,13 @@ gdk_seat_class_init (GdkSeatClass *klass)
   /**
    * GdkSeat::tool-added:
    * @seat: the object on which the signal is emitted
-   * @tool: the new #GdkDeviceTool known to the seat
+   * @tool: the new `GdkDeviceTool` known to the seat
    *
-   * The ::tool-added signal is emitted whenever a new tool
-   * is made known to the seat. The tool may later be assigned
-   * to a device (i.e. on proximity with a tablet). The device
-   * will emit the #GdkDevice::tool-changed signal accordingly.
+   * Emitted whenever a new tool is made known to the seat.
+   *
+   * The tool may later be assigned to a device (i.e. on
+   * proximity with a tablet). The device will emit the
+   * [signalGdkDevice::tool-changed] signal accordingly.
    *
    * A same tool may be used by several devices.
    */
@@ -177,10 +166,9 @@ gdk_seat_class_init (GdkSeatClass *klass)
   /**
    * GdkSeat::tool-removed:
    * @seat: the object on which the signal is emitted
-   * @tool: the just removed #GdkDeviceTool
+   * @tool: the just removed `GdkDeviceTool`
    *
-   * This signal is emitted whenever a tool is no longer known
-   * to this @seat.
+   * Emitted whenever a tool is no longer known to this @seat.
    */
   signals [TOOL_REMOVED] =
     g_signal_new (g_intern_static_string ("tool-removed"),
@@ -192,9 +180,9 @@ gdk_seat_class_init (GdkSeatClass *klass)
                   GDK_TYPE_DEVICE_TOOL);
 
   /**
-   * GdkSeat:display:
+   * GdkSeat:display: (attributes org.gtk.Property.get=gdk_seat_get_display)
    *
-   * #GdkDisplay of this seat.
+   * `GdkDisplay` of this seat.
    */
   props[PROP_DISPLAY] =
     g_param_spec_object ("display",
@@ -215,12 +203,12 @@ gdk_seat_init (GdkSeat *seat)
 
 /**
  * gdk_seat_get_capabilities:
- * @seat: a #GdkSeat
+ * @seat: a `GdkSeat`
  *
- * Returns the capabilities this #GdkSeat currently has.
+ * Returns the capabilities this `GdkSeat` currently has.
  *
  * Returns: the seat capabilities
- **/
+ */
 GdkSeatCapabilities
 gdk_seat_get_capabilities (GdkSeat *seat)
 {
@@ -234,30 +222,30 @@ gdk_seat_get_capabilities (GdkSeat *seat)
 
 /*
  * gdk_seat_grab:
- * @seat: a #GdkSeat
- * @surface: the #GdkSurface which will own the grab
+ * @seat: a `GdkSeat`
+ * @surface: the `GdkSurface` which will own the grab
  * @capabilities: capabilities that will be grabbed
  * @owner_events: if %FALSE then all device events are reported with respect to
- *                @surface and are only reported if selected by @event_mask. If
- *                %TRUE then pointer events for this application are reported
- *                as normal, but pointer events outside this application are
- *                reported with respect to @surface and only if selected by
- *                @event_mask. In either mode, unreported events are discarded.
- * @cursor: (nullable): the cursor to display while the grab is active. If
- *          this is %NULL then the normal cursors are used for
- *          @surface and its descendants, and the cursor for @surface is used
- *          elsewhere.
+ *   @surface and are only reported if selected by @event_mask. If %TRUE then
+ *   pointer events for this application are reported as normal, but pointer
+ *   events outside this application are reported with respect to @surface and
+ *   only if selected by @event_mask. In either mode, unreported events are
+ *   discarded.
+ * @cursor: (nullable): the cursor to display while the grab is active.
+ *   If this is %NULL then the normal cursors are used for @surface and
+ *   its descendants, and the cursor for @surface is used elsewhere.
  * @event: (nullable): the event that is triggering the grab, or %NULL if none
- *         is available.
- * @prepare_func: (nullable) (scope call): function to
- *                prepare the surface to be grabbed, it can be %NULL if @surface is
- *                visible before this call.
+ *   is available.
+ * @prepare_func: (nullable) (scope call): function to prepare the surface
+ *   to be grabbed, it can be %NULL if @surface is visible before this call.
  * @prepare_func_data: (closure): user data to pass to @prepare_func
  *
  * Grabs the seat so that all events corresponding to the given @capabilities
- * are passed to this application until the seat is ungrabbed with gdk_seat_ungrab(),
- * or the surface becomes hidden. This overrides any previous grab on the
- * seat by this client.
+ * are passed to this application.
+ *
+ * The grab remains in place until the seat is ungrabbed with
+ * [method@Gdk.Seat.ungrab], or the surface becomes hidden. This overrides
+ * any previous grab on the seat by this client.
  *
  * As a rule of thumb, if a grab is desired over %GDK_SEAT_CAPABILITY_POINTER,
  * all other "pointing" capabilities (eg. %GDK_SEAT_CAPABILITY_TOUCH) should
@@ -269,18 +257,18 @@ gdk_seat_get_capabilities (GdkSeat *seat)
  * events corresponding to the given capabilities. For example in GTK this
  * is used for Drag and Drop operations, popup menus and such.
  *
- * Note that if the event mask of a #GdkSurface has selected both button press
+ * Note that if the event mask of a `GdkSurface` has selected both button press
  * and button release events, or touch begin and touch end, then a press event
  * will cause an automatic grab until the button is released, equivalent to a
- * grab on the surface with @owner_events set to %TRUE. This is done because most
- * applications expect to receive paired press and release events.
+ * grab on the surface with @owner_events set to %TRUE. This is done because
+ * most applications expect to receive paired press and release events.
  *
  * If you set up anything at the time you take the grab that needs to be
- * cleaned up when the grab ends, you should handle the #GdkEventGrabBroken
+ * cleaned up when the grab ends, you should handle the `GdkEventGrabBroken`
  * events that are emitted when the grab ends unvoluntarily.
  *
  * Returns: %GDK_GRAB_SUCCESS if the grab was successful.
- **/
+ */
 GdkGrabStatus
 gdk_seat_grab (GdkSeat                *seat,
                GdkSurface              *surface,
@@ -308,10 +296,12 @@ gdk_seat_grab (GdkSeat                *seat,
 
 /*
  * gdk_seat_ungrab:
- * @seat: a #GdkSeat
+ * @seat: a `GdkSeat`
  *
- * Releases a grab added through gdk_seat_grab().
- **/
+ * Releases a grab.
+ *
+ * See [method@Gdk.Seat.grab] for more information.
+ */
 void
 gdk_seat_ungrab (GdkSeat *seat)
 {
@@ -330,10 +320,10 @@ gdk_seat_ungrab (GdkSeat *seat)
  *
  * Returns the devices that match the given capabilities.
  *
- * Returns: (transfer container) (element-type GdkDevice): A list of #GdkDevices.
- *          The list must be freed with g_list_free(), the elements are owned
- *          by GTK and must not be freed.
- **/
+ * Returns: (transfer container) (element-type GdkDevice): A list
+ *   of `GdkDevices`. The list must be freed with g_list_free(),
+ *   the elements are owned by GTK and must not be freed.
+ */
 GList *
 gdk_seat_get_devices (GdkSeat             *seat,
                       GdkSeatCapabilities  capabilities)
@@ -348,13 +338,13 @@ gdk_seat_get_devices (GdkSeat             *seat,
 
 /**
  * gdk_seat_get_pointer:
- * @seat: a #GdkSeat
+ * @seat: a `GdkSeat`
  *
  * Returns the device that routes pointer events.
  *
- * Returns: (transfer none) (nullable): a #GdkDevice with pointer
- *          capabilities. This object is owned by GTK and must not be freed.
- **/
+ * Returns: (transfer none) (nullable): a `GdkDevice` with pointer
+ *   capabilities. This object is owned by GTK and must not be freed.
+ */
 GdkDevice *
 gdk_seat_get_pointer (GdkSeat *seat)
 {
@@ -368,13 +358,13 @@ gdk_seat_get_pointer (GdkSeat *seat)
 
 /**
  * gdk_seat_get_keyboard:
- * @seat: a #GdkSeat
+ * @seat: a `GdkSeat`
  *
  * Returns the device that routes keyboard events.
  *
- * Returns: (transfer none) (nullable): a #GdkDevice with keyboard
- *          capabilities. This object is owned by GTK and must not be freed.
- **/
+ * Returns: (transfer none) (nullable): a `GdkDevice` with keyboard
+ *   capabilities. This object is owned by GTK and must not be freed.
+ */
 GdkDevice *
 gdk_seat_get_keyboard (GdkSeat *seat)
 {
@@ -403,14 +393,14 @@ gdk_seat_device_removed (GdkSeat   *seat,
 }
 
 /**
- * gdk_seat_get_display:
- * @seat: a #GdkSeat
+ * gdk_seat_get_display: (attributes org.gtk.Method.get_property=display)
+ * @seat: a `GdkSeat`
  *
- * Returns the #GdkDisplay this seat belongs to.
+ * Returns the `GdkDisplay` this seat belongs to.
  *
- * Returns: (transfer none): a #GdkDisplay. This object is owned by GTK
- *          and must not be freed.
- **/
+ * Returns: (transfer none): a `GdkDisplay`. This object
+ *   is owned by GTK and must not be freed.
+ */
 GdkDisplay *
 gdk_seat_get_display (GdkSeat *seat)
 {
@@ -464,14 +454,13 @@ gdk_seat_get_tool (GdkSeat          *seat,
 
 /**
  * gdk_seat_get_tools:
- * @seat: A #GdkSeat
+ * @seat: a `GdkSeat`
  *
- * Returns all #GdkDeviceTools that are known to the
- * application.
+ * Returns all `GdkDeviceTools` that are known to the application.
  *
  * Returns: (transfer container) (element-type Gdk.DeviceTool):
- *     A list of tools. Free with g_list_free().
- **/
+ *   A list of tools. Free with g_list_free().
+ */
 GList *
 gdk_seat_get_tools (GdkSeat *seat)
 {

@@ -44,6 +44,18 @@
  * #GtkTreeDragSource and #GtkTreeDragDest interfaces.
  */
 
+/**
+ * GtkTreeDragDest:
+ *
+ * Interface for Drag-and-Drop destinations in `GtkTreeView`.
+ */
+
+/**
+ * GtkTreeDragSource:
+ *
+ * Interface for Drag-and-Drop destinations in `GtkTreeView`.
+ */
+
 GType
 gtk_tree_drag_source_get_type (void)
 {

@@ -19,14 +19,20 @@
  */
 
 /**
- * SECTION:gtkeventcontroller
- * @Short_description: Self-contained handler of series of events
- * @Title: GtkEventController
- * @See_also: #GtkGesture
+ * GtkEventController:
  *
- * #GtkEventController is a base, low-level implementation for event
- * controllers. Those react to a series of #GdkEvents, and possibly trigger
- * actions as a consequence of those.
+ * `GtkEventController` is the base class for event controllers.
+ *
+ * These are ancillary objects associated to widgets, which react
+ * to `GdkEvents`, and possibly trigger actions as a consequence.
+ *
+ * Event controllers are added to a widget with
+ * [method@Gtk.Widget.add_controller]. It is rarely necessary to
+ * explicitly remove a controller with [method@Gtk.Widget.remove_controller].
+ *
+ * See the chapter of [input handling](input-handling.html) for
+ * an overview of the basic concepts, such as the capture and bubble
+ * phases of even propagation.
  */
 
 #include "config.h"
@@ -189,9 +195,9 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
   object_class->get_property = gtk_event_controller_get_property;
 
   /**
-   * GtkEventController:widget:
+   * GtkEventController:widget: (attributes org.gtk.Property.get=gtk_event_controller_get_widget)
    *
-   * The widget receiving the #GdkEvents that the controller will handle.
+   * The widget receiving the `GdkEvents` that the controller will handle.
    */
   properties[PROP_WIDGET] =
       g_param_spec_object ("widget",
@@ -201,7 +207,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
                            GTK_PARAM_READABLE);
 
   /**
-   * GtkEventController:propagation-phase:
+   * GtkEventController:propagation-phase: (attributes org.gtk.Property.get=gtk_event_controller_get_propagation_phase org.gtk.Property.set=gtk_event_controller_set_propagation_phase)
    *
    * The propagation phase at which this controller will handle events.
    */
@@ -214,7 +220,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEventController:propagation-limit:
+   * GtkEventController:propagation-limit: (attributes org.gtk.Property.get=gtk_event_controller_get_propagation_limit org.gtk.Property.set=gtk_event_controller_set_propagation_limit)
    *
    * The limit for which events this controller will handle.
    */
@@ -227,7 +233,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEventController:name:
+   * GtkEventController:name: (attributes org.gtk.Property.get=gtk_event_controller_get_name org.gtk.Property.set=gtk_event_controller_set_name)
    *
    * The name for this controller, typically used for debugging purposes.
    */
@@ -321,10 +327,10 @@ gtk_event_controller_filter_crossing (GtkEventController    *controller,
   return FALSE;
 }
 
-/*
+/*< private >
  * gtk_event_controller_handle_event:
- * @controller: a #GtkEventController
- * @event: a #GdkEvent
+ * @controller: a `GtkEventController`
+ * @event: a `GdkEvent`
  * @target: the target widget
  * @x: event position in widget coordinates, or 0 if not a pointer event
  * @y: event position in widget coordinates, or 0 if not a pointer event
@@ -333,8 +339,8 @@ gtk_event_controller_filter_crossing (GtkEventController    *controller,
  * and the controller actions triggered.
  *
  * Returns: %TRUE if the event was potentially useful to trigger the
- *          controller action
- **/
+ *   controller action
+ */
 gboolean
 gtk_event_controller_handle_event (GtkEventController *controller,
                                    GdkEvent           *event,
@@ -401,12 +407,12 @@ gtk_event_controller_handle_crossing (GtkEventController    *controller,
 }
 
 /**
- * gtk_event_controller_get_widget:
- * @controller: a #GtkEventController
+ * gtk_event_controller_get_widget: (attributes org.gtk.Method.get_property=widget)
+ * @controller: a `GtkEventController`
  *
  * Returns the #GtkWidget this controller relates to.
  *
- * Returns: (transfer none): a #GtkWidget
+ * Returns: (transfer none): a `GtkWidget`
  **/
 GtkWidget *
 gtk_event_controller_get_widget (GtkEventController *controller)
@@ -422,12 +428,10 @@ gtk_event_controller_get_widget (GtkEventController *controller)
 
 /**
  * gtk_event_controller_reset:
- * @controller: a #GtkEventController
+ * @controller: a `GtkEventController`
  *
- * Resets the @controller to a clean state. Every interaction
- * the controller did through gtk_event_controller_handle_event()
- * will be dropped at this point.
- **/
+ * Resets the @controller to a clean state.
+ */
 void
 gtk_event_controller_reset (GtkEventController *controller)
 {
@@ -442,13 +446,13 @@ gtk_event_controller_reset (GtkEventController *controller)
 }
 
 /**
- * gtk_event_controller_get_propagation_phase:
- * @controller: a #GtkEventController
+ * gtk_event_controller_get_propagation_phase: (attributes org.gtk.Method.get_property=propagation-phase)
+ * @controller: a `GtkEventController`
  *
  * Gets the propagation phase at which @controller handles events.
  *
  * Returns: the propagation phase
- **/
+ */
 GtkPropagationPhase
 gtk_event_controller_get_propagation_phase (GtkEventController *controller)
 {
@@ -462,16 +466,15 @@ gtk_event_controller_get_propagation_phase (GtkEventController *controller)
 }
 
 /**
- * gtk_event_controller_set_propagation_phase:
- * @controller: a #GtkEventController
+ * gtk_event_controller_set_propagation_phase: (attributes org.gtk.Method.set_property=propagation-phase)
+ * @controller: a `GtkEventController`
  * @phase: a propagation phase
  *
  * Sets the propagation phase at which a controller handles events.
  *
  * If @phase is %GTK_PHASE_NONE, no automatic event handling will be
- * performed, but other additional gesture maintenance will. In that phase,
- * the events can be managed by calling gtk_event_controller_handle_event().
- **/
+ * performed, but other additional gesture maintenance will.
+ */
 void
 gtk_event_controller_set_propagation_phase (GtkEventController  *controller,
                                             GtkPropagationPhase  phase)
@@ -495,8 +498,8 @@ gtk_event_controller_set_propagation_phase (GtkEventController  *controller,
 }
 
 /**
- * gtk_event_controller_get_propagation_limit:
- * @controller: a #GtkEventController
+ * gtk_event_controller_get_propagation_limit: (attributes org.gtk.Method.get_property=propagation-limit)
+ * @controller: a `GtkEventController`
  *
  * Gets the propagation limit of the event controller.
  *
@@ -515,8 +518,8 @@ gtk_event_controller_get_propagation_limit (GtkEventController *controller)
 }
 
 /**
- * gtk_event_controller_set_propagation_limit:
- * @controller: a #GtkEventController
+ * gtk_event_controller_set_propagation_limit: (attributes org.gtk.Method.set_property=propagation-limit)
+ * @controller: a `GtkEventController`
  * @limit: the propagation limit
  *
  * Sets the event propagation limit on the event controller.
@@ -544,8 +547,8 @@ gtk_event_controller_set_propagation_limit (GtkEventController  *controller,
 }
 
 /**
- * gtk_event_controller_get_name:
- * @controller: a #GtkEventController
+ * gtk_event_controller_get_name: (attributes org.gtk.Method.get_property=name)
+ * @controller: a `GtkEventController`
  *
  * Gets the name of @controller.
  */
@@ -560,12 +563,11 @@ gtk_event_controller_get_name (GtkEventController *controller)
 }
 
 /**
- * gtk_event_controller_set_name:
- * @controller: a #GtkEventController
+ * gtk_event_controller_set_name: (attributes org.gtk.Method.set_property=name)
+ * @controller: a `GtkEventController`
  * @name: a name for @controller
  *
- * Sets a name on the controller that can be used for
- * debugging.
+ * Sets a name on the controller that can be used for debugging.
  */
 void
 gtk_event_controller_set_name (GtkEventController *controller,
@@ -589,12 +591,13 @@ gtk_event_controller_get_target (GtkEventController *controller)
 
 /**
  * gtk_event_controller_get_current_event:
- * @controller: a #GtkEventController
+ * @controller: a `GtkEventController`
  *
  * Returns the event that is currently being handled by the
  * controller, and %NULL at other times.
  *
- * Returns: (nullable) (transfer none): the event is current handled by @controller
+ * Returns: (nullable) (transfer none): the event that is currently
+ *   handled by @controller
  */
 GdkEvent *
 gtk_event_controller_get_current_event (GtkEventController *controller)
@@ -606,12 +609,12 @@ gtk_event_controller_get_current_event (GtkEventController *controller)
 
 /**
  * gtk_event_controller_get_current_event_time:
- * @controller: a #GtkEventController
+ * @controller: a `GtkEventController`
  *
  * Returns the timestamp of the event that is currently being
  * handled by the controller, and 0 otherwise.
  *
- * Returns: timestamp of the event is current handled by @controller
+ * Returns: timestamp of the event is currently handled by @controller
  */
 guint32
 gtk_event_controller_get_current_event_time (GtkEventController *controller)
@@ -626,12 +629,13 @@ gtk_event_controller_get_current_event_time (GtkEventController *controller)
 
 /**
  * gtk_event_controller_get_current_event_device:
- * @controller: a #GtkEventController
+ * @controller: a `GtkEventController`
  *
  * Returns the device of the event that is currently being
  * handled by the controller, and %NULL otherwise.
  *
- * Returns: (nullable) (transfer none): device of the event is current handled by @controller
+ * Returns: (nullable) (transfer none): device of the event is
+ *   currently handled by @controller
  */
 GdkDevice *
 gtk_event_controller_get_current_event_device (GtkEventController *controller)
@@ -646,12 +650,12 @@ gtk_event_controller_get_current_event_device (GtkEventController *controller)
 
 /**
  * gtk_event_controller_get_current_event_state:
- * @controller: a #GtkEventController
+ * @controller: a `GtkEventController`
  *
  * Returns the modifier state of the event that is currently being
  * handled by the controller, and 0 otherwise.
  *
- * Returns: modifier state of the event is current handled by @controller
+ * Returns: modifier state of the event is currently handled by @controller
  */
 GdkModifierType
 gtk_event_controller_get_current_event_state (GtkEventController *controller)

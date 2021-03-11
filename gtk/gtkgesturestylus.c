@@ -18,13 +18,11 @@
  */
 
 /**
- * SECTION:gtkgesturestylus
- * @Short_description: Gesture for stylus input
- * @Title: GtkGestureStylus
- * @See_also: #GtkGesture, #GtkGestureSingle
+ * GtkGestureStylus:
  *
- * #GtkGestureStylus is a #GtkGesture implementation specific to stylus
- * input. The provided signals just relay the basic information of the
+ * `GtkGestureStylus` is a `GtkGesture` specific to stylus input.
+ *
+ * The provided signals just relay the basic information of the
  * stylus events.
  */
 
@@ -98,11 +96,11 @@ gtk_gesture_stylus_class_init (GtkGestureStylusClass *klass)
 
   /**
    * GtkGestureStylus::proximity:
-   * @gesture: the #GtkGestureStylus that emitted the signal
+   * @gesture: the `GtkGestureStylus` that emitted the signal
    * @x: the X coordinate of the stylus event
    * @y: the Y coordinate of the stylus event
    *
-   * A signal emitted when the stylus is in proximity of the device.
+   * Emitted when the stylus is in proximity of the device.
    */
   signals[PROXIMITY] =
     g_signal_new (I_("proximity"),
@@ -118,11 +116,11 @@ gtk_gesture_stylus_class_init (GtkGestureStylusClass *klass)
 
   /**
    * GtkGestureStylus::down:
-   * @gesture: the #GtkGestureStylus that emitted the signal
+   * @gesture: the `GtkGestureStylus` that emitted the signal
    * @x: the X coordinate of the stylus event
    * @y: the Y coordinate of the stylus event
    *
-   * A signal emitted when the stylus touches the device.
+   * Emitted when the stylus touches the device.
    */
   signals[DOWN] =
     g_signal_new (I_("down"),
@@ -138,11 +136,11 @@ gtk_gesture_stylus_class_init (GtkGestureStylusClass *klass)
 
   /**
    * GtkGestureStylus::motion:
-   * @gesture: the #GtkGestureStylus that emitted the signal
+   * @gesture: the `GtkGestureStylus` that emitted the signal
    * @x: the X coordinate of the stylus event
    * @y: the Y coordinate of the stylus event
    *
-   * A signal emitted when the stylus moves while touching the device.
+   * Emitted when the stylus moves while touching the device.
    */
   signals[MOTION] =
     g_signal_new (I_("motion"),
@@ -158,11 +156,11 @@ gtk_gesture_stylus_class_init (GtkGestureStylusClass *klass)
 
   /**
    * GtkGestureStylus::up:
-   * @gesture: the #GtkGestureStylus that emitted the signal
+   * @gesture: the `GtkGestureStylus` that emitted the signal
    * @x: the X coordinate of the stylus event
    * @y: the Y coordinate of the stylus event
    *
-   * A signal emitted when the stylus no longer touches the device.
+   * Emitted when the stylus no longer touches the device.
    */
   signals[UP] =
     g_signal_new (I_("up"),
@@ -185,7 +183,7 @@ gtk_gesture_stylus_init (GtkGestureStylus *gesture)
 /**
  * gtk_gesture_stylus_new:
  *
- * Creates a new #GtkGestureStylus.
+ * Creates a new `GtkGestureStylus`.
  *
  * Returns: a newly created stylus gesture
  **/
@@ -208,15 +206,16 @@ gesture_get_current_event (GtkGestureStylus *gesture)
 
 /**
  * gtk_gesture_stylus_get_axis:
- * @gesture: a #GtkGestureStylus
+ * @gesture: a `GtkGestureStylus`
  * @axis: requested device axis
  * @value: (out): return location for the axis value
  *
  * Returns the current value for the requested @axis.
  *
  * This function must be called from the handler of one of the
- * #GtkGestureStylus::down, #GtkGestureStylus::motion,
- * #GtkGestureStylus::up or #GtkGestureStylus::proximity signals.
+ * [signal@Gtk.GestureStylus::down], [signal@Gtk.GestureStylus::motion],
+ * [signal@Gtk.GestureStylus::up] or [signal@Gtk.GestureStylus::proximity]
+ * signals.
  *
  * Returns: %TRUE if there is a current value for the axis
  **/
@@ -240,17 +239,19 @@ gtk_gesture_stylus_get_axis (GtkGestureStylus *gesture,
 
 /**
  * gtk_gesture_stylus_get_axes:
- * @gesture: a GtkGestureStylus
- * @axes: (array): array of requested axes, terminated with #GDK_AXIS_IGNORE
+ * @gesture: a `GtkGestureStylus`
+ * @axes: (array): array of requested axes, terminated with %GDK_AXIS_IGNORE
  * @values: (out) (array): return location for the axis values
  *
- * Returns the current values for the requested @axes. This function
- * must be called from either the #GtkGestureStylus::down,
- * #GtkGestureStylus::motion, #GtkGestureStylus::up or #GtkGestureStylus::proximity
+ * Returns the current values for the requested @axes.
+ *
+ * This function must be called from the handler of one of the
+ * [signal@Gtk.GestureStylus::down], [signal@Gtk.GestureStylus::motion],
+ * [signal@Gtk.GestureStylus::up] or [signal@Gtk.GestureStylus::proximity]
  * signals.
  *
  * Returns: %TRUE if there is a current value for the axes
- **/
+ */
 gboolean
 gtk_gesture_stylus_get_axes (GtkGestureStylus  *gesture,
 			     GdkAxisUse         axes[],
@@ -293,24 +294,26 @@ gtk_gesture_stylus_get_axes (GtkGestureStylus  *gesture,
 
 /**
  * gtk_gesture_stylus_get_backlog:
- * @gesture: a #GtkGestureStylus
+ * @gesture: a `GtkGestureStylus`
  * @backlog: (out) (array length=n_elems): coordinates and times for the backlog events
  * @n_elems: (out): return location for the number of elements
  *
- * By default, GTK will limit rate of input events. On stylus input where
- * accuracy of strokes is paramount, this function returns the accumulated
- * coordinate/timing state before the emission of the current
- * #GtkGestureStylus::motion signal.
+ * Returns the accumulated backlog of tracking information.
  *
- * This function may only be called within a #GtkGestureStylus::motion
+ * By default, GTK will limit rate of input events. On stylus input
+ * where accuracy of strokes is paramount, this function returns the
+ * accumulated coordinate/timing state before the emission of the
+ * current [Gtk.GestureStylus::motion] signal.
+ *
+ * This function may only be called within a [signal@Gtk.GestureStylus::motion]
  * signal handler, the state given in this signal and obtainable through
- * gtk_gesture_stylus_get_axis() call express the latest (most up-to-date)
+ * [method@Gtk.GestureStylus.get_axis] express the latest (most up-to-date)
  * state in motion history.
  *
  * The @backlog is provided in chronological order.
  *
  * Returns: %TRUE if there is a backlog to unfold in the current state.
- **/
+ */
 gboolean
 gtk_gesture_stylus_get_backlog (GtkGestureStylus  *gesture,
                                 GdkTimeCoord     **backlog,
@@ -370,15 +373,17 @@ gtk_gesture_stylus_get_backlog (GtkGestureStylus  *gesture,
 
 /**
  * gtk_gesture_stylus_get_device_tool:
- * @gesture: a #GtkGestureStylus
+ * @gesture: a `GtkGestureStylus`
  *
- * Returns the #GdkDeviceTool currently driving input through this gesture.
- * This function must be called from either the #GtkGestureStylus::down,
- * #GtkGestureStylus::motion, #GtkGestureStylus::up or #GtkGestureStylus::proximity
- * signal handlers.
+ * Returns the `GdkDeviceTool` currently driving input through this gesture.
+ *
+ * This function must be called from the handler of one of the
+ * [signal@Gtk.GestureStylus::down], [signal@Gtk.GestureStylus::motion],
+ * [signal@Gtk.GestureStylus::up] or [signal@Gtk.GestureStylus::proximity]
+ * signals.
  *
  * Returns: (nullable) (transfer none): The current stylus tool
- **/
+ */
 GdkDeviceTool *
 gtk_gesture_stylus_get_device_tool (GtkGestureStylus *gesture)
 {

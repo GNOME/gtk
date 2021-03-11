@@ -54,39 +54,41 @@
 
 
 /**
- * SECTION:gtktextmark
- * @Short_description: A position in the buffer preserved across buffer modifications
- * @Title: GtkTextMark
+ * GtkTextMark:
+ *
+ * A `GtkTextMark` is a position in a `GtkTextbuffer` that is preserved
+ * across modifications.
  *
  * You may wish to begin by reading the
- * [text widget conceptual overview][TextWidget]
- * which gives an overview of all the objects and data
- * types related to the text widget and how they work together.
+ * [text widget conceptual overview](section-text-widget.html),
+ * which gives an overview of all the objects and data types
+ * related to the text widget and how they work together.
  *
- * A #GtkTextMark is like a bookmark in a text buffer; it preserves a position in
- * the text. You can convert the mark to an iterator using
- * gtk_text_buffer_get_iter_at_mark(). Unlike iterators, marks remain valid across
- * buffer mutations, because their behavior is defined when text is inserted or
- * deleted. When text containing a mark is deleted, the mark remains in the
- * position originally occupied by the deleted text. When text is inserted at a
- * mark, a mark with “left gravity” will be moved to the
- * beginning of the newly-inserted text, and a mark with “right
- * gravity” will be moved to the end.
+ * A `GtkTextMark` is like a bookmark in a text buffer; it preserves
+ * a position in the text. You can convert the mark to an iterator using
+ * [method@Gtk.TextBuffer.get_iter_at_mark]. Unlike iterators, marks remain
+ * valid across buffer mutations, because their behavior is defined when
+ * text is inserted or deleted. When text containing a mark is deleted,
+ * the mark remains in the position originally occupied by the deleted
+ * text. When text is inserted at a mark, a mark with “left gravity” will
+ * be moved to the beginning of the newly-inserted text, and a mark with
+ * “right gravity” will be moved to the end.
  *
  * Note that “left” and “right” here refer to logical direction (left
  * is the toward the start of the buffer); in some languages such as
  * Hebrew the logically-leftmost text is not actually on the left when
  * displayed.
  *
- * Marks are reference counted, but the reference count only controls the validity
- * of the memory; marks can be deleted from the buffer at any time with
- * gtk_text_buffer_delete_mark(). Once deleted from the buffer, a mark is
- * essentially useless.
+ * Marks are reference counted, but the reference count only controls
+ * the validity of the memory; marks can be deleted from the buffer at
+ * any time with [method@Gtk.TextBuffer.delete_mark]. Once deleted from
+ * the buffer, a mark is essentially useless.
  *
- * Marks optionally have names; these can be convenient to avoid passing the
- * #GtkTextMark object around.
+ * Marks optionally have names; these can be convenient to avoid passing
+ * the `GtkTextMark` object around.
  *
- * Marks are typically created using the gtk_text_buffer_create_mark() function.
+ * Marks are typically created using the [method@Gtk.TextBuffer.create_mark]
+ * function.
  */
 
 /*
@@ -140,9 +142,11 @@ gtk_text_mark_class_init (GtkTextMarkClass *klass)
   /**
    * GtkTextMark:left-gravity:
    *
-   * Whether the mark has left gravity. When text is inserted at the mark’s
-   * current location, if the mark has left gravity it will be moved
-   * to the left of the newly-inserted text, otherwise to the right.
+   * Whether the mark has left gravity.
+   *
+   * When text is inserted at the mark’s current location, if the mark
+   * has left gravity it will be moved to the left of the newly-inserted
+   * text, otherwise to the right.
    */
   g_object_class_install_property (object_class,
                                    PROP_LEFT_GRAVITY,
@@ -244,18 +248,20 @@ gtk_text_mark_get_property (GObject    *object,
  * @name: (allow-none): mark name or %NULL
  * @left_gravity: whether the mark should have left gravity
  *
- * Creates a text mark. Add it to a buffer using gtk_text_buffer_add_mark().
- * If @name is %NULL, the mark is anonymous; otherwise, the mark can be 
- * retrieved by name using gtk_text_buffer_get_mark(). If a mark has left 
- * gravity, and text is inserted at the mark’s current location, the mark 
- * will be moved to the left of the newly-inserted text. If the mark has 
- * right gravity (@left_gravity = %FALSE), the mark will end up on the 
- * right of newly-inserted text. The standard left-to-right cursor is a 
- * mark with right gravity (when you type, the cursor stays on the right
- * side of the text you’re typing).
+ * Creates a text mark.
  *
- * Returns: new #GtkTextMark
- **/
+ * Add it to a buffer using [method@Gtk.TextBuffer.add_mark].
+ * If @name is %NULL, the mark is anonymous; otherwise, the mark can be
+ * retrieved by name using [method@Gtk.TextBuffer.get_mark]. If a mark
+ * has left gravity, and text is inserted at the mark’s current location,
+ * the mark will be moved to the left of the newly-inserted text. If the
+ * mark has right gravity (@left_gravity = %FALSE), the mark will end up
+ * on the right of newly-inserted text. The standard left-to-right cursor
+ * is a mark with right gravity (when you type, the cursor stays on the
+ * right side of the text you’re typing).
+ *
+ * Returns: new `GtkTextMark`
+ */
 GtkTextMark *
 gtk_text_mark_new (const char *name,
 		   gboolean     left_gravity)
@@ -268,13 +274,14 @@ gtk_text_mark_new (const char *name,
 
 /**
  * gtk_text_mark_get_visible:
- * @mark: a #GtkTextMark
- * 
- * Returns %TRUE if the mark is visible (i.e. a cursor is displayed
- * for it).
- * 
+ * @mark: a `GtkTextMark`
+ *
+ * Returns %TRUE if the mark is visible.
+ *
+ * A cursor is displayed for visible marks.
+ *
  * Returns: %TRUE if visible
- **/
+ */
 gboolean
 gtk_text_mark_get_visible (GtkTextMark *mark)
 {
@@ -287,12 +294,14 @@ gtk_text_mark_get_visible (GtkTextMark *mark)
 
 /**
  * gtk_text_mark_get_name:
- * @mark: a #GtkTextMark
- * 
- * Returns the mark name; returns NULL for anonymous marks.
- * 
+ * @mark: a `GtkTextMark`
+ *
+ * Returns the mark name.
+ *
+ * Returns %NULL for anonymous marks.
+ *
  * Returns: (nullable): mark name
- **/
+ */
 const char *
 gtk_text_mark_get_name (GtkTextMark *mark)
 {
@@ -305,14 +314,15 @@ gtk_text_mark_get_name (GtkTextMark *mark)
 
 /**
  * gtk_text_mark_get_deleted:
- * @mark: a #GtkTextMark
- * 
- * Returns %TRUE if the mark has been removed from its buffer
- * with gtk_text_buffer_delete_mark(). See gtk_text_buffer_add_mark()
- * for a way to add it to a buffer again.
- * 
+ * @mark: a `GtkTextMark`
+ *
+ * Returns %TRUE if the mark has been removed from its buffer.
+ *
+ * See [method@Gtk.TextBuffer.add_mark] for a way to add it
+ * to a buffer again.
+ *
  * Returns: whether the mark is deleted
- **/
+ */
 gboolean
 gtk_text_mark_get_deleted (GtkTextMark *mark)
 {
@@ -330,13 +340,14 @@ gtk_text_mark_get_deleted (GtkTextMark *mark)
 
 /**
  * gtk_text_mark_get_buffer:
- * @mark: a #GtkTextMark
- * 
- * Gets the buffer this mark is located inside,
- * or %NULL if the mark is deleted.
+ * @mark: a `GtkTextMark`
  *
- * Returns: (transfer none): the mark’s #GtkTextBuffer
- **/
+ * Gets the buffer this mark is located inside.
+ *
+ * Returns %NULL if the mark is deleted.
+ *
+ * Returns: (transfer none): the mark’s `GtkTextBuffer`
+ */
 GtkTextBuffer*
 gtk_text_mark_get_buffer (GtkTextMark *mark)
 {
@@ -354,12 +365,12 @@ gtk_text_mark_get_buffer (GtkTextMark *mark)
 
 /**
  * gtk_text_mark_get_left_gravity:
- * @mark: a #GtkTextMark
- * 
+ * @mark: a `GtkTextMark`
+ *
  * Determines whether the mark has left gravity.
- * 
+ *
  * Returns: %TRUE if the mark has left gravity, %FALSE otherwise
- **/
+ */
 gboolean
 gtk_text_mark_get_left_gravity (GtkTextMark *mark)
 {

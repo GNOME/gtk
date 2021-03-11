@@ -46,34 +46,35 @@
 
 
 /**
- * SECTION:gtkscale
- * @Short_description: A slider widget for selecting a value from a range
- * @Title: GtkScale
+ * GtkScale:
  *
- * A GtkScale is a slider control used to select a numeric value. 
- * To use it, you’ll probably want to investigate the methods on
- * its base class, #GtkRange, in addition to the methods for GtkScale itself.
- * To set the value of a scale, you would normally use gtk_range_set_value().
+ * A `GtkScale` is a slider control used to select a numeric value.
+ *
+ * ![An example GtkScale](scales.png)
+ *
+ * To use it, you’ll probably want to investigate the methods on its base
+ * class, [class@GtkRange], in addition to the methods for `GtkScale` itself.
+ * To set the value of a scale, you would normally use [method@Gtk.Range.set_value].
  * To detect changes to the value, you would normally use the
- * #GtkRange::value-changed signal.
+ * [signal@Gtk.Range::value-changed] signal.
  *
- * Note that using the same upper and lower bounds for the #GtkScale (through
- * the #GtkRange methods) will hide the slider itself. This is useful for
+ * Note that using the same upper and lower bounds for the `GtkScale` (through
+ * the `GtkRange` methods) will hide the slider itself. This is useful for
  * applications that want to show an undeterminate value on the scale, without
  * changing the layout of the application (such as movie or music players).
  *
  * # GtkScale as GtkBuildable
  *
- * GtkScale supports a custom <marks> element, which can contain multiple
- * <mark> elements. The “value” and “position” attributes have the same
- * meaning as gtk_scale_add_mark() parameters of the same name. If the
- * element is not empty, its content is taken as the markup to show at
+ * `GtkScale` supports a custom <marks> element, which can contain multiple
+ * <mark\> elements. The “value” and “position” attributes have the same
+ * meaning as [method@Gtk.Scale.add_mark] parameters of the same name. If
+ * the element is not empty, its content is taken as the markup to show at
  * the mark. It can be translated with the usual ”translatable” and
  * “context” attributes.
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * scale[.fine-tune][.marks-before][.marks-after]
  * ├── [value][.top][.right][.bottom][.left]
  * ├── marks.top
@@ -92,19 +93,19 @@
  *     ├── [fill]
  *     ├── [highlight]
  *     ╰── slider
- * ]|
+ * ```
  *
- * GtkScale has a main CSS node with name scale and a subnode for its contents,
+ * `GtkScale` has a main CSS node with name scale and a subnode for its contents,
  * with subnodes named trough and slider.
  *
  * The main node gets the style class .fine-tune added when the scale is in
  * 'fine-tuning' mode.
  *
- * If the scale has an origin (see gtk_scale_set_has_origin()), there is a
- * subnode with name highlight below the trough node that is used for rendering
+ * If the scale has an origin (see [method@Gtk.Scale.set_has_origin]), there is
+ * a subnode with name highlight below the trough node that is used for rendering
  * the highlighted part of the trough.
  *
- * If the scale is showing a fill level (see gtk_range_set_show_fill_level()),
+ * If the scale is showing a fill level (see [method@Gtk.Range.set_show_fill_level]),
  * there is a subnode with name fill below the trough node that is used for
  * rendering the filled in part of the trough.
  *
@@ -120,13 +121,13 @@
  * The main CSS node gets the 'marks-before' and/or 'marks-after' style classes
  * added depending on what marks are present.
  *
- * If the scale is displaying the value (see #GtkScale:draw-value), there is
- * subnode with name value. This node will get the .top or .bottom style classes
- * similar to the marks node.
+ * If the scale is displaying the value (see [property@Gtk.Scale:draw-value]),
+ * there is subnode with name value. This node will get the .top or .bottom style
+ * classes similar to the marks node.
  *
  * # Accessibility
  *
- * GtkScale uses the #GTK_ACCESSIBLE_ROLE_SLIDER role.
+ * `GtkScale` uses the %GTK_ACCESSIBLE_ROLE_SLIDER role.
  */
 
 
@@ -670,6 +671,11 @@ gtk_scale_class_init (GtkScaleClass *class)
 
   class->get_layout_offsets = gtk_scale_real_get_layout_offsets;
 
+  /**
+   * GtkScale:digits: (attributes org.gtk.Method.get=gtk_scale_get_digits org.gtk.Method.set=gtk_scale_set_digits)
+   *
+   * The number of decimal places that are displayed in the value.
+   */
   properties[PROP_DIGITS] =
       g_param_spec_int ("digits",
                         P_("Digits"),
@@ -678,6 +684,11 @@ gtk_scale_class_init (GtkScaleClass *class)
                         1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkScale:draw-value: (attributes org.gtk.Method.get=gtk_scale_get_draw_value org.gtk.Method.set=gtk_scale_set_draw_value)
+   *
+   * Whether the current value is displayed as a string next to the slider.
+   */
   properties[PROP_DRAW_VALUE] =
       g_param_spec_boolean ("draw-value",
                             P_("Draw Value"),
@@ -685,6 +696,11 @@ gtk_scale_class_init (GtkScaleClass *class)
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkScale:has-origin: (attributes org.gtk.Method.get=gtk_scale_get_has_origin org.gtk.Method.set=gtk_scale_set_has_origin)
+   *
+   * Whether the scale has an origin.
+   */
   properties[PROP_HAS_ORIGIN] =
       g_param_spec_boolean ("has-origin",
                             P_("Has Origin"),
@@ -692,6 +708,11 @@ gtk_scale_class_init (GtkScaleClass *class)
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkScale:value-pos: (attributes org.gtk.Method.get=gtk_scale_get_value_pos org.gtk.Method.set=gtk_scale_set_value_pos)
+   *
+   * The position in which the current value is displayed.
+   */
   properties[PROP_VALUE_POS] =
       g_param_spec_enum ("value-pos",
                          P_("Value Position"),
@@ -904,13 +925,13 @@ gtk_scale_get_property (GObject      *object,
 /**
  * gtk_scale_new:
  * @orientation: the scale’s orientation.
- * @adjustment: (nullable): the #GtkAdjustment which sets the range
- *              of the scale, or %NULL to create a new adjustment.
+ * @adjustment: (nullable): the [class@Gtk.Adjustment] which sets
+ *   the range of the scale, or %NULL to create a new adjustment.
  *
- * Creates a new #GtkScale.
+ * Creates a new `GtkScale`.
  *
- * Returns: a new #GtkScale
- **/
+ * Returns: a new `GtkScale`
+ */
 GtkWidget *
 gtk_scale_new (GtkOrientation  orientation,
                GtkAdjustment  *adjustment)
@@ -931,15 +952,17 @@ gtk_scale_new (GtkOrientation  orientation,
  * @max: maximum value
  * @step: step increment (tick size) used with keyboard shortcuts
  *
- * Creates a new scale widget with the given orientation that lets the
+ * Creates a new scale widget with a range from @min to @max.
+ *
+ * The returns scale will have the given orientation and will let the
  * user input a number between @min and @max (including @min and @max)
- * with the increment @step.  @step must be nonzero; it’s the distance
+ * with the increment @step. @step must be nonzero; it’s the distance
  * the slider moves when using the arrow keys to adjust the scale
  * value.
  *
- * Note that the way in which the precision is derived works best if @step
- * is a power of ten. If the resulting precision is not suitable for your
- * needs, use gtk_scale_set_digits() to correct it.
+ * Note that the way in which the precision is derived works best if
+ * @step is a power of ten. If the resulting precision is not suitable
+ * for your needs, use [method@Gtk.Scale.set_digits] to correct it.
  *
  * Returns: a new #GtkScale
  */
@@ -976,20 +999,22 @@ gtk_scale_new_with_range (GtkOrientation orientation,
 }
 
 /**
- * gtk_scale_set_digits:
- * @scale: a #GtkScale
+ * gtk_scale_set_digits: (attributes org.gtk.Method.set_property=digits)
+ * @scale: a `GtkScale`
  * @digits: the number of decimal places to display,
  *     e.g. use 1 to display 1.0, 2 to display 1.00, etc
  *
- * Sets the number of decimal places that are displayed in the value. Also
- * causes the value of the adjustment to be rounded to this number of digits,
- * so the retrieved value matches the displayed one, if #GtkScale:draw-value is
- * %TRUE when the value changes. If you want to enforce rounding the value when
- * #GtkScale:draw-value is %FALSE, you can set #GtkRange:round-digits instead.
+ * Sets the number of decimal places that are displayed in the value.
+ *
+ * Also causes the value of the adjustment to be rounded to this number
+ * of digits, so the retrieved value matches the displayed one, if
+ * [property@GtkScale:draw-value] is %TRUE when the value changes. If
+ * you want to enforce rounding the value when [property@GtkScale:draw-value]
+ * is %FALSE, you can set [property@GtkRange:round-digits] instead.
  *
  * Note that rounding to a small number of digits can interfere with
- * the smooth autoscrolling that is built into #GtkScale. As an alternative,
- * you can use gtk_scale_set_format_value_func() to format the displayed
+ * the smooth autoscrolling that is built into `GtkScale`. As an alternative,
+ * you can use [method@Gtk.Scale.set_format_value_func] to format the displayed
  * value yourself.
  */
 void
@@ -1018,8 +1043,8 @@ gtk_scale_set_digits (GtkScale *scale,
 }
 
 /**
- * gtk_scale_get_digits:
- * @scale: a #GtkScale
+ * gtk_scale_get_digits: (attributes org.gtk.Method.get_property=digits)
+ * @scale: a `GtkScale`
  *
  * Gets the number of decimal places that are displayed in the value.
  *
@@ -1069,11 +1094,11 @@ update_value_position (GtkScale *scale)
 }
 
 /**
- * gtk_scale_set_draw_value:
+ * gtk_scale_set_draw_value: (attributes org.gtk.Method.set_property=draw-value)
  * @scale: a #GtkScale
  * @draw_value: %TRUE to draw the value
  *
- * Specifies whether the current value is displayed as a string next 
+ * Specifies whether the current value is displayed as a string next
  * to the slider.
  */
 void
@@ -1118,10 +1143,10 @@ gtk_scale_set_draw_value (GtkScale *scale,
 }
 
 /**
- * gtk_scale_get_draw_value:
- * @scale: a #GtkScale
+ * gtk_scale_get_draw_value: (attributes org.gtk.Method.get_property=draw-value)
+ * @scale: a `GtkScale`
  *
- * Returns whether the current value is displayed as a string 
+ * Returns whether the current value is displayed as a string
  * next to the slider.
  *
  * Returns: whether the current value is displayed as a string
@@ -1137,13 +1162,15 @@ gtk_scale_get_draw_value (GtkScale *scale)
 }
 
 /**
- * gtk_scale_set_has_origin:
- * @scale: a #GtkScale
+ * gtk_scale_set_has_origin: (attributes org.gtk.Method.set_property=has-origin)
+ * @scale: a `GtkScale`
  * @has_origin: %TRUE if the scale has an origin
- * 
- * If #GtkScale:has-origin is set to %TRUE (the default), the scale will
- * highlight the part of the trough between the origin (bottom or left side)
- * and the current value.
+ *
+ * Sets whether the scale has an origin.
+ *
+ * If [property@GtkScale:has-origin] is set to %TRUE (the default),
+ * the scale will highlight the part of the trough between the origin
+ * (bottom or left side) and the current value.
  */
 void
 gtk_scale_set_has_origin (GtkScale *scale,
@@ -1164,8 +1191,8 @@ gtk_scale_set_has_origin (GtkScale *scale,
 }
 
 /**
- * gtk_scale_get_has_origin:
- * @scale: a #GtkScale
+ * gtk_scale_get_has_origin: (attributes org.gtk.Method.get_property=has-origin)
+ * @scale: a `GtkScale`
  *
  * Returns whether the scale has an origin.
  *
@@ -1180,8 +1207,8 @@ gtk_scale_get_has_origin (GtkScale *scale)
 }
 
 /**
- * gtk_scale_set_value_pos:
- * @scale: a #GtkScale
+ * gtk_scale_set_value_pos: (attributes org.gtk.Method.set_property=value-pos)
+ * @scale: a `GtkScale`
  * @pos: the position in which the current value is displayed
  *
  * Sets the position in which the current value is displayed.
@@ -1206,8 +1233,8 @@ gtk_scale_set_value_pos (GtkScale        *scale,
 }
 
 /**
- * gtk_scale_get_value_pos:
- * @scale: a #GtkScale
+ * gtk_scale_get_value_pos: (attributes org.gtk.Method.get_property=value-pos)
+ * @scale: a `GtkScale`
  *
  * Gets the position in which the current value is displayed.
  *
@@ -1542,14 +1569,16 @@ gtk_scale_finalize (GObject *object)
 
 /**
  * gtk_scale_get_layout:
- * @scale: A #GtkScale
+ * @scale: A `GtkScale`
  *
- * Gets the #PangoLayout used to display the scale. The returned
- * object is owned by the scale so does not need to be freed by
- * the caller.
+ * Gets the `PangoLayout` used to display the scale.
  *
- * Returns: (transfer none) (nullable): the #PangoLayout for this scale,
- *     or %NULL if the #GtkScale:draw-value property is %FALSE.
+ * The returned object is owned by the scale so does not need
+ * to be freed by the caller.
+ *
+ * Returns: (transfer none) (nullable): the [class@Pango.Layout]
+ *   for this scale, or %NULL if the [property@GtkScale:draw-value]
+ *   property is %FALSE.
  */
 PangoLayout *
 gtk_scale_get_layout (GtkScale *scale)
@@ -1570,12 +1599,13 @@ gtk_scale_get_layout (GtkScale *scale)
  * @x: (out) (allow-none): location to store X offset of layout, or %NULL
  * @y: (out) (allow-none): location to store Y offset of layout, or %NULL
  *
- * Obtains the coordinates where the scale will draw the 
- * #PangoLayout representing the text in the scale. Remember
- * when using the #PangoLayout function you need to convert to
- * and from pixels using PANGO_PIXELS() or #PANGO_SCALE. 
+ * Obtains the coordinates where the scale will draw the
+ * `PangoLayout` representing the text in the scale.
  *
- * If the #GtkScale:draw-value property is %FALSE, the return 
+ * Remember when using the `PangoLayout` function you need to
+ * convert to and from pixels using `PANGO_PIXELS()` or `PANGO_SCALE`.
+ *
+ * If the [property@GtkScale:draw-value] property is %FALSE, the return
  * values are undefined.
  */
 void 
@@ -1614,9 +1644,9 @@ gtk_scale_mark_free (gpointer data)
 
 /**
  * gtk_scale_clear_marks:
- * @scale: a #GtkScale
- * 
- * Removes any marks that have been added with gtk_scale_add_mark().
+ * @scale: a `GtkScale`
+ *
+ * Removes any marks that have been added.
  */
 void
 gtk_scale_clear_marks (GtkScale *scale)
@@ -1641,15 +1671,15 @@ gtk_scale_clear_marks (GtkScale *scale)
 
 /**
  * gtk_scale_add_mark:
- * @scale: a #GtkScale
+ * @scale: a `GtkScale`
  * @value: the value at which the mark is placed, must be between
  *   the lower and upper limits of the scales’ adjustment
  * @position: where to draw the mark. For a horizontal scale, #GTK_POS_TOP
  *   and %GTK_POS_LEFT are drawn above the scale, anything else below.
  *   For a vertical scale, #GTK_POS_LEFT and %GTK_POS_TOP are drawn to
  *   the left of the scale, anything else to the right.
- * @markup: (allow-none): Text to be shown at the mark, using [Pango markup][PangoMarkupFormat], or %NULL
- *
+ * @markup: (allow-none): Text to be shown at the mark, using
+ *   Pango markup, or %NULL
  *
  * Adds a mark at @value.
  *
@@ -1659,7 +1689,7 @@ gtk_scale_clear_marks (GtkScale *scale)
  *
  * If @markup is not %NULL, text is shown next to the tick mark.
  *
- * To remove marks from a scale, use gtk_scale_clear_marks().
+ * To remove marks from a scale, use [method@Gtk.Scale.clear_marks].
  */
 void
 gtk_scale_add_mark (GtkScale        *scale,
@@ -2015,17 +2045,19 @@ gtk_scale_buildable_custom_finished (GtkBuildable *buildable,
 
 /**
  * gtk_scale_set_format_value_func:
- * @scale: a #GtkScale
+ * @scale: a `GtkScale`
  * @func: (nullable): function that formats the value
  * @user_data: (closure): user data to pass to @func
  * @destroy_notify: (nullable): destroy function for @user_data
  *
- * @func allows you to change how the scale value is displayed. The given
- * function will return an allocated string representing @value.
- * That string will then be used to display the scale's value.
+ * @func allows you to change how the scale value is displayed.
+ *
+ * The given function will return an allocated string representing
+ * @value. That string will then be used to display the scale's value.
  *
  * If #NULL is passed as @func, the value will be displayed on
- * its own, rounded according to the value of the #GtkScale:digits property.
+ * its own, rounded according to the value of the
+ * [property@GtkScale:digits] property.
  */
 void
 gtk_scale_set_format_value_func (GtkScale                *scale,

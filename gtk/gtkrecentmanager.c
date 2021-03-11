@@ -18,42 +18,39 @@
  */
 
 /**
- * SECTION:gtkrecentmanager
- * @Title: GtkRecentManager
- * @short_description: Managing recently used files
- * @See_Also: #GBookmarkFile, #GtkSettings, #GtkRecentChooser
+ * GtkRecentManager:
  *
- * #GtkRecentManager provides a facility for adding, removing and
- * looking up recently used files. Each recently used file is
- * identified by its URI, and has meta-data associated to it, like
- * the names and command lines of the applications that have
- * registered it, the number of time each application has registered
- * the same file, the mime type of the file and whether the file
- * should be displayed only by the applications that have
+ * `GtkRecentManager` manages and looks up recently used files.
+ *
+ * Each recently used file is identified by its URI, and has meta-data
+ * associated to it, like the names and command lines of the applications
+ * that have registered it, the number of time each application has
+ * registered the same file, the mime type of the file and whether
+ * the file should be displayed only by the applications that have
  * registered it.
  *
  * The recently used files list is per user.
  *
- * The #GtkRecentManager acts like a database of all the recently
- * used files. You can create new #GtkRecentManager objects, but
- * it is more efficient to use the default manager created by GTK
+ * `GtkRecentManager` acts like a database of all the recently
+ * used files. You can create new `GtkRecentManager` objects, but
+ * it is more efficient to use the default manager created by GTK.
  *
  * Adding a new recently used file is as simple as:
  *
- * |[<!-- language="C" -->
+ * ```c
  * GtkRecentManager *manager;
  *
  * manager = gtk_recent_manager_get_default ();
  * gtk_recent_manager_add_item (manager, file_uri);
- * ]|
+ * ```
  *
- * The #GtkRecentManager will try to gather all the needed information
+ * The `GtkRecentManager` will try to gather all the needed information
  * from the file itself through GIO.
  *
  * Looking up the meta-data associated with a recently used file
- * given its URI requires calling gtk_recent_manager_lookup_item():
+ * given its URI requires calling [method@Gtk.RecentManager.lookup_item]:
  *
- * |[<!-- language="C" -->
+ * ```c
  * GtkRecentManager *manager;
  * GtkRecentInfo *info;
  * GError *error = NULL;
@@ -70,16 +67,14 @@
  *    // Use the info object
  *    gtk_recent_info_unref (info);
  *  }
- * ]|
+ * ```
  *
  * In order to retrieve the list of recently used files, you can use
- * gtk_recent_manager_get_items(), which returns a list of #GtkRecentInfo.
- *
- * A #GtkRecentManager is the model used to populate the contents of
- * one, or more #GtkRecentChooser implementations.
+ * [method@Gtk.RecentManager.get_items], which returns a list of
+ * [struct@Gtk.RecentInfo].
  *
  * Note that the maximum age of the recently used files list is
- * controllable through the #GtkSettings:gtk-recent-files-max-age
+ * controllable through the [property@Gtk.Settings:gtk-recent-files-max-age]
  * property.
  */
 
@@ -129,11 +124,8 @@ typedef struct
 /**
  * GtkRecentInfo:
  *
- * #GtkRecentInfo contains private data only, and should be accessed using the
- * provided API.
- *
- * #GtkRecentInfo contains all the meta-data
- * associated with an entry in the recently used files list.
+ * `GtkRecentInfo` contains the metadata associated with an item in the
+ * recently used files list.
  */
 struct _GtkRecentInfo
 {
@@ -299,8 +291,10 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
    * @recent_manager: the recent manager
    *
    * Emitted when the current recently used resources manager changes
-   * its contents, either by calling gtk_recent_manager_add_item() or
-   * by another application.
+   * its contents.
+   *
+   * This can happen either by calling [method@Gtk.RecentManager.add_item]
+   * or by another application.
    */
   signal_changed =
     g_signal_new (I_("changed"),
@@ -718,15 +712,18 @@ build_recent_items_list (GtkRecentManager *manager)
 /**
  * gtk_recent_manager_new:
  *
- * Creates a new recent manager object. Recent manager objects are used to
- * handle the list of recently used resources. A #GtkRecentManager object
- * monitors the recently used resources list, and emits the “changed” signal
- * each time something inside the list changes.
+ * Creates a new recent manager object.
  *
- * #GtkRecentManager objects are expensive: be sure to create them only when
- * needed. You should use gtk_recent_manager_get_default() instead.
+ * Recent manager objects are used to handle the list of recently used
+ * resources. A `GtkRecentManager` object monitors the recently used
+ * resources list, and emits the [signal@Gtk.RecentManager::changed]
+ * signal each time something inside the list changes.
  *
- * Returns: A newly created #GtkRecentManager object
+ * `GtkRecentManager` objects are expensive: be sure to create them
+ * only when needed. You should use [type_func@Gtk.RecentManager.get_default]
+ * instead.
+ *
+ * Returns: A newly created `GtkRecentManager` object
  */
 GtkRecentManager *
 gtk_recent_manager_new (void)
@@ -737,10 +734,10 @@ gtk_recent_manager_new (void)
 /**
  * gtk_recent_manager_get_default:
  *
- * Gets a unique instance of #GtkRecentManager, that you can share
+ * Gets a unique instance of `GtkRecentManager` that you can share
  * in your application without caring about memory management.
  *
- * Returns: (transfer none): A unique #GtkRecentManager. Do not ref or
+ * Returns: (transfer none): A unique `GtkRecentManager`. Do not ref or
  *   unref it.
  */
 GtkRecentManager *
@@ -815,7 +812,7 @@ gtk_recent_manager_add_item_query_info (GObject      *source_object,
 
 /**
  * gtk_recent_manager_add_item:
- * @manager: a #GtkRecentManager
+ * @manager: a `GtkRecentManager`
  * @uri: a valid URI
  *
  * Adds a new resource, pointed by @uri, into the recently used
@@ -823,9 +820,9 @@ gtk_recent_manager_add_item_query_info (GObject      *source_object,
  *
  * This function automatically retrieves some of the needed
  * metadata and setting other metadata to common default values;
- * it then feeds the data to gtk_recent_manager_add_full().
+ * it then feeds the data to [method@Gtk.RecentManager.add_full].
  *
- * See gtk_recent_manager_add_full() if you want to explicitly
+ * See [method@Gtk.RecentManager.add_full] if you want to explicitly
  * define the metadata for the resource pointed by @uri.
  *
  * Returns: %TRUE if the new item was successfully added
@@ -857,25 +854,25 @@ gtk_recent_manager_add_item (GtkRecentManager *manager,
 
 /**
  * gtk_recent_manager_add_full:
- * @manager: a #GtkRecentManager
+ * @manager: a `GtkRecentManager`
  * @uri: a valid URI
  * @recent_data: metadata of the resource
  *
  * Adds a new resource, pointed by @uri, into the recently used
  * resources list, using the metadata specified inside the
- * #GtkRecentData passed in @recent_data.
+ * `GtkRecentData` passed in @recent_data.
  *
  * The passed URI will be used to identify this resource inside the
  * list.
  *
  * In order to register the new recently used resource, metadata about
  * the resource must be passed as well as the URI; the metadata is
- * stored in a #GtkRecentData, which must contain the MIME
+ * stored in a `GtkRecentData`, which must contain the MIME
  * type of the resource pointed by the URI; the name of the application
  * that is registering the item, and a command line to be used when
  * launching the item.
  *
- * Optionally, a #GtkRecentData might contain a UTF-8 string
+ * Optionally, a `GtkRecentData` might contain a UTF-8 string
  * to be used when viewing the item instead of the last component of
  * the URI; a short description of the item; whether the item should
  * be considered private - that is, should be displayed only by the
@@ -996,7 +993,7 @@ gtk_recent_manager_add_full (GtkRecentManager    *manager,
 
 /**
  * gtk_recent_manager_remove_item:
- * @manager: a #GtkRecentManager
+ * @manager: a `GtkRecentManager`
  * @uri: the URI of the item you wish to remove
  * @error: (allow-none): return location for a #GError, or %NULL
  *
@@ -1054,7 +1051,7 @@ gtk_recent_manager_remove_item (GtkRecentManager  *manager,
 
 /**
  * gtk_recent_manager_has_item:
- * @manager: a #GtkRecentManager
+ * @manager: a `GtkRecentManager`
  * @uri: a URI
  *
  * Checks whether there is a recently used resource registered
@@ -1145,18 +1142,18 @@ build_recent_info (GBookmarkFile *bookmarks,
 
 /**
  * gtk_recent_manager_lookup_item:
- * @manager: a #GtkRecentManager
+ * @manager: a `GtkRecentManager`
  * @uri: a URI
  * @error: (allow-none): a return location for a #GError, or %NULL
  *
  * Searches for a URI inside the recently used resources list, and
- * returns a #GtkRecentInfo containing information about the resource
+ * returns a `GtkRecentInfo` containing information about the resource
  * like its MIME type, or its display name.
  *
- * Returns: (nullable): a #GtkRecentInfo containing information
+ * Returns: (nullable): a `GtkRecentInfo` containing information
  *   about the resource pointed by @uri, or %NULL if the URI was
  *   not registered in the recently used resources list. Free with
- *   gtk_recent_info_unref().
+ *   [method@Gtk.RecentInfo.unref].
  */
 GtkRecentInfo *
 gtk_recent_manager_lookup_item (GtkRecentManager  *manager,
@@ -1206,7 +1203,7 @@ gtk_recent_manager_lookup_item (GtkRecentManager  *manager,
 
 /**
  * gtk_recent_manager_move_item:
- * @manager: a #GtkRecentManager
+ * @manager: a `GtkRecentManager`
  * @uri: the URI of a recently used resource
  * @new_uri: (allow-none): the new URI of the recently used resource, or
  *    %NULL to remove the item pointed by @uri in the list
@@ -1275,13 +1272,13 @@ gtk_recent_manager_move_item (GtkRecentManager  *recent_manager,
 
 /**
  * gtk_recent_manager_get_items:
- * @manager: a #GtkRecentManager
+ * @manager: a `GtkRecentManager`
  *
  * Gets the list of recently used resources.
  *
  * Returns: (element-type GtkRecentInfo) (transfer full): a list of
- *   newly allocated #GtkRecentInfo objects. Use
- *   gtk_recent_info_unref() on each item inside the list, and then
+ *   newly allocated `GtkRecentInfo objects`. Use
+ *   [method@Gtk.RecentInfo.unref] on each item inside the list, and then
  *   free the list itself using g_list_free().
  */
 GList *
@@ -1334,7 +1331,7 @@ purge_recent_items_list (GtkRecentManager  *manager,
 
 /**
  * gtk_recent_manager_purge_items:
- * @manager: a #GtkRecentManager
+ * @manager: a `GtkRecentManager`
  * @error: (allow-none): a return location for a #GError, or %NULL
  *
  * Purges every item from the recently used resources list.
@@ -1532,7 +1529,7 @@ gtk_recent_info_free (GtkRecentInfo *recent_info)
 
 /**
  * gtk_recent_info_ref:
- * @info: a #GtkRecentInfo
+ * @info: a `GtkRecentInfo`
  *
  * Increases the reference count of @recent_info by one.
  *
@@ -1552,10 +1549,12 @@ gtk_recent_info_ref (GtkRecentInfo *info)
 
 /**
  * gtk_recent_info_unref:
- * @info: a #GtkRecentInfo
+ * @info: a `GtkRecentInfo`
  *
- * Decreases the reference count of @info by one. If the reference
- * count reaches zero, @info is deallocated, and the memory freed.
+ * Decreases the reference count of @info by one.
+ *
+ * If the reference count reaches zero, @info is
+ * deallocated, and the memory freed.
  */
 void
 gtk_recent_info_unref (GtkRecentInfo *info)
@@ -1571,7 +1570,7 @@ gtk_recent_info_unref (GtkRecentInfo *info)
 
 /**
  * gtk_recent_info_get_uri:
- * @info: a #GtkRecentInfo
+ * @info: a `tkRecentInfo`
  *
  * Gets the URI of the resource.
  *
@@ -1588,9 +1587,11 @@ gtk_recent_info_get_uri (GtkRecentInfo *info)
 
 /**
  * gtk_recent_info_get_display_name:
- * @info: a #GtkRecentInfo
+ * @info: a `GtkRecentInfo`
  *
- * Gets the name of the resource. If none has been defined, the basename
+ * Gets the name of the resource.
+ *
+ * If none has been defined, the basename
  * of the resource is obtained.
  *
  * Returns: the display name of the resource. The returned string
@@ -1609,7 +1610,7 @@ gtk_recent_info_get_display_name (GtkRecentInfo *info)
 
 /**
  * gtk_recent_info_get_description:
- * @info: a #GtkRecentInfo
+ * @info: a `GtkRecentInfo`
  *
  * Gets the (short) description of the resource.
  *
@@ -1626,7 +1627,7 @@ gtk_recent_info_get_description (GtkRecentInfo *info)
 
 /**
  * gtk_recent_info_get_mime_type:
- * @info: a #GtkRecentInfo
+ * @info: a `GtkRecentInfo`
  *
  * Gets the MIME type of the resource.
  *
@@ -1646,7 +1647,7 @@ gtk_recent_info_get_mime_type (GtkRecentInfo *info)
 
 /**
  * gtk_recent_info_get_added:
- * @info: a #GtkRecentInfo
+ * @info: a `GtkRecentInfo`
  *
  * Gets the the time when the resource
  * was added to the recently used resources list.
@@ -1664,7 +1665,7 @@ gtk_recent_info_get_added (GtkRecentInfo *info)
 
 /**
  * gtk_recent_info_get_modified:
- * @info: a #GtkRecentInfo
+ * @info: a `GtkRecentInfo`
  *
  * Gets the time when the meta-data
  * for the resource was last modified.
@@ -1682,7 +1683,7 @@ gtk_recent_info_get_modified (GtkRecentInfo *info)
 
 /**
  * gtk_recent_info_get_visited:
- * @info: a #GtkRecentInfo
+ * @info: a `GtkRecentInfo`
  *
  * Gets the time when the meta-data
  * for the resource was last visited.
@@ -1700,11 +1701,13 @@ gtk_recent_info_get_visited (GtkRecentInfo *info)
 
 /**
  * gtk_recent_info_get_private_hint:
- * @info: a #GtkRecentInfo
+ * @info: a `GtkRecentInfo`
  *
- * Gets the value of the “private” flag. Resources in the recently used
- * list that have this flag set to %TRUE should only be displayed by the
- * applications that have registered them.
+ * Gets the value of the “private” flag.
+ *
+ * Resources in the recently used list that have this flag
+ * set to %TRUE should only be displayed by the applications
+ * that have registered them.
  *
  * Returns: %TRUE if the private flag was found, %FALSE otherwise
  */
@@ -1718,7 +1721,7 @@ gtk_recent_info_get_private_hint (GtkRecentInfo *info)
 
 /**
  * gtk_recent_info_get_application_info:
- * @info: a #GtkRecentInfo
+ * @info: a `GtkRecentInfo`
  * @app_name: the name of the application that has registered this item
  * @app_exec: (transfer none) (out): return location for the string containing
  *    the command line
@@ -1734,7 +1737,7 @@ gtk_recent_info_get_private_hint (GtkRecentInfo *info)
  *
  * Returns: %TRUE if an application with @app_name has registered this
  *   resource inside the recently used list, or %FALSE otherwise. The
- *   @app_exec string is owned by the #GtkRecentInfo and should not be
+ *   @app_exec string is owned by the `GtkRecentInfo` and should not be
  *   modified or freed
  */
 gboolean
@@ -1774,14 +1777,13 @@ gtk_recent_info_get_application_info (GtkRecentInfo  *info,
 
 /**
  * gtk_recent_info_get_applications:
- * @info: a #GtkRecentInfo
+ * @info: a `GtkRecentInfo`
  * @length: (out) (allow-none): return location for the length of the returned list
  *
  * Retrieves the list of applications that have registered this resource.
  *
- * Returns: (array length=length zero-terminated=1) (transfer full):
- *     a newly allocated %NULL-terminated array of strings.
- *     Use g_strfreev() to free it.
+ * Returns: (array length=length zero-terminated=1) (transfer full): a newly
+ *   allocated %NULL-terminated array of strings. Use g_strfreev() to free it.
  */
 char **
 gtk_recent_info_get_applications (GtkRecentInfo *info,
@@ -1820,7 +1822,7 @@ gtk_recent_info_get_applications (GtkRecentInfo *info,
 
 /**
  * gtk_recent_info_has_application:
- * @info: a #GtkRecentInfo
+ * @info: a `GtkRecentInfo`
  * @app_name: a string containing an application name
  *
  * Checks whether an application registered this resource using @app_name.
@@ -1840,7 +1842,7 @@ gtk_recent_info_has_application (GtkRecentInfo *info,
 
 /**
  * gtk_recent_info_last_application:
- * @info: a #GtkRecentInfo
+ * @info: a `GtkRecentInfo`
  *
  * Gets the name of the last application that have registered the
  * recently used resource represented by @info.
@@ -1873,7 +1875,7 @@ gtk_recent_info_last_application (GtkRecentInfo *info)
 
 /**
  * gtk_recent_info_get_gicon:
- * @info: a #GtkRecentInfo
+ * @info: a `GtkRecentInfo`
  *
  * Retrieves the icon associated to the resource MIME type.
  *
@@ -1908,7 +1910,7 @@ gtk_recent_info_get_gicon (GtkRecentInfo *info)
 
 /**
  * gtk_recent_info_is_local:
- * @info: a #GtkRecentInfo
+ * @info: a `GtkRecentInfo`
  *
  * Checks whether the resource is local or not by looking at the
  * scheme of its URI.
@@ -1925,7 +1927,7 @@ gtk_recent_info_is_local (GtkRecentInfo *info)
 
 /**
  * gtk_recent_info_exists:
- * @info: a #GtkRecentInfo
+ * @info: a `GtkRecentInfo`
  *
  * Checks whether the resource pointed by @info still exists.
  * At the moment this check is done only on resources pointing
@@ -1960,12 +1962,12 @@ gtk_recent_info_exists (GtkRecentInfo *info)
 
 /**
  * gtk_recent_info_match:
- * @info_a: a #GtkRecentInfo
- * @info_b: a #GtkRecentInfo
+ * @info_a: a `GtkRecentInfo`
+ * @info_b: a `GtkRecentInfo`
  *
- * Checks whether two #GtkRecentInfo point to the same resource.
+ * Checks whether two `GtkRecentInfo` point to the same resource.
  *
- * Returns: %TRUE if both #GtkRecentInfo point to the same
+ * Returns: %TRUE if both `GtkRecentInfo` point to the same
  *   resource, %FALSE otherwise
  */
 gboolean
@@ -2104,12 +2106,13 @@ get_uri_shortname_for_display (const char *uri)
 
 /**
  * gtk_recent_info_get_short_name:
- * @info: an #GtkRecentInfo
+ * @info: an `GtkRecentInfo`
  *
  * Computes a valid UTF-8 string that can be used as the
- * name of the item in a menu or list. For example, calling
- * this function on an item that refers to
- * “file:///foo/bar.txt” will yield “bar.txt”.
+ * name of the item in a menu or list.
+ *
+ * For example, calling this function on an item that refers
+ * to “file:///foo/bar.txt” will yield “bar.txt”.
  *
  * Returns: A newly-allocated string in UTF-8 encoding
  *   free it with g_free()
@@ -2131,11 +2134,13 @@ gtk_recent_info_get_short_name (GtkRecentInfo *info)
 
 /**
  * gtk_recent_info_get_uri_display:
- * @info: a #GtkRecentInfo
+ * @info: a `GtkRecentInfo`
  *
- * Gets a displayable version of the resource’s URI. If the resource
- * is local, it returns a local path; if the resource is not local,
- * it returns the UTF-8 encoded content of gtk_recent_info_get_uri().
+ * Gets a displayable version of the resource’s URI.
+ *
+ * If the resource is local, it returns a local path; if the
+ * resource is not local, it returns the UTF-8 encoded content
+ * of [method@Gtk.RecentInfo.get_uri].
  *
  * Returns: (nullable): a newly allocated UTF-8 string containing the
  *   resource’s URI or %NULL. Use g_free() when done using it.
@@ -2169,7 +2174,7 @@ gtk_recent_info_get_uri_display (GtkRecentInfo *info)
 
 /**
  * gtk_recent_info_get_age:
- * @info: a #GtkRecentInfo
+ * @info: a `GtkRecentInfo`
  *
  * Gets the number of days elapsed since the last update
  * of the resource pointed by @info.
@@ -2191,10 +2196,11 @@ gtk_recent_info_get_age (GtkRecentInfo *info)
 
 /**
  * gtk_recent_info_get_groups:
- * @info: a #GtkRecentInfo
+ * @info: a `GtkRecentInfo`
  * @length: (out) (allow-none): return location for the number of groups returned
  *
  * Returns all groups registered for the recently used item @info.
+ *
  * The array of returned group names will be %NULL terminated, so
  * length might optionally be %NULL.
  *
@@ -2236,7 +2242,7 @@ gtk_recent_info_get_groups (GtkRecentInfo *info,
 
 /**
  * gtk_recent_info_has_group:
- * @info: a #GtkRecentInfo
+ * @info: a `GtkRecentInfo`
  * @group_name: name of a group
  *
  * Checks whether @group_name appears inside the groups
@@ -2269,16 +2275,16 @@ gtk_recent_info_has_group (GtkRecentInfo *info,
 
 /**
  * gtk_recent_info_create_app_info:
- * @info: a #GtkRecentInfo
+ * @info: a `GtkRecentInfo`
  * @app_name: (allow-none): the name of the application that should
- *   be mapped to a #GAppInfo; if %NULL is used then the default
+ *   be mapped to a `GAppInfo`; if %NULL is used then the default
  *   application for the MIME type is used
  * @error: (allow-none): return location for a #GError, or %NULL
  *
- * Creates a #GAppInfo for the specified #GtkRecentInfo
+ * Creates a `GAppInfo` for the specified `GtkRecentInfo`
  *
- * Returns: (nullable) (transfer full): the newly created #GAppInfo, or %NULL.
- *   In case of error, @error will be set either with a
+ * Returns: (nullable) (transfer full): the newly created `GAppInfo`,
+ *   or %NULL. In case of error, @error will be set either with a
  *   %GTK_RECENT_MANAGER_ERROR or a %G_IO_ERROR
  */
 GAppInfo *
