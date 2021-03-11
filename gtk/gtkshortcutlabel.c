@@ -515,7 +515,7 @@ gtk_shortcut_label_init (GtkShortcutLabel *self)
  *
  * Creates a new `GtkShortcutLabel` with @accelerator set.
  *
- * Returns: (transfer full): a newly-allocated `GtkShortcutLabel`
+ * Returns: a newly-allocated `GtkShortcutLabel`
  */
 GtkWidget *
 gtk_shortcut_label_new (const char *accelerator)
