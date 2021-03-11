@@ -23,6 +23,7 @@ epoxy_req          = '>= 1.4'
 cloudproviders_req = '>= 0.3.1'
 xkbcommon_req      = '>= 0.2.0'
 sysprof_req        = '>= 3.38.0'
+enchant_req        = '>= 2.2.12'
 
 gnome = import('gnome')
 pkg_config = import('pkgconfig')
@@ -667,6 +668,16 @@ else
   profiler_enabled = false
 endif
 
+# enchant spellcheck support
+spellcheck_backends = []
+if not get_option('spell-enchant').disabled()
+  libenchant_dep = dependency('enchant-2', version: enchant_req, required: get_option('spell-enchant'))
+  if libenchant_dep.found()
+    spellcheck_backends += ['enchant']
+    cdata.set10('HAVE_ENCHANT', true)
+  endif
+endif
+
 graphene_dep_type = graphene_dep.type_name()
 if graphene_dep_type == 'pkgconfig'
   graphene_has_sse2 = graphene_dep.get_pkgconfig_variable('graphene_has_sse2') == '1'
@@ -834,6 +845,7 @@ endif
 summary('Display backends', display_backends)
 summary('Print backends', print_backends)
 summary('Media backends', media_backends)
+summary('Spell backends', spellcheck_backends)
 
 summary('Vulkan support', vulkan_dep.found(), section: 'Features')
 summary('Cloud support', cloudproviders_dep.found(), section: 'Features')

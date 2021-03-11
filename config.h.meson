@@ -30,6 +30,9 @@
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #mesondefine HAVE_DLFCN_H
+#
+/* define if we have enchant */
+#mesondefine HAVE_ENCHANT
 
 /* Have the ffmpeg library */
 #mesondefine HAVE_FFMPEG

@@ -53,6 +53,8 @@ struct _GdkWaylandKeymap
 
   PangoDirection *direction;
   gboolean bidi;
+
+  char **languages;
 };
 
 struct _GdkWaylandKeymapClass

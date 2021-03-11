@@ -236,6 +236,7 @@
 #include <gtk/gtkstacksidebar.h>
 #include <gtk/gtksizegroup.h>
 #include <gtk/gtksizerequest.h>
+#include <gtk/gtkspellcheck.h>
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtkspinner.h>
 #include <gtk/gtkstack.h>

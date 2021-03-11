@@ -587,7 +587,7 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  *     (state & ~consumed & ALL_ACCELS_MASK) == GDK_CONTROL_MASK)
  *   // Control was pressed
  * ]|
- * 
+ *
  * An older interpretation @consumed_modifiers was that it contained
  * all modifiers that might affect the translation of the key;
  * this allowed accelerators to be stored with irrelevant consumed

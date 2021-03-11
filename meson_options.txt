@@ -49,6 +49,13 @@ option('print-cloudprint',
        value: 'auto',
        description : 'Build the cloudprint print backend')
 
+# Spell Check Providers
+
+option('spell-enchant',
+       type: 'feature',
+       value: 'auto',
+       description : 'Build the enchant spellcheck backend')
+
 # Optional features
 
 option('vulkan',
