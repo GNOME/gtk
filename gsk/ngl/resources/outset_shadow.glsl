@@ -1,4 +1,6 @@
 // VERTEX_SHADER:
+// outset_shadow.glsl
+
 uniform vec4[3] u_outline_rect;
 
 _OUT_ vec4 final_color;
@@ -17,13 +19,15 @@ void main() {
 }
 
 // FRAGMENT_SHADER:
+// outset_shadow.glsl
+
 _IN_ vec4 final_color;
 _IN_ _GSK_ROUNDED_RECT_UNIFORM_ transformed_outline;
 
 void main() {
   vec2 frag = gsk_get_frag_coord();
-
   float alpha = GskTexture(u_source, vUv).a;
+
   alpha *= (1.0 -  clamp(gsk_rounded_rect_coverage(gsk_decode_rect(transformed_outline), frag), 0.0, 1.0));
 
   vec4 color = final_color * alpha;

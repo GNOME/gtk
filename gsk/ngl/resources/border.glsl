@@ -1,4 +1,6 @@
 // VERTEX_SHADER:
+// border.glsl
+
 uniform vec4 u_widths;
 uniform vec4[3] u_outline_rect;
 
@@ -22,6 +24,8 @@ void main() {
 }
 
 // FRAGMENT_SHADER:
+// border.glsl
+
 uniform vec4[3] u_outline_rect;
 
 _IN_ vec4 final_color;

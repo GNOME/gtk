@@ -1,4 +1,6 @@
 // VERTEX_SHADER:
+// color.glsl
+
 _OUT_ vec4 final_color;
 
 void main() {
@@ -8,6 +10,8 @@ void main() {
 }
 
 // FRAGMENT_SHADER:
+// color.glsl
+
 _IN_ vec4 final_color;
 
 void main() {

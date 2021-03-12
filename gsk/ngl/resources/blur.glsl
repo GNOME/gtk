@@ -1,4 +1,6 @@
 // VERTEX_SHADER:
+// blur.glsl
+
 uniform float u_blur_radius;
 uniform vec2 u_blur_size;
 uniform vec2 u_blur_dir;
@@ -25,6 +27,8 @@ void main() {
 }
 
 // FRAGMENT_SHADER:
+// blur.glsl
+
 _IN_ vec2 pixel_step;
 _IN_ float pixels_per_side;
 _IN_ vec3 initial_gaussian;

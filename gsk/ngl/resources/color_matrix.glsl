@@ -1,4 +1,5 @@
 // VERTEX_SHADER:
+// color_matrix.glsl
 
 void main() {
   gl_Position = u_projection * u_modelview * vec4(aPosition, 0.0, 1.0);
@@ -7,6 +8,8 @@ void main() {
 }
 
 // FRAGMENT_SHADER:
+// color_matrix.glsl
+
 uniform mat4 u_color_matrix;
 uniform vec4 u_color_offset;
 

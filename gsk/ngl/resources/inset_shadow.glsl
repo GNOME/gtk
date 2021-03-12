@@ -1,4 +1,6 @@
 // VERTEX_SHADER:
+// inset_shadow.glsl
+
 uniform float u_spread;
 uniform vec2 u_offset;
 uniform vec4[3] u_outline_rect;
@@ -25,6 +27,8 @@ void main() {
 }
 
 // FRAGMENT_SHADER:
+// inset_shadow.glsl
+
 _IN_ vec4 final_color;
 _IN_ _GSK_ROUNDED_RECT_UNIFORM_ transformed_outside_outline;
 _IN_ _GSK_ROUNDED_RECT_UNIFORM_ transformed_inside_outline;

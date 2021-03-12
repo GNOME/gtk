@@ -1,4 +1,5 @@
 // VERTEX_SHADER
+// linear_gradient.glsl
 uniform vec4 u_points;
 
 _NOPERSPECTIVE_ _OUT_ vec4 info;
@@ -39,6 +40,8 @@ void main() {
 }
 
 // FRAGMENT_SHADER:
+// linear_gradient.glsl
+
 #ifdef GSK_LEGACY
 uniform int u_num_color_stops;
 #else

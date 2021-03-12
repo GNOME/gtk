@@ -1,4 +1,5 @@
 // VERTEX_SHADER:
+// blend.glsl
 
 void main() {
   gl_Position = u_projection * u_modelview * vec4(aPosition, 0.0, 1.0);
@@ -7,6 +8,8 @@ void main() {
 }
 
 // FRAGMENT_SHADER:
+// blend.glsl
+
 uniform int u_mode;
 uniform sampler2D u_source2;
 

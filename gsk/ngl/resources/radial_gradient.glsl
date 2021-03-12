@@ -1,4 +1,6 @@
 // VERTEX_SHADER
+// radial_gradient.glsl
+
 uniform vec4 u_geometry;
 
 _NOPERSPECTIVE_ _OUT_ vec2 coord;
@@ -16,6 +18,8 @@ void main() {
 }
 
 // FRAGMENT_SHADER:
+// radial_gradient.glsl
+
 #ifdef GSK_LEGACY
 uniform int u_num_color_stops;
 #else

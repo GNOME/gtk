@@ -1,10 +1,14 @@
 // VERTEX_SHADER:
+// custom.glsl
+
 void main() {
   gl_Position = u_projection * u_modelview * vec4(aPosition, 0.0, 1.0);
   vUv = vec2(aUv.x, aUv.y);
 }
 
 // FRAGMENT_SHADER:
+// custom.glsl
+
 // The shader supplies:
 void mainImage(out vec4 fragColor, in vec2 fragCoord, in vec2 resolution, in vec2 uv);
 

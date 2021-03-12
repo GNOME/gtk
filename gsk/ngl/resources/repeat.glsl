@@ -1,4 +1,5 @@
 // VERTEX_SHADER:
+// repeat.glsl
 
 void main() {
   gl_Position = u_projection * u_modelview * vec4(aPosition, 0.0, 1.0);
@@ -7,6 +8,8 @@ void main() {
 }
 
 // FRAGMENT_SHADER:
+// repeat.glsl
+
 uniform vec4 u_child_bounds;
 uniform vec4 u_texture_rect;
 
