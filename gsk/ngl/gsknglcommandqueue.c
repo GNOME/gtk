@@ -1096,6 +1096,12 @@ gsk_ngl_command_queue_execute (GskNglCommandQueue   *self,
                          sizeof (GskNglDrawVertex),
                          (void *) G_STRUCT_OFFSET (GskNglDrawVertex, uv));
 
+  /* 2 = color location */
+  glEnableVertexAttribArray (2);
+  glVertexAttribPointer (2, 4, GL_FLOAT, GL_FALSE,
+                         sizeof (GskNglDrawVertex),
+                         (void *) G_STRUCT_OFFSET (GskNglDrawVertex, color));
+
   /* Setup initial scissor clip */
   if (scissor != NULL)
     {

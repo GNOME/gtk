@@ -58,13 +58,17 @@ typedef struct {
   graphene_rect_t parent_rect; /* Valid when pointer_is_child */
 } GskTextureKey;
 
-#define GSL_GK_NO_UNIFORMS UNIFORM_INVALID_##__COUNTER__
+#define GSK_NGL_NO_UNIFORMS CONCAT_EXPANDED(UNIFORM_INVALID_,__COUNTER__)
+#define CONCAT_EXPANDED(a,b) CONCAT_EXPANDED2(a,b)
+#define CONCAT_EXPANDED2(a,b) a##b
 #define GSK_NGL_ADD_UNIFORM(pos, KEY, name) UNIFORM_##KEY = UNIFORM_SHARED_LAST + pos,
 #define GSK_NGL_DEFINE_PROGRAM(name, resource, uniforms) enum { uniforms };
 # include "gsknglprograms.defs"
 #undef GSK_NGL_DEFINE_PROGRAM
 #undef GSK_NGL_ADD_UNIFORM
-#undef GSL_GK_NO_UNIFORMS
+#undef GSK_NGL_NO_UNIFORMS
+#undef CONCAT_EXPANDED
+#undef CONCAT_EXPANDED2
 
 #define GSK_TYPE_NGL_DRIVER (gsk_ngl_driver_get_type())
 

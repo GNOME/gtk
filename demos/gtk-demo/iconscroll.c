@@ -13,7 +13,7 @@ static GtkWidget *window = NULL;
 static GtkWidget *scrolledwindow;
 static int selected;
 
-#define N_WIDGET_TYPES 7
+#define N_WIDGET_TYPES 8
 
 
 static int hincrement = 5;
@@ -97,6 +97,41 @@ populate_text (gboolean highlight)
 
   if (highlight)
     fontify ("c", buffer);
+
+  textview = gtk_text_view_new ();
+  gtk_text_view_set_buffer (GTK_TEXT_VIEW (textview), buffer);
+
+  hincrement = 0;
+  vincrement = 5;
+
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow),
+                                  GTK_POLICY_NEVER,
+                                  GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolledwindow), textview);
+}
+
+static void
+populate_emoji_text (void)
+{
+  GtkWidget *textview;
+  GtkTextBuffer *buffer;
+  GString *s;
+
+  s = g_string_sized_new (1000 * 30 * 4);
+
+  for (int i = 0; i < 1000; i++)
+    {
+      if (i % 2)
+        g_string_append (s, "x");
+      for (int j = 0; j < 30; j++)
+        g_string_append (s, "💓x");
+      g_string_append (s, "\n");
+    }
+
+  buffer = gtk_text_buffer_new (NULL);
+  gtk_text_buffer_set_text (buffer, s->str, s->len);
+
+  g_string_free (s, TRUE);
 
   textview = gtk_text_view_new ();
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (textview), buffer);
@@ -224,21 +259,26 @@ set_widget_type (int type)
       break;
 
     case 3:
+      gtk_window_set_title (GTK_WINDOW (window), "Scrolling text with Emoji");
+      populate_emoji_text ();
+      break;
+
+    case 4:
       gtk_window_set_title (GTK_WINDOW (window), "Scrolling a big image");
       populate_image ();
       break;
 
-    case 4:
+    case 5:
       gtk_window_set_title (GTK_WINDOW (window), "Scrolling a list");
       populate_list ();
       break;
 
-    case 5:
+    case 6:
       gtk_window_set_title (GTK_WINDOW (window), "Scrolling a columned list");
       populate_list2 ();
       break;
 
-    case 6:
+    case 7:
       gtk_window_set_title (GTK_WINDOW (window), "Scrolling a grid");
       populate_grid ();
       break;

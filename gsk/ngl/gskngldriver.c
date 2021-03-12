@@ -336,17 +336,18 @@ gsk_ngl_driver_load_programs (GskNglDriver  *self,
   /* Setup preambles that are shared by all shaders */
   gsk_ngl_compiler_set_preamble_from_resource (compiler,
                                                GSK_NGL_COMPILER_ALL,
-                                               "/org/gtk/libgsk/glsl/preamble.glsl");
+                                               "/org/gtk/libgsk/ngl/preamble.glsl");
   gsk_ngl_compiler_set_preamble_from_resource (compiler,
                                                GSK_NGL_COMPILER_VERTEX,
-                                               "/org/gtk/libgsk/glsl/preamble.vs.glsl");
+                                               "/org/gtk/libgsk/ngl/preamble.vs.glsl");
   gsk_ngl_compiler_set_preamble_from_resource (compiler,
                                                GSK_NGL_COMPILER_FRAGMENT,
-                                               "/org/gtk/libgsk/glsl/preamble.fs.glsl");
+                                               "/org/gtk/libgsk/ngl/preamble.fs.glsl");
 
   /* Setup attributes that are provided via VBO */
   gsk_ngl_compiler_bind_attribute (compiler, "aPosition", 0);
   gsk_ngl_compiler_bind_attribute (compiler, "aUv", 1);
+  gsk_ngl_compiler_bind_attribute (compiler, "aColor", 2);
 
   /* Use XMacros to register all of our programs and their uniforms */
 #define GSK_NGL_NO_UNIFORMS
@@ -376,7 +377,6 @@ gsk_ngl_driver_load_programs (GskNglDriver  *self,
     uniforms                                                                                     \
                                                                                                  \
     gsk_ngl_program_uniforms_added (program, have_source);                                       \
-                                                                                                 \
     if (have_alpha)                                                                              \
       gsk_ngl_program_set_uniform1f (program, UNIFORM_SHARED_ALPHA, 0, 1.0f);                    \
                                                                                                  \
@@ -1045,6 +1045,7 @@ gsk_ngl_driver_lookup_shader (GskNglDriver  *self,
       /* Setup attributes that are provided via VBO */
       gsk_ngl_compiler_bind_attribute (compiler, "aPosition", 0);
       gsk_ngl_compiler_bind_attribute (compiler, "aUv", 1);
+      gsk_ngl_compiler_bind_attribute (compiler, "aColor", 2);
 
       if ((program = gsk_ngl_compiler_compile (compiler, NULL, "", error)))
         {
