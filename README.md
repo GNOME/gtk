@@ -32,9 +32,9 @@ Discussion forum
   - https://discourse.gnome.org/c/platform/core/
 
 Nightly documentation can be found at
-  - Gtk: https://gnome.pages.gitlab.gnome.org/gtk/gtk/
-  - Gdk: https://gnome.pages.gitlab.gnome.org/gtk/gdk/
-  - Gsk: https://gnome.pages.gitlab.gnome.org/gtk/gsk/
+  - Gtk: https://gnome.pages.gitlab.gnome.org/gtk/gtk4/
+  - Gdk: https://gnome.pages.gitlab.gnome.org/gtk/gdk4/
+  - Gsk: https://gnome.pages.gitlab.gnome.org/gtk/gsk4/
 
 Building and installing
 -----------------------
