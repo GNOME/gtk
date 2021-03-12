@@ -4261,14 +4261,15 @@ gdk_win32_surface_is_win32 (GdkSurface *window)
 }
 
 static gboolean
-gdk_win32_surface_show_window_menu (GdkSurface *window,
-                                   GdkEvent  *event)
+gdk_win32_surface_show_window_menu (GdkSurface *surface,
+                                    GdkEvent  *event)
 {
   double event_x, event_y;
   int x, y;
-  GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
+  GdkEventType event_type = gdk_event_get_event_type (event);
 
-  switch ((int) event->event_type)
+  switch ((int) event_type)
     {
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
@@ -4280,10 +4281,9 @@ gdk_win32_surface_show_window_menu (GdkSurface *window,
     }
 
   gdk_event_get_position (event, &event_x, &event_y);
-  x = round (event_x);
-  y = round (event_y);
+  gdk_win32_surface_get_root_coords (surface, event_x, event_y, &x, &y);
 
-  SendMessage (GDK_SURFACE_HWND (window),
+  SendMessage (GDK_SURFACE_HWND (surface),
                WM_SYSMENU,
                0,
                MAKELPARAM (x * impl->surface_scale, y * impl->surface_scale));
