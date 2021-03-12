@@ -15,17 +15,16 @@ GSK_NGL_DEFINE_PROGRAM (blur,
 
 GSK_NGL_DEFINE_PROGRAM (border,
                         "/org/gtk/libgsk/ngl/border.glsl",
-                        GSK_NGL_ADD_UNIFORM (1, BORDER_COLOR, u_color)
                         GSK_NGL_ADD_UNIFORM (2, BORDER_WIDTHS, u_widths)
                         GSK_NGL_ADD_UNIFORM (3, BORDER_OUTLINE_RECT, u_outline_rect))
 
 GSK_NGL_DEFINE_PROGRAM (color,
                         "/org/gtk/libgsk/ngl/color.glsl",
-                        GSK_NGL_ADD_UNIFORM (1, COLOR_COLOR, u_color))
+                        GSK_NGL_NO_UNIFORMS)
 
 GSK_NGL_DEFINE_PROGRAM (coloring,
                         "/org/gtk/libgsk/ngl/coloring.glsl",
-                        GSK_NGL_ADD_UNIFORM (1, COLORING_COLOR, u_color))
+                        GSK_NGL_NO_UNIFORMS)
 
 GSK_NGL_DEFINE_PROGRAM (color_matrix,
                         "/org/gtk/libgsk/ngl/color_matrix.glsl",
@@ -45,7 +44,6 @@ GSK_NGL_DEFINE_PROGRAM (cross_fade,
 
 GSK_NGL_DEFINE_PROGRAM (inset_shadow,
                         "/org/gtk/libgsk/ngl/inset_shadow.glsl",
-                        GSK_NGL_ADD_UNIFORM (1, INSET_SHADOW_COLOR, u_color)
                         GSK_NGL_ADD_UNIFORM (2, INSET_SHADOW_SPREAD, u_spread)
                         GSK_NGL_ADD_UNIFORM (3, INSET_SHADOW_OFFSET, u_offset)
                         GSK_NGL_ADD_UNIFORM (4, INSET_SHADOW_OUTLINE_RECT, u_outline_rect))
@@ -59,7 +57,6 @@ GSK_NGL_DEFINE_PROGRAM (linear_gradient,
 
 GSK_NGL_DEFINE_PROGRAM (outset_shadow,
                         "/org/gtk/libgsk/ngl/outset_shadow.glsl",
-                        GSK_NGL_ADD_UNIFORM (1, OUTSET_SHADOW_COLOR, u_color)
                         GSK_NGL_ADD_UNIFORM (2, OUTSET_SHADOW_OUTLINE_RECT, u_outline_rect))
 
 GSK_NGL_DEFINE_PROGRAM (radial_gradient,
@@ -77,7 +74,6 @@ GSK_NGL_DEFINE_PROGRAM (repeat,
 
 GSK_NGL_DEFINE_PROGRAM (unblurred_outset_shadow,
                         "/org/gtk/libgsk/ngl/unblurred_outset_shadow.glsl",
-                        GSK_NGL_ADD_UNIFORM (1, UNBLURRED_OUTSET_SHADOW_COLOR, u_color)
                         GSK_NGL_ADD_UNIFORM (2, UNBLURRED_OUTSET_SHADOW_SPREAD, u_spread)
                         GSK_NGL_ADD_UNIFORM (3, UNBLURRED_OUTSET_SHADOW_OFFSET, u_offset)
                         GSK_NGL_ADD_UNIFORM (4, UNBLURRED_OUTSET_SHADOW_OUTLINE_RECT, u_outline_rect))

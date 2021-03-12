@@ -1,5 +1,4 @@
 // VERTEX_SHADER:
-uniform vec4 u_color;
 uniform vec4[3] u_outline_rect;
 
 _OUT_ vec4 final_color;
@@ -10,7 +9,7 @@ void main() {
 
   vUv = vec2(aUv.x, aUv.y);
 
-  final_color = gsk_premultiply(u_color) * u_alpha;
+  final_color = gsk_premultiply(aColor) * u_alpha;
 
   GskRoundedRect outline = gsk_create_rect(u_outline_rect);
   gsk_rounded_rect_transform(outline, u_modelview);

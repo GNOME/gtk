@@ -1,6 +1,4 @@
 // VERTEX_SHADER:
-uniform vec4 u_color;
-
 _OUT_ vec4 final_color;
 
 void main() {
@@ -8,7 +6,7 @@ void main() {
 
   vUv = vec2(aUv.x, aUv.y);
 
-  final_color = gsk_premultiply(u_color) * u_alpha;
+  final_color = gsk_premultiply(aColor) * u_alpha;
 }
 
 // FRAGMENT_SHADER:

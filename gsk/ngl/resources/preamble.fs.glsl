@@ -1,7 +1,7 @@
 uniform sampler2D u_source;
 uniform mat4 u_projection;
 uniform mat4 u_modelview;
-uniform float u_alpha;// = 1.0;
+uniform float u_alpha;
 uniform vec4 u_viewport;
 uniform vec4[3] u_clip_rect;
 
@@ -12,7 +12,6 @@ _OUT_ vec4 outputColor;
 #endif
 
 _IN_ vec2 vUv;
-
 
 
 GskRoundedRect gsk_decode_rect(_GSK_ROUNDED_RECT_UNIFORM_ r)

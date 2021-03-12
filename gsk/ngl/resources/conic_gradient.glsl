@@ -10,8 +10,7 @@ void main() {
   vec2 mv1 = u_modelview[1].xy;
   vec2 offset = aPosition - u_geometry.xy;
 
-  coord = vec2(dot(mv0, offset),
-               dot(mv1, offset));
+  coord = vec2(dot(mv0, offset), dot(mv1, offset));
 }
 
 // FRAGMENT_SHADER:
