@@ -20,6 +20,28 @@ gsk_private_gl_shaders = [
   'resources/glsl/custom.glsl',
 ]
 
+gsk_private_ngl_shaders = [
+  'ngl/resources/preamble.glsl',
+  'ngl/resources/preamble.fs.glsl',
+  'ngl/resources/preamble.vs.glsl',
+  'ngl/resources/border.glsl',
+  'ngl/resources/blit.glsl',
+  'ngl/resources/coloring.glsl',
+  'ngl/resources/color.glsl',
+  'ngl/resources/linear_gradient.glsl',
+  'ngl/resources/radial_gradient.glsl',
+  'ngl/resources/conic_gradient.glsl',
+  'ngl/resources/color_matrix.glsl',
+  'ngl/resources/blur.glsl',
+  'ngl/resources/inset_shadow.glsl',
+  'ngl/resources/outset_shadow.glsl',
+  'ngl/resources/unblurred_outset_shadow.glsl',
+  'ngl/resources/cross_fade.glsl',
+  'ngl/resources/blend.glsl',
+  'ngl/resources/repeat.glsl',
+  'ngl/resources/custom.glsl',
+]
+
 gsk_public_sources = files([
   'gskdiff.c',
   'gskcairorenderer.c',
@@ -150,6 +172,7 @@ gsk_resources_xml = configure_file(output: 'gsk.resources.xml',
     find_program('gen-gsk-gresources-xml.py'),
     '@OUTPUT@',
     gsk_private_gl_shaders,
+    gsk_private_ngl_shaders,
     gsk_private_vulkan_compiled_shaders,
     gsk_private_vulkan_shaders
   ],

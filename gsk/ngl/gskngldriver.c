@@ -336,13 +336,13 @@ gsk_ngl_driver_load_programs (GskNglDriver  *self,
   /* Setup preambles that are shared by all shaders */
   gsk_ngl_compiler_set_preamble_from_resource (compiler,
                                                GSK_NGL_COMPILER_ALL,
-                                               "/org/gtk/libgsk/glsl/preamble.glsl");
+                                               "/org/gtk/libgsk/ngl/preamble.glsl");
   gsk_ngl_compiler_set_preamble_from_resource (compiler,
                                                GSK_NGL_COMPILER_VERTEX,
-                                               "/org/gtk/libgsk/glsl/preamble.vs.glsl");
+                                               "/org/gtk/libgsk/ngl/preamble.vs.glsl");
   gsk_ngl_compiler_set_preamble_from_resource (compiler,
                                                GSK_NGL_COMPILER_FRAGMENT,
-                                               "/org/gtk/libgsk/glsl/preamble.fs.glsl");
+                                               "/org/gtk/libgsk/ngl/preamble.fs.glsl");
 
   /* Setup attributes that are provided via VBO */
   gsk_ngl_compiler_bind_attribute (compiler, "aPosition", 0);
