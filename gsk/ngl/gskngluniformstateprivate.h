@@ -83,6 +83,7 @@ typedef struct _GskNglUniformState
   guint8 *values_buf;
   guint values_pos;
   guint values_len;
+  GskNglUniformInfo apply_hash[512];
 } GskNglUniformState;
 
 /**
@@ -677,6 +678,137 @@ gsk_ngl_uniform_state_set4fv (GskNglUniformState   *state,
       GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform4f, count);
       memcpy (u, value, sizeof (Uniform4f) * count);
       gsk_ngl_uniform_info_changed (info, location, stamp);
+    }
+}
+
+static inline guint
+gsk_ngl_uniform_state_fmix (guint program,
+                            guint location)
+{
+  guint h = (program << 16) | location;
+
+   h ^= h >> 16;
+   h *= 0x85ebca6b;
+   h ^= h >> 13;
+   h *= 0xc2b2ae35;
+   h ^= h >> 16;
+
+   return h;
+}
+
+/*
+ * gsk_ngl_uniform_state_apply:
+ * @state: the uniform state
+ * @program: the program id
+ * @location: the location of the uniform
+ * @offset: the offset of the data within the buffer
+ * @info: the uniform info
+ *
+ * This function can be used to apply state that was previously recorded
+ * by the #GskNglUniformState.
+ *
+ * It is specifically useful from the GskNglCommandQueue to execute uniform
+ * changes but only when they have changed from the current value.
+ */
+static inline void
+gsk_ngl_uniform_state_apply (GskNglUniformState *state,
+                             guint               program,
+                             guint               location,
+                             GskNglUniformInfo   info)
+{
+  guint index = gsk_ngl_uniform_state_fmix (program, location) % G_N_ELEMENTS (state->apply_hash);
+  gconstpointer dataptr = GSK_NGL_UNIFORM_VALUE (state->values_buf, info.offset);
+
+  /* aligned, can treat as unsigned */
+  if (*(guint *)&info == *(guint *)&state->apply_hash[index])
+    return;
+
+  state->apply_hash[index] = info;
+
+  /* TODO: We could do additional comparisons here to make sure we are
+   *       changing state.
+   */
+
+  switch (info.format)
+    {
+    case GSK_NGL_UNIFORM_FORMAT_1F:
+      glUniform1fv (location, 1, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_2F:
+      glUniform2fv (location, 1, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_3F:
+      glUniform3fv (location, 1, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_4F:
+      glUniform4fv (location, 1, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_1FV:
+      glUniform1fv (location, info.array_count, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_2FV:
+      glUniform2fv (location, info.array_count, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_3FV:
+      glUniform3fv (location, info.array_count, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_4FV:
+      glUniform4fv (location, info.array_count, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_1I:
+    case GSK_NGL_UNIFORM_FORMAT_TEXTURE:
+      glUniform1iv (location, 1, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_2I:
+      glUniform2iv (location, 1, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_3I:
+      glUniform3iv (location, 1, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_4I:
+      glUniform4iv (location, 1, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_1UI:
+      glUniform1uiv (location, 1, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_MATRIX: {
+      float mat[16];
+      graphene_matrix_to_float (dataptr, mat);
+      glUniformMatrix4fv (location, 1, GL_FALSE, mat);
+#if 0
+      /* TODO: If Graphene can give us a peek here on platforms
+       * where the format is float[16] (most/all x86_64?) then
+       * We can avoid the SIMD operation to convert the format.
+       */
+      G_STATIC_ASSERT (sizeof (graphene_matrix_t) == 16*4);
+      glUniformMatrix4fv (location, 1, GL_FALSE, dataptr);
+#endif
+    }
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_COLOR:
+      glUniform4fv (location, 1, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_ROUNDED_RECT:
+      glUniform4fv (location, 3, dataptr);
+    break;
+
+    default:
+      g_assert_not_reached ();
     }
 }
 

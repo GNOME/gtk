@@ -65,6 +65,8 @@ gsk_ngl_uniform_state_new (void)
   state->values_pos = 0;
   state->values_buf = g_malloc (4096);
 
+  memset (state->apply_hash, 0, sizeof state->apply_hash);
+
   return g_steal_pointer (&state);
 }
 
@@ -221,6 +223,8 @@ gsk_ngl_uniform_state_end_frame (GskNglUniformState *state)
   state->values_pos = allocator;
 
   g_assert (allocator <= state->values_len);
+
+  memset (state->apply_hash, 0, sizeof state->apply_hash);
 }
 
 gsize
