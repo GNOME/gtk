@@ -83,6 +83,7 @@ typedef struct _GskNglUniformState
   guint8 *values_buf;
   guint values_pos;
   guint values_len;
+  GskNglUniformInfo apply_hash[512];
 } GskNglUniformState;
 
 /**
@@ -273,9 +274,12 @@ gsk_ngl_uniform_state_set1f (GskNglUniformState   *state,
 
   if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_1F, 1, location, stamp, &info)))
     {
-      GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform1f , 1);
-      u->v0 = value0;
-      gsk_ngl_uniform_info_changed (info, location, stamp);
+      if (info->info.initial || u->v0 != value0)
+        {
+          GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform1f , 1);
+          u->v0 = value0;
+          gsk_ngl_uniform_info_changed (info, location, stamp);
+        }
     }
 }
 
@@ -295,10 +299,13 @@ gsk_ngl_uniform_state_set2f (GskNglUniformState   *state,
 
   if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_2F, 1, location, stamp, &info)))
     {
-      GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform2f, 1);
-      u->v0 = value0;
-      u->v1 = value1;
-      gsk_ngl_uniform_info_changed (info, location, stamp);
+      if (info->info.initial || u->v0 != value0 || u->v1 != value1)
+        {
+          GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform2f, 1);
+          u->v0 = value0;
+          u->v1 = value1;
+          gsk_ngl_uniform_info_changed (info, location, stamp);
+        }
     }
 }
 
@@ -319,11 +326,14 @@ gsk_ngl_uniform_state_set3f (GskNglUniformState   *state,
 
   if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_3F, 1, location, stamp, &info)))
     {
-      GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform3f, 1);
-      u->v0 = value0;
-      u->v1 = value1;
-      u->v2 = value2;
-      gsk_ngl_uniform_info_changed (info, location, stamp);
+      if (info->info.initial || u->v0 != value0 || u->v1 != value1 || u->v2 != value2)
+        {
+          GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform3f, 1);
+          u->v0 = value0;
+          u->v1 = value1;
+          u->v2 = value2;
+          gsk_ngl_uniform_info_changed (info, location, stamp);
+        }
     }
 }
 
@@ -345,12 +355,15 @@ gsk_ngl_uniform_state_set4f (GskNglUniformState   *state,
 
   if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_4F, 1, location, stamp, &info)))
     {
-      GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform4f, 1);
-      u->v0 = value0;
-      u->v1 = value1;
-      u->v2 = value2;
-      u->v3 = value3;
-      gsk_ngl_uniform_info_changed (info, location, stamp);
+      if (info->info.initial || u->v0 != value0 || u->v1 != value1 || u->v2 != value2 || u->v3 != value3)
+        {
+          GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform4f, 1);
+          u->v0 = value0;
+          u->v1 = value1;
+          u->v2 = value2;
+          u->v3 = value3;
+          gsk_ngl_uniform_info_changed (info, location, stamp);
+        }
     }
 }
 
@@ -369,9 +382,12 @@ gsk_ngl_uniform_state_set1ui (GskNglUniformState   *state,
 
   if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_1UI, 1, location, stamp, &info)))
     {
-      GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform1ui, 1);
-      u->v0 = value0;
-      gsk_ngl_uniform_info_changed (info, location, stamp);
+      if (info->info.initial || u->v0 != value0)
+        {
+          GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform1ui, 1);
+          u->v0 = value0;
+          gsk_ngl_uniform_info_changed (info, location, stamp);
+        }
     }
 }
 
@@ -390,9 +406,12 @@ gsk_ngl_uniform_state_set1i (GskNglUniformState   *state,
 
   if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_1I, 1, location, stamp, &info)))
     {
-      GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform1i, 1);
-      u->v0 = value0;
-      gsk_ngl_uniform_info_changed (info, location, stamp);
+      if (info->info.initial || u->v0 != value0)
+        {
+          GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform1i, 1);
+          u->v0 = value0;
+          gsk_ngl_uniform_info_changed (info, location, stamp);
+        }
     }
 }
 
@@ -412,10 +431,13 @@ gsk_ngl_uniform_state_set2i (GskNglUniformState   *state,
 
   if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_2I, 1, location, stamp, &info)))
     {
-      GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform2i, 1);
-      u->v0 = value0;
-      u->v1 = value1;
-      gsk_ngl_uniform_info_changed (info, location, stamp);
+      if (info->info.initial || u->v0 != value0 || u->v1 != value1)
+        {
+          GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform2i, 1);
+          u->v0 = value0;
+          u->v1 = value1;
+          gsk_ngl_uniform_info_changed (info, location, stamp);
+        }
     }
 }
 
@@ -436,11 +458,14 @@ gsk_ngl_uniform_state_set3i (GskNglUniformState   *state,
 
   if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_3I, 1, location, stamp, &info)))
     {
-      GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform3i, 1);
-      u->v0 = value0;
-      u->v1 = value1;
-      u->v2 = value2;
-      gsk_ngl_uniform_info_changed (info, location, stamp);
+      if (info->info.initial || u->v0 != value0 || u->v1 != value1 || u->v2 != value2)
+        {
+          GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform3i, 1);
+          u->v0 = value0;
+          u->v1 = value1;
+          u->v2 = value2;
+          gsk_ngl_uniform_info_changed (info, location, stamp);
+        }
     }
 }
 
@@ -462,12 +487,15 @@ gsk_ngl_uniform_state_set4i (GskNglUniformState   *state,
 
   if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_4I, 1, location, stamp, &info)))
     {
-      GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform4i, 1);
-      u->v0 = value0;
-      u->v1 = value1;
-      u->v2 = value2;
-      u->v3 = value3;
-      gsk_ngl_uniform_info_changed (info, location, stamp);
+      if (info->info.initial || u->v0 != value0 || u->v1 != value1 || u->v2 != value2 || u->v3 != value3)
+        {
+          GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform4i, 1);
+          u->v0 = value0;
+          u->v1 = value1;
+          u->v2 = value2;
+          u->v3 = value3;
+          gsk_ngl_uniform_info_changed (info, location, stamp);
+        }
     }
 }
 
@@ -487,9 +515,12 @@ gsk_ngl_uniform_state_set_rounded_rect (GskNglUniformState   *state,
 
   if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_ROUNDED_RECT, 1, location, stamp, &info)))
     {
-      GSK_NGL_UNIFORM_STATE_REPLACE (info, u, GskRoundedRect, 1);
-      memcpy (u, rounded_rect, sizeof *rounded_rect);
-      gsk_ngl_uniform_info_changed (info, location, stamp);
+      if (info->info.initial || memcmp (u, rounded_rect, sizeof *u) != 0)
+        {
+          GSK_NGL_UNIFORM_STATE_REPLACE (info, u, GskRoundedRect, 1);
+          memcpy (u, rounded_rect, sizeof *rounded_rect);
+          gsk_ngl_uniform_info_changed (info, location, stamp);
+        }
     }
 }
 
@@ -509,9 +540,12 @@ gsk_ngl_uniform_state_set_matrix (GskNglUniformState      *state,
 
   if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_MATRIX, 1, location, stamp, &info)))
     {
-      GSK_NGL_UNIFORM_STATE_REPLACE (info, u, graphene_matrix_t, 1);
-      memcpy (u, matrix, sizeof *matrix);
-      gsk_ngl_uniform_info_changed (info, location, stamp);
+      if (info->info.initial || memcmp (u, matrix, sizeof *u) != 0)
+        {
+          GSK_NGL_UNIFORM_STATE_REPLACE (info, u, graphene_matrix_t, 1);
+          memcpy (u, matrix, sizeof *matrix);
+          gsk_ngl_uniform_info_changed (info, location, stamp);
+        }
     }
 }
 
@@ -546,9 +580,12 @@ gsk_ngl_uniform_state_set_texture (GskNglUniformState   *state,
 
   if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_TEXTURE, 1, location, stamp, &info)))
     {
-      GSK_NGL_UNIFORM_STATE_REPLACE (info, u, guint, 1);
-      *u = texture_slot;
-      gsk_ngl_uniform_info_changed (info, location, stamp);
+      if (info->info.initial || *u != texture_slot)
+        {
+          GSK_NGL_UNIFORM_STATE_REPLACE (info, u, guint, 1);
+          *u = texture_slot;
+          gsk_ngl_uniform_info_changed (info, location, stamp);
+        }
     }
 }
 
@@ -582,9 +619,12 @@ gsk_ngl_uniform_state_set_color (GskNglUniformState   *state,
       if (color == NULL)
         color = &transparent;
 
-      GSK_NGL_UNIFORM_STATE_REPLACE (info, u, GdkRGBA, 1);
-      memcpy (u, color, sizeof *color);
-      gsk_ngl_uniform_info_changed (info, location, stamp);
+      if (info->info.initial || memcmp (color, u, sizeof *u) != 0)
+        {
+          GSK_NGL_UNIFORM_STATE_REPLACE (info, u, GdkRGBA, 1);
+          memcpy (u, color, sizeof *color);
+          gsk_ngl_uniform_info_changed (info, location, stamp);
+        }
     }
 }
 
@@ -605,9 +645,12 @@ gsk_ngl_uniform_state_set1fv (GskNglUniformState   *state,
 
   if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_1FV, count, location, stamp, &info)))
     {
-      GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform1f, count);
-      memcpy (u, value, sizeof (Uniform1f) * count);
-      gsk_ngl_uniform_info_changed (info, location, stamp);
+      if (info->info.initial || count != info->info.array_count || memcmp (u, value, sizeof *u * count) != 0)
+        {
+          GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform1f, count);
+          memcpy (u, value, sizeof (Uniform1f) * count);
+          gsk_ngl_uniform_info_changed (info, location, stamp);
+        }
     }
 }
 
@@ -628,9 +671,12 @@ gsk_ngl_uniform_state_set2fv (GskNglUniformState   *state,
 
   if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_2FV, count, location, stamp, &info)))
     {
-      GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform2f, count);
-      memcpy (u, value, sizeof (Uniform2f) * count);
-      gsk_ngl_uniform_info_changed (info, location, stamp);
+      if (info->info.initial || count != info->info.array_count || memcmp (u, value, sizeof *u * count) != 0)
+        {
+          GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform2f, count);
+          memcpy (u, value, sizeof (Uniform2f) * count);
+          gsk_ngl_uniform_info_changed (info, location, stamp);
+        }
     }
 }
 
@@ -651,9 +697,12 @@ gsk_ngl_uniform_state_set3fv (GskNglUniformState   *state,
 
   if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_3FV, count, location, stamp, &info)))
     {
-      GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform3f, count);
-      memcpy (u, value, sizeof (Uniform3f) * count);
-      gsk_ngl_uniform_info_changed (info, location, stamp);
+      if (info->info.initial || count != info->info.array_count || memcmp (u, value, sizeof *u * count) != 0)
+        {
+          GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform3f, count);
+          memcpy (u, value, sizeof (Uniform3f) * count);
+          gsk_ngl_uniform_info_changed (info, location, stamp);
+        }
     }
 }
 
@@ -674,9 +723,143 @@ gsk_ngl_uniform_state_set4fv (GskNglUniformState   *state,
 
   if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_4FV, count, location, stamp, &info)))
     {
-      GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform4f, count);
-      memcpy (u, value, sizeof (Uniform4f) * count);
-      gsk_ngl_uniform_info_changed (info, location, stamp);
+      if (info->info.initial || count != info->info.array_count || memcmp (u, value, sizeof *u * count) != 0)
+        {
+          GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform4f, count);
+          memcpy (u, value, sizeof (Uniform4f) * count);
+          gsk_ngl_uniform_info_changed (info, location, stamp);
+        }
+    }
+}
+
+static inline guint
+gsk_ngl_uniform_state_fmix (guint program,
+                            guint location)
+{
+  guint h = (program << 16) | location;
+
+   h ^= h >> 16;
+   h *= 0x85ebca6b;
+   h ^= h >> 13;
+   h *= 0xc2b2ae35;
+   h ^= h >> 16;
+
+   return h;
+}
+
+/*
+ * gsk_ngl_uniform_state_apply:
+ * @state: the uniform state
+ * @program: the program id
+ * @location: the location of the uniform
+ * @offset: the offset of the data within the buffer
+ * @info: the uniform info
+ *
+ * This function can be used to apply state that was previously recorded
+ * by the #GskNglUniformState.
+ *
+ * It is specifically useful from the GskNglCommandQueue to execute uniform
+ * changes but only when they have changed from the current value.
+ */
+static inline void
+gsk_ngl_uniform_state_apply (GskNglUniformState *state,
+                             guint               program,
+                             guint               location,
+                             GskNglUniformInfo   info)
+{
+  guint index = gsk_ngl_uniform_state_fmix (program, location) % G_N_ELEMENTS (state->apply_hash);
+  gconstpointer dataptr = GSK_NGL_UNIFORM_VALUE (state->values_buf, info.offset);
+
+  /* aligned, can treat as unsigned */
+  if (*(guint *)&info == *(guint *)&state->apply_hash[index])
+    return;
+
+  state->apply_hash[index] = info;
+
+  /* TODO: We could do additional comparisons here to make sure we are
+   *       changing state.
+   */
+
+  switch (info.format)
+    {
+    case GSK_NGL_UNIFORM_FORMAT_1F:
+      glUniform1fv (location, 1, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_2F:
+      glUniform2fv (location, 1, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_3F:
+      glUniform3fv (location, 1, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_4F:
+      glUniform4fv (location, 1, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_1FV:
+      glUniform1fv (location, info.array_count, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_2FV:
+      glUniform2fv (location, info.array_count, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_3FV:
+      glUniform3fv (location, info.array_count, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_4FV:
+      glUniform4fv (location, info.array_count, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_1I:
+    case GSK_NGL_UNIFORM_FORMAT_TEXTURE:
+      glUniform1iv (location, 1, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_2I:
+      glUniform2iv (location, 1, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_3I:
+      glUniform3iv (location, 1, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_4I:
+      glUniform4iv (location, 1, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_1UI:
+      glUniform1uiv (location, 1, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_MATRIX: {
+      float mat[16];
+      graphene_matrix_to_float (dataptr, mat);
+      glUniformMatrix4fv (location, 1, GL_FALSE, mat);
+#if 0
+      /* TODO: If Graphene can give us a peek here on platforms
+       * where the format is float[16] (most/all x86_64?) then
+       * We can avoid the SIMD operation to convert the format.
+       */
+      G_STATIC_ASSERT (sizeof (graphene_matrix_t) == 16*4);
+      glUniformMatrix4fv (location, 1, GL_FALSE, dataptr);
+#endif
+    }
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_COLOR:
+      glUniform4fv (location, 1, dataptr);
+    break;
+
+    case GSK_NGL_UNIFORM_FORMAT_ROUNDED_RECT:
+      glUniform4fv (location, 3, dataptr);
+    break;
+
+    default:
+      g_assert_not_reached ();
     }
 }
 

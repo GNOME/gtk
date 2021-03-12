@@ -732,98 +732,6 @@ gsk_ngl_command_queue_delete_program (GskNglCommandQueue *self,
 }
 
 static inline void
-apply_uniform (gconstpointer     dataptr,
-               GskNglUniformInfo info,
-               guint             location)
-{
-  g_assert (dataptr != NULL);
-  g_assert (info.format > 0);
-  g_assert (location < GL_MAX_UNIFORM_LOCATIONS);
-
-  switch (info.format)
-    {
-    case GSK_NGL_UNIFORM_FORMAT_1F:
-      glUniform1fv (location, 1, dataptr);
-    break;
-
-    case GSK_NGL_UNIFORM_FORMAT_2F:
-      glUniform2fv (location, 1, dataptr);
-    break;
-
-    case GSK_NGL_UNIFORM_FORMAT_3F:
-      glUniform3fv (location, 1, dataptr);
-    break;
-
-    case GSK_NGL_UNIFORM_FORMAT_4F:
-      glUniform4fv (location, 1, dataptr);
-    break;
-
-    case GSK_NGL_UNIFORM_FORMAT_1FV:
-      glUniform1fv (location, info.array_count, dataptr);
-    break;
-
-    case GSK_NGL_UNIFORM_FORMAT_2FV:
-      glUniform2fv (location, info.array_count, dataptr);
-    break;
-
-    case GSK_NGL_UNIFORM_FORMAT_3FV:
-      glUniform3fv (location, info.array_count, dataptr);
-    break;
-
-    case GSK_NGL_UNIFORM_FORMAT_4FV:
-      glUniform4fv (location, info.array_count, dataptr);
-    break;
-
-    case GSK_NGL_UNIFORM_FORMAT_1I:
-    case GSK_NGL_UNIFORM_FORMAT_TEXTURE:
-      glUniform1iv (location, 1, dataptr);
-    break;
-
-    case GSK_NGL_UNIFORM_FORMAT_2I:
-      glUniform2iv (location, 1, dataptr);
-    break;
-
-    case GSK_NGL_UNIFORM_FORMAT_3I:
-      glUniform3iv (location, 1, dataptr);
-    break;
-
-    case GSK_NGL_UNIFORM_FORMAT_4I:
-      glUniform4iv (location, 1, dataptr);
-    break;
-
-    case GSK_NGL_UNIFORM_FORMAT_1UI:
-      glUniform1uiv (location, 1, dataptr);
-    break;
-
-    case GSK_NGL_UNIFORM_FORMAT_MATRIX: {
-      float mat[16];
-      graphene_matrix_to_float (dataptr, mat);
-      glUniformMatrix4fv (location, 1, GL_FALSE, mat);
-#if 0
-      /* TODO: If Graphene can give us a peek here on platforms
-       * where the format is float[16] (most/all x86_64?) then
-       * We can avoid the SIMD operation to convert the format.
-       */
-      G_STATIC_ASSERT (sizeof (graphene_matrix_t) == 16*4);
-      glUniformMatrix4fv (location, 1, GL_FALSE, dataptr);
-#endif
-    }
-    break;
-
-    case GSK_NGL_UNIFORM_FORMAT_COLOR:
-      glUniform4fv (location, 1, dataptr);
-    break;
-
-    case GSK_NGL_UNIFORM_FORMAT_ROUNDED_RECT:
-      glUniform4fv (location, 3, dataptr);
-    break;
-
-    default:
-      g_assert_not_reached ();
-    }
-}
-
-static inline void
 apply_viewport (guint *current_width,
                 guint *current_height,
                 guint  width,
@@ -1193,8 +1101,7 @@ gsk_ngl_command_queue_execute (GskNglCommandQueue   *self,
               const GskNglCommandUniform *u = &self->batch_uniforms.items[batch->draw.uniform_offset];
 
               for (guint i = 0; i < batch->draw.uniform_count; i++, u++)
-                apply_uniform (gsk_ngl_uniform_state_get_uniform_data (self->uniforms, u->info.offset),
-                               u->info, u->location);
+                gsk_ngl_uniform_state_apply (self->uniforms, program, u->location, u->info);
 
               n_uniforms += batch->draw.uniform_count;
             }
