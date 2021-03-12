@@ -2703,15 +2703,20 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
   guint last_texture = 0;
   GskNglDrawVertex *vertices;
   guint used = 0;
+  GdkRGBA c;
 
   if (num_glyphs == 0)
     return;
 
-  /* If the font has color glyphs, we don't need to recolor anything */
+  program = CHOOSE_PROGRAM (job, coloring);
+
+  /* If the font has color glyphs, we don't need to recolor anything.
+   * We tell the shader by setting the color to vec4(-1).
+   */
   if (!force_color && gsk_text_node_has_color_glyphs (node))
-    program = CHOOSE_PROGRAM (job, blit);
+    c = (GdkRGBA) { -1.f, -1.f, -1.f, -1.f };
   else
-    program = CHOOSE_PROGRAM (job, coloring);
+    c = *color;
 
   lookup.font = (PangoFont *)font;
   lookup.scale = (guint) (text_scale * 1024);
@@ -2786,55 +2791,55 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
       vertices[base+0].position[1] = glyph_y;
       vertices[base+0].uv[0] = tx;
       vertices[base+0].uv[1] = ty;
-      vertices[base+0].color[0] = color->red;
-      vertices[base+0].color[1] = color->green;
-      vertices[base+0].color[2] = color->blue;
-      vertices[base+0].color[3] = color->alpha;
+      vertices[base+0].color[0] = c.red;
+      vertices[base+0].color[1] = c.green;
+      vertices[base+0].color[2] = c.blue;
+      vertices[base+0].color[3] = c.alpha;
 
       vertices[base+1].position[0] = glyph_x;
       vertices[base+1].position[1] = glyph_y2;
       vertices[base+1].uv[0] = tx;
       vertices[base+1].uv[1] = ty2;
-      vertices[base+1].color[0] = color->red;
-      vertices[base+1].color[1] = color->green;
-      vertices[base+1].color[2] = color->blue;
-      vertices[base+1].color[3] = color->alpha;
+      vertices[base+1].color[0] = c.red;
+      vertices[base+1].color[1] = c.green;
+      vertices[base+1].color[2] = c.blue;
+      vertices[base+1].color[3] = c.alpha;
 
       vertices[base+2].position[0] = glyph_x2;
       vertices[base+2].position[1] = glyph_y;
       vertices[base+2].uv[0] = tx2;
       vertices[base+2].uv[1] = ty;
-      vertices[base+2].color[0] = color->red;
-      vertices[base+2].color[1] = color->green;
-      vertices[base+2].color[2] = color->blue;
-      vertices[base+2].color[3] = color->alpha;
+      vertices[base+2].color[0] = c.red;
+      vertices[base+2].color[1] = c.green;
+      vertices[base+2].color[2] = c.blue;
+      vertices[base+2].color[3] = c.alpha;
 
       vertices[base+3].position[0] = glyph_x2;
       vertices[base+3].position[1] = glyph_y2;
       vertices[base+3].uv[0] = tx2;
       vertices[base+3].uv[1] = ty2;
-      vertices[base+3].color[0] = color->red;
-      vertices[base+3].color[1] = color->green;
-      vertices[base+3].color[2] = color->blue;
-      vertices[base+3].color[3] = color->alpha;
+      vertices[base+3].color[0] = c.red;
+      vertices[base+3].color[1] = c.green;
+      vertices[base+3].color[2] = c.blue;
+      vertices[base+3].color[3] = c.alpha;
 
       vertices[base+4].position[0] = glyph_x;
       vertices[base+4].position[1] = glyph_y2;
       vertices[base+4].uv[0] = tx;
       vertices[base+4].uv[1] = ty2;
-      vertices[base+4].color[0] = color->red;
-      vertices[base+4].color[1] = color->green;
-      vertices[base+4].color[2] = color->blue;
-      vertices[base+4].color[3] = color->alpha;
+      vertices[base+4].color[0] = c.red;
+      vertices[base+4].color[1] = c.green;
+      vertices[base+4].color[2] = c.blue;
+      vertices[base+4].color[3] = c.alpha;
 
       vertices[base+5].position[0] = glyph_x2;
       vertices[base+5].position[1] = glyph_y;
       vertices[base+5].uv[0] = tx2;
       vertices[base+5].uv[1] = ty;
-      vertices[base+5].color[0] = color->red;
-      vertices[base+5].color[1] = color->green;
-      vertices[base+5].color[2] = color->blue;
-      vertices[base+5].color[3] = color->alpha;
+      vertices[base+5].color[0] = c.red;
+      vertices[base+5].color[1] = c.green;
+      vertices[base+5].color[2] = c.blue;
+      vertices[base+5].color[3] = c.alpha;
 
       batch->draw.vbo_count += GSK_NGL_N_VERTICES;
       used++;
