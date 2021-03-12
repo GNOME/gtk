@@ -1,3 +1,31 @@
+Overview of Changes in GTK+ 3.24.27
+===================================
+
+* Input: Ensure preedit-start and preedit-end
+  are emitted properly
+
+* GtkScrolledWindow:
+ - Revert a change that broke touch scrolling
+
+* Theme:
+ - Fix a problem with size changes in SSD decorations
+   that caused mutter crashes
+ - Use transparent black for window border in the dark theme
+
+* Windows:
+ - Memory leak fixes
+ - Fix unresponsive windows after tablet input
+ - Add support for wheel and rotation axes
+
+* Translation updates:
+ Belarusian
+ German
+ Kazakh
+ Korean
+ Latvian
+ Turkish
+
+
 Overview of Changes in GTK+ 3.24.26
 ===================================
 
