@@ -17,7 +17,7 @@ void main() {
   else
     use_color = 1.0;
 
-  final_color = gsk_premultiply(aColor) * u_alpha;
+  final_color = gsk_scaled_premultiply(aColor, u_alpha);
 }
 
 // FRAGMENT_SHADER:
