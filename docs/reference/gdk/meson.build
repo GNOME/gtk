@@ -22,6 +22,8 @@ if get_option('gtk_doc')
     ],
     depend_files: [ expand_content_md_files ],
     build_by_default: true,
+    install: true,
+    install_dir: docs_dir,
   )
 
   if x11_enabled
@@ -42,6 +44,8 @@ if get_option('gtk_doc')
       depends: [ gdk_gir[0] ],
       depend_files: [ ],
       build_by_default: true,
+      install: true,
+      install_dir: docs_dir,
     )
   endif
 
@@ -63,6 +67,8 @@ if get_option('gtk_doc')
       depends: [ gdk_gir[0] ],
       depend_files: [ ],
       build_by_default: true,
+      install: true,
+      install_dir: docs_dir,
     )
   endif
 endif
