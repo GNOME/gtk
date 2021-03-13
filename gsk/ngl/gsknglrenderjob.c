@@ -2668,7 +2668,6 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
   GskNglCommandBatch *batch;
   int x_position = 0;
   GskNglGlyphKey lookup;
-  GskNglProgram *program;
   guint last_texture = 0;
   GskNglDrawVertex *vertices;
   guint used = 0;
@@ -2676,8 +2675,6 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
 
   if (num_glyphs == 0)
     return;
-
-  program = CHOOSE_PROGRAM (job, coloring);
 
   /* If the font has color glyphs, we don't need to recolor anything.
    * We tell the shader by setting the color to vec4(-1).
@@ -2690,7 +2687,7 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
   lookup.font = (PangoFont *)font;
   lookup.scale = (guint) (text_scale * 1024);
 
-  gsk_ngl_render_job_begin_draw (job, program);
+  gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, coloring));
 
   batch = gsk_ngl_command_queue_get_batch (job->command_queue);
   vertices = gsk_ngl_command_queue_add_n_vertices (job->command_queue, num_glyphs);
@@ -2738,7 +2735,7 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
               batch->draw.vbo_offset = vbo_offset;
             }
 
-          gsk_ngl_program_set_uniform_texture (program,
+          gsk_ngl_program_set_uniform_texture (job->current_program,
                                                UNIFORM_SHARED_SOURCE, 0,
                                                GL_TEXTURE_2D,
                                                GL_TEXTURE0,
@@ -2756,59 +2753,13 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
       glyph_x2 = glyph_x + glyph->ink_rect.width;
       glyph_y2 = glyph_y + glyph->ink_rect.height;
 
-      vertices[base+0].position[0] = glyph_x;
-      vertices[base+0].position[1] = glyph_y;
-      vertices[base+0].uv[0] = tx;
-      vertices[base+0].uv[1] = ty;
-      vertices[base+0].color[0] = c.red;
-      vertices[base+0].color[1] = c.green;
-      vertices[base+0].color[2] = c.blue;
-      vertices[base+0].color[3] = c.alpha;
+      vertices[base+0] = (GskNglDrawVertex) { { glyph_x,  glyph_y  }, { tx,  ty  }, { c.red, c.green, c.blue, c.alpha } };
+      vertices[base+1] = (GskNglDrawVertex) { { glyph_x,  glyph_y2 }, { tx,  ty2 }, { c.red, c.green, c.blue, c.alpha } };
+      vertices[base+2] = (GskNglDrawVertex) { { glyph_x2, glyph_y  }, { tx2, ty  }, { c.red, c.green, c.blue, c.alpha } };
 
-      vertices[base+1].position[0] = glyph_x;
-      vertices[base+1].position[1] = glyph_y2;
-      vertices[base+1].uv[0] = tx;
-      vertices[base+1].uv[1] = ty2;
-      vertices[base+1].color[0] = c.red;
-      vertices[base+1].color[1] = c.green;
-      vertices[base+1].color[2] = c.blue;
-      vertices[base+1].color[3] = c.alpha;
-
-      vertices[base+2].position[0] = glyph_x2;
-      vertices[base+2].position[1] = glyph_y;
-      vertices[base+2].uv[0] = tx2;
-      vertices[base+2].uv[1] = ty;
-      vertices[base+2].color[0] = c.red;
-      vertices[base+2].color[1] = c.green;
-      vertices[base+2].color[2] = c.blue;
-      vertices[base+2].color[3] = c.alpha;
-
-      vertices[base+3].position[0] = glyph_x2;
-      vertices[base+3].position[1] = glyph_y2;
-      vertices[base+3].uv[0] = tx2;
-      vertices[base+3].uv[1] = ty2;
-      vertices[base+3].color[0] = c.red;
-      vertices[base+3].color[1] = c.green;
-      vertices[base+3].color[2] = c.blue;
-      vertices[base+3].color[3] = c.alpha;
-
-      vertices[base+4].position[0] = glyph_x;
-      vertices[base+4].position[1] = glyph_y2;
-      vertices[base+4].uv[0] = tx;
-      vertices[base+4].uv[1] = ty2;
-      vertices[base+4].color[0] = c.red;
-      vertices[base+4].color[1] = c.green;
-      vertices[base+4].color[2] = c.blue;
-      vertices[base+4].color[3] = c.alpha;
-
-      vertices[base+5].position[0] = glyph_x2;
-      vertices[base+5].position[1] = glyph_y;
-      vertices[base+5].uv[0] = tx2;
-      vertices[base+5].uv[1] = ty;
-      vertices[base+5].color[0] = c.red;
-      vertices[base+5].color[1] = c.green;
-      vertices[base+5].color[2] = c.blue;
-      vertices[base+5].color[3] = c.alpha;
+      vertices[base+3] = (GskNglDrawVertex) { { glyph_x2, glyph_y2 }, { tx2, ty2 }, { c.red, c.green, c.blue, c.alpha } };
+      vertices[base+4] = (GskNglDrawVertex) { { glyph_x,  glyph_y2 }, { tx,  ty2 }, { c.red, c.green, c.blue, c.alpha } };
+      vertices[base+5] = (GskNglDrawVertex) { { glyph_x2, glyph_y  }, { tx2, ty  }, { c.red, c.green, c.blue, c.alpha } };
 
       batch->draw.vbo_count += GSK_NGL_N_VERTICES;
       used++;
