@@ -143,7 +143,7 @@ G_GNUC_UNUSED static inline void
 gsk_ngl_command_queue_print_batch (GskNglCommandQueue       *self,
                                    const GskNglCommandBatch *batch)
 {
-  static const char *command_kinds[] = { "Clear", NULL, NULL, "Draw", };
+  static const char *command_kinds[] = { "Clear", "Draw", };
   guint framebuffer_id;
 
   g_assert (GSK_IS_NGL_COMMAND_QUEUE (self));
