@@ -310,5 +310,5 @@ void main() {
   else
     discard;
 
-  gskSetOutputColor(result * u_alpha);
+  gskSetScaledOutputColor(result, u_alpha);
 }
