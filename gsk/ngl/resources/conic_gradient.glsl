@@ -18,6 +18,8 @@ void main() {
 // FRAGMENT_SHADER:
 // conic_gradient.glsl
 
+#define MAX_COLOR_STOPS 6
+
 #ifdef GSK_LEGACY
 uniform int u_num_color_stops;
 #else
@@ -25,7 +27,7 @@ uniform highp int u_num_color_stops; // Why? Because it works like this.
 #endif
 
 uniform vec4 u_geometry;
-uniform float u_color_stops[6 * 5];
+uniform float u_color_stops[MAX_COLOR_STOPS * 5];
 
 _NOPERSPECTIVE_ _IN_ vec2 coord;
 
@@ -50,27 +52,31 @@ void main() {
   // fract() does the modulo here, so now we have progress
   // into the current conic
   float offset = fract(angle * u_geometry.z + u_geometry.w);
+  float curr_offset;
+  float next_offset;
 
-  if (offset < get_offset(0)) {
+  next_offset = get_offset(0);
+  if (offset < next_offset) {
     gskSetOutputColor(gsk_scaled_premultiply(get_color(0), u_alpha));
     return;
   }
 
-  int n = u_num_color_stops - 1;
-  for (int i = 0; i < n; i++) {
-    float curr_offset = get_offset(i);
-    float next_offset = get_offset(i + 1);
+  if (offset >= get_offset(u_num_color_stops - 1)) {
+    gskSetOutputColor(gsk_scaled_premultiply(get_color(u_num_color_stops - 1), u_alpha));
+    return;
+  }
 
-    if (offset >= curr_offset && offset < next_offset) {
+  for (int i = 0; i < MAX_COLOR_STOPS; i++) {
+    curr_offset = next_offset;
+    next_offset = get_offset(i + 1);
+
+    if (offset < next_offset) {
       float f = (offset - curr_offset) / (next_offset - curr_offset);
       vec4 curr_color = gsk_premultiply(get_color(i));
       vec4 next_color = gsk_premultiply(get_color(i + 1));
       vec4 color = mix(curr_color, next_color, f);
-
       gskSetOutputColor(color * u_alpha);
       return;
     }
   }
-
-  gskSetOutputColor(gsk_scaled_premultiply(get_color(n), u_alpha));
 }
