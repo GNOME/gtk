@@ -2,7 +2,7 @@
 // coloring.glsl
 
 _OUT_ vec4 final_color;
-flat _OUT_ int use_color;
+_OUT_ float use_color;
 
 void main() {
   gl_Position = u_projection * u_modelview * vec4(aPosition, 0.0, 1.0);
@@ -13,9 +13,9 @@ void main() {
   // and color glpyhs (used as source). The renderer sets
   // aColor to vec4(-1) for color glyhs.
   if (distance(aColor, vec4(-1)) < 0.001)
-    use_color = 0;
+    use_color = 0.0;
   else
-    use_color = 1;
+    use_color = 1.0;
 
   final_color = gsk_premultiply(aColor) * u_alpha;
 }
@@ -24,12 +24,12 @@ void main() {
 // coloring.glsl
 
 _IN_ vec4 final_color;
-flat _IN_ int use_color;
+_IN_ float use_color;
 
 void main() {
   vec4 diffuse = GskTexture(u_source, vUv);
 
-  if (use_color == 1)
+  if (use_color > 0.0)
     gskSetOutputColor(final_color * diffuse.a);
   else
     gskSetOutputColor(diffuse * u_alpha);
