@@ -4142,6 +4142,8 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
   GSList *line_list;
   GSList *tmp_list;
   GdkRGBA color;
+  GtkSnapshot *cursor_snapshot;
+  GskRenderNode *cursors;
 
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (layout->default_style != NULL);
@@ -4157,6 +4159,8 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
 
   if (line_list == NULL)
     return; /* nothing on the screen */
+
+  cursor_snapshot = gtk_snapshot_new ();
 
   crenderer = gsk_pango_renderer_acquire ();
 
@@ -4267,14 +4271,14 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
                   dir = (line_display->direction == GTK_TEXT_DIR_RTL) ? PANGO_DIRECTION_RTL : PANGO_DIRECTION_LTR;
 
                   if (cursor.is_insert || cursor.is_selection_bound)
-                    gtk_snapshot_push_opacity (crenderer->snapshot, cursor_alpha);
+                    gtk_snapshot_push_opacity (cursor_snapshot, cursor_alpha);
 
-                  gtk_snapshot_render_insertion_cursor (crenderer->snapshot, context,
+                  gtk_snapshot_render_insertion_cursor (cursor_snapshot, context,
                                                         line_display->x_offset, offset_y + line_display->top_margin,
                                                         line_display->layout, cursor.pos, dir);
 
                   if (cursor.is_insert || cursor.is_selection_bound)
-                    gtk_snapshot_pop (crenderer->snapshot);
+                    gtk_snapshot_pop (cursor_snapshot);
                 }
             }
         } /* line_display->height > 0 */
@@ -4287,6 +4291,13 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
     }
 
   gtk_text_layout_wrap_loop_end (layout);
+
+  cursors = gtk_snapshot_free_to_node (cursor_snapshot);
+  if (cursors)
+    {
+      gtk_snapshot_append_node (crenderer->snapshot, cursors);
+      gsk_render_node_unref (cursors);
+    }
 
   /* Only update eviction source once per snapshot */
   gtk_text_line_display_cache_delay_eviction (priv->cache);
