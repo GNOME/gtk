@@ -11,7 +11,7 @@ _OUT_ _GSK_ROUNDED_RECT_UNIFORM_ transformed_inside_outline;
 void main() {
   gl_Position = u_projection * u_modelview * vec4(aPosition, 0.0, 1.0);
 
-  final_color = gsk_premultiply(aColor) * u_alpha;
+  final_color = gsk_scaled_premultiply(aColor, u_alpha);
 
   GskRoundedRect outside = gsk_create_rect(u_outline_rect);
   GskRoundedRect inside = gsk_rounded_rect_shrink (outside, u_widths);
