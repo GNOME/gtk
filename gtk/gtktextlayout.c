@@ -4236,6 +4236,13 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
                 selection_end_index = -1;
             }
 
+          if (line_display->node != NULL)
+            {
+              if (line_display->has_block_cursor &&
+                  gtk_widget_has_focus (widget))
+                g_clear_pointer (&line_display->node, gsk_render_node_unref);
+            }
+
           if (line_display->node == NULL)
             {
               gtk_snapshot_push_collect (snapshot);
