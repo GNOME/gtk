@@ -1685,31 +1685,6 @@ gsk_ngl_render_job_visit_rect_border_node (GskNglRenderJob     *job,
 }
 
 static inline void
-gsk_ngl_render_job_visit_uniform_border_node (GskNglRenderJob     *job,
-                                              const GskRenderNode *node)
-{
-  const GskRoundedRect *rounded_outline = gsk_border_node_get_outline (node);
-  const GdkRGBA *colors = gsk_border_node_get_colors (node);
-  const float *widths = gsk_border_node_get_widths (node);
-  GskRoundedRect outline;
-
-  gsk_ngl_render_job_transform_rounded_rect (job, rounded_outline, &outline);
-
-  gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, inset_shadow));
-  gsk_ngl_program_set_uniform_rounded_rect (job->current_program,
-                                            UNIFORM_INSET_SHADOW_OUTLINE_RECT, 0,
-                                            &outline);
-  gsk_ngl_program_set_uniform1f (job->current_program,
-                                 UNIFORM_INSET_SHADOW_SPREAD, 0,
-                                 widths[0]);
-  gsk_ngl_program_set_uniform2f (job->current_program,
-                                 UNIFORM_INSET_SHADOW_OFFSET, 0,
-                                 0, 0);
-  gsk_ngl_render_job_draw_rect_with_color (job, &node->bounds, &colors[0]);
-  gsk_ngl_render_job_end_draw (job);
-}
-
-static inline void
 gsk_ngl_render_job_visit_border_node (GskNglRenderJob     *job,
                                       const GskRenderNode *node)
 {
@@ -3329,8 +3304,6 @@ gsk_ngl_render_job_visit_node (GskNglRenderJob     *job,
       if (gsk_border_node_get_uniform_color (node) &&
           gsk_rounded_rect_is_rectilinear (gsk_border_node_get_outline (node)))
         gsk_ngl_render_job_visit_rect_border_node (job, node);
-      else if (gsk_border_node_get_uniform (node))
-        gsk_ngl_render_job_visit_uniform_border_node (job, node);
       else
         gsk_ngl_render_job_visit_border_node (job, node);
     break;
