@@ -123,11 +123,35 @@ void gskSetOutputColor(vec4 color) {
 #if defined(NO_CLIP)
   result = color;
 #elif defined(RECT_CLIP)
-  result = color * gsk_rect_coverage(gsk_get_bounds(u_clip_rect),
+  float coverage = gsk_rect_coverage(gsk_get_bounds(u_clip_rect),
                                      gsk_get_frag_coord());
+  result = color * coverage;
 #else
-  result = color * gsk_rounded_rect_coverage(gsk_create_rect(u_clip_rect),
+  float coverage = gsk_rounded_rect_coverage(gsk_create_rect(u_clip_rect),
                                              gsk_get_frag_coord());
+  result = color * coverage;
+#endif
+
+#if defined(GSK_GLES) || defined(GSK_LEGACY)
+  gl_FragColor = result;
+#else
+  outputColor = result;
+#endif
+}
+
+void gskSetScaledOutputColor(vec4 color, float alpha) {
+  vec4 result;
+
+#if defined(NO_CLIP)
+  result = color * alpha;
+#elif defined(RECT_CLIP)
+  float coverage = gsk_rect_coverage(gsk_get_bounds(u_clip_rect),
+                                     gsk_get_frag_coord());
+  result = color * (alpha * coverage);
+#else
+  float coverage = gsk_rounded_rect_coverage(gsk_create_rect(u_clip_rect),
+                                             gsk_get_frag_coord());
+  result = color * (alpha * coverage);
 #endif
 
 #if defined(GSK_GLES) || defined(GSK_LEGACY)

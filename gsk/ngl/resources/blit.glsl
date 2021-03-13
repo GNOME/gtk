@@ -13,5 +13,5 @@ void main() {
 void main() {
   vec4 diffuse = GskTexture(u_source, vUv);
 
-  gskSetOutputColor(diffuse * u_alpha);
+  gskSetScaledOutputColor(diffuse, u_alpha);
 }
