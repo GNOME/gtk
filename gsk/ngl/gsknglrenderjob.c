@@ -1740,128 +1740,103 @@ gsk_ngl_render_job_visit_border_node (GskNglRenderJob     *job,
     float w;
     float h;
   } sizes[4];
+  float min_x = job->offset_x + node->bounds.origin.x;
+  float min_y = job->offset_y + node->bounds.origin.y;
+  float max_x = min_x + node->bounds.size.width;
+  float max_y = min_y + node->bounds.size.height;
+  GskRoundedRect outline;
 
-  /* Top left */
-  if (widths[3] > 0)
-    sizes[0].w = MAX (widths[3], rounded_outline->corner[0].width);
-  else
-    sizes[0].w = 0;
-
-  if (widths[0] > 0)
-    sizes[0].h = MAX (widths[0], rounded_outline->corner[0].height);
-  else
-    sizes[0].h = 0;
-
-  /* Top right */
-  if (widths[1] > 0)
-    sizes[1].w = MAX (widths[1], rounded_outline->corner[1].width);
-  else
-    sizes[1].w = 0;
+  memset (sizes, 0, sizeof sizes);
 
   if (widths[0] > 0)
-    sizes[1].h = MAX (widths[0], rounded_outline->corner[1].height);
-  else
-    sizes[1].h = 0;
+    {
+      sizes[0].h = MAX (widths[0], rounded_outline->corner[0].height);
+      sizes[1].h = MAX (widths[0], rounded_outline->corner[1].height);
+    }
 
-  /* Bottom right */
   if (widths[1] > 0)
-    sizes[2].w = MAX (widths[1], rounded_outline->corner[2].width);
-  else
-    sizes[2].w = 0;
+    {
+      sizes[1].w = MAX (widths[1], rounded_outline->corner[1].width);
+      sizes[2].w = MAX (widths[1], rounded_outline->corner[2].width);
+    }
 
   if (widths[2] > 0)
-    sizes[2].h = MAX (widths[2], rounded_outline->corner[2].height);
-  else
-    sizes[2].h = 0;
+    {
+      sizes[2].h = MAX (widths[2], rounded_outline->corner[2].height);
+      sizes[3].h = MAX (widths[2], rounded_outline->corner[3].height);
+    }
 
-
-  /* Bottom left */
   if (widths[3] > 0)
-    sizes[3].w = MAX (widths[3], rounded_outline->corner[3].width);
-  else
-    sizes[3].w = 0;
+    {
+      sizes[0].w = MAX (widths[3], rounded_outline->corner[0].width);
+      sizes[3].w = MAX (widths[3], rounded_outline->corner[3].width);
+    }
+
+  gsk_ngl_render_job_transform_rounded_rect (job, rounded_outline, &outline);
+
+  gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, border));
+
+  gsk_ngl_program_set_uniform4fv (job->current_program,
+                                  UNIFORM_BORDER_WIDTHS, 0,
+                                  1,
+                                  widths);
+  gsk_ngl_program_set_uniform_rounded_rect (job->current_program,
+                                            UNIFORM_BORDER_OUTLINE_RECT, 0,
+                                            &outline);
+
+  if (widths[0] > 0)
+    {
+      GskNglDrawVertex *vertices = gsk_ngl_command_queue_add_vertices (job->command_queue);
+
+      vertices[0] = (GskNglDrawVertex) { { min_x,              min_y              }, { 0, 1 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } };
+      vertices[1] = (GskNglDrawVertex) { { min_x + sizes[0].w, min_y + sizes[0].h }, { 0, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } };
+      vertices[2] = (GskNglDrawVertex) { { max_x,              min_y              }, { 1, 1 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } };
+
+      vertices[3] = (GskNglDrawVertex) { { max_x - sizes[1].w, min_y + sizes[1].h }, { 1, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } };
+      vertices[4] = (GskNglDrawVertex) { { min_x + sizes[0].w, min_y + sizes[0].h }, { 0, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } };
+      vertices[5] = (GskNglDrawVertex) { { max_x,              min_y              }, { 1, 1 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } };
+    }
+
+  if (widths[1] > 0)
+    {
+      GskNglDrawVertex *vertices = gsk_ngl_command_queue_add_vertices (job->command_queue);
+
+      vertices[0] = (GskNglDrawVertex) { { max_x - sizes[1].w, min_y + sizes[1].h }, { 0, 1 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } };
+      vertices[1] = (GskNglDrawVertex) { { max_x - sizes[2].w, max_y - sizes[2].h }, { 0, 0 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } };
+      vertices[2] = (GskNglDrawVertex) { { max_x,              min_y              }, { 1, 1 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } };
+
+      vertices[3] = (GskNglDrawVertex) { { max_x,              max_y              }, { 1, 0 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } };
+      vertices[4] = (GskNglDrawVertex) { { max_x - sizes[2].w, max_y - sizes[2].h }, { 0, 0 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } };
+      vertices[5] = (GskNglDrawVertex) { { max_x,              min_y              }, { 1, 1 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } };
+    }
 
   if (widths[2] > 0)
-    sizes[3].h = MAX (widths[2], rounded_outline->corner[3].height);
-  else
-    sizes[3].h = 0;
+    {
+      GskNglDrawVertex *vertices = gsk_ngl_command_queue_add_vertices (job->command_queue);
 
-  {
-    float min_x = job->offset_x + node->bounds.origin.x;
-    float min_y = job->offset_y + node->bounds.origin.y;
-    float max_x = min_x + node->bounds.size.width;
-    float max_y = min_y + node->bounds.size.height;
-    const GskNglDrawVertex side_data[4][6] = {
-      /* Top */
-      {
-        { { min_x,              min_y              }, { 0, 1 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } }, /* Upper left */
-        { { min_x + sizes[0].w, min_y + sizes[0].h }, { 0, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } }, /* Lower left */
-        { { max_x,              min_y              }, { 1, 1 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } }, /* Upper right */
+      vertices[0] = (GskNglDrawVertex) { { min_x + sizes[3].w, max_y - sizes[3].h }, { 0, 1 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } };
+      vertices[1] = (GskNglDrawVertex) { { min_x,              max_y              }, { 0, 0 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } };
+      vertices[2] = (GskNglDrawVertex) { { max_x - sizes[2].w, max_y - sizes[2].h }, { 1, 1 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } };
 
-        { { max_x - sizes[1].w, min_y + sizes[1].h }, { 1, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } }, /* Lower right */
-        { { min_x + sizes[0].w, min_y + sizes[0].h }, { 0, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } }, /* Lower left */
-        { { max_x,              min_y              }, { 1, 1 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } }, /* Upper right */
-      },
-      /* Right */
-      {
-        { { max_x - sizes[1].w, min_y + sizes[1].h }, { 0, 1 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } }, /* Upper left */
-        { { max_x - sizes[2].w, max_y - sizes[2].h }, { 0, 0 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } }, /* Lower left */
-        { { max_x,              min_y              }, { 1, 1 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } }, /* Upper right */
+      vertices[3] = (GskNglDrawVertex) { { max_x,              max_y              }, { 1, 0 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } };
+      vertices[4] = (GskNglDrawVertex) { { min_x            ,  max_y              }, { 0, 0 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } };
+      vertices[5] = (GskNglDrawVertex) { { max_x - sizes[2].w, max_y - sizes[2].h }, { 1, 1 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } };
+    }
 
-        { { max_x,              max_y              }, { 1, 0 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } }, /* Lower right */
-        { { max_x - sizes[2].w, max_y - sizes[2].h }, { 0, 0 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } }, /* Lower left */
-        { { max_x,              min_y              }, { 1, 1 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } }, /* Upper right */
-      },
-      /* Bottom */
-      {
-        { { min_x + sizes[3].w, max_y - sizes[3].h }, { 0, 1 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } }, /* Upper left */
-        { { min_x,              max_y              }, { 0, 0 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } }, /* Lower left */
-        { { max_x - sizes[2].w, max_y - sizes[2].h }, { 1, 1 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } }, /* Upper right */
+  if (widths[3] > 0)
+    {
+      GskNglDrawVertex *vertices = gsk_ngl_command_queue_add_vertices (job->command_queue);
 
-        { { max_x,              max_y              }, { 1, 0 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } }, /* Lower right */
-        { { min_x            ,  max_y              }, { 0, 0 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } }, /* Lower left */
-        { { max_x - sizes[2].w, max_y - sizes[2].h }, { 1, 1 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } }, /* Upper right */
-      },
-      /* Left */
-      {
-        { { min_x,              min_y              }, { 0, 1 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } }, /* Upper left */
-        { { min_x,              max_y              }, { 0, 0 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } }, /* Lower left */
-        { { min_x + sizes[0].w, min_y + sizes[0].h }, { 1, 1 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } }, /* Upper right */
+      vertices[0] = (GskNglDrawVertex) { { min_x,              min_y              }, { 0, 1 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } };
+      vertices[1] = (GskNglDrawVertex) { { min_x,              max_y              }, { 0, 0 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } };
+      vertices[2] = (GskNglDrawVertex) { { min_x + sizes[0].w, min_y + sizes[0].h }, { 1, 1 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } };
 
-        { { min_x + sizes[3].w, max_y - sizes[3].h }, { 1, 0 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } }, /* Lower right */
-        { { min_x,              max_y              }, { 0, 0 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } }, /* Lower left */
-        { { min_x + sizes[0].w, min_y + sizes[0].h }, { 1, 1 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } }, /* Upper right */
-      }
-    };
-    GskRoundedRect outline;
-    GskNglProgram *program;
+      vertices[3] = (GskNglDrawVertex) { { min_x + sizes[3].w, max_y - sizes[3].h }, { 1, 0 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } };
+      vertices[4] = (GskNglDrawVertex) { { min_x,              max_y              }, { 0, 0 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } };
+      vertices[5] = (GskNglDrawVertex) { { min_x + sizes[0].w, min_y + sizes[0].h }, { 1, 1 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } };
+    }
 
-    /* Prepare outline */
-    gsk_ngl_render_job_transform_rounded_rect (job, rounded_outline, &outline);
-
-    program = CHOOSE_PROGRAM (job, border);
-
-    gsk_ngl_program_set_uniform4fv (program,
-                                    UNIFORM_BORDER_WIDTHS, 0,
-                                    1,
-                                    widths);
-    gsk_ngl_program_set_uniform_rounded_rect (program,
-                                              UNIFORM_BORDER_OUTLINE_RECT, 0,
-                                              &outline);
-
-    for (guint i = 0; i < 4; i++)
-      {
-        GskNglDrawVertex *vertices;
-
-        if (widths[i] <= 0)
-          continue;
-
-        gsk_ngl_render_job_begin_draw (job, program);
-        vertices = gsk_ngl_command_queue_add_vertices (job->command_queue);
-        memcpy (vertices, side_data[i], sizeof (GskNglDrawVertex) * GSK_NGL_N_VERTICES);
-        gsk_ngl_render_job_end_draw (job);
-      }
-  }
+  gsk_ngl_render_job_end_draw (job);
 }
 
 /* Returns TRUE if applying @transform to @bounds
