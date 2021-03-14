@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-02-25 09:31+0000\n"
-"PO-Revision-Date: 2021-02-25 12:44+0200\n"
+"POT-Creation-Date: 2021-03-14 13:38+0000\n"
+"PO-Revision-Date: 2021-03-14 19:01+0200\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
 "Language-Team: suomi <lokalisointi-lista@googlegroups.com>\n"
 "Language: fi\n"
@@ -646,13 +646,11 @@ msgstr "GlobalAlloc() epäonnistui: "
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:290
 #, c-format
-#| msgid "Starting %s"
 msgid "Starting “%s”"
 msgstr "Käynnistetään “%s”"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:303
 #, c-format
-#| msgid "Opening “%s”."
 msgid "Opening “%s”"
 msgstr "Avataan “%s”"
 
@@ -665,11 +663,11 @@ msgstr[1] "Avataan %d kohdetta"
 
 #: gdk/x11/gdkclipboard-x11.c:433
 msgid "Clipboard manager could not store selection."
-msgstr ""
+msgstr "Leikepöydän hallinta ei voinut tallettaa valintaa."
 
 #: gdk/x11/gdkclipboard-x11.c:613
 msgid "Cannot store clipboard. No clipboard manager is active."
-msgstr ""
+msgstr "Leikepöytää ei voi tallettaa. Leikepöydän hallinta ei ole aktiivinen."
 
 #: gdk/x11/gdkglcontext-x11.c:907
 #, c-format
@@ -939,7 +937,7 @@ msgstr "Kääntäjät"
 
 #: gtk/gtkaboutdialog.c:2105
 msgid "Design by"
-msgstr ""
+msgstr "Suunnitellut"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
@@ -1948,9 +1946,6 @@ msgid "Custom color %d: %s"
 msgstr "Mukautettu väri %d: %s"
 
 #: gtk/gtkcolorswatch.c:230
-#, fuzzy
-#| msgctxt "Action name"
-#| msgid "Customize"
 msgid "Customize"
 msgstr "Mukauta"
 
@@ -2803,7 +2798,6 @@ msgstr "_Näytä teksti"
 #. translators: %s is the name of a cloud provider for files
 #: gtk/gtkplacessidebar.c:913
 #, c-format
-#| msgid "Open '%s'"
 msgid "Open %s"
 msgstr "Avaa %s"
 
@@ -3647,7 +3641,7 @@ msgstr "CSS:n tallentaminen epäonnistui"
 
 #: gtk/inspector/css-editor.ui:33
 msgid "Disable this custom CSS"
-msgstr ""
+msgstr "Poista käytöstä tämä mukautettu CSS"
 
 #: gtk/inspector/css-editor.ui:41
 msgid "Save the current CSS"
@@ -3977,7 +3971,6 @@ msgstr ""
 
 #: gtk/inspector/recorder.c:1212
 #, c-format
-#| msgid "Saving CSS failed"
 msgid "Saving RenderNode failed"
 msgstr "RenderNoden tallentaminen epäonnistui"
 
@@ -4325,11 +4318,11 @@ msgstr ""
 
 #: gtk/inspector/window.ui:506
 msgid "Magnifier"
-msgstr ""
+msgstr "Suurennuslasi"
 
 #: gtk/inspector/window.ui:527
 msgid "Accessibility"
-msgstr ""
+msgstr "Esteettömyys"
 
 #: gtk/inspector/window.ui:551
 msgid "Global"
@@ -6849,7 +6842,7 @@ msgstr ""
 
 #: gtk/tools/encodesymbolic.c:42
 msgid "Generate debug output"
-msgstr ""
+msgstr "Generoi vianselvitystulostetta"
 
 #: gtk/tools/encodesymbolic.c:94
 #, c-format
@@ -6908,32 +6901,28 @@ msgstr "Ominaisuutta %s::%s ei löytynyt\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:2204
 #, c-format
-#| msgid "Can’t load file: %s\n"
 msgid "Can’t load “%s”: %s\n"
 msgstr "Ei voi ladata “%s”: %s\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:2215
 #, c-format
-#| msgid "Can't parse file: %s\n"
 msgid "Can’t parse “%s”: %s\n"
 msgstr "Ei voi jäsentää “%s”: %s\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:2239
 #, c-format
-#| msgid "Failed to open file %s : %s\n"
 msgid "Failed to read “%s”: %s\n"
 msgstr "Tiedoston “%s” lukeminen epäonnistui: %s\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:2245
 #, c-format
-#| msgid "Failed to open file %s : %s\n"
 msgid "Failed to write %s: “%s”\n"
 msgstr "Tiedostoon %s kirjoittaminen epäonnistui: “%s”\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:2285
 #, c-format
 msgid "No .ui file specified\n"
-msgstr ""
+msgstr "Ei määritetty .ui-tiedostoa\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:2291
 #, c-format
