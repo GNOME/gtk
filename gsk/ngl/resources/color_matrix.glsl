@@ -23,7 +23,5 @@ void main() {
   color = u_color_matrix * color + u_color_offset;
   color = clamp(color, 0.0, 1.0);
 
-  color.rgb *= color.a;
-
-  gskSetOutputColor(color * u_alpha);
+  gskSetOutputColor(gsk_scaled_premultiply(color, u_alpha));
 }

@@ -12,12 +12,12 @@ void main() {
   // We use this shader for both plain glyphs (used as mask)
   // and color glpyhs (used as source). The renderer sets
   // aColor to vec4(-1) for color glyhs.
-  if (distance(aColor, vec4(-1)) < 0.001)
+  if (distance(aColor,vec4(-1)) < 0.1)
     use_color = 0.0;
   else
     use_color = 1.0;
 
-  final_color = gsk_premultiply(aColor) * u_alpha;
+  final_color = gsk_scaled_premultiply(aColor, u_alpha);
 }
 
 // FRAGMENT_SHADER:
@@ -29,8 +29,5 @@ _IN_ float use_color;
 void main() {
   vec4 diffuse = GskTexture(u_source, vUv);
 
-  if (use_color > 0.0)
-    gskSetOutputColor(final_color * diffuse.a);
-  else
-    gskSetOutputColor(diffuse * u_alpha);
+  gskSetOutputColor(mix(diffuse * u_alpha, final_color * diffuse.a, use_color));
 }

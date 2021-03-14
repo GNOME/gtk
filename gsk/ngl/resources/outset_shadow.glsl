@@ -11,7 +11,7 @@ void main() {
 
   vUv = vec2(aUv.x, aUv.y);
 
-  final_color = gsk_premultiply(aColor) * u_alpha;
+  final_color = gsk_scaled_premultiply(aColor, u_alpha);
 
   GskRoundedRect outline = gsk_create_rect(u_outline_rect);
   gsk_rounded_rect_transform(outline, u_modelview);
@@ -30,7 +30,5 @@ void main() {
 
   alpha *= (1.0 -  clamp(gsk_rounded_rect_coverage(gsk_decode_rect(transformed_outline), frag), 0.0, 1.0));
 
-  vec4 color = final_color * alpha;
-
-  gskSetOutputColor(color);
+  gskSetScaledOutputColor(final_color, alpha);
 }

@@ -142,9 +142,6 @@ struct _GskNglRenderJob
   /* Our current alpha state as we process nodes */
   float alpha;
 
-  /* Our current color state as we process nodes */
-  GdkRGBA color;
-
   /* Offset (delta x,y) as we process nodes. Occasionally this is merged into
    * a transform that is referenced from child transform nodes.
    */
@@ -396,13 +393,6 @@ gsk_ngl_render_job_set_alpha (GskNglRenderJob *job,
     }
 
   return alpha;
-}
-
-static inline void
-gsk_ngl_render_job_set_color (GskNglRenderJob *job,
-                              const GdkRGBA   *color)
-{
-  job->color = *color;
 }
 
 static void
@@ -894,70 +884,25 @@ gsk_ngl_render_job_draw_coords (GskNglRenderJob *job,
                                 float            min_u,
                                 float            min_v,
                                 float            max_u,
-                                float            max_v)
+                                float            max_v,
+                                const GdkRGBA   *color)
 {
   GskNglDrawVertex *vertices = gsk_ngl_command_queue_add_vertices (job->command_queue);
 
-  vertices[0].position[0] = min_x;
-  vertices[0].position[1] = min_y;
-  vertices[0].uv[0] = min_u;
-  vertices[0].uv[1] = min_v;
-  vertices[0].color[0] = job->color.red;
-  vertices[0].color[1] = job->color.green;
-  vertices[0].color[2] = job->color.blue;
-  vertices[0].color[3] = job->color.alpha;
-
-  vertices[1].position[0] = min_x;
-  vertices[1].position[1] = max_y;
-  vertices[1].uv[0] = min_u;
-  vertices[1].uv[1] = max_v;
-  vertices[1].color[0] = job->color.red;
-  vertices[1].color[1] = job->color.green;
-  vertices[1].color[2] = job->color.blue;
-  vertices[1].color[3] = job->color.alpha;
-
-  vertices[2].position[0] = max_x;
-  vertices[2].position[1] = min_y;
-  vertices[2].uv[0] = max_u;
-  vertices[2].uv[1] = min_v;
-  vertices[2].color[0] = job->color.red;
-  vertices[2].color[1] = job->color.green;
-  vertices[2].color[2] = job->color.blue;
-  vertices[2].color[3] = job->color.alpha;
-
-  vertices[3].position[0] = max_x;
-  vertices[3].position[1] = max_y;
-  vertices[3].uv[0] = max_u;
-  vertices[3].uv[1] = max_v;
-  vertices[3].color[0] = job->color.red;
-  vertices[3].color[1] = job->color.green;
-  vertices[3].color[2] = job->color.blue;
-  vertices[3].color[3] = job->color.alpha;
-
-  vertices[4].position[0] = min_x;
-  vertices[4].position[1] = max_y;
-  vertices[4].uv[0] = min_u;
-  vertices[4].uv[1] = max_v;
-  vertices[4].color[0] = job->color.red;
-  vertices[4].color[1] = job->color.green;
-  vertices[4].color[2] = job->color.blue;
-  vertices[4].color[3] = job->color.alpha;
-
-  vertices[5].position[0] = max_x;
-  vertices[5].position[1] = min_y;
-  vertices[5].uv[0] = max_u;
-  vertices[5].uv[1] = min_v;
-  vertices[5].color[0] = job->color.red;
-  vertices[5].color[1] = job->color.green;
-  vertices[5].color[2] = job->color.blue;
-  vertices[5].color[3] = job->color.alpha;
+  vertices[0] = (GskNglDrawVertex) { { min_x, min_y }, { min_u, min_v }, { color->red, color->green, color->blue, color->alpha } };
+  vertices[1] = (GskNglDrawVertex) { { min_x, max_y }, { min_u, max_v }, { color->red, color->green, color->blue, color->alpha } };
+  vertices[2] = (GskNglDrawVertex) { { max_x, min_y }, { max_u, min_v }, { color->red, color->green, color->blue, color->alpha } };
+  vertices[3] = (GskNglDrawVertex) { { max_x, max_y }, { max_u, max_v }, { color->red, color->green, color->blue, color->alpha } };
+  vertices[4] = (GskNglDrawVertex) { { min_x, max_y }, { min_u, max_v }, { color->red, color->green, color->blue, color->alpha } };
+  vertices[5] = (GskNglDrawVertex) { { max_x, min_y }, { max_u, min_v }, { color->red, color->green, color->blue, color->alpha } };
 }
 
 /* load_vertex_data_with_region */
 static inline void
-gsk_ngl_render_job_load_vertices_from_offscreen (GskNglRenderJob             *job,
-                                                 const graphene_rect_t       *bounds,
-                                                 const GskNglRenderOffscreen *offscreen)
+gsk_ngl_render_job_draw_offscreen_with_color (GskNglRenderJob             *job,
+                                              const graphene_rect_t       *bounds,
+                                              const GskNglRenderOffscreen *offscreen,
+                                              const GdkRGBA               *color)
 {
   float min_x = job->offset_x + bounds->origin.x;
   float min_y = job->offset_y + bounds->origin.y;
@@ -968,10 +913,35 @@ gsk_ngl_render_job_load_vertices_from_offscreen (GskNglRenderJob             *jo
 
   gsk_ngl_render_job_draw_coords (job,
                                   min_x, min_y, max_x, max_y,
-                                  offscreen->area.x, y1, offscreen->area.x2, y2);
+                                  offscreen->area.x, y1, offscreen->area.x2, y2,
+                                  color);
+}
+
+static inline void
+gsk_ngl_render_job_draw_offscreen (GskNglRenderJob             *job,
+                                   const graphene_rect_t       *bounds,
+                                   const GskNglRenderOffscreen *offscreen)
+{
+  gsk_ngl_render_job_draw_offscreen_with_color (job, bounds, offscreen, &(GdkRGBA) { 0.f, 0.f, 0.f, 0.f });
 }
 
 /* load_float_vertex_data */
+static inline void
+gsk_ngl_render_job_draw_with_color (GskNglRenderJob *job,
+                                    float            x,
+                                    float            y,
+                                    float            width,
+                                    float            height,
+                                    const GdkRGBA   *color)
+{
+  float min_x = job->offset_x + x;
+  float min_y = job->offset_y + y;
+  float max_x = min_x + width;
+  float max_y = min_y + height;
+
+  gsk_ngl_render_job_draw_coords (job, min_x, min_y, max_x, max_y, 0, 0, 1, 1, color);
+}
+
 static inline void
 gsk_ngl_render_job_draw (GskNglRenderJob *job,
                          float            x,
@@ -979,15 +949,22 @@ gsk_ngl_render_job_draw (GskNglRenderJob *job,
                          float            width,
                          float            height)
 {
-  float min_x = job->offset_x + x;
-  float min_y = job->offset_y + y;
-  float max_x = min_x + width;
-  float max_y = min_y + height;
-
-  gsk_ngl_render_job_draw_coords (job, min_x, min_y, max_x, max_y, 0, 0, 1, 1);
+  gsk_ngl_render_job_draw_with_color (job, x, y, width, height, &(GdkRGBA) { 0.f, 0.f, 0.f, 0.f });
 }
 
 /* load_vertex_data */
+static inline void
+gsk_ngl_render_job_draw_rect_with_color (GskNglRenderJob       *job,
+                                         const graphene_rect_t *bounds,
+                                         const GdkRGBA         *color)
+{
+  gsk_ngl_render_job_draw_with_color (job,
+                                      bounds->origin.x,
+                                      bounds->origin.y,
+                                      bounds->size.width,
+                                      bounds->size.height,
+                                      color);
+}
 static inline void
 gsk_ngl_render_job_draw_rect (GskNglRenderJob       *job,
                               const graphene_rect_t *bounds)
@@ -1009,7 +986,10 @@ gsk_ngl_render_job_draw_offscreen_rect (GskNglRenderJob       *job,
   float max_x = min_x + bounds->size.width;
   float max_y = min_y + bounds->size.height;
 
-  gsk_ngl_render_job_draw_coords (job, min_x, min_y, max_x, max_y, 0, 1, 1, 0);
+  gsk_ngl_render_job_draw_coords (job,
+                                  min_x, min_y, max_x, max_y,
+                                  0, 1, 1, 0,
+                                  &(GdkRGBA) { 0.f, 0.f, 0.f, 0.f } );
 }
 
 static inline void
@@ -1265,7 +1245,10 @@ blur_offscreen (GskNglRenderJob       *job,
   gsk_ngl_program_set_uniform2f (job->current_program,
                                  UNIFORM_BLUR_DIR, 0,
                                  1, 0);
-  gsk_ngl_render_job_draw_coords (job, 0, 0, texture_to_blur_width, texture_to_blur_height, 0, 1, 1, 0);
+  gsk_ngl_render_job_draw_coords (job,
+                                  0, 0, texture_to_blur_width, texture_to_blur_height,
+                                  0, 1, 1, 0,
+                                  &(GdkRGBA) { 0.f, 0.f, 0.f, 0.f });
   gsk_ngl_render_job_end_draw (job);
 
   /* Bind second pass framebuffer and clear it */
@@ -1289,7 +1272,10 @@ blur_offscreen (GskNglRenderJob       *job,
   gsk_ngl_program_set_uniform2f (job->current_program,
                                  UNIFORM_BLUR_DIR, 0,
                                  0, 1);
-  gsk_ngl_render_job_draw_coords (job, 0, 0, texture_to_blur_width, texture_to_blur_height, 0, 1, 1, 0);
+  gsk_ngl_render_job_draw_coords (job,
+                                  0, 0, texture_to_blur_width, texture_to_blur_height,
+                                  0, 1, 1, 0,
+                                  &(GdkRGBA) { 0.f, 0.f, 0.f, 0.f });
   gsk_ngl_render_job_end_draw (job);
 
   gsk_ngl_render_job_pop_modelview (job);
@@ -1363,8 +1349,9 @@ gsk_ngl_render_job_visit_color_node (GskNglRenderJob     *job,
                                      const GskRenderNode *node)
 {
   gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color));
-  gsk_ngl_render_job_set_color (job, gsk_color_node_get_color (node));
-  gsk_ngl_render_job_draw_rect (job, &node->bounds);
+  gsk_ngl_render_job_draw_rect_with_color (job,
+                                           &node->bounds,
+                                           gsk_color_node_get_color (node));
   gsk_ngl_render_job_end_draw (job);
 }
 
@@ -1627,7 +1614,7 @@ gsk_ngl_render_job_visit_rounded_clip_node (GskNglRenderJob     *job,
                                            GL_TEXTURE_2D,
                                            GL_TEXTURE0,
                                            offscreen.texture_id);
-      gsk_ngl_render_job_load_vertices_from_offscreen (job, &node->bounds, &offscreen);
+      gsk_ngl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
       gsk_ngl_render_job_end_draw (job);
     }
 }
@@ -1674,58 +1661,26 @@ gsk_ngl_render_job_visit_rect_border_node (GskNglRenderJob     *job,
 
   gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color));
 
-  gsk_ngl_render_job_set_color (job, &colors[0]);
+  if (widths[0] > 0)
+    gsk_ngl_render_job_draw_rect_with_color (job,
+                                             &GRAPHENE_RECT_INIT (origin->x, origin->y, size->width - widths[1], widths[0]),
+                                             &colors[0]);
 
-  gsk_ngl_render_job_draw_rect (job,
-      &GRAPHENE_RECT_INIT (origin->x,
-                           origin->y,
-                           size->width - widths[1],
-                           widths[0]));
+  if (widths[1] > 0)
+    gsk_ngl_render_job_draw_rect_with_color (job,
+                                             &GRAPHENE_RECT_INIT (origin->x + size->width - widths[1], origin->y, widths[1], size->height - widths[2]),
+                                             &colors[0]);
 
-  gsk_ngl_render_job_draw_rect (job,
-      &GRAPHENE_RECT_INIT (origin->x + size->width - widths[1],
-                           origin->y,
-                           widths[1],
-                           size->height - widths[2]));
+  if (widths[2] > 0)
+    gsk_ngl_render_job_draw_rect_with_color (job,
+                                             &GRAPHENE_RECT_INIT (origin->x + widths[3], origin->y + size->height - widths[2], size->width - widths[1], widths[2]),
+                                             &colors[0]);
 
-  gsk_ngl_render_job_draw_rect (job,
-      &GRAPHENE_RECT_INIT (origin->x + widths[3],
-                           origin->y + size->height - widths[2],
-                           size->width - widths[1],
-                           widths[2]));
+  if (widths[3] > 0)
+    gsk_ngl_render_job_draw_rect_with_color (job,
+                                             &GRAPHENE_RECT_INIT (origin->x, origin->y + widths[0], widths[3], size->height - widths[0]),
+                                             &colors[0]);
 
-  gsk_ngl_render_job_draw_rect (job,
-      &GRAPHENE_RECT_INIT (origin->x,
-                           origin->y + widths[0],
-                           widths[3],
-                           size->height - widths[0]));
-
-  gsk_ngl_render_job_end_draw (job);
-}
-
-static inline void
-gsk_ngl_render_job_visit_uniform_border_node (GskNglRenderJob     *job,
-                                              const GskRenderNode *node)
-{
-  const GskRoundedRect *rounded_outline = gsk_border_node_get_outline (node);
-  const GdkRGBA *colors = gsk_border_node_get_colors (node);
-  const float *widths = gsk_border_node_get_widths (node);
-  GskRoundedRect outline;
-
-  gsk_ngl_render_job_transform_rounded_rect (job, rounded_outline, &outline);
-
-  gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, inset_shadow));
-  gsk_ngl_render_job_set_color (job, &colors[0]);
-  gsk_ngl_program_set_uniform_rounded_rect (job->current_program,
-                                            UNIFORM_INSET_SHADOW_OUTLINE_RECT, 0,
-                                            &outline);
-  gsk_ngl_program_set_uniform1f (job->current_program,
-                                 UNIFORM_INSET_SHADOW_SPREAD, 0,
-                                 widths[0]);
-  gsk_ngl_program_set_uniform2f (job->current_program,
-                                 UNIFORM_INSET_SHADOW_OFFSET, 0,
-                                 0, 0);
-  gsk_ngl_render_job_draw_rect (job, &node->bounds);
   gsk_ngl_render_job_end_draw (job);
 }
 
@@ -1740,128 +1695,153 @@ gsk_ngl_render_job_visit_border_node (GskNglRenderJob     *job,
     float w;
     float h;
   } sizes[4];
+  float min_x = job->offset_x + node->bounds.origin.x;
+  float min_y = job->offset_y + node->bounds.origin.y;
+  float max_x = min_x + node->bounds.size.width;
+  float max_y = min_y + node->bounds.size.height;
+  GskRoundedRect outline;
 
-  /* Top left */
-  if (widths[3] > 0)
-    sizes[0].w = MAX (widths[3], rounded_outline->corner[0].width);
-  else
-    sizes[0].w = 0;
-
-  if (widths[0] > 0)
-    sizes[0].h = MAX (widths[0], rounded_outline->corner[0].height);
-  else
-    sizes[0].h = 0;
-
-  /* Top right */
-  if (widths[1] > 0)
-    sizes[1].w = MAX (widths[1], rounded_outline->corner[1].width);
-  else
-    sizes[1].w = 0;
+  memset (sizes, 0, sizeof sizes);
 
   if (widths[0] > 0)
-    sizes[1].h = MAX (widths[0], rounded_outline->corner[1].height);
-  else
-    sizes[1].h = 0;
+    {
+      sizes[0].h = MAX (widths[0], rounded_outline->corner[0].height);
+      sizes[1].h = MAX (widths[0], rounded_outline->corner[1].height);
+    }
 
-  /* Bottom right */
   if (widths[1] > 0)
-    sizes[2].w = MAX (widths[1], rounded_outline->corner[2].width);
-  else
-    sizes[2].w = 0;
+    {
+      sizes[1].w = MAX (widths[1], rounded_outline->corner[1].width);
+      sizes[2].w = MAX (widths[1], rounded_outline->corner[2].width);
+    }
 
   if (widths[2] > 0)
-    sizes[2].h = MAX (widths[2], rounded_outline->corner[2].height);
-  else
-    sizes[2].h = 0;
+    {
+      sizes[2].h = MAX (widths[2], rounded_outline->corner[2].height);
+      sizes[3].h = MAX (widths[2], rounded_outline->corner[3].height);
+    }
 
-
-  /* Bottom left */
   if (widths[3] > 0)
-    sizes[3].w = MAX (widths[3], rounded_outline->corner[3].width);
-  else
-    sizes[3].w = 0;
+    {
+      sizes[0].w = MAX (widths[3], rounded_outline->corner[0].width);
+      sizes[3].w = MAX (widths[3], rounded_outline->corner[3].width);
+    }
+
+  gsk_ngl_render_job_transform_rounded_rect (job, rounded_outline, &outline);
+
+  gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, border));
+
+  gsk_ngl_program_set_uniform4fv (job->current_program,
+                                  UNIFORM_BORDER_WIDTHS, 0,
+                                  1,
+                                  widths);
+  gsk_ngl_program_set_uniform_rounded_rect (job->current_program,
+                                            UNIFORM_BORDER_OUTLINE_RECT, 0,
+                                            &outline);
+
+  if (widths[0] > 0)
+    {
+      GskNglDrawVertex *vertices = gsk_ngl_command_queue_add_vertices (job->command_queue);
+
+      vertices[0] = (GskNglDrawVertex) { { min_x,              min_y              }, { 0, 1 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } };
+      vertices[1] = (GskNglDrawVertex) { { min_x + sizes[0].w, min_y + sizes[0].h }, { 0, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } };
+      vertices[2] = (GskNglDrawVertex) { { max_x,              min_y              }, { 1, 1 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } };
+
+      vertices[3] = (GskNglDrawVertex) { { max_x - sizes[1].w, min_y + sizes[1].h }, { 1, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } };
+      vertices[4] = (GskNglDrawVertex) { { min_x + sizes[0].w, min_y + sizes[0].h }, { 0, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } };
+      vertices[5] = (GskNglDrawVertex) { { max_x,              min_y              }, { 1, 1 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } };
+    }
+
+  if (widths[1] > 0)
+    {
+      GskNglDrawVertex *vertices = gsk_ngl_command_queue_add_vertices (job->command_queue);
+
+      vertices[0] = (GskNglDrawVertex) { { max_x - sizes[1].w, min_y + sizes[1].h }, { 0, 1 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } };
+      vertices[1] = (GskNglDrawVertex) { { max_x - sizes[2].w, max_y - sizes[2].h }, { 0, 0 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } };
+      vertices[2] = (GskNglDrawVertex) { { max_x,              min_y              }, { 1, 1 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } };
+
+      vertices[3] = (GskNglDrawVertex) { { max_x,              max_y              }, { 1, 0 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } };
+      vertices[4] = (GskNglDrawVertex) { { max_x - sizes[2].w, max_y - sizes[2].h }, { 0, 0 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } };
+      vertices[5] = (GskNglDrawVertex) { { max_x,              min_y              }, { 1, 1 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } };
+    }
 
   if (widths[2] > 0)
-    sizes[3].h = MAX (widths[2], rounded_outline->corner[3].height);
-  else
-    sizes[3].h = 0;
+    {
+      GskNglDrawVertex *vertices = gsk_ngl_command_queue_add_vertices (job->command_queue);
 
-  {
-    float min_x = job->offset_x + node->bounds.origin.x;
-    float min_y = job->offset_y + node->bounds.origin.y;
-    float max_x = min_x + node->bounds.size.width;
-    float max_y = min_y + node->bounds.size.height;
-    const GskNglDrawVertex side_data[4][6] = {
-      /* Top */
-      {
-        { { min_x,              min_y              }, { 0, 1 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } }, /* Upper left */
-        { { min_x + sizes[0].w, min_y + sizes[0].h }, { 0, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } }, /* Lower left */
-        { { max_x,              min_y              }, { 1, 1 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } }, /* Upper right */
+      vertices[0] = (GskNglDrawVertex) { { min_x + sizes[3].w, max_y - sizes[3].h }, { 0, 1 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } };
+      vertices[1] = (GskNglDrawVertex) { { min_x,              max_y              }, { 0, 0 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } };
+      vertices[2] = (GskNglDrawVertex) { { max_x - sizes[2].w, max_y - sizes[2].h }, { 1, 1 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } };
 
-        { { max_x - sizes[1].w, min_y + sizes[1].h }, { 1, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } }, /* Lower right */
-        { { min_x + sizes[0].w, min_y + sizes[0].h }, { 0, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } }, /* Lower left */
-        { { max_x,              min_y              }, { 1, 1 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha } }, /* Upper right */
-      },
-      /* Right */
-      {
-        { { max_x - sizes[1].w, min_y + sizes[1].h }, { 0, 1 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } }, /* Upper left */
-        { { max_x - sizes[2].w, max_y - sizes[2].h }, { 0, 0 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } }, /* Lower left */
-        { { max_x,              min_y              }, { 1, 1 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } }, /* Upper right */
+      vertices[3] = (GskNglDrawVertex) { { max_x,              max_y              }, { 1, 0 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } };
+      vertices[4] = (GskNglDrawVertex) { { min_x            ,  max_y              }, { 0, 0 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } };
+      vertices[5] = (GskNglDrawVertex) { { max_x - sizes[2].w, max_y - sizes[2].h }, { 1, 1 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } };
+    }
 
-        { { max_x,              max_y              }, { 1, 0 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } }, /* Lower right */
-        { { max_x - sizes[2].w, max_y - sizes[2].h }, { 0, 0 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } }, /* Lower left */
-        { { max_x,              min_y              }, { 1, 1 }, { c[1].red, c[1].green, c[1].blue, c[1].alpha } }, /* Upper right */
-      },
-      /* Bottom */
-      {
-        { { min_x + sizes[3].w, max_y - sizes[3].h }, { 0, 1 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } }, /* Upper left */
-        { { min_x,              max_y              }, { 0, 0 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } }, /* Lower left */
-        { { max_x - sizes[2].w, max_y - sizes[2].h }, { 1, 1 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } }, /* Upper right */
+  if (widths[3] > 0)
+    {
+      GskNglDrawVertex *vertices = gsk_ngl_command_queue_add_vertices (job->command_queue);
 
-        { { max_x,              max_y              }, { 1, 0 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } }, /* Lower right */
-        { { min_x            ,  max_y              }, { 0, 0 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } }, /* Lower left */
-        { { max_x - sizes[2].w, max_y - sizes[2].h }, { 1, 1 }, { c[2].red, c[2].green, c[2].blue, c[2].alpha } }, /* Upper right */
-      },
-      /* Left */
-      {
-        { { min_x,              min_y              }, { 0, 1 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } }, /* Upper left */
-        { { min_x,              max_y              }, { 0, 0 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } }, /* Lower left */
-        { { min_x + sizes[0].w, min_y + sizes[0].h }, { 1, 1 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } }, /* Upper right */
+      vertices[0] = (GskNglDrawVertex) { { min_x,              min_y              }, { 0, 1 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } };
+      vertices[1] = (GskNglDrawVertex) { { min_x,              max_y              }, { 0, 0 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } };
+      vertices[2] = (GskNglDrawVertex) { { min_x + sizes[0].w, min_y + sizes[0].h }, { 1, 1 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } };
 
-        { { min_x + sizes[3].w, max_y - sizes[3].h }, { 1, 0 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } }, /* Lower right */
-        { { min_x,              max_y              }, { 0, 0 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } }, /* Lower left */
-        { { min_x + sizes[0].w, min_y + sizes[0].h }, { 1, 1 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } }, /* Upper right */
-      }
-    };
-    GskRoundedRect outline;
-    GskNglProgram *program;
+      vertices[3] = (GskNglDrawVertex) { { min_x + sizes[3].w, max_y - sizes[3].h }, { 1, 0 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } };
+      vertices[4] = (GskNglDrawVertex) { { min_x,              max_y              }, { 0, 0 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } };
+      vertices[5] = (GskNglDrawVertex) { { min_x + sizes[0].w, min_y + sizes[0].h }, { 1, 1 }, { c[3].red, c[3].green, c[3].blue, c[3].alpha } };
+    }
 
-    /* Prepare outline */
-    gsk_ngl_render_job_transform_rounded_rect (job, rounded_outline, &outline);
+  gsk_ngl_render_job_end_draw (job);
+}
 
-    program = CHOOSE_PROGRAM (job, border);
+/* A special case for a pattern that occurs frequently with CSS
+ * backgrounds: two sibling nodes, the first of which is a rounded
+ * clip node with a color node as child, and the second one is a
+ * border node, with the same outline as the clip node. We render
+ * this using the filled_border shader.
+ */
+static void
+gsk_ngl_render_job_visit_css_background (GskNglRenderJob     *job,
+                                         const GskRenderNode *node,
+                                         const GskRenderNode *node2)
+{
+  const GskRenderNode *child = gsk_rounded_clip_node_get_child (node);
+  const GdkRGBA *c2 = gsk_color_node_get_color (child);
+  const GdkRGBA *c = gsk_border_node_get_colors (node2);
+  const GskRoundedRect *rounded_outline = gsk_border_node_get_outline (node2);
+  const float *widths = gsk_border_node_get_widths (node2);
+  float min_x = job->offset_x + node2->bounds.origin.x;
+  float min_y = job->offset_y + node2->bounds.origin.y;
+  float max_x = min_x + node2->bounds.size.width;
+  float max_y = min_y + node2->bounds.size.height;
+  GskRoundedRect outline;
+  GskNglDrawVertex *vertices;
 
-    gsk_ngl_program_set_uniform4fv (program,
-                                    UNIFORM_BORDER_WIDTHS, 0,
-                                    1,
-                                    widths);
-    gsk_ngl_program_set_uniform_rounded_rect (program,
-                                              UNIFORM_BORDER_OUTLINE_RECT, 0,
-                                              &outline);
+  if (node_is_invisible (node2))
+    return;
 
-    for (guint i = 0; i < 4; i++)
-      {
-        GskNglDrawVertex *vertices;
+  gsk_ngl_render_job_transform_rounded_rect (job, rounded_outline, &outline);
 
-        if (widths[i] <= 0)
-          continue;
+  gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, filled_border));
 
-        gsk_ngl_render_job_begin_draw (job, program);
-        vertices = gsk_ngl_command_queue_add_vertices (job->command_queue);
-        memcpy (vertices, side_data[i], sizeof (GskNglDrawVertex) * GSK_NGL_N_VERTICES);
-        gsk_ngl_render_job_end_draw (job);
-      }
-  }
+  gsk_ngl_program_set_uniform4fv (job->current_program,
+                                  UNIFORM_FILLED_BORDER_WIDTHS, 0,
+                                  1,
+                                  widths);
+  gsk_ngl_program_set_uniform_rounded_rect (job->current_program,
+                                            UNIFORM_FILLED_BORDER_OUTLINE_RECT, 0,
+                                            &outline);
+
+  vertices = gsk_ngl_command_queue_add_vertices (job->command_queue);
+
+  vertices[0] = (GskNglDrawVertex) { { min_x, min_y }, { 0, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha }, { c2->red, c2->green, c2->blue, c2->alpha } };
+  vertices[1] = (GskNglDrawVertex) { { min_x, max_y }, { 0, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha }, { c2->red, c2->green, c2->blue, c2->alpha } };
+  vertices[2] = (GskNglDrawVertex) { { max_x, min_y }, { 0, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha }, { c2->red, c2->green, c2->blue, c2->alpha } };
+  vertices[3] = (GskNglDrawVertex) { { max_x, max_y }, { 0, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha }, { c2->red, c2->green, c2->blue, c2->alpha } };
+  vertices[4] = (GskNglDrawVertex) { { min_x, max_y }, { 0, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha }, { c2->red, c2->green, c2->blue, c2->alpha } };
+  vertices[5] = (GskNglDrawVertex) { { max_x, min_y }, { 0, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha }, { c2->red, c2->green, c2->blue, c2->alpha } };
+
+  gsk_ngl_render_job_end_draw (job);
 }
 
 /* Returns TRUE if applying @transform to @bounds
@@ -1964,7 +1944,7 @@ gsk_ngl_render_job_visit_transform_node (GskNglRenderJob     *job,
                                                    GL_TEXTURE_2D,
                                                    GL_TEXTURE0,
                                                    offscreen.texture_id);
-              gsk_ngl_render_job_load_vertices_from_offscreen (job, &child->bounds, &offscreen);
+              gsk_ngl_render_job_draw_offscreen (job, &child->bounds, &offscreen);
               gsk_ngl_render_job_end_draw (job);
 
               gsk_ngl_render_job_pop_modelview (job);
@@ -1987,7 +1967,6 @@ gsk_ngl_render_job_visit_unblurred_inset_shadow_node (GskNglRenderJob     *job,
   gsk_ngl_render_job_transform_rounded_rect (job, outline, &transformed_outline);
 
   gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, inset_shadow));
-  gsk_ngl_render_job_set_color (job, gsk_inset_shadow_node_get_color (node));
   gsk_ngl_program_set_uniform_rounded_rect (job->current_program,
                                             UNIFORM_INSET_SHADOW_OUTLINE_RECT, 0,
                                             &transformed_outline);
@@ -1998,7 +1977,7 @@ gsk_ngl_render_job_visit_unblurred_inset_shadow_node (GskNglRenderJob     *job,
                                  UNIFORM_INSET_SHADOW_OFFSET, 0,
                                  gsk_inset_shadow_node_get_dx (node),
                                  gsk_inset_shadow_node_get_dy (node));
-  gsk_ngl_render_job_draw_rect (job, &node->bounds);
+  gsk_ngl_render_job_draw_rect_with_color (job, &node->bounds, gsk_inset_shadow_node_get_color (node));
   gsk_ngl_render_job_end_draw (job);
 }
 
@@ -2088,7 +2067,6 @@ gsk_ngl_render_job_visit_blurred_inset_shadow_node (GskNglRenderJob     *job,
 
       /* Actual inset shadow outline drawing */
       gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, inset_shadow));
-      gsk_ngl_render_job_set_color (job, gsk_inset_shadow_node_get_color (node));
       gsk_ngl_program_set_uniform_rounded_rect (job->current_program,
                                                 UNIFORM_INSET_SHADOW_OUTLINE_RECT, 0,
                                                 &transformed_outline);
@@ -2099,7 +2077,9 @@ gsk_ngl_render_job_visit_blurred_inset_shadow_node (GskNglRenderJob     *job,
                                      UNIFORM_INSET_SHADOW_OFFSET, 0,
                                      offset_x * scale_x,
                                      offset_y * scale_y);
-      gsk_ngl_render_job_draw (job, 0, 0, texture_width, texture_height);
+      gsk_ngl_render_job_draw_with_color (job,
+                                          0, 0, texture_width, texture_height,
+                                          gsk_inset_shadow_node_get_color (node));
       gsk_ngl_render_job_end_draw (job);
 
       gsk_ngl_render_job_pop_modelview (job);
@@ -2161,7 +2141,7 @@ gsk_ngl_render_job_visit_blurred_inset_shadow_node (GskNglRenderJob     *job,
                                          GL_TEXTURE_2D,
                                          GL_TEXTURE0,
                                          blurred_texture_id);
-    gsk_ngl_render_job_load_vertices_from_offscreen (job, &node->bounds, &offscreen);
+    gsk_ngl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
     gsk_ngl_render_job_end_draw (job);
 
     if (needs_clip)
@@ -2182,6 +2162,7 @@ gsk_ngl_render_job_visit_unblurred_outset_shadow_node (GskNglRenderJob     *job,
   float spread = gsk_outset_shadow_node_get_spread (node);
   float dx = gsk_outset_shadow_node_get_dx (node);
   float dy = gsk_outset_shadow_node_get_dy (node);
+  const GdkRGBA *color = gsk_outset_shadow_node_get_color (node);
   const float edge_sizes[] = { // Top, right, bottom, left
     spread - dy, spread + dx, spread + dy, spread - dx
   };
@@ -2195,7 +2176,6 @@ gsk_ngl_render_job_visit_unblurred_outset_shadow_node (GskNglRenderJob     *job,
   gsk_ngl_render_job_transform_rounded_rect (job, outline, &transformed_outline);
 
   gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, unblurred_outset_shadow));
-  gsk_ngl_render_job_set_color (job, gsk_outset_shadow_node_get_color (node));
   gsk_ngl_program_set_uniform_rounded_rect (job->current_program,
                                             UNIFORM_UNBLURRED_OUTSET_SHADOW_OUTLINE_RECT, 0,
                                             &transformed_outline);
@@ -2208,38 +2188,45 @@ gsk_ngl_render_job_visit_unblurred_outset_shadow_node (GskNglRenderJob     *job,
 
   /* Corners... */
   if (corner_sizes[0][0] > 0 && corner_sizes[0][1] > 0) /* Top left */
-    gsk_ngl_render_job_draw (job,
-                             x, y,
-                             corner_sizes[0][0], corner_sizes[0][1]);
+    gsk_ngl_render_job_draw_with_color (job,
+                                        x, y, corner_sizes[0][0], corner_sizes[0][1],
+                                        color);
   if (corner_sizes[1][0] > 0 && corner_sizes[1][1] > 0) /* Top right */
-    gsk_ngl_render_job_draw (job,
-                             x + w - corner_sizes[1][0], y,
-                             corner_sizes[1][0], corner_sizes[1][1]);
+    gsk_ngl_render_job_draw_with_color (job,
+                                        x + w - corner_sizes[1][0], y,
+                                        corner_sizes[1][0], corner_sizes[1][1],
+                                        color);
   if (corner_sizes[2][0] > 0 && corner_sizes[2][1] > 0) /* Bottom right */
-    gsk_ngl_render_job_draw (job,
-                             x + w - corner_sizes[2][0], y + h - corner_sizes[2][1],
-                             corner_sizes[2][0], corner_sizes[2][1]);
+    gsk_ngl_render_job_draw_with_color (job,
+                                        x + w - corner_sizes[2][0], y + h - corner_sizes[2][1],
+                                        corner_sizes[2][0], corner_sizes[2][1],
+                                        color);
   if (corner_sizes[3][0] > 0 && corner_sizes[3][1] > 0) /* Bottom left */
-    gsk_ngl_render_job_draw (job,
-                             x, y + h - corner_sizes[3][1],
-                             corner_sizes[3][0], corner_sizes[3][1]);
+    gsk_ngl_render_job_draw_with_color (job,
+                                        x, y + h - corner_sizes[3][1],
+                                        corner_sizes[3][0], corner_sizes[3][1],
+                                        color);
   /* Edges... */;
   if (edge_sizes[0] > 0) /* Top */
-    gsk_ngl_render_job_draw (job,
-                             x + corner_sizes[0][0], y,
-                             w - corner_sizes[0][0] - corner_sizes[1][0], edge_sizes[0]);
+    gsk_ngl_render_job_draw_with_color (job,
+                                        x + corner_sizes[0][0], y,
+                                        w - corner_sizes[0][0] - corner_sizes[1][0], edge_sizes[0],
+                                        color);
   if (edge_sizes[1] > 0) /* Right */
-    gsk_ngl_render_job_draw (job,
-                             x + w - edge_sizes[1], y + corner_sizes[1][1],
-                             edge_sizes[1], h - corner_sizes[1][1] - corner_sizes[2][1]);
+    gsk_ngl_render_job_draw_with_color (job,
+                                        x + w - edge_sizes[1], y + corner_sizes[1][1],
+                                        edge_sizes[1], h - corner_sizes[1][1] - corner_sizes[2][1],
+                                        color);
   if (edge_sizes[2] > 0) /* Bottom */
-    gsk_ngl_render_job_draw (job,
-                             x + corner_sizes[3][0], y + h - edge_sizes[2],
-                             w - corner_sizes[3][0] - corner_sizes[2][0], edge_sizes[2]);
+    gsk_ngl_render_job_draw_with_color (job,
+                                        x + corner_sizes[3][0], y + h - edge_sizes[2],
+                                        w - corner_sizes[3][0] - corner_sizes[2][0], edge_sizes[2],
+                                        color);
   if (edge_sizes[3] > 0) /* Left */
-    gsk_ngl_render_job_draw (job,
-                             x, y + corner_sizes[0][1],
-                             edge_sizes[3], h - corner_sizes[0][1] - corner_sizes[3][1]);
+    gsk_ngl_render_job_draw_with_color (job,
+                                        x, y + corner_sizes[0][1],
+                                        edge_sizes[3], h - corner_sizes[0][1] - corner_sizes[3][1],
+                                        color);
 
   gsk_ngl_render_job_end_draw (job);
 }
@@ -2349,8 +2336,7 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
 
       /* Draw the outline using color program */
       gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color));
-      gsk_ngl_render_job_set_color (job, &white);
-      gsk_ngl_render_job_draw (job, 0, 0, texture_width, texture_height);
+      gsk_ngl_render_job_draw_with_color (job, 0, 0, texture_width, texture_height, &white);
       gsk_ngl_render_job_end_draw (job);
 
       /* Reset state from offscreen */
@@ -2393,7 +2379,6 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
       init_full_texture_region (&offscreen);
 
       gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, outset_shadow));
-      gsk_ngl_render_job_set_color (job, color);
       gsk_ngl_program_set_uniform_texture (job->current_program,
                                            UNIFORM_SHARED_SOURCE, 0,
                                            GL_TEXTURE_2D,
@@ -2402,19 +2387,19 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
       gsk_ngl_program_set_uniform_rounded_rect (job->current_program,
                                                 UNIFORM_OUTSET_SHADOW_OUTLINE_RECT, 0,
                                                 &transformed_outline);
-      gsk_ngl_render_job_load_vertices_from_offscreen (job,
-                                                       &GRAPHENE_RECT_INIT (min_x,
-                                                                            min_y,
-                                                                            texture_width / scale_x,
-                                                                            texture_height / scale_y),
-                                                       &offscreen);
+      gsk_ngl_render_job_draw_offscreen_with_color (job,
+                                                    &GRAPHENE_RECT_INIT (min_x,
+                                                                         min_y,
+                                                                         texture_width / scale_x,
+                                                                         texture_height / scale_y),
+                                                    &offscreen,
+                                                    color);
       gsk_ngl_render_job_end_draw (job);
 
       return;
     }
 
   gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, outset_shadow));
-  gsk_ngl_render_job_set_color (job, color);
   gsk_ngl_program_set_uniform_texture (job->current_program,
                                        UNIFORM_SHARED_SOURCE, 0,
                                        GL_TEXTURE_2D,
@@ -2446,11 +2431,12 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
     if (nine_slice_is_visible (&slices[NINE_SLICE_TOP_LEFT]))
       {
         memcpy (&offscreen.area, &slices[NINE_SLICE_TOP_LEFT].area, sizeof offscreen.area);
-        gsk_ngl_render_job_load_vertices_from_offscreen (job,
-                                                         &GRAPHENE_RECT_INIT (min_x, min_y,
-                                                                              slices[NINE_SLICE_TOP_LEFT].rect.width / scale_x,
-                                                                              slices[NINE_SLICE_TOP_LEFT].rect.height / scale_y),
-                                                         &offscreen);
+        gsk_ngl_render_job_draw_offscreen_with_color (job,
+                                                      &GRAPHENE_RECT_INIT (min_x, min_y,
+                                                                           slices[NINE_SLICE_TOP_LEFT].rect.width / scale_x,
+                                                                           slices[NINE_SLICE_TOP_LEFT].rect.height / scale_y),
+                                                      &offscreen,
+                                                      color);
       }
 
     /* Top center */
@@ -2459,48 +2445,52 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
       memcpy (&offscreen.area, &slices[NINE_SLICE_TOP_CENTER].area, sizeof offscreen.area);
       float width = (max_x - min_x) - (slices[NINE_SLICE_TOP_LEFT].rect.width / scale_x +
                                        slices[NINE_SLICE_TOP_RIGHT].rect.width / scale_x);
-      gsk_ngl_render_job_load_vertices_from_offscreen (job,
-                                                       &GRAPHENE_RECT_INIT (min_x + (slices[NINE_SLICE_TOP_LEFT].rect.width / scale_x),
-                                                                            min_y,
-                                                                            width,
-                                                                            slices[NINE_SLICE_TOP_CENTER].rect.height / scale_y),
-                                                       &offscreen);
+      gsk_ngl_render_job_draw_offscreen_with_color (job,
+                                                    &GRAPHENE_RECT_INIT (min_x + (slices[NINE_SLICE_TOP_LEFT].rect.width / scale_x),
+                                                                         min_y,
+                                                                         width,
+                                                                         slices[NINE_SLICE_TOP_CENTER].rect.height / scale_y),
+                                                    &offscreen,
+                                                    color);
     }
 
     /* Top right */
     if (nine_slice_is_visible (&slices[NINE_SLICE_TOP_RIGHT]))
     {
       memcpy (&offscreen.area, &slices[NINE_SLICE_TOP_RIGHT].area, sizeof offscreen.area);
-      gsk_ngl_render_job_load_vertices_from_offscreen (job,
-                                                       &GRAPHENE_RECT_INIT (max_x - (slices[NINE_SLICE_TOP_RIGHT].rect.width / scale_x),
-                                                                            min_y,
-                                                                            slices[NINE_SLICE_TOP_RIGHT].rect.width / scale_x,
-                                                                            slices[NINE_SLICE_TOP_RIGHT].rect.height / scale_y),
-                                                       &offscreen);
+      gsk_ngl_render_job_draw_offscreen_with_color (job,
+                                                    &GRAPHENE_RECT_INIT (max_x - (slices[NINE_SLICE_TOP_RIGHT].rect.width / scale_x),
+                                                                         min_y,
+                                                                         slices[NINE_SLICE_TOP_RIGHT].rect.width / scale_x,
+                                                                         slices[NINE_SLICE_TOP_RIGHT].rect.height / scale_y),
+                                                    &offscreen,
+                                                    color);
     }
 
     /* Bottom right */
     if (nine_slice_is_visible (&slices[NINE_SLICE_BOTTOM_RIGHT]))
     {
       memcpy (&offscreen.area, &slices[NINE_SLICE_BOTTOM_RIGHT].area, sizeof offscreen.area);
-      gsk_ngl_render_job_load_vertices_from_offscreen (job,
-                                                       &GRAPHENE_RECT_INIT (max_x - (slices[NINE_SLICE_BOTTOM_RIGHT].rect.width / scale_x),
-                                                                            max_y - (slices[NINE_SLICE_BOTTOM_RIGHT].rect.height / scale_y),
-                                                                            slices[NINE_SLICE_BOTTOM_RIGHT].rect.width / scale_x,
-                                                                            slices[NINE_SLICE_BOTTOM_RIGHT].rect.height / scale_y),
-                                                       &offscreen);
+      gsk_ngl_render_job_draw_offscreen_with_color (job,
+                                                    &GRAPHENE_RECT_INIT (max_x - (slices[NINE_SLICE_BOTTOM_RIGHT].rect.width / scale_x),
+                                                                         max_y - (slices[NINE_SLICE_BOTTOM_RIGHT].rect.height / scale_y),
+                                                                         slices[NINE_SLICE_BOTTOM_RIGHT].rect.width / scale_x,
+                                                                         slices[NINE_SLICE_BOTTOM_RIGHT].rect.height / scale_y),
+                                                    &offscreen,
+                                                    color);
     }
 
     /* Bottom left */
     if (nine_slice_is_visible (&slices[NINE_SLICE_BOTTOM_LEFT]))
       {
         memcpy (&offscreen.area, &slices[NINE_SLICE_BOTTOM_LEFT].area, sizeof offscreen.area);
-        gsk_ngl_render_job_load_vertices_from_offscreen (job,
-                                                         &GRAPHENE_RECT_INIT (min_x,
-                                                                              max_y - (slices[NINE_SLICE_BOTTOM_LEFT].rect.height / scale_y),
-                                                                              slices[NINE_SLICE_BOTTOM_LEFT].rect.width / scale_x,
-                                                                              slices[NINE_SLICE_BOTTOM_LEFT].rect.height / scale_y),
-                                                         &offscreen);
+        gsk_ngl_render_job_draw_offscreen_with_color (job,
+                                                      &GRAPHENE_RECT_INIT (min_x,
+                                                                           max_y - (slices[NINE_SLICE_BOTTOM_LEFT].rect.height / scale_y),
+                                                                           slices[NINE_SLICE_BOTTOM_LEFT].rect.width / scale_x,
+                                                                           slices[NINE_SLICE_BOTTOM_LEFT].rect.height / scale_y),
+                                                      &offscreen,
+                                                      color);
       }
 
     /* Left side */
@@ -2509,12 +2499,13 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
         memcpy (&offscreen.area, &slices[NINE_SLICE_LEFT_CENTER].area, sizeof offscreen.area);
         float height = (max_y - min_y) - (slices[NINE_SLICE_TOP_LEFT].rect.height / scale_y +
                                                 slices[NINE_SLICE_BOTTOM_LEFT].rect.height / scale_y);
-        gsk_ngl_render_job_load_vertices_from_offscreen (job,
-                                                         &GRAPHENE_RECT_INIT (min_x,
-                                                                              min_y + (slices[NINE_SLICE_TOP_LEFT].rect.height / scale_y),
-                                                                              slices[NINE_SLICE_LEFT_CENTER].rect.width / scale_x,
-                                                                              height),
-                                                         &offscreen);
+        gsk_ngl_render_job_draw_offscreen_with_color (job,
+                                                      &GRAPHENE_RECT_INIT (min_x,
+                                                                           min_y + (slices[NINE_SLICE_TOP_LEFT].rect.height / scale_y),
+                                                                           slices[NINE_SLICE_LEFT_CENTER].rect.width / scale_x,
+                                                                           height),
+                                                      &offscreen,
+                                                      color);
       }
 
     /* Right side */
@@ -2523,12 +2514,13 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
         memcpy (&offscreen.area, &slices[NINE_SLICE_RIGHT_CENTER].area, sizeof offscreen.area);
         float height = (max_y - min_y) - (slices[NINE_SLICE_TOP_RIGHT].rect.height / scale_y +
                                           slices[NINE_SLICE_BOTTOM_RIGHT].rect.height / scale_y);
-        gsk_ngl_render_job_load_vertices_from_offscreen (job,
-                                                         &GRAPHENE_RECT_INIT (max_x - (slices[NINE_SLICE_RIGHT_CENTER].rect.width / scale_x),
-                                                                              min_y + (slices[NINE_SLICE_TOP_LEFT].rect.height / scale_y),
-                                                                              slices[NINE_SLICE_RIGHT_CENTER].rect.width / scale_x,
-                                                                              height),
-                                                         &offscreen);
+        gsk_ngl_render_job_draw_offscreen_with_color (job,
+                                                      &GRAPHENE_RECT_INIT (max_x - (slices[NINE_SLICE_RIGHT_CENTER].rect.width / scale_x),
+                                                                           min_y + (slices[NINE_SLICE_TOP_LEFT].rect.height / scale_y),
+                                                                           slices[NINE_SLICE_RIGHT_CENTER].rect.width / scale_x,
+                                                                           height),
+                                                      &offscreen,
+                                                      color);
       }
 
     /* Bottom side */
@@ -2537,12 +2529,13 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
         memcpy (&offscreen.area, &slices[NINE_SLICE_BOTTOM_CENTER].area, sizeof offscreen.area);
         float width = (max_x - min_x) - (slices[NINE_SLICE_BOTTOM_LEFT].rect.width / scale_x +
                                          slices[NINE_SLICE_BOTTOM_RIGHT].rect.width / scale_x);
-        gsk_ngl_render_job_load_vertices_from_offscreen (job,
-                                                         &GRAPHENE_RECT_INIT (min_x + (slices[NINE_SLICE_BOTTOM_LEFT].rect.width / scale_x),
-                                                                              max_y - (slices[NINE_SLICE_BOTTOM_CENTER].rect.height / scale_y),
-                                                                              width,
-                                                                              slices[NINE_SLICE_BOTTOM_CENTER].rect.height / scale_y),
-                                                         &offscreen);
+        gsk_ngl_render_job_draw_offscreen_with_color (job,
+                                                      &GRAPHENE_RECT_INIT (min_x + (slices[NINE_SLICE_BOTTOM_LEFT].rect.width / scale_x),
+                                                                           max_y - (slices[NINE_SLICE_BOTTOM_CENTER].rect.height / scale_y),
+                                                                           width,
+                                                                           slices[NINE_SLICE_BOTTOM_CENTER].rect.height / scale_y),
+                                                      &offscreen,
+                                                      color);
       }
 
     /* Middle */
@@ -2553,11 +2546,12 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
                                          slices[NINE_SLICE_RIGHT_CENTER].rect.width / scale_x);
         float height = (max_y - min_y) - (slices[NINE_SLICE_TOP_CENTER].rect.height / scale_y +
                                           slices[NINE_SLICE_BOTTOM_CENTER].rect.height / scale_y);
-        gsk_ngl_render_job_load_vertices_from_offscreen (job,
-                                                         &GRAPHENE_RECT_INIT (min_x + (slices[NINE_SLICE_LEFT_CENTER].rect.width / scale_x),
-                                                                              min_y + (slices[NINE_SLICE_TOP_CENTER].rect.height / scale_y),
-                                                                              width, height),
-                                                         &offscreen);
+        gsk_ngl_render_job_draw_offscreen_with_color (job,
+                                                      &GRAPHENE_RECT_INIT (min_x + (slices[NINE_SLICE_LEFT_CENTER].rect.width / scale_x),
+                                                                           min_y + (slices[NINE_SLICE_TOP_CENTER].rect.height / scale_y),
+                                                                           width, height),
+                                                      &offscreen,
+                                                      color);
       }
   }
 
@@ -2632,7 +2626,7 @@ gsk_ngl_render_job_visit_cross_fade_node (GskNglRenderJob     *job,
   gsk_ngl_program_set_uniform1f (job->current_program,
                                  UNIFORM_CROSS_FADE_PROGRESS, 0,
                                  progress);
-  gsk_ngl_render_job_load_vertices_from_offscreen (job, &node->bounds, &offscreen_end);
+  gsk_ngl_render_job_draw_offscreen (job, &node->bounds, &offscreen_end);
   gsk_ngl_render_job_end_draw (job);
 }
 
@@ -2670,7 +2664,7 @@ gsk_ngl_render_job_visit_opacity_node (GskNglRenderJob     *job,
                                                GL_TEXTURE_2D,
                                                GL_TEXTURE0,
                                                offscreen.texture_id);
-          gsk_ngl_render_job_load_vertices_from_offscreen (job, &node->bounds, &offscreen);
+          gsk_ngl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
           gsk_ngl_render_job_end_draw (job);
         }
       else
@@ -2699,7 +2693,6 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
   GskNglCommandBatch *batch;
   int x_position = 0;
   GskNglGlyphKey lookup;
-  GskNglProgram *program;
   guint last_texture = 0;
   GskNglDrawVertex *vertices;
   guint used = 0;
@@ -2707,8 +2700,6 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
 
   if (num_glyphs == 0)
     return;
-
-  program = CHOOSE_PROGRAM (job, coloring);
 
   /* If the font has color glyphs, we don't need to recolor anything.
    * We tell the shader by setting the color to vec4(-1).
@@ -2721,7 +2712,7 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
   lookup.font = (PangoFont *)font;
   lookup.scale = (guint) (text_scale * 1024);
 
-  gsk_ngl_render_job_begin_draw (job, program);
+  gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, coloring));
 
   batch = gsk_ngl_command_queue_get_batch (job->command_queue);
   vertices = gsk_ngl_command_queue_add_n_vertices (job->command_queue, num_glyphs);
@@ -2769,7 +2760,7 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
               batch->draw.vbo_offset = vbo_offset;
             }
 
-          gsk_ngl_program_set_uniform_texture (program,
+          gsk_ngl_program_set_uniform_texture (job->current_program,
                                                UNIFORM_SHARED_SOURCE, 0,
                                                GL_TEXTURE_2D,
                                                GL_TEXTURE0,
@@ -2787,59 +2778,13 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
       glyph_x2 = glyph_x + glyph->ink_rect.width;
       glyph_y2 = glyph_y + glyph->ink_rect.height;
 
-      vertices[base+0].position[0] = glyph_x;
-      vertices[base+0].position[1] = glyph_y;
-      vertices[base+0].uv[0] = tx;
-      vertices[base+0].uv[1] = ty;
-      vertices[base+0].color[0] = c.red;
-      vertices[base+0].color[1] = c.green;
-      vertices[base+0].color[2] = c.blue;
-      vertices[base+0].color[3] = c.alpha;
+      vertices[base+0] = (GskNglDrawVertex) { { glyph_x,  glyph_y  }, { tx,  ty  }, { c.red, c.green, c.blue, c.alpha } };
+      vertices[base+1] = (GskNglDrawVertex) { { glyph_x,  glyph_y2 }, { tx,  ty2 }, { c.red, c.green, c.blue, c.alpha } };
+      vertices[base+2] = (GskNglDrawVertex) { { glyph_x2, glyph_y  }, { tx2, ty  }, { c.red, c.green, c.blue, c.alpha } };
 
-      vertices[base+1].position[0] = glyph_x;
-      vertices[base+1].position[1] = glyph_y2;
-      vertices[base+1].uv[0] = tx;
-      vertices[base+1].uv[1] = ty2;
-      vertices[base+1].color[0] = c.red;
-      vertices[base+1].color[1] = c.green;
-      vertices[base+1].color[2] = c.blue;
-      vertices[base+1].color[3] = c.alpha;
-
-      vertices[base+2].position[0] = glyph_x2;
-      vertices[base+2].position[1] = glyph_y;
-      vertices[base+2].uv[0] = tx2;
-      vertices[base+2].uv[1] = ty;
-      vertices[base+2].color[0] = c.red;
-      vertices[base+2].color[1] = c.green;
-      vertices[base+2].color[2] = c.blue;
-      vertices[base+2].color[3] = c.alpha;
-
-      vertices[base+3].position[0] = glyph_x2;
-      vertices[base+3].position[1] = glyph_y2;
-      vertices[base+3].uv[0] = tx2;
-      vertices[base+3].uv[1] = ty2;
-      vertices[base+3].color[0] = c.red;
-      vertices[base+3].color[1] = c.green;
-      vertices[base+3].color[2] = c.blue;
-      vertices[base+3].color[3] = c.alpha;
-
-      vertices[base+4].position[0] = glyph_x;
-      vertices[base+4].position[1] = glyph_y2;
-      vertices[base+4].uv[0] = tx;
-      vertices[base+4].uv[1] = ty2;
-      vertices[base+4].color[0] = c.red;
-      vertices[base+4].color[1] = c.green;
-      vertices[base+4].color[2] = c.blue;
-      vertices[base+4].color[3] = c.alpha;
-
-      vertices[base+5].position[0] = glyph_x2;
-      vertices[base+5].position[1] = glyph_y;
-      vertices[base+5].uv[0] = tx2;
-      vertices[base+5].uv[1] = ty;
-      vertices[base+5].color[0] = c.red;
-      vertices[base+5].color[1] = c.green;
-      vertices[base+5].color[2] = c.blue;
-      vertices[base+5].color[3] = c.alpha;
+      vertices[base+3] = (GskNglDrawVertex) { { glyph_x2, glyph_y2 }, { tx2, ty2 }, { c.red, c.green, c.blue, c.alpha } };
+      vertices[base+4] = (GskNglDrawVertex) { { glyph_x,  glyph_y2 }, { tx,  ty2 }, { c.red, c.green, c.blue, c.alpha } };
+      vertices[base+5] = (GskNglDrawVertex) { { glyph_x2, glyph_y  }, { tx2, ty  }, { c.red, c.green, c.blue, c.alpha } };
 
       batch->draw.vbo_count += GSK_NGL_N_VERTICES;
       used++;
@@ -2932,13 +2877,12 @@ gsk_ngl_render_job_visit_shadow_node (GskNglRenderJob     *job,
 
       gsk_ngl_render_job_offset (job, dx, dy);
       gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, coloring));
-      gsk_ngl_render_job_set_color (job, &shadow->color);
       gsk_ngl_program_set_uniform_texture (job->current_program,
                                            UNIFORM_SHARED_SOURCE, 0,
                                            GL_TEXTURE_2D,
                                            GL_TEXTURE0,
                                            offscreen.texture_id);
-      gsk_ngl_render_job_load_vertices_from_offscreen (job, &bounds, &offscreen);
+      gsk_ngl_render_job_draw_offscreen_with_color (job, &bounds, &offscreen, &shadow->color);
       gsk_ngl_render_job_end_draw (job);
       gsk_ngl_render_job_offset (job, -dx, -dy);
     }
@@ -2992,7 +2936,10 @@ gsk_ngl_render_job_visit_blur_node (GskNglRenderJob     *job,
                                        GL_TEXTURE_2D,
                                        GL_TEXTURE0,
                                        offscreen.texture_id);
-  gsk_ngl_render_job_draw_coords (job, min_x, min_y, max_x, max_y, 0, 1, 1, 0);
+  gsk_ngl_render_job_draw_coords (job,
+                                  min_x, min_y, max_x, max_y,
+                                  0, 1, 1, 0,
+                                  &(GdkRGBA) { 0.f, 0.f, 0.f, 0.f } );
   gsk_ngl_render_job_end_draw (job);
 }
 
@@ -3031,7 +2978,7 @@ gsk_ngl_render_job_visit_blend_node (GskNglRenderJob     *job,
                                            GL_TEXTURE_2D,
                                            GL_TEXTURE0,
                                            bottom_offscreen.texture_id);
-      gsk_ngl_render_job_load_vertices_from_offscreen (job, &node->bounds, &bottom_offscreen);
+      gsk_ngl_render_job_draw_offscreen (job, &node->bounds, &bottom_offscreen);
       gsk_ngl_render_job_end_draw (job);
       return;
     }
@@ -3090,7 +3037,7 @@ gsk_ngl_render_job_visit_color_matrix_node (GskNglRenderJob     *job,
                                   UNIFORM_COLOR_MATRIX_COLOR_OFFSET, 0,
                                   1,
                                   offset);
-  gsk_ngl_render_job_load_vertices_from_offscreen (job, &node->bounds, &offscreen);
+  gsk_ngl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
   gsk_ngl_render_job_end_draw (job);
 }
 
@@ -3101,8 +3048,7 @@ gsk_ngl_render_job_visit_gl_shader_node_fallback (GskNglRenderJob     *job,
   static const GdkRGBA pink = { 255 / 255., 105 / 255., 180 / 255., 1.0 };
 
   gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color));
-  gsk_ngl_render_job_set_color (job, &pink);
-  gsk_ngl_render_job_draw_rect (job, &node->bounds);
+  gsk_ngl_render_job_draw_rect_with_color (job, &node->bounds, &pink);
   gsk_ngl_render_job_end_draw (job);
 }
 
@@ -3270,7 +3216,7 @@ gsk_ngl_render_job_visit_texture_node (GskNglRenderJob     *job,
                                            GL_TEXTURE_2D,
                                            GL_TEXTURE0,
                                            offscreen.texture_id);
-      gsk_ngl_render_job_load_vertices_from_offscreen (job, &node->bounds, &offscreen);
+      gsk_ngl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
       gsk_ngl_render_job_end_draw (job);
     }
   else
@@ -3309,7 +3255,10 @@ gsk_ngl_render_job_visit_texture_node (GskNglRenderJob     *job,
                                                GL_TEXTURE0,
                                                slice->texture_id);
 
-          gsk_ngl_render_job_draw_coords (job, x1, y1, x2, y2, 0, 0, 1, 1);
+          gsk_ngl_render_job_draw_coords (job,
+                                          x1, y1, x2, y2,
+                                          0, 0, 1, 1,
+                                          &(GdkRGBA) { 0.f, 0.f, 0.f, 0.f });
         }
 
       gsk_ngl_render_job_end_draw (job);
@@ -3367,7 +3316,7 @@ gsk_ngl_render_job_visit_repeat_node (GskNglRenderJob     *job,
                                  offscreen.was_offscreen ? offscreen.area.y2 : offscreen.area.y,
                                  offscreen.area.x2,
                                  offscreen.was_offscreen ? offscreen.area.y : offscreen.area.y2);
-  gsk_ngl_render_job_load_vertices_from_offscreen (job, &node->bounds, &offscreen);
+  gsk_ngl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
   gsk_ngl_render_job_end_draw (job);
 }
 
@@ -3405,8 +3354,6 @@ gsk_ngl_render_job_visit_node (GskNglRenderJob     *job,
       if (gsk_border_node_get_uniform_color (node) &&
           gsk_rounded_rect_is_rectilinear (gsk_border_node_get_outline (node)))
         gsk_ngl_render_job_visit_rect_border_node (job, node);
-      else if (gsk_border_node_get_uniform (node))
-        gsk_ngl_render_job_visit_uniform_border_node (job, node);
       else
         gsk_ngl_render_job_visit_border_node (job, node);
     break;
@@ -3437,6 +3384,25 @@ gsk_ngl_render_job_visit_node (GskNglRenderJob     *job,
         for (guint i = 0; i < n_children; i++)
           {
             const GskRenderNode *child = gsk_container_node_get_child (node, i);
+
+            if (i + 1 < n_children &&
+                job->current_clip->is_fully_contained &&
+                gsk_render_node_get_node_type (child) == GSK_ROUNDED_CLIP_NODE)
+              {
+                const GskRenderNode *grandchild = gsk_rounded_clip_node_get_child (child);
+                const GskRenderNode *child2 = gsk_container_node_get_child (node, i + 1);
+                if (gsk_render_node_get_node_type (grandchild) == GSK_COLOR_NODE &&
+                    gsk_render_node_get_node_type (child2) == GSK_BORDER_NODE &&
+                    gsk_border_node_get_uniform_color (child2) &&
+                    gsk_rounded_rect_equal (gsk_rounded_clip_node_get_clip (child),
+                                            gsk_border_node_get_outline (child2)))
+                  {
+                    gsk_ngl_render_job_visit_css_background (job, child, child2);
+                    i++; /* skip the border node */
+                    continue;
+                  }
+              }
+
             gsk_ngl_render_job_visit_node (job, child);
           }
       }
@@ -3846,7 +3812,6 @@ gsk_ngl_render_job_new (GskNglDriver          *driver,
   job->viewport = *viewport;
 
   gsk_ngl_render_job_set_alpha (job, 1.0);
-  gsk_ngl_render_job_set_color (job, &(GdkRGBA){ 0.f, 0.f, 0.f, 0.f });
   gsk_ngl_render_job_set_projection_from_rect (job, viewport, NULL);
   gsk_ngl_render_job_set_modelview (job, gsk_transform_scale (NULL, scale_factor, scale_factor));
 
