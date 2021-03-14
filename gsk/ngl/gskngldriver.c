@@ -348,6 +348,7 @@ gsk_ngl_driver_load_programs (GskNglDriver  *self,
   gsk_ngl_compiler_bind_attribute (compiler, "aPosition", 0);
   gsk_ngl_compiler_bind_attribute (compiler, "aUv", 1);
   gsk_ngl_compiler_bind_attribute (compiler, "aColor", 2);
+  gsk_ngl_compiler_bind_attribute (compiler, "aColor2", 3);
 
   /* Use XMacros to register all of our programs and their uniforms */
 #define GSK_NGL_NO_UNIFORMS
@@ -1046,6 +1047,7 @@ gsk_ngl_driver_lookup_shader (GskNglDriver  *self,
       gsk_ngl_compiler_bind_attribute (compiler, "aPosition", 0);
       gsk_ngl_compiler_bind_attribute (compiler, "aUv", 1);
       gsk_ngl_compiler_bind_attribute (compiler, "aColor", 2);
+      gsk_ngl_compiler_bind_attribute (compiler, "aColor2", 3);
 
       if ((program = gsk_ngl_compiler_compile (compiler, NULL, "", error)))
         {

@@ -42,6 +42,11 @@ GSK_NGL_DEFINE_PROGRAM (cross_fade,
                         GSK_NGL_ADD_UNIFORM (1, CROSS_FADE_PROGRESS, u_progress)
                         GSK_NGL_ADD_UNIFORM (2, CROSS_FADE_SOURCE2, u_source2))
 
+GSK_NGL_DEFINE_PROGRAM (filled_border,
+                        "/org/gtk/libgsk/ngl/filled_border.glsl",
+                        GSK_NGL_ADD_UNIFORM (1, FILLED_BORDER_WIDTHS, u_widths)
+                        GSK_NGL_ADD_UNIFORM (2, FILLED_BORDER_OUTLINE_RECT, u_outline_rect))
+
 GSK_NGL_DEFINE_PROGRAM (inset_shadow,
                         "/org/gtk/libgsk/ngl/inset_shadow.glsl",
                         GSK_NGL_ADD_UNIFORM (1, INSET_SHADOW_SPREAD, u_spread)

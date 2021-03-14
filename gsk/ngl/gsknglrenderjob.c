@@ -1794,6 +1794,56 @@ gsk_ngl_render_job_visit_border_node (GskNglRenderJob     *job,
   gsk_ngl_render_job_end_draw (job);
 }
 
+/* A special case for a pattern that occurs frequently with CSS
+ * backgrounds: two sibling nodes, the first of which is a rounded
+ * clip node with a color node as child, and the second one is a
+ * border node, with the same outline as the clip node. We render
+ * this using the filled_border shader.
+ */
+static void
+gsk_ngl_render_job_visit_css_background (GskNglRenderJob     *job,
+                                         const GskRenderNode *node,
+                                         const GskRenderNode *node2)
+{
+  const GskRenderNode *child = gsk_rounded_clip_node_get_child (node);
+  const GdkRGBA *c2 = gsk_color_node_get_color (child);
+  const GdkRGBA *c = gsk_border_node_get_colors (node2);
+  const GskRoundedRect *rounded_outline = gsk_border_node_get_outline (node2);
+  const float *widths = gsk_border_node_get_widths (node2);
+  float min_x = job->offset_x + node2->bounds.origin.x;
+  float min_y = job->offset_y + node2->bounds.origin.y;
+  float max_x = min_x + node2->bounds.size.width;
+  float max_y = min_y + node2->bounds.size.height;
+  GskRoundedRect outline;
+  GskNglDrawVertex *vertices;
+
+  if (node_is_invisible (node2))
+    return;
+
+  gsk_ngl_render_job_transform_rounded_rect (job, rounded_outline, &outline);
+
+  gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, filled_border));
+
+  gsk_ngl_program_set_uniform4fv (job->current_program,
+                                  UNIFORM_FILLED_BORDER_WIDTHS, 0,
+                                  1,
+                                  widths);
+  gsk_ngl_program_set_uniform_rounded_rect (job->current_program,
+                                            UNIFORM_FILLED_BORDER_OUTLINE_RECT, 0,
+                                            &outline);
+
+  vertices = gsk_ngl_command_queue_add_vertices (job->command_queue);
+
+  vertices[0] = (GskNglDrawVertex) { { min_x, min_y }, { 0, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha }, { c2->red, c2->green, c2->blue, c2->alpha } };
+  vertices[1] = (GskNglDrawVertex) { { min_x, max_y }, { 0, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha }, { c2->red, c2->green, c2->blue, c2->alpha } };
+  vertices[2] = (GskNglDrawVertex) { { max_x, min_y }, { 0, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha }, { c2->red, c2->green, c2->blue, c2->alpha } };
+  vertices[3] = (GskNglDrawVertex) { { max_x, max_y }, { 0, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha }, { c2->red, c2->green, c2->blue, c2->alpha } };
+  vertices[4] = (GskNglDrawVertex) { { min_x, max_y }, { 0, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha }, { c2->red, c2->green, c2->blue, c2->alpha } };
+  vertices[5] = (GskNglDrawVertex) { { max_x, min_y }, { 0, 0 }, { c[0].red, c[0].green, c[0].blue, c[0].alpha }, { c2->red, c2->green, c2->blue, c2->alpha } };
+
+  gsk_ngl_render_job_end_draw (job);
+}
+
 /* Returns TRUE if applying @transform to @bounds
  * yields an axis-aligned rectangle
  */
@@ -3334,6 +3384,25 @@ gsk_ngl_render_job_visit_node (GskNglRenderJob     *job,
         for (guint i = 0; i < n_children; i++)
           {
             const GskRenderNode *child = gsk_container_node_get_child (node, i);
+
+            if (i + 1 < n_children &&
+                job->current_clip->is_fully_contained &&
+                gsk_render_node_get_node_type (child) == GSK_ROUNDED_CLIP_NODE)
+              {
+                const GskRenderNode *grandchild = gsk_rounded_clip_node_get_child (child);
+                const GskRenderNode *child2 = gsk_container_node_get_child (node, i + 1);
+                if (gsk_render_node_get_node_type (grandchild) == GSK_COLOR_NODE &&
+                    gsk_render_node_get_node_type (child2) == GSK_BORDER_NODE &&
+                    gsk_border_node_get_uniform_color (child2) &&
+                    gsk_rounded_rect_equal (gsk_rounded_clip_node_get_clip (child),
+                                            gsk_border_node_get_outline (child2)))
+                  {
+                    gsk_ngl_render_job_visit_css_background (job, child, child2);
+                    i++; /* skip the border node */
+                    continue;
+                  }
+              }
+
             gsk_ngl_render_job_visit_node (job, child);
           }
       }

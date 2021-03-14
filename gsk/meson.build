@@ -40,6 +40,7 @@ gsk_private_ngl_shaders = [
   'ngl/resources/blend.glsl',
   'ngl/resources/repeat.glsl',
   'ngl/resources/custom.glsl',
+  'ngl/resources/filled_border.glsl',
 ]
 
 gsk_public_sources = files([
