@@ -1,3 +1,58 @@
+Overview of Changes in 4.1.2
+============================
+
+* Input:
+ - Ensure preedit-start and preedit-end
+   are emitted properly
+ - Support the Wayland text protocol better
+ - Delete the selection when preedit starts
+
+* Label: Fix a small issue with markup parsing
+  and mnemonics
+
+* Spinbutton: Interpret localized digits
+
+* Textview: Fix blinking block cursors
+
+* Tooltips: Don't pop up erroneous on popovers
+
+* Window: Add a way to disable F10 handling
+
+* Theme:
+ - Use a regular focus ring for sidebar rows
+
+* GSK
+ - ngl: Performance improvements
+ - vulkan: Add visible fallback rendering
+ - vukan: Handle simple transforms when clipping
+
+* Wayland:
+ - Don't force a full redraw for every frame
+ - Don't leak buffers when rendering with cairo
+
+* Demos:
+ - iconbrowser: Make search more useful
+
+* Documentation:
+ - Switch to building docs from gir files with gi-docgen
+
+* build:
+ - Allow GTK to be used as meson subproject
+
+* Translation updates
+ Catalan
+ Czech
+ Finnish
+ French
+ Indonesian
+ Kazakh
+ Latvian
+ Norwegian Bokmål
+ Polish
+ Serbian
+ Turkish
+
+
 Overview of Changes in 4.1.1
 ============================
 
