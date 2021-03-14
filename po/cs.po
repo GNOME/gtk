@@ -298,12 +298,12 @@ msgstr "KlávesniceJasSnížit"
 #: gdk/keyname-table.h:6885
 msgctxt "keyboard label"
 msgid "AudioMute"
-msgstr "ZvukZtlumit"
+msgstr "ZvukVypnout"
 
 #: gdk/keyname-table.h:6886
 msgctxt "keyboard label"
 msgid "AudioMicMute"
-msgstr "MikrofonZtlumit"
+msgstr "MikrofonVypnout"
 
 #: gdk/keyname-table.h:6887
 msgctxt "keyboard label"
@@ -3392,7 +3392,7 @@ msgstr "Rozbalit"
 
 #: gtk/gtkvolumebutton.c:229
 msgid "Muted"
-msgstr "Ztlumeno"
+msgstr "Vypnutý zvuk"
 
 #: gtk/gtkvolumebutton.c:233
 msgid "Full Volume"

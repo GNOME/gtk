@@ -4053,15 +4053,15 @@ msgstr "Smyčka"
 
 #: gtk/gtkmediastream.c:425
 msgid "Try to restart the media from the beginning once it ended."
-msgstr "Při dosažení konce datového proudu se pokusit jej vrátit na začátek"
+msgstr "Při dosažení konce multimédia se pokusit jej vrátit na začátek."
 
 #: gtk/gtkmediastream.c:436
 msgid "Muted"
-msgstr "Ztišeno"
+msgstr "Vypnutý zvuk"
 
 #: gtk/gtkmediastream.c:437
 msgid "Whether the audio stream should be muted."
-msgstr "Jestli má být zvukový datový proud ztišen"
+msgstr "Jestli má být vypnutý zvuk u audiokanálu."
 
 #: gtk/gtkmediastream.c:448
 msgid "Volume"
@@ -4069,7 +4069,7 @@ msgstr "Hlasitost"
 
 #: gtk/gtkmediastream.c:449
 msgid "Volume of the audio stream."
-msgstr "Hlasitost zvukového datového proudu"
+msgstr "Hlasitost audiokanálu."
 
 #: gtk/gtkmenubutton.c:377 gtk/gtkpopovermenubar.c:637 gtk/gtkpopovermenu.c:563
 msgid "Menu model"
