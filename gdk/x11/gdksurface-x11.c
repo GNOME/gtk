@@ -179,19 +179,29 @@ _gdk_x11_surface_get_toplevel (GdkSurface *surface)
 
 /**
  * _gdk_x11_surface_update_size:
- * @impl: a #GdkX11Surface.
- * 
+ * @impl: a #GdkX11Surface
+ *
  * Updates the state of the surface (in particular the drawable's
  * cairo surface) when its size has changed.
  **/
-void
-_gdk_x11_surface_update_size (GdkX11Surface *impl)
+static void
+_gdk_x11_surface_update_size (GdkX11Surface *impl,
+                              int            width,
+                              int            height)
 {
+  GdkSurface *surface = GDK_SURFACE (impl);
+
+  if (surface->width == width && surface->height == height)
+    return;
+
+  surface->width = width;
+  surface->height = height;
+  _gdk_surface_update_size (surface);
+
   if (impl->cairo_surface)
-    {
-      cairo_xlib_surface_set_size (impl->cairo_surface,
-                                   impl->unscaled_width, impl->unscaled_height);
-    }
+    cairo_xlib_surface_set_size (impl->cairo_surface,
+                                 impl->unscaled_width,
+                                 impl->unscaled_height);
 }
 
 static void
@@ -385,10 +395,9 @@ gdk_x11_surface_compute_size (GdkSurface *surface)
 
       if (surface->resize_count == 0)
         {
-          surface->width = impl->next_layout.configured_width;
-          surface->height = impl->next_layout.configured_height;
-          _gdk_surface_update_size (surface);
-          _gdk_x11_surface_update_size (impl);
+          _gdk_x11_surface_update_size (impl,
+                                        impl->next_layout.configured_width,
+                                        impl->next_layout.configured_height);
         }
 
       impl->next_layout.surface_geometry_dirty = FALSE;
@@ -396,11 +405,9 @@ gdk_x11_surface_compute_size (GdkSurface *surface)
     }
   else
     {
-      surface->width = impl->next_layout.configured_width;
-      surface->height = impl->next_layout.configured_height;
-
-      _gdk_surface_update_size (surface);
-      _gdk_x11_surface_update_size (impl);
+      _gdk_x11_surface_update_size (impl,
+                                    impl->next_layout.configured_width,
+                                    impl->next_layout.configured_height);
 
       impl->next_layout.surface_geometry_dirty = FALSE;
     }
@@ -1990,6 +1997,9 @@ _gdk_x11_surface_set_surface_scale (GdkSurface *surface,
   GdkSurfaceHints geom_mask;
 
   impl = GDK_X11_SURFACE (surface);
+
+  if (impl->surface_scale == scale)
+    return;
 
   impl->surface_scale = scale;
   if (impl->cairo_surface)
