@@ -2643,7 +2643,6 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
   GskNglCommandBatch *batch;
   int x_position = 0;
   GskNglGlyphKey lookup;
-  GskNglProgram *program;
   guint last_texture = 0;
   GskNglDrawVertex *vertices;
   guint used = 0;
@@ -2651,8 +2650,6 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
 
   if (num_glyphs == 0)
     return;
-
-  program = CHOOSE_PROGRAM (job, coloring);
 
   /* If the font has color glyphs, we don't need to recolor anything.
    * We tell the shader by setting the color to vec4(-1).
@@ -2665,7 +2662,7 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
   lookup.font = (PangoFont *)font;
   lookup.scale = (guint) (text_scale * 1024);
 
-  gsk_ngl_render_job_begin_draw (job, program);
+  gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, coloring));
 
   batch = gsk_ngl_command_queue_get_batch (job->command_queue);
   vertices = gsk_ngl_command_queue_add_n_vertices (job->command_queue, num_glyphs);
@@ -2713,7 +2710,7 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
               batch->draw.vbo_offset = vbo_offset;
             }
 
-          gsk_ngl_program_set_uniform_texture (program,
+          gsk_ngl_program_set_uniform_texture (job->current_program,
                                                UNIFORM_SHARED_SOURCE, 0,
                                                GL_TEXTURE_2D,
                                                GL_TEXTURE0,
