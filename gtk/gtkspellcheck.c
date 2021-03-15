@@ -251,9 +251,7 @@ gtk_spell_checker_new_for_language (const char *language)
 {
   const char *languages[] = { language, NULL };
 
-  return g_object_new (GTK_TYPE_SPELL_CHECKER,
-                       "languages", languages,
-                       NULL);
+  return gtk_spell_checker_new_for_languages (languages);
 }
 
 /**
