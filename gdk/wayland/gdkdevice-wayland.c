@@ -2195,6 +2195,7 @@ deliver_key_event (GdkWaylandSeat *seat,
   struct xkb_keymap *xkb_keymap;
   GdkKeymap *keymap;
   xkb_keysym_t sym;
+  int layout;
   guint delay, interval, timeout;
   gint64 begin_time, now;
 
@@ -2207,6 +2208,7 @@ deliver_key_event (GdkWaylandSeat *seat,
   xkb_keymap = _gdk_wayland_keymap_get_xkb_keymap (keymap);
 
   sym = xkb_state_key_get_one_sym (xkb_state, key);
+  layout = xkb_state_key_get_layout (xkb_state, key);
   if (sym == XKB_KEY_NoSymbol)
     return;
 
@@ -2220,7 +2222,7 @@ deliver_key_event (GdkWaylandSeat *seat,
   gdk_event_set_seat (event, GDK_SEAT (seat));
   event->key.time = time_;
   event->key.state = device_get_modifiers (seat->master_pointer);
-  event->key.group = 0;
+  event->key.group = layout;
   event->key.hardware_keycode = key;
   gdk_event_set_scancode (event, key);
   event->key.keyval = sym;
