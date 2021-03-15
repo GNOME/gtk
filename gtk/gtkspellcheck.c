@@ -160,7 +160,12 @@ gtk_spell_checker_set_languages (GtkSpellChecker    *self,
 
           if (gtk_spell_provider_supports (provider, code))
             {
-              g_ptr_array_add (self->languages, _gtk_spell_language_new (provider, code));
+              GtkSpellLanguage *language = _gtk_spell_language_new (provider, code);
+
+              if (language == NULL)
+                continue;
+
+              g_ptr_array_add (self->languages, language);
               break;
             }
         }
