@@ -61,6 +61,7 @@ static DefaultCursor default_cursors[] = {
   { "text", IDC_IBEAM },
   { "move", IDC_SIZEALL },
   { "not-allowed", IDC_NO },
+  { "all-scroll", IDC_ARROW },
   { "ew-resize", IDC_SIZEWE },
   { "e-resize", IDC_SIZEWE },
   { "w-resize", IDC_SIZEWE },
