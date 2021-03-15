@@ -17,7 +17,7 @@ meson dist -C${release_build_dir} || exit
 meson configure ${release_build_dir} -Dintrospection=enabled -Dgtk_doc=true || exit
 ninja -C${release_build_dir} || exit
 
-tar cf ${release_build_dir}/meson-dist/gtk-docs-${version}.tar.xz -C${release_build_dir} docs/reference
+tar cxf ${release_build_dir}/meson-dist/gtk-docs-${version}.tar.xz -C${release_build_dir} docs/reference
 
 echo -e "\n\nGTK ${version} release on branch ${branch} in ./${release_build_dir}/:\n"
 
