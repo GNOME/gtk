@@ -1686,6 +1686,24 @@ gdk_key_event_is_modifier (GdkEvent *event)
   return self->key_is_modifier;
 }
 
+static gboolean
+keyval_in_group (GdkKeymap *keymap,
+                 guint      keyval,
+                 int        group)
+{
+  GdkKeymapKey *keys;
+  guint n_keys;
+
+  gdk_keymap_get_cached_entries_for_keyval (keymap, keyval, &keys, &n_keys);
+  for (int i = 0; i < n_keys; i++)
+    {
+      if (keys[i].group == group)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 /**
  * gdk_key_event_matches:
  * @event: (type GdkKeyEvent): a key `GdkEvent`
@@ -1781,10 +1799,9 @@ gdk_key_event_matches (GdkEvent        *event,
           if (keys[i].keycode == keycode &&
               keys[i].level == level &&
               /* Only match for group if it's an accel mod */
-              (!group_mod_is_accel_mod || keys[i].group == layout))
-            {
-              return GDK_KEY_MATCH_PARTIAL;
-            }
+              (keys[i].group == layout ||
+               (!group_mod_is_accel_mod && !keyval_in_group (keymap, keyval, layout))))
+            return GDK_KEY_MATCH_PARTIAL;
         }
     }
 
