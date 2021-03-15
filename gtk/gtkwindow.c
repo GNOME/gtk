@@ -246,6 +246,8 @@ typedef struct
   int surface_height;
 
   GdkCursor *resize_cursor;
+
+  GtkEventController *menubar_controller;
 } GtkWindowPrivate;
 
 enum {
@@ -278,6 +280,7 @@ enum {
   PROP_DEFAULT_WIDGET,
   PROP_FOCUS_WIDGET,
   PROP_CHILD,
+  PROP_HANDLE_MENUBAR_ACCEL,
 
   /* Readonly properties */
   PROP_IS_ACTIVE,
@@ -1002,6 +1005,20 @@ gtk_window_class_init (GtkWindowClass *klass)
                            GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkWindow:handle-menubar-accel: (attributes org.gtk.Property.get=gtk_window_get_handle_menubar_accel org.gtk.Property.set=gtk_window_set_handle_menubar_accel)
+   *
+   * Whether the window frame should handle F10 for activating
+   * menubars.
+   *
+   * Since: 4.2
+   */
+  window_props[PROP_HANDLE_MENUBAR_ACCEL] =
+      g_param_spec_boolean ("handle-menubar-accel",
+                            P_("Handle Menubar accels"),
+                            P_("Whether the window should handle F10"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_ARG, window_props);
 
@@ -1656,6 +1673,8 @@ gtk_window_init (GtkWindow *window)
   gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
   gtk_event_controller_set_name (controller, "gtk-window-menubar-accel");
   gtk_widget_add_controller (widget, controller);
+
+  priv->menubar_controller = controller;
 }
 
 static void
@@ -1768,6 +1787,9 @@ gtk_window_set_property (GObject      *object,
     case PROP_CHILD:
       gtk_window_set_child (window, g_value_get_object (value));
       break;
+    case PROP_HANDLE_MENUBAR_ACCEL:
+      gtk_window_set_handle_menubar_accel (window, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1847,6 +1869,9 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_CHILD:
       g_value_set_object (value, gtk_window_get_child (window));
+      break;
+    case PROP_HANDLE_MENUBAR_ACCEL:
+      g_value_set_boolean (value, gtk_window_get_handle_menubar_accel (window));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -6720,4 +6745,57 @@ gtk_window_grab_notify (GtkWindow *window,
                                         new_grab_widget,
                                         from_grab);
     }
+}
+
+/**
+ * gtk_window_set_handle_menubar_accel: (attributes org.gtk.Method.set_property=handle-menubar-accel)
+ * @window: a #GtkWindow
+ * @handle_menubar_accel: %TRUE to make @window handle F10
+ *
+ * Sets whether this window should react to F10 key presses
+ * by activating a menubar it contains.
+ *
+ * Since: 4.2
+ */
+void
+gtk_window_set_handle_menubar_accel (GtkWindow *window,
+                                     gboolean   handle_menubar_accel)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  GtkPropagationPhase phase;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  phase = handle_menubar_accel ? GTK_PHASE_CAPTURE : GTK_PHASE_NONE;
+
+  if (gtk_event_controller_get_propagation_phase (priv->menubar_controller) == phase)
+    return;
+
+  gtk_event_controller_set_propagation_phase (priv->menubar_controller, phase);
+
+  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_HANDLE_MENUBAR_ACCEL]);
+}
+
+/**
+ * gtk_window_get_handle_menubar_accel: (attributes org.gtk.Method.get_property=handle-menubar-accel)
+ * @window: a #GtkWindow
+ *
+ * Returns whether this window reacts to F10 key presses by
+ * activating a menubar it contains.
+ *
+ * Returns: %TRUE if the window handles F10
+ *
+ * Since: 4.2
+ */
+gboolean
+gtk_window_get_handle_menubar_accel (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  GtkPropagationPhase phase;
+
+  g_return_val_if_fail (GTK_IS_WINDOW (window), TRUE);
+
+  phase = gtk_event_controller_get_propagation_phase (priv->menubar_controller);
+
+  return phase == GTK_PHASE_CAPTURE;
 }

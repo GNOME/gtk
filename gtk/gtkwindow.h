@@ -251,6 +251,12 @@ void     gtk_window_destroy                (GtkWindow    *window);
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_set_interactive_debugging (gboolean enable);
 
+GDK_AVAILABLE_IN_4_2
+void     gtk_window_set_handle_menubar_accel (GtkWindow *window,
+                                              gboolean   handle_menubar_accel);
+GDK_AVAILABLE_IN_4_2
+gboolean gtk_window_get_handle_menubar_accel (GtkWindow *window);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWindow, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWindowGroup, g_object_unref)
 
