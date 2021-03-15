@@ -3900,6 +3900,24 @@ gtk_scrolled_window_adjustment_changed (GtkAdjustment *adjustment,
 
 	  if (priv->hscrollbar_visible != visible)
 	    gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
+
+          if (priv->hscrolling)
+            {
+              GtkKineticScrollingChange change;
+              gdouble lower = gtk_adjustment_get_lower (adjustment);
+              gdouble upper = gtk_adjustment_get_upper (adjustment);
+              upper -= gtk_adjustment_get_page_size (adjustment);
+
+              change = gtk_kinetic_scrolling_update_size (priv->hscrolling, lower, upper);
+
+              if ((change & GTK_KINETIC_SCROLLING_CHANGE_IN_OVERSHOOT) &&
+                  (change & (GTK_KINETIC_SCROLLING_CHANGE_UPPER | GTK_KINETIC_SCROLLING_CHANGE_LOWER)))
+                {
+                  g_clear_pointer (&priv->hscrolling, gtk_kinetic_scrolling_free);
+                  priv->unclamped_hadj_value = gtk_adjustment_get_value (adjustment);
+                  gtk_scrolled_window_invalidate_overshoot (scrolled_window);
+                }
+            }
 	}
     }
   else if (adjustment == gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar)))
@@ -3914,8 +3932,29 @@ gtk_scrolled_window_adjustment_changed (GtkAdjustment *adjustment,
 
 	  if (priv->vscrollbar_visible != visible)
 	    gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
+
+          if (priv->vscrolling)
+            {
+              GtkKineticScrollingChange change;
+              gdouble lower = gtk_adjustment_get_lower (adjustment);
+              gdouble upper = gtk_adjustment_get_upper (adjustment);
+              upper -= gtk_adjustment_get_page_size (adjustment);
+
+              change = gtk_kinetic_scrolling_update_size (priv->vscrolling, lower, upper);
+
+              if ((change & GTK_KINETIC_SCROLLING_CHANGE_IN_OVERSHOOT) &&
+                  (change & (GTK_KINETIC_SCROLLING_CHANGE_UPPER | GTK_KINETIC_SCROLLING_CHANGE_LOWER)))
+                {
+                  g_clear_pointer (&priv->vscrolling, gtk_kinetic_scrolling_free);
+                  priv->unclamped_vadj_value = gtk_adjustment_get_value (adjustment);
+                  gtk_scrolled_window_invalidate_overshoot (scrolled_window);
+                }
+            }
 	}
     }
+
+  if (!priv->hscrolling && !priv->vscrolling)
+    gtk_scrolled_window_cancel_deceleration (scrolled_window);
 }
 
 static void
