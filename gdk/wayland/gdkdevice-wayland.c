@@ -1846,6 +1846,36 @@ pointer_handle_axis_discrete (void              *data,
                        get_axis_name (axis), value, seat));
 }
 
+static int
+get_active_layout (GdkKeymap *keymap)
+{
+  struct xkb_keymap *xkb_keymap;
+  struct xkb_state *xkb_state;
+
+  xkb_keymap = _gdk_wayland_keymap_get_xkb_keymap (keymap);
+  xkb_state = _gdk_wayland_keymap_get_xkb_state (keymap);
+
+  for (int i = 0; i < xkb_keymap_num_layouts (xkb_keymap); i++)
+    {
+      if (xkb_state_layout_index_is_active (xkb_state, i, XKB_STATE_LAYOUT_EFFECTIVE))
+        return i;
+    }
+
+  return -1;
+}
+
+#ifdef G_ENABLE_DEBUG
+static const char *
+get_active_layout_name (GdkKeymap *keymap)
+{
+  struct xkb_keymap *xkb_keymap;
+
+  xkb_keymap = _gdk_wayland_keymap_get_xkb_keymap (keymap);
+
+  return xkb_keymap_layout_get_name (xkb_keymap, get_active_layout (keymap));
+}
+#endif
+
 static void
 keyboard_handle_keymap (void               *data,
                         struct wl_keyboard *keyboard,
@@ -1869,6 +1899,8 @@ keyboard_handle_keymap (void               *data,
   modifiers = gdk_keymap_get_modifier_state (seat->keymap);
 
   _gdk_wayland_keymap_update_from_fd (seat->keymap, format, fd, size);
+
+  GDK_DISPLAY_NOTE(seat->keymap->display, INPUT, g_print ("active layout now: %s\n", get_active_layout_name (seat->keymap)));
 
   g_signal_emit_by_name (seat->keymap, "keys-changed");
   g_signal_emit_by_name (seat->keymap, "state-changed");
@@ -2197,24 +2229,6 @@ keyboard_handle_key (void               *data,
 
 }
 
-static int
-get_active_layout (GdkKeymap *keymap)
-{
-  struct xkb_keymap *xkb_keymap;
-  struct xkb_state *xkb_state;
-
-  xkb_keymap = _gdk_wayland_keymap_get_xkb_keymap (keymap);
-  xkb_state = _gdk_wayland_keymap_get_xkb_state (keymap);
-
-  for (int i = 0; i < xkb_keymap_num_layouts (xkb_keymap); i++)
-    {
-      if (xkb_state_layout_index_is_active (xkb_state, i, XKB_STATE_LAYOUT_EFFECTIVE))
-        return i;
-    }
-
-  return -1;
-}
-
 static void
 keyboard_handle_modifiers (void               *data,
                            struct wl_keyboard *keyboard,
@@ -2267,7 +2281,11 @@ keyboard_handle_modifiers (void               *data,
 
   g_signal_emit_by_name (keymap, "state-changed");
   if (layout != get_active_layout (keymap))
-    g_signal_emit_by_name (keymap, "keys-changed");
+    {
+      GDK_DISPLAY_NOTE(keymap->display, INPUT, g_print ("active layout now: %s\n", get_active_layout_name (keymap)));
+
+      g_signal_emit_by_name (keymap, "keys-changed");
+    }
   if (direction != gdk_keymap_get_direction (keymap))
     {
       g_signal_emit_by_name (keymap, "direction-changed");
