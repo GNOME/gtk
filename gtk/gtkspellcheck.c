@@ -268,9 +268,16 @@ gtk_spell_checker_new_for_language (const char *language)
 GtkSpellChecker *
 gtk_spell_checker_new_for_languages (const char * const * languages)
 {
-  return g_object_new (GTK_TYPE_SPELL_CHECKER,
-                       "languages", languages,
-                       NULL);
+  GtkSpellChecker *ret;
+
+  ret = g_object_new (GTK_TYPE_SPELL_CHECKER,
+                      "languages", languages,
+                      NULL);
+
+  if (ret != NULL && ret->languages->len == 0)
+    g_clear_object (&ret);
+
+  return g_steal_pointer (&ret);
 }
 
 const char * const *
