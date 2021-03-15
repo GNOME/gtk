@@ -33,7 +33,7 @@ static gboolean     gtk_enchant_supports         (const char       *code);
 static gboolean     gtk_enchant_contains_word    (GtkSpellLanguage *language,
                                                   const char       *word,
                                                   gssize            word_length);
-static void         gtk_enchant_init_language    (GtkSpellLanguage *language);
+static gboolean     gtk_enchant_init_language    (GtkSpellLanguage *language);
 static void         gtk_enchant_fini_language    (GtkSpellLanguage *language);
 static GListModel  *gtk_enchant_list_corrections (GtkSpellLanguage *language,
                                                   const char       *word,
@@ -119,7 +119,14 @@ _gtk_spell_language_new (const GtkSpellProvider *provider,
   language->code = g_strdup (code);
 
   if (provider->init_language != NULL)
-    provider->init_language (language);
+    {
+      if (!provider->init_language (language))
+        {
+          g_free (language->code);
+          g_free (language);
+          return NULL;
+        }
+    }
 
   return language;
 }
@@ -457,11 +464,15 @@ gtk_enchant_list_corrections (GtkSpellLanguage *language,
   return G_LIST_MODEL (model);
 }
 
-static void
+static gboolean
 gtk_enchant_init_language (GtkSpellLanguage *language)
 {
   EnchantBroker *broker = gtk_enchant_get_broker ();
-  language->native = enchant_broker_request_dict (broker, language->code);
+
+  if (!(language->native = enchant_broker_request_dict (broker, language->code)))
+    return FALSE;
+
+  return TRUE;
 }
 
 static void

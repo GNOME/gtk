@@ -35,7 +35,7 @@ struct _GtkSpellProvider
   GListModel  *(*list_corrections) (GtkSpellLanguage *language,
                                     const char       *word,
                                     gssize            word_length);
-  void         (*init_language)    (GtkSpellLanguage *language);
+  gboolean     (*init_language)    (GtkSpellLanguage *language);
   void         (*fini_language)    (GtkSpellLanguage *language);
   gboolean     (*contains_word)    (GtkSpellLanguage *language,
                                     const char       *word,
