@@ -340,13 +340,13 @@ gtk_spell_checker_list_corrections (GtkSpellChecker *self,
   if (self->languages->len == 0)
     return G_LIST_MODEL (gtk_string_list_new (NULL));
 
-  store = g_list_store_new (G_TYPE_LIST_MODEL);
-
   if (self->languages->len == 1)
     {
       GtkSpellLanguage *language = g_ptr_array_index (self->languages, 0);
       return language->provider->list_corrections (language, word, word_length);
     }
+
+  store = g_list_store_new (G_TYPE_LIST_MODEL);
 
   for (guint i = 0; i < self->languages->len; i++)
     {
@@ -361,8 +361,6 @@ gtk_spell_checker_list_corrections (GtkSpellChecker *self,
     }
 
   ret = gtk_flatten_list_model_new (G_LIST_MODEL (store));
-
-  g_object_unref (store);
 
   return G_LIST_MODEL (ret);
 }
