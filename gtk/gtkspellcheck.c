@@ -377,7 +377,17 @@ gtk_spell_checker_get_default (void)
 
   if (instance == NULL)
     {
-      instance = gtk_spell_checker_new_for_language ("en_US");
+      const char * const *langs = g_get_language_names ();
+
+      if (langs != NULL)
+        instance = gtk_spell_checker_new_for_languages (langs);
+
+      if (instance == NULL)
+        instance = gtk_spell_checker_new_for_language ("en_US");
+
+      if (instance == NULL)
+        instance = gtk_spell_checker_new_for_language ("C");
+
       g_object_add_weak_pointer (G_OBJECT (instance), (gpointer *)&instance);
     }
 
