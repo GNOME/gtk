@@ -2197,6 +2197,24 @@ keyboard_handle_key (void               *data,
 
 }
 
+static int
+get_active_layout (GdkKeymap *keymap)
+{
+  struct xkb_keymap *xkb_keymap;
+  struct xkb_state *xkb_state;
+
+  xkb_keymap = _gdk_wayland_keymap_get_xkb_keymap (keymap);
+  xkb_state = _gdk_wayland_keymap_get_xkb_state (keymap);
+
+  for (int i = 0; i < xkb_keymap_num_layouts (xkb_keymap); i++)
+    {
+      if (xkb_state_layout_index_is_active (xkb_state, i, XKB_STATE_LAYOUT_EFFECTIVE))
+        return i;
+    }
+
+  return -1;
+}
+
 static void
 keyboard_handle_modifiers (void               *data,
                            struct wl_keyboard *keyboard,
@@ -2215,17 +2233,18 @@ keyboard_handle_modifiers (void               *data,
   gboolean num_lock;
   gboolean scroll_lock;
   GdkModifierType modifiers;
+  int layout;
 
   keymap = seat->keymap;
   xkb_state = _gdk_wayland_keymap_get_xkb_state (keymap);
 
-  direction = gdk_keymap_get_direction (seat->keymap);
-  bidi = gdk_keymap_have_bidi_layouts (seat->keymap);
-  caps_lock = gdk_keymap_get_caps_lock_state (seat->keymap);
-  num_lock = gdk_keymap_get_num_lock_state (seat->keymap);
-  scroll_lock = gdk_keymap_get_scroll_lock_state (seat->keymap);
-  modifiers = gdk_keymap_get_modifier_state (seat->keymap);
-
+  direction = gdk_keymap_get_direction (keymap);
+  bidi = gdk_keymap_have_bidi_layouts (keymap);
+  caps_lock = gdk_keymap_get_caps_lock_state (keymap);
+  num_lock = gdk_keymap_get_num_lock_state (keymap);
+  scroll_lock = gdk_keymap_get_scroll_lock_state (keymap);
+  modifiers = gdk_keymap_get_modifier_state (keymap);
+  layout = get_active_layout (keymap);
 
   /* Note: the docs for xkb_state_update mask state that all parameters
    * must be passed, or we may end up with an 'incoherent' state. But the
@@ -2247,20 +2266,22 @@ keyboard_handle_modifiers (void               *data,
   seat->key_modifiers = gdk_keymap_get_modifier_state (keymap);
 
   g_signal_emit_by_name (keymap, "state-changed");
+  if (layout != get_active_layout (keymap))
+    g_signal_emit_by_name (keymap, "keys-changed");
   if (direction != gdk_keymap_get_direction (keymap))
-    g_signal_emit_by_name (keymap, "direction-changed");
-
-  if (direction != gdk_keymap_get_direction (seat->keymap))
-    g_object_notify (G_OBJECT (seat->logical_keyboard), "direction");
-  if (bidi != gdk_keymap_have_bidi_layouts (seat->keymap))
+    {
+      g_signal_emit_by_name (keymap, "direction-changed");
+      g_object_notify (G_OBJECT (seat->logical_keyboard), "direction");
+    }
+  if (bidi != gdk_keymap_have_bidi_layouts (keymap))
     g_object_notify (G_OBJECT (seat->logical_keyboard), "has-bidi-layouts");
-  if (caps_lock != gdk_keymap_get_caps_lock_state (seat->keymap))
+  if (caps_lock != gdk_keymap_get_caps_lock_state (keymap))
     g_object_notify (G_OBJECT (seat->logical_keyboard), "caps-lock-state");
-  if (num_lock != gdk_keymap_get_num_lock_state (seat->keymap))
+  if (num_lock != gdk_keymap_get_num_lock_state (keymap))
     g_object_notify (G_OBJECT (seat->logical_keyboard), "num-lock-state");
-  if (scroll_lock != gdk_keymap_get_scroll_lock_state (seat->keymap))
+  if (scroll_lock != gdk_keymap_get_scroll_lock_state (keymap))
     g_object_notify (G_OBJECT (seat->logical_keyboard), "scroll-lock-state");
-  if (modifiers != gdk_keymap_get_modifier_state (seat->keymap))
+  if (modifiers != gdk_keymap_get_modifier_state (keymap))
     g_object_notify (G_OBJECT (seat->logical_keyboard), "modifier-state");
 }
 
