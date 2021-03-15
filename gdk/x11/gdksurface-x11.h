@@ -195,7 +195,6 @@ GdkToplevelX11 *_gdk_x11_surface_get_toplevel        (GdkSurface *window);
 
 GdkCursor      *_gdk_x11_surface_get_cursor          (GdkSurface *window);
 
-void            _gdk_x11_surface_update_size         (GdkX11Surface *impl);
 void            _gdk_x11_surface_set_surface_scale   (GdkSurface *window,
                                                       int        scale);
 gboolean        _gdk_x11_surface_syncs_frames        (GdkSurface *surface);
