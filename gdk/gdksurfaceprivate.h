@@ -157,9 +157,6 @@ struct _GdkSurfaceClass
                                          double              dy);
 
   int          (* get_scale_factor)       (GdkSurface      *surface);
-  void         (* get_unscaled_size)      (GdkSurface      *surface,
-                                           int            *unscaled_width,
-                                           int            *unscaled_height);
 
   void         (* set_opaque_region)      (GdkSurface      *surface,
                                            cairo_region_t *region);
@@ -271,9 +268,6 @@ GdkGLContext * gdk_surface_get_paint_gl_context (GdkSurface *surface,
                                                  GError   **error);
 GdkGLContext * gdk_surface_get_shared_data_gl_context (GdkSurface *surface);
 
-void gdk_surface_get_unscaled_size (GdkSurface *surface,
-                                    int *unscaled_width,
-                                    int *unscaled_height);
 gboolean gdk_surface_handle_event (GdkEvent       *event);
 GdkSeat * gdk_surface_get_seat_from_event (GdkSurface *surface,
                                            GdkEvent    *event);

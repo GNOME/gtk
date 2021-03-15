@@ -195,20 +195,6 @@ _gdk_x11_surface_update_size (GdkX11Surface *impl)
 }
 
 static void
-gdk_x11_surface_get_unscaled_size (GdkSurface *surface,
-                                  int *unscaled_width,
-                                  int *unscaled_height)
-{
-  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
-
-  if (unscaled_width)
-    *unscaled_width = impl->unscaled_width;
-
-  if (unscaled_height)
-    *unscaled_height = impl->unscaled_height;
-}
-
-static void
 update_shadow_size (GdkSurface *surface,
                     int         shadow_left,
                     int         shadow_right,
@@ -4802,7 +4788,6 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->get_scale_factor = gdk_x11_surface_get_scale_factor;
   impl_class->set_opaque_region = gdk_x11_surface_set_opaque_region;
   impl_class->create_gl_context = gdk_x11_surface_create_gl_context;
-  impl_class->get_unscaled_size = gdk_x11_surface_get_unscaled_size;
   impl_class->request_layout = gdk_x11_surface_request_layout;
   impl_class->compute_size = gdk_x11_surface_compute_size;
 }

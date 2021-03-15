@@ -2610,37 +2610,6 @@ gdk_surface_get_scale_factor (GdkSurface *surface)
   return 1;
 }
 
-/* Returns the *real* unscaled size, which may be a fractional size
-   in surface scale coordinates. We need this to properly handle GL
-   coordinates which are y-flipped in the real coordinates. */
-void
-gdk_surface_get_unscaled_size (GdkSurface *surface,
-                               int *unscaled_width,
-                               int *unscaled_height)
-{
-  GdkSurfaceClass *class;
-  int scale;
-
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  class = GDK_SURFACE_GET_CLASS (surface);
-
-  if (class->get_unscaled_size)
-    {
-      class->get_unscaled_size (surface, unscaled_width, unscaled_height);
-      return;
-    }
-
-  scale = gdk_surface_get_scale_factor (surface);
-
-  if (unscaled_width)
-    *unscaled_width = surface->width * scale;
-
-  if (unscaled_height)
-    *unscaled_height = surface->height * scale;
-}
-
-
 /**
  * gdk_surface_set_opaque_region:
  * @surface: a top-level `GdkSurface`
