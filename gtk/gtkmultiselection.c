@@ -378,7 +378,7 @@ gtk_multi_selection_new (GListModel *model)
 {
   GtkMultiSelection *self;
 
-  g_return_val_if_fail (G_IS_LIST_MODEL (model), NULL);
+  g_return_val_if_fail (model == NULL || G_IS_LIST_MODEL (model), NULL);
 
   self = g_object_new (GTK_TYPE_MULTI_SELECTION,
                        "model", model,
