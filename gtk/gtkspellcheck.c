@@ -146,6 +146,26 @@ gtk_spell_checker_get_languages (GtkSpellChecker *self)
   return (char **)(gpointer)g_array_free (ar, FALSE);
 }
 
+static gboolean
+gtk_spell_checker_contains_language (GtkSpellChecker  *self,
+                                     GtkSpellLanguage *language)
+{
+  g_assert (GTK_IS_SPELL_CHECKER (self));
+  g_assert (language != NULL);
+  g_assert (language->code != NULL);
+  g_assert (language->provider != NULL);
+
+  for (guint i = 0; i < self->languages->len; i++)
+    {
+      GtkSpellLanguage *element = g_ptr_array_index (self->languages, i);
+
+      if (g_strcmp0 (language->code, element->code) == 0)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 gtk_spell_checker_set_languages (GtkSpellChecker    *self,
                                  const char * const *languages)
@@ -165,7 +185,9 @@ gtk_spell_checker_set_languages (GtkSpellChecker    *self,
               if (language == NULL)
                 continue;
 
-              g_ptr_array_add (self->languages, language);
+              if (!gtk_spell_checker_contains_language (self, language))
+                g_ptr_array_add (self->languages, language);
+
               break;
             }
         }
