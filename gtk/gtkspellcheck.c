@@ -469,6 +469,26 @@ gtk_enchant_list_corrections (GtkSpellLanguage *language,
   return G_LIST_MODEL (model);
 }
 
+static void
+gtk_enchant_init_language_cb (const char * const  code,
+                              const char * const  provider_name,
+                              const char * const  provider_desc,
+                              const char * const  provider_file,
+                              void               *user_data)
+{
+  GtkSpellLanguage *language = user_data;
+
+  g_assert (language != NULL);
+  g_assert (code != NULL);
+
+  /* Replace the language code so we can deduplicate based on what
+   * dictionary was actually loaded. Otherwise we could end up with
+   * en_US and en_US.UTF-8 as two separate dictionaries.
+   */
+  g_free (language->code);
+  language->code = g_strdup (code);
+}
+
 static gboolean
 gtk_enchant_init_language (GtkSpellLanguage *language)
 {
@@ -476,6 +496,10 @@ gtk_enchant_init_language (GtkSpellLanguage *language)
 
   if (!(language->native = enchant_broker_request_dict (broker, language->code)))
     return FALSE;
+
+  enchant_dict_describe (language->native,
+                         gtk_enchant_init_language_cb,
+                         language);
 
   return TRUE;
 }
