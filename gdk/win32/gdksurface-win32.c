@@ -520,8 +520,6 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
   surface->height = height;
 
   impl->surface_scale = _gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL, NULL);
-  impl->unscaled_width = width * impl->surface_scale;
-  impl->unscaled_height = height * impl->surface_scale;
 
   dwExStyle = 0;
   owner = NULL;
@@ -3969,12 +3967,9 @@ gdk_win32_surface_do_move_resize_drag (GdkSurface *window,
         {
           int scale = impl->surface_scale;
 
-          impl->unscaled_width = new_rect.right - new_rect.left;
-          impl->unscaled_height = new_rect.bottom - new_rect.top;
-
           impl->next_layout.configured_rect = new_rect;
-          impl->next_layout.configured_width = (impl->unscaled_width + scale - 1) / scale;
-          impl->next_layout.configured_height = (impl->unscaled_height + scale - 1) / scale;
+          impl->next_layout.configured_width = (new_rect.right - new_rect.left + scale - 1) / scale;
+          impl->next_layout.configured_height = (new_rect.bottom - new_rect.top + scale - 1) / scale;
         }
 
       context->native_move_resize_pending = TRUE;
@@ -4476,19 +4471,6 @@ _gdk_win32_surface_get_scale_factor (GdkSurface *window)
     }
 }
 
-void
-_gdk_win32_surface_get_unscaled_size (GdkSurface *window,
-                                    int       *unscaled_width,
-                                    int       *unscaled_height)
-{
-  GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
-
-  if (unscaled_width)
-    *unscaled_width = impl->unscaled_width;
-  if (unscaled_height)
-    *unscaled_height = impl->unscaled_height;
-}
-
 static void
 gdk_win32_surface_set_input_region (GdkSurface     *window,
                                     cairo_region_t *input_region)
@@ -4580,11 +4562,8 @@ _gdk_win32_surface_request_layout (GdkSurface *surface)
     {
       _gdk_win32_get_window_rect (surface, &rect);
 
-      impl->unscaled_width = rect.right - rect.left;
-      impl->unscaled_height = rect.bottom - rect.top;
-
-      impl->next_layout.configured_width = (impl->unscaled_width + scale - 1) / scale;
-      impl->next_layout.configured_height = (impl->unscaled_height + scale - 1) / scale;
+      impl->next_layout.configured_width = (rect.right - rect.left + scale - 1) / scale;
+      impl->next_layout.configured_height = (rect.bottom - rect.top + scale - 1) / scale;
       surface->x = rect.left / scale;
       surface->y = rect.top / scale;
     }
@@ -4635,7 +4614,6 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
   impl_class->drag_begin = _gdk_win32_surface_drag_begin;
   impl_class->create_gl_context = _gdk_win32_surface_create_gl_context;
   impl_class->get_scale_factor = _gdk_win32_surface_get_scale_factor;
-  impl_class->get_unscaled_size = _gdk_win32_surface_get_unscaled_size;
   impl_class->request_layout = _gdk_win32_surface_request_layout;
   impl_class->compute_size = _gdk_win32_surface_compute_size;
 }

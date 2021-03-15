@@ -335,8 +335,6 @@ struct _GdkWin32Surface
 
   /* scale of window on HiDPI */
   int surface_scale;
-  int unscaled_width;
-  int unscaled_height;
 
   GdkToplevelLayout *toplevel_layout;
   struct {

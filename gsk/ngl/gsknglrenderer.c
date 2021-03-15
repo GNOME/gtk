@@ -173,10 +173,7 @@ get_render_region (GdkSurface   *surface,
    */
   damage = gdk_draw_context_get_frame_region (GDK_DRAW_CONTEXT (context));
 
-  if (cairo_region_contains_rectangle (damage, &whole_surface) == CAIRO_REGION_OVERLAP_IN)
-    return NULL;
-
-  /* If the extents match the full-scene, do the same as above */
+  /* If the extents match the full-scene, return NULL */
   cairo_region_get_extents (damage, &extents);
   if (gdk_rectangle_equal (&extents, &whole_surface))
     return NULL;
