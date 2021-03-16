@@ -230,5 +230,5 @@ libgsk = static_library('gsk',
 # "public" libgtk_dep used by internal executables.
 libgsk_dep = declare_dependency(include_directories: [ confinc, ],
   sources: [ gskenum_h, ],
-  dependencies: libgdk_dep,
+  dependencies: [libgdk_dep, cairo_csi_dep],
 )
