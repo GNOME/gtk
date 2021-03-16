@@ -437,7 +437,6 @@ static void        gtk_window_css_changed               (GtkWidget      *widget,
                                                          GtkCssStyleChange *change);
 static void _gtk_window_set_is_active (GtkWindow *window,
 			               gboolean   is_active);
-static void gtk_window_present_toplevel (GtkWindow *window);
 static void gtk_window_update_toplevel (GtkWindow         *window,
                                         GdkToplevelLayout *layout);
 
@@ -3800,8 +3799,6 @@ gtk_window_show (GtkWidget *widget)
 
   gtk_widget_realize (widget);
 
-  gtk_window_present_toplevel (window);
-
   gtk_widget_map (widget);
 
   if (!priv->focus_widget)
@@ -3869,6 +3866,8 @@ gtk_window_map (GtkWidget *widget)
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *child = priv->child;
 
+  gtk_window_present_toplevel (window);
+
   GTK_WIDGET_CLASS (gtk_window_parent_class)->map (widget);
 
   if (child != NULL && gtk_widget_get_visible (child))
@@ -3878,8 +3877,6 @@ gtk_window_map (GtkWidget *widget)
       gtk_widget_get_visible (priv->title_box) &&
       gtk_widget_get_child_visible (priv->title_box))
     gtk_widget_map (priv->title_box);
-
-  gtk_window_present_toplevel (window);
 
   if (priv->minimize_initially)
     gdk_toplevel_minimize (GDK_TOPLEVEL (priv->surface));
