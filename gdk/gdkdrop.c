@@ -699,6 +699,11 @@ gdk_drop_read_async (GdkDrop             *self,
  *
  * Finishes an async drop read operation.
  *
+ * Note that you must not use blocking read calls on the returned stream
+ * in the GTK thread, since some platforms might require communication with
+ * GTK to complete the data transfer. You can use async APIs such as
+ * g_input_stream_read_bytes_async().
+ *
  * See [method@Gdk.Drop.read_async].
  *
  * Returns: (nullable) (transfer full): the `GInputStream`, or %NULL
