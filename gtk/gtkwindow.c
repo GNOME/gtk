@@ -3864,19 +3864,10 @@ gtk_window_map (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWidget *child = priv->child;
 
   gtk_window_present_toplevel (window);
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->map (widget);
-
-  if (child != NULL && gtk_widget_get_visible (child))
-    gtk_widget_map (child);
-
-  if (priv->title_box != NULL &&
-      gtk_widget_get_visible (priv->title_box) &&
-      gtk_widget_get_child_visible (priv->title_box))
-    gtk_widget_map (priv->title_box);
 
   if (priv->minimize_initially)
     gdk_toplevel_minimize (GDK_TOPLEVEL (priv->surface));
