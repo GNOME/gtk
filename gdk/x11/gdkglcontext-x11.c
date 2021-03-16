@@ -37,7 +37,7 @@
 
 #include "gdkintl.h"
 
-#include <cairo/cairo-xlib.h>
+#include <cairo-xlib.h>
 
 #include <epoxy/glx.h>
 
