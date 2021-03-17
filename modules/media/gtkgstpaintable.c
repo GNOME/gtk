@@ -192,19 +192,9 @@ gtk_gst_paintable_realize (GtkGstPaintable *self,
                            GdkSurface      *surface)
 {
   GError *error = NULL;
-  GtkNative *native;
-  GskRenderer *renderer;
 
   if (self->context)
     return;
-
-  native = gtk_native_get_for_surface (surface);
-  renderer = gtk_native_get_renderer (native);
-  if (!GSK_IS_GL_RENDERER (renderer))
-    {
-      GST_INFO ("not using GL with a %s renderer\n", G_OBJECT_TYPE_NAME (renderer));
-      return;
-    }
 
   self->context = gdk_surface_create_gl_context (surface, &error);
   if (self->context == NULL)
