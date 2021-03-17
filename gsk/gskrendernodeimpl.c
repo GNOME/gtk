@@ -1310,7 +1310,7 @@ gsk_border_node_diff (GskRenderNode  *node1,
     return;
 
   /* Different uniformity -> diff impossible */
-  if (uniform1 ^ uniform1)
+  if (uniform1 ^ uniform2)
     {
       gsk_render_node_diff_impossible (node1, node2, region);
       return;
