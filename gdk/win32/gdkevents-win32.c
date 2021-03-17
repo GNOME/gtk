@@ -2485,8 +2485,6 @@ gdk_event_translate (MSG *msg,
                                     delta_y,
                                     FALSE);
 
-      _gdk_win32_append_event (event);
-
       /* Append the discrete version too */
       direction = 0;
       if (msg->message == WM_MOUSEWHEEL)
