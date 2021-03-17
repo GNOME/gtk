@@ -913,6 +913,8 @@ gtk_check_button_set_label (GtkCheckButton *self,
  * Setting the group of a check button also changes the css name of the
  * indicator widget's CSS node to 'radio'.
  *
+ * Setting up groups in a cycle leads to undefined behavior.
+ *
  * Note that the same effect can be achieved via the [interface@Gtk.Actionable]
  * API, by using the same action with parameter type and state type 's'
  * for all buttons in the group, and giving each button its own target
@@ -926,6 +928,7 @@ gtk_check_button_set_group (GtkCheckButton *self,
   GtkCheckButtonPrivate *group_priv = gtk_check_button_get_instance_private (group);
 
   g_return_if_fail (GTK_IS_CHECK_BUTTON (self));
+  g_return_if_fail (self != group);
 
   if (!group)
     {

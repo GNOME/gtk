@@ -473,6 +473,8 @@ gtk_toggle_button_toggled (GtkToggleButton *toggle_button)
  * In a group of multiple toggle buttons, only one button can be active
  * at a time.
  *
+ * Setting up groups in a cycle leads to undefined behavior.
+ *
  * Note that the same effect can be achieved via the [interface@Gtk.Actionable]
  * API, by using the same action with parameter type and state type 's'
  * for all buttons in the group, and giving each button its own target
@@ -486,6 +488,7 @@ gtk_toggle_button_set_group (GtkToggleButton *toggle_button,
   GtkToggleButtonPrivate *group_priv = gtk_toggle_button_get_instance_private (group);
 
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (toggle_button));
+  g_return_if_fail (toggle_button != group);
 
   if (!group)
     {
