@@ -2471,7 +2471,9 @@ gtk_tree_store_move (GtkTreeStore *tree_store,
   GNode *parent, *node, *a, *b, *tmp, *tmp_a, *tmp_b;
   int old_pos, new_pos, length, i, *order;
   GtkTreePath *path = NULL, *tmppath, *pos_path = NULL;
-  GtkTreeIter parent_iter, dst_a, dst_b;
+  GtkTreeIter parent_iter = { 0, };
+  GtkTreeIter dst_a = { 0, };
+  GtkTreeIter dst_b = { 0, };
   int depth = 0;
   gboolean handle_b = TRUE;
 
