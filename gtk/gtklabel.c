@@ -1658,6 +1658,7 @@ gtk_label_query_tooltip (GtkWidget  *widget,
               if (link->title)
                 {
                   gtk_tooltip_set_markup (tooltip, link->title);
+                  return TRUE;
                 }
             }
         }
