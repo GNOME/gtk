@@ -305,6 +305,17 @@ test_create (void)
 }
 
 static void
+test_create_empty (void)
+{
+  GtkSingleSelection *selection;
+
+  selection = gtk_single_selection_new (NULL);
+  g_assert_cmpint (g_list_model_get_n_items (G_LIST_MODEL (selection)), ==, 0);
+
+  g_object_unref (selection);
+}
+
+static void
 test_changes (void)
 {
   GtkSelectionModel *selection;
@@ -706,6 +717,7 @@ main (int argc, char *argv[])
   selection_quark = g_quark_from_static_string ("Mana mana, badibidibi");
 
   g_test_add_func ("/singleselection/create", test_create);
+  g_test_add_func ("/singleselection/create-empty", test_create_empty);
   g_test_add_func ("/singleselection/autoselect", test_autoselect);
   g_test_add_func ("/singleselection/autoselect-toggle", test_autoselect_toggle);
   g_test_add_func ("/singleselection/selection", test_selection);

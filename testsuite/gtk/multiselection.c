@@ -305,6 +305,17 @@ test_create (void)
 }
 
 static void
+test_create_empty (void)
+{
+  GtkMultiSelection *selection;
+
+  selection = gtk_multi_selection_new (NULL);
+  g_assert_cmpint (g_list_model_get_n_items (G_LIST_MODEL (selection)), ==, 0);
+
+  g_object_unref (selection);
+}
+
+static void
 test_changes (void)
 {
   GtkSelectionModel *selection;
@@ -682,6 +693,7 @@ main (int argc, char *argv[])
   selection_quark = g_quark_from_static_string ("Mana mana, badibidibi");
 
   g_test_add_func ("/multiselection/create", test_create);
+  g_test_add_func ("/multiselection/create-empty", test_create_empty);
 #if GLIB_CHECK_VERSION (2, 58, 0) /* g_list_store_splice() is broken before 2.58 */
   g_test_add_func ("/multiselection/changes", test_changes);
 #endif
