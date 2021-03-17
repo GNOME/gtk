@@ -494,14 +494,14 @@ gtk_css_shadow_value_parse (GtkCssParser *parser,
     return gtk_css_shadow_value_new_none ();
 
   do {
+    if (n_shadows == MAX_SHADOWS)
+      {
+        gtk_css_parser_error_syntax (parser, "Not more than %d shadows supported", MAX_SHADOWS);
+        goto fail;
+      }
     if (gtk_css_shadow_value_parse_one (parser, box_shadow_mode, &shadows[n_shadows]))
       n_shadows++;
 
-    if (n_shadows > MAX_SHADOWS)
-      {
-        gtk_css_parser_error_syntax (parser, "Not more than 64 shadows supported");
-        goto fail;
-      }
   } while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
 
   return gtk_css_shadow_value_new (shadows, n_shadows, FALSE);
