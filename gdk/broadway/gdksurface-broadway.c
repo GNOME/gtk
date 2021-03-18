@@ -519,7 +519,7 @@ gdk_broadway_surface_move_resize_internal (GdkSurface *surface,
   if (size_changed)
     {
       surface->resize_count++;
-      _gdk_surface_update_size (surface);
+      gdk_surface_update_size (surface, surface->width, surface->height, gdk_surface_get_scale_factor (surface));
     }
 }
 

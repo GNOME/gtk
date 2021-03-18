@@ -256,7 +256,7 @@ typedef NSString *CALayerContentsGravity;
 
   [[self contentView] setFrame:NSMakeRect (0, 0, surface->width, surface->height)];
 
-  _gdk_surface_update_size (surface);
+  gdk_surface_update_size (surface, surface->width, surface->height, gdk_surface_get_scale_factor (surface));
 
   gdk_surface_request_layout (surface);
 

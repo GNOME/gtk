@@ -4583,7 +4583,7 @@ _gdk_win32_surface_compute_size (GdkSurface *surface)
       surface->width = impl->next_layout.configured_width;
       surface->height = impl->next_layout.configured_height;
 
-      _gdk_surface_update_size (surface);
+      gdk_surface_update_size (surface, surface->width, surface->height, gdk_surface_get_scale_factor (surface));
     }
 
   return FALSE;

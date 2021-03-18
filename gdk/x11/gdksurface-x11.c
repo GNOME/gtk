@@ -207,7 +207,7 @@ gdk_x11_surface_update_size (GdkX11Surface *self,
   surface->height = height;
   self->surface_scale = scale;
 
-  _gdk_surface_update_size (surface);
+  gdk_surface_update_size (surface, surface->width, surface->height, self->surface_scale);
 
   if (self->cairo_surface)
     {

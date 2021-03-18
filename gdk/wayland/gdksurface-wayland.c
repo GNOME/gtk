@@ -438,7 +438,7 @@ gdk_wayland_surface_update_size (GdkSurface *surface,
   if (scale_changed)
     g_object_notify (G_OBJECT (surface), "scale-factor");
 
-  _gdk_surface_update_size (surface);
+  gdk_surface_update_size (surface, surface->width, surface->height, impl->scale);
 }
 
 static const char *

@@ -255,6 +255,11 @@ gdk_gravity_flip_vertically (GdkGravity anchor)
   g_assert_not_reached ();
 }
 
+void                    gdk_surface_update_size                 (GdkSurface             *surface,
+                                                                 int                     width,
+                                                                 int                     height,
+                                                                 int                     scale);
+
 void       _gdk_surface_destroy           (GdkSurface      *surface,
                                            gboolean        foreign_destroy);
 void       gdk_surface_invalidate_rect    (GdkSurface           *surface,
@@ -262,7 +267,6 @@ void       gdk_surface_invalidate_rect    (GdkSurface           *surface,
 void       gdk_surface_invalidate_region  (GdkSurface           *surface,
                                            const cairo_region_t *region);
 void       _gdk_surface_clear_update_area (GdkSurface      *surface);
-void       _gdk_surface_update_size       (GdkSurface      *surface);
 
 GdkGLContext * gdk_surface_get_paint_gl_context (GdkSurface *surface,
                                                  GError   **error);

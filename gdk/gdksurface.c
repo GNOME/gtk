@@ -814,7 +814,10 @@ gdk_surface_get_property (GObject    *object,
 }
 
 void
-_gdk_surface_update_size (GdkSurface *surface)
+gdk_surface_update_size (GdkSurface *surface,
+                         int         width,
+                         int         height,
+                         int         scale)
 {
   GSList *l;
 
