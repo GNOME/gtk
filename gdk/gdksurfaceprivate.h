@@ -89,7 +89,9 @@ struct _GdkSurface
 
   guint update_and_descendants_freeze_count;
 
-  int width, height;
+  int width;
+  int height;
+  int scale_factor;
 
   GdkCursor *cursor;
   GHashTable *device_cursor;
@@ -255,7 +257,7 @@ gdk_gravity_flip_vertically (GdkGravity anchor)
   g_assert_not_reached ();
 }
 
-void                    gdk_surface_update_size                 (GdkSurface             *surface,
+gboolean                gdk_surface_update_size                 (GdkSurface             *surface,
                                                                  int                     width,
                                                                  int                     height,
                                                                  int                     scale);

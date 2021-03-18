@@ -470,6 +470,7 @@ gdk_surface_init (GdkSurface *surface)
   surface->fullscreen_mode = GDK_FULLSCREEN_ON_CURRENT_MONITOR;
   surface->width = 1;
   surface->height = 1;
+  surface->scale_factor = 1;
 
   surface->alpha = 255;
 
@@ -813,19 +814,50 @@ gdk_surface_get_property (GObject    *object,
     }
 }
 
-void
-gdk_surface_update_size (GdkSurface *surface,
+gboolean
+gdk_surface_update_size (GdkSurface *self,
                          int         width,
                          int         height,
                          int         scale)
 {
   GSList *l;
 
-  for (l = surface->draw_contexts; l; l = l->next)
+  if (self->width == width && 
+      self->height == height &&
+      self->scale_factor == scale)
+    {
+      /* FIXME: Remove when all backends are updated */
+      for (l = self->draw_contexts; l; l = l->next)
+        gdk_draw_context_surface_resized (l->data);
+      return FALSE;
+    }
+
+  g_object_freeze_notify (G_OBJECT (self));
+
+  if (self->width != width)
+    {
+      self->width = width;
+      g_object_notify (G_OBJECT (self), "width");
+    }
+
+  if (self->height != height)
+    {
+      self->height = height;
+      g_object_notify (G_OBJECT (self), "height");
+    }
+
+  if (self->scale_factor != scale)
+    {
+      self->scale_factor = scale;
+      g_object_notify (G_OBJECT (self), "scale-factor");
+    }
+
+  for (l = self->draw_contexts; l; l = l->next)
     gdk_draw_context_surface_resized (l->data);
 
-  g_object_notify (G_OBJECT (surface), "width");
-  g_object_notify (G_OBJECT (surface), "height");
+  g_object_thaw_notify (G_OBJECT (self));
+
+  return TRUE;
 }
 
 static GdkSurface *
