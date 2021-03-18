@@ -294,6 +294,13 @@ wayland_get_display (struct wl_display *wl_display)
 static void
 init_gl (GtkInspectorGeneral *gen)
 {
+  if (gdk_display_get_debug_flags (gen->display) & GDK_DEBUG_GL_DISABLE)
+    {
+      gtk_label_set_text (GTK_LABEL (gen->gl_version), C_("GL version", "Disabled"));
+      gtk_label_set_text (GTK_LABEL (gen->gl_vendor), C_("GL vendor", "Disabled"));
+      return;
+    }
+
 #ifdef GDK_WINDOWING_X11
   if (GDK_IS_X11_DISPLAY (gen->display))
     {
@@ -329,7 +336,11 @@ init_gl (GtkInspectorGeneral *gen)
       dpy = wayland_get_display (gdk_wayland_display_get_wl_display (gen->display));
 
       if (!eglInitialize (dpy, &major, &minor))
-        return;
+        {
+          gtk_label_set_text (GTK_LABEL (gen->gl_version), C_("GL version", "None"));
+          gtk_label_set_text (GTK_LABEL (gen->gl_vendor), C_("GL vendor", "None"));
+          return;
+        }
 
       version = g_strconcat ("EGL ", eglQueryString (dpy, EGL_VERSION), NULL);
       gtk_label_set_text (GTK_LABEL (gen->gl_version), version);
@@ -393,6 +404,14 @@ init_vulkan (GtkInspectorGeneral *gen)
 #ifdef GDK_RENDERING_VULKAN
   GdkSurface *surface;
   GdkVulkanContext *context;
+
+  if (gdk_display_get_debug_flags (gen->display) & GDK_DEBUG_VULKAN_DISABLE)
+    {
+      gtk_label_set_text (GTK_LABEL (gen->vk_device), C_("Vulkan device", "Disabled"));
+      gtk_label_set_text (GTK_LABEL (gen->vk_api_version), C_("Vulkan version", "Disabled"));
+      gtk_label_set_text (GTK_LABEL (gen->vk_driver_version), C_("Vulkan version", "Disabled"));
+      return;
+    }
 
   surface = gdk_surface_new_toplevel (gen->display);
   context = gdk_surface_create_vulkan_context (surface, NULL);

@@ -1091,9 +1091,7 @@ gtk_image_get_baseline_align (GtkImage *image)
   if (image->baseline_align == 0.0)
     {
       pango_context = gtk_widget_get_pango_context (GTK_WIDGET (image));
-      metrics = pango_context_get_metrics (pango_context,
-					   pango_context_get_font_description (pango_context),
-					   pango_context_get_language (pango_context));
+      metrics = pango_context_get_metrics (pango_context, NULL, NULL);
       image->baseline_align =
                 (float)pango_font_metrics_get_ascent (metrics) /
                 (pango_font_metrics_get_ascent (metrics) + pango_font_metrics_get_descent (metrics));
