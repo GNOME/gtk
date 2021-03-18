@@ -32,7 +32,7 @@ typedef struct _GskNglBuffer
   gsize   buffer_len;
   guint   count;
   GLenum  target;
-  guint   element_size;
+  gsize   element_size;
 } GskNglBuffer;
 
 void   gsk_ngl_buffer_init    (GskNglBuffer *self,
@@ -50,7 +50,8 @@ gsk_ngl_buffer_advance (GskNglBuffer *buffer,
 
   if G_UNLIKELY (buffer->buffer_pos + to_alloc > buffer->buffer_len)
     {
-      buffer->buffer_len *= 2;
+      while (buffer->buffer_pos + to_alloc > buffer->buffer_len)
+        buffer->buffer_len *= 2;
       buffer->buffer = g_realloc (buffer->buffer, buffer->buffer_len);
     }
 
