@@ -754,6 +754,8 @@ gtk_im_context_set_surrounding (GtkIMContext  *context,
  * string. This function is expected to be called in response to the
  * GtkIMContext::retrieve_surrounding signal, and will likely have no
  * effect if called at other times.
+ *
+ * Since: 4.2
  */
 void
 gtk_im_context_set_surrounding_with_selection (GtkIMContext  *context,
@@ -853,6 +855,8 @@ gtk_im_context_get_surrounding (GtkIMContext  *context,
  *
  * Returns: `TRUE` if surrounding text was provided; in this case
  *   you must free the result stored in `text`.
+ *
+ * Since: 4.2
  */
 gboolean
 gtk_im_context_get_surrounding_with_selection (GtkIMContext  *context,

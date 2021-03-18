@@ -150,14 +150,14 @@ GDK_DEPRECATED_IN_4_2_FOR(gtk_im_context_get_surrounding_with_selection)
 gboolean gtk_im_context_get_surrounding     (GtkIMContext       *context,
                                              char              **text,
                                              int                *cursor_index);
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_4_2
 void     gtk_im_context_set_surrounding_with_selection
                                             (GtkIMContext       *context,
                                              const char         *text,
                                              int                 len,
                                              int                 cursor_index,
                                              int                 anchor_index);
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_4_2
 gboolean gtk_im_context_get_surrounding_with_selection
                                             (GtkIMContext       *context,
                                              char              **text,
