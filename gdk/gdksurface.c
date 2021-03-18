@@ -2730,8 +2730,6 @@ set_is_mapped_idle (gpointer user_data)
                         G_SOURCE_REMOVE);
 
   surface->is_mapped = surface->pending_is_mapped;
-  if (surface->is_mapped)
-    gdk_surface_invalidate_rect (surface, NULL);
 
   g_object_notify (G_OBJECT (surface), "mapped");
 
@@ -2751,8 +2749,6 @@ gdk_surface_set_is_mapped (GdkSurface *surface,
 
   was_mapped = surface->is_mapped;
   surface->is_mapped = is_mapped;
-  if (surface->is_mapped)
-    gdk_surface_invalidate_rect (surface, NULL);
 
   if (was_mapped != is_mapped)
     g_object_notify (G_OBJECT (surface), "mapped");
