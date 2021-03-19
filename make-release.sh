@@ -10,8 +10,8 @@ if [ -d ${release_build_dir} ]; then
 fi
 
 # make the release tarball
-meson setup ${release_build_dir} || exit
-meson dist -C${release_build_dir} || exit
+meson setup --force-fallback-for gi-docgen ${release_build_dir} || exit
+meson dist -C${release_build_dir} --include-subprojects || exit
 
 # now build the docs
 meson configure ${release_build_dir} -Dintrospection=enabled -Dgtk_doc=true || exit

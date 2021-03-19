@@ -643,7 +643,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                        GTK_PARAM_READWRITE));
 
   /**
-   * GtkTextTag:oerline:
+   * GtkTextTag:overline:
    *
    * Style of overline for this text.
    */
