@@ -27,10 +27,11 @@ G_BEGIN_DECLS
 
 typedef struct _GtkAccessibleAttributeSet       GtkAccessibleAttributeSet;
 
+typedef const char *(* GtkAccessibleAttributeNameFunc) (int attribute);
 typedef GtkAccessibleValue *(* GtkAccessibleAttributeDefaultFunc) (int attribute);
 
-GtkAccessibleAttributeSet *     gtk_accessible_attribute_set_new                (gsize                       n_attributes,
-                                                                                 const char                **attr_names,
+GtkAccessibleAttributeSet *     gtk_accessible_attribute_set_new                (gsize                             n_attributes,
+                                                                                 GtkAccessibleAttributeNameFunc    name_func,
                                                                                  GtkAccessibleAttributeDefaultFunc default_func);
 GtkAccessibleAttributeSet *     gtk_accessible_attribute_set_ref                (GtkAccessibleAttributeSet  *self);
 void                            gtk_accessible_attribute_set_unref              (GtkAccessibleAttributeSet  *self);
