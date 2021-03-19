@@ -142,12 +142,19 @@ struct _GtkTextAttributes
 {
   guint refcount;
 
-  GtkTextAppearance appearance;
-
   GtkJustification justification;
   GtkTextDirection direction;
+  GtkWrapMode wrap_mode;
+
+  GtkTextAppearance appearance;
 
   PangoFontDescription *font;
+  char *font_features;
+
+  GdkRGBA *pg_bg_rgba;
+
+  PangoTabArray *tabs;
+  PangoLanguage *language;
 
   double font_scale;
 
@@ -159,11 +166,7 @@ struct _GtkTextAttributes
   int pixels_below_lines;
   int pixels_inside_wrap;
 
-  PangoTabArray *tabs;
-
-  GtkWrapMode wrap_mode;
-
-  PangoLanguage *language;
+  int letter_spacing;
 
   guint invisible : 1;
   guint bg_full_height : 1;
@@ -171,14 +174,7 @@ struct _GtkTextAttributes
   guint no_fallback: 1;
   guint no_breaks : 1;
   guint show_spaces : 3; /* PangoShowFlags */
-  int   no_hyphens : 1;
-
-
-  GdkRGBA *pg_bg_rgba;
-
-  int letter_spacing;
-
-  char *font_features;
+  guint no_hyphens : 1;
 };
 
 GtkTextAttributes* gtk_text_attributes_new         (void);
