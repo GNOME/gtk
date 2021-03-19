@@ -33,6 +33,8 @@ typedef struct _GskNglBuffer
   guint   count;
   GLenum  target;
   gsize   element_size;
+  GLuint  vbo_id;
+  gsize   vbo_size;
 } GskNglBuffer;
 
 void   gsk_ngl_buffer_init    (GskNglBuffer *self,

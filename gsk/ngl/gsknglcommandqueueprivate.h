@@ -228,6 +228,9 @@ struct _GskNglCommandQueue
   /* String storage for debug groups */
   GStringChunk *debug_groups;
 
+  /* The vertex array */
+  GLuint vao_id;
+
   /* Discovered max texture size when loading the command queue so that we
    * can either scale down or slice textures to fit within this size. Assumed
    * to be both height and width.

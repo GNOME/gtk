@@ -45,25 +45,36 @@ gsk_ngl_buffer_init (GskNglBuffer *self,
   self->buffer = g_malloc (self->buffer_len);
   self->target = target;
   self->element_size = element_size;
+  self->vbo_size = 0;
+  self->vbo_id = 0;
 }
 
 GLuint
 gsk_ngl_buffer_submit (GskNglBuffer *buffer)
 {
-  GLuint id;
+  if (buffer->vbo_id == 0)
+    glGenBuffers (1, &buffer->vbo_id);
 
-  glGenBuffers (1, &id);
-  glBindBuffer (buffer->target, id);
-  glBufferData (buffer->target, buffer->buffer_pos, buffer->buffer, GL_STATIC_DRAW);
+  if (buffer->vbo_size < buffer->buffer_pos)
+    {
+      glBindBuffer (buffer->target, buffer->vbo_id);
+      glBufferData (buffer->target, buffer->buffer_pos, buffer->buffer, GL_DYNAMIC_DRAW);
+      buffer->vbo_size = buffer->buffer_pos;
+    }
+  else
+    {
+      glBufferSubData (buffer->target, 0, buffer->buffer_pos, buffer->buffer);
+    }
 
   buffer->buffer_pos = 0;
   buffer->count = 0;
 
-  return id;
+  return buffer->vbo_id;
 }
 
 void
 gsk_ngl_buffer_destroy (GskNglBuffer *buffer)
 {
+  glDeleteBuffers (1, &buffer->vbo_id);
   g_clear_pointer (&buffer->buffer, g_free);
 }

@@ -402,6 +402,9 @@ gsk_ngl_command_queue_dispose (GObject *object)
   gsk_ngl_command_binds_clear (&self->batch_binds);
   gsk_ngl_command_uniforms_clear (&self->batch_uniforms);
 
+  glDeleteVertexArrays (1, &self->vao_id);
+  self->vao_id = 0;
+
   gsk_ngl_buffer_destroy (&self->vertices);
 
   G_OBJECT_CLASS (gsk_ngl_command_queue_parent_class)->dispose (object);
@@ -929,6 +932,40 @@ gsk_ngl_command_queue_sort_batches (GskNglCommandQueue *self)
   g_free (seen_free);
 }
 
+static void
+init_vertex_array (GskNglCommandQueue *self)
+{
+  if (self->vao_id == 0)
+    {
+      glGenVertexArrays (1, &self->vao_id);
+      glBindVertexArray (self->vao_id);
+
+      /* 0 = position location */
+      glEnableVertexAttribArray (0);
+      glVertexAttribPointer (0, 2, GL_FLOAT, GL_FALSE,
+                             sizeof (GskNglDrawVertex),
+                             (void *) G_STRUCT_OFFSET (GskNglDrawVertex, position));
+
+      /* 1 = texture coord location */
+      glEnableVertexAttribArray (1);
+      glVertexAttribPointer (1, 2, GL_FLOAT, GL_FALSE,
+                             sizeof (GskNglDrawVertex),
+                             (void *) G_STRUCT_OFFSET (GskNglDrawVertex, uv));
+
+      /* 2 = color location */
+      glEnableVertexAttribArray (2);
+      glVertexAttribPointer (2, 4, GL_FLOAT, GL_FALSE,
+                             sizeof (GskNglDrawVertex),
+                             (void *) G_STRUCT_OFFSET (GskNglDrawVertex, color));
+
+      /* 3 = color2 location */
+      glEnableVertexAttribArray (3);
+      glVertexAttribPointer (3, 4, GL_FLOAT, GL_FALSE,
+                             sizeof (GskNglDrawVertex),
+                             (void *) G_STRUCT_OFFSET (GskNglDrawVertex, color2));
+    }
+}
+
 /**
  * gsk_ngl_command_queue_execute:
  * @self: a #GskNglCommandQueue
@@ -954,8 +991,6 @@ gsk_ngl_command_queue_execute (GskNglCommandQueue   *self,
   guint n_binds = 0;
   guint n_fbos = 0;
   guint n_uniforms = 0;
-  guint vao_id;
-  guint vbo_id;
   int textures[4];
   int framebuffer = -1;
   int next_batch_index;
@@ -987,34 +1022,9 @@ gsk_ngl_command_queue_execute (GskNglCommandQueue   *self,
   glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
   glBlendEquation (GL_FUNC_ADD);
 
-  glGenVertexArrays (1, &vao_id);
-  glBindVertexArray (vao_id);
+  gsk_ngl_buffer_submit (&self->vertices);
 
-  vbo_id = gsk_ngl_buffer_submit (&self->vertices);
-
-  /* 0 = position location */
-  glEnableVertexAttribArray (0);
-  glVertexAttribPointer (0, 2, GL_FLOAT, GL_FALSE,
-                         sizeof (GskNglDrawVertex),
-                         (void *) G_STRUCT_OFFSET (GskNglDrawVertex, position));
-
-  /* 1 = texture coord location */
-  glEnableVertexAttribArray (1);
-  glVertexAttribPointer (1, 2, GL_FLOAT, GL_FALSE,
-                         sizeof (GskNglDrawVertex),
-                         (void *) G_STRUCT_OFFSET (GskNglDrawVertex, uv));
-
-  /* 2 = color location */
-  glEnableVertexAttribArray (2);
-  glVertexAttribPointer (2, 4, GL_FLOAT, GL_FALSE,
-                         sizeof (GskNglDrawVertex),
-                         (void *) G_STRUCT_OFFSET (GskNglDrawVertex, color));
-
-  /* 3 = color2 location */
-  glEnableVertexAttribArray (3);
-  glVertexAttribPointer (3, 4, GL_FLOAT, GL_FALSE,
-                         sizeof (GskNglDrawVertex),
-                         (void *) G_STRUCT_OFFSET (GskNglDrawVertex, color2));
+  init_vertex_array (self);
 
   /* Setup initial scissor clip */
   if (scissor != NULL)
@@ -1140,9 +1150,6 @@ gsk_ngl_command_queue_execute (GskNglCommandQueue   *self,
 
       next_batch_index = batch->any.next_batch_index;
     }
-
-  glDeleteBuffers (1, &vbo_id);
-  glDeleteVertexArrays (1, &vao_id);
 
   gdk_profiler_set_int_counter (self->metrics.n_binds, n_binds);
   gdk_profiler_set_int_counter (self->metrics.n_uniforms, n_uniforms);
