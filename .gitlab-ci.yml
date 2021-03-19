@@ -306,6 +306,7 @@ pages:
   needs: ['reference']
   script:
     - mv _reference/ public/
+    - cp .gitlab-ci/pages/* public/
   artifacts:
     paths:
       - public
