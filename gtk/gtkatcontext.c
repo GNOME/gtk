@@ -384,15 +384,15 @@ gtk_at_context_init (GtkATContext *self)
 
   self->properties =
     gtk_accessible_attribute_set_new (G_N_ELEMENTS (property_attrs),
-                                      property_attrs,
+                                      (GtkAccessibleAttributeNameFunc) gtk_accessible_property_get_attribute_name,
                                       (GtkAccessibleAttributeDefaultFunc) gtk_accessible_value_get_default_for_property);
   self->relations =
     gtk_accessible_attribute_set_new (G_N_ELEMENTS (relation_attrs),
-                                      relation_attrs,
+                                      (GtkAccessibleAttributeNameFunc) gtk_accessible_relation_get_attribute_name,
                                       (GtkAccessibleAttributeDefaultFunc) gtk_accessible_value_get_default_for_relation);
   self->states =
     gtk_accessible_attribute_set_new (G_N_ELEMENTS (state_attrs),
-                                      state_attrs,
+                                      (GtkAccessibleAttributeNameFunc) gtk_accessible_state_get_attribute_name,
                                       (GtkAccessibleAttributeDefaultFunc) gtk_accessible_value_get_default_for_state);
 }
 

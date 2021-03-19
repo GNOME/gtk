@@ -29,44 +29,41 @@ struct _GtkAccessibleAttributeSet
 {
   gsize n_attributes;
 
+  GtkAccessibleAttributeNameFunc name_func;
   GtkAccessibleAttributeDefaultFunc default_func;
 
   GtkBitmask *attributes_set;
 
-  char **attribute_names;
   GtkAccessibleValue **attribute_values;
 };
 
 static GtkAccessibleAttributeSet *
 gtk_accessible_attribute_set_init (GtkAccessibleAttributeSet          *self,
                                    gsize                               n_attributes,
-                                   const char                        **attribute_names,
+                                   GtkAccessibleAttributeNameFunc      name_func,
                                    GtkAccessibleAttributeDefaultFunc   default_func)
 {
   self->n_attributes = n_attributes;
+  self->name_func = name_func;
   self->default_func = default_func;
-  self->attribute_names = g_new (char *, n_attributes);
   self->attribute_values = g_new (GtkAccessibleValue *, n_attributes);
   self->attributes_set = _gtk_bitmask_new ();
 
   /* Initialize all attribute values, so we can always get the full attribute */
   for (int i = 0; i < self->n_attributes; i++)
-    {
-      self->attribute_names[i] = g_strdup (attribute_names[i]);
-      self->attribute_values[i] = (* self->default_func) (i);
-    }
+    self->attribute_values[i] = (* self->default_func) (i);
 
   return self;
 }
 
 GtkAccessibleAttributeSet *
 gtk_accessible_attribute_set_new (gsize                               n_attributes,
-                                  const char                        **attribute_names,
+                                  GtkAccessibleAttributeNameFunc      name_func,
                                   GtkAccessibleAttributeDefaultFunc   default_func)
 {
   GtkAccessibleAttributeSet *set = g_rc_box_new0 (GtkAccessibleAttributeSet);
 
-  return gtk_accessible_attribute_set_init (set, n_attributes, attribute_names, default_func);
+  return gtk_accessible_attribute_set_init (set, n_attributes, name_func, default_func);
 }
 
 GtkAccessibleAttributeSet *
@@ -84,13 +81,10 @@ gtk_accessible_attribute_set_free (gpointer data)
 
   for (int i = 0; i < self->n_attributes; i++)
     {
-      g_free (self->attribute_names[i]);
-
       if (self->attribute_values[i] != NULL)
         gtk_accessible_value_unref (self->attribute_values[i]);
     }
 
-  g_free (self->attribute_names);
   g_free (self->attribute_values);
 
   _gtk_bitmask_free (self->attributes_set);
@@ -247,7 +241,7 @@ gtk_accessible_attribute_set_print (GtkAccessibleAttributeSet *self,
         continue;
 
       g_string_append (buffer, "    ");
-      g_string_append (buffer, self->attribute_names[i]);
+      g_string_append (buffer, self->name_func (i));
       g_string_append (buffer, ": ");
 
       gtk_accessible_value_print (self->attribute_values[i], buffer);
