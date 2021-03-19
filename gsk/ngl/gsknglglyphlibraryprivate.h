@@ -55,7 +55,6 @@ G_DECLARE_FINAL_TYPE (GskNglGlyphLibrary, gsk_ngl_glyph_library, GSK, NGL_GLYPH_
 struct _GskNglGlyphLibrary
 {
   GskNglTextureLibrary parent_instance;
-  GHashTable *hash_table;
   guint8 *surface_data;
   gsize surface_data_len;
   struct {
@@ -92,7 +91,7 @@ gsk_ngl_glyph_library_lookup_or_add (GskNglGlyphLibrary      *self,
                                      const GskNglGlyphValue **out_value)
 {
   GskNglTextureAtlasEntry *entry;
-  guint front_index = key->glyph & 0xFF;
+  guint front_index = ((key->glyph << 2) | key->xshift) & 0xFF;
 
   if (memcmp (key, &self->front[front_index], sizeof *key) == 0)
     {

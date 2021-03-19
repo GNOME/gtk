@@ -98,7 +98,6 @@ gsk_ngl_glyph_library_finalize (GObject *object)
 {
   GskNglGlyphLibrary *self = (GskNglGlyphLibrary *)object;
 
-  g_clear_pointer (&self->hash_table, g_hash_table_unref);
   g_clear_pointer (&self->surface_data, g_free);
 
   G_OBJECT_CLASS (gsk_ngl_glyph_library_parent_class)->finalize (object);
