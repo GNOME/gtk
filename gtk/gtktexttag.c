@@ -459,7 +459,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   /**
    * GtkTextTag:justification:
    *
-   * Lett, right, or center justification.
+   * Left, right, or center justification.
    */
   g_object_class_install_property (object_class,
                                    PROP_JUSTIFICATION,
@@ -951,7 +951,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   /**
    * GtkTextTag:underline-rgba-set:
    *
-   * If the #GtkTextTag:underline-rgba property has been set.
+   * If the `underline-rgba` property has been set.
    */
   ADD_SET_PROP ("underline-rgba-set", PROP_UNDERLINE_RGBA_SET,
                 P_("Underline RGBA set"),
@@ -968,7 +968,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   /**
    * GtkTextTag:strikethrough-rgba-set:
    *
-   * If the #GtkTextTag:strikethrough-rgba property has been set.
+   * If the `strikethrough-rgba` property has been set.
    */
   ADD_SET_PROP ("strikethrough-rgba-set", PROP_STRIKETHROUGH_RGBA_SET,
                 P_("Strikethrough RGBA set"),
