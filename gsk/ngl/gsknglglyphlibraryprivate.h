@@ -108,6 +108,8 @@ gsk_ngl_glyph_library_lookup_or_add (GskNglGlyphLibrary      *self,
       GskNglGlyphKey *k = g_slice_copy (sizeof *key, key);
       g_object_ref (k->font);
       gsk_ngl_glyph_library_add (self, k, out_value);
+      self->front[front_index].key = *key;
+      self->front[front_index].value = *out_value;
     }
 
   return GSK_NGL_TEXTURE_ATLAS_ENTRY_TEXTURE (*out_value) != 0;
