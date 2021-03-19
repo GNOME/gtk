@@ -39,6 +39,7 @@
 #include "gskngltexturepoolprivate.h"
 
 #define ATLAS_SIZE 512
+#define MAX_OLD_RATIO 0.5
 
 typedef struct _GskNglTextureState
 {
@@ -494,6 +495,37 @@ failure:
   return g_steal_pointer (&driver);
 }
 
+static GPtrArray *
+gsk_ngl_driver_compact_atlases (GskNglDriver *self)
+{
+  GPtrArray *removed = NULL;
+
+  g_assert (GSK_IS_NGL_DRIVER (self));
+
+  for (guint i = self->atlases->len; i > 0; i--)
+    {
+      GskNglTextureAtlas *atlas = g_ptr_array_index (self->atlases, i - 1);
+
+      if (gsk_ngl_texture_atlas_get_unused_ratio (atlas) > MAX_OLD_RATIO)
+        {
+          GSK_NOTE (GLYPH_CACHE,
+                    g_message ("Dropping atlas %d (%g.2%% old)", i,
+                               100.0 * gsk_ngl_texture_atlas_get_unused_ratio (atlas)));
+          if (removed == NULL)
+            removed = g_ptr_array_new_with_free_func ((GDestroyNotify)gsk_ngl_texture_atlas_free);
+          g_ptr_array_add (removed, g_ptr_array_steal_index (self->atlases, i - 1));
+        }
+    }
+
+  GSK_NOTE (GLYPH_CACHE, {
+    static guint timestamp;
+    if (timestamp++ % 60 == 0)
+      g_message ("%d atlases", self->atlases->len);
+  });
+
+  return removed;
+}
+
 /**
  * gsk_ngl_driver_begin_frame:
  * @self: a #GskNglDriver
@@ -510,6 +542,7 @@ gsk_ngl_driver_begin_frame (GskNglDriver       *self,
                             GskNglCommandQueue *command_queue)
 {
   gint64 last_frame_id;
+  GPtrArray *removed;
 
   g_return_if_fail (GSK_IS_NGL_DRIVER (self));
   g_return_if_fail (GSK_IS_NGL_COMMAND_QUEUE (command_queue));
@@ -524,8 +557,18 @@ gsk_ngl_driver_begin_frame (GskNglDriver       *self,
 
   gsk_ngl_command_queue_begin_frame (self->command_queue);
 
-  gsk_ngl_texture_library_begin_frame (GSK_NGL_TEXTURE_LIBRARY (self->icons));
-  gsk_ngl_texture_library_begin_frame (GSK_NGL_TEXTURE_LIBRARY (self->glyphs));
+  /* Compact atlases with too many freed pixels */
+  removed = gsk_ngl_driver_compact_atlases (self);
+
+  /* Mark unused pixel regions of the atlases */
+  gsk_ngl_texture_library_begin_frame (GSK_NGL_TEXTURE_LIBRARY (self->icons),
+                                       self->current_frame_id,
+                                       removed);
+  gsk_ngl_texture_library_begin_frame (GSK_NGL_TEXTURE_LIBRARY (self->glyphs),
+                                       self->current_frame_id,
+                                       removed);
+
+  /* Cleanup old shadows */
   gsk_ngl_shadow_library_begin_frame (self->shadows);
 
   /* Remove all textures that are from a previous frame or are no
@@ -534,6 +577,9 @@ gsk_ngl_driver_begin_frame (GskNglDriver       *self,
    * we block on any resources while delivering our frames.
    */
   gsk_ngl_driver_collect_unused_textures (self, last_frame_id - 1);
+
+  /* Now free atlas textures */
+  g_clear_pointer (&removed, g_ptr_array_unref);
 }
 
 /**
@@ -552,9 +598,6 @@ gsk_ngl_driver_end_frame (GskNglDriver *self)
 
   gsk_ngl_command_queue_make_current (self->command_queue);
   gsk_ngl_command_queue_end_frame (self->command_queue);
-
-  gsk_ngl_texture_library_end_frame (GSK_NGL_TEXTURE_LIBRARY (self->icons));
-  gsk_ngl_texture_library_end_frame (GSK_NGL_TEXTURE_LIBRARY (self->glyphs));
 
   self->in_frame = FALSE;
 }
