@@ -91,7 +91,7 @@ gsk_ngl_glyph_library_lookup_or_add (GskNglGlyphLibrary      *self,
                                      const GskNglGlyphValue **out_value)
 {
   GskNglTextureAtlasEntry *entry;
-  guint front_index = key->glyph & 0xFF;
+  guint front_index = ((key->glyph << 2) | key->xshift) & 0xFF;
 
   if (memcmp (key, &self->front[front_index], sizeof *key) == 0)
     {
