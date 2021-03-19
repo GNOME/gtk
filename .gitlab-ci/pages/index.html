@@ -33,7 +33,11 @@ SPDX-License-Identifier: LGPL-2.1-or-later
 
 <body>
   <div id="body-wrapper" tabindex="-1">
-    <section>
+    <section id="main" class="content">
+      <header>
+        <h1>GTK Documentation</h1>
+      </header>
+
       <div class="toggle-wrapper">
         <h4 id="core-libraries" style="display:flex;">
           Core libraries
@@ -67,16 +71,14 @@ SPDX-License-Identifier: LGPL-2.1-or-later
           <p><a href="https://developer.gnome.org/gio/" class="external">GIO API reference</a></p>
         </div>
       </div>
-    </section>
 
-    <section>
       <div class="toggle-wrapper">
         <h4 id="user-interface">
           User interface
           <a href="#user-interface" class="anchor"></a>
         </h4>
 
-        <div class="cairo">
+        <div class="docblock">
           <h5 id="cairo">Cairo</h5>
           <p>Cairo is a 2D graphics library with support for multiple output
           devices. It is designed to produce consistent, high quality output
