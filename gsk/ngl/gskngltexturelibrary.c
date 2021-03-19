@@ -20,9 +20,13 @@
 
 #include "config.h"
 
+#include <gsk/gskdebugprivate.h>
+
 #include "gsknglcommandqueueprivate.h"
 #include "gskngldriverprivate.h"
 #include "gskngltexturelibraryprivate.h"
+
+#define MAX_FRAME_AGE 60
 
 G_DEFINE_ABSTRACT_TYPE (GskNglTextureLibrary, gsk_ngl_texture_library, G_TYPE_OBJECT)
 
@@ -130,21 +134,62 @@ gsk_ngl_texture_library_set_funcs (GskNglTextureLibrary *self,
 }
 
 void
-gsk_ngl_texture_library_begin_frame (GskNglTextureLibrary *self)
+gsk_ngl_texture_library_begin_frame (GskNglTextureLibrary *self,
+                                     gint64                frame_id,
+                                     GPtrArray            *removed_atlases)
 {
+  GHashTableIter iter;
+
   g_return_if_fail (GSK_IS_NGL_TEXTURE_LIBRARY (self));
 
   if (GSK_NGL_TEXTURE_LIBRARY_GET_CLASS (self)->begin_frame)
-    GSK_NGL_TEXTURE_LIBRARY_GET_CLASS (self)->begin_frame (self);
-}
+    GSK_NGL_TEXTURE_LIBRARY_GET_CLASS (self)->begin_frame (self, frame_id, removed_atlases);
 
-void
-gsk_ngl_texture_library_end_frame (GskNglTextureLibrary *self)
-{
-  g_return_if_fail (GSK_IS_NGL_TEXTURE_LIBRARY (self));
+  if (removed_atlases != NULL)
+    {
+      GskNglTextureAtlasEntry *entry;
+      guint dropped = 0;
 
-  if (GSK_NGL_TEXTURE_LIBRARY_GET_CLASS (self)->end_frame)
-    GSK_NGL_TEXTURE_LIBRARY_GET_CLASS (self)->end_frame (self);
+      g_hash_table_iter_init (&iter, self->hash_table);
+      while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&entry))
+        {
+          if (entry->is_atlased)
+            {
+              for (guint i = 0; i < removed_atlases->len; i++)
+                {
+                  GskNglTextureAtlas *atlas = g_ptr_array_index (removed_atlases, i);
+
+                  if (atlas == entry->atlas)
+                    {
+                      g_hash_table_iter_remove (&iter);
+                      dropped++;
+                      break;
+                    }
+                }
+            }
+        }
+
+      GSK_NOTE (GLYPH_CACHE,
+                if (dropped > 0)
+                  g_message ("%s: Dropped %d icons",
+                             G_OBJECT_TYPE_NAME (self), dropped));
+    }
+
+  if (frame_id % MAX_FRAME_AGE == 0)
+    {
+      GskNglTextureAtlasEntry *entry;
+
+      g_hash_table_iter_init (&iter, self->hash_table);
+      while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&entry))
+        {
+          gsk_ngl_texture_atlas_entry_mark_unused (entry);
+          entry->accessed = FALSE;
+        }
+
+      GSK_NOTE (GLYPH_CACHE, g_message ("%s: %d atlas items cached",
+                                        G_OBJECT_TYPE_NAME (self),
+                                        g_hash_table_size (self->hash_table)));
+    }
 }
 
 static GskNglTexture *
@@ -252,6 +297,7 @@ gsk_ngl_texture_library_pack (GskNglTextureLibrary *self,
   entry = g_slice_alloc0 (valuelen);
   entry->n_pixels = width * height;
   entry->accessed = TRUE;
+  entry->used = TRUE;
 
   /* If our size is invisible then we just want an entry in the
    * cache for faster lookups, but do not actually spend any texture

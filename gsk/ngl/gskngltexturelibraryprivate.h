@@ -99,8 +99,9 @@ typedef struct _GskNglTextureLibraryClass
 {
   GObjectClass parent_class;
 
-  void (*begin_frame) (GskNglTextureLibrary *library);
-  void (*end_frame)   (GskNglTextureLibrary *library);
+  void (*begin_frame) (GskNglTextureLibrary *library,
+                       gint64                frame_id,
+                       GPtrArray            *removed_atlases);
 } GskNglTextureLibraryClass;
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GskNglTextureLibrary, g_object_unref)
@@ -111,8 +112,9 @@ void     gsk_ngl_texture_library_set_funcs   (GskNglTextureLibrary *self,
                                               GEqualFunc            equal_func,
                                               GDestroyNotify        key_destroy,
                                               GDestroyNotify        value_destroy);
-void     gsk_ngl_texture_library_begin_frame (GskNglTextureLibrary *self);
-void     gsk_ngl_texture_library_end_frame   (GskNglTextureLibrary *self);
+void     gsk_ngl_texture_library_begin_frame (GskNglTextureLibrary *self,
+                                              gint64                frame_id,
+                                              GPtrArray            *removed_atlases);
 gpointer gsk_ngl_texture_library_pack        (GskNglTextureLibrary *self,
                                               gpointer              key,
                                               gsize                 valuelen,
@@ -126,14 +128,29 @@ static inline void
 gsk_ngl_texture_atlas_mark_unused (GskNglTextureAtlas *self,
                                    int                 n_pixels)
 {
+  g_assert (n_pixels >= 0);
+
   self->unused_pixels += n_pixels;
 }
 
 static inline void
-gsk_ngl_texture_atlas_mark_used (GskNglTextureAtlas *self,
-                                 int                 n_pixels)
+gsk_ngl_texture_atlas_entry_mark_used (GskNglTextureAtlasEntry *entry)
 {
-  self->unused_pixels -= n_pixels;
+  if (entry->used == TRUE || entry->is_atlased == FALSE)
+    return;
+
+  entry->atlas->unused_pixels -= entry->n_pixels;
+  entry->used = TRUE;
+}
+
+static inline void
+gsk_ngl_texture_atlas_entry_mark_unused (GskNglTextureAtlasEntry *entry)
+{
+  if (entry->used == FALSE || entry->is_atlased == FALSE)
+    return;
+
+  entry->atlas->unused_pixels += entry->n_pixels;
+  entry->used = FALSE;
 }
 
 static inline gboolean
@@ -151,13 +168,7 @@ gsk_ngl_texture_library_lookup (GskNglTextureLibrary     *self,
 
   if (entry != NULL)
     {
-      if (!entry->used && entry->is_atlased)
-        {
-          g_assert (entry->atlas != NULL);
-          gsk_ngl_texture_atlas_mark_used (entry->atlas, entry->n_pixels);
-          entry->used = TRUE;
-        }
-
+      gsk_ngl_texture_atlas_entry_mark_used (entry);
       entry->accessed = TRUE;
       *out_entry = entry;
       return TRUE;
