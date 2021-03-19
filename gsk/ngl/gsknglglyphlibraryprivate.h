@@ -71,7 +71,7 @@ gboolean            gsk_ngl_glyph_library_add (GskNglGlyphLibrary      *self,
 static inline int
 gsk_ngl_glyph_key_phase (float value)
 {
-  return floor (4 * (value + 0.125)) - 4 * floor (value + 0.125);
+  return floorf (4 * (value + 0.125)) - 4 * floorf (value + 0.125);
 }
 
 static inline void
