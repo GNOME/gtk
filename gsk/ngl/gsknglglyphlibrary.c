@@ -84,6 +84,16 @@ gsk_ngl_glyph_value_free (gpointer data)
 }
 
 static void
+gsk_ngl_glyph_library_begin_frame (GskNglTextureLibrary *library,
+                                   gint64                frame_id,
+                                   GPtrArray            *removed_atlases)
+{
+  GskNglGlyphLibrary *self = GSK_NGL_GLYPH_LIBRARY (library);
+
+  memset (self->front, 0, sizeof self->front);
+}
+
+static void
 gsk_ngl_glyph_library_finalize (GObject *object)
 {
   GskNglGlyphLibrary *self = (GskNglGlyphLibrary *)object;
@@ -98,8 +108,11 @@ static void
 gsk_ngl_glyph_library_class_init (GskNglGlyphLibraryClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GskNglTextureLibraryClass *library_class = GSK_NGL_TEXTURE_LIBRARY_CLASS (klass);
 
   object_class->finalize = gsk_ngl_glyph_library_finalize;
+
+  library_class->begin_frame = gsk_ngl_glyph_library_begin_frame;
 }
 
 static void
