@@ -424,8 +424,6 @@ gsk_ngl_command_queue_init (GskNglCommandQueue *self)
   gsk_ngl_command_binds_init (&self->batch_binds, 1024);
   gsk_ngl_command_uniforms_init (&self->batch_uniforms, 2048);
 
-  self->debug_groups = g_string_chunk_new (4096);
-
   gsk_ngl_buffer_init (&self->vertices, GL_ARRAY_BUFFER, sizeof (GskNglDrawVertex));
 }
 
@@ -1214,8 +1212,6 @@ gsk_ngl_command_queue_end_frame (GskNglCommandQueue *self)
           self->attachments->textures[i].initial = TRUE;
         }
     }
-
-  g_string_chunk_clear (self->debug_groups);
 
   self->batches.len = 0;
   self->batch_binds.len = 0;
