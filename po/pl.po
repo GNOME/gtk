@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-03-13 22:27+0000\n"
-"PO-Revision-Date: 2021-03-14 13:23+0100\n"
+"POT-Creation-Date: 2021-03-19 14:15+0000\n"
+"PO-Revision-Date: 2021-03-20 15:40+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -2014,7 +2014,7 @@ msgstr "Plik o tej nazwie już istnieje"
 #: gtk/gtkmountoperation.c:616 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:643 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:823
-#: gtk/gtkwindow.c:6055 gtk/inspector/css-editor.c:248
+#: gtk/gtkwindow.c:6080 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1241 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
@@ -2106,7 +2106,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Jeśli element zostanie usunięty, to zostanie on bezpowrotnie utracony."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5450 gtk/gtktext.c:6032 gtk/gtktextview.c:8731
+#: gtk/gtklabel.c:5449 gtk/gtktext.c:6032 gtk/gtktextview.c:8731
 msgid "_Delete"
 msgstr "_Usuń"
 
@@ -2380,27 +2380,27 @@ msgstr "Warianty znaku"
 msgid "OpenGL context creation failed"
 msgstr "Utworzenie kontekstu OpenGL się nie powiodło"
 
-#: gtk/gtklabel.c:5447 gtk/gtktext.c:6020 gtk/gtktextview.c:8719
+#: gtk/gtklabel.c:5446 gtk/gtktext.c:6020 gtk/gtktextview.c:8719
 msgid "Cu_t"
 msgstr "_Wytnij"
 
-#: gtk/gtklabel.c:5448 gtk/gtktext.c:6024 gtk/gtktextview.c:8723
+#: gtk/gtklabel.c:5447 gtk/gtktext.c:6024 gtk/gtktextview.c:8723
 msgid "_Copy"
 msgstr "S_kopiuj"
 
-#: gtk/gtklabel.c:5449 gtk/gtktext.c:6028 gtk/gtktextview.c:8727
+#: gtk/gtklabel.c:5448 gtk/gtktext.c:6028 gtk/gtktextview.c:8727
 msgid "_Paste"
 msgstr "Wk_lej"
 
-#: gtk/gtklabel.c:5455 gtk/gtktext.c:6041 gtk/gtktextview.c:8752
+#: gtk/gtklabel.c:5454 gtk/gtktext.c:6041 gtk/gtktextview.c:8752
 msgid "Select _All"
 msgstr "Z_aznacz wszystko"
 
-#: gtk/gtklabel.c:5460
+#: gtk/gtklabel.c:5459
 msgid "_Open Link"
 msgstr "_Otwórz odnośnik"
 
-#: gtk/gtklabel.c:5464
+#: gtk/gtklabel.c:5463
 msgid "Copy _Link Address"
 msgstr "S_kopiuj adres odnośnika"
 
@@ -2502,7 +2502,7 @@ msgid "%d:%02d"
 msgstr "%d∶%02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:644 gtk/gtkwindow.c:6056
+#: gtk/gtkprintbackend.c:644 gtk/gtkwindow.c:6081
 msgid "_OK"
 msgstr "_OK"
 
@@ -3411,12 +3411,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d%%"
 
-#: gtk/gtkwindow.c:6043
+#: gtk/gtkwindow.c:6068
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Użyć Inspektora biblioteki GTK?"
 
-#: gtk/gtkwindow.c:6045
+#: gtk/gtkwindow.c:6070
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3427,7 +3427,7 @@ msgstr ""
 "i modyfikowanie wnętrza programu GTK. Jego użycie może spowodować awarię lub "
 "uszkodzenie programu."
 
-#: gtk/gtkwindow.c:6050
+#: gtk/gtkwindow.c:6075
 msgid "Don’t show this message again"
 msgstr "Bez wyświetlania ponownie"
 
@@ -3563,22 +3563,42 @@ msgstr "Klasy stylu"
 msgid "CSS Property"
 msgstr "Właściwość CSS"
 
-#: gtk/inspector/general.c:347
+#: gtk/inspector/general.c:299
+msgctxt "GL version"
+msgid "Disabled"
+msgstr "Wyłączone"
+
+#: gtk/inspector/general.c:300
+msgctxt "GL vendor"
+msgid "Disabled"
+msgstr "Wyłączone"
+
+#: gtk/inspector/general.c:340 gtk/inspector/general.c:358
 msgctxt "GL version"
 msgid "None"
 msgstr "Brak"
 
-#: gtk/inspector/general.c:348
+#: gtk/inspector/general.c:341 gtk/inspector/general.c:359
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Brak"
 
-#: gtk/inspector/general.c:449
+#: gtk/inspector/general.c:410
+msgctxt "Vulkan device"
+msgid "Disabled"
+msgstr "Wyłączone"
+
+#: gtk/inspector/general.c:411 gtk/inspector/general.c:412
+msgctxt "Vulkan version"
+msgid "Disabled"
+msgstr "Wyłączone"
+
+#: gtk/inspector/general.c:468
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Brak"
 
-#: gtk/inspector/general.c:450 gtk/inspector/general.c:451
+#: gtk/inspector/general.c:469 gtk/inspector/general.c:470
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Brak"
@@ -7639,7 +7659,7 @@ msgstr "Wydruk na LPR"
 msgid "Pages Per Sheet"
 msgstr "Stron na kartkę"
 
-#: modules/printbackends/gtkprintbackendlpr.c:413
+#: modules/printbackends/gtkprintbackendlpr.c:412
 msgid "Command Line"
 msgstr "Wiersz poleceń"
 
