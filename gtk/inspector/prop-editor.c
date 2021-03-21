@@ -844,6 +844,43 @@ describe_expression (GtkExpression *expression)
                             g_type_name (gtk_expression_get_value_type (expression)));
 }
 
+static void
+toggle_unicode (GtkToggleButton *button,
+                GParamSpec      *pspec,
+                GtkWidget       *stack)
+{
+  GtkWidget *entry;
+  GtkWidget *unicode;
+
+  entry = gtk_stack_get_child_by_name (GTK_STACK (stack), "entry");
+  unicode = gtk_stack_get_child_by_name (GTK_STACK (stack), "unicode");
+  if (gtk_toggle_button_get_active (button))
+    {
+      const char *text;
+      const char *p;
+      GString *s;
+
+      text = gtk_editable_get_text (GTK_EDITABLE (entry));
+      s = g_string_sized_new (6 * strlen (text));
+      for (p = text; *p; p = g_utf8_next_char (p))
+        {
+          gunichar ch = g_utf8_get_char (p);
+          if (s->len > 0)
+            g_string_append_c (s, ' ');
+          g_string_append_printf (s, "U+%04X", ch);
+        }
+      gtk_editable_set_text (GTK_EDITABLE (unicode), s->str);
+      g_string_free (s, TRUE);
+
+      gtk_stack_set_visible_child_name (GTK_STACK (stack), "unicode");
+    }
+  else
+    {
+      gtk_editable_set_text (GTK_EDITABLE (unicode), "");
+      gtk_stack_set_visible_child_name (GTK_STACK (stack), "entry");
+    }
+}
+
 static GtkWidget *
 property_editor (GObject                *object,
                  GParamSpec             *spec,
@@ -926,18 +963,38 @@ property_editor (GObject                *object,
     }
   else if (type == G_TYPE_PARAM_STRING)
     {
-      prop_edit = gtk_entry_new ();
+      GtkWidget *entry;
+      GtkWidget *button;
+      GtkWidget *stack;
+      GtkWidget *unicode;
+
+      entry = gtk_entry_new ();
 
       g_object_connect_property (object, spec,
                                  G_CALLBACK (string_changed),
-                                 prop_edit, G_OBJECT (prop_edit));
+                                 entry, G_OBJECT (entry));
 
       if (GTK_IS_CSS_NODE (object))
-        connect_controller (G_OBJECT (prop_edit), "changed",
+        connect_controller (G_OBJECT (entry), "changed",
                             object, spec, G_CALLBACK (intern_string_modified));
       else
-        connect_controller (G_OBJECT (prop_edit), "changed",
+        connect_controller (G_OBJECT (entry), "changed",
                             object, spec, G_CALLBACK (string_modified));
+
+      unicode = gtk_entry_new ();
+      gtk_editable_set_editable (GTK_EDITABLE (unicode), FALSE);
+
+      stack = gtk_stack_new ();
+      gtk_stack_add_named (GTK_STACK (stack), entry, "entry");
+      gtk_stack_add_named (GTK_STACK (stack), unicode, "unicode");
+
+      prop_edit = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+      gtk_box_append (GTK_BOX (prop_edit), stack);
+
+      button = gtk_toggle_button_new_with_label ("Unicode");
+      gtk_box_append (GTK_BOX (prop_edit), button);
+
+      g_signal_connect (button, "notify::active", G_CALLBACK (toggle_unicode), stack);
     }
   else if (type == G_TYPE_PARAM_BOOLEAN)
     {

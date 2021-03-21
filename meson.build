@@ -66,7 +66,7 @@ if debug
     gtk_debug_cflags += '-DG_ENABLE_CONSISTENCY_CHECKS'
   endif
 elif optimization in ['2', '3', 's']
-  gtk_debug_cflags += '-DG_DISABLE_CAST_CHECKS'
+  gtk_debug_cflags += '-DG_DISABLE_CAST_CHECKS -DG_DISABLE_ASSERT'
 endif
 
 add_project_arguments(gtk_debug_cflags, language: 'c')

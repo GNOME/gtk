@@ -149,10 +149,10 @@ render_glyph (GlyphCacheKey    *key,
   glyph_info.glyph = key->data.glyph;
   glyph_info.geometry.width = value->draw_width * 1024;
   if (glyph_info.glyph & PANGO_GLYPH_UNKNOWN_FLAG)
-    glyph_info.geometry.x_offset = 250 * key->data.xshift;
+    glyph_info.geometry.x_offset = 256 * key->data.xshift;
   else
-    glyph_info.geometry.x_offset = 250 * key->data.xshift - value->draw_x * 1024;
-  glyph_info.geometry.y_offset = 250 * key->data.yshift - value->draw_y * 1024;
+    glyph_info.geometry.x_offset = 256 * key->data.xshift - value->draw_x * 1024;
+  glyph_info.geometry.y_offset = 256 * key->data.yshift - value->draw_y * 1024;
 
   glyph_string.num_glyphs = 1;
   glyph_string.glyphs = &glyph_info;
