@@ -895,6 +895,39 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 
       output = g_string_new ("");
 
+      if (n_compose == 2)
+        {
+          /* Special-case deadkey-deadkey sequences.
+           * We are not doing chained deadkeys, so we
+           * want to commit the first key, and contine
+           * preediting with second.
+           */
+          if (is_dead_key (priv->compose_buffer[0]) &&
+              is_dead_key (priv->compose_buffer[1]))
+            {
+              gunichar ch;
+              gboolean need_space;
+              guint next;
+
+              next = priv->compose_buffer[1];
+
+              ch = dead_key_to_unicode (priv->compose_buffer[0], &need_space);
+              if (ch)
+                {
+                  if (need_space)
+                    g_string_append_c (output, ' ');
+                  g_string_append_unichar (output, ch);
+
+                  gtk_im_context_simple_commit_string (context_simple, output->str);
+                  g_string_set_size (output, 0);
+
+                  priv->compose_buffer[0] = next;
+                  priv->compose_buffer[1] = 0;
+                  n_compose = 1;
+                }
+            }
+        }
+
       G_LOCK (global_tables);
 
       tmp_list = global_tables;
