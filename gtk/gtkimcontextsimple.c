@@ -433,6 +433,79 @@ beep_surface (GdkSurface *surface)
     gdk_surface_beep (surface);
 }
 
+static inline gboolean
+is_dead_key (guint keysym)
+{
+  return GDK_KEY_dead_grave <= keysym && keysym <= GDK_KEY_dead_greek;
+}
+
+static gunichar
+dead_key_to_unicode (guint     keysym,
+                     gboolean *need_space)
+{
+  /* Sadly, not all the dead keysyms have spacing mark equivalents
+   * in Unicode. For those that don't, we use space + the non-spacing
+   * mark as an approximation
+   */
+  switch (keysym)
+    {
+#define CASE(keysym, unicode, sp) \
+    case GDK_KEY_dead_##keysym: *need_space = sp; return unicode;
+
+    CASE (grave, 0x60, 0);
+    CASE (acute, 0xb4, 0);
+    CASE (circumflex, 0x5e, 0);
+    CASE (tilde, 0x7e, 0);
+    CASE (macron, 0xaf, 0);
+    CASE (breve, 0x2d8, 0);
+    CASE (abovedot, 0x307, 1);
+    CASE (diaeresis, 0xa8, 0);
+    CASE (abovering, 0x2da, 0);
+    CASE (hook, 0x2c0, 0);
+    CASE (doubleacute, 0x2dd, 0);
+    CASE (caron, 0x2c7, 0);
+    CASE (cedilla, 0xb8, 0);
+    CASE (ogonek, 0x2db, 0);
+    CASE (iota, 0x37a, 0);
+    CASE (voiced_sound, 0x3099, 1);
+    CASE (semivoiced_sound, 0x309a, 1);
+    CASE (belowdot, 0x323, 1);
+    CASE (horn, 0x31b, 1);
+    CASE (stroke, 0x335, 1);
+    CASE (abovecomma, 0x2bc, 0);
+    CASE (abovereversedcomma, 0x2bd, 1);
+    CASE (doublegrave, 0x30f, 1);
+    CASE (belowring, 0x2f3, 0);
+    CASE (belowmacron, 0x2cd, 0);
+    CASE (belowcircumflex, 0x32d, 1);
+    CASE (belowtilde, 0x330, 1);
+    CASE (belowbreve, 0x32e, 1);
+    CASE (belowdiaeresis, 0x324, 1);
+    CASE (invertedbreve, 0x32f, 1);
+    CASE (belowcomma, 0x326, 1);
+    CASE (lowline, 0x5f, 0);
+    CASE (aboveverticalline, 0x2c8, 0);
+    CASE (belowverticalline, 0x2cc, 0);
+    CASE (longsolidusoverlay, 0x338, 1);
+    CASE (a, 0x363, 1);
+    CASE (A, 0x363, 1);
+    CASE (e, 0x364, 1);
+    CASE (E, 0x364, 1);
+    CASE (i, 0x365, 1);
+    CASE (I, 0x365, 1);
+    CASE (o, 0x366, 1);
+    CASE (O, 0x366, 1);
+    CASE (u, 0x367, 1);
+    CASE (U, 0x367, 1);
+    CASE (small_schwa, 0x1dea, 1);
+    CASE (capital_schwa, 0x1dea, 1);
+#undef CASE
+    default:
+      *need_space = FALSE;
+      return gdk_keyval_to_unicode (keysym);
+    }
+}
+
 static gboolean
 no_sequence_matches (GtkIMContextSimple *context_simple,
                      int                 n_compose,
@@ -491,6 +564,31 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
   else
     {
       keyval = gdk_key_event_get_keyval (event);
+
+      if (n_compose == 2 && is_dead_key (priv->compose_buffer[0]))
+        {
+          gboolean need_space;
+          GString *s;
+
+          s = g_string_new ("");
+
+          /* dead keys are never *really* dead */
+          ch = dead_key_to_unicode (priv->compose_buffer[0], &need_space);
+          if (ch)
+            {
+              if (need_space)
+                g_string_append_c (s, ' ');
+              g_string_append_unichar (s, ch);
+            }
+
+          ch = gdk_keyval_to_unicode (priv->compose_buffer[1]);
+          if (ch != 0 && !g_unichar_iscntrl (ch))
+            g_string_append_unichar (s, ch);
+
+          gtk_im_context_simple_commit_string (context_simple, s->str);
+          g_string_free (s, TRUE);
+          return TRUE;
+        }
 
       priv->compose_buffer[0] = 0;
       if (n_compose > 1)		/* Invalid sequence */
@@ -982,70 +1080,9 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
                   gunichar ch;
                   gboolean need_space;
 
-                  if (GDK_KEY_dead_grave <= priv->compose_buffer[i] && priv->compose_buffer[i] <= GDK_KEY_dead_greek)
+                  if (is_dead_key (priv->compose_buffer[i]))
                     {
-                      /* Sadly, not all the dead keysyms have spacing mark equivalents
-                       * in Unicode. For those that don't, we use space + the non-spacing
-                       * mark as an approximation
-                       */
-                      switch (priv->compose_buffer[i])
-                        {
-    #define CASE(keysym, unicode, sp) \
-                        case GDK_KEY_dead_##keysym: ch = unicode; need_space = sp; break
-
-                        CASE (grave, 0x60, 0);
-                        CASE (acute, 0xb4, 0);
-                        CASE (circumflex, 0x5e, 0);
-                        CASE (tilde, 0x7e, 0);
-                        CASE (macron, 0xaf, 0);
-                        CASE (breve, 0x2d8, 0);
-                        CASE (abovedot, 0x307, 1);
-                        CASE (diaeresis, 0xa8, 0);
-                        CASE (abovering, 0x2da, 0);
-                        CASE (hook, 0x2c0, 0);
-                        CASE (doubleacute, 0x2dd, 0);
-                        CASE (caron, 0x2c7, 0);
-                        CASE (cedilla, 0xb8, 0);
-                        CASE (ogonek, 0x2db, 0);
-                        CASE (iota, 0x37a, 0);
-                        CASE (voiced_sound, 0x3099, 1);
-                        CASE (semivoiced_sound, 0x309a, 1);
-                        CASE (belowdot, 0x323, 1);
-                        CASE (horn, 0x31b, 1);
-                        CASE (stroke, 0x335, 1);
-                        CASE (abovecomma, 0x2bc, 0);
-                        CASE (abovereversedcomma, 0x2bd, 1);
-                        CASE (doublegrave, 0x30f, 1);
-                        CASE (belowring, 0x2f3, 0);
-                        CASE (belowmacron, 0x2cd, 0);
-                        CASE (belowcircumflex, 0x32d, 1);
-                        CASE (belowtilde, 0x330, 1);
-                        CASE (belowbreve, 0x32e, 1);
-                        CASE (belowdiaeresis, 0x324, 1);
-                        CASE (invertedbreve, 0x32f, 1);
-                        CASE (belowcomma, 0x326, 1);
-                        CASE (lowline, 0x5f, 0);
-                        CASE (aboveverticalline, 0x2c8, 0);
-                        CASE (belowverticalline, 0x2cc, 0);
-                        CASE (longsolidusoverlay, 0x338, 1);
-                        CASE (a, 0x363, 1);
-                        CASE (A, 0x363, 1);
-                        CASE (e, 0x364, 1);
-                        CASE (E, 0x364, 1);
-                        CASE (i, 0x365, 1);
-                        CASE (I, 0x365, 1);
-                        CASE (o, 0x366, 1);
-                        CASE (O, 0x366, 1);
-                        CASE (u, 0x367, 1);
-                        CASE (U, 0x367, 1);
-                        CASE (small_schwa, 0x1dea, 1);
-                        CASE (capital_schwa, 0x1dea, 1);
-    #undef CASE
-                        default:
-                          need_space = FALSE;
-                          ch = gdk_keyval_to_unicode (priv->compose_buffer[i]);
-                          break;
-                        }
+                      ch = dead_key_to_unicode (priv->compose_buffer[i], &need_space);
                       if (ch)
                         {
                           if (need_space)
