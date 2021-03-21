@@ -352,12 +352,14 @@ RegisterGdkClass (GdkSurfaceType wtype)
     {
       char sLoc [MAX_PATH+1];
 
-      if (0 != GetModuleFileName (_gdk_dll_hinstance, sLoc, MAX_PATH))
+      // try to load first icon of executable program
+      if (0 != GetModuleFileName (NULL, sLoc, MAX_PATH))
         {
           ExtractIconEx (sLoc, 0, &hAppIcon, &hAppIconSm, 1);
 
           if (0 == hAppIcon && 0 == hAppIconSm)
             {
+              // fallback : load icon from GTK DLL
               if (0 != GetModuleFileName (_gdk_dll_hinstance, sLoc, MAX_PATH))
 		{
 		  ExtractIconEx (sLoc, 0, &hAppIcon, &hAppIconSm, 1);
