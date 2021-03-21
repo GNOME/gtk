@@ -1620,37 +1620,6 @@ gsk_ngl_render_job_visit_rounded_clip_node (GskNglRenderJob     *job,
 }
 
 static inline void
-sort_border_sides (const GdkRGBA *colors,
-                   int           *indices)
-{
-  gboolean done[4] = {0, 0, 0, 0};
-  guint cur = 0;
-
-  for (guint i = 0; i < 3; i++)
-    {
-      if (done[i])
-        continue;
-
-      indices[cur] = i;
-      done[i] = TRUE;
-      cur++;
-
-      for (guint k = i + 1; k < 4; k ++)
-        {
-          if (memcmp (&colors[k], &colors[i], sizeof (GdkRGBA)) == 0)
-            {
-              indices[cur] = k;
-              done[k] = TRUE;
-              cur++;
-            }
-        }
-
-      if (cur >= 4)
-        break;
-    }
-}
-
-static inline void
 gsk_ngl_render_job_visit_rect_border_node (GskNglRenderJob     *job,
                                            const GskRenderNode *node)
 {
