@@ -214,7 +214,7 @@ gtk_bool_filter_new (GtkExpression *expression)
  * Gets the expression that the filter uses to evaluate if
  * an item should be filtered.
  *
- * Returns: (transfer none): a `GtkExpression`
+ * Returns: (transfer none) (nullable): a `GtkExpression`
  */
 GtkExpression *
 gtk_bool_filter_get_expression (GtkBoolFilter *self)
@@ -227,7 +227,7 @@ gtk_bool_filter_get_expression (GtkBoolFilter *self)
 /**
  * gtk_bool_filter_set_expression: (attributes org.gtk.Method.set_property=expression)
  * @self: a `GtkBoolFilter`
- * @expression: a `GtkExpression`
+ * @expression: (nullable): a `GtkExpression`
  *
  * Sets the expression that the filter uses to check if items
  * should be filtered.
