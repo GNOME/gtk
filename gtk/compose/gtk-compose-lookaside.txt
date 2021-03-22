@@ -403,3 +403,7 @@
 <Multi_key> <Greek_omicron> <apostrophe> 			: "ό" U03CC
 <Multi_key> <Greek_upsilon> <apostrophe> 			: "ύ" U03CD
 <Multi_key> <Greek_omega> <apostrophe> 			: "ώ" U03CE
+
+# This sequence matches our handling of dead keys better.
+# We remove the xorg sequence that maps this to '
+<dead_acute> <space> : "´" acute # ACUTE ACCENT
