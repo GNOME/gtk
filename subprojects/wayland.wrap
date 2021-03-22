@@ -1,0 +1,8 @@
+[wrap-git]
+directory=wayland
+url=https://gitlab.freedesktop.org/wayland/wayland.git
+revision=main
+depth=1
+
+[provide]
+dependency_names = wayland-client, wayland-egl
