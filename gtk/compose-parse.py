@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 #
 # compose-parse.py, version 1.4
@@ -26,6 +26,7 @@ URL_KEYSYMSTXT = "http://www.cl.cam.ac.uk/~mgk25/ucs/keysyms.txt"
 URL_GDKKEYSYMSH = "http://git.gnome.org/browse/gtk%2B/plain/gdk/gdkkeysyms.h"
 URL_UNICODEDATATXT = 'http://www.unicode.org/Public/6.0.0/ucd/UnicodeData.txt'
 FILENAME_COMPOSE_SUPPLEMENTARY = 'gtk-compose-lookaside.txt'
+FILENAME_COMPOSE_NEGATIVE_SUPPLEMENTARY = 'gtk-compose-remove.txt'
 
 # We currently support keysyms of size 2; once upstream xorg gets sorted, 
 # we might produce some tables with size 2 and some with size 4.
@@ -447,6 +448,18 @@ except:
 xorg_compose_sequences_raw = []
 for seq in composefile.readlines():
         xorg_compose_sequences_raw.append(seq)
+
+try:
+        composefile_lookaside = open(FILENAME_COMPOSE_NEGATIVE_SUPPLEMENTARY, 'r')
+        for seq in composefile_lookaside.readlines():
+                xorg_compose_sequences_raw.remove(seq)
+except IOError, (errno, strerror):
+        if opt_verbose:
+                print "I/O error(%s): %s" % (errno, strerror)
+                print "Did not find negative lookaside compose file. Continuing..."
+except:
+        print "Unexpected error: ", sys.exc_info()[0]
+        sys.exit(-1)
 
 try:
         composefile_lookaside = open(FILENAME_COMPOSE_SUPPLEMENTARY, 'r')
