@@ -272,24 +272,23 @@ snapshot_uniforms (GskNglUniformState    *state,
                    GskNglUniformProgram  *program,
                    GskNglCommandUniforms *array)
 {
-  GskNglCommandUniform *uniform = gsk_ngl_command_uniforms_append_n (array, program->n_sparse);
+  GskNglCommandUniform *uniform = gsk_ngl_command_uniforms_append_n (array, program->n_mappings);
   guint count = 0;
 
-  for (guint i = 0; i < program->n_sparse; i++)
+  for (guint i = 0; i < program->n_mappings; i++)
     {
-      guint location = program->sparse[i];
-      const GskNglUniformInfo *info = &program->uniforms[location].info;
+      const GskNglUniformMapping *mapping = &program->mappings[i];
 
-      if (!info->initial)
+      if (!mapping->info.initial && mapping->location > -1)
         {
-          uniform[count].location = location;
-          uniform[count].info = *info;
+          uniform[count].location = mapping->location;
+          uniform[count].info = mapping->info;
           count++;
         }
     }
 
-  if (count != program->n_sparse)
-    array->len -= program->n_sparse - count;
+  if (count != program->n_mappings)
+    array->len -= program->n_mappings - count;
 
   return count;
 }

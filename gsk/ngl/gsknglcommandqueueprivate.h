@@ -153,7 +153,7 @@ G_STATIC_ASSERT (sizeof (GskNglCommandClear) == 20);
 typedef struct _GskNglCommandUniform
 {
   GskNglUniformInfo info;
-  guint            location;
+  guint             location;
 } GskNglCommandUniform;
 
 G_STATIC_ASSERT (sizeof (GskNglCommandUniform) == 8);

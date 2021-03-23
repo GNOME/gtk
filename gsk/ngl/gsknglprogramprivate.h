@@ -23,12 +23,15 @@
 
 #include "gskngltypesprivate.h"
 
+#include "gsknglattachmentstateprivate.h"
 #include "gsknglcommandqueueprivate.h"
 #include "gskngldriverprivate.h"
 
 G_BEGIN_DECLS
 
 #define GSK_TYPE_GL_PROGRAM (gsk_ngl_program_get_type())
+#define GSK_NGL_PROGRAM_MAX_CUSTOM_TEXTURES 4
+#define GSK_NGL_PROGRAM_MAX_CUSTOM_ARGS 8
 
 G_DECLARE_FINAL_TYPE (GskNglProgram, gsk_ngl_program, GSK, NGL_PROGRAM, GObject)
 
@@ -40,23 +43,13 @@ struct _GskNglProgram
   char *name;
   GskNglDriver *driver;
 
-  /* In reality, this is the largest uniform position
-   * as returned after linking so that we can use direct
-   * indexes based on location.
-   */
-  guint n_uniforms;
-
   /* Cached pointer to avoid lots of pointer chasing/lookups */
   GskNglUniformState *uniforms;
   GskNglUniformProgram *program_info;
 
-  /* For custom programs */
-  int texture_locations[4];
-  int args_locations[8];
-  int size_location;
-
   /* Static array for key->location transforms */
-  int uniform_locations[32];
+  GskNglUniformMapping mappings[32];
+  guint n_mappings;
 };
 
 GskNglProgram *gsk_ngl_program_new            (GskNglDriver  *driver,
@@ -69,8 +62,6 @@ void           gsk_ngl_program_uniforms_added (GskNglProgram *self,
                                                gboolean       has_attachments);
 void           gsk_ngl_program_delete         (GskNglProgram *self);
 
-#define gsk_ngl_program_get_uniform_location(s,k) ((s)->uniform_locations[(k)])
-
 static inline void
 gsk_ngl_program_set_uniform1fv (GskNglProgram *self,
                                 guint          key,
@@ -79,8 +70,10 @@ gsk_ngl_program_set_uniform1fv (GskNglProgram *self,
                                 const float   *values)
 {
   gsk_ngl_uniform_state_set1fv (self->uniforms, self->program_info,
-                                gsk_ngl_program_get_uniform_location (self, key),
-                                stamp, count, values);
+                                key,
+                                stamp,
+                                count,
+                                values);
 }
 
 static inline void
@@ -91,8 +84,10 @@ gsk_ngl_program_set_uniform2fv (GskNglProgram *self,
                                 const float   *values)
 {
   gsk_ngl_uniform_state_set2fv (self->uniforms, self->program_info,
-                                gsk_ngl_program_get_uniform_location (self, key),
-                                stamp, count, values);
+                                key,
+                                stamp,
+                                count,
+                                values);
 }
 
 static inline void
@@ -103,8 +98,10 @@ gsk_ngl_program_set_uniform4fv (GskNglProgram *self,
                                 const float   *values)
 {
   gsk_ngl_uniform_state_set4fv (self->uniforms, self->program_info,
-                                gsk_ngl_program_get_uniform_location (self, key),
-                                stamp, count, values);
+                                key,
+                                stamp,
+                                count,
+                                values);
 }
 
 static inline void
@@ -114,8 +111,9 @@ gsk_ngl_program_set_uniform_rounded_rect (GskNglProgram        *self,
                                           const GskRoundedRect *rounded_rect)
 {
   gsk_ngl_uniform_state_set_rounded_rect (self->uniforms, self->program_info,
-                                          gsk_ngl_program_get_uniform_location (self, key),
-                                          stamp, rounded_rect);
+                                          key,
+                                          stamp,
+                                          rounded_rect);
 }
 
 static inline void
@@ -126,8 +124,9 @@ gsk_ngl_program_set_uniform1i (GskNglProgram *self,
 {
   gsk_ngl_uniform_state_set1i (self->uniforms,
                                self->program_info,
-                               gsk_ngl_program_get_uniform_location (self, key),
-                               stamp, value0);
+                               key,
+                               stamp,
+                               value0);
 }
 
 static inline void
@@ -139,8 +138,9 @@ gsk_ngl_program_set_uniform2i (GskNglProgram *self,
 {
   gsk_ngl_uniform_state_set2i (self->uniforms,
                                self->program_info,
-                               gsk_ngl_program_get_uniform_location (self, key),
-                               stamp, value0, value1);
+                               key,
+                               stamp,
+                               value0, value1);
 }
 
 static inline void
@@ -153,8 +153,9 @@ gsk_ngl_program_set_uniform3i (GskNglProgram *self,
 {
   gsk_ngl_uniform_state_set3i (self->uniforms,
                                self->program_info,
-                               gsk_ngl_program_get_uniform_location (self, key),
-                               stamp, value0, value1, value2);
+                               key,
+                               stamp,
+                               value0, value1, value2);
 }
 
 static inline void
@@ -168,8 +169,9 @@ gsk_ngl_program_set_uniform4i (GskNglProgram *self,
 {
   gsk_ngl_uniform_state_set4i (self->uniforms,
                                self->program_info,
-                               gsk_ngl_program_get_uniform_location (self, key),
-                               stamp, value0, value1, value2, value3);
+                               key,
+                               stamp,
+                               value0, value1, value2, value3);
 }
 
 static inline void
@@ -180,8 +182,9 @@ gsk_ngl_program_set_uniform1f (GskNglProgram *self,
 {
   gsk_ngl_uniform_state_set1f (self->uniforms,
                                self->program_info,
-                               gsk_ngl_program_get_uniform_location (self, key),
-                               stamp, value0);
+                               key,
+                               stamp,
+                               value0);
 }
 
 static inline void
@@ -193,8 +196,9 @@ gsk_ngl_program_set_uniform2f (GskNglProgram *self,
 {
   gsk_ngl_uniform_state_set2f (self->uniforms,
                                self->program_info,
-                               gsk_ngl_program_get_uniform_location (self, key),
-                               stamp, value0, value1);
+                               key,
+                               stamp,
+                               value0, value1);
 }
 
 static inline void
@@ -207,8 +211,9 @@ gsk_ngl_program_set_uniform3f (GskNglProgram *self,
 {
   gsk_ngl_uniform_state_set3f (self->uniforms,
                                self->program_info,
-                               gsk_ngl_program_get_uniform_location (self, key),
-                               stamp, value0, value1, value2);
+                               key,
+                               stamp,
+                               value0, value1, value2);
 }
 
 static inline void
@@ -222,8 +227,9 @@ gsk_ngl_program_set_uniform4f (GskNglProgram *self,
 {
   gsk_ngl_uniform_state_set4f (self->uniforms,
                                self->program_info,
-                               gsk_ngl_program_get_uniform_location (self, key),
-                               stamp, value0, value1, value2, value3);
+                               key,
+                               stamp,
+                               value0, value1, value2, value3);
 }
 
 static inline void
@@ -234,8 +240,9 @@ gsk_ngl_program_set_uniform_color (GskNglProgram *self,
 {
   gsk_ngl_uniform_state_set_color (self->uniforms,
                                    self->program_info,
-                                   gsk_ngl_program_get_uniform_location (self, key),
-                                   stamp, color);
+                                   key,
+                                   stamp,
+                                   color);
 }
 
 static inline void
@@ -252,8 +259,9 @@ gsk_ngl_program_set_uniform_texture (GskNglProgram *self,
                                          texture_id);
   gsk_ngl_uniform_state_set_texture (self->uniforms,
                                      self->program_info,
-                                     gsk_ngl_program_get_uniform_location (self, key),
-                                     stamp, texture_slot);
+                                     key,
+                                     stamp,
+                                     texture_slot);
 }
 
 static inline void
@@ -264,8 +272,9 @@ gsk_ngl_program_set_uniform_matrix (GskNglProgram           *self,
 {
   gsk_ngl_uniform_state_set_matrix (self->uniforms,
                                     self->program_info,
-                                    gsk_ngl_program_get_uniform_location (self, key),
-                                    stamp, matrix);
+                                    key,
+                                    stamp,
+                                    matrix);
 }
 
 G_END_DECLS

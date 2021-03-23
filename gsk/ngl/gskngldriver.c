@@ -226,14 +226,14 @@ gsk_ngl_driver_dispose (GObject *object)
 #define GSK_NGL_NO_UNIFORMS
 #define GSK_NGL_ADD_UNIFORM(pos, KEY, name)
 #define GSK_NGL_DEFINE_PROGRAM(name, resource, uniforms) \
-  GSK_NGL_DELETE_PROGRAM(name); \
-  GSK_NGL_DELETE_PROGRAM(name ## _no_clip); \
+  GSK_NGL_DELETE_PROGRAM(name);                          \
+  GSK_NGL_DELETE_PROGRAM(name ## _no_clip);              \
   GSK_NGL_DELETE_PROGRAM(name ## _rect_clip);
-#define GSK_NGL_DELETE_PROGRAM(name)                    \
-  G_STMT_START {                                        \
-    if (self->name)                                     \
+#define GSK_NGL_DELETE_PROGRAM(name)                     \
+  G_STMT_START {                                         \
+    if (self->name)                                      \
       gsk_ngl_program_delete (self->name);               \
-    g_clear_object (&self->name);                       \
+    g_clear_object (&self->name);                        \
   } G_STMT_END;
 # include "gsknglprograms.defs"
 #undef GSK_NGL_NO_UNIFORMS
@@ -356,10 +356,10 @@ gsk_ngl_driver_load_programs (GskNglDriver  *self,
 #define GSK_NGL_ADD_UNIFORM(pos, KEY, name)                                                      \
   gsk_ngl_program_add_uniform (program, #name, UNIFORM_##KEY);
 #define GSK_NGL_DEFINE_PROGRAM(name, resource, uniforms)                                         \
-   gsk_ngl_compiler_set_source_from_resource (compiler, GSK_NGL_COMPILER_ALL, resource);         \
-   GSK_NGL_COMPILE_PROGRAM(name ## _no_clip, uniforms, "#define NO_CLIP 1\n");                   \
-   GSK_NGL_COMPILE_PROGRAM(name ## _rect_clip, uniforms, "#define RECT_CLIP 1\n");               \
-   GSK_NGL_COMPILE_PROGRAM(name, uniforms, "");
+  gsk_ngl_compiler_set_source_from_resource (compiler, GSK_NGL_COMPILER_ALL, resource);          \
+  GSK_NGL_COMPILE_PROGRAM(name ## _no_clip, uniforms, "#define NO_CLIP 1\n");                    \
+  GSK_NGL_COMPILE_PROGRAM(name ## _rect_clip, uniforms, "#define RECT_CLIP 1\n");                \
+  GSK_NGL_COMPILE_PROGRAM(name, uniforms, "");
 #define GSK_NGL_COMPILE_PROGRAM(name, uniforms, clip)                                            \
   G_STMT_START {                                                                                 \
     GskNglProgram *program;                                                                      \
@@ -1046,26 +1046,26 @@ gsk_ngl_driver_lookup_shader (GskNglDriver  *self,
       int n_uniforms;
 
       uniforms = gsk_gl_shader_get_uniforms (shader, &n_uniforms);
-      if (n_uniforms > G_N_ELEMENTS (program->args_locations))
+      if (n_uniforms > GSK_NGL_PROGRAM_MAX_CUSTOM_ARGS)
         {
           g_set_error (error,
                        GDK_GL_ERROR,
                        GDK_GL_ERROR_UNSUPPORTED_FORMAT,
                        "Tried to use %d uniforms, while only %d is supported",
                        n_uniforms,
-                       (int)G_N_ELEMENTS (program->args_locations));
+                       GSK_NGL_PROGRAM_MAX_CUSTOM_ARGS);
           return NULL;
         }
 
       n_required_textures = gsk_gl_shader_get_n_textures (shader);
-      if (n_required_textures > G_N_ELEMENTS (program->texture_locations))
+      if (n_required_textures > GSK_NGL_PROGRAM_MAX_CUSTOM_TEXTURES)
         {
           g_set_error (error,
                        GDK_GL_ERROR,
                        GDK_GL_ERROR_UNSUPPORTED_FORMAT,
                        "Tried to use %d textures, while only %d is supported",
                        n_required_textures,
-                       (int)(G_N_ELEMENTS (program->texture_locations)));
+                       GSK_NGL_PROGRAM_MAX_CUSTOM_TEXTURES);
           return NULL;
         }
 
@@ -1108,18 +1108,10 @@ gsk_ngl_driver_lookup_shader (GskNglDriver  *self,
           gsk_ngl_program_add_uniform (program, "u_texture2", UNIFORM_CUSTOM_TEXTURE2);
           gsk_ngl_program_add_uniform (program, "u_texture3", UNIFORM_CUSTOM_TEXTURE3);
           gsk_ngl_program_add_uniform (program, "u_texture4", UNIFORM_CUSTOM_TEXTURE4);
-          for (guint i = 0; i < n_uniforms; i++)
-            gsk_ngl_program_add_uniform (program, uniforms[i].name, UNIFORM_CUSTOM_LAST+i);
 
-          program->size_location = gsk_ngl_program_get_uniform_location (program, UNIFORM_CUSTOM_SIZE);
-          program->texture_locations[0] = gsk_ngl_program_get_uniform_location (program, UNIFORM_CUSTOM_TEXTURE1);
-          program->texture_locations[1] = gsk_ngl_program_get_uniform_location (program, UNIFORM_CUSTOM_TEXTURE2);
-          program->texture_locations[2] = gsk_ngl_program_get_uniform_location (program, UNIFORM_CUSTOM_TEXTURE3);
-          program->texture_locations[3] = gsk_ngl_program_get_uniform_location (program, UNIFORM_CUSTOM_TEXTURE4);
+          /* Custom arguments (max is 8) */
           for (guint i = 0; i < n_uniforms; i++)
-            program->args_locations[i] = gsk_ngl_program_get_uniform_location (program, UNIFORM_CUSTOM_LAST+i);
-          for (guint i = n_uniforms; i < G_N_ELEMENTS (program->args_locations); i++)
-            program->args_locations[i] = -1;
+            gsk_ngl_program_add_uniform (program, uniforms[i].name, UNIFORM_CUSTOM_ARG0+i);
 
           gsk_ngl_program_uniforms_added (program, TRUE);
 

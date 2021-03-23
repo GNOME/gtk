@@ -40,7 +40,7 @@ gsk_ngl_program_new (GskNglDriver *driver,
   self->id = program_id;
   self->name = g_strdup (name);
   self->driver = g_object_ref (driver);
-  self->n_uniforms = 0;
+  self->n_mappings = 0;
 
   return self;
 }
@@ -74,8 +74,8 @@ gsk_ngl_program_init (GskNglProgram *self)
 {
   self->id = -1;
 
-  for (guint i = 0; i < G_N_ELEMENTS (self->uniform_locations); i++)
-    self->uniform_locations[i] = -1;
+  for (guint i = 0; i < G_N_ELEMENTS (self->mappings); i++)
+    self->mappings[i].location = -1;
 }
 
 /**
@@ -114,22 +114,22 @@ gsk_ngl_program_add_uniform (GskNglProgram *self,
 
   g_return_val_if_fail (GSK_IS_NGL_PROGRAM (self), FALSE);
   g_return_val_if_fail (name != NULL, FALSE);
-  g_return_val_if_fail (key < 1024, FALSE);
+  g_return_val_if_fail (key < G_N_ELEMENTS (self->mappings), FALSE);
 
-  if (-1 == (location = glGetUniformLocation (self->id, name)))
-    return FALSE;
+  location = glGetUniformLocation (self->id, name);
 
-  self->uniform_locations[key] = location;
-
-  if (location >= self->n_uniforms)
-    self->n_uniforms = location + 1;
+  /* Register the information even if unused */
+  self->mappings[key].name = g_intern_string (name);
+  self->mappings[key].location = location;
+  if (key >= self->n_mappings)
+    self->n_mappings = key + 1;
 
 #if 0
-  g_print ("program [%d] %s uniform %s at location %d.\n",
-           self->id, self->name, name, location);
+  g_print ("program [%d] %s uniform %s [%u of %u] at location %d.\n",
+           self->id, self->name, name, key, self->n_mappings, location);
 #endif
 
-  return TRUE;
+  return location > -1;
 }
 
 /**
@@ -171,6 +171,6 @@ gsk_ngl_program_uniforms_added (GskNglProgram *self,
   g_return_if_fail (self->uniforms == NULL);
 
   self->uniforms = self->driver->command_queue->uniforms;
-  self->program_info = gsk_ngl_uniform_state_get_program (self->uniforms, self->id, self->n_uniforms);
+  self->program_info = gsk_ngl_uniform_state_get_program (self->uniforms, self->id, self->mappings, self->n_mappings);
   self->program_info->has_attachments = has_attachments;
 }
