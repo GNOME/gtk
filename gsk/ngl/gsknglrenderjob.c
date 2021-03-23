@@ -1003,41 +1003,36 @@ gsk_ngl_render_job_begin_draw (GskNglRenderJob *job,
                                     job->viewport.size.width,
                                     job->viewport.size.height);
 
-  if (program->uniform_locations[UNIFORM_SHARED_VIEWPORT] > -1)
-    gsk_ngl_uniform_state_set4fv (program->uniforms,
-                                  program->program_info,
-                                  program->uniform_locations[UNIFORM_SHARED_VIEWPORT],
-                                  job->driver->stamps[UNIFORM_SHARED_VIEWPORT],
-                                  1,
-                                  (const float *)&job->viewport);
+  gsk_ngl_uniform_state_set4fv (program->uniforms,
+                                program->program_info,
+                                UNIFORM_SHARED_VIEWPORT,
+                                job->driver->stamps[UNIFORM_SHARED_VIEWPORT],
+                                1,
+                                (const float *)&job->viewport);
 
-  if (program->uniform_locations[UNIFORM_SHARED_MODELVIEW] > -1)
-    gsk_ngl_uniform_state_set_matrix (program->uniforms,
-                                      program->program_info,
-                                      program->uniform_locations[UNIFORM_SHARED_MODELVIEW],
-                                      job->driver->stamps[UNIFORM_SHARED_MODELVIEW],
-                                      &job->current_modelview->matrix);
+  gsk_ngl_uniform_state_set_matrix (program->uniforms,
+                                    program->program_info,
+                                    UNIFORM_SHARED_MODELVIEW,
+                                    job->driver->stamps[UNIFORM_SHARED_MODELVIEW],
+                                    &job->current_modelview->matrix);
 
-  if (program->uniform_locations[UNIFORM_SHARED_PROJECTION] > -1)
-    gsk_ngl_uniform_state_set_matrix (program->uniforms,
-                                      program->program_info,
-                                      program->uniform_locations[UNIFORM_SHARED_PROJECTION],
-                                      job->driver->stamps[UNIFORM_SHARED_PROJECTION],
-                                      &job->projection);
+  gsk_ngl_uniform_state_set_matrix (program->uniforms,
+                                    program->program_info,
+                                    UNIFORM_SHARED_PROJECTION,
+                                    job->driver->stamps[UNIFORM_SHARED_PROJECTION],
+                                    &job->projection);
 
-  if (program->uniform_locations[UNIFORM_SHARED_CLIP_RECT] > -1)
-    gsk_ngl_uniform_state_set_rounded_rect (program->uniforms,
-                                            program->program_info,
-                                            program->uniform_locations[UNIFORM_SHARED_CLIP_RECT],
-                                            job->driver->stamps[UNIFORM_SHARED_CLIP_RECT],
-                                            &job->current_clip->rect);
+  gsk_ngl_uniform_state_set_rounded_rect (program->uniforms,
+                                          program->program_info,
+                                          UNIFORM_SHARED_CLIP_RECT,
+                                          job->driver->stamps[UNIFORM_SHARED_CLIP_RECT],
+                                          &job->current_clip->rect);
 
-  if (program->uniform_locations[UNIFORM_SHARED_ALPHA] > -1)
-    gsk_ngl_uniform_state_set1f (program->uniforms,
-                                 program->program_info,
-                                 program->uniform_locations[UNIFORM_SHARED_ALPHA],
-                                 job->driver->stamps[UNIFORM_SHARED_ALPHA],
-                                 job->alpha);
+  gsk_ngl_uniform_state_set1f (program->uniforms,
+                               program->program_info,
+                               UNIFORM_SHARED_ALPHA,
+                               job->driver->stamps[UNIFORM_SHARED_ALPHA],
+                               job->alpha);
 }
 
 #define CHOOSE_PROGRAM(job,name) \
@@ -3086,10 +3081,6 @@ gsk_ngl_render_job_visit_gl_shader_node (GskNglRenderJob     *job,
           const GskGLUniform *u = &uniforms[i];
           const guint8 *data = base + u->offset;
 
-          /* Ignore unused uniforms */
-          if (program->args_locations[i] == -1)
-            continue;
-
           switch (u->type)
             {
             default:
@@ -3098,38 +3089,38 @@ gsk_ngl_render_job_visit_gl_shader_node (GskNglRenderJob     *job,
             case GSK_GL_UNIFORM_TYPE_FLOAT:
               gsk_ngl_uniform_state_set1fv (job->command_queue->uniforms,
                                             program->program_info,
-                                            program->args_locations[i],
+                                            UNIFORM_CUSTOM_ARG0 + i,
                                             0, 1, (const float *)data);
               break;
             case GSK_GL_UNIFORM_TYPE_INT:
               gsk_ngl_uniform_state_set1i (job->command_queue->uniforms,
                                            program->program_info,
-                                           program->args_locations[i],
+                                           UNIFORM_CUSTOM_ARG0 + i,
                                            0, *(const gint32 *)data);
               break;
             case GSK_GL_UNIFORM_TYPE_UINT:
             case GSK_GL_UNIFORM_TYPE_BOOL:
               gsk_ngl_uniform_state_set1ui (job->command_queue->uniforms,
                                             program->program_info,
-                                            program->args_locations[i],
+                                            UNIFORM_CUSTOM_ARG0 + i,
                                             0, *(const guint32 *)data);
               break;
             case GSK_GL_UNIFORM_TYPE_VEC2:
               gsk_ngl_uniform_state_set2fv (job->command_queue->uniforms,
                                             program->program_info,
-                                            program->args_locations[i],
+                                            UNIFORM_CUSTOM_ARG0 + i,
                                             0, 1, (const float *)data);
               break;
             case GSK_GL_UNIFORM_TYPE_VEC3:
               gsk_ngl_uniform_state_set3fv (job->command_queue->uniforms,
                                             program->program_info,
-                                            program->args_locations[i],
+                                            UNIFORM_CUSTOM_ARG0 + i,
                                             0, 1, (const float *)data);
               break;
             case GSK_GL_UNIFORM_TYPE_VEC4:
               gsk_ngl_uniform_state_set4fv (job->command_queue->uniforms,
                                             program->program_info,
-                                            program->args_locations[i],
+                                            UNIFORM_CUSTOM_ARG0 + i,
                                             0, 1, (const float *)data);
               break;
             }

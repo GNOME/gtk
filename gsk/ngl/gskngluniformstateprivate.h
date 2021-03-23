@@ -51,30 +51,21 @@ typedef struct _GskNglUniformInfo
 
 G_STATIC_ASSERT (sizeof (GskNglUniformInfo) == 4);
 
-typedef struct _GskNglUniformInfoElement
+typedef struct _GskNglUniformMapping
 {
+  const char *name;
   GskNglUniformInfo info;
   guint stamp;
-} GskNglUniformInfoElement;
-
-G_STATIC_ASSERT (sizeof (GskNglUniformInfoElement) == 8);
+  int location;
+} GskNglUniformMapping;
 
 typedef struct _GskNglUniformProgram
 {
   guint program_id;
   guint n_uniforms : 12;
   guint has_attachments : 1;
-
-  /* To avoid walking our 1:1 array of location->uniform slots, we have
-   * a sparse index that allows us to skip the empty zones.
-   */
-  guint *sparse;
-  guint n_sparse;
-
-  /* Uniforms are provided inline at the end of structure to avoid
-   * an extra dereference.
-   */
-  GskNglUniformInfoElement uniforms[0];
+  guint n_mappings;
+  GskNglUniformMapping mappings[32];
 } GskNglUniformProgram;
 
 typedef struct _GskNglUniformState
@@ -85,20 +76,6 @@ typedef struct _GskNglUniformState
   guint values_len;
   GskNglUniformInfo apply_hash[512];
 } GskNglUniformState;
-
-/**
- * GskNglUniformStateCallback:
- * @info: a pointer to the information about the uniform
- * @location: the location of the uniform within the GPU program.
- * @user_data: closure data for the callback
- *
- * This callback can be used to snapshot state of a program which
- * is useful when batching commands so that the state may be compared
- * with future evocations of the program.
- */
-typedef void (*GskNglUniformStateCallback) (const GskNglUniformInfo *info,
-                                            guint                    location,
-                                            gpointer                 user_data);
 
 typedef enum _GskNglUniformKind
 {
@@ -131,49 +108,42 @@ typedef enum _GskNglUniformKind
 G_STATIC_ASSERT (GSK_NGL_UNIFORM_FORMAT_LAST < (1 << GSK_NGL_UNIFORM_FORMAT_BITS));
 
 GskNglUniformState   *gsk_ngl_uniform_state_new         (void);
-GskNglUniformState   *gsk_ngl_uniform_state_ref         (GskNglUniformState        *state);
-void                  gsk_ngl_uniform_state_unref       (GskNglUniformState        *state);
-GskNglUniformProgram *gsk_ngl_uniform_state_get_program (GskNglUniformState        *state,
-                                                         guint                      program,
-                                                         guint                      n_uniforms);
-void                  gsk_ngl_uniform_state_end_frame   (GskNglUniformState        *state);
-gsize                 gsk_ngl_uniform_format_size       (GskNglUniformFormat        format);
-gpointer              gsk_ngl_uniform_state_init_value  (GskNglUniformState        *state,
-                                                         GskNglUniformProgram      *program,
-                                                         GskNglUniformFormat        format,
-                                                         guint                      array_count,
-                                                         guint                      location,
-                                                         GskNglUniformInfoElement **infoptr);
+GskNglUniformState   *gsk_ngl_uniform_state_ref         (GskNglUniformState          *state);
+void                  gsk_ngl_uniform_state_unref       (GskNglUniformState          *state);
+GskNglUniformProgram *gsk_ngl_uniform_state_get_program (GskNglUniformState          *state,
+                                                         guint                        program,
+                                                         const GskNglUniformMapping  *mappings,
+                                                         guint                        n_mappings);
+void                  gsk_ngl_uniform_state_end_frame   (GskNglUniformState          *state);
+gsize                 gsk_ngl_uniform_format_size       (GskNglUniformFormat          format);
+gpointer              gsk_ngl_uniform_state_init_value  (GskNglUniformState          *state,
+                                                         GskNglUniformProgram        *program,
+                                                         GskNglUniformFormat          format,
+                                                         guint                        array_count,
+                                                         guint                        key,
+                                                         GskNglUniformMapping       **out_mapping);
 
 #define GSK_NGL_UNIFORM_VALUE(base, offset) ((gpointer)((base) + ((offset) * 4)))
 #define gsk_ngl_uniform_state_get_uniform_data(state,offset) GSK_NGL_UNIFORM_VALUE((state)->values_buf, offset)
-#define gsk_ngl_uniform_state_snapshot(state, program_info, callback, user_data) \
-  G_STMT_START {                                                                 \
-    for (guint z = 0; z < program_info->n_sparse; z++)                           \
-      {                                                                          \
-        guint location = program_info->sparse[z];                                \
-        GskNglUniformInfoElement *info = &program_info->uniforms[location];      \
-                                                                                 \
-        g_assert (location < GL_MAX_UNIFORM_LOCATIONS);                          \
-        g_assert (location < program_info->n_uniforms);                          \
-                                                                                 \
-        if (info->info.format > 0)                                               \
-          callback (&info->info, location, user_data);                           \
-      }                                                                          \
-  } G_STMT_END
 
 static inline gpointer
-gsk_ngl_uniform_state_get_value (GskNglUniformState        *state,
-                                 GskNglUniformProgram      *program,
-                                 GskNglUniformFormat        format,
-                                 guint                      array_count,
-                                 guint                      location,
-                                 guint                      stamp,
-                                 GskNglUniformInfoElement **infoptr)
+gsk_ngl_uniform_state_get_value (GskNglUniformState    *state,
+                                 GskNglUniformProgram  *program,
+                                 GskNglUniformFormat    format,
+                                 guint                  array_count,
+                                 guint                  key,
+                                 guint                  stamp,
+                                 GskNglUniformMapping **out_mapping)
 {
-  GskNglUniformInfoElement *info;
+  GskNglUniformMapping *mapping;
 
-  if (location == (guint)-1)
+  g_assert (key < G_N_ELEMENTS (program->mappings));
+  g_assert (key < program->n_mappings);
+
+  mapping = &program->mappings[key];
+
+  /* Short-circuit if the program optimized the uniform out */
+  if (mapping->location == -1)
     return NULL;
 
   /* If the stamp is the same, then we can ignore the request
@@ -185,17 +155,16 @@ gsk_ngl_uniform_state_get_value (GskNglUniformState        *state,
    * modelview, clip, etc to avoid so many comparisons which cost
    * considerable CPU.
    */
-  info = &program->uniforms[location];
-  if (stamp != 0 && stamp == info->stamp)
+  if (stamp != 0 && stamp == mapping->stamp)
     return NULL;
 
-  if G_LIKELY (format == info->info.format && array_count <= info->info.array_count)
+  if G_LIKELY (format == mapping->info.format && array_count <= mapping->info.array_count)
     {
-      *infoptr = info;
-      return GSK_NGL_UNIFORM_VALUE (state->values_buf, info->info.offset);
+      *out_mapping = mapping;
+      return GSK_NGL_UNIFORM_VALUE (state->values_buf, mapping->info.offset);
     }
 
-  return gsk_ngl_uniform_state_init_value (state, program, format, array_count, location, infoptr);
+  return gsk_ngl_uniform_state_init_value (state, program, format, array_count, key, out_mapping);
 }
 
 static inline guint
@@ -251,8 +220,7 @@ gsk_ngl_uniform_state_realloc (GskNglUniformState *state,
   } G_STMT_END
 
 static inline void
-gsk_ngl_uniform_info_changed (GskNglUniformInfoElement *info,
-                              guint                     location,
+gsk_ngl_uniform_info_changed (GskNglUniformMapping *info,
                               guint                     stamp)
 {
   info->stamp = stamp;
@@ -262,23 +230,23 @@ gsk_ngl_uniform_info_changed (GskNglUniformInfoElement *info,
 static inline void
 gsk_ngl_uniform_state_set1f (GskNglUniformState   *state,
                              GskNglUniformProgram *program,
-                             guint                 location,
+                             guint                 key,
                              guint                 stamp,
                              float                 value0)
 {
   Uniform1f *u;
-  GskNglUniformInfoElement *info;
+  GskNglUniformMapping *info;
 
   g_assert (state != NULL);
   g_assert (program != 0);
 
-  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_1F, 1, location, stamp, &info)))
+  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_1F, 1, key, stamp, &info)))
     {
       if (info->info.initial || u->v0 != value0)
         {
           GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform1f , 1);
           u->v0 = value0;
-          gsk_ngl_uniform_info_changed (info, location, stamp);
+          gsk_ngl_uniform_info_changed (info, stamp);
         }
     }
 }
@@ -286,25 +254,25 @@ gsk_ngl_uniform_state_set1f (GskNglUniformState   *state,
 static inline void
 gsk_ngl_uniform_state_set2f (GskNglUniformState   *state,
                              GskNglUniformProgram *program,
-                             guint                 location,
+                             guint                 key,
                              guint                 stamp,
                              float                 value0,
                              float                 value1)
 {
   Uniform2f *u;
-  GskNglUniformInfoElement *info;
+  GskNglUniformMapping *info;
 
   g_assert (state != NULL);
   g_assert (program != NULL);
 
-  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_2F, 1, location, stamp, &info)))
+  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_2F, 1, key, stamp, &info)))
     {
       if (info->info.initial || u->v0 != value0 || u->v1 != value1)
         {
           GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform2f, 1);
           u->v0 = value0;
           u->v1 = value1;
-          gsk_ngl_uniform_info_changed (info, location, stamp);
+          gsk_ngl_uniform_info_changed (info, stamp);
         }
     }
 }
@@ -312,19 +280,19 @@ gsk_ngl_uniform_state_set2f (GskNglUniformState   *state,
 static inline void
 gsk_ngl_uniform_state_set3f (GskNglUniformState   *state,
                              GskNglUniformProgram *program,
-                             guint                 location,
+                             guint                 key,
                              guint                 stamp,
                              float                 value0,
                              float                 value1,
                              float                 value2)
 {
   Uniform3f *u;
-  GskNglUniformInfoElement *info;
+  GskNglUniformMapping *info;
 
   g_assert (state != NULL);
   g_assert (program != NULL);
 
-  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_3F, 1, location, stamp, &info)))
+  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_3F, 1, key, stamp, &info)))
     {
       if (info->info.initial || u->v0 != value0 || u->v1 != value1 || u->v2 != value2)
         {
@@ -332,7 +300,7 @@ gsk_ngl_uniform_state_set3f (GskNglUniformState   *state,
           u->v0 = value0;
           u->v1 = value1;
           u->v2 = value2;
-          gsk_ngl_uniform_info_changed (info, location, stamp);
+          gsk_ngl_uniform_info_changed (info, stamp);
         }
     }
 }
@@ -340,7 +308,7 @@ gsk_ngl_uniform_state_set3f (GskNglUniformState   *state,
 static inline void
 gsk_ngl_uniform_state_set4f (GskNglUniformState   *state,
                              GskNglUniformProgram *program,
-                             guint                 location,
+                             guint                 key,
                              guint                 stamp,
                              float                 value0,
                              float                 value1,
@@ -348,12 +316,12 @@ gsk_ngl_uniform_state_set4f (GskNglUniformState   *state,
                              float                 value3)
 {
   Uniform4f *u;
-  GskNglUniformInfoElement *info;
+  GskNglUniformMapping *info;
 
   g_assert (state != NULL);
   g_assert (program != NULL);
 
-  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_4F, 1, location, stamp, &info)))
+  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_4F, 1, key, stamp, &info)))
     {
       if (info->info.initial || u->v0 != value0 || u->v1 != value1 || u->v2 != value2 || u->v3 != value3)
         {
@@ -362,7 +330,7 @@ gsk_ngl_uniform_state_set4f (GskNglUniformState   *state,
           u->v1 = value1;
           u->v2 = value2;
           u->v3 = value3;
-          gsk_ngl_uniform_info_changed (info, location, stamp);
+          gsk_ngl_uniform_info_changed (info, stamp);
         }
     }
 }
@@ -370,23 +338,23 @@ gsk_ngl_uniform_state_set4f (GskNglUniformState   *state,
 static inline void
 gsk_ngl_uniform_state_set1ui (GskNglUniformState   *state,
                               GskNglUniformProgram *program,
-                              guint                 location,
+                              guint                 key,
                               guint                 stamp,
                               guint                 value0)
 {
   Uniform1ui *u;
-  GskNglUniformInfoElement *info;
+  GskNglUniformMapping *info;
 
   g_assert (state != NULL);
   g_assert (program != NULL);
 
-  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_1UI, 1, location, stamp, &info)))
+  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_1UI, 1, key, stamp, &info)))
     {
       if (info->info.initial || u->v0 != value0)
         {
           GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform1ui, 1);
           u->v0 = value0;
-          gsk_ngl_uniform_info_changed (info, location, stamp);
+          gsk_ngl_uniform_info_changed (info, stamp);
         }
     }
 }
@@ -394,23 +362,23 @@ gsk_ngl_uniform_state_set1ui (GskNglUniformState   *state,
 static inline void
 gsk_ngl_uniform_state_set1i (GskNglUniformState   *state,
                              GskNglUniformProgram *program,
-                             guint                 location,
+                             guint                 key,
                              guint                 stamp,
                              int                   value0)
 {
   Uniform1i *u;
-  GskNglUniformInfoElement *info;
+  GskNglUniformMapping *info;
 
   g_assert (state != NULL);
   g_assert (program != NULL);
 
-  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_1I, 1, location, stamp, &info)))
+  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_1I, 1, key, stamp, &info)))
     {
       if (info->info.initial || u->v0 != value0)
         {
           GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform1i, 1);
           u->v0 = value0;
-          gsk_ngl_uniform_info_changed (info, location, stamp);
+          gsk_ngl_uniform_info_changed (info, stamp);
         }
     }
 }
@@ -418,25 +386,25 @@ gsk_ngl_uniform_state_set1i (GskNglUniformState   *state,
 static inline void
 gsk_ngl_uniform_state_set2i (GskNglUniformState   *state,
                              GskNglUniformProgram *program,
-                             guint                 location,
+                             guint                 key,
                              guint                 stamp,
                              int                   value0,
                              int                   value1)
 {
   Uniform2i *u;
-  GskNglUniformInfoElement *info;
+  GskNglUniformMapping *info;
 
   g_assert (state != NULL);
   g_assert (program != NULL);
 
-  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_2I, 1, location, stamp, &info)))
+  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_2I, 1, key, stamp, &info)))
     {
       if (info->info.initial || u->v0 != value0 || u->v1 != value1)
         {
           GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform2i, 1);
           u->v0 = value0;
           u->v1 = value1;
-          gsk_ngl_uniform_info_changed (info, location, stamp);
+          gsk_ngl_uniform_info_changed (info, stamp);
         }
     }
 }
@@ -444,19 +412,19 @@ gsk_ngl_uniform_state_set2i (GskNglUniformState   *state,
 static inline void
 gsk_ngl_uniform_state_set3i (GskNglUniformState   *state,
                              GskNglUniformProgram *program,
-                             guint                 location,
+                             guint                 key,
                              guint                 stamp,
                              int                   value0,
                              int                   value1,
                              int                   value2)
 {
   Uniform3i *u;
-  GskNglUniformInfoElement *info;
+  GskNglUniformMapping *info;
 
   g_assert (state != NULL);
   g_assert (program != NULL);
 
-  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_3I, 1, location, stamp, &info)))
+  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_3I, 1, key, stamp, &info)))
     {
       if (info->info.initial || u->v0 != value0 || u->v1 != value1 || u->v2 != value2)
         {
@@ -464,7 +432,7 @@ gsk_ngl_uniform_state_set3i (GskNglUniformState   *state,
           u->v0 = value0;
           u->v1 = value1;
           u->v2 = value2;
-          gsk_ngl_uniform_info_changed (info, location, stamp);
+          gsk_ngl_uniform_info_changed (info, stamp);
         }
     }
 }
@@ -472,7 +440,7 @@ gsk_ngl_uniform_state_set3i (GskNglUniformState   *state,
 static inline void
 gsk_ngl_uniform_state_set4i (GskNglUniformState   *state,
                              GskNglUniformProgram *program,
-                             guint                 location,
+                             guint                 key,
                              guint                 stamp,
                              int                   value0,
                              int                   value1,
@@ -480,12 +448,12 @@ gsk_ngl_uniform_state_set4i (GskNglUniformState   *state,
                              int                   value3)
 {
   Uniform4i *u;
-  GskNglUniformInfoElement *info;
+  GskNglUniformMapping *info;
 
   g_assert (state != NULL);
   g_assert (program != NULL);
 
-  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_4I, 1, location, stamp, &info)))
+  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_4I, 1, key, stamp, &info)))
     {
       if (info->info.initial || u->v0 != value0 || u->v1 != value1 || u->v2 != value2 || u->v3 != value3)
         {
@@ -494,7 +462,7 @@ gsk_ngl_uniform_state_set4i (GskNglUniformState   *state,
           u->v1 = value1;
           u->v2 = value2;
           u->v3 = value3;
-          gsk_ngl_uniform_info_changed (info, location, stamp);
+          gsk_ngl_uniform_info_changed (info, stamp);
         }
     }
 }
@@ -502,24 +470,24 @@ gsk_ngl_uniform_state_set4i (GskNglUniformState   *state,
 static inline void
 gsk_ngl_uniform_state_set_rounded_rect (GskNglUniformState   *state,
                                         GskNglUniformProgram *program,
-                                        guint                 location,
+                                        guint                 key,
                                         guint                 stamp,
                                         const GskRoundedRect *rounded_rect)
 {
   GskRoundedRect *u;
-  GskNglUniformInfoElement *info;
+  GskNglUniformMapping *info;
 
   g_assert (state != NULL);
   g_assert (program != NULL);
   g_assert (rounded_rect != NULL);
 
-  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_ROUNDED_RECT, 1, location, stamp, &info)))
+  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_ROUNDED_RECT, 1, key, stamp, &info)))
     {
       if (info->info.initial || memcmp (u, rounded_rect, sizeof *u) != 0)
         {
           GSK_NGL_UNIFORM_STATE_REPLACE (info, u, GskRoundedRect, 1);
           memcpy (u, rounded_rect, sizeof *rounded_rect);
-          gsk_ngl_uniform_info_changed (info, location, stamp);
+          gsk_ngl_uniform_info_changed (info, stamp);
         }
     }
 }
@@ -527,24 +495,24 @@ gsk_ngl_uniform_state_set_rounded_rect (GskNglUniformState   *state,
 static inline void
 gsk_ngl_uniform_state_set_matrix (GskNglUniformState      *state,
                                   GskNglUniformProgram    *program,
-                                  guint                    location,
+                                  guint                    key,
                                   guint                    stamp,
                                   const graphene_matrix_t *matrix)
 {
   graphene_matrix_t *u;
-  GskNglUniformInfoElement *info;
+  GskNglUniformMapping *info;
 
   g_assert (state != NULL);
   g_assert (program != NULL);
   g_assert (matrix != NULL);
 
-  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_MATRIX, 1, location, stamp, &info)))
+  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_MATRIX, 1, key, stamp, &info)))
     {
       if (info->info.initial || memcmp (u, matrix, sizeof *u) != 0)
         {
           GSK_NGL_UNIFORM_STATE_REPLACE (info, u, graphene_matrix_t, 1);
           memcpy (u, matrix, sizeof *matrix);
-          gsk_ngl_uniform_info_changed (info, location, stamp);
+          gsk_ngl_uniform_info_changed (info, stamp);
         }
     }
 }
@@ -566,11 +534,11 @@ gsk_ngl_uniform_state_set_matrix (GskNglUniformState      *state,
 static inline void
 gsk_ngl_uniform_state_set_texture (GskNglUniformState   *state,
                                    GskNglUniformProgram *program,
-                                   guint                 location,
+                                   guint                 key,
                                    guint                 stamp,
                                    guint                 texture_slot)
 {
-  GskNglUniformInfoElement *info;
+  GskNglUniformMapping *info;
   guint *u;
 
   g_assert (texture_slot >= GL_TEXTURE0);
@@ -578,13 +546,13 @@ gsk_ngl_uniform_state_set_texture (GskNglUniformState   *state,
 
   texture_slot -= GL_TEXTURE0;
 
-  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_TEXTURE, 1, location, stamp, &info)))
+  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_TEXTURE, 1, key, stamp, &info)))
     {
       if (info->info.initial || *u != texture_slot)
         {
           GSK_NGL_UNIFORM_STATE_REPLACE (info, u, guint, 1);
           *u = texture_slot;
-          gsk_ngl_uniform_info_changed (info, location, stamp);
+          gsk_ngl_uniform_info_changed (info, stamp);
         }
     }
 }
@@ -603,18 +571,18 @@ gsk_ngl_uniform_state_set_texture (GskNglUniformState   *state,
 static inline void
 gsk_ngl_uniform_state_set_color (GskNglUniformState   *state,
                                  GskNglUniformProgram *program,
-                                 guint                 location,
+                                 guint                 key,
                                  guint                 stamp,
                                  const GdkRGBA        *color)
 {
   static const GdkRGBA transparent = {0};
-  GskNglUniformInfoElement *info;
+  GskNglUniformMapping *info;
   GdkRGBA *u;
 
   g_assert (state != NULL);
   g_assert (program != NULL);
 
-  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_COLOR, 1, location, stamp, &info)))
+  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_COLOR, 1, key, stamp, &info)))
     {
       if (color == NULL)
         color = &transparent;
@@ -623,7 +591,7 @@ gsk_ngl_uniform_state_set_color (GskNglUniformState   *state,
         {
           GSK_NGL_UNIFORM_STATE_REPLACE (info, u, GdkRGBA, 1);
           memcpy (u, color, sizeof *color);
-          gsk_ngl_uniform_info_changed (info, location, stamp);
+          gsk_ngl_uniform_info_changed (info, stamp);
         }
     }
 }
@@ -631,25 +599,25 @@ gsk_ngl_uniform_state_set_color (GskNglUniformState   *state,
 static inline void
 gsk_ngl_uniform_state_set1fv (GskNglUniformState   *state,
                               GskNglUniformProgram *program,
-                              guint                 location,
+                              guint                 key,
                               guint                 stamp,
                               guint                 count,
                               const float          *value)
 {
   Uniform1f *u;
-  GskNglUniformInfoElement *info;
+  GskNglUniformMapping *info;
 
   g_assert (state != NULL);
   g_assert (program != NULL);
   g_assert (count > 0);
 
-  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_1FV, count, location, stamp, &info)))
+  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_1FV, count, key, stamp, &info)))
     {
       if (info->info.initial || count != info->info.array_count || memcmp (u, value, sizeof *u * count) != 0)
         {
           GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform1f, count);
           memcpy (u, value, sizeof (Uniform1f) * count);
-          gsk_ngl_uniform_info_changed (info, location, stamp);
+          gsk_ngl_uniform_info_changed (info, stamp);
         }
     }
 }
@@ -657,25 +625,25 @@ gsk_ngl_uniform_state_set1fv (GskNglUniformState   *state,
 static inline void
 gsk_ngl_uniform_state_set2fv (GskNglUniformState   *state,
                               GskNglUniformProgram *program,
-                              guint                 location,
+                              guint                 key,
                               guint                 stamp,
                               guint                 count,
                               const float          *value)
 {
   Uniform2f *u;
-  GskNglUniformInfoElement *info;
+  GskNglUniformMapping *info;
 
   g_assert (state != NULL);
   g_assert (program != NULL);
   g_assert (count > 0);
 
-  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_2FV, count, location, stamp, &info)))
+  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_2FV, count, key, stamp, &info)))
     {
       if (info->info.initial || count != info->info.array_count || memcmp (u, value, sizeof *u * count) != 0)
         {
           GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform2f, count);
           memcpy (u, value, sizeof (Uniform2f) * count);
-          gsk_ngl_uniform_info_changed (info, location, stamp);
+          gsk_ngl_uniform_info_changed (info, stamp);
         }
     }
 }
@@ -683,25 +651,25 @@ gsk_ngl_uniform_state_set2fv (GskNglUniformState   *state,
 static inline void
 gsk_ngl_uniform_state_set3fv (GskNglUniformState   *state,
                               GskNglUniformProgram *program,
-                              guint                 location,
+                              guint                 key,
                               guint                 stamp,
                               guint                 count,
                               const float          *value)
 {
   Uniform3f *u;
-  GskNglUniformInfoElement *info;
+  GskNglUniformMapping *info;
 
   g_assert (state != NULL);
   g_assert (program != NULL);
   g_assert (count > 0);
 
-  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_3FV, count, location, stamp, &info)))
+  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_3FV, count, key, stamp, &info)))
     {
       if (info->info.initial || count != info->info.array_count || memcmp (u, value, sizeof *u * count) != 0)
         {
           GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform3f, count);
           memcpy (u, value, sizeof (Uniform3f) * count);
-          gsk_ngl_uniform_info_changed (info, location, stamp);
+          gsk_ngl_uniform_info_changed (info, stamp);
         }
     }
 }
@@ -709,25 +677,25 @@ gsk_ngl_uniform_state_set3fv (GskNglUniformState   *state,
 static inline void
 gsk_ngl_uniform_state_set4fv (GskNglUniformState   *state,
                               GskNglUniformProgram *program,
-                              guint                 location,
+                              guint                 key,
                               guint                 stamp,
                               guint                 count,
                               const float          *value)
 {
   Uniform4f *u;
-  GskNglUniformInfoElement *info;
+  GskNglUniformMapping *info;
 
   g_assert (state != NULL);
   g_assert (program != NULL);
   g_assert (count > 0);
 
-  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_4FV, count, location, stamp, &info)))
+  if ((u = gsk_ngl_uniform_state_get_value (state, program, GSK_NGL_UNIFORM_FORMAT_4FV, count, key, stamp, &info)))
     {
       if (info->info.initial || count != info->info.array_count || memcmp (u, value, sizeof *u * count) != 0)
         {
           GSK_NGL_UNIFORM_STATE_REPLACE (info, u, Uniform4f, count);
           memcpy (u, value, sizeof (Uniform4f) * count);
-          gsk_ngl_uniform_info_changed (info, location, stamp);
+          gsk_ngl_uniform_info_changed (info, stamp);
         }
     }
 }

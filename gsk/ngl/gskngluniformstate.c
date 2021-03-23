@@ -92,14 +92,14 @@ gsk_ngl_uniform_state_unref (GskNglUniformState *state)
 }
 
 gpointer
-gsk_ngl_uniform_state_init_value (GskNglUniformState        *state,
-                                  GskNglUniformProgram      *program,
-                                  GskNglUniformFormat        format,
-                                  guint                      array_count,
-                                  guint                      location,
-                                  GskNglUniformInfoElement **infoptr)
+gsk_ngl_uniform_state_init_value (GskNglUniformState    *state,
+                                  GskNglUniformProgram  *program,
+                                  GskNglUniformFormat    format,
+                                  guint                  array_count,
+                                  guint                  key,
+                                  GskNglUniformMapping **infoptr)
 {
-  GskNglUniformInfoElement *info;
+  GskNglUniformMapping *mapping;
   guint offset;
 
   g_assert (state != NULL);
@@ -107,23 +107,22 @@ gsk_ngl_uniform_state_init_value (GskNglUniformState        *state,
   g_assert ((int)format >= 0 && format < GSK_NGL_UNIFORM_FORMAT_LAST);
   g_assert (format > 0);
   g_assert (program != NULL);
-  g_assert (program->sparse != NULL);
-  g_assert (program->n_sparse <= program->n_uniforms);
-  g_assert (location < GL_MAX_UNIFORM_LOCATIONS || location == (guint)-1);
-  g_assert (location < program->n_uniforms);
+  g_assert (key < program->n_mappings);
 
-  /* Handle unused uniforms gracefully */
-  if G_UNLIKELY (location == (guint)-1)
-    return NULL;
+  mapping = &program->mappings[key];
 
-  info = &program->uniforms[location];
-
-  if G_LIKELY (format == info->info.format)
+  if (mapping->location == -1)
     {
-      if G_LIKELY (array_count <= info->info.array_count)
+      *infoptr = NULL;
+      return NULL;
+    }
+
+  if G_LIKELY (format == mapping->info.format)
+    {
+      if G_LIKELY (array_count <= mapping->info.array_count)
         {
-          *infoptr = info;
-          return GSK_NGL_UNIFORM_VALUE (state->values_buf, info->info.offset);
+          *infoptr = mapping;
+          return GSK_NGL_UNIFORM_VALUE (state->values_buf, mapping->info.offset);
         }
 
       /* We found the uniform, but there is not enough space for the
@@ -136,7 +135,7 @@ gsk_ngl_uniform_state_init_value (GskNglUniformState        *state,
        */
       goto setup_info;
     }
-  else if (info->info.format == 0)
+  else if (mapping->info.format == 0)
     {
       goto setup_info;
     }
@@ -145,8 +144,8 @@ gsk_ngl_uniform_state_init_value (GskNglUniformState        *state,
       g_critical ("Attempt to access uniform with different type of value "
                   "than it was initialized with. Program %u Location %u. "
                   "Was %d now %d (array length %d now %d).",
-                  program->program_id, location, info->info.format, format,
-                  info->info.array_count, array_count);
+                  program->program_id, key, mapping->info.format, format,
+                  mapping->info.array_count, array_count);
       *infoptr = NULL;
       return NULL;
     }
@@ -160,22 +159,15 @@ setup_info:
   /* we have 21 bits for offset */
   g_assert (offset < (1 << GSK_NGL_UNIFORM_OFFSET_BITS));
 
-  /* We could once again be setting up this info if the array size grew.
-   * So make sure that we have space in our space array for the value.
-   */
-  g_assert (info->info.format != 0 || program->n_sparse < program->n_uniforms);
-  if (info->info.format == 0)
-    program->sparse[program->n_sparse++] = location;
+  mapping->info.format = format;
+  mapping->info.offset = offset;
+  mapping->info.array_count = array_count;
+  mapping->info.initial = TRUE;
+  mapping->stamp = 0;
 
-  info->info.format = format;
-  info->info.offset = offset;
-  info->info.array_count = array_count;
-  info->info.initial = TRUE;
-  info->stamp = 0;
+  *infoptr = mapping;
 
-  *infoptr = info;
-
-  return GSK_NGL_UNIFORM_VALUE (state->values_buf, info->info.offset);
+  return GSK_NGL_UNIFORM_VALUE (state->values_buf, mapping->info.offset);
 }
 
 void
@@ -196,24 +188,25 @@ gsk_ngl_uniform_state_end_frame (GskNglUniformState *state)
   g_hash_table_iter_init (&iter, state->programs);
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&program))
     {
-      for (guint j = 0; j < program->n_sparse; j++)
+      for (guint j = 0; j < program->n_mappings; j++)
         {
-          guint location = program->sparse[j];
-          GskNglUniformInfoElement *info = &program->uniforms[location];
+          GskNglUniformMapping *mapping = &program->mappings[j];
           guint size;
 
-          g_assert (info->info.format > 0);
+          /* Skip unused uniform mappings */
+          if (mapping->info.format == 0 || mapping->location == -1)
+            continue;
 
           /* Calculate how much size is needed for the uniform, including arrays */
-          size = uniform_sizes[info->info.format] * MAX (1, info->info.array_count);
+          size = uniform_sizes[mapping->info.format] * MAX (1, mapping->info.array_count);
 
           /* Adjust alignment for value */
           allocator += gsk_ngl_uniform_state_align (allocator, size);
 
           /* Offset is in slots of 4 bytes */
-          info->info.offset = allocator / 4;
-          info->info.initial = TRUE;
-          info->stamp = 0;
+          mapping->info.offset = allocator / 4;
+          mapping->info.initial = TRUE;
+          mapping->stamp = 0;
 
           /* Now advance for this items data */
           allocator += size;
@@ -237,35 +230,27 @@ gsk_ngl_uniform_format_size (GskNglUniformFormat format)
 }
 
 GskNglUniformProgram *
-gsk_ngl_uniform_state_get_program (GskNglUniformState *state,
-                                   guint               program,
-                                   guint               n_uniforms)
+gsk_ngl_uniform_state_get_program (GskNglUniformState         *state,
+                                   guint                       program,
+                                   const GskNglUniformMapping *mappings,
+                                   guint                       n_mappings)
 {
   GskNglUniformProgram *ret;
 
   g_return_val_if_fail (state != NULL, NULL);
   g_return_val_if_fail (program > 0, NULL);
   g_return_val_if_fail (program < G_MAXUINT, NULL);
+  g_return_val_if_fail (n_mappings <= G_N_ELEMENTS (ret->mappings), NULL);
 
   ret = g_hash_table_lookup (state->programs, GUINT_TO_POINTER (program));
 
   if (ret == NULL)
     {
-      gsize uniform_size = n_uniforms * sizeof (GskNglUniformInfoElement);
-      gsize sparse_size = n_uniforms * sizeof (guint);
-      gsize size = sizeof (GskNglUniformProgram) + uniform_size + sparse_size;
-
-      /* Must be multiple of 4 for space pointer to align */
-      G_STATIC_ASSERT (sizeof (GskNglUniformInfoElement) == 8);
-
-      ret = g_malloc0 (size);
+      ret = g_new0 (GskNglUniformProgram, 1);
       ret->program_id = program;
-      ret->n_uniforms = n_uniforms;
-      ret->n_sparse = 0;
-      ret->sparse = (guint *)&ret->uniforms[n_uniforms];
+      ret->n_mappings = n_mappings;
 
-      for (guint i = 0; i < n_uniforms; i++)
-        ret->uniforms[i].info.initial = TRUE;
+      memcpy (ret->mappings, mappings, n_mappings * sizeof *mappings);
 
       g_hash_table_insert (state->programs, GUINT_TO_POINTER (program), ret);
     }
