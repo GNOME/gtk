@@ -944,6 +944,8 @@ rewrite_notebook_page (Element *child, Element *tab, MyParserData *data)
         object = elt;
       else if (g_str_equal (elt->element_name, "packing"))
         packing = elt;
+      else if (g_str_equal (elt->element_name, "placeholder"))
+        return child;
     }
 
   if (!packing && !tab)
