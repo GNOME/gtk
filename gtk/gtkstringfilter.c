@@ -396,7 +396,7 @@ gtk_string_filter_set_search (GtkStringFilter *self,
  * Gets the expression that the string filter uses to
  * obtain strings from items.
  *
- * Returns: (transfer none): a `GtkExpression`
+ * Returns: (transfer none) (nullable): a `GtkExpression`
  */
 GtkExpression *
 gtk_string_filter_get_expression (GtkStringFilter *self)
@@ -409,7 +409,7 @@ gtk_string_filter_get_expression (GtkStringFilter *self)
 /**
  * gtk_string_filter_set_expression: (attributes org.gtk.Method.set_property=expression)
  * @self: a `GtkStringFilter`
- * @expression: a `GtkExpression`
+ * @expression: (nullable): a `GtkExpression`
  *
  * Sets the expression that the string filter uses to
  * obtain strings from items.
