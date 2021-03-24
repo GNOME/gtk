@@ -56,7 +56,10 @@ uniform bool u_repeat;
 _NOPERSPECTIVE_ _IN_ vec4 info;
 
 float get_offset(int index) {
-  return u_color_stops[5 * index];
+  // u_color_stops[5 * index] makes Intel Windows driver crash.
+  // See https://gitlab.gnome.org/GNOME/gtk/-/issues/3783
+  int base = 5 * index;
+  return u_color_stops[base];
 }
 
 vec4 get_color(int index) {
