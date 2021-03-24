@@ -485,7 +485,9 @@ make_blurred_pango_surface (cairo_t           *existing_cr,
                                                 x_scale * (ink_rect.width + 2 * clip_radius),
                                                 y_scale * (ink_rect.height + 2 * clip_radius));
   cairo_surface_set_device_scale (surface, x_scale, y_scale);
-  cairo_surface_set_device_offset (surface, -ink_rect.x + clip_radius, -ink_rect.y + clip_radius);
+  cairo_surface_set_device_offset (surface,
+                                   x_scale * (-ink_rect.x + clip_radius),
+                                   y_scale * (-ink_rect.y + clip_radius));
   cr = cairo_create (surface);
   cairo_move_to (cr, 0, 0);
   _gtk_pango_fill_layout (cr, layout);
