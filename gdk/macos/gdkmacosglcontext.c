@@ -103,8 +103,7 @@ create_pixel_format (int      major,
     NSOpenGLPFABackingStore,
     NSOpenGLPFAColorSize, 24,
     NSOpenGLPFAAlphaSize, 8,
-
-    (NSOpenGLPixelFormatAttribute)nil
+    0
   };
 
   if (major == 3 && minor == 2)
