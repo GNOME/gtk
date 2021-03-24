@@ -538,6 +538,9 @@ gtk_stack_pages_get_item (GListModel *model,
 
   page = g_list_nth_data (priv->children, position);
 
+  if (!page)
+    return NULL;
+
   return g_object_ref (page);
 }
 
@@ -559,7 +562,7 @@ gtk_stack_pages_is_selected (GtkSelectionModel *model,
 
   page = g_list_nth_data (priv->children, position);
 
-  return page == priv->visible_child;
+  return page && page == priv->visible_child;
 }
 
 static void set_visible_child (GtkStack               *stack,
