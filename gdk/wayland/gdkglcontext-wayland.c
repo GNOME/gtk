@@ -126,14 +126,48 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
                                                   : EGL_NO_CONTEXT,
                           context_attribs);
 
-  /* If context creation failed without the legacy bit, let's try again with it */
-  if (ctx == NULL && !legacy_bit)
+  /* If context creation failed without the ES bit, let's try again with it */
+  if (ctx == NULL)
     {
-      /* Ensure that re-ordering does not break the offsets */
-      g_assert (context_attribs[0] == EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR);
-      context_attribs[1] = EGL_CONTEXT_OPENGL_COMPATIBILITY_PROFILE_BIT_KHR;
-      context_attribs[3] = 3;
-      context_attribs[5] = 0;
+      i = 0;
+      context_attribs[i++] = EGL_CONTEXT_MAJOR_VERSION;
+      context_attribs[i++] = 2;
+      context_attribs[i++] = EGL_CONTEXT_MINOR_VERSION;
+      context_attribs[i++] = 0;
+      context_attribs[i++] = EGL_CONTEXT_FLAGS_KHR;
+      context_attribs[i++] = flags & ~EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
+      context_attribs[i++] = EGL_NONE;
+      g_assert (i < N_EGL_ATTRS);
+
+      eglBindAPI (EGL_OPENGL_ES_API);
+
+      legacy_bit = FALSE;
+      use_es = TRUE;
+
+      GDK_DISPLAY_NOTE (display, OPENGL,
+                g_message ("eglCreateContext failed, switching to OpenGL ES"));
+      ctx = eglCreateContext (display_wayland->egl_display,
+                              context_wayland->egl_config,
+                              share != NULL ? GDK_WAYLAND_GL_CONTEXT (share)->egl_context
+                                 : shared_data_context != NULL ? GDK_WAYLAND_GL_CONTEXT (shared_data_context)->egl_context
+                                    : EGL_NO_CONTEXT,
+                              context_attribs);
+    }
+
+  /* If context creation failed without the legacy bit, let's try again with it */
+  if (ctx == NULL)
+    {
+      i = 0;
+      context_attribs[i++] = EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR;
+      context_attribs[i++] = EGL_CONTEXT_OPENGL_COMPATIBILITY_PROFILE_BIT_KHR;
+      context_attribs[i++] = EGL_CONTEXT_MAJOR_VERSION;
+      context_attribs[i++] = 3;
+      context_attribs[i++] = EGL_CONTEXT_MINOR_VERSION;
+      context_attribs[i++] = 0;
+      context_attribs[i++] = EGL_CONTEXT_FLAGS_KHR;
+      context_attribs[i++] = flags & ~EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
+      context_attribs[i++] = EGL_NONE;
+      g_assert (i < N_EGL_ATTRS);
 
       eglBindAPI (EGL_OPENGL_API);
 
