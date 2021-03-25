@@ -1,3 +1,42 @@
+Overview of Changes in 4.2.0
+============================
+
+* Label: Fix tooltips on links
+
+* X11:
+ - Fix damage handling
+ - Trap errors from the COW
+
+* Windows: Use a visible scroll cursor
+
+* Wayland: Fix key event matching with mismatched layouts.
+  This was causing keyboard accelerators to trigger unexpectedly
+
+* Inspector: Allow inspecting Unicode
+
+* Input:
+ - Improve dead key handling
+ - Regenerate compose sequence table
+
+* gsk:
+ - Fix a crash in the ngl renderer
+ - Fix a rounding error in subpixel glyph positioning
+ - ngl: Implement glyph cache eviction
+ - ngl: Improve the glyph cache effectiveness
+ - ngl: Fix uniform key mapping on Windows
+ - Make the ngl renderer the default
+
+* build:
+ - Fix build with cairo as subproject
+ - Disable g_assert in release builds
+
+* Translation updates:
+ Hungarian
+ Italian
+ Polish
+ Ukrainian
+
+
 Overview of Changes in 4.1.2
 ============================
 
