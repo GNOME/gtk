@@ -2455,13 +2455,13 @@ gdk_surface_ensure_motion (GdkSurface *surface)
   if (!gdk_surface_get_device_position (surface, device, &x, &y, &state))
     return;
 
-  event = gdk_motion_event_new (surface,
-                                device,
-                                NULL,
-                                GDK_CURRENT_TIME,
-                                state,
-                                x, y,
-                                NULL);
+  event = gdk_synthetic_motion_event_new (surface,
+                                          device,
+                                          NULL,
+                                          GDK_CURRENT_TIME,
+                                          state,
+                                          x, y,
+                                          NULL);
 
   gdk_surface_handle_event (event);
   gdk_event_unref (event);
