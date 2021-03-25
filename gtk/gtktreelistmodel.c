@@ -29,6 +29,14 @@
  * GtkTreeListModel:
  *
  * `GtkTreeListModel` is a list model that can create child models on demand.
+ *
+ * `GtkTreeListModel` is typically used together with `GtkTreeExpander` to
+ * make list widgets where user can expand rows by clicking on an expander.
+ *
+ * When creating `GtkTreeListModel` with [ctor@Gtk.TreeListModel.new], you
+ * specify a *root* model that contains the initial items for your tree, and
+ * a callback function that we be called whenever the tree model needs to
+ * find the children of a given item.
  */
 
 enum {
