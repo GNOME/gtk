@@ -2940,6 +2940,11 @@ gtk_text_motion_controller_motion (GtkEventControllerMotion *controller,
                                    GtkText                  *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  GdkEvent *event;
+
+  event = gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (controller));
+  if (gdk_motion_event_is_synthetic (event))
+    return;
 
   if (priv->mouse_cursor_obscured)
     {

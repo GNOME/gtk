@@ -5712,6 +5712,12 @@ gtk_text_view_motion (GtkEventController *controller,
                       double              y,
                       gpointer            user_data)
 {
+  GdkEvent *event;
+
+  event = gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (controller));
+  if (gdk_motion_event_is_synthetic (event))
+    return;
+
   gtk_text_view_unobscure_mouse_cursor (GTK_TEXT_VIEW (user_data));
 }
 
