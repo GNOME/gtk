@@ -446,6 +446,15 @@ GdkEvent * gdk_motion_event_new         (GdkSurface      *surface,
                                          double           y,
                                          double          *axes);
 
+GdkEvent * gdk_synthetic_motion_event_new (GdkSurface      *surface,
+                                           GdkDevice       *device,
+                                           GdkDeviceTool   *tool,
+                                           guint32          time,
+                                           GdkModifierType  state,
+                                           double           x,
+                                           double           y,
+                                           double          *axes);
+
 GdkEvent * gdk_crossing_event_new       (GdkEventType     type,
                                          GdkSurface      *surface,
                                          GdkDevice       *device,
@@ -576,6 +585,8 @@ GdkEvent * gdk_grab_broken_event_new    (GdkSurface      *surface,
 GdkTranslatedKey *      gdk_key_event_get_translated_key        (GdkEvent *event,
                                                                  gboolean  no_lock);
 
+gboolean gdk_motion_event_is_synthetic (GdkEvent *event);
+
 typedef enum
 {
   /* Following flag is set for events on the event queue during
@@ -587,7 +598,10 @@ typedef enum
    * mark all events in the queue with this flag, and deliver
    * only those events until we finish the frame.
    */
-  GDK_EVENT_FLUSHED = 1 << 2
+  GDK_EVENT_FLUSHED = 1 << 1,
+
+  /* Used for synthetic motion events. */
+  GDK_EVENT_SYNTHETIC = 1 << 2,
 } GdkEventFlags;
 
 GdkEvent* _gdk_event_unqueue (GdkDisplay *display);

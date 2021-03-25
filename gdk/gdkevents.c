@@ -2894,6 +2894,31 @@ gdk_motion_event_new (GdkSurface      *surface,
   return (GdkEvent *) self;
 }
 
+GdkEvent *
+gdk_synthetic_motion_event_new (GdkSurface      *surface,
+                                GdkDevice       *device,
+                                GdkDeviceTool   *tool,
+                                guint32          time,
+                                GdkModifierType  state,
+                                double           x,
+                                double           y,
+                                double          *axes)
+{
+  GdkEvent *event;
+
+  event = gdk_motion_event_new (surface, device, tool, time, state, x, y, axes);
+
+  event->flags |= GDK_EVENT_SYNTHETIC;
+
+  return event;
+}
+
+gboolean
+gdk_motion_event_is_synthetic (GdkEvent *event)
+{
+  return (event->flags & GDK_EVENT_SYNTHETIC) != 0;
+}
+
 /**
  * gdk_event_get_history:
  * @event: a motion or scroll event
