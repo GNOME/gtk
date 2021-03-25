@@ -204,7 +204,7 @@ gsk_ngl_texture_library_pack_one (GskNglTextureLibrary *self,
   if (width > self->driver->command_queue->max_texture_size ||
       height > self->driver->command_queue->max_texture_size)
     {
-      g_warning ("Clipping requested texture of size %ux%u to maximum allowable size %u.",
+      g_warning ("Texture bigger (%ux%u) than the aximum allowable size %u.",
                  width, height, self->driver->command_queue->max_texture_size);
       width = MIN (width, self->driver->command_queue->max_texture_size);
       height = MIN (height, self->driver->command_queue->max_texture_size);
