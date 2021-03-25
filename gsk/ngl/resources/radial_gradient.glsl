@@ -35,7 +35,10 @@ uniform float u_color_stops[MAX_COLOR_STOPS * 5];
 _NOPERSPECTIVE_ _IN_ vec2 coord;
 
 float get_offset(int index) {
-  return u_color_stops[5 * index];
+  // u_color_stops[5 * index] makes Intel Windows driver crash.
+  // See https://gitlab.gnome.org/GNOME/gtk/-/issues/3783
+  int base = 5 * index;
+  return u_color_stops[base];
 }
 
 vec4 get_color(int index) {
