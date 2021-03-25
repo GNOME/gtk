@@ -349,7 +349,7 @@ gdk_content_provider_union_get_value (GdkContentProvider  *provider,
       g_clear_error (&provider_error);
     }
 
-  return FALSE;
+  return GDK_CONTENT_PROVIDER_CLASS (gdk_content_provider_union_parent_class)->get_value (provider, value, error);
 }
 
 static void
