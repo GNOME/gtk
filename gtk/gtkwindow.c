@@ -2046,7 +2046,7 @@ gtk_window_native_layout (GtkNative *native,
     }
 
   /* This fake motion event is needed for getting up to date pointer focus
-   * and coordinates when tho pointer didn't move but the layout changed
+   * and coordinates when the pointer didn't move but the layout changed
    * within the window.
    */
   if (gtk_widget_needs_allocate (widget))
