@@ -197,6 +197,7 @@ static const GdkDebugKey gtk_debug_keys[] = {
   { "touchscreen", GTK_DEBUG_TOUCHSCREEN, "Pretend the pointer is a touchscreen" },
   { "snapshot", GTK_DEBUG_SNAPSHOT, "Generate debug render nodes" },
   { "accessibility", GTK_DEBUG_A11Y, "Information about accessibility state changes" },
+  { "iconfallback", GTK_DEBUG_ICONFALLBACK, "Information about icon fallback" },
 };
 
 /* This checks to see if the process is running suid or sgid

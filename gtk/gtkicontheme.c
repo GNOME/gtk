@@ -2269,6 +2269,11 @@ real_choose_icon (GtkIconTheme      *self,
   /* Fall back to missing icon */
   if (icon == NULL)
     {
+      GTK_NOTE(ICONFALLBACK, {
+        char *s = g_strjoinv (", ", (char **)icon_names);
+        g_message ("No icon found for: %s", s);
+        g_free (s);
+      });
       icon = icon_paintable_new ("image-missing", size, scale);
       icon->filename = g_strdup (IMAGE_MISSING_RESOURCE_PATH);
       icon->is_resource = TRUE;
