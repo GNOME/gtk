@@ -2248,13 +2248,18 @@ _gdk_windowing_got_event (GdkDisplay *display,
   GdkPointerSurfaceInfo *pointer_info = NULL;
   GdkDevice *device;
   GdkEventType type;
+  guint32 timestamp;
 
   _gdk_display_update_last_event (display, event);
 
   device = gdk_event_get_device (event);
+  timestamp = gdk_event_get_time (event);
 
   if (device)
     {
+      if (timestamp != GDK_CURRENT_TIME)
+        gdk_device_set_timestamp (device, timestamp);
+
       if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD &&
           gdk_device_get_source (device) != GDK_SOURCE_TABLET_PAD)
         {

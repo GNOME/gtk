@@ -1381,3 +1381,31 @@ gdk_device_has_bidi_layouts (GdkDevice *device)
 
   return FALSE;
 }
+
+void
+gdk_device_set_timestamp (GdkDevice *device,
+                          guint32    timestamp)
+{
+  device->timestamp = timestamp;
+}
+
+/**
+ * gdk_device_get_timestamp:
+ * @device: a `GdkDevice`
+ *
+ * Returns the timestamp of the last activity for this device.
+ *
+ * In practice, this means the timestamp of the last event that was
+ * received from the OS for this device. (GTK may occasionally produce
+ * events for a device that are not received from the OS, and will not
+ * update the timestamp).
+ *
+ * Returns: the timestamp of the last activity for this device
+ *
+ * Since: 4.2
+ */
+guint32
+gdk_device_get_timestamp (GdkDevice *device)
+{
+  return device->timestamp;
+}
