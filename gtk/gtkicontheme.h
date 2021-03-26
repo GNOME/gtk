@@ -116,6 +116,9 @@ char *           gtk_icon_theme_get_theme_name       (GtkIconTheme              
 GDK_AVAILABLE_IN_ALL
 gboolean         gtk_icon_theme_has_icon             (GtkIconTheme                *self,
                                                       const char                  *icon_name);
+GDK_AVAILABLE_IN_4_2
+gboolean         gtk_icon_theme_has_gicon            (GtkIconTheme                *self,
+                                                      GIcon                       *gicon);
 GDK_AVAILABLE_IN_ALL
 int              *gtk_icon_theme_get_icon_sizes      (GtkIconTheme                *self,
                                                       const char                  *icon_name);

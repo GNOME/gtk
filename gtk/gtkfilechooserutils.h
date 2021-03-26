@@ -21,6 +21,7 @@
 #define __GTK_FILE_CHOOSER_UTILS_H__
 
 #include "gtkfilechooserprivate.h"
+#include "gtkicontheme.h"
 
 G_BEGIN_DECLS
 
@@ -52,9 +53,10 @@ char * _gtk_file_chooser_label_for_file (GFile *file);
 gboolean        _gtk_file_info_consider_as_directory (GFileInfo *info);
 gboolean        _gtk_file_has_native_path (GFile *file);
 gboolean        _gtk_file_consider_as_remote (GFile *file);
-GIcon *               _gtk_file_info_get_icon    (GFileInfo *info,
-                                                  int        icon_size,
-                                                  int        scale);
+GIcon *         _gtk_file_info_get_icon    (GFileInfo    *info,
+                                            int           icon_size,
+                                            int           scale,
+                                            GtkIconTheme *icon_theme);
 
 G_END_DECLS
 
