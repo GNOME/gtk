@@ -414,6 +414,9 @@ gdk_event_alloc (GdkEventType event_type,
   event->device = device != NULL ? g_object_ref (device) : NULL;
   event->time = time_;
 
+  if (device != NULL && time_ != GDK_CURRENT_TIME)
+    gdk_device_set_timestamp (device, time_);
+
   return event;
 }
 
