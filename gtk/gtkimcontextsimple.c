@@ -563,30 +563,62 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
     }
   else
     {
-      keyval = gdk_key_event_get_keyval (event);
+      int i;
 
-      if (n_compose == 2 && is_dead_key (priv->compose_buffer[0]))
+      for (i = 0; i < n_compose && is_dead_key (priv->compose_buffer[i]); i++)
+        ;
+
+      if (n_compose > 1 && i >= n_compose - 1)
         {
           gboolean need_space;
           GString *s;
 
           s = g_string_new ("");
 
-          /* dead keys are never *really* dead */
-          ch = dead_key_to_unicode (priv->compose_buffer[0], &need_space);
-          if (ch)
+          if (i == n_compose - 1)
             {
-              if (need_space)
-                g_string_append_c (s, ' ');
-              g_string_append_unichar (s, ch);
+              /* dead keys are never *really* dead */
+              for (int j = 0; j < i; j++)
+                {
+                  ch = dead_key_to_unicode (priv->compose_buffer[j], &need_space);
+                  if (ch)
+                    {
+                      if (need_space)
+                        g_string_append_c (s, ' ');
+                      g_string_append_unichar (s, ch);
+                    }
+                }
+
+              ch = gdk_keyval_to_unicode (priv->compose_buffer[i]);
+              if (ch != 0 && ch != ' ' && !g_unichar_iscntrl (ch))
+                g_string_append_unichar (s, ch);
+
+              gtk_im_context_simple_commit_string (context_simple, s->str);
+            }
+          else
+            {
+              ch = dead_key_to_unicode (priv->compose_buffer[0], &need_space);
+              if (ch)
+                {
+                  if (need_space)
+                    g_string_append_c (s, ' ');
+                  g_string_append_unichar (s, ch);
+                }
+
+              gtk_im_context_simple_commit_string (context_simple, s->str);
+
+              for (i = 1; i < n_compose; i++)
+                priv->compose_buffer[i - 1] = priv->compose_buffer[i];
+              priv->compose_buffer[n_compose - 1] = 0;
+
+              priv->in_compose_sequence = TRUE;
+
+              g_signal_emit_by_name (context, "preedit-start");
+              g_signal_emit_by_name (context, "preedit-changed");
             }
 
-          ch = gdk_keyval_to_unicode (priv->compose_buffer[1]);
-          if (ch != 0 && !g_unichar_iscntrl (ch))
-            g_string_append_unichar (s, ch);
-
-          gtk_im_context_simple_commit_string (context_simple, s->str);
           g_string_free (s, TRUE);
+
           return TRUE;
         }
 
@@ -599,6 +631,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
 	  return TRUE;
 	}
   
+      keyval = gdk_key_event_get_keyval (event);
       ch = gdk_keyval_to_unicode (keyval);
       if (ch != 0 && !g_unichar_iscntrl (ch))
 	{
@@ -922,39 +955,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 
       output = g_string_new ("");
 
-      if (n_compose == 2)
-        {
-          /* Special-case deadkey-deadkey sequences.
-           * We are not doing chained deadkeys, so we
-           * want to commit the first key, and contine
-           * preediting with second.
-           */
-          if (is_dead_key (priv->compose_buffer[0]) &&
-              is_dead_key (priv->compose_buffer[1]))
-            {
-              gunichar ch;
-              gboolean need_space;
-              guint next;
-
-              next = priv->compose_buffer[1];
-
-              ch = dead_key_to_unicode (priv->compose_buffer[0], &need_space);
-              if (ch)
-                {
-                  if (need_space)
-                    g_string_append_c (output, ' ');
-                  g_string_append_unichar (output, ch);
-
-                  gtk_im_context_simple_commit_string (context_simple, output->str);
-                  g_string_set_size (output, 0);
-
-                  priv->compose_buffer[0] = next;
-                  priv->compose_buffer[1] = 0;
-                  n_compose = 1;
-                }
-            }
-        }
-
       G_LOCK (global_tables);
 
       tmp_list = global_tables;
@@ -1040,6 +1040,8 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 
           if (output_char)
             gtk_im_context_simple_commit_char (context_simple, output_char);
+          else
+            g_signal_emit_by_name (context_simple, "preedit-changed");
 
           return TRUE;
         }
