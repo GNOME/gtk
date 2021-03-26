@@ -117,6 +117,9 @@ GDK_AVAILABLE_IN_ALL
 GdkSurface *        gdk_device_get_surface_at_position  (GdkDevice *device,
                                                          double    *win_x,
                                                          double    *win_y);
+
+GDK_AVAILABLE_IN_4_2
+guint32             gdk_device_get_timestamp            (GdkDevice *device);
 G_END_DECLS
 
 #endif /* __GDK_DEVICE_H__ */

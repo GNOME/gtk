@@ -205,6 +205,7 @@ struct _GtkTextPrivate
   int           scroll_offset;
   int           width_chars;
   int           max_width_chars;
+  guint32       obscured_cursor_timestamp;
 
   gunichar      invisible_char;
 
@@ -2940,8 +2941,12 @@ gtk_text_motion_controller_motion (GtkEventControllerMotion *controller,
                                    GtkText                  *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  GdkDevice *device;
 
-  if (priv->mouse_cursor_obscured)
+  device = gtk_event_controller_get_current_event_device (GTK_EVENT_CONTROLLER (controller));
+
+  if (priv->mouse_cursor_obscured &&
+      gdk_device_get_timestamp (device) != priv->obscured_cursor_timestamp)
     {
       set_text_cursor (GTK_WIDGET (self));
       priv->mouse_cursor_obscured = FALSE;
@@ -3162,12 +3167,20 @@ static void
 gtk_text_obscure_mouse_cursor (GtkText *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  GdkDisplay *display;
+  GdkSeat *seat;
+  GdkDevice *device;
 
   if (priv->mouse_cursor_obscured)
     return;
 
   gtk_widget_set_cursor_from_name (GTK_WIDGET (self), "none");
 
+  display = gtk_widget_get_display (GTK_WIDGET (self));
+  seat = gdk_display_get_default_seat (display);
+  device = gdk_seat_get_pointer (seat);
+
+  priv->obscured_cursor_timestamp = gdk_device_get_timestamp (device);
   priv->mouse_cursor_obscured = TRUE;
 }
 

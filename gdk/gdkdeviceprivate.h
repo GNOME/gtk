@@ -89,6 +89,8 @@ struct _GdkDevice
 
   GdkSeat *seat;
   GdkDeviceTool *last_tool;
+
+  guint32 timestamp;
 };
 
 struct _GdkDeviceClass
@@ -188,6 +190,9 @@ gboolean gdk_device_get_axis  (GdkDevice         *device,
                                double            *value);
 GdkAxisUse gdk_device_get_axis_use  (GdkDevice         *device,
                                      guint              index_);
+
+void gdk_device_set_timestamp (GdkDevice *device,
+                               guint32    timestamp);
 
 
 G_END_DECLS
