@@ -1407,5 +1407,7 @@ gdk_device_set_timestamp (GdkDevice *device,
 guint32
 gdk_device_get_timestamp (GdkDevice *device)
 {
+  g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_CURRENT_TIME);
+
   return device->timestamp;
 }
