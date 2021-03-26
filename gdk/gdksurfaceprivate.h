@@ -91,7 +91,6 @@ struct _GdkSurface
 
   int width;
   int height;
-  int scale_factor;
 
   GdkCursor *cursor;
   GHashTable *device_cursor;

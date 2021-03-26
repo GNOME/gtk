@@ -86,6 +86,13 @@ enum {
   LAST_PROP
 };
 
+typedef struct _GdkSurfacePrivate GdkSurfacePrivate;
+
+struct _GdkSurfacePrivate
+{
+  int scale_factor;
+};
+
 /* Global info */
 
 static void gdk_surface_finalize     (GObject      *object);
@@ -112,7 +119,7 @@ static void gdk_surface_queue_set_is_mapped (GdkSurface *surface,
 static guint signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *properties[LAST_PROP] = { NULL, };
 
-G_DEFINE_ABSTRACT_TYPE (GdkSurface, gdk_surface, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkSurface, gdk_surface, G_TYPE_OBJECT)
 
 static gboolean
 gdk_surface_real_beep (GdkSurface *surface)
@@ -462,20 +469,19 @@ gdk_surface_event_marshallerv (GClosure *closure,
 }
 
 static void
-gdk_surface_init (GdkSurface *surface)
+gdk_surface_init (GdkSurface *self)
 {
-  /* 0-initialization is good for all other fields. */
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
 
-  surface->state = 0;
-  surface->fullscreen_mode = GDK_FULLSCREEN_ON_CURRENT_MONITOR;
-  surface->width = 1;
-  surface->height = 1;
-  surface->scale_factor = 1;
+  self->fullscreen_mode = GDK_FULLSCREEN_ON_CURRENT_MONITOR;
+  self->width = 1;
+  self->height = 1;
+  priv->scale_factor = 1;
 
-  surface->alpha = 255;
+  self->alpha = 255;
 
-  surface->device_cursor = g_hash_table_new_full (NULL, NULL,
-                                                 NULL, g_object_unref);
+  self->device_cursor = g_hash_table_new_full (NULL, NULL,
+                                               NULL, g_object_unref);
 }
 
 static void
@@ -820,11 +826,12 @@ gdk_surface_update_size (GdkSurface *self,
                          int         height,
                          int         scale)
 {
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
   GSList *l;
 
   if (self->width == width && 
       self->height == height &&
-      self->scale_factor == scale)
+      priv->scale_factor == scale)
     {
       /* FIXME: Remove when all backends are updated */
       for (l = self->draw_contexts; l; l = l->next)
@@ -846,9 +853,9 @@ gdk_surface_update_size (GdkSurface *self,
       g_object_notify (G_OBJECT (self), "height");
     }
 
-  if (self->scale_factor != scale)
+  if (priv->scale_factor != scale)
     {
-      self->scale_factor = scale;
+      priv->scale_factor = scale;
       g_object_notify (G_OBJECT (self), "scale-factor");
     }
 
@@ -2399,7 +2406,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
  *   with it.
  */
 cairo_surface_t *
-gdk_surface_create_similar_surface (GdkSurface *     surface,
+gdk_surface_create_similar_surface (GdkSurface *    surface,
                                     cairo_content_t content,
                                     int             width,
                                     int             height)
@@ -2636,6 +2643,7 @@ gdk_surface_get_frame_clock (GdkSurface *surface)
 int
 gdk_surface_get_scale_factor (GdkSurface *surface)
 {
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (surface);
   GdkSurfaceClass *class;
 
   g_return_val_if_fail (GDK_IS_SURFACE (surface), 1);
@@ -2647,7 +2655,7 @@ gdk_surface_get_scale_factor (GdkSurface *surface)
   if (class->get_scale_factor)
     return class->get_scale_factor (surface);
 
-  return 1;
+  return priv->scale_factor;
 }
 
 /**
