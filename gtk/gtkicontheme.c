@@ -2615,6 +2615,50 @@ gtk_icon_theme_has_icon (GtkIconTheme *self,
   return res;
 }
 
+/**
+ * gtk_icon_theme_has_gicon:
+ * @self: a `GtkIconTheme`
+ * @gicon: a `GIcon`
+ *
+ * Checks whether an icon theme includes an icon
+ * for a particular `GIcon`.
+ *
+ * Returns: %TRUE if @self includes an icon for @gicon
+ */
+gboolean
+gtk_icon_theme_has_gicon (GtkIconTheme *self,
+                          GIcon        *gicon)
+{
+  const char * const *names;
+  gboolean res = FALSE;
+
+  if (!G_IS_THEMED_ICON (gicon))
+    return TRUE;
+
+  names = g_themed_icon_get_names (G_THEMED_ICON (gicon));
+
+  gtk_icon_theme_lock (self);
+
+  ensure_valid_themes (self, FALSE);
+
+  for (int i = 0; names[i]; i++)
+    {
+      for (GList *l = self->themes; l; l = l->next)
+        {
+          if (theme_has_icon (l->data, names[i]))
+            {
+              res = TRUE;
+              goto out;
+            }
+        }
+    }
+
+ out:
+  gtk_icon_theme_unlock (self);
+
+  return res;
+}
+
 static void
 add_size (gpointer key,
           gpointer value,
