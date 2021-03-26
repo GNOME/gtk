@@ -11,6 +11,7 @@ tests = [
   'encoding',
   'keysyms',
   'memorytexture',
+  'pixbuf',
   'rectangle',
   'rgba',
   'seat',
