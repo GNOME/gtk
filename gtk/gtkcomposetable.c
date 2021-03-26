@@ -1190,6 +1190,12 @@ gtk_check_algorithmically (const guint16 *compose_buffer,
 
   for (i = 0; i < n_compose && IS_DEAD_KEY (compose_buffer[i]); i++)
     ;
+
+  /* Allow at most 2 dead keys */
+  if (i > 2)
+    return FALSE;
+
+  /* Can't combine if there's no base character */
   if (i == n_compose)
     return TRUE;
 
