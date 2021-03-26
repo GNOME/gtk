@@ -259,8 +259,12 @@ struct _GtkTextViewPrivate
   int bottom_padding;
 
   int indent;
+
+  guint32 obscured_cursor_timestamp;
+
   gint64 handle_place_time;
   PangoTabArray *tabs;
+
   guint editable : 1;
 
   guint overwrite_mode : 1;
@@ -5048,18 +5052,36 @@ gtk_text_view_state_flags_changed (GtkWidget     *widget,
 static void
 gtk_text_view_obscure_mouse_cursor (GtkTextView *text_view)
 {
+  GdkDisplay *display;
+  GdkSeat *seat;
+  GdkDevice *device;
+
   if (text_view->priv->mouse_cursor_obscured)
     return;
 
   gtk_widget_set_cursor_from_name (GTK_WIDGET (text_view), "none");
 
+  display = gtk_widget_get_display (GTK_WIDGET (text_view));
+  seat = gdk_display_get_default_seat (display);
+  device = gdk_seat_get_pointer (seat);
+
+  text_view->priv->obscured_cursor_timestamp = gdk_device_get_timestamp (device);
   text_view->priv->mouse_cursor_obscured = TRUE;
 }
 
 static void
 gtk_text_view_unobscure_mouse_cursor (GtkTextView *text_view)
 {
-  if (text_view->priv->mouse_cursor_obscured)
+  GdkDisplay *display;
+  GdkSeat *seat;
+  GdkDevice *device;
+
+  display = gtk_widget_get_display (GTK_WIDGET (text_view));
+  seat = gdk_display_get_default_seat (display);
+  device = gdk_seat_get_pointer (seat);
+
+  if (text_view->priv->mouse_cursor_obscured &&
+      gdk_device_get_timestamp (device) != text_view->priv->obscured_cursor_timestamp)
     {
       gtk_widget_set_cursor_from_name (GTK_WIDGET (text_view), "text");
       text_view->priv->mouse_cursor_obscured = FALSE;
