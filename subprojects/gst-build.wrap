@@ -1,0 +1,6 @@
+[wrap-git]
+url=https://gitlab.freedesktop.org/gstreamer/gst-build.git
+revision=master
+
+[provide]
+dependency_names=gstreamer-player-1.0
