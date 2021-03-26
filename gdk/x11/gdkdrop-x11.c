@@ -641,6 +641,7 @@ xdnd_position_filter (GdkSurface   *surface,
   GdkX11Display *display_x11;
   GdkDrop *drop;
   GdkX11Drop *drop_x11;
+  int scale;
 
   display = gdk_surface_get_display (surface);
   display_x11 = GDK_X11_DISPLAY (display);
@@ -657,12 +658,13 @@ xdnd_position_filter (GdkSurface   *surface,
     {
       surface = gdk_drop_get_surface (drop);
       impl = GDK_X11_SURFACE (surface);
+      scale = gdk_surface_get_scale_factor (surface);
 
       drop_x11->suggested_action = xdnd_action_from_atom (display, action);
       gdk_x11_drop_update_actions (drop_x11);
 
-      drop_x11->last_x = x_root / impl->surface_scale;
-      drop_x11->last_y = y_root / impl->surface_scale;
+      drop_x11->last_x = x_root / scale;
+      drop_x11->last_y = y_root / scale;
 
       if (drop_x11->enter_emitted)
         {

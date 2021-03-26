@@ -625,6 +625,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
   GdkToplevelX11 *toplevel = NULL;
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
   GdkEvent *event;
+  int scale = 1;
 
   event = NULL;
 
@@ -644,6 +645,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       x11_screen = GDK_SURFACE_SCREEN (surface);
       toplevel = _gdk_x11_surface_get_toplevel (surface);
       surface_impl = GDK_X11_SURFACE (surface);
+      scale = gdk_surface_get_scale_factor (surface);
 
       g_object_ref (surface);
     }
@@ -701,13 +703,13 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	GdkRectangle expose_rect;
         int x2, y2;
 
-        expose_rect.x = xevent->xexpose.x / surface_impl->surface_scale;
-        expose_rect.y = xevent->xexpose.y / surface_impl->surface_scale;
+        expose_rect.x = xevent->xexpose.x / scale;
+        expose_rect.y = xevent->xexpose.y / scale;
 
-        x2 = (xevent->xexpose.x + xevent->xexpose.width + surface_impl->surface_scale -1) / surface_impl->surface_scale;
+        x2 = (xevent->xexpose.x + xevent->xexpose.width + scale -1) / scale;
         expose_rect.width = x2 - expose_rect.x;
 
-        y2 = (xevent->xexpose.y + xevent->xexpose.height + surface_impl->surface_scale -1) / surface_impl->surface_scale;
+        y2 = (xevent->xexpose.y + xevent->xexpose.height + scale -1) / scale;
         expose_rect.height = y2 - expose_rect.y;
 
         gdk_surface_invalidate_rect (surface, &expose_rect);
@@ -727,13 +729,13 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
         if (surface == NULL)
           break;
 
-        expose_rect.x = xevent->xgraphicsexpose.x / surface_impl->surface_scale;
-        expose_rect.y = xevent->xgraphicsexpose.y / surface_impl->surface_scale;
+        expose_rect.x = xevent->xgraphicsexpose.x / scale;
+        expose_rect.y = xevent->xgraphicsexpose.y / scale;
 
-        x2 = (xevent->xgraphicsexpose.x + xevent->xgraphicsexpose.width + surface_impl->surface_scale -1) / surface_impl->surface_scale;
+        x2 = (xevent->xgraphicsexpose.x + xevent->xgraphicsexpose.width + scale -1) / scale;
         expose_rect.width = x2 - expose_rect.x;
 
-        y2 = (xevent->xgraphicsexpose.y + xevent->xgraphicsexpose.height + surface_impl->surface_scale -1) / surface_impl->surface_scale;
+        y2 = (xevent->xgraphicsexpose.y + xevent->xgraphicsexpose.height + scale -1) / scale;
         expose_rect.height = y2 - expose_rect.y;
 
         gdk_surface_invalidate_rect (surface, &expose_rect);
@@ -906,11 +908,11 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
           int new_abs_x, new_abs_y;
 
           configured_width =
-            (xevent->xconfigure.width + surface_impl->surface_scale - 1) /
-            surface_impl->surface_scale;
+            (xevent->xconfigure.width + scale - 1) /
+            scale;
           configured_height =
-            (xevent->xconfigure.height + surface_impl->surface_scale - 1) /
-            surface_impl->surface_scale;
+            (xevent->xconfigure.height + scale - 1) /
+            scale;
 
 	  if (!xevent->xconfigure.send_event &&
 	      !xevent->xconfigure.override_redirect &&
@@ -929,15 +931,15 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 					 &tx, &ty,
 					 &child_window))
 		{
-		  x = tx / surface_impl->surface_scale;
-		  y = ty / surface_impl->surface_scale;
+		  x = tx / scale;
+		  y = ty / scale;
 		}
 	      gdk_x11_display_error_trap_pop_ignored (display);
 	    }
 	  else
 	    {
-	      x = xevent->xconfigure.x / surface_impl->surface_scale;
-	      y = xevent->xconfigure.y / surface_impl->surface_scale;
+	      x = xevent->xconfigure.x / scale;
+	      y = xevent->xconfigure.y / scale;
 	    }
 
           new_abs_x = x;

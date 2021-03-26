@@ -1448,7 +1448,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
   const XGenericEventCookie *cookie;
   GdkDevice *device, *source_device;
   GdkSurface *surface;
-  GdkX11Surface *impl;
   int scale;
   XIEvent *ev;
   GdkEvent *event;
@@ -1475,10 +1474,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
   scale = 1;
   if (surface)
-    {
-      impl = GDK_X11_SURFACE (surface);
-      scale = impl->surface_scale;
-    }
+    scale = gdk_surface_get_scale_factor (surface);
 
   if (ev->evtype == XI_Motion ||
       ev->evtype == XI_ButtonRelease)

@@ -57,8 +57,6 @@ struct _GdkX11Surface
   guint frame_sync_enabled : 1;
   guint tracking_damage: 1;
 
-  int surface_scale;
-
   int shadow_left;
   int shadow_right;
   int shadow_top;

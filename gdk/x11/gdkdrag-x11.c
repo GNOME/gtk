@@ -536,19 +536,18 @@ gdk_surface_cache_new (GdkDisplay *display)
     {
       GList *toplevel_windows, *list;
       GdkSurface *surface;
-      GdkX11Surface *impl;
       int x, y, width, height;
+      int scale;
 
       toplevel_windows = gdk_x11_display_get_toplevel_windows (display);
       for (list = toplevel_windows; list; list = list->next)
         {
           surface = GDK_SURFACE (list->data);
-	  impl = GDK_X11_SURFACE (surface);
+          scale = gdk_surface_get_scale_factor (surface);
           gdk_surface_get_geometry (surface, &x, &y, &width, &height);
           gdk_surface_cache_add (result, GDK_SURFACE_XID (surface),
-                                x * impl->surface_scale, y * impl->surface_scale, 
-				width * impl->surface_scale, 
-				height * impl->surface_scale,
+                                x * scale, y * scale, 
+				width * scale, height * scale,
                                 gdk_surface_get_mapped (surface));
         }
       return result;

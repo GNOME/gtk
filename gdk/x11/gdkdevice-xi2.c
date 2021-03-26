@@ -228,7 +228,7 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
   else
     {
       xwindow = GDK_SURFACE_XID (surface);
-      scale = GDK_X11_SURFACE (surface)->surface_scale;
+      scale = gdk_surface_get_scale_factor (surface);
     }
 
   if (!GDK_X11_DISPLAY (display)->trusted_client ||
@@ -357,7 +357,6 @@ gdk_x11_device_xi2_surface_at_position (GdkDevice       *device,
                                         double          *win_y,
                                         GdkModifierType *mask)
 {
-  GdkX11Surface *impl;
   GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
   GdkDisplay *display;
   GdkX11Screen *screen;
@@ -369,6 +368,7 @@ gdk_x11_device_xi2_surface_at_position (GdkDevice       *device,
   XIModifierState mod_state;
   XIGroupState group_state;
   Bool retval;
+  int scale;
 
   display = gdk_device_get_display (device);
   screen = GDK_X11_DISPLAY (display)->screen;
@@ -501,12 +501,13 @@ gdk_x11_device_xi2_surface_at_position (GdkDevice       *device,
 
   gdk_x11_display_ungrab (display);
 
+  scale = 1;
+
   if (gdk_x11_display_error_trap_pop (display) == 0)
     {
       surface = gdk_x11_surface_lookup_for_display (display, last);
-      impl = NULL;
       if (surface)
-        impl = GDK_X11_SURFACE (surface);
+        scale = gdk_surface_get_scale_factor (surface);
 
       if (mask)
         *mask = _gdk_x11_device_xi2_translate_state (&mod_state, &button_state, &group_state);
@@ -522,10 +523,10 @@ gdk_x11_device_xi2_surface_at_position (GdkDevice       *device,
     }
 
   if (win_x)
-    *win_x = (surface) ? (xwin_x / impl->surface_scale) : -1;
+    *win_x = (surface) ? (xwin_x / scale) : -1;
 
   if (win_y)
-    *win_y = (surface) ? (xwin_y / impl->surface_scale) : -1;
+    *win_y = (surface) ? (xwin_y / scale) : -1;
 
 
   return surface;
