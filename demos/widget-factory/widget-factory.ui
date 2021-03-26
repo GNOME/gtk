@@ -312,9 +312,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
         <col id="0">camera-photo-symbolic</col>
       </row>
       <row>
-        <col id="0">camera-video-symbolic</col>
-      </row>
-      <row>
         <col id="0">camera-web-symbolic</col>
       </row>
       <row>
@@ -328,9 +325,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
       </row>
       <row>
         <col id="0">drive-harddisk-symbolic</col>
-      </row>
-      <row>
-        <col id="0">drive-multidisk-symbolic</col>
       </row>
       <row>
         <col id="0">drive-optical-symbolic</col>
