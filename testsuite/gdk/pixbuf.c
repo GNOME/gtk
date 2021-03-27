@@ -14,7 +14,7 @@ main (int argc, char *argv[])
   for (GSList *l = formats; l; l = l->next)
     {
       GdkPixbufFormat *format = l->data;
-      const char *name;
+      char *name;
 
       name = gdk_pixbuf_format_get_name (format);
 
@@ -22,6 +22,8 @@ main (int argc, char *argv[])
         have_png = TRUE;
       else if (strcmp (name, "jpeg") == 0)
         have_jpeg = TRUE;
+
+      g_free (name);
     }
 
   if (!have_png || !have_jpeg)
