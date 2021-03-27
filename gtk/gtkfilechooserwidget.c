@@ -5444,7 +5444,9 @@ gtk_file_chooser_widget_get_files (GtkFileChooser *chooser)
       if (info.result == NULL && impl->location_entry)
         goto file_entry;
     }
-  else if (impl->location_entry && current_focus == impl->location_entry)
+  else if (impl->location_entry &&
+           (current_focus == impl->location_entry ||
+            gtk_widget_is_ancestor (current_focus, impl->location_entry)))
     {
       gboolean is_well_formed, is_empty, is_file_part_empty, is_folder;
 
@@ -6230,7 +6232,9 @@ gtk_file_chooser_widget_should_respond (GtkFileChooserWidget *impl)
           g_assert_not_reached ();
         }
     }
-  else if ((impl->location_entry != NULL) && (current_focus == impl->location_entry))
+  else if ((impl->location_entry != NULL) &&
+           (current_focus == impl->location_entry ||
+            gtk_widget_is_ancestor (current_focus, impl->location_entry)))
     {
       GFile *file;
       gboolean is_well_formed, is_empty, is_file_part_empty;
@@ -7719,7 +7723,13 @@ captured_key (GtkEventControllerKey *controller,
   GtkFileChooserWidget *impl = data;
   gboolean handled;
 
-  if (impl->operation_mode == OPERATION_MODE_SEARCH)
+  if (impl->operation_mode == OPERATION_MODE_SEARCH ||
+      impl->operation_mode == OPERATION_MODE_ENTER_LOCATION ||
+      (impl->operation_mode == OPERATION_MODE_BROWSE &&
+       impl->location_mode == LOCATION_MODE_FILENAME_ENTRY))
+    return GDK_EVENT_PROPAGATE;
+
+  if (keyval == GDK_KEY_slash)
     return GDK_EVENT_PROPAGATE;
 
   handled = gtk_event_controller_key_forward (controller, GTK_WIDGET (impl->search_entry));
