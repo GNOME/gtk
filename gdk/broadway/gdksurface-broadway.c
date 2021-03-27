@@ -408,19 +408,6 @@ gdk_broadway_surface_hide (GdkSurface *surface)
   _gdk_surface_clear_update_area (surface);
 }
 
-static int
-gdk_broadway_surface_get_scale_factor (GdkSurface *surface)
-{
-  GdkBroadwayDisplay *broadway_display;
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return 1;
-
-  broadway_display = GDK_BROADWAY_DISPLAY (gdk_surface_get_display (surface));
-
-  return broadway_display->scale_factor;
-}
-
 static void
 sync_child_root_pos (GdkSurface *parent)
 {
@@ -519,7 +506,7 @@ gdk_broadway_surface_move_resize_internal (GdkSurface *surface,
   if (size_changed)
     {
       surface->resize_count++;
-      gdk_surface_update_size (surface, surface->width, surface->height, gdk_surface_get_scale_factor (surface));
+      gdk_surface_update_size (surface, surface->width, surface->height, broadway_display->scale_factor);
     }
 }
 
@@ -1257,7 +1244,6 @@ gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
   impl_class->beep = gdk_broadway_surface_beep;
   impl_class->destroy_notify = gdk_broadway_surface_destroy_notify;
   impl_class->drag_begin = _gdk_broadway_surface_drag_begin;
-  impl_class->get_scale_factor = gdk_broadway_surface_get_scale_factor;
 }
 
 #define LAST_PROP 1
