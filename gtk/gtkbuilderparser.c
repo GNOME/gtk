@@ -2007,6 +2007,7 @@ end_element (GtkBuildableParseContext  *context,
           PropertyInfo *prop_info = (PropertyInfo *) parent_info;
 
           prop_info->value = expression_info_construct (data->builder, expression_info, error);
+          free_expression_info (expression_info);
         }
       else if (parent_info->tag_type == TAG_EXPRESSION)
         {
