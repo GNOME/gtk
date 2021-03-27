@@ -322,12 +322,16 @@ test_ui_file (GFile *file)
   if (diff_image)
     {
       save_image (diff_image, ui_file, ".diff.png");
+      cairo_surface_destroy (diff_image);
       g_test_fail ();
     }
 
   remove_extra_css (provider);
 
   g_free (ui_file);
+
+  cairo_surface_destroy (ui_image);
+  cairo_surface_destroy (reference_image);
 }
 
 static int
