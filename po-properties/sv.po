@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-25 06:30+0000\n"
-"PO-Revision-Date: 2020-06-25 21:59+0200\n"
+"POT-Creation-Date: 2021-03-27 02:23+0000\n"
+"PO-Revision-Date: 2021-03-27 22:08+0100\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2014-08-03 20:41+0000\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
 #: gdk/gdkglcontext.c:317 gdk/gdkseat.c:202 gdk/gdkseat.c:203
@@ -880,7 +880,7 @@ msgstr "Skärmen där denna statusikon kommer att visas"
 msgid "Whether the status icon is visible"
 msgstr "Huruvida statusikonen är synlig"
 
-#: gtk/deprecated/gtkstatusicon.c:330 gtk/gtkplug.c:196
+#: gtk/deprecated/gtkstatusicon.c:330 gtk/gtkplug.c:198
 msgid "Embedded"
 msgstr "Inbäddad"
 
@@ -2400,7 +2400,7 @@ msgstr "Justering"
 
 #: gtk/gtkcellrendererspin.c:114 gtk/gtkspinbutton.c:380
 msgid "The adjustment that holds the value of the spin button"
-msgstr "Justeringen som håller värdet på snurrknappen"
+msgstr "Justeringen som håller värdet på stegningsrutan"
 
 #: gtk/gtkcellrendererspin.c:129
 msgid "Climb rate"
@@ -2902,7 +2902,7 @@ msgstr ""
 msgid "Indicator Size"
 msgstr "Indikatorstorlek"
 
-#: gtk/gtkcheckbutton.c:249 gtk/gtkexpander.c:406
+#: gtk/gtkcheckbutton.c:249 gtk/gtkexpander.c:413
 msgid "Indicator Spacing"
 msgstr "Indikatorutrymme"
 
@@ -2980,7 +2980,7 @@ msgstr "Aktuell färg, som en GdkRGBA"
 msgid "Whether alpha should be shown"
 msgstr "Huruvida alfa ska visas"
 
-#: gtk/gtkcolorchooserdialog.c:213 gtk/gtkcolorchooserwidget.c:704
+#: gtk/gtkcolorchooserdialog.c:213 gtk/gtkcolorchooserwidget.c:695
 msgid "Show editor"
 msgstr "Visa redigerare"
 
@@ -3850,20 +3850,20 @@ msgid "A widget to display in place of the usual expander label"
 msgstr ""
 "En gränssnittskomponent att visa istället för den vanliga expanderaretiketten"
 
-#: gtk/gtkexpander.c:359
+#: gtk/gtkexpander.c:366
 msgid "Label fill"
 msgstr "Etikettfyllning"
 
-#: gtk/gtkexpander.c:360
+#: gtk/gtkexpander.c:367
 msgid "Whether the label widget should fill all available horizontal space"
 msgstr ""
 "Huruvida etikettkomponenten ska fylla allt tillgängligt vågrätt utrymme"
 
-#: gtk/gtkexpander.c:375
+#: gtk/gtkexpander.c:382
 msgid "Resize toplevel"
 msgstr "Storleksändra toppnivå"
 
-#: gtk/gtkexpander.c:376
+#: gtk/gtkexpander.c:383
 msgid ""
 "Whether the expander will resize the toplevel window upon expanding and "
 "collapsing"
@@ -3871,15 +3871,15 @@ msgstr ""
 "Huruvida expanderaren kommer att storleksändra toppnivåfönstret vid "
 "utfällning och infällning"
 
-#: gtk/gtkexpander.c:389 gtk/gtktoolitemgroup.c:1674 gtk/gtktreeview.c:1234
+#: gtk/gtkexpander.c:396 gtk/gtktoolitemgroup.c:1674 gtk/gtktreeview.c:1234
 msgid "Expander Size"
 msgstr "Storlek på expanderare"
 
-#: gtk/gtkexpander.c:390 gtk/gtktoolitemgroup.c:1675 gtk/gtktreeview.c:1235
+#: gtk/gtkexpander.c:397 gtk/gtktoolitemgroup.c:1675 gtk/gtktreeview.c:1235
 msgid "Size of the expander arrow"
 msgstr "Storlek på expanderarpilen"
 
-#: gtk/gtkexpander.c:407
+#: gtk/gtkexpander.c:414
 msgid "Spacing around expander arrow"
 msgstr "Avstånd runt expanderarpil"
 
@@ -3916,7 +3916,7 @@ msgid "The current filter for selecting which files are displayed"
 msgstr "Det aktuella filtret för val av vilka filer som visas"
 
 #: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4836
-#: gtk/gtkplacesview.c:2322
+#: gtk/gtkplacesview.c:2336
 msgid "Local Only"
 msgstr "Endast lokala"
 
@@ -5641,11 +5641,11 @@ msgstr "Plats att välja"
 msgid "The location to highlight in the sidebar"
 msgstr "Plats att markera i sidopanelen"
 
-#: gtk/gtkplacessidebar.c:4805 gtk/gtkplacesview.c:2343
+#: gtk/gtkplacessidebar.c:4805 gtk/gtkplacesview.c:2357
 msgid "Open Flags"
 msgstr "Öppna flaggor"
 
-#: gtk/gtkplacessidebar.c:4806 gtk/gtkplacesview.c:2344
+#: gtk/gtkplacessidebar.c:4806 gtk/gtkplacesview.c:2358
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5693,7 +5693,7 @@ msgstr ""
 "Huruvida sidopanelen innehåller en inbyggd genväg för att manuellt ange en "
 "plats"
 
-#: gtk/gtkplacessidebar.c:4837 gtk/gtkplacesview.c:2323
+#: gtk/gtkplacessidebar.c:4837 gtk/gtkplacesview.c:2337
 msgid "Whether the sidebar only includes local files"
 msgstr "Huruvida sidopanelen bara innehåller lokala filer"
 
@@ -5729,19 +5729,19 @@ msgid "Whether to emit ::populate-popup for popups that are not menus"
 msgstr ""
 "Huruvida ::populate-popup ska signaleras för poppupper som inte är menyer"
 
-#: gtk/gtkplacesview.c:2329
+#: gtk/gtkplacesview.c:2343
 msgid "Loading"
 msgstr "Läser in"
 
-#: gtk/gtkplacesview.c:2330
+#: gtk/gtkplacesview.c:2344
 msgid "Whether the view is loading locations"
 msgstr "Huruvida vyn läser in platser"
 
-#: gtk/gtkplacesview.c:2336
+#: gtk/gtkplacesview.c:2350
 msgid "Fetching networks"
 msgstr "Hämtar nätverk"
 
-#: gtk/gtkplacesview.c:2337
+#: gtk/gtkplacesview.c:2351
 msgid "Whether the view is fetching networks"
 msgstr "Huruvida vyn hämtar nätverk"
 
@@ -5797,15 +5797,15 @@ msgstr "Filen representerad av raden, om någon"
 msgid "Whether the row represents a network location"
 msgstr "Huruvida raden representerar en nätverkplats"
 
-#: gtk/gtkplug.c:197
+#: gtk/gtkplug.c:199
 msgid "Whether the plug is embedded"
 msgstr "Huruvida pluggen är inbäddad"
 
-#: gtk/gtkplug.c:211
+#: gtk/gtkplug.c:213
 msgid "Socket Window"
 msgstr "Uttagsfönster"
 
-#: gtk/gtkplug.c:212
+#: gtk/gtkplug.c:214
 msgid "The window of the socket the plug is embedded in"
 msgstr "Fönstret för uttaget som pluggen är inbäddad i"
 
@@ -6646,51 +6646,51 @@ msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr "Visa en andra framåtpil-knapp på motsatt sida av rullningslisten"
 
-#: gtk/gtkscrolledwindow.c:569
+#: gtk/gtkscrolledwindow.c:567
 msgid "Horizontal Adjustment"
 msgstr "Vågrät justering"
 
-#: gtk/gtkscrolledwindow.c:570
+#: gtk/gtkscrolledwindow.c:568
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "GtkAdjustment på den vågräta positionen"
 
-#: gtk/gtkscrolledwindow.c:576
+#: gtk/gtkscrolledwindow.c:574
 msgid "Vertical Adjustment"
 msgstr "Lodrät justering"
 
-#: gtk/gtkscrolledwindow.c:577
+#: gtk/gtkscrolledwindow.c:575
 msgid "The GtkAdjustment for the vertical position"
 msgstr "GtkAdjustment på den lodräta positionen"
 
-#: gtk/gtkscrolledwindow.c:583
+#: gtk/gtkscrolledwindow.c:581
 msgid "Horizontal Scrollbar Policy"
 msgstr "Policy för vågräta rullningslister"
 
-#: gtk/gtkscrolledwindow.c:584
+#: gtk/gtkscrolledwindow.c:582
 msgid "When the horizontal scrollbar is displayed"
 msgstr "När den vågräta rullningslisten visas"
 
-#: gtk/gtkscrolledwindow.c:591
+#: gtk/gtkscrolledwindow.c:589
 msgid "Vertical Scrollbar Policy"
 msgstr "Policy för lodrät rullningslist"
 
-#: gtk/gtkscrolledwindow.c:592
+#: gtk/gtkscrolledwindow.c:590
 msgid "When the vertical scrollbar is displayed"
 msgstr "När den lodräta rullningslisten visas"
 
-#: gtk/gtkscrolledwindow.c:599
+#: gtk/gtkscrolledwindow.c:597
 msgid "Window Placement"
 msgstr "Fönsterplacering"
 
-#: gtk/gtkscrolledwindow.c:600
+#: gtk/gtkscrolledwindow.c:598
 msgid "Where the contents are located with respect to the scrollbars."
 msgstr "Var innehållet är placerat beroende på rullisterna."
 
-#: gtk/gtkscrolledwindow.c:618
+#: gtk/gtkscrolledwindow.c:616
 msgid "Window Placement Set"
 msgstr "Fönsterplacering"
 
-#: gtk/gtkscrolledwindow.c:619
+#: gtk/gtkscrolledwindow.c:617
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
@@ -6698,89 +6698,89 @@ msgstr ""
 "Huruvida ”window-placement” ska används för att fastställa platsen för "
 "innehållet i förhållande till rullningslisterna."
 
-#: gtk/gtkscrolledwindow.c:625 gtk/gtkspinbutton.c:455
+#: gtk/gtkscrolledwindow.c:623 gtk/gtkspinbutton.c:455
 msgid "Shadow Type"
 msgstr "Skuggtyp"
 
-#: gtk/gtkscrolledwindow.c:626
+#: gtk/gtkscrolledwindow.c:624
 msgid "Style of bevel around the contents"
 msgstr "Stil på avfasning runt innehållet"
 
-#: gtk/gtkscrolledwindow.c:642
+#: gtk/gtkscrolledwindow.c:640
 msgid "Scrollbars within bevel"
 msgstr "Rullningslist inom avfasning"
 
-#: gtk/gtkscrolledwindow.c:643
+#: gtk/gtkscrolledwindow.c:641
 msgid "Place scrollbars within the scrolled window's bevel"
 msgstr "Placera rullningslister inom det rullade fönstrets avrundning"
 
-#: gtk/gtkscrolledwindow.c:649
+#: gtk/gtkscrolledwindow.c:647
 msgid "Scrollbar spacing"
 msgstr "Rullningslistutrymme"
 
-#: gtk/gtkscrolledwindow.c:650
+#: gtk/gtkscrolledwindow.c:648
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "Antalet bildpunkter mellan rullningslisterna och det rullade fönstret"
 
-#: gtk/gtkscrolledwindow.c:665
+#: gtk/gtkscrolledwindow.c:663
 msgid "Minimum Content Width"
 msgstr "Minsta innehållsbredd"
 
-#: gtk/gtkscrolledwindow.c:666
+#: gtk/gtkscrolledwindow.c:664
 msgid "The minimum width that the scrolled window will allocate to its content"
 msgstr ""
 "Minsta bredd som det rullningsbara fönstret kan allokera till dess innehåll"
 
-#: gtk/gtkscrolledwindow.c:679
+#: gtk/gtkscrolledwindow.c:677
 msgid "Minimum Content Height"
 msgstr "Minsta innehållshöjd"
 
-#: gtk/gtkscrolledwindow.c:680
+#: gtk/gtkscrolledwindow.c:678
 msgid ""
 "The minimum height that the scrolled window will allocate to its content"
 msgstr ""
 "Minsta höjd som det rullningsbara fönstret kan allokera till dess innehåll"
 
-#: gtk/gtkscrolledwindow.c:694
+#: gtk/gtkscrolledwindow.c:692
 msgid "Kinetic Scrolling"
 msgstr "Kinetisk rullning"
 
-#: gtk/gtkscrolledwindow.c:695
+#: gtk/gtkscrolledwindow.c:693
 msgid "Kinetic scrolling mode."
 msgstr "Kinetiskt rullningsläge."
 
-#: gtk/gtkscrolledwindow.c:714
+#: gtk/gtkscrolledwindow.c:712
 msgid "Overlay Scrolling"
 msgstr "Överdragen rullning"
 
-#: gtk/gtkscrolledwindow.c:715
+#: gtk/gtkscrolledwindow.c:713
 msgid "Overlay scrolling mode"
 msgstr "Överdraget rullningsläge"
 
-#: gtk/gtkscrolledwindow.c:728
+#: gtk/gtkscrolledwindow.c:726
 msgid "Maximum Content Width"
 msgstr "Största innehållsbredd"
 
-#: gtk/gtkscrolledwindow.c:729
+#: gtk/gtkscrolledwindow.c:727
 msgid "The maximum width that the scrolled window will allocate to its content"
 msgstr ""
 "Största bredd som det rullningsbara fönstret kan allokera till dess innehåll"
 
-#: gtk/gtkscrolledwindow.c:742
+#: gtk/gtkscrolledwindow.c:740
 msgid "Maximum Content Height"
 msgstr "Största innehållshöjd"
 
-#: gtk/gtkscrolledwindow.c:743
+#: gtk/gtkscrolledwindow.c:741
 msgid ""
 "The maximum height that the scrolled window will allocate to its content"
 msgstr ""
 "Största höjd som det rullningsbara fönstret kan allokera till dess innehåll"
 
-#: gtk/gtkscrolledwindow.c:760 gtk/gtkscrolledwindow.c:761
+#: gtk/gtkscrolledwindow.c:758 gtk/gtkscrolledwindow.c:759
 msgid "Propagate Natural Width"
 msgstr "Propagera naturlig bredd"
 
-#: gtk/gtkscrolledwindow.c:778 gtk/gtkscrolledwindow.c:779
+#: gtk/gtkscrolledwindow.c:776 gtk/gtkscrolledwindow.c:777
 msgid "Propagate Natural Height"
 msgstr "Propagera naturlig höjd"
 
@@ -7679,7 +7679,7 @@ msgid ""
 "Whether erroneous values are automatically changed to a spin button's "
 "nearest step increment"
 msgstr ""
-"Huruvida felaktiga värden automatiskt korrigeras till en snurrknapps "
+"Huruvida felaktiga värden automatiskt korrigeras till en stegningsrutas "
 "närmaste stegökning"
 
 #: gtk/gtkspinbutton.c:411
@@ -7696,7 +7696,7 @@ msgstr "Börja om"
 
 #: gtk/gtkspinbutton.c:420
 msgid "Whether a spin button should wrap upon reaching its limits"
-msgstr "Huruvida en snurrknapp ska börja om då dess gränser nås"
+msgstr "Huruvida en stegningsruta ska börja om då dess gränser nås"
 
 #: gtk/gtkspinbutton.c:427
 msgid "Update Policy"
@@ -7706,7 +7706,8 @@ msgstr "Uppdateringspolicy"
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
-"Huruvida snurrknappen alltid ska uppdatera, eller endast då värdet är giltigt"
+"Huruvida stegningsrutan alltid ska uppdatera, eller endast då värdet är "
+"giltigt"
 
 #: gtk/gtkspinbutton.c:437
 msgid "Reads the current value, or sets a new value"
@@ -7714,7 +7715,7 @@ msgstr "Läser aktuellt värde, eller ställer in ett nytt värde"
 
 #: gtk/gtkspinbutton.c:456
 msgid "Style of bevel around the spin button"
-msgstr "Stil på avfasning runt snurrknappen"
+msgstr "Stil på avfasning runt stegningsrutan"
 
 #: gtk/gtkspinner.c:222
 msgid "Whether the spinner is active"
