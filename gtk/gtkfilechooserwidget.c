@@ -7729,6 +7729,9 @@ captured_key (GtkEventControllerKey *controller,
        impl->location_mode == LOCATION_MODE_FILENAME_ENTRY))
     return GDK_EVENT_PROPAGATE;
 
+  if (keyval == GDK_KEY_slash)
+    return GDK_EVENT_PROPAGATE;
+
   handled = gtk_event_controller_key_forward (controller, GTK_WIDGET (impl->search_entry));
   if (handled == GDK_EVENT_STOP)
     operation_mode_set (impl, OPERATION_MODE_SEARCH);
