@@ -1741,7 +1741,7 @@ EXTRA_DIST +=                   \
 	$(gesture_sources)	\
 	$(theme_sources)	\
 	$(gsettings_SCHEMAS)	\
-	compose-parse.py	\
+	compose/compose-parse.py	\
 	emoji/convert-emoji.c	\
 	emoji/emoji.json	\
 	emoji/emoji1.json	\
@@ -1749,7 +1749,8 @@ EXTRA_DIST +=                   \
 	deprecated/Makefile.inc	\
 	glade/README.glade	\
 	glade/gtk-private-widgets.xml \
-	gtk-compose-lookaside.txt \
+	compose/gtk-compose-lookaside.txt \
+	compose/gtk-compose-remove.txt \
 	inspector/Makefile.inc	\
 	libgtk3.manifest.in	\
 	gtk-win32.rc.body.in	\
