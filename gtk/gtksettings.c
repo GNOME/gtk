@@ -1177,6 +1177,8 @@ gtk_settings_finalize (GObject *object)
 
   g_free (settings->font_family);
 
+  g_object_unref (settings->theme_provider);
+
   G_OBJECT_CLASS (gtk_settings_parent_class)->finalize (object);
 }
 

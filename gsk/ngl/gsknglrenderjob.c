@@ -2672,6 +2672,8 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
   else
     c = *color;
 
+  //memset (&lookup, 0, sizeof lookup);
+
   lookup.font = (PangoFont *)font;
   lookup.scale = (guint) (text_scale * 1024);
 

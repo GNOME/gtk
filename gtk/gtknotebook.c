@@ -1972,7 +1972,7 @@ gtk_notebook_get_property (GObject         *object,
       g_value_set_string (value, gtk_notebook_get_group_name (notebook));
       break;
     case PROP_PAGES:
-      g_value_set_object (value, gtk_notebook_get_pages (notebook));
+      g_value_take_object (value, gtk_notebook_get_pages (notebook));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);

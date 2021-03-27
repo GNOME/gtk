@@ -14,13 +14,9 @@ meson subprojects update gi-docgen
 
 # make the release tarball
 meson setup --force-fallback-for gi-docgen ${release_build_dir} || exit
+meson compile -C${release_build_dir} || exit
 meson dist -C${release_build_dir} --include-subprojects || exit
 
-# now build the docs
-meson configure ${release_build_dir} -Dintrospection=enabled -Dgtk_doc=true || exit
-ninja -C${release_build_dir} || exit
-
-tar cxf ${release_build_dir}/meson-dist/gtk-docs-${version}.tar.xz -C${release_build_dir} docs/reference
 
 echo -e "\n\nGTK ${version} release on branch ${branch} in ./${release_build_dir}/:\n"
 

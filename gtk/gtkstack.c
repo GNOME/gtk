@@ -749,7 +749,7 @@ gtk_stack_get_property (GObject   *object,
       g_value_set_boolean (value, gtk_stack_get_interpolate_size (stack));
       break;
     case PROP_PAGES:
-      g_value_set_object (value, gtk_stack_get_pages (stack));
+      g_value_take_object (value, gtk_stack_get_pages (stack));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);

@@ -287,8 +287,15 @@ got_file_info (GObject      *source,
   GtkBookmarkList *self = user_data;
   GFile *file = G_FILE (source);
   GFileInfo *info;
+  GError *error = NULL;
 
-  info = g_file_query_info_finish (file, res, NULL);
+  info = g_file_query_info_finish (file, res, &error);
+  if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    {
+      g_error_free (error);
+      return;
+    }
+
   if (info)
     {
       char *uri;
