@@ -1,3 +1,25 @@
+Overview of Changes in GTK+ 3.24.28
+===================================
+
+* Input:
+ - Improve dead key handling
+
+* CSS:
+ - Fix rendering of scaled text shadows
+
+* Wayland:
+ - Fix matching of accelerators with multiple layouts
+
+* X11:
+ - Trap errors from the COW
+
+* Build:
+ - Make gtk3-update-icon-cache output reproducible
+
+* Translation updates:
+ Serbian
+
+
 Overview of Changes in GTK+ 3.24.27
 ===================================
 
