@@ -7719,7 +7719,10 @@ captured_key (GtkEventControllerKey *controller,
   GtkFileChooserWidget *impl = data;
   gboolean handled;
 
-  if (impl->operation_mode == OPERATION_MODE_SEARCH)
+  if (impl->operation_mode == OPERATION_MODE_SEARCH ||
+      impl->operation_mode == OPERATION_MODE_ENTER_LOCATION ||
+      (impl->operation_mode == OPERATION_MODE_BROWSE &&
+       impl->location_mode == LOCATION_MODE_FILENAME_ENTRY))
     return GDK_EVENT_PROPAGATE;
 
   handled = gtk_event_controller_key_forward (controller, GTK_WIDGET (impl->search_entry));
