@@ -965,6 +965,7 @@ init (void)
                                        string_serializer,
                                        (gpointer) charset,
                                        NULL);
+      g_free (mime);
     }
   gdk_content_register_serializer (G_TYPE_STRING,
                                    "text/plain",
