@@ -1145,6 +1145,8 @@ gtk_builder_create_bindings (GtkBuilder  *builder,
 
           free_binding_expression_info (info);
         }
+      else
+        g_assert_not_reached ();
     }
 
   g_slist_free (priv->bindings);
