@@ -399,7 +399,6 @@ static void
 extract_matrix_metadata (GskNglRenderModelview *modelview)
 {
   float dummy;
-  graphene_matrix_t m;
 
   gsk_transform_to_matrix (modelview->transform, &modelview->matrix);
 
@@ -428,14 +427,14 @@ extract_matrix_metadata (GskNglRenderModelview *modelview)
         /* TODO: 90% sure this is incorrect. But we should never hit this code
          * path anyway. */
         graphene_vec3_init (&col1,
-                            graphene_matrix_get_value (&m, 0, 0),
-                            graphene_matrix_get_value (&m, 1, 0),
-                            graphene_matrix_get_value (&m, 2, 0));
+                            graphene_matrix_get_value (&modelview->matrix, 0, 0),
+                            graphene_matrix_get_value (&modelview->matrix, 1, 0),
+                            graphene_matrix_get_value (&modelview->matrix, 2, 0));
 
         graphene_vec3_init (&col2,
-                            graphene_matrix_get_value (&m, 0, 1),
-                            graphene_matrix_get_value (&m, 1, 1),
-                            graphene_matrix_get_value (&m, 2, 1));
+                            graphene_matrix_get_value (&modelview->matrix, 0, 1),
+                            graphene_matrix_get_value (&modelview->matrix, 1, 1),
+                            graphene_matrix_get_value (&modelview->matrix, 2, 1));
 
         modelview->scale_x = graphene_vec3_length (&col1);
         modelview->scale_y = graphene_vec3_length (&col2);
@@ -2672,6 +2671,8 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
     c = (GdkRGBA) { -1.f, -1.f, -1.f, -1.f };
   else
     c = *color;
+
+  //memset (&lookup, 0, sizeof lookup);
 
   lookup.font = (PangoFont *)font;
   lookup.scale = (guint) (text_scale * 1024);
