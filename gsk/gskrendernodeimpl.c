@@ -2641,6 +2641,36 @@ gsk_container_node_get_diff_settings (void)
   return settings;
 }
 
+static gboolean
+gsk_render_node_diff_multiple (GskRenderNode **nodes1,
+                               gsize           n_nodes1,
+                               GskRenderNode **nodes2,
+                               gsize           n_nodes2,
+                               cairo_region_t *region)
+{
+  return gsk_diff ((gconstpointer *) nodes1, n_nodes1,
+                   (gconstpointer *) nodes2, n_nodes2,
+                   gsk_container_node_get_diff_settings (),
+                   region) == GSK_DIFF_OK;
+}
+
+void
+gsk_container_node_diff_with (GskRenderNode   *container,
+                              GskRenderNode   *other,
+                              cairo_region_t  *region)
+{
+  GskContainerNode *self = (GskContainerNode *) container;
+
+  if (gsk_render_node_diff_multiple (self->children,
+                                     self->n_children,
+                                     &other,
+                                     1,
+                                     region))
+    return;
+
+  gsk_render_node_diff_impossible (container, other, region);
+}
+
 static void
 gsk_container_node_diff (GskRenderNode  *node1,
                          GskRenderNode  *node2,
@@ -2649,12 +2679,11 @@ gsk_container_node_diff (GskRenderNode  *node1,
   GskContainerNode *self1 = (GskContainerNode *) node1;
   GskContainerNode *self2 = (GskContainerNode *) node2;
 
-  if (gsk_diff ((gconstpointer *) self1->children,
-                self1->n_children,
-                (gconstpointer *) self2->children,
-                self2->n_children,
-                gsk_container_node_get_diff_settings (),
-                region) == GSK_DIFF_OK)
+  if (gsk_render_node_diff_multiple (self1->children,
+                                     self1->n_children,
+                                     self2->children,
+                                     self2->n_children,
+                                     region))
     return;
 
   gsk_render_node_diff_impossible (node1, node2, region);
