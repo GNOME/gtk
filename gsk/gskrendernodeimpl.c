@@ -2849,19 +2849,18 @@ gsk_transform_node_diff (GskRenderNode  *node1,
       {
         cairo_region_t *sub;
         float dx, dy;
-
         gsk_transform_to_translate (self1->transform, &dx, &dy);
         sub = cairo_region_create ();
         gsk_render_node_diff (self1->child, self2->child, sub);
-        cairo_region_translate (sub, floor (dx), floor (dy));
-        if (floor (dx) != dx)
+        cairo_region_translate (sub, floorf (dx), floorf (dy));
+        if (floorf (dx) != dx)
           {
             cairo_region_t *tmp = cairo_region_copy (sub);
             cairo_region_translate (tmp, 1, 0);
             cairo_region_union (sub, tmp);
             cairo_region_destroy (tmp);
           }
-        if (floor (dy) != dy)
+        if (floorf (dy) != dy)
           {
             cairo_region_t *tmp = cairo_region_copy (sub);
             cairo_region_translate (tmp, 0, 1);
