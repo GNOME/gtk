@@ -167,7 +167,7 @@ test_create_builder (void)
   list = GTK_STRING_LIST (gtk_builder_get_object (builder, "list"));
   assert_model (list, "a b c");
 
-  g_object_unref (list);
+  g_object_unref (builder);
 }
 
 static void

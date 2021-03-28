@@ -1052,6 +1052,8 @@ gtk_css_provider_load_internal (GtkCssProvider *self,
                                     "Failed to import: %s",
                                     load_error->message);
             }
+
+          g_error_free (load_error);
         }
     }
 

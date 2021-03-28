@@ -285,3 +285,11 @@
   ...
   fun:g_intern_static_string
 }
+
+# Threads
+{
+   pthread
+   Memcheck:Leak
+   fun:calloc
+   fun:_dl_allocate_tls
+}
