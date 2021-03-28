@@ -727,7 +727,7 @@ gsk_ngl_render_job_transform_bounds (GskNglRenderJob       *job,
       out_rect->size.width = rect->size.width * scale_x;
       out_rect->size.height = rect->size.height * scale_y;
 
-      /* Normaize in place */
+      /* Normalize in place */
       if (out_rect->size.width < 0.f)
         {
           float size = fabsf (out_rect->size.width);
