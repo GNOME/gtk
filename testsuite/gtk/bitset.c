@@ -553,6 +553,9 @@ test_splice_overflow (void)
 
   compare = gtk_bitset_new_range (16, 1);
   g_assert_true (gtk_bitset_equals (set, compare));
+
+  gtk_bitset_unref (compare);
+  gtk_bitset_unref (set);
 }
 
 int
