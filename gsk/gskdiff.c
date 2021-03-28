@@ -372,7 +372,7 @@ compare (gconstpointer             *elem1,
       if (settings->compare_func (elem1[lim1 - 1], elem2[lim2 - 1], data) != 0)
         break;
 
-     settings-> keep_func (elem1[lim1 - 1], elem2[lim2 - 1], data);
+      settings->keep_func (elem1[lim1 - 1], elem2[lim2 - 1], data);
     }
 
   /*
