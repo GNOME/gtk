@@ -4160,6 +4160,9 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
   if (line_list == NULL)
     return; /* nothing on the screen */
 
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (0, offset_y));
+  offset_y = 0;
+
   cursor_snapshot = gtk_snapshot_new ();
 
   crenderer = gsk_pango_renderer_acquire ();
