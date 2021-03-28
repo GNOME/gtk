@@ -93,6 +93,9 @@ void            gsk_render_node_diff                    (GskRenderNode          
 void            gsk_render_node_diff_impossible         (GskRenderNode               *node1,
                                                          GskRenderNode               *node2,
                                                          cairo_region_t              *region);
+void            gsk_container_node_diff_with            (GskRenderNode               *container,
+                                                         GskRenderNode               *other,
+                                                         cairo_region_t              *region);
 
 bool            gsk_border_node_get_uniform             (const GskRenderNode         *self);
 bool            gsk_border_node_get_uniform_color       (const GskRenderNode         *self);
