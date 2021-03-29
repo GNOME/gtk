@@ -115,6 +115,7 @@ internal_tests = [
   { 'name': 'rbtree-crash' },
   { 'name': 'propertylookuplistmodel' },
   { 'name': 'rbtree' },
+  { 'name': 'textregion' },
   { 'name': 'timsort' },
 ]
 
