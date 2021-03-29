@@ -2639,6 +2639,30 @@ gsk_ngl_render_job_visit_opacity_node (GskNglRenderJob     *job,
     }
 }
 
+static inline int
+compute_phase_and_pos (float value, float *pos)
+{
+  float v;
+
+  *pos = floorf (value);
+
+  v = value - *pos;
+
+  if (v < 0.125)
+    return 0;
+  else if (v < 0.375)
+    return 1;
+  else if (v < 0.625)
+    return 2;
+  else if (v < 0.875)
+    return 3;
+  else
+    {
+      *pos += 1;
+      return 0;
+    }
+}
+
 static inline void
 gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
                                     const GskRenderNode *node,
@@ -2662,6 +2686,8 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
   GdkRGBA c;
   const PangoGlyphInfo *gi;
   guint i;
+  int yshift;
+  float ypos;
 
   if (num_glyphs == 0)
     return;
@@ -2676,6 +2702,8 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
 
   lookup.font = (PangoFont *)font;
   lookup.scale = (guint) (text_scale * 1024);
+
+  yshift = compute_phase_and_pos (y, &ypos);
 
   gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, coloring));
 
@@ -2695,20 +2723,28 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
       if G_UNLIKELY (gi->glyph == PANGO_GLYPH_EMPTY)
         continue;
 
+      lookup.glyph = gi->glyph;
+
       cx = (float)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
-      cy = (float)(gi->geometry.y_offset) / PANGO_SCALE;
+      lookup.xshift = compute_phase_and_pos (x + cx, &cx);
 
-      gsk_ngl_glyph_key_set_glyph_and_shift (&lookup, gi->glyph, x + cx, y + cy);
+      if G_UNLIKELY (gi->geometry.y_offset != 0)
+        {
+          cy = (float)(gi->geometry.y_offset) / PANGO_SCALE;
+          lookup.yshift = compute_phase_and_pos (y + cy, &cy);
+        }
+      else
+        {
+          lookup.yshift = yshift;
+          cy = ypos;
+        }
 
-      if G_UNLIKELY (!gsk_ngl_glyph_library_lookup_or_add (library, &lookup, &glyph))
+      texture_id = gsk_ngl_glyph_library_lookup_or_add (library, &lookup, &glyph);
+      if G_UNLIKELY (texture_id == 0)
         goto next;
-
-      texture_id = GSK_NGL_TEXTURE_ATLAS_ENTRY_TEXTURE (glyph);
 
       if G_UNLIKELY (last_texture != texture_id)
         {
-          g_assert (texture_id > 0);
-
           if G_LIKELY (last_texture != 0)
             {
               guint vbo_offset = batch->draw.vbo_offset + batch->draw.vbo_count;
@@ -2736,8 +2772,8 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
       tx2 = glyph->entry.area.x2;
       ty2 = glyph->entry.area.y2;
 
-      glyph_x = floorf (x + cx + 0.125) + glyph->ink_rect.x;
-      glyph_y = floorf (y + cy + 0.125) + glyph->ink_rect.y;
+      glyph_x = cx + glyph->ink_rect.x;
+      glyph_y = cy + glyph->ink_rect.y;
       glyph_x2 = glyph_x + glyph->ink_rect.width;
       glyph_y2 = glyph_y + glyph->ink_rect.height;
 
