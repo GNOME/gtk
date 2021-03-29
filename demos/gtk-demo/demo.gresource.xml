@@ -128,6 +128,9 @@
     <file>gtkfishbowl.c</file>
     <file>gtkfishbowl.h</file>
   </gresource>
+  <gresource prefix="/frames">
+    <file>frames.ui</file>
+  </gresource>
   <gresource prefix="/gears">
     <file>gtkgears.c</file>
     <file>gtkgears.h</file>
@@ -276,6 +279,7 @@
     <file>fishbowl.c</file>
     <file>fixed.c</file>
     <file>flowbox.c</file>
+    <file>frames.c</file>
     <file>font_features.c</file>
     <file>fontplane.c</file>
     <file>fontrendering.c</file>
