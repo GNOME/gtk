@@ -127,17 +127,8 @@ g_io_module_query (void)
 }
 
 static void
-gtk_gst_media_file_position_updated_cb (GstPlayer       *player,
-                                        GstClockTime     time,
-                                        GtkGstMediaFile *self)
-{
-  gtk_media_stream_update (GTK_MEDIA_STREAM (self), FROM_GST_TIME (time));
-}
-
-static void
-gtk_gst_media_file_duration_changed_cb (GstPlayer       *player,
-                                        GstClockTime     duration,
-                                        GtkGstMediaFile *self)
+gtk_gst_media_file_ensure_prepared (GtkGstMediaFile *self,
+                                    gint64           duration)
 {
   if (gtk_media_stream_is_prepared (GTK_MEDIA_STREAM (self)))
     return;
@@ -146,7 +137,25 @@ gtk_gst_media_file_duration_changed_cb (GstPlayer       *player,
                              TRUE,
                              TRUE,
                              TRUE,
-                             FROM_GST_TIME (duration));
+                             duration);
+}
+
+static void
+gtk_gst_media_file_position_updated_cb (GstPlayer       *player,
+                                        GstClockTime     time,
+                                        GtkGstMediaFile *self)
+{
+  gtk_gst_media_file_ensure_prepared (self, 0);
+
+  gtk_media_stream_update (GTK_MEDIA_STREAM (self), FROM_GST_TIME (time));
+}
+
+static void
+gtk_gst_media_file_duration_changed_cb (GstPlayer       *player,
+                                        GstClockTime     duration,
+                                        GtkGstMediaFile *self)
+{
+  gtk_gst_media_file_ensure_prepared (self, FROM_GST_TIME (duration));
 }
 
 static void
@@ -176,6 +185,8 @@ static void
 gtk_gst_media_file_end_of_stream_cb (GstPlayer       *player,
                                      GtkGstMediaFile *self)
 {
+  gtk_gst_media_file_ensure_prepared (self, 0);
+
   if (gtk_media_stream_get_ended (GTK_MEDIA_STREAM (self)))
     return;
 

@@ -1263,6 +1263,8 @@ gtk_media_stream_error_valist (GtkMediaStream *self,
  *
  * It is up to implementations to call this at the frequency
  * they deem appropriate.
+ *
+ * The media stream must be prepared when this function is called.
  */
 void
 gtk_media_stream_update (GtkMediaStream *self,
@@ -1271,6 +1273,7 @@ gtk_media_stream_update (GtkMediaStream *self,
   GtkMediaStreamPrivate *priv = gtk_media_stream_get_instance_private (self);
 
   g_return_if_fail (GTK_IS_MEDIA_STREAM (self));
+  g_return_if_fail (gtk_media_stream_is_prepared (self));
 
   g_object_freeze_notify (G_OBJECT (self));
 
@@ -1301,6 +1304,8 @@ gtk_media_stream_update (GtkMediaStream *self,
  *
  * This is a hint only, calls to GtkMediaStream.play()
  * may still happen.
+ *
+ * The media stream must be prepared when this function is called.
  */
 void
 gtk_media_stream_ended (GtkMediaStream *self)
@@ -1308,6 +1313,7 @@ gtk_media_stream_ended (GtkMediaStream *self)
   GtkMediaStreamPrivate *priv = gtk_media_stream_get_instance_private (self);
 
   g_return_if_fail (GTK_IS_MEDIA_STREAM (self));
+  g_return_if_fail (gtk_media_stream_is_prepared (self));
   g_return_if_fail (!gtk_media_stream_get_ended (self));
 
   g_object_freeze_notify (G_OBJECT (self));
