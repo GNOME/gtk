@@ -162,7 +162,7 @@ gtk_im_context_simple_init_compose_table (void)
   const char * const *sys_lang = NULL;
   char *x11_compose_file_dir = get_x11_compose_file_dir ();
 
-  path = g_build_filename (g_get_user_config_dir (), "gtk-4.0", "Compose", NULL);
+  path = g_build_filename (g_get_user_config_dir (), "gtk-3.0", "Compose", NULL);
   if (g_file_test (path, G_FILE_TEST_EXISTS))
     {
       G_LOCK (global_tables);
