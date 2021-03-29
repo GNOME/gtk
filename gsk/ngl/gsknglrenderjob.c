@@ -2736,9 +2736,11 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
           cy = ypos;
         }
 
+      x_position += gi->geometry.width;
+
       texture_id = gsk_ngl_glyph_library_lookup_or_add (library, &lookup, &glyph);
       if G_UNLIKELY (texture_id == 0)
-        goto next;
+        continue;
 
       if G_UNLIKELY (last_texture != texture_id)
         {
@@ -2784,9 +2786,6 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
 
       batch->draw.vbo_count += GSK_NGL_N_VERTICES;
       used++;
-
-next:
-      x_position += gi->geometry.width;
     }
 
   if (used != num_glyphs)
