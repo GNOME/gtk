@@ -4435,9 +4435,15 @@ gsk_text_node_new (PangoFont              *font,
   self->has_color_glyphs = font_has_color_glyphs (font);
   self->color = *color;
   self->offset = *offset;
-  self->num_glyphs = glyphs->num_glyphs;
   self->glyphs = g_malloc_n (glyphs->num_glyphs, sizeof (PangoGlyphInfo));
-  memcpy (self->glyphs, glyphs->glyphs, glyphs->num_glyphs * sizeof (PangoGlyphInfo));
+
+  /* skip empty glyphs */
+  self->num_glyphs = 0;
+  for (int i = 0; i < glyphs->num_glyphs; i++)
+    {
+      if (glyphs->glyphs[i].glyph != PANGO_GLYPH_EMPTY)
+        self->glyphs[self->num_glyphs++] = glyphs->glyphs[i];
+    }
 
   graphene_rect_init (&node->bounds,
                       offset->x + ink_rect.x - 1,

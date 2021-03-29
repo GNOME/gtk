@@ -2720,9 +2720,6 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
       float cy;
       guint texture_id;
 
-      if G_UNLIKELY (gi->glyph == PANGO_GLYPH_EMPTY)
-        continue;
-
       lookup.glyph = gi->glyph;
 
       cx = (float)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
