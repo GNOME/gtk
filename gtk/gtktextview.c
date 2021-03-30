@@ -56,6 +56,7 @@
 #include "gtkemojichooser.h"
 #include "gtkpango.h"
 #include "gtknative.h"
+#include "gtkspellcheck.h"
 #include "gtkwidgetprivate.h"
 
 /**
@@ -2208,6 +2209,8 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 
       priv->first_para_pixels = 0;
 
+      /* XXX: remove me */
+      gtk_text_buffer_set_spell_checker (buffer, gtk_spell_checker_get_default ());
 
       g_signal_connect (priv->buffer, "mark-set",
 			G_CALLBACK (gtk_text_view_mark_set_handler),
