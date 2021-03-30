@@ -287,9 +287,11 @@ testdata = [
   'label-attribute-preference.css',
   'label-attribute-preference.ref.ui',
   'label-attribute-preference.ui',
-  'label-background.css',
-  'label-background.ref.ui',
-  'label-background.ui',
+  # makes assumptions about text positioning that are not
+  # valid with subpixel positioning
+  #'label-background.css',
+  #'label-background.ref.ui',
+  #'label-background.ui',
   'label-box-shadow-clip.css',
   'label-box-shadow-clip.ref.ui',
   'label-box-shadow-clip.ui',
