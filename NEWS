@@ -1,9 +1,11 @@
 Overview of Changes in 4.2.0
 ============================
 
-* Filechooser: Make the location entry work again
+* GtkFileChooser: Make the location entry work again
 
-* Label: Fix tooltips on links
+* GtlLabel: Fix tooltips on links
+
+* GtkTextView: Make scrolling work better with renderers
 
 * X11:
  - Fix damage handling
@@ -37,9 +39,12 @@ Overview of Changes in 4.2.0
  - Include generated docs
 
 * Translation updates:
+ Hebrew
  Hungarian
  Italian
  Polish
+ Portuguese
+ Swedish
  Ukrainian
 
 
