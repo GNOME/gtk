@@ -254,8 +254,9 @@ focus_chain_tests = [
   [ 'basic', 'right' ],
   [ 'widget-factory', 'tab' ],
   [ 'widget-factory', 'tab-backward' ],
-  [ 'widget-factory', 'up' ],
-  [ 'widget-factory', 'down' ],
+  # flaky
+  # [ 'widget-factory', 'up' ],
+  # [ 'widget-factory', 'down' ],
   [ 'widget-factory', 'left' ],
   # this one is flaky in ci, for unclear reasons
   #[ 'widget-factory', 'right' ],
