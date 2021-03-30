@@ -23,16 +23,17 @@
 
 G_BEGIN_DECLS
 
-void            _gtk_text_buffer_spew                  (GtkTextBuffer      *buffer);
-
-GtkTextBTree*   _gtk_text_buffer_get_btree             (GtkTextBuffer      *buffer);
-
-const PangoLogAttr* _gtk_text_buffer_get_line_log_attrs (GtkTextBuffer     *buffer,
-                                                         const GtkTextIter *anywhere_in_line,
-                                                         int               *char_len);
-
-void _gtk_text_buffer_notify_will_remove_tag (GtkTextBuffer *buffer,
-                                              GtkTextTag    *tag);
+void                _gtk_text_buffer_spew                   (GtkTextBuffer     *buffer);
+GtkTextBTree       *_gtk_text_buffer_get_btree              (GtkTextBuffer     *buffer);
+const PangoLogAttr *_gtk_text_buffer_get_line_log_attrs     (GtkTextBuffer     *buffer,
+                                                             const GtkTextIter *anywhere_in_line,
+                                                             int               *char_len);
+void                _gtk_text_buffer_notify_will_remove_tag (GtkTextBuffer     *buffer,
+                                                             GtkTextTag        *tag);
+gboolean            _gtk_text_buffer_can_check_spelling     (GtkTextBuffer     *buffer);
+void                _gtk_text_buffer_check_spelling         (GtkTextBuffer     *buffer,
+                                                             const GtkTextIter *begin,
+                                                             const GtkTextIter *end);
 
 G_END_DECLS
 

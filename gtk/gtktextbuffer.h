@@ -34,6 +34,7 @@
 #include <gtk/gtktextiter.h>
 #include <gtk/gtktextmark.h>
 #include <gtk/gtktextchild.h>
+#include <gtk/gtkspellcheck.h>
 
 G_BEGIN_DECLS
 
@@ -460,6 +461,12 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_text_buffer_begin_user_action         (GtkTextBuffer *buffer);
 GDK_AVAILABLE_IN_ALL
 void            gtk_text_buffer_end_user_action           (GtkTextBuffer *buffer);
+
+GDK_AVAILABLE_IN_4_2
+GtkSpellChecker *gtk_text_buffer_get_spell_checker (GtkTextBuffer   *buffer);
+GDK_AVAILABLE_IN_4_2
+void             gtk_text_buffer_set_spell_checker (GtkTextBuffer   *buffer,
+                                                    GtkSpellChecker *spell_checker);
 
 
 G_END_DECLS

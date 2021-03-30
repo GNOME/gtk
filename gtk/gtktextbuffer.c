@@ -33,12 +33,17 @@
 #include "gtktextbufferprivate.h"
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"
+#include "gtktextregionprivate.h"
+#include "gtkspellcheckprivate.h"
 #include "gtktexttagprivate.h"
 #include "gtktexttagtableprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
-#define DEFAULT_MAX_UNDO 200
+#define DEFAULT_MAX_UNDO   200
+#define SPELLING_UNCHECKED GSIZE_TO_POINTER(0)
+#define SPELLING_CHECKED   GSIZE_TO_POINTER(1)
+
 
 /**
  * GtkTextBuffer:
@@ -64,6 +69,10 @@ struct _GtkTextBufferPrivate
   GtkTextLogAttrCache *log_attr_cache;
 
   GtkTextHistory *history;
+
+  GtkTextRegion *spell_region;
+  GtkSpellChecker *spell_checker;
+  GtkTextTag *spell_tag;
 
   guint user_action_count;
 
@@ -116,10 +125,12 @@ enum {
   PROP_CAN_UNDO,
   PROP_CAN_REDO,
   PROP_ENABLE_UNDO,
+  PROP_SPELL_CHECKER,
   LAST_PROP
 };
 
-static void gtk_text_buffer_finalize   (GObject            *object);
+static void gtk_text_buffer_constructed (GObject            *object);
+static void gtk_text_buffer_finalize    (GObject            *object);
 
 static void gtk_text_buffer_real_insert_text           (GtkTextBuffer     *buffer,
                                                         GtkTextIter       *iter,
@@ -431,6 +442,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructed = gtk_text_buffer_constructed;
   object_class->finalize = gtk_text_buffer_finalize;
   object_class->set_property = gtk_text_buffer_set_property;
   object_class->get_property = gtk_text_buffer_get_property;
@@ -534,6 +546,22 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
 			0, G_MAXINT,
                         0,
                         GTK_PARAM_READABLE);
+
+  /**
+   * GtkTextBuffer:spell-checker:
+   *
+   * The #GtkSpellChecker to use for spell checking the buffer.
+   *
+   * If set, the buffer will be scanned for misspelled words.
+   *
+   * Since: 4.2
+   */
+  text_buffer_props[PROP_SPELL_CHECKER] =
+    g_param_spec_object ("spell-checker",
+                         "Spell Checker",
+                         "The spell checker for the buffer",
+                         GTK_TYPE_SPELL_CHECKER,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, text_buffer_props);
 
@@ -980,6 +1008,10 @@ gtk_text_buffer_set_property (GObject         *object,
       gtk_text_buffer_set_enable_undo (text_buffer, g_value_get_boolean (value));
       break;
 
+    case PROP_SPELL_CHECKER:
+      gtk_text_buffer_set_spell_checker (text_buffer, g_value_get_object (value));
+      break;
+
     case PROP_TAG_TABLE:
       set_table (text_buffer, g_value_get_object (value));
       break;
@@ -1010,6 +1042,10 @@ gtk_text_buffer_get_property (GObject         *object,
     {
     case PROP_ENABLE_UNDO:
       g_value_set_boolean (value, gtk_text_buffer_get_enable_undo (text_buffer));
+      break;
+
+    case PROP_SPELL_CHECKER:
+      g_value_set_object (value, gtk_text_buffer_get_spell_checker (text_buffer));
       break;
 
     case PROP_TAG_TABLE:
@@ -1072,6 +1108,19 @@ gtk_text_buffer_new (GtkTextTagTable *table)
 }
 
 static void
+gtk_text_buffer_constructed (GObject *object)
+{
+  GtkTextBuffer *buffer = GTK_TEXT_BUFFER (object);
+
+  G_OBJECT_CLASS (gtk_text_buffer_parent_class)->constructed (object);
+
+  buffer->priv->spell_tag =
+    gtk_text_buffer_create_tag (buffer, NULL,
+                                "underline", PANGO_UNDERLINE_ERROR,
+                                NULL);
+}
+
+static void
 gtk_text_buffer_finalize (GObject *object)
 {
   GtkTextBuffer *buffer;
@@ -1081,6 +1130,9 @@ gtk_text_buffer_finalize (GObject *object)
   priv = buffer->priv;
 
   remove_all_selection_clipboards (buffer);
+
+  g_clear_pointer (&buffer->priv->spell_region, _gtk_text_region_free);
+  g_clear_object (&buffer->priv->spell_checker);
 
   g_clear_object (&buffer->priv->history);
 
@@ -1195,6 +1247,12 @@ gtk_text_buffer_real_insert_text (GtkTextBuffer *buffer,
                                   gtk_text_iter_get_offset (iter),
                                   text,
                                   len);
+
+  if (buffer->priv->spell_region != NULL)
+    _gtk_text_region_insert (buffer->priv->spell_region,
+                             gtk_text_iter_get_offset (iter),
+                             g_utf8_strlen (text, len),
+                             SPELLING_UNCHECKED);
 
   _gtk_text_btree_insert (iter, text, len);
 
@@ -1952,6 +2010,11 @@ gtk_text_buffer_real_delete_range (GtkTextBuffer *buffer,
                                      text, -1);
       g_free (text);
     }
+
+  if (buffer->priv->spell_region != NULL)
+    _gtk_text_region_remove (buffer->priv->spell_region,
+                             gtk_text_iter_get_offset (start),
+                             gtk_text_iter_get_offset (end) - gtk_text_iter_get_offset (start));
 
   _gtk_text_btree_delete (start, end);
 
@@ -5081,4 +5144,155 @@ gtk_text_buffer_set_max_undo_levels (GtkTextBuffer *buffer,
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
 
   gtk_text_history_set_max_undo_levels (buffer->priv->history, max_undo_levels);
+}
+
+/**
+ * gtk_text_buffer_get_spell_checker:
+ * @buffer: a #GtkTextBuffer
+ *
+ * Get the #GtkTextBuffer:spell-checker property.
+ *
+ * Returns: (transfer none): a #GtkSpellChecker or %NULL
+ *
+ * Since: 4.2
+ */
+GtkSpellChecker *
+gtk_text_buffer_get_spell_checker (GtkTextBuffer *buffer)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
+
+  return buffer->priv->spell_checker;
+}
+
+/**
+ * gtk_text_buffer_set_spell_checker:
+ * @buffer: a #GtkTextBuffer
+ * @spell_checker: (nullable): a #GtkSpellChecker
+ *
+ * Sets the #GtkTextBuffer:spell-checker property.
+ * Set this to enable spell checking on your #GtkTextBuffer.
+ *
+ * Since: 4.2
+ */
+void
+gtk_text_buffer_set_spell_checker (GtkTextBuffer   *buffer,
+                                   GtkSpellChecker *spell_checker)
+{
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+  g_return_if_fail (!spell_checker || GTK_IS_SPELL_CHECKER (spell_checker));
+
+  if (g_set_object (&buffer->priv->spell_checker, spell_checker))
+    {
+      g_clear_pointer (&buffer->priv->spell_region, _gtk_text_region_free);
+
+      if (spell_checker != NULL)
+        {
+          GtkTextIter end;
+
+          buffer->priv->spell_region = _gtk_text_region_new (NULL, NULL);
+          gtk_text_buffer_get_end_iter (buffer, &end);
+          _gtk_text_region_insert (buffer->priv->spell_region,
+                                   0, gtk_text_iter_get_offset (&end),
+                                   SPELLING_UNCHECKED);
+        }
+
+      g_object_notify_by_pspec (G_OBJECT (buffer), text_buffer_props [PROP_SPELL_CHECKER]);
+    }
+}
+
+gboolean
+_gtk_text_buffer_can_check_spelling (GtkTextBuffer *buffer)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), FALSE);
+
+  return buffer->priv->spell_checker != NULL;
+}
+
+static gboolean
+has_unchecked_ranges_cb (gsize                   offset,
+                         const GtkTextRegionRun *run,
+                         gpointer                user_data)
+{
+  gboolean *has_unchecked = user_data;
+
+  g_assert (run != NULL);
+  g_assert (has_unchecked != NULL);
+
+  if (run->data == SPELLING_UNCHECKED)
+    {
+      *has_unchecked = TRUE;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+void
+_gtk_text_buffer_check_spelling (GtkTextBuffer     *buffer,
+                                 const GtkTextIter *begin,
+                                 const GtkTextIter *end)
+{
+  GtkTextIter iter;
+  guint has_unchecked = 0;
+  guint begin_offset;
+  guint end_offset;
+
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+  g_return_if_fail (begin != NULL);
+  g_return_if_fail (end != NULL);
+
+  if (buffer->priv->spell_checker == NULL)
+    return;
+
+  g_assert (buffer->priv->spell_region != NULL);
+
+  begin_offset = gtk_text_iter_get_offset (begin);
+  end_offset = gtk_text_iter_get_offset (end);
+
+  if (begin_offset == end_offset)
+    return;
+
+  g_assert (begin_offset < end_offset);
+
+  _gtk_text_region_foreach_in_range (buffer->priv->spell_region,
+                                     begin_offset, end_offset,
+                                     has_unchecked_ranges_cb,
+                                     &has_unchecked);
+
+  if (!has_unchecked)
+    return;
+
+  iter = *begin;
+
+  if (!gtk_text_iter_starts_word (&iter))
+    gtk_text_iter_backward_word_start (&iter);
+
+  while (gtk_text_iter_compare (&iter, end) < 0)
+    {
+      GtkTextIter word_end = iter;
+      char *word;
+
+      if (!gtk_text_iter_forward_word_end (&word_end))
+        break;
+
+      word = gtk_text_iter_get_slice (&iter, &word_end);
+
+      if (!_gtk_spell_checker_contains_word (buffer->priv->spell_checker, word, -1))
+        gtk_text_buffer_apply_tag (buffer, buffer->priv->spell_tag, &iter, &word_end);
+
+      if (!gtk_text_iter_forward_word_end (&word_end))
+        break;
+
+      iter = word_end;
+
+      if (!gtk_text_iter_backward_word_start (&iter))
+        break;
+
+      g_free (word);
+    }
+
+  _gtk_text_region_replace (buffer->priv->spell_region,
+                            begin_offset,
+                            end_offset - begin_offset,
+                            SPELLING_CHECKED);
 }
