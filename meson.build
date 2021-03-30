@@ -23,7 +23,7 @@ epoxy_req          = '>= 1.4'
 cloudproviders_req = '>= 0.3.1'
 xkbcommon_req      = '>= 0.2.0'
 sysprof_req        = '>= 3.38.0'
-enchant_req        = '>= 2.2.12'
+enchant_req        = '>= 2.2.0'
 
 gnome = import('gnome')
 pkg_config = import('pkgconfig')
@@ -673,7 +673,7 @@ spellcheck_backends = []
 if not get_option('spell-enchant').disabled()
   libenchant_dep = dependency('enchant-2', version: enchant_req, required: get_option('spell-enchant'))
   if libenchant_dep.found()
-    spellcheck_backends += ['enchant']
+    spellcheck_backends += ['enchant2']
     cdata.set10('HAVE_ENCHANT', true)
   endif
 endif
