@@ -58,12 +58,12 @@ struct _GskNglTexture
   /* Backpointer to texture (can be cleared asynchronously) */
   GdkTexture *user;
 
+  /* Only used by nine-slice textures */
+  GskNglTextureNineSlice *nine_slice;
+
   /* Only used by sliced textures */
   GskNglTextureSlice *slices;
   guint n_slices;
-
-  /* Only used by nine-slice textures */
-  GskNglTextureNineSlice *nine_slice;
 
   /* The actual GL texture identifier in some shared context */
   guint texture_id;

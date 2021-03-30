@@ -209,7 +209,7 @@ typedef enum {
  *
  * Also keep in mind that rounding errors may cause matrices to not
  * conform to their categories. Otherwise, matrix operations done via
- * mutliplication will not worsen categories. So for the matrix
+ * multiplication will not worsen categories. So for the matrix
  * multiplication `C = A * B`, `category(C) = MIN (category(A), category(B))`.
  */
 typedef enum

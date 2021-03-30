@@ -727,7 +727,7 @@ gsk_ngl_render_job_transform_bounds (GskNglRenderJob       *job,
       out_rect->size.width = rect->size.width * scale_x;
       out_rect->size.height = rect->size.height * scale_y;
 
-      /* Normaize in place */
+      /* Normalize in place */
       if (out_rect->size.width < 0.f)
         {
           float size = fabsf (out_rect->size.width);
@@ -2660,6 +2660,8 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
   GskNglDrawVertex *vertices;
   guint used = 0;
   GdkRGBA c;
+  const PangoGlyphInfo *gi;
+  guint i;
 
   if (num_glyphs == 0)
     return;
@@ -2681,18 +2683,16 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
   vertices = gsk_ngl_command_queue_add_n_vertices (job->command_queue, num_glyphs);
 
   /* We use one quad per character */
-  for (guint i = 0; i < num_glyphs; i++)
+  for (i = 0, gi = glyphs; i < num_glyphs; i++, gi++)
     {
-      const PangoGlyphInfo *gi = &glyphs[i];
       const GskNglGlyphValue *glyph;
-      guint base = used * GSK_NGL_N_VERTICES;
       float glyph_x, glyph_y, glyph_x2, glyph_y2;
       float tx, ty, tx2, ty2;
       float cx;
       float cy;
       guint texture_id;
 
-      if (gi->glyph == PANGO_GLYPH_EMPTY)
+      if G_UNLIKELY (gi->glyph == PANGO_GLYPH_EMPTY)
         continue;
 
       cx = (float)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
@@ -2700,7 +2700,7 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
 
       gsk_ngl_glyph_key_set_glyph_and_shift (&lookup, gi->glyph, x + cx, y + cy);
 
-      if (!gsk_ngl_glyph_library_lookup_or_add (library, &lookup, &glyph))
+      if G_UNLIKELY (!gsk_ngl_glyph_library_lookup_or_add (library, &lookup, &glyph))
         goto next;
 
       texture_id = GSK_NGL_TEXTURE_ATLAS_ENTRY_TEXTURE (glyph);
@@ -2741,13 +2741,13 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
       glyph_x2 = glyph_x + glyph->ink_rect.width;
       glyph_y2 = glyph_y + glyph->ink_rect.height;
 
-      vertices[base+0] = (GskNglDrawVertex) { { glyph_x,  glyph_y  }, { tx,  ty  }, { c.red, c.green, c.blue, c.alpha } };
-      vertices[base+1] = (GskNglDrawVertex) { { glyph_x,  glyph_y2 }, { tx,  ty2 }, { c.red, c.green, c.blue, c.alpha } };
-      vertices[base+2] = (GskNglDrawVertex) { { glyph_x2, glyph_y  }, { tx2, ty  }, { c.red, c.green, c.blue, c.alpha } };
+      *(vertices++) = (GskNglDrawVertex) { { glyph_x,  glyph_y  }, { tx,  ty  }, { c.red, c.green, c.blue, c.alpha } };
+      *(vertices++) = (GskNglDrawVertex) { { glyph_x,  glyph_y2 }, { tx,  ty2 }, { c.red, c.green, c.blue, c.alpha } };
+      *(vertices++) = (GskNglDrawVertex) { { glyph_x2, glyph_y  }, { tx2, ty  }, { c.red, c.green, c.blue, c.alpha } };
 
-      vertices[base+3] = (GskNglDrawVertex) { { glyph_x2, glyph_y2 }, { tx2, ty2 }, { c.red, c.green, c.blue, c.alpha } };
-      vertices[base+4] = (GskNglDrawVertex) { { glyph_x,  glyph_y2 }, { tx,  ty2 }, { c.red, c.green, c.blue, c.alpha } };
-      vertices[base+5] = (GskNglDrawVertex) { { glyph_x2, glyph_y  }, { tx2, ty  }, { c.red, c.green, c.blue, c.alpha } };
+      *(vertices++) = (GskNglDrawVertex) { { glyph_x2, glyph_y2 }, { tx2, ty2 }, { c.red, c.green, c.blue, c.alpha } };
+      *(vertices++) = (GskNglDrawVertex) { { glyph_x,  glyph_y2 }, { tx,  ty2 }, { c.red, c.green, c.blue, c.alpha } };
+      *(vertices++) = (GskNglDrawVertex) { { glyph_x2, glyph_y  }, { tx2, ty  }, { c.red, c.green, c.blue, c.alpha } };
 
       batch->draw.vbo_count += GSK_NGL_N_VERTICES;
       used++;
