@@ -42,10 +42,25 @@ open_clicked_cb (GtkWidget *button,
                                         "_Cancel");
 
   filter = gtk_file_filter_new ();
+  gtk_file_filter_add_pattern (filter, "*");
+  gtk_file_filter_set_name (filter, "All Files");
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+  g_object_unref (filter);
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_add_mime_type (filter, "image/*");
+  gtk_file_filter_set_name (filter, "Images");
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+  g_object_unref (filter);
+
+  filter = gtk_file_filter_new ();
   gtk_file_filter_add_mime_type (filter, "video/*");
   gtk_file_filter_set_name (filter, "Video");
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+  
   gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
   g_object_unref (filter);
+
   gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (dialog), TRUE);
   g_signal_connect (dialog, "response", G_CALLBACK (open_dialog_response_cb), video);
   gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
