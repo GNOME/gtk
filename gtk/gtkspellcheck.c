@@ -422,7 +422,12 @@ gtk_spell_checker_get_default (void)
       if (instance == NULL)
         instance = gtk_spell_checker_new_for_language ("C");
 
-      g_object_add_weak_pointer (G_OBJECT (instance), (gpointer *)&instance);
+      /* TODO: We might want to have a fallback so that a real object
+       *       is always returned from this method.
+       */
+
+      if (instance != NULL)
+        g_object_add_weak_pointer (G_OBJECT (instance), (gpointer *)&instance);
     }
 
   return instance;
