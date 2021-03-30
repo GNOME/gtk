@@ -1234,7 +1234,8 @@ _gtk_text_region_foreach (GtkTextRegion            *region,
       g_assert (leaf->leaf.next == NULL || leaf->leaf.next->leaf.prev == leaf);
 
       SORTED_ARRAY_FOREACH (&leaf->leaf.runs, GtkTextRegionRun, run, {
-        func (offset, run, user_data);
+        if (func (offset, run, user_data))
+          return;
         offset += run->length;
       });
     }
@@ -1279,7 +1280,8 @@ _gtk_text_region_foreach_in_range (GtkTextRegion            *region,
         else
           {
             offset_within_node = 0;
-            func (position, run, user_data);
+            if (func (position, run, user_data))
+              return;
           }
 
         position += run->length;

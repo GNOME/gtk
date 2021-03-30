@@ -33,9 +33,19 @@ typedef struct _GtkTextRegionRun
   gpointer data;
 } GtkTextRegionRun;
 
-typedef void (*GtkTextRegionForeachFunc)   (gsize                   offset,
-                                            const GtkTextRegionRun *run,
-                                            gpointer                user_data);
+/*
+ * GtkTextRegionForeachFunc:
+ * @offset: the offset in characters within the text region
+ * @run: the run of text and data pointer
+ * @user_data: user data supplied
+ *
+ * Function callback to iterate through runs within a text region.
+ *
+ * Returns: %FALSE to coninue iteration, otherwise %TRUE to stop.
+ */
+typedef gboolean (*GtkTextRegionForeachFunc) (gsize                   offset,
+                                              const GtkTextRegionRun *run,
+                                              gpointer                user_data);
 
 /*
  * GtkTextRegionJoinFunc:

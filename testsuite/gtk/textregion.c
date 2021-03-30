@@ -98,12 +98,13 @@ assert_empty (GtkTextRegion *region)
   g_assert_cmpint (1, ==, count_leaves (region));
 }
 
-static void
+static gboolean
 non_overlapping_insert_remove_cb (gsize                   offset,
                                   const GtkTextRegionRun *run,
                                   gpointer                user_data)
 {
   g_assert_cmpint (offset, ==, GPOINTER_TO_UINT (run->data));
+  return FALSE;
 }
 
 static void
@@ -145,7 +146,7 @@ typedef struct {
   const SplitRunCheck *checks;
 } SplitRun;
 
-static void
+static gboolean
 split_run_cb (gsize                   offset,
               const GtkTextRegionRun *run,
               gpointer                user_data)
@@ -155,6 +156,8 @@ split_run_cb (gsize                   offset,
   g_assert_cmpint (run->length, ==, state->checks[state->index].length);
   g_assert_true (run->data == state->checks[state->index].data);
   state->index++;
+
+  return FALSE;
 }
 
 static void
@@ -463,7 +466,7 @@ typedef struct
   GString *res;
 } wordstate;
 
-static void
+static gboolean
 word_foreach_cb (gsize                   offset,
                  const GtkTextRegionRun *run,
                  gpointer                data)
@@ -485,6 +488,8 @@ word_foreach_cb (gsize                   offset,
 #endif
 
   g_string_append_len (state->res, src + soff, run->length);
+
+  return FALSE;
 }
 
 static gboolean
@@ -564,7 +569,7 @@ test_words_database (void)
   _gtk_text_region_free (region);
 }
 
-static void
+static gboolean
 foreach_cb (gsize                   offset,
             const GtkTextRegionRun *run,
             gpointer                user_data)
@@ -573,6 +578,8 @@ foreach_cb (gsize                   offset,
 
   g_assert_cmpint (GPOINTER_TO_SIZE (run->data), ==, offset);
   (*count)++;
+
+  return FALSE;
 }
 
 static void
