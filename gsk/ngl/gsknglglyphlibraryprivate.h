@@ -33,9 +33,9 @@ typedef struct _GskNglGlyphKey
 {
   PangoFont *font;
   PangoGlyph glyph;
-  guint xshift : 3;
-  guint yshift : 3;
-  guint scale  : 26; /* times 1024 */
+  guint xshift : 2;
+  guint yshift : 2;
+  guint scale  : 28; /* times 1024 */
 } GskNglGlyphKey;
 
 typedef struct _GskNglGlyphValue
@@ -68,24 +68,7 @@ gboolean            gsk_ngl_glyph_library_add (GskNglGlyphLibrary      *self,
                                                GskNglGlyphKey          *key,
                                                const GskNglGlyphValue **out_value);
 
-static inline int
-gsk_ngl_glyph_key_phase (float value)
-{
-  return floorf (4 * (value + 0.125)) - 4 * floorf (value + 0.125);
-}
-
-static inline void
-gsk_ngl_glyph_key_set_glyph_and_shift (GskNglGlyphKey *key,
-                                       PangoGlyph      glyph,
-                                       float           x,
-                                       float           y)
-{
-  key->glyph = glyph;
-  key->xshift = gsk_ngl_glyph_key_phase (x);
-  key->yshift = gsk_ngl_glyph_key_phase (y);
-}
-
-static inline gboolean
+static inline guint
 gsk_ngl_glyph_library_lookup_or_add (GskNglGlyphLibrary      *self,
                                      const GskNglGlyphKey    *key,
                                      const GskNglGlyphValue **out_value)
@@ -112,7 +95,7 @@ gsk_ngl_glyph_library_lookup_or_add (GskNglGlyphLibrary      *self,
       self->front[front_index].value = *out_value;
     }
 
-  return GSK_NGL_TEXTURE_ATLAS_ENTRY_TEXTURE (*out_value) != 0;
+  return GSK_NGL_TEXTURE_ATLAS_ENTRY_TEXTURE (*out_value);
 }
 
 G_END_DECLS
