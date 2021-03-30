@@ -3250,7 +3250,7 @@ gtk_text_buffer_remove_all_tags (GtkTextBuffer     *buffer,
  * Note characters, not bytes; UTF-8 may encode one character as multiple
  * bytes.
  *
- * If @line_number is greater than the number of lines in the @buffer,
+ * If @line_number is greater than or equal to the number of lines in the @buffer,
  * the end iterator is returned. And if @char_offset is off the
  * end of the line, the iterator at the end of the line is returned.
  *
@@ -3301,7 +3301,7 @@ gtk_text_buffer_get_iter_at_line_offset (GtkTextBuffer *buffer,
  * @byte_index must be the start of a UTF-8 character. Note bytes, not
  * characters; UTF-8 may encode one character as multiple bytes.
  *
- * If @line_number is greater than the number of lines in the @buffer,
+ * If @line_number is greater than or equal to the number of lines in the @buffer,
  * the end iterator is returned. And if @byte_index is off the
  * end of the line, the iterator at the end of the line is returned.
  *
@@ -3348,7 +3348,7 @@ gtk_text_buffer_get_iter_at_line_index  (GtkTextBuffer *buffer,
  *
  * Initializes @iter to the start of the given line.
  *
- * If @line_number is greater than the number of lines
+ * If @line_number is greater than or equal to the number of lines
  * in the @buffer, the end iterator is returned.
  *
  * Returns: whether the exact position has been found

@@ -4052,7 +4052,7 @@ gtk_text_iter_set_visible_line_index (GtkTextIter *iter,
  *
  * Moves iterator @iter to the start of the line @line_number.
  *
- * If @line_number is negative or larger than the number of lines
+ * If @line_number is negative or larger than or equal to the number of lines
  * in the buffer, moves @iter to the start of the last line in the buffer.
  */
 void
