@@ -818,7 +818,7 @@ else
 endif
 
 if not meson.is_subproject()
-    meson.add_dist_script('build-aux/meson/dist-theme.py')
+    meson.add_dist_script('build-aux/meson/dist-data.py')
 endif
 
 if host_machine.system() != 'windows'
