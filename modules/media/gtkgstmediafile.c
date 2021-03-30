@@ -127,17 +127,35 @@ g_io_module_query (void)
 }
 
 static void
-gtk_gst_media_file_ensure_prepared (GtkGstMediaFile *self,
-                                    gint64           duration)
+gtk_gst_media_file_ensure_prepared (GtkGstMediaFile *self)
 {
+  GstPlayerMediaInfo *media_info;
+
   if (gtk_media_stream_is_prepared (GTK_MEDIA_STREAM (self)))
     return;
 
-  gtk_media_stream_prepared (GTK_MEDIA_STREAM (self),
-                             TRUE,
-                             TRUE,
-                             TRUE,
-                             duration);
+  media_info = gst_player_get_media_info (self->player);
+  if (media_info)
+    {
+      gtk_media_stream_prepared (GTK_MEDIA_STREAM (self),
+                                 gst_player_media_info_get_audio_streams (media_info) != NULL,
+                                 gst_player_media_info_get_video_streams (media_info) != NULL,
+                                 gst_player_media_info_is_seekable (media_info),
+                                 FROM_GST_TIME (gst_player_media_info_get_duration (media_info)));
+    }
+  else
+    {
+      /* Assuming everything exists is better for the user than pretending it doesn't exist.
+       * Better to be able to control non-existing audio than not be able to control existing audio.
+       *
+       * Only for seeking we can't do a thing, because with 0 duration we can't seek anywhere.
+       */
+      gtk_media_stream_prepared (GTK_MEDIA_STREAM (self),
+                                 TRUE,
+                                 TRUE,
+                                 FALSE,
+                                 0);
+    }
 }
 
 static void
@@ -145,17 +163,17 @@ gtk_gst_media_file_position_updated_cb (GstPlayer       *player,
                                         GstClockTime     time,
                                         GtkGstMediaFile *self)
 {
-  gtk_gst_media_file_ensure_prepared (self, 0);
+  gtk_gst_media_file_ensure_prepared (self);
 
   gtk_media_stream_update (GTK_MEDIA_STREAM (self), FROM_GST_TIME (time));
 }
 
 static void
-gtk_gst_media_file_duration_changed_cb (GstPlayer       *player,
-                                        GstClockTime     duration,
-                                        GtkGstMediaFile *self)
+gtk_gst_media_file_media_info_updated_cb (GstPlayer       *player,
+                                          GstClockTime     duration,
+                                          GtkGstMediaFile *self)
 {
-  gtk_gst_media_file_ensure_prepared (self, FROM_GST_TIME (duration));
+  gtk_gst_media_file_ensure_prepared (self);
 }
 
 static void
@@ -185,7 +203,7 @@ static void
 gtk_gst_media_file_end_of_stream_cb (GstPlayer       *player,
                                      GtkGstMediaFile *self)
 {
-  gtk_gst_media_file_ensure_prepared (self, 0);
+  gtk_gst_media_file_ensure_prepared (self);
 
   if (gtk_media_stream_get_ended (GTK_MEDIA_STREAM (self)))
     return;
@@ -205,7 +223,7 @@ gtk_gst_media_file_destroy_player (GtkGstMediaFile *self)
   if (self->player == NULL)
     return;
 
-  g_signal_handlers_disconnect_by_func (self->player, gtk_gst_media_file_duration_changed_cb, self);
+  g_signal_handlers_disconnect_by_func (self->player, gtk_gst_media_file_media_info_updated_cb, self);
   g_signal_handlers_disconnect_by_func (self->player, gtk_gst_media_file_position_updated_cb, self);
   g_signal_handlers_disconnect_by_func (self->player, gtk_gst_media_file_end_of_stream_cb, self);
   g_signal_handlers_disconnect_by_func (self->player, gtk_gst_media_file_seek_done_cb, self);
@@ -224,7 +242,7 @@ gtk_gst_media_file_create_player (GtkGstMediaFile *file)
 
   self->player = gst_player_new (GST_PLAYER_VIDEO_RENDERER (g_object_ref (self->paintable)),
                                  gst_player_g_main_context_signal_dispatcher_new (NULL));
-  g_signal_connect (self->player, "duration-changed", G_CALLBACK (gtk_gst_media_file_duration_changed_cb), self);
+  g_signal_connect (self->player, "media-info-updated", G_CALLBACK (gtk_gst_media_file_media_info_updated_cb), self);
   g_signal_connect (self->player, "position-updated", G_CALLBACK (gtk_gst_media_file_position_updated_cb), self);
   g_signal_connect (self->player, "end-of-stream", G_CALLBACK (gtk_gst_media_file_end_of_stream_cb), self);
   g_signal_connect (self->player, "seek-done", G_CALLBACK (gtk_gst_media_file_seek_done_cb), self);
