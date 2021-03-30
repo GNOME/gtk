@@ -42,6 +42,7 @@
 #include "gtktextiterprivate.h"
 #include "gtkimmulticontext.h"
 #include "gtkprivate.h"
+#include "gtktextbufferprivate.h"
 #include "gtktextutil.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
@@ -8069,6 +8070,26 @@ gtk_text_view_drag_drop (GtkDropTarget *dest,
 }
 
 static void
+gtk_text_view_check_spelling (GtkTextView *text_view)
+{
+  GtkTextIter begin, end;
+  GdkRectangle visible;
+
+  g_assert (GTK_IS_TEXT_VIEW (text_view));
+
+  if (!_gtk_text_buffer_can_check_spelling (text_view->priv->buffer))
+    return;
+
+  gtk_text_view_get_visible_rect (text_view, &visible);
+  gtk_text_view_get_iter_at_location (text_view, &begin, visible.x, visible.y);
+  gtk_text_view_get_iter_at_location (text_view, &end,
+                                      visible.x + visible.width,
+                                      visible.y + visible.height);
+
+  _gtk_text_buffer_check_spelling (text_view->priv->buffer, &begin, &end);
+}
+
+static void
 gtk_text_view_set_hadjustment (GtkTextView   *text_view,
                                GtkAdjustment *adjustment)
 {
@@ -8285,6 +8306,8 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
   gtk_text_view_update_im_spot_location (text_view);
 
   gtk_text_view_update_handles (text_view);
+
+  gtk_text_view_check_spelling (text_view);
 
   if (priv->anchored_children.length > 0)
     gtk_widget_queue_allocate (GTK_WIDGET (text_view));
