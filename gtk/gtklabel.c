@@ -4228,6 +4228,12 @@ gtk_label_style_updated (GtkWidget *widget)
   context = gtk_widget_get_style_context (widget);
   change = gtk_style_context_get_change (context);
 
+  if (change == NULL || gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_FONT))
+    {
+      gtk_label_clear_layout (GTK_LABEL (widget));
+      gtk_widget_queue_resize (label);
+    }
+
   if (change == NULL || gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_ATTRS) ||
       (priv->select_info && priv->select_info->links))
     gtk_label_update_layout_attributes (label);
