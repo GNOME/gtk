@@ -434,26 +434,19 @@ gdk_registry_handle_global (void               *data,
     }
   else if (strcmp (interface, "wl_seat") == 0)
     {
+      SeatAddedClosure *closure;
       static const char *required_device_manager_globals[] = {
         "wl_compositor",
         "wl_data_device_manager",
         NULL
       };
 
-      if (has_required_globals (display_wayland,
-                                required_device_manager_globals))
-        _gdk_wayland_display_add_seat (display_wayland, id, version);
-      else
-        {
-          SeatAddedClosure *closure;
-
-          closure = g_new0 (SeatAddedClosure, 1);
-          closure->base.handler = seat_added_closure_run;
-          closure->base.required_globals = required_device_manager_globals;
-          closure->id = id;
-          closure->version = version;
-          postpone_on_globals_closure (display_wayland, &closure->base);
-        }
+      closure = g_new0 (SeatAddedClosure, 1);
+      closure->base.handler = seat_added_closure_run;
+      closure->base.required_globals = required_device_manager_globals;
+      closure->id = id;
+      closure->version = version;
+      postpone_on_globals_closure (display_wayland, &closure->base);
     }
   else if (strcmp (interface, "wl_data_device_manager") == 0)
     {
@@ -533,8 +526,6 @@ gdk_registry_handle_global (void               *data,
 
   g_hash_table_insert (display_wayland->known_globals,
                        GUINT_TO_POINTER (id), g_strdup (interface));
-
-  process_on_globals_closures (display_wayland);
 }
 
 static void
@@ -625,8 +616,13 @@ _gdk_wayland_display_open (const gchar *display_name)
 
   display_wayland->wl_registry = wl_display_get_registry (display_wayland->wl_display);
   wl_registry_add_listener (display_wayland->wl_registry, &registry_listener, display_wayland);
+  if (wl_display_roundtrip (display_wayland->wl_display) < 0)
+    {
+      g_object_unref (display);
+      return NULL;
+    }
 
-  _gdk_wayland_display_async_roundtrip (display_wayland);
+  process_on_globals_closures (display_wayland);
 
   /* Wait for initializing to complete. This means waiting for all
    * asynchrounous roundtrips that were triggered during initial roundtrip. */
