@@ -1,6 +1,7 @@
 FROM registry.gitlab.gnome.org/gnome/gtk/fedora-base:v28
 
 RUN dnf -y install \
+        graphviz \
         python3-jinja2 \
         python3-markdown \
         python3-pygments \
