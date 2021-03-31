@@ -409,6 +409,11 @@ gsk_pango_renderer_prepare_run (PangoRenderer  *renderer,
     }
   else
     text_renderer_set_rgba (crenderer, PANGO_RENDER_PART_UNDERLINE, fg_rgba);
+
+  if (appearance->overline_rgba)
+    text_renderer_set_rgba (crenderer, PANGO_RENDER_PART_OVERLINE, appearance->overline_rgba);
+  else
+    text_renderer_set_rgba (crenderer, PANGO_RENDER_PART_OVERLINE, fg_rgba);
 }
 
 static void
