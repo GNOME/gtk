@@ -1527,10 +1527,33 @@ get_layout (GtkCellRendererText *celltext,
           uline = PANGO_UNDERLINE_DOUBLE_LINE;
           break;
 
-        case PANGO_UNDERLINE_DOUBLE_LINE:
-        case PANGO_UNDERLINE_ERROR_LINE:
+#if PANGO_VERSION_CHECK(1,49,0)
+        case PANGO_UNDERLINE_SINGLE_DASHED:
+          uline = PANGO_UNDERLINE_DOUBLE_DASHED;
           break;
 
+        case PANGO_UNDERLINE_SINGLE_LINE_DASHED:
+          uline = PANGO_UNDERLINE_DOUBLE_LINE_DASHED;
+          break;
+
+        case PANGO_UNDERLINE_SINGLE_DOTTED:
+          uline = PANGO_UNDERLINE_DOUBLE_DOTTED;
+          break;
+
+        case PANGO_UNDERLINE_SINGLE_LINE_DOTTED:
+          uline = PANGO_UNDERLINE_DOUBLE_LINE_DOTTED;
+          break;
+
+        case PANGO_UNDERLINE_DOUBLE_DASHED:
+        case PANGO_UNDERLINE_DOUBLE_LINE_DASHED:
+        case PANGO_UNDERLINE_DOUBLE_DOTTED:
+        case PANGO_UNDERLINE_DOUBLE_LINE_DOTTED:
+        case PANGO_UNDERLINE_LOW_DASHED:
+        case PANGO_UNDERLINE_LOW_DOTTED:
+#endif
+
+        case PANGO_UNDERLINE_DOUBLE_LINE:
+        case PANGO_UNDERLINE_ERROR_LINE:
         case PANGO_UNDERLINE_DOUBLE:
         case PANGO_UNDERLINE_LOW:
         case PANGO_UNDERLINE_ERROR:
