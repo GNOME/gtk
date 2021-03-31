@@ -119,6 +119,7 @@ gsk_pango_renderer_draw_rectangle (PangoRenderer     *renderer,
   GdkRGBA rgba;
 
   get_color (crenderer, part, &rgba);
+
   gtk_snapshot_append_color (crenderer->snapshot,
                              &rgba,
                              &GRAPHENE_RECT_INIT ((double)x / PANGO_SCALE,
@@ -169,8 +170,6 @@ gsk_pango_renderer_draw_trapezoid (PangoRenderer   *renderer,
   cairo_destroy (cr);
 }
 
-#define HEIGHT_RATIO (M_SQRT2/5.0)
-
 static void
 gsk_pango_renderer_draw_error_underline (PangoRenderer *renderer,
                                          int            x,
@@ -178,61 +177,34 @@ gsk_pango_renderer_draw_error_underline (PangoRenderer *renderer,
                                          int            width,
                                          int            height)
 {
-  GdkRGBA rgba;
-  double xx, yy, ww, hh;
-  double hs;
-  double e, o;
-
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
+  double xx, yy, ww, hh;
+  GdkRGBA rgba;
+  GskRoundedRect dot;
 
   xx = (double)x / PANGO_SCALE;
   yy = (double)y / PANGO_SCALE;
   ww = (double)width / PANGO_SCALE;
   hh = (double)height / PANGO_SCALE;
-  hs = hh / M_SQRT2;
-
-  e = fmod (ww - 2 * hs * HEIGHT_RATIO, hs * (1 - HEIGHT_RATIO));
-
-#if 0
-  gdk_rgba_parse (&rgba, "yellow");
-  gtk_snapshot_append_color (crenderer->snapshot, &rgba,
-                             &GRAPHENE_RECT_INIT (xx, yy, ww, hh));
-#endif
-
 
   get_color (crenderer, PANGO_RENDER_PART_UNDERLINE, &rgba);
-  gtk_snapshot_save (crenderer->snapshot);
-  gtk_snapshot_translate (crenderer->snapshot,
-                          &GRAPHENE_POINT_INIT (xx, yy));
 
-  gtk_snapshot_rotate (crenderer->snapshot, 45);
-  gtk_snapshot_translate (crenderer->snapshot,
-                          &GRAPHENE_POINT_INIT (e / 2 + hs * HEIGHT_RATIO,
-                                                - hs * HEIGHT_RATIO));
+  gtk_snapshot_push_repeat (crenderer->snapshot,
+                            &GRAPHENE_RECT_INIT (xx, yy, ww, hh),
+                            NULL);
 
-  xx = yy = o = 0;
-  while (1)
-    {
-      if (o + hs * (1 + HEIGHT_RATIO) >= ww)
-        break;
+  gsk_rounded_rect_init_from_rect (&dot,
+                                   &GRAPHENE_RECT_INIT (xx, yy, hh, hh),
+                                   hh / 2);
 
-      gtk_snapshot_append_color (crenderer->snapshot, &rgba,
-                                 &GRAPHENE_RECT_INIT (xx, yy, hh, hh * HEIGHT_RATIO));
+  gtk_snapshot_push_rounded_clip (crenderer->snapshot, &dot);
+  gtk_snapshot_append_color (crenderer->snapshot, &rgba, &dot.bounds);
+  gtk_snapshot_pop (crenderer->snapshot);
+  gtk_snapshot_append_color (crenderer->snapshot,
+                             &(GdkRGBA) { 0.f, 0.f, 0.f, 0.f },
+                             &GRAPHENE_RECT_INIT (xx, yy, 1.5 * hh, hh));
 
-      xx += hh * (1 - HEIGHT_RATIO);
-      yy -= hh * (1 - HEIGHT_RATIO);
-      o += hs * (1 - HEIGHT_RATIO);
-
-      if (o + hs * (1 + HEIGHT_RATIO) >= ww)
-        break;
-
-      gtk_snapshot_append_color (crenderer->snapshot, &rgba,
-                                 &GRAPHENE_RECT_INIT (xx, yy, hh * HEIGHT_RATIO, hh));
-
-      o += hs * (1 - HEIGHT_RATIO);
-    }
-
-  gtk_snapshot_restore (crenderer->snapshot);
+  gtk_snapshot_pop (crenderer->snapshot);
 }
 
 static void
