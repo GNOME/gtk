@@ -89,8 +89,8 @@ informative_render_tests = [
 
 renderers = [
   # name      exclude term
-  [ 'opengl', ''    ],
-  [ 'next', ''    ],
+  [ 'gl', ''    ],
+  [ 'ngl', ''    ],
   [ 'broadway',  '-3d' ],
   [ 'cairo',  '-3d' ],
 ]
