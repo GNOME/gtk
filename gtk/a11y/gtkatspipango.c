@@ -86,11 +86,27 @@ pango_underline_to_string (PangoUnderline value)
       return "none";
     case PANGO_UNDERLINE_SINGLE:
     case PANGO_UNDERLINE_SINGLE_LINE:
+#if PANGO_VERSION_CHECK(1,49,0)
+    case PANGO_UNDERLINE_SINGLE_DOTTED:
+    case PANGO_UNDERLINE_SINGLE_LINE_DOTTED:
+    case PANGO_UNDERLINE_SINGLE_DASHED:
+    case PANGO_UNDERLINE_SINGLE_LINE_DASHED:
+#endif
       return "single";
     case PANGO_UNDERLINE_DOUBLE:
     case PANGO_UNDERLINE_DOUBLE_LINE:
+#if PANGO_VERSION_CHECK(1,49,0)
+    case PANGO_UNDERLINE_DOUBLE_DOTTED:
+    case PANGO_UNDERLINE_DOUBLE_LINE_DOTTED:
+    case PANGO_UNDERLINE_DOUBLE_DASHED:
+    case PANGO_UNDERLINE_DOUBLE_LINE_DASHED:
+#endif
       return "double";
     case PANGO_UNDERLINE_LOW:
+#if PANGO_VERSION_CHECK(1,49,0)
+    case PANGO_UNDERLINE_LOW_DOTTED:
+    case PANGO_UNDERLINE_LOW_DASHED:
+#endif
       return "low";
     case PANGO_UNDERLINE_ERROR:
     case PANGO_UNDERLINE_ERROR_LINE:
@@ -196,7 +212,7 @@ gtk_pango_get_default_attributes (PangoLayout     *layout,
                          pango_wrap_mode_to_string (mode));
 
   g_variant_builder_add (builder, "{ss}", "strikethrough", "false");
-  g_variant_builder_add (builder, "{ss}", "underline", "false");
+  g_variant_builder_add (builder, "{ss}", "underline", "none");
   g_variant_builder_add (builder, "{ss}", "rise", "0");
   g_variant_builder_add (builder, "{ss}", "scale", "1");
   g_variant_builder_add (builder, "{ss}", "bg-full-height", "0");
