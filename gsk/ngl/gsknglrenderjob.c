@@ -3566,8 +3566,8 @@ gsk_ngl_render_job_visit_node_with_offscreen (GskNglRenderJob       *job,
 
   float scaled_width;
   float scaled_height;
-  float scale_x = job->scale_x;
-  float scale_y = job->scale_y;
+  float downscale_x = 1;
+  float downscale_y = 1;
 
   g_assert (job->command_queue->max_texture_size > 0);
 
@@ -3578,17 +3578,17 @@ gsk_ngl_render_job_visit_node_with_offscreen (GskNglRenderJob       *job,
   {
     int max_texture_size = job->command_queue->max_texture_size;
 
-    scaled_width = ceilf (offscreen->bounds->size.width * scale_x);
+    scaled_width = ceilf (offscreen->bounds->size.width * job->scale_x);
     if (scaled_width > max_texture_size)
       {
-        scale_x *= (float)max_texture_size / scaled_width;
+        downscale_x = (float)max_texture_size / scaled_width;
         scaled_width = max_texture_size;
       }
 
-    scaled_height = ceilf (offscreen->bounds->size.height * scale_y);
+    scaled_height = ceilf (offscreen->bounds->size.height * job->scale_y);
     if (scaled_height > max_texture_size)
       {
-        scale_y *= (float)max_texture_size / scaled_height;
+        downscale_y = (float)max_texture_size / scaled_height;
         scaled_height = max_texture_size;
       }
   }
@@ -3632,10 +3632,9 @@ gsk_ngl_render_job_visit_node_with_offscreen (GskNglRenderJob       *job,
 
   gsk_ngl_render_job_set_viewport (job, &viewport, &prev_viewport);
   gsk_ngl_render_job_set_projection_from_rect (job, &job->viewport, &prev_projection);
-  gsk_ngl_render_job_set_modelview (job, gsk_transform_scale (NULL, scale_x, scale_y));
+  if (downscale_x != 1 || downscale_y != 1)
+    gsk_ngl_render_job_push_modelview (job, gsk_transform_scale (NULL, downscale_x, downscale_y));
   prev_alpha = gsk_ngl_render_job_set_alpha (job, 1.0f);
-  job->offset_x = offset_x;
-  job->offset_y = offset_y;
 
   prev_fbo = gsk_ngl_command_queue_bind_framebuffer (job->command_queue, render_target->framebuffer_id);
   gsk_ngl_command_queue_clear (job->command_queue, 0, &job->viewport);
@@ -3648,7 +3647,8 @@ gsk_ngl_render_job_visit_node_with_offscreen (GskNglRenderJob       *job,
   if (offscreen->reset_clip)
     gsk_ngl_render_job_pop_clip (job);
 
-  gsk_ngl_render_job_pop_modelview (job);
+  if (downscale_x != 1 || downscale_y != 1)
+    gsk_ngl_render_job_pop_modelview (job);
   gsk_ngl_render_job_set_viewport (job, &prev_viewport, NULL);
   gsk_ngl_render_job_set_projection (job, &prev_projection);
   gsk_ngl_render_job_set_alpha (job, prev_alpha);
