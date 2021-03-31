@@ -1129,16 +1129,11 @@ _gdk_display_unpause_events (GdkDisplay *display)
 GdkSurface *
 gdk_display_create_surface (GdkDisplay     *display,
                             GdkSurfaceType  surface_type,
-                            GdkSurface     *parent,
-                            int             x,
-                            int             y,
-                            int             width,
-                            int             height)
+                            GdkSurface     *parent)
 {
   return GDK_DISPLAY_GET_CLASS (display)->create_surface (display,
                                                           surface_type,
-                                                          parent,
-                                                          x, y, width, height);
+                                                          parent);
 }
 
 /**

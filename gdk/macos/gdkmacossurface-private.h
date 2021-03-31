@@ -72,11 +72,7 @@ struct _GdkMacosSurfaceClass
 
 GdkMacosSurface   *_gdk_macos_surface_new                     (GdkMacosDisplay    *display,
                                                                GdkSurfaceType      surface_type,
-                                                               GdkSurface         *parent,
-                                                               int                 x,
-                                                               int                 y,
-                                                               int                 width,
-                                                               int                 height);
+                                                               GdkSurface         *parent);
 NSWindow          *_gdk_macos_surface_get_native              (GdkMacosSurface    *self);
 CGDirectDisplayID  _gdk_macos_surface_get_screen_id           (GdkMacosSurface    *self);
 const char        *_gdk_macos_surface_get_title               (GdkMacosSurface    *self);

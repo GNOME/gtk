@@ -1434,11 +1434,9 @@ gdk_x11_display_open (const char *display_name)
 
   gdk_event_init (display);
 
-  display_x11->leader_gdk_surface =
-      _gdk_x11_display_create_surface (display,
-                                       GDK_SURFACE_TEMP,
-                                       NULL,
-                                       -100, -100, 1, 1);
+  display_x11->leader_gdk_surface = gdk_x11_display_create_surface (display,
+                                                                    GDK_SURFACE_TEMP,
+                                                                    NULL);
 
   (_gdk_x11_surface_get_toplevel (display_x11->leader_gdk_surface))->is_leader = TRUE;
 
@@ -2938,7 +2936,7 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->get_next_serial = gdk_x11_display_get_next_serial;
   display_class->get_startup_notification_id = gdk_x11_display_get_startup_notification_id;
   display_class->notify_startup_complete = gdk_x11_display_notify_startup_complete;
-  display_class->create_surface = _gdk_x11_display_create_surface;
+  display_class->create_surface = gdk_x11_display_create_surface;
   display_class->get_keymap = gdk_x11_display_get_keymap;
 
   display_class->make_gl_context_current = gdk_x11_display_make_gl_context_current;

@@ -1169,7 +1169,7 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
 
   display_class->get_next_serial = gdk_win32_display_get_next_serial;
   display_class->notify_startup_complete = gdk_win32_display_notify_startup_complete;
-  display_class->create_surface = _gdk_win32_display_create_surface;
+  display_class->create_surface = gdk_win32_display_create_surface;
 
   display_class->get_keymap = _gdk_win32_display_get_keymap;
   display_class->make_gl_context_current = _gdk_win32_display_make_gl_context_current;

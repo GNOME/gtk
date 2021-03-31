@@ -211,11 +211,7 @@ disconnect_frame_clock (GdkSurface *surface)
 GdkSurface *
 _gdk_broadway_display_create_surface (GdkDisplay     *display,
                                       GdkSurfaceType  surface_type,
-                                      GdkSurface     *parent,
-                                      int             x,
-                                      int             y,
-                                      int             width,
-                                      int             height)
+                                      GdkSurface     *parent)
 {
   GdkBroadwayDisplay *broadway_display;
   GdkFrameClock *frame_clock;
@@ -252,16 +248,17 @@ _gdk_broadway_display_create_surface (GdkDisplay     *display,
   g_object_unref (frame_clock);
 
   surface->parent = parent;
-  surface->x = x;
-  surface->y = y;
-  surface->width = width;
-  surface->height = height;
+  if (surface_type == GDK_SURFACE_TEMP)
+    {
+      surface->x = -100;
+      surface->y = -100;
+    }
 
   broadway_display = GDK_BROADWAY_DISPLAY (display);
 
   impl = GDK_BROADWAY_SURFACE (surface);
-  impl->root_x = x;
-  impl->root_y = y;
+  impl->root_x = 0;
+  impl->root_y = 0;
   if (parent)
     {
       impl->root_x += GDK_BROADWAY_SURFACE (parent)->root_x;
@@ -1100,8 +1097,7 @@ create_moveresize_surface (MoveResizeData *mv_resize,
   mv_resize->moveresize_emulation_surface =
       _gdk_broadway_display_create_surface (mv_resize->display,
                                             GDK_SURFACE_TEMP,
-                                            NULL,
-                                            -100, -100, 1, 1);
+                                            NULL);
 
   gdk_broadway_surface_show (mv_resize->moveresize_emulation_surface, FALSE);
 

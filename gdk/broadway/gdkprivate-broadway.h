@@ -107,11 +107,7 @@ void _gdk_broadway_display_get_maximal_cursor_size (GdkDisplay *display,
                                                     guint       *height);
 GdkSurface * _gdk_broadway_display_create_surface (GdkDisplay     *display,
                                                    GdkSurfaceType  surface_type,
-                                                   GdkSurface     *parent,
-                                                   int             x,
-                                                   int             y,
-                                                   int             width,
-                                                   int             height);
+                                                   GdkSurface     *parent);
 GdkKeymap* _gdk_broadway_display_get_keymap (GdkDisplay *display);
 void _gdk_broadway_display_consume_all_input (GdkDisplay *display);
 BroadwayInputMsg * _gdk_broadway_display_block_for_input (GdkDisplay *display,

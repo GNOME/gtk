@@ -1039,7 +1039,7 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   display_class->get_next_serial = gdk_wayland_display_get_next_serial;
   display_class->get_startup_notification_id = gdk_wayland_display_get_startup_notification_id;
   display_class->notify_startup_complete = gdk_wayland_display_notify_startup_complete;
-  display_class->create_surface = _gdk_wayland_display_create_surface;
+  display_class->create_surface = gdk_wayland_display_create_surface;
   display_class->get_keymap = _gdk_wayland_display_get_keymap;
 
   display_class->make_gl_context_current = gdk_wayland_display_make_gl_context_current;

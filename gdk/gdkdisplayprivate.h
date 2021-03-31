@@ -137,11 +137,7 @@ struct _GdkDisplayClass
 
   GdkSurface *               (*create_surface) (GdkDisplay     *display,
                                                 GdkSurfaceType  surface_type,
-                                                GdkSurface     *parent,
-                                                int             x,
-                                                int             y,
-                                                int             width,
-                                                int             height);
+                                                GdkSurface     *parent);
 
   GdkKeymap *                (*get_keymap)         (GdkDisplay    *display);
 
@@ -205,11 +201,7 @@ void                _gdk_display_pause_events         (GdkDisplay       *display
 void                _gdk_display_unpause_events       (GdkDisplay       *display);
 GdkSurface *        gdk_display_create_surface        (GdkDisplay       *display,
                                                        GdkSurfaceType    surface_type,
-                                                       GdkSurface       *parent,
-                                                       int               x,
-                                                       int               y,
-                                                       int               width,
-                                                       int               height);
+                                                       GdkSurface       *parent);
 
 gboolean            gdk_display_make_gl_context_current  (GdkDisplay        *display,
                                                           GdkGLContext      *context);

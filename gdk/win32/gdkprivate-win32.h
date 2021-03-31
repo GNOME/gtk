@@ -379,13 +379,9 @@ void       _gdk_win32_keymap_set_active_layout   (GdkWin32Keymap *keymap,
 
 GdkKeymap *_gdk_win32_display_get_keymap (GdkDisplay *display);
 
-GdkSurface *_gdk_win32_display_create_surface  (GdkDisplay    *display,
+GdkSurface *gdk_win32_display_create_surface   (GdkDisplay    *display,
                                                 GdkSurfaceType surface_type,
-                                                GdkSurface     *parent,
-                                                int             x,
-                                                int             y,
-                                                int             width,
-                                                int             height);
+                                                GdkSurface     *parent);
 
 /* stray GdkSurfaceImplWin32 members */
 void _gdk_win32_surface_register_dnd (GdkSurface *window);

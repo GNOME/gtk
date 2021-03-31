@@ -321,8 +321,7 @@ gdk_macos_surface_drag_begin (GdkSurface         *surface,
   _gdk_macos_surface_get_root_coords (GDK_MACOS_SURFACE (surface), &sx, &sy);
   drag_surface = _gdk_macos_surface_new (GDK_MACOS_DISPLAY (surface->display),
                                          GDK_SURFACE_TEMP,
-                                         surface,
-                                         -99, -99, 1, 1);
+                                         surface);
   drag = g_object_new (GDK_TYPE_MACOS_DRAG,
                        "drag-surface", drag_surface,
                        "surface", surface,
@@ -514,13 +513,9 @@ gdk_macos_surface_init (GdkMacosSurface *self)
 }
 
 GdkMacosSurface *
-_gdk_macos_surface_new (GdkMacosDisplay   *display,
-                        GdkSurfaceType     surface_type,
-                        GdkSurface        *parent,
-                        int                x,
-                        int                y,
-                        int                width,
-                        int                height)
+_gdk_macos_surface_new (GdkMacosDisplay *display,
+                        GdkSurfaceType   surface_type,
+                        GdkSurface      *parent)
 {
   GdkFrameClock *frame_clock;
   GdkMacosSurface *ret;
@@ -535,15 +530,15 @@ _gdk_macos_surface_new (GdkMacosDisplay   *display,
   switch (surface_type)
     {
     case GDK_SURFACE_TOPLEVEL:
-      ret = _gdk_macos_toplevel_surface_new (display, parent, frame_clock, x, y, width, height);
+      ret = _gdk_macos_toplevel_surface_new (display, parent, frame_clock);
       break;
 
     case GDK_SURFACE_POPUP:
-      ret = _gdk_macos_popup_surface_new (display, parent, frame_clock, x, y, width, height);
+      ret = _gdk_macos_popup_surface_new (display, parent, frame_clock);
       break;
 
     case GDK_SURFACE_TEMP:
-      ret = _gdk_macos_drag_surface_new (display, frame_clock, x, y, width, height);
+      ret = _gdk_macos_drag_surface_new (display, frame_clock, x, y);
       break;
 
     default:

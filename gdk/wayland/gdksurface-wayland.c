@@ -803,13 +803,9 @@ static void gdk_wayland_surface_set_title      (GdkSurface *surface,
                                                 const char *title);
 
 GdkSurface *
-_gdk_wayland_display_create_surface (GdkDisplay     *display,
-                                     GdkSurfaceType  surface_type,
-                                     GdkSurface     *parent,
-                                     int             x,
-                                     int             y,
-                                     int             width,
-                                     int             height)
+gdk_wayland_display_create_surface (GdkDisplay     *display,
+                                    GdkSurfaceType  surface_type,
+                                    GdkSurface     *parent)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GdkSurface *surface;
@@ -851,22 +847,6 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
     }
 
   impl = GDK_WAYLAND_SURFACE (surface);
-
-  if (width > 65535)
-    {
-      g_warning ("Native Surfaces wider than 65535 pixels are not supported");
-      width = 65535;
-    }
-  if (height > 65535)
-    {
-      g_warning ("Native Surfaces taller than 65535 pixels are not supported");
-      height = 65535;
-    }
-
-  surface->x = x;
-  surface->y = y;
-  surface->width = width;
-  surface->height = height;
 
   g_object_ref (surface);
 
@@ -4696,10 +4676,9 @@ create_dnd_surface (GdkDisplay *display)
 {
   GdkSurface *surface;
 
-  surface = _gdk_wayland_display_create_surface (display,
-                                                 GDK_SURFACE_TEMP,
-                                                 NULL,
-                                                 0, 0, 100, 100);
+  surface = gdk_wayland_display_create_surface (display,
+                                                GDK_SURFACE_TEMP,
+                                                NULL);
   GDK_WAYLAND_SURFACE (surface)->is_drag_surface = TRUE;
 
   return surface;
