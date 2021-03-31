@@ -108,23 +108,88 @@ gsk_pango_renderer_draw_glyph_item (PangoRenderer  *renderer,
 }
 
 static void
-gsk_pango_renderer_draw_rectangle (PangoRenderer     *renderer,
-                                   PangoRenderPart    part,
-                                   int                x,
-                                   int                y,
-                                   int                width,
-                                   int                height)
+gsk_pango_renderer_draw_rectangle (PangoRenderer   *renderer,
+                                   PangoRenderPart  part,
+                                   int              x,
+                                   int              y,
+                                   int              width,
+                                   int              height)
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
   GdkRGBA rgba;
+  double xx, yy, ww, hh;
+  GtkLineStyle line_style;
+
+  xx = (double)x / PANGO_SCALE;
+  yy = (double)y / PANGO_SCALE;
+  ww = (double)width / PANGO_SCALE;
+  hh = (double)height / PANGO_SCALE;
 
   get_color (crenderer, part, &rgba);
-  gtk_snapshot_append_color (crenderer->snapshot,
-                             &rgba,
-                             &GRAPHENE_RECT_INIT ((double)x / PANGO_SCALE,
-                                                  (double)y / PANGO_SCALE,
-                                                  (double)width / PANGO_SCALE,
-                                                  (double)height / PANGO_SCALE));
+
+  if (part == PANGO_RENDER_PART_UNDERLINE ||
+      part == PANGO_RENDER_PART_STRIKETHROUGH ||
+      part == PANGO_RENDER_PART_OVERLINE)
+    line_style = crenderer->line_style;
+  else
+    line_style = GTK_LINE_STYLE_SOLID;
+
+  switch (line_style)
+    {
+    case GTK_LINE_STYLE_SOLID:
+      gtk_snapshot_append_color (crenderer->snapshot,
+                                 &rgba,
+                                 &GRAPHENE_RECT_INIT (xx, yy, ww, hh));
+      break;
+
+    case GTK_LINE_STYLE_DOTTED:
+      {
+        GskRoundedRect dot;
+        double d = hh;
+        graphene_rect_t bounds = GRAPHENE_RECT_INIT (xx, yy, d, d);
+        graphene_size_t rr = GRAPHENE_SIZE_INIT (d/2, d/2);
+        GdkRGBA transparent = { 0.f, 0.f, 0.f, 0.f };
+
+        gsk_rounded_rect_init (&dot, &bounds, &rr, &rr, &rr, &rr);
+
+        gtk_snapshot_push_repeat (crenderer->snapshot,
+                                  &GRAPHENE_RECT_INIT (xx, yy, ww, hh),
+                                  NULL);
+
+        gtk_snapshot_push_rounded_clip (crenderer->snapshot, &dot);
+        gtk_snapshot_append_color (crenderer->snapshot, &rgba, &bounds);
+        gtk_snapshot_pop (crenderer->snapshot);
+        gtk_snapshot_append_color (crenderer->snapshot, &transparent, &GRAPHENE_RECT_INIT (xx + d, yy, 0.5 * d, d));
+        gtk_snapshot_pop (crenderer->snapshot);
+      }
+      break;
+
+    case GTK_LINE_STYLE_DASHED:
+      {
+        GskColorStop stops[4];
+        GdkRGBA transparent = { 0.f, 0.f, 0.f, 0.f };
+
+        stops[0].offset = 0;
+        stops[0].color = rgba;
+        stops[1].offset = 0.66;
+        stops[1].color = rgba;
+        stops[2].offset = 0.66;
+        stops[2].color = transparent;
+        stops[3].offset = 1;
+        stops[3].color = transparent;
+
+        gtk_snapshot_append_repeating_linear_gradient (
+                                  crenderer->snapshot,
+                                  &GRAPHENE_RECT_INIT (xx, yy, ww, hh),
+                                  &GRAPHENE_POINT_INIT (xx, yy),
+                                  &GRAPHENE_POINT_INIT (xx + 9 * MIN (ww, hh), yy),
+                                  stops, 4);
+      }
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
 }
 
 static void
@@ -343,6 +408,24 @@ get_item_appearance (PangoItem *item)
   return NULL;
 }
 
+static GtkLineStyle
+get_item_line_style (PangoItem *item)
+{
+  GSList *tmp_list = item->analysis.extra_attrs;
+
+  while (tmp_list)
+    {
+      PangoAttribute *attr = tmp_list->data;
+
+      if (attr->klass->type == gtk_text_attr_line_style_type)
+        return ((GtkTextAttrLineStyle *)attr)->value;
+
+      tmp_list = tmp_list->next;
+    }
+
+  return GTK_LINE_STYLE_SOLID;
+}
+
 static void
 gsk_pango_renderer_prepare_run (PangoRenderer  *renderer,
                                 PangoLayoutRun *run)
@@ -351,8 +434,16 @@ gsk_pango_renderer_prepare_run (PangoRenderer  *renderer,
   const GdkRGBA *bg_rgba = NULL;
   const GdkRGBA *fg_rgba = NULL;
   GtkTextAppearance *appearance;
+  GtkLineStyle line_style;
 
   PANGO_RENDERER_CLASS (gsk_pango_renderer_parent_class)->prepare_run (renderer, run);
+
+  line_style = get_item_line_style (run->item);
+  if (crenderer->line_style != line_style)
+    {
+      pango_renderer_part_changed (renderer, PANGO_RENDER_PART_UNDERLINE);
+      crenderer->line_style = get_item_line_style (run->item);
+    }
 
   appearance = get_item_appearance (run->item);
 

@@ -219,6 +219,21 @@ struct _GtkTextLineDisplay
 
 #ifdef GTK_COMPILATION
 extern G_GNUC_INTERNAL PangoAttrType gtk_text_attr_appearance_type;
+
+typedef enum {
+  GTK_LINE_STYLE_SOLID,
+  GTK_LINE_STYLE_DASHED,
+  GTK_LINE_STYLE_DOTTED
+} GtkLineStyle;
+
+typedef struct {
+  PangoAttribute attr;
+  GtkLineStyle value;
+} GtkTextAttrLineStyle;
+
+extern PangoAttrType gtk_text_attr_line_style_type;
+
+PangoAttribute *gtk_text_attr_line_style_new (GtkLineStyle style);
 #endif
 
 GType         gtk_text_layout_get_type    (void) G_GNUC_CONST;

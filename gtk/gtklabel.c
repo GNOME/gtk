@@ -52,6 +52,7 @@
 #include "gtkdragsourceprivate.h"
 #include "gtkdragicon.h"
 #include "gtkcsscolorvalueprivate.h"
+#include "gtktextlayoutprivate.h"
 
 #include <math.h>
 #include <string.h>
@@ -1259,6 +1260,85 @@ gtk_label_size_allocate (GtkWidget *widget,
 }
 
 
+static void
+add_dotted_underline (PangoLayout *layout)
+{
+  const char *text;
+  char *p;
+  GSList *l, *ll, *a;
+
+  text = pango_layout_get_text (layout);
+  p = strstr (text, "good");
+
+  for (int i = 0; i < pango_layout_get_line_count (layout); i++)
+    {
+      PangoLayoutLine *line = pango_layout_get_line (layout, i);
+
+      for (l = line->runs, ll = NULL; l; ll = l, l = l->next)
+        {
+          PangoGlyphItem *run = l->data;
+
+          if (run == NULL)
+            continue;
+
+          if (p != NULL && text + run->item->offset <= p && p + strlen ("good") <= text + run->item->offset + run->item->length)
+            {
+               /* Match inside this item */
+               if (text + run->item->offset < p)
+                 {
+                   PangoGlyphItem *before;
+
+                   /* split off initial segment */
+                   before = pango_glyph_item_split (run, text, p - (text + run->item->offset));
+                   if (ll)
+                     {
+                       ll->next = g_slist_prepend (l, before);
+                       ll = ll->next;
+                     }
+                   else
+                     {
+                       line->runs = g_slist_prepend (line->runs, before);
+                       ll = line->runs;
+                     }
+                 }
+
+               if (p + strlen ("good") < text + run->item->offset + run->item->length)
+                 {
+                   /* split off final segment */
+                   run = pango_glyph_item_split (run, text, strlen ("good"));
+
+                   if (ll)
+                     ll->next = g_slist_prepend (l, run);
+                   else
+                     line->runs = g_slist_prepend (line->runs, run);
+                 }
+
+               for (a = run->item->analysis.extra_attrs; a; a = a->next)
+                 {
+                   PangoAttribute *attr = a->data;
+
+                   if (attr->klass->type == gtk_text_attr_line_style_type)
+                     break;
+                 }
+
+               if (a == NULL)
+                 {
+                   PangoAttribute *attr;
+
+                   attr = gtk_text_attr_line_style_new (GTK_LINE_STYLE_DOTTED);
+                   run->item->analysis.extra_attrs =
+                       g_slist_prepend (run->item->analysis.extra_attrs, attr);
+
+                   attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
+                   run->item->analysis.extra_attrs =
+                       g_slist_prepend (run->item->analysis.extra_attrs, attr);
+                 }
+
+               return;
+            }
+        }
+    }
+}
 
 #define GRAPHENE_RECT_FROM_RECT(_r) (GRAPHENE_RECT_INIT ((_r)->x, (_r)->y, (_r)->width, (_r)->height))
 
@@ -1280,6 +1360,7 @@ gtk_label_snapshot (GtkWidget   *widget,
   context = _gtk_widget_get_style_context (widget);
   get_layout_location (self, &lx, &ly);
 
+  add_dotted_underline (self->layout);
   gtk_snapshot_render_layout (snapshot, context, lx, ly, self->layout);
 
   info = self->select_info;

@@ -21,6 +21,7 @@
 
 #include <pango/pango.h>
 #include "gtk/gtksnapshot.h"
+#include "gtk/gtktextlayoutprivate.h"
 
 G_BEGIN_DECLS
 
@@ -68,6 +69,8 @@ struct _GskPangoRenderer
   guint                  is_cached_renderer : 1;
 
   GskPangoShapeHandler   shape_handler;
+
+  GtkLineStyle line_style;
 };
 
 struct _GskPangoRendererClass

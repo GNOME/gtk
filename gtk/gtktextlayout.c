@@ -1512,6 +1512,51 @@ gtk_text_attr_appearance_new (const GtkTextAppearance *appearance)
   return (PangoAttribute *)result;
 }
 
+static PangoAttribute *
+attr_line_style_copy (const PangoAttribute *attr)
+{
+  const GtkTextAttrLineStyle *a = (GtkTextAttrLineStyle *)attr;
+  return gtk_text_attr_line_style_new (a->value);
+}
+
+static void
+attr_line_style_destroy (PangoAttribute *attr)
+{
+  g_slice_free (GtkTextAttrLineStyle, (gpointer)attr);
+}
+
+static gboolean
+attr_line_style_equal (const PangoAttribute *attr1,
+                       const PangoAttribute *attr2)
+{
+  const GtkTextAttrLineStyle *a1 = (GtkTextAttrLineStyle *)attr1;
+  const GtkTextAttrLineStyle *a2 = (GtkTextAttrLineStyle *)attr2;
+  return a1->value == a2->value;
+}
+
+PangoAttrType gtk_text_attr_line_style_type = 0;
+
+PangoAttribute *
+gtk_text_attr_line_style_new (GtkLineStyle style)
+{
+  static PangoAttrClass klass = {
+    0,
+    attr_line_style_copy,
+    attr_line_style_destroy,
+    attr_line_style_equal
+  };
+  GtkTextAttrLineStyle *attr;
+
+  if (!klass.type)
+    klass.type = gtk_text_attr_line_style_type =
+      pango_attr_type_register (I_("GtkTextAttrLineStyle"));
+
+  attr = g_slice_new (GtkTextAttrLineStyle);
+  pango_attribute_init (&attr->attr, &klass);
+  attr->value = style;
+  return (PangoAttribute *)attr;
+}
+
 static void
 add_generic_attrs (GtkTextLayout      *layout,
                    GtkTextAppearance  *appearance,
