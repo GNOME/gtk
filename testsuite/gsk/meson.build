@@ -76,6 +76,7 @@ compare_render_tests = [
   'clip-in-rounded-clip2',
   'clip-in-rounded-clip3',
   'rounded-clip-in-clip-3d', # not really 3d, but cairo fails it
+  'clipped-repeat-3d-ngl',
   'issue-3615'
 ]
 
@@ -89,8 +90,8 @@ informative_render_tests = [
 
 renderers = [
   # name      exclude term
-  [ 'opengl', ''    ],
-  [ 'next', ''    ],
+  [ 'gl', '-ngl'    ],
+  [ 'ngl', ''    ],
   [ 'broadway',  '-3d' ],
   [ 'cairo',  '-3d' ],
 ]
