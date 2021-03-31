@@ -127,6 +127,85 @@ gsk_pango_renderer_draw_rectangle (PangoRenderer     *renderer,
                                                   (double)height / PANGO_SCALE));
 }
 
+#if PANGO_VERSION_CHECK(1,49,0)
+static void
+gsk_pango_renderer_draw_line (PangoRenderer        *renderer,
+                              PangoRenderPart       part,
+                              PangoRenderLineStyle  style,
+                              int                   x,
+                              int                   y,
+                              int                   width,
+                              int                   height)
+{
+  GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
+  GdkRGBA rgba;
+  double xx, yy, ww, hh;
+
+  xx = (double)x / PANGO_SCALE;
+  yy = (double)y / PANGO_SCALE;
+  ww = (double)width / PANGO_SCALE;
+  hh = (double)height / PANGO_SCALE;
+
+  get_color (crenderer, part, &rgba);
+  switch (style)
+    {
+    case PANGO_RENDER_LINE_SOLID:
+      gtk_snapshot_append_color (crenderer->snapshot,
+                                 &rgba,
+                                 &GRAPHENE_RECT_INIT (xx, yy, ww, hh));
+      break;
+
+    case PANGO_RENDER_LINE_DOTTED:
+      {
+        GskRoundedRect dot;
+        double d = MIN (ww, hh);
+        graphene_rect_t bounds = GRAPHENE_RECT_INIT (xx, yy, d, d);
+        graphene_size_t rr = GRAPHENE_SIZE_INIT (d/2, d/2);
+        GdkRGBA transparent = { 0.f, 0.f, 0.f, 0.f };
+
+        gsk_rounded_rect_init (&dot, &bounds, &rr, &rr, &rr, &rr);
+
+        gtk_snapshot_push_repeat (crenderer->snapshot,
+                                  &GRAPHENE_RECT_INIT (xx, yy, ww, hh),
+                                  NULL);
+
+        gtk_snapshot_push_rounded_clip (crenderer->snapshot, &dot);
+        gtk_snapshot_append_color (crenderer->snapshot, &rgba, &bounds);
+        gtk_snapshot_pop (crenderer->snapshot);
+        gtk_snapshot_append_color (crenderer->snapshot, &transparent, &GRAPHENE_RECT_INIT (xx + d, yy, 0.5 * d, d));
+        gtk_snapshot_pop (crenderer->snapshot);
+      }
+      break;
+
+    case PANGO_RENDER_LINE_DASHED:
+      {
+        GskColorStop stops[4];
+        GdkRGBA transparent = { 0.f, 0.f, 0.f, 0.f };
+
+        stops[0].offset = 0;
+        stops[0].color = rgba;
+        stops[1].offset = 0.66;
+        stops[1].color = rgba;
+        stops[2].offset = 0.66;
+        stops[2].color = transparent;
+        stops[3].offset = 1;
+        stops[3].color = transparent;
+
+        gtk_snapshot_append_repeating_linear_gradient (
+                                  crenderer->snapshot,
+                                  &GRAPHENE_RECT_INIT (xx, yy, ww, hh),
+                                  &GRAPHENE_POINT_INIT (xx, yy),
+                                  &GRAPHENE_POINT_INIT (xx + 9 * MIN (ww, hh), yy),
+                                  stops, 4);
+      }
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+#endif
+
 static void
 gsk_pango_renderer_draw_trapezoid (PangoRenderer   *renderer,
                                    PangoRenderPart  part,
@@ -431,6 +510,9 @@ gsk_pango_renderer_class_init (GskPangoRendererClass *klass)
   renderer_class->draw_trapezoid = gsk_pango_renderer_draw_trapezoid;
   renderer_class->draw_error_underline = gsk_pango_renderer_draw_error_underline;
   renderer_class->draw_shape = gsk_pango_renderer_draw_shape;
+#if PANGO_VERSION_CHECK(1,49,0)
+  renderer_class->draw_line = gsk_pango_renderer_draw_line;
+#endif
   renderer_class->prepare_run = gsk_pango_renderer_prepare_run;
 }
 
