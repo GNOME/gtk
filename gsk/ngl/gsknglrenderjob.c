@@ -1605,6 +1605,7 @@ gsk_ngl_render_job_visit_rounded_clip_node (GskNglRenderJob     *job,
 
       offscreen.bounds = &node->bounds;
       offscreen.force_offscreen = TRUE;
+      offscreen.reset_clip = FALSE;
 
       gsk_ngl_render_job_push_clip (job, &transformed_clip);
       if (!gsk_ngl_render_job_visit_node_with_offscreen (job, child, &offscreen))
