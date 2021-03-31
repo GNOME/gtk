@@ -163,18 +163,29 @@ struct _GskNglRenderJob
 
 typedef struct _GskNglRenderOffscreen
 {
+  /* The bounds to render */
   const graphene_rect_t *bounds;
+
+  /* Return location for texture coordinates */
   struct {
     float x;
     float y;
     float x2;
     float y2;
   } area;
+
+  /* Return location for texture ID */
   guint texture_id;
+
+  /* Whether to force creating a new texture, even if the
+   * input already is a texture
+   */
   guint force_offscreen : 1;
   guint reset_clip : 1;
   guint do_not_cache : 1;
   guint linear_filter : 1;
+
+  /* Return location for whether we created a texture */
   guint was_offscreen : 1;
 } GskNglRenderOffscreen;
 
