@@ -24,17 +24,17 @@ search_index = true
   [dependencies."Pango-1.0"]
   name = "Pango"
   description = "Text shaping and rendering"
-  docs_url = "https://developer.gnome.org/pango/stable"
+  docs_url = "https://docs.gtk.org/Pango/"
 
   [dependencies."GdkWayland-4.0"]
   name = "GdkWayland"
   description = "GDK Wayland Backend"
-  docs_url = "https://gnome.pages.gitlab.gnome.org/gtk/gdk4-wayland/"
+  docs_url = "https://docs.gtk.org/gdk4-wayland/"
 
   [dependencies."GdkX11-4.0"]
   name = "GdkX11"
   description = "GDK X11 Backend"
-  docs_url = "https://gnome.pages.gitlab.gnome.org/gtk/gdk4-x11/"
+  docs_url = "https://docs.gtk.org/gdk4-x11/"
 
 [theme]
 name = "basic"
