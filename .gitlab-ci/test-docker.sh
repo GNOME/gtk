@@ -15,7 +15,7 @@ meson \
         -Dx11-backend=true \
         -Dwayland-backend=true \
         -Dbroadway-backend=true \
-        -Dvulkan=yes \
+        -Dvulkan=enabled \
         -Dprofiler=true \
         --werror \
         ${EXTRA_MESON_FLAGS:-} \
