@@ -66,13 +66,13 @@
  * calling [method@Gtk.Builder.set_translation_domain] on the builder.
  *
  * Objects are described by `<object>` elements, which can contain
- * <property> elements to set properties, `<signal>` elements which
+ * `<property>` elements to set properties, `<signal>` elements which
  * connect signals to handlers, and `<child>` elements, which describe
  * child objects (most often widgets inside a container, but also e.g.
  * actions in an action group, or columns in a tree model). A `<child>`
  * element contains an `<object>` element which describes the child object.
  *
- * The target toolkit version(s) are described by <requires> elements,
+ * The target toolkit version(s) are described by `<requires>` elements,
  * the “lib” attribute specifies the widget library in question (currently
  * the only supported value is “gtk”) and the “version” attribute specifies
  * the target version in the form “`<major>`.`<minor>`”. `GtkBuilder` will
@@ -93,7 +93,7 @@
  * underscores) for its own purposes.
  *
  * Setting properties of objects is pretty straightforward with the
- * <property> element: the “name” attribute specifies the name of the
+ * `<property>` element: the “name” attribute specifies the name of the
  * property, and the content of the element specifies the value.
  * If the “translatable” attribute is set to a true value, GTK uses
  * `gettext()` (or `dgettext()` if the builder has a translation domain set)
@@ -148,7 +148,7 @@
  *
  * # Signal handlers and function pointers
  *
- * Signal handlers are set up with the <signal> element. The “name”
+ * Signal handlers are set up with the `<signal>` element. The “name”
  * attribute specifies the name of the signal, and the “handler” attribute
  * specifies the function to connect to the signal.
  * The remaining attributes, “after”, “swapped” and “object”, have the
@@ -198,7 +198,7 @@
  * These XML fragments are explained in the documentation of the
  * respective objects.
  *
- * A <template> tag can be used to define a widget class’s components.
+ * A `<template>` tag can be used to define a widget class’s components.
  * See the [GtkWidget documentation](class.Widget.html#building-composite-widgets-from-template-xml) for details.
  */
 
