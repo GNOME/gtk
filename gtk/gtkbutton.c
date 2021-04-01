@@ -39,6 +39,8 @@
  * `GtkButton` has a single CSS node with name button. The node will get the
  * style classes .image-button or .text-button, if the content is just an
  * image or label, respectively. It may also receive the .flat style class.
+ * When activating a button via the keyboard, the button will temporarily
+ * gain the .keyboard-activating style class.
  *
  * Other style classes that are commonly used with `GtkButton` include
  * .suggested-action and .destructive-action. In special cases, buttons
@@ -780,6 +782,8 @@ gtk_real_button_activate (GtkButton *button)
     {
       priv->activate_timeout = g_timeout_add (ACTIVATE_TIMEOUT, button_activate_timeout, button);
       g_source_set_name_by_id (priv->activate_timeout, "[gtk] button_activate_timeout");
+
+      gtk_widget_add_css_class (GTK_WIDGET (button), "keyboard-activating");
       priv->button_down = TRUE;
     }
 }
@@ -789,6 +793,8 @@ gtk_button_finish_activate (GtkButton *button,
                             gboolean   do_it)
 {
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
+
+  gtk_widget_remove_css_class (GTK_WIDGET (button), "keyboard-activating");
 
   g_source_remove (priv->activate_timeout);
   priv->activate_timeout = 0;

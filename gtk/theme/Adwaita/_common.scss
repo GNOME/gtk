@@ -492,6 +492,7 @@ button {
       -gtk-icon-filter: brightness(1.2);
     }
 
+    &.keyboard-activating,
     &:active,
     &:checked {
       @include button(active);
