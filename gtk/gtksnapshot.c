@@ -1413,7 +1413,8 @@ gtk_snapshot_append_node_internal (GtkSnapshot   *snapshot,
 }
 
 static GskRenderNode *
-gtk_snapshot_pop_internal (GtkSnapshot *snapshot)
+gtk_snapshot_pop_internal (GtkSnapshot *snapshot,
+                           gboolean     is_texture_pop)
 {
   GtkSnapshotState *state;
   GskRenderNode *node;
@@ -1435,6 +1436,17 @@ gtk_snapshot_pop_internal (GtkSnapshot *snapshot)
   if (forgotten_restores)
     {
       g_warning ("Too many gtk_snapshot_save() calls. %u saves remaining.", forgotten_restores);
+    }
+
+  if (is_texture_pop && (state->collect_func != gtk_snapshot_collect_gl_shader_texture))
+    {
+      g_critical ("Unexpected call to gtk_snapshot_gl_shader_pop_texture().");
+      return NULL;
+    }
+  else if (!is_texture_pop && (state->collect_func == gtk_snapshot_collect_gl_shader_texture))
+    {
+      g_critical ("Expected a call to gtk_snapshot_gl_shader_pop_texture().");
+      return NULL;
     }
 
   return gtk_snapshot_pop_one (snapshot);
@@ -1460,7 +1472,7 @@ gtk_snapshot_push_collect (GtkSnapshot *snapshot)
 GskRenderNode *
 gtk_snapshot_pop_collect (GtkSnapshot *snapshot)
 {
-  GskRenderNode *result = gtk_snapshot_pop_internal (snapshot);
+  GskRenderNode *result = gtk_snapshot_pop_internal (snapshot, FALSE);
 
   return result;
 }
@@ -1483,7 +1495,7 @@ gtk_snapshot_to_node (GtkSnapshot *snapshot)
 {
   GskRenderNode *result;
 
-  result = gtk_snapshot_pop_internal (snapshot);
+  result = gtk_snapshot_pop_internal (snapshot, FALSE);
 
   /* We should have exactly our initial state */
   if (!gtk_snapshot_states_is_empty (&snapshot->state_stack))
@@ -1551,13 +1563,9 @@ gtk_snapshot_to_paintable (GtkSnapshot           *snapshot,
 void
 gtk_snapshot_pop (GtkSnapshot *snapshot)
 {
-  GtkSnapshotState *state = gtk_snapshot_get_current_state (snapshot);
   GskRenderNode *node;
 
-  if (state->collect_func == gtk_snapshot_collect_gl_shader_texture)
-    g_warning ("Not enough calls to gtk_snapshot_gl_shader_pop_texture().");
-
-  node = gtk_snapshot_pop_internal (snapshot);
+  node = gtk_snapshot_pop_internal (snapshot, FALSE);
 
   if (node)
     gtk_snapshot_append_node_internal (snapshot, node);
@@ -1577,18 +1585,9 @@ gtk_snapshot_pop (GtkSnapshot *snapshot)
 void
 gtk_snapshot_gl_shader_pop_texture (GtkSnapshot *snapshot)
 {
-  GtkSnapshotState *state = gtk_snapshot_get_current_state (snapshot);
   G_GNUC_UNUSED GskRenderNode *node;
 
-  if (state->collect_func != gtk_snapshot_collect_gl_shader_texture)
-    {
-      g_warning ("Too many calls to gtk_snapshot_gl_shader_pop_texture().");
-      return;
-    }
-
-  g_assert (state->collect_func == gtk_snapshot_collect_gl_shader_texture);
-
-  node = gtk_snapshot_pop_internal (snapshot);
+  node = gtk_snapshot_pop_internal (snapshot, TRUE);
   g_assert (node == NULL);
 }
 
