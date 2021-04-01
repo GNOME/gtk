@@ -212,6 +212,7 @@ compose_table_match_compact (void)
   gunichar ch;
 
   buffer[0] = GDK_KEY_Multi_key;
+  buffer[1] = 0;
 
   ret = gtk_compose_table_compact_check (&table, buffer, 1, &finish, &match, &ch);
   g_assert_true (ret);
@@ -222,6 +223,7 @@ compose_table_match_compact (void)
   buffer[0] = GDK_KEY_a;
   buffer[1] = GDK_KEY_b;
   buffer[2] = GDK_KEY_c;
+  buffer[3] = 0;
 
   ret = gtk_compose_table_compact_check (&table, buffer, 3, &finish, &match, &ch);
   g_assert_false (ret);
@@ -233,12 +235,33 @@ compose_table_match_compact (void)
   buffer[1] = GDK_KEY_parenleft;
   buffer[2] = GDK_KEY_j;
   buffer[3] = GDK_KEY_parenright;
+  buffer[4] = 0;
 
   ret = gtk_compose_table_compact_check (&table, buffer, 4, &finish, &match, &ch);
   g_assert_true (ret);
   g_assert_true (finish);
   g_assert_true (match);
   g_assert_true (ch == 0x24d9); /* CIRCLED LATIN SMALL LETTER J */
+
+  buffer[0] = GDK_KEY_dead_acute;
+  buffer[1] = GDK_KEY_space;
+  buffer[2] = 0;
+
+  ret = gtk_compose_table_compact_check (&table, buffer, 2, &finish, &match, &ch);
+  g_assert_true (ret);
+  g_assert_true (finish);
+  g_assert_true (match);
+  g_assert_true (ch == 0x27);
+
+  buffer[0] = GDK_KEY_dead_acute;
+  buffer[1] = GDK_KEY_dead_acute;
+  buffer[2] = 0;
+
+  ret = gtk_compose_table_compact_check (&table, buffer, 2, &finish, &match, &ch);
+  g_assert_true (ret);
+  g_assert_true (finish);
+  g_assert_true (match);
+  g_assert_true (ch == 0xb4);
 }
 
 static void
