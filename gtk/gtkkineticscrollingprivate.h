@@ -23,6 +23,13 @@
 
 G_BEGIN_DECLS
 
+typedef enum {
+  GTK_KINETIC_SCROLLING_CHANGE_NONE = 0,
+  GTK_KINETIC_SCROLLING_CHANGE_LOWER = 1 << 0,
+  GTK_KINETIC_SCROLLING_CHANGE_UPPER = 1 << 1,
+  GTK_KINETIC_SCROLLING_CHANGE_IN_OVERSHOOT = 1 << 2,
+} GtkKineticScrollingChange;
+
 typedef struct _GtkKineticScrolling GtkKineticScrolling;
 
 GtkKineticScrolling *    gtk_kinetic_scrolling_new  (double                lower,
@@ -33,6 +40,10 @@ GtkKineticScrolling *    gtk_kinetic_scrolling_new  (double                lower
                                                      double                initial_position,
                                                      double                initial_velocity);
 void                     gtk_kinetic_scrolling_free (GtkKineticScrolling  *kinetic);
+
+GtkKineticScrollingChange gtk_kinetic_scrolling_update_size (GtkKineticScrolling *data,
+                                                             double               lower,
+                                                             double               upper);
 
 gboolean                 gtk_kinetic_scrolling_tick (GtkKineticScrolling  *data,
                                                      double                time_delta,

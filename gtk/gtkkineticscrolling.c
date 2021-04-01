@@ -123,6 +123,35 @@ gtk_kinetic_scrolling_new (double lower,
   return data;
 }
 
+GtkKineticScrollingChange
+gtk_kinetic_scrolling_update_size (GtkKineticScrolling *data,
+                                   double               lower,
+                                   double               upper)
+{
+  GtkKineticScrollingChange change = GTK_KINETIC_SCROLLING_CHANGE_NONE;
+
+  if (lower != data->lower)
+    {
+      if (data->position <= lower)
+        change |= GTK_KINETIC_SCROLLING_CHANGE_LOWER;
+
+      data->lower = lower;
+    }
+
+  if (upper != data->upper)
+    {
+      if (data->position >= data->upper)
+        change |= GTK_KINETIC_SCROLLING_CHANGE_UPPER;
+
+      data->upper = upper;
+    }
+
+  if (data->phase == GTK_KINETIC_SCROLLING_PHASE_OVERSHOOTING)
+    change |= GTK_KINETIC_SCROLLING_CHANGE_IN_OVERSHOOT;
+
+  return change;
+}
+
 void
 gtk_kinetic_scrolling_free (GtkKineticScrolling *kinetic)
 {
