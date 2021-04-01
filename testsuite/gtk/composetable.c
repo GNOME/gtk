@@ -329,12 +329,21 @@ match_algorithmic (void)
   g_assert_cmphex (ch, ==, 0x1e09);
 
   ret = gtk_check_algorithmically (buffer, 2, &ch);
+  g_assert_true (ret);
+
   buffer[0] = GDK_KEY_dead_acute;
   buffer[1] = GDK_KEY_dead_cedilla;
   buffer[2] = GDK_KEY_dead_grave;
 
   ret = gtk_check_algorithmically (buffer, 3, &ch);
   g_assert_false (ret);
+
+  buffer[0] = GDK_KEY_dead_diaeresis;
+  buffer[1] = GDK_KEY_a;
+
+  ret = gtk_check_algorithmically (buffer, 2, &ch);
+  g_assert_true (ret);
+  g_assert_cmphex (ch, ==, 0xe4);
 }
 
 int
