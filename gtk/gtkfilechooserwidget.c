@@ -3115,6 +3115,7 @@ gtk_file_chooser_widget_dispose (GObject *object)
       location_entry_disconnect (impl);
       impl->external_entry = NULL;
     }
+  remove_settings_signal (impl, gtk_widget_get_display (GTK_WIDGET (impl)));
 
   g_clear_pointer (&impl->box, gtk_widget_unparent);
 
