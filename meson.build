@@ -24,6 +24,7 @@ cloudproviders_req = '>= 0.3.1'
 xkbcommon_req      = '>= 0.2.0'
 sysprof_req        = '>= 3.38.0'
 
+fs = import('fs')
 gnome = import('gnome')
 pkg_config = import('pkgconfig')
 

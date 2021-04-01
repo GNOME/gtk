@@ -78,11 +78,6 @@ option('colord',
        value: 'disabled',
        description : 'Build colord support for the CUPS printing backend')
 
-option('sassc',
-       type: 'feature',
-       value: 'auto',
-       description: 'Rebuild themes using sassc')
-
 option('f16c',
        type: 'feature',
        value: 'enabled',

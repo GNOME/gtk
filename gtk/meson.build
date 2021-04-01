@@ -839,23 +839,25 @@ gtk_gresources_xml = configure_file(output: 'gtk.gresources.xml',
   ],
 )
 
-# Build the theme files
-sassc = find_program('sassc', required: false)
-if not sassc.found() and not get_option('sassc').disabled()
-  subproject('sassc')
-  sassc = find_program('sassc', required: get_option('sassc').enabled())
-endif
+theme_deps = []
+# For git checkouts, but not for tarballs...
+if not fs.exists('theme/Adwaita/Adwaita.css')
+  # ... build the theme files
+  sassc = find_program('sassc', required: false)
+  if not sassc.found()
+    subproject('sassc')
+    sassc = find_program('sassc', required: true)
+  endif
 
-if sassc.found()
-  sassc_opts = [ '-a', '-M', '-t', 'compact' ]
+  if sassc.found()
+    sassc_opts = [ '-a', '-M', '-t', 'compact' ]
 
-  subdir('theme/Default')
+    subdir('theme/Default')
 
-  theme_deps = [
-    default_theme_deps,
-  ]
-else
-  theme_deps = []
+    theme_deps += [
+      default_theme_deps,
+    ]
+  endif
 endif
 
 gtkresources = gnome.compile_resources('gtkresources',
