@@ -3084,14 +3084,13 @@ cancel_all_operations (GtkFileChooserWidget *impl)
 
 /* Removes the settings signal handler.  It's safe to call multiple times */
 static void
-remove_settings_signal (GtkFileChooserWidget *impl,
-                        GdkDisplay           *display)
+remove_settings_signal (GtkFileChooserWidget *impl)
 {
   if (impl->settings_signal_id)
     {
-      GtkSettings *settings;
+      GdkDisplay *display = gtk_widget_get_display (GTK_WIDGET (impl));
+      GtkSettings *settings = gtk_settings_get_for_display (display);
 
-      settings = gtk_settings_get_for_display (display);
       g_signal_handler_disconnect (settings,
                                    impl->settings_signal_id);
       impl->settings_signal_id = 0;
@@ -3115,7 +3114,7 @@ gtk_file_chooser_widget_dispose (GObject *object)
       location_entry_disconnect (impl);
       impl->external_entry = NULL;
     }
-  remove_settings_signal (impl, gtk_widget_get_display (GTK_WIDGET (impl)));
+  remove_settings_signal (impl);
 
   g_clear_pointer (&impl->box, gtk_widget_unparent);
 
@@ -7856,7 +7855,7 @@ display_changed_cb (GtkWidget            *wiget,
                     GParamSpec           *pspec,
                     GtkFileChooserWidget *impl)
 {
-  remove_settings_signal (impl, gtk_widget_get_display (GTK_WIDGET (impl)));
+  remove_settings_signal (impl);
   check_icon_theme (impl);
 }
 
