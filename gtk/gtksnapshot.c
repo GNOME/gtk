@@ -2448,7 +2448,14 @@ gtk_snapshot_append_border (GtkSnapshot          *snapshot,
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
   gsk_rounded_rect_scale_affine (&real_outline, outline, scale_x, scale_y, dx, dy);
 
-  node = gsk_border_node_new (&real_outline, border_width, border_color);
+  node = gsk_border_node_new (&real_outline,
+                              (float[4]) { 
+                                border_width[0] * scale_y,
+                                border_width[1] * scale_x,
+                                border_width[2] * scale_y,
+                                border_width[3] * scale_x,
+                              },
+                              border_color);
 
   gtk_snapshot_append_node_internal (snapshot, node);
 }
