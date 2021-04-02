@@ -544,6 +544,7 @@ button {
         transition: $button_transition;
         transition-duration: 500ms;
       }
+      &.keyboard-activating,
       &:active,
       &:checked {
         @include button(undecorated-active);
