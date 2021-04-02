@@ -5,9 +5,9 @@
 // - if you need to inverse a color function use the @if directive to match for dark $variant
 
 $variant: 'light';
+$contrast: 'normal';
 
-@import '../Adwaita/colors';
-@import 'colors-hc';
-@import '../Adwaita/colors-public'; // export public colors
-@import '../Adwaita/drawing';
-@import '../Adwaita/common';
+@import 'colors';
+@import 'drawing';
+@import 'common';
+@import 'colors-public';
