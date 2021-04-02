@@ -1503,6 +1503,7 @@ gsk_ngl_render_job_visit_clipped_child (GskNglRenderJob       *job,
 
       offscreen.bounds = &child->bounds;
       offscreen.force_offscreen = TRUE;
+      offscreen.reset_clip = FALSE;
 
       scaled_clip = GSK_ROUNDED_RECT_INIT ((job->offset_x + clip->origin.x) * job->scale_x,
                                            (job->offset_y + clip->origin.y) * job->scale_y,
@@ -1898,6 +1899,7 @@ gsk_ngl_render_job_visit_transform_node (GskNglRenderJob     *job,
           GskNglRenderOffscreen offscreen = {0};
 
           offscreen.bounds = &child->bounds;
+          offscreen.force_offscreen = FALSE;
           offscreen.reset_clip = TRUE;
 
           if (!result_is_axis_aligned (transform, &child->bounds))
@@ -3625,7 +3627,11 @@ gsk_ngl_render_job_visit_node_with_offscreen (GskNglRenderJob       *job,
     }
 
   if (downscale_x != 1 || downscale_y != 1)
-    gsk_ngl_render_job_push_modelview (job, gsk_transform_scale (NULL, downscale_x, downscale_y));
+    {
+      GskTransform *transform = gsk_transform_scale (NULL, downscale_x, downscale_y);
+      gsk_ngl_render_job_push_modelview (job, transform);
+      gsk_transform_unref (transform);
+    }
 
   gsk_ngl_render_job_transform_bounds (job, offscreen->bounds, &viewport);
   /* Code above will scale the size with the scale we use in the render ops,
