@@ -1498,21 +1498,14 @@ gsk_ngl_render_job_visit_clipped_child (GskNglRenderJob       *job,
     }
   else
     {
-      GskRoundedRect scaled_clip;
       GskNglRenderOffscreen offscreen = {0};
 
-      offscreen.bounds = &child->bounds;
+      offscreen.bounds = clip;
       offscreen.force_offscreen = TRUE;
-      offscreen.reset_clip = FALSE;
+      offscreen.reset_clip = TRUE;
+      offscreen.do_not_cache = TRUE;
 
-      scaled_clip = GSK_ROUNDED_RECT_INIT ((job->offset_x + clip->origin.x) * job->scale_x,
-                                           (job->offset_y + clip->origin.y) * job->scale_y,
-                                           clip->size.width * job->scale_x,
-                                           clip->size.height * job->scale_y);
-
-      gsk_ngl_render_job_push_clip (job, &scaled_clip);
       gsk_ngl_render_job_visit_node_with_offscreen (job, child, &offscreen);
-      gsk_ngl_render_job_pop_clip (job);
 
       g_assert (offscreen.texture_id);
 
@@ -1522,7 +1515,7 @@ gsk_ngl_render_job_visit_clipped_child (GskNglRenderJob       *job,
                                            GL_TEXTURE_2D,
                                            GL_TEXTURE0,
                                            offscreen.texture_id);
-      gsk_ngl_render_job_draw_offscreen_rect (job, &child->bounds);
+      gsk_ngl_render_job_draw_offscreen_rect (job, clip);
       gsk_ngl_render_job_end_draw (job);
     }
 }
