@@ -3624,6 +3624,9 @@ gsk_ngl_render_job_visit_node_with_offscreen (GskNglRenderJob       *job,
                                           render_target->framebuffer_id);
     }
 
+  if (downscale_x != 1 || downscale_y != 1)
+    gsk_ngl_render_job_push_modelview (job, gsk_transform_scale (NULL, downscale_x, downscale_y));
+
   gsk_ngl_render_job_transform_bounds (job, offscreen->bounds, &viewport);
   /* Code above will scale the size with the scale we use in the render ops,
    * but for the viewport size, we need our own size limited by the texture size */
@@ -3632,8 +3635,6 @@ gsk_ngl_render_job_visit_node_with_offscreen (GskNglRenderJob       *job,
 
   gsk_ngl_render_job_set_viewport (job, &viewport, &prev_viewport);
   gsk_ngl_render_job_set_projection_from_rect (job, &job->viewport, &prev_projection);
-  if (downscale_x != 1 || downscale_y != 1)
-    gsk_ngl_render_job_push_modelview (job, gsk_transform_scale (NULL, downscale_x, downscale_y));
   prev_alpha = gsk_ngl_render_job_set_alpha (job, 1.0f);
 
   prev_fbo = gsk_ngl_command_queue_bind_framebuffer (job->command_queue, render_target->framebuffer_id);
