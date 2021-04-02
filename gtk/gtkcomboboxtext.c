@@ -49,8 +49,7 @@
  *
  * If the `GtkComboBoxText` contains an entry (via the
  * [property@Gtk.ComboBox:has-entry] property), its contents can be retrieved
- * using [method@Gtk.ComboBoxText.get_active_text]. The entry itself can be
- * accessed by calling [method@Gtk.ComboBox.get_child] on the combo box.
+ * using [method@Gtk.ComboBoxText.get_active_text].
  *
  * You should not call [method@Gtk.ComboBox.set_model] or attempt to pack more
  * cells into this combo box via its [interface@Gtk.CellLayout] interface.
