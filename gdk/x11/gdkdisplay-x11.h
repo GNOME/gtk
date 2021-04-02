@@ -71,8 +71,6 @@ struct _GdkX11Display
   gboolean have_xfixes;
   int xfixes_event_base;
 
-  gboolean have_xcomposite;
-
   gboolean have_randr12;
   gboolean have_randr13;
   gboolean have_randr15;

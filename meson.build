@@ -500,14 +500,12 @@ if x11_enabled
   xcursor_dep    = dependency('xcursor')
   xdamage_dep    = dependency('xdamage')
   xfixes_dep     = dependency('xfixes')
-  xcomposite_dep = dependency('xcomposite')
   fontconfig_dep = dependency('fontconfig')
 
-  x11_pkgs = ['fontconfig', 'x11', 'xext', 'xi', 'xrandr', 'xcursor', 'xdamage', 'xfixes', 'xcomposite', 'xinerama']
+  x11_pkgs = ['fontconfig', 'x11', 'xext', 'xi', 'xrandr', 'xcursor', 'xdamage', 'xfixes', 'xinerama']
 
   cdata.set('HAVE_XCURSOR', 1)
   cdata.set('HAVE_XDAMAGE', 1)
-  cdata.set('HAVE_XCOMPOSITE', 1)
   cdata.set('HAVE_XFIXES', 1)
 
   if not cc.has_function('XkbQueryExtension', dependencies: x11_dep,

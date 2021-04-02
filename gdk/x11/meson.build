@@ -69,7 +69,6 @@ gdk_x11_deps = [
   xcursor_dep,
   xdamage_dep,
   xfixes_dep,
-  xcomposite_dep,
   xrandr_dep,
   xinerama_dep,
 ]
