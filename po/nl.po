@@ -23,13 +23,13 @@
 # Wouter Bolsterlee <wbolster@gnome.org>, 2011–2012.
 # Rachid BM <rachidbm@ubuntu.com>, 2011–2012, 2013.
 # Hannie Dumoleyn <hannie@ubuntu-nl.org>, 2013, 2016, 2017.
-# Nathan Follens <nthn@unseen.is>, 2018-2020.
+# Nathan Follens <nthn@unseen.is>, 2018-2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-24 00:54+0000\n"
-"PO-Revision-Date: 2020-08-25 16:39+0200\n"
+"POT-Creation-Date: 2021-04-01 20:52+0000\n"
+"PO-Revision-Date: 2021-04-02 16:13+0200\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: Dutch <gnome-nl-list@gnome.org>\n"
 "Language: nl\n"
@@ -38,7 +38,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2016-03-25 10:32+0000\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 "X-Project-Style: gnome\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
@@ -95,7 +95,7 @@ msgstr "In te stellen GDK debug-vlaggen"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:241 gdk/gdk.c:244 gtk/gtkmain.c:471 gtk/gtkmain.c:474
+#: gdk/gdk.c:241 gdk/gdk.c:244 gtk/gtkmain.c:469 gtk/gtkmain.c:472
 msgid "FLAGS"
 msgstr "VLAGGEN"
 
@@ -502,19 +502,19 @@ msgid "Unable to create a GL pixel format"
 msgstr "Er kan geen GL-pixelformaat worden aangemaakt"
 
 #: gdk/quartz/gdkglcontext-quartz.c:133 gdk/wayland/gdkglcontext-wayland.c:208
-#: gdk/win32/gdkglcontext-win32.c:1072 gdk/win32/gdkglcontext-win32.c:1112
+#: gdk/win32/gdkglcontext-win32.c:1089 gdk/win32/gdkglcontext-win32.c:1129
 #: gdk/x11/gdkglcontext-x11.c:724 gdk/x11/gdkglcontext-x11.c:774
 msgid "Unable to create a GL context"
 msgstr "Er kan geen GL-context worden aangemaakt"
 
 #: gdk/wayland/gdkglcontext-wayland.c:418
-#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:910
-#: gdk/win32/gdkglcontext-win32.c:920 gdk/win32/gdkglcontext-win32.c:1037
+#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:927
+#: gdk/win32/gdkglcontext-win32.c:937 gdk/win32/gdkglcontext-win32.c:1054
 #: gdk/x11/gdkglcontext-x11.c:975
 msgid "No available configurations for the given pixel format"
 msgstr "Geen configuraties beschikbaar voor het gegeven beeldpuntformaat"
 
-#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1179
+#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1196
 #: gdk/x11/gdkglcontext-x11.c:1281
 msgid "No GL implementation is available"
 msgstr "Er is geen GL-implementatie beschikbaar"
@@ -1591,7 +1591,6 @@ msgid "Apache License, Version 2.0"
 msgstr "Apache License, versie 2.0"
 
 #: gtk/gtkaboutdialog.c:131
-#| msgid "Artistic License 2.0"
 msgid "Mozilla Public License 2.0"
 msgstr "Mozilla Public License 2.0"
 
@@ -2016,198 +2015,243 @@ msgstr "Kleur: %s"
 
 #: gtk/gtkcolorchooserwidget.c:446
 msgctxt "Color name"
-msgid "Light Scarlet Red"
-msgstr "Lichtscharlakenrood"
+msgid "Very Light Blue"
+msgstr "Zeer lichtblauw"
 
 #: gtk/gtkcolorchooserwidget.c:447
 msgctxt "Color name"
-msgid "Scarlet Red"
-msgstr "Scharlakenrood"
+msgid "Light Blue"
+msgstr "Lichtblauw"
 
 #: gtk/gtkcolorchooserwidget.c:448
 msgctxt "Color name"
-msgid "Dark Scarlet Red"
-msgstr "Donkerscharlakenrood"
+msgid "Blue"
+msgstr "Blauw"
 
 #: gtk/gtkcolorchooserwidget.c:449
+msgctxt "Color name"
+msgid "Dark Blue"
+msgstr "Donkerblauw"
+
+#: gtk/gtkcolorchooserwidget.c:450
+msgctxt "Color name"
+msgid "Very Dark Blue"
+msgstr "Zeer donkerblauw"
+
+#: gtk/gtkcolorchooserwidget.c:451
+msgctxt "Color name"
+msgid "Very Light Green"
+msgstr "Zeer lichtgroen"
+
+#: gtk/gtkcolorchooserwidget.c:452
+msgctxt "Color name"
+msgid "Light Green"
+msgstr "Lichtgroen"
+
+#: gtk/gtkcolorchooserwidget.c:453
+msgctxt "Color name"
+msgid "Green"
+msgstr "Groen"
+
+#: gtk/gtkcolorchooserwidget.c:454
+msgctxt "Color name"
+msgid "Dark Green"
+msgstr "Donkergroen"
+
+#: gtk/gtkcolorchooserwidget.c:455
+msgctxt "Color name"
+msgid "Very Dark Green"
+msgstr "Zeer donkergroen"
+
+#: gtk/gtkcolorchooserwidget.c:456
+msgctxt "Color name"
+msgid "Very Light Yellow"
+msgstr "Zeer lichtgeel"
+
+#: gtk/gtkcolorchooserwidget.c:457
+msgctxt "Color name"
+msgid "Light Yellow"
+msgstr "Lichtgeel"
+
+#: gtk/gtkcolorchooserwidget.c:458
+msgctxt "Color name"
+msgid "Yellow"
+msgstr "Geel"
+
+#: gtk/gtkcolorchooserwidget.c:459
+msgctxt "Color name"
+msgid "Dark Yellow"
+msgstr "Donkergeel"
+
+#: gtk/gtkcolorchooserwidget.c:460
+msgctxt "Color name"
+msgid "Very Dark Yellow"
+msgstr "Zeer donkergeel"
+
+#: gtk/gtkcolorchooserwidget.c:461
+msgctxt "Color name"
+msgid "Very Light Orange"
+msgstr "Zeer lichtoranje"
+
+#: gtk/gtkcolorchooserwidget.c:462
 msgctxt "Color name"
 msgid "Light Orange"
 msgstr "Lichtoranje"
 
-#: gtk/gtkcolorchooserwidget.c:450
+#: gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
 msgid "Orange"
 msgstr "Oranje"
 
-#: gtk/gtkcolorchooserwidget.c:451
+#: gtk/gtkcolorchooserwidget.c:464
 msgctxt "Color name"
 msgid "Dark Orange"
 msgstr "Donkeroranje"
 
-#: gtk/gtkcolorchooserwidget.c:452
-msgctxt "Color name"
-msgid "Light Butter"
-msgstr "Lichtboterkleur"
-
-#: gtk/gtkcolorchooserwidget.c:453
-msgctxt "Color name"
-msgid "Butter"
-msgstr "Boterkleur"
-
-#: gtk/gtkcolorchooserwidget.c:454
-msgctxt "Color name"
-msgid "Dark Butter"
-msgstr "Donkerboterkleur"
-
-#: gtk/gtkcolorchooserwidget.c:455
-msgctxt "Color name"
-msgid "Light Chameleon"
-msgstr "Lichtkameleon"
-
-#: gtk/gtkcolorchooserwidget.c:456
-msgctxt "Color name"
-msgid "Chameleon"
-msgstr "Kameleon"
-
-#: gtk/gtkcolorchooserwidget.c:457
-msgctxt "Color name"
-msgid "Dark Chameleon"
-msgstr "Donkerkameleon"
-
-#: gtk/gtkcolorchooserwidget.c:458
-msgctxt "Color name"
-msgid "Light Sky Blue"
-msgstr "Lichthemelblauw"
-
-#: gtk/gtkcolorchooserwidget.c:459
-msgctxt "Color name"
-msgid "Sky Blue"
-msgstr "Hemelsblauw"
-
-#: gtk/gtkcolorchooserwidget.c:460
-msgctxt "Color name"
-msgid "Dark Sky Blue"
-msgstr "Donkerhemelsblauw"
-
-#: gtk/gtkcolorchooserwidget.c:461
-msgctxt "Color name"
-msgid "Light Plum"
-msgstr "Lichtpruimenpaars"
-
-#: gtk/gtkcolorchooserwidget.c:462
-msgctxt "Color name"
-msgid "Plum"
-msgstr "Pruimenpaars"
-
-#: gtk/gtkcolorchooserwidget.c:463
-msgctxt "Color name"
-msgid "Dark Plum"
-msgstr "Donkerpruimenpaars"
-
-#: gtk/gtkcolorchooserwidget.c:464
-msgctxt "Color name"
-msgid "Light Chocolate"
-msgstr "Lichtchocolade"
-
 #: gtk/gtkcolorchooserwidget.c:465
 msgctxt "Color name"
-msgid "Chocolate"
-msgstr "Chocolade"
+msgid "Very Dark Orange"
+msgstr "Zeer donkeroranje"
 
 #: gtk/gtkcolorchooserwidget.c:466
 msgctxt "Color name"
-msgid "Dark Chocolate"
-msgstr "Donkerchocolade"
+msgid "Very Light Red"
+msgstr "Zeer lichtrood"
 
 #: gtk/gtkcolorchooserwidget.c:467
 msgctxt "Color name"
-msgid "Light Aluminum 1"
-msgstr "Lichtaluminium 1"
+msgid "Light Red"
+msgstr "Lichtrood"
 
 #: gtk/gtkcolorchooserwidget.c:468
 msgctxt "Color name"
-msgid "Aluminum 1"
-msgstr "Aluminium 1"
+msgid "Red"
+msgstr "Rood"
 
 #: gtk/gtkcolorchooserwidget.c:469
 msgctxt "Color name"
-msgid "Dark Aluminum 1"
-msgstr "Donkeraluminium 1"
+msgid "Dark Red"
+msgstr "Donkerrood"
 
 #: gtk/gtkcolorchooserwidget.c:470
 msgctxt "Color name"
-msgid "Light Aluminum 2"
-msgstr "Lichtaluminium 2"
+msgid "Very Dark Red"
+msgstr "Zeer donkerrood"
 
 #: gtk/gtkcolorchooserwidget.c:471
 msgctxt "Color name"
-msgid "Aluminum 2"
-msgstr "Aluminium 2"
+msgid "Very Light Purple"
+msgstr "Zeer lichtpaars"
 
 #: gtk/gtkcolorchooserwidget.c:472
 msgctxt "Color name"
-msgid "Dark Aluminum 2"
-msgstr "Donkeraluminium 2"
+msgid "Light Purple"
+msgstr "Lichtpaars"
 
-#: gtk/gtkcolorchooserwidget.c:486
+#: gtk/gtkcolorchooserwidget.c:473
 msgctxt "Color name"
-msgid "Black"
-msgstr "Zwart"
+msgid "Purple"
+msgstr "Paars"
 
-#: gtk/gtkcolorchooserwidget.c:487
+#: gtk/gtkcolorchooserwidget.c:474
 msgctxt "Color name"
-msgid "Very Dark Gray"
-msgstr "Zeer donkergrijs"
+msgid "Dark Purple"
+msgstr "Donkerpaars"
 
-#: gtk/gtkcolorchooserwidget.c:488
+#: gtk/gtkcolorchooserwidget.c:475
 msgctxt "Color name"
-msgid "Darker Gray"
-msgstr "Donkerder grijs"
+msgid "Very Dark Purple"
+msgstr "Zeer donkerpaars"
 
-#: gtk/gtkcolorchooserwidget.c:489
+#: gtk/gtkcolorchooserwidget.c:476
 msgctxt "Color name"
-msgid "Dark Gray"
-msgstr "Donkergrijs"
+msgid "Very Light Brown"
+msgstr "Zeer lichtbruin"
 
-#: gtk/gtkcolorchooserwidget.c:490
+#: gtk/gtkcolorchooserwidget.c:477
 msgctxt "Color name"
-msgid "Medium Gray"
-msgstr "Gemiddeldgrijs"
+msgid "Light Brown"
+msgstr "Lichtbruin"
 
-#: gtk/gtkcolorchooserwidget.c:491
+#: gtk/gtkcolorchooserwidget.c:478
 msgctxt "Color name"
-msgid "Light Gray"
-msgstr "Lichtgrijs"
+msgid "Brown"
+msgstr "Bruin"
 
-#: gtk/gtkcolorchooserwidget.c:492
+#: gtk/gtkcolorchooserwidget.c:479
 msgctxt "Color name"
-msgid "Lighter Gray"
-msgstr "Lichter grijs"
+msgid "Dark Brown"
+msgstr "Donkerbruin"
 
-#: gtk/gtkcolorchooserwidget.c:493
+#: gtk/gtkcolorchooserwidget.c:480
 msgctxt "Color name"
-msgid "Very Light Gray"
-msgstr "Zeer lichtgrijs"
+msgid "Very Dark Brown"
+msgstr "Zeer donkerbruin"
 
-#: gtk/gtkcolorchooserwidget.c:494
+#: gtk/gtkcolorchooserwidget.c:481
 msgctxt "Color name"
 msgid "White"
 msgstr "Wit"
 
+#: gtk/gtkcolorchooserwidget.c:482
+msgctxt "Color name"
+msgid "Light Gray 1"
+msgstr "Lichtgrijs 1"
+
+#: gtk/gtkcolorchooserwidget.c:483
+msgctxt "Color name"
+msgid "Light Gray 2"
+msgstr "Lichtgrijs 2"
+
+#: gtk/gtkcolorchooserwidget.c:484
+msgctxt "Color name"
+msgid "Light Gray 3"
+msgstr "Lichtgrijs 3"
+
+#: gtk/gtkcolorchooserwidget.c:485
+msgctxt "Color name"
+msgid "Light Gray 4"
+msgstr "Lichtgrijs 4"
+
+#: gtk/gtkcolorchooserwidget.c:486
+msgctxt "Color name"
+msgid "Dark Gray 1"
+msgstr "Donkergrijs 1"
+
+#: gtk/gtkcolorchooserwidget.c:487
+msgctxt "Color name"
+msgid "Dark Gray 2"
+msgstr "Donkergrijs 2"
+
+#: gtk/gtkcolorchooserwidget.c:488
+msgctxt "Color name"
+msgid "Dark Gray 3"
+msgstr "Donkergrijs 3"
+
+#: gtk/gtkcolorchooserwidget.c:489
+msgctxt "Color name"
+msgid "Dark Gray 4"
+msgstr "Donkergrijs 4"
+
+#: gtk/gtkcolorchooserwidget.c:490
+msgctxt "Color name"
+msgid "Black"
+msgstr "Zwart"
+
 #. translators: label for the custom section in the color chooser
-#: gtk/gtkcolorchooserwidget.c:543
+#: gtk/gtkcolorchooserwidget.c:534
 msgid "Custom"
 msgstr "Aangepast"
 
-#: gtk/gtkcolorchooserwidget.c:550
+#: gtk/gtkcolorchooserwidget.c:541
 msgid "Custom color"
 msgstr "Aangepaste kleur"
 
-#: gtk/gtkcolorchooserwidget.c:551
+#: gtk/gtkcolorchooserwidget.c:542
 msgid "Create a custom color"
 msgstr "Aangepaste kleur aanmaken"
 
-#: gtk/gtkcolorchooserwidget.c:570
+#: gtk/gtkcolorchooserwidget.c:561
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "Aangepaste kleur %d: %s"
@@ -2294,24 +2338,24 @@ msgstr "_Rechts:"
 msgid "Paper Margins"
 msgstr "Papiermarges"
 
-#: gtk/gtkentry.c:9591 gtk/gtklabel.c:6680 gtk/gtktextview.c:9520
+#: gtk/gtkentry.c:9591 gtk/gtklabel.c:6686 gtk/gtktextview.c:9520
 msgid "Cu_t"
 msgstr "K_nippen"
 
-#: gtk/gtkentry.c:9595 gtk/gtklabel.c:6681 gtk/gtktextview.c:9524
+#: gtk/gtkentry.c:9595 gtk/gtklabel.c:6687 gtk/gtktextview.c:9524
 msgid "_Copy"
 msgstr "_Kopiëren"
 
-#: gtk/gtkentry.c:9599 gtk/gtklabel.c:6682 gtk/gtktextview.c:9526
+#: gtk/gtkentry.c:9599 gtk/gtklabel.c:6688 gtk/gtktextview.c:9526
 msgid "_Paste"
 msgstr "_Plakken"
 
 #: gtk/gtkentry.c:9602 gtk/gtkfilechooserwidget.c:1499
-#: gtk/gtkfilechooserwidget.c:2334 gtk/gtklabel.c:6684 gtk/gtktextview.c:9529
+#: gtk/gtkfilechooserwidget.c:2334 gtk/gtklabel.c:6690 gtk/gtktextview.c:9529
 msgid "_Delete"
 msgstr "_Verwijderen"
 
-#: gtk/gtkentry.c:9613 gtk/gtklabel.c:6693 gtk/gtktextview.c:9543
+#: gtk/gtkentry.c:9613 gtk/gtklabel.c:6699 gtk/gtktextview.c:9543
 msgid "Select _All"
 msgstr "_Alles selecteren"
 
@@ -2775,53 +2819,53 @@ msgctxt "font"
 msgid "None"
 msgstr "Geen"
 
-#: gtk/gtkfontchooserwidget.c:1525
+#: gtk/gtkfontchooserwidget.c:1556
 msgid "Width"
 msgstr "Breedte"
 
-#: gtk/gtkfontchooserwidget.c:1526
+#: gtk/gtkfontchooserwidget.c:1557
 msgid "Weight"
 msgstr "Gewicht"
 
 # _schuin/_schuingedrukt/_cursief
 # voorzover ik kan zien alleen in gucharmap gebruikt.
-#: gtk/gtkfontchooserwidget.c:1527
+#: gtk/gtkfontchooserwidget.c:1558
 msgid "Italic"
 msgstr "Cursief"
 
-#: gtk/gtkfontchooserwidget.c:1528
+#: gtk/gtkfontchooserwidget.c:1559
 msgid "Slant"
 msgstr "Helling"
 
-#: gtk/gtkfontchooserwidget.c:1529
+#: gtk/gtkfontchooserwidget.c:1560
 msgid "Optical Size"
 msgstr "Optische grootte"
 
-#: gtk/gtkfontchooserwidget.c:2066 gtk/inspector/prop-editor.c:1676
+#: gtk/gtkfontchooserwidget.c:2097 gtk/inspector/prop-editor.c:1676
 msgid "Default"
 msgstr "Standaard"
 
-#: gtk/gtkfontchooserwidget.c:2113
+#: gtk/gtkfontchooserwidget.c:2144
 msgid "Ligatures"
 msgstr "Ligaturen"
 
-#: gtk/gtkfontchooserwidget.c:2114
+#: gtk/gtkfontchooserwidget.c:2145
 msgid "Letter Case"
 msgstr "Grote/kleine letters"
 
-#: gtk/gtkfontchooserwidget.c:2115
+#: gtk/gtkfontchooserwidget.c:2146
 msgid "Number Case"
 msgstr "Grote/kleine cijfers"
 
-#: gtk/gtkfontchooserwidget.c:2116
+#: gtk/gtkfontchooserwidget.c:2147
 msgid "Number Spacing"
 msgstr "Getalspatiëring"
 
-#: gtk/gtkfontchooserwidget.c:2117
+#: gtk/gtkfontchooserwidget.c:2148
 msgid "Number Formatting"
 msgstr "Getalopmaak"
 
-#: gtk/gtkfontchooserwidget.c:2118
+#: gtk/gtkfontchooserwidget.c:2149
 msgid "Character Variants"
 msgstr "Tekenvarianten"
 
@@ -2885,12 +2929,12 @@ msgid "Error"
 msgstr "Fout"
 
 #. Open Link
-#: gtk/gtklabel.c:6661
+#: gtk/gtklabel.c:6667
 msgid "_Open Link"
 msgstr "Link _openen"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6670
+#: gtk/gtklabel.c:6676
 msgid "Copy _Link Address"
 msgstr "Linkadres _kopiëren"
 
@@ -2991,40 +3035,40 @@ msgstr ""
 "Neem contact op met uw systeembeheerder"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:464
+#: gtk/gtkmain.c:462
 msgid "Load additional GTK+ modules"
 msgstr "Extra GTK+-modules laden"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:465
+#: gtk/gtkmain.c:463
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:467
+#: gtk/gtkmain.c:465
 msgid "Make all warnings fatal"
 msgstr "Alle waarschuwing fataal laten zijn"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:470
+#: gtk/gtkmain.c:468
 msgid "GTK+ debugging flags to set"
 msgstr "In te stellen GTK+ debug-vlaggen"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:473
+#: gtk/gtkmain.c:471
 msgid "GTK+ debugging flags to unset"
 msgstr "Uit te zetten GTK+ debug-vlaggen"
 
-#: gtk/gtkmain.c:810 gtk/gtkmain.c:1004
+#: gtk/gtkmain.c:811 gtk/gtkmain.c:1005
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Kan scherm ‘%s’ niet openen"
 
-#: gtk/gtkmain.c:922
+#: gtk/gtkmain.c:923
 msgid "GTK+ Options"
 msgstr "GTK+-opties"
 
-#: gtk/gtkmain.c:922
+#: gtk/gtkmain.c:923
 msgid "Show GTK+ Options"
 msgstr "GTK+-opties tonen"
 
@@ -3033,7 +3077,7 @@ msgstr "GTK+-opties tonen"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:1275
+#: gtk/gtkmain.c:1276
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -3642,7 +3686,7 @@ msgstr "Papier is op"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:635
-#: modules/printbackends/cups/gtkprintbackendcups.c:2624
+#: modules/printbackends/cups/gtkprintbackendcups.c:2672
 msgid "Paused"
 msgstr "Gepauzeerd"
 
@@ -3713,42 +3757,42 @@ msgstr "Printerinformatie opvragen…"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3120
-#: modules/printbackends/cups/gtkprintbackendcups.c:5493
+#: modules/printbackends/cups/gtkprintbackendcups.c:5698
 msgid "Left to right, top to bottom"
 msgstr "Van links naar rechts, van boven naar onder"
 
 #: gtk/gtkprintunixdialog.c:3120
-#: modules/printbackends/cups/gtkprintbackendcups.c:5493
+#: modules/printbackends/cups/gtkprintbackendcups.c:5698
 msgid "Left to right, bottom to top"
 msgstr "Van links naar rechts, van onder naar boven"
 
 #: gtk/gtkprintunixdialog.c:3121
-#: modules/printbackends/cups/gtkprintbackendcups.c:5494
+#: modules/printbackends/cups/gtkprintbackendcups.c:5699
 msgid "Right to left, top to bottom"
 msgstr "Van rechts naar links, van boven naar onder"
 
 #: gtk/gtkprintunixdialog.c:3121
-#: modules/printbackends/cups/gtkprintbackendcups.c:5494
+#: modules/printbackends/cups/gtkprintbackendcups.c:5699
 msgid "Right to left, bottom to top"
 msgstr "Van rechts naar links, van onder naar boven"
 
 #: gtk/gtkprintunixdialog.c:3122
-#: modules/printbackends/cups/gtkprintbackendcups.c:5495
+#: modules/printbackends/cups/gtkprintbackendcups.c:5700
 msgid "Top to bottom, left to right"
 msgstr "Van boven naar onder, van links naar rechts"
 
 #: gtk/gtkprintunixdialog.c:3122
-#: modules/printbackends/cups/gtkprintbackendcups.c:5495
+#: modules/printbackends/cups/gtkprintbackendcups.c:5700
 msgid "Top to bottom, right to left"
 msgstr "Van boven naar onder, van rechts naar links"
 
 #: gtk/gtkprintunixdialog.c:3123
-#: modules/printbackends/cups/gtkprintbackendcups.c:5496
+#: modules/printbackends/cups/gtkprintbackendcups.c:5701
 msgid "Bottom to top, left to right"
 msgstr "Van onder naar boven, van links naar rechts"
 
 #: gtk/gtkprintunixdialog.c:3123
-#: modules/printbackends/cups/gtkprintbackendcups.c:5496
+#: modules/printbackends/cups/gtkprintbackendcups.c:5701
 msgid "Bottom to top, right to left"
 msgstr "Van onder naar boven, van rechts naar links"
 
@@ -7690,114 +7734,114 @@ msgid "Decreases the volume"
 msgstr "Zet het geluid zachter"
 
 # header/header-data
-#: gtk/updateiconcache.c:1388
+#: gtk/updateiconcache.c:1397
 #, c-format
 msgid "Failed to write header\n"
 msgstr "Kon header niet schrijven\n"
 
 # schraptabel/hash tabel
-#: gtk/updateiconcache.c:1394
+#: gtk/updateiconcache.c:1403
 #, c-format
 msgid "Failed to write hash table\n"
 msgstr "Kon ‘hash table’ niet schrijven\n"
 
-#: gtk/updateiconcache.c:1400
+#: gtk/updateiconcache.c:1409
 #, c-format
 msgid "Failed to write folder index\n"
 msgstr "Kon mapindex niet schrijven\n"
 
 # header/header-data
-#: gtk/updateiconcache.c:1408
+#: gtk/updateiconcache.c:1417
 #, c-format
 msgid "Failed to rewrite header\n"
 msgstr "Kon header niet herschrijven\n"
 
-#: gtk/updateiconcache.c:1502
+#: gtk/updateiconcache.c:1511
 #, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "Openen van bestand ‘%s’ mislukt: %s\n"
 
 # bestand %s/
 # bufferbestand/cache-bestand/tijdelijke-opslagbestand
-#: gtk/updateiconcache.c:1510 gtk/updateiconcache.c:1540
+#: gtk/updateiconcache.c:1519 gtk/updateiconcache.c:1549
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Kon cache-bestand niet schrijven: %s\n"
 
-#: gtk/updateiconcache.c:1550
+#: gtk/updateiconcache.c:1559
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "De gegenereerde cache was ongeldig.\n"
 
-#: gtk/updateiconcache.c:1564
+#: gtk/updateiconcache.c:1573
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "Kon %s niet hernoemen naar %s: %s, zal daarom %s verwijderen.\n"
 
-#: gtk/updateiconcache.c:1578
+#: gtk/updateiconcache.c:1587
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "Kon %s niet hernoemen naar %s: %s\n"
 
-#: gtk/updateiconcache.c:1588
+#: gtk/updateiconcache.c:1597
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "Kon %s niet terug hernoemen naar %s: %s.\n"
 
-#: gtk/updateiconcache.c:1615
+#: gtk/updateiconcache.c:1624
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "Er is een cache-bestand aangemaakt.\n"
 
-#: gtk/updateiconcache.c:1654
+#: gtk/updateiconcache.c:1663
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Een bestaande cache overschrijven, zelfs wanneer die up-to-date is"
 
-#: gtk/updateiconcache.c:1655
+#: gtk/updateiconcache.c:1664
 msgid "Don't check for the existence of index.theme"
 msgstr "Niet controleren op het bestaan van index.theme"
 
-#: gtk/updateiconcache.c:1656
+#: gtk/updateiconcache.c:1665
 msgid "Don't include image data in the cache"
 msgstr "Afbeeldingsgegevens niet in de cache opslaan"
 
-#: gtk/updateiconcache.c:1657
+#: gtk/updateiconcache.c:1666
 msgid "Include image data in the cache"
 msgstr "Afbeeldingsdata opnemen in de cache"
 
 # aanmaken/opmaken/uitvoeren
 # afdrukken (zie #909 en 925)
-#: gtk/updateiconcache.c:1658
+#: gtk/updateiconcache.c:1667
 msgid "Output a C header file"
 msgstr "Een C-headerbestand afdrukken"
 
 # uitvoerige/uitgebreide uitvoer/berichten/berichtgeving
 # kort en bondige uitvoer
-#: gtk/updateiconcache.c:1659
+#: gtk/updateiconcache.c:1668
 msgid "Turn off verbose output"
 msgstr "Uitvoerige berichtgeving uitzetten"
 
 # valideren/controleren op geldigheid
-#: gtk/updateiconcache.c:1660
+#: gtk/updateiconcache.c:1669
 msgid "Validate existing icon cache"
 msgstr "Bestaande pictogrammencache controleren op geldigheid"
 
-#: gtk/updateiconcache.c:1727
+#: gtk/updateiconcache.c:1736
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Bestand niet gevonden: %s\n"
 
-#: gtk/updateiconcache.c:1733
+#: gtk/updateiconcache.c:1742
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Geen geldige pictogrammenbuffer: %s\n"
 
-#: gtk/updateiconcache.c:1746
+#: gtk/updateiconcache.c:1755
 #, c-format
 msgid "No theme index file.\n"
 msgstr "Geen thema-indexbestand.\n"
 
-#: gtk/updateiconcache.c:1750
+#: gtk/updateiconcache.c:1759
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -7926,413 +7970,413 @@ msgstr "Slapende"
 msgid "Pages per _sheet:"
 msgstr "Pagina's per _vel:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1129
-#: modules/printbackends/cups/gtkprintbackendcups.c:1438
+#: modules/printbackends/cups/gtkprintbackendcups.c:1153
+#: modules/printbackends/cups/gtkprintbackendcups.c:1462
 msgid "Username:"
 msgstr "Gebruikersnaam:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1130
-#: modules/printbackends/cups/gtkprintbackendcups.c:1447
+#: modules/printbackends/cups/gtkprintbackendcups.c:1154
+#: modules/printbackends/cups/gtkprintbackendcups.c:1471
 msgid "Password:"
 msgstr "Wachtwoord:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1169
-#: modules/printbackends/cups/gtkprintbackendcups.c:1460
+#: modules/printbackends/cups/gtkprintbackendcups.c:1193
+#: modules/printbackends/cups/gtkprintbackendcups.c:1484
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
 msgstr ""
 "Aanmeldingscontrole is vereist om document ‘%s’ af te drukken op printer %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1171
+#: modules/printbackends/cups/gtkprintbackendcups.c:1195
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "Aanmeldingscontrole is vereist om een document af te drukken op %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1175
+#: modules/printbackends/cups/gtkprintbackendcups.c:1199
 #, c-format
 msgid "Authentication is required to get attributes of job “%s”"
 msgstr ""
 "Aanmeldingscontrole is vereist om attributen van printopdracht ‘%s’ te "
 "verkrijgen"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1177
+#: modules/printbackends/cups/gtkprintbackendcups.c:1201
 msgid "Authentication is required to get attributes of a job"
 msgstr ""
 "Aanmeldingscontrole is vereist om attributen van een printopdracht te "
 "verkrijgen"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1181
+#: modules/printbackends/cups/gtkprintbackendcups.c:1205
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr ""
 "Aanmeldingscontrole is vereist om attributen van printer %s te verkrijgen"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1183
+#: modules/printbackends/cups/gtkprintbackendcups.c:1207
 msgid "Authentication is required to get attributes of a printer"
 msgstr ""
 "Aanmeldingscontrole is vereist om attributen van een printer te verkrijgen"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1186
+#: modules/printbackends/cups/gtkprintbackendcups.c:1210
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr ""
 "Aanmeldingscontrole is vereist voor toegang tot de standaardprinter van %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1189
+#: modules/printbackends/cups/gtkprintbackendcups.c:1213
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "Aanmeldingscontrole is vereist om printers van %s te verkrijgen"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1194
+#: modules/printbackends/cups/gtkprintbackendcups.c:1218
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "Aanmeldingscontrole is vereist om een bestand te verkrijgen van %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1196
+#: modules/printbackends/cups/gtkprintbackendcups.c:1220
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "Aanmeldingscontrole is vereist op %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1432
+#: modules/printbackends/cups/gtkprintbackendcups.c:1456
 msgid "Domain:"
 msgstr "Domein:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1462
+#: modules/printbackends/cups/gtkprintbackendcups.c:1486
 #, c-format
 msgid "Authentication is required to print document “%s”"
 msgstr "Aanmeldingscontrole is vereist om een document af te drukken op ‘%s’"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1467
+#: modules/printbackends/cups/gtkprintbackendcups.c:1491
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr ""
 "Aanmeldingscontrole is vereist om dit document af te drukken op printer %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1469
+#: modules/printbackends/cups/gtkprintbackendcups.c:1493
 msgid "Authentication is required to print this document"
 msgstr "Aanmeldingscontrole is vereist om dit document af te drukken"
 
 # een bijna lege toner/toner is bijna leeg/bijna op
-#: modules/printbackends/cups/gtkprintbackendcups.c:2553
+#: modules/printbackends/cups/gtkprintbackendcups.c:2601
 #, c-format
 msgid "Printer “%s” is low on toner."
 msgstr "De toner van printer ‘%s’  is bijna op."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2557
+#: modules/printbackends/cups/gtkprintbackendcups.c:2605
 #, c-format
 msgid "Printer “%s” has no toner left."
 msgstr "De toner van printer ‘%s’ is op."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:2562
+#: modules/printbackends/cups/gtkprintbackendcups.c:2610
 #, c-format
 msgid "Printer “%s” is low on developer."
 msgstr "De ontwikkelvloeistof van printer ‘%s’ is bijna op."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:2567
+#: modules/printbackends/cups/gtkprintbackendcups.c:2615
 #, c-format
 msgid "Printer “%s” is out of developer."
 msgstr "De ontwikkelvloeistof van printer ‘%s’ is op."
 
 # printerkleur/kleur
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:2572
+#: modules/printbackends/cups/gtkprintbackendcups.c:2620
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr "Minstens één kleur van printer ‘%s’ is bijna op."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:2577
+#: modules/printbackends/cups/gtkprintbackendcups.c:2625
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr "Minstens één kleur van printer ‘%s’ is op."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2581
+#: modules/printbackends/cups/gtkprintbackendcups.c:2629
 #, c-format
 msgid "The cover is open on printer “%s”."
 msgstr "Het deksel van printer ‘%s’ is open."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2585
+#: modules/printbackends/cups/gtkprintbackendcups.c:2633
 #, c-format
 msgid "The door is open on printer “%s”."
 msgstr "De deur van printer ‘%s’ is open."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2589
+#: modules/printbackends/cups/gtkprintbackendcups.c:2637
 #, c-format
 msgid "Printer “%s” is low on paper."
 msgstr "Het papier van printer ‘%s’ is bijna op."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2593
+#: modules/printbackends/cups/gtkprintbackendcups.c:2641
 #, c-format
 msgid "Printer “%s” is out of paper."
 msgstr "Het papier van printer ‘%s’ is op."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2597
+#: modules/printbackends/cups/gtkprintbackendcups.c:2645
 #, c-format
 msgid "Printer “%s” is currently offline."
 msgstr "Printer ‘%s’ is momenteel offline."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2601
+#: modules/printbackends/cups/gtkprintbackendcups.c:2649
 #, c-format
 msgid "There is a problem on printer “%s”."
 msgstr "Er is een probleem met printer ‘%s’."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2621
+#: modules/printbackends/cups/gtkprintbackendcups.c:2669
 msgid "Paused; Rejecting Jobs"
 msgstr "Gepauzeerd; pintopdrachten worden geweigerd"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2627
+#: modules/printbackends/cups/gtkprintbackendcups.c:2675
 msgid "Rejecting Jobs"
 msgstr "Printopdrachten afwijzen"
 
 #. Translators: this string connects multiple printer states together.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2668
+#: modules/printbackends/cups/gtkprintbackendcups.c:2716
 msgid "; "
 msgstr "; "
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4439
-#: modules/printbackends/cups/gtkprintbackendcups.c:4506
+#: modules/printbackends/cups/gtkprintbackendcups.c:4644
+#: modules/printbackends/cups/gtkprintbackendcups.c:4711
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "Tweezijdig"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4440
+#: modules/printbackends/cups/gtkprintbackendcups.c:4645
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "Papiersoort"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4441
+#: modules/printbackends/cups/gtkprintbackendcups.c:4646
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "Papierbron"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4442
-#: modules/printbackends/cups/gtkprintbackendcups.c:4507
+#: modules/printbackends/cups/gtkprintbackendcups.c:4647
+#: modules/printbackends/cups/gtkprintbackendcups.c:4712
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "Uitvoerlade"
 
 # een van de opties is: Default Printer (andere is automatisch kiezen?)
 # Misschien: Keuze/Oplossing/besluit
-#: modules/printbackends/cups/gtkprintbackendcups.c:4443
+#: modules/printbackends/cups/gtkprintbackendcups.c:4648
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "Resolutie"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4444
+#: modules/printbackends/cups/gtkprintbackendcups.c:4649
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "Voorfilteren GhostScript"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4453
+#: modules/printbackends/cups/gtkprintbackendcups.c:4658
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "Eenzijdig"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4455
+#: modules/printbackends/cups/gtkprintbackendcups.c:4660
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "Lange zijde (standaard)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4457
+#: modules/printbackends/cups/gtkprintbackendcups.c:4662
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "Korte zijde (Omdraaien)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4459
-#: modules/printbackends/cups/gtkprintbackendcups.c:4461
-#: modules/printbackends/cups/gtkprintbackendcups.c:4469
+#: modules/printbackends/cups/gtkprintbackendcups.c:4664
+#: modules/printbackends/cups/gtkprintbackendcups.c:4666
+#: modules/printbackends/cups/gtkprintbackendcups.c:4674
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "Automatisch selecteren"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4463
-#: modules/printbackends/cups/gtkprintbackendcups.c:4465
-#: modules/printbackends/cups/gtkprintbackendcups.c:4467
-#: modules/printbackends/cups/gtkprintbackendcups.c:4471
+#: modules/printbackends/cups/gtkprintbackendcups.c:4668
+#: modules/printbackends/cups/gtkprintbackendcups.c:4670
+#: modules/printbackends/cups/gtkprintbackendcups.c:4672
+#: modules/printbackends/cups/gtkprintbackendcups.c:4676
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "Standaardinstellingen van de printer"
 
 # inbakken/meevoeren/embedden
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4473
+#: modules/printbackends/cups/gtkprintbackendcups.c:4678
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "Alleen GhostScript-lettertypen insluiten"
 
 # niveau 1/level 1
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4475
+#: modules/printbackends/cups/gtkprintbackendcups.c:4680
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "Omzetten naar PS level 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4477
+#: modules/printbackends/cups/gtkprintbackendcups.c:4682
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "Omzetten naar PS level 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4479
+#: modules/printbackends/cups/gtkprintbackendcups.c:4684
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "Niet vooraf filteren"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:4488
+#: modules/printbackends/cups/gtkprintbackendcups.c:4693
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "Diversen"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4515
+#: modules/printbackends/cups/gtkprintbackendcups.c:4720
 msgctxt "sides"
 msgid "One Sided"
 msgstr "Enkelzijdig"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4517
+#: modules/printbackends/cups/gtkprintbackendcups.c:4722
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "Lange kant (standaard)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4519
+#: modules/printbackends/cups/gtkprintbackendcups.c:4724
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "Korte kant (omdraaien)"
 
 #. Translators: Top output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4522
+#: modules/printbackends/cups/gtkprintbackendcups.c:4727
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr "Bovenste lade"
 
 #. Translators: Middle output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4524
+#: modules/printbackends/cups/gtkprintbackendcups.c:4729
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr "Middelste lade"
 
 #. Translators: Bottom output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4526
+#: modules/printbackends/cups/gtkprintbackendcups.c:4731
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "Onderste lade"
 
 #. Translators: Side output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4528
+#: modules/printbackends/cups/gtkprintbackendcups.c:4733
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr "Lade zijkant"
 
 #. Translators: Left output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4530
+#: modules/printbackends/cups/gtkprintbackendcups.c:4735
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "Linker lade"
 
 #. Translators: Right output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4532
+#: modules/printbackends/cups/gtkprintbackendcups.c:4737
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "Rechter lade"
 
 #. Translators: Center output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4534
+#: modules/printbackends/cups/gtkprintbackendcups.c:4739
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "Midden lade"
 
 #. Translators: Rear output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4536
+#: modules/printbackends/cups/gtkprintbackendcups.c:4741
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "Lade achterkant"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
-#: modules/printbackends/cups/gtkprintbackendcups.c:4538
+#: modules/printbackends/cups/gtkprintbackendcups.c:4743
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "Lade beeld naar boven"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
-#: modules/printbackends/cups/gtkprintbackendcups.c:4540
+#: modules/printbackends/cups/gtkprintbackendcups.c:4745
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr "Lade beeld naar beneden"
 
 #. Translators: Large capacity output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4542
+#: modules/printbackends/cups/gtkprintbackendcups.c:4747
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr "Lade grote capaciteit"
 
 #. Translators: Output stacker number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4564
+#: modules/printbackends/cups/gtkprintbackendcups.c:4769
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr "Stapel %d"
 
 #. Translators: Output mailbox number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4568
+#: modules/printbackends/cups/gtkprintbackendcups.c:4773
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr "Postbus %d"
 
 #. Translators: Private mailbox
-#: modules/printbackends/cups/gtkprintbackendcups.c:4572
+#: modules/printbackends/cups/gtkprintbackendcups.c:4777
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr "Mijn postbus"
 
 #. Translators: Output tray number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4576
+#: modules/printbackends/cups/gtkprintbackendcups.c:4781
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
 msgstr "Uitvoerlade %d"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5047
+#: modules/printbackends/cups/gtkprintbackendcups.c:5252
 msgid "Printer Default"
 msgstr "Standaard printer"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5488
+#: modules/printbackends/cups/gtkprintbackendcups.c:5693
 msgid "Urgent"
 msgstr "Urgent"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5488
+#: modules/printbackends/cups/gtkprintbackendcups.c:5693
 msgid "High"
 msgstr "Hoog"
 
 # gemiddeld/medium
-#: modules/printbackends/cups/gtkprintbackendcups.c:5488
+#: modules/printbackends/cups/gtkprintbackendcups.c:5693
 msgid "Medium"
 msgstr "Medium"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5488
+#: modules/printbackends/cups/gtkprintbackendcups.c:5693
 msgid "Low"
 msgstr "Laag"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5518
+#: modules/printbackends/cups/gtkprintbackendcups.c:5723
 msgid "Job Priority"
 msgstr "Taakprioriteit"
 
@@ -8340,44 +8384,44 @@ msgstr "Taakprioriteit"
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5529
+#: modules/printbackends/cups/gtkprintbackendcups.c:5734
 msgid "Billing Info"
 msgstr "Info facturering"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5553
+#: modules/printbackends/cups/gtkprintbackendcups.c:5758
 msgctxt "cover page"
 msgid "None"
 msgstr "Geen"
 
 # Gevoelige informatie
 # Classified-Confidential-Secret-Top Secret
-#: modules/printbackends/cups/gtkprintbackendcups.c:5554
+#: modules/printbackends/cups/gtkprintbackendcups.c:5759
 msgctxt "cover page"
 msgid "Classified"
 msgstr "Gevoelig"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5555
+#: modules/printbackends/cups/gtkprintbackendcups.c:5760
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "Vertrouwelijk"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5556
+#: modules/printbackends/cups/gtkprintbackendcups.c:5761
 msgctxt "cover page"
 msgid "Secret"
 msgstr "Geheim"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5557
+#: modules/printbackends/cups/gtkprintbackendcups.c:5762
 msgctxt "cover page"
 msgid "Standard"
 msgstr "Standaard"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5558
+#: modules/printbackends/cups/gtkprintbackendcups.c:5763
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "Topgeheim"
 
 # niet geheim/niet gevoelig/niet vertrouwelijk/openbaar
-#: modules/printbackends/cups/gtkprintbackendcups.c:5559
+#: modules/printbackends/cups/gtkprintbackendcups.c:5764
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "Openbaar"
@@ -8385,7 +8429,7 @@ msgstr "Openbaar"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5571
+#: modules/printbackends/cups/gtkprintbackendcups.c:5776
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "Pagina's per vel"
@@ -8393,7 +8437,7 @@ msgstr "Pagina's per vel"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5588
+#: modules/printbackends/cups/gtkprintbackendcups.c:5793
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Paginavolgorde"
@@ -8401,7 +8445,7 @@ msgstr "Paginavolgorde"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5630
+#: modules/printbackends/cups/gtkprintbackendcups.c:5835
 msgctxt "printer option"
 msgid "Before"
 msgstr "Voor"
@@ -8409,7 +8453,7 @@ msgstr "Voor"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5645
+#: modules/printbackends/cups/gtkprintbackendcups.c:5850
 msgctxt "printer option"
 msgid "After"
 msgstr "Na"
@@ -8419,7 +8463,7 @@ msgstr "Na"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5665
+#: modules/printbackends/cups/gtkprintbackendcups.c:5870
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Wanneer afdrukken"
@@ -8427,7 +8471,7 @@ msgstr "Wanneer afdrukken"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5676
+#: modules/printbackends/cups/gtkprintbackendcups.c:5881
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "Afdrukken om"
@@ -8437,18 +8481,18 @@ msgstr "Afdrukken om"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5721
+#: modules/printbackends/cups/gtkprintbackendcups.c:5926
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Aangepast %s×%s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5831
+#: modules/printbackends/cups/gtkprintbackendcups.c:6036
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "Printerprofiel"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/cups/gtkprintbackendcups.c:5838
+#: modules/printbackends/cups/gtkprintbackendcups.c:6043
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "Niet beschikbaar"
@@ -8497,15 +8541,15 @@ msgstr "Bestand"
 msgid "_Output format"
 msgstr "_Uitvoerformaat"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:393
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:394
 msgid "Print to LPR"
 msgstr "Afdrukken naar LPR"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:419
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:423
 msgid "Pages Per Sheet"
 msgstr "Pagina's per vel"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:426
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:430
 msgid "Command Line"
 msgstr "Opdrachtregel"
 
@@ -8543,6 +8587,78 @@ msgstr "testafdruk.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Afdrukken om printer te testen"
+
+#~ msgctxt "Color name"
+#~ msgid "Scarlet Red"
+#~ msgstr "Scharlakenrood"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Butter"
+#~ msgstr "Lichtboterkleur"
+
+#~ msgctxt "Color name"
+#~ msgid "Butter"
+#~ msgstr "Boterkleur"
+
+#~ msgctxt "Color name"
+#~ msgid "Chameleon"
+#~ msgstr "Kameleon"
+
+#~ msgctxt "Color name"
+#~ msgid "Sky Blue"
+#~ msgstr "Hemelsblauw"
+
+#~ msgctxt "Color name"
+#~ msgid "Plum"
+#~ msgstr "Pruimenpaars"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Chocolate"
+#~ msgstr "Lichtchocolade"
+
+#~ msgctxt "Color name"
+#~ msgid "Chocolate"
+#~ msgstr "Chocolade"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Chocolate"
+#~ msgstr "Donkerchocolade"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Aluminum 1"
+#~ msgstr "Lichtaluminium 1"
+
+#~ msgctxt "Color name"
+#~ msgid "Aluminum 1"
+#~ msgstr "Aluminium 1"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Aluminum 1"
+#~ msgstr "Donkeraluminium 1"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Aluminum 2"
+#~ msgstr "Lichtaluminium 2"
+
+#~ msgctxt "Color name"
+#~ msgid "Aluminum 2"
+#~ msgstr "Aluminium 2"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Aluminum 2"
+#~ msgstr "Donkeraluminium 2"
+
+#~ msgctxt "Color name"
+#~ msgid "Darker Gray"
+#~ msgstr "Donkerder grijs"
+
+#~ msgctxt "Color name"
+#~ msgid "Medium Gray"
+#~ msgstr "Gemiddeldgrijs"
+
+#~ msgctxt "Color name"
+#~ msgid "Lighter Gray"
+#~ msgstr "Lichter grijs"
 
 #~ msgid "3.2 core GL profile is not available on EGL implementation"
 #~ msgstr "3.2 core GL-profiel is niet beschikbaar bij EGL-implementatie"
