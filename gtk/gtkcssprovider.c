@@ -1385,16 +1385,20 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
   else
     {
       /* Things failed! Fall back! Fall back! */
-
-      if (variant)
+      if (strcmp (name, "HighContrast") == 0)
         {
-          /* If there was a variant, try without */
-          gtk_css_provider_load_named (provider, name, NULL);
+          if (g_strcmp0 (variant, "dark") == 0)
+            gtk_css_provider_load_named (provider, DEFAULT_THEME_NAME, "hc-dark");
+          else
+            gtk_css_provider_load_named (provider, DEFAULT_THEME_NAME, "hc");
         }
+      else if (strcmp (name, "HighConstrastInverse") == 0)
+        gtk_css_provider_load_named (provider, DEFAULT_THEME_NAME, "hc-dark");
+      else if (strcmp (name, DEFAULT_THEME_NAME) != 0)
+        gtk_css_provider_load_named (provider, DEFAULT_THEME_NAME, variant);
       else
         {
-          /* Worst case, fall back to the default */
-          g_return_if_fail (!g_str_equal (name, DEFAULT_THEME_NAME)); /* infloop protection */
+          g_return_if_fail (variant != NULL);
           gtk_css_provider_load_named (provider, DEFAULT_THEME_NAME, NULL);
         }
     }
