@@ -53,11 +53,6 @@ option('vulkan',
        value: 'disabled',
        description : 'Enable support for the experimental Vulkan graphics API')
 
-option('xinerama',
-       type: 'feature',
-       value: 'auto',
-       description : 'Enable support for the X11 Xinerama extension')
-
 option('cloudproviders',
        type: 'feature',
        value: 'disabled',
