@@ -66,6 +66,7 @@ struct _GtkInspectorRecorder
   GtkWidget *render_node_view;
   GtkWidget *render_node_list;
   GtkWidget *render_node_save_button;
+  GtkWidget *render_node_clip_button;
   GtkWidget *node_property_tree;
   GtkTreeModel *render_node_properties;
 
@@ -1168,12 +1169,15 @@ render_node_list_selection_changed (GtkListBox           *list,
   GtkTreeListRow *row_item;
 
   row_item = gtk_single_selection_get_selected_item (recorder->render_node_selection);
+
+  gtk_widget_set_sensitive (recorder->render_node_save_button, row_item != NULL);
+  gtk_widget_set_sensitive (recorder->render_node_clip_button, row_item != NULL);
+
   if (row_item == NULL)
     return;
 
   paintable = gtk_tree_list_row_get_item (row_item);
 
-  gtk_widget_set_sensitive (recorder->render_node_save_button, TRUE);
   gtk_picture_set_paintable (GTK_PICTURE (recorder->render_node_view), paintable);
   node = gtk_render_node_paintable_get_render_node (GTK_RENDER_NODE_PAINTABLE (paintable));
   populate_render_node_properties (GTK_LIST_STORE (recorder->render_node_properties), node);
@@ -1250,6 +1254,30 @@ render_node_save (GtkButton            *button,
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   g_signal_connect (dialog, "response", G_CALLBACK (render_node_save_response), node);
   gtk_widget_show (dialog);
+}
+
+static void
+render_node_clip (GtkButton            *button,
+                  GtkInspectorRecorder *recorder)
+{
+  GskRenderNode *node;
+  GdkClipboard *clipboard;
+  GBytes *bytes;
+  GdkContentProvider *content;
+
+  node = get_selected_node (recorder);
+  if (node == NULL)
+    return;
+
+  bytes = gsk_render_node_serialize (node);
+  content = gdk_content_provider_new_for_bytes ("text/plain;charset=utf-8", bytes);
+
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (recorder));
+
+  gdk_clipboard_set_content (clipboard, content);
+
+  g_object_unref (content);
+  g_bytes_unref (bytes);
 }
 
 static void
@@ -1460,11 +1488,13 @@ gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, render_node_view);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, render_node_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, render_node_save_button);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, render_node_clip_button);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, node_property_tree);
 
   gtk_widget_class_bind_template_callback (widget_class, recordings_clear_all);
   gtk_widget_class_bind_template_callback (widget_class, recordings_list_row_selected);
   gtk_widget_class_bind_template_callback (widget_class, render_node_save);
+  gtk_widget_class_bind_template_callback (widget_class, render_node_clip);
   gtk_widget_class_bind_template_callback (widget_class, node_property_activated);
   gtk_widget_class_bind_template_callback (widget_class, toggle_dark_mode);
 
