@@ -122,8 +122,10 @@
           </object>
         </child>
         <child type="start">
-          <object class="GtkSeparator">
-            <property name="orientation">vertical</property>
+          <object class="GtkButton">
+            <property name="icon-name">edit-copy-symbolic</property>
+            <property name="tooltip-text">Copy image to clipboard</property>
+            <signal name="clicked" handler="clip_image_cb"/>
           </object>
         </child>
         <child type="start">

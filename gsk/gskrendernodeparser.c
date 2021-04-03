@@ -2439,9 +2439,9 @@ render_node_print (Printer       *p,
       {
         start_node (p, "cross-fade");
 
-        append_node_param (p, "end", gsk_cross_fade_node_get_end_child (node));
         append_float_param (p, "progress", gsk_cross_fade_node_get_progress (node), 0.5f);
         append_node_param (p, "start", gsk_cross_fade_node_get_start_child (node));
+        append_node_param (p, "end", gsk_cross_fade_node_get_end_child (node));
 
         end_node (p);
       }
@@ -2456,8 +2456,8 @@ render_node_print (Printer       *p,
           start_node (p, "linear-gradient");
 
         append_rect_param (p, "bounds", &node->bounds);
-        append_point_param (p, "end", gsk_linear_gradient_node_get_end (node));
         append_point_param (p, "start", gsk_linear_gradient_node_get_start (node));
+        append_point_param (p, "end", gsk_linear_gradient_node_get_end (node));
         append_stops_param (p, "stops", gsk_linear_gradient_node_get_color_stops (node, NULL),
                                         gsk_linear_gradient_node_get_n_color_stops (node));
 
@@ -2506,8 +2506,8 @@ render_node_print (Printer       *p,
       {
         start_node (p, "opacity");
 
-        append_node_param (p, "child", gsk_opacity_node_get_child (node));
         append_float_param (p, "opacity", gsk_opacity_node_get_opacity (node), 0.5f);
+        append_node_param (p, "child", gsk_opacity_node_get_child (node));
 
         end_node (p);
       }
@@ -2535,8 +2535,8 @@ render_node_print (Printer       *p,
       {
         start_node (p, "clip");
 
-        append_node_param (p, "child", gsk_clip_node_get_child (node));
         append_rect_param (p, "clip", gsk_clip_node_get_clip (node));
+        append_node_param (p, "child", gsk_clip_node_get_child (node));
 
         end_node (p);
       }
@@ -2546,8 +2546,8 @@ render_node_print (Printer       *p,
       {
         start_node (p, "rounded-clip");
 
-        append_node_param (p, "child", gsk_rounded_clip_node_get_child (node));
         append_rounded_rect_param (p, "clip", gsk_rounded_clip_node_get_clip (node));
+        append_node_param (p, "child", gsk_rounded_clip_node_get_child (node));
 
 
         end_node (p);
@@ -2559,9 +2559,9 @@ render_node_print (Printer       *p,
         GskTransform *transform = gsk_transform_node_get_transform (node);
         start_node (p, "transform");
 
-        append_node_param (p, "child", gsk_transform_node_get_child (node));
         if (gsk_transform_get_category (transform) != GSK_TRANSFORM_CATEGORY_IDENTITY)
           append_transform_param (p, "transform", transform);
+        append_node_param (p, "child", gsk_transform_node_get_child (node));
 
         end_node (p);
       }
@@ -2571,11 +2571,11 @@ render_node_print (Printer       *p,
       {
         start_node (p, "color-matrix");
 
-        append_node_param (p, "child", gsk_color_matrix_node_get_child (node));
         if (!graphene_matrix_is_identity (gsk_color_matrix_node_get_color_matrix (node)))
           append_matrix_param (p, "matrix", gsk_color_matrix_node_get_color_matrix (node));
         if (!graphene_vec4_equal (gsk_color_matrix_node_get_color_offset (node), graphene_vec4_zero ()))
           append_vec4_param (p, "offset", gsk_color_matrix_node_get_color_offset (node));
+        append_node_param (p, "child", gsk_color_matrix_node_get_child (node));
 
         end_node (p);
       }
@@ -2649,8 +2649,6 @@ render_node_print (Printer       *p,
 
         start_node (p, "shadow");
 
-        append_node_param (p, "child", gsk_shadow_node_get_child (node));
-
         _indent (p);
         g_string_append (p->str, "shadows: ");
         for (i = 0; i < n_shadows; i ++)
@@ -2678,6 +2676,7 @@ render_node_print (Printer       *p,
 
         g_string_append_c (p->str, ';');
         g_string_append_c (p->str, '\n');
+        append_node_param (p, "child", gsk_shadow_node_get_child (node));
 
         end_node (p);
       }
@@ -2917,9 +2916,9 @@ render_node_print (Printer       *p,
 
         if (!graphene_rect_equal (&node->bounds, &child->bounds))
           append_rect_param (p, "bounds", &node->bounds);
-        append_node_param (p, "child", gsk_repeat_node_get_child (node));
         if (!graphene_rect_equal (child_bounds, &child->bounds))
           append_rect_param (p, "child-bounds", child_bounds);
+        append_node_param (p, "child", gsk_repeat_node_get_child (node));
 
         end_node (p);
       }
@@ -2931,8 +2930,6 @@ render_node_print (Printer       *p,
         guint i;
 
         start_node (p, "blend");
-
-        append_node_param (p, "bottom", gsk_blend_node_get_bottom_child (node));
 
         if (mode != GSK_BLEND_MODE_DEFAULT)
           {
@@ -2946,6 +2943,7 @@ render_node_print (Printer       *p,
                   }
               }
           }
+        append_node_param (p, "bottom", gsk_blend_node_get_bottom_child (node));
         append_node_param (p, "top", gsk_blend_node_get_top_child (node));
 
         end_node (p);

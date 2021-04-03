@@ -1889,6 +1889,7 @@ gtk_text_init (GtkText *self)
   GTK_TEXT_CONTENT (priv->selection_content)->self = self;
 
   target = gtk_drop_target_new (G_TYPE_STRING, GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  gtk_event_controller_set_name (GTK_EVENT_CONTROLLER (target), "gtk-text-drop-target");
   g_signal_connect (target, "accept", G_CALLBACK (gtk_text_drag_accept), self);
   g_signal_connect (target, "enter", G_CALLBACK (gtk_text_drag_motion), self);
   g_signal_connect (target, "motion", G_CALLBACK (gtk_text_drag_motion), self);
@@ -1913,6 +1914,7 @@ gtk_text_init (GtkText *self)
                     G_CALLBACK (gtk_text_delete_surrounding_cb), self);
 
   priv->drag_gesture = gtk_gesture_drag_new ();
+  gtk_event_controller_set_name (GTK_EVENT_CONTROLLER (priv->drag_gesture), "gtk-text-drag-gesture");
   g_signal_connect (priv->drag_gesture, "drag-update",
                     G_CALLBACK (gtk_text_drag_gesture_update), self);
   g_signal_connect (priv->drag_gesture, "drag-end",

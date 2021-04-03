@@ -636,6 +636,24 @@ export_image_cb (GtkWidget        *button,
 }
 
 static void
+clip_image_cb (GtkWidget        *button,
+               NodeEditorWindow *self)
+{
+  GdkTexture *texture;
+  GdkClipboard *clipboard;
+
+  texture = create_texture (self);
+  if (texture == NULL)
+    return;
+
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (self));
+
+  gdk_clipboard_set_texture (clipboard, texture);
+
+  g_object_unref (texture);
+}
+
+static void
 testcase_name_entry_changed_cb (GtkWidget        *button,
                                 GParamSpec       *pspec,
                                 NodeEditorWindow *self)
@@ -826,6 +844,7 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
   gtk_widget_class_bind_template_callback (widget_class, open_cb);
   gtk_widget_class_bind_template_callback (widget_class, save_cb);
   gtk_widget_class_bind_template_callback (widget_class, export_image_cb);
+  gtk_widget_class_bind_template_callback (widget_class, clip_image_cb);
   gtk_widget_class_bind_template_callback (widget_class, testcase_save_clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class, testcase_name_entry_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, dark_mode_cb);

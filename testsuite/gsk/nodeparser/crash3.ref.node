@@ -1,8 +1,4 @@
 cross-fade {
-  end: color {
-    bounds: 5 5 10 10;
-    color: rgb(0,0,255);
-  }
   progress: 0.2;
   start: container {
     color {
@@ -13,5 +9,9 @@ cross-fade {
       bounds: 10 10 10 10;
       color: rgb(0,128,0);
     }
+  }
+  end: color {
+    bounds: 5 5 10 10;
+    color: rgb(0,0,255);
   }
 }

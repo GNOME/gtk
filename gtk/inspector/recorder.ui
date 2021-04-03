@@ -54,6 +54,15 @@
                 <signal name="clicked" handler="render_node_save"/>
               </object>
             </child>
+            <child>
+              <object class="GtkButton" id="render_node_clip_button">
+                <property name="has-frame">0</property>
+                <property name="sensitive">0</property>
+                <property name="icon-name">edit-copy-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Copy to clipboard</property>
+                <signal name="clicked" handler="render_node_clip"/>
+              </object>
+            </child>
           </object>
         </child>
         <child>
