@@ -45,7 +45,7 @@ xml = '''<?xml version='1.0' encoding='UTF-8'?>
 '''
 
 for f in gl_source_shaders:
-  xml += '    <file alias=\'gl/{0}\'>resources/glsl/{0}</file>\n'.format(os.path.basename(f))
+  xml += '    <file alias=\'gl/{0}\'>gl/resources/{0}</file>\n'.format(os.path.basename(f))
 
 xml += '\n'
 
@@ -55,12 +55,12 @@ for f in ngl_source_shaders:
 xml += '\n'
 
 for f in vulkan_compiled_shaders:
-  xml += '    <file alias=\'vulkan/{0}\'>resources/vulkan/{0}</file>\n'.format(os.path.basename(f))
+  xml += '    <file alias=\'vulkan/{0}\'>vulkan/resources/{0}</file>\n'.format(os.path.basename(f))
 
 xml += '\n'
 
 for f in vulkan_shaders:
-  xml += '    <file alias=\'vulkan/{0}\'>resources/vulkan/{0}</file>\n'.format(os.path.basename(f))
+  xml += '    <file alias=\'vulkan/{0}\'>vulkan/resources/{0}</file>\n'.format(os.path.basename(f))
 
 xml += '''
   </gresource>
