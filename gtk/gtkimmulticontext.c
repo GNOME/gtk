@@ -205,6 +205,9 @@ gtk_im_multicontext_set_delegate (GtkIMMulticontext *multicontext,
 					    gtk_im_multicontext_delete_surrounding_cb,
 					    multicontext);
 
+      if (priv->client_widget)
+        gtk_im_context_set_client_widget (priv->delegate, NULL);
+
       g_object_unref (priv->delegate);
       priv->delegate = NULL;
 
