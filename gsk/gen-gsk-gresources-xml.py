@@ -45,7 +45,7 @@ xml = '''<?xml version='1.0' encoding='UTF-8'?>
 '''
 
 for f in gl_source_shaders:
-  xml += '    <file alias=\'glsl/{0}\'>resources/glsl/{0}</file>\n'.format(os.path.basename(f))
+  xml += '    <file alias=\'gl/{0}\'>resources/glsl/{0}</file>\n'.format(os.path.basename(f))
 
 xml += '\n'
 

@@ -3313,27 +3313,27 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
     const char *resource_path;
     const char *name;
   } program_definitions[] = {
-    { "/org/gtk/libgsk/glsl/blend.glsl",                     "blend" },
-    { "/org/gtk/libgsk/glsl/blit.glsl",                      "blit" },
-    { "/org/gtk/libgsk/glsl/blur.glsl",                      "blur" },
-    { "/org/gtk/libgsk/glsl/border.glsl",                    "border" },
-    { "/org/gtk/libgsk/glsl/color_matrix.glsl",              "color matrix" },
-    { "/org/gtk/libgsk/glsl/color.glsl",                     "color" },
-    { "/org/gtk/libgsk/glsl/coloring.glsl",                  "coloring" },
-    { "/org/gtk/libgsk/glsl/cross_fade.glsl",                "cross fade" },
-    { "/org/gtk/libgsk/glsl/inset_shadow.glsl",              "inset shadow" },
-    { "/org/gtk/libgsk/glsl/linear_gradient.glsl",           "linear gradient" },
-    { "/org/gtk/libgsk/glsl/radial_gradient.glsl",           "radial gradient" },
-    { "/org/gtk/libgsk/glsl/conic_gradient.glsl",            "conic gradient" },
-    { "/org/gtk/libgsk/glsl/outset_shadow.glsl",             "outset shadow" },
-    { "/org/gtk/libgsk/glsl/repeat.glsl",                    "repeat" },
-    { "/org/gtk/libgsk/glsl/unblurred_outset_shadow.glsl",   "unblurred_outset shadow" },
+    { "/org/gtk/libgsk/gl/blend.glsl",                     "blend" },
+    { "/org/gtk/libgsk/gl/blit.glsl",                      "blit" },
+    { "/org/gtk/libgsk/gl/blur.glsl",                      "blur" },
+    { "/org/gtk/libgsk/gl/border.glsl",                    "border" },
+    { "/org/gtk/libgsk/gl/color_matrix.glsl",              "color matrix" },
+    { "/org/gtk/libgsk/gl/color.glsl",                     "color" },
+    { "/org/gtk/libgsk/gl/coloring.glsl",                  "coloring" },
+    { "/org/gtk/libgsk/gl/cross_fade.glsl",                "cross fade" },
+    { "/org/gtk/libgsk/gl/inset_shadow.glsl",              "inset shadow" },
+    { "/org/gtk/libgsk/gl/linear_gradient.glsl",           "linear gradient" },
+    { "/org/gtk/libgsk/gl/radial_gradient.glsl",           "radial gradient" },
+    { "/org/gtk/libgsk/gl/conic_gradient.glsl",            "conic gradient" },
+    { "/org/gtk/libgsk/gl/outset_shadow.glsl",             "outset shadow" },
+    { "/org/gtk/libgsk/gl/repeat.glsl",                    "repeat" },
+    { "/org/gtk/libgsk/gl/unblurred_outset_shadow.glsl",   "unblurred_outset shadow" },
   };
 
   gsk_gl_shader_builder_init (&shader_builder,
-                              "/org/gtk/libgsk/glsl/preamble.glsl",
-                              "/org/gtk/libgsk/glsl/preamble.vs.glsl",
-                              "/org/gtk/libgsk/glsl/preamble.fs.glsl");
+                              "/org/gtk/libgsk/gl/preamble.glsl",
+                              "/org/gtk/libgsk/gl/preamble.vs.glsl",
+                              "/org/gtk/libgsk/gl/preamble.fs.glsl");
 
   g_assert (G_N_ELEMENTS (program_definitions) == GL_N_PROGRAMS);
 
