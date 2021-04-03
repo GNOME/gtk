@@ -5,18 +5,18 @@ blend {
   }
 }
 blend {
+  mode: color-dodge;
   bottom: container {
   }
-  mode: color-dodge;
   top: container {
   }
 }
 blend {
+  mode: difference;
   bottom: color {
     bounds: 0 0 50 50;
     color: rgb(255,0,204);
   }
-  mode: difference;
   top: color {
     bounds: 0 0 50 50;
     color: rgb(255,0,204);
