@@ -1432,6 +1432,7 @@ gtk_settings_notify (GObject    *object,
       settings_update_theme (settings);
       break;
     case PROP_XFT_DPI:
+      settings_invalidate_style (settings);
       gtk_system_setting_changed (settings->display, GTK_SYSTEM_SETTING_DPI);
       break;
     case PROP_XFT_ANTIALIAS:
