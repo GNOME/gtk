@@ -315,12 +315,12 @@ main (int argc, char **argv)
 {
   gboolean success;
 
-  gtk_test_init (&argc, &argv);
-
   if (argc < 2)
     {
       const char *basedir;
       GFile *dir;
+
+      gtk_test_init (&argc, &argv);
 
       basedir = g_test_get_dir (G_TEST_DIST);
       dir = g_file_new_for_path (basedir);
@@ -334,6 +334,8 @@ main (int argc, char **argv)
         {
           GFile *file = g_file_new_for_commandline_arg (argv[2]);
 
+          gtk_init ();
+
           success = parse_node_file (file, TRUE);
 
           g_object_unref (file);
@@ -344,6 +346,8 @@ main (int argc, char **argv)
   else
     {
       guint i;
+
+      gtk_test_init (&argc, &argv);
 
       success = TRUE;
 
