@@ -1,23 +1,23 @@
 gsk_private_gl_shaders = [
-  'resources/glsl/preamble.glsl',
-  'resources/glsl/preamble.fs.glsl',
-  'resources/glsl/preamble.vs.glsl',
-  'resources/glsl/border.glsl',
-  'resources/glsl/blit.glsl',
-  'resources/glsl/coloring.glsl',
-  'resources/glsl/color.glsl',
-  'resources/glsl/linear_gradient.glsl',
-  'resources/glsl/radial_gradient.glsl',
-  'resources/glsl/conic_gradient.glsl',
-  'resources/glsl/color_matrix.glsl',
-  'resources/glsl/blur.glsl',
-  'resources/glsl/inset_shadow.glsl',
-  'resources/glsl/outset_shadow.glsl',
-  'resources/glsl/unblurred_outset_shadow.glsl',
-  'resources/glsl/cross_fade.glsl',
-  'resources/glsl/blend.glsl',
-  'resources/glsl/repeat.glsl',
-  'resources/glsl/custom.glsl',
+  'gl/resources/preamble.glsl',
+  'gl/resources/preamble.fs.glsl',
+  'gl/resources/preamble.vs.glsl',
+  'gl/resources/border.glsl',
+  'gl/resources/blit.glsl',
+  'gl/resources/coloring.glsl',
+  'gl/resources/color.glsl',
+  'gl/resources/linear_gradient.glsl',
+  'gl/resources/radial_gradient.glsl',
+  'gl/resources/conic_gradient.glsl',
+  'gl/resources/color_matrix.glsl',
+  'gl/resources/blur.glsl',
+  'gl/resources/inset_shadow.glsl',
+  'gl/resources/outset_shadow.glsl',
+  'gl/resources/unblurred_outset_shadow.glsl',
+  'gl/resources/cross_fade.glsl',
+  'gl/resources/blend.glsl',
+  'gl/resources/repeat.glsl',
+  'gl/resources/custom.glsl',
 ]
 
 gsk_private_ngl_shaders = [
@@ -158,7 +158,7 @@ if have_vulkan
     'vulkan/gskvulkanshader.c',
   ])
 
-  subdir('resources/vulkan')
+  subdir('vulkan/resources')
 endif # have_vulkan
 
 if get_variable('broadway_enabled')
