@@ -1873,6 +1873,7 @@ set_up_context_popover (GtkWidget *widget,
   gtk_widget_set_parent (popover, widget);
   gtk_popover_set_has_arrow (GTK_POPOVER (popover), FALSE);
   gesture = gtk_gesture_click_new ();
+  gtk_event_controller_set_name (GTK_EVENT_CONTROLLER (gesture), "widget-factory-context-click");
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
   g_signal_connect (gesture, "pressed", G_CALLBACK (clicked_cb), popover);
   gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture));
