@@ -1481,30 +1481,28 @@ _gtk_text_btree_find_line_top (GtkTextBTree *tree,
 {
   int y = 0;
   BTreeView *view;
-  GSList *nodes;
-  GSList *iter;
   GtkTextBTreeNode *node;
+  GtkTextBTreeNode *nodes[64];
+  int tos = 0;
 
   view = gtk_text_btree_get_view (tree, view_id);
 
   g_return_val_if_fail (view != NULL, 0);
 
-  nodes = NULL;
   node = target_line->parent;
   while (node != NULL)
     {
-      nodes = g_slist_prepend (nodes, node);
+      nodes[tos++] = node;
       node = node->parent;
     }
 
-  iter = nodes;
-  while (iter != NULL)
+  tos--;
+  while (tos >= 0)
     {
-      node = iter->data;
+      node = nodes[tos];
 
       if (node->level == 0)
         {
-          g_slist_free (nodes);
           return find_line_top_in_line_list (tree, view,
                                              node->children.line,
                                              target_line, y);
@@ -1514,8 +1512,8 @@ _gtk_text_btree_find_line_top (GtkTextBTree *tree,
           GtkTextBTreeNode *child;
           GtkTextBTreeNode *target_node;
 
-          g_assert (iter->next != NULL); /* not at level 0 */
-          target_node = iter->next->data;
+          g_assert (tos > 0); /* not at level 0 */
+          target_node = nodes[tos - 1];
 
           child = node->children.node;
 
@@ -1538,7 +1536,7 @@ _gtk_text_btree_find_line_top (GtkTextBTree *tree,
                                        ran out of nodes */
         }
 
-      iter = iter->next;
+      tos--;
     }
 
   g_assert_not_reached (); /* we return when we find the target line */
