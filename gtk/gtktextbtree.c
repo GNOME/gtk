@@ -6496,21 +6496,9 @@ inc_count (GtkTextTag *tag, int inc, TagInfo *tagInfoPtr)
 
   if (tagInfoPtr->numTags == tagInfoPtr->arraySize)
     {
-      GtkTextTag **newTags;
-      int *newCounts, newSize;
-
-      newSize = 2*tagInfoPtr->arraySize;
-      newTags = (GtkTextTag **) g_malloc ((unsigned)
-                                          (newSize*sizeof (GtkTextTag *)));
-      memcpy ((void *) newTags, (void *) tagInfoPtr->tags,
-              tagInfoPtr->arraySize  *sizeof (GtkTextTag *));
-      g_free ((char *) tagInfoPtr->tags);
-      tagInfoPtr->tags = newTags;
-      newCounts = (int *) g_malloc ((unsigned) (newSize*sizeof (int)));
-      memcpy ((void *) newCounts, (void *) tagInfoPtr->counts,
-              tagInfoPtr->arraySize  *sizeof (int));
-      g_free ((char *) tagInfoPtr->counts);
-      tagInfoPtr->counts = newCounts;
+      int newSize = 2 * tagInfoPtr->arraySize;
+      tagInfoPtr->tags = g_realloc (tagInfoPtr->tags, newSize * sizeof (GtkTextTag *));
+      tagInfoPtr->counts = g_realloc (tagInfoPtr->counts, newSize * sizeof (int));
       tagInfoPtr->arraySize = newSize;
     }
 
