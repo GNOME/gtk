@@ -276,13 +276,6 @@ static void             gtk_text_line_set_parent        (GtkTextLine      *line,
 static void             gtk_text_btree_node_remove_data (GtkTextBTreeNode *node,
                                                          gpointer          view_id);
 
-
-static NodeData         *node_data_new          (gpointer  view_id);
-static void              node_data_destroy      (NodeData *nd);
-static void              node_data_list_destroy (NodeData *nd);
-static NodeData         *node_data_find         (NodeData *nd,
-                                                 gpointer  view_id);
-
 static GtkTextBTreeNode     *gtk_text_btree_node_new                  (void);
 #if 0
 static void                  gtk_text_btree_node_invalidate_downward  (GtkTextBTreeNode *node);
@@ -4817,15 +4810,16 @@ cleanup_line (GtkTextLine *line)
  * Nodes
  */
 
-static NodeData*
-node_data_new (gpointer view_id)
+static inline NodeData*
+node_data_new (gpointer  view_id,
+               NodeData *next)
 {
   NodeData *nd;
   
   nd = g_slice_new (NodeData);
 
   nd->view_id = view_id;
-  nd->next = NULL;
+  nd->next = next;
   nd->width = 0;
   nd->height = 0;
   nd->valid = FALSE;
@@ -4833,19 +4827,19 @@ node_data_new (gpointer view_id)
   return nd;
 }
 
-static void
+static inline void
 node_data_destroy (NodeData *nd)
 {
   g_slice_free (NodeData, nd);
 }
 
-static void
+static inline void
 node_data_list_destroy (NodeData *nd)
 {
   g_slice_free_chain (NodeData, nd, next);
 }
 
-static NodeData*
+static inline NodeData*
 node_data_find (NodeData *nd, 
 		gpointer  view_id)
 {
@@ -5534,24 +5528,10 @@ gtk_text_btree_node_ensure_data (GtkTextBTreeNode *node, gpointer view_id)
 {
   NodeData *nd;
 
-  nd = node->node_data;
-  while (nd != NULL)
-    {
-      if (nd->view_id == view_id)
-        break;
-
-      nd = nd->next;
-    }
+  nd = node_data_find (node->node_data, view_id);
 
   if (nd == NULL)
-    {
-      nd = node_data_new (view_id);
-      
-      if (node->node_data)
-        nd->next = node->node_data;
-      
-      node->node_data = nd;
-    }
+    nd = node->node_data = node_data_new (view_id, node->node_data);
 
   return nd;
 }
