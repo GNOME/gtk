@@ -2469,16 +2469,12 @@ _gtk_text_btree_char_count (GtkTextBTree *tree)
   return tree->root_node->num_chars - 2;
 }
 
-#define LOTSA_TAGS 1000
 gboolean
 _gtk_text_btree_char_is_invisible (const GtkTextIter *iter)
 {
   gboolean invisible = FALSE;  /* if nobody says otherwise, it's visible */
-
-  int deftagCnts[LOTSA_TAGS] = { 0, };
-  int *tagCnts = deftagCnts;
-  GtkTextTag *deftags[LOTSA_TAGS];
-  GtkTextTag **tags = deftags;
+  int *tagCnts;
+  GtkTextTag **tags;
   int numTags;
   GtkTextBTreeNode *node;
   GtkTextLine *siblingline;
@@ -2489,7 +2485,6 @@ _gtk_text_btree_char_is_invisible (const GtkTextIter *iter)
   GtkTextBTree *tree;
   int byte_index;
 
-  line = _gtk_text_iter_get_text_line (iter);
   tree = _gtk_text_iter_get_btree (iter);
 
   /* Short-circuit if we've never seen a visibility tag within the
@@ -2498,16 +2493,14 @@ _gtk_text_btree_char_is_invisible (const GtkTextIter *iter)
   if G_LIKELY (!_gtk_text_tag_table_affects_visibility (tree->table))
     return FALSE;
 
+  line = _gtk_text_iter_get_text_line (iter);
+
   byte_index = gtk_text_iter_get_line_index (iter);
 
   numTags = gtk_text_tag_table_get_size (tree->table);
 
-  /* almost always avoid malloc, so stay out of system calls */
-  if (LOTSA_TAGS < numTags)
-    {
-      tagCnts = g_new0 (int, numTags);
-      tags = g_new (GtkTextTag*, numTags);
-    }
+  tagCnts = g_alloca (sizeof (int) * numTags);
+  tags = g_alloca (sizeof (GtkTextTag *) * numTags);
 
   /*
    * Record tag toggles within the line of indexPtr but preceding
@@ -2608,12 +2601,6 @@ _gtk_text_btree_char_is_invisible (const GtkTextIter *iter)
           invisible = tags[i]->priv->values->invisible;
           break;
         }
-    }
-
-  if (LOTSA_TAGS < numTags)
-    {
-      g_free (tagCnts);
-      g_free (tags);
     }
 
   return invisible;
