@@ -2632,7 +2632,6 @@ gtk_text_layout_create_display (GtkTextLayout *layout,
   pango_layout_get_extents (display->layout, NULL, &extents);
 
   text_pixel_width = PIXEL_BOUND (extents.width);
-  display->width = text_pixel_width + display->left_margin + display->right_margin;
 
   h_margin = display->left_margin + display->right_margin;
   h_padding = layout->left_padding + layout->right_padding;
