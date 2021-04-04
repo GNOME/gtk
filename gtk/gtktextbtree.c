@@ -3747,65 +3747,58 @@ _gtk_text_line_byte_count (GtkTextLine *line)
 int
 _gtk_text_line_char_index (GtkTextLine *target_line)
 {
-  GSList *node_stack = NULL;
+  GtkTextBTreeNode *node_stack[64];
   GtkTextBTreeNode *iter;
   GtkTextLine *line;
   int num_chars;
+  int tos = 0;
 
   /* Push all our parent nodes onto a stack */
   iter = target_line->parent;
 
   g_assert (iter != NULL);
 
-  while (iter != NULL)
+  while (iter != NULL && tos < 64)
     {
-      node_stack = g_slist_prepend (node_stack, iter);
-
+      node_stack[tos++] = iter;
       iter = iter->parent;
     }
 
+  tos--;
+
   /* Check that we have the root node on top of the stack. */
   g_assert (node_stack != NULL &&
-            node_stack->data != NULL &&
-            ((GtkTextBTreeNode*)node_stack->data)->parent == NULL);
+            node_stack[tos] != NULL &&
+            node_stack[tos]->parent == NULL);
 
   /* Add up chars in all nodes before the nodes in our stack.
    */
 
   num_chars = 0;
-  iter = node_stack->data;
-  while (iter != NULL)
+  while (tos >= 0)
     {
       GtkTextBTreeNode *child_iter;
-      GtkTextBTreeNode *next_node;
 
-      next_node = node_stack->next ?
-        node_stack->next->data : NULL;
-      node_stack = g_slist_remove (node_stack, node_stack->data);
+      iter = node_stack[tos];
 
       if (iter->level == 0)
         {
           /* stack should be empty when we're on the last node */
-          g_assert (node_stack == NULL);
+          g_assert (tos == 0);
           break; /* Our children are now lines */
         }
 
-      g_assert (next_node != NULL);
-      g_assert (iter != NULL);
-      g_assert (next_node->parent == iter);
+       tos--;
 
       /* Add up chars before us in the tree */
       child_iter = iter->children.node;
-      while (child_iter != next_node)
+      while (child_iter != node_stack[tos])
         {
           g_assert (child_iter != NULL);
 
           num_chars += child_iter->num_chars;
-
           child_iter = child_iter->next;
         }
-
-      iter = next_node;
     }
 
   g_assert (iter != NULL);
@@ -3820,7 +3813,6 @@ _gtk_text_line_char_index (GtkTextLine *target_line)
       g_assert (line != NULL);
 
       num_chars += _gtk_text_line_char_count (line);
-
       line = line->next;
     }
 
