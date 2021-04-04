@@ -4245,7 +4245,9 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
                 g_clear_pointer (&line_display->node, gsk_render_node_unref);
             }
 
-          if (line_display->node == NULL)
+          if (line_display->node == NULL &&
+              (pango_layout_get_character_count (line_display->layout) > 0 ||
+               selection_start_index != -1 || selection_end_index != -1))
             {
               gtk_snapshot_push_collect (snapshot);
               render_para (crenderer, line_display,
