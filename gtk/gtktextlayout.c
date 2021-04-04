@@ -3908,31 +3908,17 @@ render_para (GskPangoRenderer   *crenderer,
              GtkTextLineDisplay *line_display,
              int                 selection_start_index,
              int                 selection_end_index,
+             const GdkRGBA      *selection,
              float               cursor_alpha)
 {
-  GtkStyleContext *context;
   PangoLayout *layout = line_display->layout;
   int byte_offset = 0;
   PangoLayoutIter *iter;
   int screen_width;
-  const GdkRGBA *selection = NULL;
   gboolean first = TRUE;
-
-  g_return_if_fail (GTK_IS_TEXT_VIEW (crenderer->widget));
 
   iter = pango_layout_get_iter (layout);
   screen_width = line_display->total_width;
-
-  context = _gtk_widget_get_style_context (crenderer->widget);
-  if (selection_start_index != -1 || selection_end_index != -1)
-    {
-      GtkCssNode *selection_node = gtk_text_view_get_selection_node ((GtkTextView*)crenderer->widget);
-      gtk_style_context_save_to_node (context, selection_node);
-
-      selection = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
-
-      gtk_style_context_restore (context);
-    }
 
   do
     {
@@ -3963,13 +3949,12 @@ render_para (GskPangoRenderer   *crenderer,
         {
           selection_y -= line_display->top_margin;
           selection_height += line_display->top_margin;
+          first = FALSE;
         }
 
       at_last_line = pango_layout_iter_at_last_line (iter);
       if (at_last_line)
         selection_height += line_display->bottom_margin;
-
-      first = FALSE;
 
       if (selection_start_index < byte_offset &&
           selection_end_index > line->length + byte_offset) /* All selected */
@@ -4067,10 +4052,12 @@ render_para (GskPangoRenderer   *crenderer,
             }
           else if (line_display->has_block_cursor &&
                    gtk_widget_has_focus (crenderer->widget) &&
+                   cursor_alpha > 0 &&
                    byte_offset <= line_display->insert_index &&
                    (line_display->insert_index < byte_offset + line->length ||
                     (at_last_line && line_display->insert_index == byte_offset + line->length)))
             {
+              GtkStyleContext *context;
               GdkRGBA cursor_color;
               graphene_rect_t bounds = {
                 .origin.x = line_display->x_offset + line_display->block_cursor.x,
@@ -4079,8 +4066,10 @@ render_para (GskPangoRenderer   *crenderer,
                 .size.height = line_display->block_cursor.height,
               };
 
-              /* we draw text using base color on filled cursor rectangle of cursor color
-               * (normally white on black) */
+              /* we draw text using base color on filled cursor rectangle
+               * of cursor color (normally white on black)
+               */
+              context = _gtk_widget_get_style_context (crenderer->widget);
               _gtk_style_context_get_cursor_color (context, &cursor_color, NULL);
 
               gtk_snapshot_push_opacity (crenderer->snapshot, cursor_alpha);
@@ -4138,6 +4127,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
   int selection_start_line;
   int selection_end_line;
   gboolean have_selection;
+  const GdkRGBA *selection;
   GSList *line_list;
   GSList *tmp_list;
   GdkRGBA color;
@@ -4179,13 +4169,24 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
                                                          &selection_end);
   if (have_selection)
     {
+      GtkCssNode *selection_node;
+
       selection_start_line = gtk_text_iter_get_line (&selection_start);
       selection_end_line = gtk_text_iter_get_line (&selection_end);
+
+      context = _gtk_widget_get_style_context (crenderer->widget);
+      selection_node = gtk_text_view_get_selection_node ((GtkTextView*)widget);
+      gtk_style_context_save_to_node (context, selection_node);
+
+      selection = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+
+      gtk_style_context_restore (context);
     }
   else
     {
       selection_start_line = -1;
       selection_end_line = -1;
+      selection = NULL;
     }
 
   tmp_list = line_list;
@@ -4252,8 +4253,8 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
               gtk_snapshot_push_collect (snapshot);
               render_para (crenderer, line_display,
                            selection_start_index, selection_end_index,
+                           selection,
                            cursor_alpha);
-
               line_display->node = gtk_snapshot_pop_collect (snapshot);
             }
 
