@@ -1404,7 +1404,8 @@ pointer_cb (GObject    *object,
       GtkModelButton *button = data;
 
       stop_open (button);
-      gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (popover), NULL);
+      if (popover)
+        gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (popover), NULL);
     }
 }
 
