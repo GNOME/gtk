@@ -671,63 +671,6 @@ gtk_text_layout_cursors_changed (GtkTextLayout *layout,
   gtk_text_layout_emit_changed (layout, y, old_height, new_height);
 }
 
-
-/*
- * gtk_text_layout_get_lines:
- *
- * Returns: (element-type GtkTextLine) (transfer container):
- */
-GPtrArray *
-gtk_text_layout_get_lines (GtkTextLayout *layout,
-                           /* [top_y, bottom_y) */
-                           int top_y,
-                           int bottom_y,
-                           int *first_line_y)
-{
-  GtkTextBTree *btree;
-  GtkTextLine *first_btree_line;
-  GtkTextLine *last_btree_line;
-  GtkTextLine *line;
-  GPtrArray *lines;
-
-  g_return_val_if_fail (GTK_IS_TEXT_LAYOUT (layout), NULL);
-
-  if (top_y >= bottom_y)
-    return NULL;
-
-  btree = _gtk_text_buffer_get_btree (layout->buffer);
-
-  first_btree_line = _gtk_text_btree_find_line_by_y (btree, layout, top_y, first_line_y);
-  if (first_btree_line == NULL)
-    {
-      /* off the bottom */
-      return NULL;
-    }
-
-  /* -1 since bottom_y is one past */
-  last_btree_line = _gtk_text_btree_find_line_by_y (btree, layout, bottom_y - 1, NULL);
-
-  if (!last_btree_line)
-    last_btree_line = _gtk_text_btree_get_end_iter_line (btree);
-
-  g_assert (last_btree_line != NULL);
-
-  lines = g_ptr_array_sized_new (32);
-
-  line = first_btree_line;
-  while (TRUE)
-    {
-      g_ptr_array_add (lines, line);
-
-      if (line == last_btree_line)
-        break;
-
-      line = _gtk_text_line_next_excluding_last (line);
-    }
-
-  return lines;
-}
-
 static void
 invalidate_cached_style (GtkTextLayout *layout)
 {
