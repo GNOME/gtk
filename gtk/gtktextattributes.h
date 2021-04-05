@@ -66,6 +66,7 @@ typedef struct _GtkTextAppearance GtkTextAppearance;
  * @fg_color: Foreground #GdkColor.
  * @rise: Super/subscript rise, can be negative.
  * @underline: #PangoUnderline
+ * @overline: #PangoOverline
  * @strikethrough: Strikethrough style
  * @draw_bg: Whether to use background-related values; this is
  *   irrelevant for the values struct when in a tag, but is used for
