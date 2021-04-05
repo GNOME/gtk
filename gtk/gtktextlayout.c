@@ -4108,7 +4108,6 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
   GSList *tmp_list;
   GdkRGBA color;
   GtkSnapshot *cursor_snapshot;
-  GskRenderNode *cursors;
 
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (layout->default_style != NULL);
@@ -4117,18 +4116,18 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
 
   priv = GTK_TEXT_LAYOUT_GET_PRIVATE (layout);
 
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_get_color (context, &color);
-
   line_list = gtk_text_layout_get_lines (layout, clip->y, clip->y + clip->height, &offset_y);
 
   if (line_list == NULL)
     return; /* nothing on the screen */
 
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_get_color (context, &color);
+
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (0, offset_y));
   offset_y = 0;
 
-  cursor_snapshot = gtk_snapshot_new ();
+  cursor_snapshot = NULL;
 
   crenderer = gsk_pango_renderer_acquire ();
 
@@ -4137,8 +4136,6 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
   crenderer->widget = widget;
   crenderer->snapshot = snapshot;
   crenderer->fg_color = &color;
-
-  gtk_text_layout_wrap_loop_start (layout);
 
   have_selection = gtk_text_buffer_get_selection_bounds (layout->buffer,
                                                          &selection_start,
@@ -4150,7 +4147,6 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
       selection_start_line = gtk_text_iter_get_line (&selection_start);
       selection_end_line = gtk_text_iter_get_line (&selection_end);
 
-      context = _gtk_widget_get_style_context (crenderer->widget);
       selection_node = gtk_text_view_get_selection_node ((GtkTextView*)widget);
       gtk_style_context_save_to_node (context, selection_node);
 
@@ -4164,6 +4160,8 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
       selection_end_line = -1;
       selection = NULL;
     }
+
+  gtk_text_layout_wrap_loop_start (layout);
 
   tmp_list = line_list;
   while (tmp_list != NULL)
@@ -4217,8 +4215,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
 
           if (line_display->node != NULL)
             {
-              if (line_display->has_block_cursor &&
-                  gtk_widget_has_focus (widget))
+              if (line_display->has_block_cursor && gtk_widget_has_focus (widget))
                 g_clear_pointer (&line_display->node, gsk_render_node_unref);
             }
 
@@ -4248,9 +4245,10 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
            */
           if (line_display->cursors != NULL)
             {
-              int i;
+              if (cursor_snapshot == NULL)
+                cursor_snapshot = gtk_snapshot_new ();
 
-              for (i = 0; i < line_display->cursors->len; i++)
+              for (int i = 0; i < line_display->cursors->len; i++)
                 {
                   PangoDirection dir;
                   CursorPosition cursor;
@@ -4280,11 +4278,16 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
 
   gtk_text_layout_wrap_loop_end (layout);
 
-  cursors = gtk_snapshot_free_to_node (cursor_snapshot);
-  if (cursors)
+  if (cursor_snapshot)
     {
-      gtk_snapshot_append_node (crenderer->snapshot, cursors);
-      gsk_render_node_unref (cursors);
+      GskRenderNode *cursors;
+
+      cursors = gtk_snapshot_free_to_node (cursor_snapshot);
+      if (cursors)
+        {
+          gtk_snapshot_append_node (crenderer->snapshot, cursors);
+          gsk_render_node_unref (cursors);
+        }
     }
 
   /* Only update eviction source once per snapshot */
