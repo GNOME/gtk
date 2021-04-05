@@ -97,10 +97,8 @@ struct _GtkTextTagPrivate
  * ascending order of priority
 */
 void _gtk_text_attributes_fill_from_tags   (GtkTextAttributes   *values,
-                                            GtkTextTag         **tags,
-                                            guint                n_tags);
-void _gtk_text_tag_array_sort              (GtkTextTag         **tag_array_p,
-                                            guint                len);
+                                            GPtrArray           *tags);
+void _gtk_text_tag_array_sort              (GPtrArray           *tags);
 
 gboolean _gtk_text_tag_affects_size               (GtkTextTag *tag);
 gboolean _gtk_text_tag_affects_nonsize_appearance (GtkTextTag *tag);

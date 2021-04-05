@@ -80,15 +80,8 @@
  */
 
 typedef struct TagInfo {
-  int numTags;                  /* Number of tags for which there
-                                 * is currently information in
-                                 * tags and counts. */
-  int arraySize;                        /* Number of entries allocated for
-                                         * tags and counts. */
-  GtkTextTag **tags;           /* Array of tags seen so far.
-                                * Malloc-ed. */
-  int *counts;                  /* Toggle count (so far) for each
-                                 * entry in tags.  Malloc-ed. */
+  GPtrArray *tags;
+  GArray *counts;
 } TagInfo;
 
 
@@ -275,13 +268,6 @@ static void             gtk_text_line_set_parent        (GtkTextLine      *line,
                                                          GtkTextBTreeNode *node);
 static void             gtk_text_btree_node_remove_data (GtkTextBTreeNode *node,
                                                          gpointer          view_id);
-
-
-static NodeData         *node_data_new          (gpointer  view_id);
-static void              node_data_destroy      (NodeData *nd);
-static void              node_data_list_destroy (NodeData *nd);
-static NodeData         *node_data_find         (NodeData *nd,
-                                                 gpointer  view_id);
 
 static GtkTextBTreeNode     *gtk_text_btree_node_new                  (void);
 #if 0
@@ -1481,30 +1467,28 @@ _gtk_text_btree_find_line_top (GtkTextBTree *tree,
 {
   int y = 0;
   BTreeView *view;
-  GSList *nodes;
-  GSList *iter;
   GtkTextBTreeNode *node;
+  GtkTextBTreeNode *nodes[64];
+  int tos = 0;
 
   view = gtk_text_btree_get_view (tree, view_id);
 
   g_return_val_if_fail (view != NULL, 0);
 
-  nodes = NULL;
   node = target_line->parent;
   while (node != NULL)
     {
-      nodes = g_slist_prepend (nodes, node);
+      nodes[tos++] = node;
       node = node->parent;
     }
 
-  iter = nodes;
-  while (iter != NULL)
+  tos--;
+  while (tos >= 0)
     {
-      node = iter->data;
+      node = nodes[tos];
 
       if (node->level == 0)
         {
-          g_slist_free (nodes);
           return find_line_top_in_line_list (tree, view,
                                              node->children.line,
                                              target_line, y);
@@ -1514,8 +1498,8 @@ _gtk_text_btree_find_line_top (GtkTextBTree *tree,
           GtkTextBTreeNode *child;
           GtkTextBTreeNode *target_node;
 
-          g_assert (iter->next != NULL); /* not at level 0 */
-          target_node = iter->next->data;
+          g_assert (tos > 0); /* not at level 0 */
+          target_node = nodes[tos - 1];
 
           child = node->children.node;
 
@@ -1538,7 +1522,7 @@ _gtk_text_btree_find_line_top (GtkTextBTree *tree,
                                        ran out of nodes */
         }
 
-      iter = iter->next;
+      tos--;
     }
 
   g_assert_not_reached (); /* we return when we find the target line */
@@ -2209,9 +2193,8 @@ _gtk_text_btree_get_line_at_char (GtkTextBTree      *tree,
 
 /* It returns an array sorted by tags priority, ready to pass to
  * _gtk_text_attributes_fill_from_tags() */
-GtkTextTag**
-_gtk_text_btree_get_tags (const GtkTextIter *iter,
-                         int *num_tags)
+GPtrArray *
+_gtk_text_btree_get_tags (const GtkTextIter *iter)
 {
   GtkTextBTreeNode *node;
   GtkTextLine *siblingline;
@@ -2226,10 +2209,8 @@ _gtk_text_btree_get_tags (const GtkTextIter *iter,
   line = _gtk_text_iter_get_text_line (iter);
   byte_index = gtk_text_iter_get_line_index (iter);
 
-  tagInfo.numTags = 0;
-  tagInfo.arraySize = NUM_TAG_INFOS;
-  tagInfo.tags = g_new (GtkTextTag*, NUM_TAG_INFOS);
-  tagInfo.counts = g_new (int, NUM_TAG_INFOS);
+  tagInfo.tags = g_ptr_array_sized_new (NUM_TAG_INFOS);
+  tagInfo.counts = g_array_new (FALSE, FALSE, sizeof (int));
 
   /*
    * Record tag toggles within the line of indexPtr but preceding
@@ -2300,26 +2281,26 @@ _gtk_text_btree_get_tags (const GtkTextIter *iter,
    * of interest, but not at the desired character itself).
    */
 
-  for (src = 0, dst = 0; src < tagInfo.numTags; src++)
+  for (src = 0, dst = 0; src < tagInfo.tags->len; src++)
     {
-      if (tagInfo.counts[src] & 1)
+      if (g_array_index (tagInfo.counts, int, src) & 1)
         {
-          g_assert (GTK_IS_TEXT_TAG (tagInfo.tags[src]));
-          tagInfo.tags[dst] = tagInfo.tags[src];
+          g_assert (GTK_IS_TEXT_TAG (g_ptr_array_index (tagInfo.tags, src)));
+          g_ptr_array_index (tagInfo.tags, dst) = g_ptr_array_index (tagInfo.tags, src);
           dst++;
         }
     }
 
-  *num_tags = dst;
-  g_free (tagInfo.counts);
+  g_ptr_array_set_size (tagInfo.tags, dst);
+  g_array_unref (tagInfo.counts);
   if (dst == 0)
     {
-      g_free (tagInfo.tags);
+      g_ptr_array_unref (tagInfo.tags);
       return NULL;
     }
 
   /* Sort tags in ascending order of priority */
-  _gtk_text_tag_array_sort (tagInfo.tags, dst);
+  _gtk_text_tag_array_sort (tagInfo.tags);
 
   return tagInfo.tags;
 }
@@ -2469,16 +2450,12 @@ _gtk_text_btree_char_count (GtkTextBTree *tree)
   return tree->root_node->num_chars - 2;
 }
 
-#define LOTSA_TAGS 1000
 gboolean
 _gtk_text_btree_char_is_invisible (const GtkTextIter *iter)
 {
   gboolean invisible = FALSE;  /* if nobody says otherwise, it's visible */
-
-  int deftagCnts[LOTSA_TAGS] = { 0, };
-  int *tagCnts = deftagCnts;
-  GtkTextTag *deftags[LOTSA_TAGS];
-  GtkTextTag **tags = deftags;
+  int *tagCnts;
+  GtkTextTag **tags;
   int numTags;
   GtkTextBTreeNode *node;
   GtkTextLine *siblingline;
@@ -2489,7 +2466,6 @@ _gtk_text_btree_char_is_invisible (const GtkTextIter *iter)
   GtkTextBTree *tree;
   int byte_index;
 
-  line = _gtk_text_iter_get_text_line (iter);
   tree = _gtk_text_iter_get_btree (iter);
 
   /* Short-circuit if we've never seen a visibility tag within the
@@ -2498,16 +2474,14 @@ _gtk_text_btree_char_is_invisible (const GtkTextIter *iter)
   if G_LIKELY (!_gtk_text_tag_table_affects_visibility (tree->table))
     return FALSE;
 
+  line = _gtk_text_iter_get_text_line (iter);
+
   byte_index = gtk_text_iter_get_line_index (iter);
 
   numTags = gtk_text_tag_table_get_size (tree->table);
 
-  /* almost always avoid malloc, so stay out of system calls */
-  if (LOTSA_TAGS < numTags)
-    {
-      tagCnts = g_new0 (int, numTags);
-      tags = g_new (GtkTextTag*, numTags);
-    }
+  tagCnts = g_alloca (sizeof (int) * numTags);
+  tags = g_alloca (sizeof (GtkTextTag *) * numTags);
 
   /*
    * Record tag toggles within the line of indexPtr but preceding
@@ -2608,12 +2582,6 @@ _gtk_text_btree_char_is_invisible (const GtkTextIter *iter)
           invisible = tags[i]->priv->values->invisible;
           break;
         }
-    }
-
-  if (LOTSA_TAGS < numTags)
-    {
-      g_free (tagCnts);
-      g_free (tags);
     }
 
   return invisible;
@@ -3760,65 +3728,58 @@ _gtk_text_line_byte_count (GtkTextLine *line)
 int
 _gtk_text_line_char_index (GtkTextLine *target_line)
 {
-  GSList *node_stack = NULL;
+  GtkTextBTreeNode *node_stack[64];
   GtkTextBTreeNode *iter;
   GtkTextLine *line;
   int num_chars;
+  int tos = 0;
 
   /* Push all our parent nodes onto a stack */
   iter = target_line->parent;
 
   g_assert (iter != NULL);
 
-  while (iter != NULL)
+  while (iter != NULL && tos < 64)
     {
-      node_stack = g_slist_prepend (node_stack, iter);
-
+      node_stack[tos++] = iter;
       iter = iter->parent;
     }
 
+  tos--;
+
   /* Check that we have the root node on top of the stack. */
   g_assert (node_stack != NULL &&
-            node_stack->data != NULL &&
-            ((GtkTextBTreeNode*)node_stack->data)->parent == NULL);
+            node_stack[tos] != NULL &&
+            node_stack[tos]->parent == NULL);
 
   /* Add up chars in all nodes before the nodes in our stack.
    */
 
   num_chars = 0;
-  iter = node_stack->data;
-  while (iter != NULL)
+  while (tos >= 0)
     {
       GtkTextBTreeNode *child_iter;
-      GtkTextBTreeNode *next_node;
 
-      next_node = node_stack->next ?
-        node_stack->next->data : NULL;
-      node_stack = g_slist_remove (node_stack, node_stack->data);
+      iter = node_stack[tos];
 
       if (iter->level == 0)
         {
           /* stack should be empty when we're on the last node */
-          g_assert (node_stack == NULL);
+          g_assert (tos == 0);
           break; /* Our children are now lines */
         }
 
-      g_assert (next_node != NULL);
-      g_assert (iter != NULL);
-      g_assert (next_node->parent == iter);
+       tos--;
 
       /* Add up chars before us in the tree */
       child_iter = iter->children.node;
-      while (child_iter != next_node)
+      while (child_iter != node_stack[tos])
         {
           g_assert (child_iter != NULL);
 
           num_chars += child_iter->num_chars;
-
           child_iter = child_iter->next;
         }
-
-      iter = next_node;
     }
 
   g_assert (iter != NULL);
@@ -3833,7 +3794,6 @@ _gtk_text_line_char_index (GtkTextLine *target_line)
       g_assert (line != NULL);
 
       num_chars += _gtk_text_line_char_count (line);
-
       line = line->next;
     }
 
@@ -4840,15 +4800,16 @@ cleanup_line (GtkTextLine *line)
  * Nodes
  */
 
-static NodeData*
-node_data_new (gpointer view_id)
+static inline NodeData*
+node_data_new (gpointer  view_id,
+               NodeData *next)
 {
   NodeData *nd;
   
   nd = g_slice_new (NodeData);
 
   nd->view_id = view_id;
-  nd->next = NULL;
+  nd->next = next;
   nd->width = 0;
   nd->height = 0;
   nd->valid = FALSE;
@@ -4856,19 +4817,19 @@ node_data_new (gpointer view_id)
   return nd;
 }
 
-static void
+static inline void
 node_data_destroy (NodeData *nd)
 {
   g_slice_free (NodeData, nd);
 }
 
-static void
+static inline void
 node_data_list_destroy (NodeData *nd)
 {
   g_slice_free_chain (NodeData, nd, next);
 }
 
-static NodeData*
+static inline NodeData*
 node_data_find (NodeData *nd, 
 		gpointer  view_id)
 {
@@ -5557,24 +5518,10 @@ gtk_text_btree_node_ensure_data (GtkTextBTreeNode *node, gpointer view_id)
 {
   NodeData *nd;
 
-  nd = node->node_data;
-  while (nd != NULL)
-    {
-      if (nd->view_id == view_id)
-        break;
-
-      nd = nd->next;
-    }
+  nd = node_data_find (node->node_data, view_id);
 
   if (nd == NULL)
-    {
-      nd = node_data_new (view_id);
-      
-      if (node->node_data)
-        nd->next = node->node_data;
-      
-      node->node_data = nd;
-    }
+    nd = node->node_data = node_data_new (view_id, node->node_data);
 
   return nd;
 }
@@ -6496,15 +6443,12 @@ _gtk_change_node_toggle_count (GtkTextBTreeNode *node,
 static void
 inc_count (GtkTextTag *tag, int inc, TagInfo *tagInfoPtr)
 {
-  GtkTextTag **tag_p;
-  int count;
-
-  for (tag_p = tagInfoPtr->tags, count = tagInfoPtr->numTags;
-       count > 0; tag_p++, count--)
+  for (int i = 0; i < tagInfoPtr->tags->len; i++)
     {
-      if (*tag_p == tag)
+      GtkTextTag *t = g_ptr_array_index (tagInfoPtr->tags, i);
+      if (t == tag)
         {
-          tagInfoPtr->counts[tagInfoPtr->numTags-count] += inc;
+          g_array_index (tagInfoPtr->counts, int, i) += inc;
           return;
         }
     }
@@ -6515,29 +6459,8 @@ inc_count (GtkTextTag *tag, int inc, TagInfo *tagInfoPtr)
    * arrays first.
    */
 
-  if (tagInfoPtr->numTags == tagInfoPtr->arraySize)
-    {
-      GtkTextTag **newTags;
-      int *newCounts, newSize;
-
-      newSize = 2*tagInfoPtr->arraySize;
-      newTags = (GtkTextTag **) g_malloc ((unsigned)
-                                          (newSize*sizeof (GtkTextTag *)));
-      memcpy ((void *) newTags, (void *) tagInfoPtr->tags,
-              tagInfoPtr->arraySize  *sizeof (GtkTextTag *));
-      g_free ((char *) tagInfoPtr->tags);
-      tagInfoPtr->tags = newTags;
-      newCounts = (int *) g_malloc ((unsigned) (newSize*sizeof (int)));
-      memcpy ((void *) newCounts, (void *) tagInfoPtr->counts,
-              tagInfoPtr->arraySize  *sizeof (int));
-      g_free ((char *) tagInfoPtr->counts);
-      tagInfoPtr->counts = newCounts;
-      tagInfoPtr->arraySize = newSize;
-    }
-
-  tagInfoPtr->tags[tagInfoPtr->numTags] = tag;
-  tagInfoPtr->counts[tagInfoPtr->numTags] = inc;
-  tagInfoPtr->numTags++;
+  g_ptr_array_add (tagInfoPtr->tags, tag);
+  g_array_append_val (tagInfoPtr->counts, inc);
 }
 
 static void

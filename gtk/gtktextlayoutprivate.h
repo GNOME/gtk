@@ -254,10 +254,6 @@ gboolean gtk_text_layout_get_cursor_visible (GtkTextLayout     *layout);
 void    gtk_text_layout_get_size  (GtkTextLayout  *layout,
                                    int            *width,
                                    int            *height);
-GSList* gtk_text_layout_get_lines (GtkTextLayout  *layout,
-                                   int             top_y,
-                                   int             bottom_y,
-                                   int            *first_line_y);
 
 void gtk_text_layout_wrap_loop_start (GtkTextLayout *layout);
 void gtk_text_layout_wrap_loop_end   (GtkTextLayout *layout);

@@ -2410,52 +2410,7 @@ tag_sort_func (gconstpointer first, gconstpointer second)
 }
 
 void
-_gtk_text_tag_array_sort (GtkTextTag** tag_array_p,
-                          guint len)
+_gtk_text_tag_array_sort (GPtrArray *tags)
 {
-  int i, j, prio;
-  GtkTextTag **tag;
-  GtkTextTag **maxPtrPtr, *tmp;
-
-  g_return_if_fail (tag_array_p != NULL);
-  g_return_if_fail (len > 0);
-
-  if (len < 2) {
-    return;
-  }
-  if (len < 20) {
-    GtkTextTag **iter = tag_array_p;
-
-    for (i = len-1; i > 0; i--, iter++) {
-      maxPtrPtr = tag = iter;
-      prio = tag[0]->priv->priority;
-      for (j = i, tag++; j > 0; j--, tag++) {
-        if (tag[0]->priv->priority < prio) {
-          prio = tag[0]->priv->priority;
-          maxPtrPtr = tag;
-        }
-      }
-      tmp = *maxPtrPtr;
-      *maxPtrPtr = *iter;
-      *iter = tmp;
-    }
-  } else {
-    qsort ((void *) tag_array_p, (unsigned) len, sizeof (GtkTextTag *),
-           tag_sort_func);
-  }
-
-#if 0
-  {
-    printf ("Sorted tag array: \n");
-    i = 0;
-    while (i < len)
-      {
-        GtkTextTag *t = tag_array_p[i];
-        printf ("  %s priority %d\n", t->name, t->priority);
-
-        ++i;
-      }
-  }
-#endif
+  g_ptr_array_sort (tags, tag_sort_func);
 }
-
