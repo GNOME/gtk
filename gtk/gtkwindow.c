@@ -6120,8 +6120,8 @@ inspector_keybinding_enabled (gboolean *warn)
   GSettings *settings;
   gboolean enabled;
 
-  enabled = FALSE;
-  *warn = FALSE;
+  enabled = TRUE;
+  *warn = TRUE;
 
   schema = g_settings_schema_source_lookup (g_settings_schema_source_get_default (),
                                             "org.gtk.gtk4.Settings.Debug",
