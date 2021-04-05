@@ -726,7 +726,7 @@ gsk_ngl_render_job_transform_bounds (GskNglRenderJob       *job,
   /* Our most common transform is 2d-affine, so inline it.
    * Both identity and 2d-translate are virtually unseen here.
    */
-  if G_LIKELY (category == GSK_TRANSFORM_CATEGORY_2D_AFFINE)
+  if G_LIKELY (category >= GSK_TRANSFORM_CATEGORY_2D_AFFINE)
     {
       float dx, dy, scale_x, scale_y;
 
