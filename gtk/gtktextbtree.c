@@ -80,15 +80,8 @@
  */
 
 typedef struct TagInfo {
-  int numTags;                  /* Number of tags for which there
-                                 * is currently information in
-                                 * tags and counts. */
-  int arraySize;                        /* Number of entries allocated for
-                                         * tags and counts. */
-  GtkTextTag **tags;           /* Array of tags seen so far.
-                                * Malloc-ed. */
-  int *counts;                  /* Toggle count (so far) for each
-                                 * entry in tags.  Malloc-ed. */
+  GPtrArray *tags;
+  GArray *counts;
 } TagInfo;
 
 
@@ -2200,9 +2193,8 @@ _gtk_text_btree_get_line_at_char (GtkTextBTree      *tree,
 
 /* It returns an array sorted by tags priority, ready to pass to
  * _gtk_text_attributes_fill_from_tags() */
-GtkTextTag**
-_gtk_text_btree_get_tags (const GtkTextIter *iter,
-                         int *num_tags)
+GPtrArray *
+_gtk_text_btree_get_tags (const GtkTextIter *iter)
 {
   GtkTextBTreeNode *node;
   GtkTextLine *siblingline;
@@ -2217,10 +2209,8 @@ _gtk_text_btree_get_tags (const GtkTextIter *iter,
   line = _gtk_text_iter_get_text_line (iter);
   byte_index = gtk_text_iter_get_line_index (iter);
 
-  tagInfo.numTags = 0;
-  tagInfo.arraySize = NUM_TAG_INFOS;
-  tagInfo.tags = g_new (GtkTextTag*, NUM_TAG_INFOS);
-  tagInfo.counts = g_new (int, NUM_TAG_INFOS);
+  tagInfo.tags = g_ptr_array_sized_new (NUM_TAG_INFOS);
+  tagInfo.counts = g_array_new (FALSE, FALSE, sizeof (int));
 
   /*
    * Record tag toggles within the line of indexPtr but preceding
@@ -2291,26 +2281,26 @@ _gtk_text_btree_get_tags (const GtkTextIter *iter,
    * of interest, but not at the desired character itself).
    */
 
-  for (src = 0, dst = 0; src < tagInfo.numTags; src++)
+  for (src = 0, dst = 0; src < tagInfo.tags->len; src++)
     {
-      if (tagInfo.counts[src] & 1)
+      if (g_array_index (tagInfo.counts, int, src) & 1)
         {
-          g_assert (GTK_IS_TEXT_TAG (tagInfo.tags[src]));
-          tagInfo.tags[dst] = tagInfo.tags[src];
+          g_assert (GTK_IS_TEXT_TAG (g_ptr_array_index (tagInfo.tags, src)));
+          g_ptr_array_index (tagInfo.tags, dst) = g_ptr_array_index (tagInfo.tags, src);
           dst++;
         }
     }
 
-  *num_tags = dst;
-  g_free (tagInfo.counts);
+  g_ptr_array_set_size (tagInfo.tags, dst);
+  g_array_unref (tagInfo.counts);
   if (dst == 0)
     {
-      g_free (tagInfo.tags);
+      g_ptr_array_unref (tagInfo.tags);
       return NULL;
     }
 
   /* Sort tags in ascending order of priority */
-  _gtk_text_tag_array_sort (tagInfo.tags, dst);
+  _gtk_text_tag_array_sort (tagInfo.tags);
 
   return tagInfo.tags;
 }
@@ -6453,15 +6443,12 @@ _gtk_change_node_toggle_count (GtkTextBTreeNode *node,
 static void
 inc_count (GtkTextTag *tag, int inc, TagInfo *tagInfoPtr)
 {
-  GtkTextTag **tag_p;
-  int count;
-
-  for (tag_p = tagInfoPtr->tags, count = tagInfoPtr->numTags;
-       count > 0; tag_p++, count--)
+  for (int i = 0; i < tagInfoPtr->tags->len; i++)
     {
-      if (*tag_p == tag)
+      GtkTextTag *t = g_ptr_array_index (tagInfoPtr->tags, i);
+      if (t == tag)
         {
-          tagInfoPtr->counts[tagInfoPtr->numTags-count] += inc;
+          g_array_index (tagInfoPtr->counts, int, i) += inc;
           return;
         }
     }
@@ -6472,17 +6459,8 @@ inc_count (GtkTextTag *tag, int inc, TagInfo *tagInfoPtr)
    * arrays first.
    */
 
-  if (tagInfoPtr->numTags == tagInfoPtr->arraySize)
-    {
-      int newSize = 2 * tagInfoPtr->arraySize;
-      tagInfoPtr->tags = g_realloc (tagInfoPtr->tags, newSize * sizeof (GtkTextTag *));
-      tagInfoPtr->counts = g_realloc (tagInfoPtr->counts, newSize * sizeof (int));
-      tagInfoPtr->arraySize = newSize;
-    }
-
-  tagInfoPtr->tags[tagInfoPtr->numTags] = tag;
-  tagInfoPtr->counts[tagInfoPtr->numTags] = inc;
-  tagInfoPtr->numTags++;
+  g_ptr_array_add (tagInfoPtr->tags, tag);
+  g_array_append_val (tagInfoPtr->counts, inc);
 }
 
 static void

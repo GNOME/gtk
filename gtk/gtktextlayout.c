@@ -1167,9 +1167,7 @@ get_style (GtkTextLayout *layout,
   gtk_text_attributes_copy_values (layout->default_style,
                                    style);
 
-  _gtk_text_attributes_fill_from_tags (style,
-                                       (GtkTextTag**) tags->pdata,
-                                       tags->len);
+  _gtk_text_attributes_fill_from_tags (style, tags);
 
   g_assert (style->refcount == 1);
 
@@ -2263,28 +2261,6 @@ gtk_text_layout_update_display_cursors (GtkTextLayout      *layout,
   g_slist_free (cursor_segs);
 }
 
-/* Same as _gtk_text_btree_get_tags(), except it returns GPtrArray,
- * to be used in gtk_text_layout_get_line_display(). */
-static GPtrArray *
-get_tags_array_at_iter (GtkTextIter *iter)
-{
-  GtkTextTag **tags;
-  GPtrArray *array = NULL;
-  int n_tags;
-
-  tags = _gtk_text_btree_get_tags (iter, &n_tags);
-
-  if (n_tags > 0)
-    {
-      array = g_ptr_array_sized_new (n_tags);
-      g_ptr_array_set_size (array, n_tags);
-      memcpy (array->pdata, tags, n_tags * sizeof (GtkTextTag*));
-    }
-
-  g_free (tags);
-  return array;
-}
-
 /* Add the tag to the array if it's not there already, and remove
  * it otherwise. It keeps the array sorted by tags priority. */
 static GPtrArray *
@@ -2386,7 +2362,7 @@ gtk_text_layout_create_display (GtkTextLayout *layout,
   layout_byte_offset = 0; /* current length of layout text (includes preedit, does not include invisible text) */
   buffer_byte_offset = 0; /* position in the buffer line */
   seg = _gtk_text_iter_get_any_segment (&iter);
-  tags = get_tags_array_at_iter (&iter);
+  tags = _gtk_text_btree_get_tags (&iter);
   initial_toggle_segments = TRUE;
   while (seg != NULL)
     {

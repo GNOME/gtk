@@ -2410,8 +2410,7 @@ tag_sort_func (gconstpointer first, gconstpointer second)
 }
 
 void
-_gtk_text_tag_array_sort (GtkTextTag **tag_array_p,
-                          guint        len)
+_gtk_text_tag_array_sort (GPtrArray *tags)
 {
-  qsort (tag_array_p, len, sizeof (GtkTextTag *), tag_sort_func);
+  g_ptr_array_sort (tags, tag_sort_func);
 }

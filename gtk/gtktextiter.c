@@ -1386,36 +1386,30 @@ gtk_text_iter_has_tag (const GtkTextIter   *iter,
 GSList*
 gtk_text_iter_get_tags (const GtkTextIter *iter)
 {
-  GtkTextTag** tags;
-  int tag_count = 0;
-  int i;
+  GPtrArray *tags;
   GSList *retval;
-  
+
   g_return_val_if_fail (iter != NULL, NULL);
-  
+
   /* Get the tags at this spot */
-  tags = _gtk_text_btree_get_tags (iter, &tag_count);
+  tags = _gtk_text_btree_get_tags (iter);
 
   /* No tags, use default style */
-  if (tags == NULL || tag_count == 0)
+  if (tags == NULL || tags->len == 0)
     {
-      g_free (tags);
-
+      if (tags)
+        g_ptr_array_unref (tags);
       return NULL;
     }
 
   retval = NULL;
-  i = 0;
-  while (i < tag_count)
-    {
-      retval = g_slist_prepend (retval, tags[i]);
-      ++i;
-    }
-  
-  g_free (tags);
 
-  /* Return tags in ascending order of priority */
-  return g_slist_reverse (retval);
+  for (int i = tags->len - 1; i >= 0; i--)
+    retval = g_slist_prepend (retval, g_ptr_array_index (tags, i));
+
+  g_ptr_array_unref (tags);
+
+  return retval;
 }
 
 /**
@@ -1506,25 +1500,22 @@ gboolean
 gtk_text_iter_get_attributes (const GtkTextIter  *iter,
                               GtkTextAttributes  *values)
 {
-  GtkTextTag** tags;
-  int tag_count = 0;
+  GPtrArray *tags;
 
   /* Get the tags at this spot */
-  tags = _gtk_text_btree_get_tags (iter, &tag_count);
+  tags = _gtk_text_btree_get_tags (iter);
 
   /* No tags, use default style */
-  if (tags == NULL || tag_count == 0)
+  if (tags == NULL || tags->len == 0)
     {
-      g_free (tags);
-
+      if (tags)
+        g_ptr_array_unref (tags);
       return FALSE;
     }
 
-  _gtk_text_attributes_fill_from_tags (values,
-                                       tags,
-                                       tag_count);
+  _gtk_text_attributes_fill_from_tags (values, tags);
 
-  g_free (tags);
+  g_ptr_array_unref (tags);
 
   return TRUE;
 }

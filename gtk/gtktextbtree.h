@@ -128,8 +128,7 @@ GtkTextLine * _gtk_text_btree_get_line_at_char  (GtkTextBTree      *tree,
                                                  int                char_index,
                                                  int               *line_start_index,
                                                  int               *real_char_index);
-GtkTextTag**  _gtk_text_btree_get_tags          (const GtkTextIter *iter,
-                                                 int               *num_tags);
+GPtrArray    * _gtk_text_btree_get_tags          (const GtkTextIter *iter);
 char         *_gtk_text_btree_get_text          (const GtkTextIter *start,
                                                  const GtkTextIter *end,
                                                  gboolean           include_hidden,
