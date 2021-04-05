@@ -677,7 +677,7 @@ gtk_text_layout_cursors_changed (GtkTextLayout *layout,
  *
  * Returns: (element-type GtkTextLine) (transfer container):
  */
-GSList*
+GPtrArray *
 gtk_text_layout_get_lines (GtkTextLayout *layout,
                            /* [top_y, bottom_y) */
                            int top_y,
@@ -688,7 +688,7 @@ gtk_text_layout_get_lines (GtkTextLayout *layout,
   GtkTextLine *first_btree_line;
   GtkTextLine *last_btree_line;
   GtkTextLine *line;
-  GSList *retval;
+  GPtrArray *lines;
 
   g_return_val_if_fail (GTK_IS_TEXT_LAYOUT (layout), NULL);
 
@@ -696,8 +696,6 @@ gtk_text_layout_get_lines (GtkTextLayout *layout,
     return NULL;
 
   btree = _gtk_text_buffer_get_btree (layout->buffer);
-
-  retval = NULL;
 
   first_btree_line = _gtk_text_btree_find_line_by_y (btree, layout, top_y, first_line_y);
   if (first_btree_line == NULL)
@@ -714,10 +712,12 @@ gtk_text_layout_get_lines (GtkTextLayout *layout,
 
   g_assert (last_btree_line != NULL);
 
+  lines = g_ptr_array_sized_new (32);
+
   line = first_btree_line;
   while (TRUE)
     {
-      retval = g_slist_prepend (retval, line);
+      g_ptr_array_add (lines, line);
 
       if (line == last_btree_line)
         break;
@@ -725,9 +725,7 @@ gtk_text_layout_get_lines (GtkTextLayout *layout,
       line = _gtk_text_line_next_excluding_last (line);
     }
 
-  retval = g_slist_reverse (retval);
-
-  return retval;
+  return lines;
 }
 
 static void
@@ -4104,10 +4102,11 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
   int selection_end_line;
   gboolean have_selection;
   const GdkRGBA *selection;
-  GSList *line_list;
-  GSList *tmp_list;
   GdkRGBA color;
   GtkSnapshot *cursor_snapshot;
+  GtkTextBTree *btree;
+  GtkTextLine *first_line;
+  GtkTextLine *last_line;
 
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (layout->default_style != NULL);
@@ -4116,10 +4115,18 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
 
   priv = GTK_TEXT_LAYOUT_GET_PRIVATE (layout);
 
-  line_list = gtk_text_layout_get_lines (layout, clip->y, clip->y + clip->height, &offset_y);
+  if (clip->height <= 0)
+    return;
 
-  if (line_list == NULL)
-    return; /* nothing on the screen */
+  btree = _gtk_text_buffer_get_btree (layout->buffer);
+
+  first_line = _gtk_text_btree_find_line_by_y (btree, layout, clip->y, &offset_y);
+  if (first_line == NULL)
+    return;
+
+  last_line = _gtk_text_btree_find_line_by_y (btree, layout, clip->y + clip->height - 1, NULL);
+  if (last_line == NULL)
+    last_line = _gtk_text_btree_get_end_iter_line (btree);
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_get_color (context, &color);
@@ -4163,10 +4170,10 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
 
   gtk_text_layout_wrap_loop_start (layout);
 
-  tmp_list = line_list;
-  while (tmp_list != NULL)
+  for (GtkTextLine *line = first_line;
+       line != last_line;
+       line = _gtk_text_line_next_excluding_last (line))
     {
-      GtkTextLine *line = tmp_list->data;
       GtkTextLineDisplay *line_display;
       int selection_start_index = -1;
       int selection_end_index = -1;
@@ -4272,8 +4279,6 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
       offset_y += line_display->height;
 
       gtk_text_line_display_unref (line_display);
-
-      tmp_list = tmp_list->next;
     }
 
   gtk_text_layout_wrap_loop_end (layout);
@@ -4292,8 +4297,6 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
 
   /* Only update eviction source once per snapshot */
   gtk_text_line_display_cache_delay_eviction (priv->cache);
-
-  g_slist_free (line_list);
 
   gsk_pango_renderer_release (crenderer);
 }
