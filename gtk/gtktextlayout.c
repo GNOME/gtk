@@ -4114,7 +4114,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
   gtk_text_layout_wrap_loop_start (layout);
 
   for (GtkTextLine *line = first_line;
-       line != last_line;
+       line != NULL;
        line = _gtk_text_line_next_excluding_last (line))
     {
       GtkTextLineDisplay *line_display;
@@ -4222,6 +4222,9 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
       offset_y += line_display->height;
 
       gtk_text_line_display_unref (line_display);
+
+      if (line == last_line)
+        break;
     }
 
   gtk_text_layout_wrap_loop_end (layout);
