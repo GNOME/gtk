@@ -221,7 +221,6 @@ libgsk = static_library('gsk',
     '-DGTK_COMPILATION',
     '-DG_LOG_DOMAIN="Gsk"',
     '-DG_LOG_STRUCTURED=1',
-    '-mf16c'
   ] + common_cflags,
   link_with: libgdk,
 )

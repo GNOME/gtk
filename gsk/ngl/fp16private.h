@@ -1,4 +1,4 @@
-/* ninesliceprivate.h
+/* fp16private.h
  *
  * Copyright 2021 Red Hat, Inc.
  *
@@ -21,10 +21,11 @@
 #ifndef __FP16_PRIVATE_H__
 #define __FP16_PRIVATE_H__
 
+#include <config.h>
 #include <glib.h>
 #include <graphene.h>
 
-#ifdef GRAPHENE_USE_SSE
+#ifdef HAVE_F16C
 #include <immintrin.h>
 #endif
 
@@ -34,7 +35,7 @@ G_BEGIN_DECLS
 #define FP16_ONE ((guint16)15360)
 #define FP16_MINUS_ONE ((guint16)48128)
 
-#ifdef GRAPHENE_USE_SSE
+#ifdef HAVE_F16C
 
 static inline void
 float_to_half4 (const float f[4],
@@ -54,7 +55,7 @@ half_to_float4 (const guint16 h[4],
   _mm_store_ps (f, s);
 }
 
-#else  /* GRAPHENE_USE_SSE */
+#else  /* GTK_HAS_F16C */
 
 static inline guint
 as_uint (const float x)
@@ -108,7 +109,7 @@ half_to_float4 (const guint16 h[4],
   f[3] = half_to_float (h[3]);
 }
 
-#endif  /* GRAPHENE_USE_SSE */
+#endif  /* HAVE_F16C */
 
 G_END_DECLS
 

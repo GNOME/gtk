@@ -86,6 +86,11 @@ option('sassc',
        value: 'auto',
        description: 'Rebuild themes using sassc')
 
+option('f16c',
+       type: 'feature',
+       value: 'enabled',
+       description: 'Enable F16C fast paths (requires F16C)')
+
 # Documentation and introspection
 
 option('gtk_doc',
