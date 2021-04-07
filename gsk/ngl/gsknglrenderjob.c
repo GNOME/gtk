@@ -2714,7 +2714,7 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
   guint last_texture = 0;
   GskNglDrawVertex *vertices;
   guint used = 0;
-  guint16 c[4];
+  guint16 c[4] = { FP16_MINUS_ONE, FP16_MINUS_ONE, FP16_MINUS_ONE, FP16_MINUS_ONE };
   const PangoGlyphInfo *gi;
   guint i;
   int yshift;
@@ -2726,9 +2726,7 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
   /* If the font has color glyphs, we don't need to recolor anything.
    * We tell the shader by setting the color to vec4(-1).
    */
-  if (!force_color && gsk_text_node_has_color_glyphs (node))
-    rgba_to_half (&(GdkRGBA){ -1.f, -1.f, -1.f, -1.f }, c);
-  else
+  if (force_color || !gsk_text_node_has_color_glyphs (node))
     rgba_to_half (color, c);
 
   lookup.font = (PangoFont *)font;

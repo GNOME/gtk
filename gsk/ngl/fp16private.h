@@ -30,6 +30,8 @@
 
 G_BEGIN_DECLS
 
+#define FP16_MINUS_ONE ((guint16)48128)
+
 #ifdef GRAPHENE_USE_SSE
 
 static inline void
