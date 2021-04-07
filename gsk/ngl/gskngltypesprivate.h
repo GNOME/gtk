@@ -55,8 +55,8 @@ struct _GskNglDrawVertex
 {
   float position[2];
   float uv[2];
-  float color[4];
-  float color2[4];
+  guint16 color[4];
+  guint16 color2[4];
 };
 
 G_END_DECLS
