@@ -910,12 +910,12 @@ gsk_ngl_render_job_draw_coords (GskNglRenderJob *job,
 
   rgba_to_half (color, c);
 
-  vertices[0] = (GskNglDrawVertex) { { min_x, min_y }, { min_u, min_v }, { c[0], c[1], c[2],c[3] } };
-  vertices[1] = (GskNglDrawVertex) { { min_x, max_y }, { min_u, max_v }, { c[0], c[1], c[2],c[3] } };
-  vertices[2] = (GskNglDrawVertex) { { max_x, min_y }, { max_u, min_v }, { c[0], c[1], c[2],c[3] } };
-  vertices[3] = (GskNglDrawVertex) { { max_x, max_y }, { max_u, max_v }, { c[0], c[1], c[2],c[3] } };
-  vertices[4] = (GskNglDrawVertex) { { min_x, max_y }, { min_u, max_v }, { c[0], c[1], c[2],c[3] } };
-  vertices[5] = (GskNglDrawVertex) { { max_x, min_y }, { max_u, min_v }, { c[0], c[1], c[2],c[3] } };
+  vertices[0] = (GskNglDrawVertex) { .position = { min_x, min_y }, .uv = { min_u, min_v }, .color = { c[0], c[1], c[2], c[3] } };
+  vertices[1] = (GskNglDrawVertex) { .position = { min_x, max_y }, .uv = { min_u, max_v }, .color = { c[0], c[1], c[2], c[3] } };
+  vertices[2] = (GskNglDrawVertex) { .position = { max_x, min_y }, .uv = { max_u, min_v }, .color = { c[0], c[1], c[2], c[3] } };
+  vertices[3] = (GskNglDrawVertex) { .position = { max_x, max_y }, .uv = { max_u, max_v }, .color = { c[0], c[1], c[2], c[3] } };
+  vertices[4] = (GskNglDrawVertex) { .position = { min_x, max_y }, .uv = { min_u, max_v }, .color = { c[0], c[1], c[2], c[3] } };
+  vertices[5] = (GskNglDrawVertex) { .position = { max_x, min_y }, .uv = { max_u, min_v }, .color = { c[0], c[1], c[2], c[3] } };
 }
 
 /* load_vertex_data_with_region */
@@ -1726,13 +1726,13 @@ gsk_ngl_render_job_visit_border_node (GskNglRenderJob     *job,
 
       rgba_to_half (&colors[0], c);
 
-      vertices[0] = (GskNglDrawVertex) { { min_x,              min_y              }, { 0, 1 }, { c[0], c[1], c[2], c[3] } };
-      vertices[1] = (GskNglDrawVertex) { { min_x + sizes[0].w, min_y + sizes[0].h }, { 0, 0 }, { c[0], c[1], c[2], c[3] } };
-      vertices[2] = (GskNglDrawVertex) { { max_x,              min_y              }, { 1, 1 }, { c[0], c[1], c[2], c[3] } };
+      vertices[0] = (GskNglDrawVertex) { .position = { min_x,              min_y              }, .uv = { 0, 1 }, .color = { c[0], c[1], c[2], c[3] } };
+      vertices[1] = (GskNglDrawVertex) { .position = { min_x + sizes[0].w, min_y + sizes[0].h }, .uv = { 0, 0 }, .color = { c[0], c[1], c[2], c[3] } };
+      vertices[2] = (GskNglDrawVertex) { .position = { max_x,              min_y              }, .uv = { 1, 1 }, .color = { c[0], c[1], c[2], c[3] } };
 
-      vertices[3] = (GskNglDrawVertex) { { max_x - sizes[1].w, min_y + sizes[1].h }, { 1, 0 }, { c[0], c[1], c[2], c[3] } };
-      vertices[4] = (GskNglDrawVertex) { { min_x + sizes[0].w, min_y + sizes[0].h }, { 0, 0 }, { c[0], c[1], c[2], c[3] } };
-      vertices[5] = (GskNglDrawVertex) { { max_x,              min_y              }, { 1, 1 }, { c[0], c[1], c[2], c[3] } };
+      vertices[3] = (GskNglDrawVertex) { .position = { max_x - sizes[1].w, min_y + sizes[1].h }, .uv = { 1, 0 }, .color = { c[0], c[1], c[2], c[3] } };
+      vertices[4] = (GskNglDrawVertex) { .position = { min_x + sizes[0].w, min_y + sizes[0].h }, .uv = { 0, 0 }, .color = { c[0], c[1], c[2], c[3] } };
+      vertices[5] = (GskNglDrawVertex) { .position = { max_x,              min_y              }, .uv = { 1, 1 }, .color = { c[0], c[1], c[2], c[3] } };
     }
 
   if (widths[1] > 0)
@@ -1741,13 +1741,13 @@ gsk_ngl_render_job_visit_border_node (GskNglRenderJob     *job,
 
       rgba_to_half (&colors[1], c);
 
-      vertices[0] = (GskNglDrawVertex) { { max_x - sizes[1].w, min_y + sizes[1].h }, { 0, 1 }, { c[0], c[1], c[2], c[3] } };
-      vertices[1] = (GskNglDrawVertex) { { max_x - sizes[2].w, max_y - sizes[2].h }, { 0, 0 }, { c[0], c[1], c[2], c[3] } };
-      vertices[2] = (GskNglDrawVertex) { { max_x,              min_y              }, { 1, 1 }, { c[0], c[1], c[2], c[3] } };
+      vertices[0] = (GskNglDrawVertex) { .position = { max_x - sizes[1].w, min_y + sizes[1].h }, .uv = { 0, 1 }, .color = { c[0], c[1], c[2], c[3] } };
+      vertices[1] = (GskNglDrawVertex) { .position = { max_x - sizes[2].w, max_y - sizes[2].h }, .uv = { 0, 0 }, .color = { c[0], c[1], c[2], c[3] } };
+      vertices[2] = (GskNglDrawVertex) { .position = { max_x,              min_y              }, .uv = { 1, 1 }, .color = { c[0], c[1], c[2], c[3] } };
 
-      vertices[3] = (GskNglDrawVertex) { { max_x,              max_y              }, { 1, 0 }, { c[0], c[1], c[2], c[3] } };
-      vertices[4] = (GskNglDrawVertex) { { max_x - sizes[2].w, max_y - sizes[2].h }, { 0, 0 }, { c[0], c[1], c[2], c[3] } };
-      vertices[5] = (GskNglDrawVertex) { { max_x,              min_y              }, { 1, 1 }, { c[0], c[1], c[2], c[3] } };
+      vertices[3] = (GskNglDrawVertex) { .position = { max_x,              max_y              }, .uv = { 1, 0 }, .color = { c[0], c[1], c[2], c[3] } };
+      vertices[4] = (GskNglDrawVertex) { .position = { max_x - sizes[2].w, max_y - sizes[2].h }, .uv = { 0, 0 }, .color = { c[0], c[1], c[2], c[3] } };
+      vertices[5] = (GskNglDrawVertex) { .position = { max_x,              min_y              }, .uv = { 1, 1 }, .color = { c[0], c[1], c[2], c[3] } };
     }
 
   if (widths[2] > 0)
@@ -1756,13 +1756,13 @@ gsk_ngl_render_job_visit_border_node (GskNglRenderJob     *job,
 
       rgba_to_half (&colors[2], c);
 
-      vertices[0] = (GskNglDrawVertex) { { min_x + sizes[3].w, max_y - sizes[3].h }, { 0, 1 }, { c[0], c[1], c[2], c[3] } };
-      vertices[1] = (GskNglDrawVertex) { { min_x,              max_y              }, { 0, 0 }, { c[0], c[1], c[2], c[3] } };
-      vertices[2] = (GskNglDrawVertex) { { max_x - sizes[2].w, max_y - sizes[2].h }, { 1, 1 }, { c[0], c[1], c[2], c[3] } };
+      vertices[0] = (GskNglDrawVertex) { .position = { min_x + sizes[3].w, max_y - sizes[3].h }, .uv = { 0, 1 }, .color = { c[0], c[1], c[2], c[3] } };
+      vertices[1] = (GskNglDrawVertex) { .position = { min_x,              max_y              }, .uv = { 0, 0 }, .color = { c[0], c[1], c[2], c[3] } };
+      vertices[2] = (GskNglDrawVertex) { .position = { max_x - sizes[2].w, max_y - sizes[2].h }, .uv = { 1, 1 }, .color = { c[0], c[1], c[2], c[3] } };
 
-      vertices[3] = (GskNglDrawVertex) { { max_x,              max_y              }, { 1, 0 }, { c[0], c[1], c[2], c[3] } };
-      vertices[4] = (GskNglDrawVertex) { { min_x            ,  max_y              }, { 0, 0 }, { c[0], c[1], c[2], c[3] } };
-      vertices[5] = (GskNglDrawVertex) { { max_x - sizes[2].w, max_y - sizes[2].h }, { 1, 1 }, { c[0], c[1], c[2], c[3] } };
+      vertices[3] = (GskNglDrawVertex) { .position = { max_x,              max_y              }, .uv = { 1, 0 }, .color = { c[0], c[1], c[2], c[3] } };
+      vertices[4] = (GskNglDrawVertex) { .position = { min_x            ,  max_y              }, .uv = { 0, 0 }, .color = { c[0], c[1], c[2], c[3] } };
+      vertices[5] = (GskNglDrawVertex) { .position = { max_x - sizes[2].w, max_y - sizes[2].h }, .uv = { 1, 1 }, .color = { c[0], c[1], c[2], c[3] } };
     }
 
   if (widths[3] > 0)
@@ -1771,13 +1771,13 @@ gsk_ngl_render_job_visit_border_node (GskNglRenderJob     *job,
 
       rgba_to_half (&colors[3], c);
 
-      vertices[0] = (GskNglDrawVertex) { { min_x,              min_y              }, { 0, 1 }, { c[0], c[1], c[2], c[3] } };
-      vertices[1] = (GskNglDrawVertex) { { min_x,              max_y              }, { 0, 0 }, { c[0], c[1], c[2], c[3] } };
-      vertices[2] = (GskNglDrawVertex) { { min_x + sizes[0].w, min_y + sizes[0].h }, { 1, 1 }, { c[0], c[1], c[2], c[3] } };
+      vertices[0] = (GskNglDrawVertex) { .position = { min_x,              min_y              }, .uv = { 0, 1 }, .color = { c[0], c[1], c[2], c[3] } };
+      vertices[1] = (GskNglDrawVertex) { .position = { min_x,              max_y              }, .uv = { 0, 0 }, .color = { c[0], c[1], c[2], c[3] } };
+      vertices[2] = (GskNglDrawVertex) { .position = { min_x + sizes[0].w, min_y + sizes[0].h }, .uv = { 1, 1 }, .color = { c[0], c[1], c[2], c[3] } };
 
-      vertices[3] = (GskNglDrawVertex) { { min_x + sizes[3].w, max_y - sizes[3].h }, { 1, 0 }, { c[0], c[1], c[2], c[3] } };
-      vertices[4] = (GskNglDrawVertex) { { min_x,              max_y              }, { 0, 0 }, { c[0], c[1], c[2], c[3] } };
-      vertices[5] = (GskNglDrawVertex) { { min_x + sizes[0].w, min_y + sizes[0].h }, { 1, 1 }, { c[0], c[1], c[2], c[3] } };
+      vertices[3] = (GskNglDrawVertex) { .position = { min_x + sizes[3].w, max_y - sizes[3].h }, .uv = { 1, 0 }, .color = { c[0], c[1], c[2], c[3] } };
+      vertices[4] = (GskNglDrawVertex) { .position = { min_x,              max_y              }, .uv = { 0, 0 }, .color = { c[0], c[1], c[2], c[3] } };
+      vertices[5] = (GskNglDrawVertex) { .position = { min_x + sizes[0].w, min_y + sizes[0].h }, .uv = { 1, 1 }, .color = { c[0], c[1], c[2], c[3] } };
     }
 
   gsk_ngl_render_job_end_draw (job);
@@ -1827,12 +1827,12 @@ gsk_ngl_render_job_visit_css_background (GskNglRenderJob     *job,
 
   vertices = gsk_ngl_command_queue_add_vertices (job->command_queue);
 
-  vertices[0] = (GskNglDrawVertex) { { min_x, min_y }, { 0, 0 }, { c[0], c[1], c[2], c[3] }, { c2[0], c2[1], c2[2], c2[3] } };
-  vertices[1] = (GskNglDrawVertex) { { min_x, max_y }, { 0, 0 }, { c[0], c[1], c[2], c[3] }, { c2[0], c2[1], c2[2], c2[3] } };
-  vertices[2] = (GskNglDrawVertex) { { max_x, min_y }, { 0, 0 }, { c[0], c[1], c[2], c[3] }, { c2[0], c2[1], c2[2], c2[3] } };
-  vertices[3] = (GskNglDrawVertex) { { max_x, max_y }, { 0, 0 }, { c[0], c[1], c[2], c[3] }, { c2[0], c2[1], c2[2], c2[3] } };
-  vertices[4] = (GskNglDrawVertex) { { min_x, max_y }, { 0, 0 }, { c[0], c[1], c[2], c[3] }, { c2[0], c2[1], c2[2], c2[3] } };
-  vertices[5] = (GskNglDrawVertex) { { max_x, min_y }, { 0, 0 }, { c[0], c[1], c[2], c[3] }, { c2[0], c2[1], c2[2], c2[3] } };
+  vertices[0] = (GskNglDrawVertex) { .position = { min_x, min_y }, .color = { c[0], c[1], c[2], c[3] }, .color2 = { c2[0], c2[1], c2[2], c2[3] } };
+  vertices[1] = (GskNglDrawVertex) { .position = { min_x, max_y }, .color = { c[0], c[1], c[2], c[3] }, .color2 = { c2[0], c2[1], c2[2], c2[3] } };
+  vertices[2] = (GskNglDrawVertex) { .position = { max_x, min_y }, .color = { c[0], c[1], c[2], c[3] }, .color2 = { c2[0], c2[1], c2[2], c2[3] } };
+  vertices[3] = (GskNglDrawVertex) { .position = { max_x, max_y }, .color = { c[0], c[1], c[2], c[3] }, .color2 = { c2[0], c2[1], c2[2], c2[3] } };
+  vertices[4] = (GskNglDrawVertex) { .position = { min_x, max_y }, .color = { c[0], c[1], c[2], c[3] }, .color2 = { c2[0], c2[1], c2[2], c2[3] } };
+  vertices[5] = (GskNglDrawVertex) { .position = { max_x, min_y }, .color = { c[0], c[1], c[2], c[3] }, .color2 = { c2[0], c2[1], c2[2], c2[3] } };
 
   gsk_ngl_render_job_end_draw (job);
 }
@@ -2807,13 +2807,13 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
       glyph_x2 = glyph_x + glyph->ink_rect.width;
       glyph_y2 = glyph_y + glyph->ink_rect.height;
 
-      *(vertices++) = (GskNglDrawVertex) { { glyph_x,  glyph_y  }, { tx,  ty  }, { c[0], c[1], c[2], c[3] } };
-      *(vertices++) = (GskNglDrawVertex) { { glyph_x,  glyph_y2 }, { tx,  ty2 }, { c[0], c[1], c[2], c[3] } };
-      *(vertices++) = (GskNglDrawVertex) { { glyph_x2, glyph_y  }, { tx2, ty  }, { c[0], c[1], c[2], c[3] } };
+      *(vertices++) = (GskNglDrawVertex) { .position = { glyph_x,  glyph_y  }, .uv = { tx,  ty  }, .color = { c[0], c[1], c[2], c[3] } };
+      *(vertices++) = (GskNglDrawVertex) { .position = { glyph_x,  glyph_y2 }, .uv = { tx,  ty2 }, .color = { c[0], c[1], c[2], c[3] } };
+      *(vertices++) = (GskNglDrawVertex) { .position = { glyph_x2, glyph_y  }, .uv = { tx2, ty  }, .color = { c[0], c[1], c[2], c[3] } };
 
-      *(vertices++) = (GskNglDrawVertex) { { glyph_x2, glyph_y2 }, { tx2, ty2 }, { c[0], c[1], c[2], c[3] } };
-      *(vertices++) = (GskNglDrawVertex) { { glyph_x,  glyph_y2 }, { tx,  ty2 }, { c[0], c[1], c[2], c[3] } };
-      *(vertices++) = (GskNglDrawVertex) { { glyph_x2, glyph_y  }, { tx2, ty  }, { c[0], c[1], c[2], c[3] } };
+      *(vertices++) = (GskNglDrawVertex) { .position = { glyph_x2, glyph_y2 }, .uv = { tx2, ty2 }, .color = { c[0], c[1], c[2], c[3] } };
+      *(vertices++) = (GskNglDrawVertex) { .position = { glyph_x,  glyph_y2 }, .uv = { tx,  ty2 }, .color = { c[0], c[1], c[2], c[3] } };
+      *(vertices++) = (GskNglDrawVertex) { .position = { glyph_x2, glyph_y  }, .uv = { tx2, ty  }, .color = { c[0], c[1], c[2], c[3] } };
 
       batch->draw.vbo_count += GSK_NGL_N_VERTICES;
       used++;

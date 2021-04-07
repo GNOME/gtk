@@ -54,9 +54,11 @@ typedef struct _GskNglDriver GskNglDriver;
 struct _GskNglDrawVertex
 {
   float position[2];
-  float uv[2];
+  union {
+    float uv[2];
+    guint16 color2[4];
+  };
   guint16 color[4];
-  guint16 color2[4];
 };
 
 G_END_DECLS
