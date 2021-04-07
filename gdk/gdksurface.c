@@ -1299,12 +1299,11 @@ gdk_surface_schedule_update (GdkSurface *surface)
 
   g_return_if_fail (surface);
 
+  surface->pending_phases |= GDK_FRAME_CLOCK_PHASE_PAINT;
+
   if (surface->update_freeze_count ||
       gdk_surface_is_toplevel_frozen (surface))
-    {
-      surface->pending_phases |= GDK_FRAME_CLOCK_PHASE_PAINT;
-      return;
-    }
+    return;
 
   /* If there's no frame clock (a foreign surface), then the invalid
    * region will just stick around unless gdk_surface_process_updates()
