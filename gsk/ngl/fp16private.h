@@ -30,6 +30,8 @@
 
 G_BEGIN_DECLS
 
+#define FP16_ZERO ((guint16)0)
+#define FP16_ONE ((guint16)15360)
 #define FP16_MINUS_ONE ((guint16)48128)
 
 #ifdef GRAPHENE_USE_SSE
