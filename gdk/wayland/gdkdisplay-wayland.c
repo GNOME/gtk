@@ -1917,6 +1917,14 @@ init_settings (GdkDisplay *display)
 
       g_variant_get (ret, "(a{sa{sv}})", &iter);
 
+      if (g_variant_n_children (ret) == 0)
+        {
+          g_debug ("Received no portal settings");
+          g_clear_pointer (&ret, g_variant_unref);
+
+          goto fallback;
+        }
+
       while (g_variant_iter_loop (iter, "{s@a{sv}}", &schema_str, &val))
         {
           GVariantIter *iter2 = g_variant_iter_new (val);
