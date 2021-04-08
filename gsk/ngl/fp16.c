@@ -123,7 +123,28 @@ resolve_half_to_float4 (void)
 
 #else
 
+#ifdef __APPLE__
+// turns out aliases don't work on Darwin
+
+void
+float_to_half4 (const float f[4],
+                guint16     h[4])
+{
+  float_to_half4_c (f, h);
+}
+
+void
+half_to_float4 (const guint16 h[4],
+                float         f[4])
+{
+  half_to_float4_c (h, f);
+}
+
+#else
+
 void float_to_half4 (const float f[4], guint16 h[4]) __attribute__((alias ("float_to_half4_c")));
 void half_to_float4 (const guint16 h[4], float f[4]) __attribute__((alias ("half_to_float4_c")));
+
+#endif
 
 #endif  /* GTK_HAS_F16C */
