@@ -5,15 +5,15 @@
 # Matic Žgur <mr.zgur@gmail.com>, 2006.
 # Martin Srebotnjak <miles@filmsi.net>, 2007.
 # Klemen Košir <klemen.kosir@gmx.com>, 2010–2011.
-# Matej Urbančič <mateju@svn.gnome.org>, 2007–2021.
+# Matej Urbančič <mateju@src.gnome.org>, 2007–2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2021-02-06 08:45+0000\n"
-"PO-Revision-Date: 2021-02-06 20:38+0100\n"
-"Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
+"PO-Revision-Date: 2021-04-08 21:16+0200\n"
+"Last-Translator: Matej Urbančič <mateju@src.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
 "MIME-Version: 1.0\n"
@@ -746,7 +746,7 @@ msgstr "Preklop"
 #: gtk/a11y/gtkatspiaction.c:295
 msgctxt "accessibility"
 msgid "Toggles the switch"
-msgstr "Preklopi nastavitev"
+msgstr "Preklopi nastavitev stikala"
 
 #: gtk/a11y/gtkatspiaction.c:375
 msgctxt "accessibility"
@@ -794,43 +794,32 @@ msgstr "Omogoči vnos"
 #: gtk/a11y/gtkatspiaction.c:507
 msgctxt "accessibility"
 msgid "Activate primary icon"
-msgstr ""
+msgstr "Omogoči osnovno ikono"
 
 #: gtk/a11y/gtkatspiaction.c:508
-#, fuzzy
-#| msgctxt "Action description"
-#| msgid "Activates the entry"
 msgctxt "accessibility"
 msgid "Activates the primary icon of the entry"
-msgstr "Omogoči vnos"
+msgstr "Omogoči osnovno ikono vnosa"
 
 #: gtk/a11y/gtkatspiaction.c:515
-#, fuzzy
-#| msgctxt "Action description"
-#| msgid "Activates the color"
 msgctxt "accessibility"
 msgid "Activate secondary icon"
-msgstr "Omogoči barvo"
+msgstr "Omogoči drugo ikono"
 
 #: gtk/a11y/gtkatspiaction.c:516
-#, fuzzy
-#| msgctxt "Action description"
-#| msgid "Activates the entry"
 msgctxt "accessibility"
 msgid "Activates the secondary icon of the entry"
-msgstr "Omogoči vnos"
+msgstr "Omogoči drugo ikono vnosa"
 
 #: gtk/a11y/gtkatspiaction.c:615
 msgctxt "accessibility"
 msgid "Peek"
-msgstr ""
+msgstr "Pokukaj"
 
 #: gtk/a11y/gtkatspiaction.c:616
-#, fuzzy
-#| msgid "Browse the contents of the network"
 msgctxt "accessibility"
 msgid "Shows the contents of the password entry"
-msgstr "Prebrskaj vsebino omrežja"
+msgstr "Pokaže vnos gesla"
 
 #: gtk/a11y/gtkatspiaction.c:702
 msgctxt "accessibility"
@@ -1214,17 +1203,17 @@ msgstr "glavno"
 #: gtk/gtkaccessible.c:589
 msgctxt "accessibility"
 msgid "marquee"
-msgstr ""
+msgstr "lega oznak"
 
 #: gtk/gtkaccessible.c:590
 msgctxt "accessibility"
 msgid "math"
-msgstr ""
+msgstr "matematika"
 
 #: gtk/gtkaccessible.c:591
 msgctxt "accessibility"
 msgid "meter"
-msgstr ""
+msgstr "merilnik"
 
 #: gtk/gtkaccessible.c:592
 msgctxt "accessibility"
@@ -1284,12 +1273,12 @@ msgstr "kazalnik napredka"
 #: gtk/gtkaccessible.c:603
 msgctxt "accessibility"
 msgid "radio"
-msgstr ""
+msgstr "izbirni gumb"
 
 #: gtk/gtkaccessible.c:604
 msgctxt "accessibility"
 msgid "radio group"
-msgstr ""
+msgstr "skupina izbirnih gumbov"
 
 #: gtk/gtkaccessible.c:605
 msgctxt "accessibility"
@@ -4064,10 +4053,8 @@ msgid "CSS Margin"
 msgstr "Rob CSS"
 
 #: gtk/inspector/visual.ui:574
-#, fuzzy
-#| msgid "Paper Margins"
 msgid "Widget Margin"
-msgstr "Robovi papirja"
+msgstr "Robovi gradnika"
 
 #: gtk/inspector/visual.ui:609
 msgid "Show Focus"
@@ -6516,90 +6503,79 @@ msgid "Zanabazar Square"
 msgstr "zanzibarski"
 
 #: gtk/script-names.c:156
-#, fuzzy
-#| msgid "Program"
 msgctxt "Script"
 msgid "Dogra"
-msgstr "Program"
+msgstr "dogra"
 
 #: gtk/script-names.c:157
-#, fuzzy
-#| msgctxt "Script"
-#| msgid "Masaram Gondi"
 msgctxt "Script"
 msgid "Gunjala Gondi"
-msgstr "masaram gondi"
+msgstr "gundžala gondi"
 
 #: gtk/script-names.c:158
 msgctxt "Script"
 msgid "Hanifi Rohingya"
-msgstr ""
+msgstr "hanifi rohinja"
 
 #: gtk/script-names.c:159
 msgctxt "Script"
 msgid "Makasar"
-msgstr ""
+msgstr "makasar"
 
 #: gtk/script-names.c:160
 msgctxt "Script"
 msgid "Medefaidrin"
-msgstr ""
+msgstr "medefaidrin"
 
 #: gtk/script-names.c:161
-#, fuzzy
-#| msgctxt "Script"
-#| msgid "Old Hungarian"
 msgctxt "Script"
 msgid "Old Sogdian"
-msgstr "staromadžarski"
+msgstr "starosogdski"
 
 #: gtk/script-names.c:162
-#, fuzzy
-#| msgctxt "Script"
-#| msgid "Lydian"
 msgctxt "Script"
 msgid "Sogdian"
-msgstr "lidianski"
+msgstr "sogdski"
 
 #: gtk/script-names.c:165 gtk/script-names.c:170
 msgctxt "Script"
 msgid "Elym"
-msgstr ""
+msgstr "elimski"
 
 #: gtk/script-names.c:166 gtk/script-names.c:171
 msgctxt "Script"
 msgid "Nand"
-msgstr ""
+msgstr "nand"
 
 #: gtk/script-names.c:167 gtk/script-names.c:172
 msgctxt "Script"
 msgid "Rohg"
-msgstr ""
+msgstr "rohg"
 
 #: gtk/script-names.c:168 gtk/script-names.c:173
 msgctxt "Script"
 msgid "Wcho"
-msgstr ""
+msgstr "wcho"
 
 #: gtk/script-names.c:176 gtk/script-names.c:181
 msgctxt "Script"
 msgid "Chorasmian"
-msgstr ""
+msgstr "horasmijan"
 
 #: gtk/script-names.c:177 gtk/script-names.c:182
 msgctxt "Script"
 msgid "Dives Akuru"
-msgstr ""
+msgstr "dives akuru"
 
 #: gtk/script-names.c:178 gtk/script-names.c:183
 msgctxt "Script"
 msgid "Khitan small script"
-msgstr ""
+msgstr "khitanske male pisave"
 
 #: gtk/script-names.c:179 gtk/script-names.c:184
 msgctxt "Script"
 msgid "Yezidi"
-msgstr ""
+msgstr "jezidi"
 
 #: gtk/tools/encodesymbolic.c:41
 msgid "Output to this directory instead of cwd"
@@ -6607,7 +6583,7 @@ msgstr "Odvod v mapo namesto v ukazno vrstico"
 
 #: gtk/tools/encodesymbolic.c:42
 msgid "Generate debug output"
-msgstr ""
+msgstr "Ustvari odvod razhroščevanja"
 
 #: gtk/tools/encodesymbolic.c:94
 #, c-format
@@ -6952,7 +6928,7 @@ msgstr "Izbor barve na zaslonu"
 
 #: gtk/ui/gtkcoloreditor.ui:80
 msgid "Hexadecimal color or color name"
-msgstr ""
+msgstr "Heksadecimalna vrednost barve oziroma ime barve"
 
 #: gtk/ui/gtkcoloreditor.ui:95
 msgid "Hue"
@@ -7074,7 +7050,7 @@ msgstr "Filtriraj po"
 
 #: gtk/ui/gtkfontchooserwidget.ui:89
 msgid "Monospace"
-msgstr ""
+msgstr "Pisava s stalno širino"
 
 #: gtk/ui/gtkfontchooserwidget.ui:95
 msgid "Language"
