@@ -706,6 +706,10 @@ int main () {
   __m128 s = _mm_loadu_ps (f);
   __m128i i = _mm_cvtps_ph (s, 0);
   _mm_storel_epi64 ((__m128i*)h, i);
+
+  __builtin_cpu_init ();
+  __builtin_cpu_supports ("f16c");
+
     return 0;
 }'''
   if cc.get_id() != 'msvc'
