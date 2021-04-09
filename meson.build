@@ -685,6 +685,46 @@ if graphene_has_sse2 or graphene_has_gcc
   endif
 endif
 
+f16c_cflags = []
+if get_option('f16c').enabled()
+  f16c_prog = '''
+#if defined(__GNUC__)
+# if !defined(__amd64__) && !defined(__x86_64__)
+#   error "F16C intrinsics are only available on x86_64"
+# endif
+#elif defined (_MSC_VER) && !defined (_M_X64) && !defined (_M_AMD64)
+# error "F16C intrinsics not supported on x86 MSVC builds"
+#endif
+#if defined(__SSE__) || (_M_X64 > 0)
+# include <immintrin.h>
+#else
+# error "No F16C intrinsics available"
+#endif
+int main () {
+  float f[4] = { 0, };
+  unsigned short h[4] = { 0, };
+  __m128 s = _mm_loadu_ps (f);
+  __m128i i = _mm_cvtps_ph (s, 0);
+  _mm_storel_epi64 ((__m128i*)h, i);
+
+  __builtin_cpu_init ();
+  __builtin_cpu_supports ("f16c");
+
+    return 0;
+}'''
+  if cc.get_id() != 'msvc'
+    test_f16c_cflags = [ '-mf16c' ]
+  else
+    test_f16c_cflags = []
+  endif
+
+  if cc.compiles(f16c_prog, args: test_f16c_cflags, name: 'F16C intrinsics')
+    cdata.set('HAVE_F16C', 1)
+    f16c_cflags = test_f16c_cflags
+    common_cflags += test_f16c_cflags
+  endif
+endif
+
 subdir('gtk/css')
 subdir('gdk')
 subdir('gsk')

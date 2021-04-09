@@ -1003,13 +1003,13 @@ gsk_ngl_command_queue_execute (GskNglCommandQueue   *self,
 
   /* 2 = color location */
   glEnableVertexAttribArray (2);
-  glVertexAttribPointer (2, 4, GL_FLOAT, GL_FALSE,
+  glVertexAttribPointer (2, 4, GL_HALF_FLOAT, GL_FALSE,
                          sizeof (GskNglDrawVertex),
                          (void *) G_STRUCT_OFFSET (GskNglDrawVertex, color));
 
   /* 3 = color2 location */
   glEnableVertexAttribArray (3);
-  glVertexAttribPointer (3, 4, GL_FLOAT, GL_FALSE,
+  glVertexAttribPointer (3, 4, GL_HALF_FLOAT, GL_FALSE,
                          sizeof (GskNglDrawVertex),
                          (void *) G_STRUCT_OFFSET (GskNglDrawVertex, color2));
 

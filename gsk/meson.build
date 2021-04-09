@@ -85,6 +85,7 @@ gsk_private_sources = files([
   'ngl/gskngltexturelibrary.c',
   'ngl/gskngluniformstate.c',
   'ngl/gskngltexturepool.c',
+  'ngl/fp16.c',
 ])
 
 gsk_public_headers = files([
