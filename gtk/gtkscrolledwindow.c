@@ -401,9 +401,6 @@ static void     indicator_start_fade (Indicator *indicator,
 static void     indicator_set_over   (Indicator *indicator,
                                       gboolean   over);
 
-static void     install_scroll_cursor (GtkScrolledWindow *scrolled_window);
-static void     uninstall_scroll_cursor (GtkScrolledWindow *scrolled_window);
-
 static void scrolled_window_scroll (GtkScrolledWindow        *scrolled_window,
                                     double                    delta_x,
                                     double                    delta_y,
@@ -1335,10 +1332,7 @@ start_scroll_deceleration_cb (gpointer user_data)
   priv->scroll_events_overshoot_id = 0;
 
   if (!priv->deceleration_id)
-    {
-      uninstall_scroll_cursor (scrolled_window);
-      gtk_scrolled_window_start_deceleration (scrolled_window);
-    }
+    gtk_scrolled_window_start_deceleration (scrolled_window);
 
   return FALSE;
 }
@@ -1349,7 +1343,6 @@ scroll_controller_scroll_begin (GtkEventControllerScroll *scroll,
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
 
-  install_scroll_cursor (scrolled_window);
   priv->smooth_scroll = TRUE;
 }
 
@@ -1442,7 +1435,6 @@ scroll_controller_scroll_end (GtkEventControllerScroll *scroll,
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
 
   priv->smooth_scroll = FALSE;
-  uninstall_scroll_cursor (scrolled_window);
 }
 
 static void
@@ -3182,18 +3174,6 @@ gtk_scrolled_window_allocate_scrollbar (GtkScrolledWindow *scrolled_window,
     }
 
   *allocation = child_allocation;
-}
-
-static void
-install_scroll_cursor (GtkScrolledWindow *scrolled_window)
-{
-  gtk_widget_set_cursor_from_name (GTK_WIDGET (scrolled_window), "all-scroll");
-}
-
-static void
-uninstall_scroll_cursor (GtkScrolledWindow *scrolled_window)
-{
-  gtk_widget_set_cursor (GTK_WIDGET (scrolled_window), NULL);
 }
 
 static void
