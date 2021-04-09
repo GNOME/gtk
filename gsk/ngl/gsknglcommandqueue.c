@@ -169,7 +169,7 @@ gsk_ngl_command_queue_print_batch (GskNglCommandQueue       *self,
       for (guint i = 0; i < batch->draw.bind_count; i++)
         {
           const GskNglCommandBind *bind = &self->batch_binds.items[batch->draw.bind_offset + i];
-          g_print ("      Bind[%d]: %u\n", bind->texture, bind->id);
+          g_printerr ("      Bind[%d]: %u\n", bind->texture, bind->id);
         }
 
       for (guint i = 0; i < batch->draw.uniform_count; i++)
