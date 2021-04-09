@@ -250,6 +250,7 @@ struct _GskNglCommandQueue
     guint n_fbos;
     guint n_uniforms;
     guint n_uploads;
+    guint n_programs;
     guint queue_depth;
   } metrics;
 

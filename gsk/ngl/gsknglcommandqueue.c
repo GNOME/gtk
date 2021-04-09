@@ -951,6 +951,7 @@ gsk_ngl_command_queue_execute (GskNglCommandQueue   *self,
   guint n_binds = 0;
   guint n_fbos = 0;
   guint n_uniforms = 0;
+  guint n_programs = 0;
   guint vao_id;
   guint vbo_id;
   int textures[4];
@@ -1062,6 +1063,8 @@ gsk_ngl_command_queue_execute (GskNglCommandQueue   *self,
             {
               program = batch->any.program;
               glUseProgram (program);
+
+              n_programs++;
             }
 
           if (apply_framebuffer (&framebuffer, batch->draw.framebuffer))
@@ -1144,6 +1147,7 @@ gsk_ngl_command_queue_execute (GskNglCommandQueue   *self,
   gdk_profiler_set_int_counter (self->metrics.n_binds, n_binds);
   gdk_profiler_set_int_counter (self->metrics.n_uniforms, n_uniforms);
   gdk_profiler_set_int_counter (self->metrics.n_fbos, n_fbos);
+  gdk_profiler_set_int_counter (self->metrics.n_programs, n_programs);
   gdk_profiler_set_int_counter (self->metrics.n_uploads, self->n_uploads);
   gdk_profiler_set_int_counter (self->metrics.queue_depth, self->batches.len);
 
@@ -1415,6 +1419,7 @@ gsk_ngl_command_queue_set_profiler (GskNglCommandQueue *self,
       self->metrics.n_fbos = gdk_profiler_define_int_counter ("fbos", "Number of framebuffers attached");
       self->metrics.n_uniforms = gdk_profiler_define_int_counter ("uniforms", "Number of uniforms changed");
       self->metrics.n_uploads = gdk_profiler_define_int_counter ("uploads", "Number of texture uploads");
+      self->metrics.n_programs = gdk_profiler_define_int_counter ("programs", "Number of program changes");
       self->metrics.queue_depth = gdk_profiler_define_int_counter ("gl-queue-depth", "Depth of GL command batches");
     }
 #endif
