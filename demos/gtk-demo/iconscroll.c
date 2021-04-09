@@ -116,20 +116,25 @@ populate_emoji_text (void)
   GtkWidget *textview;
   GtkTextBuffer *buffer;
   GString *s;
+  GtkTextIter iter;
 
-  s = g_string_sized_new (1000 * 30 * 4);
+  s = g_string_sized_new (500 * 30 * 4);
 
-  for (int i = 0; i < 1000; i++)
+  for (int i = 0; i < 500; i++)
     {
       if (i % 2)
-        g_string_append (s, "x");
+        g_string_append (s, "<span underline=\"single\" underline_color=\"red\">x</span>");
       for (int j = 0; j < 30; j++)
-        g_string_append (s, "💓x");
+        {
+          g_string_append (s, "💓");
+          g_string_append (s, "<span underline=\"single\" underline_color=\"red\">x</span>");
+        }
       g_string_append (s, "\n");
     }
 
   buffer = gtk_text_buffer_new (NULL);
-  gtk_text_buffer_set_text (buffer, s->str, s->len);
+  gtk_text_buffer_get_start_iter (buffer, &iter);
+  gtk_text_buffer_insert_markup (buffer, &iter, s->str, s->len);
 
   g_string_free (s, TRUE);
 

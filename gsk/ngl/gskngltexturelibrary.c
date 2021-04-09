@@ -20,6 +20,7 @@
 
 #include "config.h"
 
+#include <gdk/gdkglcontextprivate.h>
 #include <gsk/gskdebugprivate.h>
 
 #include "gsknglcommandqueueprivate.h"
@@ -240,6 +241,51 @@ gsk_ngl_texture_atlas_pack (GskNglTextureAtlas *self,
 }
 
 static void
+gsk_ngl_texture_atlas_initialize (GskNglDriver       *driver,
+                                  GskNglTextureAtlas *atlas)
+{
+  /* Insert a single pixel at 0,0 for use in coloring */
+
+  gboolean packed;
+  int x, y;
+  guint gl_format;
+  guint gl_type;
+  guint8 pixel_data[4 * 3 * 3];
+
+  gdk_gl_context_push_debug_group_printf (gdk_gl_context_get_current (),
+                                          "Initializing Atlas");
+
+  packed = gsk_ngl_texture_atlas_pack (atlas, 3, 3, &x, &y);
+  g_assert (packed);
+  g_assert (x == 0 && y == 0);
+
+  memset (pixel_data, 255, sizeof pixel_data);
+
+  if (gdk_gl_context_get_use_es (gdk_gl_context_get_current ()))
+    {
+      gl_format = GL_RGBA;
+      gl_type = GL_UNSIGNED_BYTE;
+    }
+  else
+    {
+      gl_format = GL_BGRA;
+      gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
+    }
+
+  glBindTexture (GL_TEXTURE_2D, atlas->texture_id);
+
+  glTexSubImage2D (GL_TEXTURE_2D, 0,
+                   0, 0,
+                   3, 3,
+                   gl_format, gl_type,
+                   pixel_data);
+
+  gdk_gl_context_pop_debug_group (gdk_gl_context_get_current ());
+
+  driver->command_queue->n_uploads++;
+}
+
+static void
 gsk_ngl_texture_atlases_pack (GskNglDriver        *driver,
                               int                  width,
                               int                  height,
@@ -264,6 +310,8 @@ gsk_ngl_texture_atlases_pack (GskNglDriver        *driver,
     {
       /* No atlas has enough space, so create a new one... */
       atlas = gsk_ngl_driver_create_atlas (driver);
+
+      gsk_ngl_texture_atlas_initialize (driver, atlas);
 
       /* Pack it onto that one, which surely has enough space... */
       if (!gsk_ngl_texture_atlas_pack (atlas, width, height, &x, &y))
