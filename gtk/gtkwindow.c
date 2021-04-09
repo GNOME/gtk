@@ -371,6 +371,8 @@ static gboolean surface_render            (GdkSurface         *surface,
 static gboolean surface_event             (GdkSurface         *surface,
                                            GdkEvent           *event,
                                            GtkWidget          *widget);
+static void     after_paint               (GdkFrameClock      *clock,
+                                           GtkWindow          *window);
 
 static int gtk_window_focus              (GtkWidget        *widget,
 				           GtkDirectionType  direction);
@@ -4256,6 +4258,7 @@ gtk_window_realize (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GdkSurface *surface;
+  GdkFrameClock *frame_clock;
 
   /* Create default title bar */
   if (!priv->client_decorated && gtk_window_should_use_csd (window))
@@ -4291,6 +4294,9 @@ gtk_window_realize (GtkWidget *widget)
   g_signal_connect (surface, "render", G_CALLBACK (surface_render), widget);
   g_signal_connect (surface, "event", G_CALLBACK (surface_event), widget);
   g_signal_connect (surface, "compute-size", G_CALLBACK (toplevel_compute_size), widget);
+
+  frame_clock = gdk_surface_get_frame_clock (surface);
+  g_signal_connect (frame_clock, "after-paint", G_CALLBACK (after_paint), widget);
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->realize (widget);
 
@@ -4363,6 +4369,7 @@ gtk_window_unrealize (GtkWidget *widget)
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWindowGeometryInfo *info;
   GdkSurface *surface;
+  GdkFrameClock *frame_clock;
 
   gtk_native_unrealize (GTK_NATIVE (window));
 
@@ -4402,6 +4409,10 @@ gtk_window_unrealize (GtkWidget *widget)
   g_signal_handlers_disconnect_by_func (surface, surface_state_changed, widget);
   g_signal_handlers_disconnect_by_func (surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (surface, surface_event, widget);
+
+  frame_clock = gdk_surface_get_frame_clock (surface);
+
+  g_signal_handlers_disconnect_by_func (frame_clock, after_paint, widget);
 
   gtk_root_stop_layout (GTK_ROOT (window));
 
@@ -4677,12 +4688,16 @@ surface_render (GdkSurface     *surface,
                 cairo_region_t *region,
                 GtkWidget      *widget)
 {
-  GtkWindow *window = GTK_WINDOW (widget);
-
   gtk_widget_render (widget, surface, region);
-  maybe_unset_focus_and_default (window);
 
   return TRUE;
+}
+
+static void
+after_paint (GdkFrameClock *clock,
+             GtkWindow     *window)
+{
+  maybe_unset_focus_and_default (window);
 }
 
 static gboolean
@@ -5129,6 +5144,16 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
   child = priv->default_widget;
   if (child && (child == widget || gtk_widget_is_ancestor (child, widget)))
     priv->unset_default = TRUE;
+
+  if ((priv->move_focus || priv->unset_default) &&
+      priv->surface != NULL)
+    {
+      GdkFrameClock *frame_clock;
+
+      frame_clock = gdk_surface_get_frame_clock (priv->surface);
+      gdk_frame_clock_request_phase (frame_clock,
+                                     GDK_FRAME_CLOCK_PHASE_AFTER_PAINT);
+    }
 }
 
 #undef INCLUDE_CSD_SIZE
