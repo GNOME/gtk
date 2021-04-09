@@ -1360,16 +1360,54 @@ blur_node (GskNglRenderJob       *job,
   *max_y = job->offset_y + node->bounds.origin.y + node->bounds.size.height + half_blur_extra;
 }
 
+#define ATLAS_SIZE 512
+
 static inline void
 gsk_ngl_render_job_visit_color_node (GskNglRenderJob     *job,
                                      const GskRenderNode *node)
 {
   guint16 color[4];
+  GskNglProgram *program;
+  GskNglCommandBatch *batch;
 
   rgba_to_half (gsk_color_node_get_color (node), color);
-  gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color));
-  gsk_ngl_render_job_draw_rect_with_color (job, &node->bounds, color);
-  gsk_ngl_render_job_end_draw (job);
+
+  /* Avoid switching away from the coloring program for
+   * rendering a solid color.
+   */
+  program = CHOOSE_PROGRAM (job, coloring);
+  batch = gsk_ngl_command_queue_get_batch (job->command_queue);
+
+  if (batch->any.kind == GSK_NGL_COMMAND_KIND_DRAW &&
+      batch->any.program == program->id)
+    {
+      GskNglRenderOffscreen offscreen = {0};
+
+      gsk_ngl_render_job_begin_draw (job, program);
+
+      /* The top left few pixels in our atlases are always
+       * solid white, so we can use it here, without
+       * having to choose any particular atlas texture.
+       */
+      offscreen.was_offscreen = FALSE;
+      offscreen.area.x = 1.f / ATLAS_SIZE;
+      offscreen.area.y = 1.f / ATLAS_SIZE;
+      offscreen.area.x2 = 2.f / ATLAS_SIZE;
+      offscreen.area.y2 = 2.f / ATLAS_SIZE;
+
+      gsk_ngl_render_job_draw_offscreen_with_color (job,
+                                                    &node->bounds,
+                                                    &offscreen,
+                                                    color);
+
+      gsk_ngl_render_job_end_draw (job);
+    }
+  else
+    {
+      gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color));
+      gsk_ngl_render_job_draw_rect_with_color (job, &node->bounds, color);
+      gsk_ngl_render_job_end_draw (job);
+    }
 }
 
 static inline void
