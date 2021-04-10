@@ -2,8 +2,8 @@
 <interface>
   <object class="GtkWindow" id="window">
     <property name="title" translatable="yes">Help</property>
-    <property name="default-width">720</property>
-    <property name="default-height">520</property>
+    <property name="default-width">920</property>
+    <property name="default-height">600</property>
     <child>
       <object class="GtkScrolledWindow">
         <child>
