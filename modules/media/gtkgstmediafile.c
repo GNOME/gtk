@@ -142,6 +142,8 @@ gtk_gst_media_file_ensure_prepared (GtkGstMediaFile *self)
                                  gst_player_media_info_get_video_streams (media_info) != NULL,
                                  gst_player_media_info_is_seekable (media_info),
                                  FROM_GST_TIME (gst_player_media_info_get_duration (media_info)));
+
+      g_object_unref (media_info);
     }
   else
     {
