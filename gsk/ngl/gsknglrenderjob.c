@@ -2458,6 +2458,8 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
       return;
     }
 
+  /* slicing */
+
   gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, outset_shadow));
   gsk_ngl_program_set_uniform_texture (job->current_program,
                                        UNIFORM_SHARED_SOURCE, 0,
@@ -2476,6 +2478,8 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
     float max_y = ceilf (outline->bounds.origin.y + outline->bounds.size.height +
                          half_blur_extra + dy + spread);
     const GskNglTextureNineSlice *slices;
+    float left_width, center_width, right_width;
+    float top_height, center_height, bottom_height;
     GskNglTexture *texture;
 
     texture = gsk_ngl_driver_get_texture_by_id (job->driver, blurred_texture_id);
@@ -2486,14 +2490,23 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
     /* Our texture coordinates MUST be scaled, while the actual vertex coords
      * MUST NOT be scaled. */
 
+    left_width = slices[NINE_SLICE_TOP_LEFT].rect.width / scale_x;
+    right_width = slices[NINE_SLICE_TOP_RIGHT].rect.width / scale_x;
+    center_width = (max_x - min_x) - (left_width + right_width);
+
+    top_height = slices[NINE_SLICE_TOP_LEFT].rect.height / scale_y;
+    bottom_height = slices[NINE_SLICE_BOTTOM_LEFT].rect.height / scale_y;
+    center_height = (max_y - min_y) - (top_height + bottom_height);
+
     /* Top left */
     if (nine_slice_is_visible (&slices[NINE_SLICE_TOP_LEFT]))
       {
         memcpy (&offscreen.area, &slices[NINE_SLICE_TOP_LEFT].area, sizeof offscreen.area);
         gsk_ngl_render_job_draw_offscreen_with_color (job,
-                                                      &GRAPHENE_RECT_INIT (min_x, min_y,
-                                                                           slices[NINE_SLICE_TOP_LEFT].rect.width / scale_x,
-                                                                           slices[NINE_SLICE_TOP_LEFT].rect.height / scale_y),
+                                                      &GRAPHENE_RECT_INIT (min_x,
+                                                                           min_y,
+                                                                           left_width,
+                                                                           top_height),
                                                       &offscreen,
                                                       color);
       }
@@ -2502,13 +2515,11 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
     if (nine_slice_is_visible (&slices[NINE_SLICE_TOP_CENTER]))
     {
       memcpy (&offscreen.area, &slices[NINE_SLICE_TOP_CENTER].area, sizeof offscreen.area);
-      float width = (max_x - min_x) - (slices[NINE_SLICE_TOP_LEFT].rect.width / scale_x +
-                                       slices[NINE_SLICE_TOP_RIGHT].rect.width / scale_x);
       gsk_ngl_render_job_draw_offscreen_with_color (job,
-                                                    &GRAPHENE_RECT_INIT (min_x + (slices[NINE_SLICE_TOP_LEFT].rect.width / scale_x),
+                                                    &GRAPHENE_RECT_INIT (min_x + left_width,
                                                                          min_y,
-                                                                         width,
-                                                                         slices[NINE_SLICE_TOP_CENTER].rect.height / scale_y),
+                                                                         center_width,
+                                                                         top_height),
                                                     &offscreen,
                                                     color);
     }
@@ -2518,10 +2529,10 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
     {
       memcpy (&offscreen.area, &slices[NINE_SLICE_TOP_RIGHT].area, sizeof offscreen.area);
       gsk_ngl_render_job_draw_offscreen_with_color (job,
-                                                    &GRAPHENE_RECT_INIT (max_x - (slices[NINE_SLICE_TOP_RIGHT].rect.width / scale_x),
+                                                    &GRAPHENE_RECT_INIT (max_x - right_width,
                                                                          min_y,
-                                                                         slices[NINE_SLICE_TOP_RIGHT].rect.width / scale_x,
-                                                                         slices[NINE_SLICE_TOP_RIGHT].rect.height / scale_y),
+                                                                         right_width,
+                                                                         top_height),
                                                     &offscreen,
                                                     color);
     }
@@ -2531,10 +2542,10 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
     {
       memcpy (&offscreen.area, &slices[NINE_SLICE_BOTTOM_RIGHT].area, sizeof offscreen.area);
       gsk_ngl_render_job_draw_offscreen_with_color (job,
-                                                    &GRAPHENE_RECT_INIT (max_x - (slices[NINE_SLICE_BOTTOM_RIGHT].rect.width / scale_x),
-                                                                         max_y - (slices[NINE_SLICE_BOTTOM_RIGHT].rect.height / scale_y),
-                                                                         slices[NINE_SLICE_BOTTOM_RIGHT].rect.width / scale_x,
-                                                                         slices[NINE_SLICE_BOTTOM_RIGHT].rect.height / scale_y),
+                                                    &GRAPHENE_RECT_INIT (max_x - right_width,
+                                                                         max_y - bottom_height,
+                                                                         right_width,
+                                                                         bottom_height),
                                                     &offscreen,
                                                     color);
     }
@@ -2545,9 +2556,9 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
         memcpy (&offscreen.area, &slices[NINE_SLICE_BOTTOM_LEFT].area, sizeof offscreen.area);
         gsk_ngl_render_job_draw_offscreen_with_color (job,
                                                       &GRAPHENE_RECT_INIT (min_x,
-                                                                           max_y - (slices[NINE_SLICE_BOTTOM_LEFT].rect.height / scale_y),
-                                                                           slices[NINE_SLICE_BOTTOM_LEFT].rect.width / scale_x,
-                                                                           slices[NINE_SLICE_BOTTOM_LEFT].rect.height / scale_y),
+                                                                           max_y - bottom_height,
+                                                                           left_width,
+                                                                           bottom_height),
                                                       &offscreen,
                                                       color);
       }
@@ -2556,13 +2567,11 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
     if (nine_slice_is_visible (&slices[NINE_SLICE_LEFT_CENTER]))
       {
         memcpy (&offscreen.area, &slices[NINE_SLICE_LEFT_CENTER].area, sizeof offscreen.area);
-        float height = (max_y - min_y) - (slices[NINE_SLICE_TOP_LEFT].rect.height / scale_y +
-                                                slices[NINE_SLICE_BOTTOM_LEFT].rect.height / scale_y);
         gsk_ngl_render_job_draw_offscreen_with_color (job,
                                                       &GRAPHENE_RECT_INIT (min_x,
-                                                                           min_y + (slices[NINE_SLICE_TOP_LEFT].rect.height / scale_y),
-                                                                           slices[NINE_SLICE_LEFT_CENTER].rect.width / scale_x,
-                                                                           height),
+                                                                           min_y + top_height,
+                                                                           left_width,
+                                                                           center_height),
                                                       &offscreen,
                                                       color);
       }
@@ -2571,13 +2580,11 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
     if (nine_slice_is_visible (&slices[NINE_SLICE_RIGHT_CENTER]))
       {
         memcpy (&offscreen.area, &slices[NINE_SLICE_RIGHT_CENTER].area, sizeof offscreen.area);
-        float height = (max_y - min_y) - (slices[NINE_SLICE_TOP_RIGHT].rect.height / scale_y +
-                                          slices[NINE_SLICE_BOTTOM_RIGHT].rect.height / scale_y);
         gsk_ngl_render_job_draw_offscreen_with_color (job,
-                                                      &GRAPHENE_RECT_INIT (max_x - (slices[NINE_SLICE_RIGHT_CENTER].rect.width / scale_x),
-                                                                           min_y + (slices[NINE_SLICE_TOP_LEFT].rect.height / scale_y),
-                                                                           slices[NINE_SLICE_RIGHT_CENTER].rect.width / scale_x,
-                                                                           height),
+                                                      &GRAPHENE_RECT_INIT (max_x - right_width,
+                                                                           min_y + top_height,
+                                                                           right_width,
+                                                                           center_height),
                                                       &offscreen,
                                                       color);
       }
@@ -2586,13 +2593,11 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
     if (nine_slice_is_visible (&slices[NINE_SLICE_BOTTOM_CENTER]))
       {
         memcpy (&offscreen.area, &slices[NINE_SLICE_BOTTOM_CENTER].area, sizeof offscreen.area);
-        float width = (max_x - min_x) - (slices[NINE_SLICE_BOTTOM_LEFT].rect.width / scale_x +
-                                         slices[NINE_SLICE_BOTTOM_RIGHT].rect.width / scale_x);
         gsk_ngl_render_job_draw_offscreen_with_color (job,
-                                                      &GRAPHENE_RECT_INIT (min_x + (slices[NINE_SLICE_BOTTOM_LEFT].rect.width / scale_x),
-                                                                           max_y - (slices[NINE_SLICE_BOTTOM_CENTER].rect.height / scale_y),
-                                                                           width,
-                                                                           slices[NINE_SLICE_BOTTOM_CENTER].rect.height / scale_y),
+                                                      &GRAPHENE_RECT_INIT (min_x + left_width,
+                                                                           max_y - bottom_height,
+                                                                           center_width,
+                                                                           bottom_height),
                                                       &offscreen,
                                                       color);
       }
@@ -2600,17 +2605,20 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
     /* Middle */
     if (nine_slice_is_visible (&slices[NINE_SLICE_CENTER]))
       {
-        memcpy (&offscreen.area, &slices[NINE_SLICE_CENTER].area, sizeof offscreen.area);
-        float width = (max_x - min_x) - (slices[NINE_SLICE_LEFT_CENTER].rect.width / scale_x +
-                                         slices[NINE_SLICE_RIGHT_CENTER].rect.width / scale_x);
-        float height = (max_y - min_y) - (slices[NINE_SLICE_TOP_CENTER].rect.height / scale_y +
-                                          slices[NINE_SLICE_BOTTOM_CENTER].rect.height / scale_y);
-        gsk_ngl_render_job_draw_offscreen_with_color (job,
-                                                      &GRAPHENE_RECT_INIT (min_x + (slices[NINE_SLICE_LEFT_CENTER].rect.width / scale_x),
-                                                                           min_y + (slices[NINE_SLICE_TOP_CENTER].rect.height / scale_y),
-                                                                           width, height),
-                                                      &offscreen,
-                                                      color);
+        if (!gsk_rounded_rect_contains_rect (outline, &GRAPHENE_RECT_INIT (min_x + left_width,
+                                                                           min_y + top_height,
+                                                                           center_width,
+                                                                           center_height)))
+          {
+            memcpy (&offscreen.area, &slices[NINE_SLICE_CENTER].area, sizeof offscreen.area);
+            gsk_ngl_render_job_draw_offscreen_with_color (job,
+                                                          &GRAPHENE_RECT_INIT (min_x + left_width,
+                                                                               min_y + top_height,
+                                                                               center_width,
+                                                                               center_height),
+                                                          &offscreen,
+                                                          color);
+          }
       }
   }
 
