@@ -2413,6 +2413,8 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
       return;
     }
 
+  /* slicing */
+
   gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, outset_shadow));
   gsk_ngl_program_set_uniform_texture (job->current_program,
                                        UNIFORM_SHARED_SOURCE, 0,
@@ -2555,17 +2557,21 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
     /* Middle */
     if (nine_slice_is_visible (&slices[NINE_SLICE_CENTER]))
       {
-        memcpy (&offscreen.area, &slices[NINE_SLICE_CENTER].area, sizeof offscreen.area);
+        float x = min_x + (slices[NINE_SLICE_LEFT_CENTER].rect.width / scale_x);
+        float y = min_y + (slices[NINE_SLICE_TOP_CENTER].rect.height / scale_y);
         float width = (max_x - min_x) - (slices[NINE_SLICE_LEFT_CENTER].rect.width / scale_x +
                                          slices[NINE_SLICE_RIGHT_CENTER].rect.width / scale_x);
         float height = (max_y - min_y) - (slices[NINE_SLICE_TOP_CENTER].rect.height / scale_y +
                                           slices[NINE_SLICE_BOTTOM_CENTER].rect.height / scale_y);
-        gsk_ngl_render_job_draw_offscreen_with_color (job,
-                                                      &GRAPHENE_RECT_INIT (min_x + (slices[NINE_SLICE_LEFT_CENTER].rect.width / scale_x),
-                                                                           min_y + (slices[NINE_SLICE_TOP_CENTER].rect.height / scale_y),
-                                                                           width, height),
-                                                      &offscreen,
-                                                      color);
+
+        if (!gsk_rounded_rect_contains_rect (outline, &GRAPHENE_RECT_INIT (x + dx, y + dy, width, height)))
+          {
+            memcpy (&offscreen.area, &slices[NINE_SLICE_CENTER].area, sizeof offscreen.area);
+            gsk_ngl_render_job_draw_offscreen_with_color (job,
+                                                          &GRAPHENE_RECT_INIT (x, y, width, height),
+                                                          &offscreen,
+                                                          color);
+          }
       }
   }
 
