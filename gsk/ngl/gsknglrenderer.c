@@ -196,6 +196,7 @@ gsk_ngl_renderer_render (GskRenderer          *renderer,
   GskNglRenderJob *job;
   GdkSurface *surface;
   float scale_factor;
+  gint64 start_time, end_time;
 
   g_assert (GSK_IS_NGL_RENDERER (renderer));
   g_assert (root != NULL);
@@ -215,14 +216,82 @@ gsk_ngl_renderer_render (GskRenderer          *renderer,
   render_region = get_render_region (surface, self->context);
 
   gsk_ngl_driver_begin_frame (self->driver, self->command_queue);
+
+  start_time = g_get_monotonic_time ();
+  g_print ("tiled:");
+  end_time = start_time;
+
+  for (int i = 0; i < 4; i++)
+    {
+      cairo_region_t *region;
+      gint64 st = end_time;
+
+      int w = gdk_surface_get_width (surface);
+      int h = gdk_surface_get_height (surface);
+
+      if (render_region)
+        region = cairo_region_copy (render_region);
+      else
+        region = cairo_region_create_rectangle (&(GdkRectangle){ 0, 0, w, h });
+
+      switch (i)
+        {
+        case 0:
+          cairo_region_intersect_rectangle (region,
+                &(cairo_rectangle_int_t) { 0, 0, w/2, h/2 });
+          break;
+        case 1:
+          cairo_region_intersect_rectangle (region,
+                &(cairo_rectangle_int_t) { w/2, 0, w - w/2, h/2 });
+          break;
+        case 2:
+          cairo_region_intersect_rectangle (region,
+                &(cairo_rectangle_int_t) { 0, h/2, w/2, h - h/2 });
+          break;
+        case 3:
+          cairo_region_intersect_rectangle (region,
+                &(cairo_rectangle_int_t) { w/2, h/2, w - w/2, h - h/2 });
+          break;
+        default:
+          g_assert_not_reached ();
+          break;
+        }
+
+      if (cairo_region_num_rectangles (region) == 0)
+        continue;
+
+      job = gsk_ngl_render_job_new (self->driver, &viewport, scale_factor, region, 0);
+#ifdef G_ENABLE_DEBUG
+      if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), FALLBACK))
+        gsk_ngl_render_job_set_debug_fallback (job, TRUE);
+#endif
+      gsk_ngl_render_job_render (job, root);
+      gsk_ngl_render_job_free (job);
+
+      cairo_region_destroy (region);
+
+      end_time = g_get_monotonic_time ();
+
+      g_print ("%s %.2f", i > 0 ? " /" : "", (end_time - st) / 1000.0);
+    }
+
+  g_print (" ms");
+
+  start_time = g_get_monotonic_time ();
+
   job = gsk_ngl_render_job_new (self->driver, &viewport, scale_factor, render_region, 0);
 #ifdef G_ENABLE_DEBUG
   if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), FALLBACK))
     gsk_ngl_render_job_set_debug_fallback (job, TRUE);
 #endif
   gsk_ngl_render_job_render (job, root);
-  gsk_ngl_driver_end_frame (self->driver);
   gsk_ngl_render_job_free (job);
+
+  end_time = g_get_monotonic_time ();
+
+  g_print ("    non-tiled: %.2fms\n", (end_time - start_time) / 1000.0);
+
+  gsk_ngl_driver_end_frame (self->driver);
 
   gdk_gl_context_make_current (self->context);
   gdk_draw_context_end_frame (GDK_DRAW_CONTEXT (self->context));
