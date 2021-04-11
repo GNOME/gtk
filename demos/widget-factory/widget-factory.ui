@@ -438,6 +438,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
         <child type="end">
           <object class="GtkMenuButton" id="gear_menu_button">
             <property name="valign">center</property>
+            <property name="focus-on-click">0</property>
             <property name="popover">
               <object class="GtkPopoverMenu" id="gear_menu">
                 <property name="menu-model">gear_menu_model</property>
