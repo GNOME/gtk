@@ -25,6 +25,7 @@
           <object class="GtkButton">
             <property name="valign">center</property>
             <property name="action-name">win.run</property>
+            <property name="focus-on-click">0</property>
             <property name="label" translatable="yes">Run</property>
           </object>
         </child>
@@ -32,6 +33,7 @@
           <object class="GtkToggleButton">
             <property name="icon-name">edit-find-symbolic</property>
             <property name="valign">center</property>
+            <property name="focus-on-click">0</property>
             <property name="active" bind-source="searchbar" bind-property="search-mode-enabled" bind-flags="bidirectional|sync-create"/>
             <accessibility>
               <property name="label" translatable="yes">Search</property>
@@ -41,6 +43,7 @@
         <child type="end">
           <object class="GtkMenuButton" id="gear_menu_button">
             <property name="valign">center</property>
+            <property name="focus-on-click">0</property>
             <property name="menu-model">gear_menu</property>
             <property name="icon-name">open-menu-symbolic</property>
             <accessibility>

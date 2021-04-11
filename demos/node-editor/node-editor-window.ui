@@ -102,6 +102,7 @@
       <object class="GtkHeaderBar" id="header">
         <child type="start">
           <object class="GtkButton">
+            <property name="focus-on-click">0</property>
             <property name="icon-name">document-open-symbolic</property>
             <property name="tooltip-text">Open node file</property>
             <signal name="clicked" handler="open_cb"/>
@@ -109,6 +110,7 @@
         </child>
         <child type="start">
           <object class="GtkButton">
+            <property name="focus-on-click">0</property>
             <property name="icon-name">document-save-symbolic</property>
             <property name="tooltip-text">Save to node file</property>
             <signal name="clicked" handler="save_cb"/>
@@ -116,6 +118,7 @@
         </child>
         <child type="start">
           <object class="GtkButton">
+            <property name="focus-on-click">0</property>
             <property name="icon-name">insert-image-symbolic</property>
             <property name="tooltip-text">Export to image</property>
             <signal name="clicked" handler="export_image_cb"/>
@@ -123,6 +126,7 @@
         </child>
         <child type="start">
           <object class="GtkButton">
+            <property name="focus-on-click">0</property>
             <property name="icon-name">edit-copy-symbolic</property>
             <property name="tooltip-text">Copy image to clipboard</property>
             <signal name="clicked" handler="clip_image_cb"/>
@@ -130,12 +134,14 @@
         </child>
         <child type="start">
           <object class="GtkMenuButton">
+            <property name="focus-on-click">0</property>
             <property name="label">Save Testcase</property>
             <property name="popover">testcase_popover</property>
           </object>
         </child>
         <child type="end">
           <object class="GtkMenuButton" id="gear_menu_button">
+            <property name="focus-on-click">0</property>
             <property name="valign">center</property>
             <property name="menu-model">gear_menu</property>
             <property name="icon-name">open-menu-symbolic</property>
@@ -143,6 +149,7 @@
         </child>
         <child type="end">
           <object class="GtkToggleButton" id="dark_bg_button">
+            <property name="focus-on-click">0</property>
             <property name="valign">center</property>
             <property name="has-frame">0</property>
             <property name="icon-name">display-brightness-symbolic</property>

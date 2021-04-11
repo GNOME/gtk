@@ -25,12 +25,14 @@
             </style>
             <child>
               <object class="GtkToggleButton" id="normal_radio">
+                <property name="focus-on-click">0</property>
                 <property name="label" translatable="yes">Normal</property>
                 <property name="active">1</property>
               </object>
             </child>
             <child>
               <object class="GtkToggleButton" id="symbolic_radio">
+                <property name="focus-on-click">0</property>
                 <property name="label" translatable="yes">Symbolic</property>
                 <property name="group">normal_radio</property>
                 <signal name="notify::active" handler="symbolic_toggled" swapped="yes" after="yes"/>
@@ -40,6 +42,7 @@
         </child>
         <child type="end">
           <object class="GtkMenuButton" id="gear_menu_button">
+            <property name="focus-on-click">0</property>
             <property name="valign">center</property>
             <property name="menu-model">gear_menu</property>
             <property name="icon-name">open-menu-symbolic</property>
@@ -47,6 +50,7 @@
         </child>
         <child type="end">
           <object class="GtkToggleButton" id="search">
+            <property name="focus-on-click">0</property>
             <style>
               <class name="image-button"/>
             </style>
