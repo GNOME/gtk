@@ -818,9 +818,9 @@ interval_contains (float p1, float w1,
 }
 
 static inline gboolean
-gsk_ngl_render_job_update_clip (GskNglRenderJob     *job,
-                                const GskRenderNode *node,
-                                gboolean            *pushed_clip)
+gsk_ngl_render_job_update_clip (GskNglRenderJob       *job,
+                                const graphene_rect_t *bounds,
+                                gboolean              *pushed_clip)
 {
   graphene_rect_t transformed_bounds;
   gboolean no_clip = FALSE;
@@ -834,7 +834,7 @@ gsk_ngl_render_job_update_clip (GskNglRenderJob     *job,
       return TRUE;
     }
 
-  gsk_ngl_render_job_transform_bounds (job, &node->bounds, &transformed_bounds);
+  gsk_ngl_render_job_transform_bounds (job, bounds, &transformed_bounds);
 
   if (!rect_intersects (&job->current_clip->rect.bounds, &transformed_bounds))
     {
@@ -3429,7 +3429,7 @@ gsk_ngl_render_job_visit_node (GskNglRenderJob     *job,
   if (node_is_invisible (node))
     return;
 
-  if (!gsk_ngl_render_job_update_clip (job, node, &has_clip))
+  if (!gsk_ngl_render_job_update_clip (job, &node->bounds, &has_clip))
     return;
 
   switch (gsk_render_node_get_node_type (node))
