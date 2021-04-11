@@ -90,10 +90,8 @@ gtk_vbox_init (GtkVBox *vbox)
  *
  * Returns: a new #GtkVBox.
  *
- * Deprecated: 3.2: You can use gtk_box_new() with %GTK_ORIENTATION_VERTICAL instead,
- *   which is a quick and easy change. But the recommendation is to switch to
- *   #GtkGrid, since #GtkBox is going to go away eventually.
- *   See [Migrating from other containers to GtkGrid][gtk-migrating-GtkGrid].
+ * Deprecated: 3.2: You should use gtk_box_new() with a %GTK_ORIENTATION_VERTICAL
+ *   #GtkOrientable:orientation instead
  */
 GtkWidget *
 gtk_vbox_new (gboolean homogeneous,

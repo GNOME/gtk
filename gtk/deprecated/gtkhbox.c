@@ -83,10 +83,8 @@ gtk_hbox_init (GtkHBox *hbox)
  *
  * Returns: a new #GtkHBox.
  *
- * Deprecated: 3.2: You can use gtk_box_new() with %GTK_ORIENTATION_HORIZONTAL instead,
- *   which is a quick and easy change. But the recommendation is to switch to
- *   #GtkGrid, since #GtkBox is going to go away eventually.
- *   See [Migrating from other containers to GtkGrid][gtk-migrating-GtkGrid].
+ * Deprecated: 3.2: You should use gtk_box_new() with a %GTK_ORIENTATION_HORIZONTAL
+ *   #GtkOrientable:orientation instead
  */
 GtkWidget *
 gtk_hbox_new (gboolean homogeneous,
