@@ -212,6 +212,13 @@ node_is_invisible (const GskRenderNode *node)
          node->bounds.size.height == 0.0f;
 }
 
+static inline gboolean G_GNUC_PURE
+rounded_rect_equal (const GskRoundedRect *r1,
+                    const GskRoundedRect *r2)
+{
+  return memcmp (r1, r2, sizeof (GskRoundedRect)) == 0;
+}
+
 static inline void
 gsk_rounded_rect_shrink_to_minimum (GskRoundedRect *self)
 {
@@ -3474,8 +3481,8 @@ gsk_ngl_render_job_visit_node (GskNglRenderJob     *job,
                 if (gsk_render_node_get_node_type (grandchild) == GSK_COLOR_NODE &&
                     gsk_render_node_get_node_type (child2) == GSK_BORDER_NODE &&
                     gsk_border_node_get_uniform_color (child2) &&
-                    gsk_rounded_rect_equal (gsk_rounded_clip_node_get_clip (child),
-                                            gsk_border_node_get_outline (child2)))
+                    rounded_rect_equal (gsk_rounded_clip_node_get_clip (child),
+                                        gsk_border_node_get_outline (child2)))
                   {
                     gsk_ngl_render_job_visit_css_background (job, child, child2);
                     i++; /* skip the border node */
