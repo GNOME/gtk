@@ -174,15 +174,14 @@ get_render_region (GdkSurface   *surface,
   damage = gdk_draw_context_get_frame_region (GDK_DRAW_CONTEXT (context));
 
   if (cairo_region_contains_rectangle (damage, &whole_surface) == CAIRO_REGION_OVERLAP_IN)
-    return NULL;
+    return cairo_region_create_rectangle (&whole_surface);
 
   /* If the extents match the full-scene, do the same as above */
   cairo_region_get_extents (damage, &extents);
   if (gdk_rectangle_equal (&extents, &whole_surface))
-    return NULL;
+    return cairo_region_create_rectangle (&whole_surface);
 
-  /* Draw clipped to the bounding-box of the region. */
-  return cairo_region_create_rectangle (&extents);
+  return cairo_region_copy (damage);
 }
 
 static void
@@ -221,44 +220,14 @@ gsk_ngl_renderer_render (GskRenderer          *renderer,
   g_print ("tiled:");
   end_time = start_time;
 
-  for (int i = 0; i < 4; i++)
+  for (int i = 0; i < cairo_region_num_rectangles (render_region); i++)
     {
+      cairo_rectangle_int_t rect;
       cairo_region_t *region;
       gint64 st = end_time;
 
-      int w = gdk_surface_get_width (surface);
-      int h = gdk_surface_get_height (surface);
-
-      if (render_region)
-        region = cairo_region_copy (render_region);
-      else
-        region = cairo_region_create_rectangle (&(GdkRectangle){ 0, 0, w, h });
-
-      switch (i)
-        {
-        case 0:
-          cairo_region_intersect_rectangle (region,
-                &(cairo_rectangle_int_t) { 0, 0, w/2, h/2 });
-          break;
-        case 1:
-          cairo_region_intersect_rectangle (region,
-                &(cairo_rectangle_int_t) { w/2, 0, w - w/2, h/2 });
-          break;
-        case 2:
-          cairo_region_intersect_rectangle (region,
-                &(cairo_rectangle_int_t) { 0, h/2, w/2, h - h/2 });
-          break;
-        case 3:
-          cairo_region_intersect_rectangle (region,
-                &(cairo_rectangle_int_t) { w/2, h/2, w - w/2, h - h/2 });
-          break;
-        default:
-          g_assert_not_reached ();
-          break;
-        }
-
-      if (cairo_region_num_rectangles (region) == 0)
-        continue;
+      cairo_region_get_rectangle (render_region, i, &rect);
+      region = cairo_region_create_rectangle (&rect);
 
       job = gsk_ngl_render_job_new (self->driver, &viewport, scale_factor, region, 0);
 #ifdef G_ENABLE_DEBUG
