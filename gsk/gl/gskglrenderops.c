@@ -19,9 +19,9 @@ rounded_rect_equal (const GskRoundedRect *r1,
                     const GskRoundedRect *r2)
 {
   if (r1 == r2)
-      return true;
+    return true;
 
-  if (!r1)
+  if (r1 == NULL || r2 == NULL)
     return false;
 
   if (r1->bounds.origin.x != r2->bounds.origin.x ||
@@ -626,6 +626,9 @@ ops_draw (RenderOpBuilder     *builder,
   ProgramState *program_state = get_current_program_state (builder);
   OpDraw *op;
 
+  if (program_state == NULL)
+    return NULL;
+
   if (memcmp (&builder->current_projection, &program_state->projection, sizeof (graphene_matrix_t)) != 0)
     {
       OpMatrix *opm;
@@ -739,7 +742,12 @@ ops_set_inset_shadow (RenderOpBuilder      *self,
   ProgramState *current_program_state = get_current_program_state (self);
   OpShadow *op;
 
+#ifdef G_DISABLE_ASSERT
+  if (current_program_state == NULL)
+    return;
+#else
   g_assert (current_program_state);
+#endif
 
   op = ops_begin (self, OP_CHANGE_INSET_SHADOW);
 
@@ -806,7 +814,12 @@ ops_set_unblurred_outset_shadow (RenderOpBuilder      *self,
   ProgramState *current_program_state = get_current_program_state (self);
   OpShadow *op;
 
+#ifdef G_DISABLE_ASSERT
+  if (current_program_state == NULL)
+    return;
+#else
   g_assert (current_program_state);
+#endif
 
   op = ops_begin (self, OP_CHANGE_UNBLURRED_OUTSET_SHADOW);
 
@@ -869,7 +882,12 @@ ops_set_linear_gradient (RenderOpBuilder     *self,
   OpLinearGradient *op;
   const guint real_n_color_stops = MIN (GL_MAX_GRADIENT_STOPS, n_color_stops);
 
+#ifdef G_DISABLE_ASSERT
+  if (current_program_state == NULL)
+    return;
+#else
   g_assert (current_program_state);
+#endif
 
   op = ops_begin (self, OP_CHANGE_LINEAR_GRADIENT);
 

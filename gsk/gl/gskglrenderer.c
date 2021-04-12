@@ -2002,7 +2002,12 @@ render_unblurred_inset_shadow_node (GskGLRenderer   *self,
   const float dy = gsk_inset_shadow_node_get_dy (node);
   const float spread = gsk_inset_shadow_node_get_spread (node);
 
+#if G_DISABLE_ASSERT
+  if (blur_radius == 0)
+    return;
+#else
   g_assert (blur_radius == 0);
+#endif
 
   ops_set_program (builder, &self->programs->inset_shadow_program);
   ops_set_inset_shadow (builder, transform_rect (self, builder, gsk_inset_shadow_node_get_outline (node)),
