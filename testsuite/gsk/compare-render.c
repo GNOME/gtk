@@ -104,9 +104,11 @@ save_image (cairo_surface_t *surface,
             const char      *extension)
 {
   char *filename = get_output_file (test_name, ".node", extension);
+  int status;
 
   g_print ("Storing test result image at %s\n", filename);
-  g_assert (cairo_surface_write_to_png (surface, filename) == CAIRO_STATUS_SUCCESS);
+  status = cairo_surface_write_to_png (surface, filename);
+  g_assert_true (status == CAIRO_STATUS_SUCCESS);
   g_free (filename);
 }
 
@@ -207,12 +209,12 @@ main (int argc, char **argv)
     g_bytes_unref (bytes);
 
     g_assert_no_error (error);
-    g_assert (node != NULL);
+    g_assert_nonnull (node);
   }
 
   /* Render the .node file and download to cairo surface */
   texture = gsk_renderer_render_texture (renderer, node, NULL);
-  g_assert (texture != NULL);
+  g_assert_nonnull (texture);
 
   rendered_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                                  gdk_texture_get_width (texture),

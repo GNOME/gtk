@@ -173,7 +173,7 @@ parse_node_file (GFile *file, gboolean generate)
       g_clear_error (&error);
       return FALSE;
     }
-  g_assert (bytes != NULL);
+  g_assert_nonnull (bytes);
 
   errors = g_string_new ("");
 
