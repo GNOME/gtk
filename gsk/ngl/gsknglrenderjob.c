@@ -2311,6 +2311,8 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
   int cached_tid;
   gboolean do_slicing;
   guint16 color[4];
+  float half_width = outline->bounds.size.width / 2;
+  float half_height = outline->bounds.size.height / 2;
 
   rgba_to_half (gsk_outset_shadow_node_get_color (node), color);
 
@@ -2319,7 +2321,15 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
   scaled_outline = *outline;
 
   if (outline->bounds.size.width < blur_extra ||
-      outline->bounds.size.height < blur_extra)
+      outline->bounds.size.height < blur_extra ||
+      outline->corner[0].width >= half_width ||
+      outline->corner[1].width >= half_width ||
+      outline->corner[2].width >= half_width ||
+      outline->corner[3].width >= half_width ||
+      outline->corner[0].height >= half_height ||
+      outline->corner[1].height >= half_height ||
+      outline->corner[2].height >= half_height ||
+      outline->corner[3].height >= half_height)
     {
       do_slicing = FALSE;
       gsk_rounded_rect_shrink (&scaled_outline, -spread, -spread, -spread, -spread);
