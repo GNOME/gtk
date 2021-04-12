@@ -9,10 +9,10 @@ test_unset_display_subprocess1 (void)
 
   g_unsetenv ("DISPLAY");
 
-  g_assert (!gtk_init_check ());
+  g_assert_false (gtk_init_check ());
   manager = gdk_display_manager_get ();
-  g_assert (manager != NULL);
-  g_assert (gdk_display_manager_get_default_display (manager) == NULL);
+  g_assert_nonnull (manager);
+  g_assert_null (gdk_display_manager_get_default_display (manager));
 }
 
 static void
@@ -41,10 +41,10 @@ test_bad_display_subprocess1 (void)
 
   g_setenv ("DISPLAY", "poo", TRUE);
 
-  g_assert (!gtk_init_check ());
+  g_assert_false (gtk_init_check ());
   manager = gdk_display_manager_get ();
-  g_assert (manager != NULL);
-  g_assert (gdk_display_manager_get_default_display (manager) == NULL);
+  g_assert_nonnull (manager);
+  g_assert_null (gdk_display_manager_get_default_display (manager));
 }
 
 static void

@@ -80,7 +80,7 @@ load_ui_file (GFile *file, gboolean generate)
   builder = gtk_builder_new_from_file (ui_file);
   window = GTK_WIDGET (gtk_builder_get_object (builder, "window1"));
 
-  g_assert (window != NULL);
+  g_assert_nonnull (window);
 
   output = NULL;
   g_signal_connect (window, "map", G_CALLBACK (style_context_changed), &output);

@@ -77,7 +77,7 @@ load_ui_file (GFile *file, gboolean generate)
   ui_file = g_file_get_path (file);
 
   css_file = test_get_other_file (ui_file, ".css");
-  g_assert (css_file != NULL);
+  g_assert_nonnull (css_file);
 
   provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_path (provider, css_file);
@@ -90,7 +90,7 @@ load_ui_file (GFile *file, gboolean generate)
   if (window == NULL)
     window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
 
-  g_assert (window != NULL);
+  g_assert_nonnull (window);
 
 
   output = NULL;

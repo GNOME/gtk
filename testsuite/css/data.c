@@ -84,7 +84,7 @@ test_parse (gconstpointer data)
       g_assert_nonnull (bytes);
       g_assert_no_error (error);
       if (test->mimetype == NULL)
-        g_assert (mimetype == NULL);
+        g_assert_null (mimetype);
       else
         g_assert_cmpstr (mimetype, ==, test->mimetype);
 

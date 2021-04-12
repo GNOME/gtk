@@ -67,7 +67,7 @@ gdk_array(test_splice) (void)
       gsize old_size = gdk_array(get_size) (&v);
 
       pos = g_random_int_range (0, old_size + 1);
-      g_assert (pos <= old_size);
+      g_assert_true (pos <= old_size);
       remove = g_random_int_range (0, 4);
       remove = MIN (remove, old_size - pos);
       add = g_random_int_range (0, 4);
