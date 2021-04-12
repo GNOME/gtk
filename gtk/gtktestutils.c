@@ -17,6 +17,14 @@
  */
 
 
+/* We need to remove G_DISABLE_ASSERT to ensure g_test_init() works;
+ * this needs to happen before we end up including glib.h, so we should
+ * do it as soon as possible.
+ */
+#ifdef G_DISABLE_ASSERT
+#undef G_DISABLE_ASSERT
+#endif
+
 #include "config.h"
 
 #include "gtkspinbutton.h"
