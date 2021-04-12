@@ -201,7 +201,7 @@ load_ui_file (GFile *ui_file,
   builder = gtk_builder_new_from_file (ui_path);
   window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
 
-  g_assert (window != NULL);
+  g_assert_nonnull (window);
 
   gtk_widget_show (window);
 
@@ -235,7 +235,7 @@ load_ui_file (GFile *ui_file,
       goto out;
     }
 
-  g_assert (ref_file != NULL);
+  g_assert_nonnull (ref_file);
 
   ref_path = g_file_get_path (ref_file);
 
@@ -289,7 +289,7 @@ main (int argc, char **argv)
 
   if (arg_generate)
     {
-      g_assert (argc == 2);
+      g_assert_cmpint (argc, ==, 2);
 
       ui_file = g_file_new_for_commandline_arg (argv[1]);
 
@@ -299,7 +299,7 @@ main (int argc, char **argv)
     }
   else
     {
-      g_assert (argc == 3);
+      g_assert_cmpint (argc, ==, 3);
 
       ui_file = g_file_new_for_commandline_arg (argv[1]);
       ref_file = g_file_new_for_commandline_arg (argv[2]);

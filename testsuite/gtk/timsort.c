@@ -74,7 +74,7 @@ run_comparison (gpointer         a,
   gint64 start, mid, end;
   gpointer b;
 
-  g_assert (n <= G_MAXSIZE / element_size);
+  g_assert_cmpint (n, <=, G_MAXSIZE / element_size);
 
   b = g_memdup2 (a, element_size * n);
 

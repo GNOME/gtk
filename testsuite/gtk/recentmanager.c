@@ -30,10 +30,10 @@ recent_manager_get_default (void)
   GtkRecentManager *manager2;
 
   manager = gtk_recent_manager_get_default ();
-  g_assert (manager != NULL);
+  g_assert_nonnull (manager);
 
   manager2 = gtk_recent_manager_get_default ();
-  g_assert (manager == manager2);
+  g_assert_true (manager == manager2);
 }
 
 static void
@@ -93,7 +93,7 @@ recent_manager_add (void)
   res = gtk_recent_manager_add_full (manager,
                                      uri,
                                      recent_data);
-  g_assert (res == TRUE);
+  g_assert_true (res);
 
   g_slice_free (GtkRecentData, recent_data);
 }
@@ -183,10 +183,10 @@ recent_manager_has_item (void)
   manager = gtk_recent_manager_get_default ();
 
   res = gtk_recent_manager_has_item (manager, "file:///tmp/testrecentdoesnotexist.txt");
-  g_assert (res == FALSE);
+  g_assert_false (res);
 
   res = gtk_recent_manager_has_item (manager, uri);
-  g_assert (res == TRUE);
+  g_assert_true (res);
 }
 
 static void
@@ -203,22 +203,20 @@ recent_manager_move_item (void)
                                       "file:///tmp/testrecentdoesnotexist.txt",
                                       uri2,
                                       &error);
-  g_assert (res == FALSE);
-  g_assert (error != NULL);
-  g_assert (error->domain == GTK_RECENT_MANAGER_ERROR);
-  g_assert (error->code == GTK_RECENT_MANAGER_ERROR_NOT_FOUND);
+  g_assert_false (res);
+  g_assert_error (error, GTK_RECENT_MANAGER_ERROR, GTK_RECENT_MANAGER_ERROR_NOT_FOUND);
   g_error_free (error);
 
   error = NULL;
   res = gtk_recent_manager_move_item (manager, uri, uri2, &error);
-  g_assert (res == TRUE);
-  g_assert (error == NULL);
+  g_assert_true (res);
+  g_assert_null (error);
 
   res = gtk_recent_manager_has_item (manager, uri);
-  g_assert (res == FALSE);
+  g_assert_false (res);
 
   res = gtk_recent_manager_has_item (manager, uri2);
-  g_assert (res == TRUE);
+  g_assert_true (res);
 }
 
 static void
@@ -234,18 +232,16 @@ recent_manager_lookup_item (void)
   info = gtk_recent_manager_lookup_item (manager,
                                          "file:///tmp/testrecentdoesnotexist.txt",
                                          &error);
-  g_assert (info == NULL);
-  g_assert (error != NULL);
-  g_assert (error->domain == GTK_RECENT_MANAGER_ERROR);
-  g_assert (error->code == GTK_RECENT_MANAGER_ERROR_NOT_FOUND);
+  g_assert_null (info);
+  g_assert_error (error, GTK_RECENT_MANAGER_ERROR, GTK_RECENT_MANAGER_ERROR_NOT_FOUND);
   g_error_free (error);
 
   error = NULL;
   info = gtk_recent_manager_lookup_item (manager, uri2, &error);
-  g_assert (info != NULL);
-  g_assert (error == NULL);
+  g_assert_nonnull (info);
+  g_assert_null (error);
 
-  g_assert (gtk_recent_info_has_application (info, "testrecentchooser"));
+  g_assert_true (gtk_recent_info_has_application (info, "testrecentchooser"));
 
   gtk_recent_info_unref (info);
 }
@@ -263,20 +259,18 @@ recent_manager_remove_item (void)
   res = gtk_recent_manager_remove_item (manager,
                                         "file:///tmp/testrecentdoesnotexist.txt",
                                         &error);
-  g_assert (res == FALSE);
-  g_assert (error != NULL);
-  g_assert (error->domain == GTK_RECENT_MANAGER_ERROR);
-  g_assert (error->code == GTK_RECENT_MANAGER_ERROR_NOT_FOUND);
+  g_assert_false (res);
+  g_assert_error (error, GTK_RECENT_MANAGER_ERROR, GTK_RECENT_MANAGER_ERROR_NOT_FOUND);
   g_error_free (error);
 
   /* remove an item that's actually there */
   error = NULL;
   res = gtk_recent_manager_remove_item (manager, uri2, &error);
-  g_assert (res == TRUE);
-  g_assert (error == NULL);
+  g_assert_true (res);
+  g_assert_null (error);
 
   res = gtk_recent_manager_has_item (manager, uri2);
-  g_assert (res == FALSE);
+  g_assert_false (res);
 }
 
 static void
@@ -292,7 +286,7 @@ recent_manager_purge (void)
   /* purge, add 1, purge again and check that 1 item has been purged */
   error = NULL;
   n = gtk_recent_manager_purge_items (manager, &error);
-  g_assert (error == NULL);
+  g_assert_null (error);
 
   recent_data = g_slice_new0 (GtkRecentData);
   recent_data->mime_type = (char *)"text/plain";
@@ -303,8 +297,8 @@ recent_manager_purge (void)
 
   error = NULL;
   n = gtk_recent_manager_purge_items (manager, &error);
-  g_assert (error == NULL);
-  g_assert (n == 1);
+  g_assert_null (error);
+  g_assert_cmpint (n, ==, 1);
 }
 
 int

@@ -67,7 +67,7 @@ items_changed (GListModel *model,
                guint       added,
                GString    *changes)
 {
-  g_assert (removed != 0 || added != 0);
+  g_assert_true (removed != 0 || added != 0);
 
   if (changes->len)
     g_string_append (changes, ", ");

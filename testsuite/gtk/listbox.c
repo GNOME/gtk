@@ -119,7 +119,7 @@ test_selection (void)
   gtk_widget_show (GTK_WIDGET (list));
 
   g_assert_cmpint (gtk_list_box_get_selection_mode (list), ==, GTK_SELECTION_SINGLE);
-  g_assert (gtk_list_box_get_selected_row (list) == NULL);
+  g_assert_null (gtk_list_box_get_selected_row (list));
 
   for (i = 0; i < 100; i++)
     {
@@ -136,39 +136,39 @@ test_selection (void)
                     &count);
 
   row = gtk_list_box_get_row_at_index (list, 20);
-  g_assert (!gtk_list_box_row_is_selected (row));
+  g_assert_false (gtk_list_box_row_is_selected (row));
   gtk_list_box_select_row (list, row);
-  g_assert (gtk_list_box_row_is_selected (row));
-  g_assert (callback_row == row);
+  g_assert_true (gtk_list_box_row_is_selected (row));
+  g_assert_true (callback_row == row);
   g_assert_cmpint (count, ==, 1);
   row2 = gtk_list_box_get_selected_row (list);
-  g_assert (row2 == row);
+  g_assert_true (row2 == row);
   gtk_list_box_unselect_all (list);
   row2 = gtk_list_box_get_selected_row (list);
-  g_assert (row2 == NULL);
+  g_assert_null (row2);
   gtk_list_box_select_row (list, row);
   row2 = gtk_list_box_get_selected_row (list);
-  g_assert (row2 == row);
+  g_assert_true (row2 == row);
 
   gtk_list_box_set_selection_mode (list, GTK_SELECTION_BROWSE);
   gtk_list_box_remove (GTK_LIST_BOX (list), GTK_WIDGET (row));
-  g_assert (callback_row == NULL);
+  g_assert_null (callback_row);
   g_assert_cmpint (count, ==, 4);
   row2 = gtk_list_box_get_selected_row (list);
-  g_assert (row2 == NULL);
+  g_assert_null (row2);
 
   row = gtk_list_box_get_row_at_index (list, 20);
   gtk_list_box_select_row (list, row);
-  g_assert (gtk_list_box_row_is_selected (row));
-  g_assert (callback_row == row);
+  g_assert_true (gtk_list_box_row_is_selected (row));
+  g_assert_true (callback_row == row);
   g_assert_cmpint (count, ==, 5);
 
   gtk_list_box_set_selection_mode (list, GTK_SELECTION_NONE);
-  g_assert (!gtk_list_box_row_is_selected (row));
-  g_assert (callback_row == NULL);
+  g_assert_false (gtk_list_box_row_is_selected (row));
+  g_assert_null (callback_row);
   g_assert_cmpint (count, ==, 6);
   row2 = gtk_list_box_get_selected_row (list);
-  g_assert (row2 == NULL);
+  g_assert_null (row2);
 
   row = gtk_list_box_get_row_at_index (list, 20);
   index = gtk_list_box_row_get_index (row);
@@ -207,7 +207,7 @@ test_multi_selection (void)
   gtk_widget_show (GTK_WIDGET (list));
 
   g_assert_cmpint (gtk_list_box_get_selection_mode (list), ==, GTK_SELECTION_SINGLE);
-  g_assert (gtk_list_box_get_selected_rows (list) == NULL);
+  g_assert_null (gtk_list_box_get_selected_rows (list));
 
   gtk_list_box_set_selection_mode (list, GTK_SELECTION_MULTIPLE);
 
@@ -232,39 +232,39 @@ test_multi_selection (void)
   l = gtk_list_box_get_selected_rows (list);
   g_assert_cmpint (g_list_length (l), ==, 100);
   g_list_free (l);
-  g_assert (gtk_list_box_row_is_selected (row));
+  g_assert_true (gtk_list_box_row_is_selected (row));
 
   gtk_list_box_unselect_all (list);
   g_assert_cmpint (count, ==, 2);
   l = gtk_list_box_get_selected_rows (list);
-  g_assert (l == NULL);
-  g_assert (!gtk_list_box_row_is_selected (row));
+  g_assert_null (l);
+  g_assert_false (gtk_list_box_row_is_selected (row));
 
   gtk_list_box_select_row (list, row);
-  g_assert (gtk_list_box_row_is_selected (row));
+  g_assert_true (gtk_list_box_row_is_selected (row));
   g_assert_cmpint (count, ==, 3);
   l = gtk_list_box_get_selected_rows (list);
   g_assert_cmpint (g_list_length (l), ==, 1);
-  g_assert (l->data == row);
+  g_assert_true (l->data == row);
   g_list_free (l);
 
   row2 = gtk_list_box_get_row_at_index (list, 40);
-  g_assert (!gtk_list_box_row_is_selected (row2));
+  g_assert_false (gtk_list_box_row_is_selected (row2));
   gtk_list_box_select_row (list, row2);
-  g_assert (gtk_list_box_row_is_selected (row2));
+  g_assert_true (gtk_list_box_row_is_selected (row2));
   g_assert_cmpint (count, ==, 4);
   l = gtk_list_box_get_selected_rows (list);
   g_assert_cmpint (g_list_length (l), ==, 2);
-  g_assert (l->data == row);
-  g_assert (l->next->data == row2);
+  g_assert_true (l->data == row);
+  g_assert_true (l->next->data == row2);
   g_list_free (l);
 
   gtk_list_box_unselect_row (list, row);
-  g_assert (!gtk_list_box_row_is_selected (row));
+  g_assert_false (gtk_list_box_row_is_selected (row));
   g_assert_cmpint (count, ==, 5);
   l = gtk_list_box_get_selected_rows (list);
   g_assert_cmpint (g_list_length (l), ==, 1);
-  g_assert (l->data == row2);
+  g_assert_true (l->data == row2);
   g_list_free (l);
 
   g_object_unref (list);
@@ -321,7 +321,7 @@ test_filter (void)
   gtk_widget_show (GTK_WIDGET (list));
 
   g_assert_cmpint (gtk_list_box_get_selection_mode (list), ==, GTK_SELECTION_SINGLE);
-  g_assert (gtk_list_box_get_selected_row (list) == NULL);
+  g_assert_null (gtk_list_box_get_selected_row (list));
 
   for (i = 0; i < 100; i++)
     {
@@ -413,7 +413,7 @@ test_header (void)
   gtk_widget_show (GTK_WIDGET (list));
 
   g_assert_cmpint (gtk_list_box_get_selection_mode (list), ==, GTK_SELECTION_SINGLE);
-  g_assert (gtk_list_box_get_selected_row (list) == NULL);
+  g_assert_null (gtk_list_box_get_selected_row (list));
 
   for (i = 0; i < 100; i++)
     {

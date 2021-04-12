@@ -36,8 +36,8 @@ test_iconview_new (void)
   view = gtk_icon_view_new ();
 
   area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view));
-  g_assert (GTK_IS_CELL_AREA_BOX (area));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == gtk_icon_view_get_item_orientation (GTK_ICON_VIEW (view)));
+  g_assert_true (GTK_IS_CELL_AREA_BOX (area));
+  g_assert_true (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == gtk_icon_view_get_item_orientation (GTK_ICON_VIEW (view)));
 
   g_object_ref_sink (view);
   g_object_unref (view);
@@ -52,7 +52,7 @@ test_iconview_new_with_area (void)
 
   area = gtk_cell_area_box_new ();
   view = gtk_icon_view_new_with_area (area);
-  g_assert (gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view)) == area);
+  g_assert_true (gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view)) == area);
 
   g_object_ref_sink (view);
   g_object_unref (view);
@@ -68,8 +68,8 @@ test_iconview_object_new (void)
   area = gtk_cell_area_box_new ();
   gtk_orientable_set_orientation (GTK_ORIENTABLE (area), GTK_ORIENTATION_HORIZONTAL);
   view = g_object_new (GTK_TYPE_ICON_VIEW, "cell-area", area, NULL);
-  g_assert (gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view)) == area);
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == gtk_icon_view_get_item_orientation (GTK_ICON_VIEW (view)));
+  g_assert_true (gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view)) == area);
+  g_assert_true (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == gtk_icon_view_get_item_orientation (GTK_ICON_VIEW (view)));
 
   g_object_ref_sink (view);
   g_object_unref (view);
@@ -85,7 +85,7 @@ test_combobox_new (void)
   view = gtk_combo_box_new ();
 
   area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view));
-  g_assert (GTK_IS_CELL_AREA_BOX (area));
+  g_assert_true (GTK_IS_CELL_AREA_BOX (area));
 
   g_object_ref_sink (view);
   g_object_unref (view);
@@ -117,8 +117,8 @@ my_combo_box_init (MyComboBox *view)
   else if (subclass_init == 1)
     {
       area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view));
-      g_assert (GTK_IS_CELL_AREA_BOX (area));
-      g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_HORIZONTAL);
+      g_assert_true (GTK_IS_CELL_AREA_BOX (area));
+      g_assert_cmpint (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)), ==, GTK_ORIENTATION_HORIZONTAL);
       gtk_orientable_set_orientation (GTK_ORIENTABLE (area), GTK_ORIENTATION_VERTICAL);
     }
 }
@@ -134,8 +134,8 @@ test_combobox_subclass0 (void)
 
   view = g_object_new (my_combo_box_get_type (), NULL);
   area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view));
-  g_assert (GTK_IS_CELL_AREA_BOX (area));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_HORIZONTAL);
+  g_assert_true (GTK_IS_CELL_AREA_BOX (area));
+  g_assert_cmpint (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)), ==, GTK_ORIENTATION_HORIZONTAL);
 
   g_object_ref_sink (view);
   g_object_unref (view);
@@ -152,8 +152,8 @@ test_combobox_subclass2 (void)
 
   view = g_object_new (my_combo_box_get_type (), NULL);
   area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view));
-  g_assert (GTK_IS_CELL_AREA_BOX (area));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
+  g_assert_true (GTK_IS_CELL_AREA_BOX (area));
+  g_assert_cmpint (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)), ==, GTK_ORIENTATION_VERTICAL);
 
   g_object_ref_sink (view);
   g_object_unref (view);
@@ -169,7 +169,7 @@ test_cellview_new (void)
   view = gtk_cell_view_new ();
 
   area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view));
-  g_assert (GTK_IS_CELL_AREA_BOX (area));
+  g_assert_true (GTK_IS_CELL_AREA_BOX (area));
 
   g_object_ref_sink (view);
   g_object_unref (view);
@@ -186,7 +186,7 @@ test_cellview_new_with_context (void)
   area = gtk_cell_area_box_new ();
   context = gtk_cell_area_create_context (area);
   view = gtk_cell_view_new_with_context (area, context);
-  g_assert (gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view)) == area);
+  g_assert_true (gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view)) == area);
 
   g_object_ref_sink (view);
   g_object_unref (view);
@@ -202,7 +202,7 @@ test_cellview_object_new (void)
   area = gtk_cell_area_box_new ();
   gtk_orientable_set_orientation (GTK_ORIENTABLE (area), GTK_ORIENTATION_HORIZONTAL);
   view = g_object_new (GTK_TYPE_CELL_VIEW, "cell-area", area, NULL);
-  g_assert (gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view)) == area);
+  g_assert_true (gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view)) == area);
 
   g_object_ref_sink (view);
   g_object_unref (view);
@@ -218,7 +218,7 @@ test_column_new (void)
   col = gtk_tree_view_column_new ();
 
   area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (col));
-  g_assert (GTK_IS_CELL_AREA_BOX (area));
+  g_assert_true (GTK_IS_CELL_AREA_BOX (area));
 
   g_object_ref_sink (col);
   g_object_unref (col);
@@ -233,7 +233,7 @@ test_column_new_with_area (void)
 
   area = gtk_cell_area_box_new ();
   col = gtk_tree_view_column_new_with_area (area);
-  g_assert (gtk_cell_layout_get_area (GTK_CELL_LAYOUT (col)) == area);
+  g_assert_true (gtk_cell_layout_get_area (GTK_CELL_LAYOUT (col)) == area);
 
   g_object_ref_sink (col);
   g_object_unref (col);
@@ -249,7 +249,7 @@ test_column_object_new (void)
   area = gtk_cell_area_box_new ();
   gtk_orientable_set_orientation (GTK_ORIENTABLE (area), GTK_ORIENTATION_HORIZONTAL);
   col = g_object_new (GTK_TYPE_TREE_VIEW_COLUMN, "cell-area", area, NULL);
-  g_assert (gtk_cell_layout_get_area (GTK_CELL_LAYOUT (col)) == area);
+  g_assert_true (gtk_cell_layout_get_area (GTK_CELL_LAYOUT (col)) == area);
 
   g_object_ref_sink (col);
   g_object_unref (col);
@@ -265,7 +265,7 @@ test_completion_new (void)
   c = gtk_entry_completion_new ();
 
   area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (c));
-  g_assert (GTK_IS_CELL_AREA_BOX (area));
+  g_assert_true (GTK_IS_CELL_AREA_BOX (area));
 
   g_object_ref_sink (c);
   g_object_unref (c);
@@ -280,7 +280,7 @@ test_completion_new_with_area (void)
 
   area = gtk_cell_area_box_new ();
   c = gtk_entry_completion_new_with_area (area);
-  g_assert (gtk_cell_layout_get_area (GTK_CELL_LAYOUT (c)) == area);
+  g_assert_true (gtk_cell_layout_get_area (GTK_CELL_LAYOUT (c)) == area);
 
   g_object_ref_sink (c);
   g_object_unref (c);
@@ -296,7 +296,7 @@ test_completion_object_new (void)
   area = gtk_cell_area_box_new ();
   gtk_orientable_set_orientation (GTK_ORIENTABLE (area), GTK_ORIENTATION_HORIZONTAL);
   c = g_object_new (GTK_TYPE_ENTRY_COMPLETION, "cell-area", area, NULL);
-  g_assert (gtk_cell_layout_get_area (GTK_CELL_LAYOUT (c)) == area);
+  g_assert_true (gtk_cell_layout_get_area (GTK_CELL_LAYOUT (c)) == area);
 
   g_object_ref_sink (c);
   g_object_unref (c);

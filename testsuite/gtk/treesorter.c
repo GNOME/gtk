@@ -87,7 +87,7 @@ add (GListStore *store,
   GObject *object;
 
   /* 0 cannot be differentiated from NULL, so don't use it */
-  g_assert (number != 0);
+  g_assert_cmpint (number, !=, 0);
 
   object = g_object_new (G_TYPE_OBJECT, NULL);
   g_object_set_qdata (object, number_quark, GUINT_TO_POINTER (number));

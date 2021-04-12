@@ -28,31 +28,32 @@ test_one_accel (const char      *accel,
   GdkModifierType mods;
   guint *keycodes;
   char *label, *name;
+  gboolean ret;
 
   accel_key = 0;
-  g_assert (gtk_accelerator_parse_with_keycode (accel,
-                                                gdk_display_get_default (),
-                                                &accel_key,
-                                                &keycodes,
-                                                &mods));
+  ret = gtk_accelerator_parse_with_keycode (accel,
+                                            gdk_display_get_default (),
+                                            &accel_key,
+                                            &keycodes,
+                                            &mods);
+  g_assert_true (ret);
 
   if (has_keysym)
     {
       guint accel_key_2;
       GdkModifierType mods_2;
 
-      g_assert (gtk_accelerator_parse (accel,
-                                       &accel_key_2,
-                                       &mods_2));
-      g_assert (accel_key == accel_key_2);
-      g_assert (mods == mods_2);
+      ret = gtk_accelerator_parse (accel, &accel_key_2, &mods_2);
+      g_assert_true (ret);
+      g_assert_true (accel_key == accel_key_2);
+      g_assert_true (mods == mods_2);
     }
 
   if (has_keysym)
-    g_assert (accel_key == exp_key);
-  g_assert (mods == exp_mods);
-  g_assert (keycodes);
-  g_assert (keycodes[0] != 0);
+    g_assert_true (accel_key == exp_key);
+  g_assert_true (mods == exp_mods);
+  g_assert_nonnull (keycodes);
+  g_assert_true (keycodes[0] != 0);
 
   label = gtk_accelerator_get_label_with_keycode (NULL,
 						  accel_key,
@@ -123,7 +124,7 @@ accel8 (void)
 static void
 keysyms (void)
 {
-  g_assert (gdk_keyval_from_name ("KP_7") == GDK_KEY_KP_7);
+  g_assert_cmpuint (gdk_keyval_from_name ("KP_7"), ==, GDK_KEY_KP_7);
 }
 
 int

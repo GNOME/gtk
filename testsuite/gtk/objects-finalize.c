@@ -37,7 +37,7 @@ main_loop_quit_cb (gpointer data)
 
   g_main_context_wakeup (NULL);
 
-  g_assert (finalized);
+  g_assert_true (finalized);
   return FALSE;
 }
 
@@ -98,7 +98,7 @@ test_finalize_object (gconstpointer data)
     }
   else
     object = g_object_new (test_type, NULL);
-  g_assert (G_IS_OBJECT (object));
+  g_assert_true (G_IS_OBJECT (object));
 
   /* Make sure we have the only reference */
   if (g_object_is_floating (object))

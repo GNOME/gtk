@@ -678,7 +678,7 @@ fill_buffer (GtkTextBuffer *buffer)
   pixbuf = gdk_pixbuf_new_from_xpm_data (book_closed_xpm);
   texture = gdk_texture_new_for_pixbuf (pixbuf);
 
-  g_assert (texture != NULL);
+  g_assert_nonnull (texture);
 
   for (i = 0; i < 10; i++)
     {
@@ -816,38 +816,38 @@ test_line_separation (const char* str,
   gtk_text_buffer_set_text (buffer, str, -1);
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, expected_line_break);
 
-  g_assert (gtk_text_iter_ends_line (&iter) || gtk_text_iter_is_end (&iter));
+  g_assert_true (gtk_text_iter_ends_line (&iter) || gtk_text_iter_is_end (&iter));
 
-  g_assert (gtk_text_buffer_get_line_count (buffer) == expected_line_count);
+  g_assert_cmpint (gtk_text_buffer_get_line_count (buffer), ==, expected_line_count);
   
   on_next_line = gtk_text_iter_forward_line (&iter);
 
-  g_assert (expect_next_line == on_next_line);
+  g_assert_cmpint (expect_next_line, ==, on_next_line);
 
   on_end_iter = gtk_text_iter_is_end (&iter);
 
-  g_assert (on_end_iter == expect_end_iter);
+  g_assert_true (on_end_iter == expect_end_iter);
   
   new_pos = gtk_text_iter_get_offset (&iter);
     
   if (on_next_line)
-    g_assert (expected_next_line_start == new_pos);
+    g_assert_cmpint (expected_next_line_start, ==, new_pos);
 
   ++expected_line_break;
   while (expected_line_break < expected_next_line_start)
     {
       gtk_text_buffer_get_iter_at_offset (buffer, &iter, expected_line_break);
 
-      g_assert (!gtk_text_iter_ends_line (&iter));
+      g_assert_false (gtk_text_iter_ends_line (&iter));
 
       on_next_line = gtk_text_iter_forward_line (&iter);
         
-      g_assert (expect_next_line == on_next_line);
+      g_assert_cmpint (expect_next_line, ==, on_next_line);
         
       new_pos = gtk_text_iter_get_offset (&iter);
         
       if (on_next_line)
-        g_assert (expected_next_line_start == new_pos);
+        g_assert_cmpint (expected_next_line_start, ==, new_pos);
         
       ++expected_line_break;
     }
@@ -880,10 +880,10 @@ split_r_n_separators_test (void)
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, 5);
   gtk_text_buffer_backspace (buffer, &iter, TRUE, TRUE);
 
-  g_assert (gtk_text_iter_ends_line (&iter));
+  g_assert_true (gtk_text_iter_ends_line (&iter));
 
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, 3);
-  g_assert (gtk_text_iter_ends_line (&iter));
+  g_assert_true (gtk_text_iter_ends_line (&iter));
 
   g_object_unref (buffer);
 }
@@ -931,14 +931,14 @@ test_backspace (void)
   gtk_text_buffer_set_text (buffer, "foo", -1);
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, 2);
   ret = gtk_text_buffer_backspace (buffer, &iter, TRUE, TRUE);
-  g_assert (ret);
+  g_assert_true (ret);
   g_assert_cmpint (1, ==, gtk_text_iter_get_offset (&iter));
   g_assert_cmpint (2, ==, gtk_text_buffer_get_char_count (buffer));
 
   gtk_text_buffer_set_text (buffer, "foo", -1);
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
   ret = gtk_text_buffer_backspace (buffer, &iter, TRUE, TRUE);
-  g_assert (!ret);
+  g_assert_true (!ret);
   g_assert_cmpint (0, ==, gtk_text_iter_get_offset (&iter));
   g_assert_cmpint (3, ==, gtk_text_buffer_get_char_count (buffer));
 
@@ -946,7 +946,7 @@ test_backspace (void)
   gtk_text_buffer_set_text (buffer, "foo\r\n\r\nbar", -1);
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, 5);
   ret = gtk_text_buffer_backspace (buffer, &iter, TRUE, TRUE);
-  g_assert (ret);
+  g_assert_true (ret);
   g_assert_cmpint (0, ==, gtk_text_iter_get_line (&iter));
   g_assert_cmpint (8, ==, gtk_text_buffer_get_char_count (buffer));
 
@@ -954,21 +954,21 @@ test_backspace (void)
   gtk_text_buffer_set_text (buffer, "", -1);
   gtk_text_buffer_get_end_iter (buffer, &iter);
   ret = gtk_text_buffer_backspace (buffer, &iter, TRUE, TRUE);
-  g_assert (!ret);
+  g_assert_false (ret);
   g_assert_cmpint (0, ==, gtk_text_iter_get_offset (&iter));
   g_assert_cmpint (0, ==, gtk_text_buffer_get_char_count (buffer));
 
   gtk_text_buffer_set_text (buffer, "foo\n", -1);
   gtk_text_buffer_get_end_iter (buffer, &iter);
   ret = gtk_text_buffer_backspace (buffer, &iter, TRUE, TRUE);
-  g_assert (ret);
+  g_assert_true (ret);
   g_assert_cmpint (3, ==, gtk_text_iter_get_offset (&iter));
   g_assert_cmpint (3, ==, gtk_text_buffer_get_char_count (buffer));
 
   gtk_text_buffer_set_text (buffer, "foo\r\n", -1);
   gtk_text_buffer_get_end_iter (buffer, &iter);
   ret = gtk_text_buffer_backspace (buffer, &iter, TRUE, TRUE);
-  g_assert (ret);
+  g_assert_true (ret);
   g_assert_cmpint (3, ==, gtk_text_iter_get_offset (&iter));
   g_assert_cmpint (3, ==, gtk_text_buffer_get_char_count (buffer));
 
@@ -1178,25 +1178,25 @@ test_marks (void)
   gtk_text_mark_set_visible (mark, TRUE);
   gtk_text_buffer_delete_mark (buf1, mark);
 
-  g_assert (gtk_text_mark_get_visible (mark));
-  g_assert (gtk_text_mark_get_left_gravity (mark));
-  g_assert (!strcmp ("foo", gtk_text_mark_get_name (mark)));
-  g_assert (gtk_text_mark_get_buffer (mark) == NULL);
-  g_assert (gtk_text_mark_get_deleted (mark));
-  g_assert (gtk_text_buffer_get_mark (buf1, "foo") == NULL);
+  g_assert_true (gtk_text_mark_get_visible (mark));
+  g_assert_true (gtk_text_mark_get_left_gravity (mark));
+  g_assert_cmpstr ("foo", ==, gtk_text_mark_get_name (mark));
+  g_assert_null (gtk_text_mark_get_buffer (mark));
+  g_assert_true (gtk_text_mark_get_deleted (mark));
+  g_assert_null (gtk_text_buffer_get_mark (buf1, "foo"));
 
   gtk_text_buffer_get_start_iter (buf2, &iter);
   gtk_text_buffer_add_mark (buf2, mark, &iter);
   gtk_text_buffer_insert (buf2, &iter, "ewfwefwefwe", -1);
   gtk_text_buffer_get_iter_at_mark (buf2, &iter, mark);
 
-  g_assert (gtk_text_mark_get_visible (mark));
-  g_assert (gtk_text_iter_is_start (&iter));
-  g_assert (gtk_text_mark_get_left_gravity (mark));
-  g_assert (!strcmp ("foo", gtk_text_mark_get_name (mark)));
-  g_assert (gtk_text_mark_get_buffer (mark) == buf2);
-  g_assert (!gtk_text_mark_get_deleted (mark));
-  g_assert (gtk_text_buffer_get_mark (buf2, "foo") == mark);
+  g_assert_true (gtk_text_mark_get_visible (mark));
+  g_assert_true (gtk_text_iter_is_start (&iter));
+  g_assert_true (gtk_text_mark_get_left_gravity (mark));
+  g_assert_cmpstr ("foo", ==, gtk_text_mark_get_name (mark));
+  g_assert_true (gtk_text_mark_get_buffer (mark) == buf2);
+  g_assert_false (gtk_text_mark_get_deleted (mark));
+  g_assert_true (gtk_text_buffer_get_mark (buf2, "foo") == mark);
 
   gtk_text_buffer_delete_mark (buf2, mark);
   gtk_text_mark_set_visible (mark, FALSE);
@@ -1207,25 +1207,25 @@ test_marks (void)
   gtk_text_mark_set_visible (mark, TRUE);
   gtk_text_buffer_add_mark (buf1, mark, &iter);
 
-  g_assert (gtk_text_mark_get_visible (mark));
-  g_assert (gtk_text_mark_get_buffer (mark) == buf1);
-  g_assert (!gtk_text_mark_get_deleted (mark));
-  g_assert (gtk_text_buffer_get_mark (buf1, "blah") == mark);
-  g_assert (!strcmp ("blah", gtk_text_mark_get_name (mark)));
+  g_assert_true (gtk_text_mark_get_visible (mark));
+  g_assert_true (gtk_text_mark_get_buffer (mark) == buf1);
+  g_assert_false (gtk_text_mark_get_deleted (mark));
+  g_assert_true (gtk_text_buffer_get_mark (buf1, "blah") == mark);
+  g_assert_cmpstr ("blah", ==, gtk_text_mark_get_name (mark));
 
   gtk_text_mark_set_visible (mark, FALSE);
   gtk_text_buffer_delete_mark (buf1, mark);
-  g_assert (!gtk_text_mark_get_visible (mark));
-  g_assert (gtk_text_buffer_get_mark (buf1, "blah") == NULL);
-  g_assert (gtk_text_mark_get_buffer (mark) == NULL);
-  g_assert (gtk_text_mark_get_deleted (mark));
+  g_assert_false (gtk_text_mark_get_visible (mark));
+  g_assert_null (gtk_text_buffer_get_mark (buf1, "blah"));
+  g_assert_null (gtk_text_mark_get_buffer (mark));
+  g_assert_true (gtk_text_mark_get_deleted (mark));
 
   gtk_text_buffer_get_start_iter (buf2, &iter);
   gtk_text_buffer_add_mark (buf2, mark, &iter);
-  g_assert (gtk_text_mark_get_buffer (mark) == buf2);
-  g_assert (!gtk_text_mark_get_deleted (mark));
-  g_assert (gtk_text_buffer_get_mark (buf2, "blah") == mark);
-  g_assert (!strcmp ("blah", gtk_text_mark_get_name (mark)));
+  g_assert_true (gtk_text_mark_get_buffer (mark) == buf2);
+  g_assert_false (gtk_text_mark_get_deleted (mark));
+  g_assert_true (gtk_text_buffer_get_mark (buf2, "blah") == mark);
+  g_assert_cmpstr ("blah", ==, gtk_text_mark_get_name (mark));
 
   g_object_unref (mark);
   g_object_unref (buf1);
@@ -1238,10 +1238,10 @@ test_utf8 (void)
   gunichar ch;
 
   /* Check UTF8 unknown char thing */
-  g_assert (GTK_TEXT_UNKNOWN_CHAR_UTF8_LEN == 3);
-  g_assert (g_utf8_strlen (gtk_text_unknown_char_utf8_gtk_tests_only (), 3) == 1);
+  g_assert_cmpint (GTK_TEXT_UNKNOWN_CHAR_UTF8_LEN, ==, 3);
+  g_assert_cmpint (g_utf8_strlen (gtk_text_unknown_char_utf8_gtk_tests_only (), 3), ==, 1);
   ch = g_utf8_get_char (gtk_text_unknown_char_utf8_gtk_tests_only ());
-  g_assert (ch == GTK_TEXT_UNKNOWN_CHAR);
+  g_assert_true (ch == GTK_TEXT_UNKNOWN_CHAR);
 }
 
 static void
@@ -1453,7 +1453,7 @@ test_clipboard (void)
   check_buffer_contents (buffer, "abcdef");
 
   gtk_text_buffer_get_iter_at_offset (buffer, &start, 3);
-  g_assert (gtk_text_iter_forward_to_tag_toggle (&start, tag));
+  g_assert_true (gtk_text_iter_forward_to_tag_toggle (&start, tag));
   g_assert_cmpint (4, ==, gtk_text_iter_get_offset (&start));
 
   g_object_unref (buffer);
@@ -1472,93 +1472,93 @@ test_get_iter (void)
   gtk_text_buffer_set_text (buffer, "ab\nßd\r\nef", -1);
 
   /* Test get_iter_at_line() */
-  g_assert (gtk_text_buffer_get_iter_at_line (buffer, &iter, 0));
-  g_assert (gtk_text_iter_is_start (&iter));
+  g_assert_true (gtk_text_buffer_get_iter_at_line (buffer, &iter, 0));
+  g_assert_true (gtk_text_iter_is_start (&iter));
 
-  g_assert (gtk_text_buffer_get_iter_at_line (buffer, &iter, 1));
+  g_assert_true (gtk_text_buffer_get_iter_at_line (buffer, &iter, 1));
   offset = gtk_text_iter_get_offset (&iter);
   g_assert_cmpint (offset, ==, 3);
 
-  g_assert (gtk_text_buffer_get_iter_at_line (buffer, &iter, 2));
+  g_assert_true (gtk_text_buffer_get_iter_at_line (buffer, &iter, 2));
   offset = gtk_text_iter_get_offset (&iter);
   g_assert_cmpint (offset, ==, 7);
 
-  g_assert (!gtk_text_buffer_get_iter_at_line (buffer, &iter, 3));
-  g_assert (gtk_text_iter_is_end (&iter));
+  g_assert_false (gtk_text_buffer_get_iter_at_line (buffer, &iter, 3));
+  g_assert_true (gtk_text_iter_is_end (&iter));
 
   /* Test get_iter_at_line_offset() */
-  g_assert (gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 0, 0));
-  g_assert (gtk_text_iter_is_start (&iter));
+  g_assert_true (gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 0, 0));
+  g_assert_true (gtk_text_iter_is_start (&iter));
 
-  g_assert (gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 0, 1));
+  g_assert_true (gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 0, 1));
   offset = gtk_text_iter_get_offset (&iter);
   g_assert_cmpint (offset, ==, 1);
 
-  g_assert (gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 0, 2));
+  g_assert_true (gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 0, 2));
   offset = gtk_text_iter_get_offset (&iter);
   g_assert_cmpint (offset, ==, 2);
 
-  g_assert (!gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 0, 3));
+  g_assert_false (gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 0, 3));
   offset = gtk_text_iter_get_offset (&iter);
   g_assert_cmpint (offset, ==, 2);
 
-  g_assert (gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 1, 1));
+  g_assert_true (gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 1, 1));
   offset = gtk_text_iter_get_offset (&iter);
   g_assert_cmpint (offset, ==, 4);
 
-  g_assert (gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 2, 1));
+  g_assert_true (gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 2, 1));
   offset = gtk_text_iter_get_offset (&iter);
   g_assert_cmpint (offset, ==, 8);
 
-  g_assert (gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 2, 2));
-  g_assert (gtk_text_iter_is_end (&iter));
+  g_assert_true (gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 2, 2));
+  g_assert_true (gtk_text_iter_is_end (&iter));
 
-  g_assert (!gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 2, 3));
-  g_assert (gtk_text_iter_is_end (&iter));
+  g_assert_false (gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 2, 3));
+  g_assert_true (gtk_text_iter_is_end (&iter));
 
-  g_assert (!gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 3, 1));
-  g_assert (gtk_text_iter_is_end (&iter));
+  g_assert_false (gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 3, 1));
+  g_assert_true (gtk_text_iter_is_end (&iter));
 
   /* Test get_iter_at_line_index() */
-  g_assert (gtk_text_buffer_get_iter_at_line_index (buffer, &iter, 0, 0));
-  g_assert (gtk_text_iter_is_start (&iter));
+  g_assert_true (gtk_text_buffer_get_iter_at_line_index (buffer, &iter, 0, 0));
+  g_assert_true (gtk_text_iter_is_start (&iter));
 
-  g_assert (gtk_text_buffer_get_iter_at_line_index (buffer, &iter, 0, 1));
+  g_assert_true (gtk_text_buffer_get_iter_at_line_index (buffer, &iter, 0, 1));
   offset = gtk_text_iter_get_offset (&iter);
   g_assert_cmpint (offset, ==, 1);
 
-  g_assert (gtk_text_buffer_get_iter_at_line_index (buffer, &iter, 0, 2));
+  g_assert_true (gtk_text_buffer_get_iter_at_line_index (buffer, &iter, 0, 2));
   offset = gtk_text_iter_get_offset (&iter);
   g_assert_cmpint (offset, ==, 2);
 
-  g_assert (!gtk_text_buffer_get_iter_at_line_index (buffer, &iter, 0, 3));
+  g_assert_false (gtk_text_buffer_get_iter_at_line_index (buffer, &iter, 0, 3));
   offset = gtk_text_iter_get_offset (&iter);
   g_assert_cmpint (offset, ==, 2);
 
-  g_assert (gtk_text_buffer_get_iter_at_line_index (buffer, &iter, 1, 0));
+  g_assert_true (gtk_text_buffer_get_iter_at_line_index (buffer, &iter, 1, 0));
   offset = gtk_text_iter_get_offset (&iter);
   g_assert_cmpint (offset, ==, 3);
 
-  g_assert (gtk_text_buffer_get_iter_at_line_index (buffer, &iter, 1, 2));
+  g_assert_true (gtk_text_buffer_get_iter_at_line_index (buffer, &iter, 1, 2));
   offset = gtk_text_iter_get_offset (&iter);
   g_assert_cmpint (offset, ==, 4);
 
-  g_assert (gtk_text_buffer_get_iter_at_line_index (buffer, &iter, 1, 3));
+  g_assert_true (gtk_text_buffer_get_iter_at_line_index (buffer, &iter, 1, 3));
   offset = gtk_text_iter_get_offset (&iter);
   g_assert_cmpint (offset, ==, 5);
 
-  g_assert (gtk_text_buffer_get_iter_at_line_index (buffer, &iter, 2, 2));
-  g_assert (gtk_text_iter_is_end (&iter));
+  g_assert_true (gtk_text_buffer_get_iter_at_line_index (buffer, &iter, 2, 2));
+  g_assert_true (gtk_text_iter_is_end (&iter));
 
-  g_assert (!gtk_text_buffer_get_iter_at_line_index (buffer, &iter, 2, 3));
-  g_assert (gtk_text_iter_is_end (&iter));
+  g_assert_false (gtk_text_buffer_get_iter_at_line_index (buffer, &iter, 2, 3));
+  g_assert_true (gtk_text_iter_is_end (&iter));
 
-  g_assert (!gtk_text_buffer_get_iter_at_line_index (buffer, &iter, 3, 1));
-  g_assert (gtk_text_iter_is_end (&iter));
+  g_assert_false (gtk_text_buffer_get_iter_at_line_index (buffer, &iter, 3, 1));
+  g_assert_true (gtk_text_iter_is_end (&iter));
 
   /* Test get_iter_at_offset() */
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
-  g_assert (gtk_text_iter_is_start (&iter));
+  g_assert_true (gtk_text_iter_is_start (&iter));
 
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, 1);
   offset = gtk_text_iter_get_offset (&iter);
@@ -1567,16 +1567,16 @@ test_get_iter (void)
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, 8);
   offset = gtk_text_iter_get_offset (&iter);
   g_assert_cmpint (offset, ==, 8);
-  g_assert (!gtk_text_iter_is_end (&iter));
+  g_assert_false (gtk_text_iter_is_end (&iter));
 
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, 9);
-  g_assert (gtk_text_iter_is_end (&iter));
+  g_assert_true (gtk_text_iter_is_end (&iter));
 
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, 100);
-  g_assert (gtk_text_iter_is_end (&iter));
+  g_assert_true (gtk_text_iter_is_end (&iter));
 
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, -1);
-  g_assert (gtk_text_iter_is_end (&iter));
+  g_assert_true (gtk_text_iter_is_end (&iter));
 
   g_object_unref (buffer);
 }

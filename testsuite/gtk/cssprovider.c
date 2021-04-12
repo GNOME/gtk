@@ -6,7 +6,7 @@ assert_section_is_not_null (GtkCssProvider *provider,
                             const GError   *error,
                             gpointer        unused)
 {
-  g_assert (section != NULL);
+  g_assert_nonnull (section);
 }
 
 static void

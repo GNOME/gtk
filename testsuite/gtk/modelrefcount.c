@@ -549,7 +549,7 @@ test_row_reference_list_remove (void)
 
   gtk_tree_store_remove (GTK_TREE_STORE (model), &iter2);
 
-  g_assert (!gtk_tree_model_get_iter_first (model, &iter0));
+  g_assert_false (gtk_tree_model_get_iter_first (model, &iter0));
 
   gtk_tree_row_reference_free (row_ref);
 

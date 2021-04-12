@@ -99,7 +99,7 @@ assert_icon_lookup_size (const char         *icon_name,
     }
   else
     {
-      g_assert (path == NULL);
+      g_assert_null (path);
     }
 
   g_free (path);
@@ -131,7 +131,7 @@ assert_icon_lookup_fails (const char         *icon_name,
   info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, NULL, size, 1, direction, flags);
 
   /* We never truly *fail*, but check that we got the image-missing fallback */
-  g_assert (info != NULL);
+  g_assert_nonnull (info);
   g_assert_cmpstr (gtk_icon_paintable_get_icon_name (info), ==, "image-missing");
 }
 
@@ -192,7 +192,7 @@ assert_lookup_order (const char         *icon_name,
   gtk_set_debug_flags (debug_flags | GTK_DEBUG_ICONTHEME);
   g_log_set_writer_func (log_writer, NULL, NULL);
 
-  g_assert (lookups == NULL);
+  g_assert_null (lookups);
 
   if (fallbacks)
     {
@@ -214,12 +214,12 @@ assert_lookup_order (const char         *icon_name,
   l = lookups;
   while (s != NULL)
     {
-      g_assert (l != NULL);
+      g_assert_nonnull (l);
       g_assert_cmpstr (s, ==, l->data);
       s = va_arg (args, char *);
       l = l->next;
     }
-  g_assert (l == NULL);
+  g_assert_null (l);
   va_end (args);
 
   g_list_free_full (lookups, g_free);
@@ -661,31 +661,31 @@ test_list (void)
   theme = get_test_icontheme (TRUE);
   icons = gtk_icon_theme_get_icon_names (theme);
 
-  g_assert (g_strv_contains ((const char * const *)icons, "size-test"));
-  g_assert (g_strv_contains ((const char * const *)icons, "simple"));
-  g_assert (g_strv_contains ((const char * const *)icons, "twosize-fixed"));
-  g_assert (g_strv_contains ((const char * const *)icons, "twosize"));
-  g_assert (g_strv_contains ((const char * const *)icons, "only32-symbolic"));
-  g_assert (g_strv_contains ((const char * const *)icons, "everything"));
-  g_assert (g_strv_contains ((const char * const *)icons, "everything-rtl"));
-  g_assert (g_strv_contains ((const char * const *)icons, "everything-symbolic"));
-  g_assert (g_strv_contains ((const char * const *)icons, "everything-justregular"));
-  g_assert (g_strv_contains ((const char * const *)icons, "everything-justrtl-rtl"));
-  g_assert (g_strv_contains ((const char * const *)icons, "everything-symbolic-rtl"));
-  g_assert (g_strv_contains ((const char * const *)icons, "everything-justsymbolic-symbolic"));
+  g_assert_true (g_strv_contains ((const char * const *)icons, "size-test"));
+  g_assert_true (g_strv_contains ((const char * const *)icons, "simple"));
+  g_assert_true (g_strv_contains ((const char * const *)icons, "twosize-fixed"));
+  g_assert_true (g_strv_contains ((const char * const *)icons, "twosize"));
+  g_assert_true (g_strv_contains ((const char * const *)icons, "only32-symbolic"));
+  g_assert_true (g_strv_contains ((const char * const *)icons, "everything"));
+  g_assert_true (g_strv_contains ((const char * const *)icons, "everything-rtl"));
+  g_assert_true (g_strv_contains ((const char * const *)icons, "everything-symbolic"));
+  g_assert_true (g_strv_contains ((const char * const *)icons, "everything-justregular"));
+  g_assert_true (g_strv_contains ((const char * const *)icons, "everything-justrtl-rtl"));
+  g_assert_true (g_strv_contains ((const char * const *)icons, "everything-symbolic-rtl"));
+  g_assert_true (g_strv_contains ((const char * const *)icons, "everything-justsymbolic-symbolic"));
 
-  g_assert (gtk_icon_theme_has_icon (theme, "size-test"));
-  g_assert (gtk_icon_theme_has_icon (theme, "simple"));
-  g_assert (gtk_icon_theme_has_icon (theme, "twosize-fixed"));
-  g_assert (gtk_icon_theme_has_icon (theme, "twosize"));
-  g_assert (gtk_icon_theme_has_icon (theme, "only32-symbolic"));
-  g_assert (gtk_icon_theme_has_icon (theme, "everything"));
-  g_assert (gtk_icon_theme_has_icon (theme, "everything-rtl"));
-  g_assert (gtk_icon_theme_has_icon (theme, "everything-symbolic"));
-  g_assert (gtk_icon_theme_has_icon (theme, "everything-justregular"));
-  g_assert (gtk_icon_theme_has_icon (theme, "everything-justrtl-rtl"));
-  g_assert (gtk_icon_theme_has_icon (theme, "everything-symbolic-rtl"));
-  g_assert (gtk_icon_theme_has_icon (theme, "everything-justsymbolic-symbolic"));
+  g_assert_true (gtk_icon_theme_has_icon (theme, "size-test"));
+  g_assert_true (gtk_icon_theme_has_icon (theme, "simple"));
+  g_assert_true (gtk_icon_theme_has_icon (theme, "twosize-fixed"));
+  g_assert_true (gtk_icon_theme_has_icon (theme, "twosize"));
+  g_assert_true (gtk_icon_theme_has_icon (theme, "only32-symbolic"));
+  g_assert_true (gtk_icon_theme_has_icon (theme, "everything"));
+  g_assert_true (gtk_icon_theme_has_icon (theme, "everything-rtl"));
+  g_assert_true (gtk_icon_theme_has_icon (theme, "everything-symbolic"));
+  g_assert_true (gtk_icon_theme_has_icon (theme, "everything-justregular"));
+  g_assert_true (gtk_icon_theme_has_icon (theme, "everything-justrtl-rtl"));
+  g_assert_true (gtk_icon_theme_has_icon (theme, "everything-symbolic-rtl"));
+  g_assert_true (gtk_icon_theme_has_icon (theme, "everything-justsymbolic-symbolic"));
 
   g_strfreev (icons);
 }
@@ -779,8 +779,8 @@ test_nonsquare_symbolic (void)
   /* the original dimensions have been preserved */
 
   gsk_render_node_get_bounds (node, &bounds);
-  g_assert (bounds.size.width == width);
-  g_assert (bounds.size.height == height);
+  g_assert_cmpint (bounds.size.width, ==, width);
+  g_assert_cmpint (bounds.size.height, ==, height);
 
   gsk_render_node_unref (node);
   g_free (path);

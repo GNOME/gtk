@@ -33,7 +33,7 @@ test_9d6da33ff5c5e41e3521e1afd63d2d67bc915753 (void)
   gtk_widget_set_sensitive (label, TRUE);
   gtk_widget_set_sensitive (window, TRUE);
 
-  g_assert (gtk_widget_get_sensitive (label));
+  g_assert_true (gtk_widget_get_sensitive (label));
 
   gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -51,7 +51,7 @@ test_94f00eb04dd1433cf1cc9a3341f485124e38abd1 (void)
   gtk_widget_set_sensitive (label, FALSE);
   gtk_widget_set_sensitive (label, TRUE);
 
-  g_assert (!gtk_widget_is_sensitive (label));
+  g_assert_false (gtk_widget_is_sensitive (label));
 
   gtk_window_destroy (GTK_WINDOW (window));
 }
