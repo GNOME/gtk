@@ -199,6 +199,9 @@ gtk_toggle_button_clicked (GtkButton *button)
   GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (button);
   GtkToggleButtonPrivate *priv = gtk_toggle_button_get_instance_private (toggle_button);
 
+  if (priv->active && (priv->group_prev || priv->group_next))
+    return;
+
   gtk_toggle_button_set_active (toggle_button, !priv->active);
 }
 
