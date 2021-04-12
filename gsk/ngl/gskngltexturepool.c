@@ -170,7 +170,8 @@ gsk_ngl_texture_new (guint  texture_id,
 const GskNglTextureNineSlice *
 gsk_ngl_texture_get_nine_slice (GskNglTexture        *texture,
                                 const GskRoundedRect *outline,
-                                float                 extra_pixels)
+                                float                 extra_pixels_x,
+                                float                 extra_pixels_y)
 {
   g_assert (texture != NULL);
   g_assert (outline != NULL);
@@ -180,7 +181,7 @@ gsk_ngl_texture_get_nine_slice (GskNglTexture        *texture,
       texture->nine_slice = g_new0 (GskNglTextureNineSlice, 9);
 
       nine_slice_rounded_rect (texture->nine_slice, outline);
-      nine_slice_grow (texture->nine_slice, extra_pixels);
+      nine_slice_grow (texture->nine_slice, extra_pixels_x, extra_pixels_y);
       nine_slice_to_texture_coords (texture->nine_slice, texture->width, texture->height);
     }
 
