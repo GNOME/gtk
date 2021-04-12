@@ -707,8 +707,10 @@ int main () {
   __m128i i = _mm_cvtps_ph (s, 0);
   _mm_storel_epi64 ((__m128i*)h, i);
 
+#if defined (__GNUC__) || defined (__clang__)
   __builtin_cpu_init ();
   __builtin_cpu_supports ("f16c");
+#endif
 
     return 0;
 }'''
