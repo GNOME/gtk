@@ -80,6 +80,12 @@ half_to_float4_c (const guint16 h[4],
 
 #ifdef HAVE_F16C
 
+#if defined(_MSC_VER) && !defined(__clang__)
+#define CAST_M128I_P(a) (__m128i const *) a
+#else
+#define CAST_M128I_P(a) (__m128i_u const *) a
+#endif
+
 static void
 float_to_half4_f16c (const float f[4],
                      guint16     h[4])
@@ -93,11 +99,61 @@ static void
 half_to_float4_f16c (const guint16 h[4],
                      float         f[4])
 {
-  __m128i i = _mm_loadl_epi64 ((__m128i_u const *)h);
+  __m128i i = _mm_loadl_epi64 (CAST_M128I_P (h));
   __m128 s = _mm_cvtph_ps (i);
+
   _mm_store_ps (f, s);
 }
 
+#undef CAST_M128I_P
+
+#if defined(_MSC_VER) && !defined(__clang__)
+/* based on info from https://walbourn.github.io/directxmath-f16c-and-fma/ */
+static gboolean
+have_f16c_msvc (void)
+{
+  static gboolean result = FALSE;
+  static gsize inited = 0;
+
+  if (g_once_init_enter (&inited))
+    {
+      int cpuinfo[4] = { -1 };
+
+      __cpuid (cpuinfo, 0);
+
+      if (cpuinfo[0] > 0)
+        {
+          __cpuid (cpuinfo, 1);
+
+          if ((cpuinfo[2] & 0x8000000) != 0)
+            result = (cpuinfo[2] & 0x20000000) != 0;
+        }
+
+      g_once_init_leave (&inited, 1);
+    }
+
+  return result;
+}
+
+void
+float_to_half4 (const float f[4], guint16 h[4])
+{
+  if (have_f16c_msvc ())
+    float_to_half4_f16c (f, h);
+  else
+    float_to_half4_c (f, h);
+}
+
+void
+half_to_float4 (const guint16 h[4], float f[4])
+{
+  if (have_f16c_msvc ())
+    half_to_float4_f16c (h, f);
+  else
+    half_to_float4_c (h, f);
+}
+
+#else
 void float_to_half4 (const float f[4], guint16 h[4]) __attribute__((ifunc ("resolve_float_to_half4")));
 void half_to_float4 (const guint16 h[4], float f[4]) __attribute__((ifunc ("resolve_half_to_float4")));
 
@@ -120,11 +176,12 @@ resolve_half_to_float4 (void)
   else
     return half_to_float4_c;
 }
+#endif
 
 #else
 
-#ifdef __APPLE__
-// turns out aliases don't work on Darwin
+#if defined(__APPLE__) || (defined(_MSC_VER) && !defined(__clang__))
+// turns out aliases don't work on Darwin nor Visual Studio
 
 void
 float_to_half4 (const float f[4],

@@ -692,10 +692,8 @@ if get_option('f16c').enabled()
 # if !defined(__amd64__) && !defined(__x86_64__)
 #   error "F16C intrinsics are only available on x86_64"
 # endif
-#elif defined (_MSC_VER) && !defined (_M_X64) && !defined (_M_AMD64)
-# error "F16C intrinsics not supported on x86 MSVC builds"
 #endif
-#if defined(__SSE__) || (_M_X64 > 0)
+#if defined(__SSE__) || defined(_MSC_VER)
 # include <immintrin.h>
 #else
 # error "No F16C intrinsics available"
@@ -707,8 +705,10 @@ int main () {
   __m128i i = _mm_cvtps_ph (s, 0);
   _mm_storel_epi64 ((__m128i*)h, i);
 
+#if defined (__GNUC__) || defined (__clang__)
   __builtin_cpu_init ();
   __builtin_cpu_supports ("f16c");
+#endif
 
     return 0;
 }'''
