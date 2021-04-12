@@ -246,7 +246,7 @@ gsk_ngl_texture_atlas_initialize (GskNglDriver       *driver,
 {
   /* Insert a single pixel at 0,0 for use in coloring */
 
-  gboolean packed;
+  gboolean packed G_GNUC_UNUSED;
   int x, y;
   guint gl_format;
   guint gl_type;
