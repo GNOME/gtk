@@ -159,121 +159,122 @@ nine_slice_to_texture_coords (GskNglTextureNineSlice *slices,
 
 static inline void
 nine_slice_grow (GskNglTextureNineSlice *slices,
-                 int                     amount)
+                 int                     amount_x,
+                 int                     amount_y)
 {
-  if (amount == 0)
+  if (amount_x == 0 && amount_y == 0)
     return;
 
   /* top left */
-  slices[0].rect.x -= amount;
-  slices[0].rect.y -= amount;
-  if (amount > slices[0].rect.width)
-    slices[0].rect.width += amount * 2;
+  slices[0].rect.x -= amount_x;
+  slices[0].rect.y -= amount_y;
+  if (amount_x > slices[0].rect.width)
+    slices[0].rect.width += amount_x * 2;
   else
-    slices[0].rect.width += amount;
+    slices[0].rect.width += amount_x;
 
-  if (amount > slices[0].rect.height)
-    slices[0].rect.height += amount * 2;
+  if (amount_y > slices[0].rect.height)
+    slices[0].rect.height += amount_y * 2;
   else
-    slices[0].rect.height += amount;
+    slices[0].rect.height += amount_y;
 
 
   /* Top center */
-  slices[1].rect.y -= amount;
-  if (amount > slices[1].rect.height)
-    slices[1].rect.height += amount * 2;
+  slices[1].rect.y -= amount_y;
+  if (amount_y > slices[1].rect.height)
+    slices[1].rect.height += amount_y * 2;
   else
-    slices[1].rect.height += amount;
+    slices[1].rect.height += amount_y;
 
   /* top right */
-  slices[2].rect.y -= amount;
-  if (amount > slices[2].rect.width)
+  slices[2].rect.y -= amount_y;
+  if (amount_x > slices[2].rect.width)
     {
-      slices[2].rect.x -= amount;
-      slices[2].rect.width += amount * 2;
+      slices[2].rect.x -= amount_x;
+      slices[2].rect.width += amount_x * 2;
     }
   else
     {
-     slices[2].rect.width += amount;
+     slices[2].rect.width += amount_x;
     }
 
-  if (amount > slices[2].rect.height)
-    slices[2].rect.height += amount * 2;
+  if (amount_y > slices[2].rect.height)
+    slices[2].rect.height += amount_y * 2;
   else
-    slices[2].rect.height += amount;
+    slices[2].rect.height += amount_y;
 
 
 
-  slices[3].rect.x -= amount;
-  if (amount > slices[3].rect.width)
-    slices[3].rect.width += amount * 2;
+  slices[3].rect.x -= amount_x;
+  if (amount_x > slices[3].rect.width)
+    slices[3].rect.width += amount_x * 2;
   else
-    slices[3].rect.width += amount;
+    slices[3].rect.width += amount_x;
 
   /* Leave center alone */
 
-  if (amount > slices[5].rect.width)
+  if (amount_x > slices[5].rect.width)
     {
-      slices[5].rect.x -= amount;
-      slices[5].rect.width += amount * 2;
+      slices[5].rect.x -= amount_x;
+      slices[5].rect.width += amount_x * 2;
     }
   else
     {
-      slices[5].rect.width += amount;
+      slices[5].rect.width += amount_x;
     }
 
 
   /* Bottom left */
-  slices[6].rect.x -= amount;
-  if (amount > slices[6].rect.width)
+  slices[6].rect.x -= amount_x;
+  if (amount_x > slices[6].rect.width)
     {
-      slices[6].rect.width += amount * 2;
+      slices[6].rect.width += amount_x * 2;
     }
   else
     {
-      slices[6].rect.width += amount;
+      slices[6].rect.width += amount_x;
     }
 
-  if (amount > slices[6].rect.height)
+  if (amount_y > slices[6].rect.height)
     {
-      slices[6].rect.y -= amount;
-      slices[6].rect.height += amount * 2;
+      slices[6].rect.y -= amount_y;
+      slices[6].rect.height += amount_y * 2;
     }
   else
     {
-      slices[6].rect.height += amount;
+      slices[6].rect.height += amount_y;
     }
 
 
   /* Bottom center */
-  if (amount > slices[7].rect.height)
+  if (amount_y > slices[7].rect.height)
     {
-      slices[7].rect.y -= amount;
-      slices[7].rect.height += amount * 2;
+      slices[7].rect.y -= amount_y;
+      slices[7].rect.height += amount_y * 2;
     }
   else
     {
-      slices[7].rect.height += amount;
+      slices[7].rect.height += amount_y;
     }
 
-  if (amount > slices[8].rect.width)
+  if (amount_x > slices[8].rect.width)
     {
-      slices[8].rect.x -= amount;
-      slices[8].rect.width += amount * 2;
+      slices[8].rect.x -= amount_x;
+      slices[8].rect.width += amount_x * 2;
     }
   else
     {
-      slices[8].rect.width += amount;
+      slices[8].rect.width += amount_x;
     }
 
-  if (amount > slices[8].rect.height)
+  if (amount_y > slices[8].rect.height)
     {
-      slices[8].rect.y -= amount;
-      slices[8].rect.height += amount * 2;
+      slices[8].rect.y -= amount_y;
+      slices[8].rect.height += amount_y * 2;
     }
   else
     {
-      slices[8].rect.height += amount;
+      slices[8].rect.height += amount_y;
     }
 
 #ifdef DEBUG_NINE_SLICE

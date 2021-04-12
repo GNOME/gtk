@@ -94,7 +94,8 @@ GskNglTexture                *gsk_ngl_texture_new            (guint             
                                                               gint64                frame_id);
 const GskNglTextureNineSlice *gsk_ngl_texture_get_nine_slice (GskNglTexture        *texture,
                                                               const GskRoundedRect *outline,
-                                                              float                 extra_pixels);
+                                                              float                 extra_pixels_x,
+                                                              float                 extra_pixels_y);
 void                          gsk_ngl_texture_free           (GskNglTexture        *texture);
 
 G_END_DECLS

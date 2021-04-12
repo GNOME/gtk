@@ -2299,7 +2299,8 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
   float blur_radius = gsk_outset_shadow_node_get_blur_radius (node);
   float blur_extra = blur_radius * 2.0f; /* 2.0 = shader radius_multiplier */
   float half_blur_extra = blur_extra / 2.0f;
-  int extra_blur_pixels = ceilf (half_blur_extra * scale_x);
+  int extra_blur_pixels_x = ceilf (half_blur_extra * scale_x);
+  int extra_blur_pixels_y = ceilf (half_blur_extra * scale_y);
   float spread = gsk_outset_shadow_node_get_spread (node);
   float dx = gsk_outset_shadow_node_get_dx (node);
   float dy = gsk_outset_shadow_node_get_dy (node);
@@ -2311,6 +2312,8 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
   int cached_tid;
   gboolean do_slicing;
   guint16 color[4];
+  float half_width = outline->bounds.size.width / 2;
+  float half_height = outline->bounds.size.height / 2;
 
   rgba_to_half (gsk_outset_shadow_node_get_color (node), color);
 
@@ -2319,7 +2322,15 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
   scaled_outline = *outline;
 
   if (outline->bounds.size.width < blur_extra ||
-      outline->bounds.size.height < blur_extra)
+      outline->bounds.size.height < blur_extra ||
+      outline->corner[0].width >= half_width ||
+      outline->corner[1].width >= half_width ||
+      outline->corner[2].width >= half_width ||
+      outline->corner[3].width >= half_width ||
+      outline->corner[0].height >= half_height ||
+      outline->corner[1].height >= half_height ||
+      outline->corner[2].height >= half_height ||
+      outline->corner[3].height >= half_height)
     {
       do_slicing = FALSE;
       gsk_rounded_rect_shrink (&scaled_outline, -spread, -spread, -spread, -spread);
@@ -2342,10 +2353,10 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
   texture_width = (int)ceil ((scaled_outline.bounds.size.width + blur_extra) * scale_x);
   texture_height = (int)ceil ((scaled_outline.bounds.size.height + blur_extra) * scale_y);
 
-  scaled_outline.bounds.origin.x = extra_blur_pixels;
-  scaled_outline.bounds.origin.y = extra_blur_pixels;
-  scaled_outline.bounds.size.width = texture_width - (extra_blur_pixels * 2);
-  scaled_outline.bounds.size.height = texture_height - (extra_blur_pixels * 2);
+  scaled_outline.bounds.origin.x = extra_blur_pixels_x;
+  scaled_outline.bounds.origin.y = extra_blur_pixels_y;
+  scaled_outline.bounds.size.width = texture_width - (extra_blur_pixels_x * 2);
+  scaled_outline.bounds.size.height = texture_height - (extra_blur_pixels_y * 2);
 
   for (guint i = 0; i < G_N_ELEMENTS (scaled_outline.corner); i++)
     {
@@ -2433,7 +2444,7 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
       float min_x = floorf (outline->bounds.origin.x - spread - half_blur_extra + dx);
       float min_y = floorf (outline->bounds.origin.y - spread - half_blur_extra + dy);
 
-      offscreen.was_offscreen = FALSE;
+      offscreen.was_offscreen = TRUE;
       offscreen.texture_id = blurred_texture_id;
       init_full_texture_region (&offscreen);
 
@@ -2483,12 +2494,13 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
     GskNglTexture *texture;
 
     texture = gsk_ngl_driver_get_texture_by_id (job->driver, blurred_texture_id);
-    slices = gsk_ngl_texture_get_nine_slice (texture, &scaled_outline, extra_blur_pixels);
+    slices = gsk_ngl_texture_get_nine_slice (texture, &scaled_outline, extra_blur_pixels_x, extra_blur_pixels_y);
 
     offscreen.was_offscreen = TRUE;
 
     /* Our texture coordinates MUST be scaled, while the actual vertex coords
-     * MUST NOT be scaled. */
+     * MUST NOT be scaled.
+     */
 
     left_width = slices[NINE_SLICE_TOP_LEFT].rect.width / scale_x;
     right_width = slices[NINE_SLICE_TOP_RIGHT].rect.width / scale_x;
