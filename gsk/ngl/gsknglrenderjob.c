@@ -2433,7 +2433,7 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
       float min_x = floorf (outline->bounds.origin.x - spread - half_blur_extra + dx);
       float min_y = floorf (outline->bounds.origin.y - spread - half_blur_extra + dy);
 
-      offscreen.was_offscreen = FALSE;
+      offscreen.was_offscreen = TRUE;
       offscreen.texture_id = blurred_texture_id;
       init_full_texture_region (&offscreen);
 
