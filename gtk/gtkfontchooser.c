@@ -110,7 +110,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
    *
    * The level of granularity to offer for selecting fonts.
    *
-   * Since: 3.22.30
+   * Since: 3.24.1
    */
   g_object_interface_install_property
      (iface,
@@ -129,7 +129,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
    * The selected font features, in a format that is compatible with
    * CSS and with Pango attributes.
    *
-   * Since: 3.22.30
+   * Since: 3.24.1
    */
   g_object_interface_install_property
      (iface,
@@ -146,7 +146,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
    * selected, in a format that is compatible with CSS and with Pango
    * attributes.
    *
-   * Since: 3.22.30
+   * Since: 3.24.1
    */
   g_object_interface_install_property
      (iface,
