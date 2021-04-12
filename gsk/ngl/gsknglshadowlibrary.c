@@ -202,6 +202,31 @@ gsk_ngl_shadow_library_lookup (GskNglShadowLibrary  *self,
   return ret->texture_id;
 }
 
+#if 0
+static void
+write_shadow_to_png (const Shadow *shadow)
+{
+  int width = shadow->outline.bounds.size.width + (shadow->outline.bounds.origin.x * 2);
+  int height = shadow->outline.bounds.size.height + (shadow->outline.bounds.origin.y * 2);
+  int stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, width);
+  guchar *data = g_malloc (height * stride);
+  cairo_surface_t *s;
+  char *filename = g_strdup_printf ("shadow_cache_%d_%d_%d.png",
+                                    width, height, shadow->texture_id);
+
+  glBindTexture (GL_TEXTURE_2D, shadow->texture_id);
+  glGetTexImage (GL_TEXTURE_2D, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, data);
+  s = cairo_image_surface_create_for_data (data, CAIRO_FORMAT_ARGB32,
+                                           width, height,
+                                           stride);
+  cairo_surface_write_to_png (s, filename);
+
+  cairo_surface_destroy (s);
+  g_free (data);
+  g_free (filename);
+}
+#endif
+
 void
 gsk_ngl_shadow_library_begin_frame (GskNglShadowLibrary *self)
 {
@@ -210,6 +235,14 @@ gsk_ngl_shadow_library_begin_frame (GskNglShadowLibrary *self)
   int p;
 
   g_return_if_fail (GSK_IS_NGL_SHADOW_LIBRARY (self));
+
+#if 0
+  for (i = 0, p = self->shadows->len; i < p; i++)
+    {
+      const Shadow *shadow = &g_array_index (self->shadows, Shadow, i);
+      write_shadow_to_png (shadow);
+    }
+#endif
 
   watermark = self->driver->current_frame_id - MAX_UNUSED_FRAMES;
 
