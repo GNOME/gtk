@@ -751,7 +751,6 @@ demo_filter_by_name (gpointer item,
                      gpointer user_data)
 {
   GtkTreeListRow *row = item;
-  GtkFilterListModel *model = user_data;
   GListModel *children;
   GtkDemo *demo;
   guint i, n;
@@ -762,7 +761,7 @@ demo_filter_by_name (gpointer item,
     return TRUE;
 
   g_assert (GTK_IS_TREE_LIST_ROW (row));
-  g_assert (GTK_IS_FILTER_LIST_MODEL (model));
+  g_assert (GTK_IS_FILTER_LIST_MODEL (user_data));
 
   /* Show a row if itself of any parent matches */
   for (parent = row; parent; parent = gtk_tree_list_row_get_parent (parent))
