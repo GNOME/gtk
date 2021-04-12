@@ -34,9 +34,9 @@ get_surface_size (cairo_surface_t *surface,
   cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
   cairo_destroy (cr);
 
-  g_assert (x1 == 0 && y1 == 0);
-  g_assert (x2 > 0 && y2 > 0);
-  g_assert ((int) x2 == x2 && (int) y2 == y2);
+  g_assert_true (x1 == 0 && y1 == 0);
+  g_assert_true (x2 > 0 && y2 > 0);
+  g_assert_true ((int) x2 == x2 && (int) y2 == y2);
 
   *width = x2;
   *height = y2;
@@ -62,7 +62,7 @@ coerce_surface_for_comparison (cairo_surface_t *surface,
 
   cairo_destroy (cr);
 
-  g_assert (cairo_surface_status (coerced) == CAIRO_STATUS_SUCCESS);
+  g_assert_true (cairo_surface_status (coerced) == CAIRO_STATUS_SUCCESS);
 
   return coerced;
 }
@@ -110,7 +110,7 @@ buffer_diff_core (const guchar *buf_a,
               diff = cairo_image_surface_create (CAIRO_FORMAT_RGB24,
                                                  width,
                                                  height);
-              g_assert (cairo_surface_status (diff) == CAIRO_STATUS_SUCCESS);
+              g_assert_true (cairo_surface_status (diff) == CAIRO_STATUS_SUCCESS);
               buf_diff = cairo_image_surface_get_data (diff);
               stride_diff = cairo_image_surface_get_stride (diff);
               row = (guint32 *) (buf_diff + y * stride_diff);

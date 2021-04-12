@@ -209,7 +209,7 @@ reftest_inhibit_snapshot (void)
 G_MODULE_EXPORT void
 reftest_uninhibit_snapshot (void)
 {
-  g_assert (inhibit_count > 0);
+  g_assert_true (inhibit_count > 0);
   inhibit_count--;
 }
 
@@ -260,7 +260,7 @@ snapshot_widget (GtkWidget *widget)
   GdkPaintable *paintable;
   cairo_surface_t *surface;
 
-  g_assert (gtk_widget_get_realized (widget));
+  g_assert_true (gtk_widget_get_realized (widget));
 
   loop = g_main_loop_new (NULL, FALSE);
 
@@ -304,7 +304,7 @@ reftest_snapshot_ui_file (const char *ui_file)
   g_assert_no_error (error);
   window = builder_get_toplevel (builder);
   g_object_unref (builder);
-  g_assert (window);
+  g_assert_true (window);
 
   gtk_widget_show (window);
 
