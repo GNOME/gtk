@@ -58,6 +58,19 @@
 
 #include "gdk/gdk-private.h"
 
+/* Keep g_assert() defined even if we disable it globally,
+ * as we use it in many places as a handy mechanism to check
+ * for non-NULL
+ */
+#ifdef G_DISABLE_ASSERT
+# undef g_assert
+# define g_assert(expr)                  G_STMT_START { \
+                                           if G_LIKELY (expr) ; else \
+                                             g_assertion_message_expr (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, \
+                                                                       #expr); \
+                                         } G_STMT_END
+#endif
+
 /**
  * GdkWaylandDisplay:
  *
