@@ -586,7 +586,7 @@ int
 main (int argc, char **argv)
 {
   gtk_init ();
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
 
   g_test_add_func ("/widgetorder/simple", simple);
   g_test_add_func ("/widgetorder/two", two);

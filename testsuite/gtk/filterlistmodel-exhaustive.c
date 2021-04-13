@@ -467,7 +467,7 @@ add_test_for_all_models (const char    *name,
 int
 main (int argc, char *argv[])
 {
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
   setlocale (LC_ALL, "C");
 
   add_test_for_all_models ("no-filter", test_no_filter);

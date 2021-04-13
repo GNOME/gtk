@@ -180,7 +180,7 @@ main (int argc, char *argv[])
   Color color;
   GEnumClass *enum_class;
 
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
 
   enum_class = g_type_class_ref (GDK_TYPE_MEMORY_FORMAT);
 

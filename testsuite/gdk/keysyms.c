@@ -128,7 +128,7 @@ main (int argc, char *argv[])
 {
   setlocale (LC_ALL, "");
 
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
   gtk_init ();
 
   g_test_add_func ("/keysyms/basic", test_keysyms_basic);

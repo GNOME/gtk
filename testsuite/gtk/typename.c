@@ -69,7 +69,7 @@ static void test_GThemedIcon (void)     { check ("GThemedIcon", "gthemed_icon_ge
 int
 main (int argc, char *argv[])
 {
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
   
   g_test_add_func ("/builder/get-type/GtkWindow",    test_GtkWindow);
   g_test_add_func ("/builder/get-type/GtkHBox",      test_GtkHBox);

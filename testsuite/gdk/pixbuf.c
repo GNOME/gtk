@@ -33,7 +33,7 @@ test_format (gconstpointer d)
 int
 main (int argc, char *argv[])
 {
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
 
   g_test_add_data_func ("/pixbuf/format/png", "png", test_format);
   g_test_add_data_func ("/pixbuf/format/jpeg", "jpeg", test_format);

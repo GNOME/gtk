@@ -43,7 +43,7 @@ test_set_default (void)
 int
 main (int argc, char *argv[])
 {
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
 
   /* Open default display */
   gdk_display_open (NULL);

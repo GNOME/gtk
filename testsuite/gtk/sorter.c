@@ -662,7 +662,7 @@ test_stable (void)
 int
 main (int argc, char *argv[])
 {
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
   setlocale (LC_ALL, "C");
 
   number_quark = g_quark_from_static_string ("Like a trashcan fire in a prison cell");

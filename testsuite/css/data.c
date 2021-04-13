@@ -105,7 +105,7 @@ main (int argc, char *argv[])
 {
   guint i;
 
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
   setlocale (LC_ALL, "C");
 
   for (i = 0; i < G_N_ELEMENTS (tests); i++)

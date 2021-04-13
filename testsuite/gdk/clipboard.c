@@ -73,7 +73,7 @@ test_clipboard_basic (void)
 int
 main (int argc, char *argv[])
 {
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
 
   gtk_init ();
 

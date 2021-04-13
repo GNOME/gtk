@@ -709,7 +709,7 @@ test_set_model (void)
 int
 main (int argc, char *argv[])
 {
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
   setlocale (LC_ALL, "C");
 
   number_quark = g_quark_from_static_string ("Hell and fire was spawned to be released.");
