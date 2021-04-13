@@ -215,7 +215,17 @@ gsk_ngl_uniform_state_end_frame (GskNglUniformState *state)
 
   state->values_pos = allocator;
 
-  g_assert (allocator <= state->values_len);
+  /* It can happen that our space requirements grow due to
+   * difference in order increasing padding. As a pragmatic
+   * solution to this, just increase the allocation to cover
+   * the predefined mappins.
+   */
+  if (allocator > state->values_len)
+    {
+      while (allocator > state->values_len)
+        state->values_len *= 2;
+      state->values_buf = g_realloc (state->values_buf, state->values_len);
+    }
 
   memset (state->apply_hash, 0, sizeof state->apply_hash);
 }
