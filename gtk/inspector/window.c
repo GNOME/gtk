@@ -903,6 +903,7 @@ update_go_buttons (GtkInspectorWindow *iw)
     {
       object = NULL;
       kind = CHILD_KIND_OTHER;
+      position = 0;
     }
 
   if (parent)

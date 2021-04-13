@@ -561,7 +561,7 @@ test_splice_overflow (void)
 int
 main (int argc, char *argv[])
 {
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
   setlocale (LC_ALL, "C");
 
   g_test_add_func ("/bitset/is_empty", test_is_empty);

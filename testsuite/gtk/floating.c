@@ -29,20 +29,20 @@ floating_tests (void)
   GtkWidget *widget = g_object_new (GTK_TYPE_LABEL, NULL);
   g_object_connect (widget, "signal::destroy", destroy, NULL, NULL);
 
-  g_assert (g_object_is_floating (widget));
+  g_assert_true (g_object_is_floating (widget));
 
   g_object_ref_sink (widget);
-  g_assert (!g_object_is_floating (widget));
+  g_assert_false (g_object_is_floating (widget));
 
   g_object_force_floating (G_OBJECT (widget));
-  g_assert (g_object_is_floating (widget));
+  g_assert_true (g_object_is_floating (widget));
 
   g_object_ref_sink (widget);
-  g_assert (!g_object_is_floating (widget));
+  g_assert_false (g_object_is_floating (widget));
 
-  g_assert (!destroyed);
+  g_assert_false (destroyed);
   g_object_unref (widget);
-  g_assert (destroyed);
+  g_assert_true (destroyed);
 }
 
 int

@@ -6,7 +6,7 @@ assert_section_is_not_null (GtkCssProvider *provider,
                             const GError   *error,
                             gpointer        unused)
 {
-  g_assert (section != NULL);
+  g_assert_nonnull (section);
 }
 
 static void
@@ -37,7 +37,7 @@ int
 main (int argc, char *argv[])
 {
   gtk_init ();
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
 
   g_test_add_func ("/cssprovider/section-in-load-from-data", test_section_in_load_from_data);
   g_test_add_func ("/cssprovider/load-nonexisting-file", test_section_load_nonexisting_file);

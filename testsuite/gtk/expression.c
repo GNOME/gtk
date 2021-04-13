@@ -37,12 +37,14 @@ test_property (void)
   GtkExpressionWatch *watch;
   GtkStringFilter *filter;
   guint counter = 0;
+  gboolean ret;
 
   filter = gtk_string_filter_new (NULL);
   expr = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, NULL, "search");
   watch = gtk_expression_watch (expr, filter, inc_counter, &counter, NULL);
 
-  g_assert (gtk_expression_evaluate (expr, filter, &value));
+  ret = gtk_expression_evaluate (expr, filter, &value);
+  g_assert_true (ret);
   g_assert_cmpstr (g_value_get_string (&value), ==, NULL);
   g_value_unset (&value);
 
@@ -50,7 +52,8 @@ test_property (void)
   g_assert_cmpint (counter, ==, 1);
   counter = 0;
 
-  g_assert (gtk_expression_evaluate (expr, filter , &value));
+  ret = gtk_expression_evaluate (expr, filter , &value);
+  g_assert_true (ret);
   g_assert_cmpstr (g_value_get_string (&value), ==, "Hello World");
   g_value_unset (&value);
 
@@ -92,6 +95,7 @@ test_cclosure (void)
   GtkExpressionWatch *watch;
   GtkStringFilter *filter;
   guint counter = 0;
+  gboolean ret;
 
   filter = GTK_STRING_FILTER (gtk_string_filter_new (NULL));
   pexpr[0] = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, NULL, "search");
@@ -106,19 +110,22 @@ test_cclosure (void)
                                       NULL);
   watch = gtk_expression_watch (expr, filter, inc_counter, &counter, NULL);
 
-  g_assert (gtk_expression_evaluate (expr, filter, &value));
+  ret = gtk_expression_evaluate (expr, filter, &value);
+  g_assert_true (ret);
   g_assert_cmpstr (g_value_get_string (&value), ==, "OK");
   g_value_unset (&value);
 
   gtk_string_filter_set_search (filter, "Hello World");
   g_assert_cmpint (counter, ==, 1);
-  g_assert (gtk_expression_evaluate (expr, filter , &value));
+  ret = gtk_expression_evaluate (expr, filter , &value);
+  g_assert_true (ret);
   g_assert_cmpstr (g_value_get_string (&value), ==, "OK");
   g_value_unset (&value);
 
   gtk_string_filter_set_ignore_case (filter, FALSE);
   g_assert_cmpint (counter, ==, 2);
-  g_assert (gtk_expression_evaluate (expr, filter , &value));
+  ret = gtk_expression_evaluate (expr, filter , &value);
+  g_assert_true (ret);
   g_assert_cmpstr (g_value_get_string (&value), ==, "OK");
   g_value_unset (&value);
 
@@ -126,7 +133,8 @@ test_cclosure (void)
   gtk_string_filter_set_ignore_case (filter, TRUE);
   gtk_string_filter_set_match_mode (filter, GTK_STRING_FILTER_MATCH_MODE_EXACT);
   g_assert_cmpint (counter, ==, 5);
-  g_assert (gtk_expression_evaluate (expr, filter , &value));
+  ret = gtk_expression_evaluate (expr, filter , &value);
+  g_assert_true (ret);
   g_assert_cmpstr (g_value_get_string (&value), ==, "OK");
   g_value_unset (&value);
 
@@ -149,10 +157,12 @@ test_closure (void)
   GValue value = G_VALUE_INIT;
   GtkExpression *expr;
   GClosure *closure;
+  gboolean ret;
 
   closure = g_cclosure_new (G_CALLBACK (make_string), NULL, NULL);
   expr = gtk_closure_expression_new (G_TYPE_STRING, closure, 0, NULL);
-  g_assert (gtk_expression_evaluate (expr, NULL, &value));
+  ret = gtk_expression_evaluate (expr, NULL, &value);
+  g_assert_true (ret);
   g_assert_cmpstr (g_value_get_string (&value), ==, "Hello");
   g_value_unset (&value);
 
@@ -585,7 +595,7 @@ test_nested_bind (void)
   /* check that the expressions evaluate correctly */
   res = gtk_expression_evaluate (filter_expr, NULL, &value);
   g_assert_true (res);
-  g_assert (g_value_get_object (&value) == filter3);
+  g_assert_true (g_value_get_object (&value) == filter3);
   g_value_unset (&value);
 
   res = gtk_expression_evaluate (expr, NULL, &value);

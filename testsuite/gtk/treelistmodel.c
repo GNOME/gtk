@@ -30,7 +30,7 @@ get (GListModel *model,
 {
   GObject *object = g_list_model_get_item (model, position);
   guint number;
-  g_assert (object != NULL);
+  g_assert_nonnull (object);
   number = GPOINTER_TO_UINT (g_object_get_qdata (object, number_quark));
   g_object_unref (object);
   return number;
@@ -65,7 +65,7 @@ prepend (GListStore *store,
   GObject *object;
 
   /* 0 cannot be differentiated from NULL, so don't use it */
-  g_assert (number != 0);
+  g_assert_cmpint (number, !=, 0);
 
   if (step / 10)
     object = G_OBJECT (new_store (number - 9 * step / 10, number, step / 10));
@@ -119,7 +119,7 @@ items_changed (GListModel *model,
                guint       added,
                GString    *changes)
 {
-  g_assert (removed != 0 || added != 0);
+  g_assert_true (removed != 0 || added != 0);
 
   if (changes->len)
     g_string_append (changes, ", ");
@@ -226,25 +226,25 @@ test_remove_some (void)
   assert_changes (tree, "");
 
   item = g_list_model_get_item (G_LIST_MODEL (tree), 1);
-  g_assert (G_IS_LIST_MODEL (item));
+  g_assert_true (G_IS_LIST_MODEL (item));
   g_list_store_remove (item, 3);
   assert_model (tree, "100 100 100 99 98 96 95 94 93 92 91 90 90 89 88 87 86 85 84 83 82 81 80 80 79 78 77 76 75 74 73 72 71 70 70 69 68 67 66 65 64 63 62 61 60 60 59 58 57 56 55 54 53 52 51 50 50 49 48 47 46 45 44 43 42 41 40 40 39 38 37 36 35 34 33 32 31 30 30 29 28 27 26 25 24 23 22 21 20 20 19 18 17 16 15 14 13 12 11 10 10 9 8 7 6 5 4 3 2 1");
   assert_changes (tree, "-5");
 
   item = g_list_model_get_item (G_LIST_MODEL (tree), 0);
-  g_assert (G_IS_LIST_MODEL (item));
+  g_assert_true (G_IS_LIST_MODEL (item));
   g_list_store_remove (item, 3);
   assert_model (tree, "100 100 100 99 98 96 95 94 93 92 91 90 90 89 88 87 86 85 84 83 82 81 80 80 79 78 77 76 75 74 73 72 71 60 60 59 58 57 56 55 54 53 52 51 50 50 49 48 47 46 45 44 43 42 41 40 40 39 38 37 36 35 34 33 32 31 30 30 29 28 27 26 25 24 23 22 21 20 20 19 18 17 16 15 14 13 12 11 10 10 9 8 7 6 5 4 3 2 1");
   assert_changes (tree, "33-11");
 
   item = g_list_model_get_item (G_LIST_MODEL (tree), 88);
-  g_assert (G_IS_LIST_MODEL (item));
+  g_assert_true (G_IS_LIST_MODEL (item));
   g_list_store_remove (item, 9);
   assert_model (tree, "100 100 100 99 98 96 95 94 93 92 91 90 90 89 88 87 86 85 84 83 82 81 80 80 79 78 77 76 75 74 73 72 71 60 60 59 58 57 56 55 54 53 52 51 50 50 49 48 47 46 45 44 43 42 41 40 40 39 38 37 36 35 34 33 32 31 30 30 29 28 27 26 25 24 23 22 21 20 20 19 18 17 16 15 14 13 12 11 10 10 9 8 7 6 5 4 3 2");
   assert_changes (tree, "-98");
 
   item = g_list_model_get_item (G_LIST_MODEL (tree), 0);
-  g_assert (G_IS_LIST_MODEL (item));
+  g_assert_true (G_IS_LIST_MODEL (item));
   g_list_store_remove (item, 8);
   assert_model (tree, "100 100 100 99 98 96 95 94 93 92 91 90 90 89 88 87 86 85 84 83 82 81 80 80 79 78 77 76 75 74 73 72 71 60 60 59 58 57 56 55 54 53 52 51 50 50 49 48 47 46 45 44 43 42 41 40 40 39 38 37 36 35 34 33 32 31 30 30 29 28 27 26 25 24 23 22 21 20 20 19 18 17 16 15 14 13 12 11");
   assert_changes (tree, "88-10");
@@ -255,7 +255,7 @@ test_remove_some (void)
 int
 main (int argc, char *argv[])
 {
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
   setlocale (LC_ALL, "C");
 
   number_quark = g_quark_from_static_string ("Hell and fire was spawned to be released.");

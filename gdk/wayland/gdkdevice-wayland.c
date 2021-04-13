@@ -848,7 +848,12 @@ gdk_wayland_device_pad_get_n_groups (GdkDevicePad *pad)
 
   data = gdk_wayland_seat_find_pad (GDK_WAYLAND_SEAT (seat),
                                     GDK_DEVICE (pad));
+#ifdef G_DISABLE_ASSERT
+  if (data == NULL)
+    return 0;
+#else
   g_assert (data != NULL);
+#endif
 
   return g_list_length (data->mode_groups);
 }
@@ -863,7 +868,12 @@ gdk_wayland_device_pad_get_group_n_modes (GdkDevicePad *pad,
 
   data = gdk_wayland_seat_find_pad (GDK_WAYLAND_SEAT (seat),
                                     GDK_DEVICE (pad));
+#ifdef G_DISABLE_ASSERT
+  if (data == NULL)
+    return 0;
+#else
   g_assert (data != NULL);
+#endif
 
   group = g_list_nth_data (data->mode_groups, n_group);
   if (!group)
@@ -909,7 +919,12 @@ gdk_wayland_device_pad_get_feature_group (GdkDevicePad        *pad,
 
   data = gdk_wayland_seat_find_pad (GDK_WAYLAND_SEAT (seat),
                                     GDK_DEVICE (pad));
+#ifdef G_DISABLE_ASSERT
+  if (data == NULL)
+    return -1;
+#else
   g_assert (data != NULL);
+#endif
 
   for (l = data->mode_groups, i = 0; l; l = l->next, i++)
     {
@@ -4236,7 +4251,14 @@ tablet_pad_handle_button (void                     *data,
                        wp_tablet_pad, button, state));
 
   group = tablet_pad_lookup_button_group (pad, button);
+
+#ifdef G_DISABLE_ASSERT
+  if (group == NULL)
+    return;
+#else
   g_assert (group != NULL);
+#endif
+
   n_group = g_list_index (pad->mode_groups, group);
 
   event = gdk_pad_event_new_button (state == ZWP_TABLET_PAD_V2_BUTTON_STATE_PRESSED

@@ -163,8 +163,8 @@ gtk_tree_model_ref_count_unref_node (GtkTreeModel *model,
   GtkTreeModelRefCount *ref_model = GTK_TREE_MODEL_REF_COUNT (model);
 
   info = g_hash_table_lookup (ref_model->priv->node_hash, iter->user_data);
-  g_assert (info != NULL);
-  g_assert (info->ref_count > 0);
+  g_assert_nonnull (info);
+  g_assert_cmpint (info->ref_count, >, 0);
 
   info->ref_count--;
 }
@@ -238,7 +238,7 @@ check_iter (GtkTreeModelRefCount *ref_model,
   NodeInfo *info;
 
   if (may_assert)
-    g_assert (gtk_tree_store_iter_is_valid (GTK_TREE_STORE (ref_model), iter));
+    g_assert_true (gtk_tree_store_iter_is_valid (GTK_TREE_STORE (ref_model), iter));
 
   info = g_hash_table_lookup (ref_model->priv->node_hash, iter->user_data);
   if (!info)

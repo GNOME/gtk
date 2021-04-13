@@ -87,7 +87,7 @@ add (GListStore *store,
   GObject *object;
 
   /* 0 cannot be differentiated from NULL, so don't use it */
-  g_assert (number != 0);
+  g_assert_cmpint (number, !=, 0);
 
   object = g_object_new (G_TYPE_OBJECT, NULL);
   g_object_set_qdata (object, number_quark, GUINT_TO_POINTER (number));
@@ -251,7 +251,7 @@ test_compare_no_order (void)
 int
 main (int argc, char *argv[])
 {
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
   setlocale (LC_ALL, "C");
 
   number_quark = g_quark_from_static_string ("Like a trashcan fire in a prison cell");

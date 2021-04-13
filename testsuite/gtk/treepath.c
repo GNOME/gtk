@@ -118,7 +118,7 @@ test_navigation (void)
 
   p = gtk_tree_path_new_from_indices (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1);
   q = gtk_tree_path_copy (p);
-  g_assert (gtk_tree_path_compare (p, q) == 0);
+  g_assert_true (gtk_tree_path_compare (p, q) == 0);
   gtk_tree_path_next (q);
   pi = gtk_tree_path_get_indices (p);
   qi = gtk_tree_path_get_indices (q);
@@ -126,39 +126,39 @@ test_navigation (void)
     g_assert_cmpint (pi[i], ==, qi[i]);
   g_assert_cmpint (qi[9], ==, pi[9] + 1);
 
-  g_assert (!gtk_tree_path_is_ancestor (p, q));
-  g_assert (!gtk_tree_path_is_ancestor (q, p));
-  g_assert (!gtk_tree_path_is_descendant (p, q));
-  g_assert (!gtk_tree_path_is_descendant (q, p));
+  g_assert_false (gtk_tree_path_is_ancestor (p, q));
+  g_assert_false (gtk_tree_path_is_ancestor (q, p));
+  g_assert_false (gtk_tree_path_is_descendant (p, q));
+  g_assert_false (gtk_tree_path_is_descendant (q, p));
 
   res = gtk_tree_path_prev (q);
-  g_assert (res);
-  g_assert (gtk_tree_path_compare (p, q) == 0);
+  g_assert_true (res);
+  g_assert_true (gtk_tree_path_compare (p, q) == 0);
 
-  g_assert (!gtk_tree_path_is_ancestor (p, q));
-  g_assert (!gtk_tree_path_is_ancestor (q, p));
-  g_assert (!gtk_tree_path_is_descendant (p, q));
-  g_assert (!gtk_tree_path_is_descendant (q, p));
+  g_assert_false (gtk_tree_path_is_ancestor (p, q));
+  g_assert_false (gtk_tree_path_is_ancestor (q, p));
+  g_assert_false (gtk_tree_path_is_descendant (p, q));
+  g_assert_false (gtk_tree_path_is_descendant (q, p));
 
   gtk_tree_path_down (q);
 
-  g_assert (gtk_tree_path_compare (p, q) < 0);
+  g_assert_true (gtk_tree_path_compare (p, q) < 0);
 
-  g_assert (gtk_tree_path_is_ancestor (p, q));
-  g_assert (!gtk_tree_path_is_ancestor (q, p));
-  g_assert (!gtk_tree_path_is_descendant (p, q));
-  g_assert (gtk_tree_path_is_descendant (q, p));
+  g_assert_true (gtk_tree_path_is_ancestor (p, q));
+  g_assert_false (gtk_tree_path_is_ancestor (q, p));
+  g_assert_false (gtk_tree_path_is_descendant (p, q));
+  g_assert_true (gtk_tree_path_is_descendant (q, p));
 
   res = gtk_tree_path_prev (q);
-  g_assert (!res);
+  g_assert_false (res);
 
   res = gtk_tree_path_up (q);
-  g_assert (res);
-  g_assert (gtk_tree_path_compare (p, q) == 0);
+  g_assert_true (res);
+  g_assert_true (gtk_tree_path_compare (p, q) == 0);
 
   g_assert_cmpint (gtk_tree_path_get_depth (q), ==, 10);
   res = gtk_tree_path_up (q);
-  g_assert (res);
+  g_assert_true (res);
   g_assert_cmpint (gtk_tree_path_get_depth (q), ==, 9);
 
   gtk_tree_path_free (p);

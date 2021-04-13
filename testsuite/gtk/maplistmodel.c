@@ -30,7 +30,7 @@ get (GListModel *model,
 {
   GObject *object = g_list_model_get_item (model, position);
   guint number;
-  g_assert (object != NULL);
+  g_assert_nonnull (object);
   number = GPOINTER_TO_UINT (g_object_get_qdata (object, number_quark));
   g_object_unref (object);
   return number;
@@ -71,7 +71,7 @@ splice (GListStore *store,
   for (i = 0; i < added; i++)
     {
       /* 0 cannot be differentiated from NULL, so don't use it */
-      g_assert (numbers[i] != 0);
+      g_assert_true (numbers[i] != 0);
       objects[i] = g_object_new (G_TYPE_OBJECT, NULL);
       g_object_set_qdata (objects[i], number_quark, GUINT_TO_POINTER (numbers[i]));
     }
@@ -90,7 +90,7 @@ add (GListStore *store,
   GObject *object;
 
   /* 0 cannot be differentiated from NULL, so don't use it */
-  g_assert (number != 0);
+  g_assert_cmpint (number, !=, 0);
 
   object = g_object_new (G_TYPE_OBJECT, NULL);
   g_object_set_qdata (object, number_quark, GUINT_TO_POINTER (number));
@@ -141,7 +141,7 @@ items_changed (GListModel *model,
                guint       added,
                GString    *changes)
 {
-  g_assert (removed != 0 || added != 0);
+  g_assert_true (removed != 0 || added != 0);
 
   if (changes->len)
     g_string_append (changes, ", ");
@@ -289,7 +289,7 @@ test_set_map_func (void)
 int
 main (int argc, char *argv[])
 {
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
   setlocale (LC_ALL, "C");
 
   number_quark = g_quark_from_static_string ("Hell and fire was spawned to be released.");

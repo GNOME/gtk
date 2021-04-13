@@ -765,9 +765,9 @@ check_sort_order (GtkTreeModel *sort_model,
 
       gtk_tree_model_get (sort_model, &siter, 0, &value, -1);
       if (sort_order == GTK_SORT_ASCENDING)
-        g_assert (prev_value <= value);
+        g_assert_cmpint (prev_value, <=, value);
       else
-        g_assert (prev_value >= value);
+        g_assert_cmpint (prev_value, >=, value);
 
       prev_value = value;
     }
@@ -1118,17 +1118,17 @@ iter_test (GtkTreeModel *model)
 {
   GtkTreeIter a, b;
 
-  g_assert (gtk_tree_model_get_iter_first (model, &a));
+  g_assert_true (gtk_tree_model_get_iter_first (model, &a));
 
-  g_assert (gtk_tree_model_iter_next (model, &a));
-  g_assert (gtk_tree_model_iter_next (model, &a));
+  g_assert_true (gtk_tree_model_iter_next (model, &a));
+  g_assert_true (gtk_tree_model_iter_next (model, &a));
   b = a;
-  g_assert (!gtk_tree_model_iter_next (model, &b));
+  g_assert_false (gtk_tree_model_iter_next (model, &b));
 
-  g_assert (gtk_tree_model_iter_previous (model, &a));
-  g_assert (gtk_tree_model_iter_previous (model, &a));
+  g_assert_true (gtk_tree_model_iter_previous (model, &a));
+  g_assert_true (gtk_tree_model_iter_previous (model, &a));
   b = a;
-  g_assert (!gtk_tree_model_iter_previous (model, &b));
+  g_assert_false (gtk_tree_model_iter_previous (model, &b));
 }
 
 static void
@@ -1236,57 +1236,57 @@ sort_column_change (void)
   column_changed = 0;
   g_signal_connect (sorted, "sort-column-changed", G_CALLBACK (sort_column_changed), NULL);
 
-  g_assert (!gtk_tree_sortable_has_default_sort_func (GTK_TREE_SORTABLE (sorted)));
+  g_assert_false (gtk_tree_sortable_has_default_sort_func (GTK_TREE_SORTABLE (sorted)));
   gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (sorted), sort_func, NULL, NULL);
-  g_assert (gtk_tree_sortable_has_default_sort_func (GTK_TREE_SORTABLE (sorted)));
+  g_assert_true (gtk_tree_sortable_has_default_sort_func (GTK_TREE_SORTABLE (sorted)));
 
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (sorted), 0, sort_func, NULL, NULL);
 
   ret = gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (sorted), &col, &order);
-  g_assert (column_changed == 0);
-  g_assert (ret == FALSE);
-  g_assert (col == GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID);
-  g_assert (order == GTK_SORT_ASCENDING);
+  g_assert_cmpint (column_changed, ==, 0);
+  g_assert_false (ret);
+  g_assert_cmpint (col, ==, GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID);
+  g_assert_cmpint (order, ==, GTK_SORT_ASCENDING);
 
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sorted),
                                         GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, GTK_SORT_DESCENDING);
   ret = gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (sorted), &col, &order);
-  g_assert (column_changed == 1);
-  g_assert (ret == FALSE);
-  g_assert (col == GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID);
-  g_assert (order == GTK_SORT_DESCENDING);
+  g_assert_cmpint (column_changed, ==, 1);
+  g_assert_false (ret);
+  g_assert_cmpint (col, ==, GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID);
+  g_assert_cmpint (order, ==, GTK_SORT_DESCENDING);
 
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sorted),
                                         GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, GTK_SORT_DESCENDING);
   ret = gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (sorted), &col, &order);
-  g_assert (column_changed == 1);
-  g_assert (ret == FALSE);
-  g_assert (col == GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID);
-  g_assert (order == GTK_SORT_DESCENDING);
+  g_assert_cmpint (column_changed, ==, 1);
+  g_assert_false (ret);
+  g_assert_cmpint (col, ==, GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID);
+  g_assert_cmpint (order, ==, GTK_SORT_DESCENDING);
 
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sorted),
                                         0, GTK_SORT_DESCENDING);
   ret = gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (sorted), &col, &order);
-  g_assert (column_changed == 2);
-  g_assert (ret == TRUE);
-  g_assert (col == 0);
-  g_assert (order == GTK_SORT_DESCENDING);
+  g_assert_cmpint (column_changed, ==, 2);
+  g_assert_true (ret);
+  g_assert_cmpint (col, ==, 0);
+  g_assert_cmpint (order, ==, GTK_SORT_DESCENDING);
 
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sorted),
                                         GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, GTK_SORT_ASCENDING);
   ret = gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (sorted), &col, &order);
-  g_assert (column_changed == 3);
-  g_assert (ret == FALSE);
-  g_assert (col == GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID);
-  g_assert (order == GTK_SORT_ASCENDING);
+  g_assert_cmpint (column_changed, ==, 3);
+  g_assert_false (ret);
+  g_assert_cmpint (col, ==, GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID);
+  g_assert_cmpint (order, ==, GTK_SORT_ASCENDING);
 
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sorted),
                                         GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, GTK_SORT_ASCENDING);
   ret = gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (sorted), &col, &order);
-  g_assert (column_changed == 4);
-  g_assert (ret == FALSE);
-  g_assert (col == GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID);
-  g_assert (order == GTK_SORT_ASCENDING);
+  g_assert_cmpint (column_changed, ==, 4);
+  g_assert_false (ret);
+  g_assert_cmpint (col, ==, GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID);
+  g_assert_cmpint (order, ==, GTK_SORT_ASCENDING);
 }
 
 /* main */

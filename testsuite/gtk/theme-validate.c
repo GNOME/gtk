@@ -50,7 +50,7 @@ main (int argc, char *argv[])
   guint i;
 
   gtk_init ();
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
 
   for (i = 0; i < G_N_ELEMENTS (themes); i++)
     {

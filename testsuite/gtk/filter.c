@@ -29,7 +29,7 @@ get (GListModel *model,
 {
   GObject *object = g_list_model_get_item (model, position);
   guint ret;
-  g_assert (object != NULL);
+  g_assert_nonnull (object);
   ret = GPOINTER_TO_UINT (g_object_get_qdata (object, number_quark));
   g_object_unref (object);
   return ret;
@@ -50,7 +50,7 @@ append_digit (GString *s,
   if (digit == 0)
     return;
 
-  g_assert (digit < 10);
+  g_assert_cmpint (digit, <, 10);
 
   if (s->len)
     g_string_append_c (s, ' ');
@@ -97,7 +97,7 @@ get_spelled_out (gpointer object)
   guint n = GPOINTER_TO_UINT (g_object_get_qdata (object, number_quark));
   GString *s;
 
-  g_assert (n < 1000000);
+  g_assert_cmpint (n, <, 1000000);
 
   if (n == 0)
     return g_strdup ("Zero");
@@ -147,7 +147,7 @@ add (GListStore *store,
   GObject *object;
 
   /* 0 cannot be differentiated from NULL, so don't use it */
-  g_assert (number != 0);
+  g_assert_cmpint (number, !=, 0);
 
   object = g_object_new (G_TYPE_OBJECT, NULL);
   g_object_set_qdata (object, number_quark, GUINT_TO_POINTER (number));
@@ -396,7 +396,7 @@ test_every_dispose (void)
 int
 main (int argc, char *argv[])
 {
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
   setlocale (LC_ALL, "C");
 
   number_quark = g_quark_from_static_string ("Hell and fire was spawned to be released.");

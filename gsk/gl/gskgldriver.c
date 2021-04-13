@@ -433,8 +433,6 @@ gsk_gl_driver_slice_texture (GskGLDriver   *self,
                              guint         *out_n_slices)
 {
   const int max_texture_size = gsk_gl_driver_get_max_texture_size (self) / 4; // XXX Too much?
-  const int tex_width = texture->width;
-  const int tex_height = texture->height;
   const int cols = (texture->width / max_texture_size) + 1;
   const int rows = (texture->height / max_texture_size) + 1;
   int col, row;
@@ -442,7 +440,7 @@ gsk_gl_driver_slice_texture (GskGLDriver   *self,
   TextureSlice *slices;
   Texture *tex;
 
-  g_assert (tex_width > max_texture_size || tex_height > max_texture_size);
+  g_assert (texture->width > max_texture_size || texture->height > max_texture_size);
 
 
   tex = gdk_texture_get_render_data (texture, self);

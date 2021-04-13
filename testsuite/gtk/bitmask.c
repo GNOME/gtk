@@ -458,7 +458,7 @@ main (int argc, char *argv[])
 {
   int result;
 
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
   setlocale (LC_ALL, "C");
 
   create_masks ();

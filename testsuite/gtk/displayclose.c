@@ -14,7 +14,7 @@ main (int argc, char **argv)
   display_name = g_getenv ("DISPLAY");
   g_unsetenv ("DISPLAY");
   has_display = gtk_init_check ();
-  g_assert (!has_display);
+  g_assert_false (has_display);
 
   display = gdk_display_open (display_name);
 

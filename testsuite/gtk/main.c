@@ -4,9 +4,12 @@
 static void
 test_init (void)
 {
-  g_assert (gtk_is_initialized () == FALSE);
-  g_assert (gtk_init_check ());
-  g_assert (gtk_is_initialized () == TRUE);
+  gboolean ret;
+
+  g_assert_false (gtk_is_initialized ());
+  ret = gtk_init_check ();
+  g_assert_true (ret);
+  g_assert_true (gtk_is_initialized ());
 }
 
 static void
@@ -28,7 +31,7 @@ int
 main (int argc, char *argv[])
 {
   /* Don't use gtk_test_init here because it implicitly initializes GTK. */
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
   gtk_disable_setlocale();
   setlocale (LC_ALL, "C");
 

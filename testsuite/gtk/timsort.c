@@ -74,7 +74,7 @@ run_comparison (gpointer         a,
   gint64 start, mid, end;
   gpointer b;
 
-  g_assert (n <= G_MAXSIZE / element_size);
+  g_assert_cmpint (n, <=, G_MAXSIZE / element_size);
 
   b = g_memdup2 (a, element_size * n);
 
@@ -245,7 +245,7 @@ test_steps (void)
 int
 main (int argc, char *argv[])
 {
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
   setlocale (LC_ALL, "C");
 
   g_test_add_func ("/timsort/integers", test_integers);

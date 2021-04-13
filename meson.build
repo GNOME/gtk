@@ -66,7 +66,7 @@ if debug
     gtk_debug_cflags += '-DG_ENABLE_CONSISTENCY_CHECKS'
   endif
 elif optimization in ['2', '3', 's']
-  gtk_debug_cflags += '-DG_DISABLE_CAST_CHECKS -DG_DISABLE_ASSERT'
+  gtk_debug_cflags += ['-DG_DISABLE_CAST_CHECKS', '-DG_DISABLE_ASSERT']
 endif
 
 add_project_arguments(gtk_debug_cflags, language: 'c')
@@ -270,7 +270,6 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     '-Wmissing-include-dirs',
     '-Wmissing-noreturn',
     '-Wnested-externs',
-    '-Wnull-dereference',
     '-Wold-style-definition',
     '-Wpointer-arith',
     '-Wshadow',
@@ -303,6 +302,10 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
 
   if cc.get_id() == 'gcc'
     test_cflags += ['-Wcast-align'] # This warns too much on clang
+  endif
+
+  if not gtk_debug_cflags.contains('-DG_DISABLE_ASSERT')
+    test_cflags += ['-Wnull-dereference'] # Too noisy when assertions are disabled
   endif
 else
   test_cflags = []

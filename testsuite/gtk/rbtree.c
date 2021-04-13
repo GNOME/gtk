@@ -69,8 +69,8 @@ _count_nodes (GtkTreeRBTree *tree,
   if (gtk_tree_rbtree_is_nil (node))
     return 0;
 
-  g_assert (node->left);
-  g_assert (node->right);
+  g_assert_true (node->left);
+  g_assert_true (node->right);
 
   res = (_count_nodes (tree, node->left) +
          _count_nodes (tree, node->right) + 1);
@@ -115,11 +115,11 @@ gtk_tree_rbtree_test_dirty (GtkTreeRBTree *tree,
                             GtkTreeRBNode *node,
                             int            expected_dirtyness)
 {
-  g_assert (node);
+  g_assert_nonnull (node);
 
   if (expected_dirtyness)
     {
-      g_assert (GTK_TREE_RBNODE_FLAG_SET (node, GTK_TREE_RBNODE_COLUMN_INVALID) ||
+      g_assert_true (GTK_TREE_RBNODE_FLAG_SET (node, GTK_TREE_RBNODE_COLUMN_INVALID) ||
                 GTK_TREE_RBNODE_FLAG_SET (node, GTK_TREE_RBNODE_INVALID) ||
                 GTK_TREE_RBNODE_FLAG_SET (node->left, GTK_TREE_RBNODE_DESCENDANTS_INVALID) ||
                 GTK_TREE_RBNODE_FLAG_SET (node->right, GTK_TREE_RBNODE_DESCENDANTS_INVALID) ||
@@ -127,14 +127,14 @@ gtk_tree_rbtree_test_dirty (GtkTreeRBTree *tree,
     }
   else
     {
-      g_assert (!GTK_TREE_RBNODE_FLAG_SET (node, GTK_TREE_RBNODE_COLUMN_INVALID) &&
+      g_assert_true (!GTK_TREE_RBNODE_FLAG_SET (node, GTK_TREE_RBNODE_COLUMN_INVALID) &&
                 !GTK_TREE_RBNODE_FLAG_SET (node, GTK_TREE_RBNODE_INVALID));
       if (!gtk_tree_rbtree_is_nil (node->left))
-        g_assert (!GTK_TREE_RBNODE_FLAG_SET (node->left, GTK_TREE_RBNODE_DESCENDANTS_INVALID));
+        g_assert_true (!GTK_TREE_RBNODE_FLAG_SET (node->left, GTK_TREE_RBNODE_DESCENDANTS_INVALID));
       if (!gtk_tree_rbtree_is_nil (node->right))
-        g_assert (!GTK_TREE_RBNODE_FLAG_SET (node->right, GTK_TREE_RBNODE_DESCENDANTS_INVALID));
+        g_assert_true (!GTK_TREE_RBNODE_FLAG_SET (node->right, GTK_TREE_RBNODE_DESCENDANTS_INVALID));
       if (node->children != NULL)
-        g_assert (!GTK_TREE_RBNODE_FLAG_SET (node->children->root, GTK_TREE_RBNODE_DESCENDANTS_INVALID));
+        g_assert_true (!GTK_TREE_RBNODE_FLAG_SET (node->children->root, GTK_TREE_RBNODE_DESCENDANTS_INVALID));
     }
 
   if (!gtk_tree_rbtree_is_nil (node->left))
@@ -153,15 +153,15 @@ gtk_tree_rbtree_test_structure_helper (GtkTreeRBTree *tree,
 {
   guint left_blacks, right_blacks;
 
-  g_assert (!gtk_tree_rbtree_is_nil (node));
+  g_assert_false (gtk_tree_rbtree_is_nil (node));
 
-  g_assert (node->left != NULL);
-  g_assert (node->right != NULL);
-  g_assert (node->parent != NULL);
+  g_assert_nonnull (node->left);
+  g_assert_nonnull (node->right);
+  g_assert_nonnull (node->parent);
 
   if (!gtk_tree_rbtree_is_nil (node->left))
     {
-      g_assert (node->left->parent == node);
+      g_assert_true (node->left->parent == node);
       left_blacks = gtk_tree_rbtree_test_structure_helper (tree, node->left);
     }
   else
@@ -169,7 +169,7 @@ gtk_tree_rbtree_test_structure_helper (GtkTreeRBTree *tree,
 
   if (!gtk_tree_rbtree_is_nil (node->right))
     {
-      g_assert (node->right->parent == node);
+      g_assert_true (node->right->parent == node);
       right_blacks = gtk_tree_rbtree_test_structure_helper (tree, node->right);
     }
   else
@@ -177,13 +177,13 @@ gtk_tree_rbtree_test_structure_helper (GtkTreeRBTree *tree,
 
   if (node->children != NULL)
     {
-      g_assert (node->children->parent_tree == tree);
-      g_assert (node->children->parent_node == node);
+      g_assert_true (node->children->parent_tree == tree);
+      g_assert_true (node->children->parent_node == node);
 
       gtk_tree_rbtree_test_structure (node->children);
     }
 
-  g_assert (left_blacks == right_blacks);
+  g_assert_true (left_blacks == right_blacks);
 
   return left_blacks + (GTK_TREE_RBNODE_GET_COLOR (node) == GTK_TREE_RBNODE_BLACK ? 1 : 0);
 }
@@ -191,11 +191,11 @@ gtk_tree_rbtree_test_structure_helper (GtkTreeRBTree *tree,
 static void
 gtk_tree_rbtree_test_structure (GtkTreeRBTree *tree)
 {
-  g_assert (tree->root);
+  g_assert_nonnull (tree->root);
   if (gtk_tree_rbtree_is_nil (tree->root))
     return;
 
-  g_assert (gtk_tree_rbtree_is_nil (tree->root->parent));
+  g_assert_true (gtk_tree_rbtree_is_nil (tree->root->parent));
   gtk_tree_rbtree_test_structure_helper (tree, tree->root);
 }
 
@@ -217,12 +217,12 @@ gtk_tree_rbtree_test (GtkTreeRBTree *tree)
 
   gtk_tree_rbtree_test_structure (tmp_tree);
 
-  g_assert ((_count_nodes (tmp_tree, tmp_tree->root->left) +
+  g_assert_true ((_count_nodes (tmp_tree, tmp_tree->root->left) +
              _count_nodes (tmp_tree, tmp_tree->root->right) + 1) == tmp_tree->root->count);
 
   gtk_tree_rbtree_test_height (tmp_tree, tmp_tree->root);
   gtk_tree_rbtree_test_dirty (tmp_tree, tmp_tree->root, GTK_TREE_RBNODE_FLAG_SET (tmp_tree->root, GTK_TREE_RBNODE_DESCENDANTS_INVALID));
-  g_assert (count_total (tmp_tree, tmp_tree->root) == tmp_tree->root->total_count);
+  g_assert_true (count_total (tmp_tree, tmp_tree->root) == tmp_tree->root->total_count);
 }
 
 /* gtk_rbtree_print() - unused, for debugging only */
@@ -286,7 +286,7 @@ append_elements (GtkTreeRBTree *tree,
   GtkTreeRBNode *node;
   guint i;
 
-  g_assert (depth > 0);
+  g_assert_cmpint (depth, >, 0);
 
   node = NULL;
   depth--;
@@ -348,9 +348,9 @@ test_insert_after (void)
     {
       node = gtk_tree_rbtree_insert_after (tree, node, i, TRUE);
       gtk_tree_rbtree_test (tree);
-      g_assert (tree->root->count == i);
-      g_assert (tree->root->total_count == i);
-      g_assert (tree->root->offset == i * (i + 1) / 2);
+      g_assert_cmpint (tree->root->count, ==, i);
+      g_assert_cmpint (tree->root->total_count, ==, i);
+      g_assert_cmpint (tree->root->offset, ==, i * (i + 1) / 2);
     }
 
   gtk_tree_rbtree_free (tree);
@@ -370,9 +370,9 @@ test_insert_before (void)
     {
       node = gtk_tree_rbtree_insert_before (tree, node, i, TRUE);
       gtk_tree_rbtree_test (tree);
-      g_assert (tree->root->count == i);
-      g_assert (tree->root->total_count == i);
-      g_assert (tree->root->offset == i * (i + 1) / 2);
+      g_assert_cmpint (tree->root->count, ==, i);
+      g_assert_cmpint (tree->root->total_count, ==, i);
+      g_assert_cmpint (tree->root->offset, ==, i * (i + 1) / 2);
     }
 
   gtk_tree_rbtree_free (tree);
@@ -501,9 +501,9 @@ test_reorder (void)
        node != NULL;
        node = gtk_tree_rbtree_next (tree, node), i++)
     {
-      g_assert (GTK_TREE_RBNODE_GET_HEIGHT (node) == i);
+      g_assert_cmpint (GTK_TREE_RBNODE_GET_HEIGHT (node), ==, i);
     }
-  g_assert (i == n);
+  g_assert_cmpint (i, ==, n);
 
   gtk_tree_rbtree_free (tree);
 
@@ -514,7 +514,7 @@ int
 main (int   argc,
       char *argv[])
 {
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
   setlocale (LC_ALL, "C");
 
   g_test_add_func ("/rbtree/create", test_create);

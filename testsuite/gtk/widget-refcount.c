@@ -19,9 +19,9 @@ popover (void)
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), p);
 
   /* GtkButton is a normal widget and thus floating */
-  g_assert (g_object_is_floating (button));
+  g_assert_true (g_object_is_floating (button));
   /* GtkPopver sinks itself */
-  g_assert (!g_object_is_floating (p));
+  g_assert_true (!g_object_is_floating (p));
 
   g_object_weak_ref (G_OBJECT (p), check_finalized, &finalized);
 
@@ -29,7 +29,7 @@ popover (void)
   g_object_unref (button);
   /* We do NOT unref p since the only reference held to it gets
    * removed when the button gets disposed. */
-  g_assert (finalized);
+  g_assert_true (finalized);
 }
 
 static void
@@ -41,8 +41,8 @@ popover2 (void)
 
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), p);
 
-  g_assert (g_object_is_floating (button));
-  g_assert (!g_object_is_floating (p));
+  g_assert_true (g_object_is_floating (button));
+  g_assert_true (!g_object_is_floating (p));
 
   g_object_weak_ref (G_OBJECT (p), check_finalized, &finalized);
 
@@ -50,7 +50,7 @@ popover2 (void)
 
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), NULL);
 
-  g_assert (finalized);
+  g_assert_true (finalized);
 
   g_object_unref (button);
 }
@@ -62,13 +62,13 @@ filechooserwidget (void)
   GtkWidget *w = gtk_file_chooser_widget_new (GTK_FILE_CHOOSER_ACTION_OPEN);
   gboolean finalized = FALSE;
 
-  g_assert (g_object_is_floating (w));
+  g_assert_true (g_object_is_floating (w));
   g_object_ref_sink (w);
   g_object_weak_ref (G_OBJECT (w), check_finalized, &finalized);
 
   g_object_unref (w);
 
-  g_assert (finalized);
+  g_assert_true (finalized);
 }
 
 static void
@@ -78,18 +78,18 @@ window (void)
   gboolean finalized = FALSE;
 
   /* GTK holds a ref */
-  g_assert (!g_object_is_floating (w));
+  g_assert_true (!g_object_is_floating (w));
   g_object_weak_ref (G_OBJECT (w), check_finalized, &finalized);
 
   gtk_window_destroy (GTK_WINDOW (w));
 
-  g_assert (finalized);
+  g_assert_true (finalized);
 }
 
 int
 main (int argc, char **argv)
 {
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
   gtk_init ();
 
   g_test_add_func ("/gtk/widget-refcount/popover", popover);

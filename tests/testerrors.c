@@ -34,13 +34,13 @@ test_error_trapping (GdkDisplay *gdk_display)
   gdk_x11_display_error_trap_push (gdk_display);
   XListProperties (d, 0, &dummy); /* round trip */
   error = gdk_x11_display_error_trap_pop (gdk_display);
-  g_assert (error == BadWindow);
+  g_assert_true (error == BadWindow);
 
   gdk_x11_display_error_trap_push (gdk_display);
   XSetCloseDownMode (d, 12345); /* not a round trip */
   XSetCloseDownMode (d, DestroyAll);
   error = gdk_x11_display_error_trap_pop (gdk_display);
-  g_assert (error == BadValue);
+  g_assert_true (error == BadValue);
 
   /* try the same without sync */
   gdk_x11_display_error_trap_push (gdk_display);
@@ -60,17 +60,17 @@ test_error_trapping (GdkDisplay *gdk_display)
   gdk_x11_display_error_trap_push (gdk_display);
   XSetCloseDownMode (d, 12345);
   error = gdk_x11_display_error_trap_pop (gdk_display);
-  g_assert (error == BadValue);
+  g_assert_true (error == BadValue);
   error = gdk_x11_display_error_trap_pop (gdk_display);
-  g_assert (error == Success);
+  g_assert_true (error == Success);
 
   gdk_x11_display_error_trap_push (gdk_display);
   XSetCloseDownMode (d, 12345);
   gdk_x11_display_error_trap_push (gdk_display);
   error = gdk_x11_display_error_trap_pop (gdk_display);
-  g_assert (error == Success);
+  g_assert_true (error == Success);
   error = gdk_x11_display_error_trap_pop (gdk_display);
-  g_assert (error == BadValue);
+  g_assert_true (error == BadValue);
 
   /* try nested, without sync */
   gdk_x11_display_error_trap_push (gdk_display);
@@ -104,23 +104,23 @@ test_error_trapping (GdkDisplay *gdk_display)
   gdk_x11_display_error_trap_push (gdk_display);
   XSync (d, TRUE); /* not an error */
   error = gdk_x11_display_error_trap_pop (gdk_display);
-  g_assert (error == Success);
+  g_assert_true (error == Success);
   error = gdk_x11_display_error_trap_pop (gdk_display);
-  g_assert (error == BadValue);
+  g_assert_true (error == BadValue);
 
   /* non-roundtrip non-error request after error request, inside trap */
   gdk_x11_display_error_trap_push (gdk_display);
   XSetCloseDownMode (d, 12345);
   XMapWindow (d, DefaultRootWindow (d));
   error = gdk_x11_display_error_trap_pop (gdk_display);
-  g_assert (error == BadValue);
+  g_assert_true (error == BadValue);
 
   /* a non-roundtrip non-error request before error request, inside trap */
   gdk_x11_display_error_trap_push (gdk_display);
   XMapWindow (d, DefaultRootWindow (d));
   XSetCloseDownMode (d, 12345);
   error = gdk_x11_display_error_trap_pop (gdk_display);
-  g_assert (error == BadValue);
+  g_assert_true (error == BadValue);
 
   /* Not part of any test, just a double-check
    * that all errors have arrived

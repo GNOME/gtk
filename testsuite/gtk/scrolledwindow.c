@@ -270,7 +270,7 @@ int
 main (int argc, char **argv)
 {
   gtk_init ();
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
 
   g_test_add_func ("/sizing/scrolledwindow/overlay_automatic_width_min", overlay_automatic_width_min);
   g_test_add_func ("/sizing/scrolledwindow/overlay_automatic_height_min", overlay_automatic_height_min);

@@ -266,7 +266,7 @@ test_invert (void)
               transform = apply_test_transform (transform, j);
               transform = apply_test_transform (transform, k);
               inverse = gsk_transform_invert (gsk_transform_ref (transform));
-              g_assert (inverse != NULL || transform == NULL);
+              g_assert_true (inverse != NULL || transform == NULL);
 
               identity = gsk_transform_transform (gsk_transform_ref (transform), inverse);
               graphene_assert_fuzzy_transform_equal (identity, NULL, EPSILON);
@@ -372,6 +372,7 @@ test_print_parse (void)
   GskTransform *transform, *parsed;
   guint i, j, k;
   char *str1, *str2;
+  gboolean ret;
 
   for (i = 0; i < G_N_ELEMENTS (test_transforms); i++)
     {
@@ -384,14 +385,15 @@ test_print_parse (void)
               transform = apply_test_transform (transform, k);
 
               str1 = gsk_transform_to_string (transform);
-              g_assert (str1);
-              g_assert (strlen (str1) > 0);
+              g_assert_nonnull (str1);
+              g_assert_true (strlen (str1) > 0);
 
               str2 = gsk_transform_to_string (transform);
               g_assert_cmpstr (str1, ==, str2);
               g_free (str2);
 
-              g_assert (gsk_transform_parse (str1, &parsed));
+              ret = gsk_transform_parse (str1, &parsed);
+              g_assert_true (ret);
               graphene_assert_fuzzy_transform_equal (parsed, transform, EPSILON);
 
               str2 = gsk_transform_to_string (parsed);

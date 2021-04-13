@@ -78,7 +78,7 @@ test_adjustment_null (void)
 
   adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (spin));
   gtk_spin_button_configure (GTK_SPIN_BUTTON (spin), NULL, 1.0, 0);
-  g_assert (adj == gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (spin)));
+  g_assert_true (adj == gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (spin)));
 
   gtk_spin_button_set_adjustment (GTK_SPIN_BUTTON (spin), NULL);
   adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (spin));

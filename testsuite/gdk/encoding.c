@@ -37,7 +37,7 @@ test_to_text_list (void)
 int
 main (int argc, char *argv[])
 {
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
   gtk_init ();
 
   g_test_add_func ("/encoding/to-text-list", test_to_text_list);

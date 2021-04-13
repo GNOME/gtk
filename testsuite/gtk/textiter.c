@@ -34,14 +34,14 @@ test_empty_search (void)
   /* search from start forward */
   gtk_text_buffer_get_start_iter (buffer, &it);
   res = gtk_text_iter_forward_search (&it, "", 0, &s, &e, NULL);
-  g_assert (res);
+  g_assert_true (res);
   g_assert_cmpint (gtk_text_iter_get_offset (&s), ==, gtk_text_iter_get_offset (&e));
   g_assert_cmpint (gtk_text_iter_get_offset (&s), ==, 1);
 
   /* search from end backward */
   gtk_text_buffer_get_end_iter (buffer, &it);
   res = gtk_text_iter_backward_search (&it, "", 0, &s, &e, NULL);
-  g_assert (res);
+  g_assert_true (res);
   g_assert_cmpint (gtk_text_iter_get_offset (&s), ==, gtk_text_iter_get_offset (&e));
   g_assert_cmpint (gtk_text_iter_get_offset (&s), ==, 20);
 }
@@ -69,7 +69,7 @@ check_found_forward (const char *haystack,
   /* search from start forward */
   gtk_text_buffer_get_start_iter (buffer, &i);
   res = gtk_text_iter_forward_search (&i, needle, flags, &s, &e, NULL);
-  g_assert (res);
+  g_assert_true (res);
   g_assert_cmpint (expected_start, ==, gtk_text_iter_get_offset (&s));
   g_assert_cmpint (expected_end, ==, gtk_text_iter_get_offset (&e));
   text = gtk_text_iter_get_text (&s, &e);
@@ -99,7 +99,7 @@ check_found_backward (const char *haystack,
   /* search from end backward */
   gtk_text_buffer_get_end_iter (buffer, &i);
   res = gtk_text_iter_backward_search (&i, needle, flags, &s, &e, NULL);
-  g_assert (res);
+  g_assert_true (res);
   g_assert_cmpint (expected_start, ==, gtk_text_iter_get_offset (&s));
   g_assert_cmpint (expected_end, ==, gtk_text_iter_get_offset (&e));
   text = gtk_text_iter_get_text (&s, &e);
@@ -125,12 +125,12 @@ check_not_found (const char *haystack,
   /* search from start forward */
   gtk_text_buffer_get_start_iter (buffer, &i);
   res = gtk_text_iter_forward_search (&i, needle, flags, &s, &e, NULL);
-  g_assert (res == FALSE);
+  g_assert_false (res);
 
   /* search from end backward */
   gtk_text_buffer_get_end_iter (buffer, &i);
   res = gtk_text_iter_backward_search (&i, needle, flags, &s, &e, NULL);
-  g_assert (res == FALSE);
+  g_assert_false (res);
 
   g_object_unref (buffer);
 }
@@ -287,6 +287,7 @@ test_forward_to_tag_toggle (void)
   GtkTextTag *editable_tag;
   GtkTextIter iter;
   int offset;
+  gboolean ret;
 
   buffer = gtk_text_buffer_new (NULL);
 
@@ -306,26 +307,31 @@ test_forward_to_tag_toggle (void)
 
   /* Go to the first "on" toggle */
   gtk_text_buffer_get_start_iter (buffer, &iter);
-  g_assert (gtk_text_iter_forward_to_tag_toggle (&iter, NULL));
+  ret = gtk_text_iter_forward_to_tag_toggle (&iter, NULL);
+  g_assert_true (ret);
   offset = gtk_text_iter_get_offset (&iter);
   g_assert_cmpint (offset, ==, 1);
 
   /* Go to the last "off" toggle for the bold tag */
-  g_assert (gtk_text_iter_forward_to_tag_toggle (&iter, bold_tag));
+  ret = gtk_text_iter_forward_to_tag_toggle (&iter, bold_tag);
+  g_assert_true (ret);
   offset = gtk_text_iter_get_offset (&iter);
   g_assert_cmpint (offset, ==, 2);
 
-  g_assert (!gtk_text_iter_forward_to_tag_toggle (&iter, bold_tag));
+  ret = gtk_text_iter_forward_to_tag_toggle (&iter, bold_tag);
+  g_assert_false (ret);
 
   /* Go to the first "on" toggle for the editable tag */
   gtk_text_buffer_get_start_iter (buffer, &iter);
-  g_assert (gtk_text_iter_forward_to_tag_toggle (&iter, editable_tag));
+  ret = gtk_text_iter_forward_to_tag_toggle (&iter, editable_tag);
+  g_assert_true (ret);
   offset = gtk_text_iter_get_offset (&iter);
   g_assert_cmpint (offset, ==, 2);
 
   /* Test with the end iter */
   gtk_text_buffer_get_end_iter (buffer, &iter);
-  g_assert (!gtk_text_iter_forward_to_tag_toggle (&iter, editable_tag));
+  ret = gtk_text_iter_forward_to_tag_toggle (&iter, editable_tag);
+  g_assert_false (ret);
 
   g_object_unref (buffer);
 }

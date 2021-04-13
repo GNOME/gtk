@@ -77,6 +77,7 @@ test_bug_539377 (void)
   GtkWidget *view;
   GtkTreePath *path;
   GtkListStore *list_store;
+  gboolean ret;
 
   /*http://bugzilla.gnome.org/show_bug.cgi?id=539377 */
 
@@ -84,20 +85,24 @@ test_bug_539377 (void)
 
   /* Non-realized view, no model */
   view = gtk_tree_view_new ();
-  g_assert (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (view), 10, 10, &path,
-                                           NULL, NULL, NULL) == FALSE);
-  g_assert (gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (view), 10, 10,
-                                               &path, NULL) == FALSE);
+  ret = gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (view), 10, 10, &path,
+                                       NULL, NULL, NULL);
+  g_assert_false (ret);
+  ret = gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (view), 10, 10,
+                                           &path, NULL);
+  g_assert_false (ret);
 
   /* Non-realized view, with model */
   list_store = gtk_list_store_new (1, G_TYPE_STRING);
   gtk_tree_view_set_model (GTK_TREE_VIEW (view),
                            GTK_TREE_MODEL (list_store));
 
-  g_assert (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (view), 10, 10, &path,
-                                           NULL, NULL, NULL) == FALSE);
-  g_assert (gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (view), 10, 10,
-                                               &path, NULL) == FALSE);
+  ret = gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (view), 10, 10, &path,
+                                       NULL, NULL, NULL);
+  g_assert_false (ret);
+  ret = gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (view), 10, 10,
+                                           &path, NULL);
+  g_assert_false (ret);
 
   g_object_unref (g_object_ref_sink (view));
 }

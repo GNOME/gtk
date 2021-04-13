@@ -676,7 +676,7 @@ test_introspection (void)
           if (strcmp (expected[i].name, name) == 0)
             {
               found++;
-              g_assert (expected[i].owner == owner);
+              g_assert_true (expected[i].owner == owner);
               g_assert_cmpstr (expected[i].name, ==, name);
               g_assert_cmpstr (expected[i].params, ==, params ? g_variant_type_peek_string (params) : NULL);
               g_assert_cmpstr (expected[i].property, ==, property);
@@ -687,7 +687,7 @@ test_introspection (void)
         g_error ("Unexpected GtkText action: %s", name);
       j++;
     }
-  g_assert (found == G_N_ELEMENTS (expected));
+  g_assert_cmpuint (found, ==, G_N_ELEMENTS (expected));
 
   g_type_class_unref (class);
 }

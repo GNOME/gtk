@@ -6799,8 +6799,8 @@ test_row_changed (void)
   gtk_list_store_set (store, &iter2, 0, 1, -1);
   gtk_list_store_set (store, &iter3, 0, 1, -1);
 
-  g_assert (row_changed_count == 3);
-  g_assert (filter_row_changed_count == 0);
+  g_assert_cmpint (row_changed_count, ==, 3);
+  g_assert_cmpint (filter_row_changed_count, ==, 0);
 
   row_changed_count = 0;
   filter_row_changed_count = 0;
@@ -6813,8 +6813,8 @@ test_row_changed (void)
   gtk_list_store_set (store, &iter2, 0, 2, -1);
   gtk_list_store_set (store, &iter3, 0, 2, -1);
 
-  g_assert (row_changed_count == 3);
-  g_assert (filter_row_changed_count == 3);
+  g_assert_cmpint (row_changed_count, ==, 3);
+  g_assert_cmpint (filter_row_changed_count, ==, 3);
 
   gtk_tree_model_unref_node (filter, &fiter1);
   gtk_tree_model_unref_node (filter, &fiter2);

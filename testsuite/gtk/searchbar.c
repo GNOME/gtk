@@ -11,11 +11,11 @@ capture_widget_destroy (void)
 
   gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (searchbar), button);
 
-  g_assert (gtk_search_bar_get_key_capture_widget (GTK_SEARCH_BAR (searchbar)) == button);
+  g_assert_true (gtk_search_bar_get_key_capture_widget (GTK_SEARCH_BAR (searchbar)) == button);
 
   g_object_unref (button);
 
-  g_assert (gtk_search_bar_get_key_capture_widget (GTK_SEARCH_BAR (searchbar)) == NULL);
+  g_assert_null (gtk_search_bar_get_key_capture_widget (GTK_SEARCH_BAR (searchbar)));
 
   g_object_unref (searchbar);
 }
@@ -31,11 +31,11 @@ capture_widget_unset (void)
 
   gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (searchbar), button);
 
-  g_assert (gtk_search_bar_get_key_capture_widget (GTK_SEARCH_BAR (searchbar)) == button);
+  g_assert_true (gtk_search_bar_get_key_capture_widget (GTK_SEARCH_BAR (searchbar)) == button);
 
   gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (searchbar), NULL);
 
-  g_assert (gtk_search_bar_get_key_capture_widget (GTK_SEARCH_BAR (searchbar)) == NULL);
+  g_assert_null (gtk_search_bar_get_key_capture_widget (GTK_SEARCH_BAR (searchbar)));
 
   g_object_unref (searchbar);
   g_object_unref (button);

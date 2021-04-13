@@ -159,7 +159,7 @@ test_color_parse_nonsense (void)
 int
 main (int argc, char *argv[])
 {
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
 
   g_test_add_func ("/rgba/parse", test_color_parse);
   g_test_add_func ("/rgba/parse/nonsense", test_color_parse_nonsense);

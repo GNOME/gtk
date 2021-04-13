@@ -183,13 +183,13 @@ signal_monitor_generic_handler (SignalMonitor *m,
     {
       int i, len;
 
-      g_assert (new_order != NULL);
+      g_assert_nonnull (new_order);
 
       len = gtk_tree_model_iter_n_children (model, iter);
-      g_assert (s->len == len);
+      g_assert_cmpint (s->len, ==, len);
 
       for (i = 0; i < len; i++)
-        g_assert (s->new_order[i] == new_order[i]);
+        g_assert_cmpint (s->new_order[i], ==, new_order[i]);
     }
 
   s = g_queue_pop_tail (m->queue);
@@ -299,7 +299,7 @@ signal_monitor_free (SignalMonitor *m)
 void
 signal_monitor_assert_is_empty (SignalMonitor *m)
 {
-  g_assert (g_queue_is_empty (m->queue));
+  g_assert_true (g_queue_is_empty (m->queue));
 }
 
 void

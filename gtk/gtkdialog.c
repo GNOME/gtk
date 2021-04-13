@@ -369,7 +369,7 @@ apply_response_for_action_area (GtkDialog *dialog,
                                 GtkWidget *child,
                                 int        response_id)
 {
-  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
+  GtkDialogPrivate *priv G_GNUC_UNUSED = gtk_dialog_get_instance_private (dialog);
 
   g_assert (gtk_widget_get_parent (child) == priv->action_area);
 }
