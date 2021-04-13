@@ -3513,7 +3513,7 @@ prelight_or_select (GtkTreeView   *tree_view,
 static void
 ensure_unprelighted (GtkTreeView *tree_view)
 {
-  GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
+  GtkTreeViewPrivate *priv G_GNUC_UNUSED = gtk_tree_view_get_instance_private (tree_view);
 
   do_prelight (tree_view,
 	       NULL, NULL,

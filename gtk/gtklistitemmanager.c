@@ -104,7 +104,7 @@ gtk_list_item_manager_augment_node (GtkRbTree *tree,
 static void
 gtk_list_item_manager_clear_node (gpointer _item)
 {
-  GtkListItemManagerItem *item = _item;
+  GtkListItemManagerItem *item G_GNUC_UNUSED = _item;
 
   g_assert (item->widget == NULL);
 }

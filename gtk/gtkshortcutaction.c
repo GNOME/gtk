@@ -882,7 +882,7 @@ gtk_signal_action_print (GtkShortcutAction *action,
 static void
 gtk_signal_action_constructed (GObject *gobject)
 {
-  GtkSignalAction *self = GTK_SIGNAL_ACTION (gobject);
+  GtkSignalAction *self G_GNUC_UNUSED = GTK_SIGNAL_ACTION (gobject);
 
   g_assert (self->name != NULL && self->name[0] != '\0');
 
@@ -1162,7 +1162,7 @@ gtk_named_action_get_property (GObject    *gobject,
 static void
 gtk_named_action_constructed (GObject *gobject)
 {
-  GtkNamedAction *self = GTK_NAMED_ACTION (gobject);
+  GtkNamedAction *self G_GNUC_UNUSED = GTK_NAMED_ACTION (gobject);
 
   g_assert (self->name != NULL && self->name[0] != '\0');
 

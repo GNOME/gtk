@@ -320,7 +320,7 @@ static void
 gtk_settings_class_init (GtkSettingsClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-  guint result;
+  guint result G_GNUC_UNUSED;
 
   gobject_class->finalize = gtk_settings_finalize;
   gobject_class->get_property = gtk_settings_get_property;

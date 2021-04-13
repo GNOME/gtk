@@ -1420,7 +1420,7 @@ gtk_at_spi_context_get_property (GObject    *gobject,
 static void
 gtk_at_spi_context_constructed (GObject *gobject)
 {
-  GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (gobject);
+  GtkAtSpiContext *self G_GNUC_UNUSED = GTK_AT_SPI_CONTEXT (gobject);
 
   /* Make sure that we were properly constructed */
   g_assert (self->bus_address);

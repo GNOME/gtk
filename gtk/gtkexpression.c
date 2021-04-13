@@ -1935,9 +1935,9 @@ gtk_expression_watch_ref (GtkExpressionWatch *watch)
 static void
 gtk_expression_watch_finalize (gpointer data)
 {
-  GtkExpressionWatch *watch = data;
+  GtkExpressionWatch *watch G_GNUC_UNUSED = data;
 
-  g_assert (!gtk_expression_watch_is_watching (watch));
+  g_assert (!gtk_expression_watch_is_watching (data));
 }
 
 /**
