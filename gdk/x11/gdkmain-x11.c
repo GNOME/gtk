@@ -240,24 +240,13 @@ gdk_x_io_error (Display *display)
   /* This is basically modelled after the code in XLib. We need
    * an explicit error handler here, so we can disable our atexit()
    * which would otherwise cause a nice segfault.
-   * We fprintf(stderr, instead of g_warning() because g_warning()
-   * could possibly be redirected to a dialog
+   * We g_debug() instead of g_warning(), because g_warning()
+   * could possibly be redirected to the log
    */
-  if (errno == EPIPE)
-    {
-      g_message ("The application '%s' lost its connection to the display %s;\n"
-                 "most likely the X server was shut down or you killed/destroyed\n"
-                 "the application.\n",
-                 g_get_prgname (),
-                 display ? DisplayString (display) : gdk_get_display_arg_name ());
-    }
-  else
-    {
-      g_message ("%s: Fatal IO error %d (%s) on X server %s.\n",
-                 g_get_prgname (),
-                 errno, g_strerror (errno),
-                 display ? DisplayString (display) : gdk_get_display_arg_name ());
-    }
+  g_debug ("%s: Fatal IO error %d (%s) on X server %s.\n",
+           g_get_prgname (),
+           errno, g_strerror (errno),
+           display ? DisplayString (display) : gdk_get_display_arg_name ());
 
   _exit (1);
 }
