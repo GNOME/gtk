@@ -70,15 +70,20 @@ if get_option('man-pages') and xsltproc.found()
   man_files = [
     [ 'gtk4-broadwayd', '1', ],
     [ 'gtk4-builder-tool', '1', ],
-    [ 'gtk4-demo', '1', ],
-    [ 'gtk4-demo-application', '1', ],
     [ 'gtk4-encode-symbolic-svg', '1', ],
-    [ 'gtk4-icon-browser', '1', ],
     [ 'gtk4-launch', '1', ],
     [ 'gtk4-query-settings', '1', ],
     [ 'gtk4-update-icon-cache', '1', ],
-    [ 'gtk4-widget-factory', '1', ],
   ]
+
+  if get_option('demos')
+    man_files += [
+      [ 'gtk4-demo', '1', ],
+      [ 'gtk4-demo-application', '1', ],
+      [ 'gtk4-widget-factory', '1', ],
+      [ 'gtk4-icon-browser', '1', ],
+    ]
+  endif
 
   foreach man: man_files
     man_name = man.get(0)
