@@ -503,13 +503,18 @@ if get_option('man') and xsltproc.found()
     [ 'gtk-update-icon-cache', '1', ],
     [ 'gtk-encode-symbolic-svg', '1', ],
     [ 'gtk-launch', '1', ],
-    [ 'gtk3-demo', '1', ],
-    [ 'gtk3-demo-application', '1', ],
-    [ 'gtk3-widget-factory', '1', ],
-    [ 'gtk3-icon-browser', '1', ],
     [ 'gtk-builder-tool', '1', ],
     [ 'gtk-query-settings', '1', ],
   ]
+
+  if get_option('demos')
+    man_files += [
+      [ 'gtk3-demo', '1', ],
+      [ 'gtk3-demo-application', '1', ],
+      [ 'gtk3-widget-factory', '1', ],
+      [ 'gtk3-icon-browser', '1', ],
+    ]
+  endif
 
   if broadway_enabled
     man_files += [[ 'broadwayd', '1', ]]
