@@ -731,13 +731,21 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	    }
 	}
 
+      if (priv->in_hex_sequence || priv->in_compose_sequence)
+        return TRUE; /* Don't leak random key events during preedit */
+
       return FALSE;
     }
 
   /* Ignore modifier key presses */
   for (i = 0; i < G_N_ELEMENTS (gtk_compose_ignore); i++)
     if (event->keyval == gtk_compose_ignore[i])
-      return FALSE;
+      {
+        if (priv->in_hex_sequence || priv->in_compose_sequence)
+          return TRUE; /* Don't leak random key events during preedit */
+
+        return FALSE;
+      }
 
   hex_mod_mask = gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
                                                GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
@@ -776,16 +784,23 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
         gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
                                       GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
 
-      if (event->state & no_text_input_mask ||
-	  (priv->in_hex_sequence && priv->modifiers_dropped &&
-	   (event->keyval == GDK_KEY_Return ||
-	    event->keyval == GDK_KEY_ISO_Enter ||
-	    event->keyval == GDK_KEY_KP_Enter)))
+      if (priv->in_hex_sequence && priv->modifiers_dropped &&
+	  (event->keyval == GDK_KEY_Return ||
+	   event->keyval == GDK_KEY_ISO_Enter ||
+	   event->keyval == GDK_KEY_KP_Enter))
 	{
 	  return FALSE;
 	}
+
+      if (event->state & no_text_input_mask)
+        {
+          if (priv->in_hex_sequence || priv->in_compose_sequence)
+            return TRUE; /* Don't leak random key events during preedit */
+
+          return FALSE;
+        }
     }
-  
+
   /* Handle backspace */
   if (priv->in_hex_sequence && have_hex_mods && is_backspace)
     {
