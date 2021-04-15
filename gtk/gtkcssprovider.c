@@ -1384,7 +1384,12 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
     }
   else
     {
-      /* Things failed! Fall back! Fall back! */
+      /* Things failed! Fall back! Fall back!
+       *
+       * We accept the names HighContrast, HighContrastInverse,
+       * Adwaita and Adwaita-dark as aliases for the variants
+       * of the Default theme.
+       */
       if (strcmp (name, "HighContrast") == 0)
         {
           if (g_strcmp0 (variant, "dark") == 0)
@@ -1394,6 +1399,8 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
         }
       else if (strcmp (name, "HighConstrastInverse") == 0)
         gtk_css_provider_load_named (provider, DEFAULT_THEME_NAME, "hc-dark");
+      else if (strcmp (name, "Adwaita-dark") == 0)
+        gtk_css_provider_load_named (provider, DEFAULT_THEME_NAME, "dark");
       else if (strcmp (name, DEFAULT_THEME_NAME) != 0)
         gtk_css_provider_load_named (provider, DEFAULT_THEME_NAME, variant);
       else
