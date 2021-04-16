@@ -2011,6 +2011,8 @@ gtk_window_root_set_focus (GtkRoot   *root,
 
   g_clear_object (&old_focus);
 
+  priv->move_focus = FALSE;
+
   g_object_notify (G_OBJECT (self), "focus-widget");
 }
 
@@ -2287,6 +2289,8 @@ gtk_window_set_default_widget (GtkWindow *window,
 	}
 
       priv->default_widget = default_widget;
+
+      priv->unset_default = FALSE;
 
       if (priv->default_widget)
 	{
@@ -4671,16 +4675,10 @@ maybe_unset_focus_and_default (GtkWindow *window)
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
   if (priv->move_focus)
-    {
-      gtk_widget_child_focus (GTK_WIDGET (window), GTK_DIR_TAB_FORWARD);
-      priv->move_focus = FALSE;
-    }
+    gtk_widget_child_focus (GTK_WIDGET (window), GTK_DIR_TAB_FORWARD);
 
   if (priv->unset_default)
-    {
-      gtk_window_set_default_widget (window, NULL);
-      priv->unset_default = FALSE;
-    }
+    gtk_window_set_default_widget (window, NULL);
 }
 
 static gboolean
