@@ -446,7 +446,7 @@ gdk_texture_download_area (GdkTexture         *texture,
   g_assert (area->x + area->width <= texture->width);
   g_assert (area->y + area->height <= texture->height);
 
-  return GDK_TEXTURE_GET_CLASS (texture)->download (texture, area, data, stride);
+  GDK_TEXTURE_GET_CLASS (texture)->download (texture, area, data, stride);
 }
 
 /**

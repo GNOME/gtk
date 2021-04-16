@@ -102,7 +102,7 @@ gtk_native_layout (GtkNative *self,
                    int        width,
                    int        height)
 {
-  return GTK_NATIVE_GET_IFACE (self)->layout (self, width, height);
+  GTK_NATIVE_GET_IFACE (self)->layout (self, width, height);
 }
 
 static void
@@ -258,7 +258,7 @@ gtk_native_get_surface_transform (GtkNative *self,
   g_return_if_fail (x != NULL);
   g_return_if_fail (y != NULL);
 
-  return GTK_NATIVE_GET_IFACE (self)->get_surface_transform (self, x, y);
+  GTK_NATIVE_GET_IFACE (self)->get_surface_transform (self, x, y);
 }
 
 /**
