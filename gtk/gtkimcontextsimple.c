@@ -553,8 +553,10 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
 
           if (i == n_compose - 1)
             {
+              int j;
+
               /* dead keys are never *really* dead */
-              for (int j = 0; j < i; j++)
+              for (j = 0; j < i; j++)
                 {
                   ch = dead_key_to_unicode (priv->compose_buffer[j], &need_space);
                   if (ch)
