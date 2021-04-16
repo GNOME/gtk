@@ -377,7 +377,7 @@ gdk_content_provider_attach_clipboard (GdkContentProvider *provider,
   g_return_if_fail (GDK_IS_CONTENT_PROVIDER (provider));
   g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
 
-  return GDK_CONTENT_PROVIDER_GET_CLASS (provider)->attach_clipboard (provider, clipboard);
+  GDK_CONTENT_PROVIDER_GET_CLASS (provider)->attach_clipboard (provider, clipboard);
 }
 
 void
@@ -387,5 +387,5 @@ gdk_content_provider_detach_clipboard (GdkContentProvider *provider,
   g_return_if_fail (GDK_IS_CONTENT_PROVIDER (provider));
   g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
 
-  return GDK_CONTENT_PROVIDER_GET_CLASS (provider)->detach_clipboard (provider, clipboard);
+  GDK_CONTENT_PROVIDER_GET_CLASS (provider)->detach_clipboard (provider, clipboard);
 }
