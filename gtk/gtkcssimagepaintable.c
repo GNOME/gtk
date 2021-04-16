@@ -66,9 +66,9 @@ gtk_css_image_paintable_snapshot (GtkCssImage *image,
 {
   GtkCssImagePaintable *paintable = GTK_CSS_IMAGE_PAINTABLE (image);
 
-  return gdk_paintable_snapshot (get_paintable (paintable),
-                                 snapshot,
-                                 width, height);
+  gdk_paintable_snapshot (get_paintable (paintable),
+                          snapshot,
+                          width, height);
 }
 
 static GtkCssImage *
