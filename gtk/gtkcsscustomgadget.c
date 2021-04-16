@@ -121,14 +121,14 @@ gtk_css_custom_gadget_get_preferred_size (GtkCssGadget   *gadget,
   GtkCssCustomGadgetPrivate *priv = gtk_css_custom_gadget_get_instance_private (GTK_CSS_CUSTOM_GADGET (gadget));
 
   if (priv->preferred_size_func)
-    return priv->preferred_size_func (gadget, orientation, for_size, 
-                                      minimum, natural,
-                                      minimum_baseline, natural_baseline,
-                                      priv->data);
+    priv->preferred_size_func (gadget, orientation, for_size,
+                               minimum, natural,
+                               minimum_baseline, natural_baseline,
+                               priv->data);
   else
-    return GTK_CSS_GADGET_CLASS (gtk_css_custom_gadget_parent_class)->get_preferred_size (gadget, orientation, for_size, 
-                                                                                          minimum, natural,
-                                                                                          minimum_baseline, natural_baseline);
+    GTK_CSS_GADGET_CLASS (gtk_css_custom_gadget_parent_class)->get_preferred_size (gadget, orientation, for_size,
+                                                                                   minimum, natural,
+                                                                                   minimum_baseline, natural_baseline);
 }
 
 static void
@@ -140,9 +140,9 @@ gtk_css_custom_gadget_allocate (GtkCssGadget        *gadget,
   GtkCssCustomGadgetPrivate *priv = gtk_css_custom_gadget_get_instance_private (GTK_CSS_CUSTOM_GADGET (gadget));
 
   if (priv->allocate_func)
-    return priv->allocate_func (gadget, allocation, baseline, out_clip, priv->data);
+    priv->allocate_func (gadget, allocation, baseline, out_clip, priv->data);
   else
-    return GTK_CSS_GADGET_CLASS (gtk_css_custom_gadget_parent_class)->allocate (gadget, allocation, baseline, out_clip);
+    GTK_CSS_GADGET_CLASS (gtk_css_custom_gadget_parent_class)->allocate (gadget, allocation, baseline, out_clip);
 }
 
 static gboolean
