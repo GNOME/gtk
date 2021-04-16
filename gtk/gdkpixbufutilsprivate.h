@@ -86,6 +86,16 @@ GdkTexture *gtk_make_symbolic_texture_from_resource (const char    *path,
                                                      int            height,
                                                      double         scale,
                                                      GError       **error);
+
+GdkPaintable *gdk_paintable_new_from_bytes_scaled    (GBytes        *bytes,
+                                                      int            scale_factor);
+GdkPaintable *gdk_paintable_new_from_path_scaled     (const char    *path,
+                                                      int            scale_factor);
+GdkPaintable *gdk_paintable_new_from_resource_scaled (const char    *path,
+                                                      int            scale_factor);
+GdkPaintable *gdk_paintable_new_from_file_scaled     (GFile         *file,
+                                                      int            scale_factor);
+
 G_END_DECLS
 
 #endif  /* __GDK_PIXBUF_UTILS_PRIVATE_H__ */

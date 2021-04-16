@@ -580,12 +580,11 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
   GtkWidget *hbox, *main_vbox, *icon;
   GtkWidget *grid;
   GtkWidget *label;
-  GtkWidget *content_area, *action_area;
+  GtkWidget *content_area;
   gboolean   can_anonymous;
   guint      rows;
   char *primary;
   const char *secondary = NULL;
-  PangoAttrList *attrs;
   gboolean use_header;
 
   priv = operation->priv;
@@ -602,11 +601,6 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
   priv->dialog = dialog;
 
   content_area = gtk_dialog_get_content_area (dialog);
-  action_area = gtk_dialog_get_action_area (dialog);
-
-  /* Set the dialog up with HIG properties */
-  gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
-  gtk_box_set_spacing (GTK_BOX (action_area), 6);
 
   gtk_window_set_resizable (window, FALSE);
   gtk_window_set_title (window, "");
@@ -621,6 +615,12 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
 
   /* Build contents */
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+  g_object_set (hbox,
+                "margin-start", 12,
+                "margin-end", 12,
+                "margin-top", 12,
+                "margin-bottom", 12,
+                NULL);
   gtk_box_append (GTK_BOX (content_area), hbox);
 
   icon = gtk_image_new_from_icon_name ("dialog-password");
@@ -646,10 +646,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
   gtk_label_set_wrap (GTK_LABEL (label), TRUE);
   gtk_box_append (GTK_BOX (main_vbox), GTK_WIDGET (label));
   g_free (primary);
-  attrs = pango_attr_list_new ();
-  pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
-  gtk_label_set_attributes (GTK_LABEL (label), attrs);
-  pango_attr_list_unref (attrs);
+  gtk_widget_add_css_class (label, "title-3");
 
   if (secondary != NULL)
     {

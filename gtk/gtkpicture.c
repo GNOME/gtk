@@ -26,9 +26,9 @@
 #include "gtkcssstyleprivate.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtkscalerprivate.h"
 #include "gtksnapshot.h"
 #include "gtkwidgetprivate.h"
+#include "gdkpixbufutilsprivate.h"
 
 /**
  * GtkPicture:
@@ -560,77 +560,6 @@ gtk_picture_new_for_resource (const char *resource_path)
   return result;
 }
 
-typedef struct {
-  int scale_factor;
-} LoaderData;
-
-static void
-on_loader_size_prepared (GdkPixbufLoader *loader,
-			 int              width,
-			 int              height,
-			 gpointer         user_data)
-{
-  LoaderData *loader_data = user_data;
-  GdkPixbufFormat *format;
-
-  /* Let the regular icon helper code path handle non-scalable pictures */
-  format = gdk_pixbuf_loader_get_format (loader);
-  if (!gdk_pixbuf_format_is_scalable (format))
-    {
-      loader_data->scale_factor = 1;
-      return;
-    }
-
-  gdk_pixbuf_loader_set_size (loader,
-                              width * loader_data->scale_factor,
-                              height * loader_data->scale_factor);
-}
-
-static GdkPaintable *
-load_scalable_with_loader (GFile *file,
-                           int    scale_factor)
-{
-  GdkPixbufLoader *loader;
-  GBytes *bytes;
-  GdkPixbufAnimation *animation;
-  GdkPaintable *result, *scaler;
-  LoaderData loader_data;
-
-  result = NULL;
-
-  loader = gdk_pixbuf_loader_new ();
-  loader_data.scale_factor = scale_factor;
-
-  g_signal_connect (loader, "size-prepared", G_CALLBACK (on_loader_size_prepared), &loader_data);
-
-  bytes = g_file_load_bytes (file, NULL, NULL, NULL);
-  if (bytes == NULL)
-    goto out1;
-
-  if (!gdk_pixbuf_loader_write_bytes (loader, bytes, NULL))
-    goto out2;
-
-  if (!gdk_pixbuf_loader_close (loader, NULL))
-    goto out2;
-
-  animation = gdk_pixbuf_loader_get_animation (loader);
-  if (animation == NULL)
-    goto out2;
-
-  result = GDK_PAINTABLE (gdk_texture_new_for_pixbuf (gdk_pixbuf_animation_get_static_image (animation)));
-  scaler = gtk_scaler_new (result, loader_data.scale_factor);
-  g_object_unref (result);
-  result = scaler;
-
-out2:
-  g_bytes_unref (bytes);
-out1:
-  gdk_pixbuf_loader_close (loader, NULL);
-  g_object_unref (loader);
-
-  return result;
-}
-
 /**
  * gtk_picture_set_file: (attributes org.gtk.Method.set_property=file)
  * @self: a `GtkPicture`
@@ -657,7 +586,7 @@ gtk_picture_set_file (GtkPicture *self,
   g_set_object (&self->file, file);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FILE]);
 
-  paintable = load_scalable_with_loader (file, gtk_widget_get_scale_factor (GTK_WIDGET (self)));
+  paintable = gdk_paintable_new_from_file_scaled (file, gtk_widget_get_scale_factor (GTK_WIDGET (self)));
   gtk_picture_set_paintable (self, paintable);
   g_clear_object (&paintable);
 

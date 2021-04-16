@@ -18,6 +18,7 @@
 
 #include <gdk/gdk.h>
 #include "gdkpixbufutilsprivate.h"
+#include "gtkscalerprivate.h"
 
 static GdkPixbuf *
 load_from_stream (GdkPixbufLoader  *loader,
@@ -571,4 +572,131 @@ gtk_make_symbolic_texture_from_file (GFile       *file,
   g_object_unref (pixbuf);
 
   return texture;
+}
+
+typedef struct {
+  int scale_factor;
+} LoaderData;
+
+static void
+on_loader_size_prepared (GdkPixbufLoader *loader,
+                         int              width,
+                         int              height,
+                         gpointer         user_data)
+{
+  LoaderData *loader_data = user_data;
+  GdkPixbufFormat *format;
+
+  /* Let the regular icon helper code path handle non-scalable images */
+  format = gdk_pixbuf_loader_get_format (loader);
+  if (!gdk_pixbuf_format_is_scalable (format))
+    {
+      loader_data->scale_factor = 1;
+      return;
+    }
+
+  gdk_pixbuf_loader_set_size (loader,
+                              width * loader_data->scale_factor,
+                              height * loader_data->scale_factor);
+}
+
+GdkPaintable *
+gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
+                                     int     scale_factor)
+{
+  GdkPixbufLoader *loader;
+  GdkPixbuf *pixbuf = NULL;
+  LoaderData loader_data;
+  GdkTexture *texture;
+  GdkPaintable *paintable;
+
+  loader_data.scale_factor = scale_factor;
+
+  loader = gdk_pixbuf_loader_new ();
+  g_signal_connect (loader, "size-prepared",
+                    G_CALLBACK (on_loader_size_prepared), &loader_data);
+
+  if (!gdk_pixbuf_loader_write_bytes (loader, bytes, NULL))
+    goto out;
+
+  if (!gdk_pixbuf_loader_close (loader, NULL))
+    goto out;
+
+  pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
+  if (pixbuf != NULL)
+    g_object_ref (pixbuf);
+
+ out:
+  gdk_pixbuf_loader_close (loader, NULL);
+  g_object_unref (loader);
+
+  if (!pixbuf)
+    return NULL;
+
+  texture = gdk_texture_new_for_pixbuf (pixbuf);
+  if (loader_data.scale_factor != 1)
+    paintable = gtk_scaler_new (GDK_PAINTABLE (texture), loader_data.scale_factor);
+  else
+    paintable = g_object_ref ((GdkPaintable *)texture);
+
+  g_object_unref (pixbuf);
+  g_object_unref (texture);
+
+  return paintable;
+}
+
+GdkPaintable *
+gdk_paintable_new_from_path_scaled (const char *path,
+                                    int         scale_factor)
+{
+  char *contents;
+  gsize length;
+  GBytes *bytes;
+  GdkPaintable *paintable;
+
+  if (!g_file_get_contents (path, &contents, &length, NULL))
+    return NULL;
+
+  bytes = g_bytes_new_take (contents, length);
+
+  paintable = gdk_paintable_new_from_bytes_scaled (bytes, scale_factor);
+
+  g_bytes_unref (bytes);
+
+  return paintable;
+}
+
+GdkPaintable *
+gdk_paintable_new_from_resource_scaled (const char *path,
+                                        int         scale_factor)
+{
+  GBytes *bytes;
+  GdkPaintable *paintable;
+
+  bytes = g_resources_lookup_data (path, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+  if (!bytes)
+    return NULL;
+
+  paintable = gdk_paintable_new_from_bytes_scaled (bytes, scale_factor);
+  g_bytes_unref (bytes);
+
+  return paintable;
+}
+
+GdkPaintable *
+gdk_paintable_new_from_file_scaled (GFile *file,
+                                    int    scale_factor)
+{
+  GBytes *bytes;
+  GdkPaintable *paintable;
+
+  bytes = g_file_load_bytes (file, NULL, NULL, NULL);
+  if (!bytes)
+    return NULL;
+
+  paintable = gdk_paintable_new_from_bytes_scaled (bytes, scale_factor);
+
+  g_bytes_unref (bytes);
+
+  return paintable;
 }
