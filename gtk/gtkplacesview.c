@@ -1215,12 +1215,14 @@ server_mount_ready_cb (GObject      *source_file,
       g_clear_error (&error);
     }
 
-  if (view->destroyed) {
-    g_object_unref (view);
-    return;
-  }
+  if (view->destroyed)
+    {
+      g_object_unref (view);
+      return;
+    }
 
   view->should_pulse_entry = FALSE;
+  gtk_entry_set_progress_fraction (GTK_ENTRY (view->address_entry), 0);
 
   /* Restore from Cancel to Connect */
   gtk_button_set_label (GTK_BUTTON (view->connect_button), _("Con_nect"));
@@ -1397,8 +1399,7 @@ pulse_entry_cb (gpointer user_data)
     }
   else
     {
-      gtk_entry_set_progress_pulse_step (GTK_ENTRY (view->address_entry), 0.0);
-      gtk_entry_set_progress_fraction (GTK_ENTRY (view->address_entry), 0.0);
+      gtk_entry_set_progress_fraction (GTK_ENTRY (view->address_entry), 0);
       view->entry_pulse_timeout_id = 0;
 
       return G_SOURCE_REMOVE;
@@ -1452,6 +1453,7 @@ mount_server (GtkPlacesView *view,
 
   view->should_pulse_entry = TRUE;
   gtk_entry_set_progress_pulse_step (GTK_ENTRY (view->address_entry), 0.1);
+  gtk_entry_set_progress_fraction (GTK_ENTRY (view->address_entry), 0.1);
   /* Allow to cancel the operation */
   gtk_button_set_label (GTK_BUTTON (view->connect_button), _("Cance_l"));
   gtk_widget_set_sensitive (view->address_entry, FALSE);
