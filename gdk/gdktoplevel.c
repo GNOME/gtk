@@ -364,7 +364,7 @@ gdk_toplevel_focus (GdkToplevel *toplevel,
 {
   g_return_if_fail (GDK_IS_TOPLEVEL (toplevel));
 
-  return GDK_TOPLEVEL_GET_IFACE (toplevel)->focus (toplevel, timestamp);
+  GDK_TOPLEVEL_GET_IFACE (toplevel)->focus (toplevel, timestamp);
 }
 
 /**

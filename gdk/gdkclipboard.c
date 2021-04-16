@@ -554,19 +554,19 @@ gdk_clipboard_store_async (GdkClipboard        *clipboard,
 
   if (priv->local)
     {
-      return GDK_CLIPBOARD_GET_CLASS (clipboard)->store_async (clipboard,
-                                                               io_priority,
-                                                               cancellable,
-                                                               callback,
-                                                               user_data);
+      GDK_CLIPBOARD_GET_CLASS (clipboard)->store_async (clipboard,
+                                                        io_priority,
+                                                        cancellable,
+                                                        callback,
+                                                        user_data);
     }
   else
     {
-      return gdk_clipboard_store_default_async (clipboard,
-                                                io_priority,
-                                                cancellable,
-                                                callback,
-                                                user_data);
+      gdk_clipboard_store_default_async (clipboard,
+                                         io_priority,
+                                         cancellable,
+                                         callback,
+                                         user_data);
     }
 }
 
