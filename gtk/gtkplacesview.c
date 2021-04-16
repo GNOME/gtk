@@ -550,7 +550,7 @@ populate_servers (GtkPlacesView *view)
 
   /* clear previous items */
   while ((child = gtk_widget_get_first_child (GTK_WIDGET (view->recent_servers_listbox))))
-    gtk_list_box_remove (GTK_LIST_BOX (view->listbox), child);
+    gtk_list_box_remove (GTK_LIST_BOX (view->recent_servers_listbox), child);
 
   gtk_list_store_clear (view->completion_store);
 
