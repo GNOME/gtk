@@ -589,8 +589,6 @@ _gdk_win32_display_init_gl (GdkDisplay *display,
   gboolean disable_wgl = FALSE;
 
 #ifdef GDK_WIN32_ENABLE_EGL
-  EGLDisplay egl_disp;
-
   disable_wgl = ((_gdk_gl_flags & GDK_GL_GLES) != 0) ||
                 display_win32->running_on_arm64;
 #endif
@@ -655,46 +653,48 @@ _gdk_win32_display_init_gl (GdkDisplay *display,
       wglMakeCurrent (NULL, NULL);
 
       _destroy_dummy_gl_context (dummy);
-      return TRUE;
     }
 
 #ifdef GDK_WIN32_ENABLE_EGL
-  egl_disp = _gdk_win32_get_egl_display (display_win32);
-
-  if (egl_disp == EGL_NO_DISPLAY ||
-      !eglInitialize (egl_disp, NULL, NULL))
+  else
     {
-      if (egl_disp != EGL_NO_DISPLAY)
+      EGLDisplay egl_disp = _gdk_win32_get_egl_display (display_win32);
+
+      if (egl_disp == EGL_NO_DISPLAY ||
+          !eglInitialize (egl_disp, NULL, NULL))
         {
-          eglTerminate (egl_disp);
-          egl_disp = EGL_NO_DISPLAY;
+          if (egl_disp != EGL_NO_DISPLAY)
+            {
+              eglTerminate (egl_disp);
+              egl_disp = EGL_NO_DISPLAY;
+            }
+
+          return FALSE;
         }
 
-      return FALSE;
+      display_win32->egl_disp = egl_disp;
+      display_win32->have_egl = TRUE;
+      display_win32->egl_version = epoxy_egl_version (egl_disp);
+
+      eglBindAPI(EGL_OPENGL_ES_API);
+
+      display_win32->hasEglSurfacelessContext =
+        epoxy_has_egl_extension (egl_disp, "EGL_KHR_surfaceless_context");
+
+
+      GDK_NOTE (OPENGL,
+                g_print ("EGL API version %d.%d found\n"
+                         " - Vendor: %s\n"
+                         " - Checked extensions:\n"
+                         "\t* EGL_KHR_surfaceless_context: %s\n",
+                         display_win32->egl_version / 10,
+                         display_win32->egl_version % 10,
+                         eglQueryString (display_win32->egl_disp, EGL_VENDOR),
+                         display_win32->hasEglSurfacelessContext ? "yes" : "no"));
     }
-
-  display_win32->egl_disp = egl_disp;
-  display_win32->have_egl = TRUE;
-  display_win32->egl_version = epoxy_egl_version (egl_disp);
-
-  eglBindAPI(EGL_OPENGL_ES_API);
-
-  display_win32->hasEglSurfacelessContext =
-    epoxy_has_egl_extension (egl_disp, "EGL_KHR_surfaceless_context");
-
-
-  GDK_NOTE (OPENGL,
-            g_print ("EGL API version %d.%d found\n"
-                     " - Vendor: %s\n"
-                     " - Checked extensions:\n"
-                     "\t* EGL_KHR_surfaceless_context: %s\n",
-                     display_win32->egl_version / 10,
-                     display_win32->egl_version % 10,
-                     eglQueryString (display_win32->egl_disp, EGL_VENDOR),
-                     display_win32->hasEglSurfacelessContext ? "yes" : "no"));
+#endif
 
   return TRUE;
-#endif
 }
 
 /* Setup the legacy context after creating it */
