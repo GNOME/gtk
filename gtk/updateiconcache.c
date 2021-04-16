@@ -623,14 +623,13 @@ scan_directory (const gchar *base_path,
   list = g_list_sort (list, (GCompareFunc) strcmp);
   for (iterator = list; iterator; iterator = iterator->next)
     {
-      name = iterator->data;
-
       gchar *path;
       gboolean retval;
       int flags = 0;
       Image *image;
       gchar *basename, *dot;
 
+      name = iterator->data;
       path = g_build_filename (dir_path, name, NULL);
 
       retval = g_file_test (path, G_FILE_TEST_IS_DIR);
