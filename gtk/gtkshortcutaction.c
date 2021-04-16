@@ -132,7 +132,7 @@ gtk_shortcut_action_print (GtkShortcutAction *self,
   g_return_if_fail (GTK_IS_SHORTCUT_ACTION (self));
   g_return_if_fail (string != NULL);
 
-  return GTK_SHORTCUT_ACTION_GET_CLASS (self)->print (self, string);
+  GTK_SHORTCUT_ACTION_GET_CLASS (self)->print (self, string);
 }
 
 /**
