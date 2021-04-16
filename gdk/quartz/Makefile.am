@@ -60,6 +60,7 @@ libgdkinclude_HEADERS = 	\
 	gdkquartz.h
 
 libgdkquartzinclude_HEADERS =		\
+	gdkquartz-cocoa-access.h        \
 	gdkquartz-gtk-only.h            \
 	gdkquartzcursor.h		\
 	gdkquartzdevice-core.h		\

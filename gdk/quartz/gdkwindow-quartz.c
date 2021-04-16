@@ -30,7 +30,7 @@
 #include "gdkquartzglcontext.h"
 #include "gdkquartzscreen.h"
 #include "gdkquartzcursor.h"
-#include "gdkquartz-gtk-only.h"
+#include "gdkquartz-cocoa-access.h"
 
 #include <Carbon/Carbon.h>
 #include <AvailabilityMacros.h>

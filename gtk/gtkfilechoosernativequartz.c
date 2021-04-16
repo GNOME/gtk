@@ -40,7 +40,7 @@
 #include "gtklabel.h"
 #include "gtkfilechooserentry.h"
 #include "gtkfilefilterprivate.h"
-#include <quartz/gdkquartz-gtk-only.h>
+#include <quartz/gdkquartz-cocoa-access.h>
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 typedef struct {

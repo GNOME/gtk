@@ -16,27 +16,22 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_QUARTZ_GTK_ONLY_H__
-#define __GDK_QUARTZ_GTK_ONLY_H__
+#ifndef __GDK_QUARTZ_COCOA_ACCESS_H__
+#define __GDK_QUARTZ_COCOA_ACCESS_H__
 
-#if !(defined (GTK_COMPILATION) || defined (GDK_COMPILATION))
-#error "This API is for use only in Gtk internal code."
+#ifndef __OBJC__
+#error "This header declares Cocoa types and can be included only from source files compiled with Objective-C."
 #endif
 
 #include <AppKit/AppKit.h>
 #include <gdk/gdk.h>
 #include <gdk/quartz/gdkquartz.h>
 
-/* Drag and Drop/Clipboard */
 GDK_AVAILABLE_IN_ALL
-GdkAtom   gdk_quartz_pasteboard_type_to_atom_libgtk_only        (NSString       *type);
+NSEvent  *gdk_quartz_event_get_nsevent              (GdkEvent  *event);
 GDK_AVAILABLE_IN_ALL
-NSString *gdk_quartz_target_to_pasteboard_type_libgtk_only      (const gchar    *target);
+NSWindow *gdk_quartz_window_get_nswindow            (GdkWindow *window);
 GDK_AVAILABLE_IN_ALL
-NSString *gdk_quartz_atom_to_pasteboard_type_libgtk_only        (GdkAtom         atom);
-
-/* Utilities */
-GDK_AVAILABLE_IN_ALL
-NSImage  *gdk_quartz_pixbuf_to_ns_image_libgtk_only (GdkPixbuf *pixbuf);
+NSView   *gdk_quartz_window_get_nsview              (GdkWindow *window);
 
 #endif
