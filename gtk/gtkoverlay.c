@@ -777,6 +777,11 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
    * Whether to pass input through the overlay child to the main child.
    * (Of course, this has no effect when set on the main child itself.)
    *
+   * Note that this is implemented by calling gdk_window_set_pass_through()
+   * on the window that the overlay child is placed in. If the descendents
+   * of the overlay child have their own windows, you need to manually call
+   * that function on them to achieve the desired effect.
+   *
    * Since: 3.18
    */
   gtk_container_class_install_child_property (container_class, CHILD_PROP_PASS_THROUGH,
