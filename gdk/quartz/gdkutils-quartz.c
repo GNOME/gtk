@@ -23,6 +23,7 @@
 #include <gdkinternals.h>
 
 #include "gdkquartz-gtk-only.h"
+#include "gdkquartz-cocoa-access.h"
 #include <gdkquartzutils.h>
 
 NSImage *

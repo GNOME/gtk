@@ -28,7 +28,7 @@
 #include "gdkquartzglcontext.h"
 #include "gdkquartzwindow.h"
 #include "gdkprivate-quartz.h"
-#include "gdkquartz-gtk-only.h"
+#include "gdkquartz-cocoa-access.h"
 
 #include "gdkinternals.h"
 

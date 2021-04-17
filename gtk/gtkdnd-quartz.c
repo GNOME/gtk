@@ -42,6 +42,7 @@
 #include "gtkintl.h"
 #include "gtkquartz.h"
 #include "gdk/quartz/gdkquartz.h"
+#include "gdk/quartz/gdkquartz-cocoa-access.h"
 #include "gdk/quartz/gdkquartz-gtk-only.h"
 #include "gdk/quartz/gdkquartzdnd.h"
 #include "gtkselectionprivate.h"

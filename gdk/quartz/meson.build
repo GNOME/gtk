@@ -26,6 +26,7 @@ gdk_quartz_sources = files(
 )
 
 gdk_quartz_public_headers = files(
+  'gdkquartz-cocoa-access.h',
   'gdkquartzcursor.h',
   'gdkquartzdevice-core.h',
   'gdkquartzdevicemanager-core.h',
