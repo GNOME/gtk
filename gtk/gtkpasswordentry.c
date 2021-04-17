@@ -532,6 +532,8 @@ gtk_password_entry_accessible_get_platform_state (GtkAccessible              *se
       return gtk_widget_get_focusable (GTK_WIDGET (entry->entry));
     case GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED:
       return gtk_widget_has_focus (GTK_WIDGET (entry->entry));
+    case GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE:
+      return FALSE;
     default:
       g_assert_not_reached ();
     }

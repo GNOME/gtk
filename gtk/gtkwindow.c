@@ -26,6 +26,7 @@
 
 #include "gtkwindowprivate.h"
 
+#include "gtkaccessibleprivate.h"
 #include "gtkaccelgroupprivate.h"
 #include "gtkactionable.h"
 #include "gtkapplicationprivate.h"
@@ -479,6 +480,9 @@ static void             gtk_window_shortcut_manager_interface_init      (GtkShor
 static void             gtk_window_root_interface_init (GtkRootInterface *iface);
 static void             gtk_window_native_interface_init  (GtkNativeInterface  *iface);
 
+static void             gtk_window_accessible_interface_init (GtkAccessibleInterface *iface);
+
+
 static void ensure_state_flag_backdrop (GtkWidget *widget);
 static void unset_titlebar (GtkWindow *window);
 
@@ -493,6 +497,8 @@ gtk_window_update_csd_size (GtkWindow *window,
 
 G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkWindow)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE,
+						gtk_window_accessible_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_window_buildable_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_NATIVE,
@@ -501,6 +507,32 @@ G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_WIDGET,
 						gtk_window_shortcut_manager_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ROOT,
 						gtk_window_root_interface_init))
+
+static GtkAccessibleInterface *parent_accessible_iface;
+
+static gboolean
+gtk_window_accessible_get_platform_state (GtkAccessible              *self,
+                                          GtkAccessiblePlatformState  state)
+{
+  switch (state)
+    {
+    case GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE:
+    case GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED:
+      return parent_accessible_iface->get_platform_state (self, state);
+    case GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE:
+      return gtk_window_is_active (GTK_WINDOW (self));
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static void
+gtk_window_accessible_interface_init (GtkAccessibleInterface *iface)
+{
+  parent_accessible_iface = g_type_interface_peek_parent (iface);
+  iface->get_at_context = parent_accessible_iface->get_at_context;
+  iface->get_platform_state = gtk_window_accessible_get_platform_state;
+}
 
 static void
 add_tab_bindings (GtkWidgetClass   *widget_class,
@@ -5827,6 +5859,8 @@ _gtk_window_set_is_active (GtkWindow *window,
 
       g_object_unref (focus);
     }
+
+  gtk_accessible_platform_changed (GTK_ACCESSIBLE (window), GTK_ACCESSIBLE_PLATFORM_CHANGE_ACTIVE);
 
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_IS_ACTIVE]);
 }

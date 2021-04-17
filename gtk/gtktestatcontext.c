@@ -79,11 +79,36 @@ gtk_test_at_context_state_change (GtkATContext                *self,
 }
 
 static void
+gtk_test_at_context_platform_change (GtkATContext                *self,
+                                     GtkAccessiblePlatformChange  changed_platform)
+{
+  if (GTK_DEBUG_CHECK (A11Y))
+    {
+      GtkAccessible *accessible;
+
+      accessible = gtk_at_context_get_accessible (self);
+
+      g_print ("*** Accessible platform state changed for accessible “%s”:\n",
+               G_OBJECT_TYPE_NAME (accessible));
+      if (changed_platform & GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSABLE)
+        g_print ("***  focusable = %d\n",
+                 gtk_accessible_get_platform_state (accessible, GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE));
+      if (changed_platform & GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSED)
+        g_print ("***    focused = %d\n",
+                 gtk_accessible_get_platform_state (accessible, GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED));
+      if (changed_platform & GTK_ACCESSIBLE_PLATFORM_CHANGE_ACTIVE)
+        g_print ("***    active = %d\n",
+                 gtk_accessible_get_platform_state (accessible, GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE));
+    }
+}
+
+static void
 gtk_test_at_context_class_init (GtkTestATContextClass *klass)
 {
   GtkATContextClass *context_class = GTK_AT_CONTEXT_CLASS (klass);
 
   context_class->state_change = gtk_test_at_context_state_change;
+  context_class->platform_change = gtk_test_at_context_platform_change;
 }
 
 static void
