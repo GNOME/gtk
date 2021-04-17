@@ -96,6 +96,9 @@ gtk_test_at_context_platform_change (GtkATContext                *self,
       if (changed_platform & GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSED)
         g_print ("***    focused = %d\n",
                  gtk_accessible_get_platform_state (accessible, GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED));
+      if (changed_platform & GTK_ACCESSIBLE_PLATFORM_CHANGE_ACTIVE)
+        g_print ("***    active = %d\n",
+                 gtk_accessible_get_platform_state (accessible, GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE));
     }
 }
 

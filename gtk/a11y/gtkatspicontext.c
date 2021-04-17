@@ -150,6 +150,13 @@ collect_states (GtkAtSpiContext    *self,
 
   set_atspi_state (&states, ATSPI_STATE_VISIBLE);
 
+  if (ctx->accessible_role == GTK_ACCESSIBLE_ROLE_WINDOW)
+    {
+      set_atspi_state (&states, ATSPI_STATE_SHOWING);
+      if (gtk_accessible_get_platform_state (accessible, GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE))
+        set_atspi_state (&states, ATSPI_STATE_ACTIVE);
+    }
+
   if (ctx->accessible_role == GTK_ACCESSIBLE_ROLE_TEXT_BOX ||
       ctx->accessible_role == GTK_ACCESSIBLE_ROLE_SEARCH_BOX ||
       ctx->accessible_role == GTK_ACCESSIBLE_ROLE_SPIN_BUTTON)
@@ -888,6 +895,7 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
       if (GTK_IS_ROOT (accessible))
         {
           gtk_at_spi_root_child_changed (self->root, change, accessible);
+          emit_state_changed (self, "showing", gtk_boolean_accessible_value_get (value));
         }
       else
         {
@@ -1083,6 +1091,13 @@ gtk_at_spi_context_platform_change (GtkATContext                *ctx,
       gboolean state = gtk_accessible_get_platform_state (GTK_ACCESSIBLE (widget),
                                                           GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED);
       emit_state_changed (self, "focused", state);
+    }
+
+  if (changed_platform & GTK_ACCESSIBLE_PLATFORM_CHANGE_ACTIVE)
+    {
+      gboolean state = gtk_accessible_get_platform_state (GTK_ACCESSIBLE (widget),
+                                                          GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE);
+      emit_state_changed (self, "active", state);
     }
 }
 
