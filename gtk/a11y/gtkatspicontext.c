@@ -25,7 +25,6 @@
 #include "gtkaccessibleprivate.h"
 
 #include "gtkatspiactionprivate.h"
-#include "gtkatspicacheprivate.h"
 #include "gtkatspieditabletextprivate.h"
 #include "gtkatspiprivate.h"
 #include "gtkatspirootprivate.h"
@@ -90,9 +89,6 @@ struct _GtkAtSpiContext
 
   /* The root object, used as a entry point */
   GtkAtSpiRoot *root;
-
-  /* The cache object, used to retrieve ATContexts */
-  GtkAtSpiCache *cache;
 
   /* The address for the ATSPI accessibility bus */
   char *bus_address;
