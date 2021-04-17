@@ -31,7 +31,8 @@ G_DECLARE_FINAL_TYPE (GtkAtSpiCache, gtk_at_spi_cache, GTK, AT_SPI_CACHE, GObjec
 
 GtkAtSpiCache *
 gtk_at_spi_cache_new (GDBusConnection *connection,
-                      const char *cache_path);
+                      const char      *cache_path,
+                      GtkAtSpiRoot    *root);
 
 void
 gtk_at_spi_cache_add_context (GtkAtSpiCache *self,

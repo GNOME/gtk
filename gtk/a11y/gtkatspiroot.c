@@ -503,7 +503,7 @@ on_registration_reply (GObject      *gobject,
     }
 
   /* Register the cache object */
-  self->cache = gtk_at_spi_cache_new (self->connection, ATSPI_CACHE_PATH);
+  self->cache = gtk_at_spi_cache_new (self->connection, ATSPI_CACHE_PATH, self);
 
   /* Drain the list of queued GtkAtSpiContexts, and add them to the cache */
   if (self->queued_contexts != NULL)
