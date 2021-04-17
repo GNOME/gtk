@@ -943,7 +943,7 @@ sec_acquire_pages (size_t *sz,
 
 	DEBUG_ALLOC ("gtk-secure-memory: new block ", *sz);
 
-#if defined(MADV_DONTDUMP)
+#if defined(HAVE_MADVISE) && defined(MADV_DONTDUMP)
 	if (madvise (pages, *sz, MADV_DONTDUMP) < 0) {
 		if (show_warning && gtk_secure_warnings) {
 			/*
