@@ -76,6 +76,9 @@
 /* Define to 1 if you have a working `mmap' system call. */
 #mesondefine HAVE_MMAP
 
+/* Define to 1 if you have a working `madvise' system call. */
+#mesondefine HAVE_MADVISE
+
 /* Define to 1 if you have the `posix_fallocate' function. */
 #mesondefine HAVE_POSIX_FALLOCATE
 
