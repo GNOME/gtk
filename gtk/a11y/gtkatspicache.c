@@ -252,6 +252,7 @@ handle_cache_method (GDBusConnection       *connection,
   if (g_strcmp0 (method_name, "GetItems") == 0)
     {
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("(" GET_ITEMS_SIGNATURE ")"));
+      GVariant *items;
 
       /* Prevent the emission os signals while collecting accessible
        * objects as the result of walking the accessible tree
@@ -261,10 +262,14 @@ handle_cache_method (GDBusConnection       *connection,
       g_variant_builder_open (&builder, G_VARIANT_TYPE (GET_ITEMS_SIGNATURE));
       collect_cached_objects (self, &builder);
       g_variant_builder_close (&builder);
+      items = g_variant_builder_end (&builder);
 
       self->in_get_items = FALSE;
 
-      g_dbus_method_invocation_return_value (invocation, g_variant_builder_end (&builder));
+      GTK_NOTE (A11Y,
+                g_message ("Returning %lu items\n", g_variant_n_children (items)));
+
+      g_dbus_method_invocation_return_value (invocation, items);
     }
 }
 

@@ -463,6 +463,8 @@ handle_accessible_method (GDBusConnection       *connection,
 {
   GtkAtSpiContext *self = user_data;
 
+  GTK_NOTE (A11Y, g_message ("handling %s on %s", method_name, object_path));
+
   if (g_strcmp0 (method_name, "GetRole") == 0)
     {
       guint atspi_role = gtk_atspi_role_for_context (GTK_AT_CONTEXT (self));
@@ -665,6 +667,8 @@ handle_accessible_get_property (GDBusConnection       *connection,
   GVariant *res = NULL;
 
   GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+
+  GTK_NOTE (A11Y, g_message ("handling GetProperty %s on %s", property_name, object_path));
 
   if (g_strcmp0 (property_name, "Name") == 0)
     {
