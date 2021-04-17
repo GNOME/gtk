@@ -943,6 +943,19 @@ sec_acquire_pages (size_t *sz,
 
 	DEBUG_ALLOC ("gtk-secure-memory: new block ", *sz);
 
+#if defined(HAVE_MADVISE) && defined(MADV_DONTDUMP)
+	if (madvise (pages, *sz, MADV_DONTDUMP) < 0) {
+		if (show_warning && gtk_secure_warnings) {
+			/*
+			 * Not fatal - this was added in Linux 3.4 and older
+			 * kernels will legitimately fail this at runtime
+			 */
+			fprintf (stderr, "couldn't MADV_DONTDUMP %lu bytes of memory (%s): %s\n",
+				 (unsigned long)*sz, during_tag, strerror (errno));
+		}
+	}
+#endif
+
 	show_warning = 1;
 	return pages;
 
