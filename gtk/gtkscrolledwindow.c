@@ -1900,10 +1900,19 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
    */
   if (policy_may_be_visible (priv->hscrollbar_policy))
     {
-      minimum_req.width = MAX (minimum_req.width, hscrollbar_requisition.width + sborder.left + sborder.right);
-      natural_req.width = MAX (natural_req.width, hscrollbar_requisition.width + sborder.left + sborder.right);
+      int vscrollbar_extra_size;
 
-      if (!priv->use_indicators && priv->hscrollbar_policy == GTK_POLICY_ALWAYS)
+      if (!priv->use_indicators && policy_may_be_visible (priv->vscrollbar_policy))
+        vscrollbar_extra_size = vscrollbar_requisition.width;
+      else
+        vscrollbar_extra_size = 0;
+
+      minimum_req.width = MAX (minimum_req.width,
+                               hscrollbar_requisition.width + sborder.left + sborder.right + vscrollbar_extra_size);
+      natural_req.width = MAX (natural_req.width,
+                               hscrollbar_requisition.width + sborder.left + sborder.right + vscrollbar_extra_size);
+
+      if (!priv->use_indicators)
 	{
 	  minimum_req.height += scrollbar_spacing + hscrollbar_requisition.height;
 	  natural_req.height += scrollbar_spacing + hscrollbar_requisition.height;
@@ -1912,10 +1921,19 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
 
   if (policy_may_be_visible (priv->vscrollbar_policy))
     {
-      minimum_req.height = MAX (minimum_req.height, vscrollbar_requisition.height + sborder.top + sborder.bottom);
-      natural_req.height = MAX (natural_req.height, vscrollbar_requisition.height + sborder.top + sborder.bottom);
+      int hscrollbar_extra_size;
 
-      if (!priv->use_indicators && priv->vscrollbar_policy == GTK_POLICY_ALWAYS)
+      if (!priv->use_indicators && policy_may_be_visible (priv->hscrollbar_policy))
+        hscrollbar_extra_size = hscrollbar_requisition.height;
+      else
+        hscrollbar_extra_size = 0;
+
+      minimum_req.height = MAX (minimum_req.height,
+                                vscrollbar_requisition.height + sborder.top + sborder.bottom + hscrollbar_extra_size);
+      natural_req.height = MAX (natural_req.height,
+                                vscrollbar_requisition.height + sborder.top + sborder.bottom + hscrollbar_extra_size);
+
+      if (!priv->use_indicators)
 	{
 	  minimum_req.width += scrollbar_spacing + vscrollbar_requisition.width;
 	  natural_req.width += scrollbar_spacing + vscrollbar_requisition.width;

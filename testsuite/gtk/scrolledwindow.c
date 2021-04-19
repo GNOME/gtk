@@ -58,7 +58,7 @@ test_size (gboolean       overlay,
       /* If the relevant scrollbar is non-overlay and always shown, it is added
        * to the preferred size. When comparing to the expected size, we need to
        * to exclude that extra, as we are only interested in the content size */
-      if (!overlay && policy == GTK_POLICY_ALWAYS)
+      if (!overlay)
         {
           GtkWidget *scrollbar = gtk_scrolled_window_get_vscrollbar (GTK_SCROLLED_WINDOW (scrolledwindow));
           gtk_widget_get_preferred_width (scrollbar, &scrollbar_size, NULL);
@@ -87,7 +87,7 @@ test_size (gboolean       overlay,
           gtk_widget_get_preferred_height (box, &child_size, NULL);
         }
 
-      if (!overlay && policy == GTK_POLICY_ALWAYS)
+      if (!overlay)
         {
           GtkWidget *scrollbar = gtk_scrolled_window_get_hscrollbar (GTK_SCROLLED_WINDOW (scrolledwindow));
           gtk_widget_get_preferred_height (scrollbar, &scrollbar_size, NULL);
