@@ -45,6 +45,9 @@ get_display_name (GFile     *file,
   if (name == NULL)
     {
       name = g_file_get_basename (file);
+      if (name == NULL)
+        name = g_file_get_uri (file);
+
       if (!g_utf8_validate (name, -1, NULL))
         {
           tmp = name;
