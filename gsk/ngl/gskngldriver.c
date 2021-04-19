@@ -1074,16 +1074,16 @@ gsk_ngl_driver_lookup_shader (GskNglDriver  *self,
 
       gsk_ngl_compiler_set_preamble_from_resource (compiler,
                                                    GSK_NGL_COMPILER_ALL,
-                                                   "/org/gtk/libgsk/glsl/preamble.glsl");
+                                                   "/org/gtk/libgsk/ngl/preamble.glsl");
       gsk_ngl_compiler_set_preamble_from_resource (compiler,
                                                    GSK_NGL_COMPILER_VERTEX,
-                                                   "/org/gtk/libgsk/glsl/preamble.vs.glsl");
+                                                   "/org/gtk/libgsk/ngl/preamble.vs.glsl");
       gsk_ngl_compiler_set_preamble_from_resource (compiler,
                                                    GSK_NGL_COMPILER_FRAGMENT,
-                                                   "/org/gtk/libgsk/glsl/preamble.fs.glsl");
+                                                   "/org/gtk/libgsk/ngl/preamble.fs.glsl");
       gsk_ngl_compiler_set_source_from_resource (compiler,
                                                  GSK_NGL_COMPILER_ALL,
-                                                 "/org/gtk/libgsk/glsl/custom.glsl");
+                                                 "/org/gtk/libgsk/ngl/custom.glsl");
       gsk_ngl_compiler_set_suffix (compiler, GSK_NGL_COMPILER_FRAGMENT, suffix);
 
       /* Setup attributes that are provided via VBO */

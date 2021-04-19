@@ -1129,13 +1129,13 @@ compile_glshader (GskGLRenderer  *self,
     }
 
   gsk_gl_shader_builder_init (&shader_builder,
-                              "/org/gtk/libgsk/glsl/preamble.glsl",
-                              "/org/gtk/libgsk/glsl/preamble.vs.glsl",
-                              "/org/gtk/libgsk/glsl/preamble.fs.glsl");
+                              "/org/gtk/libgsk/gl/preamble.glsl",
+                              "/org/gtk/libgsk/gl/preamble.vs.glsl",
+                              "/org/gtk/libgsk/gl/preamble.fs.glsl");
 
   init_shader_builder (self, &shader_builder);
   program_id = gsk_gl_shader_builder_create_program (&shader_builder,
-                                                     "/org/gtk/libgsk/glsl/custom.glsl",
+                                                     "/org/gtk/libgsk/gl/custom.glsl",
                                                      shader_source, shader_source_len,
                                                      error);
   gsk_gl_shader_builder_finish (&shader_builder);
