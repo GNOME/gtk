@@ -1326,9 +1326,12 @@ update_selection (TextChanged *changed,
                   int          selection_bound)
 {
   gboolean caret_moved, bound_moved;
+  gboolean had_selection, has_selection;
 
   caret_moved = cursor_position != changed->cursor_position;
   bound_moved = selection_bound != changed->selection_bound;
+  had_selection = changed->cursor_position != changed->selection_bound;
+  has_selection = cursor_position != selection_bound;
 
   if (!caret_moved && !bound_moved)
     return;
@@ -1339,7 +1342,7 @@ update_selection (TextChanged *changed,
   if (caret_moved)
     changed->selection_changed (changed->data, "text-caret-moved", changed->cursor_position);
 
-  if (caret_moved || bound_moved)
+  if (had_selection || has_selection)
     changed->selection_changed (changed->data, "text-selection-changed", 0);
 }
 
