@@ -883,6 +883,22 @@ emit_focus (GtkAtSpiContext *self,
 }
 
 static void
+emit_window_activate (GtkAtSpiContext *self)
+{
+  if (self->connection == NULL)
+    return;
+
+  g_dbus_connection_emit_signal (self->connection,
+                                 NULL,
+                                 self->context_path,
+                                 "org.a11y.atspi.Event.Window",
+                                 "activate",
+                                 g_variant_new ("(siiva{sv})",
+                                                "", 0, 0, g_variant_new_string("0"), NULL),
+                                 NULL);
+}
+
+static void
 gtk_at_spi_context_state_change (GtkATContext                *ctx,
                                  GtkAccessibleStateChange     changed_states,
                                  GtkAccessiblePropertyChange  changed_properties,
@@ -1117,6 +1133,9 @@ gtk_at_spi_context_platform_change (GtkATContext                *ctx,
       gboolean state = gtk_accessible_get_platform_state (GTK_ACCESSIBLE (widget),
                                                           GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE);
       emit_state_changed (self, "active", state);
+
+      if (gtk_accessible_get_accessible_role (accessible) == GTK_ACCESSIBLE_ROLE_WINDOW && state)
+        emit_window_activate (self);
     }
 }
 
