@@ -1782,7 +1782,10 @@ gtk_list_box_update_selection_full (GtkListBox    *box,
               g_signal_emit (box, signals[ROW_SELECTED], 0, row);
             }
           else
-            gtk_list_box_select_all_between (box, selected_row, row, FALSE);
+            {
+              gtk_list_box_select_all_between (box, selected_row, row, FALSE);
+              box->selected_row = selected_row;
+            }
         }
       else
         {
