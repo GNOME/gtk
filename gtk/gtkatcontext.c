@@ -1172,8 +1172,7 @@ void
 gtk_at_context_platform_changed (GtkATContext                *self,
                                  GtkAccessiblePlatformChange  change)
 {
-  if (!self->realized)
-    return;
+  gtk_at_context_realize (self);
 
   GTK_AT_CONTEXT_GET_CLASS (self)->platform_change (self, change);
 }
