@@ -154,6 +154,10 @@ rebuild_child (GtkWidget   *self,
       gtk_widget_set_halign (GTK_WIDGET (button_child), GTK_ALIGN_CENTER);
       gtk_button_set_child (GTK_BUTTON (self), button_child);
     }
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL, title,
+                                  -1);
 }
 
 static void
