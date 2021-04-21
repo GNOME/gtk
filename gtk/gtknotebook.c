@@ -5461,6 +5461,9 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
   gtk_widget_set_state_flags (page->tab_widget, GTK_STATE_FLAG_CHECKED, FALSE);
   gtk_widget_set_visible (notebook->header_widget, notebook->show_tabs);
 
+  if (gtk_widget_get_realized (GTK_WIDGET (notebook)))
+    gtk_widget_realize_at_context (notebook->cur_page->tab_widget);
+
   gtk_accessible_update_state (GTK_ACCESSIBLE (notebook->cur_page->tab_widget),
                                GTK_ACCESSIBLE_STATE_SELECTED, TRUE,
                                -1);
