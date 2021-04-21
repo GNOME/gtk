@@ -883,7 +883,8 @@ emit_focus (GtkAtSpiContext *self,
 }
 
 static void
-emit_window_activate (GtkAtSpiContext *self)
+emit_window_event (GtkAtSpiContext *self,
+                   const char      *event_type)
 {
   if (self->connection == NULL)
     return;
@@ -892,9 +893,11 @@ emit_window_activate (GtkAtSpiContext *self)
                                  NULL,
                                  self->context_path,
                                  "org.a11y.atspi.Event.Window",
-                                 "activate",
+                                 event_type,
                                  g_variant_new ("(siiva{sv})",
-                                                "", 0, 0, g_variant_new_string("0"), NULL),
+                                                "", 0, 0,
+                                                g_variant_new_string("0"),
+                                                NULL),
                                  NULL);
 }
 
@@ -1134,8 +1137,16 @@ gtk_at_spi_context_platform_change (GtkATContext                *ctx,
                                                           GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE);
       emit_state_changed (self, "active", state);
 
-      if (gtk_accessible_get_accessible_role (accessible) == GTK_ACCESSIBLE_ROLE_WINDOW && state)
-        emit_window_activate (self);
+      /* Orca tracks the window:activate and window:deactivate events on top
+       * levels to decide whether to track other AT-SPI events
+       */
+      if (gtk_accessible_get_accessible_role (accessible) == GTK_ACCESSIBLE_ROLE_WINDOW)
+        {
+          if (state)
+            emit_window_event (self, "activate");
+          else
+            emit_window_event (self, "deactivate");
+        }
     }
 }
 
