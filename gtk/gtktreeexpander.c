@@ -151,6 +151,8 @@ gtk_tree_expander_update_for_list_row (GtkTreeExpander *self)
           gtk_widget_unparent (child);
         }
       self->expander = NULL;
+
+      gtk_accessible_reset_state (GTK_ACCESSIBLE (self), GTK_ACCESSIBLE_STATE_EXPANDED);
     }
   else
     {
@@ -192,25 +194,26 @@ gtk_tree_expander_update_for_list_row (GtkTreeExpander *self)
               gtk_accessible_update_property (GTK_ACCESSIBLE (self->expander),
                                               GTK_ACCESSIBLE_PROPERTY_LABEL, _("Expand"),
                                               -1);
-              gtk_accessible_update_relation (GTK_ACCESSIBLE (self->expander),
-                                              GTK_ACCESSIBLE_RELATION_LABELLED_BY, self->child, NULL,
-                                              -1);
             }
 
           if (gtk_tree_list_row_get_expanded (self->list_row))
             {
               gtk_widget_set_state_flags (self->expander, GTK_STATE_FLAG_CHECKED, FALSE);
-              gtk_accessible_update_state (GTK_ACCESSIBLE (self->expander),
+              gtk_accessible_update_state (GTK_ACCESSIBLE (self),
                                            GTK_ACCESSIBLE_STATE_EXPANDED, TRUE,
                                            -1);
             }
           else
             {
               gtk_widget_unset_state_flags (self->expander, GTK_STATE_FLAG_CHECKED);
-              gtk_accessible_update_state (GTK_ACCESSIBLE (self->expander),
+              gtk_accessible_update_state (GTK_ACCESSIBLE (self),
                                            GTK_ACCESSIBLE_STATE_EXPANDED, FALSE,
                                            -1);
             }
+
+          gtk_accessible_update_relation (GTK_ACCESSIBLE (self),
+                                          GTK_ACCESSIBLE_RELATION_LABELLED_BY, self->child, NULL,
+                                          -1);
 
           child = gtk_widget_get_prev_sibling (self->expander);
         }
