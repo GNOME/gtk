@@ -211,10 +211,6 @@ gtk_tree_expander_update_for_list_row (GtkTreeExpander *self)
                                            -1);
             }
 
-          gtk_accessible_update_relation (GTK_ACCESSIBLE (self),
-                                          GTK_ACCESSIBLE_RELATION_LABELLED_BY, self->child, NULL,
-                                          -1);
-
           child = gtk_widget_get_prev_sibling (self->expander);
         }
       else
@@ -728,6 +724,14 @@ gtk_tree_expander_set_child (GtkTreeExpander *self,
     {
       self->child = child;
       gtk_widget_set_parent (child, GTK_WIDGET (self));
+
+      gtk_accessible_update_relation (GTK_ACCESSIBLE (self),
+                                      GTK_ACCESSIBLE_RELATION_LABELLED_BY, self->child, NULL,
+                                      -1);
+    }
+  else
+    {
+      gtk_accessible_reset_relation (GTK_ACCESSIBLE (self), GTK_ACCESSIBLE_RELATION_LABELLED_BY);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CHILD]);
