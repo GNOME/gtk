@@ -4542,6 +4542,9 @@ gdk_x11_surface_beep (GdkSurface *surface)
 
   display = GDK_SURFACE_DISPLAY (surface);
 
+  if (!GDK_X11_DISPLAY (display)->trusted_client)
+    return FALSE;
+
 #ifdef HAVE_XKB
   if (GDK_X11_DISPLAY (display)->use_xkb)
     {
