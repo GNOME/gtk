@@ -1245,6 +1245,11 @@ server_mount_ready_cb (GObject      *source_file,
           GMount *mount;
           GFile *root;
 
+          /*
+           * If the mount is not found at this point, it is probably user-
+           * invisible, which happens e.g for smb-browse, but the location
+           * should be opened anyway...
+           */
           mount = g_file_find_enclosing_mount (location, view->cancellable, NULL);
           if (mount)
             {
@@ -1254,6 +1259,10 @@ server_mount_ready_cb (GObject      *source_file,
 
               g_object_unref (root);
               g_object_unref (mount);
+            }
+          else
+            {
+              emit_open_location (view, location, view->open_flags);
             }
         }
     }
