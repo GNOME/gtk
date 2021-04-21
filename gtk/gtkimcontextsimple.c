@@ -1152,7 +1152,7 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
     }
 
   if (cursor_pos)
-    *cursor_pos = s->len;
+    *cursor_pos = g_utf8_strlen (s->str, s->len);
 
   if (attrs)
     {
