@@ -1964,6 +1964,9 @@ _gdk_x11_display_update_grab_info_ungrab (GdkDisplay *display,
 static void
 gdk_x11_display_beep (GdkDisplay *display)
 {
+  if (!GDK_X11_DISPLAY (display)->trusted_client)
+    return;
+
 #ifdef HAVE_XKB
   XkbBell (GDK_DISPLAY_XDISPLAY (display), None, 0, None);
 #else

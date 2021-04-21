@@ -5472,6 +5472,9 @@ gdk_x11_window_beep (GdkWindow *window)
 
   display = GDK_WINDOW_DISPLAY (window);
 
+  if (!GDK_X11_DISPLAY (display)->trusted_client)
+    return FALSE;
+
 #ifdef HAVE_XKB
   if (GDK_X11_DISPLAY (display)->use_xkb)
     {
