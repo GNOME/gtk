@@ -239,6 +239,11 @@ gtk_tree_expander_update_for_list_row (GtkTreeExpander *self)
             }
         }
 
+      /* The level property is >= 1 */
+      gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                      GTK_ACCESSIBLE_PROPERTY_LEVEL, depth + 1,
+                                      -1);
+
       while (child)
         {
           GtkWidget *prev = gtk_widget_get_prev_sibling (child);
