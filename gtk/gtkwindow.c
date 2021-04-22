@@ -1376,10 +1376,10 @@ get_edge_for_coordinates (GtkWindow *window,
 
       get_shadow_width (window, &shadow);
       /* This logic is duplicated in update_realized_window_properties() */
-      handle_size.left += MIN (RESIZE_HANDLE_SIZE, shadow.left);
-      handle_size.top += MIN (RESIZE_HANDLE_SIZE, shadow.top);
-      handle_size.right += MIN (RESIZE_HANDLE_SIZE, shadow.right);
-      handle_size.bottom += MIN (RESIZE_HANDLE_SIZE, shadow.bottom);
+      handle_size.left += shadow.left;
+      handle_size.top += shadow.top;
+      handle_size.right += shadow.right;
+      handle_size.bottom += shadow.bottom;
     }
 
   left = border_rect->origin.x;
@@ -3986,6 +3986,12 @@ get_shadow_width (GtkWindow *window,
 
   /* Calculate the size of the drop shadows ... */
   gtk_css_shadow_value_get_extents (style->background->box_shadow, shadow_width);
+
+  shadow_width->left = MAX (shadow_width->left, RESIZE_HANDLE_SIZE);
+  shadow_width->top = MAX (shadow_width->top, RESIZE_HANDLE_SIZE);
+  shadow_width->bottom = MAX (shadow_width->bottom, RESIZE_HANDLE_SIZE);
+  shadow_width->right = MAX (shadow_width->right, RESIZE_HANDLE_SIZE);
+
   return;
 
 out:
@@ -4092,7 +4098,6 @@ update_realized_window_properties (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkBorder shadow;
-  GtkBorder resize_handle;
   GdkRectangle rect;
   GtkCssBoxes css_boxes;
   const graphene_rect_t *border_rect;
@@ -4101,7 +4106,7 @@ update_realized_window_properties (GtkWindow *window)
   get_shadow_width (window, &shadow);
   update_opaque_region (window, &shadow);
 
-  if (!priv->client_decorated)
+  if (!priv->client_decorated || !priv->use_client_shadow)
     return;
 
   gtk_native_get_surface_transform (GTK_NATIVE (window), &native_x, &native_y);
@@ -4112,15 +4117,10 @@ update_realized_window_properties (GtkWindow *window)
   border_rect = gtk_css_boxes_get_border_rect (&css_boxes);
 
   /* This logic is duplicated in get_edge_for_coordinates() */
-  resize_handle.left = MIN (shadow.left, RESIZE_HANDLE_SIZE);
-  resize_handle.top = MIN (shadow.top, RESIZE_HANDLE_SIZE);
-  resize_handle.right = MIN (shadow.right, RESIZE_HANDLE_SIZE);
-  resize_handle.bottom = MIN (shadow.bottom, RESIZE_HANDLE_SIZE);
-
-  rect.x = native_x + border_rect->origin.x - resize_handle.left;
-  rect.y = native_y + border_rect->origin.y - resize_handle.top;
-  rect.width = border_rect->size.width + resize_handle.left + resize_handle.right;
-  rect.height = border_rect->size.height + resize_handle.top + resize_handle.bottom;
+  rect.x = native_x + border_rect->origin.x - RESIZE_HANDLE_SIZE;
+  rect.y = native_y + border_rect->origin.y - RESIZE_HANDLE_SIZE;
+  rect.width = border_rect->size.width + 2 * RESIZE_HANDLE_SIZE;
+  rect.height = border_rect->size.height + 2 * RESIZE_HANDLE_SIZE;
 
   if (rect.width > 0 && rect.height > 0)
     {
