@@ -633,6 +633,8 @@ gtk_spin_button_accessible_get_platform_state (GtkAccessible              *self,
       return gtk_widget_get_focusable (spin_button->entry);
     case GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED:
       return gtk_widget_has_focus (spin_button->entry);
+    case GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE:
+      return FALSE;
     default:
       g_assert_not_reached ();
     }

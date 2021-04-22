@@ -74,6 +74,7 @@
 #include "gtkwidgetpaintableprivate.h"
 #include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
+#include "gtktestatcontextprivate.h"
 
 #include "inspector/window.h"
 
@@ -2449,13 +2450,13 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->at_context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (widget));
 }
 
-void
-gtk_widget_realize_at_context (GtkWidget *self)
+static void
+gtk_widget_root_at_context (GtkWidget *self)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (self);
   GtkAccessibleRole role = priv->accessible_role;
 
-  if (priv->at_context == NULL || gtk_at_context_is_realized (priv->at_context))
+  if (priv->at_context == NULL)
     return;
 
   /* Reset the accessible role to its current value */
@@ -2468,6 +2469,17 @@ gtk_widget_realize_at_context (GtkWidget *self)
 
   gtk_at_context_set_accessible_role (priv->at_context, role);
   gtk_at_context_set_display (priv->at_context, gtk_root_get_display (priv->root));
+}
+
+void
+gtk_widget_realize_at_context (GtkWidget *self)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (self);
+
+  if (priv->at_context == NULL || gtk_at_context_is_realized (priv->at_context))
+     return;
+
+  gtk_widget_root_at_context (self);
   gtk_at_context_realize (priv->at_context);
 }
 
@@ -2510,6 +2522,8 @@ gtk_widget_root (GtkWidget *widget)
 
   if (priv->layout_manager)
     gtk_layout_manager_set_root (priv->layout_manager, priv->root);
+
+  gtk_widget_root_at_context (widget);
 
   GTK_WIDGET_GET_CLASS (widget)->root (widget);
 
@@ -8492,6 +8506,8 @@ gtk_widget_accessible_get_platform_state (GtkAccessible              *self,
       return gtk_widget_get_focusable (GTK_WIDGET (self));
     case GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED:
       return gtk_widget_has_focus (GTK_WIDGET (self));
+    case GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE:
+      return FALSE;
     default:
       g_assert_not_reached ();
     }

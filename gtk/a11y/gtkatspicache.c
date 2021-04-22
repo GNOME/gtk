@@ -27,6 +27,8 @@
 #include "gtkatspiutilsprivate.h"
 #include "gtkdebug.h"
 
+#include "a11y/atspi/atspi-accessible.h"
+#include "a11y/atspi/atspi-application.h"
 #include "a11y/atspi/atspi-cache.h"
 
 /* Cached item:
@@ -61,6 +63,8 @@ struct _GtkAtSpiCache
 
   /* Re-entrancy guard */
   gboolean in_get_items;
+
+  GtkAtSpiRoot *root;
 };
 
 enum
@@ -145,6 +149,36 @@ collect_object (GtkAtSpiCache   *self,
 }
 
 static void
+collect_root (GtkAtSpiCache   *self,
+              GVariantBuilder *builder)
+{
+  g_variant_builder_add (builder, "@(so)", gtk_at_spi_root_to_ref (self->root));
+  g_variant_builder_add (builder, "@(so)", gtk_at_spi_root_to_ref (self->root));
+
+  g_variant_builder_add (builder, "@(so)", gtk_at_spi_null_ref ());
+
+  g_variant_builder_add (builder, "i", -1);
+  g_variant_builder_add (builder, "i", 0);
+
+  GVariantBuilder interfaces = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("as"));
+
+  g_variant_builder_add (&interfaces, "s", atspi_accessible_interface.name);
+  g_variant_builder_add (&interfaces, "s", atspi_application_interface.name);
+  g_variant_builder_add (builder, "@as", g_variant_builder_end (&interfaces));
+
+  g_variant_builder_add (builder, "s", g_get_prgname () ? g_get_prgname () : "Unnamed");
+
+  g_variant_builder_add (builder, "u", ATSPI_ROLE_APPLICATION);
+
+  g_variant_builder_add (builder, "s", g_get_application_name () ? g_get_application_name () : "No description");
+
+  GVariantBuilder states = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("au"));
+  g_variant_builder_add (&states, "u", 0);
+  g_variant_builder_add (&states, "u", 0);
+  g_variant_builder_add (builder, "@au", g_variant_builder_end (&states));
+}
+
+static void
 collect_cached_objects (GtkAtSpiCache   *self,
                         GVariantBuilder *builder)
 {
@@ -159,6 +193,10 @@ collect_cached_objects (GtkAtSpiCache   *self,
   g_hash_table_iter_init (&iter, self->contexts_by_path);
   while (g_hash_table_iter_next (&iter, &key_p, &value_p))
     g_hash_table_add (collection, value_p);
+
+  g_variant_builder_open (builder, G_VARIANT_TYPE ("(" ITEM_SIGNATURE ")"));
+  collect_root (self, builder);
+  g_variant_builder_close (builder);
 
   g_hash_table_iter_init (&iter, collection);
   while (g_hash_table_iter_next (&iter, &key_p, &value_p))
@@ -355,15 +393,21 @@ gtk_at_spi_cache_init (GtkAtSpiCache *self)
 
 GtkAtSpiCache *
 gtk_at_spi_cache_new (GDBusConnection *connection,
-                      const char *cache_path)
+                      const char      *cache_path,
+                      GtkAtSpiRoot    *root)
 {
+  GtkAtSpiCache *cache;
+
   g_return_val_if_fail (G_IS_DBUS_CONNECTION (connection), NULL);
   g_return_val_if_fail (cache_path != NULL, NULL);
 
-  return g_object_new (GTK_TYPE_AT_SPI_CACHE,
-                       "connection", connection,
-                       "cache-path", cache_path,
-                       NULL);
+  cache = g_object_new (GTK_TYPE_AT_SPI_CACHE,
+                        "connection", connection,
+                        "cache-path", cache_path,
+                        NULL);
+  cache->root = root;
+
+  return cache;
 }
 
 void

@@ -25,7 +25,6 @@
 #include "gtkaccessibleprivate.h"
 
 #include "gtkatspiactionprivate.h"
-#include "gtkatspicacheprivate.h"
 #include "gtkatspieditabletextprivate.h"
 #include "gtkatspiprivate.h"
 #include "gtkatspirootprivate.h"
@@ -91,9 +90,6 @@ struct _GtkAtSpiContext
   /* The root object, used as a entry point */
   GtkAtSpiRoot *root;
 
-  /* The cache object, used to retrieve ATContexts */
-  GtkAtSpiCache *cache;
-
   /* The address for the ATSPI accessibility bus */
   char *bus_address;
 
@@ -153,6 +149,13 @@ collect_states (GtkAtSpiContext    *self,
   accessible = gtk_at_context_get_accessible (ctx);
 
   set_atspi_state (&states, ATSPI_STATE_VISIBLE);
+
+  if (ctx->accessible_role == GTK_ACCESSIBLE_ROLE_WINDOW)
+    {
+      set_atspi_state (&states, ATSPI_STATE_SHOWING);
+      if (gtk_accessible_get_platform_state (accessible, GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE))
+        set_atspi_state (&states, ATSPI_STATE_ACTIVE);
+    }
 
   if (ctx->accessible_role == GTK_ACCESSIBLE_ROLE_TEXT_BOX ||
       ctx->accessible_role == GTK_ACCESSIBLE_ROLE_SEARCH_BOX ||
@@ -862,6 +865,43 @@ emit_children_changed (GtkAtSpiContext         *self,
 }
 
 static void
+emit_focus (GtkAtSpiContext *self,
+            gboolean         focus_in)
+{
+  if (self->connection == NULL)
+    return;
+
+  if (focus_in)
+    g_dbus_connection_emit_signal (self->connection,
+                                   NULL,
+                                   self->context_path,
+                                   "org.a11y.atspi.Event.Focus",
+                                   "Focus",
+                                   g_variant_new ("(siiva{sv})",
+                                                  "", 0, 0, g_variant_new_string ("0"), NULL),
+                                   NULL);
+}
+
+static void
+emit_window_event (GtkAtSpiContext *self,
+                   const char      *event_type)
+{
+  if (self->connection == NULL)
+    return;
+
+  g_dbus_connection_emit_signal (self->connection,
+                                 NULL,
+                                 self->context_path,
+                                 "org.a11y.atspi.Event.Window",
+                                 event_type,
+                                 g_variant_new ("(siiva{sv})",
+                                                "", 0, 0,
+                                                g_variant_new_string("0"),
+                                                NULL),
+                                 NULL);
+}
+
+static void
 gtk_at_spi_context_state_change (GtkATContext                *ctx,
                                  GtkAccessibleStateChange     changed_states,
                                  GtkAccessiblePropertyChange  changed_properties,
@@ -892,6 +932,7 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
       if (GTK_IS_ROOT (accessible))
         {
           gtk_at_spi_root_child_changed (self->root, change, accessible);
+          emit_state_changed (self, "showing", gtk_boolean_accessible_value_get (value));
         }
       else
         {
@@ -1087,6 +1128,25 @@ gtk_at_spi_context_platform_change (GtkATContext                *ctx,
       gboolean state = gtk_accessible_get_platform_state (GTK_ACCESSIBLE (widget),
                                                           GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED);
       emit_state_changed (self, "focused", state);
+      emit_focus (self, state);
+    }
+
+  if (changed_platform & GTK_ACCESSIBLE_PLATFORM_CHANGE_ACTIVE)
+    {
+      gboolean state = gtk_accessible_get_platform_state (GTK_ACCESSIBLE (widget),
+                                                          GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE);
+      emit_state_changed (self, "active", state);
+
+      /* Orca tracks the window:activate and window:deactivate events on top
+       * levels to decide whether to track other AT-SPI events
+       */
+      if (gtk_accessible_get_accessible_role (accessible) == GTK_ACCESSIBLE_ROLE_WINDOW)
+        {
+          if (state)
+            emit_window_event (self, "activate");
+          else
+            emit_window_event (self, "deactivate");
+        }
     }
 }
 
