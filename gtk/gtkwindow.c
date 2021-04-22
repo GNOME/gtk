@@ -149,7 +149,8 @@
  */
 
 #define MENU_BAR_ACCEL GDK_KEY_F10
-#define RESIZE_HANDLE_SIZE 20
+#define RESIZE_HANDLE_SIZE 12 /* Width of resize borders */
+#define RESIZE_HANDLE_CORNER_SIZE 24 /* How resize corners extend */
 #define MNEMONICS_DELAY 300 /* ms */
 #define NO_CONTENT_CHILD_NAT 200 /* ms */
 #define VISIBLE_FOCUS_DURATION 3 /* s */
@@ -1421,10 +1422,10 @@ get_edge_for_coordinates (GtkWindow *window,
 
   if (x < left && x >= left - handle_size.left)
     {
-      if (y < top + handle_size.top && y >= top - handle_size.top)
+      if (y < top + RESIZE_HANDLE_CORNER_SIZE && y >= top - handle_size.top)
         return edge_or_minus_one (GDK_SURFACE_EDGE_NORTH_WEST);
 
-      if (y > top + border_rect->size.height - handle_size.bottom &&
+      if (y > top + border_rect->size.height - RESIZE_HANDLE_CORNER_SIZE &&
           y <= top + border_rect->size.height + handle_size.bottom)
         return edge_or_minus_one (GDK_SURFACE_EDGE_SOUTH_WEST);
 
@@ -1433,10 +1434,10 @@ get_edge_for_coordinates (GtkWindow *window,
   else if (x > left + border_rect->size.width &&
            x <= left + border_rect->size.width + handle_size.right)
     {
-      if (y < top + handle_size.top && y >= top - handle_size.top)
+      if (y < top + RESIZE_HANDLE_CORNER_SIZE && y >= top - handle_size.top)
         return edge_or_minus_one (GDK_SURFACE_EDGE_NORTH_EAST);
 
-      if (y > top + border_rect->size.height - handle_size.bottom &&
+      if (y > top + border_rect->size.height - RESIZE_HANDLE_CORNER_SIZE &&
           y <= top + border_rect->size.height + handle_size.bottom)
         return edge_or_minus_one (GDK_SURFACE_EDGE_SOUTH_EAST);
 
@@ -1444,10 +1445,10 @@ get_edge_for_coordinates (GtkWindow *window,
     }
   else if (y < top && y >= top - handle_size.top)
     {
-      if (x < left + handle_size.left && x >= left - handle_size.left)
+      if (x < left + RESIZE_HANDLE_CORNER_SIZE && x >= left - handle_size.left)
         return edge_or_minus_one (GDK_SURFACE_EDGE_NORTH_WEST);
 
-      if (x > left + border_rect->size.width - handle_size.right &&
+      if (x > left + border_rect->size.width - RESIZE_HANDLE_CORNER_SIZE &&
           x <= left + border_rect->size.width + handle_size.right)
         return edge_or_minus_one (GDK_SURFACE_EDGE_NORTH_EAST);
 
@@ -1456,10 +1457,10 @@ get_edge_for_coordinates (GtkWindow *window,
   else if (y > top + border_rect->size.height &&
            y <= top + border_rect->size.height + handle_size.bottom)
     {
-      if (x < left + handle_size.left && x >= left - handle_size.left)
+      if (x < left + RESIZE_HANDLE_CORNER_SIZE && x >= left - handle_size.left)
         return edge_or_minus_one (GDK_SURFACE_EDGE_SOUTH_WEST);
 
-      if (x > left + border_rect->size.width - handle_size.right &&
+      if (x > left + border_rect->size.width - RESIZE_HANDLE_CORNER_SIZE &&
           x <= left + border_rect->size.width + handle_size.right)
         return edge_or_minus_one (GDK_SURFACE_EDGE_SOUTH_EAST);
 
