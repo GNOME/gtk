@@ -1364,10 +1364,10 @@ static void
 get_box_border (GtkCssStyle *style,
                 GtkBorder   *border)
 {
-  border->top = get_number (style->border->border_top_width);
-  border->left = get_number (style->border->border_left_width);
-  border->bottom = get_number (style->border->border_bottom_width);
-  border->right = get_number (style->border->border_right_width);
+  border->top = get_number (style->border->border_top_width) + get_number (style->size->padding_top);
+  border->left = get_number (style->border->border_left_width) + get_number (style->size->padding_left);
+  border->bottom = get_number (style->border->border_bottom_width) + get_number (style->size->padding_bottom);
+  border->right = get_number (style->border->border_right_width) + get_number (style->size->padding_right);
 }
 
 static int
@@ -1396,7 +1396,10 @@ get_edge_for_coordinates (GtkWindow *window,
     return -1;
 
   gtk_css_boxes_init (&css_boxes, GTK_WIDGET (window));
-  border_rect = gtk_css_boxes_get_padding_rect (&css_boxes);
+  border_rect = gtk_css_boxes_get_content_rect (&css_boxes);
+
+  get_box_border (gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (window))),
+                  &handle_size);
 
   if (priv->use_client_shadow)
     {
@@ -1405,16 +1408,10 @@ get_edge_for_coordinates (GtkWindow *window,
 
       get_shadow_width (window, &shadow);
       /* This logic is duplicated in update_realized_window_properties() */
-      handle_size.left = MIN (RESIZE_HANDLE_SIZE, shadow.left);
-      handle_size.top = MIN (RESIZE_HANDLE_SIZE, shadow.top);
-      handle_size.right = MIN (RESIZE_HANDLE_SIZE, shadow.right);
-      handle_size.bottom = MIN (RESIZE_HANDLE_SIZE, shadow.bottom);
-    }
-  else
-    {
-      /* Use border */
-      get_box_border (gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (window))),
-                      &handle_size);
+      handle_size.left += MIN (RESIZE_HANDLE_SIZE, shadow.left);
+      handle_size.top += MIN (RESIZE_HANDLE_SIZE, shadow.top);
+      handle_size.right += MIN (RESIZE_HANDLE_SIZE, shadow.right);
+      handle_size.bottom += MIN (RESIZE_HANDLE_SIZE, shadow.bottom);
     }
 
   left = border_rect->origin.x;
@@ -4008,7 +4005,7 @@ get_shadow_width (GtkWindow *window,
   if (!priv->decorated)
     goto out;
 
-  if (!priv->client_decorated &&
+  if (!priv->client_decorated ||
       !(gtk_window_should_use_csd (window) &&
         gtk_window_supports_client_shadow (window)))
     goto out;
