@@ -100,7 +100,10 @@ static const guint16 gtk_compose_ignore[] = {
   GDK_KEY_Hyper_L,
   GDK_KEY_Hyper_R,
   GDK_KEY_Mode_switch,
-  GDK_KEY_ISO_Level3_Shift
+  GDK_KEY_ISO_Level3_Shift,
+  GDK_KEY_ISO_Level3_Latch,
+  GDK_KEY_ISO_Level5_Shift,
+  GDK_KEY_ISO_Level5_Latch
 };
 
 static void     gtk_im_context_simple_finalize           (GObject                  *obj);
