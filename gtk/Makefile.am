@@ -1750,7 +1750,6 @@ EXTRA_DIST +=                   \
 	glade/README.glade	\
 	glade/gtk-private-widgets.xml \
 	compose/gtk-compose-lookaside.txt \
-	compose/gtk-compose-remove.txt \
 	inspector/Makefile.inc	\
 	libgtk3.manifest.in	\
 	gtk-win32.rc.body.in	\
