@@ -1,3 +1,52 @@
+Overview of Changes in GTK+ 3.24.29
+===================================
+
+* Input:
+ - Look for a Compose file in the right place (~/.config/gtk-3.0)
+ - Revert some Compose sequence changes (mainly around dead
+   acute and apostrophe)
+ - Consume all key events during preedit, to avoid unexpected
+   interactions
+ - Ignore more modifiers during preedit, to allow using 3rd and
+   5th level choosers
+ - Fix handling of cursor positions in non-ASCII preedit text
+
+* GtkSpinButton:
+ - Interpret localized digits
+
+* GtkScale:
+ - Fix sporadic criticals
+
+* GtkScrolledWindow:
+ - Cancel overshoot on size changes
+ - Avoid criticals with non-overlay scrollbars
+
+* GtkFileChooser:
+ - Handle smb mounts better
+
+* GtkListBox:
+ - Fix extending multi-selections
+
+* Fix a possible crash in gtk_show_uri
+
+* Wayland:
+ - Improve font settings fallback
+
+* X11:
+ - Avoid log spam on exit
+ - Don't beep on untrusted displays
+
+* OS X:
+ - Fix building on OS X 10.11
+ - Add gdk-quartz-cocoa-access.h with api that provides
+   access to native objects
+
+* Translation updates:
+ Dutch
+ Nepali
+ Swedish
+
+
 Overview of Changes in GTK+ 3.24.28
 ===================================
 
