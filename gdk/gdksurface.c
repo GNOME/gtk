@@ -2443,6 +2443,7 @@ gdk_surface_ensure_motion (GdkSurface *surface)
   GdkEvent *event;
   double x, y;
   GdkModifierType state;
+  GdkSurface *grab_surface;
 
   if (!surface->request_motion)
     return;
@@ -2458,6 +2459,12 @@ gdk_surface_ensure_motion (GdkSurface *surface)
 
   if (!gdk_surface_get_device_position (surface, device, &x, &y, &state))
     return;
+
+  if (gdk_device_grab_info (display, device, &grab_surface, NULL))
+    {
+      if (grab_surface != surface)
+        return;
+    }
 
   event = gdk_motion_event_new (surface,
                                 device,
