@@ -696,15 +696,8 @@ gtk_at_context_update (GtkATContext *self)
       self->updated_states == 0)
     return;
 
-  GtkAccessibleStateChange changed_states =
-    gtk_accessible_attribute_set_get_changed (self->states);
-  GtkAccessiblePropertyChange changed_properties =
-    gtk_accessible_attribute_set_get_changed (self->properties);
-  GtkAccessibleRelationChange changed_relations =
-    gtk_accessible_attribute_set_get_changed (self->relations);
-
   GTK_AT_CONTEXT_GET_CLASS (self)->state_change (self,
-                                                 changed_states, changed_properties, changed_relations,
+                                                 self->updated_states, self->updated_properties, self->updated_relations,
                                                  self->states, self->properties, self->relations);
   g_signal_emit (self, obj_signals[STATE_CHANGE], 0);
 
