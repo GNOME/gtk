@@ -36,6 +36,13 @@ Nightly documentation can be found at
   - Gdk: https://gnome.pages.gitlab.gnome.org/gtk/gdk4/
   - Gsk: https://gnome.pages.gitlab.gnome.org/gtk/gsk4/
 
+Nightly flatpaks of our demos can be installed from the
+[GNOME Nightly](https://wiki.gnome.org/Apps/Nightly) repository:
+  - flatpak remote-add --if-not-exists gnome-nightly https://nightly.gnome.org/gnome-nightly.flatpakrepo 
+  - flatpak install gnome-nightly org.gtk.Demo4
+  - flatpak install gnome-nightly org.gtk.WidgetFactory4
+  - flatpak install gnome-nightly org.gtk.IconBrowser4
+
 Building and installing
 -----------------------
 
