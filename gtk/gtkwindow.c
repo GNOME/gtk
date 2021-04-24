@@ -3038,8 +3038,10 @@ gtk_window_set_titlebar (GtkWindow *window,
 
   if (titlebar == NULL)
     {
+      /* these are updated in realize() */
       priv->client_decorated = FALSE;
       gtk_widget_remove_css_class (widget, "csd");
+      gtk_widget_remove_css_class (widget, "solid-csd");
 
       goto out;
     }
