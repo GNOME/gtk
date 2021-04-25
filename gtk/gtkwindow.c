@@ -3038,8 +3038,10 @@ gtk_window_set_titlebar (GtkWindow *window,
 
   if (titlebar == NULL)
     {
+      /* these are updated in realize() */
       priv->client_decorated = FALSE;
       gtk_widget_remove_css_class (widget, "csd");
+      gtk_widget_remove_css_class (widget, "solid-csd");
 
       goto out;
     }
@@ -4006,8 +4008,7 @@ get_shadow_width (GtkWindow *window,
     goto out;
 
   if (!priv->client_decorated ||
-      !(gtk_window_should_use_csd (window) &&
-        gtk_window_supports_client_shadow (window)))
+      !priv->use_client_shadow)
     goto out;
 
   if (priv->maximized ||
