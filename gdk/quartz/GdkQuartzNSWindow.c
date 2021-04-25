@@ -803,8 +803,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
   gdk_event_free (event);
 
-  g_object_unref (_gdk_quartz_drag_source_context);
-  _gdk_quartz_drag_source_context = NULL;
+  _gdk_quartz_drag_source_context_destroy_gtk_only ();
 }
 
 #ifdef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
