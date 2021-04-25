@@ -7596,19 +7596,19 @@ msgstr "Apuja o abaixa el volum"
 
 #: gtk/ui/gtkvolumebutton.ui:34
 msgid "Volume Up"
-msgstr "Volum amunt"
+msgstr "Apuja el volum"
 
 #: gtk/ui/gtkvolumebutton.ui:35
 msgid "Increases the volume"
-msgstr "Apuja el volum"
+msgstr "Augmenta el volum"
 
 #: gtk/ui/gtkvolumebutton.ui:44
 msgid "Volume Down"
-msgstr "Volum avall"
+msgstr "Abaixa el volum"
 
 #: gtk/ui/gtkvolumebutton.ui:45
 msgid "Decreases the volume"
-msgstr "Abaixa el volum"
+msgstr "Disminueix el volum"
 
 #: gtk/updateiconcache.c:1388
 #, c-format
