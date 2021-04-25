@@ -2985,7 +2985,7 @@ msgstr "Protocol de transferència de fitxers SSH"
 #. Translators: do not translate sftp:// and ssh://
 #: gtk/gtkplacesview.c:1625
 msgid "sftp:// or ssh://"
-msgstr "sftp:// or ssh://"
+msgstr "sftp:// o ssh://"
 
 #: gtk/gtkplacesview.c:1631
 msgid "WebDAV"
