@@ -740,7 +740,8 @@ file_uri_deserializer_finish (GObject      *source,
     }
 
   /* write terminating NULL */
-  if (!g_output_stream_write (stream, "", 1, NULL, &error))
+  if (g_output_stream_write (stream, "", 1, NULL, &error) < 0 ||
+      !g_output_stream_close (stream, NULL, &error))
     {
       gdk_content_deserializer_return_error (deserializer, error);
       return;
@@ -780,7 +781,7 @@ file_uri_deserializer (GdkContentDeserializer *deserializer)
 
   g_output_stream_splice_async (output,
                                 gdk_content_deserializer_get_input_stream (deserializer),
-                                G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE | G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
+                                G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE,
                                 gdk_content_deserializer_get_priority (deserializer),
                                 gdk_content_deserializer_get_cancellable (deserializer),
                                 file_uri_deserializer_finish,
