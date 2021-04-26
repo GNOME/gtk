@@ -51,6 +51,7 @@
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
 #include <epoxy/egl.h>
+#include <xkbcommon/xkbcommon.h>
 #endif
 
 #ifdef GDK_WINDOWING_BROADWAY
@@ -753,6 +754,26 @@ add_device (GtkInspectorGeneral *gen,
       add_label_row (gen, GTK_LIST_BOX (gen->device_box), "Touches", text, 20);
       g_free (text);
     }
+
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DEVICE (device) &&
+      gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
+    {
+      struct xkb_keymap *keymap = gdk_wayland_device_get_xkb_keymap (device);
+      GString *s;
+
+      s = g_string_new ("");
+      for (int i = 0; i < xkb_keymap_num_layouts (keymap); i++)
+        {
+          if (s->len > 0)
+            g_string_append (s, ", ");
+          g_string_append (s, xkb_keymap_layout_get_name (keymap, i));
+        }
+
+      add_label_row (gen, GTK_LIST_BOX (gen->device_box), "Layouts", s->str, 20);
+      g_string_free (s, TRUE);
+    }
+#endif
 
   g_type_class_unref (class);
 }
