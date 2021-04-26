@@ -672,9 +672,18 @@ string_deserializer_finish (GObject      *source,
     }
   else
     {
+      GOutputStream *mem_stream = g_filter_output_stream_get_base_stream (G_FILTER_OUTPUT_STREAM (stream));
+
+      /* write a terminating NULL byte */
+      if (g_output_stream_write (mem_stream, "", 1, NULL, &error) < 0 ||
+          !g_output_stream_close (mem_stream, NULL, &error))
+        {
+          gdk_content_deserializer_return_error (deserializer, error);
+          return;
+        }
+
       g_value_take_string (gdk_content_deserializer_get_value (deserializer),
-                           g_memory_output_stream_steal_data (G_MEMORY_OUTPUT_STREAM (
-                               g_filter_output_stream_get_base_stream (G_FILTER_OUTPUT_STREAM (stream)))));
+                           g_memory_output_stream_steal_data (G_MEMORY_OUTPUT_STREAM (mem_stream)));
     }
   gdk_content_deserializer_return_success (deserializer);
 }
@@ -703,7 +712,7 @@ string_deserializer (GdkContentDeserializer *deserializer)
 
   g_output_stream_splice_async (filter,
                                 gdk_content_deserializer_get_input_stream (deserializer),
-                                G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE | G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
+                                G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE,
                                 gdk_content_deserializer_get_priority (deserializer),
                                 gdk_content_deserializer_get_cancellable (deserializer),
                                 string_deserializer_finish,
