@@ -1037,6 +1037,23 @@ gdk_wayland_device_get_wl_keyboard (GdkDevice *device)
   return seat->wl_keyboard;
 }
 
+/**
+ * gdk_wayland_device_get_xkb_keymap:
+ * @device: (type GdkWaylandDevice): a `GdkDevice`
+ *
+ * Returns the `xkb_keymap` of a `GdkDevice`.
+ *
+ * Returns: (transfer none): a `struct xkb_keymap`
+ *
+ * Since: 4.4
+ */
+struct xkb_keymap *
+gdk_wayland_device_get_xkb_keymap (GdkDevice *device)
+{
+  GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (device));
+  return _gdk_wayland_keymap_get_xkb_keymap (seat->keymap);
+}
+
 GdkKeymap *
 _gdk_wayland_device_get_keymap (GdkDevice *device)
 {

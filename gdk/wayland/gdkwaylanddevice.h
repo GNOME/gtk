@@ -52,6 +52,8 @@ GDK_AVAILABLE_IN_ALL
 struct wl_pointer   *gdk_wayland_device_get_wl_pointer      (GdkDevice *device);
 GDK_AVAILABLE_IN_ALL
 struct wl_keyboard  *gdk_wayland_device_get_wl_keyboard     (GdkDevice *device);
+GDK_AVAILABLE_IN_4_4
+struct xkb_keymap   *gdk_wayland_device_get_xkb_keymap      (GdkDevice *device);
 
 GDK_AVAILABLE_IN_ALL
 const char          *gdk_wayland_device_get_node_path       (GdkDevice *device);
