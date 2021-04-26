@@ -1915,7 +1915,22 @@ keyboard_handle_keymap (void               *data,
 
   _gdk_wayland_keymap_update_from_fd (seat->keymap, format, fd, size);
 
-  GDK_DISPLAY_NOTE(seat->keymap->display, INPUT, g_print ("active layout now: %s\n", get_active_layout_name (seat->keymap)));
+  GDK_DISPLAY_NOTE(seat->keymap->display, INPUT,
+    {
+      GString *s = g_string_new ("");
+      struct xkb_keymap *xkb_keymap = _gdk_wayland_keymap_get_xkb_keymap (seat->keymap);
+      struct xkb_state *xkb_state = _gdk_wayland_keymap_get_xkb_state (seat->keymap);
+      for (int i = 0; i < xkb_keymap_num_layouts (xkb_keymap); i++)
+        {
+          if (s->len > 0)
+            g_string_append (s, ", ");
+          if (xkb_state_layout_index_is_active (xkb_state, i, XKB_STATE_LAYOUT_EFFECTIVE))
+            g_string_append (s, "*");
+          g_string_append (s, xkb_keymap_layout_get_name (xkb_keymap, i));
+        }
+      g_print ("layouts: %s\n", s->str);
+      g_string_free (s, TRUE);
+    });
 
   g_signal_emit_by_name (seat->keymap, "keys-changed");
   g_signal_emit_by_name (seat->keymap, "state-changed");
