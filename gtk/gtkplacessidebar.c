@@ -866,6 +866,9 @@ on_bookmark_query_info_complete (GObject      *source,
     {
       /* Don't add non-UTF-8 bookmarks */
       bookmark_name = g_file_get_basename (root);
+      if (bookmark_name == NULL)
+        goto out;
+
       if (!g_utf8_validate (bookmark_name, -1, NULL))
         {
           g_free (bookmark_name);
