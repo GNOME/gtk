@@ -193,6 +193,7 @@ check_functions = [
   'getpagesize',
   'getresuid',
   'lstat',
+  'memfd_create',
   'mmap',
   'posix_fallocate',
   '_lock_file',

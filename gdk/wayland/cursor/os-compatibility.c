@@ -32,7 +32,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define HAVE_MEMFD_CREATE
 #ifdef HAVE_MEMFD_CREATE
 #include <sys/mman.h>
 #endif
