@@ -21,3 +21,9 @@ show_index_summary = true
 
 [source-location]
 base_url = "https://gitlab.gnome.org/GNOME/gtk/-/blob/master/"
+
+[extra]
+content_images = [
+  "images/gtk-logo.svg",
+]
+urlmap_file = "urlmap.js"
