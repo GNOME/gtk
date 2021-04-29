@@ -855,19 +855,30 @@ _set_pixformat_for_hdc (HDC              hdc,
                         const gboolean   need_alpha_bits,
                         GdkWin32Display *display)
 {
-  PIXELFORMATDESCRIPTOR pfd;
-  gboolean set_pixel_format_result = FALSE;
+  gboolean already_checked = TRUE;
+  *best_idx = GetPixelFormat (hdc);
 
   /* one is only allowed to call SetPixelFormat(), and so ChoosePixelFormat()
    * one single time per window HDC
    */
-  *best_idx = _get_wgl_pfd (hdc, need_alpha_bits, &pfd, display);
-  if (*best_idx != 0)
-    set_pixel_format_result = SetPixelFormat (hdc, *best_idx, &pfd);
+  if (*best_idx == 0)
+    {
+      PIXELFORMATDESCRIPTOR pfd;
+      gboolean set_pixel_format_result = FALSE;
 
-  /* ChoosePixelFormat() or SetPixelFormat() failed, bail out */
-  if (*best_idx == 0 || !set_pixel_format_result)
-    return FALSE;
+      GDK_NOTE (OPENGL, g_print ("requesting pixel format...\n"));
+	  already_checked = FALSE;
+      *best_idx = _get_wgl_pfd (hdc, need_alpha_bits, &pfd, display);
+
+      if (*best_idx != 0)
+        set_pixel_format_result = SetPixelFormat (hdc, *best_idx, &pfd);
+
+      /* ChoosePixelFormat() or SetPixelFormat() failed, bail out */
+      if (*best_idx == 0 || !set_pixel_format_result)
+        return FALSE;
+    }
+
+  GDK_NOTE (OPENGL, g_print ("%s""requested and set pixel format: %d\n", already_checked ? "already " : "", *best_idx));
 
   return TRUE;
 }
