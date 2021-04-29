@@ -172,6 +172,22 @@ macos:
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
 
+vs2017-x64:
+  extends: .only-default
+  # TODO: Uncomment this when ready to merge.
+  #only:
+  #  - branches@GNOME/gtk
+  stage: build
+  tags:
+    - win32-ps
+  needs: []
+  script:
+    - .gitlab-ci/test-msvc.bat
+  artifacts:
+    when: always
+    paths:
+      - "${CI_PROJECT_DIR}/_build/meson-logs"
+
 .flatpak-defaults:
   image: $FLATPAK_IMAGE
   stage: flatpak
