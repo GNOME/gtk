@@ -1526,13 +1526,16 @@ gtk_box_pack (GtkBox      *box,
               guint        padding,
               GtkPackType  pack_type)
 {
-  GtkContainer *container = GTK_CONTAINER (box);
-  GtkBoxPrivate *private = box->priv;
+  GtkContainer *container;
+  GtkBoxPrivate *private;
   GtkBoxChild *child_info;
 
   g_return_val_if_fail (GTK_IS_BOX (box), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
   g_return_val_if_fail (_gtk_widget_get_parent (child) == NULL, NULL);
+
+  container = GTK_CONTAINER (box);
+  private = box->priv;
 
   child_info = g_new (GtkBoxChild, 1);
   child_info->widget = child;
