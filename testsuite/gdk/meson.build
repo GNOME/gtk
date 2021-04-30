@@ -42,8 +42,10 @@ foreach t : tests
     ],
     suite: 'gdk',
   )
+endforeach
 
-  if get_option('install-tests')
+if get_option('install-tests')
+  foreach t : tests
     test_cdata = configuration_data()
     test_cdata.set('testexecdir', testexecdir)
     test_cdata.set('test', t)
@@ -53,5 +55,7 @@ foreach t : tests
       install: true,
       install_dir: testdatadir,
     )
-  endif
-endforeach
+  endforeach
+
+  install_subdir('clipboard-data', install_dir: testexecdir)
+endif

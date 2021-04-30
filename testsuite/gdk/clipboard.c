@@ -230,7 +230,7 @@ test_clipboard_text (void)
 {
   char *filename;
 
-  filename = g_test_build_filename (G_TEST_DIST, "../../../gtk/gtkwidget.h", NULL);
+  filename = g_test_build_filename (G_TEST_DIST, "clipboard-data", "test.txt", NULL);
 
   test_clipboard_roundtrip ("text", filename, NULL);
 }
@@ -240,7 +240,7 @@ test_clipboard_image (void)
 {
   char *filename;
 
-  filename = g_test_build_filename (G_TEST_DIST, "../../../gtk/icons/32x32/places/network-workgroup.png", NULL);
+  filename = g_test_build_filename (G_TEST_DIST, "clipboard-data", "image.png", NULL);
 
   test_clipboard_roundtrip ("image", filename, NULL);
 }
