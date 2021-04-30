@@ -7826,7 +7826,7 @@ _gtk_widget_list_devices (GtkWidget *widget,
     }
 
   root = gtk_widget_get_root (widget);
-  if (!root)
+  if (!GTK_IS_WINDOW (root))
     {
       *out_n_devices = 0;
       return NULL;
@@ -12162,7 +12162,7 @@ gtk_widget_set_cursor (GtkWidget *widget,
     return;
 
   root = _gtk_widget_get_root (widget);
-  if (root)
+  if (GTK_IS_WINDOW (root))
     gtk_window_maybe_update_cursor (GTK_WINDOW (root), widget, NULL);
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CURSOR]);
