@@ -130,6 +130,12 @@ test_clipboard_roundtrip (const char *type,
   char *stdout_buf = NULL;
   char *stderr_buf = NULL;
 
+  if (gdk_display_get_default_seat (gdk_display_get_default ()) == NULL)
+    {
+      g_test_skip ("we have no seat, so focus won't work");
+      return;
+    }
+
   clipboard_client = g_test_build_filename (G_TEST_BUILT, "/clipboard-client", NULL);
 
   source = g_subprocess_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE,
