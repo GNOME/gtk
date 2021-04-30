@@ -189,7 +189,8 @@ do_it (GObject    *object,
 {
   GdkClipboard *clipboard;
 
-  g_signal_handler_disconnect (object, handler);
+  if (object)
+    g_signal_handler_disconnect (object, handler);
 
   clipboard = gdk_display_get_clipboard (gdk_display_get_default ());
 
