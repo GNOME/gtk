@@ -1,12 +1,13 @@
+testexecdir = join_paths(installed_test_bindir, 'gdk')
+testdatadir = join_paths(installed_test_datadir, 'gdk')
+
 clipboard_client = executable('clipboard-client',
                               sources: ['clipboard-client.c'],
                               include_directories: [confinc],
                               c_args: common_cflags,
                               dependencies: [ libgtk_dep ],
-                              install: false)
-
-testexecdir = join_paths(installed_test_bindir, 'gdk')
-testdatadir = join_paths(installed_test_datadir, 'gdk')
+                              install: get_option('install-tests'),
+                              install_dir: testexecdir)
 
 tests = [
   'array',
