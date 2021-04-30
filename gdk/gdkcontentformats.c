@@ -461,7 +461,7 @@ gdk_content_formats_contain_mime_type (const GdkContentFormats *formats,
  * Note that @formats may not contain any #GTypes, in particular when
  * they are empty. In that case %NULL will be returned.
  *
- * Returns: (transfer none) (nullable) (array length=n_gtypes):
+ * Returns: (transfer none) (nullable) (array length=n_gtypes zero-terminated=1):
  *      %G_TYPE_INVALID-terminated array of types included in @formats or
  *      %NULL if none.
  */
