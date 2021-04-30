@@ -39,6 +39,7 @@ foreach t : tests
     env: [
       'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
       'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+      'DBUS_SESSION_BUS_ADDRESS=',
     ],
     suite: 'gdk',
   )
