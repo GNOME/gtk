@@ -269,122 +269,23 @@ postpone_on_globals_closure (GdkWaylandDisplay *display_wayland,
 #ifdef G_ENABLE_DEBUG
 
 static const char *
-get_format_name (enum wl_shm_format format)
+get_format_name (uint32_t format,
+                 char     name[10])
 {
-  int i;
-#define FORMAT(s) { WL_SHM_FORMAT_ ## s, #s }
-  struct { int format; const char *name; } formats[] = {
-    FORMAT(ARGB8888),
-    FORMAT(XRGB8888),
-    FORMAT(C8),
-    FORMAT(RGB332),
-    FORMAT(BGR233),
-    FORMAT(XRGB4444),
-    FORMAT(XBGR4444),
-    FORMAT(RGBX4444),
-    FORMAT(BGRX4444),
-    FORMAT(ARGB4444),
-    FORMAT(ABGR4444),
-    FORMAT(RGBA4444),
-    FORMAT(BGRA4444),
-    FORMAT(XRGB1555),
-    FORMAT(XBGR1555),
-    FORMAT(RGBX5551),
-    FORMAT(BGRX5551),
-    FORMAT(ARGB1555),
-    FORMAT(ABGR1555),
-    FORMAT(RGBA5551),
-    FORMAT(BGRA5551),
-    FORMAT(RGB565),
-    FORMAT(BGR565),
-    FORMAT(RGB888),
-    FORMAT(BGR888),
-    FORMAT(XBGR8888),
-    FORMAT(RGBX8888),
-    FORMAT(BGRX8888),
-    FORMAT(ABGR8888),
-    FORMAT(RGBA8888),
-    FORMAT(BGRA8888),
-    FORMAT(XRGB2101010),
-    FORMAT(XBGR2101010),
-    FORMAT(RGBX1010102),
-    FORMAT(BGRX1010102),
-    FORMAT(ARGB2101010),
-    FORMAT(ABGR2101010),
-    FORMAT(RGBA1010102),
-    FORMAT(BGRA1010102),
-    FORMAT(YUYV),
-    FORMAT(YVYU),
-    FORMAT(UYVY),
-    FORMAT(VYUY),
-    FORMAT(AYUV),
-    FORMAT(NV12),
-    FORMAT(NV21),
-    FORMAT(NV16),
-    FORMAT(NV61),
-    FORMAT(YUV410),
-    FORMAT(YVU410),
-    FORMAT(YUV411),
-    FORMAT(YVU411),
-    FORMAT(YUV420),
-    FORMAT(YVU420),
-    FORMAT(YUV422),
-    FORMAT(YVU422),
-    FORMAT(YUV444),
-    FORMAT(YVU444),
-    FORMAT(R8),
-    FORMAT(R16),
-    FORMAT(RG88),
-    FORMAT(GR88),
-    FORMAT(RG1616),
-    FORMAT(GR1616),
-    FORMAT(XRGB16161616F),
-    FORMAT(XBGR16161616F),
-    FORMAT(ARGB16161616F),
-    FORMAT(ABGR16161616F),
-    FORMAT(XYUV8888),
-    FORMAT(VUY888),
-    FORMAT(VUY101010),
-    FORMAT(Y210),
-    FORMAT(Y212),
-    FORMAT(Y216),
-    FORMAT(Y410),
-    FORMAT(Y412),
-    FORMAT(Y416),
-    FORMAT(XVYU12_16161616),
-    FORMAT(XVYU16161616),
-    FORMAT(Y0L0),
-    FORMAT(X0L0),
-    FORMAT(Y0L2),
-    FORMAT(X0L2),
-    FORMAT(YUV420_8BIT),
-    FORMAT(YUV420_10BIT),
-    FORMAT(XRGB8888_A8),
-    FORMAT(XBGR8888_A8),
-    FORMAT(RGBX8888_A8),
-    FORMAT(BGRX8888_A8),
-    FORMAT(RGB888_A8),
-    FORMAT(BGR888_A8),
-    FORMAT(RGB565_A8),
-    FORMAT(BGR565_A8),
-    FORMAT(NV24),
-    FORMAT(NV42),
-    FORMAT(P210),
-    FORMAT(P010),
-    FORMAT(P012),
-    FORMAT(P016),
+  if (format == 0)
+    g_strlcpy (name, "ARGB8888", 10);
+  else if (format == 1)
+    g_strlcpy (name, "XRGB8888", 10);
+  else
+    g_snprintf (name, 10, "4cc %c%c%c%c",
+               (char) (format & 0xff),
+               (char) ((format >> 8) & 0xff),
+               (char) ((format >> 16) & 0xff),
+               (char) ((format >> 24) & 0xff));
 
-    { 0xffffffff, NULL }
-  };
-#undef FORMAT
-
-  for (i = 0; formats[i].name; i++)
-    {
-      if (formats[i].format == format)
-        return formats[i].name;
-    }
-  return NULL;
+  return name;
 }
+
 #endif
 
 static void
@@ -392,7 +293,10 @@ wl_shm_format (void          *data,
                struct wl_shm *wl_shm,
                uint32_t       format)
 {
-  GDK_NOTE (MISC, g_message ("supported pixel format %s", get_format_name (format)));
+  GDK_NOTE (MISC,
+            char buf[10];
+            g_message ("supported pixel format %s", get_format_name (format, buf));
+            );
 }
 
 static const struct wl_shm_listener wl_shm_listener = {
