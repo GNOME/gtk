@@ -4,7 +4,8 @@
 #include "wayland/gdkwayland.h"
 #endif
 
-static void
+
+G_GNUC_NORETURN static void
 got_string_cb (GObject      *source,
                GAsyncResult *result,
                gpointer      data)
@@ -28,7 +29,7 @@ got_string_cb (GObject      *source,
   exit (0);
 }
 
-static void
+G_GNUC_NORETURN static void
 got_text_cb (GObject      *source,
              GAsyncResult *result,
              gpointer      data)
@@ -61,7 +62,7 @@ got_text_cb (GObject      *source,
   exit (0);
 }
 
-static void
+G_GNUC_NORETURN static void
 got_texture_cb (GObject      *source,
                 GAsyncResult *result,
                 gpointer      data)
@@ -94,7 +95,7 @@ got_texture_cb (GObject      *source,
   exit (0);
 }
 
-static void
+G_GNUC_NORETURN static void
 got_file (GObject      *source,
           GAsyncResult *result,
           gpointer      data)
@@ -120,7 +121,7 @@ got_file (GObject      *source,
   exit (0);
 }
 
-static void
+G_GNUC_NORETURN static void
 got_files (GObject      *source,
            GAsyncResult *result,
            gpointer      data)
@@ -152,7 +153,7 @@ got_files (GObject      *source,
   exit (0);
 }
 
-static void
+G_GNUC_NORETURN static void
 got_color (GObject      *source,
            GAsyncResult *result,
            gpointer      data)
