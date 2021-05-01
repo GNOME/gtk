@@ -171,9 +171,9 @@ gtk_gst_media_file_position_updated_cb (GstPlayer       *player,
 }
 
 static void
-gtk_gst_media_file_media_info_updated_cb (GstPlayer       *player,
-                                          GstClockTime     duration,
-                                          GtkGstMediaFile *self)
+gtk_gst_media_file_media_info_updated_cb (GstPlayer          *player,
+                                          GstPlayerMediaInfo *media_info,
+                                          GtkGstMediaFile    *self)
 {
   gtk_gst_media_file_ensure_prepared (self);
 }
