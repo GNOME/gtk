@@ -931,7 +931,7 @@ init (void)
       gdk_content_register_deserializer (mime,
                                          G_TYPE_STRING,
                                          string_deserializer,
-                                         mime,
+                                         (gpointer) charset,
                                          g_free);
     }
   gdk_content_register_deserializer ("text/plain",
