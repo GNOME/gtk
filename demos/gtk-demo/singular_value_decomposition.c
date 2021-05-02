@@ -2,6 +2,7 @@
 #include <float.h>
 #include <math.h>
 #include <glib.h>
+#include <assert.h>
 
 /* See Golub and Reinsch,
  * "Handbook for Automatic Computation vol II - Linear Algebra",
@@ -38,6 +39,9 @@ householder_reduction (double *A,
   double s, s2, si, scale;
   double *pu, *pui, *pv, *pvi;
   double half_norm_squared;
+
+  assert (nrows >= 2);
+  assert (ncols >= 2);
 
   memcpy (U, A, sizeof (double) * nrows * ncols);
 
@@ -205,6 +209,9 @@ givens_reduction (int nrows,
   int rotation_test;
   int iteration_count;
 
+  assert (nrows >= 2);
+  assert (ncols >= 2);
+
   for (i = 0, x = 0.0; i < ncols; i++)
     {
       y = fabs (diagonal[i]) + fabs (superdiagonal[i]);
@@ -342,6 +349,9 @@ sort_singular_values (int     nrows,
   double temp;
   double *p1, *p2;
 
+  assert (nrows >= 2);
+  assert (ncols >= 2);
+
   for (i = 0; i < ncols - 1; i++)
     {
       max_index = i;
@@ -433,9 +443,12 @@ singular_value_decomposition_solve (double *U,
   double d;
   double tolerance;
 
+  assert (nrows >= 2);
+  assert (ncols >= 2);
+
   tolerance = DBL_EPSILON * S[0] * (double) ncols;
 
-  for ( i = 0, pv = V; i < ncols; i++, pv += ncols)
+  for (i = 0, pv = V; i < ncols; i++, pv += ncols)
     {
       x[i] = 0.0;
       for (j = 0; j < ncols; j++)
