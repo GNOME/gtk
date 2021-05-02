@@ -432,9 +432,11 @@ gtk_shortcut_controller_handle_event (GtkEventController *controller,
 
   if (event_type == GDK_KEY_PRESS)
     {
-      GdkModifierType modifiers;
+      GdkModifierType modifiers, consumed_modifiers;
+
       modifiers = gdk_event_get_modifier_state (event);
-      enable_mnemonics = (modifiers & gtk_accelerator_get_default_mod_mask ()) == self->mnemonics_modifiers;
+      consumed_modifiers = gdk_key_event_get_consumed_modifiers (event);
+      enable_mnemonics = (modifiers & ~consumed_modifiers & gtk_accelerator_get_default_mod_mask ()) == self->mnemonics_modifiers;
     }
   else
     {
