@@ -133,7 +133,7 @@ testdata = [
   'border-image-url-scaled.ref.ui',
   'border-image-url-scaled.ui',
   # this seems to make assumptions on text positioning
-  # that are not valid with subpixel positioning 
+  # that are not valid with subpixel positioning
   #'border-image-url.css',
   #'border-image-url.ref.ui',
   #'border-image-url.ui',
@@ -324,8 +324,10 @@ testdata = [
   'label-text-shadow-changes-modify-clip.ui',
   'label-width-chars-dont-shrink.ref.ui',
   'label-width-chars-dont-shrink.ui',
-  'label-wrap-justify.ref.ui',
-  'label-wrap-justify.ui',
+  # this seems to make assumptions on text positioning
+  # that are not valid with subpixel positioning
+  #'label-wrap-justify.ref.ui',
+  #'label-wrap-justify.ui',
   'letter-spacing.css',
   'letter-spacing.ui',
   'letter-spacing.ref.ui',
