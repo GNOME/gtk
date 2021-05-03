@@ -106,7 +106,7 @@ gtk_fnmatch_intern (const char *pattern,
 	    return FALSE;
 
 	  {
-	    const char *last_p = p;
+	    const char *last_p;
 
 	    for (last_p = p, c = get_char (&p);
 		 c == '?' || c == '*';
