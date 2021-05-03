@@ -2320,7 +2320,7 @@ gtk_stack_snapshot_cube (GtkWidget   *widget,
 
   if (priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_ROTATE_LEFT)
     gtk_widget_snapshot_child (widget, priv->visible_child->widget, snapshot);
-  else
+  else if (priv->last_visible_child)
     gtk_widget_snapshot_child (widget, priv->last_visible_child->widget, snapshot);
   gtk_snapshot_restore (snapshot);
 
