@@ -150,6 +150,7 @@ gdk_toplevel_size_set_shadow_width (GdkToplevelSize *size,
 void
 gdk_toplevel_size_validate (GdkToplevelSize *size)
 {
+#if 0
   int geometry_width, geometry_height;
 
   geometry_width = size->width;
@@ -159,4 +160,5 @@ gdk_toplevel_size_validate (GdkToplevelSize *size)
       geometry_width -= size->shadow.left + size->shadow.right;
       geometry_height -= size->shadow.top + size->shadow.bottom;
     }
+#endif
 }
