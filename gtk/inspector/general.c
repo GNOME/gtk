@@ -51,6 +51,7 @@
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
 #include <epoxy/egl.h>
+#include <xkbcommon/xkbcommon.h>
 #endif
 
 #ifdef GDK_WINDOWING_BROADWAY
@@ -568,26 +569,23 @@ populate_display (GdkDisplay *display, GtkInspectorGeneral *gen)
                           gdk_display_is_composited (display));
 }
 
-static GtkWidget *
-populate_monitor (gpointer item,
-                  gpointer gen)
+static void
+add_monitor (GtkInspectorGeneral *gen,
+             GdkMonitor          *monitor,
+             guint                i)
 {
   GtkListBox *list;
-  GdkMonitor *monitor = item;
-  char *name;
   char *value;
   GdkRectangle rect;
   int scale;
+  char *name;
   char *scale_str = NULL;
   const char *manufacturer;
   const char *model;
 
-  list = GTK_LIST_BOX (gtk_list_box_new ());
-  gtk_widget_add_css_class (GTK_WIDGET (list), "rich-list");
-  gtk_list_box_set_selection_mode (list, GTK_SELECTION_NONE);
+  list = GTK_LIST_BOX (gen->monitor_box);
 
-  /* XXX: add monitor # here when porting to listview */
-  name = g_strdup_printf ("Monitor %d", 1);
+  name = g_strdup_printf ("Monitor %u", i);
   manufacturer = gdk_monitor_get_manufacturer (monitor);
   model = gdk_monitor_get_model (monitor);
   value = g_strdup_printf ("%s%s%s",
@@ -595,13 +593,15 @@ populate_monitor (gpointer item,
                            manufacturer || model ? " " : "",
                            model ? model : "");
   add_label_row (gen, list, name, value, 0);
-  g_free (name);
   g_free (value);
+  g_free (name);
+
+  add_label_row (gen, list, "Connector", gdk_monitor_get_connector (monitor), 10);
 
   gdk_monitor_get_geometry (monitor, &rect);
   scale = gdk_monitor_get_scale_factor (monitor);
   if (scale != 1)
-    scale_str = g_strdup_printf (" @ %d", scale);
+    scale_str = g_strdup_printf (" @ %d", scale);
 
   value = g_strdup_printf ("%d × %d%s at %d, %d",
                            rect.width, rect.height,
@@ -611,25 +611,46 @@ populate_monitor (gpointer item,
   g_free (value);
   g_free (scale_str);
 
-  value = g_strdup_printf ("%d × %d mm²",
+  value = g_strdup_printf ("%d × %d mm²",
                            gdk_monitor_get_width_mm (monitor),
                            gdk_monitor_get_height_mm (monitor));
   add_label_row (gen, list, "Size", value, 10);
   g_free (value);
 
   if (gdk_monitor_get_refresh_rate (monitor) != 0)
-    value = g_strdup_printf ("%.2f Hz",
-                             0.001 * gdk_monitor_get_refresh_rate (monitor));
-  else
-    value = g_strdup ("unknown");
-  add_label_row (gen, list, "Refresh rate", value, 10);
-  g_free (value);
+    {
+      value = g_strdup_printf ("%.2f Hz",
+                               0.001 * gdk_monitor_get_refresh_rate (monitor));
+      add_label_row (gen, list, "Refresh rate", value, 10);
+      g_free (value);
+    }
 
-  value = g_strdup (translate_subpixel_layout (gdk_monitor_get_subpixel_layout (monitor)));
-  add_label_row (gen, list, "Subpixel layout", value, 10);
-  g_free (value);
+  if (gdk_monitor_get_subpixel_layout (monitor) != GDK_SUBPIXEL_LAYOUT_UNKNOWN)
+    {
+      add_label_row (gen, list, "Subpixel layout",
+                     translate_subpixel_layout (gdk_monitor_get_subpixel_layout (monitor)),
+                     10);
+    }
+}
 
-  return GTK_WIDGET (list);
+static void
+populate_monitors (GdkDisplay          *display,
+                   GtkInspectorGeneral *gen)
+{
+  GtkWidget *child;
+  GListModel *list;
+
+  while ((child = gtk_widget_get_first_child (gen->monitor_box)))
+    gtk_list_box_remove (GTK_LIST_BOX (gen->monitor_box), child);
+
+  list = gdk_display_get_monitors (gen->display);
+
+  for (guint i = 0; i < g_list_model_get_n_items (list); i++)
+    {
+      GdkMonitor *monitor = g_list_model_get_item (list, i);
+      add_monitor (gen, monitor, i);
+      g_object_unref (monitor);
+    }
 }
 
 static void
@@ -641,15 +662,24 @@ populate_display_notify_cb (GdkDisplay          *display,
 }
 
 static void
+monitors_changed_cb (GListModel          *monitors,
+                     guint                position,
+                     guint                removed,
+                     guint                added,
+                     GtkInspectorGeneral *gen)
+{
+  populate_monitors (gen->display, gen);
+}
+
+static void
 init_display (GtkInspectorGeneral *gen)
 {
   g_signal_connect (gen->display, "notify", G_CALLBACK (populate_display_notify_cb), gen);
-  gtk_list_box_bind_model (GTK_LIST_BOX (gen->monitor_box),
-                           gdk_display_get_monitors (gen->display),
-                           populate_monitor,
-                           gen, NULL);
+  g_signal_connect (gdk_display_get_monitors (gen->display), "items-changed",
+                    G_CALLBACK (monitors_changed_cb), gen);
 
   populate_display (gen->display, gen);
+  populate_monitors (gen->display, gen);
 }
 
 static void
@@ -753,6 +783,26 @@ add_device (GtkInspectorGeneral *gen,
       add_label_row (gen, GTK_LIST_BOX (gen->device_box), "Touches", text, 20);
       g_free (text);
     }
+
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DEVICE (device) &&
+      gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
+    {
+      struct xkb_keymap *keymap = gdk_wayland_device_get_xkb_keymap (device);
+      GString *s;
+
+      s = g_string_new ("");
+      for (int i = 0; i < xkb_keymap_num_layouts (keymap); i++)
+        {
+          if (s->len > 0)
+            g_string_append (s, ", ");
+          g_string_append (s, xkb_keymap_layout_get_name (keymap, i));
+        }
+
+      add_label_row (gen, GTK_LIST_BOX (gen->device_box), "Layouts", s->str, 20);
+      g_string_free (s, TRUE);
+    }
+#endif
 
   g_type_class_unref (class);
 }
@@ -953,6 +1003,8 @@ gtk_inspector_general_dispose (GObject *object)
 
   g_signal_handlers_disconnect_by_func (gen->display, G_CALLBACK (seat_added), gen);
   g_signal_handlers_disconnect_by_func (gen->display, G_CALLBACK (seat_removed), gen);
+  g_signal_handlers_disconnect_by_func (gen->display, G_CALLBACK (populate_display_notify_cb), gen);
+  g_signal_handlers_disconnect_by_func (gdk_display_get_monitors (gen->display), G_CALLBACK (monitors_changed_cb), gen);
 
   list = gdk_display_list_seats (gen->display);
   for (l = list; l; l = l->next)
