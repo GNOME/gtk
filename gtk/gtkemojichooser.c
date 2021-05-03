@@ -1110,6 +1110,8 @@ keynav_failed (GtkWidget        *box,
         }
     }
 
+  n_columns = MAX (n_columns, 1);
+
   child = gtk_widget_get_ancestor (focus, GTK_TYPE_EMOJI_CHOOSER_CHILD);
 
   i = 0;
