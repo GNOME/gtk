@@ -336,18 +336,13 @@ gtk_print_backend_lpr_print_stream (GtkPrintBackend        *print_backend,
                                  NULL,
                                  NULL,
                                  &print_error))
-      goto out;
+    goto out;
 
   ps->in = g_io_channel_unix_new (in_fd);
 
   g_io_channel_set_encoding (ps->in, NULL, &print_error);
   if (print_error != NULL)
-    {
-      if (ps->in != NULL)
-        g_io_channel_unref (ps->in);
-
-      goto out;
-    }
+    goto out;
 
   g_io_channel_set_close_on_unref (ps->in, TRUE);
 
@@ -362,9 +357,14 @@ gtk_print_backend_lpr_print_stream (GtkPrintBackend        *print_backend,
 
   if (print_error != NULL)
     {
-      lpr_print_cb (GTK_PRINT_BACKEND_LPR (print_backend),
-		    print_error, ps);
+      lpr_print_cb (GTK_PRINT_BACKEND_LPR (print_backend), print_error, ps);
       g_error_free (print_error);
+
+      if (ps->in != NULL)
+        g_io_channel_unref (ps->in);
+      if (ps->job)
+        g_object_unref (ps->job);
+       g_free (ps);
     }
 }
 
