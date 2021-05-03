@@ -5046,6 +5046,9 @@ gtk_text_view_state_flags_changed (GtkWidget     *widget,
 
   gtk_css_node_set_state (priv->selection_node, state);
 
+  if (priv->layout)
+    gtk_text_layout_invalidate_selection (priv->layout);
+
   gtk_widget_queue_draw (widget);
 }
 

@@ -287,6 +287,7 @@ void gtk_text_layout_invalidate        (GtkTextLayout     *layout,
 void gtk_text_layout_invalidate_cursors(GtkTextLayout     *layout,
                                         const GtkTextIter *start,
                                         const GtkTextIter *end);
+void gtk_text_layout_invalidate_selection (GtkTextLayout  *layout);
 void gtk_text_layout_free_line_data    (GtkTextLayout     *layout,
                                         GtkTextLine       *line,
                                         GtkTextLineData   *line_data);

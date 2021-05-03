@@ -3365,6 +3365,8 @@ gtk_text_state_flags_changed (GtkWidget     *widget,
   gtk_css_node_set_state (priv->undershoot_node[1], state);
 
   gtk_text_update_cached_style_values (self);
+
+  gtk_widget_queue_draw (widget);
 }
 
 /* GtkEditable method implementations

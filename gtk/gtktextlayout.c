@@ -834,6 +834,20 @@ gtk_text_layout_invalidate_cursors (GtkTextLayout     *layout,
 }
 
 void
+gtk_text_layout_invalidate_selection (GtkTextLayout *layout)
+{
+  GtkTextIter selection_start, selection_end;
+
+  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
+
+  if (layout->buffer &&
+      gtk_text_buffer_get_selection_bounds (layout->buffer,
+                                            &selection_start,
+                                            &selection_end))
+    gtk_text_layout_invalidate (layout, &selection_start, &selection_end);
+}
+
+void
 gtk_text_layout_free_line_data (GtkTextLayout   *layout,
                                 GtkTextLine     *line,
                                 GtkTextLineData *line_data)
@@ -3826,6 +3840,7 @@ render_para (GskPangoRenderer   *crenderer,
              int                 selection_start_index,
              int                 selection_end_index,
              const GdkRGBA      *selection,
+             gboolean            draw_selection_text,
              float               cursor_alpha)
 {
   PangoLayout *layout = line_display->layout;
@@ -3873,8 +3888,12 @@ render_para (GskPangoRenderer   *crenderer,
       if (at_last_line)
         selection_height += line_display->bottom_margin;
 
+      /* Don't draw the text underneath if the whole line is selected. We can
+       * only do it if the selection is opaque.
+       */
       if (selection_start_index < byte_offset &&
-          selection_end_index > line->length + byte_offset) /* All selected */
+          selection_end_index > line->length + byte_offset &&
+          selection->alpha >= 1)
         {
           gtk_snapshot_append_color (crenderer->snapshot,
                                      selection,
@@ -3882,11 +3901,15 @@ render_para (GskPangoRenderer   *crenderer,
                                                           selection_y,
                                                           screen_width,
                                                           selection_height));
-          gsk_pango_renderer_set_state (crenderer, GSK_PANGO_RENDERER_SELECTED);
-          pango_renderer_draw_layout_line (PANGO_RENDERER (crenderer),
-                                           line,
-                                           line_rect.x,
-                                           baseline);
+
+          if (draw_selection_text)
+            {
+              gsk_pango_renderer_set_state (crenderer, GSK_PANGO_RENDERER_SELECTED);
+              pango_renderer_draw_layout_line (PANGO_RENDERER (crenderer),
+                                               line,
+                                               line_rect.x,
+                                               baseline);
+            }
         }
       else
         {
@@ -3928,13 +3951,28 @@ render_para (GskPangoRenderer   *crenderer,
                   bounds.size.width = PANGO_PIXELS (ranges[2*i + 1]) - PANGO_PIXELS (ranges[2*i]);
                   bounds.size.height = selection_height;
 
+                  if (bounds.origin.x < PANGO_PIXELS (line_rect.x))
+                    {
+                      bounds.size.width -= PANGO_PIXELS (line_rect.x) - bounds.origin.x;
+                      bounds.origin.x = PANGO_PIXELS (line_rect.x);
+                    }
+
+                  bounds.size.width = MIN (bounds.size.width,
+                                           PANGO_PIXELS (line_rect.x) +
+                                           PANGO_PIXELS (line_rect.width) -
+                                           bounds.origin.x);
+
                   gtk_snapshot_append_color (crenderer->snapshot, selection, &bounds);
-                  gtk_snapshot_push_clip (crenderer->snapshot, &bounds);
-                  pango_renderer_draw_layout_line (PANGO_RENDERER (crenderer),
-                                                   line,
-                                                   line_rect.x,
-                                                   baseline);
-                  gtk_snapshot_pop (crenderer->snapshot);
+
+                  if (draw_selection_text)
+                    {
+                      gtk_snapshot_push_clip (crenderer->snapshot, &bounds);
+                      pango_renderer_draw_layout_line (PANGO_RENDERER (crenderer),
+                                                       line,
+                                                       line_rect.x,
+                                                       baseline);
+                      gtk_snapshot_pop (crenderer->snapshot);
+                    }
                 }
 
               g_free (ranges);
@@ -4044,6 +4082,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
   int selection_start_line;
   int selection_end_line;
   gboolean have_selection;
+  gboolean draw_selection_text;
   const GdkRGBA *selection;
   GdkRGBA color;
   GtkSnapshot *cursor_snapshot;
@@ -4093,6 +4132,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
   if (have_selection)
     {
       GtkCssNode *selection_node;
+      GdkRGBA text_color;
 
       selection_start_line = gtk_text_iter_get_line (&selection_start);
       selection_end_line = gtk_text_iter_get_line (&selection_end);
@@ -4102,6 +4142,9 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
 
       selection = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
 
+      gtk_style_context_get_color (context, &text_color);
+      draw_selection_text = text_color.alpha > 0;
+
       gtk_style_context_restore (context);
     }
   else
@@ -4109,6 +4152,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
       selection_start_line = -1;
       selection_end_line = -1;
       selection = NULL;
+      draw_selection_text = FALSE;
     }
 
   gtk_text_layout_wrap_loop_start (layout);
@@ -4177,6 +4221,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
               render_para (crenderer, line_display,
                            selection_start_index, selection_end_index,
                            selection,
+                           draw_selection_text,
                            cursor_alpha);
               line_display->node = gtk_snapshot_pop_collect (snapshot);
             }
