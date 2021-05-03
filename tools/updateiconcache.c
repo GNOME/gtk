@@ -1007,8 +1007,7 @@ get_image_meta_data_size (Image *image)
 
               for (i = 0; data->display_names[i]; i++)
                 {
-                  int poolv;
-                  if ((poolv = find_string (data->display_names[i])) == 0)
+                  if (find_string (data->display_names[i]) == 0)
                     {
                       data->size += ALIGN_VALUE (strlen (data->display_names[i]) + 1, 4);
                       /* Adding the string to the pool with -1
