@@ -1,3 +1,79 @@
+Overview of Changes in 4.3.0
+============================
+
+* GtkVideo:
+ - Detect stream metadata when using gstreamer
+
+* GtkFileChooser:
+ - Fix a crash
+
+* GtkButton:
+ - Add back visual feedback for keynav activation
+
+* GtkFontChooser:
+ - Fix initial font selection
+
+* Text widgets:
+ - Support translucent selections
+
+* GtkScrolledWindow:
+ - Stop using scroll cursors
+
+* GtkMenuButton:
+ - Make focus-on-click work
+
+* GtkToggleButton:
+ - Make grouped buttons mutually exclusive
+
+* GtkPasswordEntry:
+ - Use MADV_DONTDUMP for secure memory
+
+* GtkListBox:
+ - Allow repeated selection extension for MULTIPLE
+
+* Themes:
+ - Fix resize border sizing
+ - Fix solid-csd window decorations
+
+* Input:
+ - Revert some Compose sequence changes (mainly around dead
+   acute and apostrophe)
+ - Consume all key events during preedit, to avoid unexpected
+   interactions
+ - Ignore more modifiers during preedit, to allow using 3rd and
+   5th level choosers
+ - Fix handling of cursor positions in non-ASCII preedit text
+ - Fix a problem with deferred focus setting
+
+* GdkClipboard:
+ - Ensure strings are nul-terminated
+
+* GSK:
+ - Improvements to the ngl renderer
+   - Fix offscreen rendering with transforms
+   - Fix downscaled textures
+   - Avoid huge intermediate textures
+ - Make shadow rendering match across renderers
+
+* Accessibility:
+ - Various fixes to get Orca to speak (still a work in progress)
+
+* Wayland:
+ - Improve font settings fallback
+ - Avoid unintentional rendering freezes with popovers
+
+* X11:
+ - Don't beep on untrusted displays
+ - Don't crash when popovers are outside the workarea
+
+* Windows:
+ - Fix using GL rendering with Mesa drivers
+
+* Inspector:
+ - Enable the inspector by default, in all cases
+ - Improve monitor information
+
+
 Overview of Changes in 4.2.0
 ============================
 
