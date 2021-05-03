@@ -432,14 +432,11 @@ gtk_filter_list_model_refilter (GtkFilterListModel *self,
         default:
         case GTK_FILTER_MATCH_SOME:
           {
-            guint start, end, n_before, n_after;
+            guint n_before, n_after;
 
             gtk_filter_list_model_stop_filtering (self);
             self->strictness = new_strictness;
             n_after = g_list_model_get_n_items (G_LIST_MODEL (self));
-            start = gtk_bitset_get_minimum (self->matches);
-            end = gtk_bitset_get_maximum (self->matches);
-
             n_before = gtk_bitset_get_size (self->matches);
             if (n_before == n_after)
               {
@@ -448,6 +445,7 @@ gtk_filter_list_model_refilter (GtkFilterListModel *self,
             else
               {
                 GtkBitset *inverse;
+                guint start, end;
 
                 inverse = gtk_bitset_new_range (0, n_after);
                 gtk_bitset_subtract (inverse, self->matches);
