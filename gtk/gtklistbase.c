@@ -439,19 +439,20 @@ gtk_list_base_select_item (GtkListBase *self,
        * by the model, fall through to normal setting.
        */
     }
+
   if (success)
     return;
 
   if (modify)
     {
       if (gtk_selection_model_is_selected (model, pos))
-        success = gtk_selection_model_unselect_item (model, pos);
+        gtk_selection_model_unselect_item (model, pos);
       else
-        success = gtk_selection_model_select_item (model, pos, FALSE);
+        gtk_selection_model_select_item (model, pos, FALSE);
     }
   else
     {
-      success = gtk_selection_model_select_item (model, pos, TRUE);
+      gtk_selection_model_select_item (model, pos, TRUE);
     }
 
   gtk_list_item_tracker_set_position (priv->item_manager,
