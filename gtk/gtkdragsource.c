@@ -470,6 +470,7 @@ drag_end (GtkDragSource *source,
 
   gdk_drag_drop_done (source->drag, success);
   g_clear_object (&source->drag);
+  g_object_unref (source);
 }
 
 static void
@@ -592,6 +593,9 @@ gtk_drag_source_drag_begin (GtkDragSource *source)
   g_signal_emit (source, signals[DRAG_BEGIN], 0, source->drag);
 
   gtk_drag_source_ensure_icon (source, source->drag);
+
+  /* Keep the source alive until the drag is done */
+  g_object_ref (source);
 
   g_signal_connect (source->drag, "dnd-finished",
                     G_CALLBACK (gtk_drag_source_dnd_finished_cb), source);
