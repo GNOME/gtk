@@ -3873,8 +3873,12 @@ render_para (GskPangoRenderer   *crenderer,
       if (at_last_line)
         selection_height += line_display->bottom_margin;
 
+      /* Don't draw the text underneath if the whole line is selected. We can
+       * only do it if the selection is opaque.
+       */
       if (selection_start_index < byte_offset &&
-          selection_end_index > line->length + byte_offset) /* All selected */
+          selection_end_index > line->length + byte_offset &&
+          selection->alpha >= 1)
         {
           gtk_snapshot_append_color (crenderer->snapshot,
                                      selection,
