@@ -1,5 +1,5 @@
 [wrap-git]
 directory=wayland-protocols
-url=https://gitlab.freedesktop.org/jadahl/wayland-protocols.git
-revision=wip/meson-meson-0.53
+url=https://gitlab.freedesktop.org/wayland/wayland-protocols.git
+revision=main
 depth=1

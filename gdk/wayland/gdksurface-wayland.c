@@ -3464,10 +3464,20 @@ gdk_wayland_surface_focus (GdkSurface *surface,
       GdkWaylandDisplay *display_wayland =
         GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
 
-      if (display_wayland->gtk_shell_version >= 3)
+      if (display_wayland->startup_notification_id)
         {
-          gtk_surface1_request_focus (impl->display_server.gtk_surface,
-                                      display_wayland->startup_notification_id);
+          if (display_wayland->xdg_activation)
+            {
+              xdg_activation_v1_activate (display_wayland->xdg_activation,
+                                          display_wayland->startup_notification_id,
+                                          impl->display_server.wl_surface);
+            }
+          else if (display_wayland->gtk_shell_version >= 3)
+            {
+              gtk_surface1_request_focus (impl->display_server.gtk_surface,
+                                          display_wayland->startup_notification_id);
+            }
+
           g_clear_pointer (&display_wayland->startup_notification_id, g_free);
         }
     }
