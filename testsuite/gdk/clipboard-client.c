@@ -4,6 +4,10 @@
 #include "wayland/gdkwayland.h"
 #endif
 
+#ifdef G_OS_WIN32
+#include <io.h>
+#include <process.h>
+#endif
 
 G_GNUC_NORETURN static void
 got_string_cb (GObject      *source,
