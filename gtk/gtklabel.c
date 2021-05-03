@@ -742,11 +742,22 @@ gtk_label_state_flags_changed (GtkWidget     *widget,
 
   if (self->select_info)
     {
+      GtkStateFlags state;
+
       if (!gtk_widget_is_sensitive (widget))
         gtk_label_select_region (self, 0, 0);
 
       gtk_label_update_cursor (self);
       update_link_state (self);
+
+      state = gtk_widget_get_state_flags (widget) & ~GTK_STATE_FLAG_DROP_ACTIVE;
+
+      if (self->select_info->selection_node)
+        {
+          gtk_css_node_set_state (self->select_info->selection_node, state);
+
+          gtk_widget_queue_draw (widget);
+        }
     }
 
   if (GTK_WIDGET_CLASS (gtk_label_parent_class)->state_flags_changed)
