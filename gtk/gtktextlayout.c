@@ -3951,6 +3951,17 @@ render_para (GskPangoRenderer   *crenderer,
                   bounds.size.width = PANGO_PIXELS (ranges[2*i + 1]) - PANGO_PIXELS (ranges[2*i]);
                   bounds.size.height = selection_height;
 
+                  if (bounds.origin.x < PANGO_PIXELS (line_rect.x))
+                    {
+                      bounds.size.width -= PANGO_PIXELS (line_rect.x) - bounds.origin.x;
+                      bounds.origin.x = PANGO_PIXELS (line_rect.x);
+                    }
+
+                  bounds.size.width = MIN (bounds.size.width,
+                                           PANGO_PIXELS (line_rect.x) +
+                                           PANGO_PIXELS (line_rect.width) -
+                                           bounds.origin.x);
+
                   gtk_snapshot_append_color (crenderer->snapshot, selection, &bounds);
 
                   if (draw_selection_text)
