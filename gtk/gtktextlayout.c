@@ -834,6 +834,20 @@ gtk_text_layout_invalidate_cursors (GtkTextLayout     *layout,
 }
 
 void
+gtk_text_layout_invalidate_selection (GtkTextLayout *layout)
+{
+  GtkTextIter selection_start, selection_end;
+
+  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
+
+  if (layout->buffer &&
+      gtk_text_buffer_get_selection_bounds (layout->buffer,
+                                            &selection_start,
+                                            &selection_end))
+    gtk_text_layout_invalidate (layout, &selection_start, &selection_end);
+}
+
+void
 gtk_text_layout_free_line_data (GtkTextLayout   *layout,
                                 GtkTextLine     *line,
                                 GtkTextLineData *line_data)
