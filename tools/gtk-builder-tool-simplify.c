@@ -1506,16 +1506,16 @@ rewrite_box (Element *element,
               if (orientation == GTK_ORIENTATION_HORIZONTAL)
                 {
                   if (expand)
-                    hexpand = write_box_prop (hexpand, object, "hexpand", "1");
+                    write_box_prop (hexpand, object, "hexpand", "1");
                   if (!fill)
-                    halign = write_box_prop (halign, object, "halign", "center");
+                    write_box_prop (halign, object, "halign", "center");
                 }
               else if (orientation == GTK_ORIENTATION_VERTICAL)
                 {
                   if (expand)
-                    vexpand = write_box_prop (vexpand, object, "vexpand", "1");
+                    write_box_prop (vexpand, object, "vexpand", "1");
                   if (!fill)
-                    valign = write_box_prop (valign, object, "valign", "center");
+                    write_box_prop (valign, object, "valign", "center");
                 }
 
               child->children = g_list_remove (child->children, packing);

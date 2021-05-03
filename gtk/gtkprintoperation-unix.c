@@ -1080,7 +1080,7 @@ find_printer_idle (gpointer data)
     printer = NULL;
 
   finder->func (printer, finder->data);
-  
+
   printer_finder_free (finder);
 
   return G_SOURCE_REMOVE;
@@ -1204,7 +1204,7 @@ printer_finder_free (PrinterFinder *finder)
   g_free (finder);
 }
 
-static void 
+static void
 find_printer (const char *printer,
 	      GFunc        func,
 	      gpointer     data)
@@ -1217,7 +1217,7 @@ find_printer (const char *printer,
   finder->printer_name = g_strdup (printer);
   finder->func = func;
   finder->data = data;
-  
+
   finder->backends = NULL;
   if (g_module_supported ())
     finder->backends = gtk_print_backend_load_modules ();
@@ -1230,6 +1230,8 @@ find_printer (const char *printer,
 
   if (finder->backends == NULL && !finder->found_printer)
     g_idle_add (find_printer_idle, finder);
+  else
+    printer_finder_free (finder);
 }
 
 

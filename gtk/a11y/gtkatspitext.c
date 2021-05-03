@@ -1110,7 +1110,7 @@ text_view_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "ScrollSubstringTo") == 0)
     {
-      GtkTextBuffer *buffer = buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
+      GtkTextBuffer *buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
       GtkTextIter iter;
       int start_offset = 0;
       int end_offset = 0;

@@ -5420,8 +5420,7 @@ _gtk_text_btree_validate_line (GtkTextBTree     *tree,
   ld = _gtk_text_line_get_data (line, view_id);
   if (!ld || !ld->valid)
     {
-      ld = gtk_text_layout_wrap (view->layout, line, ld);
-      
+      gtk_text_layout_wrap (view->layout, line, ld);
       gtk_text_btree_node_check_valid_upward (line->parent, view_id);
     }
 }

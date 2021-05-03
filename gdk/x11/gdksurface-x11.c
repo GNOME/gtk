@@ -624,10 +624,12 @@ maybe_sync_counter_for_end_frame (GdkSurface *surface)
 {
   GdkX11Surface *impl = GDK_X11_SURFACE (surface);
   gboolean frame_sync_negotiated = _gdk_x11_surface_syncs_frames (surface);
-  gboolean frame_done_painting = !impl->toplevel->frame_pending;
+  gboolean frame_done_painting;
 
 #ifdef HAVE_XDAMAGE
   frame_done_painting = !impl->toplevel->frame_still_painting && frame_sync_negotiated;
+#else
+  frame_done_painting = !impl->toplevel->frame_pending;
 #endif
 
   if (!impl->toplevel->frame_pending)
@@ -1582,7 +1584,6 @@ gdk_x11_surface_show (GdkSurface *surface, gboolean already_mapped)
   GdkToplevelX11 *toplevel;
   Display *xdisplay = GDK_SURFACE_XDISPLAY (surface);
   Window xwindow = GDK_SURFACE_XID (surface);
-  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
 
   if (!already_mapped)
     set_initial_hints (surface);
@@ -1598,6 +1599,7 @@ gdk_x11_surface_show (GdkSurface *surface, gboolean already_mapped)
 
  if (GDK_PROFILER_IS_RUNNING)
    {
+     GdkX11Surface *impl = GDK_X11_SURFACE (surface);
      if (impl->map_time == 0)
        impl->map_time = g_get_monotonic_time ();
    }
