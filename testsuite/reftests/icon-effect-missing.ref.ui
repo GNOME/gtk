@@ -2,6 +2,7 @@
 <interface>
   <object class="GtkWindow" id="window1">
     <property name="decorated">0</property>
+    <signal name="map" handler="reftest:set_icon_theme_hicolor" swapped="no"/>
     <child>
       <object class="GtkBox" id="box1">
         <child>
