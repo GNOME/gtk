@@ -15,6 +15,7 @@ Overview of Changes in 4.3.0
 
 * Text widgets:
  - Replace squiggly error underlines by dotted lines
+ - Support translucent selections
 
 * GtkTextView:
  - Various improvements to rendering performance
