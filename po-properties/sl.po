@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2021-02-03 15:30+0000\n"
-"PO-Revision-Date: 2021-04-11 21:26+0200\n"
+"PO-Revision-Date: 2021-05-04 20:19+0200\n"
 "Last-Translator: Matej Urbančič <mateju@src.gnome.org>\n"
 "Language-Team: Slovenščina <gnome-si@googlegroups.com>\n"
 "Language: sl\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: gdk/gdkapplaunchcontext.c:133 gdk/gdkdrawcontext.c:155 gdk/gdkseat.c:201
 #: gdk/gdkseat.c:202 gdk/gdksurface.c:522 gdk/gdksurface.c:523
@@ -2821,7 +2821,7 @@ msgstr "Dopolnjevanje"
 
 #: gtk/gtkentry.c:873
 msgid "The auxiliary completion object"
-msgstr "DOdaten predmet dopolnjevanja"
+msgstr "Dodaten predmet dopolnjevanja"
 
 #: gtk/gtkentry.c:891 gtk/gtkimcontext.c:337 gtk/gtktext.c:860
 #: gtk/gtktextview.c:1034
@@ -3010,8 +3010,6 @@ msgid "Whether the expander has been opened to reveal the child widget"
 msgstr "Ali je razširilnik odprt za prikaz podrejenega gradnika"
 
 #: gtk/gtkexpander.c:322
-#, fuzzy
-#| msgid "Text of the expander's label"
 msgid "Text of the expander’s label"
 msgstr "Besedilo oznake razširilnika"
 
@@ -3075,14 +3073,12 @@ msgid "List model of filters"
 msgstr "Prikazan seznam filtrov"
 
 #: gtk/gtkfilechooser.c:128
-#, fuzzy
-#| msgid "Shortcut Type"
 msgid "Shortcut Folders"
-msgstr "Vrsta tipkovne bližnjice"
+msgstr "Mapa tipkovne bližnjice"
 
 #: gtk/gtkfilechooser.c:129
 msgid "List model of shortcut folders"
-msgstr ""
+msgstr "Model seznama mape tipkovne bližnice"
 
 #: gtk/gtkfilechooser.c:141
 msgid "Allow folder creation"
@@ -3132,20 +3128,16 @@ msgid "The filter set for this model"
 msgstr "Besedilo podrejene oznake"
 
 #: gtk/gtkfilterlistmodel.c:577 gtk/gtksortlistmodel.c:784
-#, fuzzy
-#| msgid "Step Increment"
 msgid "Incremental"
-msgstr "Povečanje koraka"
+msgstr "Naraščajoče"
 
 #: gtk/gtkfilterlistmodel.c:578
 msgid "Filter items incrementally"
 msgstr "Filtriraj predmete naraščajoče"
 
 #: gtk/gtkfilterlistmodel.c:590 gtk/gtkselectionfiltermodel.c:228
-#, fuzzy
-#| msgid "The GIcon being displayed"
 msgid "The model being filtered"
-msgstr "Prikazan predmet GIcon"
+msgstr "Model, ki se filtrira"
 
 #: gtk/gtkfilterlistmodel.c:601 gtk/gtksortlistmodel.c:808
 msgid "Pending"
@@ -3495,16 +3487,12 @@ msgid "Minimum number of columns per row"
 msgstr "Najmanjše število stolpcev na vrstico"
 
 #: gtk/gtkheaderbar.c:562
-#, fuzzy
-#| msgid "Edit Widget"
 msgid "Title Widget"
-msgstr "Uredi gradnik"
+msgstr "Gradnik naslova"
 
 #: gtk/gtkheaderbar.c:563
-#, fuzzy
-#| msgid "Custom title widget to display"
 msgid "Title widget to display"
-msgstr "Gradnik naziva okna po meri za prikaz"
+msgstr "Gradnik naslova za prikaz"
 
 #: gtk/gtkheaderbar.c:579
 msgid "Show title buttons"
@@ -4120,10 +4108,8 @@ msgid "Muted"
 msgstr "Utišano"
 
 #: gtk/gtkmediastream.c:437
-#, fuzzy
-#| msgid "Whether a palette should be used"
 msgid "Whether the audio stream should be muted."
-msgstr "Ali naj je uporabljena paleta"
+msgstr "Ali naj bo zvokovni pretok utišan."
 
 #: gtk/gtkmediastream.c:448
 msgid "Volume"
@@ -4250,16 +4236,12 @@ msgid "Whether to prefer the icon over text"
 msgstr "Ali naj imajo ikone prednost pred besedilom"
 
 #: gtk/gtkmodelbutton.c:1272
-#, fuzzy
-#| msgid "Title Size Group"
 msgid "Size group"
-msgstr "Skupina velikosti naziva"
+msgstr "Skupina velikosti"
 
 #: gtk/gtkmodelbutton.c:1273
-#, fuzzy
-#| msgid "Size of check or radio indicator"
 msgid "Size group for checks and radios"
-msgstr "Velikost potrditvenega ali izbirnega kazalnika"
+msgstr "Velikost območja potrditvenega ali izbirnega polja"
 
 #: gtk/gtkmodelbutton.c:1278
 msgid "Accel"
@@ -4282,14 +4264,12 @@ msgid "Are we showing a dialog"
 msgstr "Ali naj je pogovorno okno prikazano"
 
 #: gtk/gtkmountoperation.c:192
-#, fuzzy
-#| msgid "The screen where this window will be displayed."
 msgid "The display where this window will be displayed."
 msgstr "Zaslon, na katerem bo to okno prikazano."
 
 #: gtk/gtkmultiselection.c:357
 msgid "List managed by this selection"
-msgstr ""
+msgstr "Seznam, ki ga upravlja izbor"
 
 #: gtk/gtknativedialog.c:213
 msgid "Dialog Title"
@@ -4324,58 +4304,44 @@ msgid "The model"
 msgstr "Model"
 
 #: gtk/gtknoselection.c:205 gtk/gtksingleselection.c:440
-#, fuzzy
-#| msgid "The model to find matches in"
 msgid "The model being managed"
-msgstr "Način za iskanje zadetkov"
+msgstr "Model, ki je upravljan"
 
 #: gtk/gtknotebook.c:577
-#, fuzzy
-#| msgid "The title of the child page"
 msgid "The child for this page"
-msgstr "Naziv podrejene strani"
+msgstr "Podrejeni predmet te strani"
 
 #: gtk/gtknotebook.c:583
-#, fuzzy
-#| msgid "Tabs"
 msgid "Tab"
-msgstr "Tabulator"
+msgstr "Zavihek"
 
 #: gtk/gtknotebook.c:584
-#, fuzzy
-#| msgid "The title of the child page"
 msgid "The tab widget for this page"
-msgstr "Naziv podrejene strani"
+msgstr "Gradnik zavihka za to stran"
 
 #: gtk/gtknotebook.c:590
 msgid "Menu"
 msgstr "Meni"
 
 #: gtk/gtknotebook.c:591
-#, fuzzy
-#| msgid "The string displayed in the child's menu entry"
 msgid "The label widget displayed in the child’s menu entry"
-msgstr "Niz, prikazan v meniju podrejenega predmeta"
+msgstr "Gradnik oznake, prikazan v meniju podrejenega predmeta"
 
 #: gtk/gtknotebook.c:597
 msgid "Tab label"
 msgstr "Oznaka zavihka"
 
 #: gtk/gtknotebook.c:598
-#, fuzzy
-#| msgid "The text of the label"
 msgid "The text of the tab widget"
-msgstr "Besedilo oznake"
+msgstr "Besedilo oznake zavihka"
 
 #: gtk/gtknotebook.c:604
 msgid "Menu label"
 msgstr "Oznaka menija"
 
 #: gtk/gtknotebook.c:605
-#, fuzzy
-#| msgid "The name of the widget"
 msgid "The text of the menu widget"
-msgstr "Ime gradnika"
+msgstr "Besedilo gradnika menija"
 
 #: gtk/gtknotebook.c:612
 msgid "The index of the child in the parent"
@@ -4476,44 +4442,39 @@ msgid "Group name for tab drag and drop"
 msgstr "Ime skupine za vlečenje in spuščanje zavihkov"
 
 #: gtk/gtknotebook.c:1114
-#, fuzzy
-#| msgid "The page size of the adjustment"
 msgid "The pages of the notebook."
-msgstr "Velikost strani prilagoditve"
+msgstr "Strani beležnica"
 
 #: gtk/gtknumericsorter.c:551 gtk/gtkstringfilter.c:253
 #: gtk/gtkstringsorter.c:297
 msgid "Expression to compare with"
-msgstr ""
+msgstr "Izraz za primerjavo"
 
 #: gtk/gtknumericsorter.c:561 gtk/gtktreeviewcolumn.c:397
 msgid "Sort order"
-msgstr "Vrstni red"
+msgstr "Način razvrščanja"
 
 #: gtk/gtknumericsorter.c:562
-#, fuzzy
-#| msgid "Whether to reserve space for a subtitle"
 msgid "Whether to sort smaller numbers first"
-msgstr "Ali naj bo prihranjen prostor za podnapis"
+msgstr "Ali naj bodo najprej razvrščene manjše vrednosti"
 
 #: gtk/gtkoverlaylayout.c:136
-#, fuzzy
 msgid "Measure"
-msgstr "Izmeri"
+msgstr "Mera"
 
 #: gtk/gtkoverlaylayout.c:137
-#, fuzzy
-#| msgid "Icon size set"
 msgid "Include in size measurement"
-msgstr "Nastavitev velikosti ikone"
+msgstr "Vključuje mero velikosti"
 
 #: gtk/gtkoverlaylayout.c:147
 msgid "Clip Overlay"
-msgstr ""
+msgstr "Obreži prekrivno polje"
 
 #: gtk/gtkoverlaylayout.c:148
 msgid "Clip the overlay child widget so as to fit the parent"
 msgstr ""
+"Obrezovanje prekrivnega polja podrejenega gradnika, da se sklada z "
+"velikostjo nadrejenega."
 
 #: gtk/gtkpadcontroller.c:370
 msgid "Action group"
@@ -4570,112 +4531,87 @@ msgid "Whether the paned should have a prominent handle"
 msgstr "Ali naj ima okvir konkretno ročico"
 
 #: gtk/gtkpaned.c:508
-#, fuzzy
-#| msgid "Resize grip"
 msgid "Resize first child"
-msgstr "Oprijemalnik velikosti"
+msgstr "Prilagodi prvi podrejeni predmet"
 
 #: gtk/gtkpaned.c:509
-#, fuzzy
-#| msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgid ""
 "If TRUE, the first child expands and shrinks along with the paned widget"
 msgstr ""
-"Izbrana možnost omogoča, da podrejeno opravilo spreminja velikost skupaj z "
-"gradnikom"
+"Izbrana možnost določa, da se velikost prvega podrejenega predmeta spreminja "
+"skupaj z gradnikom"
 
 #: gtk/gtkpaned.c:521
-#, fuzzy
-#| msgid "Resize mode"
 msgid "Resize second child"
-msgstr "Način spreminjanja velikosti"
+msgstr "Prilagodi drugi podrejeni predmet"
 
 #: gtk/gtkpaned.c:522
-#, fuzzy
-#| msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgid ""
 "If TRUE, the second child expands and shrinks along with the paned widget"
 msgstr ""
-"Izbrana možnost omogoča, da podrejeno opravilo spreminja velikost skupaj z "
-"gradnikom"
+"Izbrana možnost določa, da se velikost drugega podrejenega predmeta "
+"spreminja skupaj z gradnikom"
 
 #: gtk/gtkpaned.c:534
 msgid "Shrink first child"
-msgstr ""
+msgstr "Skrči prvi podrejeni predmet"
 
 #: gtk/gtkpaned.c:535
-#, fuzzy
-#| msgid "If TRUE, the child can be made smaller than its requisition"
 msgid "If TRUE, the first child can be made smaller than its requisition"
 msgstr ""
-"Izbrana možnost omogoča, da je podrejeno opravilo manjše od zahtevanega"
+"Izbrana možnost določa, da je prvi podrejen predmet lahko manjši od "
+"zahtevane velikosti"
 
 #: gtk/gtkpaned.c:547
 msgid "Shrink second child"
-msgstr ""
+msgstr "Skrči drugi podrejeni predmet"
 
 #: gtk/gtkpaned.c:548
-#, fuzzy
-#| msgid "If TRUE, the child can be made smaller than its requisition"
 msgid "If TRUE, the second child can be made smaller than its requisition"
 msgstr ""
-"Izbrana možnost omogoča, da je podrejeno opravilo manjše od zahtevanega"
+"Izbrana možnost določa, da je drugi podrejen predmet lahko manjši od "
+"zahtevane velikosti"
 
 #: gtk/gtkpaned.c:554
-#, fuzzy
-#| msgid "Visible child"
 msgid "First child"
-msgstr "Vidni podrejeni predmet"
+msgstr "Prvi podrejeni predmet"
 
 #: gtk/gtkpaned.c:555
-#, fuzzy
-#| msgid "Name of visible child"
 msgid "The first child"
-msgstr "Ime vidnega podrejenega predmeta"
+msgstr "Prvi vidni podrejeni predmet"
 
 #: gtk/gtkpaned.c:561
-#, fuzzy
-#| msgid "Obey child"
 msgid "Second child"
-msgstr "Upoštevaj podrejeni predmet"
+msgstr "Drugi podrejeni predmet"
 
 #: gtk/gtkpaned.c:562
-#, fuzzy
-#| msgid "The selected color"
 msgid "The second child"
-msgstr "Izbrana barva"
+msgstr "Drugi vidni podrejeni predmet"
 
 #: gtk/gtkpasswordentry.c:450
-#, fuzzy
-#| msgid "Show Icons"
 msgid "Show Peek Icon"
-msgstr "Pokaži ikone"
+msgstr "Pokaži ikono prikaza"
 
 #: gtk/gtkpasswordentry.c:451
-#, fuzzy
-#| msgid "Whether to show an icon for Emoji"
 msgid "Whether to show an icon for revealing the content"
-msgstr "Ali naj se pokaže sličica izraznih ikon"
+msgstr "Ali naj se pokaže ikona za prikaz vsebine"
 
 #: gtk/gtkpicture.c:331
-#, fuzzy
 #| msgid "The title to display"
 msgid "The GdkPaintable to display"
-msgstr "Naslov za prikaz"
+msgstr "Predmet GdkPaintable za prikaz"
 
 #: gtk/gtkpicture.c:343
 msgid "File to load and display"
 msgstr "Datoteka, ki naj se naloži in prikaže"
 
 #: gtk/gtkpicture.c:354
-#, fuzzy
-#| msgid "Alternative button order"
 msgid "Alternative text"
-msgstr "Nadomestni razpored gumbov"
+msgstr "Nadomestno besedilo"
 
 #: gtk/gtkpicture.c:355
 msgid "The alternative textual description"
-msgstr ""
+msgstr "Nadomestni besedilni opis"
 
 #: gtk/gtkpicture.c:367
 msgid "Keep aspect ratio"
@@ -4683,23 +4619,19 @@ msgstr "Ohrani razmerja velikosti"
 
 #: gtk/gtkpicture.c:368
 msgid "Render contents respecting the aspect ratio"
-msgstr ""
+msgstr "Izriše vsebino z upoštevanjem razmerja velikosti"
 
 #: gtk/gtkpicture.c:379
-#, fuzzy
-#| msgid "Shrink"
 msgid "Can shrink"
-msgstr "Skrči"
+msgstr "Se lahko skrči"
 
 #: gtk/gtkpicture.c:380
-#, fuzzy
-#| msgid "Style of bevel around the contents"
 msgid "Allow self to be smaller than contents"
-msgstr "Vrsta obrobe okoli vsebine"
+msgstr "Dovoli predmetu pomanjšanje prek omejitve vsebine"
 
 #: gtk/gtkplacessidebar.c:4326
 msgid "Location to Select"
-msgstr "Izbro mesta"
+msgstr "Izbira mesta"
 
 #: gtk/gtkplacessidebar.c:4327
 msgid "The location to highlight in the sidebar"
@@ -4864,7 +4796,7 @@ msgstr "Vključuje puščico"
 
 #: gtk/gtkpopover.c:1693
 msgid "Whether to draw an arrow"
-msgstr "Ali naj bo prikazana puščica"
+msgstr "Ali naj se izriše puščica"
 
 #: gtk/gtkpopover.c:1699
 #, fuzzy
@@ -4889,10 +4821,8 @@ msgid "Whether the popover pops down after a child popover"
 msgstr "Ali spustno polje obdaja okvir okoli podrejenega opravila"
 
 #: gtk/gtkpopovermenubar.c:638
-#, fuzzy
-#| msgid "The model from which the popup is made."
 msgid "The model from which the bar is made."
-msgstr "Model, iz katerega je izdelano pojavno okno."
+msgstr "Model, iz katerega je izdelana orodna vrstica."
 
 #: gtk/gtkpopovermenu.c:555
 msgid "Visible submenu"
@@ -4903,10 +4833,8 @@ msgid "The name of the visible submenu"
 msgstr "Ime vidnega podmenija"
 
 #: gtk/gtkpopovermenu.c:564
-#, fuzzy
-#| msgid "The model from which the popup is made."
 msgid "The model from which the menu is made."
-msgstr "Model, iz katerega je izdelano pojavno okno."
+msgstr "Model, iz katerega je izdelan meni."
 
 #: gtk/gtkprinter.c:120
 msgid "Name of the printer"
@@ -5267,20 +5195,16 @@ msgid "type"
 msgstr "vrsta"
 
 #: gtk/gtkpropertylookuplistmodel.c:389
-#, fuzzy
-#| msgid "The name of the property"
 msgid "Name of the property used for lookups"
-msgstr "Ime lastnosti"
+msgstr "Ime lastnosti, uporabljene za poizvedbe"
 
 #: gtk/gtkpropertylookuplistmodel.c:400
 msgid "Object"
 msgstr "Predmet"
 
 #: gtk/gtkpropertylookuplistmodel.c:401
-#, fuzzy
-#| msgid "The auxiliary completion object"
 msgid "The root object"
-msgstr "DOdaten predmet dopolnjevanja"
+msgstr "Korenski predmet"
 
 #: gtk/gtkrange.c:365
 msgid "The GtkAdjustment that contains the current value of this range object"
