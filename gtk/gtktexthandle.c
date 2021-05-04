@@ -17,7 +17,8 @@
 
 #include "config.h"
 
-#include "gtkcssnumbervalueprivate.h"
+#include "gtkbinlayout.h"
+#include "gtkgizmoprivate.h"
 #include "gtkprivatetypebuiltins.h"
 #include "gtktexthandleprivate.h"
 #include "gtkmarshalers.h"
@@ -47,6 +48,7 @@ struct _GtkTextHandle
   GskRenderer *renderer;
   GtkEventController *controller;
   GtkWidget *controller_widget;
+  GtkWidget *contents;
 
   GdkRectangle pointing_to;
   GtkBorder border;
@@ -221,6 +223,8 @@ gtk_text_handle_snapshot (GtkWidget   *widget,
                                snapshot,
                                gtk_widget_get_width (widget),
                                gtk_widget_get_height (widget));
+
+  GTK_WIDGET_CLASS (gtk_text_handle_parent_class)->snapshot (widget, snapshot);
 }
 
 static void
@@ -322,18 +326,13 @@ gtk_text_handle_unmap (GtkWidget *widget)
 }
 
 static void
-gtk_text_handle_measure (GtkWidget      *widget,
-                         GtkOrientation  orientation,
-                         int             for_size,
-                         int            *minimum,
-                         int            *natural,
-                         int            *minimum_baseline,
-                         int            *natural_baseline)
+gtk_text_handle_dispose (GObject *object)
 {
-  *natural = 0;
-  *minimum = 0;
-  *minimum_baseline = -1;
-  *natural_baseline = -1;
+  GtkTextHandle *handle = GTK_TEXT_HANDLE (object);
+
+  g_clear_pointer (&handle->contents, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (gtk_text_handle_parent_class)->dispose (object);
 }
 
 static void
@@ -342,12 +341,13 @@ gtk_text_handle_class_init (GtkTextHandleClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->dispose = gtk_text_handle_dispose;
+
   widget_class->snapshot = gtk_text_handle_snapshot;
   widget_class->realize = gtk_text_handle_realize;
   widget_class->unrealize = gtk_text_handle_unrealize;
   widget_class->map = gtk_text_handle_map;
   widget_class->unmap = gtk_text_handle_unmap;
-  widget_class->measure = gtk_text_handle_measure;
 
   signals[HANDLE_DRAGGED] =
     g_signal_new (I_("handle-dragged"),
@@ -373,6 +373,7 @@ gtk_text_handle_class_init (GtkTextHandleClass *klass)
                   G_TYPE_NONE, 0, G_TYPE_NONE);
 
   gtk_widget_class_set_css_name (widget_class, I_("cursor-handle"));
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
 
 /* Relative to pointing_to x/y */
@@ -507,6 +508,10 @@ gtk_text_handle_update_for_role (GtkTextHandle *handle)
 static void
 gtk_text_handle_init (GtkTextHandle *handle)
 {
+  handle->contents = gtk_gizmo_new ("contents", NULL, NULL, NULL, NULL, NULL, NULL);
+  gtk_widget_set_can_target (handle->contents, FALSE);
+  gtk_widget_set_parent (handle->contents, GTK_WIDGET (handle));
+
   gtk_text_handle_update_for_role (handle);
 }
 
