@@ -59,6 +59,14 @@ _gdk_quartz_window_drag_begin (GdkWindow *window,
   return _gdk_quartz_drag_source_context;
 }
 
+void
+_gdk_quartz_drag_source_context_destroy_gtk_only ()
+{
+     if (_gdk_quartz_drag_source_context)
+          g_object_unref (_gdk_quartz_drag_source_context);
+     _gdk_quartz_drag_source_context = NULL;
+}
+
 static gboolean
 gdk_quartz_drag_context_drag_motion (GdkDragContext  *context,
                                      GdkWindow       *dest_window,

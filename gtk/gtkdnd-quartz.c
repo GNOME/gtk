@@ -1088,8 +1088,10 @@ gtk_drag_begin_idle (gpointer arg)
   [types release];
 
   if ((nswindow = get_toplevel_nswindow (info->source_widget)) == NULL)
-     return G_SOURCE_REMOVE;
-  
+    {
+      _gdk_quartz_drag_source_context_destroy_gtk_only ();
+      return G_SOURCE_REMOVE;
+    }
   /* Ref the context. It's unreffed when the drag has been aborted */
   g_object_ref (info->context);
 
@@ -1101,6 +1103,7 @@ gtk_drag_begin_idle (gpointer arg)
   if (drag_image == NULL)
     {
       g_object_unref (info->context);
+      _gdk_quartz_drag_source_context_destroy_gtk_only ();
       return G_SOURCE_REMOVE;
     }
 
@@ -1669,7 +1672,7 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
       break;
     default:
       g_assert_not_reached ();
-    }  
+    }
 }
 
 /**
