@@ -8,10 +8,10 @@ from pathlib import PurePath
 
 
 stylesheets = [
-    'gtk/theme/Adwaita/Adwaita.css',
-    'gtk/theme/Adwaita/Adwaita-dark.css',
-    'gtk/theme/HighContrast/HighContrast.css',
-    'gtk/theme/HighContrast/HighContrast-dark.css',
+    'gtk/theme/Default/Default-light.css',
+    'gtk/theme/Default/Default-dark.css',
+    'gtk/theme/Default/Default-hc.css',
+    'gtk/theme/Default/Default-hc-dark.css',
 ]
 
 references = [
