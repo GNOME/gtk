@@ -444,7 +444,6 @@ static gboolean
 populate_emoji_chooser (gpointer data)
 {
   GtkEmojiChooser *chooser = data;
-  GBytes *bytes = NULL;
   GVariant *item;
   guint64 start, now;
 
@@ -452,8 +451,9 @@ populate_emoji_chooser (gpointer data)
 
   if (!chooser->data)
     {
-      bytes = g_resources_lookup_data ("/org/gtk/libgtk/emoji/emoji.data", 0, NULL);
+      GBytes *bytes = g_resources_lookup_data ("/org/gtk/libgtk/emoji/emoji.data", 0, NULL);
       chooser->data = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(auss)"), bytes, TRUE));
+      g_bytes_unref (bytes);
     }
 
   if (!chooser->iter)
