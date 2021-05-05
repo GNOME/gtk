@@ -88,6 +88,10 @@ gsk_private_sources = files([
   'ngl/fp16.c',
 ])
 
+gsk_f16c_sources = files([
+  'ngl/fp16i.c',
+])
+
 gsk_public_headers = files([
   'gskcairorenderer.h',
   'gskenums.h',
@@ -209,6 +213,17 @@ gsk_deps = [
   libgdk_dep,
 ]
 
+libgsk_f16c = static_library('gsk_f16c',
+  sources: gsk_f16c_sources,
+  dependencies: gsk_deps,
+  include_directories: [ confinc, ],
+  c_args: [
+    '-DGTK_COMPILATION',
+    '-DG_LOG_DOMAIN="Gsk"',
+    '-DG_LOG_STRUCTURED=1',
+  ] + common_cflags + f16c_cflags,
+)
+
 libgsk = static_library('gsk',
   sources: [
     gsk_public_sources,
@@ -223,7 +238,7 @@ libgsk = static_library('gsk',
     '-DG_LOG_DOMAIN="Gsk"',
     '-DG_LOG_STRUCTURED=1',
   ] + common_cflags,
-  link_with: libgdk,
+  link_with: [ libgdk, libgsk_f16c]
 )
 
 # We don't have link_with: to internal static libs here on purpose, just

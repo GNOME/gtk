@@ -18,13 +18,9 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#include <config.h>
+#include "config.h"
 
 #include "fp16private.h"
-
-#ifdef HAVE_F16C
-#include <immintrin.h>
-#endif
 
 static inline guint
 as_uint (const float x)
@@ -81,33 +77,6 @@ half_to_float4_c (const guint16 h[4],
 #ifdef HAVE_F16C
 
 #if defined(_MSC_VER) && !defined(__clang__)
-#define CAST_M128I_P(a) (__m128i const *) a
-#else
-#define CAST_M128I_P(a) (__m128i_u const *) a
-#endif
-
-static void
-float_to_half4_f16c (const float f[4],
-                     guint16     h[4])
-{
-  __m128 s = _mm_loadu_ps (f);
-  __m128i i = _mm_cvtps_ph (s, 0);
-  _mm_storel_epi64 ((__m128i*)h, i);
-}
-
-static void
-half_to_float4_f16c (const guint16 h[4],
-                     float         f[4])
-{
-  __m128i i = _mm_loadl_epi64 (CAST_M128I_P (h));
-  __m128 s = _mm_cvtph_ps (i);
-
-  _mm_store_ps (f, s);
-}
-
-#undef CAST_M128I_P
-
-#if defined(_MSC_VER) && !defined(__clang__)
 /* based on info from https://walbourn.github.io/directxmath-f16c-and-fma/ */
 static gboolean
 have_f16c_msvc (void)
@@ -154,6 +123,7 @@ half_to_float4 (const guint16 h[4], float f[4])
 }
 
 #else
+
 void float_to_half4 (const float f[4], guint16 h[4]) __attribute__((ifunc ("resolve_float_to_half4")));
 void half_to_float4 (const guint16 h[4], float f[4]) __attribute__((ifunc ("resolve_half_to_float4")));
 
@@ -176,9 +146,10 @@ resolve_half_to_float4 (void)
   else
     return half_to_float4_c;
 }
+
 #endif
 
-#else
+#else /* ! HAVE_F16C */
 
 #if defined(__APPLE__) || (defined(_MSC_VER) && !defined(__clang__))
 // turns out aliases don't work on Darwin nor Visual Studio
@@ -204,4 +175,4 @@ void half_to_float4 (const guint16 h[4], float f[4]) __attribute__((alias ("half
 
 #endif
 
-#endif  /* GTK_HAS_F16C */
+#endif  /* HAVE_F16C */
