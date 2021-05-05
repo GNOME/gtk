@@ -1638,7 +1638,21 @@ output_handle_geometry (void             *data,
 
   monitor->x = x;
   monitor->y = y;
-  gdk_monitor_set_physical_size (GDK_MONITOR (monitor), physical_width, physical_height);
+
+  switch (transform)
+    {
+    case WL_OUTPUT_TRANSFORM_90:
+    case WL_OUTPUT_TRANSFORM_270:
+    case WL_OUTPUT_TRANSFORM_FLIPPED_90:
+    case WL_OUTPUT_TRANSFORM_FLIPPED_270:
+      gdk_monitor_set_physical_size (GDK_MONITOR (monitor),
+                                     physical_height, physical_width);
+      break;
+    default:
+      gdk_monitor_set_physical_size (GDK_MONITOR (monitor),
+                                     physical_width, physical_height);
+    }
+
   gdk_monitor_set_subpixel_layout (GDK_MONITOR (monitor), subpixel);
   gdk_monitor_set_manufacturer (GDK_MONITOR (monitor), make);
   gdk_monitor_set_model (GDK_MONITOR (monitor), model);
