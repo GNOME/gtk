@@ -728,7 +728,8 @@ int main () {
   if cc.compiles(f16c_prog, args: test_f16c_cflags, name: 'F16C intrinsics')
     cdata.set('HAVE_F16C', 1)
     f16c_cflags = test_f16c_cflags
-    common_cflags += test_f16c_cflags
+  else
+    f16c_cflags = []
   endif
 endif
 

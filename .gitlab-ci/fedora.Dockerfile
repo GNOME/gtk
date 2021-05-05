@@ -1,4 +1,4 @@
-FROM fedora:33
+FROM fedora:34
 
 RUN dnf -y install \
     adwaita-icon-theme \
@@ -73,6 +73,7 @@ RUN dnf -y install \
     pcre-devel \
     pcre-static \
     python3 \
+    python3-gobject \
     python3-jinja2 \
     python3-markdown \
     python3-pip \

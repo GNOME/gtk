@@ -1,4 +1,4 @@
-/* fp16private.h
+/* fp16i.c
  *
  * Copyright 2021 Red Hat, Inc.
  *
@@ -18,29 +18,36 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __FP16_PRIVATE_H__
-#define __FP16_PRIVATE_H__
+#include "config.h"
 
-#include <glib.h>
+#include "fp16private.h"
 
-G_BEGIN_DECLS
+#ifdef HAVE_F16C
+#include <immintrin.h>
 
-#define FP16_ZERO ((guint16)0)
-#define FP16_ONE ((guint16)15360)
-#define FP16_MINUS_ONE ((guint16)48128)
-
-void float_to_half4 (const float f[4],
-                     guint16     h[4]);
-
-void half_to_float4 (const guint16 h[4],
-                     float         f[4]);
-
-void float_to_half4_f16c (const float f[4],
-                          guint16     h[4]);
-
-void half_to_float4_f16c (const guint16 h[4],
-                          float         f[4]);
-
-G_END_DECLS
-
+#if defined(_MSC_VER) && !defined(__clang__)
+#define CAST_M128I_P(a) (__m128i const *) a
+#else
+#define CAST_M128I_P(a) (__m128i_u const *) a
 #endif
+
+void
+float_to_half4_f16c (const float f[4],
+                     guint16     h[4])
+{
+  __m128 s = _mm_loadu_ps (f);
+  __m128i i = _mm_cvtps_ph (s, 0);
+  _mm_storel_epi64 ((__m128i*)h, i);
+}
+
+void
+half_to_float4_f16c (const guint16 h[4],
+                     float         f[4])
+{
+  __m128i i = _mm_loadl_epi64 (CAST_M128I_P (h));
+  __m128 s = _mm_cvtph_ps (i);
+
+  _mm_store_ps (f, s);
+}
+
+#endif  /* HAVE_F16C */
