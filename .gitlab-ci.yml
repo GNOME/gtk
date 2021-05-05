@@ -77,6 +77,7 @@ fedora-x86_64:
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
   script:
+    - .gitlab-ci/show-info-linux.sh
     - meson subprojects update
     - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
             _build
@@ -92,6 +93,7 @@ release-build:
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release"
   script:
+    - .gitlab-ci/show-info-linux.sh
     - meson subprojects update
     - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
             _build
@@ -106,6 +108,7 @@ installed-tests:
     EXTRA_MESON_FLAGS: "--prefix=/usr --libdir=/usr/lib64 -Dinstall-tests=true"
     G_TEST_ACCESSIBLE: 1
   script:
+    - .gitlab-ci/show-info-linux.sh
     - meson subprojects update
     - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
             _build
@@ -155,7 +158,7 @@ macos:
     - macos
   needs: []
   before_script:
-    - bash .gitlab-ci/show-execution-environment.sh
+    - bash .gitlab-ci/show-info-osx.sh
     - pip3 install --user meson==0.56
     - pip3 install --user ninja
     - export PATH=/Users/gitlabrunner/Library/Python/3.7/bin:$PATH
