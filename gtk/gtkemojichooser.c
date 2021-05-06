@@ -174,6 +174,37 @@ populate_recent_section (GtkEmojiChooser *chooser)
   g_variant_unref (variant);
 }
 
+static GVariant *
+get_recent_emoji_data (GtkWidget *widget)
+{
+  GVariant *emoji_data = g_object_get_data (G_OBJECT (widget), "emoji-data");
+  GVariantIter *codes_iter;
+  GVariantIter *keywords_iter;
+  GVariantBuilder codes_builder;
+  const char *name;
+  const char *shortname;
+  guint code;
+  guint group;
+
+  g_assert (emoji_data);
+
+  if (g_variant_is_of_type (emoji_data, G_VARIANT_TYPE ("(auss)")))
+    return emoji_data;
+
+  g_variant_get (emoji_data, "(au&sasu)", &codes_iter, &name, &keywords_iter, &group);
+
+  g_variant_builder_init (&codes_builder, G_VARIANT_TYPE ("au"));
+  while (g_variant_iter_loop (codes_iter, "u", &code))
+    g_variant_builder_add (&codes_builder, "u", code);
+
+  g_variant_iter_free (codes_iter);
+  g_variant_iter_free (keywords_iter);
+
+  shortname = "";
+
+  return g_variant_new ("(auss)", &codes_builder, name, shortname);
+}
+
 static void
 add_recent_item (GtkEmojiChooser *chooser,
                  GVariant        *item,
@@ -185,13 +216,13 @@ add_recent_item (GtkEmojiChooser *chooser,
 
   g_variant_ref (item);
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a((ausasu)u)"));
-  g_variant_builder_add (&builder, "(@(ausasu)u)", item, modifier);
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a((auss)u)"));
+  g_variant_builder_add (&builder, "(@(auss)u)", item, modifier);
 
   children = gtk_container_get_children (GTK_CONTAINER (chooser->recent.box));
   for (l = children, i = 1; l; l = l->next, i++)
     {
-      GVariant *item2 = g_object_get_data (G_OBJECT (l->data), "emoji-data");
+      GVariant *item2 = get_recent_emoji_data (GTK_WIDGET (l->data));
       gunichar modifier2 = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (l->data), "modifier"));
 
       if (modifier == modifier2 && g_variant_equal (item, item2))
@@ -206,7 +237,7 @@ add_recent_item (GtkEmojiChooser *chooser,
           continue;
         }
 
-      g_variant_builder_add (&builder, "(@(ausasu)u)", item2, modifier2);
+      g_variant_builder_add (&builder, "(@(auss)u)", item2, modifier2);
     }
   g_list_free (children);
 
@@ -265,7 +296,7 @@ emoji_activated (GtkFlowBox      *box,
   label = gtk_bin_get_child (GTK_BIN (ebox));
   text = g_strdup (gtk_label_get_label (GTK_LABEL (label)));
 
-  item = (GVariant*) g_object_get_data (G_OBJECT (child), "emoji-data");
+  item = get_recent_emoji_data (GTK_WIDGET (child));
   modifier = (gunichar) GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (child), "modifier"));
   add_recent_item (chooser, item, modifier);
 
@@ -694,7 +725,6 @@ filter_func (GtkFlowBoxChild *child,
   GVariant *emoji_data;
   const char *text;
   const char *name;
-  const char **keywords;
   char **term_tokens;
   char **name_tokens;
   gboolean res;
@@ -715,10 +745,16 @@ filter_func (GtkFlowBoxChild *child,
   
   g_variant_get_child (emoji_data, 1, "&s", &name);
   name_tokens = g_str_tokenize_and_fold (name, "en", NULL);
-  g_variant_get_child (emoji_data, 2, "^a&s", &keywords);
 
-  res = match_tokens ((const char **)term_tokens, (const char **)name_tokens) ||
-        match_tokens ((const char **)term_tokens, keywords);
+  res = match_tokens ((const char **)term_tokens, (const char **)name_tokens);
+
+  if (g_variant_is_of_type (emoji_data, G_VARIANT_TYPE ("(ausasu)")))
+    {
+      const char **keywords;
+
+      g_variant_get_child (emoji_data, 2, "^a&s", &keywords);
+      res |= match_tokens ((const char **)term_tokens, keywords);
+    }
 
   g_strfreev (term_tokens);
   g_strfreev (name_tokens);
