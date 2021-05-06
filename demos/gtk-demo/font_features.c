@@ -1136,7 +1136,7 @@ done:
   g_free (design_coords);
 }
 
-void
+G_MODULE_EXPORT void
 font_features_font_changed (void)
 {
   update_script_combo ();
@@ -1144,14 +1144,14 @@ font_features_font_changed (void)
   update_font_variations ();
 }
 
-void
+G_MODULE_EXPORT void
 font_features_script_changed (void)
 {
   update_features ();
   update_display ();
 }
 
-void
+G_MODULE_EXPORT void
 font_features_reset_features (void)
 {
   GList *l;
@@ -1197,7 +1197,7 @@ switch_to_label (void)
   update_display ();
 }
 
-void
+G_MODULE_EXPORT void
 font_features_toggle_edit (void)
 {
   if (strcmp (gtk_stack_get_visible_child_name (GTK_STACK (stack)), "label") == 0)
@@ -1206,7 +1206,7 @@ font_features_toggle_edit (void)
     switch_to_label ();
 }
 
-void
+G_MODULE_EXPORT void
 font_features_stop_edit (void)
 {
   g_signal_emit_by_name (edit_toggle, "clicked");

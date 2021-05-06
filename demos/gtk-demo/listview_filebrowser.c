@@ -34,6 +34,7 @@ enum {
 };
 
 #define FILE_BROWSER_TYPE_VIEW (file_browser_view_get_type ())
+G_MODULE_EXPORT
 G_DECLARE_FINAL_TYPE (FileBrowserView, file_browser_view, FILE_BROWSER, VIEW, GObject);
 
 G_DEFINE_TYPE (FileBrowserView, file_browser_view, G_TYPE_OBJECT);
@@ -159,7 +160,7 @@ static void file_browser_view_init (FileBrowserView *self)
 {
 }
 
-char *
+G_MODULE_EXPORT char *
 filebrowser_get_display_name (GObject *object,
                               GFileInfo *info)
 {
@@ -169,7 +170,7 @@ filebrowser_get_display_name (GObject *object,
   return g_strdup (g_file_info_get_attribute_string (info, "standard::display-name"));
 }
 
-char *
+G_MODULE_EXPORT char *
 filebrowser_get_content_type (GObject *object,
                               GFileInfo *info)
 {
@@ -179,7 +180,7 @@ filebrowser_get_content_type (GObject *object,
   return g_strdup (g_file_info_get_attribute_string (info, "standard::content-type"));
 }
 
-char *
+G_MODULE_EXPORT char *
 filebrowser_get_size (GObject *object,
                       GFileInfo *info)
 {
@@ -189,7 +190,7 @@ filebrowser_get_size (GObject *object,
   return g_format_size (g_file_info_get_attribute_uint64 (info, "standard::size"));
 }
 
-GIcon *
+G_MODULE_EXPORT GIcon *
 filebrowser_get_icon (GObject *object,
                       GFileInfo *info)
 {
@@ -206,7 +207,7 @@ filebrowser_get_icon (GObject *object,
   return icon;
 }
 
-void
+G_MODULE_EXPORT void
 filebrowser_up_clicked_cb (GtkButton        *button,
                            GtkDirectoryList *list)
 {
@@ -219,7 +220,7 @@ filebrowser_up_clicked_cb (GtkButton        *button,
   gtk_directory_list_set_file (list, file);
 }
 
-void
+G_MODULE_EXPORT void
 filebrowser_view_activated_cb (GtkGridView      *view,
                                guint             pos,
                                GtkDirectoryList *list)
