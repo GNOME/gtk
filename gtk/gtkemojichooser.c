@@ -496,11 +496,15 @@ get_emoji_data (void)
   if (g_error_matches (error, G_RESOURCE_ERROR, G_RESOURCE_ERROR_NOT_FOUND))
     {
       char *filename;
+      char *gresource_name;
       GMappedFile *file;
 
       g_clear_error (&error);
 
-      filename = g_strconcat ("/usr/share/gtk-3.0/emoji/", lang, ".gresource", NULL);
+      gresource_name = g_strconcat (lang, ".gresource", NULL);
+      filename = g_build_filename (_gtk_get_data_prefix (), "share", "gtk-3.0",
+                                   "emoji", gresource_name, NULL);
+      g_clear_pointer (&gresource_name, g_free);
       file = g_mapped_file_new (filename, FALSE, NULL);
 
       if (file)
