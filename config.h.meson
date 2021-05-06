@@ -284,3 +284,6 @@
 #mesondefine HAVE_TRACKER3
 
 #mesondefine HAVE_F16C
+
+/* Does the OS support GDesktopAppInfo? */
+#mesondefine HAVE_DESKTOPAPPINFO

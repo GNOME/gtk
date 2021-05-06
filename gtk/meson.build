@@ -814,7 +814,6 @@ endif
 if macos_enabled
   gtk_sources += files([
     'gtksearchenginequartz.c',
-    'gtkmountoperation-stub.c',
     'gtkapplication-quartz.c',
     'gtkapplication-quartz-menu.c',
     'gtkfilechoosernativequartz.c',
@@ -825,7 +824,7 @@ if macos_enabled
   gtk_cargs += ['-xobjective-c']  # FIXME? maybe add_languages() instead?
 endif
 
-if not (x11_enabled or win32_enabled or macos_enabled)
+if not (x11_enabled or win32_enabled)
   gtk_sources += ['gtkmountoperation-stub.c', ]
 endif
 

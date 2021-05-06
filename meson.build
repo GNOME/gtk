@@ -177,6 +177,7 @@ check_headers = [
   'sys/time.h',
   'sys/types.h',
   'unistd.h',
+  'gio/gdesktopappinfo.h'
 ]
 
 foreach h : check_headers
