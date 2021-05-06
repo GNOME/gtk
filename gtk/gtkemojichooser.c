@@ -31,7 +31,6 @@
 #include "gtkpopover.h"
 #include "gtkscrolledwindow.h"
 #include "gtkintl.h"
-#include "gtkprivate.h"
 #include "gtksearchentryprivate.h"
 #include "gtktext.h"
 #include "gtknative.h"
