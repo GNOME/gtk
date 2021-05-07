@@ -397,16 +397,13 @@ gtk_calendar_class_init (GtkCalendarClass *class)
    * GtkCalendar:day:
    *
    * The selected day (as a number between 1 and 31).
-   *
-   * This can be set to 0 to unselect the currently selected day.
-   * This property gets initially set to the current day.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_DAY,
                                    g_param_spec_int ("day",
                                                      P_("Day"),
-                                                     P_("The selected day (as a number between 1 and 31, or 0 to unselect the currently selected day)"),
-                                                     0, 31, 0,
+                                                     P_("The selected day (as a number between 1 and 31)"),
+                                                     1, 31, 1,
                                                      G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
@@ -1025,7 +1022,7 @@ gtk_calendar_set_property (GObject      *object,
     case PROP_DAY:
       date = g_date_time_new_local (g_date_time_get_year (calendar->date),
                                     g_date_time_get_month (calendar->date),
-                                    g_value_get_int (value) + 1,
+                                    g_value_get_int (value),
                                     0, 0, 0);
       if (date)
         {
@@ -1065,7 +1062,7 @@ gtk_calendar_get_property (GObject      *object,
       g_value_set_int (value, g_date_time_get_month (calendar->date) - 1);
       break;
     case PROP_DAY:
-      g_value_set_int (value, g_date_time_get_day_of_month (calendar->date) - 1);
+      g_value_set_int (value, g_date_time_get_day_of_month (calendar->date));
       break;
     case PROP_SHOW_HEADING:
       g_value_set_boolean (value, gtk_calendar_get_show_heading (calendar));
