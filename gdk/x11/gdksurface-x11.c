@@ -4376,6 +4376,7 @@ create_moveresize_surface (MoveResizeData *mv_resize,
                                        NULL,
                                        -100, -100, 1, 1);
 
+  gdk_surface_set_is_mapped (mv_resize->moveresize_emulation_surface, TRUE);
   gdk_x11_surface_show (mv_resize->moveresize_emulation_surface, FALSE);
 
   status = gdk_seat_grab (gdk_device_get_seat (mv_resize->device),
