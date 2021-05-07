@@ -595,24 +595,12 @@ add_emoji (GtkWidget    *box,
   gtk_flow_box_insert (GTK_FLOW_BOX (box), child, prepend ? 0 : -1);
 }
 
-GBytes *
-get_emoji_data (void)
+static GBytes *
+get_emoji_data_by_language (const char *lang)
 {
   GBytes *bytes;
-  const char *lang;
-  char q[10];
   char *path;
   GError *error = NULL;
-
-  lang = pango_language_to_string (gtk_get_default_language ());
-  if (strchr (lang, '-'))
-    {
-      int i;
-      for (i = 0; lang[i] != '-' && i < 9; i++)
-        q[i] = lang[i];
-      q[i] = '\0';
-      lang = q;
-    }
 
   path = g_strconcat ("/org/gtk/libgtk/emoji/", lang, ".data", NULL);
   bytes = g_resources_lookup_data (path, 0, &error);
@@ -666,10 +654,40 @@ get_emoji_data (void)
     }
 
   g_clear_error (&error);
-
   g_free (path);
 
-  return g_resources_lookup_data ("/org/gtk/libgtk/emoji/en.data", 0, NULL);
+  return NULL;
+}
+
+GBytes *
+get_emoji_data (void)
+{
+  GBytes *bytes;
+  const char *lang;
+
+  lang = pango_language_to_string (gtk_get_default_language ());
+  bytes = get_emoji_data_by_language (lang);
+  if (bytes)
+    return bytes;
+
+  if (strchr (lang, '-'))
+    {
+      char q[5];
+      int i;
+
+      for (i = 0; lang[i] != '-' && i < 4; i++)
+        q[i] = lang[i];
+      q[i] = '\0';
+
+      bytes = get_emoji_data_by_language (q);
+      if (bytes)
+        return bytes;
+    }
+
+  bytes = get_emoji_data_by_language ("en");
+  g_assert (bytes);
+
+  return bytes;
 }
 
 static gboolean
