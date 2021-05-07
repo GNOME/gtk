@@ -3153,10 +3153,12 @@ typedef struct
   gsize text_len;
   gboolean strip_ulines;
   GString *text_data;
+  gunichar accel_key;
 } UriParserData;
 
 static char *
-strip_ulines (const char *text)
+strip_ulines (const char *text,
+              guint      *accel_key)
 {
   char *new_text;
   const char *p;
@@ -3175,6 +3177,9 @@ strip_ulines (const char *text)
         }
 
       *q = *p;
+      if (after_uline && *accel_key == 0)
+        *accel_key = g_utf8_get_char (p);
+
       q++;
       after_uline = FALSE;
     }
@@ -3201,7 +3206,7 @@ finish_text (UriParserData *pdata)
 
       if (pdata->strip_ulines && strchr (pdata->text_data->str, '_'))
         {
-          text = strip_ulines (pdata->text_data->str);
+          text = strip_ulines (pdata->text_data->str, &pdata->accel_key);
           text_len = strlen (text);
         }
       else
@@ -3404,6 +3409,7 @@ static gboolean
 parse_uri_markup (GtkLabel      *self,
                   const char    *str,
                   gboolean       strip_ulines,
+                  gunichar      *accel_key,
                   char         **new_str,
                   GtkLabelLink **links,
                   guint         *out_n_links,
@@ -3424,6 +3430,7 @@ parse_uri_markup (GtkLabel      *self,
   pdata.text_len = 0;
   pdata.strip_ulines = strip_ulines;
   pdata.text_data = g_string_new ("");
+  pdata.accel_key = 0;
 
   while (p != end && xml_isspace (*p))
     p++;
@@ -3465,6 +3472,9 @@ parse_uri_markup (GtkLabel      *self,
     {
       *links = NULL;
     }
+
+  if (accel_key)
+    *accel_key = pdata.accel_key;
 
   return TRUE;
 
@@ -3509,7 +3519,7 @@ gtk_label_set_markup_internal (GtkLabel   *self,
   char *str_for_display = NULL;
   GtkLabelLink *links = NULL;
   guint n_links = 0;
-  guint accel_keyval = 0;
+  gunichar accel_keyval = 0;
   gboolean do_mnemonics;
 
   do_mnemonics = self->mnemonics_visible &&
@@ -3518,6 +3528,7 @@ gtk_label_set_markup_internal (GtkLabel   *self,
 
   if (!parse_uri_markup (self, str,
                          with_uline && !do_mnemonics,
+                         &accel_keyval,
                          &str_for_display,
                          &links, &n_links,
                          &error))
