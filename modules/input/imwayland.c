@@ -494,12 +494,13 @@ tweak_preedit (const char *text)
 {
   GString *s;
   guint len;
+  const char *p;
 
   s = g_string_new ("");
 
   len = g_utf8_strlen (text, -1);
 
-  for (const char *p = text; *p; p = g_utf8_next_char (p))
+  for (p = text; *p; p = g_utf8_next_char (p))
     {
       gunichar ch = g_utf8_get_char (p);
 
