@@ -397,16 +397,13 @@ gtk_calendar_class_init (GtkCalendarClass *class)
    * GtkCalendar:day:
    *
    * The selected day (as a number between 1 and 31).
-   *
-   * This can be set to 0 to unselect the currently selected day.
-   * This property gets initially set to the current day.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_DAY,
                                    g_param_spec_int ("day",
                                                      P_("Day"),
-                                                     P_("The selected day (as a number between 1 and 31, or 0 to unselect the currently selected day)"),
-                                                     0, 31, 0,
+                                                     P_("The selected day (as a number between 1 and 31)"),
+                                                     1, 31, 1,
                                                      G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
