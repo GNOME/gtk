@@ -31,6 +31,7 @@ tests = [
     'link_args': gtk_tests_export_dynamic_ldflag,
   },
   { 'name': 'builderparser' },
+  { 'name': 'calendar' },
   { 'name': 'cellarea' },
   { 'name': 'check-icon-names' },
   { 'name': 'cssprovider' },
