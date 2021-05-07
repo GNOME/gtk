@@ -25,43 +25,43 @@ show_shortcuts (GtkWidget   *window,
   g_object_unref (builder);
 }
 
-void
+G_MODULE_EXPORT void
 shortcuts_builder_shortcuts (GtkWidget *window)
 {
   show_shortcuts (window, "shortcuts-builder", NULL);
 }
 
-void
+G_MODULE_EXPORT void
 shortcuts_gedit_shortcuts (GtkWidget *window)
 {
   show_shortcuts (window, "shortcuts-gedit", NULL);
 }
 
-void
+G_MODULE_EXPORT void
 shortcuts_clocks_shortcuts (GtkWidget *window)
 {
   show_shortcuts (window, "shortcuts-clocks", NULL);
 }
 
-void
+G_MODULE_EXPORT void
 shortcuts_clocks_shortcuts_stopwatch (GtkWidget *window)
 {
   show_shortcuts (window, "shortcuts-clocks", "stopwatch");
 }
 
-void
+G_MODULE_EXPORT void
 shortcuts_boxes_shortcuts (GtkWidget *window)
 {
   show_shortcuts (window, "shortcuts-boxes", NULL);
 }
 
-void
+G_MODULE_EXPORT void
 shortcuts_boxes_shortcuts_wizard (GtkWidget *window)
 {
   show_shortcuts (window, "shortcuts-boxes", "wizard");
 }
 
-void
+G_MODULE_EXPORT void
 shortcuts_boxes_shortcuts_display (GtkWidget *window)
 {
   show_shortcuts (window, "shortcuts-boxes", "display");

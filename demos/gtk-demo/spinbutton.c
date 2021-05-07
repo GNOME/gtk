@@ -12,7 +12,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-int
+G_MODULE_EXPORT int
 spinbutton_hex_spin_input (GtkSpinButton *spin_button,
                            double        *new_val)
 {
@@ -29,7 +29,7 @@ spinbutton_hex_spin_input (GtkSpinButton *spin_button,
     return TRUE;
 }
 
-int
+G_MODULE_EXPORT int
 spinbutton_hex_spin_output (GtkSpinButton *spin_button)
 {
   GtkAdjustment *adjustment;
@@ -49,7 +49,7 @@ spinbutton_hex_spin_output (GtkSpinButton *spin_button)
   return TRUE;
 }
 
-int
+G_MODULE_EXPORT int
 spinbutton_time_spin_input (GtkSpinButton *spin_button,
                             double        *new_val)
 {
@@ -88,7 +88,7 @@ spinbutton_time_spin_input (GtkSpinButton *spin_button,
   return TRUE;
 }
 
-int
+G_MODULE_EXPORT int
 spinbutton_time_spin_output (GtkSpinButton *spin_button)
 {
   GtkAdjustment *adjustment;
@@ -122,7 +122,7 @@ static const char *month[12] = {
   "December"
 };
 
-int
+G_MODULE_EXPORT int
 spinbutton_month_spin_input (GtkSpinButton *spin_button,
                              double        *new_val)
 {
@@ -151,7 +151,7 @@ spinbutton_month_spin_input (GtkSpinButton *spin_button,
   return TRUE;
 }
 
-int
+G_MODULE_EXPORT int
 spinbutton_month_spin_output (GtkSpinButton *spin_button)
 {
   GtkAdjustment *adjustment;
