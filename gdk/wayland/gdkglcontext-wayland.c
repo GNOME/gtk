@@ -313,19 +313,6 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
   gdk_wayland_surface_notify_committed (surface);
 }
 
-typedef struct {
-  EGLDisplay display;
-  EGLImage image;
-} ImageData;
-
-static void
-free_image (gpointer data)
-{
-  ImageData *idata = data;
-  eglDestroyImage (idata->display, idata->image);
-  g_free (data);
-}
-
 static GdkTexture *
 gdk_wayland_gl_context_import_dmabuf (GdkGLContext *context,
                                       int           fd,
@@ -348,7 +335,6 @@ gdk_wayland_gl_context_import_dmabuf (GdkGLContext *context,
     EGL_NONE
   };
   EGLImage image;
-  ImageData *idata;
 
   gdk_gl_context_make_current (context);
 
@@ -393,12 +379,9 @@ gdk_wayland_gl_context_import_dmabuf (GdkGLContext *context,
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-  idata = g_new (ImageData, 1);
+  eglDestroyImage (display_wayland->egl_display, image);
 
-  idata->display = display_wayland->egl_display;
-  idata->image = image;
-
-  return gdk_gl_texture_new (context, texture, width, height, free_image, idata);
+  return gdk_gl_texture_new (context, texture, width, height, NULL, NULL);
 }
 
 static void
