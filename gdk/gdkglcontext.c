@@ -1258,3 +1258,21 @@ gdk_gl_context_use_es_bgra (GdkGLContext *context)
 
   return FALSE;
 }
+
+GdkTexture *
+gdk_gl_context_import_dmabuf (GdkGLContext *context,
+                              int           fd,
+                              int           fourcc,
+                              int           width,
+                              int           height,
+                              int           offset,
+                              int           stride)
+{
+  if (GDK_GL_CONTEXT_GET_CLASS (context)->import_dmabuf)
+    return GDK_GL_CONTEXT_GET_CLASS (context)->import_dmabuf (context,
+                                                              fd, fourcc,
+                                                              width, height,
+                                                              offset, stride);
+
+  return NULL;
+}

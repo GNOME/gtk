@@ -90,6 +90,15 @@ GdkGLContext *          gdk_gl_context_get_current              (void);
 GDK_AVAILABLE_IN_ALL
 void                    gdk_gl_context_clear_current            (void);
 
+GDK_AVAILABLE_IN_4_4
+GdkTexture *            gdk_gl_context_import_dmabuf (GdkGLContext *context,
+                                                      int           fd,
+                                                      int           fourcc,
+                                                      int           width,
+                                                      int           height,
+                                                      int           offset,
+                                                      int           stride);
+
 G_END_DECLS
 
 #endif /* __GDK_GL_CONTEXT_H__ */
