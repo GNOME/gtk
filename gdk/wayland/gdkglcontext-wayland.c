@@ -313,6 +313,94 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
   gdk_wayland_surface_notify_committed (surface);
 }
 
+typedef struct {
+  EGLDisplay display;
+  EGLImage image;
+} ImageData;
+
+static void
+free_image (gpointer data)
+{
+  ImageData *idata = data;
+  eglDestroyImage (idata->display, idata->image);
+  g_free (data);
+}
+
+static GdkTexture *
+gdk_wayland_gl_context_import_dmabuf (GdkGLContext *context,
+                                      int           fd,
+                                      int           fourcc,
+                                      int           width,
+                                      int           height,
+                                      int           offset,
+                                      int           stride)
+{
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  guint texture;
+  const EGLAttrib attribute_list[] = {
+    EGL_WIDTH, width,
+    EGL_HEIGHT, height,
+    EGL_LINUX_DRM_FOURCC_EXT, fourcc,
+    EGL_DMA_BUF_PLANE0_FD_EXT, fd,
+    EGL_DMA_BUF_PLANE0_OFFSET_EXT, offset,
+    EGL_DMA_BUF_PLANE0_PITCH_EXT, stride,
+    EGL_NONE
+  };
+  EGLImage image;
+  ImageData *idata;
+
+  gdk_gl_context_make_current (context);
+
+  image = eglCreateImage (display_wayland->egl_display,
+                          EGL_NO_CONTEXT,
+                          EGL_LINUX_DMA_BUF_EXT,
+                          (EGLClientBuffer)NULL,
+                          attribute_list);
+  if (image == EGL_NO_IMAGE)
+    {
+      switch (eglGetError ())
+        {
+#define EGL_ERROR(name) \
+  case name: \
+    g_print (#name); \
+    break;
+
+        EGL_ERROR(EGL_NOT_INITIALIZED)
+        EGL_ERROR(EGL_BAD_ACCESS)
+        EGL_ERROR(EGL_BAD_ALLOC)
+        EGL_ERROR(EGL_BAD_ATTRIBUTE)
+        EGL_ERROR(EGL_BAD_CONTEXT)
+        EGL_ERROR(EGL_BAD_CONFIG)
+        EGL_ERROR(EGL_BAD_CURRENT_SURFACE)
+        EGL_ERROR(EGL_BAD_DISPLAY)
+        EGL_ERROR(EGL_BAD_SURFACE)
+        EGL_ERROR(EGL_BAD_MATCH)
+        EGL_ERROR(EGL_BAD_PARAMETER)
+        EGL_ERROR(EGL_BAD_NATIVE_PIXMAP)
+        EGL_ERROR(EGL_BAD_NATIVE_WINDOW)
+        EGL_ERROR(EGL_CONTEXT_LOST)
+        default:
+          g_print ("error: %d\n", eglGetError ());
+          break;
+        }
+      return NULL;
+    }
+
+  glGenTextures (1, &texture);
+  glBindTexture (GL_TEXTURE_2D, texture);
+  glEGLImageTargetTexture2DOES (GL_TEXTURE_2D, image);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+  idata = g_new (ImageData, 1);
+
+  idata->display = display_wayland->egl_display;
+  idata->image = image;
+
+  return gdk_gl_texture_new (context, texture, width, height, free_image, idata);
+}
+
 static void
 gdk_wayland_gl_context_class_init (GdkWaylandGLContextClass *klass)
 {
@@ -326,6 +414,8 @@ gdk_wayland_gl_context_class_init (GdkWaylandGLContextClass *klass)
 
   context_class->realize = gdk_wayland_gl_context_realize;
   context_class->get_damage = gdk_wayland_gl_context_get_damage;
+
+  context_class->import_dmabuf = gdk_wayland_gl_context_import_dmabuf;
 }
 
 static void
@@ -576,3 +666,4 @@ gdk_wayland_display_make_gl_context_current (GdkDisplay   *display,
 
   return TRUE;
 }
+
