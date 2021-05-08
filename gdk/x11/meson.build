@@ -8,7 +8,6 @@ gdk_x11_public_sources = files([
   'gdkdevicemanager-x11.c',
   'gdkdevicemanager-xi2.c',
   'gdkdisplay-x11.c',
-  'gdkglcontext-x11.c',
   'gdkkeys-x11.c',
   'gdkmonitor-x11.c',
   'gdkproperty-x11.c',
@@ -19,6 +18,12 @@ gdk_x11_public_sources = files([
   'gdkxid.c',
   'xsettings-client.c',
 ])
+
+if get_option('x11-egl').disabled()
+  gdk_x11_public_sources += files([ 'gdkglcontext-x11.c' ])
+else
+  gdk_x11_public_sources += files([ 'gdkglcontext-x11-eglx.c' ])
+endif
 
 # All sources
 gdk_x11_sources = gdk_x11_public_sources + [

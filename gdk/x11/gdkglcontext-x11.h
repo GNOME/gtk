@@ -28,9 +28,6 @@
 #include <X11/extensions/Xdamage.h>
 #endif
 
-#include <epoxy/gl.h>
-#include <epoxy/glx.h>
-
 #include "gdkglcontextprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkvisual-x11.h"
@@ -39,37 +36,13 @@
 
 G_BEGIN_DECLS
 
-struct _GdkX11GLContext
-{
-  GdkGLContext parent_instance;
-
-  GLXContext glx_context;
-  GLXFBConfig glx_config;
-  GLXDrawable attached_drawable;
-  GLXDrawable unattached_drawable;
-
-#ifdef HAVE_XDAMAGE
-  GLsync frame_fence;
-  Damage xdamage;
-#endif
-
-  guint is_attached : 1;
-  guint is_direct : 1;
-  guint do_frame_sync : 1;
-};
-
-struct _GdkX11GLContextClass
-{
-  GdkGLContextClass parent_class;
-};
-
 gboolean        gdk_x11_screen_init_gl                          (GdkX11Screen      *screen);
-GdkGLContext *  gdk_x11_surface_create_gl_context                (GdkSurface         *window,
-								 gboolean           attached,
+GdkGLContext *  gdk_x11_surface_create_gl_context               (GdkSurface        *window,
+                                                                 gboolean           attached,
                                                                  GdkGLContext      *share,
                                                                  GError           **error);
-gboolean        gdk_x11_display_make_gl_context_current         (GdkDisplay        *display,
-                                                                 GdkGLContext      *context);
+gboolean        gdk_x11_display_make_gl_context_current        (GdkDisplay         *display,
+                                                                GdkGLContext       *context);
 
 G_END_DECLS
 

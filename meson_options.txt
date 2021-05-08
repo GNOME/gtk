@@ -61,6 +61,11 @@ option('xinerama',
        value: 'auto',
        description : 'Enable support for the X11 Xinerama extension')
 
+option('x11-egl',
+       type: 'feature',
+       value: 'enabled',
+       description: 'Use EGL and Xlib for GL on X11, instead of GLX')
+
 option('cloudproviders',
        type: 'feature',
        value: 'disabled',
