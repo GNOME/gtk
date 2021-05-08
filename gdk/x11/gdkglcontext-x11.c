@@ -40,6 +40,8 @@
 #include <cairo-xlib.h>
 
 #include <epoxy/glx.h>
+#include <epoxy/egl.h>
+
 
 G_DEFINE_TYPE (GdkX11GLContext, gdk_x11_gl_context, GDK_TYPE_GL_CONTEXT)
 
@@ -710,6 +712,94 @@ gdk_x11_gl_context_dispose (GObject *gobject)
   G_OBJECT_CLASS (gdk_x11_gl_context_parent_class)->dispose (gobject);
 }
 
+typedef struct {
+  EGLDisplay display;
+  EGLImage image;
+} ImageData;
+
+static void
+free_image (gpointer data)
+{
+  ImageData *idata = data;
+  eglDestroyImage (idata->display, idata->image);
+  g_free (data);
+}
+
+static GdkTexture *
+gdk_x11_gl_context_import_dmabuf (GdkGLContext *context,
+                                  int           fd,
+                                  int           fourcc,
+                                  int           width,
+                                  int           height,
+                                  int           offset,
+                                  int           stride)
+{
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+  guint texture;
+  const EGLAttrib attribute_list[] = {
+    EGL_WIDTH, width,
+    EGL_HEIGHT, height,
+    EGL_LINUX_DRM_FOURCC_EXT, fourcc,
+    EGL_DMA_BUF_PLANE0_FD_EXT, fd,
+    EGL_DMA_BUF_PLANE0_OFFSET_EXT, offset,
+    EGL_DMA_BUF_PLANE0_PITCH_EXT, stride,
+    EGL_NONE
+  };
+  EGLDisplay egl_display;
+  EGLImage image;
+  ImageData *idata;
+  int major, minor;
+
+  gdk_gl_context_make_current (context);
+
+  egl_display = eglGetDisplay ((EGLNativeDisplayType) display_x11->xdisplay);
+
+  if (!eglInitialize (egl_display, &major, &minor))
+    {
+      g_warning ("Failed to initialize EGL: %x", eglGetError());
+      return NULL;
+    }
+  if (!eglBindAPI(EGL_OPENGL_API))
+    {
+      g_warning ("Failed to bind EGL API: %x", eglGetError());
+      return NULL;
+    }
+
+  g_message ("EGL API version %d.%d found\n"
+             " - Vendor: %s\n"
+             " - Version: %s\n"
+             " - Client APIs: %s\n"
+             " - Extensions:\n"
+             "\t%s",
+             major, minor,
+             eglQueryString (egl_display, EGL_VENDOR),
+             eglQueryString (egl_display, EGL_VERSION),
+             eglQueryString (egl_display, EGL_CLIENT_APIS),
+             eglQueryString (egl_display, EGL_EXTENSIONS));
+
+  image = eglCreateImage (egl_display,
+                          EGL_NO_CONTEXT,
+                          EGL_LINUX_DMA_BUF_EXT,
+                          (EGLClientBuffer)NULL,
+                          attribute_list);
+  if (image == EGL_NO_IMAGE)
+    return NULL;
+
+  glGenTextures (1, &texture);
+  glBindTexture (GL_TEXTURE_2D, texture);
+  glEGLImageTargetTexture2DOES (GL_TEXTURE_2D, image);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+  idata = g_new (ImageData, 1);
+
+  idata->display = egl_display;
+  idata->image = image;
+
+  return gdk_gl_texture_new (context, texture, width, height, free_image, idata);
+}
+
 static void
 gdk_x11_gl_context_class_init (GdkX11GLContextClass *klass)
 {
@@ -719,6 +809,7 @@ gdk_x11_gl_context_class_init (GdkX11GLContextClass *klass)
 
   context_class->realize = gdk_x11_gl_context_realize;
   context_class->get_damage = gdk_x11_gl_context_get_damage;
+  context_class->import_dmabuf = gdk_x11_gl_context_import_dmabuf;
 
   draw_context_class->end_frame = gdk_x11_gl_context_end_frame;
 
