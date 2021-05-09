@@ -42,10 +42,10 @@ do_headerbar (GtkWidget *do_widget)
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_widget_add_css_class (box, "linked");
       button = gtk_button_new ();
-      gtk_button_set_child (GTK_BUTTON (button), gtk_image_new_from_icon_name ("pan-start-symbolic"));
+      gtk_button_set_child (GTK_BUTTON (button), gtk_image_new_from_icon_name ("go-previous-symbolic"));
       gtk_box_append (GTK_BOX (box), button);
       button = gtk_button_new ();
-      gtk_button_set_child (GTK_BUTTON (button), gtk_image_new_from_icon_name ("pan-end-symbolic"));
+      gtk_button_set_child (GTK_BUTTON (button), gtk_image_new_from_icon_name ("go-next-symbolic"));
       gtk_box_append (GTK_BOX (box), button);
 
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), box);
