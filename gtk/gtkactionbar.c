@@ -181,6 +181,9 @@ gtk_action_bar_init (GtkActionBar *self)
   self->start_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   self->end_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
+  gtk_widget_add_css_class (self->start_box, "start");
+  gtk_widget_add_css_class (self->end_box, "end");
+
   self->center_box = gtk_center_box_new ();
   gtk_center_box_set_start_widget (GTK_CENTER_BOX (self->center_box), self->start_box);
   gtk_center_box_set_end_widget (GTK_CENTER_BOX (self->center_box), self->end_box);
