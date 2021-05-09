@@ -18,8 +18,6 @@ do_headerbar (GtkWidget *do_widget)
   GtkWidget *header;
   GtkWidget *button;
   GtkWidget *box;
-  GtkWidget *image;
-  GIcon *icon;
 
   if (!window)
     {
@@ -32,20 +30,14 @@ do_headerbar (GtkWidget *do_widget)
 
       header = gtk_header_bar_new ();
 
-      button = gtk_button_new ();
-      icon = g_themed_icon_new ("mail-send-receive-symbolic");
-      image = gtk_image_new_from_gicon (icon);
-      g_object_unref (icon);
-      gtk_button_set_child (GTK_BUTTON (button), image);
+      button = gtk_button_new_from_icon_name ("mail-send-receive-symbolic");
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_widget_add_css_class (box, "linked");
-      button = gtk_button_new ();
-      gtk_button_set_child (GTK_BUTTON (button), gtk_image_new_from_icon_name ("pan-start-symbolic"));
+      button = gtk_button_new_from_icon_name ("go-previous-symbolic");
       gtk_box_append (GTK_BOX (box), button);
-      button = gtk_button_new ();
-      gtk_button_set_child (GTK_BUTTON (button), gtk_image_new_from_icon_name ("pan-end-symbolic"));
+      button = gtk_button_new_from_icon_name ("go-next-symbolic");
       gtk_box_append (GTK_BOX (box), button);
 
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), box);

@@ -30,13 +30,13 @@
                 </style>
                 <child>
                   <object class="GtkButton">
-                    <property name="label">&lt;</property>
+                    <property name="icon-name">go-previous-symbolic</property>
                     <property name="valign">center</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkButton">
-                    <property name="label">&gt;</property>
+                    <property name="icon-name">go-next-symbolic</property>
                     <property name="valign">center</property>
                   </object>
                 </child>

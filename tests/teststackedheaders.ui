@@ -32,7 +32,7 @@
               <object class="GtkHeaderBar">
                 <child type="start">
                   <object class="GtkButton" id="back_btn">
-                    <property name="label">&lt;</property>
+                    <property name="icon-name">go-previous-symbolic</property>
                     <property name="valign">center</property>
                   </object>
                 </child>
