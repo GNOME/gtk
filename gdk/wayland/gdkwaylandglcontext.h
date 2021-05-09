@@ -32,13 +32,24 @@ G_BEGIN_DECLS
 
 #define GDK_TYPE_WAYLAND_GL_CONTEXT		(gdk_wayland_gl_context_get_type ())
 #define GDK_WAYLAND_GL_CONTEXT(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_WAYLAND_GL_CONTEXT, GdkWaylandGLContext))
-#define GDK_WAYLAND_IS_GL_CONTEXT(obj)	(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_WAYLAND_GL_CONTEXT))
+#define GDK_IS_WAYLAND_GL_CONTEXT(obj)	(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_WAYLAND_GL_CONTEXT))
 
 typedef struct _GdkWaylandGLContext		GdkWaylandGLContext;
 typedef struct _GdkWaylandGLContextClass	GdkWaylandGLContextClass;
 
 GDK_AVAILABLE_IN_ALL
 GType gdk_wayland_gl_context_get_type (void) G_GNUC_CONST;
+
+GDK_AVAILABLE_IN_4_4
+int   gdk_wayland_gl_context_import_dmabuf (GdkGLContext   *context,
+                                            uint32_t        fourcc,
+                                            unsigned int    width,
+                                            unsigned int    height,
+                                            uint32_t        n_planes,
+                                            const int      *fd,
+                                            const uint32_t *stride,
+                                            const uint32_t *offset,
+                                            const uint64_t *modifiers);
 
 G_END_DECLS
 
