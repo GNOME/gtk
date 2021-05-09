@@ -159,7 +159,7 @@ save_file (GFile *save_filename)
 
   error = NULL;
   g_file_replace_contents (save_filename,
-                           text, -1,
+                           text, strlen (text),
                            NULL, FALSE,
                            G_FILE_CREATE_NONE,
                            NULL,
