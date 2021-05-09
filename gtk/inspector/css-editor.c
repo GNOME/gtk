@@ -192,7 +192,7 @@ save_to_file (GtkInspectorCssEditor *ce,
 
   text = get_current_text (ce->priv->text);
 
-  g_file_replace_contents (file, text, -1,
+  g_file_replace_contents (file, text, strlen (text),
                            NULL,
                            FALSE,
                            G_FILE_CREATE_NONE,
