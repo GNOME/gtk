@@ -48,6 +48,10 @@ void                    gdk_broadway_display_show_keyboard       (GdkBroadwayDis
 GDK_AVAILABLE_IN_ALL
 void                    gdk_broadway_display_hide_keyboard       (GdkBroadwayDisplay *display);
 
+GDK_AVAILABLE_IN_4_4
+void                    gdk_broadway_display_set_surface_scale   (GdkDisplay *display,
+                                                                  int         scale);
+
 G_END_DECLS
 
 #endif /* __GDK_BROADWAY_DISPLAY_H__ */
