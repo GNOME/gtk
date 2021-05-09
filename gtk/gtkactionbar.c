@@ -49,7 +49,23 @@
  *
  * # CSS nodes
  *
- * `GtkActionBar` has a single CSS node with name actionbar.
+ * ```
+ * actionbar
+ * ╰── revealer
+ *     ╰── box
+ *         ├── box.start
+ *         │   ╰── [start children]
+ *         ├── [center widget]
+ *         ╰── box.end
+ *             ╰── [end children]
+ * ```
+ *
+ * A `GtkActionBar`'s CSS node is called `actionbar`. It contains a `revealer`
+ * subnode, which contains a `box` subnode, which contains two `box` subnodes at
+ * the start and end of the action bar, with `start` and `end style classes
+ * respectively, as well as a center node that represents the center child.
+ *
+ * Each of the boxes contains children packed for that side.
  */
 
 typedef struct _GtkActionBarClass         GtkActionBarClass;
