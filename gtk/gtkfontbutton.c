@@ -1121,9 +1121,9 @@ pango_font_description_to_css (PangoFontDescription *desc,
   set = pango_font_description_get_set_fields (desc);
   if (set & PANGO_FONT_MASK_FAMILY)
     {
-      g_string_append (s, "font-family: ");
+      g_string_append (s, "font-family: \"");
       g_string_append (s, pango_font_description_get_family (desc));
-      g_string_append (s, "; ");
+      g_string_append (s, "\"; ");
     }
   if (set & PANGO_FONT_MASK_STYLE)
     {
