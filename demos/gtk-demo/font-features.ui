@@ -10,12 +10,8 @@
           <object class="GtkButton" id="reset">
             <property name="receives-default">1</property>
             <property name="tooltip-text">Reset</property>
+            <property name="icon-name">view-refresh-symbolic</property>
             <signal name="clicked" handler="font_features_reset_features" swapped="no"/>
-            <child>
-              <object class="GtkImage">
-                <property name="icon-name">view-refresh-symbolic</property>
-              </object>
-            </child>
           </object>
         </child>
       </object>
