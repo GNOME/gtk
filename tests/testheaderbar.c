@@ -439,7 +439,6 @@ change_header (GtkButton *button, gpointer data)
   GtkWidget *window = GTK_WIDGET (data);
   GtkWidget *label;
   GtkWidget *widget;
-  GtkWidget *image;
   GtkWidget *header;
 
   if (button && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
@@ -470,10 +469,8 @@ change_header (GtkButton *button, gpointer data)
 
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), widget);
 
-      widget= gtk_button_new ();
-      image = gtk_image_new_from_icon_name ("bookmark-new-symbolic");
+      widget= gtk_button_new_from_icon_name ("bookmark-new-symbolic");
       g_signal_connect (widget, "clicked", G_CALLBACK (on_bookmark_clicked), window);
-      gtk_button_set_child (GTK_BUTTON (widget), image);
 
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), widget);
     }
