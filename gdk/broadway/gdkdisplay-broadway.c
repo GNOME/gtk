@@ -112,7 +112,8 @@ _gdk_broadway_display_size_changed (GdkDisplay                      *display,
         gdk_broadway_surface_move_resize (GDK_SURFACE (toplevel),
                                           0, 0,
                                           msg->width, msg->height);
-    }}
+    }
+}
 
 static GdkDevice *
 create_core_pointer (GdkDisplay *display)
