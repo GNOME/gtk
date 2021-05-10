@@ -1022,6 +1022,9 @@ gdk_x11_screen_update_visuals_for_glx (GdkX11Screen *x11_screen)
   display_x11 = GDK_X11_DISPLAY (display);
   dpy = gdk_x11_display_get_xdisplay (display);
 
+  if (display_x11->have_egl)
+    return;
+
   /* We save the default visuals as a property on the root window to avoid
      having to initialize GL each time, as it may not be used later. */
   if (get_cached_gl_visuals (display, &system_visual_id, &rgba_visual_id))
