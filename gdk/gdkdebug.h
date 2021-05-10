@@ -41,9 +41,10 @@ typedef enum {
   GDK_DEBUG_GL_LEGACY       = 1 << 15,
   GDK_DEBUG_GL_GLES         = 1 << 16,
   GDK_DEBUG_GL_DEBUG        = 1 << 17,
-  GDK_DEBUG_VULKAN_DISABLE  = 1 << 18,
-  GDK_DEBUG_VULKAN_VALIDATE = 1 << 19,
-  GDK_DEBUG_DEFAULT_SETTINGS= 1 << 20
+  GDK_DEBUG_GL_GLX          = 1 << 18,
+  GDK_DEBUG_VULKAN_DISABLE  = 1 << 19,
+  GDK_DEBUG_VULKAN_VALIDATE = 1 << 20,
+  GDK_DEBUG_DEFAULT_SETTINGS= 1 << 21
 } GdkDebugFlags;
 
 extern guint _gdk_debug_flags;

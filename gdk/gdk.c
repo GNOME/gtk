@@ -126,6 +126,7 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "gl-legacy",       GDK_DEBUG_GL_LEGACY, "Use a legacy OpenGL context" },
   { "gl-gles",         GDK_DEBUG_GL_GLES, "Use a GLES OpenGL context" },
   { "gl-debug",        GDK_DEBUG_GL_DEBUG, "Insert debugging information in OpenGL" },
+  { "gl-glx",          GDK_DEBUG_GL_GLX, "Use GLX on X11" },
   { "vulkan-disable",  GDK_DEBUG_VULKAN_DISABLE, "Disable Vulkan support" },
   { "vulkan-validate", GDK_DEBUG_VULKAN_VALIDATE, "Load the Vulkan validation layer" },
   { "default-settings",GDK_DEBUG_DEFAULT_SETTINGS, "Force default values for xsettings" },

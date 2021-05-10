@@ -126,10 +126,19 @@ struct _GdkX11Display
 
   int wm_moveresize_button;
 
+#ifdef HAVE_XDAMAGE
+  int damage_event_base;
+  int damage_error_base;
+  guint have_damage;
+#endif
+
   /* GLX information */
   int glx_version;
   int glx_error_base;
   int glx_event_base;
+
+  /* EGL information */
+  int egl_version;
 
   /* Translation between X server time and system-local monotonic time */
   gint64 server_time_query_time;
@@ -138,6 +147,7 @@ struct _GdkX11Display
   guint server_time_is_monotonic_time : 1;
 
   guint have_glx : 1;
+  guint have_egl : 1;
 
   /* GLX extensions we check */
   guint has_glx_swap_interval : 1;
@@ -151,11 +161,11 @@ struct _GdkX11Display
   guint has_glx_create_es2_context : 1;
   guint has_async_glx_swap_buffers : 1;
 
-#ifdef HAVE_XDAMAGE
-  int damage_event_base;
-  int damage_error_base;
-  guint have_damage;
-#endif
+  /* EGL extensions we check */
+  guint has_egl_khr_create_context : 1;
+  guint has_egl_buffer_age : 1;
+  guint has_egl_swap_buffers_with_damage : 1;
+  guint has_egl_surfaceless_context : 1;
 };
 
 struct _GdkX11DisplayClass
