@@ -238,9 +238,12 @@ gdk_x11_screen_init_gl (GdkX11Screen *screen)
   if (GDK_DISPLAY_DEBUG_CHECK (display, GL_DISABLE))
     return FALSE;
 
-  /* We favour EGL */
-  if (gdk_x11_screen_init_egl (screen))
-    return TRUE;
+  if (!GDK_DISPLAY_DEBUG_CHECK (display, GL_GLX))
+    {
+      /* We favour EGL */
+      if (gdk_x11_screen_init_egl (screen))
+        return TRUE;
+    }
 
   if (gdk_x11_screen_init_glx (screen))
     return TRUE;
