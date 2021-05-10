@@ -24,7 +24,7 @@
 #include <X11/Xatom.h>
 
 #include "gdkinternals.h"
-
+#include "gdkprofilerprivate.h"
 #include "gdkintl.h"
 
 #include <cairo-xlib.h>
@@ -193,6 +193,8 @@ gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
                        (unsigned long) drawable,
                        (unsigned long) gdk_x11_surface_get_xid (surface),
                        context_x11->do_frame_sync ? "yes" : "no"));
+
+  gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "x11", "swap buffers");
 
   /* if we are going to wait for the vertical refresh manually
    * we need to flush pending redraws, and we also need to wait

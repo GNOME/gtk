@@ -34,7 +34,7 @@
 #include <X11/Xatom.h>
 
 #include "gdkinternals.h"
-
+#include "gdkprofilerprivate.h"
 #include "gdkintl.h"
 
 #include <cairo-xlib.h>
@@ -285,6 +285,7 @@ gdk_x11_gl_context_egl_end_frame (GdkDrawContext *draw_context,
 
   egl_surface = gdk_x11_surface_get_egl_surface (surface, context_egl->egl_config);
 
+  gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "x11", "swap buffers");
   if (display_x11->has_egl_swap_buffers_with_damage)
     {
       int i, j, n_rects = cairo_region_num_rectangles (painted);
