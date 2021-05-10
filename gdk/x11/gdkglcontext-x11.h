@@ -49,13 +49,8 @@ struct _GdkX11GLContext
 {
   GdkGLContext parent_instance;
 
-#ifdef HAVE_XDAMAGE
-  GLsync frame_fence;
-  Damage xdamage;
-#endif
-
-  guint is_attached : 1;
   guint do_frame_sync : 1;
+  guint is_attached : 1;
 };
 
 struct _GdkX11GLContextClass

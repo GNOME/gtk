@@ -40,6 +40,11 @@ struct _GdkX11GLContextGLX
   GLXDrawable attached_drawable;
   GLXDrawable unattached_drawable;
 
+#ifdef HAVE_XDAMAGE
+  GLsync frame_fence;
+  Damage xdamage;
+#endif
+
   guint is_direct : 1;
 };
 
@@ -95,48 +100,6 @@ set_glx_drawable_info (GdkSurface    *surface,
   g_object_set_data_full (G_OBJECT (surface), "-gdk-x11-surface-glx-info",
                           info,
                           drawable_info_free);
-}
-
-static void
-gdk_x11_gl_context_glx_bind_for_frame_fence (GdkX11GLContext *context_x11)
-{
-  GdkX11GLContextGLX *self = GDK_X11_GL_CONTEXT_GLX (context_x11);
-  GdkX11GLContextGLX *current_context_glx;
-  GLXContext current_glx_context = NULL;
-  GdkGLContext *current_context;
-  gboolean needs_binding = TRUE;
-
-  /* We don't care if the passed context is the current context,
-   * necessarily, but we do care that *some* context that can
-   * see the sync object is bound.
-   *
-   * If no context is bound at all, the GL dispatch layer will
-   * make glClientWaitSync() silently return 0.
-   */
-  current_glx_context = glXGetCurrentContext ();
-
-  if (current_glx_context == NULL)
-    goto out;
-
-  current_context = gdk_gl_context_get_current ();
-
-  if (current_context == NULL)
-    goto out;
-
-  current_context_glx = GDK_X11_GL_CONTEXT_GLX (current_context);
-
-  /* If the GLX context was changed out from under GDK, then
-   * that context may not be one that is able to see the
-   * created fence object.
-   */
-  if (current_context_glx->glx_context != current_glx_context)
-    goto out;
-
-  needs_binding = FALSE;
-
-out:
-  if (needs_binding)
-    gdk_gl_context_make_current (GDK_GL_CONTEXT (self));
 }
 
 static void
@@ -232,11 +195,11 @@ gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
   gdk_x11_surface_pre_damage (surface);
 
 #ifdef HAVE_XDAMAGE
-  if (context_x11->xdamage != 0 && _gdk_x11_surface_syncs_frames (surface))
+  if (context_glx->xdamage != 0 && _gdk_x11_surface_syncs_frames (surface))
     {
-      g_assert (context_x11->frame_fence == 0);
+      g_assert (context_glx->frame_fence == 0);
 
-      context_x11->frame_fence = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+      context_glx->frame_fence = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 
       /* We consider the frame still getting painted until the GL operation is
        * finished, and the window gets damage reported from the X server.
@@ -375,6 +338,155 @@ create_legacy_context (GdkDisplay   *display,
 
   return res;
 }
+
+#ifdef HAVE_XDAMAGE
+static void
+bind_context_for_frame_fence (GdkX11GLContextGLX *self)
+{
+  GdkX11GLContextGLX *current_context_glx;
+  GLXContext current_glx_context = NULL;
+  GdkGLContext *current_context;
+  gboolean needs_binding = TRUE;
+
+  /* We don't care if the passed context is the current context,
+   * necessarily, but we do care that *some* context that can
+   * see the sync object is bound.
+   *
+   * If no context is bound at all, the GL dispatch layer will
+   * make glClientWaitSync() silently return 0.
+   */
+  current_glx_context = glXGetCurrentContext ();
+
+  if (current_glx_context == NULL)
+    goto out;
+
+  current_context = gdk_gl_context_get_current ();
+
+  if (current_context == NULL)
+    goto out;
+
+  current_context_glx = GDK_X11_GL_CONTEXT_GLX (current_context);
+
+  /* If the GLX context was changed out from under GDK, then
+   * that context may not be one that is able to see the
+   * created fence object.
+   */
+  if (current_context_glx->glx_context != current_glx_context)
+    goto out;
+
+  needs_binding = FALSE;
+
+out:
+  if (needs_binding)
+    gdk_gl_context_make_current (GDK_GL_CONTEXT (self));
+}
+
+static void
+finish_frame (GdkGLContext *context)
+{
+  GdkX11GLContextGLX *context_glx = GDK_X11_GL_CONTEXT_GLX (context);
+  GdkSurface *surface = gdk_gl_context_get_surface (context);
+
+  if (context_glx->xdamage == 0)
+    return;
+
+  if (context_glx->frame_fence == 0)
+    return;
+
+  glDeleteSync (context_glx->frame_fence);
+  context_glx->frame_fence = 0;
+
+  _gdk_x11_surface_set_frame_still_painting (surface, FALSE);
+}
+
+static gboolean
+on_gl_surface_xevent (GdkGLContext   *context,
+                      XEvent         *xevent,
+                      GdkX11Display  *display_x11)
+{
+  GdkX11GLContextGLX *context_glx = GDK_X11_GL_CONTEXT_GLX (context);
+  GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (context);
+  XDamageNotifyEvent *damage_xevent;
+
+  if (!context_x11->is_attached)
+    return FALSE;
+
+  if (xevent->type != (display_x11->damage_event_base + XDamageNotify))
+    return FALSE;
+
+  damage_xevent = (XDamageNotifyEvent *) xevent;
+
+  if (damage_xevent->damage != context_glx->xdamage)
+    return FALSE;
+
+  if (context_glx->frame_fence)
+    {
+      GLenum wait_result;
+
+      bind_context_for_frame_fence (context_glx);
+
+      wait_result = glClientWaitSync (context_glx->frame_fence, 0, 0);
+
+      switch (wait_result)
+        {
+          /* We assume that if the fence has been signaled, that this damage
+           * event is the damage event that was triggered by the GL drawing
+           * associated with the fence. That's, technically, not necessarly
+           * always true. The X server could have generated damage for
+           * an unrelated event (say the size of the window changing), at
+           * just the right moment such that we're picking it up instead.
+           *
+           * We're choosing not to handle this edge case, but if it does ever
+           * happen in the wild, it could lead to slight underdrawing by
+           * the compositor for one frame. In the future, if we find out
+           * this edge case is noticeable, we can compensate by copying the
+           * painted region from gdk_x11_gl_context_end_frame and subtracting
+           * damaged areas from the copy as they come in. Once the copied
+           * region goes empty, we know that there won't be any underdraw,
+           * and can mark painting has finished. It's not worth the added
+           * complexity and resource usage to do this bookkeeping, however,
+           * unless the problem is practically visible.
+           */
+          case GL_ALREADY_SIGNALED:
+          case GL_CONDITION_SATISFIED:
+          case GL_WAIT_FAILED:
+            if (wait_result == GL_WAIT_FAILED)
+              g_warning ("failed to wait on GL fence associated with last swap buffers call");
+            finish_frame (context);
+            break;
+
+          /* We assume that if the fence hasn't been signaled, that this
+           * damage event is not the damage event that was triggered by the
+           * GL drawing associated with the fence. That's only true for
+           * the Nvidia vendor driver. When using open source drivers, damage
+           * is emitted immediately on swap buffers, before the fence ever
+           * has a chance to signal.
+           */
+          case GL_TIMEOUT_EXPIRED:
+            break;
+          default:
+            g_error ("glClientWaitSync returned unexpected result: %x", (guint) wait_result);
+        }
+    }
+
+  return FALSE;
+}
+
+static void
+on_surface_state_changed (GdkGLContext *context)
+{
+  GdkSurface *surface = gdk_gl_context_get_surface (context);
+
+  if (GDK_SURFACE_IS_MAPPED (surface))
+    return;
+
+  /* If we're about to withdraw the surface, then we don't care if the frame is
+   * still getting rendered by the GPU. The compositor is going to remove the surface
+   * from the scene anyway, so wrap up the frame.
+   */
+  finish_frame (context);
+}
+#endif
 
 static gboolean
 gdk_x11_gl_context_glx_realize (GdkGLContext  *context,
@@ -557,14 +669,46 @@ gdk_x11_gl_context_glx_realize (GdkGLContext  *context,
                        display_x11->glx_version / 10,
                        display_x11->glx_version % 10));
 
-  /* Handle damage tracking in the parent class */
-  return GDK_GL_CONTEXT_CLASS (gdk_x11_gl_context_glx_parent_class)->realize (context, error);
+#ifdef HAVE_XDAMAGE
+  if (display_x11->have_damage &&
+      display_x11->has_async_glx_swap_buffers)
+    {
+      gdk_x11_display_error_trap_push (display);
+      context_glx->xdamage = XDamageCreate (dpy,
+                                            gdk_x11_surface_get_xid (surface),
+                                            XDamageReportRawRectangles);
+      if (gdk_x11_display_error_trap_pop (display))
+        {
+          context_glx->xdamage = 0;
+        }
+      else
+        {
+          g_signal_connect_object (G_OBJECT (display),
+                                   "xevent",
+                                   G_CALLBACK (on_gl_surface_xevent),
+                                   context,
+                                   G_CONNECT_SWAPPED);
+          g_signal_connect_object (G_OBJECT (surface),
+                                   "notify::state",
+                                   G_CALLBACK (on_surface_state_changed),
+                                   context,
+                                   G_CONNECT_SWAPPED);
+
+        }
+    }
+#endif
+
+  return TRUE;
 }
 
 static void
 gdk_x11_gl_context_glx_dispose (GObject *gobject)
 {
   GdkX11GLContextGLX *context_glx = GDK_X11_GL_CONTEXT_GLX (gobject);
+
+#ifdef HAVE_XDAMAGE
+  context_glx->xdamage = 0;
+#endif
 
   if (context_glx->glx_context != NULL)
     {
@@ -586,12 +730,9 @@ gdk_x11_gl_context_glx_dispose (GObject *gobject)
 static void
 gdk_x11_gl_context_glx_class_init (GdkX11GLContextGLXClass *klass)
 {
-  GdkX11GLContextClass *context_x11_class = GDK_X11_GL_CONTEXT_CLASS (klass);
   GdkGLContextClass *context_class = GDK_GL_CONTEXT_CLASS (klass);
   GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-
-  context_x11_class->bind_for_frame_fence = gdk_x11_gl_context_glx_bind_for_frame_fence;
 
   context_class->realize = gdk_x11_gl_context_glx_realize;
   context_class->get_damage = gdk_x11_gl_context_glx_get_damage;
