@@ -10,6 +10,7 @@ RUN dnf -y install \
     ccache \
     clang \
     clang-analyzer \
+    clang-tools-extra \
     colord-devel \
     cups-devel \
     dbus-daemon \
