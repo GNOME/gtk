@@ -97,7 +97,6 @@ GdkX11Screen *_gdk_x11_screen_new           (GdkDisplay   *display,
                                              int           screen_number,
                                              gboolean      setup_display);
 
-void _gdk_x11_screen_update_visuals_for_gl  (GdkX11Screen *screen);
 void _gdk_x11_screen_window_manager_changed (GdkX11Screen *screen);
 void _gdk_x11_screen_size_changed           (GdkX11Screen *screen,
                                              const XEvent *event);

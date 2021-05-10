@@ -65,14 +65,7 @@ struct _GdkX11GLContextClass
   void (* bind_for_frame_fence) (GdkX11GLContext *self);
 };
 
-#define GDK_TYPE_X11_GL_CONTEXT_GLX     (gdk_x11_gl_context_glx_get_type())
-#define GDK_X11_GL_CONTEXT_GLX(obj)     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_X11_GL_CONTEXT_GLX, GdkX11GLContextGLX))
-#define GDK_IS_X11_GL_CONTEXT_GLX(obj)  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_X11_GL_CONTEXT_GLX))
-
-typedef struct _GdkX11GLContextGLX      GdkX11GLContextGLX;
-
 gboolean        gdk_x11_screen_init_gl                  (GdkX11Screen  *screen);
-gboolean        gdk_x11_screen_init_glx                 (GdkX11Screen  *screen);
 
 GdkGLContext *  gdk_x11_surface_create_gl_context       (GdkSurface    *window,
                                                          gboolean       attached,
@@ -80,6 +73,16 @@ GdkGLContext *  gdk_x11_surface_create_gl_context       (GdkSurface    *window,
                                                          GError       **error);
 gboolean        gdk_x11_display_make_gl_context_current (GdkDisplay    *display,
                                                          GdkGLContext  *context);
+
+/* GLX */
+#define GDK_TYPE_X11_GL_CONTEXT_GLX     (gdk_x11_gl_context_glx_get_type())
+#define GDK_X11_GL_CONTEXT_GLX(obj)     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_X11_GL_CONTEXT_GLX, GdkX11GLContextGLX))
+#define GDK_IS_X11_GL_CONTEXT_GLX(obj)  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_X11_GL_CONTEXT_GLX))
+
+typedef struct _GdkX11GLContextGLX      GdkX11GLContextGLX;
+
+gboolean                gdk_x11_screen_init_glx                 (GdkX11Screen  *screen);
+void                    gdk_x11_screen_update_visuals_for_glx   (GdkX11Screen  *screen);
 
 GType                   gdk_x11_gl_context_glx_get_type         (void) G_GNUC_CONST;
 GdkX11GLContext *       gdk_x11_gl_context_glx_new              (GdkSurface    *surface,
@@ -89,6 +92,22 @@ GdkX11GLContext *       gdk_x11_gl_context_glx_new              (GdkSurface    *
 gboolean                gdk_x11_gl_context_glx_make_current     (GdkDisplay    *display,
                                                                  GdkGLContext  *context);
 
+
+/* EGL */
+#define GDK_TYPE_X11_GL_CONTEXT_EGL     (gdk_x11_gl_context_egl_get_type())
+#define GDK_X11_GL_CONTEXT_EGL(obj)     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_X11_GL_CONTEXT_EGL, GdkX11GLContextEGL))
+#define GDK_IS_X11_GL_CONTEXT_EGL(obj)  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_X11_GL_CONTEXT_EGL))
+
+typedef struct _GdkX11GLContextEGL      GdkX11GLContextEGL;
+
+gboolean                gdk_x11_screen_init_egl                 (GdkX11Screen  *screen);
+GType                   gdk_x11_gl_context_egl_get_type         (void) G_GNUC_CONST;
+GdkX11GLContext *       gdk_x11_gl_context_egl_new              (GdkSurface    *surface,
+                                                                 gboolean       attached,
+                                                                 GdkGLContext  *share,
+                                                                 GError       **error);
+gboolean                gdk_x11_gl_context_egl_make_current     (GdkDisplay    *display,
+                                                                 GdkGLContext  *context);
 
 G_END_DECLS
 

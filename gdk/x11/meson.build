@@ -8,6 +8,7 @@ gdk_x11_public_sources = files([
   'gdkdevicemanager-x11.c',
   'gdkdevicemanager-xi2.c',
   'gdkdisplay-x11.c',
+  'gdkglcontext-egl.c',
   'gdkglcontext-glx.c',
   'gdkglcontext-x11.c',
   'gdkkeys-x11.c',

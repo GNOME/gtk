@@ -27,6 +27,7 @@
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
 #include "gdkvisual-x11.h"
+#include "gdkglcontext-x11.h"
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -249,9 +250,10 @@ _gdk_x11_screen_init_visuals (GdkX11Screen *x11_screen,
   x11_screen->nvisuals = nvisuals;
 
   /* If GL is available we want to pick better default/rgba visuals,
-     as we care about glx details such as alpha/depth/stencil depth,
-     stereo and double buffering */
-  _gdk_x11_screen_update_visuals_for_gl (x11_screen);
+   * as we care about GLX details such as alpha/depth/stencil depth,
+   * stereo and double buffering
+   */
+  gdk_x11_screen_update_visuals_for_glx (x11_screen);
 
   if (setup_display)
     {

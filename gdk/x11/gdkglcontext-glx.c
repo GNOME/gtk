@@ -866,7 +866,7 @@ save_cached_gl_visuals (GdkDisplay *display, int system, int rgba)
 }
 
 void
-_gdk_x11_screen_update_visuals_for_gl (GdkX11Screen *x11_screen)
+gdk_x11_screen_update_visuals_for_glx (GdkX11Screen *x11_screen)
 {
   GdkDisplay *display;
   GdkX11Display *display_x11;
