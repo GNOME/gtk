@@ -57,6 +57,7 @@ struct _GdkBroadwayDisplay
   GListStore *monitors;
   GdkMonitor *monitor;
   int scale_factor;
+  gboolean fixed_scale;
 
   GHashTable *texture_cache;
 

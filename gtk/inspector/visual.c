@@ -55,6 +55,9 @@
 #ifdef GDK_WINDOWING_MACOS
 #include "macos/gdkmacos.h"
 #endif
+#ifdef GDK_WINDOWING_BROADWAY
+#include "broadway/gdkbroadway.h"
+#endif
 
 #include "gdk/gdk-private.h"
 
@@ -796,14 +799,21 @@ init_font_scale (GtkInspectorVisual *vis)
                     G_CALLBACK (font_scale_entry_activated), vis);
 }
 
-#if defined (GDK_WINDOWING_X11)
+#if defined (GDK_WINDOWING_X11) || defined (GDK_WINDOWING_BROADWAY)
 static void
 scale_changed (GtkAdjustment *adjustment, GtkInspectorVisual *vis)
 {
   int scale;
 
   scale = gtk_adjustment_get_value (adjustment);
-  gdk_x11_display_set_surface_scale (vis->display, scale);
+#if defined (GDK_WINDOWING_X11)
+  if (GDK_IS_X11_DISPLAY (vis->display))
+    gdk_x11_display_set_surface_scale (vis->display, scale);
+#endif
+#if defined (GDK_WINDOWING_BROADWAY)
+  if (GDK_IS_BROADWAY_DISPLAY (vis->display))
+    gdk_broadway_display_set_surface_scale (vis->display, scale);
+#endif
 }
 #endif
 
@@ -812,6 +822,18 @@ init_scale (GtkInspectorVisual *vis)
 {
 #if defined (GDK_WINDOWING_X11)
   if (GDK_IS_X11_DISPLAY (vis->display))
+    {
+      double scale;
+
+      scale = gdk_monitor_get_scale_factor (gdk_x11_display_get_primary_monitor (vis->display));
+      gtk_adjustment_set_value (vis->scale_adjustment, scale);
+      g_signal_connect (vis->scale_adjustment, "value-changed",
+                        G_CALLBACK (scale_changed), vis);
+    }
+  else
+#endif
+#if defined (GDK_WINDOWING_BROADWAY)
+  if (GDK_IS_BROADWAY_DISPLAY (vis->display))
     {
       double scale;
 

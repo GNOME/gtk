@@ -94,10 +94,12 @@ _gdk_broadway_display_size_changed (GdkDisplay                      *display,
 
   if (msg->width == current_size.width &&
       msg->height == current_size.height &&
-      msg->scale == broadway_display->scale_factor)
+      (msg->scale == broadway_display->scale_factor ||
+       broadway_display->fixed_scale))
     return;
 
-  broadway_display->scale_factor = msg->scale;
+  if (!broadway_display->fixed_scale)
+    broadway_display->scale_factor = msg->scale;
 
   gdk_monitor_set_geometry (monitor, &(GdkRectangle) { 0, 0, msg->width, msg->height });
   gdk_monitor_set_scale_factor (monitor, msg->scale);
@@ -112,7 +114,8 @@ _gdk_broadway_display_size_changed (GdkDisplay                      *display,
         gdk_broadway_surface_move_resize (GDK_SURFACE (toplevel),
                                           0, 0,
                                           msg->width, msg->height);
-    }}
+    }
+}
 
 static GdkDevice *
 create_core_pointer (GdkDisplay *display)
@@ -325,6 +328,37 @@ gdk_broadway_display_hide_keyboard (GdkBroadwayDisplay *display)
   g_return_if_fail (GDK_IS_BROADWAY_DISPLAY (display));
 
   _gdk_broadway_server_set_show_keyboard (display->server, FALSE);
+}
+
+/**
+ * gdk_broadway_display_set_surface_scale:
+ * @display: (type GdkBroadwayDisplay): the display
+ * @scale: The new scale value, as an integer >= 1
+ *
+ * Forces a specific window scale for all windows on this display,
+ * instead of using the default or user configured scale. This
+ * is can be used to disable scaling support by setting @scale to
+ * 1, or to programmatically set the window scale.
+ *
+ * Once the scale is set by this call it will not change in
+ * response to later user configuration changes.
+ *
+ * Since: 4.4
+ */
+void
+gdk_broadway_display_set_surface_scale (GdkDisplay *display,
+                                        int         scale)
+{
+  GdkBroadwayDisplay *self;
+
+  g_return_if_fail (GDK_IS_BROADWAY_DISPLAY (display));
+  g_return_if_fail (scale > 0);
+
+  self = GDK_BROADWAY_DISPLAY (display);
+
+  self->scale_factor = scale;
+  self->fixed_scale = TRUE;
+  gdk_monitor_set_scale_factor (self->monitor, scale);
 }
 
 static GListModel *
