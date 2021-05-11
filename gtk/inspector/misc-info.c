@@ -47,6 +47,8 @@ struct _GtkInspectorMiscInfo
   GtkWidget *refcount;
   GtkWidget *state_row;
   GtkWidget *state;
+  GtkWidget *direction_row;
+  GtkWidget *direction;
   GtkWidget *buildable_id_row;
   GtkWidget *buildable_id;
   GtkWidget *mnemonic_label_row;
@@ -296,6 +298,30 @@ update_frame_clock (GtkInspectorMiscInfo *sl)
     }
 }
 
+static void
+update_direction (GtkInspectorMiscInfo *sl)
+{
+  GtkWidget *widget = GTK_WIDGET (sl->object);
+
+  switch (widget->priv->direction)
+    {
+    case GTK_TEXT_DIR_LTR:
+      gtk_label_set_label (GTK_LABEL (sl->direction), "Left-to-Right");
+      break;
+    case GTK_TEXT_DIR_RTL:
+      gtk_label_set_label (GTK_LABEL (sl->direction), "Right-to-Left");
+      break;
+    case GTK_TEXT_DIR_NONE:
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+        gtk_label_set_label (GTK_LABEL (sl->direction), "Left-to-Right (inherited)");
+      else
+        gtk_label_set_label (GTK_LABEL (sl->direction), "Right-to-Left (inherited)");
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 static gboolean
 update_info (gpointer data)
 {
@@ -325,8 +351,10 @@ update_info (gpointer data)
       GtkWidget *child;
       GList *list, *l;
 
-       while ((child = gtk_widget_get_first_child (sl->mnemonic_label)))
-         gtk_box_remove (GTK_BOX (sl->mnemonic_label), child);
+      update_direction (sl);
+
+      while ((child = gtk_widget_get_first_child (sl->mnemonic_label)))
+        gtk_box_remove (GTK_BOX (sl->mnemonic_label), child);
 
       list = gtk_widget_list_mnemonic_labels (GTK_WIDGET (sl->object));
       for (l = list; l; l = l->next)
@@ -418,6 +446,7 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
     {
       gtk_widget_show (sl->refcount_row);
       gtk_widget_show (sl->state_row);
+      gtk_widget_show (sl->direction_row);
       gtk_widget_show (sl->request_mode_row);
       gtk_widget_show (sl->allocated_size_row);
       gtk_widget_show (sl->baseline_row);
@@ -437,6 +466,7 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
   else
     {
       gtk_widget_hide (sl->state_row);
+      gtk_widget_hide (sl->direction_row);
       gtk_widget_hide (sl->request_mode_row);
       gtk_widget_hide (sl->mnemonic_label_row);
       gtk_widget_hide (sl->allocated_size_row);
@@ -534,6 +564,8 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, refcount);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, state_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, state);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, direction_row);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, direction);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, buildable_id_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, buildable_id);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, mnemonic_label_row);

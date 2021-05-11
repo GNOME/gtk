@@ -697,13 +697,16 @@ get_inspector_display (void)
   if (display)
     {
       const char *name;
+      GdkDebugFlags flags;
 
       name = g_getenv ("GTK_INSPECTOR_RENDERER");
 
       g_object_set_data_full (G_OBJECT (display), "gsk-renderer",
                               g_strdup (name), g_free);
 
-      gdk_display_set_debug_flags (display, 0);
+      flags = gdk_display_get_debug_flags (gdk_display_get_default ());
+
+      gdk_display_set_debug_flags (display, flags & (GDK_DEBUG_GL_GLES | GDK_DEBUG_GL_GLX));
       gtk_set_display_debug_flags (display, 0);
     }
 
