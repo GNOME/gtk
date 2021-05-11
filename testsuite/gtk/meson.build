@@ -223,7 +223,6 @@ endforeach
 if add_languages('cpp', required: false, native: false)
   test_exe = executable('autotestkeywords',
     sources: 'autotestkeywords.cc',
-    cpp_args: test_cargs,
     dependencies: libgtk_dep,
     install: get_option('install-tests'),
     install_dir: testexecdir,
