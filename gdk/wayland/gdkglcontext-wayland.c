@@ -333,8 +333,31 @@ gdk_wayland_gl_context_init (GdkWaylandGLContext *self)
 {
 }
 
+/**
+ * gdk_wayland_display_get_egl_display:
+ * @display: (type GdkWaylandDisplay): a Wayland display
+ *
+ * Retrieves the EGL display connection object for the given GDK display.
+ *
+ * Returns: (nullable): the EGL display
+ */
+gpointer
+gdk_wayland_display_get_egl_display (GdkDisplay *display)
+{
+  GdkWaylandDisplay *display_wayland;
+
+  g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY (display), NULL);
+
+  if (!gdk_wayland_display_init_gl (display))
+    return NULL;
+
+  display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  return display_wayland->egl_display;
+}
+
 static EGLDisplay
-gdk_wayland_get_display (GdkWaylandDisplay *display_wayland)
+get_egl_display (GdkWaylandDisplay *display_wayland)
 {
   EGLDisplay dpy = NULL;
 
@@ -343,12 +366,12 @@ gdk_wayland_get_display (GdkWaylandDisplay *display_wayland)
       PFNEGLGETPLATFORMDISPLAYPROC getPlatformDisplay =
         (void *) eglGetProcAddress ("eglGetPlatformDisplay");
 
-      if (getPlatformDisplay)
+      if (getPlatformDisplay != NULL)
         dpy = getPlatformDisplay (EGL_PLATFORM_WAYLAND_EXT,
                                   display_wayland->wl_display,
                                   NULL);
-      if (dpy)
-        return dpy;
+      if (dpy != NULL)
+        goto out;
     }
 
   if (epoxy_has_egl_extension (NULL, "EGL_EXT_platform_base"))
@@ -356,15 +379,18 @@ gdk_wayland_get_display (GdkWaylandDisplay *display_wayland)
       PFNEGLGETPLATFORMDISPLAYEXTPROC getPlatformDisplay =
         (void *) eglGetProcAddress ("eglGetPlatformDisplayEXT");
 
-      if (getPlatformDisplay)
+      if (getPlatformDisplay != NULL)
         dpy = getPlatformDisplay (EGL_PLATFORM_WAYLAND_EXT,
                                   display_wayland->wl_display,
                                   NULL);
-      if (dpy)
-        return dpy;
+      if (dpy != NULL)
+        goto out;
     }
 
-  return eglGetDisplay ((EGLNativeDisplayType) display_wayland->wl_display);
+  dpy = eglGetDisplay ((EGLNativeDisplayType) display_wayland->wl_display);
+
+out:
+  return dpy;
 }
 
 gboolean
@@ -377,7 +403,7 @@ gdk_wayland_display_init_gl (GdkDisplay *display)
   if (display_wayland->have_egl)
     return TRUE;
 
-  dpy = gdk_wayland_get_display (display_wayland);
+  dpy = get_egl_display (display_wayland);
 
   if (dpy == NULL)
     return FALSE;
