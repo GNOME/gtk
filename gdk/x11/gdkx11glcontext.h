@@ -48,6 +48,9 @@ gboolean        gdk_x11_display_get_egl_version (GdkDisplay *display,
                                                  int        *major,
                                                  int        *minor);
 
+GDK_AVAILABLE_IN_4_4
+gpointer        gdk_x11_display_get_egl_display (GdkDisplay *display);
+
 G_END_DECLS
 
 #endif /* __GDK_X11_GL_CONTEXT_H__ */

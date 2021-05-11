@@ -84,11 +84,28 @@ drawable_info_free (gpointer data)
   g_free (info);
 }
 
-static EGLDisplay
+/**
+ * gdk_x11_display_get_egl_display:
+ * @display: (type GdkX11Display): an X11 display
+ *
+ * Retrieves the EGL display connection object for the given GDK display.
+ *
+ * This function returns `NULL` if GDK is using GLX.
+ *
+ * Returns: (nullable): the EGL display object
+ *
+ * Since: 4.4
+ */
+gpointer
 gdk_x11_display_get_egl_display (GdkDisplay *display)
 {
   EGLDisplay edpy = NULL;
   Display *dpy;
+
+  g_return_val_if_fail (GDK_IS_X11_DISPLAY (display), NULL);
+
+  if (GDK_X11_DISPLAY (display)->have_glx)
+    return NULL;
 
   edpy = g_object_get_data (G_OBJECT (display), "-gdk-x11-egl-display");
   if (edpy != NULL)
