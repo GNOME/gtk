@@ -63,6 +63,9 @@ GDK_AVAILABLE_IN_ALL
 gboolean                gdk_wayland_display_query_registry      (GdkDisplay  *display,
 								 const char *global);
 
+GDK_AVAILABLE_IN_4_4
+gpointer                gdk_wayland_display_get_egl_display     (GdkDisplay  *display);
+
 G_END_DECLS
 
 #endif /* __GDK_WAYLAND_DISPLAY_H__ */
