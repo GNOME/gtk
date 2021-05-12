@@ -104,6 +104,9 @@ void       gdk_win32_display_remove_filter       (GdkWin32Display               
 GDK_AVAILABLE_IN_ALL
 GdkMonitor * gdk_win32_display_get_primary_monitor (GdkDisplay *display);
 
+GDK_AVAILABLE_IN_4_4
+gpointer gdk_win32_display_get_egl_display         (GdkDisplay  *display);
+
 
 G_END_DECLS
 
