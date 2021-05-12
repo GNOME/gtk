@@ -299,7 +299,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    * GdkMonitor:valid: (attributes org.gtk.Property.get=gdk_monitor_is_valid)
    *
    * Whether the object is still valid.
-   */ 
+   */
   props[PROP_VALID] =
     g_param_spec_boolean ("valid",
                           "Valid",
@@ -449,7 +449,7 @@ gdk_monitor_get_model (GdkMonitor *monitor)
 }
 
 /**
- * gdk_monitor_get_scale_factor: (attributes org.gtk.Method.get_prooperty=scale-factor)
+ * gdk_monitor_get_scale_factor: (attributes org.gtk.Method.get_property=scale-factor)
  * @monitor: a `GdkMonitor`
  *
  * Gets the internal scale factor that maps from monitor coordinates
