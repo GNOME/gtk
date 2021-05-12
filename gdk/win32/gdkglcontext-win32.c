@@ -424,7 +424,6 @@ static EGLDisplay
 _gdk_win32_get_egl_display (GdkWin32Display *display)
 {
   EGLDisplay disp;
-  gboolean success = FALSE;
 
   if (epoxy_has_egl_extension (NULL, "EGL_EXT_platform_base"))
     {
@@ -553,6 +552,37 @@ _gdk_win32_display_init_gl (GdkDisplay *display)
 #endif
 
   return TRUE;
+}
+
+/**
+ * gdk_win32_display_get_egl_display:
+ * @display: (type GdkWin32Display): a Win32 display
+ *
+ * Retrieves the EGL display connection object for the given GDK display.
+ *
+ * Returns: (nullable): the EGL display
+ */
+gpointer
+gdk_win32_display_get_egl_display (GdkDisplay *display)
+{
+  GdkWin32Display *display_win32;
+
+  g_return_val_if_fail (GDK_IS_WIN32_DISPLAY (display), NULL);
+
+#ifdef GDK_WIN32_ENABLE_EGL
+  if (!_gdk_win32_display_init_gl (display))
+    return NULL;
+
+  display_win32 = GDK_WIN32_DISPLAY (display);
+
+  if (display_win32->have_wgl)
+    return NULL;
+
+  return display_win32->egl_disp;
+#else
+  /* no EGL support */
+  return NULL;
+#endif
 }
 
 /* Setup the legacy context after creating it */
