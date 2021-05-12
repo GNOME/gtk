@@ -38,10 +38,16 @@
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
 #include <epoxy/glx.h>
+#include <epoxy/egl.h>
 #endif
 
 #ifdef GDK_WINDOWING_WIN32
 #include "win32/gdkwin32.h"
+#include <epoxy/wgl.h>
+#endif
+
+#ifdef GDK_WIN32_ENABLE_EGL
+#include <epoxy/egl.h>
 #endif
 
 #ifdef GDK_WINDOWING_MACOS
@@ -247,7 +253,18 @@ append_glx_extension_row (GtkInspectorGeneral *gen,
 }
 #endif
 
-#if defined(GDK_WINDOWING_WAYLAND) || defined (GDK_WINDOWING_X11)
+#ifdef GDK_WINDOWING_WIN32
+static void
+append_wgl_extension_row (GtkInspectorGeneral *gen,
+                          const char          *ext)
+{
+  HDC hdc = 0;
+
+  add_check_row (gen, GTK_LIST_BOX (gen->gl_box), ext, epoxy_has_wgl_extension (hdc, ext), 0);
+}
+#endif
+
+#if defined(GDK_WINDOWING_WAYLAND) || defined (GDK_WINDOWING_X11) || (defined (GDK_WINDOWING_WIN32) && defined(GDK_WIN32_ENABLE_EGL))
 static void
 append_egl_extension_row (GtkInspectorGeneral *gen,
                           EGLDisplay          dpy,
@@ -259,54 +276,24 @@ append_egl_extension_row (GtkInspectorGeneral *gen,
 static EGLDisplay
 get_egl_display (GdkDisplay *display)
 {
-  void *native;
-  GLenum platform;
-  EGLDisplay dpy = NULL;
-
 #ifdef GDK_WINDOWING_WAYLAND
   if (GDK_IS_WAYLAND_DISPLAY (display))
-    {
-      native = gdk_wayland_display_get_wl_display (display);
-      platform = EGL_PLATFORM_WAYLAND_EXT;
-    }
+    return gdk_wayland_display_get_egl_display (display);
   else
 #endif
 #ifdef GDK_WINDOWING_X11
   if (GDK_IS_X11_DISPLAY (display))
-    {
-      native = gdk_x11_display_get_xdisplay (display);
-      platform = EGL_PLATFORM_X11_EXT;
-    }
+    return gdk_x11_display_get_egl_display (display);
+  else
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  if (GDK_IS_WIN32_DISPLAY (display))
+    return gdk_win32_display_get_egl_display (display);
   else
 #endif
    return NULL;
-
-  if (epoxy_has_egl_extension (NULL, "EGL_KHR_platform_base"))
-    {
-      PFNEGLGETPLATFORMDISPLAYPROC getPlatformDisplay =
-        (void *) eglGetProcAddress ("eglGetPlatformDisplay");
-
-      if (getPlatformDisplay)
-        dpy = getPlatformDisplay (platform, native, NULL);
-      if (dpy)
-        return dpy;
-    }
-
-  if (epoxy_has_egl_extension (NULL, "EGL_EXT_platform_base"))
-    {
-      PFNEGLGETPLATFORMDISPLAYEXTPROC getPlatformDisplay =
-        (void *) eglGetProcAddress ("eglGetPlatformDisplayEXT");
-
-      if (getPlatformDisplay)
-        dpy = getPlatformDisplay (platform, native, NULL);
-      if (dpy)
-        return dpy;
-    }
-
-  return eglGetDisplay ((EGLNativeDisplayType)native);
 }
 #endif
-
 
 static void
 init_gl (GtkInspectorGeneral *gen)
@@ -318,85 +305,68 @@ init_gl (GtkInspectorGeneral *gen)
       return;
     }
 
-#ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_DISPLAY (gen->display))
+#if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND) || (defined(GDK_WINDOWING_WIN32) && defined(GDK_WIN32_ENABLE_EGL))
+  EGLDisplay egl_display = get_egl_display (gen->display);
+  if (egl_display)
     {
-      if (gdk_display_get_debug_flags (gen->display) & GDK_DEBUG_GL_GLX)
-        {
-          Display *dpy = GDK_DISPLAY_XDISPLAY (gen->display);
-          int error_base, event_base;
-          char *version;
+      char *version;
 
-          if (!glXQueryExtension (dpy, &error_base, &event_base))
-            return;
+      version = g_strconcat ("EGL ", eglQueryString (egl_display, EGL_VERSION), NULL);
+      gtk_label_set_text (GTK_LABEL (gen->gl_version), version);
+      g_free (version);
 
-          version = g_strconcat ("GLX ", glXGetClientString (dpy, GLX_VERSION), NULL);
-          gtk_label_set_text (GTK_LABEL (gen->gl_version), version);
-          g_free (version);
-          gtk_label_set_text (GTK_LABEL (gen->gl_vendor), glXGetClientString (dpy, GLX_VENDOR));
+      gtk_label_set_text (GTK_LABEL (gen->gl_vendor), eglQueryString (egl_display, EGL_VENDOR));
 
-          append_glx_extension_row (gen, dpy, "GLX_ARB_create_context_profile");
-          append_glx_extension_row (gen, dpy, "GLX_SGI_swap_control");
-          append_glx_extension_row (gen, dpy, "GLX_EXT_texture_from_pixmap");
-          append_glx_extension_row (gen, dpy, "GLX_SGI_video_sync");
-          append_glx_extension_row (gen, dpy, "GLX_EXT_buffer_age");
-          append_glx_extension_row (gen, dpy, "GLX_OML_sync_control");
-          append_glx_extension_row (gen, dpy, "GLX_ARB_multisample");
-          append_glx_extension_row (gen, dpy, "GLX_EXT_visual_rating");
-        }
-      else
-        {
-          EGLDisplay dpy;
-          EGLint major, minor;
-          char *version;
-
-          dpy = get_egl_display (gen->display);
-
-          if (!eglInitialize (dpy, &major, &minor))
-            {
-              gtk_label_set_text (GTK_LABEL (gen->gl_version), C_("GL version", "None"));
-              gtk_label_set_text (GTK_LABEL (gen->gl_vendor), C_("GL vendor", "None"));
-              return;
-            }
-
-          version = g_strconcat ("EGL ", eglQueryString (dpy, EGL_VERSION), NULL);
-          gtk_label_set_text (GTK_LABEL (gen->gl_version), version);
-          g_free (version);
-          gtk_label_set_text (GTK_LABEL (gen->gl_vendor), eglQueryString (dpy, EGL_VENDOR));
-
-          append_egl_extension_row (gen, dpy, "EGL_KHR_create_context");
-          append_egl_extension_row (gen, dpy, "EGL_EXT_buffer_age");
-          append_egl_extension_row (gen, dpy, "EGL_EXT_swap_buffers_with_damage");
-          append_egl_extension_row (gen, dpy, "EGL_KHR_surfaceless_context");
-        }
+      append_egl_extension_row (gen, egl_display, "EGL_KHR_create_context");
+      append_egl_extension_row (gen, egl_display, "EGL_EXT_buffer_age");
+      append_egl_extension_row (gen, egl_display, "EGL_EXT_swap_buffers_with_damage");
+      append_egl_extension_row (gen, egl_display, "EGL_KHR_surfaceless_context");
     }
   else
 #endif
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gen->display))
+#ifdef GDK_WINDOWING_X11
+  if (GDK_IS_X11_DISPLAY (gen->display))
     {
-      EGLDisplay dpy;
-      EGLint major, minor;
+      Display *dpy = GDK_DISPLAY_XDISPLAY (gen->display);
+      int error_base, event_base;
       char *version;
 
-      dpy = get_egl_display (gen->display);
+      if (!glXQueryExtension (dpy, &error_base, &event_base))
+        return;
 
-      if (!eglInitialize (dpy, &major, &minor))
-        {
-          gtk_label_set_text (GTK_LABEL (gen->gl_version), C_("GL version", "None"));
-          gtk_label_set_text (GTK_LABEL (gen->gl_vendor), C_("GL vendor", "None"));
-          return;
-        }
-
-      version = g_strconcat ("EGL ", eglQueryString (dpy, EGL_VERSION), NULL);
+      version = g_strconcat ("GLX ", glXGetClientString (dpy, GLX_VERSION), NULL);
       gtk_label_set_text (GTK_LABEL (gen->gl_version), version);
       g_free (version);
-      gtk_label_set_text (GTK_LABEL (gen->gl_vendor), eglQueryString (dpy, EGL_VENDOR));
+      gtk_label_set_text (GTK_LABEL (gen->gl_vendor), glXGetClientString (dpy, GLX_VENDOR));
 
-      append_egl_extension_row (gen, dpy, "EGL_KHR_create_context");
-      append_egl_extension_row (gen, dpy, "EGL_EXT_buffer_age");
-      append_egl_extension_row (gen, dpy, "EGL_EXT_swap_buffers_with_damage");
-      append_egl_extension_row (gen, dpy, "EGL_KHR_surfaceless_context");
+      append_glx_extension_row (gen, dpy, "GLX_ARB_create_context_profile");
+      append_glx_extension_row (gen, dpy, "GLX_SGI_swap_control");
+      append_glx_extension_row (gen, dpy, "GLX_EXT_texture_from_pixmap");
+      append_glx_extension_row (gen, dpy, "GLX_SGI_video_sync");
+      append_glx_extension_row (gen, dpy, "GLX_EXT_buffer_age");
+      append_glx_extension_row (gen, dpy, "GLX_OML_sync_control");
+      append_glx_extension_row (gen, dpy, "GLX_ARB_multisample");
+      append_glx_extension_row (gen, dpy, "GLX_EXT_visual_rating");
+    }
+  else
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  if (GDK_IS_WIN32_DISPLAY (gen->display))
+    {
+      int gl_version;
+      char *version;
+
+      gl_version = epoxy_gl_version ();
+      version = g_strdup_printf ("WGL %d.%d", gl_version / 10, gl_version % 10, NULL);
+      gtk_label_set_text (GTK_LABEL (gen->gl_version), version);
+      g_free (version);
+      gtk_label_set_text (GTK_LABEL (gen->gl_vendor), glGetString (GL_VENDOR));
+
+      append_wgl_extension_row (gen, "WGL_EXT_create_context");
+      append_wgl_extension_row (gen, "WGL_EXT_swap_control");
+      append_wgl_extension_row (gen, "WGL_OML_sync_control");
+      append_wgl_extension_row (gen, "WGL_ARB_pixel_format");
+      append_wgl_extension_row (gen, "WGL_ARB_multisample");
     }
   else
 #endif
