@@ -876,8 +876,8 @@ gtk_drop_target_get_formats (GtkDropTarget *self)
 /**
  * gtk_drop_target_set_gtypes:
  * @self: a `GtkDropTarget`
- * @types: (nullable) (transfer none) (array length=n_types):
- *     all supported #GTypes that can be dropped
+ * @types: (nullable) (transfer none) (array length=n_types): all supported `GType`s
+ *   that can be dropped on the target
  * @n_types: number of @types
  *
  * Sets the supported `GTypes` for this drop target.
@@ -907,16 +907,16 @@ gtk_drop_target_set_gtypes (GtkDropTarget *self,
 /**
  * gtk_drop_target_get_gtypes:
  * @self: a `GtkDropTarget`
- * @n_types: (out) (optional): optional pointer to take the
- *     number of #GTypes contained in the return value
+ * @n_types: (out) (optional): the number of `GType`s contained in the
+ *   return value
  *
- * Gets the list of supported `GTypes` for @self.
+ * Gets the list of supported `GType`s that can be dropped on the target.
  *
- * If no type have been set, %NULL will be returned.
+ * If no types have been set, `NULL` will be returned.
  *
  * Returns: (transfer none) (nullable) (array length=n_types):
- *   %G_TYPE_INVALID-terminated array of types included in
- *   @formats or %NULL if none.
+ *   the `G_TYPE_INVALID`-terminated array of types included in
+ *   formats
  */
 const GType *
 gtk_drop_target_get_gtypes (GtkDropTarget *self,
