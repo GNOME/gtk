@@ -10089,7 +10089,7 @@ gtk_widget_do_pick (GtkWidget    *widget,
 
       if (child_priv->transform)
         {
-          if (gsk_transform_get_category (child_priv->transform) >= GSK_TRANSFORM_CATEGORY_2D_AFFINE)
+          if (gsk_transform_get_category (child_priv->transform) >= GSK_TRANSFORM_CATEGORY_2D_TRANSLATE)
             {
               graphene_point_t transformed_p;
 
