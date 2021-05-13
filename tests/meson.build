@@ -115,6 +115,7 @@ gtk_tests = [
   ['testwindowdrag'],
   ['testinhibitshortcuts'],
   ['testtexthistory', ['../gtk/gtktexthistory.c']],
+  ['testzoom']
 ]
 
 if os_unix
