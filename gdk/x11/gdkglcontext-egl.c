@@ -596,7 +596,10 @@ gdk_x11_screen_init_egl (GdkX11Screen *screen)
    */
   const char *vendor = eglQueryString (edpy, EGL_VENDOR);
   if (strstr (vendor, "NVIDIA") != NULL)
-    return FALSE;
+    {
+      eglTerminate (edpy);
+      return FALSE;
+    }
 
   display_x11->have_egl = TRUE;
   display_x11->egl_version = epoxy_egl_version (dpy);
