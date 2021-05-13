@@ -595,7 +595,7 @@ gdk_x11_screen_init_egl (GdkX11Screen *screen)
    * fallback to GLX
    */
   const char *vendor = eglQueryString (edpy, EGL_VENDOR);
-  if (g_strcmp0 (vendor, "NVIDIA Corporation") == 0)
+  if (strstr (vendor, "NVIDIA") != NULL)
     return FALSE;
 
   display_x11->have_egl = TRUE;
