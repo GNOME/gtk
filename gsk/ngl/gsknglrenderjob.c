@@ -2837,6 +2837,7 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
   guint i;
   int yshift;
   float ypos;
+  float scale;
 
   if (num_glyphs == 0)
     return;
@@ -2847,8 +2848,13 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
   if (force_color || !gsk_text_node_has_color_glyphs (node))
     rgba_to_half (color, c);
 
+  /* Avoid caching glyphs with miniscule scale differences */
+  scale = 1;
+  while (scale < text_scale)
+    scale *= 1.2;
+
   lookup.font = (PangoFont *)font;
-  lookup.scale = (guint) (text_scale * 1024);
+  lookup.scale = (guint) (scale * 1024);
 
   yshift = compute_phase_and_pos (y, &ypos);
 
