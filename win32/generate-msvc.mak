@@ -156,7 +156,7 @@ all:	\
 	@for %%s in (scalable) do @(for %%c in (status) do @(for %%f in (..\gtk\icons\%%s\%%c\*.svg) do @echo     ^<file^>icons/%%s/%%c/%%~nxf^</file^>>> $@))
 	@for %%f in (..\gtk\inspector\*.ui) do @echo     ^<file compressed='true' preprocess='xml-stripblanks'^>inspector/%%~nxf^</file^>>> $@
 	@echo     ^<file^>inspector/logo.png^</file^>>> $@
-	@echo     ^<file^>emoji/emoji.data^</file^>>> $@
+	@for %%f in (..\gtk\emoji\*.data) do @echo     ^<file^>emoji/%%~nxf^</file^>>> $@
 	@echo   ^</gresource^>>> $@
 	@echo ^</gresources^>>> $@
 

@@ -1027,6 +1027,24 @@ libgtk_dep = declare_dependency(sources: gtk_dep_sources,
                                 link_with: libgtk,
                                 link_args: common_ldflags)
 
+foreach lang : [ 'de', 'fr', 'es', 'zh' ]
+  conf = configuration_data()
+  conf.set('lang', lang)
+  resxml = configure_file(input: 'emoji/gresource.xml.in',
+                          output: lang + '.gresource.xml',
+                          configuration: conf
+  )
+
+  gnome.compile_resources(lang,
+    resxml,
+    source_dir: 'emoji',
+    gresource_bundle: true,
+    install: true,
+    install_dir: join_paths(gtk_datadir, 'gtk-3.0', 'emoji'),
+  )
+endforeach
+
+
 if quartz_enabled
   install_data(['gtk-keys.css.mac'],
                install_dir:  join_paths(get_option('datadir'), 'themes/Mac/gtk-3.0'),

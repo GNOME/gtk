@@ -71,7 +71,7 @@ NULL=
 !if [for %s in (scalable) do @(for %c in (status) do @(for %f in (..\gtk\icons\%s\%c\*.svg) do @call create-lists.bat file resources_sources.mak %f))]
 !endif
 
-!if [for %f in (..\gtk\inspector\*.ui ..\gtk\inspector\logo.png ..\gtk\emoji\emoji.data) do @call create-lists.bat file resources_sources.mak %f]
+!if [for %f in (..\gtk\inspector\*.ui ..\gtk\inspector\logo.png ..\gtk\emoji\*.data) do @call create-lists.bat file resources_sources.mak %f]
 !endif
 
 !if [call create-lists.bat footer resources_sources.mak]

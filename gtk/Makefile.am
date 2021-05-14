@@ -1355,7 +1355,10 @@ gtk.gresource.xml: Makefile.am inspector/Makefile.inc
 	  echo "    <file compressed='true' preprocess='xml-stripblanks'>inspector/$$n</file>" >> $@; \
 	done; \
 	echo "    <file>inspector/logo.png</file>" >> $@; \
-	echo "    <file>emoji/emoji.data</file>" >> $@; \
+	for f in $(srcdir)/emoji/*.data; do \
+	  n=`basename $$f`; \
+	  echo "    <file>emoji/$$n</file>" >> $@; \
+	done; \
 	echo "  </gresource>" >> $@; \
 	echo "</gresources>" >> $@;
 
@@ -1743,8 +1746,13 @@ EXTRA_DIST +=                   \
 	$(gsettings_SCHEMAS)	\
 	compose/compose-parse.py	\
 	emoji/convert-emoji.c	\
-	emoji/emoji.json	\
-	emoji/emoji1.json	\
+	emoji/gresource.xml.in	\
+	emoji/README.md	\
+	emoji/de.data	\
+	emoji/en.data	\
+	emoji/es.data	\
+	emoji/fr.data	\
+	emoji/zh.data	\
 	a11y/Makefile.inc	\
 	deprecated/Makefile.inc	\
 	glade/README.glade	\
