@@ -51,13 +51,23 @@ update_transform (GtkZoom *zoom)
   GtkLayoutManager *manager;
   GtkLayoutChild *child;
   GskTransform *transform;
+  int w, h;
+  int x, y;
 
   manager = gtk_widget_get_layout_manager (GTK_WIDGET (zoom));
   child = gtk_layout_manager_get_layout_child (manager, zoom->child);
 
+  w = gtk_widget_get_width (GTK_WIDGET (zoom));
+  h = gtk_widget_get_height (GTK_WIDGET (zoom));
+
+  x = gtk_widget_get_allocated_width (GTK_WIDGET (zoom->child));
+  y = gtk_widget_get_allocated_height (GTK_WIDGET (zoom->child));
+
   transform = NULL;
-  transform = gsk_transform_rotate (transform, zoom->angle);
+  transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (w/2, h/2));
   transform = gsk_transform_scale (transform, zoom->scale, zoom->scale);
+  transform = gsk_transform_rotate (transform, zoom->angle);
+  transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (-x/2, -y/2));
   gtk_fixed_layout_child_set_transform (GTK_FIXED_LAYOUT_CHILD (child), transform);
   gsk_transform_unref (transform);
 }
@@ -106,6 +116,8 @@ gtk_zoom_set_child (GtkZoom   *zoom,
 
   if (zoom->child)
     gtk_widget_set_parent (zoom->child, GTK_WIDGET (zoom));
+
+  update_transform (zoom);
 
   g_object_notify_by_pspec (G_OBJECT (zoom), props[PROP_CHILD]);
 }
@@ -199,6 +211,22 @@ gtk_zoom_new (void)
   return g_object_new (gtk_zoom_get_type (), NULL);
 }
 
+static gboolean
+update_transform_once (GtkWidget     *widget,
+                       GdkFrameClock *frame_clock,
+                       gpointer       data)
+{
+  static int count = 0;
+
+  update_transform ((GtkZoom *)widget);
+  count++;
+
+  if (count == 2)
+    return G_SOURCE_REMOVE;
+
+  return G_SOURCE_CONTINUE;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -206,7 +234,6 @@ main (int argc, char *argv[])
   GtkWidget *zoom;
   GtkWidget *box;
   GtkWidget *grid;
-  GtkWidget *sw;
   GtkWidget *scale;
   GtkWidget *angle;
   GtkWidget *child;
@@ -236,15 +263,10 @@ main (int argc, char *argv[])
   gtk_grid_attach (GTK_GRID (grid), angle, 1, 1, 1, 1);
   gtk_box_append (GTK_BOX (box), grid);
 
-  sw = gtk_scrolled_window_new ();
-  gtk_widget_set_hexpand (sw, TRUE);
-  gtk_widget_set_vexpand (sw, TRUE);
-  gtk_box_append (GTK_BOX (box), sw);
-
   zoom = gtk_zoom_new ();
-  gtk_widget_set_halign (zoom, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (zoom, GTK_ALIGN_CENTER);
-  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), zoom);
+  gtk_widget_set_hexpand (zoom, TRUE);
+  gtk_widget_set_vexpand (zoom, TRUE);
+  gtk_box_append (GTK_BOX (box), zoom);
 
   adjustment = gtk_range_get_adjustment (GTK_RANGE (scale));
   g_object_bind_property (adjustment, "value",
@@ -268,6 +290,9 @@ main (int argc, char *argv[])
     gtk_zoom_set_child ((GtkZoom *)zoom, gtk_button_new_with_label ("Click me!"));
 
   gtk_window_present (window);
+
+  /* HACK to get the transform initally updated */
+  gtk_widget_add_tick_callback (zoom, update_transform_once, NULL, NULL);
 
   while (g_list_model_get_n_items (gtk_window_get_toplevels ()) > 0)
     g_main_context_iteration (NULL, TRUE);

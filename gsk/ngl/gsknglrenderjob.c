@@ -524,7 +524,7 @@ gsk_ngl_render_job_push_modelview (GskNglRenderJob *job,
                              GskNglRenderModelview,
                              job->modelview->len - 2);
 
-      /* Multiply given matrix with our previews modelview */
+      /* Multiply given matrix with our previous modelview */
       t = gsk_transform_translate (gsk_transform_ref (last->transform),
                                    &(graphene_point_t) {
                                      job->offset_x,
@@ -1972,6 +1972,7 @@ gsk_ngl_render_job_visit_transform_node (GskNglRenderJob     *job,
       else
         {
           GskNglRenderOffscreen offscreen = {0};
+          float sx = 1, sy  = 1;
 
           offscreen.bounds = &child->bounds;
           offscreen.force_offscreen = FALSE;
@@ -1980,15 +1981,37 @@ gsk_ngl_render_job_visit_transform_node (GskNglRenderJob     *job,
           if (!result_is_axis_aligned (transform, &child->bounds))
             offscreen.linear_filter = TRUE;
 
+          if (category == GSK_TRANSFORM_CATEGORY_2D)
+            {
+              graphene_matrix_t m;
+              double a, b, c, d, tx, ty;
+
+              g_assert (transform != NULL);
+              gsk_transform_to_matrix (transform, &m);
+              if (graphene_matrix_to_2d (&m, &a, &b, &c, &d, &tx, &ty))
+                {
+                  sx = sqrt (a * a + b * b);
+                  sy = sqrt (c * c + d * d);
+                }
+              else
+                sx = sy = 1;
+
+              if (sx != 1 || sy != 1)
+                {
+                  GskTransform *scale;
+
+                  scale = gsk_transform_translate (gsk_transform_scale (NULL, sx, sy), &GRAPHENE_POINT_INIT (tx, ty));
+                  gsk_ngl_render_job_push_modelview (job, scale);
+                  transform = gsk_transform_transform (gsk_transform_invert (scale), transform);
+                }
+            }
+
           if (gsk_ngl_render_job_visit_node_with_offscreen (job, child, &offscreen))
             {
               /* For non-trivial transforms, we draw everything on a texture and then
                * draw the texture transformed. */
-              /* TODO: We should compute a modelview containing only the "non-trivial"
-               *       part (e.g. the rotation) and use that. We want to keep the scale
-               *       for the texture.
-               */
-              gsk_ngl_render_job_push_modelview (job, transform);
+              if (transform)
+                gsk_ngl_render_job_push_modelview (job, transform);
 
               gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
               gsk_ngl_program_set_uniform_texture (job->current_program,
@@ -1999,7 +2022,17 @@ gsk_ngl_render_job_visit_transform_node (GskNglRenderJob     *job,
               gsk_ngl_render_job_draw_offscreen (job, &child->bounds, &offscreen);
               gsk_ngl_render_job_end_draw (job);
 
-              gsk_ngl_render_job_pop_modelview (job);
+              if (transform)
+                gsk_ngl_render_job_pop_modelview (job);
+            }
+
+          if (category == GSK_TRANSFORM_CATEGORY_2D)
+            {
+              if (sx != 1 || sy != 1)
+                {
+                  gsk_ngl_render_job_pop_modelview (job);
+                  gsk_transform_unref (transform);
+                }
             }
         }
     break;
