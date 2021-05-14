@@ -25,12 +25,19 @@
 #include "gtkgstpaintableprivate.h"
 #include "gtkintl.h"
 
-#if GST_GL_HAVE_WINDOW_X11 && GST_GL_HAVE_PLATFORM_GLX && defined (GDK_WINDOWING_X11)
+#if GST_GL_HAVE_WINDOW_X11 && (GST_GL_HAVE_PLATFORM_GLX || GST_GL_HAVE_PLATFORM_EGL) && defined (GDK_WINDOWING_X11)
+#define HAVE_GST_X11_SUPPORT
 #include <gdk/x11/gdkx.h>
+#if GST_GL_HAVE_PLATFORM_GLX
 #include <gst/gl/x11/gstgldisplay_x11.h>
+#endif
+#if GST_GL_HAVE_PLATFORM_EGL
+#include <gst/gl/egl/gstgldisplay_egl.h>
+#endif
 #endif
 
 #if GST_GL_HAVE_WINDOW_WAYLAND && GST_GL_HAVE_PLATFORM_EGL && defined (GDK_WINDOWING_WAYLAND)
+#define HAVE_GST_WAYLAND_SUPPORT
 #include <gdk/wayland/gdkwayland.h>
 #include <gst/gl/wayland/gstgldisplay_wayland.h>
 #endif
@@ -351,31 +358,48 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
 
   gdk_gl_context_make_current (self->gdk_context);
 
-#if GST_GL_HAVE_WINDOW_X11 && GST_GL_HAVE_PLATFORM_GLX && defined (GDK_WINDOWING_X11)
+#ifdef HAVE_GST_X11_SUPPORT
   if (GDK_IS_X11_DISPLAY (display))
     {
-      GstGLPlatform platform = GST_GL_PLATFORM_GLX;
+      GstGLPlatform platform;
       GstGLAPI gl_api;
       guintptr gl_handle;
+      gpointer display_ptr;
 
-      GST_DEBUG_OBJECT (self, "got GLX on X11!");
+#if GST_GL_HAVE_PLATFORM_EGL
+      display_ptr = gdk_x11_display_get_egl_display (display);
+      if (display_ptr)
+        {
+          GST_DEBUG_OBJECT (self, "got EGL on X11!");
+          platform = GST_GL_PLATFORM_EGL;
+          self->gst_display = GST_GL_DISPLAY (gst_gl_display_egl_new_with_egl_display (display_ptr));
+        }
+#endif
+#if GST_GL_HAVE_PLATFORM_GLX
+      if (!self->gst_display)
+        {
+          GST_DEBUG_OBJECT (self, "got GLX on X11!");
+          platform = GST_GL_PLATFORM_GLX;
+          display_ptr = gdk_x11_display_get_xdisplay (display);
+          self->gst_display = GST_GL_DISPLAY (gst_gl_display_x11_new_with_display (display_ptr));
+        }
+#endif
 
       gl_api = gst_gl_context_get_current_gl_api (platform, NULL, NULL);
       gl_handle = gst_gl_context_get_current_gl_context (platform);
       if (gl_handle)
         {
-          self->gst_display = GST_GL_DISPLAY (gst_gl_display_x11_new_with_display (gdk_x11_display_get_xdisplay (display)));
           self->gst_app_context = gst_gl_context_new_wrapped (self->gst_display, gl_handle, platform, gl_api);
         }
       else
         {
-          GST_ERROR_OBJECT (self, "Failed to get handle from GdkGLContext, not using GLX");
+          GST_ERROR_OBJECT (self, "Failed to get handle from GdkGLContext");
           return;
         }
     }
   else
 #endif
-#if GST_GL_HAVE_WINDOW_WAYLAND && GST_GL_HAVE_PLATFORM_EGL && defined (GDK_WINDOWING_WAYLAND)
+#ifdef HAVE_GST_WAYLAND_SUPPORT
   if (GDK_IS_WAYLAND_DISPLAY (display))
     {
       GstGLPlatform platform = GST_GL_PLATFORM_GLX;
