@@ -318,7 +318,7 @@ gsk_ngl_glyph_library_add (GskNglGlyphLibrary      *self,
                                         sizeof *value,
                                         width,
                                         height,
-                                        0,
+                                        1,
                                         &packed_x, &packed_y);
 
   memcpy (&value->ink_rect, &ink_rect, sizeof ink_rect);
