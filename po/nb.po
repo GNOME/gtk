@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 4.x\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-03-13 12:48+0000\n"
-"PO-Revision-Date: 2021-03-13 16:33+0100\n"
+"POT-Creation-Date: 2021-05-11 18:06+0000\n"
+"PO-Revision-Date: 2021-05-15 09:33+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
@@ -484,27 +484,33 @@ msgstr ""
 #: gdk/win32/gdkclipdrop-win32.c:727
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
-msgstr "Kan ikke ta eierskap til utklippstavlen. En annen prosess tok den før oss."
+msgstr ""
+"Kan ikke ta eierskap til utklippstavlen. En annen prosess tok den før oss."
 
 #: gdk/win32/gdkclipdrop-win32.c:741
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
-msgstr "Kan ikke ta eierskap til utklippstavlen. OpenClipboard() feilet: 0x%lx."
+msgstr ""
+"Kan ikke ta eierskap til utklippstavlen. OpenClipboard() feilet: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:753
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
-msgstr "Kan ikke ta eierskap til utklippstavlen. EmptyClipboard() feilet: 0x%lx."
+msgstr ""
+"Kan ikke ta eierskap til utklippstavlen. EmptyClipboard() feilet: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:796
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
-msgstr "Kan ikke sette data på utklippstavlen. OpenClipboard() fikk tidsavbrudd."
+msgstr ""
+"Kan ikke sette data på utklippstavlen. OpenClipboard() fikk tidsavbrudd."
 
 #: gdk/win32/gdkclipdrop-win32.c:806 gdk/win32/gdkclipdrop-win32.c:837
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
-msgstr "Kan ikke sette data på utklippstavlen. En annen prosess tok eierskap av utklippstavlen."
+msgstr ""
+"Kan ikke sette data på utklippstavlen. En annen prosess tok eierskap av "
+"utklippstavlen."
 
 #: gdk/win32/gdkclipdrop-win32.c:820
 #, c-format
@@ -3477,7 +3483,9 @@ msgstr "Du kan skrive enhver CSS-regel som støttes av GTK+ her."
 msgid ""
 "You can temporarily disable this custom CSS by clicking on the “Pause” "
 "button above."
-msgstr "Du kan midlertidig deaktivere denne egendefinerte CSSen ved å klikke på «Pause»-knappen over."
+msgstr ""
+"Du kan midlertidig deaktivere denne egendefinerte CSSen ved å klikke på "
+"«Pause»-knappen over."
 
 #: gtk/inspector/css-editor.c:131
 msgid "Changes are applied instantly and globally, for the whole application."
@@ -3622,7 +3630,6 @@ msgid "Buildable ID"
 msgstr "Byggbar-ID"
 
 #: gtk/inspector/misc-info.ui:181
-#, fuzzy
 msgid "Mnemonic Label"
 msgstr "Etikett for hurtigtast"
 
@@ -3654,7 +3661,7 @@ msgstr "Tegnemotor"
 
 #: gtk/inspector/misc-info.ui:375
 msgid "Frame Clock"
-msgstr ""
+msgstr "Bildeklokke"
 
 #: gtk/inspector/misc-info.ui:414
 msgid "Tick Callback"
@@ -4282,24 +4289,19 @@ msgid "Final Glyph on Line Alternates"
 msgstr ""
 
 #: gtk/open-type-layout.h:40
-#, fuzzy
 msgctxt "OpenType layout"
 msgid "Terminal Forms #2"
-msgstr "Terminal Pager"
+msgstr "Terminal former #2"
 
 #: gtk/open-type-layout.h:41
-#, fuzzy
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms #3"
-msgstr "Terminal Pager"
+msgstr "Terminal former #3"
 
 #: gtk/open-type-layout.h:42
-#, fuzzy
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms"
-msgstr "Terminal Pager"
+msgstr "Terminal former"
 
 #: gtk/open-type-layout.h:43
 msgctxt "OpenType layout"
@@ -4319,7 +4321,7 @@ msgstr "Full bredde"
 #: gtk/open-type-layout.h:46
 msgctxt "OpenType layout"
 msgid "Half Forms"
-msgstr ""
+msgstr "Halve former"
 
 #: gtk/open-type-layout.h:47
 msgctxt "OpenType layout"
@@ -4334,7 +4336,7 @@ msgstr ""
 #: gtk/open-type-layout.h:49
 msgctxt "OpenType layout"
 msgid "Historical Forms"
-msgstr ""
+msgstr "Historiske former"
 
 #: gtk/open-type-layout.h:50
 msgctxt "OpenType layout"
@@ -4349,30 +4351,27 @@ msgstr ""
 #: gtk/open-type-layout.h:52
 msgctxt "OpenType layout"
 msgid "Hangul"
-msgstr ""
+msgstr "Hangul"
 
 #: gtk/open-type-layout.h:53
 msgctxt "OpenType layout"
 msgid "Hojo Kanji Forms"
-msgstr ""
+msgstr "Hojo Kanji former"
 
 #: gtk/open-type-layout.h:54
 msgctxt "OpenType layout"
 msgid "Half Widths"
-msgstr ""
+msgstr "Halvbredder"
 
 #: gtk/open-type-layout.h:55
-#, fuzzy
-#| msgctxt "print operation status"
-#| msgid "Initial state"
 msgctxt "OpenType layout"
 msgid "Initial Forms"
-msgstr "Starttilstand"
+msgstr "Initielle former"
 
 #: gtk/open-type-layout.h:56
 msgctxt "OpenType layout"
 msgid "Isolated Forms"
-msgstr ""
+msgstr "Isolerte former"
 
 #: gtk/open-type-layout.h:57
 msgctxt "OpenType layout"
@@ -4387,22 +4386,22 @@ msgstr ""
 #: gtk/open-type-layout.h:59
 msgctxt "OpenType layout"
 msgid "JIS78 Forms"
-msgstr ""
+msgstr "JIS78 former"
 
 #: gtk/open-type-layout.h:60
 msgctxt "OpenType layout"
 msgid "JIS83 Forms"
-msgstr ""
+msgstr "JIS83 former"
 
 #: gtk/open-type-layout.h:61
 msgctxt "OpenType layout"
 msgid "JIS90 Forms"
-msgstr ""
+msgstr "JIS90 former"
 
 #: gtk/open-type-layout.h:62
 msgctxt "OpenType layout"
 msgid "JIS2004 Forms"
-msgstr ""
+msgstr "JIS2004 former"
 
 #: gtk/open-type-layout.h:63
 msgctxt "OpenType layout"
@@ -4440,10 +4439,9 @@ msgid "Left-to-right alternates"
 msgstr "Venstre-til-høyre-merke alternerer"
 
 #: gtk/open-type-layout.h:70
-#, fuzzy
 msgctxt "OpenType layout"
 msgid "Left-to-right mirrored forms"
-msgstr "Venstre-til-høyre-merke"
+msgstr "Venstre-til-høyre speilede former"
 
 #: gtk/open-type-layout.h:71
 msgctxt "OpenType layout"
@@ -4588,7 +4586,7 @@ msgstr ""
 #: gtk/open-type-layout.h:99
 msgctxt "OpenType layout"
 msgid "Reph Forms"
-msgstr ""
+msgstr "Reph former"
 
 #: gtk/open-type-layout.h:100
 msgctxt "OpenType layout"
@@ -4601,11 +4599,9 @@ msgid "Right-to-left alternates"
 msgstr "Høyre-til-venstre alternerer"
 
 #: gtk/open-type-layout.h:102
-#, fuzzy
-#| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left mirrored forms"
-msgstr "HVM _Høyre-til-venstre-merke"
+msgstr "Høyre-til-venstre speilede former"
 
 #: gtk/open-type-layout.h:103
 msgctxt "OpenType layout"
@@ -6025,7 +6021,7 @@ msgstr "Tai Le"
 #: gtk/script-names.c:67
 msgctxt "Script"
 msgid "Ugaritic"
-msgstr ""
+msgstr "Ugaritic"
 
 #: gtk/script-names.c:68
 msgctxt "Script"
@@ -6463,10 +6459,9 @@ msgid "Soyombo"
 msgstr "Soyombo"
 
 #: gtk/script-names.c:155
-#, fuzzy
 msgctxt "Script"
 msgid "Zanabazar Square"
-msgstr "Zanabazar"
+msgstr "Zanabazar firkant"
 
 #: gtk/script-names.c:156
 msgctxt "Script"
