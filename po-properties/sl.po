@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2021-02-03 15:30+0000\n"
-"PO-Revision-Date: 2021-05-04 20:19+0200\n"
+"PO-Revision-Date: 2021-05-16 21:50+0200\n"
 "Last-Translator: Matej Urbančič <mateju@src.gnome.org>\n"
 "Language-Team: Slovenščina <gnome-si@googlegroups.com>\n"
 "Language: sl\n"
@@ -1341,10 +1341,6 @@ msgid "Pulse"
 msgstr "Pulz"
 
 #: gtk/gtkcellrendererprogress.c:660
-#, fuzzy
-#| msgid ""
-#| "Set this to positive values to indicate that some progress is made, but "
-#| "you don't know how much."
 msgid ""
 "Set this to positive values to indicate that some progress is made, but you "
 "don’t know how much."
@@ -2037,14 +2033,13 @@ msgstr "Pogled stolpcev, ki mu stolpec pripada"
 
 #: gtk/gtkcolumnviewcolumn.c:252 gtk/gtkdropdown.c:433 gtk/gtkgridview.c:1059
 #: gtk/gtklistview.c:819
-#, fuzzy
 msgid "Factory"
-msgstr "Tovarna"
+msgstr "Vir podatkov"
 
 #: gtk/gtkcolumnviewcolumn.c:253 gtk/gtkdropdown.c:434 gtk/gtkdropdown.c:448
 #: gtk/gtkgridview.c:1060 gtk/gtklistview.c:820
 msgid "Factory for populating list items"
-msgstr ""
+msgstr "Vir podatkov za določitev predmetov seznama"
 
 #: gtk/gtkcolumnviewcolumn.c:265
 msgid "Title displayed in the header"
@@ -2376,49 +2371,36 @@ msgid "Desired height for displayed content"
 msgstr "Želena višina prikazane vsebine"
 
 #: gtk/gtkdropcontrollermotion.c:226 gtk/gtkeventcontrollermotion.c:223
-#, fuzzy
-#| msgid "Paused Printer"
 msgid "Contains Pointer"
-msgstr "Tiskalnik v premoru"
+msgstr "Vsebuje kazalnik"
 
 #: gtk/gtkdropcontrollermotion.c:227 gtk/gtkeventcontrollermotion.c:224
-#, fuzzy
-#| msgid "Whether the widget is the default widget"
 msgid "Whether the pointer is in the controllers widget or a descendant"
-msgstr "Ali naj je gradnik privzeti gradnik"
+msgstr "Ali je kazalnik pod nadzorom gradnika ali podrejenega predmeta"
 
 #: gtk/gtkdropcontrollermotion.c:246 gtk/gtkdroptarget.c:629
-#, fuzzy
 msgid "Drop"
-msgstr "Spusti"
+msgstr "Vsebuje spuščanje"
 
 #: gtk/gtkdropcontrollermotion.c:247
-#, fuzzy
-#| msgid "The layout for window decorations"
 msgid "The ongoing drop operation"
-msgstr "Postavitev okenskih okraskov"
+msgstr "Izvajanje opravila spuščanja"
 
 #: gtk/gtkdropcontrollermotion.c:264 gtk/gtkeventcontrollermotion.c:206
-#, fuzzy
-#| msgid "Printer"
 msgid "Is Pointer"
-msgstr "Tiskalnik"
+msgstr "Vsebuje kazalnik"
 
 #: gtk/gtkdropcontrollermotion.c:265 gtk/gtkeventcontrollermotion.c:207
-#, fuzzy
-#| msgid "Whether the widget is the default widget"
 msgid "Whether the pointer is in the controllers widget"
-msgstr "Ali naj je gradnik privzeti gradnik"
+msgstr "Ali je kazalnik v gradniku za nadzor"
 
 #: gtk/gtkdropdown.c:447
 msgid "List Factory"
-msgstr ""
+msgstr "Vsebuje vir seznama"
 
 #: gtk/gtkdropdown.c:460
-#, fuzzy
-#| msgid "The model for the filtermodel to filter"
 msgid "Model for the displayed items"
-msgstr "Model filtra za razvrščanje"
+msgstr "Model za prikazane predmete seznama"
 
 #: gtk/gtkdropdown.c:472 gtk/gtklistitem.c:233 gtk/gtksingleselection.c:415
 msgid "Selected"
@@ -2441,10 +2423,8 @@ msgid "Enable search"
 msgstr "Omogoči iskanje"
 
 #: gtk/gtkdropdown.c:499
-#, fuzzy
-#| msgid "Whether to show a sort indicator"
 msgid "Whether to show a search entry in the popup"
-msgstr "Ali naj se pokaže določilo razvrščanja"
+msgstr "Ali naj bo prikazan vnos iskanja v pojavnem oknu"
 
 #: gtk/gtkdropdown.c:514
 msgid "Expression to determine strings to search for"
@@ -2456,13 +2436,11 @@ msgstr "Zapisi"
 
 #: gtk/gtkdroptarget.c:618
 msgid "The actions supported by this drop target"
-msgstr ""
+msgstr "Dejanja, podprta z opravilom spuščanja cilja"
 
 #: gtk/gtkdroptarget.c:630
-#, fuzzy
-#| msgid "Current Color"
 msgid "Current drop"
-msgstr "Trenutna barva"
+msgstr "Trenutno spuščanje"
 
 #: gtk/gtkdroptarget.c:642
 msgid "The supported formats"
@@ -2473,16 +2451,12 @@ msgid "Preload"
 msgstr "Predhodno nalaganje"
 
 #: gtk/gtkdroptarget.c:670
-#, fuzzy
-#| msgid "Whether activatable icons should prelight when hovered"
 msgid "Whether drop data should be preloaded while hovering"
-msgstr "Ali naj dejavne ikone posvetlijo, če miško premaknemo preko njih"
+msgstr "Ali naj se spuščeni podatki naložijo med premikom miške preko njih"
 
 #: gtk/gtkdroptarget.c:687
-#, fuzzy
-#| msgid "The status of the print operation"
 msgid "The value for this drop operation"
-msgstr "Stanje opravila tiskanja"
+msgstr "Vrednost tega opravila spuščanja"
 
 #: gtk/gtkeditable.c:379
 msgid "The contents of the entry"
@@ -6057,7 +6031,7 @@ msgstr "Ime dejanja"
 
 #: gtk/gtkshortcuttrigger.c:656 gtk/gtkshortcuttrigger.c:912
 msgid "Key value"
-msgstr "Ključna vrednost"
+msgstr "Vrednost ključa"
 
 #: gtk/gtkshortcuttrigger.c:657 gtk/gtkshortcuttrigger.c:913
 msgid "The key value for the trigger"
@@ -6068,29 +6042,24 @@ msgid "Modifiers"
 msgstr "Spremenilniki"
 
 #: gtk/gtkshortcuttrigger.c:672
-#, fuzzy
-#| msgid "The model for the tree view"
 msgid "The key modifiers for the trigger"
-msgstr "Model drevesnega pogleda"
+msgstr "Spremenilniki ključa za sprožilec"
 
 #: gtk/gtkshortcuttrigger.c:1158
-#, fuzzy
 msgid "First"
-msgstr "Prva vrstica"
+msgstr "Prvi sprožilec"
 
 #: gtk/gtkshortcuttrigger.c:1159
 msgid "The first trigger to check"
-msgstr ""
+msgstr "Prvi sprožilec za preverjanje"
 
 #: gtk/gtkshortcuttrigger.c:1171
-#, fuzzy
-#| msgid "Secondary"
 msgid "Second"
-msgstr "Sekunda"
+msgstr "Drugi sprožilec"
 
 #: gtk/gtkshortcuttrigger.c:1172
 msgid "The second trigger to check"
-msgstr ""
+msgstr "Drugi sprožilec za preverjanje"
 
 #: gtk/gtksingleselection.c:391
 msgid "Autoselect"
@@ -6098,17 +6067,15 @@ msgstr "Samodejni izbor"
 
 #: gtk/gtksingleselection.c:392
 msgid "If the selection will always select an item"
-msgstr ""
+msgstr "Ali naj izbor vedno vključuje predmet"
 
 #: gtk/gtksingleselection.c:403
-#, fuzzy
-#| msgid "Has selection"
 msgid "Can unselect"
-msgstr "Vsebuje izbrano"
+msgstr "Preklic izbora"
 
 #: gtk/gtksingleselection.c:404
 msgid "If unselecting the selected item is allowed"
-msgstr ""
+msgstr "Ali je dovoljeno odstraniti izbor izbranega predmeta"
 
 #: gtk/gtksizegroup.c:226 gtk/gtktreeselection.c:138
 msgid "Mode"
@@ -6124,7 +6091,7 @@ msgstr ""
 
 #: gtk/gtkslicelistmodel.c:265
 msgid "Child model to take slice from"
-msgstr ""
+msgstr "Podrejeni model, od katerega je odstranjen del"
 
 #: gtk/gtkslicelistmodel.c:276
 msgid "Offset"
@@ -6132,35 +6099,27 @@ msgstr "Odmik"
 
 #: gtk/gtkslicelistmodel.c:277
 msgid "Offset of slice"
-msgstr ""
+msgstr "Odmik dela"
 
 #: gtk/gtkslicelistmodel.c:289
-#, fuzzy
-#| msgid "Maximum Children Per Line"
 msgid "Maximum size of slice"
-msgstr "Največ podrejenih predmetov na vrstico"
+msgstr "Največa velikost dela"
 
 #: gtk/gtksortlistmodel.c:785
-#, fuzzy
-#| msgid "Step Increment"
 msgid "Sort items incrementally"
-msgstr "Povečanje koraka"
+msgstr "Razvrsti predmete naraščajoče"
 
 #: gtk/gtksortlistmodel.c:797
-#, fuzzy
-#| msgid "The GIcon being displayed"
 msgid "The model being sorted"
-msgstr "Prikazan predmet GIcon"
+msgstr "Predmet, ki se razvršča"
 
 #: gtk/gtksortlistmodel.c:809
 msgid "Estimate of unsorted items remaining"
 msgstr ""
 
 #: gtk/gtksortlistmodel.c:821
-#, fuzzy
-#| msgid "The text for the child label"
 msgid "The sorter for this model"
-msgstr "Besedilo podrejene oznake"
+msgstr "Razvrstilnik tega modela"
 
 #: gtk/gtkspinbutton.c:378
 msgid "Climb Rate"
