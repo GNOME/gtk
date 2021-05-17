@@ -509,6 +509,8 @@ gtk_list_item_widget_default_setup (GtkListItemWidget *self,
   if (list_item->child)
     gtk_list_item_widget_add_child (self, list_item->child);
 
+  gtk_list_item_widget_set_activatable (self, list_item->activatable);
+
   if (priv->item)
     g_object_notify (G_OBJECT (list_item), "item");
   if (priv->position != GTK_INVALID_LIST_POSITION)
@@ -530,6 +532,8 @@ gtk_list_item_widget_default_teardown (GtkListItemWidget *self,
 
   if (list_item->child)
     gtk_list_item_widget_remove_child (self, list_item->child);
+
+  gtk_list_item_widget_set_activatable (self, FALSE);
 
   if (priv->item)
     g_object_notify (G_OBJECT (list_item), "item");
@@ -610,6 +614,16 @@ gtk_list_item_widget_set_single_click_activate (GtkListItemWidget *self,
   priv->single_click_activate = single_click_activate;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SINGLE_CLICK_ACTIVATE]);
+}
+
+void
+gtk_list_item_widget_set_activatable (GtkListItemWidget *self,
+                                      gboolean           activatable)
+{
+  if (activatable)
+    gtk_widget_add_css_class (GTK_WIDGET (self), "activatable");
+  else
+    gtk_widget_remove_css_class (GTK_WIDGET (self), "activatable");
 }
 
 void

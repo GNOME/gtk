@@ -64,17 +64,18 @@
  *
  * ```
  * gridview
- * ├── child
+ * ├── child[.activatable]
  * │
- * ├── child
+ * ├── child[.activatable]
  * │
  * ┊
  * ╰── [rubberband]
  * ```
  *
- * `GtkGridView` uses a single CSS node with name gridview. Each child
- * uses a single CSS node with name child. For rubberband selection,
- * a subnode with name rubberband is used.
+ * `GtkGridView` uses a single CSS node with name `gridview`. Each child uses
+ * a single CSS node with name `child`. If the [property@Gtk.ListItem.activatable]
+ * property is set, the corresponding row will have the `.activatable` style
+ * class. For rubberband selection, a subnode with name `rubberband` is used.
  *
  * # Accessibility
  *
