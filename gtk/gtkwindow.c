@@ -6748,6 +6748,10 @@ gtk_window_propagate_grab_notify (GtkWindow *window,
 
   while (target)
     {
+      if (target == old_grab_widget)
+        was_grabbed = TRUE;
+      if (target == new_grab_widget)
+        is_grabbed = TRUE;
       widgets = g_list_prepend (widgets, g_object_ref (target));
       target = gtk_widget_get_parent (target);
     }
@@ -6758,11 +6762,13 @@ gtk_window_propagate_grab_notify (GtkWindow *window,
     {
       gboolean was_shadowed, is_shadowed;
 
-      was_grabbed |= (l->data == old_grab_widget);
-      is_grabbed |= (l->data == new_grab_widget);
-
       was_shadowed = old_grab_widget && !was_grabbed;
-      is_shadowed = new_grab_widget && is_grabbed;
+      is_shadowed = new_grab_widget && !is_grabbed;
+
+      if (l->data == old_grab_widget)
+        was_grabbed = FALSE;
+      if (l->data == new_grab_widget)
+        is_grabbed = FALSE;
 
       if (was_shadowed == is_shadowed)
         break;
