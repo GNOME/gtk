@@ -1191,6 +1191,11 @@ dropdown > popover.menu.background > contents { padding: 0; } //allow search ent
 
 dropdown > button > box {
   border-spacing: 6px;
+
+  > stack > row.activatable:hover {
+    background: none;
+    box-shadow: none;
+  }
 }
 
 dropdown,
@@ -1229,13 +1234,16 @@ combobox {
 
       margin: 8px 0;
 
-      &>row {
+      > row.activatable {
          padding: 8px;
 
          &:selected {
-           outline-color: $alt_focus_border_color;
-           color: $text-color;
-           background-color: $menu_selected_color;
+           &, &:hover {
+             outline-color: $alt_focus_border_color;
+             color: $text-color;
+             background-color: $menu_selected_color;
+             box-shadow: none;
+           }
          }
       }
    }
