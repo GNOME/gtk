@@ -194,13 +194,14 @@ static void
 gsk_ngl_glyph_library_upload_glyph (GskNglGlyphLibrary     *self,
                                     const GskNglGlyphKey   *key,
                                     const GskNglGlyphValue *value,
+                                    int                     x,
+                                    int                     y,
                                     int                     width,
                                     int                     height,
                                     double                  device_scale)
 {
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
   cairo_scaled_font_t *scaled_font;
-  GskNglTextureAtlas *atlas;
   cairo_surface_t *surface;
   guchar *pixel_data;
   guchar *free_data = NULL;
@@ -208,7 +209,6 @@ gsk_ngl_glyph_library_upload_glyph (GskNglGlyphLibrary     *self,
   guint gl_type;
   guint texture_id;
   gsize stride;
-  int x, y;
 
   g_assert (GSK_IS_NGL_GLYPH_LIBRARY (self));
   g_assert (key != NULL);
@@ -220,7 +220,6 @@ gsk_ngl_glyph_library_upload_glyph (GskNglGlyphLibrary     *self,
     return;
 
   stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, width);
-  atlas = value->entry.is_atlased ? value->entry.atlas : NULL;
 
   gdk_gl_context_push_debug_group_printf (gdk_gl_context_get_current (),
                                           "Uploading glyph %d",
@@ -254,17 +253,6 @@ gsk_ngl_glyph_library_upload_glyph (GskNglGlyphLibrary     *self,
       pixel_data = cairo_image_surface_get_data (surface);
       gl_format = GL_BGRA;
       gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
-    }
-
-  if G_LIKELY (atlas != NULL)
-    {
-      x = atlas->width * value->entry.area.x;
-      y = atlas->width * value->entry.area.y;
-    }
-  else
-    {
-      x = 0;
-      y = 0;
     }
 
   glTexSubImage2D (GL_TEXTURE_2D, 0, x, y, width, height,
@@ -310,15 +298,15 @@ gsk_ngl_glyph_library_add (GskNglGlyphLibrary      *self,
   if (key->yshift != 0)
     ink_rect.height++;
 
-  width = ink_rect.width * key->scale / 1024;
-  height = ink_rect.height * key->scale / 1024;
+  width = (int) ceil (ink_rect.width * key->scale / 1024.0);
+  height = (int) ceil (ink_rect.height * key->scale / 1024.0);
 
   value = gsk_ngl_texture_library_pack (GSK_NGL_TEXTURE_LIBRARY (self),
                                         key,
                                         sizeof *value,
                                         width,
                                         height,
-                                        0,
+                                        1,
                                         &packed_x, &packed_y);
 
   memcpy (&value->ink_rect, &ink_rect, sizeof ink_rect);
@@ -327,6 +315,8 @@ gsk_ngl_glyph_library_add (GskNglGlyphLibrary      *self,
     gsk_ngl_glyph_library_upload_glyph (self,
                                         key,
                                         value,
+                                        packed_x + 1,
+                                        packed_y + 1,
                                         width,
                                         height,
                                         key->scale / 1024.0);

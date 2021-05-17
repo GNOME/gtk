@@ -377,10 +377,10 @@ gsk_ngl_texture_library_pack (GskNglTextureLibrary *self,
 
       entry->atlas = atlas;
       entry->is_atlased = TRUE;
-      entry->area.x = (float)(packed_x + padding) / atlas->width;
-      entry->area.y = (float)(packed_y + padding) / atlas->height;
-      entry->area.x2 = entry->area.x + (float)width / atlas->width;
-      entry->area.y2 = entry->area.y + (float)height / atlas->height;
+      entry->area.x = (packed_x + padding) / (float)atlas->width;
+      entry->area.y = (packed_y + padding) / (float)atlas->height;
+      entry->area.x2 = (packed_x + padding + width) / (float)atlas->width;
+      entry->area.y2 = (packed_y + padding + height) / (float)atlas->height;
 
       *out_packed_x = packed_x;
       *out_packed_y = packed_y;
@@ -394,13 +394,13 @@ gsk_ngl_texture_library_pack (GskNglTextureLibrary *self,
       entry->texture = texture;
       entry->is_atlased = FALSE;
       entry->accessed = TRUE;
-      entry->area.x = 0.0f;
-      entry->area.y = 0.0f;
-      entry->area.x2 = 1.0f;
-      entry->area.y2 = 1.0f;
+      entry->area.x = padding / (float) (padding + width + padding);
+      entry->area.y = padding / (float) (padding + height + padding);
+      entry->area.x2 = (padding + width) / (float) (padding + width + padding);
+      entry->area.y2 = (padding + height) / (float) (padding + height + padding);
 
-      *out_packed_x = padding;
-      *out_packed_y = padding;
+      *out_packed_x = 0;
+      *out_packed_y = 0;
     }
 
   g_hash_table_insert (self->hash_table, key, entry);
