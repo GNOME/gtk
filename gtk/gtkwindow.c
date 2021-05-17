@@ -6703,13 +6703,13 @@ gtk_window_get_foci_on_widget (GtkWindow *window,
 }
 
 static void
-gtk_grab_notify_foreach (GtkWidget *child,
-                         GdkDevice *device,
-                         GtkWidget *new_grab_widget,
-                         GtkWidget *old_grab_widget,
-                         gboolean   from_grab,
-                         gboolean   was_shadowed,
-                         gboolean   is_shadowed)
+gtk_synthesize_grab_crossing (GtkWidget *child,
+                              GdkDevice *device,
+                              GtkWidget *new_grab_widget,
+                              GtkWidget *old_grab_widget,
+                              gboolean   from_grab,
+                              gboolean   was_shadowed,
+                              gboolean   is_shadowed)
 {
   g_object_ref (child);
 
@@ -6767,13 +6767,13 @@ gtk_window_propagate_grab_notify (GtkWindow *window,
       if (was_shadowed == is_shadowed)
         break;
 
-      gtk_grab_notify_foreach (l->data,
-                               device,
-                               old_grab_widget,
-                               new_grab_widget,
-                               from_grab,
-                               was_shadowed,
-                               is_shadowed);
+      gtk_synthesize_grab_crossing (l->data,
+                                    device,
+                                    old_grab_widget,
+                                    new_grab_widget,
+                                    from_grab,
+                                    was_shadowed,
+                                    is_shadowed);
 
       gtk_widget_reset_controllers (l->data);
     }
