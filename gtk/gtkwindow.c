@@ -6703,13 +6703,13 @@ gtk_window_get_foci_on_widget (GtkWindow *window,
 }
 
 static void
-gtk_grab_notify_foreach (GtkWidget *child,
-                         GdkDevice *device,
-                         GtkWidget *new_grab_widget,
-                         GtkWidget *old_grab_widget,
-                         gboolean   from_grab,
-                         gboolean   was_shadowed,
-                         gboolean   is_shadowed)
+gtk_synthesize_grab_crossing (GtkWidget *child,
+                              GdkDevice *device,
+                              GtkWidget *new_grab_widget,
+                              GtkWidget *old_grab_widget,
+                              gboolean   from_grab,
+                              gboolean   was_shadowed,
+                              gboolean   is_shadowed)
 {
   g_object_ref (child);
 
@@ -6732,8 +6732,6 @@ gtk_grab_notify_foreach (GtkWidget *child,
                                          GDK_CROSSING_GTK_UNGRAB);
     }
 
-  _gtk_widget_grab_notify (child, was_shadowed);
-
   g_object_unref (child);
 }
 
@@ -6750,6 +6748,10 @@ gtk_window_propagate_grab_notify (GtkWindow *window,
 
   while (target)
     {
+      if (target == old_grab_widget)
+        was_grabbed = TRUE;
+      if (target == new_grab_widget)
+        is_grabbed = TRUE;
       widgets = g_list_prepend (widgets, g_object_ref (target));
       target = gtk_widget_get_parent (target);
     }
@@ -6760,22 +6762,26 @@ gtk_window_propagate_grab_notify (GtkWindow *window,
     {
       gboolean was_shadowed, is_shadowed;
 
-      was_grabbed |= (l->data == old_grab_widget);
-      is_grabbed |= (l->data == new_grab_widget);
-
       was_shadowed = old_grab_widget && !was_grabbed;
-      is_shadowed = new_grab_widget && is_grabbed;
+      is_shadowed = new_grab_widget && !is_grabbed;
+
+      if (l->data == old_grab_widget)
+        was_grabbed = FALSE;
+      if (l->data == new_grab_widget)
+        is_grabbed = FALSE;
 
       if (was_shadowed == is_shadowed)
         break;
 
-      gtk_grab_notify_foreach (l->data,
-                               device,
-                               old_grab_widget,
-                               new_grab_widget,
-                               from_grab,
-                               was_shadowed,
-                               is_shadowed);
+      gtk_synthesize_grab_crossing (l->data,
+                                    device,
+                                    old_grab_widget,
+                                    new_grab_widget,
+                                    from_grab,
+                                    was_shadowed,
+                                    is_shadowed);
+
+      gtk_widget_reset_controllers (l->data);
     }
 
   g_list_free_full (widgets, g_object_unref);

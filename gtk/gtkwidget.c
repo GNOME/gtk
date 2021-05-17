@@ -748,34 +748,6 @@ gtk_widget_real_contains (GtkWidget *widget,
                                           &GRAPHENE_POINT_INIT (x, y));
 }
 
-/*
- * _gtk_widget_grab_notify:
- * @widget: a `GtkWidget`
- * @was_grabbed: whether a grab is now in effect
- *
- * Emits the `GtkWidget`::grab-notify signal on @widget.
- */
-void
-_gtk_widget_grab_notify (GtkWidget *widget,
-                         gboolean   was_grabbed)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GList *l;
-
-  if (was_grabbed)
-    return;
-
-  for (l = g_list_last (priv->event_controllers); l; l = l->prev)
-    {
-      GtkEventController *controller = l->data;
-
-      gtk_event_controller_reset (controller);
-    }
-
-  if (GTK_IS_NATIVE (widget))
-    gtk_widget_hide (widget);
-}
-
 static void
 gtk_widget_real_root (GtkWidget *widget)
 {
