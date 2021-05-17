@@ -74,6 +74,8 @@ void                    gtk_list_item_widget_set_factory        (GtkListItemWidg
 void                    gtk_list_item_widget_set_single_click_activate
                                                                 (GtkListItemWidget     *self,
                                                                  gboolean               single_click_activate);
+void                    gtk_list_item_widget_set_activatable    (GtkListItemWidget     *self,
+                                                                 gboolean               activatable);
 void                    gtk_list_item_widget_add_child          (GtkListItemWidget      *self,
                                                                  GtkWidget              *child);
 void                    gtk_list_item_widget_reorder_child      (GtkListItemWidget      *self,

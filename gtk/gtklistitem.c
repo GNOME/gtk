@@ -460,5 +460,8 @@ gtk_list_item_set_activatable (GtkListItem *self,
 
   self->activatable = activatable;
 
+  if (self->owner)
+    gtk_list_item_widget_set_activatable (self->owner, activatable);
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACTIVATABLE]);
 }
