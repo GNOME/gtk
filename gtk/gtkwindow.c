@@ -6732,8 +6732,6 @@ gtk_grab_notify_foreach (GtkWidget *child,
                                          GDK_CROSSING_GTK_UNGRAB);
     }
 
-  _gtk_widget_grab_notify (child, was_shadowed);
-
   g_object_unref (child);
 }
 
@@ -6776,6 +6774,8 @@ gtk_window_propagate_grab_notify (GtkWindow *window,
                                from_grab,
                                was_shadowed,
                                is_shadowed);
+
+      gtk_widget_reset_controllers (l->data);
     }
 
   g_list_free_full (widgets, g_object_unref);
