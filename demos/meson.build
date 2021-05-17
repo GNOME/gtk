@@ -1,17 +1,14 @@
-demo_conf = configuration_data()
-demo_conf.set_quoted('PROFILE', get_option('profile'))
-demo_conf.set_quoted('VCS_TAG', '@VCS_TAG@')
+gen_demo_header = find_program('../build-aux/meson/gen-demo-header.py')
+demo_profile = get_option('profile')
 
 demo_conf_h = declare_dependency(
-  sources: vcs_tag(
-             command: [ 'git', 'rev-parse', '--short', 'HEAD' ],
-             fallback: get_option('profile') != 'default' ? 'devel' : '',
-             input: configure_file(
-                      output: 'demo_conf.h.in',
-                      configuration: demo_conf
-                    ),
-             output: 'demo_conf.h'
-           )
+  sources: custom_target('demo-header',
+    command: [gen_demo_header, demo_profile],
+    capture: true,
+    output: 'demo_conf.h',
+    build_by_default: true,
+    build_always_stale: true,
+  )
 )
 
 subdir('constraint-editor')
