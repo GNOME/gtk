@@ -220,6 +220,7 @@
                       <object class="GtkFlowBox">
                         <property name="min-children-per-line">3</property>
                         <property name="max-children-per-line">10</property>
+                        <property name="selection-mode">none</property>
                         <style>
                           <class name="emoji-toolbar"/>
                         </style>
