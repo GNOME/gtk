@@ -24,6 +24,7 @@ flatpak build ${builddir} meson \
                 -Dbuild-examples=false \
                 -Dintrospection=disabled \
                 -Ddemos=true \
+                -Dprofile=devel \
                 _flatpak_build
 
 flatpak build ${builddir} ninja -C _flatpak_build install
