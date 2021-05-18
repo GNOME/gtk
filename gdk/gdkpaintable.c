@@ -257,7 +257,7 @@ gdk_paintable_is_immutable (GdkPaintable *paintable)
  * If the @paintable is already immutable, it will return itself.
  *
  * Returns: (transfer full): An immutable paintable for the current
- *     contents of @paintable.
+ *   contents of @paintable
  */
 GdkPaintable *
 gdk_paintable_get_current_image (GdkPaintable *paintable)
@@ -439,17 +439,15 @@ gdk_paintable_invalidate_size (GdkPaintable *paintable)
  * gdk_paintable_compute_concrete_size:
  * @paintable: a `GdkPaintable`
  * @specified_width: the width @paintable could be drawn into or
- *     0.0 if unknown
+ *   0.0 if unknown
  * @specified_height: the height @paintable could be drawn into or
- *     0.0 if unknown
+ *   0.0 if unknown
  * @default_width: the width @paintable would be drawn into if
- *     no other constraints were given
+ *   no other constraints were given
  * @default_height: the height @paintable would be drawn into if
- *     no other constraints were given
- * @concrete_width: (out): will be set to the concrete width
- *     computed.
- * @concrete_height: (out): will be set to the concrete height
- *     computed.
+ *   no other constraints were given
+ * @concrete_width: (out): will be set to the concrete width computed
+ * @concrete_height: (out): will be set to the concrete height computed
  *
  * Compute a concrete size for the `GdkPaintable`.
  *

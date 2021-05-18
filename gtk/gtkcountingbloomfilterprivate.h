@@ -43,7 +43,7 @@ G_BEGIN_DECLS
  * be considered useful.
  *
  * See: [Bloom filter](https://en.wikipedia.org/wiki/Bloom_filter),
- *      [Counting Bloom filter](https://en.wikipedia.org/wiki/Counting_Bloom_filter)
+ *   [Counting Bloom filter](https://en.wikipedia.org/wiki/Counting_Bloom_filter)
  */
 
 /* The number of bits from the hash we care about */

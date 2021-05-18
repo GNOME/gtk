@@ -537,10 +537,10 @@ gtk_scale_button_dispose (GObject *object)
  * @min: the minimum value of the scale (usually 0)
  * @max: the maximum value of the scale (usually 100)
  * @step: the stepping of value when a scroll-wheel event,
- *        or up/down arrow event occurs (usually 2)
+ *   or up/down arrow event occurs (usually 2)
  * @icons: (allow-none) (array zero-terminated=1): a %NULL-terminated
- *         array of icon names, or %NULL if you want to set the list
- *         later with gtk_scale_button_set_icons()
+ *   array of icon names, or %NULL if you want to set the list
+ *   later with gtk_scale_button_set_icons()
  *
  * Creates a `GtkScaleButton`.
  *

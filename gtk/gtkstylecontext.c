@@ -1219,11 +1219,11 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
  * GtkStyleContextPrintFlags:
  * @GTK_STYLE_CONTEXT_PRINT_NONE: Default value.
  * @GTK_STYLE_CONTEXT_PRINT_RECURSE: Print the entire tree of
- *     CSS nodes starting at the style context's node
+ *   CSS nodes starting at the style context's node
  * @GTK_STYLE_CONTEXT_PRINT_SHOW_STYLE: Show the values of the
- *     CSS properties for each node
- * @GTK_STYLE_CONTEXT_PRINT_SHOW_CHANGE: Show information about 
- *     what changes affect the styles
+ *   CSS properties for each node
+ * @GTK_STYLE_CONTEXT_PRINT_SHOW_CHANGE: Show information about
+ *   what changes affect the styles
  *
  * Flags that modify the behavior of gtk_style_context_to_string().
  *

@@ -93,7 +93,7 @@ gsk_transform_has_class (GskTransform            *self,
  * gsk_transform_alloc:
  * @transform_class: class structure for this self
  * @category: The category of this transform. Will be used to initialize
- *     the result's category together with &next's category
+ *   the result's category together with &next's category
  * @next: (transfer full): Next transform to multiply with or %NULL if none
  *
  * Returns: (transfer full): the newly created #GskTransform
@@ -226,7 +226,7 @@ static const GskTransformClass GSK_IDENTITY_TRANSFORM_CLASS =
  * which just results in an identity transform when simplified.
  *
  * Returns: %TRUE  if this transform is a representation of
- *     the identity transform
+ *   the identity transform
  **/
 static gboolean
 gsk_transform_is_identity (GskTransform *self)
@@ -1288,8 +1288,8 @@ static const GskTransformClass GSK_PERSPECTIVE_TRANSFORM_CLASS =
  * gsk_transform_perspective:
  * @next: (allow-none) (transfer full): the next transform
  * @depth: distance of the z=0 plane. Lower values give a more
- *     flattened pyramid and therefore a more pronounced
- *     perspective effect.
+ *   flattened pyramid and therefore a more pronounced
+ *   perspective effect.
  *
  * Applies a perspective projection transform.
  *
@@ -1520,19 +1520,22 @@ gsk_transform_to_2d (GskTransform *self,
  * gsk_transform_to_affine:
  * @self: a `GskTransform`
  * @out_scale_x: (out): return location for the scale
- *     factor in the x direction
+ *   factor in the x direction
  * @out_scale_y: (out): return location for the scale
- *     factor in the y direction
+ *   factor in the y direction
  * @out_dx: (out): return location for the translation
- *     in the x direction
+ *   in the x direction
  * @out_dy: (out): return location for the translation
- *     in the y direction
+ *   in the y direction
  *
  * Converts a `GskTransform` to 2D affine transformation factors.
  *
  * @self must be a 2D transformation. If you are not
- * sure, use gsk_transform_get_category() >=
- * %GSK_TRANSFORM_CATEGORY_2D_AFFINE to check.
+ * sure, use
+ *
+ *     gsk_transform_get_category() >= %GSK_TRANSFORM_CATEGORY_2D_AFFINE
+ *
+ * to check.
  */
 void
 gsk_transform_to_affine (GskTransform *self,
@@ -1586,15 +1589,18 @@ gsk_transform_to_affine (GskTransform *self,
  * gsk_transform_to_translate:
  * @self: a `GskTransform`
  * @out_dx: (out): return location for the translation
- *     in the x direction
+ *   in the x direction
  * @out_dy: (out): return location for the translation
- *     in the y direction
+ *   in the y direction
  *
  * Converts a `GskTransform` to a translation operation.
  *
  * @self must be a 2D transformation. If you are not
- * sure, use gsk_transform_get_category() >= 
- * %GSK_TRANSFORM_CATEGORY_2D_TRANSLATE to check.
+ * sure, use
+ *
+ *     gsk_transform_get_category() >= %GSK_TRANSFORM_CATEGORY_2D_TRANSLATE
+ *
+ * to check.
  */
 void
 gsk_transform_to_translate (GskTransform *self,
@@ -1677,8 +1683,7 @@ gsk_transform_transform (GskTransform *next,
  * between those cases, you should check @self is not %NULL
  * before calling this function.
  *
- * Returns: (nullable): The inverted transform or %NULL if the transform
- *     cannot be inverted.
+ * Returns: (nullable): The inverted transform
  */
 GskTransform *
 gsk_transform_invert (GskTransform *self)
@@ -1705,7 +1710,7 @@ gsk_transform_invert (GskTransform *self)
  *
  * Checks two transforms for equality.
  *
- * Returns: %TRUE if the two transforms perform the same operation.
+ * Returns: %TRUE if the two transforms perform the same operation
  */
 gboolean
 gsk_transform_equal (GskTransform *first,

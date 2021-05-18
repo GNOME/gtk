@@ -844,7 +844,7 @@ gtk_expander_new (const char *label)
 /**
  * gtk_expander_new_with_mnemonic:
  * @label: (nullable): the text of the label with an underscore
- *     in front of the mnemonic character
+ *   in front of the mnemonic character
  *
  * Creates a new expander using @label as the text of the label.
  *
@@ -985,7 +985,7 @@ gtk_expander_set_label (GtkExpander *expander,
  * container.
  *
  * Returns: (nullable): The text of the label widget. This string is owned
- *     by the widget and must not be modified or freed.
+ *   by the widget and must not be modified or freed.
  */
 const char *
 gtk_expander_get_label (GtkExpander *expander)
@@ -1031,7 +1031,7 @@ gtk_expander_set_use_underline (GtkExpander *expander,
  * Returns whether an underline in the text indicates a mnemonic.
  *
  * Returns: %TRUE if an embedded underline in the expander
- *     label indicates the mnemonic accelerator keys
+ *   label indicates the mnemonic accelerator keys
  */
 gboolean
 gtk_expander_get_use_underline (GtkExpander *expander)
@@ -1135,7 +1135,7 @@ gtk_expander_set_label_widget (GtkExpander *expander,
  * Retrieves the label widget for the frame.
  *
  * Returns: (nullable) (transfer none): the label widget,
- *     or %NULL if there is none
+ *   or %NULL if there is none
  */
 GtkWidget *
 gtk_expander_get_label_widget (GtkExpander *expander)

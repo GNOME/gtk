@@ -1537,7 +1537,7 @@ gtk_icon_theme_add_search_path (GtkIconTheme *self,
  * gtk_icon_theme_set_resource_path:
  * @self: a `GtkIconTheme`
  * @path: NULL-terminated array of resource paths
- *     that are searched for icons
+ *   that are searched for icons
  *
  * Sets the resource paths that will be looked at when
  * looking for icons, similar to search paths.
@@ -2464,7 +2464,7 @@ load_icon_thread (GTask        *task,
  * GtkWidgetClass.css-changed() function.
  *
  * Returns: (transfer full): a `GtkIconPaintable` object
- *     containing the icon.
+ *   containing the icon.
  */
 GtkIconPaintable *
 gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
@@ -3967,13 +3967,13 @@ icon_paintable_snapshot (GdkPaintable *paintable,
  * @width: width to snapshot in
  * @height: height to snapshot in
  * @foreground_color: (allow-none): a `GdkRGBA` representing the foreground color
- *      of the icon or %NULL to use the default color.
+ *   of the icon or %NULL to use the default color.
  * @success_color: (allow-none): a `GdkRGBA` representing the warning color
- *     of the icon or %NULL to use the default color
+ *   of the icon or %NULL to use the default color
  * @warning_color: (allow-none): a `GdkRGBA` representing the warning color
- *     of the icon or %NULL to use the default color
+ *   of the icon or %NULL to use the default color
  * @error_color: (allow-none): a `GdkRGBA` representing the error color
- *     of the icon or %NULL to use the default color (allow-none)
+ *   of the icon or %NULL to use the default color
  *
  * Snapshots the `GtkIconPaintable`.
  *
@@ -4079,7 +4079,7 @@ icon_paintable_init (GdkPaintableInterface *iface)
  * The icon can then be rendered by using it as a `GdkPaintable`.
  *
  * Returns: (transfer full): a `GtkIconPaintable` containing
- *     for the icon. Unref with g_object_unref()
+ *   for the icon. Unref with g_object_unref()
  */
 GtkIconPaintable *
 gtk_icon_paintable_new_for_file (GFile *file,

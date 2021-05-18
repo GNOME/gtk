@@ -2280,10 +2280,8 @@ gtk_text_view_get_buffer (GtkTextView *text_view)
  * gtk_text_view_get_cursor_locations:
  * @text_view: a `GtkTextView`
  * @iter: (allow-none): a `GtkTextIter`
- * @strong: (out) (allow-none): location to store the strong
- *     cursor position (may be %NULL)
- * @weak: (out) (allow-none): location to store the weak
- *     cursor position (may be %NULL)
+ * @strong: (out) (allow-none): location to store the strong cursor position
+ * @weak: (out) (allow-none): location to store the weak cursor position
  *
  * Determine the positions of the strong and weak cursors if the
  * insertion point is at @iter.

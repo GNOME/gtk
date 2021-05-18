@@ -201,14 +201,14 @@ cell_augment (GtkRbTree *tree,
  * @self: a `GtkGridView`
  * @y: an offset in direction of @self's orientation
  * @position: (out caller-allocates) (optional): stores the position
- *     index of the returned row
+ *   index of the returned row
  * @offset: (out caller-allocates) (optional): stores the offset
- *     in pixels between y and top of cell.
+ *   in pixels between y and top of cell.
  * @offset: (out caller-allocates) (optional): stores the height
- *     of the cell
+ *   of the cell
  *
  * Gets the Cell that occupies the leftmost position in the row at offset
- * @y into the primary direction. 
+ * @y into the primary direction.
  *
  * If y is larger than the height of all cells, %NULL will be returned.
  * In particular that means that for an empty grid, %NULL is returned

@@ -436,9 +436,9 @@ gtk_im_context_real_get_surrounding_with_selection (GtkIMContext *context,
 /**
  * gtk_im_context_set_client_widget:
  * @context: a `GtkIMContext`
- * @widget: (allow-none):  the client widget. This may be %NULL to indicate
- *           that the previous client widget no longer exists.
- * 
+ * @widget: (allow-none): the client widget. This may be %NULL to indicate
+ *   that the previous client widget no longer exists.
+ *
  * Set the client widget for the input context.
  *
  * This is the `GtkWidget` holding the input focus. This widget is
@@ -460,14 +460,14 @@ gtk_im_context_set_client_widget (GtkIMContext *context,
 
 /**
  * gtk_im_context_get_preedit_string:
- * @context:    a `GtkIMContext`
- * @str:        (out) (transfer full): location to store the retrieved
- *              string. The string retrieved must be freed with g_free().
- * @attrs:      (out) (transfer full): location to store the retrieved
- *              attribute list.  When you are done with this list, you
- *              must unreference it with pango_attr_list_unref().
+ * @context: a `GtkIMContext`
+ * @str: (out) (transfer full): location to store the retrieved
+ *   string. The string retrieved must be freed with g_free().
+ * @attrs: (out) (transfer full): location to store the retrieved
+ *   attribute list. When you are done with this list, you
+ *   must unreference it with pango_attr_list_unref().
  * @cursor_pos: (out): location to store position of cursor (in characters)
- *              within the preedit string.
+ *   within the preedit string.
  *
  * Retrieve the current preedit string for the input context,
  * and a list of attributes to apply to the string.
@@ -717,8 +717,7 @@ gtk_im_context_set_use_preedit (GtkIMContext *context,
  * gtk_im_context_set_surrounding:
  * @context: a `GtkIMContext`
  * @text: text surrounding the insertion point, as UTF-8.
- *        the preedit string should not be included within
- *        @text.
+ *   the preedit string should not be included within @text
  * @len: the length of @text, or -1 if @text is nul-terminated
  * @cursor_index: the byte index of the insertion cursor within @text.
  *
@@ -744,8 +743,7 @@ gtk_im_context_set_surrounding (GtkIMContext  *context,
  * gtk_im_context_set_surrounding_with_selection:
  * @context: a #GtkIMContext
  * @text: text surrounding the insertion point, as UTF-8.
- *        the preedit string should not be included within
- *        @text.
+ *   the preedit string should not be included within @text
  * @len: the length of @text, or -1 if @text is nul-terminated
  * @cursor_index: the byte index of the insertion cursor within @text
  * @anchor_index: the byte index of the selection bound within @text

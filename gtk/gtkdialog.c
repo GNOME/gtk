@@ -1058,7 +1058,7 @@ gtk_dialog_response (GtkDialog *dialog,
  * of a dialog.
  *
  * Returns: (nullable) (transfer none): the @widget button that uses the given
- *     @response_id, or %NULL.
+ *   @response_id
  */
 GtkWidget*
 gtk_dialog_get_widget_for_response (GtkDialog *dialog,

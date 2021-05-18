@@ -679,7 +679,6 @@ gtk_filter_list_model_set_filter (GtkFilterListModel *self,
  * Gets the `GtkFilter` currently set on @self.
  *
  * Returns: (nullable) (transfer none): The filter currently in use
- *     or %NULL if the list isn't filtered
  */
 GtkFilter *
 gtk_filter_list_model_get_filter (GtkFilterListModel *self)

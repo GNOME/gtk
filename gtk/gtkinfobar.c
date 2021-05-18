@@ -666,7 +666,7 @@ add_buttons_valist (GtkInfoBar  *info_bar,
  * @info_bar: a `GtkInfoBar`
  * @first_button_text: button text
  * @...: response ID for first button, then more text-response_id pairs,
- *     ending with %NULL
+ *   ending with %NULL
  *
  * Adds multiple buttons.
  *

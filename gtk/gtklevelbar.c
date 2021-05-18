@@ -1127,7 +1127,7 @@ gtk_level_bar_get_max_value (GtkLevelBar *self)
  * Returns the `value` of the `GtkLevelBar`.
  *
  * Returns: a value in the interval between
- *     `GtkLevelBar`:min-value and `GtkLevelBar`:max-value
+ *   [property@Gtk.LevelBar:min-value[ and [property@Gtk.LevelBar:max-value]
  */
 double
 gtk_level_bar_get_value (GtkLevelBar *self)
@@ -1225,7 +1225,7 @@ gtk_level_bar_set_max_value (GtkLevelBar *self,
  * gtk_level_bar_set_value: (attributes org.gtk.Method.set_property=value)
  * @self: a `GtkLevelBar`
  * @value: a value in the interval between
- *     [property@Gtk.LevelBar:min-value] and [property@Gtk.LevelBar:max-value]
+ *   [property@Gtk.LevelBar:min-value] and [property@Gtk.LevelBar:max-value]
  *
  * Sets the value of the `GtkLevelBar`.
  */

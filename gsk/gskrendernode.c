@@ -607,8 +607,7 @@ gsk_render_node_write_to_file (GskRenderNode *node,
  *
  * For a discussion of the supported format, see that function.
  *
- * Returns: (nullable) (transfer full): a new `GskRenderNode` or %NULL on
- *     error.
+ * Returns: (nullable) (transfer full): a new `GskRenderNode`
  */
 GskRenderNode *
 gsk_render_node_deserialize (GBytes            *bytes,

@@ -1801,7 +1801,7 @@ gtk_paned_get_position (GtkPaned  *paned)
  * gtk_paned_set_position: (attributes org.gtk.Method.set_property=position)
  * @paned: a `GtkPaned` widget
  * @position: pixel position of divider, a negative value means that the position
- *            is unset.
+ *   is unset
  *
  * Sets the position of the divider between the two panes.
  **/

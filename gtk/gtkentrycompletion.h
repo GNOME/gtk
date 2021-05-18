@@ -53,7 +53,7 @@ typedef struct _GtkEntryCompletion            GtkEntryCompletion;
  * `gtk_editable_get_text (GTK_EDITABLE (gtk_entry_completion_get_entry ()))`.
  *
  * Returns: %TRUE if @iter should be displayed as a possible completion
- *     for @key
+ *   for @key
  */
 typedef gboolean (* GtkEntryCompletionMatchFunc) (GtkEntryCompletion *completion,
                                                   const char         *key,

@@ -32,11 +32,11 @@ G_BEGIN_DECLS
 /**
  * GtkStringFilterMatchMode:
  * @GTK_STRING_FILTER_MATCH_MODE_EXACT: The search string and
- *     text must match exactly.
+ *   text must match exactly.
  * @GTK_STRING_FILTER_MATCH_MODE_SUBSTRING: The search string
- *     must be contained as a substring inside the text.
+ *   must be contained as a substring inside the text.
  * @GTK_STRING_FILTER_MATCH_MODE_PREFIX: The text must begin
- *     with the search string.
+ *   with the search string.
  *
  * Specifies how search strings are matched inside text.
  */

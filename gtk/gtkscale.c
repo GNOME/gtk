@@ -1002,7 +1002,7 @@ gtk_scale_new_with_range (GtkOrientation orientation,
  * gtk_scale_set_digits: (attributes org.gtk.Method.set_property=digits)
  * @scale: a `GtkScale`
  * @digits: the number of decimal places to display,
- *     e.g. use 1 to display 1.0, 2 to display 1.00, etc
+ *   e.g. use 1 to display 1.0, 2 to display 1.00, etc
  *
  * Sets the number of decimal places that are displayed in the value.
  *

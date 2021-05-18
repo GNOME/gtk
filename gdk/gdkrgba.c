@@ -122,8 +122,7 @@ gdk_rgba_is_opaque (const GdkRGBA *rgba)
  *
  *  - For non-percentage values, we accept floats in the range 0-255
  *    not just [0-9]+ integers
- *  - For percentage values we accept any float, not just
- *     [ 0-9]+ | [0-9]* “.” [0-9]+
+ *  - For percentage values we accept any float, not just [ 0-9]+ | [0-9]* “.” [0-9]+
  *  - We accept mixed percentages and non-percentages in a single
  *    rgb() or rgba() specification.
  */

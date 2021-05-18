@@ -1685,7 +1685,7 @@ gtk_print_settings_load_key_file (GtkPrintSettings *settings,
  * gtk_print_settings_new_from_key_file:
  * @key_file: the `GKeyFile` to retrieve the settings from
  * @group_name: (allow-none): the name of the group to use, or %NULL to use
- *     the default “Print Settings”
+ *   the default “Print Settings”
  * @error: (allow-none): return location for errors, or %NULL
  *
  * Reads the print settings from the group @group_name in @key_file.
@@ -1777,7 +1777,7 @@ add_value_to_key_file (const char   *key,
  * @settings: a `GtkPrintSettings`
  * @key_file: the `GKeyFile` to save the print settings to
  * @group_name: (nullable): the group to add the settings to in @key_file, or
- *     %NULL to use the default “Print Settings”
+ *   %NULL to use the default “Print Settings”
  *
  * This function adds the print settings from @settings to @key_file.
  */

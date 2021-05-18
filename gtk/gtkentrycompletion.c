@@ -927,8 +927,8 @@ gtk_entry_completion_set_model (GtkEntryCompletion *completion,
  *
  * Returns %NULL if the model is unset.
  *
- * Returns: (nullable) (transfer none): A #GtkTreeModel, or %NULL if none
- *     is currently being used
+ * Returns: (nullable) (transfer none): A `GtkTreeModel`, or %NULL if none
+ *   is currently being used
  */
 GtkTreeModel *
 gtk_entry_completion_get_model (GtkEntryCompletion *completion)
@@ -1567,8 +1567,7 @@ gtk_entry_completion_get_popup_set_width (GtkEntryCompletion *completion)
 /**
  * gtk_entry_completion_set_popup_single_match: (attributes org.gtk.Method.set_property=popup-single-match)
  * @completion: a `GtkEntryCompletion`
- * @popup_single_match: %TRUE if the popup should appear even for a single
- *     match
+ * @popup_single_match: %TRUE if the popup should appear even for a single match
  *
  * Sets whether the completion popup window will appear even if there is
  * only a single match.

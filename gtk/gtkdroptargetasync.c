@@ -566,8 +566,7 @@ gtk_drop_target_async_new (GdkContentFormats *formats,
 /**
  * gtk_drop_target_async_set_formats: (attributes org.gtk.Method.set_property=formats)
  * @self: a `GtkDropTargetAsync`
- * @formats: (nullable): the supported data formats or %NULL for
- *     any format.
+ * @formats: (nullable): the supported data formats or %NULL for any format
  *
  * Sets the data formats that this drop target will accept.
  */

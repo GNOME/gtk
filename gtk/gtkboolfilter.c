@@ -187,12 +187,11 @@ gtk_bool_filter_init (GtkBoolFilter *self)
 /**
  * gtk_bool_filter_new:
  * @expression: (transfer full) (nullable): The expression to evaluate
- *     or %NULL for none
  *
  * Creates a new bool filter.
  *
  * Returns: a new `GtkBoolFilter`
- **/
+ */
 GtkBoolFilter *
 gtk_bool_filter_new (GtkExpression *expression)
 {

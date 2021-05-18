@@ -85,7 +85,7 @@ G_DEFINE_BOXED_TYPE (GdkContentFormats, gdk_content_formats,
  * See RFC 2048 for the syntax if mime types.
  *
  * Returns: An interned string for the canonicalized mime type
- *     or %NULL if the string wasn't a valid mime type
+ *   or %NULL if the string wasn't a valid mime type
  */
 const char *
 gdk_intern_mime_type (const char *string)
@@ -454,16 +454,15 @@ gdk_content_formats_contain_mime_type (const GdkContentFormats *formats,
  * gdk_content_formats_get_gtypes:
  * @formats: a `GdkContentFormats`
  * @n_gtypes: (out) (optional): optional pointer to take the
- *     number of #GTypes contained in the return value
+ *   number of `GType`s contained in the return value
  *
- * Gets the `GTypes` included in @formats.
+ * Gets the `GType`s included in @formats.
  *
  * Note that @formats may not contain any #GTypes, in particular when
  * they are empty. In that case %NULL will be returned.
  *
  * Returns: (transfer none) (nullable) (array length=n_gtypes zero-terminated=1):
- *      %G_TYPE_INVALID-terminated array of types included in @formats or
- *      %NULL if none.
+ *   %G_TYPE_INVALID-terminated array of types included in @formats
  */
 const GType *
 gdk_content_formats_get_gtypes (const GdkContentFormats *formats,
@@ -481,16 +480,16 @@ gdk_content_formats_get_gtypes (const GdkContentFormats *formats,
  * gdk_content_formats_get_mime_types:
  * @formats: a `GdkContentFormats`
  * @n_mime_types: (out) (optional): optional pointer to take the
- *     number of mime types contained in the return value
+ *   number of mime types contained in the return value
  *
  * Gets the mime types included in @formats.
  *
  * Note that @formats may not contain any mime types, in particular
  * when they are empty. In that case %NULL will be returned.
  *
- * Returns: (transfer none) (nullable) (array length=n_mime_types zero-terminated=1): %NULL-terminated array of
- *     interned strings of mime types included in @formats or %NULL
- *     if none.
+ * Returns: (transfer none) (nullable) (array length=n_mime_types zero-terminated=1):
+ *   %NULL-terminated array of interned strings of mime types included
+ *   in @formats
  */
 const char * const *
 gdk_content_formats_get_mime_types (const GdkContentFormats *formats,

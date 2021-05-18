@@ -474,7 +474,7 @@ gtk_css_dimension_value_new (double     value,
  * match.
  *
  * Returns: Magic value determining placement when printing calc()
- *     expression.
+ *   expression.
  */
 static int
 gtk_css_number_value_get_calc_term_order (const GtkCssValue *value)

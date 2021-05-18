@@ -2285,7 +2285,7 @@ gtk_window_set_startup_id (GtkWindow   *window,
  * gtk_window_set_default_widget: (attributes org.gtk.Property.set=default-widget)
  * @window: a `GtkWindow`
  * @default_widget: (allow-none): widget to be the default, or %NULL
- *     to unset the default widget for the toplevel
+ *   to unset the default widget for the toplevel
  *
  * Sets the default widget.
  *

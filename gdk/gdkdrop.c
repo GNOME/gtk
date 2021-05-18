@@ -657,12 +657,11 @@ gdk_drop_read_internal (GdkDrop             *self,
  * gdk_drop_read_async:
  * @self: a `GdkDrop`
  * @mime_types: (array zero-terminated=1) (element-type utf8):
- *     pointer to an array of mime types
+ *   pointer to an array of mime types
  * @io_priority: the I/O priority for the read operation
- * @cancellable: (allow-none): optional `GCancellable` object,
- *     %NULL to ignore
+ * @cancellable: (allow-none): optional `GCancellable` object
  * @callback: (scope async): a `GAsyncReadyCallback` to call when
- *     the request is satisfied
+ *   the request is satisfied
  * @user_data: (closure): the data to pass to @callback
  *
  * Asynchronously read the dropped data from a `GdkDrop`

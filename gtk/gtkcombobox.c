@@ -1908,7 +1908,7 @@ gtk_combo_box_new_with_model_and_entry (GtkTreeModel *model)
  * [struct@Gtk.TreePath] of the active item.
  *
  * Returns: An integer which is the index of the currently active item,
- *     or -1 if there’s no active item.
+ *   or -1 if there’s no active item
  */
 int
 gtk_combo_box_get_active (GtkComboBox *combo_box)
@@ -2154,7 +2154,7 @@ out:
  * Returns the `GtkTreeModel` of @combo_box.
  *
  * Returns: (nullable) (transfer none): A `GtkTreeModel` which was passed
- *     during construction.
+ *   during construction.
  */
 GtkTreeModel *
 gtk_combo_box_get_model (GtkComboBox *combo_box)

@@ -665,7 +665,7 @@ gtk_button_new_from_icon_name (const char *icon_name)
 /**
  * gtk_button_new_with_mnemonic:
  * @label: The text of the button, with an underscore in front of the
- *         mnemonic character
+ *   mnemonic character
  *
  * Creates a new `GtkButton` containing a label.
  *

@@ -570,7 +570,7 @@ do_post_parse_initialization (void)
  * interface.
  *
  * Returns: %TRUE if the windowing system has been successfully
- *     initialized, %FALSE otherwise
+ *   initialized, %FALSE otherwise
  */
 gboolean
 gtk_init_check (void)
@@ -772,7 +772,7 @@ gtk_get_locale_direction (void)
  * See that function for details.
  *
  * Returns: (transfer none): the default language as a #PangoLanguage,
- *     must not be freed
+ *   must not be freed
  */
 PangoLanguage *
 gtk_get_default_language (void)
@@ -1789,7 +1789,7 @@ gtk_get_current_event_time (void)
  * originally.
  *
  * Returns: (transfer none) (nullable): the widget that originally
- *     received @event, or %NULL
+ *   received @event, or %NULL
  */
 GtkWidget *
 gtk_get_event_widget (GdkEvent *event)

@@ -38,7 +38,7 @@ G_DECLARE_INTERFACE (GtkShortcutManager, gtk_shortcut_manager, GTK, SHORTCUT_MAN
  * GtkShortcutManagerInterface:
  * @add_controller: Add a #GtkShortcutController to be managed.
  * @remove_controller: Remove a #GtkShortcutController that had previously
- *     been added.
+ *   been added
  *
  * The list of functions that can be implemented for the #GtkShortcutManager interface.
  *

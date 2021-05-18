@@ -770,7 +770,7 @@ gtk_header_bar_set_show_title_buttons (GtkHeaderBar *bar,
  * gtk_header_bar_set_decoration_layout: (attributes org.gtk.Method.set_property=decoration-layout)
  * @bar: a `GtkHeaderBar`
  * @layout: (allow-none): a decoration layout, or %NULL to
- *     unset the layout
+ *   unset the layout
  *
  * Sets the decoration layout for this header bar.
  *

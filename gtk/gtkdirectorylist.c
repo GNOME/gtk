@@ -831,7 +831,7 @@ gtk_directory_list_is_loading (GtkDirectoryList *self)
  * successfully queried files will remain in the list.
  *
  * Returns: (nullable) (transfer none): The loading error or %NULL if
- *     loading finished successfully.
+ *   loading finished successfully
  */
 const GError *
 gtk_directory_list_get_error (GtkDirectoryList *self)

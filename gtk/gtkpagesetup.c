@@ -575,7 +575,7 @@ string_to_enum (GType type,
  * @setup: a `GtkPageSetup`
  * @key_file: the `GKeyFile` to retrieve the page_setup from
  * @group_name: (allow-none): the name of the group in the key_file to read, or %NULL
- *              to use the default name “Page Setup”
+ *   to use the default name “Page Setup”
  * @error: (allow-none): return location for an error, or %NULL
  *
  * Reads the page setup from the group @group_name in the key file
@@ -661,7 +661,7 @@ out:
  * gtk_page_setup_new_from_key_file:
  * @key_file: the `GKeyFile` to retrieve the page_setup from
  * @group_name: (allow-none): the name of the group in the key_file to read, or %NULL
- *              to use the default name “Page Setup”
+ *    to use the default name “Page Setup”
  * @error: (allow-none): return location for an error, or %NULL
  *
  * Reads the page setup from the group @group_name in the key file
@@ -752,7 +752,7 @@ enum_to_string (GType type,
  * @setup: a `GtkPageSetup`
  * @key_file: the `GKeyFile` to save the page setup to
  * @group_name: (nullable): the group to add the settings to in @key_file,
- *      or %NULL to use the default name “Page Setup”
+ *   or %NULL to use the default name “Page Setup”
  *
  * This function adds the page setup from @setup to @key_file.
  */

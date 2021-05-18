@@ -1036,8 +1036,7 @@ gdk_display_real_get_app_launch_context (GdkDisplay *display)
  * Returns a `GdkAppLaunchContext` suitable for launching
  * applications on the given display.
  *
- * Returns: (transfer full): a new `GdkAppLaunchContext` for @display.
- *     Free with g_object_unref() when done
+ * Returns: (transfer full): a new `GdkAppLaunchContext` for @display
  */
 GdkAppLaunchContext *
 gdk_display_get_app_launch_context (GdkDisplay *display)
@@ -1053,8 +1052,9 @@ gdk_display_get_app_launch_context (GdkDisplay *display)
  *
  * Opens a display.
  *
- * Returns: (nullable) (transfer none): a `GdkDisplay`, or %NULL if the
- *     display could not be opened
+ * If opening the display fails, `NULL` is returned.
+ *
+ * Returns: (nullable) (transfer none): a `GdkDisplay`
  */
 GdkDisplay *
 gdk_display_open (const char *display_name)
@@ -1073,7 +1073,7 @@ _gdk_display_get_next_serial (GdkDisplay *display)
  * gdk_display_notify_startup_complete:
  * @display: a `GdkDisplay`
  * @startup_id: a startup-notification identifier, for which
- *     notification process should be completed
+ *   notification process should be completed
  *
  * Indicates to the GUI environment that the application has
  * finished loading, using a given identifier.
@@ -1099,7 +1099,7 @@ gdk_display_notify_startup_complete (GdkDisplay  *display,
  * Gets the startup notification ID for a Wayland display, or %NULL
  * if no ID has been defined.
  *
- * Returns: (nullable): the startup notification ID for @display, or %NULL
+ * Returns: (nullable): the startup notification ID for @display
  */
 const char *
 gdk_display_get_startup_notification_id (GdkDisplay *display)
@@ -1160,7 +1160,7 @@ gdk_display_get_keymap (GdkDisplay *display)
 /*< private >
  * gdk_display_make_gl_context_current:
  * @display: a #GdkDisplay
- * @context: (optional): a #GdkGLContext, or %NULL
+ * @context: (optional): a #GdkGLContext
  *
  * Makes the given @context the current GL context, or unsets
  * the current GL context if @context is %NULL.
@@ -1243,7 +1243,7 @@ gdk_display_set_composited (GdkDisplay *display,
  * On modern displays, this value is always %TRUE.
  *
  * Returns: %TRUE if surfaces are created with an alpha channel or
- *     %FALSE if the display does not support this functionality.
+ *   %FALSE if the display does not support this functionality.
  */
 gboolean
 gdk_display_is_rgba (GdkDisplay *display)
@@ -1343,8 +1343,8 @@ gdk_display_get_default_seat (GdkDisplay *display)
  * Returns the list of seats known to @display.
  *
  * Returns: (transfer container) (element-type GdkSeat): the
- *          list of seats known to the `GdkDisplay`
- **/
+ *   list of seats known to the `GdkDisplay`
+ */
 GList *
 gdk_display_list_seats (GdkDisplay *display)
 {
@@ -1502,7 +1502,7 @@ gdk_display_set_cursor_theme (GdkDisplay *display,
  * @display: a `GdkDisplay`
  * @keyval: a keyval, such as %GDK_KEY_a, %GDK_KEY_Up, %GDK_KEY_Return, etc.
  * @keys: (out) (array length=n_keys) (transfer full): return location
- *     for an array of `GdkKeymapKey`
+ *   for an array of `GdkKeymapKey`
  * @n_keys: return location for number of elements in returned array
  *
  * Obtains a list of keycode/group/level combinations that will
@@ -1540,9 +1540,9 @@ gdk_display_map_keyval (GdkDisplay    *display,
  * @display: a `GdkDisplay`
  * @keycode: a keycode
  * @keys: (out) (array length=n_entries) (transfer full) (optional): return
- *     location for array of `GdkKeymapKey`, or %NULL
+ *   location for array of `GdkKeymapKey`
  * @keyvals: (out) (array length=n_entries) (transfer full) (optional): return
- *     location for array of keyvals, or %NULL
+ *   location for array of keyvals
  * @n_entries: length of @keys and @keyvals
  *
  * Returns the keyvals bound to @keycode.
@@ -1577,12 +1577,11 @@ gdk_display_map_keycode (GdkDisplay    *display,
  * @keycode: a keycode
  * @state: a modifier state
  * @group: active keyboard group
- * @keyval: (out) (optional): return location for keyval, or %NULL
- * @effective_group: (out) (optional): return location for effective
- *     group, or %NULL
- * @level: (out) (optional): return location for level, or %NULL
- * @consumed: (out) (optional): return location for modifiers
- *     that were used to determine the group or level, or %NULL
+ * @keyval: (out) (optional): return location for keyval
+ * @effective_group: (out) (optional): return location for effective group
+ * @level: (out) (optional): return location for level
+ * @consumed: (out) (optional): return location for modifiers that were used
+ *   to determine the group or level
  *
  * Translates the contents of a `GdkEventKey` into a keyval, effective group,
  * and level.

@@ -1781,8 +1781,7 @@ gtk_builder_get_current_object (GtkBuilder *builder)
 /**
  * gtk_builder_set_current_object: (attributes org.gtk.Method.set_property=current-object)
  * @builder: a `GtkBuilder`
- * @current_object: (nullable) (transfer none): the new current object or
- *     %NULL for none
+ * @current_object: (nullable) (transfer none): the new current object
  *
  * Sets the current object for the @builder.
  *
@@ -1830,12 +1829,11 @@ gtk_builder_get_scope (GtkBuilder *builder)
 /**
  * gtk_builder_set_scope: (attributes org.gtk.Method.set_property=scope)
  * @builder: a `GtkBuilder`
- * @scope: (nullable) (transfer none): the scope to use or
- *     %NULL for the default
+ * @scope: (nullable) (transfer none): the scope to use
  *
  * Sets the scope the builder should operate in.
  *
- * If @scope is %NULL a new [class@Gtk.BuilderCScope] will be created.
+ * If @scope is %NULL, a new [class@Gtk.BuilderCScope] will be created.
  */
 void
 gtk_builder_set_scope (GtkBuilder      *builder,

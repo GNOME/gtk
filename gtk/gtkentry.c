@@ -2119,8 +2119,7 @@ gtk_entry_set_buffer (GtkEntry       *entry,
 /**
  * gtk_entry_set_visibility: (attributes org.gtk.Method.set_property=visibility)
  * @entry: a `GtkEntry`
- * @visible: %TRUE if the contents of the entry are displayed
- *           as plaintext
+ * @visible: %TRUE if the contents of the entry are displayed as plaintext
  *
  * Sets whether the contents of the entry are visible or not.
  *

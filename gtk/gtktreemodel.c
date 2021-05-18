@@ -727,7 +727,7 @@ gtk_tree_path_new_from_indicesv (int *indices,
 
 /**
  * gtk_tree_path_to_string:
- * @path: A #GtkTreePath-struct
+ * @path: a `GtkTreePath`
  *
  * Generates a string representation of the path.
  *
@@ -736,8 +736,7 @@ gtk_tree_path_new_from_indicesv (int *indices,
  * return value for this string. If the path has
  * depth 0, %NULL is returned.
  *
- * Returns: (nullable): A newly-allocated string.
- *     Must be freed with g_free().
+ * Returns: (nullable): A newly-allocated string
  */
 char *
 gtk_tree_path_to_string (GtkTreePath *path)
@@ -881,9 +880,9 @@ gtk_tree_path_get_indices (GtkTreePath *path)
 
 /**
  * gtk_tree_path_get_indices_with_depth: (rename-to gtk_tree_path_get_indices)
- * @path: a #GtkTreePath-struct
+ * @path: a `GtkTreePath`
  * @depth: (out) (allow-none): return location for number of elements
- *     returned in the integer array, or %NULL
+ *   returned in the integer array, or %NULL
  *
  * Returns the current indices of @path.
  *
@@ -892,7 +891,7 @@ gtk_tree_path_get_indices (GtkTreePath *path)
  * The array should not be freed.
  *
  * Returns: (array length=depth) (transfer none): The current
- *     indices, or %NULL
+ *   indices, or %NULL
  */
 int *
 gtk_tree_path_get_indices_with_depth (GtkTreePath *path,
@@ -1075,7 +1074,7 @@ gtk_tree_path_next (GtkTreePath *path)
  * current depth, if it exists.
  *
  * Returns: %TRUE if @path has a previous node, and
- *     the move was made
+ *   the move was made
  */
 gboolean
 gtk_tree_path_prev (GtkTreePath *path)
@@ -1310,8 +1309,8 @@ gtk_tree_model_get_iter_from_string (GtkTreeModel *tree_model,
 
 /**
  * gtk_tree_model_get_string_from_iter:
- * @tree_model: a #GtkTreeModel
- * @iter: a #GtkTreeIter-struct
+ * @tree_model: a `GtkTreeModel`
+ * @iter: a `GtkTreeIter`
  *
  * Generates a string representation of the iter.
  *
@@ -1319,8 +1318,7 @@ gtk_tree_model_get_iter_from_string (GtkTreeModel *tree_model,
  * For example, “4:10:0:3” would be an acceptable
  * return value for this string.
  *
- * Returns: (nullable): a newly-allocated string.
- *     Must be freed with g_free().
+ * Returns: (nullable): a newly-allocated string
  */
 char *
 gtk_tree_model_get_string_from_iter (GtkTreeModel *tree_model,
@@ -1731,10 +1729,10 @@ gtk_tree_model_unref_node (GtkTreeModel *tree_model,
 
 /**
  * gtk_tree_model_get:
- * @tree_model: a #GtkTreeModel
+ * @tree_model: a `GtkTreeModel`
  * @iter: a row in @tree_model
  * @...: pairs of column number and value return locations,
- *     terminated by -1
+ *   terminated by -1
  *
  * Gets the value of one or more cells in the row referenced by @iter.
  * The variable argument list should contain integer column numbers,
@@ -1880,9 +1878,9 @@ gtk_tree_model_row_has_child_toggled (GtkTreeModel *tree_model,
 
 /**
  * gtk_tree_model_row_deleted:
- * @tree_model: a #GtkTreeModel
- * @path: a #GtkTreePath-struct pointing to the previous location of
- *     the deleted row
+ * @tree_model: a `GtkTreeModel`
+ * @path: a `GtkTreePath` pointing to the previous location of
+ *   the deleted row
  *
  * Emits the #GtkTreeModel::row-deleted signal on @tree_model.
  *
@@ -1905,16 +1903,16 @@ gtk_tree_model_row_deleted (GtkTreeModel *tree_model,
 
 /**
  * gtk_tree_model_rows_reordered: (skip)
- * @tree_model: a #GtkTreeModel
- * @path: a #GtkTreePath-struct pointing to the tree node whose children
- *     have been reordered
- * @iter: a valid #GtkTreeIter-struct pointing to the node whose children
- *     have been reordered, or %NULL if the depth of @path is 0
+ * @tree_model: a `GtkTreeModel`
+ * @path: a `GtkTreePath` pointing to the tree node whose children
+ *   have been reordered
+ * @iter: a valid `GtkTreeIter` pointing to the node whose children
+ *   have been reordered, or %NULL if the depth of @path is 0
  * @new_order: an array of integers mapping the current position of
- *     each child to its old position before the re-ordering,
- *     i.e. @new_order`[newpos] = oldpos`
+ *   each child to its old position before the re-ordering,
+ *   i.e. @new_order`[newpos] = oldpos`
  *
- * Emits the #GtkTreeModel::rows-reordered signal on @tree_model.
+ * Emits the ::rows-reordered signal on @tree_model.
  *
  * This should be called by models when their rows have been
  * reordered.
@@ -1933,19 +1931,19 @@ gtk_tree_model_rows_reordered (GtkTreeModel *tree_model,
 
 /**
  * gtk_tree_model_rows_reordered_with_length: (rename-to gtk_tree_model_rows_reordered)
- * @tree_model: a #GtkTreeModel
- * @path: a #GtkTreePath-struct pointing to the tree node whose children
- *     have been reordered
+ * @tree_model: a `GtkTreeModel`
+ * @path: a `GtkTreePath` pointing to the tree node whose children
+ *   have been reordered
  * @iter: (allow-none): a valid #GtkTreeIter-struct pointing to the node
- *     whose children have been reordered, or %NULL if the depth
- *     of @path is 0
+ *   whose children have been reordered, or %NULL if the depth
+ *   of @path is 0
  * @new_order: (array length=length): an array of integers
- *     mapping the current position of each child to its old
- *     position before the re-ordering,
- *     i.e. @new_order`[newpos] = oldpos`
+ *   mapping the current position of each child to its old
+ *   position before the re-ordering,
+ *   i.e. @new_order`[newpos] = oldpos`
  * @length: length of @new_order array
  *
- * Emits the #GtkTreeModel::rows-reordered signal on @tree_model.
+ * Emits the ::rows-reordered signal on @tree_model.
  *
  * This should be called by models when their rows have been
  * reordered.

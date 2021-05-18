@@ -58,10 +58,8 @@ gtk_action_observer_default_init (GtkActionObserverInterface *class)
  * @observable: the source of the event
  * @action_name: the name of the action
  * @enabled: %TRUE if the action is now enabled
- * @parameter_type: the parameter type for action invocations, or %NULL
- *                  if no parameter is required
- * @state: the current state of the action, or %NULL if the action is
- *         stateless
+ * @parameter_type: (nullable): the parameter type for action invocations
+ * @state: (nullable): the current state of the action
  *
  * This function is called when an action that the observer is
  * registered to receive events for is added.

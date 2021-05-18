@@ -453,7 +453,7 @@ gdk_texture_download_area (GdkTexture         *texture,
  * gdk_texture_download:
  * @texture: a `GdkTexture`
  * @data: (array): pointer to enough memory to be filled with the
- *     downloaded data of @texture
+ *   downloaded data of @texture
  * @stride: rowstride in bytes
  *
  * Downloads the @texture into local memory.

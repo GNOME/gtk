@@ -122,7 +122,7 @@ gtk_filter_init (GtkFilter *self)
  * Checks if the given @item is matched by the filter or not.
  *
  * Returns: %TRUE if the filter matches the item and a filter model should
- *     keep it, %FALSE if not.
+ *   keep it, %FALSE if not.
  */
 gboolean
 gtk_filter_match (GtkFilter *self,

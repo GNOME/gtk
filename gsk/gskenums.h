@@ -169,12 +169,11 @@ typedef enum {
 
 /**
  * GskSerializationError:
- * @GSK_SERIALIZATION_UNSUPPORTED_FORMAT: The format can not be
- *     identified
- * @GSK_SERIALIZATION_UNSUPPORTED_VERSION: The version of the data
- *     is not understood
+ * @GSK_SERIALIZATION_UNSUPPORTED_FORMAT: The format can not be identified
+ * @GSK_SERIALIZATION_UNSUPPORTED_VERSION: The version of the data is not
+ *   understood
  * @GSK_SERIALIZATION_INVALID_DATA: The given data may not exist in
- *     a proper serialization
+ *   a proper serialization
  *
  * Errors that can happen during (de)serialization.
  */
@@ -187,17 +186,17 @@ typedef enum {
 /**
  * GskTransformCategory:
  * @GSK_TRANSFORM_CATEGORY_UNKNOWN: The category of the matrix has not been
- *     determined.
+ *   determined.
  * @GSK_TRANSFORM_CATEGORY_ANY: Analyzing the matrix concluded that it does
- *     not fit in any other category.
+ *   not fit in any other category.
  * @GSK_TRANSFORM_CATEGORY_3D: The matrix is a 3D matrix. This means that
- *     the w column (the last column) has the values (0, 0, 0, 1).
+ *   the w column (the last column) has the values (0, 0, 0, 1).
  * @GSK_TRANSFORM_CATEGORY_2D: The matrix is a 2D matrix. This is equivalent
- *     to graphene_matrix_is_2d() returning %TRUE. In particular, this
- *     means that Cairo can deal with the matrix.
+ *   to graphene_matrix_is_2d() returning %TRUE. In particular, this
+ *   means that Cairo can deal with the matrix.
  * @GSK_TRANSFORM_CATEGORY_2D_AFFINE: The matrix is a combination of 2D scale
- *     and 2D translation operations. In particular, this means that any
- *     rectangle can be transformed exactly using this matrix.
+ *   and 2D translation operations. In particular, this means that any
+ *   rectangle can be transformed exactly using this matrix.
  * @GSK_TRANSFORM_CATEGORY_2D_TRANSLATE: The matrix is a 2D translation.
  * @GSK_TRANSFORM_CATEGORY_IDENTITY: The matrix is the identity matrix.
  *

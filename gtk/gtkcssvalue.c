@@ -348,8 +348,8 @@ gtk_css_value_is_dynamic (const GtkCssValue *value)
  * See gtk_css_value_is_dynamic() for details about dynamic values.
  *
  * Returns: (transfer full): The dynamic value for @value at the given
- *     timestamp
- **/
+ *   timestamp
+ */
 GtkCssValue *
 gtk_css_value_get_dynamic_value (GtkCssValue *value,
                                  gint64       monotonic_time)

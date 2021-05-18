@@ -805,7 +805,7 @@ gtk_editable_get_alignment (GtkEditable *editable)
  * gtk_editable_set_alignment: (attributes org.gtk.Method.set_property=xalign)
  * @editable: a `GtkEditable`
  * @xalign: The horizontal alignment, from 0 (left) to 1 (right).
- *          Reversed for RTL layouts
+ *   Reversed for RTL layouts
  *
  * Sets the alignment for the contents of the editable.
  *

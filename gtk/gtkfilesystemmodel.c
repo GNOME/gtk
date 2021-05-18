@@ -1479,9 +1479,8 @@ _gtk_file_system_model_set_show_folders (GtkFileSystemModel *model,
 /**
  * _gtk_file_system_model_set_show_files:
  * @model: a #GtkFileSystemModel
- * @show_files: whether files (as opposed to folders) should
- *              be displayed.
- * 
+ * @show_files: whether files (as opposed to folders) should be displayed.
+ *
  * Sets whether files (as opposed to folders) should be included
  * in the #GtkTreeModel for display.
  **/
@@ -1662,7 +1661,7 @@ _gtk_file_system_model_get_file (GtkFileSystemModel *model,
  * lookups. Both of which are slow.
  *
  * Returns: a pointer to the actual value as stored in @model or %NULL
- *          if no value available yet.
+ *   if no value available yet
  **/
 const GValue *
 _gtk_file_system_model_get_value (GtkFileSystemModel *model,

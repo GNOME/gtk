@@ -4846,7 +4846,7 @@ gtk_places_sidebar_remove_shortcut (GtkPlacesSidebar *sidebar,
  * @sidebar may or may not affect the returned model.
  *
  * Returns: (transfer full): a list model of #GFiles that have been added as
- *     application-specific shortcuts with gtk_places_sidebar_add_shortcut().
+ *   application-specific shortcuts with gtk_places_sidebar_add_shortcut()
  */
 GListModel *
 gtk_places_sidebar_get_shortcuts (GtkPlacesSidebar *sidebar)

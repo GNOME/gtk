@@ -491,7 +491,7 @@ gboolean                gdk_events_get_center           (GdkEvent *event1,
  * GdkKeyMatch:
  * @GDK_KEY_MATCH_NONE: The key event does not match
  * @GDK_KEY_MATCH_PARTIAL: The key event matches if keyboard state
- *     (specifically, the currently active group) is ignored
+ *   (specifically, the currently active group) is ignored
  * @GDK_KEY_MATCH_EXACT: The key event matches
  *
  * Describes how well an event matches a given keyval and modifiers.

@@ -632,7 +632,7 @@ gtk_flow_box_child_get_child (GtkFlowBoxChild *self)
  * Gets the current index of the @child in its `GtkFlowBox` container.
  *
  * Returns: the index of the @child, or -1 if the @child is not
- *     in a flow box.
+ *   in a flow box
  */
 int
 gtk_flow_box_child_get_index (GtkFlowBoxChild *child)
@@ -4135,8 +4135,8 @@ gtk_flow_box_insert (GtkFlowBox *box,
  * Gets the nth child in the @box.
  *
  * Returns: (transfer none) (nullable): the child widget, which will
- *     always be a `GtkFlowBoxChild` or %NULL in case no child widget
- *     with the given index exists.
+ *   always be a `GtkFlowBoxChild` or %NULL in case no child widget
+ *   with the given index exists.
  */
 GtkFlowBoxChild *
 gtk_flow_box_get_child_at_index (GtkFlowBox *box,
@@ -4557,7 +4557,7 @@ gtk_flow_box_set_activate_on_single_click (GtkFlowBox *box,
  * Returns whether children activate on single clicks.
  *
  * Returns: %TRUE if children are activated on single click,
- *     %FALSE otherwise
+ *   %FALSE otherwise
  */
 gboolean
 gtk_flow_box_get_activate_on_single_click (GtkFlowBox *box)
@@ -4587,8 +4587,8 @@ gtk_flow_box_set_accept_unpaired_release (GtkFlowBox *box,
  * Creates a list of all selected children.
  *
  * Returns: (element-type GtkFlowBoxChild) (transfer container):
- *     A `GList` containing the `GtkWidget` for each selected child.
- *     Free with g_list_free() when done.
+ *   A `GList` containing the `GtkWidget` for each selected child.
+ *   Free with g_list_free() when done.
  */
 GList *
 gtk_flow_box_get_selected_children (GtkFlowBox *box)
@@ -4806,7 +4806,7 @@ gtk_flow_box_get_selection_mode (GtkFlowBox *box)
  * gtk_flow_box_set_filter_func:
  * @box: a `GtkFlowBox`
  * @filter_func: (allow-none): callback that
- *     lets you filter which children to show
+ *   lets you filter which children to show
  * @user_data: (closure): user data passed to @filter_func
  * @destroy: destroy notifier for @user_data
  *
@@ -4881,7 +4881,7 @@ gtk_flow_box_invalidate_filter (GtkFlowBox *box)
  * should come first.
  *
  * Returns: < 0 if @child1 should be before @child2, 0 if
- *     the are equal, and > 0 otherwise
+ *   the are equal, and > 0 otherwise
  */
 
 /**

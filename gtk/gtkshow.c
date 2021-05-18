@@ -143,7 +143,7 @@ gtk_show_uri_full (GtkWindow           *parent,
  * of the operation.
  *
  * Returns: %TRUE if the URI was shown successfully.
- *     Otherwise, %FALSE is returned and @error is set
+ *   Otherwise, %FALSE is returned and @error is set
  */
 gboolean
 gtk_show_uri_full_finish (GtkWindow     *parent,

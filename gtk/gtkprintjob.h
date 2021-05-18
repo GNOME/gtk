@@ -40,7 +40,7 @@ typedef struct _GtkPrintJob          GtkPrintJob;
  * @print_job: the #GtkPrintJob
  * @user_data: user data that has been passed to gtk_print_job_send()
  * @error: a #GError that contains error information if the sending
- *     of the print job failed, otherwise %NULL
+ *   of the print job failed, otherwise %NULL
  *
  * The type of callback that is passed to gtk_print_job_send().
  *

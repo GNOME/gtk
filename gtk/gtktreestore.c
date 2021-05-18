@@ -2230,16 +2230,16 @@ gtk_tree_store_reorder_func (gconstpointer a,
 
 /**
  * gtk_tree_store_reorder: (skip)
- * @tree_store: A #GtkTreeStore
- * @parent: (nullable): A #GtkTreeIter, or %NULL
+ * @tree_store: A `GtkTreeStore`
+ * @parent: (nullable): A `GtkTreeIter`, or %NULL
  * @new_order: (array): an array of integers mapping the new position of each child
- *      to its old position before the re-ordering,
- *      i.e. @new_order`[newpos] = oldpos`.
+ *   to its old position before the re-ordering,
+ *   i.e. @new_order`[newpos] = oldpos`.
  *
  * Reorders the children of @parent in @tree_store to follow the order
  * indicated by @new_order. Note that this function only works with
  * unsorted stores.
- **/
+ */
 void
 gtk_tree_store_reorder (GtkTreeStore *tree_store,
 			GtkTreeIter  *parent,

@@ -31,11 +31,11 @@ G_BEGIN_DECLS
 /**
  * GdkMemoryFormat:
  * @GDK_MEMORY_B8G8R8A8_PREMULTIPLIED: 4 bytes; for blue, green, red, alpha.
- *     The color values are premultiplied with the alpha value.
+ *   The color values are premultiplied with the alpha value.
  * @GDK_MEMORY_A8R8G8B8_PREMULTIPLIED: 4 bytes; for alpha, red, green, blue.
- *     The color values are premultiplied with the alpha value.
+ *   The color values are premultiplied with the alpha value.
  * @GDK_MEMORY_R8G8B8A8_PREMULTIPLIED: 4 bytes; for red, green, blue, alpha
- *     The color values are premultiplied with the alpha value.
+ *   The color values are premultiplied with the alpha value.
  * @GDK_MEMORY_B8G8R8A8: 4 bytes; for blue, green, red, alpha.
  * @GDK_MEMORY_A8R8G8B8: 4 bytes; for alpha, red, green, blue.
  * @GDK_MEMORY_R8G8B8A8: 4 bytes; for red, green, blue, alpha.
@@ -43,7 +43,7 @@ G_BEGIN_DECLS
  * @GDK_MEMORY_R8G8B8: 3 bytes; for red, green, blue. The data is opaque.
  * @GDK_MEMORY_B8G8R8: 3 bytes; for blue, green, red. The data is opaque.
  * @GDK_MEMORY_N_FORMATS: The number of formats. This value will change as
- *     more formats get added, so do not rely on its concrete integer.
+ *   more formats get added, so do not rely on its concrete integer.
  *
  * `GdkMemoryFormat` describes a format that bytes can have in memory.
  *

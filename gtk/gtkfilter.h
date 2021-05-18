@@ -31,11 +31,11 @@ G_BEGIN_DECLS
 /**
  * GtkFilterMatch:
  * @GTK_FILTER_MATCH_SOME: The filter matches some items,
- *     gtk_filter_match() may return %TRUE or %FALSE
+ *   gtk_filter_match() may return %TRUE or %FALSE
  * @GTK_FILTER_MATCH_NONE: The filter does not match any item,
- *     gtk_filter_match() will always return %FALSE.
+ *   gtk_filter_match() will always return %FALSE.
  * @GTK_FILTER_MATCH_ALL: The filter matches all items,
- *     gtk_filter_match() will alays return %TRUE.
+ *   gtk_filter_match() will alays return %TRUE.
  *
  * Describes the known strictness of a filter.
  *
@@ -52,13 +52,13 @@ typedef enum {
 /**
  * GtkFilterChange:
  * @GTK_FILTER_CHANGE_DIFFERENT: The filter change cannot be
- *     described with any of the other enumeration values.
+ *   described with any of the other enumeration values.
  * @GTK_FILTER_CHANGE_LESS_STRICT: The filter is less strict than
- *     it was before: All items that it used to return %TRUE for
- *     still return %TRUE, others now may, too.
+ *   it was before: All items that it used to return %TRUE for
+ *   still return %TRUE, others now may, too.
  * @GTK_FILTER_CHANGE_MORE_STRICT: The filter is more strict than
- *     it was before: All items that it used to return %FALSE for
- *     still return %FALSE, others now may, too.
+ *   it was before: All items that it used to return %FALSE for
+ *   still return %FALSE, others now may, too.
  *
  * Describes changes in a filter in more detail and allows objects
  * using the filter to optimize refiltering items.

@@ -316,7 +316,7 @@ layout_get_char_width (PangoLayout *layout)
  * character
  *
  * Returns: whether cursor should actually be drawn as a rectangle.
- *     It may not be the case if character at index is invisible.
+ *   It may not be the case if character at index is invisible.
  */
 gboolean
 _gtk_text_util_get_block_cursor_location (PangoLayout    *layout,

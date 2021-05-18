@@ -112,7 +112,7 @@ static GParamSpec *properties[N_PROPS] = { NULL, };
  * @along:  position in pixels in the direction of the list
  * @pos: (out caller-allocates): set to the looked up position
  * @area: (out caller-allocates) (allow-none): set to the area occupied
- *     by the returned position.
+ *   by the returned position
  *
  * Given a coordinate in list coordinates, determine the position of the
  * item that occupies that position.
@@ -264,8 +264,7 @@ gtk_list_base_clear_adjustment (GtkListBase    *self,
  * gtk_list_base_move_focus_along:
  * @self: a #GtkListBase
  * @pos: position from which to move focus
- * @steps: steps to move focus - negative numbers
- *     move focus backwards
+ * @steps: steps to move focus - negative numbers move focus backwards
  *
  * Moves focus @steps in the direction of the list.
  * If focus cannot be moved, @pos is returned.
@@ -286,8 +285,7 @@ gtk_list_base_move_focus_along (GtkListBase *self,
  * gtk_list_base_move_focus_across:
  * @self: a #GtkListBase
  * @pos: position from which to move focus
- * @steps: steps to move focus - negative numbers
- *     move focus backwards
+ * @steps: steps to move focus - negative numbers move focus backwards
  *
  * Moves focus @steps in the direction across the list.
  * If focus cannot be moved, @pos is returned.
@@ -327,9 +325,9 @@ gtk_list_base_move_focus (GtkListBase    *self,
  * @self: a #GtkListBase
  * @pos: item to get the size of
  * @offset: (out caller-allocates) (allow-none) set to the offset
- *     of the top/left of the item
+ *   of the top/left of the item
  * @size: (out caller-allocates) (allow-none) set to the size of
- *     the item in the direction
+ *   the item in the direction
  *
  * Computes the allocation of the item in the direction along the sizing
  * axis.
@@ -350,9 +348,9 @@ gtk_list_base_get_allocation_along (GtkListBase *self,
  * @self: a #GtkListBase
  * @pos: item to get the size of
  * @offset: (out caller-allocates) (allow-none) set to the offset
- *     of the top/left of the item
+ *   of the top/left of the item
  * @size: (out caller-allocates) (allow-none) set to the size of
- *     the item in the direction
+ *   the item in the direction
  *
  * Computes the allocation of the item in the direction across to the sizing
  * axis.
@@ -373,11 +371,11 @@ gtk_list_base_get_allocation_across (GtkListBase *self,
  * @self: a #GtkListBase
  * @pos: item to select
  * @modify: %TRUE if the selection should be modified, %FALSE
- *     if a new selection should be done. This is usually set
- *     to %TRUE if the user keeps the <Shift> key pressed.
+ *   if a new selection should be done. This is usually set
+ *   to %TRUE if the user keeps the <Shift> key pressed.
  * @extend_pos: %TRUE if the selection should be extended.
- *     Selections are usually extended from the last selected
- *     position if the user presses the <Ctrl> key.
+ *   Selections are usually extended from the last selected
+ *   position if the user presses the <Ctrl> key.
  *
  * Selects the item at @pos according to how GTK list widgets modify
  * selections, both when clicking rows with the mouse or when using
@@ -1944,11 +1942,9 @@ gtk_list_base_get_anchor (GtkListBase *self)
  * @self: a #GtkListBase
  * @anchor_pos: position of the item to anchor
  * @anchor_align_across: how far in the across direction to anchor
- * @anchor_side_across: if the anchor should side to start or end
- *     of item
+ * @anchor_side_across: if the anchor should side to start or end of item
  * @anchor_align_along: how far in the along direction to anchor
- * @anchor_side_along: if the anchor should side to start or end
- *     of item
+ * @anchor_side_along: if the anchor should side to start or end of item
  *
  * Sets the anchor.
  * The anchor is the item that is always kept on screen.
@@ -2047,9 +2043,9 @@ gtk_list_base_set_anchor_max_widgets (GtkListBase *self,
  * @pos: position of the item to focus
  * @select: %TRUE to select the item
  * @modify: if selecting, %TRUE to modify the selected
- *     state, %FALSE to always select
+ *   state, %FALSE to always select
  * @extend: if selecting, %TRUE to extend the selection,
- *     %FALSE to only operate on this item
+ *   %FALSE to only operate on this item
  *
  * Tries to grab focus on the given item. If there is no item
  * at this position or grabbing focus failed, %FALSE will be

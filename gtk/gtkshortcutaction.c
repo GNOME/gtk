@@ -209,7 +209,6 @@ string_is_function (const char *string,
  * - `signal(NAME)`, for a `GtkSignalAction` for the signal `NAME`
  *
  * Returns: (nullable) (transfer full): a new `GtkShortcutAction`
- *     or %NULL on error
  */
 GtkShortcutAction *
 gtk_shortcut_action_parse_string (const char *string)

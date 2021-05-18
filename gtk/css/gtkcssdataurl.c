@@ -37,7 +37,7 @@
  * gtk_css_data_url_parse:
  * @url: the URL to parse
  * @out_mimetype: (out nullable optional): Return location to set the contained
- *     mime type to. If no mime type was specified, this value is set to %NULL.
+ *   mime type to. If no mime type was specified, this value is set to %NULL.
  * @error: error location or %NULL for none
  *
  * Decodes a data URL according to RFC2397 and returns the decoded data.

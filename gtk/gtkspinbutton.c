@@ -1706,7 +1706,7 @@ gtk_spin_button_default_output (GtkSpinButton *spin_button)
  * gtk_spin_button_configure:
  * @spin_button: a `GtkSpinButton`
  * @adjustment: (nullable): a `GtkAdjustment` to replace the spin button’s
- *     existing adjustment, or %NULL to leave its current adjustment unchanged
+ *   existing adjustment, or %NULL to leave its current adjustment unchanged
  * @climb_rate: the new climb rate
  * @digits: the number of decimal places to display in the spin button
  *
@@ -1774,9 +1774,9 @@ gtk_spin_button_configure (GtkSpinButton *spin_button,
 /**
  * gtk_spin_button_new:
  * @adjustment: (allow-none): the `GtkAdjustment` that this spin
- *     button should use, or %NULL
+ *   button should use, or %NULL
  * @climb_rate: specifies by how much the rate of change in the value will
- *     accelerate if you continue to hold down an up/down button or arrow key
+ *   accelerate if you continue to hold down an up/down button or arrow key
  * @digits: the number of decimal places to display
  *
  * Creates a new `GtkSpinButton`.

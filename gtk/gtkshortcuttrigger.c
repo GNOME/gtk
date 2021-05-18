@@ -87,8 +87,8 @@ gtk_shortcut_trigger_init (GtkShortcutTrigger *self)
  * @self: a `GtkShortcutTrigger`
  * @event: the event to check
  * @enable_mnemonics: %TRUE if mnemonics should trigger. Usually the
- *     value of this property is determined by checking that the passed
- *     in @event is a Key event and has the right modifiers set.
+ *   value of this property is determined by checking that the passed
+ *   in @event is a Key event and has the right modifiers set.
  *
  * Checks if the given @event triggers @self.
  *
@@ -292,8 +292,8 @@ gtk_shortcut_trigger_to_label (GtkShortcutTrigger *self,
  * not guaranteed to stay identical.
  *
  * Returns: %TRUE if something was printed or %FALSE if the
- *     trigger did not have a textual representation suitable
- *     for end users.
+ *   trigger did not have a textual representation suitable
+ *   for end users.
  **/
 gboolean
 gtk_shortcut_trigger_print_label (GtkShortcutTrigger *self,
@@ -363,8 +363,8 @@ gtk_shortcut_trigger_equal (gconstpointer trigger1,
  * They must each be a `GtkShortcutTrigger`.
  *
  * Returns: An integer less than, equal to, or greater than zero if
- *     @trigger1 is found, respectively, to be less than, to match,
- *     or be greater than @trigger2.
+ *   @trigger1 is found, respectively, to be less than, to match,
+ *   or be greater than @trigger2.
  */
 int
 gtk_shortcut_trigger_compare (gconstpointer trigger1,

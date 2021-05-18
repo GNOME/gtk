@@ -1500,7 +1500,7 @@ gtk_column_view_get_show_column_separators (GtkColumnView *self)
  * gtk_column_view_append_column:
  * @self: a `GtkColumnView`
  * @column: a `GtkColumnViewColumn` that hasn't been added to a
- *     `GtkColumnView` yet
+ *   `GtkColumnView` yet
  *
  * Appends the @column to the end of the columns in @self.
  */

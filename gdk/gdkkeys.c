@@ -412,7 +412,7 @@ gdk_keymap_get_modifier_state (GdkKeymap *keymap)
  * @keymap: a #GdkKeymap
  * @keyval: a keyval, such as %GDK_KEY_a, %GDK_KEY_Up, %GDK_KEY_Return, etc.
  * @keys: (out) (array length=n_keys) (transfer full): return location
- *     for an array of #GdkKeymapKey
+ *   for an array of #GdkKeymapKey
  * @n_keys: return location for number of elements in returned array
  *
  * Obtains a list of keycode/group/level combinations that will
@@ -494,9 +494,9 @@ gdk_keymap_get_cached_entries_for_keyval (GdkKeymap     *keymap,
  * @keymap: a #GdkKeymap
  * @hardware_keycode: a keycode
  * @keys: (out) (array length=n_entries) (transfer full) (optional): return
- *     location for array of #GdkKeymapKey, or %NULL
+ *   location for array of #GdkKeymapKey
  * @keyvals: (out) (array length=n_entries) (transfer full) (optional): return
- *     location for array of keyvals, or %NULL
+ *   location for array of keyvals
  * @n_entries: length of @keys and @keyvals
  *
  * Returns the keyvals bound to @hardware_keycode.
@@ -551,12 +551,11 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * @hardware_keycode: a keycode
  * @state: a modifier state
  * @group: active keyboard group
- * @keyval: (out) (allow-none): return location for keyval, or %NULL
- * @effective_group: (out) (allow-none): return location for effective
- *     group, or %NULL
- * @level: (out) (allow-none): return location for level, or %NULL
+ * @keyval: (out) (allow-none): return location for keyval
+ * @effective_group: (out) (allow-none): return location for effective group
+ * @level: (out) (allow-none): return location for level
  * @consumed_modifiers: (out) (allow-none): return location for modifiers
- *     that were used to determine the group or level, or %NULL
+ *   that were used to determine the group or level
  *
  * Translates the contents of a #GdkEventKey into a keyval, effective
  * group, and level. Modifiers that affected the translation and
@@ -646,8 +645,7 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
  * but without the leading “GDK_KEY_”.
  *
  * Returns: (nullable) (transfer none): a string containing the name
- *     of the key, or %NULL if @keyval is not a valid key. The string
- *     should not be modified.
+ *   of the key
  */
 const char *
 gdk_keyval_name (guint keyval)
@@ -666,7 +664,7 @@ gdk_keyval_name (guint keyval)
  * but without the leading “GDK_KEY_”.
  *
  * Returns: the corresponding key value, or %GDK_KEY_VoidSymbol
- *     if the key name is not a valid key
+ *   if the key name is not a valid key
  */
 guint
 gdk_keyval_from_name (const char *keyval_name)

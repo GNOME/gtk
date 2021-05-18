@@ -58,11 +58,10 @@
 /**
  * gtk_test_init:
  * @argcp: Address of the `argc` parameter of the
- *        main() function. Changed if any arguments were handled.
- * @argvp: (inout) (array length=argcp): Address of the 
- *        `argv` parameter of main().
- *        Any parameters understood by g_test_init() or gtk_init() are
- *        stripped before return.
+ *   main() function. Changed if any arguments were handled.
+ * @argvp: (inout) (array length=argcp): Address of the `argv`
+ *   parameter of main(). Any parameters understood by g_test_init()
+ *   or gtk_init() are stripped before return.
  * @...: currently unused
  *
  * This function is used to initialize a GTK test program.

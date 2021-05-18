@@ -167,8 +167,8 @@ _gtk_style_property_init_properties (void)
  * property exists, %NULL is returned.
  *
  * Returns: (nullable) (transfer none): The property or %NULL if no
- *     property with the given name exists.
- **/
+ *   property with the given name exists.
+ */
 GtkStyleProperty *
 _gtk_style_property_lookup (const char *name)
 {

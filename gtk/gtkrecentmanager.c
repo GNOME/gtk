@@ -879,7 +879,7 @@ gtk_recent_manager_add_item (GtkRecentManager *manager,
  * applications that have registered it.
  *
  * Returns: %TRUE if the new item was successfully added to the
- *     recently used resources list, %FALSE otherwise
+ *   recently used resources list, %FALSE otherwise
  */
 gboolean
 gtk_recent_manager_add_full (GtkRecentManager    *manager,
@@ -1534,7 +1534,7 @@ gtk_recent_info_free (GtkRecentInfo *recent_info)
  * Increases the reference count of @recent_info by one.
  *
  * Returns: the recent info object with its reference count
- *     increased by one
+ *   increased by one
  */
 GtkRecentInfo *
 gtk_recent_info_ref (GtkRecentInfo *info)

@@ -309,7 +309,6 @@ gtk_string_filter_init (GtkStringFilter *self)
 /**
  * gtk_string_filter_new:
  * @expression: (transfer full) (nullable): The expression to evaluate
- *     or %NULL for none
  *
  * Creates a new string filter.
  *
@@ -352,7 +351,7 @@ gtk_string_filter_get_search (GtkStringFilter *self)
  * gtk_string_filter_set_search: (attributes org.gtk.Method.set_property=search)
  * @self: a `GtkStringFilter`
  * @search: (transfer none) (nullable): The string to search for
- *     or %NULL to clear the search
+ *   or %NULL to clear the search
  *
  * Sets the string to search for.
  */

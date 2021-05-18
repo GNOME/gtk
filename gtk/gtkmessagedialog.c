@@ -739,7 +739,7 @@ gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
  * for the corresponding function in the parent [class@Gtk.Dialog].
  *
  * Returns: (transfer none): A `GtkBox` corresponding to the
- *     “message area” in the @message_dialog.
+ *   “message area” in the @message_dialog
  */
 GtkWidget *
 gtk_message_dialog_get_message_area (GtkMessageDialog *message_dialog)

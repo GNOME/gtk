@@ -987,8 +987,8 @@ gtk_list_box_selected_foreach (GtkListBox            *box,
  * Creates a list of all selected children.
  *
  * Returns: (element-type GtkListBoxRow) (transfer container):
- *     A `GList` containing the `GtkWidget` for each selected child.
- *     Free with g_list_free() when done.
+ *   A `GList` containing the `GtkWidget` for each selected child.
+ *   Free with g_list_free() when done.
  */
 GList *
 gtk_list_box_get_selected_rows (GtkListBox *box)

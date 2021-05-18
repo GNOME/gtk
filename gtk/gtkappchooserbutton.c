@@ -1058,7 +1058,7 @@ gtk_app_chooser_button_set_heading (GtkAppChooserButton *self,
  * Returns the text to display at the top of the dialog.
  *
  * Returns: (nullable): the text to display at the top of the dialog,
- *     or %NULL, in which case a default text is displayed
+ *   or %NULL, in which case a default text is displayed
  */
 const char *
 gtk_app_chooser_button_get_heading (GtkAppChooserButton *self)

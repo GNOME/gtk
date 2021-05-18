@@ -12634,10 +12634,9 @@ gtk_tree_view_convert_bin_window_to_tree_coords (GtkTreeView *tree_view,
 
 /**
  * gtk_tree_view_get_visible_range:
- * @tree_view: A #GtkTreeView
- * @start_path: (out) (allow-none): Return location for start of region,
- *              or %NULL.
- * @end_path: (out) (allow-none): Return location for end of region, or %NULL.
+ * @tree_view: A `GtkTreeView`
+ * @start_path: (out) (allow-none): Return location for start of region
+ * @end_path: (out) (allow-none): Return location for end of region
  *
  * Sets @start_path and @end_path to be the first and last visible path.
  * Note that there may be invisible paths in between.
@@ -12645,7 +12644,7 @@ gtk_tree_view_convert_bin_window_to_tree_coords (GtkTreeView *tree_view,
  * The paths should be freed with gtk_tree_path_free() after use.
  *
  * Returns: %TRUE, if valid paths were placed in @start_path and @end_path.
- **/
+ */
 gboolean
 gtk_tree_view_get_visible_range (GtkTreeView  *tree_view,
                                  GtkTreePath **start_path,
@@ -14677,28 +14676,28 @@ gtk_tree_view_set_tooltip_cell (GtkTreeView       *tree_view,
 
 /**
  * gtk_tree_view_get_tooltip_context:
- * @tree_view: a #GtkTreeView
+ * @tree_view: a `GtkTreeView`
  * @x: the x coordinate (relative to widget coordinates)
  * @y: the y coordinate (relative to widget coordinates)
  * @keyboard_tip: whether this is a keyboard tooltip or not
  * @model: (out) (optional) (nullable) (transfer none): a pointer to
- *         receive a #GtkTreeModel or %NULL
- * @path: (out) (optional): a pointer to receive a #GtkTreePath or %NULL
- * @iter: (out) (optional): a pointer to receive a #GtkTreeIter or %NULL
+ *   receive a `GtkTreeModel`
+ * @path: (out) (optional): a pointer to receive a `GtkTreePath`
+ * @iter: (out) (optional): a pointer to receive a `GtkTreeIter`
  *
- * This function is supposed to be used in a #GtkWidget::query-tooltip
- * signal handler for #GtkTreeView.  The @x, @y and @keyboard_tip values
+ * This function is supposed to be used in a ::query-tooltip
+ * signal handler for `GtkTreeView`. The @x, @y and @keyboard_tip values
  * which are received in the signal handler, should be passed to this
  * function without modification.
  *
  * The return value indicates whether there is a tree view row at the given
- * coordinates (%TRUE) or not (%FALSE) for mouse tooltips.  For keyboard
- * tooltips the row returned will be the cursor row.  When %TRUE, then any of
+ * coordinates (%TRUE) or not (%FALSE) for mouse tooltips. For keyboard
+ * tooltips the row returned will be the cursor row. When %TRUE, then any of
  * @model, @path and @iter which have been provided will be set to point to
- * that row and the corresponding model.  @x and @y will always be converted
+ * that row and the corresponding model. @x and @y will always be converted
  * to be relative to @tree_view’s bin_window if @keyboard_tooltip is %FALSE.
  *
- * Returns: whether or not the given tooltip context points to a row.
+ * Returns: whether or not the given tooltip context points to a row
  */
 gboolean
 gtk_tree_view_get_tooltip_context (GtkTreeView   *tree_view,

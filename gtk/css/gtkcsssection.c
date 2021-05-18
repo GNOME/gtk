@@ -158,8 +158,8 @@ gtk_css_section_get_file (const GtkCssSection *section)
  * Returns the location in the CSS document where this section starts.
  *
  * Returns: (transfer none) (not nullable): The start location of
- *     this section
- **/
+ *   this section
+ */
 const GtkCssLocation *
 gtk_css_section_get_start_location (const GtkCssSection *section)
 {
@@ -175,8 +175,8 @@ gtk_css_section_get_start_location (const GtkCssSection *section)
  * Returns the location in the CSS document where this section ends.
  *
  * Returns: (transfer none) (not nullable): The end location of
- *     this section
- **/
+ *   this section
+ */
 const GtkCssLocation *
 gtk_css_section_get_end_location (const GtkCssSection *section)
 {

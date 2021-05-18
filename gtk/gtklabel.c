@@ -2668,7 +2668,7 @@ gtk_label_new (const char *str)
 /**
  * gtk_label_new_with_mnemonic:
  * @str: (nullable): The text of the label, with an underscore in front of the
- *       mnemonic character
+ *   mnemonic character
  *
  * Creates a new `GtkLabel`, containing the text in @str.
  *
@@ -2872,7 +2872,7 @@ gtk_label_set_mnemonic_widget (GtkLabel  *self,
  * See [method@Gtk.Label.set_mnemonic_widget].
  *
  * Returns: (nullable) (transfer none): the target of the label’s mnemonic,
- *     or %NULL if none has been set and the default algorithm will be used.
+ *   or %NULL if none has been set and the default algorithm will be used.
  **/
 GtkWidget *
 gtk_label_get_mnemonic_widget (GtkLabel *self)
@@ -3090,7 +3090,7 @@ gtk_label_set_attributes (GtkLabel         *self,
  * `pango_layout_get_attribute (gtk_label_get_layout (self))`.
  *
  * Returns: (nullable) (transfer none): the attribute list, or %NULL
- *     if none was set.
+ *   if none was set.
  */
 PangoAttrList *
 gtk_label_get_attributes (GtkLabel *self)

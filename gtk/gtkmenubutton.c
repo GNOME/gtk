@@ -1030,7 +1030,7 @@ gtk_menu_button_set_use_underline (GtkMenuButton *menu_button,
  * mnemonic.
  *
  * Returns: %TRUE whether an embedded underline in the text indicates
- *     the mnemonic accelerator keys.
+ *   the mnemonic accelerator keys.
  */
 gboolean
 gtk_menu_button_get_use_underline (GtkMenuButton *menu_button)

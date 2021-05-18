@@ -889,7 +889,7 @@ gtk_drop_down_set_selected (GtkDropDown *self,
  * Gets the position of the selected item.
  *
  * Returns: the position of the selected item, or %GTK_INVALID_LIST_POSITION
- *     if not item is selected
+ *   if not item is selected
  */
 guint
 gtk_drop_down_get_selected (GtkDropDown *self)
