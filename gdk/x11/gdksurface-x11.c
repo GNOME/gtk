@@ -3059,7 +3059,7 @@ gdk_x11_surface_set_user_time (GdkSurface *surface,
  * gdk_x11_surface_set_utf8_property:
  * @surface: (type GdkX11Surface): a #GdkSurface
  * @name: Property name, will be interned as an X atom
- * @value: (allow-none): Property value, or %NULL to delete
+ * @value: (nullable): Property value, or %NULL to delete
  *
  * This function modifies or removes an arbitrary X11 window
  * property of type UTF8_STRING.  If the given @surface is

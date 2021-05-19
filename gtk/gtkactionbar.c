@@ -291,7 +291,7 @@ gtk_action_bar_remove (GtkActionBar *action_bar,
 /**
  * gtk_action_bar_set_center_widget:
  * @action_bar: a `GtkActionBar`
- * @center_widget: (allow-none): a widget to use for the center
+ * @center_widget: (nullable): a widget to use for the center
  *
  * Sets the center widget for the `GtkActionBar`.
  */

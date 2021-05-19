@@ -1051,7 +1051,7 @@ gtk_list_item_manager_update_list_item (GtkListItemManager *self,
 /*
  * gtk_list_item_manager_release_list_item:
  * @self: a #GtkListItemManager
- * @change: (allow-none): The change associated with this release or
+ * @change: (nullable): The change associated with this release or
  *   %NULL if this is a final removal
  * @item: an item previously acquired with
  *   gtk_list_item_manager_acquire_list_item()

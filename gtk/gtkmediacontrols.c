@@ -306,7 +306,7 @@ gtk_media_controls_init (GtkMediaControls *controls)
 
 /**
  * gtk_media_controls_new:
- * @stream: (allow-none) (transfer none): a `GtkMediaStream` to manage
+ * @stream: (nullable) (transfer none): a `GtkMediaStream` to manage
  *
  * Creates a new `GtkMediaControls` managing the @stream passed to it.
  *

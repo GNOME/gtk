@@ -395,8 +395,8 @@ gtk_cell_area_context_allocate (GtkCellAreaContext *context,
 /**
  * gtk_cell_area_context_get_preferred_width:
  * @context: a #GtkCellAreaContext
- * @minimum_width: (out) (allow-none): location to store the minimum width
- * @natural_width: (out) (allow-none): location to store the natural width
+ * @minimum_width: (out) (optional): location to store the minimum width
+ * @natural_width: (out) (optional): location to store the natural width
  *
  * Gets the accumulative preferred width for all rows which have been
  * requested with this context.
@@ -423,8 +423,8 @@ gtk_cell_area_context_get_preferred_width (GtkCellAreaContext *context,
 /**
  * gtk_cell_area_context_get_preferred_height:
  * @context: a #GtkCellAreaContext
- * @minimum_height: (out) (allow-none): location to store the minimum height
- * @natural_height: (out) (allow-none): location to store the natural height
+ * @minimum_height: (out) (optional): location to store the minimum height
+ * @natural_height: (out) (optional): location to store the natural height
  *
  * Gets the accumulative preferred height for all rows which have been
  * requested with this context.
@@ -452,8 +452,8 @@ gtk_cell_area_context_get_preferred_height (GtkCellAreaContext *context,
  * gtk_cell_area_context_get_preferred_height_for_width:
  * @context: a #GtkCellAreaContext
  * @width: a proposed width for allocation
- * @minimum_height: (out) (allow-none): location to store the minimum height
- * @natural_height: (out) (allow-none): location to store the natural height
+ * @minimum_height: (out) (optional): location to store the minimum height
+ * @natural_height: (out) (optional): location to store the natural height
  *
  * Gets the accumulative preferred height for @width for all rows
  * which have been requested for the same said @width with this context.
@@ -480,8 +480,8 @@ gtk_cell_area_context_get_preferred_height_for_width (GtkCellAreaContext *contex
  * gtk_cell_area_context_get_preferred_width_for_height:
  * @context: a #GtkCellAreaContext
  * @height: a proposed height for allocation
- * @minimum_width: (out) (allow-none): location to store the minimum width
- * @natural_width: (out) (allow-none): location to store the natural width
+ * @minimum_width: (out) (optional): location to store the minimum width
+ * @natural_width: (out) (optional): location to store the natural width
  *
  * Gets the accumulative preferred width for @height for all rows which
  * have been requested for the same said @height with this context.
@@ -507,8 +507,8 @@ gtk_cell_area_context_get_preferred_width_for_height (GtkCellAreaContext *contex
 /**
  * gtk_cell_area_context_get_allocation:
  * @context: a #GtkCellAreaContext
- * @width: (out) (allow-none): location to store the allocated width, or %NULL
- * @height: (out) (allow-none): location to store the allocated height, or %NULL
+ * @width: (out) (optional): location to store the allocated width, or %NULL
+ * @height: (out) (optional): location to store the allocated height, or %NULL
  *
  * Fetches the current allocation size for @context.
  *

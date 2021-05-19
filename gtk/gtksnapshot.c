@@ -316,7 +316,7 @@ gtk_snapshot_free_to_node (GtkSnapshot *snapshot)
 /**
  * gtk_snapshot_free_to_paintable: (skip)
  * @snapshot: (transfer full): a `GtkSnapshot`
- * @size: (allow-none): The size of the resulting paintable
+ * @size: (nullable): The size of the resulting paintable
  *   or %NULL to use the bounds of the snapshot
  *
  * Returns a paintable for the node that was
@@ -1513,7 +1513,7 @@ gtk_snapshot_to_node (GtkSnapshot *snapshot)
 /**
  * gtk_snapshot_to_paintable:
  * @snapshot: a `GtkSnapshot`
- * @size: (allow-none): The size of the resulting paintable
+ * @size: (nullable): The size of the resulting paintable
  *   or %NULL to use the bounds of the snapshot
  *
  * Returns a paintable encapsulating the render node
@@ -1655,7 +1655,7 @@ gtk_snapshot_restore (GtkSnapshot *snapshot)
 /**
  * gtk_snapshot_transform:
  * @snapshot: a `GtkSnapshot`
- * @transform: (allow-none): the transform to apply
+ * @transform: (nullable): the transform to apply
  *
  * Transforms @snapshot's coordinate system with the given @transform.
  */

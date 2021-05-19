@@ -125,7 +125,7 @@ gdk_content_formats_new_take (GType *      gtypes,
 
 /**
  * gdk_content_formats_new:
- * @mime_types: (array length=n_mime_types) (allow-none): Pointer to an
+ * @mime_types: (array length=n_mime_types) (nullable): Pointer to an
  *   array of mime types
  * @n_mime_types: number of entries in @mime_types.
  *

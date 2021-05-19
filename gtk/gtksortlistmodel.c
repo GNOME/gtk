@@ -829,8 +829,8 @@ gtk_sort_list_model_init (GtkSortListModel *self)
 
 /**
  * gtk_sort_list_model_new:
- * @model: (allow-none) (transfer full): the model to sort, or %NULL
- * @sorter: (allow-none) (transfer full): the `GtkSorter` to sort @model with, or %NULL
+ * @model: (nullable) (transfer full): the model to sort, or %NULL
+ * @sorter: (nullable) (transfer full): the `GtkSorter` to sort @model with, or %NULL
  *
  * Creates a new sort list model that uses the @sorter to sort @model.
  *
@@ -860,7 +860,7 @@ gtk_sort_list_model_new (GListModel *model,
 /**
  * gtk_sort_list_model_set_model: (attributes org.gtk.Method.set_property=model)
  * @self: a `GtkSortListModel`
- * @model: (allow-none): The model to be sorted
+ * @model: (nullable): The model to be sorted
  *
  * Sets the model to be sorted.
  *
@@ -922,7 +922,7 @@ gtk_sort_list_model_get_model (GtkSortListModel *self)
 /**
  * gtk_sort_list_model_set_sorter: (attributes org.gtk.Method.set_property=sorter)
  * @self: a `GtkSortListModel`
- * @sorter: (allow-none): the `GtkSorter` to sort @model with
+ * @sorter: (nullable): the `GtkSorter` to sort @model with
  *
  * Sets a new sorter on @self.
  */

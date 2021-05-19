@@ -1185,8 +1185,8 @@ gtk_grid_view_init (GtkGridView *self)
 
 /**
  * gtk_grid_view_new:
- * @model: (allow-none) (transfer full): the model to use, or %NULL
- * @factory: (allow-none) (transfer full): The factory to populate items with, or %NULL
+ * @model: (nullable) (transfer full): the model to use, or %NULL
+ * @factory: (nullable) (transfer full): The factory to populate items with, or %NULL
  *
  * Creates a new `GtkGridView` that uses the given @factory for
  * mapping items to widgets.
@@ -1240,7 +1240,7 @@ gtk_grid_view_get_model (GtkGridView *self)
 /**
  * gtk_grid_view_set_model: (attributes org.gtk.Method.set_property=model)
  * @self: a `GtkGridView`
- * @model: (allow-none) (transfer none): the model to use or %NULL for none
+ * @model: (nullable) (transfer none): the model to use or %NULL for none
  *
  * Sets the imodel to use.
  *
@@ -1282,7 +1282,7 @@ gtk_grid_view_get_factory (GtkGridView *self)
 /**
  * gtk_grid_view_set_factory: (attributes org.gtk.Method.set_property=factory)
  * @self: a `GtkGridView`
- * @factory: (allow-none) (transfer none): the factory to use or %NULL for none
+ * @factory: (nullable) (transfer none): the factory to use or %NULL for none
  *
  * Sets the `GtkListItemFactory` to use for populating list items.
  */

@@ -397,7 +397,7 @@ unset_stack (GtkStackSwitcher *switcher)
 /**
  * gtk_stack_switcher_set_stack: (attributes org.gtk.Method.set_property=stack)
  * @switcher: a `GtkStackSwitcher`
- * @stack: (allow-none): a `GtkStack`
+ * @stack: (nullable): a `GtkStack`
  *
  * Sets the stack to control.
  */

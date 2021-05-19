@@ -477,7 +477,7 @@ gtk_image_new_from_resource (const char *resource_path)
 
 /**
  * gtk_image_new_from_pixbuf:
- * @pixbuf: (allow-none): a `GdkPixbuf`, or %NULL
+ * @pixbuf: (nullable): a `GdkPixbuf`, or %NULL
  *
  * Creates a new `GtkImage` displaying @pixbuf.
  *
@@ -508,7 +508,7 @@ gtk_image_new_from_pixbuf (GdkPixbuf *pixbuf)
 
 /**
  * gtk_image_new_from_paintable:
- * @paintable: (allow-none): a `GdkPaintable`, or %NULL
+ * @paintable: (nullable): a `GdkPaintable`, or %NULL
  *
  * Creates a new `GtkImage` displaying @paintable.
  *
@@ -584,7 +584,7 @@ gtk_image_new_from_gicon (GIcon *icon)
 /**
  * gtk_image_set_from_file: (attributes org.gtk.Method.set_property=file)
  * @image: a `GtkImage`
- * @filename: (type filename) (allow-none): a filename or %NULL
+ * @filename: (type filename) (nullable): a filename or %NULL
  *
  * Sets a `GtkImage` to show a file.
  *
@@ -662,7 +662,7 @@ out:
 /**
  * gtk_image_set_from_resource: (attributes org.gtk.Method.set_property=resource)
  * @image: a `GtkImage`
- * @resource_path: (allow-none): a resource path or %NULL
+ * @resource_path: (nullable): a resource path or %NULL
  *
  * Sets a `GtkImage` to show a resource.
  *
@@ -720,7 +720,7 @@ gtk_image_set_from_resource (GtkImage   *image,
 /**
  * gtk_image_set_from_pixbuf: (attributes org.gtk.Method.set_property=paintable)
  * @image: a `GtkImage`
- * @pixbuf: (allow-none): a `GdkPixbuf` or `NULL`
+ * @pixbuf: (nullable): a `GdkPixbuf` or `NULL`
  *
  * Sets a `GtkImage` to show a `GdkPixbuf`.
  *
@@ -925,7 +925,7 @@ gtk_image_get_paintable (GtkImage *image)
  * The returned string is owned by the `GtkImage` and should not
  * be freed.
  *
- * Returns: (transfer none) (allow-none): the icon name, or %NULL
+ * Returns: (transfer none) (nullable): the icon name, or %NULL
  */
 const char *
 gtk_image_get_icon_name (GtkImage *image)
@@ -946,7 +946,7 @@ gtk_image_get_icon_name (GtkImage *image)
  * The caller of this function does not own a reference to the
  * returned `GIcon`.
  *
- * Returns: (transfer none) (allow-none): a `GIcon`, or %NULL
+ * Returns: (transfer none) (nullable): a `GIcon`, or %NULL
  **/
 GIcon *
 gtk_image_get_gicon (GtkImage *image)

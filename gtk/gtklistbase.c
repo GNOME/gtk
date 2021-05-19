@@ -111,7 +111,7 @@ static GParamSpec *properties[N_PROPS] = { NULL, };
  * @across: position in pixels in the direction cross to the list
  * @along:  position in pixels in the direction of the list
  * @pos: (out caller-allocates): set to the looked up position
- * @area: (out caller-allocates) (allow-none): set to the area occupied
+ * @area: (out caller-allocates) (optional): set to the area occupied
  *   by the returned position
  *
  * Given a coordinate in list coordinates, determine the position of the
@@ -324,9 +324,9 @@ gtk_list_base_move_focus (GtkListBase    *self,
  * gtk_list_base_get_allocation_along:
  * @self: a #GtkListBase
  * @pos: item to get the size of
- * @offset: (out caller-allocates) (allow-none) set to the offset
+ * @offset: (out caller-allocates) (optional): set to the offset
  *   of the top/left of the item
- * @size: (out caller-allocates) (allow-none) set to the size of
+ * @size: (out caller-allocates) (optional): set to the size of
  *   the item in the direction
  *
  * Computes the allocation of the item in the direction along the sizing
@@ -347,9 +347,9 @@ gtk_list_base_get_allocation_along (GtkListBase *self,
  * gtk_list_base_get_allocation_across:
  * @self: a #GtkListBase
  * @pos: item to get the size of
- * @offset: (out caller-allocates) (allow-none) set to the offset
+ * @offset: (out caller-allocates) (optional): set to the offset
  *   of the top/left of the item
- * @size: (out caller-allocates) (allow-none) set to the size of
+ * @size: (out caller-allocates) (optional): set to the size of
  *   the item in the direction
  *
  * Computes the allocation of the item in the direction across to the sizing

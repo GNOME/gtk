@@ -1773,7 +1773,7 @@ gtk_spin_button_configure (GtkSpinButton *spin_button,
 
 /**
  * gtk_spin_button_new:
- * @adjustment: (allow-none): the `GtkAdjustment` that this spin
+ * @adjustment: (nullable): the `GtkAdjustment` that this spin
  *   button should use, or %NULL
  * @climb_rate: specifies by how much the rate of change in the value will
  *   accelerate if you continue to hold down an up/down button or arrow key
@@ -1964,8 +1964,8 @@ gtk_spin_button_set_increments (GtkSpinButton *spin_button,
 /**
  * gtk_spin_button_get_increments:
  * @spin_button: a `GtkSpinButton`
- * @step: (out) (allow-none): location to store step increment, or %NULL
- * @page: (out) (allow-none): location to store page increment, or %NULL
+ * @step: (out) (optional): location to store step increment, or %NULL
+ * @page: (out) (optional): location to store page increment, or %NULL
  *
  * Gets the current step and page the increments
  * used by @spin_button.

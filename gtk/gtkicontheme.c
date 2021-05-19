@@ -1637,7 +1637,7 @@ gtk_icon_theme_add_resource_path (GtkIconTheme *self,
 /**
  * gtk_icon_theme_set_theme_name:
  * @self: a `GtkIconTheme`
- * @theme_name: (allow-none): name of icon theme to use instead of
+ * @theme_name: (nullable): name of icon theme to use instead of
  *   configured theme, or %NULL to unset a previously set custom theme
  *
  * Sets the name of the icon theme that the `GtkIconTheme` object uses
@@ -3966,13 +3966,13 @@ icon_paintable_snapshot (GdkPaintable *paintable,
  * @snapshot: a `GdkSnapshot` to snapshot to
  * @width: width to snapshot in
  * @height: height to snapshot in
- * @foreground_color: (allow-none): a `GdkRGBA` representing the foreground color
+ * @foreground_color: (nullable): a `GdkRGBA` representing the foreground color
  *   of the icon or %NULL to use the default color.
- * @success_color: (allow-none): a `GdkRGBA` representing the warning color
+ * @success_color: (nullable): a `GdkRGBA` representing the warning color
  *   of the icon or %NULL to use the default color
- * @warning_color: (allow-none): a `GdkRGBA` representing the warning color
+ * @warning_color: (nullable): a `GdkRGBA` representing the warning color
  *   of the icon or %NULL to use the default color
- * @error_color: (allow-none): a `GdkRGBA` representing the error color
+ * @error_color: (nullable): a `GdkRGBA` representing the error color
  *   of the icon or %NULL to use the default color
  *
  * Snapshots the `GtkIconPaintable`.

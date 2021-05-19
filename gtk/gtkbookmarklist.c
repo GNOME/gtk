@@ -464,8 +464,8 @@ gtk_bookmark_list_get_filename (GtkBookmarkList *self)
 
 /**
  * gtk_bookmark_list_new:
- * @filename: (allow-none): The bookmark file to load
- * @attributes: (allow-none): The attributes to query
+ * @filename: (nullable): The bookmark file to load
+ * @attributes: (nullable): The attributes to query
  *
  * Creates a new `GtkBookmarkList` with the given @attributes.
  *
@@ -484,7 +484,7 @@ gtk_bookmark_list_new (const char *filename,
 /**
  * gtk_bookmark_list_set_attributes: (attributes org.gtk.Method.set_property=attributes)
  * @self: a `GtkBookmarkList`
- * @attributes: (allow-none): the attributes to enumerate
+ * @attributes: (nullable): the attributes to enumerate
  *
  * Sets the @attributes to be enumerated and starts the enumeration.
  *

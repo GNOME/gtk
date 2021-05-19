@@ -301,7 +301,7 @@ free_style_cache (GtkTextLayout *text_layout)
 
 /*
  * gtk_text_layout_set_buffer:
- * @buffer: (allow-none):
+ * @buffer: (nullable):
  */
 void
 gtk_text_layout_set_buffer (GtkTextLayout *layout,

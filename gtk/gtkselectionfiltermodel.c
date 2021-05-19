@@ -236,7 +236,7 @@ gtk_selection_filter_model_init (GtkSelectionFilterModel *self)
 
 /**
  * gtk_selection_filter_model_new:
- * @model: (allow-none) (transfer none): the selection model to filter, or %NULL
+ * @model: (nullable) (transfer none): the selection model to filter, or %NULL
  *
  * Creates a new `GtkSelectionFilterModel` that will include the
  * selected items from the underlying selection model.
@@ -254,7 +254,7 @@ gtk_selection_filter_model_new (GtkSelectionModel *model)
 /**
  * gtk_selection_filter_model_set_model: (attributes org.gtk.Method.set_property=model)
  * @self: a `GtkSelectionFilterModel`
- * @model: (allow-none): The model to be filtered
+ * @model: (nullable): The model to be filtered
  *
  * Sets the model to be filtered.
  *

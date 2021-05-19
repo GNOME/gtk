@@ -232,7 +232,7 @@ gtk_shortcut_new (GtkShortcutTrigger *trigger,
  * @trigger: (transfer full) (nullable): The trigger that will trigger the shortcut
  * @action: (transfer full) (nullable): The action that will be activated upon
  *   triggering
- * @format_string: (allow-none): GVariant format string for arguments or %NULL for
+ * @format_string: (nullable): GVariant format string for arguments or %NULL for
  *   no arguments
  * @...: arguments, as given by format string.
  *

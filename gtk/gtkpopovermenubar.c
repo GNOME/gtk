@@ -683,7 +683,7 @@ gtk_popover_menu_bar_buildable_iface_init (GtkBuildableIface *iface)
 
 /**
  * gtk_popover_menu_bar_new_from_model:
- * @model: (allow-none): a `GMenuModel`, or %NULL
+ * @model: (nullable): a `GMenuModel`, or %NULL
  *
  * Creates a `GtkPopoverMenuBar` from a `GMenuModel`.
  *
@@ -700,7 +700,7 @@ gtk_popover_menu_bar_new_from_model (GMenuModel *model)
 /**
  * gtk_popover_menu_bar_set_menu_model: (attributes org.gtk.Method.set_property=menu-model)
  * @bar: a `GtkPopoverMenuBar`
- * @model: (allow-none): a `GMenuModel`, or %NULL
+ * @model: (nullable): a `GMenuModel`, or %NULL
  *
  * Sets a menu model from which @bar should take
  * its contents.

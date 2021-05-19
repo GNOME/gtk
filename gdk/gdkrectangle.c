@@ -91,7 +91,7 @@ gdk_rectangle_union (const GdkRectangle *src1,
  * gdk_rectangle_intersect:
  * @src1: a `GdkRectangle`
  * @src2: a `GdkRectangle`
- * @dest: (out caller-allocates) (allow-none): return location for the
+ * @dest: (out caller-allocates) (optional): return location for the
  *   intersection of @src1 and @src2, or %NULL
  *
  * Calculates the intersection of two rectangles.

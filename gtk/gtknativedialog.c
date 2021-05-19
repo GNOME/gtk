@@ -501,7 +501,7 @@ parent_destroyed (GtkWidget       *parent,
 /**
  * gtk_native_dialog_set_transient_for: (attributes org.gtk.Method.set_property=transient-for)
  * @self: a `GtkNativeDialog`
- * @parent: (allow-none): parent window, or %NULL
+ * @parent: (nullable): parent window, or %NULL
  *
  * Dialog windows should be set transient for the main application
  * window they were spawned from.

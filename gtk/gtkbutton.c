@@ -1018,7 +1018,7 @@ gtk_button_get_gesture (GtkButton *button)
 /**
  * gtk_button_set_child: (attributes org.gtk.Method.set_property=child)
  * @button: a `GtkButton`
- * @child: (allow-none): the child widget
+ * @child: (nullable): the child widget
  *
  * Sets the child widget of @button.
  */

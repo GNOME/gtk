@@ -1329,7 +1329,7 @@ gtk_level_bar_set_inverted (GtkLevelBar *self,
 /**
  * gtk_level_bar_remove_offset_value:
  * @self: a `GtkLevelBar`
- * @name: (allow-none): the name of an offset in the bar
+ * @name: (nullable): the name of an offset in the bar
  *
  * Removes an offset marker from a `GtkLevelBar`.
  *
@@ -1391,7 +1391,7 @@ gtk_level_bar_add_offset_value (GtkLevelBar *self,
 /**
  * gtk_level_bar_get_offset_value:
  * @self: a `GtkLevelBar`
- * @name: (allow-none): the name of an offset in the bar
+ * @name: (nullable): the name of an offset in the bar
  * @value: (out): location where to store the value
  *
  * Fetches the value specified for the offset marker @name in @self.

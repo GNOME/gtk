@@ -1438,7 +1438,7 @@ gdk_surface_paint_on_clock (GdkFrameClock *clock,
 /*
  * gdk_surface_invalidate_rect:
  * @surface: a `GdkSurface`
- * @rect: (allow-none): rectangle to invalidate or %NULL to
+ * @rect: (nullable): rectangle to invalidate or %NULL to
  *   invalidate the whole surface
  *
  * Invalidate a rectangular region of @surface.
@@ -1696,9 +1696,9 @@ gdk_surface_constrain_size (GdkGeometry    *geometry,
  * gdk_surface_get_device_position:
  * @surface: a `GdkSurface`
  * @device: pointer `GdkDevice` to query to
- * @x: (out) (allow-none): return locatio for the X coordinate of @device, or %NULL
- * @y: (out) (allow-none): return location for the Y coordinate of @device, or %NULL
- * @mask: (out) (allow-none): return location for the modifier mask, or %NULL
+ * @x: (out) (optional): return locatio for the X coordinate of @device, or %NULL
+ * @y: (out) (optional): return location for the Y coordinate of @device, or %NULL
+ * @mask: (out) (optional): return location for the modifier mask, or %NULL
  *
  * Obtains the current device position and modifier state.
  *
@@ -1855,7 +1855,7 @@ gdk_surface_get_cursor (GdkSurface *surface)
 /**
  * gdk_surface_set_cursor: (attributes org.gtk.Method.set_property=cursor)
  * @surface: a `GdkSurface`
- * @cursor: (allow-none): a `GdkCursor`
+ * @cursor: (nullable): a `GdkCursor`
  *
  * Sets the default mouse pointer for a `GdkSurface`.
  *
@@ -1970,10 +1970,10 @@ gdk_surface_set_device_cursor (GdkSurface *surface,
 /*
  * gdk_surface_get_geometry:
  * @surface: a `GdkSurface`
- * @x: (out) (allow-none): return location for X coordinate of surface (relative to its parent)
- * @y: (out) (allow-none): return location for Y coordinate of surface (relative to its parent)
- * @width: (out) (allow-none): return location for width of surface
- * @height: (out) (allow-none): return location for height of surface
+ * @x: (out) (optional): return location for X coordinate of surface (relative to its parent)
+ * @y: (out) (optional): return location for Y coordinate of surface (relative to its parent)
+ * @width: (out) (optional): return location for width of surface
+ * @height: (out) (optional): return location for height of surface
  *
  * Get the geometry of the surface.
  *
@@ -2624,7 +2624,7 @@ gdk_surface_get_scale_factor (GdkSurface *surface)
 /**
  * gdk_surface_set_opaque_region:
  * @surface: a top-level `GdkSurface`
- * @region: (allow-none):  a region, or %NULL
+ * @region: (nullable):  a region, or %NULL
  *
  * Marks a region of the `GdkSurface` as opaque.
  *

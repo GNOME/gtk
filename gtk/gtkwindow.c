@@ -2284,7 +2284,7 @@ gtk_window_set_startup_id (GtkWindow   *window,
 /**
  * gtk_window_set_default_widget: (attributes org.gtk.Property.set=default-widget)
  * @window: a `GtkWindow`
- * @default_widget: (allow-none): widget to be the default, or %NULL
+ * @default_widget: (nullable): widget to be the default, or %NULL
  *   to unset the default widget for the toplevel
  *
  * Sets the default widget.
@@ -2650,7 +2650,7 @@ gtk_window_unset_transient_for (GtkWindow *window)
 /**
  * gtk_window_set_transient_for: (attributes org.gtk.Method.set_property=transient-for)
  * @window: a `GtkWindow`
- * @parent: (allow-none): parent window, or %NULL
+ * @parent: (nullable): parent window, or %NULL
  *
  * Dialog windows should be set transient for the main application
  * window they were spawned from. This allows window managers to e.g.
@@ -2778,7 +2778,7 @@ gtk_window_release_application (GtkWindow *window)
 /**
  * gtk_window_set_application: (attributes org.gtk.Method.set_property=application)
  * @window: a `GtkWindow`
- * @application: (allow-none): a `GtkApplication`, or %NULL to unset
+ * @application: (nullable): a `GtkApplication`, or %NULL to unset
  *
  * Sets or unsets the `GtkApplication` associated with the window.
  *
@@ -2998,7 +2998,7 @@ gtk_window_enable_csd (GtkWindow *window)
 /**
  * gtk_window_set_titlebar:
  * @window: a `GtkWindow`
- * @titlebar: (allow-none): the widget to use as titlebar
+ * @titlebar: (nullable): the widget to use as titlebar
  *
  * Sets a custom titlebar for @window.
  *
@@ -3421,7 +3421,7 @@ update_themed_icon (GtkWindow *window)
 /**
  * gtk_window_set_icon_name: (attributes org.gtk.Method.set_property=icon-name)
  * @window: a `GtkWindow`
- * @name: (allow-none): the name of the themed icon
+ * @name: (nullable): the name of the themed icon
  *
  * Sets the icon for the window from a named themed icon.
  *
@@ -3646,8 +3646,8 @@ gtk_window_set_default_size (GtkWindow   *window,
 /**
  * gtk_window_get_default_size:
  * @window: a `GtkWindow`
- * @width: (out) (allow-none): location to store the default width, or %NULL
- * @height: (out) (allow-none): location to store the default height, or %NULL
+ * @width: (out) (optional): location to store the default width, or %NULL
+ * @height: (out) (optional): location to store the default height, or %NULL
  *
  * Gets the default size of the window.
  *
@@ -5108,7 +5108,7 @@ synthesize_focus_change_events (GtkWindow       *window,
 /**
  * gtk_window_set_focus: (attributes org.gtk.Method.set_property=focus-widget)
  * @window: a `GtkWindow`
- * @focus: (allow-none): widget to be the new focus widget, or %NULL to unset
+ * @focus: (nullable): widget to be the new focus widget, or %NULL to unset
  *   any focus widget for the toplevel window.
  *
  * Sets the focus widget.
@@ -5719,7 +5719,7 @@ gtk_window_is_active (GtkWindow *window)
 
 /**
  * gtk_window_get_group:
- * @window: (allow-none): a `GtkWindow`, or %NULL
+ * @window: (nullable): a `GtkWindow`, or %NULL
  *
  * Returns the group for @window.
  *
@@ -6598,7 +6598,7 @@ gtk_window_maybe_update_cursor (GtkWindow *window,
 /**
  * gtk_window_set_child: (attributes org.gtk.Method.set_property=child)
  * @window: a `GtkWindow`
- * @child: (allow-none): the child widget
+ * @child: (nullable): the child widget
  *
  * Sets the child widget of @window.
  */

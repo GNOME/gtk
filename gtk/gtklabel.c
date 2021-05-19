@@ -5729,7 +5729,7 @@ gtk_label_get_yalign (GtkLabel *self)
 /**
  * gtk_label_set_extra_menu: (attributes org.gtk.Method.set_property=extra-menu)
  * @self: a `GtkLabel`
- * @model: (allow-none): a `GMenuModel`
+ * @model: (nullable): a `GMenuModel`
  *
  * Sets a menu model to add when constructing
  * the context menu for @label.

@@ -1176,7 +1176,7 @@ gtk_builder_new (void)
  * gtk_builder_add_from_file:
  * @builder: a `GtkBuilder`
  * @filename: the name of the file to parse
- * @error: (allow-none): return location for an error, or %NULL
+ * @error: (nullable): return location for an error, or %NULL
  *
  * Parses a file containing a UI definition and merges it with
  * the current contents of @builder.
@@ -1247,7 +1247,7 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
  * @builder: a `GtkBuilder`
  * @filename: the name of the file to parse
  * @object_ids: (array zero-terminated=1) (element-type utf8): nul-terminated array of objects to build
- * @error: (allow-none): return location for an error, or %NULL
+ * @error: (nullable): return location for an error, or %NULL
  *
  * Parses a file containing a UI definition building only the
  * requested objects and merges them with the current contents
@@ -1315,7 +1315,7 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
  * @template_type: the type that the template is for
  * @buffer: the string to parse
  * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
- * @error: (allow-none): return location for an error, or %NULL
+ * @error: (nullable): return location for an error, or %NULL
  *
  * Main private entry point for building composite components
  * from template XML.
@@ -1372,7 +1372,7 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
  * gtk_builder_add_from_resource:
  * @builder: a `GtkBuilder`
  * @resource_path: the path of the resource file to parse
- * @error: (allow-none): return location for an error, or %NULL
+ * @error: (nullable): return location for an error, or %NULL
  *
  * Parses a resource file containing a UI definition
  * and merges it with the current contents of @builder.
@@ -1450,7 +1450,7 @@ gtk_builder_add_from_resource (GtkBuilder   *builder,
  * @builder: a `GtkBuilder`
  * @resource_path: the path of the resource file to parse
  * @object_ids: (array zero-terminated=1) (element-type utf8): nul-terminated array of objects to build
- * @error: (allow-none): return location for an error, or %NULL
+ * @error: (nullable): return location for an error, or %NULL
  *
  * Parses a resource file containing a UI definition, building
  * only the requested objects and merges them with the current
@@ -1525,7 +1525,7 @@ gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
  * @builder: a `GtkBuilder`
  * @buffer: the string to parse
  * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
- * @error: (allow-none): return location for an error, or %NULL
+ * @error: (nullable): return location for an error, or %NULL
  *
  * Parses a string containing a UI definition and merges it
  * with the current contents of @builder.
@@ -1584,7 +1584,7 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
  * @buffer: the string to parse
  * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
  * @object_ids: (array zero-terminated=1) (element-type utf8): nul-terminated array of objects to build
- * @error: (allow-none): return location for an error, or %NULL
+ * @error: (nullable): return location for an error, or %NULL
  *
  * Parses a string containing a UI definition, building only the
  * requested objects and merges them with the current contents of
@@ -1938,7 +1938,7 @@ _gtk_builder_finish (GtkBuilder  *builder,
  * @pspec: the `GParamSpec` for the property
  * @string: the string representation of the value
  * @value: (out): the `GValue` to store the result in
- * @error: (allow-none): return location for an error, or %NULL
+ * @error: (nullable): return location for an error, or %NULL
  *
  * Demarshals a value from a string.
  *
@@ -2064,7 +2064,7 @@ error:
  * @type: the `GType` of the value
  * @string: the string representation of the value
  * @value: (out): the #GValue to store the result in
- * @error: (allow-none): return location for an error, or %NULL
+ * @error: (nullable): return location for an error, or %NULL
  *
  * Demarshals a value from a string.
  *
@@ -2732,7 +2732,7 @@ _gtk_builder_get_template_type (GtkBuilder *builder)
  * @function_name: name of the function to look up
  * @flags: closure creation flags
  * @object: (nullable): Object to create the closure with
- * @error: (allow-none): return location for an error, or %NULL
+ * @error: (nullable): return location for an error, or %NULL
  *
  * Creates a closure to invoke the function called @function_name.
  *

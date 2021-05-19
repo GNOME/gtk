@@ -938,7 +938,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
   /**
    * GtkGLArea::create-context:
    * @area: the `GtkGLArea` that emitted the signal
-   * @error: (allow-none): location to store error information on failure
+   * @error: (nullable): location to store error information on failure
    *
    * Emitted when the widget is being realized.
    *
@@ -992,7 +992,7 @@ gtk_gl_area_new (void)
 /**
  * gtk_gl_area_set_error:
  * @area: a `GtkGLArea`
- * @error: (allow-none): a new `GError`, or %NULL to unset the error
+ * @error: (nullable): a new `GError`, or %NULL to unset the error
  *
  * Sets an error on the area which will be shown instead of the
  * GL rendering.

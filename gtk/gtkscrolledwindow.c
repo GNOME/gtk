@@ -4167,7 +4167,7 @@ gtk_scrolled_window_get_propagate_natural_height (GtkScrolledWindow *scrolled_wi
 /**
  * gtk_scrolled_window_set_child: (attributes org.gtk.Method.set_property=child)
  * @scrolled_window: a `GtkScrolledWindow`
- * @child: (allow-none): the child widget
+ * @child: (nullable): the child widget
  *
  * Sets the child widget of @scrolled_window.
  */

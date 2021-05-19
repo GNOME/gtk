@@ -846,7 +846,7 @@ gtk_list_box_get_row_at_y (GtkListBox *box,
 /**
  * gtk_list_box_select_row:
  * @box: a `GtkListBox`
- * @row: (allow-none): The row to select or %NULL
+ * @row: (nullable): The row to select or %NULL
  *
  * Make @row the currently selected row.
  */
@@ -1014,7 +1014,7 @@ gtk_list_box_get_selected_rows (GtkListBox *box)
 /**
  * gtk_list_box_set_placeholder:
  * @box: a `GtkListBox`
- * @placeholder: (allow-none): a #GtkWidget or %NULL
+ * @placeholder: (nullable): a #GtkWidget or %NULL
  *
  * Sets the placeholder widget that is shown in the list when
  * it doesn't display any visible children.
@@ -1045,7 +1045,7 @@ gtk_list_box_set_placeholder (GtkListBox *box,
 /**
  * gtk_list_box_set_adjustment:
  * @box: a `GtkListBox`
- * @adjustment: (allow-none): the adjustment, or %NULL
+ * @adjustment: (nullable): the adjustment, or %NULL
  *
  * Sets the adjustment (if any) that the widget uses to
  * for vertical scrolling.
@@ -1190,7 +1190,7 @@ gtk_list_box_get_selection_mode (GtkListBox *box)
 /**
  * gtk_list_box_set_filter_func:
  * @box: a `GtkListBox`
- * @filter_func: (allow-none): callback that lets you filter which rows to show
+ * @filter_func: (nullable): callback that lets you filter which rows to show
  * @user_data: (closure): user data passed to @filter_func
  * @destroy: destroy notifier for @user_data
  *
@@ -1231,7 +1231,7 @@ gtk_list_box_set_filter_func (GtkListBox           *box,
 /**
  * gtk_list_box_set_header_func:
  * @box: a `GtkListBox`
- * @update_header: (allow-none): callback that lets you add row headers
+ * @update_header: (nullable): callback that lets you add row headers
  * @user_data: (closure): user data passed to @update_header
  * @destroy: destroy notifier for @user_data
  *
@@ -1386,7 +1386,7 @@ gtk_list_box_invalidate_headers (GtkListBox *box)
 /**
  * gtk_list_box_set_sort_func:
  * @box: a `GtkListBox`
- * @sort_func: (allow-none): the sort function
+ * @sort_func: (nullable): the sort function
  * @user_data: (closure): user data passed to @sort_func
  * @destroy: destroy notifier for @user_data
  *
@@ -2953,7 +2953,7 @@ gtk_list_box_row_new (void)
 /**
  * gtk_list_box_row_set_child: (attributes org.gtk.Method.set_property=child)
  * @row: a `GtkListBoxRow`
- * @child: (allow-none): the child widget
+ * @child: (nullable): the child widget
  *
  * Sets the child widget of @self.
  */
@@ -3167,7 +3167,7 @@ gtk_list_box_row_get_header (GtkListBoxRow *row)
 /**
  * gtk_list_box_row_set_header:
  * @row: a `GtkListBoxRow`
- * @header: (allow-none): the header, or %NULL
+ * @header: (nullable): the header, or %NULL
  *
  * Sets the current header of the @row.
  *

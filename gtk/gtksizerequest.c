@@ -577,8 +577,8 @@ gtk_widget_get_request_mode (GtkWidget *widget)
 /**
  * gtk_widget_get_preferred_size:
  * @widget: a `GtkWidget` instance
- * @minimum_size: (out) (allow-none): location for storing the minimum size, or %NULL
- * @natural_size: (out) (allow-none): location for storing the natural size, or %NULL
+ * @minimum_size: (out) (optional): location for storing the minimum size, or %NULL
+ * @natural_size: (out) (optional): location for storing the natural size, or %NULL
  *
  * Retrieves the minimum and natural size of a widget, taking
  * into account the widget’s preference for height-for-width management.

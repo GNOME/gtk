@@ -405,7 +405,7 @@ gtk_font_chooser_set_show_preview_entry (GtkFontChooser *fontchooser,
 /**
  * gtk_font_chooser_set_filter_func:
  * @fontchooser: a `GtkFontChooser`
- * @filter: (allow-none): a `GtkFontFilterFunc`, or %NULL
+ * @filter: (nullable): a `GtkFontFilterFunc`, or %NULL
  * @user_data: (closure): data to pass to @filter
  * @destroy: function to call to free @data when it is no longer needed
  *
@@ -438,7 +438,7 @@ _gtk_font_chooser_font_activated (GtkFontChooser *chooser,
 /**
  * gtk_font_chooser_set_font_map:
  * @fontchooser: a `GtkFontChooser`
- * @fontmap: (allow-none): a `PangoFontMap`
+ * @fontmap: (nullable): a `PangoFontMap`
  *
  * Sets a custom font map to use for this font chooser widget.
  *

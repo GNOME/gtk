@@ -866,7 +866,7 @@ gtk_revealer_set_transition_type (GtkRevealer               *revealer,
 /**
  * gtk_revealer_set_child: (attributes org.gtk.Method.set_property=child)
  * @revealer: a `GtkRevealer`
- * @child: (allow-none): the child widget
+ * @child: (nullable): the child widget
  *
  * Sets the child widget of @revealer.
  */

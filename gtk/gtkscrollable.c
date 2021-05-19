@@ -154,7 +154,7 @@ gtk_scrollable_get_hadjustment (GtkScrollable *scrollable)
 /**
  * gtk_scrollable_set_hadjustment: (attributes org.gtk.Method.set_property=hadjustment)
  * @scrollable: a `GtkScrollable`
- * @hadjustment: (allow-none): a `GtkAdjustment`
+ * @hadjustment: (nullable): a `GtkAdjustment`
  *
  * Sets the horizontal adjustment of the `GtkScrollable`.
  */
@@ -198,7 +198,7 @@ gtk_scrollable_get_vadjustment (GtkScrollable *scrollable)
 /**
  * gtk_scrollable_set_vadjustment: (attributes org.gtk.Method.set_property=vadjustment)
  * @scrollable: a `GtkScrollable`
- * @vadjustment: (allow-none): a `GtkAdjustment`
+ * @vadjustment: (nullable): a `GtkAdjustment`
  *
  * Sets the vertical adjustment of the `GtkScrollable`.
  */

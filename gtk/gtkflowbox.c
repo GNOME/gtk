@@ -591,7 +591,7 @@ gtk_flow_box_child_new (void)
 /**
  * gtk_flow_box_child_set_child: (attributes org.gtk.Method.set_property=child)
  * @self: a `GtkFlowBoxChild`
- * @child: (allow-none): the child widget
+ * @child: (nullable): the child widget
  *
  * Sets the child widget of @self.
  */
@@ -4263,7 +4263,7 @@ gtk_flow_box_check_model_compat (GtkFlowBox *box)
 /**
  * gtk_flow_box_bind_model:
  * @box: a `GtkFlowBox`
- * @model: (allow-none): the `GListModel` to be bound to @box
+ * @model: (nullable): the `GListModel` to be bound to @box
  * @create_widget_func: a function that creates widgets for items
  * @user_data: (closure): user data passed to @create_widget_func
  * @user_data_free_func: function for freeing @user_data
@@ -4805,7 +4805,7 @@ gtk_flow_box_get_selection_mode (GtkFlowBox *box)
 /**
  * gtk_flow_box_set_filter_func:
  * @box: a `GtkFlowBox`
- * @filter_func: (allow-none): callback that
+ * @filter_func: (nullable): callback that
  *   lets you filter which children to show
  * @user_data: (closure): user data passed to @filter_func
  * @destroy: destroy notifier for @user_data
@@ -4887,7 +4887,7 @@ gtk_flow_box_invalidate_filter (GtkFlowBox *box)
 /**
  * gtk_flow_box_set_sort_func:
  * @box: a `GtkFlowBox`
- * @sort_func: (allow-none): the sort function
+ * @sort_func: (nullable): the sort function
  * @user_data: (closure): user data passed to @sort_func
  * @destroy: destroy notifier for @user_data
  *

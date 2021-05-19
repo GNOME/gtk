@@ -1357,7 +1357,7 @@ gdk_display_setup_window_visual (GdkDisplay *display,
 
 /**
  * gdk_x11_display_open:
- * @display_name: (allow-none): name of the X display.
+ * @display_name: (nullable): name of the X display.
  *   See the XOpenDisplay() for details.
  *
  * Tries to open a new display to the X server given by

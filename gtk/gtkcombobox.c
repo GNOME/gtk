@@ -2060,7 +2060,7 @@ gtk_combo_box_get_active_iter (GtkComboBox     *combo_box,
 /**
  * gtk_combo_box_set_active_iter:
  * @combo_box: A `GtkComboBox`
- * @iter: (allow-none): The `GtkTreeIter`, or %NULL
+ * @iter: (nullable): The `GtkTreeIter`, or %NULL
  *
  * Sets the current active item to be the one referenced by @iter.
  *
@@ -2084,7 +2084,7 @@ gtk_combo_box_set_active_iter (GtkComboBox     *combo_box,
 /**
  * gtk_combo_box_set_model: (attributes org.gtk.Method.set_property=model)
  * @combo_box: A `GtkComboBox`
- * @model: (allow-none): A `GtkTreeModel`
+ * @model: (nullable): A `GtkTreeModel`
  *
  * Sets the model used by @combo_box to be @model.
  *
@@ -2569,8 +2569,8 @@ gtk_combo_box_get_row_separator_func (GtkComboBox *combo_box)
  * gtk_combo_box_set_row_separator_func:
  * @combo_box: a `GtkComboBox`
  * @func: (nullable): a `GtkTreeViewRowSeparatorFunc`
- * @data: (allow-none): user data to pass to @func, or %NULL
- * @destroy: (allow-none): destroy notifier for @data, or %NULL
+ * @data: (nullable): user data to pass to @func, or %NULL
+ * @destroy: (nullable): destroy notifier for @data, or %NULL
  *
  * Sets the row separator function, which is used to determine
  * whether a row should be drawn as a separator.
@@ -2887,7 +2887,7 @@ gtk_combo_box_get_active_id (GtkComboBox *combo_box)
 /**
  * gtk_combo_box_set_active_id: (attributes org.gtk.Method.set_property=active-id)
  * @combo_box: a `GtkComboBox`
- * @active_id: (allow-none): the ID of the row to select, or %NULL
+ * @active_id: (nullable): the ID of the row to select, or %NULL
  *
  * Changes the active row of @combo_box to the one that has an ID equal to
  * @active_id.
@@ -2962,7 +2962,7 @@ gtk_combo_box_get_popup (GtkComboBox *combo_box)
 /**
  * gtk_combo_box_set_child: (attributes org.gtk.Method.set_property=child)
  * @combo_box: a `GtkComboBox`
- * @child: (allow-none): the child widget
+ * @child: (nullable): the child widget
  *
  * Sets the child widget of @combo_box.
  */

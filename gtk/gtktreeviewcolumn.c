@@ -1695,7 +1695,7 @@ gtk_tree_view_column_set_attributes (GtkTreeViewColumn *tree_column,
  * gtk_tree_view_column_set_cell_data_func:
  * @tree_column: A #GtkTreeViewColumn
  * @cell_renderer: A #GtkCellRenderer
- * @func: (allow-none): The #GtkTreeCellDataFunc to use. 
+ * @func: (nullable): The #GtkTreeCellDataFunc to use. 
  * @func_data: (closure): The user data for @func.
  * @destroy: The destroy notification for @func_data
  * 
@@ -2393,7 +2393,7 @@ gtk_tree_view_column_get_clickable (GtkTreeViewColumn *tree_column)
 /**
  * gtk_tree_view_column_set_widget:
  * @tree_column: A #GtkTreeViewColumn.
- * @widget: (allow-none): A child #GtkWidget, or %NULL.
+ * @widget: (nullable): A child #GtkWidget, or %NULL.
  *
  * Sets the widget in the header to be @widget.  If widget is %NULL, then the
  * header button is set with a #GtkLabel set to the title of @tree_column.
@@ -2927,9 +2927,9 @@ _gtk_tree_view_column_cell_get_dirty (GtkTreeViewColumn  *tree_column)
  * gtk_tree_view_column_cell_get_position:
  * @tree_column: a `GtkTreeViewColumn`
  * @cell_renderer: a `GtkCellRenderer`
- * @x_offset: (out) (allow-none): return location for the horizontal
+ * @x_offset: (out) (optional): return location for the horizontal
  *   position of @cell within @tree_column
- * @width: (out) (allow-none): return location for the width of @cell
+ * @width: (out) (optional): return location for the width of @cell
  *
  * Obtains the horizontal position and size of a cell in a column.
  *

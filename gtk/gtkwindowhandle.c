@@ -583,7 +583,7 @@ gtk_window_handle_get_child (GtkWindowHandle *self)
 /**
  * gtk_window_handle_set_child: (attributes org.gtk.Method.set_property=child)
  * @self: a `GtkWindowHandle`
- * @child: (allow-none): the child widget
+ * @child: (nullable): the child widget
  *
  * Sets the child widget of @self.
  */

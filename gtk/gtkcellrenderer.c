@@ -877,8 +877,8 @@ gtk_cell_renderer_set_fixed_size (GtkCellRenderer *cell,
 /**
  * gtk_cell_renderer_get_fixed_size:
  * @cell: A #GtkCellRenderer
- * @width: (out) (allow-none): location to fill in with the fixed width of the cell, or %NULL
- * @height: (out) (allow-none): location to fill in with the fixed height of the cell, or %NULL
+ * @width: (out) (optional): location to fill in with the fixed width of the cell, or %NULL
+ * @height: (out) (optional): location to fill in with the fixed height of the cell, or %NULL
  *
  * Fills in @width and @height with the appropriate size of @cell.
  **/
@@ -943,8 +943,8 @@ gtk_cell_renderer_set_alignment (GtkCellRenderer *cell,
 /**
  * gtk_cell_renderer_get_alignment:
  * @cell: A #GtkCellRenderer
- * @xalign: (out) (allow-none): location to fill in with the x alignment of the cell, or %NULL
- * @yalign: (out) (allow-none): location to fill in with the y alignment of the cell, or %NULL
+ * @xalign: (out) (optional): location to fill in with the x alignment of the cell, or %NULL
+ * @yalign: (out) (optional): location to fill in with the y alignment of the cell, or %NULL
  *
  * Fills in @xalign and @yalign with the appropriate values of @cell.
  **/
@@ -1008,8 +1008,8 @@ gtk_cell_renderer_set_padding (GtkCellRenderer *cell,
 /**
  * gtk_cell_renderer_get_padding:
  * @cell: A #GtkCellRenderer
- * @xpad: (out) (allow-none): location to fill in with the x padding of the cell, or %NULL
- * @ypad: (out) (allow-none): location to fill in with the y padding of the cell, or %NULL
+ * @xpad: (out) (optional): location to fill in with the x padding of the cell, or %NULL
+ * @ypad: (out) (optional): location to fill in with the y padding of the cell, or %NULL
  *
  * Fills in @xpad and @ypad with the appropriate values of @cell.
  **/
@@ -1363,8 +1363,8 @@ gtk_cell_renderer_get_request_mode (GtkCellRenderer *cell)
  * gtk_cell_renderer_get_preferred_width:
  * @cell: a #GtkCellRenderer instance
  * @widget: the #GtkWidget this cell will be rendering to
- * @minimum_size: (out) (allow-none): location to store the minimum size, or %NULL
- * @natural_size: (out) (allow-none): location to store the natural size, or %NULL
+ * @minimum_size: (out) (optional): location to store the minimum size, or %NULL
+ * @natural_size: (out) (optional): location to store the natural size, or %NULL
  *
  * Retrieves a renderer’s natural size when rendered to @widget.
  */
@@ -1409,8 +1409,8 @@ gtk_cell_renderer_get_preferred_width (GtkCellRenderer *cell,
  * gtk_cell_renderer_get_preferred_height:
  * @cell: a #GtkCellRenderer instance
  * @widget: the #GtkWidget this cell will be rendering to
- * @minimum_size: (out) (allow-none): location to store the minimum size, or %NULL
- * @natural_size: (out) (allow-none): location to store the natural size, or %NULL
+ * @minimum_size: (out) (optional): location to store the minimum size, or %NULL
+ * @natural_size: (out) (optional): location to store the natural size, or %NULL
  *
  * Retrieves a renderer’s natural size when rendered to @widget.
  */
@@ -1456,8 +1456,8 @@ gtk_cell_renderer_get_preferred_height (GtkCellRenderer *cell,
  * @cell: a #GtkCellRenderer instance
  * @widget: the #GtkWidget this cell will be rendering to
  * @height: the size which is available for allocation
- * @minimum_width: (out) (allow-none): location for storing the minimum size, or %NULL
- * @natural_width: (out) (allow-none): location for storing the preferred size, or %NULL
+ * @minimum_width: (out) (optional): location for storing the minimum size, or %NULL
+ * @natural_width: (out) (optional): location for storing the preferred size, or %NULL
  *
  * Retrieves a cell renderers’s minimum and natural width if it were rendered to 
  * @widget with the specified @height.
@@ -1504,8 +1504,8 @@ gtk_cell_renderer_get_preferred_width_for_height (GtkCellRenderer *cell,
  * @cell: a #GtkCellRenderer instance
  * @widget: the #GtkWidget this cell will be rendering to
  * @width: the size which is available for allocation
- * @minimum_height: (out) (allow-none): location for storing the minimum size, or %NULL
- * @natural_height: (out) (allow-none): location for storing the preferred size, or %NULL
+ * @minimum_height: (out) (optional): location for storing the minimum size, or %NULL
+ * @natural_height: (out) (optional): location for storing the preferred size, or %NULL
  *
  * Retrieves a cell renderers’s minimum and natural height if it were rendered to 
  * @widget with the specified @width.
@@ -1551,8 +1551,8 @@ gtk_cell_renderer_get_preferred_height_for_width (GtkCellRenderer *cell,
  * gtk_cell_renderer_get_preferred_size:
  * @cell: a #GtkCellRenderer instance
  * @widget: the #GtkWidget this cell will be rendering to
- * @minimum_size: (out) (allow-none): location for storing the minimum size, or %NULL
- * @natural_size: (out) (allow-none): location for storing the natural size, or %NULL
+ * @minimum_size: (out) (optional): location for storing the minimum size, or %NULL
+ * @natural_size: (out) (optional): location for storing the natural size, or %NULL
  *
  * Retrieves the minimum and natural size of a cell taking
  * into account the widget’s preference for height-for-width management.

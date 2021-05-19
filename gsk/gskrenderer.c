@@ -339,7 +339,7 @@ gsk_renderer_unrealize (GskRenderer *renderer)
  * gsk_renderer_render_texture:
  * @renderer: a realized `GskRenderer`
  * @root: a `GskRenderNode`
- * @viewport: (allow-none): the section to draw or %NULL to use @root's bounds
+ * @viewport: (nullable): the section to draw or %NULL to use @root's bounds
  *
  * Renders the scene graph, described by a tree of `GskRenderNode` instances,
  * to a `GdkTexture`.

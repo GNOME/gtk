@@ -367,7 +367,7 @@ gtk_multi_selection_init (GtkMultiSelection *self)
 
 /**
  * gtk_multi_selection_new:
- * @model: (allow-none) (transfer full): the `GListModel` to manage, or %NULL
+ * @model: (nullable) (transfer full): the `GListModel` to manage, or %NULL
  *
  * Creates a new selection to handle @model.
  *
@@ -409,7 +409,7 @@ gtk_multi_selection_get_model (GtkMultiSelection *self)
 /**
  * gtk_multi_selection_set_model: (attributes org.gtk.Method.set_property=model)
  * @self: a `GtkMultiSelection`
- * @model: (allow-none): A `GListModel` to wrap
+ * @model: (nullable): A `GListModel` to wrap
  *
  * Sets the model that @self should wrap.
  *

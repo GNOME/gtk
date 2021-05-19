@@ -118,7 +118,7 @@ gtk_root_get_constraint_solver (GtkRoot *self)
 /**
  * gtk_root_set_focus:
  * @self: a `GtkRoot`
- * @focus: (allow-none): widget to be the new focus widget, or %NULL
+ * @focus: (nullable): widget to be the new focus widget, or %NULL
  *    to unset the focus widget
  *
  * If @focus is not the current focus widget, and is focusable, sets

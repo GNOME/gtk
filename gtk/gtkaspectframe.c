@@ -642,7 +642,7 @@ gtk_aspect_frame_get_request_mode (GtkWidget *widget)
 /**
  * gtk_aspect_frame_set_child: (attributes org.gtk.Method.set_property=child)
  * @self: a `GtkAspectFrame`
- * @child: (allow-none): the child widget
+ * @child: (nullable): the child widget
  *
  * Sets the child widget of @self.
  */

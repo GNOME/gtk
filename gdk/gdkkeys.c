@@ -551,10 +551,10 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * @hardware_keycode: a keycode
  * @state: a modifier state
  * @group: active keyboard group
- * @keyval: (out) (allow-none): return location for keyval
- * @effective_group: (out) (allow-none): return location for effective group
- * @level: (out) (allow-none): return location for level
- * @consumed_modifiers: (out) (allow-none): return location for modifiers
+ * @keyval: (out) (optional): return location for keyval
+ * @effective_group: (out) (optional): return location for effective group
+ * @level: (out) (optional): return location for level
+ * @consumed_modifiers: (out) (optional): return location for modifiers
  *   that were used to determine the group or level
  *
  * Translates the contents of a #GdkEventKey into a keyval, effective

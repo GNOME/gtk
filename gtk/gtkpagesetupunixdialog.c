@@ -767,8 +767,8 @@ paper_size_changed (GtkDropDown            *combo_box,
 
 /**
  * gtk_page_setup_unix_dialog_new:
- * @title: (allow-none): the title of the dialog, or %NULL
- * @parent: (allow-none): transient parent of the dialog, or %NULL
+ * @title: (nullable): the title of the dialog, or %NULL
+ * @parent: (nullable): transient parent of the dialog, or %NULL
  *
  * Creates a new page setup dialog.
  *

@@ -1776,7 +1776,7 @@ gtk_assistant_remove_page (GtkAssistant *assistant,
 /**
  * gtk_assistant_set_forward_page_func:
  * @assistant: a `GtkAssistant`
- * @page_func: (allow-none): the `GtkAssistant`PageFunc, or %NULL
+ * @page_func: (nullable): the `GtkAssistant`PageFunc, or %NULL
  *   to use the default one
  * @data: user data for @page_func
  * @destroy: destroy notifier for @data

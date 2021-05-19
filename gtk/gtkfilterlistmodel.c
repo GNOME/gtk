@@ -610,8 +610,8 @@ gtk_filter_list_model_init (GtkFilterListModel *self)
 
 /**
  * gtk_filter_list_model_new:
- * @model: (allow-none) (transfer full): the model to sort, or %NULL
- * @filter: (allow-none) (transfer full): filter or %NULL to not filter items
+ * @model: (nullable) (transfer full): the model to sort, or %NULL
+ * @filter: (nullable) (transfer full): filter or %NULL to not filter items
  *
  * Creates a new `GtkFilterListModel` that will filter @model using the given
  * @filter.
@@ -642,7 +642,7 @@ gtk_filter_list_model_new (GListModel *model,
 /**
  * gtk_filter_list_model_set_filter: (attributes org.gtk.Method.set_property=filter)
  * @self: a `GtkFilterListModel`
- * @filter: (allow-none) (transfer none): filter to use or %NULL to not filter items
+ * @filter: (nullable) (transfer none): filter to use or %NULL to not filter items
  *
  * Sets the filter used to filter items.
  **/
@@ -691,7 +691,7 @@ gtk_filter_list_model_get_filter (GtkFilterListModel *self)
 /**
  * gtk_filter_list_model_set_model: (attributes org.gtk.Method.set_property=model)
  * @self: a `GtkFilterListModel`
- * @model: (allow-none): The model to be filtered
+ * @model: (nullable): The model to be filtered
  *
  * Sets the model to be filtered.
  *

@@ -203,7 +203,7 @@ gtk_tooltip_dispose (GObject *object)
 /**
  * gtk_tooltip_set_markup:
  * @tooltip: a `GtkTooltip`
- * @markup: (allow-none): a string with Pango markup or %NLL
+ * @markup: (nullable): a string with Pango markup or %NLL
  *
  * Sets the text of the tooltip to be @markup.
  *
@@ -222,7 +222,7 @@ gtk_tooltip_set_markup (GtkTooltip  *tooltip,
 /**
  * gtk_tooltip_set_text:
  * @tooltip: a `GtkTooltip`
- * @text: (allow-none): a text string or %NULL
+ * @text: (nullable): a text string or %NULL
  *
  * Sets the text of the tooltip to be @text.
  *
@@ -241,7 +241,7 @@ gtk_tooltip_set_text (GtkTooltip  *tooltip,
 /**
  * gtk_tooltip_set_icon:
  * @tooltip: a #GtkTooltip
- * @paintable: (allow-none): a #GdkPaintable, or %NULL
+ * @paintable: (nullable): a #GdkPaintable, or %NULL
  *
  * Sets the icon of the tooltip (which is in front of the text) to be
  * @paintable.  If @paintable is %NULL, the image will be hidden.
@@ -259,7 +259,7 @@ gtk_tooltip_set_icon (GtkTooltip   *tooltip,
 /**
  * gtk_tooltip_set_icon_from_icon_name:
  * @tooltip: a #GtkTooltip
- * @icon_name: (allow-none): an icon name, or %NULL
+ * @icon_name: (nullable): an icon name, or %NULL
  *
  * Sets the icon of the tooltip (which is in front of the text) to be
  * the icon indicated by @icon_name with the size indicated
@@ -278,7 +278,7 @@ gtk_tooltip_set_icon_from_icon_name (GtkTooltip  *tooltip,
 /**
  * gtk_tooltip_set_icon_from_gicon:
  * @tooltip: a #GtkTooltip
- * @gicon: (allow-none): a #GIcon representing the icon, or %NULL
+ * @gicon: (nullable): a #GIcon representing the icon, or %NULL
  *
  * Sets the icon of the tooltip (which is in front of the text)
  * to be the icon indicated by @gicon with the size indicated
@@ -297,7 +297,7 @@ gtk_tooltip_set_icon_from_gicon (GtkTooltip  *tooltip,
 /**
  * gtk_tooltip_set_custom:
  * @tooltip: a #GtkTooltip
- * @custom_widget: (allow-none): a #GtkWidget, or %NULL to unset the old custom widget.
+ * @custom_widget: (nullable): a #GtkWidget, or %NULL to unset the old custom widget.
  *
  * Replaces the widget packed into the tooltip with
  * @custom_widget. @custom_widget does not get destroyed when the tooltip goes

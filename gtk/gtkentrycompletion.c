@@ -877,7 +877,7 @@ gtk_entry_completion_get_entry (GtkEntryCompletion *completion)
 /**
  * gtk_entry_completion_set_model: (attributes org.gtk.Method.set_property=model)
  * @completion: a `GtkEntryCompletion`
- * @model: (allow-none): the `GtkTreeModel`
+ * @model: (nullable): the `GtkTreeModel`
  *
  * Sets the model for a `GtkEntryCompletion`.
  *

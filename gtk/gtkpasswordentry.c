@@ -649,7 +649,7 @@ gtk_password_entry_get_show_peek_icon (GtkPasswordEntry *entry)
 /**
  * gtk_password_entry_set_extra_menu: (attributes org.gtk.Method.set_property=extra-menu)
  * @entry: a `GtkPasswordEntry`
- * @model: (allow-none): a `GMenuModel`
+ * @model: (nullable): a `GMenuModel`
  *
  * Sets a menu model to add when constructing
  * the context menu for @entry.

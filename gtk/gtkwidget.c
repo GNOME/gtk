@@ -3898,7 +3898,7 @@ gtk_widget_adjust_size_allocation (GtkWidget     *widget,
  * @width: New width of @widget
  * @height: New height of @widget
  * @baseline: New baseline of @widget, or -1
- * @transform: (transfer full) (allow-none): Transformation to be applied to @widget
+ * @transform: (transfer full) (nullable): Transformation to be applied to @widget
  *
  * This function is only used by `GtkWidget` subclasses, to
  * assign a size, position and (optionally) baseline to their
@@ -6480,7 +6480,7 @@ gtk_widget_update_pango_context (GtkWidget *widget)
 /**
  * gtk_widget_set_font_options:
  * @widget: a `GtkWidget`
- * @options: (allow-none): a #cairo_font_options_t, or %NULL
+ * @options: (nullable): a #cairo_font_options_t, or %NULL
  *   to unset any previously set default font options
  *
  * Sets the `cairo_font_options_t` used for Pango rendering
@@ -6542,7 +6542,7 @@ gtk_widget_set_font_map_recurse (GtkWidget *widget, gpointer user_data)
 /**
  * gtk_widget_set_font_map:
  * @widget: a `GtkWidget`
- * @font_map: (allow-none): a `PangoFontMap`, or %NULL to unset any
+ * @font_map: (nullable): a `PangoFontMap`, or %NULL to unset any
  *   previously set font map
  *
  * Sets the font map to use for Pango rendering.
@@ -7063,8 +7063,8 @@ gtk_widget_set_size_request (GtkWidget *widget,
 /**
  * gtk_widget_get_size_request:
  * @widget: a `GtkWidget`
- * @width: (out) (allow-none): return location for width
- * @height: (out) (allow-none): return location for height
+ * @width: (out) (optional): return location for width
+ * @height: (out) (optional): return location for height
  *
  * Gets the size request that was explicitly set for the widget using
  * gtk_widget_set_size_request().
@@ -10836,7 +10836,7 @@ _gtk_widget_get_action_muxer (GtkWidget *widget,
  * gtk_widget_insert_action_group:
  * @widget: a `GtkWidget`
  * @name: the prefix for actions in @group
- * @group: (allow-none): a `GActionGroup`, or %NULL to remove
+ * @group: (nullable): a `GActionGroup`, or %NULL to remove
  *   the previously inserted group for @name
  *
  * Inserts @group into @widget.
@@ -11296,7 +11296,7 @@ gtk_widget_get_template_child (GtkWidget   *widget,
  * gtk_widget_activate_action_variant: (rename-to gtk_widget_activate_action)
  * @widget: a `GtkWidget`
  * @name: the name of the action to activate
- * @args: (allow-none): parameters to use, or %NULL
+ * @args: (nullable): parameters to use, or %NULL
  *
  * Looks up the action in the action groups associated with
  * @widget and its ancestors, and activates it.
@@ -12107,7 +12107,7 @@ gtk_widget_get_focus_child (GtkWidget *widget)
 /**
  * gtk_widget_set_cursor: (attributes org.gtk.Method.set_property=cursor)
  * @widget: a `GtkWidget`
- * @cursor: (allow-none): the new cursor
+ * @cursor: (nullable): the new cursor
  *
  * Sets the cursor to be shown when pointer devices point
  * towards @widget.

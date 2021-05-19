@@ -436,7 +436,7 @@ gtk_im_context_real_get_surrounding_with_selection (GtkIMContext *context,
 /**
  * gtk_im_context_set_client_widget:
  * @context: a `GtkIMContext`
- * @widget: (allow-none): the client widget. This may be %NULL to indicate
+ * @widget: (nullable): the client widget. This may be %NULL to indicate
  *   that the previous client widget no longer exists.
  *
  * Set the client widget for the input context.

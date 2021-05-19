@@ -189,7 +189,7 @@ show_uri_done (GObject      *object,
 
 /**
  * gtk_show_uri:
- * @parent: (allow-none): parent window
+ * @parent: (nullable): parent window
  * @uri: the uri to show
  * @timestamp: timestamp from the event that triggered this call, or %GDK_CURRENT_TIME
  *

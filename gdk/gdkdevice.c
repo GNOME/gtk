@@ -520,9 +520,9 @@ gdk_device_get_property (GObject    *object,
 /**
  * gdk_device_get_surface_at_position:
  * @device: pointer `GdkDevice` to query info to
- * @win_x: (out) (allow-none): return location for the X coordinate
+ * @win_x: (out) (optional): return location for the X coordinate
  *   of the device location relative to the surface origin
- * @win_y: (out) (allow-none): return location for the Y coordinate
+ * @win_y: (out) (optional): return location for the Y coordinate
  *   of the device location relative to the surface origin
  *
  * Obtains the surface underneath @device, returning the location of the

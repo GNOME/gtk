@@ -1037,7 +1037,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * @operation: the `GtkPrintOperation` on which the signal was emitted
    * @preview: the `GtkPrintOperationPreview` for the current operation
    * @context: the `GtkPrintContext` that will be used
-   * @parent: (allow-none): the `GtkWindow` to use as window parent, or %NULL
+   * @parent: (nullable): the `GtkWindow` to use as window parent, or %NULL
    *
    * Gets emitted when a preview is requested from the native dialog.
    *
@@ -1422,7 +1422,7 @@ gtk_print_operation_new (void)
 /**
  * gtk_print_operation_set_default_page_setup: (attributes org.gtk.Method.set_property=default-page-setup)
  * @op: a `GtkPrintOperation`
- * @default_page_setup: (allow-none): a `GtkPageSetup`, or %NULL
+ * @default_page_setup: (nullable): a `GtkPageSetup`, or %NULL
  *
  * Makes @default_page_setup the default page setup for @op.
  *
@@ -1474,7 +1474,7 @@ gtk_print_operation_get_default_page_setup (GtkPrintOperation *op)
 /**
  * gtk_print_operation_set_print_settings: (attributes org.gtk.Method.set_property=print-settings)
  * @op: a `GtkPrintOperation`
- * @print_settings: (allow-none): `GtkPrintSettings`
+ * @print_settings: (nullable): `GtkPrintSettings`
  *
  * Sets the print settings for @op.
  *
@@ -1878,7 +1878,7 @@ gtk_print_operation_set_allow_async (GtkPrintOperation  *op,
 /**
  * gtk_print_operation_set_custom_tab_label: (attributes org.gtk.Method.set_property=custom-tab-label)
  * @op: a `GtkPrintOperation`
- * @label: (allow-none): the label to use, or %NULL to use the default label
+ * @label: (nullable): the label to use, or %NULL to use the default label
  *
  * Sets the label for the tab holding custom widgets.
  */
@@ -3011,8 +3011,8 @@ gtk_print_operation_get_error (GtkPrintOperation  *op,
  * gtk_print_operation_run:
  * @op: a `GtkPrintOperation`
  * @action: the action to start
- * @parent: (allow-none): Transient parent of the dialog
- * @error: (allow-none): Return location for errors, or %NULL
+ * @parent: (nullable): Transient parent of the dialog
+ * @error: (nullable): Return location for errors, or %NULL
  *
  * Runs the print operation.
  *

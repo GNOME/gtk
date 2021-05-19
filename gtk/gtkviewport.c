@@ -490,8 +490,8 @@ gtk_viewport_init (GtkViewport *viewport)
 
 /**
  * gtk_viewport_new:
- * @hadjustment: (allow-none): horizontal adjustment
- * @vadjustment: (allow-none): vertical adjustment
+ * @hadjustment: (nullable): horizontal adjustment
+ * @vadjustment: (nullable): vertical adjustment
  *
  * Creates a new `GtkViewport`.
  *
@@ -702,7 +702,7 @@ clear_focus_change_handler (GtkViewport *viewport)
 /**
  * gtk_viewport_set_child: (attributes org.gtk.Method.set_property=child)
  * @viewport: a `GtkViewport`
- * @child: (allow-none): the child widget
+ * @child: (nullable): the child widget
  *
  * Sets the child widget of @viewport.
  */

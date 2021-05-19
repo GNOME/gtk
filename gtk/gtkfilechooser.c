@@ -450,7 +450,7 @@ gtk_file_chooser_get_files (GtkFileChooser *chooser)
  * gtk_file_chooser_set_file:
  * @chooser: a `GtkFileChooser`
  * @file: the `GFile` to set as current
- * @error: (allow-none): location to store the error, or %NULL to ignore errors.
+ * @error: (nullable): location to store the error, or %NULL to ignore errors.
  *
  * Sets @file as the current filename for the file chooser.
  *

@@ -6931,7 +6931,7 @@ gtk_text_get_key_controller (GtkText *self)
 /**
  * gtk_text_set_extra_menu: (attributes org.gtk.Method.set_property=extra-menu)
  * @self: a `GtkText`
- * @model: (allow-none): a `GMenuModel`
+ * @model: (nullable): a `GMenuModel`
  *
  * Sets a menu model to add when constructing
  * the context menu for @self.

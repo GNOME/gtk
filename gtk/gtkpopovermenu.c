@@ -691,7 +691,7 @@ gtk_popover_menu_add_submenu (GtkPopoverMenu *popover,
 
 /**
  * gtk_popover_menu_new_from_model:
- * @model: (allow-none): a `GMenuModel`, or %NULL
+ * @model: (nullable): a `GMenuModel`, or %NULL
  *
  * Creates a `GtkPopoverMenu` and populates it according to @model.
  *

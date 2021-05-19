@@ -1186,7 +1186,7 @@ gtk_expander_get_resize_toplevel (GtkExpander *expander)
 /**
  * gtk_expander_set_child: (attributes org.gtk.Method.set_property=child)
  * @expander: a `GtkExpander`
- * @child: (allow-none): the child widget
+ * @child: (nullable): the child widget
  *
  * Sets the child widget of @expander.
  */

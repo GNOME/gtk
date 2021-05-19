@@ -214,7 +214,7 @@ gtk_css_token_is_finite (const GtkCssToken *token)
 /*
  * gtk_css_token_is_preserved:
  * @token: a #GtkCssToken
- * @out_closing: (allow-none): Type of the token that closes a block
+ * @out_closing: (nullable): Type of the token that closes a block
  *   started with this token
  *
  * A token is considered preserved when it does not start a block.

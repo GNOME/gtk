@@ -5677,7 +5677,7 @@ gtk_notebook_menu_label_unparent (GtkWidget *widget)
  * gtk_notebook_append_page:
  * @notebook: a `GtkNotebook`
  * @child: the `GtkWidget` to use as the contents of the page
- * @tab_label: (allow-none): the `GtkWidget` to be used as the label
+ * @tab_label: (nullable): the `GtkWidget` to be used as the label
  *   for the page, or %NULL to use the default label, “page N”
  *
  * Appends a page to @notebook.
@@ -5701,9 +5701,9 @@ gtk_notebook_append_page (GtkNotebook *notebook,
  * gtk_notebook_append_page_menu:
  * @notebook: a `GtkNotebook`
  * @child: the `GtkWidget` to use as the contents of the page
- * @tab_label: (allow-none): the `GtkWidget` to be used as the label
+ * @tab_label: (nullable): the `GtkWidget` to be used as the label
  *   for the page, or %NULL to use the default label, “page N”
- * @menu_label: (allow-none): the widget to use as a label for the
+ * @menu_label: (nullable): the widget to use as a label for the
  *   page-switch menu, if that is enabled. If %NULL, and @tab_label
  *   is a #GtkLabel or %NULL, then the menu label will be a newly
  *   created label with the same text as @tab_label; if @tab_label
@@ -5734,7 +5734,7 @@ gtk_notebook_append_page_menu (GtkNotebook *notebook,
  * gtk_notebook_prepend_page:
  * @notebook: a `GtkNotebook`
  * @child: the `GtkWidget` to use as the contents of the page
- * @tab_label: (allow-none): the #GtkWidget to be used as the label
+ * @tab_label: (nullable): the #GtkWidget to be used as the label
  *   for the page, or %NULL to use the default label, “page N”
  *
  * Prepends a page to @notebook.
@@ -5758,9 +5758,9 @@ gtk_notebook_prepend_page (GtkNotebook *notebook,
  * gtk_notebook_prepend_page_menu:
  * @notebook: a `GtkNotebook`
  * @child: the `GtkWidget` to use as the contents of the page
- * @tab_label: (allow-none): the `GtkWidget` to be used as the label
+ * @tab_label: (nullable): the `GtkWidget` to be used as the label
  *   for the page, or %NULL to use the default label, “page N”
- * @menu_label: (allow-none): the widget to use as a label for the
+ * @menu_label: (nullable): the widget to use as a label for the
  *   page-switch menu, if that is enabled. If %NULL, and @tab_label
  *   is a #GtkLabel or %NULL, then the menu label will be a newly
  *   created label with the same text as @tab_label; if @tab_label
@@ -5791,7 +5791,7 @@ gtk_notebook_prepend_page_menu (GtkNotebook *notebook,
  * gtk_notebook_insert_page:
  * @notebook: a `GtkNotebook`
  * @child: the `GtkWidget` to use as the contents of the page
- * @tab_label: (allow-none): the `GtkWidget` to be used as the label
+ * @tab_label: (nullable): the `GtkWidget` to be used as the label
  *   for the page, or %NULL to use the default label, “page N”
  * @position: the index (starting at 0) at which to insert the page,
  *   or -1 to append the page after all other pages
@@ -5848,9 +5848,9 @@ gtk_notebook_mnemonic_activate_switch_page (GtkWidget *child,
  * gtk_notebook_insert_page_menu:
  * @notebook: a `GtkNotebook`
  * @child: the `GtkWidget` to use as the contents of the page
- * @tab_label: (allow-none): the `GtkWidget` to be used as the label
+ * @tab_label: (nullable): the `GtkWidget` to be used as the label
  *   for the page, or %NULL to use the default label, “page N”
- * @menu_label: (allow-none): the widget to use as a label for the
+ * @menu_label: (nullable): the widget to use as a label for the
  *   page-switch menu, if that is enabled. If %NULL, and @tab_label
  *   is a #GtkLabel or %NULL, then the menu label will be a newly
  *   created label with the same text as @tab_label; if @tab_label
@@ -6528,7 +6528,7 @@ gtk_notebook_get_tab_label (GtkNotebook *notebook,
  * gtk_notebook_set_tab_label:
  * @notebook: a `GtkNotebook`
  * @child: the page
- * @tab_label: (allow-none): the tab label widget to use, or %NULL
+ * @tab_label: (nullable): the tab label widget to use, or %NULL
  *   for default tab label
  *
  * Changes the tab label for @child.
@@ -6688,7 +6688,7 @@ gtk_notebook_get_menu_label (GtkNotebook *notebook,
  * gtk_notebook_set_menu_label:
  * @notebook: a `GtkNotebook`
  * @child: the child widget
- * @menu_label: (allow-none): the menu label, or %NULL for default
+ * @menu_label: (nullable): the menu label, or %NULL for default
  *
  * Changes the menu label for the page containing @child.
  */
@@ -6883,7 +6883,7 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
 /**
  * gtk_notebook_set_group_name: (attributes org.gtk.Method.set_property=group-name)
  * @notebook: a `GtkNotebook`
- * @group_name: (allow-none): the name of the notebook group,
+ * @group_name: (nullable): the name of the notebook group,
  *   or %NULL to unset it
  *
  * Sets a group name for @notebook.

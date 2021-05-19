@@ -1320,7 +1320,7 @@ _gtk_css_find_theme (const char *name,
  * gtk_css_provider_load_named:
  * @provider: a `GtkCssProvider`
  * @name: A theme name
- * @variant: (allow-none): variant to load, for example, "dark", or
+ * @variant: (nullable): variant to load, for example, "dark", or
  *   %NULL for the default
  *
  * Loads a theme from the usual theme paths.

@@ -1226,9 +1226,9 @@ gtk_gesture_get_last_target (GtkGesture        *gesture,
 /**
  * gtk_gesture_get_point:
  * @gesture: a `GtkGesture`
- * @sequence: (allow-none): a `GdkEventSequence`, or %NULL for pointer events
- * @x: (out) (allow-none): return location for X axis of the sequence coordinates
- * @y: (out) (allow-none): return location for Y axis of the sequence coordinates
+ * @sequence: (nullable): a `GdkEventSequence`, or %NULL for pointer events
+ * @x: (out) (optional): return location for X axis of the sequence coordinates
+ * @y: (out) (optional): return location for Y axis of the sequence coordinates
  *
  * If @sequence is currently being interpreted by @gesture,
  * returns %TRUE and fills in @x and @y with the last coordinates

@@ -276,8 +276,8 @@ gtk_color_chooser_dialog_iface_init (GtkColorChooserInterface *iface)
 
 /**
  * gtk_color_chooser_dialog_new:
- * @title: (allow-none): Title of the dialog, or %NULL
- * @parent: (allow-none): Transient parent of the dialog, or %NULL
+ * @title: (nullable): Title of the dialog, or %NULL
+ * @parent: (nullable): Transient parent of the dialog, or %NULL
  *
  * Creates a new `GtkColorChooserDialog`.
  *

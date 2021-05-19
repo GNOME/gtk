@@ -2467,7 +2467,7 @@ gtk_entry_get_alignment (GtkEntry *entry)
  * gtk_entry_set_icon_from_paintable:
  * @entry: a `GtkEntry`
  * @icon_pos: Icon position
- * @paintable: (allow-none): A `GdkPaintable`, or %NULL
+ * @paintable: (nullable): A `GdkPaintable`, or %NULL
  *
  * Sets the icon shown in the specified position using a `GdkPaintable`.
  *
@@ -2522,7 +2522,7 @@ gtk_entry_set_icon_from_paintable (GtkEntry             *entry,
  * gtk_entry_set_icon_from_icon_name:
  * @entry: A `GtkEntry`
  * @icon_pos: The position at which to set the icon
- * @icon_name: (allow-none): An icon name, or %NULL
+ * @icon_name: (nullable): An icon name, or %NULL
  *
  * Sets the icon shown in the entry at the specified position
  * from the current icon theme.
@@ -2578,7 +2578,7 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
  * gtk_entry_set_icon_from_gicon:
  * @entry: A `GtkEntry`
  * @icon_pos: The position at which to set the icon
- * @icon: (allow-none): The icon to set, or %NULL
+ * @icon: (nullable): The icon to set, or %NULL
  *
  * Sets the icon shown in the entry at the specified position
  * from the current icon theme.
@@ -3091,7 +3091,7 @@ gtk_entry_get_icon_tooltip_text (GtkEntry             *entry,
  * gtk_entry_set_icon_tooltip_text:
  * @entry: a `GtkEntry`
  * @icon_pos: the icon position
- * @tooltip: (allow-none): the contents of the tooltip for the
+ * @tooltip: (nullable): the contents of the tooltip for the
  *   icon, or %NULL
  *
  * Sets @tooltip as the contents of the tooltip for the icon
@@ -3177,7 +3177,7 @@ gtk_entry_get_icon_tooltip_markup (GtkEntry             *entry,
  * gtk_entry_set_icon_tooltip_markup:
  * @entry: a `GtkEntry`
  * @icon_pos: the icon position
- * @tooltip: (allow-none): the contents of the tooltip for the
+ * @tooltip: (nullable): the contents of the tooltip for the
  *   icon, or %NULL
  *
  * Sets @tooltip as the contents of the tooltip for the icon at
@@ -3261,7 +3261,7 @@ gtk_entry_query_tooltip (GtkWidget  *widget,
 /**
  * gtk_entry_set_completion: (attributes org.gtk.Method.set_property=completion)
  * @entry: A `GtkEntry`
- * @completion: (allow-none): The `GtkEntryCompletion` or %NULL
+ * @completion: (nullable): The `GtkEntryCompletion` or %NULL
  *
  * Sets @completion to be the auxiliary completion object
  * to use with @entry.
@@ -3772,7 +3772,7 @@ gtk_entry_get_text_widget (GtkEntry *entry)
 /**
  * gtk_entry_set_extra_menu: (attributes org.gtk.Method.set_property=extra-menu)
  * @entry: a `GtkEntry`
- * @model: (allow-none): a `GMenuModel`
+ * @model: (nullable): a `GMenuModel`
  *
  * Sets a menu model to add when constructing
  * the context menu for @entry.

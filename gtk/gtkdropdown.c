@@ -662,8 +662,8 @@ gtk_drop_down_init (GtkDropDown *self)
 
 /**
  * gtk_drop_down_new:
- * @model: (transfer full) (allow-none): the model to use or %NULL for none
- * @expression: (transfer full) (allow-none): the expression to use or %NULL for none
+ * @model: (transfer full) (nullable): the model to use or %NULL for none
+ * @expression: (transfer full) (nullable): the expression to use or %NULL for none
  *
  * Creates a new `GtkDropDown`.
  *
@@ -724,7 +724,7 @@ gtk_drop_down_get_model (GtkDropDown *self)
 /**
  * gtk_drop_down_set_model: (attributes org.gtk.Method.set_property=model)
  * @self: a `GtkDropDown`
- * @model: (allow-none) (transfer none): the model to use or %NULL for none
+ * @model: (nullable) (transfer none): the model to use or %NULL for none
  *
  * Sets the `GListModel` to use.
  */
@@ -798,7 +798,7 @@ gtk_drop_down_get_factory (GtkDropDown *self)
 /**
  * gtk_drop_down_set_factory: (attributes org.gtk.Method.set_property=factory)
  * @self: a `GtkDropDown`
- * @factory: (allow-none) (transfer none): the factory to use or %NULL for none
+ * @factory: (nullable) (transfer none): the factory to use or %NULL for none
  *
  * Sets the `GtkListItemFactory` to use for populating list items.
  **/
@@ -838,7 +838,7 @@ gtk_drop_down_get_list_factory (GtkDropDown *self)
 /**
  * gtk_drop_down_set_list_factory: (attributes org.gtk.Method.set_property=list-factory)
  * @self: a `GtkDropDown`
- * @factory: (allow-none) (transfer none): the factory to use or %NULL for none
+ * @factory: (nullable) (transfer none): the factory to use or %NULL for none
  *
  * Sets the `GtkListItemFactory` to use for populating list items in the popup.
  */

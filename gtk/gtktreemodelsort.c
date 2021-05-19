@@ -2111,7 +2111,7 @@ gtk_tree_model_sort_elt_get_path (SortLevel *level,
 /**
  * gtk_tree_model_sort_set_model:
  * @tree_model_sort: The #GtkTreeModelSort.
- * @child_model: (allow-none): A #GtkTreeModel, or %NULL.
+ * @child_model: (nullable): A #GtkTreeModel, or %NULL.
  *
  * Sets the model of @tree_model_sort to be @model.  If @model is %NULL, 
  * then the old model is unset.  The sort function is unset as a result 

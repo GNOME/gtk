@@ -676,7 +676,7 @@ gdk_clipboard_read_async (GdkClipboard        *clipboard,
  * gdk_clipboard_read_finish:
  * @clipboard: a `GdkClipboard`
  * @result: a `GAsyncResult`
- * @out_mime_type: (out) (allow-none) (transfer none): pointer to store
+ * @out_mime_type: (out) (optional) (transfer none): pointer to store
  *   the chosen mime type
  * @error: a `GError` location to store the error occurring
  *
@@ -1194,7 +1194,7 @@ gdk_clipboard_claim_remote (GdkClipboard      *clipboard,
 /**
  * gdk_clipboard_set_content:
  * @clipboard: a `GdkClipboard`
- * @provider: (transfer none) (allow-none): the new contents of @clipboard
+ * @provider: (transfer none) (nullable): the new contents of @clipboard
  *   or %NULL to clear the clipboard
  *
  * Sets a new content provider on @clipboard.

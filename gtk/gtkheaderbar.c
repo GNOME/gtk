@@ -284,7 +284,7 @@ construct_title_label (GtkHeaderBar *bar)
 /**
  * gtk_header_bar_set_title_widget:
  * @bar: a `GtkHeaderBar`
- * @title_widget: (allow-none): a widget to use for a title
+ * @title_widget: (nullable): a widget to use for a title
  *
  * Sets the title for the `GtkHeaderBar`.
  *
@@ -769,7 +769,7 @@ gtk_header_bar_set_show_title_buttons (GtkHeaderBar *bar,
 /**
  * gtk_header_bar_set_decoration_layout: (attributes org.gtk.Method.set_property=decoration-layout)
  * @bar: a `GtkHeaderBar`
- * @layout: (allow-none): a decoration layout, or %NULL to
+ * @layout: (nullable): a decoration layout, or %NULL to
  *   unset the layout
  *
  * Sets the decoration layout for this header bar.

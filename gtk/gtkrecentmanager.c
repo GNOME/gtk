@@ -995,7 +995,7 @@ gtk_recent_manager_add_full (GtkRecentManager    *manager,
  * gtk_recent_manager_remove_item:
  * @manager: a `GtkRecentManager`
  * @uri: the URI of the item you wish to remove
- * @error: (allow-none): return location for a #GError, or %NULL
+ * @error: (nullable): return location for a #GError, or %NULL
  *
  * Removes a resource pointed by @uri from the recently used resources
  * list handled by a recent manager.
@@ -1144,7 +1144,7 @@ build_recent_info (GBookmarkFile *bookmarks,
  * gtk_recent_manager_lookup_item:
  * @manager: a `GtkRecentManager`
  * @uri: a URI
- * @error: (allow-none): a return location for a #GError, or %NULL
+ * @error: (nullable): a return location for a #GError, or %NULL
  *
  * Searches for a URI inside the recently used resources list, and
  * returns a `GtkRecentInfo` containing information about the resource
@@ -1205,9 +1205,9 @@ gtk_recent_manager_lookup_item (GtkRecentManager  *manager,
  * gtk_recent_manager_move_item:
  * @manager: a `GtkRecentManager`
  * @uri: the URI of a recently used resource
- * @new_uri: (allow-none): the new URI of the recently used resource, or
+ * @new_uri: (nullable): the new URI of the recently used resource, or
  *    %NULL to remove the item pointed by @uri in the list
- * @error: (allow-none): a return location for a #GError, or %NULL
+ * @error: (nullable): a return location for a #GError, or %NULL
  *
  * Changes the location of a recently used resource from @uri to @new_uri.
  *
@@ -1332,7 +1332,7 @@ purge_recent_items_list (GtkRecentManager  *manager,
 /**
  * gtk_recent_manager_purge_items:
  * @manager: a `GtkRecentManager`
- * @error: (allow-none): a return location for a #GError, or %NULL
+ * @error: (nullable): a return location for a #GError, or %NULL
  *
  * Purges every item from the recently used resources list.
  *
@@ -1778,7 +1778,7 @@ gtk_recent_info_get_application_info (GtkRecentInfo  *info,
 /**
  * gtk_recent_info_get_applications:
  * @info: a `GtkRecentInfo`
- * @length: (out) (allow-none): return location for the length of the returned list
+ * @length: (out) (optional): return location for the length of the returned list
  *
  * Retrieves the list of applications that have registered this resource.
  *
@@ -2197,7 +2197,7 @@ gtk_recent_info_get_age (GtkRecentInfo *info)
 /**
  * gtk_recent_info_get_groups:
  * @info: a `GtkRecentInfo`
- * @length: (out) (allow-none): return location for the number of groups returned
+ * @length: (out) (optional): return location for the number of groups returned
  *
  * Returns all groups registered for the recently used item @info.
  *
@@ -2276,10 +2276,10 @@ gtk_recent_info_has_group (GtkRecentInfo *info,
 /**
  * gtk_recent_info_create_app_info:
  * @info: a `GtkRecentInfo`
- * @app_name: (allow-none): the name of the application that should
+ * @app_name: (nullable): the name of the application that should
  *   be mapped to a `GAppInfo`; if %NULL is used then the default
  *   application for the MIME type is used
- * @error: (allow-none): return location for a #GError, or %NULL
+ * @error: (nullable): return location for a #GError, or %NULL
  *
  * Creates a `GAppInfo` for the specified `GtkRecentInfo`
  *
