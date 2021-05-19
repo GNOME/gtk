@@ -364,7 +364,7 @@ gdk_content_deserializer_return_success (GdkContentDeserializer *deserializer)
 /**
  * gdk_content_deserializer_return_error:
  * @deserializer: a `GdkContentDeserializer`
- * @error: a `GError`
+ * @error: (transfer full): a `GError`
  *
  * Indicate that the deserialization has ended with an error.
  *

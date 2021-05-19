@@ -368,7 +368,7 @@ gdk_content_serializer_return_success (GdkContentSerializer *serializer)
 /**
  * gdk_content_serializer_return_error:
  * @serializer: a `GdkContentSerializer`
- * @error: a `GError`
+ * @error: (transfer full): a `GError`
  *
  * Indicate that the serialization has ended with an error.
  *
