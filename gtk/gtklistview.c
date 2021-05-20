@@ -128,7 +128,7 @@
  * `GtkListView` uses a single CSS node named `listview`. It may carry the
  * `.separators` style class, when [property@Gtk.ListView:show-separators]
  * property is set. Each child widget uses a single CSS node named `row`.
- * If the [property@Gtk.ListItem.activatable] property is set, the
+ * If the [property@Gtk.ListItem:activatable] property is set, the
  * corresponding row will have the `.activatable` style class. For
  * rubberband selection, a node with name `rubberband` is used.
  *
