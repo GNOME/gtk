@@ -2228,11 +2228,6 @@ gtk_popover_get_autohide (GtkPopover *popover)
  * @popover: a `GtkPopover`
  *
  * Pops @popover up.
- *
- * This is different from a [method@Gtk.Widget.show() call
- * in that it may show the popover with a transition. If
- * you want to show the popover without a transition, just
- * use [method@Gtk.Widget.show].
  */
 void
 gtk_popover_popup (GtkPopover *popover)
@@ -2273,10 +2268,8 @@ cascade_popdown (GtkPopover *popover)
  *
  * Pops @popover down.
  *
- * This is different from a [method@Gtk.Widget.hide] call
- * in that it may show the popover with a transition. If
- * you want to hide the popover without a transition, just
- * use [method@Gtk.Widget.hide].
+ * This may have the side-effect of closing a parent popover
+ * as well. See [property@Gtk.Popover:cascade-popdown].
  */
 void
 gtk_popover_popdown (GtkPopover *popover)
