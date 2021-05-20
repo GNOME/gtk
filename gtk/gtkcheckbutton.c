@@ -399,6 +399,19 @@ get_group_active_button (GtkCheckButton *self)
   return NULL;
 }
 
+static void
+gtk_check_button_state_flags_changed (GtkWidget     *widget,
+                                      GtkStateFlags  previous_flags)
+{
+  GtkCheckButton *self = GTK_CHECK_BUTTON (widget);
+  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (self);
+  GtkStateFlags state = gtk_widget_get_state_flags (GTK_WIDGET (self));
+
+  gtk_widget_set_state_flags (priv->indicator_widget, state, TRUE);
+
+  GTK_WIDGET_CLASS (gtk_check_button_parent_class)->state_flags_changed (widget, previous_flags);
+}
+
 static gboolean
 gtk_check_button_focus (GtkWidget         *widget,
                         GtkDirectionType   direction)
@@ -499,6 +512,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   object_class->set_property = gtk_check_button_set_property;
   object_class->get_property = gtk_check_button_get_property;
 
+  widget_class->state_flags_changed = gtk_check_button_state_flags_changed;
   widget_class->focus = gtk_check_button_focus;
 
   class->activate = gtk_check_button_real_activate;
