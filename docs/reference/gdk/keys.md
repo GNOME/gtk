@@ -3,7 +3,7 @@ Title: Key Values
 ## Functions for manipulating keyboard codes
 
 Key values are the codes which are sent whenever a key is pressed or released.
-They are included in the data contained in a key press or release #GdkEvent.
+They are included in the data contained in a key press or release `GdkEvent`.
 The complete list of key values can be found in the `gdk/gdkkeysyms.h` header
 file.
 
@@ -45,7 +45,7 @@ information:
     or the “!” symbol. The letter keys are considered to have a lowercase
     letter at level 0, and an uppercase letter at level 1, though normally
     only the uppercase letter is printed on the key
-  1. third, the #GdkKeymapKey contains a group; groups are not used on
+  1. third, the [struct@Gdk.KeymapKey] contains a group; groups are not used on
      standard US keyboards, but are used in many other countries. On a
      keyboard with groups, there can be 3 or 4 symbols printed on a single
      key. The group indicates movement in a horizontal direction. Usually

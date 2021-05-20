@@ -8,7 +8,7 @@ an application's user interface elements. Assistive technology (AT)
 applications, like Orca, convey this information to users with disabilities,
 or reduced abilities, to help them use the application.
 
-Standard GTK controls implement the #GtkAccessible interface and are thus
+Standard GTK controls implement the `GtkAccessible` interface and are thus
 accessible to ATs by default. This means that if you use GTK controls such
 as `GtkButton`, `GtkEntry`, or `GtkListView`, you only need to supply
 application-specific details when the defaults values are incomplete. You
@@ -103,39 +103,39 @@ for instance:
 
  - a toggle button will change its %GTK_ACCESSIBLE_STATE_CHECKED state every
    time it is toggled, either by the user or programmatically
- - setting the mnemonic widget on a #GtkLabel will update the
+ - setting the mnemonic widget on a `GtkLabel` will update the
    %GTK_ACCESSIBLE_RELATION_LABELLED_BY relation on the widget with a
    reference to the label
- - changing the #GtkAdjustment instance on a #GtkScrollbar will change the
+ - changing the `GtkAdjustment` instance on a `GtkScrollbar` will change the
    %GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, %GTK_ACCESSIBLE_PROPERTY_VALUE_MIN,
    and %GTK_ACCESSIBLE_PROPERTY_VALUE_NOW properties with the upper, lower,
-   and value properties of the #GtkAdjustment
+   and value properties of the `GtkAdjustment`
 
 See the [WAI-ARIA](https://www.w3.org/WAI/PF/aria/appendices#quickref) list
 of attributes for additional information.
 
 #### List of accessible states
 
-Each state name is part of the #GtkAccessibleState enumeration.
+Each state name is part of the `GtkAccessibleState` enumeration.
 
 | State name | ARIA attribute | Value type | Notes |
 |------------|----------------|------------|-------|
 | %GTK_ACCESSIBLE_STATE_BUSY | “aria-busy” | boolean |
-| %GTK_ACCESSIBLE_STATE_CHECKED | “aria-checked” | #GtkAccessibleTristate | Indicates the current state of a [class@Gtk.CheckButton] |
+| %GTK_ACCESSIBLE_STATE_CHECKED | “aria-checked” | `GtkAccessibleTristate` | Indicates the current state of a [class@Gtk.CheckButton] |
 | %GTK_ACCESSIBLE_STATE_DISABLED | “aria-disabled” | boolean | Corresponds to the [property@Gtk.Widget:sensitive] property on [class@Gtk.Widget] |
 | %GTK_ACCESSIBLE_STATE_EXPANDED | “aria-expanded” | boolean or undefined | Corresponds to the  [property@Gtk.Expander:expanded] property on [class@Gtk.Expander] |
 | %GTK_ACCESSIBLE_STATE_HIDDEN | “aria-hidden” | boolean | Corresponds to the [property@Gtk.Widget:visible] property on [class@Gtk.Widget] |
-| %GTK_ACCESSIBLE_STATE_INVALID | “aria-invalid” | #GtkAccessibleInvalidState | Set when a widget is showing an error |
-| %GTK_ACCESSIBLE_STATE_PRESSED | “aria-pressed” | #GtkAccessibleTristate | Indicates the current state of a [class@Gtk.ToggleButton] |
+| %GTK_ACCESSIBLE_STATE_INVALID | “aria-invalid” | `GtkAccessibleInvalidState` | Set when a widget is showing an error |
+| %GTK_ACCESSIBLE_STATE_PRESSED | “aria-pressed” | `GtkAccessibleTristate` | Indicates the current state of a [class@Gtk.ToggleButton] |
 | %GTK_ACCESSIBLE_STATE_SELECTED | “aria-selected” | boolean or undefined | Set when a widget is selected |
 
 #### List of accessible properties
 
-Each property name is part of the #GtkAccessibleProperty enumeration.
+Each property name is part of the `GtkAccessibleProperty` enumeration.
 
 | State name | ARIA attribute | Value type |
 |------------|----------------|------------|
-| %GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE | “aria-autocomplete” | #GtkAccessibleAutocomplete |
+| %GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE | “aria-autocomplete” | `GtkAccessibleAutocomplete` |
 | %GTK_ACCESSIBLE_PROPERTY_DESCRIPTION | “aria-description” | translatable string |
 | %GTK_ACCESSIBLE_PROPERTY_HAS_POPUP | “aria-haspopup” | boolean |
 | %GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS | “aria-keyshortcuts” | string |
@@ -144,12 +144,12 @@ Each property name is part of the #GtkAccessibleProperty enumeration.
 | %GTK_ACCESSIBLE_PROPERTY_MODAL | “aria-modal” | boolean |
 | %GTK_ACCESSIBLE_PROPERTY_MULTI_LINE | “aria-multiline” | boolean |
 | %GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE | “aria-multiselectable” | boolean |
-| %GTK_ACCESSIBLE_PROPERTY_ORIENTATION | “aria-orientation” | #GtkOrientation |
+| %GTK_ACCESSIBLE_PROPERTY_ORIENTATION | “aria-orientation” | `GtkOrientation` |
 | %GTK_ACCESSIBLE_PROPERTY_PLACEHOLDER | “aria-placeholder” | translatable string |
 | %GTK_ACCESSIBLE_PROPERTY_READ_ONLY | “aria-readonly” | boolean |
 | %GTK_ACCESSIBLE_PROPERTY_REQUIRED | “aria-required” | boolean |
 | %GTK_ACCESSIBLE_PROPERTY_ROLE_DESCRIPTION | “aria-roledescription” | translatable string |
-| %GTK_ACCESSIBLE_PROPERTY_SORT | “aria-sort” | #GtkAccessibleSort |
+| %GTK_ACCESSIBLE_PROPERTY_SORT | “aria-sort” | `GtkAccessibleSort` |
 | %GTK_ACCESSIBLE_PROPERTY_VALUE_MAX | “aria-valuemax” | double |
 | %GTK_ACCESSIBLE_PROPERTY_VALUE_MIN | “aria-valuemin” | double |
 | %GTK_ACCESSIBLE_PROPERTY_VALUE_NOW | “aria-valuenow” | double |
@@ -157,22 +157,22 @@ Each property name is part of the #GtkAccessibleProperty enumeration.
 
 #### List of accessible relations
 
-Each relation name is part of the #GtkAccessibleRelation enumeration.
+Each relation name is part of the `GtkAccessibleRelation` enumeration.
 
 | State name | ARIA attribute | Value type |
 |------------|----------------|------------|
-| %GTK_ACCESSIBLE_RELATION_ACTIVE_DESCENDANT | “aria-activedescendant” | #GtkAccessible |
+| %GTK_ACCESSIBLE_RELATION_ACTIVE_DESCENDANT | “aria-activedescendant” | `GtkAccessible` |
 | %GTK_ACCESSIBLE_RELATION_COL_COUNT | “aria-colcount” | integer |
 | %GTK_ACCESSIBLE_RELATION_COL_INDEX | “aria-colindex” | integer |
 | %GTK_ACCESSIBLE_RELATION_COL_INDEX_TEXT | “aria-colindextext” | translatable string |
 | %GTK_ACCESSIBLE_RELATION_COL_SPAN | “aria-colspan” | integer |
-| %GTK_ACCESSIBLE_RELATION_CONTROLS | “aria-controls” | a list of #GtkAccessible |
-| %GTK_ACCESSIBLE_RELATION_DESCRIBED_BY | “aria-describedby” | a list of #GtkAccessible |
-| %GTK_ACCESSIBLE_RELATION_DETAILS | “aria-details” | a list of #GtkAccessible |
-| %GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE | “aria-errormessage” | #GtkAccessible |
-| %GTK_ACCESSIBLE_RELATION_FLOW_TO | “aria-flowto” | a list of #GtkAccessible |
-| %GTK_ACCESSIBLE_RELATION_LABELLED_BY | “aria-labelledby” | a list of #GtkAccessible |
-| %GTK_ACCESSIBLE_RELATION_OWNS | “aria-owns” | a list of #GtkAccessible |
+| %GTK_ACCESSIBLE_RELATION_CONTROLS | “aria-controls” | a list of `GtkAccessible` |
+| %GTK_ACCESSIBLE_RELATION_DESCRIBED_BY | “aria-describedby” | a list of `GtkAccessible` |
+| %GTK_ACCESSIBLE_RELATION_DETAILS | “aria-details” | a list of `GtkAccessible` |
+| %GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE | “aria-errormessage” | `GtkAccessible` |
+| %GTK_ACCESSIBLE_RELATION_FLOW_TO | “aria-flowto” | a list of `GtkAccessible` |
+| %GTK_ACCESSIBLE_RELATION_LABELLED_BY | “aria-labelledby” | a list of `GtkAccessible` |
+| %GTK_ACCESSIBLE_RELATION_OWNS | “aria-owns” | a list of `GtkAccessible` |
 | %GTK_ACCESSIBLE_RELATION_POS_IN_SET | “aria-posinset” | integer |
 | %GTK_ACCESSIBLE_RELATION_ROW_COUNT | “aria-rowcount” | integer |
 | %GTK_ACCESSIBLE_RELATION_ROW_INDEX | “aria-rowindex” | integer |
@@ -219,11 +219,11 @@ be used as part of the application's test suite to avoid regressions.
 
 ## Implementations
 
-Each UI control implements the #GtkAccessible interface to allow widget and
+Each UI control implements the `GtkAccessible` interface to allow widget and
 application developers to specify the roles, state, and relations between UI
 controls. This API is purely descriptive.
 
-Each `GtkAccessible` implementation must provide a #GtkATContext instance,
+Each `GtkAccessible` implementation must provide a `GtkATContext` instance,
 which acts as a proxy to the specific platform's accessibility API:
 
  * AT-SPI on Linux/BSD
@@ -256,7 +256,7 @@ is a promise that the widget being created will provide the same keyboard
 interactions expected for a button. An accessible role of a button will not
 turn automatically any widget into a `GtkButton`; but if your widget behaves
 like a button, using the %GTK_ACCESSIBLE_ROLE_BUTTON will allow any
-assistive technology to handle it like they would a #GtkButton.
+assistive technology to handle it like they would a `GtkButton`.
 
 ### Attributes can both hide and enhance
 
@@ -308,7 +308,7 @@ interface.
 
 A "presentation" role should not be confused with the
 %GTK_ACCESSIBLE_STATE_HIDDEN state; the "hidden" state is transient, and is
-typically controlled by showing and hiding a widget using the #GtkWidget
+typically controlled by showing and hiding a widget using the `GtkWidget`
 API.
 
 ## Design patterns and custom widgets
@@ -322,7 +322,7 @@ as well.
 A button is a widget that enables users to trigger an action. While it is
 recommended you use `GtkButton` for anything that looks and behaves like a
 button, it is possible to apply a button behavior to UI elements like images
-by using a #GtkGestureClick gesture. When doing so, you should:
+by using a `GtkGestureClick` gesture. When doing so, you should:
 
   - Give your widget the role %GTK_ACCESSIBLE_ROLE_BUTTON
   - Install an action with no parameters, which will activate the widget
@@ -336,7 +336,7 @@ in the same way as a `GtkSpinButton` or `GtkSearchEntry`.
 
 ### Tab-based UI
 
-If you make a tab-based interface, you should consider using #GtkStack
+If you make a tab-based interface, you should consider using `GtkStack`
 as the core, and just make a custom tab widget to control the active
 stack page. When doing so, the following extra steps will ensure that
 your tabs are accessible in the same way as `GtkStackSwitcher` or `GtkNotebook`:
@@ -344,7 +344,7 @@ your tabs are accessible in the same way as `GtkStackSwitcher` or `GtkNotebook`:
 - Give your tab container the role %GTK_ACCESSIBLE_ROLE_TAB_LIST
 - Give your tab widgets the role %GTK_ACCESSIBLE_ROLE_TAB
 - Set up the %GTK_ACCESSIBLE_RELATION_CONTROLS relation between each
-  tab and the #GtkStackPage object for its page
+  tab and the `GtkStackPage` object for its page
 - Set the %GTK_ACCESSIBLE_PROPERTY_SELECTED property on each tab, with
   the active tab getting the value %TRUE, all others %FALSE
 
@@ -357,7 +357,7 @@ or add a `activate-tab` action on each tab.
 ### Value controls
 
 A value control (ie a widget that controls a one-dimensional quantity
-that can be represented by a #GtkAdjustment) can be represented to
+that can be represented by a `GtkAdjustment`) can be represented to
 accessible technologies by setting the %GTK_ACCESSIBLE_PROPERTY_VALUE_MIN,
 %GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, and %GTK_ACCESSIBLE_PROPERTY_VALUE_NOW
 properties.

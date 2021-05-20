@@ -33,13 +33,13 @@ the question you have, this list is a good place to start.
 
 4.  How does memory management work in GTK? Should I free data returned from functions?
 
-    See the documentation for #GObject and #GInitiallyUnowned. For #GObject note
-    specifically g_object_ref() and g_object_unref(). #GInitiallyUnowned is a
-    subclass of #GObject so the same points apply, except that it has a "floating"
+    See the documentation for `GObject` and `GInitiallyUnowned`. For `GObject` note
+    specifically `g_object_ref()` and `g_object_unref()`. `GInitiallyUnowned` is a
+    subclass of `GObject` so the same points apply, except that it has a "floating"
     state (explained in its documentation).
 
     For strings returned from functions, they will be declared "const" if they should
-    not be freed. Non-const strings should be freed with g_free(). Arrays follow the
+    not be freed. Non-const strings should be freed with `g_free()`. Arrays follow the
     same rule. If you find an undocumented exception to the rules, please
     [file a bug report.](https://gitlab.gnome.org/GNOME/gtk/issues/new).
 
@@ -47,7 +47,7 @@ the question you have, this list is a good place to start.
     documentation can provide useful hints for memory handling semantics as well.
 
 5.  Why does my program leak memory, if I destroy a widget immediately
-    after creating it ?
+    after creating it?
 
     If `GtkFoo` isn't a toplevel window, then
 
@@ -60,7 +60,7 @@ the question you have, this list is a good place to start.
     want standard reference counting, not floating reference counting.
 
     To get this, you must acquire a reference to the widget and drop the
-    floating reference (_ref and sink_ in GObject parlance) after creating it:
+    floating reference (_ref and sink_ in `GObject` parlance) after creating it:
 
         foo = gtk_foo_new ();
         g_object_ref_sink (foo);
@@ -72,12 +72,12 @@ the question you have, this list is a good place to start.
 6.  How do I use GTK with threads?
 
     GTK requires that all GTK API calls are made from the same thread in which
-    the #GtkApplication was created, or gtk_init() was called (the _main thread_).
+    the `GtkApplication` was created, or `gtk_init()` was called (the _main thread_).
 
     If you want to take advantage of multi-threading in a GTK application,
     it is usually best to send long-running tasks to worker threads, and feed
-    the results back to the main thread using g_idle_add() or #GAsyncQueue. GIO
-    offers useful tools for such an approach such as #GTask.
+    the results back to the main thread using `g_idle_add()` or `GAsyncQueue`. GIO
+    offers useful tools for such an approach such as `GTask`.
 
 7.  How do I internationalize a GTK program?
 
@@ -239,7 +239,7 @@ the question you have, this list is a good place to start.
 
         gdk_surface_set_events (gdk_surface,
                                 (GdkEventMask) GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
-        
+
     There are very few functions that require this cast, however.
 
 10. How do I use GTK with other non-C languages?
@@ -250,14 +250,14 @@ the question you have, this list is a good place to start.
 11. How do I load an image or animation from a file?
 
     To load an image file straight into a display widget, use
-    gtk_image_new_from_file(). To load an image for another purpose, use
-    gdk_texture_new_from_file(). To load a video from a file, use
-    gtk_media_file_new_for_file().
+    [ctor@Gtk.Image.new_from_file]. To load an image for another purpose, use
+    [ctor@Gdk.Texture.new_from_file]. To load a video from a file, use
+    [ctor@Gtk.MediaFile.new_for_file].
 
 12. How do I draw text?
 
     To draw a piece of text onto a cairo surface, use a Pango layout and
-    pango_cairo_show_layout().
+    [func@PangoCairo.show_layout].
 
         layout = gtk_widget_create_pango_layout (widget, text);
         fontdesc = pango_font_description_from_string ("Luxi Mono 12");
@@ -265,17 +265,17 @@ the question you have, this list is a good place to start.
         pango_cairo_show_layout (cr, layout);
         pango_font_description_free (fontdesc);
         g_object_unref (layout);
-        
+
     See also the [Cairo Rendering](https://developer.gnome.org/pango/stable/pango-Cairo-Rendering.html)
     section of the [Pango documentation](https://developer.gnome.org/pango/stable/).
 
-    To draw a piece of text in a widget snapshot() implementation, use
-    gtk_snapshot_append_layout().
+    To draw a piece of text in a widget [vfunc@Gtk.Widget.snapshot] implementation,
+    use [method@Gtk.Snapshot.append_layout].
 
 13. How do I measure the size of a piece of text?
 
     To obtain the size of a piece of text, use a Pango layout and
-    pango_layout_get_pixel_size(), using code like the following:
+    [method@Pango.Layout.get_pixel_size], using code like the following:
 
         layout = gtk_widget_create_pango_layout (widget, text);
         fontdesc = pango_font_description_from_string ("Luxi Mono 12");
@@ -294,7 +294,7 @@ the question you have, this list is a good place to start.
     compiler to optimize the call away if it appears that the value is not
     being used.
 
-    GLib provides the g_type_ensure() function to work around this problem.
+    GLib provides the `g_type_ensure()` function to work around this problem.
 
         g_type_ensure (GTK_TYPE_BLAH);
 
@@ -311,34 +311,34 @@ the question you have, this list is a good place to start.
     and the required formatting flexibility.
 
     If you want to display a large amount of data in a uniform way, your best
-    option is a #GtkTreeView widget. See the [tree widget overview](#TreeWidget).
+    option is a [class@Gtk.TreeView] widget. See the [tree widget overview](#TreeWidget).
     A list is just a tree with no branches, so the treeview widget is used for
     lists as well.
 
     If you want to display a small amount of items, but need flexible formatting
-    and widgetry inside the list, then you probably want to use a #GtkListBox,
+    and widgetry inside the list, then you probably want to use a [class@Gtk.ListBox],
     which uses regular widgets for display.
 
 17. ...for multi-line text display or editing?
 
     See the [text widget overview](#TextWidget) -- you should use the
-    #GtkTextView widget.
+    [class@Gtk.TextView] widget.
 
-    If you only have a small amount of text, #GtkLabel may also be appropriate
-    of course. It can be made selectable with gtk_label_set_selectable(). For a
-    single-line text entry, see #GtkEntry.
+    If you only have a small amount of text, [class@Gtk.Label] may also be appropriate
+    of course. It can be made selectable with [method@Gtk.Label.set_selectable]. For a
+    single-line text entry, see [class@Gtk.Entry].
 
 18. ...to display an image or animation?
 
-    GTK has two widgets that are dedicated to displaying images. #GtkImage, for
-    small, fixed-size icons and #GtkPicture for content images.
+    GTK has two widgets that are dedicated to displaying images. [class@Gtk.Image], for
+    small, fixed-size icons and [class@Gtk.Picture] for content images.
 
     Both can display images in just about any format GTK understands.
-    You can also use #GtkDrawingArea if you need to do something more complex,
+    You can also use [class@Gtk.DrawingArea] if you need to do something more complex,
     such as draw text or graphics over the top of the image.
 
-    Both GtkImage and GtkPicture can display animations and videos as well.
-    To show an webm file, load it with the GtkMediaFile API and then use
+    Both [class@Gtk.Image] and [class@Gtk.Picture] can display animations and videos as well.
+    To show an webm file, load it with the [class@Gtk.MediaFile] API and then use
     it as a paintable:
 
         mediafile = gtk_media_file_new_for_filename ("example.webm");
@@ -347,8 +347,10 @@ the question you have, this list is a good place to start.
 19. ...for presenting a set of mutually-exclusive choices, where Windows
     would use a combo box?
 
-    With GTK, a #GtkComboBox is the recommended widget to use for this use case.
-    If you need an editable text entry, use the #GtkComboBox:has-entry property.
+    With GTK, a [class@Gtk.ComboBox] is the recommended widget to use for this use case.
+    If you need an editable text entry, use the [property@Gtk.ComboBox:has-entry] property.
+
+    A newer alternative is [class@Gtk.DropDown].
 
 ## Questions about GtkWidget
 
@@ -357,8 +359,8 @@ the question you have, this list is a good place to start.
     The background color of a widget is determined by the CSS style that applies
     to it. To change that, you can set style classes on the widget, and provide
     custom CSS to change the appearance. Such CSS can be loaded with
-    gtk_css_provider_load_from_file() and its variants.
-    See gtk_style_context_add_provider().
+    [method@Gtk.CssProvider.load_from_file] and its variants.
+    See [method@Gtk.StyleContext.add_provider].
 
 21. How do I change the font of a widget?
 
@@ -368,7 +370,7 @@ the question you have, this list is a good place to start.
         gtk_label_set_markup (label, "<big>big tex</big>");
 
     This is preferred for many apps because it's a relative size to the
-    user's chosen font size. See g_markup_escape_text() if you are
+    user's chosen font size. See `g_markup_escape_text()` if you are
     constructing such strings on the fly.
 
     You can also change the font of a widget by putting
@@ -377,24 +379,24 @@ the question you have, this list is a good place to start.
           font: Sans 30;
         }
 
-    in a CSS file, loading it with gtk_css_provider_load_from_file(), and
-    adding the provider with gtk_style_context_add_provider_for_display().
+    in a CSS file, loading it with [method@Gtk.CssProvider.load_from_file], and
+    adding the provider with [type_func@Gtk.StyleContext.add_provider_for_display].
     To associate this style information with your widget, set a style class
-    on its #GtkStyleContext using gtk_style_context_add_class(). The advantage
+    on the widget using [method@Gtk.Widget.add_css_class]. The advantage
     of this approach is that users can then override the font you have chosen.
-    See the #GtkStyleContext documentation for more discussion.
+    See the `GtkStyleContext` documentation for more discussion.
 
 22. How do I disable/ghost/desensitize a widget?
 
     In GTK a disabled widget is termed _insensitive_.
-    See gtk_widget_set_sensitive().
+    See [method@Gtk.Widget.set_sensitive].
 
 ## GtkTextView questions
 
 23. How do I get the contents of the entire text widget as a string?
 
-    See gtk_text_buffer_get_bounds() and gtk_text_buffer_get_text()
-    or gtk_text_iter_get_text().
+    See [method@Gtk.TextBuffer.get_bounds] and [method@Gtk.TextBuffer.get_text]
+    or [method@Gtk.TextIter.get_text].
 
         GtkTextIter start, end;
         GtkTextBuffer *buffer;
@@ -405,10 +407,10 @@ the question you have, this list is a good place to start.
         text = gtk_text_iter_get_text (&start, &end);
         /* use text */
         g_free (text);
-        
+
 24. How do I make a text widget display its complete contents in a specific font?
 
-    If you use gtk_text_buffer_insert_with_tags() with appropriate tags to
+    If you use [method@Gtk.TextBuffer.insert_with_tags] with appropriate tags to
     select the font, the inserted text will have the desired appearance, but
     text typed in by the user before or after the tagged block will appear in
     the default style.
@@ -421,40 +423,40 @@ the question you have, this list is a good place to start.
     *before*, keeping the mark at the end.
 
     To ensure that the end of the buffer remains visible, use
-    gtk_text_view_scroll_to_mark() to scroll to the mark after
+    [method@Gtk.TextView.scroll_to_mark] to scroll to the mark after
     inserting new text.
 
-    The gtk-demo application contains an example of this technique.
+    The gtk4-demo application contains an example of this technique.
 
 ## GtkTreeView questions
 
 26. How do I associate some data with a row in the tree?
 
-    Remember that the #GtkTreeModel columns don't necessarily have to be
+    Remember that the [class@Gtk.TreeModel] columns don't necessarily have to be
     displayed. So you can put non-user-visible data in your model just
-    like any other data, and retrieve it with gtk_tree_model_get().
-    See the [tree widget overview](#TreeWidget).
+    like any other data, and retrieve it with [method@Gtk.TreeModel.get].
+    See the [tree widget overview](#TreeWidget).        
 
 27. How do I put an image and some text in the same column?
 
-    You can pack more than one #GtkCellRenderer into a single #GtkTreeViewColumn
-    using gtk_tree_view_column_pack_start() or gtk_tree_view_column_pack_end().
-    So pack both a #GtkCellRendererPixbuf and a #GtkCellRendererText into the
+    You can pack more than one [class@Gtk.CellRenderer] into a single [class@Gtk.TreeViewColumn]
+    using [method@Gtk.TreeViewColumn.pack_start] or [method@Gtk.TreeViewColumn.pack_end].
+    So pack both a [class@Gtk.CellRendererPixbuf] and a [class@Gtk.CellRendererText] into the
     column.
 
-28. I can set data easily on my #GtkTreeStore or #GtkListStore models using
-    gtk_list_store_set() and gtk_tree_store_set(), but can't read it back?
+28. I can set data easily on my [class@Gtk.TreeStore] or [class@Gtk.ListStore] models using
+    [method@Gtk.ListStore.set] and [method@Gtk.TreeStore.set], but can't read it back?
 
-    Both the #GtkTreeStore and the #GtkListStore implement the #GtkTreeModel
+    Both the [class@Gtk.TreeStore] and the [class@Gtk.ListStore] implement the [class@Gtk.TreeModel]
     interface. As a consequence, you can use any function this interface
     implements. The easiest way to read a set of data back is to use
-    gtk_tree_model_get().
+    [method@Gtk.TreeModel.get].
 
-29. How do I change the way that numbers are formatted by #GtkTreeView?
+29. How do I change the way that numbers are formatted by `GtkTreeView`?
 
-    Use gtk_tree_view_insert_column_with_data_func() or
-    gtk_tree_view_column_set_cell_data_func() and do the conversion
-    from number to string yourself (with, say, g_strdup_printf()).
+    Use [method@Gtk.TreeView.insert_column_with_data_func] or
+    [method@Gtk.TreeViewColumn.set_cell_data_func] and do the conversion
+    from number to string yourself (with, say, `g_strdup_printf()`).
 
     The following example demonstrates this:
 
@@ -527,29 +529,29 @@ the question you have, this list is a good place to start.
 30. How do I hide the expander arrows in my tree view?
 
     Set the expander-column property of the tree view to a hidden column.
-    See gtk_tree_view_set_expander_column() and gtk_tree_view_column_set_visible().
+    See [method@Gtk.TreeView.set_expander_column] and [method@Gtk.TreeViewColumn.set_visible].
 
 ## Using cairo with GTK
 
 31. How do I use cairo to draw in GTK applications?
 
-    Use gtk_snapshot_append_cairo() in your #GtkWidgetClass.snapshot() vfunc
+    Use [method@Gtk.Snapshot.append_cairo] in your [vfunc@Gtk.Widget.snapshot] vfunc
     to obtain a cairo context and draw with that.
-    
+
 32. Can I improve the performance of my application by using another backend
     of cairo (such as GL)?
 
     No. Most drawing in GTK is not done via cairo anymore (but instead
     by the GL or Vulkan renderers of GSK).
 
-    If you use cairo for drawing your own widgets, gtk_snapshot_append_cairo()
+    If you use cairo for drawing your own widgets, [mehtod@Gtk.Snapshot.append_cairo]
     will choose the most appropriate surface type for you.
 
-    If you are interested in using GL for your own drawing, see #GtkGLArea.
+    If you are interested in using GL for your own drawing, see [class@Gtk.GLArea].
 
-33. Can I use cairo to draw on a #GdkPixbuf?
+33. Can I use cairo to draw on a `GdkPixbuf`?
 
-    No. The cairo image surface does not support the pixel format used by GdkPixbuf.
+    No. The cairo image surface does not support the pixel format used by `GdkPixbuf`.
 
     If you need to get cairo drawing into a format that can be displayed efficiently
-    by GTK, you may want to use an image surface and gdk_memory_texture_new().
+    by GTK, you may want to use an image surface and [ctor@Gdk.MemoryTexture.new].
