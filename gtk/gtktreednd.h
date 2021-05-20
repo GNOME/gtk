@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 /**
  * GTK_TYPE_TREE_ROW_DATA:
- * Magic #GType to use when dragging rows in a #GtkTreeModel.
+ * Magic `GType` to use when dragging rows in a `GtkTreeModel`.
  *
  * Data in this format will be provided by gtk_tree_create_row_drag_content()
  * and can be consumed via gtk_tree_get_row_drag_data().
@@ -48,11 +48,11 @@ typedef struct _GtkTreeDragSourceIface GtkTreeDragSourceIface;
 
 /**
  * GtkTreeDragSourceIface:
- * @row_draggable: Asks the #GtkTreeDragSource whether a particular
+ * @row_draggable: Asks the `GtkTreeDragSource` whether a particular
  *    row can be used as the source of a DND operation.
- * @drag_data_get: Asks the #GtkTreeDragSource to fill in
+ * @drag_data_get: Asks the `GtkTreeDragSource` to fill in
  *    selection_data with a representation of the row at path.
- * @drag_data_delete: Asks the #GtkTreeDragSource to delete the row at
+ * @drag_data_delete: Asks the `GtkTreeDragSource` to delete the row at
  *    path, because it was moved somewhere else via drag-and-drop.
  */
 struct _GtkTreeDragSourceIface
@@ -105,7 +105,7 @@ typedef struct _GtkTreeDragDestIface GtkTreeDragDestIface;
 
 /**
  * GtkTreeDragDestIface:
- * @drag_data_received: Asks the #GtkTreeDragDest to insert a row
+ * @drag_data_received: Asks the `GtkTreeDragDest` to insert a row
  *    before the path dest, deriving the contents of the row from
  *    selection_data.
  * @row_drop_possible: Determines whether a drop is possible before

@@ -42,8 +42,8 @@
  *
  * Decodes a data URL according to RFC2397 and returns the decoded data.
  *
- * Returns: a new #GBytes with the decoded data
- **/
+ * Returns: a new `GBytes` with the decoded data
+ */
 GBytes *
 gtk_css_data_url_parse (const char  *url,
                         char       **out_mimetype,

@@ -139,7 +139,7 @@ struct _GtkWidgetPrivate
   char *name;
 
   /* The root this widget belongs to or %NULL if widget is not
-   * rooted or is a #GtkRoot itself.
+   * rooted or is a GtkRoot itself.
    */
   GtkRoot *root;
 

@@ -431,7 +431,7 @@ gtk_text_layout_set_contexts (GtkTextLayout *layout,
 
 /**
  * gtk_text_layout_set_overwrite_mode:
- * @layout: a #GtkTextLayout
+ * @layout: a `GtkTextLayout`
  * @overwrite: overwrite mode
  *
  * Sets overwrite mode
@@ -493,7 +493,7 @@ gtk_text_layout_set_keyboard_direction (GtkTextLayout   *layout,
 
 /**
  * gtk_text_layout_get_buffer:
- * @layout: a #GtkTextLayout
+ * @layout: a `GtkTextLayout`
  *
  * Gets the text buffer used by the layout. See
  * gtk_text_layout_set_buffer().
@@ -526,12 +526,12 @@ gtk_text_layout_set_screen_width (GtkTextLayout *layout, int width)
 
 /**
  * gtk_text_layout_set_cursor_visible:
- * @layout: a #GtkTextLayout
+ * @layout: a `GtkTextLayout`
  * @cursor_visible: If %FALSE, then the insertion cursor will not
  *   be shown, even if the text is editable.
  *
  * Sets whether the insertion cursor should be shown. Generally,
- * widgets using #GtkTextLayout will hide the cursor when the
+ * widgets using `GtkTextLayout` will hide the cursor when the
  * widget does not have the input focus.
  */
 void
@@ -561,7 +561,7 @@ gtk_text_layout_set_cursor_visible (GtkTextLayout *layout,
 
 /**
  * gtk_text_layout_get_cursor_visible:
- * @layout: a #GtkTextLayout
+ * @layout: a `GtkTextLayout`
  *
  * Returns whether the insertion cursor will be shown.
  *
@@ -576,9 +576,9 @@ gtk_text_layout_get_cursor_visible (GtkTextLayout *layout)
 
 /**
  * gtk_text_layout_set_preedit_string:
- * @layout: a #PangoLayout
+ * @layout: a `PangoLayout`
  * @preedit_string: a string to display at the insertion point
- * @preedit_attrs: a #PangoAttrList of attributes that apply to @preedit_string
+ * @preedit_attrs: a `PangoAttrList` of attributes that apply to @preedit_string
  * @cursor_pos: position of cursor within preedit string in chars
  * 
  * Set the preedit string and attributes. The preedit string is a
@@ -859,9 +859,9 @@ gtk_text_layout_free_line_data (GtkTextLayout   *layout,
 
 /**
  * gtk_text_layout_is_valid:
- * @layout: a #GtkTextLayout
+ * @layout: a `GtkTextLayout`
  *
- * Check if there are any invalid regions in a #GtkTextLayout’s buffer
+ * Check if there are any invalid regions in a `GtkTextLayout`’s buffer
  *
  * Returns: %TRUE if any invalid regions were found
  */
@@ -884,7 +884,7 @@ update_layout_size (GtkTextLayout *layout)
 
 /**
  * gtk_text_layout_validate_yrange:
- * @layout: a #GtkTextLayout
+ * @layout: a `GtkTextLayout`
  * @anchor: iter pointing into a line that will be used as the
  *   coordinate origin
  * @y0_: offset from the top of the line pointed to by @anchor at
@@ -894,7 +894,7 @@ update_layout_size (GtkTextLayout *layout)
  *   which to end validation. (The offset here is in pixels
  *   after validation.)
  *
- * Ensure that a region of a #GtkTextLayout is valid. The ::changed
+ * Ensure that a region of a `GtkTextLayout` is valid. The ::changed
  * signal will be emitted if any lines are validated.
  */
 void
@@ -1022,11 +1022,11 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
 
 /**
  * gtk_text_layout_validate:
- * @tree: a #GtkTextLayout
+ * @tree: a `GtkTextLayout`
  * @max_pixels: the maximum number of pixels to validate. (No more
  *   than one paragraph beyond this limit will be validated)
  *
- * Validate regions of a #GtkTextLayout. The ::changed signal will
+ * Validate regions of a `GtkTextLayout`. The ::changed signal will
  * be emitted for each region validated.
  **/
 void
@@ -1785,8 +1785,8 @@ add_child_attrs (GtkTextLayout      *layout,
 
 /*
  * get_block_cursor:
- * @layout: a #GtkTextLayout
- * @display: a #GtkTextLineDisplay
+ * @layout: a `GtkTextLayout`
+ * @display: a `GtkTextLineDisplay`
  * @insert_iter: iter pointing to the cursor location
  * @insert_index: cursor offset in the @display’s layout, it may
  * be different from @insert_iter’s offset in case when preedit
@@ -2730,7 +2730,7 @@ get_line_at_y (GtkTextLayout *layout,
 
 /**
  * gtk_text_layout_get_line_at_y:
- * @layout: a #GtkLayout
+ * @layout: a `GtkLayout`
  * @target_iter: the iterator in which the result is stored
  * @y: the y position
  * @line_top: location to store the y coordinate of the
@@ -2824,8 +2824,8 @@ gtk_text_layout_get_iter_at_position (GtkTextLayout *layout,
 
 /**
  * gtk_text_layout_get_cursor_locations:
- * @layout: a #GtkTextLayout
- * @iter: a #GtkTextIter
+ * @layout: a `GtkTextLayout`
+ * @iter: a `GtkTextIter`
  * @strong_pos: (out) (optional): location to store the strong cursor position
  * @weak_pos: (out) (optional): location to store the weak cursor position
  *
@@ -2894,8 +2894,8 @@ gtk_text_layout_get_cursor_locations (GtkTextLayout  *layout,
 
 /**
  * _gtk_text_layout_get_block_cursor:
- * @layout: a #GtkTextLayout
- * @pos: a #GdkRectangle to store block cursor position
+ * @layout: a `GtkTextLayout`
+ * @pos: a `GdkRectangle` to store block cursor position
  *
  * If layout is to display a block cursor, calculates its position
  * and returns %TRUE. Otherwise it returns %FALSE. In case when
@@ -2955,8 +2955,8 @@ _gtk_text_layout_get_block_cursor (GtkTextLayout *layout,
 
 /**
  * gtk_text_layout_get_line_yrange:
- * @layout: a #GtkTextLayout
- * @iter: a #GtkTextIter
+ * @layout: a `GtkTextLayout`
+ * @iter: a `GtkTextIter`
  * @y: (nullable): location to store the top of the paragraph in pixels
  * @height: (nullable): location to store the height of the paragraph in pixels
  *
@@ -3171,8 +3171,8 @@ find_display_line_above (GtkTextLayout *layout,
 
 /**
  * gtk_text_layout_clamp_iter_to_vrange:
- * @layout: a #GtkTextLayout
- * @iter:   a #GtkTextIter
+ * @layout: a `GtkTextLayout`
+ * @iter:   a `GtkTextIter`
  * @top:    the top of the range
  * @bottom: the bottom the range
  *
@@ -3217,8 +3217,8 @@ gtk_text_layout_clamp_iter_to_vrange (GtkTextLayout *layout,
 
 /**
  * gtk_text_layout_move_iter_to_previous_line:
- * @layout: a #GtkLayout
- * @iter:   a #GtkTextIter
+ * @layout: a `GtkLayout`
+ * @iter:   a `GtkTextIter`
  *
  * Move the iterator to the beginning of the previous line. The lines
  * of a wrapped paragraph are treated as distinct for this operation.
@@ -3336,8 +3336,8 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
 
 /**
  * gtk_text_layout_move_iter_to_next_line:
- * @layout: a #GtkLayout
- * @iter:   a #GtkTextIter
+ * @layout: a `GtkLayout`
+ * @iter:   a `GtkTextIter`
  *
  * Move the iterator to the beginning of the next line. The
  * lines of a wrapped paragraph are treated as distinct for
@@ -3413,7 +3413,7 @@ gtk_text_layout_move_iter_to_next_line (GtkTextLayout *layout,
 
 /**
  * gtk_text_layout_move_iter_to_line_end:
- * @layout: a #GtkTextLayout
+ * @layout: a `GtkTextLayout`
  * @direction: if negative, move to beginning of line, otherwise
                move to end of line.
  *
@@ -3474,7 +3474,7 @@ gtk_text_layout_move_iter_to_line_end (GtkTextLayout *layout,
 
 /**
  * gtk_text_layout_iter_starts_line:
- * @layout: a #GtkTextLayout
+ * @layout: a `GtkTextLayout`
  * @iter: iterator to test
  *
  * Tests whether an iterator is at the start of a display line.
@@ -3533,9 +3533,9 @@ gtk_text_layout_get_iter_at_line (GtkTextLayout  *layout,
 
 /**
  * gtk_text_layout_move_iter_to_x:
- * @layout: a #GtkTextLayout
- * @iter:   a #GtkTextIter
- * @x:      X coordinate
+ * @layout: a `GtkTextLayout`
+ * @iter: a `GtkTextIter`
+ * @x: X coordinate
  *
  * Keeping the iterator on the same line of the layout, move it to the
  * specified X coordinate. The lines of a wrapped paragraph are
@@ -3592,9 +3592,9 @@ gtk_text_layout_move_iter_to_x (GtkTextLayout *layout,
 
 /**
  * gtk_text_layout_move_iter_visually:
- * @layout:  a #GtkTextLayout
- * @iter:    a #GtkTextIter
- * @count:   number of characters to move (negative moves left, positive moves right)
+ * @layout: a `GtkTextLayout`
+ * @iter: a `GtkTextIter`
+ * @count: number of characters to move (negative moves left, positive moves right)
  *
  * Move the iterator a given number of characters visually, treating
  * it as the strong cursor position. If @count is positive, then the

@@ -453,8 +453,8 @@ gsk_pango_renderer_release (GskPangoRenderer *renderer)
 
 /**
  * gtk_snapshot_append_layout:
- * @snapshot: a #GtkSnapshot
- * @layout: the #PangoLayout to render
+ * @snapshot: a `GtkSnapshot`
+ * @layout: the `PangoLayout` to render
  * @color: the foreground color to render the layout in
  *
  * Creates render nodes for rendering @layout in the given foregound @color

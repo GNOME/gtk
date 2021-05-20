@@ -677,7 +677,7 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
 /**
  * gtk_search_entry_set_key_capture_widget:
  * @entry: a `GtkSearchEntry`
- * @widget: (nullable) (transfer none): a #GtkWidget
+ * @widget: (nullable) (transfer none): a `GtkWidget`
  *
  * Sets @widget as the widget that @entry will capture key
  * events from.

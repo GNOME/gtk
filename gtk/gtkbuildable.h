@@ -115,7 +115,7 @@ struct _GtkBuildableParser
  * @custom_tag_start: Implement this if the buildable needs to parse
  *  content below <child>. To handle an element, the implementation
  *  must fill in the @parser and @user_data and return %TRUE.
- *  #GtkWidget implements this to parse accessible attributes specified
+ *  `GtkWidget` implements this to parse accessible attributes specified
  *  in <accessibility> elements.
  *  Note that @user_data must be freed in @custom_tag_end or @custom_finished.
  * @custom_tag_end: Called for the end tag of each custom element that is
@@ -124,8 +124,8 @@ struct _GtkBuildableParser
  *  when the builder finishes parsing (see @custom_tag_start)
  * @parser_finished: Called when a builder finishes the parsing
  *  of a UI definition. It is normally not necessary to implement this,
- *  unless you need to perform special cleanup actions. #GtkWindow sets
- *  the #GtkWidget:visible property here.
+ *  unless you need to perform special cleanup actions. `GtkWindow` sets
+ *  the `GtkWidget:visible` property here.
  * @get_internal_child: Returns an internal child of a buildable.
  *  `GtkDialog` implements this to give access to its @vbox, making
  *  it possible to add children to the vbox in a UI definition.
@@ -147,8 +147,8 @@ struct _GtkBuildableIface
 
   /**
    * GtkBuildableIface::add_child:
-   * @buildable: a #GtkBuildable
-   * @builder: a #GtkBuilder
+   * @buildable: a `GtkBuildable`
+   * @builder: a `GtkBuilder`
    * @child: child to add
    * @type: (nullable): kind of child or %NULL
    *
@@ -169,11 +169,11 @@ struct _GtkBuildableIface
 
   /**
    * GtkBuildableIface::custom_tag_start:
-   * @buildable: a #GtkBuildable
-   * @builder: a #GtkBuilder used to construct this object
+   * @buildable: a `GtkBuildable`
+   * @builder: a `GtkBuilder` used to construct this object
    * @child: (nullable): child object or %NULL for non-child tags
    * @tagname: name of tag
-   * @parser: (out): a #GtkBuildableParser to fill in
+   * @parser: (out): a `GtkBuildableParser` to fill in
    * @data: (out): return location for user data that will be passed in
    *   to parser functions
    *
@@ -190,8 +190,8 @@ struct _GtkBuildableIface
                                             gpointer           *data);
   /**
    * GtkBuildableIface::custom_tag_end:
-   * @buildable: A #GtkBuildable
-   * @builder: #GtkBuilder used to construct this object
+   * @buildable: A `GtkBuildable`
+   * @builder: `GtkBuilder` used to construct this object
    * @child: (nullable): child object or %NULL for non-child tags
    * @tagname: name of tag
    * @data: user data that will be passed in to parser functions
@@ -206,8 +206,8 @@ struct _GtkBuildableIface
                                             gpointer            data);
    /**
     * GtkBuildableIface::custom_finished:
-    * @buildable: a #GtkBuildable
-    * @builder: a #GtkBuilder
+    * @buildable: a `GtkBuildable`
+    * @builder: a `GtkBuilder`
     * @child: (nullable): child object or %NULL for non-child tags
     * @tagname: the name of the tag
     * @data: user data created in custom_tag_start
@@ -225,8 +225,8 @@ struct _GtkBuildableIface
 
   /**
    * GtkBuildableIface::get_internal_child:
-   * @buildable: a #GtkBuildable
-   * @builder: a #GtkBuilder
+   * @buildable: a `GtkBuildable`
+   * @builder: a `GtkBuilder`
    * @childname: name of child
    *
    * Retrieves the internal child called @childname of the @buildable object.

@@ -99,9 +99,9 @@ struct _GtkCellRenderer
  * @get_preferred_height: Called to get a renderer’s natural height.
  * @get_preferred_width_for_height: Called to get a renderer’s natural width for height.
  * @get_aligned_area: Called to get the aligned area used by @cell inside @cell_area.
- * @snapshot: Called to snapshot the content of the #GtkCellRenderer.
- * @activate: Called to activate the content of the #GtkCellRenderer.
- * @start_editing: Called to initiate editing the content of the #GtkCellRenderer.
+ * @snapshot: Called to snapshot the content of the `GtkCellRenderer`.
+ * @activate: Called to activate the content of the `GtkCellRenderer`.
+ * @start_editing: Called to initiate editing the content of the `GtkCellRenderer`.
  * @editing_canceled: Signal gets emitted when the user cancels the process of editing a cell.
  * @editing_started: Signal gets emitted when a cell starts to be edited.
  */

@@ -186,7 +186,7 @@ gtk_tim_sort_set_change (GtkTimSortRun *out_change,
 
 /*<private>
  * gtk_tim_sort_get_runs:
- * @self: a #GtkTimSort
+ * @self: a GtkTimSort
  * @runs: (out) (caller-allocates): Place to store the 0-terminated list of
  *     runs
  *
@@ -212,7 +212,7 @@ gtk_tim_sort_get_runs (GtkTimSort *self,
 
 /*<private>
  * gtk_tim_sort_set_runs:
- * @self: a freshly initialized #GtkTimSort
+ * @self: a freshly initialized GtkTimSort
  * @runs: (array length=zero-terminated): a 0-terminated list of runs
  *
  * Sets the list of runs. A run is a range of items that are already
@@ -236,7 +236,7 @@ gtk_tim_sort_set_runs (GtkTimSort *self,
 
 /*
  * gtk_tim_sort_set_max_merge_size:
- * @self: a #GtkTimSort
+ * @self: a GtkTimSort
  * @max_merge_size: Maximum size of a merge step, 0 for unlimited
  *
  * Sets the maximum size of a merge step. Every time
@@ -270,7 +270,7 @@ gtk_tim_sort_set_max_merge_size (GtkTimSort *self,
 
 /**
  * gtk_tim_sort_get_progress:
- * @self: a #GtkTimSort
+ * @self: a GtkTimSort
  *
  * Does a progress estimate about sort progress, estimates relative
  * to the number of items to sort.
@@ -330,7 +330,7 @@ gtk_tim_sort_get_progress (GtkTimSort *self)
 
 /*
  * gtk_tim_sort_step:
- * @self: a #GtkTimSort
+ * @self: a GtkTimSort
  * @out_change: (optional): Return location for changed
  *     area. If a change did not cause any changes (for example,
  *     if an already sorted array gets sorted), out_change

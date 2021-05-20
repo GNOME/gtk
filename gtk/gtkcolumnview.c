@@ -1371,7 +1371,7 @@ gtk_column_view_get_model (GtkColumnView *self)
 
 /**
  * gtk_column_view_set_model: (attributes org.gtk.Method.set_property=model)
- * @self: a #GtkColumnView
+ * @self: a `GtkColumnView`
  * @model: (nullable) (transfer none): the model to use
  *
  * Sets the model to use.

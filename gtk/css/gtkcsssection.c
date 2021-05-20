@@ -188,7 +188,7 @@ gtk_css_section_get_end_location (const GtkCssSection *section)
 /**
  * gtk_css_section_print:
  * @section: a section
- * @string: a #GString to print to
+ * @string: a `GString` to print to
  *
  * Prints the `section` into `string` in a human-readable form.
  *
@@ -235,7 +235,7 @@ gtk_css_section_print (const GtkCssSection  *section,
 
 /**
  * gtk_css_section_to_string:
- * @section: a #GtkCssSection
+ * @section: a `GtkCssSection`
  *
  * Prints the section into a human-readable text form using
  * [method@Gtk.CssSection.print].

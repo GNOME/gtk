@@ -152,7 +152,7 @@
  * and %GTK_RESPONSE_CANCEL if he pressed cancel. It can also return
  * %GTK_RESPONSE_DELETE_EVENT if the window was unexpectedly closed.
  *
- * ## Differences from #GtkFileChooserDialog
+ * ## Differences from `GtkFileChooserDialog`
  *
  * There are a few things in the [iface@Gtk.FileChooser] interface that
  * are not possible to use with `GtkFileChooserNative`, as such use would

@@ -36,21 +36,21 @@ G_BEGIN_DECLS
 /**
  * GTK_LEVEL_BAR_OFFSET_LOW:
  *
- * The name used for the stock low offset included by #GtkLevelBar.
+ * The name used for the stock low offset included by `GtkLevelBar`.
  */
 #define GTK_LEVEL_BAR_OFFSET_LOW  "low"
 
 /**
  * GTK_LEVEL_BAR_OFFSET_HIGH:
  *
- * The name used for the stock high offset included by #GtkLevelBar.
+ * The name used for the stock high offset included by `GtkLevelBar`.
  */
 #define GTK_LEVEL_BAR_OFFSET_HIGH "high"
 
 /**
  * GTK_LEVEL_BAR_OFFSET_FULL:
  *
- * The name used for the stock full offset included by #GtkLevelBar.
+ * The name used for the stock full offset included by `GtkLevelBar`.
  */
 #define GTK_LEVEL_BAR_OFFSET_FULL "full"
 

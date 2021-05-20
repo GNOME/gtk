@@ -65,7 +65,7 @@
  * render (GtkGLArea *area, GdkGLContext *context)
  * {
  *   // inside this function it's safe to use GL; the given
- *   // #GdkGLContext has been made current to the drawable
+ *   // GdkGLContext has been made current to the drawable
  *   // surface used by the `GtkGLArea` and the viewport has
  *   // already been set to be the size of the allocation
  *
@@ -110,7 +110,7 @@
  *
  *   // If there were errors during the initialization or
  *   // when trying to make the context current, this
- *   // function will return a #GError for you to catch
+ *   // function will return a GError for you to catch
  *   if (gtk_gl_area_get_error (area) != NULL)
  *     return;
  *
@@ -1019,7 +1019,7 @@ gtk_gl_area_set_error (GtkGLArea    *area,
  *
  * Gets the current error set on the @area.
  *
- * Returns: (nullable) (transfer none): the #GError
+ * Returns: (nullable) (transfer none): the `GError`
  */
 GError *
 gtk_gl_area_get_error (GtkGLArea *area)
@@ -1038,7 +1038,7 @@ gtk_gl_area_get_error (GtkGLArea *area)
  *
  * Sets whether the @area should create an OpenGL or an OpenGL ES context.
  *
- * You should check the capabilities of the #GdkGLContext before drawing
+ * You should check the capabilities of the `GdkGLContext` before drawing
  * with either API.
  */
 void

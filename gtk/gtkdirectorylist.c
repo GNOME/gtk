@@ -659,7 +659,7 @@ gtk_directory_list_update_monitoring (GtkDirectoryList *self)
 /**
  * gtk_directory_list_set_file: (attributes org.gtk.Method.set_property=file)
  * @self: a `GtkDirectoryList`
- * @file: (nullable): the #GFile to be enumerated
+ * @file: (nullable): the `GFile` to be enumerated
  *
  * Sets the @file to be enumerated and starts the enumeration.
  *

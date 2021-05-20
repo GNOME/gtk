@@ -57,9 +57,9 @@ typedef struct _GtkTreeSortableIface GtkTreeSortableIface;
 
 /**
  * GtkTreeIterCompareFunc:
- * @model: The #GtkTreeModel the comparison is within
- * @a: A #GtkTreeIter in @model
- * @b: Another #GtkTreeIter in @model
+ * @model: The `GtkTreeModel` the comparison is within
+ * @a: A `GtkTreeIter` in @model
+ * @b: Another `GtkTreeIter` in @model
  * @user_data: Data passed when the compare func is assigned e.g. by
  *  gtk_tree_sortable_set_sort_func()
  *
@@ -68,7 +68,7 @@ typedef struct _GtkTreeSortableIface GtkTreeSortableIface;
  * respectively.
  *
  * If two iters compare as equal, their order in the sorted model
- * is undefined. In order to ensure that the #GtkTreeSortable behaves as
+ * is undefined. In order to ensure that the `GtkTreeSortable` behaves as
  * expected, the GtkTreeIterCompareFunc must define a partial order on
  * the model, i.e. it must be reflexive, antisymmetric and transitive.
  *

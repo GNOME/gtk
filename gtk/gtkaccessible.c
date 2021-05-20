@@ -78,7 +78,7 @@ gtk_accessible_default_init (GtkAccessibleInterface *iface)
 
 /*< private >
  * gtk_accessible_get_at_context:
- * @self: a #GtkAccessible
+ * @self: a `GtkAccessible`
  *
  * Retrieves the `GtkATContext` for the given `GtkAccessible`.
  *
@@ -707,7 +707,7 @@ gtk_accessible_platform_changed (GtkAccessible               *self,
  *
  * This functionality can be overridden by `GtkAccessible`
  * implementations, e.g. to get platform state from an ignored
- * child widget, as is the case for #GtkText wrappers.
+ * child widget, as is the case for `GtkText` wrappers.
  *
  * Returns: the value of @state for the accessible
  */
@@ -754,7 +754,7 @@ gtk_accessible_bounds_changed (GtkAccessible *self)
  * By default, hidden widgets are are among these, but there can
  * be other reasons to return %FALSE, e.g. for widgets that are
  * purely presentations, or for widgets whose functionality is
- * represented elsewhere, as is the case for #GtkText widgets.
+ * represented elsewhere, as is the case for `GtkText` widgets.
  *
  * Returns: %TRUE if the widget should be represented
  */

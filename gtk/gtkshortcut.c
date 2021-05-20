@@ -38,7 +38,7 @@
  * The actual work is usually done via [class@Gtk.ShortcutController],
  * which decides if and when to activate a shortcut. Using that controller
  * directly however is rarely necessary as various higher level
- * convenience APIs exist on #GtkWidgets that make it easier to use
+ * convenience APIs exist on `GtkWidget`s that make it easier to use
  * shortcuts in GTK.
  *
  * `GtkShortcut` does provide functionality to make it easy for users

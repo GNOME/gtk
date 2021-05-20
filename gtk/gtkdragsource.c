@@ -708,7 +708,7 @@ gtk_drag_source_set_actions (GtkDragSource *source,
 /**
  * gtk_drag_source_set_icon:
  * @source: a `GtkDragSource`
- * @paintable: (nullable): the #GdkPaintable to use as icon
+ * @paintable: (nullable): the `GdkPaintable` to use as icon
  * @hot_x: the hotspot X coordinate on the icon
  * @hot_y: the hotspot Y coordinate on the icon
  *
@@ -776,7 +776,7 @@ gtk_drag_source_drag_cancel (GtkDragSource *source)
 
 /**
  * gtk_drag_check_threshold: (method)
- * @widget: a #GtkWidget
+ * @widget: a `GtkWidget`
  * @start_x: X coordinate of start of drag
  * @start_y: Y coordinate of start of drag
  * @current_x: current X coordinate

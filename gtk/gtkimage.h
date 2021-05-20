@@ -46,8 +46,8 @@ typedef struct _GtkImage              GtkImage;
  * GtkImageType:
  * @GTK_IMAGE_EMPTY: there is no image displayed by the widget
  * @GTK_IMAGE_ICON_NAME: the widget contains a named icon
- * @GTK_IMAGE_GICON: the widget contains a #GIcon
- * @GTK_IMAGE_PAINTABLE: the widget contains a #GdkPaintable
+ * @GTK_IMAGE_GICON: the widget contains a `GIcon`
+ * @GTK_IMAGE_PAINTABLE: the widget contains a `GdkPaintable`
  *
  * Describes the image data representation used by a [class@Gtk.Image].
  *

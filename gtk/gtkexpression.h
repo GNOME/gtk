@@ -160,7 +160,7 @@ GtkExpression *         gtk_cclosure_expression_new             (GType          
 
 /**
  * GTK_VALUE_HOLDS_EXPRESSION:
- * @value: a #GValue
+ * @value: a `GValue`
  *
  * Evaluates to %TRUE if @value was initialized with %GTK_TYPE_EXPRESSION.
  */
@@ -184,7 +184,7 @@ GtkExpression * gtk_value_dup_expression        (const GValue  *value);
 /**
  * GtkParamSpecExpression:
  *
- * A #GParamSpec for properties holding a #GtkExpression.
+ * A `GParamSpec` for properties holding a `GtkExpression`.
  */
 typedef struct {
   /*< private >*/

@@ -111,7 +111,7 @@ gtk_sorter_class_init (GtkSorterClass *class)
 
   /**
    * GtkSorter::changed:
-   * @self: The #GtkSorter
+   * @self: The `GtkSorter`
    * @change: how the sorter changed
    *
    * Emitted whenever the sorter changed.

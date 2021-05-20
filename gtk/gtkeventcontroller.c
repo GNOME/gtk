@@ -377,8 +377,8 @@ gtk_event_controller_handle_event (GtkEventController *controller,
 
 /*< private >
  * gtk_event_controller_handle_crossing:
- * @controller: a #GtkEventController
- * @crossing: a #GtkCrossingData
+ * @controller: a `GtkEventController`
+ * @crossing: a `GtkCrossingData`
  * @x: translated event coordinates
  * @y: translated event coordinates
  *
@@ -410,7 +410,7 @@ gtk_event_controller_handle_crossing (GtkEventController    *controller,
  * gtk_event_controller_get_widget: (attributes org.gtk.Method.get_property=widget)
  * @controller: a `GtkEventController`
  *
- * Returns the #GtkWidget this controller relates to.
+ * Returns the `GtkWidget` this controller relates to.
  *
  * Returns: (transfer none): a `GtkWidget`
  **/

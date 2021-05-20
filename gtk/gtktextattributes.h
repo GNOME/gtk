@@ -60,26 +60,6 @@ G_BEGIN_DECLS
 typedef struct _GtkTextAttributes GtkTextAttributes;
 typedef struct _GtkTextAppearance GtkTextAppearance;
 
-/**
- * GtkTextAppearance:
- * @bg_color: Background #GdkColor.
- * @fg_color: Foreground #GdkColor.
- * @rise: Super/subscript rise, can be negative.
- * @underline: #PangoUnderline
- * @overline: #PangoOverline
- * @strikethrough: Strikethrough style
- * @draw_bg: Whether to use background-related values; this is
- *   irrelevant for the values struct when in a tag, but is used for
- *   the composite values struct; it’s true if any of the tags being
- *   composited had background stuff set.
- * @inside_selection: This are only used when we are actually laying
- *   out and rendering a paragraph; not when a #GtkTextAppearance is
- *   part of a #GtkTextAttributes.
- * @is_text: This are only used when we are actually laying
- *   out and rendering a paragraph; not when a #GtkTextAppearance is
- *   part of a #GtkTextAttributes.
- * @rgba: #GdkRGBA
- */
 struct _GtkTextAppearance
 {
   GdkRGBA *bg_rgba;
@@ -112,10 +92,10 @@ struct _GtkTextAppearance
 
 /**
  * GtkTextAttributes:
- * @appearance: #GtkTextAppearance for text.
- * @justification: #GtkJustification for text.
- * @direction: #GtkTextDirection for text.
- * @font: #PangoFontDescription for text.
+ * @appearance: GtkTextAppearance for text.
+ * @justification: GtkJustification for text.
+ * @direction: GtkTextDirection for text.
+ * @font: `PangoFontDescription` for text.
  * @font_scale: Font scale factor.
  * @left_margin: Width of the left margin in pixels.
  * @right_margin: Width of the right margin in pixels.
@@ -124,9 +104,9 @@ struct _GtkTextAppearance
  * @pixels_below_lines: Pixels of blank space below paragraphs.
  * @pixels_inside_wrap: Pixels of blank space between wrapped lines in
  *   a paragraph.
- * @tabs: Custom #PangoTabArray for this text.
- * @wrap_mode: #GtkWrapMode for text.
- * @language: #PangoLanguage for text.
+ * @tabs: Custom `PangoTabArray` for this text.
+ * @wrap_mode: `GtkWrapMode` for text.
+ * @language: `PangoLanguage` for text.
  * @invisible: Hide the text.
  * @bg_full_height: Background is fit to full line height rather than
  *    baseline +/- ascent/descent (font height).
@@ -134,7 +114,7 @@ struct _GtkTextAppearance
  * @no_fallback: Whether to disable font fallback.
  * @letter_spacing: Extra space to insert between graphemes, in Pango units
  *
- * Using #GtkTextAttributes directly should rarely be necessary.
+ * Using GtkTextAttributes directly should rarely be necessary.
  * It’s primarily useful with gtk_text_iter_get_attributes().
  * As with most GTK structs, the fields in this struct should only
  * be read, never modified directly.

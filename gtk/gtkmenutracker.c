@@ -24,32 +24,32 @@
 /*< private >
  * GtkMenuTracker:
  *
- * #GtkMenuTracker is a simple object to ease implementations of #GMenuModel.
- * Given a #GtkActionObservable (usually a #GActionMuxer) along with a
- * #GMenuModel, it will tell you which menu items to create and where to place
+ * GtkMenuTracker is a simple object to ease implementations of GMenuModel.
+ * Given a GtkActionObservable (usually a GActionMuxer) along with a
+ * GMenuModel, it will tell you which menu items to create and where to place
  * them. If a menu item is removed, it will tell you the position of the menu
  * item to remove.
  *
- * Using #GtkMenuTracker is fairly simple. The only guarantee you must make
- * to #GtkMenuTracker is that you must obey all insert signals and track the
- * position of items that #GtkMenuTracker gives you. That is, #GtkMenuTracker
+ * Using GtkMenuTracker is fairly simple. The only guarantee you must make
+ * to GtkMenuTracker is that you must obey all insert signals and track the
+ * position of items that GtkMenuTracker gives you. That is, GtkMenuTracker
  * expects positions of all the latter items to change when it calls your
  * insertion callback with an early position, as it may ask you to remove
  * an item with a readjusted position later.
  *
- * #GtkMenuTracker will give you a #GtkMenuTrackerItem in your callback. You
+ * GtkMenuTracker will give you a GtkMenuTrackerItem in your callback. You
  * must hold onto this object until a remove signal is emitted. This item
  * represents a single menu item, which can be one of three classes: normal item,
  * separator, or submenu.
  *
- * Certain properties on the #GtkMenuTrackerItem are mutable, and you must
+ * Certain properties on the GtkMenuTrackerItem are mutable, and you must
  * listen for changes in the item. For more details, see the documentation
- * for #GtkMenuTrackerItem along with https://wiki.gnome.org/Projects/GLib/GApplication/GMenuModel.
+ * for GtkMenuTrackerItem along with https://wiki.gnome.org/Projects/GLib/GApplication/GMenuModel.
  *
  * The idea of @with_separators is for special cases where menu models may
  * be tracked in places where separators are not available, like in toplevel
- * "File", “Edit” menu bars. Ignoring separator items is wrong, as #GtkMenuTracker
- * expects the position to change, so we must tell #GtkMenuTracker to ignore
+ * "File", “Edit” menu bars. Ignoring separator items is wrong, as GtkMenuTracker
+ * expects the position to change, so we must tell GtkMenuTracker to ignore
  * separators itself.
  */
 
@@ -540,10 +540,10 @@ gtk_menu_tracker_section_new (GtkMenuTracker *tracker,
  * this case -- to the section menu item corresponding to the separator.
  * This is useful if the section specifies a label, for example.  If
  * there is an “action-namespace” attribute on this menu item then it
- * should be ignored by the consumer because #GtkMenuTracker has already
+ * should be ignored by the consumer because GtkMenuTracker has already
  * handled it.
  *
- * When using #GtkMenuTracker there is no need to hold onto @model or
+ * When using GtkMenuTracker there is no need to hold onto @model or
  * monitor it for changes.  The model will be unreffed when
  * gtk_menu_tracker_free() is called.
  */
@@ -602,7 +602,7 @@ gtk_menu_tracker_new_for_item_link (GtkMenuTrackerItem       *item,
 
 /*< private >
  * gtk_menu_tracker_free:
- * @tracker: a #GtkMenuTracker
+ * @tracker: a GtkMenuTracker
  *
  * Frees the tracker, ...
  */

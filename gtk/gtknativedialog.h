@@ -34,9 +34,9 @@ G_DECLARE_DERIVABLE_TYPE (GtkNativeDialog, gtk_native_dialog, GTK, NATIVE_DIALOG
 
 /**
  * GtkNativeDialogClass:
- * @response: class handler for the #GtkNativeDialog::response signal
+ * @response: class handler for the `GtkNativeDialog::response` signal
  *
- * Class structure for #GtkNativeDialog.
+ * Class structure for `GtkNativeDialog`.
  */
 struct _GtkNativeDialogClass
 {

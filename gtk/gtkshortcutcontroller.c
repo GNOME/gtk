@@ -865,7 +865,7 @@ gtk_shortcut_controller_get_scope (GtkShortcutController *self)
  * The mnemonics modifiers determines which modifiers need to be pressed to allow
  * activation of shortcuts with mnemonics triggers.
  *
- * GTK normally uses the Alt modifier for mnemonics, except in #GtkPopoverMenus,
+ * GTK normally uses the Alt modifier for mnemonics, except in `GtkPopoverMenu`s,
  * where mnemonics can be triggered without any modifiers. It should be very
  * rarely necessary to change this, and doing so is likely to interfere with
  * other shortcuts.

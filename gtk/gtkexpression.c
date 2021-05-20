@@ -244,14 +244,14 @@ G_DEFINE_BOXED_TYPE (GtkExpressionWatch, gtk_expression_watch,
  * GTK_DEFINE_EXPRESSION_TYPE:
  * @TypeName: the type name, in camel case
  * @type_name: the type name, in snake case
- * @type_info: the address of the #GtkExpressionTypeInfo for the expression type
+ * @type_info: the address of the `GtkExpressionTypeInfo` for the expression type
  *
- * Registers a new #GtkExpression subclass with the given @TypeName and @type_info.
+ * Registers a new `GtkExpression` subclass with the given @TypeName and @type_info.
  *
  * Similarly to %G_DEFINE_TYPE, this macro will generate a `get_type()`
  * function that registers the event type.
  *
- * You can specify code to be run after the type registration; the #GType of
+ * You can specify code to be run after the type registration; the `GType` of
  * the event is available in the `gtk_define_expression_type_id` variable.
  */
 #define GTK_DEFINE_EXPRESSION_TYPE(TypeName, type_name, type_info) \

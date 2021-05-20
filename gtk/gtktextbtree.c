@@ -2999,19 +2999,21 @@ _gtk_text_btree_get_mark_by_name (GtkTextBTree *tree,
 
 /**
  * gtk_text_mark_set_visible:
- * @mark: a #GtkTextMark
+ * @mark: a GtkTextMark
  * @setting: visibility of mark
- * 
- * Sets the visibility of @mark; the insertion point is normally
- * visible, i.e. you can see it as a vertical bar. Also, the text
- * widget uses a visible mark to indicate where a drop will occur when
- * dragging-and-dropping text. Most other marks are not visible.
+ *
+ * Sets the visibility of @mark.
+ *
+ * The insertion point is normally visible, i.e. you can see it as
+ * a vertical bar. Also, the text widget uses a visible mark to
+ * indicate where a drop will occur when dragging-and-dropping text.
+ * Most other marks are not visible.
+ *
  * Marks are not visible by default.
- * 
- **/
+ */
 void
-gtk_text_mark_set_visible (GtkTextMark       *mark,
-                           gboolean           setting)
+gtk_text_mark_set_visible (GtkTextMark *mark,
+                           gboolean     setting)
 {
   GtkTextLineSegment *seg;
 
@@ -5012,13 +5014,13 @@ gtk_text_btree_node_invalidate_upward (GtkTextBTreeNode *node, gpointer view_id)
 
 /**
  * _gtk_text_btree_is_valid:
- * @tree: a #GtkTextBTree
+ * @tree: a GtkTextBTree
  * @view_id: ID for the view
  *
- * Check to see if the entire #GtkTextBTree is valid or not for
+ * Check to see if the entire GtkTextBTree is valid or not for
  * the given view.
  *
- * Returns: %TRUE if the entire #GtkTextBTree is valid
+ * Returns: %TRUE if the entire GtkTextBTree is valid
  **/
 gboolean
 _gtk_text_btree_is_valid (GtkTextBTree *tree,
@@ -5208,7 +5210,7 @@ gtk_text_btree_node_validate (BTreeView         *view,
 
 /**
  * _gtk_text_btree_validate:
- * @tree: a #GtkTextBTree
+ * @tree: a GtkTextBTree
  * @view_id: view id
  * @max_pixels: the maximum number of pixels to validate. (No more
  *   than one paragraph beyond this limit will be validated)
@@ -5216,7 +5218,7 @@ gtk_text_btree_node_validate (BTreeView         *view,
  * @old_height: location to store old height of validated region
  * @new_height: location to store new height of validated region
  *
- * Validate a single contiguous invalid region of a #GtkTextBTree for
+ * Validate a single contiguous invalid region of a GtkTextBTree for
  * a given view.
  *
  * Returns: %TRUE if a region has been validated, %FALSE if the
@@ -5396,7 +5398,7 @@ gtk_text_btree_node_check_valid_downward (GtkTextBTreeNode *node,
 
 /**
  * _gtk_text_btree_validate_line:
- * @tree: a #GtkTextBTree
+ * @tree: a GtkTextBTree
  * @line: line to validate
  * @view_id: view ID for the view to validate
  *

@@ -90,13 +90,13 @@ limit_layout_lines (PangoLayout *layout)
 
 /**
  * gtk_text_util_create_drag_icon:
- * @widget: #GtkWidget to extract the pango context
+ * @widget: `GtkWidget` to extract the pango context
  * @text: a #char to render the icon
  * @len: length of @text, or -1 for NUL-terminated text
  *
  * Creates a drag and drop icon from @text.
  *
- * Returns: (transfer full): a #GdkPaintable to use as DND icon
+ * Returns: (transfer full): a `GdkPaintable` to use as DND icon
  */
 GdkPaintable *
 gtk_text_util_create_drag_icon (GtkWidget *widget,
@@ -309,7 +309,7 @@ layout_get_char_width (PangoLayout *layout)
 
 /*
  * _gtk_text_util_get_block_cursor_location
- * @layout: a #PangoLayout
+ * @layout: a `PangoLayout`
  * @index: index at which cursor is located
  * @pos: cursor location
  * @at_line_end: whether cursor is drawn at line end, not over some

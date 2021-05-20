@@ -59,7 +59,7 @@ typedef enum
 /**
  * GTK_ICON_THEME_ERROR:
  *
- * The #GQuark used for #GtkIconThemeError errors.
+ * The `GQuark` used for `GtkIconThemeError` errors.
  */
 #define GTK_ICON_THEME_ERROR gtk_icon_theme_error_quark ()
 

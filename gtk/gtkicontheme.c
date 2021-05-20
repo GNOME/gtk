@@ -1048,7 +1048,7 @@ gtk_icon_theme_class_init (GtkIconThemeClass *klass)
    * The name of the icon theme that is being used.
    *
    * Unless set to a different value, this will be the value of
-   * the #GtkSettings:gtk-icon-theme-name property of the #GtkSettings
+   * the `GtkSettings:gtk-icon-theme-name` property of the `GtkSettings`
    * object associated to the display of the icontheme object. 
    */
   props[PROP_THEME_NAME] =
@@ -3677,7 +3677,7 @@ new_resource_file (const char *filename)
  *
  * Returns %NULL if the icon was not loaded from a file.
  *
- * Returns: (nullable) (transfer full): the #GFile for the icon
+ * Returns: (nullable) (transfer full): the `GFile` for the icon
  */
 GFile *
 gtk_icon_paintable_get_file (GtkIconPaintable *icon)

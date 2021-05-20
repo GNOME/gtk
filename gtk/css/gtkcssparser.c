@@ -152,7 +152,7 @@ gtk_css_parser_unref (GtkCssParser *self)
 
 /**
  * gtk_css_parser_get_file:
- * @self: a #GtkCssParser
+ * @self: a `GtkCssParser`
  *
  * Gets the file being parsed. If no file is associated with @self -
  * for example when raw data is parsed - %NULL is returned.
@@ -167,7 +167,7 @@ gtk_css_parser_get_file (GtkCssParser *self)
 
 /**
  * gtk_css_parser_resolve_url:
- * @self: a #GtkCssParser
+ * @self: a `GtkCssParser`
  * @url: the URL to resolve
  *
  * Resolves a given URL against the parser's location.
@@ -198,7 +198,7 @@ gtk_css_parser_resolve_url (GtkCssParser *self,
 
 /**
  * gtk_css_parser_get_start_location:
- * @self: a #GtkCssParser
+ * @self: a `GtkCssParser`
  *
  * Queries the location of the current token.
  *
@@ -222,7 +222,7 @@ gtk_css_parser_get_start_location (GtkCssParser *self)
 
 /**
  * gtk_css_parser_get_end_location:
- * @self: a #GtkCssParser
+ * @self: a `GtkCssParser`
  * @out_location: (caller-allocates) Place to store the location
  *
  * Queries the location of the current token.
@@ -247,7 +247,7 @@ gtk_css_parser_get_end_location (GtkCssParser *self)
 
 /**
  * gtk_css_parser_get_block_location:
- * @self: a #GtkCssParser
+ * @self: a `GtkCssParser`
  *
  * Queries the start location of the token that started the current
  * block that is being parsed.
@@ -450,7 +450,7 @@ gtk_css_parser_end_block (GtkCssParser *self)
 
 /*
  * gtk_css_parser_skip:
- * @self: a #GtkCssParser
+ * @self: a `GtkCssParser`
  *
  * Skips a component value.
  *
@@ -477,7 +477,7 @@ gtk_css_parser_skip (GtkCssParser *self)
 
 /*
  * gtk_css_parser_skip_until:
- * @self: a #GtkCssParser
+ * @self: a `GtkCssParser`
  * @token_type: type of token to skip to
  *
  * Repeatedly skips a token until a certain type is reached.
@@ -700,7 +700,7 @@ gtk_css_parser_consume_function (GtkCssParser *self,
 
 /**
  * gtk_css_parser_has_token:
- * @self: a #GtkCssParser
+ * @self: a `GtkCssParser`
  * @token_type: type of the token to check
  *
  * Checks if the next token is of @token_type.
@@ -720,7 +720,7 @@ gtk_css_parser_has_token (GtkCssParser    *self,
 
 /**
  * gtk_css_parser_has_ident:
- * @self: a #GtkCssParser
+ * @self: a `GtkCssParser`
  * @ident: name of identifier
  *
  * Checks if the next token is an identifier with the given @name.
@@ -752,7 +752,7 @@ gtk_css_parser_has_integer (GtkCssParser *self)
 
 /**
  * gtk_css_parser_has_function:
- * @self: a #GtkCssParser
+ * @self: a `GtkCssParser`
  * @name: name of function
  *
  * Checks if the next token is a function with the given @name.
@@ -773,7 +773,7 @@ gtk_css_parser_has_function (GtkCssParser *self,
 
 /**
  * gtk_css_parser_try_delim:
- * @self: a #GtkCssParser
+ * @self: a `GtkCssParser`
  * @codepoint: unicode character codepoint to check
  *
  * Checks if the current token is a delimiter matching the given
@@ -803,7 +803,7 @@ gtk_css_parser_try_delim (GtkCssParser *self,
 
 /**
  * gtk_css_parser_try_ident:
- * @self: a #GtkCssParser
+ * @self: a `GtkCssParser`
  * @ident: identifier to check for
  *
  * Checks if the current token is an identifier matching the given
@@ -830,7 +830,7 @@ gtk_css_parser_try_ident (GtkCssParser *self,
 
 /**
  * gtk_css_parser_try_at_keyword:
- * @self: a #GtkCssParser
+ * @self: a `GtkCssParser`
  * @keyword: name of keyword to check for
  *
  * Checks if the current token is an at-keyword token with the
@@ -857,7 +857,7 @@ gtk_css_parser_try_at_keyword (GtkCssParser *self,
 
 /**
  * gtk_css_parser_try_token:
- * @self: a #GtkCssParser
+ * @self: a `GtkCssParser`
  * @token_type: type of token to try
  *
  * Consumes the next token if it matches the given @token_type.
@@ -886,7 +886,7 @@ gtk_css_parser_try_token (GtkCssParser    *self,
 
 /**
  * gtk_css_parser_consume_ident:
- * @self: a #GtkCssParser
+ * @self: a `GtkCssParser`
  *
  * If the current token is an identifier, consumes it and returns
  * its name.
@@ -918,7 +918,7 @@ gtk_css_parser_consume_ident (GtkCssParser *self)
 
 /**
  * gtk_css_parser_consume_string:
- * @self: a #GtkCssParser
+ * @self: a `GtkCssParser`
  *
  * If the current token is a string, consumes it and return the string.
  *
@@ -963,11 +963,11 @@ gtk_css_parser_parse_url_arg (GtkCssParser *parser,
 
 /**
  * gtk_css_parser_consume_url:
- * @self: a #GtkCssParser
+ * @self: a `GtkCssParser`
  *
  * If the parser matches the <url> token from the [CSS
  * specification](https://drafts.csswg.org/css-values-4/#url-value),
- * consumes it, resolves the URL and returns the resulting #GFile.
+ * consumes it, resolves the URL and returns the resulting `GFile`.
  * On failure, an error is emitted and %NULL is returned.
  *
  * Returns: (nullable) (transfer full): the resulting URL

@@ -70,14 +70,14 @@ gtk_constraint_variable_init (GtkConstraintVariable *variable,
  * gtk_constraint_variable_new_dummy:
  * @name: the name of the variable
  *
- * Allocates and initializes a new #GtkConstraintVariable for a "dummy"
+ * Allocates and initializes a new `GtkConstraintVariable` for a "dummy"
  * symbol. Dummy symbols are typically used as markers inside a solver,
  * and will not be factored in the solution when pivoting the tableau
  * of the constraint equations.
  *
- * Only #GtkConstraintSolver should use this function.
+ * Only `GtkConstraintSolver` should use this function.
  *
- * Returns: a newly allocated #GtkConstraintVariable
+ * Returns: a newly allocated `GtkConstraintVariable`
  */
 GtkConstraintVariable *
 gtk_constraint_variable_new_dummy (const char *name)
@@ -98,13 +98,13 @@ gtk_constraint_variable_new_dummy (const char *name)
  * gtk_constraint_variable_new_objective:
  * @name: the name of the variable
  *
- * Allocates and initializes a new #GtkConstraintVariable for an objective
+ * Allocates and initializes a new `GtkConstraintVariable` for an objective
  * symbol. This is the constant value we wish to find as the result of the
  * simplex optimization.
  *
- * Only #GtkConstraintSolver should use this function.
+ * Only `GtkConstraintSolver` should use this function.
  *
- * Returns: a newly allocated #GtkConstraintVariable
+ * Returns: a newly allocated `GtkConstraintVariable`
  */
 GtkConstraintVariable *
 gtk_constraint_variable_new_objective (const char *name)
@@ -125,7 +125,7 @@ gtk_constraint_variable_new_objective (const char *name)
  * gtk_constraint_variable_new_slack:
  * @name: the name of the variable
  *
- * Allocates and initializes a new #GtkConstraintVariable for a "slack"
+ * Allocates and initializes a new `GtkConstraintVariable` for a "slack"
  * symbol. Slack variables are introduced inside the tableau to turn
  * inequalities, like:
  *
@@ -139,9 +139,9 @@ gtk_constraint_variable_new_objective (const char *name)
  *   expr - slack = 0
  * ]|
  *
- * Only #GtkConstraintSolver should use this function.
+ * Only `GtkConstraintSolver` should use this function.
  *
- * Returns: a newly allocated #GtkConstraintVariable
+ * Returns: a newly allocated `GtkConstraintVariable`
  */
 GtkConstraintVariable *
 gtk_constraint_variable_new_slack (const char *name)
@@ -163,15 +163,15 @@ gtk_constraint_variable_new_slack (const char *name)
  * @prefix: (nullable): an optional prefix string for @name
  * @name: (nullable): an optional name for the variable
  *
- * Allocates and initializes a new #GtkConstraintVariable for a regular
+ * Allocates and initializes a new `GtkConstraintVariable` for a regular
  * symbol. All variables introduced by constraints are regular variables.
  *
- * Only #GtkConstraintSolver should use this function; a constraint layout
- * manager should ask the #GtkConstraintSolver to create a variable, using
+ * Only `GtkConstraintSolver` should use this function; a constraint layout
+ * manager should ask the `GtkConstraintSolver` to create a variable, using
  * gtk_constraint_solver_create_variable(), which will insert the variable
  * in the solver's tableau.
  *
- * Returns: a newly allocated #GtkConstraintVariable
+ * Returns: a newly allocated `GtkConstraintVariable`
  */
 GtkConstraintVariable *
 gtk_constraint_variable_new (const char *prefix,
@@ -191,11 +191,11 @@ gtk_constraint_variable_new (const char *prefix,
 
 /*< private >
  * gtk_constraint_variable_ref:
- * @variable: a #GtkConstraintVariable
+ * @variable: a `GtkConstraintVariable`
  *
  * Acquires a reference to @variable.
  *
- * Returns: (transfer full): the given #GtkConstraintVariable, with its reference
+ * Returns: (transfer full): the given `GtkConstraintVariable`, with its reference
  *   count increased
  */
 GtkConstraintVariable *
@@ -208,7 +208,7 @@ gtk_constraint_variable_ref (GtkConstraintVariable *variable)
 
 /*< private >
  * gtk_constraint_variable_unref:
- * @variable: (transfer full): a #GtkConstraintVariable
+ * @variable: (transfer full): a `GtkConstraintVariable`
  *
  * Releases a reference to @variable.
  */
@@ -222,9 +222,9 @@ gtk_constraint_variable_unref (GtkConstraintVariable *variable)
 
 /*< private >
  * gtk_constraint_variable_set_value:
- * @variable: a #GtkConstraintVariable
+ * @variable: a `GtkConstraintVariable`
  *
- * Sets the current value of a #GtkConstraintVariable.
+ * Sets the current value of a `GtkConstraintVariable`.
  */
 void
 gtk_constraint_variable_set_value (GtkConstraintVariable *variable,
@@ -235,9 +235,9 @@ gtk_constraint_variable_set_value (GtkConstraintVariable *variable,
 
 /*< private >
  * gtk_constraint_variable_get_value:
- * @variable: a #GtkConstraintVariable
+ * @variable: a `GtkConstraintVariable`
  *
- * Retrieves the current value of a #GtkConstraintVariable
+ * Retrieves the current value of a `GtkConstraintVariable`
  *
  * Returns: the value of the variable
  */
@@ -249,7 +249,7 @@ gtk_constraint_variable_get_value (const GtkConstraintVariable *variable)
 
 /*< private >
  * gtk_constraint_variable_to_string:
- * @variable: a #GtkConstraintVariable
+ * @variable: a `GtkConstraintVariable`
  *
  * Turns @variable into a string, for debugging purposes.
  *
@@ -311,7 +311,7 @@ gtk_constraint_variable_to_string (const GtkConstraintVariable *variable)
 
 /*< private >
  * gtk_constraint_variable_is_external:
- * @variable: a #GtkConstraintVariable
+ * @variable: a `GtkConstraintVariable`
  *
  * Checks whether the @variable was introduced from outside the solver.
  *
@@ -325,7 +325,7 @@ gtk_constraint_variable_is_external (const GtkConstraintVariable *variable)
 
 /*< private >
  * gtk_constraint_variable_is_pivotable:
- * @variable: a #GtkConstraintVariable
+ * @variable: a `GtkConstraintVariable`
  *
  * Checks whether the @variable can be used as a pivot.
  *
@@ -339,7 +339,7 @@ gtk_constraint_variable_is_pivotable (const GtkConstraintVariable *variable)
 
 /*< private >
  * gtk_constraint_variable_is_restricted:
- * @variable: a #GtkConstraintVariable
+ * @variable: a `GtkConstraintVariable`
  *
  * Checks whether the @variable's use is restricted.
  *
@@ -353,7 +353,7 @@ gtk_constraint_variable_is_restricted (const GtkConstraintVariable *variable)
 
 /*< private >
  * gtk_constraint_variable_is_dummy:
- * @variable: a #GtkConstraintVariable
+ * @variable: a `GtkConstraintVariable`
  *
  * Checks whether the @variable is a dummy symbol.
  *
@@ -380,9 +380,9 @@ struct _GtkConstraintVariableSet {
 
 /*< private >
  * gtk_constraint_variable_set_free:
- * @set: a #GtkConstraintVariableSet
+ * @set: a `GtkConstraintVariable`Set
  *
- * Frees the resources associated to a #GtkConstraintVariableSet/
+ * Frees the resources associated to a `GtkConstraintVariable`Set/
  */
 void
 gtk_constraint_variable_set_free (GtkConstraintVariableSet *set)
@@ -397,7 +397,7 @@ gtk_constraint_variable_set_free (GtkConstraintVariableSet *set)
 /*< private >
  * gtk_constraint_variable_set_new:
  *
- * Creates a new #GtkConstraintVariableSet.
+ * Creates a new `GtkConstraintVariable`Set.
  *
  * Returns: the newly created variable set
  */
@@ -428,8 +428,8 @@ sort_by_variable_id (gconstpointer a,
 
 /*< private >
  * gtk_constraint_variable_set_add:
- * @set: a #GtkConstraintVariableSet
- * @variable: a #GtkConstraintVariable
+ * @set: a `GtkConstraintVariable`Set
+ * @variable: a `GtkConstraintVariable`
  *
  * Adds @variable to the given @set, if the @variable is not already
  * in it.
@@ -463,8 +463,8 @@ gtk_constraint_variable_set_add (GtkConstraintVariableSet *set,
 
 /*< private >
  * gtk_constraint_variable_set_remove:
- * @set: a #GtkConstraintVariableSet
- * @variable: a #GtkConstraintVariable
+ * @set: a `GtkConstraintVariable`Set
+ * @variable: a `GtkConstraintVariable`
  *
  * Removes @variable from the @set.
  *
@@ -493,7 +493,7 @@ gtk_constraint_variable_set_remove (GtkConstraintVariableSet *set,
 
 /*< private >
  * gtk_constraint_variable_set_size:
- * @set: a #GtkConstraintVariableSet
+ * @set: a `GtkConstraintVariable`Set
  *
  * Retrieves the size of the @set.
  *
@@ -520,7 +520,7 @@ gtk_constraint_variable_set_is_singleton (GtkConstraintVariableSet *set)
 /*< private >
  * GtkConstraintVariableSetIter:
  *
- * An iterator type for #GtkConstraintVariableSet.
+ * An iterator type for `GtkConstraintVariable`Set.
  */
 /* Keep in sync with GtkConstraintVariableSetIter */
 typedef struct {
@@ -533,8 +533,8 @@ typedef struct {
 
 /*< private >
  * gtk_constraint_variable_set_iter_init:
- * @iter: a #GtkConstraintVariableSetIter
- * @set: the #GtkConstraintVariableSet to iterate
+ * @iter: a `GtkConstraintVariable`SetIter
+ * @set: the `GtkConstraintVariable`Set to iterate
  *
  * Initializes @iter for iterating over @set.
  */
@@ -554,10 +554,10 @@ gtk_constraint_variable_set_iter_init (GtkConstraintVariableSetIter *iter,
 
 /*< private >
  * gtk_constraint_variable_set_iter_next:
- * @iter: a #GtkConstraintVariableSetIter
+ * @iter: a `GtkConstraintVariable`SetIter
  * @variable_p: (out): the next variable in the set
  *
- * Advances the @iter to the next variable in the #GtkConstraintVariableSet.
+ * Advances the @iter to the next variable in the `GtkConstraintVariable`Set.
  *
  * Returns: %TRUE if the iterator was advanced, and %FALSE otherwise
  */
@@ -583,15 +583,15 @@ gtk_constraint_variable_set_iter_next (GtkConstraintVariableSetIter *iter,
 
 /*< private >
  * gtk_constraint_variable_pair_new:
- * @first: a #GtkConstraintVariable
- * @second: a #GtkConstraintVariable
+ * @first: a `GtkConstraintVariable`
+ * @second: a `GtkConstraintVariable`
  *
- * Creates a new #GtkConstraintVariablePair, containing @first and @second.
+ * Creates a new `GtkConstraintVariable`Pair, containing @first and @second.
  *
- * The #GtkConstraintVariablePair acquires a reference over the two
- * given #GtkConstraintVariables.
+ * The `GtkConstraintVariable`Pair acquires a reference over the two
+ * given `GtkConstraintVariable`s.
  *
- * Returns: a new #GtkConstraintVariablePair
+ * Returns: a new `GtkConstraintVariable`Pair
  */
 GtkConstraintVariablePair *
 gtk_constraint_variable_pair_new (GtkConstraintVariable *first,
@@ -607,7 +607,7 @@ gtk_constraint_variable_pair_new (GtkConstraintVariable *first,
 
 /*< private >
  * gtk_constraint_variable_pair_free:
- * @pair: a #GtkConstraintVariablePair
+ * @pair: a `GtkConstraintVariable`Pair
  *
  * Frees the resources associated by @pair.
  */
@@ -626,7 +626,7 @@ gtk_constraint_variable_pair_free (GtkConstraintVariablePair *pair)
 
 /*< private >
  * Term:
- * @variable: a #GtkConstraintVariable
+ * @variable: a `GtkConstraintVariable`
  * @coefficient: the coefficient applied to the @variable
  * @next: the next term in the expression
  * @prev: the previous term in the expression;
@@ -692,12 +692,12 @@ struct _GtkConstraintExpression
 
 /*< private >
  * gtk_constraint_expression_add_term:
- * @self: a #GtkConstraintExpression
- * @variable: a #GtkConstraintVariable
+ * @self: a `GtkConstraintExpression`
+ * @variable: a `GtkConstraintVariable`
  * @coefficient: a coefficient for @variable
  *
  * Adds a new term formed by (@variable, @coefficient) into a
- * #GtkConstraintExpression.
+ * `GtkConstraintExpression`.
  *
  * The @expression acquires a reference on @variable.
  */
@@ -790,7 +790,7 @@ gtk_constraint_expression_remove_term (GtkConstraintExpression *self,
  * gtk_constraint_expression_new:
  * @constant: a constant for the expression
  *
- * Creates a new #GtkConstraintExpression with the given @constant.
+ * Creates a new `GtkConstraintExpression` with the given @constant.
  *
  * Returns: (transfer full): the newly created expression
  */
@@ -810,9 +810,9 @@ gtk_constraint_expression_new (double constant)
 
 /*< private >
  * gtk_constraint_expression_new_from_variable:
- * @variable: a #GtkConstraintVariable
+ * @variable: a `GtkConstraintVariable`
  *
- * Creates a new #GtkConstraintExpression with the given @variable.
+ * Creates a new `GtkConstraintExpression` with the given @variable.
  *
  * Returns: (transfer full): the newly created expression
  */
@@ -828,7 +828,7 @@ gtk_constraint_expression_new_from_variable (GtkConstraintVariable *variable)
 
 /*< private >
  * gtk_constraint_expression_ref:
- * @expression: a #GtkConstraintExpression
+ * @expression: a `GtkConstraintExpression`
  *
  * Acquires a reference on @expression.
  *
@@ -858,7 +858,7 @@ gtk_constraint_expression_clear (gpointer data)
 
 /*< private >
  * gtk_constraint_expression_unref:
- * @expression: (transfer full): a #GtkConstraintExpression
+ * @expression: (transfer full): a `GtkConstraintExpression`
  *
  * Releases a reference on @expression.
  */
@@ -870,7 +870,7 @@ gtk_constraint_expression_unref (GtkConstraintExpression *expression)
 
 /*< private >
  * gtk_constraint_expression_is_constant:
- * @expression: a #GtkConstraintExpression
+ * @expression: a `GtkConstraintExpression`
  *
  * Checks whether @expression is a constant value, with no variable terms.
  *
@@ -884,7 +884,7 @@ gtk_constraint_expression_is_constant (const GtkConstraintExpression *expression
 
 /*< private >
  * gtk_constraint_expression_set_constant:
- * @expression: a #GtkConstraintExpression
+ * @expression: a `GtkConstraintExpression`
  * @constant: the value of the constant
  *
  * Sets the value of the constant part of @expression.
@@ -900,7 +900,7 @@ gtk_constraint_expression_set_constant (GtkConstraintExpression *expression,
 
 /*< private >
  * gtk_constraint_expression_get_constant:
- * @expression: a #GtkConstraintExpression
+ * @expression: a `GtkConstraintExpression`
  *
  * Retrieves the constant value of @expression.
  *
@@ -935,11 +935,11 @@ gtk_constraint_expression_clone (GtkConstraintExpression *expression)
 
 /*< private >
  * gtk_constraint_expression_add_variable:
- * @expression: a #GtkConstraintExpression
- * @variable: a #GtkConstraintVariable to add to @expression
+ * @expression: a `GtkConstraintExpression`
+ * @variable: a `GtkConstraintVariable` to add to @expression
  * @coefficient: the coefficient of @variable
- * @subject: (nullable): a #GtkConstraintVariable
- * @solver: (nullable): a #GtkConstraintSolver
+ * @subject: (nullable): a `GtkConstraintVariable`
+ * @solver: (nullable): a `GtkConstraintSolver`
  *
  * Adds a `(@coefficient × @variable)` term to @expression.
  *
@@ -998,8 +998,8 @@ gtk_constraint_expression_add_variable (GtkConstraintExpression *expression,
 
 /*< private >
  * gtk_constraint_expression_remove_variable:
- * @expression: a #GtkConstraintExpression
- * @variable: a #GtkConstraintVariable
+ * @expression: a `GtkConstraintExpression`
+ * @variable: a `GtkConstraintVariable`
  *
  * Removes @variable from @expression.
  */
@@ -1015,8 +1015,8 @@ gtk_constraint_expression_remove_variable (GtkConstraintExpression *expression,
 
 /*< private >
  * gtk_constraint_expression_set_variable:
- * @expression: a #GtkConstraintExpression
- * @variable: a #GtkConstraintVariable
+ * @expression: a `GtkConstraintExpression`
+ * @variable: a `GtkConstraintVariable`
  * @coefficient: a coefficient for @variable
  *
  * Sets the @coefficient for @variable inside an @expression.
@@ -1048,8 +1048,8 @@ gtk_constraint_expression_set_variable (GtkConstraintExpression *expression,
  * @a_expr: first operand
  * @b_expr: second operand
  * @n: the multiplication factor for @b_expr
- * @subject: (nullable): a #GtkConstraintVariable
- * @solver: (nullable): a #GtkConstraintSolver
+ * @subject: (nullable): a `GtkConstraintVariable`
+ * @solver: (nullable): a `GtkConstraintSolver`
  *
  * Adds `(@n × @b_expr)` to @a_expr.
  *
@@ -1066,7 +1066,7 @@ gtk_constraint_expression_set_variable (GtkConstraintExpression *expression,
  *   a.x + a.width - b.x - b.width = 0
  * ]|
  *
- * If @solver is not %NULL, this function will notify a #GtkConstraintSolver
+ * If @solver is not %NULL, this function will notify a `GtkConstraintSolver`
  * of every variable that was added or removed from @a_expr.
  */
 void
@@ -1096,12 +1096,12 @@ gtk_constraint_expression_add_expression (GtkConstraintExpression *a_expr,
 
 /*< private >
  * gtk_constraint_expression_plus_constant:
- * @expression: a #GtkConstraintExpression
+ * @expression: a `GtkConstraintExpression`
  * @constant: a constant value
  *
  * Adds a @constant value to the @expression.
  *
- * This is the equivalent of creating a new #GtkConstraintExpression for
+ * This is the equivalent of creating a new `GtkConstraintExpression` for
  * the @constant and calling gtk_constraint_expression_add_expression().
  *
  * Returns: the @expression
@@ -1121,12 +1121,12 @@ gtk_constraint_expression_plus_constant (GtkConstraintExpression *expression,
 
 /*< private >
  * gtk_constraint_expression_minus_constant:
- * @expression: a #GtkConstraintExpression
+ * @expression: a `GtkConstraintExpression`
  * @constant: a constant value
  *
  * Removes a @constant value from the @expression.
  *
- * This is the equivalent of creating a new #GtkConstraintExpression for
+ * This is the equivalent of creating a new `GtkConstraintExpression` for
  * the inverse of @constant and calling gtk_constraint_expression_add_expression().
  *
  * Returns: the @expression
@@ -1140,8 +1140,8 @@ gtk_constraint_expression_minus_constant (GtkConstraintExpression *expression,
 
 /*< private >
  * gtk_constraint_expression_plus_variable:
- * @expression: a #GtkConstraintExpression
- * @variable: a #GtkConstraintVariable
+ * @expression: a `GtkConstraintExpression`
+ * @variable: a `GtkConstraintVariable`
  *
  * Adds a @variable to the @expression.
  *
@@ -1162,8 +1162,8 @@ gtk_constraint_expression_plus_variable (GtkConstraintExpression *expression,
 
 /*< private >
  * gtk_constraint_expression_minus_variable:
- * @expression: a #GtkConstraintExpression
- * @variable: a #GtkConstraintVariable
+ * @expression: a `GtkConstraintExpression`
+ * @variable: a `GtkConstraintVariable`
  *
  * Subtracts a @variable from the @expression.
  *
@@ -1184,7 +1184,7 @@ gtk_constraint_expression_minus_variable (GtkConstraintExpression *expression,
 
 /*< private >
  * gtk_constraint_expression_multiply_by:
- * @expression: a #GtkConstraintExpression
+ * @expression: a `GtkConstraintExpression`
  * @factor: the multiplication factor
  *
  * Multiplies the constant part and the coefficient of all terms
@@ -1217,7 +1217,7 @@ gtk_constraint_expression_multiply_by (GtkConstraintExpression *expression,
 
 /*< private >
  * gtk_constraint_expression_divide_by:
- * @expression: a #GtkConstraintExpression
+ * @expression: a `GtkConstraintExpression`
  * @factor: the division factor
  *
  * Divides the constant part and the coefficient of all terms
@@ -1237,12 +1237,12 @@ gtk_constraint_expression_divide_by (GtkConstraintExpression *expression,
 
 /*< private >
  * gtk_constraint_expression_new_subject:
- * @expression: a #GtkConstraintExpression
- * @subject: a #GtkConstraintVariable part of @expression
+ * @expression: a `GtkConstraintExpression`
+ * @subject: a `GtkConstraintVariable` part of @expression
  *
  * Modifies @expression to have a new @subject.
  *
- * A #GtkConstraintExpression is a linear expression in the form of
+ * A `GtkConstraintExpression` is a linear expression in the form of
  * `@expression = 0`. If @expression contains @subject, for instance:
  *
  * |[
@@ -1283,9 +1283,9 @@ gtk_constraint_expression_new_subject (GtkConstraintExpression *expression,
 
 /*< private >
  * gtk_constraint_expression_change_subject:
- * @expression: a #GtkConstraintExpression
- * @old_subject: the old subject #GtkConstraintVariable of @expression
- * @new_subject: the new subject #GtkConstraintVariable of @expression
+ * @expression: a `GtkConstraintExpression`
+ * @old_subject: the old subject `GtkConstraintVariable` of @expression
+ * @new_subject: the new subject `GtkConstraintVariable` of @expression
  *
  * Turns an @expression in the form of:
  *
@@ -1318,8 +1318,8 @@ gtk_constraint_expression_change_subject (GtkConstraintExpression *expression,
 
 /*< private >
  * gtk_constraint_expression_get_coefficient:
- * @expression: a #GtkConstraintExpression
- * @variable: a #GtkConstraintVariable
+ * @expression: a `GtkConstraintExpression`
+ * @variable: a `GtkConstraintVariable`
  *
  * Retrieves the coefficient of the term for @variable inside @expression.
  *
@@ -1346,15 +1346,15 @@ gtk_constraint_expression_get_coefficient (GtkConstraintExpression *expression,
 
 /*< private >
  * gtk_constraint_expression_substitute_out:
- * @expression: a #GtkConstraintExpression
+ * @expression: a `GtkConstraintExpression`
  * @out_var: the variable to replace
  * @expr: the expression used to replace @out_var
- * @subject: (nullable): a #GtkConstraintVariable
- * @solver: (nullable): a #GtkConstraintSolver
+ * @subject: (nullable): a `GtkConstraintVariable`
+ * @solver: (nullable): a `GtkConstraintSolver`
  *
  * Replaces every term containing @out_var inside @expression with @expr.
  *
- * If @solver is not %NULL, this function will notify the #GtkConstraintSolver
+ * If @solver is not %NULL, this function will notify the `GtkConstraintSolver`
  * for every variable added to or removed from @expression.
  */
 void
@@ -1412,12 +1412,12 @@ gtk_constraint_expression_substitute_out (GtkConstraintExpression *expression,
 
 /*< private >
  * gtk_constraint_expression_get_pivotable_variable:
- * @expression: a #GtkConstraintExpression
+ * @expression: a `GtkConstraintExpression`
  *
- * Retrieves the first #GtkConstraintVariable in @expression that
+ * Retrieves the first `GtkConstraintVariable` in @expression that
  * is marked as pivotable.
  *
- * Returns: (transfer none) (nullable): a #GtkConstraintVariable
+ * Returns: (transfer none) (nullable): a `GtkConstraintVariable`
  */
 GtkConstraintVariable *
 gtk_constraint_expression_get_pivotable_variable (GtkConstraintExpression *expression)
@@ -1446,7 +1446,7 @@ gtk_constraint_expression_get_pivotable_variable (GtkConstraintExpression *expre
 
 /*< private >
  * gtk_constraint_expression_to_string:
- * @expression: a #GtkConstraintExpression
+ * @expression: a `GtkConstraintExpression`
  *
  * Creates a string containing @expression.
  *
@@ -1513,8 +1513,8 @@ typedef struct {
 
 /*< private >
  * gtk_constraint_expression_iter_init:
- * @iter: a #GtkConstraintExpressionIter
- * @expression: a #GtkConstraintExpression
+ * @iter: a `GtkConstraintExpression`Iter
+ * @expression: a `GtkConstraintExpression`
  *
  * Initializes an iterator over @expression.
  */
@@ -1531,11 +1531,11 @@ gtk_constraint_expression_iter_init (GtkConstraintExpressionIter *iter,
 
 /*< private >
  * gtk_constraint_expression_iter_next:
- * @iter: a valid #GtkConstraintExpressionIter
+ * @iter: a valid `GtkConstraintExpression`Iter
  * @variable: (out): the variable of the next term
  * @coefficient: (out): the coefficient of the next term
  *
- * Moves the given #GtkConstraintExpressionIter forwards to the next
+ * Moves the given `GtkConstraintExpression`Iter forwards to the next
  * term in the expression, starting from the first term.
  *
  * Returns: %TRUE if the iterator was moved, and %FALSE if the iterator
@@ -1566,11 +1566,11 @@ gtk_constraint_expression_iter_next (GtkConstraintExpressionIter *iter,
 
 /*< private >
  * gtk_constraint_expression_iter_prev:
- * @iter: a valid #GtkConstraintExpressionIter
+ * @iter: a valid `GtkConstraintExpression`Iter
  * @variable: (out): the variable of the previous term
  * @coefficient: (out): the coefficient of the previous term
  *
- * Moves the given #GtkConstraintExpressionIter backwards to the previous
+ * Moves the given `GtkConstraintExpression`Iter backwards to the previous
  * term in the expression, starting from the last term.
  *
  * Returns: %TRUE if the iterator was moved, and %FALSE if the iterator
@@ -1618,11 +1618,11 @@ typedef struct
 
 /*< private >
  * gtk_constraint_expression_builder_init:
- * @builder: a #GtkConstraintExpressionBuilder
- * @solver: a #GtkConstraintSolver
+ * @builder: a `GtkConstraintExpression`Builder
+ * @solver: a `GtkConstraintSolver`
  *
- * Initializes the given #GtkConstraintExpressionBuilder for the
- * given #GtkConstraintSolver.
+ * Initializes the given `GtkConstraintExpression`Builder for the
+ * given `GtkConstraintSolver`.
  *
  * You can use the @builder to construct expressions to be added to the
  * @solver, in the form of constraints.
@@ -1666,8 +1666,8 @@ gtk_constraint_expression_builder_init (GtkConstraintExpressionBuilder *builder,
 
 /*< private >
  * gtk_constraint_expression_builder_term:
- * @builder: a #GtkConstraintExpressionBuilder
- * @term: a #GtkConstraintVariable
+ * @builder: a `GtkConstraintExpression`Builder
+ * @term: a `GtkConstraintVariable`
  *
  * Adds a variable @term to the @builder.
  */
@@ -1712,7 +1712,7 @@ gtk_constraint_expression_builder_term (GtkConstraintExpressionBuilder *builder,
 
 /*< private >
  * gtk_constraint_expression_builder_plus:
- * @builder: a #GtkConstraintExpressionBuilder
+ * @builder: a `GtkConstraintExpression`Builder
  *
  * Adds a plus operator to the @builder.
  */
@@ -1726,7 +1726,7 @@ gtk_constraint_expression_builder_plus (GtkConstraintExpressionBuilder *builder)
 
 /*< private >
  * gtk_constraint_expression_builder_minus:
- * @builder: a #GtkConstraintExpressionBuilder
+ * @builder: a `GtkConstraintExpression`Builder
  *
  * Adds a minus operator to the @builder.
  */
@@ -1740,7 +1740,7 @@ gtk_constraint_expression_builder_minus (GtkConstraintExpressionBuilder *builder
 
 /*< private >
  * gtk_constraint_expression_builder_divide_by:
- * @builder: a #GtkConstraintExpressionBuilder
+ * @builder: a `GtkConstraintExpression`Builder
  *
  * Adds a division operator to the @builder.
  */
@@ -1754,7 +1754,7 @@ gtk_constraint_expression_builder_divide_by (GtkConstraintExpressionBuilder *bui
 
 /*< private >
  * gtk_constraint_expression_builder_multiply_by:
- * @builder: a #GtkConstraintExpressionBuilder
+ * @builder: a `GtkConstraintExpression`Builder
  *
  * Adds a multiplication operator to the @builder.
  */
@@ -1769,7 +1769,7 @@ gtk_constraint_expression_builder_multiply_by (GtkConstraintExpressionBuilder *b
 
 /*< private >
  * gtk_constraint_expression_builder_constant:
- * @builder: a #GtkConstraintExpressionBuilder
+ * @builder: a `GtkConstraintExpression`Builder
  * @value: a constant value
  *
  * Adds a constant value to the @builder.
@@ -1811,7 +1811,7 @@ gtk_constraint_expression_builder_constant (GtkConstraintExpressionBuilder *buil
 
 /*< private >
  * gtk_constraint_expression_builder_finish:
- * @builder: a #GtkConstraintExpressionBuilder
+ * @builder: a `GtkConstraintExpression`Builder
  *
  * Closes the given expression builder, and returns the expression.
  *

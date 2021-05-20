@@ -29,7 +29,7 @@
 /*< private >
  * GtkMenuTrackerItem:
  *
- * A #GtkMenuTrackerItem is a small helper class used by #GtkMenuTracker to
+ * A GtkMenuTrackerItem is a small helper class used by GtkMenuTracker to
  * represent menu items. It has one of three classes: normal item, separator,
  * or submenu.
  *
@@ -50,11 +50,11 @@
  * GtkMenuTrackerItem::is-separator and GtkMenuTrackerItem::has-submenu are
  * allowed to change, so listen to the notify signals to update your item's
  * appearance. When using a GObject library, this can conveniently be done
- * with g_object_bind_property() and #GBinding, and this is how this is
- * implemented in GTK; the appearance side is implemented in #GtkModelMenuItem.
+ * with g_object_bind_property() and GBinding, and this is how this is
+ * implemented in GTK; the appearance side is implemented in GtkModelMenuItem.
  *
  * When an item is clicked, simply call gtk_menu_tracker_item_activated() in
- * response. The #GtkMenuTrackerItem will take care of everything related to
+ * response. The GtkMenuTrackerItem will take care of everything related to
  * activating the item and will itself update the state of all items in
  * response.
  *
@@ -577,11 +577,11 @@ _gtk_menu_tracker_item_get_observable (GtkMenuTrackerItem *self)
 
 /*< private >
  * gtk_menu_tracker_item_get_is_separator:
- * @self: A #GtkMenuTrackerItem instance
+ * @self: A GtkMenuTrackerItem instance
  *
  * Returns: whether the menu item is a separator. If so, only
  * certain properties may need to be obeyed. See the documentation
- * for #GtkMenuTrackerItem.
+ * for GtkMenuTrackerItem.
  */
 gboolean
 gtk_menu_tracker_item_get_is_separator (GtkMenuTrackerItem *self)
@@ -591,11 +591,11 @@ gtk_menu_tracker_item_get_is_separator (GtkMenuTrackerItem *self)
 
 /*< private >
  * gtk_menu_tracker_item_get_has_submenu:
- * @self: A #GtkMenuTrackerItem instance
+ * @self: A GtkMenuTrackerItem instance
  *
  * Returns: whether the menu item has a submenu. If so, only
  * certain properties may need to be obeyed. See the documentation
- * for #GtkMenuTrackerItem.
+ * for GtkMenuTrackerItem.
  */
 gboolean
 gtk_menu_tracker_item_get_has_link (GtkMenuTrackerItem *self,
@@ -972,7 +972,7 @@ gtk_menu_tracker_item_request_submenu_shown (GtkMenuTrackerItem *self,
 
 /*
  * gtk_menu_tracker_item_get_is_visible:
- * @self: A #GtkMenuTrackerItem instance
+ * @self: A GtkMenuTrackerItem instance
  *
  * Don't use this unless you're tracking items for yourself -- normally
  * the tracker will emit add/remove automatically when this changes.
@@ -987,7 +987,7 @@ gtk_menu_tracker_item_get_is_visible (GtkMenuTrackerItem *self)
 
 /*
  * gtk_menu_tracker_item_may_disappear:
- * @self: A #GtkMenuTrackerItem instance
+ * @self: A GtkMenuTrackerItem instance
  *
  * Returns: if the item may disappear (ie: is-visible property may change)
  */

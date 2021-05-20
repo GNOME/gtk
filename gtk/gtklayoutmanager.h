@@ -34,22 +34,22 @@ G_DECLARE_DERIVABLE_TYPE (GtkLayoutManager, gtk_layout_manager, GTK, LAYOUT_MANA
  * GtkLayoutManagerClass:
  * @get_request_mode: a virtual function, used to return the preferred
  *   request mode for the layout manager; for instance, "width for height"
- *   or "height for width"; see #GtkSizeRequestMode
+ *   or "height for width"; see `GtkSizeRequestMode`
  * @measure: a virtual function, used to measure the minimum and preferred
  *   sizes of the widget using the layout manager for a given orientation
  * @allocate: a virtual function, used to allocate the size of the widget
  *   using the layout manager
- * @layout_child_type: the type of #GtkLayoutChild used by this layout manager
- * @create_layout_child: a virtual function, used to create a #GtkLayoutChild
+ * @layout_child_type: the type of `GtkLayoutChild` used by this layout manager
+ * @create_layout_child: a virtual function, used to create a `GtkLayoutChild`
  *   meta object for the layout properties
  * @root: a virtual function, called when the widget using the layout
- *   manager is attached to a #GtkRoot
+ *   manager is attached to a `GtkRoot`
  * @unroot: a virtual function, called when the widget using the layout
- *   manager is detached from a #GtkRoot
+ *   manager is detached from a `GtkRoot`
  *
  * The `GtkLayoutManagerClass` structure contains only private data, and
  * should only be accessed through the provided API, or when subclassing
- * #GtkLayoutManager.
+ * `GtkLayoutManager`.
  */
 struct _GtkLayoutManagerClass
 {
@@ -79,13 +79,13 @@ struct _GtkLayoutManagerClass
 
   /**
    * GtkLayoutManagerClass::create_layout_child:
-   * @manager: the #GtkLayoutManager
+   * @manager: the `GtkLayoutManager`
    * @widget: the widget using the @manager
    * @for_child: the child of @widget
    *
-   * Create a #GtkLayoutChild instance for the given @for_child widget.
+   * Create a `GtkLayoutChild` instance for the given @for_child widget.
    *
-   * Returns: (transfer full): a #GtkLayoutChild
+   * Returns: (transfer full): a `GtkLayoutChild`
    */
   GtkLayoutChild *   (* create_layout_child) (GtkLayoutManager *manager,
                                               GtkWidget        *widget,

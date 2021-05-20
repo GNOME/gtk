@@ -39,7 +39,7 @@ typedef struct _GtkModelButton        GtkModelButton;
  * @GTK_BUTTON_ROLE_RADIO: A radio button
  * @GTK_BUTTON_ROLE_TITLE: The title for a submenu
  *
- * The role specifies the desired appearance of a #GtkModelButton.
+ * The role specifies the desired appearance of a GtkModelButton.
  */
 typedef enum {
   GTK_BUTTON_ROLE_NORMAL,

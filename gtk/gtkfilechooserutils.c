@@ -71,15 +71,16 @@ static const char *   delegate_get_choice             (GtkFileChooser  *chooser,
 
 /**
  * _gtk_file_chooser_install_properties:
- * @klass: the class structure for a type deriving from #GObject
+ * @klass: the class structure for a type deriving from `GObject`
  *
  * Installs the necessary properties for a class implementing
- * #GtkFileChooser. A #GtkParamSpecOverride property is installed
- * for each property, using the values from the #GtkFileChooserProp
- * enumeration. The caller must make sure itself that the enumeration
- * values don’t collide with some other property values they
- * are using.
- **/
+ * `GtkFileChooser`.
+ *
+ * A `GtkParamSpecOverride` property is installed for each property,
+ * using the values from the `GtkFileChooserProp` enumeration. The
+ * caller must make sure itself that the enumeration values don’t
+ * collide with some other property values they are using.
+ */
 void
 _gtk_file_chooser_install_properties (GObjectClass *klass)
 {
@@ -105,11 +106,12 @@ _gtk_file_chooser_install_properties (GObjectClass *klass)
 
 /**
  * _gtk_file_chooser_delegate_iface_init:
- * @iface: a #GtkFileChoserIface structure
+ * @iface: a `GtkFileChoserIface` structure
  *
  * An interface-initialization function for use in cases where
  * an object is simply delegating the methods, signals of
- * the #GtkFileChooser interface to another object.
+ * the `GtkFileChooser` interface to another object.
+ *
  * _gtk_file_chooser_set_delegate() must be called on each
  * instance of the object so that the delegate object can
  * be found.
@@ -140,12 +142,12 @@ _gtk_file_chooser_delegate_iface_init (GtkFileChooserIface *iface)
 
 /**
  * _gtk_file_chooser_set_delegate:
- * @receiver: a #GObject implementing #GtkFileChooser
- * @delegate: another #GObject implementing #GtkFileChooser
+ * @receiver: a `GObject` implementing `GtkFileChooser`
+ * @delegate: another `GObject` implementing `GtkFileChooser`
  *
- * Establishes that calls on @receiver for #GtkFileChooser
+ * Establishes that calls on @receiver for `GtkFileChooser`
  * methods should be delegated to @delegate, and that
- * #GtkFileChooser signals emitted on @delegate should be
+ * `GtkFileChooser` signals emitted on @delegate should be
  * forwarded to @receiver. Must be used in conjunction with
  * _gtk_file_chooser_delegate_iface_init().
  **/

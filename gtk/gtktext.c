@@ -1018,7 +1018,7 @@ gtk_text_class_init (GtkTextClass *class)
   /**
    * GtkText::move-cursor:
    * @self: the object which received the signal
-   * @step: the granularity of the move, as a #GtkMovementStep
+   * @step: the granularity of the move, as a `GtkMovementStep`
    * @count: the number of @step units to move
    * @extend: %TRUE if the move should extend the selection
    *
@@ -1080,7 +1080,7 @@ gtk_text_class_init (GtkTextClass *class)
   /**
    * GtkText::delete-from-cursor:
    * @self: the object which received the signal
-   * @type: the granularity of the deletion, as a #GtkDeleteType
+   * @type: the granularity of the deletion, as a `GtkDeleteType`
    * @count: the number of @type units to delete
    *
    * Emitted when the user initiates a text deletion.

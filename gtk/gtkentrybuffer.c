@@ -378,7 +378,7 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
 
   /**
    * GtkEntryBuffer::inserted-text:
-   * @buffer: a #GtkEntryBuffer
+   * @buffer: a `GtkEntryBuffer`
    * @position: the position the text was inserted at.
    * @chars: The text that was inserted.
    * @n_chars: The number of characters that were inserted.
@@ -398,7 +398,7 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
 
   /**
    * GtkEntryBuffer::deleted-text:
-   * @buffer: a #GtkEntryBuffer
+   * @buffer: a `GtkEntryBuffer`
    * @position: the position the text was deleted at.
    * @n_chars: The number of characters that were deleted.
    *
@@ -466,7 +466,7 @@ gtk_entry_buffer_get_length (GtkEntryBuffer *buffer)
 
 /**
  * gtk_entry_buffer_get_bytes:
- * @buffer: a #GtkEntryBuffer
+ * @buffer: a `GtkEntryBuffer`
  *
  * Retrieves the length in bytes of the buffer.
  *
@@ -582,7 +582,7 @@ gtk_entry_buffer_set_max_length (GtkEntryBuffer *buffer,
  * Retrieves the maximum allowed length of the text in @buffer.
  *
  * Returns: the maximum allowed number of characters
- *   in #GtkEntryBuffer, or 0 if there is no maximum.
+ *   in `GtkEntryBuffer`, or 0 if there is no maximum.
  */
 int
 gtk_entry_buffer_get_max_length (GtkEntryBuffer *buffer)

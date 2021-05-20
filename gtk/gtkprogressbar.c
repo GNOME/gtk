@@ -85,7 +85,7 @@
  *
  * # Accessibility
  *
- * `GtkProgressBar` uses the #GTK_ACCESSIBLE_ROLE_PROGRESS_BAR role.
+ * `GtkProgressBar` uses the %GTK_ACCESSIBLE_ROLE_PROGRESS_BAR role.
  */
 
 typedef struct _GtkProgressBarClass         GtkProgressBarClass;

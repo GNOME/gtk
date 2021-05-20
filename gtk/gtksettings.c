@@ -834,7 +834,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * GtkSettings:gtk-primary-button-warps-slider:
    *
    * If the value of this setting is %TRUE, clicking the primary button in a
-   * #GtkRange trough will move the slider, and hence set the range’s value, to
+   * `GtkRange` trough will move the slider, and hence set the range’s value, to
    * the point that you clicked.
    *
    * If it is %FALSE, a primary click will cause the slider/value to move

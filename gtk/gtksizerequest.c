@@ -446,7 +446,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
 
 /**
  * gtk_widget_measure:
- * @widget: A #GtkWidget instance
+ * @widget: A `GtkWidget` instance
  * @orientation: the orientation to measure
  * @for_size: Size for the opposite of @orientation, i.e.
  *   if @orientation is %GTK_ORIENTATION_HORIZONTAL, this is
@@ -467,7 +467,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
  * if it is allocated at a height of 300 pixels.
  *
  * See [GtkWidget’s geometry management section](class.Widget.html#height-for-width-geometry-management) for
- * a more details on implementing #GtkWidgetClass.measure().
+ * a more details on implementing `GtkWidgetClass.measure()`.
  */
 void
 gtk_widget_measure (GtkWidget        *widget,

@@ -49,7 +49,7 @@
  *
  * # Accessibility
  *
- * `GtkLinkButton` uses the #GTK_ACCESSIBLE_ROLE_LINK role.
+ * `GtkLinkButton` uses the %GTK_ACCESSIBLE_ROLE_LINK role.
  */
 
 #include "config.h"
@@ -198,7 +198,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
 
   /**
    * GtkLinkButton::activate-link:
-   * @button: the #GtkLinkButton that emitted the signal
+   * @button: the `GtkLinkButton` that emitted the signal
    *
    * Emitted each time the `GtkLinkButton` is clicked.
    *

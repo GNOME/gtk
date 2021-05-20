@@ -40,10 +40,10 @@ typedef struct _GtkCellLayoutIface      GtkCellLayoutIface;
 /* keep in sync with GtkTreeCellDataFunc */
 /**
  * GtkCellLayoutDataFunc:
- * @cell_layout: a #GtkCellLayout
+ * @cell_layout: a `GtkCellLayout`
  * @cell: the cell renderer whose value is to be set
  * @tree_model: the model
- * @iter: a #GtkTreeIter indicating the row to set the value for
+ * @iter: a `GtkTreeIter` indicating the row to set the value for
  * @data: (closure): user data passed to gtk_cell_layout_set_cell_data_func()
  *
  * A function which should set the value of @cell_layout’s cell renderer(s)
@@ -63,16 +63,16 @@ typedef void (* GtkCellLayoutDataFunc) (GtkCellLayout   *cell_layout,
  *    removes all renderers from cell_layout.
  * @add_attribute: Adds an attribute mapping to the list in
  *    cell_layout.
- * @set_cell_data_func: Sets the #GtkCellLayoutDataFunc to use for
+ * @set_cell_data_func: Sets the `GtkCellLayout`DataFunc to use for
  *    cell_layout.
  * @clear_attributes: Clears all existing attributes previously set
  *    with gtk_cell_layout_set_attributes().
  * @reorder: Re-inserts cell at position.
  * @get_cells: Get the cell renderers which have been added to
  *    cell_layout.
- * @get_area: Get the underlying #GtkCellArea which might be
- *    cell_layout if called on a #GtkCellArea or might be NULL if no
- *    #GtkCellArea is used by cell_layout.
+ * @get_area: Get the underlying `GtkCellArea` which might be
+ *    cell_layout if called on a `GtkCellArea` or might be NULL if no
+ *    `GtkCellArea` is used by cell_layout.
  */
 struct _GtkCellLayoutIface
 {

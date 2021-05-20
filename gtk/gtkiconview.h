@@ -38,8 +38,8 @@ typedef struct _GtkIconView           GtkIconView;
 
 /**
  * GtkIconViewForeachFunc:
- * @icon_view: a #GtkIconView
- * @path: The #GtkTreePath of a selected row
+ * @icon_view: a `GtkIconView`
+ * @path: The `GtkTreePath` of a selected row
  * @data: (closure): user data
  *
  * A function used by gtk_icon_view_selected_foreach() to map all

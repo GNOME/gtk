@@ -38,15 +38,15 @@
  *
  * A widget displaying a single row of a GtkTreeModel
  *
- * A #GtkCellView displays a single row of a #GtkTreeModel using a #GtkCellArea
- * and #GtkCellAreaContext. A #GtkCellAreaContext can be provided to the 
- * #GtkCellView at construction time in order to keep the cellview in context
+ * A `GtkCellView` displays a single row of a `GtkTreeModel` using a `GtkCellArea`
+ * and `GtkCellAreaContext`. A `GtkCellAreaContext` can be provided to the 
+ * `GtkCellView` at construction time in order to keep the cellview in context
  * of a group of cell views, this ensures that the renderers displayed will
  * be properly aligned with each other (like the aligned cells in the menus
- * of #GtkComboBox).
+ * of `GtkComboBox`).
  *
- * #GtkCellView is #GtkOrientable in order to decide in which orientation
- * the underlying #GtkCellAreaContext should be allocated. Taking the #GtkComboBox
+ * `GtkCellView` is `GtkOrientable` in order to decide in which orientation
+ * the underlying `GtkCellAreaContext` should be allocated. Taking the `GtkComboBox`
  * menu as an example, cellviews should be oriented horizontally if the menus are
  * listed top-to-bottom and thus all share the same width but may have separate
  * individual heights (left-to-right menus should be allocated vertically since
@@ -205,10 +205,10 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
   /**
    * GtkCellView:cell-area:
    *
-   * The #GtkCellArea rendering cells
+   * The `GtkCellArea` rendering cells
    *
    * If no area is specified when creating the cell view with gtk_cell_view_new_with_context() 
-   * a horizontally oriented #GtkCellAreaBox will be used.
+   * a horizontally oriented `GtkCellArea`Box will be used.
    *
    * since 3.0
    */
@@ -223,13 +223,13 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
   /**
    * GtkCellView:cell-area-context:
    *
-   * The #GtkCellAreaContext used to compute the geometry of the cell view.
+   * The `GtkCellAreaContext` used to compute the geometry of the cell view.
    *
    * A group of cell views can be assigned the same context in order to
    * ensure the sizes and cell alignments match across all the views with
    * the same context.
    *
-   * #GtkComboBox menus uses this to assign the same context to all cell views
+   * `GtkComboBox` menus uses this to assign the same context to all cell views
    * in the menu items for a single menu (each submenu creates its own
    * context since the size of each submenu does not depend on parent
    * or sibling menus).
@@ -817,9 +817,9 @@ row_changed_cb (GtkTreeModel         *model,
 /**
  * gtk_cell_view_new:
  *
- * Creates a new #GtkCellView widget.
+ * Creates a new `GtkCellView` widget.
  *
- * Returns: A newly created #GtkCellView widget.
+ * Returns: A newly created `GtkCellView` widget.
  */
 GtkWidget *
 gtk_cell_view_new (void)
@@ -834,18 +834,18 @@ gtk_cell_view_new (void)
 
 /**
  * gtk_cell_view_new_with_context:
- * @area: the #GtkCellArea to layout cells
- * @context: the #GtkCellAreaContext in which to calculate cell geometry
+ * @area: the `GtkCellArea` to layout cells
+ * @context: the `GtkCellAreaContext` in which to calculate cell geometry
  *
- * Creates a new #GtkCellView widget with a specific #GtkCellArea
- * to layout cells and a specific #GtkCellAreaContext.
+ * Creates a new `GtkCellView` widget with a specific `GtkCellArea`
+ * to layout cells and a specific `GtkCellAreaContext`.
  *
  * Specifying the same context for a handful of cells lets
  * the underlying area synchronize the geometry for those cells,
  * in this way alignments with cellviews for other rows are
  * possible.
  *
- * Returns: A newly created #GtkCellView widget.
+ * Returns: A newly created `GtkCellView` widget.
  */
 GtkWidget *
 gtk_cell_view_new_with_context (GtkCellArea        *area,
@@ -864,10 +864,10 @@ gtk_cell_view_new_with_context (GtkCellArea        *area,
  * gtk_cell_view_new_with_text:
  * @text: the text to display in the cell view
  *
- * Creates a new #GtkCellView widget, adds a #GtkCellRendererText 
+ * Creates a new `GtkCellView` widget, adds a `GtkCellRendererText`
  * to it, and makes it show @text.
  *
- * Returns: A newly created #GtkCellView widget.
+ * Returns: A newly created `GtkCellView` widget.
  */
 GtkWidget *
 gtk_cell_view_new_with_text (const char *text)
@@ -894,11 +894,11 @@ gtk_cell_view_new_with_text (const char *text)
  * gtk_cell_view_new_with_markup:
  * @markup: the text to display in the cell view
  *
- * Creates a new #GtkCellView widget, adds a #GtkCellRendererText 
+ * Creates a new `GtkCellView` widget, adds a `GtkCellRendererText`
  * to it, and makes it show @markup. The text can be
  * marked up with the [Pango text markup language][PangoMarkupFormat].
  *
- * Returns: A newly created #GtkCellView widget.
+ * Returns: A newly created `GtkCellView` widget.
  */
 GtkWidget *
 gtk_cell_view_new_with_markup (const char *markup)
@@ -925,10 +925,10 @@ gtk_cell_view_new_with_markup (const char *markup)
  * gtk_cell_view_new_with_texture:
  * @texture: the image to display in the cell view
  *
- * Creates a new #GtkCellView widget, adds a #GtkCellRendererPixbuf
+ * Creates a new `GtkCellView` widget, adds a `GtkCellRendererPixbuf`
  * to it, and makes it show @texture.
  *
- * Returns: A newly created #GtkCellView widget.
+ * Returns: A newly created `GtkCellView` widget.
  */
 GtkWidget *
 gtk_cell_view_new_with_texture (GdkTexture *texture)
@@ -953,7 +953,7 @@ gtk_cell_view_new_with_texture (GdkTexture *texture)
 
 /**
  * gtk_cell_view_set_value:
- * @cell_view: a #GtkCellView widget
+ * @cell_view: a `GtkCellView` widget
  * @renderer: one of the renderers of @cell_view
  * @property: the name of the property of @renderer to set
  * @value: the new value to set the property to
@@ -976,8 +976,8 @@ gtk_cell_view_set_value (GtkCellView     *cell_view,
 
 /**
  * gtk_cell_view_set_model:
- * @cell_view: a #GtkCellView
- * @model: (nullable): a #GtkTreeModel
+ * @cell_view: a `GtkCellView`
+ * @model: (nullable): a `GtkTreeModel`
  *
  * Sets the model for @cell_view.  If @cell_view already has a model
  * set, it will remove it before setting the new model.  If @model is
@@ -1018,12 +1018,12 @@ gtk_cell_view_set_model (GtkCellView  *cell_view,
 
 /**
  * gtk_cell_view_get_model:
- * @cell_view: a #GtkCellView
+ * @cell_view: a `GtkCellView`
  *
  * Returns the model for @cell_view. If no model is used %NULL is
  * returned.
  *
- * Returns: (nullable) (transfer none): a #GtkTreeModel used
+ * Returns: (nullable) (transfer none): a `GtkTreeModel` used
  */
 GtkTreeModel *
 gtk_cell_view_get_model (GtkCellView *cell_view)
@@ -1037,15 +1037,15 @@ gtk_cell_view_get_model (GtkCellView *cell_view)
 
 /**
  * gtk_cell_view_set_displayed_row:
- * @cell_view: a #GtkCellView
- * @path: (nullable): a #GtkTreePath or %NULL to unset.
+ * @cell_view: a `GtkCellView`
+ * @path: (nullable): a `GtkTreePath` or %NULL to unset.
  *
  * Sets the row of the model that is currently displayed
- * by the #GtkCellView. If the path is unset, then the
+ * by the `GtkCellView`. If the path is unset, then the
  * contents of the cellview “stick” at their last value;
  * this is not normally a desired result, but may be
  * a needed intermediate state if say, the model for
- * the #GtkCellView becomes temporarily empty.
+ * the `GtkCellView` becomes temporarily empty.
  **/
 void
 gtk_cell_view_set_displayed_row (GtkCellView *cell_view,
@@ -1071,9 +1071,9 @@ gtk_cell_view_set_displayed_row (GtkCellView *cell_view,
 
 /**
  * gtk_cell_view_get_displayed_row:
- * @cell_view: a #GtkCellView
+ * @cell_view: a `GtkCellView`
  *
- * Returns a #GtkTreePath referring to the currently 
+ * Returns a `GtkTreePath` referring to the currently 
  * displayed row. If no row is currently displayed, 
  * %NULL is returned.
  *
@@ -1094,7 +1094,7 @@ gtk_cell_view_get_displayed_row (GtkCellView *cell_view)
 
 /**
  * gtk_cell_view_get_draw_sensitive:
- * @cell_view: a #GtkCellView
+ * @cell_view: a `GtkCellView`
  *
  * Gets whether @cell_view is configured to draw all of its
  * cells in a sensitive state.
@@ -1114,11 +1114,11 @@ gtk_cell_view_get_draw_sensitive (GtkCellView     *cell_view)
 
 /**
  * gtk_cell_view_set_draw_sensitive:
- * @cell_view: a #GtkCellView
+ * @cell_view: a `GtkCellView`
  * @draw_sensitive: whether to draw all cells in a sensitive state.
  *
  * Sets whether @cell_view should draw all of its
- * cells in a sensitive state, this is used by #GtkComboBox menus
+ * cells in a sensitive state, this is used by `GtkComboBox` menus
  * to ensure that rows with insensitive cells that contain
  * children appear sensitive in the parent menu item.
  */
@@ -1140,13 +1140,13 @@ gtk_cell_view_set_draw_sensitive (GtkCellView     *cell_view,
 
 /**
  * gtk_cell_view_get_fit_model:
- * @cell_view: a #GtkCellView
+ * @cell_view: a `GtkCellView`
  *
  * Gets whether @cell_view is configured to request space
- * to fit the entire #GtkTreeModel.
+ * to fit the entire `GtkTreeModel`.
  *
  * Returns: whether @cell_view requests space to fit
- * the entire #GtkTreeModel.
+ * the entire `GtkTreeModel`.
  */
 gboolean
 gtk_cell_view_get_fit_model (GtkCellView     *cell_view)
@@ -1160,12 +1160,12 @@ gtk_cell_view_get_fit_model (GtkCellView     *cell_view)
 
 /**
  * gtk_cell_view_set_fit_model:
- * @cell_view: a #GtkCellView
+ * @cell_view: a `GtkCellView`
  * @fit_model: whether @cell_view should request space for the whole model.
  *
- * Sets whether @cell_view should request space to fit the entire #GtkTreeModel.
+ * Sets whether @cell_view should request space to fit the entire `GtkTreeModel`.
  *
- * This is used by #GtkComboBox to ensure that the cell view displayed on
+ * This is used by `GtkComboBox` to ensure that the cell view displayed on
  * the combo box’s button always gets enough space and does not resize
  * when selection changes.
  */

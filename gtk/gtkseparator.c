@@ -50,7 +50,7 @@
  *
  * # Accessibility
  *
- * `GtkSeparator` uses the #GTK_ACCESSIBLE_ROLE_SEPARATOR role.
+ * `GtkSeparator` uses the %GTK_ACCESSIBLE_ROLE_SEPARATOR role.
  */
 
 typedef struct _GtkSeparatorClass GtkSeparatorClass;

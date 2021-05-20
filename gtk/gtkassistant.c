@@ -596,7 +596,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   /**
    * GtkAssistant:use-header-bar:
    *
-   * %TRUE if the assistant uses a #GtkHeaderBar for action buttons
+   * %TRUE if the assistant uses a `GtkHeaderBar` for action buttons
    * instead of the action-area.
    *
    * For technical reasons, this property is declared as an integer

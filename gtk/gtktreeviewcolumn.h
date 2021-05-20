@@ -56,10 +56,10 @@ typedef enum
 
 /**
  * GtkTreeCellDataFunc:
- * @tree_column: A #GtkTreeViewColumn
- * @cell: The #GtkCellRenderer that is being rendered by @tree_column
- * @tree_model: The #GtkTreeModel being rendered
- * @iter: A #GtkTreeIter of the current row rendered
+ * @tree_column: A `GtkTreeViewColumn`
+ * @cell: The `GtkCellRenderer` that is being rendered by @tree_column
+ * @tree_model: The `GtkTreeModel` being rendered
+ * @iter: A `GtkTreeIter` of the current row rendered
  * @data: (closure): user data
  *
  * A function to set the properties of a cell instead of just using the

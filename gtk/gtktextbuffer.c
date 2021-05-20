@@ -2462,14 +2462,14 @@ gtk_text_buffer_set_mark (GtkTextBuffer     *buffer,
  * side of the text you’re typing).
  *
  * The caller of this function does not own a
- * reference to the returned #GtkTextMark, so you can ignore the
+ * reference to the returned `GtkTextMark`, so you can ignore the
  * return value if you like. Marks are owned by the buffer and go
  * away when the buffer does.
  *
  * Emits the `GtkTextBuffer`::mark-set signal as notification of
  * the mark's initial placement.
  *
- * Returns: (transfer none): the new #GtkTextMark object
+ * Returns: (transfer none): the new `GtkTextMark` object
  */
 GtkTextMark*
 gtk_text_buffer_create_mark (GtkTextBuffer     *buffer,
@@ -2615,7 +2615,7 @@ gtk_text_buffer_delete_mark (GtkTextBuffer *buffer,
  * Returns the mark named @name in buffer @buffer, or %NULL if no such
  * mark exists in the buffer.
  *
- * Returns: (nullable) (transfer none): a #GtkTextMark
+ * Returns: (nullable) (transfer none): a `GtkTextMark`
  **/
 GtkTextMark*
 gtk_text_buffer_get_mark (GtkTextBuffer *buffer,

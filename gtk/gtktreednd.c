@@ -41,7 +41,7 @@
  * On the other hand, if you write to the high-level API, then all the
  * bookkeeping of rows is done for you, as well as things like hover-to-open
  * and auto-scroll, but your models have to implement the
- * #GtkTreeDragSource and #GtkTreeDragDest interfaces.
+ * `GtkTreeDragSource` and `GtkTreeDragDest` interfaces.
  */
 
 /**
@@ -113,10 +113,10 @@ gtk_tree_drag_dest_get_type (void)
 
 /**
  * gtk_tree_drag_source_row_draggable:
- * @drag_source: a #GtkTreeDragSource
+ * @drag_source: a `GtkTreeDragSource`
  * @path: row on which user is initiating a drag
  * 
- * Asks the #GtkTreeDragSource whether a particular row can be used as
+ * Asks the `GtkTreeDragSource` whether a particular row can be used as
  * the source of a DND operation. If the source doesn’t implement
  * this interface, the row is assumed draggable.
  *
@@ -142,10 +142,10 @@ gtk_tree_drag_source_row_draggable (GtkTreeDragSource *drag_source,
 
 /**
  * gtk_tree_drag_source_drag_data_delete:
- * @drag_source: a #GtkTreeDragSource
+ * @drag_source: a `GtkTreeDragSource`
  * @path: row that was being dragged
  * 
- * Asks the #GtkTreeDragSource to delete the row at @path, because
+ * Asks the `GtkTreeDragSource` to delete the row at @path, because
  * it was moved somewhere else via drag-and-drop. Returns %FALSE
  * if the deletion fails because @path no longer exists, or for
  * some model-specific reason. Should robustly handle a @path no
@@ -167,14 +167,14 @@ gtk_tree_drag_source_drag_data_delete (GtkTreeDragSource *drag_source,
 
 /**
  * gtk_tree_drag_source_drag_data_get:
- * @drag_source: a #GtkTreeDragSource
+ * @drag_source: a `GtkTreeDragSource`
  * @path: row that was dragged
  * 
- * Asks the #GtkTreeDragSource to return a #GdkContentProvider representing
+ * Asks the `GtkTreeDragSource` to return a `GdkContentProvider` representing
  * the row at @path. Should robustly handle a @path no
  * longer found in the model!
  * 
- * Returns: (nullable) (transfer full): a #GdkContentProvider for the
+ * Returns: (nullable) (transfer full): a `GdkContentProvider` for the
  *    given @path
  **/
 GdkContentProvider *
@@ -191,11 +191,11 @@ gtk_tree_drag_source_drag_data_get (GtkTreeDragSource *drag_source,
 
 /**
  * gtk_tree_drag_dest_drag_data_received:
- * @drag_dest: a #GtkTreeDragDest
+ * @drag_dest: a `GtkTreeDragDest`
  * @dest: row to drop in front of
  * @value: data to drop
  * 
- * Asks the #GtkTreeDragDest to insert a row before the path @dest,
+ * Asks the `GtkTreeDragDest` to insert a row before the path @dest,
  * deriving the contents of the row from @value. If @dest is
  * outside the tree so that inserting before it is impossible, %FALSE
  * will be returned. Also, %FALSE may be returned if the new row is
@@ -221,7 +221,7 @@ gtk_tree_drag_dest_drag_data_received (GtkTreeDragDest  *drag_dest,
 
 /**
  * gtk_tree_drag_dest_row_drop_possible:
- * @drag_dest: a #GtkTreeDragDest
+ * @drag_dest: a `GtkTreeDragDest`
  * @dest_path: destination row
  * @value: the data being dropped
  * 
@@ -268,12 +268,12 @@ G_DEFINE_BOXED_TYPE (GtkTreeRowData, gtk_tree_row_data,
 
 /**
  * gtk_tree_create_row_drag_content:
- * @tree_model: a #GtkTreeModel
+ * @tree_model: a `GtkTreeModel`
  * @path: a row in @tree_model
  * 
  * Creates a content provider for dragging @path from @tree_model.
  * 
- * Returns: (transfer full): a new #GdkContentProvider
+ * Returns: (transfer full): a new `GdkContentProvider`
  */
 GdkContentProvider *
 gtk_tree_create_row_drag_content (GtkTreeModel *tree_model,
@@ -313,8 +313,8 @@ gtk_tree_create_row_drag_content (GtkTreeModel *tree_model,
 
 /**
  * gtk_tree_get_row_drag_data:
- * @value: a #GValue
- * @tree_model: (nullable) (optional) (transfer none) (out): a #GtkTreeModel
+ * @value: a `GValue`
+ * @tree_model: (nullable) (optional) (transfer none) (out): a `GtkTreeModel`
  * @path: (nullable) (optional) (out): row in @tree_model
  * 
  * Obtains a @tree_model and @path from value of target type

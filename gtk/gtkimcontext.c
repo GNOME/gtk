@@ -123,15 +123,15 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkIMContext, gtk_im_context, G_TYPE_OBJECT
 
 /**
  * GtkIMContextClass:
- * @preedit_start: Default handler of the #GtkIMContext::preedit-start signal.
- * @preedit_end: Default handler of the #GtkIMContext::preedit-end signal.
- * @preedit_changed: Default handler of the #GtkIMContext::preedit-changed
+ * @preedit_start: Default handler of the `GtkIMContext::preedit-start` signal.
+ * @preedit_end: Default handler of the `GtkIMContext::preedit-end` signal.
+ * @preedit_changed: Default handler of the `GtkIMContext::preedit-changed`
  *   signal.
- * @commit: Default handler of the #GtkIMContext::commit signal.
+ * @commit: Default handler of the `GtkIMContext::commit` signal.
  * @retrieve_surrounding: Default handler of the
- *   #GtkIMContext::retrieve-surrounding signal.
+ *   `GtkIMContext::retrieve-surrounding` signal.
  * @delete_surrounding: Default handler of the
- *   #GtkIMContext::delete-surrounding signal.
+ *   `GtkIMContext::delete-surrounding` signal.
  * @set_client_widget: Called via gtk_im_context_set_client_widget() when the
  *   input window where the entered text will appear changes. Override this to
  *   keep track of the current input window, for instance for the purpose of
@@ -145,7 +145,7 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkIMContext, gtk_im_context, G_TYPE_OBJECT
  *   key press or release event. Every non-trivial input method needs to
  *   override this in order to implement the mapping from key events to text.
  *   A return value of %TRUE indicates to the caller that the event was
- *   consumed by the input method. In that case, the #GtkIMContext::commit
+ *   consumed by the input method. In that case, the `GtkIMContext::commit`
  *   signal should be emitted upon completion of a key sequence to pass the
  *   resulting text back to the input widget. Alternatively, %FALSE may be
  *   returned to indicate that the event wasn’t handled by the input method.
@@ -166,7 +166,7 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkIMContext, gtk_im_context, G_TYPE_OBJECT
  *   the use of the preedit string. Override this to display feedback by some
  *   other means if turned off.
  * @set_surrounding: Called via gtk_im_context_set_surrounding() in response
- *   to signal #GtkIMContext::retrieve-surrounding to update the input
+ *   to signal `GtkIMContext::retrieve-surrounding` to update the input
  *   method’s idea of the context around the cursor. It is not necessary to
  *   override this method even with input methods which implement
  *   context-dependent behavior. The base implementation is sufficient for
@@ -175,10 +175,10 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkIMContext, gtk_im_context, G_TYPE_OBJECT
  *   the context around the cursor location. It is not necessary to override
  *   this method even with input methods which implement context-dependent
  *   behavior. The base implementation emits
- *   #GtkIMContext::retrieve-surrounding and records the context received
+ *   `GtkIMContext::retrieve-surrounding` and records the context received
  *   by the subsequent invocation of @get_surrounding.
  * @set_surrounding_with_selection: Called via gtk_im_context_set_surrounding_with_selection()
- *   in response to signal #GtkIMContext::retrieve-surrounding to update the input
+ *   in response to signal `GtkIMContext::retrieve-surrounding` to update the input
  *   method’s idea of the context around the cursor. It is not necessary to
  *   override this method even with input methods which implement
  *   context-dependent behavior. The base implementation is sufficient for
@@ -187,7 +187,7 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkIMContext, gtk_im_context, G_TYPE_OBJECT
  *   to update the context around the cursor location. It is not necessary to override
  *   this method even with input methods which implement context-dependent
  *   behavior. The base implementation emits
- *   #GtkIMContext::retrieve-surrounding and records the context received
+ *   `GtkIMContext::retrieve-surrounding` and records the context received
  *   by the subsequent invocation of @get_surrounding.
  */
 static void
@@ -741,7 +741,7 @@ gtk_im_context_set_surrounding (GtkIMContext  *context,
 
 /**
  * gtk_im_context_set_surrounding_with_selection:
- * @context: a #GtkIMContext
+ * @context: a `GtkIMContext`
  * @text: text surrounding the insertion point, as UTF-8.
  *   the preedit string should not be included within @text
  * @len: the length of @text, or -1 if @text is nul-terminated
@@ -825,7 +825,7 @@ gtk_im_context_get_surrounding (GtkIMContext  *context,
 
 /**
  * gtk_im_context_get_surrounding_with_selection:
- * @context: a #GtkIMContext
+ * @context: a `GtkIMContext`
  * @text: (out) (transfer full): location to store a UTF-8 encoded
  *   string of text holding context around the insertion point.
  *   If the function returns %TRUE, then you must free the result
@@ -905,7 +905,7 @@ gtk_im_context_get_surrounding_with_selection (GtkIMContext  *context,
  * GtkIMContext::delete_surrounding signal.
  *
  * Note that @offset and @n_chars are in characters not in bytes
- * which differs from the usage other places in #GtkIMContext.
+ * which differs from the usage other places in `GtkIMContext`.
  *
  * In order to use this function, you should first call
  * gtk_im_context_get_surrounding() to get the current context, and

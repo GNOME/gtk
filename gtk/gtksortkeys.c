@@ -135,10 +135,10 @@ static const GtkSortKeysClass GTK_EQUAL_SORT_KEYS_CLASS =
 /*<private>
  * gtk_sort_keys_new_equal:
  *
- * Creates a new #GtkSortKeys that compares every element as equal.
+ * Creates a new GtkSortKeys that compares every element as equal.
  * This is useful when sorters are in an invalid configuration.
  *
- * Returns: a new #GtkSortKeys
+ * Returns: a new GtkSortKeys
  **/
 GtkSortKeys *
 gtk_sort_keys_new_equal (void)

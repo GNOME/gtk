@@ -56,7 +56,7 @@
  * queries information from all attached `GtkStyleProviders`. Style
  * providers can be either attached explicitly to the context through
  * [method@Gtk.StyleContext.add_provider], or to the display through
- * [func@Gtk.StyleContext.add_provider_for_display]. The resulting
+ * [type_func@Gtk.StyleContext.add_provider_for_display]. The resulting
  * style is a combination of all providers’ information in priority order.
  *
  * For GTK widgets, any `GtkStyleContext` returned by
@@ -354,11 +354,11 @@ gtk_style_context_new_for_node (GtkCssNode *node)
  * Note that a style provider added by this function only affects
  * the style of the widget to which @context belongs. If you want
  * to affect the style of all widgets, use
- * [func@Gtk.StyleContext.add_provider_for_display].
+ * [type_func@Gtk.StyleContext.add_provider_for_display].
  *
  * Note: If both priorities are the same, a `GtkStyleProvider`
  * added through this function takes precedence over another added
- * through [func@Gtk.StyleContext.add_provider_for_display].
+ * through [type_func@Gtk.StyleContext.add_provider_for_display].
  */
 void
 gtk_style_context_add_provider (GtkStyleContext  *context,
@@ -1124,8 +1124,8 @@ snapshot_insertion_cursor (GtkSnapshot     *snapshot,
  * @x: X origin
  * @y: Y origin
  * @layout: the `PangoLayout` of the text
- * @index: the index in the #PangoLayout
- * @direction: the #PangoDirection of the text
+ * @index: the index in the `PangoLayout`
+ * @direction: the `PangoDirection` of the text
  *
  * Draws a text caret using @snapshot at the specified index of @layout.
  */

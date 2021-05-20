@@ -378,8 +378,8 @@ gtk_text_view_child_class_init (GtkTextViewChildClass *klass)
   /**
    * GtkTextViewChild:window-type:
    *
-   * The "window-type" property is the #GtkTextWindowType of the
-   * #GtkTextView that the child is attached.
+   * The "window-type" property is the `GtkTextWindowType` of the
+   * `GtkTextView` that the child is attached.
    */
   properties[PROP_WINDOW_TYPE] =
     g_param_spec_enum ("window-type",

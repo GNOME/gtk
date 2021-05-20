@@ -50,33 +50,33 @@
 /*< private >
  * GtkModelButton:
  *
- * GtkModelButton is a button class that can use a #GAction as its model.
- * In contrast to #GtkToggleButton or #GtkCheckButton, which can also
- * be backed by a #GAction via the #GtkActionable:action-name property,
+ * GtkModelButton is a button class that can use a GAction as its model.
+ * In contrast to GtkToggleButton or GtkCheckButton, which can also
+ * be backed by a GAction via the GtkActionable:action-name property,
  * GtkModelButton will adapt its appearance according to the kind of
  * action it is backed by, and appear either as a plain, check or
  * radio button.
  *
  * Model buttons are used when popovers from a menu model with
  * gtk_popover_menu_new_from_model(); they can also be used manually in
- * a #GtkPopoverMenu.
+ * a GtkPopoverMenu.
  *
- * When the action is specified via the #GtkActionable:action-name
- * and #GtkActionable:action-target properties, the role of the button
+ * When the action is specified via the GtkActionable:action-name
+ * and GtkActionable:action-target properties, the role of the button
  * (i.e. whether it is a plain, check or radio button) is determined by
  * the type of the action and doesn't have to be explicitly specified
- * with the #GtkModelButton:role property.
+ * with the GtkModelButton:role property.
  *
- * The content of the button is specified by the #GtkModelButton:text
- * and #GtkModelButton:icon properties.
+ * The content of the button is specified by the GtkModelButton:text
+ * and GtkModelButton:icon properties.
  *
  * The appearance of model buttons can be influenced with the
- * #GtkModelButton:iconic property.
+ * GtkModelButton:iconic property.
  *
- * Model buttons have built-in support for submenus in #GtkPopoverMenu.
+ * Model buttons have built-in support for submenus in GtkPopoverMenu.
  * To make a GtkModelButton that opens a submenu when activated, set
- * the #GtkModelButton:menu-name property. To make a button that goes
- * back to the parent menu, you should set the #GtkModelButton:inverted
+ * the GtkModelButton:menu-name property. To make a button that goes
+ * back to the parent menu, you should set the GtkModelButton:inverted
  * property to place the submenu indicator at the opposite side.
  *
  * # Example
@@ -149,7 +149,7 @@
  * ╰── check
  * ]|
  *
- * Iconic model buttons (see #GtkModelButton:iconic) change the name of
+ * Iconic model buttons (see GtkModelButton:iconic) change the name of
  * their main node to button and add a .model style class to it. The indicator
  * subnode is invisible in this case.
  */
@@ -1162,7 +1162,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
    * GtkModelButton:role:
    *
    * Specifies whether the button is a plain, check or radio button.
-   * When #GtkActionable:action-name is set, the role will be determined
+   * When GtkActionable:action-name is set, the role will be determined
    * from the action and does not have to be set explicitly.
    */
   properties[PROP_ROLE] =
@@ -1176,7 +1176,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   /**
    * GtkModelButton:icon:
    *
-   * A #GIcon that will be used if iconic appearance for the button is
+   * A GIcon that will be used if iconic appearance for the button is
    * desired.
    */
   properties[PROP_ICON] = 
@@ -1216,7 +1216,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
    * GtkModelButton:active:
    *
    * The state of the button. This is reflecting the state of the associated
-   * #GAction.
+   * GAction.
    */
   properties[PROP_ACTIVE] =
     g_param_spec_boolean ("active",
@@ -1261,7 +1261,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   /**
    * GtkModelButton:indicator-size-group:
    *
-   * Containers like #GtkPopoverMenu can provide a size group
+   * Containers like GtkPopoverMenu can provide a size group
    * in this property to align the checks and radios of all
    * the model buttons in a menu.
    */
@@ -1499,7 +1499,7 @@ gtk_model_button_init (GtkModelButton *self)
  *
  * Creates a new GtkModelButton.
  *
- * Returns: the newly created #GtkModelButton widget
+ * Returns: the newly created GtkModelButton widget
  */
 GtkWidget *
 gtk_model_button_new (void)

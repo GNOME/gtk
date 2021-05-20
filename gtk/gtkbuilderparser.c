@@ -207,14 +207,14 @@ gtk_buildable_parse_context_parse (GtkBuildableParseContext *context,
 
 /**
  * gtk_buildable_parse_context_push:
- * @context: a #GtkBuildableParseContext
- * @parser: a #GtkBuildableParser
- * @user_data: user data to pass to #GtkBuildableParser functions
+ * @context: a `GtkBuildableParseContext`
+ * @parser: a `GtkBuildableParser`
+ * @user_data: user data to pass to `GtkBuildableParser` functions
  *
  * Temporarily redirects markup data to a sub-parser.
  *
  * This function may only be called from the start_element handler of
- * a #GtkBuildableParser. It must be matched with a corresponding call to
+ * a `GtkBuildableParser`. It must be matched with a corresponding call to
  * gtk_buildable_parse_context_pop() in the matching end_element handler
  * (except in the case that the parser aborts due to an error).
  *
@@ -263,7 +263,7 @@ gtk_buildable_parse_context_push (GtkBuildableParseContext *context,
 
 /**
  * gtk_buildable_parse_context_pop:
- * @context: a #GtkBuildableParseContext
+ * @context: a `GtkBuildableParseContext`
  *
  * Completes the process of a temporary sub-parser redirection.
  *
@@ -301,7 +301,7 @@ gtk_buildable_parse_context_pop (GtkBuildableParseContext *context)
 
 /**
  * gtk_buildable_parse_context_get_element:
- * @context: a #GtkBuildablParseContext
+ * @context: a `GtkBuildablParseContext`
  *
  * Retrieves the name of the currently open element.
  *
@@ -321,11 +321,11 @@ gtk_buildable_parse_context_get_element (GtkBuildableParseContext *context)
 
 /**
  * gtk_buildable_parse_context_get_element_stack:
- * @context: a #GtkBuildableParseContext
+ * @context: a `GtkBuildableParseContext`
  *
  * Retrieves the element stack from the internal state of the parser.
  *
- * The returned #GPtrArray is an array of strings where the last item is
+ * The returned `GPtrArray` is an array of strings where the last item is
  * the currently open tag (as would be returned by
  * gtk_buildable_parse_context_get_element()) and the previous item is its
  * immediate parent.
@@ -345,7 +345,7 @@ gtk_buildable_parse_context_get_element_stack (GtkBuildableParseContext *context
 
 /**
  * gtk_buildable_parse_context_get_position:
- * @context: a #GtkBuildableParseContext
+ * @context: a `GtkBuildableParseContext`
  * @line_number: (out) (optional): return location for a line number
  * @char_number: (out) (optional): return location for a char-on-line number
  *

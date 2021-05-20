@@ -47,9 +47,9 @@ struct _GtkGLArea
 
 /**
  * GtkGLAreaClass:
- * @render: class closure for the #GtkGLArea::render signal
- * @resize: class closeure for the #GtkGLArea::resize signal
- * @create_context: class closure for the #GtkGLArea::create-context signal
+ * @render: class closure for the `GtkGLArea::render` signal
+ * @resize: class closeure for the `GtkGLArea::resize` signal
+ * @create_context: class closure for the `GtkGLArea::create-context` signal
  *
  * The `GtkGLAreaClass` structure contains only private data.
  */

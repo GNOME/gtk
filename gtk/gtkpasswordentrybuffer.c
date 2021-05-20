@@ -195,7 +195,7 @@ gtk_password_entry_buffer_init (GtkPasswordEntryBuffer *self)
 /*< private >
  * gtk_password_entry_buffer_new:
  *
- * Creates a new #GtkEntryBuffer using secure memory allocations.
+ * Creates a new `GtkEntryBuffer` using secure memory allocations.
  *
  * Returns: (transfer full): the newly created instance
  */

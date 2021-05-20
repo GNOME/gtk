@@ -34,23 +34,23 @@
  *
  * A list-like data structure that can be used with the GtkTreeView
  *
- * The #GtkListStore object is a list model for use with a #GtkTreeView
- * widget.  It implements the #GtkTreeModel interface, and consequentialy,
+ * The `GtkListStore` object is a list model for use with a `GtkTreeView`
+ * widget.  It implements the `GtkTreeModel` interface, and consequentialy,
  * can use all of the methods available there.  It also implements the
- * #GtkTreeSortable interface so it can be sorted by the view.
+ * `GtkTreeSortable` interface so it can be sorted by the view.
  * Finally, it also implements the tree
  * [drag and drop][gtk4-GtkTreeView-drag-and-drop]
  * interfaces.
  *
- * The #GtkListStore can accept most GObject types as a column type, though
+ * The `GtkListStore` can accept most GObject types as a column type, though
  * it can’t accept all custom types.  Internally, it will keep a copy of
  * data passed in (such as a string or a boxed pointer).  Columns that
- * accept #GObjects are handled a little differently.  The
- * #GtkListStore will keep a reference to the object instead of copying the
+ * accept `GObject`s are handled a little differently.  The
+ * `GtkListStore` will keep a reference to the object instead of copying the
  * value.  As a result, if the object is modified, it is up to the
  * application writer to call gtk_tree_model_row_changed() to emit the
- * #GtkTreeModel::row_changed signal.  This most commonly affects lists with
- * #GdkTextures stored.
+ * `GtkTreeModel`::row_changed signal.  This most commonly affects lists with
+ * `GdkTexture`s stored.
  *
  * An example for creating a simple list store:
  * |[<!-- language="C" -->
@@ -105,10 +105,10 @@
  *
  * # Performance Considerations
  *
- * Internally, the #GtkListStore was originally implemented with a linked list
+ * Internally, the `GtkListStore` was originally implemented with a linked list
  * with a tail pointer.  As a result, it was fast at data insertion and deletion,
- * and not fast at random data access.  The #GtkListStore sets the
- * #GTK_TREE_MODEL_ITERS_PERSIST flag, which means that #GtkTreeIters can be
+ * and not fast at random data access.  The `GtkListStore` sets the
+ * %GTK_TREE_MODEL_ITERS_PERSIST flag, which means that `GtkTreeIter`s can be
  * cached while the row exists.  Thus, if access to a particular row is needed
  * often and your code is expected to run on older versions of GTK, it is worth
  * keeping the iter around.
@@ -118,16 +118,16 @@
  * It is important to note that only the methods
  * gtk_list_store_insert_with_values() and gtk_list_store_insert_with_valuesv()
  * are atomic, in the sense that the row is being appended to the store and the
- * values filled in in a single operation with regard to #GtkTreeModel signaling.
+ * values filled in in a single operation with regard to `GtkTreeModel` signaling.
  * In contrast, using e.g. gtk_list_store_append() and then gtk_list_store_set()
- * will first create a row, which triggers the #GtkTreeModel::row-inserted signal
- * on #GtkListStore. The row, however, is still empty, and any signal handler
- * connecting to #GtkTreeModel::row-inserted on this particular store should be prepared
+ * will first create a row, which triggers the `GtkTreeModel`::row-inserted signal
+ * on `GtkListStore`. The row, however, is still empty, and any signal handler
+ * connecting to `GtkTreeModel`::row-inserted on this particular store should be prepared
  * for the situation that the row might be empty. This is especially important
- * if you are wrapping the #GtkListStore inside a #GtkTreeModelFilter and are
- * using a #GtkTreeModelFilterVisibleFunc. Using any of the non-atomic operations
- * to append rows to the #GtkListStore will cause the
- * #GtkTreeModelFilterVisibleFunc to be visited with an empty row first; the
+ * if you are wrapping the `GtkListStore` inside a `GtkTreeModel`Filter and are
+ * using a `GtkTreeModel`FilterVisibleFunc. Using any of the non-atomic operations
+ * to append rows to the `GtkListStore` will cause the
+ * `GtkTreeModel`FilterVisibleFunc to be visited with an empty row first; the
  * function must be prepared for that.
  *
  * # GtkListStore as GtkBuildable
@@ -398,17 +398,17 @@ iter_is_valid (GtkTreeIter  *iter,
 /**
  * gtk_list_store_new:
  * @n_columns: number of columns in the list store
- * @...: all #GType types for the columns, from first to last
+ * @...: all `GType` types for the columns, from first to last
  *
  * Creates a new list store as with @n_columns columns each of the types passed
  * in.  Note that only types derived from standard GObject fundamental types
  * are supported.
  *
  * As an example, `gtk_list_store_new (3, G_TYPE_INT, G_TYPE_STRING,
- * GDK_TYPE_TEXTURE);` will create a new #GtkListStore with three columns, of type
- * int, string and #GdkTexture, respectively.
+ * GDK_TYPE_TEXTURE);` will create a new `GtkListStore` with three columns, of type
+ * int, string and `GdkTexture`, respectively.
  *
- * Returns: a new #GtkListStore
+ * Returns: a new `GtkListStore`
  */
 GtkListStore *
 gtk_list_store_new (int n_columns,
@@ -449,11 +449,11 @@ gtk_list_store_new (int n_columns,
 /**
  * gtk_list_store_newv: (rename-to gtk_list_store_new)
  * @n_columns: number of columns in the list store
- * @types: (array length=n_columns): an array of #GType types for the columns, from first to last
+ * @types: (array length=n_columns): an array of `GType` types for the columns, from first to last
  *
  * Non-vararg creation function.  Used primarily by language bindings.
  *
- * Returns: (transfer full): a new #GtkListStore
+ * Returns: (transfer full): a new `GtkListStore`
  **/
 GtkListStore *
 gtk_list_store_newv (int    n_columns,
@@ -484,13 +484,13 @@ gtk_list_store_newv (int    n_columns,
 
 /**
  * gtk_list_store_set_column_types:
- * @list_store: A #GtkListStore
+ * @list_store: A `GtkListStore`
  * @n_columns: Number of columns for the list store
- * @types: (array length=n_columns): An array length n of #GTypes
+ * @types: (array length=n_columns): An array length n of `GType`s
  *
- * This function is meant primarily for #GObjects that inherit from #GtkListStore,
- * and should only be used when constructing a new #GtkListStore.  It will not
- * function after a row has been added, or a method on the #GtkTreeModel
+ * This function is meant primarily for `GObject`s that inherit from `GtkListStore`,
+ * and should only be used when constructing a new `GtkListStore`.  It will not
+ * function after a row has been added, or a method on the `GtkTreeModel`
  * interface is called.
  **/
 void
@@ -910,8 +910,8 @@ gtk_list_store_real_set_value (GtkListStore *list_store,
 
 /**
  * gtk_list_store_set_value:
- * @list_store: A #GtkListStore
- * @iter: A valid #GtkTreeIter for the row being modified
+ * @list_store: A `GtkListStore`
+ * @iter: A valid `GtkTreeIter` for the row being modified
  * @column: column number to modify
  * @value: new value for the cell
  *
@@ -1061,8 +1061,8 @@ gtk_list_store_set_valist_internal (GtkListStore *list_store,
 
 /**
  * gtk_list_store_set_valuesv: (rename-to gtk_list_store_set)
- * @list_store: A #GtkListStore
- * @iter: A valid #GtkTreeIter for the row being modified
+ * @list_store: A `GtkListStore`
+ * @iter: A valid `GtkTreeIter` for the row being modified
  * @columns: (array length=n_values): an array of column numbers
  * @values: (array length=n_values): an array of GValues
  * @n_values: the length of the @columns and @values arrays
@@ -1109,8 +1109,8 @@ gtk_list_store_set_valuesv (GtkListStore *list_store,
 
 /**
  * gtk_list_store_set_valist:
- * @list_store: A #GtkListStore
- * @iter: A valid #GtkTreeIter for the row being modified
+ * @list_store: A `GtkListStore`
+ * @iter: A valid `GtkTreeIter` for the row being modified
  * @var_args: va_list of column/value pairs
  *
  * See gtk_list_store_set(); this version takes a va_list for use by language
@@ -1151,7 +1151,7 @@ gtk_list_store_set_valist (GtkListStore *list_store,
 
 /**
  * gtk_list_store_set:
- * @list_store: a #GtkListStore
+ * @list_store: a `GtkListStore`
  * @iter: row iterator
  * @...: pairs of column number and value, terminated with -1
  *
@@ -1179,8 +1179,8 @@ gtk_list_store_set (GtkListStore *list_store,
 
 /**
  * gtk_list_store_remove:
- * @list_store: A #GtkListStore
- * @iter: A valid #GtkTreeIter
+ * @list_store: A `GtkListStore`
+ * @iter: A valid `GtkTreeIter`
  *
  * Removes the given row from the list store.  After being removed, 
  * @iter is set to be the next valid row, or invalidated if it pointed 
@@ -1229,8 +1229,8 @@ gtk_list_store_remove (GtkListStore *list_store,
 
 /**
  * gtk_list_store_insert:
- * @list_store: A #GtkListStore
- * @iter: (out): An unset #GtkTreeIter to set to the new row
+ * @list_store: A `GtkListStore`
+ * @iter: (out): An unset `GtkTreeIter` to set to the new row
  * @position: position to insert the new row, or -1 for last
  *
  * Creates a new row at @position.  @iter will be changed to point to this new
@@ -1282,9 +1282,9 @@ gtk_list_store_insert (GtkListStore *list_store,
 
 /**
  * gtk_list_store_insert_before:
- * @list_store: A #GtkListStore
- * @iter: (out): An unset #GtkTreeIter to set to the new row
- * @sibling: (nullable): A valid #GtkTreeIter
+ * @list_store: A `GtkListStore`
+ * @iter: (out): An unset `GtkTreeIter` to set to the new row
+ * @sibling: (nullable): A valid `GtkTreeIter`
  *
  * Inserts a new row before @sibling. If @sibling is %NULL, then the row will 
  * be appended to the end of the list. @iter will be changed to point to this 
@@ -1318,9 +1318,9 @@ gtk_list_store_insert_before (GtkListStore *list_store,
 
 /**
  * gtk_list_store_insert_after:
- * @list_store: A #GtkListStore
- * @iter: (out): An unset #GtkTreeIter to set to the new row
- * @sibling: (nullable): A valid #GtkTreeIter
+ * @list_store: A `GtkListStore`
+ * @iter: (out): An unset `GtkTreeIter` to set to the new row
+ * @sibling: (nullable): A valid `GtkTreeIter`
  *
  * Inserts a new row after @sibling. If @sibling is %NULL, then the row will be
  * prepended to the beginning of the list. @iter will be changed to point to
@@ -1354,8 +1354,8 @@ gtk_list_store_insert_after (GtkListStore *list_store,
 
 /**
  * gtk_list_store_prepend:
- * @list_store: A #GtkListStore
- * @iter: (out): An unset #GtkTreeIter to set to the prepend row
+ * @list_store: A `GtkListStore`
+ * @iter: (out): An unset `GtkTreeIter` to set to the prepend row
  *
  * Prepends a new row to @list_store. @iter will be changed to point to this new
  * row. The row will be empty after this function is called. To fill in
@@ -1374,8 +1374,8 @@ gtk_list_store_prepend (GtkListStore *list_store,
 
 /**
  * gtk_list_store_append:
- * @list_store: A #GtkListStore
- * @iter: (out): An unset #GtkTreeIter to set to the appended row
+ * @list_store: A `GtkListStore`
+ * @iter: (out): An unset `GtkTreeIter` to set to the appended row
  *
  * Appends a new row to @list_store.  @iter will be changed to point to this new
  * row.  The row will be empty after this function is called.  To fill in
@@ -1406,7 +1406,7 @@ gtk_list_store_increment_stamp (GtkListStore *list_store)
 
 /**
  * gtk_list_store_clear:
- * @list_store: a #GtkListStore.
+ * @list_store: a `GtkListStore`.
  *
  * Removes all rows from the list store.  
  *
@@ -1433,13 +1433,13 @@ gtk_list_store_clear (GtkListStore *list_store)
 
 /**
  * gtk_list_store_iter_is_valid:
- * @list_store: A #GtkListStore.
- * @iter: A #GtkTreeIter.
+ * @list_store: A `GtkListStore`.
+ * @iter: A `GtkTreeIter`
  *
  * > This function is slow. Only use it for debugging and/or testing
  * > purposes.
  *
- * Checks if the given iter is a valid iter for this #GtkListStore.
+ * Checks if the given iter is a valid iter for this `GtkListStore`.
  *
  * Returns: %TRUE if the iter is valid, %FALSE if the iter is invalid.
  **/
@@ -1678,7 +1678,7 @@ gtk_list_store_reorder_func (GSequenceIter *a,
   
 /**
  * gtk_list_store_reorder:
- * @store: A #GtkListStore.
+ * @store: A `GtkListStore`.
  * @new_order: (array zero-terminated=1): an array of integers mapping the new
  *   position of each child to its old position before the re-ordering,
  *   i.e. @new_order`[newpos] = oldpos`. It must have
@@ -1772,9 +1772,9 @@ generate_order (GSequence *seq,
 
 /**
  * gtk_list_store_swap:
- * @store: A #GtkListStore.
- * @a: A #GtkTreeIter.
- * @b: Another #GtkTreeIter.
+ * @store: A `GtkListStore`.
+ * @a: A `GtkTreeIter`
+ * @b: Another `GtkTreeIter`
  *
  * Swaps @a and @b in @store. Note that this function only works with
  * unsorted stores.
@@ -1838,9 +1838,9 @@ gtk_list_store_move_to (GtkListStore *store,
 
 /**
  * gtk_list_store_move_before:
- * @store: A #GtkListStore.
- * @iter: A #GtkTreeIter.
- * @position: (nullable): A #GtkTreeIter
+ * @store: A `GtkListStore`.
+ * @iter: A `GtkTreeIter`
+ * @position: (nullable): A `GtkTreeIter`
  *
  * Moves @iter in @store to the position before @position. Note that this
  * function only works with unsorted stores. If @position is %NULL, @iter
@@ -1869,9 +1869,9 @@ gtk_list_store_move_before (GtkListStore *store,
 
 /**
  * gtk_list_store_move_after:
- * @store: A #GtkListStore.
- * @iter: A #GtkTreeIter.
- * @position: (nullable): A #GtkTreeIter
+ * @store: A `GtkListStore`.
+ * @iter: A `GtkTreeIter`
+ * @position: (nullable): A `GtkTreeIter`
  *
  * Moves @iter in @store to the position after @position. Note that this
  * function only works with unsorted stores. If @position is %NULL, @iter
@@ -2147,8 +2147,8 @@ gtk_list_store_has_default_sort_func (GtkTreeSortable *sortable)
 
 /**
  * gtk_list_store_insert_with_values:
- * @list_store: A #GtkListStore
- * @iter: (out) (optional): An unset #GtkTreeIter to set to the new row
+ * @list_store: A `GtkListStore`
+ * @iter: (out) (optional): An unset `GtkTreeIter` to set to the new row
  * @position: position to insert the new row, or -1 to append after existing
  *    rows
  * @...: pairs of column number and value, terminated with -1
@@ -2176,12 +2176,12 @@ gtk_list_store_has_default_sort_func (GtkTreeSortable *sortable)
  * }
  * ]|
  *
- * with the difference that the former will only emit #GtkTreeModel::row-inserted
- * once, while the latter will emit #GtkTreeModel::row-inserted,
- * #GtkTreeModel::row-changed and, if the list store is sorted,
- * #GtkTreeModel::rows-reordered for every inserted value.
+ * with the difference that the former will only emit `GtkTreeModel`::row-inserted
+ * once, while the latter will emit `GtkTreeModel`::row-inserted,
+ * `GtkTreeModel`::row-changed and, if the list store is sorted,
+ * `GtkTreeModel`::rows-reordered for every inserted value.
  *
- * Since emitting the #GtkTreeModel::rows-reordered signal repeatedly can
+ * Since emitting the `GtkTreeModel::rows-reordered` signal repeatedly can
  * affect the performance of the program, gtk_list_store_insert_with_values()
  * should generally be preferred when inserting rows in a sorted list store.
  */
@@ -2248,8 +2248,8 @@ gtk_list_store_insert_with_values (GtkListStore *list_store,
 
 /**
  * gtk_list_store_insert_with_valuesv: (rename-to gtk_list_store_insert_with_values)
- * @list_store: A #GtkListStore
- * @iter: (out) (optional): An unset #GtkTreeIter to set to the new row
+ * @list_store: A `GtkListStore`
+ * @iter: (out) (optional): An unset `GtkTreeIter` to set to the new row
  * @position: position to insert the new row, or -1 for last
  * @columns: (array length=n_values): an array of column numbers
  * @values: (array length=n_values): an array of GValues 

@@ -31,8 +31,8 @@ G_BEGIN_DECLS
 
 /**
  * GtkFontFilterFunc:
- * @family: a #PangoFontFamily
- * @face: a #PangoFontFace belonging to @family
+ * @family: a `PangoFontFamily`
+ * @face: a `PangoFontFace` belonging to @family
  * @data: (closure): user data passed to gtk_font_chooser_set_filter_func()
  *
  * The type of function that is used for deciding what fonts get

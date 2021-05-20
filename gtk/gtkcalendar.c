@@ -1353,7 +1353,7 @@ gtk_calendar_new (void)
 /**
  * gtk_calendar_select_day:
  * @self: a `GtkCalendar`.
- * @date: (transfer none): a #GDateTime representing the day to select
+ * @date: (transfer none): a `GDateTime` representing the day to select
  *
  * Switches to @date's year and month and select its day.
  */
@@ -1608,7 +1608,7 @@ gtk_calendar_unmark_day (GtkCalendar *calendar,
  * gtk_calendar_get_date:
  * @self: a `GtkCalendar`
  *
- * Returns a #GDateTime representing the shown
+ * Returns a `GDateTime` representing the shown
  * year, month and the selected day.
  *
  * The returned date is in the local time zone.

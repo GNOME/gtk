@@ -38,7 +38,7 @@ G_DECLARE_INTERFACE (GtkSelectionModel, gtk_selection_model, GTK, SELECTION_MODE
  * @is_selected: Return if the item at the given position is selected.
  * @get_selection_in_range: Return a bitset with all currently selected
  *   items in the given range. By default, this function will call
- *   #GtkSelectionModel::is_selected() on all items in the given range.
+ *   `GtkSelectionModel::is_selected()` on all items in the given range.
  * @select_item: Select the item in the given position. If the operation
  *   is known to fail, return %FALSE.
  * @unselect_item: Unselect the item in the given position. If the
@@ -56,8 +56,8 @@ G_DECLARE_INTERFACE (GtkSelectionModel, gtk_selection_model, GTK, SELECTION_MODE
  *   See gtk_selection_model_set_selection() for a detailed explanation
  *   of this function.
  *
- * The list of virtual functions for the #GtkSelectionModel interface.
- * No function must be implemented, but unless #GtkSelectionModel::is_selected()
+ * The list of virtual functions for the `GtkSelectionModel` interface.
+ * No function must be implemented, but unless `GtkSelectionModel::is_selected()`
  * is implemented, it will not be possible to select items in the set.
  * 
  * The model does not need to implement any functions to support either
@@ -65,7 +65,7 @@ G_DECLARE_INTERFACE (GtkSelectionModel, gtk_selection_model, GTK, SELECTION_MODE
  * it means that users cannot select or unselect items in a list widget
  * using the model.
  *
- * All selection functions fall back to #GtkSelectionModel::set_selection()
+ * All selection functions fall back to `GtkSelectionModel::set_selection()`
  * so it is sufficient to implement just that function for full selection
  * support.
  */

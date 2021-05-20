@@ -1751,7 +1751,7 @@ gtk_stack_get_hhomogeneous (GtkStack *stack)
  * @stack: a `GtkStack`
  * @vhomogeneous: %TRUE to make @stack vertically homogeneous
  *
- * Sets the #GtkStack to be vertically homogeneous or not.
+ * Sets the `GtkStack` to be vertically homogeneous or not.
  *
  * If it is homogeneous, the `GtkStack` will request the same
  * height for all its children. If it isn't, the stack
@@ -1941,7 +1941,7 @@ gtk_stack_set_interpolate_size (GtkStack *stack,
  * gtk_stack_get_interpolate_size: (attributes org.gtk.Method.get_property=interpolate-size)
  * @stack: A `GtkStack`
  *
- * Returns whether the #GtkStack is set up to interpolate between
+ * Returns whether the `GtkStack` is set up to interpolate between
  * the sizes of children on page switch.
  *
  * Returns: %TRUE if child sizes are interpolated

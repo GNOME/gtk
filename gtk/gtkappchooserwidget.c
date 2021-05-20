@@ -988,7 +988,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   /**
    * GtkAppChooserWidget::application-selected:
    * @self: the object which received the signal
-   * @application: the selected #GAppInfo
+   * @application: the selected `GAppInfo`
    *
    * Emitted when an application item is selected from the widget's list.
    */
@@ -1005,7 +1005,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   /**
    * GtkAppChooserWidget::application-activated:
    * @self: the object which received the signal
-   * @application: the activated #GAppInfo
+   * @application: the activated `GAppInfo`
    *
    * Emitted when an application item is activated from the widget's list.
    *

@@ -608,7 +608,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   /**
    * GtkPaned::move-handle:
    * @widget: the object that received the signal
-   * @scroll_type: a #GtkScrollType
+   * @scroll_type: a `GtkScrollType`
    *
    * Emitted to move the handle with key bindings.
    *

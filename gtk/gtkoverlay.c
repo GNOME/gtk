@@ -325,7 +325,7 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
 
   /**
    * GtkOverlay::get-child-position:
-   * @overlay: the #GtkOverlay
+   * @overlay: the `GtkOverlay`
    * @widget: the child widget to position
    * @allocation: (type Gdk.Rectangle) (out caller-allocates): return
    *   location for the allocation

@@ -76,7 +76,7 @@ gtk_print_operation_preview_base_init (gpointer g_iface)
       /**
        * GtkPrintOperationPreview::ready:
        * @preview: the object on which the signal is emitted
-       * @context: the current #GtkPrintContext
+       * @context: the current `GtkPrintContext`
        *
        * The ::ready signal gets emitted once per preview operation,
        * before the first page is rendered.

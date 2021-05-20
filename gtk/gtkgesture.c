@@ -936,7 +936,7 @@ gtk_gesture_get_device (GtkGesture *gesture)
 /**
  * gtk_gesture_get_sequence_state:
  * @gesture: a `GtkGesture`
- * @sequence: a #GdkEventSequence
+ * @sequence: a `GdkEventSequence`
  *
  * Returns the @sequence state, as seen by @gesture.
  *

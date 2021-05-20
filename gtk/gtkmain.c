@@ -607,8 +607,8 @@ gtk_init_check (void)
  * applications.  It will initialize everything needed to operate the
  * toolkit and parses some standard command line options.
  *
- * If you are using #GtkApplication, you don't have to call gtk_init()
- * or gtk_init_check(); the #GApplication::startup handler
+ * If you are using `GtkApplication`, you don't have to call gtk_init()
+ * or gtk_init_check(); the `GApplication::startup` handler
  * does it for you.
  *
  * This function will terminate your program if it was unable to
@@ -738,7 +738,7 @@ gtk_is_initialized (void)
  * gtk_widget_set_default_direction (direction);
  * ]|
  *
- * Returns: the #GtkTextDirection of the current locale
+ * Returns: the `GtkTextDirection` of the current locale
  */
 GtkTextDirection
 gtk_get_locale_direction (void)
@@ -762,17 +762,22 @@ gtk_get_locale_direction (void)
 /**
  * gtk_get_default_language:
  *
- * Returns the #PangoLanguage for the default language currently in
- * effect. (Note that this can change over the life of an
- * application.) The default language is derived from the current
- * locale. It determines, for example, whether GTK uses the
- * right-to-left or left-to-right text direction.
+ * Returns the `PangoLanguage` for the default language
+ * currently in effect.
  *
- * This function is equivalent to pango_language_get_default().
+ * Note that this can change over the life of an
+ * application.
+ *
+ * The default language is derived from the current
+ * locale. It determines, for example, whether GTK uses
+ * the right-to-left or left-to-right text direction.
+ *
+ * This function is equivalent to
+ * [func@Pango.Language.get_default].
  * See that function for details.
  *
- * Returns: (transfer none): the default language as a #PangoLanguage,
- *   must not be freed
+ * Returns: (transfer none): the default language as a
+ *   `PangoLanguage`
  */
 PangoLanguage *
 gtk_get_default_language (void)
@@ -1782,7 +1787,7 @@ gtk_get_current_event_time (void)
 
 /**
  * gtk_get_event_widget:
- * @event: a #GdkEvent
+ * @event: a `GdkEvent`
  *
  * If @event is %NULL or the event was not associated with any widget,
  * returns %NULL, otherwise returns the widget that received the event
@@ -1892,14 +1897,14 @@ gtk_propagate_event_internal (GtkWidget *widget,
 
 /**
  * gtk_propagate_event:
- * @widget: a #GtkWidget
+ * @widget: a `GtkWidget`
  * @event: an event
  *
  * Sends an event to a widget, propagating the event to parent widgets
  * if the event remains unhandled. This function will emit the event
  * through all the hierarchy of @widget through all propagation phases.
  *
- * Events received by GTK from GDK normally begin at a #GtkRoot widget.
+ * Events received by GTK from GDK normally begin at a `GtkRoot` widget.
  * Depending on the type of event, existence of modal dialogs, grabs, etc.,
  * the event may be propagated; if so, this function is used.
  *

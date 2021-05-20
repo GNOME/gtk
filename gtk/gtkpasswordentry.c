@@ -142,7 +142,7 @@ focus_changed (GtkWidget *widget)
 
 /*< private >
  * gtk_password_entry_toggle_peek:
- * @entry: a #GtkPasswordEntry
+ * @entry: a `GtkPasswordEntry`
  *
  * Toggles the text visibility.
  */
@@ -549,11 +549,11 @@ gtk_password_entry_accessible_init (GtkAccessibleInterface *iface)
 
 /*< private >
  * gtk_password_entry_get_text_widget
- * @entry: a #GtkPasswordEntry
+ * @entry: a `GtkPasswordEntry`
  *
- * Retrieves the #GtkText delegate of the #GtkPasswordEntry.
+ * Retrieves the `GtkText` delegate of the `GtkPasswordEntry`.
  *
- * Returns: (transfer none): the #GtkText delegate widget
+ * Returns: (transfer none): the `GtkText` delegate widget
  */
 GtkText *
 gtk_password_entry_get_text_widget (GtkPasswordEntry *entry)

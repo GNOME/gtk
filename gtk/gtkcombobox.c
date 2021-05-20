@@ -731,7 +731,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                       P_("Entry Text Column"),
                                                       P_("The column in the combo box’s model to associate "
                                                          "with strings from the entry if the combo was "
-                                                         "created with #GtkComboBox:has-entry = %TRUE"),
+                                                         "created with GtkComboBox:has-entry = %TRUE"),
                                                       -1, G_MAXINT, -1,
                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 

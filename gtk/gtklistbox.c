@@ -1013,7 +1013,7 @@ gtk_list_box_get_selected_rows (GtkListBox *box)
 /**
  * gtk_list_box_set_placeholder:
  * @box: a `GtkListBox`
- * @placeholder: (nullable): a #GtkWidget
+ * @placeholder: (nullable): a `GtkWidget`
  *
  * Sets the placeholder widget that is shown in the list when
  * it doesn't display any visible children.

@@ -65,7 +65,7 @@ typedef struct _GtkCrossingData GtkCrossingData;
  * @new_descendent: the direct child of the receiving widget that
  *   is an ancestor of @new_target, or %NULL if @new_target is not
  *   a descendent of the receiving widget
- * @drop: the #GdkDrop if this is info for a drop operation
+ * @drop: the `GdkDrop` if this is info for a drop operation
  *
  * The struct that is passed to gtk_event_controller_handle_crossing().
  *

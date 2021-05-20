@@ -302,10 +302,10 @@ gtk_im_context_simple_finalize (GObject *obj)
 /**
  * gtk_im_context_simple_new:
  * 
- * Creates a new #GtkIMContextSimple.
+ * Creates a new `GtkIMContextSimple`.
  *
- * Returns: a new #GtkIMContextSimple.
- **/
+ * Returns: a new `GtkIMContextSimple`
+ */
 GtkIMContext *
 gtk_im_context_simple_new (void)
 {
@@ -1183,7 +1183,7 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
 
 /**
  * gtk_im_context_simple_add_table: (skip)
- * @context_simple: A #GtkIMContextSimple
+ * @context_simple: A `GtkIMContextSimple`
  * @data: (array): the table
  * @max_seq_len: Maximum length of a sequence in the table
  * @n_seqs: number of sequences in the table
@@ -1216,7 +1216,7 @@ gtk_im_context_simple_add_table (GtkIMContextSimple *context_simple,
 
 /**
  * gtk_im_context_simple_add_compose_file:
- * @context_simple: A #GtkIMContextSimple
+ * @context_simple: A `GtkIMContextSimple`
  * @compose_file: The path of compose file
  *
  * Adds an additional table from the X11 compose file.

@@ -924,7 +924,7 @@ gtk_expander_set_expanded (GtkExpander *expander,
  * gtk_expander_get_expanded: (attributes org.gtk.Method.get_property=expanded)
  * @expander:a `GtkExpander`
  *
- * Queries a #GtkExpander and returns its current state.
+ * Queries a `GtkExpander` and returns its current state.
  *
  * Returns %TRUE if the child widget is revealed.
  *

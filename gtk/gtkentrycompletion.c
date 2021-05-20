@@ -205,7 +205,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    *
    * Applications may connect to this signal in order to insert only a
    * smaller part of the @prefix into the entry - e.g. the entry used in
-   * the #GtkFileChooser inserts only the part of the prefix up to the
+   * the `GtkFileChooser` inserts only the part of the prefix up to the
    * next '/'.
    *
    * Returns: %TRUE if the signal has been handled
@@ -838,7 +838,7 @@ gtk_entry_completion_new (void)
 
 /**
  * gtk_entry_completion_new_with_area:
- * @area: the #GtkCellArea used to layout cells
+ * @area: the `GtkCellArea` used to layout cells
  *
  * Creates a new `GtkEntryCompletion` object using the
  * specified @area.

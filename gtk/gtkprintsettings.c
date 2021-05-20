@@ -834,7 +834,7 @@ gtk_print_settings_get_duplex (GtkPrintSettings *settings)
 /**
  * gtk_print_settings_set_duplex:
  * @settings: a `GtkPrintSettings`
- * @duplex: a #GtkPrintDuplex value
+ * @duplex: a `GtkPrintDuplex` value
  *
  * Sets the value of %GTK_PRINT_SETTINGS_DUPLEX.
  */
@@ -894,7 +894,7 @@ gtk_print_settings_get_quality (GtkPrintSettings *settings)
 /**
  * gtk_print_settings_set_quality:
  * @settings: a `GtkPrintSettings`
- * @quality: a #GtkPrintQuality value
+ * @quality: a `GtkPrintQuality` value
  * 
  * Sets the value of %GTK_PRINT_SETTINGS_QUALITY.
  */
@@ -954,7 +954,7 @@ gtk_print_settings_get_page_set (GtkPrintSettings *settings)
 /**
  * gtk_print_settings_set_page_set:
  * @settings: a `GtkPrintSettings`
- * @page_set: a #GtkPageSet value
+ * @page_set: a `GtkPageSet` value
  *
  * Sets the value of %GTK_PRINT_SETTINGS_PAGE_SET.
  */
@@ -1023,7 +1023,7 @@ gtk_print_settings_get_number_up_layout (GtkPrintSettings *settings)
 /**
  * gtk_print_settings_set_number_up_layout:
  * @settings: a `GtkPrintSettings`
- * @number_up_layout: a #GtkNumberUpLayout value
+ * @number_up_layout: a `GtkNumberUpLayout` value
  *
  * Sets the value of %GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT.
  */
@@ -1281,7 +1281,7 @@ gtk_print_settings_get_print_pages (GtkPrintSettings *settings)
 /**
  * gtk_print_settings_set_print_pages:
  * @settings: a `GtkPrintSettings`
- * @pages: a #GtkPrintPages value
+ * @pages: a `GtkPrintPages` value
  * 
  * Sets the value of %GTK_PRINT_SETTINGS_PRINT_PAGES.
  */

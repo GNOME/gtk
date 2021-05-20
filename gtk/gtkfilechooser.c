@@ -372,7 +372,7 @@ gtk_file_chooser_unselect_all (GtkFileChooser *chooser)
  * @file: the `GFile` for the new folder
  * @error: location to store error
  *
- * Sets the current folder for @chooser from a #GFile.
+ * Sets the current folder for @chooser from a `GFile`.
  *
  * Returns: %TRUE if the folder could be changed successfully, %FALSE
  *   otherwise.
@@ -393,7 +393,7 @@ gtk_file_chooser_set_current_folder (GtkFileChooser  *chooser,
  * gtk_file_chooser_get_current_folder:
  * @chooser: a `GtkFileChooser`
  *
- * Gets the current folder of @chooser as #GFile.
+ * Gets the current folder of @chooser as `GFile`.
  *
  * Returns: (transfer full): the `GFile` for the current folder.
  */
@@ -432,7 +432,7 @@ gtk_file_chooser_unselect_file (GtkFileChooser *chooser,
  * @chooser: a `GtkFileChooser`
  *
  * Lists all the selected files and subfolders in the current folder
- * of @chooser as #GFile.
+ * of @chooser as `GFile`.
  *
  * Returns: (transfer full): a list model containing a `GFile` for each
  *   selected file and subfolder in the current folder. Free the returned

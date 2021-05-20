@@ -8,7 +8,7 @@ G_BEGIN_DECLS
 /**
  * GtkNativeIface:
  *
- * The list of functions that must be implemented for the #GtkNative interface.
+ * The list of functions that must be implemented for the `GtkNative` interface.
  */
 struct _GtkNativeInterface
 {

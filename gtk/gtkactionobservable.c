@@ -30,9 +30,9 @@ gtk_action_observable_default_init (GtkActionObservableInterface *iface)
 
 /**
  * gtk_action_observable_register_observer:
- * @observable: a #GtkActionObservable
+ * @observable: a `GtkActionObservable`
  * @action_name: the name of the action
- * @observer: the #GtkActionObserver to which the events will be reported
+ * @observer: the `GtkActionObserver` to which the events will be reported
  *
  * Registers @observer as being interested in changes to @action_name on
  * @observable.
@@ -50,9 +50,9 @@ gtk_action_observable_register_observer (GtkActionObservable *observable,
 
 /**
  * gtk_action_observable_unregister_observer:
- * @observable: a #GtkActionObservable
+ * @observable: a `GtkActionObservable`
  * @action_name: the name of the action
- * @observer: the #GtkActionObserver to which the events will be reported
+ * @observer: the `GtkActionObserver` to which the events will be reported
  *
  * Removes the registration of @observer as being interested in changes
  * to @action_name on @observable.

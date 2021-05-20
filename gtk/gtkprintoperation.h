@@ -195,7 +195,7 @@ struct _GtkPrintOperationClass
 /**
  * GTK_PRINT_ERROR:
  *
- * The error domain for #GtkPrintError errors.
+ * The error domain for `GtkPrintError` errors.
  */
 #define GTK_PRINT_ERROR gtk_print_error_quark ()
 
@@ -310,7 +310,7 @@ GtkPageSetup           *gtk_print_run_page_setup_dialog            (GtkWindow   
 
 /**
  * GtkPageSetupDoneFunc:
- * @page_setup: the #GtkPageSetup that has been passed to
+ * @page_setup: the `GtkPageSetup` that has been passed to
  *   gtk_print_run_page_setup_dialog_async()
  * @data: (closure): user data that has been passed to
  *   gtk_print_run_page_setup_dialog_async()

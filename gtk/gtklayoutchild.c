@@ -176,7 +176,7 @@ gtk_layout_child_get_layout_manager (GtkLayoutChild *layout_child)
  *
  * Retrieves the `GtkWidget` associated to the given @layout_child.
  *
- * Returns: (transfer none): a #GtkWidget
+ * Returns: (transfer none): a `GtkWidget`
  */
 GtkWidget *
 gtk_layout_child_get_child_widget (GtkLayoutChild *layout_child)

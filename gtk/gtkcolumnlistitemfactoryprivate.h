@@ -35,7 +35,7 @@ G_BEGIN_DECLS
 /**
  * GtkColumnListItemFactory:
  *
- * The object for the #GtkColumnListItemFactory.
+ * The object for the `GtkColumnListItemFactory`.
  **/
 typedef struct _GtkColumnListItemFactory GtkColumnListItemFactory;
 typedef struct _GtkColumnListItemFactoryClass GtkColumnListItemFactoryClass;

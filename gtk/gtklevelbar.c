@@ -78,7 +78,7 @@
  * [method@Gtk.LevelBar.set_max_value]. The value will be always drawn in
  * proportion to the admissible interval, i.e. a value of 15 with a specified
  * interval between 10 and 20 is equivalent to a value of 0.5 with an interval
- * between 0 and 1. When #GTK_LEVEL_BAR_MODE_DISCRETE is used, the bar level
+ * between 0 and 1. When %GTK_LEVEL_BAR_MODE_DISCRETE is used, the bar level
  * is rendered as a finite number of separated blocks instead of a single one.
  * The number of blocks that will be rendered is equal to the number of units
  * specified by the admissible interval.
@@ -117,7 +117,7 @@
  *
  * # Accessibility
  *
- * `GtkLevelBar` uses the #GTK_ACCESSIBLE_ROLE_METER role.
+ * `GtkLevelBar` uses the %GTK_ACCESSIBLE_ROLE_METER role.
  */
 #include "config.h"
 
@@ -977,9 +977,9 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
    * Determines the way `GtkLevelBar` interprets the value properties to draw the
    * level fill area.
    *
-   * Specifically, when the value is #GTK_LEVEL_BAR_MODE_CONTINUOUS,
+   * Specifically, when the value is %GTK_LEVEL_BAR_MODE_CONTINUOUS,
    * `GtkLevelBar` will draw a single block representing the current value in
-   * that area; when the value is #GTK_LEVEL_BAR_MODE_DISCRETE,
+   * that area; when the value is %GTK_LEVEL_BAR_MODE_DISCRETE,
    * the widget will draw a succession of separate blocks filling the
    * draw area, with the number of blocks being equal to the units separating
    * the integral roundings of [property@Gtk.LevelBar:min-value] and

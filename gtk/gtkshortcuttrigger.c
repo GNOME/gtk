@@ -317,8 +317,8 @@ gtk_shortcut_trigger_print_label (GtkShortcutTrigger *self,
  * architectures or even different versions of GTK. Do not use this
  * function as a basis for building protocols or file formats.
  *
- * The types of @trigger is #gconstpointer only to allow use of this
- * function with #GHashTable. They must each be a `GtkShortcutTrigger`.
+ * The types of @trigger is `gconstpointer` only to allow use of this
+ * function with `GHashTable`. They must each be a `GtkShortcutTrigger`.
  *
  * Returns: a hash value corresponding to @trigger
  */
@@ -339,8 +339,8 @@ gtk_shortcut_trigger_hash (gconstpointer trigger)
  *
  * Checks if @trigger1 and @trigger2 trigger under the same conditions.
  *
- * The types of @one and @two are #gconstpointer only to allow use of this
- * function with #GHashTable. They must each be a `GtkShortcutTrigger`.
+ * The types of @one and @two are `gconstpointer` only to allow use of this
+ * function with `GHashTable`. They must each be a `GtkShortcutTrigger`.
  *
  * Returns: %TRUE if @trigger1 and @trigger2 are equal
  */
@@ -356,8 +356,8 @@ gtk_shortcut_trigger_equal (gconstpointer trigger1,
  * @trigger1: (type GtkShortcutTrigger): a `GtkShortcutTrigger`
  * @trigger2: (type GtkShortcutTrigger): a `GtkShortcutTrigger`
  *
- * The types of @trigger1 and @trigger2 are #gconstpointer only to allow
- * use of this function as a #GCompareFunc.
+ * The types of @trigger1 and @trigger2 are `gconstpointer` only to allow
+ * use of this function as a `GCompareFunc`.
  *
  * They must each be a `GtkShortcutTrigger`.
  *

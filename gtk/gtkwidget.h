@@ -86,7 +86,7 @@ typedef gboolean (*GtkTickCallback) (GtkWidget     *widget,
  * @width: the widget’s desired width
  * @height: the widget’s desired height
  *
- * A #GtkRequisition-struct represents the desired size of a widget. See
+ * A `GtkRequisition` represents the desired size of a widget. See
  * [GtkWidget’s geometry management section][geometry-management] for
  * more information.
  */
@@ -126,14 +126,16 @@ struct _GtkWidget
  *   means that either it or any of its parents up to the toplevel
  *   widget have been set as hidden.
  * @realize: Signal emitted when widget is associated with a
- *   #GdkSurface, which means that gtk_widget_realize() has been called or
+ *   `GdkSurface`, which means that gtk_widget_realize() has been called or
  *   the widget has been mapped (that is, it is going to be drawn).
  * @unrealize: Signal emitted when the GdkSurface associated with
  *   widget is destroyed, which means that gtk_widget_unrealize() has
  *   been called or the widget has been unmapped (that is, it is going
  *   to be hidden).
- * @root: Called when the widget gets added to a #GtkRoot widget. Must chain up
- * @unroot: Called when the widget is about to be removed from its #GtkRoot widget. Must chain up
+ * @root: Called when the widget gets added to a `GtkRoot` widget. Must
+ *   chain up
+ * @unroot: Called when the widget is about to be removed from its
+ *   `GtkRoot` widget. Must chain up
  * @size_allocate: Called to set the allocation, if the widget does
  *   not have a layout manager.
  * @state_flags_changed: Signal emitted when the widget state changes,
@@ -146,14 +148,14 @@ struct _GtkWidget
  *   it prefers to be allocated in %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or
  *   %GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT mode.
  *   %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH means the widget prefers to have
- *   #GtkWidgetClass.measure() called first to get the default width (passing
+ *   `GtkWidgetClass.measure()` called first to get the default width (passing
  *   a for_size of -1), then again to get the height for said default width.
  *   %GTK_SIZE_REQUEST_CONSTANT_SIZE disables any height-for-width or
  *   width-for-height geometry management for said widget and is the
  *   default return.
  *   It’s important to note that any widget
  *   which trades height-for-width or width-for-height must respond properly
- *   to a for_size value >= -1 passed to #GtkWidgetClass.measure, for both
+ *   to a for_size value >= -1 passed to `GtkWidgetClass.measure`, for both
  *   possible orientations.
  * @measure: Called to obtain the minimum and natural size of the widget,
  *   if the widget does not have a layout manager.
@@ -163,7 +165,7 @@ struct _GtkWidget
  * @mnemonic_activate: Activates the @widget if @group_cycling is
  *   %FALSE, and just grabs the focus if @group_cycling is %TRUE.
  * @grab_focus: Causes @widget to have the keyboard focus for the
- *   #GtkWindow it’s inside.
+ *   `GtkWindow` it’s inside.
  * @focus: Vfunc for gtk_widget_child_focus()
  * @set_focus_child: Sets the focused child of a widget. Must chain up
  * @move_focus: Signal emitted when a change of focus is requested
@@ -725,7 +727,7 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
 
 /**
  * gtk_widget_class_bind_template_callback:
- * @widget_class: a #GtkWidgetClass
+ * @widget_class: a `GtkWidgetClass`
  * @callback: the callback symbol
  *
  * Binds a callback function defined in a template to the @widget_class.
@@ -742,7 +744,7 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
 
 /**
  * gtk_widget_class_bind_template_child:
- * @widget_class: a #GtkWidgetClass
+ * @widget_class: a `GtkWidgetClass`
  * @TypeName: the type name of this widget
  * @member_name: name of the instance member in the instance struct for @data_type
  *
@@ -762,7 +764,7 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
 
 /**
  * gtk_widget_class_bind_template_child_internal:
- * @widget_class: a #GtkWidgetClass
+ * @widget_class: a `GtkWidgetClass`
  * @TypeName: the type name, in CamelCase
  * @member_name: name of the instance member in the instance struct for @data_type
  *
@@ -784,7 +786,7 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
 
 /**
  * gtk_widget_class_bind_template_child_private:
- * @widget_class: a #GtkWidgetClass
+ * @widget_class: a `GtkWidgetClass`
  * @TypeName: the type name of this widget
  * @member_name: name of the instance private member in the private struct for @data_type
  *
@@ -805,7 +807,7 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
 
 /**
  * gtk_widget_class_bind_template_child_internal_private:
- * @widget_class: a #GtkWidgetClass
+ * @widget_class: a `GtkWidgetClass`
  * @TypeName: the type name, in CamelCase
  * @member_name: name of the instance private member on the private struct for @data_type
  *

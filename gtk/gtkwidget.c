@@ -1920,7 +1920,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @y: the y coordinate of the cursor position where the request has
    *   been emitted, relative to @widget's top
    * @keyboard_mode: %TRUE if the tooltip was triggered using the keyboard
-   * @tooltip: a #GtkTooltip
+   * @tooltip: a `GtkTooltip`
    *
    * Emitted when the widgets tooltip is about to be shown.
    *
@@ -3027,7 +3027,7 @@ static guint tick_callback_id;
  * frame or every few frames. The tick callback does not automatically
  * imply a relayout or repaint. If you want a repaint or relayout, and
  * aren’t changing widget properties that would trigger that (for example,
- * changing the text of a #GtkLabel), then you will have to call
+ * changing the text of a `GtkLabel`), then you will have to call
  * [method@Gtk.Widget.queue_resize] or [method@Gtk.Widget.queue_draw]
  * yourself.
  *
@@ -6479,7 +6479,7 @@ gtk_widget_update_pango_context (GtkWidget *widget)
 /**
  * gtk_widget_set_font_options:
  * @widget: a `GtkWidget`
- * @options: (nullable): a #cairo_font_options_t
+ * @options: (nullable): a `cairo_font_options_t`
  *   to unset any previously set default font options
  *
  * Sets the `cairo_font_options_t` used for Pango rendering
@@ -6907,7 +6907,7 @@ gtk_widget_child_focus (GtkWidget       *widget,
  *
  * The default [signal@Gtk.Widget::keynav-failed] handler returns
  * %FALSE for %GTK_DIR_TAB_FORWARD and %GTK_DIR_TAB_BACKWARD.
- * For the other values of #GtkDirectionType it returns %TRUE.
+ * For the other values of `GtkDirectionType` it returns %TRUE.
  *
  * Whenever the default handler returns %TRUE, it also calls
  * [method@Gtk.Widget.error_bell] to notify the user of the
@@ -7773,7 +7773,7 @@ gtk_widget_adjust_baseline_request (GtkWidget *widget,
  * _gtk_widget_list_devices:
  * @widget: a `GtkWidget`
  *
- * Returns the list of pointer #GdkDevices that are currently
+ * Returns the list of pointer `GdkDevice`s that are currently
  * on top of @widget. Free the list
  * with g_free(), the elements are owned by GTK and must
  * not be freed.
@@ -7808,7 +7808,7 @@ _gtk_widget_list_devices (GtkWidget *widget,
  * _gtk_widget_synthesize_crossing:
  * @from: the `GtkWidget` the virtual pointer is leaving.
  * @to: the `GtkWidget` the virtual pointer is moving to.
- * @mode: the #GdkCrossingMode to place on the synthesized events.
+ * @mode: the `GdkCrossingMode` to place on the synthesized events.
  *
  * Generate crossing event(s) on widget state (sensitivity) or GTK grab change.
  */
@@ -11254,7 +11254,7 @@ gtk_widget_class_bind_template_child_full (GtkWidgetClass *widget_class,
 /**
  * gtk_widget_get_template_child:
  * @widget: A `GtkWidget`
- * @widget_type: The #GType to get a template child for
+ * @widget_type: The `GType` to get a template child for
  * @name: The “id” of the child defined in the template XML
  *
  * Fetch an object build from the template XML for @widget_type in
@@ -11427,7 +11427,7 @@ gtk_widget_cancel_event_sequence (GtkWidget             *widget,
 /**
  * gtk_widget_add_controller:
  * @widget: a `GtkWidget`
- * @controller: (transfer full): a #GtkEventController that hasn't been
+ * @controller: (transfer full): a `GtkEventController` that hasn't been
  *   added to a widget yet
  *
  * Adds @controller to @widget so that it will receive events.
@@ -11456,7 +11456,7 @@ gtk_widget_add_controller (GtkWidget          *widget,
 /**
  * gtk_widget_remove_controller:
  * @widget: a `GtkWidget`
- * @controller: (transfer none): a #GtkEventController
+ * @controller: (transfer none): a `GtkEventController`
  *
  * Removes @controller from @widget, so that it doesn't process
  * events anymore.

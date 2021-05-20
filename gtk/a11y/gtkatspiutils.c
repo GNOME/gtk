@@ -28,9 +28,9 @@
 
 /*< private >
  * gtk_accessible_role_to_atspi_role:
- * @role: a #GtkAccessibleRole
+ * @role: a `GtkAccessibleRole`
  *
- * Converts a #GtkAccessibleRole value to the equivalent ATSPI role.
+ * Converts a `GtkAccessibleRole` value to the equivalent ATSPI role.
  *
  * Returns: an #AtspiRole
  */
@@ -282,10 +282,10 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
 
 /*<private>
  * gtk_atspi_role_for_context:
- * @context: a #GtkATContext
+ * @context: a `GtkATContext`
  *
  * Returns a suitable ATSPI role for a context, taking into account
- * both the #GtkAccessibleRole set on the context and the type
+ * both the `GtkAccessibleRole` set on the context and the type
  * of accessible.
  *
  * Returns: an #AtspiRole

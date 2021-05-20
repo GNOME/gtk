@@ -3782,7 +3782,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
   /**
    * GtkFlowBox::move-cursor:
    * @box: the `GtkFlowBox` on which the signal is emitted
-   * @step: the granularity fo the move, as a #GtkMovementStep
+   * @step: the granularity fo the move, as a `GtkMovementStep`
    * @count: the number of @step units to move
    * @extend: whether to extend the selection
    * @modify: whether to modify the selection

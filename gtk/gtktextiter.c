@@ -1370,7 +1370,7 @@ gtk_text_iter_has_tag (const GtkTextIter   *iter,
 
 /**
  * gtk_text_iter_get_tags:
- * @iter: a #GtkTextIter
+ * @iter: a `GtkTextIter`
  *
  * Returns a list of tags that apply to @iter, in ascending order of
  * priority.
@@ -1421,7 +1421,7 @@ gtk_text_iter_get_tags (const GtkTextIter *iter)
  * of text.
  *
  * Non-editable text is “locked” and can’t be changed by the
- * user via #GtkTextView. If no tags applied to this text affect
+ * user via `GtkTextView`. If no tags applied to this text affect
  * editability, @default_setting will be returned.
  *
  * You don’t want to use this function to decide whether text can be
@@ -2490,7 +2490,7 @@ gtk_text_iter_backward_chars (GtkTextIter *iter, int count)
 
 /**
  * gtk_text_iter_forward_text_chars:
- * @iter: a #GtkTextIter
+ * @iter: a `GtkTextIter`
  * @count: number of chars to move
  *
  * Moves forward by @count text characters.
@@ -2513,7 +2513,7 @@ gtk_text_iter_forward_text_chars  (GtkTextIter *iter,
 
 /**
  * gtk_text_iter_backward_text_chars:
- * @iter: a #GtkTextIter
+ * @iter: a `GtkTextIter`
  * @count: number of chars to move
  *
  * Moves backward by @count text characters (paintables, widgets,
