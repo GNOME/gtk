@@ -1370,7 +1370,7 @@ gsk_border_node_get_widths (const GskRenderNode *node)
  *
  * Retrieves the colors of the border.
  *
- * Returns: (transfer none): an array of 4 #GdkRGBA structs
+ * Returns: (transfer none): an array of 4 `GdkRGBA` structs
  *     for the top, right, bottom and left color of the border
  */
 const GdkRGBA *
@@ -1383,7 +1383,7 @@ gsk_border_node_get_colors (const GskRenderNode *node)
 
 /**
  * gsk_border_node_new:
- * @outline: a #GskRoundedRect describing the outline of the border
+ * @outline: a `GskRoundedRect` describing the outline of the border
  * @border_width: (array fixed-size=4): the stroke width of the border on
  *     the top, right, bottom and left side respectively.
  * @border_color: (array fixed-size=4): the color used on the top, right,
@@ -1454,7 +1454,7 @@ gsk_border_node_get_uniform_color (const GskRenderNode *self)
 /**
  * GskTextureNode:
  *
- * A render node for a #GdkTexture.
+ * A render node for a `GdkTexture`.
  */
 struct _GskTextureNode
 {
@@ -3575,7 +3575,7 @@ gsk_clip_node_get_child (const GskRenderNode *node)
 
 /**
  * gsk_clip_node_get_clip:
- * @node: (type GskClipNode): a #GskClipNode
+ * @node: (type GskClipNode): a `GskClipNode`
  *
  * Retrieves the clip rectangle for @node.
  *
@@ -4405,8 +4405,8 @@ font_has_color_glyphs (const PangoFont *font)
 
 /**
  * gsk_text_node_new:
- * @font: the #PangoFont containing the glyphs
- * @glyphs: the #PangoGlyphString to render
+ * @font: the `PangoFont` containing the glyphs
+ * @glyphs: the `PangoGlyphString` to render
  * @color: the foreground color to render with
  * @offset: offset of the baseline
  *
@@ -5067,7 +5067,7 @@ gsk_gl_shader_node_diff (GskRenderNode  *node1,
 
 /**
  * gsk_gl_shader_node_new:
- * @shader: the #GskGLShader
+ * @shader: the `GskGLShader`
  * @bounds: the rectangle to render the shader into
  * @args: Arguments for the uniforms
  * @children: (array length=n_children): array of child nodes, these will
@@ -5171,7 +5171,7 @@ gsk_gl_shader_node_get_child (const GskRenderNode *node,
  *
  * Gets shader code for the node.
  *
- * Returns: (transfer none): the #GskGLShader shader
+ * Returns: (transfer none): the `GskGLShader` shader
  */
 GskGLShader *
 gsk_gl_shader_node_get_shader (const GskRenderNode *node)
@@ -5187,7 +5187,7 @@ gsk_gl_shader_node_get_shader (const GskRenderNode *node)
  *
  * Gets args for the node.
  *
- * Returns: (transfer none): A #GBytes with the uniform arguments
+ * Returns: (transfer none): A `GBytes` with the uniform arguments
  */
 GBytes *
 gsk_gl_shader_node_get_args (const GskRenderNode *node)

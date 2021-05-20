@@ -633,7 +633,7 @@ gsk_ngl_command_queue_end_draw (GskNglCommandQueue *self)
 
 /**
  * gsk_ngl_command_queue_split_draw:
- * @self a #GskNglCommandQueue
+ * @self a `GskNglCommandQueue`
  *
  * This function is like calling gsk_ngl_command_queue_end_draw() followed by
  * a gsk_ngl_command_queue_begin_draw() with the same parameters as a
@@ -928,7 +928,7 @@ gsk_ngl_command_queue_sort_batches (GskNglCommandQueue *self)
 
 /**
  * gsk_ngl_command_queue_execute:
- * @self: a #GskNglCommandQueue
+ * @self: a `GskNglCommandQueue`
  * @surface_height: the height of the backing surface
  * @scale_factor: the scale factor of the backing surface
  * #scissor: (nullable): the scissor clip if any
@@ -1182,7 +1182,7 @@ gsk_ngl_command_queue_begin_frame (GskNglCommandQueue *self)
 
 /**
  * gsk_ngl_command_queue_end_frame:
- * @self: a #GskNglCommandQueue
+ * @self: a `GskNglCommandQueue`
  *
  * This function performs cleanup steps that need to be done after
  * a frame has finished. This is not performed as part of the command

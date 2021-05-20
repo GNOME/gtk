@@ -245,11 +245,11 @@ gsk_renderer_get_surface (GskRenderer *renderer)
 
 /*< private >
  * gsk_renderer_get_root_node:
- * @renderer: a #GskRenderer
+ * @renderer: a `GskRenderer`
  *
- * Retrieves the #GskRenderNode used by @renderer.
+ * Retrieves the `GskRenderNode` used by @renderer.
  *
- * Returns: (transfer none) (nullable): a #GskRenderNode
+ * Returns: (transfer none) (nullable): a `GskRenderNode`
  */
 GskRenderNode *
 gsk_renderer_get_root_node (GskRenderer *renderer)
@@ -478,9 +478,9 @@ gsk_renderer_render (GskRenderer          *renderer,
 
 /*< private >
  * gsk_renderer_get_profiler:
- * @renderer: a #GskRenderer
+ * @renderer: a `GskRenderer`
  *
- * Retrieves a pointer to the GskProfiler instance of the renderer.
+ * Retrieves a pointer to the `GskProfiler` instance of the renderer.
  *
  * Returns: (transfer none): the profiler
  */

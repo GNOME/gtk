@@ -29,7 +29,7 @@
  * @target: the target buffer such as %GL_ARRAY_BUFFER or %GL_UNIFORM_BUFFER
  * @element_size: the size of elements within the buffer
  *
- * Creates a new #GskNglBuffer which can be used to deliver data to shaders
+ * Creates a new `GskNglBuffer` which can be used to deliver data to shaders
  * within a GLSL program. You can use this to store vertices such as with
  * %GL_ARRAY_BUFFER or uniform data with %GL_UNIFORM_BUFFER.
  */

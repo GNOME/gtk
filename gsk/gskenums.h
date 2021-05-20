@@ -26,7 +26,7 @@
  * GskRenderNodeType:
  * @GSK_NOT_A_RENDER_NODE: Error type. No node will ever have this type.
  * @GSK_CONTAINER_NODE: A node containing a stack of children
- * @GSK_CAIRO_NODE: A node drawing a #cairo_surface_t
+ * @GSK_CAIRO_NODE: A node drawing a `cairo_surface_t`
  * @GSK_COLOR_NODE: A node drawing a single color rectangle
  * @GSK_LINEAR_GRADIENT_NODE: A node drawing a linear gradient
  * @GSK_REPEATING_LINEAR_GRADIENT_NODE: A node drawing a repeating linear gradient
@@ -34,7 +34,7 @@
  * @GSK_REPEATING_RADIAL_GRADIENT_NODE: A node drawing a repeating radial gradient
  * @GSK_CONIC_GRADIENT_NODE: A node drawing a conic gradient
  * @GSK_BORDER_NODE: A node stroking a border around an area
- * @GSK_TEXTURE_NODE: A node drawing a #GdkTexture
+ * @GSK_TEXTURE_NODE: A node drawing a `GdkTexture`
  * @GSK_INSET_SHADOW_NODE: A node drawing an inset shadow
  * @GSK_OUTSET_SHADOW_NODE: A node drawing an outset shadow
  * @GSK_TRANSFORM_NODE: A node that renders its child after applying a matrix transform
@@ -158,7 +158,7 @@ typedef enum {
  * @GSK_CORNER_BOTTOM_RIGHT: The bottom right corner
  * @GSK_CORNER_BOTTOM_LEFT: The bottom left corner
  *
- * The corner indices used by #GskRoundedRect.
+ * The corner indices used by `GskRoundedRect`.
  */
 typedef enum {
   GSK_CORNER_TOP_LEFT,

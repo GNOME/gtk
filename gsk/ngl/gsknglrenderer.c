@@ -66,7 +66,7 @@ G_DEFINE_TYPE (GskNglRenderer, gsk_ngl_renderer, GSK_TYPE_RENDERER)
 /**
  * gsk_ngl_renderer_new:
  *
- * Creates a new #GskRenderer using the new OpenGL renderer.
+ * Creates a new `GskRenderer` using the new OpenGL renderer.
  *
  * Returns: a new NGL renderer
  *

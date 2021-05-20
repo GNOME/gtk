@@ -96,7 +96,7 @@ gsk_transform_has_class (GskTransform            *self,
  *   the result's category together with &next's category
  * @next: (transfer full) (nullable): Next transform to multiply with
  *
- * Returns: (transfer full): the newly created #GskTransform
+ * Returns: (transfer full): the newly created `GskTransform`
  */
 static gpointer
 gsk_transform_alloc (const GskTransformClass *transform_class,
@@ -1402,7 +1402,7 @@ gsk_transform_print (GskTransform *self,
 
 /**
  * gsk_transform_to_string:
- * @self: (nullable): a #GskTransform
+ * @self: (nullable): a `GskTransform`
  *
  * Converts a matrix into a string that is suitable for printing.
  *
@@ -1452,7 +1452,7 @@ gsk_transform_to_matrix (GskTransform      *self,
 
 /**
  * gsk_transform_to_2d:
- * @self: a 2D #GskTransform
+ * @self: a 2D `GskTransform`
  * @out_xx: (out): return location for the xx member
  * @out_yx: (out): return location for the yx member
  * @out_xy: (out): return location for the xy member
@@ -1736,7 +1736,7 @@ gsk_transform_equal (GskTransform *first,
 
 /**
  * gsk_transform_get_category:
- * @self: (nullable): A #GskTransform
+ * @self: (nullable): A `GskTransform`
  *
  * Returns the category this transform belongs to.
  *

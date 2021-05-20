@@ -4548,11 +4548,10 @@ gsk_gl_renderer_init (GskGLRenderer *self)
 /**
  * gsk_gl_renderer_new:
  *
- * Creates a new #GskRenderer using OpenGL. This is the default renderer
- * used by GTK.
+ * Creates a new `GskRenderer` using OpenGL.
  *
  * Returns: a new GL renderer
- **/
+ */
 GskRenderer *
 gsk_gl_renderer_new (void)
 {

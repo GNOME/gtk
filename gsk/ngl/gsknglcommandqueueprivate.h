@@ -129,12 +129,12 @@ typedef struct _GskNglCommandDraw
   guint vbo_offset;
 
   /* The offset within the array of uniform changes to be made containing
-   * @uniform_count #GskNglCommandUniform elements to apply.
+   * @uniform_count `GskNglCommandUniform` elements to apply.
    */
   guint uniform_offset;
 
   /* The offset within the array of bind changes to be made containing
-   * @bind_count #GskNglCommandBind elements to apply.
+   * @bind_count `GskNglCommandBind` elements to apply.
    */
   guint bind_offset;
 } GskNglCommandDraw;

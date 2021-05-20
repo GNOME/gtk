@@ -3019,7 +3019,7 @@ render_node_print (Printer       *p,
 
 /**
  * gsk_render_node_serialize:
- * @node: a #GskRenderNode
+ * @node: a `GskRenderNode`
  *
  * Serializes the @node for later deserialization via
  * gsk_render_node_deserialize(). No guarantees are made about the format
@@ -3031,7 +3031,7 @@ render_node_print (Printer       *p,
  * The intended use of this functions is testing, benchmarking and debugging.
  * The format is not meant as a permanent storage format.
  *
- * Returns: a #GBytes representing the node.
+ * Returns: a `GBytes` representing the node.
  **/
 GBytes *
 gsk_render_node_serialize (GskRenderNode *node)

@@ -35,7 +35,7 @@ G_BEGIN_DECLS
 /**
  * GskShaderArgsBuilder:
  *
- * An object to build the uniforms data for a #GskGLShader.
+ * An object to build the uniforms data for a `GskGLShader`.
  */
 typedef struct _GskShaderArgsBuilder GskShaderArgsBuilder;
 

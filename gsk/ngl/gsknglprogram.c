@@ -80,7 +80,7 @@ gsk_ngl_program_init (GskNglProgram *self)
 
 /**
  * gsk_ngl_program_add_uniform:
- * @self: a #GskNglProgram
+ * @self: a `GskNglProgram`
  * @name: the name of the uniform such as "u_source"
  * @key: the identifier to use for the uniform
  *
@@ -134,7 +134,7 @@ gsk_ngl_program_add_uniform (GskNglProgram *self,
 
 /**
  * gsk_ngl_program_delete:
- * @self: a #GskNglProgram
+ * @self: a `GskNglProgram`
  *
  * Deletes the GLSL program.
  *
@@ -153,7 +153,7 @@ gsk_ngl_program_delete (GskNglProgram *self)
 
 /**
  * gsk_ngl_program_uniforms_added:
- * @self: a #GskNglProgram
+ * @self: a `GskNglProgram`
  * @has_attachments: if any uniform is for a bind/texture attachment
  *
  * This function should be called after all of the uniforms ahve
