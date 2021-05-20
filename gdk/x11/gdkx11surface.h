@@ -80,9 +80,9 @@ void     gdk_x11_surface_set_frame_sync_enabled (GdkSurface *surface,
 
 /**
  * GDK_SURFACE_XDISPLAY:
- * @win: a #GdkSurface.
+ * @win: a `GdkSurface`
  *
- * Returns the display of a #GdkSurface.
+ * Returns the display of a `GdkSurface`.
  *
  * Returns: an Xlib Display*.
  */
@@ -90,9 +90,9 @@ void     gdk_x11_surface_set_frame_sync_enabled (GdkSurface *surface,
 
 /**
  * GDK_SURFACE_XID:
- * @win: a #GdkSurface.
+ * @win: a `GdkSurface`
  *
- * Returns the X window belonging to a #GdkSurface.
+ * Returns the X window belonging to a `GdkSurface`.
  *
  * Returns: the Xlib Window of @win.
  */

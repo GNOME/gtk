@@ -394,7 +394,7 @@ gdk_content_provider_union_init (GdkContentProviderUnion *self)
 /**
  * gdk_content_provider_new_union:
  * @providers: (nullable) (array length=n_providers) (transfer full):
- *   The #GdkContentProviders to present the union of
+ *   The `GdkContentProvider`s to present the union of
  * @n_providers: the number of providers
  *
  * Creates a content provider that represents all the given @providers.

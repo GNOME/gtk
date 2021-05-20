@@ -69,9 +69,9 @@ Cursor        gdk_x11_display_get_xcursor      (GdkDisplay  *display,
 
 /**
  * GDK_DISPLAY_XDISPLAY:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  *
- * Returns the display of a #GdkDisplay.
+ * Returns the display of a `GdkDisplay`.
  *
  * Returns: an Xlib Display*
  */

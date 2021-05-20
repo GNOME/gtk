@@ -36,7 +36,7 @@ typedef struct _GdkContentSerializer GdkContentSerializer;
 
 /**
  * GdkContentSerializeFunc:
- * @serializer: a #GdkContentSerializer
+ * @serializer: a `GdkContentSerializer`
  *
  * The type of a function that can be registered with gdk_content_register_serializer().
  *

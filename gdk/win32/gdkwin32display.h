@@ -62,7 +62,7 @@ void       gdk_win32_display_set_cursor_theme    (GdkDisplay  *display,
  * @GDK_WIN32_MESSAGE_FILTER_CONTINUE: event not handled, continue processing.
  * @GDK_WIN32_MESSAGE_FILTER_REMOVE: event handled, terminate processing.
  *
- * Specifies the result of applying a #GdkWin32MessageFilterFunc to a Windows message.
+ * Specifies the result of applying a `GdkWin32MessageFilterFunc` to a Windows message.
  */
 typedef enum {
   GDK_WIN32_MESSAGE_FILTER_CONTINUE,	  /* Message not handled, continue processing */
@@ -79,12 +79,12 @@ typedef enum {
  * processed by GDK Win32 backend.
  *
  * The @return_value must be set, if this function returns
- * #GDK_WIN32_MESSAGE_FILTER_REMOVE, otherwise it is ignored.
+ * `GDK_WIN32_MESSAGE_FILTER_REMOVE`, otherwise it is ignored.
  *
- * The event translation and message filtering are orthogonal - 
+ * The event translation and message filtering are orthogonal -
  * if a filter wants a GDK event queued, it should do that itself.
  *
- * Returns: a #GdkWin32MessageFilterReturn value.
+ * Returns: a `GdkWin32MessageFilterReturn` value.
  */
 typedef GdkWin32MessageFilterReturn (*GdkWin32MessageFilterFunc) (GdkWin32Display *display,
                                                                   MSG             *message,

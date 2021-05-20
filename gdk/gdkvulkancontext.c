@@ -674,7 +674,7 @@ gdk_vulkan_context_get_physical_device (GdkVulkanContext *context)
 
 /**
  * gdk_vulkan_context_get_device:
- * @context: a #GdkVulkanContext
+ * @context: a `GdkVulkanContext`
  *
  * Gets the Vulkan device that this context is using.
  *

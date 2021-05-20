@@ -4645,7 +4645,7 @@ gdk_wayland_surface_get_inhibitor (GdkWaylandSurface *impl,
 
 /*
  * gdk_wayland_surface_inhibit_shortcuts:
- * @surface: (type GdkWaylandSurface): a #GdkSurface
+ * @surface: (type GdkWaylandSurface): a `GdkSurface`
  * @seat: the seat to inhibit
  *
  * Inhibits the shortcuts coming from the given @seat.
@@ -4675,7 +4675,7 @@ gdk_wayland_surface_inhibit_shortcuts (GdkSurface *surface,
 
 /*
  * gdk_wayland_surface_restore_shortcuts:
- * @surface: (type GdkWaylandSurface): a #GdkSurface
+ * @surface: (type GdkWaylandSurface): a `GdkSurface`
  * @seat: the seat to inhibit
  *
  * Restores the shortcuts on the given @seat inhibited by calling

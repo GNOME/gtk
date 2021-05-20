@@ -258,7 +258,7 @@ gdk_event_get_type (void)
  * @instance_size: the size of the instance of a GdkEvent subclass
  * @instance_init: (nullable): the function to initialize the instance data
  * @finalize: (nullable): the function to free the instance data
- * @get_state: (nullable): the function to retrieve the #GdkModifierType
+ * @get_state: (nullable): the function to retrieve the `GdkModifierType`:w
  *   associated to the event
  * @get_position: (nullable): the function to retrieve the event coordinates
  * @get_sequence: (nullable): the function to retrieve the event sequence
@@ -358,7 +358,7 @@ static GType gdk_event_types[GDK_EVENT_LAST];
  * Similarly to %G_DEFINE_TYPE_WITH_CODE, this macro will generate a `get_type()`
  * function that registers the event type.
  *
- * You can specify code to be run after the type registration; the #GType of
+ * You can specify code to be run after the type registration; the `GType` of
  * the event is available in the `gdk_define_event_type_id` variable.
  */
 #define GDK_DEFINE_EVENT_TYPE(TypeName, type_name, type_info, _C_) \
@@ -382,8 +382,8 @@ type_name ## _get_type (void) \
 /*< private >
  * gdk_event_alloc:
  * @event_type: the `GdkEvent`Type to allocate
- * @surface: (nullable): the #GdkSurface of the event
- * @device: (nullable): the #GdkDevice of the event
+ * @surface: (nullable): the `GdkSurface` of the event
+ * @device: (nullable): the `GdkDevice` of the event
  * @time_: the event serial
  *
  * Allocates a `GdkEvent` for the given @event_type, and sets its
@@ -496,14 +496,13 @@ _gdk_event_emit (GdkEvent *event)
 
 /**
  * _gdk_event_queue_find_first:
- * @display: a #GdkDisplay
- * 
+ * @display: a `GdkDisplay`
+ *
  * Find the first event on the queue that is not still
  * being filled in.
- * 
- * Returns: (nullable): Pointer to the list node for that event, or
- *   %NULL.
- **/
+ *
+ * Returns: (nullable): Pointer to the list node for that event
+ */
 GList*
 _gdk_event_queue_find_first (GdkDisplay *display)
 {
@@ -537,13 +536,13 @@ _gdk_event_queue_find_first (GdkDisplay *display)
 
 /**
  * _gdk_event_queue_append:
- * @display: a #GdkDisplay
- * @event: Event to append.
- * 
+ * @display: a `GdkDisplay`
+ * @event: Event to append
+ *
  * Appends an event onto the tail of the event queue.
  *
  * Returns: the newly appended list node.
- **/
+ */
 GList *
 _gdk_event_queue_append (GdkDisplay *display,
 			 GdkEvent   *event)
@@ -555,11 +554,11 @@ _gdk_event_queue_append (GdkDisplay *display,
 
 /*
  * _gdk_event_queue_remove_link:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  * @node: node to remove
  *
  * Removes a specified list node from the event queue.
- **/
+ */
 void
 _gdk_event_queue_remove_link (GdkDisplay *display,
 			      GList      *node)
@@ -569,12 +568,12 @@ _gdk_event_queue_remove_link (GdkDisplay *display,
 
 /*
  * _gdk_event_unqueue:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  *
  * Removes and returns the first event from the event
  * queue that is not still being filled in.
  *
- * Returns: (nullable) (transfer full): the event
+ * Returns: (nullable): the event
  */
 GdkEvent*
 _gdk_event_unqueue (GdkDisplay *display)
@@ -1180,7 +1179,7 @@ gdk_event_get_event_type (GdkEvent *event)
  *
  * Extracts the surface associated with an event.
  *
- * Returns: (transfer none): The #GdkSurface associated with the event
+ * Returns: (transfer none): The `GdkSurface` associated with the event
  */
 GdkSurface *
 gdk_event_get_surface (GdkEvent *event)
@@ -1196,7 +1195,7 @@ gdk_event_get_surface (GdkEvent *event)
  *
  * Returns the seat that originated the event.
  *
- * Returns: (nullable) (transfer none): a #GdkSeat.
+ * Returns: (nullable) (transfer none): a `GdkSeat`.
  */
 GdkSeat *
 gdk_event_get_seat (GdkEvent *event)
@@ -1212,7 +1211,7 @@ gdk_event_get_seat (GdkEvent *event)
  *
  * Returns the device of an event.
  *
- * Returns: (nullable) (transfer none): a #GdkDevice.
+ * Returns: (nullable) (transfer none): a `GdkDevice`
  */
 GdkDevice *
 gdk_event_get_device (GdkEvent *event)
@@ -1272,7 +1271,7 @@ gdk_event_get_time (GdkEvent *event)
  *
  * Retrieves the display associated to the @event.
  *
- * Returns: (transfer none) (nullable): a #GdkDisplay
+ * Returns: (transfer none) (nullable): a `GdkDisplay`
  */
 GdkDisplay *
 gdk_event_get_display (GdkEvent *event)

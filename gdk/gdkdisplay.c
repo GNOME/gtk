@@ -1141,13 +1141,13 @@ gdk_display_create_surface (GdkDisplay     *display,
                                                           x, y, width, height);
 }
 
-/**
+/*< private >
  * gdk_display_get_keymap:
  * @display: the `GdkDisplay`
  *
- * Returns the #GdkKeymap attached to @display.
+ * Returns the `GdkKeymap` attached to @display.
  *
- * Returns: (transfer none): the #GdkKeymap attached to @display.
+ * Returns: (transfer none): the `GdkKeymap` attached to @display.
  */
 GdkKeymap *
 gdk_display_get_keymap (GdkDisplay *display)
@@ -1159,8 +1159,8 @@ gdk_display_get_keymap (GdkDisplay *display)
 
 /*< private >
  * gdk_display_make_gl_context_current:
- * @display: a #GdkDisplay
- * @context: (optional): a #GdkGLContext
+ * @display: a `GdkDisplay`
+ * @context: (optional): a `GdkGLContext`
  *
  * Makes the given @context the current GL context, or unsets
  * the current GL context if @context is %NULL.
@@ -1365,7 +1365,7 @@ gdk_display_list_seats (GdkDisplay *display)
  * You can listen to the GListModel::items-changed signal on
  * this list to monitor changes to the monitor of this display.
  *
- * Returns: (transfer none): a #GListModel of `GdkMonitor`
+ * Returns: (transfer none): a `GListModel` of `GdkMonitor`
  */
 GListModel *
 gdk_display_get_monitors (GdkDisplay *self)

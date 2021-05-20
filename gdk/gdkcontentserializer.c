@@ -533,7 +533,7 @@ serialize_not_found (GdkContentSerializer *serializer)
  * @mime_type: the mime type to serialize to
  * @value: the content to serialize
  * @io_priority: the I/O priority of the operation
- * @cancellable: (nullable): optional #GCancellable object
+ * @cancellable: (nullable): optional `GCancellable` object
  * @callback: (scope async): callback to call when the operation is done
  * @user_data: (closure): data to pass to the callback function
  *

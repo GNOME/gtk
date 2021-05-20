@@ -45,9 +45,9 @@ struct _GdkContentProvider
 
 /**
  * GdkContentProviderClass:
- * @content_changed: Signal class closure for #GdkContentProvider::content-changed
+ * @content_changed: Signal class closure for `GdkContentProvider::content-changed`
  *
- * Class structure for #GdkContentProvider.
+ * Class structure for `GdkContentProvider`.
  */
 struct _GdkContentProviderClass
 {

@@ -80,7 +80,7 @@ typedef enum {
  * Note that apart from the [vfunc@Gdk.PaintableInterface.snapshot] function,
  * no virtual function of this interface is mandatory to implement, though it
  * is a good idea to implement [vfunc@Gdk.PaintableInterface.get_current_image]
- * for non-static paintables and #GdkPaintableInterface.get_flags() if the
+ * for non-static paintables and [vfunc@Gdk.PaintableInterface.get_flags] if the
  * image is not dynamic as the default implementation returns no flags and
  * that will make the implementation likely quite slow.
  */

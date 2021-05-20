@@ -661,7 +661,7 @@ gdk_empty_paintable_init (GdkEmptyPaintable *self)
  * Returns a paintable that has the given intrinsic size and draws nothing.
  *
  * This is often useful for implementing the
- * #GdkPaintableInterface.get_current_image() virtual function
+ * [vfunc@Gdk.Paintable.get_current_image] virtual function
  * when the paintable is in an incomplete state (like a
  * [class@Gtk.MediaStream] before receiving the first frame).
  *

@@ -26,9 +26,9 @@
 /**
  * gdk_cairo_set_source_rgba:
  * @cr: a cairo context
- * @rgba: a #GdkRGBA
+ * @rgba: a `GdkRGBA`
  *
- * Sets the specified #GdkRGBA as the source color of @cr.
+ * Sets the specified `GdkRGBA` as the source color of @cr.
  */
 void
 gdk_cairo_set_source_rgba (cairo_t       *cr,
@@ -47,7 +47,7 @@ gdk_cairo_set_source_rgba (cairo_t       *cr,
 /**
  * gdk_cairo_rectangle:
  * @cr: a cairo context
- * @rectangle: a #GdkRectangle
+ * @rectangle: a `GdkRectangle`
  *
  * Adds the given rectangle to the current path of @cr.
  */
@@ -66,7 +66,7 @@ gdk_cairo_rectangle (cairo_t            *cr,
 /**
  * gdk_cairo_region:
  * @cr: a cairo context
- * @region: a #cairo_region_t
+ * @region: a `cairo_region_t`
  *
  * Adds the given region to the current path of @cr.
  */
@@ -185,7 +185,7 @@ gdk_cairo_surface_paint_pixbuf (cairo_surface_t *surface,
 /**
  * gdk_cairo_set_source_pixbuf:
  * @cr: a cairo context
- * @pixbuf: a #GdkPixbuf
+ * @pixbuf: a `GdkPixbuf`
  * @pixbuf_x: X coordinate of location to place upper left corner of @pixbuf
  * @pixbuf_y: Y coordinate of location to place upper left corner of @pixbuf
  *
@@ -232,7 +232,7 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
  * You must explicitly check the return value of you want to handle
  * that case.
  *
- * Returns: %TRUE if the extents fit in a #GdkRectangle, %FALSE if not
+ * Returns: %TRUE if the extents fit in a `GdkRectangle`, %FALSE if not
  */
 gboolean
 _gdk_cairo_surface_extents (cairo_surface_t *surface,

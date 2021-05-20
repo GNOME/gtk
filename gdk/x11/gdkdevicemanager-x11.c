@@ -64,17 +64,17 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
   g_error ("XInput2 support not found on display");
 }
 
-/*
+/**
  * gdk_x11_device_manager_lookup:
- * @device_manager: (type GdkX11DeviceManagerXI2): a #GdkDeviceManager
+ * @device_manager: (type GdkX11DeviceManagerXI2): a `GdkDeviceManager`
  * @device_id: a device ID, as understood by the XInput2 protocol
  *
- * Returns the #GdkDevice that wraps the given device ID.
+ * Returns the `GdkDevice` that wraps the given device ID.
  *
  * Returns: (transfer none) (nullable) (type GdkX11DeviceXI2): The
- *   `GdkDevice` wrapping the device ID,
- *   or %NULL if the given ID doesn’t currently represent a device.
- **/
+ *   `GdkDevice` wrapping the device ID, or %NULL if the given ID
+ *   doesn’t currently represent a device.
+ */
 GdkDevice *
 gdk_x11_device_manager_lookup (GdkX11DeviceManagerXI2 *device_manager,
 			       int                     device_id)

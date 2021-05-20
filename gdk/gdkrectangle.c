@@ -149,9 +149,9 @@ gdk_rectangle_intersect (const GdkRectangle *src1,
  * @x: X coordinate
  * @y: Y coordinate
  *
- * Returns #TRUE if @rect contains the point described by @x and @y.
+ * Returns %TRUE if @rect contains the point described by @x and @y.
  *
- * Returns: #TRUE if @rect contains the point
+ * Returns: %TRUE if @rect contains the point
  **/
 gboolean
 gdk_rectangle_contains_point (const GdkRectangle *rect,

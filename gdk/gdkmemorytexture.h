@@ -79,7 +79,7 @@ typedef enum {
  * This is the format provided by [method@Gdk.Texture.download].
  * It is equal to %CAIRO_FORMAT_ARGB32.
  *
- * Be aware that unlike the #GdkMemoryFormat values, this format
+ * Be aware that unlike the `GdkMemoryFormat` values, this format
  * is different for different endianness.
  */
 #if G_BYTE_ORDER == G_LITTLE_ENDIAN

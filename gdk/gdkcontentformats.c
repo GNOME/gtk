@@ -411,7 +411,7 @@ gdk_content_formats_match_mime_type (const GdkContentFormats *first,
  *
  * Checks if a given `GType` is part of the given @formats.
  *
- * Returns: %TRUE if the #GType was found
+ * Returns: %TRUE if the `GType` was found
  */
 gboolean
 gdk_content_formats_contain_gtype (const GdkContentFormats *formats,
@@ -458,7 +458,7 @@ gdk_content_formats_contain_mime_type (const GdkContentFormats *formats,
  *
  * Gets the `GType`s included in @formats.
  *
- * Note that @formats may not contain any #GTypes, in particular when
+ * Note that @formats may not contain any `GType`s, in particular when
  * they are empty. In that case %NULL will be returned.
  *
  * Returns: (transfer none) (nullable) (array length=n_gtypes zero-terminated=1):
