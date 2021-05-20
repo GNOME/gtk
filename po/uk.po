@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-04-11 18:24+0000\n"
-"PO-Revision-Date: 2021-04-11 21:39+0300\n"
+"POT-Creation-Date: 2021-05-16 22:32+0000\n"
+"PO-Revision-Date: 2021-05-20 10:26+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -459,24 +459,22 @@ msgstr "Не знайдено сумісного формату передава
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Не вдалося декодувати дані з типом MIME «%s»"
 
-#: gdk/wayland/gdkglcontext-wayland.c:191 gdk/win32/gdkglcontext-win32.c:934
-#: gdk/win32/gdkglcontext-win32.c:975 gdk/x11/gdkglcontext-x11.c:581
-#: gdk/x11/gdkglcontext-x11.c:631
+#: gdk/wayland/gdkglcontext-wayland.c:191 gdk/win32/gdkglcontext-win32.c:974
+#: gdk/win32/gdkglcontext-win32.c:1015
 msgid "Unable to create a GL context"
 msgstr "Неможливо створити вміст GL"
 
-#: gdk/wayland/gdkglcontext-wayland.c:463 gdk/win32/gdkglcontext-win32.c:775
-#: gdk/win32/gdkglcontext-win32.c:785 gdk/win32/gdkglcontext-win32.c:900
-#: gdk/x11/gdkglcontext-x11.c:879
+#: gdk/wayland/gdkglcontext-wayland.c:489 gdk/win32/gdkglcontext-win32.c:815
+#: gdk/win32/gdkglcontext-win32.c:825 gdk/win32/gdkglcontext-win32.c:940
 msgid "No available configurations for the given pixel format"
 msgstr "Немає доступних налаштувань для заданого формату точок"
 
-#: gdk/wayland/gdkglcontext-wayland.c:488 gdk/win32/gdkglcontext-win32.c:1048
-#: gdk/x11/gdkglcontext-x11.c:1182
+#: gdk/wayland/gdkglcontext-wayland.c:514 gdk/win32/gdkglcontext-win32.c:1088
+#: gdk/x11/gdkglcontext-x11.c:94
 msgid "No GL implementation is available"
 msgstr "Немає жодної реалізації GL"
 
-#: gdk/wayland/gdkglcontext-wayland.c:496
+#: gdk/wayland/gdkglcontext-wayland.c:522
 msgid "Core GL is not available on EGL implementation"
 msgstr "«Core GL» недоступний у реалізації EGL"
 
@@ -664,17 +662,17 @@ msgstr "Помилка GlobalLock(): "
 msgid "GlobalAlloc() failed: "
 msgstr "Помилка GlobalAlloc(): "
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:290
+#: gdk/x11/gdkapplaunchcontext-x11.c:295
 #, c-format
 msgid "Starting “%s”"
 msgstr "Запускання «%s»"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:303
+#: gdk/x11/gdkapplaunchcontext-x11.c:308
 #, c-format
 msgid "Opening “%s”"
 msgstr "Відкриваємо «%s»"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:308
+#: gdk/x11/gdkapplaunchcontext-x11.c:313
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
@@ -691,11 +689,6 @@ msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr ""
 "Не вдалося зберегти буфер обміну. Немає активної програми для керування "
 "буфером обміну."
-
-#: gdk/x11/gdkglcontext-x11.c:907
-#, c-format
-msgid "No available configurations for the given RGBA pixel format"
-msgstr "Немає доступних налаштувань для заданого формату точок RGBA"
 
 #: gdk/x11/gdkselectioninputstream-x11.c:462
 #, c-format
@@ -1532,7 +1525,7 @@ msgstr "Текст може не показуватись усередині «%
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:771
+#: gtk/gtkcalendar.c:768
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1540,7 +1533,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:809
+#: gtk/gtkcalendar.c:806
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1550,7 +1543,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1405
+#: gtk/gtkcalendar.c:1402
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1565,7 +1558,7 @@ msgstr "%Y"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1442
+#: gtk/gtkcalendar.c:1439
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1579,7 +1572,7 @@ msgstr "%d"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#: gtk/gtkcalendar.c:1506
+#: gtk/gtkcalendar.c:1503
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1943,7 +1936,7 @@ msgstr "_Праве:"
 msgid "Paper Margins"
 msgstr "Поля сторінки"
 
-#: gtk/gtkentry.c:3734
+#: gtk/gtkentry.c:3736
 msgid "Insert Emoji"
 msgstr "Вставити емодзі"
 
@@ -2010,10 +2003,10 @@ msgstr "Файл з такою назвою вже існує"
 #: gtk/gtkfilechoosernative.c:511 gtk/gtkfilechoosernative.c:582
 #: gtk/gtkfilechooserwidget.c:1209 gtk/gtkfilechooserwidget.c:5767
 #: gtk/gtkmessagedialog.c:166 gtk/gtkmessagedialog.c:175
-#: gtk/gtkmountoperation.c:616 gtk/gtkpagesetupunixdialog.c:283
+#: gtk/gtkmountoperation.c:610 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:643 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:823
-#: gtk/gtkwindow.c:6105 gtk/inspector/css-editor.c:248
+#: gtk/gtkwindow.c:6136 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1245 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
@@ -2021,8 +2014,8 @@ msgid "_Cancel"
 msgstr "_Скасувати"
 
 #: gtk/gtkfilechoosernative.c:512 gtk/gtkfilechoosernative.c:576
-#: gtk/gtkplacessidebar.c:3124 gtk/gtkplacessidebar.c:3209
-#: gtk/gtkplacesview.c:1647
+#: gtk/gtkplacessidebar.c:3127 gtk/gtkplacessidebar.c:3212
+#: gtk/gtkplacesview.c:1658
 msgid "_Open"
 msgstr "_Відкрити"
 
@@ -2104,7 +2097,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Якщо вилучити об'єкт, його буде втрачено назавжди."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5449 gtk/gtktext.c:6047 gtk/gtktextview.c:8753
+#: gtk/gtklabel.c:5471 gtk/gtktext.c:6049 gtk/gtktextview.c:8756
 msgid "_Delete"
 msgstr "В_илучити"
 
@@ -2132,8 +2125,8 @@ msgstr "Копіювати _адресу"
 msgid "_Add to Bookmarks"
 msgstr "_Додати до закладок"
 
-#: gtk/gtkfilechooserwidget.c:1822 gtk/gtkplacessidebar.c:2306
-#: gtk/gtkplacessidebar.c:3245 gtk/ui/gtkfilechooserwidget.ui:464
+#: gtk/gtkfilechooserwidget.c:1822 gtk/gtkplacessidebar.c:2309
+#: gtk/gtkplacessidebar.c:3248 gtk/ui/gtkfilechooserwidget.ui:464
 msgid "_Rename"
 msgstr "Пере_йменувати"
 
@@ -2280,7 +2273,7 @@ msgstr "Електронна таблиця"
 msgid "Unknown"
 msgstr "Невідомо"
 
-#: gtk/gtkfilechooserwidget.c:4579 gtk/gtkplacessidebar.c:1023
+#: gtk/gtkfilechooserwidget.c:4579 gtk/gtkplacessidebar.c:1026
 msgid "Home"
 msgstr "Домівка"
 
@@ -2376,27 +2369,27 @@ msgstr "Варіанти символів"
 msgid "OpenGL context creation failed"
 msgstr "Не вдалося створити контекст OpenGL"
 
-#: gtk/gtklabel.c:5446 gtk/gtktext.c:6035 gtk/gtktextview.c:8741
+#: gtk/gtklabel.c:5468 gtk/gtktext.c:6037 gtk/gtktextview.c:8744
 msgid "Cu_t"
 msgstr "Ви_різати"
 
-#: gtk/gtklabel.c:5447 gtk/gtktext.c:6039 gtk/gtktextview.c:8745
+#: gtk/gtklabel.c:5469 gtk/gtktext.c:6041 gtk/gtktextview.c:8748
 msgid "_Copy"
 msgstr "_Копіювати"
 
-#: gtk/gtklabel.c:5448 gtk/gtktext.c:6043 gtk/gtktextview.c:8749
+#: gtk/gtklabel.c:5470 gtk/gtktext.c:6045 gtk/gtktextview.c:8752
 msgid "_Paste"
 msgstr "Вст_авити"
 
-#: gtk/gtklabel.c:5454 gtk/gtktext.c:6056 gtk/gtktextview.c:8774
+#: gtk/gtklabel.c:5476 gtk/gtktext.c:6058 gtk/gtktextview.c:8777
 msgid "Select _All"
 msgstr "Виді_лити все"
 
-#: gtk/gtklabel.c:5459
+#: gtk/gtklabel.c:5481
 msgid "_Open Link"
 msgstr "_Відкрити посилання"
 
-#: gtk/gtklabel.c:5463
+#: gtk/gtklabel.c:5485
 msgid "Copy _Link Address"
 msgstr "Копіювати _адресу посилання"
 
@@ -2498,7 +2491,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:644 gtk/gtkwindow.c:6106
+#: gtk/gtkprintbackend.c:644 gtk/gtkwindow.c:6137
 msgid "_OK"
 msgstr "_Гаразд"
 
@@ -2510,73 +2503,73 @@ msgstr "Н_і"
 msgid "_Yes"
 msgstr "_Так"
 
-#: gtk/gtkmountoperation.c:617
+#: gtk/gtkmountoperation.c:611
 msgid "Co_nnect"
 msgstr "З'_єднатись"
 
-#: gtk/gtkmountoperation.c:680
+#: gtk/gtkmountoperation.c:677
 msgid "Connect As"
 msgstr "З'єднатись як"
 
-#: gtk/gtkmountoperation.c:689
+#: gtk/gtkmountoperation.c:686
 msgid "_Anonymous"
 msgstr "_Анонімний користувач"
 
-#: gtk/gtkmountoperation.c:695
+#: gtk/gtkmountoperation.c:692
 msgid "Registered U_ser"
 msgstr "Зареєстрований _користувач"
 
-#: gtk/gtkmountoperation.c:705
+#: gtk/gtkmountoperation.c:702
 msgid "_Username"
 msgstr "_Користувач"
 
-#: gtk/gtkmountoperation.c:710
+#: gtk/gtkmountoperation.c:707
 msgid "_Domain"
 msgstr "_Домен"
 
-#: gtk/gtkmountoperation.c:719
+#: gtk/gtkmountoperation.c:716
 msgid "Volume type"
 msgstr "Тип тому"
 
-#: gtk/gtkmountoperation.c:729
+#: gtk/gtkmountoperation.c:726
 msgid "_Hidden"
 msgstr "При_хований"
 
-#: gtk/gtkmountoperation.c:732
+#: gtk/gtkmountoperation.c:729
 msgid "_Windows system"
 msgstr "С_истема Windows"
 
-#: gtk/gtkmountoperation.c:735
+#: gtk/gtkmountoperation.c:732
 msgid "_PIM"
 msgstr "_PIM"
 
-#: gtk/gtkmountoperation.c:741
+#: gtk/gtkmountoperation.c:738
 msgid "_Password"
 msgstr "_Пароль"
 
-#: gtk/gtkmountoperation.c:763
+#: gtk/gtkmountoperation.c:760
 msgid "Forget password _immediately"
 msgstr "_Забути пароль негайно"
 
-#: gtk/gtkmountoperation.c:773
+#: gtk/gtkmountoperation.c:770
 msgid "Remember password until you _logout"
 msgstr "Запам'ятати пароль _до виходу з сеансу"
 
-#: gtk/gtkmountoperation.c:784
+#: gtk/gtkmountoperation.c:781
 msgid "Remember _forever"
 msgstr "Запам'ятати _назавжди"
 
-#: gtk/gtkmountoperation.c:1210
+#: gtk/gtkmountoperation.c:1207
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Невідома програма (PID %d)"
 
-#: gtk/gtkmountoperation.c:1409
+#: gtk/gtkmountoperation.c:1406
 #, c-format
 msgid "Unable to end process"
 msgstr "Не вдалось завершити процес"
 
-#: gtk/gtkmountoperation.c:1439
+#: gtk/gtkmountoperation.c:1436
 msgid "_End Process"
 msgstr "_Завершити процес"
 
@@ -2633,7 +2626,7 @@ msgstr "Наступна вкладка"
 msgid "Tab"
 msgstr "Вкладка"
 
-#: gtk/gtknotebook.c:4371 gtk/gtknotebook.c:6576
+#: gtk/gtknotebook.c:4371 gtk/gtknotebook.c:6579
 #, c-format
 msgid "Page %u"
 msgstr "Сторінка %u"
@@ -2682,7 +2675,7 @@ msgstr "Параметри сторінки"
 msgid "Hide text"
 msgstr "Сховати текст"
 
-#: gtk/gtkpasswordentry.c:171 gtk/gtkpasswordentry.c:603
+#: gtk/gtkpasswordentry.c:171 gtk/gtkpasswordentry.c:605
 msgid "Show text"
 msgstr "Показати текст"
 
@@ -2690,87 +2683,87 @@ msgstr "Показати текст"
 msgid "Caps Lock is on"
 msgstr "Caps Lock увімкнено"
 
-#: gtk/gtkpasswordentry.c:675
+#: gtk/gtkpasswordentry.c:677
 msgid "_Show Text"
 msgstr "По_казати текст"
 
 #. translators: %s is the name of a cloud provider for files
-#: gtk/gtkplacessidebar.c:911
+#: gtk/gtkplacessidebar.c:914
 #, c-format
 msgid "Open %s"
 msgstr "Відкрити %s"
 
-#: gtk/gtkplacessidebar.c:1001
+#: gtk/gtkplacessidebar.c:1004
 msgid "Recent"
 msgstr "Нещодавні"
 
-#: gtk/gtkplacessidebar.c:1003
+#: gtk/gtkplacessidebar.c:1006
 msgid "Recent files"
 msgstr "Нещодавні файли"
 
-#: gtk/gtkplacessidebar.c:1012
+#: gtk/gtkplacessidebar.c:1015
 msgid "Starred"
 msgstr "З зірочками"
 
-#: gtk/gtkplacessidebar.c:1014
+#: gtk/gtkplacessidebar.c:1017
 msgid "Starred files"
 msgstr "Файли з зірочками"
 
-#: gtk/gtkplacessidebar.c:1025
+#: gtk/gtkplacessidebar.c:1028
 msgid "Open your personal folder"
 msgstr "Відкрити особисту теку"
 
-#: gtk/gtkplacessidebar.c:1038
+#: gtk/gtkplacessidebar.c:1041
 msgid "Desktop"
 msgstr "Стільниця"
 
-#: gtk/gtkplacessidebar.c:1040
+#: gtk/gtkplacessidebar.c:1043
 msgid "Open the contents of your desktop in a folder"
 msgstr "Відкрити вміст стільниці як теку"
 
-#: gtk/gtkplacessidebar.c:1054
+#: gtk/gtkplacessidebar.c:1057
 msgid "Enter Location"
 msgstr "Увести адресу"
 
-#: gtk/gtkplacessidebar.c:1056
+#: gtk/gtkplacessidebar.c:1059
 msgid "Manually enter a location"
 msgstr "Вручну ввести адресу"
 
-#: gtk/gtkplacessidebar.c:1066
+#: gtk/gtkplacessidebar.c:1069
 msgid "Trash"
 msgstr "Смітник"
 
-#: gtk/gtkplacessidebar.c:1068
+#: gtk/gtkplacessidebar.c:1071
 msgid "Open the trash"
 msgstr "Відкрити теку смітника"
 
-#: gtk/gtkplacessidebar.c:1179 gtk/gtkplacessidebar.c:1207
-#: gtk/gtkplacessidebar.c:1407
+#: gtk/gtkplacessidebar.c:1182 gtk/gtkplacessidebar.c:1210
+#: gtk/gtkplacessidebar.c:1410
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Змонтувати і відкрити «%s»"
 
-#: gtk/gtkplacessidebar.c:1302
+#: gtk/gtkplacessidebar.c:1305
 msgid "Open the contents of the file system"
 msgstr "Відкрити список ресурсів файлової системи"
 
-#: gtk/gtkplacessidebar.c:1385
+#: gtk/gtkplacessidebar.c:1388
 msgid "New bookmark"
 msgstr "Створити закладку"
 
-#: gtk/gtkplacessidebar.c:1387
+#: gtk/gtkplacessidebar.c:1390
 msgid "Add a new bookmark"
 msgstr "Закласти"
 
-#: gtk/gtkplacessidebar.c:1452
+#: gtk/gtkplacessidebar.c:1455
 msgid "Other Locations"
 msgstr "Інші місця"
 
-#: gtk/gtkplacessidebar.c:1453
+#: gtk/gtkplacessidebar.c:1456
 msgid "Show other locations"
 msgstr "Показувати інші місця"
 
-#: gtk/gtkplacessidebar.c:1958 gtk/gtkplacessidebar.c:2959
+#: gtk/gtkplacessidebar.c:1961 gtk/gtkplacessidebar.c:2962
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Неможливо запустити «%s»"
@@ -2778,127 +2771,127 @@ msgstr "Неможливо запустити «%s»"
 #. Translators: This means that unlocking an encrypted storage
 #. * device failed. %s is the name of the device.
 #.
-#: gtk/gtkplacessidebar.c:1994
+#: gtk/gtkplacessidebar.c:1997
 #, c-format
 msgid "Error unlocking “%s”"
 msgstr "Помилка під час спроби відкрити «%s»"
 
-#: gtk/gtkplacessidebar.c:1996
+#: gtk/gtkplacessidebar.c:1999
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Не вдалось доступитись до «%s»"
 
-#: gtk/gtkplacessidebar.c:2227
+#: gtk/gtkplacessidebar.c:2230
 msgid "This name is already taken"
 msgstr "Цю назву вже вжито"
 
-#: gtk/gtkplacessidebar.c:2300 gtk/inspector/actions.ui:19
+#: gtk/gtkplacessidebar.c:2303 gtk/inspector/actions.ui:19
 #: gtk/inspector/css-node-tree.ui:35 gtk/inspector/prop-list.ui:23
 #: gtk/ui/gtkfilechooserwidget.ui:167 gtk/ui/gtkfilechooserwidget.ui:439
 #: gtk/ui/gtkprintunixdialog.ui:85
 msgid "Name"
 msgstr "Назва"
 
-#: gtk/gtkplacessidebar.c:2500
+#: gtk/gtkplacessidebar.c:2503
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Неможливо демонтувати «%s»"
 
-#: gtk/gtkplacessidebar.c:2676
+#: gtk/gtkplacessidebar.c:2679
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Неможливо запустити «%s»"
 
-#: gtk/gtkplacessidebar.c:2705
+#: gtk/gtkplacessidebar.c:2708
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Неможливо витягнути «%s»"
 
-#: gtk/gtkplacessidebar.c:2734 gtk/gtkplacessidebar.c:2763
+#: gtk/gtkplacessidebar.c:2737 gtk/gtkplacessidebar.c:2766
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Не вдалося витягнути %s"
 
-#: gtk/gtkplacessidebar.c:2911
+#: gtk/gtkplacessidebar.c:2914
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Неможливо опитати «%s» на зміну носія"
 
-#: gtk/gtkplacessidebar.c:3130 gtk/gtkplacessidebar.c:3217
-#: gtk/gtkplacesview.c:1651
+#: gtk/gtkplacessidebar.c:3133 gtk/gtkplacessidebar.c:3220
+#: gtk/gtkplacesview.c:1662
 msgid "Open in New _Tab"
 msgstr "Відкрити у новій в_кладці"
 
-#: gtk/gtkplacessidebar.c:3136 gtk/gtkplacessidebar.c:3226
-#: gtk/gtkplacesview.c:1656
+#: gtk/gtkplacessidebar.c:3139 gtk/gtkplacessidebar.c:3229
+#: gtk/gtkplacesview.c:1667
 msgid "Open in New _Window"
 msgstr "Відкрити у новому _вікні"
 
-#: gtk/gtkplacessidebar.c:3237
+#: gtk/gtkplacessidebar.c:3240
 msgid "_Add Bookmark"
 msgstr "_Додати до закладок"
 
-#: gtk/gtkplacessidebar.c:3241
+#: gtk/gtkplacessidebar.c:3244
 msgid "_Remove"
 msgstr "В_лучити"
 
-#: gtk/gtkplacessidebar.c:3257 gtk/gtkplacesview.c:1681
+#: gtk/gtkplacessidebar.c:3260 gtk/gtkplacesview.c:1692
 msgid "_Mount"
 msgstr "_Змонтувати"
 
-#: gtk/gtkplacessidebar.c:3266 gtk/gtkplacesview.c:1670
+#: gtk/gtkplacessidebar.c:3269 gtk/gtkplacesview.c:1681
 msgid "_Unmount"
 msgstr "_Демонтувати"
 
-#: gtk/gtkplacessidebar.c:3273
+#: gtk/gtkplacessidebar.c:3276
 msgid "_Eject"
 msgstr "Ви_тягнути"
 
-#: gtk/gtkplacessidebar.c:3283
+#: gtk/gtkplacessidebar.c:3286
 msgid "_Detect Media"
 msgstr "Ви_явити носій"
 
-#: gtk/gtkplacessidebar.c:3292
+#: gtk/gtkplacessidebar.c:3295
 msgid "_Start"
 msgstr "П_уск"
 
-#: gtk/gtkplacessidebar.c:3294
+#: gtk/gtkplacessidebar.c:3297
 msgid "_Power On"
 msgstr "_Увімкнути"
 
-#: gtk/gtkplacessidebar.c:3295
+#: gtk/gtkplacessidebar.c:3298
 msgid "_Connect Drive"
 msgstr "Під’_єднати диск"
 
-#: gtk/gtkplacessidebar.c:3296
+#: gtk/gtkplacessidebar.c:3299
 msgid "_Start Multi-disk Device"
 msgstr "З_апустити багатодисковий пристрій"
 
-#: gtk/gtkplacessidebar.c:3297
+#: gtk/gtkplacessidebar.c:3300
 msgid "_Unlock Device"
 msgstr "_Розблокувати пристрій"
 
-#: gtk/gtkplacessidebar.c:3307
+#: gtk/gtkplacessidebar.c:3310
 msgid "_Stop"
 msgstr "С_топ"
 
-#: gtk/gtkplacessidebar.c:3309
+#: gtk/gtkplacessidebar.c:3312
 msgid "_Safely Remove Drive"
 msgstr "_Безпечне вилучення пристрою"
 
-#: gtk/gtkplacessidebar.c:3310
+#: gtk/gtkplacessidebar.c:3313
 msgid "_Disconnect Drive"
 msgstr "_Від'єднати диск"
 
-#: gtk/gtkplacessidebar.c:3311
+#: gtk/gtkplacessidebar.c:3314
 msgid "_Stop Multi-disk Device"
 msgstr "З_упинити багатодисковий пристрій"
 
-#: gtk/gtkplacessidebar.c:3312
+#: gtk/gtkplacessidebar.c:3315
 msgid "_Lock Device"
 msgstr "За_блокувати пристрій"
 
-#: gtk/gtkplacessidebar.c:3800 gtk/gtkplacesview.c:1103
+#: gtk/gtkplacessidebar.c:3803 gtk/gtkplacesview.c:1103
 msgid "Computer"
 msgstr "Комп'ютер"
 
@@ -2911,81 +2904,81 @@ msgid "No network locations found"
 msgstr "Не знайдено жодної мережевої адреси"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1210 gtk/gtkplacesview.c:1296
+#: gtk/gtkplacesview.c:1210 gtk/gtkplacesview.c:1307
 msgid "Unable to access location"
 msgstr "Неможливо доступитись до адреси"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1226 gtk/ui/gtkplacesview.ui:262
+#: gtk/gtkplacesview.c:1228 gtk/ui/gtkplacesview.ui:262
 msgid "Con_nect"
 msgstr "З'_єднатись"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1355
+#: gtk/gtkplacesview.c:1366
 msgid "Unable to unmount volume"
 msgstr "Неможливо демонтувати том"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1447
+#: gtk/gtkplacesview.c:1458
 msgid "Cance_l"
 msgstr "_Скасувати"
 
-#: gtk/gtkplacesview.c:1594
+#: gtk/gtkplacesview.c:1605
 msgid "AppleTalk"
 msgstr "AppleTalk"
 
-#: gtk/gtkplacesview.c:1600
+#: gtk/gtkplacesview.c:1611
 msgid "File Transfer Protocol"
 msgstr "Протокол передавання файлів"
 
 #. Translators: do not translate ftp:// and ftps://
-#: gtk/gtkplacesview.c:1602
+#: gtk/gtkplacesview.c:1613
 msgid "ftp:// or ftps://"
 msgstr "ftp:// або ftps://"
 
-#: gtk/gtkplacesview.c:1608
+#: gtk/gtkplacesview.c:1619
 msgid "Network File System"
 msgstr "Система мережевих файлів"
 
-#: gtk/gtkplacesview.c:1614
+#: gtk/gtkplacesview.c:1625
 msgid "Samba"
 msgstr "Samba"
 
-#: gtk/gtkplacesview.c:1620
+#: gtk/gtkplacesview.c:1631
 msgid "SSH File Transfer Protocol"
 msgstr "Протокол передавання файлів SSH"
 
 #. Translators: do not translate sftp:// and ssh://
-#: gtk/gtkplacesview.c:1622
+#: gtk/gtkplacesview.c:1633
 msgid "sftp:// or ssh://"
 msgstr "sftp:// або ssh://"
 
-#: gtk/gtkplacesview.c:1628
+#: gtk/gtkplacesview.c:1639
 msgid "WebDAV"
 msgstr "WebDAV"
 
 #. Translators: do not translate dav:// and davs://
-#: gtk/gtkplacesview.c:1630
+#: gtk/gtkplacesview.c:1641
 msgid "dav:// or davs://"
 msgstr "dav:// або davs://"
 
-#: gtk/gtkplacesview.c:1665
+#: gtk/gtkplacesview.c:1676
 msgid "_Disconnect"
 msgstr "_Від'єднати"
 
-#: gtk/gtkplacesview.c:1676
+#: gtk/gtkplacesview.c:1687
 msgid "_Connect"
 msgstr "З'_єднатись"
 
-#: gtk/gtkplacesview.c:1860
+#: gtk/gtkplacesview.c:1871
 msgid "Unable to get remote server location"
 msgstr "Неможливо одержати адресу віддаленого сервера"
 
-#: gtk/gtkplacesview.c:2003 gtk/gtkplacesview.c:2012
+#: gtk/gtkplacesview.c:2014 gtk/gtkplacesview.c:2023
 msgid "Networks"
 msgstr "Мережі"
 
-#: gtk/gtkplacesview.c:2003 gtk/gtkplacesview.c:2012
+#: gtk/gtkplacesview.c:2014 gtk/gtkplacesview.c:2023
 msgid "On This Computer"
 msgstr "На цьому комп'ютері"
 
@@ -3281,7 +3274,7 @@ msgid "No registered application with name “%s” for item with URI “%s” f
 msgstr ""
 "Не знайдено зареєстрованої програми з назвою «%s» для пункту з URI «%s»"
 
-#: gtk/gtksearchentry.c:597
+#: gtk/gtksearchentry.c:599
 msgid "Clear entry"
 msgstr "Спорожнити запис"
 
@@ -3370,19 +3363,19 @@ msgstr "Спробуйте пошукати по-інакшому"
 msgid "Could not show link"
 msgstr "Не вдалось показати посилання"
 
-#: gtk/gtktext.c:6061 gtk/gtktextview.c:8779
+#: gtk/gtktext.c:6063 gtk/gtktextview.c:8782
 msgid "Insert _Emoji"
 msgstr "Вставити _емодзі"
 
-#: gtk/gtktextview.c:8761
+#: gtk/gtktextview.c:8764
 msgid "_Undo"
 msgstr "_Скасувати"
 
-#: gtk/gtktextview.c:8765
+#: gtk/gtktextview.c:8768
 msgid "_Redo"
 msgstr "Пов_торити"
 
-#: gtk/gtktreeexpander.c:193
+#: gtk/gtktreeexpander.c:195
 msgid "Expand"
 msgstr "Розгорнути"
 
@@ -3405,12 +3398,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6093
+#: gtk/gtkwindow.c:6124
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Бажаєте використовувати інспектор GTK?"
 
-#: gtk/gtkwindow.c:6095
+#: gtk/gtkwindow.c:6126
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3421,7 +3414,7 @@ msgstr ""
 "редагувати внутрішні частини будь-які програми GTK. Його використання може "
 "спричинити збої в програмі."
 
-#: gtk/gtkwindow.c:6100
+#: gtk/gtkwindow.c:6131
 msgid "Don’t show this message again"
 msgstr "Не показувати це повідомлення надалі"
 
@@ -3556,42 +3549,42 @@ msgstr "Класи стилів"
 msgid "CSS Property"
 msgstr "Властивість CSS"
 
-#: gtk/inspector/general.c:299
+#: gtk/inspector/general.c:303
 msgctxt "GL version"
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: gtk/inspector/general.c:300
+#: gtk/inspector/general.c:304
 msgctxt "GL vendor"
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: gtk/inspector/general.c:340 gtk/inspector/general.c:358
+#: gtk/inspector/general.c:374
 msgctxt "GL version"
 msgid "None"
 msgstr "Немає"
 
-#: gtk/inspector/general.c:341 gtk/inspector/general.c:359
+#: gtk/inspector/general.c:375
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Немає"
 
-#: gtk/inspector/general.c:410
+#: gtk/inspector/general.c:426
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: gtk/inspector/general.c:411 gtk/inspector/general.c:412
+#: gtk/inspector/general.c:427 gtk/inspector/general.c:428
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: gtk/inspector/general.c:468
+#: gtk/inspector/general.c:484
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Немає"
 
-#: gtk/inspector/general.c:469 gtk/inspector/general.c:470
+#: gtk/inspector/general.c:485 gtk/inspector/general.c:486
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Немає"
@@ -3686,68 +3679,73 @@ msgid "Reference Count"
 msgstr "Підрахунок посилань"
 
 #: gtk/inspector/misc-info.ui:151
+#| msgid "Text Direction"
+msgid "Direction"
+msgstr "Напрямок"
+
+#: gtk/inspector/misc-info.ui:181
 msgid "Buildable ID"
 msgstr "Ідентифікатор збирання"
 
-#: gtk/inspector/misc-info.ui:181
+#: gtk/inspector/misc-info.ui:211
 msgid "Mnemonic Label"
 msgstr "Мнемонічна мітка"
 
-#: gtk/inspector/misc-info.ui:210
+#: gtk/inspector/misc-info.ui:240
 msgid "Request Mode"
 msgstr "Режим запиту"
 
-#: gtk/inspector/misc-info.ui:239
+#: gtk/inspector/misc-info.ui:269
 msgid "Allocation"
 msgstr "Розміщення"
 
-#: gtk/inspector/misc-info.ui:268
+#: gtk/inspector/misc-info.ui:298
 msgid "Baseline"
 msgstr "Базова лінія"
 
-#: gtk/inspector/misc-info.ui:297
+#: gtk/inspector/misc-info.ui:327
 msgid "Surface"
 msgstr "Поверхня"
 
-#: gtk/inspector/misc-info.ui:316 gtk/inspector/misc-info.ui:355
-#: gtk/inspector/misc-info.ui:394 gtk/inspector/prop-editor.c:1111
+#: gtk/inspector/misc-info.ui:346 gtk/inspector/misc-info.ui:385
+#: gtk/inspector/misc-info.ui:424 gtk/inspector/prop-editor.c:1111
 #: gtk/inspector/prop-editor.c:1471 gtk/inspector/window.ui:415
 msgid "Properties"
 msgstr "Властивості"
 
-#: gtk/inspector/misc-info.ui:336
+#: gtk/inspector/misc-info.ui:366
 msgid "Renderer"
 msgstr "Відтворювач"
 
-#: gtk/inspector/misc-info.ui:375
+#: gtk/inspector/misc-info.ui:405
 msgid "Frame Clock"
 msgstr "Годинник кадрів"
 
-#: gtk/inspector/misc-info.ui:414
+#: gtk/inspector/misc-info.ui:444
 msgid "Tick Callback"
 msgstr "Позначити зворотний виклик"
 
-#: gtk/inspector/misc-info.ui:444
+#: gtk/inspector/misc-info.ui:474
 msgid "Frame Count"
 msgstr "Підрахунок кадрів"
 
-#: gtk/inspector/misc-info.ui:473
+#: gtk/inspector/misc-info.ui:503
 msgid "Frame Rate"
 msgstr "Частота кадрів"
 
-#: gtk/inspector/misc-info.ui:502
+#: gtk/inspector/misc-info.ui:532
 msgid "Mapped"
 msgstr "Відображення"
 
-#: gtk/inspector/misc-info.ui:532
+#: gtk/inspector/misc-info.ui:562
 msgid "Realized"
 msgstr "Спостереження"
 
-#: gtk/inspector/misc-info.ui:562
+#: gtk/inspector/misc-info.ui:592
 msgid "Is Toplevel"
 msgstr "На верхньому рівні"
 
-#: gtk/inspector/misc-info.ui:592
+#: gtk/inspector/misc-info.ui:622
 msgid "Child Visible"
 msgstr "Видимі діти"
 
@@ -3882,8 +3880,7 @@ msgstr "Зберегти позначений вузол"
 
 #: gtk/inspector/recorder.ui:62
 msgid "Copy to clipboard"
-msgstr ""
-"Скопіювати до буфера"
+msgstr "Скопіювати до буфера"
 
 #: gtk/inspector/recorder.ui:119
 msgid "Property"
@@ -3986,15 +3983,15 @@ msgstr "Ієрархія"
 msgid "Implements"
 msgstr "Реалізує"
 
-#: gtk/inspector/visual.c:600 gtk/inspector/visual.c:619
+#: gtk/inspector/visual.c:603 gtk/inspector/visual.c:622
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Тему пришито через GTK_THEME"
 
-#: gtk/inspector/visual.c:831
+#: gtk/inspector/visual.c:853
 msgid "Backend does not support window scaling"
 msgstr "Модуль не підтримує масштабування вікна"
 
-#: gtk/inspector/visual.c:1021
+#: gtk/inspector/visual.c:1043
 msgid "GL rendering is disabled"
 msgstr "Відтворення GL вимкнено"
 
@@ -7844,105 +7841,105 @@ msgstr "%s: нема такої програми %s"
 msgid "%s: error launching application: %s\n"
 msgstr "%s: помилка запускання програми: %s\n"
 
-#: tools/updateiconcache.c:1392
+#: tools/updateiconcache.c:1391
 #, c-format
 msgid "Failed to write header\n"
 msgstr "Не вдалось записати заголовок\n"
 
-#: tools/updateiconcache.c:1398
+#: tools/updateiconcache.c:1397
 #, c-format
 msgid "Failed to write hash table\n"
 msgstr "Не вдалось записати таблицю хешу\n"
 
-#: tools/updateiconcache.c:1404
+#: tools/updateiconcache.c:1403
 #, c-format
 msgid "Failed to write folder index\n"
 msgstr "Не вдалось записати індекс теки\n"
 
-#: tools/updateiconcache.c:1412
+#: tools/updateiconcache.c:1411
 #, c-format
 msgid "Failed to rewrite header\n"
 msgstr "Не вдалось перезаписати заголовок\n"
 
-#: tools/updateiconcache.c:1506
+#: tools/updateiconcache.c:1505
 #, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "Не вдалось відкрити файл %s : %s\n"
 
-#: tools/updateiconcache.c:1514 tools/updateiconcache.c:1544
+#: tools/updateiconcache.c:1513 tools/updateiconcache.c:1543
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Не вдалось записати файл кешу: %s\n"
 
-#: tools/updateiconcache.c:1554
+#: tools/updateiconcache.c:1553
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "Створений кеш містить помилки.\n"
 
-#: tools/updateiconcache.c:1568
+#: tools/updateiconcache.c:1567
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "Не вдалось перейменувати %s на %s: %s, з подальшим вилученням %s.\n"
 
-#: tools/updateiconcache.c:1582
+#: tools/updateiconcache.c:1581
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "Не вдалось перейменувати %s у %s: %s\n"
 
-#: tools/updateiconcache.c:1592
+#: tools/updateiconcache.c:1591
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "Не вдалось перейменувати %s назад на %s: %s.\n"
 
-#: tools/updateiconcache.c:1619
+#: tools/updateiconcache.c:1618
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "Файл кешу успішно створено.\n"
 
-#: tools/updateiconcache.c:1658
+#: tools/updateiconcache.c:1657
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Перезаписати наявний кеш, навіть якщо його оновлено"
 
-#: tools/updateiconcache.c:1659
+#: tools/updateiconcache.c:1658
 msgid "Don’t check for the existence of index.theme"
 msgstr "Не перевіряти існування файла index.theme"
 
-#: tools/updateiconcache.c:1660
+#: tools/updateiconcache.c:1659
 msgid "Don’t include image data in the cache"
 msgstr "Не враховувати зображення в кеші"
 
-#: tools/updateiconcache.c:1661
+#: tools/updateiconcache.c:1660
 msgid "Include image data in the cache"
 msgstr "Враховувати зображення в кеші"
 
-#: tools/updateiconcache.c:1662
+#: tools/updateiconcache.c:1661
 msgid "Output a C header file"
 msgstr "Видавати файл заголовків на мові C"
 
-#: tools/updateiconcache.c:1663
+#: tools/updateiconcache.c:1662
 msgid "Turn off verbose output"
 msgstr "Вимкнути розширений вивід"
 
-#: tools/updateiconcache.c:1664
+#: tools/updateiconcache.c:1663
 msgid "Validate existing icon cache"
 msgstr "Перевірити наявний кеш піктограм"
 
-#: tools/updateiconcache.c:1731
+#: tools/updateiconcache.c:1730
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Не вдалось знайти файл: %s\n"
 
-#: tools/updateiconcache.c:1737
+#: tools/updateiconcache.c:1736
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Некоректний піктограма у кеші: %s\n"
 
-#: tools/updateiconcache.c:1750
+#: tools/updateiconcache.c:1749
 #, c-format
 msgid "No theme index file.\n"
 msgstr "Немає файла з індексом теми.\n"
 
-#: tools/updateiconcache.c:1754
+#: tools/updateiconcache.c:1753
 #, c-format
 msgid ""
 "No theme index file in “%s”.\n"
@@ -7951,6 +7948,9 @@ msgstr ""
 "Немає індексного файла теми в «%s».\n"
 "Якщо ви дійсно бажаєте створити тут кеш значків, використовуйте --ignore-"
 "theme-index.\n"
+
+#~ msgid "No available configurations for the given RGBA pixel format"
+#~ msgstr "Немає доступних налаштувань для заданого формату точок RGBA"
 
 #~ msgid "Select a File"
 #~ msgstr "Виберіть файл"
