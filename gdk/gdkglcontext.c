@@ -1127,7 +1127,7 @@ gdk_gl_context_make_current (GdkGLContext *context)
  *
  * Retrieves the display the @context is created for
  *
- * Returns: (nullable) (transfer none): a `GdkDisplay` or %NULL
+ * Returns: (nullable) (transfer none): a `GdkDisplay`
  */
 GdkDisplay *
 gdk_gl_context_get_display (GdkGLContext *context)
@@ -1143,7 +1143,7 @@ gdk_gl_context_get_display (GdkGLContext *context)
  *
  * Retrieves the surface used by the @context.
  *
- * Returns: (nullable) (transfer none): a `GdkSurface` or %NULL
+ * Returns: (nullable) (transfer none): a `GdkSurface`
  */
 GdkSurface *
 gdk_gl_context_get_surface (GdkGLContext *context)
@@ -1159,7 +1159,7 @@ gdk_gl_context_get_surface (GdkGLContext *context)
  *
  * Retrieves the `GdkGLContext` that this @context share data with.
  *
- * Returns: (nullable) (transfer none): a `GdkGLContext` or %NULL
+ * Returns: (nullable) (transfer none): a `GdkGLContext`
  */
 GdkGLContext *
 gdk_gl_context_get_shared_context (GdkGLContext *context)
@@ -1223,7 +1223,7 @@ gdk_gl_context_clear_current (void)
  *
  * Retrieves the current `GdkGLContext`.
  *
- * Returns: (nullable) (transfer none): the current `GdkGLContext`, or %NULL
+ * Returns: (nullable) (transfer none): the current `GdkGLContext`
  */
 GdkGLContext *
 gdk_gl_context_get_current (void)

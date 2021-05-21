@@ -353,7 +353,7 @@ gdk_texture_new_from_resource (const char *resource_path)
  *
  * If %NULL is returned, then @error will be set.
  *
- * Return value: A newly-created `GdkTexture` or %NULL if an error occurred.
+ * Return value: A newly-created `GdkTexture`
  */
 GdkTexture *
 gdk_texture_new_from_file (GFile   *file,

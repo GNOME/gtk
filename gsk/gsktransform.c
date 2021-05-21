@@ -94,7 +94,7 @@ gsk_transform_has_class (GskTransform            *self,
  * @transform_class: class structure for this self
  * @category: The category of this transform. Will be used to initialize
  *   the result's category together with &next's category
- * @next: (transfer full): Next transform to multiply with or %NULL if none
+ * @next: (transfer full) (nullable): Next transform to multiply with
  *
  * Returns: (transfer full): the newly created #GskTransform
  */
@@ -217,7 +217,7 @@ static const GskTransformClass GSK_IDENTITY_TRANSFORM_CLASS =
 
 /*<private>
  * gsk_transform_is_identity:
- * @transform: (nullable): A transform or %NULL
+ * @transform: (nullable): A transform
  *
  * Checks if the transform is a representation of the identity
  * transform.

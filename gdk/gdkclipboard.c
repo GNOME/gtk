@@ -574,7 +574,7 @@ gdk_clipboard_store_async (GdkClipboard        *clipboard,
  * gdk_clipboard_store_finish:
  * @clipboard: a `GdkClipboard`
  * @result: a `GAsyncResult`
- * @error: a `GError` location to store the error occurring, or %NULL to ignore.
+ * @error: a `GError` location to store the error occurring
  *
  * Finishes an asynchronous clipboard store.
  *
@@ -684,7 +684,7 @@ gdk_clipboard_read_async (GdkClipboard        *clipboard,
  *
  * See [method@Gdk.Clipboard.read_async].
  *
- * Returns: (transfer full) (nullable): a `GInputStream` or %NULL on error
+ * Returns: (transfer full) (nullable): a `GInputStream`
  */
 GInputStream *
 gdk_clipboard_read_finish (GdkClipboard  *clipboard,
@@ -872,7 +872,7 @@ gdk_clipboard_read_value_async (GdkClipboard        *clipboard,
  * gdk_clipboard_read_value_finish:
  * @clipboard: a `GdkClipboard`
  * @result: a `GAsyncResult`
- * @error: a GError` location to store the error occurring, or %NULL to ignore
+ * @error: a GError` location to store the error occurring
  *
  * Finishes an asynchronous clipboard read.
  *
@@ -931,13 +931,13 @@ gdk_clipboard_read_texture_async (GdkClipboard        *clipboard,
  * gdk_clipboard_read_texture_finish:
  * @clipboard: a `GdkClipboard`
  * @result: a `GAsyncResult`
- * @error: a `GError` location to store the error occurring, or %NULL to ignore
+ * @error: a `GError` location to store the error occurring
  *
  * Finishes an asynchronous clipboard read.
  *
  * See [method@Gdk.Clipboard.read_texture_async].
  *
- * Returns: (transfer full) (nullable): a new `GdkTexture` or %NULL on error
+ * Returns: (transfer full) (nullable): a new `GdkTexture`
  */
 GdkTexture *
 gdk_clipboard_read_texture_finish (GdkClipboard  *clipboard,
@@ -996,13 +996,13 @@ gdk_clipboard_read_text_async (GdkClipboard        *clipboard,
  * gdk_clipboard_read_text_finish:
  * @clipboard: a `GdkClipboard`
  * @result: a `GAsyncResult`
- * @error: a `GError` location to store the error occurring, or %NULL to ignore
+ * @error: a `GError` location to store the error occurring
  *
  * Finishes an asynchronous clipboard read.
  *
  * See [method@Gdk.Clipboard.read_text_async].
  *
- * Returns: (transfer full) (nullable): a new string or %NULL on error
+ * Returns: (transfer full) (nullable): a new string
  */
 char *
 gdk_clipboard_read_text_finish (GdkClipboard  *clipboard,

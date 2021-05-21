@@ -480,7 +480,7 @@ gtk_media_controls_notify_cb (GtkMediaStream   *stream,
 /**
  * gtk_media_controls_set_media_stream: (attributes org.gtk.Method.set_property=media-stream)
  * @controls: a `GtkMediaControls` widget
- * @stream: (nullable):  a `GtkMediaStream`, or %NULL
+ * @stream: (nullable):  a `GtkMediaStream`
  *
  * Sets the stream that is controlled by @controls.
  */

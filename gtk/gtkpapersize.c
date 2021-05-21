@@ -205,7 +205,7 @@ gtk_paper_size_new_from_info (const PaperInfo *info)
 
 /**
  * gtk_paper_size_new:
- * @name: (nullable): a paper size name, or %NULL
+ * @name: (nullable): a paper size name
  *
  * Creates a new `GtkPaperSize` object by parsing a
  * [PWG 5101.1-2002](ftp://ftp.pwg.org/pub/pwg/candidates/cs-pwgmsn10-20020226-5101.1.pdf)
@@ -910,13 +910,12 @@ gtk_paper_size_get_default_right_margin (GtkPaperSize *size,
  * @key_file: the `GKeyFile` to retrieve the papersize from
  * @group_name: (nullable): the name of the group in the key file to read,
  *   or %NULL to read the first group
- * @error: (nullable): return location for an error, or %NULL
+ * @error: (nullable): return location for an error
  *
  * Reads a paper size from the group @group_name in the key file
  * @key_file.
  *
- * Returns: a new `GtkPaperSize` object with the restored
- *   paper size, or %NULL if an error occurred
+ * Returns: a new `GtkPaperSize` object with the restored paper size
  */
 GtkPaperSize *
 gtk_paper_size_new_from_key_file (GKeyFile     *key_file,

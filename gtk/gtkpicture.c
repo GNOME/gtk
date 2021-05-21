@@ -410,7 +410,7 @@ gtk_picture_new (void)
 
 /**
  * gtk_picture_new_for_paintable:
- * @paintable: (nullable): a `GdkPaintable`, or %NULL
+ * @paintable: (nullable): a `GdkPaintable`
  *
  * Creates a new `GtkPicture` displaying @paintable.
  *
@@ -431,7 +431,7 @@ gtk_picture_new_for_paintable (GdkPaintable *paintable)
 
 /**
  * gtk_picture_new_for_pixbuf:
- * @pixbuf: (nullable): a `GdkPixbuf`, or %NULL
+ * @pixbuf: (nullable): a `GdkPixbuf`
  *
  * Creates a new `GtkPicture` displaying @pixbuf.
  *
@@ -563,7 +563,7 @@ gtk_picture_new_for_resource (const char *resource_path)
 /**
  * gtk_picture_set_file: (attributes org.gtk.Method.set_property=file)
  * @self: a `GtkPicture`
- * @file: (nullable): a `GFile` or %NULL
+ * @file: (nullable): a `GFile`
  *
  * Makes @self load and display @file.
  *
@@ -684,7 +684,7 @@ gtk_picture_set_resource (GtkPicture *self,
 /**
  * gtk_picture_set_pixbuf:
  * @self: a `GtkPicture`
- * @pixbuf: (nullable): a `GdkPixbuf` or %NULL
+ * @pixbuf: (nullable): a `GdkPixbuf`
  *
  * Sets a `GtkPicture` to show a `GdkPixbuf`.
  *
@@ -729,7 +729,7 @@ gtk_picture_paintable_invalidate_size (GdkPaintable *paintable,
 /**
  * gtk_picture_set_paintable: (attributes org.gtk.Method.set_property=paintable)
  * @self: a `GtkPicture`
- * @paintable: (nullable): a `GdkPaintable` or %NULL
+ * @paintable: (nullable): a `GdkPaintable`
  *
  * Makes @self display the given @paintable.
  *
@@ -801,8 +801,7 @@ gtk_picture_set_paintable (GtkPicture   *self,
  *
  * Gets the `GdkPaintable` being displayed by the `GtkPicture`.
  *
- * Returns: (nullable) (transfer none): the displayed paintable, or %NULL if
- *   the picture is empty
+ * Returns: (nullable) (transfer none): the displayed paintable
  */
 GdkPaintable *
 gtk_picture_get_paintable (GtkPicture *self)

@@ -421,8 +421,7 @@ gdk_monitor_get_connector (GdkMonitor *monitor)
  * The PNP ID registry is located at
  * [https://uefi.org/pnp_id_list](https://uefi.org/pnp_id_list).
  *
- * Returns: (transfer none) (nullable): the name of the manufacturer,
- *   or %NULL
+ * Returns: (transfer none) (nullable): the name of the manufacturer
  */
 const char *
 gdk_monitor_get_manufacturer (GdkMonitor *monitor)
@@ -438,7 +437,7 @@ gdk_monitor_get_manufacturer (GdkMonitor *monitor)
  *
  * Gets the string identifying the monitor model, if available.
  *
- * Returns: (transfer none) (nullable): the monitor model, or %NULL
+ * Returns: (transfer none) (nullable): the monitor model
  */
 const char *
 gdk_monitor_get_model (GdkMonitor *monitor)

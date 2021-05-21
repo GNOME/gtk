@@ -175,7 +175,7 @@ gtk_tree_drag_source_drag_data_delete (GtkTreeDragSource *drag_source,
  * longer found in the model!
  * 
  * Returns: (nullable) (transfer full): a #GdkContentProvider for the
- *    given @path or %NULL if none exists
+ *    given @path
  **/
 GdkContentProvider *
 gtk_tree_drag_source_drag_data_get (GtkTreeDragSource *drag_source,

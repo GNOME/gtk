@@ -574,9 +574,8 @@ _gdk_event_queue_remove_link (GdkDisplay *display,
  * Removes and returns the first event from the event
  * queue that is not still being filled in.
  *
- * Returns: (nullable): the event, or %NULL. Ownership is transferred
- * to the caller.
- **/
+ * Returns: (nullable) (transfer full): the event
+ */
 GdkEvent*
 _gdk_event_unqueue (GdkDisplay *display)
 {
@@ -1238,8 +1237,8 @@ gdk_event_get_device (GdkEvent *event)
  * the application lifetime, if settings must be stored
  * persistently across runs, see [method@Gdk.DeviceTool.get_serial].
  *
- * Returns: (transfer none) (nullable): The current device tool, or %NULL
- **/
+ * Returns: (transfer none) (nullable): The current device tool
+ */
 GdkDeviceTool *
 gdk_event_get_device_tool (GdkEvent *event)
 {

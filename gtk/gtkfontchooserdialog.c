@@ -281,8 +281,8 @@ gtk_font_chooser_dialog_init (GtkFontChooserDialog *dialog)
 
 /**
  * gtk_font_chooser_dialog_new:
- * @title: (nullable): Title of the dialog, or %NULL
- * @parent: (nullable): Transient parent of the dialog, or %NULL
+ * @title: (nullable): Title of the dialog
+ * @parent: (nullable): Transient parent of the dialog
  *
  * Creates a new `GtkFontChooserDialog`.
  *

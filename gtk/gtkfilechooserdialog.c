@@ -707,10 +707,10 @@ gtk_file_chooser_dialog_new_valist (const char           *title,
 
 /**
  * gtk_file_chooser_dialog_new:
- * @title: (nullable): Title of the dialog, or %NULL
- * @parent: (nullable): Transient parent of the dialog, or %NULL
+ * @title: (nullable): Title of the dialog
+ * @parent: (nullable): Transient parent of the dialog
  * @action: Open or save mode for the dialog
- * @first_button_text: (nullable): text to go in the first button, or %NULL
+ * @first_button_text: (nullable): text to go in the first button
  * @...: response ID for the first button, then additional (button, id) pairs, ending with %NULL
  *
  * Creates a new `GtkFileChooserDialog`.

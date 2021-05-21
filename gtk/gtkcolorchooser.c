@@ -193,7 +193,7 @@ gtk_color_chooser_set_use_alpha (GtkColorChooser *chooser,
  *   be displayed in rows, %GTK_ORIENTATION_VERTICAL for columns
  * @colors_per_line: the number of colors to show in each row/column
  * @n_colors: the total number of elements in @colors
- * @colors: (nullable) (array length=n_colors): the colors of the palette, or %NULL
+ * @colors: (nullable) (array length=n_colors): the colors of the palette
  *
  * Adds a palette to the color chooser.
  *

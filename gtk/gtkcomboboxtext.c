@@ -431,7 +431,7 @@ gtk_combo_box_text_insert_text (GtkComboBoxText *combo_box,
 /**
  * gtk_combo_box_text_append:
  * @combo_box: A `GtkComboBoxText`
- * @id: (nullable): a string ID for this value, or %NULL
+ * @id: (nullable): a string ID for this value
  * @text: A string
  *
  * Appends @text to the list of strings stored in @combo_box.
@@ -452,7 +452,7 @@ gtk_combo_box_text_append (GtkComboBoxText *combo_box,
 /**
  * gtk_combo_box_text_prepend:
  * @combo_box: A `GtkComboBox`
- * @id: (nullable): a string ID for this value, or %NULL
+ * @id: (nullable): a string ID for this value
  * @text: a string
  *
  * Prepends @text to the list of strings stored in @combo_box.
@@ -475,7 +475,7 @@ gtk_combo_box_text_prepend (GtkComboBoxText *combo_box,
  * gtk_combo_box_text_insert:
  * @combo_box: A `GtkComboBoxText`
  * @position: An index to insert @text
- * @id: (nullable): a string ID for this value, or %NULL
+ * @id: (nullable): a string ID for this value
  * @text: A string to display
  *
  * Inserts @text at @position in the list of strings stored in @combo_box.

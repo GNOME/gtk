@@ -548,7 +548,7 @@ gtk_lock_button_get_permission (GtkLockButton *button)
 /**
  * gtk_lock_button_set_permission: (attributes org.gtk.Method.set_property=permission)
  * @button: a `GtkLockButton`
- * @permission: (nullable): a `GPermission` object, or %NULL
+ * @permission: (nullable): a `GPermission` object
  *
  * Sets the `GPermission` object that controls @button.
  */

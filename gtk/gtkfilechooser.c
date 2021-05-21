@@ -370,7 +370,7 @@ gtk_file_chooser_unselect_all (GtkFileChooser *chooser)
  * gtk_file_chooser_set_current_folder:
  * @chooser: a `GtkFileChooser`
  * @file: the `GFile` for the new folder
- * @error: location to store error, or %NULL.
+ * @error: location to store error
  *
  * Sets the current folder for @chooser from a #GFile.
  *
@@ -450,7 +450,7 @@ gtk_file_chooser_get_files (GtkFileChooser *chooser)
  * gtk_file_chooser_set_file:
  * @chooser: a `GtkFileChooser`
  * @file: the `GFile` to set as current
- * @error: (nullable): location to store the error, or %NULL to ignore errors.
+ * @error: (nullable): location to store the error
  *
  * Sets @file as the current filename for the file chooser.
  *
@@ -546,7 +546,7 @@ gtk_file_chooser_get_file (GtkFileChooser *chooser)
  * gtk_file_chooser_add_shortcut_folder:
  * @chooser: a `GtkFileChooser`
  * @folder: a `GFile` for the folder to add
- * @error: location to store error, or %NULL
+ * @error: location to store error
  *
  * Adds a folder to be displayed with the shortcut folders
  * in a file chooser.
@@ -569,7 +569,7 @@ gtk_file_chooser_add_shortcut_folder (GtkFileChooser  *chooser,
  * gtk_file_chooser_remove_shortcut_folder:
  * @chooser: a `GtkFileChooser`
  * @folder: a `GFile` for the folder to remove
- * @error: location to store error, or %NULL
+ * @error: location to store error
  *
  * Removes a folder from the shortcut folders in a file chooser.
  *
@@ -679,7 +679,7 @@ gtk_file_chooser_set_filter (GtkFileChooser *chooser,
  *
  * Gets the current filter.
  *
- * Returns: (nullable) (transfer none): the current filter, or %NULL
+ * Returns: (nullable) (transfer none): the current filter
  */
 GtkFileFilter *
 gtk_file_chooser_get_filter (GtkFileChooser *chooser)

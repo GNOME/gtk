@@ -3754,7 +3754,7 @@ gtk_tree_model_filter_set_root (GtkTreeModelFilter *filter,
 /**
  * gtk_tree_model_filter_new:
  * @child_model: A #GtkTreeModel.
- * @root: (nullable): A #GtkTreePath or %NULL.
+ * @root: (nullable): A #GtkTreePath
  *
  * Creates a new #GtkTreeModel, with @child_model as the child_model
  * and @root as the virtual root.
@@ -3793,8 +3793,8 @@ gtk_tree_model_filter_get_model (GtkTreeModelFilter *filter)
  * gtk_tree_model_filter_set_visible_func:
  * @filter: A #GtkTreeModelFilter
  * @func: A #GtkTreeModelFilterVisibleFunc, the visible function
- * @data: (nullable): User data to pass to the visible function, or %NULL
- * @destroy: (nullable): Destroy notifier of @data, or %NULL
+ * @data: (nullable): User data to pass to the visible function
+ * @destroy: (nullable): Destroy notifier of @data
  *
  * Sets the visible function used when filtering the @filter to be @func.
  * The function should return %TRUE if the given row should be visible and
@@ -3855,8 +3855,8 @@ gtk_tree_model_filter_set_visible_func (GtkTreeModelFilter            *filter,
  * @n_columns: The number of columns in the filter model.
  * @types: (array length=n_columns): The #GTypes of the columns.
  * @func: A #GtkTreeModelFilterModifyFunc
- * @data: (nullable): User data to pass to the modify function, or %NULL.
- * @destroy: (nullable): Destroy notifier of @data, or %NULL.
+ * @data: (nullable): User data to pass to the modify function
+ * @destroy: (nullable): Destroy notifier of @data
  *
  * With the @n_columns and @types parameters, you give an array of column
  * types for this model (which will be exposed to the parent model/view).
@@ -4108,7 +4108,7 @@ gtk_real_tree_model_filter_convert_child_path_to_path (GtkTreeModelFilter *filte
  * child model or points to a row which is not visible in @filter, then %NULL
  * is returned.
  *
- * Returns: (nullable) (transfer full): A newly allocated #GtkTreePath, or %NULL.
+ * Returns: (nullable) (transfer full): A newly allocated #GtkTreePath
  */
 GtkTreePath *
 gtk_tree_model_filter_convert_child_path_to_path (GtkTreeModelFilter *filter,
@@ -4149,7 +4149,7 @@ gtk_tree_model_filter_convert_child_path_to_path (GtkTreeModelFilter *filter,
  * point to the same location in the model not being filtered. If @filter_path
  * does not point to a location in the child model, %NULL is returned.
  *
- * Returns: (nullable) (transfer full): A newly allocated #GtkTreePath, or %NULL.
+ * Returns: (nullable) (transfer full): A newly allocated #GtkTreePath
  */
 GtkTreePath *
 gtk_tree_model_filter_convert_path_to_child_path (GtkTreeModelFilter *filter,

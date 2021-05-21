@@ -1662,7 +1662,7 @@ _gtk_file_system_model_get_file (GtkFileSystemModel *model,
  *
  * Returns: a pointer to the actual value as stored in @model or %NULL
  *   if no value available yet
- **/
+ */
 const GValue *
 _gtk_file_system_model_get_value (GtkFileSystemModel *model,
                                   GtkTreeIter *       iter,

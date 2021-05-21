@@ -297,7 +297,7 @@ gtk_slice_list_model_init (GtkSliceListModel *self)
 
 /**
  * gtk_slice_list_model_new:
- * @model: (transfer full) (nullable): The model to use, or %NULL
+ * @model: (transfer full) (nullable): The model to use
  * @offset: the offset of the slice
  * @size: maximum size of the slice
  *

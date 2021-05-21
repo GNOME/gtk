@@ -1376,8 +1376,8 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    * necessary properties to the notebook (e.g. the
    * `GtkNotebook`:group-name ).
    *
-   * Returns: (transfer none): a `GtkNotebook` that @page should be
-   *     added to, or %NULL.
+   * Returns: (nullable) (transfer none): a `GtkNotebook` that
+   *   @page should be added to
    */
   notebook_signals[CREATE_WINDOW] =
     g_signal_new (I_("create-window"),

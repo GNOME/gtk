@@ -1883,11 +1883,11 @@ get_cell_by_position (GtkCellRenderer     *renderer,
  * @context: the #GtkCellAreaContext used to hold sizes for @area.
  * @widget: the #GtkWidget that @area is rendering on
  * @cell_area: the whole allocated area for @area in @widget
- *             for this row
+ *   for this row
  * @x: the x position
  * @y: the y position
  * @alloc_area: (out) (optional): where to store the inner allocated area of the
- *                                  returned cell renderer, or %NULL.
+ *   returned cell renderer
  *
  * Gets the #GtkCellRenderer at @x and @y coordinates inside @area and optionally
  * returns the full cell allocation for it inside @cell_area.
@@ -1997,8 +1997,8 @@ gtk_cell_area_get_request_mode (GtkCellArea *area)
  * @area: a #GtkCellArea
  * @context: the #GtkCellAreaContext to perform this request with
  * @widget: the #GtkWidget where @area will be rendering
- * @minimum_width: (out) (optional): location to store the minimum width, or %NULL
- * @natural_width: (out) (optional): location to store the natural width, or %NULL
+ * @minimum_width: (out) (optional): location to store the minimum width
+ * @natural_width: (out) (optional): location to store the natural width
  *
  * Retrieves a cell area’s initial minimum and natural width.
  *
@@ -2028,8 +2028,8 @@ gtk_cell_area_get_preferred_width (GtkCellArea        *area,
  * @context: the #GtkCellAreaContext which has already been requested for widths.
  * @widget: the #GtkWidget where @area will be rendering
  * @width: the width for which to check the height of this area
- * @minimum_height: (out) (optional): location to store the minimum height, or %NULL
- * @natural_height: (out) (optional): location to store the natural height, or %NULL
+ * @minimum_height: (out) (optional): location to store the minimum height
+ * @natural_height: (out) (optional): location to store the natural height
  *
  * Retrieves a cell area’s minimum and natural height if it would be given
  * the specified @width.
@@ -2069,8 +2069,8 @@ gtk_cell_area_get_preferred_height_for_width (GtkCellArea        *area,
  * @area: a #GtkCellArea
  * @context: the #GtkCellAreaContext to perform this request with
  * @widget: the #GtkWidget where @area will be rendering
- * @minimum_height: (out) (optional): location to store the minimum height, or %NULL
- * @natural_height: (out) (optional): location to store the natural height, or %NULL
+ * @minimum_height: (out) (optional): location to store the minimum height
+ * @natural_height: (out) (optional): location to store the natural height
  *
  * Retrieves a cell area’s initial minimum and natural height.
  *
@@ -2100,8 +2100,8 @@ gtk_cell_area_get_preferred_height (GtkCellArea        *area,
  * @context: the #GtkCellAreaContext which has already been requested for widths.
  * @widget: the #GtkWidget where @area will be rendering
  * @height: the height for which to check the width of this area
- * @minimum_width: (out) (optional): location to store the minimum width, or %NULL
- * @natural_width: (out) (optional): location to store the natural width, or %NULL
+ * @minimum_width: (out) (optional): location to store the minimum width
+ * @natural_width: (out) (optional): location to store the natural width
  *
  * Retrieves a cell area’s minimum and natural width if it would be given
  * the specified @height.
@@ -2381,8 +2381,7 @@ gtk_cell_area_class_install_cell_property (GtkCellAreaClass   *aclass,
  *
  * Finds a cell property of a cell area class by name.
  *
- * Returns: (transfer none): the #GParamSpec of the child property
- *   or %NULL if @aclass has no child property with that name.
+ * Returns: (nullable) (transfer none): the #GParamSpec of the child property
  */
 GParamSpec*
 gtk_cell_area_class_find_cell_property (GtkCellAreaClass   *aclass,
@@ -3073,7 +3072,7 @@ gtk_cell_area_get_focus_siblings (GtkCellArea     *area,
  * cell may have been a sibling.
  *
  * Returns: (nullable) (transfer none): the #GtkCellRenderer for which @renderer
- *    is a sibling, or %NULL.
+ *    is a sibling
  */
 GtkCellRenderer *
 gtk_cell_area_get_focus_from_sibling (GtkCellArea          *area,
@@ -3438,8 +3437,8 @@ gtk_cell_area_inner_cell_area (GtkCellArea        *area,
  * @widget: the #GtkWidget that @area is rendering onto
  * @for_size: the allocation contextual size to request for, or -1 if
  * the base request for the orientation is to be returned.
- * @minimum_size: (out) (optional): location to store the minimum size, or %NULL
- * @natural_size: (out) (optional): location to store the natural size, or %NULL
+ * @minimum_size: (out) (optional): location to store the minimum size
+ * @natural_size: (out) (optional): location to store the natural size
  *
  * This is a convenience function for #GtkCellArea implementations
  * to request size for cell renderers. It’s important to use this

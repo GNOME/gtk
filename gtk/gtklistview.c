@@ -926,8 +926,8 @@ gtk_list_view_init (GtkListView *self)
 
 /**
  * gtk_list_view_new:
- * @model: (nullable) (transfer full): the model to use, or %NULL
- * @factory: (nullable) (transfer full): The factory to populate items with, or %NULL
+ * @model: (nullable) (transfer full): the model to use
+ * @factory: (nullable) (transfer full): The factory to populate items with
  *
  * Creates a new `GtkListView` that uses the given @factory for
  * mapping items to widgets.
@@ -981,7 +981,7 @@ gtk_list_view_get_model (GtkListView *self)
 /**
  * gtk_list_view_set_model: (attributes org.gtk.Method.set_property=model)
  * @self: a `GtkListView`
- * @model: (nullable) (transfer none): the model to use or %NULL for none
+ * @model: (nullable) (transfer none): the model to use
  *
  * Sets the model to use.
  *
@@ -1023,7 +1023,7 @@ gtk_list_view_get_factory (GtkListView *self)
 /**
  * gtk_list_view_set_factory: (attributes org.gtk.Method.set_property=factory)
  * @self: a `GtkListView`
- * @factory: (nullable) (transfer none): the factory to use or %NULL for none
+ * @factory: (nullable) (transfer none): the factory to use
  *
  * Sets the `GtkListItemFactory` to use for populating list items.
  */

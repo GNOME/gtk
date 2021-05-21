@@ -158,8 +158,7 @@ gtk_css_parser_unref (GtkCssParser *self)
  * for example when raw data is parsed - %NULL is returned.
  *
  * Returns: (nullable) (transfer none): The file being parsed
- *   or %NULL.
- **/
+ */
 GFile *
 gtk_css_parser_get_file (GtkCssParser *self)
 {
@@ -971,7 +970,7 @@ gtk_css_parser_parse_url_arg (GtkCssParser *parser,
  * consumes it, resolves the URL and returns the resulting #GFile.
  * On failure, an error is emitted and %NULL is returned.
  *
- * Returns: (nullable) (transfer full): the resulting URL or %NULL on error
+ * Returns: (nullable) (transfer full): the resulting URL
  **/
 char *
 gtk_css_parser_consume_url (GtkCssParser *self)

@@ -448,8 +448,7 @@ gtk_frame_set_label_widget (GtkFrame  *frame,
  *
  * Retrieves the label widget for the frame.
  *
- * Returns: (nullable) (transfer none): the label widget, or %NULL if
- * there is none.
+ * Returns: (nullable) (transfer none): the label widget
  */
 GtkWidget *
 gtk_frame_get_label_widget (GtkFrame *frame)

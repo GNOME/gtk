@@ -919,7 +919,7 @@ gtk_gesture_init (GtkGesture *gesture)
  *
  * This returns %NULL if the gesture is not being interacted.
  *
- * Returns: (nullable) (transfer none): a `GdkDevice`, or %NULL
+ * Returns: (nullable) (transfer none): a `GdkDevice`
  */
 GdkDevice *
 gtk_gesture_get_device (GtkGesture *gesture)
@@ -1450,7 +1450,7 @@ _gtk_gesture_check (GtkGesture *gesture)
 /**
  * gtk_gesture_handles_sequence:
  * @gesture: a `GtkGesture`
- * @sequence: (nullable): a `GdkEventSequence` or %NULL
+ * @sequence: (nullable): a `GdkEventSequence`
  *
  * Returns %TRUE if @gesture is currently handling events
  * corresponding to @sequence.

@@ -927,8 +927,7 @@ gtk_entry_completion_set_model (GtkEntryCompletion *completion,
  *
  * Returns %NULL if the model is unset.
  *
- * Returns: (nullable) (transfer none): A `GtkTreeModel`, or %NULL if none
- *   is currently being used
+ * Returns: (nullable) (transfer none): A `GtkTreeModel`
  */
 GtkTreeModel *
 gtk_entry_completion_get_model (GtkEntryCompletion *completion)
@@ -1248,7 +1247,7 @@ gtk_entry_completion_cursor_on_match (GtkEntryCompletion *completion,
  * see [method@Gtk.EntryCompletion.set_text_column] for details.
  *
  * Returns: (nullable) (transfer full): The common prefix all rows
- *   starting with @key or %NULL if no row matches @key.
+ *   starting with @key
  */
 char *
 gtk_entry_completion_compute_prefix (GtkEntryCompletion *completion,

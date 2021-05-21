@@ -507,8 +507,8 @@ gtk_cell_area_context_get_preferred_width_for_height (GtkCellAreaContext *contex
 /**
  * gtk_cell_area_context_get_allocation:
  * @context: a #GtkCellAreaContext
- * @width: (out) (optional): location to store the allocated width, or %NULL
- * @height: (out) (optional): location to store the allocated height, or %NULL
+ * @width: (out) (optional): location to store the allocated width
+ * @height: (out) (optional): location to store the allocated height
  *
  * Fetches the current allocation size for @context.
  *

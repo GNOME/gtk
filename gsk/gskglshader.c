@@ -578,8 +578,7 @@ gsk_gl_shader_get_source (GskGLShader *shader)
  * Gets the resource path for the GLSL sourcecode being used
  * to render this shader.
  *
- * Returns: (transfer none): The resource path for the shader,
- *     or %NULL if none.
+ * Returns: (transfer none) (nullable): The resource path for the shader
  */
 const char *
 gsk_gl_shader_get_resource (GskGLShader *shader)

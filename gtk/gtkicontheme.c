@@ -1484,8 +1484,7 @@ gtk_icon_theme_set_search_path (GtkIconTheme       *self,
  * See [method@Gtk.IconTheme.set_search_path].
  *
  * Returns: (transfer full) (array zero-terminated=1) (element-type filename) (nullable):
- *   a list of icon theme path directories or %NULL.
- *   The returned value should be freed with g_strfreev().
+ *   a list of icon theme path directories
  */
 char **
 gtk_icon_theme_get_search_path (GtkIconTheme  *self)
@@ -1581,8 +1580,7 @@ gtk_icon_theme_set_resource_path (GtkIconTheme       *self,
  * See [method@Gtk.IconTheme.set_resource_path].
  *
  * Returns: (transfer full) (array zero-terminated=1) (element-type utf8) (nullable):
- *   A list of resource paths or %NULL.
- *   The returned value should be freed with g_strfreev().
+ *   A list of resource paths
  */
 char **
 gtk_icon_theme_get_resource_path (GtkIconTheme  *self)
@@ -3679,8 +3677,7 @@ new_resource_file (const char *filename)
  *
  * Returns %NULL if the icon was not loaded from a file.
  *
- * Returns: (nullable) (transfer full): the #GFile for the icon, or %NULL.
- *    Free with g_object_unref().
+ * Returns: (nullable) (transfer full): the #GFile for the icon
  */
 GFile *
 gtk_icon_paintable_get_file (GtkIconPaintable *icon)

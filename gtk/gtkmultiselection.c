@@ -367,7 +367,7 @@ gtk_multi_selection_init (GtkMultiSelection *self)
 
 /**
  * gtk_multi_selection_new:
- * @model: (nullable) (transfer full): the `GListModel` to manage, or %NULL
+ * @model: (nullable) (transfer full): the `GListModel` to manage
  *
  * Creates a new selection to handle @model.
  *

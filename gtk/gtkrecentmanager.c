@@ -995,7 +995,7 @@ gtk_recent_manager_add_full (GtkRecentManager    *manager,
  * gtk_recent_manager_remove_item:
  * @manager: a `GtkRecentManager`
  * @uri: the URI of the item you wish to remove
- * @error: (nullable): return location for a #GError, or %NULL
+ * @error: (nullable): return location for a #GError
  *
  * Removes a resource pointed by @uri from the recently used resources
  * list handled by a recent manager.
@@ -1144,7 +1144,7 @@ build_recent_info (GBookmarkFile *bookmarks,
  * gtk_recent_manager_lookup_item:
  * @manager: a `GtkRecentManager`
  * @uri: a URI
- * @error: (nullable): a return location for a #GError, or %NULL
+ * @error: (nullable): a return location for a #GError
  *
  * Searches for a URI inside the recently used resources list, and
  * returns a `GtkRecentInfo` containing information about the resource

@@ -222,7 +222,7 @@ gtk_tooltip_set_markup (GtkTooltip  *tooltip,
 /**
  * gtk_tooltip_set_text:
  * @tooltip: a `GtkTooltip`
- * @text: (nullable): a text string or %NULL
+ * @text: (nullable): a text string
  *
  * Sets the text of the tooltip to be @text.
  *
@@ -241,7 +241,7 @@ gtk_tooltip_set_text (GtkTooltip  *tooltip,
 /**
  * gtk_tooltip_set_icon:
  * @tooltip: a #GtkTooltip
- * @paintable: (nullable): a #GdkPaintable, or %NULL
+ * @paintable: (nullable): a #GdkPaintable
  *
  * Sets the icon of the tooltip (which is in front of the text) to be
  * @paintable.  If @paintable is %NULL, the image will be hidden.
@@ -259,7 +259,7 @@ gtk_tooltip_set_icon (GtkTooltip   *tooltip,
 /**
  * gtk_tooltip_set_icon_from_icon_name:
  * @tooltip: a #GtkTooltip
- * @icon_name: (nullable): an icon name, or %NULL
+ * @icon_name: (nullable): an icon name
  *
  * Sets the icon of the tooltip (which is in front of the text) to be
  * the icon indicated by @icon_name with the size indicated
@@ -278,7 +278,7 @@ gtk_tooltip_set_icon_from_icon_name (GtkTooltip  *tooltip,
 /**
  * gtk_tooltip_set_icon_from_gicon:
  * @tooltip: a #GtkTooltip
- * @gicon: (nullable): a #GIcon representing the icon, or %NULL
+ * @gicon: (nullable): a #GIcon representing the icon
  *
  * Sets the icon of the tooltip (which is in front of the text)
  * to be the icon indicated by @gicon with the size indicated

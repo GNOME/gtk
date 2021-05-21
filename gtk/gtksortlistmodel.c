@@ -829,8 +829,8 @@ gtk_sort_list_model_init (GtkSortListModel *self)
 
 /**
  * gtk_sort_list_model_new:
- * @model: (nullable) (transfer full): the model to sort, or %NULL
- * @sorter: (nullable) (transfer full): the `GtkSorter` to sort @model with, or %NULL
+ * @model: (nullable) (transfer full): the model to sort
+ * @sorter: (nullable) (transfer full): the `GtkSorter` to sort @model with,
  *
  * Creates a new sort list model that uses the @sorter to sort @model.
  *

@@ -379,7 +379,7 @@ gdk_cursor_new_from_texture (GdkTexture *texture,
  * it is used on does not support textured cursors.
  *
  * Returns: (transfer none) (nullable): the fallback of the cursor or %NULL
- *  to use the default cursor as fallback.
+ *   to use the default cursor as fallback
  */
 GdkCursor *
 gdk_cursor_get_fallback (GdkCursor *cursor)

@@ -457,7 +457,7 @@ gtk_drag_icon_set_from_paintable (GdkDrag      *drag,
 /**
  * gtk_drag_icon_set_child: (attributes org.gtk.Method.set_property=child)
  * @self: a `GtkDragIcon`
- * @child: (nullable): a `GtkWidget` or %NULL
+ * @child: (nullable): a `GtkWidget`
  *
  * Sets the widget to display as the drag icon.
  */
@@ -491,7 +491,7 @@ gtk_drag_icon_set_child (GtkDragIcon *self,
  *
  * Gets the widget currently used as drag icon.
  *
- * Returns: (nullable) (transfer none): The drag icon or %NULL if none.
+ * Returns: (nullable) (transfer none): The drag icon
  **/
 GtkWidget *
 gtk_drag_icon_get_child (GtkDragIcon *self)

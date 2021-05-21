@@ -126,7 +126,6 @@ gtk_shortcut_trigger_trigger (GtkShortcutTrigger *self,
  * `<` and `&gt;` instead of `>`.
  *
  * Returns: (nullable) (transfer full): a new `GtkShortcutTrigger`
- *   or %NULL on error
  */
 GtkShortcutTrigger *
 gtk_shortcut_trigger_parse_string (const char *string)

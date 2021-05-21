@@ -625,7 +625,7 @@ gtk_tree_path_new (void)
  * child of that 11th child, and the 1st child of that 5th child.
  * If an invalid path string is passed in, %NULL is returned.
  *
- * Returns: (nullable): A newly-created #GtkTreePath-struct, or %NULL
+ * Returns: (nullable): A newly-created #GtkTreePath
  */
 GtkTreePath *
 gtk_tree_path_new_from_string (const char *path)
@@ -868,7 +868,7 @@ gtk_tree_path_get_depth (GtkTreePath *path)
  *
  * The length of the array can be obtained with gtk_tree_path_get_depth().
  *
- * Returns: (nullable): The current indices, or %NULL
+ * Returns: (nullable) (transfer none): The current indices
  */
 int *
 gtk_tree_path_get_indices (GtkTreePath *path)
@@ -882,7 +882,7 @@ gtk_tree_path_get_indices (GtkTreePath *path)
  * gtk_tree_path_get_indices_with_depth: (rename-to gtk_tree_path_get_indices)
  * @path: a `GtkTreePath`
  * @depth: (out) (optional): return location for number of elements
- *   returned in the integer array, or %NULL
+ *   returned in the integer array
  *
  * Returns the current indices of @path.
  *
@@ -890,8 +890,8 @@ gtk_tree_path_get_indices (GtkTreePath *path)
  * It also returns the number of elements in the array.
  * The array should not be freed.
  *
- * Returns: (array length=depth) (transfer none): The current
- *   indices, or %NULL
+ * Returns: (array length=depth) (transfer none) (nullable): The current
+ *   indices
  */
 int *
 gtk_tree_path_get_indices_with_depth (GtkTreePath *path,
@@ -1508,7 +1508,7 @@ gtk_tree_model_iter_previous (GtkTreeModel *tree_model,
  * gtk_tree_model_iter_children:
  * @tree_model: a #GtkTreeModel
  * @iter: (out): the new #GtkTreeIter-struct to be set to the child
- * @parent: (nullable): the #GtkTreeIter-struct, or %NULL
+ * @parent: (nullable): the #GtkTreeIter
  *
  * Sets @iter to point to the first child of @parent.
  *
@@ -1566,7 +1566,7 @@ gtk_tree_model_iter_has_child (GtkTreeModel *tree_model,
 /**
  * gtk_tree_model_iter_n_children:
  * @tree_model: a #GtkTreeModel
- * @iter: (nullable): the #GtkTreeIter-struct, or %NULL
+ * @iter: (nullable): the #GtkTreeIter
  *
  * Returns the number of children that @iter has.
  *
@@ -1592,8 +1592,8 @@ gtk_tree_model_iter_n_children (GtkTreeModel *tree_model,
 /**
  * gtk_tree_model_iter_nth_child:
  * @tree_model: a #GtkTreeModel
- * @iter: (out): the #GtkTreeIter-struct to set to the nth child
- * @parent: (nullable): the #GtkTreeIter-struct to get the child from, or %NULL.
+ * @iter: (out): the #GtkTreeIter to set to the nth child
+ * @parent: (nullable): the #GtkTreeIter to get the child from
  * @n: the index of the desired child
  *
  * Sets @iter to be the child of @parent, using the given index.
@@ -2287,7 +2287,7 @@ gtk_tree_row_reference_unref_path (GtkTreePath  *path,
  * propagated, and the path is updated appropriately. If
  * @path isn’t a valid path in @model, then %NULL is returned.
  *
- * Returns: (nullable): a newly allocated #GtkTreeRowReference, or %NULL
+ * Returns: (nullable): a newly allocated #GtkTreeRowReference
  */
 GtkTreeRowReference *
 gtk_tree_row_reference_new (GtkTreeModel *model,
@@ -2334,7 +2334,7 @@ gtk_tree_row_reference_new (GtkTreeModel *model,
  * need to carefully monitor exactly when a row reference updates
  * itself, and is not generally needed by most applications.
  *
- * Returns: (nullable): a newly allocated #GtkTreeRowReference, or %NULL
+ * Returns: (nullable): a newly allocated #GtkTreeRowReference
  */
 GtkTreeRowReference *
 gtk_tree_row_reference_new_proxy (GObject      *proxy,
@@ -2400,7 +2400,7 @@ gtk_tree_row_reference_new_proxy (GObject      *proxy,
  * Returns a path that the row reference currently points to,
  * or %NULL if the path pointed to is no longer valid.
  *
- * Returns: (nullable) (transfer full): a current path, or %NULL
+ * Returns: (nullable) (transfer full): a current path
  */
 GtkTreePath *
 gtk_tree_row_reference_get_path (GtkTreeRowReference *reference)
@@ -2434,7 +2434,7 @@ gtk_tree_row_reference_get_model (GtkTreeRowReference *reference)
 
 /**
  * gtk_tree_row_reference_valid:
- * @reference: (nullable): a #GtkTreeRowReference, or %NULL
+ * @reference: (nullable): a #GtkTreeRowReference
  *
  * Returns %TRUE if the @reference is non-%NULL and refers to
  * a current valid path.
@@ -2469,7 +2469,7 @@ gtk_tree_row_reference_copy (GtkTreeRowReference *reference)
 
 /**
  * gtk_tree_row_reference_free:
- * @reference: (nullable): a #GtkTreeRowReference, or %NULL
+ * @reference: (nullable): a #GtkTreeRowReference
  *
  * Free’s @reference. @reference may be %NULL
  */

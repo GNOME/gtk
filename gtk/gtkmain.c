@@ -1789,7 +1789,7 @@ gtk_get_current_event_time (void)
  * originally.
  *
  * Returns: (transfer none) (nullable): the widget that originally
- *   received @event, or %NULL
+ *   received @event
  */
 GtkWidget *
 gtk_get_event_widget (GdkEvent *event)

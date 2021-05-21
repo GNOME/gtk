@@ -260,7 +260,7 @@ gtk_widget_paintable_init (GtkWidgetPaintable *self)
 
 /**
  * gtk_widget_paintable_new:
- * @widget: (nullable) (transfer none): a `GtkWidget` or %NULL
+ * @widget: (nullable) (transfer none): a `GtkWidget`
  *
  * Creates a new widget paintable observing the given widget.
  *
@@ -312,7 +312,7 @@ gtk_widget_paintable_get_widget (GtkWidgetPaintable *self)
 /**
  * gtk_widget_paintable_set_widget: (attributes org.gtk.Method.set_property=widget)
  * @self: a `GtkWidgetPaintable`
- * @widget: (nullable): the widget to observe or %NULL
+ * @widget: (nullable): the widget to observe
  *
  * Sets the widget that should be observed.
  */

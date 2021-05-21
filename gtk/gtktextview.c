@@ -4458,7 +4458,7 @@ find_child_for_window_type (GtkTextView       *text_view,
  * @win must be one of %GTK_TEXT_WINDOW_LEFT, %GTK_TEXT_WINDOW_RIGHT,
  * %GTK_TEXT_WINDOW_TOP, or %GTK_TEXT_WINDOW_BOTTOM.
  *
- * Returns: (transfer none) (nullable): a `GtkWidget` or %NULL
+ * Returns: (transfer none) (nullable): a `GtkWidget`
  */
 GtkWidget *
 gtk_text_view_get_gutter (GtkTextView       *text_view,
@@ -4484,7 +4484,7 @@ gtk_text_view_get_gutter (GtkTextView       *text_view,
  * gtk_text_view_set_gutter:
  * @text_view: a `GtkTextView`
  * @win: a `GtkTextWindowType`
- * @widget: (nullable): a `GtkWidget` or %NULL
+ * @widget: (nullable): a `GtkWidget`
  *
  * Places @widget into the gutter specified by @win.
  *
@@ -9211,8 +9211,8 @@ text_window_get_height (GtkTextWindow *win)
  * @win: a #GtkTextWindowType
  * @buffer_x: buffer x coordinate
  * @buffer_y: buffer y coordinate
- * @window_x: (out) (optional): window x coordinate return location or %NULL
- * @window_y: (out) (optional): window y coordinate return location or %NULL
+ * @window_x: (out) (optional): window x coordinate return location
+ * @window_y: (out) (optional): window y coordinate return location
  *
  * Converts buffer coordinates to window coordinates.
  */
@@ -9274,8 +9274,8 @@ gtk_text_view_buffer_to_window_coords (GtkTextView      *text_view,
  * @win: a #GtkTextWindowType
  * @window_x: window x coordinate
  * @window_y: window y coordinate
- * @buffer_x: (out) (optional): buffer x coordinate return location or %NULL
- * @buffer_y: (out) (optional): buffer y coordinate return location or %NULL
+ * @buffer_x: (out) (optional): buffer x coordinate return location
+ * @buffer_y: (out) (optional): buffer y coordinate return location
  *
  * Converts coordinates on the window identified by @win to buffer
  * coordinates.

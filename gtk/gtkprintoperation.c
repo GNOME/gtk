@@ -978,8 +978,8 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * signal is emitted on the operation. Then you can read out any
    * information you need from the widgets.
    *
-   * Returns: (transfer none): A custom widget that gets embedded in
-   *   the print dialog, or %NULL
+   * Returns: (nullable) (transfer none): A custom widget that gets embedded in
+   *   the print dialog
    */
   signals[CREATE_CUSTOM_WIDGET] =
     g_signal_new (I_("create-custom-widget"),
@@ -1037,7 +1037,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * @operation: the `GtkPrintOperation` on which the signal was emitted
    * @preview: the `GtkPrintOperationPreview` for the current operation
    * @context: the `GtkPrintContext` that will be used
-   * @parent: (nullable): the `GtkWindow` to use as window parent, or %NULL
+   * @parent: (nullable): the `GtkWindow` to use as window parent
    *
    * Gets emitted when a preview is requested from the native dialog.
    *
@@ -1422,7 +1422,7 @@ gtk_print_operation_new (void)
 /**
  * gtk_print_operation_set_default_page_setup: (attributes org.gtk.Method.set_property=default-page-setup)
  * @op: a `GtkPrintOperation`
- * @default_page_setup: (nullable): a `GtkPageSetup`, or %NULL
+ * @default_page_setup: (nullable): a `GtkPageSetup`
  *
  * Makes @default_page_setup the default page setup for @op.
  *
@@ -3012,7 +3012,7 @@ gtk_print_operation_get_error (GtkPrintOperation  *op,
  * @op: a `GtkPrintOperation`
  * @action: the action to start
  * @parent: (nullable): Transient parent of the dialog
- * @error: (nullable): Return location for errors, or %NULL
+ * @error: (nullable): Return location for errors
  *
  * Runs the print operation.
  *

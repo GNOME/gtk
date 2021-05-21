@@ -106,7 +106,7 @@ gtk_buildable_get_buildable_id (GtkBuildable *buildable)
  * @buildable: a `GtkBuildable`
  * @builder: a `GtkBuilder`
  * @child: child to add
- * @type: (nullable): kind of child or %NULL
+ * @type: (nullable): kind of child
  *
  * Adds a child to @buildable. @type is an optional string
  * describing how the child should be added.

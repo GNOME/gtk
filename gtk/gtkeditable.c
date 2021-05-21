@@ -666,8 +666,8 @@ gtk_editable_get_position (GtkEditable *editable)
 /**
  * gtk_editable_get_selection_bounds:
  * @editable: a `GtkEditable`
- * @start_pos: (out) (optional): location to store the starting position, or %NULL
- * @end_pos: (out) (optional): location to store the end position, or %NULL
+ * @start_pos: (out) (optional): location to store the starting position
+ * @end_pos: (out) (optional): location to store the end position
  *
  * Retrieves the selection bound of the editable.
  *

@@ -343,8 +343,7 @@ gtk_text_tag_table_add (GtkTextTagTable *table,
  *
  * Look up a named tag.
  *
- * Returns: (nullable) (transfer none): The tag,
- *   or %NULL if none by that name is in the table.
+ * Returns: (nullable) (transfer none): The tag
  */
 GtkTextTag*
 gtk_text_tag_table_lookup (GtkTextTagTable *table,

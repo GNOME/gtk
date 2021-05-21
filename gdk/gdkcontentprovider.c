@@ -319,7 +319,7 @@ gdk_content_provider_write_mime_type_async (GdkContentProvider  *provider,
  * gdk_content_provider_write_mime_type_finish:
  * @provider: a `GdkContentProvider`
  * @result: a `GAsyncResult`
- * @error: a `GError` location to store the error occurring, or %NULL to ignore
+ * @error: a `GError` location to store the error occurring
  *
  * Finishes an asynchronous write operation.
  *
@@ -343,7 +343,7 @@ gdk_content_provider_write_mime_type_finish (GdkContentProvider  *provider,
  * gdk_content_provider_get_value:
  * @provider: a `GdkContentProvider`
  * @value: the `GValue` to fill
- * @error: a `GError` location to store the error occurring, or %NULL to ignore
+ * @error: a `GError` location to store the error occurring
  *
  * Gets the contents of @provider stored in @value.
  *

@@ -453,12 +453,12 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
  *   the height the widget should be measured with. The %GTK_ORIENTATION_VERTICAL
  *   case is analogous. This way, both height-for-width and width-for-height
  *   requests can be implemented. If no size is known, -1 can be passed.
- * @minimum: (out) (optional): location to store the minimum size, or %NULL
- * @natural: (out) (optional): location to store the natural size, or %NULL
+ * @minimum: (out) (optional): location to store the minimum size
+ * @natural: (out) (optional): location to store the natural size
  * @minimum_baseline: (out) (optional): location to store the baseline
- *   position for the minimum size, or %NULL
+ *   position for the minimum size
  * @natural_baseline: (out) (optional): location to store the baseline
- *   position for the natural size, or %NULL
+ *   position for the natural size
  *
  * Measures @widget in the orientation @orientation and for the given @for_size.
  *
@@ -577,8 +577,8 @@ gtk_widget_get_request_mode (GtkWidget *widget)
 /**
  * gtk_widget_get_preferred_size:
  * @widget: a `GtkWidget` instance
- * @minimum_size: (out) (optional): location for storing the minimum size, or %NULL
- * @natural_size: (out) (optional): location for storing the natural size, or %NULL
+ * @minimum_size: (out) (optional): location for storing the minimum size
+ * @natural_size: (out) (optional): location for storing the natural size
  *
  * Retrieves the minimum and natural size of a widget, taking
  * into account the widget’s preference for height-for-width management.

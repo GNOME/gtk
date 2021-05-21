@@ -1145,7 +1145,7 @@ _gdk_device_surface_at_position (GdkDevice       *device,
  *  }
  * ```
  *
- * Returns: (nullable): the vendor ID, or %NULL
+ * Returns: (nullable): the vendor ID
  */
 const char *
 gdk_device_get_vendor_id (GdkDevice *device)
@@ -1164,7 +1164,7 @@ gdk_device_get_vendor_id (GdkDevice *device)
  * This ID is retrieved from the device, and does not change.
  * See [method@Gdk.Device.get_vendor_id] for more information.
  *
- * Returns: (nullable): the product ID, or %NULL
+ * Returns: (nullable): the product ID
  */
 const char *
 gdk_device_get_product_id (GdkDevice *device)
@@ -1239,7 +1239,7 @@ gdk_device_get_num_touches (GdkDevice *device)
  *
  * Retrieves the current tool for @device.
  *
- * Returns: (transfer none): the `GdkDeviceTool`, or %NULL
+ * Returns: (transfer none): the `GdkDeviceTool`
  */
 GdkDeviceTool *
 gdk_device_get_device_tool (GdkDevice *device)

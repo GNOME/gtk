@@ -237,7 +237,7 @@ gdk_app_launch_context_set_timestamp (GdkAppLaunchContext *context,
 /**
  * gdk_app_launch_context_set_icon:
  * @context: a `GdkAppLaunchContext`
- * @icon: (nullable): a #GIcon, or %NULL
+ * @icon: (nullable): a #GIcon
  *
  * Sets the icon for applications that are launched with this
  * context.
@@ -267,7 +267,7 @@ gdk_app_launch_context_set_icon (GdkAppLaunchContext *context,
 /**
  * gdk_app_launch_context_set_icon_name:
  * @context: a `GdkAppLaunchContext`
- * @icon_name: (nullable): an icon name, or %NULL
+ * @icon_name: (nullable): an icon name
  *
  * Sets the icon for applications that are launched with this context.
  *

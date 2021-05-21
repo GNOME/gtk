@@ -3687,8 +3687,7 @@ gtk_widget_queue_resize (GtkWidget *widget)
  *
  * Unrealized widgets do not have a frame clock.
  *
- * Returns: (nullable) (transfer none): a `GdkFrameClock`,
- *   or %NULL if widget is unrealized
+ * Returns: (nullable) (transfer none): a `GdkFrameClock`
  */
 GdkFrameClock*
 gtk_widget_get_frame_clock (GtkWidget *widget)
@@ -6480,7 +6479,7 @@ gtk_widget_update_pango_context (GtkWidget *widget)
 /**
  * gtk_widget_set_font_options:
  * @widget: a `GtkWidget`
- * @options: (nullable): a #cairo_font_options_t, or %NULL
+ * @options: (nullable): a #cairo_font_options_t
  *   to unset any previously set default font options
  *
  * Sets the `cairo_font_options_t` used for Pango rendering
@@ -6584,7 +6583,7 @@ gtk_widget_set_font_map (GtkWidget    *widget,
  *
  * See [method@Gtk.Widget.set_font_map].
  *
- * Returns: (transfer none) (nullable): A `PangoFontMap`, or %NULL
+ * Returns: (transfer none) (nullable): A `PangoFontMap`
  */
 PangoFontMap *
 gtk_widget_get_font_map (GtkWidget *widget)
@@ -11296,7 +11295,7 @@ gtk_widget_get_template_child (GtkWidget   *widget,
  * gtk_widget_activate_action_variant: (rename-to gtk_widget_activate_action)
  * @widget: a `GtkWidget`
  * @name: the name of the action to activate
- * @args: (nullable): parameters to use, or %NULL
+ * @args: (nullable): parameters to use
  *
  * Looks up the action in the action groups associated with
  * @widget and its ancestors, and activates it.
@@ -12460,7 +12459,7 @@ gtk_widget_class_add_action (GtkWidgetClass  *widget_class,
  * gtk_widget_class_install_action:
  * @widget_class: a `GtkWidgetClass`
  * @action_name: a prefixed action name, such as "clipboard.paste"
- * @parameter_type: (nullable): the parameter type, or %NULL
+ * @parameter_type: (nullable): the parameter type
  * @activate: (scope call): callback to use when the action is activated
  *
  * This should be called at class initialization time to specify

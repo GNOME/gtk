@@ -217,8 +217,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkFileChooserNative, gtk_file_chooser_native, GTK_TYPE
  *
  * Retrieves the custom label text for the accept button.
  *
- * Returns: (nullable): The custom label, or %NULL for the default.
- *   This string is owned by GTK and should not be modified or freed
+ * Returns: (nullable): The custom label
  */
 const char *
 gtk_file_chooser_native_get_accept_label (GtkFileChooserNative *self)
@@ -231,7 +230,7 @@ gtk_file_chooser_native_get_accept_label (GtkFileChooserNative *self)
 /**
  * gtk_file_chooser_native_set_accept_label: (attributes org.gtk.Method.set_property=accept-label)
  * @self: a `GtkFileChooserNative`
- * @accept_label: (nullable): custom label or %NULL for the default
+ * @accept_label: (nullable): custom label
  *
  * Sets the custom label text for the accept button.
  *
@@ -260,8 +259,7 @@ gtk_file_chooser_native_set_accept_label (GtkFileChooserNative *self,
  *
  * Retrieves the custom label text for the cancel button.
  *
- * Returns: (nullable): The custom label, or %NULL for the default.
- *   This string is owned by GTK and should not be modified or freed
+ * Returns: (nullable): The custom label
  */
 const char *
 gtk_file_chooser_native_get_cancel_label (GtkFileChooserNative *self)
@@ -274,7 +272,7 @@ gtk_file_chooser_native_get_cancel_label (GtkFileChooserNative *self)
 /**
  * gtk_file_chooser_native_set_cancel_label: (attributes org.gtk.Method.set_property=cancel-label)
  * @self: a `GtkFileChooserNative`
- * @cancel_label: (nullable): custom label or %NULL for the default
+ * @cancel_label: (nullable): custom label
  *
  * Sets the custom label text for the cancel button.
  *
@@ -520,8 +518,8 @@ gtk_file_chooser_native_init (GtkFileChooserNative *self)
 
 /**
  * gtk_file_chooser_native_new:
- * @title: (nullable): Title of the native, or %NULL
- * @parent: (nullable): Transient parent of the native, or %NULL
+ * @title: (nullable): Title of the native
+ * @parent: (nullable): Transient parent of the native
  * @action: Open or save mode for the dialog
  * @accept_label: (nullable): text to go in the accept button, or %NULL for the default
  * @cancel_label: (nullable): text to go in the cancel button, or %NULL for the default

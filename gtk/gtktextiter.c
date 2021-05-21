@@ -1185,7 +1185,7 @@ gtk_text_iter_get_toggled_tags  (const GtkTextIter  *iter,
 /**
  * gtk_text_iter_starts_tag:
  * @iter: an iterator
- * @tag: (nullable): a `GtkTextTag`, or %NULL
+ * @tag: (nullable): a `GtkTextTag`
  *
  * Returns %TRUE if @tag is toggled on at exactly this point.
  *
@@ -1235,7 +1235,7 @@ gtk_text_iter_starts_tag (const GtkTextIter *iter,
 /**
  * gtk_text_iter_ends_tag:
  * @iter: an iterator
- * @tag: (nullable): a `GtkTextTag`, or %NULL
+ * @tag: (nullable): a `GtkTextTag`
  *
  * Returns %TRUE if @tag is toggled off at exactly this point.
  *
@@ -1285,7 +1285,7 @@ gtk_text_iter_ends_tag   (const GtkTextIter  *iter,
 /**
  * gtk_text_iter_toggles_tag:
  * @iter: an iterator
- * @tag: (nullable): a `GtkTextTag`, or %NULL
+ * @tag: (nullable): a `GtkTextTag`
  *
  * Gets whether a range with @tag applied to it begins
  * or ends at @iter.
@@ -4232,7 +4232,7 @@ gtk_text_iter_forward_to_line_end (GtkTextIter *iter)
 /**
  * gtk_text_iter_forward_to_tag_toggle:
  * @iter: a `GtkTextIter`
- * @tag: (nullable): a `GtkTextTag`, or %NULL
+ * @tag: (nullable): a `GtkTextTag`
  *
  * Moves forward to the next toggle (on or off) of the
  * @tag, or to the next toggle of any tag if
@@ -4319,7 +4319,7 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
 /**
  * gtk_text_iter_backward_to_tag_toggle:
  * @iter: a `GtkTextIter`
- * @tag: (nullable): a `GtkTextTag`, or %NULL
+ * @tag: (nullable): a `GtkTextTag`
  *
  * Moves backward to the next toggle (on or off) of the
  * @tag, or to the next toggle of any tag if
@@ -4436,7 +4436,7 @@ matches_pred (GtkTextIter *iter,
  * @iter: a `GtkTextIter`
  * @pred: (scope call): a function to be called on each character
  * @user_data: (closure): user data for @pred
- * @limit: (nullable): search limit, or %NULL for none
+ * @limit: (nullable): search limit
  *
  * Advances @iter, calling @pred on each character.
  *
@@ -4475,7 +4475,7 @@ gtk_text_iter_forward_find_char (GtkTextIter         *iter,
  * @iter: a `GtkTextIter`
  * @pred: (scope call): function to be called on each character
  * @user_data: (closure): user data for @pred
- * @limit: (nullable): search limit, or %NULL for none
+ * @limit: (nullable): search limit
  *
  * Same as gtk_text_iter_forward_find_char(),
  * but goes backward from @iter.
@@ -4955,8 +4955,8 @@ strbreakup (const char *string,
  * @iter: start of search
  * @str: a search string
  * @flags: flags affecting how the search is done
- * @match_start: (out caller-allocates) (optional): return location for start of match, or %NULL
- * @match_end: (out caller-allocates) (optional): return location for end of match, or %NULL
+ * @match_start: (out caller-allocates) (optional): return location for start of match
+ * @match_end: (out caller-allocates) (optional): return location for end of match
  * @limit: (nullable): location of last possible @match_end, or %NULL for the end of the buffer
  *
  * Searches forward for @str.
@@ -5285,8 +5285,8 @@ lines_window_free (LinesWindow *win)
  * @iter: a `GtkTextIter` where the search begins
  * @str: search string
  * @flags: bitmask of flags affecting the search
- * @match_start: (out caller-allocates) (optional): return location for start of match, or %NULL
- * @match_end: (out caller-allocates) (optional): return location for end of match, or %NULL
+ * @match_start: (out caller-allocates) (optional): return location for start of match
+ * @match_end: (out caller-allocates) (optional): return location for end of match
  * @limit: (nullable): location of last possible @match_start, or %NULL for start of buffer
  *
  * Same as gtk_text_iter_forward_search(), but moves backward.

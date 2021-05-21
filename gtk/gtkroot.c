@@ -151,8 +151,7 @@ gtk_root_set_focus (GtkRoot   *self,
  * `gtk_widget_has_focus (widget)` will be %FALSE for the
  * widget.
  *
- * Returns: (nullable) (transfer none): the currently focused
- *   widget, or %NULL if there is none.
+ * Returns: (nullable) (transfer none): the currently focused widget
  */
 GtkWidget *
 gtk_root_get_focus (GtkRoot *self)

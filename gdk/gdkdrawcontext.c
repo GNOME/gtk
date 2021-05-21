@@ -219,7 +219,7 @@ gdk_draw_context_surface_resized (GdkDrawContext *context)
  *
  * Retrieves the `GdkDisplay` the @context is created for
  *
- * Returns: (nullable) (transfer none): a `GdkDisplay` or %NULL
+ * Returns: (nullable) (transfer none): the `GdkDisplay`
  */
 GdkDisplay *
 gdk_draw_context_get_display (GdkDrawContext *context)
@@ -237,7 +237,7 @@ gdk_draw_context_get_display (GdkDrawContext *context)
  *
  * Retrieves the surface that @context is bound to.
  *
- * Returns: (nullable) (transfer none): a #GdkSurface or %NULL
+ * Returns: (nullable) (transfer none): the #GdkSurface
  */
 GdkSurface *
 gdk_draw_context_get_surface (GdkDrawContext *context)

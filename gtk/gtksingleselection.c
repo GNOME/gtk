@@ -449,7 +449,7 @@ gtk_single_selection_init (GtkSingleSelection *self)
 
 /**
  * gtk_single_selection_new:
- * @model: (nullable) (transfer full): the `GListModel` to manage, or %NULL
+ * @model: (nullable) (transfer full): the `GListModel` to manage
  *
  * Creates a new selection to handle @model.
  *

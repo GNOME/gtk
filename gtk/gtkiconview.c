@@ -1955,7 +1955,7 @@ gtk_icon_view_remove_editable (GtkCellArea            *area,
  * gtk_icon_view_set_cursor:
  * @icon_view: A #GtkIconView
  * @path: A #GtkTreePath
- * @cell: (nullable): One of the cell renderers of @icon_view, or %NULL
+ * @cell: (nullable): One of the cell renderers of @icon_view
  * @start_editing: %TRUE if the specified cell should start being edited.
  *
  * Sets the current keyboard focus to be at @path, and selects it.  This is
@@ -4110,9 +4110,9 @@ gtk_icon_view_get_path_at_pos (GtkIconView *icon_view,
  * @icon_view: A #GtkIconView.
  * @x: The x position to be identified
  * @y: The y position to be identified
- * @path: (out) (optional): Return location for the path, or %NULL
+ * @path: (out) (optional): Return location for the path
  * @cell: (out) (optional) (transfer none): Return location for the renderer
- *   responsible for the cell at (@x, @y), or %NULL
+ *   responsible for the cell at (@x, @y)
  *
  * Gets the path and cell for the icon at the given position.
  *
@@ -4150,7 +4150,7 @@ gtk_icon_view_get_item_at_pos (GtkIconView      *icon_view,
  * gtk_icon_view_get_cell_rect:
  * @icon_view: a #GtkIconView
  * @path: a #GtkTreePath
- * @cell: (nullable): a #GtkCellRenderer or %NULL
+ * @cell: (nullable): a #GtkCellRenderer
  * @rect: (out): rectangle to fill with cell rect
  *
  * Fills the bounding rectangle in widget coordinates for the cell specified by
@@ -4225,7 +4225,7 @@ gtk_icon_view_set_tooltip_item (GtkIconView     *icon_view,
  * @icon_view: a #GtkIconView
  * @tooltip: a #GtkTooltip
  * @path: a #GtkTreePath
- * @cell: (nullable): a #GtkCellRenderer or %NULL
+ * @cell: (nullable): a #GtkCellRenderer
  *
  * Sets the tip area of @tooltip to the area which @cell occupies in
  * the item pointed to by @path. See also gtk_tooltip_set_tip_area().
@@ -6368,7 +6368,7 @@ gtk_icon_view_unset_model_drag_dest (GtkIconView *icon_view)
 /**
  * gtk_icon_view_set_drag_dest_item:
  * @icon_view: a #GtkIconView
- * @path: (nullable): The path of the item to highlight, or %NULL.
+ * @path: (nullable): The path of the item to highlight
  * @pos: Specifies where to drop, relative to the item
  *
  * Sets the item that is highlighted for feedback.
@@ -6455,9 +6455,8 @@ gtk_icon_view_get_drag_dest_item (GtkIconView              *icon_view,
  * @icon_view: a #GtkIconView
  * @drag_x: the position to determine the destination item for
  * @drag_y: the position to determine the destination item for
- * @path: (out) (optional): Return location for the path of the item,
- *    or %NULL.
- * @pos: (out) (optional): Return location for the drop position, or %NULL
+ * @path: (out) (optional): Return location for the path of the item
+ * @pos: (out) (optional): Return location for the drop position
  * 
  * Determines the destination item for a given position.
  * 

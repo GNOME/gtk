@@ -655,7 +655,7 @@ gtk_column_view_column_get_factory (GtkColumnViewColumn *self)
 /**
  * gtk_column_view_column_set_factory: (attributes org.gtk.Method.set_property=factory)
  * @self: a `GtkColumnViewColumn`
- * @factory: (nullable) (transfer none): the factory to use or %NULL for none
+ * @factory: (nullable) (transfer none): the factory to use
  *
  * Sets the `GtkListItemFactory` to use for populating list items for this
  * column.
@@ -848,7 +848,7 @@ gtk_column_view_column_get_visible (GtkColumnViewColumn *self)
 /**
  * gtk_column_view_column_set_header_menu: (attributes org.gtk.Method.set_property=header-menu)
  * @self: a `GtkColumnViewColumn`
- * @menu: (nullable): a `GMenuModel`, or %NULL
+ * @menu: (nullable): a `GMenuModel`
  *
  * Sets the menu model that is used to create the context menu
  * for the column header.
@@ -876,7 +876,7 @@ gtk_column_view_column_set_header_menu (GtkColumnViewColumn *self,
  * Gets the menu model that is used to create the context menu
  * for the column header.
  *
- * Returns: (transfer none) (nullable): the #GMenuModel, or %NULL
+ * Returns: (transfer none) (nullable): the #GMenuModel
  */
 GMenuModel *
 gtk_column_view_column_get_header_menu (GtkColumnViewColumn *self)

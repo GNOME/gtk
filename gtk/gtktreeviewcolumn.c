@@ -2393,7 +2393,7 @@ gtk_tree_view_column_get_clickable (GtkTreeViewColumn *tree_column)
 /**
  * gtk_tree_view_column_set_widget:
  * @tree_column: A #GtkTreeViewColumn.
- * @widget: (nullable): A child #GtkWidget, or %NULL.
+ * @widget: (nullable): A child #GtkWidget
  *
  * Sets the widget in the header to be @widget.  If widget is %NULL, then the
  * header button is set with a #GtkLabel set to the title of @tree_column.
@@ -2732,10 +2732,10 @@ gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column,
 /**
  * gtk_tree_view_column_cell_get_size:
  * @tree_column: A #GtkTreeViewColumn.
- * @x_offset: (out) (optional): location to return x offset of a cell relative to @cell_area, or %NULL
- * @y_offset: (out) (optional): location to return y offset of a cell relative to @cell_area, or %NULL
- * @width: (out) (optional): location to return width needed to render a cell, or %NULL
- * @height: (out) (optional): location to return height needed to render a cell, or %NULL
+ * @x_offset: (out) (optional): location to return x offset of a cell relative to @cell_area
+ * @y_offset: (out) (optional): location to return y offset of a cell relative to @cell_area
+ * @width: (out) (optional): location to return width needed to render a cell
+ * @height: (out) (optional): location to return height needed to render a cell
  * 
  * Obtains the width and height needed to render the column.  This is used
  * primarily by the #GtkTreeView.

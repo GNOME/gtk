@@ -1134,8 +1134,7 @@ gtk_expander_set_label_widget (GtkExpander *expander,
  *
  * Retrieves the label widget for the frame.
  *
- * Returns: (nullable) (transfer none): the label widget,
- *   or %NULL if there is none
+ * Returns: (nullable) (transfer none): the label widget
  */
 GtkWidget *
 gtk_expander_get_label_widget (GtkExpander *expander)
