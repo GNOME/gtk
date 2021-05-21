@@ -964,10 +964,8 @@ gtk_range_get_range_rect (GtkRange     *range,
 /**
  * gtk_range_get_slider_range:
  * @range: a `GtkRange`
- * @slider_start: (out) (allow-none): return location for the slider's
- *     start, or %NULL
- * @slider_end: (out) (allow-none): return location for the slider's
- *     end, or %NULL
+ * @slider_start: (out) (optional): return location for the slider's start
+ * @slider_end: (out) (optional): return location for the slider's end
  *
  * This function returns sliders range along the long dimension,
  * in widget->window coordinates.

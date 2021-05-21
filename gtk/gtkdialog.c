@@ -724,10 +724,10 @@ gtk_dialog_new_empty (const char      *title,
 
 /**
  * gtk_dialog_new_with_buttons:
- * @title: (allow-none): Title of the dialog, or %NULL
- * @parent: (allow-none): Transient parent of the dialog, or %NULL
+ * @title: (nullable): Title of the dialog
+ * @parent: (nullable): Transient parent of the dialog
  * @flags: from `GtkDialogFlags`
- * @first_button_text: (allow-none): text to go in first button, or %NULL
+ * @first_button_text: (nullable): text to go in first button
  * @...: response ID for first button, then additional buttons, ending with %NULL
  *
  * Creates a new `GtkDialog` with the given title and transient parent.
@@ -1058,7 +1058,7 @@ gtk_dialog_response (GtkDialog *dialog,
  * of a dialog.
  *
  * Returns: (nullable) (transfer none): the @widget button that uses the given
- *     @response_id, or %NULL.
+ *   @response_id
  */
 GtkWidget*
 gtk_dialog_get_widget_for_response (GtkDialog *dialog,

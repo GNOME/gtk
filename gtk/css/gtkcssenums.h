@@ -35,15 +35,13 @@
 /**
  * GtkCssParserError:
  * @GTK_CSS_PARSER_ERROR_FAILED: Unknown failure.
- * @GTK_CSS_PARSER_ERROR_SYNTAX: The given text does not form valid
- *     syntax
+ * @GTK_CSS_PARSER_ERROR_SYNTAX: The given text does not form valid syntax
  * @GTK_CSS_PARSER_ERROR_IMPORT: Failed to import a resource
  * @GTK_CSS_PARSER_ERROR_NAME: The given name has not been defined
- * @GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE: The given value is not
- *     correct
+ * @GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE: The given value is not correct
  *
  * Errors that can occur while parsing CSS.
- * 
+ *
  * These errors are unexpected and will cause parts of the given CSS
  * to be ignored.
  */
@@ -59,11 +57,10 @@ typedef enum
 /**
  * GtkCssParserWarning:
  * @GTK_CSS_PARSER_WARNING_DEPRECATED: The given construct is
- *     deprecated and will be removed in a future version
+ *   deprecated and will be removed in a future version
  * @GTK_CSS_PARSER_WARNING_SYNTAX: A syntax construct was used
- *     that should be avoided
- * @GTK_CSS_PARSER_WARNING_UNIMPLEMENTED: A feature is not
- *     implemented
+ *   that should be avoided
+ * @GTK_CSS_PARSER_WARNING_UNIMPLEMENTED: A feature is not implemented
  *
  * Warnings that can occur while parsing CSS.
  *

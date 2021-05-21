@@ -2119,8 +2119,7 @@ gtk_entry_set_buffer (GtkEntry       *entry,
 /**
  * gtk_entry_set_visibility: (attributes org.gtk.Method.set_property=visibility)
  * @entry: a `GtkEntry`
- * @visible: %TRUE if the contents of the entry are displayed
- *           as plaintext
+ * @visible: %TRUE if the contents of the entry are displayed as plaintext
  *
  * Sets whether the contents of the entry are visible or not.
  *
@@ -2468,7 +2467,7 @@ gtk_entry_get_alignment (GtkEntry *entry)
  * gtk_entry_set_icon_from_paintable:
  * @entry: a `GtkEntry`
  * @icon_pos: Icon position
- * @paintable: (allow-none): A `GdkPaintable`, or %NULL
+ * @paintable: (nullable): A `GdkPaintable`
  *
  * Sets the icon shown in the specified position using a `GdkPaintable`.
  *
@@ -2523,7 +2522,7 @@ gtk_entry_set_icon_from_paintable (GtkEntry             *entry,
  * gtk_entry_set_icon_from_icon_name:
  * @entry: A `GtkEntry`
  * @icon_pos: The position at which to set the icon
- * @icon_name: (allow-none): An icon name, or %NULL
+ * @icon_name: (nullable): An icon name
  *
  * Sets the icon shown in the entry at the specified position
  * from the current icon theme.
@@ -2579,7 +2578,7 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
  * gtk_entry_set_icon_from_gicon:
  * @entry: A `GtkEntry`
  * @icon_pos: The position at which to set the icon
- * @icon: (allow-none): The icon to set, or %NULL
+ * @icon: (nullable): The icon to set
  *
  * Sets the icon shown in the entry at the specified position
  * from the current icon theme.
@@ -2698,7 +2697,7 @@ gtk_entry_get_icon_activatable (GtkEntry             *entry,
  *
  * If no `GdkPaintable` was used for the icon, %NULL is returned.
  *
- * Returns: (transfer none) (nullable): A `GdkPaintable`, or %NULL
+ * Returns: (transfer none) (nullable): A `GdkPaintable`
  *   if no icon is set for this position or the icon set is not
  *   a `GdkPaintable`.
  */
@@ -2730,8 +2729,7 @@ gtk_entry_get_icon_paintable (GtkEntry             *entry,
  * %NULL will be returned if there is no icon or if the icon was
  * set by some other method (e.g., by `GdkPaintable` or icon name).
  *
- * Returns: (transfer none) (nullable): A `GIcon`, or %NULL if no
- *   icon is set or if the icon is not a `GIcon`
+ * Returns: (transfer none) (nullable): A `GIcon`
  */
 GIcon *
 gtk_entry_get_icon_gicon (GtkEntry             *entry,
@@ -2761,8 +2759,7 @@ gtk_entry_get_icon_gicon (GtkEntry             *entry,
  * %NULL is returned if there is no icon or if the icon was set
  * by some other method (e.g., by `GdkPaintable` or gicon).
  *
- * Returns: (nullable): An icon name, or %NULL if no icon is set
- *   or if the icon wasn’t set from an icon name
+ * Returns: (nullable): An icon name
  */
 const char *
 gtk_entry_get_icon_name (GtkEntry             *entry,
@@ -3062,8 +3059,7 @@ ensure_has_tooltip (GtkEntry *entry)
  * Gets the contents of the tooltip on the icon at the specified
  * position in @entry.
  *
- * Returns: (nullable): the tooltip text, or %NULL. Free the returned
- *   string with g_free() when done.
+ * Returns: (nullable) (transfer full): the tooltip text
  */
 char *
 gtk_entry_get_icon_tooltip_text (GtkEntry             *entry,
@@ -3092,8 +3088,7 @@ gtk_entry_get_icon_tooltip_text (GtkEntry             *entry,
  * gtk_entry_set_icon_tooltip_text:
  * @entry: a `GtkEntry`
  * @icon_pos: the icon position
- * @tooltip: (allow-none): the contents of the tooltip for the
- *   icon, or %NULL
+ * @tooltip: (nullable): the contents of the tooltip for the icon
  *
  * Sets @tooltip as the contents of the tooltip for the icon
  * at the specified position.
@@ -3153,8 +3148,7 @@ gtk_entry_set_icon_tooltip_text (GtkEntry             *entry,
  * Gets the contents of the tooltip on the icon at the specified
  * position in @entry.
  *
- * Returns: (nullable): the tooltip text, or %NULL. Free the
- *   returned string with g_free() when done.
+ * Returns: (nullable) (transfer full): the tooltip text
  */
 char *
 gtk_entry_get_icon_tooltip_markup (GtkEntry             *entry,
@@ -3178,8 +3172,7 @@ gtk_entry_get_icon_tooltip_markup (GtkEntry             *entry,
  * gtk_entry_set_icon_tooltip_markup:
  * @entry: a `GtkEntry`
  * @icon_pos: the icon position
- * @tooltip: (allow-none): the contents of the tooltip for the
- *   icon, or %NULL
+ * @tooltip: (nullable): the contents of the tooltip for the icon
  *
  * Sets @tooltip as the contents of the tooltip for the icon at
  * the specified position.
@@ -3262,7 +3255,7 @@ gtk_entry_query_tooltip (GtkWidget  *widget,
 /**
  * gtk_entry_set_completion: (attributes org.gtk.Method.set_property=completion)
  * @entry: A `GtkEntry`
- * @completion: (allow-none): The `GtkEntryCompletion` or %NULL
+ * @completion: (nullable): The `GtkEntryCompletion`
  *
  * Sets @completion to be the auxiliary completion object
  * to use with @entry.
@@ -3481,8 +3474,7 @@ gtk_entry_progress_pulse (GtkEntry *entry)
 /**
  * gtk_entry_set_placeholder_text: (attributes org.gtk.Method.set_property=placeholder-text)
  * @entry: a `GtkEntry`
- * @text: (nullable): a string to be displayed when @entry is
- *   empty and unfocused, or %NULL
+ * @text: (nullable): a string to be displayed when @entry is empty and unfocused
  *
  * Sets text to be displayed in @entry when it is empty.
  *
@@ -3635,8 +3627,7 @@ gtk_entry_set_attributes (GtkEntry      *entry,
  *
  * See [method@Gtk.Entry.set_attributes].
  *
- * Returns: (transfer none) (nullable): the attribute list,
- *   or %NULL if none was set.
+ * Returns: (transfer none) (nullable): the attribute list
  */
 PangoAttrList *
 gtk_entry_get_attributes (GtkEntry *entry)
@@ -3677,8 +3668,7 @@ gtk_entry_set_tabs (GtkEntry      *entry,
  *
  * See [method@Gtk.Entry.set_tabs].
  *
- * Returns: (nullable) (transfer none): the tabstops,
- *   or %NULL if none was set.
+ * Returns: (nullable) (transfer none): the tabstops
  */
 
 PangoTabArray *
@@ -3773,7 +3763,7 @@ gtk_entry_get_text_widget (GtkEntry *entry)
 /**
  * gtk_entry_set_extra_menu: (attributes org.gtk.Method.set_property=extra-menu)
  * @entry: a `GtkEntry`
- * @model: (allow-none): a `GMenuModel`
+ * @model: (nullable): a `GMenuModel`
  *
  * Sets a menu model to add when constructing
  * the context menu for @entry.

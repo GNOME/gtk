@@ -164,8 +164,8 @@ gtk_sorter_init (GtkSorter *self)
  * via the return value of [method@Gtk.Sorter.get_order].
  *
  * Returns: %GTK_ORDERING_EQUAL if @item1 == @item2,
- *     %GTK_ORDERING_SMALLER if @item1 < @item2,
- *     %GTK_ORDERING_LARGER if @item1 > @item2
+ *   %GTK_ORDERING_SMALLER if @item1 < @item2,
+ *   %GTK_ORDERING_LARGER if @item1 > @item2
  */
 GtkOrdering
 gtk_sorter_compare (GtkSorter *self,

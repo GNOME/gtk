@@ -2668,7 +2668,7 @@ gtk_label_new (const char *str)
 /**
  * gtk_label_new_with_mnemonic:
  * @str: (nullable): The text of the label, with an underscore in front of the
- *       mnemonic character
+ *   mnemonic character
  *
  * Creates a new `GtkLabel`, containing the text in @str.
  *
@@ -2872,7 +2872,7 @@ gtk_label_set_mnemonic_widget (GtkLabel  *self,
  * See [method@Gtk.Label.set_mnemonic_widget].
  *
  * Returns: (nullable) (transfer none): the target of the label’s mnemonic,
- *     or %NULL if none has been set and the default algorithm will be used.
+ *   or %NULL if none has been set and the default algorithm will be used.
  **/
 GtkWidget *
 gtk_label_get_mnemonic_widget (GtkLabel *self)
@@ -3043,7 +3043,7 @@ gtk_label_set_text (GtkLabel    *self,
 /**
  * gtk_label_set_attributes: (attributes org.gtk.Method.set_property=attributes)
  * @self: a `GtkLabel`
- * @attrs: (nullable): a [struct@Pango.AttrList], or %NULL
+ * @attrs: (nullable): a [struct@Pango.AttrList]
  *
  * Apply attributes to the label text.
  *
@@ -3089,8 +3089,7 @@ gtk_label_set_attributes (GtkLabel         *self,
  * attributes for the label, use
  * `pango_layout_get_attribute (gtk_label_get_layout (self))`.
  *
- * Returns: (nullable) (transfer none): the attribute list, or %NULL
- *     if none was set.
+ * Returns: (nullable) (transfer none): the attribute list
  */
 PangoAttrList *
 gtk_label_get_attributes (GtkLabel *self)
@@ -5011,8 +5010,8 @@ gtk_label_get_layout (GtkLabel *self)
 /**
  * gtk_label_get_layout_offsets:
  * @self: a `GtkLabel`
- * @x: (out) (optional): location to store X offset of layout, or %NULL
- * @y: (out) (optional): location to store Y offset of layout, or %NULL
+ * @x: (out) (optional): location to store X offset of layout
+ * @y: (out) (optional): location to store Y offset of layout
  *
  * Obtains the coordinates where the label will draw its `PangoLayout`.
  *
@@ -5549,8 +5548,7 @@ gtk_label_do_popup (GtkLabel *self,
  * This function is intended for use in a [signal@Gtk.Label::activate-link]
  * handler or for use in a [signal@Gtk.Widget::query-tooltip] handler.
  *
- * Returns: (nullable): the currently active URI or %NULL if there is none.
- *   The string is owned by GTK and must not be freed or modified.
+ * Returns: (nullable): the currently active URI
  */
 const char *
 gtk_label_get_current_uri (GtkLabel *self)
@@ -5729,7 +5727,7 @@ gtk_label_get_yalign (GtkLabel *self)
 /**
  * gtk_label_set_extra_menu: (attributes org.gtk.Method.set_property=extra-menu)
  * @self: a `GtkLabel`
- * @model: (allow-none): a `GMenuModel`
+ * @model: (nullable): a `GMenuModel`
  *
  * Sets a menu model to add when constructing
  * the context menu for @label.

@@ -600,7 +600,7 @@ gtk_menu_button_set_menu_model (GtkMenuButton *menu_button,
  *
  * Returns the `GMenuModel` used to generate the popup.
  *
- * Returns: (nullable) (transfer none): a `GMenuModel` or %NULL
+ * Returns: (nullable) (transfer none): a `GMenuModel`
  */
 GMenuModel *
 gtk_menu_button_get_menu_model (GtkMenuButton *menu_button)
@@ -1030,7 +1030,7 @@ gtk_menu_button_set_use_underline (GtkMenuButton *menu_button,
  * mnemonic.
  *
  * Returns: %TRUE whether an embedded underline in the text indicates
- *     the mnemonic accelerator keys.
+ *   the mnemonic accelerator keys.
  */
 gboolean
 gtk_menu_button_get_use_underline (GtkMenuButton *menu_button)

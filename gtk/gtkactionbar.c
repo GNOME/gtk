@@ -291,7 +291,7 @@ gtk_action_bar_remove (GtkActionBar *action_bar,
 /**
  * gtk_action_bar_set_center_widget:
  * @action_bar: a `GtkActionBar`
- * @center_widget: (allow-none): a widget to use for the center
+ * @center_widget: (nullable): a widget to use for the center
  *
  * Sets the center widget for the `GtkActionBar`.
  */
@@ -308,7 +308,7 @@ gtk_action_bar_set_center_widget (GtkActionBar *action_bar,
  *
  * Retrieves the center bar widget of the bar.
  *
- * Returns: (transfer none) (nullable): the center `GtkWidget` or %NULL.
+ * Returns: (transfer none) (nullable): the center `GtkWidget`
  */
 GtkWidget *
 gtk_action_bar_get_center_widget (GtkActionBar *action_bar)
@@ -362,7 +362,7 @@ gtk_action_bar_set_revealed (GtkActionBar *action_bar,
  * Gets whether the contents of the action bar are revealed.
  *
  * Returns: the current value of the [property@Gtk.ActionBar:revealed]
- * property.
+ *   property
  */
 gboolean
 gtk_action_bar_get_revealed (GtkActionBar *action_bar)

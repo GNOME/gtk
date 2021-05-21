@@ -666,7 +666,7 @@ set_parent_and_flags (GtkWidget      *dialog,
 
 /**
  * gtk_app_chooser_dialog_new:
- * @parent: (allow-none): a `GtkWindow`, or %NULL
+ * @parent: (nullable): a `GtkWindow`
  * @flags: flags for this dialog
  * @file: a `GFile`
  *
@@ -696,7 +696,7 @@ gtk_app_chooser_dialog_new (GtkWindow      *parent,
 
 /**
  * gtk_app_chooser_dialog_new_for_content_type:
- * @parent: (allow-none): a `GtkWindow`, or %NULL
+ * @parent: (nullable): a `GtkWindow`
  * @flags: flags for this dialog
  * @content_type: a content type string
  *

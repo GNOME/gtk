@@ -2394,9 +2394,9 @@ gtk_scrolled_window_set_policy (GtkScrolledWindow *scrolled_window,
  * gtk_scrolled_window_get_policy:
  * @scrolled_window: a `GtkScrolledWindow`
  * @hscrollbar_policy: (out) (optional): location to store the policy
- *     for the horizontal scrollbar, or %NULL
+ *   for the horizontal scrollbar
  * @vscrollbar_policy: (out) (optional): location to store the policy
- *     for the vertical scrollbar, or %NULL
+ *   for the vertical scrollbar
  *
  * Retrieves the current policy values for the horizontal and vertical
  * scrollbars.
@@ -4167,7 +4167,7 @@ gtk_scrolled_window_get_propagate_natural_height (GtkScrolledWindow *scrolled_wi
 /**
  * gtk_scrolled_window_set_child: (attributes org.gtk.Method.set_property=child)
  * @scrolled_window: a `GtkScrolledWindow`
- * @child: (allow-none): the child widget
+ * @child: (nullable): the child widget
  *
  * Sets the child widget of @scrolled_window.
  */

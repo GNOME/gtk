@@ -1484,8 +1484,7 @@ gtk_icon_theme_set_search_path (GtkIconTheme       *self,
  * See [method@Gtk.IconTheme.set_search_path].
  *
  * Returns: (transfer full) (array zero-terminated=1) (element-type filename) (nullable):
- *   a list of icon theme path directories or %NULL.
- *   The returned value should be freed with g_strfreev().
+ *   a list of icon theme path directories
  */
 char **
 gtk_icon_theme_get_search_path (GtkIconTheme  *self)
@@ -1537,7 +1536,7 @@ gtk_icon_theme_add_search_path (GtkIconTheme *self,
  * gtk_icon_theme_set_resource_path:
  * @self: a `GtkIconTheme`
  * @path: NULL-terminated array of resource paths
- *     that are searched for icons
+ *   that are searched for icons
  *
  * Sets the resource paths that will be looked at when
  * looking for icons, similar to search paths.
@@ -1581,8 +1580,7 @@ gtk_icon_theme_set_resource_path (GtkIconTheme       *self,
  * See [method@Gtk.IconTheme.set_resource_path].
  *
  * Returns: (transfer full) (array zero-terminated=1) (element-type utf8) (nullable):
- *   A list of resource paths or %NULL.
- *   The returned value should be freed with g_strfreev().
+ *   A list of resource paths
  */
 char **
 gtk_icon_theme_get_resource_path (GtkIconTheme  *self)
@@ -1637,7 +1635,7 @@ gtk_icon_theme_add_resource_path (GtkIconTheme *self,
 /**
  * gtk_icon_theme_set_theme_name:
  * @self: a `GtkIconTheme`
- * @theme_name: (allow-none): name of icon theme to use instead of
+ * @theme_name: (nullable): name of icon theme to use instead of
  *   configured theme, or %NULL to unset a previously set custom theme
  *
  * Sets the name of the icon theme that the `GtkIconTheme` object uses
@@ -2464,7 +2462,7 @@ load_icon_thread (GTask        *task,
  * GtkWidgetClass.css-changed() function.
  *
  * Returns: (transfer full): a `GtkIconPaintable` object
- *     containing the icon.
+ *   containing the icon.
  */
 GtkIconPaintable *
 gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
@@ -3679,8 +3677,7 @@ new_resource_file (const char *filename)
  *
  * Returns %NULL if the icon was not loaded from a file.
  *
- * Returns: (nullable) (transfer full): the #GFile for the icon, or %NULL.
- *    Free with g_object_unref().
+ * Returns: (nullable) (transfer full): the #GFile for the icon
  */
 GFile *
 gtk_icon_paintable_get_file (GtkIconPaintable *icon)
@@ -3966,14 +3963,14 @@ icon_paintable_snapshot (GdkPaintable *paintable,
  * @snapshot: a `GdkSnapshot` to snapshot to
  * @width: width to snapshot in
  * @height: height to snapshot in
- * @foreground_color: (allow-none): a `GdkRGBA` representing the foreground color
- *      of the icon or %NULL to use the default color.
- * @success_color: (allow-none): a `GdkRGBA` representing the warning color
- *     of the icon or %NULL to use the default color
- * @warning_color: (allow-none): a `GdkRGBA` representing the warning color
- *     of the icon or %NULL to use the default color
- * @error_color: (allow-none): a `GdkRGBA` representing the error color
- *     of the icon or %NULL to use the default color (allow-none)
+ * @foreground_color: (nullable): a `GdkRGBA` representing the foreground color
+ *   of the icon or %NULL to use the default color.
+ * @success_color: (nullable): a `GdkRGBA` representing the warning color
+ *   of the icon or %NULL to use the default color
+ * @warning_color: (nullable): a `GdkRGBA` representing the warning color
+ *   of the icon or %NULL to use the default color
+ * @error_color: (nullable): a `GdkRGBA` representing the error color
+ *   of the icon or %NULL to use the default color
  *
  * Snapshots the `GtkIconPaintable`.
  *
@@ -4079,7 +4076,7 @@ icon_paintable_init (GdkPaintableInterface *iface)
  * The icon can then be rendered by using it as a `GdkPaintable`.
  *
  * Returns: (transfer full): a `GtkIconPaintable` containing
- *     for the icon. Unref with g_object_unref()
+ *   for the icon. Unref with g_object_unref()
  */
 GtkIconPaintable *
 gtk_icon_paintable_new_for_file (GFile *file,

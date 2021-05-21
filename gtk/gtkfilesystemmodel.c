@@ -1370,7 +1370,7 @@ _gtk_file_system_model_new (GtkFileSystemModelGetValue get_func,
 /**
  * _gtk_file_system_model_new_for_directory:
  * @directory: the directory to show.
- * @attributes: (allow-none): attributes to immediately load or %NULL for all
+ * @attributes: (nullable): attributes to immediately load or %NULL for all
  * @get_func: function that the model should call to query data about a file
  * @get_data: user data to pass to the @get_func
  * @n_columns: number of columns
@@ -1479,9 +1479,8 @@ _gtk_file_system_model_set_show_folders (GtkFileSystemModel *model,
 /**
  * _gtk_file_system_model_set_show_files:
  * @model: a #GtkFileSystemModel
- * @show_files: whether files (as opposed to folders) should
- *              be displayed.
- * 
+ * @show_files: whether files (as opposed to folders) should be displayed.
+ *
  * Sets whether files (as opposed to folders) should be included
  * in the #GtkTreeModel for display.
  **/
@@ -1662,8 +1661,8 @@ _gtk_file_system_model_get_file (GtkFileSystemModel *model,
  * lookups. Both of which are slow.
  *
  * Returns: a pointer to the actual value as stored in @model or %NULL
- *          if no value available yet.
- **/
+ *   if no value available yet
+ */
 const GValue *
 _gtk_file_system_model_get_value (GtkFileSystemModel *model,
                                   GtkTreeIter *       iter,
@@ -1934,7 +1933,7 @@ _gtk_file_system_model_update_files (GtkFileSystemModel *model,
 /**
  * _gtk_file_system_model_set_filter:
  * @mode: a #GtkFileSystemModel
- * @filter: (allow-none): %NULL or filter to use
+ * @filter: (nullable): %NULL or filter to use
  * 
  * Sets a filter to be used for deciding if a row should be visible or not.
  * Whether this filter applies to directories can be toggled with

@@ -736,7 +736,7 @@ gtk_tree_list_model_init (GtkTreeListModel *self)
  * @passthrough: %TRUE to pass through items from the models
  * @autoexpand: %TRUE to set the autoexpand property and expand the @root model
  * @create_func: Function to call to create the `GListModel` for the children
- *     of an item
+ *   of an item
  * @user_data: (closure): Data to pass to @create_func
  * @user_destroy: Function to call to free @user_data
  *

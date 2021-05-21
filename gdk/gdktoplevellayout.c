@@ -149,7 +149,7 @@ gdk_toplevel_layout_copy (GdkToplevelLayout *layout)
  * Check whether @layout and @other has identical layout properties.
  *
  * Returns: %TRUE if @layout and @other have identical layout properties,
- *     otherwise %FALSE.
+ *   otherwise %FALSE.
  */
 gboolean
 gdk_toplevel_layout_equal (GdkToplevelLayout *layout,

@@ -477,7 +477,7 @@ gtk_image_new_from_resource (const char *resource_path)
 
 /**
  * gtk_image_new_from_pixbuf:
- * @pixbuf: (allow-none): a `GdkPixbuf`, or %NULL
+ * @pixbuf: (nullable): a `GdkPixbuf`
  *
  * Creates a new `GtkImage` displaying @pixbuf.
  *
@@ -508,7 +508,7 @@ gtk_image_new_from_pixbuf (GdkPixbuf *pixbuf)
 
 /**
  * gtk_image_new_from_paintable:
- * @paintable: (allow-none): a `GdkPaintable`, or %NULL
+ * @paintable: (nullable): a `GdkPaintable`
  *
  * Creates a new `GtkImage` displaying @paintable.
  *
@@ -535,7 +535,7 @@ gtk_image_new_from_paintable (GdkPaintable *paintable)
 
 /**
  * gtk_image_new_from_icon_name:
- * @icon_name: (nullable): an icon name or %NULL
+ * @icon_name: (nullable): an icon name
  *
  * Creates a `GtkImage` displaying an icon from the current icon theme.
  *
@@ -584,7 +584,7 @@ gtk_image_new_from_gicon (GIcon *icon)
 /**
  * gtk_image_set_from_file: (attributes org.gtk.Method.set_property=file)
  * @image: a `GtkImage`
- * @filename: (type filename) (allow-none): a filename or %NULL
+ * @filename: (type filename) (nullable): a filename
  *
  * Sets a `GtkImage` to show a file.
  *
@@ -662,7 +662,7 @@ out:
 /**
  * gtk_image_set_from_resource: (attributes org.gtk.Method.set_property=resource)
  * @image: a `GtkImage`
- * @resource_path: (allow-none): a resource path or %NULL
+ * @resource_path: (nullable): a resource path
  *
  * Sets a `GtkImage` to show a resource.
  *
@@ -720,7 +720,7 @@ gtk_image_set_from_resource (GtkImage   *image,
 /**
  * gtk_image_set_from_pixbuf: (attributes org.gtk.Method.set_property=paintable)
  * @image: a `GtkImage`
- * @pixbuf: (allow-none): a `GdkPixbuf` or `NULL`
+ * @pixbuf: (nullable): a `GdkPixbuf` or `NULL`
  *
  * Sets a `GtkImage` to show a `GdkPixbuf`.
  *
@@ -753,7 +753,7 @@ gtk_image_set_from_pixbuf (GtkImage  *image,
 /**
  * gtk_image_set_from_icon_name: (attributes org.gtk.Method.set_property=icon-name)
  * @image: a `GtkImage`
- * @icon_name: (nullable): an icon name or %NULL
+ * @icon_name: (nullable): an icon name
  *
  * Sets a `GtkImage` to show a named icon.
  *
@@ -827,7 +827,7 @@ gtk_image_paintable_invalidate_size (GdkPaintable *paintable,
 /**
  * gtk_image_set_from_paintable: (attributes org.gtk.Method.set_property=paintable)
  * @image: a `GtkImage`
- * @paintable: (nullable): a `GdkPaintable` or %NULL
+ * @paintable: (nullable): a `GdkPaintable`
  *
  * Sets a `GtkImage` to show a `GdkPaintable`.
  *
@@ -903,8 +903,7 @@ gtk_image_get_storage_type (GtkImage *image)
  * The caller of this function does not own a reference to the
  * returned paintable.
  *
- * Returns: (nullable) (transfer none): the displayed paintable,
- *   or %NULL if the image is empty
+ * Returns: (nullable) (transfer none): the displayed paintable
  */
 GdkPaintable *
 gtk_image_get_paintable (GtkImage *image)
@@ -925,7 +924,7 @@ gtk_image_get_paintable (GtkImage *image)
  * The returned string is owned by the `GtkImage` and should not
  * be freed.
  *
- * Returns: (transfer none) (allow-none): the icon name, or %NULL
+ * Returns: (transfer none) (nullable): the icon name
  */
 const char *
 gtk_image_get_icon_name (GtkImage *image)
@@ -946,7 +945,7 @@ gtk_image_get_icon_name (GtkImage *image)
  * The caller of this function does not own a reference to the
  * returned `GIcon`.
  *
- * Returns: (transfer none) (allow-none): a `GIcon`, or %NULL
+ * Returns: (transfer none) (nullable): a `GIcon`
  **/
 GIcon *
 gtk_image_get_gicon (GtkImage *image)

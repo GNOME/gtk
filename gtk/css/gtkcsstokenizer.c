@@ -214,8 +214,8 @@ gtk_css_token_is_finite (const GtkCssToken *token)
 /*
  * gtk_css_token_is_preserved:
  * @token: a #GtkCssToken
- * @out_closing: (allow-none): Type of the token that closes a block
- *     started with this token
+ * @out_closing: (nullable): Type of the token that closes a block
+ *   started with this token
  *
  * A token is considered preserved when it does not start a block.
  *
@@ -223,7 +223,7 @@ gtk_css_token_is_finite (const GtkCssToken *token)
  * so CSS parsers want to look at this function
  *
  * Returns: %TRUE if the token is considered preserved.
- **/
+ */
 gboolean
 gtk_css_token_is_preserved (const GtkCssToken *token,
                             GtkCssTokenType   *out_closing)

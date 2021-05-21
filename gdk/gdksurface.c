@@ -1164,8 +1164,7 @@ gdk_surface_get_paint_gl_context (GdkSurface  *surface,
  * Before using the returned `GdkGLContext`, you will need to
  * call [method@Gdk.GLContext.make_current] or [method@Gdk.GLContext.realize].
  *
- * Returns: (transfer full): the newly created `GdkGLContext`,
- *   or %NULL on error
+ * Returns: (transfer full) (nullable): the newly created `GdkGLContext`
  */
 GdkGLContext *
 gdk_surface_create_gl_context (GdkSurface   *surface,
@@ -1438,7 +1437,7 @@ gdk_surface_paint_on_clock (GdkFrameClock *clock,
 /*
  * gdk_surface_invalidate_rect:
  * @surface: a `GdkSurface`
- * @rect: (allow-none): rectangle to invalidate or %NULL to
+ * @rect: (nullable): rectangle to invalidate or %NULL to
  *   invalidate the whole surface
  *
  * Invalidate a rectangular region of @surface.
@@ -1696,9 +1695,9 @@ gdk_surface_constrain_size (GdkGeometry    *geometry,
  * gdk_surface_get_device_position:
  * @surface: a `GdkSurface`
  * @device: pointer `GdkDevice` to query to
- * @x: (out) (allow-none): return locatio for the X coordinate of @device, or %NULL
- * @y: (out) (allow-none): return location for the Y coordinate of @device, or %NULL
- * @mask: (out) (allow-none): return location for the modifier mask, or %NULL
+ * @x: (out) (optional): return locatio for the X coordinate of @device
+ * @y: (out) (optional): return location for the Y coordinate of @device
+ * @mask: (out) (optional): return location for the modifier mask
  *
  * Obtains the current device position and modifier state.
  *
@@ -1839,10 +1838,9 @@ gdk_surface_set_cursor_internal (GdkSurface *surface,
  * If the return value is %NULL then there is no custom cursor set on
  * the surface, and it is using the cursor for its parent surface.
  *
- * Returns: (nullable) (transfer none): a `GdkCursor`, or %NULL. The
- *   returned object is owned by the `GdkSurface` and should not be
- *   unreferenced directly. Use [method@Gdk.Surface.set_cursor] to
- *   unset the cursor of the surface
+ * Use [method@Gdk.Surface.set_cursor] to unset the cursor of the surface.
+ *
+ * Returns: (nullable) (transfer none): a `GdkCursor`
  */
 GdkCursor *
 gdk_surface_get_cursor (GdkSurface *surface)
@@ -1855,7 +1853,7 @@ gdk_surface_get_cursor (GdkSurface *surface)
 /**
  * gdk_surface_set_cursor: (attributes org.gtk.Method.set_property=cursor)
  * @surface: a `GdkSurface`
- * @cursor: (allow-none): a `GdkCursor`
+ * @cursor: (nullable): a `GdkCursor`
  *
  * Sets the default mouse pointer for a `GdkSurface`.
  *
@@ -1920,10 +1918,9 @@ gdk_surface_set_cursor (GdkSurface *surface,
  * If the return value is %NULL then there is no custom cursor set on the
  * specified surface, and it is using the cursor for its parent surface.
  *
- * Returns: (nullable) (transfer none): a `GdkCursor`, or %NULL. The
- *   returned object is owned by the `GdkSurface` and should not be
- *   unreferenced directly. Use [method@Gdk.Surface.set_cursor] to unset
- *   the cursor of the surface
+ * Use [method@Gdk.Surface.set_cursor] to unset the cursor of the surface.
+ *
+ * Returns: (nullable) (transfer none): a `GdkCursor`
  */
 GdkCursor *
 gdk_surface_get_device_cursor (GdkSurface *surface,
@@ -1970,10 +1967,10 @@ gdk_surface_set_device_cursor (GdkSurface *surface,
 /*
  * gdk_surface_get_geometry:
  * @surface: a `GdkSurface`
- * @x: (out) (allow-none): return location for X coordinate of surface (relative to its parent)
- * @y: (out) (allow-none): return location for Y coordinate of surface (relative to its parent)
- * @width: (out) (allow-none): return location for width of surface
- * @height: (out) (allow-none): return location for height of surface
+ * @x: (out) (optional): return location for X coordinate of surface (relative to its parent)
+ * @y: (out) (optional): return location for Y coordinate of surface (relative to its parent)
+ * @width: (out) (optional): return location for width of surface
+ * @height: (out) (optional): return location for height of surface
  *
  * Get the geometry of the surface.
  *
@@ -2415,8 +2412,7 @@ gdk_surface_destroy_notify (GdkSurface *surface)
  * the source if [method@Gdk.Drag.get_selected_action] returns
  * %GDK_ACTION_MOVE.
  *
- * Returns: (transfer full) (nullable): a newly created [class@Gdk.Drag]
- *   or %NULL on error
+ * Returns: (transfer full) (nullable): a newly created `GdkDrag`
  */
 GdkDrag *
 gdk_drag_begin (GdkSurface          *surface,
@@ -2624,7 +2620,8 @@ gdk_surface_get_scale_factor (GdkSurface *surface)
 /**
  * gdk_surface_set_opaque_region:
  * @surface: a top-level `GdkSurface`
- * @region: (allow-none):  a region, or %NULL
+ * @region: (nullable): a region, or %NULL to make the entire
+ *   surface opaque
  *
  * Marks a region of the `GdkSurface` as opaque.
  *

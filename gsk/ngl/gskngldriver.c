@@ -1016,14 +1016,13 @@ gsk_ngl_driver_release_render_target (GskNglDriver       *self,
  * gsk_ngl_driver_lookup_shader:
  * @self: a #GskNglDriver
  * @shader: the shader to lookup or load
- * @error: a location for a #GError, or %NULL
+ * @error: a location for a #GError
  *
  * Attepts to load @shader from the shader cache.
  *
  * If it has not been loaded, then it will compile the shader on demand.
  *
- * Returns: (transfer none): a #GskGLShader if successful; otherwise
- *   %NULL and @error is set.
+ * Returns: (nullable) (transfer none): a #GskGLShader
  */
 GskNglProgram *
 gsk_ngl_driver_lookup_shader (GskNglDriver  *self,

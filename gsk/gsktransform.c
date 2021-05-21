@@ -93,8 +93,8 @@ gsk_transform_has_class (GskTransform            *self,
  * gsk_transform_alloc:
  * @transform_class: class structure for this self
  * @category: The category of this transform. Will be used to initialize
- *     the result's category together with &next's category
- * @next: (transfer full): Next transform to multiply with or %NULL if none
+ *   the result's category together with &next's category
+ * @next: (transfer full) (nullable): Next transform to multiply with
  *
  * Returns: (transfer full): the newly created #GskTransform
  */
@@ -217,7 +217,7 @@ static const GskTransformClass GSK_IDENTITY_TRANSFORM_CLASS =
 
 /*<private>
  * gsk_transform_is_identity:
- * @transform: (allow-none): A transform or %NULL
+ * @transform: (nullable): A transform
  *
  * Checks if the transform is a representation of the identity
  * transform.
@@ -226,7 +226,7 @@ static const GskTransformClass GSK_IDENTITY_TRANSFORM_CLASS =
  * which just results in an identity transform when simplified.
  *
  * Returns: %TRUE  if this transform is a representation of
- *     the identity transform
+ *   the identity transform
  **/
 static gboolean
 gsk_transform_is_identity (GskTransform *self)
@@ -452,7 +452,7 @@ gsk_transform_matrix_with_category (GskTransform            *next,
 
 /**
  * gsk_transform_matrix:
- * @next: (allow-none) (transfer full): the next transform
+ * @next: (nullable) (transfer full): the next transform
  * @matrix: the matrix to multiply @next with
  *
  * Multiplies @next with the given @matrix.
@@ -605,7 +605,7 @@ static const GskTransformClass GSK_TRANSLATE_TRANSFORM_CLASS =
 
 /**
  * gsk_transform_translate:
- * @next: (allow-none) (transfer full): the next transform
+ * @next: (nullable) (transfer full): the next transform
  * @point: the point to translate the transform by
  *
  * Translates @next in 2-dimensional space by @point.
@@ -625,7 +625,7 @@ gsk_transform_translate (GskTransform           *next,
 
 /**
  * gsk_transform_translate_3d:
- * @next: (allow-none) (transfer full): the next transform
+ * @next: (nullable) (transfer full): the next transform
  * @point: the point to translate the transform by
  *
  * Translates @next by @point.
@@ -840,7 +840,7 @@ normalize_angle (float angle)
 
 /**
  * gsk_transform_rotate:
- * @next: (allow-none) (transfer full): the next transform
+ * @next: (nullable) (transfer full): the next transform
  * @angle: the rotation angle, in degrees (clockwise)
  *
  * Rotates @next @angle degrees in 2D - or in 3D-speak, around the z axis.
@@ -964,7 +964,7 @@ static const GskTransformClass GSK_ROTATE3D_TRANSFORM_CLASS =
 
 /**
  * gsk_transform_rotate_3d:
- * @next: (allow-none) (transfer full): the next transform
+ * @next: (nullable) (transfer full): the next transform
  * @angle: the rotation angle, in degrees (clockwise)
  * @axis: The rotation axis
  *
@@ -1137,7 +1137,7 @@ static const GskTransformClass GSK_SCALE_TRANSFORM_CLASS =
 
 /**
  * gsk_transform_scale:
- * @next: (allow-none) (transfer full): the next transform
+ * @next: (nullable) (transfer full): the next transform
  * @factor_x: scaling factor on the X axis
  * @factor_y: scaling factor on the Y axis
  *
@@ -1157,7 +1157,7 @@ gsk_transform_scale (GskTransform *next,
 
 /**
  * gsk_transform_scale_3d:
- * @next: (allow-none) (transfer full): the next transform
+ * @next: (nullable) (transfer full): the next transform
  * @factor_x: scaling factor on the X axis
  * @factor_y: scaling factor on the Y axis
  * @factor_z: scaling factor on the Z axis
@@ -1286,10 +1286,10 @@ static const GskTransformClass GSK_PERSPECTIVE_TRANSFORM_CLASS =
 
 /**
  * gsk_transform_perspective:
- * @next: (allow-none) (transfer full): the next transform
+ * @next: (nullable) (transfer full): the next transform
  * @depth: distance of the z=0 plane. Lower values give a more
- *     flattened pyramid and therefore a more pronounced
- *     perspective effect.
+ *   flattened pyramid and therefore a more pronounced
+ *   perspective effect.
  *
  * Applies a perspective projection transform.
  *
@@ -1335,7 +1335,7 @@ gsk_transform_finalize (GskTransform *self)
 
 /**
  * gsk_transform_ref:
- * @self: (allow-none): a `GskTransform`
+ * @self: (nullable): a `GskTransform`
  *
  * Acquires a reference on the given `GskTransform`.
  *
@@ -1352,7 +1352,7 @@ gsk_transform_ref (GskTransform *self)
 
 /**
  * gsk_transform_unref:
- * @self: (allow-none): a `GskTransform`
+ * @self: (nullable): a `GskTransform`
  *
  * Releases a reference on the given `GskTransform`.
  *
@@ -1370,7 +1370,7 @@ gsk_transform_unref (GskTransform *self)
 
 /**
  * gsk_transform_print:
- * @self: (allow-none): a `GskTransform`
+ * @self: (nullable): a `GskTransform`
  * @string:  The string to print into
  *
  * Converts @self into a human-readable string representation suitable
@@ -1402,7 +1402,7 @@ gsk_transform_print (GskTransform *self,
 
 /**
  * gsk_transform_to_string:
- * @self: (allow-none): a #GskTransform
+ * @self: (nullable): a #GskTransform
  *
  * Converts a matrix into a string that is suitable for printing.
  *
@@ -1426,7 +1426,7 @@ gsk_transform_to_string (GskTransform *self)
 
 /**
  * gsk_transform_to_matrix:
- * @self: (allow-none): a `GskTransform`
+ * @self: (nullable): a `GskTransform`
  * @out_matrix: (out caller-allocates): The matrix to set
  *
  * Computes the actual value of @self and stores it in @out_matrix.
@@ -1520,19 +1520,22 @@ gsk_transform_to_2d (GskTransform *self,
  * gsk_transform_to_affine:
  * @self: a `GskTransform`
  * @out_scale_x: (out): return location for the scale
- *     factor in the x direction
+ *   factor in the x direction
  * @out_scale_y: (out): return location for the scale
- *     factor in the y direction
+ *   factor in the y direction
  * @out_dx: (out): return location for the translation
- *     in the x direction
+ *   in the x direction
  * @out_dy: (out): return location for the translation
- *     in the y direction
+ *   in the y direction
  *
  * Converts a `GskTransform` to 2D affine transformation factors.
  *
  * @self must be a 2D transformation. If you are not
- * sure, use gsk_transform_get_category() >=
- * %GSK_TRANSFORM_CATEGORY_2D_AFFINE to check.
+ * sure, use
+ *
+ *     gsk_transform_get_category() >= %GSK_TRANSFORM_CATEGORY_2D_AFFINE
+ *
+ * to check.
  */
 void
 gsk_transform_to_affine (GskTransform *self,
@@ -1586,15 +1589,18 @@ gsk_transform_to_affine (GskTransform *self,
  * gsk_transform_to_translate:
  * @self: a `GskTransform`
  * @out_dx: (out): return location for the translation
- *     in the x direction
+ *   in the x direction
  * @out_dy: (out): return location for the translation
- *     in the y direction
+ *   in the y direction
  *
  * Converts a `GskTransform` to a translation operation.
  *
  * @self must be a 2D transformation. If you are not
- * sure, use gsk_transform_get_category() >= 
- * %GSK_TRANSFORM_CATEGORY_2D_TRANSLATE to check.
+ * sure, use
+ *
+ *     gsk_transform_get_category() >= %GSK_TRANSFORM_CATEGORY_2D_TRANSLATE
+ *
+ * to check.
  */
 void
 gsk_transform_to_translate (GskTransform *self,
@@ -1636,8 +1642,8 @@ gsk_transform_to_translate (GskTransform *self,
 
 /**
  * gsk_transform_transform:
- * @next: (allow-none) (transfer full): Transform to apply @other to
- * @other: (allow-none):  Transform to apply
+ * @next: (nullable) (transfer full): Transform to apply @other to
+ * @other: (nullable):  Transform to apply
  *
  * Applies all the operations from @other to @next.
  *
@@ -1667,7 +1673,7 @@ gsk_transform_transform (GskTransform *next,
 
 /**
  * gsk_transform_invert:
- * @self: (allow-none) (transfer full): Transform to invert
+ * @self: (nullable) (transfer full): Transform to invert
  *
  * Inverts the given transform.
  *
@@ -1677,8 +1683,7 @@ gsk_transform_transform (GskTransform *next,
  * between those cases, you should check @self is not %NULL
  * before calling this function.
  *
- * Returns: (nullable): The inverted transform or %NULL if the transform
- *     cannot be inverted.
+ * Returns: (nullable): The inverted transform
  */
 GskTransform *
 gsk_transform_invert (GskTransform *self)
@@ -1705,7 +1710,7 @@ gsk_transform_invert (GskTransform *self)
  *
  * Checks two transforms for equality.
  *
- * Returns: %TRUE if the two transforms perform the same operation.
+ * Returns: %TRUE if the two transforms perform the same operation
  */
 gboolean
 gsk_transform_equal (GskTransform *first,
@@ -1731,7 +1736,7 @@ gsk_transform_equal (GskTransform *first,
 
 /**
  * gsk_transform_get_category:
- * @self: (allow-none): A #GskTransform
+ * @self: (nullable): A #GskTransform
  *
  * Returns the category this transform belongs to.
  *

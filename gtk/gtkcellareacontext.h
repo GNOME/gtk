@@ -49,15 +49,15 @@ struct _GtkCellAreaContext
 /**
  * GtkCellAreaContextClass:
  * @allocate: This tells the context that an allocation width or height
- *     (or both) have been decided for a group of rows. The context should
- *     store any allocations for internally aligned cells at this point so
- *     that they dont need to be recalculated at gtk_cell_area_render() time.
+ *   (or both) have been decided for a group of rows. The context should
+ *   store any allocations for internally aligned cells at this point so
+ *   that they dont need to be recalculated at gtk_cell_area_render() time.
  * @reset: Clear any previously stored information about requested and
- *     allocated sizes for the context.
+ *   allocated sizes for the context.
  * @get_preferred_height_for_width: Returns the aligned height for the given
- *     width that context must store while collecting sizes for it’s rows.
+ *   width that context must store while collecting sizes for it’s rows.
  * @get_preferred_width_for_height: Returns the aligned width for the given
- *     height that context must store while collecting sizes for it’s rows.
+ *   height that context must store while collecting sizes for it’s rows.
  */
 struct _GtkCellAreaContextClass
 {

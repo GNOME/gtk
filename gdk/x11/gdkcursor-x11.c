@@ -260,17 +260,17 @@ gdk_x11_cursor_create_for_name (GdkDisplay  *display,
 
 /**
  * gdk_x11_display_set_cursor_theme:
- * @display: (type GdkX11Display): a #GdkDisplay
- * @theme: (nullable): the name of the cursor theme to use, or %NULL to unset
- *         a previously set value
+ * @display: (type GdkX11Display): a `GdkDisplay`
+ * @theme: (nullable): the name of the cursor theme to use, or %NULL
+ *   to unset a previously set value
  * @size: the cursor size to use, or 0 to keep the previous size
  *
  * Sets the cursor theme from which the images for cursor
  * should be taken.
  *
  * If the windowing system supports it, existing cursors created
- * with gdk_cursor_new_from_name() are updated to reflect the theme
- * change. Custom cursors constructed with gdk_cursor_new_from_texture()
+ * with [ctor@Gdk.Cursor.new_from_name] are updated to reflect the theme
+ * change. Custom cursors constructed with [ctor@Gdk.Cursor.new_from_texture]
  * will have to be handled by the application (GTK applications can learn
  * about cursor theme changes by listening for change notification
  * for the corresponding #GtkSetting).

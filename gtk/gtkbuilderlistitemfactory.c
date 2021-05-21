@@ -370,8 +370,7 @@ gtk_builder_list_item_factory_get_bytes (GtkBuilderListItemFactory *self)
  *
  * If the data references a resource, gets the path of that resource.
  *
- * Returns: (transfer none) (nullable): The path to the resource or %NULL
- *     if none
+ * Returns: (transfer none) (nullable): The path to the resource
  */
 const char *
 gtk_builder_list_item_factory_get_resource (GtkBuilderListItemFactory *self)

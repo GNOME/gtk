@@ -447,7 +447,7 @@ gtk_flatten_list_model_new (GListModel *model)
 /**
  * gtk_flatten_list_model_set_model: (attributes org.gtk.Method.set_property=model)
  * @self: a `GtkFlattenListModel`
- * @model: (nullable) (transfer none): the new model or %NULL
+ * @model: (nullable) (transfer none): the new model
  *
  * Sets a new model to be flattened.
  */

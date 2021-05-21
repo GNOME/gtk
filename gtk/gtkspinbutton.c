@@ -1706,7 +1706,7 @@ gtk_spin_button_default_output (GtkSpinButton *spin_button)
  * gtk_spin_button_configure:
  * @spin_button: a `GtkSpinButton`
  * @adjustment: (nullable): a `GtkAdjustment` to replace the spin button’s
- *     existing adjustment, or %NULL to leave its current adjustment unchanged
+ *   existing adjustment, or %NULL to leave its current adjustment unchanged
  * @climb_rate: the new climb rate
  * @digits: the number of decimal places to display in the spin button
  *
@@ -1773,10 +1773,9 @@ gtk_spin_button_configure (GtkSpinButton *spin_button,
 
 /**
  * gtk_spin_button_new:
- * @adjustment: (allow-none): the `GtkAdjustment` that this spin
- *     button should use, or %NULL
+ * @adjustment: (nullable): the `GtkAdjustment` that this spin button should use
  * @climb_rate: specifies by how much the rate of change in the value will
- *     accelerate if you continue to hold down an up/down button or arrow key
+ *   accelerate if you continue to hold down an up/down button or arrow key
  * @digits: the number of decimal places to display
  *
  * Creates a new `GtkSpinButton`.
@@ -1964,8 +1963,8 @@ gtk_spin_button_set_increments (GtkSpinButton *spin_button,
 /**
  * gtk_spin_button_get_increments:
  * @spin_button: a `GtkSpinButton`
- * @step: (out) (allow-none): location to store step increment, or %NULL
- * @page: (out) (allow-none): location to store page increment, or %NULL
+ * @step: (out) (optional): location to store step increment
+ * @page: (out) (optional): location to store page increment
  *
  * Gets the current step and page the increments
  * used by @spin_button.
@@ -2019,8 +2018,8 @@ gtk_spin_button_set_range (GtkSpinButton *spin_button,
 /**
  * gtk_spin_button_get_range:
  * @spin_button: a `GtkSpinButton`
- * @min: (out) (optional): location to store minimum allowed value, or %NULL
- * @max: (out) (optional): location to store maximum allowed value, or %NULL
+ * @min: (out) (optional): location to store minimum allowed value
+ * @max: (out) (optional): location to store maximum allowed value
  *
  * Gets the range allowed for @spin_button.
  *

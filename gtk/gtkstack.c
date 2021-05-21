@@ -1476,7 +1476,7 @@ gtk_stack_add_child (GtkStack   *stack,
  * gtk_stack_add_named:
  * @stack: a `GtkStack`
  * @child: the widget to add
- * @name: (nullable): the name for @child or %NULL
+ * @name: (nullable): the name for @child
  *
  * Adds a child to @stack.
  *

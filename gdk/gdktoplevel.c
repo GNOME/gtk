@@ -569,8 +569,7 @@ gdk_toplevel_set_deletable (GdkToplevel *toplevel,
  * Returns whether the desktop environment supports
  * tiled window states.
  *
- * Returns: %TRUE if the desktop environment supports
- *     tiled window states
+ * Returns: %TRUE if the desktop environment supports tiled window states
  */
 gboolean
 gdk_toplevel_supports_edge_constraints (GdkToplevel *toplevel)

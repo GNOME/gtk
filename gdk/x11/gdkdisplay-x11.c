@@ -1357,16 +1357,15 @@ gdk_display_setup_window_visual (GdkDisplay *display,
 
 /**
  * gdk_x11_display_open:
- * @display_name: (allow-none): name of the X display.
- *     See the XOpenDisplay() for details.
+ * @display_name: (nullable): name of the X display.
+ *   See the XOpenDisplay() for details.
  *
  * Tries to open a new display to the X server given by
  * @display_name. If opening the display fails, %NULL is
  * returned.
  *
- * Returns: (nullable) (transfer full): The new display or
- *     %NULL on error.
- **/
+ * Returns: (nullable) (transfer full): The new display
+ */
 GdkDisplay *
 gdk_x11_display_open (const char *display_name)
 {
@@ -1994,17 +1993,17 @@ gdk_x11_lookup_xdisplay (Display *xdisplay)
   return display;
 }
 
-/**
+/*
  * _gdk_x11_display_screen_for_xrootwin:
  * @display: a #GdkDisplay
  * @xrootwin: window ID for one of the screen’s of the display.
- * 
+ *
  * Given the root window ID of one of the screen’s of a #GdkDisplay,
  * finds the screen.
- * 
- * Returns: (transfer none): the #GdkX11Screen corresponding to
- *     @xrootwin, or %NULL.
- **/
+ *
+ * Returns: (transfer none) (nullable): the #GdkX11Screen
+ *   corresponding to @xrootwin
+ */
 GdkX11Screen *
 _gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,
 				      Window      xrootwin)
@@ -2832,7 +2831,7 @@ gdk_x11_display_get_monitors (GdkDisplay *display)
 
 /**
  * gdk_x11_display_get_primary_monitor:
- * @display: (type GdkX11Display): a #GdkDisplay
+ * @display: (type GdkX11Display): a `GdkDisplay`
  *
  * Gets the primary monitor for the display.
  *
@@ -2845,7 +2844,7 @@ gdk_x11_display_get_monitors (GdkDisplay *display)
  * (usually the first) may be returned.
  *
  * Returns: (transfer none): the primary monitor, or any monitor if no
- *     primary monitor is configured by the user
+ *   primary monitor is configured by the user
  */
 GdkMonitor *
 gdk_x11_display_get_primary_monitor (GdkDisplay *display)

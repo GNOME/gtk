@@ -43,14 +43,14 @@ G_DEFINE_TYPE (GdkMacosMonitor, gdk_macos_monitor, GDK_TYPE_MONITOR)
 
 /**
  * gdk_macos_monitor_get_workarea:
- * @monitor: a #GdkMonitor
- * @workarea: (out): a #GdkRectangle to be filled with
- *     the monitor workarea
+ * @monitor: a `GdkMonitor`
+ * @workarea: (out): a `GdkRectangle` to be filled with the monitor workarea
  *
  * Retrieves the size and position of the “work area” on a monitor
- * within the display coordinate space. The returned geometry is in
- * ”application pixels”, not in ”device pixels” (see
- * gdk_monitor_get_scale_factor()).
+ * within the display coordinate space.
+ *
+ * The returned geometry is in ”application pixels”, not in ”device pixels”
+ * (see [method@Gdk.Monitor.get_scale_factor]).
  */
 void
 gdk_macos_monitor_get_workarea (GdkMonitor   *monitor,

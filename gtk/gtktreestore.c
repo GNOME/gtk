@@ -1260,7 +1260,7 @@ gtk_tree_store_remove (GtkTreeStore *tree_store,
  * gtk_tree_store_insert:
  * @tree_store: A #GtkTreeStore
  * @iter: (out): An unset #GtkTreeIter to set to the new row
- * @parent: (allow-none): A valid #GtkTreeIter, or %NULL
+ * @parent: (nullable): A valid #GtkTreeIter
  * @position: position to insert the new row, or -1 for last
  *
  * Creates a new row at @position.  If parent is non-%NULL, then the row will be
@@ -1322,8 +1322,8 @@ gtk_tree_store_insert (GtkTreeStore *tree_store,
  * gtk_tree_store_insert_before:
  * @tree_store: A #GtkTreeStore
  * @iter: (out): An unset #GtkTreeIter to set to the new row
- * @parent: (allow-none): A valid #GtkTreeIter, or %NULL
- * @sibling: (allow-none): A valid #GtkTreeIter, or %NULL
+ * @parent: (nullable): A valid #GtkTreeIter
+ * @sibling: (nullable): A valid #GtkTreeIter
  *
  * Inserts a new row before @sibling.  If @sibling is %NULL, then the row will
  * be appended to @parent ’s children.  If @parent and @sibling are %NULL, then
@@ -1403,8 +1403,8 @@ gtk_tree_store_insert_before (GtkTreeStore *tree_store,
  * gtk_tree_store_insert_after:
  * @tree_store: A #GtkTreeStore
  * @iter: (out): An unset #GtkTreeIter to set to the new row
- * @parent: (allow-none): A valid #GtkTreeIter, or %NULL
- * @sibling: (allow-none): A valid #GtkTreeIter, or %NULL
+ * @parent: (nullable): A valid #GtkTreeIter
+ * @sibling: (nullable): A valid #GtkTreeIter
  *
  * Inserts a new row after @sibling.  If @sibling is %NULL, then the row will be
  * prepended to @parent ’s children.  If @parent and @sibling are %NULL, then
@@ -1484,8 +1484,8 @@ gtk_tree_store_insert_after (GtkTreeStore *tree_store,
 /**
  * gtk_tree_store_insert_with_values:
  * @tree_store: A #GtkTreeStore
- * @iter: (out) (allow-none): An unset #GtkTreeIter to set the new row, or %NULL.
- * @parent: (allow-none): A valid #GtkTreeIter, or %NULL
+ * @iter: (out) (optional): An unset #GtkTreeIter to set the new row
+ * @parent: (nullable): A valid #GtkTreeIter
  * @position: position to insert the new row, or -1 to append after existing rows
  * @...: pairs of column number and value, terminated with -1
  *
@@ -1574,8 +1574,8 @@ gtk_tree_store_insert_with_values (GtkTreeStore *tree_store,
 /**
  * gtk_tree_store_insert_with_valuesv: (rename-to gtk_tree_store_insert_with_values)
  * @tree_store: A #GtkTreeStore
- * @iter: (out) (allow-none): An unset #GtkTreeIter to set the new row, or %NULL.
- * @parent: (allow-none): A valid #GtkTreeIter, or %NULL
+ * @iter: (out) (optional): An unset #GtkTreeIter to set the new row
+ * @parent: (nullable): A valid #GtkTreeIter
  * @position: position to insert the new row, or -1 for last
  * @columns: (array length=n_values): an array of column numbers
  * @values: (array length=n_values): an array of GValues
@@ -1651,7 +1651,7 @@ gtk_tree_store_insert_with_valuesv (GtkTreeStore *tree_store,
  * gtk_tree_store_prepend:
  * @tree_store: A #GtkTreeStore
  * @iter: (out): An unset #GtkTreeIter to set to the prepended row
- * @parent: (allow-none): A valid #GtkTreeIter, or %NULL
+ * @parent: (nullable): A valid #GtkTreeIter
  * 
  * Prepends a new row to @tree_store.  If @parent is non-%NULL, then it will prepend
  * the new row before the first child of @parent, otherwise it will prepend a row
@@ -1710,7 +1710,7 @@ gtk_tree_store_prepend (GtkTreeStore *tree_store,
  * gtk_tree_store_append:
  * @tree_store: A #GtkTreeStore
  * @iter: (out): An unset #GtkTreeIter to set to the appended row
- * @parent: (allow-none): A valid #GtkTreeIter, or %NULL
+ * @parent: (nullable): A valid #GtkTreeIter
  * 
  * Appends a new row to @tree_store.  If @parent is non-%NULL, then it will append the
  * new row after the last child of @parent, otherwise it will append a row to
@@ -2230,16 +2230,16 @@ gtk_tree_store_reorder_func (gconstpointer a,
 
 /**
  * gtk_tree_store_reorder: (skip)
- * @tree_store: A #GtkTreeStore
- * @parent: (nullable): A #GtkTreeIter, or %NULL
+ * @tree_store: A `GtkTreeStore`
+ * @parent: (nullable): A `GtkTreeIter`
  * @new_order: (array): an array of integers mapping the new position of each child
- *      to its old position before the re-ordering,
- *      i.e. @new_order`[newpos] = oldpos`.
+ *   to its old position before the re-ordering,
+ *   i.e. @new_order`[newpos] = oldpos`.
  *
  * Reorders the children of @parent in @tree_store to follow the order
  * indicated by @new_order. Note that this function only works with
  * unsorted stores.
- **/
+ */
 void
 gtk_tree_store_reorder (GtkTreeStore *tree_store,
 			GtkTreeIter  *parent,
@@ -2785,7 +2785,7 @@ free_paths_and_out:
  * gtk_tree_store_move_before:
  * @tree_store: A #GtkTreeStore.
  * @iter: A #GtkTreeIter.
- * @position: (allow-none): A #GtkTreeIter or %NULL.
+ * @position: (nullable): A #GtkTreeIter
  *
  * Moves @iter in @tree_store to the position before @position. @iter and
  * @position should be in the same level. Note that this function only
@@ -2804,7 +2804,7 @@ gtk_tree_store_move_before (GtkTreeStore *tree_store,
  * gtk_tree_store_move_after:
  * @tree_store: A #GtkTreeStore.
  * @iter: A #GtkTreeIter.
- * @position: (allow-none): A #GtkTreeIter.
+ * @position: (nullable): A #GtkTreeIter.
  *
  * Moves @iter in @tree_store to the position after @position. @iter and
  * @position should be in the same level. Note that this function only

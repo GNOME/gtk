@@ -155,14 +155,14 @@ convert_no_alpha (guchar *dest_data,
  * The pixbuf will contain an alpha channel if the @surface contains one.
  *
  * Returns: (nullable) (transfer full): A newly-created pixbuf with a
- *     reference count of 1, or %NULL on error
+ *   reference count of 1
  */
 GdkPixbuf *
-gdk_pixbuf_get_from_surface  (cairo_surface_t *surface,
-                              int              src_x,
-                              int              src_y,
-                              int              width,
-                              int              height)
+gdk_pixbuf_get_from_surface (cairo_surface_t *surface,
+                             int              src_x,
+                             int              src_y,
+                             int              width,
+                             int              height)
 {
   cairo_content_t content;
   GdkPixbuf *dest;
@@ -225,8 +225,7 @@ gdk_pixbuf_get_from_surface  (cairo_surface_t *surface,
  * stages will almost certainly convert the pixbuf back into a texture
  * to draw it on screen.
  *
- * Returns: (transfer full) (nullable): a new #GdkPixbuf or %NULL
- *   in case of an error
+ * Returns: (transfer full) (nullable): a new #GdkPixbuf
  */
 GdkPixbuf *
 gdk_pixbuf_get_from_texture (GdkTexture *texture)

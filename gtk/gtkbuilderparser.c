@@ -309,7 +309,7 @@ gtk_buildable_parse_context_pop (GtkBuildableParseContext *context)
  * give the element_name as passed to those functions. For the parent
  * elements, see gtk_buildable_parse_context_get_element_stack().
  *
- * Returns: (nullable): the name of the currently open element, or %NULL
+ * Returns: (nullable): the name of the currently open element
  */
 const char *
 gtk_buildable_parse_context_get_element (GtkBuildableParseContext *context)
@@ -346,8 +346,8 @@ gtk_buildable_parse_context_get_element_stack (GtkBuildableParseContext *context
 /**
  * gtk_buildable_parse_context_get_position:
  * @context: a #GtkBuildableParseContext
- * @line_number: (out) (optional): return location for a line number, or %NULL
- * @char_number: (out) (optional): return location for a char-on-line number, or %NULL
+ * @line_number: (out) (optional): return location for a line number
+ * @char_number: (out) (optional): return location for a char-on-line number
  *
  * Retrieves the current line number and the number of the character on
  * that line. Intended for use in error messages; there are no strict

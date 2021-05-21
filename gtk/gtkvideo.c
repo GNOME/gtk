@@ -379,7 +379,7 @@ gtk_video_new (void)
 
 /**
  * gtk_video_new_for_media_stream:
- * @stream: (allow-none): a `GtkMediaStream`
+ * @stream: (nullable): a `GtkMediaStream`
  *
  * Creates a `GtkVideo` to play back the given @stream.
  *
@@ -397,7 +397,7 @@ gtk_video_new_for_media_stream (GtkMediaStream *stream)
 
 /**
  * gtk_video_new_for_file:
- * @file: (allow-none): a `GFile`
+ * @file: (nullable): a `GFile`
  *
  * Creates a `GtkVideo` to play back the given @file.
  *
@@ -415,7 +415,7 @@ gtk_video_new_for_file (GFile *file)
 
 /**
  * gtk_video_new_for_filename:
- * @filename: (allow-none) (type filename): filename to play back
+ * @filename: (nullable) (type filename): filename to play back
  *
  * Creates a `GtkVideo` to play back the given @filename.
  *
@@ -445,7 +445,7 @@ gtk_video_new_for_filename (const char *filename)
 
 /**
  * gtk_video_new_for_resource:
- * @resource_path: (allow-none): resource path to play back
+ * @resource_path: (nullable): resource path to play back
  *
  * Creates a `GtkVideo` to play back the resource at the
  * given @resource_path.
@@ -579,7 +579,7 @@ gtk_video_notify_cb (GtkMediaStream *stream,
 /**
  * gtk_video_set_media_stream: (attributes org.gtk.Method.set_property=media-stream)
  * @self: a `GtkVideo`
- * @stream: (allow-none): The media stream to play or %NULL to unset
+ * @stream: (nullable): The media stream to play or %NULL to unset
  *
  * Sets the media stream to be played back.
  *
@@ -667,7 +667,7 @@ gtk_video_get_file (GtkVideo *self)
 /**
  * gtk_video_set_file: (attributes org.gtk.Method.set_property=file)
  * @self: a `GtkVideo`
- * @file: (allow-none): the file to play
+ * @file: (nullable): the file to play
  *
  * Makes @self play the given @file.
  */
@@ -714,7 +714,7 @@ gtk_video_set_file (GtkVideo *self,
 /**
  * gtk_video_set_filename:
  * @self: a `GtkVideo`
- * @filename: (allow-none): the filename to play
+ * @filename: (nullable): the filename to play
  *
  * Makes @self play the given @filename.
  *
@@ -742,7 +742,7 @@ gtk_video_set_filename (GtkVideo   *self,
 /**
  * gtk_video_set_resource:
  * @self: a `GtkVideo`
- * @resource_path: (allow-none): the resource to set
+ * @resource_path: (nullable): the resource to set
  *
  * Makes @self play the resource at the given @resource_path.
  *

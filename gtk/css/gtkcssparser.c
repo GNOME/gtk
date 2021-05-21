@@ -158,8 +158,7 @@ gtk_css_parser_unref (GtkCssParser *self)
  * for example when raw data is parsed - %NULL is returned.
  *
  * Returns: (nullable) (transfer none): The file being parsed
- *   or %NULL.
- **/
+ */
 GFile *
 gtk_css_parser_get_file (GtkCssParser *self)
 {
@@ -173,9 +172,9 @@ gtk_css_parser_get_file (GtkCssParser *self)
  *
  * Resolves a given URL against the parser's location.
  *
- * Returns: (nullable) (transfer full): a new #GFile for the
- *     resolved URL or %NULL if the URI cannot be resolved.
- **/
+ * Returns: (nullable) (transfer full): a new `GFile` for the
+ *   resolved URL
+ */
 GFile *
 gtk_css_parser_resolve_url (GtkCssParser *self,
                             const char   *url)
@@ -890,13 +889,13 @@ gtk_css_parser_try_token (GtkCssParser    *self,
  * @self: a #GtkCssParser
  *
  * If the current token is an identifier, consumes it and returns
- * its name.  
+ * its name.
+ *
  * If the current token is not an identifier, an error is emitted
  * and %NULL is returned.
  *
  * Returns: (transfer full): the name of the consumed identifier
- *     or %NULL on error
- **/
+ */
 char *
 gtk_css_parser_consume_ident (GtkCssParser *self)
 {
@@ -921,12 +920,12 @@ gtk_css_parser_consume_ident (GtkCssParser *self)
  * gtk_css_parser_consume_string:
  * @self: a #GtkCssParser
  *
- * If the current token is a string, consumes it and return the string.  
+ * If the current token is a string, consumes it and return the string.
+ *
  * If the current token is not a string, an error is emitted
  * and %NULL is returned.
  *
- * Returns: (transfer full): the name of the consumed string 
- *     or %NULL on error
+ * Returns: (transfer full): the name of the consumed string
  **/
 char *
 gtk_css_parser_consume_string (GtkCssParser *self)
@@ -971,7 +970,7 @@ gtk_css_parser_parse_url_arg (GtkCssParser *parser,
  * consumes it, resolves the URL and returns the resulting #GFile.
  * On failure, an error is emitted and %NULL is returned.
  *
- * Returns: (nullable) (transfer full): the resulting URL or %NULL on error
+ * Returns: (nullable) (transfer full): the resulting URL
  **/
 char *
 gtk_css_parser_consume_url (GtkCssParser *self)

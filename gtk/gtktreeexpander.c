@@ -704,7 +704,7 @@ gtk_tree_expander_get_child (GtkTreeExpander *self)
 /**
  * gtk_tree_expander_set_child: (attributes org.gtk.Method.set_property=child)
  * @self: a `GtkTreeExpander`
- * @child: (nullable): a `GtkWidget`, or %NULL
+ * @child: (nullable): a `GtkWidget`
  *
  * Sets the content widget to display.
  */
@@ -781,7 +781,7 @@ gtk_tree_expander_get_list_row (GtkTreeExpander *self)
 /**
  * gtk_tree_expander_set_list_row: (attributes org.gtk.Method.set_property=list-row)
  * @self: a `GtkTreeExpander` widget
- * @list_row: (nullable): a `GtkTreeListRow`, or %NULL
+ * @list_row: (nullable): a `GtkTreeListRow`
  *
  * Sets the tree list row that this expander should manage.
  */

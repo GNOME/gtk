@@ -45,8 +45,8 @@ typedef gboolean (* GtkShortcutFunc) (GtkWidget *widget,
 /**
  * GtkShortcutActionFlags:
  * @GTK_SHORTCUT_ACTION_EXCLUSIVE: The action is the only
- *     action that can be activated. If this flag is not set,
- *     a future activation may select a different action.
+ *   action that can be activated. If this flag is not set,
+ *   a future activation may select a different action.
  *
  * List of flags that can be passed to action activation.
  *

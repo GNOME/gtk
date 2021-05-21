@@ -657,12 +657,11 @@ gdk_drop_read_internal (GdkDrop             *self,
  * gdk_drop_read_async:
  * @self: a `GdkDrop`
  * @mime_types: (array zero-terminated=1) (element-type utf8):
- *     pointer to an array of mime types
+ *   pointer to an array of mime types
  * @io_priority: the I/O priority for the read operation
- * @cancellable: (allow-none): optional `GCancellable` object,
- *     %NULL to ignore
+ * @cancellable: (nullable): optional `GCancellable` object
  * @callback: (scope async): a `GAsyncReadyCallback` to call when
- *     the request is satisfied
+ *   the request is satisfied
  * @user_data: (closure): the data to pass to @callback
  *
  * Asynchronously read the dropped data from a `GdkDrop`
@@ -695,7 +694,7 @@ gdk_drop_read_async (GdkDrop             *self,
  * @self: a `GdkDrop`
  * @result: a `GAsyncResult`
  * @out_mime_type: (out) (type utf8): return location for the used mime type
- * @error: (allow-none): location to store error information on failure, or %NULL
+ * @error: (nullable): location to store error information on failure
  *
  * Finishes an async drop read operation.
  *
@@ -706,7 +705,7 @@ gdk_drop_read_async (GdkDrop             *self,
  *
  * See [method@Gdk.Drop.read_async].
  *
- * Returns: (nullable) (transfer full): the `GInputStream`, or %NULL
+ * Returns: (nullable) (transfer full): the `GInputStream`
  */
 GInputStream *
 gdk_drop_read_finish (GdkDrop       *self,
@@ -892,7 +891,7 @@ gdk_drop_read_value_async (GdkDrop             *self,
  * gdk_drop_read_value_finish:
  * @self: a `GdkDrop`
  * @result: a `GAsyncResult`
- * @error: a `GError` location to store the error occurring, or %NULL to ignore
+ * @error: a `GError` location to store the error occurring
  *
  * Finishes an async drop read.
  *

@@ -106,7 +106,7 @@ gtk_buildable_get_buildable_id (GtkBuildable *buildable)
  * @buildable: a `GtkBuildable`
  * @builder: a `GtkBuilder`
  * @child: child to add
- * @type: (nullable): kind of child or %NULL
+ * @type: (nullable): kind of child
  *
  * Adds a child to @buildable. @type is an optional string
  * describing how the child should be added.
@@ -188,7 +188,7 @@ gtk_buildable_construct_child (GtkBuildable *buildable,
  * gtk_buildable_custom_tag_start:
  * @buildable: a `GtkBuildable`
  * @builder: a `GtkBuilder` used to construct this object
- * @child: (allow-none): child object or %NULL for non-child tags
+ * @child: (nullable): child object or %NULL for non-child tags
  * @tagname: name of tag
  * @parser: (out): a #GMarkupParser to fill in
  * @data: (out): return location for user data that will be passed in
@@ -197,7 +197,7 @@ gtk_buildable_construct_child (GtkBuildable *buildable,
  * This is called for each unknown element under <child>.
  *
  * Returns: %TRUE if an object has a custom implementation, %FALSE
- *          if it doesn't.
+ *   if it doesn't.
  */
 gboolean
 gtk_buildable_custom_tag_start (GtkBuildable       *buildable,
@@ -224,7 +224,7 @@ gtk_buildable_custom_tag_start (GtkBuildable       *buildable,
  * gtk_buildable_custom_tag_end:
  * @buildable: A `GtkBuildable`
  * @builder: `GtkBuilder` used to construct this object
- * @child: (allow-none): child object or %NULL for non-child tags
+ * @child: (nullable): child object or %NULL for non-child tags
  * @tagname: name of tag
  * @data: user data that will be passed in to parser functions
  *
@@ -253,7 +253,7 @@ gtk_buildable_custom_tag_end (GtkBuildable  *buildable,
  * gtk_buildable_custom_finished:
  * @buildable: a `GtkBuildable`
  * @builder: a `GtkBuilder`
- * @child: (allow-none): child object or %NULL for non-child tags
+ * @child: (nullable): child object or %NULL for non-child tags
  * @tagname: the name of the tag
  * @data: user data created in custom_tag_start
  *

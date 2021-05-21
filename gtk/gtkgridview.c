@@ -73,7 +73,7 @@
  * ```
  *
  * `GtkGridView` uses a single CSS node with name `gridview`. Each child uses
- * a single CSS node with name `child`. If the [property@Gtk.ListItem.activatable]
+ * a single CSS node with name `child`. If the [property@Gtk.ListItem:activatable]
  * property is set, the corresponding row will have the `.activatable` style
  * class. For rubberband selection, a subnode with name `rubberband` is used.
  *
@@ -201,20 +201,20 @@ cell_augment (GtkRbTree *tree,
  * @self: a `GtkGridView`
  * @y: an offset in direction of @self's orientation
  * @position: (out caller-allocates) (optional): stores the position
- *     index of the returned row
+ *   index of the returned row
  * @offset: (out caller-allocates) (optional): stores the offset
- *     in pixels between y and top of cell.
+ *   in pixels between y and top of cell.
  * @offset: (out caller-allocates) (optional): stores the height
- *     of the cell
+ *   of the cell
  *
  * Gets the Cell that occupies the leftmost position in the row at offset
- * @y into the primary direction. 
+ * @y into the primary direction.
  *
  * If y is larger than the height of all cells, %NULL will be returned.
  * In particular that means that for an empty grid, %NULL is returned
  * for any value.
  *
- * Returns: (nullable): The first cell at offset y or %NULL if none
+ * Returns: (nullable): The first cell at offset y
  **/
 static Cell *
 gtk_grid_view_get_cell_at_y (GtkGridView *self,
@@ -1185,8 +1185,8 @@ gtk_grid_view_init (GtkGridView *self)
 
 /**
  * gtk_grid_view_new:
- * @model: (allow-none) (transfer full): the model to use, or %NULL
- * @factory: (allow-none) (transfer full): The factory to populate items with, or %NULL
+ * @model: (nullable) (transfer full): the model to use
+ * @factory: (nullable) (transfer full): The factory to populate items with
  *
  * Creates a new `GtkGridView` that uses the given @factory for
  * mapping items to widgets.
@@ -1240,7 +1240,7 @@ gtk_grid_view_get_model (GtkGridView *self)
 /**
  * gtk_grid_view_set_model: (attributes org.gtk.Method.set_property=model)
  * @self: a `GtkGridView`
- * @model: (allow-none) (transfer none): the model to use or %NULL for none
+ * @model: (nullable) (transfer none): the model to use
  *
  * Sets the imodel to use.
  *
@@ -1282,7 +1282,7 @@ gtk_grid_view_get_factory (GtkGridView *self)
 /**
  * gtk_grid_view_set_factory: (attributes org.gtk.Method.set_property=factory)
  * @self: a `GtkGridView`
- * @factory: (allow-none) (transfer none): the factory to use or %NULL for none
+ * @factory: (nullable) (transfer none): the factory to use
  *
  * Sets the `GtkListItemFactory` to use for populating list items.
  */

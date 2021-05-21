@@ -449,7 +449,7 @@ gtk_single_selection_init (GtkSingleSelection *self)
 
 /**
  * gtk_single_selection_new:
- * @model: (allow-none) (transfer full): the `GListModel` to manage, or %NULL
+ * @model: (nullable) (transfer full): the `GListModel` to manage
  *
  * Creates a new selection to handle @model.
  *
@@ -491,7 +491,7 @@ gtk_single_selection_get_model (GtkSingleSelection *self)
 /**
  * gtk_single_selection_set_model: (attributes org.gtk.Method.set_property=model)
  * @self: a `GtkSingleSelection`
- * @model: (allow-none): A `GListModel` to wrap
+ * @model: (nullable): A `GListModel` to wrap
  *
  * Sets the model that @self should wrap.
  *

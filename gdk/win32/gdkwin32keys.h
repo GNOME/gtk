@@ -32,7 +32,7 @@ G_BEGIN_DECLS
  * @GDK_WIN32_KEYMAP_MATCH_NONE: no matches found. Output is not valid.
  * @GDK_WIN32_KEYMAP_MATCH_INCOMPLETE: the sequence matches so far, but is incomplete. Output is not valid.
  * @GDK_WIN32_KEYMAP_MATCH_PARTIAL: the sequence matches up to the last key,
- *     which does not match. Output is valid.
+ *   which does not match. Output is valid.
  * @GDK_WIN32_KEYMAP_MATCH_EXACT: the sequence matches exactly. Output is valid.
  *
  * An enumeration describing the result of a deadkey combination matching.

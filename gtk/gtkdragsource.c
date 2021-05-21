@@ -359,7 +359,7 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
    * the [property@Gtk.DragSource:content] property, so if you set up that
    * property ahead of time, you don't need to connect to this signal.
    *
-   * Returns: (transfer full) (nullable): a `GdkContentProvider`, or %NULL
+   * Returns: (transfer full) (nullable): a `GdkContentProvider`
    */
   signals[PREPARE] =
       g_signal_new (I_("prepare"),
@@ -635,7 +635,7 @@ gtk_drag_source_get_content (GtkDragSource *source)
 /**
  * gtk_drag_source_set_content: (attributes org.gtk.Method.set_property=content)
  * @source: a `GtkDragSource`
- * @content: (nullable): a `GdkContentProvider`, or %NULL
+ * @content: (nullable): a `GdkContentProvider`
  *
  * Sets a content provider on a `GtkDragSource`.
  *
@@ -708,7 +708,7 @@ gtk_drag_source_set_actions (GtkDragSource *source,
 /**
  * gtk_drag_source_set_icon:
  * @source: a `GtkDragSource`
- * @paintable: (nullable): the #GdkPaintable to use as icon, or %NULL
+ * @paintable: (nullable): the #GdkPaintable to use as icon
  * @hot_x: the hotspot X coordinate on the icon
  * @hot_y: the hotspot Y coordinate on the icon
  *
@@ -744,7 +744,7 @@ gtk_drag_source_set_icon (GtkDragSource *source,
  * Returns the underlying `GdkDrag` object for an ongoing drag.
  *
  * Returns: (nullable) (transfer none): the `GdkDrag` of the current
- *   drag operation, or %NULL
+ *   drag operation
  */
 GdkDrag *
 gtk_drag_source_get_drag (GtkDragSource *source)

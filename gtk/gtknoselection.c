@@ -213,7 +213,7 @@ gtk_no_selection_init (GtkNoSelection *self)
 
 /**
  * gtk_no_selection_new:
- * @model: (allow-none) (transfer full): the `GListModel` to manage, or %NULL
+ * @model: (nullable) (transfer full): the `GListModel` to manage
  *
  * Creates a new selection to handle @model.
  *
@@ -255,7 +255,7 @@ gtk_no_selection_get_model (GtkNoSelection *self)
 /**
  * gtk_no_selection_set_model: (attributes org.gtk.Method.set_property=model)
  * @self: a `GtkNoSelection`
- * @model: (allow-none): A `GListModel` to wrap
+ * @model: (nullable): A `GListModel` to wrap
  *
  * Sets the model that @self should wrap.
  *

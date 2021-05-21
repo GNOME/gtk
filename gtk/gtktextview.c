@@ -2117,7 +2117,7 @@ gtk_text_view_new_with_buffer (GtkTextBuffer *buffer)
 /**
  * gtk_text_view_set_buffer: (attributes org.gtk.Method.set_property=buffer)
  * @text_view: a `GtkTextView`
- * @buffer: (allow-none): a `GtkTextBuffer`
+ * @buffer: (nullable): a `GtkTextBuffer`
  *
  * Sets @buffer as the buffer being displayed by @text_view.
  *
@@ -2279,11 +2279,9 @@ gtk_text_view_get_buffer (GtkTextView *text_view)
 /**
  * gtk_text_view_get_cursor_locations:
  * @text_view: a `GtkTextView`
- * @iter: (allow-none): a `GtkTextIter`
- * @strong: (out) (allow-none): location to store the strong
- *     cursor position (may be %NULL)
- * @weak: (out) (allow-none): location to store the weak
- *     cursor position (may be %NULL)
+ * @iter: (nullable): a `GtkTextIter`
+ * @strong: (out) (optional): location to store the strong cursor position
+ * @weak: (out) (optional): location to store the weak cursor position
  *
  * Determine the positions of the strong and weak cursors if the
  * insertion point is at @iter.
@@ -2364,7 +2362,7 @@ gtk_text_view_get_iter_at_location (GtkTextView *text_view,
  * gtk_text_view_get_iter_at_position:
  * @text_view: a `GtkTextView`
  * @iter: (out): a `GtkTextIter`
- * @trailing: (out) (allow-none): if non-%NULL, location to store
+ * @trailing: (out) (optional): if non-%NULL, location to store
  *    an integer indicating where in the grapheme the user clicked.
  *    It will either be zero, or the number of characters in the grapheme.
  *    0 represents the trailing edge of the grapheme.
@@ -4460,7 +4458,7 @@ find_child_for_window_type (GtkTextView       *text_view,
  * @win must be one of %GTK_TEXT_WINDOW_LEFT, %GTK_TEXT_WINDOW_RIGHT,
  * %GTK_TEXT_WINDOW_TOP, or %GTK_TEXT_WINDOW_BOTTOM.
  *
- * Returns: (transfer none) (nullable): a `GtkWidget` or %NULL
+ * Returns: (transfer none) (nullable): a `GtkWidget`
  */
 GtkWidget *
 gtk_text_view_get_gutter (GtkTextView       *text_view,
@@ -4486,7 +4484,7 @@ gtk_text_view_get_gutter (GtkTextView       *text_view,
  * gtk_text_view_set_gutter:
  * @text_view: a `GtkTextView`
  * @win: a `GtkTextWindowType`
- * @widget: (nullable): a `GtkWidget` or %NULL
+ * @widget: (nullable): a `GtkWidget`
  *
  * Places @widget into the gutter specified by @win.
  *
@@ -9213,8 +9211,8 @@ text_window_get_height (GtkTextWindow *win)
  * @win: a #GtkTextWindowType
  * @buffer_x: buffer x coordinate
  * @buffer_y: buffer y coordinate
- * @window_x: (out) (allow-none): window x coordinate return location or %NULL
- * @window_y: (out) (allow-none): window y coordinate return location or %NULL
+ * @window_x: (out) (optional): window x coordinate return location
+ * @window_y: (out) (optional): window y coordinate return location
  *
  * Converts buffer coordinates to window coordinates.
  */
@@ -9276,8 +9274,8 @@ gtk_text_view_buffer_to_window_coords (GtkTextView      *text_view,
  * @win: a #GtkTextWindowType
  * @window_x: window x coordinate
  * @window_y: window y coordinate
- * @buffer_x: (out) (allow-none): buffer x coordinate return location or %NULL
- * @buffer_y: (out) (allow-none): buffer y coordinate return location or %NULL
+ * @buffer_x: (out) (optional): buffer x coordinate return location
+ * @buffer_y: (out) (optional): buffer y coordinate return location
  *
  * Converts coordinates on the window identified by @win to buffer
  * coordinates.
@@ -9881,7 +9879,7 @@ gtk_text_view_insert_emoji (GtkTextView *text_view)
 /**
  * gtk_text_view_set_extra_menu: (attributes org.gtk.Method.set_property=extra-menu)
  * @text_view: a `GtkTextView`
- * @model: (allow-none): a `GMenuModel`
+ * @model: (nullable): a `GMenuModel`
  *
  * Sets a menu model to add when constructing the context
  * menu for @text_view.

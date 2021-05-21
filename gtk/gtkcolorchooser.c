@@ -155,7 +155,7 @@ gtk_color_chooser_set_rgba (GtkColorChooser *chooser,
  * Returns whether the color chooser shows the alpha channel.
  *
  * Returns: %TRUE if the color chooser uses the alpha channel,
- *     %FALSE if not
+ *   %FALSE if not
  */
 gboolean
 gtk_color_chooser_get_use_alpha (GtkColorChooser *chooser)
@@ -190,10 +190,10 @@ gtk_color_chooser_set_use_alpha (GtkColorChooser *chooser,
  * gtk_color_chooser_add_palette:
  * @chooser: a `GtkColorChooser`
  * @orientation: %GTK_ORIENTATION_HORIZONTAL if the palette should
- *     be displayed in rows, %GTK_ORIENTATION_VERTICAL for columns
+ *   be displayed in rows, %GTK_ORIENTATION_VERTICAL for columns
  * @colors_per_line: the number of colors to show in each row/column
  * @n_colors: the total number of elements in @colors
- * @colors: (allow-none) (array length=n_colors): the colors of the palette, or %NULL
+ * @colors: (nullable) (array length=n_colors): the colors of the palette
  *
  * Adds a palette to the color chooser.
  *

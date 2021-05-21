@@ -5211,7 +5211,7 @@ gtk_text_btree_node_validate (BTreeView         *view,
  * @tree: a #GtkTextBTree
  * @view_id: view id
  * @max_pixels: the maximum number of pixels to validate. (No more
- *              than one paragraph beyond this limit will be validated)
+ *   than one paragraph beyond this limit will be validated)
  * @y: location to store starting y coordinate of validated region
  * @old_height: location to store old height of validated region
  * @new_height: location to store new height of validated region

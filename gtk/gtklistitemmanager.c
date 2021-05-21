@@ -164,7 +164,7 @@ gtk_list_item_manager_get_root (GtkListItemManager *self)
  * represents a row with an existing widget, @offset will always be 0.
  *
  * Returns: (type GtkListItemManagerItem): the item for @position or
- *     %NULL if position is out of range
+ *   %NULL if position is out of range
  **/
 gpointer
 gtk_list_item_manager_get_nth (GtkListItemManager *self,
@@ -900,7 +900,7 @@ gtk_list_item_manager_get_model (GtkListItemManager *self)
  * @self: a #GtkListItemManager
  * @position: the row in the model to create a list item for
  * @prev_sibling: the widget this widget should be inserted before or %NULL
- *     if it should be the first widget
+ *   if it should be the first widget
  *
  * Creates a list item widget to use for @position. No widget may
  * yet exist that is used for @position.
@@ -945,7 +945,7 @@ gtk_list_item_manager_acquire_list_item (GtkListItemManager *self,
  * @self: a #GtkListItemManager
  * @position: the row in the model to create a list item for
  * @prev_sibling: the widget this widget should be inserted after or %NULL
- *     if it should be the first widget
+ *   if it should be the first widget
  *
  * Like gtk_list_item_manager_acquire_list_item(), but only tries to acquire list
  * items from those previously released as part of @change.
@@ -953,7 +953,7 @@ gtk_list_item_manager_acquire_list_item (GtkListItemManager *self,
  * gtk_list_item_manager_acquire_list_item().
  *
  * Returns: (nullable): a properly setup widget to use in @position or %NULL if
- *     no item for reuse existed
+ *   no item for reuse existed
  **/
 static GtkWidget *
 gtk_list_item_manager_try_reacquire_list_item (GtkListItemManager *self,
@@ -993,7 +993,7 @@ gtk_list_item_manager_try_reacquire_list_item (GtkListItemManager *self,
  * gtk_list_item_manager_move_list_item:
  * @self: a #GtkListItemManager
  * @list_item: an acquired #GtkListItem that should be moved to represent
- *     a different row
+ *   a different row
  * @position: the new position of that list item
  * @prev_sibling: the new previous sibling
  *
@@ -1051,10 +1051,10 @@ gtk_list_item_manager_update_list_item (GtkListItemManager *self,
 /*
  * gtk_list_item_manager_release_list_item:
  * @self: a #GtkListItemManager
- * @change: (allow-none): The change associated with this release or
- *     %NULL if this is a final removal
+ * @change: (nullable): The change associated with this release or
+ *   %NULL if this is a final removal
  * @item: an item previously acquired with
- *     gtk_list_item_manager_acquire_list_item()
+ *   gtk_list_item_manager_acquire_list_item()
  *
  * Releases an item that was previously acquired via
  * gtk_list_item_manager_acquire_list_item() and is no longer in use.

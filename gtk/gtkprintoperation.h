@@ -49,17 +49,17 @@ typedef struct _GtkPrintOperation        GtkPrintOperation;
 /**
  * GtkPrintStatus:
  * @GTK_PRINT_STATUS_INITIAL: The printing has not started yet; this
- *     status is set initially, and while the print dialog is shown.
+ *   status is set initially, and while the print dialog is shown.
  * @GTK_PRINT_STATUS_PREPARING: This status is set while the begin-print
- *     signal is emitted and during pagination.
+ *   signal is emitted and during pagination.
  * @GTK_PRINT_STATUS_GENERATING_DATA: This status is set while the
- *     pages are being rendered.
+ *   pages are being rendered.
  * @GTK_PRINT_STATUS_SENDING_DATA: The print job is being sent off to the
- *     printer.
+ *   printer.
  * @GTK_PRINT_STATUS_PENDING: The print job has been sent to the printer,
- *     but is not printed for some reason, e.g. the printer may be stopped.
+ *   but is not printed for some reason, e.g. the printer may be stopped.
  * @GTK_PRINT_STATUS_PENDING_ISSUE: Some problem has occurred during
- *     printing, e.g. a paper jam.
+ *   printing, e.g. a paper jam.
  * @GTK_PRINT_STATUS_PRINTING: The printer is processing the print job.
  * @GTK_PRINT_STATUS_FINISHED: The printing has been completed successfully.
  * @GTK_PRINT_STATUS_FINISHED_ABORTED: The printing has been aborted.
@@ -84,9 +84,9 @@ typedef enum {
  * @GTK_PRINT_OPERATION_RESULT_ERROR: An error has occurred.
  * @GTK_PRINT_OPERATION_RESULT_APPLY: The print settings should be stored.
  * @GTK_PRINT_OPERATION_RESULT_CANCEL: The print operation has been canceled,
- *     the print settings should not be stored.
+ *   the print settings should not be stored.
  * @GTK_PRINT_OPERATION_RESULT_IN_PROGRESS: The print operation is not complete
- *     yet. This value will only be returned when running asynchronously.
+ *   yet. This value will only be returned when running asynchronously.
  *
  * The result of a print operation.
  *
@@ -103,10 +103,10 @@ typedef enum {
  * GtkPrintOperationAction:
  * @GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG: Show the print dialog.
  * @GTK_PRINT_OPERATION_ACTION_PRINT: Start to print without showing
- *     the print dialog, based on the current print settings.
+ *   the print dialog, based on the current print settings.
  * @GTK_PRINT_OPERATION_ACTION_PREVIEW: Show the print preview.
  * @GTK_PRINT_OPERATION_ACTION_EXPORT: Export to a file. This requires
- *     the export-filename property to be set.
+ *   the export-filename property to be set.
  *
  * Determines what action the print operation should perform.
  *
@@ -205,7 +205,7 @@ struct _GtkPrintOperationClass
  * @GTK_PRINT_ERROR_INTERNAL_ERROR: An internal error occurred.
  * @GTK_PRINT_ERROR_NOMEM: A memory allocation failed.
  * @GTK_PRINT_ERROR_INVALID_FILE: An error occurred while loading a page setup
- *     or paper size from a key file.
+ *   or paper size from a key file.
  *
  * Error codes that identify various errors that can occur while
  * using the GTK printing support.
@@ -311,9 +311,9 @@ GtkPageSetup           *gtk_print_run_page_setup_dialog            (GtkWindow   
 /**
  * GtkPageSetupDoneFunc:
  * @page_setup: the #GtkPageSetup that has been passed to
- *     gtk_print_run_page_setup_dialog_async()
+ *   gtk_print_run_page_setup_dialog_async()
  * @data: (closure): user data that has been passed to
- *     gtk_print_run_page_setup_dialog_async()
+ *   gtk_print_run_page_setup_dialog_async()
  *
  * The type of function that is passed to
  * gtk_print_run_page_setup_dialog_async().

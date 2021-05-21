@@ -1613,8 +1613,7 @@ gtk_calendar_unmark_day (GtkCalendar *calendar,
  *
  * The returned date is in the local time zone.
  *
- * Returns: (transfer full): the `GDate` representing
- *     the shown date.
+ * Returns: (transfer full): the `GDate` representing the shown date
  */
 GDateTime *
 gtk_calendar_get_date (GtkCalendar *self)

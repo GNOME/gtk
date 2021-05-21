@@ -209,7 +209,7 @@ typedef enum {
 /**
  * GdkVulkanError:
  * @GDK_VULKAN_ERROR_UNSUPPORTED: Vulkan is not supported on this backend or has not been
- *     compiled in.
+ *   compiled in.
  * @GDK_VULKAN_ERROR_NOT_AVAILABLE: Vulkan support is not available on this Surface
  *
  * Error enumeration for #GdkVulkanContext.

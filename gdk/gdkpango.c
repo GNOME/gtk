@@ -93,9 +93,8 @@ layout_iter_get_line_clip_region (PangoLayoutIter *iter,
  * @line: a `PangoLayoutLine`
  * @x_origin: X pixel where you intend to draw the layout line with this clip
  * @y_origin: baseline pixel where you intend to draw the layout line with this clip
- * @index_ranges: (array): array of byte indexes into the layout,
- *     where even members of array are start indexes and odd elements
- *     are end indexes
+ * @index_ranges: (array): array of byte indexes into the layout, where even
+ *   members of array are start indexes and odd elements are end indexes
  * @n_ranges: number of ranges in @index_ranges, i.e. half the size of @index_ranges
  *
  * Obtains a clip region which contains the areas where the given

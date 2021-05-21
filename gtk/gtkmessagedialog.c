@@ -478,11 +478,11 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
 
 /**
  * gtk_message_dialog_new:
- * @parent: (allow-none): transient parent, or %NULL for none
+ * @parent: (nullable): transient parent
  * @flags: flags
  * @type: type of message
  * @buttons: set of buttons to use
- * @message_format: (allow-none): printf()-style format string, or %NULL
+ * @message_format: (nullable): printf()-style format string
  * @...: arguments for @message_format
  *
  * Creates a new message dialog.
@@ -542,11 +542,11 @@ gtk_message_dialog_new (GtkWindow     *parent,
 
 /**
  * gtk_message_dialog_new_with_markup:
- * @parent: (allow-none): transient parent, or %NULL for none
+ * @parent: (nullable): transient parent
  * @flags: flags
  * @type: type of message
  * @buttons: set of buttons to use
- * @message_format: (allow-none): printf()-style format string, or %NULL
+ * @message_format: (nullable): printf()-style format string
  * @...: arguments for @message_format
  *
  * Creates a new message dialog.
@@ -632,7 +632,7 @@ gtk_message_dialog_set_markup (GtkMessageDialog *message_dialog,
 /**
  * gtk_message_dialog_format_secondary_text:
  * @message_dialog: a `GtkMessageDialog`
- * @message_format: (allow-none): printf()-style format string, or %NULL
+ * @message_format: (nullable): printf()-style format string
  * @...: arguments for @message_format
  *
  * Sets the secondary text of the message dialog.
@@ -739,7 +739,7 @@ gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
  * for the corresponding function in the parent [class@Gtk.Dialog].
  *
  * Returns: (transfer none): A `GtkBox` corresponding to the
- *     “message area” in the @message_dialog.
+ *   “message area” in the @message_dialog
  */
 GtkWidget *
 gtk_message_dialog_get_message_area (GtkMessageDialog *message_dialog)

@@ -78,7 +78,7 @@
  * ID @context_id.
  *
  * Returns: a newly created input context of or @context_id, or
- *     if that could not be created, a newly created GtkIMContextSimple.
+ *   if that could not be created, a newly created `GtkIMContextSimple`
  */
 GtkIMContext *
 _gtk_im_module_create (const char *context_id)

@@ -33,10 +33,10 @@ G_BEGIN_DECLS
  * GtkSorterOrder:
  * @GTK_SORTER_ORDER_PARTIAL: A partial order. Any #GtkOrdering is possible.
  * @GTK_SORTER_ORDER_NONE: No order, all elements are considered equal.
- *     gtk_sorter_compare() will only return %GTK_ORDERING_EQUAL.
+ *   gtk_sorter_compare() will only return %GTK_ORDERING_EQUAL.
  * @GTK_SORTER_ORDER_TOTAL: A total order. gtk_sorter_compare() will only
- *     return %GTK_ORDERING_EQUAL if an item is compared with itself. Two
- *     different items will never cause this value to be returned.
+ *   return %GTK_ORDERING_EQUAL if an item is compared with itself. Two
+ *   different items will never cause this value to be returned.
  *
  * Describes the type of order that a `GtkSorter` may produce.
  */
@@ -49,14 +49,14 @@ typedef enum {
 /**
  * GtkSorterChange:
  * @GTK_SORTER_CHANGE_DIFFERENT: The sorter change cannot be described
- *     by any of the other enumeration values
+ *   by any of the other enumeration values
  * @GTK_SORTER_CHANGE_INVERTED: The sort order was inverted. Comparisons
- *     that returned %GTK_ORDERING_SMALLER now return %GTK_ORDERING_LARGER
- *     and vice versa. Other comparisons return the same values as before.
+ *   that returned %GTK_ORDERING_SMALLER now return %GTK_ORDERING_LARGER
+ *   and vice versa. Other comparisons return the same values as before.
  * @GTK_SORTER_CHANGE_LESS_STRICT: The sorter is less strict: Comparisons
- *     may now return %GTK_ORDERING_EQUAL that did not do so before.
+ *   may now return %GTK_ORDERING_EQUAL that did not do so before.
  * @GTK_SORTER_CHANGE_MORE_STRICT: The sorter is more strict: Comparisons
- *     that did return %GTK_ORDERING_EQUAL may not do so anymore.
+ *   that did return %GTK_ORDERING_EQUAL may not do so anymore.
  *
  * Describes changes in a sorter in more detail and allows users
  * to optimize resorting.
@@ -77,7 +77,7 @@ G_DECLARE_DERIVABLE_TYPE (GtkSorter, gtk_sorter, GTK, SORTER, GObject)
  * GtkSorterClass
  * @compare: Compare two items. See gtk_sorter_compare() for details.
  * @get_order: Get the #GtkSorderOrder that applies to the current sorter.
- *     If unimplemented, it returns %GTK_SORTER_ORDER_PARTIAL.
+ *   If unimplemented, it returns %GTK_SORTER_ORDER_PARTIAL.
  *
  * The virtual table for `GtkSorter`.
  */

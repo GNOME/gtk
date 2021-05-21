@@ -564,7 +564,7 @@ gtk_overlay_get_clip_overlay (GtkOverlay *overlay,
 /**
  * gtk_overlay_set_child:
  * @overlay: a `GtkOverlay`
- * @child: (allow-none): the child widget
+ * @child: (nullable): the child widget
  *
  * Sets the child widget of @overlay.
  */

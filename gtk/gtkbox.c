@@ -530,7 +530,7 @@ gtk_box_insert_child_after (GtkBox    *box,
  * gtk_box_reorder_child_after:
  * @box: a `GtkBox`
  * @child: the `GtkWidget` to move, must be a child of @box
- * @sibling: (nullable): the sibling to move @child after, or %NULL
+ * @sibling: (nullable): the sibling to move @child after
  *
  * Moves @child to the position after @sibling in the list
  * of @box children.

@@ -600,15 +600,14 @@ gsk_render_node_write_to_file (GskRenderNode *node,
 /**
  * gsk_render_node_deserialize:
  * @bytes: the bytes containing the data
- * @error_func: (nullable) (scope call): Callback on parsing errors or %NULL
+ * @error_func: (nullable) (scope call): Callback on parsing errors
  * @user_data: (closure error_func): user_data for @error_func
  *
  * Loads data previously created via gsk_render_node_serialize().
  *
  * For a discussion of the supported format, see that function.
  *
- * Returns: (nullable) (transfer full): a new `GskRenderNode` or %NULL on
- *     error.
+ * Returns: (nullable) (transfer full): a new `GskRenderNode`
  */
 GskRenderNode *
 gsk_render_node_deserialize (GBytes            *bytes,

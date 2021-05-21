@@ -91,7 +91,7 @@ typedef gboolean (*GtkListBoxFilterFunc) (GtkListBoxRow *row,
  * Compare two rows to determine which should be first.
  *
  * Returns: < 0 if @row1 should be before @row2, 0 if they are
- *     equal and > 0 otherwise
+ *   equal and > 0 otherwise
  */
 typedef int (*GtkListBoxSortFunc) (GtkListBoxRow *row1,
                                    GtkListBoxRow *row2,
@@ -100,7 +100,7 @@ typedef int (*GtkListBoxSortFunc) (GtkListBoxRow *row1,
 /**
  * GtkListBoxUpdateHeaderFunc:
  * @row: the row to update
- * @before: (allow-none): the row before @row, or %NULL if it is first
+ * @before: (nullable): the row before @row, or %NULL if it is first
  * @user_data: (closure): user data
  *
  * Whenever @row changes or which row is before @row changes this

@@ -4493,7 +4493,7 @@ gdk_wayland_surface_is_exported (GdkWaylandSurface *impl)
  * and thus may require changes in the future.
  *
  * Return value: %TRUE if the handle has been requested, %FALSE if
- *     an error occurred.
+ *   an error occurred.
  */
 gboolean
 gdk_wayland_toplevel_export_handle (GdkToplevel                *toplevel,
@@ -4601,7 +4601,7 @@ static const struct zxdg_imported_v1_listener xdg_imported_listener = {
  * and thus may require changes in the future.
  *
  * Return value: %TRUE if the surface has been marked as transient,
- *     %FALSE if an error occurred.
+ *   %FALSE if an error occurred.
  */
 gboolean
 gdk_wayland_toplevel_set_transient_for_exported (GdkToplevel *toplevel,

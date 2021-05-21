@@ -1176,7 +1176,7 @@ gtk_builder_new (void)
  * gtk_builder_add_from_file:
  * @builder: a `GtkBuilder`
  * @filename: the name of the file to parse
- * @error: (allow-none): return location for an error, or %NULL
+ * @error: (nullable): return location for an error
  *
  * Parses a file containing a UI definition and merges it with
  * the current contents of @builder.
@@ -1247,7 +1247,7 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
  * @builder: a `GtkBuilder`
  * @filename: the name of the file to parse
  * @object_ids: (array zero-terminated=1) (element-type utf8): nul-terminated array of objects to build
- * @error: (allow-none): return location for an error, or %NULL
+ * @error: (nullable): return location for an error
  *
  * Parses a file containing a UI definition building only the
  * requested objects and merges them with the current contents
@@ -1315,7 +1315,7 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
  * @template_type: the type that the template is for
  * @buffer: the string to parse
  * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
- * @error: (allow-none): return location for an error, or %NULL
+ * @error: (nullable): return location for an error
  *
  * Main private entry point for building composite components
  * from template XML.
@@ -1372,7 +1372,7 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
  * gtk_builder_add_from_resource:
  * @builder: a `GtkBuilder`
  * @resource_path: the path of the resource file to parse
- * @error: (allow-none): return location for an error, or %NULL
+ * @error: (nullable): return location for an erro
  *
  * Parses a resource file containing a UI definition
  * and merges it with the current contents of @builder.
@@ -1450,7 +1450,7 @@ gtk_builder_add_from_resource (GtkBuilder   *builder,
  * @builder: a `GtkBuilder`
  * @resource_path: the path of the resource file to parse
  * @object_ids: (array zero-terminated=1) (element-type utf8): nul-terminated array of objects to build
- * @error: (allow-none): return location for an error, or %NULL
+ * @error: (nullable): return location for an error
  *
  * Parses a resource file containing a UI definition, building
  * only the requested objects and merges them with the current
@@ -1525,7 +1525,7 @@ gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
  * @builder: a `GtkBuilder`
  * @buffer: the string to parse
  * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
- * @error: (allow-none): return location for an error, or %NULL
+ * @error: (nullable): return location for an error
  *
  * Parses a string containing a UI definition and merges it
  * with the current contents of @builder.
@@ -1584,7 +1584,7 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
  * @buffer: the string to parse
  * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
  * @object_ids: (array zero-terminated=1) (element-type utf8): nul-terminated array of objects to build
- * @error: (allow-none): return location for an error, or %NULL
+ * @error: (nullable): return location for an error
  *
  * Parses a string containing a UI definition, building only the
  * requested objects and merges them with the current contents of
@@ -1646,7 +1646,6 @@ gtk_builder_add_objects_from_string (GtkBuilder   *builder,
  * of the returned object.
  *
  * Returns: (nullable) (transfer none): the object named @name
- *   or %NULL if it could not be found in the object tree.
  */
 GObject *
 gtk_builder_get_object (GtkBuilder  *builder,
@@ -1694,7 +1693,7 @@ gtk_builder_get_objects (GtkBuilder *builder)
 /**
  * gtk_builder_set_translation_domain: (attributes org.gtk.Method.set_property=translation-domain)
  * @builder: a `GtkBuilder`
- * @domain: (nullable): the translation domain or %NULL
+ * @domain: (nullable): the translation domain
  *
  * Sets the translation domain of @builder.
  */
@@ -1721,8 +1720,6 @@ gtk_builder_set_translation_domain (GtkBuilder  *builder,
  * Gets the translation domain of @builder.
  *
  * Returns: (transfer none) (nullable): the translation domain
- *   or %NULL. This string is owned by the builder object and
- *   must not be modified or freed.
  */
 const char *
 gtk_builder_get_translation_domain (GtkBuilder *builder)
@@ -1781,8 +1778,7 @@ gtk_builder_get_current_object (GtkBuilder *builder)
 /**
  * gtk_builder_set_current_object: (attributes org.gtk.Method.set_property=current-object)
  * @builder: a `GtkBuilder`
- * @current_object: (nullable) (transfer none): the new current object or
- *     %NULL for none
+ * @current_object: (nullable) (transfer none): the new current object
  *
  * Sets the current object for the @builder.
  *
@@ -1830,12 +1826,11 @@ gtk_builder_get_scope (GtkBuilder *builder)
 /**
  * gtk_builder_set_scope: (attributes org.gtk.Method.set_property=scope)
  * @builder: a `GtkBuilder`
- * @scope: (nullable) (transfer none): the scope to use or
- *     %NULL for the default
+ * @scope: (nullable) (transfer none): the scope to use
  *
  * Sets the scope the builder should operate in.
  *
- * If @scope is %NULL a new [class@Gtk.BuilderCScope] will be created.
+ * If @scope is %NULL, a new [class@Gtk.BuilderCScope] will be created.
  */
 void
 gtk_builder_set_scope (GtkBuilder      *builder,
@@ -1940,7 +1935,7 @@ _gtk_builder_finish (GtkBuilder  *builder,
  * @pspec: the `GParamSpec` for the property
  * @string: the string representation of the value
  * @value: (out): the `GValue` to store the result in
- * @error: (allow-none): return location for an error, or %NULL
+ * @error: (nullable): return location for an error
  *
  * Demarshals a value from a string.
  *
@@ -2066,7 +2061,7 @@ error:
  * @type: the `GType` of the value
  * @string: the string representation of the value
  * @value: (out): the #GValue to store the result in
- * @error: (allow-none): return location for an error, or %NULL
+ * @error: (nullable): return location for an error
  *
  * Demarshals a value from a string.
  *
@@ -2734,7 +2729,7 @@ _gtk_builder_get_template_type (GtkBuilder *builder)
  * @function_name: name of the function to look up
  * @flags: closure creation flags
  * @object: (nullable): Object to create the closure with
- * @error: (allow-none): return location for an error, or %NULL
+ * @error: (nullable): return location for an error
  *
  * Creates a closure to invoke the function called @function_name.
  *

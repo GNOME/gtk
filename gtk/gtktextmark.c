@@ -245,7 +245,7 @@ gtk_text_mark_get_property (GObject    *object,
 
 /**
  * gtk_text_mark_new:
- * @name: (allow-none): mark name or %NULL
+ * @name: (nullable): mark name
  * @left_gravity: whether the mark should have left gravity
  *
  * Creates a text mark.

@@ -59,7 +59,7 @@
  * a set of properties on some text.
  * 
  * Returns: a new #GtkTextAttributes,
- *     free with gtk_text_attributes_unref().
+ *   free with gtk_text_attributes_unref().
  */
 GtkTextAttributes*
 gtk_text_attributes_new (void)
@@ -87,7 +87,7 @@ gtk_text_attributes_new (void)
  * Copies @src and returns a new #GtkTextAttributes.
  *
  * Returns: a copy of @src,
- *     free with gtk_text_attributes_unref()
+ *   free with gtk_text_attributes_unref()
  */
 GtkTextAttributes*
 gtk_text_attributes_copy (GtkTextAttributes *src)

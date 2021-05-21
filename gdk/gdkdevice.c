@@ -520,19 +520,19 @@ gdk_device_get_property (GObject    *object,
 /**
  * gdk_device_get_surface_at_position:
  * @device: pointer `GdkDevice` to query info to
- * @win_x: (out) (allow-none): return location for the X coordinate of the device location,
- *         relative to the surface origin, or %NULL.
- * @win_y: (out) (allow-none): return location for the Y coordinate of the device location,
- *         relative to the surface origin, or %NULL.
+ * @win_x: (out) (optional): return location for the X coordinate
+ *   of the device location relative to the surface origin
+ * @win_y: (out) (optional): return location for the Y coordinate
+ *   of the device location relative to the surface origin
  *
  * Obtains the surface underneath @device, returning the location of the
- * device in @win_x and @win_y
+ * device in @win_x and @win_y.
  *
  * Returns %NULL if the surface tree under @device is not known to GDK
  * (for example, belongs to another application).
  *
  * Returns: (nullable) (transfer none): the `GdkSurface` under the
- *   device position, or %NULL
+ *   device position
  */
 GdkSurface *
 gdk_device_get_surface_at_position (GdkDevice *device,
@@ -1145,7 +1145,7 @@ _gdk_device_surface_at_position (GdkDevice       *device,
  *  }
  * ```
  *
- * Returns: (nullable): the vendor ID, or %NULL
+ * Returns: (nullable): the vendor ID
  */
 const char *
 gdk_device_get_vendor_id (GdkDevice *device)
@@ -1164,7 +1164,7 @@ gdk_device_get_vendor_id (GdkDevice *device)
  * This ID is retrieved from the device, and does not change.
  * See [method@Gdk.Device.get_vendor_id] for more information.
  *
- * Returns: (nullable): the product ID, or %NULL
+ * Returns: (nullable): the product ID
  */
 const char *
 gdk_device_get_product_id (GdkDevice *device)
@@ -1239,7 +1239,7 @@ gdk_device_get_num_touches (GdkDevice *device)
  *
  * Retrieves the current tool for @device.
  *
- * Returns: (transfer none): the `GdkDeviceTool`, or %NULL
+ * Returns: (transfer none): the `GdkDeviceTool`
  */
 GdkDeviceTool *
 gdk_device_get_device_tool (GdkDevice *device)
@@ -1368,8 +1368,7 @@ gdk_device_get_direction (GdkDevice *device)
  *
  * This is only relevant for keyboard devices.
  *
- * Returns: %TRUE if there are layouts with both directions,
- *     %FALSE otherwise
+ * Returns: %TRUE if there are layouts with both directions, %FALSE otherwise
  */
 gboolean
 gdk_device_has_bidi_layouts (GdkDevice *device)

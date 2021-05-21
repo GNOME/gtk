@@ -843,7 +843,7 @@ gtk_application_window_set_help_overlay (GtkApplicationWindow *window,
  * See [method@Gtk.ApplicationWindow.set_help_overlay].
  *
  * Returns: (transfer none) (nullable): the help overlay associated
- *   with @window, or %NULL
+ *   with @window
  */
 GtkShortcutsWindow *
 gtk_application_window_get_help_overlay (GtkApplicationWindow *window)

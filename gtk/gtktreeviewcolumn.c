@@ -1695,7 +1695,7 @@ gtk_tree_view_column_set_attributes (GtkTreeViewColumn *tree_column,
  * gtk_tree_view_column_set_cell_data_func:
  * @tree_column: A #GtkTreeViewColumn
  * @cell_renderer: A #GtkCellRenderer
- * @func: (allow-none): The #GtkTreeCellDataFunc to use. 
+ * @func: (nullable): The #GtkTreeCellDataFunc to use. 
  * @func_data: (closure): The user data for @func.
  * @destroy: The destroy notification for @func_data
  * 
@@ -2393,7 +2393,7 @@ gtk_tree_view_column_get_clickable (GtkTreeViewColumn *tree_column)
 /**
  * gtk_tree_view_column_set_widget:
  * @tree_column: A #GtkTreeViewColumn.
- * @widget: (allow-none): A child #GtkWidget, or %NULL.
+ * @widget: (nullable): A child #GtkWidget
  *
  * Sets the widget in the header to be @widget.  If widget is %NULL, then the
  * header button is set with a #GtkLabel set to the title of @tree_column.
@@ -2422,14 +2422,14 @@ gtk_tree_view_column_set_widget (GtkTreeViewColumn *tree_column,
 
 /**
  * gtk_tree_view_column_get_widget:
- * @tree_column: A #GtkTreeViewColumn.
+ * @tree_column: A `GtkTreeViewColumn`
  *
- * Returns the #GtkWidget in the button on the column header.
+ * Returns the `GtkWidget` in the button on the column header.
+ *
  * If a custom widget has not been set then %NULL is returned.
  *
- * Returns: (nullable) (transfer none): The #GtkWidget in the column
- *     header, or %NULL
- **/
+ * Returns: (nullable) (transfer none): The `GtkWidget` in the column header
+ */
 GtkWidget *
 gtk_tree_view_column_get_widget (GtkTreeViewColumn *tree_column)
 {
@@ -2592,15 +2592,16 @@ gtk_tree_view_column_set_sort_column_id (GtkTreeViewColumn *tree_column,
 
 /**
  * gtk_tree_view_column_get_sort_column_id:
- * @tree_column: a #GtkTreeViewColumn
+ * @tree_column: a `GtkTreeViewColumn`
  *
- * Gets the logical @sort_column_id that the model sorts on when this
- * column is selected for sorting.
- * See gtk_tree_view_column_set_sort_column_id().
+ * Gets the logical @sort_column_id that the model sorts on
+ * when this column is selected for sorting.
+ *
+ * See [method@Gtk.TreeViewColumn.set_sort_column_id].
  *
  * Returns: the current @sort_column_id for this column, or -1 if
- *               this column can’t be used for sorting.
- **/
+ *   this column can’t be used for sorting
+ */
 int
 gtk_tree_view_column_get_sort_column_id (GtkTreeViewColumn *tree_column)
 {
@@ -2731,10 +2732,10 @@ gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column,
 /**
  * gtk_tree_view_column_cell_get_size:
  * @tree_column: A #GtkTreeViewColumn.
- * @x_offset: (out) (optional): location to return x offset of a cell relative to @cell_area, or %NULL
- * @y_offset: (out) (optional): location to return y offset of a cell relative to @cell_area, or %NULL
- * @width: (out) (optional): location to return width needed to render a cell, or %NULL
- * @height: (out) (optional): location to return height needed to render a cell, or %NULL
+ * @x_offset: (out) (optional): location to return x offset of a cell relative to @cell_area
+ * @y_offset: (out) (optional): location to return y offset of a cell relative to @cell_area
+ * @width: (out) (optional): location to return width needed to render a cell
+ * @height: (out) (optional): location to return height needed to render a cell
  * 
  * Obtains the width and height needed to render the column.  This is used
  * primarily by the #GtkTreeView.
@@ -2924,18 +2925,18 @@ _gtk_tree_view_column_cell_get_dirty (GtkTreeViewColumn  *tree_column)
 
 /**
  * gtk_tree_view_column_cell_get_position:
- * @tree_column: a #GtkTreeViewColumn
- * @cell_renderer: a #GtkCellRenderer
- * @x_offset: (out) (allow-none): return location for the horizontal
- *            position of @cell within @tree_column, may be %NULL
- * @width: (out) (allow-none): return location for the width of @cell,
- *         may be %NULL
+ * @tree_column: a `GtkTreeViewColumn`
+ * @cell_renderer: a `GtkCellRenderer`
+ * @x_offset: (out) (optional): return location for the horizontal
+ *   position of @cell within @tree_column
+ * @width: (out) (optional): return location for the width of @cell
  *
- * Obtains the horizontal position and size of a cell in a column. If the
- * cell is not found in the column, @start_pos and @width are not changed and
- * %FALSE is returned.
- * 
- * Returns: %TRUE if @cell belongs to @tree_column.
+ * Obtains the horizontal position and size of a cell in a column.
+ *
+ * If the  cell is not found in the column, @start_pos and @width
+ * are not changed and %FALSE is returned.
+ *
+ * Returns: %TRUE if @cell belongs to @tree_column
  */
 gboolean
 gtk_tree_view_column_cell_get_position (GtkTreeViewColumn *tree_column,
@@ -2998,8 +2999,8 @@ gtk_tree_view_column_queue_resize (GtkTreeViewColumn *tree_column)
  * If @column is currently not inserted in any tree view, %NULL is
  * returned.
  *
- * Returns: (nullable) (transfer none): The tree view wherein @column has
- *     been inserted if any, %NULL otherwise.
+ * Returns: (nullable) (transfer none): The tree view wherein @column
+ *   has been inserted
  */
 GtkWidget *
 gtk_tree_view_column_get_tree_view (GtkTreeViewColumn *tree_column)

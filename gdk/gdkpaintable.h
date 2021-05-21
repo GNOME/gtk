@@ -37,11 +37,11 @@ G_DECLARE_INTERFACE (GdkPaintable, gdk_paintable, GDK, PAINTABLE, GObject)
 /**
  * GdkPaintableFlags:
  * @GDK_PAINTABLE_STATIC_SIZE: The size is immutable.
- *     The [signal@GdkPaintable::invalidate-size] signal will never be
- *     emitted.
+ *   The [signal@GdkPaintable::invalidate-size] signal will never be
+ *   emitted.
  * @GDK_PAINTABLE_STATIC_CONTENTS: The content is immutable.
- *     The [signal@GdkPaintable::invalidate-contents] signal will never be
- *     emitted.
+ *   The [signal@GdkPaintable::invalidate-contents] signal will never be
+ *   emitted.
  *
  * Flags about a paintable object.
  *
@@ -55,31 +55,31 @@ typedef enum {
 /**
  * GdkPaintableInterface:
  * @snapshot: Snapshot the paintable. The given @width and @height are
- *     guaranteed to be larger than 0.0. The resulting snapshot must modify
- *     only the area in the rectangle from (0,0) to (width, height).
- *     This is the only function that must be implemented for this interface.
- * @get_current_image: return a #GdkPaintable that does not change over
- *     time. This means the GDK_PAINTABLE_STATIC_SIZE and
- *     %GDK_PAINTABLE_STATIC_CONTENTS flag are set.
- * @get_flags: Get the flags for this instance. See #GdkPaintableFlags
- *     for details.
+ *   guaranteed to be larger than 0.0. The resulting snapshot must modify
+ *   only the area in the rectangle from (0,0) to (width, height).
+ *   This is the only function that must be implemented for this interface.
+ * @get_current_image: return a `GdkPaintable` that does not change over
+ *   time. This means the `GDK_PAINTABLE_STATIC_SIZE` and
+ *   `GDK_PAINTABLE_STATIC_CONTENTS` flag are set.
+ * @get_flags: Get the flags for this instance. See [enum@Gdk.PaintableFlags]
+ *   for details.
  * @get_intrinsic_width: The preferred width for this object to be
- *     snapshot at or 0 if none. This is purely a hint. The object must still
- *     be able to render at any size.
+ *   snapshot at or 0 if none. This is purely a hint. The object must still
+ *   be able to render at any size.
  * @get_intrinsic_height: The preferred height for this object to be
- *     snapshot at or 0 if none. This is purely a hint. The object must still
- *     be able to render at any size.
+ *   snapshot at or 0 if none. This is purely a hint. The object must still
+ *   be able to render at any size.
  * @get_intrinsic_aspect_ratio: The preferred aspect ratio for this object
- *     or 0 if none. If both #GdkPaintableInterface.get_intrinsic_width() and
- *     #GdkPaintableInterface.get_intrinsic_height() return non-zero values,
- *     this function should return the aspect ratio computed from those.
+ *   or 0 if none. If both [vfunc@Gdk.PaintableInterface.get_intrinsic_width]
+ *   and [vfunc@Gdk.PaintableInterface.get_intrinsic_height] return non-zero
+ *   values, this function should return the aspect ratio computed from those.
  *
  * The list of functions that can be implemented for the `GdkPaintable`
  * interface.
  *
- * Note that apart from the #GdkPaintableInterface.snapshot() function, no
- * virtual function of this interface is mandatory to implement, though it
- * is a good idea to implement #GdkPaintableInterface.get_current_image()
+ * Note that apart from the [vfunc@Gdk.PaintableInterface.snapshot] function,
+ * no virtual function of this interface is mandatory to implement, though it
+ * is a good idea to implement [vfunc@Gdk.PaintableInterface.get_current_image]
  * for non-static paintables and #GdkPaintableInterface.get_flags() if the
  * image is not dynamic as the default implementation returns no flags and
  * that will make the implementation likely quite slow.

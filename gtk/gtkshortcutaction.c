@@ -140,7 +140,7 @@ gtk_shortcut_action_print (GtkShortcutAction *self,
  * @self: a `GtkShortcutAction`
  * @flags: flags to activate with
  * @widget: Target of the activation
- * @args: (allow-none): arguments to pass
+ * @args: (nullable): arguments to pass
  *
  * Activates the action on the @widget with the given @args.
  *
@@ -209,7 +209,6 @@ string_is_function (const char *string,
  * - `signal(NAME)`, for a `GtkSignalAction` for the signal `NAME`
  *
  * Returns: (nullable) (transfer full): a new `GtkShortcutAction`
- *     or %NULL on error
  */
 GtkShortcutAction *
 gtk_shortcut_action_parse_string (const char *string)

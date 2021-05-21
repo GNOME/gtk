@@ -65,8 +65,8 @@ typedef struct _GtkBuilderClass   GtkBuilderClass;
  * @GTK_BUILDER_ERROR_INVALID_SIGNAL: The specified signal is unknown for the object class.
  * @GTK_BUILDER_ERROR_INVALID_ID: An object id is unknown.
  * @GTK_BUILDER_ERROR_INVALID_FUNCTION: A function could not be found. This often happens
- *     when symbols are set to be kept private. Compiling code with -rdynamic or using the
- *     `gmodule-export-2.0` pkgconfig module can fix this problem.
+ *   when symbols are set to be kept private. Compiling code with -rdynamic or using the
+ *   `gmodule-export-2.0` pkgconfig module can fix this problem.
  *
  * Error codes that identify various errors that can occur while using
  * #GtkBuilder.

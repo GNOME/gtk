@@ -245,7 +245,7 @@ gtk_center_box_new (void)
 /**
  * gtk_center_box_set_start_widget:
  * @self: a `GtkCenterBox`
- * @child: (nullable): the new start widget, or %NULL
+ * @child: (nullable): the new start widget
  *
  * Sets the start widget.
  *
@@ -271,7 +271,7 @@ gtk_center_box_set_start_widget (GtkCenterBox *self,
 /**
  * gtk_center_box_set_center_widget:
  * @self: a `GtkCenterBox`
- * @child: (nullable): the new center widget, or %NULL
+ * @child: (nullable): the new center widget
  *
  * Sets the center widget.
  *
@@ -297,7 +297,7 @@ gtk_center_box_set_center_widget (GtkCenterBox *self,
 /**
  * gtk_center_box_set_end_widget:
  * @self: a `GtkCenterBox`
- * @child: (nullable): the new end widget, or %NULL
+ * @child: (nullable): the new end widget
  *
  * Sets the end widget.
  *

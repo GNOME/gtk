@@ -167,7 +167,7 @@ gtk_print_settings_get (GtkPrintSettings *settings,
  * gtk_print_settings_set:
  * @settings: a `GtkPrintSettings`
  * @key: a key
- * @value: (allow-none): a string value, or %NULL
+ * @value: (nullable): a string value
  *
  * Associates @value with @key.
  */
@@ -1557,7 +1557,7 @@ gtk_print_settings_set_output_bin (GtkPrintSettings *settings,
  * gtk_print_settings_load_file:
  * @settings: a `GtkPrintSettings`
  * @file_name: (type filename): the filename to read the settings from
- * @error: (allow-none): return location for errors, or %NULL
+ * @error: (nullable): return location for errors
  *
  * Reads the print settings from @file_name.
  *
@@ -1593,7 +1593,7 @@ gtk_print_settings_load_file (GtkPrintSettings *settings,
 /**
  * gtk_print_settings_new_from_file:
  * @file_name: (type filename): the filename to read the settings from
- * @error: (allow-none): return location for errors, or %NULL
+ * @error: (nullable): return location for errors
  *
  * Reads the print settings from @file_name.
  *
@@ -1624,9 +1624,9 @@ gtk_print_settings_new_from_file (const char   *file_name,
  * gtk_print_settings_load_key_file:
  * @settings: a `GtkPrintSettings`
  * @key_file: the `GKeyFile` to retrieve the settings from
- * @group_name: (allow-none): the name of the group to use, or %NULL
+ * @group_name: (nullable): the name of the group to use, or %NULL
  *   to use the default “Print Settings”
- * @error: (allow-none): return location for errors, or %NULL
+ * @error: (nullable): return location for errors
  *
  * Reads the print settings from the group @group_name in @key_file.
  *
@@ -1684,9 +1684,9 @@ gtk_print_settings_load_key_file (GtkPrintSettings *settings,
 /**
  * gtk_print_settings_new_from_key_file:
  * @key_file: the `GKeyFile` to retrieve the settings from
- * @group_name: (allow-none): the name of the group to use, or %NULL to use
- *     the default “Print Settings”
- * @error: (allow-none): return location for errors, or %NULL
+ * @group_name: (nullable): the name of the group to use, or %NULL to use
+ *   the default “Print Settings”
+ * @error: (nullable): return location for errors
  *
  * Reads the print settings from the group @group_name in @key_file.
  *
@@ -1717,7 +1717,7 @@ gtk_print_settings_new_from_key_file (GKeyFile     *key_file,
  * gtk_print_settings_to_file:
  * @settings: a `GtkPrintSettings`
  * @file_name: (type filename): the file to save to
- * @error: (allow-none): return location for errors, or %NULL
+ * @error: (nullable): return location for errors
  *
  * This function saves the print settings from @settings to @file_name.
  *
@@ -1777,7 +1777,7 @@ add_value_to_key_file (const char   *key,
  * @settings: a `GtkPrintSettings`
  * @key_file: the `GKeyFile` to save the print settings to
  * @group_name: (nullable): the group to add the settings to in @key_file, or
- *     %NULL to use the default “Print Settings”
+ *   %NULL to use the default “Print Settings”
  *
  * This function adds the print settings from @settings to @key_file.
  */

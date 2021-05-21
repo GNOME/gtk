@@ -420,7 +420,7 @@ gtk_media_file_clear (GtkMediaFile *self)
 /**
  * gtk_media_file_set_filename:
  * @self: a `GtkMediaFile`
- * @filename: (allow-none): name of file to play
+ * @filename: (nullable): name of file to play
  *
  * Sets the `GtkMediaFile to play the given file.
  *
@@ -449,7 +449,7 @@ gtk_media_file_set_filename (GtkMediaFile *self,
 /**
  * gtk_media_file_set_resource:
  * @self: a `GtkMediaFile`
- * @resource_path: (allow-none): path to resource to play
+ * @resource_path: (nullable): path to resource to play
  *
  * Sets the `GtkMediaFile to play the given resource.
  *
@@ -491,7 +491,7 @@ gtk_media_file_set_resource (GtkMediaFile *self,
 /**
  * gtk_media_file_set_file: (attributes org.gtk.Method.set_property=file)
  * @self: a `GtkMediaFile`
- * @file: (allow-none): the file to play
+ * @file: (nullable): the file to play
  *
  * Sets the `GtkMediaFile` to play the given file.
  *
@@ -534,7 +534,6 @@ gtk_media_file_set_file (GtkMediaFile *self,
  * %NULL is returned.
  *
  * Returns: (nullable) (transfer none): The currently playing file
- *   or %NULL if not playing from a file.
  */
 GFile *
 gtk_media_file_get_file (GtkMediaFile *self)
@@ -549,7 +548,7 @@ gtk_media_file_get_file (GtkMediaFile *self)
 /**
  * gtk_media_file_set_input_stream: (attributes org.gtk.Method.set_property=input-stream)
  * @self: a `GtkMediaFile`
- * @stream: (allow-none): the stream to play from
+ * @stream: (nullable): the stream to play from
  *
  * Sets the `GtkMediaFile` to play the given stream.
  *
@@ -594,8 +593,7 @@ gtk_media_file_set_input_stream (GtkMediaFile *self,
  * When @self is not playing or not playing from a stream,
  * %NULL is returned.
  *
- * Returns: (nullable) (transfer none): The currently playing
- *   stream or %NULL if not playing from a stream.
+ * Returns: (nullable) (transfer none): The currently playing stream
  */
 GInputStream *
 gtk_media_file_get_input_stream (GtkMediaFile *self)

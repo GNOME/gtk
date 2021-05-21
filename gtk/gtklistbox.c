@@ -760,7 +760,7 @@ gtk_list_box_init (GtkListBox *box)
  * case you should use [method@Gtk.ListBox.selected_foreach] to
  * find all selected rows.
  *
- * Returns: (transfer none) (nullable): the selected row or %NULL
+ * Returns: (transfer none) (nullable): the selected row
  */
 GtkListBoxRow *
 gtk_list_box_get_selected_row (GtkListBox *box)
@@ -780,7 +780,7 @@ gtk_list_box_get_selected_row (GtkListBox *box)
  * If @index_ is negative or larger than the number of items in the
  * list, %NULL is returned.
  *
- * Returns: (transfer none) (nullable): the child `GtkWidget` or %NULL
+ * Returns: (transfer none) (nullable): the child `GtkWidget`
  */
 GtkListBoxRow *
 gtk_list_box_get_row_at_index (GtkListBox *box,
@@ -821,8 +821,7 @@ row_y_cmp_func (gconstpointer a,
  *
  * Gets the row at the @y position.
  *
- * Returns: (transfer none) (nullable): the row or %NULL
- *   in case no row exists for the given y coordinate.
+ * Returns: (transfer none) (nullable): the row
  */
 GtkListBoxRow *
 gtk_list_box_get_row_at_y (GtkListBox *box,
@@ -846,7 +845,7 @@ gtk_list_box_get_row_at_y (GtkListBox *box,
 /**
  * gtk_list_box_select_row:
  * @box: a `GtkListBox`
- * @row: (allow-none): The row to select or %NULL
+ * @row: (nullable): The row to select
  *
  * Make @row the currently selected row.
  */
@@ -987,8 +986,8 @@ gtk_list_box_selected_foreach (GtkListBox            *box,
  * Creates a list of all selected children.
  *
  * Returns: (element-type GtkListBoxRow) (transfer container):
- *     A `GList` containing the `GtkWidget` for each selected child.
- *     Free with g_list_free() when done.
+ *   A `GList` containing the `GtkWidget` for each selected child.
+ *   Free with g_list_free() when done.
  */
 GList *
 gtk_list_box_get_selected_rows (GtkListBox *box)
@@ -1014,7 +1013,7 @@ gtk_list_box_get_selected_rows (GtkListBox *box)
 /**
  * gtk_list_box_set_placeholder:
  * @box: a `GtkListBox`
- * @placeholder: (allow-none): a #GtkWidget or %NULL
+ * @placeholder: (nullable): a #GtkWidget
  *
  * Sets the placeholder widget that is shown in the list when
  * it doesn't display any visible children.
@@ -1045,7 +1044,7 @@ gtk_list_box_set_placeholder (GtkListBox *box,
 /**
  * gtk_list_box_set_adjustment:
  * @box: a `GtkListBox`
- * @adjustment: (allow-none): the adjustment, or %NULL
+ * @adjustment: (nullable): the adjustment
  *
  * Sets the adjustment (if any) that the widget uses to
  * for vertical scrolling.
@@ -1190,7 +1189,7 @@ gtk_list_box_get_selection_mode (GtkListBox *box)
 /**
  * gtk_list_box_set_filter_func:
  * @box: a `GtkListBox`
- * @filter_func: (allow-none): callback that lets you filter which rows to show
+ * @filter_func: (nullable): callback that lets you filter which rows to show
  * @user_data: (closure): user data passed to @filter_func
  * @destroy: destroy notifier for @user_data
  *
@@ -1231,7 +1230,7 @@ gtk_list_box_set_filter_func (GtkListBox           *box,
 /**
  * gtk_list_box_set_header_func:
  * @box: a `GtkListBox`
- * @update_header: (allow-none): callback that lets you add row headers
+ * @update_header: (nullable): callback that lets you add row headers
  * @user_data: (closure): user data passed to @update_header
  * @destroy: destroy notifier for @user_data
  *
@@ -1386,7 +1385,7 @@ gtk_list_box_invalidate_headers (GtkListBox *box)
 /**
  * gtk_list_box_set_sort_func:
  * @box: a `GtkListBox`
- * @sort_func: (allow-none): the sort function
+ * @sort_func: (nullable): the sort function
  * @user_data: (closure): user data passed to @sort_func
  * @destroy: destroy notifier for @user_data
  *
@@ -2953,7 +2952,7 @@ gtk_list_box_row_new (void)
 /**
  * gtk_list_box_row_set_child: (attributes org.gtk.Method.set_property=child)
  * @row: a `GtkListBoxRow`
- * @child: (allow-none): the child widget
+ * @child: (nullable): the child widget
  *
  * Sets the child widget of @self.
  */
@@ -3154,7 +3153,7 @@ gtk_list_box_row_changed (GtkListBoxRow *row)
  * there is a header set already, and if so to update
  * the state of it.
  *
- * Returns: (transfer none) (nullable): the current header, or %NULL if none
+ * Returns: (transfer none) (nullable): the current header
  */
 GtkWidget *
 gtk_list_box_row_get_header (GtkListBoxRow *row)
@@ -3167,7 +3166,7 @@ gtk_list_box_row_get_header (GtkListBoxRow *row)
 /**
  * gtk_list_box_row_set_header:
  * @row: a `GtkListBoxRow`
- * @header: (allow-none): the header, or %NULL
+ * @header: (nullable): the header
  *
  * Sets the current header of the @row.
  *

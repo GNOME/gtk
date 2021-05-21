@@ -1346,7 +1346,7 @@ gtk_action_muxer_get_parent (GtkActionMuxer *muxer)
 /*< private >
  * gtk_action_muxer_set_parent:
  * @muxer: a #GtkActionMuxer
- * @parent: (allow-none): the new parent #GtkActionMuxer
+ * @parent: (nullable): the new parent #GtkActionMuxer
  *
  * Sets the parent of @muxer to @parent.
  */

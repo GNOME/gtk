@@ -37,15 +37,12 @@ G_BEGIN_DECLS
 /**
  * GtkAlign:
  * @GTK_ALIGN_FILL: stretch to fill all space if possible, center if
- *     no meaningful way to stretch
- * @GTK_ALIGN_START: snap to left or top side, leaving space on right
- *     or bottom
- * @GTK_ALIGN_END: snap to right or bottom side, leaving space on left
- *     or top
- * @GTK_ALIGN_CENTER: center natural width of widget inside the
- *     allocation
- * @GTK_ALIGN_BASELINE: align the widget according to the baseline. See
- *     #GtkWidget
+ *   no meaningful way to stretch
+ * @GTK_ALIGN_START: snap to left or top side, leaving space on right or bottom
+ * @GTK_ALIGN_END: snap to right or bottom side, leaving space on left or top
+ * @GTK_ALIGN_CENTER: center natural width of widget inside the allocation
+ * @GTK_ALIGN_BASELINE: align the widget according to the baseline.
+ *   See [class@Gtk.Widget].
  *
  * Controls how a widget deals with extra space in a single dimension.
  *
@@ -327,9 +324,9 @@ typedef enum
 /**
  * GtkOverflow:
  * @GTK_OVERFLOW_VISIBLE: No change is applied. Content is drawn at the specified
- *     position.
+ *   position.
  * @GTK_OVERFLOW_HIDDEN: Content is clipped to the bounds of the area. Content
- *     outside the area is not drawn and cannot be interacted with.
+ *   outside the area is not drawn and cannot be interacted with.
  *
  * Defines how content overflowing a given area should be handled.
  *
@@ -424,15 +421,15 @@ typedef enum
  * @GTK_SELECTION_NONE: No selection is possible.
  * @GTK_SELECTION_SINGLE: Zero or one element may be selected.
  * @GTK_SELECTION_BROWSE: Exactly one element is selected.
- *     In some circumstances, such as initially or during a search
- *     operation, it’s possible for no element to be selected with
- *     %GTK_SELECTION_BROWSE. What is really enforced is that the user
- *     can’t deselect a currently selected element except by selecting
- *     another element.
+ *   In some circumstances, such as initially or during a search
+ *   operation, it’s possible for no element to be selected with
+ *   %GTK_SELECTION_BROWSE. What is really enforced is that the user
+ *   can’t deselect a currently selected element except by selecting
+ *   another element.
  * @GTK_SELECTION_MULTIPLE: Any number of elements may be selected.
- *      The Ctrl key may be used to enlarge the selection, and Shift
- *      key to select between the focus and the child pointed to.
- *      Some widgets may also allow Click-drag to select a range of elements.
+ *   The Ctrl key may be used to enlarge the selection, and Shift
+ *   key to select between the focus and the child pointed to.
+ *   Some widgets may also allow Click-drag to select a range of elements.
  *
  * Used to control what selections users are allowed to make.
  */
@@ -450,11 +447,11 @@ typedef enum
  * GtkWrapMode:
  * @GTK_WRAP_NONE: do not wrap lines; just make the text area wider
  * @GTK_WRAP_CHAR: wrap text, breaking lines anywhere the cursor can
- *     appear (between characters, usually - if you want to be technical,
- *     between graphemes, see pango_get_log_attrs())
+ *   appear (between characters, usually - if you want to be technical,
+ *   between graphemes, see pango_get_log_attrs())
  * @GTK_WRAP_WORD: wrap text, breaking lines in between words
  * @GTK_WRAP_WORD_CHAR: wrap text, breaking lines in between words, or if
- *     that is not enough, also between graphemes
+ *   that is not enough, also between graphemes
  *
  * Describes a type of line wrapping.
  */
@@ -861,11 +858,11 @@ typedef enum
  * @GTK_INPUT_HINT_LOWERCASE: Suggest to convert all text to lowercase
  * @GTK_INPUT_HINT_UPPERCASE_CHARS: Suggest to capitalize all text
  * @GTK_INPUT_HINT_UPPERCASE_WORDS: Suggest to capitalize the first
- *     character of each word
+ *   character of each word
  * @GTK_INPUT_HINT_UPPERCASE_SENTENCES: Suggest to capitalize the
- *     first word of each sentence
+ *   first word of each sentence
  * @GTK_INPUT_HINT_INHIBIT_OSK: Suggest to not show an onscreen keyboard
- *     (e.g for a calculator that already has all the keys).
+ *   (e.g for a calculator that already has all the keys).
  * @GTK_INPUT_HINT_VERTICAL_WRITING: The text is vertical
  * @GTK_INPUT_HINT_EMOJI: Suggest offering Emoji support
  * @GTK_INPUT_HINT_NO_EMOJI: Suggest not offering Emoji support
@@ -977,11 +974,11 @@ typedef enum
 /**
  * GtkShortcutScope:
  * @GTK_SHORTCUT_SCOPE_LOCAL: Shortcuts are handled inside
- *     the widget the controller belongs to.
+ *   the widget the controller belongs to.
  * @GTK_SHORTCUT_SCOPE_MANAGED: Shortcuts are handled by
- *     the first ancestor that is a #GtkShortcutManager
+ *   the first ancestor that is a #GtkShortcutManager
  * @GTK_SHORTCUT_SCOPE_GLOBAL: Shortcuts are handled by
- *     the root widget.
+ *   the root widget.
  *
  * Describes where `GtkShortcut`s added to a
  * `GtkShortcutController` get handled.
@@ -1103,18 +1100,20 @@ typedef enum {
 
 /**
  * GtkSystemSetting:
- * @GTK_SYSTEM_SETTING_DPI: the #GtkSettings:gtk-xft-dpi setting has changed
- * @GTK_SYSTEM_SETTING_FONT_NAME: The #GtkSettings:gtk-font-name setting has changed
+ * @GTK_SYSTEM_SETTING_DPI: the [property@Gtk.Settings:gtk-xft-dpi] setting has changed
+ * @GTK_SYSTEM_SETTING_FONT_NAME: The [property@Gtk.Settings:gtk-font-name] setting has changed
  * @GTK_SYSTEM_SETTING_FONT_CONFIG: The font configuration has changed in a way that
- *     requires text to be redrawn. This can be any of the
- *     #GtkSettings:gtk-xft-antialias, #GtkSettings:gtk-xft-hinting,
- *     #GtkSettings:gtk-xft-hintstyle, #GtkSettings:gtk-xft-rgba or
- *     #GtkSettings:gtk-fontconfig-timestamp settings
+ *   requires text to be redrawn. This can be any of the
+ *   [property@Gtk.Settings:gtk-xft-antialias],
+ *   [property@Gtk.Settings:gtk-xft-hinting],
+ *   [property@Gtk.Settings:gtk-xft-hintstyle],
+ *   [property@Gtk.Settings:gtk-xft-rgba] or
+ *   [property@Gtk.Settings:gtk-fontconfig-timestamp] settings
  * @GTK_SYSTEM_SETTING_DISPLAY: The display has changed
  * @GTK_SYSTEM_SETTING_ICON_THEME: The icon theme has changed in a way that requires
- *     icons to be looked up again
+ *   icons to be looked up again
  *
- * Values that can be passed to the GtkWidgetClass.system_setting_changed
+ * Values that can be passed to the [vfunc@Gtk.Widget.system_setting_changed]
  * vfunc.
  *
  * The values indicate which system setting has changed.

@@ -3051,8 +3051,8 @@ paper_size_changed (GtkDropDown *combo_box,
 
 /**
  * gtk_print_unix_dialog_new:
- * @title: (allow-none): Title of the dialog, or %NULL
- * @parent: (allow-none): Transient parent of the dialog, or %NULL
+ * @title: (nullable): Title of the dialog
+ * @parent: (nullable): Transient parent of the dialog
  *
  * Creates a new `GtkPrintUnixDialog`.
  *
@@ -3222,7 +3222,7 @@ set_active_printer (GtkPrintUnixDialog *dialog,
 /**
  * gtk_print_unix_dialog_set_settings: (attributes org.gtk.Method.set_property=print-settings)
  * @dialog: a `GtkPrintUnixDialog`
- * @settings: (allow-none): a `GtkPrintSettings`, or %NULL
+ * @settings: (nullable): a `GtkPrintSettings`
  *
  * Sets the `GtkPrintSettings` for the `GtkPrintUnixDialog`.
  *

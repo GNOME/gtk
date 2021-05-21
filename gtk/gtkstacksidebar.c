@@ -426,7 +426,7 @@ gtk_stack_sidebar_set_stack (GtkStackSidebar *self,
  * Retrieves the stack.
  *
  * Returns: (nullable) (transfer none): the associated #GtkStack or
- *     %NULL if none has been set explicitly
+ *   %NULL if none has been set explicitly
  */
 GtkStack *
 gtk_stack_sidebar_get_stack (GtkStackSidebar *self)

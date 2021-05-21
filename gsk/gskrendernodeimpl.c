@@ -3392,7 +3392,7 @@ gsk_repeat_node_draw (GskRenderNode *node,
  * gsk_repeat_node_new:
  * @bounds: The bounds of the area to be painted
  * @child: The child to repeat
- * @child_bounds: (allow-none): The area of the child to repeat or %NULL to
+ * @child_bounds: (nullable): The area of the child to repeat or %NULL to
  *     use the child's bounds
  *
  * Creates a `GskRenderNode` that will repeat the drawing of @child across

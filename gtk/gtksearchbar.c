@@ -675,7 +675,7 @@ gtk_search_bar_get_key_capture_widget (GtkSearchBar *bar)
 /**
  * gtk_search_bar_set_child: (attributes org.gtk.Method.set_property=child)
  * @bar: a `GtkSearchBar`
- * @child: (allow-none): the child widget
+ * @child: (nullable): the child widget
  *
  * Sets the child widget of @bar.
  */

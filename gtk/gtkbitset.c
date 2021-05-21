@@ -56,7 +56,7 @@ G_DEFINE_BOXED_TYPE (GtkBitset, gtk_bitset,
 
 /**
  * gtk_bitset_ref:
- * @self: (allow-none): a `GtkBitset`
+ * @self: (nullable): a `GtkBitset`
  *
  * Acquires a reference on the given `GtkBitset`.
  *
@@ -74,7 +74,7 @@ gtk_bitset_ref (GtkBitset *self)
 
 /**
  * gtk_bitset_unref:
- * @self: (allow-none): a `GtkBitset`
+ * @self: (nullable): a `GtkBitset`
  *
  * Releases a reference on the given `GtkBitset`.
  *
@@ -309,7 +309,7 @@ gtk_bitset_new_range (guint start,
  * Creates a copy of @self.
  *
  * Returns: (transfer full): A new bitset that contains the same
- *     values as @self
+ *   values as @self
  */
 GtkBitset *
 gtk_bitset_copy (const GtkBitset *self)
@@ -346,7 +346,7 @@ gtk_bitset_remove_all (GtkBitset *self)
  * Adds @value to @self if it wasn't part of it before.
  *
  * Returns: %TRUE if @value was not part of @self and @self
- *     was changed.
+ *   was changed
  */
 gboolean
 gtk_bitset_add (GtkBitset *self,
@@ -365,7 +365,7 @@ gtk_bitset_add (GtkBitset *self,
  * Removes @value from @self if it was part of it before.
  *
  * Returns: %TRUE if @value was part of @self and @self
- *     was changed.
+ *   was changed
  */
 gboolean
 gtk_bitset_remove (GtkBitset *self,

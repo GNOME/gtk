@@ -1867,9 +1867,8 @@ gtk_expression_watch_cb (gpointer data)
  * gtk_expression_watch:
  * @self: a `GtkExpression`
  * @this_: (transfer none) (type GObject) (nullable): the `this` argument to
- *     watch
- * @notify: (closure user_data): callback to invoke when the
- *     expression changes
+ *   watch
+ * @notify: (closure user_data): callback to invoke when the expression changes
  * @user_data: user data to pass to the `notify` callback
  * @user_destroy: destroy notify for `user_data`
  *
@@ -2104,7 +2103,7 @@ gtk_expression_bind_notify (gpointer data)
  * @target: (transfer none) (type GObject): the target object to bind to
  * @property: name of the property on `target` to bind to
  * @this_: (transfer none) (type GObject) (nullable): the this argument for
- *     the evaluation of `self`
+ *   the evaluation of `self`
  *
  * Bind `target`'s property named `property` to `self`.
  *

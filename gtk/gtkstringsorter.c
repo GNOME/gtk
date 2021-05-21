@@ -354,7 +354,7 @@ gtk_string_sorter_new (GtkExpression *expression)
  *
  * Gets the expression that is evaluated to obtain strings from items.
  *
- * Returns: (transfer none) (nullable): a `GtkExpression`, or %NULL
+ * Returns: (transfer none) (nullable): a `GtkExpression`
  */
 GtkExpression *
 gtk_string_sorter_get_expression (GtkStringSorter *self)
@@ -367,7 +367,7 @@ gtk_string_sorter_get_expression (GtkStringSorter *self)
 /**
  * gtk_string_sorter_set_expression: (attributes org.gtk.Method.set_property=expression)
  * @self: a `GtkStringSorter`
- * @expression: (nullable) (transfer none): a `GtkExpression`, or %NULL
+ * @expression: (nullable) (transfer none): a `GtkExpression`
  *
  * Sets the expression that is evaluated to obtain strings from items.
  *

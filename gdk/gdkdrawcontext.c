@@ -188,7 +188,7 @@ gdk_draw_context_init (GdkDrawContext *self)
  * may be effecting the contents of the @context's surface.
  *
  * Returns: %TRUE if the context is between [method@Gdk.DrawContext.begin_frame]
- *     and [method@Gdk.DrawContext.end_frame] calls.
+ *   and [method@Gdk.DrawContext.end_frame] calls.
  */
 gboolean
 gdk_draw_context_is_in_frame (GdkDrawContext *context)
@@ -219,7 +219,7 @@ gdk_draw_context_surface_resized (GdkDrawContext *context)
  *
  * Retrieves the `GdkDisplay` the @context is created for
  *
- * Returns: (nullable) (transfer none): a `GdkDisplay` or %NULL
+ * Returns: (nullable) (transfer none): the `GdkDisplay`
  */
 GdkDisplay *
 gdk_draw_context_get_display (GdkDrawContext *context)
@@ -237,7 +237,7 @@ gdk_draw_context_get_display (GdkDrawContext *context)
  *
  * Retrieves the surface that @context is bound to.
  *
- * Returns: (nullable) (transfer none): a #GdkSurface or %NULL
+ * Returns: (nullable) (transfer none): the #GdkSurface
  */
 GdkSurface *
 gdk_draw_context_get_surface (GdkDrawContext *context)
@@ -393,8 +393,7 @@ gdk_draw_context_end_frame (GdkDrawContext *context)
  * If @context is not in between calls to [method@Gdk.DrawContext.begin_frame]
  * and [method@Gdk.DrawContext.end_frame], %NULL will be returned.
  *
- * Returns: (transfer none) (nullable): a Cairo region or %NULL if not drawing
- *     a frame.
+ * Returns: (transfer none) (nullable): a Cairo region
  */
 const cairo_region_t *
 gdk_draw_context_get_frame_region (GdkDrawContext *context)

@@ -666,8 +666,8 @@ gtk_editable_get_position (GtkEditable *editable)
 /**
  * gtk_editable_get_selection_bounds:
  * @editable: a `GtkEditable`
- * @start_pos: (out) (allow-none): location to store the starting position, or %NULL
- * @end_pos: (out) (allow-none): location to store the end position, or %NULL
+ * @start_pos: (out) (optional): location to store the starting position
+ * @end_pos: (out) (optional): location to store the end position
  *
  * Retrieves the selection bound of the editable.
  *
@@ -805,7 +805,7 @@ gtk_editable_get_alignment (GtkEditable *editable)
  * gtk_editable_set_alignment: (attributes org.gtk.Method.set_property=xalign)
  * @editable: a `GtkEditable`
  * @xalign: The horizontal alignment, from 0 (left) to 1 (right).
- *          Reversed for RTL layouts
+ *   Reversed for RTL layouts
  *
  * Sets the alignment for the contents of the editable.
  *

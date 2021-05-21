@@ -47,8 +47,7 @@ G_DECLARE_FINAL_TYPE (GtkMapListModel, gtk_map_list_model, GTK, MAP_LIST_MODEL, 
  * The returned items must conform to the item type of the model they are
  * used with.
  *
- * Returns: (type GObject) (transfer full): The item to map to.
- *     This function may not return %NULL
+ * Returns: (type GObject) (transfer full): The item to map to
  */
 typedef gpointer (* GtkMapListModelMapFunc) (gpointer item, gpointer user_data);
 

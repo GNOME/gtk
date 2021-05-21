@@ -335,8 +335,8 @@ gtk_directory_list_init (GtkDirectoryList *self)
 
 /**
  * gtk_directory_list_new:
- * @file: (allow-none): The file to query
- * @attributes: (allow-none): The attributes to query with
+ * @file: (nullable): The file to query
+ * @attributes: (nullable): The attributes to query with
  *
  * Creates a new `GtkDirectoryList`.
  *
@@ -659,7 +659,7 @@ gtk_directory_list_update_monitoring (GtkDirectoryList *self)
 /**
  * gtk_directory_list_set_file: (attributes org.gtk.Method.set_property=file)
  * @self: a `GtkDirectoryList`
- * @file: (allow-none): the #GFile to be enumerated
+ * @file: (nullable): the #GFile to be enumerated
  *
  * Sets the @file to be enumerated and starts the enumeration.
  *
@@ -707,7 +707,7 @@ gtk_directory_list_get_file (GtkDirectoryList *self)
 /**
  * gtk_directory_list_set_attributes: (attributes org.gtk.Method.set_property=attributes)
  * @self: a `GtkDirectoryList`
- * @attributes: (allow-none): the attributes to enumerate
+ * @attributes: (nullable): the attributes to enumerate
  *
  * Sets the @attributes to be enumerated and starts the enumeration.
  *
@@ -831,7 +831,7 @@ gtk_directory_list_is_loading (GtkDirectoryList *self)
  * successfully queried files will remain in the list.
  *
  * Returns: (nullable) (transfer none): The loading error or %NULL if
- *     loading finished successfully.
+ *   loading finished successfully
  */
 const GError *
 gtk_directory_list_get_error (GtkDirectoryList *self)

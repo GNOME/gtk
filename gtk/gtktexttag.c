@@ -1024,7 +1024,7 @@ gtk_text_tag_init (GtkTextTag *text_tag)
 
 /**
  * gtk_text_tag_new:
- * @name: (allow-none): tag name, or %NULL
+ * @name: (nullable): tag name
  *
  * Creates a `GtkTextTag`.
  *

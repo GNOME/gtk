@@ -442,7 +442,7 @@ gtk_file_filter_new (void)
 /**
  * gtk_file_filter_set_name: (attributes org.gtk.Method.set_property=name)
  * @filter: a `GtkFileFilter`
- * @name: (allow-none): the human-readable-name for the filter, or %NULL
+ * @name: (nullable): the human-readable-name for the filter, or %NULL
  *   to remove any existing name.
  *
  * Sets a human-readable name of the filter.
@@ -473,9 +473,7 @@ gtk_file_filter_set_name (GtkFileFilter *filter,
  *
  * See [method@Gtk.FileFilter.set_name].
  *
- * Returns: (nullable): The human-readable name of the filter,
- *   or %NULL. This value is owned by GTK and must not
- *   be modified or freed.
+ * Returns: (nullable): The human-readable name of the filter
  */
 const char *
 gtk_file_filter_get_name (GtkFileFilter *filter)

@@ -1443,8 +1443,8 @@ gtk_assistant_new (void)
  * Returns the page number of the current page.
  *
  * Returns: The index (starting from 0) of the current
- *     page in the @assistant, or -1 if the @assistant has no pages,
- *     or no current page.
+ *   page in the @assistant, or -1 if the @assistant has no pages,
+ *   or no current page
  */
 int
 gtk_assistant_get_current_page (GtkAssistant *assistant)
@@ -1461,9 +1461,9 @@ gtk_assistant_get_current_page (GtkAssistant *assistant)
  * gtk_assistant_set_current_page:
  * @assistant: a `GtkAssistant`
  * @page_num: index of the page to switch to, starting from 0.
- *     If negative, the last page will be used. If greater
- *     than the number of pages in the @assistant, nothing
- *     will be done.
+ *   If negative, the last page will be used. If greater
+ *   than the number of pages in the @assistant, nothing
+ *   will be done.
  *
  * Switches the page to @page_num.
  *
@@ -1583,12 +1583,12 @@ gtk_assistant_get_n_pages (GtkAssistant *assistant)
  * gtk_assistant_get_nth_page:
  * @assistant: a `GtkAssistant`
  * @page_num: the index of a page in the @assistant,
- *     or -1 to get the last page
+ *   or -1 to get the last page
  *
  * Returns the child widget contained in page number @page_num.
  *
  * Returns: (nullable) (transfer none): the child widget, or %NULL
- *     if @page_num is out of bounds
+ *   if @page_num is out of bounds
  */
 GtkWidget*
 gtk_assistant_get_nth_page (GtkAssistant *assistant,
@@ -1656,7 +1656,7 @@ gtk_assistant_append_page (GtkAssistant *assistant,
  * @assistant: a `GtkAssistant`
  * @page: a `GtkWidget`
  * @position: the index (starting at 0) at which to insert the page,
- *     or -1 to append the page to the @assistant
+ *   or -1 to append the page to the @assistant
  *
  * Inserts a page in the @assistant at a given position.
  *
@@ -1753,7 +1753,7 @@ gtk_assistant_add_page (GtkAssistant *assistant,
  * gtk_assistant_remove_page:
  * @assistant: a `GtkAssistant`
  * @page_num: the index of a page in the @assistant,
- *     or -1 to remove the last page
+ *   or -1 to remove the last page
  *
  * Removes the @page_num’s page from @assistant.
  */
@@ -1776,8 +1776,8 @@ gtk_assistant_remove_page (GtkAssistant *assistant,
 /**
  * gtk_assistant_set_forward_page_func:
  * @assistant: a `GtkAssistant`
- * @page_func: (allow-none): the `GtkAssistant`PageFunc, or %NULL
- *     to use the default one
+ * @page_func: (nullable): the `GtkAssistantPageFunc`, or %NULL
+ *   to use the default one
  * @data: user data for @page_func
  * @destroy: destroy notifier for @data
  *

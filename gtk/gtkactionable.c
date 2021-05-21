@@ -74,7 +74,7 @@ gtk_actionable_default_init (GtkActionableInterface *iface)
  *
  * Gets the action name for @actionable.
  *
- * Returns: (nullable): the action name, or %NULL if none is set
+ * Returns: (nullable): the action name
  */
 const char *
 gtk_actionable_get_action_name (GtkActionable *actionable)
@@ -88,7 +88,7 @@ gtk_actionable_get_action_name (GtkActionable *actionable)
 /**
  * gtk_actionable_set_action_name: (attributes org.gtk.Property.set=action-name)
  * @actionable: a `GtkActionable` widget
- * @action_name: (nullable): an action name, or %NULL
+ * @action_name: (nullable): an action name
  *
  * Specifies the name of the action with which this widget should be
  * associated.
@@ -134,7 +134,7 @@ gtk_actionable_get_action_target_value (GtkActionable *actionable)
 /**
  * gtk_actionable_set_action_target_value: (attributes org.gtk.Method.set_property=action-target)
  * @actionable: a `GtkActionable` widget
- * @target_value: (nullable): a #GVariant to set as the target value, or %NULL
+ * @target_value: (nullable): a `GVariant` to set as the target value
  *
  * Sets the target value of an actionable widget.
  *
@@ -154,7 +154,7 @@ gtk_actionable_get_action_target_value (GtkActionable *actionable)
  * is now equal to the target value of the button, the button will now
  * be rendered as active (and the other buttons, with different targets,
  * rendered inactive).
- **/
+ */
 void
 gtk_actionable_set_action_target_value (GtkActionable *actionable,
                                         GVariant      *target_value)

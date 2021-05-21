@@ -1914,7 +1914,7 @@ gtk_popover_new (void)
 /**
  * gtk_popover_set_child: (attributes org.gtk.Method.set_property=child)
  * @popover: a `GtkPopover`
- * @child: (allow-none): the child widget
+ * @child: (nullable): the child widget
  *
  * Sets the child widget of @popover.
  */
@@ -1963,7 +1963,7 @@ gtk_popover_get_child (GtkPopover *popover)
 /**
  * gtk_popover_set_default_widget: (attributes org.gtk.Method.set_property=default-widget)
  * @popover: a `GtkPopover`
- * @widget: (allow-none): a child widget of @popover to set as
+ * @widget: (nullable): a child widget of @popover to set as
  *   the default, or %NULL to unset the default widget for the popover
  *
  * Sets the default widget of a `GtkPopover`.

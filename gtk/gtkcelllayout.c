@@ -489,7 +489,7 @@ gtk_cell_layout_add_attribute (GtkCellLayout   *cell_layout,
  * gtk_cell_layout_set_cell_data_func:
  * @cell_layout: a #GtkCellLayout
  * @cell: a #GtkCellRenderer
- * @func: (allow-none): the #GtkCellLayoutDataFunc to use, or %NULL
+ * @func: (nullable): the #GtkCellLayoutDataFunc to use
  * @func_data: (closure): user data for @func
  * @destroy: destroy notify for @func_data
  *
@@ -562,9 +562,9 @@ gtk_cell_layout_reorder (GtkCellLayout   *cell_layout,
  * Returns the cell renderers which have been added to @cell_layout.
  *
  * Returns: (element-type GtkCellRenderer) (transfer container):
- *     a list of cell renderers. The list, but not the renderers has
- *     been newly allocated and should be freed with g_list_free()
- *     when no longer needed.
+ *   a list of cell renderers. The list, but not the renderers has
+ *   been newly allocated and should be freed with g_list_free()
+ *   when no longer needed.
  */
 GList *
 gtk_cell_layout_get_cells (GtkCellLayout *cell_layout)
@@ -582,8 +582,7 @@ gtk_cell_layout_get_cells (GtkCellLayout *cell_layout)
  * if called on a #GtkCellArea or might be %NULL if no #GtkCellArea
  * is used by @cell_layout.
  *
- * Returns: (transfer none) (nullable): the cell area used by @cell_layout,
- * or %NULL in case no cell area is used.
+ * Returns: (transfer none) (nullable): the cell area used by @cell_layout
  */
 GtkCellArea *
 gtk_cell_layout_get_area (GtkCellLayout *cell_layout)

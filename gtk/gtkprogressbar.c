@@ -835,7 +835,7 @@ gtk_progress_bar_pulse (GtkProgressBar *pbar)
 /**
  * gtk_progress_bar_set_text: (attributes org.gtk.Method.set_property=text)
  * @pbar: a `GtkProgressBar`
- * @text: (allow-none): a UTF-8 string, or %NULL
+ * @text: (nullable): a UTF-8 string
  *
  * Causes the given @text to appear next to the progress bar.
  *
@@ -1039,8 +1039,7 @@ gtk_progress_bar_set_inverted (GtkProgressBar *pbar,
  * The return value is a reference to the text, not a copy of it,
  * so will become invalid if you change the text in the progress bar.
  *
- * Returns: (nullable): text, or %NULL; this string is owned by the widget
- * and should not be modified or freed.
+ * Returns: (nullable): the text
  */
 const char *
 gtk_progress_bar_get_text (GtkProgressBar *pbar)

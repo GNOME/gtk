@@ -54,7 +54,7 @@
  * gtk_snapshot_pop() to change the current node.
  *
  * The typical way to obtain a `GtkSnapshot` object is as an argument to
- * the GtkWidgetClass.snapshot() vfunc. If you need to create your own
+ * the [vfunc@Gtk.Widget.snapshot] vfunc. If you need to create your own
  * `GtkSnapshot`, use [ctor@Gtk.Snapshot.new].
  */
 
@@ -316,8 +316,8 @@ gtk_snapshot_free_to_node (GtkSnapshot *snapshot)
 /**
  * gtk_snapshot_free_to_paintable: (skip)
  * @snapshot: (transfer full): a `GtkSnapshot`
- * @size: (allow-none): The size of the resulting paintable
- *     or %NULL to use the bounds of the snapshot
+ * @size: (nullable): The size of the resulting paintable
+ *   or %NULL to use the bounds of the snapshot
  *
  * Returns a paintable for the node that was
  * constructed by @snapshot and frees @snapshot.
@@ -1513,8 +1513,8 @@ gtk_snapshot_to_node (GtkSnapshot *snapshot)
 /**
  * gtk_snapshot_to_paintable:
  * @snapshot: a `GtkSnapshot`
- * @size: (allow-none): The size of the resulting paintable
- *     or %NULL to use the bounds of the snapshot
+ * @size: (nullable): The size of the resulting paintable
+ *   or %NULL to use the bounds of the snapshot
  *
  * Returns a paintable encapsulating the render node
  * that was constructed by @snapshot.
@@ -1655,7 +1655,7 @@ gtk_snapshot_restore (GtkSnapshot *snapshot)
 /**
  * gtk_snapshot_transform:
  * @snapshot: a `GtkSnapshot`
- * @transform: (allow-none): the transform to apply
+ * @transform: (nullable): the transform to apply
  *
  * Transforms @snapshot's coordinate system with the given @transform.
  */
@@ -2421,9 +2421,9 @@ gtk_snapshot_append_repeating_radial_gradient (GtkSnapshot            *snapshot,
  * @snapshot: a `GtkSnapshot`
  * @outline: a `GskRoundedRect` describing the outline of the border
  * @border_width: (array fixed-size=4): the stroke width of the border on
- *     the top, right, bottom and left side respectively.
+ *   the top, right, bottom and left side respectively.
  * @border_color: (array fixed-size=4): the color used on the top, right,
- *     bottom and left side.
+ *   bottom and left side.
  *
  * Appends a stroked border rectangle inside the given @outline.
  *

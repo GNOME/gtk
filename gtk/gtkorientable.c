@@ -63,7 +63,7 @@ gtk_orientable_default_init (GtkOrientableInterface *iface)
 /**
  * gtk_orientable_set_orientation: (attributes org.gtk.Method.set_property=orientation)
  * @orientable: a `GtkOrientable`
- * @orientation: the orientable’s new orientation.
+ * @orientation: the orientable’s new orientation
  *
  * Sets the orientation of the @orientable.
  */
@@ -87,7 +87,7 @@ gtk_orientable_set_orientation (GtkOrientable  *orientable,
  *
  * Retrieves the orientation of the @orientable.
  *
- * Returns: the orientation of the @orientable.
+ * Returns: the orientation of the @orientable
  */
 GtkOrientation
 gtk_orientable_get_orientation (GtkOrientable *orientable)

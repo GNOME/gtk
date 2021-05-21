@@ -515,7 +515,7 @@ gtk_builder_cscope_add_callback_symbols (GtkBuilderCScope *self,
  * gtk_builder_cscope_add_callback_symbol().
  *
  * Returns: (nullable) (transfer none): The callback symbol
- *   in @builder for @callback_name, or %NULL
+ *   in @builder for @callback_name
  */
 GCallback
 gtk_builder_cscope_lookup_callback_symbol (GtkBuilderCScope *self,

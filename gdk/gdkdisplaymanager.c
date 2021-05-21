@@ -309,8 +309,7 @@ gdk_display_manager_get (void)
  *
  * Gets the default `GdkDisplay`.
  *
- * Returns: (nullable) (transfer none): a `GdkDisplay`, or %NULL if
- *     there is no default display.
+ * Returns: (nullable) (transfer none): a `GdkDisplay`
  */
 GdkDisplay *
 gdk_display_manager_get_default_display (GdkDisplayManager *manager)
@@ -361,8 +360,7 @@ gdk_display_manager_set_default_display (GdkDisplayManager *manager,
  * List all currently open displays.
  *
  * Returns: (transfer container) (element-type GdkDisplay): a newly
- *     allocated `GSList` of `GdkDisplay` objects. Free with g_slist_free()
- *     when you are done with it.
+ *   allocated `GSList` of `GdkDisplay` objects
  */
 GSList *
 gdk_display_manager_list_displays (GdkDisplayManager *manager)

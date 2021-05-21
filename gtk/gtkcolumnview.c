@@ -1327,7 +1327,7 @@ gtk_column_view_init (GtkColumnView *self)
 
 /**
  * gtk_column_view_new:
- * @model: (allow-none) (transfer full): the list model to use, or %NULL
+ * @model: (nullable) (transfer full): the list model to use
  *
  * Creates a new `GtkColumnView`.
  *
@@ -1372,7 +1372,7 @@ gtk_column_view_get_model (GtkColumnView *self)
 /**
  * gtk_column_view_set_model: (attributes org.gtk.Method.set_property=model)
  * @self: a #GtkColumnView
- * @model: (allow-none) (transfer none): the model to use or %NULL for none
+ * @model: (nullable) (transfer none): the model to use
  *
  * Sets the model to use.
  *
@@ -1500,7 +1500,7 @@ gtk_column_view_get_show_column_separators (GtkColumnView *self)
  * gtk_column_view_append_column:
  * @self: a `GtkColumnView`
  * @column: a `GtkColumnViewColumn` that hasn't been added to a
- *     `GtkColumnView` yet
+ *   `GtkColumnView` yet
  *
  * Appends the @column to the end of the columns in @self.
  */
@@ -1678,7 +1678,7 @@ gtk_column_view_get_sorter (GtkColumnView *self)
 /**
  * gtk_column_view_sort_by_column:
  * @self: a `GtkColumnView`
- * @column: (allow-none): the `GtkColumnViewColumn` to sort by, or %NULL
+ * @column: (nullable): the `GtkColumnViewColumn` to sort by
  * @direction: the direction to sort in
  *
  * Sets the sorting of the view.

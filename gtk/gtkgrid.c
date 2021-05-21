@@ -580,8 +580,8 @@ gtk_grid_attach (GtkGrid   *grid,
  * gtk_grid_attach_next_to:
  * @grid: a `GtkGrid`
  * @child: the widget to add
- * @sibling: (allow-none): the child of @grid that @child will be placed
- *     next to, or %NULL to place @child at the beginning or end
+ * @sibling: (nullable): the child of @grid that @child will be placed
+ *   next to, or %NULL to place @child at the beginning or end
  * @side: the side of @sibling that @child is positioned next to
  * @width: the number of columns that @child will span
  * @height: the number of rows that @child will span
@@ -682,7 +682,7 @@ gtk_grid_attach_next_to (GtkGrid         *grid,
  * Gets the child of @grid whose area covers the grid
  * cell at @column, @row.
  *
- * Returns: (transfer none) (nullable): the child at the given position, or %NULL
+ * Returns: (transfer none) (nullable): the child at the given position
  */
 GtkWidget *
 gtk_grid_get_child_at (GtkGrid *grid,
@@ -919,7 +919,7 @@ gtk_grid_remove_column (GtkGrid *grid,
  * gtk_grid_insert_next_to:
  * @grid: a `GtkGrid`
  * @sibling: the child of @grid that the new row or column will be
- *     placed next to
+ *   placed next to
  * @side: the side of @sibling that @child is positioned next to
  *
  * Inserts a row or column at the specified position.

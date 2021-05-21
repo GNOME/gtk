@@ -692,7 +692,7 @@ gdk_drag_set_selected_action (GdkDrag       *drag,
  * drag operation. The surface is owned by @drag and will be destroyed
  * when the drag operation is over.
  *
- * Returns: (nullable) (transfer none): the drag surface, or %NULL
+ * Returns: (nullable) (transfer none): the drag surface
  */
 GdkSurface *
 gdk_drag_get_drag_surface (GdkDrag *drag)

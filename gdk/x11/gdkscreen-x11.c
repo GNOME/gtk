@@ -372,12 +372,12 @@ gdk_x11_screen_get_xscreen (GdkX11Screen *screen)
 
 /**
  * gdk_x11_screen_get_screen_number:
- * @screen: a #GdkX11Screen
+ * @screen: a `GdkX11Screen`
  *
- * Returns the index of a #GdkX11Screen.
+ * Returns the index of a `GdkX11Screen`.
  *
  * Returns: the position of @screen among the screens
- *     of its display
+ *   of its display
  */
 int
 gdk_x11_screen_get_screen_number (GdkX11Screen *screen)

@@ -48,12 +48,12 @@ G_DECLARE_FINAL_TYPE (GtkTreeListRow, gtk_tree_list_row, GTK, TREE_LIST_ROW, GOb
  * gtk_tree_list_row_set_expanded() is called.
  *
  * This function can return %NULL to indicate that @item is guaranteed to be
- * a leaf node and will never have children.
- * If it does not have children but may get children later, it should return
- * an empty model that is filled once children arrive.
+ * a leaf node and will never have children. If it does not have children but
+ * may get children later, it should return an empty model that is filled once
+ * children arrive.
  *
- * Returns: (nullable) (transfer full): The model tracking the children of @item or %NULL if
- *     @item can never have children
+ * Returns: (nullable) (transfer full): The model tracking the children of
+ *   @item or %NULL if @item can never have children
  */
 typedef GListModel * (* GtkTreeListModelCreateModelFunc) (gpointer item, gpointer user_data);
 

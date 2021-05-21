@@ -1002,7 +1002,7 @@ gtk_scale_new_with_range (GtkOrientation orientation,
  * gtk_scale_set_digits: (attributes org.gtk.Method.set_property=digits)
  * @scale: a `GtkScale`
  * @digits: the number of decimal places to display,
- *     e.g. use 1 to display 1.0, 2 to display 1.00, etc
+ *   e.g. use 1 to display 1.0, 2 to display 1.00, etc
  *
  * Sets the number of decimal places that are displayed in the value.
  *
@@ -1596,8 +1596,8 @@ gtk_scale_get_layout (GtkScale *scale)
 /**
  * gtk_scale_get_layout_offsets:
  * @scale: a #GtkScale
- * @x: (out) (allow-none): location to store X offset of layout, or %NULL
- * @y: (out) (allow-none): location to store Y offset of layout, or %NULL
+ * @x: (out) (optional): location to store X offset of layout
+ * @y: (out) (optional): location to store Y offset of layout
  *
  * Obtains the coordinates where the scale will draw the
  * `PangoLayout` representing the text in the scale.
@@ -1678,8 +1678,7 @@ gtk_scale_clear_marks (GtkScale *scale)
  *   and %GTK_POS_LEFT are drawn above the scale, anything else below.
  *   For a vertical scale, #GTK_POS_LEFT and %GTK_POS_TOP are drawn to
  *   the left of the scale, anything else to the right.
- * @markup: (allow-none): Text to be shown at the mark, using
- *   Pango markup, or %NULL
+ * @markup: (nullable): Text to be shown at the mark, using Pango markup
  *
  * Adds a mark at @value.
  *

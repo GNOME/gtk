@@ -911,12 +911,12 @@ gtk_application_get_menubar (GtkApplication *application)
 /**
  * GtkApplicationInhibitFlags:
  * @GTK_APPLICATION_INHIBIT_LOGOUT: Inhibit ending the user session
- *     by logging out or by shutting down the computer
+ *   by logging out or by shutting down the computer
  * @GTK_APPLICATION_INHIBIT_SWITCH: Inhibit user switching
  * @GTK_APPLICATION_INHIBIT_SUSPEND: Inhibit suspending the
- *     session or computer
+ *   session or computer
  * @GTK_APPLICATION_INHIBIT_IDLE: Inhibit the session being
- *     marked as idle (and possibly locked)
+ *   marked as idle (and possibly locked)
  *
  * Types of user actions that may be blocked by `GtkApplication`.
  *
@@ -1043,9 +1043,9 @@ gtk_application_list_action_descriptions (GtkApplication *application)
  * gtk_application_set_accels_for_action:
  * @application: a `GtkApplication`
  * @detailed_action_name: a detailed action name, specifying an action
- *     and target to associate accelerators with
+ *   and target to associate accelerators with
  * @accels: (array zero-terminated=1): a list of accelerators in the format
- *     understood by [func@Gtk.accelerator_parse]
+ *   understood by [func@Gtk.accelerator_parse]
  *
  * Sets zero or more keyboard accelerators that will trigger the
  * given action.
@@ -1195,7 +1195,7 @@ gtk_application_handle_window_map (GtkApplication *application,
  * for more information.
  *
  * Returns: (nullable) (transfer none): Gets the menu with the
- *     given id from the automatically loaded resources
+ *   given id from the automatically loaded resources
  */
 GMenu *
 gtk_application_get_menu_by_id (GtkApplication *application,

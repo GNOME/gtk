@@ -640,7 +640,7 @@ gtk_button_new_with_label (const char *label)
 
 /**
  * gtk_button_new_from_icon_name:
- * @icon_name: (nullable): an icon name or %NULL
+ * @icon_name: (nullable): an icon name
  *
  * Creates a new button containing an icon from the current icon theme.
  *
@@ -665,7 +665,7 @@ gtk_button_new_from_icon_name (const char *icon_name)
 /**
  * gtk_button_new_with_mnemonic:
  * @label: The text of the button, with an underscore in front of the
- *         mnemonic character
+ *   mnemonic character
  *
  * Creates a new `GtkButton` containing a label.
  *
@@ -1018,7 +1018,7 @@ gtk_button_get_gesture (GtkButton *button)
 /**
  * gtk_button_set_child: (attributes org.gtk.Method.set_property=child)
  * @button: a `GtkButton`
- * @child: (allow-none): the child widget
+ * @child: (nullable): the child widget
  *
  * Sets the child widget of @button.
  */

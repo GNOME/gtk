@@ -353,7 +353,7 @@ gtk_toggle_button_new_with_label (const char *label)
 /**
  * gtk_toggle_button_new_with_mnemonic:
  * @label: the text of the button, with an underscore in front of the
- *         mnemonic character
+ *   mnemonic character
  *
  * Creates a new `GtkToggleButton` containing a label.
  *

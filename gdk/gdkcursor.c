@@ -298,8 +298,8 @@ gdk_cursor_equal (gconstpointer a,
 /**
  * gdk_cursor_new_from_name:
  * @name: the name of the cursor
- * @fallback: (allow-none): %NULL or the `GdkCursor` to fall back to when
- *     this one cannot be supported
+ * @fallback: (nullable): %NULL or the `GdkCursor` to fall back to when
+ *   this one cannot be supported
  *
  * Creates a new cursor by looking up @name in the current cursor
  * theme.
@@ -340,8 +340,8 @@ gdk_cursor_new_from_name (const char *name,
  * @texture: the texture providing the pixel data
  * @hotspot_x: the horizontal offset of the “hotspot” of the cursor
  * @hotspot_y: the vertical offset of the “hotspot” of the cursor
- * @fallback: (allow-none): %NULL or the `GdkCursor` to fall back to when
- *     this one cannot be supported
+ * @fallback: (nullable): %NULL or the `GdkCursor` to fall back to when
+ *   this one cannot be supported
  *
  * Creates a new cursor from a `GdkTexture`.
  *
@@ -379,7 +379,7 @@ gdk_cursor_new_from_texture (GdkTexture *texture,
  * it is used on does not support textured cursors.
  *
  * Returns: (transfer none) (nullable): the fallback of the cursor or %NULL
- *  to use the default cursor as fallback.
+ *   to use the default cursor as fallback
  */
 GdkCursor *
 gdk_cursor_get_fallback (GdkCursor *cursor)

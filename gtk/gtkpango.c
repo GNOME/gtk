@@ -38,8 +38,8 @@ attr_list_merge_filter (PangoAttribute *attribute,
 
 /*
  * _gtk_pango_attr_list_merge:
- * @into: a #PangoAttrList where attributes are merged or %NULL
- * @from: a #PangoAttrList with the attributes to merge or %NULL
+ * @into: (nullable): a #PangoAttrList where attributes are merged
+ * @from: (nullable): a #PangoAttrList with the attributes to merge
  *
  * Merges attributes from @from into @into.
  *

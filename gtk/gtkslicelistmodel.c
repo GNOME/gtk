@@ -297,7 +297,7 @@ gtk_slice_list_model_init (GtkSliceListModel *self)
 
 /**
  * gtk_slice_list_model_new:
- * @model: (transfer full) (allow-none): The model to use, or %NULL
+ * @model: (transfer full) (nullable): The model to use
  * @offset: the offset of the slice
  * @size: maximum size of the slice
  *
@@ -332,7 +332,7 @@ gtk_slice_list_model_new (GListModel *model,
 /**
  * gtk_slice_list_model_set_model: (attributes org.gtk.Method.set_property=model)
  * @self: a `GtkSliceListModel`
- * @model: (allow-none): The model to be sliced
+ * @model: (nullable): The model to be sliced
  *
  * Sets the model to show a slice of.
  *

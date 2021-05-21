@@ -301,7 +301,7 @@ free_style_cache (GtkTextLayout *text_layout)
 
 /*
  * gtk_text_layout_set_buffer:
- * @buffer: (allow-none):
+ * @buffer: (nullable):
  */
 void
 gtk_text_layout_set_buffer (GtkTextLayout *layout,
@@ -451,9 +451,9 @@ gtk_text_layout_set_overwrite_mode (GtkTextLayout *layout,
 /**
  * gtk_text_layout_set_cursor_direction:
  * @direction: the new direction(s) for which to draw cursors.
- *             %GTK_TEXT_DIR_NONE means draw cursors for both
- *             left-to-right insertion and right-to-left insertion.
- *             (The two cursors will be visually distinguished.)
+ *   %GTK_TEXT_DIR_NONE means draw cursors for both
+ *   left-to-right insertion and right-to-left insertion.
+ *   (The two cursors will be visually distinguished.)
  * 
  * Sets which text directions (left-to-right and/or right-to-left) for
  * which cursors will be drawn for the insertion point. The visual
@@ -566,7 +566,7 @@ gtk_text_layout_set_cursor_visible (GtkTextLayout *layout,
  * Returns whether the insertion cursor will be shown.
  *
  * Returns: if %FALSE, the insertion cursor will not be
- *     shown, even if the text is editable.
+ *   shown, even if the text is editable.
  */
 gboolean
 gtk_text_layout_get_cursor_visible (GtkTextLayout *layout)
@@ -886,13 +886,13 @@ update_layout_size (GtkTextLayout *layout)
  * gtk_text_layout_validate_yrange:
  * @layout: a #GtkTextLayout
  * @anchor: iter pointing into a line that will be used as the
- *          coordinate origin
+ *   coordinate origin
  * @y0_: offset from the top of the line pointed to by @anchor at
- *       which to begin validation. (The offset here is in pixels
- *       after validation.)
+ *   which to begin validation. (The offset here is in pixels
+ *   after validation.)
  * @y1_: offset from the top of the line pointed to by @anchor at
- *       which to end validation. (The offset here is in pixels
- *       after validation.)
+ *   which to end validation. (The offset here is in pixels
+ *   after validation.)
  *
  * Ensure that a region of a #GtkTextLayout is valid. The ::changed
  * signal will be emitted if any lines are validated.
@@ -1024,7 +1024,7 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
  * gtk_text_layout_validate:
  * @tree: a #GtkTextLayout
  * @max_pixels: the maximum number of pixels to validate. (No more
- *              than one paragraph beyond this limit will be validated)
+ *   than one paragraph beyond this limit will be validated)
  *
  * Validate regions of a #GtkTextLayout. The ::changed signal will
  * be emitted for each region validated.
@@ -2734,7 +2734,7 @@ get_line_at_y (GtkTextLayout *layout,
  * @target_iter: the iterator in which the result is stored
  * @y: the y position
  * @line_top: location to store the y coordinate of the
- *            top of the line. (Can by %NULL)
+ *   top of the line. (Can by %NULL)
  *
  * Get the iter at the beginning of the line which is displayed
  * at the given y.
@@ -2826,8 +2826,8 @@ gtk_text_layout_get_iter_at_position (GtkTextLayout *layout,
  * gtk_text_layout_get_cursor_locations:
  * @layout: a #GtkTextLayout
  * @iter: a #GtkTextIter
- * @strong_pos: (out) (optional): location to store the strong cursor position, or %NULL
- * @weak_pos: (out) (optional): location to store the weak cursor position, or %NULL
+ * @strong_pos: (out) (optional): location to store the strong cursor position
+ * @weak_pos: (out) (optional): location to store the weak cursor position
  *
  * Given an iterator within a text layout, determine the positions of the
  * strong and weak cursors if the insertion point is at that
@@ -2956,11 +2956,9 @@ _gtk_text_layout_get_block_cursor (GtkTextLayout *layout,
 /**
  * gtk_text_layout_get_line_yrange:
  * @layout: a #GtkTextLayout
- * @iter:   a #GtkTextIter
- * @y:      location to store the top of the paragraph in pixels,
- *          or %NULL.
- * @height  location to store the height of the paragraph in pixels,
- *          or %NULL.
+ * @iter: a #GtkTextIter
+ * @y: (nullable): location to store the top of the paragraph in pixels
+ * @height: (nullable): location to store the height of the paragraph in pixels
  *
  * Find the range of y coordinates for the paragraph containing
  * the given iter.

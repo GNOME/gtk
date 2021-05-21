@@ -323,7 +323,7 @@ gtk_frame_get_property (GObject         *object,
 
 /**
  * gtk_frame_new:
- * @label: (allow-none): the text to use as the label of the frame
+ * @label: (nullable): the text to use as the label of the frame
  *
  * Creates a new `GtkFrame`, with optional label @label.
  *
@@ -340,7 +340,7 @@ gtk_frame_new (const char *label)
 /**
  * gtk_frame_set_label: (attributes org.gtk.Method.set_property=label)
  * @frame: a `GtkFrame`
- * @label: (allow-none): the text to use as the label of the frame
+ * @label: (nullable): the text to use as the label of the frame
  *
  * Creates a new `GtkLabel` with the @label and sets it as the frame's
  * label widget.
@@ -448,8 +448,7 @@ gtk_frame_set_label_widget (GtkFrame  *frame,
  *
  * Retrieves the label widget for the frame.
  *
- * Returns: (nullable) (transfer none): the label widget, or %NULL if
- * there is none.
+ * Returns: (nullable) (transfer none): the label widget
  */
 GtkWidget *
 gtk_frame_get_label_widget (GtkFrame *frame)
@@ -668,7 +667,7 @@ gtk_frame_get_request_mode (GtkWidget *widget)
 /**
  * gtk_frame_set_child: (attributes org.gtk.Method.set_property=child)
  * @frame: a `GtkFrame`
- * @child: (allow-none): the child widget
+ * @child: (nullable): the child widget
  *
  * Sets the child widget of @frame.
  */

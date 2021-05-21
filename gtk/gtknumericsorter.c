@@ -607,7 +607,7 @@ gtk_numeric_sorter_new (GtkExpression *expression)
  *
  * Gets the expression that is evaluated to obtain numbers from items.
  *
- * Returns: (transfer none) (nullable): a `GtkExpression`, or %NULL
+ * Returns: (transfer none) (nullable): a `GtkExpression`
  */
 GtkExpression *
 gtk_numeric_sorter_get_expression (GtkNumericSorter *self)
@@ -620,7 +620,7 @@ gtk_numeric_sorter_get_expression (GtkNumericSorter *self)
 /**
  * gtk_numeric_sorter_set_expression: (attributes org.gtk.Method.set_property=expression)
  * @self: a `GtkNumericSorter`
- * @expression: (nullable) (transfer none): a `GtkExpression`, or %NULL
+ * @expression: (nullable) (transfer none): a `GtkExpression`
  *
  * Sets the expression that is evaluated to obtain numbers from items.
  *

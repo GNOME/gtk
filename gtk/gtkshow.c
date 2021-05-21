@@ -143,7 +143,7 @@ gtk_show_uri_full (GtkWindow           *parent,
  * of the operation.
  *
  * Returns: %TRUE if the URI was shown successfully.
- *     Otherwise, %FALSE is returned and @error is set
+ *   Otherwise, %FALSE is returned and @error is set
  */
 gboolean
 gtk_show_uri_full_finish (GtkWindow     *parent,
@@ -189,7 +189,7 @@ show_uri_done (GObject      *object,
 
 /**
  * gtk_show_uri:
- * @parent: (allow-none): parent window
+ * @parent: (nullable): parent window
  * @uri: the uri to show
  * @timestamp: timestamp from the event that triggered this call, or %GDK_CURRENT_TIME
  *

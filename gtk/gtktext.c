@@ -6615,7 +6615,7 @@ gtk_text_reset_blink_time (GtkText *self)
  * gtk_text_set_placeholder_text: (attributes org.gtk.Method.set_property=placeholder-text)
  * @self: a `GtkText`
  * @text: (nullable): a string to be displayed when @self
- *   is empty and unfocused, or %NULL
+ *   is empty and unfocused
  *
  * Sets text to be displayed in @self when it is empty.
  *
@@ -6776,7 +6776,7 @@ gtk_text_get_input_hints (GtkText *self)
 /**
  * gtk_text_set_attributes: (attributes org.gtk.Method.set_property=attributes)
  * @self: a `GtkText`
- * @attrs: (nullable): a `PangoAttrList` or %NULL to unset
+ * @attrs: (nullable): a `PangoAttrList`
  *
  * Sets attributes that are applied to the text.
  */
@@ -6811,8 +6811,7 @@ gtk_text_set_attributes (GtkText       *self,
  * Gets the attribute list that was set on the `GtkText`
  * using gtk_text_set_attributes().
  *
- * Returns: (transfer none) (nullable): the attribute list,
- *   or %NULL if none was set.
+ * Returns: (transfer none) (nullable): the attribute list
  */
 PangoAttrList *
 gtk_text_get_attributes (GtkText *self)
@@ -6860,8 +6859,7 @@ gtk_text_set_tabs (GtkText       *self,
  * Gets the tabstops that were set on the `GtkText`
  * using gtk_text_set_tabs().
  *
- * Returns: (nullable) (transfer none): the tabstops,
- *   or %NULL if none was set.
+ * Returns: (nullable) (transfer none): the tabstops
  */
 PangoTabArray *
 gtk_text_get_tabs (GtkText *self)
@@ -6931,7 +6929,7 @@ gtk_text_get_key_controller (GtkText *self)
 /**
  * gtk_text_set_extra_menu: (attributes org.gtk.Method.set_property=extra-menu)
  * @self: a `GtkText`
- * @model: (allow-none): a `GMenuModel`
+ * @model: (nullable): a `GMenuModel`
  *
  * Sets a menu model to add when constructing
  * the context menu for @self.

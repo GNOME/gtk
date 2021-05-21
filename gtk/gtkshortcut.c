@@ -231,9 +231,9 @@ gtk_shortcut_new (GtkShortcutTrigger *trigger,
  * gtk_shortcut_new_with_arguments: (skip)
  * @trigger: (transfer full) (nullable): The trigger that will trigger the shortcut
  * @action: (transfer full) (nullable): The action that will be activated upon
- *    triggering
- * @format_string: (allow-none): GVariant format string for arguments or %NULL for
- *     no arguments
+ *   triggering
+ * @format_string: (nullable): GVariant format string for arguments or %NULL for
+ *   no arguments
  * @...: arguments, as given by format string.
  *
  * Creates a new `GtkShortcut` that is triggered by @trigger and then activates
@@ -296,7 +296,7 @@ gtk_shortcut_get_action (GtkShortcut *self)
  * gtk_shortcut_set_action: (attributes org.gtk.Method.set_property=action)
  * @self: a `GtkShortcut`
  * @action: (transfer full) (nullable): The new action.
- *     If the @action is %NULL, the nothing action will be used.
+ *   If the @action is %NULL, the nothing action will be used.
  *
  * Sets the new action for @self to be @action.
  */
@@ -336,7 +336,7 @@ gtk_shortcut_get_trigger (GtkShortcut *self)
  * gtk_shortcut_set_trigger: (attributes org.gtk.Method.set_property=trigger)
  * @self: a `GtkShortcut`
  * @trigger: (transfer full) (nullable): The new trigger.
- *     If the @trigger is %NULL, the never trigger will be used.
+ *   If the @trigger is %NULL, the never trigger will be used.
  *
  * Sets the new trigger for @self to be @trigger.
  */

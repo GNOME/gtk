@@ -38,7 +38,7 @@ G_BEGIN_DECLS
  * @GTK_DIALOG_MODAL: Make the constructed dialog modal
  * @GTK_DIALOG_DESTROY_WITH_PARENT: Destroy the dialog when its parent is destroyed
  * @GTK_DIALOG_USE_HEADER_BAR: Create dialog with actions in header
- *     bar instead of action area
+ *   bar instead of action area
  *
  * Flags used to influence dialog construction.
  */
@@ -52,7 +52,7 @@ typedef enum
 /**
  * GtkResponseType:
  * @GTK_RESPONSE_NONE: Returned if an action widget has no response id,
- *     or if the dialog gets programmatically hidden or destroyed
+ *   or if the dialog gets programmatically hidden or destroyed
  * @GTK_RESPONSE_REJECT: Generic response id, not used by GTK dialogs
  * @GTK_RESPONSE_ACCEPT: Generic response id, not used by GTK dialogs
  * @GTK_RESPONSE_DELETE_EVENT: Returned if the dialog is deleted

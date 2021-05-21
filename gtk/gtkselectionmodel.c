@@ -375,7 +375,7 @@ gtk_selection_model_select_item (GtkSelectionModel *model,
  * Requests to unselect an item in the model.
  *
  * Returns: %TRUE if this action was supported and no fallback should be
- *     tried. This does not mean the item was unselected.
+ *   tried. This does not mean the item was unselected.
  */
 gboolean
 gtk_selection_model_unselect_item (GtkSelectionModel *model,
@@ -399,7 +399,7 @@ gtk_selection_model_unselect_item (GtkSelectionModel *model,
  * Requests to select a range of items in the model.
  *
  * Returns: %TRUE if this action was supported and no fallback should be
- *     tried. This does not mean the range was selected.
+ *   tried. This does not mean the range was selected.
  */
 gboolean
 gtk_selection_model_select_range (GtkSelectionModel *model,
@@ -424,7 +424,7 @@ gtk_selection_model_select_range (GtkSelectionModel *model,
  * Requests to unselect a range of items in the model.
  *
  * Returns: %TRUE if this action was supported and no fallback should be
- *     tried. This does not mean the range was unselected.
+ *   tried. This does not mean the range was unselected.
  */
 gboolean
 gtk_selection_model_unselect_range (GtkSelectionModel *model,
@@ -446,7 +446,7 @@ gtk_selection_model_unselect_range (GtkSelectionModel *model,
  * Requests to select all items in the model.
  *
  * Returns: %TRUE if this action was supported and no fallback should be
- *     tried. This does not mean that all items are now selected.
+ *   tried. This does not mean that all items are now selected.
  */
 gboolean
 gtk_selection_model_select_all (GtkSelectionModel *model)
@@ -466,7 +466,7 @@ gtk_selection_model_select_all (GtkSelectionModel *model)
  * Requests to unselect all items in the model.
  *
  * Returns: %TRUE if this action was supported and no fallback should be
- *     tried. This does not mean that all items are now unselected.
+ *   tried. This does not mean that all items are now unselected.
  */
 gboolean
 gtk_selection_model_unselect_all (GtkSelectionModel *model)
@@ -482,8 +482,7 @@ gtk_selection_model_unselect_all (GtkSelectionModel *model)
 /**
  * gtk_selection_model_set_selection:
  * @model: a `GtkSelectionModel`
- * @selected: bitmask specifying if items should be selected or
- *     unselected
+ * @selected: bitmask specifying if items should be selected or unselected
  * @mask: bitmask specifying which items should be updated
  *
  * Make selection changes.
@@ -521,8 +520,8 @@ gtk_selection_model_unselect_all (GtkSelectionModel *model)
  * be selected.
  *
  * Returns: %TRUE if this action was supported and no fallback should be
- *     tried. This does not mean that all items were updated according
- *     to the inputs.
+ *   tried. This does not mean that all items were updated according
+ *   to the inputs.
  */
 gboolean
 gtk_selection_model_set_selection (GtkSelectionModel *model,

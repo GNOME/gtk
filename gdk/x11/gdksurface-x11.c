@@ -183,13 +183,13 @@ _gdk_x11_surface_get_toplevel (GdkSurface *surface)
  * @width: the new width of the surface
  * @height: the new height of the surface
  * @scale: the new scale of the surface
- * 
+ *
  * Updates the state of the surface (in particular the drawable's
  * cairo surface) when its size has changed.
  *
  * Returns: %TRUE if the surface was updated, %FALSE if no updates
- *     where necessary
- **/
+ *   where necessary
+ */
 static gboolean
 gdk_x11_surface_update_size (GdkX11Surface *self,
                              int            width,
@@ -3059,7 +3059,7 @@ gdk_x11_surface_set_user_time (GdkSurface *surface,
  * gdk_x11_surface_set_utf8_property:
  * @surface: (type GdkX11Surface): a #GdkSurface
  * @name: Property name, will be interned as an X atom
- * @value: (allow-none): Property value, or %NULL to delete
+ * @value: (nullable): Property value, or %NULL to delete
  *
  * This function modifies or removes an arbitrary X11 window
  * property of type UTF8_STRING.  If the given @surface is
@@ -4622,15 +4622,14 @@ timestamp_predicate (Display *display,
 
 /**
  * gdk_x11_get_server_time:
- * @surface: (type GdkX11Surface): a #GdkSurface, used for communication
- *          with the server.  The surface must have
- *          GDK_PROPERTY_CHANGE_MASK in its events mask or a hang will
- *          result.
+ * @surface: (type GdkX11Surface): a `GdkSurface`, used for communication
+ *   with the server. The surface must have `GDK_PROPERTY_CHANGE_MASK` in
+ *   its events mask or a hang will result.
  *
  * Routine to get the current X server time stamp.
  *
- * Returns: the time stamp.
- **/
+ * Returns: the time stamp
+ */
 guint32
 gdk_x11_get_server_time (GdkSurface *surface)
 {

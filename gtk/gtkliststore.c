@@ -1284,7 +1284,7 @@ gtk_list_store_insert (GtkListStore *list_store,
  * gtk_list_store_insert_before:
  * @list_store: A #GtkListStore
  * @iter: (out): An unset #GtkTreeIter to set to the new row
- * @sibling: (allow-none): A valid #GtkTreeIter, or %NULL
+ * @sibling: (nullable): A valid #GtkTreeIter
  *
  * Inserts a new row before @sibling. If @sibling is %NULL, then the row will 
  * be appended to the end of the list. @iter will be changed to point to this 
@@ -1320,7 +1320,7 @@ gtk_list_store_insert_before (GtkListStore *list_store,
  * gtk_list_store_insert_after:
  * @list_store: A #GtkListStore
  * @iter: (out): An unset #GtkTreeIter to set to the new row
- * @sibling: (allow-none): A valid #GtkTreeIter, or %NULL
+ * @sibling: (nullable): A valid #GtkTreeIter
  *
  * Inserts a new row after @sibling. If @sibling is %NULL, then the row will be
  * prepended to the beginning of the list. @iter will be changed to point to
@@ -1680,9 +1680,9 @@ gtk_list_store_reorder_func (GSequenceIter *a,
  * gtk_list_store_reorder:
  * @store: A #GtkListStore.
  * @new_order: (array zero-terminated=1): an array of integers mapping the new
- *      position of each child to its old position before the re-ordering,
- *      i.e. @new_order`[newpos] = oldpos`. It must have
- *      exactly as many items as the list store’s length.
+ *   position of each child to its old position before the re-ordering,
+ *   i.e. @new_order`[newpos] = oldpos`. It must have
+ *   exactly as many items as the list store’s length.
  *
  * Reorders @store to follow the order indicated by @new_order. Note that
  * this function only works with unsorted stores.
@@ -1840,7 +1840,7 @@ gtk_list_store_move_to (GtkListStore *store,
  * gtk_list_store_move_before:
  * @store: A #GtkListStore.
  * @iter: A #GtkTreeIter.
- * @position: (allow-none): A #GtkTreeIter, or %NULL.
+ * @position: (nullable): A #GtkTreeIter
  *
  * Moves @iter in @store to the position before @position. Note that this
  * function only works with unsorted stores. If @position is %NULL, @iter
@@ -1871,7 +1871,7 @@ gtk_list_store_move_before (GtkListStore *store,
  * gtk_list_store_move_after:
  * @store: A #GtkListStore.
  * @iter: A #GtkTreeIter.
- * @position: (allow-none): A #GtkTreeIter or %NULL.
+ * @position: (nullable): A #GtkTreeIter
  *
  * Moves @iter in @store to the position after @position. Note that this
  * function only works with unsorted stores. If @position is %NULL, @iter
@@ -2150,7 +2150,7 @@ gtk_list_store_has_default_sort_func (GtkTreeSortable *sortable)
  * @list_store: A #GtkListStore
  * @iter: (out) (optional): An unset #GtkTreeIter to set to the new row
  * @position: position to insert the new row, or -1 to append after existing
- *     rows
+ *    rows
  * @...: pairs of column number and value, terminated with -1
  *
  * Creates a new row at @position. @iter will be changed to point to this new

@@ -977,7 +977,7 @@ gtk_cell_view_set_value (GtkCellView     *cell_view,
 /**
  * gtk_cell_view_set_model:
  * @cell_view: a #GtkCellView
- * @model: (allow-none): a #GtkTreeModel
+ * @model: (nullable): a #GtkTreeModel
  *
  * Sets the model for @cell_view.  If @cell_view already has a model
  * set, it will remove it before setting the new model.  If @model is
@@ -1023,8 +1023,8 @@ gtk_cell_view_set_model (GtkCellView  *cell_view,
  * Returns the model for @cell_view. If no model is used %NULL is
  * returned.
  *
- * Returns: (nullable) (transfer none): a #GtkTreeModel used or %NULL
- **/
+ * Returns: (nullable) (transfer none): a #GtkTreeModel used
+ */
 GtkTreeModel *
 gtk_cell_view_get_model (GtkCellView *cell_view)
 {
@@ -1038,7 +1038,7 @@ gtk_cell_view_get_model (GtkCellView *cell_view)
 /**
  * gtk_cell_view_set_displayed_row:
  * @cell_view: a #GtkCellView
- * @path: (allow-none): a #GtkTreePath or %NULL to unset.
+ * @path: (nullable): a #GtkTreePath or %NULL to unset.
  *
  * Sets the row of the model that is currently displayed
  * by the #GtkCellView. If the path is unset, then the
@@ -1077,7 +1077,7 @@ gtk_cell_view_set_displayed_row (GtkCellView *cell_view,
  * displayed row. If no row is currently displayed, 
  * %NULL is returned.
  *
- * Returns: (nullable) (transfer full): the currently displayed row or %NULL
+ * Returns: (nullable) (transfer full): the currently displayed row
  */
 GtkTreePath *
 gtk_cell_view_get_displayed_row (GtkCellView *cell_view)

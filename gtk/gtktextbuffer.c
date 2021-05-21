@@ -1055,7 +1055,7 @@ gtk_text_buffer_get_property (GObject         *object,
 
 /**
  * gtk_text_buffer_new:
- * @table: (allow-none): a tag table, or %NULL to create a new one
+ * @table: (nullable): a tag table, or %NULL to create a new one
  *
  * Creates a new text buffer.
  *
@@ -2445,7 +2445,7 @@ gtk_text_buffer_set_mark (GtkTextBuffer     *buffer,
 /**
  * gtk_text_buffer_create_mark:
  * @buffer: a `GtkTextBuffer`
- * @mark_name: (allow-none): name for mark, or %NULL
+ * @mark_name: (nullable): name for mark
  * @where: location to place mark
  * @left_gravity: whether the mark has left gravity
  *
@@ -2615,7 +2615,7 @@ gtk_text_buffer_delete_mark (GtkTextBuffer *buffer,
  * Returns the mark named @name in buffer @buffer, or %NULL if no such
  * mark exists in the buffer.
  *
- * Returns: (nullable) (transfer none): a #GtkTextMark, or %NULL
+ * Returns: (nullable) (transfer none): a #GtkTextMark
  **/
 GtkTextMark*
 gtk_text_buffer_get_mark (GtkTextBuffer *buffer,
@@ -2826,8 +2826,8 @@ gtk_text_buffer_select_range (GtkTextBuffer     *buffer,
 /**
  * gtk_text_buffer_create_tag:
  * @buffer: a `GtkTextBuffer`
- * @tag_name: (allow-none): name of the new tag, or %NULL
- * @first_property_name: (allow-none): name of first property to set, or %NULL
+ * @tag_name: (nullable): name of the new tag
+ * @first_property_name: (nullable): name of first property to set
  * @...: %NULL-terminated list of property names and values
  *
  * Creates a tag and adds it to the tag table for @buffer.
@@ -3919,7 +3919,7 @@ remove_all_selection_clipboards (GtkTextBuffer *buffer)
  * gtk_text_buffer_paste_clipboard:
  * @buffer: a `GtkTextBuffer`
  * @clipboard: the `GdkClipboard` to paste from
- * @override_location: (allow-none): location to insert pasted text, or %NULL
+ * @override_location: (nullable): location to insert pasted text
  * @default_editable: whether the buffer is editable by default
  *
  * Pastes the contents of a clipboard.

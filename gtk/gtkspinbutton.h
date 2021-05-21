@@ -55,10 +55,10 @@ G_BEGIN_DECLS
 /**
  * GtkSpinButtonUpdatePolicy:
  * @GTK_UPDATE_ALWAYS: When refreshing your #GtkSpinButton, the value is
- *     always displayed
+ *   always displayed
  * @GTK_UPDATE_IF_VALID: When refreshing your #GtkSpinButton, the value is
- *     only displayed if it is valid within the bounds of the spin button's
- *     adjustment
+ *   only displayed if it is valid within the bounds of the spin button's
+ *   adjustment
  *
  * Determines whether the spin button displays values outside the adjustment
  * bounds.

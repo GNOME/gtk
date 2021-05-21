@@ -919,7 +919,7 @@ gtk_gesture_init (GtkGesture *gesture)
  *
  * This returns %NULL if the gesture is not being interacted.
  *
- * Returns: (nullable) (transfer none): a `GdkDevice`, or %NULL
+ * Returns: (nullable) (transfer none): a `GdkDevice`
  */
 GdkDevice *
 gtk_gesture_get_device (GtkGesture *gesture)
@@ -1226,9 +1226,9 @@ gtk_gesture_get_last_target (GtkGesture        *gesture,
 /**
  * gtk_gesture_get_point:
  * @gesture: a `GtkGesture`
- * @sequence: (allow-none): a `GdkEventSequence`, or %NULL for pointer events
- * @x: (out) (allow-none): return location for X axis of the sequence coordinates
- * @y: (out) (allow-none): return location for Y axis of the sequence coordinates
+ * @sequence: (nullable): a `GdkEventSequence`, or %NULL for pointer events
+ * @x: (out) (optional): return location for X axis of the sequence coordinates
+ * @y: (out) (optional): return location for Y axis of the sequence coordinates
  *
  * If @sequence is currently being interpreted by @gesture,
  * returns %TRUE and fills in @x and @y with the last coordinates
@@ -1450,7 +1450,7 @@ _gtk_gesture_check (GtkGesture *gesture)
 /**
  * gtk_gesture_handles_sequence:
  * @gesture: a `GtkGesture`
- * @sequence: (nullable): a `GdkEventSequence` or %NULL
+ * @sequence: (nullable): a `GdkEventSequence`
  *
  * Returns %TRUE if @gesture is currently handling events
  * corresponding to @sequence.

@@ -504,8 +504,8 @@ gdk_clipboard_is_local (GdkClipboard *clipboard)
  * If the @clipboard is empty or its contents are not owned by the
  * current process, %NULL will be returned.
  *
- * Returns: (transfer none) (nullable): The content of a clipboard or %NULL
- *     if the clipboard does not maintain any content.
+ * Returns: (transfer none) (nullable): The content of a clipboard
+ *   if the clipboard does not maintain any content
  */
 GdkContentProvider *
 gdk_clipboard_get_content (GdkClipboard *clipboard)
@@ -574,7 +574,7 @@ gdk_clipboard_store_async (GdkClipboard        *clipboard,
  * gdk_clipboard_store_finish:
  * @clipboard: a `GdkClipboard`
  * @result: a `GAsyncResult`
- * @error: a `GError` location to store the error occurring, or %NULL to ignore.
+ * @error: a `GError` location to store the error occurring
  *
  * Finishes an asynchronous clipboard store.
  *
@@ -676,15 +676,15 @@ gdk_clipboard_read_async (GdkClipboard        *clipboard,
  * gdk_clipboard_read_finish:
  * @clipboard: a `GdkClipboard`
  * @result: a `GAsyncResult`
- * @out_mime_type: (out) (allow-none) (transfer none): pointer to store
- *     the chosen mime type in or %NULL
- * @error: a `GError` location to store the error occurring, or %NULL to ignore.
+ * @out_mime_type: (out) (optional) (transfer none): pointer to store
+ *   the chosen mime type
+ * @error: a `GError` location to store the error occurring
  *
  * Finishes an asynchronous clipboard read.
  *
  * See [method@Gdk.Clipboard.read_async].
  *
- * Returns: (transfer full) (nullable): a `GInputStream` or %NULL on error.
+ * Returns: (transfer full) (nullable): a `GInputStream`
  */
 GInputStream *
 gdk_clipboard_read_finish (GdkClipboard  *clipboard,
@@ -872,7 +872,7 @@ gdk_clipboard_read_value_async (GdkClipboard        *clipboard,
  * gdk_clipboard_read_value_finish:
  * @clipboard: a `GdkClipboard`
  * @result: a `GAsyncResult`
- * @error: a GError` location to store the error occurring, or %NULL to ignore
+ * @error: a GError` location to store the error occurring
  *
  * Finishes an asynchronous clipboard read.
  *
@@ -931,13 +931,13 @@ gdk_clipboard_read_texture_async (GdkClipboard        *clipboard,
  * gdk_clipboard_read_texture_finish:
  * @clipboard: a `GdkClipboard`
  * @result: a `GAsyncResult`
- * @error: a `GError` location to store the error occurring, or %NULL to ignore
+ * @error: a `GError` location to store the error occurring
  *
  * Finishes an asynchronous clipboard read.
  *
  * See [method@Gdk.Clipboard.read_texture_async].
  *
- * Returns: (transfer full) (nullable): a new `GdkTexture` or %NULL on error
+ * Returns: (transfer full) (nullable): a new `GdkTexture`
  */
 GdkTexture *
 gdk_clipboard_read_texture_finish (GdkClipboard  *clipboard,
@@ -996,13 +996,13 @@ gdk_clipboard_read_text_async (GdkClipboard        *clipboard,
  * gdk_clipboard_read_text_finish:
  * @clipboard: a `GdkClipboard`
  * @result: a `GAsyncResult`
- * @error: a `GError` location to store the error occurring, or %NULL to ignore
+ * @error: a `GError` location to store the error occurring
  *
  * Finishes an asynchronous clipboard read.
  *
  * See [method@Gdk.Clipboard.read_text_async].
  *
- * Returns: (transfer full) (nullable): a new string or %NULL on error
+ * Returns: (transfer full) (nullable): a new string
  */
 char *
 gdk_clipboard_read_text_finish (GdkClipboard  *clipboard,
@@ -1194,8 +1194,8 @@ gdk_clipboard_claim_remote (GdkClipboard      *clipboard,
 /**
  * gdk_clipboard_set_content:
  * @clipboard: a `GdkClipboard`
- * @provider: (transfer none) (allow-none): the new contents of @clipboard or
- *     %NULL to clear the clipboard
+ * @provider: (transfer none) (nullable): the new contents of @clipboard
+ *   or %NULL to clear the clipboard
  *
  * Sets a new content provider on @clipboard.
  *
