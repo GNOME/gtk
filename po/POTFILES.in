@@ -41,6 +41,8 @@ gdk/x11/gdkdevicemanager-xi2.c
 gdk/x11/gdkdevice-xi2.c
 gdk/x11/gdkdrag-x11.c
 gdk/x11/gdkdrop-x11.c
+gdk/x11/gdkglcontext-egl.c
+gdk/x11/gdkglcontext-glx.c
 gdk/x11/gdkglcontext-x11.c
 gdk/x11/gdkmain-x11.c
 gdk/x11/gdkselectioninputstream-x11.c
