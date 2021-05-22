@@ -76,12 +76,16 @@ and in some cases a number as arguments.
 
 `lighter(Color)`
  : produces a brigher variant of Color
+
 `darker(Color)`
  : produces a darker variant of Color
+
 `shade(Color, Number)`
  : changes the lightness of Color. The number ranges from 0 for black to 2 for white.
+
 `alpha(Color, Number)`
  : replaces the alpha value of color with number (between 0 and 1)
+
 `mix(Color1, Color2, Number)`
  : interpolates between the two colors
 
