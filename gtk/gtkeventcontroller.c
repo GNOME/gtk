@@ -30,7 +30,7 @@
  * [method@Gtk.Widget.add_controller]. It is rarely necessary to
  * explicitly remove a controller with [method@Gtk.Widget.remove_controller].
  *
- * See the chapter of [input handling](input-handling.html) for
+ * See the chapter on [input handling](input-handling.html) for
  * an overview of the basic concepts, such as the capture and bubble
  * phases of even propagation.
  */
@@ -593,8 +593,9 @@ gtk_event_controller_get_target (GtkEventController *controller)
  * gtk_event_controller_get_current_event:
  * @controller: a `GtkEventController`
  *
- * Returns the event that is currently being handled by the
- * controller, and %NULL at other times.
+ * Returns the event that is currently being handled by the controller.
+ *
+ * At other times, %NULL is returned.
  *
  * Returns: (nullable) (transfer none): the event that is currently
  *   handled by @controller
@@ -612,7 +613,9 @@ gtk_event_controller_get_current_event (GtkEventController *controller)
  * @controller: a `GtkEventController`
  *
  * Returns the timestamp of the event that is currently being
- * handled by the controller, and 0 otherwise.
+ * handled by the controller.
+ *
+ * At other times, 0 is returned.
  *
  * Returns: timestamp of the event is currently handled by @controller
  */
@@ -632,7 +635,9 @@ gtk_event_controller_get_current_event_time (GtkEventController *controller)
  * @controller: a `GtkEventController`
  *
  * Returns the device of the event that is currently being
- * handled by the controller, and %NULL otherwise.
+ * handled by the controller.
+ *
+ * At other times, %NULL is returned.
  *
  * Returns: (nullable) (transfer none): device of the event is
  *   currently handled by @controller
@@ -653,7 +658,9 @@ gtk_event_controller_get_current_event_device (GtkEventController *controller)
  * @controller: a `GtkEventController`
  *
  * Returns the modifier state of the event that is currently being
- * handled by the controller, and 0 otherwise.
+ * handled by the controller.
+ *
+ * At other times, 0 is returned.
  *
  * Returns: modifier state of the event is currently handled by @controller
  */
