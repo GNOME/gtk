@@ -138,16 +138,18 @@ gtk_filter_match (GtkFilter *self,
  * gtk_filter_get_strictness:
  * @self: a `GtkFilter`
  *
- * Gets the known strictness of @filters. If the strictness is not known,
- * %GTK_FILTER_MATCH_SOME is returned.
+ * Gets the known strictness of @filters.
  *
- * This value may change after emission of the `GtkFilter::changed` signal.
+ * If the strictness is not known, %GTK_FILTER_MATCH_SOME is returned.
+ *
+ * This value may change after emission of the [signal@Gtk.Filter::changed]
+ * signal.
  *
  * This function is meant purely for optimization purposes, filters can
  * choose to omit implementing it, but `GtkFilterListModel` uses it.
  *
  * Returns: the strictness of @self
- **/
+ */
 GtkFilterMatch
 gtk_filter_get_strictness (GtkFilter *self)
 {
@@ -161,15 +163,18 @@ gtk_filter_get_strictness (GtkFilter *self)
  * @self: a `GtkFilter`
  * @change: How the filter changed
  *
- * Emits the `GtkFilter::changed` signal to notify all users of the filter that
- * the filter changed. Users of the filter should then check items again via
- * gtk_filter_match().
+ * Notifies all users of the filter that it has changed.
  *
- * Depending on the @change parameter, not all items need to be changed, but
- * only some. Refer to the `GtkFilterChange` documentation for details.
+ * This emits the [signal@Gtk.Filter::changed] signal. Users
+ * of the filter should then check items again via
+ * [method@Gtk.Filter.match].
  *
- * This function is intended for implementors of `GtkFilter` subclasses and
- * should not be called from other functions.
+ * Depending on the @change parameter, not all items need to
+ * be changed, but only some. Refer to the [enum@Gtk.FilterChange]
+ * documentation for details.
+ *
+ * This function is intended for implementors of `GtkFilter`
+ * subclasses and should not be called from other functions.
  */
 void
 gtk_filter_changed (GtkFilter       *self,
