@@ -3522,8 +3522,8 @@ gtk_widget_get_surface_allocation (GtkWidget     *widget,
  * gtk_widget_queue_draw:
  * @widget: a `GtkWidget`
  *
- * Schedules this widget to be redrawn in paint phase of the
- * current or the next frame.
+ * Schedules this widget to be redrawn in the paint phase
+ * of the current or the next frame.
  *
  * This means @widget's [vfunc@Gtk.Widget.snapshot]
  * implementation will be called.
@@ -4435,7 +4435,9 @@ gtk_widget_class_add_shortcut (GtkWidgetClass *widget_class,
  * @widget: a `GtkWidget`
  * @group_cycling: %TRUE if there are other widgets with the same mnemonic
  *
- * Emits the `GtkWidget`::mnemonic-activate signal.
+ * Emits the ::mnemonic-activate signal.
+ *
+ * See [signal@Gtk.Widget::mnemonic-activate].
  *
  * Returns: %TRUE if the signal has been handled
  */
@@ -4463,8 +4465,9 @@ gtk_widget_mnemonic_activate (GtkWidget *widget,
  * gtk_widget_can_activate:
  * @self: a `GtkWidget`
  *
- * Checks whether a `GtkWidget` can be activated using
- * gtk_widget_activate().
+ * Checks whether a `GtkWidget` can be activated.
+ *
+ * To activate a widget, use [method@Gtk.Widget.activate].
  */
 gboolean
 gtk_widget_can_activate (GtkWidget *self)
@@ -4757,8 +4760,10 @@ gtk_widget_event (GtkWidget *widget,
  * gtk_widget_class_get_activate_signal:
  * @widget_class: a `GtkWidgetClass`
  *
- * Retrieves the signal id for the activation signal set using
- * gtk_widget_class_set_activate_signal().
+ * Retrieves the signal id for the activation signal.
+ *
+ * the activation signal is set using
+ * [method@Gtk.WidgetClass.set_activate_signal].
  *
  * Returns: a signal id, or 0 if the widget class does not
  *   specify an activation signal
@@ -4776,12 +4781,12 @@ gtk_widget_class_get_activate_signal (GtkWidgetClass *widget_class)
  * @widget_class: a `GtkWidgetClass`
  * @signal_id: the id for the activate signal
  *
- * Sets the GtkWidgetClass.activate_signal field with the
+ * Sets the `GtkWidgetClass.activate_signal` field with the
  * given @signal_id.
  *
  * The signal will be emitted when calling [method@Gtk.Widget.activate].
  *
- * The @signal_id must have been registered with g_signal_new()
+ * The @signal_id must have been registered with `g_signal_new()`
  * or g_signal_newv() before calling this function.
  */
 void
@@ -4799,7 +4804,7 @@ gtk_widget_class_set_activate_signal (GtkWidgetClass *widget_class,
  * @widget_class: a `GtkWidgetClass`
  * @signal_name: the name of the activate signal of @widget_type
  *
- * Sets the GtkWidgetClass.activate_signal field with the signal id for
+ * Sets the `GtkWidgetClass.activate_signal` field with the signal id for
  * the given @signal_name.
  *
  * The signal will be emitted when calling [method@Gtk.Widget.activate].
@@ -4838,8 +4843,8 @@ gtk_widget_class_set_activate_signal_from_name (GtkWidgetClass *widget_class,
  * The activation will emit the signal set using
  * [method@Gtk.WidgetClass.set_activate_signal] during class initialization.
  *
- * Activation is what happens when you press Enter on a widget during
- * key navigation.
+ * Activation is what happens when you press <kbd>Enter</kbd>
+ * on a widget during key navigation.
  *
  * If you wish to handle the activation keybinding yourself, it is
  * recommended to use [method@Gtk.WidgetClass.add_shortcut] with an action
