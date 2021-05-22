@@ -7072,7 +7072,7 @@ gtk_text_view_set_overwrite (GtkTextView *text_view,
  *    character, %FALSE, if pressing the Tab key should move the
  *    keyboard focus.
  *
- * Sets the behavior of the text widget when the Tab key is pressed.
+ * Sets the behavior of the text widget when the <kbd>Tab</kbd> key is pressed.
  *
  * If @accepts_tab is %TRUE, a tab character is inserted. If @accepts_tab
  * is %FALSE the keyboard focus is moved to the next widget in the focus
@@ -7098,7 +7098,7 @@ gtk_text_view_set_accepts_tab (GtkTextView *text_view,
  * gtk_text_view_get_accepts_tab: (attributes org.gtk.Method.get_property=accepts-tab)
  * @text_view: A `GtkTextView`
  *
- * Returns whether pressing the Tab key inserts a tab characters.
+ * Returns whether pressing the <kbd>Tab</kbd> key inserts a tab characters.
  *
  * See [method@Gtk.TextView.set_accepts_tab].
  *
