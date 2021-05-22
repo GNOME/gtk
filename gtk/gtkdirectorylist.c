@@ -847,8 +847,11 @@ gtk_directory_list_get_error (GtkDirectoryList *self)
  * @monitored: %TRUE to monitor the directory for changes
  *
  * Sets whether the directory list will monitor the directory
- * for changes. If monitoring is enabled, the ::items-changed
- * signal will be emitted when the directory contents change.
+ * for changes.
+ *
+ * If monitoring is enabled, the ::items-changed signal will
+ * be emitted when the directory contents change.
+ *
  *
  * When monitoring is turned on after the initial creation
  * of the directory list, the directory is reloaded to avoid
