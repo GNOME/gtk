@@ -25,8 +25,8 @@
  *
  * Most common shortcuts are using this controller implicitly, e.g. by
  * adding a mnemonic underline to a `GtkLabel`, or by installing a key
- * binding using gtk_widget_class_add_binding(), or by adding accelerators
- * to global actions using gtk_application_set_accels_for_action().
+ * binding using [method@Gtk.WidgetClass.add_binding], or by adding accelerators
+ * to global actions using [method@Gtk.Application.set_accels_for_action].
  *
  * But it is possible to create your own shortcut controller, and add
  * shortcuts to it.
@@ -47,7 +47,7 @@
  *         <property name='scope'>managed</property>
  *         <child>
  *           <object class='GtkShortcut'>
- *             <property name='trigger'>&amp;lt;Control&amp;gt;k</property>
+ *             <property name='trigger'>&lt;Control&gt;k</property>
  *             <property name='action'>activate</property>
  *           </object>
  *         </child>
@@ -842,8 +842,9 @@ gtk_shortcut_controller_set_scope (GtkShortcutController *self,
  * gtk_shortcut_controller_get_scope: (attributes org.gtk.Method.get_property=scope)
  * @self: a `GtkShortcutController`
  *
- * Gets the scope for when this controller activates its shortcuts. See
- * gtk_shortcut_controller_set_scope() for details.
+ * Gets the scope for when this controller activates its shortcuts.
+ *
+ * See [method@Gtk.ShortcutController.set_scope] for details.
  *
  * Returns: the controller's scope
  */
@@ -860,7 +861,7 @@ gtk_shortcut_controller_get_scope (GtkShortcutController *self)
  * @self: a `GtkShortcutController`
  * @modifiers: the new mnemonics_modifiers to use
  *
- * Sets the controller to have the given @mnemonics_modifiers.
+ * Sets the controller to use the given modifier for mnemonics.
  *
  * The mnemonics modifiers determines which modifiers need to be pressed to allow
  * activation of shortcuts with mnemonics triggers.
