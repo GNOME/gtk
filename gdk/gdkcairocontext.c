@@ -34,8 +34,8 @@
  * draw context.
  *
  * `GdkCairoContext`s are created for a surface using
- * [method@Gdk.Surface.create_cairo_context], and the context can then be used
- * to draw on that surface.
+ * [method@Gdk.Surface.create_cairo_context], and the context
+ * can then be used to draw on that surface.
  */
 
 typedef struct _GdkCairoContextPrivate GdkCairoContextPrivate;
@@ -70,9 +70,8 @@ gdk_cairo_context_init (GdkCairoContext *self)
  * The returned context is guaranteed to be valid until
  * [method@Gdk.DrawContext.end_frame] is called.
  *
- * Returns: (transfer full) (nullable): a Cairo context to be used
- *   to draw the contents of the `GdkSurface`. %NULL is returned
- *   when @context is not drawing.
+ * Returns: (transfer full) (nullable): a Cairo context
+ *   to draw on `GdkSurface
  */
 cairo_t *
 gdk_cairo_context_cairo_create (GdkCairoContext *self)

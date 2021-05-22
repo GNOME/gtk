@@ -84,8 +84,8 @@ G_DEFINE_BOXED_TYPE (GdkContentFormats, gdk_content_formats,
  * If @string is not a valid mime type, %NULL is returned instead.
  * See RFC 2048 for the syntax if mime types.
  *
- * Returns: An interned string for the canonicalized mime type
- *   or %NULL if the string wasn't a valid mime type
+ * Returns: (nullable): An interned string for the canonicalized
+ *   mime type or %NULL if the string wasn't a valid mime type
  */
 const char *
 gdk_intern_mime_type (const char *string)
@@ -133,7 +133,7 @@ gdk_content_formats_new_take (GType *      gtypes,
  *
  * The mime types must be valid and different from each other or the
  * behavior of the return value is undefined. If you cannot guarantee
- * this, use `GdkContentFormatsBuilder` instead.
+ * this, use [struct@Gdk.ContentFormatsBuilder] instead.
  *
  * Returns: (transfer full): the new `GdkContentFormats`.
  */

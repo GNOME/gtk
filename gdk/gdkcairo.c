@@ -287,7 +287,7 @@ _gdk_cairo_surface_extents (cairo_surface_t *surface,
  * This function takes into account device offsets that might be
  * set with cairo_surface_set_device_offset().
  *
- * Returns: A `cairo_region_t`; must be freed with cairo_region_destroy()
+ * Returns: (transfer full): A `cairo_region_t`
  */
 cairo_region_t *
 gdk_cairo_region_create_from_surface (cairo_surface_t *surface)

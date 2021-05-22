@@ -87,6 +87,7 @@
  * GDK_DISABLE_DEPRECATION_WARNINGS:
  *
  * A macro that should be defined before including the gdk.h header.
+ *
  * If it is defined, no compiler warnings will be produced for uses
  * of deprecated GDK APIs.
  */

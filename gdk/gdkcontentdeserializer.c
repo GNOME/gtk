@@ -190,9 +190,9 @@ gdk_content_deserializer_get_mime_type (GdkContentDeserializer *deserializer)
  * gdk_content_deserializer_get_gtype:
  * @deserializer: a `GdkContentDeserializer`
  *
- * Gets the GType to create an instance of.
+ * Gets the `GType` to create an instance of.
  *
- * Returns: the GType for the current operation
+ * Returns: the `GType` for the current operation
  */
 GType
 gdk_content_deserializer_get_gtype (GdkContentDeserializer *deserializer)
@@ -224,7 +224,7 @@ gdk_content_deserializer_get_value (GdkContentDeserializer *deserializer)
  *
  * Gets the input stream for the current operation.
  *
- * This is the stream that was passed to [func@content_deserialize_async].
+ * This is the stream that was passed to [func@Gdk.content_deserialize_async].
  *
  * Returns: (transfer none): the input stream for the current operation
  */
@@ -242,7 +242,7 @@ gdk_content_deserializer_get_input_stream (GdkContentDeserializer *deserializer)
  *
  * Gets the I/O priority for the current operation.
  *
- * This is the priority that was passed to [funccontent_deserialize_async].
+ * This is the priority that was passed to [func@Gdk.content_deserialize_async].
  *
  * Returns: the I/O priority for the current operation
  */
@@ -260,7 +260,7 @@ gdk_content_deserializer_get_priority (GdkContentDeserializer *deserializer)
  *
  * Gets the cancellable for the current operation.
  *
- * This is the `GCancellable` that was passed to [func@content_deserialize_async].
+ * This is the `GCancellable` that was passed to [func@Gdk.content_deserialize_async].
  *
  * Returns: (transfer none): the cancellable for the current operation
  */
@@ -539,7 +539,7 @@ deserialize_not_found (GdkContentDeserializer *deserializer)
  * indicate a higher priority.
  *
  * When the operation is finished, @callback will be called. You must then
- * call [func@content_deserialize_finish] to get the result of the operation.
+ * call [func@Gdk.content_deserialize_finish] to get the result of the operation.
  */
 void
 gdk_content_deserialize_async (GInputStream        *stream,
