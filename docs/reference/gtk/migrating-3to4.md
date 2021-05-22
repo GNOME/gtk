@@ -217,8 +217,8 @@ using `GMainContext` APIs. The replacement for `gtk_events_pending()` is
 `g_main_context_pending()`, the replacement for `gtk_main_iteration()` is
 `g_main_context_iteration()`.
 
-Here is a replacement that will iterate the default main loop until
-all windows have been closed:
+In GTK 4, you can use this replacement that will iterate the default main loop
+until all windows have been closed:
 
 ```
 while (g_list_model_get_n_items (gtk_window_get_toplevels ()) > 0)
@@ -1215,7 +1215,7 @@ controller, [class@Gtk.DragSource]. Instead of calling `gtk_drag_source_set()`
 and connecting to `GtkWidget` signals, you create a [class@Gtk.DragSource] object,
 attach it to the widget with [method@Gtk.Widget.add_controller], and connect
 to `GtkDragSource` signals. Instead of calling `gtk_drag_begin()` on a widget
-to start a drag manually, call [type_func@Gdk.Drag.begin].
+to start a drag manually, call [func@Gdk.Drag.begin].
 The `::drag-data-get` signal has been replaced by the [signal@Gtk.DragSource::prepare]
 signal, which returns a [class@Gdk.ContentProvider] for the drag operation.
 
