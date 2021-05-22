@@ -314,15 +314,15 @@ gtk_sorter_get_keys (GtkSorter *self)
  * @self: a `GtkSorter`
  * @change: How the sorter changed
  *
- * Emits the [signal@Gtk.Sorter::changed] signal to notify all users
- * of the sorter that it has changed.
+ * Notifies all users of the sorter that it has changed.
  *
- * Users of the sorter should then update the sort order via
- * gtk_sorter_compare().
+ * This emits the [signal@Gtk.Sorter::changed] signal. Users
+ * of the sorter should then update the sort order via
+ * [method@Gtk.Sorter.compare].
  *
- * Depending on the @change parameter, it may be possible to update
- * the sort order without a full resorting. Refer to the
- * [enum@Gtk.SorterChange] documentation for details.
+ * Depending on the @change parameter, it may be possible to
+ * update the sort order without a full resorting. Refer to
+ * the [enum@Gtk.SorterChange] documentation for details.
  *
  * This function is intended for implementors of `GtkSorter`
  * subclasses and should not be called from other functions.
