@@ -1727,7 +1727,7 @@ gtk_text_buffer_real_insert_range (GtkTextBuffer     *buffer,
  * images and tags. If @start and @end are in a different buffer from
  * @buffer, the two buffers must share the same tag table.
  *
- * Implemented via emissions of the insert_text and apply_tag signals,
+ * Implemented via emissions of the ::insert-text and ::apply-tag signals,
  * so expect those.
  */
 void
@@ -2466,8 +2466,8 @@ gtk_text_buffer_set_mark (GtkTextBuffer     *buffer,
  * return value if you like. Marks are owned by the buffer and go
  * away when the buffer does.
  *
- * Emits the `GtkTextBuffer`::mark-set signal as notification of
- * the mark's initial placement.
+ * Emits the [signal@Gtk.TextBuffer::mark-set] signal as notification
+ * of the mark's initial placement.
  *
  * Returns: (transfer none): the new `GtkTextMark` object
  */
@@ -2495,8 +2495,8 @@ gtk_text_buffer_create_mark (GtkTextBuffer     *buffer,
  * is not %NULL then there must not be another mark in the buffer
  * with the same name.
  *
- * Emits the `GtkTextBuffer`::mark-set signal as notification of
- * the mark's initial placement.
+ * Emits the [signal@Gtk.TextBuffer::mark-set] signal as notification
+ * of the mark's initial placement.
  */
 void
 gtk_text_buffer_add_mark (GtkTextBuffer     *buffer,
@@ -2529,8 +2529,8 @@ gtk_text_buffer_add_mark (GtkTextBuffer     *buffer,
  *
  * Moves @mark to the new location @where.
  *
- * Emits the `GtkTextBuffer`::mark-set
- * signal as notification of the move.
+ * Emits the [signal@Gtk.TextBuffer::mark-set] signal
+ * as notification of the move.
  */
 void
 gtk_text_buffer_move_mark (GtkTextBuffer     *buffer,
@@ -5010,8 +5010,8 @@ gtk_text_buffer_set_enable_undo (GtkTextBuffer *buffer,
  * [method@Gtk.TextBuffer.end_irreversible_action] after the irreversible
  * action has completed.
  *
- * You may nest calls to gtk_text_buffer_begin_irreversible_action() and
- * gtk_text_buffer_end_irreversible_action() pairs.
+ * You may nest calls to gtk_text_buffer_begin_irreversible_action()
+ * and gtk_text_buffer_end_irreversible_action() pairs.
  */
 void
 gtk_text_buffer_begin_irreversible_action (GtkTextBuffer *buffer)
@@ -5031,11 +5031,11 @@ gtk_text_buffer_begin_irreversible_action (GtkTextBuffer *buffer)
  * queue to be cleared.
  *
  * This should be called after completing modifications to the
- * text buffer after gtk_text_buffer_begin_irreversible_action()
+ * text buffer after [method@Gtk.TextBuffer.begin_irreversible_action]
  * was called.
  *
- * You may nest calls to gtk_text_buffer_begin_irreversible_action() and
- * gtk_text_buffer_end_irreversible_action() pairs.
+ * You may nest calls to gtk_text_buffer_begin_irreversible_action()
+ * and gtk_text_buffer_end_irreversible_action() pairs.
  */
 void
 gtk_text_buffer_end_irreversible_action (GtkTextBuffer *buffer)
