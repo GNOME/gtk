@@ -34,6 +34,34 @@
 
 G_BEGIN_DECLS
 
+/**
+ * GtkDebugFlags:
+ * @GTK_DEBUG_TEXT: Information about GtkTextView
+ * @GTK_DEBUG_TREE: Information about GtkTreeView
+ * @GTK_DEBUG_KEYBINDINGS: Information about keyboard shortcuts
+ * @GTK_DEBUG_MODULES: Information about modules and extensions
+ * @GTK_DEBUG_GEOMETRY: Information about size allocation
+ * @GTK_DEBUG_ICONTHEME: Information about icon themes
+ * @GTK_DEBUG_PRINTING: Information about printing
+ * @GTK_DEBUG_BUILDER: Trace GtkBuilder operation
+ * @GTK_DEBUG_SIZE_REQUEST: Information about size requests
+ * @GTK_DEBUG_NO_CSS_CACHE: Disable the style property cache
+ * @GTK_DEBUG_INTERACTIVE: Open the GTK inspector
+ * @GTK_DEBUG_TOUCHSCREEN: Pretend the pointer is a touchscreen
+ * @GTK_DEBUG_ACTIONS: Information about actions and menu models
+ * @GTK_DEBUG_LAYOUT: Information from layout managers
+ * @GTK_DEBUG_SNAPSHOT: Include debug render nodes in the generated snapshots
+ * @GTK_DEBUG_CONSTRAINTS: Information from the constraints solver
+ * @GTK_DEBUG_BUILDER_OBJECTS: Log unused GtkBuilder objects
+ * @GTK_DEBUG_A11Y: Information about accessibility state changes
+ * @GTK_DEBUG_ICONFALLBACK: Information about icon fallback
+ *
+ * Flags to use with gtk_set_debug_flags().
+ *
+ * Settings these flags causes GTK to print out different
+ * types of debugging information. Some of these flags are
+ * only available when GTK has been configured with `-Ddebug=true`.
+ */
 typedef enum {
   GTK_DEBUG_TEXT            = 1 <<  0,
   GTK_DEBUG_TREE            = 1 <<  1,
