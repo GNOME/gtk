@@ -311,7 +311,7 @@ gtk_tree_expander_focus (GtkWidget        *widget,
   if (gtk_widget_is_focus (widget))
     return FALSE;
 
-  if (!gtk_widget_get_can_focus (widget))
+  if (!gtk_widget_get_focusable (widget))
     return FALSE;
 
   gtk_widget_grab_focus (widget);

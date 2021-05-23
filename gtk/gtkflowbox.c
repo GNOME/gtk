@@ -337,8 +337,8 @@ gtk_flow_box_child_focus (GtkWidget        *widget,
   GtkWidget *child = priv->child;
   gboolean had_focus = FALSE;
 
-  /* Without "can-focus" flag try to pass the focus to the child immediately */
-  if (!gtk_widget_get_can_focus (widget))
+  /* Without "focusable" flag try to pass the focus to the child immediately */
+  if (!gtk_widget_get_focusable (widget))
     {
       if (child)
         {
@@ -3383,10 +3383,10 @@ gtk_flow_box_move_cursor (GtkFlowBox      *box,
       return TRUE;
     }
 
-  /* If the child has its "can-focus" property set to FALSE then it will
+  /* If the child has its "focusable" property set to FALSE then it will
    * not grab the focus. We must pass the focus to its child directly.
    */
-  if (!gtk_widget_get_can_focus (GTK_WIDGET (child)))
+  if (!gtk_widget_get_focusable (GTK_WIDGET (child)))
     {
       GtkWidget *subchild;
 

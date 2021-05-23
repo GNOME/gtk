@@ -184,7 +184,7 @@ gtk_toggle_button_mnemonic_activate (GtkWidget *widget,
    * gtk_widget_real_mnemonic_activate() in order to focus the widget even
    * if there is no mnemonic conflict.
    */
-  if (gtk_widget_get_can_focus (widget))
+  if (gtk_widget_get_focusable (widget))
     gtk_widget_grab_focus (widget);
 
   if (!group_cycling)
