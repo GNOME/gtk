@@ -37,7 +37,7 @@ G_BEGIN_DECLS
 /**
  * GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID:
  *
- * Uses the default sort function in a [interface@Gtk.TreeSortable].
+ * Uses the default sort function in a [iface@Gtk.TreeSortable].
  *
  * See also: [method@Gtk.TreeSortable.set_sort_column_id]
  */
@@ -46,7 +46,7 @@ G_BEGIN_DECLS
 /**
  * GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID:
  *
- * Disables sorting in a [interface@Gtk.TreeSortable].
+ * Disables sorting in a [iface@Gtk.TreeSortable].
  *
  * See also: [method@Gtk.TreeSortable.set_sort_column_id]
  */
