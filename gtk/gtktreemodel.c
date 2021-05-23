@@ -1249,8 +1249,10 @@ gtk_tree_model_get_column_type (GtkTreeModel *tree_model,
  * @iter: (out): the uninitialized `GtkTreeIter`
  * @path: the `GtkTreePath`
  *
- * Sets @iter to a valid iterator pointing to @path.  If @path does
- * not exist, @iter is set to an invalid iterator and %FALSE is returned.
+ * Sets @iter to a valid iterator pointing to @path.
+ *
+ * If @path does not exist, @iter is set to an invalid
+ * iterator and %FALSE is returned.
  *
  * Returns: %TRUE, if @iter was set
  */
@@ -1281,7 +1283,9 @@ gtk_tree_model_get_iter (GtkTreeModel *tree_model,
  * @path_string: a string representation of a `GtkTreePath`
  *
  * Sets @iter to a valid iterator pointing to @path_string, if it
- * exists. Otherwise, @iter is left invalid and %FALSE is returned.
+ * exists.
+ *
+ * Otherwise, @iter is left invalid and %FALSE is returned.
  *
  * Returns: %TRUE, if @iter was set
  */
@@ -1346,8 +1350,9 @@ gtk_tree_model_get_string_from_iter (GtkTreeModel *tree_model,
  * @iter: (out): the uninitialized `GtkTreeIter`
  *
  * Initializes @iter with the first iterator in the tree
- * (the one at the path "0") and returns %TRUE. Returns
- * %FALSE if the tree is empty.
+ * (the one at the path "0").
+ *
+ * Returns %FALSE if the tree is empty, %TRUE otherwise.
  *
  * Returns: %TRUE, if @iter was set
  */
@@ -1735,6 +1740,7 @@ gtk_tree_model_unref_node (GtkTreeModel *tree_model,
  *   terminated by -1
  *
  * Gets the value of one or more cells in the row referenced by @iter.
+ *
  * The variable argument list should contain integer column numbers,
  * each column number followed by a place to store the value being
  * retrieved.  The list is terminated by a -1. For example, to get a
@@ -1768,7 +1774,9 @@ gtk_tree_model_get (GtkTreeModel *tree_model,
  * @iter: a row in @tree_model
  * @var_args: va_list of column/return location pairs
  *
- * See gtk_tree_model_get(), this version takes a va_list
+ * Gets the value of one or more cells in the row referenced by @iter.
+ *
+ * See [method@Gtk.TreeModel.get], this version takes a va_list
  * for language bindings to use.
  */
 void
@@ -1820,7 +1828,9 @@ gtk_tree_model_get_valist (GtkTreeModel *tree_model,
  * @path: a `GtkTreePath` pointing to the changed row
  * @iter: a valid `GtkTreeIter` pointing to the changed row
  *
- * Emits the `GtkTreeModel::row-changed` signal on @tree_model.
+ * Emits the ::row-changed signal on @tree_model.
+ *
+ * See [signal@Gtk.TreeModel::row-changed].
  */
 void
 gtk_tree_model_row_changed (GtkTreeModel *tree_model,
@@ -1840,7 +1850,9 @@ gtk_tree_model_row_changed (GtkTreeModel *tree_model,
  * @path: a `GtkTreePath` pointing to the inserted row
  * @iter: a valid `GtkTreeIter` pointing to the inserted row
  *
- * Emits the `GtkTreeModel::row-inserted` signal on @tree_model.
+ * Emits the ::row-inserted signal on @tree_model.
+ *
+ * See [signal@Gtk.TreeModel::row-inserted].
  */
 void
 gtk_tree_model_row_inserted (GtkTreeModel *tree_model,
@@ -1860,8 +1872,11 @@ gtk_tree_model_row_inserted (GtkTreeModel *tree_model,
  * @path: a `GtkTreePath` pointing to the changed row
  * @iter: a valid `GtkTreeIter` pointing to the changed row
  *
- * Emits the `GtkTreeModel::row-has-child-toggled` signal on
- * @tree_model. This should be called by models after the child
+ * Emits the ::row-has-child-toggled signal on @tree_model.
+ *
+ * See [signal@Gtk.TreeModel::row-has-child-toggled].
+ *
+ * This should be called by models after the child
  * state of a node changes.
  */
 void
@@ -1882,7 +1897,9 @@ gtk_tree_model_row_has_child_toggled (GtkTreeModel *tree_model,
  * @path: a `GtkTreePath` pointing to the previous location of
  *   the deleted row
  *
- * Emits the `GtkTreeModel`::row-deleted signal on @tree_model.
+ * Emits the ::row-deleted signal on @tree_model.
+ *
+ * See [signal@Gtk.TreeModel::row-deleted].
  *
  * This should be called by models after a row has been removed.
  * The location pointed to by @path should be the location that
@@ -1914,6 +1931,8 @@ gtk_tree_model_row_deleted (GtkTreeModel *tree_model,
  *
  * Emits the ::rows-reordered signal on @tree_model.
  *
+ * See [signal@Gtk.TreeModel::rows-reordered].
+ *
  * This should be called by models when their rows have been
  * reordered.
  */
@@ -1944,6 +1963,8 @@ gtk_tree_model_rows_reordered (GtkTreeModel *tree_model,
  * @length: length of @new_order array
  *
  * Emits the ::rows-reordered signal on @tree_model.
+ *
+ * See [signal@Gtk.TreeModel::rows-reordered].
  *
  * This should be called by models when their rows have been
  * reordered.
@@ -2007,7 +2028,7 @@ gtk_tree_model_foreach_helper (GtkTreeModel            *model,
  * @func: (scope call): a function to be called on each row
  * @user_data: (closure): user data to passed to @func
  *
- * Calls func on each node in model in a depth-first fashion.
+ * Calls @func on each node in model in a depth-first fashion.
  *
  * If @func returns %TRUE, then the tree ceases to be walked,
  * and gtk_tree_model_foreach() returns.
@@ -2516,7 +2537,7 @@ gtk_tree_row_reference_free (GtkTreeRowReference *reference)
  *
  * Lets a set of row reference created by
  * gtk_tree_row_reference_new_proxy() know that the
- * model emitted the `GtkTreeModel`::row-inserted signal.
+ * model emitted the ::row-inserted signal.
  */
 void
 gtk_tree_row_reference_inserted (GObject     *proxy,
@@ -2534,7 +2555,7 @@ gtk_tree_row_reference_inserted (GObject     *proxy,
  *
  * Lets a set of row reference created by
  * gtk_tree_row_reference_new_proxy() know that the
- * model emitted the `GtkTreeModel`::row-deleted signal.
+ * model emitted the ::row-deleted signal.
  */
 void
 gtk_tree_row_reference_deleted (GObject     *proxy,
@@ -2554,7 +2575,7 @@ gtk_tree_row_reference_deleted (GObject     *proxy,
  *
  * Lets a set of row reference created by
  * gtk_tree_row_reference_new_proxy() know that the
- * model emitted the `GtkTreeModel`::rows-reordered signal.
+ * model emitted the ::rows-reordered signal.
  */
 void
 gtk_tree_row_reference_reordered (GObject     *proxy,
