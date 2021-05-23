@@ -28,8 +28,8 @@ At the lowest level, physical keys on the keyboard are represented by
 numeric keycodes, and GDK knows how to translate these keycodes into
 key values according to the configured keyboard layout and the current
 state of the keyboard. In the GDK api, the mapping from keycodes to key
-values is available via [`method@Gdk.Display.map_keycode`], and the reverse
-mapping is available via [`method@Gdk.Display.map_keyval`]. The results of
+values is available via [method@Gdk.Display.map_keycode], and the reverse
+mapping is available via [method@Gdk.Display.map_keyval]. The results of
 these functions are returned in [struct@Gdk.KeymapKey] structures.
 
 You can think of a [struct@Gdk.KeymapKey] as a representation of a symbol

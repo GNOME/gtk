@@ -48,7 +48,7 @@
  *
  * `GdkContentFormats` is an immutable struct. After creation, you cannot change
  * the types it represents. Instead, new `GdkContentFormats` have to be created.
- * The [struct@Gdk.ContentFormatsBuilder]` structure is meant to help in this
+ * The [struct@Gdk.ContentFormatsBuilder] structure is meant to help in this
  * endeavor.
  */
 
