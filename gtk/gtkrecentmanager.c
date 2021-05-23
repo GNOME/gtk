@@ -720,7 +720,7 @@ build_recent_items_list (GtkRecentManager *manager)
  * signal each time something inside the list changes.
  *
  * `GtkRecentManager` objects are expensive: be sure to create them
- * only when needed. You should use [type_func@Gtk.RecentManager.get_default]
+ * only when needed. You should use [func@Gtk.RecentManager.get_default]
  * instead.
  *
  * Returns: A newly created `GtkRecentManager` object

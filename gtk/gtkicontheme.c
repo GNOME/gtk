@@ -1642,7 +1642,7 @@ gtk_icon_theme_add_resource_path (GtkIconTheme *self,
  * overriding system configuration.
  *
  * This function cannot be called on the icon theme objects returned
- * from [type_func@Gtk.IconTheme.get_for_display].
+ * from [func@Gtk.IconTheme.get_for_display].
  */
 void
 gtk_icon_theme_set_theme_name (GtkIconTheme *self,

@@ -62,7 +62,7 @@
  * [method@Gtk.CssProvider.load_from_file] or
  * [method@Gtk.CssProvider.load_from_resource]
  * and adding the provider with [method@Gtk.StyleContext.add_provider] or
- * [type_func@Gtk.StyleContext.add_provider_for_display].
+ * [func@Gtk.StyleContext.add_provider_for_display].
 
  * In addition, certain files will be read when GTK is initialized.
  * First, the file `$XDG_CONFIG_HOME/gtk-4.0/gtk.css` is loaded if it

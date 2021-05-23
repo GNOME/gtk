@@ -380,7 +380,7 @@ the question you have, this list is a good place to start.
         }
 
     in a CSS file, loading it with [method@Gtk.CssProvider.load_from_file], and
-    adding the provider with [type_func@Gtk.StyleContext.add_provider_for_display].
+    adding the provider with [func@Gtk.StyleContext.add_provider_for_display].
     To associate this style information with your widget, set a style class
     on the widget using [method@Gtk.Widget.add_css_class]. The advantage
     of this approach is that users can then override the font you have chosen.
