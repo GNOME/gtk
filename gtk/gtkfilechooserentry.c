@@ -798,12 +798,12 @@ delete_text_callback (GtkFileChooserEntry *chooser_entry,
  * @eat_tabs: If %FALSE, allow focus navigation with the tab key.
  * @eat_escape: If %TRUE, capture Escape key presses and emit ::hide-entry
  *
- * Creates a new #GtkFileChooserEntry object. #GtkFileChooserEntry
+ * Creates a new `GtkFileChooserEntry` object. `GtkFileChooserEntry`
  * is an internal implementation widget for the GTK file chooser
  * which is an entry with completion with respect to a
- * #GtkFileSystem object.
+ * `GtkFileSystem` object.
  *
- * Returns: the newly created #GtkFileChooserEntry
+ * Returns: the newly created `GtkFileChooserEntry`
  **/
 GtkWidget *
 _gtk_file_chooser_entry_new (gboolean eat_tabs,
@@ -820,7 +820,7 @@ _gtk_file_chooser_entry_new (gboolean eat_tabs,
 
 /**
  * _gtk_file_chooser_entry_set_base_folder:
- * @chooser_entry: a #GtkFileChooserEntry
+ * @chooser_entry: a `GtkFileChooserEntry`
  * @file: file for a folder in the chooser entries current file system.
  *
  * Sets the folder with respect to which completions occur.
@@ -850,13 +850,14 @@ _gtk_file_chooser_entry_set_base_folder (GtkFileChooserEntry *chooser_entry,
 
 /**
  * _gtk_file_chooser_entry_get_current_folder:
- * @chooser_entry: a #GtkFileChooserEntry
+ * @chooser_entry: a `GtkFileChooserEntry`
  *
- * Gets the current folder for the #GtkFileChooserEntry. If the
- * user has only entered a filename, this will be in the base folder
- * (see _gtk_file_chooser_entry_set_base_folder()), but if the
- * user has entered a relative or absolute path, then it will
- * be different.  If the user has entered unparsable text, or text which
+ * Gets the current folder for the `GtkFileChooserEntry`.
+ *
+ * If the user has only entered a filename, this will be in the base
+ * folder (see _gtk_file_chooser_entry_set_base_folder()), but if the
+ * user has entered a relative or absolute path, then it will be
+ * different. If the user has entered unparsable text, or text which
  * the entry cannot handle, this will return %NULL.
  *
  * Returns: (nullable) (transfer full): the file for the current folder
@@ -873,7 +874,7 @@ _gtk_file_chooser_entry_get_current_folder (GtkFileChooserEntry *chooser_entry)
 
 /**
  * _gtk_file_chooser_entry_get_file_part:
- * @chooser_entry: a #GtkFileChooserEntry
+ * @chooser_entry: a `GtkFileChooserEntry`
  *
  * Gets the non-folder portion of whatever the user has entered
  * into the file selector. What is returned is a UTF-8 string,
@@ -902,11 +903,11 @@ _gtk_file_chooser_entry_get_file_part (GtkFileChooserEntry *chooser_entry)
 
 /**
  * _gtk_file_chooser_entry_set_action:
- * @chooser_entry: a #GtkFileChooserEntry
+ * @chooser_entry: a `GtkFileChooserEntry`
  * @action: the action which is performed by the file selector using this entry
  *
- * Sets action which is performed by the file selector using this entry. 
- * The #GtkFileChooserEntry will use different completion strategies for 
+ * Sets action which is performed by the file selector using this entry.
+ * The `GtkFileChooserEntry` will use different completion strategies for
  * different actions.
  **/
 void
@@ -949,7 +950,7 @@ _gtk_file_chooser_entry_set_action (GtkFileChooserEntry *chooser_entry,
 
 /**
  * _gtk_file_chooser_entry_get_action:
- * @chooser_entry: a #GtkFileChooserEntry
+ * @chooser_entry: a `GtkFileChooserEntry`
  *
  * Gets the action for this entry. 
  *
@@ -986,7 +987,7 @@ _gtk_file_chooser_entry_get_is_folder (GtkFileChooserEntry *chooser_entry,
 
 /*
  * _gtk_file_chooser_entry_select_filename:
- * @chooser_entry: a #GtkFileChooserEntry
+ * @chooser_entry: a `GtkFileChooserEntry`
  *
  * Selects the filename (without the extension) for user edition.
  */

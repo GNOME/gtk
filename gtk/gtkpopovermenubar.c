@@ -805,7 +805,7 @@ gtk_popover_menu_bar_add_child (GtkPopoverMenuBar *bar,
 /**
  * gtk_popover_menu_bar_remove_child:
  * @bar: a `GtkPopoverMenuBar`
- * @child: the #GtkWidget to remove
+ * @child: the `GtkWidget` to remove
  *
  * Removes a widget that has previously been added with
  * gtk_popover_menu_bar_add_child().

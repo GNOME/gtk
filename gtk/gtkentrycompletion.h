@@ -39,9 +39,9 @@ typedef struct _GtkEntryCompletion            GtkEntryCompletion;
 
 /**
  * GtkEntryCompletionMatchFunc:
- * @completion: the #GtkEntryCompletion
+ * @completion: the `GtkEntryCompletion`
  * @key: the string to match, normalized and case-folded
- * @iter: a #GtkTreeIter indicating the row to match
+ * @iter: a `GtkTreeIter` indicating the row to match
  * @user_data: user data given to gtk_entry_completion_set_match_func()
  *
  * A function which decides whether the row indicated by @iter matches

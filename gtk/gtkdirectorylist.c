@@ -659,7 +659,7 @@ gtk_directory_list_update_monitoring (GtkDirectoryList *self)
 /**
  * gtk_directory_list_set_file: (attributes org.gtk.Method.set_property=file)
  * @self: a `GtkDirectoryList`
- * @file: (nullable): the #GFile to be enumerated
+ * @file: (nullable): the `GFile` to be enumerated
  *
  * Sets the @file to be enumerated and starts the enumeration.
  *
@@ -847,8 +847,11 @@ gtk_directory_list_get_error (GtkDirectoryList *self)
  * @monitored: %TRUE to monitor the directory for changes
  *
  * Sets whether the directory list will monitor the directory
- * for changes. If monitoring is enabled, the ::items-changed
- * signal will be emitted when the directory contents change.
+ * for changes.
+ *
+ * If monitoring is enabled, the ::items-changed signal will
+ * be emitted when the directory contents change.
+ *
  *
  * When monitoring is turned on after the initial creation
  * of the directory list, the directory is reloaded to avoid

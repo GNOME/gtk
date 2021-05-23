@@ -41,7 +41,7 @@ G_BEGIN_DECLS
  * @xid: XID to stuff into the pointer
  *
  * Converts an XID into a @gpointer. This is useful with data structures
- * that use pointer arguments such as #GHashTable. Use GDK_POINTER_TO_XID()
+ * that use pointer arguments such as `GHashTable`. Use GDK_POINTER_TO_XID()
  * to convert the argument back to an XID.
  */
 #define GDK_XID_TO_POINTER(xid) GUINT_TO_POINTER(xid)

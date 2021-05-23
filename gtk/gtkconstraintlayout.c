@@ -106,7 +106,7 @@
  * There can be "constant" and "multiplier" attributes.
  *
  * Additionally, the "constraints" element can also contain a description
- * of the #GtkConstraintGuides used by the layout:
+ * of the `GtkConstraintGuides` used by the layout:
  *
  * ```xml
  *   <constraints>
@@ -736,10 +736,10 @@ get_layout_attribute (GtkConstraintLayout    *self,
  * @self: a `GtkConstraintLayout`
  * @constraint: a [class@Gtk.Constraint]
  *
- * Turns a #GtkConstraint into a #GtkConstraintRef inside the
+ * Turns a `GtkConstraint` into a `GtkConstraintRef` inside the
  * constraint solver associated to @self.
  *
- * If @self does not have a #GtkConstraintSolver, because it
+ * If @self does not have a `GtkConstraintSolver`, because it
  * has not been rooted yet, we just store the @constraint instance,
  * and we're going to call this function when the layout manager
  * gets rooted.

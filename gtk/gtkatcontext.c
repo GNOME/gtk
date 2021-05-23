@@ -596,9 +596,9 @@ gtk_at_context_create (GtkAccessibleRole  accessible_role,
  * @role: the accessible role of the clone, or %GTK_ACCESSIBLE_ROLE_NONE to
  *   use the same accessible role of @self
  * @accessible: (nullable): the accessible creating the context, or %NULL to
- *   use the same #GtkAccessible of @self
+ *   use the same `GtkAccessible` of @self
  * @display: (nullable): the display connection, or %NULL to use the same
- *   #GdkDisplay of @self
+ *   `GdkDisplay` of @self
  *
  * Clones the state of the given `GtkATContext`, using @role, @accessible,
  * and @display.
@@ -710,7 +710,7 @@ gtk_at_context_update (GtkATContext *self)
  * gtk_at_context_set_accessible_state:
  * @self: a `GtkATContext`
  * @state: a `GtkAccessibleState`
- * @value: (nullable): #GtkAccessibleValue
+ * @value: (nullable): `GtkAccessibleValue`
  *
  * Sets the @value for the given @state of a `GtkATContext`.
  *

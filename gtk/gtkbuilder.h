@@ -42,18 +42,18 @@ typedef struct _GtkBuilderClass   GtkBuilderClass;
 /**
  * GtkBuilderError:
  * @GTK_BUILDER_ERROR_INVALID_TYPE_FUNCTION: A type-func attribute didn’t name
- *  a function that returns a #GType.
- * @GTK_BUILDER_ERROR_UNHANDLED_TAG: The input contained a tag that #GtkBuilder
+ *  a function that returns a `GType`.
+ * @GTK_BUILDER_ERROR_UNHANDLED_TAG: The input contained a tag that `GtkBuilder`
  *  can’t handle.
  * @GTK_BUILDER_ERROR_MISSING_ATTRIBUTE: An attribute that is required by
- *  #GtkBuilder was missing.
- * @GTK_BUILDER_ERROR_INVALID_ATTRIBUTE: #GtkBuilder found an attribute that
+ *  `GtkBuilder` was missing.
+ * @GTK_BUILDER_ERROR_INVALID_ATTRIBUTE: `GtkBuilder` found an attribute that
  *  it doesn’t understand.
- * @GTK_BUILDER_ERROR_INVALID_TAG: #GtkBuilder found a tag that
+ * @GTK_BUILDER_ERROR_INVALID_TAG: `GtkBuilder` found a tag that
  *  it doesn’t understand.
  * @GTK_BUILDER_ERROR_MISSING_PROPERTY_VALUE: A required property value was
  *  missing.
- * @GTK_BUILDER_ERROR_INVALID_VALUE: #GtkBuilder couldn’t parse
+ * @GTK_BUILDER_ERROR_INVALID_VALUE: `GtkBuilder` couldn’t parse
  *  some attribute value.
  * @GTK_BUILDER_ERROR_VERSION_MISMATCH: The input file requires a newer version
  *  of GTK.
@@ -69,7 +69,7 @@ typedef struct _GtkBuilderClass   GtkBuilderClass;
  *   `gmodule-export-2.0` pkgconfig module can fix this problem.
  *
  * Error codes that identify various errors that can occur while using
- * #GtkBuilder.
+ * `GtkBuilder`.
  */
 typedef enum
 {
@@ -186,7 +186,7 @@ GClosure *   gtk_builder_create_closure          (GtkBuilder    *builder,
 
 /**
  * GTK_BUILDER_WARN_INVALID_CHILD_TYPE:
- * @object: the #GtkBuildable on which the warning occurred
+ * @object: the `GtkBuildable` on which the warning occurred
  * @type: the unexpected type value
  *
  * This macro should be used to emit a warning about and unexpected @type value

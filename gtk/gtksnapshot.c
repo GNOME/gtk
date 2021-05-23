@@ -1523,7 +1523,7 @@ gtk_snapshot_to_node (GtkSnapshot *snapshot)
  * add more nodes to @snapshot. The only function that should
  * be called after this is g_object_unref().
  *
- * Returns: (transfer full): a new #GdkPaintable
+ * Returns: (transfer full): a new `GdkPaintable`
  */
 GdkPaintable *
 gtk_snapshot_to_paintable (GtkSnapshot           *snapshot,
@@ -1848,7 +1848,7 @@ gtk_snapshot_perspective (GtkSnapshot *snapshot,
 /**
  * gtk_snapshot_append_node:
  * @snapshot: a `GtkSnapshot`
- * @node: a #GskRenderNode
+ * @node: a `GskRenderNode`
  *
  * Appends @node to the current render node of @snapshot,
  * without changing the current node.
@@ -2072,7 +2072,7 @@ gtk_snapshot_render_focus (GtkSnapshot     *snapshot,
  * @context: the `GtkStyleContext` to use
  * @x: X origin of the rectangle
  * @y: Y origin of the rectangle
- * @layout: the #PangoLayout to render
+ * @layout: the `PangoLayout` to render
  *
  * Creates a render node for rendering @layout according to the style
  * information in @context, and appends it to the current node of @snapshot,

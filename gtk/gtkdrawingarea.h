@@ -47,7 +47,7 @@ typedef struct _GtkDrawingAreaClass  GtkDrawingAreaClass;
 
 /**
  * GtkDrawingAreaDrawFunc:
- * @drawing_area: the #GtkDrawingArea to redraw
+ * @drawing_area: the `GtkDrawingArea` to redraw
  * @cr: the context to draw to
  * @width: the actual width of the contents. This value will be at least
  *   as wide as GtkDrawingArea:width.

@@ -153,7 +153,7 @@ gtk_list_item_manager_get_root (GtkListItemManager *self)
 
 /*
  * gtk_list_item_manager_get_nth:
- * @self: a #GtkListItemManager
+ * @self: a `GtkListItemManager`
  * @position: position of the item
  * @offset: (out): offset into the returned item
  *
@@ -897,7 +897,7 @@ gtk_list_item_manager_get_model (GtkListItemManager *self)
 
 /*
  * gtk_list_item_manager_acquire_list_item:
- * @self: a #GtkListItemManager
+ * @self: a `GtkListItemManager`
  * @position: the row in the model to create a list item for
  * @prev_sibling: the widget this widget should be inserted before or %NULL
  *   if it should be the first widget
@@ -906,7 +906,7 @@ gtk_list_item_manager_get_model (GtkListItemManager *self)
  * yet exist that is used for @position.
  *
  * When the returned item is no longer needed, the caller is responsible
- * for calling gtk_list_item_manager_release_list_item().  
+ * for calling gtk_list_item_manager_release_list_item().
  * A particular case is when the row at @position is removed. In that case,
  * all list items in the removed range must be released before
  * gtk_list_item_manager_model_changed() is called.
@@ -942,7 +942,7 @@ gtk_list_item_manager_acquire_list_item (GtkListItemManager *self,
 
 /**
  * gtk_list_item_manager_try_acquire_list_item_from_change:
- * @self: a #GtkListItemManager
+ * @self: a `GtkListItemManager`
  * @position: the row in the model to create a list item for
  * @prev_sibling: the widget this widget should be inserted after or %NULL
  *   if it should be the first widget
@@ -991,8 +991,8 @@ gtk_list_item_manager_try_reacquire_list_item (GtkListItemManager *self,
 
 /**
  * gtk_list_item_manager_move_list_item:
- * @self: a #GtkListItemManager
- * @list_item: an acquired #GtkListItem that should be moved to represent
+ * @self: a `GtkListItemManager`
+ * @list_item: an acquired `GtkListItem` that should be moved to represent
  *   a different row
  * @position: the new position of that list item
  * @prev_sibling: the new previous sibling
@@ -1023,8 +1023,8 @@ gtk_list_item_manager_move_list_item (GtkListItemManager     *self,
 
 /**
  * gtk_list_item_manager_update_list_item:
- * @self: a #GtkListItemManager
- * @item: a #GtkListItem that has been acquired
+ * @self: a `GtkListItemManager`
+ * @item: a `GtkListItem` that has been acquired
  * @position: the new position of that list item
  *
  * Updates the position of the given @item. This function must be called whenever
@@ -1050,7 +1050,7 @@ gtk_list_item_manager_update_list_item (GtkListItemManager *self,
 
 /*
  * gtk_list_item_manager_release_list_item:
- * @self: a #GtkListItemManager
+ * @self: a `GtkListItemManager`
  * @change: (nullable): The change associated with this release or
  *   %NULL if this is a final removal
  * @item: an item previously acquired with

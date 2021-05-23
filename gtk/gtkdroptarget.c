@@ -793,7 +793,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
   /**
    * GtkDropTarget::drop:
    * @self: the `GtkDropTarget`
-   * @value: the #GValue being dropped
+   * @value: the `GValue` being dropped
    * @x: the x coordinate of the current pointer position
    * @y: the y coordinate of the current pointer position
    *

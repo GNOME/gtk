@@ -1124,8 +1124,8 @@ snapshot_insertion_cursor (GtkSnapshot     *snapshot,
  * @x: X origin
  * @y: Y origin
  * @layout: the `PangoLayout` of the text
- * @index: the index in the #PangoLayout
- * @direction: the #PangoDirection of the text
+ * @index: the index in the `PangoLayout`
+ * @direction: the `PangoDirection` of the text
  *
  * Draws a text caret using @snapshot at the specified index of @layout.
  */

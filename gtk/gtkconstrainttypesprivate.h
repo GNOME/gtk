@@ -33,9 +33,9 @@ typedef struct _GtkConstraintExpressionBuilder  GtkConstraintExpressionBuilder;
 /*< private >
  * GtkConstraintRef:
  *
- * A reference to a constraint stored inside the solver; while #GtkConstraint
- * represent the public API, a #GtkConstraintRef represents data stored inside
- * the solver. A #GtkConstraintRef is completely opaque, and should only be
+ * A reference to a constraint stored inside the solver; while `GtkConstraint`
+ * represent the public API, a `GtkConstraintRef` represents data stored inside
+ * the solver. A `GtkConstraintRef` is completely opaque, and should only be
  * used to remove a constraint from the solver.
  */
 typedef struct _GtkConstraintRef                GtkConstraintRef;

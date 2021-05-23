@@ -48,7 +48,7 @@
  *
  * `GdkContentFormats` is an immutable struct. After creation, you cannot change
  * the types it represents. Instead, new `GdkContentFormats` have to be created.
- * The [struct@Gdk.ContentFormatsBuilder]` structure is meant to help in this
+ * The [struct@Gdk.ContentFormatsBuilder] structure is meant to help in this
  * endeavor.
  */
 
@@ -84,8 +84,8 @@ G_DEFINE_BOXED_TYPE (GdkContentFormats, gdk_content_formats,
  * If @string is not a valid mime type, %NULL is returned instead.
  * See RFC 2048 for the syntax if mime types.
  *
- * Returns: An interned string for the canonicalized mime type
- *   or %NULL if the string wasn't a valid mime type
+ * Returns: (nullable): An interned string for the canonicalized
+ *   mime type or %NULL if the string wasn't a valid mime type
  */
 const char *
 gdk_intern_mime_type (const char *string)
@@ -133,7 +133,7 @@ gdk_content_formats_new_take (GType *      gtypes,
  *
  * The mime types must be valid and different from each other or the
  * behavior of the return value is undefined. If you cannot guarantee
- * this, use `GdkContentFormatsBuilder` instead.
+ * this, use [struct@Gdk.ContentFormatsBuilder] instead.
  *
  * Returns: (transfer full): the new `GdkContentFormats`.
  */
@@ -411,7 +411,7 @@ gdk_content_formats_match_mime_type (const GdkContentFormats *first,
  *
  * Checks if a given `GType` is part of the given @formats.
  *
- * Returns: %TRUE if the #GType was found
+ * Returns: %TRUE if the `GType` was found
  */
 gboolean
 gdk_content_formats_contain_gtype (const GdkContentFormats *formats,
@@ -458,7 +458,7 @@ gdk_content_formats_contain_mime_type (const GdkContentFormats *formats,
  *
  * Gets the `GType`s included in @formats.
  *
- * Note that @formats may not contain any #GTypes, in particular when
+ * Note that @formats may not contain any `GType`s, in particular when
  * they are empty. In that case %NULL will be returned.
  *
  * Returns: (transfer none) (nullable) (array length=n_gtypes zero-terminated=1):

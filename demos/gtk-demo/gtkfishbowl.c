@@ -74,9 +74,9 @@ gtk_fishbowl_init (GtkFishbowl *fishbowl)
 /**
  * gtk_fishbowl_new:
  *
- * Creates a new #GtkFishbowl.
+ * Creates a new `GtkFishbowl`.
  *
- * Returns: a new #GtkFishbowl.
+ * Returns: a new `GtkFishbowl`.
  */
 GtkWidget*
 gtk_fishbowl_new (void)

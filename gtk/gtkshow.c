@@ -84,7 +84,7 @@ window_handle_exported (GtkWindow  *window,
  * @parent: (nullable): parent window
  * @uri: the uri to show
  * @timestamp: timestamp from the event that triggered this call, or %GDK_CURRENT_TIME
- * @cancellable: (nullable): a #GCancellable to cancel the launch
+ * @cancellable: (nullable): a `GCancellable` to cancel the launch
  * @callback: (scope async): a callback to call when the action is complete
  * @user_data: (closure callback): data to pass to @callback
  *
@@ -135,8 +135,8 @@ gtk_show_uri_full (GtkWindow           *parent,
 
 /**
  * gtk_show_uri_full_finish:
- * @parent: the #GtkWindow passed to gtk_show_uri()
- * @result: #GAsyncResult that was passed to @callback
+ * @parent: the `GtkWindow` passed to gtk_show_uri()
+ * @result: `GAsyncResult` that was passed to @callback
  * @error: return location for an error
  *
  * Finishes the gtk_show_uri() call and returns the result

@@ -113,7 +113,7 @@
  *
  * # Accessibility
  *
- * `GtkLabel` uses the #GTK_ACCESSIBLE_ROLE_LABEL role.
+ * `GtkLabel` uses the %GTK_ACCESSIBLE_ROLE_LABEL role.
  *
  * # Mnemonics
  *
@@ -308,7 +308,7 @@ struct _GtkLabelClass
  * to ensure that pressing inside a link and releasing outside of it
  * does not activate the link.
  *
- * Links are rendered with the #GTK_STATE_FLAG_LINK/#GTK_STATE_FLAG_VISITED
+ * Links are rendered with the %GTK_STATE_FLAG_LINK/%GTK_STATE_FLAG_VISITED
  * state flags. When the mouse pointer is over a link, the pointer is changed
  * to indicate the link.
  *
@@ -2079,7 +2079,7 @@ gtk_label_class_init (GtkLabelClass *class)
   /**
    * GtkLabel::move-cursor:
    * @entry: the object which received the signal
-   * @step: the granularity of the move, as a #GtkMovementStep
+   * @step: the granularity of the move, as a `GtkMovementStep`
    * @count: the number of @step units to move
    * @extend_selection: %TRUE if the move should extend the selection
    *
@@ -2814,7 +2814,7 @@ label_mnemonic_widget_weak_notify (gpointer      data,
 /**
  * gtk_label_set_mnemonic_widget: (attributes org.gtk.Method.set_property=mnemonic-widget)
  * @self: a `GtkLabel`
- * @widget: (nullable): the target #GtkWidget, or %NULL to unset
+ * @widget: (nullable): the target `GtkWidget`, or %NULL to unset
  *
  * Associate the label with its mnemonic target.
  *

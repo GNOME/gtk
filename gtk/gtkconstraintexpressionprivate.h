@@ -253,7 +253,7 @@ gtk_constraint_expression_builder_finish (GtkConstraintExpressionBuilder *builde
 /*< private >
  * GtkConstraintExpressionIter:
  *
- * An iterator object for terms inside a #GtkConstraintExpression.
+ * An iterator object for terms inside a `GtkConstraintExpression`.
  */
 typedef struct {
   /*< private >*/

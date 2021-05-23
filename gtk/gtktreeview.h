@@ -63,10 +63,10 @@ typedef struct _GtkTreeSelection      GtkTreeSelection;
 
 /**
  * GtkTreeViewColumnDropFunc:
- * @tree_view: A #GtkTreeView
- * @column: The #GtkTreeViewColumn being dragged
- * @prev_column: A #GtkTreeViewColumn on one side of @column
- * @next_column: A #GtkTreeViewColumn on the other side of @column
+ * @tree_view: A `GtkTreeView`
+ * @column: The `GtkTreeViewColumn` being dragged
+ * @prev_column: A `GtkTreeViewColumn` on one side of @column
+ * @next_column: A `GtkTreeViewColumn` on the other side of @column
  * @data: (closure): user data
  *
  * Function type for determining whether @column can be dropped in a
@@ -88,7 +88,7 @@ typedef gboolean (* GtkTreeViewColumnDropFunc) (GtkTreeView             *tree_vi
 
 /**
  * GtkTreeViewMappingFunc:
- * @tree_view: A #GtkTreeView
+ * @tree_view: A `GtkTreeView`
  * @path: The path that’s expanded
  * @user_data: user data
  *
@@ -100,10 +100,10 @@ typedef void     (* GtkTreeViewMappingFunc)    (GtkTreeView             *tree_vi
 
 /**
  * GtkTreeViewSearchEqualFunc:
- * @model: the #GtkTreeModel being searched
+ * @model: the `GtkTreeModel` being searched
  * @column: the search column set by gtk_tree_view_set_search_column()
  * @key: the key string to compare with
- * @iter: a #GtkTreeIter pointing the row of @model that should be compared
+ * @iter: a `GtkTreeIter` pointing the row of @model that should be compared
  *  with @key.
  * @search_data: (closure): user data from gtk_tree_view_set_search_equal_func()
  *
@@ -122,13 +122,13 @@ typedef gboolean (*GtkTreeViewSearchEqualFunc) (GtkTreeModel            *model,
 
 /**
  * GtkTreeViewRowSeparatorFunc:
- * @model: the #GtkTreeModel
- * @iter: a #GtkTreeIter pointing at a row in @model
+ * @model: the `GtkTreeModel`
+ * @iter: a `GtkTreeIter` pointing at a row in @model
  * @data: (closure): user data
  *
  * Function type for determining whether the row pointed to by @iter should
  * be rendered as a separator. A common way to implement this is to have a
- * boolean column in the model, whose values the #GtkTreeViewRowSeparatorFunc
+ * boolean column in the model, whose values the `GtkTreeViewRowSeparatorFunc`
  * returns.
  *
  * Returns: %TRUE if the row is a separator

@@ -679,7 +679,7 @@ gdk_toplevel_begin_resize (GdkToplevel    *toplevel,
 
 /**
  * gdk_toplevel_begin_move:
- * @toplevel: a #GdkToplevel
+ * @toplevel: a `GdkToplevel`
  * @device: the device used for the operation
  * @button: the button being used to drag, or 0 for a keyboard-initiated drag
  * @x: surface X coordinate of mouse click that began the drag

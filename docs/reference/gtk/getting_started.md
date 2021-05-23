@@ -106,7 +106,7 @@ The call to [ctor@Gtk.ApplicationWindow.new] will create a new
 window will have a frame, a title bar, and window controls depending on the
 platform.
 
-A window title is set using [`method@Gtk.Window.set_title`]. This function
+A window title is set using [method@Gtk.Window.set_title]. This function
 takes a `GtkWindow` pointer and a string as input. As our `window` pointer
 is a `GtkWidget` pointer, we need to cast it to `GtkWindow`; instead of
 casting `window` via a typical C cast like `(GtkWindow*)`, `window` can be
@@ -115,7 +115,7 @@ pointer is an instance of the `GtkWindow` class, before casting, and emit a
 warning if the check fails. More information about this convention can be
 found [here](https://developer.gnome.org/gobject/stable/gtype-conventions.html).
 
-Finally the window size is set using [`method@Gtk.Window.set_default_size`]
+Finally the window size is set using [method@Gtk.Window.set_default_size]
 and the window is then shown by GTK via [method@Gtk.Widget.show].
 
 When you close the window, by (for example) pressing the X button, the
@@ -212,10 +212,10 @@ The `GtkBox` widget is created with [ctor@Gtk.Box.new], which takes a
 this box will contain can either be laid out horizontally or vertically.
 This does not matter in this particular case, as we are dealing with only
 one button. After initializing box with the newly created `GtkBox`, the code
-adds the box widget to the window widget using [`method@Gtk.Window.set_child`].
+adds the box widget to the window widget using [method@Gtk.Window.set_child].
 
 Next the `button` variable is initialized in similar manner.
-[`ctor@Gtk.Button.new_with_label`] is called which returns a
+[ctor@Gtk.Button.new_with_label] is called which returns a
 [class@Gtk.Button] to be stored in `button`. Afterwards `button` is added to
 our `box`.
 
@@ -353,7 +353,7 @@ draw function.
 The contents of a widget often need to be partially or fully redrawn, e.g.
 when another window is moved and uncovers part of the widget, or when the
 window containing it is resized. It is also possible to explicitly cause a
-widget to be redrawn, by calling [`method@Gtk.Widget.queue_draw`]. GTK takes
+widget to be redrawn, by calling [method@Gtk.Widget.queue_draw]. GTK takes
 care of most of the details by providing a ready-to-use cairo context to the
 draw function.
 
@@ -690,16 +690,16 @@ gcc $( pkg-config --cflags gtk4 ) -o example-3 example-3.c $( pkg-config --libs 
 
 Note that `GtkBuilder` can also be used to construct objects that are
 not widgets, such as tree models, adjustments, etc. That is the reason
-the method we use here is called [`method@Gtk.Builder.get_object`] and returns
+the method we use here is called [method@Gtk.Builder.get_object] and returns
 a `GObject` instead of a `GtkWidget`.
 
-Normally, you would pass a full path to [`method@Gtk.Builder.add_from_file`] to
+Normally, you would pass a full path to [method@Gtk.Builder.add_from_file] to
 make the execution of your program independent of the current directory.
 A common location to install UI descriptions and similar data is
 `/usr/share/appname`.
 
 It is also possible to embed the UI description in the source code as a
-string and use [`method@Gtk.Builder.add_from_string`] to load it. But keeping the
+string and use [method@Gtk.Builder.add_from_string] to load it. But keeping the
 UI description in a separate file has several advantages: It is then possible
 to make minor adjustments to the UI without recompiling your program, and,
 more importantly, graphical UI editors such as [Glade](http://glade.gnome.org)
@@ -985,7 +985,7 @@ glib-compile-resources exampleapp.gresource.xml --target=resources.c --generate-
 ```
 
 The gnome module of the [Meson build system](https://mesonbuild.com)
-provides the [`gnome.compile_resources()`](https://mesonbuild.com/Gnome-module.html#gnomecompile_resources)
+provides the [gnome.compile_resources()](https://mesonbuild.com/Gnome-module.html#gnomecompile_resources)
 method for this task.
 
 Our application now looks like this:
@@ -1081,7 +1081,7 @@ tell it to display information about our stack.
 
 The stack switcher gets all its information it needs to display tabs from
 the stack that it belongs to. Here, we are passing the label to show for
-each file as the last argument to the [`method@Gtk.Stack.add_titled`]
+each file as the last argument to the [method@Gtk.Stack.add_titled]
 function.
 
 Our application is beginning to take shape:
@@ -1221,7 +1221,7 @@ Before we can make use of this schema in our application, we need to compile
 it into the binary form that GSettings expects. GIO provides
 [macros](https://developer.gnome.org/gio/2.36/ch31s06.html) to do this in
 autotools-based projects, and the gnome module of the Meson build system
-provides the [`gnome.compile_schemas()`](https://mesonbuild.com/Gnome-module.html#gnomecompile_schemas)
+provides the [gnome.compile_schemas()](https://mesonbuild.com/Gnome-module.html#gnomecompile_schemas)
 method for this task.
 
 Next, we need to connect our settings to the widgets that they are supposed

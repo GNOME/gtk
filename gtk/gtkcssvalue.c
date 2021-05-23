@@ -315,7 +315,7 @@ _gtk_css_value_print (const GtkCssValue *value,
 
 /**
  * gtk_css_value_is_dynamic:
- * @value: a #GtkCssValue
+ * @value: a `GtkCssValue`
  *
  * A "dynamic" value has a different value at different times. This means that
  * the value needs to be animated when time is progressing.
@@ -339,7 +339,7 @@ gtk_css_value_is_dynamic (const GtkCssValue *value)
 
 /**
  * gtk_css_value_get_dynamic_value:
- * @value: a #GtkCssValue
+ * @value: a `GtkCssValue`
  * @monotonic_time: the timestamp for which to get the dynamic value
  *
  * Gets the dynamic value for a given timestamp. If @monotonic_time is 0,

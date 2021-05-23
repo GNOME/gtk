@@ -179,7 +179,7 @@ _gdk_x11_surface_get_toplevel (GdkSurface *surface)
 
 /*
  * gdk_x11_surface_update_size:
- * @self: a #GdkX11Surface
+ * @self: a `GdkX11Surface`
  * @width: the new width of the surface
  * @height: the new height of the surface
  * @scale: the new scale of the surface
@@ -2069,7 +2069,7 @@ gdk_x11_surface_lower (GdkSurface *surface)
 
 /**
  * gdk_x11_surface_move_to_current_desktop:
- * @surface: (type GdkX11Surface): a #GdkSurface
+ * @surface: (type GdkX11Surface): a `GdkSurface`
  * 
  * Moves the surface to the correct workspace when running under a 
  * window manager that supports multiple workspaces, as described
@@ -2132,7 +2132,7 @@ get_netwm_cardinal_property (GdkSurface   *surface,
 
 /**
  * gdk_x11_surface_get_desktop:
- * @surface: (type GdkX11Surface): a #GdkSurface
+ * @surface: (type GdkX11Surface): a `GdkSurface`
  *
  * Gets the number of the workspace @surface is on.
  *
@@ -2148,7 +2148,7 @@ gdk_x11_surface_get_desktop (GdkSurface *surface)
 
 /**
  * gdk_x11_surface_move_to_desktop:
- * @surface: (type GdkX11Surface): a #GdkSurface
+ * @surface: (type GdkX11Surface): a `GdkSurface`
  * @desktop: the number of the workspace to move the surface to
  *
  * Moves the surface to the given workspace when running unde a
@@ -2351,7 +2351,7 @@ gdk_x11_surface_set_modal_hint (GdkSurface *surface,
 
 /**
  * gdk_x11_surface_set_skip_taskbar_hint:
- * @surface: (type GdkX11Surface): a native #GdkSurface
+ * @surface: (type GdkX11Surface): a native `GdkSurface`
  * @skips_taskbar: %TRUE to skip taskbars
  *
  * Sets a hint on @surface that taskbars should not
@@ -2377,7 +2377,7 @@ gdk_x11_surface_set_skip_taskbar_hint (GdkSurface *surface,
 
 /**
  * gdk_x11_surface_set_skip_pager_hint:
- * @surface: (type GdkX11Surface): a #GdkSurface
+ * @surface: (type GdkX11Surface): a `GdkSurface`
  * @skips_pager: %TRUE to skip pagers
  *
  * Sets a hint on @surface that pagers should not
@@ -2403,7 +2403,7 @@ gdk_x11_surface_set_skip_pager_hint (GdkSurface *surface,
 
 /**
  * gdk_x11_surface_set_urgency_hint:
- * @surface: (type GdkX11Surface): a native #GdkSurface
+ * @surface: (type GdkX11Surface): a native `GdkSurface`
  * @urgent: %TRUE to indicate urgenct attention needed
  *
  * Sets a hint on @surface that it needs user attention.
@@ -2995,7 +2995,7 @@ gdk_x11_surface_set_input_region (GdkSurface     *surface,
 
 /**
  * gdk_x11_surface_set_user_time:
- * @surface: (type GdkX11Surface): A toplevel #GdkSurface
+ * @surface: (type GdkX11Surface): A toplevel `GdkSurface`
  * @timestamp: An XServer timestamp to which the property should be set
  *
  * The application can use this call to update the _NET_WM_USER_TIME
@@ -3057,7 +3057,7 @@ gdk_x11_surface_set_user_time (GdkSurface *surface,
 
 /**
  * gdk_x11_surface_set_utf8_property:
- * @surface: (type GdkX11Surface): a #GdkSurface
+ * @surface: (type GdkX11Surface): a `GdkSurface`
  * @name: Property name, will be interned as an X atom
  * @value: (nullable): Property value, or %NULL to delete
  *
@@ -3092,7 +3092,7 @@ gdk_x11_surface_set_utf8_property  (GdkSurface *surface,
 
 /**
  * gdk_x11_surface_set_theme_variant:
- * @surface: (type GdkX11Surface): a #GdkSurface
+ * @surface: (type GdkX11Surface): a `GdkSurface`
  * @variant: the theme variant to export
  *
  * GTK applications can request a dark theme variant. In order to
@@ -3537,7 +3537,7 @@ gdk_x11_surface_unfullscreen (GdkSurface *surface)
 
 /**
  * gdk_x11_surface_get_group:
- * @surface: (type GdkX11Surface): The #GdkSurface
+ * @surface: (type GdkX11Surface): The `GdkSurface`
  *
  * Returns the group this surface belongs to.
  *
@@ -3558,8 +3558,8 @@ gdk_x11_surface_get_group (GdkSurface *surface)
 
 /**
  * gdk_x11_surface_set_group:
- * @surface: (type GdkX11Surface): a native #GdkSurface
- * @leader: a #GdkSurface
+ * @surface: (type GdkX11Surface): a native `GdkSurface`
+ * @leader: a `GdkSurface`
  *
  * Sets the group leader of @surface to be @leader.
  * See the ICCCM for details.
@@ -4660,9 +4660,9 @@ gdk_x11_get_server_time (GdkSurface *surface)
 
 /**
  * gdk_x11_surface_get_xid:
- * @surface: (type GdkX11Surface): a native #GdkSurface.
+ * @surface: (type GdkX11Surface): a native `GdkSurface`.
  * 
- * Returns the X resource (surface) belonging to a #GdkSurface.
+ * Returns the X resource (surface) belonging to a `GdkSurface`.
  * 
  * Returns: the ID of @drawable’s X resource.
  **/
@@ -4685,7 +4685,7 @@ gdk_x11_surface_get_scale_factor (GdkSurface *surface)
 
 /**
  * gdk_x11_surface_set_frame_sync_enabled:
- * @surface: (type GdkX11Surface): a native #GdkSurface
+ * @surface: (type GdkX11Surface): a native `GdkSurface`
  * @frame_sync_enabled: whether frame-synchronization should be enabled
  *
  * This function can be used to disable frame synchronization for a surface.

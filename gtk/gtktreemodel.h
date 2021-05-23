@@ -44,9 +44,9 @@ typedef struct _GtkTreeModelIface   GtkTreeModelIface;
 
 /**
  * GtkTreeModelForeachFunc:
- * @model: the #GtkTreeModel being iterated
- * @path: the current #GtkTreePath
- * @iter: the current #GtkTreeIter
+ * @model: the `GtkTreeModel` being iterated
+ * @path: the current `GtkTreePath`
+ * @iter: the current `GtkTreeIter`
  * @data: (closure): The user data passed to gtk_tree_model_foreach()
  *
  * Type of the callback passed to gtk_tree_model_foreach() to
@@ -68,7 +68,7 @@ typedef gboolean (* GtkTreeModelForeachFunc) (GtkTreeModel *model, GtkTreePath *
  *
  * They are returned by [method@Gtk.TreeModel.get_flags], and must be
  * static for the lifetime of the object. A more complete description
- * of #GTK_TREE_MODEL_ITERS_PERSIST can be found in the overview of
+ * of %GTK_TREE_MODEL_ITERS_PERSIST can be found in the overview of
  * this section.
  */
 typedef enum
@@ -84,8 +84,8 @@ typedef enum
  * @user_data2: model-specific data
  * @user_data3: model-specific data
  *
- * The #GtkTreeIter is the primary structure
- * for accessing a #GtkTreeModel. Models are expected to put a unique
+ * The `GtkTreeIter` is the primary structure
+ * for accessing a `GtkTreeModel`. Models are expected to put a unique
  * integer in the @stamp member, and put
  * model-specific data in the three @user_data
  * members.
@@ -108,11 +108,11 @@ struct _GtkTreeIter
  * @row_deleted: Signal emitted when a row has been deleted.
  * @rows_reordered: Signal emitted when the children of a node in the
  *    GtkTreeModel have been reordered.
- * @get_flags: Get #GtkTreeModelFlags supported by this interface.
+ * @get_flags: Get `GtkTreeModelFlags` supported by this interface.
  * @get_n_columns: Get the number of columns supported by the model.
  * @get_column_type: Get the type of the column.
  * @get_iter: Sets iter to a valid iterator pointing to path.
- * @get_path: Gets a newly-created #GtkTreePath referenced by iter.
+ * @get_path: Gets a newly-created `GtkTreePath` referenced by iter.
  * @get_value: Initializes and sets value to that at column.
  * @iter_next: Sets iter to point to the node following it at the
  *    current level.
@@ -250,7 +250,7 @@ gboolean     gtk_tree_path_is_descendant    (GtkTreePath       *path,
  * GtkTreeRowReference:
  *
  * A GtkTreeRowReference tracks model changes so that it always refers to the
- * same row (a #GtkTreePath refers to a position, not a fixed row). Create a
+ * same row (a `GtkTreePath` refers to a position, not a fixed row). Create a
  * new GtkTreeRowReference with gtk_tree_row_reference_new().
  */
 

@@ -90,7 +90,7 @@
  * content. `<attribute>` elements can be marked for translation with a
  * `translatable="yes"` attribute. It is also possible to specify message
  * context and translator comments, using the context and comments attributes.
- * To make use of this, the #GtkBuilder must have been given the gettext
+ * To make use of this, the `GtkBuilder` must have been given the gettext
  * domain to use.
  *
  * The following attributes are used when constructing menu items:
@@ -655,16 +655,16 @@ gtk_popover_menu_new (void)
 
 /*<private>
  * gtk_popover_menu_open_submenu:
- * @popover: a #GtkPopoverMenu
+ * @popover: a `GtkPopoverMenu`
  * @name: the name of the menu to switch to
  *
  * Opens a submenu of the @popover. The @name
  * must be one of the names given to the submenus
- * of @popover with #GtkPopoverMenu:submenu, or
+ * of @popover with `GtkPopoverMenu:submenu`, or
  * "main" to switch back to the main menu.
  *
- * #GtkModelButton will open submenus automatically
- * when the #GtkModelButton:menu-name property is set,
+ * `GtkModelButton` will open submenus automatically
+ * when the `GtkModelButton:menu-name` property is set,
  * so this function is only needed when you are using
  * other kinds of widgets to initiate menu changes.
  */

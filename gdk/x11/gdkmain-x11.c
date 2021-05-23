@@ -90,7 +90,7 @@ _gdk_x11_convert_grab_status (int status)
 
 /*
  * _gdk_x11_surface_grab_check_unmap:
- * @surface: a #GdkSurface
+ * @surface: a `GdkSurface`
  * @serial: serial from Unmap event (or from NextRequest(display)
  *   if the unmap is being done by this client.)
  *
@@ -121,7 +121,7 @@ _gdk_x11_surface_grab_check_unmap (GdkSurface *surface,
 
 /*
  * _gdk_x11_surface_grab_check_destroy:
- * @surface: a #GdkSurface
+ * @surface: a `GdkSurface`
  * 
  * Checks to see if surface is the current grab surface, and if
  * so, clear the current grab surface.

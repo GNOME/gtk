@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 /**
  * GTK_CSS_PARSER_ERROR:
  *
- * Domain for #GtkCssParser errors.
+ * Domain for `GtkCssParser` errors.
  */
 #define GTK_CSS_PARSER_ERROR (gtk_css_parser_error_quark ())
 
@@ -39,7 +39,7 @@ GQuark gtk_css_parser_error_quark (void);
 /**
  * GTK_CSS_PARSER_WARNING:
  *
- * Domain for #GtkCssParser warnings.
+ * Domain for `GtkCssParser` warnings.
  */
 #define GTK_CSS_PARSER_WARNING (gtk_css_parser_warning_quark ())
 

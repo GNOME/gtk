@@ -244,14 +244,14 @@ G_DEFINE_BOXED_TYPE (GtkExpressionWatch, gtk_expression_watch,
  * GTK_DEFINE_EXPRESSION_TYPE:
  * @TypeName: the type name, in camel case
  * @type_name: the type name, in snake case
- * @type_info: the address of the #GtkExpressionTypeInfo for the expression type
+ * @type_info: the address of the `GtkExpressionTypeInfo` for the expression type
  *
- * Registers a new #GtkExpression subclass with the given @TypeName and @type_info.
+ * Registers a new `GtkExpression` subclass with the given @TypeName and @type_info.
  *
  * Similarly to %G_DEFINE_TYPE, this macro will generate a `get_type()`
  * function that registers the event type.
  *
- * You can specify code to be run after the type registration; the #GType of
+ * You can specify code to be run after the type registration; the `GType` of
  * the event is available in the `gtk_define_expression_type_id` variable.
  */
 #define GTK_DEFINE_EXPRESSION_TYPE(TypeName, type_name, type_info) \
@@ -1285,9 +1285,10 @@ GTK_DEFINE_EXPRESSION_TYPE (GtkPropertyExpression,
  *   query the `this` object
  * @property_name: name of the property
  *
- * Creates an expression that looks up a property via the
- * given `expression` or the `this` argument when `expression`
- * is `NULL`.
+ * Creates an expression that looks up a property.
+ *
+ * The object to use is found by evaluating the `expression`,
+ * or using the `this` argument when `expression` is `NULL`.
  *
  * If the resulting object conforms to `this_type`, its property named
  * `property_name` will be queried. Otherwise, this expression's
@@ -1338,9 +1339,10 @@ gtk_property_expression_new (GType          this_type,
  *   query the `this` object
  * @pspec: the `GParamSpec` for the property to query
  *
- * Creates an expression that looks up a property via the
- * given `expression` or the `this` argument when `expression`
- * is `NULL`.
+ * Creates an expression that looks up a property.
+ *
+ * The object to use is found by evaluating the `expression`,
+ * or using the `this` argument when `expression` is `NULL`.
  *
  * If the resulting object conforms to `this_type`, its
  * property specified by `pspec` will be queried.
@@ -1605,6 +1607,7 @@ GTK_DEFINE_EXPRESSION_TYPE (GtkClosureExpression,
  * @params: (nullable) (array length=n_params) (transfer full): expressions for each parameter
  *
  * Creates a `GtkExpression` that calls `closure` when it is evaluated.
+ *
  * `closure` is called with the `this` object and the results of evaluating
  * the `params` expressions.
  *
@@ -1679,8 +1682,10 @@ GTK_DEFINE_EXPRESSION_TYPE (GtkCClosureExpression,
  * @user_data: (nullable): user data used for creating a closure
  * @user_destroy: (nullable): destroy notify for @user_data
  *
+ * Creates a `GtkExpression` that calls `callback_func` when it is evaluated.
+ *
  * This function is a variant of [ctor@Gtk.ClosureExpression.new] that
- * creates a `GClosure` by calling `g_cclosure_new()` with the given
+ * creates a `GClosure` by calling g_cclosure_new() with the given
  * `callback_func`, `user_data` and `user_destroy`.
  *
  * Returns: (transfer full) (type GtkCClosureExpression): a new `GtkExpression`
@@ -1872,12 +1877,14 @@ gtk_expression_watch_cb (gpointer data)
  * @user_data: user data to pass to the `notify` callback
  * @user_destroy: destroy notify for `user_data`
  *
- * Installs a watch for the given `expression` that calls the `notify` function
- * whenever the evaluation of `self` may have changed.
+ * Watch the given `expression` for changes.
+ *
+ * The @notify function will be called whenever the evaluation of `self`
+ * may have changed.
  *
  * GTK cannot guarantee that the evaluation did indeed change when the @notify
  * gets invoked, but it guarantees the opposite: When it did in fact change,
- * the `notify` will be invoked.
+ * the @notify will be invoked.
  *
  * Returns: (transfer none): The newly installed watch. Note that the only
  *   reference held to the watch will be released when the watch is unwatched

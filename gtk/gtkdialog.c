@@ -146,7 +146,7 @@
  * on the “use-header-bar“ property. The response id has to be associated
  * with the action widget using the <action-widgets> element.
  *
- * An example of a #GtkDialog UI definition fragment:
+ * An example of a `GtkDialog` UI definition fragment:
  * ```xml
  * <object class="GtkDialog" id="dialog1">
  *   <child type="action">
@@ -1414,7 +1414,7 @@ gtk_dialog_get_header_bar (GtkDialog *dialog)
  *
  * Returns the content area of @dialog.
  *
- * Returns: (type Gtk.Box) (transfer none): the content area #GtkBox.
+ * Returns: (type Gtk.Box) (transfer none): the content area `GtkBox`.
  */
 GtkWidget *
 gtk_dialog_get_content_area (GtkDialog *dialog)

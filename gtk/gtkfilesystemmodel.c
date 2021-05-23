@@ -1340,13 +1340,13 @@ _gtk_file_system_model_new_valist (GtkFileSystemModelGetValue get_func,
  * @get_func: function to call for getting a value
  * @get_data: user data argument passed to @get_func
  * @n_columns: number of columns
- * @...: @n_columns #GType types for the columns
+ * @...: @n_columns `GType` types for the columns
  *
- * Creates a new #GtkFileSystemModel object. You need to add files
+ * Creates a new `GtkFileSystemModel` object. You need to add files
  * to the list using _gtk_file_system_model_add_and_query_file()
  * or _gtk_file_system_model_update_file().
  *
- * Returns: the newly created #GtkFileSystemModel
+ * Returns: the newly created `GtkFileSystemModel`
  **/
 GtkFileSystemModel *
 _gtk_file_system_model_new (GtkFileSystemModelGetValue get_func,
@@ -1374,16 +1374,17 @@ _gtk_file_system_model_new (GtkFileSystemModelGetValue get_func,
  * @get_func: function that the model should call to query data about a file
  * @get_data: user data to pass to the @get_func
  * @n_columns: number of columns
- * @...: @n_columns #GType types for the columns
+ * @...: @n_columns `GType` types for the columns
  *
- * Creates a new #GtkFileSystemModel object. The #GtkFileSystemModel
- * object wraps the given @directory as a #GtkTreeModel.
- * The model will query the given directory with the given @attributes
- * and add all files inside the directory automatically. If supported,
- * it will also monitor the drectory and update the model's
+ * Creates a new `GtkFileSystemModel` object.
+ *
+ * The `GtkFileSystemModel` object wraps the given @directory as a
+ * `GtkTreeModel`. The model will query the given directory with the
+ * given @attributes and add all files inside the directory automatically.
+ * If supported, it will also monitor the drectory and update the model's
  * contents to reflect changes, if the @directory supports monitoring.
- * 
- * Returns: the newly created #GtkFileSystemModel
+ *
+ * Returns: the newly created `GtkFileSystemModel`
  **/
 GtkFileSystemModel *
 _gtk_file_system_model_new_for_directory (GFile *                    dir,
@@ -1432,10 +1433,10 @@ gtk_file_system_model_refilter_all (GtkFileSystemModel *model)
 
 /**
  * _gtk_file_system_model_set_show_hidden:
- * @model: a #GtkFileSystemModel
+ * @model: a `GtkFileSystemModel`
  * @show_hidden: whether hidden files should be displayed
- * 
- * Sets whether hidden files should be included in the #GtkTreeModel
+ *
+ * Sets whether hidden files should be included in the `GtkTreeModel`
  * for display.
  **/
 void
@@ -1455,12 +1456,12 @@ _gtk_file_system_model_set_show_hidden (GtkFileSystemModel *model,
 
 /**
  * _gtk_file_system_model_set_show_folders:
- * @model: a #GtkFileSystemModel
+ * @model: a `GtkFileSystemModel`
  * @show_folders: whether folders should be displayed
- * 
- * Sets whether folders should be included in the #GtkTreeModel for
- * display.
- **/
+ *
+ * Sets whether folders should be included in the `GtkTreeModel`
+ * for display.
+ */
 void
 _gtk_file_system_model_set_show_folders (GtkFileSystemModel *model,
 					 gboolean            show_folders)
@@ -1478,12 +1479,12 @@ _gtk_file_system_model_set_show_folders (GtkFileSystemModel *model,
 
 /**
  * _gtk_file_system_model_set_show_files:
- * @model: a #GtkFileSystemModel
+ * @model: a `GtkFileSystemModel`
  * @show_files: whether files (as opposed to folders) should be displayed.
  *
  * Sets whether files (as opposed to folders) should be included
- * in the #GtkTreeModel for display.
- **/
+ * in the `GtkTreeModel` for display.
+ */
 void
 _gtk_file_system_model_set_show_files (GtkFileSystemModel *model,
 				       gboolean            show_files)
@@ -1501,13 +1502,13 @@ _gtk_file_system_model_set_show_files (GtkFileSystemModel *model,
 
 /**
  * _gtk_file_system_model_set_filter_folders:
- * @model: a #GtkFileSystemModel
+ * @model: a `GtkFileSystemModel`
  * @filter_folders: whether the filter applies to folders
- * 
+ *
  * Sets whether the filter set by _gtk_file_system_model_set_filter()
  * applies to folders. By default, it does not and folders are always
  * visible.
- **/
+ */
 void
 _gtk_file_system_model_set_filter_folders (GtkFileSystemModel *model,
 					   gboolean            filter_folders)
@@ -1548,8 +1549,9 @@ _gtk_file_system_model_get_cancellable (GtkFileSystemModel *model)
  * @iter: a valid iterator
  *
  * Checks if the iterator is visible. A visible iterator references
- * a row that is currently exposed using the #GtkTreeModel API. If
- * the iterator is invisible, it references a file that is not shown
+ * a row that is currently exposed using the `GtkTreeModel` API.
+ *
+ * If the iterator is invisible, it references a file that is not shown
  * for some reason, such as being filtered out by the current filter or
  * being a hidden file.
  *
@@ -1596,18 +1598,17 @@ _gtk_file_system_model_iter_is_filtered_out (GtkFileSystemModel *model,
 
 /**
  * _gtk_file_system_model_get_info:
- * @model: a #GtkFileSystemModel
- * @iter: a #GtkTreeIter pointing to a row of @model
- * 
- * Gets the #GFileInfo-struct for a particular row
+ * @model: a `GtkFileSystemModel`
+ * @iter: a `GtkTreeIter` pointing to a row of @model
+ *
+ * Gets the `GFileInfo` for a particular row
  * of @model.
- * 
- * Returns: a #GFileInfo-struct. This value
- *   is owned by @model and must not be modified or freed.
- *   If you want to keep the information for later use,
- *   you must take a reference, since the #GFileInfo-struct may be
- *   freed on later changes to the file system.
- **/
+ *
+ * Returns: a `GFileInfo`. This value is owned by @model and must not
+ *   be modified or freed. If you want to keep the information for
+ *   later use, you must take a reference, since the `GFileInfo` may
+ *   be freed on later changes to the file system.
+ */
 GFileInfo *
 _gtk_file_system_model_get_info (GtkFileSystemModel *model,
 				 GtkTreeIter        *iter)
@@ -1624,9 +1625,9 @@ _gtk_file_system_model_get_info (GtkFileSystemModel *model,
 
 /**
  * _gtk_file_system_model_get_file:
- * @model: a #GtkFileSystemModel
- * @iter: a #GtkTreeIter pointing to a row of @model
- * 
+ * @model: a `GtkFileSystemModel`
+ * @iter: a `GtkTreeIter` pointing to a row of @model
+ *
  * Gets the file for a particular row in @model. 
  *
  * Returns: the file. This object is owned by @model and
@@ -1648,8 +1649,8 @@ _gtk_file_system_model_get_file (GtkFileSystemModel *model,
 
 /**
  * _gtk_file_system_model_get_value:
- * @model: a #GtkFileSystemModel
- * @iter: a #GtkTreeIter pointing to a row of @model
+ * @model: a `GtkFileSystemModel`
+ * @iter: a `GtkTreeIter` pointing to a row of @model
  * @column: the column to get the value for
  *
  * Gets the value associated with the given row @iter and @column.
@@ -1932,7 +1933,7 @@ _gtk_file_system_model_update_files (GtkFileSystemModel *model,
 
 /**
  * _gtk_file_system_model_set_filter:
- * @mode: a #GtkFileSystemModel
+ * @mode: a `GtkFileSystemModel`
  * @filter: (nullable): %NULL or filter to use
  * 
  * Sets a filter to be used for deciding if a row should be visible or not.
@@ -1962,7 +1963,7 @@ _gtk_file_system_model_set_filter (GtkFileSystemModel      *model,
 
 /**
  * freeze_updates:
- * @model: a #GtkFileSystemModel
+ * @model: a `GtkFileSystemModel`
  *
  * Freezes most updates on the model, so that performing multiple operations on
  * the files in the model do not cause any events.  Use thaw_updates() to resume
@@ -1979,7 +1980,7 @@ freeze_updates (GtkFileSystemModel *model)
 
 /**
  * thaw_updates:
- * @model: a #GtkFileSystemModel
+ * @model: a `GtkFileSystemModel`
  *
  * Undoes the effect of a previous call to freeze_updates() 
  **/
@@ -2019,7 +2020,7 @@ thaw_updates (GtkFileSystemModel *model)
 
 /**
  * _gtk_file_system_model_clear_cache:
- * @model: a #GtkFileSystemModel
+ * @model: a `GtkFileSystemModel`
  * @column: the column to clear or -1 for all columns
  *
  * Clears the cached values in the model for the given @column. Use 
@@ -2072,7 +2073,7 @@ _gtk_file_system_model_clear_cache (GtkFileSystemModel *model,
 
 /**
  * _gtk_file_system_model_add_and_query_file:
- * @model: a #GtkFileSystemModel
+ * @model: a `GtkFileSystemModel`
  * @file: the file to add
  * @attributes: attributes to query before adding the file
  *

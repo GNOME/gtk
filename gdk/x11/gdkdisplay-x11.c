@@ -1624,7 +1624,7 @@ gdk_x11_display_open (const char *display_name)
 
 /**
  * gdk_x11_display_set_program_class:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  * @program_class: a string
  *
  * Sets the program class.
@@ -1825,7 +1825,7 @@ gdk_x11_display_has_pending (GdkDisplay *display)
 
 /**
  * gdk_x11_display_get_default_group:
- * @display: (type GdkX11Display): a #GdkDisplay
+ * @display: (type GdkX11Display): a `GdkDisplay`
  *
  * Returns the default group leader surface for all toplevel surfaces
  * on @display. This surface is implicitly created by GDK.
@@ -1844,10 +1844,10 @@ gdk_x11_display_get_default_group (GdkDisplay *display)
 
 /**
  * gdk_x11_display_grab:
- * @display: (type GdkX11Display): a #GdkDisplay 
- * 
- * Call XGrabServer() on @display. 
- * To ungrab the display again, use gdk_x11_display_ungrab(). 
+ * @display: (type GdkX11Display): a `GdkDisplay`
+ *
+ * Call XGrabServer() on @display.
+ * To ungrab the display again, use gdk_x11_display_ungrab().
  *
  * gdk_x11_display_grab()/gdk_x11_display_ungrab() calls can be nested.
  **/
@@ -1867,10 +1867,10 @@ gdk_x11_display_grab (GdkDisplay *display)
 
 /**
  * gdk_x11_display_ungrab:
- * @display: (type GdkX11Display): a #GdkDisplay
- * 
- * Ungrab @display after it has been grabbed with 
- * gdk_x11_display_grab(). 
+ * @display: (type GdkX11Display): a `GdkDisplay`
+ *
+ * Ungrab @display after it has been grabbed with
+ * gdk_x11_display_grab().
  **/
 void
 gdk_x11_display_ungrab (GdkDisplay *display)
@@ -1963,10 +1963,10 @@ gdk_x11_display_finalize (GObject *object)
 /**
  * gdk_x11_lookup_xdisplay:
  * @xdisplay: a pointer to an X Display
- * 
- * Find the #GdkDisplay corresponding to @xdisplay, if any exists.
- * 
- * Returns: (transfer none) (type GdkX11Display): the #GdkDisplay, if found, otherwise %NULL.
+ *
+ * Find the `GdkDisplay` corresponding to @xdisplay, if any exists.
+*
+ * Returns: (transfer none) (type GdkX11Display): the `GdkDisplay`, if found, otherwise %NULL.
  **/
 GdkDisplay *
 gdk_x11_lookup_xdisplay (Display *xdisplay)
@@ -1995,14 +1995,13 @@ gdk_x11_lookup_xdisplay (Display *xdisplay)
 
 /*
  * _gdk_x11_display_screen_for_xrootwin:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  * @xrootwin: window ID for one of the screen’s of the display.
  *
- * Given the root window ID of one of the screen’s of a #GdkDisplay,
+ * Given the root window ID of one of the screen’s of a `GdkDisplay`,
  * finds the screen.
  *
- * Returns: (transfer none) (nullable): the #GdkX11Screen
- *   corresponding to @xrootwin
+ * Returns: (transfer none): the `GdkX11Screen` corresponding to @xrootwin
  */
 GdkX11Screen *
 _gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,
@@ -2042,9 +2041,9 @@ _gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,
 
 /**
  * gdk_x11_display_get_xdisplay:
- * @display: (type GdkX11Display): a #GdkDisplay
+ * @display: (type GdkX11Display): a `GdkDisplay`
  *
- * Returns the X display of a #GdkDisplay.
+ * Returns the X display of a `GdkDisplay`.
  *
  * Returns: (transfer none): an X display
  */
@@ -2058,9 +2057,9 @@ gdk_x11_display_get_xdisplay (GdkDisplay *display)
 
 /**
  * gdk_x11_display_get_xscreen:
- * @display: (type GdkX11Display): a #GdkDisplay
+ * @display: (type GdkX11Display): a `GdkDisplay`
  *
- * Returns the X Screen used by #GdkDisplay.
+ * Returns the X Screen used by `GdkDisplay`.
  *
  * Returns: (transfer none): an X Screen
  */
@@ -2074,9 +2073,9 @@ gdk_x11_display_get_xscreen (GdkDisplay *display)
 
 /**
  * gdk_x11_display_get_xrootwindow:
- * @display: (type GdkX11Display): a #GdkDisplay
+ * @display: (type GdkX11Display): a `GdkDisplay`
  *
- * Returns the root X window used by #GdkDisplay.
+ * Returns the root X window used by `GdkDisplay`.
  *
  * Returns: an X Window
  */
@@ -2191,7 +2190,7 @@ broadcast_xmessage (GdkDisplay *display,
 
 /**
  * gdk_x11_display_broadcast_startup_message:
- * @display: (type GdkX11Display): a #GdkDisplay
+ * @display: (type GdkX11Display): a `GdkDisplay`
  * @message_type: startup notification message type ("new", "change",
  * or "remove")
  * @...: a list of key/value pairs (as strings), terminated by a
@@ -2305,14 +2304,14 @@ gdk_x11_display_request_selection_notification (GdkDisplay *display,
 
 /**
  * gdk_x11_display_get_user_time:
- * @display: (type GdkX11Display): a #GdkDisplay
+ * @display: (type GdkX11Display): a `GdkDisplay`
  *
- * Returns the timestamp of the last user interaction on 
+ * Returns the timestamp of the last user interaction on
  * @display. The timestamp is taken from events caused
- * by user interaction such as key presses or pointer 
+ * by user interaction such as key presses or pointer
  * movements. See gdk_x11_surface_set_user_time().
  *
- * Returns: the timestamp of the last user interaction 
+ * Returns: the timestamp of the last user interaction
  */
 guint32
 gdk_x11_display_get_user_time (GdkDisplay *display)
@@ -2322,7 +2321,7 @@ gdk_x11_display_get_user_time (GdkDisplay *display)
 
 /**
  * gdk_x11_display_get_startup_notification_id:
- * @display: (type GdkX11Display): a #GdkDisplay
+ * @display: (type GdkX11Display): a `GdkDisplay`
  *
  * Gets the startup notification ID for a display.
  * 
@@ -2336,7 +2335,7 @@ gdk_x11_display_get_startup_notification_id (GdkDisplay *display)
 
 /**
  * gdk_x11_display_set_startup_notification_id:
- * @display: (type GdkX11Display): a #GdkDisplay
+ * @display: (type GdkX11Display): a `GdkDisplay`
  * @startup_id: the startup notification ID (must be valid utf8)
  *
  * Sets the startup notification ID for a display.
@@ -2528,7 +2527,7 @@ delete_outdated_error_traps (GdkX11Display *display_x11)
 
 /**
  * gdk_x11_display_error_trap_push:
- * @display: (type GdkX11Display): a #GdkDisplay
+ * @display: (type GdkX11Display): a `GdkDisplay`
  *
  * Begins a range of X requests on @display for which X error events
  * will be ignored. Unignored errors (when no trap is pushed) will abort
@@ -2759,11 +2758,11 @@ gdk_x11_display_get_max_request_size (GdkDisplay *display)
 
 /**
  * gdk_x11_display_get_screen:
- * @display: (type GdkX11Display): a #GdkX11Display
+ * @display: (type GdkX11Display): a `GdkX11Display`
  *
- * Retrieves the #GdkX11Screen of the @display.
+ * Retrieves the `GdkX11Screen` of the @display.
  *
- * Returns: (transfer none): the #GdkX11Screen
+ * Returns: (transfer none): the `GdkX11Screen`
  */
 GdkX11Screen *
 gdk_x11_display_get_screen (GdkDisplay *display)
@@ -2965,7 +2964,7 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
    * that GDK expects to translate, you may break GDK and/or GTK+ in
    * interesting ways. You have been warned.
    *
-   * If you want this signal handler to queue a #GdkEvent, you can use
+   * If you want this signal handler to queue a `GdkEvent`, you can use
    * gdk_display_put_event().
    *
    * If you are interested in X GenericEvents, bear in mind that

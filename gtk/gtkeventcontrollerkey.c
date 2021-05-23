@@ -194,7 +194,7 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
    * @controller: the object which received the signal.
    * @keyval: the pressed key.
    * @keycode: the raw code of the pressed key.
-   * @state: the bitmask, representing the state of modifier keys and pointer buttons. See #GdkModifierType.
+   * @state: the bitmask, representing the state of modifier keys and pointer buttons. See `GdkModifierType`.
    *
    * Emitted whenever a key is pressed.
    *
@@ -216,7 +216,7 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
    * @controller: the object which received the signal.
    * @keyval: the released key.
    * @keycode: the raw code of the released key.
-   * @state: the bitmask, representing the state of modifier keys and pointer buttons. See #GdkModifierType.
+   * @state: the bitmask, representing the state of modifier keys and pointer buttons. See `GdkModifierType`.
    *
    * Emitted whenever a key is released.
    */
@@ -236,7 +236,7 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
    * @controller: the object which received the signal.
    * @keyval: the released key.
    * @state: the bitmask, representing the new state of modifier keys and
-   *   pointer buttons. See #GdkModifierType.
+   *   pointer buttons. See `GdkModifierType`.
    *
    * Emitted whenever the state of modifier keys and pointer buttons change.
    */

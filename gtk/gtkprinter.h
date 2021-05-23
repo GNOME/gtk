@@ -142,7 +142,7 @@ gboolean                 gtk_printer_get_hard_margins_for_paper_size (GtkPrinter
 
 /**
  * GtkPrinterFunc:
- * @printer: a #GtkPrinter
+ * @printer: a `GtkPrinter`
  * @data: (closure): user data passed to gtk_enumerate_printers()
  *
  * The type of function passed to gtk_enumerate_printers().

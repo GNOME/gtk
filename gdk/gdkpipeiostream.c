@@ -458,15 +458,16 @@ gdk_pipe_io_stream_init (GdkPipeIOStream *pipe)
 /**
  * gdk_pipe_io_stream_new:
  *
- * Creates a #GIOStream whose input- and output-stream behave like a pipe.
+ * Creates a `GIOStream` whose input- and output-stream behave like a pipe.
+ *
  * Data written into the output stream becomes available for reading on
  * the input stream.
  *
  * Note that this is data transfer in the opposite direction to
  * g_output_stream_splice().
  *
- * Returns: a new #GIOStream
- **/
+ * Returns: a new `GIOStream`
+ */
 GIOStream *
 gdk_pipe_io_stream_new (void)
 {

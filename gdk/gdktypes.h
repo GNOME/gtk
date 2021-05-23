@@ -112,7 +112,7 @@ typedef struct _GdkVulkanContext      GdkVulkanContext;
  * @GDK_GRAVITY_STATIC: the reference point is at the top left corner of the
  *  surface itself, ignoring window manager decorations.
  *
- * Defines the reference point of a surface and is used in #GdkPopupLayout.
+ * Defines the reference point of a surface and is used in `GdkPopupLayout`.
  */
 typedef enum
 {
@@ -212,7 +212,7 @@ typedef enum {
  *   compiled in.
  * @GDK_VULKAN_ERROR_NOT_AVAILABLE: Vulkan support is not available on this Surface
  *
- * Error enumeration for #GdkVulkanContext.
+ * Error enumeration for `GdkVulkanContext`.
  */
 typedef enum {
   GDK_VULKAN_ERROR_UNSUPPORTED,

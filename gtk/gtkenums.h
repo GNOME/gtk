@@ -927,7 +927,7 @@ typedef enum
  * @GTK_LIMIT_NONE: Events are handled regardless of what their
  *   target is.
  * @GTK_LIMIT_SAME_NATIVE: Events are only handled if their target
- *   is in the same #GtkNative as the event controllers widget. Note
+ *   is in the same `GtkNative` as the event controllers widget. Note
  *   that some event types have two targets (origin and destination).
  *
  * Describes limits of a `GtkEventController` for handling events
@@ -976,7 +976,7 @@ typedef enum
  * @GTK_SHORTCUT_SCOPE_LOCAL: Shortcuts are handled inside
  *   the widget the controller belongs to.
  * @GTK_SHORTCUT_SCOPE_MANAGED: Shortcuts are handled by
- *   the first ancestor that is a #GtkShortcutManager
+ *   the first ancestor that is a `GtkShortcutManager`
  * @GTK_SHORTCUT_SCOPE_GLOBAL: Shortcuts are handled by
  *   the root widget.
  *
@@ -994,7 +994,7 @@ typedef enum
  * GtkPickFlags:
  * @GTK_PICK_DEFAULT: The default behavior, include widgets that are receiving events
  * @GTK_PICK_INSENSITIVE: Include widgets that are insensitive
- * @GTK_PICK_NON_TARGETABLE: Include widgets that are marked as non-targetable. See #GtkWidget:can-target
+ * @GTK_PICK_NON_TARGETABLE: Include widgets that are marked as non-targetable. See `GtkWidget:can-target`
  *
  * Flags that influence the behavior of gtk_widget_pick().
  */
@@ -1027,7 +1027,7 @@ typedef enum {
  *
  * The strength of a constraint, expressed as a symbolic constant.
  *
- * The strength of a #GtkConstraint can be expressed with any positive
+ * The strength of a `GtkConstraint` can be expressed with any positive
  * integer; the values of this enumeration can be used for readability.
  */
 typedef enum {
@@ -1160,7 +1160,7 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_GRID: A grid of items.
  * @GTK_ACCESSIBLE_ROLE_GRID_CELL: An item in a grid or tree grid.
  * @GTK_ACCESSIBLE_ROLE_GROUP: An element that groups multiple widgets. GTK uses
- *   this role for various containers, like #GtkBox, #GtkViewport, and #GtkHeaderBar.
+ *   this role for various containers, like `GtkBox`, `GtkViewport`, and `GtkHeaderBar`.
  * @GTK_ACCESSIBLE_ROLE_HEADING: Unused
  * @GTK_ACCESSIBLE_ROLE_IMG: An image.
  * @GTK_ACCESSIBLE_ROLE_INPUT: Abstract role.
@@ -1322,22 +1322,22 @@ typedef enum {
  * GtkAccessibleState:
  * @GTK_ACCESSIBLE_STATE_BUSY: A “busy” state. This state has boolean values
  * @GTK_ACCESSIBLE_STATE_CHECKED: A “checked” state; indicates the current
- *   state of a #GtkCheckButton. Value type: #GtkAccessibleTristate
+ *   state of a `GtkCheckButton`. Value type: `GtkAccessibleTristate`
  * @GTK_ACCESSIBLE_STATE_DISABLED: A “disabled” state; corresponds to the
- *   #GtkWidget:sensitive property on #GtkWidget. It indicates a UI element
+ *   `GtkWidget:sensitive` property on `GtkWidget`. It indicates a UI element
  *   that is perceivable, but not editable or operable. Value type: boolean
  * @GTK_ACCESSIBLE_STATE_EXPANDED: An “expanded” state; corresponds to the
- *   #GtkExpander:expanded property on #GtkExpander. Value type: boolean
+ *   `GtkExpander:expanded` property on `GtkExpander`. Value type: boolean
  *   or undefined
  * @GTK_ACCESSIBLE_STATE_HIDDEN: A “hidden” state; corresponds to the
- *   #GtkWidget:visible property on #GtkWidget. You can use this state
+ *   `GtkWidget:visible` property on `GtkWidget`. You can use this state
  *   explicitly on UI elements that should not be exposed to an assistive
  *   technology. Value type: boolean
  *   See also: %GTK_ACCESSIBLE_STATE_DISABLED
  * @GTK_ACCESSIBLE_STATE_INVALID: An “invalid” state; set when a widget
- *   is showing an error. Value type: #GtkAccessibleInvalidState
+ *   is showing an error. Value type: `GtkAccessibleInvalidState`
  * @GTK_ACCESSIBLE_STATE_PRESSED: A “pressed” state; indicates the current
- *   state of a #GtkToggleButton. Value type: #GtkAccessibleTristate
+ *   state of a `GtkToggleButton`. Value type: `GtkAccessibleTristate`
  *   enumeration
  * @GTK_ACCESSIBLE_STATE_SELECTED: A “selected” state; set when a widget
  *   is selected. Value type: boolean or undefined
@@ -1368,7 +1368,7 @@ typedef enum {
  * @GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE: Indicates whether inputting text
  *    could trigger display of one or more predictions of the user's intended
  *    value for a combobox, searchbox, or textbox and specifies how predictions
- *    would be presented if they were made. Value type: #GtkAccessibleAutocomplete
+ *    would be presented if they were made. Value type: `GtkAccessibleAutocomplete`
  * @GTK_ACCESSIBLE_PROPERTY_DESCRIPTION: Defines a string value that describes
  *    or annotates the current element. Value type: string
  * @GTK_ACCESSIBLE_PROPERTY_HAS_POPUP: Indicates the availability and type of
@@ -1390,7 +1390,7 @@ typedef enum {
  *    boolean
  * @GTK_ACCESSIBLE_PROPERTY_ORIENTATION: Indicates whether the element's
  *    orientation is horizontal, vertical, or unknown/ambiguous. Value type:
- *    #GtkOrientation
+ *    `GtkOrientation`
  * @GTK_ACCESSIBLE_PROPERTY_PLACEHOLDER: Defines a short hint (a word or short
  *    phrase) intended to aid the user with data entry when the control has no
  *    value. A hint could be a sample value or a brief description of the expected
@@ -1403,7 +1403,7 @@ typedef enum {
  *    author-localized description for the role of an element. Value type: string
  * @GTK_ACCESSIBLE_PROPERTY_SORT: Indicates if items in a table or grid are
  *    sorted in ascending or descending order. Possible property values are in
- *    the #GtkAccessibleSort enumeration. Value type: #GtkAccessibleSort
+ *    the `GtkAccessibleSort` enumeration. Value type: `GtkAccessibleSort`
  * @GTK_ACCESSIBLE_PROPERTY_VALUE_MAX: Defines the maximum allowed value for a
  *    range widget. Value type: double
  * @GTK_ACCESSIBLE_PROPERTY_VALUE_MIN: Defines the minimum allowed value for a

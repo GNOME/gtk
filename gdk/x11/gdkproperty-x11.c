@@ -66,14 +66,14 @@ lookup_cached_xatom (GdkDisplay *display,
 
 /**
  * gdk_x11_get_xatom_by_name_for_display:
- * @display: (type GdkX11Display): a #GdkDisplay
+ * @display: (type GdkX11Display): a `GdkDisplay`
  * @atom_name: a string
  * 
- * Returns the X atom for a #GdkDisplay corresponding to @atom_name.
+ * Returns the X atom for a `GdkDisplay` corresponding to @atom_name.
  * This function caches the result, so if called repeatedly it is much
  * faster than XInternAtom(), which is a round trip to the server each time.
  * 
- * Returns: a X atom for a #GdkDisplay
+ * Returns: a X atom for a `GdkDisplay`
  **/
 Atom
 gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,
@@ -136,7 +136,7 @@ _gdk_x11_precache_atoms (GdkDisplay          *display,
 
 /**
  * gdk_x11_get_xatom_name_for_display:
- * @display: (type GdkX11Display): the #GdkDisplay where @xatom is defined
+ * @display: (type GdkX11Display): the `GdkDisplay` where @xatom is defined
  * @xatom: an X atom 
  * 
  * Returns the name of an X atom for its display. This

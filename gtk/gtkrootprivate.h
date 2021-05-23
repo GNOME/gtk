@@ -10,7 +10,7 @@ G_BEGIN_DECLS
 /**
  * GtkRootIface:
  *
- * The list of functions that must be implemented for the #GtkRoot interface.
+ * The list of functions that must be implemented for the `GtkRoot` interface.
  */
 struct _GtkRootInterface
 {

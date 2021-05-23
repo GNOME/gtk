@@ -64,7 +64,7 @@ typedef enum
  *
  * Warnings that can occur while parsing CSS.
  *
- * Unlike #GtkCssParserErrors, warnings do not cause the parser to
+ * Unlike `GtkCssParserError`s, warnings do not cause the parser to
  * skip any input, but they indicate issues that should be fixed.
  */
 typedef enum

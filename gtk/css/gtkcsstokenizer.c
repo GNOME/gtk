@@ -151,7 +151,7 @@ append_string (GString    *string,
 
 /*
  * gtk_css_token_is_finite:
- * @token: a #GtkCssToken
+ * @token: a `GtkCssToken`
  *
  * A token is considered finite when it would stay the same no matter
  * what bytes follow it in the data stream.
@@ -213,7 +213,7 @@ gtk_css_token_is_finite (const GtkCssToken *token)
 
 /*
  * gtk_css_token_is_preserved:
- * @token: a #GtkCssToken
+ * @token: a `GtkCssToken`
  * @out_closing: (nullable): Type of the token that closes a block
  *   started with this token
  *

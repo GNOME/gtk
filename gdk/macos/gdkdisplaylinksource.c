@@ -147,7 +147,7 @@ gdk_display_link_source_frame_cb (CVDisplayLinkRef   display_link,
 /**
  * gdk_display_link_source_new:
  *
- * Creates a new #GSource that will activate the dispatch function upon
+ * Creates a new `GSource` that will activate the dispatch function upon
  * notification from a CVDisplayLink that a new frame should be drawn.
  *
  * Effort is made to keep the transition from the high-priority
@@ -155,7 +155,7 @@ gdk_display_link_source_frame_cb (CVDisplayLinkRef   display_link,
  * somewhat non-ideal since the best case would be to do the drawing
  * from the high-priority thread.
  *
- * Returns: (transfer full): A newly created #GSource.
+ * Returns: (transfer full): A newly created `GSource`
  */
 GSource *
 gdk_display_link_source_new (void)

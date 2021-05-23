@@ -285,12 +285,12 @@ _gdk_x11_screen_init_visuals (GdkX11Screen *x11_screen,
 
 /*< private >
  * gdk_x11_screen_lookup_visual:
- * @screen: a #GdkX11Screen.
+ * @screen: a `GdkX11Screen`
  * @xvisualid: an X Visual ID.
  *
- * Looks up the #GdkVisual for a particular screen and X Visual ID.
+ * Looks up the `GdkVisual` for a particular screen and X Visual ID.
  *
- * Returns: (transfer none) (nullable) (type GdkX11Visual): the #GdkVisual
+ * Returns: (transfer none) (nullable) (type GdkX11Visual): the `GdkVisual`
  */
 GdkX11Visual *
 gdk_x11_screen_lookup_visual (GdkX11Screen *x11_screen,
@@ -307,9 +307,9 @@ gdk_x11_screen_lookup_visual (GdkX11Screen *x11_screen,
 
 /*< private >
  * gdk_x11_visual_get_xvisual:
- * @visual: a #GdkX11Visual.
+ * @visual: a `GdkX11Visual`
  *
- * Returns the X visual belonging to a #GdkX11Visual.
+ * Returns the X visual belonging to a `GdkX11Visual`.
  *
  * Returns: (transfer none): an Xlib Visual*.
  **/

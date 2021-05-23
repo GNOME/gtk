@@ -400,7 +400,7 @@ failure:
 
 /**
  * gsk_ngl_driver_autorelease_framebuffer:
- * @self: a #GskNglDriver
+ * @self: a `GskNglDriver`
  * @framebuffer_id: the id of the OpenGL framebuffer
  *
  * Marks @framebuffer_id to be deleted when the current frame has cmopleted.
@@ -448,14 +448,14 @@ gsk_ngl_driver_new (GskNglCommandQueue  *command_queue,
 
 /**
  * gsk_ngl_driver_from_shared_context:
- * @context: a shared #GdkGLContext retrieved with gdk_gl_context_get_shared_context()
+ * @context: a shared `GdkGLContext` retrieved with gdk_gl_context_get_shared_context()
  * @debug_shaders: if debug information for shaders should be displayed
  * @error: location for error information
  *
  * Retrieves a driver for a shared context. Generally this is shared across all GL
  * contexts for a display so that fewer programs are necessary for driving output.
  *
- * Returns: (transfer full): a #GskNglDriver if successful; otherwise %NULL and
+ * Returns: (transfer full): a `GskNglDriver` if successful; otherwise %NULL and
  *   @error is set.
  */
 GskNglDriver *
@@ -528,8 +528,8 @@ gsk_ngl_driver_compact_atlases (GskNglDriver *self)
 
 /**
  * gsk_ngl_driver_begin_frame:
- * @self: a #GskNglDriver
- * @command_queue: A #GskNglCommandQueue from the renderer
+ * @self: a `GskNglDriver`
+ * @command_queue: A `GskNglCommandQueue` from the renderer
  *
  * Begin a new frame.
  *
@@ -584,7 +584,7 @@ gsk_ngl_driver_begin_frame (GskNglDriver       *self,
 
 /**
  * gsk_ngl_driver_end_frame:
- * @self: a #GskNglDriver
+ * @self: a `GskNglDriver`
  *
  * Clean up resources from drawing the current frame.
  *
@@ -604,7 +604,7 @@ gsk_ngl_driver_end_frame (GskNglDriver *self)
 
 /**
  * gsk_ngl_driver_after_frame:
- * @self: a #GskNglDriver
+ * @self: a `GskNglDriver`
  *
  * This function does post-frame cleanup operations.
  *
@@ -661,7 +661,7 @@ gsk_ngl_driver_get_context (GskNglDriver *self)
 
 /**
  * gsk_ngl_driver_cache_texture:
- * @self: a #GskNglDriver
+ * @self: a `GskNglDriver`
  * @key: the key for the texture
  * @texture_id: the id of the texture to be cached
  *
@@ -693,13 +693,13 @@ gsk_ngl_driver_cache_texture (GskNglDriver        *self,
 
 /**
  * gsk_ngl_driver_load_texture:
- * @self: a #GdkTexture
- * @texture: a #GdkTexture
+ * @self: a `GdkTexture`
+ * @texture: a `GdkTexture`
  * @min_filter: GL_NEAREST or GL_LINEAR
  * @mag_filter: GL_NEAREST or GL_LINEAR
  *
- * Loads a #GdkTexture by uploading the contents to the GPU when
- * necessary. If @texture is a #GdkGLTexture, it can be used without
+ * Loads a `GdkTexture` by uploading the contents to the GPU when
+ * necessary. If @texture is a `GdkGLTexture`, it can be used without
  * uploading contents to the GPU.
  *
  * If the texture has already been uploaded and not yet released
@@ -807,7 +807,7 @@ gsk_ngl_driver_load_texture (GskNglDriver *self,
 
 /**
  * gsk_ngl_driver_create_texture:
- * @self: a #GskNglDriver
+ * @self: a `GskNglDriver`
  * @width: the width of the texture
  * @height: the height of the texture
  * @min_filter: GL_NEAREST or GL_LINEAR
@@ -820,7 +820,7 @@ gsk_ngl_driver_load_texture (GskNglDriver *self,
  * Use gsk_ngl_driver_release_texture() to release this texture back into
  * the pool so it may be reused later in the pipeline.
  *
- * Returns: a #GskNglTexture which can be returned to the pool with
+ * Returns: a `GskNglTexture` which can be returned to the pool with
  *   gsk_ngl_driver_release_texture().
  */
 GskNglTexture *
@@ -846,8 +846,8 @@ gsk_ngl_driver_create_texture (GskNglDriver *self,
 
 /**
  * gsk_ngl_driver_release_texture:
- * @self: a #GskNglDriver
- * @texture: a #GskNglTexture
+ * @self: a `GskNglDriver`
+ * @texture: a `GskNglTexture`
  *
  * Releases @texture back into the pool so that it can be used later
  * in the command stream by future batches. This helps reduce VRAM
@@ -876,7 +876,7 @@ gsk_ngl_driver_release_texture (GskNglDriver *self,
 
 /**
  * gsk_ngl_driver_create_render_target:
- * @self: a #GskNglDriver
+ * @self: a `GskNglDriver`
  * @width: the width for the render target
  * @height: the height for the render target
  * @min_filter: the min filter to use for the texture
@@ -955,8 +955,8 @@ gsk_ngl_driver_create_render_target (GskNglDriver        *self,
 
 /**
  * gsk_ngl_driver_release_render_target:
- * @self: a #GskNglDriver
- * @render_target: a #GskNglRenderTarget created with
+ * @self: a `GskNglDriver`
+ * @render_target: a `GskNglRenderTarget` created with
  *   gsk_ngl_driver_create_render_target().
  * @release_texture: if the texture should also be released
  *
@@ -1014,15 +1014,15 @@ gsk_ngl_driver_release_render_target (GskNglDriver       *self,
 
 /**
  * gsk_ngl_driver_lookup_shader:
- * @self: a #GskNglDriver
+ * @self: a `GskNglDriver`
  * @shader: the shader to lookup or load
- * @error: a location for a #GError
+ * @error: a location for a `GError`
  *
  * Attepts to load @shader from the shader cache.
  *
  * If it has not been loaded, then it will compile the shader on demand.
  *
- * Returns: (nullable) (transfer none): a #GskGLShader
+ * Returns: (nullable) (transfer none): a `GskGLShader`
  */
 GskNglProgram *
 gsk_ngl_driver_lookup_shader (GskNglDriver  *self,

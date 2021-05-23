@@ -1218,7 +1218,7 @@ _gdk_win32_display_make_gl_context_current (GdkDisplay *display,
 
 /**
  * gdk_win32_display_get_wgl_version:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  * @major: (out): return location for the WGL major version
  * @minor: (out): return location for the WGL minor version
  *

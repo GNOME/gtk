@@ -720,7 +720,7 @@ build_recent_items_list (GtkRecentManager *manager)
  * signal each time something inside the list changes.
  *
  * `GtkRecentManager` objects are expensive: be sure to create them
- * only when needed. You should use [type_func@Gtk.RecentManager.get_default]
+ * only when needed. You should use [func@Gtk.RecentManager.get_default]
  * instead.
  *
  * Returns: A newly created `GtkRecentManager` object
@@ -995,7 +995,7 @@ gtk_recent_manager_add_full (GtkRecentManager    *manager,
  * gtk_recent_manager_remove_item:
  * @manager: a `GtkRecentManager`
  * @uri: the URI of the item you wish to remove
- * @error: (nullable): return location for a #GError
+ * @error: (nullable): return location for a `GError`
  *
  * Removes a resource pointed by @uri from the recently used resources
  * list handled by a recent manager.
@@ -1144,7 +1144,7 @@ build_recent_info (GBookmarkFile *bookmarks,
  * gtk_recent_manager_lookup_item:
  * @manager: a `GtkRecentManager`
  * @uri: a URI
- * @error: (nullable): a return location for a #GError
+ * @error: (nullable): a return location for a `GError`
  *
  * Searches for a URI inside the recently used resources list, and
  * returns a `GtkRecentInfo` containing information about the resource
@@ -1207,7 +1207,7 @@ gtk_recent_manager_lookup_item (GtkRecentManager  *manager,
  * @uri: the URI of a recently used resource
  * @new_uri: (nullable): the new URI of the recently used resource, or
  *    %NULL to remove the item pointed by @uri in the list
- * @error: (nullable): a return location for a #GError, or %NULL
+ * @error: (nullable): a return location for a `GError`
  *
  * Changes the location of a recently used resource from @uri to @new_uri.
  *
@@ -1332,7 +1332,7 @@ purge_recent_items_list (GtkRecentManager  *manager,
 /**
  * gtk_recent_manager_purge_items:
  * @manager: a `GtkRecentManager`
- * @error: (nullable): a return location for a #GError, or %NULL
+ * @error: (nullable): a return location for a `GError`
  *
  * Purges every item from the recently used resources list.
  *
@@ -1652,7 +1652,7 @@ gtk_recent_info_get_mime_type (GtkRecentInfo *info)
  * Gets the the time when the resource
  * was added to the recently used resources list.
  *
- * Returns: (transfer none): a #GDateTime for the time
+ * Returns: (transfer none): a `GDateTime` for the time
  *    when the resource was added
  */
 GDateTime *
@@ -1670,8 +1670,8 @@ gtk_recent_info_get_added (GtkRecentInfo *info)
  * Gets the time when the meta-data
  * for the resource was last modified.
  *
- * Returns: (transfer none): a #GDateTime for the time
- *    when the resource was last modified
+ * Returns: (transfer none): a `GDateTime` for the time
+ *   when the resource was last modified
  */
 GDateTime *
 gtk_recent_info_get_modified (GtkRecentInfo *info)
@@ -1688,7 +1688,7 @@ gtk_recent_info_get_modified (GtkRecentInfo *info)
  * Gets the time when the meta-data
  * for the resource was last visited.
  *
- * Returns: (transfer none): a #GDateTime for the time
+ * Returns: (transfer none): a `GDateTime` for the time
  *    when the resource was last visited
  */
 GDateTime *
@@ -1879,8 +1879,7 @@ gtk_recent_info_last_application (GtkRecentInfo *info)
  *
  * Retrieves the icon associated to the resource MIME type.
  *
- * Returns: (nullable) (transfer full): a #GIcon containing the icon, or %NULL.
- *   Use g_object_unref() when finished using the icon
+ * Returns: (nullable) (transfer full): a `GIcon` containing the icon
  */
 GIcon *
 gtk_recent_info_get_gicon (GtkRecentInfo *info)
@@ -2279,13 +2278,14 @@ gtk_recent_info_has_group (GtkRecentInfo *info,
  * @app_name: (nullable): the name of the application that should
  *   be mapped to a `GAppInfo`; if %NULL is used then the default
  *   application for the MIME type is used
- * @error: (nullable): return location for a #GError, or %NULL
+ * @error: (nullable): return location for a `GError`
  *
  * Creates a `GAppInfo` for the specified `GtkRecentInfo`
  *
- * Returns: (nullable) (transfer full): the newly created `GAppInfo`,
- *   or %NULL. In case of error, @error will be set either with a
- *   %GTK_RECENT_MANAGER_ERROR or a %G_IO_ERROR
+ * In case of error, @error will be set either with a
+ * %GTK_RECENT_MANAGER_ERROR or a %G_IO_ERROR
+ *
+ * Returns: (nullable) (transfer full): the newly created `GAppInfo`
  */
 GAppInfo *
 gtk_recent_info_create_app_info (GtkRecentInfo  *info,

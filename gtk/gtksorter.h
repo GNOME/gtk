@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 
 /**
  * GtkSorterOrder:
- * @GTK_SORTER_ORDER_PARTIAL: A partial order. Any #GtkOrdering is possible.
+ * @GTK_SORTER_ORDER_PARTIAL: A partial order. Any `GtkOrdering` is possible.
  * @GTK_SORTER_ORDER_NONE: No order, all elements are considered equal.
  *   gtk_sorter_compare() will only return %GTK_ORDERING_EQUAL.
  * @GTK_SORTER_ORDER_TOTAL: A total order. gtk_sorter_compare() will only
@@ -76,7 +76,7 @@ G_DECLARE_DERIVABLE_TYPE (GtkSorter, gtk_sorter, GTK, SORTER, GObject)
 /**
  * GtkSorterClass
  * @compare: Compare two items. See gtk_sorter_compare() for details.
- * @get_order: Get the #GtkSorderOrder that applies to the current sorter.
+ * @get_order: Get the `GtkSorderOrder` that applies to the current sorter.
  *   If unimplemented, it returns %GTK_SORTER_ORDER_PARTIAL.
  *
  * The virtual table for `GtkSorter`.

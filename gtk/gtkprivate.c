@@ -175,7 +175,7 @@ _gtk_ensure_resources (void)
 
 /*
  * gtk_get_portal_interface_version:
- * @connection: a session #GDBusConnection
+ * @connection: a session `GDBusConnection`
  * @interface_name: the interface name for the portal interface
  *   we're interested in.
  *

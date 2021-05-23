@@ -519,7 +519,7 @@ gsk_ngl_uniform_state_set_matrix (GskNglUniformState      *state,
 
 /**
  * gsk_ngl_uniform_state_set_texture:
- * @state: a #GskNglUniformState
+ * @state: a `GskNglUniformState`
  * @program: the program id
  * @location: the location of the texture
  * @texture_slot: a texturing slot such as GL_TEXTURE0
@@ -559,7 +559,7 @@ gsk_ngl_uniform_state_set_texture (GskNglUniformState   *state,
 
 /**
  * gsk_ngl_uniform_state_set_color:
- * @state: a #GskNglUniformState
+ * @state: a `GskNglUniformState`
  * @program: a program id > 0
  * @location: the uniform location
  * @color: a color to set or %NULL for transparent
@@ -724,9 +724,9 @@ gsk_ngl_uniform_state_fmix (guint program,
  * @info: the uniform info
  *
  * This function can be used to apply state that was previously recorded
- * by the #GskNglUniformState.
+ * by the `GskNglUniformState`.
  *
- * It is specifically useful from the GskNglCommandQueue to execute uniform
+ * It is specifically useful from the `GskNglCommandQueue` to execute uniform
  * changes but only when they have changed from the current value.
  */
 static inline void

@@ -4503,7 +4503,7 @@ update_window_style_classes (GtkWindow *window)
 }
 
 /* _gtk_window_set_allocation:
- * @window: a #GtkWindow
+ * @window: a `GtkWindow`
  * @allocation: the original allocation for the window
  * @allocation_out: @allocation taking decorations into
  * consideration
@@ -5146,7 +5146,7 @@ gtk_window_css_changed (GtkWidget         *widget,
 
 /*
  * _gtk_window_unset_focus_and_default:
- * @window: a #GtkWindow
+ * @window: a `GtkWindow`
  * @widget: a widget inside of @window
  *
  * Checks whether the focus and default widgets of @window are
@@ -6805,7 +6805,7 @@ gtk_window_grab_notify (GtkWindow *window,
 
 /**
  * gtk_window_set_handle_menubar_accel: (attributes org.gtk.Method.set_property=handle-menubar-accel)
- * @window: a #GtkWindow
+ * @window: a `GtkWindow`
  * @handle_menubar_accel: %TRUE to make @window handle F10
  *
  * Sets whether this window should react to F10 key presses
@@ -6834,7 +6834,7 @@ gtk_window_set_handle_menubar_accel (GtkWindow *window,
 
 /**
  * gtk_window_get_handle_menubar_accel: (attributes org.gtk.Method.get_property=handle-menubar-accel)
- * @window: a #GtkWindow
+ * @window: a `GtkWindow`
  *
  * Returns whether this window reacts to F10 key presses by
  * activating a menubar it contains.

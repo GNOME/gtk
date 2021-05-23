@@ -237,7 +237,7 @@ gdk_draw_context_get_display (GdkDrawContext *context)
  *
  * Retrieves the surface that @context is bound to.
  *
- * Returns: (nullable) (transfer none): the #GdkSurface
+ * Returns: (nullable) (transfer none): a `GdkSurface`
  */
 GdkSurface *
 gdk_draw_context_get_surface (GdkDrawContext *context)
@@ -382,7 +382,7 @@ gdk_draw_context_end_frame (GdkDrawContext *context)
 
 /**
  * gdk_draw_context_get_frame_region:
- * @context: a #GdkDrawContext
+ * @context: a `GdkDrawContext`
  *
  * Retrieves the region that is currently being repainted.
  *

@@ -60,14 +60,14 @@ gtk_do_render_icon (GtkStyleContext        *context,
 
 /**
  * gtk_render_check:
- * @context: a #GtkStyleContext
- * @cr: a #cairo_t
+ * @context: a `GtkStyleContext`
+ * @cr: a `cairo_t`
  * @x: X origin of the rectangle
  * @y: Y origin of the rectangle
  * @width: rectangle width
  * @height: rectangle height
  *
- * Renders a checkmark (as in a #GtkCheckButton).
+ * Renders a checkmark (as in a `GtkCheckButton`).
  *
  * The %GTK_STATE_FLAG_CHECKED state determines whether the check is
  * on or off, and %GTK_STATE_FLAG_INCONSISTENT determines whether it
@@ -96,8 +96,8 @@ gtk_render_check (GtkStyleContext *context,
 
 /**
  * gtk_render_option:
- * @context: a #GtkStyleContext
- * @cr: a #cairo_t
+ * @context: a `GtkStyleContext`
+ * @cr: a `cairo_t`
  * @x: X origin of the rectangle
  * @y: Y origin of the rectangle
  * @width: rectangle width
@@ -130,8 +130,8 @@ gtk_render_option (GtkStyleContext *context,
 
 /**
  * gtk_render_arrow:
- * @context: a #GtkStyleContext
- * @cr: a #cairo_t
+ * @context: a `GtkStyleContext`
+ * @cr: a `cairo_t`
  * @angle: arrow angle from 0 to 2 * %G_PI, being 0 the arrow pointing to the north
  * @x: X origin of the render area
  * @y: Y origin of the render area
@@ -162,8 +162,8 @@ gtk_render_arrow (GtkStyleContext *context,
 
 /**
  * gtk_render_background:
- * @context: a #GtkStyleContext
- * @cr: a #cairo_t
+ * @context: a `GtkStyleContext`
+ * @cr: a `cairo_t`
  * @x: X origin of the rectangle
  * @y: Y origin of the rectangle
  * @width: rectangle width
@@ -208,8 +208,8 @@ gtk_render_background (GtkStyleContext *context,
 
 /**
  * gtk_render_frame:
- * @context: a #GtkStyleContext
- * @cr: a #cairo_t
+ * @context: a `GtkStyleContext`
+ * @cr: a `cairo_t`
  * @x: X origin of the rectangle
  * @y: Y origin of the rectangle
  * @width: rectangle width
@@ -254,14 +254,14 @@ gtk_render_frame (GtkStyleContext *context,
 
 /**
  * gtk_render_expander:
- * @context: a #GtkStyleContext
- * @cr: a #cairo_t
+ * @context: a `GtkStyleContext`
+ * @cr: a `cairo_t`
  * @x: X origin of the rectangle
  * @y: Y origin of the rectangle
  * @width: rectangle width
  * @height: rectangle height
  *
- * Renders an expander (as used in #GtkTreeView and #GtkExpander) in the area
+ * Renders an expander (as used in `GtkTreeView` and `GtkExpander`) in the area
  * defined by @x, @y, @width, @height. The state %GTK_STATE_FLAG_CHECKED
  * determines whether the expander is collapsed or expanded.
  *
@@ -288,8 +288,8 @@ gtk_render_expander (GtkStyleContext *context,
 
 /**
  * gtk_render_focus:
- * @context: a #GtkStyleContext
- * @cr: a #cairo_t
+ * @context: a `GtkStyleContext`
+ * @cr: a `cairo_t`
  * @x: X origin of the rectangle
  * @y: Y origin of the rectangle
  * @width: rectangle width
@@ -333,11 +333,11 @@ gtk_render_focus (GtkStyleContext *context,
 
 /**
  * gtk_render_layout:
- * @context: a #GtkStyleContext
- * @cr: a #cairo_t
+ * @context: a `GtkStyleContext`
+ * @cr: a `cairo_t`
  * @x: X origin
  * @y: Y origin
- * @layout: the #PangoLayout to render
+ * @layout: the `PangoLayout` to render
  *
  * Renders @layout on the coordinates @x, @y
  **/
@@ -370,8 +370,8 @@ gtk_render_layout (GtkStyleContext *context,
 
 /**
  * gtk_render_line:
- * @context: a #GtkStyleContext
- * @cr: a #cairo_t
+ * @context: a `GtkStyleContext`
+ * @cr: a `cairo_t`
  * @x0: X coordinate for the origin of the line
  * @y0: Y coordinate for the origin of the line
  * @x1: X coordinate for the end of the line
@@ -410,16 +410,15 @@ gtk_render_line (GtkStyleContext *context,
 
 /**
  * gtk_render_handle:
- * @context: a #GtkStyleContext
- * @cr: a #cairo_t
+ * @context: a `GtkStyleContext`
+ * @cr: a `cairo_t`
  * @x: X origin of the rectangle
  * @y: Y origin of the rectangle
  * @width: rectangle width
  * @height: rectangle height
  *
- * Renders a handle (as in #GtkPaned and
- * #GtkWindow’s resize grip), in the rectangle
- * determined by @x, @y, @width, @height.
+ * Renders a handle (as in `GtkPaned` and `GtkWindow`’s resize grip),
+ * in the rectangle determined by @x, @y, @width, @height.
  *
  * Handles rendered for the paned and grip classes:
  *
@@ -447,14 +446,14 @@ gtk_render_handle (GtkStyleContext *context,
 
 /**
  * gtk_render_activity:
- * @context: a #GtkStyleContext
- * @cr: a #cairo_t
+ * @context: a `GtkStyleContext`
+ * @cr: a `cairo_t`
  * @x: X origin of the rectangle
  * @y: Y origin of the rectangle
  * @width: rectangle width
  * @height: rectangle height
  *
- * Renders an activity indicator (such as in #GtkSpinner).
+ * Renders an activity indicator (such as in `GtkSpinner`).
  * The state %GTK_STATE_FLAG_CHECKED determines whether there is
  * activity going on.
  **/
@@ -477,11 +476,11 @@ gtk_render_activity (GtkStyleContext *context,
 
 /**
  * gtk_render_icon:
- * @context: a #GtkStyleContext
- * @cr: a #cairo_t
- * @texture: a #GdkTexture containing the icon to draw
+ * @context: a `GtkStyleContext`
+ * @cr: a `cairo_t`
+ * @texture: a `GdkTexture` containing the icon to draw
  * @x: X position for the @texture
- * @y: Y position for the @texture 
+ * @y: Y position for the @texture
  *
  * Renders the icon in @texture at the specified @x and @y coordinates.
  *

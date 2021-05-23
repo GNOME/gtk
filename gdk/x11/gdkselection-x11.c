@@ -34,7 +34,7 @@
 
 /**
  * gdk_x11_display_text_property_to_text_list:
- * @display: (type GdkX11Display): The #GdkDisplay where the encoding is defined
+ * @display: (type GdkX11Display): The `GdkDisplay` where the encoding is defined
  * @encoding: a string representing the encoding. The most
  *   common values for this are "STRING", or "COMPOUND_TEXT".
  *   This is value used as the type for the property
@@ -271,7 +271,7 @@ _gdk_x11_display_text_property_to_utf8_list (GdkDisplay    *display,
 
 /**
  * gdk_x11_display_string_to_compound_text:
- * @display: (type GdkX11Display): the #GdkDisplay where the encoding is defined
+ * @display: (type GdkX11Display): the `GdkDisplay` where the encoding is defined
  * @str: a nul-terminated string
  * @encoding: (out) (transfer none): location to store the encoding
  *   (to be used as the type for the property)
@@ -326,7 +326,7 @@ gdk_x11_display_string_to_compound_text (GdkDisplay  *display,
 
 /**
  * gdk_x11_display_utf8_to_compound_text:
- * @display: (type GdkX11Display): a #GdkDisplay
+ * @display: (type GdkX11Display): a `GdkDisplay`
  * @str: a UTF-8 string
  * @encoding: (out) (transfer none): location to store resulting encoding
  * @format: (out): location to store format of the result

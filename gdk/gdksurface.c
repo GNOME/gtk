@@ -1695,7 +1695,7 @@ gdk_surface_constrain_size (GdkGeometry    *geometry,
  * gdk_surface_get_device_position:
  * @surface: a `GdkSurface`
  * @device: pointer `GdkDevice` to query to
- * @x: (out) (optional): return locatio for the X coordinate of @device
+ * @x: (out) (optional): return location for the X coordinate of @device
  * @y: (out) (optional): return location for the Y coordinate of @device
  * @mask: (out) (optional): return location for the modifier mask
  *
@@ -2637,7 +2637,7 @@ gdk_surface_get_scale_factor (GdkSurface *surface)
  * GTK will update this property automatically if the @surface background
  * is opaque, as we know where the opaque regions are. If your surface
  * background is not opaque, please update this property in your
- * #GtkWidgetClass.css_changed() handler.
+ * [vfunc@Gtk.Widget.css_changed] handler.
  */
 void
 gdk_surface_set_opaque_region (GdkSurface      *surface,

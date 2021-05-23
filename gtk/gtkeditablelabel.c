@@ -386,7 +386,7 @@ gtk_editable_label_class_init (GtkEditableLabelClass *class)
    * The default bindings for this action are clicking
    * on the widget and the Enter key.
    *
-   * This action is disabled when #GtkEditableLabel:editing
+   * This action is disabled when `GtkEditableLabel:editing`
    * is %FALSE.
    */
   gtk_widget_class_install_action (widget_class, "editing.start", NULL, start_editing);
@@ -397,12 +397,12 @@ gtk_editable_label_class_init (GtkEditableLabelClass *class)
    *
    * Switch the widget out of editing mode. If @commit
    * is %TRUE, then the results of the editing are taken
-   * as the new value of #GtkEditable:text.
+   * as the new value of `GtkEditable:text`.
    *
    * The default binding for this action is the Escape
    * key.
    *
-   * This action is disabled when #GtkEditableLabel:editing
+   * This action is disabled when `GtkEditableLabel:editing`
    * is %FALSE.
    */
   gtk_widget_class_install_action (widget_class, "editing.stop", "b", stop_editing);

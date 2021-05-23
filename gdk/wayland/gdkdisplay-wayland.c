@@ -326,7 +326,7 @@ static const struct org_kde_kwin_server_decoration_manager_listener server_decor
 
 /*
  * gdk_wayland_display_prefers_ssd:
- * @display: (type GdkWaylandDisplay): a #GdkDisplay
+ * @display: (type GdkWaylandDisplay): a `GdkDisplay`
  *
  * Checks whether the Wayland compositor prefers to draw the window
  * decorations or if it leaves decorations to the application.

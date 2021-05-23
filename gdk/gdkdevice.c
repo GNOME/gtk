@@ -107,7 +107,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
   /**
    * GdkDevice:display: (attributes org.gtk.Property.get=gdk_device_get_display)
    *
-   * The #GdkDisplay the #GdkDevice pertains to.
+   * The `GdkDisplay` the `GdkDevice` pertains to.
    */
   device_props[PROP_DISPLAY] =
       g_param_spec_object ("display",
@@ -1190,7 +1190,7 @@ gdk_device_set_seat (GdkDevice *device,
 
 /**
  * gdk_device_get_seat: (attributes org.gtk.Method.get_property=seat)
- * @device: A #GdkDevice
+ * @device: A `GdkDevice`
  *
  * Returns the `GdkSeat` the device belongs to.
  *

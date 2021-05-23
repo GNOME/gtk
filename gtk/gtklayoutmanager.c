@@ -234,8 +234,8 @@ gtk_layout_manager_init (GtkLayoutManager *self)
 
 /*< private >
  * gtk_layout_manager_set_widget:
- * @layout_manager: a #GtkLayoutManager
- * @widget: (nullable): a #GtkWidget
+ * @layout_manager: a `GtkLayoutManager`
+ * @widget: (nullable): a `GtkWidget`
  *
  * Sets a back pointer from @widget to @layout_manager.
  */
@@ -263,14 +263,14 @@ gtk_layout_manager_set_widget (GtkLayoutManager *layout_manager,
 
 /*< private >
  * gtk_layout_manager_set_root:
- * @layout_manager: a #GtkLayoutManager
- * @root: (nullable): a #GtkWidget implementing #GtkRoot
+ * @layout_manager: a i`GtkLayoutManager`
+ * @root: (nullable): a `GtkWidget` implementing `GtkRoot`
  *
  * Sets a back pointer from @root to @layout_manager.
  *
- * This function is called by #GtkWidget when getting rooted and unrooted,
- * and will call #GtkLayoutManagerClass.root() or #GtkLayoutManagerClass.unroot()
- * depending on whether @root is a #GtkWidget or %NULL.
+ * This function is called by `GtkWidget` when getting rooted and unrooted,
+ * and will call `GtkLayoutManagerClass.root()` or `GtkLayoutManagerClass.unroot()`
+ * depending on whether @root is a `GtkWidget` or %NULL.
  */
 void
 gtk_layout_manager_set_root (GtkLayoutManager *layout_manager,
@@ -470,11 +470,11 @@ gtk_layout_manager_layout_changed (GtkLayoutManager *manager)
 
 /*< private >
  * gtk_layout_manager_remove_layout_child:
- * @manager: a #GtkLayoutManager
- * @widget: a #GtkWidget
+ * @manager: a `GtkLayoutManager`
+ * @widget: a `GtkWidget`
  *
- * Removes the #GtkLayoutChild associated with @widget from the
- * given #GtkLayoutManager, if any is set.
+ * Removes the `GtkLayoutChild` associated with @widget from the
+ * given `GtkLayoutManager`, if any is set.
  */
 void
 gtk_layout_manager_remove_layout_child (GtkLayoutManager *manager,

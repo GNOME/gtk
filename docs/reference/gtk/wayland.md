@@ -18,3 +18,8 @@ or wayland-1.
 ### XDG_RUNTIME_DIR
 
 Used to locate the Wayland socket to use.
+
+## Wayland-specific APIs
+
+See the [documentation](https://docs.gtk.org/gdk4-wayland/) for
+Wayland-specific GDK APIs.

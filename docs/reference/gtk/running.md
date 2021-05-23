@@ -22,20 +22,26 @@ are only available when GTK has been configured with `-Ddebug=true`.
 `builder`
 : GtkBuilder support
 
+`builder-objects`
+: Unused GtkBuilder objects
+
 `geometry`
 : Size allocation
 
 `icontheme`
 : Icon themes
 
+`iconfallback`
+: Information about icon fallback
+
 `keybindings`
-: Keybindings
+: Keyboard shortcuts
 
 `modules`
-: Loading of modules
+: Modules and extensions
 
 `printing`
-: Printing support
+: Printing
 
 `size-request`
 : Size requests
@@ -45,6 +51,15 @@ are only available when GTK has been configured with `-Ddebug=true`.
 
 `tree`
 : Tree widget internals
+
+`constraints`
+: Constraints and the constraint solver
+
+`layout`
+: Layout managers
+
+`acccessibility`
+: Accessibility state changs
 
 A number of keys are influencing behavior instead of just logging:
 
@@ -56,15 +71,6 @@ A number of keys are influencing behavior instead of just logging:
 
 `touchscreen`
 : Pretend the pointer is a touchscreen device
-
-`updates`
-: Visual feedback about window updates
-
-`resize`
-: Highlight resizing widgets
-
-`layout`
-: Show layout borders
 
 `snapshot`
 : Include debug render nodes in the generated snapshots
@@ -324,8 +330,14 @@ using and the GDK backend supports them:
 `cairo`
 : Selects the fallback Cairo renderer
 
-`gl`
+`opengl`
 : Selects the default OpenGL renderer
+
+`gl`
+: Selects the "gl" OpenGL renderer
+
+`ngl`
+: Selects the "ngl" OpenGL renderer
 
 `vulkan`
 : Selects the Vulkan renderer

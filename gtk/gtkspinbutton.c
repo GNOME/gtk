@@ -568,7 +568,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   /**
    * GtkSpinButton::change-value:
    * @spin_button: the object on which the signal was emitted
-   * @scroll: a #GtkScrollType to specify the speed and amount of change
+   * @scroll: a `GtkScrollType` to specify the speed and amount of change
    *
    * Emitted when the user initiates a value change.
    *

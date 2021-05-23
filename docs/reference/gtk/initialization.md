@@ -7,7 +7,7 @@ Title: Initialization
 Before using GTK, you need to initialize it using [func@Gtk.init]; this
 connects to the windowing system, sets up the locale and performs other
 initialization tasks. [func@Gtk.init] exits the application if errors occur;
-to avoid this, you can use [`func@Gtk.init_check`], which allows you to recover
+to avoid this, you can use [func@Gtk.init_check], which allows you to recover
 from a failed GTK initialization; for instance, you might start up your
 application in text mode instead.
 

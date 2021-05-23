@@ -231,7 +231,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    * 50% of the scale, and the second one for the top 50%.
    *
    * It is recommended to use at least 3 icons so that the
-   * #GtkScaleButton reflects the current value of the scale
+   * `GtkScaleButton` reflects the current value of the scale
    * better for the users.
    */
   g_object_class_install_property (gobject_class,

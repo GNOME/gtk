@@ -315,7 +315,7 @@ gdk_seat_ungrab (GdkSeat *seat)
 
 /**
  * gdk_seat_get_devices:
- * @seat: a #GdkSeat
+ * @seat: a `GdkSeat`
  * @capabilities: capabilities to get devices for
  *
  * Returns the devices that match the given capabilities.

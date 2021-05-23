@@ -37,10 +37,10 @@
  *
  * Renders a toggle button in a cell
  *
- * #GtkCellRendererToggle renders a toggle button in a cell. The
+ * `GtkCellRendererToggle` renders a toggle button in a cell. The
  * button is drawn as a radio or a checkbutton, depending on the
- * #GtkCellRendererToggle:radio property.
- * When activated, it emits the #GtkCellRendererToggle::toggled signal.
+ * `GtkCellRendererToggle:radio` property.
+ * When activated, it emits the `GtkCellRendererToggle::toggled` signal.
  */
 
 
@@ -226,7 +226,7 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
   /**
    * GtkCellRendererToggle::toggled:
    * @cell_renderer: the object which received the signal
-   * @path: string representation of #GtkTreePath describing the 
+   * @path: string representation of `GtkTreePath` describing the 
    *        event location
    *
    * The ::toggled signal is emitted when the cell is toggled. 
@@ -324,10 +324,10 @@ gtk_cell_renderer_toggle_set_property (GObject      *object,
 /**
  * gtk_cell_renderer_toggle_new:
  *
- * Creates a new #GtkCellRendererToggle. Adjust rendering
+ * Creates a new `GtkCellRendererToggle`. Adjust rendering
  * parameters using object properties. Object properties can be set
- * globally (with g_object_set()). Also, with #GtkTreeViewColumn, you
- * can bind a property to a value in a #GtkTreeModel. For example, you
+ * globally (with g_object_set()). Also, with `GtkTreeViewColumn`, you
+ * can bind a property to a value in a `GtkTreeModel`. For example, you
  * can bind the “active” property on the cell renderer to a boolean value
  * in the model, thus causing the check button to reflect the state of
  * the model.
@@ -531,15 +531,15 @@ gtk_cell_renderer_toggle_activate (GtkCellRenderer      *cell,
 
 /**
  * gtk_cell_renderer_toggle_set_radio:
- * @toggle: a #GtkCellRendererToggle
+ * @toggle: a `GtkCellRendererToggle`
  * @radio: %TRUE to make the toggle look like a radio button
  * 
  * If @radio is %TRUE, the cell renderer renders a radio toggle
  * (i.e. a toggle in a group of mutually-exclusive toggles).
  * If %FALSE, it renders a check toggle (a standalone boolean option).
  * This can be set globally for the cell renderer, or changed just
- * before rendering each cell in the model (for #GtkTreeView, you set
- * up a per-row setting using #GtkTreeViewColumn to associate model
+ * before rendering each cell in the model (for `GtkTreeView`, you set
+ * up a per-row setting using `GtkTreeViewColumn` to associate model
  * columns with cell renderer properties).
  **/
 void
@@ -555,7 +555,7 @@ gtk_cell_renderer_toggle_set_radio (GtkCellRendererToggle *toggle,
 
 /**
  * gtk_cell_renderer_toggle_get_radio:
- * @toggle: a #GtkCellRendererToggle
+ * @toggle: a `GtkCellRendererToggle`
  *
  * Returns whether we’re rendering radio toggles rather than checkboxes. 
  * 
@@ -573,7 +573,7 @@ gtk_cell_renderer_toggle_get_radio (GtkCellRendererToggle *toggle)
 
 /**
  * gtk_cell_renderer_toggle_get_active:
- * @toggle: a #GtkCellRendererToggle
+ * @toggle: a `GtkCellRendererToggle`
  *
  * Returns whether the cell renderer is active. See
  * gtk_cell_renderer_toggle_set_active().
@@ -592,7 +592,7 @@ gtk_cell_renderer_toggle_get_active (GtkCellRendererToggle *toggle)
 
 /**
  * gtk_cell_renderer_toggle_set_active:
- * @toggle: a #GtkCellRendererToggle.
+ * @toggle: a `GtkCellRendererToggle`.
  * @setting: the value to set.
  *
  * Activates or deactivates a cell renderer.
@@ -608,7 +608,7 @@ gtk_cell_renderer_toggle_set_active (GtkCellRendererToggle *toggle,
 
 /**
  * gtk_cell_renderer_toggle_get_activatable:
- * @toggle: a #GtkCellRendererToggle
+ * @toggle: a `GtkCellRendererToggle`
  *
  * Returns whether the cell renderer is activatable. See
  * gtk_cell_renderer_toggle_set_activatable().
@@ -627,7 +627,7 @@ gtk_cell_renderer_toggle_get_activatable (GtkCellRendererToggle *toggle)
 
 /**
  * gtk_cell_renderer_toggle_set_activatable:
- * @toggle: a #GtkCellRendererToggle.
+ * @toggle: a `GtkCellRendererToggle`.
  * @setting: the value to set.
  *
  * Makes the cell renderer activatable.

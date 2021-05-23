@@ -107,7 +107,7 @@ static GParamSpec *properties[N_PROPS] = { NULL, };
 
 /*
  * gtk_list_base_get_position_from_allocation:
- * @self: a #GtkListBase
+ * @self: a `GtkListBase`
  * @across: position in pixels in the direction cross to the list
  * @along:  position in pixels in the direction of the list
  * @pos: (out caller-allocates): set to the looked up position
@@ -262,7 +262,7 @@ gtk_list_base_clear_adjustment (GtkListBase    *self,
 
 /*
  * gtk_list_base_move_focus_along:
- * @self: a #GtkListBase
+ * @self: a `GtkListBase`
  * @pos: position from which to move focus
  * @steps: steps to move focus - negative numbers move focus backwards
  *
@@ -283,7 +283,7 @@ gtk_list_base_move_focus_along (GtkListBase *self,
 
 /*
  * gtk_list_base_move_focus_across:
- * @self: a #GtkListBase
+ * @self: a `GtkListBase`
  * @pos: position from which to move focus
  * @steps: steps to move focus - negative numbers move focus backwards
  *
@@ -322,7 +322,7 @@ gtk_list_base_move_focus (GtkListBase    *self,
 
 /*
  * gtk_list_base_get_allocation_along:
- * @self: a #GtkListBase
+ * @self: a `GtkListBase`
  * @pos: item to get the size of
  * @offset: (out caller-allocates) (optional): set to the offset
  *   of the top/left of the item
@@ -345,7 +345,7 @@ gtk_list_base_get_allocation_along (GtkListBase *self,
 
 /*
  * gtk_list_base_get_allocation_across:
- * @self: a #GtkListBase
+ * @self: a `GtkListBase`
  * @pos: item to get the size of
  * @offset: (out caller-allocates) (optional): set to the offset
  *   of the top/left of the item
@@ -368,7 +368,7 @@ gtk_list_base_get_allocation_across (GtkListBase *self,
 
 /*
  * gtk_list_base_select_item:
- * @self: a #GtkListBase
+ * @self: a `GtkListBase`
  * @pos: item to select
  * @modify: %TRUE if the selection should be modified, %FALSE
  *   if a new selection should be done. This is usually set
@@ -1939,7 +1939,7 @@ gtk_list_base_get_anchor (GtkListBase *self)
 
 /*
  * gtk_list_base_set_anchor:
- * @self: a #GtkListBase
+ * @self: a `GtkListBase`
  * @anchor_pos: position of the item to anchor
  * @anchor_align_across: how far in the across direction to anchor
  * @anchor_side_across: if the anchor should side to start or end of item
@@ -1999,7 +1999,7 @@ gtk_list_base_set_anchor (GtkListBase *self,
 
 /**
  * gtk_list_base_set_anchor_max_widgets:
- * @self: a #GtkListBase
+ * @self: a `GtkListBase`
  * @center: the number of widgets in the middle
  * @above_below: extra widgets above and below
  *
@@ -2039,7 +2039,7 @@ gtk_list_base_set_anchor_max_widgets (GtkListBase *self,
 
 /*
  * gtk_list_base_grab_focus_on_item:
- * @self: a #GtkListBase
+ * @self: a `GtkListBase`
  * @pos: position of the item to focus
  * @select: %TRUE to select the item
  * @modify: if selecting, %TRUE to modify the selected

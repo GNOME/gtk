@@ -67,7 +67,7 @@ typedef enum {
  * @GDK_DRAG_PROTO_ROOTWIN: An extension to the Xdnd protocol for
  *  unclaimed root window drops.
  *
- * Used in #GdkDrag to indicate the protocol according to
+ * Used in `GdkDrag` to indicate the protocol according to
  * which DND is done.
  */
 typedef enum

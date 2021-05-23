@@ -51,7 +51,7 @@ G_BEGIN_DECLS
  * @GTK_TEXT_WINDOW_TOP: Top border window.
  * @GTK_TEXT_WINDOW_BOTTOM: Bottom border window.
  *
- * Used to reference the parts of #GtkTextView.
+ * Used to reference the parts of `GtkTextView`.
  */
 typedef enum
 {
@@ -68,7 +68,7 @@ typedef enum
  * @GTK_TEXT_VIEW_LAYER_BELOW_TEXT: The layer rendered below the text (but above the background).
  * @GTK_TEXT_VIEW_LAYER_ABOVE_TEXT: The layer rendered above the text.
  *
- * Used to reference the layers of #GtkTextView for the purpose of customized
+ * Used to reference the layers of `GtkTextView` for the purpose of customized
  * drawing with the ::snapshot_layer vfunc.
  */
 typedef enum
@@ -85,7 +85,7 @@ typedef enum
  *   a triple-click for example.
  *
  * Granularity types that extend the text selection. Use the
- * #GtkTextView::extend-selection signal to customize the selection.
+ * `GtkTextView::extend-selection` signal to customize the selection.
  */
 typedef enum
 {
@@ -117,25 +117,25 @@ struct _GtkTextView
 /**
  * GtkTextViewClass:
  * @parent_class: The object class structure needs to be the first
- * @move_cursor: The class handler for the #GtkTextView::move-cursor
+ * @move_cursor: The class handler for the `GtkTextView::move-cursor`
  *   keybinding signal.
- * @set_anchor: The class handler for the #GtkTextView::set-anchor
+ * @set_anchor: The class handler for the `GtkTextView::set-anchor`
  *   keybinding signal.
- * @insert_at_cursor: The class handler for the #GtkTextView::insert-at-cursor
+ * @insert_at_cursor: The class handler for the `GtkTextView::insert-at-cursor`
  *   keybinding signal.
- * @delete_from_cursor: The class handler for the #GtkTextView::delete-from-cursor
+ * @delete_from_cursor: The class handler for the `GtkTextView::delete-from-cursor`
  *   keybinding signal.
- * @backspace: The class handler for the #GtkTextView::backspace
+ * @backspace: The class handler for the `GtkTextView::backspace`
  *   keybinding signal.
- * @cut_clipboard: The class handler for the #GtkTextView::cut-clipboard
+ * @cut_clipboard: The class handler for the `GtkTextView::cut-clipboard`
  *   keybinding signal
- * @copy_clipboard: The class handler for the #GtkTextView::copy-clipboard
+ * @copy_clipboard: The class handler for the `GtkTextView::copy-clipboard`
  *   keybinding signal.
- * @paste_clipboard: The class handler for the #GtkTextView::paste-clipboard
+ * @paste_clipboard: The class handler for the `GtkTextView::paste-clipboard`
  *   keybinding signal.
- * @toggle_overwrite: The class handler for the #GtkTextView::toggle-overwrite
+ * @toggle_overwrite: The class handler for the `GtkTextView::toggle-overwrite`
  *   keybinding signal.
- * @create_buffer: The create_buffer vfunc is called to create a #GtkTextBuffer
+ * @create_buffer: The create_buffer vfunc is called to create a `GtkTextBuffer`
  *   for the text view. The default implementation is to just call
  *   gtk_text_buffer_new().
  * @snapshot_layer: The snapshot_layer vfunc is called before and after the text
@@ -143,8 +143,8 @@ struct _GtkTextView
  *   in a subclass to draw customized content underneath or above the
  *   text. In the %GTK_TEXT_VIEW_LAYER_BELOW_TEXT and %GTK_TEXT_VIEW_LAYER_ABOVE_TEXT
  *   layers the drawing is done in the buffer coordinate space.
- * @extend_selection: The class handler for the #GtkTextView::extend-selection signal.
- * @insert_emoji: The class handler for the #GtkTextView::insert-emoji signal.
+ * @extend_selection: The class handler for the `GtkTextView::extend-selection` signal.
+ * @insert_emoji: The class handler for the `GtkTextView::insert-emoji` signal.
  */
 struct _GtkTextViewClass
 {

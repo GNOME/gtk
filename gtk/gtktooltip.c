@@ -240,8 +240,8 @@ gtk_tooltip_set_text (GtkTooltip  *tooltip,
 
 /**
  * gtk_tooltip_set_icon:
- * @tooltip: a #GtkTooltip
- * @paintable: (nullable): a #GdkPaintable
+ * @tooltip: a `GtkTooltip`
+ * @paintable: (nullable): a `GdkPaintable`
  *
  * Sets the icon of the tooltip (which is in front of the text) to be
  * @paintable.  If @paintable is %NULL, the image will be hidden.
@@ -258,7 +258,7 @@ gtk_tooltip_set_icon (GtkTooltip   *tooltip,
 
 /**
  * gtk_tooltip_set_icon_from_icon_name:
- * @tooltip: a #GtkTooltip
+ * @tooltip: a `GtkTooltip`
  * @icon_name: (nullable): an icon name
  *
  * Sets the icon of the tooltip (which is in front of the text) to be
@@ -277,8 +277,8 @@ gtk_tooltip_set_icon_from_icon_name (GtkTooltip  *tooltip,
 
 /**
  * gtk_tooltip_set_icon_from_gicon:
- * @tooltip: a #GtkTooltip
- * @gicon: (nullable): a #GIcon representing the icon
+ * @tooltip: a `GtkTooltip`
+ * @gicon: (nullable): a `GIcon` representing the icon
  *
  * Sets the icon of the tooltip (which is in front of the text)
  * to be the icon indicated by @gicon with the size indicated
@@ -296,13 +296,13 @@ gtk_tooltip_set_icon_from_gicon (GtkTooltip  *tooltip,
 
 /**
  * gtk_tooltip_set_custom:
- * @tooltip: a #GtkTooltip
- * @custom_widget: (nullable): a #GtkWidget, or %NULL to unset the old custom widget.
+ * @tooltip: a `GtkTooltip`
+ * @custom_widget: (nullable): a `GtkWidget`, or %NULL to unset the old custom widget.
  *
  * Replaces the widget packed into the tooltip with
  * @custom_widget. @custom_widget does not get destroyed when the tooltip goes
  * away.
- * By default a box with a #GtkImage and #GtkLabel is embedded in 
+ * By default a box with a `GtkImage` and `GtkLabel` is embedded in 
  * the tooltip, which can be configured using gtk_tooltip_set_markup() 
  * and gtk_tooltip_set_icon().
  */
@@ -323,15 +323,15 @@ gtk_tooltip_set_custom (GtkTooltip *tooltip,
 
 /**
  * gtk_tooltip_set_tip_area:
- * @tooltip: a #GtkTooltip
- * @rect: a #GdkRectangle
+ * @tooltip: a `GtkTooltip`
+ * @rect: a `GdkRectangle`
  *
  * Sets the area of the widget, where the contents of this tooltip apply,
  * to be @rect (in widget coordinates).  This is especially useful for
- * properly setting tooltips on #GtkTreeView rows and cells, #GtkIconViews,
+ * properly setting tooltips on `GtkTreeView` rows and cells, `GtkIconViews`,
  * etc.
  *
- * For setting tooltips on #GtkTreeView, please refer to the convenience
+ * For setting tooltips on `GtkTreeView`, please refer to the convenience
  * functions for this: gtk_tree_view_set_tooltip_row() and
  * gtk_tree_view_set_tooltip_cell().
  */
@@ -352,7 +352,7 @@ gtk_tooltip_set_tip_area (GtkTooltip         *tooltip,
 
 /*
  * gtk_tooltip_trigger_tooltip_query:
- * @display: a #GdkDisplay
+ * @display: a `GdkDisplay`
  *
  * Triggers a new tooltip query on @display, in order to update the current
  * visible tooltip, or to show/hide the current tooltip.  This function is

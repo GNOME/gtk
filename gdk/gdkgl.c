@@ -303,8 +303,8 @@ gdk_gl_texture_quads (GdkGLContext *paint_context,
  *
  * The main way to draw GL content in GTK.
  *
- * It takes a render buffer ID (@source_type == #GL_RENDERBUFFER) or a texture
- * id (@source_type == #GL_TEXTURE) and draws it onto @cr with an OVER operation,
+ * It takes a render buffer ID (@source_type == GL_RENDERBUFFER) or a texture
+ * id (@source_type == GL_TEXTURE) and draws it onto @cr with an OVER operation,
  * respecting the current clip. The top left corner of the rectangle specified
  * by @x, @y, @width and @height will be drawn at the current (0,0) position of
  * the `cairo_t`.
@@ -315,8 +315,8 @@ gdk_gl_texture_quads (GdkGLContext *paint_context,
  * no special effects applied to @cr it will however use a more efficient
  * approach.
  *
- * For #GL_RENDERBUFFER the code will always fall back to software for buffers
- * with alpha components, so make sure you use #GL_TEXTURE if using alpha.
+ * For GL_RENDERBUFFER the code will always fall back to software for buffers
+ * with alpha components, so make sure you use GL_TEXTURE if using alpha.
  *
  * Calling this may change the current GL context.
  */

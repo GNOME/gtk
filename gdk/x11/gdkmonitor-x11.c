@@ -116,7 +116,7 @@ gdk_x11_monitor_class_init (GdkX11MonitorClass *class)
 
 /**
  * gdk_x11_monitor_get_output:
- * @monitor: (type GdkX11Monitor): a #GdkMonitor
+ * @monitor: (type GdkX11Monitor): a `GdkMonitor`
  *
  * Returns the XID of the Output corresponding to @monitor.
  *

@@ -1711,7 +1711,7 @@ gtk_grid_layout_class_init (GtkGridLayoutClass *klass)
   /**
    * GtkGridLayout:baseline-row: (attributes org.gtk.Property.get=gtk_grid_layout_get_baseline_row org.gtk.Property.set=gtk_grid_layout_set_baseline_row)
    *
-   * The row to align to the baseline, when #GtkWidget:valign is set
+   * The row to align to the baseline, when `GtkWidget:valign` is set
    * to %GTK_ALIGN_BASELINE.
    */
   layout_props[PROP_BASELINE_ROW] =

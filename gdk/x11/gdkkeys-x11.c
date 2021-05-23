@@ -1397,11 +1397,11 @@ gdk_x11_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 
 /*< private >
  * gdk_x11_keymap_get_group_for_state:
- * @keymap: (type GdkX11Keymap): a #GdkX11Keymap
+ * @keymap: (type GdkX11Keymap): a `GdkX11Keymap`
  * @state: raw state returned from X
  *
  * Extracts the group from the state field sent in an X Key event.
- * This is only needed for code processing raw X events, since #GdkEventKey
+ * This is only needed for code processing raw X events, since `GdkEventKey`
  * directly includes an is_modifier field.
  *
  * Returns: the index of the active keyboard group for the event
@@ -1461,14 +1461,14 @@ _gdk_x11_keymap_add_virt_mods (GdkKeymap       *keymap,
 
 /*< private >
  * gdk_x11_keymap_key_is_modifier:
- * @keymap: (type GdkX11Keymap): a #GdkX11Keymap
+ * @keymap: (type GdkX11Keymap): a `GdkX11Keymap`
  * @keycode: the hardware keycode from a key event
  *
  * Determines whether a particular key code represents a key that
  * is a modifier. That is, it’s a key that normally just affects
  * the keyboard state and the behavior of other keys rather than
  * producing a direct effect itself. This is only needed for code
- * processing raw X events, since #GdkEventKey directly includes
+ * processing raw X events, since `GdkEventKey` directly includes
  * an is_modifier field.
  *
  * Returns: %TRUE if the hardware keycode is a modifier key

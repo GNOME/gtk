@@ -139,14 +139,15 @@ gtk_pango_get_font_attributes (PangoFontDescription *font,
 
 /*
  * gtk_pango_get_default_attributes:
- * @attributes: a #AtkAttributeSet to add the attributes to
- * @layout: the #PangoLayout from which to get attributes
+ * @layout: the `PangoLayout` from which to get attributes
+ * @builder: a `GVariantBuilder` to add to
  *
- * Adds the default text attributes from @layout to @attributes,
- * after translating them from Pango attributes to atspi attributes.
+ * Adds the default text attributes from @layout to @builder,
+ * after translating them from Pango attributes to atspi
+ * attributes.
  *
  * This is a convenience function that can be used to implement
- * support for the #AtkText interface in widgets using Pango
+ * support for the `AtkText` interface in widgets using Pango
  * layouts.
  *
  * Returns: the modified @attributes
@@ -212,8 +213,8 @@ gtk_pango_get_default_attributes (PangoLayout     *layout,
 
 /*
  * gtk_pango_get_run_attributes:
- * @layout: the #PangoLayout to get the attributes from
- * @builder: GVariantBuilder to add to
+ * @layout: the `PangoLayout` to get the attributes from
+ * @builder: `GVariantBuilder` to add to
  * @offset: the offset at which the attributes are wanted
  * @start_offset: return location for the starting offset
  *    of the current run
@@ -394,7 +395,7 @@ gtk_pango_get_run_attributes (PangoLayout     *layout,
 
 /*
  * gtk_pango_move_chars:
- * @layout: a #PangoLayout
+ * @layout: a `PangoLayout`
  * @offset: a character offset in @layout
  * @count: the number of characters to move from @offset
  *
@@ -438,7 +439,7 @@ gtk_pango_move_chars (PangoLayout *layout,
 
 /*
  * gtk_pango_move_words:
- * @layout: a #PangoLayout
+ * @layout: a `PangoLayout`
  * @offset: a character offset in @layout
  * @count: the number of words to move from @offset
  *
@@ -484,7 +485,7 @@ gtk_pango_move_words (PangoLayout  *layout,
 
 /*
  * gtk_pango_move_sentences:
- * @layout: a #PangoLayout
+ * @layout: a `PangoLayout`
  * @offset: a character offset in @layout
  * @count: the number of sentences to move from @offset
  *
@@ -531,7 +532,7 @@ gtk_pango_move_sentences (PangoLayout  *layout,
 #if 0
 /*
  * gtk_pango_move_lines:
- * @layout: a #PangoLayout
+ * @layout: a `PangoLayout`
  * @offset: a character offset in @layout
  * @count: the number of lines to move from @offset
  *
@@ -602,7 +603,7 @@ gtk_pango_move_lines (PangoLayout *layout,
 
 /*
  * gtk_pango_is_inside_word:
- * @layout: a #PangoLayout
+ * @layout: a `PangoLayout`
  * @offset: a character offset in @layout
  *
  * Returns whether the given position is inside
@@ -631,7 +632,7 @@ gtk_pango_is_inside_word (PangoLayout  *layout,
 
 /*
  * gtk_pango_is_inside_sentence:
- * @layout: a #PangoLayout
+ * @layout: a `PangoLayout`
  * @offset: a character offset in @layout
  *
  * Returns whether the given position is inside
@@ -867,7 +868,7 @@ pango_layout_get_line_after (PangoLayout           *layout,
 
 /*
  * gtk_pango_get_text_before:
- * @layout: a #PangoLayout
+ * @layout: a `PangoLayout`
  * @offset: a character offset in @layout
  * @boundary_type: a #AtspiTextBoundaryType
  * @start_offset: return location for the start of the returned text
@@ -972,7 +973,7 @@ gtk_pango_get_text_before (PangoLayout           *layout,
 
 /*
  * gtk_pango_get_text_after:
- * @layout: a #PangoLayout
+ * @layout: a `PangoLayout`
  * @offset: a character offset in @layout
  * @boundary_type: a #AtspiTextBoundaryType
  * @start_offset: return location for the start of the returned text
@@ -1083,9 +1084,9 @@ gtk_pango_get_text_after (PangoLayout           *layout,
 
 /*
  * gtk_pango_get_text_at:
- * @layout: a #PangoLayout
+ * @layout: a `PangoLayout`
  * @offset: a character offset in @layout
- * @boundary_type: a #AtspiTextBoundaryType
+ * @boundary_type: a `AtspiTextBoundaryType`
  * @start_offset: return location for the start of the returned text
  * @end_offset: return location for the end of the return text
  *

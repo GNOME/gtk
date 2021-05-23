@@ -783,7 +783,7 @@ gdk_x11_gl_context_egl_make_current (GdkDisplay   *display,
 
 /**
  * gdk_x11_display_get_egl_version:
- * @display: (type GdkX11Display): a #GdkDisplay
+ * @display: (type GdkX11Display): a `GdkDisplay`
  * @major: (out): return location for the EGL major version
  * @minor: (out): return location for the EGL minor version
  *

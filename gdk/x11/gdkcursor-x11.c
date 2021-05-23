@@ -273,7 +273,7 @@ gdk_x11_cursor_create_for_name (GdkDisplay  *display,
  * change. Custom cursors constructed with [ctor@Gdk.Cursor.new_from_texture]
  * will have to be handled by the application (GTK applications can learn
  * about cursor theme changes by listening for change notification
- * for the corresponding #GtkSetting).
+ * for the corresponding `GtkSetting`).
  */
 void
 gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
@@ -331,19 +331,19 @@ gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
 
 /**
  * gdk_x11_display_get_xcursor:
- * @display: (type GdkX11Display): a #GdkDisplay
- * @cursor: a #GdkCursor.
- * 
- * Returns the X cursor belonging to a #GdkCursor, potentially
+ * @display: (type GdkX11Display): a `GdkDisplay`
+ * @cursor: a `GdkCursor`
+ *
+ * Returns the X cursor belonging to a `GdkCursor`, potentially
  * creating the cursor.
  *
  * Be aware that the returned cursor may not be unique to @cursor.
  * It may for example be shared with its fallback cursor. On old
  * X servers that don't support the XCursor extension, all cursors
  * may even fall back to a few default cursors.
- * 
+ *
  * Returns: an Xlib Cursor.
- **/
+ */
 Cursor
 gdk_x11_display_get_xcursor (GdkDisplay *display,
                              GdkCursor  *cursor)

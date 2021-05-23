@@ -300,7 +300,7 @@ marshal_tree (GString *marshaled,
  * binary form that is more efficient to parse. This is a custom
  * format that is only supported by GtkBuilder.
  *
- * returns: A #GByte with the precompiled data
+ * returns: A `GBytes` with the precompiled data
  **/
 GBytes *
 _gtk_buildable_parser_precompile (const char          *text,

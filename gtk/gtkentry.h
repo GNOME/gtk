@@ -75,10 +75,10 @@ struct _GtkEntry
 /**
  * GtkEntryClass:
  * @parent_class: The parent class.
- * @activate: Class handler for the #GtkEntry::activate signal. The default
+ * @activate: Class handler for the `GtkEntry::activate` signal. The default
  *   implementation activates the gtk.activate-default action.
  *
- * Class structure for #GtkEntry. All virtual functions have a default
+ * Class structure for `GtkEntry`. All virtual functions have a default
  * implementation. Derived classes may set the virtual function pointers for the
  * signal handlers to %NULL, but must keep @get_text_area_size and
  * @get_frame_size non-%NULL; either use the default implementation, or provide

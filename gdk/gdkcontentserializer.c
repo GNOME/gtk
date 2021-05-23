@@ -43,7 +43,7 @@
  *
  * GTK provides serializers and deserializers for common data types
  * such as text, colors, images or file lists. To register your own
- * serialization functions, use [func@content_register_serializer].
+ * serialization functions, use [func@Gdk.content_register_serializer].
  *
  * Also see [class@Gdk.ContentDeserializer].
  */
@@ -533,7 +533,7 @@ serialize_not_found (GdkContentSerializer *serializer)
  * @mime_type: the mime type to serialize to
  * @value: the content to serialize
  * @io_priority: the I/O priority of the operation
- * @cancellable: (nullable): optional #GCancellable object
+ * @cancellable: (nullable): optional `GCancellable` object
  * @callback: (scope async): callback to call when the operation is done
  * @user_data: (closure): data to pass to the callback function
  *
@@ -543,7 +543,7 @@ serialize_not_found (GdkContentSerializer *serializer)
  * indicate a higher priority.
  *
  * When the operation is finished, @callback will be called. You must then
- * call [func@content_serialize_finish] to get the result of the operation.
+ * call [func@Gdk.content_serialize_finish] to get the result of the operation.
  */
 void
 gdk_content_serialize_async (GOutputStream       *stream,

@@ -964,7 +964,7 @@ gtk_scale_new (GtkOrientation  orientation,
  * @step is a power of ten. If the resulting precision is not suitable
  * for your needs, use [method@Gtk.Scale.set_digits] to correct it.
  *
- * Returns: a new #GtkScale
+ * Returns: a new `GtkScale`
  */
 GtkWidget *
 gtk_scale_new_with_range (GtkOrientation orientation,
@@ -1095,7 +1095,7 @@ update_value_position (GtkScale *scale)
 
 /**
  * gtk_scale_set_draw_value: (attributes org.gtk.Method.set_property=draw-value)
- * @scale: a #GtkScale
+ * @scale: a `GtkScale`
  * @draw_value: %TRUE to draw the value
  *
  * Specifies whether the current value is displayed as a string next
@@ -1595,7 +1595,7 @@ gtk_scale_get_layout (GtkScale *scale)
 
 /**
  * gtk_scale_get_layout_offsets:
- * @scale: a #GtkScale
+ * @scale: a `GtkScale`
  * @x: (out) (optional): location to store X offset of layout
  * @y: (out) (optional): location to store Y offset of layout
  *
@@ -1674,9 +1674,9 @@ gtk_scale_clear_marks (GtkScale *scale)
  * @scale: a `GtkScale`
  * @value: the value at which the mark is placed, must be between
  *   the lower and upper limits of the scales’ adjustment
- * @position: where to draw the mark. For a horizontal scale, #GTK_POS_TOP
+ * @position: where to draw the mark. For a horizontal scale, %GTK_POS_TOP
  *   and %GTK_POS_LEFT are drawn above the scale, anything else below.
- *   For a vertical scale, #GTK_POS_LEFT and %GTK_POS_TOP are drawn to
+ *   For a vertical scale, %GTK_POS_LEFT and %GTK_POS_TOP are drawn to
  *   the left of the scale, anything else to the right.
  * @markup: (nullable): Text to be shown at the mark, using Pango markup
  *

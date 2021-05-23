@@ -136,7 +136,7 @@
  * been constructed by GTK as part of a composite widget, to set
  * properties on them or to add further children (e.g. the content area
  * of a `GtkDialog`). This can be achieved by setting the “internal-child”
- * property of the `<child>` element to a true value. Note that #GtkBuilder
+ * property of the `<child>` element to a true value. Note that `GtkBuilder`
  * still requires an `<object>` element for the internal child, even if it
  * has already been constructed.
  *
@@ -302,7 +302,7 @@ gtk_builder_class_init (GtkBuilderClass *klass)
   * The translation domain used when translating property values that
   * have been marked as translatable.
   *
-  * If the translation domain is %NULL, #GtkBuilder uses gettext(),
+  * If the translation domain is %NULL, `GtkBuilder` uses gettext(),
   * otherwise g_dgettext().
   */
   builder_props[PROP_TRANSLATION_DOMAIN] =
@@ -2060,7 +2060,7 @@ error:
  * @builder: a `GtkBuilder`
  * @type: the `GType` of the value
  * @string: the string representation of the value
- * @value: (out): the #GValue to store the result in
+ * @value: (out): the `GValue` to store the result in
  * @error: (nullable): return location for an error
  *
  * Demarshals a value from a string.
@@ -2839,8 +2839,8 @@ gtk_builder_new_from_string (const char *string,
 
 /*< private >
  * _gtk_builder_prefix_error:
- * @builder: a #GtkBuilder
- * @context: the #GtkBuildableParseContext
+ * @builder: a `GtkBuilder`
+ * @context: the `GtkBuildableParseContext`
  * @error: an error
  *
  * Calls g_prefix_error() to prepend a filename:line:column marker
@@ -2865,8 +2865,8 @@ _gtk_builder_prefix_error (GtkBuilder                *builder,
 
 /*< private >
  * _gtk_builder_error_unhandled_tag:
- * @builder: a #GtkBuilder
- * @context: the #GtkBuildableParseContext
+ * @builder: a `GtkBuilder`
+ * @context: the `GtkBuildableParseContext`
  * @object: name of the object that is being handled
  * @element_name: name of the element whose start tag is being handled
  * @error: return location for the error
@@ -2896,8 +2896,8 @@ _gtk_builder_error_unhandled_tag (GtkBuilder                *builder,
 }
 
 /*< private >
- * @builder: a #GtkBuilder
- * @context: the #GtkBuildableParseContext
+ * @builder: a `GtkBuilder`
+ * @context: the `GtkBuildableParseContext`
  * @parent_name: the name of the expected parent element
  * @error: return location for an error
  *
@@ -2963,7 +2963,7 @@ gtk_builder_lookup_object (GtkBuilder   *builder,
 }
 
 /*< private >
- * @builder: a #GtkBuilder
+ * @builder: a `GtkBuilder`
  * @name: object name to look up
  * @line: line number where @name was encountered
  * @col: column number where @name was encountered
@@ -3005,7 +3005,7 @@ _gtk_builder_lookup_object (GtkBuilder  *builder,
 
 /*< private >
  * _gtk_builder_lookup_failed:
- * @GtkBuilder: a #GtkBuilder
+ * @GtkBuilder: a `GtkBuilder`
  * @error: return location for error
  *
  * Finds whether any object lookups have failed.

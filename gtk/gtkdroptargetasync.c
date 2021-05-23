@@ -404,7 +404,7 @@ gtk_drop_target_async_class_init (GtkDropTargetAsyncClass *class)
  /**
    * GtkDropTargetAsync::accept:
    * @self: the `GtkDropTargetAsync`
-   * @drop: the #GdkDrop
+   * @drop: the `GdkDrop`
    *
    * Emitted on the drop site when a drop operation is about to begin.
    *
@@ -437,7 +437,7 @@ gtk_drop_target_async_class_init (GtkDropTargetAsyncClass *class)
   /**
    * GtkDropTargetAsync::drag-enter:
    * @self: the `GtkDropTargetAsync`
-   * @drop: the #GdkDrop
+   * @drop: the `GdkDrop`
    * @x: the x coordinate of the current pointer position
    * @y: the y coordinate of the current pointer position
    *
@@ -460,7 +460,7 @@ gtk_drop_target_async_class_init (GtkDropTargetAsyncClass *class)
   /**
    * GtkDropTargetAsync::drag-motion:
    * @self: the `GtkDropTargetAsync`
-   * @drop: the #GdkDrop
+   * @drop: the `GdkDrop`
    * @x: the x coordinate of the current pointer position
    * @y: the y coordinate of the current pointer position
    *
@@ -481,7 +481,7 @@ gtk_drop_target_async_class_init (GtkDropTargetAsyncClass *class)
   /**
    * GtkDropTargetAsync::drag-leave:
    * @self: the `GtkDropTargetAsync`
-   * @drop: the #GdkDrop
+   * @drop: the `GdkDrop`
    *
    * Emitted on the drop site when the pointer leaves the widget.
    *
@@ -501,7 +501,7 @@ gtk_drop_target_async_class_init (GtkDropTargetAsyncClass *class)
   /**
    * GtkDropTargetAsync::drop:
    * @self: the `GtkDropTargetAsync`
-   * @drop: the #GdkDrop
+   * @drop: the `GdkDrop`
    * @x: the x coordinate of the current pointer position
    * @y: the y coordinate of the current pointer position
    *
@@ -648,7 +648,7 @@ gtk_drop_target_async_get_actions (GtkDropTargetAsync *self)
 /**
  * gtk_drop_target_async_reject_drop:
  * @self: a `GtkDropTargetAsync`
- * @drop: the #GdkDrop of an ongoing drag operation
+ * @drop: the `GdkDrop` of an ongoing drag operation
  *
  * Sets the @drop as not accepted on this drag site.
  *

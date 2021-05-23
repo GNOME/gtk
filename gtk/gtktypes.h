@@ -59,12 +59,15 @@ typedef struct _GtkWindow              GtkWindow;
 /**
  * GTK_INVALID_LIST_POSITION:
  *
- * The value used to refer to a guaranteed invalid position in a #GListModel. This
- * value may be returned from some functions, others may accept it as input.
- * Its interpretation may differ for different functions.
+ * The value used to refer to a guaranteed invalid position
+ * in a `GListModel`.
  *
- * Refer to each function's documentation for if this value is allowed and what it
- * does.
+ * This value may be returned from some functions, others may
+ * accept it as input. Its interpretation may differ for different
+ * functions.
+ *
+ * Refer to each function's documentation for if this value is
+ * allowed and what it does.
  */
 #define GTK_INVALID_LIST_POSITION (0xffffffffU)
 

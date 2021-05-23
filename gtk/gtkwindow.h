@@ -60,9 +60,9 @@ struct _GtkWindow
  * @activate_default: Activates the default widget for the window.
  * @keys_changed: Signal gets emitted when the set of accelerators or
  *   mnemonics that are associated with window changes.
- * @enable_debugging: Class handler for the #GtkWindow::enable-debugging
+ * @enable_debugging: Class handler for the `GtkWindow::enable-debugging`
  *   keybinding signal.
- * @close_request: Class handler for the #GtkWindow::close-request signal.
+ * @close_request: Class handler for the `GtkWindow::close-request` signal.
  */
 struct _GtkWindowClass
 {

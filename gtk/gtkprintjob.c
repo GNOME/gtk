@@ -210,7 +210,7 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
 
   /**
    * GtkPrintJob::status-changed:
-   * @job: the #GtkPrintJob object on which the signal was emitted
+   * @job: the `GtkPrintJob` object on which the signal was emitted
    *
    * Emitted when the status of a job changes.
    *

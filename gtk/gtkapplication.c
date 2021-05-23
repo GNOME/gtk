@@ -1186,7 +1186,7 @@ gtk_application_handle_window_map (GtkApplication *application,
 
 /**
  * gtk_application_get_menu_by_id:
- * @application: a #GtkApplication
+ * @application: a `GtkApplication`
  * @id: the id of the menu to look up
  *
  * Gets a menu from automatically loaded resources.

@@ -77,7 +77,7 @@
  *
  * # Accessibility
  *
- * `GtkMenuButton` uses the #GTK_ACCESSIBLE_ROLE_BUTTON role.
+ * `GtkMenuButton` uses the %GTK_ACCESSIBLE_ROLE_BUTTON role.
  */
 
 #include "config.h"

@@ -47,7 +47,7 @@ struct _GskRenderNodeClass
 
 /*< private >
  * GskRenderNodeTypeInfo:
- * @node_type: the render node type in the #GskRenderNodeType enumeration
+ * @node_type: the render node type in the `GskRenderNodeType` enumeration
  * @instance_size: the size of the render node instance
  * @instance_init: (nullable): the instance initialization function
  * @finalize: (nullable): the instance finalization function; must chain up to the
@@ -58,7 +58,7 @@ struct _GskRenderNodeClass
  * @diff: (nullable): the function called by gsk_render_node_diff(); if unset,
  *   gsk_render_node_diff_impossible() will be used
  *
- * A struction that contains the type information for a #GskRenderNode subclass,
+ * A struction that contains the type information for a `GskRenderNode` subclass,
  * to be used by gsk_render_node_type_register_static().
  */
 typedef struct

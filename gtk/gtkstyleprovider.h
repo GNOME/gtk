@@ -59,7 +59,7 @@ G_BEGIN_DECLS
  * The priority used for style information provided
  * via `GtkSettings`.
  *
- * This priority is higher than #GTK_STYLE_PROVIDER_PRIORITY_THEME
+ * This priority is higher than %GTK_STYLE_PROVIDER_PRIORITY_THEME
  * to let settings override themes.
  */
 #define GTK_STYLE_PROVIDER_PRIORITY_SETTINGS    400

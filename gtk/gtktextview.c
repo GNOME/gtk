@@ -93,7 +93,7 @@
  *
  * ## Accessibility
  *
- * `GtkTextView` uses the #GTK_ACCESSIBLE_ROLE_TEXT_BOX role.
+ * `GtkTextView` uses the %GTK_ACCESSIBLE_ROLE_TEXT_BOX role.
  */
 
 /* How scrolling, validation, exposes, etc. work.
@@ -1165,7 +1165,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   /**
    * GtkTextView::move-cursor:
    * @text_view: the object which received the signal
-   * @step: the granularity of the move, as a #GtkMovementStep
+   * @step: the granularity of the move, as a `GtkMovementStep`
    * @count: the number of @step units to move
    * @extend_selection: %TRUE if the move should extend the selection
    *
@@ -1211,7 +1211,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   /**
    * GtkTextView::move-viewport:
    * @text_view: the object which received the signal
-   * @step: the granularity of the movement, as a #GtkScrollStep
+   * @step: the granularity of the movement, as a `GtkScrollStep`
    * @count: the number of @step units to move
    *
    * Gets emitted to move the viewport.
@@ -1284,7 +1284,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   /**
    * GtkTextView::delete-from-cursor:
    * @text_view: the object which received the signal
-   * @type: the granularity of the deletion, as a #GtkDeleteType
+   * @type: the granularity of the deletion, as a `GtkDeleteType`
    * @count: the number of @type units to delete
    *
    * Gets emitted when the user initiates a text deletion.
@@ -3697,7 +3697,7 @@ gtk_text_view_get_indent (GtkTextView *text_view)
 /**
  * gtk_text_view_set_tabs: (attributes org.gtk.Method.set_property=tabs)
  * @text_view: a `GtkTextView`
- * @tabs: tabs as a #PangoTabArray
+ * @tabs: tabs as a `PangoTabArray`
  *
  * Sets the default tab stops for paragraphs in @text_view.
  *
@@ -7072,7 +7072,7 @@ gtk_text_view_set_overwrite (GtkTextView *text_view,
  *    character, %FALSE, if pressing the Tab key should move the
  *    keyboard focus.
  *
- * Sets the behavior of the text widget when the Tab key is pressed.
+ * Sets the behavior of the text widget when the <kbd>Tab</kbd> key is pressed.
  *
  * If @accepts_tab is %TRUE, a tab character is inserted. If @accepts_tab
  * is %FALSE the keyboard focus is moved to the next widget in the focus
@@ -7098,7 +7098,7 @@ gtk_text_view_set_accepts_tab (GtkTextView *text_view,
  * gtk_text_view_get_accepts_tab: (attributes org.gtk.Method.get_property=accepts-tab)
  * @text_view: A `GtkTextView`
  *
- * Returns whether pressing the Tab key inserts a tab characters.
+ * Returns whether pressing the <kbd>Tab</kbd> key inserts a tab characters.
  *
  * See [method@Gtk.TextView.set_accepts_tab].
  *
@@ -9208,7 +9208,7 @@ text_window_get_height (GtkTextWindow *win)
 /**
  * gtk_text_view_buffer_to_window_coords:
  * @text_view: a `GtkTextView`
- * @win: a #GtkTextWindowType
+ * @win: a `GtkTextWindowType`
  * @buffer_x: buffer x coordinate
  * @buffer_y: buffer y coordinate
  * @window_x: (out) (optional): window x coordinate return location
@@ -9271,7 +9271,7 @@ gtk_text_view_buffer_to_window_coords (GtkTextView      *text_view,
 /**
  * gtk_text_view_window_to_buffer_coords:
  * @text_view: a `GtkTextView`
- * @win: a #GtkTextWindowType
+ * @win: a `GtkTextWindowType`
  * @window_x: window x coordinate
  * @window_y: window y coordinate
  * @buffer_x: (out) (optional): buffer x coordinate return location
@@ -9434,7 +9434,7 @@ ensure_child (GtkTextView        *text_view,
 /**
  * gtk_text_view_add_overlay:
  * @text_view: a `GtkTextView`
- * @child: a #GtkWidget
+ * @child: a `GtkWidget`
  * @xpos: X position of child in window coordinates
  * @ypos: Y position of child in window coordinates
  *
@@ -9447,7 +9447,7 @@ ensure_child (GtkTextView        *text_view,
  * @child will scroll with the text view.
  *
  * If instead you want a widget that will not move with the
- * `GtkTextView` contents see #GtkOverlay.
+ * `GtkTextView` contents see `GtkOverlay`.
  */
 void
 gtk_text_view_add_overlay (GtkTextView *text_view,

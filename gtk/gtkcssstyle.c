@@ -308,8 +308,8 @@ gtk_css_style_get_static_style (GtkCssStyle *style)
 
 /*
  * gtk_css_style_print:
- * @style: a #GtkCssStyle
- * @string: the #GString to print to
+ * @style: a `GtkCssStyle`
+ * @string: the `GString` to print to
  * @indent: level of indentation to use
  * @skip_initial: %TRUE to skip properties that have their initial value
  *

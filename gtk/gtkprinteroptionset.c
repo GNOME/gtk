@@ -144,7 +144,7 @@ gtk_printer_option_set_clear_conflicts (GtkPrinterOptionSet *set)
 
 /**
  * gtk_printer_option_set_get_groups:
- * @set: a #GtkPrinterOptionSet
+ * @set: a `GtkPrinterOptionSet`
  *
  * Gets the groups in this set.
  *

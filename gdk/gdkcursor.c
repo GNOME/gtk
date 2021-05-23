@@ -410,7 +410,7 @@ gdk_cursor_get_name (GdkCursor *cursor)
 
 /**
  * gdk_cursor_get_texture:
- * @cursor: a #GdkCursor.
+ * @cursor: a `GdkCursor`
  *
  * Returns the texture for the cursor.
  *

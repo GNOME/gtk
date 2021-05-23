@@ -42,7 +42,7 @@ typedef GtkSizeRequestMode (* GtkCustomRequestModeFunc) (GtkWidget *widget);
  * @minimum_baseline: (out): the measured minimum baseline of the widget
  * @natural_baseline: (out): the measured natural baseline of the widget
  *
- * A function to be used by #GtkCustomLayout to measure a widget.
+ * A function to be used by `GtkCustomLayout` to measure a widget.
  */
 typedef void (* GtkCustomMeasureFunc) (GtkWidget      *widget,
                                        GtkOrientation  orientation,

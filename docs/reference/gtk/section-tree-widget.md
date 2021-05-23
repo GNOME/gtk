@@ -1,8 +1,8 @@
 Title: Tree and List Widget Overview
 Slug: gtk-treeview
 
-To create a tree or list in GTK, use the #GtkTreeModel interface in
-conjunction with the #GtkTreeView widget.  This widget is designed around
+To create a tree or list in GTK, use the `GtkTreeModel` interface in
+conjunction with the `GtkTreeView` widget. This widget is designed around
 a _Model/View/Controller_ design and consists of four major parts:
 
 - The tree view widget (GtkTreeView)
@@ -25,9 +25,9 @@ it be rendered as a checkbox?
 
 ## Creating a model
 
-GTK provides two simple models that can be used: the #GtkListStore
-and the #GtkTreeStore. GtkListStore is used to model list widgets,
-while the GtkTreeStore models trees. It is possible to develop a new
+GTK provides two simple models that can be used: the `GtkListStore`
+and the `GtkTreeStore`. `GtkListStore` is used to model list widgets,
+while the `GtkTreeStore` models trees. It is possible to develop a new
 type of model, but the existing models should be satisfactory for all
 but the most specialized of situations. Creating the model is quite
 
@@ -59,7 +59,7 @@ GtkTreeStore *store = gtk_tree_store_new (N_COLUMNS,       /* Total number of co
 
 Adding data to the model is done using gtk_tree_store_set() or
 gtk_list_store_set(), depending upon which sort of model was
-created. To do this, a #GtkTreeIter must be acquired. The iterator
+created. To do this, a `GtkTreeIter` must be acquired. The iterator
 points to the location where data will be added.
 
 Once an iterator has been acquired, gtk_tree_store_set() is used to
@@ -119,8 +119,8 @@ gtk_tree_store_set (store, &iter2,
 
 While there are several different models to choose from, there is
 only one view widget to deal with. It works with either the list
-or the tree store. Setting up a #GtkTreeView is not a difficult
-matter. It needs a #GtkTreeModel to know where to retrieve its data
+or the tree store. Setting up a `GtkTreeView` is not a difficult
+matter. It needs a `GtkTreeModel` to know where to retrieve its data
 from.
 
 ``` {.c}
@@ -131,16 +131,16 @@ tree = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
 
 ## Columns and cell renderers
 
-Once the #GtkTreeView widget has a model, it will need to know how
+Once the `GtkTreeView` widget has a model, it will need to know how
 to display the model. It does this with columns and cell renderers.
 
 Cell renderers are used to draw the data in the tree model in a
 way. There are a number of cell renderers that come with GTK,
-including the #GtkCellRendererText, #GtkCellRendererPixbuf and
-the #GtkCellRendererToggle. It is relatively easy to write a
+including the `GtkCellRendererText`, `GtkCellRendererPixbuf` and
+the `GtkCellRendererToggle`. It is relatively easy to write a
 custom renderer.
 
-A #GtkTreeViewColumn is the object that GtkTreeView uses to organize
+A `GtkTreeViewColumn` is the object that `GtkTreeView` uses to organize
 the vertical columns in the tree view. It needs to know the name of
 the column to label for the user, what type of cell renderer to use,
 and which piece of data to retrieve from the model for a given row.
@@ -166,7 +166,7 @@ created and columns are added to it.
 Most applications will need to not only deal with displaying data,
 but also receiving input events from users. To do this, simply get
 a reference to a selection object and connect to the
-#GtkTreeSelection::changed signal.
+`GtkTreeSelection::changed` signal.
 
 ``` {.c}
 /* Prototype for selection handler callback */
@@ -205,11 +205,11 @@ tree_selection_changed_cb (GtkTreeSelection *selection, gpointer data)
 
 ## Simple Example
 
-Here is a simple example of using a #GtkTreeView widget in context
+Here is a simple example of using a `GtkTreeView` widget in context
 of the other widgets. It simply creates a simple model and view,
 and puts them together. Note that the model is never populated
-with data &mdash; that is left as an exercise for the reader.
-More information can be found on this in the #GtkTreeModel section.
+with data — that is left as an exercise for the reader.
+More information can be found on this in the `GtkTreeModel` section.
 
 ``` {.c}
 enum

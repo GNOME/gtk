@@ -66,7 +66,7 @@
  * ## Implementing GtkEditable
  *
  * The most likely scenario for implementing `GtkEditable` on your own widget
- * is that you will embed a #GtkText inside a complex widget, and want to
+ * is that you will embed a `GtkText` inside a complex widget, and want to
  * delegate the editable functionality to that text widget. `GtkEditable`
  * provides some utility functions to make this easy.
  *

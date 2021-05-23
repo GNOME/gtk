@@ -390,7 +390,7 @@ gtk_custom_paper_unix_dialog_finalize (GObject *object)
  *
  * Creates a new custom paper dialog.
  *
- * Returns: the new #GtkCustomPaperUnixDialog
+ * Returns: the new `GtkCustomPaperUnixDialog`
  */
 GtkWidget *
 _gtk_custom_paper_unix_dialog_new (GtkWindow   *parent,

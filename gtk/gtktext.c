@@ -74,7 +74,7 @@
  * The `GtkText` widget is a single-line text entry widget.
  *
  * `GtkText` is the common implementation of single-line text editing
- * that is shared between `GtkEntry`, `GtkPasswordEntry, `GtkSpinButton`
+ * that is shared between `GtkEntry`, `GtkPasswordEntry`, `GtkSpinButton`
  * and other widgets. In all of these, `GtkText` is used as the delegate
  * for the [iface@Gtk.Editable] implementation.
  *
@@ -1018,7 +1018,7 @@ gtk_text_class_init (GtkTextClass *class)
   /**
    * GtkText::move-cursor:
    * @self: the object which received the signal
-   * @step: the granularity of the move, as a #GtkMovementStep
+   * @step: the granularity of the move, as a `GtkMovementStep`
    * @count: the number of @step units to move
    * @extend: %TRUE if the move should extend the selection
    *
@@ -1080,7 +1080,7 @@ gtk_text_class_init (GtkTextClass *class)
   /**
    * GtkText::delete-from-cursor:
    * @self: the object which received the signal
-   * @type: the granularity of the deletion, as a #GtkDeleteType
+   * @type: the granularity of the deletion, as a `GtkDeleteType`
    * @count: the number of @type units to delete
    *
    * Emitted when the user initiates a text deletion.
@@ -1232,7 +1232,7 @@ gtk_text_class_init (GtkTextClass *class)
    * GtkText::insert-emoji:
    * @self: the object which received the signal
    *
-   * Emitted to present the Emoji chooser for the @self.
+   * Emitted to present the Emoji chooser for the widget.
    *
    * This is a [keybinding signal](class.SignalAction.html).
    *
@@ -5391,7 +5391,7 @@ get_buffer (GtkText *self)
  * @self: a `GtkText`
  *
  * Get the `GtkEntryBuffer` object which holds the text for
- * this self.
+ * this widget.
  *
  * Returns: (transfer none): A `GtkEntryBuffer` object.
  */
@@ -5604,8 +5604,7 @@ gtk_text_get_visibility (GtkText *self)
  * @self: a `GtkText`
  * @ch: a Unicode character
  *
- * Sets the character to use in place of the actual text when
- * in “password mode”.
+ * Sets the character to use when in “password mode”.
  *
  * By default, GTK picks the best invisible char available in the
  * current font. If you set the invisible char to 0, then the user
@@ -5638,8 +5637,7 @@ gtk_text_set_invisible_char (GtkText  *self,
  * gtk_text_get_invisible_char: (attributes org.gtk.Method.get_property=invisible-char)
  * @self: a `GtkText`
  *
- * Retrieves the character displayed in place of the real characters
- * for entries with visibility set to false.
+ * Retrieves the character displayed when visibility is set to false.
  *
  * Note that GTK does not compute this value unless it needs it,
  * so the value returned by this function is not very useful unless
@@ -5719,9 +5717,11 @@ gtk_text_set_overwrite_mode (GtkText  *self,
  * gtk_text_get_overwrite_mode: (attributes org.gtk.Method.get_property=overwrite-mode)
  * @self: a `GtkText`
  *
- * Gets the value set by gtk_text_set_overwrite_mode().
+ * Gets whether text is overwritten when typing in the `GtkText`.
  *
- * Returns: whether the text is overwritten when typing.
+ * See [method@Gtk.Text.set_overwrite_mode].
+ *
+ * Returns: whether the text is overwritten when typing
  */
 gboolean
 gtk_text_get_overwrite_mode (GtkText *self)
@@ -5804,8 +5804,8 @@ gtk_text_get_text_length (GtkText *self)
  * @self: a `GtkText`
  * @activates: %TRUE to activate window’s default widget on Enter keypress
  *
- * If @activates is %TRUE, pressing Enter in the @self will
- * activate the default widget for the window containing @self.
+ * If @activates is %TRUE, pressing Enter will activate
+ * the default widget for the window containing @self.
  *
  * This usually means that the dialog containing the `GtkText`
  * will be closed, since the default widget is usually one of
@@ -5832,7 +5832,10 @@ gtk_text_set_activates_default (GtkText  *self,
  * gtk_text_get_activates_default: (attributes org.gtk.Method.get_property=activates-default)
  * @self: a `GtkText`
  *
- * Retrieves the value set by gtk_text_set_activates_default().
+ * Returns whether pressing Enter will activate
+ * the default widget for the window containing @self.
+ *
+ * See [method@Gtk.Text.set_activates_default].
  *
  * Returns: %TRUE if the `GtkText` will activate the default widget
  */
@@ -6656,11 +6659,9 @@ gtk_text_set_placeholder_text (GtkText    *self,
  * Retrieves the text that will be displayed when
  * @self is empty and unfocused
  *
- * Returns: (nullable) (transfer none): a pointer
- *   to the placeholder text as a string. This string
- *   points to internally allocated storage in the widget
- *   and must not be freed, modified or stored. If no placeholder
- *   text has been set, %NULL will be returned.
+ * If no placeholder text has been set, %NULL will be returned.
+ *
+ * Returns: (nullable) (transfer none): the placeholder text
  */
 const char *
 gtk_text_get_placeholder_text (GtkText *self)
@@ -6808,8 +6809,9 @@ gtk_text_set_attributes (GtkText       *self,
  * gtk_text_get_attributes: (attributes org.gtk.Method.get_property=attributes)
  * @self: a `GtkText`
  *
- * Gets the attribute list that was set on the `GtkText`
- * using gtk_text_set_attributes().
+ * Gets the attribute list that was set on the `GtkText`.
+ *
+ * See [method@Gtk.Text.set_attributes].
  *
  * Returns: (transfer none) (nullable): the attribute list
  */
@@ -6856,8 +6858,9 @@ gtk_text_set_tabs (GtkText       *self,
  * gtk_text_get_tabs: (attributes org.gtk.Method.get_property=tabs)
  * @self: a `GtkText`
  *
- * Gets the tabstops that were set on the `GtkText`
- * using gtk_text_set_tabs().
+ * Gets the tabstops that were set on the `GtkText`.
+ *
+ * See [method@Gtk.Text.set_tabs].
  *
  * Returns: (nullable) (transfer none): the tabstops
  */
@@ -6954,7 +6957,9 @@ gtk_text_set_extra_menu (GtkText    *self,
  * gtk_text_get_extra_menu: (attributes org.gtk.Method.get_property=extra-menu)
  * @self: a `GtkText`
  *
- * Gets the menu model set with gtk_text_set_extra_menu().
+ * Gets the menu model for extra items in the context menu.
+ *
+ * See [method@Gtk.Text.set_extra_menu].
  *
  * Returns: (transfer none) (nullable): the menu model
  */

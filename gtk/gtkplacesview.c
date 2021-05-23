@@ -35,8 +35,8 @@
 /*< private >
  * GtkPlacesView:
  *
- * #GtkPlacesView is a widget that displays a list of persistent drives
- * such as harddisk partitions and networks.  #GtkPlacesView does not monitor
+ * GtkPlacesView is a widget that displays a list of persistent drives
+ * such as harddisk partitions and networks.  GtkPlacesView does not monitor
  * removable devices.
  *
  * The places view displays drives and networks, and will automatically mount
@@ -45,7 +45,7 @@
  * shown at the network list.
  *
  * To make use of the places view, an application at least needs to connect
- * to the #GtkPlacesView::open-location signal. This is emitted when the user
+ * to the GtkPlacesView::open-location signal. This is emitted when the user
  * selects a location to open in the view.
  */
 
@@ -2198,8 +2198,8 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
   /*
    * GtkPlacesView::open-location:
    * @view: the object which received the signal.
-   * @location: (type Gio.File): #GFile to which the caller should switch.
-   * @open_flags: a single value from #GtkPlacesOpenFlags specifying how the @location
+   * @location: (type Gio.File): GFile to which the caller should switch.
+   * @open_flags: a single value from GtkPlacesOpenFlags specifying how the @location
    * should be opened.
    *
    * The places view emits this signal when the user selects a location
@@ -2377,13 +2377,13 @@ gtk_places_view_init (GtkPlacesView *self)
 /*
  * gtk_places_view_new:
  *
- * Creates a new #GtkPlacesView widget.
+ * Creates a new GtkPlacesView widget.
  *
  * The application should connect to at least the
- * #GtkPlacesView::open-location signal to be notified
+ * GtkPlacesView::open-location signal to be notified
  * when the user makes a selection in the view.
  *
- * Returns: a newly created #GtkPlacesView
+ * Returns: a newly created GtkPlacesView
  */
 GtkWidget *
 gtk_places_view_new (void)
@@ -2393,7 +2393,7 @@ gtk_places_view_new (void)
 
 /*
  * gtk_places_view_set_open_flags:
- * @view: a #GtkPlacesView
+ * @view: a GtkPlacesView
  * @flags: Bitmask of modes in which the calling application can open locations
  *
  * Sets the way in which the calling application can open new locations from
@@ -2405,11 +2405,11 @@ gtk_places_view_new (void)
  * application can open new locations, so that the view can display (or not)
  * the “Open in new tab” and “Open in new window” menu items as appropriate.
  *
- * When the #GtkPlacesView::open-location signal is emitted, its flags
+ * When the GtkPlacesView::open-location signal is emitted, its flags
  * argument will be set to one of the @flags that was passed in
  * gtk_places_view_set_open_flags().
  *
- * Passing 0 for @flags will cause #GTK_PLACES_OPEN_NORMAL to always be sent
+ * Passing 0 for @flags will cause GTK_PLACES_OPEN_NORMAL to always be sent
  * to callbacks for the “open-location” signal.
  */
 void
@@ -2433,11 +2433,11 @@ gtk_places_view_set_open_flags (GtkPlacesView      *view,
 
 /*
  * gtk_places_view_get_open_flags:
- * @view: a #GtkPlacesSidebar
+ * @view: a GtkPlacesSidebar
  *
  * Gets the open flags.
  *
- * Returns: the #GtkPlacesOpenFlags of @view
+ * Returns: the GtkPlacesOpenFlags of @view
  */
 GtkPlacesOpenFlags
 gtk_places_view_get_open_flags (GtkPlacesView *view)
@@ -2449,7 +2449,7 @@ gtk_places_view_get_open_flags (GtkPlacesView *view)
 
 /*
  * gtk_places_view_get_search_query:
- * @view: a #GtkPlacesView
+ * @view: a GtkPlacesView
  *
  * Retrieves the current search query from @view.
  *
@@ -2465,7 +2465,7 @@ gtk_places_view_get_search_query (GtkPlacesView *view)
 
 /*
  * gtk_places_view_set_search_query:
- * @view: a #GtkPlacesView
+ * @view: a GtkPlacesView
  * @query_text: the query, or NULL.
  *
  * Sets the search query of @view. The search is immediately performed
@@ -2491,7 +2491,7 @@ gtk_places_view_set_search_query (GtkPlacesView *view,
 
 /*
  * gtk_places_view_get_loading:
- * @view: a #GtkPlacesView
+ * @view: a GtkPlacesView
  *
  * Returns %TRUE if the view is loading locations.
  */

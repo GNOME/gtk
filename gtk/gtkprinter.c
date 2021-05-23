@@ -262,7 +262,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
 
   /**
    * GtkPrinter::details-acquired:
-   * @printer: the #GtkPrinter on which the signal is emitted
+   * @printer: the `GtkPrinter` on which the signal is emitted
    * @success: %TRUE if the details were successfully acquired
    *
    * Emitted in response to a request for detailed information
@@ -484,7 +484,7 @@ gtk_printer_get_name (GtkPrinter *printer)
 
 /**
  * gtk_printer_get_description:
- * @printer: a #GtkPrinter
+ * @printer: a `GtkPrinter`
  *
  * Gets the description of the printer.
  *

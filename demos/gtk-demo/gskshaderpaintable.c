@@ -23,13 +23,10 @@
 #include "gskshaderpaintable.h"
 
 /**
- * SECTION:gskshaderpaintable
- * @Short_description: Drawing with shaders
- * @Title: GskShaderPaintable
- * @see_also: #GdkPaintable
+ * GskShaderPaintable:
  *
- * GskShaderPaintable is an implementation of the #GdkPaintable interface
- * that uses a #GskGLShader to create pixels.
+ * `GskShaderPaintable` is an implementation of the `GdkPaintable` interface
+ * that uses a `GskGLShader` to create pixels.
  *
  * You can set the uniform data that the shader needs for rendering
  * using gsk_shader_paintable_set_args(). This function can
@@ -38,7 +35,7 @@
  *
  * Commonly, time is passed to shaders as a float uniform containing
  * the elapsed time in seconds. The convenience API
- * gsk_shader_paintable_update_time() can be called from a #GtkTickCallback
+ * gsk_shader_paintable_update_time() can be called from a `GtkTickCallback`
  * to update the time based on the frame time of the frame clock.
  */
 
@@ -186,7 +183,7 @@ gsk_shader_paintable_init (GskShaderPaintable *self)
  * pixels. The shader must not require input textures.
  * If @data is %NULL, all uniform values are set to zero.
  *
- * Returns: (transfer full): a new #GskShaderPaintable
+ * Returns: (transfer full): a new `GskShaderPaintable`
  */
 GdkPaintable *
 gsk_shader_paintable_new (GskGLShader *shader,
@@ -215,8 +212,8 @@ gsk_shader_paintable_new (GskGLShader *shader,
 
 /**
  * gsk_shader_paintable_set_shader:
- * @self: a #GskShaderPaintable
- * @shader: the #GskGLShader to use
+ * @self: a `GskShaderPaintable`
+ * @shader: the `GskGLShader` to use
  *
  * Sets the shader that the paintable will use
  * to create pixels. The shader must not require
@@ -241,11 +238,11 @@ gsk_shader_paintable_set_shader (GskShaderPaintable *self,
 
 /**
  * gsk_shader_paintable_get_shader:
- * @self: a #GskShaderPaintable
+ * @self: a `GskShaderPaintable`
  *
  * Returns the shader that the paintable is using.
  *
- * Returns: (transfer none): the #GskGLShader that is used
+ * Returns: (transfer none): the `GskGLShader` that is used
  */
 GskGLShader *
 gsk_shader_paintable_get_shader (GskShaderPaintable *self)
@@ -257,12 +254,12 @@ gsk_shader_paintable_get_shader (GskShaderPaintable *self)
 
 /**
  * gsk_shader_paintable_set_args:
- * @self: a #GskShaderPaintable
+ * @self: a `GskShaderPaintable`
  * @data: Data block with uniform data for the shader
  *
  * Sets the uniform data that will be passed to the
  * shader when rendering. The @data will typically
- * be produced by a #GskUniformDataBuilder.
+ * be produced by a `GskUniformDataBuilder`.
  *
  * Note that the @data should be considered immutable
  * after it has been passed to this function.
@@ -284,7 +281,7 @@ gsk_shader_paintable_set_args (GskShaderPaintable *self,
 
 /**
  * gsk_shader_paintable_get_args:
- * @self: a #GskShaderPaintable
+ * @self: a `GskShaderPaintable`
  *
  * Returns the uniform data set with
  * gsk_shader_paintable_get_args().
@@ -301,9 +298,9 @@ gsk_shader_paintable_get_args (GskShaderPaintable *self)
 
 /**
  * gsk_shader_paintable_update_time:
- * @self: a #GskShaderPaintable
+ * @self: a `GskShaderPaintable`
  * @time_idx: the index of the uniform for time in seconds as float
- * @frame_time: the current frame time, as returned by #GdkFrameClock
+ * @frame_time: the current frame time, as returned by `GdkFrameClock`
  *
  * This function is a convenience wrapper for
  * gsk_shader_paintable_set_args() that leaves all
@@ -311,7 +308,7 @@ gsk_shader_paintable_get_args (GskShaderPaintable *self)
  * index @time_idx, which will be set to the elapsed time
  * in seconds, since the first call to this function.
  *
- * This function is usually called from a #GtkTickCallback.
+ * This function is usually called from a `GtkTickCallback`.
  */
 void
 gsk_shader_paintable_update_time (GskShaderPaintable *self,

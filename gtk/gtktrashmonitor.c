@@ -228,7 +228,7 @@ _gtk_trash_monitor_init (GtkTrashMonitor *monitor)
  * _gtk_trash_monitor_get:
  *
  * Returns: (transfer full): a new reference to the singleton
- * #GtkTrashMonitor object.  Be sure to call g_object_unref() on it when you are
+ * GtkTrashMonitor object.  Be sure to call g_object_unref() on it when you are
  * done with the trash monitor.
  */
 GtkTrashMonitor *
@@ -249,9 +249,9 @@ _gtk_trash_monitor_get (void)
 
 /*
  * _gtk_trash_monitor_get_icon:
- * @monitor: a #GtkTrashMonitor
+ * @monitor: a GtkTrashMonitor
  *
- * Returns: (transfer full): the #GIcon that should be used to represent
+ * Returns: (transfer full): the GIcon that should be used to represent
  * the state of the trash folder on screen, based on whether there is trash or
  * not.
  */
@@ -272,7 +272,7 @@ _gtk_trash_monitor_get_icon (GtkTrashMonitor *monitor)
 
 /*
  * _gtk_trash_monitor_get_has_trash:
- * @monitor: a #GtkTrashMonitor
+ * @monitor: a GtkTrashMonitor
  *
  * Returns: #TRUE if there is trash in the trash:/// folder, or #FALSE otherwise.
  */

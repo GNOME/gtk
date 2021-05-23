@@ -51,7 +51,7 @@ static int debug_indent = 0;
 
 /**
  * gdk_win32_display_add_filter:
- * @display: a #GdkWin32Display
+ * @display: a `GdkWin32Display`
  * @function: filter callback
  * @data: data to pass to filter callback
  *
@@ -94,7 +94,7 @@ gdk_win32_display_add_filter (GdkWin32Display           *display,
 
 /**
  * _gdk_win32_message_filter_unref:
- * @display: A #GdkWin32Display
+ * @display: A `GdkWin32Display`
  * @filter: A message filter
  *
  * Release a reference to @filter.  Note this function may
@@ -136,7 +136,7 @@ _gdk_win32_message_filter_unref (GdkWin32Display       *display,
 
 /**
  * gdk_win32_display_remove_filter:
- * @display: A #GdkWin32Display
+ * @display: A `GdkWin32Display`
  * @function: previously-added filter function
  * @data: user data for previously-added filter function
  *
@@ -340,7 +340,7 @@ _gdk_win32_display_init_monitors (GdkWin32Display *win32_display)
  * change. Custom cursors constructed with [ctor@Gdk.Cursor.new_from_texture]
  * will have to be handled by the application (GTK applications can
  * learn about cursor theme changes by listening for change notification
- * for the corresponding #GtkSetting).
+ * for the corresponding `GtkSetting`).
  */
 void
 gdk_win32_display_set_cursor_theme (GdkDisplay  *display,

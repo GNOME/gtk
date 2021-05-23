@@ -82,7 +82,7 @@ static inline gboolean  gtk_counting_bloom_filter_may_contain   (const GtkCounti
 
 /*
  * gtk_counting_bloom_filter_add:
- * @self: a #GtkCountingBloomFilter
+ * @self: a `GtkCountingBloomFilter`
  * @hash: a hash value to add to the filter
  *
  * Adds the hash value to the filter.
@@ -105,7 +105,7 @@ gtk_counting_bloom_filter_add (GtkCountingBloomFilter *self,
 
 /*
  * gtk_counting_bloom_filter_remove:
- * @self: a #GtkCountingBloomFilter
+ * @self: a `GtkCountingBloomFilter`
  * @hash: a hash value to remove from the filter
  *
  * Removes a hash value from the filter that has previously
@@ -127,7 +127,7 @@ gtk_counting_bloom_filter_remove (GtkCountingBloomFilter *self,
 
 /*
  * gtk_counting_bloom_filter_may_contain:
- * @self: a #GtkCountingBloomFilter
+ * @self: a `GtkCountingBloomFilter`
  * @hash: the hash value to check
  *
  * Checks if @hash may be contained in @self.

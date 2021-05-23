@@ -500,7 +500,7 @@ gtk_pad_controller_set_action_entries (GtkPadController        *controller,
  * @mode: the mode that will trigger this action, or -1 for all modes.
  * @label: Human readable description of this action, this string should
  *   be deemed user-visible.
- * @action_name: action name that will be activated in the #GActionGroup
+ * @action_name: action name that will be activated in the `GActionGroup`
  *
  * Adds an individual action to @controller.
  *

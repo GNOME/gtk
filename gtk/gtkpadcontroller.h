@@ -62,7 +62,7 @@ typedef enum {
  * @mode: the mode that will trigger this action entry, or -1 for all modes.
  * @label: Human readable description of this action entry, this string should
  *   be deemed user-visible.
- * @action_name: action name that will be activated in the #GActionGroup.
+ * @action_name: action name that will be activated in the `GActionGroup`.
  *
  * Struct defining a pad action entry.
  */

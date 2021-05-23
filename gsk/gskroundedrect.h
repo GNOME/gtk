@@ -34,7 +34,7 @@ G_BEGIN_DECLS
  * @_w: the width
  * @_h: the height
  *
- * Initializes a #GskRoundedRect when declaring it.
+ * Initializes a `GskRoundedRect` when declaring it.
  * All corner sizes will be initialized to 0.
  */
 #define GSK_ROUNDED_RECT_INIT(_x,_y,_w,_h)       (GskRoundedRect) { .bounds = GRAPHENE_RECT_INIT(_x,_y,_w,_h), \

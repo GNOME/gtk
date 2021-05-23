@@ -1821,11 +1821,11 @@ gtk_at_spi_context_get_context_path (GtkAtSpiContext *self)
 
 /*< private >
  * gtk_at_spi_context_to_ref:
- * @self: a #GtkAtSpiContext
+ * @self: a `GtkAtSpiContext`
  *
- * Returns an ATSPI object reference for the #GtkAtSpiContext.
+ * Returns an ATSPI object reference for the `GtkAtSpiContext`.
  *
- * Returns: (transfer floating): a #GVariant with the reference
+ * Returns: (transfer floating): a `GVariant` with the reference
  */
 GVariant *
 gtk_at_spi_context_to_ref (GtkAtSpiContext *self)

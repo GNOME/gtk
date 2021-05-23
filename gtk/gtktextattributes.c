@@ -55,10 +55,10 @@
 /**
  * gtk_text_attributes_new:
  * 
- * Creates a #GtkTextAttributes, which describes
+ * Creates a `GtkTextAttributes`, which describes
  * a set of properties on some text.
  * 
- * Returns: a new #GtkTextAttributes,
+ * Returns: a new `GtkTextAttributes`,
  *   free with gtk_text_attributes_unref().
  */
 GtkTextAttributes*
@@ -82,9 +82,9 @@ gtk_text_attributes_new (void)
 
 /**
  * gtk_text_attributes_copy:
- * @src: a #GtkTextAttributes to be copied
+ * @src: a `GtkTextAttributes` to be copied
  *
- * Copies @src and returns a new #GtkTextAttributes.
+ * Copies @src and returns a new `GtkTextAttributes`.
  *
  * Returns: a copy of @src,
  *   free with gtk_text_attributes_unref()
@@ -102,8 +102,8 @@ gtk_text_attributes_copy (GtkTextAttributes *src)
 
 /**
  * gtk_text_attributes_copy_values:
- * @src: a #GtkTextAttributes
- * @dest: another #GtkTextAttributes
+ * @src: a `GtkTextAttributes`
+ * @dest: another `GtkTextAttributes`
  *
  * Copies the values from @src to @dest so that @dest has
  * the same values as @src. Frees existing values in @dest.
@@ -184,11 +184,11 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
 
 /**
  * gtk_text_attributes_ref:
- * @values: a #GtkTextAttributes
+ * @values: a `GtkTextAttributes`
  *
  * Increments the reference count on @values.
  *
- * Returns: the #GtkTextAttributes that were passed in
+ * Returns: the `GtkTextAttributes` that were passed in
  **/
 GtkTextAttributes *
 gtk_text_attributes_ref (GtkTextAttributes *values)
@@ -202,7 +202,7 @@ gtk_text_attributes_ref (GtkTextAttributes *values)
 
 /**
  * gtk_text_attributes_unref:
- * @values: a #GtkTextAttributes
+ * @values: a `GtkTextAttributes`
  * 
  * Decrements the reference count on @values, freeing the structure
  * if the reference count reaches 0.

@@ -67,7 +67,7 @@ struct _GtkScaleClass
 
 /**
  * GtkScaleFormatValueFunc:
- * @scale: The #GtkScale
+ * @scale: The `GtkScale`
  * @value: The numeric value to format
  * @user_data: (closure): user data
  *

@@ -120,7 +120,7 @@ gdk_x11_screen_finalize (GObject *object)
 
 /**
  * gdk_x11_screen_get_monitor_output:
- * @screen: a #GdkX11Screen
+ * @screen: a `GdkX11Screen`
  * @monitor_num: number of the monitor, between 0 and gdk_screen_get_n_monitors (screen)
  *
  * Gets the XID of the specified output/monitor.
@@ -358,9 +358,9 @@ out:
 
 /**
  * gdk_x11_screen_get_xscreen:
- * @screen: a #GdkX11Screen
+ * @screen: a `GdkX11Screen`
  *
- * Returns the screen of a #GdkX11Screen.
+ * Returns the screen of a `GdkX11Screen`.
  *
  * Returns: (transfer none): an Xlib Screen*
  */
@@ -1176,7 +1176,7 @@ fetch_net_wm_check_window (GdkX11Screen *x11_screen)
 
 /**
  * gdk_x11_screen_supports_net_wm_hint:
- * @screen: the relevant #GdkX11Screen.
+ * @screen: the relevant `GdkX11Screen`.
  * @property_name: name of the WM property
  *
  * This function is specific to the X11 backend of GDK, and indicates
@@ -1189,7 +1189,7 @@ fetch_net_wm_check_window (GdkX11Screen *x11_screen)
  * is that your application can start up before the window manager
  * does when the user logs in, and before the window manager starts
  * gdk_x11_screen_supports_net_wm_hint() will return %FALSE for every property.
- * You can monitor the window_manager_changed signal on #GdkX11Screen to detect
+ * You can monitor the window_manager_changed signal on `GdkX11Screen` to detect
  * a window manager change.
  *
  * Returns: %TRUE if the window manager supports @property
@@ -1263,7 +1263,7 @@ gdk_x11_screen_supports_net_wm_hint (GdkX11Screen *x11_screen,
 
 /**
  * gdk_x11_screen_get_window_manager_name:
- * @screen: a #GdkX11Screen
+ * @screen: a `GdkX11Screen`
  *
  * Returns the name of the window manager for @screen.
  *
@@ -1378,7 +1378,7 @@ get_netwm_cardinal_property (GdkX11Screen *x11_screen,
 
 /**
  * gdk_x11_screen_get_number_of_desktops:
- * @screen: a #GdkX11Screen
+ * @screen: a `GdkX11Screen`
  *
  * Returns the number of workspaces for @screen when running under a
  * window manager that supports multiple workspaces, as described
@@ -1395,7 +1395,7 @@ gdk_x11_screen_get_number_of_desktops (GdkX11Screen *screen)
 
 /**
  * gdk_x11_screen_get_current_desktop:
- * @screen: a #GdkX11Screen
+ * @screen: a `GdkX11Screen`
  *
  * Returns the current workspace for @screen when running under a
  * window manager that supports multiple workspaces, as described

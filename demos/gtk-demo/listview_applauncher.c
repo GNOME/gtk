@@ -8,8 +8,8 @@
 
 #include <gtk/gtk.h>
 
-/* This is the function that creates the #GListModel that we need.
- * GTK list widgets need a #GListModel to display, as models support change
+/* This is the function that creates the GListModel that we need.
+ * GTK list widgets need a GListModel to display, as models support change
  * notifications.
  * Unfortunately various older APIs do not provide list models, so we create
  * our own.
@@ -20,10 +20,10 @@ create_application_list (void)
   GListStore *store;
   GList *apps, *l;
 
-  /* We use a #GListStore here, which is a simple array-like list implementation
+  /* We use a GListStore here, which is a simple array-like list implementation
    * for manual management.
    * List models need to know what type of data they provide, so we need to
-   * provide the type here. As we want to do a list of applications, #GAppInfo
+   * provide the type here. As we want to do a list of applications, GAppInfo
    * is the object we provide.
    */
   store = g_list_store_new (G_TYPE_APP_INFO);
@@ -39,7 +39,7 @@ create_application_list (void)
 }
 
 /* This is the function we use for setting up new listitems to display.
- * We add just an #GtkImage and a #GtkLabel here to display the application's
+ * We add just an GtkImage and a GtkLabel here to display the application's
  * icon and name, as this is just a simple demo.
  */
 static void
@@ -61,8 +61,8 @@ setup_listitem_cb (GtkListItemFactory *factory,
 
 /* Here we need to prepare the listitem for displaying its item. We get the
  * listitem already set up from the previous function, so we can reuse the
- * #GtkImage widget we set up above.
- * We get the item - which we know is a #GAppInfo because it comes out of
+ * GtkImage widget we set up above.
+ * We get the item - which we know is a GAppInfo because it comes out of
  * the model we set up above, grab its icon and display it.
  */
 static void
@@ -85,7 +85,7 @@ bind_listitem_cb (GtkListItemFactory *factory,
  * the listitem, but this is simple code, so the default implementations are
  * enough. If we had connected signals, this step would have been necessary.
  *
- * The #GtkSignalListItemFactory documentation contains more information about
+ * The GtkSignalListItemFactory documentation contains more information about
  * this step.
  */
 
@@ -108,8 +108,8 @@ activate_cb (GtkListView  *list,
   app_info = g_list_model_get_item (G_LIST_MODEL (gtk_list_view_get_model (list)), position);
 
   /* Prepare the context for launching the application and launch it. This
-   * code is explained in detail in the documentation for #GdkAppLaunchContext
-   * and #GAppInfo.
+   * code is explained in detail in the documentation for GdkAppLaunchContext
+   * and GAppInfo.
    */
   context = gdk_display_get_app_launch_context (gtk_widget_get_display (GTK_WIDGET (list)));
   if (!g_app_info_launch (app_info,
@@ -155,13 +155,13 @@ do_listview_applauncher (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "Application Launcher");
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *) &window);
 
-      /* The #GtkListitemFactory is what is used to create #GtkListItems
+      /* The GtkListitemFactory is what is used to create GtkListItems
        * to display the data from the model. So it is absolutely necessary
        * to create one.
-       * We will use a #GtkSignalListItemFactory because it is the simplest
+       * We will use a GtkSignalListItemFactory because it is the simplest
        * one to use. Different ones are available for different use cases.
-       * The most powerful one is #GtkBuilderListItemFactory which uses
-       * #GtkBuilder .ui files, so it requires little code.
+       * The most powerful one is GtkBuilderListItemFactory which uses
+       * GtkBuilder .ui files, so it requires little code.
        */
       factory = gtk_signal_list_item_factory_new ();
       g_signal_connect (factory, "setup", G_CALLBACK (setup_listitem_cb), NULL);
@@ -184,7 +184,7 @@ do_listview_applauncher (GtkWidget *do_widget)
        */
       g_signal_connect (list, "activate", G_CALLBACK (activate_cb), NULL);
 
-      /* List widgets should always be contained in a #GtkScrolledWindow,
+      /* List widgets should always be contained in a GtkScrolledWindow,
        * because otherwise they might get too large or they might not
        * be scrollable.
        */

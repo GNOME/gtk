@@ -61,7 +61,7 @@
  * was emitted on a listitem, the listitem will be destroyed and not be used again.
  *
  * Note that during the signal emissions, changing properties on the
- * #GtkListItems passed will not trigger notify signals as the listitem's
+ * `GtkListItem`s passed will not trigger notify signals as the listitem's
  * notifications are frozen. See g_object_freeze_notify() for details.
  *
  * For tracking changes in other properties in the `GtkListItem`, the
@@ -156,7 +156,7 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
   /**
    * GtkSignalListItemFactory::setup:
    * @self: The `GtkSignalListItemFactory`
-   * @listitem: The #GtkListItem to set up
+   * @listitem: The `GtkListItem` to set up
    *
    * Emitted when a new listitem has been created and needs to be setup for use.
    *
@@ -181,7 +181,7 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
   /**
    * GtkSignalListItemFactory::bind:
    * @self: The `GtkSignalListItemFactory`
-   * @listitem: The #GtkListItem to bind
+   * @listitem: The `GtkListItem` to bind
    *
    * Emitted when a new [property@Gtk.ListItem:item] has been set
    * on the @listitem and should be bound for use.
@@ -209,7 +209,7 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
   /**
    * GtkSignalListItemFactory::unbind:
    * @self: The `GtkSignalListItemFactory`
-   * @listitem: The #GtkListItem to unbind
+   * @listitem: The `GtkListItem` to unbind
    *
    * Emitted when a listitem has been removed from use in a list widget
    * and its new [property@Gtk.ListItem:item] is about to be unset.
@@ -233,7 +233,7 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
   /**
    * GtkSignalListItemFactory::teardown:
    * @self: The `GtkSignalListItemFactory`
-   * @listitem: The #GtkListItem to teardown
+   * @listitem: The `GtkListItem` to teardown
    *
    * Emitted when a listitem is about to be destroyed.
    *

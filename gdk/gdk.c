@@ -50,7 +50,7 @@
 /**
  * GDK_WINDOWING_X11:
  *
- * The #GDK_WINDOWING_X11 macro is defined if the X11 backend
+ * The `GDK_WINDOWING_X11` macro is defined if the X11 backend
  * is supported.
  *
  * Use this macro to guard code that is specific to the X11 backend.
@@ -59,7 +59,7 @@
 /**
  * GDK_WINDOWING_WIN32:
  *
- * The #GDK_WINDOWING_WIN32 macro is defined if the Win32 backend
+ * The `GDK_WINDOWING_WIN32` macro is defined if the Win32 backend
  * is supported.
  *
  * Use this macro to guard code that is specific to the Win32 backend.
@@ -68,7 +68,7 @@
 /**
  * GDK_WINDOWING_MACOS:
  *
- * The #GDK_WINDOWING_MACOS macro is defined if the MacOS backend
+ * The `GDK_WINDOWING_MACOS` macro is defined if the MacOS backend
  * is supported.
  *
  * Use this macro to guard code that is specific to the MacOS backend.
@@ -77,7 +77,7 @@
 /**
  * GDK_WINDOWING_WAYLAND:
  *
- * The #GDK_WINDOWING_WAYLAND macro is defined if the Wayland backend
+ * The `GDK_WINDOWING_WAYLAND` macro is defined if the Wayland backend
  * is supported.
  *
  * Use this macro to guard code that is specific to the Wayland backend.
@@ -87,6 +87,7 @@
  * GDK_DISABLE_DEPRECATION_WARNINGS:
  *
  * A macro that should be defined before including the gdk.h header.
+ *
  * If it is defined, no compiler warnings will be produced for uses
  * of deprecated GDK APIs.
  */

@@ -180,7 +180,7 @@ gtk_page_setup_get_orientation (GtkPageSetup *setup)
 /**
  * gtk_page_setup_set_orientation:
  * @setup: a `GtkPageSetup`
- * @orientation: a #GtkPageOrientation value
+ * @orientation: a `GtkPageOrientation` value
  *
  * Sets the page orientation of the `GtkPageSetup`.
  */
@@ -210,7 +210,7 @@ gtk_page_setup_get_paper_size (GtkPageSetup *setup)
 /**
  * gtk_page_setup_set_paper_size:
  * @setup: a `GtkPageSetup`
- * @size: a #GtkPaperSize
+ * @size: a `GtkPaperSize`
  *
  * Sets the paper size of the `GtkPageSetup` without
  * changing the margins.
@@ -237,7 +237,7 @@ gtk_page_setup_set_paper_size (GtkPageSetup *setup,
 /**
  * gtk_page_setup_set_paper_size_and_default_margins:
  * @setup: a `GtkPageSetup`
- * @size: a #GtkPaperSize
+ * @size: a `GtkPaperSize`
  *
  * Sets the paper size of the `GtkPageSetup` and modifies
  * the margins according to the new paper size.
@@ -797,7 +797,7 @@ gtk_page_setup_to_key_file (GtkPageSetup *setup,
  *
  * Serialize page setup to an a{sv} variant.
  *
- * Return: (transfer none): a new, floating, #GVariant
+ * Return: (transfer none): a new, floating, `GVariant`
  */
 GVariant *
 gtk_page_setup_to_gvariant (GtkPageSetup *setup)

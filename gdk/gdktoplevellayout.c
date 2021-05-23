@@ -64,7 +64,7 @@ G_DEFINE_BOXED_TYPE (GdkToplevelLayout, gdk_toplevel_layout,
  * The size is in ”application pixels”, not
  * ”device pixels” (see gdk_surface_get_scale_factor()).
  *
- * Returns: (transfer full): newly created instance of #GdkToplevelLayout
+ * Returns: (transfer full): newly created instance of `GdkToplevelLayout`
  */
 GdkToplevelLayout *
 gdk_toplevel_layout_new (void)
@@ -85,7 +85,7 @@ gdk_toplevel_layout_new (void)
 
 /**
  * gdk_toplevel_layout_ref:
- * @layout: a #GdkToplevelLayout
+ * @layout: a `GdkToplevelLayout`
  *
  * Increases the reference count of @layout.
  *
@@ -100,7 +100,7 @@ gdk_toplevel_layout_ref (GdkToplevelLayout *layout)
 
 /**
  * gdk_toplevel_layout_unref:
- * @layout: a #GdkToplevelLayout
+ * @layout: a `GdkToplevelLayout`
  *
  * Decreases the reference count of @layout.
  */
@@ -116,9 +116,9 @@ gdk_toplevel_layout_unref (GdkToplevelLayout *layout)
 
 /**
  * gdk_toplevel_layout_copy:
- * @layout: a #GdkToplevelLayout
+ * @layout: a `GdkToplevelLayout`
  *
- * Create a new #GdkToplevelLayout and copy the contents of @layout into it.
+ * Create a new `GdkToplevelLayout` and copy the contents of @layout into it.
  *
  * Returns: (transfer full): a copy of @layout.
  */
@@ -143,8 +143,8 @@ gdk_toplevel_layout_copy (GdkToplevelLayout *layout)
 
 /**
  * gdk_toplevel_layout_equal:
- * @layout: a #GdkToplevelLayout
- * @other: another #GdkToplevelLayout
+ * @layout: a `GdkToplevelLayout`
+ * @other: another `GdkToplevelLayout`
  *
  * Check whether @layout and @other has identical layout properties.
  *
@@ -168,7 +168,7 @@ gdk_toplevel_layout_equal (GdkToplevelLayout *layout,
 
 /**
  * gdk_toplevel_layout_set_resizable:
- * @layout: a #GdkToplevelLayout
+ * @layout: a `GdkToplevelLayout`
  * @resizable: %TRUE to allow resizing
  *
  * Sets whether the layout should allow the user
@@ -183,7 +183,7 @@ gdk_toplevel_layout_set_resizable (GdkToplevelLayout *layout,
 
 /**
  * gdk_toplevel_layout_get_resizable:
- * @layout: a #GdkToplevelLayout
+ * @layout: a `GdkToplevelLayout`
  *
  * Returns whether the layout should allow the user
  * to resize the surface.
@@ -198,7 +198,7 @@ gdk_toplevel_layout_get_resizable (GdkToplevelLayout *layout)
 
 /**
  * gdk_toplevel_layout_set_maximized:
- * @layout: a #GdkToplevelLayout
+ * @layout: a `GdkToplevelLayout`
  * @maximized: %TRUE to maximize
  *
  * Sets whether the layout should cause the surface
@@ -214,7 +214,7 @@ gdk_toplevel_layout_set_maximized (GdkToplevelLayout *layout,
 
 /**
  * gdk_toplevel_layout_get_maximized:
- * @layout: a #GdkToplevelLayout
+ * @layout: a `GdkToplevelLayout`
  * @maximized: (out): set to %TRUE if the toplevel should be maximized
  *
  * If the layout specifies whether to the toplevel should go maximized,
@@ -238,7 +238,7 @@ gdk_toplevel_layout_get_maximized (GdkToplevelLayout *layout,
 
 /**
  * gdk_toplevel_layout_set_fullscreen:
- * @layout: a #GdkToplevelLayout
+ * @layout: a `GdkToplevelLayout`
  * @fullscreen: %TRUE to fullscreen the surface
  * @monitor: (nullable): the monitor to fullscreen on
  *
@@ -258,7 +258,7 @@ gdk_toplevel_layout_set_fullscreen (GdkToplevelLayout *layout,
 
 /**
  * gdk_toplevel_layout_get_fullscreen:
- * @layout: a #GdkToplevelLayout
+ * @layout: a ``GdkToplevelLayout`
  * @fullscreen: (out): location to store whether the toplevel should be fullscreen
  *
  * If the layout specifies whether to the toplevel should go fullscreen,
@@ -282,7 +282,7 @@ gdk_toplevel_layout_get_fullscreen (GdkToplevelLayout *layout,
 
 /**
  * gdk_toplevel_layout_get_fullscreen_monitor:
- * @layout: a #GdkToplevelLayout
+ * @layout: a `GdkToplevelLayout`
  *
  * Returns the monitor that the layout is fullscreening
  * the surface on.

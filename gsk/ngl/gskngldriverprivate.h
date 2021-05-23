@@ -198,7 +198,7 @@ gsk_ngl_driver_get_texture_by_id (GskNglDriver *self,
 
 /**
  * gsk_ngl_driver_lookup_texture:
- * @self: a #GskNglDriver
+ * @self: a `GskNglDriver`
  * @key: the key for the texture
  *
  * Looks up a texture in the texture cache by @key.

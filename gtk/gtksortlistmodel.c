@@ -55,8 +55,8 @@
 /**
  * GtkSortListModel:
  *
- * `GtkSortListModel` is a list model that sorts the elements of
- * the underlying model according to a `GtkSorter`.
+ * A `GListModel` that sorts the elements of an underlying model
+ * according to a `GtkSorter`.
  *
  * The model can be set up to do incremental sorting, so that
  * sorting long lists doesn't block the UI. See

@@ -38,7 +38,7 @@ typedef struct _GtkMenuButton        GtkMenuButton;
 
 /**
  * GtkMenuButtonCreatePopupFunc:
- * @menu_button: the #GtkMenuButton
+ * @menu_button: the `GtkMenuButton`
  * @user_data: User data passed to gtk_menu_button_set_create_popup_func()
  *
  * User-provided callback function to create a popup for a

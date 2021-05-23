@@ -218,7 +218,7 @@ gdk_content_provider_init (GdkContentProvider *provider)
 
 /**
  * gdk_content_provider_ref_formats: (attributes org.gtk.Method.get_property=formats)
- * @provider: a #GdkContentProvider
+ * @provider: a `GdkContentProvider`
  *
  * Gets the formats that the provider can provide its current contents in.
  *
@@ -234,7 +234,7 @@ gdk_content_provider_ref_formats (GdkContentProvider *provider)
 
 /**
  * gdk_content_provider_ref_storable_formats: (attributes org.gtk.Method.get_property=storable-formats)
- * @provider: a #GdkContentProvider
+ * @provider: a `GdkContentProvider`
  *
  * Gets the formats that the provider suggests other applications to store
  * the data in.
@@ -288,7 +288,7 @@ gdk_content_provider_content_changed (GdkContentProvider *provider)
  *
  * The given mime type does not need to be listed in the formats returned by
  * [method@Gdk.ContentProvider.ref_formats]. However, if the given `GType` is
- * not supported, #G_IO_ERROR_NOT_SUPPORTED will be reported.
+ * not supported, `G_IO_ERROR_NOT_SUPPORTED` will be reported.
  *
  * The given @stream will not be closed.
  */
@@ -351,7 +351,7 @@ gdk_content_provider_write_mime_type_finish (GdkContentProvider  *provider,
  * provided in. This given `GType` does not need to be listed in the formats
  * returned by [method@Gdk.ContentProvider.ref_formats]. However, if the
  * given `GType` is not supported, this operation can fail and
- * #G_IO_ERROR_NOT_SUPPORTED will be reported.
+ * `G_IO_ERROR_NOT_SUPPORTED` will be reported.
  *
  * Returns: %TRUE if the value was set successfully. Otherwise
  *   @error will be set to describe the failure.

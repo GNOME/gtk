@@ -111,7 +111,7 @@ gdk_popup_default_init (GdkPopupInterface *iface)
  * @height: the unconstrained popup height to layout
  * @layout: the `GdkPopupLayout` object used to layout
  *
- * Present @popup after having processed the #GdkPopupLayout rules.
+ * Present @popup after having processed the `GdkPopupLayout` rules.
  *
  * If the popup was previously now showing, it will be showed,
  * otherwise it will change position according to @layout.

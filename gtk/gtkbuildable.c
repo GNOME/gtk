@@ -49,7 +49,7 @@ gtk_buildable_default_init (GtkBuildableInterface *iface)
 
 /*< private >
  * gtk_buildable_set_buildable_id:
- * @buildable: a #GtkBuildable
+ * @buildable: a `GtkBuildable`
  * @id: name to set
  *
  * Sets the ID of the @buildable object.
@@ -162,7 +162,7 @@ gtk_buildable_parser_finished (GtkBuildable *buildable,
  *
  * Constructs a child of @buildable with the name @name.
  *
- * #GtkBuilder calls this function if a “constructor” has been
+ * `GtkBuilder` calls this function if a “constructor” has been
  * specified in the UI definition.
  *
  * Returns: (transfer full): the constructed child
@@ -190,7 +190,7 @@ gtk_buildable_construct_child (GtkBuildable *buildable,
  * @builder: a `GtkBuilder` used to construct this object
  * @child: (nullable): child object or %NULL for non-child tags
  * @tagname: name of tag
- * @parser: (out): a #GMarkupParser to fill in
+ * @parser: (out): a `GMarkupParser` to fill in
  * @data: (out): return location for user data that will be passed in
  *   to parser functions
  *

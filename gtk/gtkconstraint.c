@@ -182,9 +182,9 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
    *
    * The target of the constraint.
    *
-   * The constraint will set the #GtkConstraint:target-attribute of the
-   * target using the #GtkConstraint:source-attribute of the source
-   * widget.
+   * The constraint will set the [property@Gtk.Constraint:target-attribute]
+   * property of the target using the [property@Gtk.Constraint:source-attribute]
+   * property of the source widget.
    *
    *
    */
@@ -196,10 +196,11 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
                          G_PARAM_READWRITE |
                          G_PARAM_STATIC_STRINGS |
                          G_PARAM_CONSTRUCT_ONLY);
+
   /**
    * GtkConstraint:target-attribute: (attributes org.gtk.Property.get=gtk_constraint_get_target_attribute)
    *
-   * The attribute of the #GtkConstraint:target set by the constraint.
+   * The attribute of the [property@Gtk.Constraint:target] set by the constraint.
    */
   obj_props[PROP_TARGET_ATTRIBUTE] =
     g_param_spec_enum ("target-attribute",
@@ -210,6 +211,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
                        G_PARAM_READWRITE |
                        G_PARAM_STATIC_STRINGS |
                        G_PARAM_CONSTRUCT_ONLY);
+
   /**
    * GtkConstraint:relation: (attributes org.gtk.Property.get=gtk_constraint_get_relation)
    *
@@ -224,14 +226,15 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
                        G_PARAM_READWRITE |
                        G_PARAM_STATIC_STRINGS |
                        G_PARAM_CONSTRUCT_ONLY);
+
   /**
    * GtkConstraint:source: (attributes org.gtk.Property.get=gtk_constraint_get_source)
    *
    * The source of the constraint.
    *
    * The constraint will set the [property@Gtk.Constraint:target-attribute]
-   * of the target using the [property@Gtk.Constraint:source-attribute]
-   * of the source.
+   * property of the target using the [property@Gtk.Constraint:source-attribute]
+   * property of the source.
    */
   obj_props[PROP_SOURCE] =
     g_param_spec_object ("source",
@@ -256,6 +259,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
                        G_PARAM_READWRITE |
                        G_PARAM_STATIC_STRINGS |
                        G_PARAM_CONSTRUCT_ONLY);
+
   /**
    * GtkConstraint:multiplier: (attributes org.gtk.Property.get=gtk_constraint_get_multiplier)
    *
@@ -270,6 +274,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
                          G_PARAM_READWRITE |
                          G_PARAM_STATIC_STRINGS |
                          G_PARAM_CONSTRUCT_ONLY);
+
   /**
    * GtkConstraint:constant: (attributes org.gtk.Property.get=gtk_constraint_get_constant)
    *
@@ -283,6 +288,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
                          G_PARAM_READWRITE |
                          G_PARAM_STATIC_STRINGS |
                          G_PARAM_CONSTRUCT_ONLY);
+
   /**
    * GtkConstraint:strength: (attributes org.gtk.Property.get=gtk_constraint_get_strength)
    *
@@ -400,7 +406,7 @@ gtk_constraint_new_constant (gpointer                target,
  * If the targe is set to `NULL` at creation, the constraint will use
  * the widget using the [class@Gtk.ConstraintLayout] as the target.
  *
- * Returns: (transfer none) (nullable): a #GtkConstraintTarget
+ * Returns: (transfer none) (nullable): a `GtkConstraintTarget`
  */
 GtkConstraintTarget *
 gtk_constraint_get_target (GtkConstraint *constraint)
@@ -428,7 +434,7 @@ gtk_constraint_get_target_attribute (GtkConstraint *constraint)
 
 /**
  * gtk_constraint_get_source: (attributes org.gtk.Method.get_property=source)
- * @constraint: a #GtkConstraint
+ * @constraint: a `GtkConstraint`
  *
  * Retrieves the [iface@Gtk.ConstraintTarget] used as the source for the
  * constraint.

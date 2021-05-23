@@ -1071,7 +1071,7 @@ gtk_info_bar_buildable_add_child (GtkBuildable *buildable,
 /**
  * gtk_info_bar_set_message_type: (attributes org.gtk.Method.set_property=message-type)
  * @info_bar: a `GtkInfoBar`
- * @message_type: a #GtkMessageType
+ * @message_type: a `GtkMessageType`
  *
  * Sets the message type of the message area.
  *

@@ -201,13 +201,13 @@ gdk_keymap_init (GdkKeymap *keymap)
   keymap->cache = g_hash_table_new (g_direct_hash, g_direct_equal);
 }
 
-/**
+/*< private >
  * gdk_keymap_get_display:
- * @keymap: a #GdkKeymap
+ * @keymap: a `GdkKeymap`
  *
- * Retrieves the #GdkDisplay associated to the @keymap.
+ * Retrieves the `GdkDisplay` associated to the @keymap.
  *
- * Returns: (transfer none): a #GdkDisplay
+ * Returns: (transfer none): a `GdkDisplay`
  */
 GdkDisplay *
 gdk_keymap_get_display (GdkKeymap *keymap)
@@ -302,9 +302,9 @@ gdk_keyval_is_lower (guint keyval)
   return FALSE;
 }
 
-/**
+/*< private >
  * gdk_keymap_get_direction:
- * @keymap: a #GdkKeymap
+ * @keymap: a `GdkKeymap`
  *
  * Returns the direction of effective layout of the keymap.
  *
@@ -314,7 +314,7 @@ gdk_keyval_is_lower (guint keyval)
  * Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL
  *   if it can determine the direction. %PANGO_DIRECTION_NEUTRAL
  *   otherwise.
- **/
+ */
 PangoDirection
 gdk_keymap_get_direction (GdkKeymap *keymap)
 {
@@ -323,15 +323,15 @@ gdk_keymap_get_direction (GdkKeymap *keymap)
   return GDK_KEYMAP_GET_CLASS (keymap)->get_direction (keymap);
 }
 
-/**
+/*< private >
  * gdk_keymap_have_bidi_layouts:
- * @keymap: a #GdkKeymap
+ * @keymap: a `GdkKeymap`
  *
  * Determines if keyboard layouts for both right-to-left and left-to-right
  * languages are in use.
  *
  * Returns: %TRUE if there are layouts in both directions, %FALSE otherwise
- **/
+ */
 gboolean
 gdk_keymap_have_bidi_layouts (GdkKeymap *keymap)
 {
@@ -340,9 +340,9 @@ gdk_keymap_have_bidi_layouts (GdkKeymap *keymap)
   return GDK_KEYMAP_GET_CLASS (keymap)->have_bidi_layouts (keymap);
 }
 
-/**
+/*< private >
  * gdk_keymap_get_caps_lock_state:
- * @keymap: a #GdkKeymap
+ * @keymap: a `GdkKeymap`
  *
  * Returns whether the Caps Lock modifier is locked.
  *
@@ -356,9 +356,9 @@ gdk_keymap_get_caps_lock_state (GdkKeymap *keymap)
   return GDK_KEYMAP_GET_CLASS (keymap)->get_caps_lock_state (keymap);
 }
 
-/**
+/*< private >
  * gdk_keymap_get_num_lock_state:
- * @keymap: a #GdkKeymap
+ * @keymap: a `GdkKeymap`
  *
  * Returns whether the Num Lock modifier is locked.
  *
@@ -372,9 +372,9 @@ gdk_keymap_get_num_lock_state (GdkKeymap *keymap)
   return GDK_KEYMAP_GET_CLASS (keymap)->get_num_lock_state (keymap);
 }
 
-/**
+/*< private >
  * gdk_keymap_get_scroll_lock_state:
- * @keymap: a #GdkKeymap
+ * @keymap: a `GdkKeymap`
  *
  * Returns whether the Scroll Lock modifier is locked.
  *
@@ -388,9 +388,9 @@ gdk_keymap_get_scroll_lock_state (GdkKeymap *keymap)
   return GDK_KEYMAP_GET_CLASS (keymap)->get_scroll_lock_state (keymap);
 }
 
-/**
+/*< private >
  * gdk_keymap_get_modifier_state:
- * @keymap: a #GdkKeymap
+ * @keymap: a `GdkKeymap`
  *
  * Returns the current modifier state.
  *
@@ -407,12 +407,12 @@ gdk_keymap_get_modifier_state (GdkKeymap *keymap)
   return 0;
 }
 
-/**
+/*< private >
  * gdk_keymap_get_entries_for_keyval:
- * @keymap: a #GdkKeymap
+ * @keymap: a `GdkKeymap`
  * @keyval: a keyval, such as %GDK_KEY_a, %GDK_KEY_Up, %GDK_KEY_Return, etc.
  * @keys: (out) (array length=n_keys) (transfer full): return location
- *   for an array of #GdkKeymapKey
+ *   for an array of `GdkKeymapKey`
  * @n_keys: return location for number of elements in returned array
  *
  * Obtains a list of keycode/group/level combinations that will
@@ -422,7 +422,7 @@ gdk_keymap_get_modifier_state (GdkKeymap *keymap)
  * right symbol is used. On US keyboards, the shift key changes the
  * keyboard level, and there are no groups. A group switch key might
  * convert a keyboard between Hebrew to English modes, for example.
- * #GdkEventKey contains a %group field that indicates the active
+ * `GdkEventKey` contains a %group field that indicates the active
  * keyboard group. The level is computed from the modifier mask.
  * The returned array should be freed
  * with g_free().
@@ -489,18 +489,18 @@ gdk_keymap_get_cached_entries_for_keyval (GdkKeymap     *keymap,
   *keys = (GdkKeymapKey *)&g_array_index (keymap->cached_keys, GdkKeymapKey, offset);
 }
 
-/**
+/*< private >
  * gdk_keymap_get_entries_for_keycode:
- * @keymap: a #GdkKeymap
+ * @keymap: a `GdkKeymap`
  * @hardware_keycode: a keycode
  * @keys: (out) (array length=n_entries) (transfer full) (optional): return
- *   location for array of #GdkKeymapKey
+ *   location for array of `GdkKeymapKey`
  * @keyvals: (out) (array length=n_entries) (transfer full) (optional): return
  *   location for array of keyvals
  * @n_entries: length of @keys and @keyvals
  *
  * Returns the keyvals bound to @hardware_keycode.
- * The Nth #GdkKeymapKey in @keys is bound to the Nth
+ * The Nth `GdkKeymapKey` in @keys is bound to the Nth
  * keyval in @keyvals. Free the returned arrays with g_free().
  * When a keycode is pressed by the user, the keyval from
  * this list of entries is selected by considering the effective
@@ -522,10 +522,10 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
                                                                  keys, keyvals, n_entries);
 }
 
-/**
+/*< private >
  * gdk_keymap_lookup_key:
- * @keymap: a #GdkKeymap
- * @key: a #GdkKeymapKey with keycode, group, and level initialized
+ * @keymap: a `GdkKeymap`
+ * @key: a `GdkKeymapKey` with keycode, group, and level initialized
  *
  * Looks up the keyval mapped to a keycode/group/level triplet.
  * If no keyval is bound to @key, returns 0. For normal user input,
@@ -545,9 +545,9 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
   return GDK_KEYMAP_GET_CLASS (keymap)->lookup_key (keymap, key);
 }
 
-/**
+/*< private >
  * gdk_keymap_translate_keyboard_state:
- * @keymap: a #GdkKeymap
+ * @keymap: a `GdkKeymap`
  * @hardware_keycode: a keycode
  * @state: a modifier state
  * @group: active keyboard group
@@ -557,7 +557,7 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * @consumed_modifiers: (out) (optional): return location for modifiers
  *   that were used to determine the group or level
  *
- * Translates the contents of a #GdkEventKey into a keyval, effective
+ * Translates the contents of a `GdkEventKey` into a keyval, effective
  * group, and level. Modifiers that affected the translation and
  * are thus unavailable for application use are returned in
  * @consumed_modifiers.
@@ -565,7 +565,7 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * groups and levels. The @effective_group is the group that was
  * actually used for the translation; some keys such as Enter are not
  * affected by the active keyboard group. The @level is derived from
- * @state. For convenience, #GdkEventKey already contains the translated
+ * @state. For convenience, `GdkEventKey` already contains the translated
  * keyval, so this function isn’t as useful as you might think.
  *
  * @consumed_modifiers gives modifiers that should be masked outfrom @state
@@ -680,7 +680,7 @@ gdk_keyval_from_name (const char *keyval_name)
  *
  * Obtains the upper- and lower-case versions of the keyval @symbol.
  *
- * Examples of keyvals are #GDK_KEY_a, #GDK_KEY_Enter, #GDK_KEY_F1, etc.
+ * Examples of keyvals are `GDK_KEY_a`, `GDK_KEY_Enter`, `GDK_KEY_F1`, etc.
  */
 void
 gdk_keyval_convert_case (guint symbol,

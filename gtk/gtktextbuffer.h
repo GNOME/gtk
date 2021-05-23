@@ -57,23 +57,23 @@ struct _GtkTextBuffer
 /**
  * GtkTextBufferClass:
  * @parent_class: The object class structure needs to be the first.
- * @insert_text: The class handler for the #GtkTextBuffer::insert-text signal.
- * @insert_paintable: The class handler for the #GtkTextBuffer::insert-paintable signal.
- * @insert_child_anchor: The class handler for the #GtkTextBuffer::insert-child-anchor signal.
- * @delete_range: The class handler for the #GtkTextBuffer::delete-range signal.
- * @changed: The class handler for the #GtkTextBuffer::changed signal.
- * @modified_changed: The class handler for the #GtkTextBuffer::modified-changed signal.
- * @mark_set: The class handler for the #GtkTextBuffer::mark-set signal.
- * @mark_deleted: The class handler for the #GtkTextBuffer::mark-deleted signal.
- * @apply_tag: The class handler for the #GtkTextBuffer::apply-tag signal.
- * @remove_tag: The class handler for the #GtkTextBuffer::remove-tag signal.
- * @begin_user_action: The class handler for the #GtkTextBuffer::begin-user-action signal.
- * @end_user_action: The class handler for the #GtkTextBuffer::end-user-action signal.
- * @paste_done: The class handler for the #GtkTextBuffer::paste-done signal.
- * @undo: The class handler for the #GtkTextBuffer::undo signal
- * @redo: The class handler for the #GtkTextBuffer::redo signal
+ * @insert_text: The class handler for the `GtkTextBuffer::insert-text` signal.
+ * @insert_paintable: The class handler for the `GtkTextBuffer::insert-paintable` signal.
+ * @insert_child_anchor: The class handler for the `GtkTextBuffer::insert-child-anchor` signal.
+ * @delete_range: The class handler for the `GtkTextBuffer::delete-range` signal.
+ * @changed: The class handler for the `GtkTextBuffer::changed` signal.
+ * @modified_changed: The class handler for the `GtkTextBuffer::modified-changed` signal.
+ * @mark_set: The class handler for the `GtkTextBuffer::mark-set` signal.
+ * @mark_deleted: The class handler for the `GtkTextBuffer::mark-deleted` signal.
+ * @apply_tag: The class handler for the `GtkTextBuffer::apply-tag` signal.
+ * @remove_tag: The class handler for the `GtkTextBuffer::remove-tag` signal.
+ * @begin_user_action: The class handler for the `GtkTextBuffer::begin-user-action` signal.
+ * @end_user_action: The class handler for the `GtkTextBuffer::end-user-action` signal.
+ * @paste_done: The class handler for the `GtkTextBuffer::paste-done` signal.
+ * @undo: The class handler for the `GtkTextBuffer::undo` signal
+ * @redo: The class handler for the `GtkTextBuffer::redo` signal
  *
- * The class structure for #GtkTextBuffer.
+ * The class structure for `GtkTextBuffer`.
  */
 struct _GtkTextBufferClass
 {

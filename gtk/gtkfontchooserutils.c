@@ -110,14 +110,15 @@ _gtk_font_chooser_delegate_get_quark (void)
 
 /**
  * _gtk_font_chooser_install_properties:
- * @klass: the class structure for a type deriving from #GObject
+ * @klass: the class structure for a type deriving from `GObject`
  *
  * Installs the necessary properties for a class implementing
- * #GtkFontChooser. A #GtkParamSpecOverride property is installed
- * for each property, using the values from the #GtkFontChooserProp
- * enumeration. The caller must make sure itself that the enumeration
- * values don’t collide with some other property values they
- * are using.
+ * `GtkFontChooser`.
+ *
+ * A `GtkParamSpecOverride` property is installed for each property,
+ * using the values from the `GtkFontChooserProp` enumeration. The
+ * caller must make sure itself that the enumeration values don’t
+ * collide with some other property values they are using.
  */
 void
 _gtk_font_chooser_install_properties (GObjectClass *klass)
@@ -147,11 +148,11 @@ _gtk_font_chooser_install_properties (GObjectClass *klass)
 
 /**
  * _gtk_font_chooser_delegate_iface_init:
- * @iface: a #GtkFontChooserIface
+ * @iface: a `GtkFontChooserIface`
  *
  * An interface-initialization function for use in cases where
  * an object is simply delegating the methods, signals of
- * the #GtkFontChooser interface to another object.
+ * the `GtkFontChooser` interface to another object.
  * _gtk_font_chooser_set_delegate() must be called on each
  * instance of the object so that the delegate object can
  * be found.
@@ -169,12 +170,12 @@ _gtk_font_chooser_delegate_iface_init (GtkFontChooserIface *iface)
 
 /**
  * _gtk_font_chooser_set_delegate:
- * @receiver: a #GObject implementing #GtkFontChooser
- * @delegate: another #GObject implementing #GtkFontChooser
+ * @receiver: a `GObject` implementing `GtkFontChooser`
+ * @delegate: another `GObject` implementing `GtkFontChooser`
  *
- * Establishes that calls on @receiver for #GtkFontChooser
+ * Establishes that calls on @receiver for `GtkFontChooser`
  * methods should be delegated to @delegate, and that
- * #GtkFontChooser signals emitted on @delegate should be
+ * `GtkFontChooser` signals emitted on @delegate should be
  * forwarded to @receiver. Must be used in conjunction with
  * _gtk_font_chooser_delegate_iface_init().
  */

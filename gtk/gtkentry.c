@@ -140,7 +140,7 @@
  * The `GtkEntry` implementation of the `GtkBuildable` interface supports a
  * custom <attributes> element, which supports any number of <attribute>
  * elements. The <attribute> element has attributes named “name“, “value“,
- * “start“ and “end“ and allows you to specify #PangoAttribute values for
+ * “start“ and “end“ and allows you to specify `PangoAttribute` values for
  * this label.
  *
  * An example of a UI definition fragment specifying Pango attributes:
@@ -333,7 +333,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkEntry, gtk_entry, GTK_TYPE_WIDGET,
                                                 gtk_entry_cell_editable_init))
 
 /* Implement the GtkAccessible interface, in order to obtain focus
- * state from the #GtkText widget that we are wrapping. The GtkText
+ * state from the GtkText widget that we are wrapping. The GtkText
  * widget is ignored for accessibility purposes (it has role NONE),
  * and any a11y text functionality is implemented for GtkEntry and
  * similar wrappers (GtkPasswordEntry, GtkSpinButton, etc).
@@ -957,7 +957,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * This is mainly useful to change the size or weight of the text.
    *
-   * The #PangoAttribute's @start_index and @end_index must refer to the
+   * The `PangoAttribute`'s @start_index and @end_index must refer to the
    * [class@Gtk.EntryBuffer] text, i.e. without the preedit string.
    */
   entry_props[PROP_ATTRIBUTES] =
@@ -2918,7 +2918,7 @@ gtk_entry_get_icon_at_pos (GtkEntry *entry,
  * gtk_entry_set_icon_drag_source:
  * @entry: a `GtkEntry`
  * @icon_pos: icon position
- * @provider: a #GdkContentProvider
+ * @provider: a `GdkContentProvider`
  * @actions: a bitmask of the allowed drag actions
  *
  * Sets up the icon at the given position as drag source.

@@ -36,7 +36,7 @@ typedef struct _GdkContentDeserializer GdkContentDeserializer;
 
 /**
  * GdkContentDeserializeFunc:
- * @deserializer: a #GdkContentDeserializer
+ * @deserializer: a `GdkContentDeserializer`
  *
  * The type of a function that can be registered with gdk_content_register_deserializer().
  *

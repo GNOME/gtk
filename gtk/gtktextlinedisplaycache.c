@@ -257,9 +257,9 @@ gtk_text_line_display_cache_invalidate_display (GtkTextLineDisplayCache *cache,
 
 /*
  * gtk_text_line_display_cache_get:
- * @cache: a #GtkTextLineDisplayCache
- * @layout: a GtkTextLayout
- * @line: a GtkTextLine
+ * @cache: a `GtkTextLineDisplayCache`
+ * @layout: a `GtkTextLayout`
+ * @line: a `GtkTextLine`
  * @size_only: if only line sizing is needed
  *
  * Gets a GtkTextLineDisplay for @line.
@@ -269,7 +269,7 @@ gtk_text_line_display_cache_invalidate_display (GtkTextLineDisplayCache *cache,
  * It's possible that calling this function will cause some existing
  * cached displays to be released and destroyed.
  *
- * Returns: (transfer full) (not nullable): a #GtkTextLineDisplay
+ * Returns: (transfer full) (not nullable): a `GtkTextLineDisplay`
  */
 GtkTextLineDisplay *
 gtk_text_line_display_cache_get (GtkTextLineDisplayCache *cache,
