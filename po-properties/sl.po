@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2021-02-03 15:30+0000\n"
-"PO-Revision-Date: 2021-05-16 21:50+0200\n"
+"PO-Revision-Date: 2021-05-24 21:27+0200\n"
 "Last-Translator: Matej Urbančič <mateju@src.gnome.org>\n"
 "Language-Team: Slovenščina <gnome-si@googlegroups.com>\n"
 "Language: sl\n"
@@ -3096,10 +3096,8 @@ msgid "The human-readable name for this filter"
 msgstr "Človeku berljiv naziv filtra"
 
 #: gtk/gtkfilterlistmodel.c:566
-#, fuzzy
-#| msgid "The text for the child label"
 msgid "The filter set for this model"
-msgstr "Besedilo podrejene oznake"
+msgstr "Filter, nastavljen za ta model"
 
 #: gtk/gtkfilterlistmodel.c:577 gtk/gtksortlistmodel.c:784
 msgid "Incremental"
@@ -3127,13 +3125,11 @@ msgstr "preoblikuj"
 
 #: gtk/gtkfixedlayout.c:156
 msgid "The transform of a child of a fixed layout"
-msgstr ""
+msgstr "Preoblikovanje podrejenega predmeta na stalnem razporedu"
 
 #: gtk/gtkflattenlistmodel.c:414
-#, fuzzy
-#| msgid "The model to find matches in"
 msgid "The model being flattened"
-msgstr "Način za iskanje zadetkov"
+msgstr "Model, ki je nastavljen ploskovno"
 
 #: gtk/gtkflowbox.c:3597 gtk/gtkiconview.c:360 gtk/gtklistbox.c:493
 #: gtk/gtktreeselection.c:139
@@ -3156,11 +3152,11 @@ msgstr "Omogoči vrstico ob enojnem kliku"
 
 #: gtk/gtkflowbox.c:3618 gtk/gtklistbox.c:508 gtk/gtklistbox.c:509
 msgid "Accept unpaired release"
-msgstr ""
+msgstr "Sprejmi neparno sprostitev"
 
 #: gtk/gtkflowbox.c:3619
 msgid "Accept an unpaired release event"
-msgstr ""
+msgstr "Sprejmi neparen dogodek sprostitve"
 
 #: gtk/gtkflowbox.c:3648
 msgid "Minimum Children Per Line"
@@ -4063,11 +4059,11 @@ msgstr "Nastavitev, če je iskanje podprto"
 
 #: gtk/gtkmediastream.c:412
 msgid "Seeking"
-msgstr ""
+msgstr "Iskanje v teku"
 
 #: gtk/gtkmediastream.c:413
 msgid "Set while a seek is in progress"
-msgstr ""
+msgstr "Nastavi, ko je iskanje v teku"
 
 #: gtk/gtkmediastream.c:424 gtk/gtkvideo.c:330
 msgid "Loop"
@@ -4076,6 +4072,7 @@ msgstr "Zanka"
 #: gtk/gtkmediastream.c:425
 msgid "Try to restart the media from the beginning once it ended."
 msgstr ""
+"Poskusi ponovno zagnati predstavno vsebino od začetka, ko je enkrat končana."
 
 #: gtk/gtkmediastream.c:436
 msgid "Muted"
@@ -4162,8 +4159,6 @@ msgid "Message area"
 msgstr "Sporočilno področje"
 
 #: gtk/gtkmessagedialog.c:439
-#, fuzzy
-#| msgid "GtkBox that holds the dialog's primary and secondary labels"
 msgid "GtkBox that holds the dialog’s primary and secondary labels"
 msgstr "Predmet GtkBox, ki vsebuje osnovne in drugotne oznake"
 
@@ -4773,26 +4768,20 @@ msgid "Whether to draw an arrow"
 msgstr "Ali naj se izriše puščica"
 
 #: gtk/gtkpopover.c:1699
-#, fuzzy
-#| msgid "Mnemonics Visible"
 msgid "Mnemonics visible"
-msgstr "Menijske bližnjice so vidne"
+msgstr "Vidne črkovne bližnjice"
 
 #: gtk/gtkpopover.c:1700
-#, fuzzy
-#| msgid "Whether mnemonics are currently visible in this window"
 msgid "Whether mnemonics are currently visible in this popover"
-msgstr "Ali naj bodo menijske bližnjice v oknu trenutno vidne"
+msgstr "Ali naj bodo črkovne bližnjice v pojavnem oknu vidne"
 
 #: gtk/gtkpopover.c:1713
 msgid "Cascade popdown"
-msgstr ""
+msgstr "Kaskadno spuščanje polj"
 
 #: gtk/gtkpopover.c:1714
-#, fuzzy
-#| msgid "Whether the combo box draws a frame around the child"
 msgid "Whether the popover pops down after a child popover"
-msgstr "Ali spustno polje obdaja okvir okoli podrejenega opravila"
+msgstr "Ali se spustno polje spusti za podrejenim spustnim poljem"
 
 #: gtk/gtkpopovermenubar.c:638
 msgid "The model from which the bar is made."
@@ -5384,10 +5373,8 @@ msgid "Where the contents are located with respect to the scrollbars."
 msgstr "Kje je vsebina glede na drsnike."
 
 #: gtk/gtkscrolledwindow.c:645
-#, fuzzy
-#| msgid "Whether the combo box draws a frame around the child"
 msgid "Whether to draw a frame around the contents"
-msgstr "Ali spustno polje obdaja okvir okoli podrejenega opravila"
+msgstr "Ali naj se izriše okvir okoli vsebine"
 
 #: gtk/gtkscrolledwindow.c:656
 msgid "Minimum Content Width"
@@ -5461,10 +5448,8 @@ msgid "Whether to show the close button in the toolbar"
 msgstr "Ali naj se pokaže gumb za zapiranje v orodni vrstici"
 
 #: gtk/gtksearchbar.c:334 gtk/gtksearchbar.c:335
-#, fuzzy
-#| msgid "Accelerator Widget"
 msgid "Key Capture Widget"
-msgstr "Gradnik pospeševalnika"
+msgstr "Gradnik zajema tipk"
 
 #: gtk/gtksettings.c:317
 msgid "Double Click Time"
@@ -5527,16 +5512,12 @@ msgstr ""
 "od leve proti desni in od desne proti levi"
 
 #: gtk/gtksettings.c:379
-#, fuzzy
-#| msgid "Cursor line aspect ratio"
 msgid "Cursor Aspect Ratio"
-msgstr "Razmerje vrstice kazalke"
+msgstr "Razmerje velikosti kazalke"
 
 #: gtk/gtksettings.c:380
-#, fuzzy
-#| msgid "The orientation of the orientable"
 msgid "The aspect ratio of the text caret"
-msgstr "Usmeritev predmetov, ki jih je mogoče usmeriti"
+msgstr "Razmerje velikosti kazalke besedila"
 
 #: gtk/gtksettings.c:387
 msgid "Theme Name"
@@ -5894,24 +5875,20 @@ msgid "Signal Name"
 msgstr "Ime signala"
 
 #: gtk/gtkshortcutaction.c:943
-#, fuzzy
-#| msgid "The name of the widget"
 msgid "The name of the signal to emit"
-msgstr "Ime gradnika"
+msgstr "Ime signala, ki se sproži"
 
 #: gtk/gtkshortcutaction.c:1183 gtk/gtkshortcutsshortcut.c:717
 msgid "Action Name"
 msgstr "Ime dejanja"
 
 #: gtk/gtkshortcutaction.c:1184
-#, fuzzy
-#| msgid "The name of the action"
 msgid "The name of the action to activate"
-msgstr "Ime dejanja"
+msgstr "Ime dejanja za aktivacijo"
 
 #: gtk/gtkshortcut.c:162
 msgid "The action activated by this shortcut"
-msgstr ""
+msgstr "Dajanje, ki ga sproži tipkovna bližnjica"
 
 #: gtk/gtkshortcut.c:175
 msgid "Arguments"
@@ -5919,7 +5896,7 @@ msgstr "Argumenti"
 
 #: gtk/gtkshortcut.c:176
 msgid "Arguments passed to activation"
-msgstr ""
+msgstr "Argumenti poslani za aktivacijo"
 
 #: gtk/gtkshortcut.c:188
 msgid "Trigger"
@@ -5930,22 +5907,20 @@ msgid "The trigger for this shortcut"
 msgstr "Sprožilec te tipkovne bližnjice"
 
 #: gtk/gtkshortcutcontroller.c:552
-#, fuzzy
-#| msgid "Mnemonic key"
 msgid "Mnemonic modifiers"
-msgstr "Menijska bližnjica"
+msgstr "Črkovni spremenilniki"
 
 #: gtk/gtkshortcutcontroller.c:553
 msgid "The modifiers to be pressed to allow mnemonics activation"
-msgstr ""
+msgstr "Spremenilniki, ki omogočajo aktivacijo črkovnih bližnjic"
 
 #: gtk/gtkshortcutcontroller.c:566
 msgid "A list model to take shortcuts from"
-msgstr ""
+msgstr "Seznam iz katerega so povzete tipkovne bližnjice"
 
 #: gtk/gtkshortcutcontroller.c:578
 msgid "What scope the shortcuts will be handled in"
-msgstr ""
+msgstr "Na katerem obsegu bodo obravnavane tipkovne bližnice"
 
 #: gtk/gtkshortcutlabel.c:485 gtk/gtkshortcutsshortcut.c:578
 msgid "Accelerator"
@@ -6174,19 +6149,15 @@ msgstr "Prebere trenutno vrednost ali nastavi novo"
 
 #: gtk/gtkspinner.c:238
 msgid "Spinning"
-msgstr ""
+msgstr "Vrtenje"
 
 #: gtk/gtkspinner.c:239
-#, fuzzy
-#| msgid "Whether the spinner is active"
 msgid "Whether the spinner is spinning"
-msgstr "Ali je vrtavka dejavna"
+msgstr "Ali se vrtavka vrti"
 
 #: gtk/gtkstack.c:405
-#, fuzzy
-#| msgid "The title of the child page"
 msgid "The child of the page"
-msgstr "Naziv podrejene strani"
+msgstr "Podrejeni predmet strani"
 
 #: gtk/gtkstack.c:412
 msgid "The name of the child page"
@@ -6209,22 +6180,16 @@ msgid "Whether this page needs attention"
 msgstr "Ali stran zahteva ponoven pregled."
 
 #: gtk/gtkstack.c:448
-#, fuzzy
-#| msgid "Whether the widget is visible"
 msgid "Whether this page is visible"
-msgstr "Ali naj je gradnik viden"
+msgstr "Ali je gradnik viden"
 
 #: gtk/gtkstack.c:455
-#, fuzzy
-#| msgid ""
-#| "If set, an underline in the text indicates the next character should be "
-#| "used for the mnemonic accelerator key"
 msgid ""
 "If set, an underline in the title indicates the next character should be "
 "used for the mnemonic accelerator key"
 msgstr ""
-"Izbrana možnost omogoča, da podčrtaj v besedilu označuje črko, ki je "
-"uporabljena kot menijska bližnjica"
+"Izbrana možnost omogoča, da podčrtaj v besedilnem nizu označuje črko, ki je "
+"uporabljena kot črkovna bližnjica"
 
 #: gtk/gtkstack.c:779
 msgid "Horizontally homogeneous"
@@ -6299,17 +6264,16 @@ msgstr "Prezri velikost črk"
 
 #: gtk/gtkstringfilter.c:264 gtk/gtkstringsorter.c:308
 msgid "If matching is case sensitive"
-msgstr ""
+msgstr "Ali skladnja upošteva velikost črk"
 
 #: gtk/gtkstringfilter.c:275
-#, fuzzy
-#| msgid "Search mode"
 msgid "Match mode"
-msgstr "Iskalni način"
+msgstr "Način skladanja"
 
 #: gtk/gtkstringfilter.c:276
 msgid "If exact matches are necessary or if substrings are allowed"
 msgstr ""
+"Ali je obvezna popolna skladnja oziroma so upoštevani tudi podrejeni nizi"
 
 #: gtk/gtkstringfilter.c:288
 msgid "Search"
@@ -7058,34 +7022,24 @@ msgid "Depth in the tree"
 msgstr "Globina drevesne strukture"
 
 #: gtk/gtktreelistmodel.c:1078
-#, fuzzy
-#| msgid "Expanded"
 msgid "Expandable"
-msgstr "Razširjeno"
+msgstr "Razširljivo"
 
 #: gtk/gtktreelistmodel.c:1079
-#, fuzzy
-#| msgid "Whether this row can be selected"
 msgid "If this row can ever be expanded"
-msgstr "Ali je to vrstico mogoče izbrati?"
+msgstr "Ali je to vrstico mogoče razširiti"
 
 #: gtk/gtktreelistmodel.c:1091
-#, fuzzy
-#| msgid "The cell which is currently being edited"
 msgid "If this row is currently expanded"
-msgstr "Celica, ki je trenutno v urejanju"
+msgstr "Ali je trenutna vrstica razširjena"
 
 #: gtk/gtktreelistmodel.c:1103
-#, fuzzy
-#| msgid "The title of the window"
 msgid "The item held in this row"
-msgstr "Naziv okna"
+msgstr "Predmet, vstavljen v to vrstico"
 
 #: gtk/gtktreelistrowsorter.c:548
-#, fuzzy
-#| msgid "Use underline"
 msgid "The underlying sorter"
-msgstr "Uporabi podčrtaj"
+msgstr "Podrejeni razvrstilnik"
 
 #: gtk/gtktreemodelfilter.c:532
 msgid "The child model"
@@ -7116,10 +7070,8 @@ msgid "model"
 msgstr "model"
 
 #: gtk/gtktreepopover.c:206
-#, fuzzy
-#| msgid "The model for the icon view"
 msgid "The model for the popover"
-msgstr "Način za pogled ikon"
+msgstr "Model pojavnega menija"
 
 #: gtk/gtktreeview.c:995
 msgid "TreeView Model"
@@ -7345,7 +7297,7 @@ msgstr "Samodejno predvajanje"
 
 #: gtk/gtkvideo.c:307
 msgid "If playback should begin automatically"
-msgstr ""
+msgstr "Ali naj se predvajanje začne samodejno"
 
 #: gtk/gtkvideo.c:319
 msgid "The video file played back"
