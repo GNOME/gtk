@@ -1,5 +1,7 @@
 Title: Widget Gallery
 
+<style>p { display: flex; flex-flow: row wrap; }</style>
+
 ## Display widgets
 
 [![label](label.png)](class.Label.html)
