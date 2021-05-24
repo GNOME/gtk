@@ -47,6 +47,21 @@ gstgl_dep = dependency('gstreamer-gl-1.0', version: '>= 1.12.3',
                        required: get_option('media-gstreamer'))
 
 if gstplayer_dep.found() and gstgl_dep.found()
+  extra_win_cflags = []
+
+  if host_machine.system() == 'windows'
+    new_gst_gl_display_code = \
+                '''#include <gst/gl/gstgldisplay.h>
+                   int main (int a, char ** g) {
+                     GstGLDisplay *d = gst_gl_display_new_with_type (GST_GL_DISPLAY_TYPE_WIN32);
+                     return 0;
+                   }'''
+    if cc.links(new_gst_gl_display_code, dependencies : gstgl_dep)
+      message('libgstgl has gst_gl_display_new_with_type()')
+      extra_win_cflags += '-DHAVE_GST_GL_DISPLAY_NEW_WITH_TYPE'
+    endif
+  endif
+
   media_backends += 'gstreamer'
   cdata.set('HAVE_GSTREAMER', 1)
   shared_module('media-gstreamer',
@@ -55,7 +70,7 @@ if gstplayer_dep.found() and gstgl_dep.found()
       'gtkgstpaintable.c',
       'gtkgstsink.c',
     ],
-    c_args: extra_c_args,
+    c_args: extra_c_args + extra_win_cflags,
     dependencies: [ libm, libgtk_dep, gstplayer_dep, gstgl_dep ],
     name_suffix: module_suffix,
     install_dir: media_install_dir,

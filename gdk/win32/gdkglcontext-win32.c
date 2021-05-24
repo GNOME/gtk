@@ -674,7 +674,7 @@ _create_gl_context (HDC           hdc,
     }
   else
     {
-      HGLRC hglrc;
+      HGLRC hglrc = NULL;
 
       if (!wglMakeCurrent (hdc, hglrc_base))
         {
@@ -682,13 +682,33 @@ _create_gl_context (HDC           hdc,
           goto gl_fail;
         }
 
-      hglrc = _create_gl_context_with_attribs (hdc,
-                                               hglrc_base,
-                                               share,
-                                               flags,
-                                               major,
-                                               minor,
-                                               is_legacy);
+      /*
+       * We need a Core GL 4.1 context in order to use the GL support in
+       * the GStreamer media widget backend, but wglCreateContextAttribsARB()
+       * may only give us the GL context version that we ask for here, and
+       * nothing more.  So, if we are asking for a pre-GL 4.1 context,
+       * try to ask for a 4.1 context explicitly first.  If that is not supported,
+       * then we fall back to whatever version that we were asking for (or, even a
+       * legacy context if that fails), at a price of not able to have GL support
+       * for the media GStreamer backend.
+       */
+      if (major < 4 || (major == 4 && minor < 1))
+        hglrc = _create_gl_context_with_attribs (hdc,
+                                                 hglrc_base,
+                                                 share,
+                                                 flags,
+                                                 4,
+                                                 1,
+                                                 is_legacy);
+
+      if (hglrc == NULL)
+        hglrc = _create_gl_context_with_attribs (hdc,
+                                                 hglrc_base,
+                                                 share,
+                                                 flags,
+                                                 major,
+                                                 minor,
+                                                 is_legacy);
 
       /* return the legacy context we have if it could be setup properly, in case the 3.0+ context creation failed */
       if (hglrc == NULL)

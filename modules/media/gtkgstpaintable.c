@@ -117,33 +117,39 @@ gtk_gst_paintable_video_renderer_create_video_sink (GstPlayerVideoRenderer *rend
 {
   GtkGstPaintable *self = GTK_GST_PAINTABLE (renderer);
   GstElement *sink, *glsinkbin;
+  GdkGLContext *ctx;
 
-#if GST_GL_HAVE_WINDOW_WIN32 && GST_GL_HAVE_PLATFORM_WGL && defined (GDK_WINDOWING_WIN32)
-  /*
-   * Unfortunately, we can't connect the GstGLContext with our GDKGLContext,
-   * since gdk_gl_context_make_current(), which calls wglMakeCurrent(), does not
-   * allow us to share WGL contexts across threads, which will cause a crash.
-   * See MR !3034, so no WGL in the gstreamer media backend :(
-   */
-  sink = g_object_new (GTK_TYPE_GST_SINK,
-                       "paintable", self,
-                       NULL);
-  return sink;
-#else
   sink = g_object_new (GTK_TYPE_GST_SINK,
                        "paintable", self,
                        "gl-context", self->context,
                        NULL);
 
-  if (self->context == NULL)
-    return sink;
+  if (self->context != NULL)
+    g_object_get (GTK_GST_SINK (sink), "gl-context", &ctx, NULL);
 
-  glsinkbin = gst_element_factory_make ("glsinkbin", NULL);
+  if (self->context != NULL && ctx != NULL)
+    {
+      glsinkbin = gst_element_factory_make ("glsinkbin", NULL);
 
-  g_object_set (glsinkbin, "sink", sink, NULL);
+      g_object_set (glsinkbin, "sink", sink, NULL);
+      g_object_unref (ctx);
 
-  return glsinkbin;
-#endif
+      return glsinkbin;
+    }
+  else
+    {
+      if (self->context != NULL)
+        {
+          g_warning ("GstGL context creation failed, falling back to non-GL playback");
+
+          g_object_unref (sink);
+          sink = g_object_new (GTK_TYPE_GST_SINK,
+                               "paintable", self,
+                               NULL);
+        }
+
+      return sink;
+    }
 }
 
 static void
