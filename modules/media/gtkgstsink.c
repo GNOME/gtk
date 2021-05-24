@@ -417,7 +417,7 @@ check_win32_gst_gl_api (GdkGLContext  *ctx,
 #define REACTIVATE_WGL_CONTEXT(ctx)
 #endif
 
-static void
+static gboolean
 gtk_gst_sink_initialize_gl (GtkGstSink *self)
 {
   GdkDisplay *display;
@@ -425,6 +425,7 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
   GstGLPlatform platform = GST_GL_PLATFORM_NONE;
   GstGLAPI gl_api = GST_GL_API_NONE;
   guintptr gl_handle = 0;
+  gboolean succeeded = FALSE;
 
   display = gdk_gl_context_get_display (self->gdk_context);
 
@@ -465,7 +466,7 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
       else
         {
           GST_ERROR_OBJECT (self, "Failed to get handle from GdkGLContext");
-          return;
+          return FALSE;
         }
     }
   else
@@ -491,7 +492,7 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
       else
         {
           GST_ERROR_OBJECT (self, "Failed to get handle from GdkGLContext, not using Wayland EGL");
-          return;
+          return FALSE;
         }
     }
   else
@@ -522,10 +523,12 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
 #ifdef HAVE_GST_GL_DISPLAY_NEW_WITH_TYPE
               self->gst_display = gst_gl_display_new_with_type (GST_GL_DISPLAY_TYPE_WIN32);
 #else
+#if GST_GL_HAVE_PLATFORM_EGL
               g_message ("If media fails to play, set the envvar `GST_DEBUG=1`, and if GstGL context creation fails");
               g_message ("due to \"Couldn't create GL context: Cannot share context with non-EGL context\",");
               g_message ("set in the environment `GST_GL_PLATFORM=wgl` and `GST_GL_WINDOW=win32`,");
               g_message ("and restart the GTK application");
+#endif
 
               self->gst_display = gst_gl_display_new ();
 #endif
@@ -545,14 +548,14 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
       else
         {
           GST_ERROR_OBJECT (self, "Failed to get handle from GdkGLContext, not using %s", gl_type);
-	      return;
+	      return FALSE;
         }
     }
   else
 #endif
     {
       GST_INFO_OBJECT (self, "Unsupported GDK display %s for GL", G_OBJECT_TYPE_NAME (display));
-      return;
+      return FALSE;
     }
 
   g_assert (self->gst_app_context != NULL);
@@ -565,8 +568,8 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
       g_clear_error (&error);
       g_clear_object (&self->gst_app_context);
       g_clear_object (&self->gst_display);
-      HANDLE_EXTERNAL_WGL_MAKE_CURRENT (self->gdk_context);;
-      return;
+      HANDLE_EXTERNAL_WGL_MAKE_CURRENT (self->gdk_context);
+      return FALSE;
     }
   else
     {
@@ -574,7 +577,9 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
       gst_gl_context_activate (self->gst_app_context, FALSE);
     }
 
-  if (!gst_gl_display_create_context (self->gst_display, self->gst_app_context, &self->gst_context, &error))
+  succeeded = gst_gl_display_create_context (self->gst_display, self->gst_app_context, &self->gst_context, &error);
+
+  if (!succeeded)
     {
       GST_ERROR_OBJECT (self, "Couldn't create GL context: %s", error->message);
       g_error_free (error);
@@ -584,6 +589,7 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
 
   HANDLE_EXTERNAL_WGL_MAKE_CURRENT (self->gdk_context);
   REACTIVATE_WGL_CONTEXT (self->gdk_context);
+  return succeeded;
 }
 
 static void
@@ -605,8 +611,8 @@ gtk_gst_sink_set_property (GObject      *object,
 
     case PROP_GL_CONTEXT:
       self->gdk_context = g_value_dup_object (value);
-      if (self->gdk_context != NULL)
-        gtk_gst_sink_initialize_gl (self);
+      if (self->gdk_context != NULL && !gtk_gst_sink_initialize_gl (self))
+        g_clear_object (&self->gdk_context);
       break;
 
     default:
@@ -627,6 +633,9 @@ gtk_gst_sink_get_property (GObject    *object,
     {
     case PROP_PAINTABLE:
       g_value_set_object (value, self->paintable);
+      break;
+    case PROP_GL_CONTEXT:
+      g_value_set_object (value, self->gdk_context);
       break;
 
     default:
@@ -690,7 +699,7 @@ gtk_gst_sink_class_init (GtkGstSinkClass * klass)
                          P_("gl-context"),
                          P_("GL context to use for rendering"),
                          GDK_TYPE_GL_CONTEXT,
-                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
