@@ -24,6 +24,7 @@
 #include "gtkmenutrackerprivate.h"
 #include "gtkicontheme.h"
 #include "gtkquartz.h"
+#include "gtkprivate.h"
 
 #include <gdk/macos/gdkmacos.h>
 #include <gdk/macos/gdkmacoskeymap-private.h>
@@ -231,7 +232,7 @@ icon_loaded (GObject      *object,
 
 - (void)didChangeLabel
 {
-  const char *label = gtk_menu_tracker_item_get_label (trackerItem);
+  char *label = _gtk_elide_underscores (gtk_menu_tracker_item_get_label (trackerItem));
 
   NSString *title = [NSString stringWithUTF8String:label ? : ""];
 
@@ -256,6 +257,8 @@ icon_loaded (GObject      *object,
     }
 
   [self setTitle:title];
+
+  g_free (label);
 }
 
 - (void)didChangeIcon
