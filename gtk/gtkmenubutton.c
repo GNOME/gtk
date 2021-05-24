@@ -97,6 +97,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkbuttonprivate.h"
 #include "gtknative.h"
+#include "gtkwindow.h"
 
 typedef struct _GtkMenuButtonClass   GtkMenuButtonClass;
 typedef struct _GtkMenuButtonPrivate GtkMenuButtonPrivate;
@@ -116,6 +117,8 @@ struct _GtkMenuButton
   GtkWidget *label_widget;
   GtkWidget *arrow_widget;
   GtkArrowType arrow_type;
+
+  gboolean primary;
 };
 
 struct _GtkMenuButtonClass
@@ -133,6 +136,7 @@ enum
   PROP_LABEL,
   PROP_USE_UNDERLINE,
   PROP_HAS_FRAME,
+  PROP_PRIMARY,
   LAST_PROP
 };
 
@@ -173,6 +177,9 @@ gtk_menu_button_set_property (GObject      *object,
       case PROP_HAS_FRAME:
         gtk_menu_button_set_has_frame (self, g_value_get_boolean (value));
         break;
+      case PROP_PRIMARY:
+        gtk_menu_button_set_primary (self, g_value_get_boolean (value));
+        break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
@@ -208,6 +215,9 @@ gtk_menu_button_get_property (GObject    *object,
         break;
       case PROP_HAS_FRAME:
         g_value_set_boolean (value, gtk_menu_button_get_has_frame (GTK_MENU_BUTTON (object)));
+        break;
+      case PROP_PRIMARY:
+        g_value_set_boolean (value, gtk_menu_button_get_primary (GTK_MENU_BUTTON (object)));
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -326,6 +336,9 @@ gtk_menu_button_grab_focus (GtkWidget *widget)
   return gtk_widget_grab_focus (self->button);
 }
 
+static void gtk_menu_button_root (GtkWidget *widget);
+static void gtk_menu_button_unroot (GtkWidget *widget);
+
 static void
 gtk_menu_button_class_init (GtkMenuButtonClass *klass)
 {
@@ -337,6 +350,8 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   gobject_class->notify = gtk_menu_button_notify;
   gobject_class->dispose = gtk_menu_button_dispose;
 
+  widget_class->root = gtk_menu_button_root;
+  widget_class->unroot = gtk_menu_button_unroot;
   widget_class->measure = gtk_menu_button_measure;
   widget_class->size_allocate = gtk_menu_button_size_allocate;
   widget_class->state_flags_changed = gtk_menu_button_state_flags_changed;
@@ -430,6 +445,20 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                           P_("Has frame"),
                           P_("Whether the button has a frame"),
                           TRUE,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkMenuButton:primary: (attributes org.gtk.Property.get=gtk_menu_button_get_primary org.gtk.Property.set=gtk_menu_button_set_primary)
+   *
+   * Whether the menu button acts as a primary menu.
+   *
+   * Primary menus can be opened using the <kbd>F10</kbd> key
+   */
+  menu_button_props[PROP_PRIMARY] =
+    g_param_spec_boolean ("primary",
+                          P_("Primary"),
+                          P_("Whether the menubutton acts as a primary menu"),
+                          FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, menu_button_props);
@@ -1038,4 +1067,111 @@ gtk_menu_button_get_use_underline (GtkMenuButton *menu_button)
   g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), FALSE);
 
   return gtk_button_get_use_underline (GTK_BUTTON (menu_button->button));
+}
+
+static GList *
+get_menu_bars (GtkWindow *window)
+{
+  return g_object_get_data (G_OBJECT (window), "gtk-menu-bar-list");
+}
+
+static void
+set_menu_bars (GtkWindow *window,
+               GList     *menubars)
+{
+  g_object_set_data (G_OBJECT (window), I_("gtk-menu-bar-list"), menubars);
+}
+
+static void
+add_to_window (GtkWindow     *window,
+               GtkMenuButton *button)
+{
+  GList *menubars = get_menu_bars (window);
+
+  set_menu_bars (window, g_list_prepend (menubars, button));
+}
+
+static void
+remove_from_window (GtkWindow     *window,
+                    GtkMenuButton *button)
+{
+  GList *menubars = get_menu_bars (window);
+
+  menubars = g_list_remove (menubars, button);
+  set_menu_bars (window, menubars);
+}
+
+static void
+gtk_menu_button_root (GtkWidget *widget)
+{
+  GtkMenuButton *button = GTK_MENU_BUTTON (widget);
+
+  GTK_WIDGET_CLASS (gtk_menu_button_parent_class)->root (widget);
+
+  if (button->primary)
+    {
+      GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
+      add_to_window (GTK_WINDOW (toplevel), button);
+    }
+}
+
+static void
+gtk_menu_button_unroot (GtkWidget *widget)
+{
+  GtkWidget *toplevel;
+
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
+  remove_from_window (GTK_WINDOW (toplevel), GTK_MENU_BUTTON (widget));
+
+  GTK_WIDGET_CLASS (gtk_menu_button_parent_class)->unroot (widget);
+}
+
+/**
+ * gtk_menu_button_set_primary: (attributes org.gtk.Method.set_property=primary)
+ * @menu_button: a `GtkMenuButton`
+ * @primary: whether the menubutton should act as a primary menu
+ *
+ * Sets whether menu button acts as a primary menu.
+ *
+ * Primary menus can be opened with the <kbd>F10</kbd> key.
+ */
+void
+gtk_menu_button_set_primary (GtkMenuButton *menu_button,
+                             gboolean       primary)
+{
+  GtkRoot *toplevel;
+
+  g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
+
+  if (menu_button->primary == primary)
+    return;
+
+  menu_button->primary = primary;
+  toplevel = gtk_widget_get_root (GTK_WIDGET (menu_button));
+
+  if (toplevel)
+    {
+      if (menu_button->primary)
+        add_to_window (GTK_WINDOW (toplevel), menu_button);
+      else
+        remove_from_window (GTK_WINDOW (toplevel), menu_button);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_PRIMARY]);
+}
+
+/**
+ * gtk_menu_button_get_primary: (attributes org.gtk.Method.get_property=primary)
+ * @menu_button: a `GtkMenuButton`
+ *
+ * Returns whether the menu button acts as a primary menu.
+ *
+ * Returns: %TRUE if the button is a primary menu
+ */
+gboolean
+gtk_menu_button_get_primary (GtkMenuButton *menu_button)
+{
+  g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), FALSE);
+
+  return menu_button->primary;
 }

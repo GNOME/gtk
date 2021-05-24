@@ -64,6 +64,7 @@
 #include "gtkpopovermenubarprivate.h"
 #include "gtkcssboxesimplprivate.h"
 #include "gtktooltipprivate.h"
+#include "gtkmenubutton.h"
 
 #include "inspector/window.h"
 
@@ -5807,7 +5808,10 @@ gtk_window_activate_menubar (GtkWidget *widget,
   gtk_widget_focus_sort (GTK_WIDGET (window), GTK_DIR_TAB_FORWARD, menubars);
 
   first = g_ptr_array_index (menubars, 0);
-  gtk_popover_menu_bar_select_first (GTK_POPOVER_MENU_BAR (first));
+  if (GTK_IS_POPOVER_MENU_BAR (first))
+    gtk_popover_menu_bar_select_first (GTK_POPOVER_MENU_BAR (first));
+  else if (GTK_IS_MENU_BUTTON (first))
+    gtk_menu_button_popup (GTK_MENU_BUTTON (first));
 
   g_ptr_array_free (menubars, TRUE);
 
