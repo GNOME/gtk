@@ -266,3 +266,46 @@ gtk_get_portal_session_path (GDBusConnection  *connection,
 {
    return get_portal_path (connection, "session", token);
 }
+
+char *
+_gtk_elide_underscores (const char *original)
+{
+  char *q, *result;
+  const char *p, *end;
+  gsize len;
+  gboolean last_underscore;
+  
+  if (!original)
+    return NULL;
+
+  len = strlen (original);
+  q = result = g_malloc (len + 1);
+  last_underscore = FALSE;
+  
+  end = original + len;
+  for (p = original; p < end; p++)
+    {
+      if (!last_underscore && *p == '_')
+        last_underscore = TRUE;
+      else
+        {
+          last_underscore = FALSE;
+          if (original + 2 <= p && p + 1 <= end && 
+              p[-2] == '(' && p[-1] == '_' && p[0] != '_' && p[1] == ')')
+            {
+              q--;
+              *q = '\0';
+              p++;
+            }
+          else
+            *q++ = *p;
+        }
+    }
+
+  if (last_underscore)
+    *q++ = '_';
+  
+  *q = '\0';
+  
+  return result;
+}

@@ -144,6 +144,8 @@ GBytes *get_emoji_data (void);
 
 #endif /* G_ENABLE_DEBUG */
 
+char * _gtk_elide_underscores (const char *original);
+
 G_END_DECLS
 
 #endif /* __GTK_PRIVATE_H__ */
