@@ -749,7 +749,7 @@ gtk_switch_get_active (GtkSwitch *self)
  *
  * Normally, this is the same as [property@Gtk.Switch:active], unless
  * the switch is set up for delayed state changes. This function is
- * typically called from a [signal@Gtk.Switch`::state-set] signal handler.
+ * typically called from a [signal@Gtk.Switch::state-set] signal handler.
  *
  * See [signal@Gtk.Switch::state-set] for details.
  */
