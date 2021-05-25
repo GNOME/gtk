@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-25 12:57+0000\n"
-"PO-Revision-Date: 2021-05-25 16:06+0300\n"
+"POT-Creation-Date: 2021-05-25 14:34+0000\n"
+"PO-Revision-Date: 2021-05-25 19:19+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -643,6 +643,18 @@ msgstr "Задіює запис"
 msgctxt "Action description"
 msgid "Activates the expander"
 msgstr "Задіює розширювач"
+
+#: gtk/a11y/gtkfilechooserwidgetaccessible.c:101
+#| msgid "Show other locations"
+msgctxt "Action name"
+msgid "Show location"
+msgstr "Показати місце"
+
+#: gtk/a11y/gtkfilechooserwidgetaccessible.c:110
+msgctxt "Action description"
+msgid "Show the File Chooser's Location text field"
+msgstr ""
+"Показати текстове поле місця засобу вибору файлів"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
@@ -7213,37 +7225,30 @@ msgid "Flags"
 msgstr "Прапорці"
 
 #: gtk/ui/gtkfilechooserdialog.ui:32
-#| msgid "Focus Widget"
 msgid "File Chooser Widget"
 msgstr "Віджет вибору файлів"
 
 #: gtk/ui/gtkfilechooserwidget.ui:22
 msgid "Places"
-msgstr ""
-"Місця"
+msgstr "Місця"
 
 #: gtk/ui/gtkfilechooserwidget.ui:47
 msgid "Browse Header Revealer"
-msgstr ""
-"Розгортання заголовка навігації"
+msgstr "Розгортання заголовка навігації"
 
 #: gtk/ui/gtkfilechooserwidget.ui:65
 msgid "Browse Header Stack"
-msgstr ""
-"Стос заголовків навігації"
+msgstr "Стос заголовків навігації"
 
 #: gtk/ui/gtkfilechooserwidget.ui:75
 msgid "PathBar Layer"
-msgstr ""
-"Шар панелі шляху"
+msgstr "Шар панелі шляху"
 
 #: gtk/ui/gtkfilechooserwidget.ui:121
-#| msgid "Location"
 msgid "Location Layer"
 msgstr "Шар адреси"
 
 #: gtk/ui/gtkfilechooserwidget.ui:137
-#| msgid "Search"
 msgid "Search Layer"
 msgstr "Шар пошуку"
 
