@@ -1135,6 +1135,7 @@ if build_gir
   gir_args = [
     '-DGTK_COMPILATION',
     '--quiet',
+    '--warn-error',
   ]
 
   # We may build some of the dependencies as sub-projects; this means
