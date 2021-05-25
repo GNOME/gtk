@@ -1077,9 +1077,12 @@ gtk_im_context_simple_reset (GtkIMContext *context)
 
   priv->compose_buffer[0] = 0;
 
-  if (priv->tentative_match->len > 0 || priv->in_hex_sequence)
+  if (priv->tentative_match->len > 0 ||
+      priv->in_hex_sequence ||
+      priv->in_compose_sequence)
     {
       priv->in_hex_sequence = FALSE;
+      priv->in_compose_sequence = FALSE;
       g_string_set_size (priv->tentative_match, 0);
       priv->tentative_match_len = 0;
       g_signal_emit_by_name (context_simple, "preedit-changed");
