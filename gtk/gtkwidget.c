@@ -4848,7 +4848,7 @@ gtk_widget_class_set_activate_signal_from_name (GtkWidgetClass *widget_class,
  *
  * If you wish to handle the activation keybinding yourself, it is
  * recommended to use [method@Gtk.WidgetClass.add_shortcut] with an action
- * created with [constructor@Gtk.SignalAction.new].
+ * created with [ctor@Gtk.SignalAction.new].
  *
  * If @widget isn't activatable, the function returns %FALSE.
  *
@@ -11184,7 +11184,7 @@ gtk_widget_class_bind_template_callback_full (GtkWidgetClass *widget_class,
  * this class’s template data.
  *
  * Note that this must be called from a composite widget classes class
- * initializer after calling [methoc@GtkWidgetClass.set_template].
+ * initializer after calling [method@GtkWidgetClass.set_template].
  */
 void
 gtk_widget_class_set_template_scope (GtkWidgetClass  *widget_class,
