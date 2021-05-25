@@ -128,7 +128,7 @@ typedef enum {
  * The implementation of each blend mode is deferred to the
  * rendering pipeline.
  *
- * See https://www.w3.org/TR/compositing-1/#blending for more information
+ * See <https://www.w3.org/TR/compositing-1/#blending> for more information
  * on blending and blend modes.
  */
 typedef enum {

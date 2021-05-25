@@ -54,7 +54,7 @@ G_BEGIN_DECLS
  * on architectures with different endiannesses.
  *
  * Its naming is modelled after VkFormat (see
- * https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkFormat
+ * <https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkFormat>
  * for details).
  */
 typedef enum {
