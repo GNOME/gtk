@@ -182,7 +182,9 @@ gtk_single_selection_items_changed_cb (GListModel         *model,
     {
       if (self->autoselect)
         {
-          self->selected_item = g_list_model_get_item (self->model, 0);
+          if (added > 0 || g_list_model_get_n_items (self->model) > 0)
+            self->selected_item = g_list_model_get_item (self->model, 0);
+
           if (self->selected_item)
             {
               self->selected = 0;
