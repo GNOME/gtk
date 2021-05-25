@@ -905,7 +905,7 @@ gdk_clipboard_read_value_finish (GdkClipboard  *clipboard,
  * call [method@Gdk.Clipboard.read_texture_finish] to get the result.
  *
  * This is a simple wrapper around [method@Gdk.Clipboard.read_value_async].
- * Use that function or [methos@Gdk.Clipboard.read_async] directly if you
+ * Use that function or [method@Gdk.Clipboard.read_async] directly if you
  * need more control over the operation.
  */
 void

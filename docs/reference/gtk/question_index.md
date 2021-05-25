@@ -544,7 +544,7 @@ the question you have, this list is a good place to start.
     No. Most drawing in GTK is not done via cairo anymore (but instead
     by the GL or Vulkan renderers of GSK).
 
-    If you use cairo for drawing your own widgets, [mehtod@Gtk.Snapshot.append_cairo]
+    If you use cairo for drawing your own widgets, [method@Gtk.Snapshot.append_cairo]
     will choose the most appropriate surface type for you.
 
     If you are interested in using GL for your own drawing, see [class@Gtk.GLArea].
