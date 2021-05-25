@@ -17,6 +17,11 @@
                 <property name="hscrollbar-policy">never</property>
                 <property name="local-only">1</property>
                 <property name="show-other-locations">1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject">
+                    <property name="AtkObject::accessible-name" translatable="yes">Places</property>
+                  </object>
+                </child>
                 <style>
                   <class name="sidebar"/>
                 </style>
@@ -37,6 +42,11 @@
                   <object class="GtkRevealer" id="browse_header_revealer">
                     <property name="visible">1</property>
                     <property name="hexpand">1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Browse Header Revealer</property>
+                      </object>
+                    </child>
                     <child>
                       <object class="GtkBox">
                         <property name="visible">1</property>
@@ -50,11 +60,21 @@
                           <object class="GtkStack" id="browse_header_stack">
                             <property name="visible">1</property>
                             <property name="transition-type">crossfade</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject">
+                                <property name="AtkObject::accessible-name" translatable="yes">Browse Header Stack</property>
+                              </object>
+                            </child>
                             <child>
                               <object class="GtkBox">
                                 <property name="visible">1</property>
                                 <property name="spacing">6</property>
                                 <property name="border-width">6</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject">
+                                    <property name="AtkObject::accessible-name" translatable="yes">PathBar Layer</property>
+                                  </object>
+                                </child>
                                 <child>
                                   <object class="GtkPathBar" id="browse_path_bar">
                                     <property name="visible">True</property>
@@ -96,6 +116,11 @@
                                 <property name="no-show-all">1</property>
                                 <property name="spacing">6</property>
                                 <property name="border-width">6</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject">
+                                    <property name="AtkObject::accessible-name" translatable="yes">Location Layer</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="name">location</property>
@@ -107,6 +132,11 @@
                                 <property name="no-show-all">1</property>
                                 <property name="spacing">6</property>
                                 <property name="border-width">6</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject">
+                                    <property name="AtkObject::accessible-name" translatable="yes">Search Layer</property>
+                                  </object>
+                                </child>
                                 <child type="center">
                                   <object class="GtkSearchEntry" id="search_entry">
                                     <property name="visible">1</property>
