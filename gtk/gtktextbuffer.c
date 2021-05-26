@@ -49,6 +49,9 @@
  * [text widget conceptual overview](section-text-widget.html),
  * which gives an overview of all the objects and data types
  * related to the text widget and how they work together.
+ *
+ * GtkTextBuffer can support undoing changes to the buffer
+ * content, see [method@Gtk.TextBuffer.set_enable_undo].
  */
 
 typedef struct _GtkTextLogAttrCache GtkTextLogAttrCache;
@@ -447,6 +450,11 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   klass->redo = gtk_text_buffer_real_redo;
 
   /* Construct */
+  /**
+   * GtkTextBuffer:tag-table: (attributes org.gtk.Property.get=gtk_text_buffer_get_tag_table)
+   *
+   * The GtkTextTagTable for the buffer.
+   */
   text_buffer_props[PROP_TAG_TABLE] =
       g_param_spec_object ("tag-table",
                            P_("Tag Table"),
@@ -457,7 +465,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   /* Normal properties */
 
   /**
-   * GtkTextBuffer:text:
+   * GtkTextBuffer:text: (attributes org.gtk.Property.set=gtk_text_buffer_set_text)
    *
    * The text content of the buffer.
    *
@@ -484,7 +492,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                             GTK_PARAM_READABLE);
 
   /**
-   * GtkTextBuffer:can-undo:
+   * GtkTextBuffer:can-undo: (attributes org.gtk.Property.get=gtk_text_buffer_get_can_undo)
    *
    * Denotes that the buffer can undo the last applied action.
    */
@@ -496,7 +504,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                           GTK_PARAM_READABLE);
 
   /**
-   * GtkTextBuffer:can-redo:
+   * GtkTextBuffer:can-redo: (attributes org.gtk.Property.get=gtk_text_buffer_get_can_redo)
    *
    * Denotes that the buffer can reapply the last undone action.
    */
@@ -508,7 +516,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                           GTK_PARAM_READABLE);
 
   /**
-   * GtkTextBuffer:enable-undo:
+   * GtkTextBuffer:enable-undo: (attributes org.gtk.Property.get=gtk_text_buffer_get_enable_undo org.gtk.Property.set=gtk_text_buffer_set_enable_undo)
    *
    * Denotes if support for undoing and redoing changes to the buffer is allowed.
    */
@@ -678,7 +686,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   signals[CHANGED] =
     g_signal_new (I_("changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_LAST,                   
+                  G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextBufferClass, changed),
                   NULL, NULL,
                   NULL,
@@ -742,7 +750,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   signals[MARK_DELETED] =
     g_signal_new (I_("mark-deleted"),
                   G_OBJECT_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_LAST,                   
+                  G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextBufferClass, mark_deleted),
                   NULL, NULL,
                   NULL,
@@ -986,7 +994,7 @@ gtk_text_buffer_set_property (GObject         *object,
 
     case PROP_TEXT:
       gtk_text_buffer_set_text (text_buffer,
-				g_value_get_string (value), -1);
+                                g_value_get_string (value), -1);
       break;
 
     default:
@@ -1124,7 +1132,7 @@ _gtk_text_buffer_get_btree (GtkTextBuffer *buffer)
 }
 
 /**
- * gtk_text_buffer_get_tag_table:
+ * gtk_text_buffer_get_tag_table: (attributes org.gtk.Method.get_property=tag-table)
  * @buffer: a `GtkTextBuffer`
  *
  * Get the `GtkTextTagTable` associated with this buffer.
@@ -1140,7 +1148,7 @@ gtk_text_buffer_get_tag_table (GtkTextBuffer *buffer)
 }
 
 /**
- * gtk_text_buffer_set_text:
+ * gtk_text_buffer_set_text: (attributes org.gtk.Method.set_property=text)
  * @buffer: a `GtkTextBuffer`
  * @text: UTF-8 text to insert
  * @len: length of @text in bytes
@@ -4820,7 +4828,7 @@ gtk_text_buffer_real_redo (GtkTextBuffer *buffer)
 }
 
 /**
- * gtk_text_buffer_get_can_undo:
+ * gtk_text_buffer_get_can_undo: (attributes org.gtk.Method.get_property=can-undo)
  * @buffer: a `GtkTextBuffer`
  *
  * Gets whether there is an undoable action in the history.
@@ -4836,7 +4844,7 @@ gtk_text_buffer_get_can_undo (GtkTextBuffer *buffer)
 }
 
 /**
- * gtk_text_buffer_get_can_redo:
+ * gtk_text_buffer_get_can_redo: (attributes org.gtk.Method.get_property=can-redo)
  * @buffer: a `GtkTextBuffer`
  *
  * Gets whether there is a redoable action in the history.
@@ -4953,7 +4961,7 @@ gtk_text_buffer_redo (GtkTextBuffer *buffer)
 }
 
 /**
- * gtk_text_buffer_get_enable_undo:
+ * gtk_text_buffer_get_enable_undo: (attributes org.gtk.Method.get_property=enable-undo)
  * @buffer: a `GtkTextBuffer`
  *
  * Gets whether the buffer is saving modifications to the buffer
@@ -4972,11 +4980,14 @@ gtk_text_buffer_get_enable_undo (GtkTextBuffer *buffer)
 }
 
 /**
- * gtk_text_buffer_set_enable_undo:
+ * gtk_text_buffer_set_enable_undo: (attributes org.gtk.Method.set_property=enable-undo)
  * @buffer: a `GtkTextBuffer`
  * @enable_undo: %TRUE to enable undo
  *
  * Sets whether or not to enable undoable actions in the text buffer.
+ *
+ * Undoable actions in this context are changes to the text content of
+ * the buffer. Changes to tags and marks are not tracked.
  *
  * If enabled, the user will be able to undo the last number of actions
  * up to [method@Gtk.TextBuffer.get_max_undo_levels].

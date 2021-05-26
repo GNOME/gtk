@@ -1581,6 +1581,125 @@ test_get_iter (void)
   g_object_unref (buffer);
 }
 
+/* Check that basic undo works */
+static void
+test_undo0 (void)
+{
+  GtkTextBuffer *buffer;
+  const char *text;
+
+  buffer = gtk_text_buffer_new (NULL);
+
+  g_assert_true (gtk_text_buffer_get_enable_undo (buffer));
+  g_assert_false (gtk_text_buffer_get_can_undo (buffer));
+
+  gtk_text_buffer_set_text (buffer, "text before", -1);
+  check_buffer_contents (buffer, "text before");
+  g_assert_false (gtk_text_buffer_get_can_undo (buffer));
+
+  text = "The quick brown fox jumps over the lazy dog.";
+  gtk_text_buffer_insert_at_cursor (buffer, text, strlen (text));
+  check_buffer_contents (buffer, "text before"
+                                 "The quick brown fox jumps over the lazy dog.");
+  g_assert_true (gtk_text_buffer_get_can_undo (buffer));
+
+  text = "Θέλει αρετή και τόλμη η ελευθερία. (Ανδρέας Κάλβος)";
+  gtk_text_buffer_insert_at_cursor (buffer, text, strlen (text));
+  check_buffer_contents (buffer, "text before"
+                                 "The quick brown fox jumps over the lazy dog."
+                                 "Θέλει αρετή και τόλμη η ελευθερία. (Ανδρέας Κάλβος)");
+  g_assert_true (gtk_text_buffer_get_can_undo (buffer));
+
+  gtk_text_buffer_undo (buffer);
+
+  check_buffer_contents (buffer, "text before"
+                                 "The quick brown fox jumps over the lazy dog.");
+  g_assert_true (gtk_text_buffer_get_can_undo (buffer));
+
+  gtk_text_buffer_undo (buffer);
+
+  check_buffer_contents (buffer, "text before");
+  g_assert_false (gtk_text_buffer_get_can_undo (buffer));
+
+  g_object_unref (buffer);
+}
+
+/* Check that bundling user actions works with history */
+static void
+test_undo1 (void)
+{
+  GtkTextBuffer *buffer;
+  const char *text;
+
+  buffer = gtk_text_buffer_new (NULL);
+
+  g_assert_true (gtk_text_buffer_get_enable_undo (buffer));
+  g_assert_false (gtk_text_buffer_get_can_undo (buffer));
+
+  gtk_text_buffer_set_text (buffer, "text before", -1);
+  check_buffer_contents (buffer, "text before");
+  g_assert_false (gtk_text_buffer_get_can_undo (buffer));
+
+  gtk_text_buffer_begin_user_action (buffer);
+
+  text = "The quick brown fox jumps over the lazy dog.";
+
+  gtk_text_buffer_insert_at_cursor (buffer, text, strlen (text));
+  check_buffer_contents (buffer, "text before"
+                                 "The quick brown fox jumps over the lazy dog.");
+
+  text = "Θέλει αρετή και τόλμη η ελευθερία. (Ανδρέας Κάλβος)";
+
+  gtk_text_buffer_insert_at_cursor (buffer, text, strlen (text));
+  check_buffer_contents (buffer, "text before"
+                                 "The quick brown fox jumps over the lazy dog."
+                                 "Θέλει αρετή και τόλμη η ελευθερία. (Ανδρέας Κάλβος)");
+
+  gtk_text_buffer_end_user_action (buffer);
+  g_assert_true (gtk_text_buffer_get_can_undo (buffer));
+
+  gtk_text_buffer_undo (buffer);
+  check_buffer_contents (buffer, "text before");
+
+  g_object_unref (buffer);
+}
+
+/* Check that irreversible actions work */
+static void
+test_undo2 (void)
+{
+  GtkTextBuffer *buffer;
+  const char *text;
+
+  buffer = gtk_text_buffer_new (NULL);
+
+  g_assert_true (gtk_text_buffer_get_enable_undo (buffer));
+
+  gtk_text_buffer_set_text (buffer, "text before", -1);
+  check_buffer_contents (buffer, "text before");
+  g_assert_false (gtk_text_buffer_get_can_undo (buffer));
+
+  gtk_text_buffer_begin_irreversible_action (buffer);
+
+  text = "The quick brown fox jumps over the lazy dog.";
+
+  gtk_text_buffer_insert_at_cursor (buffer, text, strlen (text));
+  check_buffer_contents (buffer, "text before"
+                                 "The quick brown fox jumps over the lazy dog.");
+
+  text = "Θέλει αρετή και τόλμη η ελευθερία. (Ανδρέας Κάλβος)";
+
+  gtk_text_buffer_insert_at_cursor (buffer, text, strlen (text));
+  check_buffer_contents (buffer, "text before"
+                                 "The quick brown fox jumps over the lazy dog."
+                                 "Θέλει αρετή και τόλμη η ελευθερία. (Ανδρέας Κάλβος)");
+
+  gtk_text_buffer_end_irreversible_action (buffer);
+  g_assert_false (gtk_text_buffer_get_can_undo (buffer));
+
+  g_object_unref (buffer);
+}
+
 int
 main (int argc, char** argv)
 {
@@ -1600,6 +1719,9 @@ main (int argc, char** argv)
   g_test_add_func ("/TextBuffer/Tag", test_tag);
   g_test_add_func ("/TextBuffer/Clipboard", test_clipboard);
   g_test_add_func ("/TextBuffer/Get iter", test_get_iter);
+  g_test_add_func ("/TextBuffer/Undo 0", test_undo0);
+  g_test_add_func ("/TextBuffer/Undo 1", test_undo1);
+  g_test_add_func ("/TextBuffer/Undo 2", test_undo2);
 
   return g_test_run();
 }
