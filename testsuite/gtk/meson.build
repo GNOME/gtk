@@ -117,6 +117,7 @@ internal_tests = [
   { 'name': 'propertylookuplistmodel' },
   { 'name': 'rbtree' },
   { 'name': 'timsort' },
+  { 'name': 'texthistory' },
 ]
 
 # Tests that are expected to fail

@@ -114,7 +114,6 @@ gtk_tests = [
   ['testtexture'],
   ['testwindowdrag'],
   ['testinhibitshortcuts'],
-  ['testtexthistory', ['../gtk/gtktexthistory.c']],
   ['testzoom']
 ]
 
