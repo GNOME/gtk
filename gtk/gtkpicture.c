@@ -586,7 +586,11 @@ gtk_picture_set_file (GtkPicture *self,
   g_set_object (&self->file, file);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FILE]);
 
-  paintable = gdk_paintable_new_from_file_scaled (file, gtk_widget_get_scale_factor (GTK_WIDGET (self)));
+  if (file)
+    paintable = gdk_paintable_new_from_file_scaled (file, gtk_widget_get_scale_factor (GTK_WIDGET (self)));
+  else
+    paintable = NULL;
+
   gtk_picture_set_paintable (self, paintable);
   g_clear_object (&paintable);
 
