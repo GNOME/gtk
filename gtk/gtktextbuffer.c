@@ -49,6 +49,9 @@
  * [text widget conceptual overview](section-text-widget.html),
  * which gives an overview of all the objects and data types
  * related to the text widget and how they work together.
+ *
+ * GtkTextBuffer can support undoing changes to the buffer
+ * content, see [method@Gtk.TextBuffer.set_enable_undo].
  */
 
 typedef struct _GtkTextLogAttrCache GtkTextLogAttrCache;
@@ -4982,6 +4985,9 @@ gtk_text_buffer_get_enable_undo (GtkTextBuffer *buffer)
  * @enable_undo: %TRUE to enable undo
  *
  * Sets whether or not to enable undoable actions in the text buffer.
+ *
+ * Undoable actions in this context are changes to the text content of
+ * the buffer. Changes to tags and marks are not tracked.
  *
  * If enabled, the user will be able to undo the last number of actions
  * up to [method@Gtk.TextBuffer.get_max_undo_levels].
