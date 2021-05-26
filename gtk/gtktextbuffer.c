@@ -4260,6 +4260,7 @@ gtk_text_buffer_begin_user_action (GtkTextBuffer *buffer)
   if (buffer->priv->user_action_count == 1)
     {
       /* Outermost nested user action begin emits the signal */
+      gtk_text_history_begin_user_action (buffer->priv->history);
       g_signal_emit (buffer, signals[BEGIN_USER_ACTION], 0);
     }
 }
@@ -4286,6 +4287,7 @@ gtk_text_buffer_end_user_action (GtkTextBuffer *buffer)
     {
       /* Ended the outermost-nested user action end, so emit the signal */
       g_signal_emit (buffer, signals[END_USER_ACTION], 0);
+      gtk_text_history_end_user_action (buffer->priv->history);
     }
 }
 
