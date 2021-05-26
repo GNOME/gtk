@@ -582,7 +582,8 @@ int
 main (int   argc,
       char *argv[])
 {
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
+
   g_test_add_func ("/Gtk/TextHistory/test1", test1);
   g_test_add_func ("/Gtk/TextHistory/test2", test2);
   g_test_add_func ("/Gtk/TextHistory/test3", test3);
@@ -596,5 +597,6 @@ main (int   argc,
   g_test_add_func ("/Gtk/TextHistory/test11", test11);
   g_test_add_func ("/Gtk/TextHistory/test12", test12);
   g_test_add_func ("/Gtk/TextHistory/test13", test13);
+
   return g_test_run ();
 }
