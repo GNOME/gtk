@@ -271,7 +271,7 @@ gdk_draw_context_get_surface (GdkDrawContext *context)
  * Note that the @region passed to this function is the minimum region that
  * needs to be drawn and depending on implementation, windowing system and
  * hardware in use, it might be necessary to draw a larger region. Drawing
- * implementation must use [method@Gdk.DrawContext.get_frame_region() to
+ * implementation must use [method@Gdk.DrawContext.get_frame_region] to
  * query the region that must be drawn.
  *
  * When using GTK, the widget system automatically places calls to

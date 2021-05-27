@@ -3634,7 +3634,7 @@ gtk_label_set_markup (GtkLabel    *self,
  * indicating that they represent a keyboard accelerator called a mnemonic.
  *
  * The mnemonic key can be used to activate another widget, chosen
- * automatically, or explicitly using method@Gtk.Label.set_mnemonic_widget].
+ * automatically, or explicitly using [method@Gtk.Label.set_mnemonic_widget].
  */
 void
 gtk_label_set_markup_with_mnemonic (GtkLabel    *self,

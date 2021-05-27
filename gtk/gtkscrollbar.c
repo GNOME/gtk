@@ -44,7 +44,7 @@
  * ![An example GtkScrollbar](scrollbar.png)
  *
  * Its position and movement are controlled by the adjustment that is passed to
- * or created by [ctor@Gtk.Scrollbar.new]. See [class.Gtk.Adjustment] for more
+ * or created by [ctor@Gtk.Scrollbar.new]. See [class@Gtk.Adjustment] for more
  * details. The [property@Gtk.Adjustment:value] field sets the position of the
  * thumb and must be between [property@Gtk.Adjustment:lower] and
  * [property@Gtk.Adjustment:upper] - [property@Gtk.Adjustment:page-size].

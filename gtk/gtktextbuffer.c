@@ -561,7 +561,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * revalidate it). The default signal handler revalidates
    * it to point to the end of the inserted text.
    *
-   * See also: [method@Gtk,TextBuffer.insert],
+   * See also: [method@Gtk.TextBuffer.insert],
    * [method@Gtk.TextBuffer.insert_range].
    */
   signals[INSERT_TEXT] =
