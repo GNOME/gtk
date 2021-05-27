@@ -5914,6 +5914,9 @@ gtk_text_set_alignment (GtkText *self,
     {
       priv->xalign = xalign;
       gtk_text_recompute (self);
+      if (priv->placeholder)
+        gtk_label_set_xalign (GTK_LABEL (priv->placeholder), xalign);
+
       g_object_notify (G_OBJECT (self), "xalign");
     }
 }
@@ -6638,7 +6641,7 @@ gtk_text_set_placeholder_text (GtkText    *self,
       priv->placeholder = g_object_new (GTK_TYPE_LABEL,
                                         "label", text,
                                         "css-name", "placeholder",
-                                        "xalign", 0.0f,
+                                        "xalign", priv->xalign,
                                         "ellipsize", PANGO_ELLIPSIZE_END,
                                         NULL);
       gtk_label_set_attributes (GTK_LABEL (priv->placeholder), priv->attrs);
