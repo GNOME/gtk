@@ -165,7 +165,7 @@
  * - To choose a folder instead of a filem use %GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER.
  *
  * In general, you should only cause the file chooser to show a specific
- * folder when it is appropriate to use [method@Gtk,FileChooser.set_file],
+ * folder when it is appropriate to use [method@Gtk.FileChooser.set_file],
  * i.e. when you are doing a “Save As” command and you already have a file
  * saved somewhere.
 

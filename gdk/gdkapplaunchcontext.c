@@ -272,7 +272,7 @@ gdk_app_launch_context_set_icon (GdkAppLaunchContext *context,
  * Sets the icon for applications that are launched with this context.
  *
  * The @icon_name will be interpreted in the same way as the Icon field
- * in desktop files. See also [method@Gdk.AppLaunchContext.set_icon()].
+ * in desktop files. See also [method@Gdk.AppLaunchContext.set_icon].
  *
  * If both @icon and @icon_name are set, the @icon_name takes priority.
  * If neither @icon or @icon_name is set, the icon is taken from either

@@ -54,7 +54,7 @@
  * this item.
  *
  * The [property@Gtk.ColumnView:show-row-separators] and
- * [propertyGtk.ColumnView:show-column-separators] properties offer a simple way
+ * [property@Gtk.ColumnView:show-column-separators] properties offer a simple way
  * to display separators between the rows or columns.
  *
  * `GtkColumnView` allows the user to select items according to the selection
