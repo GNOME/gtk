@@ -26,6 +26,7 @@
 #include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
+#include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkselectionmodel.h"
 #include "gtktogglebutton.h"
@@ -62,6 +63,12 @@
  *
  * `GtkStackSwitcher` uses the %GTK_ACCESSIBLE_ROLE_TAB_LIST role
  * and uses the %GTK_ACCESSIBLE_ROLE_TAB for its buttons.
+ *
+ * # Orientable
+ *
+ * Since GTK 4.4, `GtkStackSwitcher` implements `GtkOrientable` allowing
+ * the stack switcher to be made vertical with
+ * `gtk_orientable_set_orientation()`.
  */
 
 #define TIMEOUT_EXPAND 500
@@ -84,10 +91,12 @@ struct _GtkStackSwitcherClass
 
 enum {
   PROP_0,
-  PROP_STACK
+  PROP_STACK,
+  PROP_ORIENTATION
 };
 
-G_DEFINE_TYPE (GtkStackSwitcher, gtk_stack_switcher, GTK_TYPE_WIDGET)
+G_DEFINE_TYPE_WITH_CODE (GtkStackSwitcher, gtk_stack_switcher, GTK_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
 
 static void
 gtk_stack_switcher_init (GtkStackSwitcher *switcher)
@@ -216,7 +225,7 @@ gtk_stack_switcher_switch_timeout (gpointer data)
   return G_SOURCE_REMOVE;
 }
 
-static void 
+static void
 gtk_stack_switcher_drag_enter (GtkDropControllerMotion *motion,
                                double                   x,
                                double                   y,
@@ -442,9 +451,14 @@ gtk_stack_switcher_get_property (GObject      *object,
                                  GParamSpec   *pspec)
 {
   GtkStackSwitcher *switcher = GTK_STACK_SWITCHER (object);
+  GtkLayoutManager *box_layout = gtk_widget_get_layout_manager (GTK_WIDGET (switcher));
 
   switch (prop_id)
     {
+    case PROP_ORIENTATION:
+      g_value_set_enum (value, gtk_orientable_get_orientation (GTK_ORIENTABLE (box_layout)));
+      break;
+
     case PROP_STACK:
       g_value_set_object (value, switcher->stack);
       break;
@@ -462,9 +476,22 @@ gtk_stack_switcher_set_property (GObject      *object,
                                  GParamSpec   *pspec)
 {
   GtkStackSwitcher *switcher = GTK_STACK_SWITCHER (object);
+  GtkLayoutManager *box_layout = gtk_widget_get_layout_manager (GTK_WIDGET (switcher));
 
   switch (prop_id)
     {
+    case PROP_ORIENTATION:
+      {
+        GtkOrientation orientation = g_value_get_enum (value);
+        if (gtk_orientable_get_orientation (GTK_ORIENTABLE (box_layout)) != orientation)
+          {
+            gtk_orientable_set_orientation (GTK_ORIENTABLE (box_layout), orientation);
+            gtk_widget_update_orientation (GTK_WIDGET (switcher), orientation);
+            g_object_notify_by_pspec (object, pspec);
+          }
+      }
+      break;
+
     case PROP_STACK:
       gtk_stack_switcher_set_stack (switcher, g_value_get_object (value));
       break;
@@ -519,6 +546,8 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
                                                         GTK_TYPE_STACK,
                                                         GTK_PARAM_READWRITE |
                                                         G_PARAM_CONSTRUCT));
+
+  g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("stackswitcher"));
