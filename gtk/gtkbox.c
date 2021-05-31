@@ -85,7 +85,6 @@ enum {
 
 typedef struct
 {
-  GtkOrientation  orientation;
   gint16          spacing;
 
   guint           homogeneous    : 1;
@@ -110,7 +109,6 @@ gtk_box_set_property (GObject      *object,
                       GParamSpec   *pspec)
 {
   GtkBox *box = GTK_BOX (object);
-  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
   GtkLayoutManager *box_layout = gtk_widget_get_layout_manager (GTK_WIDGET (box));
 
   switch (prop_id)
@@ -118,13 +116,11 @@ gtk_box_set_property (GObject      *object,
     case PROP_ORIENTATION:
       {
         GtkOrientation orientation = g_value_get_enum (value);
-        if (priv->orientation != orientation)
+        if (gtk_orientable_get_orientation (GTK_ORIENTABLE (box_layout)) != orientation)
           {
-            priv->orientation = orientation;
-            gtk_orientable_set_orientation (GTK_ORIENTABLE (box_layout),
-                                            priv->orientation);
-            gtk_widget_update_orientation (GTK_WIDGET (box), priv->orientation);
-            g_object_notify (object, "orientation");
+            gtk_orientable_set_orientation (GTK_ORIENTABLE (box_layout), orientation);
+            gtk_widget_update_orientation (GTK_WIDGET (box), orientation);
+            g_object_notify_by_pspec (G_OBJECT (box), pspec);
           }
       }
       break;
@@ -150,13 +146,12 @@ gtk_box_get_property (GObject    *object,
                       GParamSpec *pspec)
 {
   GtkBox *box = GTK_BOX (object);
-  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
   GtkBoxLayout *box_layout = GTK_BOX_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (box)));
 
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      g_value_set_enum (value, priv->orientation);
+      g_value_set_enum (value, gtk_orientable_get_orientation (GTK_ORIENTABLE (box_layout)));
       break;
     case PROP_SPACING:
       g_value_set_int (value, gtk_box_layout_get_spacing (box_layout));
@@ -303,10 +298,7 @@ gtk_box_class_init (GtkBoxClass *class)
 static void
 gtk_box_init (GtkBox *box)
 {
-  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
-
-  priv->orientation = GTK_ORIENTATION_HORIZONTAL;
-  gtk_widget_update_orientation (GTK_WIDGET (box), priv->orientation);
+  gtk_widget_update_orientation (GTK_WIDGET (box), GTK_ORIENTATION_HORIZONTAL);
 }
 
 static GtkBuildableIface *parent_buildable_iface;
