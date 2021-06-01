@@ -5652,8 +5652,8 @@ gtk_notebook_menu_item_recreate (GtkNotebook *notebook,
   GtkNotebookPage *page = list->data;
   GtkWidget *menu_item = gtk_widget_get_parent (page->menu_label);
 
-  gtk_box_remove (GTK_BOX (menu_item), page->menu_label);
-  gtk_widget_unparent (menu_item);
+  gtk_button_set_child (GTK_BUTTON (menu_item), NULL);
+  gtk_box_remove (GTK_BOX (notebook->menu_box), menu_item);
   gtk_notebook_menu_item_create (notebook, page);
 }
 
