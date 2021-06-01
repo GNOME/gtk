@@ -255,6 +255,30 @@ screensaver_signal_portal (GDBusConnection *connection,
 }
 
 static void
+ss_get_active_cb (GObject      *source,
+                  GAsyncResult *result,
+                  gpointer      data)
+{
+  GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) data;
+  GDBusProxy *proxy = G_DBUS_PROXY (source);
+  GError *error = NULL;
+  GVariant *ret;
+  gboolean active;
+
+  ret = g_dbus_proxy_call_finish (proxy, result, &error);
+  if (ret == NULL)
+    {
+      g_warning ("Getting screensaver status failed: %s", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  g_variant_get (ret, "(b)", &active);
+  g_variant_unref (ret);
+  gtk_application_set_screensaver_active (dbus->impl.application, active);
+}
+
+static void
 create_monitor_cb (GObject      *source,
                    GAsyncResult *result,
                    gpointer      data)
@@ -359,31 +383,17 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
 
   if (dbus->ss_proxy)
     {
-      GVariant *active_var;
-      gboolean active;
-
       g_signal_connect (dbus->ss_proxy, "g-signal",
                         G_CALLBACK (screensaver_signal_session), impl->application);
 
-      active_var = g_dbus_proxy_call_sync (dbus->ss_proxy,
-                                           "GetActive",
-                                           NULL,
-                                           G_DBUS_CALL_FLAGS_NONE,
-                                           G_MAXINT,
-                                           NULL,
-                                           &error);
-      if (!active_var)
-        {
-          g_debug ("Error calling GetActive on GNOME screensaver: %s",
-                   error->message);
-          g_clear_error (&error);
-        }
-      else
-        {
-          g_variant_get (active_var, "(b)", &active);
-          g_variant_unref (active_var);
-          gtk_application_set_screensaver_active (dbus->impl.application, active);
-        }
+      g_dbus_proxy_call (dbus->ss_proxy,
+                         "GetActive",
+                         NULL,
+                         G_DBUS_CALL_FLAGS_NONE,
+                         G_MAXINT,
+                         NULL,
+                         ss_get_active_cb,
+                         dbus);
     }
 
   g_debug ("Registering client '%s' '%s'", dbus->application_id, client_id);
