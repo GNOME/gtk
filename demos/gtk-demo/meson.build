@@ -205,4 +205,9 @@ install_data('org.gtk.Demo4.gschema.xml', install_dir: gtk_schemasdir)
 gnome.compile_schemas()
 
 # appdata
-install_data('org.gtk.Demo4.appdata.xml', install_dir: gtk_appdatadir)
+configure_file(
+  input: 'org.gtk.Demo4.appdata.xml.in',
+  output: 'org.gtk.Demo4.appdata.xml',
+  configuration: appdata_config,
+  install_dir: gtk_appdatadir
+)

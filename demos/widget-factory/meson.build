@@ -26,4 +26,9 @@ foreach size: ['scalable', 'symbolic']
 endforeach
 
 # appdata
-install_data('org.gtk.WidgetFactory4.appdata.xml', install_dir: gtk_appdatadir)
+configure_file(
+  input: 'org.gtk.WidgetFactory4.appdata.xml.in',
+  output: 'org.gtk.WidgetFactory4.appdata.xml',
+  configuration: appdata_config,
+  install_dir: gtk_appdatadir
+)

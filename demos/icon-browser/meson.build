@@ -32,5 +32,10 @@ endforeach
 install_data('org.gtk.IconBrowser4.desktop', install_dir: gtk_applicationsdir)
 
 # appdata
-install_data('org.gtk.IconBrowser4.appdata.xml', install_dir: gtk_appdatadir)
+configure_file(
+  input: 'org.gtk.IconBrowser4.appdata.xml.in',
+  output: 'org.gtk.IconBrowser4.appdata.xml',
+  configuration: appdata_config,
+  install_dir: gtk_appdatadir
+)
 
