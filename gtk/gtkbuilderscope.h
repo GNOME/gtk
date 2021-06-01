@@ -41,7 +41,7 @@ G_DECLARE_INTERFACE (GtkBuilderScope, gtk_builder_scope, GTK, BUILDER_SCOPE, GOb
  * The list of flags that can be passed to gtk_builder_create_closure().
  *
  * New values may be added in the future for new features, so external
- * implementations of [interface@Gtk.BuilderScope] should test the flags
+ * implementations of [iface@Gtk.BuilderScope] should test the flags
  * for unknown values and raise a %GTK_BUILDER_ERROR_INVALID_ATTRIBUTE error
  * when they encounter one.
  */

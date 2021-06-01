@@ -271,7 +271,7 @@ holds a reference on them, and GTK holds a reference on toplevel windows.
 and cause the whole widget hierarchy to be finalized unless there are other
 references that keep widgets alive.
 
-The [signals@Gtk.Widget::destroy] signal is emitted when a widget is
+The [signal@Gtk.Widget::destroy] signal is emitted when a widget is
 disposed, and therefore can no longer be used to break reference cycles. A
 typical sign of a reference cycle involving a toplevel window is when
 closing the window does not make the application quit.
@@ -555,7 +555,7 @@ for you, so templates work like before.
 A few changes to the event controller and [class@Gtk.Gesture] APIs
 did not make it back to GTK 3, and have to be taken into account
 when moving to GTK 4. One is that the [signal@Gtk.EventControllerMotion::enter]
-and [signals@Gtk.EventControllerMotion::leave] signals have gained new arguments.
+and [signal@Gtk.EventControllerMotion::leave] signals have gained new arguments.
 Another is that `GtkGestureMultiPress` has been renamed to [class@Gtk.GestureClick],
 and has lost its area property. A [class@Gtk.EventControllerFocus] has been
 split off from [class@Gtk.EventControllerKey].

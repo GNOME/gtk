@@ -58,7 +58,7 @@
  *
  * The Wayland implementation of `GdkToplevel`.
  *
- * Beyond the [interface@Gdk.Toplevel] API, the Wayland implementation
+ * Beyond the [iface@Gdk.Toplevel] API, the Wayland implementation
  * has API to set up cross-process parent-child relationships between
  * surfaces with [method@GdkWayland.WaylandToplevel.export_handle] and
  * [method@GdkWayland.WaylandToplevel.set_transient_for_exported].

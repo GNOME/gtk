@@ -52,7 +52,7 @@
  * using [method@Gtk.ComboBoxText.get_active_text].
  *
  * You should not call [method@Gtk.ComboBox.set_model] or attempt to pack more
- * cells into this combo box via its [interface@Gtk.CellLayout] interface.
+ * cells into this combo box via its [iface@Gtk.CellLayout] interface.
  *
  * # GtkComboBoxText as GtkBuildable
  *

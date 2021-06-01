@@ -58,7 +58,7 @@
  * is specified in the form of a tree model, and the display of the choices
  * can be adapted to the data in the model by using cell renderers, as you
  * would in a tree view. This is possible since `GtkComboBox` implements the
- * [interface@Gtk.CellLayout] interface. The tree model holding the valid
+ * [iface@Gtk.CellLayout] interface. The tree model holding the valid
  * choices is not restricted to a flat list, it can be a real tree, and the
  * popup will reflect the tree structure.
  *

@@ -953,7 +953,7 @@ gtk_dialog_add_buttons_valist (GtkDialog      *dialog,
  *
  * This is the same as calling [method@Gtk.Dialog.add_button]
  * repeatedly. The variable argument list should be %NULL-terminated
- * as with [new@Gtk.Dialog.new_with_buttons]. Each button must have both
+ * as with [ctor@Gtk.Dialog.new_with_buttons]. Each button must have both
  * text and response ID.
  */
 void

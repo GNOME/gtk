@@ -89,7 +89,7 @@
  * configuration facility.
  *
  * There is one `GtkSettings` instance per display. It can be obtained with
- * [type_func@GtkSettings.get_for_display], but in many cases, it is more
+ * [func@Gtk.Settings.get_for_display], but in many cases, it is more
  * convenient to use [method@Gtk.Widget.get_settings].
  */
 
@@ -1333,7 +1333,7 @@ gtk_settings_get_for_display (GdkDisplay *display)
  * Gets the `GtkSettings` object for the default display, creating
  * it if necessary.
  *
- * See [type_func@Gtk.Settings.get_for_display].
+ * See [func@Gtk.Settings.get_for_display].
  *
  * Returns: (nullable) (transfer none): a `GtkSettings` object. If there is
  *   no default display, then returns %NULL.

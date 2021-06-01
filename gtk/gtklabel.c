@@ -4998,7 +4998,7 @@ gtk_label_get_layout (GtkLabel *self)
  * inside the [class@Pango.Layout], e.g. to take some action if some part
  * of the label is clicked. Remember when using the [class@Pango.Layout]
  * functions you need to convert to and from pixels using PANGO_PIXELS()
- * or [constant@Pango.SCALE].
+ * or [const@Pango.SCALE].
  */
 void
 gtk_label_get_layout_offsets (GtkLabel *self,
