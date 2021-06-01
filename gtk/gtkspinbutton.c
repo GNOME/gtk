@@ -820,7 +820,7 @@ gtk_spin_button_get_property (GObject      *object,
        g_value_set_double (value, gtk_adjustment_get_value (spin_button->adjustment));
       break;
     case PROP_ORIENTATION:
-      g_value_set_enum (value, spin_button->orientation);
+      g_value_set_enum (value, gtk_orientable_get_orientation (GTK_ORIENTABLE (gtk_widget_get_layout_manager (GTK_WIDGET (spin_button)))));
       break;
     case PROP_EDITING_CANCELED:
       g_value_set_boolean (value, spin_button->editing_canceled);
@@ -1015,10 +1015,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   spin_button->snap_to_ticks = FALSE;
   spin_button->width_chars = -1;
 
-  spin_button->orientation = GTK_ORIENTATION_HORIZONTAL;
-
-  gtk_widget_update_orientation (GTK_WIDGET (spin_button),
-                                 spin_button->orientation);
+  gtk_widget_update_orientation (GTK_WIDGET (spin_button), GTK_ORIENTATION_HORIZONTAL);
 
   spin_button->entry = gtk_text_new ();
   gtk_editable_init_delegate (GTK_EDITABLE (spin_button));
@@ -1200,21 +1197,23 @@ gtk_spin_button_set_orientation (GtkSpinButton  *spin,
   GtkBoxLayout *layout_manager;
   GtkEditable *editable = GTK_EDITABLE (spin->entry);
 
-  if (spin->orientation == orientation)
+  if (gtk_orientable_get_orientation (GTK_ORIENTABLE (spin)) == orientation)
     return;
 
-  spin->orientation = orientation;
-  gtk_widget_update_orientation (GTK_WIDGET (spin), spin->orientation);
+  layout_manager = GTK_BOX_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (spin)));
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (layout_manager), orientation);
+
+  gtk_widget_update_orientation (GTK_WIDGET (spin), orientation);
 
   /* change alignment if it's the default */
-  if (spin->orientation == GTK_ORIENTATION_VERTICAL &&
+  if (orientation == GTK_ORIENTATION_VERTICAL &&
       gtk_editable_get_alignment (editable) == 0.0)
     gtk_editable_set_alignment (editable, 0.5);
-  else if (spin->orientation == GTK_ORIENTATION_HORIZONTAL &&
+  else if (orientation == GTK_ORIENTATION_HORIZONTAL &&
            gtk_editable_get_alignment (editable) == 0.5)
     gtk_editable_set_alignment (editable, 0.0);
 
-  if (spin->orientation == GTK_ORIENTATION_HORIZONTAL)
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       /* Current orientation of the box is vertical! */
       gtk_widget_insert_after (spin->up_button, GTK_WIDGET (spin), spin->down_button);
@@ -1224,9 +1223,6 @@ gtk_spin_button_set_orientation (GtkSpinButton  *spin,
       /* Current orientation of the box is horizontal! */
       gtk_widget_insert_before (spin->up_button, GTK_WIDGET (spin), spin->entry);
     }
-
-  layout_manager = GTK_BOX_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (spin)));
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (layout_manager), spin->orientation);
 
   g_object_notify (G_OBJECT (spin), "orientation");
 }
