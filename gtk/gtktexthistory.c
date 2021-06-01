@@ -460,6 +460,8 @@ has_actionable (const GQueue *queue)
         {
           if (has_actionable (&action->u.group.actions))
             return TRUE;
+          else
+            continue;
         }
 
       return TRUE;
