@@ -2767,9 +2767,9 @@ gtk_tree_view_click_gesture_pressed (GtkGestureClick *gesture,
   gboolean rtl;
   GtkWidget *target;
 
-  /* check if this is a click in an editing widget */
+  /* check if this is a click in a child widget */
   target = gtk_event_controller_get_target (GTK_EVENT_CONTROLLER (gesture));
-  if (priv->edited_column && gtk_widget_is_ancestor (target, widget))
+  if (gtk_widget_is_ancestor (target, widget))
     return;
 
   gtk_tree_view_stop_editing (tree_view, FALSE);
