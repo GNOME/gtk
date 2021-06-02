@@ -226,6 +226,13 @@ gtk_stack_switcher_switch_timeout (gpointer data)
 }
 
 static void
+clear_timer (gpointer data)
+{
+  if (data)
+    g_source_remove (GPOINTER_TO_UINT (data));
+}
+
+static void
 gtk_stack_switcher_drag_enter (GtkDropControllerMotion *motion,
                                double                   x,
                                double                   y,
@@ -239,7 +246,7 @@ gtk_stack_switcher_drag_enter (GtkDropControllerMotion *motion,
                                           gtk_stack_switcher_switch_timeout,
                                           button);
       g_source_set_name_by_id (switch_timer, "[gtk] gtk_stack_switcher_switch_timeout");
-      g_object_set_data (G_OBJECT (button), "-gtk-switch-timer", GUINT_TO_POINTER (switch_timer));
+      g_object_set_data_full (G_OBJECT (button), "-gtk-switch-timer", GUINT_TO_POINTER (switch_timer), clear_timer);
     }
 }
 
