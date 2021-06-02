@@ -1271,6 +1271,12 @@ gdk_x11_screen_init_glx (GdkX11Screen *screen)
 
   if (g_strcmp0 (glXGetClientString (dpy, GLX_VENDOR), "NVIDIA Corporation") == 0)
     {
+      Atom type;
+      int format;
+      gulong nitems;
+      gulong bytes_after;
+      guchar *data = NULL;
+
       /* With the mesa based drivers, we can safely assume the compositor can
        * access the updated surface texture immediately after glXSwapBuffers is
        * run, because the kernel ensures there is an implicit synchronization
@@ -1280,8 +1286,24 @@ gdk_x11_screen_init_glx (GdkX11Screen *screen)
        * in that case, to defer telling the compositor our latest frame is
        * ready until after the GPU has completed all issued commands related
        * to the frame, and that the X server says the frame has been drawn.
+       *
+       * As this can cause deadlocks, we want to make sure to only enable it for Xorg,
+       * but not for XWayland, Xnest or whatever other X servers exist.
        */
-      display_x11->has_async_glx_swap_buffers = TRUE;
+
+      gdk_x11_display_error_trap_push (display);
+      if (XGetWindowProperty (dpy, DefaultRootWindow (dpy),
+                              gdk_x11_get_xatom_by_name_for_display (display, "XFree86_VT"),
+                              0, 1, False, AnyPropertyType,
+                              &type, &format, &nitems, &bytes_after, &data) == Success)
+        {
+          if (type != None)
+            display_x11->has_async_glx_swap_buffers = TRUE;
+        }
+      gdk_x11_display_error_trap_pop_ignored (display);
+
+      if (data)
+        XFree (data);
     }
 
   GDK_DISPLAY_NOTE (display, OPENGL,
