@@ -106,8 +106,6 @@ struct _GtkProgressBar
   double         activity_pos;
   guint          activity_blocks;
 
-  GtkOrientation orientation;
-
   guint              tick_id;
   GtkProgressTracker tracker;
   gint64             pulse1;
@@ -313,6 +311,9 @@ update_node_classes (GtkProgressBar *pbar)
   gboolean right = FALSE;
   gboolean top = FALSE;
   gboolean bottom = FALSE;
+  GtkOrientation orientation;
+
+  orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (pbar));
 
   /* Here we set positional classes, depending on which end of the
    * progressbar the progress touches.
@@ -320,7 +321,7 @@ update_node_classes (GtkProgressBar *pbar)
 
   if (pbar->activity_mode)
     {
-      if (pbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
           left = pbar->activity_pos <= 0.0;
           right = pbar->activity_pos >= 1.0;
@@ -338,11 +339,11 @@ update_node_classes (GtkProgressBar *pbar)
       inverted = pbar->inverted;
       if (gtk_widget_get_direction (GTK_WIDGET (pbar)) == GTK_TEXT_DIR_RTL)
         {
-          if (pbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+          if (orientation == GTK_ORIENTATION_HORIZONTAL)
             inverted = !inverted;
         }
 
-      if (pbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
           left = !inverted || pbar->fraction >= 1.0;
           right = inverted || pbar->fraction >= 1.0;
@@ -388,11 +389,14 @@ allocate_trough (GtkGizmo *gizmo,
   GtkAllocation alloc;
   int progress_width, progress_height;
   gboolean inverted;
+  GtkOrientation orientation;
+
+  orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (pbar));
 
   inverted = pbar->inverted;
   if (gtk_widget_get_direction (GTK_WIDGET (pbar)) == GTK_TEXT_DIR_RTL)
     {
-      if (pbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
         inverted = !inverted;
     }
 
@@ -406,7 +410,7 @@ allocate_trough (GtkGizmo *gizmo,
 
   if (pbar->activity_mode)
     {
-      if (pbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
           alloc.width = progress_width + (width - progress_width) / pbar->activity_blocks;
           alloc.x = pbar->activity_pos * (width - alloc.width);
@@ -424,7 +428,7 @@ allocate_trough (GtkGizmo *gizmo,
     }
   else
     {
-      if (pbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
           alloc.width = progress_width + (width - progress_width) * pbar->fraction;
           alloc.height = progress_height;
@@ -481,9 +485,9 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
   gtk_widget_set_parent (pbar->progress_widget, pbar->trough_widget);
 
   /* horizontal is default */
-  pbar->orientation = GTK_ORIENTATION_VERTICAL; /* Just to force an update... */
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (gtk_widget_get_layout_manager (GTK_WIDGET (pbar))),
+                                  GTK_ORIENTATION_VERTICAL);
   gtk_progress_bar_set_orientation (pbar, GTK_ORIENTATION_HORIZONTAL);
-  gtk_widget_update_orientation (GTK_WIDGET (pbar), pbar->orientation);
 
   gtk_accessible_update_property (GTK_ACCESSIBLE (pbar),
                                   GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, 1.0,
@@ -542,7 +546,7 @@ gtk_progress_bar_get_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      g_value_set_enum (value, pbar->orientation);
+      g_value_set_enum (value, gtk_orientable_get_orientation (GTK_ORIENTABLE (gtk_widget_get_layout_manager (GTK_WIDGET (pbar)))));
       break;
     case PROP_INVERTED:
       g_value_set_boolean (value, pbar->inverted);
@@ -691,7 +695,7 @@ gtk_progress_bar_act_mode_enter (GtkProgressBar *pbar)
   inverted = pbar->inverted;
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     {
-      if (pbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+      if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_HORIZONTAL)
         inverted = !inverted;
     }
 
@@ -975,10 +979,12 @@ gtk_progress_bar_set_orientation (GtkProgressBar *pbar,
 {
   GtkBoxLayout *layout;
 
-  if (pbar->orientation == orientation)
+  layout = GTK_BOX_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (pbar)));
+
+  if (gtk_orientable_get_orientation (GTK_ORIENTABLE (layout)) == orientation)
     return;
 
-  pbar->orientation = orientation;
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (layout), orientation);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -995,11 +1001,8 @@ gtk_progress_bar_set_orientation (GtkProgressBar *pbar,
       gtk_widget_set_valign (pbar->trough_widget, GTK_ALIGN_FILL);
     }
 
-  gtk_widget_update_orientation (GTK_WIDGET (pbar), pbar->orientation);
+  gtk_widget_update_orientation (GTK_WIDGET (pbar), orientation);
   update_node_classes (pbar);
-
-  layout = GTK_BOX_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (pbar)));
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (layout), GTK_ORIENTATION_VERTICAL);
 
   g_object_notify (G_OBJECT (pbar), "orientation");
 }
