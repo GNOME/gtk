@@ -145,7 +145,7 @@
  *
  * An example of a UI definition fragment specifying Pango attributes:
  * ```xml
- * <object class="GtkEnry">
+ * <object class="GtkEntry">
  *   <attributes>
  *     <attribute name="weight" value="PANGO_WEIGHT_BOLD"/>
  *     <attribute name="background" value="red" start="5" end="10"/>
