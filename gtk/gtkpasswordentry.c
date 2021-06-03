@@ -415,6 +415,32 @@ gtk_password_entry_mnemonic_activate (GtkWidget *widget,
   return TRUE;
 }
 
+static gboolean
+gtk_password_entry_save_state (GtkWidget    *widget,
+                               GVariantDict *dict,
+                               gboolean     *save_children)
+{
+  GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (widget);
+
+  g_variant_dict_insert (dict, "visibility", "b", gtk_text_get_visibility (GTK_TEXT (entry->entry)));
+  *save_children = TRUE;
+
+  return TRUE;
+}
+
+static gboolean
+gtk_password_entry_restore_state (GtkWidget *widget,
+                                  GVariant  *data)
+{
+  GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (widget);
+  gboolean value;
+
+  if (g_variant_lookup (data, "visibility", "b", &value))
+    gtk_text_set_visibility (GTK_TEXT (entry->entry), value);
+
+  return TRUE;
+}
+
 static void
 gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
 {
@@ -431,6 +457,8 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
   widget_class->mnemonic_activate = gtk_password_entry_mnemonic_activate;
   widget_class->grab_focus = gtk_widget_grab_focus_child;
   widget_class->focus = gtk_widget_focus_child;
+  widget_class->save_state = gtk_password_entry_save_state;
+  widget_class->restore_state = gtk_password_entry_restore_state;
 
   /**
    * GtkPasswordEntry:placeholder-text:
