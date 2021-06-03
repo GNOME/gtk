@@ -245,6 +245,12 @@ static gboolean      gtk_range_scroll_controller_scroll (GtkEventControllerScrol
 static void          gtk_range_set_orientation          (GtkRange       *range,
                                                          GtkOrientation  orientation);
 
+static gboolean      gtk_range_save_state               (GtkWidget    *range,
+                                                         GVariantDict *dict,
+                                                         gboolean     *save);
+static gboolean      gtk_range_restore_state            (GtkWidget    *range,
+                                                         GVariant     *data);
+
 G_DEFINE_TYPE_WITH_CODE (GtkRange, gtk_range, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkRange)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
@@ -271,6 +277,8 @@ gtk_range_class_init (GtkRangeClass *class)
   widget_class->size_allocate = gtk_range_size_allocate;
   widget_class->unmap = gtk_range_unmap;
   widget_class->direction_changed = gtk_range_direction_changed;
+  widget_class->save_state = gtk_range_save_state;
+  widget_class->restore_state = gtk_range_restore_state;
 
   class->move_slider = gtk_range_move_slider;
   class->change_value = gtk_range_real_change_value;
@@ -2857,6 +2865,29 @@ _gtk_range_get_stop_positions (GtkRange  *range,
     *values = g_memdup2 (priv->mark_pos, priv->n_marks * sizeof (int));
 
   return priv->n_marks;
+}
+
+static gboolean
+gtk_range_save_state (GtkWidget    *range,
+                      GVariantDict *dict,
+                      gboolean     *save_children)
+{
+  g_variant_dict_insert (dict, "value", "d", gtk_range_get_value (GTK_RANGE (range)));
+  *save_children = FALSE;
+
+  return TRUE;
+}
+
+static gboolean
+gtk_range_restore_state (GtkWidget *range,
+                         GVariant  *data)
+{
+  double value;
+
+  if (g_variant_lookup (data, "value", "d", &value))
+    gtk_range_set_value (GTK_RANGE (range), value);
+
+  return TRUE;
 }
 
 /**
