@@ -149,7 +149,7 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
 {
   GtkTextIter iter;
   GSList *tags, *temp_tags;
-  gdouble scale = 1;
+  double scale = 1;
   gboolean val_set = FALSE;
 
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, offset);

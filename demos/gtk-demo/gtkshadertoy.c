@@ -163,8 +163,8 @@ drag_update_cb (GtkGestureDrag *drag,
 
 static void
 drag_end_cb (GtkGestureDrag *drag,
-             gdouble         dx,
-             gdouble         dy,
+             double          dx,
+             double          dy,
              gpointer        user_data)
 {
   GtkShadertoy *shadertoy = GTK_SHADERTOY (user_data);
