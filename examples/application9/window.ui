@@ -4,6 +4,7 @@
     <property name="title" translatable="yes">Example Application</property>
     <property name="default-width">600</property>
     <property name="default-height">400</property>
+    <property name="save-id">window</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header">
         <child>
@@ -26,6 +27,7 @@
           <object class="GtkToggleButton" id="search">
             <property name="sensitive">0</property>
             <property name="icon-name">edit-find-symbolic</property>
+            <property name="save-id">search</property>
           </object>
         </child>
         <child type="end">
@@ -38,6 +40,7 @@
     <child>
       <object class="GtkBox" id="content_box">
         <property name="orientation">vertical</property>
+        <property name="save-id">content_box</property>
         <child>
           <object class="GtkSearchBar" id="searchbar">
             <child>
@@ -49,8 +52,10 @@
         </child>
         <child>
           <object class="GtkBox" id="hbox">
+            <property name="save-id">hbox</property>
             <child>
               <object class="GtkRevealer" id="sidebar">
+                <property name="save-id">sidebar</property>
                 <property name="transition-type">slide-right</property>
                 <child>
                   <object class="GtkScrolledWindow" id="sidebar-sw">
@@ -66,6 +71,7 @@
             </child>
             <child>
               <object class="GtkStack" id="stack">
+                <property name="save-id">stack</property>
                 <signal name="notify::visible-child" handler="visible_child_changed"/>
               </object>
             </child>

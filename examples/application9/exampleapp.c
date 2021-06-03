@@ -59,12 +59,14 @@ example_app_startup (GApplication *app)
 }
 
 static void
-example_app_activate (GApplication *app)
+example_app_create_window (GtkApplication *app,
+                           const char     *save_id)
 {
   ExampleAppWindow *win;
 
   win = example_app_window_new (EXAMPLE_APP (app));
-  gtk_window_present (GTK_WINDOW (win));
+  gtk_widget_set_save_id (GTK_WIDGET (win), save_id);
+  /* FIXME: differentiate save ids */
 }
 
 static void
@@ -93,8 +95,8 @@ static void
 example_app_class_init (ExampleAppClass *class)
 {
   G_APPLICATION_CLASS (class)->startup = example_app_startup;
-  G_APPLICATION_CLASS (class)->activate = example_app_activate;
   G_APPLICATION_CLASS (class)->open = example_app_open;
+  GTK_APPLICATION_CLASS (class)->create_window = example_app_create_window;
 }
 
 ExampleApp *
@@ -103,5 +105,7 @@ example_app_new (void)
   return g_object_new (EXAMPLE_APP_TYPE,
                        "application-id", "org.gtk.exampleapp",
                        "flags", G_APPLICATION_HANDLES_OPEN,
+                       "register-session", TRUE,
+                       "save-state", TRUE,
                        NULL);
 }

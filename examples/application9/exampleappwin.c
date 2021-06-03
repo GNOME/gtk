@@ -17,6 +17,8 @@ struct _ExampleAppWindow
   GtkWidget *words;
   GtkWidget *lines;
   GtkWidget *lines_label;
+
+  GList *files;
 };
 
 G_DEFINE_TYPE (ExampleAppWindow, example_app_window, GTK_TYPE_APPLICATION_WINDOW)
@@ -211,13 +213,67 @@ example_app_window_dispose (GObject *object)
 
   g_clear_object (&win->settings);
 
+  g_list_free_full (win->files, g_object_unref);
+  win->files = NULL;
+
   G_OBJECT_CLASS (example_app_window_parent_class)->dispose (object);
+}
+
+static gboolean
+example_app_window_save_state (GtkWidget    *widget,
+                               GVariantDict *dict,
+                               gboolean     *save_children)
+{
+  ExampleAppWindow *win = EXAMPLE_APP_WINDOW (widget);
+  GVariantBuilder builder;
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("as"));
+  for (GList *l = win->files; l; l = l->next)
+    {
+      g_variant_builder_add (&builder, "s", g_file_peek_path (G_FILE (l->data)));
+    }
+
+  g_variant_dict_insert_value (dict, "files", g_variant_builder_end (&builder));
+
+  /* Save window state */
+  GTK_WIDGET_CLASS (example_app_window_parent_class)->save_state (widget, dict, save_children);
+
+  *save_children = TRUE;
+  return TRUE;
+}
+
+static gboolean
+example_app_window_restore_state (GtkWidget *widget,
+                                  GVariant  *state)
+{
+  ExampleAppWindow *win = EXAMPLE_APP_WINDOW (widget);
+  GVariantIter *iter;
+
+  /* Restore window state */
+  GTK_WIDGET_CLASS (example_app_window_parent_class)->restore_state (widget, state);
+
+  if (g_variant_lookup (state, "files", "as", &iter))
+    {
+       const char *path;
+
+       while (g_variant_iter_next (iter, "&s", &path))
+         {
+           GFile *file = g_file_new_for_path (path);
+           example_app_window_open (win, file);
+           g_object_unref (file);
+         }
+    }
+
+  return TRUE;
 }
 
 static void
 example_app_window_class_init (ExampleAppWindowClass *class)
 {
   G_OBJECT_CLASS (class)->dispose = example_app_window_dispose;
+
+  GTK_WIDGET_CLASS (class)->save_state = example_app_window_save_state;
+  GTK_WIDGET_CLASS (class)->restore_state = example_app_window_restore_state;
 
   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (class),
                                                "/org/gtk/exampleapp/window.ui");
@@ -288,4 +344,6 @@ example_app_window_open (ExampleAppWindow *win,
 
   update_words (win);
   update_lines (win);
+
+  win->files = g_list_append (win->files, g_object_ref (file));
 }
