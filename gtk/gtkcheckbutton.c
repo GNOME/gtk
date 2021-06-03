@@ -498,6 +498,29 @@ gtk_check_button_real_activate (GtkCheckButton *self)
   gtk_check_button_set_active (self, !gtk_check_button_get_active (self));
 }
 
+static gboolean
+gtk_check_button_save_state (GtkWidget    *self,
+                             GVariantDict *dict,
+                             gboolean     *save_children)
+{
+  g_variant_dict_insert (dict, "active", "b", gtk_check_button_get_active (GTK_CHECK_BUTTON (self)));
+  *save_children = FALSE;
+
+  return TRUE;
+}
+
+static gboolean
+gtk_check_button_restore_state (GtkWidget *self,
+                                GVariant  *data)
+{
+  gboolean value;
+
+  if (g_variant_lookup (data, "active", "b", &value))
+    gtk_check_button_set_active (GTK_CHECK_BUTTON (self), value);
+
+  return TRUE;
+}
+
 static void
 gtk_check_button_class_init (GtkCheckButtonClass *class)
 {
@@ -518,6 +541,8 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
 
   widget_class->state_flags_changed = gtk_check_button_state_flags_changed;
   widget_class->focus = gtk_check_button_focus;
+  widget_class->save_state = gtk_check_button_save_state;
+  widget_class->restore_state = gtk_check_button_restore_state;
 
   class->activate = gtk_check_button_real_activate;
 
