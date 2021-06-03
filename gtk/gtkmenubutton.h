@@ -109,6 +109,12 @@ void          gtk_menu_button_set_create_popup_func (GtkMenuButton              
                                                      gpointer                      user_data,
                                                      GDestroyNotify                destroy_notify);
 
+GDK_AVAILABLE_IN_4_4
+void          gtk_menu_button_set_primary (GtkMenuButton *menu_button,
+                                           gboolean       primary);
+GDK_AVAILABLE_IN_4_4
+gboolean      gtk_menu_button_get_primary (GtkMenuButton *menu_button);
+
 G_END_DECLS
 
 #endif /* __GTK_MENU_BUTTON_H__ */
