@@ -708,6 +708,54 @@ gtk_window_get_request_mode (GtkWidget *widget)
     return GTK_SIZE_REQUEST_CONSTANT_SIZE;
 }
 
+static gboolean
+gtk_window_save_state (GtkWidget    *widget,
+                       GVariantDict *dict,
+                       gboolean     *save_children)
+{
+  GtkWindow *win = GTK_WINDOW (widget);
+  int width, height;
+
+  g_variant_dict_insert (dict, "maximized", "b", gtk_window_is_maximized (win));
+  g_variant_dict_insert (dict, "fullscreen", "b", gtk_window_is_fullscreen (win));
+
+  gtk_window_get_default_size (win, &width, &height);
+  g_variant_dict_insert (dict, "size", "(ii)", width, height);
+
+  *save_children = TRUE;
+
+  return TRUE;
+}
+
+static gboolean
+gtk_window_restore_state (GtkWidget *widget,
+                          GVariant  *state)
+{
+  GtkWindow *win = GTK_WINDOW (widget);
+  gboolean maximized;
+  gboolean fullscreen;
+  int width, height;
+
+  if (g_variant_lookup (state, "maximized", "b", &maximized))
+    {
+      if (maximized)
+        gtk_window_maximize (win);
+    }
+
+  if (g_variant_lookup (state, "fullscreen", "b", &fullscreen))
+    {
+      if (fullscreen)
+        gtk_window_fullscreen (win);
+    }
+
+  if (g_variant_lookup (state, "size", "(ii)", &width, &height))
+    {
+      gtk_window_set_default_size (win, width, height);
+    }
+
+  return TRUE;
+}
+
 static void
 gtk_window_class_init (GtkWindowClass *klass)
 {
@@ -739,6 +787,8 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->move_focus = gtk_window_move_focus;
   widget_class->measure = gtk_window_measure;
   widget_class->css_changed = gtk_window_css_changed;
+  widget_class->save_state = gtk_window_save_state;
+  widget_class->restore_state = gtk_window_restore_state;
 
   klass->activate_default = gtk_window_real_activate_default;
   klass->activate_focus = gtk_window_real_activate_focus;
