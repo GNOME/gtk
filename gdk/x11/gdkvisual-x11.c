@@ -50,8 +50,7 @@ gdk_x11_visual_class_init (GdkX11VisualClass *class)
 }
 
 void
-_gdk_x11_screen_init_visuals (GdkX11Screen *x11_screen,
-                              gboolean      setup_display)
+_gdk_x11_screen_init_visuals (GdkX11Screen *x11_screen)
 {
   static const int possible_depths[8] = { 32, 30, 24, 16, 15, 8, 4, 1 };
   static const GdkVisualType possible_types[6] =
@@ -254,33 +253,6 @@ _gdk_x11_screen_init_visuals (GdkX11Screen *x11_screen,
    * stereo and double buffering
    */
   gdk_x11_screen_update_visuals_for_glx (x11_screen);
-
-  if (setup_display)
-    {
-      if (x11_screen->rgba_visual)
-        {
-          Visual *xvisual = GDK_X11_VISUAL (x11_screen->rgba_visual)->xvisual;
-          Colormap colormap;
-          
-          colormap = XCreateColormap (x11_screen->xdisplay,
-                                      RootWindow (x11_screen->xdisplay, x11_screen->screen_num),
-                                      xvisual,
-                                      AllocNone);
-          gdk_display_setup_window_visual (GDK_SCREEN_DISPLAY (x11_screen),
-                                           x11_screen->rgba_visual->depth,
-                                           GDK_X11_VISUAL (x11_screen->rgba_visual)->xvisual,
-                                           colormap,
-                                           TRUE);
-        }
-      else
-        {
-          gdk_display_setup_window_visual (GDK_SCREEN_DISPLAY (x11_screen),
-                                           DefaultDepth (x11_screen->xdisplay, x11_screen->screen_num),
-                                           DefaultVisual (x11_screen->xdisplay, x11_screen->screen_num),
-                                           DefaultColormap (x11_screen->xdisplay, x11_screen->screen_num),
-                                           FALSE);
-        }
-    }
 }
 
 /*< private >

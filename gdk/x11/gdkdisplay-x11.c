@@ -1335,22 +1335,6 @@ set_sm_client_id (GdkDisplay  *display,
                      gdk_x11_get_xatom_by_name_for_display (display, "SM_CLIENT_ID"));
 }
 
-void
-gdk_display_setup_window_visual (GdkDisplay *display,
-                                 int         depth,
-                                 Visual     *visual,
-                                 Colormap    colormap,
-                                 gboolean    rgba)
-{
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
-
-  display_x11->window_depth = depth;
-  display_x11->window_visual = visual;
-  display_x11->window_colormap = colormap;
-
-  gdk_display_set_rgba (display, rgba);
-}
-
 /**
  * gdk_x11_display_open:
  * @display_name: (nullable): name of the X display.
@@ -1416,7 +1400,27 @@ gdk_x11_display_open (const char *display_name)
 #endif
 
   /* initialize the display's screens */ 
-  display_x11->screen = _gdk_x11_screen_new (display, DefaultScreen (display_x11->xdisplay), TRUE);
+  display_x11->screen = _gdk_x11_screen_new (display, DefaultScreen (display_x11->xdisplay));
+
+  if (display_x11->screen->rgba_visual)
+    {
+      Visual *xvisual = GDK_X11_VISUAL (display_x11->screen->rgba_visual)->xvisual;
+
+      display_x11->window_depth = display_x11->screen->rgba_visual->depth;
+      display_x11->window_visual = xvisual;
+      display_x11->window_colormap = XCreateColormap (xdisplay,
+                                                      DefaultRootWindow (xdisplay),
+                                                      xvisual,
+                                                      AllocNone);
+      gdk_display_set_rgba (display, TRUE);
+    }
+  else
+    {
+      display_x11->window_depth = DefaultDepth (xdisplay, DefaultScreen (xdisplay)),
+      display_x11->window_visual = DefaultVisual (xdisplay, DefaultScreen (xdisplay));
+      display_x11->window_colormap = DefaultColormap (xdisplay, DefaultScreen (xdisplay));
+      gdk_display_set_rgba (display, FALSE);
+    }
 
   /* We need to initialize events after we have the screen
    * structures in places
@@ -2010,7 +2014,7 @@ _gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,
   if (gdk_x11_display_error_trap_pop (display) || !result)
     return NULL;
 
-  screen = _gdk_x11_screen_new (display, XScreenNumberOfScreen (attrs.screen), FALSE);
+  screen = _gdk_x11_screen_new (display, XScreenNumberOfScreen (attrs.screen));
 
   display_x11->screens = g_list_prepend (display_x11->screens, screen);
 

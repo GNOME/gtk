@@ -94,8 +94,7 @@ struct _GdkX11ScreenClass
 
 GType       _gdk_x11_screen_get_type (void);
 GdkX11Screen *_gdk_x11_screen_new           (GdkDisplay   *display,
-                                             int           screen_number,
-                                             gboolean      setup_display);
+                                             int           screen_number);
 
 void _gdk_x11_screen_window_manager_changed (GdkX11Screen *screen);
 void _gdk_x11_screen_size_changed           (GdkX11Screen *screen,
@@ -120,8 +119,7 @@ _gdk_x11_screen_get_xft_setting             (GdkX11Screen *screen,
                                              const char   *name,
                                              GValue       *value);
 
-void _gdk_x11_screen_init_visuals           (GdkX11Screen *screen,
-                                             gboolean      setup_display);
+void _gdk_x11_screen_init_visuals           (GdkX11Screen *screen);
 
 G_END_DECLS
 
