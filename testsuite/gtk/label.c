@@ -89,7 +89,7 @@ print_attr_list (PangoAttrList *attrs, GString *string)
 
   iter = pango_attr_list_get_iterator (attrs);
   do {
-    gint start, end;
+    int start, end;
     GSList *list, *l;
 
     pango_attr_iterator_range (iter, &start, &end);

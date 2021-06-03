@@ -93,7 +93,7 @@ type_name_mangle (const char *name,
                   gboolean    split_first_cap)
 {
   GString *symbol_name = g_string_new ("");
-  gint i;
+  int i;
 
   for (i = 0; name[i] != '\0'; i++)
     {
@@ -300,7 +300,7 @@ main (int argc, char **argv)
 {
   const GType *all_types;
   guint n_types = 0, i;
-  gint result;
+  int result;
 
   /* These must be set before before gtk_test_init */
   g_setenv ("GIO_USE_VFS", "local", TRUE);
