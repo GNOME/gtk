@@ -82,7 +82,7 @@ typedef struct
     struct {
       float width;
       float height;
-      gint uniform_data_len;
+      int uniform_data_len;
       guchar uniform_data[32];
     } gl_shader;
   };
