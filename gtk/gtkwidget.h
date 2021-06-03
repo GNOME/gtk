@@ -257,11 +257,18 @@ struct _GtkWidgetClass
                                                 double     x,
                                                 double     y);
 
+  gboolean     (* save_state)                  (GtkWidget    *widget,
+                                                GVariantDict *dict,
+                                                gboolean     *save_children);
+
+  gboolean     (* restore_state)               (GtkWidget    *widget,
+                                                GVariant     *data);
+
   /*< private >*/
 
   GtkWidgetClassPrivate *priv;
 
-  gpointer padding[8];
+  gpointer padding[6];
 };
 
 
@@ -976,6 +983,21 @@ GtkAccessibleRole       gtk_widget_class_get_accessible_role    (GtkWidgetClass 
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWidget, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkRequisition, gtk_requisition_free)
+
+
+GDK_AVAILABLE_IN_4_4
+void                    gtk_widget_set_save_id   (GtkWidget  *widget,
+                                                  const char *id);
+
+GDK_AVAILABLE_IN_4_4
+const char *            gtk_widget_get_save_id   (GtkWidget  *widget);
+
+GDK_AVAILABLE_IN_4_4
+GVariant *              gtk_widget_save_state    (GtkWidget  *widget);
+
+GDK_AVAILABLE_IN_4_4
+void                    gtk_widget_restore_state (GtkWidget  *widget,
+                                                  GVariant   *state);
 
 G_END_DECLS
 

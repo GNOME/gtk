@@ -198,6 +198,9 @@ struct _GtkWidgetPrivate
   /* Accessibility */
   GtkAccessibleRole accessible_role;
   GtkATContext *at_context;
+
+  /* State saving */
+  char *save_id;
 };
 
 typedef struct

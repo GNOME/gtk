@@ -479,6 +479,8 @@ enum {
   MOVE_FOCUS,
   KEYNAV_FAILED,
   QUERY_TOOLTIP,
+  SAVE_STATE,
+  RESTORE_STATE,
   LAST_SIGNAL
 };
 
@@ -518,6 +520,7 @@ enum {
   PROP_CSS_NAME,
   PROP_CSS_CLASSES,
   PROP_LAYOUT_MANAGER,
+  PROP_SAVE_ID,
   NUM_PROPERTIES,
 
   /* GtkAccessible */
@@ -996,6 +999,9 @@ gtk_widget_set_property (GObject      *object,
     case PROP_ACCESSIBLE_ROLE:
       gtk_widget_set_accessible_role (widget, g_value_get_enum (value));
       break;
+    case PROP_SAVE_ID:
+      gtk_widget_set_save_id (widget, g_value_get_string (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1128,6 +1134,9 @@ gtk_widget_get_property (GObject    *object,
       break;
     case PROP_ACCESSIBLE_ROLE:
       g_value_set_enum (value, gtk_widget_get_accessible_role (widget));
+      break;
+    case PROP_SAVE_ID:
+      g_value_set_string (value, priv->save_id);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1672,6 +1681,21 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                          GTK_TYPE_LAYOUT_MANAGER,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkWidget:save-id: (attributes org.gtk.Property.get=gtk_widget_get_save_id org.gtk.Property.set=gtk_widget_set_save_id)
+   *
+   * The ID under which persistent state of this widget is saved.
+   *
+   * In order for a widget to have its state saved (and restored), the widget
+   * and all its ancestors must have a `save-id`.
+   */
+  widget_props[PROP_SAVE_ID] =
+      g_param_spec_string ("save-id",
+                           P_("Save ID"),
+                           P_("The ID to save the widget state under"),
+                           NULL,
+                           GTK_PARAM_READWRITE);
+
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, widget_props);
 
   g_object_class_override_property (gobject_class, PROP_ACCESSIBLE_ROLE, "accessible-role");
@@ -1955,6 +1979,53 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                               G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__INT_INT_BOOLEAN_OBJECTv);
 
+  /**
+   * GtkWidget:save-state:
+   * @widget: the object which received the signal
+   * @dict: a `GVariantDict`
+   * @save_children: (out): return location for whether to save children
+   *
+   * The handler for this signal should persist any state of @widget
+   * into @dict, and set @save_children if the child widgets may have
+   * state worth saving too.
+   *
+   * See [signal@Gtk.Widget:restore-state].
+   *
+   * Returns: %TRUE to stop stop further handlers from running
+   */
+  widget_signals[SAVE_STATE] =
+    g_signal_new (I_("save-state"),
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkWidgetClass, save_state),
+                  _gtk_boolean_handled_accumulator, NULL,
+                  NULL,
+                  G_TYPE_BOOLEAN, 2,
+                  G_TYPE_VARIANT_DICT,
+                  G_TYPE_POINTER);
+
+  /**
+   * GtkWidget:restore-state:
+   * @widget: the object which received the signal
+   * @state: an "a{sv}" `GVariant` with state to restore
+   *
+   * The handler for this signal should do the opposite of what the
+   * corresponding handler for [signal@Gtk.Widget:save-state] does.
+   *
+   * See [signal@Gtk.Widget:save-state].
+   *
+   * Returns: %TRUE to stop stop further handlers from running
+   */
+  widget_signals[RESTORE_STATE] =
+    g_signal_new (I_("restore-state"),
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkWidgetClass, restore_state),
+                  _gtk_boolean_handled_accumulator, NULL,
+                  NULL,
+                  G_TYPE_BOOLEAN, 1,
+                  G_TYPE_VARIANT);
+
   gtk_widget_class_set_css_name (klass, I_("widget"));
   gtk_widget_class_set_accessible_role (klass, GTK_ACCESSIBLE_ROLE_WIDGET);
 }
@@ -2034,7 +2105,6 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
                                    NULL,
                                    gdk_touch_event_get_emulating_pointer (event));
       break;
-    case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       press = gdk_button_event_new (GDK_BUTTON_PRESS,
                                     gdk_event_get_surface (event),
@@ -7576,6 +7646,7 @@ gtk_widget_finalize (GObject *object)
   g_free (priv->name);
   g_free (priv->tooltip_markup);
   g_free (priv->tooltip_text);
+  g_free (priv->save_id);
 
   g_clear_pointer (&priv->transform, gsk_transform_unref);
   g_clear_pointer (&priv->allocated_transform, gsk_transform_unref);
@@ -12927,4 +12998,159 @@ gtk_widget_set_active_state (GtkWidget *widget,
       if (priv->n_active == 0)
         gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_ACTIVE);
     }
+}
+
+void
+gtk_widget_set_save_id (GtkWidget  *widget,
+                        const char *id)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_free (priv->save_id);
+  priv->save_id = g_strdup (id);
+
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_SAVE_ID]);
+}
+
+const char *
+gtk_widget_get_save_id (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  return priv->save_id;
+}
+
+static void
+gtk_widget_collect_child_state (GtkWidget    *widget,
+                                GVariantDict *dict)
+{
+  const char *id;
+  GVariant *state;
+
+  id = gtk_widget_get_save_id (widget);
+  if (!id)
+    return;
+
+  if (g_variant_dict_contains (dict, id))
+    {
+      g_warning ("Duplicate save-id %s", id);
+      return;
+    }
+
+  state = gtk_widget_save_state (widget);
+
+  if (state)
+    g_variant_dict_insert_value (dict, id, state);
+}
+
+/**
+ * gtk_widget_save_state:
+ * @widget: a `GtkWidget`
+ *
+ * Save the state of @widget and its children to a `GVariant`.
+ *
+ * In order a widgets state to be saved by this, the widget and
+ * all its ancestors must have a [property@Gtk.Widget:save-id].
+ *
+ * See [signal@Gtk.Widget::save-state] for how to override what
+ * state is saved.
+ *
+ * This function is used by `GtkApplication` to implement automatic
+ * state saving. It is recommended that you use that functionality.
+ *
+ * Returns: (transfer full) (nullable): A `GVariant` with the saved state
+ *
+ * Since: 4.4
+ */
+GVariant *
+gtk_widget_save_state (GtkWidget *widget)
+{
+  const char *id;
+  GVariantDict *dict;
+  GVariantBuilder data;
+  gboolean save_children = TRUE;
+  gboolean ret;
+  GVariant *v;
+
+  id = gtk_widget_get_save_id (widget);
+  if (id == NULL)
+    return NULL;
+
+  dict = g_variant_dict_new (NULL);
+
+  g_signal_emit (widget, widget_signals[SAVE_STATE], 0, dict, &save_children, &ret);
+
+  g_variant_builder_init (&data, G_VARIANT_TYPE_VARDICT);
+
+  v = g_variant_dict_end (dict);
+  if (g_variant_n_children (v) > 0)
+    g_variant_builder_add (&data, "{sv}", "data", v);
+  else
+    g_variant_unref (v);
+
+  if (save_children)
+    {
+      g_variant_dict_init (dict, NULL);
+      gtk_widget_forall (widget, (GtkCallback) gtk_widget_collect_child_state, dict);
+      v = g_variant_dict_end (dict);
+      if (g_variant_n_children (v) > 0)
+        g_variant_builder_add (&data, "{sv}", "children", v);
+      else
+        g_variant_unref (v);
+    }
+
+  g_variant_dict_unref (dict);
+
+  v = g_variant_builder_end (&data);
+  if (g_variant_n_children (v) > 0)
+    return v;
+
+  g_variant_unref (v);
+  return NULL;
+}
+
+static void
+gtk_widget_restore_child_state (GtkWidget *widget,
+                                GVariant  *data)
+{
+  const char *id;
+  GVariant *v;
+
+  id = gtk_widget_get_save_id (widget);
+  if (!id)
+    return;
+
+  v = g_variant_lookup_value (data, id, G_VARIANT_TYPE_VARDICT);
+  if (v)
+    gtk_widget_restore_state (widget, v);
+}
+
+/**
+ * gtk_widget_restore_state:
+ * @widget: a `GtkWidget`
+ * @state: an "a{sv}" `GVariant` as returned by gtk_widget_save_state()
+ *
+ * Restores state of @widget and its children.
+ *
+ * See [method@Gtk.Widget.save_state] for how to save state.
+ *
+ * This function is used by `GtkApplication` to implement automatic
+ * state restoration. It is recommended that you use that functionality.
+ *
+ * Since: 4.4
+ */
+void
+gtk_widget_restore_state (GtkWidget *widget,
+                          GVariant  *state)
+{
+  GVariant *data;
+  gboolean ret;
+
+  data = g_variant_lookup_value (state, "data", G_VARIANT_TYPE_VARDICT);
+  if (data)
+    g_signal_emit (widget, widget_signals[RESTORE_STATE], 0, data, &ret);
+
+  data = g_variant_lookup_value (state, "children", G_VARIANT_TYPE_VARDICT);
+  if (data)
+    gtk_widget_forall (widget, (GtkCallback) gtk_widget_restore_child_state, data);
 }
