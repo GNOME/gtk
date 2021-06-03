@@ -390,6 +390,29 @@ gtk_paned_set_orientation (GtkPaned       *self,
     }
 }
 
+static gboolean
+gtk_paned_save_state (GtkWidget    *paned,
+                      GVariantDict *dict,
+                      gboolean     *save_children)
+{
+  g_variant_dict_insert (dict, "position", "i", gtk_paned_get_position (GTK_PANED (paned)));
+  *save_children = TRUE;
+
+  return TRUE;
+}
+
+static gboolean
+gtk_paned_restore_state (GtkWidget *paned,
+                         GVariant  *data)
+{
+  int value;
+
+  if (g_variant_lookup (data, "position", "i", &value))
+    gtk_paned_set_position(GTK_PANED (paned), value);
+
+  return TRUE;
+}
+
 static void
 gtk_paned_class_init (GtkPanedClass *class)
 {
@@ -408,6 +431,8 @@ gtk_paned_class_init (GtkPanedClass *class)
   widget_class->css_changed = gtk_paned_css_changed;
   widget_class->get_request_mode = gtk_paned_get_request_mode;
   widget_class->compute_expand = gtk_paned_compute_expand;
+  widget_class->save_state = gtk_paned_save_state;
+  widget_class->restore_state = gtk_paned_restore_state;
 
   class->cycle_child_focus = gtk_paned_cycle_child_focus;
   class->toggle_handle_focus = gtk_paned_toggle_handle_focus;
