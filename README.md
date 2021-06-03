@@ -158,7 +158,7 @@ The release notes for GTK are part of the migration guide in the API
 reference. See:
 
  - [3.x release notes](https://developer.gnome.org/gtk3/stable/gtk-migrating-2-to-3.html)
- - [4.x release notes](https://developer.gnome.org/gtk4/stable/gtk-migrating-3-to-4.html)
+ - [4.x release notes](https://docs.gtk.org/gtk4/migrating-3to4.html)
 
 Licensing terms
 ---------------
