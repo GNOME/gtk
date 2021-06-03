@@ -506,6 +506,29 @@ state_set (GtkSwitch *self,
   return TRUE;
 }
 
+static gboolean
+gtk_switch_save_state (GtkWidget    *self,
+                       GVariantDict *dict,
+                       gboolean     *save_children)
+{
+  g_variant_dict_insert (dict, "active", "b", gtk_switch_get_active (GTK_SWITCH (self)));
+  *save_children = FALSE;
+
+  return TRUE;
+}
+
+static gboolean
+gtk_switch_restore_state (GtkWidget *self,
+                          GVariant  *data)
+{
+  gboolean value;
+
+  if (g_variant_lookup (data, "active", "b", &value))
+    gtk_switch_set_active (GTK_SWITCH (self), value);
+
+  return TRUE;
+}
+
 static void
 gtk_switch_class_init (GtkSwitchClass *klass)
 {
@@ -544,6 +567,9 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   gobject_class->finalize = gtk_switch_finalize;
 
   g_object_class_install_properties (gobject_class, LAST_PROP, switch_props);
+
+  widget_class->save_state = gtk_switch_save_state;
+  widget_class->restore_state = gtk_switch_restore_state;
 
   klass->activate = gtk_switch_activate;
   klass->state_set = state_set;
