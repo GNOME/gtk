@@ -42,7 +42,6 @@ struct _GdkX11Display
   GdkDisplay parent_instance;
   Display *xdisplay;
   GdkX11Screen *screen;
-  GList *screens;
   GList *toplevels;
   GdkX11DeviceManagerXI2 *device_manager;
 
@@ -174,8 +173,6 @@ struct _GdkX11DisplayClass
                                                                  const XEvent           *event);
 };
 
-GdkX11Screen *  _gdk_x11_display_screen_for_xrootwin            (GdkDisplay             *display,
-                                                                 Window                  xrootwin);
 void            _gdk_x11_display_error_event                    (GdkDisplay             *display,
                                                                  XErrorEvent            *error);
 gsize           gdk_x11_display_get_max_request_size            (GdkDisplay             *display);

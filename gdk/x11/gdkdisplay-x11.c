@@ -1910,7 +1910,6 @@ gdk_x11_display_finalize (GObject *object)
 
   /* Free all GdkX11Screens */
   g_object_unref (display_x11->screen);
-  g_list_free_full (display_x11->screens, g_object_unref);
 
   g_list_store_remove_all (display_x11->monitors);
   g_object_unref (display_x11->monitors);
@@ -1973,52 +1972,6 @@ gdk_x11_lookup_xdisplay (Display *xdisplay)
   g_slist_free (list);
 
   return display;
-}
-
-/*
- * _gdk_x11_display_screen_for_xrootwin:
- * @display: a `GdkDisplay`
- * @xrootwin: window ID for one of the screen’s of the display.
- *
- * Given the root window ID of one of the screen’s of a `GdkDisplay`,
- * finds the screen.
- *
- * Returns: (transfer none): the `GdkX11Screen` corresponding to @xrootwin
- */
-GdkX11Screen *
-_gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,
-				      Window      xrootwin)
-{
-  GdkX11Screen *screen;
-  XWindowAttributes attrs;
-  gboolean result;
-  GdkX11Display *display_x11;
-  GList *l;
-
-  screen = GDK_X11_DISPLAY (display)->screen;
-
-  if (GDK_SCREEN_XROOTWIN (screen) == xrootwin)
-    return screen;
-
-  display_x11 = GDK_X11_DISPLAY (display);
-
-  for (l = display_x11->screens; l; l = l->next)
-    {
-      screen = l->data;
-      if (GDK_SCREEN_XROOTWIN (screen) == xrootwin)
-        return screen;
-    }
-
-  gdk_x11_display_error_trap_push (display);
-  result = XGetWindowAttributes (display_x11->xdisplay, xrootwin, &attrs);
-  if (gdk_x11_display_error_trap_pop (display) || !result)
-    return NULL;
-
-  screen = _gdk_x11_screen_new (display, XScreenNumberOfScreen (attrs.screen));
-
-  display_x11->screens = g_list_prepend (display_x11->screens, screen);
-
-  return screen;
 }
 
 /**
