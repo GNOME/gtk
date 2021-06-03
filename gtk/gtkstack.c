@@ -794,6 +794,29 @@ gtk_stack_set_property (GObject     *object,
     }
 }
 
+static gboolean
+gtk_stack_save_state (GtkWidget    *widget,
+                      GVariantDict *dict,
+                      gboolean     *save_children)
+{
+  g_variant_dict_insert (dict, "visible-page", "s", gtk_stack_get_visible_child_name (GTK_STACK (widget)));
+  *save_children = TRUE;
+
+  return TRUE;
+}
+
+static gboolean
+gtk_stack_restore_state (GtkWidget *widget,
+                         GVariant  *data)
+{
+  const char *name;
+
+  if (g_variant_lookup (data, "visible-page", "&s", &name))
+    gtk_stack_set_visible_child_name (GTK_STACK (widget), name);
+
+  return TRUE;
+}
+
 static void
 gtk_stack_class_init (GtkStackClass *klass)
 {
@@ -810,6 +833,8 @@ gtk_stack_class_init (GtkStackClass *klass)
   widget_class->measure = gtk_stack_measure;
   widget_class->compute_expand = gtk_stack_compute_expand;
   widget_class->get_request_mode = gtk_stack_get_request_mode;
+  widget_class->save_state = gtk_stack_save_state;
+  widget_class->restore_state = gtk_stack_restore_state;
 
   /**
    * GtkStack:hhomogeneous: (attributes org.gtk.Property.get=gtk_stack_get_hhomogeneous org.gtk.Property.set=gtk_stack_set_hhomogeneous)
