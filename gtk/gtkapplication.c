@@ -1325,8 +1325,8 @@ get_state_file (GtkApplication *application)
   const char *dir;
 
   app_id = g_application_get_application_id (G_APPLICATION (application));
-  dir = g_get_user_data_dir ();
-  return g_strconcat (dir, "/", app_id, ".state", NULL);
+  dir = g_get_user_cache_dir ();
+  return g_strconcat (dir, G_DIR_SEPARATOR_S, app_id, ".state", NULL);
 }
 
 /**
