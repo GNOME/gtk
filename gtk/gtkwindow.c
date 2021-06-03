@@ -6150,7 +6150,7 @@ gtk_window_set_debugging (GdkDisplay *display,
  * gtk_window_set_interactive_debugging:
  * @enable: %TRUE to enable interactive debugging
  *
- * Opens or closes the [interactive debugger](#interactive-debugging).
+ * Opens or closes the [interactive debugger](running.html#interactive-debugging).
  *
  * The debugger offers access to the widget hierarchy of the application
  * and to useful debugging tools.
