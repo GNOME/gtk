@@ -1402,6 +1402,12 @@ gdk_x11_display_open (const char *display_name)
   /* initialize the display's screens */ 
   display_x11->screen = _gdk_x11_screen_new (display, DefaultScreen (display_x11->xdisplay));
 
+  /* If GL is available we want to pick better default/rgba visuals,
+   * as we care about GLX details such as alpha/depth/stencil depth,
+   * stereo and double buffering
+   */
+  gdk_x11_screen_update_visuals_for_glx (display_x11->screen);
+
   if (display_x11->screen->rgba_visual)
     {
       Visual *xvisual = GDK_X11_VISUAL (display_x11->screen->rgba_visual)->xvisual;
