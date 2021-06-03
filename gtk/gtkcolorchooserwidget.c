@@ -263,6 +263,43 @@ update_from_editor (GtkColorEditor        *editor,
     g_object_notify (G_OBJECT (widget), "rgba");
 }
 
+static gboolean
+gtk_color_chooser_save_state (GtkWidget    *widget,
+                              GVariantDict *dict,
+                              gboolean     *save_children)
+{
+  GtkColorChooserWidget *cc = GTK_COLOR_CHOOSER_WIDGET (widget);
+  GdkRGBA c;
+
+  gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (cc), &c);
+
+  g_variant_dict_insert (dict, "show-editor", "b", gtk_widget_get_visible (cc->editor));
+  g_variant_dict_insert (dict, "rgba", "(dddd)", c.red, c.green, c.blue, c.alpha);
+  *save_children = TRUE;
+
+  return TRUE;
+}
+
+static gboolean
+gtk_color_chooser_restore_state (GtkWidget *widget,
+                                 GVariant  *data)
+{
+  GtkColorChooserWidget *cc = GTK_COLOR_CHOOSER_WIDGET (widget);
+  gboolean show_editor;
+  double r, g, b, a;
+
+  if (g_variant_lookup (data, "show-editor", "b", &show_editor))
+    gtk_color_chooser_widget_set_show_editor (cc, show_editor);
+
+  if (g_variant_lookup (data, "rgba", "(dddd)", &r, &g, &b, &a))
+    {
+      GdkRGBA c = { r, g, b, a };
+      gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (cc), &c);
+    }
+
+  return TRUE;
+}
+
 /* UI construction {{{1 */
 
 static void
@@ -706,6 +743,8 @@ gtk_color_chooser_widget_class_init (GtkColorChooserWidgetClass *class)
 
   widget_class->grab_focus = gtk_widget_grab_focus_child;
   widget_class->focus = gtk_widget_focus_child;
+  widget_class->save_state = gtk_color_chooser_save_state;
+  widget_class->restore_state = gtk_color_chooser_restore_state;
 
   g_object_class_override_property (object_class, PROP_RGBA, "rgba");
   g_object_class_override_property (object_class, PROP_USE_ALPHA, "use-alpha");
