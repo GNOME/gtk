@@ -65,7 +65,6 @@ _gdk_x11_screen_init_visuals (GdkX11Screen *x11_screen)
 
   XVisualInfo *visual_list;
   XVisualInfo visual_template;
-  Visual *default_xvisual;
   GdkX11Visual **visuals;
   int nxvisuals;
   int nvisuals;
@@ -78,8 +77,6 @@ _gdk_x11_screen_init_visuals (GdkX11Screen *x11_screen)
   visuals = g_new (GdkX11Visual *, nxvisuals);
   for (i = 0; i < nxvisuals; i++)
     visuals[i] = g_object_new (GDK_TYPE_X11_VISUAL, NULL);
-
-  default_xvisual = DefaultVisual (x11_screen->xdisplay, x11_screen->screen_num);
 
   nvisuals = 0;
   for (i = 0; i < nxvisuals; i++)
@@ -143,9 +140,6 @@ _gdk_x11_screen_init_visuals (GdkX11Screen *x11_screen)
 
   for (i = 0; i < nvisuals; i++)
     {
-      if (default_xvisual->visualid == GDK_X11_VISUAL (visuals[i])->xvisual->visualid)
-        x11_screen->system_visual = visuals[i];
-
       /* For now, we only support 8888 ARGB for the "rgba visual".
        * Additional formats (like ABGR) could be added later if they
        * turn up.

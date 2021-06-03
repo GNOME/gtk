@@ -947,38 +947,36 @@ pick_better_visual_for_gl (GdkX11Screen *x11_screen,
   return compatible;
 }
 
-static gboolean
-get_cached_gl_visuals (GdkDisplay *display, int *system, int *rgba)
+#define STRINGIFY_WITHOUT_BRACKETS(x) G_STRINGIFY x
+#define CACHED_VISUAL_ATOM_NAME "GDK" STRINGIFY_WITHOUT_BRACKETS(GDK_MAJOR_VERSION) "_GLX_VISUAL"
+
+static VisualID
+get_cached_gl_visual (GdkDisplay *display)
 {
-  gboolean found;
   Atom type_return;
   int format_return;
   gulong nitems_return;
   gulong bytes_after_return;
   guchar *data = NULL;
   Display *dpy;
+  VisualID result;
 
   dpy = gdk_x11_display_get_xdisplay (display);
-
-  found = FALSE;
+  result = 0;
 
   gdk_x11_display_error_trap_push (display);
   if (XGetWindowProperty (dpy, DefaultRootWindow (dpy),
-                          gdk_x11_get_xatom_by_name_for_display (display, "GDK_VISUALS"),
-                          0, 2, False, XA_INTEGER, &type_return,
+                          gdk_x11_get_xatom_by_name_for_display (display, CACHED_VISUAL_ATOM_NAME),
+                          0, 1, False, XA_VISUALID, &type_return,
                           &format_return, &nitems_return,
                           &bytes_after_return, &data) == Success)
     {
-      if (type_return == XA_INTEGER &&
+      if (type_return == XA_VISUALID &&
           format_return == 32 &&
-          nitems_return == 2 &&
+          nitems_return == 1 &&
           data != NULL)
         {
-          long *visuals = (long *) data;
-
-          *system = (int)visuals[0];
-          *rgba = (int)visuals[1];
-          found = TRUE;
+          result = *(unsigned long *) data;
         }
     }
   gdk_x11_display_error_trap_pop_ignored (display);
@@ -986,25 +984,24 @@ get_cached_gl_visuals (GdkDisplay *display, int *system, int *rgba)
   if (data)
     XFree (data);
 
-  return found;
+  return result;
 }
 
 static void
-save_cached_gl_visuals (GdkDisplay *display, int system, int rgba)
+save_cached_gl_visual (GdkDisplay *display, VisualID visual)
 {
-  long visualdata[2];
+  unsigned long visualdata[1];
   Display *dpy;
 
   dpy = gdk_x11_display_get_xdisplay (display);
 
-  visualdata[0] = system;
-  visualdata[1] = rgba;
+  visualdata[0] = visual;
 
   gdk_x11_display_error_trap_push (display);
   XChangeProperty (dpy, DefaultRootWindow (dpy),
-                   gdk_x11_get_xatom_by_name_for_display (display, "GDK_VISUALS"),
-                   XA_INTEGER, 32, PropModeReplace,
-                   (unsigned char *)visualdata, 2);
+                   gdk_x11_get_xatom_by_name_for_display (display, CACHED_VISUAL_ATOM_NAME),
+                   XA_VISUALID, 32, PropModeReplace,
+                   (unsigned char *) visualdata, 2);
   gdk_x11_display_error_trap_pop_ignored (display);
 }
 
@@ -1016,7 +1013,7 @@ gdk_x11_screen_update_visuals_for_glx (GdkX11Screen *x11_screen)
   Display *dpy;
   struct glvisualinfo *gl_info;
   int i;
-  int system_visual_id, rgba_visual_id;
+  int rgba_visual_id;
 
   display = x11_screen->display;
   display_x11 = GDK_X11_DISPLAY (display);
@@ -1027,20 +1024,20 @@ gdk_x11_screen_update_visuals_for_glx (GdkX11Screen *x11_screen)
 
   /* We save the default visuals as a property on the root window to avoid
      having to initialize GL each time, as it may not be used later. */
-  if (get_cached_gl_visuals (display, &system_visual_id, &rgba_visual_id))
+  rgba_visual_id = get_cached_gl_visual (display);
+  if (rgba_visual_id)
     {
       for (i = 0; i < x11_screen->nvisuals; i++)
         {
           GdkX11Visual *visual = x11_screen->visuals[i];
           int visual_id = gdk_x11_visual_get_xvisual (visual)->visualid;
 
-          if (visual_id == system_visual_id)
-            x11_screen->system_visual = visual;
           if (visual_id == rgba_visual_id)
-            x11_screen->rgba_visual = visual;
+            {
+              x11_screen->rgba_visual = visual;
+              return;
+            }
         }
-
-      return;
     }
 
   if (!gdk_x11_screen_init_glx (x11_screen))
@@ -1079,17 +1076,13 @@ gdk_x11_screen_update_visuals_for_glx (GdkX11Screen *x11_screen)
       XFree (visual_list);
     }
 
-  x11_screen->system_visual = pick_better_visual_for_gl (x11_screen, gl_info, x11_screen->system_visual);
   if (x11_screen->rgba_visual)
-    x11_screen->rgba_visual = pick_better_visual_for_gl (x11_screen, gl_info, x11_screen->rgba_visual);
+    {
+      x11_screen->rgba_visual = pick_better_visual_for_gl (x11_screen, gl_info, x11_screen->rgba_visual);
+      save_cached_gl_visual (display, gdk_x11_visual_get_xvisual (x11_screen->rgba_visual)->visualid);
+    }
 
   g_free (gl_info);
-
-  save_cached_gl_visuals (display,
-                          gdk_x11_visual_get_xvisual (x11_screen->system_visual)->visualid,
-                          x11_screen->rgba_visual
-                            ? gdk_x11_visual_get_xvisual (x11_screen->rgba_visual)->visualid
-                            : 0);
 }
 
 GdkX11GLContext *

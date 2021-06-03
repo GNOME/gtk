@@ -74,7 +74,6 @@ struct _GdkX11Screen
   /* Visual Part */
   int nvisuals;
   GdkX11Visual **visuals;
-  GdkX11Visual *system_visual;
   int available_depths[7];
   GdkVisualType available_types[6];
   gint16 navailable_depths;
