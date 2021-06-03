@@ -64,8 +64,11 @@ struct _GtkApplicationClass
   void (*window_removed) (GtkApplication *application,
                           GtkWindow      *window);
 
+  void (*create_window)  (GtkApplication *application,
+                          const char     *save_id);
+
   /*< private >*/
-  gpointer padding[8];
+  gpointer padding[7];
 };
 
 GDK_AVAILABLE_IN_ALL
@@ -134,6 +137,14 @@ void             gtk_application_set_accels_for_action           (GtkApplication
 GDK_AVAILABLE_IN_ALL
 GMenu *          gtk_application_get_menu_by_id                  (GtkApplication       *application,
                                                                   const char           *id);
+
+GDK_AVAILABLE_IN_4_4
+void             gtk_application_save                            (GtkApplication       *application);
+GDK_AVAILABLE_IN_4_4
+void             gtk_application_forget                          (GtkApplication       *application);
+GDK_AVAILABLE_IN_4_4
+gboolean         gtk_application_restore                         (GtkApplication       *application);
+
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkApplication, g_object_unref)
 
