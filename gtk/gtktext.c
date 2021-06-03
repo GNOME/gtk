@@ -595,6 +595,12 @@ static void gtk_text_history_select_cb               (gpointer    funcs_data,
                                                       int         selection_insert,
                                                       int         selection_bound);
 
+static gboolean gtk_text_save_state                  (GtkWidget    *widget,
+                                                      GVariantDict *dict,
+                                                      gboolean     *save_children);
+static gboolean gtk_text_restore_state               (GtkWidget    *widget,
+                                                      GVariant     *data);
+
 /* GtkTextContent implementation
  */
 #define GTK_TYPE_TEXT_CONTENT            (gtk_text_content_get_type ())
@@ -734,6 +740,8 @@ gtk_text_class_init (GtkTextClass *class)
   widget_class->direction_changed = gtk_text_direction_changed;
   widget_class->state_flags_changed = gtk_text_state_flags_changed;
   widget_class->mnemonic_activate = gtk_text_mnemonic_activate;
+  widget_class->save_state = gtk_text_save_state;
+  widget_class->restore_state = gtk_text_restore_state;
 
   class->move_cursor = gtk_text_move_cursor;
   class->insert_at_cursor = gtk_text_insert_at_cursor;
@@ -1870,6 +1878,7 @@ gtk_text_init (GtkText *self)
 
   gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
+  gtk_widget_set_save_id (GTK_WIDGET (self), "text");
 
   priv->editable = TRUE;
   priv->visible = TRUE;
@@ -7180,4 +7189,27 @@ gtk_text_history_select_cb (gpointer funcs_data,
   gtk_editable_select_region (GTK_EDITABLE (text),
                               selection_insert,
                               selection_bound);
+}
+
+static gboolean
+gtk_text_save_state (GtkWidget    *widget,
+                     GVariantDict *dict,
+                     gboolean     *save_children)
+{
+  g_variant_dict_insert (dict, "text", "s", gtk_editable_get_text (GTK_EDITABLE (widget)));
+  *save_children = FALSE;
+
+  return TRUE;
+}
+
+static gboolean
+gtk_text_restore_state (GtkWidget    *widget,
+                        GVariant     *data)
+{
+  const char *text;
+
+  if (g_variant_lookup (data, "text", "&s", &text))
+    gtk_editable_set_text (GTK_EDITABLE (widget), text);
+
+  return TRUE;
 }
