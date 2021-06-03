@@ -65,7 +65,6 @@ _gdk_x11_screen_init_visuals (GdkX11Screen *x11_screen)
 
   XVisualInfo *visual_list;
   XVisualInfo visual_template;
-  GdkX11Visual *temp_visual;
   Visual *default_xvisual;
   GdkX11Visual **visuals;
   int nxvisuals;
@@ -141,40 +140,6 @@ _gdk_x11_screen_init_visuals (GdkX11Screen *x11_screen)
 
   if (visual_list)
     XFree (visual_list);
-
-  for (i = 0; i < nvisuals; i++)
-    {
-      for (j = i+1; j < nvisuals; j++)
-	{
-	  if (visuals[j]->depth >= visuals[i]->depth)
-	    {
-	      if ((visuals[j]->depth == 8) && (visuals[i]->depth == 8))
-		{
-		  if (visuals[j]->type == GDK_VISUAL_PSEUDO_COLOR)
-		    {
-		      temp_visual = visuals[j];
-		      visuals[j] = visuals[i];
-		      visuals[i] = temp_visual;
-		    }
-		  else if ((visuals[i]->type != GDK_VISUAL_PSEUDO_COLOR) &&
-			   visuals[j]->type > visuals[i]->type)
-		    {
-		      temp_visual = visuals[j];
-		      visuals[j] = visuals[i];
-		      visuals[i] = temp_visual;
-		    }
-		}
-	      else if ((visuals[j]->depth > visuals[i]->depth) ||
-		       ((visuals[j]->depth == visuals[i]->depth) &&
-			(visuals[j]->type > visuals[i]->type)))
-		{
-		  temp_visual = visuals[j];
-		  visuals[j] = visuals[i];
-		  visuals[i] = temp_visual;
-		}
-	    }
-	}
-    }
 
   for (i = 0; i < nvisuals; i++)
     {
