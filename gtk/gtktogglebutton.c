@@ -249,6 +249,29 @@ get_group_first (GtkToggleButton *self)
   return group_first;
 }
 
+static gboolean
+gtk_toggle_button_save_state (GtkWidget    *self,
+                              GVariantDict *dict,
+                              gboolean     *save_children)
+{
+  g_variant_dict_insert (dict, "active", "b", gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self)));
+  *save_children = FALSE;
+
+  return TRUE;
+}
+
+static gboolean
+gtk_toggle_button_restore_state (GtkWidget *self,
+                                 GVariant  *data)
+{
+  gboolean value;
+
+  if (g_variant_lookup (data, "active", "b", &value))
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self), value);
+
+  return TRUE;
+}
+
 static void
 gtk_toggle_button_class_init (GtkToggleButtonClass *class)
 {
@@ -261,6 +284,8 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
   gobject_class->get_property = gtk_toggle_button_get_property;
 
   widget_class->mnemonic_activate = gtk_toggle_button_mnemonic_activate;
+  widget_class->save_state = gtk_toggle_button_save_state;
+  widget_class->restore_state = gtk_toggle_button_restore_state;
 
   button_class->clicked = gtk_toggle_button_clicked;
 
