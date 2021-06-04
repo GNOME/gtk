@@ -125,6 +125,37 @@ test_fnmatch (gconstpointer data)
   g_assert_true (_gtk_fnmatch (test->pat, test->str, test->no_leading_period, test->ci) == test->result);
 }
 
+typedef struct {
+  const char *glob;
+  const char *ci;
+} CITest;
+
+static CITest citests[] = {
+  { "*.txt", "*.[tT][xX][tT]" },
+  { "*.TXT", "*.[tT][xX][tT]" },
+  { "*?[]-abc]t", "*?[]-abc][tT]" },
+#ifdef DO_ESCAPE
+  /* Tests of escaping */
+  { "\\\\", "\\\\" },
+  { "\\??", "\\??" },
+  { "\\**", "\\**" },
+  { "\\[", "\\[" },
+  { "\\[a-", "\\[[aA]-" },
+  { "\\[]", "\\[]" },
+#endif
+};
+
+static void
+test_ci_glob (gconstpointer data)
+{
+  const CITest *test = data;
+  char *ci;
+
+  ci = _gtk_make_ci_glob_pattern (test->glob);
+  g_assert_cmpstr (ci, ==, test->ci);
+  g_free (ci);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -134,6 +165,12 @@ main (int argc, char *argv[])
     {
       char *path = g_strdup_printf ("/fnmatch/test%d", i);
       g_test_add_data_func (path, &tests[i], test_fnmatch);
+    }
+
+  for (int i = 0; i < G_N_ELEMENTS (citests); i++)
+    {
+      char *path = g_strdup_printf ("/ci-glob/test%d", i);
+      g_test_add_data_func (path, &citests[i], test_ci_glob);
     }
 
   return g_test_run ();
