@@ -29,6 +29,7 @@
 #include "gtkintl.h"
 #include "gtksettings.h"
 #include "gtkshortcutswindowprivate.h"
+#include "gtktooltipprivate.h"
 
 #if defined(HAVE_GIO_UNIX) && !defined(__APPLE__)
 #include <gio/gdesktopappinfo.h>
@@ -487,6 +488,8 @@ gtk_application_window_real_size_allocate (GtkWidget *widget,
       child = gtk_window_get_child (GTK_WINDOW (window));
       if (child != NULL && gtk_widget_get_visible (child))
         gtk_widget_size_allocate (child, &child_allocation, baseline);
+
+      gtk_tooltip_maybe_allocate (GTK_NATIVE (widget));
     }
   else
     GTK_WIDGET_CLASS (gtk_application_window_parent_class)->size_allocate (widget,
