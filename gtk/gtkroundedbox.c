@@ -23,7 +23,6 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcsstypesprivate.h"
 
-/* XXX: For g_memdup2() */
 #include "gtkprivate.h"
 
 #include <string.h>

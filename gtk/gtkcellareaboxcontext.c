@@ -25,7 +25,6 @@
 #include "gtkcellareaboxcontextprivate.h"
 #include "gtkorientable.h"
 
-/* XXX: For g_memdup2() */
 #include "gtkprivate.h"
 
 /* GObjectClass */

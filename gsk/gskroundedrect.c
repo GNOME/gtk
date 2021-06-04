@@ -310,7 +310,17 @@ gsk_rounded_rect_scale_affine (GskRoundedRect       *dest,
     }
 }
 
-/* XXX: Find a better name */
+/*<private>
+ * gsk_rounded_rect_is_circular:
+ * @self: the `GskRoundedRect` to check
+ *
+ * Checks if all corners of @self are quarter-circles (as
+ * opposed to quarter-ellipses).
+ *
+ * Note that different corners can still have different radii.
+ *
+ * Returns: %TRUE if the rectangle is circular.
+ */
 gboolean
 gsk_rounded_rect_is_circular (const GskRoundedRect *self)
 {

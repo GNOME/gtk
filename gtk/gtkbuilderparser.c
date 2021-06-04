@@ -28,7 +28,6 @@
 #include "gtkversion.h"
 #include "gdkprofilerprivate.h"
 
-/* XXX: For g_memdup2() */
 #include "gtkprivate.h"
 
 #include <gio/gio.h>

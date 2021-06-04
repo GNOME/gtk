@@ -24,7 +24,6 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkstylepropertyprivate.h"
 
-/* XXX: For g_memdup2() */
 #include "gtkprivate.h"
 
 #include <stdlib.h>
@@ -97,7 +96,8 @@ gtk_css_keyframes_add_keyframe (GtkCssKeyframes *keyframes,
               KEYFRAMES_VALUE (keyframes, k, p) = NULL;
 
               /* XXX: GC properties that are now unset
-               * in all keyframes? */
+               * in all keyframes?
+               */
             }
           return k;
         }

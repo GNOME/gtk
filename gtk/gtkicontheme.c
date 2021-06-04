@@ -2269,7 +2269,7 @@ real_choose_icon (GtkIconTheme      *self,
     {
       GTK_NOTE(ICONFALLBACK, {
         char *s = g_strjoinv (", ", (char **)icon_names);
-        g_message ("No icon found for: %s", s);
+        g_message ("No icon found in %s (or fallbacks) for: %s", self->current_theme, s);
         g_free (s);
       });
       icon = icon_paintable_new ("image-missing", size, scale);

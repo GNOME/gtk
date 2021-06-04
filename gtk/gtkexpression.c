@@ -22,7 +22,6 @@
 
 #include "gtkexpression.h"
 
-/* XXX: For g_memdup2() */
 #include "gtkprivate.h"
 
 #include <gobject/gvaluecollector.h>
