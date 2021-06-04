@@ -36,14 +36,14 @@
 #include <glib.h>
 
 static gunichar
-get_char (const char **str)
+get_char (const char **str,
+          gboolean     casefold)
 {
   gunichar c = g_utf8_get_char (*str);
   *str = g_utf8_next_char (*str);
 
-#ifdef G_PLATFORM_WIN32
-  c = g_unichar_tolower (c);
-#endif
+  if (casefold)
+    c = g_unichar_tolower (c);
 
   return c;
 }
@@ -56,13 +56,14 @@ get_char (const char **str)
 
 static gunichar
 get_unescaped_char (const char **str,
-		    gboolean    *was_escaped)
+		    gboolean    *was_escaped,
+                    gboolean     casefold)
 {
-  gunichar c = get_char (str);
+  gunichar c = get_char (str, casefold);
 
   *was_escaped = DO_ESCAPE && c == '\\';
   if (*was_escaped)
-    c = get_char (str);
+    c = get_char (str, casefold);
   
   return c;
 }
@@ -74,7 +75,8 @@ static gboolean
 gtk_fnmatch_intern (const char *pattern,
 		    const char *string,
 		    gboolean    component_start,
-		    gboolean    no_leading_period)
+		    gboolean    no_leading_period,
+                    gboolean    casefold)
 {
   const char *p = pattern, *n = string;
   
@@ -82,8 +84,8 @@ gtk_fnmatch_intern (const char *pattern,
     {
       const char *last_n = n;
       
-      gunichar c = get_char (&p);
-      gunichar nc = get_char (&n);
+      gunichar c = get_char (&p, casefold);
+      gunichar nc = get_char (&n, casefold);
       
       switch (c)
 	{
@@ -97,7 +99,7 @@ gtk_fnmatch_intern (const char *pattern,
 	  break;
 	case '\\':
 	  if (DO_ESCAPE)
-	    c = get_char (&p);
+	    c = get_char (&p, casefold);
 	  if (nc != c)
 	    return FALSE;
 	  break;
@@ -108,9 +110,9 @@ gtk_fnmatch_intern (const char *pattern,
 	  {
 	    const char *last_p;
 
-	    for (last_p = p, c = get_char (&p);
+	    for (last_p = p, c = get_char (&p, casefold);
 		 c == '?' || c == '*';
-		 last_p = p, c = get_char (&p))
+		 last_p = p, c = get_char (&p, casefold))
 	      {
 		if (c == '?')
 		  {
@@ -120,7 +122,7 @@ gtk_fnmatch_intern (const char *pattern,
 		      return FALSE;
 		    else
 		      {
-			last_n = n; nc = get_char (&n);
+			last_n = n; nc = get_char (&n, casefold);
 		      }
 		  }
 	      }
@@ -138,17 +140,17 @@ gtk_fnmatch_intern (const char *pattern,
 	      }
 
 	    if (DO_ESCAPE && c == '\\')
-	      c = get_char (&p);
+	      c = get_char (&p, casefold);
 
 	    for (p = last_p; nc != '\0';)
 	      {
 		if ((c == '[' || nc == c) &&
-		    gtk_fnmatch_intern (p, last_n, component_start, no_leading_period))
+		    gtk_fnmatch_intern (p, last_n, component_start, no_leading_period, casefold))
 		  return TRUE;
 		
 		component_start = (nc == G_DIR_SEPARATOR);
 		last_n = n;
-		nc = get_char (&n);
+		nc = get_char (&n, casefold);
 	      }
 		  
 	    return FALSE;
@@ -170,7 +172,7 @@ gtk_fnmatch_intern (const char *pattern,
 	    if (not)
 	      ++p;
 
-	    c = get_unescaped_char (&p, &was_escaped);
+	    c = get_unescaped_char (&p, &was_escaped, casefold);
 	    for (;;)
 	      {
 		register gunichar cstart = c, cend = c;
@@ -178,15 +180,15 @@ gtk_fnmatch_intern (const char *pattern,
 		  /* [ (unterminated) loses.  */
 		  return FALSE;
 
-		c = get_unescaped_char (&p, &was_escaped);
+		c = get_unescaped_char (&p, &was_escaped, casefold);
 		
 		if (!was_escaped && c == '-' && *p != ']')
 		  {
-		    cend = get_unescaped_char (&p, &was_escaped);
+		    cend = get_unescaped_char (&p, &was_escaped, casefold);
 		    if (cend == '\0')
 		      return FALSE;
 
-		    c = get_char (&p);
+		    c = get_char (&p, casefold);
 		  }
 
 		if (nc >= cstart && nc <= cend)
@@ -208,7 +210,7 @@ gtk_fnmatch_intern (const char *pattern,
 		  /* [... (unterminated) loses.  */
 		  return FALSE;
 
-		c = get_unescaped_char (&p, &was_escaped);
+		c = get_unescaped_char (&p, &was_escaped, casefold);
 	      }
 	    if (not)
 	      return FALSE;
@@ -246,113 +248,8 @@ gtk_fnmatch_intern (const char *pattern,
 gboolean
 _gtk_fnmatch (const char *pattern,
 	      const char *string,
-	      gboolean no_leading_period)
+	      gboolean no_leading_period,
+              gboolean casefold)
 {
-  return gtk_fnmatch_intern (pattern, string, TRUE, no_leading_period);
+  return gtk_fnmatch_intern (pattern, string, TRUE, no_leading_period, casefold);
 }
-
-#undef FNMATCH_TEST_CASES
-#ifdef FNMATCH_TEST_CASES
-
-#define TEST(pat, str, no_leading_period, result) \
-  g_assert (_gtk_fnmatch ((pat), (str), (no_leading_period)) == result)
-
-int main (int argc, char **argv)
-{
-  TEST ("[a-]", "-", TRUE, TRUE);
-  
-  TEST ("a", "a", TRUE, TRUE);
-  TEST ("a", "b", TRUE, FALSE);
-
-  /* Test what ? matches */
-  TEST ("?", "a", TRUE, TRUE);
-  TEST ("?", ".", TRUE, FALSE);
-  TEST ("a?", "a.", TRUE, TRUE);
-  TEST ("a/?", "a/b", TRUE, TRUE);
-  TEST ("a/?", "a/.", TRUE, FALSE);
-  TEST ("?", "/", TRUE, FALSE);
-
-  /* Test what * matches */
-  TEST ("*", "a", TRUE, TRUE);
-  TEST ("*", ".", TRUE, FALSE);
-  TEST ("a*", "a.", TRUE, TRUE);
-  TEST ("a/*", "a/b", TRUE, TRUE);
-  TEST ("a/*", "a/.", TRUE, FALSE);
-  TEST ("*", "/", TRUE, FALSE);
-
-  /* Range tests */
-  TEST ("[ab]", "a", TRUE, TRUE);
-  TEST ("[ab]", "c", TRUE, FALSE);
-  TEST ("[^ab]", "a", TRUE, FALSE);
-  TEST ("[!ab]", "a", TRUE, FALSE);
-  TEST ("[^ab]", "c", TRUE, TRUE);
-  TEST ("[!ab]", "c", TRUE, TRUE);
-  TEST ("[a-c]", "b", TRUE, TRUE);
-  TEST ("[a-c]", "d", TRUE, FALSE);
-  TEST ("[a-]", "-", TRUE, TRUE);
-  TEST ("[]]", "]", TRUE, TRUE);
-  TEST ("[^]]", "a", TRUE, TRUE);
-  TEST ("[!]]", "a", TRUE, TRUE);
-
-  /* Various unclosed ranges */
-  TEST ("[ab", "a", TRUE, FALSE);
-  TEST ("[a-", "a", TRUE, FALSE);
-  TEST ("[ab", "c", TRUE, FALSE);
-  TEST ("[a-", "c", TRUE, FALSE);
-  TEST ("[^]", "a", TRUE, FALSE);
-
-  /* Ranges and special no-wildcard matches */
-  TEST ("[.]", ".", TRUE, FALSE);
-  TEST ("a[.]", "a.", TRUE, TRUE);
-  TEST ("a/[.]", "a/.", TRUE, FALSE);
-  TEST ("[/]", "/", TRUE, FALSE);
-  TEST ("[^/]", "a", TRUE, TRUE);
-  
-  /* Basic tests of * (and combinations of * and ?) */
-  TEST ("a*b", "ab", TRUE, TRUE);
-  TEST ("a*b", "axb", TRUE, TRUE);
-  TEST ("a*b", "axxb", TRUE, TRUE);
-  TEST ("a**b", "ab", TRUE, TRUE);
-  TEST ("a**b", "axb", TRUE, TRUE);
-  TEST ("a**b", "axxb", TRUE, TRUE);
-  TEST ("a*?*b", "ab", TRUE, FALSE);
-  TEST ("a*?*b", "axb", TRUE, TRUE);
-  TEST ("a*?*b", "axxb", TRUE, TRUE);
-
-  /* Test of  *[range] */
-  TEST ("a*[cd]", "ac", TRUE, TRUE);
-  TEST ("a*[cd]", "axc", TRUE, TRUE);
-  TEST ("a*[cd]", "axx", TRUE, FALSE);
-
-  TEST ("a/[.]", "a/.", TRUE, FALSE);
-  TEST ("a*[.]", "a/.", TRUE, FALSE);
-
-  /* Test of UTF-8 */
-
-  TEST ("ä", "ä", TRUE, TRUE);      /* TEST ("ä", "ä", TRUE); */
-  TEST ("?", "ä", TRUE, TRUE);       /* TEST ("?", "ä", TRUE); */
-  TEST ("*ö", "äö", TRUE, TRUE);   /* TEST ("*ö", "äö", TRUE); */
-  TEST ("*ö", "ääö", TRUE, TRUE); /* TEST ("*ö", "ääö", TRUE); */
-  TEST ("[ä]", "ä", TRUE, TRUE);    /* TEST ("[ä]", "ä", TRUE); */
-  TEST ("[ä-ö]", "é", TRUE, TRUE); /* TEST ("[ä-ö]", "é", TRUE); */
-  TEST ("[ä-ö]", "a", TRUE, FALSE); /* TEST ("[ä-ö]", "a", FALSE); */
-
-#ifdef DO_ESCAPE
-  /* Tests of escaping */
-  TEST ("\\\\", "\\", TRUE, TRUE);
-  TEST ("\\?", "?", TRUE, TRUE);
-  TEST ("\\?", "a", TRUE, FALSE);
-  TEST ("\\*", "*", TRUE, TRUE);
-  TEST ("\\*", "a", TRUE, FALSE);
-  TEST ("\\[a-b]", "[a-b]", TRUE, TRUE);
-  TEST ("[\\\\]", "\\", TRUE, TRUE);
-  TEST ("[\\^a]", "a", TRUE, TRUE);
-  TEST ("[a\\-c]", "b", TRUE, FALSE);
-  TEST ("[a\\-c]", "-", TRUE, TRUE);
-  TEST ("[a\\]", "a", TRUE, FALSE);
-#endif /* DO_ESCAPE */
-  
-  return 0;
-}
-
-#endif /* FNMATCH_TEST_CASES */
