@@ -1851,6 +1851,10 @@ gtk_combo_box_new (void)
  *
  * Creates a new empty `GtkComboBox` with an entry.
  *
+ * In order to use a combo box with entry, you need to tell it
+ * which column of the model contains the text for the entry
+ * by calling [method@Gtk.ComboBox.set_entry_text_column]. 
+ *
  * Returns: A new `GtkComboBox`
  */
 GtkWidget *
@@ -1884,6 +1888,8 @@ gtk_combo_box_new_with_model (GtkTreeModel *model)
  * @model: A `GtkTreeModel`
  *
  * Creates a new empty `GtkComboBox` with an entry and a model.
+ *
+ * See also [ctor@Gtk.ComboBox.new_with_entry].
  *
  * Returns: A new `GtkComboBox`
  */
@@ -2674,7 +2680,10 @@ gtk_combo_box_get_has_entry (GtkComboBox *combo_box)
  *   the internal entry
  *
  * Sets the model column which @combo_box should use to get strings
- * from to be @text_column.
+ * from to be @text_column. 
+ *
+ * For this column no separate 
+ * [class@Gtk.CellRenderer] is needed.
  *
  * The column @text_column in the model of @combo_box must be of
  * type %G_TYPE_STRING.
