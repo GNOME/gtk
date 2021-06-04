@@ -523,7 +523,7 @@ populate_monitor_devices_from_display_config (GPtrArray *monitors)
 
       refresh = &dispconf_paths[path_index].targetInfo.refreshRate;
       gdk_monitor_set_refresh_rate (mon,
-                                    refresh->Numerator * 1000 / refresh->Denominator);
+                                    refresh->Numerator * (UINT64) 1000 / refresh->Denominator);
     }
 
   g_free (dispconf_paths);
