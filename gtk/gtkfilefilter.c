@@ -804,7 +804,7 @@ gtk_file_filter_match (GtkFilter *filter,
             display_name = g_file_info_get_display_name (info);
             if (display_name)
               {
-                if (_gtk_fnmatch (rule->u.pattern, display_name, FALSE))
+                if (_gtk_fnmatch (rule->u.pattern, display_name, FALSE, FALSE))
                   return TRUE;
               }
           }
