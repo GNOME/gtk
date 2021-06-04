@@ -2002,7 +2002,7 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
       _gtk_icon_view_set_cell_data (icon_view, item);
       gtk_cell_area_activate (icon_view->priv->cell_area, context, 
 			      GTK_WIDGET (icon_view), &item->cell_area, 
-			      0 /* XXX flags */, TRUE);
+			      0, TRUE);
     }
 }
 
@@ -2156,7 +2156,7 @@ gtk_icon_view_button_press (GtkGestureClick *gesture,
 	      _gtk_icon_view_set_cell_data (icon_view, item);
 	      gtk_cell_area_activate (icon_view->priv->cell_area, context,
 				      GTK_WIDGET (icon_view),
-				      &item->cell_area, 0/* XXX flags */, FALSE);
+				      &item->cell_area, 0, FALSE);
 	    }
 	}
       else
@@ -2489,7 +2489,7 @@ gtk_icon_view_real_activate_cursor_item (GtkIconView *icon_view)
   gtk_cell_area_activate (icon_view->priv->cell_area, context,
                           GTK_WIDGET (icon_view),
                           &icon_view->priv->cursor_item->cell_area,
-                          0 /* XXX flags */,
+                          0,
                           FALSE);
 
   path = gtk_tree_path_new_from_indices (icon_view->priv->cursor_item->index, -1);
