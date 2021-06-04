@@ -53,8 +53,8 @@ G_BEGIN_DECLS
  * CAIRO_FORMAT_ARGB32 is represented by different `GdkMemoryFormats`
  * on architectures with different endiannesses.
  *
- * Its naming is modelled after VkFormat (see
- * https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkFormat
+ * Its naming is modelled after
+ * [VkFormat](https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkFormat)
  * for details).
  */
 typedef enum {
