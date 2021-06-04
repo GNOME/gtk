@@ -23,8 +23,8 @@
  *
  * `GtkFileFilter` can be used to restrict the files being shown in a
  * `GtkFileChooser`. Files can be filtered based on their name (with
- * [method@Gtk.FileFilter.add_pattern]) or on their mime type (with
- * [method@Gtk.FileFilter.add_mime_type]).
+ * [method@Gtk.FileFilter.add_pattern] or [method@Gtk.FileFilter.add_suffix])
+ * or on their mime type (with [method@Gtk.FileFilter.add_mime_type]).
  *
  * Filtering by mime types handles aliasing and subclassing of mime
  * types; e.g. a filter for text/plain also matches a file with mime
@@ -40,11 +40,13 @@
  * # GtkFileFilter as GtkBuildable
  *
  * The `GtkFileFilter` implementation of the `GtkBuildable` interface
- * supports adding rules using the <mime-types> and <patterns>
- * elements and listing the rules within. Specifying a <mime-type>
- * or <pattern> has the same effect as as calling
+ * supports adding rules using the `<mime-types>` and `<patterns>` and
+ * `<suffixes>` elements and listing the rules within. Specifying a
+ * `<mime-type>` or `<pattern>` or `<suffix>` has the same effect as
+ * as calling
  * [method@Gtk.FileFilter.add_mime_type] or
- * [method@Gtk.FileFilter.add_pattern].
+ * [method@Gtk.FileFilter.add_pattern] or
+ * [method@Gtk.FileFilter.add_suffix].
  *
  * An example of a UI definition fragment specifying `GtkFileFilter`
  * rules:
@@ -57,8 +59,10 @@
  *   </mime-types>
  *   <patterns>
  *     <pattern>*.txt</pattern>
- *     <pattern>*.png</pattern>
  *   </patterns>
+ *   <suffixes>
+ *     <suffix>png</suffix>
+ *   </suffixes>
  * </object>
  * ```
  */
@@ -85,6 +89,7 @@ typedef struct _FilterRule FilterRule;
 typedef enum {
   FILTER_RULE_PATTERN,
   FILTER_RULE_MIME_TYPE,
+  FILTER_RULE_SUFFIX,
   FILTER_RULE_PIXBUF_FORMATS
 } FilterRuleType;
 
@@ -182,6 +187,7 @@ filter_rule_free (FilterRule *rule)
   switch (rule->type)
     {
     case FILTER_RULE_PATTERN:
+    case FILTER_RULE_SUFFIX:
       g_free (rule->u.pattern);
       break;
     case FILTER_RULE_MIME_TYPE:
@@ -245,7 +251,8 @@ gtk_file_filter_class_init (GtkFileFilterClass *class)
 typedef enum
 {
   PARSE_MIME_TYPES,
-  PARSE_PATTERNS
+  PARSE_PATTERNS,
+  PARSE_SUFFIXES
 } ParserType;
 
 typedef struct
@@ -295,6 +302,13 @@ parser_start_element (GtkBuildableParseContext  *context,
 
       data->parsing = TRUE;
     }
+  else if (strcmp (element_name, "suffix") == 0)
+    {
+      if (!_gtk_builder_check_parent (data->builder, context, "suffixes", error))
+        return;
+
+      data->parsing = TRUE;
+    }
   else
     {
       _gtk_builder_error_unhandled_tag (data->builder, context,
@@ -333,6 +347,9 @@ parser_end_element (GtkBuildableParseContext  *context,
           break;
         case PARSE_PATTERNS:
           gtk_file_filter_add_pattern (data->filter, data->string->str);
+          break;
+        case PARSE_SUFFIXES:
+          gtk_file_filter_add_suffix (data->filter, data->string->str);
           break;
         default:
           break;
@@ -382,6 +399,17 @@ gtk_file_filter_buildable_custom_tag_start (GtkBuildable       *buildable,
       *parser = sub_parser;
       *parser_data = data;
     }
+  else if (strcmp (tagname, "suffixes") == 0)
+    {
+      data = g_slice_new0 (SubParserData);
+      data->string = g_string_new ("");
+      data->type = PARSE_SUFFIXES;
+      data->filter = GTK_FILE_FILTER (buildable);
+      data->builder = builder;
+
+      *parser = sub_parser;
+      *parser_data = data;
+    }
 
   return data != NULL;
 }
@@ -422,7 +450,8 @@ gtk_file_filter_buildable_init (GtkBuildableIface *iface)
  * Such a filter doesn’t accept any files, so is not
  * particularly useful until you add rules with
  * [method@Gtk.FileFilter.add_mime_type],
- * [method@Gtk.FileFilter.add_pattern], or
+ * [method@Gtk.FileFilter.add_pattern],
+ * [method@Gtk.FileFilter.add_suffix] or
  * [method@Gtk.FileFilter.add_pixbuf_formats].
  *
  * To create a filter that accepts any file, use:
@@ -543,6 +572,10 @@ gtk_file_filter_add_mime_type (GtkFileFilter *filter,
  * @pattern: a shell style glob
  *
  * Adds a rule allowing a shell style glob to a filter.
+ *
+ * Note that it depends on the platform whether pattern
+ * matching ignores case or not. On Windows, it does, on
+ * other platforms, it doesn't.
  */
 void
 gtk_file_filter_add_pattern (GtkFileFilter *filter,
@@ -556,6 +589,36 @@ gtk_file_filter_add_pattern (GtkFileFilter *filter,
   rule = g_slice_new (FilterRule);
   rule->type = FILTER_RULE_PATTERN;
   rule->u.pattern = g_strdup (pattern);
+
+  file_filter_add_attribute (filter, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME);
+  file_filter_add_rule (filter, rule);
+}
+
+/**
+ * gtk_file_filter_add_suffix:
+ * @filter: a `GtkFileFilter`
+ * @suffix: filename suffix to match
+ *
+ * Adds a suffix match rule to a filter.
+ *
+ * This is similar to adding a match for the pattern
+ * "*.@suffix".
+ *
+ * In contrast to pattern matches, suffix matches
+ * are *always* case-insensitive.
+ */
+void
+gtk_file_filter_add_suffix (GtkFileFilter *filter,
+                            const char    *suffix)
+{
+  FilterRule *rule;
+
+  g_return_if_fail (GTK_IS_FILE_FILTER (filter));
+  g_return_if_fail (suffix != NULL);
+
+  rule = g_slice_new (FilterRule);
+  rule->type = FILTER_RULE_SUFFIX;
+  rule->u.pattern = g_strconcat ("*.", suffix, NULL);
 
   file_filter_add_attribute (filter, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME);
   file_filter_add_rule (filter, rule);
@@ -657,6 +720,7 @@ NSArray * _gtk_file_filter_get_as_pattern_nsstrings (GtkFileFilter *filter)
           break;
 
         case FILTER_RULE_PATTERN:
+        case FILTER_RULE_SUFFIX:
           {
             // patterns will need to be stripped of their leading *.
             GString *pattern = g_string_new (rule->u.pattern);
@@ -725,6 +789,10 @@ _gtk_file_filter_get_as_patterns (GtkFileFilter *filter)
           break;
 
         case FILTER_RULE_PATTERN:
+        case FILTER_RULE_SUFFIX:
+          /* Note: we don't make the suffix pattern explicitly
+           * case-insensitive, since this is only used on Windows
+           */
           g_ptr_array_add (array, g_strdup (rule->u.pattern));
           break;
 
@@ -794,9 +862,14 @@ gtk_file_filter_match (GtkFilter *filter,
   for (tmp_list = file_filter->rules; tmp_list; tmp_list = tmp_list->next)
     {
       FilterRule *rule = tmp_list->data;
+      gboolean ignore_case = FALSE;
 
       switch (rule->type)
         {
+        case FILTER_RULE_SUFFIX:
+          ignore_case = TRUE;
+          G_GNUC_FALLTHROUGH;
+
         case FILTER_RULE_PATTERN:
           {
             const char *display_name;
@@ -804,7 +877,7 @@ gtk_file_filter_match (GtkFilter *filter,
             display_name = g_file_info_get_display_name (info);
             if (display_name)
               {
-                if (_gtk_fnmatch (rule->u.pattern, display_name, FALSE, FALSE))
+                if (_gtk_fnmatch (rule->u.pattern, display_name, FALSE, ignore_case))
                   return TRUE;
               }
           }
@@ -861,6 +934,17 @@ gtk_file_filter_to_gvariant (GtkFileFilter *filter)
         {
         case FILTER_RULE_PATTERN:
           g_variant_builder_add (&builder, "(us)", 0, rule->u.pattern);
+          break;
+
+        case FILTER_RULE_SUFFIX:
+          {
+            /* Tweak the glob, since the filechooser portal has no api
+             * for case-insensitive globs
+             */
+            char *pattern = _gtk_make_ci_glob_pattern (rule->u.pattern);
+            g_variant_builder_add (&builder, "(us)", 0, pattern);
+            g_free (pattern);
+          }
           break;
 
         case FILTER_RULE_MIME_TYPE:
