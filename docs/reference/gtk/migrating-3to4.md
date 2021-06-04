@@ -804,6 +804,11 @@ by a layout manager (if they are layout-related), or handled in some
 other way. One possibility is to use child meta objects, as seen with
 [class@Gtk.AssistantPage], [class@Gtk.StackPage] and the like.
 
+If you used to define child properties with `<packing>` in ui files, you have
+to switch to using `<layout>` for the corresponding layout properties.
+`gtk4-builder-tool` can help with this conversion, with the `--3to4` option
+of the `simplify` command.
+
 The replacements for gtk_container_add() are:
 
 | Widget | Replacement |
