@@ -436,7 +436,10 @@ gtk_cell_layout_set_attributesv (GtkCellLayout   *cell_layout,
  * @cell: a `GtkCellRenderer`
  * @...: a %NULL-terminated list of attributes
  *
- * Sets the attributes in list as the attributes of @cell_layout.
+ * Sets the attributes in the parameter list as the attributes 
+ * of @cell_layout.
+ *
+ * See [method@Gtk.CellLayout.add_attribute] for more details.
  *
  * The attributes should be in attribute/column order, as in
  * gtk_cell_layout_add_attribute(). All existing attributes are
@@ -461,15 +464,16 @@ gtk_cell_layout_set_attributes (GtkCellLayout   *cell_layout,
  * gtk_cell_layout_add_attribute:
  * @cell_layout: a `GtkCellLayout`
  * @cell: a `GtkCellRenderer`
- * @attribute: an attribute on the renderer
+ * @attribute: a property on the renderer
  * @column: the column position on the model to get the attribute from
  *
  * Adds an attribute mapping to the list in @cell_layout.
  *
  * The @column is the column of the model to get a value from, and the
- * @attribute is the parameter on @cell to be set from the value. So for
+ * @attribute is the property on @cell to be set from that value. So for
  * example if column 2 of the model contains strings, you could have the
  * “text” attribute of a `GtkCellRendererText` get its values from column 2.
+ * In this context "attribute" and "property" are used interchangeably.
  */
 void
 gtk_cell_layout_add_attribute (GtkCellLayout   *cell_layout,
