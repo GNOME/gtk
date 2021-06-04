@@ -118,6 +118,7 @@ internal_tests = [
   { 'name': 'rbtree' },
   { 'name': 'timsort' },
   { 'name': 'texthistory' },
+  { 'name': 'fnmatch' },
 ]
 
 # Tests that are expected to fail
