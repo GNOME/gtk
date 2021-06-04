@@ -740,7 +740,7 @@ The abstract base class `GtkBin` for single-child containers has been
 removed. The former subclasses are now derived directly from `GtkWidget`,
 and have a "child" property for their child widget. To add a child, use
 the setter for the "child" property (e.g. [method@Gtk.Frame.set_child]) instead
-of `gtk_container_add()`. Adding a child in a ui file with <child> still works.
+of `gtk_container_add()`. Adding a child in a ui file with `<child>` still works.
 
 The affected classes are:
 
@@ -766,7 +766,7 @@ expand flags) and [vfunc@Gtk.Widget.get_request_mode] (if you want your
 container to support height-for-width).
 
 You may also want to implement the [iface@Gtk.Buildable] interface, to support
-adding children with <child> in ui files.
+adding children with `<child>` in ui files.
 
 ### Adapt to GtkContainer removal
 
@@ -777,7 +777,7 @@ and have class-specific add() and remove() functions.
 The most noticeable change is the use of [method@Gtk.Box.append] or [method@Gtk.Box.prepend]
 instead of `gtk_container_add()` for adding children to `GtkBox`, and the change
 to use container-specific remove functions, such as [method@Gtk.Stack.remove] instead
-of `gtk_container_remove()`. Adding a child in a ui file with <child> still works.
+of `gtk_container_remove()`. Adding a child in a ui file with `<child>` still works.
 
 The affected classes are:
 
@@ -804,8 +804,8 @@ by a layout manager (if they are layout-related), or handled in some
 other way. One possibility is to use child meta objects, as seen with
 [class@Gtk.AssistantPage], [class@Gtk.StackPage] and the like.
 
-If you used to define child properties with <packing> in ui files, you have
-to switch to using <layout> for the corresponding layout properties.
+If you used to define child properties with `<packing>` in ui files, you have
+to switch to using `<layout>` for the corresponding layout properties.
 `gtk4-builder-tool` can help with this conversion, with the `--3to4` option
 of the `simplify` command.
 
