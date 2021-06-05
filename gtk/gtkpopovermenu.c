@@ -63,8 +63,8 @@
  * of a toplevel `<menu>` element, which contains one or more `<item>`
  * elements. Each `<item>` element contains `<attribute>` and `<link>`
  * elements with a mandatory name attribute. `<link>` elements have the
- * same content model as `<menu>`. Instead of `<link name="submenu>` or
- * `<link name="section">`, you can use `<submenu>` or `<section>`
+ * same content model as `<menu>`. Instead of `<link name="submenu">`
+ * or `<link name="section">`, you can use `<submenu>` or `<section>`
  * elements.
  *
  * ```xml
@@ -99,8 +99,8 @@
  * - "action": the prefixed name of the action to trigger
  * - "target": the parameter to use when activating the action
  * - "icon" and "verb-icon": names of icons that may be displayed
- * - "submenu-action": name of an action that may be used to determine
- *      if a submenu can be opened
+ * - "submenu-action": name of an action that may be used to track
+ *      whether a submenu is open
  * - "hidden-when": a string used to determine when the item will be hidden.
  *      Possible values include "action-disabled", "action-missing", "macos-menubar".
  *      This is mainly useful for exported menus, see [method@Gtk.Application.set_menubar].
