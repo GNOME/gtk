@@ -20,7 +20,7 @@
 
 #pragma once
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && !defined (_M_ARM) && !defined (_M_ARM64)
 #include <intrin.h>
 
 static inline guint
