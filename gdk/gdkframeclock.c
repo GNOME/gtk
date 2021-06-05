@@ -481,11 +481,11 @@ _gdk_frame_clock_begin_frame (GdkFrameClock *frame_clock)
  * for the current frame or a recent frame.
  *
  * The `GdkFrameTimings` object may not yet be complete: see
- * [method@Gdk.FrameTimings.get_complete].
+ * [method@Gdk.FrameTimings.get_complete] and
+ * [method@Gdk.FrameClock.get_history_start].
  *
  * Returns: (nullable) (transfer none): the `GdkFrameTimings` object
- *   for the specified frame, or %NULL if it is not available. See
- *   [method@Gdk.FrameClock.get_history_start].
+ *   for the specified frame, or %NULL if it is not available
  */
 GdkFrameTimings *
 gdk_frame_clock_get_timings (GdkFrameClock *frame_clock,

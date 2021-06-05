@@ -721,6 +721,7 @@ maybe_rename_property (Element *element, MyParserData *data)
     { "GtkHeaderBar", "custom-title", GTK_TYPE_HEADER_BAR, PROP_KIND_OBJECT, "title-widget", { NULL, NULL, NULL } },
     { "GtkStack", "homogeneous", GTK_TYPE_STACK, PROP_KIND_OBJECT, "hhomogeneous", { "vhomogeneous", NULL, NULL } },
     { "GtkImage", "pixbuf", GTK_TYPE_IMAGE, PROP_KIND_OBJECT, "file", { NULL, NULL, NULL } },
+    { "GtkWidget", "can-focus", GTK_TYPE_WIDGET, PROP_KIND_OBJECT, "focusable", { NULL, NULL, NULL } },
   };
   int i, k, l;
   PropKind kind;

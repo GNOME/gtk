@@ -604,6 +604,9 @@ from `FALSE` to `TRUE`. In addition, there is a [property@Gtk.Widget:focusable]
 property, which controls whether an individual widget can receive
 the input focus.
 
+The `gtk4-builder-tool` utility, when called with the `--3to4` option of the
+`simplify` command, will replace `:can-focus` by `:focusable`.
+
 The feature to automatically keep the focus widget scrolled into view with
 `gtk_container_set_focus_vadjustment()` has been removed together with
 `GtkContainer`, and is provided by scrollable widgets instead. In the common

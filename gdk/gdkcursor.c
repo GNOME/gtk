@@ -340,7 +340,7 @@ gdk_cursor_new_from_name (const char *name,
  * @texture: the texture providing the pixel data
  * @hotspot_x: the horizontal offset of the “hotspot” of the cursor
  * @hotspot_y: the vertical offset of the “hotspot” of the cursor
- * @fallback: (nullable): %NULL or the `GdkCursor` to fall back to when
+ * @fallback: (nullable): the `GdkCursor` to fall back to when
  *   this one cannot be supported
  *
  * Creates a new cursor from a `GdkTexture`.
