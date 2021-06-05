@@ -48,9 +48,15 @@ const char *    gtk_file_filter_get_name           (GtkFileFilter *filter);
 GDK_AVAILABLE_IN_ALL
 void            gtk_file_filter_add_mime_type      (GtkFileFilter *filter,
                                                     const char    *mime_type);
+
 GDK_AVAILABLE_IN_ALL
 void            gtk_file_filter_add_pattern        (GtkFileFilter *filter,
                                                     const char    *pattern);
+
+GDK_AVAILABLE_IN_4_4
+void            gtk_file_filter_add_suffix         (GtkFileFilter *filter,
+                                                    const char    *suffix);
+
 GDK_AVAILABLE_IN_ALL
 void            gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter);
 

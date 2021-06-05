@@ -5576,8 +5576,8 @@ native_filter_changed (GtkWidget *combo,
     case 1:   /* pattern */
       filter = gtk_file_filter_new ();
       gtk_file_filter_set_name (filter, "Text");
-      gtk_file_filter_add_pattern (filter, "*.doc");
-      gtk_file_filter_add_pattern (filter, "*.txt");
+      gtk_file_filter_add_suffix (filter, "doc");
+      gtk_file_filter_add_suffix (filter, "txt");
       gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (native), filter);
       g_object_unref (filter);
 

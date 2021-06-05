@@ -64,6 +64,9 @@ gboolean      _gtk_fnmatch                (const char *pattern,
                                            gboolean    no_leading_period,
                                            gboolean    casefold);
 
+char *        _gtk_make_ci_glob_pattern   (const char *pattern);
+
+
 char        * _gtk_get_lc_ctype           (void);
 
 void          _gtk_ensure_resources       (void);

@@ -253,3 +253,67 @@ _gtk_fnmatch (const char *pattern,
 {
   return gtk_fnmatch_intern (pattern, string, TRUE, no_leading_period, casefold);
 }
+
+/* Turn a glob pattern into a case-insensitive one, by replacing
+ * alphabetic characters by [xX] ranges.
+ */
+char *
+_gtk_make_ci_glob_pattern (const char *pattern)
+{
+  GString *s;
+  gboolean in_range = FALSE;
+
+  s = g_string_new ("");
+  for (const char *p = pattern; *p; p = g_utf8_next_char (p))
+    {
+      gunichar c = g_utf8_get_char (p);
+      if (in_range)
+        {
+          g_string_append_unichar (s, c);
+          if (c == ']')
+            in_range = FALSE;
+          continue;
+        }
+
+#if DO_ESCAPE
+      if (c == '\\')
+        {
+          g_string_append (s, "\\");
+          p = g_utf8_next_char (p);
+          if (*p == '\0')
+            break;
+
+          c = g_utf8_get_char (p);
+          g_string_append_unichar (s, c);
+          continue;
+        }
+#endif
+
+      if (c == '[')
+        {
+          g_string_append (s, "[");
+          p = g_utf8_next_char (p);
+          if (*p == '\0')
+            break;
+
+          c = g_utf8_get_char (p);
+          g_string_append_unichar (s, c);
+
+          in_range = TRUE;
+          continue;
+        }
+      else if (g_unichar_isalpha (c))
+        {
+          g_string_append (s, "[");
+          g_string_append_unichar (s, g_unichar_tolower (c));
+          g_string_append_unichar (s, g_unichar_toupper (c));
+          g_string_append (s, "]");
+        }
+      else
+        {
+          g_string_append_unichar (s, c);
+        }
+    }
+
+  return g_string_free (s, FALSE);
+}

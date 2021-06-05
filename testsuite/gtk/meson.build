@@ -38,6 +38,7 @@ tests = [
   { 'name': 'defaultvalue' },
   { 'name': 'entry' },
   { 'name': 'expression' },
+  { 'name': 'filefilter' },
   { 'name': 'filter' },
   { 'name': 'filterlistmodel' },
   {
