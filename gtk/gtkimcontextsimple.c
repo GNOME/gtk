@@ -86,6 +86,8 @@ static GSList *global_tables;
 
 static const guint16 gtk_compose_ignore[] = {
   0, /* Yes, XKB will send us key press events with NoSymbol :( */
+  GDK_KEY_Overlay1_Enable,
+  GDK_KEY_Overlay2_Enable,
   GDK_KEY_Shift_L,
   GDK_KEY_Shift_R,
   GDK_KEY_Control_L,
