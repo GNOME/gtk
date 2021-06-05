@@ -384,11 +384,11 @@ gdk_display_is_closed  (GdkDisplay  *display)
  * gdk_display_get_event:
  * @display: a `GdkDisplay`
  *
- * Gets the next `GdkEvent` to be processed for @display, fetching events from the
- * windowing system if necessary.
+ * Gets the next `GdkEvent` to be processed for @display,
+ * fetching events from the windowing system if necessary.
  *
- * Returns: (nullable) (transfer full): the next `GdkEvent` to be processed,
- *   or %NULL if no events are pending
+ * Returns: (nullable) (transfer full): the next `GdkEvent`
+ *   to be processed
  */
 GdkEvent *
 gdk_display_get_event (GdkDisplay *display)
