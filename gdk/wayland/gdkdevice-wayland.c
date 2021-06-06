@@ -1518,6 +1518,7 @@ pointer_handle_leave (void              *data,
   GdkWaylandSeat *seat = data;
   GdkEvent *event;
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
+  GdkDeviceGrabInfo *grab;
 
   if (!surface)
     return;
@@ -1529,8 +1530,11 @@ pointer_handle_leave (void              *data,
     return;
 
   _gdk_wayland_display_update_serial (display_wayland, serial);
+  grab = _gdk_display_get_last_device_grab (seat->display,
+                                            seat->logical_pointer);
 
-  if (seat->pointer_info.button_modifiers != 0)
+  if (seat->pointer_info.button_modifiers != 0 &&
+      grab && grab->implicit)
     {
       gulong display_serial;
 
