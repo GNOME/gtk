@@ -805,10 +805,7 @@ gdk_x11_display_get_egl_version (GdkDisplay *display,
 
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
 
-  if (display_x11->have_glx)
-    return FALSE;
-
-  if (!gdk_x11_screen_init_egl (display_x11->screen))
+  if (!display_x11->have_egl)
     return FALSE;
 
   if (major != NULL)

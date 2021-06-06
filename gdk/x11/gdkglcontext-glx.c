@@ -1019,7 +1019,7 @@ gdk_x11_screen_update_visuals_for_glx (GdkX11Screen *x11_screen)
   display_x11 = GDK_X11_DISPLAY (display);
   dpy = gdk_x11_display_get_xdisplay (display);
 
-  if (display_x11->have_egl)
+  if (!display_x11->have_glx)
     return;
 
   /* We save the default visuals as a property on the root window to avoid
@@ -1039,9 +1039,6 @@ gdk_x11_screen_update_visuals_for_glx (GdkX11Screen *x11_screen)
             }
         }
     }
-
-  if (!gdk_x11_screen_init_glx (x11_screen))
-    return;
 
   gl_info = g_new0 (struct glvisualinfo, x11_screen->nvisuals);
 
@@ -1194,7 +1191,7 @@ gdk_x11_display_get_glx_version (GdkDisplay *display,
 
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
 
-  if (!gdk_x11_screen_init_glx (display_x11->screen))
+  if (!display_x11->have_glx)
     return FALSE;
 
   if (major != NULL)
