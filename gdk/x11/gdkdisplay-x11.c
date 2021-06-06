@@ -1335,6 +1335,25 @@ set_sm_client_id (GdkDisplay  *display,
                      gdk_x11_get_xatom_by_name_for_display (display, "SM_CLIENT_ID"));
 }
 
+static void
+gdk_x11_display_init_gl (GdkX11Display *self)
+{
+  GdkDisplay *display G_GNUC_UNUSED = GDK_DISPLAY (self);
+
+  if (GDK_DISPLAY_DEBUG_CHECK (display, GL_DISABLE))
+    return;
+
+  if (!GDK_DISPLAY_DEBUG_CHECK (display, GL_GLX))
+    {
+      /* We favour EGL */
+      if (gdk_x11_screen_init_egl (self->screen))
+        return;
+    }
+
+  if (gdk_x11_screen_init_glx (self->screen))
+    return;
+}
+
 /**
  * gdk_x11_display_open:
  * @display_name: (nullable): name of the X display.
@@ -1406,6 +1425,7 @@ gdk_x11_display_open (const char *display_name)
    * as we care about GLX details such as alpha/depth/stencil depth,
    * stereo and double buffering
    */
+  gdk_x11_display_init_gl (display_x11);
   gdk_x11_screen_update_visuals_for_glx (display_x11->screen);
 
   if (display_x11->screen->rgba_visual)
