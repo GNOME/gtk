@@ -1161,15 +1161,11 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
   GdkX11Display *display_x11;
 
   Window xparent;
-  Visual *xvisual;
   Display *xdisplay;
 
   XSetWindowAttributes xattributes;
   long xattributes_mask;
   XClassHint *class_hint;
-
-  unsigned int class;
-  int depth;
 
   int abs_x;
   int abs_y;
@@ -1223,11 +1219,7 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
 
   xattributes_mask = 0;
 
-  xvisual = gdk_x11_display_get_window_visual (display_x11);
-
   impl->override_redirect = FALSE;
-
-  class = InputOutput;
 
   xattributes.background_pixmap = None;
   xattributes_mask |= CWBackPixmap;
@@ -1252,8 +1244,6 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
       impl->override_redirect = TRUE;
     }
 
-  depth = gdk_x11_display_get_window_depth (display_x11);
-
   if (surface->width * impl->surface_scale > 32767 ||
       surface->height * impl->surface_scale > 32767)
     {
@@ -1276,7 +1266,10 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
                              (surface->y + abs_y) * impl->surface_scale,
                              MAX (1, surface->width * impl->surface_scale),
                              MAX (1, surface->height * impl->surface_scale),
-                             0, depth, class, xvisual,
+                             0,
+                             gdk_x11_display_get_window_depth (display_x11),
+                             InputOutput,
+                             gdk_x11_display_get_window_visual (display_x11),
                              xattributes_mask, &xattributes);
 
   g_object_ref (surface);
