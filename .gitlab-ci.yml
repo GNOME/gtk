@@ -79,6 +79,8 @@ msys2-mingw64-meson:
     name: "gtk3-${env:CI_JOB_NAME}-${env:CI_COMMIT_REF_NAME}"
     paths:
       - "_build/meson-logs"
+      - "_build/gdk/libgdk-3-0.dll"
+      - "_build/gtk/libgtk-3-0.dll"
 
 msys2-mingw64-autotools:
   when: manual
