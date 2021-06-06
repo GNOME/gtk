@@ -1167,7 +1167,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
    * GtkTreeView::row-activated:
    * @tree_view: the object on which the signal is emitted
    * @path: the `GtkTreePath` for the activated row
-   * @column: the `GtkTreeViewColumn` in which the activation occurred
+   * @column: (nullable): the `GtkTreeViewColumn` in which the activation occurred
    *
    * The "row-activated" signal is emitted when the method
    * gtk_tree_view_row_activated() is called, when the user double
@@ -11283,7 +11283,7 @@ gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
  * gtk_tree_view_row_activated:
  * @tree_view: A `GtkTreeView`
  * @path: The `GtkTreePath` to be activated.
- * @column: The `GtkTreeViewColumn` to be activated.
+ * @column: (nullable): The `GtkTreeViewColumn` to be activated.
  *
  * Activates the cell determined by @path and @column.
  **/
