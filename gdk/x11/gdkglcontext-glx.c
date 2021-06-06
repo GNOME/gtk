@@ -1005,7 +1005,7 @@ save_cached_gl_visual (GdkDisplay *display, VisualID visual)
   gdk_x11_display_error_trap_pop_ignored (display);
 }
 
-void
+static void
 gdk_x11_screen_update_visuals_for_glx (GdkX11Screen *x11_screen)
 {
   GdkDisplay *display;
@@ -1018,9 +1018,6 @@ gdk_x11_screen_update_visuals_for_glx (GdkX11Screen *x11_screen)
   display = x11_screen->display;
   display_x11 = GDK_X11_DISPLAY (display);
   dpy = gdk_x11_display_get_xdisplay (display);
-
-  if (!display_x11->have_glx)
-    return;
 
   /* We save the default visuals as a property on the root window to avoid
      having to initialize GL each time, as it may not be used later. */
@@ -1321,6 +1318,8 @@ gdk_x11_screen_init_glx (GdkX11Screen *screen)
                      display_x11->has_glx_sync_control ? "yes" : "no",
                      display_x11->has_glx_multisample ? "yes" : "no",
                      display_x11->has_glx_visual_rating ? "yes" : "no"));
+
+  gdk_x11_screen_update_visuals_for_glx (display_x11->screen);
 
   return TRUE;
 }

@@ -1426,7 +1426,6 @@ gdk_x11_display_open (const char *display_name)
    * stereo and double buffering
    */
   gdk_x11_display_init_gl (display_x11);
-  gdk_x11_screen_update_visuals_for_glx (display_x11->screen);
 
   if (display_x11->screen->rgba_visual)
     {

@@ -75,7 +75,6 @@ gboolean        gdk_x11_display_make_gl_context_current (GdkDisplay    *display,
 typedef struct _GdkX11GLContextGLX      GdkX11GLContextGLX;
 
 gboolean                gdk_x11_screen_init_glx                 (GdkX11Screen  *screen);
-void                    gdk_x11_screen_update_visuals_for_glx   (GdkX11Screen  *screen);
 
 GType                   gdk_x11_gl_context_glx_get_type         (void) G_GNUC_CONST;
 GdkX11GLContext *       gdk_x11_gl_context_glx_new              (GdkSurface    *surface,
