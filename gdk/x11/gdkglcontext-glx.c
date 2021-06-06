@@ -1200,26 +1200,22 @@ gdk_x11_display_get_glx_version (GdkDisplay *display,
 }
 
 /*< private >
- * gdk_x11_screen_init_glx:
- * @screen: an X11 screen
+ * gdk_x11_display_init_glx:
+ * @display_x11: an X11 display that has not been inited yet. 
  *
  * Initializes the cached GLX state for the given @screen.
  *
- * It's safe to call this function multiple times.
+ * This function must be called exactly once during initialization.
  *
  * Returns: %TRUE if GLX was initialized
  */
 gboolean
-gdk_x11_screen_init_glx (GdkX11Screen *screen)
+gdk_x11_display_init_glx (GdkX11Display *display_x11)
 {
-  GdkDisplay *display = GDK_SCREEN_DISPLAY (screen);
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+  GdkDisplay *display = GDK_DISPLAY (display_x11);
   Display *dpy;
   int error_base, event_base;
   int screen_num;
-
-  if (display_x11->have_glx)
-    return TRUE;
 
   dpy = gdk_x11_display_get_xdisplay (display);
 
@@ -1229,7 +1225,7 @@ gdk_x11_screen_init_glx (GdkX11Screen *screen)
   if (!glXQueryExtension (dpy, &error_base, &event_base))
     return FALSE;
 
-  screen_num = screen->screen_num;
+  screen_num = display_x11->screen->screen_num;
 
   display_x11->have_glx = TRUE;
 

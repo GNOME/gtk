@@ -1346,11 +1346,11 @@ gdk_x11_display_init_gl (GdkX11Display *self)
   if (!GDK_DISPLAY_DEBUG_CHECK (display, GL_GLX))
     {
       /* We favour EGL */
-      if (gdk_x11_screen_init_egl (self->screen))
+      if (gdk_x11_display_init_egl (self))
         return;
     }
 
-  if (gdk_x11_screen_init_glx (self->screen))
+  if (gdk_x11_display_init_glx (self))
     return;
 }
 

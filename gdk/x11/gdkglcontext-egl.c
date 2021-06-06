@@ -566,16 +566,12 @@ gdk_x11_gl_context_egl_init (GdkX11GLContextEGL *self)
 }
 
 gboolean
-gdk_x11_screen_init_egl (GdkX11Screen *screen)
+gdk_x11_display_init_egl (GdkX11Display *display_x11)
 {
-  GdkDisplay *display = GDK_SCREEN_DISPLAY (screen);
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+  GdkDisplay *display = GDK_DISPLAY (display_x11);
   EGLDisplay edpy;
   Display *dpy;
   int major, minor;
-
-  if (display_x11->have_egl)
-    return TRUE;
 
   dpy = gdk_x11_display_get_xdisplay (display);
 

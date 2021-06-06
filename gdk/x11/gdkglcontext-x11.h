@@ -34,7 +34,7 @@
 #include <epoxy/glx.h>
 
 #include "gdkglcontextprivate.h"
-#include "gdkdisplayprivate.h"
+#include "gdkdisplay-x11.h"
 #include "gdkvisual-x11.h"
 #include "gdksurface.h"
 #include "gdkinternals.h"
@@ -74,7 +74,7 @@ gboolean        gdk_x11_display_make_gl_context_current (GdkDisplay    *display,
 
 typedef struct _GdkX11GLContextGLX      GdkX11GLContextGLX;
 
-gboolean                gdk_x11_screen_init_glx                 (GdkX11Screen  *screen);
+gboolean                gdk_x11_display_init_glx                (GdkX11Display *display_x11);
 
 GType                   gdk_x11_gl_context_glx_get_type         (void) G_GNUC_CONST;
 GdkX11GLContext *       gdk_x11_gl_context_glx_new              (GdkSurface    *surface,
@@ -92,7 +92,8 @@ gboolean                gdk_x11_gl_context_glx_make_current     (GdkDisplay    *
 
 typedef struct _GdkX11GLContextEGL      GdkX11GLContextEGL;
 
-gboolean                gdk_x11_screen_init_egl                 (GdkX11Screen  *screen);
+gboolean                gdk_x11_display_init_egl                (GdkX11Display *display_x11);
+
 GType                   gdk_x11_gl_context_egl_get_type         (void) G_GNUC_CONST;
 GdkX11GLContext *       gdk_x11_gl_context_egl_new              (GdkSurface    *surface,
                                                                  gboolean       attached,
