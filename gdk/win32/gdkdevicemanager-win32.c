@@ -1279,6 +1279,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
           event->button.time = _gdk_win32_get_next_tick (msg->time);
 	  if (source_device->sends_core)
 	    gdk_event_set_device (event, device_manager->core_pointer);
+          else
+            gdk_event_set_device (event, GDK_DEVICE (source_device));
           gdk_event_set_source_device (event, GDK_DEVICE (source_device));
           gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_pointer));
 
@@ -1311,7 +1313,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
         {
           event->motion.time = _gdk_win32_get_next_tick (msg->time);
           event->motion.is_hint = FALSE;
-          gdk_event_set_device (event, device_manager->core_pointer);
+          if (source_device->sends_core)
+            gdk_event_set_device (event, device_manager->core_pointer);
+          else
+            gdk_event_set_device (event, GDK_DEVICE (source_device));
           gdk_event_set_source_device (event, GDK_DEVICE (source_device));
           gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_pointer));
 
