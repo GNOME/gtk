@@ -516,6 +516,17 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
                                 devix, *hctx));
 
       wintab_contexts = g_list_append (wintab_contexts, hctx);
+
+      /* Set the CXO_SYSTEM flag */
+      if (!(lc.lcOptions & CXO_SYSTEM))
+        {
+          lc.lcOptions |= CXO_SYSTEM;
+          if (!p_WTSetA (hctx, &lc))
+            {
+              g_warning ("Could not set the CXO_SYSTEM option in the WINTAB context");
+            }
+        }
+
 #if 0
       (*p_WTEnable) (*hctx, TRUE);
 #endif
