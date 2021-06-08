@@ -604,6 +604,7 @@ gtk_public_headers = files([
   'gtkpaned.h',
   'gtkpapersize.h',
   'gtkpasswordentry.h',
+  'gtkpasswordentrybuffer.h',
   'gtkpicture.h',
   'gtkpopover.h',
   'gtkpopovermenu.h',
