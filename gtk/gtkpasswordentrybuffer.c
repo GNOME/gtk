@@ -21,7 +21,7 @@
 
 #include "config.h"
 
-#include "gtkpasswordentrybufferprivate.h"
+#include "gtkpasswordentrybuffer.h"
 
 #include "gtksecurememoryprivate.h"
 
@@ -30,6 +30,16 @@
 /* Initial size of buffer, in bytes */
 #define MIN_SIZE 16
 
+/**
+ * GtkPasswordEntryBuffer:
+ *
+ * A `GtkEntryBuffer` that locks the underlying memory to prevent it
+ * from being swapped to disk.
+ *
+ * `GtkPasswordEntry` uses a `GtkPasswordEntryBuffer`.
+ *
+ * Since 4.4.
+ */
 struct _GtkPasswordEntryBuffer
 {
   GtkEntryBuffer parent_instance;
@@ -192,7 +202,7 @@ gtk_password_entry_buffer_init (GtkPasswordEntryBuffer *self)
 {
 }
 
-/*< private >
+/**
  * gtk_password_entry_buffer_new:
  *
  * Creates a new `GtkEntryBuffer` using secure memory allocations.

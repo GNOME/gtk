@@ -31,7 +31,7 @@
 #include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
-#include "gtkpasswordentrybufferprivate.h"
+#include "gtkpasswordentrybuffer.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcsspositionvalueprivate.h"
