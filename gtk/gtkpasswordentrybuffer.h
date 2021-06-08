@@ -26,8 +26,10 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_PASSWORD_ENTRY_BUFFER (gtk_password_entry_buffer_get_type())
 
+GDK_AVAILABLE_IN_4_4
 G_DECLARE_FINAL_TYPE (GtkPasswordEntryBuffer, gtk_password_entry_buffer, GTK, PASSWORD_ENTRY_BUFFER, GtkEntryBuffer)
 
+GDK_AVAILABLE_IN_4_4
 GtkEntryBuffer *        gtk_password_entry_buffer_new   (void);
 
 G_END_DECLS

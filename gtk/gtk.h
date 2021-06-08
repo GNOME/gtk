@@ -191,6 +191,7 @@
 #include <gtk/gtkpaned.h>
 #include <gtk/gtkpapersize.h>
 #include <gtk/gtkpasswordentry.h>
+#include <gtk/gtkpasswordentrybuffer.h>
 #include <gtk/gtkpicture.h>
 #include <gtk/gtkpopover.h>
 #include <gtk/gtkpopovermenu.h>
