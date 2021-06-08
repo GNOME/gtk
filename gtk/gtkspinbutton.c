@@ -208,6 +208,7 @@ struct _GtkSpinButton
 
   double         climb_rate;
   double         timer_step;
+  double         swipe_remainder;
 
   int            width_chars;
 
@@ -838,6 +839,7 @@ swipe_gesture_begin (GtkGesture       *gesture,
 {
   gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
   gtk_widget_grab_focus (GTK_WIDGET (spin_button));
+  spin_button->swipe_remainder = 0;
 }
 
 static void
@@ -845,10 +847,12 @@ swipe_gesture_update (GtkGesture       *gesture,
                       GdkEventSequence *sequence,
                       GtkSpinButton    *spin_button)
 {
-  double vel_y;
+  double vel_y, step;
 
   gtk_gesture_swipe_get_velocity (GTK_GESTURE_SWIPE (gesture), NULL, &vel_y);
-  gtk_spin_button_real_spin (spin_button, -vel_y / 20);
+  step = (-vel_y / 20) + spin_button->swipe_remainder;
+  spin_button->swipe_remainder = fmod (step, gtk_adjustment_get_step_increment (spin_button->adjustment));
+  gtk_spin_button_real_spin (spin_button, step - spin_button->swipe_remainder);
 }
 
 static gboolean
