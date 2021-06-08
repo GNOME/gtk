@@ -1078,7 +1078,8 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
                     G_CALLBACK (swipe_gesture_begin), spin_button);
   g_signal_connect (gesture, "update",
                     G_CALLBACK (swipe_gesture_update), spin_button);
-  gtk_widget_add_controller (GTK_WIDGET (spin_button), GTK_EVENT_CONTROLLER (gesture));
+  gtk_widget_add_controller (GTK_WIDGET (spin_button->entry),
+                             GTK_EVENT_CONTROLLER (gesture));
 
   controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL |
 				                GTK_EVENT_CONTROLLER_SCROLL_DISCRETE);
