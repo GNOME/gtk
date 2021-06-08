@@ -79,9 +79,14 @@ fedora-x86_64:
   script:
     - .gitlab-ci/show-info-linux.sh
     - meson subprojects update
-    - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
+    - mkdir _install
+    - meson --prefix=${CI_PROJECT_DIR}/_install
+            ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
             _build
-    - ninja -C _build
+    - meson compile -C _build
+    - meson install -C _build
+    - PKG_CONFIG_PATH=${CI_PROJECT_DIR}/_install/lib64/pkgconfig:${CI_PROJECT_DIR}/_install/share/pkgconfig meson setup _build_hello examples/hello
+    - meson compile -C _build_hello
     - .gitlab-ci/run-tests.sh _build x11
     - .gitlab-ci/run-tests.sh _build wayland
     - .gitlab-ci/run-tests.sh _build broadway
