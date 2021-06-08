@@ -101,10 +101,7 @@ gtk_video_hide_controls (gpointer data)
 }
 
 static void
-gtk_video_motion (GtkEventControllerMotion *motion,
-                  double                    x,
-                  double                    y,
-                  GtkVideo                 *self)
+gtk_video_reveal_controls (GtkVideo *self)
 {
   gtk_revealer_set_reveal_child (GTK_REVEALER (self->controls_revealer), TRUE);
   if (self->controls_hide_source)
@@ -112,6 +109,21 @@ gtk_video_motion (GtkEventControllerMotion *motion,
   self->controls_hide_source = g_timeout_add (5 * 1000,
                                               gtk_video_hide_controls,
                                               self);
+}
+
+static void
+gtk_video_motion (GtkEventControllerMotion *motion,
+                  double                    x,
+                  double                    y,
+                  GtkVideo                 *self)
+{
+  gtk_video_reveal_controls (self);
+}
+
+static void
+gtk_video_pressed (GtkVideo *self)
+{
+  gtk_video_reveal_controls (self);
 }
 
 static void
@@ -353,6 +365,7 @@ gtk_video_class_init (GtkVideoClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkVideo, controls);
   gtk_widget_class_bind_template_child (widget_class, GtkVideo, controls_revealer);
   gtk_widget_class_bind_template_callback (widget_class, gtk_video_motion);
+  gtk_widget_class_bind_template_callback (widget_class, gtk_video_pressed);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("video"));

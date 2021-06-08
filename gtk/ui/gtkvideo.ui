@@ -45,5 +45,11 @@
         <signal name="motion" handler="gtk_video_motion" swapped="no"/>
       </object>
     </child>
+    <child>
+      <object class="GtkGestureClick">
+        <property name="touch-only">1</property>
+        <signal name="pressed" handler="gtk_video_pressed" swapped="yes"/>
+      </object>
+    </child>
   </template>
 </interface>
