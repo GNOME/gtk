@@ -1177,7 +1177,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
    * or when the user single-clicks a row when that property set to %TRUE.
    *
    * This signal is also emitted when a non-editable row is selected and one
-   * of the keys: Space, Shift+Space, Return or Enter is pressed.
+   * of the keys: <kbd>Space</kbd>, <kbd>Shift</kbd>+<kbd>Space</kbd>, <kbd>Return</kbd> or <kbd>Enter</kbd> is pressed.
    *
    * For selection handling refer to the
    * [tree widget conceptual overview][TreeWidget]
