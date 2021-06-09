@@ -60,6 +60,7 @@ style-check-diff:
       - "${CI_PROJECT_DIR}/_build/testsuite/reftests/output/*/*.png"
       - "${CI_PROJECT_DIR}/_build/testsuite/gsk/compare/*/*/*.png"
       - "${CI_PROJECT_DIR}/_build/testsuite/css/output/*/*.syscap"
+      - "${CI_PROJECT_DIR}/_build_hello/meson-logs"
   cache:
     key: "$CI_JOB_NAME"
     paths:
