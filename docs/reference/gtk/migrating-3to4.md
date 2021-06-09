@@ -200,6 +200,9 @@ on a one-by-one basis:
  - If you were using `::map-event` and `::unmap-event` to track a window
    being mapped, you should use property notification for the
    [property@Gdk.Surface:mapped] property instead.
+ - The `::damage-event` signal has no replacement, as the only consumer
+   of damage events were the offscreen GDK surfaces, which have no
+   replacement in GTK 4.x.
 
 ### Set a proper application ID
 
