@@ -24,9 +24,8 @@ variables:
   BACKEND_FLAGS: "-Dx11-backend=true -Dwayland-backend=true -Dbroadway-backend=true"
   FEATURE_FLAGS: "-Dvulkan=enabled -Dcloudproviders=enabled"
   MESON_TEST_TIMEOUT_MULTIPLIER: 3
-  FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v31"
+  FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v32"
   FLATPAK_IMAGE: "registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master"
-  DOCS_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v31"
 
 .only-default:
   only:
@@ -308,7 +307,7 @@ asan-build:
   allow_failure: true
 
 reference:
-  image: $DOCS_IMAGE
+  image: $FEDORA_IMAGE
   stage: docs
   needs: []
   variables:

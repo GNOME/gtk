@@ -38,7 +38,6 @@ RUN dnf -y install \
     gstreamer1-plugins-good \
     gstreamer1-plugins-bad-free-devel \
     gstreamer1-plugins-base-devel \
-    gtk-doc \
     hicolor-icon-theme \
     iso-codes \
     itstool \
