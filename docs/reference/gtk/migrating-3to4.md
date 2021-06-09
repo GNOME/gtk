@@ -197,6 +197,9 @@ on a one-by-one basis:
  - If you were using `::delete-event` to present a confirmation when using
    the close button of a window, you should use the
    [signal@Gtk.Window::close-request] signal.
+ - If you were using `::map-event` and `::unmap-event` to track a window
+   being mapped, you should use property notification for the
+   [property@Gdk.Surface:mapped] property instead.
 
 ### Set a proper application ID
 
