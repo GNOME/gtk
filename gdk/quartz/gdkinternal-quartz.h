@@ -79,14 +79,10 @@ typedef enum {
 #define GDK_QUARTZ_EVENT_TABLET_PROXIMITY NSEventTypeTabletProximity
 #define GDK_QUARTZ_EVENT_SUBTYPE_TABLET_PROXIMITY NSEventSubtypeTabletProximity
 #define GDK_QUARTZ_EVENT_SUBTYPE_TABLET_POINT NSEventSubtypeTabletPoint
-#elif MAC_OS_X_VERSION_MIN_REQUIRED >= 10120
+#else
 #define GDK_QUARTZ_EVENT_TABLET_PROXIMITY NSTabletProximity
 #define GDK_QUARTZ_EVENT_SUBTYPE_TABLET_PROXIMITY NSTabletProximityEventSubtype
 #define GDK_QUARTZ_EVENT_SUBTYPE_TABLET_POINT NSTabletPointEventSubtype
-#else
-#define GDK_QUARTZ_EVENT_TABLET_PROXIMITY kEventTabletProximity
-#define GDK_QUARTZ_EVENT_SUBTYPE_TABLET_PROXIMITY NSTabletProximityEventSubtype
-#define GDK_QUARTZ_EVENT_SUBTYPE_TABLET_POINT kCGEventMouseSubtypeTabletPoint
 #endif
 
 void         _gdk_quartz_events_update_focus_window    (GdkWindow *new_window,

@@ -2228,7 +2228,7 @@ _gdk_quartz_window_set_collection_behavior (NSWindow *nswindow,
                                             GdkWindowTypeHint hint)
 {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= 101100
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= 101100
 #define GDK_QUARTZ_ALLOWS_TILING NSWindowCollectionBehaviorFullScreenAllowsTiling
 #define GDK_QUARTZ_DISALLOWS_TILING NSWindowCollectionBehaviorFullScreenDisallowsTiling
 #else
