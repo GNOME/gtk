@@ -2,7 +2,6 @@ examples = [
   'builder',
   'drawing',
   'grid-packing',
-  'hello-world',
   'plugman',
   'search-bar',
   'sunny',

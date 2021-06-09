@@ -24,9 +24,8 @@ variables:
   BACKEND_FLAGS: "-Dx11-backend=true -Dwayland-backend=true -Dbroadway-backend=true"
   FEATURE_FLAGS: "-Dvulkan=enabled -Dcloudproviders=enabled"
   MESON_TEST_TIMEOUT_MULTIPLIER: 3
-  FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v31"
+  FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v32"
   FLATPAK_IMAGE: "registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master"
-  DOCS_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v31"
 
 .only-default:
   only:
@@ -60,6 +59,7 @@ style-check-diff:
       - "${CI_PROJECT_DIR}/_build/testsuite/reftests/output/*/*.png"
       - "${CI_PROJECT_DIR}/_build/testsuite/gsk/compare/*/*/*.png"
       - "${CI_PROJECT_DIR}/_build/testsuite/css/output/*/*.syscap"
+      - "${CI_PROJECT_DIR}/_build_hello/meson-logs"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -79,9 +79,14 @@ fedora-x86_64:
   script:
     - .gitlab-ci/show-info-linux.sh
     - meson subprojects update
-    - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
+    - mkdir _install
+    - meson --prefix=${CI_PROJECT_DIR}/_install
+            ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
             _build
-    - ninja -C _build
+    - meson compile -C _build
+    - meson install -C _build
+    - PKG_CONFIG_PATH=${CI_PROJECT_DIR}/_install/lib64/pkgconfig:${CI_PROJECT_DIR}/_install/share/pkgconfig meson setup _build_hello examples/hello
+    - meson compile -C _build_hello
     - .gitlab-ci/run-tests.sh _build x11
     - .gitlab-ci/run-tests.sh _build wayland
     - .gitlab-ci/run-tests.sh _build broadway
@@ -302,7 +307,7 @@ asan-build:
   allow_failure: true
 
 reference:
-  image: $DOCS_IMAGE
+  image: $FEDORA_IMAGE
   stage: docs
   needs: []
   variables:
