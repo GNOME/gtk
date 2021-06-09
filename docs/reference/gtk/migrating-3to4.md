@@ -187,11 +187,16 @@ for this change.
 | ::grab-broken-event | - |
 
 Event signals which are not directly related to input have to be dealt with
-on a one-by-one basis. If you were using `::configure-event` and
-`::window-state-event` to save window state, you should use property
-notification for corresponding [class@Gtk.Window] properties, such as
-[property@Gtk.Window:default-width], [property@Gtk.Window:default-height],
-[property@Gtk.Window:maximized] or [property@Gtk.Window:fullscreened].
+on a one-by-one basis:
+
+ - If you were using `::configure-event` and `::window-state-event` to save
+   window state, you should use property notification for corresponding
+   [class@Gtk.Window] properties, such as [property@Gtk.Window:default-width],
+   [property@Gtk.Window:default-height], [property@Gtk.Window:maximized] or
+   [property@Gtk.Window:fullscreened].
+ - If you were using `::delete-event` to present a confirmation when using
+   the close button of a window, you should use the
+   [signal@Gtk.Window::close-request] signal.
 
 ### Set a proper application ID
 
