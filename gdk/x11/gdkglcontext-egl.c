@@ -35,7 +35,6 @@ struct _GdkX11GLContextEGL
 {
   GdkX11GLContext parent_instance;
 
-  EGLConfig egl_config;
   EGLContext egl_context;
 };
 
@@ -143,6 +142,41 @@ gdk_x11_display_create_egl_display (GdkX11Display *self)
   self->egl_display = eglGetDisplay ((EGLNativeDisplayType) dpy);
 }
 
+#define MAX_EGL_ATTRS   30
+
+static void
+gdk_x11_display_create_egl_config (GdkX11Display *display)
+{
+  GdkX11Display *self = GDK_X11_DISPLAY (display);
+  EGLint attrs[MAX_EGL_ATTRS];
+  EGLint count;
+  int i = 0;
+
+  attrs[i++] = EGL_SURFACE_TYPE;
+  attrs[i++] = EGL_WINDOW_BIT;
+
+  attrs[i++] = EGL_COLOR_BUFFER_TYPE;
+  attrs[i++] = EGL_RGB_BUFFER;
+
+  attrs[i++] = EGL_RED_SIZE;
+  attrs[i++] = 8;
+  attrs[i++] = EGL_GREEN_SIZE;
+  attrs[i++] = 8;
+  attrs[i++] = EGL_BLUE_SIZE;
+  attrs[i++] = 8;
+  attrs[i++] = EGL_ALPHA_SIZE;
+  attrs[i++] = 8;
+
+  attrs[i++] = EGL_NONE;
+  g_assert (i < MAX_EGL_ATTRS);
+
+  /* Pick first valid configuration that the driver returns us */
+  if (!eglChooseConfig (self->egl_display, attrs, &display->egl_config, 1, &count) && count >= 1)
+    display->egl_config = NULL;
+}
+
+#undef MAX_EGL_ATTRS
+
 static XVisualInfo *
 get_visual_info_for_egl_config (GdkDisplay *display,
                                 EGLConfig   egl_config)
@@ -193,6 +227,7 @@ static EGLSurface
 gdk_x11_display_get_egl_dummy_surface (GdkDisplay *display,
                                        EGLConfig   egl_config)
 {
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
   DrawableInfo *info;
   XVisualInfo *xvisinfo;
   XSetWindowAttributes attrs;
@@ -212,10 +247,7 @@ gdk_x11_display_get_egl_dummy_surface (GdkDisplay *display,
   info->egl_config = egl_config;
 
   attrs.override_redirect = True;
-  attrs.colormap = XCreateColormap (info->xdisplay,
-                                    DefaultRootWindow (info->xdisplay),
-                                    xvisinfo->visual,
-                                    AllocNone);
+  attrs.colormap = gdk_x11_display_get_window_colormap (display_x11);
   attrs.border_pixel = 0;
 
   info->dummy_xwin =
@@ -223,9 +255,9 @@ gdk_x11_display_get_egl_dummy_surface (GdkDisplay *display,
                    DefaultRootWindow (info->xdisplay),
                    -100, -100, 1, 1,
                    0,
-                   xvisinfo->depth,
+                   gdk_x11_display_get_window_depth (display_x11),
                    CopyFromParent,
-                   xvisinfo->visual,
+                   gdk_x11_display_get_window_visual (display_x11),
                    CWOverrideRedirect | CWColormap | CWBorderPixel,
                    &attrs);
 
@@ -243,8 +275,7 @@ gdk_x11_display_get_egl_dummy_surface (GdkDisplay *display,
 }
 
 static EGLSurface
-gdk_x11_surface_get_egl_surface (GdkSurface *surface,
-                                 EGLConfig   config)
+gdk_x11_surface_get_egl_surface (GdkSurface *surface)
 {
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
@@ -256,9 +287,9 @@ gdk_x11_surface_get_egl_surface (GdkSurface *surface,
 
   info = g_new0 (DrawableInfo, 1);
   info->egl_display = display_x11->egl_display;
-  info->egl_config = config;
+  info->egl_config = display_x11->egl_config;
   info->egl_surface =
-    eglCreateWindowSurface (info->egl_display, config,
+    eglCreateWindowSurface (info->egl_display, info->egl_config,
                             (EGLNativeWindowType) gdk_x11_surface_get_xid (surface),
                             NULL);
 
@@ -274,7 +305,6 @@ gdk_x11_gl_context_egl_end_frame (GdkDrawContext *draw_context,
                                   cairo_region_t *painted)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
-  GdkX11GLContextEGL *context_egl = GDK_X11_GL_CONTEXT_EGL (context);
   GdkSurface *surface = gdk_gl_context_get_surface (context);
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
@@ -286,7 +316,7 @@ gdk_x11_gl_context_egl_end_frame (GdkDrawContext *draw_context,
 
   gdk_gl_context_make_current (context);
 
-  egl_surface = gdk_x11_surface_get_egl_surface (surface, context_egl->egl_config);
+  egl_surface = gdk_x11_surface_get_egl_surface (surface);
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "x11", "swap buffers");
   if (display_x11->has_egl_swap_buffers_with_damage)
@@ -332,16 +362,14 @@ gdk_x11_gl_context_egl_get_damage (GdkGLContext *context)
     {
       GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
       GdkGLContext *shared = gdk_gl_context_get_shared_context (context);
-      GdkX11GLContextEGL *shared_egl;
       EGLSurface egl_surface;
       int buffer_age = 0;
 
       shared = gdk_gl_context_get_shared_context (context);
       if (shared == NULL)
         shared = context;
-      shared_egl = GDK_X11_GL_CONTEXT_EGL (shared);
 
-      egl_surface = gdk_x11_surface_get_egl_surface (surface, shared_egl->egl_config);
+      egl_surface = gdk_x11_surface_get_egl_surface (surface);
       gdk_gl_context_make_current (shared);
 
       eglQuerySurface (display_x11->egl_display,
@@ -462,7 +490,7 @@ gdk_x11_gl_context_egl_realize (GdkGLContext  *context,
 
   context_egl->egl_context =
     eglCreateContext (display_x11->egl_display,
-                      context_egl->egl_config,
+                      display_x11->egl_config,
                       share != NULL
                         ? GDK_X11_GL_CONTEXT_EGL (share)->egl_context
                         : shared_data_context != NULL
@@ -487,7 +515,7 @@ gdk_x11_gl_context_egl_realize (GdkGLContext  *context,
 
       context_egl->egl_context =
         eglCreateContext (display_x11->egl_display,
-                          context_egl->egl_config,
+                          display_x11->egl_config,
                           share != NULL
                             ? GDK_X11_GL_CONTEXT_EGL (share)->egl_context
                             : shared_data_context != NULL
@@ -579,6 +607,14 @@ gdk_x11_display_init_egl (GdkX11Display *self)
       return FALSE;
     }
 
+  gdk_x11_display_create_egl_config (self);
+  if (self->egl_config == NULL)
+    {
+      eglTerminate (self->egl_display);
+      self->egl_display = NULL;
+      return FALSE;
+    }
+
   /* While NVIDIA might support EGL, it might very well not support
    * all the EGL subset we rely on; we should be looking at more
    * EGL extensions, but for the time being, this is a blanket
@@ -624,75 +660,18 @@ gdk_x11_display_init_egl (GdkX11Display *self)
   return TRUE;
 }
 
-#define MAX_EGL_ATTRS   30
-
-static gboolean
-find_eglconfig_for_display (GdkDisplay  *display,
-                            EGLConfig   *egl_config_out,
-                            GError     **error)
-{
-  GdkX11Display *self = GDK_X11_DISPLAY (display);
-  EGLint attrs[MAX_EGL_ATTRS];
-  EGLint count;
-  EGLConfig egl_config;
-  int i = 0;
-
-  attrs[i++] = EGL_SURFACE_TYPE;
-  attrs[i++] = EGL_WINDOW_BIT;
-
-  attrs[i++] = EGL_COLOR_BUFFER_TYPE;
-  attrs[i++] = EGL_RGB_BUFFER;
-
-  attrs[i++] = EGL_RED_SIZE;
-  attrs[i++] = 8;
-  attrs[i++] = EGL_GREEN_SIZE;
-  attrs[i++] = 8;
-  attrs[i++] = EGL_BLUE_SIZE;
-  attrs[i++] = 8;
-  attrs[i++] = EGL_ALPHA_SIZE;
-  attrs[i++] = 8;
-
-  attrs[i++] = EGL_NONE;
-  g_assert (i < MAX_EGL_ATTRS);
-
-  /* Pick first valid configuration that the driver returns us */
-  if (!eglChooseConfig (self->egl_display, attrs, &egl_config, 1, &count) || count < 1)
-    {
-      g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_UNSUPPORTED_FORMAT,
-                           _("No available configurations for the given pixel format"));
-      return FALSE;
-    }
-
-  g_assert (egl_config_out);
-  *egl_config_out = egl_config;
-
-  return TRUE;
-}
-
-#undef MAX_EGL_ATTRS
-
 GdkX11GLContext *
 gdk_x11_gl_context_egl_new (GdkSurface    *surface,
                             gboolean       attached,
                             GdkGLContext  *share,
                             GError       **error)
 {
-  GdkDisplay *display;
   GdkX11GLContextEGL *context;
-  EGLConfig egl_config;
-
-  display = gdk_surface_get_display (surface);
-
-  if (!find_eglconfig_for_display (display, &egl_config, error))
-    return NULL;
 
   context = g_object_new (GDK_TYPE_X11_GL_CONTEXT_EGL,
                           "surface", surface,
                           "shared-context", share,
                           NULL);
-
-  context->egl_config = egl_config;
 
   return GDK_X11_GL_CONTEXT (context);
 }
@@ -723,13 +702,13 @@ gdk_x11_gl_context_egl_make_current (GdkDisplay   *display,
   surface = gdk_gl_context_get_surface (context);
 
   if (context_x11->is_attached || gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)))
-    egl_surface = gdk_x11_surface_get_egl_surface (surface, context_egl->egl_config);
+    egl_surface = gdk_x11_surface_get_egl_surface (surface);
   else
     {
       if (display_x11->has_egl_surfaceless_context)
         egl_surface = EGL_NO_SURFACE;
       else
-        egl_surface = gdk_x11_display_get_egl_dummy_surface (display, context_egl->egl_config);
+        egl_surface = gdk_x11_display_get_egl_dummy_surface (display, display_x11->egl_config);
     }
 
   GDK_DISPLAY_NOTE (display, OPENGL,
