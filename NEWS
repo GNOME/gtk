@@ -1,3 +1,106 @@
+Overview of Changes in 4.3.1
+============================
+
+* GtkEmojiChooser:
+ - Update data from CLDR 39
+ - Load Emoji data for both language and territory
+
+* GtkCalendar:
+ - Fix an off-by-one error in day numbers
+
+* GtkListView:
+ - Add .activatable style class to activatable items
+
+* GtkCheckButton:
+ - Don't allow unchecking grouped radio buttons
+
+*GtkToggleButton:
+ - Fix mnemonic activation propagation
+
+* GtkLabel:
+ - Make mnemonics work even when invisible
+ - Fix mnemonic activation propagation
+
+* GtkMenuButton:
+ - Add a property to mark primary menus and make F10 work
+
+* GtkApplication:
+ - Fix initial screensaver state async
+
+* GtkEntry:
+ - Apply xalign to placeholder text (as it was in GTK 3)
+
+* GtkSpinButton:
+ - Fix swipe gestures
+
+* GtkStackSwitcher:
+ - Implement GtkOrientable (as it was in GTK 3)
+ - Fix a use-after-free problem with drag timeouts
+
+* GtkFileChooser:
+ - Add support for (case-insensitive) suffix matches in GtkFileFilter
+
+* GtkPasswordEntry:
+ - Make GtkPasswordEntryBuffer public, to make it easier
+   to write your own password entry widget
+
+* Input:
+ - Fix interference between various obscure XKB features
+   (e.g. overlays) and Compose sequences
+
+* Action support:
+ - Fix submenu-action handling
+
+* Theme:
+ - Update icons from the Adwaita icon theme
+ - Fix icon names for GtkSwitch
+ - Fix switch-off icon
+
+* GSK:
+ - Improve transformed offscreen rendering
+ - Add padding between cached glyphs
+
+* Wayland:
+ - Fix monitor sizes in the presence of transforms
+ - Add a getter for the EGLDisplay
+ - Fix click-drag-release sequences for popovers
+
+* X11:
+ - Support EGL for X11. Fall back to GLX if EGL isn't available
+ - Always fall back to GLX on NVidia
+ - Add a getter for the EGLDisplay
+
+* Broadway:
+ - Add a setter for display scale
+
+* Windows:
+ - Add a getter for the EGLDisplay
+ - Make GL work for media playback
+
+* MacOS:
+ - Fix menubar appearance
+
+* Tools:
+ - gtk4-builder-tool: Replace can-focus with focusable in 3-to-4 conversion
+
+* Introspection:
+ - Add missing annotations in a few places (e.g. gtk_free_view_row_activated)
+
+* Build:
+ - Only build one source file with -mf16c
+ - Fix devel styling for ci flatpak builds
+ - Generate appdata for demo flatpaks
+
+* Docs:
+ - Numerous fixes and additions
+
+* Translation updates:
+ Friulian
+ Nepali
+ Norwegian Bokmål
+ Ukrainian
+
+
 Overview of Changes in 4.3.0
 ============================
 
