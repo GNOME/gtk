@@ -277,27 +277,34 @@ gdk_x11_display_get_egl_dummy_surface (GdkDisplay *display,
 static EGLSurface
 gdk_x11_surface_get_egl_surface (GdkSurface *surface)
 {
-  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkX11Surface *self = GDK_X11_SURFACE (surface);
+  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (self));
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
-  DrawableInfo *info;
 
-  info = g_object_get_data (G_OBJECT (surface), "-gdk-x11-egl-drawable");
-  if (info != NULL)
-    return info->egl_surface;
+  if (self->egl_surface)
+    return self->egl_surface;
 
-  info = g_new0 (DrawableInfo, 1);
-  info->egl_display = display_x11->egl_display;
-  info->egl_config = display_x11->egl_config;
-  info->egl_surface =
-    eglCreateWindowSurface (info->egl_display, info->egl_config,
+  self->egl_surface =
+    eglCreateWindowSurface (display_x11->egl_display, 
+                            display_x11->egl_config,
                             (EGLNativeWindowType) gdk_x11_surface_get_xid (surface),
                             NULL);
 
-  g_object_set_data_full (G_OBJECT (surface), "-gdk-x11-egl-drawable",
-                          info,
-                          drawable_info_free);
+  return self->egl_surface;
+}
 
-  return info->egl_surface;
+void
+gdk_x11_surface_destroy_egl_surface (GdkX11Surface *self)
+{
+  GdkX11Display *display_x11;
+
+  if (self->egl_surface == NULL)
+    return;
+
+  display_x11 = GDK_X11_DISPLAY (gdk_surface_get_display (GDK_SURFACE (self)));
+
+  eglDestroySurface (display_x11->egl_display, self->egl_surface);
+  self->egl_surface = NULL;
 }
 
 static void

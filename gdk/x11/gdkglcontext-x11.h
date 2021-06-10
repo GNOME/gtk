@@ -93,6 +93,7 @@ gboolean                gdk_x11_gl_context_glx_make_current     (GdkDisplay    *
 typedef struct _GdkX11GLContextEGL      GdkX11GLContextEGL;
 
 gboolean                gdk_x11_display_init_egl                (GdkX11Display *display_x11);
+void                    gdk_x11_surface_destroy_egl_surface     (GdkX11Surface *self);
 
 GType                   gdk_x11_gl_context_egl_get_type         (void) G_GNUC_CONST;
 GdkX11GLContext *       gdk_x11_gl_context_egl_new              (GdkSurface    *surface,

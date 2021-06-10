@@ -87,6 +87,7 @@ struct _GdkX11Surface
   guint compute_size_source_id;
 
   cairo_surface_t *cairo_surface;
+  /* EGLSurface */ gpointer egl_surface;
 
   int abs_x;
   int abs_y;

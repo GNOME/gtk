@@ -1360,7 +1360,11 @@ gdk_x11_surface_destroy (GdkSurface *surface,
     }
 
   if (!foreign_destroy)
-    XDestroyWindow (GDK_SURFACE_XDISPLAY (surface), GDK_SURFACE_XID (surface));
+    {
+      gdk_x11_surface_destroy_egl_surface (impl);
+
+      XDestroyWindow (GDK_SURFACE_XDISPLAY (surface), GDK_SURFACE_XID (surface));
+    }
 }
 
 /* This function is called when the XWindow is really gone.
