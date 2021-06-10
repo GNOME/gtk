@@ -202,6 +202,9 @@ gtk_toggle_button_clicked (GtkButton *button)
   if (priv->active && (priv->group_prev || priv->group_next))
     return;
 
+  if (gtk_button_get_action_helper (button))
+    return;
+
   gtk_toggle_button_set_active (toggle_button, !priv->active);
 }
 
