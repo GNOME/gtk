@@ -22,7 +22,9 @@
 #include "gtkbutton.h"
 
 #include "gtkgesture.h"
+#include "gtkactionhelperprivate.h"
 
-GtkGesture * gtk_button_get_gesture (GtkButton *button);
+GtkGesture      * gtk_button_get_gesture       (GtkButton *button);
+GtkActionHelper * gtk_button_get_action_helper (GtkButton *button);
 
 #endif /* __GTK_BUTTON_PRIVATE_H__ */
