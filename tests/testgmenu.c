@@ -418,7 +418,7 @@ create_action_treeview (GActionGroup *group)
 /* Dynamic menu changes {{{1 */
 
 static void
-toggle_sumerian (GtkToggleButton *button, gpointer data)
+toggle_sumerian (GtkCheckButton *button, gpointer data)
 {
   GMenuModel *model;
   gboolean adding;
@@ -426,7 +426,7 @@ toggle_sumerian (GtkToggleButton *button, gpointer data)
 
   model = g_object_get_data (G_OBJECT (button), "model");
 
-  adding = gtk_toggle_button_get_active (button);
+  adding = gtk_check_button_get_active (button);
 
   m = g_menu_model_get_item_link (model, g_menu_model_get_n_items (model) - 1, G_MENU_LINK_SECTION);
   m = g_menu_model_get_item_link (m, g_menu_model_get_n_items (m) - 1, G_MENU_LINK_SUBMENU);
@@ -467,7 +467,7 @@ action_list_remove (GtkTreeModel *store,
 }
 
 static void
-toggle_italic (GtkToggleButton *button, gpointer data)
+toggle_italic (GtkCheckButton *button, gpointer data)
 {
   GMenuModel *model;
   GActionGroup *group;
@@ -482,7 +482,7 @@ toggle_italic (GtkToggleButton *button, gpointer data)
 
   store = gtk_tree_view_get_model (tv);
 
-  adding = gtk_toggle_button_get_active (button);
+  adding = gtk_check_button_get_active (button);
 
   m = g_menu_model_get_item_link (model, g_menu_model_get_n_items (model) - 1, G_MENU_LINK_SECTION);
   if (adding)
@@ -503,7 +503,7 @@ toggle_italic (GtkToggleButton *button, gpointer data)
 }
 
 static void
-toggle_speed (GtkToggleButton *button, gpointer data)
+toggle_speed (GtkCheckButton *button, gpointer data)
 {
   GMenuModel *model;
   GActionGroup *group;
@@ -519,7 +519,7 @@ toggle_speed (GtkToggleButton *button, gpointer data)
 
   store = gtk_tree_view_get_model (tv);
 
-  adding = gtk_toggle_button_get_active (button);
+  adding = gtk_check_button_get_active (button);
 
   m = g_menu_model_get_item_link (model, 1, G_MENU_LINK_SECTION);
   if (adding)
