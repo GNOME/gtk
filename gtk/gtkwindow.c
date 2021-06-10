@@ -2024,7 +2024,10 @@ gtk_window_root_set_focus (GtkRoot   *root,
     return;
 
   if (focus == priv->focus_widget)
-    return;
+    {
+      priv->move_focus = FALSE;
+      return;
+    }
 
   if (priv->focus_widget)
     old_focus = g_object_ref (priv->focus_widget);
