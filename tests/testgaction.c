@@ -118,6 +118,7 @@ int main (int argc, char **argv)
   GtkWidget *button1 = gtk_button_new_with_label ("Change Label Text");
   GtkWidget *menu;
   GSimpleActionGroup *action_group;
+  GtkWidget *box1;
 
 
   action_group = g_simple_action_group_new ();
@@ -147,6 +148,50 @@ int main (int argc, char **argv)
   gtk_widget_set_halign (button1, GTK_ALIGN_CENTER);
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button1), "win.change-label-button");
   gtk_box_append (GTK_BOX (box), button1);
+
+  box1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+
+  button1 = gtk_toggle_button_new_with_label ("Toggle");
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button1), "win.toggle-menu-item");
+  gtk_box_append (GTK_BOX (box1), button1);
+
+  button1 = gtk_check_button_new_with_label ("Check");
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button1), "win.toggle-menu-item");
+  gtk_box_append (GTK_BOX (box1), button1);
+
+  gtk_box_append (GTK_BOX (box), box1);
+
+  box1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+
+  button1 = gtk_toggle_button_new_with_label ("Radio 1");
+  gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button1), "win.radio::1");
+  gtk_box_append (GTK_BOX (box1), button1);
+
+  button1 = gtk_toggle_button_new_with_label ("Radio 2");
+  gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button1), "win.radio::2");
+  gtk_box_append (GTK_BOX (box1), button1);
+
+  button1 = gtk_toggle_button_new_with_label ("Radio 3");
+  gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button1), "win.radio::3");
+  gtk_box_append (GTK_BOX (box1), button1);
+
+  gtk_box_append (GTK_BOX (box), box1);
+
+  box1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+
+  button1 = gtk_check_button_new_with_label ("Radio 1");
+  gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button1), "win.radio::1");
+  gtk_box_append (GTK_BOX (box1), button1);
+
+  button1 = gtk_check_button_new_with_label ("Radio 2");
+  gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button1), "win.radio::2");
+  gtk_box_append (GTK_BOX (box1), button1);
+
+  button1 = gtk_check_button_new_with_label ("Radio 3");
+  gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button1), "win.radio::3");
+  gtk_box_append (GTK_BOX (box1), button1);
+
+  gtk_box_append (GTK_BOX (box), box1);
 
   gtk_window_set_child (GTK_WINDOW (window), box);
 
