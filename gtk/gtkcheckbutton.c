@@ -325,10 +325,10 @@ click_released_cb (GtkGestureClick *gesture,
 
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
-  gtk_check_button_set_active (self, !priv->active);
-
   if (priv->action_helper)
     gtk_action_helper_activate (priv->action_helper);
+  else
+    gtk_check_button_set_active (self, !priv->active);
 }
 
 static void

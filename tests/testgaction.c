@@ -24,8 +24,13 @@ toggle_menu_item (GSimpleAction *action,
                   GVariant      *parameter,
                   gpointer       user_data)
 {
+  GVariant *state = g_action_get_state (G_ACTION (action));
 
   gtk_label_set_label (GTK_LABEL (label), "Text set from toggle menu item");
+
+  g_simple_action_set_state (action, g_variant_new_boolean (!g_variant_get_boolean (state)));
+
+  g_variant_unref (state);
 }
 
 static void
@@ -39,15 +44,16 @@ submenu_item (GSimpleAction *action,
 static void
 radio (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 {
-  GVariant *new_state = g_variant_new_string (g_variant_get_string (parameter, NULL));
   char *str;
 
   str = g_strdup_printf ("From Radio menu item %s",
-                         g_variant_get_string (new_state, NULL));
+                         g_variant_get_string (parameter, NULL));
 
   gtk_label_set_label (GTK_LABEL (label), str);
 
   g_free (str);
+
+  g_simple_action_set_state (action, parameter);
 }
 
 
@@ -57,7 +63,7 @@ static const GActionEntry win_actions[] = {
   { "normal-menu-item",    normal_menu_item,    NULL, NULL, NULL },
   { "toggle-menu-item",    toggle_menu_item,    NULL, "true", NULL },
   { "submenu-item",        submenu_item,        NULL, NULL, NULL },
-  { "radio",               radio,               "s", "1", NULL },
+  { "radio",               radio,               "s", "'1'", NULL },
 };
 
 
@@ -112,6 +118,7 @@ int main (int argc, char **argv)
   GtkWidget *button1 = gtk_button_new_with_label ("Change Label Text");
   GtkWidget *menu;
   GSimpleActionGroup *action_group;
+  GtkWidget *box1;
 
 
   action_group = g_simple_action_group_new ();
@@ -141,6 +148,50 @@ int main (int argc, char **argv)
   gtk_widget_set_halign (button1, GTK_ALIGN_CENTER);
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button1), "win.change-label-button");
   gtk_box_append (GTK_BOX (box), button1);
+
+  box1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+
+  button1 = gtk_toggle_button_new_with_label ("Toggle");
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button1), "win.toggle-menu-item");
+  gtk_box_append (GTK_BOX (box1), button1);
+
+  button1 = gtk_check_button_new_with_label ("Check");
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button1), "win.toggle-menu-item");
+  gtk_box_append (GTK_BOX (box1), button1);
+
+  gtk_box_append (GTK_BOX (box), box1);
+
+  box1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+
+  button1 = gtk_toggle_button_new_with_label ("Radio 1");
+  gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button1), "win.radio::1");
+  gtk_box_append (GTK_BOX (box1), button1);
+
+  button1 = gtk_toggle_button_new_with_label ("Radio 2");
+  gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button1), "win.radio::2");
+  gtk_box_append (GTK_BOX (box1), button1);
+
+  button1 = gtk_toggle_button_new_with_label ("Radio 3");
+  gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button1), "win.radio::3");
+  gtk_box_append (GTK_BOX (box1), button1);
+
+  gtk_box_append (GTK_BOX (box), box1);
+
+  box1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+
+  button1 = gtk_check_button_new_with_label ("Radio 1");
+  gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button1), "win.radio::1");
+  gtk_box_append (GTK_BOX (box1), button1);
+
+  button1 = gtk_check_button_new_with_label ("Radio 2");
+  gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button1), "win.radio::2");
+  gtk_box_append (GTK_BOX (box1), button1);
+
+  button1 = gtk_check_button_new_with_label ("Radio 3");
+  gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button1), "win.radio::3");
+  gtk_box_append (GTK_BOX (box1), button1);
+
+  gtk_box_append (GTK_BOX (box), box1);
 
   gtk_window_set_child (GTK_WINDOW (window), box);
 

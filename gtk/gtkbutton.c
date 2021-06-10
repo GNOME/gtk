@@ -1015,6 +1015,14 @@ gtk_button_get_gesture (GtkButton *button)
   return priv->gesture;
 }
 
+GtkActionHelper *
+gtk_button_get_action_helper (GtkButton *button)
+{
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
+
+  return priv->action_helper;
+}
+
 /**
  * gtk_button_set_child: (attributes org.gtk.Method.set_property=child)
  * @button: a `GtkButton`
