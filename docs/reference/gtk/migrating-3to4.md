@@ -243,6 +243,10 @@ in GTK 3, you can prepare for the switch by using `gtk_widget_destroy()`
 only on toplevel windows, and replace all other uses with
 `gtk_container_remove()` or `g_object_unref()`.
 
+### Stop using the GtkWidget.destroy vfunc
+
+Instead of implementing GtkWidget.destroy, you can implement GObject.dispose.
+
 ### Reduce the use of generic container APIs
 
 GTK 4 removes `gtk_container_add()` and `gtk_container_remove()`. While there
