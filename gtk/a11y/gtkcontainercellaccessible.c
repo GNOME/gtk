@@ -31,11 +31,18 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkContainerCellAccessible, gtk_container_cell_acces
 
 
 static void
+unset_child (gpointer child)
+{
+  atk_object_set_parent (ATK_OBJECT (child), NULL);
+  g_object_unref (child);
+}
+
+static void
 gtk_container_cell_accessible_finalize (GObject *obj)
 {
   GtkContainerCellAccessible *container = GTK_CONTAINER_CELL_ACCESSIBLE (obj);
 
-  g_list_free_full (container->priv->children, g_object_unref);
+  g_list_free_full (container->priv->children, unset_child);
 
   G_OBJECT_CLASS (gtk_container_cell_accessible_parent_class)->finalize (obj);
 }
@@ -157,6 +164,7 @@ gtk_container_cell_accessible_remove_child (GtkContainerCellAccessible *containe
   g_return_if_fail (GTK_IS_CELL_ACCESSIBLE (child));
   g_return_if_fail (container->priv->n_children > 0);
 
+  atk_object_set_parent (ATK_OBJECT (child), NULL);
   container->priv->children = g_list_remove (container->priv->children, child);
   container->priv->n_children--;
 
