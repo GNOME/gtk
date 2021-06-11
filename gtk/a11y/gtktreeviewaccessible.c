@@ -104,6 +104,17 @@ static void
 cell_info_free (GtkTreeViewAccessibleCellInfo *cell_info)
 {
   gtk_accessible_set_widget (GTK_ACCESSIBLE (cell_info->cell), NULL);
+  if (GTK_IS_CONTAINER_CELL_ACCESSIBLE (cell_info->cell))
+    {
+      GList *children;
+
+      while ((children = gtk_container_cell_accessible_get_children (GTK_CONTAINER_CELL_ACCESSIBLE (cell_info->cell))) != NULL)
+        {
+          GtkCellAccessible *child = children->data;
+          gtk_container_cell_accessible_remove_child (GTK_CONTAINER_CELL_ACCESSIBLE (cell_info->cell), child);
+        }
+    }
+
   g_object_unref (cell_info->cell);
 
   g_free (cell_info);
