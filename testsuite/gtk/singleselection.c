@@ -706,6 +706,27 @@ test_set_model (void)
   g_object_unref (selection);
 }
 
+static void
+test_empty (void)
+{
+  GtkSingleSelection *selection;
+  GListStore *store;
+
+  selection = gtk_single_selection_new (NULL);
+
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (selection)), ==, 0);
+  g_assert_null (g_list_model_get_item (G_LIST_MODEL (selection), 11));
+
+  store = g_list_store_new (G_TYPE_OBJECT);
+  gtk_single_selection_set_model (selection, G_LIST_MODEL (store));
+  g_object_unref (store);
+
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (selection)), ==, 0);
+  g_assert_null (g_list_model_get_item (G_LIST_MODEL (selection), 11));
+
+  g_object_unref (selection);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -726,6 +747,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/singleselection/query-range", test_query_range);
   g_test_add_func ("/singleselection/changes", test_changes);
   g_test_add_func ("/singleselection/set-model", test_set_model);
+  g_test_add_func ("/singleselection/empty", test_empty);
 
   return g_test_run ();
 }

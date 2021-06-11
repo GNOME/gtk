@@ -64,10 +64,10 @@ gtk_selection_filter_model_get_n_items (GListModel *list)
 {
   GtkSelectionFilterModel *self = GTK_SELECTION_FILTER_MODEL (list);
 
-  if (self->selection)
-    return gtk_bitset_get_size (self->selection);
+  if (!self->selection)
+    return 0;
 
-  return 0;
+  return gtk_bitset_get_size (self->selection);
 }
 
 static gpointer
@@ -75,6 +75,12 @@ gtk_selection_filter_model_get_item (GListModel *list,
                                      guint       position)
 {
   GtkSelectionFilterModel *self = GTK_SELECTION_FILTER_MODEL (list);
+
+  if (!self->selection)
+    return NULL;
+
+  if (position >= gtk_bitset_get_size (self->selection))
+    return NULL;
 
   position = gtk_bitset_get_nth (self->selection, position);
 

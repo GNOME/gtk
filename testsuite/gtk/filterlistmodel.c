@@ -376,6 +376,35 @@ test_incremental (void)
   g_object_unref (filter);
 }
 
+static void
+test_empty (void)
+{
+  GtkFilterListModel *filter;
+  GListStore *store;
+  GtkFilter *f;
+
+  filter = gtk_filter_list_model_new (NULL, NULL);
+
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter)), ==, 0);
+  g_assert_null (g_list_model_get_item (G_LIST_MODEL (filter), 11));
+
+  store = g_list_store_new (G_TYPE_OBJECT);
+  gtk_filter_list_model_set_model (filter, G_LIST_MODEL (store));
+  g_object_unref (store);
+
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter)), ==, 0);
+  g_assert_null (g_list_model_get_item (G_LIST_MODEL (filter), 11));
+
+  f = GTK_FILTER (gtk_every_filter_new ());
+  gtk_filter_list_model_set_filter (filter, f);
+  g_object_unref (f);
+
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (filter)), ==, 0);
+  g_assert_null (g_list_model_get_item (G_LIST_MODEL (filter), 11));
+
+  g_object_unref (filter);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -389,6 +418,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/filterlistmodel/empty_set_filter", test_empty_set_filter);
   g_test_add_func ("/filterlistmodel/change_filter", test_change_filter);
   g_test_add_func ("/filterlistmodel/incremental", test_incremental);
+  g_test_add_func ("/filterlistmodel/empty", test_empty);
 
   return g_test_run ();
 }
