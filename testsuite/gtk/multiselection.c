@@ -681,6 +681,47 @@ test_set_model (void)
   g_object_unref (selection);
 }
 
+static void
+test_empty (void)
+{
+  GtkMultiSelection *selection;
+  GListStore *store;
+
+  selection = gtk_multi_selection_new (NULL);
+
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (selection)), ==, 0);
+  g_assert_null (g_list_model_get_item (G_LIST_MODEL (selection), 11));
+
+  store = g_list_store_new (G_TYPE_OBJECT);
+  gtk_multi_selection_set_model (selection, G_LIST_MODEL (store));
+  g_object_unref (store);
+
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (selection)), ==, 0);
+  g_assert_null (g_list_model_get_item (G_LIST_MODEL (selection), 11));
+
+  g_object_unref (selection);
+}
+
+static void
+test_empty_filter (void)
+{
+  GtkStringList *stringlist;
+  GtkMultiSelection *selection;
+  GtkSelectionFilterModel *selection_filter;
+
+  stringlist = gtk_string_list_new (NULL);
+  gtk_string_list_append (stringlist, "first item");
+
+  selection = gtk_multi_selection_new (G_LIST_MODEL (stringlist));
+  selection_filter = gtk_selection_filter_model_new (GTK_SELECTION_MODEL (selection));
+
+  g_assert_cmpuint (g_list_model_get_n_items (G_LIST_MODEL (selection_filter)), ==, 0);
+  g_assert_null (g_list_model_get_item (G_LIST_MODEL (selection_filter), 11));
+
+  g_object_unref (selection_filter);
+  g_object_unref (selection);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -703,6 +744,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/multiselection/set_selection", test_set_selection);
   g_test_add_func ("/multiselection/selection-filter", test_selection_filter);
   g_test_add_func ("/multiselection/set-model", test_set_model);
+  g_test_add_func ("/multiselection/empty", test_empty);
+  g_test_add_func ("/multiselection/selection-filter/empty", test_empty_filter);
 
   return g_test_run ();
 }
