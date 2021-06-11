@@ -133,7 +133,7 @@ or `gtk_style_context_get_color()` only accept the context's current
 state for their state argument. You should update all callers to pass
 the current state.
 
-### Stop using `gdk_pixbuf_get_from_window()` and `gdk_cairo_set_source_surface()`
+### Stop using `gdk_pixbuf_get_from_window()` and `gdk_cairo_set_source_window()`
 
 These functions are not supported in GTK 4. Instead, either use
 backend-specific APIs, or render your widgets using
