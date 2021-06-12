@@ -20,7 +20,7 @@
 
 #pragma once
 
-#if (_MSC_VER && !_M_ARM && !_M_ARM64) && (__AVX__ || __SSE4_2__ || __POPCNT__)
+#if (defined(_MSC_VER) && !_M_ARM && !_M_ARM64) && (__AVX__ || __SSE4_2__ || __POPCNT__)
 #include <intrin.h>
 
 static inline guint
