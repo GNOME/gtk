@@ -1335,25 +1335,6 @@ set_sm_client_id (GdkDisplay  *display,
                      gdk_x11_get_xatom_by_name_for_display (display, "SM_CLIENT_ID"));
 }
 
-static void
-gdk_x11_display_init_gl (GdkX11Display *self)
-{
-  GdkDisplay *display G_GNUC_UNUSED = GDK_DISPLAY (self);
-
-  if (GDK_DISPLAY_DEBUG_CHECK (display, GL_DISABLE))
-    return;
-
-  if (!GDK_DISPLAY_DEBUG_CHECK (display, GL_GLX))
-    {
-      /* We favour EGL */
-      if (gdk_x11_display_init_egl (self))
-        return;
-    }
-
-  if (gdk_x11_display_init_glx (self))
-    return;
-}
-
 /**
  * gdk_x11_display_open:
  * @display_name: (nullable): name of the X display.

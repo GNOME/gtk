@@ -60,12 +60,14 @@ struct _GdkX11GLContextClass
   void (* bind_for_frame_fence) (GdkX11GLContext *self);
 };
 
-GdkGLContext *  gdk_x11_surface_create_gl_context       (GdkSurface    *window,
-                                                         gboolean       attached,
-                                                         GdkGLContext  *share,
-                                                         GError       **error);
-gboolean        gdk_x11_display_make_gl_context_current (GdkDisplay    *display,
-                                                         GdkGLContext  *context);
+void                    gdk_x11_display_init_gl                 (GdkX11Display *self);
+
+GdkGLContext *          gdk_x11_surface_create_gl_context       (GdkSurface    *window,
+                                                                 gboolean       attached,
+                                                                 GdkGLContext  *share,
+                                                                 GError       **error);
+gboolean                gdk_x11_display_make_gl_context_current (GdkDisplay    *display,
+                                                                 GdkGLContext  *context);
 
 /* GLX */
 #define GDK_TYPE_X11_GL_CONTEXT_GLX     (gdk_x11_gl_context_glx_get_type())
