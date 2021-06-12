@@ -533,7 +533,7 @@ gdk_texture_get_render_data (GdkTexture  *self,
 /**
  * gdk_texture_save_to_png:
  * @texture: a `GdkTexture`
- * @filename: the filename to store to
+ * @filename: (type filename): the filename to store to
  *
  * Store the given @texture to the @filename as a PNG file.
  *

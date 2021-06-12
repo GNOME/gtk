@@ -714,7 +714,7 @@ gtk_video_set_file (GtkVideo *self,
 /**
  * gtk_video_set_filename:
  * @self: a `GtkVideo`
- * @filename: (nullable): the filename to play
+ * @filename: (type filename) (nullable): the filename to play
  *
  * Makes @self play the given @filename.
  *

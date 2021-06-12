@@ -562,7 +562,7 @@ gsk_render_node_diff (GskRenderNode  *node1,
 /**
  * gsk_render_node_write_to_file:
  * @node: a `GskRenderNode`
- * @filename: the file to save it to.
+ * @filename: (type filename): the file to save it to.
  * @error: Return location for a potential error
  *
  * This function is equivalent to calling gsk_render_node_serialize()

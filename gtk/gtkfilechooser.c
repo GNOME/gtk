@@ -459,7 +459,7 @@ gtk_file_chooser_get_files (GtkFileChooser *chooser)
  * the file’s base name will also appear in the dialog’s file name entry.
  *
  * If the file name isn’t in the current folder of @chooser, then the current
- * folder of @chooser will be changed to the folder containing @filename.
+ * folder of @chooser will be changed to the folder containing @file.
  *
  * Note that the file must exist, or nothing will be done except
  * for the directory change.

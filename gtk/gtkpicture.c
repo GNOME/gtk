@@ -619,7 +619,7 @@ gtk_picture_get_file (GtkPicture *self)
 /**
  * gtk_picture_set_filename:
  * @self: a `GtkPicture`
- * @filename: (nullable): the filename to play
+ * @filename: (type filename) (nullable): the filename to play
  *
  * Makes @self load and display the given @filename.
  *

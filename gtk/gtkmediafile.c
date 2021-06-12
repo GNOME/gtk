@@ -270,7 +270,7 @@ gtk_media_file_new (void)
 
 /**
  * gtk_media_file_new_for_filename:
- * @filename: filename to open
+ * @filename: (type filename): filename to open
  *
  * Creates a new media file for the given filename.
  *
@@ -420,7 +420,7 @@ gtk_media_file_clear (GtkMediaFile *self)
 /**
  * gtk_media_file_set_filename:
  * @self: a `GtkMediaFile`
- * @filename: (nullable): name of file to play
+ * @filename: (type filename) (nullable): name of file to play
  *
  * Sets the `GtkMediaFile to play the given file.
  *
