@@ -20,7 +20,7 @@
 
 #pragma once
 
-#if defined(_MSC_VER) && !defined(_M_ARM) && !defined(_M_ARM64) && defined(__AVX__) && defined(__SSE4_2__) && defined(__POPCNT__)
+#if defined(_MSC_VER) && !defined(_M_ARM) && !defined(_M_ARM64) && defined(__AVX__) || defined(__SSE4_2__) || defined(__POPCNT__)
 #include <intrin.h>
 
 static inline guint
