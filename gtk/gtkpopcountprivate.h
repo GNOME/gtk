@@ -20,7 +20,7 @@
 
 #pragma once
 
-#if defined(_MSC_VER) && !defined (_M_ARM) && !defined (_M_ARM64)
+#if (defined(_MSC_VER) && !_M_ARM && !_M_ARM64) && (__AVX__ || __SSE4_2__ || __POPCNT__)
 #include <intrin.h>
 
 static inline guint
@@ -29,7 +29,7 @@ gtk_popcount (guint32 value)
   return __popcnt (value);
 }
 #elif defined(__GNUC__) || defined(__clang__)
-# define gtk_popcount(v) __builtin_popcount(v)
+#define gtk_popcount(v) __builtin_popcount (v)
 #else
 static inline guint
 gtk_popcount (guint32 value)
