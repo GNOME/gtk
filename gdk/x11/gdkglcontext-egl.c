@@ -37,49 +37,9 @@ struct _GdkX11GLContextEGL
   EGLContext egl_context;
 };
 
-typedef struct {
-  EGLDisplay egl_display;
-  EGLConfig egl_config;
-  EGLSurface egl_surface;
-
-  /* Only set by the dummy surface we attach to the display */
-  Display *xdisplay;
-  Window dummy_xwin;
-  XVisualInfo *xvisinfo;
-} DrawableInfo;
-
 typedef struct _GdkX11GLContextClass    GdkX11GLContextEGLClass;
 
 G_DEFINE_TYPE (GdkX11GLContextEGL, gdk_x11_gl_context_egl, GDK_TYPE_X11_GL_CONTEXT)
-
-static void
-drawable_info_free (gpointer data)
-{
-  DrawableInfo *info = data;
-
-  if (data == NULL)
-    return;
-
-  if (info->egl_surface != NULL)
-    {
-      eglDestroySurface (info->egl_display, info->egl_surface);
-      info->egl_surface = NULL;
-    }
-
-  if (info->dummy_xwin != None)
-    {
-      XDestroyWindow (info->xdisplay, info->dummy_xwin);
-      info->dummy_xwin = None;
-    }
-
-  if (info->xvisinfo != NULL)
-    {
-      XFree (info->xvisinfo);
-      info->xvisinfo = NULL;
-    }
-
-  g_free (info);
-}
 
 /**
  * gdk_x11_display_get_egl_display:
@@ -175,103 +135,6 @@ gdk_x11_display_create_egl_config (GdkX11Display *display)
 }
 
 #undef MAX_EGL_ATTRS
-
-static XVisualInfo *
-get_visual_info_for_egl_config (GdkDisplay *display,
-                                EGLConfig   egl_config)
-{
-  XVisualInfo visinfo_template;
-  int template_mask = 0;
-  XVisualInfo *visinfo = NULL;
-  int visinfos_count;
-  EGLint visualid, red_size, green_size, blue_size, alpha_size;
-  EGLDisplay egl_display = GDK_X11_DISPLAY (display)->egl_display;
-
-  eglGetConfigAttrib (egl_display, egl_config, EGL_NATIVE_VISUAL_ID, &visualid);
-
-  if (visualid != 0)
-    {
-      visinfo_template.visualid = visualid;
-      template_mask |= VisualIDMask;
-    }
-  else
-    {
-      /* some EGL drivers don't implement the EGL_NATIVE_VISUAL_ID
-       * attribute, so attempt to find the closest match.
-       */
-      eglGetConfigAttrib (egl_display, egl_config, EGL_RED_SIZE, &red_size);
-      eglGetConfigAttrib (egl_display, egl_config, EGL_GREEN_SIZE, &green_size);
-      eglGetConfigAttrib (egl_display, egl_config, EGL_BLUE_SIZE, &blue_size);
-      eglGetConfigAttrib (egl_display, egl_config, EGL_ALPHA_SIZE, &alpha_size);
-
-      visinfo_template.depth = red_size + green_size + blue_size + alpha_size;
-      template_mask |= VisualDepthMask;
-
-      visinfo_template.screen = DefaultScreen (gdk_x11_display_get_xdisplay (display));
-      template_mask |= VisualScreenMask;
-    }
-
-  visinfo = XGetVisualInfo (gdk_x11_display_get_xdisplay (display),
-                            template_mask,
-                            &visinfo_template,
-                            &visinfos_count);
-
-  if (visinfos_count < 1)
-    return NULL;
-
-  return visinfo;
-}
-
-static EGLSurface
-gdk_x11_display_get_egl_dummy_surface (GdkDisplay *display,
-                                       EGLConfig   egl_config)
-{
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
-  DrawableInfo *info;
-  XVisualInfo *xvisinfo;
-  XSetWindowAttributes attrs;
-
-  info = g_object_get_data (G_OBJECT (display), "-gdk-x11-egl-dummy-surface");
-  if (info != NULL)
-    return info->egl_surface;
-
-  xvisinfo = get_visual_info_for_egl_config (display, egl_config);
-  if (xvisinfo == NULL)
-    return NULL;
-
-  info = g_new (DrawableInfo, 1);
-  info->xdisplay = gdk_x11_display_get_xdisplay (display);
-  info->xvisinfo = xvisinfo;
-  info->egl_display = GDK_X11_DISPLAY (display)->egl_display;
-  info->egl_config = egl_config;
-
-  attrs.override_redirect = True;
-  attrs.colormap = gdk_x11_display_get_window_colormap (display_x11);
-  attrs.border_pixel = 0;
-
-  info->dummy_xwin =
-    XCreateWindow (info->xdisplay,
-                   DefaultRootWindow (info->xdisplay),
-                   -100, -100, 1, 1,
-                   0,
-                   gdk_x11_display_get_window_depth (display_x11),
-                   CopyFromParent,
-                   gdk_x11_display_get_window_visual (display_x11),
-                   CWOverrideRedirect | CWColormap | CWBorderPixel,
-                   &attrs);
-
-  info->egl_surface =
-    eglCreateWindowSurface (info->egl_display,
-                            info->egl_config,
-                            (EGLNativeWindowType) info->dummy_xwin,
-                            NULL);
-
-  g_object_set_data_full (G_OBJECT (display), "-gdk-x11-egl-dummy-surface",
-                          info,
-                          drawable_info_free);
-
-  return info->egl_surface;
-}
 
 static EGLSurface
 gdk_x11_surface_get_egl_surface (GdkSurface *surface)
@@ -718,7 +581,7 @@ gdk_x11_gl_context_egl_make_current (GdkDisplay   *display,
       if (display_x11->has_egl_surfaceless_context)
         egl_surface = EGL_NO_SURFACE;
       else
-        egl_surface = gdk_x11_display_get_egl_dummy_surface (display, display_x11->egl_config);
+        egl_surface = gdk_x11_surface_get_egl_surface (display_x11->leader_gdk_surface);
     }
 
   GDK_DISPLAY_NOTE (display, OPENGL,
