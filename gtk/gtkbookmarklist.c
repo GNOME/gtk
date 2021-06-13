@@ -452,7 +452,7 @@ gtk_bookmark_list_set_filename (GtkBookmarkList *self,
  * Returns the filename of the bookmark file that
  * this list is loading.
  *
- * Returns: the filename of the .xbel file
+ * Returns: (type filename): the filename of the .xbel file
  */
 const char *
 gtk_bookmark_list_get_filename (GtkBookmarkList *self)
@@ -464,7 +464,7 @@ gtk_bookmark_list_get_filename (GtkBookmarkList *self)
 
 /**
  * gtk_bookmark_list_new:
- * @filename: (nullable): The bookmark file to load
+ * @filename: (type filename) (nullable): The bookmark file to load
  * @attributes: (nullable): The attributes to query
  *
  * Creates a new `GtkBookmarkList` with the given @attributes.

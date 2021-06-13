@@ -1175,7 +1175,7 @@ gtk_builder_new (void)
 /**
  * gtk_builder_add_from_file:
  * @builder: a `GtkBuilder`
- * @filename: the name of the file to parse
+ * @filename: (type filename): the name of the file to parse
  * @error: (nullable): return location for an error
  *
  * Parses a file containing a UI definition and merges it with
@@ -1245,7 +1245,7 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
 /**
  * gtk_builder_add_objects_from_file:
  * @builder: a `GtkBuilder`
- * @filename: the name of the file to parse
+ * @filename: (type filename): the name of the file to parse
  * @object_ids: (array zero-terminated=1) (element-type utf8): nul-terminated array of objects to build
  * @error: (nullable): return location for an error
  *
@@ -2760,7 +2760,7 @@ gtk_builder_create_closure (GtkBuilder             *builder,
 
 /**
  * gtk_builder_new_from_file: (constructor)
- * @filename: filename of user interface description file
+ * @filename: (type filename): filename of user interface description file
  *
  * Parses the UI definition in the file @filename.
  *
