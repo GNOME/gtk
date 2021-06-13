@@ -35,7 +35,6 @@
 
 #include "gdkglcontextprivate.h"
 #include "gdkdisplay-x11.h"
-#include "gdkvisual-x11.h"
 #include "gdksurface.h"
 #include "gdkinternals.h"
 

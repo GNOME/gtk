@@ -91,9 +91,6 @@ gdk_x11_screen_dispose (GObject *object)
 
   _gdk_x11_xsettings_finish (x11_screen);
 
-  for (i = 0; i < x11_screen->nvisuals; i++)
-    g_object_run_dispose (G_OBJECT (x11_screen->visuals[i]));
-
   G_OBJECT_CLASS (gdk_x11_screen_parent_class)->dispose (object);
 
   x11_screen->xdisplay = NULL;
@@ -106,12 +103,6 @@ static void
 gdk_x11_screen_finalize (GObject *object)
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (object);
-  int           i;
-
-  /* Visual Part */
-  for (i = 0; i < x11_screen->nvisuals; i++)
-    g_object_unref (x11_screen->visuals[i]);
-  g_free (x11_screen->visuals);
 
   g_free (x11_screen->window_manager_name);
 
@@ -896,8 +887,6 @@ _gdk_x11_screen_new (GdkDisplay *display,
 
   init_randr_support (x11_screen);
   init_multihead (x11_screen);
-
-  _gdk_x11_screen_init_visuals (x11_screen);
 
   return x11_screen;
 }

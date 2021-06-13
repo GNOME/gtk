@@ -31,7 +31,6 @@
 #include "gdkpopupprivate.h"
 #include "gdktoplevelprivate.h"
 #include "gdkdragsurfaceprivate.h"
-#include "gdkvisual-x11.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevice-xi2-private.h"
