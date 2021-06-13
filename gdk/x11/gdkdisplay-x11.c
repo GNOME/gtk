@@ -1335,6 +1335,40 @@ set_sm_client_id (GdkDisplay  *display,
                      gdk_x11_get_xatom_by_name_for_display (display, "SM_CLIENT_ID"));
 }
 
+void
+gdk_x11_display_query_default_visual (GdkX11Display  *self,
+                                      Visual        **out_visual,
+                                      int            *out_depth)
+{
+  XVisualInfo template, *visinfo;
+  int n_visuals;
+  Display *dpy;
+
+  dpy = gdk_x11_display_get_xdisplay (GDK_DISPLAY (self));
+
+  template.screen = self->screen->screen_num;
+  template.depth = 32;
+  template.red_mask  = 0xff0000;
+  template.green_mask = 0x00ff00;
+  template.blue_mask = 0x0000ff;
+
+  visinfo = XGetVisualInfo (dpy,
+                            VisualScreenMask | VisualDepthMask
+                            | VisualRedMaskMask | VisualGreenMaskMask | VisualBlueMaskMask,
+                            &template,
+                            &n_visuals);
+  if (visinfo != NULL)
+    {
+      *out_visual = visinfo[0].visual;
+      *out_depth = visinfo[0].depth;
+      XFree (visinfo);
+      return;
+    }
+
+  *out_visual = DefaultVisual (dpy, self->screen->screen_num);
+  *out_depth = DefaultDepth (dpy, self->screen->screen_num);
+}
+
 /**
  * gdk_x11_display_open:
  * @display_name: (nullable): name of the X display.
@@ -1406,27 +1440,14 @@ gdk_x11_display_open (const char *display_name)
    * as we care about GLX details such as alpha/depth/stencil depth,
    * stereo and double buffering
    */
-  gdk_x11_display_init_gl (display_x11);
+  if (!gdk_x11_display_init_gl (display_x11, &display_x11->window_visual, &display_x11->window_depth))
+    gdk_x11_display_query_default_visual (display_x11, &display_x11->window_visual, &display_x11->window_depth);
 
-  if (display_x11->screen->rgba_visual)
-    {
-      Visual *xvisual = GDK_X11_VISUAL (display_x11->screen->rgba_visual)->xvisual;
-
-      display_x11->window_depth = display_x11->screen->rgba_visual->depth;
-      display_x11->window_visual = xvisual;
-      display_x11->window_colormap = XCreateColormap (xdisplay,
-                                                      DefaultRootWindow (xdisplay),
-                                                      xvisual,
-                                                      AllocNone);
-      gdk_display_set_rgba (display, TRUE);
-    }
-  else
-    {
-      display_x11->window_depth = DefaultDepth (xdisplay, DefaultScreen (xdisplay)),
-      display_x11->window_visual = DefaultVisual (xdisplay, DefaultScreen (xdisplay));
-      display_x11->window_colormap = DefaultColormap (xdisplay, DefaultScreen (xdisplay));
-      gdk_display_set_rgba (display, FALSE);
-    }
+  display_x11->window_colormap = XCreateColormap (xdisplay,
+                                                  DefaultRootWindow (xdisplay),
+                                                  display_x11->window_visual,
+                                                  AllocNone);
+  gdk_display_set_rgba (display, display_x11->window_depth == 32);
 
   /* We need to initialize events after we have the screen
    * structures in places

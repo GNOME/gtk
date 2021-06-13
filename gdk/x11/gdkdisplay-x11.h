@@ -175,6 +175,9 @@ struct _GdkX11DisplayClass
                                                                  const XEvent           *event);
 };
 
+void            gdk_x11_display_query_default_visual            (GdkX11Display          *self,
+                                                                 Visual                **out_visual,
+                                                                 int                    *out_depth);
 void            _gdk_x11_display_error_event                    (GdkDisplay             *display,
                                                                  XErrorEvent            *error);
 gsize           gdk_x11_display_get_max_request_size            (GdkDisplay             *display);

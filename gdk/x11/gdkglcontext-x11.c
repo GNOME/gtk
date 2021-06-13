@@ -103,22 +103,26 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
   return FALSE;
 }
 
-void
-gdk_x11_display_init_gl (GdkX11Display *self)
+gboolean
+gdk_x11_display_init_gl (GdkX11Display  *self,
+                         Visual        **out_visual,
+                         int            *out_depth)
 {
   GdkDisplay *display G_GNUC_UNUSED = GDK_DISPLAY (self);
 
   if (GDK_DISPLAY_DEBUG_CHECK (display, GL_DISABLE))
-    return;
+    return FALSE;
 
   if (!GDK_DISPLAY_DEBUG_CHECK (display, GL_GLX))
     {
       /* We favour EGL */
-      if (gdk_x11_display_init_egl (self))
-        return;
+      if (gdk_x11_display_init_egl (self, out_visual, out_depth))
+        return TRUE;
     }
 
-  if (gdk_x11_display_init_glx (self))
-    return;
+  if (gdk_x11_display_init_glx (self, out_visual, out_depth))
+    return TRUE;
+
+  return FALSE;
 }
 

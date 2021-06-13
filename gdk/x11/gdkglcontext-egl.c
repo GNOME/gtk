@@ -593,7 +593,9 @@ gdk_x11_gl_context_egl_init (GdkX11GLContextEGL *self)
 }
 
 gboolean
-gdk_x11_display_init_egl (GdkX11Display *self)
+gdk_x11_display_init_egl (GdkX11Display  *self,
+                          Visual        **out_visual,
+                          int            *out_depth)
 {
   GdkDisplay *display = GDK_DISPLAY (self);
   Display *dpy;
@@ -663,6 +665,8 @@ gdk_x11_display_init_egl (GdkX11Display *self)
                                self->has_egl_buffer_age ? "yes" : "no",
                                self->has_egl_swap_buffers_with_damage ? "yes" : "no",
                                self->has_egl_surfaceless_context ? "yes" : "no"));
+
+  gdk_x11_display_query_default_visual (self, out_visual, out_depth);
 
   return TRUE;
 }

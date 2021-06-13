@@ -60,7 +60,9 @@ struct _GdkX11GLContextClass
   void (* bind_for_frame_fence) (GdkX11GLContext *self);
 };
 
-void                    gdk_x11_display_init_gl                 (GdkX11Display *self);
+gboolean                gdk_x11_display_init_gl                 (GdkX11Display *self,
+                                                                 Visual       **out_visual,
+                                                                 int           *out_depth);
 
 GdkGLContext *          gdk_x11_surface_create_gl_context       (GdkSurface    *window,
                                                                  gboolean       attached,
@@ -76,7 +78,9 @@ gboolean                gdk_x11_display_make_gl_context_current (GdkDisplay    *
 
 typedef struct _GdkX11GLContextGLX      GdkX11GLContextGLX;
 
-gboolean                gdk_x11_display_init_glx                (GdkX11Display *display_x11);
+gboolean                gdk_x11_display_init_glx                (GdkX11Display *display_x11,
+                                                                 Visual       **out_visual,
+                                                                 int           *out_depth);
 
 GType                   gdk_x11_gl_context_glx_get_type         (void) G_GNUC_CONST;
 GdkX11GLContext *       gdk_x11_gl_context_glx_new              (GdkSurface    *surface,
@@ -94,7 +98,9 @@ gboolean                gdk_x11_gl_context_glx_make_current     (GdkDisplay    *
 
 typedef struct _GdkX11GLContextEGL      GdkX11GLContextEGL;
 
-gboolean                gdk_x11_display_init_egl                (GdkX11Display *display_x11);
+gboolean                gdk_x11_display_init_egl                (GdkX11Display *display_x11,
+                                                                 Visual       **out_visual,
+                                                                 int           *out_depth);
 void                    gdk_x11_surface_destroy_egl_surface     (GdkX11Surface *self);
 
 GType                   gdk_x11_gl_context_egl_get_type         (void) G_GNUC_CONST;
