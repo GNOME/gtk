@@ -239,8 +239,7 @@ discard_preedit (GtkIMContext *context)
 
   /* reset any partial input for this NSView */
   [(GdkMacosBaseView *)nsview unmarkText];
-  NSInputManager *currentInputManager = [NSInputManager currentInputManager];
-  [currentInputManager markedTextAbandoned:nsview];
+  [[NSTextInputContext currentInputContext] discardMarkedText];
 
   if (qc->preedit_str && strlen (qc->preedit_str) > 0)
     {

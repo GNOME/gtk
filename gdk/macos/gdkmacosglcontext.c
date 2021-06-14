@@ -145,6 +145,7 @@ ensure_gl_view (GdkMacosGLContext *self)
       [nsview setPostsFrameChangedNotifications: YES];
       [nsview setNeedsDisplay:YES];
       [nswindow setContentView:nsview];
+      [nswindow makeFirstResponder:nsview];
       [nsview release];
 
       if (self->dummy_view != NULL)
