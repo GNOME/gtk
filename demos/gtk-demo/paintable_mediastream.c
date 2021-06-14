@@ -267,11 +267,11 @@ gtk_nuclear_media_stream_init (GtkNuclearMediaStream *nuclear)
    * However, media streams need to tell GTK once they are initialized,
    * so we do that here.
    */
-  gtk_media_stream_prepared (GTK_MEDIA_STREAM (nuclear),
-                             FALSE,
-                             TRUE,
-                             TRUE,
-                             DURATION);
+  gtk_media_stream_set_prepared (GTK_MEDIA_STREAM (nuclear),
+                                 FALSE,
+                                 TRUE,
+                                 TRUE,
+                                 DURATION);
 }
 
 /* And finally, we add the simple constructor we declared in the header. */
