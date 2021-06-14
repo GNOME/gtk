@@ -137,8 +137,10 @@ void                    gtk_media_stream_unset_prepared         (GtkMediaStream 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_media_stream_update                 (GtkMediaStream *self,
                                                                  gint64          timestamp);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_4_FOR(gtk_media_stream_set_ended)
 void                    gtk_media_stream_ended                  (GtkMediaStream *self);
+GDK_AVAILABLE_IN_4_4
+void                    gtk_media_stream_set_ended              (GtkMediaStream *self);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_media_stream_seek_success           (GtkMediaStream *self);
 GDK_AVAILABLE_IN_ALL
