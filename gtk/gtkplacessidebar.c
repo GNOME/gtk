@@ -1851,7 +1851,7 @@ drag_drop_callback (GtkDropTarget    *target,
           emit_drag_perform_drop (sidebar,
                                   dest_file,
                                   g_value_get_boxed (value),
-                                  gdk_drop_get_actions (gtk_drop_target_get_drop (target)));
+                                  gdk_drop_get_actions (gtk_drop_target_get_current_drop (target)));
 
           g_object_unref (dest_file);
         }

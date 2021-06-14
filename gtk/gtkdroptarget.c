@@ -148,6 +148,7 @@ struct _GtkDropTargetClass
 enum {
   PROP_0,
   PROP_ACTIONS,
+  PROP_CURRENT_DROP,
   PROP_DROP,
   PROP_FORMATS,
   PROP_PRELOAD,
@@ -186,6 +187,7 @@ gtk_drop_target_end_drop (GtkDropTarget *self)
 
   g_clear_object (&self->drop);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_DROP]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CURRENT_DROP]);
 
   if (G_IS_VALUE (&self->value))
     {
@@ -320,6 +322,7 @@ gtk_drop_target_start_drop (GtkDropTarget *self,
 
   self->drop = g_object_ref (drop);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_DROP]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CURRENT_DROP]);
 
   if (self->preload)
     gtk_drop_target_load (self);
@@ -565,6 +568,7 @@ gtk_drop_target_get_property (GObject    *object,
       break;
 
     case PROP_DROP:
+    case PROP_CURRENT_DROP:
       g_value_set_object (value, self->drop);
       break;
 
@@ -620,13 +624,29 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkDropTarget:drop: (attributes org.gtk.Property.get=gtk_drop_target_get_drop)
+   * GtkDropTarget:drop: (attributes org.gtk.Property.get=gtk_drop_target_get_drop) (skip)
    *
    * The `GdkDrop` that is currently being performed.
+   *
+   * Deprecated: 4.4: Use [property@Gtk.DropTarget:current-drop] instead
    */
   properties[PROP_DROP] =
        g_param_spec_object ("drop",
                             P_("Drop"),
+                            P_("Current drop"),
+                            GDK_TYPE_DROP,
+                            GTK_PARAM_READABLE | G_PARAM_DEPRECATED);
+
+  /**
+   * GtkDropTarget:current-drop: (attributes org.gtk.Property.get=gtk_drop_target_get_current_drop)
+   *
+   * The `GdkDrop` that is currently being performed.
+   *
+   * Since: 4.4
+   */
+  properties[PROP_CURRENT_DROP] =
+       g_param_spec_object ("current-drop",
+                            P_("Current drop"),
                             P_("Current drop"),
                             GDK_TYPE_DROP,
                             GTK_PARAM_READABLE);
@@ -1010,9 +1030,31 @@ gtk_drop_target_get_preload (GtkDropTarget *self)
  * If no drop operation is going on, %NULL is returned.
  *
  * Returns: (nullable) (transfer none): The current drop
+ *
+ * Deprecated: 4.4: Use [method@Gtk.DropTarget.get_current_drop] instead
  */
 GdkDrop *
 gtk_drop_target_get_drop (GtkDropTarget *self)
+{
+  g_return_val_if_fail (GTK_IS_DROP_TARGET (self), NULL);
+
+  return self->drop;
+}
+
+/**
+ * gtk_drop_target_get_current_drop: (attributes org.gtk.Method.get_property=current-drop)
+ * @self: a `GtkDropTarget`
+ *
+ * Gets the currently handled drop operation.
+ *
+ * If no drop operation is going on, %NULL is returned.
+ *
+ * Returns: (nullable) (transfer none): The current drop
+ *
+ * Since: 4.4
+ */
+GdkDrop *
+gtk_drop_target_get_current_drop (GtkDropTarget *self)
 {
   g_return_val_if_fail (GTK_IS_DROP_TARGET (self), NULL);
 
@@ -1044,7 +1086,7 @@ gtk_drop_target_get_value (GtkDropTarget *self)
  *
  * Rejects the ongoing drop operation.
  *
- * If no drop operation is ongoing, i.e when [property@Gtk.DropTarget:drop]
+ * If no drop operation is ongoing, i.e when [property@Gtk.DropTarget:current-drop]
  * is %NULL, this function does nothing.
  *
  * This function should be used when delaying the decision
@@ -1061,3 +1103,4 @@ gtk_drop_target_reject (GtkDropTarget *self)
 
   gtk_drop_target_end_drop (self);
 }
+
