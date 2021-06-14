@@ -1012,7 +1012,7 @@ gtk_media_stream_unrealize (GtkMediaStream *self,
 }
 
 /**
- * gtk_media_stream_prepared:
+ * gtk_media_stream_set_prepared:
  * @self: a `GtkMediaStream`
  * @has_audio: %TRUE if the stream should advertise audio support
  * @has_video: %TRUE if the stream should advertise video support
@@ -1029,13 +1029,15 @@ gtk_media_stream_unrealize (GtkMediaStream *self,
  *
  * This function may not be called again until the stream has been
  * reset via [method@Gtk.MediaStream.unprepared].
+ *
+ * Since: 4.4
  */
 void
-gtk_media_stream_prepared (GtkMediaStream *self,
-                           gboolean        has_audio,
-                           gboolean        has_video,
-                           gboolean        seekable,
-                           gint64          duration)
+gtk_media_stream_set_prepared (GtkMediaStream *self,
+                               gboolean        has_audio,
+                               gboolean        has_video,
+                               gboolean        seekable,
+                               gint64          duration)
 {
   GtkMediaStreamPrivate *priv = gtk_media_stream_get_instance_private (self);
 
@@ -1072,7 +1074,7 @@ gtk_media_stream_prepared (GtkMediaStream *self,
 }
 
 /**
- * gtk_media_stream_unprepared:
+ * gtk_media_stream_unset_prepared:
  * @self: a `GtkMediaStream`
  *
  * Resets a given media stream implementation.
@@ -1080,9 +1082,11 @@ gtk_media_stream_prepared (GtkMediaStream *self,
  * [method@Gtk.MediaStream.prepared] can then be called again.
  *
  * This function will also reset any error state the stream was in.
+ *
+ * Since: 4.4
  */
 void
-gtk_media_stream_unprepared (GtkMediaStream *self)
+gtk_media_stream_unset_prepared (GtkMediaStream *self)
 {
   GtkMediaStreamPrivate *priv = gtk_media_stream_get_instance_private (self);
 
@@ -1133,6 +1137,42 @@ gtk_media_stream_unprepared (GtkMediaStream *self)
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PREPARED]);
 
   g_object_thaw_notify (G_OBJECT (self));
+}
+
+/**
+ * gtk_media_stream_prepared:
+ * @self: a `GtkMediaStream`
+ * @has_audio: %TRUE if the stream should advertise audio support
+ * @has_video: %TRUE if the stream should advertise video support
+ * @seekable: %TRUE if the stream should advertise seekability
+ * @duration: The duration of the stream or 0 if unknown
+ *
+ * Same as gtk_media_stream_set_prepared().
+ *
+ * Deprecated: 4.4: Use [method@Gtk.MediaStream.set_prepared] instead.
+ */
+void
+gtk_media_stream_prepared (GtkMediaStream *self,
+                           gboolean        has_audio,
+                           gboolean        has_video,
+                           gboolean        seekable,
+                           gint64          duration)
+{
+  gtk_media_stream_set_prepared (self, has_audio, has_video, seekable, duration);
+}
+
+/**
+ * gtk_media_stream_unprepared:
+ * @self: a `GtkMediaStream`
+ *
+ * Same as gtk_media_stream_unset_prepared().
+ *
+ * Deprecated: 4.4: Use [method@Gtk.MediaStream.unset_prepared] instead.
+ */
+void
+gtk_media_stream_unprepared (GtkMediaStream *self)
+{
+  gtk_media_stream_unset_prepared (self);
 }
 
 /**

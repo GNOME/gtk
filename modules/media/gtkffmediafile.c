@@ -553,13 +553,13 @@ gtk_ff_media_file_open (GtkMediaFile *file)
       return;
     }
 
-  gtk_media_stream_prepared (GTK_MEDIA_STREAM (video),
-                             FALSE,
-                             video->codec_ctx != NULL,
-                             TRUE,
-                             video->format_ctx->duration != AV_NOPTS_VALUE
-                             ? av_rescale (video->format_ctx->duration, G_USEC_PER_SEC, AV_TIME_BASE)
-                             : 0);
+  gtk_media_stream_set_prepared (GTK_MEDIA_STREAM (video),
+                                 FALSE,
+                                 video->codec_ctx != NULL,
+                                 TRUE,
+                                 video->format_ctx->duration != AV_NOPTS_VALUE
+                                 ? av_rescale (video->format_ctx->duration, G_USEC_PER_SEC, AV_TIME_BASE)
+                                 : 0);
 
   gdk_paintable_invalidate_size (GDK_PAINTABLE (video));
 

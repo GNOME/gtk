@@ -116,14 +116,23 @@ void                    gtk_media_stream_unrealize              (GtkMediaStream 
                                                                  GdkSurface      *surface);
 
 /* for implementations only */
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_4_FOR(gtk_media_stream_set_prepared)
 void                    gtk_media_stream_prepared               (GtkMediaStream *self,
                                                                  gboolean        has_audio,
                                                                  gboolean        has_video,
                                                                  gboolean        seekable,
                                                                  gint64          duration);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_4_FOR(gtk_media_stream_unset_prepared)
 void                    gtk_media_stream_unprepared             (GtkMediaStream *self);
+
+GDK_AVAILABLE_IN_4_4
+void                    gtk_media_stream_set_prepared           (GtkMediaStream *self,
+                                                                 gboolean        has_audio,
+                                                                 gboolean        has_video,
+                                                                 gboolean        seekable,
+                                                                 gint64          duration);
+GDK_AVAILABLE_IN_4_4
+void                    gtk_media_stream_unset_prepared         (GtkMediaStream *self);
 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_media_stream_update                 (GtkMediaStream *self,
