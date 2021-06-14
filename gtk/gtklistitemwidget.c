@@ -334,6 +334,7 @@ gtk_list_item_widget_click_gesture_pressed (GtkGestureClick   *gesture,
     {
       if (n_press == 2 && !priv->single_click_activate)
         {
+          gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
           gtk_widget_activate_action (GTK_WIDGET (self),
                                       "list.activate-item",
                                       "u",
@@ -356,14 +357,17 @@ gtk_list_item_widget_click_gesture_released (GtkGestureClick   *gesture,
 {
   GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
 
-  if (priv->single_click_activate)
+  if (!priv->list_item || priv->list_item->activatable)
     {
-      gtk_widget_activate_action (GTK_WIDGET (self),
-                                  "list.activate-item",
-                                  "u",
-                                  priv->position);
-
-      return;
+      if (n_press == 1 && priv->single_click_activate)
+        {
+          gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+          gtk_widget_activate_action (GTK_WIDGET (self),
+                                      "list.activate-item",
+                                      "u",
+                                      priv->position);
+          return;
+        }
     }
 
   if (!priv->list_item || priv->list_item->selectable)
