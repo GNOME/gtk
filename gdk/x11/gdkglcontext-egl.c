@@ -486,19 +486,6 @@ gdk_x11_display_init_egl (GdkX11Display  *self,
       return FALSE;
     }
 
-  /* While NVIDIA might support EGL, it might very well not support
-   * all the EGL subset we rely on; we should be looking at more
-   * EGL extensions, but for the time being, this is a blanket
-   * fallback to GLX
-   */
-  const char *vendor = eglQueryString (self->egl_display, EGL_VENDOR);
-  if (strstr (vendor, "NVIDIA") != NULL)
-    {
-      eglTerminate (self->egl_display);
-      self->egl_display = NULL;
-      return FALSE;
-    }
-
   self->egl_version = epoxy_egl_version (dpy);
 
   self->has_egl_khr_create_context =
