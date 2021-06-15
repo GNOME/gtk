@@ -4657,9 +4657,9 @@ gdk_win32_popup_init (GdkWin32Popup *popup)
 
 static void
 gdk_win32_popup_get_property (GObject    *object,
-                                guint       prop_id,
-                                GValue     *value,
-                                GParamSpec *pspec)
+                              guint       prop_id,
+                              GValue     *value,
+                              GParamSpec *pspec)
 {
   GdkSurface *surface = GDK_SURFACE (object);
 
@@ -4681,9 +4681,9 @@ gdk_win32_popup_get_property (GObject    *object,
 
 static void
 gdk_win32_popup_set_property (GObject      *object,
-                                guint         prop_id,
-                                const GValue *value,
-                                GParamSpec   *pspec)
+                              guint         prop_id,
+                              const GValue *value,
+                              GParamSpec   *pspec)
 {
   GdkSurface *surface = GDK_SURFACE (object);
 
@@ -4718,9 +4718,9 @@ gdk_win32_popup_class_init (GdkWin32PopupClass *class)
 
 static gboolean
 gdk_win32_popup_present (GdkPopup       *popup,
-                           int             width,
-                           int             height,
-                           GdkPopupLayout *layout)
+                         int             width,
+                         int             height,
+                         GdkPopupLayout *layout)
 {
   return gdk_win32_surface_present_popup (GDK_SURFACE (popup), width, height, layout);
 }
