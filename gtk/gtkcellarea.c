@@ -3423,8 +3423,18 @@ gtk_cell_area_inner_cell_area (GtkCellArea        *area,
 
   *inner_area = *cell_area;
 
+  if (border.left + border.right > cell_area->width)
+    {
+      border.left = cell_area->width / 2;
+      border.right = (cell_area->width + 1) / 2;
+    }
   inner_area->x += border.left;
   inner_area->width -= border.left + border.right;
+  if (border.top + border.bottom > cell_area->height)
+    {
+      border.top = cell_area->height / 2;
+      border.bottom = (cell_area->height + 1) / 2;
+    }
   inner_area->y += border.top;
   inner_area->height -= border.top + border.bottom;
 }
