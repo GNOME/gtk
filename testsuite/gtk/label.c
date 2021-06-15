@@ -196,12 +196,35 @@ test_label_markup (void)
   gtk_window_destroy (GTK_WINDOW (window));
 }
 
+static void
+test_label_underline (void)
+{
+  GtkWidget *window;
+  GtkWidget *label;
+
+  window = gtk_window_new ();
+
+  label = gtk_label_new ("");
+
+  gtk_window_set_child (GTK_WINDOW (window), label);
+  gtk_window_set_mnemonics_visible (GTK_WINDOW (window), TRUE);
+
+  gtk_label_set_use_markup (GTK_LABEL (label), FALSE);
+  gtk_label_set_use_underline (GTK_LABEL (label), TRUE);
+  gtk_label_set_label (GTK_LABEL (label), "tes_t & no markup <<");
+
+  g_assert_cmpint (gtk_label_get_mnemonic_keyval (GTK_LABEL (label)), ==, GDK_KEY_t);
+
+  gtk_window_destroy (GTK_WINDOW (window));
+}
+
 int
 main (int argc, char *argv[])
 {
   gtk_test_init (&argc, &argv);
 
   g_test_add_func ("/label/markup-parse", test_label_markup);
+  g_test_add_func ("/label/underline-parse", test_label_underline);
 
   return g_test_run ();
 }
