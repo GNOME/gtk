@@ -345,6 +345,7 @@ static void
 combo_changed (GtkComboBox *combo,
                gpointer     user_data)
 {
+  GtkDialog *dialog = user_data;
   GtkEntry *entry = g_object_get_data (user_data, "entry");
   const char *action;
   char **accels;
@@ -360,6 +361,17 @@ combo_changed (GtkComboBox *combo,
   g_strfreev (accels);
 
   gtk_editable_set_text (GTK_EDITABLE (entry), str);
+  gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_APPLY, FALSE);
+}
+
+static void
+entry_changed (GtkEntry   *entry,
+               GParamSpec *pspec,
+               gpointer    user_data)
+{
+  GtkDialog *dialog = user_data;
+
+  gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_APPLY, TRUE);
 }
 
 static void
@@ -373,7 +385,7 @@ response (GtkDialog *dialog,
   const char *str;
   char **accels;
 
-  if (response_id == GTK_RESPONSE_CLOSE)
+  if (response_id == GTK_RESPONSE_CANCEL)
     {
       gtk_window_destroy (GTK_WINDOW (dialog));
       return;
@@ -389,6 +401,8 @@ response (GtkDialog *dialog,
 
   gtk_application_set_accels_for_action (gtk_window_get_application (user_data), action, (const char **) accels);
   g_strfreev (accels);
+
+  gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_APPLY, FALSE);
 }
 
 static void
@@ -403,21 +417,40 @@ edit_accels (GSimpleAction *action,
   GtkWidget *dialog;
   int i;
 
-  dialog = gtk_dialog_new ();
+  dialog = gtk_dialog_new_with_buttons ("Accelerators",
+                                        NULL,
+                                        GTK_DIALOG_USE_HEADER_BAR,
+                                        "Close", GTK_RESPONSE_CANCEL,
+                                        "Set", GTK_RESPONSE_APPLY,
+                                        NULL);
+
   gtk_window_set_application (GTK_WINDOW (dialog), app);
   actions = gtk_application_list_action_descriptions (app);
+
   combo = gtk_combo_box_text_new ();
+  g_object_set (gtk_dialog_get_content_area (GTK_DIALOG (dialog)),
+                "margin-top", 10,
+                "margin-bottom", 10,
+                "margin-start", 10,
+                "margin-end", 10,
+                "spacing", 10,
+                NULL);
+
   gtk_box_append (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), combo);
   for (i = 0; actions[i]; i++)
     gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), actions[i], actions[i]);
   g_signal_connect (combo, "changed", G_CALLBACK (combo_changed), dialog);
+
   entry = gtk_entry_new ();
+  gtk_widget_set_hexpand (entry, TRUE);
+  g_signal_connect (entry, "notify::text", G_CALLBACK (entry_changed), dialog);
+
   gtk_box_append (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), entry);
-  gtk_dialog_add_button (GTK_DIALOG (dialog), "Close", GTK_RESPONSE_CLOSE);
-  gtk_dialog_add_button (GTK_DIALOG (dialog), "Set", GTK_RESPONSE_APPLY);
   g_signal_connect (dialog, "response", G_CALLBACK (response), dialog);
   g_object_set_data (G_OBJECT (dialog), "combo", combo);
   g_object_set_data (G_OBJECT (dialog), "entry", entry);
+
+  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 
   gtk_widget_show (dialog);
 }
