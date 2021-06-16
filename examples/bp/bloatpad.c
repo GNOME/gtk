@@ -197,6 +197,17 @@ text_buffer_changed_cb (GtkTextBuffer *buffer,
     }
 }
 
+static void
+fullscreen_changed (GObject    *object,
+                    GParamSpec *pspec,
+                    gpointer    user_data)
+{
+  if (gtk_window_is_fullscreen (GTK_WINDOW (object)))
+    gtk_button_set_icon_name (GTK_BUTTON (user_data), "view-restore-symbolic");
+  else
+    gtk_button_set_icon_name (GTK_BUTTON (user_data), "view-fullscreen-symbolic");
+}
+
 static GActionEntry win_entries[] = {
   { "copy", window_copy, NULL, NULL, NULL },
   { "paste", window_paste, NULL, NULL, NULL },
@@ -214,7 +225,6 @@ new_window (GApplication *app,
   GtkWidget *window, *grid, *scrolled, *view;
   GtkWidget *toolbar;
   GtkWidget *button;
-  GtkWidget *sw, *box, *label;
 
   window = gtk_application_window_new (GTK_APPLICATION (app));
   gtk_window_set_default_size ((GtkWindow*)window, 640, 480);
@@ -226,6 +236,7 @@ new_window (GApplication *app,
   gtk_window_set_child (GTK_WINDOW (window), grid);
 
   toolbar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_add_css_class (toolbar, "toolbar");
   button = gtk_toggle_button_new ();
   gtk_button_set_icon_name (GTK_BUTTON (button), "format-justify-left");
   gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button), "win.justify::left");
@@ -241,21 +252,18 @@ new_window (GApplication *app,
   gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button), "win.justify::right");
   gtk_box_append (GTK_BOX (toolbar), button);
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_widget_set_halign (box, GTK_ALIGN_END);
-  label = gtk_label_new ("Fullscreen:");
-  gtk_box_append (GTK_BOX (box), label);
-  sw = gtk_switch_new ();
-  gtk_widget_set_valign (sw, GTK_ALIGN_CENTER);
-  gtk_actionable_set_action_name (GTK_ACTIONABLE (sw), "win.fullscreen");
-  gtk_box_append (GTK_BOX (box), sw);
-  gtk_box_append (GTK_BOX (toolbar), box);
+  button = gtk_toggle_button_new ();
+  gtk_button_set_icon_name (GTK_BUTTON (button), "view-fullscreen-symbolic");
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "win.fullscreen");
+  gtk_box_append (GTK_BOX (toolbar), button);
+  g_signal_connect (window, "notify::fullscreened", G_CALLBACK (fullscreen_changed), button);
 
   gtk_grid_attach (GTK_GRID (grid), toolbar, 0, 0, 1, 1);
 
   scrolled = gtk_scrolled_window_new ();
   gtk_widget_set_hexpand (scrolled, TRUE);
   gtk_widget_set_vexpand (scrolled, TRUE);
+  gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (scrolled), TRUE);
   view = gtk_text_view_new ();
 
   g_object_set_data ((GObject*)window, "bloatpad-text", view);
