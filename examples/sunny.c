@@ -12,7 +12,7 @@ new_window (GApplication *app,
   gtk_application_window_set_show_menubar (GTK_APPLICATION_WINDOW (window), TRUE);
   gtk_window_set_default_size ((GtkWindow*)window, 640, 480);
   gtk_window_set_title (GTK_WINDOW (window), "Sunny");
-  gtk_window_set_icon_name (GTK_WINDOW (window), "sunny");
+  gtk_window_set_icon_name (GTK_WINDOW (window), "weather-clear-symbolic");
 
   header = gtk_header_bar_new ();
   gtk_window_set_titlebar (GTK_WINDOW (window), header);
@@ -78,7 +78,7 @@ show_about (GSimpleAction *action,
   gtk_show_about_dialog (NULL,
                          "program-name", "Sunny",
                          "title", "About Sunny",
-                         "logo-icon-name", "sunny",
+                         "logo-icon-name", "weather-clear-symbolic",
                          "comments", "A cheap Bloatpad clone.",
                          NULL);
 }
