@@ -208,7 +208,7 @@ gtk_gst_media_file_end_of_stream_cb (GstPlayer       *player,
       return;
     }
 
-  gtk_media_stream_ended (GTK_MEDIA_STREAM (self));
+  gtk_media_stream_set_ended (GTK_MEDIA_STREAM (self));
 }
 
 static void

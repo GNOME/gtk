@@ -150,7 +150,7 @@ gtk_nuclear_media_stream_step (gpointer data)
    * call our pause function to pause the stream.
    */
   if (nuclear->progress >= DURATION)
-    gtk_media_stream_ended (GTK_MEDIA_STREAM (nuclear));
+    gtk_media_stream_set_ended (GTK_MEDIA_STREAM (nuclear));
 
   /* The timeout function is removed by the pause function,
    * so we can just always return this value.
