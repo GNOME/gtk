@@ -3379,7 +3379,7 @@ gtk_notebook_drag_motion (GtkDropTarget *dest,
                           double         y,
                           GtkNotebook   *notebook)
 {
-  GdkDrag *drag = gdk_drop_get_drag (gtk_drop_target_get_drop (dest));
+  GdkDrag *drag = gdk_drop_get_drag (gtk_drop_target_get_current_drop (dest));
   GtkNotebook *source;
 
   notebook->mouse_x = x;
@@ -3404,7 +3404,7 @@ gtk_notebook_drag_drop (GtkDropTarget *dest,
                         double         y,
                         GtkNotebook   *self)
 {
-  GdkDrag *drag = gdk_drop_get_drag (gtk_drop_target_get_drop (dest));
+  GdkDrag *drag = gdk_drop_get_drag (gtk_drop_target_get_current_drop (dest));
   GtkNotebook *source;
   GtkNotebookPage *page = g_value_get_object (value);
 

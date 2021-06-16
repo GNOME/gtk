@@ -71,8 +71,11 @@ void                    gtk_drop_target_set_preload      (GtkDropTarget         
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_drop_target_get_preload      (GtkDropTarget         *self);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_4_FOR(gtk_drop_target_get_current_drop)
 GdkDrop *               gtk_drop_target_get_drop         (GtkDropTarget         *self);
+
+GDK_AVAILABLE_IN_4_4
+GdkDrop *               gtk_drop_target_get_current_drop (GtkDropTarget         *self);
 
 GDK_AVAILABLE_IN_ALL
 const GValue *          gtk_drop_target_get_value        (GtkDropTarget         *self);
