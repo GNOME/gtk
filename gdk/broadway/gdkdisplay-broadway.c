@@ -361,6 +361,29 @@ gdk_broadway_display_set_surface_scale (GdkDisplay *display,
   gdk_monitor_set_scale_factor (self->monitor, scale);
 }
 
+/**
+ * gdk_broadway_display_get_surface_scale:
+ * @display: (type GdkBroadwayDisplay): the display
+ *
+ * Gets the surface scale that was previously set by the client or
+ * gdk_broadway_display_set_surface_scale().
+ *
+ * Returns: the scale for surfaces
+ *
+ * Since: 4.4
+ */
+int
+gdk_broadway_display_get_surface_scale (GdkDisplay *display)
+{
+  GdkBroadwayDisplay *self;
+
+  g_return_val_if_fail (GDK_IS_BROADWAY_DISPLAY (display), 1);
+
+  self = GDK_BROADWAY_DISPLAY (display);
+
+  return self->scale_factor;
+}
+
 static GListModel *
 gdk_broadway_display_get_monitors (GdkDisplay *display)
 {

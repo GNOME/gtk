@@ -835,9 +835,9 @@ init_scale (GtkInspectorVisual *vis)
 #if defined (GDK_WINDOWING_BROADWAY)
   if (GDK_IS_BROADWAY_DISPLAY (vis->display))
     {
-      double scale;
+      int scale;
 
-      scale = gdk_monitor_get_scale_factor (gdk_x11_display_get_primary_monitor (vis->display));
+      scale = gdk_broadway_display_get_surface_scale (vis->display);
       gtk_adjustment_set_value (vis->scale_adjustment, scale);
       g_signal_connect (vis->scale_adjustment, "value-changed",
                         G_CALLBACK (scale_changed), vis);
