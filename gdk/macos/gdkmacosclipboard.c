@@ -622,4 +622,17 @@ on_data_ready_cb (GObject      *object,
   write_request_free (wr);
 }
 
+void
+_gdk_macos_clipboard_register_drag_types (NSWindow *window)
+{
+  [window registerForDraggedTypes:[NSArray arrayWithObjects:PTYPE(STRING),
+                                                            PTYPE(PBOARD),
+                                                            PTYPE(URL),
+                                                            PTYPE(FILE_URL),
+                                                            PTYPE(COLOR),
+                                                            PTYPE(TIFF),
+                                                            PTYPE(PNG),
+                                                            nil]];
+}
+
 @end
