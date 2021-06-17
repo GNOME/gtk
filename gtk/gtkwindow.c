@@ -54,7 +54,7 @@
 #include "gtknativeprivate.h"
 #include "gtksettings.h"
 #include "gtkshortcut.h"
-#include "gtkshortcutcontroller.h"
+#include "gtkshortcutcontrollerprivate.h"
 #include "gtkshortcutmanager.h"
 #include "gtkshortcuttrigger.h"
 #include "gtksnapshot.h"
@@ -2376,6 +2376,8 @@ handle_keys_changed (gpointer data)
       priv->keys_changed_handler = 0;
     }
 
+  if (priv->application_shortcut_controller)
+    gtk_shortcut_controller_update_accels (GTK_SHORTCUT_CONTROLLER (priv->application_shortcut_controller));
   g_signal_emit (window, window_signals[KEYS_CHANGED], 0);
   
   return FALSE;
