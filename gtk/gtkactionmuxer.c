@@ -443,10 +443,9 @@ notify_observers_added (GtkActionMuxer *muxer,
       if (!action->watchers)
         continue;
 
-      if (action_muxer_query_action (muxer, action_name,
-                                     NULL, NULL, NULL, NULL, NULL,
-                                     FALSE))
-        continue;
+      for (node = action ? action->watchers : NULL; node; node = node->next)
+        gtk_action_observer_primary_accel_changed (node->data, GTK_ACTION_OBSERVABLE (muxer),
+                                                   action_name, NULL);
 
       gtk_action_observable_register_observer (GTK_ACTION_OBSERVABLE (parent), action_name, GTK_ACTION_OBSERVER (muxer));
 
