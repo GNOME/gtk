@@ -318,7 +318,6 @@ do_it (GObject    *object,
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *window;
   gboolean done = FALSE;
 
   if (argc < 2)
@@ -355,6 +354,8 @@ main (int argc, char *argv[])
 #ifdef GDK_WINDOWING_WAYLAND
   if (GDK_IS_WAYLAND_DISPLAY (gdk_display_get_default ()))
     {
+      GtkWidget *window;
+
       window = gtk_window_new ();
       gtk_window_present (GTK_WINDOW (window));
       handler = g_signal_connect (window, "notify::is-active", G_CALLBACK (do_it), NULL);

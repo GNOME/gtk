@@ -78,6 +78,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtknative.h"
 #include "gtkdebug.h"
+#include "gtkmodelbuttonprivate.h"
 
 #include <gdk/gdk.h>
 
@@ -480,16 +481,17 @@ update_accel (GtkShortcut    *shortcut,
   g_free (accel);
 }
 
-static void
-gtk_shortcut_controller_set_widget (GtkEventController *controller,
-                                    GtkWidget          *widget)
+void
+gtk_shortcut_controller_update_accels (GtkShortcutController *self)
 {
-  GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (controller);
   GListModel *shortcuts = self->shortcuts;
+  GtkWidget *widget;
   GtkActionMuxer *muxer;
   guint i, p;
 
-  GTK_EVENT_CONTROLLER_CLASS (gtk_shortcut_controller_parent_class)->set_widget (controller, widget);
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self));
+  if (!widget || GTK_IS_MODEL_BUTTON (widget))
+    return;
 
   muxer = _gtk_widget_get_action_muxer (widget, TRUE);
   for (i = 0, p = g_list_model_get_n_items (shortcuts); i < p; i++)
@@ -499,6 +501,17 @@ gtk_shortcut_controller_set_widget (GtkEventController *controller,
         update_accel (shortcut, muxer, TRUE);
       g_object_unref (shortcut);
     }
+}
+
+static void
+gtk_shortcut_controller_set_widget (GtkEventController *controller,
+                                    GtkWidget          *widget)
+{
+  GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (controller);
+
+  GTK_EVENT_CONTROLLER_CLASS (gtk_shortcut_controller_parent_class)->set_widget (controller, widget);
+
+  gtk_shortcut_controller_update_accels (self);
 
   if (_gtk_widget_get_root (widget))
     gtk_shortcut_controller_root (self);

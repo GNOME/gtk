@@ -463,8 +463,12 @@ gtk_menu_tracker_item_primary_accel_changed (GtkActionObserver   *observer,
                                              const char          *action_and_target)
 {
   GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (observer);
+  const char *action;
 
-  if (g_str_equal (action_and_target, self->action_and_target))
+  action = strrchr (self->action_and_target, '|') + 1;
+
+  if ((action_and_target && g_str_equal (action_and_target, self->action_and_target)) ||
+      (action_name && g_str_equal (action_name, action)))
     g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_ACCEL]);
 }
 

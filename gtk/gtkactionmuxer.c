@@ -443,10 +443,9 @@ notify_observers_added (GtkActionMuxer *muxer,
       if (!action->watchers)
         continue;
 
-      if (action_muxer_query_action (muxer, action_name,
-                                     NULL, NULL, NULL, NULL, NULL,
-                                     FALSE))
-        continue;
+      for (node = action ? action->watchers : NULL; node; node = node->next)
+        gtk_action_observer_primary_accel_changed (node->data, GTK_ACTION_OBSERVABLE (muxer),
+                                                   action_name, NULL);
 
       gtk_action_observable_register_observer (GTK_ACTION_OBSERVABLE (parent), action_name, GTK_ACTION_OBSERVER (muxer));
 
@@ -967,21 +966,14 @@ gtk_action_muxer_register_observer (GtkActionObservable *observable,
 
   if (action_muxer_query_action (muxer, name,
                                  &enabled, &parameter_type,
-                                 NULL, NULL, &state, FALSE))
+                                 NULL, NULL, &state, TRUE))
     {
       gtk_action_muxer_action_added (muxer, name, parameter_type, enabled, state);
       g_clear_pointer (&state, g_variant_unref);
     }
-  else if (muxer->parent)
-    {
-      if (action_muxer_query_action (muxer->parent, name,
-                                     &enabled, &parameter_type,
-                                     NULL, NULL, &state, FALSE))
-        {
-          gtk_action_muxer_action_added (muxer, name, parameter_type, enabled, state);
-          g_clear_pointer (&state, g_variant_unref);
-        }
 
+  if (muxer->parent)
+    {
       gtk_action_observable_register_observer (GTK_ACTION_OBSERVABLE (muxer->parent),
                                                name,
                                                GTK_ACTION_OBSERVER (muxer));
@@ -1143,6 +1135,10 @@ gtk_action_muxer_observer_action_added (GtkActionObserver    *observer,
                                         gboolean              enabled,
                                         GVariant             *state)
 {
+  if (action_muxer_query_action (GTK_ACTION_MUXER (observer), action_name,
+                                 NULL, NULL, NULL, NULL, NULL, FALSE))
+    return;
+
   gtk_action_muxer_action_added (GTK_ACTION_MUXER (observer),
                                  action_name,
                                  parameter_type,
@@ -1155,6 +1151,10 @@ gtk_action_muxer_observer_action_removed (GtkActionObserver   *observer,
                                           GtkActionObservable *observable,
                                           const char          *action_name)
 {
+  if (action_muxer_query_action (GTK_ACTION_MUXER (observer), action_name,
+                                 NULL, NULL, NULL, NULL, NULL, FALSE))
+    return;
+
   gtk_action_muxer_action_removed (GTK_ACTION_MUXER (observer), action_name);
 }
 
@@ -1164,6 +1164,10 @@ gtk_action_muxer_observer_action_enabled_changed (GtkActionObserver   *observer,
                                                   const char          *action_name,
                                                   gboolean             enabled)
 {
+  if (action_muxer_query_action (GTK_ACTION_MUXER (observer), action_name,
+                                 NULL, NULL, NULL, NULL, NULL, FALSE))
+    return;
+
   gtk_action_muxer_action_enabled_changed (GTK_ACTION_MUXER (observer), action_name, enabled);
 }
 
@@ -1173,6 +1177,10 @@ gtk_action_muxer_observer_action_state_changed (GtkActionObserver   *observer,
                                                 const char          *action_name,
                                                 GVariant            *state)
 {
+  if (action_muxer_query_action (GTK_ACTION_MUXER (observer), action_name,
+                                 NULL, NULL, NULL, NULL, NULL, FALSE))
+    return;
+
   gtk_action_muxer_action_state_changed (GTK_ACTION_MUXER (observer), action_name, state);
 }
 

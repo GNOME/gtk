@@ -721,7 +721,6 @@ static const char ui_info[] =
   "        <item>"
   "          <attribute name='label'>_New</attribute>"
   "          <attribute name='action'>app.new</attribute>"
-  "          <attribute name='accel'>&lt;Primary&gt;n</attribute>"
   "        </item>"
   "        <item>"
   "          <attribute name='label'>_Open</attribute>"
@@ -730,12 +729,10 @@ static const char ui_info[] =
   "        <item>"
   "          <attribute name='label'>_Save</attribute>"
   "          <attribute name='action'>app.save</attribute>"
-  "          <attribute name='accel'>&lt;Primary&gt;s</attribute>"
   "        </item>"
   "        <item>"
   "          <attribute name='label'>Save _As...</attribute>"
   "          <attribute name='action'>app.save-as</attribute>"
-  "          <attribute name='accel'>&lt;Primary&gt;s</attribute>"
   "        </item>"
   "      </section>"
   "      <section>"
@@ -756,7 +753,6 @@ static const char ui_info[] =
   "        <item>"
   "          <attribute name='label'>_Quit</attribute>"
   "          <attribute name='action'>app.quit</attribute>"
-  "          <attribute name='accel'>&lt;Primary&gt;q</attribute>"
   "        </item>"
   "      </section>"
   "    </submenu>"
@@ -766,7 +762,6 @@ static const char ui_info[] =
   "        <item>"
   "          <attribute name='label'>_About Print Editor</attribute>"
   "          <attribute name='action'>app.about</attribute>"
-  "          <attribute name='accel'>&lt;Primary&gt;a</attribute>"
   "        </item>"
   "      </section>"
   "    </submenu>"
@@ -794,6 +789,15 @@ startup (GApplication *app)
 {
   GtkBuilder *builder;
   GMenuModel *menubar;
+  struct {
+    const char *action_and_target;
+    const char *accelerators[2];
+  } accels[] = {
+    { "app.new", { "<Control>n", NULL } },
+    { "app.quit", { "<Control>q", NULL } },
+    { "app.save", { "<Control>s", NULL } },
+    { "app.about", { "<Control>a", NULL } },
+  };
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder, ui_info, -1, NULL);
@@ -801,6 +805,9 @@ startup (GApplication *app)
   menubar = (GMenuModel *)gtk_builder_get_object (builder, "menubar");
 
   gtk_application_set_menubar (GTK_APPLICATION (app), menubar);
+
+  for (int i = 0; i < G_N_ELEMENTS (accels); i++)
+    gtk_application_set_accels_for_action (GTK_APPLICATION (app), accels[i].action_and_target, accels[i].accelerators);
 
   g_object_unref (builder);
 }

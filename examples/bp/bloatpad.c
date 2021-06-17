@@ -197,6 +197,17 @@ text_buffer_changed_cb (GtkTextBuffer *buffer,
     }
 }
 
+static void
+fullscreen_changed (GObject    *object,
+                    GParamSpec *pspec,
+                    gpointer    user_data)
+{
+  if (gtk_window_is_fullscreen (GTK_WINDOW (object)))
+    gtk_button_set_icon_name (GTK_BUTTON (user_data), "view-restore-symbolic");
+  else
+    gtk_button_set_icon_name (GTK_BUTTON (user_data), "view-fullscreen-symbolic");
+}
+
 static GActionEntry win_entries[] = {
   { "copy", window_copy, NULL, NULL, NULL },
   { "paste", window_paste, NULL, NULL, NULL },
@@ -214,7 +225,6 @@ new_window (GApplication *app,
   GtkWidget *window, *grid, *scrolled, *view;
   GtkWidget *toolbar;
   GtkWidget *button;
-  GtkWidget *sw, *box, *label;
 
   window = gtk_application_window_new (GTK_APPLICATION (app));
   gtk_window_set_default_size ((GtkWindow*)window, 640, 480);
@@ -226,6 +236,7 @@ new_window (GApplication *app,
   gtk_window_set_child (GTK_WINDOW (window), grid);
 
   toolbar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_add_css_class (toolbar, "toolbar");
   button = gtk_toggle_button_new ();
   gtk_button_set_icon_name (GTK_BUTTON (button), "format-justify-left");
   gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button), "win.justify::left");
@@ -241,21 +252,18 @@ new_window (GApplication *app,
   gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button), "win.justify::right");
   gtk_box_append (GTK_BOX (toolbar), button);
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_widget_set_halign (box, GTK_ALIGN_END);
-  label = gtk_label_new ("Fullscreen:");
-  gtk_box_append (GTK_BOX (box), label);
-  sw = gtk_switch_new ();
-  gtk_widget_set_valign (sw, GTK_ALIGN_CENTER);
-  gtk_actionable_set_action_name (GTK_ACTIONABLE (sw), "win.fullscreen");
-  gtk_box_append (GTK_BOX (box), sw);
-  gtk_box_append (GTK_BOX (toolbar), box);
+  button = gtk_toggle_button_new ();
+  gtk_button_set_icon_name (GTK_BUTTON (button), "view-fullscreen-symbolic");
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "win.fullscreen");
+  gtk_box_append (GTK_BOX (toolbar), button);
+  g_signal_connect (window, "notify::fullscreened", G_CALLBACK (fullscreen_changed), button);
 
   gtk_grid_attach (GTK_GRID (grid), toolbar, 0, 0, 1, 1);
 
   scrolled = gtk_scrolled_window_new ();
   gtk_widget_set_hexpand (scrolled, TRUE);
   gtk_widget_set_vexpand (scrolled, TRUE);
+  gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (scrolled), TRUE);
   view = gtk_text_view_new ();
 
   g_object_set_data ((GObject*)window, "bloatpad-text", view);
@@ -345,6 +353,7 @@ static void
 combo_changed (GtkComboBox *combo,
                gpointer     user_data)
 {
+  GtkDialog *dialog = user_data;
   GtkEntry *entry = g_object_get_data (user_data, "entry");
   const char *action;
   char **accels;
@@ -360,6 +369,17 @@ combo_changed (GtkComboBox *combo,
   g_strfreev (accels);
 
   gtk_editable_set_text (GTK_EDITABLE (entry), str);
+  gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_APPLY, FALSE);
+}
+
+static void
+entry_changed (GtkEntry   *entry,
+               GParamSpec *pspec,
+               gpointer    user_data)
+{
+  GtkDialog *dialog = user_data;
+
+  gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_APPLY, TRUE);
 }
 
 static void
@@ -373,7 +393,7 @@ response (GtkDialog *dialog,
   const char *str;
   char **accels;
 
-  if (response_id == GTK_RESPONSE_CLOSE)
+  if (response_id == GTK_RESPONSE_CANCEL)
     {
       gtk_window_destroy (GTK_WINDOW (dialog));
       return;
@@ -389,6 +409,8 @@ response (GtkDialog *dialog,
 
   gtk_application_set_accels_for_action (gtk_window_get_application (user_data), action, (const char **) accels);
   g_strfreev (accels);
+
+  gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_APPLY, FALSE);
 }
 
 static void
@@ -403,21 +425,40 @@ edit_accels (GSimpleAction *action,
   GtkWidget *dialog;
   int i;
 
-  dialog = gtk_dialog_new ();
+  dialog = gtk_dialog_new_with_buttons ("Accelerators",
+                                        NULL,
+                                        GTK_DIALOG_USE_HEADER_BAR,
+                                        "Close", GTK_RESPONSE_CANCEL,
+                                        "Set", GTK_RESPONSE_APPLY,
+                                        NULL);
+
   gtk_window_set_application (GTK_WINDOW (dialog), app);
   actions = gtk_application_list_action_descriptions (app);
+
   combo = gtk_combo_box_text_new ();
+  g_object_set (gtk_dialog_get_content_area (GTK_DIALOG (dialog)),
+                "margin-top", 10,
+                "margin-bottom", 10,
+                "margin-start", 10,
+                "margin-end", 10,
+                "spacing", 10,
+                NULL);
+
   gtk_box_append (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), combo);
   for (i = 0; actions[i]; i++)
     gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), actions[i], actions[i]);
   g_signal_connect (combo, "changed", G_CALLBACK (combo_changed), dialog);
+
   entry = gtk_entry_new ();
+  gtk_widget_set_hexpand (entry, TRUE);
+  g_signal_connect (entry, "notify::text", G_CALLBACK (entry_changed), dialog);
+
   gtk_box_append (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), entry);
-  gtk_dialog_add_button (GTK_DIALOG (dialog), "Close", GTK_RESPONSE_CLOSE);
-  gtk_dialog_add_button (GTK_DIALOG (dialog), "Set", GTK_RESPONSE_APPLY);
   g_signal_connect (dialog, "response", G_CALLBACK (response), dialog);
   g_object_set_data (G_OBJECT (dialog), "combo", combo);
   g_object_set_data (G_OBJECT (dialog), "entry", entry);
+
+  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 
   gtk_widget_show (dialog);
 }
