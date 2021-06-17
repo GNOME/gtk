@@ -1997,6 +1997,7 @@ activate (GApplication *app)
     const char *accelerators[2];
   } accels[] = {
     { "app.about", { "F1", NULL } },
+    { "app.shortcuts", { "<Control>question", NULL } },
     { "app.quit", { "<Control>q", NULL } },
     { "app.open-in", { "<Control>n", NULL } },
     { "win.dark", { "<Control>d", NULL } },
