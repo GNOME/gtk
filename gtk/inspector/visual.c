@@ -837,7 +837,7 @@ init_scale (GtkInspectorVisual *vis)
     {
       double scale;
 
-      scale = gdk_monitor_get_scale_factor (gdk_x11_display_get_primary_monitor (vis->display));
+      scale = gdk_monitor_get_scale_factor (gdk_broadway_display_get_primary_monitor (vis->display));
       gtk_adjustment_set_value (vis->scale_adjustment, scale);
       g_signal_connect (vis->scale_adjustment, "value-changed",
                         G_CALLBACK (scale_changed), vis);
