@@ -78,6 +78,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtknative.h"
 #include "gtkdebug.h"
+#include "gtkmodelbuttonprivate.h"
 
 #include <gdk/gdk.h>
 
@@ -489,7 +490,7 @@ gtk_shortcut_controller_update_accels (GtkShortcutController *self)
   guint i, p;
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self));
-  if (!widget)
+  if (!widget || GTK_IS_MODEL_BUTTON (widget))
     return;
 
   muxer = _gtk_widget_get_action_muxer (widget, TRUE);
