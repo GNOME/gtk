@@ -40,6 +40,7 @@ void              _gdk_macos_clipboard_check_externally_modified (GdkMacosClipbo
 NSPasteboardType  _gdk_macos_clipboard_to_ns_type                (const char        *mime_type,
                                                                   NSPasteboardType  *alternate);
 const char       *_gdk_macos_clipboard_from_ns_type              (NSPasteboardType   ns_type);
+void              _gdk_macos_clipboard_register_drag_types       (NSWindow          *window);
 
 @interface GdkMacosClipboardDataProvider : NSObject <NSPasteboardItemDataProvider>
 {

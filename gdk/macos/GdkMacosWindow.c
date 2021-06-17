@@ -28,6 +28,7 @@
 #import "GdkMacosGLView.h"
 #import "GdkMacosWindow.h"
 
+#include "gdkmacosclipboard-private.h"
 #include "gdkmacosdisplay-private.h"
 #include "gdkmacosmonitor-private.h"
 #include "gdkmacossurface-private.h"
@@ -286,6 +287,9 @@ typedef NSString *CALayerContentsGravity;
   view = [[GdkMacosCairoView alloc] initWithFrame:contentRect];
   [self setContentView:view];
   [view release];
+
+  /* TODO: We might want to make this more extensible at some point */
+  _gdk_macos_clipboard_register_drag_types (self);
 
   return self;
 }
