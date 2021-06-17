@@ -326,12 +326,10 @@ gdk_drag_update (GdkDrag         *drag,
                                 &suggested_action,
                                 &possible_actions);
 
-  _gdk_macos_drag_surface_drag_motion (self->drag_surface,
-                                       x_root - self->hot_x,
-                                       y_root - self->hot_y,
-                                       suggested_action,
-                                       possible_actions,
-                                       evtime);
+  if (GDK_IS_MACOS_SURFACE (self->drag_surface))
+    _gdk_macos_surface_move (GDK_MACOS_SURFACE (self->drag_surface),
+                             x_root - self->hot_x,
+                             y_root - self->hot_y);
 
   if (!self->did_update)
     {
@@ -339,6 +337,8 @@ gdk_drag_update (GdkDrag         *drag,
       self->start_y = self->last_y;
       self->did_update = TRUE;
     }
+
+  gdk_drag_set_actions (drag, possible_actions);
 }
 
 static gboolean
