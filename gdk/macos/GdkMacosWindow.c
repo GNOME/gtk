@@ -27,10 +27,10 @@
 #import "GdkMacosView.h"
 #import "GdkMacosWindow.h"
 
-#include "gdkmacosclipboard-private.h"
 #include "gdkmacosdisplay-private.h"
 #include "gdkmacosdrop-private.h"
 #include "gdkmacosmonitor-private.h"
+#include "gdkmacospasteboard-private.h"
 #include "gdkmacossurface-private.h"
 #include "gdkmacospopupsurface-private.h"
 #include "gdkmacostoplevelsurface-private.h"
@@ -246,7 +246,7 @@ typedef NSString *CALayerContentsGravity;
   [view release];
 
   /* TODO: We might want to make this more extensible at some point */
-  _gdk_macos_clipboard_register_drag_types (self);
+  _gdk_macos_pasteboard_register_drag_types (self);
 
   return self;
 }

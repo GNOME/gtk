@@ -24,6 +24,7 @@
 
 #include "gdkclipboardprivate.h"
 #include "gdkmacosdisplay-private.h"
+#include "gdkmacospasteboard-private.h"
 
 G_BEGIN_DECLS
 
@@ -41,28 +42,13 @@ NSPasteboardType   _gdk_macos_clipboard_to_ns_type                (const char   
                                                                    NSPasteboardType     *alternate);
 const char        *_gdk_macos_clipboard_from_ns_type              (NSPasteboardType      ns_type);
 void               _gdk_macos_clipboard_register_drag_types       (NSWindow             *window);
-GdkContentFormats *_gdk_macos_pasteboard_load_formats             (NSPasteboard         *pasteboard);
-void               _gdk_macos_pasteboard_read_async               (GObject              *object,
-                                                                   NSPasteboard         *pasteboard,
-                                                                   GdkContentFormats    *formats,
-                                                                   int                   io_priority,
-                                                                   GCancellable         *cancellable,
-                                                                   GAsyncReadyCallback   callback,
-                                                                   gpointer              user_data);
-GInputStream      *_gdk_macos_pasteboard_read_finish              (GObject              *object,
-                                                                   GAsyncResult         *result,
-                                                                   const char          **out_mime_type,
-                                                                   GError              **error);
 
-@interface GdkMacosClipboardDataProvider : NSObject <NSPasteboardItemDataProvider>
+@interface GdkMacosClipboardDataProvider : GdkMacosPasteboardDataProvider
 {
-  GCancellable  *cancellable;
-  GdkClipboard  *clipboard;
-  char         **mimeTypes;
+  GdkClipboard *clipboard;
 }
 
--(id)initClipboard:(GdkClipboard *)gdkClipboard mimetypes:(const char * const *)mime_types;
--(NSArray<NSPasteboardType> *)types;
+-(id)initClipboard:(GdkMacosClipboard *)gdkClipboard mimetypes:(const char * const *)mime_types;
 
 @end
 

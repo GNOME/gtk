@@ -1,0 +1,64 @@
+/*
+ * Copyright © 2021 Red Hat, Inc.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: LGPL-2.1-or-later
+ */
+
+#ifndef __GDK_MACOS_PASTEBOARD_PRIVATE_H__
+#define __GDK_MACOS_PASTEBOARD_PRIVATE_H__
+
+#include <AppKit/AppKit.h>
+#include <gio/gio.h>
+
+#include "gdkclipboardprivate.h"
+
+G_BEGIN_DECLS
+
+@interface GdkMacosPasteboardDataProvider : NSObject <NSPasteboardItemDataProvider>
+{
+  NSPasteboard  *pasteboard;
+  GCancellable  *cancellable;
+  char         **mimeTypes;
+}
+
+-(id)initPasteboard:(NSPasteboard *)pasteBoard mimetypes:(const char * const *)mime_types;
+-(NSArray<NSPasteboardType> *)types;
+
+@end
+
+NSPasteboardType   _gdk_macos_pasteboard_to_ns_type          (const char                      *mime_type,
+                                                              NSPasteboardType                *alternate);
+const char        *_gdk_macos_pasteboard_from_ns_type        (NSPasteboardType                 type);
+GdkContentFormats *_gdk_macos_pasteboard_load_formats        (NSPasteboard                    *pasteboard);
+void               _gdk_macos_pasteboard_register_drag_types (NSWindow                        *window);
+void               _gdk_macos_pasteboard_read_async          (GObject                         *object,
+                                                              NSPasteboard                    *pasteboard,
+                                                              GdkContentFormats               *formats,
+                                                              int                              io_priority,
+                                                              GCancellable                    *cancellable,
+                                                              GAsyncReadyCallback              callback,
+                                                              gpointer                         user_data);
+GInputStream      *_gdk_macos_pasteboard_read_finish         (GObject                         *object,
+                                                              GAsyncResult                    *result,
+                                                              const char                     **out_mime_type,
+                                                              GError                         **error);
+void               _gdk_macos_pasteboard_send_content        (NSPasteboard                    *pasteboard,
+                                                              GdkContentProvider              *content,
+                                                              GdkMacosPasteboardDataProvider  *dataProvider);
+
+G_END_DECLS
+
+#endif /* __GDK_MACOS_PASTEBOARD_PRIVATE_H__ */
