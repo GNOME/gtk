@@ -236,6 +236,21 @@ gtk_event_controller_scroll_get_property (GObject    *object,
 }
 
 static gboolean
+gtk_event_controller_scroll_begin (GtkEventController *controller)
+{
+  GtkEventControllerScroll *scroll = GTK_EVENT_CONTROLLER_SCROLL (controller);
+
+  if (scroll->active)
+    return FALSE;
+
+  g_signal_emit (controller, signals[SCROLL_BEGIN], 0);
+  scroll_history_reset (scroll);
+  scroll->active = TRUE;
+
+  return TRUE;
+}
+
+static gboolean
 gtk_event_controller_scroll_handle_event (GtkEventController *controller,
                                           GdkEvent           *event,
                                           double              x,
@@ -258,13 +273,7 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
   if (direction == GDK_SCROLL_SMOOTH)
     {
       gdk_scroll_event_get_deltas (event, &dx, &dy);
-
-      if (!scroll->active)
-        {
-          g_signal_emit (controller, signals[SCROLL_BEGIN], 0);
-          scroll_history_reset (scroll);
-          scroll->active = TRUE;
-        }
+      gtk_event_controller_scroll_begin (controller);
 
       if ((scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_VERTICAL) == 0)
         dy = 0;
