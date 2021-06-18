@@ -1227,6 +1227,7 @@ gdk_win32_surface_layout_popup (GdkSurface     *surface,
                                      &shadow_right,
                                      &shadow_top,
                                      &shadow_bottom);
+
   gdk_win32_surface_set_shadow_width (surface,
                                       shadow_left,
                                       shadow_right,
@@ -1236,10 +1237,10 @@ gdk_win32_surface_layout_popup (GdkSurface     *surface,
   gdk_surface_layout_popup_helper (surface,
                                    width,
                                    height,
-                                   impl->shadow.left,
-                                   impl->shadow.right,
-                                   impl->shadow.top,
-                                   impl->shadow.bottom,
+                                   shadow_left,
+                                   shadow_right,
+                                   shadow_top,
+                                   shadow_bottom,
                                    monitor,
                                    &bounds,
                                    layout,
@@ -1259,9 +1260,7 @@ gdk_win32_surface_layout_popup (GdkSurface     *surface,
                                      final_rect.height);
     }
   else
-    {
-      gdk_win32_surface_move (surface, x, y);
-    }
+    gdk_win32_surface_move (surface, x, y);
 }
 
 static void
@@ -4415,9 +4414,9 @@ gdk_win32_surface_set_shadow_width (GdkSurface *window,
   if (impl->zero_shadow)
     return;
 
-  impl->shadow.left = left;
+  impl->shadow.left = left * impl->surface_scale;;
   impl->shadow.right = right * impl->surface_scale;
-  impl->shadow.top = top;
+  impl->shadow.top = top * impl->surface_scale;;
   impl->shadow.bottom = bottom * impl->surface_scale;
   impl->shadow_x = left + right;
   impl->shadow_y = top + bottom;
@@ -4553,7 +4552,7 @@ _gdk_win32_surface_request_layout (GdkSurface *surface)
   int scale = impl->surface_scale;
   RECT rect;
 
-  if (GDK_IS_TOPLEVEL (surface) && impl->drag_move_resize_context.native_move_resize_pending)
+  if (impl->drag_move_resize_context.native_move_resize_pending)
     {
       surface->width = impl->next_layout.configured_width;
       surface->height = impl->next_layout.configured_height;
@@ -4564,8 +4563,18 @@ _gdk_win32_surface_request_layout (GdkSurface *surface)
 
       impl->next_layout.configured_width = (rect.right - rect.left + scale - 1) / scale;
       impl->next_layout.configured_height = (rect.bottom - rect.top + scale - 1) / scale;
-      surface->x = rect.left / scale;
-      surface->y = rect.top / scale;
+
+      if (GDK_IS_TOPLEVEL (surface))
+        {
+          surface->x = rect.left / scale;
+          surface->y = rect.top / scale;
+        }
+      else if (GDK_IS_POPUP (surface))
+        {
+          gdk_win32_surface_get_geometry (surface,
+                                         &surface->x, &surface->y,
+                                          NULL, NULL);
+        }
     }
 }
 
@@ -4655,9 +4664,9 @@ gdk_win32_popup_init (GdkWin32Popup *popup)
 
 static void
 gdk_win32_popup_get_property (GObject    *object,
-                                guint       prop_id,
-                                GValue     *value,
-                                GParamSpec *pspec)
+                              guint       prop_id,
+                              GValue     *value,
+                              GParamSpec *pspec)
 {
   GdkSurface *surface = GDK_SURFACE (object);
 
@@ -4679,9 +4688,9 @@ gdk_win32_popup_get_property (GObject    *object,
 
 static void
 gdk_win32_popup_set_property (GObject      *object,
-                                guint         prop_id,
-                                const GValue *value,
-                                GParamSpec   *pspec)
+                              guint         prop_id,
+                              const GValue *value,
+                              GParamSpec   *pspec)
 {
   GdkSurface *surface = GDK_SURFACE (object);
 
@@ -4716,9 +4725,9 @@ gdk_win32_popup_class_init (GdkWin32PopupClass *class)
 
 static gboolean
 gdk_win32_popup_present (GdkPopup       *popup,
-                           int             width,
-                           int             height,
-                           GdkPopupLayout *layout)
+                         int             width,
+                         int             height,
+                         GdkPopupLayout *layout)
 {
   return gdk_win32_surface_present_popup (GDK_SURFACE (popup), width, height, layout);
 }
