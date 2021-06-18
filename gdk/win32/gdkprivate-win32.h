@@ -150,7 +150,8 @@ typedef enum
 
 typedef enum {
   GDK_WIN32_TABLET_INPUT_API_NONE = 0,
-  GDK_WIN32_TABLET_INPUT_API_WINTAB
+  GDK_WIN32_TABLET_INPUT_API_WINTAB,
+  GDK_WIN32_TABLET_INPUT_API_WINPOINTER
 } GdkWin32TabletInputAPI;
 
 GType _gdk_gc_win32_get_type (void);
