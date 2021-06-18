@@ -348,7 +348,7 @@ _gdk_macos_seat_new (GdkMacosDisplay *display)
 
   init_devices (self);
 
-  return g_steal_pointer (&self);
+  return GDK_SEAT (g_steal_pointer (&self));
 }
 
 static GdkDeviceToolType
