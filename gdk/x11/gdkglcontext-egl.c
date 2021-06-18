@@ -101,14 +101,55 @@ gdk_x11_display_create_egl_display (GdkX11Display *self)
   self->egl_display = eglGetDisplay ((EGLNativeDisplayType) dpy);
 }
 
+static XVisualInfo *
+gdk_x11_display_get_visual_info_for_visual (GdkX11Display  *self,
+                                            VisualID        visualid)
+{
+  XVisualInfo template, *visinfo;
+  int nvisuals;
+
+  template.screen = self->screen->screen_num;
+  template.visualid = visualid;
+
+  visinfo = XGetVisualInfo (gdk_x11_display_get_xdisplay (GDK_DISPLAY (self)),
+                            VisualScreenMask | VisualIDMask,
+                            &template,
+                            &nvisuals);
+  g_warn_if_fail (nvisuals == 1);
+  
+  return visinfo;
+}
+
+static gboolean
+visual_is_rgba (XVisualInfo *visinfo)
+{
+  return
+    visinfo->depth == 32 &&
+    visinfo->visual->red_mask   == 0xff0000 &&
+    visinfo->visual->green_mask == 0x00ff00 &&
+    visinfo->visual->blue_mask  == 0x0000ff;
+}
+
 #define MAX_EGL_ATTRS   30
 
 static void
-gdk_x11_display_create_egl_config (GdkX11Display *display)
+gdk_x11_display_create_egl_config (GdkX11Display  *display,
+                                   Visual        **out_visual,
+                                   int            *out_depth)
 {
   GdkX11Display *self = GDK_X11_DISPLAY (display);
   EGLint attrs[MAX_EGL_ATTRS];
-  EGLint count;
+  EGLConfig *configs;
+  EGLint count, alloced;
+  enum {
+    NO_VISUAL_FOUND,
+    WITH_MULTISAMPLING,
+    WITH_STENCIL_AND_DEPTH_BUFFER,
+    NO_ALPHA,
+    NO_ALPHA_VISUAL,
+    PERFECT
+  } best_features;
+
   int i = 0;
 
   attrs[i++] = EGL_SURFACE_TYPE;
@@ -129,9 +170,85 @@ gdk_x11_display_create_egl_config (GdkX11Display *display)
   attrs[i++] = EGL_NONE;
   g_assert (i < MAX_EGL_ATTRS);
 
-  /* Pick first valid configuration that the driver returns us */
-  if (!eglChooseConfig (self->egl_display, attrs, &display->egl_config, 1, &count) && count >= 1)
-    display->egl_config = NULL;
+  if (!eglChooseConfig (self->egl_display, attrs, NULL, -1, &alloced))
+    return;
+
+  configs = g_new (EGLConfig, alloced);
+  if (!eglChooseConfig (self->egl_display, attrs, configs, alloced, &count))
+    {
+      g_free (configs);
+      return;
+    }
+  g_warn_if_fail (alloced == count);
+
+  best_features = NO_VISUAL_FOUND;
+
+  for (i = 0; i < count; i++)
+    {
+      XVisualInfo *visinfo;
+      int tmp, visualid;
+
+      if (!eglGetConfigAttrib (self->egl_display, configs[i], EGL_NATIVE_VISUAL_ID, &visualid))
+        continue;
+
+      visinfo = gdk_x11_display_get_visual_info_for_visual (self, visualid);
+      if (visinfo == NULL)
+        continue;
+
+      if (!eglGetConfigAttrib (self->egl_display, configs[i], EGL_SAMPLE_BUFFERS, &tmp) || tmp != 0)
+        {
+          if (best_features < WITH_MULTISAMPLING)
+            {
+              GDK_NOTE (OPENGL, g_message ("Best EGL config is %u for visual 0x%lX with multisampling", i, visinfo->visualid));
+              best_features = WITH_MULTISAMPLING;
+              *out_visual = visinfo->visual;
+              *out_depth = visinfo->depth;
+              self->egl_config = configs[i];
+            }
+          XFree (visinfo);
+          continue;
+        }
+
+      if (!eglGetConfigAttrib (self->egl_display, configs[i], EGL_DEPTH_SIZE, &tmp) || tmp != 0 ||
+          !eglGetConfigAttrib (self->egl_display, configs[i], EGL_STENCIL_SIZE, &tmp) || tmp != 0)
+        {
+          GDK_NOTE (OPENGL, g_message ("Best EGL config is %u for visual 0x%lX with stencil or depth buffer", i, visinfo->visualid));
+          if (best_features < WITH_STENCIL_AND_DEPTH_BUFFER)
+            {
+              best_features = WITH_STENCIL_AND_DEPTH_BUFFER;
+              *out_visual = visinfo->visual;
+              *out_depth = visinfo->depth;
+              self->egl_config = configs[i];
+            }
+          XFree (visinfo);
+          continue;
+        }
+    
+      if (!visual_is_rgba (visinfo))
+        {
+          GDK_NOTE (OPENGL, g_message ("Best EGL config is %u for visual 0x%lX without RGBA Visual", i, visinfo->visualid));
+          if (best_features < NO_ALPHA_VISUAL)
+            {
+              best_features = NO_ALPHA_VISUAL;
+              *out_visual = visinfo->visual;
+              *out_depth = visinfo->depth;
+              self->egl_config = configs[i];
+            }
+          XFree (visinfo);
+          continue;
+        }
+
+      GDK_NOTE (OPENGL, g_message ("EGL Config %u for visual 0x%lX is the perfect choice", i, visinfo->visualid));
+      *out_visual = visinfo->visual;
+      *out_depth = visinfo->depth;
+      self->egl_config = configs[i];
+      XFree (visinfo);
+      /* everything is perfect */
+      best_features = PERFECT;
+      break;
+    }
+
+  g_free (configs);
 }
 
 #undef MAX_EGL_ATTRS
@@ -478,7 +595,7 @@ gdk_x11_display_init_egl (GdkX11Display  *self,
       return FALSE;
     }
 
-  gdk_x11_display_create_egl_config (self);
+  gdk_x11_display_create_egl_config (self, out_visual, out_depth);
   if (self->egl_config == NULL)
     {
       eglTerminate (self->egl_display);
@@ -514,8 +631,6 @@ gdk_x11_display_init_egl (GdkX11Display  *self,
                                self->has_egl_buffer_age ? "yes" : "no",
                                self->has_egl_swap_buffers_with_damage ? "yes" : "no",
                                self->has_egl_surfaceless_context ? "yes" : "no"));
-
-  gdk_x11_display_query_default_visual (self, out_visual, out_depth);
 
   return TRUE;
 }

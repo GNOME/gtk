@@ -1335,7 +1335,7 @@ set_sm_client_id (GdkDisplay  *display,
                      gdk_x11_get_xatom_by_name_for_display (display, "SM_CLIENT_ID"));
 }
 
-void
+static void
 gdk_x11_display_query_default_visual (GdkX11Display  *self,
                                       Visual        **out_visual,
                                       int            *out_depth)
