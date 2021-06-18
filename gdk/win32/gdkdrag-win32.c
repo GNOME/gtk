@@ -2345,8 +2345,8 @@ gdk_dnd_handle_motion_event (GdkDrag  *drag,
   state = gdk_event_get_modifier_state (event);
   gdk_event_get_position (event, &x, &y);
 
-  x_root = x + _gdk_offset_x;
-  y_root = y + _gdk_offset_y;
+  x_root = event->surface->x + x;
+  y_root = event->surface->y + y;
 
   if (drag_win32->drag_surface)
     move_drag_surface (drag, x_root, y_root);
