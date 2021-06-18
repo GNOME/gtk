@@ -81,6 +81,10 @@ struct _GdkMacosDisplay
   /* The surface that is receiving keyboard events */
   GdkMacosSurface *keyboard_surface;
 
+  /* [NSDraggingInfo draggingSequenceNumber] to GdkMacosDr(ag,op) */
+  GHashTable *active_drags;
+  GHashTable *active_drops;
+
   /* Used to translate from quartz coordinate space to GDK */
   int width;
   int height;
@@ -160,6 +164,16 @@ void             _gdk_macos_display_warp_pointer                   (GdkMacosDisp
                                                                     int              x,
                                                                     int              y);
 NSEvent         *_gdk_macos_display_get_nsevent                    (GdkEvent        *event);
+GdkDrag         *_gdk_macos_display_find_drag                      (GdkMacosDisplay *self,
+                                                                    NSInteger        sequence_number);
+GdkDrop         *_gdk_macos_display_find_drop                      (GdkMacosDisplay *self,
+                                                                    NSInteger        sequence_number);
+void             _gdk_macos_display_set_drag                       (GdkMacosDisplay *self,
+                                                                    NSInteger        sequence_number,
+                                                                    GdkDrag         *drag);
+void             _gdk_macos_display_set_drop                       (GdkMacosDisplay *self,
+                                                                    NSInteger        sequence_number,
+                                                                    GdkDrop         *drop);
 
 G_END_DECLS
 

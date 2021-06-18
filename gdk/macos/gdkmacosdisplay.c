@@ -31,6 +31,8 @@
 #include "gdkmacoscairocontext-private.h"
 #include "gdkmacoseventsource-private.h"
 #include "gdkmacosdisplay-private.h"
+#include "gdkmacosdrag-private.h"
+#include "gdkmacosdrop-private.h"
 #include "gdkmacosglcontext-private.h"
 #include "gdkmacoskeymap-private.h"
 #include "gdkmacosmonitor-private.h"
@@ -663,6 +665,8 @@ gdk_macos_display_finalize (GObject *object)
                                       CFSTR ("NSUserDefaultsDidChangeNotification"),
                                       NULL);
 
+  g_clear_pointer (&self->active_drags, g_hash_table_unref);
+  g_clear_pointer (&self->active_drops, g_hash_table_unref);
   g_clear_object (&GDK_DISPLAY (self)->clipboard);
   g_clear_pointer (&self->frame_source, g_source_unref);
   g_clear_object (&self->monitors);
@@ -701,6 +705,8 @@ static void
 gdk_macos_display_init (GdkMacosDisplay *self)
 {
   self->monitors = g_list_store_new (GDK_TYPE_MONITOR);
+  self->active_drags = g_hash_table_new_full (NULL, NULL, NULL, g_object_unref);
+  self->active_drops = g_hash_table_new_full (NULL, NULL, NULL, g_object_unref);
 
   gdk_display_set_composited (GDK_DISPLAY (self), TRUE);
   gdk_display_set_input_shapes (GDK_DISPLAY (self), FALSE);
@@ -1112,4 +1118,56 @@ _gdk_macos_display_get_nsevent (GdkEvent *event)
     }
 
   return NULL;
+}
+
+GdkDrag *
+_gdk_macos_display_find_drag (GdkMacosDisplay *self,
+                              NSInteger        sequence_number)
+{
+  g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (self), NULL);
+
+  return g_hash_table_lookup (self->active_drags, GSIZE_TO_POINTER (sequence_number));
+}
+
+void
+_gdk_macos_display_set_drag (GdkMacosDisplay *self,
+                             NSInteger        sequence_number,
+                             GdkDrag         *drag)
+{
+  g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
+  g_return_if_fail (!drag || GDK_IS_MACOS_DRAG (drag));
+
+  if (drag)
+    g_hash_table_insert (self->active_drags,
+                         GSIZE_TO_POINTER (sequence_number),
+                         g_object_ref (drag));
+  else
+    g_hash_table_remove (self->active_drags,
+                         GSIZE_TO_POINTER (sequence_number));
+}
+
+GdkDrop *
+_gdk_macos_display_find_drop (GdkMacosDisplay *self,
+                              NSInteger        sequence_number)
+{
+  g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (self), NULL);
+
+  return g_hash_table_lookup (self->active_drops, GSIZE_TO_POINTER (sequence_number));
+}
+
+void
+_gdk_macos_display_set_drop (GdkMacosDisplay *self,
+                             NSInteger        sequence_number,
+                             GdkDrop         *drop)
+{
+  g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
+  g_return_if_fail (!drop || GDK_IS_MACOS_DROP (drop));
+
+  if (drop)
+    g_hash_table_insert (self->active_drops,
+                         GSIZE_TO_POINTER (sequence_number),
+                         g_object_ref (drop));
+  else
+    g_hash_table_remove (self->active_drops,
+                         GSIZE_TO_POINTER (sequence_number));
 }
