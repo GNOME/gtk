@@ -788,6 +788,9 @@ get_surface_from_ns_event (GdkMacosDisplay *self,
       NSRect view_frame;
 
       view = (GdkMacosBaseView *)[nswindow contentView];
+      if (!GDK_IS_MACOS_BASE_VIEW (view))
+        goto find_under_pointer;
+
       surface = GDK_SURFACE ([view gdkSurface]);
 
       point = [nsevent locationInWindow];
@@ -846,6 +849,8 @@ get_surface_from_ns_event (GdkMacosDisplay *self,
         }
     }
 
+find_under_pointer:
+
   if (!surface)
     {
       /* Fallback used when no NSSurface set.  This happens e.g. when
@@ -864,17 +869,24 @@ get_surface_from_ns_event (GdkMacosDisplay *self,
 static GdkMacosSurface *
 find_surface_for_keyboard_event (NSEvent *nsevent)
 {
-  GdkMacosBaseView *view = (GdkMacosBaseView *)[[nsevent window] contentView];
-  GdkSurface *surface = GDK_SURFACE ([view gdkSurface]);
-  GdkDisplay *display = gdk_surface_get_display (surface);
-  GdkSeat *seat = gdk_display_get_default_seat (display);
-  GdkDevice *device = gdk_seat_get_keyboard (seat);
-  GdkDeviceGrabInfo *grab = _gdk_display_get_last_device_grab (display, device);
+  NSView *nsview = [[nsevent window] contentView];
 
-  if (grab && grab->surface && !grab->owner_events)
-    return GDK_MACOS_SURFACE (grab->surface);
+  if (GDK_IS_MACOS_BASE_VIEW (nsview))
+    {
+      GdkMacosBaseView *view = (GdkMacosBaseView *)nsview;
+      GdkSurface *surface = GDK_SURFACE ([view gdkSurface]);
+      GdkDisplay *display = gdk_surface_get_display (surface);
+      GdkSeat *seat = gdk_display_get_default_seat (display);
+      GdkDevice *device = gdk_seat_get_keyboard (seat);
+      GdkDeviceGrabInfo *grab = _gdk_display_get_last_device_grab (display, device);
 
-  return GDK_MACOS_SURFACE (surface);
+      if (grab && grab->surface && !grab->owner_events)
+        return GDK_MACOS_SURFACE (grab->surface);
+
+      return GDK_MACOS_SURFACE (surface);
+    }
+
+  return NULL;
 }
 
 static GdkMacosSurface *
@@ -1090,7 +1102,8 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
   if (!(surface = find_surface_for_ns_event (self, nsevent, &x, &y)))
     return NULL;
 
-  if (!(window = (GdkMacosWindow *)_gdk_macos_surface_get_native (surface)))
+  if (!(window = (GdkMacosWindow *)_gdk_macos_surface_get_native (surface)) ||
+      !GDK_IS_MACOS_WINDOW (window))
     return NULL;
 
   /* Ignore events and break grabs while the window is being
