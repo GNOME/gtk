@@ -752,7 +752,7 @@ gdk_device_manager_win32_class_init (GdkDeviceManagerWin32Class *klass)
 }
 
 void
-_gdk_input_set_tablet_active (void)
+_gdk_wintab_set_tablet_active (void)
 {
   GList *tmp_list;
   HCTX *hctx;
@@ -763,7 +763,7 @@ _gdk_input_set_tablet_active (void)
   if (!wintab_contexts)
     return; /* No tablet devices found, or Wintab not initialized yet */
 
-  GDK_NOTE (INPUT, g_print ("_gdk_input_set_tablet_active: "
+  GDK_NOTE (INPUT, g_print ("_gdk_wintab_set_tablet_active: "
                             "Bringing Wintab contexts to the top of the overlap order\n"));
 
   tmp_list = wintab_contexts;
@@ -866,7 +866,7 @@ gdk_device_manager_find_wintab_device (GdkDeviceManagerWin32 *device_manager,
 }
 
 GdkEvent *
-gdk_input_other_event (GdkDisplay *display,
+gdk_wintab_make_event (GdkDisplay *display,
                        MSG        *msg,
                        GdkSurface  *window)
 {
@@ -894,7 +894,7 @@ gdk_input_other_event (GdkDisplay *display,
 
   if (window != wintab_window)
     {
-      g_warning ("gdk_input_other_event: not wintab_window?");
+      g_warning ("gdk_wintab_make_event: not wintab_window?");
       return NULL;
     }
 
@@ -905,7 +905,7 @@ gdk_input_other_event (GdkDisplay *display,
     g_object_ref (window);
 
   GDK_NOTE (EVENTS_OR_INPUT,
-	    g_print ("gdk_input_other_event: window=%p %+g%+g\n",
+	    g_print ("gdk_wintab_make_event: window=%p %+g%+g\n",
                window ? GDK_SURFACE_HWND (window) : NULL, x, y));
 
   if (msg->message == WT_PACKET || msg->message == WT_CSRCHANGE)
