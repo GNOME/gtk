@@ -54,11 +54,6 @@ _gdk_win32_surfaceing_init (void)
 {
   char buf[10];
 
-  if (getenv ("GDK_IGNORE_WINTAB") != NULL)
-    _gdk_input_ignore_wintab = TRUE;
-  else if (getenv ("GDK_USE_WINTAB") != NULL)
-    _gdk_input_ignore_wintab = FALSE;
-
   if (gdk_synchronize)
     GdiSetBatchLimit (1);
 

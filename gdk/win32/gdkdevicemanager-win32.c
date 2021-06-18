@@ -371,9 +371,6 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
 
   wintab_contexts = NULL;
 
-  if (_gdk_input_ignore_wintab)
-    return;
-
   n = GetSystemDirectory (&dummy, 0);
 
   if (n <= 0)
