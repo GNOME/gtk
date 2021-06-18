@@ -685,6 +685,8 @@ gdk_device_manager_win32_constructed (GObject *object)
   GdkSeat *seat;
   GdkDisplayManager *display_manager = NULL;
   GdkDisplay *default_display = NULL;
+  const char *tablet_input_api_user_preference = NULL;
+  gboolean have_tablet_input_api_preference = FALSE;
 
   device_manager = GDK_DEVICE_MANAGER_WIN32 (object);
   device_manager->core_pointer =
@@ -725,18 +727,38 @@ gdk_device_manager_win32_constructed (GObject *object)
   gdk_seat_default_add_physical_device (GDK_SEAT_DEFAULT (seat), device_manager->system_keyboard);
   g_object_unref (seat);
 
-  /* Only call Wintab init stuff after the default display
-   * is globally known and accessible through the display manager
-   * singleton. Approach lifted from gtkmodules.c.
-   */
-  display_manager = gdk_display_manager_get ();
-  g_assert (display_manager != NULL);
-  default_display = gdk_display_manager_get_default_display (display_manager);
-  g_assert (default_display == NULL);
+  tablet_input_api_user_preference = g_getenv ("GDK_WIN32_TABLET_INPUT_API");
+  if (g_strcmp0 (tablet_input_api_user_preference, "none") == 0)
+    {
+      have_tablet_input_api_preference = TRUE;
+      _gdk_win32_tablet_input_api = GDK_WIN32_TABLET_INPUT_API_NONE;
+    }
+  else if (g_strcmp0 (tablet_input_api_user_preference, "wintab") == 0)
+    {
+      have_tablet_input_api_preference = TRUE;
+      _gdk_win32_tablet_input_api = GDK_WIN32_TABLET_INPUT_API_WINTAB;
+    }
+  else
+    {
+      have_tablet_input_api_preference = FALSE;
+      _gdk_win32_tablet_input_api = GDK_WIN32_TABLET_INPUT_API_WINTAB;
+    }
 
-  g_signal_connect (display_manager, "notify::default-display",
-                    G_CALLBACK (wintab_default_display_notify_cb),
-                    NULL);
+  if (_gdk_win32_tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINTAB)
+    {
+      /* Only call Wintab init stuff after the default display
+       * is globally known and accessible through the display manager
+       * singleton. Approach lifted from gtkmodules.c.
+       */
+      display_manager = gdk_display_manager_get ();
+      g_assert (display_manager != NULL);
+      default_display = gdk_display_manager_get_default_display (display_manager);
+      g_assert (default_display == NULL);
+
+      g_signal_connect (display_manager, "notify::default-display",
+                        G_CALLBACK (wintab_default_display_notify_cb),
+                        NULL);
+    }
 }
 
 static void

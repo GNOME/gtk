@@ -3052,12 +3052,15 @@ gdk_event_translate (MSG *msg,
         {
           gdk_synthesize_surface_state (window, 0, GDK_TOPLEVEL_STATE_FOCUSED);
 
-          /* Bring any tablet contexts to the top of the overlap order when
-           * one of our windows is activated.
-           * NOTE: It doesn't seem to work well if it is done in WM_ACTIVATEAPP
-           * instead
-           */
-          _gdk_wintab_set_tablet_active ();
+          if (_gdk_win32_tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINTAB)
+            {
+              /* Bring any tablet contexts to the top of the overlap order when
+               * one of our windows is activated.
+               * NOTE: It doesn't seem to work well if it is done in WM_ACTIVATEAPP
+               * instead
+               */
+              _gdk_wintab_set_tablet_active ();
+           }
         }
 
       break;
@@ -3096,11 +3099,14 @@ gdk_event_translate (MSG *msg,
       /* Fall through */
     wintab:
 
-      event = gdk_wintab_make_event (display, msg, window);
-      if (event)
+      if (_gdk_win32_tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINTAB)
         {
-          _gdk_win32_append_event (event);
-	  gdk_event_unref (event);
+          event = gdk_wintab_make_event (display, msg, window);
+          if (event)
+            {
+              _gdk_win32_append_event (event);
+               gdk_event_unref (event);
+            }
         }
 
       break;
