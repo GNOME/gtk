@@ -444,9 +444,12 @@ gsk_ngl_command_queue_new (GdkGLContext       *context,
   else
     self->uniforms = gsk_ngl_uniform_state_new ();
 
-  /* Determine max texture size immediately and restore context */
+  /* Determine max texture size and other limitations immediately
+   * and restore context
+   */
   gdk_gl_context_make_current (context);
   glGetIntegerv (GL_MAX_TEXTURE_SIZE, &self->max_texture_size);
+  glGetIntegerv (GL_MAX_ELEMENTS_VERTICES, &self->max_elements_vertices);
 
   return g_steal_pointer (&self);
 }
@@ -617,6 +620,7 @@ gsk_ngl_command_queue_end_draw (GskNglCommandQueue *self)
       last_batch->any.viewport.height == batch->any.viewport.height &&
       last_batch->draw.framebuffer == batch->draw.framebuffer &&
       last_batch->draw.vbo_offset + last_batch->draw.vbo_count == batch->draw.vbo_offset &&
+      last_batch->draw.vbo_count + batch->draw.vbo_count <= self->max_elements_vertices &&
       snapshots_equal (self, last_batch, batch))
     {
       last_batch->draw.vbo_count += batch->draw.vbo_count;
