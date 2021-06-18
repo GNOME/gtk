@@ -10,6 +10,7 @@ gdk_macos_sources = files([
   'gdkmacosdisplay-settings.c',
   'gdkmacosdisplay-translate.c',
   'gdkmacosdrag.c',
+  'gdkmacosdrop.c',
   'gdkmacosdragsurface.c',
   'gdkmacosglcontext.c',
   'gdkmacoseventsource.c',
