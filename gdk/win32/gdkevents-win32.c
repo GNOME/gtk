@@ -3057,7 +3057,7 @@ gdk_event_translate (MSG *msg,
            * NOTE: It doesn't seem to work well if it is done in WM_ACTIVATEAPP
            * instead
            */
-          _gdk_input_set_tablet_active ();
+          _gdk_wintab_set_tablet_active ();
         }
 
       break;
@@ -3096,7 +3096,7 @@ gdk_event_translate (MSG *msg,
       /* Fall through */
     wintab:
 
-      event = gdk_input_other_event (display, msg, window);
+      event = gdk_wintab_make_event (display, msg, window);
       if (event)
         {
           _gdk_win32_append_event (event);
