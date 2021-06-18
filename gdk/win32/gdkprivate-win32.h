@@ -304,11 +304,6 @@ extern HWND             _modal_move_resize_window;
 void  _gdk_win32_begin_modal_call (GdkWin32ModalOpKind kind);
 void  _gdk_win32_end_modal_call (GdkWin32ModalOpKind kind);
 
-
-/* Options */
-extern gboolean          _gdk_input_ignore_wintab;
-extern int               _gdk_max_colors;
-
 /* Convert a pixbuf to an HICON (or HCURSOR).  Supports alpha under
  * Windows XP, thresholds alpha otherwise.
  */
