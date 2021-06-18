@@ -37,6 +37,7 @@ HINSTANCE	  _gdk_dll_hinstance;
 HINSTANCE	  _gdk_app_hmodule;
 
 int		  _gdk_input_ignore_core;
+GdkWin32TabletInputAPI _gdk_win32_tablet_input_api;
 
 HKL		  _gdk_input_locale;
 gboolean	  _gdk_input_locale_is_ime = FALSE;
