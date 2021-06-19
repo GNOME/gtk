@@ -313,10 +313,12 @@ gdk_macos_surface_drag_begin (GdkSurface         *surface,
   GdkMacosSurface *self = (GdkMacosSurface *)surface;
   GdkMacosSurface *drag_surface;
   GdkMacosDrag *drag;
+  GdkDisplay *display;
   GdkCursor *cursor;
   GdkSeat *seat;
   double px;
   double py;
+  int quartz_x, quartz_y;
   int sx;
   int sy;
 
@@ -325,6 +327,12 @@ gdk_macos_surface_drag_begin (GdkSurface         *surface,
             GDK_IS_MACOS_POPUP_SURFACE (self));
   g_assert (GDK_IS_MACOS_DEVICE (device));
   g_assert (GDK_IS_CONTENT_PROVIDER (content));
+
+  display = gdk_surface_get_display (surface);
+  _gdk_macos_display_to_display_coords (GDK_MACOS_DISPLAY (display),
+                                        surface->x + dx,
+                                        surface->y + dy,
+                                        &quartz_x, &quartz_y);
 
   seat = gdk_device_get_seat (device);
   gdk_macos_device_query_state (device, surface, NULL, &px, &py, NULL);
@@ -346,7 +354,7 @@ gdk_macos_surface_drag_begin (GdkSurface         *surface,
                                 gdk_drag_get_selected_action (GDK_DRAG (drag)));
   gdk_drag_set_cursor (GDK_DRAG (drag), cursor);
 
-  if (!_gdk_macos_drag_begin (drag))
+  if (!_gdk_macos_drag_begin (drag, content, self->window, quartz_x, quartz_y))
     {
       g_object_unref (drag);
       return NULL;

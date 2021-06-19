@@ -696,4 +696,24 @@
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
+- (void)draggingSession:(NSDraggingSession *)session
+           endedAtPoint:(NSPoint)screenPoint
+              operation:(NSDragOperation)operation
+{
+  NSInteger sequence = [session draggingSequenceNumber];
+  GdkMacosDisplay *display = [self gdkDisplay];
+  GdkDrag *drag = _gdk_macos_display_find_drag (display, sequence);
+  gboolean success = operation != NSDragOperationNone;
+
+  if (drag == NULL)
+    return;
+
+  g_print ("Dragging session ended!: success=%d\n", success);
+
+  if (!success)
+    gdk_drag_cancel (drag, GDK_DRAG_CANCEL_ERROR);
+  else
+    g_signal_emit_by_name (drag, "dnd-finished");
+}
+
 @end

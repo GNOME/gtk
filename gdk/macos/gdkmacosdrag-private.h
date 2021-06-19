@@ -23,6 +23,7 @@
 #include "gdkdragprivate.h"
 
 #include "gdkmacosdragsurface-private.h"
+#include "gdkmacospasteboard-private.h"
 
 G_BEGIN_DECLS
 
@@ -44,6 +45,8 @@ struct _GdkMacosDrag
   GdkSeat *drag_seat;
   GdkCursor *cursor;
 
+  NSInteger sequence;
+
   int hot_x;
   int hot_y;
 
@@ -63,7 +66,11 @@ struct _GdkMacosDragClass
 };
 
 GType    gdk_macos_drag_get_type (void) G_GNUC_CONST;
-gboolean _gdk_macos_drag_begin   (GdkMacosDrag *self);
+gboolean _gdk_macos_drag_begin   (GdkMacosDrag       *self,
+                                  GdkContentProvider *provider,
+                                  NSWindow           *window,
+                                  double              quartz_x,
+                                  double              quartz_y);
 
 G_END_DECLS
 

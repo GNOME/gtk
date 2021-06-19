@@ -49,6 +49,17 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
+static void
+gdk_macos_drag_drop_from_display (GdkMacosDrag *self)
+{
+  GdkDisplay *display;
+
+  g_assert (GDK_IS_MACOS_DRAG (self));
+
+  display = gdk_drag_get_display (GDK_DRAG (self));
+  _gdk_macos_display_set_drag (GDK_MACOS_DISPLAY (display), self->sequence, NULL);
+}
+
 static double
 ease_out_cubic (double t)
 {
@@ -81,12 +92,12 @@ gdk_macos_zoomback_timeout (gpointer data)
   frame_clock = zb->frame_clock;
 
   if (!frame_clock)
-    return G_SOURCE_REMOVE;
+    goto hide_surface;
 
   current_time = gdk_frame_clock_get_frame_time (frame_clock);
   f = (current_time - zb->start_time) / (double) ANIM_TIME;
   if (f >= 1.0)
-    return G_SOURCE_REMOVE;
+    goto hide_surface;
 
   t = ease_out_cubic (f);
 
@@ -101,6 +112,11 @@ gdk_macos_zoomback_timeout (gpointer data)
   _gdk_macos_surface_show (GDK_MACOS_SURFACE (drag->drag_surface));
 
   return G_SOURCE_CONTINUE;
+
+hide_surface:
+  gdk_surface_hide (GDK_SURFACE (drag->drag_surface));
+
+  return G_SOURCE_REMOVE;
 }
 
 static GdkSurface *
@@ -141,6 +157,8 @@ gdk_macos_drag_drop_done (GdkDrag  *drag,
   guint id;
 
   g_assert (GDK_IS_MACOS_DRAG (self));
+
+  g_print ("Drop done! success=%d\n", success);
 
   if (success)
     {
@@ -231,20 +249,8 @@ gdk_macos_drag_cancel (GdkDrag             *drag,
 
   self->cancelled = TRUE;
   drag_ungrab (self);
-  gdk_drag_drop_done (drag, FALSE);
-}
-
-static void
-gdk_macos_drag_drop_performed (GdkDrag *drag,
-                               guint32  time)
-{
-  GdkMacosDrag *self = (GdkMacosDrag *)drag;
-
-  g_assert (GDK_IS_MACOS_DRAG (self));
-
-  drag_ungrab (self);
-  g_signal_emit_by_name (drag, "dnd-finished");
-  gdk_drag_drop_done (drag, TRUE);
+  gdk_surface_hide (GDK_SURFACE (self->drag_surface));
+  gdk_macos_drag_drop_from_display (self);
 }
 
 static void
@@ -503,6 +509,9 @@ gdk_macos_drag_handle_event (GdkDrag  *drag,
   g_assert (GDK_IS_MACOS_DRAG (drag));
   g_assert (event != NULL);
 
+  if (GDK_MACOS_DRAG (drag)->cancelled)
+    return FALSE;
+
   switch ((guint) event->event_type)
     {
     case GDK_MOTION_NOTIFY:
@@ -521,6 +530,12 @@ gdk_macos_drag_handle_event (GdkDrag  *drag,
     default:
       return FALSE;
     }
+}
+
+static void
+gdk_macos_drag_dnd_finished (GdkDrag *drag)
+{
+  gdk_macos_drag_drop_from_display (GDK_MACOS_DRAG (drag));
 }
 
 static void
@@ -591,8 +606,8 @@ gdk_macos_drag_class_init (GdkMacosDragClass *klass)
   drag_class->drop_done = gdk_macos_drag_drop_done;
   drag_class->set_cursor = gdk_macos_drag_set_cursor;
   drag_class->cancel = gdk_macos_drag_cancel;
-  drag_class->drop_performed = gdk_macos_drag_drop_performed;
   drag_class->handle_event = gdk_macos_drag_handle_event;
+  drag_class->dnd_finished = gdk_macos_drag_dnd_finished;
 
   properties [PROP_DRAG_SURFACE] =
     g_param_spec_object ("drag-surface",
@@ -610,11 +625,57 @@ gdk_macos_drag_init (GdkMacosDrag *self)
 }
 
 gboolean
-_gdk_macos_drag_begin (GdkMacosDrag *self)
+_gdk_macos_drag_begin (GdkMacosDrag       *self,
+                       GdkContentProvider *content,
+                       NSWindow           *window,
+                       double              quartz_x,
+                       double              quartz_y)
 {
+  NSArray<NSDraggingItem *> *items;
+  NSDraggingSession *session;
+  NSPasteboardItem *item;
+  NSTimeInterval nstime;
+  NSEvent *nsevent;
+
   g_return_val_if_fail (GDK_IS_MACOS_DRAG (self), FALSE);
 
+  GDK_BEGIN_MACOS_ALLOC_POOL;
+
+  item = [[GdkMacosPasteboardItem alloc] initForDrag:GDK_DRAG (self) withContentProvider:content];
+  items = [NSArray arrayWithObject:item];
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  nstime = [[NSDate dateWithTimeIntervalSince1970: (gint64)time / 1000L] timeIntervalSinceReferenceDate];
+  nsevent = [NSEvent mouseEventWithType: NSEventTypeLeftMouseDown
+                               location: NSMakePoint (quartz_x, quartz_y)
+                          modifierFlags: 0
+                              timestamp: nstime
+                           windowNumber: [window windowNumber]
+                                context: [window graphicsContext]
+                            eventNumber: 0
+                             clickCount: 1
+                               pressure: 0.0];
+  G_GNUC_END_IGNORE_DEPRECATIONS
+
+  session = [[window contentView] beginDraggingSessionWithItems:items
+                                                          event:nsevent
+                                                         source:[window contentView]];
+  self->sequence = [session draggingSequenceNumber];
+
+  GDK_END_MACOS_ALLOC_POOL;
+
+  gdk_surface_hide (GDK_SURFACE (self->drag_surface));
+#if 0
   _gdk_macos_surface_show (GDK_MACOS_SURFACE (self->drag_surface));
 
-  return drag_grab (self);
+  if (drag_grab (self))
+#endif
+    {
+      _gdk_macos_display_set_drag (GDK_MACOS_DISPLAY (gdk_drag_get_display (GDK_DRAG (self))),
+                                   self->sequence,
+                                   GDK_DRAG (self));
+      return TRUE;
+    }
+
+  //return FALSE;
 }
