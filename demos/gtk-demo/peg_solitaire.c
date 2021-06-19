@@ -1,7 +1,7 @@
 /* Peg Solitaire
  * #Keywords: GtkGridView, game
  *
- * This demo demonstrates how to use drag'n'drop to implement peg solitaire.
+ * This demo demonstrates how to use drag-and-drop to implement peg solitaire.
  *
  */
 
@@ -98,7 +98,7 @@ solitaire_peg_init (SolitairePeg *peg)
 
 /* Add a little setter for the peg's position.
  * We want to track those so that we can check for legal moves
- * during drag'n'drop operations.
+ * during drag-and-drop operations.
  */
 static void
 solitaire_peg_set_position (SolitairePeg *peg,
