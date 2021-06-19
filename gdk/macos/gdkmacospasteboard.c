@@ -21,6 +21,7 @@
 
 #include <glib/gi18n.h>
 
+#include "gdkdragprivate.h"
 #include "gdkmacospasteboard-private.h"
 #include "gdkmacosutils-private.h"
 
@@ -164,87 +165,6 @@ _gdk_macos_pasteboard_load_formats (NSPasteboard *pasteboard)
 {
   return load_offer_formats (pasteboard);
 }
-
-void
-_gdk_macos_pasteboard_send_content (NSPasteboard                   *pasteboard,
-                                    GdkContentProvider             *content,
-                                    GdkMacosPasteboardDataProvider *dataProvider)
-{
-  GDK_BEGIN_MACOS_ALLOC_POOL;
-
-  NSPasteboardItem *item;
-
-  g_return_if_fail (pasteboard != NULL);
-  g_return_if_fail (GDK_IS_CONTENT_PROVIDER (content));
-
-  item = [[NSPasteboardItem alloc] init];
-  [item setDataProvider:dataProvider forTypes:[dataProvider types]];
-
-  [pasteboard clearContents];
-  if ([pasteboard writeObjects:[NSArray arrayWithObject:item]] == NO)
-    g_warning ("Failed to write object to pasteboard");
-
-  GDK_END_MACOS_ALLOC_POOL;
-}
-
-@implementation GdkMacosPasteboardDataProvider
-
--(id)initPasteboard:(NSPasteboard *)pasteBoard mimetypes:(const char * const *)mime_types;
-{
-  [super init];
-
-  self->mimeTypes = g_strdupv ((char **)mime_types);
-  self->pasteboard = [pasteBoard retain];
-
-  return self;
-}
-
--(void)dealloc
-{
-  g_cancellable_cancel (self->cancellable);
-
-  if (self->pasteboard)
-    {
-      [self->pasteboard release];
-      self->pasteboard = nil;
-    }
-
-  g_clear_pointer (&self->mimeTypes, g_strfreev);
-  g_clear_object (&self->cancellable);
-
-  [super dealloc];
-}
-
--(void)pasteboardFinishedWithDataProvider:(NSPasteboard *)pasteboard
-{
-}
-
--(void)pasteboard:(NSPasteboard *)pasteboard item:(NSPasteboardItem *)item provideDataForType:(NSPasteboardType)type
-{
-}
-
--(NSArray<NSPasteboardType> *)types
-{
-  NSMutableArray *ret = [[NSMutableArray alloc] init];
-
-  for (guint i = 0; self->mimeTypes[i]; i++)
-    {
-      const char *mime_type = self->mimeTypes[i];
-      NSPasteboardType type;
-      NSPasteboardType alternate = nil;
-
-      if ((type = _gdk_macos_pasteboard_to_ns_type (mime_type, &alternate)))
-        {
-          [ret addObject:type];
-          if (alternate)
-            [ret addObject:alternate];
-        }
-    }
-
-  return g_steal_pointer (&ret);
-}
-
-@end
 
 static GInputStream *
 create_stream_from_nsdata (NSData *data)
@@ -414,3 +334,250 @@ _gdk_macos_pasteboard_register_drag_types (NSWindow *window)
                                                             PTYPE(PNG),
                                                             nil]];
 }
+
+@implementation GdkMacosPasteboardItemDataProvider
+
+-(id)initForClipboard:(GdkClipboard*)clipboard withContentProvider:(GdkContentProvider*)contentProvider
+{
+  [super init];
+  g_set_object (&self->_clipboard, clipboard);
+  g_set_object (&self->_contentProvider, contentProvider);
+  return self;
+}
+
+-(id)initForDrag:(GdkDrag*)drag withContentProvider:(GdkContentProvider*)contentProvider
+{
+  [super init];
+  g_set_object (&self->_drag, drag);
+  g_set_object (&self->_contentProvider, contentProvider);
+  return self;
+}
+
+-(void)dealloc
+{
+  g_clear_object (&self->_contentProvider);
+  g_clear_object (&self->_clipboard);
+  g_clear_object (&self->_drag);
+  [super dealloc];
+}
+
+-(NSArray<NSPasteboardType> *)types
+{
+  NSMutableArray *ret = [[NSMutableArray alloc] init];
+  GdkContentFormats *serializable;
+  const char * const *mime_types;
+  gsize n_mime_types;
+
+  serializable = gdk_content_provider_ref_storable_formats (self->_contentProvider);
+  serializable = gdk_content_formats_union_serialize_mime_types (serializable);
+  mime_types = gdk_content_formats_get_mime_types (serializable, &n_mime_types);
+
+  for (guint i = 0; mime_types[i]; i++)
+    {
+      const char *mime_type = mime_types[i];
+      NSPasteboardType type;
+      NSPasteboardType alternate = nil;
+
+      if ((type = _gdk_macos_pasteboard_to_ns_type (mime_type, &alternate)))
+        {
+          [ret addObject:type];
+          if (alternate)
+            [ret addObject:alternate];
+        }
+    }
+
+  return g_steal_pointer (&ret);
+}
+
+typedef struct
+{
+  GMemoryOutputStream *stream;
+  NSPasteboardItem    *item;
+  NSPasteboardType     type;
+  GMainContext        *main_context;
+  guint                done : 1;
+} WriteRequest;
+
+static void
+write_request_free (WriteRequest *wr)
+{
+  g_clear_pointer (&wr->main_context, g_main_context_unref);
+  g_clear_object (&wr->stream);
+  [wr->item release];
+  g_slice_free (WriteRequest, wr);
+}
+
+static void
+on_data_ready_cb (GObject      *object,
+                  GAsyncResult *result,
+                  gpointer      user_data)
+{
+  GDK_BEGIN_MACOS_ALLOC_POOL;
+
+  WriteRequest *wr = user_data;
+  GError *error = NULL;
+  NSData *data = nil;
+  gboolean ret;
+
+  g_assert (G_IS_OBJECT (object));
+  g_assert (GDK_IS_CLIPBOARD (object) || GDK_IS_DRAG (object));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (wr != NULL);
+  g_assert (G_IS_MEMORY_OUTPUT_STREAM (wr->stream));
+  g_assert ([wr->item isKindOfClass:[NSPasteboardItem class]]);
+
+  if (GDK_IS_CLIPBOARD (object))
+    ret = gdk_clipboard_write_finish (GDK_CLIPBOARD (object), result, &error);
+  else if (GDK_IS_DRAG (object))
+    ret = gdk_drag_write_finish (GDK_DRAG (object), result, &error);
+  else
+    g_return_if_reached ();
+
+  if (ret)
+    {
+      gsize size;
+      gpointer bytes;
+
+      g_output_stream_close (G_OUTPUT_STREAM (wr->stream), NULL, NULL);
+
+      size = g_memory_output_stream_get_data_size (wr->stream);
+      bytes = g_memory_output_stream_steal_data (wr->stream);
+      data = [[NSData alloc] initWithBytesNoCopy:bytes
+                                          length:size
+                                     deallocator:^(void *alloc, NSUInteger length) { g_free (alloc); }];
+    }
+  else
+    {
+      g_warning ("Failed to serialize pasteboard contents: %s",
+                 error->message);
+      g_clear_error (&error);
+    }
+
+  [wr->item setData:data forType:wr->type];
+
+  wr->done = TRUE;
+
+  GDK_END_MACOS_ALLOC_POOL;
+}
+
+-(void)pasteboard:(NSPasteboard *)pasteboard item:(NSPasteboardItem *)item provideDataForType:(NSPasteboardType)type
+{
+  const char *mime_type = _gdk_macos_pasteboard_from_ns_type (type);
+  GMainContext *main_context = g_main_context_default ();
+  WriteRequest *wr;
+
+  if (self->_contentProvider == NULL || mime_type == NULL)
+    {
+      [item setData:[NSData data] forType:type];
+      return;
+    }
+
+  wr = g_slice_new0 (WriteRequest);
+  wr->item = [item retain];
+  wr->stream = G_MEMORY_OUTPUT_STREAM (g_memory_output_stream_new_resizable ());
+  wr->type = type;
+  wr->main_context = g_main_context_ref (main_context);
+  wr->done = FALSE;
+
+  if (GDK_IS_CLIPBOARD (self->_clipboard))
+    gdk_clipboard_write_async (self->_clipboard,
+                               mime_type,
+                               G_OUTPUT_STREAM (wr->stream),
+                               G_PRIORITY_DEFAULT,
+                               NULL,
+                               on_data_ready_cb,
+                               wr);
+  else if (GDK_IS_DRAG (self->_drag))
+    gdk_drag_write_async (self->_drag,
+                          mime_type,
+                          G_OUTPUT_STREAM (wr->stream),
+                          G_PRIORITY_DEFAULT,
+                          NULL,
+                          on_data_ready_cb,
+                          wr);
+  else
+    g_return_if_reached ();
+
+  /* We're forced to provide data synchronously via this API
+   * so we must block on the main loop. Using another main loop
+   * than the default tends to get us locked up here, so that is
+   * what we'll do for now.
+   */
+  while (!wr->done)
+    g_main_context_iteration (wr->main_context, TRUE);
+
+  write_request_free (wr);
+}
+
+-(void)pasteboardFinishedWithDataProvider:(NSPasteboard *)pasteboard
+{
+  g_clear_object (&self->_clipboard);
+  g_clear_object (&self->_drag);
+  g_clear_object (&self->_contentProvider);
+}
+
+@end
+
+@implementation GdkMacosPasteboardItem
+
+-(id)initForClipboard:(GdkClipboard*)clipboard withContentProvider:(GdkContentProvider*)contentProvider
+{
+  GdkMacosPasteboardItemDataProvider *dataProvider;
+
+  dataProvider = [[GdkMacosPasteboardItemDataProvider alloc] initForClipboard:clipboard withContentProvider:contentProvider];
+
+  [super init];
+  g_set_object (&self->_clipboard, clipboard);
+  g_set_object (&self->_contentProvider, contentProvider);
+  [self setDataProvider:dataProvider forTypes:[dataProvider types]];
+
+  [dataProvider release];
+
+  return self;
+}
+
+-(id)initForDrag:(GdkDrag*)drag withContentProvider:(GdkContentProvider*)contentProvider
+{
+  GdkMacosPasteboardItemDataProvider *dataProvider;
+
+  dataProvider = [[GdkMacosPasteboardItemDataProvider alloc] initForDrag:drag withContentProvider:contentProvider];
+
+  [super init];
+  g_set_object (&self->_drag, drag);
+  g_set_object (&self->_contentProvider, contentProvider);
+  [self setDataProvider:dataProvider forTypes:[dataProvider types]];
+
+  [dataProvider release];
+
+  return self;
+}
+
+-(void)dealloc
+{
+  g_clear_object (&self->_contentProvider);
+  g_clear_object (&self->_clipboard);
+  g_clear_object (&self->_drag);
+  [super dealloc];
+}
+
+-(NSRect)draggingFrame
+{
+  return self->_draggingFrame;
+}
+
+-(void)setDraggingFrame:(NSRect)draggingFrame;
+{
+  self->_draggingFrame = draggingFrame;
+}
+
+-(id)item
+{
+  return self;
+}
+
+-(NSArray* (^) (void))imageComponentsProvider
+{
+  return nil;
+}
+
+@end

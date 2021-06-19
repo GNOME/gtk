@@ -27,15 +27,28 @@
 
 G_BEGIN_DECLS
 
-@interface GdkMacosPasteboardDataProvider : NSObject <NSPasteboardItemDataProvider>
+@interface GdkMacosPasteboardItemDataProvider : NSObject <NSPasteboardItemDataProvider>
 {
-  NSPasteboard  *pasteboard;
-  GCancellable  *cancellable;
-  char         **mimeTypes;
+  GdkContentProvider *_contentProvider;
+  GdkClipboard *_clipboard;
+  GdkDrag *_drag;
 }
 
--(id)initPasteboard:(NSPasteboard *)pasteBoard mimetypes:(const char * const *)mime_types;
--(NSArray<NSPasteboardType> *)types;
+-(id)initForClipboard:(GdkClipboard *)clipboard withContentProvider:(GdkContentProvider *)contentProvider;
+-(id)initForDrag:(GdkDrag *)drag withContentProvider:(GdkContentProvider *)contentProvider;
+
+@end
+
+@interface GdkMacosPasteboardItem : NSPasteboardItem
+{
+  GdkContentProvider *_contentProvider;
+  GdkClipboard *_clipboard;
+  GdkDrag *_drag;
+  NSRect _draggingFrame;
+}
+
+-(id)initForClipboard:(GdkClipboard *)clipboard withContentProvider:(GdkContentProvider *)contentProvider;
+-(id)initForDrag:(GdkDrag *)drag withContentProvider:(GdkContentProvider *)contentProvider;
 
 @end
 
@@ -55,9 +68,6 @@ GInputStream      *_gdk_macos_pasteboard_read_finish         (GObject           
                                                               GAsyncResult                    *result,
                                                               const char                     **out_mime_type,
                                                               GError                         **error);
-void               _gdk_macos_pasteboard_send_content        (NSPasteboard                    *pasteboard,
-                                                              GdkContentProvider              *content,
-                                                              GdkMacosPasteboardDataProvider  *dataProvider);
 
 G_END_DECLS
 
