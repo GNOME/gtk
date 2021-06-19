@@ -294,8 +294,11 @@ gdk_drop_finalize (GObject *object)
 
   /* someone forgot to send a LEAVE signal */
   g_warn_if_fail (!priv->entered);
+
   /* Should we emit finish() here if necessary?
-   * For now that's the backends' job */
+   * For now that's the backends' job
+   */
+  g_warn_if_fail (priv->state != GDK_DROP_STATE_DROPPING);
 
   g_clear_object (&priv->device);
   g_clear_object (&priv->drag);
