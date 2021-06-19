@@ -2970,8 +2970,18 @@ gtk_label_recalculate (GtkLabel *self)
   gtk_label_clear_layout (self);
   gtk_label_clear_select_info (self);
 
-  if (self->use_markup || self->use_underline)
-    gtk_label_set_markup_internal (self, self->label, self->use_underline);
+  if (self->use_markup)
+    {
+      gtk_label_set_markup_internal (self, self->label, self->use_underline);
+    }
+  else if (self->use_underline)
+    {
+      char *text;
+
+      text = g_markup_escape_text (self->label, -1);
+      gtk_label_set_markup_internal (self, text, TRUE);
+      g_free (text);
+    }
   else
     {
       g_clear_pointer (&self->markup_attrs, pango_attr_list_unref);

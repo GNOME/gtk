@@ -231,6 +231,12 @@ struct _GskNglCommandQueue
    */
   int max_texture_size;
 
+  /* Discovered max element count. We must not create batches that contain
+   * more vertices than this number.
+   */
+
+  int max_elements_vertices;
+
   /* The index of the last batch in @batches, which may not be the element
    * at the end of the array, as batches can be reordered. This is used to
    * update the "next" index when adding a new batch.
