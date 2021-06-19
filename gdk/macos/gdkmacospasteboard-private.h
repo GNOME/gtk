@@ -27,6 +27,8 @@
 
 G_BEGIN_DECLS
 
+#define GDK_MACOS_LOCAL_DND_MIME_TYPE "application/x-gtk-local-dnd"
+
 @interface GdkMacosPasteboardItemDataProvider : NSObject <NSPasteboardItemDataProvider>
 {
   GdkContentProvider *_contentProvider;

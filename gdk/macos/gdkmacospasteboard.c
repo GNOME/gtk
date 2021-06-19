@@ -33,6 +33,7 @@ enum {
   TYPE_COLOR,
   TYPE_TIFF,
   TYPE_PNG,
+  TYPE_INTERNAL,
   TYPE_LAST
 };
 
@@ -67,6 +68,8 @@ get_pasteboard_type (int type)
       pasteboard_types[TYPE_FILE_URL] = [[NSString alloc] initWithUTF8String:"public.file-url"];
 #endif
 
+      pasteboard_types[TYPE_INTERNAL] = [[NSString alloc] initWithUTF8String:"org.gtk.pasteboard.internal"];
+
       g_once_init_leave (&initialized, TRUE);
     }
 
@@ -90,6 +93,8 @@ _gdk_macos_pasteboard_from_ns_type (NSPasteboardType type)
     return g_intern_string ("image/tiff");
   else if ([type isEqualToString:PTYPE(PNG)])
     return g_intern_string ("image/png");
+  else if ([type isEqualToString:PTYPE(INTERNAL)])
+    return g_intern_string (GDK_MACOS_LOCAL_DND_MIME_TYPE);
 
   G_GNUC_END_IGNORE_DEPRECATIONS;
 
@@ -124,6 +129,10 @@ _gdk_macos_pasteboard_to_ns_type (const char       *mime_type,
   else if (g_strcmp0 (mime_type, "image/png") == 0)
     {
       return PTYPE(PNG);
+    }
+  else if (g_strcmp0 (mime_type, GDK_MACOS_LOCAL_DND_MIME_TYPE) == 0)
+    {
+      return PTYPE(INTERNAL);
     }
 
   return nil;
@@ -283,6 +292,11 @@ _gdk_macos_pasteboard_read_async (GObject             *object,
       NSData *data = [pasteboard dataForType:PTYPE(PNG)];
       stream = create_stream_from_nsdata (data);
     }
+  else if (strcmp (mime_type, GDK_MACOS_LOCAL_DND_MIME_TYPE) == 0)
+    {
+      /* Should be internal copy */
+      g_warn_if_reached ();
+    }
 
   if (stream != NULL)
     {
@@ -332,6 +346,7 @@ _gdk_macos_pasteboard_register_drag_types (NSWindow *window)
                                                             PTYPE(COLOR),
                                                             PTYPE(TIFF),
                                                             PTYPE(PNG),
+                                                            PTYPE(INTERNAL),
                                                             nil]];
 }
 
@@ -385,6 +400,16 @@ _gdk_macos_pasteboard_register_drag_types (NSWindow *window)
             [ret addObject:alternate];
         }
     }
+
+  if ([ret count] == 0)
+    {
+      NSPasteboardType type;
+      NSPasteboardType alternate = nil;
+
+      if ((type = _gdk_macos_pasteboard_to_ns_type (GDK_MACOS_LOCAL_DND_MIME_TYPE, &alternate)))
+        [ret addObject:type];
+    }
+
 
   return g_steal_pointer (&ret);
 }
