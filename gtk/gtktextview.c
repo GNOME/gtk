@@ -9963,3 +9963,49 @@ gtk_text_view_buffer_notify_undo (GtkTextBuffer *buffer,
                                  (gtk_text_view_get_editable (view) &&
                                   gtk_text_buffer_get_can_undo (buffer)));
 }
+
+/**
+ * gtk_text_view_get_ltr_context:
+ * @text_view: a `GtkTextView`
+ *
+ * Gets the `PangoContext` that is used for rendering LTR directed
+ * text layouts.
+ *
+ * The context may be replaced when CSS changes occur.
+ *
+ * Returns: (transfer none): a `PangoContext`
+ *
+ * Since: 4.4
+ */
+PangoContext *
+gtk_text_view_get_ltr_context (GtkTextView *text_view)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), NULL);
+
+  gtk_text_view_ensure_layout (text_view);
+
+  return text_view->priv->layout->ltr_context;
+}
+
+/**
+ * gtk_text_view_get_rtl_context:
+ * @text_view: a `GtkTextView`
+ *
+ * Gets the `PangoContext` that is used for rendering RTL directed
+ * text layouts.
+ *
+ * The context may be replaced when CSS changes occur.
+ *
+ * Returns: (transfer none): a `PangoContext`
+ *
+ * Since: 4.4
+ */
+PangoContext *
+gtk_text_view_get_rtl_context (GtkTextView *text_view)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), NULL);
+
+  gtk_text_view_ensure_layout (text_view);
+
+  return text_view->priv->layout->rtl_context;
+}
