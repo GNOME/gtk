@@ -17,6 +17,7 @@
                 <child>
                   <object class="GtkPlacesSidebar" id="places_sidebar">
                     <property name="show-other-locations">1</property>
+                    <property name="show-trash">0</property>
                     <style>
                       <class name="sidebar"/>
                     </style>
