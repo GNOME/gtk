@@ -843,8 +843,16 @@ gtk_menu_button_set_icon_name (GtkMenuButton *menu_button,
 {
   g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
 
+  g_object_freeze_notify (G_OBJECT (menu_button));
+
+  if (gtk_menu_button_get_label (menu_button))
+    g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_LABEL]);
+
   gtk_button_set_icon_name (GTK_BUTTON (menu_button->button), icon_name);
+
   g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_ICON_NAME]);
+
+  g_object_thaw_notify (G_OBJECT (menu_button));
 }
 
 /**
@@ -880,6 +888,11 @@ gtk_menu_button_set_label (GtkMenuButton *menu_button,
 
   g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
 
+  g_object_freeze_notify (G_OBJECT (menu_button));
+
+  if (gtk_menu_button_get_icon_name (menu_button))
+    g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_ICON_NAME]);
+
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   label_widget = gtk_label_new (label);
   g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
@@ -897,6 +910,8 @@ gtk_menu_button_set_label (GtkMenuButton *menu_button,
   menu_button->label_widget = label_widget;
 
   g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_LABEL]);
+
+  g_object_thaw_notify (G_OBJECT (menu_button));
 }
 
 /**
