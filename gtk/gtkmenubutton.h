@@ -80,6 +80,12 @@ void         gtk_menu_button_set_icon_name (GtkMenuButton *menu_button,
 GDK_AVAILABLE_IN_ALL
 const char * gtk_menu_button_get_icon_name (GtkMenuButton *menu_button);
 
+GDK_AVAILABLE_IN_4_4
+void         gtk_menu_button_set_always_show_arrow (GtkMenuButton *menu_button,
+                                                    gboolean       always_show_arrow);
+GDK_AVAILABLE_IN_4_4
+gboolean     gtk_menu_button_get_always_show_arrow (GtkMenuButton *menu_button);
+
 GDK_AVAILABLE_IN_ALL
 void         gtk_menu_button_set_label (GtkMenuButton *menu_button,
                                         const char    *label);

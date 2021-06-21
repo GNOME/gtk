@@ -4322,6 +4322,10 @@ statusbar {
 }
 
 menubutton {
+  > button > box {
+    border-spacing: 6px;
+  }
+
   arrow {
     min-height: 16px;
     min-width: 16px;
