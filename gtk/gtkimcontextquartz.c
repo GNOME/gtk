@@ -41,6 +41,7 @@ typedef struct _GtkIMContextQuartz
   GtkIMContext parent;
   GtkIMContext *helper;
   GdkSurface *client_surface;
+  GtkWidget *client_widget;
   char *preedit_str;
   unsigned int cursor_index;
   unsigned int selected_len;
@@ -266,6 +267,7 @@ quartz_set_client_surface (GtkIMContext *context,
 
   GTK_NOTE (MODULES, g_print ("quartz_set_client_surface: %p\n", widget));
 
+  qc->client_widget = widget;
   qc->client_surface = NULL;
 
   if (widget != NULL)
@@ -302,25 +304,24 @@ static void
 quartz_set_cursor_location (GtkIMContext *context, GdkRectangle *area)
 {
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
-  int x, y;
+  int sx, sy;
+  double wx, wy;
 
   GTK_NOTE (MODULES, g_print ("quartz_set_cursor_location\n"));
 
-  if (!qc->client_surface)
+  if (!qc->client_surface || !qc->client_widget)
     return;
 
   if (!qc->focused)
     return;
 
-  qc->cursor_rect->x = area->x;
-  qc->cursor_rect->y = area->y;
+  gdk_surface_get_origin (qc->client_surface, &sx, &sy);
+  gtk_widget_translate_coordinates(qc->client_widget, qc->client_surface->widget, area->x, area->y, &wx, &wy);
+  
+  qc->cursor_rect->x = sx + (int) wx;
+  qc->cursor_rect->y = sy + (int) wy;
   qc->cursor_rect->width = area->width;
   qc->cursor_rect->height = area->height;
-
-  gdk_surface_get_origin (qc->client_surface, &x, &y);
-
-  qc->cursor_rect->x = area->x + x;
-  qc->cursor_rect->y = area->y + y;
 
   if (!GDK_IS_MACOS_SURFACE (qc->client_surface))
     return;
