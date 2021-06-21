@@ -895,7 +895,6 @@ gtk_menu_button_set_label (GtkMenuButton *menu_button,
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   label_widget = gtk_label_new (label);
-  g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
   gtk_label_set_xalign (GTK_LABEL (label_widget), 0);
   gtk_label_set_use_underline (GTK_LABEL (label_widget),
                                gtk_button_get_use_underline (GTK_BUTTON (menu_button->button)));
