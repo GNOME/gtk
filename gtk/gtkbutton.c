@@ -407,6 +407,16 @@ gtk_button_set_child_type (GtkButton *button, guint child_type)
   if (priv->child_type == child_type)
     return;
 
+  if (child_type == LABEL_CHILD)
+    gtk_widget_add_css_class (GTK_WIDGET (button), "text-button");
+  else
+    gtk_widget_remove_css_class (GTK_WIDGET (button), "text-button");
+
+  if (child_type == ICON_CHILD)
+    gtk_widget_add_css_class (GTK_WIDGET (button), "image-button");
+  else
+    gtk_widget_remove_css_class (GTK_WIDGET (button), "image-button");
+
   if (child_type != LABEL_CHILD)
     g_object_notify_by_pspec (G_OBJECT (button), props[PROP_LABEL]);
   else if (child_type != ICON_CHILD)
@@ -835,8 +845,6 @@ gtk_button_set_label (GtkButton   *button,
         gtk_label_set_xalign (GTK_LABEL (child), 0.0);
 
       gtk_button_set_child (button,  child);
-      gtk_widget_remove_css_class (GTK_WIDGET (button), "image-button");
-      gtk_widget_add_css_class (GTK_WIDGET (button), "text-button");
     }
 
   gtk_label_set_label (GTK_LABEL (priv->child), label);
@@ -966,8 +974,6 @@ gtk_button_set_icon_name (GtkButton  *button,
                                        NULL);
       gtk_button_set_child (GTK_BUTTON (button), child);
       gtk_widget_set_valign (child, GTK_ALIGN_CENTER);
-      gtk_widget_remove_css_class (GTK_WIDGET (button), "text-button");
-      gtk_widget_add_css_class (GTK_WIDGET (button), "image-button");
     }
   else
     {
