@@ -251,6 +251,28 @@ gtk_event_controller_scroll_begin (GtkEventController *controller)
 }
 
 static gboolean
+gtk_event_controller_scroll_end (GtkEventController *controller)
+{
+  GtkEventControllerScroll *scroll = GTK_EVENT_CONTROLLER_SCROLL (controller);
+
+  if (!scroll->active)
+    return FALSE;
+
+  g_signal_emit (controller, signals[SCROLL_END], 0);
+  scroll->active = FALSE;
+
+  if (scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_KINETIC)
+    {
+      double vel_x, vel_y;
+
+      scroll_history_finish (scroll, &vel_x, &vel_y);
+      g_signal_emit (controller, signals[DECELERATE], 0, vel_x, vel_y);
+    }
+
+  return TRUE;
+}
+
+static gboolean
 gtk_event_controller_scroll_handle_event (GtkEventController *controller,
                                           GdkEvent           *event,
                                           double              x,
@@ -343,17 +365,8 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
 
   if (scroll->active && gdk_scroll_event_is_stop (event))
     {
-      g_signal_emit (controller, signals[SCROLL_END], 0);
-      scroll->active = FALSE;
+      gtk_event_controller_scroll_end (controller);
       handled = FALSE;
-
-      if (scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_KINETIC)
-        {
-          double vel_x, vel_y;
-
-          scroll_history_finish (scroll, &vel_x, &vel_y);
-          g_signal_emit (controller, signals[DECELERATE], 0, vel_x, vel_y);
-        }
     }
 
   return handled;
