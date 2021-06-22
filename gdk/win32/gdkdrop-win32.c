@@ -180,11 +180,7 @@ gdk_drop_new (GdkDisplay        *display,
                              "surface", surface,
                              NULL);
 
-  if (display_win32->has_fixed_scale)
-    drop_win32->scale = display_win32->surface_scale;
-  else
-    drop_win32->scale = gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL);
-
+  drop_win32->scale = display_win32->surface_scale;
   drop_win32->protocol = protocol;
 
   return GDK_DROP (drop_win32);

@@ -780,11 +780,7 @@ gdk_drag_new (GdkDisplay         *display,
                              NULL);
 
   drag = GDK_DRAG (drag_win32);
-
-  if (display_win32->has_fixed_scale)
-    drag_win32->scale = display_win32->surface_scale;
-  else
-    drag_win32->scale = gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL);
+  drag_win32->scale = display_win32->surface_scale;
 
   return drag;
 }
@@ -1892,7 +1888,6 @@ gdk_win32_drag_drop_done (GdkDrag  *drag,
   if (success)
     {
       gdk_surface_hide (drag_win32->drag_surface);
-
       return;
     }
 
