@@ -154,7 +154,6 @@ typedef enum
   GDK_DRAG_PROTO_NONE = 0,
   GDK_DRAG_PROTO_WIN32_DROPFILES,
   GDK_DRAG_PROTO_OLE2,
-  GDK_DRAG_PROTO_LOCAL,
 } GdkDragProtocol;
 
 GType _gdk_gc_win32_get_type (void);
@@ -442,7 +441,6 @@ BOOL WINAPI GtkShowWindow (GdkSurface *window,
 /* Initialization */
 void _gdk_win32_surfaceing_init (void);
 void _gdk_drag_init    (void);
-void _gdk_drop_init    (void);
 void _gdk_events_init (GdkDisplay *display);
 
 #endif /* __GDK_PRIVATE_WIN32_H__ */

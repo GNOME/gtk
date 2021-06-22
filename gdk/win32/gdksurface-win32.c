@@ -204,7 +204,6 @@ gdk_surface_win32_finalize (GObject *object)
     }
 
   _gdk_win32_surface_unregister_dnd (GDK_SURFACE (surface));
-  g_clear_object (&surface->drop);
 
   g_assert (surface->transient_owner == NULL);
   g_assert (surface->transient_children == NULL);

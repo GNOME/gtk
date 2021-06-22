@@ -253,7 +253,6 @@ _gdk_win32_drag_protocol_to_string (GdkDragProtocol protocol)
       CASE (NONE);
       CASE (WIN32_DROPFILES);
       CASE (OLE2);
-      CASE (LOCAL);
 #undef CASE
     default: return static_printf ("illegal_%d", protocol);
     }

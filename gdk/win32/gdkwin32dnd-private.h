@@ -93,38 +93,6 @@ struct _GdkWin32DragClass
 gpointer _gdk_win32_dnd_thread_main                      (gpointer         data);
 
 GdkDrag *_gdk_win32_find_drag_for_dest_window     (HWND             dest_window);
-GdkDrop  *_gdk_win32_get_drop_for_dest_surface     (GdkSurface      *dest);
-
-gboolean _gdk_win32_local_drop_target_will_emit_motion   (GdkDrop *drop,
-                                                          int      x_root,
-                                                          int      y_root,
-                                                          DWORD    grfKeyState);
-
-void     _gdk_win32_local_drop_target_dragenter          (GdkDrag        *drag,
-                                                          GdkSurface     *dest_surface,
-                                                          int             x_root,
-                                                          int             y_root,
-                                                          DWORD           grfKeyState,
-                                                          guint32         time_,
-                                                          GdkDragAction  *actions);
-void     _gdk_win32_local_drop_target_dragover           (GdkDrop        *drop,
-                                                          GdkDrag        *drag,
-                                                          int             x_root,
-                                                          int             y_root,
-                                                          DWORD           grfKeyState,
-                                                          guint32         time_,
-                                                          GdkDragAction  *actions);
-void     _gdk_win32_local_drop_target_dragleave          (GdkDrop        *drop,
-                                                          guint32         time_);
-void     _gdk_win32_local_drop_target_drop               (GdkDrop        *drop,
-                                                          GdkDrag        *drag,
-                                                          guint32         time_,
-                                                          GdkDragAction  *actions);
-
-void     _gdk_win32_local_drag_give_feedback             (GdkDrag        *drag,
-                                                          GdkDragAction   actions);
-void     _gdk_win32_local_drag_drop_response             (GdkDrag        *drag,
-                                                          GdkDragAction   action);
 
 
 G_END_DECLS
