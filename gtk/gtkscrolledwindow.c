@@ -1351,6 +1351,19 @@ scroll_controller_scroll_begin (GtkEventControllerScroll *scroll,
 }
 
 static void
+stop_kinetic_scrolling_cb (GtkEventControllerScroll *scroll,
+                           GtkScrolledWindow        *scrolled_window)
+{
+  GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
+
+  if (priv->hscrolling)
+    gtk_kinetic_scrolling_stop (priv->hscrolling);
+
+  if (priv->vscrolling)
+    gtk_kinetic_scrolling_stop (priv->vscrolling);
+}
+
+static void
 scrolled_window_scroll (GtkScrolledWindow        *scrolled_window,
                         double                    delta_x,
                         double                    delta_y,
@@ -2115,6 +2128,8 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES |
                                                 GTK_EVENT_CONTROLLER_SCROLL_KINETIC);
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+  g_signal_connect (controller, "scroll-begin",
+                    G_CALLBACK (stop_kinetic_scrolling_cb), scrolled_window);
   g_signal_connect (controller, "scroll",
                     G_CALLBACK (captured_scroll_cb), scrolled_window);
   g_signal_connect (controller, "decelerate",
