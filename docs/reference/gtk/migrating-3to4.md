@@ -99,6 +99,12 @@ you should stop using `GdkVisual` APIs, since this object not longer
 exists in GTK 4. Most of its APIs are deprecated already and not
 useful when dealing with RGBA visuals.
 
+### Stop using `gtk_widget_set_app_paintable`
+
+This is gone in GTK4 with no direct replacement. But for some usecases there
+are alternatives. If you want to make the background transparent, you can set
+the background color to, for example, `rgba(255, 255, 255, 0)` using CSS instead.
+
 ### Stop using `GtkBox` padding, fill and expand child properties
 
 GTK 4 removes these [class@Gtk.Box] child properties, so you should stop using
@@ -1338,3 +1344,4 @@ of tree models, and widgets instead of cell renderers.
 
 To learn more about the new list widgets, you can read the [List Widget
 Overview](#ListWidget).
+
