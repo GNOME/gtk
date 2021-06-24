@@ -1017,7 +1017,7 @@ gtk_menu_button_set_label (GtkMenuButton *menu_button,
   if (gtk_menu_button_get_icon_name (menu_button))
     g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_ICON_NAME]);
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   label_widget = gtk_label_new (label);
   gtk_label_set_xalign (GTK_LABEL (label_widget), 0);
   gtk_label_set_use_underline (GTK_LABEL (label_widget),
