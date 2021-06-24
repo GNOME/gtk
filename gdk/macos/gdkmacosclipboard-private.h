@@ -35,11 +35,24 @@ typedef NSString *NSPasteboardType;
 
 G_DECLARE_FINAL_TYPE (GdkMacosClipboard, _gdk_macos_clipboard, GDK, MACOS_CLIPBOARD, GdkClipboard)
 
-GdkClipboard     *_gdk_macos_clipboard_new                       (GdkMacosDisplay   *display);
-void              _gdk_macos_clipboard_check_externally_modified (GdkMacosClipboard *self);
-NSPasteboardType  _gdk_macos_clipboard_to_ns_type                (const char        *mime_type,
-                                                                  NSPasteboardType  *alternate);
-const char       *_gdk_macos_clipboard_from_ns_type              (NSPasteboardType   ns_type);
+GdkClipboard      *_gdk_macos_clipboard_new                       (GdkMacosDisplay      *display);
+void               _gdk_macos_clipboard_check_externally_modified (GdkMacosClipboard    *self);
+NSPasteboardType   _gdk_macos_clipboard_to_ns_type                (const char           *mime_type,
+                                                                   NSPasteboardType     *alternate);
+const char        *_gdk_macos_clipboard_from_ns_type              (NSPasteboardType      ns_type);
+void               _gdk_macos_clipboard_register_drag_types       (NSWindow             *window);
+GdkContentFormats *_gdk_macos_pasteboard_load_formats             (NSPasteboard         *pasteboard);
+void               _gdk_macos_pasteboard_read_async               (GObject              *object,
+                                                                   NSPasteboard         *pasteboard,
+                                                                   GdkContentFormats    *formats,
+                                                                   int                   io_priority,
+                                                                   GCancellable         *cancellable,
+                                                                   GAsyncReadyCallback   callback,
+                                                                   gpointer              user_data);
+GInputStream      *_gdk_macos_pasteboard_read_finish              (GObject              *object,
+                                                                   GAsyncResult         *result,
+                                                                   const char          **out_mime_type,
+                                                                   GError              **error);
 
 @interface GdkMacosClipboardDataProvider : NSObject <NSPasteboardItemDataProvider>
 {

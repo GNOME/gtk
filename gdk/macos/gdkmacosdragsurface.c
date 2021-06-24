@@ -123,16 +123,3 @@ _gdk_macos_drag_surface_new (GdkMacosDisplay *display,
 
   return g_steal_pointer (&self);
 }
-
-void
-_gdk_macos_drag_surface_drag_motion (GdkMacosDragSurface *self,
-                                     int                  x_root,
-                                     int                  y_root,
-                                     GdkDragAction        suggested_action,
-                                     GdkDragAction        possible_actions,
-                                     guint32              evtime)
-{
-  g_return_if_fail (GDK_IS_MACOS_DRAG_SURFACE (self));
-
-  _gdk_macos_surface_move (GDK_MACOS_SURFACE (self), x_root, y_root);
-}

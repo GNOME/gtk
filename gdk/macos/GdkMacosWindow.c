@@ -28,7 +28,9 @@
 #import "GdkMacosGLView.h"
 #import "GdkMacosWindow.h"
 
+#include "gdkmacosclipboard-private.h"
 #include "gdkmacosdisplay-private.h"
+#include "gdkmacosdrop-private.h"
 #include "gdkmacosmonitor-private.h"
 #include "gdkmacossurface-private.h"
 #include "gdkmacospopupsurface-private.h"
@@ -286,6 +288,9 @@ typedef NSString *CALayerContentsGravity;
   view = [[GdkMacosCairoView alloc] initWithFrame:contentRect];
   [self setContentView:view];
   [view release];
+
+  /* TODO: We might want to make this more extensible at some point */
+  _gdk_macos_clipboard_register_drag_types (self);
 
   return self;
 }
@@ -597,25 +602,86 @@ typedef NSString *CALayerContentsGravity;
 
 -(NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {
-  return NSDragOperationNone;
+  NSPoint location = [sender draggingLocation];
+  NSDragOperation ret;
+  GdkMacosDrop *drop;
+
+  if (!(drop = _gdk_macos_drop_new ([self gdkSurface], sender)))
+    return NSDragOperationNone;
+
+  _gdk_macos_display_set_drop ([self gdkDisplay],
+                               [sender draggingSequenceNumber],
+                               GDK_DROP (drop));
+
+  gdk_drop_emit_enter_event (GDK_DROP (drop),
+                             TRUE,
+                             location.x,
+                             GDK_SURFACE (gdk_surface)->height - location.y,
+                             GDK_CURRENT_TIME);
+
+  ret = _gdk_macos_drop_operation (drop);
+
+  g_object_unref (drop);
+
+  return ret;
 }
 
 -(void)draggingEnded:(id <NSDraggingInfo>)sender
 {
+  _gdk_macos_display_set_drop ([self gdkDisplay], [sender draggingSequenceNumber], NULL);
 }
 
 -(void)draggingExited:(id <NSDraggingInfo>)sender
 {
+  NSInteger sequence_number = [sender draggingSequenceNumber];
+  GdkDrop *drop = _gdk_macos_display_find_drop ([self gdkDisplay], sequence_number);
+
+  if (drop != NULL)
+    gdk_drop_emit_leave_event (drop, TRUE, GDK_CURRENT_TIME);
+
+  _gdk_macos_display_set_drop ([self gdkDisplay], sequence_number, NULL);
 }
 
 -(NSDragOperation)draggingUpdated:(id <NSDraggingInfo>)sender
 {
-  return NSDragOperationNone;
+  NSInteger sequence_number = [sender draggingSequenceNumber];
+  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (gdk_surface));
+  GdkDrop *drop = _gdk_macos_display_find_drop (GDK_MACOS_DISPLAY (display), sequence_number);
+  NSPoint location = [sender draggingLocation];
+
+  if (drop == NULL)
+    return NSDragOperationNone;
+
+  _gdk_macos_drop_update_actions (GDK_MACOS_DROP (drop), sender);
+
+  gdk_drop_emit_motion_event (drop,
+                              TRUE,
+                              location.x,
+                              GDK_SURFACE (gdk_surface)->height - location.y,
+                              GDK_CURRENT_TIME);
+
+  return _gdk_macos_drop_operation (GDK_MACOS_DROP (drop));
 }
 
 -(BOOL)performDragOperation:(id <NSDraggingInfo>)sender
 {
-  return YES;
+  NSInteger sequence_number = [sender draggingSequenceNumber];
+  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (gdk_surface));
+  GdkDrop *drop = _gdk_macos_display_find_drop (GDK_MACOS_DISPLAY (display), sequence_number);
+  NSPoint location = [sender draggingLocation];
+
+  if (drop == NULL)
+    return NO;
+
+  gdk_drop_emit_drop_event (drop,
+                            TRUE,
+                            location.x,
+                            GDK_SURFACE (gdk_surface)->height - location.y,
+                            GDK_CURRENT_TIME);
+
+  gdk_drop_emit_leave_event (drop, TRUE, GDK_CURRENT_TIME);
+
+  return GDK_MACOS_DROP (drop)->finish_action != 0;
 }
 
 -(BOOL)wantsPeriodicDraggingUpdates

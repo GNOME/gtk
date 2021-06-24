@@ -172,17 +172,15 @@ populate_content_formats (GdkContentFormatsBuilder *builder,
 }
 
 static GdkContentFormats *
-load_offer_formats (GdkMacosClipboard *self)
+load_offer_formats (NSPasteboard *pasteboard)
 {
   GDK_BEGIN_MACOS_ALLOC_POOL;
 
   GdkContentFormatsBuilder *builder;
   GdkContentFormats *formats;
 
-  g_assert (GDK_IS_MACOS_CLIPBOARD (self));
-
   builder = gdk_content_formats_builder_new ();
-  for (NSPasteboardType type in [self->pasteboard types])
+  for (NSPasteboardType type in [pasteboard types])
     populate_content_formats (builder, type);
   formats = gdk_content_formats_builder_free_to_formats (builder);
 
@@ -201,7 +199,7 @@ _gdk_macos_clipboard_load_contents (GdkMacosClipboard *self)
 
   change_count = [self->pasteboard changeCount];
 
-  formats = load_offer_formats (self);
+  formats = load_offer_formats (self->pasteboard);
   gdk_clipboard_claim_remote (GDK_CLIPBOARD (self), formats);
   gdk_content_formats_unref (formats);
 
@@ -225,125 +223,13 @@ _gdk_macos_clipboard_read_async (GdkClipboard        *clipboard,
                                  GAsyncReadyCallback  callback,
                                  gpointer             user_data)
 {
-  GDK_BEGIN_MACOS_ALLOC_POOL;
-
-  GdkMacosClipboard *self = (GdkMacosClipboard *)clipboard;
-  GdkContentFormats *offer_formats = NULL;
-  const char *mime_type;
-  GInputStream *stream = NULL;
-  GTask *task = NULL;
-
-  g_assert (GDK_IS_MACOS_CLIPBOARD (self));
-  g_assert (formats != NULL);
-
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, _gdk_macos_clipboard_read_async);
-  g_task_set_priority (task, io_priority);
-
-  offer_formats = load_offer_formats (GDK_MACOS_CLIPBOARD (clipboard));
-  mime_type = gdk_content_formats_match_mime_type (formats, offer_formats);
-
-  if (mime_type == NULL)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_SUPPORTED,
-                               "%s",
-                               _("No compatible transfer format found"));
-      goto cleanup;
-    }
-
-  if (strcmp (mime_type, "text/plain;charset=utf-8") == 0)
-    {
-      NSString *nsstr = [self->pasteboard stringForType:NSPasteboardTypeString];
-
-      if (nsstr != NULL)
-        {
-          const char *str = [nsstr UTF8String];
-          stream = g_memory_input_stream_new_from_data (g_strdup (str),
-                                                        strlen (str) + 1,
-                                                        g_free);
-        }
-    }
-  else if (strcmp (mime_type, "text/uri-list") == 0)
-    {
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-      if ([[self->pasteboard types] containsObject:PTYPE(FILE_URL)])
-        {
-          GString *str = g_string_new (NULL);
-          NSArray *files = [self->pasteboard propertyListForType:NSFilenamesPboardType];
-          gsize n_files = [files count];
-          char *data;
-          guint len;
-
-          for (gsize i = 0; i < n_files; ++i)
-            {
-              NSString* uriString = [files objectAtIndex:i];
-              uriString = [@"file://" stringByAppendingString:uriString];
-              uriString = [uriString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-
-              g_string_append_printf (str,
-                                      "%s\r\n",
-                                      [uriString cStringUsingEncoding:NSUTF8StringEncoding]);
-            }
-
-          len = str->len;
-          data = g_string_free (str, FALSE);
-          stream = g_memory_input_stream_new_from_data (data, len, g_free);
-        }
-
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-    }
-  else if (strcmp (mime_type, "application/x-color") == 0)
-    {
-      NSColorSpace *colorspace;
-      NSColor *nscolor;
-      guint16 color[4];
-
-      colorspace = [NSColorSpace genericRGBColorSpace];
-      nscolor = [[NSColor colorFromPasteboard:self->pasteboard]
-                    colorUsingColorSpace:colorspace];
-
-      color[0] = 0xffff * [nscolor redComponent];
-      color[1] = 0xffff * [nscolor greenComponent];
-      color[2] = 0xffff * [nscolor blueComponent];
-      color[3] = 0xffff * [nscolor alphaComponent];
-
-      stream = g_memory_input_stream_new_from_data (g_memdup2 (&color, sizeof color),
-                                                    sizeof color,
-                                                    g_free);
-    }
-  else if (strcmp (mime_type, "image/tiff") == 0)
-    {
-      NSData *data = [self->pasteboard dataForType:PTYPE(TIFF)];
-      stream = create_stream_from_nsdata (data);
-    }
-  else if (strcmp (mime_type, "image/png") == 0)
-    {
-      NSData *data = [self->pasteboard dataForType:PTYPE(PNG)];
-      stream = create_stream_from_nsdata (data);
-    }
-
-  if (stream != NULL)
-    {
-      g_task_set_task_data (task, g_strdup (mime_type), g_free);
-      g_task_return_pointer (task, g_steal_pointer (&stream), g_object_unref);
-    }
-  else
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               _("Failed to decode contents with mime-type of '%s'"),
-                               mime_type);
-    }
-
-cleanup:
-  g_clear_object (&task);
-  g_clear_pointer (&offer_formats, gdk_content_formats_unref);
-
-  GDK_END_MACOS_ALLOC_POOL;
+  _gdk_macos_pasteboard_read_async (G_OBJECT (clipboard),
+                                    GDK_MACOS_CLIPBOARD (clipboard)->pasteboard,
+                                    formats,
+                                    io_priority,
+                                    cancellable,
+                                    callback,
+                                    user_data);
 }
 
 static GInputStream *
@@ -352,15 +238,7 @@ _gdk_macos_clipboard_read_finish (GdkClipboard  *clipboard,
                                   const char   **out_mime_type,
                                   GError       **error)
 {
-  GTask *task = (GTask *)result;
-
-  g_assert (GDK_IS_MACOS_CLIPBOARD (clipboard));
-  g_assert (G_IS_TASK (task));
-
-  if (out_mime_type != NULL)
-    *out_mime_type = g_strdup (g_task_get_task_data (task));
-
-  return g_task_propagate_pointer (task, error);
+  return _gdk_macos_pasteboard_read_finish (G_OBJECT (clipboard), result, out_mime_type, error);
 }
 
 static void
@@ -622,4 +500,170 @@ on_data_ready_cb (GObject      *object,
   write_request_free (wr);
 }
 
+void
+_gdk_macos_clipboard_register_drag_types (NSWindow *window)
+{
+  [window registerForDraggedTypes:[NSArray arrayWithObjects:PTYPE(STRING),
+                                                            PTYPE(PBOARD),
+                                                            PTYPE(URL),
+                                                            PTYPE(FILE_URL),
+                                                            PTYPE(COLOR),
+                                                            PTYPE(TIFF),
+                                                            PTYPE(PNG),
+                                                            nil]];
+}
+
 @end
+
+GdkContentFormats *
+_gdk_macos_pasteboard_load_formats (NSPasteboard *pasteboard)
+{
+  return load_offer_formats (pasteboard);
+}
+
+void
+_gdk_macos_pasteboard_read_async (GObject             *object,
+                                  NSPasteboard        *pasteboard,
+                                  GdkContentFormats   *formats,
+                                  int                  io_priority,
+                                  GCancellable        *cancellable,
+                                  GAsyncReadyCallback  callback,
+                                  gpointer             user_data)
+{
+  GDK_BEGIN_MACOS_ALLOC_POOL;
+
+  GdkContentFormats *offer_formats = NULL;
+  const char *mime_type;
+  GInputStream *stream = NULL;
+  GTask *task = NULL;
+
+  g_assert (G_IS_OBJECT (object));
+  g_assert (pasteboard != NULL);
+  g_assert (formats != NULL);
+
+  task = g_task_new (object, cancellable, callback, user_data);
+  g_task_set_source_tag (task, _gdk_macos_pasteboard_read_async);
+  g_task_set_priority (task, io_priority);
+
+  offer_formats = load_offer_formats (pasteboard);
+  mime_type = gdk_content_formats_match_mime_type (formats, offer_formats);
+
+  if (mime_type == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               "%s",
+                               _("No compatible transfer format found"));
+      goto cleanup;
+    }
+
+  if (strcmp (mime_type, "text/plain;charset=utf-8") == 0)
+    {
+      NSString *nsstr = [pasteboard stringForType:NSPasteboardTypeString];
+
+      if (nsstr != NULL)
+        {
+          const char *str = [nsstr UTF8String];
+          stream = g_memory_input_stream_new_from_data (g_strdup (str),
+                                                        strlen (str) + 1,
+                                                        g_free);
+        }
+    }
+  else if (strcmp (mime_type, "text/uri-list") == 0)
+    {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
+      if ([[pasteboard types] containsObject:PTYPE(FILE_URL)])
+        {
+          GString *str = g_string_new (NULL);
+          NSArray *files = [pasteboard propertyListForType:NSFilenamesPboardType];
+          gsize n_files = [files count];
+          char *data;
+          guint len;
+
+          for (gsize i = 0; i < n_files; ++i)
+            {
+              NSString* uriString = [files objectAtIndex:i];
+              uriString = [@"file://" stringByAppendingString:uriString];
+              uriString = [uriString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+
+              g_string_append_printf (str,
+                                      "%s\r\n",
+                                      [uriString cStringUsingEncoding:NSUTF8StringEncoding]);
+            }
+
+          len = str->len;
+          data = g_string_free (str, FALSE);
+          stream = g_memory_input_stream_new_from_data (data, len, g_free);
+        }
+
+      G_GNUC_END_IGNORE_DEPRECATIONS;
+    }
+  else if (strcmp (mime_type, "application/x-color") == 0)
+    {
+      NSColorSpace *colorspace;
+      NSColor *nscolor;
+      guint16 color[4];
+
+      colorspace = [NSColorSpace genericRGBColorSpace];
+      nscolor = [[NSColor colorFromPasteboard:pasteboard]
+                    colorUsingColorSpace:colorspace];
+
+      color[0] = 0xffff * [nscolor redComponent];
+      color[1] = 0xffff * [nscolor greenComponent];
+      color[2] = 0xffff * [nscolor blueComponent];
+      color[3] = 0xffff * [nscolor alphaComponent];
+
+      stream = g_memory_input_stream_new_from_data (g_memdup2 (&color, sizeof color),
+                                                    sizeof color,
+                                                    g_free);
+    }
+  else if (strcmp (mime_type, "image/tiff") == 0)
+    {
+      NSData *data = [pasteboard dataForType:PTYPE(TIFF)];
+      stream = create_stream_from_nsdata (data);
+    }
+  else if (strcmp (mime_type, "image/png") == 0)
+    {
+      NSData *data = [pasteboard dataForType:PTYPE(PNG)];
+      stream = create_stream_from_nsdata (data);
+    }
+
+  if (stream != NULL)
+    {
+      g_task_set_task_data (task, g_strdup (mime_type), g_free);
+      g_task_return_pointer (task, g_steal_pointer (&stream), g_object_unref);
+    }
+  else
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               _("Failed to decode contents with mime-type of '%s'"),
+                               mime_type);
+    }
+
+cleanup:
+  g_clear_object (&task);
+  g_clear_pointer (&offer_formats, gdk_content_formats_unref);
+
+  GDK_END_MACOS_ALLOC_POOL;
+}
+
+GInputStream *
+_gdk_macos_pasteboard_read_finish (GObject       *object,
+                                   GAsyncResult  *result,
+                                   const char   **out_mime_type,
+                                   GError       **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_assert (G_IS_OBJECT (object));
+  g_assert (G_IS_TASK (task));
+
+  if (out_mime_type != NULL)
+    *out_mime_type = g_strdup (g_task_get_task_data (task));
+
+  return g_task_propagate_pointer (task, error);
+}

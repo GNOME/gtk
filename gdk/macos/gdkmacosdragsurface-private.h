@@ -31,19 +31,13 @@ typedef struct _GdkMacosDragSurfaceClass GdkMacosDragSurfaceClass;
 #define GDK_MACOS_DRAG_SURFACE(object)    (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_MACOS_DRAG_SURFACE, GdkMacosDragSurface))
 #define GDK_IS_MACOS_DRAG_SURFACE(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_MACOS_DRAG_SURFACE))
 
-GType            _gdk_macos_drag_surface_get_type    (void);
-GdkMacosSurface *_gdk_macos_drag_surface_new         (GdkMacosDisplay *display,
-                                                      GdkFrameClock   *frame_clock,
-                                                      int              x,
-                                                      int              y,
-                                                      int              width,
-                                                      int              height);
-void             _gdk_macos_drag_surface_drag_motion (GdkMacosDragSurface *self,
-                                                      int                  x_root,
-                                                      int                  y_root,
-                                                      GdkDragAction        suggested_action,
-                                                      GdkDragAction        possible_actions,
-                                                      guint32              evtime);
+GType            _gdk_macos_drag_surface_get_type (void);
+GdkMacosSurface *_gdk_macos_drag_surface_new      (GdkMacosDisplay *display,
+                                                   GdkFrameClock   *frame_clock,
+                                                   int              x,
+                                                   int              y,
+                                                   int              width,
+                                                   int              height);
 
 G_END_DECLS
 
