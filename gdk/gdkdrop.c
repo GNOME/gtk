@@ -294,8 +294,11 @@ gdk_drop_finalize (GObject *object)
 
   /* someone forgot to send a LEAVE signal */
   g_warn_if_fail (!priv->entered);
+
   /* Should we emit finish() here if necessary?
-   * For now that's the backends' job */
+   * For now that's the backends' job
+   */
+  g_warn_if_fail (priv->state != GDK_DROP_STATE_DROPPING);
 
   g_clear_object (&priv->device);
   g_clear_object (&priv->drag);
@@ -571,7 +574,7 @@ gdk_drop_get_drag (GdkDrop *self)
  * the ones provided by [method@Gdk.Drop.get_actions]. Those actions may
  * change in the future, even depending on the actions you provide here.
  *
- * The @preferred action is a hint to the drag'n'drop mechanism about which
+ * The @preferred action is a hint to the drag-and-drop mechanism about which
  * action to use when multiple actions are possible.
  *
  * This function should be called by drag destinations in response to
@@ -862,7 +865,7 @@ gdk_drop_read_value_internal (GdkDrop             *self,
  * then call [method@Gdk.Drop.read_value_finish] to get the resulting
  * `GValue`.
  *
- * For local drag'n'drop operations that are available in the given
+ * For local drag-and-drop operations that are available in the given
  * `GType`, the value will be copied directly. Otherwise, GDK will
  * try to use [func@Gdk.content_deserialize_async] to convert the data.
  */

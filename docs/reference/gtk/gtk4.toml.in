@@ -57,6 +57,7 @@ content_files = [
   "initialization.md",
   "actions.md",
   "input-handling.md",
+  "drag-and-drop.md",
   "drawing-model.md",
   "css-overview.md",
   "css-properties.md",

@@ -824,7 +824,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    * and no further processing is necessary.
    *
    * Otherwise, the handler returns %TRUE. In this case, this handler will
-   * accept the drop. The handler is responsible for rading the given @value
+   * accept the drop. The handler is responsible for using the given @value
    * and performing the drop operation.
    *
    * Returns: whether the drop was accepted at the given pointer position

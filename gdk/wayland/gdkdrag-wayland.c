@@ -163,6 +163,7 @@ gdk_wayland_drag_cancel (GdkDrag             *drag,
                          GdkDragCancelReason  reason)
 {
   gdk_drag_set_cursor (drag, NULL);
+  gdk_drag_drop_done (drag, FALSE);
 }
 
 static void
@@ -290,6 +291,7 @@ data_source_dnd_finished (void                  *data,
   GdkDrag *drag = data;
 
   g_signal_emit_by_name (drag, "dnd-finished");
+  gdk_drag_drop_done (drag, TRUE);
 }
 
 static void
