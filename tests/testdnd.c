@@ -559,7 +559,7 @@ main (int argc, char **argv)
   gtk_grid_attach (GTK_GRID (grid), label, 1, 1, 1, 1);
 
   pixmap = gtk_image_new_from_pixbuf (trashcan_closed);
-  async = gtk_drop_target_async_new (NULL, 0);
+  async = gtk_drop_target_async_new (NULL, GDK_ACTION_ALL);
   g_signal_connect (async, "drag-enter", G_CALLBACK (trash_drag_enter), pixmap);
   g_signal_connect (async, "drag-leave", G_CALLBACK (trash_drag_leave), pixmap);
   g_signal_connect (async, "drop", G_CALLBACK (trash_drag_drop), pixmap);
