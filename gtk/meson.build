@@ -1153,7 +1153,6 @@ if build_gir
   gir_args = [
     '-DGTK_COMPILATION',
     '--quiet',
-    '--warn-error',
   ]
 
   gdk_gir_inc = [ 'cairo-1.0', 'Gio-2.0', 'GdkPixbuf-2.0', 'Pango-1.0', 'PangoCairo-1.0' ]
@@ -1170,6 +1169,7 @@ if build_gir
     install: true,
     dependencies: libgdk_dep,
     extra_args: gir_args,
+    fatal_warnings: get_option('werror'),
   )
   gtk_dep_sources += gdk_gir
 
@@ -1186,6 +1186,7 @@ if build_gir
       dependencies: libgdk_dep,
       header: 'gdk/x11/gdkx.h',
       extra_args: gir_args,
+      fatal_warnings: get_option('werror'),
     )
     gtk_dep_sources += gdk_x11_gir
   endif
@@ -1203,6 +1204,7 @@ if build_gir
       dependencies: libgdk_dep,
       header: 'gdk/wayland/gdkwayland.h',
       extra_args: gir_args,
+      fatal_warnings: get_option('werror'),
     )
     gtk_dep_sources += gdk_wayland_gir
   endif
@@ -1221,6 +1223,7 @@ if build_gir
     install: true,
     dependencies: libgsk_dep,
     extra_args: gir_args,
+    fatal_warnings: get_option('werror'),
   )
   gtk_dep_sources += gsk_gir
 
@@ -1255,6 +1258,7 @@ if build_gir
     install: true,
     dependencies: [gtk_deps, libgsk_dep],
     extra_args: gir_args,
+    fatal_warnings: get_option('werror'),
   )
   gtk_dep_sources += gtk_gir
 endif
