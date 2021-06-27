@@ -95,6 +95,7 @@
  * if you had more than a simple message in the dialog.
  *
  * An example for simple `GtkDialog` usage:
+ *
  * ```c
  * // Function to open a dialog box with a message
  * void
@@ -133,20 +134,21 @@
  * The `GtkDialog` implementation of the `GtkBuildable` interface exposes the
  * @content_area as an internal child with the name “content_area”.
  *
- * `GtkDialog` supports a custom <action-widgets> element, which can contain
- * multiple <action-widget> elements. The “response” attribute specifies a
+ * `GtkDialog` supports a custom `<action-widgets>` element, which can contain
+ * multiple `<action-widget>` elements. The “response” attribute specifies a
  * numeric response, and the content of the element is the id of widget
  * (which should be a child of the dialogs @action_area). To mark a response
- * as default, set the “default“ attribute of the <action-widget> element
+ * as default, set the “default” attribute of the `<action-widget>` element
  * to true.
  *
- * `GtkDialog` supports adding action widgets by specifying “action“ as
- * the “type“ attribute of a <child> element. The widget will be added
+ * `GtkDialog` supports adding action widgets by specifying “action” as
+ * the “type” attribute of a `<child>` element. The widget will be added
  * either to the action area or the headerbar of the dialog, depending
- * on the “use-header-bar“ property. The response id has to be associated
- * with the action widget using the <action-widgets> element.
+ * on the “use-header-bar” property. The response id has to be associated
+ * with the action widget using the `<action-widgets>` element.
  *
  * An example of a `GtkDialog` UI definition fragment:
+ *
  * ```xml
  * <object class="GtkDialog" id="dialog1">
  *   <child type="action">
