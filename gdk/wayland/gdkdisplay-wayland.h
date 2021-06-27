@@ -52,7 +52,7 @@
 
 G_BEGIN_DECLS
 
-#define GDK_ZWP_POINTER_GESTURES_V1_VERSION 1
+#define GDK_ZWP_POINTER_GESTURES_V1_VERSION 3
 
 typedef struct _GdkWaylandSelection GdkWaylandSelection;
 
@@ -140,6 +140,7 @@ struct _GdkWaylandDisplay
   int data_device_manager_version;
   int gtk_shell_version;
   int xdg_output_manager_version;
+  int pointer_gestures_version;
   int xdg_activation_version;
 
   uint32_t server_decoration_mode;

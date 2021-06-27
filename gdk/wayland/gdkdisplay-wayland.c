@@ -431,6 +431,9 @@ gdk_registry_handle_global (void               *data,
     }
   else if (strcmp (interface, "zwp_pointer_gestures_v1") == 0)
     {
+      display_wayland->pointer_gestures_version =
+          MIN (version, GDK_ZWP_POINTER_GESTURES_V1_VERSION);
+
       display_wayland->pointer_gestures =
         wl_registry_bind (display_wayland->wl_registry,
                           id, &zwp_pointer_gestures_v1_interface,
