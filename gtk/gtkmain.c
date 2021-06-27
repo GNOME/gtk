@@ -915,6 +915,7 @@ rewrite_event_for_surface (GdkEvent  *event,
     case GDK_TOUCH_CANCEL:
     case GDK_TOUCHPAD_SWIPE:
     case GDK_TOUCHPAD_PINCH:
+    case GDK_TOUCHPAD_HOLD:
       gdk_event_get_position (event, &x, &y);
       gdk_surface_translate_coordinates (gdk_event_get_surface (event), new_surface, &x, &y);
       break;
@@ -981,6 +982,14 @@ rewrite_event_for_surface (GdkEvent  *event,
                                            dx, dy,
                                            gdk_touchpad_event_get_pinch_scale (event),
                                            gdk_touchpad_event_get_pinch_angle_delta (event));
+    case GDK_TOUCHPAD_HOLD:
+      return gdk_touchpad_event_new_hold (new_surface,
+                                          gdk_event_get_device (event),
+                                          gdk_event_get_time (event),
+                                          gdk_event_get_modifier_state (event),
+                                          gdk_touchpad_event_get_gesture_phase (event),
+                                          x, y,
+                                          gdk_touchpad_event_get_n_fingers (event));
     default:
       break;
     }
@@ -1020,6 +1029,7 @@ rewrite_event_for_grabs (GdkEvent *event)
     case GDK_TOUCH_CANCEL:
     case GDK_TOUCHPAD_SWIPE:
     case GDK_TOUCHPAD_PINCH:
+    case GDK_TOUCHPAD_HOLD:
       display = gdk_event_get_display (event);
       device = gdk_event_get_device (event);
 
@@ -1270,6 +1280,7 @@ is_pointing_event (GdkEvent *event)
     case GDK_TOUCH_CANCEL:
     case GDK_TOUCHPAD_PINCH:
     case GDK_TOUCHPAD_SWIPE:
+    case GDK_TOUCHPAD_HOLD:
     case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:
     case GDK_DRAG_MOTION:
@@ -1353,7 +1364,8 @@ handle_pointing_event (GdkEvent *event)
       device = gdk_seat_get_pointer (gdk_event_get_seat (event));
     }
   else if (type == GDK_TOUCHPAD_PINCH ||
-           type == GDK_TOUCHPAD_SWIPE)
+           type == GDK_TOUCHPAD_SWIPE ||
+           type == GDK_TOUCHPAD_HOLD)
     {
       /* Another bit of a kludge, touchpad gesture sequences do not
        * reflect on the pointer focus lookup.
@@ -1488,6 +1500,7 @@ handle_pointing_event (GdkEvent *event)
     case GDK_SCROLL:
     case GDK_TOUCHPAD_PINCH:
     case GDK_TOUCHPAD_SWIPE:
+    case GDK_TOUCHPAD_HOLD:
       break;
     case GDK_GRAB_BROKEN:
       if (gdk_grab_broken_event_get_implicit (event))
@@ -1662,6 +1675,7 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_TOUCH_CANCEL:
     case GDK_TOUCHPAD_SWIPE:
     case GDK_TOUCHPAD_PINCH:
+    case GDK_TOUCHPAD_HOLD:
     case GDK_PAD_BUTTON_PRESS:
     case GDK_PAD_BUTTON_RELEASE:
     case GDK_PAD_RING:
