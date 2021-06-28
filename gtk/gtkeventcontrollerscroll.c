@@ -66,6 +66,7 @@
 #include "gtkprivate.h"
 
 #define SCROLL_CAPTURE_THRESHOLD_MS 150
+#define HOLD_TIMEOUT_MS 50
 
 typedef struct
 {
@@ -84,6 +85,7 @@ struct _GtkEventControllerScroll
   double cur_dx;
   double cur_dy;
 
+  guint hold_timeout_id;
   guint active : 1;
 };
 
@@ -193,6 +195,7 @@ gtk_event_controller_scroll_finalize (GObject *object)
   GtkEventControllerScroll *scroll = GTK_EVENT_CONTROLLER_SCROLL (object);
 
   g_array_unref (scroll->scroll_history);
+  g_clear_handle_id (&scroll->hold_timeout_id, g_source_remove);
 
   G_OBJECT_CLASS (gtk_event_controller_scroll_parent_class)->finalize (object);
 }
@@ -273,6 +276,70 @@ gtk_event_controller_scroll_end (GtkEventController *controller)
 }
 
 static gboolean
+gtk_event_controller_scroll_hold_timeout (gpointer user_data)
+{
+  GtkEventController *controller;
+  GtkEventControllerScroll *scroll;
+
+  controller = user_data;
+  scroll = GTK_EVENT_CONTROLLER_SCROLL (controller);
+
+  gtk_event_controller_scroll_end (controller);
+  scroll->hold_timeout_id = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
+static gboolean
+gtk_event_controller_scroll_handle_hold_event (GtkEventController *controller,
+                                               GdkEvent           *event)
+{
+  GtkEventControllerScroll *scroll = GTK_EVENT_CONTROLLER_SCROLL (controller);
+  gboolean handled = GDK_EVENT_PROPAGATE;
+  GdkTouchpadGesturePhase phase;
+  guint n_fingers = 0;
+
+  if (gdk_event_get_event_type (event) != GDK_TOUCHPAD_HOLD)
+    return handled;
+
+  n_fingers = gdk_touchpad_event_get_n_fingers (event);
+  if (n_fingers != 1 && n_fingers != 2)
+    return handled;
+
+  if (scroll->hold_timeout_id != 0)
+    return handled;
+
+  phase = gdk_touchpad_event_get_gesture_phase (event);
+
+  switch (phase)
+    {
+    case GDK_TOUCHPAD_GESTURE_PHASE_BEGIN:
+      handled = gtk_event_controller_scroll_begin (controller);
+      break;
+
+    case GDK_TOUCHPAD_GESTURE_PHASE_END:
+      handled = gtk_event_controller_scroll_end (controller);
+      break;
+
+    case GDK_TOUCHPAD_GESTURE_PHASE_CANCEL:
+      if (scroll->hold_timeout_id == 0)
+        {
+          scroll->hold_timeout_id =
+              g_timeout_add (HOLD_TIMEOUT_MS,
+                             gtk_event_controller_scroll_hold_timeout,
+                             controller);
+        }
+      break;
+
+    case GDK_TOUCHPAD_GESTURE_PHASE_UPDATE:
+    default:
+      break;
+    }
+
+  return handled;
+}
+
+static gboolean
 gtk_event_controller_scroll_handle_event (GtkEventController *controller,
                                           GdkEvent           *event,
                                           double              x,
@@ -282,13 +349,21 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
   GdkScrollDirection direction = GDK_SCROLL_SMOOTH;
   double dx = 0, dy = 0;
   gboolean handled = GDK_EVENT_PROPAGATE;
+  GdkEventType event_type;
 
-  if (gdk_event_get_event_type (event) != GDK_SCROLL)
+  event_type = gdk_event_get_event_type (event);
+
+  if (event_type == GDK_TOUCHPAD_HOLD)
+    return gtk_event_controller_scroll_handle_hold_event (controller, event);
+
+  if (event_type != GDK_SCROLL)
     return FALSE;
 
   if ((scroll->flags & (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL |
                         GTK_EVENT_CONTROLLER_SCROLL_HORIZONTAL)) == 0)
     return FALSE;
+
+  g_clear_handle_id (&scroll->hold_timeout_id, g_source_remove);
 
   /* FIXME: Handle device changes */
   direction = gdk_scroll_event_get_direction (event);
@@ -484,6 +559,7 @@ gtk_event_controller_scroll_init (GtkEventControllerScroll *scroll)
 {
   scroll->scroll_history = g_array_new (FALSE, FALSE,
                                         sizeof (ScrollHistoryElem));
+  scroll->hold_timeout_id = 0;
 }
 
 /**
