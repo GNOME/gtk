@@ -171,7 +171,8 @@ static guint signals[N_SIGNALS] = { 0 };
 #define BUTTONS_MASK (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK)
 
 #define EVENT_IS_TOUCHPAD_GESTURE(e) (gdk_event_get_event_type (e) == GDK_TOUCHPAD_SWIPE || \
-                                      gdk_event_get_event_type (e) == GDK_TOUCHPAD_PINCH)
+                                      gdk_event_get_event_type (e) == GDK_TOUCHPAD_PINCH || \
+                                      gdk_event_get_event_type (e) == GDK_TOUCHPAD_HOLD)
 
 GList * _gtk_gesture_get_group_link (GtkGesture *gesture);
 
@@ -258,7 +259,8 @@ _gtk_gesture_get_n_touchpad_points (GtkGesture *gesture,
   if (only_active &&
       (data->state == GTK_EVENT_SEQUENCE_DENIED ||
        (event_type == GDK_TOUCHPAD_SWIPE && phase == GDK_TOUCHPAD_GESTURE_PHASE_END) ||
-       (event_type == GDK_TOUCHPAD_PINCH && phase == GDK_TOUCHPAD_GESTURE_PHASE_END)))
+       (event_type == GDK_TOUCHPAD_PINCH && phase == GDK_TOUCHPAD_GESTURE_PHASE_END) ||
+       (event_type == GDK_TOUCHPAD_HOLD && phase == GDK_TOUCHPAD_GESTURE_PHASE_END)))
     return 0;
 
   return n_fingers;
@@ -390,8 +392,8 @@ _update_touchpad_deltas (PointData *data)
 {
   GdkEvent *event = data->event;
   GdkTouchpadGesturePhase phase;
-  double dx;
-  double dy;
+  double dx = 0;
+  double dy = 0;
 
   if (!event)
     return;
@@ -399,7 +401,10 @@ _update_touchpad_deltas (PointData *data)
   if (EVENT_IS_TOUCHPAD_GESTURE (event))
     {
       phase = gdk_touchpad_event_get_gesture_phase (event);
-      gdk_touchpad_event_get_deltas (event, &dx, &dy);
+
+      if (gdk_event_get_event_type (event) != GDK_TOUCHPAD_HOLD)
+        gdk_touchpad_event_get_deltas (event, &dx, &dy);
+
       if (phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN)
         data->accum_dx = data->accum_dy = 0;
       else if (phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE)
