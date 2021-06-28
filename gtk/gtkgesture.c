@@ -162,6 +162,7 @@ struct _GtkGesturePrivate
   GdkDevice *device;
   GList *group_link;
   guint n_points;
+  guint hold_timeout_id;
   guint recognized : 1;
   guint touchpad : 1;
 };
@@ -173,6 +174,8 @@ static guint signals[N_SIGNALS] = { 0 };
 #define EVENT_IS_TOUCHPAD_GESTURE(e) (gdk_event_get_event_type (e) == GDK_TOUCHPAD_SWIPE || \
                                       gdk_event_get_event_type (e) == GDK_TOUCHPAD_PINCH || \
                                       gdk_event_get_event_type (e) == GDK_TOUCHPAD_HOLD)
+
+#define HOLD_TIMEOUT_MS 50
 
 GList * _gtk_gesture_get_group_link (GtkGesture *gesture);
 
@@ -222,6 +225,7 @@ gtk_gesture_finalize (GObject *object)
 
   gtk_gesture_ungroup (gesture);
   g_list_free (priv->group_link);
+  g_clear_handle_id (&priv->hold_timeout_id, g_source_remove);
 
   g_hash_table_destroy (priv->points);
 
@@ -580,6 +584,22 @@ _gtk_gesture_cancel_all (GtkGesture *gesture)
 }
 
 static gboolean
+gtk_gesture_hold_timeout (gpointer user_data)
+{
+  GtkGesture *gesture;
+  GtkGesturePrivate *priv;
+
+  gesture = user_data;
+  priv = gtk_gesture_get_instance_private (gesture);
+
+  if (priv->touchpad)
+    _gtk_gesture_cancel_sequence (gesture, priv->last_sequence);
+
+  priv->hold_timeout_id = 0;
+  return G_SOURCE_REMOVE;
+}
+
+static gboolean
 gesture_within_surface (GtkGesture *gesture,
                         GdkSurface  *surface)
 {
@@ -641,8 +661,13 @@ gtk_gesture_handle_event (GtkEventController *controller,
   if (event_type == GDK_BUTTON_PRESS ||
       event_type == GDK_TOUCH_BEGIN ||
       (event_type == GDK_TOUCHPAD_SWIPE && phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN) ||
-      (event_type == GDK_TOUCHPAD_PINCH && phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN))
+      (event_type == GDK_TOUCHPAD_PINCH && phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN) ||
+      (event_type == GDK_TOUCHPAD_HOLD && phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN))
     {
+      if ((event_type == GDK_TOUCHPAD_PINCH || event_type == GDK_TOUCHPAD_SWIPE) &&
+          _gtk_gesture_has_matching_touchpoints (gesture))
+        g_clear_handle_id (&priv->hold_timeout_id, g_source_remove);
+
       if (_gtk_gesture_update_point (gesture, event, target, x, y, TRUE))
         {
           gboolean triggered_recognition;
@@ -673,7 +698,8 @@ gtk_gesture_handle_event (GtkEventController *controller,
   else if (event_type == GDK_BUTTON_RELEASE ||
            event_type == GDK_TOUCH_END ||
            (event_type == GDK_TOUCHPAD_SWIPE && phase == GDK_TOUCHPAD_GESTURE_PHASE_END) ||
-           (event_type == GDK_TOUCHPAD_PINCH && phase == GDK_TOUCHPAD_GESTURE_PHASE_END))
+           (event_type == GDK_TOUCHPAD_PINCH && phase == GDK_TOUCHPAD_GESTURE_PHASE_END) ||
+           (event_type == GDK_TOUCHPAD_HOLD && phase == GDK_TOUCHPAD_GESTURE_PHASE_END))
     {
       gboolean was_claimed = FALSE;
 
@@ -717,6 +743,15 @@ gtk_gesture_handle_event (GtkEventController *controller,
       if (priv->touchpad)
         _gtk_gesture_cancel_sequence (gesture, sequence);
     }
+  else if (event_type == GDK_TOUCHPAD_HOLD && phase == GDK_TOUCHPAD_GESTURE_PHASE_CANCEL)
+    {
+      if (priv->hold_timeout_id == 0)
+        {
+          priv->hold_timeout_id = g_timeout_add (HOLD_TIMEOUT_MS,
+                                                 gtk_gesture_hold_timeout,
+                                                 gesture);
+        }
+    }
   else if (event_type == GDK_GRAB_BROKEN)
     {
       GdkSurface *surface;
@@ -742,6 +777,10 @@ gtk_gesture_handle_event (GtkEventController *controller,
 static void
 gtk_gesture_reset (GtkEventController *controller)
 {
+  GtkGesture *gesture = GTK_GESTURE (controller);
+  GtkGesturePrivate *priv = gtk_gesture_get_instance_private (gesture);
+
+  g_clear_handle_id (&priv->hold_timeout_id, g_source_remove);
   _gtk_gesture_cancel_all (GTK_GESTURE (controller));
 }
 
@@ -913,6 +952,7 @@ gtk_gesture_init (GtkGesture *gesture)
   priv->points = g_hash_table_new_full (NULL, NULL, NULL,
                                         (GDestroyNotify) free_point_data);
   priv->group_link = g_list_prepend (NULL, gesture);
+  priv->hold_timeout_id = 0;
 }
 
 /**
