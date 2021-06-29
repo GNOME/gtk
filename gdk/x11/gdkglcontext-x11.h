@@ -80,6 +80,7 @@ typedef struct _GdkX11GLContextGLX      GdkX11GLContextGLX;
 gboolean                gdk_x11_display_init_glx                (GdkX11Display *display_x11,
                                                                  Visual       **out_visual,
                                                                  int           *out_depth);
+void                    gdk_x11_surface_destroy_glx_drawable    (GdkX11Surface *self);
 
 GType                   gdk_x11_gl_context_glx_get_type         (void) G_GNUC_CONST;
 GdkX11GLContext *       gdk_x11_gl_context_glx_new              (GdkSurface    *surface,

@@ -35,8 +35,6 @@ struct _GdkX11GLContextGLX
   GdkX11GLContext parent_instance;
 
   GLXContext glx_context;
-  GLXDrawable attached_drawable;
-  GLXDrawable unattached_drawable;
 
 #ifdef HAVE_XDAMAGE
   GLsync frame_fence;
@@ -49,38 +47,45 @@ typedef struct _GdkX11GLContextClass    GdkX11GLContextGLXClass;
 typedef struct {
   GdkDisplay *display;
 
-  GLXDrawable glx_drawable;
-
-  Window dummy_xwin;
-  GLXWindow dummy_glx;
-
   guint32 last_frame_counter;
 } DrawableInfo;
 
 G_DEFINE_TYPE (GdkX11GLContextGLX, gdk_x11_gl_context_glx, GDK_TYPE_X11_GL_CONTEXT)
 
+static GLXDrawable
+gdk_x11_surface_get_glx_drawable (GdkSurface *surface)
+{
+  GdkX11Surface *self = GDK_X11_SURFACE (surface);
+  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (self));
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+
+  if (self->glx_drawable)
+    return self->glx_drawable;
+
+  self->glx_drawable = glXCreateWindow (gdk_x11_display_get_xdisplay (display),
+                                        display_x11->glx_config,
+                                        gdk_x11_surface_get_xid (surface),
+                                        NULL);
+
+  return self->glx_drawable;
+}
+
+void
+gdk_x11_surface_destroy_glx_drawable (GdkX11Surface *self)
+{
+  if (self->glx_drawable == None)
+    return;
+
+  glXDestroyWindow (gdk_x11_display_get_xdisplay (gdk_surface_get_display (GDK_SURFACE (self))),
+                    self->glx_drawable);
+
+  self->glx_drawable = None;
+}
+
 static void
 drawable_info_free (gpointer data_)
 {
-  DrawableInfo *data = data_;
-  Display *dpy;
-
-  gdk_x11_display_error_trap_push (data->display);
-
-  dpy = gdk_x11_display_get_xdisplay (data->display);
-
-  if (data->glx_drawable)
-    glXDestroyWindow (dpy, data->glx_drawable);
-
-  if (data->dummy_glx)
-    glXDestroyWindow (dpy, data->dummy_glx);
-
-  if (data->dummy_xwin)
-    XDestroyWindow (dpy, data->dummy_xwin);
-
-  gdk_x11_display_error_trap_pop_ignored (data->display);
-
-  g_slice_free (DrawableInfo, data);
+  g_slice_free (DrawableInfo, data_);
 }
 
 static DrawableInfo *
@@ -123,6 +128,21 @@ maybe_wait_for_vblank (GdkDisplay  *display,
     }
 }
 
+static GLXDrawable
+gdk_x11_gl_context_glx_get_drawable (GdkX11GLContextGLX *self)
+{
+  GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (self);
+  GdkDrawContext *draw_context = GDK_DRAW_CONTEXT (self);
+  GdkSurface *surface;
+
+  if (context_x11->is_attached || gdk_draw_context_is_in_frame (draw_context))
+    surface = gdk_draw_context_get_surface (draw_context);
+  else
+    surface = GDK_X11_DISPLAY (gdk_draw_context_get_display (draw_context))->leader_gdk_surface;
+
+  return gdk_x11_surface_get_glx_drawable (surface);
+}
+
 static void
 gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
                                   cairo_region_t *painted)
@@ -145,7 +165,7 @@ gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
 
   info = get_glx_drawable_info (surface);
 
-  drawable = context_glx->attached_drawable;
+  drawable = gdk_x11_surface_get_glx_drawable (surface);
 
   GDK_DISPLAY_NOTE (display, OPENGL,
             g_message ("Flushing GLX buffers for drawable %lu (window: %lu), frame sync: %s",
@@ -232,7 +252,7 @@ gdk_x11_gl_context_glx_get_damage (GdkGLContext *context)
       shared_glx = GDK_X11_GL_CONTEXT_GLX (shared);
 
       gdk_gl_context_make_current (shared);
-      glXQueryDrawable (dpy, shared_glx->attached_drawable,
+      glXQueryDrawable (dpy, gdk_x11_gl_context_glx_get_drawable (shared_glx),
                         GLX_BACK_BUFFER_AGE_EXT, &buffer_age);
 
       switch (buffer_age)
@@ -591,52 +611,12 @@ gdk_x11_gl_context_glx_realize (GdkGLContext  *context,
   info = get_glx_drawable_info (surface);
   if (info == NULL)
     {
-      XSetWindowAttributes attrs;
-      unsigned long mask;
-
-      gdk_x11_display_error_trap_push (display);
-
       info = g_slice_new0 (DrawableInfo);
       info->display = display;
       info->last_frame_counter = 0;
 
-      attrs.override_redirect = True;
-      attrs.colormap = gdk_x11_display_get_window_colormap (display_x11);
-      attrs.border_pixel = 0;
-      mask = CWOverrideRedirect | CWColormap | CWBorderPixel;
-      info->dummy_xwin = XCreateWindow (dpy, DefaultRootWindow (dpy),
-                                        -100, -100, 1, 1,
-                                        0,
-                                        gdk_x11_display_get_window_depth (display_x11),
-                                        CopyFromParent,
-                                        gdk_x11_display_get_window_visual (display_x11),
-                                        mask,
-                                        &attrs);
-      XMapWindow(dpy, info->dummy_xwin);
-
-      info->glx_drawable = glXCreateWindow (dpy, display_x11->glx_config,
-                                            gdk_x11_surface_get_xid (surface),
-                                            NULL);
-      info->dummy_glx = glXCreateWindow (dpy, display_x11->glx_config, info->dummy_xwin, NULL);
-
-      if (gdk_x11_display_error_trap_pop (display))
-        {
-          g_set_error_literal (error, GDK_GL_ERROR,
-                               GDK_GL_ERROR_NOT_AVAILABLE,
-                               _("Unable to create a GL context"));
-
-          drawable_info_free (info);
-          glXDestroyContext (dpy, context_glx->glx_context);
-          context_glx->glx_context = NULL;
-
-          return FALSE;
-        }
-
       set_glx_drawable_info (surface, info);
     }
-
-  context_glx->attached_drawable = info->glx_drawable;
-  context_glx->unattached_drawable = info->dummy_glx;
 
   GDK_DISPLAY_NOTE (display, OPENGL,
             g_message ("Realized GLX context[%p], %s, version: %d.%d",
@@ -889,10 +869,7 @@ gdk_x11_gl_context_glx_make_current (GdkDisplay   *display,
     }
 
   context_x11 = GDK_X11_GL_CONTEXT (context);
-  if (context_x11->is_attached || gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)))
-    drawable = context_glx->attached_drawable;
-  else
-    drawable = context_glx->unattached_drawable;
+  drawable = gdk_x11_gl_context_glx_get_drawable (context_glx);
 
   GDK_DISPLAY_NOTE (display, OPENGL,
                     g_message ("Making GLX context %p current to drawable %lu",

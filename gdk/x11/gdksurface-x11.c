@@ -1361,6 +1361,7 @@ gdk_x11_surface_destroy (GdkSurface *surface,
   if (!foreign_destroy)
     {
       gdk_x11_surface_destroy_egl_surface (impl);
+      gdk_x11_surface_destroy_glx_drawable (impl);
 
       XDestroyWindow (GDK_SURFACE_XDISPLAY (surface), GDK_SURFACE_XID (surface));
     }
