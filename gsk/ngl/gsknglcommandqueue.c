@@ -617,7 +617,7 @@ gsk_ngl_command_queue_end_draw (GskNglCommandQueue *self)
       last_batch->any.viewport.height == batch->any.viewport.height &&
       last_batch->draw.framebuffer == batch->draw.framebuffer &&
       last_batch->draw.vbo_offset + last_batch->draw.vbo_count == batch->draw.vbo_offset &&
-      last_batch->draw.vbo_count + batch->draw.vbo_count < G_MAXINT16 &&
+      last_batch->draw.vbo_count + batch->draw.vbo_count <= 0xffff &&
       snapshots_equal (self, last_batch, batch))
     {
       last_batch->draw.vbo_count += batch->draw.vbo_count;
