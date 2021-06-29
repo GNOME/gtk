@@ -2889,7 +2889,7 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
       if G_UNLIKELY (texture_id == 0)
         continue;
 
-      if G_UNLIKELY (last_texture != texture_id)
+      if G_UNLIKELY (last_texture != texture_id || batch->draw.vbo_count + GSK_NGL_N_VERTICES > 0xffff)
         {
           if G_LIKELY (last_texture != 0)
             {
