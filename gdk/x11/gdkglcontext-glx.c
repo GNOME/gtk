@@ -627,13 +627,10 @@ gdk_x11_gl_context_glx_realize (GdkGLContext  *context,
                                         &attrs);
       XMapWindow(dpy, info->dummy_xwin);
 
-      if (display_x11->glx_version >= 13)
-        {
-          info->glx_drawable = glXCreateWindow (dpy, context_glx->glx_config,
-                                                gdk_x11_surface_get_xid (surface),
-                                                NULL);
-          info->dummy_glx = glXCreateWindow (dpy, context_glx->glx_config, info->dummy_xwin, NULL);
-        }
+      info->glx_drawable = glXCreateWindow (dpy, context_glx->glx_config,
+                                            gdk_x11_surface_get_xid (surface),
+                                            NULL);
+      info->dummy_glx = glXCreateWindow (dpy, context_glx->glx_config, info->dummy_xwin, NULL);
 
       if (gdk_x11_display_error_trap_pop (display))
         {
@@ -654,8 +651,8 @@ gdk_x11_gl_context_glx_realize (GdkGLContext  *context,
 
   XFree (xvisinfo);
 
-  context_glx->attached_drawable = info->glx_drawable ? info->glx_drawable : gdk_x11_surface_get_xid (surface);
-  context_glx->unattached_drawable = info->dummy_glx ? info->dummy_glx : info->dummy_xwin;
+  context_glx->attached_drawable = info->glx_drawable;
+  context_glx->unattached_drawable = info->dummy_glx;
 
   GDK_DISPLAY_NOTE (display, OPENGL,
             g_message ("Realized GLX context[%p], %s, version: %d.%d",
