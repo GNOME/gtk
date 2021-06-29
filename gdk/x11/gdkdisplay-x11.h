@@ -130,6 +130,7 @@ struct _GdkX11Display
 #endif
 
   /* GLX information */
+  /* GLXFBConfig */ gpointer glx_config;
   int glx_version;
   int glx_error_base;
   int glx_event_base;
@@ -145,8 +146,6 @@ struct _GdkX11Display
   gint64 server_time_offset;
 
   guint server_time_is_monotonic_time : 1;
-
-  guint have_glx : 1;
 
   /* GLX extensions we check */
   guint has_glx_swap_interval : 1;

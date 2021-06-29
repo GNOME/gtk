@@ -68,7 +68,7 @@ gdk_x11_surface_create_gl_context (GdkSurface    *surface,
 
   if (display_x11->egl_display)
     context = gdk_x11_gl_context_egl_new (surface, attached, share, error);
-  else if (display_x11->have_glx)
+  else if (display_x11->glx_config != NULL)
     context = gdk_x11_gl_context_glx_new (surface, attached, share, error);
   else
     {
@@ -94,7 +94,7 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
 
   if (display_x11->egl_display)
     return gdk_x11_gl_context_egl_make_current (display, context);
-  else if (display_x11->have_glx)
+  else if (display_x11->glx_config)
     return gdk_x11_gl_context_glx_make_current (display, context);
   else
     g_assert_not_reached ();
