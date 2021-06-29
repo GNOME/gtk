@@ -62,6 +62,8 @@ libgdk_win32 = static_library('gdk-win32',
     '-DGTK_COMPILATION',
     '-DG_LOG_DOMAIN="Gdk"',
     '-DINSIDE_GDK_WIN32',
+    '-D_WIN32_WINNT=0x0601',
+    '-DWINVER=0x0601',
   ] + GDK_WIN32_EGL_CFLAGS,
   dependencies: [ gdk_deps, gdk_win32_deps ],
 )
