@@ -25,15 +25,6 @@
 #ifndef __GDK_PRIVATE_WIN32_H__
 #define __GDK_PRIVATE_WIN32_H__
 
-#ifndef WINVER
-/* Vista or newer */
-#define WINVER 0x0600
-#endif
-
-#ifndef _WIN32_WINNT
-#define _WIN32_WINNT WINVER
-#endif
-
 #include <gdk/gdkcursorprivate.h>
 #include <gdk/win32/gdksurface-win32.h>
 #include <gdk/win32/gdkwin32display.h>
