@@ -43,8 +43,6 @@ struct _GdkX11GLContextGLX
   GLsync frame_fence;
   Damage xdamage;
 #endif
-
-  guint is_direct : 1;
 };
 
 typedef struct _GdkX11GLContextClass    GdkX11GLContextGLXClass;
@@ -659,12 +657,10 @@ gdk_x11_gl_context_glx_realize (GdkGLContext  *context,
   context_glx->attached_drawable = info->glx_drawable ? info->glx_drawable : gdk_x11_surface_get_xid (surface);
   context_glx->unattached_drawable = info->dummy_glx ? info->dummy_glx : info->dummy_xwin;
 
-  context_glx->is_direct = glXIsDirect (dpy, context_glx->glx_context);
-
   GDK_DISPLAY_NOTE (display, OPENGL,
             g_message ("Realized GLX context[%p], %s, version: %d.%d",
                        context_glx->glx_context,
-                       context_glx->is_direct ? "direct" : "indirect",
+                       glXIsDirect (dpy, context_glx->glx_context) ? "direct" : "indirect",
                        display_x11->glx_version / 10,
                        display_x11->glx_version % 10));
 
