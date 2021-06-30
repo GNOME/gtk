@@ -1536,8 +1536,8 @@ gtk_icon_theme_add_search_path (GtkIconTheme *self,
 /**
  * gtk_icon_theme_set_resource_path:
  * @self: a `GtkIconTheme`
- * @path: NULL-terminated array of resource paths
- *     that are searched for icons
+ * @path: (array zero-terminated=1) (element-type utf8) (nullable): 
+ *   NULL-terminated array of resource paths that are searched for icons
  *
  * Sets the resource paths that will be looked at when
  * looking for icons, similar to search paths.
