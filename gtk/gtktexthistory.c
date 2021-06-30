@@ -213,6 +213,8 @@ action_chain (Action   *action,
 
   if (action->kind == ACTION_KIND_GROUP)
     {
+      Action *tail = g_queue_peek_tail (&action->u.group.actions);
+
       /* Always push new items onto a group, so that we can coalesce
        * items when gtk_text_history_end_user_action() is called.
        *
@@ -221,9 +223,23 @@ action_chain (Action   *action,
        */
 
       if (other->kind == ACTION_KIND_BARRIER)
-        action_free (other);
-      else
-        g_queue_push_tail_link (&action->u.group.actions, &other->link);
+        {
+          action_free (other);
+          return TRUE;
+        }
+
+      /* Try to chain onto the tail item in the group to increase
+       * the chances we have a single action within the group. That
+       * way we are more likely to hoist out of the group when the
+       * user action is ended.
+       */
+      if (tail != NULL && tail->kind == other->kind)
+        {
+          if (action_chain (tail, other, in_user_action))
+            return TRUE;
+        }
+
+      g_queue_push_tail_link (&action->u.group.actions, &other->link);
 
       return TRUE;
     }
@@ -817,6 +833,26 @@ gtk_text_history_end_user_action (GtkTextHistory *self)
     {
       g_queue_unlink (&self->undo_queue, &peek->link);
       action_free (peek);
+      goto update_state;
+    }
+
+  /* If there is a single item within the group, we can hoist
+   * it up increasing the chances that we can join actions.
+   */
+  if (peek->u.group.actions.length == 1)
+    {
+      GList *link_ = peek->u.group.actions.head;
+      Action *replaced = link_->data;
+
+      replaced->is_modified = peek->is_modified;
+      replaced->is_modified_set = peek->is_modified_set;
+
+      g_queue_unlink (&peek->u.group.actions, link_);
+      g_queue_unlink (&self->undo_queue, &peek->link);
+      action_free (peek);
+
+      gtk_text_history_push (self, replaced);
+
       goto update_state;
     }
 
