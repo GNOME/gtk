@@ -52,10 +52,13 @@ struct _GdkGLContextClass
 {
   GdkDrawContextClass parent_class;
 
-  gboolean (* realize) (GdkGLContext *context,
-                        GError **error);
+  gboolean              (* realize)                             (GdkGLContext          *context,
+                                                                 GError               **error);
 
-  cairo_region_t * (* get_damage) (GdkGLContext *context);
+  cairo_region_t *      (* get_damage)                          (GdkGLContext          *context);
+
+  gboolean              (* is_shared)                           (GdkGLContext          *self,
+                                                                 GdkGLContext          *other);
 };
 
 typedef struct {

@@ -333,6 +333,18 @@ gdk_gl_context_real_get_damage (GdkGLContext *context)
                                         });
 }
 
+static gboolean
+gdk_gl_context_real_is_shared (GdkGLContext *self,
+                               GdkGLContext *other)
+{
+  if (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (self)) != gdk_draw_context_get_display (GDK_DRAW_CONTEXT (other)))
+    return FALSE;
+
+  /* XXX: Should we check es or legacy here? */
+
+  return TRUE;
+}
+
 static void
 gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
                                  cairo_region_t *region)
@@ -406,6 +418,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
 
   klass->realize = gdk_gl_context_real_realize;
   klass->get_damage = gdk_gl_context_real_get_damage;
+  klass->is_shared = gdk_gl_context_real_is_shared;
 
   draw_context_class->begin_frame = gdk_gl_context_real_begin_frame;
   draw_context_class->end_frame = gdk_gl_context_real_end_frame;
@@ -810,6 +823,42 @@ gdk_gl_context_set_is_legacy (GdkGLContext *context,
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
   priv->is_legacy = !!is_legacy;
+}
+
+/**
+ * gdk_gl_context_is_shared:
+ * @self: a `GdkGLContext`
+ * @other: the `GdkGLContext` that should be compatible with @self
+ *
+ * Checks if the two GL contexts can share resources.
+ *
+ * When they can, the texture IDs from @other can be used in @self. This
+ * is particularly useful when passing `GdkGLTexture` objects between
+ * different contexts.
+ *
+ * Contexts created for the same display with the same properties will
+ * always be compatible, even if they are created for different surfaces.
+ * For other contexts it depends on the GL backend.
+ *
+ * Both contexts must be realized for this check to succeed. If either one
+ * is not, this function will return %FALSE.
+ *
+ * Returns: %TRUE if the two GL contexts are compatible.
+ */
+gboolean
+gdk_gl_context_is_shared (GdkGLContext *self,
+                          GdkGLContext *other)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+  GdkGLContextPrivate *priv_other = gdk_gl_context_get_instance_private (other);
+
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (self), FALSE);
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (other), FALSE);
+
+  if (!priv->realized || !priv_other->realized)
+    return FALSE;
+
+  return GDK_GL_CONTEXT_GET_CLASS (self)->is_shared (self, other);
 }
 
 /**

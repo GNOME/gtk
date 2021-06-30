@@ -54,6 +54,9 @@ void                    gdk_gl_context_get_version              (GdkGLContext  *
                                                                  int           *minor);
 GDK_AVAILABLE_IN_ALL
 gboolean                gdk_gl_context_is_legacy                (GdkGLContext  *context);
+GDK_AVAILABLE_IN_4_4
+gboolean                gdk_gl_context_is_shared                (GdkGLContext  *self,
+                                                                 GdkGLContext  *other);
 
 GDK_AVAILABLE_IN_ALL
 void                    gdk_gl_context_set_required_version     (GdkGLContext  *context,
