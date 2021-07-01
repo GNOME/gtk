@@ -1700,6 +1700,55 @@ test_undo2 (void)
   g_object_unref (buffer);
 }
 
+/* Simulate typing, check that words get batched togethe */
+static void
+test_undo3 (void)
+{
+  GtkTextBuffer *buffer;
+  const char *str;
+  GtkTextIter iter;
+
+  buffer = gtk_text_buffer_new (NULL);
+
+  str = "abc def. 122";
+  for (int i = 0; str[i]; i++)
+    gtk_text_buffer_insert_interactive_at_cursor (buffer, &str[i], 1, TRUE);
+
+  gtk_text_buffer_get_end_iter (buffer, &iter);
+  gtk_text_buffer_backspace (buffer, &iter, TRUE, TRUE);
+  gtk_text_buffer_insert_interactive_at_cursor (buffer, "3", 1, TRUE);
+
+  check_buffer_contents (buffer, "abc def. 123");
+  g_assert_true (gtk_text_buffer_get_can_undo (buffer));
+
+  gtk_text_buffer_undo (buffer);
+
+  check_buffer_contents (buffer, "abc def. 12");
+  g_assert_true (gtk_text_buffer_get_can_undo (buffer));
+
+  gtk_text_buffer_undo (buffer);
+
+  check_buffer_contents (buffer, "abc def. 122");
+  g_assert_true (gtk_text_buffer_get_can_undo (buffer));
+
+  gtk_text_buffer_undo (buffer);
+
+  check_buffer_contents (buffer, "abc def.");
+  g_assert_true (gtk_text_buffer_get_can_undo (buffer));
+
+  gtk_text_buffer_undo (buffer);
+
+  check_buffer_contents (buffer, "abc");
+  g_assert_true (gtk_text_buffer_get_can_undo (buffer));
+
+  gtk_text_buffer_undo (buffer);
+
+  check_buffer_contents (buffer, "");
+  g_assert_false (gtk_text_buffer_get_can_undo (buffer));
+
+  g_object_unref (buffer);
+}
+
 int
 main (int argc, char** argv)
 {
@@ -1722,6 +1771,7 @@ main (int argc, char** argv)
   g_test_add_func ("/TextBuffer/Undo 0", test_undo0);
   g_test_add_func ("/TextBuffer/Undo 1", test_undo1);
   g_test_add_func ("/TextBuffer/Undo 2", test_undo2);
+  g_test_add_func ("/TextBuffer/Undo 3", test_undo3);
 
   return g_test_run();
 }
