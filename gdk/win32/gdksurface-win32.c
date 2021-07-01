@@ -2305,22 +2305,22 @@ stash_window (GdkSurface          *window,
 }
 
 static void
-snap_up (GdkSurface *window)
+snap_up (GdkSurface *surface)
 {
   SHORT maxysize;
   int x, y;
   int width, height;
   GdkWin32Surface *impl;
 
-  impl = GDK_WIN32_SURFACE (window);
+  impl = GDK_WIN32_SURFACE (surface);
 
   impl->snap_state = GDK_WIN32_AEROSNAP_STATE_FULLUP;
 
-  stash_window (window, impl);
+  stash_window (surface, impl);
 
   maxysize = GetSystemMetrics (SM_CYVIRTUALSCREEN) / impl->surface_scale;
   x = y = 0;
-  width = gdk_surface_get_width (window);
+  width = gdk_surface_get_width (surface);
 
   y = 0;
   height = maxysize;
@@ -2330,24 +2330,24 @@ snap_up (GdkSurface *window)
   width += impl->shadow_x;
   height += impl->shadow_y;
 
-  gdk_win32_surface_move_resize (window, x, y, width, height);
+  gdk_win32_surface_move_resize (surface, x, y, width, height);
 }
 
 static void
-snap_left (GdkSurface  *window,
+snap_left (GdkSurface *surface,
            GdkMonitor *monitor,
            GdkMonitor *snap_monitor)
 {
   GdkRectangle rect;
   GdkWin32Surface *impl;
 
-  impl = GDK_WIN32_SURFACE (window);
+  impl = GDK_WIN32_SURFACE (surface);
 
   impl->snap_state = GDK_WIN32_AEROSNAP_STATE_HALFLEFT;
 
   gdk_win32_monitor_get_workarea (snap_monitor, &rect);
 
-  stash_window (window, impl);
+  stash_window (surface, impl);
 
   rect.width = rect.width / 2;
 
@@ -2356,26 +2356,26 @@ snap_left (GdkSurface  *window,
   rect.width = rect.width + impl->shadow_x;
   rect.height = rect.height + impl->shadow_y;
 
-  gdk_win32_surface_move_resize (window,
+  gdk_win32_surface_move_resize (surface,
                                  rect.x, rect.y,
                                  rect.width, rect.height);
 }
 
 static void
-snap_right (GdkSurface  *window,
+snap_right (GdkSurface *surface,
             GdkMonitor *monitor,
             GdkMonitor *snap_monitor)
 {
   GdkRectangle rect;
   GdkWin32Surface *impl;
 
-  impl = GDK_WIN32_SURFACE (window);
+  impl = GDK_WIN32_SURFACE (surface);
 
   impl->snap_state = GDK_WIN32_AEROSNAP_STATE_HALFRIGHT;
 
   gdk_win32_monitor_get_workarea (snap_monitor, &rect);
 
-  stash_window (window, impl);
+  stash_window (surface, impl);
 
   rect.width = rect.width / 2;
   rect.x += rect.width;
@@ -2385,7 +2385,7 @@ snap_right (GdkSurface  *window,
   rect.width = rect.width + impl->shadow_x;
   rect.height = rect.height + impl->shadow_y;
 
-  gdk_win32_surface_move_resize (window,
+  gdk_win32_surface_move_resize (surface,
                                  rect.x, rect.y,
                                  rect.width, rect.height);
 }
