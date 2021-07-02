@@ -1070,7 +1070,7 @@ send_crossing_event (GdkDisplay                 *display,
   event = gdk_crossing_event_new (type,
                                   window,
                                   device_manager->core_pointer,
-                                  _gdk_win32_get_next_tick (time_),
+                                  time_,
                                   mask,
                                   pt.x / impl->surface_scale,
                                   pt.y / impl->surface_scale,
@@ -2255,7 +2255,7 @@ gdk_event_translate (MSG *msg,
 					  GDK_CROSSING_UNGRAB,
 					  &msg->pt,
 					  0, /* TODO: Set right mask */
-					  msg->time,
+					  _gdk_win32_get_next_tick (msg->time),
 					  FALSE);
 	      g_set_object (&implicit_grab_surface, NULL);
 	      g_set_object (&mouse_window, new_window);
@@ -2320,7 +2320,7 @@ gdk_event_translate (MSG *msg,
 				      GDK_CROSSING_NORMAL,
 				      &msg->pt,
 				      0, /* TODO: Set right mask */
-				      msg->time,
+				      _gdk_win32_get_next_tick (msg->time),
 				      FALSE);
 	  g_set_object (&mouse_window, new_window);
 	  mouse_window_ignored_leave = NULL;
@@ -2413,7 +2413,7 @@ gdk_event_translate (MSG *msg,
 				    GDK_CROSSING_NORMAL,
 				    &msg->pt,
 				    0, /* TODO: Set right mask */
-				    msg->time,
+				    _gdk_win32_get_next_tick (msg->time),
 				    FALSE);
       g_set_object (&mouse_window, new_window);
       mouse_window_ignored_leave = ignore_leave ? new_window : NULL;
