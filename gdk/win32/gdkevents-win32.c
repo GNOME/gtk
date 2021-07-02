@@ -1036,11 +1036,12 @@ do_show_window (GdkSurface *window, gboolean hide_window)
 
 static void
 send_crossing_event (GdkDisplay                 *display,
-		     GdkSurface                  *window,
+                     GdkDevice                  *physical_device,
+		     GdkSurface                 *window,
 		     GdkEventType                type,
 		     GdkCrossingMode             mode,
 		     GdkNotifyType               notify_type,
-		     GdkSurface                  *subwindow,
+		     GdkSurface                 *subwindow,
 		     POINT                      *screen_pt,
 		     GdkModifierType             mask,
 		     guint32                     time_)
@@ -1076,7 +1077,7 @@ send_crossing_event (GdkDisplay                 *display,
                                   pt.y / impl->surface_scale,
                                   mode,
                                   notify_type);
-          
+
   _gdk_win32_append_event (event);
 }
 
@@ -1119,8 +1120,9 @@ find_common_ancestor (GdkSurface *win1,
 
 void
 synthesize_crossing_events (GdkDisplay                 *display,
-			    GdkSurface                  *src,
-			    GdkSurface                  *dest,
+                            GdkDevice                  *physical_device,
+			    GdkSurface                 *src,
+			    GdkSurface                 *dest,
 			    GdkCrossingMode             mode,
 			    POINT                      *screen_pt,
 			    GdkModifierType             mask,
@@ -1153,6 +1155,7 @@ synthesize_crossing_events (GdkDisplay                 *display,
       else
 	notify_type = GDK_NOTIFY_ANCESTOR;
       send_crossing_event (display,
+                           physical_device,
 			   a, GDK_LEAVE_NOTIFY,
 			   mode,
 			   notify_type,
@@ -1172,6 +1175,7 @@ synthesize_crossing_events (GdkDisplay                 *display,
 	  while (win != c && win != NULL)
 	    {
 	      send_crossing_event (display,
+                                   physical_device,
 				   win, GDK_LEAVE_NOTIFY,
 				   mode,
 				   notify_type,
@@ -1214,6 +1218,7 @@ synthesize_crossing_events (GdkDisplay                 *display,
 		next = b;
 
 	      send_crossing_event (display,
+                                   physical_device,
 				   win, GDK_ENTER_NOTIFY,
 				   mode,
 				   notify_type,
@@ -1233,6 +1238,7 @@ synthesize_crossing_events (GdkDisplay                 *display,
 	notify_type = GDK_NOTIFY_INFERIOR;
 
       send_crossing_event (display,
+                           physical_device,
 			   b, GDK_ENTER_NOTIFY,
 			   mode,
 			   notify_type,
@@ -2245,6 +2251,7 @@ gdk_event_translate (MSG *msg,
 		}
 
 	      synthesize_crossing_events (display,
+                                          _gdk_device_manager->system_pointer,
 					  implicit_grab_surface, new_window,
 					  GDK_CROSSING_UNGRAB,
 					  &msg->pt,
@@ -2309,6 +2316,7 @@ gdk_event_translate (MSG *msg,
 				     mouse_window ? GDK_SURFACE_HWND (mouse_window) : NULL,
 				     new_window ? GDK_SURFACE_HWND (new_window) : NULL));
 	  synthesize_crossing_events (display,
+                                      _gdk_device_manager->system_pointer,
 				      mouse_window, new_window,
 				      GDK_CROSSING_NORMAL,
 				      &msg->pt,
@@ -2401,6 +2409,7 @@ gdk_event_translate (MSG *msg,
 
       if (!ignore_leave)
 	synthesize_crossing_events (display,
+                                    _gdk_device_manager->system_pointer,
 				    mouse_window, new_window,
 				    GDK_CROSSING_NORMAL,
 				    &msg->pt,
