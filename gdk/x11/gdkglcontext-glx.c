@@ -715,10 +715,11 @@ visual_is_rgba (XVisualInfo *visinfo)
 
 #define MAX_GLX_ATTRS   30
 
-static void
+static gboolean
 gdk_x11_display_create_glx_config (GdkX11Display  *self,
                                    Visual        **out_visual,
-                                   int            *out_depth)
+                                   int            *out_depth,
+                                   GError        **error)
 {
   GdkDisplay *display = GDK_DISPLAY (self);
   Display *dpy = gdk_x11_display_get_xdisplay (display);
@@ -758,7 +759,12 @@ gdk_x11_display_create_glx_config (GdkX11Display  *self,
 
   configs = glXChooseFBConfig (dpy, DefaultScreen (dpy), attrs, &count);
   if (configs == NULL || count == 0)
-    return;
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("No GLX configurations available"));
+      return FALSE;
+    }
 
   best_features = NO_VISUAL_FOUND;
 
@@ -824,6 +830,16 @@ gdk_x11_display_create_glx_config (GdkX11Display  *self,
     }
 
   XFree (configs);
+
+  if (best_features == NO_VISUAL_FOUND)
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("No GLX configuration with required features found"));
+      return FALSE;
+    }
+
+  return TRUE;
 }
 
 #undef MAX_GLX_ATTRS
@@ -942,6 +958,7 @@ gdk_x11_display_get_glx_version (GdkDisplay *display,
  * @display_x11: an X11 display that has not been inited yet. 
  * @out_visual: set to the Visual to be used with the returned config
  * @out_depth: set to the depth to be used with the returned config
+ * @error: Return location for error
  *
  * Initializes the cached GLX state for the given @screen.
  *
@@ -952,7 +969,8 @@ gdk_x11_display_get_glx_version (GdkDisplay *display,
 gboolean
 gdk_x11_display_init_glx (GdkX11Display  *display_x11,
                           Visual        **out_visual,
-                          int            *out_depth)
+                          int            *out_depth,
+                          GError        **error)
 {
   GdkDisplay *display = GDK_DISPLAY (display_x11);
   Display *dpy;
@@ -961,7 +979,12 @@ gdk_x11_display_init_glx (GdkX11Display  *display_x11,
   dpy = gdk_x11_display_get_xdisplay (display);
 
   if (!epoxy_has_glx (dpy))
-    return FALSE;
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("GLX is not supported"));
+      return FALSE;
+    }
 
   screen_num = display_x11->screen->screen_num;
 
@@ -1023,8 +1046,7 @@ gdk_x11_display_init_glx (GdkX11Display  *display_x11,
         XFree (data);
     }
 
-  gdk_x11_display_create_glx_config (display_x11, out_visual, out_depth);
-  if (display_x11->glx_config == NULL)
+  if (!gdk_x11_display_create_glx_config (display_x11, out_visual, out_depth, error))
     return FALSE;
 
   GDK_DISPLAY_NOTE (display, OPENGL,

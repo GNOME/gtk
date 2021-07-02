@@ -61,7 +61,8 @@ struct _GdkX11GLContextClass
 
 gboolean                gdk_x11_display_init_gl                 (GdkX11Display *self,
                                                                  Visual       **out_visual,
-                                                                 int           *out_depth);
+                                                                 int           *out_depth,
+                                                                 GError       **error);
 
 GdkGLContext *          gdk_x11_surface_create_gl_context       (GdkSurface    *window,
                                                                  gboolean       attached,
@@ -79,7 +80,8 @@ typedef struct _GdkX11GLContextGLX      GdkX11GLContextGLX;
 
 gboolean                gdk_x11_display_init_glx                (GdkX11Display *display_x11,
                                                                  Visual       **out_visual,
-                                                                 int           *out_depth);
+                                                                 int           *out_depth,
+                                                                 GError       **error);
 void                    gdk_x11_surface_destroy_glx_drawable    (GdkX11Surface *self);
 
 GType                   gdk_x11_gl_context_glx_get_type         (void) G_GNUC_CONST;
@@ -100,7 +102,8 @@ typedef struct _GdkX11GLContextEGL      GdkX11GLContextEGL;
 
 gboolean                gdk_x11_display_init_egl                (GdkX11Display *display_x11,
                                                                  Visual       **out_visual,
-                                                                 int           *out_depth);
+                                                                 int           *out_depth,
+                                                                 GError       **error);
 void                    gdk_x11_surface_destroy_egl_surface     (GdkX11Surface *self);
 
 GType                   gdk_x11_gl_context_egl_get_type         (void) G_GNUC_CONST;

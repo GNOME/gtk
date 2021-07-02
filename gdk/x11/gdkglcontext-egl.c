@@ -132,10 +132,11 @@ visual_is_rgba (XVisualInfo *visinfo)
 
 #define MAX_EGL_ATTRS   30
 
-static void
+static gboolean
 gdk_x11_display_create_egl_config (GdkX11Display  *display,
                                    Visual        **out_visual,
-                                   int            *out_depth)
+                                   int            *out_depth,
+                                   GError        **error)
 {
   GdkX11Display *self = GDK_X11_DISPLAY (display);
   EGLint attrs[MAX_EGL_ATTRS];
@@ -170,14 +171,19 @@ gdk_x11_display_create_egl_config (GdkX11Display  *display,
   attrs[i++] = EGL_NONE;
   g_assert (i < MAX_EGL_ATTRS);
 
-  if (!eglChooseConfig (self->egl_display, attrs, NULL, -1, &alloced))
-    return;
+  if (!eglChooseConfig (self->egl_display, attrs, NULL, -1, &alloced) || alloced == 0)
+    {
+      g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("No EGL configuration available"));
+      return FALSE;
+    }
 
   configs = g_new (EGLConfig, alloced);
   if (!eglChooseConfig (self->egl_display, attrs, configs, alloced, &count))
     {
-      g_free (configs);
-      return;
+      g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("Failed to get EGL configurations"));
+      return FALSE;
     }
   g_warn_if_fail (alloced == count);
 
@@ -249,6 +255,16 @@ gdk_x11_display_create_egl_config (GdkX11Display  *display,
     }
 
   g_free (configs);
+
+  if (best_features == NO_VISUAL_FOUND)
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("No EGL configuration with required features found"));
+      return FALSE;
+    }
+
+  return TRUE;
 }
 
 #undef MAX_EGL_ATTRS
@@ -574,7 +590,8 @@ gdk_x11_gl_context_egl_init (GdkX11GLContextEGL *self)
 gboolean
 gdk_x11_display_init_egl (GdkX11Display  *self,
                           Visual        **out_visual,
-                          int            *out_depth)
+                          int            *out_depth,
+                          GError        **error)
 {
   GdkDisplay *display = GDK_DISPLAY (self);
   Display *dpy;
@@ -583,20 +600,32 @@ gdk_x11_display_init_egl (GdkX11Display  *self,
   dpy = gdk_x11_display_get_xdisplay (display);
 
   if (!epoxy_has_egl ())
-    return FALSE;
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("EGL is not supported"));
+      return FALSE;
+    }
 
   gdk_x11_display_create_egl_display (self);
   if (self->egl_display == NULL)
-    return FALSE;
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("Failed to create EGL display"));
+      return FALSE;
+    }
 
   if (!eglInitialize (self->egl_display, &major, &minor))
     {
       self->egl_display = NULL;
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("Could not initialize EGL display"));
       return FALSE;
     }
 
-  gdk_x11_display_create_egl_config (self, out_visual, out_depth);
-  if (self->egl_config == NULL)
+  if (!gdk_x11_display_create_egl_config (self, out_visual, out_depth, error))
     {
       eglTerminate (self->egl_display);
       self->egl_display = NULL;

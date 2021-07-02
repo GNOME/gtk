@@ -72,9 +72,9 @@ gdk_x11_surface_create_gl_context (GdkSurface    *surface,
     context = gdk_x11_gl_context_glx_new (surface, attached, share, error);
   else
     {
-      g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_NOT_AVAILABLE,
-                           _("No GL implementation is available"));
+      g_assert (display_x11->gl_error);
+      if (error)
+        *error = g_error_copy (display_x11->gl_error);
       return NULL;
     }
 
@@ -105,22 +105,41 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
 gboolean
 gdk_x11_display_init_gl (GdkX11Display  *self,
                          Visual        **out_visual,
-                         int            *out_depth)
+                         int            *out_depth,
+                         GError        **error)
 {
   GdkDisplay *display G_GNUC_UNUSED = GDK_DISPLAY (self);
+  GError *egl_error = NULL;
+  GError *glx_error = NULL;
 
   if (GDK_DISPLAY_DEBUG_CHECK (display, GL_DISABLE))
-    return FALSE;
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("GL support disabled via GDK_DEBUG=gl-disable"));
+      return FALSE;
+    }
 
   if (!GDK_DISPLAY_DEBUG_CHECK (display, GL_GLX))
     {
       /* We favour EGL */
-      if (gdk_x11_display_init_egl (self, out_visual, out_depth))
+      if (gdk_x11_display_init_egl (self, out_visual, out_depth, &egl_error))
         return TRUE;
     }
 
-  if (gdk_x11_display_init_glx (self, out_visual, out_depth))
-    return TRUE;
+  if (gdk_x11_display_init_glx (self, out_visual, out_depth, &glx_error))
+    {
+      g_clear_error (&egl_error);
+      return TRUE;
+    }
+
+  if (egl_error)
+    {
+      *error = egl_error;
+      g_clear_error (&glx_error);
+    }
+  else
+    *error = glx_error;
 
   return FALSE;
 }

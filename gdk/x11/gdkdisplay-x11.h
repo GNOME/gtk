@@ -129,6 +129,9 @@ struct _GdkX11Display
   guint have_damage;
 #endif
 
+  /* If GL is not supported, store the error here */
+  GError *gl_error;
+
   /* GLX information */
   /* GLXFBConfig */ gpointer glx_config;
   int glx_version;

@@ -1440,7 +1440,7 @@ gdk_x11_display_open (const char *display_name)
    * as we care about GLX details such as alpha/depth/stencil depth,
    * stereo and double buffering
    */
-  if (!gdk_x11_display_init_gl (display_x11, &display_x11->window_visual, &display_x11->window_depth))
+  if (!gdk_x11_display_init_gl (display_x11, &display_x11->window_visual, &display_x11->window_depth, &display_x11->gl_error))
     gdk_x11_display_query_default_visual (display_x11, &display_x11->window_visual, &display_x11->window_depth);
 
   display_x11->window_colormap = XCreateColormap (xdisplay,
@@ -1947,6 +1947,8 @@ gdk_x11_display_finalize (GObject *object)
   g_hash_table_destroy (display_x11->xid_ht);
 
   XCloseDisplay (display_x11->xdisplay);
+
+  g_clear_error (&display_x11->gl_error);
 
   /* error traps */
   while (display_x11->error_traps != NULL)
