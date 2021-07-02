@@ -339,7 +339,7 @@ parse_settings (unsigned char *data,
             rgba.alpha = alpha / 65535.0;
 
             value = g_new0 (GValue, 1);
-            g_value_init (value, G_TYPE_STRING);
+            g_value_init (value, GDK_TYPE_RGBA);
             g_value_set_boxed (value, &rgba);
 
             GDK_NOTE (SETTINGS, g_message ("  %s = #%02X%02X%02X%02X", x_name, alpha,red, green, blue));
