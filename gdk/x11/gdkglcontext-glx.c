@@ -956,7 +956,6 @@ gdk_x11_display_init_glx (GdkX11Display  *display_x11,
 {
   GdkDisplay *display = GDK_DISPLAY (display_x11);
   Display *dpy;
-  int error_base, event_base;
   int screen_num;
 
   dpy = gdk_x11_display_get_xdisplay (display);
@@ -964,14 +963,9 @@ gdk_x11_display_init_glx (GdkX11Display  *display_x11,
   if (!epoxy_has_glx (dpy))
     return FALSE;
 
-  if (!glXQueryExtension (dpy, &error_base, &event_base))
-    return FALSE;
-
   screen_num = display_x11->screen->screen_num;
 
   display_x11->glx_version = epoxy_glx_version (dpy, screen_num);
-  display_x11->glx_error_base = error_base;
-  display_x11->glx_event_base = event_base;
 
   display_x11->has_glx_create_context =
     epoxy_has_glx_extension (dpy, screen_num, "GLX_ARB_create_context_profile");

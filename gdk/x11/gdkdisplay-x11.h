@@ -132,8 +132,6 @@ struct _GdkX11Display
   /* GLX information */
   /* GLXFBConfig */ gpointer glx_config;
   int glx_version;
-  int glx_error_base;
-  int glx_event_base;
 
   /* EGL information */
   /* We use gpointer here so we don't have to pull in EGL headers (which glx doesn't like) */
