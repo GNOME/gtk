@@ -50,6 +50,9 @@ struct _GdkDeviceWinpointer
   double scale_y;
 
   GdkModifierType last_button_mask;
+
+  GdkDeviceTool *tool_pen;
+  GdkDeviceTool *tool_eraser;
 };
 
 struct _GdkDeviceWinpointerClass

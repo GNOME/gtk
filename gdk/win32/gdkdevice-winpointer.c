@@ -204,6 +204,9 @@ gdk_device_winpointer_finalize (GObject *object)
 {
   GdkDeviceWinpointer *device_winpointer = GDK_DEVICE_WINPOINTER (object);
 
+  g_clear_object (&device_winpointer->tool_pen);
+  g_clear_object (&device_winpointer->tool_eraser);
+
   G_OBJECT_CLASS (gdk_device_winpointer_parent_class)->finalize (object);
 }
 
