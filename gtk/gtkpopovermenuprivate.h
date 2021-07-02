@@ -42,6 +42,8 @@ void  gtk_popover_menu_add_submenu (GtkPopoverMenu *popover,
 void gtk_popover_menu_open_submenu (GtkPopoverMenu *popover,
                                     const char     *name);
 
+GtkWidget * gtk_popover_menu_get_stack (GtkPopoverMenu *menu);
+
 G_END_DECLS
 
 #endif /* __GTK_POPOVER_MENU_PRIVATE_H__ */
