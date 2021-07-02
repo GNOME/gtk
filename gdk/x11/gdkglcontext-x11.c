@@ -109,8 +109,6 @@ gdk_x11_display_init_gl (GdkX11Display  *self,
                          GError        **error)
 {
   GdkDisplay *display G_GNUC_UNUSED = GDK_DISPLAY (self);
-  GError *egl_error = NULL;
-  GError *glx_error = NULL;
 
   if (GDK_DISPLAY_DEBUG_CHECK (display, GL_DISABLE))
     {
@@ -120,27 +118,30 @@ gdk_x11_display_init_gl (GdkX11Display  *self,
       return FALSE;
     }
 
-  if (!GDK_DISPLAY_DEBUG_CHECK (display, GL_GLX))
-    {
-      /* We favour EGL */
-      if (gdk_x11_display_init_egl (self, out_visual, out_depth, &egl_error))
-        return TRUE;
-    }
+  if (GDK_DISPLAY_DEBUG_CHECK (display, GL_EGL))
+    return gdk_x11_display_init_egl (self, TRUE, out_visual, out_depth, error);
+  if (GDK_DISPLAY_DEBUG_CHECK (display, GL_GLX))
+    return gdk_x11_display_init_glx (self, out_visual, out_depth, error);
 
-  if (gdk_x11_display_init_glx (self, out_visual, out_depth, &glx_error))
-    {
-      g_clear_error (&egl_error);
-      return TRUE;
-    }
+  /* No env vars set, do the regular GL initialization.
+   * 
+   * We try EGL first, but are very picky about what we accept.
+   * If that fails, we try to go with GLX instead.
+   * And if that also fails, we try EGL again, but this time accept anything.
+   *
+   * The idea here is that EGL is the preferred method going forward, but GLX is
+   * the tried and tested method that we know works. So if we detect issues with
+   * EGL, we want to avoid using it in favor of GLX.
+   */
 
-  if (egl_error)
-    {
-      *error = egl_error;
-      g_clear_error (&glx_error);
-    }
-  else
-    *error = glx_error;
+  if (gdk_x11_display_init_egl (self, FALSE, out_visual, out_depth, error))
+    return TRUE;
+  g_clear_error (error);
 
-  return FALSE;
+  if (gdk_x11_display_init_glx (self, out_visual, out_depth, error))
+    return TRUE;
+  g_clear_error (error);
+
+  return gdk_x11_display_init_egl (self, TRUE, out_visual, out_depth, error);
 }
 

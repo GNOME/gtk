@@ -134,6 +134,7 @@ visual_is_rgba (XVisualInfo *visinfo)
 
 static gboolean
 gdk_x11_display_create_egl_config (GdkX11Display  *display,
+                                   gboolean        force,
                                    Visual        **out_visual,
                                    int            *out_depth,
                                    GError        **error)
@@ -261,6 +262,13 @@ gdk_x11_display_create_egl_config (GdkX11Display  *display,
       g_set_error_literal (error, GDK_GL_ERROR,
                            GDK_GL_ERROR_NOT_AVAILABLE,
                            _("No EGL configuration with required features found"));
+      return FALSE;
+    }
+  else if (!force && best_features != PERFECT)
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("No perfect EGL configuration found"));
       return FALSE;
     }
 
@@ -589,6 +597,7 @@ gdk_x11_gl_context_egl_init (GdkX11GLContextEGL *self)
 
 gboolean
 gdk_x11_display_init_egl (GdkX11Display  *self,
+                          gboolean        force,
                           Visual        **out_visual,
                           int            *out_depth,
                           GError        **error)
@@ -625,7 +634,7 @@ gdk_x11_display_init_egl (GdkX11Display  *self,
       return FALSE;
     }
 
-  if (!gdk_x11_display_create_egl_config (self, out_visual, out_depth, error))
+  if (!gdk_x11_display_create_egl_config (self, force, out_visual, out_depth, error))
     {
       eglTerminate (self->egl_display);
       self->egl_display = NULL;
