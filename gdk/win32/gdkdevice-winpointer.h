@@ -50,6 +50,9 @@ struct _GdkDeviceWinpointer
   double *last_axis_data;
   unsigned num_axes;
   GdkModifierType last_button_mask;
+
+  GdkDeviceTool *tool_pen;
+  GdkDeviceTool *tool_eraser;
 };
 
 struct _GdkDeviceWinpointerClass

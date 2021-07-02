@@ -29,6 +29,7 @@
 #include "gdkdevice-win32.h"
 #include "gdkdevice-virtual.h"
 #include "gdkdevice-wintab.h"
+#include "gdkinput-winpointer.h"
 #include "gdkdisplayprivate.h"
 #include "gdkseatdefaultprivate.h"
 
@@ -738,12 +739,22 @@ gdk_device_manager_win32_constructed (GObject *object)
       have_tablet_input_api_preference = TRUE;
       _gdk_win32_tablet_input_api = GDK_WIN32_TABLET_INPUT_API_WINTAB;
     }
+  else if (g_strcmp0 (tablet_input_api_user_preference, "winpointer") == 0)
+    {
+      have_tablet_input_api_preference = TRUE;
+      _gdk_win32_tablet_input_api = GDK_WIN32_TABLET_INPUT_API_WINPOINTER;
+    }
   else
     {
       have_tablet_input_api_preference = FALSE;
-      _gdk_win32_tablet_input_api = GDK_WIN32_TABLET_INPUT_API_WINTAB;
+      _gdk_win32_tablet_input_api = GDK_WIN32_TABLET_INPUT_API_WINPOINTER;
     }
 
+  if (_gdk_win32_tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER)
+    {
+      if (!gdk_winpointer_initialize () && !have_tablet_input_api_preference)
+        _gdk_win32_tablet_input_api = GDK_WIN32_TABLET_INPUT_API_WINTAB;
+    }
   if (_gdk_win32_tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINTAB)
     {
       /* Only call Wintab init stuff after the default display

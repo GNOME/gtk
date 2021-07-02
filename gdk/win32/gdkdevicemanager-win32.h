@@ -40,6 +40,8 @@ struct _GdkDeviceManagerWin32
   /* Fake physical devices */
   GdkDevice *system_pointer;
   GdkDevice *system_keyboard;
+
+  GList *winpointer_devices;
   GList *wintab_devices;
 
   /* Bumped up every time a wintab device enters the proximity

@@ -57,6 +57,7 @@
 #include "gdkdeviceprivate.h"
 #include "gdkdevice-virtual.h"
 #include "gdkdevice-wintab.h"
+#include "gdkinput-winpointer.h"
 #include "gdkwin32dnd.h"
 #include "gdkwin32dnd-private.h"
 #include "gdkdisplay-win32.h"
@@ -71,8 +72,9 @@
 #endif
 
 #include <objbase.h>
-
 #include <imm.h>
+#include <tchar.h>
+#include <tpcshrd.h>
 
 #define GDK_MOD2_MASK (1 << 4)
 
@@ -2972,6 +2974,13 @@ gdk_event_translate (MSG *msg,
       *ret_valp = 0;
       break;
 
+    case WM_DESTROY:
+      if (_gdk_win32_tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER)
+        gdk_winpointer_finalize_surface (window);
+
+      return_val = FALSE;
+      break;
+
     case WM_NCDESTROY:
       if ((pointer_grab != NULL && pointer_grab->surface == window) ||
           (keyboard_grab && keyboard_grab->surface == window))
@@ -3076,6 +3085,16 @@ gdk_event_translate (MSG *msg,
                                      GET_X_LPARAM (msg->lParam),
                                      GET_Y_LPARAM (msg->lParam), ret_valp);
       break;
+
+    case WM_TABLET_QUERYSYSTEMGESTURESTATUS:
+      *ret_valp = TABLET_DISABLE_PRESSANDHOLD |
+                  TABLET_DISABLE_PENTAPFEEDBACK |
+                  TABLET_DISABLE_PENBARRELFEEDBACK |
+                  TABLET_DISABLE_FLICKS |
+                  TABLET_DISABLE_FLICKFALLBACKKEYS;
+      return_val = TRUE;
+      break;
+
 
       /* Handle WINTAB events here, as we know that the device manager will
        * use the fixed WT_DEFBASE as lcMsgBase, and we thus can use the

@@ -16,6 +16,7 @@ gdk_win32_sources = files([
   'gdkglcontext-win32.c',
   'gdkglobals-win32.c',
   'gdkhdataoutputstream-win32.c',
+  'gdkinput-winpointer.c',
   'gdkkeys-win32.c',
   'gdkwin32langnotification.c',
   'gdkmain-win32.c',
@@ -61,8 +62,9 @@ if win32_has_egl
   ]
 endif
 
-gdk_win32_deps = [ # FIXME
-  pangowin32_dep
+gdk_win32_deps = [
+  pangowin32_dep, # FIXME
+  cc.find_library('hid'),
 ]
 
 libgdk_win32 = static_library('gdk-win32',
