@@ -36,12 +36,12 @@ HINSTANCE	  _gdk_dll_hinstance;
 HINSTANCE	  _gdk_app_hmodule;
 
 gint		  _gdk_input_ignore_core;
+GdkWin32TabletInputAPI _gdk_win32_tablet_input_api;
 
 HKL		  _gdk_input_locale;
 gboolean	  _gdk_input_locale_is_ime = FALSE;
 UINT		  _gdk_input_codepage;
 
-gint		  _gdk_input_ignore_wintab = FALSE;
 gint		  _gdk_max_colors = 0;
 
 GdkWin32ModalOpKind	  _modal_operation_in_progress = GDK_WIN32_MODAL_OP_NONE;

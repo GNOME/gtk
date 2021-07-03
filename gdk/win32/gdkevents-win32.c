@@ -54,6 +54,7 @@
 #include "gdkglcontext-win32.h"
 #include "gdkdevicemanager-win32.h"
 #include "gdkdeviceprivate.h"
+#include "gdkdevice-virtual.h"
 #include "gdkdevice-wintab.h"
 #include "gdkwin32dnd.h"
 #include "gdkdisplay-win32.h"
@@ -61,6 +62,8 @@
 #include "gdkdndprivate.h"
 
 #include <windowsx.h>
+#include <tpcshrd.h>
+#include "winpointer.h"
 
 #ifdef G_WITH_CYGWIN
 #include <fcntl.h>
@@ -153,6 +156,10 @@ static int both_shift_pressed[2]; /* to store keycodes for shift keys */
 static HHOOK keyboard_hook = NULL;
 static UINT aerosnap_message;
 
+static gboolean pen_touch_input;
+static POINT pen_touch_cursor_position;
+static LONG last_digitizer_time;
+
 static void
 track_mouse_event (DWORD dwFlags,
 		   HWND  hwnd)
@@ -185,6 +192,18 @@ _gdk_win32_get_next_tick (gulong suggested_tick)
     return cur_tick;
   else
     return cur_tick = suggested_tick;
+}
+
+BOOL
+_gdk_win32_get_cursor_pos (LPPOINT lpPoint)
+{
+  if (pen_touch_input)
+    {
+      *lpPoint = pen_touch_cursor_position;
+      return TRUE;
+    }
+  else
+    return GetCursorPos (lpPoint);
 }
 
 static void
@@ -228,6 +247,7 @@ generate_grab_broken_event (GdkDeviceManager *device_manager,
     {
       device = GDK_DEVICE_MANAGER_WIN32 (device_manager)->core_pointer;
       source_device = GDK_DEVICE_MANAGER_WIN32 (device_manager)->system_pointer;
+      _gdk_device_virtual_set_active (device, source_device);
     }
 
   event->grab_broken.window = window;
@@ -1237,6 +1257,7 @@ do_show_window (GdkWindow *window, gboolean hide_window)
 
 static void
 send_crossing_event (GdkDisplay                 *display,
+                     GdkDevice                  *source_device,
 		     GdkWindow                  *window,
 		     GdkEventType                type,
 		     GdkCrossingMode             mode,
@@ -1271,7 +1292,7 @@ send_crossing_event (GdkDisplay                 *display,
   event = gdk_event_new (type);
   event->crossing.window = window;
   event->crossing.subwindow = subwindow;
-  event->crossing.time = _gdk_win32_get_next_tick (time_);
+  event->crossing.time = time_;
   event->crossing.x = pt.x / impl->window_scale;
   event->crossing.y = pt.y / impl->window_scale;
   event->crossing.x_root = (screen_pt->x + _gdk_offset_x) / impl->window_scale;
@@ -1283,8 +1304,10 @@ send_crossing_event (GdkDisplay                 *display,
   event->crossing.focus = FALSE;
   event->crossing.state = mask;
   gdk_event_set_device (event, device_manager->core_pointer);
-  gdk_event_set_source_device (event, device_manager->system_pointer);
+  gdk_event_set_source_device (event, source_device);
   gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_pointer));
+
+  _gdk_device_virtual_set_active (device_manager->core_pointer, source_device);
 
   _gdk_win32_append_event (event);
 }
@@ -1336,6 +1359,7 @@ find_common_ancestor (GdkWindow *win1,
 
 void
 synthesize_crossing_events (GdkDisplay                 *display,
+                            GdkDevice                  *source_device,
 			    GdkWindow                  *src,
 			    GdkWindow                  *dest,
 			    GdkCrossingMode             mode,
@@ -1370,6 +1394,7 @@ synthesize_crossing_events (GdkDisplay                 *display,
       else
 	notify_type = GDK_NOTIFY_ANCESTOR;
       send_crossing_event (display,
+                           source_device,
 			   a, GDK_LEAVE_NOTIFY,
 			   mode,
 			   notify_type,
@@ -1389,6 +1414,7 @@ synthesize_crossing_events (GdkDisplay                 *display,
 	  while (win != c && win->window_type != GDK_WINDOW_ROOT)
 	    {
 	      send_crossing_event (display,
+                                   source_device,
 				   win, GDK_LEAVE_NOTIFY,
 				   mode,
 				   notify_type,
@@ -1431,6 +1457,7 @@ synthesize_crossing_events (GdkDisplay                 *display,
 		next = b;
 
 	      send_crossing_event (display,
+                                   source_device,
 				   win, GDK_ENTER_NOTIFY,
 				   mode,
 				   notify_type,
@@ -1450,6 +1477,7 @@ synthesize_crossing_events (GdkDisplay                 *display,
 	notify_type = GDK_NOTIFY_INFERIOR;
 
       send_crossing_event (display,
+                           source_device,
 			   b, GDK_ENTER_NOTIFY,
 			   mode,
 			   notify_type,
@@ -1457,6 +1485,27 @@ synthesize_crossing_events (GdkDisplay                 *display,
 			   screen_pt,
 			   mask, time_);
     }
+}
+
+static void
+make_crossing_event (GdkDisplay *display,
+                     GdkDevice *device,
+                     GdkWindow *window,
+                     POINT *screen_pt,
+                     guint32 time_)
+{
+  GDK_NOTE (EVENTS, g_print (" mouse_window %p -> %p",
+                             mouse_window ? GDK_WINDOW_HWND (mouse_window) : NULL,
+                             window ? GDK_WINDOW_HWND (window) : NULL));
+  synthesize_crossing_events (display,
+                              device,
+                              mouse_window, window,
+                              GDK_CROSSING_NORMAL,
+                              screen_pt,
+                              0, /* TODO: Set right mask */
+                              time_,
+                              FALSE);
+  g_set_object (&mouse_window, window);
 }
 
 /* The check_extended flag controls whether to check if the windows want
@@ -1861,6 +1910,8 @@ generate_button_event (GdkEventType      type,
   gdk_event_set_source_device (event, device_manager->system_pointer);
   gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_pointer));
 
+  _gdk_device_virtual_set_active (device_manager->core_pointer, device_manager->system_pointer);
+
   _gdk_win32_append_event (event);
 }
 
@@ -2103,6 +2154,8 @@ gdk_event_translate (MSG  *msg,
   GdkDeviceGrabInfo *keyboard_grab = NULL;
   GdkDeviceGrabInfo *pointer_grab = NULL;
   GdkWindow *grab_window = NULL;
+
+  crossing_cb_t crossing_cb = NULL;
 
   gint button;
   GdkAtom target;
@@ -2600,6 +2653,8 @@ gdk_event_translate (MSG  *msg,
 		g_print (" (%d,%d)",
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
+      pen_touch_input = FALSE;
+
       g_set_object (&window, find_window_for_mouse_event (window, msg));
       /* TODO_CSW?: there used to some synthesize and propagate */
       if (GDK_WINDOW_DESTROYED (window))
@@ -2639,6 +2694,8 @@ gdk_event_translate (MSG  *msg,
 		g_print (" (%d,%d)",
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
+      pen_touch_input = FALSE;
+
       g_set_object (&window, find_window_for_mouse_event (window, msg));
 
       if (pointer_grab != NULL && pointer_grab->implicit)
@@ -2665,11 +2722,12 @@ gdk_event_translate (MSG  *msg,
 		}
 
 	      synthesize_crossing_events (display,
+                                          device_manager_win32->system_pointer,
 					  native_window, new_window,
 					  GDK_CROSSING_UNGRAB,
 					  &msg->pt,
 					  0, /* TODO: Set right mask */
-					  msg->time,
+					  _gdk_win32_get_next_tick (msg->time),
 					  FALSE);
 	      g_set_object (&mouse_window, new_window);
 	      mouse_window_ignored_leave = NULL;
@@ -2694,6 +2752,13 @@ gdk_event_translate (MSG  *msg,
 		g_print (" %p (%d,%d)",
 			 (gpointer) msg->wParam,
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
+
+      if (_gdk_win32_tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER &&
+          ( (msg->time - last_digitizer_time) < 200 ||
+           -(msg->time - last_digitizer_time) < 200 ))
+        break;
+
+      pen_touch_input = FALSE;
 
       new_window = window;
 
@@ -2722,15 +2787,16 @@ gdk_event_translate (MSG  *msg,
 
       if (mouse_window != new_window)
 	{
-	  GDK_NOTE (EVENTS, g_print (" mouse_sinwod %p -> %p",
+	  GDK_NOTE (EVENTS, g_print (" mouse_window %p -> %p",
 				     mouse_window ? GDK_WINDOW_HWND (mouse_window) : NULL,
 				     new_window ? GDK_WINDOW_HWND (new_window) : NULL));
 	  synthesize_crossing_events (display,
+                                      device_manager_win32->system_pointer,
 				      mouse_window, new_window,
 				      GDK_CROSSING_NORMAL,
 				      &msg->pt,
 				      0, /* TODO: Set right mask */
-				      msg->time,
+				      _gdk_win32_get_next_tick (msg->time),
 				      FALSE);
 	  g_set_object (&mouse_window, new_window);
 	  mouse_window_ignored_leave = NULL;
@@ -2782,6 +2848,8 @@ gdk_event_translate (MSG  *msg,
 	  gdk_event_set_source_device (event, device_manager_win32->system_pointer);
           gdk_event_set_seat (event, gdk_device_get_seat (device_manager_win32->core_pointer));
 
+          _gdk_device_virtual_set_active (device_manager_win32->core_pointer, device_manager_win32->system_pointer);
+
 	  _gdk_win32_append_event (event);
 	}
 
@@ -2792,11 +2860,16 @@ gdk_event_translate (MSG  *msg,
       GDK_NOTE (EVENTS,
 		g_print (" (%d,%d)",
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
+
+      pen_touch_input = FALSE;
+
       break;
 
     case WM_MOUSELEAVE:
       GDK_NOTE (EVENTS, g_print (" %d (%ld,%ld)",
 				 HIWORD (msg->wParam), msg->pt.x, msg->pt.y));
+
+      pen_touch_input = FALSE;
 
       new_window = NULL;
       hwnd = WindowFromPoint (msg->pt);
@@ -2823,16 +2896,226 @@ gdk_event_translate (MSG  *msg,
 
       if (!ignore_leave)
 	synthesize_crossing_events (display,
+                                    device_manager_win32->system_pointer,
 				    mouse_window, new_window,
 				    GDK_CROSSING_NORMAL,
 				    &msg->pt,
 				    0, /* TODO: Set right mask */
-				    msg->time,
+				    _gdk_win32_get_next_tick (msg->time),
 				    FALSE);
       g_set_object (&mouse_window, new_window);
       mouse_window_ignored_leave = ignore_leave ? new_window : NULL;
 
 
+      return_val = TRUE;
+      break;
+
+    case WM_POINTERDOWN:
+      if (_gdk_win32_tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
+          gdk_winpointer_should_forward_message (msg))
+        {
+          return_val = FALSE;
+          break;
+        }
+
+      if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
+        {
+          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          pen_touch_input = TRUE;
+          last_digitizer_time = msg->time;
+        }
+
+      if (pointer_grab != NULL &&
+          !pointer_grab->implicit &&
+          !pointer_grab->owner_events)
+        g_set_object (&window, pointer_grab->native_window);
+
+      if (IS_POINTER_PRIMARY_WPARAM (msg->wParam) && mouse_window != window)
+        crossing_cb = make_crossing_event;
+
+      gdk_winpointer_input_events (display, window, crossing_cb, msg);
+
+      *ret_valp = 0;
+      return_val = TRUE;
+      break;
+
+    case WM_POINTERUP:
+      if (_gdk_win32_tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
+          gdk_winpointer_should_forward_message (msg))
+        {
+          return_val = FALSE;
+          break;
+        }
+
+      if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
+        {
+          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          pen_touch_input = TRUE;
+          last_digitizer_time = msg->time;
+        }
+
+      if (pointer_grab != NULL &&
+          !pointer_grab->implicit &&
+          !pointer_grab->owner_events)
+        g_set_object (&window, pointer_grab->native_window);
+
+      gdk_winpointer_input_events (display, window, NULL, msg);
+
+      impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+      if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
+        {
+          gdk_win32_window_end_move_resize_drag (window);
+        }
+
+      *ret_valp = 0;
+      return_val = TRUE;
+      break;
+
+    case WM_POINTERUPDATE:
+      if (_gdk_win32_tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
+          gdk_winpointer_should_forward_message (msg))
+        {
+          return_val = FALSE;
+          break;
+        }
+
+      if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
+        {
+          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          pen_touch_input = TRUE;
+          last_digitizer_time = msg->time;
+        }
+
+      if (pointer_grab != NULL &&
+          !pointer_grab->implicit &&
+          !pointer_grab->owner_events)
+        g_set_object (&window, pointer_grab->native_window);
+
+      if (IS_POINTER_PRIMARY_WPARAM (msg->wParam) && mouse_window != window)
+        crossing_cb = make_crossing_event;
+
+      impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+      if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
+        {
+          gdk_win32_window_do_move_resize_drag (window, current_root_x, current_root_y);
+        }
+      else
+        {
+          gdk_winpointer_input_events (display, window, crossing_cb, msg);
+        }
+
+      *ret_valp = 0;
+      return_val = TRUE;
+      break;
+
+    case WM_NCPOINTERUPDATE:
+      if (_gdk_win32_tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
+          gdk_winpointer_should_forward_message (msg))
+        {
+          return_val = FALSE;
+          break;
+        }
+
+      if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
+        {
+          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          pen_touch_input = TRUE;
+          last_digitizer_time = msg->time;
+        }
+
+      if (IS_POINTER_PRIMARY_WPARAM (msg->wParam) &&
+          !IS_POINTER_INCONTACT_WPARAM (msg->wParam) &&
+          mouse_window != NULL)
+        {
+          GdkDevice *event_device = NULL;
+          guint32 event_time = 0;
+
+          if (gdk_winpointer_get_message_info (display, msg, &event_device, &event_time))
+            {
+              make_crossing_event(display,
+                                  event_device,
+                                  NULL,
+                                  &pen_touch_cursor_position,
+                                  event_time);
+            }
+        }
+
+      return_val = FALSE; /* forward to DefWindowProc */
+      break;
+
+    case WM_POINTERENTER:
+      if (_gdk_win32_tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
+          gdk_winpointer_should_forward_message (msg))
+        {
+          return_val = FALSE;
+          break;
+        }
+
+      if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
+        {
+          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          pen_touch_input = TRUE;
+          last_digitizer_time = msg->time;
+        }
+
+      if (pointer_grab != NULL &&
+          !pointer_grab->implicit &&
+          !pointer_grab->owner_events)
+        g_set_object (&window, pointer_grab->native_window);
+
+      if (IS_POINTER_NEW_WPARAM (msg->wParam))
+        {
+          gdk_winpointer_input_events (display, window, NULL, msg);
+        }
+
+      *ret_valp = 0;
+      return_val = TRUE;
+      break;
+
+    case WM_POINTERLEAVE:
+      if (_gdk_win32_tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
+          gdk_winpointer_should_forward_message (msg))
+        {
+          return_val = FALSE;
+          break;
+        }
+
+      if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
+        {
+          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          pen_touch_input = TRUE;
+          last_digitizer_time = msg->time;
+        }
+
+      if (!IS_POINTER_INRANGE_WPARAM (msg->wParam))
+        {
+          gdk_winpointer_input_events (display, window, NULL, msg);
+        }
+      else if (IS_POINTER_PRIMARY_WPARAM (msg->wParam) && mouse_window != NULL)
+        {
+          GdkDevice *event_device = NULL;
+          guint32 event_time = 0;
+
+          if (gdk_winpointer_get_message_info (display, msg, &event_device, &event_time))
+            {
+              make_crossing_event(display,
+                                  event_device,
+                                  NULL,
+                                  &pen_touch_cursor_position,
+                                  event_time);
+            }
+        }
+
+      gdk_winpointer_interaction_ended (msg);
+
+      *ret_valp = 0;
       return_val = TRUE;
       break;
 
@@ -2914,6 +3197,8 @@ gdk_event_translate (MSG  *msg,
       gdk_event_set_seat (event, gdk_device_get_seat (device_manager_win32->core_pointer));
       gdk_event_set_pointer_emulated (event, FALSE);
 
+      _gdk_device_virtual_set_active (device_manager_win32->core_pointer, device_manager_win32->system_pointer);
+
       _gdk_win32_append_event (gdk_event_copy (event));
 
       /* Append the discrete version too */
@@ -2930,44 +3215,6 @@ gdk_event_translate (MSG  *msg,
       _gdk_win32_append_event (event);
 
       return_val = TRUE;
-      break;
-
-    case WM_HSCROLL:
-      /* Just print more debugging information, don't actually handle it. */
-      GDK_NOTE (EVENTS,
-		(g_print (" %s",
-			  (LOWORD (msg->wParam) == SB_ENDSCROLL ? "ENDSCROLL" :
-			   (LOWORD (msg->wParam) == SB_LEFT ? "LEFT" :
-			    (LOWORD (msg->wParam) == SB_RIGHT ? "RIGHT" :
-			     (LOWORD (msg->wParam) == SB_LINELEFT ? "LINELEFT" :
-			      (LOWORD (msg->wParam) == SB_LINERIGHT ? "LINERIGHT" :
-			       (LOWORD (msg->wParam) == SB_PAGELEFT ? "PAGELEFT" :
-				(LOWORD (msg->wParam) == SB_PAGERIGHT ? "PAGERIGHT" :
-				 (LOWORD (msg->wParam) == SB_THUMBPOSITION ? "THUMBPOSITION" :
-				  (LOWORD (msg->wParam) == SB_THUMBTRACK ? "THUMBTRACK" :
-				   "???")))))))))),
-		 (LOWORD (msg->wParam) == SB_THUMBPOSITION ||
-		  LOWORD (msg->wParam) == SB_THUMBTRACK) ?
-		 (g_print (" %d", HIWORD (msg->wParam)), 0) : 0));
-      break;
-
-    case WM_VSCROLL:
-      /* Just print more debugging information, don't actually handle it. */
-      GDK_NOTE (EVENTS,
-		(g_print (" %s",
-			  (LOWORD (msg->wParam) == SB_ENDSCROLL ? "ENDSCROLL" :
-			   (LOWORD (msg->wParam) == SB_BOTTOM ? "BOTTOM" :
-			    (LOWORD (msg->wParam) == SB_TOP ? "TOP" :
-			     (LOWORD (msg->wParam) == SB_LINEDOWN ? "LINDOWN" :
-			      (LOWORD (msg->wParam) == SB_LINEUP ? "LINEUP" :
-			       (LOWORD (msg->wParam) == SB_PAGEDOWN ? "PAGEDOWN" :
-				(LOWORD (msg->wParam) == SB_PAGEUP ? "PAGEUP" :
-				 (LOWORD (msg->wParam) == SB_THUMBPOSITION ? "THUMBPOSITION" :
-				  (LOWORD (msg->wParam) == SB_THUMBTRACK ? "THUMBTRACK" :
-				   "???")))))))))),
-		 (LOWORD (msg->wParam) == SB_THUMBPOSITION ||
-		  LOWORD (msg->wParam) == SB_THUMBTRACK) ?
-		 (g_print (" %d", HIWORD (msg->wParam)), 0) : 0));
       break;
 
      case WM_MOUSEACTIVATE:
@@ -2987,6 +3234,17 @@ gdk_event_translate (MSG  *msg,
        }
 
        break;
+
+    case WM_POINTERACTIVATE:
+      if (gdk_window_get_window_type (window) == GDK_WINDOW_TEMP ||
+          !window->accept_focus ||
+          _gdk_modal_blocked (gdk_window_get_toplevel (window)))
+        {
+          *ret_valp = PA_NOACTIVATE;
+          return_val = TRUE;
+        }
+
+      break;
 
     case WM_KILLFOCUS:
       if (keyboard_grab != NULL &&
@@ -3566,6 +3824,14 @@ gdk_event_translate (MSG  *msg,
       return_val = TRUE;
       break;
 
+    case WM_DESTROY:
+      /* we have to call RemoveProp before the window is destroyed */
+      if (_gdk_win32_tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER)
+        gdk_winpointer_finalize_window (window);
+
+      return_val = FALSE;
+      break;
+
     case WM_NCDESTROY:
       if ((pointer_grab != NULL && pointer_grab -> window == window) ||
           (keyboard_grab && keyboard_grab -> window == window))
@@ -3735,7 +4001,10 @@ gdk_event_translate (MSG  *msg,
        * instead
        */
       if (LOWORD(msg->wParam) != WA_INACTIVE)
-	_gdk_input_set_tablet_active ();
+        {
+          if (_gdk_win32_tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINTAB)
+            _gdk_wintab_set_tablet_active ();
+        }
       break;
 
     case WM_ACTIVATEAPP:
@@ -3775,16 +4044,29 @@ gdk_event_translate (MSG  *msg,
 				 HIWORD (msg->lParam)));
       /* Fall through */
     wintab:
+      if (_gdk_win32_tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINTAB)
+        break;
 
       event = gdk_event_new (GDK_NOTHING);
       event->any.window = window;
       g_object_ref (window);
 
-      if (gdk_input_other_event (display, event, msg, window))
+      if (gdk_wintab_input_events (display, event, msg, window))
 	_gdk_win32_append_event (event);
       else
 	gdk_event_free (event);
 
+      break;
+
+    case WM_TABLET_QUERYSYSTEMGESTURESTATUS:
+
+      *ret_valp = TABLET_DISABLE_PRESSANDHOLD |
+                  TABLET_DISABLE_PENTAPFEEDBACK |
+                  TABLET_DISABLE_PENBARRELFEEDBACK |
+                  TABLET_DISABLE_FLICKS |
+                  TABLET_DISABLE_FLICKFALLBACKKEYS;
+
+      return_val = TRUE;
       break;
     }
 
