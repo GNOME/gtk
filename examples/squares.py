@@ -1,4 +1,4 @@
-#!/usr/bin/env -S GI_TYPELIB_PATH=${PWD}/build/gtk:${GI_TYPELIB_PATH} LD_PRELOAD=${PWD}/build/gtk/libgtk-4.so python3
+#!/usr/bin/env -S GI_TYPELIB_PATH=${PWD}/build/gtk:${GI_TYPELIB_PATH} LD_PRELOAD=${LD_PRELOAD}:${PWD}/build/gtk/libgtk-4.so python3
 
 import gi
 
