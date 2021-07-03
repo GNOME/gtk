@@ -46,7 +46,8 @@ display, unless specified otherwise.
 <para>
 <command>gtk4-launch</command> takes at least one argument, the name of
 the application to launch. The name should match application desktop file name,
-as residing in /usr/share/application, with or without the '.desktop' suffix.
+as residing in the applications subdirectories of the XDG data directories, with
+or without the '.desktop' suffix.
 </para>
 <para>
 If called with more than one argument, the rest of them besides the application
@@ -67,6 +68,16 @@ application.
     <varlistentry>
     <term><option>--version</option></term>
       <listitem><para>Prints the program version and exits.</para></listitem>
+    </varlistentry>
+  </variablelist>
+</refsect1>
+
+<refsect1><title>Environment</title>
+  <para>Some environment variables affect the behavior of <command>gtk4-launch</command>.</para>
+  <variablelist>
+    <varlistentry>
+    <term><option>XDG_DATA_HOME</option>, <option>XDG_DATA_DIRS</option></term>
+      <listitem><para>The environment variables specifying the XDG dta directories.</para></listitem>
     </varlistentry>
   </variablelist>
 </refsect1>
