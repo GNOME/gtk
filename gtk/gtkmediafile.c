@@ -72,7 +72,7 @@ gtk_media_file_default_open (GtkMediaFile *self)
 static void
 gtk_media_file_default_close (GtkMediaFile *self)
 {
-  gtk_media_stream_unset_prepared (GTK_MEDIA_STREAM (self));
+  gtk_media_stream_stream_unprepared (GTK_MEDIA_STREAM (self));
 }
 
 static void

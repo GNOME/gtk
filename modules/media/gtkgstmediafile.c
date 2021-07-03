@@ -137,11 +137,11 @@ gtk_gst_media_file_ensure_prepared (GtkGstMediaFile *self)
   media_info = gst_player_get_media_info (self->player);
   if (media_info)
     {
-      gtk_media_stream_set_prepared (GTK_MEDIA_STREAM (self),
-                                     gst_player_media_info_get_audio_streams (media_info) != NULL,
-                                     gst_player_media_info_get_video_streams (media_info) != NULL,
-                                     gst_player_media_info_is_seekable (media_info),
-                                     FROM_GST_TIME (gst_player_media_info_get_duration (media_info)));
+      gtk_media_stream_stream_prepared (GTK_MEDIA_STREAM (self),
+                                        gst_player_media_info_get_audio_streams (media_info) != NULL,
+                                        gst_player_media_info_get_video_streams (media_info) != NULL,
+                                        gst_player_media_info_is_seekable (media_info),
+                                        FROM_GST_TIME (gst_player_media_info_get_duration (media_info)));
 
       g_object_unref (media_info);
     }
@@ -152,11 +152,11 @@ gtk_gst_media_file_ensure_prepared (GtkGstMediaFile *self)
        *
        * Only for seeking we can't do a thing, because with 0 duration we can't seek anywhere.
        */
-      gtk_media_stream_set_prepared (GTK_MEDIA_STREAM (self),
-                                     TRUE,
-                                     TRUE,
-                                     FALSE,
-                                     0);
+      gtk_media_stream_stream_prepared (GTK_MEDIA_STREAM (self),
+                                        TRUE,
+                                        TRUE,
+                                        FALSE,
+                                        0);
     }
 }
 
@@ -208,7 +208,7 @@ gtk_gst_media_file_end_of_stream_cb (GstPlayer       *player,
       return;
     }
 
-  gtk_media_stream_set_ended (GTK_MEDIA_STREAM (self));
+  gtk_media_stream_stream_ended (GTK_MEDIA_STREAM (self));
 }
 
 static void

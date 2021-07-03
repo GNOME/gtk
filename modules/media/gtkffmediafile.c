@@ -553,13 +553,13 @@ gtk_ff_media_file_open (GtkMediaFile *file)
       return;
     }
 
-  gtk_media_stream_set_prepared (GTK_MEDIA_STREAM (video),
-                                 FALSE,
-                                 video->codec_ctx != NULL,
-                                 TRUE,
-                                 video->format_ctx->duration != AV_NOPTS_VALUE
-                                 ? av_rescale (video->format_ctx->duration, G_USEC_PER_SEC, AV_TIME_BASE)
-                                 : 0);
+  gtk_media_stream_stream_prepared (GTK_MEDIA_STREAM (video),
+                                    FALSE,
+                                    video->codec_ctx != NULL,
+                                    TRUE,
+                                    video->format_ctx->duration != AV_NOPTS_VALUE
+                                      ? av_rescale (video->format_ctx->duration, G_USEC_PER_SEC, AV_TIME_BASE)
+                                      : 0);
 
   gdk_paintable_invalidate_size (GDK_PAINTABLE (video));
 
@@ -632,7 +632,7 @@ gtk_ff_media_file_next_frame_cb (gpointer data)
       if (!gtk_media_stream_get_loop (GTK_MEDIA_STREAM (video)) ||
           !gtk_ff_media_file_restart (video))
         {
-          gtk_media_stream_set_ended (GTK_MEDIA_STREAM (video));
+          gtk_media_stream_stream_ended (GTK_MEDIA_STREAM (video));
           return G_SOURCE_REMOVE;
         }
 
@@ -733,7 +733,7 @@ gtk_ff_media_file_seek (GtkMediaStream *stream,
     {
       gtk_ff_media_file_pause (stream);
       if (!gtk_ff_media_file_play (stream))
-        gtk_media_stream_set_ended (stream);
+        gtk_media_stream_stream_ended (stream);
     }
 }
 
