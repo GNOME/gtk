@@ -5444,6 +5444,7 @@ gtk_file_chooser_widget_get_files (GtkFileChooser *chooser)
         goto file_entry;
     }
   else if (impl->location_entry &&
+           current_focus &&
            (current_focus == impl->location_entry ||
             gtk_widget_is_ancestor (current_focus, impl->location_entry)))
     {
