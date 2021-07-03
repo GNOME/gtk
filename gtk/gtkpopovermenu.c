@@ -36,6 +36,8 @@
 #include "gtkshortcutmanager.h"
 #include "gtkshortcutcontroller.h"
 #include "gtkbuildable.h"
+#include "gtkscrolledwindow.h"
+#include "gtkviewport.h"
 
 
 /**
@@ -299,16 +301,23 @@ leave_cb (GtkEventController *controller,
 static void
 gtk_popover_menu_init (GtkPopoverMenu *popover)
 {
+  GtkWidget *sw;
   GtkWidget *stack;
   GtkEventController *controller;
   GtkEventController **controllers;
   guint n_controllers, i;
 
+  sw = gtk_scrolled_window_new ();
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_propagate_natural_width (GTK_SCROLLED_WINDOW (sw), TRUE);
+  gtk_scrolled_window_set_propagate_natural_height (GTK_SCROLLED_WINDOW (sw), TRUE);
+  gtk_popover_set_child (GTK_POPOVER (popover), sw);
+
   stack = gtk_stack_new ();
   gtk_stack_set_vhomogeneous (GTK_STACK (stack), FALSE);
   gtk_stack_set_transition_type (GTK_STACK (stack), GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT);
   gtk_stack_set_interpolate_size (GTK_STACK (stack), TRUE);
-  gtk_popover_set_child (GTK_POPOVER (popover), stack);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), stack);
   g_signal_connect (stack, "notify::visible-child-name",
                     G_CALLBACK (visible_submenu_changed), popover);
 
@@ -334,6 +343,16 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
 
   gtk_popover_disable_auto_mnemonics (GTK_POPOVER (popover));
   gtk_popover_set_cascade_popdown (GTK_POPOVER (popover), TRUE);
+}
+
+GtkWidget *
+gtk_popover_menu_get_stack (GtkPopoverMenu *menu)
+{
+  GtkWidget *sw = gtk_popover_get_child (GTK_POPOVER (menu));
+  GtkWidget *vp = gtk_scrolled_window_get_child (GTK_SCROLLED_WINDOW (sw));
+  GtkWidget *stack = gtk_viewport_get_child (GTK_VIEWPORT (vp));
+
+  return stack;
 }
 
 static void
@@ -372,16 +391,16 @@ gtk_popover_menu_get_property (GObject    *object,
                                GValue     *value,
                                GParamSpec *pspec)
 {
-  GtkWidget *stack = gtk_popover_get_child (GTK_POPOVER (object));
+  GtkPopoverMenu *menu = GTK_POPOVER_MENU (object);
 
   switch (property_id)
     {
     case PROP_VISIBLE_SUBMENU:
-      g_value_set_string (value, gtk_stack_get_visible_child_name (GTK_STACK (stack)));
+      g_value_set_string (value, gtk_stack_get_visible_child_name (GTK_STACK (gtk_popover_menu_get_stack (menu))));
       break;
 
     case PROP_MENU_MODEL:
-      g_value_set_object (value, gtk_popover_menu_get_menu_model (GTK_POPOVER_MENU (object)));
+      g_value_set_object (value, gtk_popover_menu_get_menu_model (menu));
       break;
 
     default:
@@ -396,16 +415,16 @@ gtk_popover_menu_set_property (GObject      *object,
                                const GValue *value,
                                GParamSpec   *pspec)
 {
-  GtkWidget *stack = gtk_popover_get_child (GTK_POPOVER (object));
+  GtkPopoverMenu *menu = GTK_POPOVER_MENU (object);
 
   switch (property_id)
     {
     case PROP_VISIBLE_SUBMENU:
-      gtk_stack_set_visible_child_name (GTK_STACK (stack), g_value_get_string (value));
+      gtk_stack_set_visible_child_name (GTK_STACK (gtk_popover_menu_get_stack (menu)), g_value_get_string (value));
       break;
 
     case PROP_MENU_MODEL:
-      gtk_popover_menu_set_menu_model (GTK_POPOVER_MENU (object), g_value_get_object (value));
+      gtk_popover_menu_set_menu_model (menu, g_value_get_object (value));
       break;
 
     default:
@@ -676,7 +695,7 @@ gtk_popover_menu_open_submenu (GtkPopoverMenu *popover,
 
   g_return_if_fail (GTK_IS_POPOVER_MENU (popover));
 
-  stack = gtk_popover_get_child (GTK_POPOVER (popover));
+  stack = gtk_popover_menu_get_stack (popover);
   gtk_stack_set_visible_child_name (GTK_STACK (stack), name);
 }
 
@@ -685,7 +704,7 @@ gtk_popover_menu_add_submenu (GtkPopoverMenu *popover,
                               GtkWidget      *submenu,
                               const char     *name)
 {
-  GtkWidget *stack = gtk_popover_get_child (GTK_POPOVER (popover));
+  GtkWidget *stack = gtk_popover_menu_get_stack (popover);
   gtk_stack_add_named (GTK_STACK (stack), submenu, name);
 }
 
@@ -773,7 +792,7 @@ gtk_popover_menu_set_menu_model (GtkPopoverMenu *popover,
       GtkWidget *stack;
       GtkWidget *child;
 
-      stack = gtk_popover_get_child (GTK_POPOVER (popover));
+      stack = gtk_popover_menu_get_stack (popover);
       while ((child = gtk_widget_get_first_child (stack)))
         gtk_stack_remove (GTK_STACK (stack), child);
 
