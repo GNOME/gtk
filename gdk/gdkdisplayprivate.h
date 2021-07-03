@@ -102,11 +102,6 @@ struct _GdkDisplay
 
   guint vulkan_refcount;
 #endif /* GDK_RENDERING_VULKAN */
-  guint rgba : 1;
-  guint composited : 1;
-  guint input_shapes : 1;
-
-  GdkDebugFlags debug_flags;
 
   GList *seats;
 };

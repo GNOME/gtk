@@ -77,6 +77,16 @@ enum {
   LAST_SIGNAL
 };
 
+typedef struct _GdkDisplayPrivate GdkDisplayPrivate;
+
+struct _GdkDisplayPrivate {
+  guint rgba : 1;
+  guint composited : 1;
+  guint input_shapes : 1;
+
+  GdkDebugFlags debug_flags;
+};
+
 static void gdk_display_dispose     (GObject         *object);
 static void gdk_display_finalize    (GObject         *object);
 
@@ -85,7 +95,7 @@ static GdkAppLaunchContext *gdk_display_real_get_app_launch_context (GdkDisplay 
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GdkDisplay, gdk_display, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GdkDisplay, gdk_display, G_TYPE_OBJECT)
 
 static void
 gdk_display_get_property (GObject    *object,
@@ -294,6 +304,8 @@ free_device_grabs_foreach (gpointer key,
 static void
 gdk_display_init (GdkDisplay *display)
 {
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (display);
+
   display->double_click_time = 250;
   display->double_click_distance = 5;
 
@@ -304,11 +316,11 @@ gdk_display_init (GdkDisplay *display)
 
   g_queue_init (&display->queued_events);
 
-  display->debug_flags = _gdk_debug_flags;
+  priv->debug_flags = _gdk_debug_flags;
 
-  display->composited = TRUE;
-  display->rgba = TRUE;
-  display->input_shapes = TRUE;
+  priv->composited = TRUE;
+  priv->rgba = TRUE;
+  priv->input_shapes = TRUE;
 }
 
 static void
@@ -998,21 +1010,25 @@ gdk_display_get_primary_clipboard (GdkDisplay *display)
 gboolean
 gdk_display_supports_input_shapes (GdkDisplay *display)
 {
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (display);
+
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
 
-  return display->input_shapes;
+  return priv->input_shapes;
 }
 
 void
 gdk_display_set_input_shapes (GdkDisplay *display,
                               gboolean    input_shapes)
 {
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (display);
+
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
-  if (display->input_shapes == input_shapes)
+  if (priv->input_shapes == input_shapes)
     return;
 
-  display->input_shapes = input_shapes;
+  priv->input_shapes = input_shapes;
 
   g_object_notify_by_pspec (G_OBJECT (display), props[PROP_INPUT_SHAPES]);
 }
@@ -1175,14 +1191,18 @@ gdk_display_make_gl_context_current (GdkDisplay   *display,
 GdkDebugFlags
 gdk_display_get_debug_flags (GdkDisplay *display)
 {
-  return display ? display->debug_flags : _gdk_debug_flags;
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (display);
+
+  return display ? priv->debug_flags : _gdk_debug_flags;
 }
 
 void
 gdk_display_set_debug_flags (GdkDisplay    *display,
                              GdkDebugFlags  flags)
 {
-  display->debug_flags = flags;
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (display);
+
+  priv->debug_flags = flags;
 }
 
 /**
@@ -1207,21 +1227,25 @@ gdk_display_set_debug_flags (GdkDisplay    *display,
 gboolean
 gdk_display_is_composited (GdkDisplay *display)
 {
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (display);
+
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
 
-  return display->composited;
+  return priv->composited;
 }
 
 void
 gdk_display_set_composited (GdkDisplay *display,
                             gboolean    composited)
 {
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (display);
+
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
-  if (display->composited == composited)
+  if (priv->composited == composited)
     return;
 
-  display->composited = composited;
+  priv->composited = composited;
 
   g_object_notify_by_pspec (G_OBJECT (display), props[PROP_COMPOSITED]);
 }
@@ -1248,21 +1272,25 @@ gdk_display_set_composited (GdkDisplay *display,
 gboolean
 gdk_display_is_rgba (GdkDisplay *display)
 {
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (display);
+
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
 
-  return display->rgba;
+  return priv->rgba;
 }
 
 void
 gdk_display_set_rgba (GdkDisplay *display,
                       gboolean    rgba)
 {
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (display);
+
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
-  if (display->rgba == rgba)
+  if (priv->rgba == rgba)
     return;
 
-  display->rgba = rgba;
+  priv->rgba = rgba;
 
   g_object_notify_by_pspec (G_OBJECT (display), props[PROP_RGBA]);
 }
