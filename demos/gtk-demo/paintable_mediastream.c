@@ -150,7 +150,7 @@ gtk_nuclear_media_stream_step (gpointer data)
    * call our pause function to pause the stream.
    */
   if (nuclear->progress >= DURATION)
-    gtk_media_stream_set_ended (GTK_MEDIA_STREAM (nuclear));
+    gtk_media_stream_stream_ended (GTK_MEDIA_STREAM (nuclear));
 
   /* The timeout function is removed by the pause function,
    * so we can just always return this value.
@@ -267,11 +267,11 @@ gtk_nuclear_media_stream_init (GtkNuclearMediaStream *nuclear)
    * However, media streams need to tell GTK once they are initialized,
    * so we do that here.
    */
-  gtk_media_stream_set_prepared (GTK_MEDIA_STREAM (nuclear),
-                                 FALSE,
-                                 TRUE,
-                                 TRUE,
-                                 DURATION);
+  gtk_media_stream_stream_prepared (GTK_MEDIA_STREAM (nuclear),
+                                    FALSE,
+                                    TRUE,
+                                    TRUE,
+                                    DURATION);
 }
 
 /* And finally, we add the simple constructor we declared in the header. */

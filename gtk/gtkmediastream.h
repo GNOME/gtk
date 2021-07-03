@@ -116,31 +116,31 @@ void                    gtk_media_stream_unrealize              (GtkMediaStream 
                                                                  GdkSurface      *surface);
 
 /* for implementations only */
-GDK_DEPRECATED_IN_4_4_FOR(gtk_media_stream_set_prepared)
+GDK_DEPRECATED_IN_4_4_FOR(gtk_media_stream_stream_prepared)
 void                    gtk_media_stream_prepared               (GtkMediaStream *self,
                                                                  gboolean        has_audio,
                                                                  gboolean        has_video,
                                                                  gboolean        seekable,
                                                                  gint64          duration);
-GDK_DEPRECATED_IN_4_4_FOR(gtk_media_stream_unset_prepared)
+GDK_DEPRECATED_IN_4_4_FOR(gtk_media_stream_stream_unprepared)
 void                    gtk_media_stream_unprepared             (GtkMediaStream *self);
 
 GDK_AVAILABLE_IN_4_4
-void                    gtk_media_stream_set_prepared           (GtkMediaStream *self,
+void                    gtk_media_stream_stream_prepared        (GtkMediaStream *self,
                                                                  gboolean        has_audio,
                                                                  gboolean        has_video,
                                                                  gboolean        seekable,
                                                                  gint64          duration);
 GDK_AVAILABLE_IN_4_4
-void                    gtk_media_stream_unset_prepared         (GtkMediaStream *self);
+void                    gtk_media_stream_stream_unprepared      (GtkMediaStream *self);
 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_media_stream_update                 (GtkMediaStream *self,
                                                                  gint64          timestamp);
-GDK_DEPRECATED_IN_4_4_FOR(gtk_media_stream_set_ended)
+GDK_DEPRECATED_IN_4_4_FOR(gtk_media_stream_stream_ended)
 void                    gtk_media_stream_ended                  (GtkMediaStream *self);
 GDK_AVAILABLE_IN_4_4
-void                    gtk_media_stream_set_ended              (GtkMediaStream *self);
+void                    gtk_media_stream_stream_ended           (GtkMediaStream *self);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_media_stream_seek_success           (GtkMediaStream *self);
 GDK_AVAILABLE_IN_ALL
