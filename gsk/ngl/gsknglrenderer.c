@@ -21,7 +21,7 @@
 #include "config.h"
 
 #include <gdk/gdkprofilerprivate.h>
-#include <gdk/gdksurfaceprivate.h>
+#include <gdk/gdkdisplayprivate.h>
 #include <gsk/gskdebugprivate.h>
 #include <gsk/gskrendererprivate.h>
 
@@ -105,7 +105,7 @@ gsk_ngl_renderer_realize (GskRenderer  *renderer,
       !gdk_gl_context_realize (context, error))
     goto failure;
 
-  if (!(shared_context = gdk_surface_get_shared_data_gl_context (surface)))
+  if (!(shared_context = gdk_display_get_gl_context (gdk_surface_get_display (surface))))
     {
       g_set_error (error,
                    GDK_GL_ERROR,

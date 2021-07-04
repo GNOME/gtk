@@ -59,7 +59,7 @@ struct _GdkX11GLContextClass
   void (* bind_for_frame_fence) (GdkX11GLContext *self);
 };
 
-gboolean                gdk_x11_display_init_gl                 (GdkX11Display *self,
+gboolean                gdk_x11_display_init_gl_backend         (GdkX11Display *self,
                                                                  Visual       **out_visual,
                                                                  int           *out_depth,
                                                                  GError       **error);

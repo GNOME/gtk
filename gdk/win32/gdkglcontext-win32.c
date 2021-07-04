@@ -906,8 +906,6 @@ static gboolean
 gdk_win32_gl_context_realize (GdkGLContext *context,
                               GError **error)
 {
-  GdkGLContext *share = gdk_gl_context_get_shared_context (context);
-  GdkGLContext *shared_data_context;
   GdkWin32GLContext *context_win32 = GDK_WIN32_GL_CONTEXT (context);
 
   gboolean debug_bit, compat_bit, legacy_bit;
@@ -922,11 +920,11 @@ gdk_win32_gl_context_realize (GdkGLContext *context,
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
+  GdkGLContext *share = gdk_display_get_gl_context (display);
 
   gdk_gl_context_get_required_version (context, &major, &minor);
   debug_bit = gdk_gl_context_get_debug_enabled (context);
   compat_bit = gdk_gl_context_get_forward_compatible (context);
-  shared_data_context = gdk_surface_get_shared_data_gl_context (surface);
 
   /*
    * A legacy context cannot be shared with core profile ones, so this means we
@@ -976,7 +974,7 @@ gdk_win32_gl_context_realize (GdkGLContext *context,
                           legacy_bit ? "yes" : "no"));
 
       hglrc = _create_gl_context (context_win32->gl_hdc,
-                                  share ? share : shared_data_context,
+                                  share,
                                   flags,
                                   major,
                                   minor,
@@ -1018,7 +1016,7 @@ gdk_win32_gl_context_realize (GdkGLContext *context,
 
       ctx = _create_egl_context (win32_display->egl_disp,
                                  context_win32->egl_config,
-                                 share ? share : shared_data_context,
+                                 share,
                                  flags,
                                  major,
                                  minor,

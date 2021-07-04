@@ -80,6 +80,13 @@ enum {
 typedef struct _GdkDisplayPrivate GdkDisplayPrivate;
 
 struct _GdkDisplayPrivate {
+  /* The base context that all other contexts inherit from.
+   * This context is never exposed to public API and is
+   * allowed to have a %NULL surface.
+   */
+  GdkGLContext *gl_context;
+  GError *gl_error;
+
   guint rgba : 1;
   guint composited : 1;
   guint input_shapes : 1;
@@ -129,10 +136,14 @@ gdk_display_real_make_default (GdkDisplay *display)
 {
 }
 
-static void
-gdk_display_real_opened (GdkDisplay *display)
+static GdkGLContext *
+gdk_display_default_init_gl (GdkDisplay  *display,
+                             GError     **error)
 {
-  _gdk_display_manager_add_display (gdk_display_manager_get (), display);
+  g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
+                       _("The current backend does not support OpenGL"));
+
+  return NULL;
 }
 
 static GdkSeat *
@@ -145,6 +156,12 @@ gdk_display_real_get_default_seat (GdkDisplay *display)
 }
 
 static void
+gdk_display_real_opened (GdkDisplay *display)
+{
+  _gdk_display_manager_add_display (gdk_display_manager_get (), display);
+}
+
+static void
 gdk_display_class_init (GdkDisplayClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -153,10 +170,11 @@ gdk_display_class_init (GdkDisplayClass *class)
   object_class->dispose = gdk_display_dispose;
   object_class->get_property = gdk_display_get_property;
 
-  class->get_app_launch_context = gdk_display_real_get_app_launch_context;
-  class->opened = gdk_display_real_opened;
   class->make_default = gdk_display_real_make_default;
+  class->get_app_launch_context = gdk_display_real_get_app_launch_context;
+  class->init_gl = gdk_display_default_init_gl;
   class->get_default_seat = gdk_display_real_get_default_seat;
+  class->opened = gdk_display_real_opened;
 
   /**
    * GdkDisplay:composited: (attributes org.gtk.Property.get=gdk_display_is_composited)
@@ -327,10 +345,14 @@ static void
 gdk_display_dispose (GObject *object)
 {
   GdkDisplay *display = GDK_DISPLAY (object);
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (display);
 
   _gdk_display_manager_remove_display (gdk_display_manager_get (), display);
 
   g_queue_clear (&display->queued_events);
+
+  g_clear_object (&priv->gl_context);
+  g_clear_error (&priv->gl_error);
 
   G_OBJECT_CLASS (gdk_display_parent_class)->dispose (object);
 }
@@ -1171,6 +1193,109 @@ gdk_display_get_keymap (GdkDisplay *display)
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   return GDK_DISPLAY_GET_CLASS (display)->get_keymap (display);
+}
+
+static void
+gdk_display_init_gl (GdkDisplay *self)
+{
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
+  GdkGLContext *context;
+
+  if (GDK_DISPLAY_DEBUG_CHECK (self, GL_DISABLE))
+    {
+      g_set_error_literal (&priv->gl_error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("GL support disabled via GDK_DEBUG"));
+      return;
+    }
+
+  context = GDK_DISPLAY_GET_CLASS (self)->init_gl (self, &priv->gl_error);
+  if (context == NULL)
+    return;
+
+  if (!gdk_gl_context_realize (context, &priv->gl_error))
+    {
+      g_object_unref (context);
+      return;
+    }
+
+  /* Only assign after realize, so GdkGLContext::realize() can use
+   * gdk_display_get_gl_context() == NULL to differentiate between
+   * the display's context and any other context.
+   */
+  priv->gl_context = context;
+}
+
+/**
+ * gdk_display_prepare_gl:
+ * @self: a `GdkDisplay`
+ * @error: return location for a `GError`
+ *
+ * Checks that OpenGL is available for @self and ensures that it is
+ * properly initialized.
+ * When this fails, an @error will be set describing the error and this
+ * function returns %FALSE.
+ *
+ * Note that even if this function succeeds, creating a `GdkGLContext`
+ * may still fail.
+ *
+ * This function is idempotent. Calling it multiple times will just 
+ * return the same value or error.
+ *
+ * You never need to call this function, GDK will call it automatically
+ * as needed. But you can use it as a check when setting up code that
+ * might make use of OpenGL.
+ *
+ * Returns: %TRUE if the display supports OpenGL
+ *
+ * Since: 4.4
+ **/
+gboolean
+gdk_display_prepare_gl (GdkDisplay  *self,
+                        GError     **error)
+{
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (self), FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  for (;;)
+    {
+      if (priv->gl_context)
+        return TRUE;
+
+      if (priv->gl_error != NULL)
+        {
+          if (error)
+            *error = g_error_copy (priv->gl_error);
+          return FALSE;
+        }
+
+      gdk_display_init_gl (self);
+
+      /* try again */
+    }
+}
+
+/*< private >
+ * gdk_display_get_gl_context:
+ * @self: the `GdkDisplay`
+ *
+ * Gets the GL context returned from [vfunc@Gdk.Display.init_gl]
+ * previously.
+ *
+ * If that function has not been called yet or did fail, %NULL is
+ * returned.
+ * Call [method@Gdk.Display.prepare_gl] to avoid this.
+ *
+ * Returns: The `GdkGLContext`
+ */
+GdkGLContext *
+gdk_display_get_gl_context (GdkDisplay *self)
+{
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
+
+  return priv->gl_context;
 }
 
 /*< private >

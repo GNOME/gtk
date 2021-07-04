@@ -637,6 +637,13 @@ gdk_macos_display_load_clipboard (GdkMacosDisplay *self)
   GDK_DISPLAY (self)->clipboard = _gdk_macos_clipboard_new (self);
 }
 
+static GdkGLContext *
+gdk_macos_display_init_gl (GdkDisplay  *display,
+                           GError     **error)
+{
+  return _gdk_macos_gl_context_new (display, NULL, FALSE, NULL, error);
+}
+
 static gboolean
 gdk_macos_display_make_gl_context_current (GdkDisplay   *display,
                                            GdkGLContext *gl_context)
@@ -695,6 +702,7 @@ gdk_macos_display_class_init (GdkMacosDisplayClass *klass)
   display_class->get_name = gdk_macos_display_get_name;
   display_class->get_setting = gdk_macos_display_get_setting;
   display_class->has_pending = gdk_macos_display_has_pending;
+  display_class->init_gl = gdk_macos_display_init_gl;
   display_class->make_gl_context_current = gdk_macos_display_make_gl_context_current;
   display_class->notify_startup_complete = gdk_macos_display_notify_startup_complete;
   display_class->queue_events = gdk_macos_display_queue_events;

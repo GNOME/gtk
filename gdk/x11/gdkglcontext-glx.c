@@ -503,20 +503,18 @@ gdk_x11_gl_context_glx_realize (GdkGLContext  *context,
   GdkDisplay *display;
   GdkX11GLContextGLX *context_glx;
   Display *dpy;
+  GdkSurface *surface;
   DrawableInfo *info;
   GdkGLContext *share;
-  GdkGLContext *shared_data_context;
-  GdkSurface *surface;
   gboolean debug_bit, compat_bit, legacy_bit, es_bit;
   int major, minor, flags;
 
-  surface = gdk_gl_context_get_surface (context);
-  display = gdk_surface_get_display (surface);
+  display = gdk_gl_context_get_display (context);
   dpy = gdk_x11_display_get_xdisplay (display);
   context_glx = GDK_X11_GL_CONTEXT_GLX (context);
   display_x11 = GDK_X11_DISPLAY (display);
-  share = gdk_gl_context_get_shared_context (context);
-  shared_data_context = gdk_surface_get_shared_data_gl_context (surface);
+  share = gdk_display_get_gl_context (display);
+  surface = gdk_gl_context_get_surface (context);
 
   gdk_gl_context_get_required_version (context, &major, &minor);
   debug_bit = gdk_gl_context_get_debug_enabled (context);
@@ -556,7 +554,7 @@ gdk_x11_gl_context_glx_realize (GdkGLContext  *context,
   if (legacy_bit && !GDK_X11_DISPLAY (display)->has_glx_create_context)
     {
       GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Creating legacy GL context on request"));
-      context_glx->glx_context = create_legacy_context (display, display_x11->glx_config, share ? share : shared_data_context);
+      context_glx->glx_context = create_legacy_context (display, display_x11->glx_config, share);
     }
   else
     {
@@ -581,14 +579,14 @@ gdk_x11_gl_context_glx_realize (GdkGLContext  *context,
       GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Creating GL3 context"));
       context_glx->glx_context = create_gl3_context (display,
                                                      display_x11->glx_config,
-                                                     share ? share : shared_data_context,
+                                                     share,
                                                      profile, flags, major, minor);
 
       /* Fall back to legacy in case the GL3 context creation failed */
       if (context_glx->glx_context == NULL)
         {
           GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Creating fallback legacy context"));
-          context_glx->glx_context = create_legacy_context (display, display_x11->glx_config, share ? share : shared_data_context);
+          context_glx->glx_context = create_legacy_context (display, display_x11->glx_config, share);
           legacy_bit = TRUE;
           es_bit = FALSE;
         }

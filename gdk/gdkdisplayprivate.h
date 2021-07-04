@@ -140,6 +140,8 @@ struct _GdkDisplayClass
 
   GdkKeymap *                (*get_keymap)         (GdkDisplay    *display);
 
+  GdkGLContext *         (*init_gl)                    (GdkDisplay        *display,
+                                                        GError           **error);
   gboolean               (*make_gl_context_current)    (GdkDisplay        *display,
                                                         GdkGLContext      *context);
 
@@ -206,6 +208,7 @@ GdkSurface *        gdk_display_create_surface        (GdkDisplay       *display
                                                        int               width,
                                                        int               height);
 
+GdkGLContext *      gdk_display_get_gl_context        (GdkDisplay       *display);
 gboolean            gdk_display_make_gl_context_current  (GdkDisplay        *display,
                                                           GdkGLContext      *context);
 

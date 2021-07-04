@@ -44,9 +44,9 @@ struct _GdkWaylandGLContextClass
   GdkGLContextClass parent_class;
 };
 
-gboolean        gdk_wayland_display_init_gl                         (GdkDisplay        *display,
+GdkGLContext *  gdk_wayland_display_init_gl                         (GdkDisplay        *display,
                                                                      GError           **error);
-GdkGLContext *  gdk_wayland_surface_create_gl_context                (GdkSurface         *surface,
+GdkGLContext *  gdk_wayland_surface_create_gl_context               (GdkSurface        *surface,
 								     gboolean           attach,
                                                                      GdkGLContext      *share,
                                                                      GError           **error);

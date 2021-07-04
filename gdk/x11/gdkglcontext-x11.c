@@ -103,10 +103,10 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
 }
 
 gboolean
-gdk_x11_display_init_gl (GdkX11Display  *self,
-                         Visual        **out_visual,
-                         int            *out_depth,
-                         GError        **error)
+gdk_x11_display_init_gl_backend (GdkX11Display  *self,
+                                 Visual        **out_visual,
+                                 int            *out_depth,
+                                 GError        **error)
 {
   GdkDisplay *display G_GNUC_UNUSED = GDK_DISPLAY (self);
 

@@ -1066,58 +1066,13 @@ gdk_surface_get_mapped (GdkSurface *surface)
 }
 
 GdkGLContext *
-gdk_surface_get_shared_data_gl_context (GdkSurface *surface)
-{
-  static int in_shared_data_creation;
-  GdkDisplay *display;
-  GdkGLContext *context;
-
-  if (in_shared_data_creation)
-    return NULL;
-
-  in_shared_data_creation = 1;
-
-  display = gdk_surface_get_display (surface);
-  context = (GdkGLContext *)g_object_get_data (G_OBJECT (display), "gdk-gl-shared-data-context");
-  if (context == NULL)
-    {
-      GError *error = NULL;
-      context = GDK_SURFACE_GET_CLASS (surface)->create_gl_context (surface, FALSE, NULL, &error);
-      if (context == NULL)
-        {
-          g_warning ("Failed to create shared context: %s", error->message);
-          g_clear_error (&error);
-        }
-
-      gdk_gl_context_realize (context, &error);
-      if (context == NULL)
-        {
-          g_warning ("Failed to realize shared context: %s", error->message);
-          g_clear_error (&error);
-        }
-
-
-      g_object_set_data (G_OBJECT (display), "gdk-gl-shared-data-context", context);
-    }
-
-  in_shared_data_creation = 0;
-
-  return context;
-}
-
-GdkGLContext *
 gdk_surface_get_paint_gl_context (GdkSurface  *surface,
-                                  GError    **error)
+                                  GError     **error)
 {
   GError *internal_error = NULL;
 
-  if (GDK_DISPLAY_DEBUG_CHECK (surface->display, GL_DISABLE))
-    {
-      g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_NOT_AVAILABLE,
-                           _("GL support disabled via GDK_DEBUG"));
-      return NULL;
-    }
+  if (!gdk_display_prepare_gl (surface->display, error))
+    return NULL;
 
   if (surface->gl_paint_context == NULL)
     {

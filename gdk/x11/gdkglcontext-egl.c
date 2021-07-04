@@ -423,19 +423,16 @@ gdk_x11_gl_context_egl_realize (GdkGLContext  *context,
   GdkX11Display *display_x11;
   GdkDisplay *display;
   GdkX11GLContextEGL *context_egl;
-  GdkGLContext *share, *shared_data_context;
-  GdkSurface *surface;
+  GdkGLContext *share;
   gboolean debug_bit, forward_bit, legacy_bit, use_es;
   int major, minor, i = 0;
   EGLint context_attrs[N_EGL_ATTRS];
 
-  surface = gdk_gl_context_get_surface (context);
-  display = gdk_surface_get_display (surface);
+  display = gdk_gl_context_get_display (context);
 
   context_egl = GDK_X11_GL_CONTEXT_EGL (context);
   display_x11 = GDK_X11_DISPLAY (display);
-  share = gdk_gl_context_get_shared_context (context);
-  shared_data_context = gdk_surface_get_shared_data_gl_context (surface);
+  share = gdk_display_get_gl_context (display);
 
   gdk_gl_context_get_required_version (context, &major, &minor);
   debug_bit = gdk_gl_context_get_debug_enabled (context);
@@ -503,9 +500,7 @@ gdk_x11_gl_context_egl_realize (GdkGLContext  *context,
                       display_x11->egl_config,
                       share != NULL
                         ? GDK_X11_GL_CONTEXT_EGL (share)->egl_context
-                        : shared_data_context != NULL
-                            ? GDK_X11_GL_CONTEXT_EGL (shared_data_context)->egl_context
-                            : EGL_NO_CONTEXT,
+                        : EGL_NO_CONTEXT,
                       context_attrs);
 
   /* If we're not asking for a GLES context, and we don't have the legacy bit set
@@ -528,9 +523,7 @@ gdk_x11_gl_context_egl_realize (GdkGLContext  *context,
                           display_x11->egl_config,
                           share != NULL
                             ? GDK_X11_GL_CONTEXT_EGL (share)->egl_context
-                            : shared_data_context != NULL
-                                ? GDK_X11_GL_CONTEXT_EGL (shared_data_context)->egl_context
-                                : EGL_NO_CONTEXT,
+                            : EGL_NO_CONTEXT,
                           context_attrs);
     }
 

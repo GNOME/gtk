@@ -369,7 +369,8 @@ gdk_macos_surface_create_gl_context (GdkSurface    *surface,
   g_assert (GDK_IS_MACOS_SURFACE (self));
   g_assert (!share || GDK_IS_GL_CONTEXT (share));
 
-  return _gdk_macos_gl_context_new (self, attached, share, error);
+  return _gdk_macos_gl_context_new ((GdkMacosDisplay *) gdk_surface_get_display (surface),
+                                    self, attached, share, error);
 }
 
 static void

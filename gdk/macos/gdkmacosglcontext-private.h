@@ -19,12 +19,14 @@
 #ifndef __GDK_MACOS_GL_CONTEXT_PRIVATE_H__
 #define __GDK_MACOS_GL_CONTEXT_PRIVATE_H__
 
+#include "gdkmacosglcontext.h"
+
 #include "gdkglcontextprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdksurface.h"
 #include "gdkinternals.h"
 
-#include "gdkmacosglcontext.h"
+#include "gdkmacosdisplay.h"
 #include "gdkmacossurface.h"
 
 #import <OpenGL/OpenGL.h>
@@ -55,7 +57,8 @@ struct _GdkMacosGLContextClass
   GdkGLContextClass parent_class;
 };
 
-GdkGLContext *_gdk_macos_gl_context_new          (GdkMacosSurface    *surface,
+GdkGLContext *_gdk_macos_gl_context_new          (GdkMacosDisplay    *display,
+                                                  GdkMacosSurface    *surface,
                                                   gboolean            attached,
                                                   GdkGLContext       *share,
                                                   GError            **error);
