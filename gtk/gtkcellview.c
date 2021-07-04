@@ -895,8 +895,8 @@ gtk_cell_view_new_with_text (const char *text)
  * @markup: the text to display in the cell view
  *
  * Creates a new `GtkCellView` widget, adds a `GtkCellRendererText`
- * to it, and makes it show @markup. The text can be
- * marked up with the [Pango text markup language][PangoMarkupFormat].
+ * to it, and makes it show @markup. The text can be marked up with
+ * the [Pango text markup language](https://docs.gtk.org/Pango/pango_markup.html).
  *
  * Returns: A newly created `GtkCellView` widget.
  */
