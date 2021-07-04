@@ -3580,7 +3580,8 @@ update_placeholder_visibility (GtkText *self)
   if (priv->placeholder)
     gtk_widget_set_child_visible (priv->placeholder,
                                   priv->preedit_length == 0 &&
-                                  gtk_entry_buffer_get_length (priv->buffer) == 0);
+                                  (priv->buffer == NULL ||
+                                   gtk_entry_buffer_get_length (priv->buffer) == 0));
 }
 
 /* GtkEntryBuffer signal handlers
@@ -6651,6 +6652,8 @@ gtk_text_set_placeholder_text (GtkText    *self,
     {
       gtk_label_set_text (GTK_LABEL (priv->placeholder), text);
     }
+
+  update_placeholder_visibility (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), text_props[PROP_PLACEHOLDER_TEXT]);
 }
