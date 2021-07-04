@@ -120,7 +120,7 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
                                use_es ? "yes" : "no"));
 
   ctx = eglCreateContext (display_wayland->egl_display,
-                          context_wayland->egl_config,
+                          display_wayland->egl_config,
                           share != NULL ? GDK_WAYLAND_GL_CONTEXT (share)->egl_context
                              : shared_data_context != NULL ? GDK_WAYLAND_GL_CONTEXT (shared_data_context)->egl_context
                                                   : EGL_NO_CONTEXT,
@@ -147,7 +147,7 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
       GDK_DISPLAY_NOTE (display, OPENGL,
                 g_message ("eglCreateContext failed, switching to OpenGL ES"));
       ctx = eglCreateContext (display_wayland->egl_display,
-                              context_wayland->egl_config,
+                              display_wayland->egl_config,
                               share != NULL ? GDK_WAYLAND_GL_CONTEXT (share)->egl_context
                                  : shared_data_context != NULL ? GDK_WAYLAND_GL_CONTEXT (shared_data_context)->egl_context
                                     : EGL_NO_CONTEXT,
@@ -177,7 +177,7 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
       GDK_DISPLAY_NOTE (display, OPENGL,
                 g_message ("eglCreateContext failed, switching to legacy"));
       ctx = eglCreateContext (display_wayland->egl_display,
-                              context_wayland->egl_config,
+                              display_wayland->egl_config,
                               share != NULL ? GDK_WAYLAND_GL_CONTEXT (share)->egl_context
                                  : shared_data_context != NULL ? GDK_WAYLAND_GL_CONTEXT (shared_data_context)->egl_context
                                     : EGL_NO_CONTEXT,
@@ -214,15 +214,13 @@ gdk_wayland_gl_context_get_damage (GdkGLContext *context)
   if (display_wayland->have_egl_buffer_age)
     {
       GdkGLContext *shared;
-      GdkWaylandGLContext *shared_wayland;
 
       shared = gdk_gl_context_get_shared_context (context);
       if (shared == NULL)
         shared = context;
-      shared_wayland = GDK_WAYLAND_GL_CONTEXT (shared);
 
       egl_surface = gdk_wayland_surface_get_egl_surface (surface,
-                                                        shared_wayland->egl_config);
+                                                         display_wayland->egl_config);
       gdk_gl_context_make_current (shared);
       eglQuerySurface (display_wayland->egl_display, egl_surface,
                        EGL_BUFFER_AGE_EXT, &buffer_age);
@@ -264,7 +262,6 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
   GdkSurface *surface = gdk_gl_context_get_surface (context);
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-  GdkWaylandGLContext *context_wayland = GDK_WAYLAND_GL_CONTEXT (context);
   EGLSurface egl_surface;
 
   GDK_DRAW_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->end_frame (draw_context, painted);
@@ -274,7 +271,7 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
   gdk_gl_context_make_current (context);
 
   egl_surface = gdk_wayland_surface_get_egl_surface (surface,
-                                                    context_wayland->egl_config);
+                                                     display_wayland->egl_config);
 
   gdk_wayland_surface_sync (surface);
   gdk_wayland_surface_request_frame (surface);
@@ -350,7 +347,7 @@ gdk_wayland_display_get_egl_display (GdkDisplay *display)
 
   g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY (display), NULL);
 
-  if (!gdk_wayland_display_init_gl (display))
+  if (!gdk_wayland_display_init_gl (display, NULL))
     return NULL;
 
   display_wayland = GDK_WAYLAND_DISPLAY (display);
@@ -395,35 +392,102 @@ out:
   return dpy;
 }
 
+#define MAX_EGL_ATTRS   30
+
+static EGLConfig
+get_eglconfig (EGLDisplay dpy)
+{
+  EGLint attrs[MAX_EGL_ATTRS];
+  EGLint count;
+  EGLConfig config;
+  int i = 0;
+
+  attrs[i++] = EGL_SURFACE_TYPE;
+  attrs[i++] = EGL_WINDOW_BIT;
+
+  attrs[i++] = EGL_COLOR_BUFFER_TYPE;
+  attrs[i++] = EGL_RGB_BUFFER;
+
+  attrs[i++] = EGL_RED_SIZE;
+  attrs[i++] = 8;
+  attrs[i++] = EGL_GREEN_SIZE;
+  attrs[i++] = 8;
+  attrs[i++] = EGL_BLUE_SIZE;
+  attrs[i++] = 8;
+  attrs[i++] = EGL_ALPHA_SIZE;
+  attrs[i++] = 8;
+
+  attrs[i++] = EGL_NONE;
+  g_assert (i < MAX_EGL_ATTRS);
+
+  /* Pick first valid configuration i guess? */
+  if (!eglChooseConfig (dpy, attrs, &config, 1, &count) || count < 1)
+    return NULL;
+
+  return config;
+}
+
+#undef MAX_EGL_ATTRS
+
 gboolean
-gdk_wayland_display_init_gl (GdkDisplay *display)
+gdk_wayland_display_init_gl (GdkDisplay  *display,
+                             GError     **error)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   EGLint major, minor;
   EGLDisplay dpy;
 
-  if (display_wayland->have_egl)
+  if (display_wayland->egl_display)
     return TRUE;
 
   dpy = get_egl_display (display_wayland);
-
   if (dpy == NULL)
-    return FALSE;
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("Failed to create EGL display"));
+      return FALSE;
+    }
 
   if (!eglInitialize (dpy, &major, &minor))
-    return FALSE;
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("Could not initialize EGL display"));
+      return FALSE;
+    }
 
   if (!eglBindAPI (EGL_OPENGL_API))
-    return FALSE;
+    {
+      eglTerminate (dpy);
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("No GL implementation is available"));
+      return FALSE;
+    }
+
+  if (!epoxy_has_egl_extension (dpy, "EGL_KHR_create_context"))
+    {
+      eglTerminate (dpy);
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_UNSUPPORTED_PROFILE,
+                           _("Core GL is not available on EGL implementation"));
+      return FALSE;
+    }
+
+  display_wayland->egl_config = get_eglconfig (dpy);
+  if (!display_wayland->egl_config)
+    {
+      eglTerminate (dpy);
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_UNSUPPORTED_FORMAT,
+                           _("No available configurations for the given pixel format"));
+      return FALSE;
+    }
 
   display_wayland->egl_display = dpy;
   display_wayland->egl_major_version = major;
   display_wayland->egl_minor_version = minor;
-
-  display_wayland->have_egl = TRUE;
-
-  display_wayland->have_egl_khr_create_context =
-    epoxy_has_egl_extension (dpy, "EGL_KHR_create_context");
 
   display_wayland->have_egl_buffer_age =
     epoxy_has_egl_extension (dpy, "EGL_EXT_buffer_age");
@@ -451,53 +515,6 @@ gdk_wayland_display_init_gl (GdkDisplay *display)
   return TRUE;
 }
 
-#define MAX_EGL_ATTRS   30
-
-static gboolean
-find_eglconfig_for_surface (GdkSurface  *surface,
-                           EGLConfig  *egl_config_out,
-                           GError    **error)
-{
-  GdkDisplay *display = gdk_surface_get_display (surface);
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-  EGLint attrs[MAX_EGL_ATTRS];
-  EGLint count;
-  EGLConfig config;
-  int i = 0;
-
-  attrs[i++] = EGL_SURFACE_TYPE;
-  attrs[i++] = EGL_WINDOW_BIT;
-
-  attrs[i++] = EGL_COLOR_BUFFER_TYPE;
-  attrs[i++] = EGL_RGB_BUFFER;
-
-  attrs[i++] = EGL_RED_SIZE;
-  attrs[i++] = 8;
-  attrs[i++] = EGL_GREEN_SIZE;
-  attrs[i++] = 8;
-  attrs[i++] = EGL_BLUE_SIZE;
-  attrs[i++] = 8;
-  attrs[i++] = EGL_ALPHA_SIZE;
-  attrs[i++] = 8;
-
-  attrs[i++] = EGL_NONE;
-  g_assert (i < MAX_EGL_ATTRS);
-
-  /* Pick first valid configuration i guess? */
-  if (!eglChooseConfig (display_wayland->egl_display, attrs, &config, 1, &count) || count < 1)
-    {
-      g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_UNSUPPORTED_FORMAT,
-                           _("No available configurations for the given pixel format"));
-      return FALSE;
-    }
-
-  g_assert (egl_config_out);
-  *egl_config_out = config;
-
-  return TRUE;
-}
-
 GdkGLContext *
 gdk_wayland_surface_create_gl_context (GdkSurface     *surface,
                                        gboolean       attached,
@@ -505,27 +522,9 @@ gdk_wayland_surface_create_gl_context (GdkSurface     *surface,
                                        GError       **error)
 {
   GdkDisplay *display = gdk_surface_get_display (surface);
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GdkWaylandGLContext *context;
-  EGLConfig config;
 
-  if (!gdk_wayland_display_init_gl (display))
-    {
-      g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_NOT_AVAILABLE,
-                           _("No GL implementation is available"));
-      return NULL;
-    }
-
-  if (!display_wayland->have_egl_khr_create_context)
-    {
-      g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_UNSUPPORTED_PROFILE,
-                           _("Core GL is not available on EGL implementation"));
-      return NULL;
-    }
-
-  if (!find_eglconfig_for_surface (surface, &config, error))
+  if (!gdk_wayland_display_init_gl (display, error))
     return NULL;
 
   context = g_object_new (GDK_TYPE_WAYLAND_GL_CONTEXT,
@@ -533,7 +532,6 @@ gdk_wayland_surface_create_gl_context (GdkSurface     *surface,
                           "shared-context", share,
                           NULL);
 
-  context->egl_config = config;
   context->is_attached = attached;
 
   return GDK_GL_CONTEXT (context);
@@ -585,14 +583,14 @@ gdk_wayland_display_make_gl_context_current (GdkDisplay   *display,
   surface = gdk_gl_context_get_surface (context);
 
   if (context_wayland->is_attached || gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)))
-    egl_surface = gdk_wayland_surface_get_egl_surface (surface, context_wayland->egl_config);
+    egl_surface = gdk_wayland_surface_get_egl_surface (surface, display_wayland->egl_config);
   else
     {
       if (display_wayland->have_egl_surfaceless_context)
         egl_surface = EGL_NO_SURFACE;
       else
         egl_surface = gdk_wayland_surface_get_dummy_egl_surface (surface,
-                                                                 context_wayland->egl_config);
+                                                                 display_wayland->egl_config);
     }
 
   if (!eglMakeCurrent (display_wayland->egl_display, egl_surface,
