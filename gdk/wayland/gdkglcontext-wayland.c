@@ -22,7 +22,9 @@
 #include "config.h"
 
 #include "gdkglcontext-wayland.h"
+
 #include "gdkdisplay-wayland.h"
+#include "gdksurface-wayland.h"
 
 #include "gdkwaylanddisplay.h"
 #include "gdkwaylandglcontext.h"
@@ -219,8 +221,7 @@ gdk_wayland_gl_context_get_damage (GdkGLContext *context)
       if (shared == NULL)
         shared = context;
 
-      egl_surface = gdk_wayland_surface_get_egl_surface (surface,
-                                                         display_wayland->egl_config);
+      egl_surface = gdk_wayland_surface_get_egl_surface (surface);
       gdk_gl_context_make_current (shared);
       eglQuerySurface (display_wayland->egl_display, egl_surface,
                        EGL_BUFFER_AGE_EXT, &buffer_age);
@@ -270,9 +271,7 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
 
   gdk_gl_context_make_current (context);
 
-  egl_surface = gdk_wayland_surface_get_egl_surface (surface,
-                                                     display_wayland->egl_config);
-
+  egl_surface = gdk_wayland_surface_get_egl_surface (surface);
   gdk_wayland_surface_sync (surface);
   gdk_wayland_surface_request_frame (surface);
 
@@ -583,7 +582,7 @@ gdk_wayland_display_make_gl_context_current (GdkDisplay   *display,
   surface = gdk_gl_context_get_surface (context);
 
   if (context_wayland->is_attached || gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)))
-    egl_surface = gdk_wayland_surface_get_egl_surface (surface, display_wayland->egl_config);
+    egl_surface = gdk_wayland_surface_get_egl_surface (surface);
   else
     {
       if (display_wayland->have_egl_surfaceless_context)

@@ -4304,8 +4304,7 @@ gdk_wayland_surface_get_wl_egl_window (GdkSurface *surface)
 }
 
 EGLSurface
-gdk_wayland_surface_get_egl_surface (GdkSurface *surface,
-                                     EGLConfig   config)
+gdk_wayland_surface_get_egl_surface (GdkSurface *surface)
 {
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   GdkWaylandSurface *impl;
@@ -4320,7 +4319,7 @@ gdk_wayland_surface_get_egl_surface (GdkSurface *surface,
       egl_window = gdk_wayland_surface_get_wl_egl_window (surface);
 
       impl->egl_surface =
-        eglCreateWindowSurface (display->egl_display, config, egl_window, NULL);
+        eglCreateWindowSurface (display->egl_display, display->egl_config, egl_window, NULL);
     }
 
   return impl->egl_surface;

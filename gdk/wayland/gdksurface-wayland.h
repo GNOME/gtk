@@ -22,6 +22,9 @@
 
 #include "gdkwaylandsurface.h"
 
+#include <wayland-egl.h>
+#include <epoxy/egl.h>
+
 G_BEGIN_DECLS
 
 void                     gdk_wayland_toplevel_set_dbus_properties       (GdkToplevel *toplevel,
@@ -37,5 +40,7 @@ void                     gdk_wayland_toplevel_announce_ssd              (GdkTopl
 
 gboolean                 gdk_wayland_toplevel_inhibit_idle              (GdkToplevel *toplevel);
 void                     gdk_wayland_toplevel_uninhibit_idle            (GdkToplevel *toplevel);
+
+EGLSurface               gdk_wayland_surface_get_egl_surface            (GdkSurface  *surface);
 
 G_END_DECLS
