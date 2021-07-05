@@ -27,6 +27,13 @@
 
 G_BEGIN_DECLS
 
+/* Version requirements for EGL contexts.
+ *
+ * If you add support for EGL to your backend, please require this.
+ */
+#define GDK_EGL_MIN_VERSION_MAJOR (1)
+#define GDK_EGL_MIN_VERSION_MINOR (4)
+
 #define GDK_GL_CONTEXT_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_GL_CONTEXT, GdkGLContextClass))
 #define GDK_IS_GL_CONTEXT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_GL_CONTEXT))
 #define GDK_GL_CONTEXT_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_GL_CONTEXT, GdkGLContextClass))

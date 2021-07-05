@@ -448,6 +448,16 @@ gdk_wayland_display_init_gl (GdkDisplay  *display,
                            _("Could not initialize EGL display"));
       return NULL;
     }
+  if (major < GDK_EGL_MIN_VERSION_MAJOR ||
+      (major == GDK_EGL_MIN_VERSION_MAJOR && minor < GDK_EGL_MIN_VERSION_MINOR))
+    {
+      eglTerminate (dpy);
+      g_set_error (error, GDK_GL_ERROR,
+                   GDK_GL_ERROR_NOT_AVAILABLE,
+                   _("EGL version %d.%d is too old. GTK requires %d.%d"),
+                   major, minor, GDK_EGL_MIN_VERSION_MAJOR, GDK_EGL_MIN_VERSION_MINOR);
+      return NULL;
+    }
 
   if (!eglBindAPI (EGL_OPENGL_API))
     {

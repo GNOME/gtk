@@ -626,6 +626,17 @@ gdk_x11_display_init_egl (GdkX11Display  *self,
                            _("Could not initialize EGL display"));
       return FALSE;
     }
+  if (major < GDK_EGL_MIN_VERSION_MAJOR ||
+      (major == GDK_EGL_MIN_VERSION_MAJOR && minor < GDK_EGL_MIN_VERSION_MINOR))
+    {
+      eglTerminate (dpy);
+      self->egl_display = NULL;
+      g_set_error (error, GDK_GL_ERROR,
+                   GDK_GL_ERROR_NOT_AVAILABLE,
+                   _("EGL version %d.%d is too old. GTK requires %d.%d"),
+                   major, minor, GDK_EGL_MIN_VERSION_MAJOR, GDK_EGL_MIN_VERSION_MINOR);
+      return FALSE;
+    }
 
   if (!gdk_x11_display_create_egl_config (self, force, out_visual, out_depth, error))
     {
