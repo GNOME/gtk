@@ -460,12 +460,12 @@ gdk_registry_handle_global (void               *data,
       display_wayland->subcompositor =
         wl_registry_bind (display_wayland->wl_registry, id, &wl_subcompositor_interface, 1);
     }
-  else if (strcmp (interface, "zwp_pointer_gestures_v1") == 0 &&
-           version == GDK_ZWP_POINTER_GESTURES_V1_VERSION)
+  else if (strcmp (interface, "zwp_pointer_gestures_v1") == 0)
     {
       display_wayland->pointer_gestures =
         wl_registry_bind (display_wayland->wl_registry,
-                          id, &zwp_pointer_gestures_v1_interface, version);
+                          id, &zwp_pointer_gestures_v1_interface,
+                          MIN (version, GDK_ZWP_POINTER_GESTURES_V1_VERSION));
     }
   else if (strcmp (interface, "gtk_primary_selection_device_manager") == 0)
     {
