@@ -79,6 +79,7 @@ enum {
 enum {
   SIGNAL_CHANGED,
   SIGNAL_CUSTOM_ITEM_ACTIVATED,
+  ACTIVATE,
   NUM_SIGNALS
 };
 
@@ -134,6 +135,7 @@ struct _GtkAppChooserButtonClass {
   void (* changed)               (GtkAppChooserButton *self);
   void (* custom_item_activated) (GtkAppChooserButton *self,
                                   const char *item_name);
+  void (* activate)              (GtkAppChooserButton *self);
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkAppChooserButton, gtk_app_chooser_button, GTK_TYPE_WIDGET,
@@ -648,6 +650,12 @@ app_chooser_iface_init (GtkAppChooserIface *iface)
 }
 
 static void
+gtk_app_chooser_button_activate (GtkAppChooserButton *self)
+{
+  gtk_widget_activate (self->combobox);
+}
+
+static void
 gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
 {
   GObjectClass *oclass = G_OBJECT_CLASS (klass);
@@ -662,6 +670,8 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
   widget_class->size_allocate = gtk_app_chooser_button_size_allocate;
   widget_class->grab_focus = gtk_widget_grab_focus_child;
   widget_class->focus = gtk_widget_focus_child;
+
+  klass->activate = gtk_app_chooser_button_activate;
 
   g_object_class_override_property (oclass, PROP_CONTENT_TYPE, "content-type");
 
@@ -754,6 +764,28 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
                   NULL,
                   G_TYPE_NONE,
                   1, G_TYPE_STRING);
+
+  /**
+   * GtkAppChooserButton::activate:
+   * @widget: the object which received the signal.
+   *
+   * Emitted to when the button is activated.
+   *
+   * The `::activate` signal on `GtkAppChooserButton` is an action signal and
+   * emitting it causes the button to pop up its dialog.
+   *
+   * Since: 4.4
+   */
+  signals[ACTIVATE] =
+      g_signal_new (I_ ("activate"),
+                    G_OBJECT_CLASS_TYPE (oclass),
+                    G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                    G_STRUCT_OFFSET (GtkAppChooserButtonClass, activate),
+                    NULL, NULL,
+                    NULL,
+                    G_TYPE_NONE, 0);
+
+  gtk_widget_class_set_activate_signal (widget_class, signals[ACTIVATE]);
 
 
   gtk_widget_class_set_css_name (widget_class, I_("appchooserbutton"));
