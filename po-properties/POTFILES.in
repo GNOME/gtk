@@ -346,8 +346,6 @@ modules/input/imviqr.c
 modules/input/imwayland.c
 modules/input/imwaylandgtk.c
 modules/input/imxim.c
-modules/printbackends/cloudprint/gtkprintbackendcloudprint.c
-modules/printbackends/cloudprint/gtkprintercloudprint.c
 modules/printbackends/cups/gtkprintbackendcups.c
 modules/printbackends/cups/gtkprintercups.c
 modules/printbackends/file/gtkprintbackendfile.c
