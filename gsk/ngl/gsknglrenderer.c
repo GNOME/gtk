@@ -86,7 +86,6 @@ gsk_ngl_renderer_realize (GskRenderer  *renderer,
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
   GskNglRenderer *self = (GskNglRenderer *)renderer;
   GdkGLContext *context = NULL;
-  GdkGLContext *shared_context;
   GskNglDriver *driver = NULL;
   gboolean ret = FALSE;
   gboolean debug_shaders = FALSE;
@@ -105,21 +104,12 @@ gsk_ngl_renderer_realize (GskRenderer  *renderer,
       !gdk_gl_context_realize (context, error))
     goto failure;
 
-  if (!(shared_context = gdk_display_get_gl_context (gdk_surface_get_display (surface))))
-    {
-      g_set_error (error,
-                   GDK_GL_ERROR,
-                   GDK_GL_ERROR_NOT_AVAILABLE,
-                   "Failed to locate shared GL context for driver");
-      goto failure;
-    }
-
 #ifdef G_ENABLE_DEBUG
   if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), SHADERS))
     debug_shaders = TRUE;
 #endif
 
-  if (!(driver = gsk_ngl_driver_from_shared_context (shared_context, debug_shaders, error)))
+  if (!(driver = gsk_ngl_driver_for_display (gdk_surface_get_display (surface), debug_shaders, error)))
     goto failure;
 
   self->command_queue = gsk_ngl_driver_create_command_queue (driver, context);
