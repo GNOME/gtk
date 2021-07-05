@@ -44,11 +44,6 @@ option('print-cups',
        value: 'auto',
        description : 'Build the cups print backend')
 
-option('print-cloudprint',
-       type: 'feature',
-       value: 'auto',
-       description : 'Build the cloudprint print backend')
-
 # Optional features
 
 option('vulkan',

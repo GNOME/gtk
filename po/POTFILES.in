@@ -390,11 +390,9 @@ gtk/ui/gtkstatusbar.ui
 gtk/ui/gtkvolumebutton.ui
 modules/media/gtkffmediafile.c
 modules/media/gtkgstsink.c
-modules/printbackends/gtkprintbackendcloudprint.c
 modules/printbackends/gtkprintbackendcups.c
 modules/printbackends/gtkprintbackendfile.c
 modules/printbackends/gtkprintbackendlpr.c
-modules/printbackends/gtkprintercloudprint.c
 modules/printbackends/gtkprintercups.c
 tools/encodesymbolic.c
 tools/gtk-builder-tool.c
