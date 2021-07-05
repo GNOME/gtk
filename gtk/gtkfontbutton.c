@@ -110,12 +110,14 @@ struct _GtkFontButtonClass
   GtkWidgetClass parent_class;
 
   void (* font_set) (GtkFontButton *gfp);
+  void (* activate) (GtkFontButton *self);
 };
 
 /* Signals */
 enum
 {
   FONT_SET,
+  ACTIVATE,
   LAST_SIGNAL
 };
 
@@ -454,6 +456,12 @@ gtk_font_button_font_chooser_notify (GObject    *object,
 }
 
 static void
+gtk_font_button_activate (GtkFontButton *self)
+{
+  gtk_widget_activate (self->button);
+}
+
+static void
 gtk_font_button_class_init (GtkFontButtonClass *klass)
 {
   GObjectClass *gobject_class;
@@ -470,6 +478,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
   widget_class->focus = gtk_widget_focus_child;
 
   klass->font_set = NULL;
+  klass->activate = gtk_font_button_activate;
 
   _gtk_font_chooser_install_properties (gobject_class);
 
@@ -545,6 +554,28 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
                                                 NULL, NULL,
                                                 NULL,
                                                 G_TYPE_NONE, 0);
+
+  /**
+   * GtkFontButton::activate:
+   * @widget: the object which received the signal.
+   *
+   * Emitted to when the font button is activated.
+   *
+   * The `::activate` signal on `GtkFontButton` is an action signal and
+   * emitting it causes the button to present its dialog.
+   *
+   * Since: 4.4
+   */
+  font_button_signals[ACTIVATE] =
+      g_signal_new (I_ ("activate"),
+                    G_OBJECT_CLASS_TYPE (gobject_class),
+                    G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                    G_STRUCT_OFFSET (GtkFontButtonClass, activate),
+                    NULL, NULL,
+                    NULL,
+                    G_TYPE_NONE, 0);
+
+  gtk_widget_class_set_activate_signal (widget_class, font_button_signals[ACTIVATE]);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("fontbutton"));
