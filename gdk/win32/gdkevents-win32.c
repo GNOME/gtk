@@ -55,6 +55,7 @@
 #include "gdkdevicemanager-win32.h"
 #include "gdkdisplay-win32.h"
 #include "gdkdeviceprivate.h"
+#include "gdkdevice-virtual.h"
 #include "gdkdevice-wintab.h"
 #include "gdkwin32dnd.h"
 #include "gdkwin32dnd-private.h"
@@ -1067,6 +1068,8 @@ send_crossing_event (GdkDisplay                 *display,
   pt = *screen_pt;
   ScreenToClient (GDK_SURFACE_HWND (window), &pt);
 
+  _gdk_device_virtual_set_active (_gdk_device_manager->core_pointer, physical_device);
+
   event = gdk_crossing_event_new (type,
                                   window,
                                   device_manager->core_pointer,
@@ -1530,6 +1533,9 @@ generate_button_event (GdkEventType      type,
 
   current_x = (gint16) GET_X_LPARAM (msg->lParam) / impl->surface_scale;
   current_y = (gint16) GET_Y_LPARAM (msg->lParam) / impl->surface_scale;
+
+  _gdk_device_virtual_set_active (_gdk_device_manager->core_pointer,
+                                  _gdk_device_manager->system_pointer);
 
   event = gdk_button_event_new (type,
                                 window,
@@ -2357,6 +2363,9 @@ gdk_event_translate (MSG *msg,
 	{
 	  current_x = (gint16) GET_X_LPARAM (msg->lParam) / impl->surface_scale;
 	  current_y = (gint16) GET_Y_LPARAM (msg->lParam) / impl->surface_scale;
+
+          _gdk_device_virtual_set_active (_gdk_device_manager->core_pointer,
+                                          _gdk_device_manager->system_pointer);
 
 	  event = gdk_motion_event_new (window,
 	                                device_manager_win32->core_pointer,
