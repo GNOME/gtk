@@ -15,7 +15,7 @@ meson \
     -Dx11_backend=true \
     -Dwayland_backend=true \
     -Dxinerama=yes \
-    -Dprint_backends="file,lpr,test,cloudprint,cups" \
+    -Dprint_backends="file,lpr,test,cups" \
     ${EXTRA_MESON_FLAGS:-} \
     _build
 

@@ -22,7 +22,7 @@ option('tracker3', type: 'boolean', value: false,
 
 # Print backends
 option('print_backends', type : 'string', value : 'auto',
-  description : 'Build the specified print backends (comma-separated list, any of "cloudprint,cups,file,lpr,papi,test" or "auto")')
+  description : 'Build the specified print backends (comma-separated list, any of "cups,file,lpr,papi,test" or "auto")')
 option('colord', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
   description : 'Build colord support for the CUPS printing backend')
 

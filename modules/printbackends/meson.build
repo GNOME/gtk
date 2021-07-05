@@ -1,7 +1,6 @@
 # Print backend config: 'auto' means all backends we have dependencies for,
 # the specific backend names mean we should fail if dependencies are missing
 all_print_backends = [
-  'cloudprint',
   'cups',
   'file',
   'lpr',
@@ -55,16 +54,6 @@ if enabled_print_backends.contains('papi')
   # TODO
   if print_strict_deps
     error('\'papi\' backend not supported with meson yet')
-  endif
-endif
-
-if enabled_print_backends.contains('cloudprint')
-  rest_dep = dependency('rest-0.7', required : print_strict_deps)
-  json_glib_dep = dependency('json-glib-1.0', required : print_strict_deps)
-  if rest_dep.found() and json_glib_dep.found()
-    print_backends += ['cloudprint']
-  else
-    message('\'cloudprint\' backend disabled: missing dependencies')
   endif
 endif
 
@@ -134,18 +123,6 @@ if print_backends.contains('test')
                 install_dir: printbackends_install_dir,
                 name_suffix: module_suffix,
                 install : true)
-endif
-
-if print_backends.contains('cloudprint')
-    shared_module('printbackend-cloudprint',
-                  'cloudprint/gtkprintbackendcloudprint.c',
-                  'cloudprint/gtkprintercloudprint.c',
-                  'cloudprint/gtkcloudprintaccount.c',
-                  c_args: printbackends_args,
-                  dependencies: [ libgtk_dep, rest_dep, json_glib_dep ],
-                  install_dir: printbackends_install_dir,
-                  name_suffix: module_suffix,
-                  install : true)
 endif
 
 if print_backends.contains('cups')

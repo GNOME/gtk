@@ -2,10 +2,6 @@ include $(top_srcdir)/Makefile.decl
 
 SUBDIRS = file lpr
 
-if HAVE_CLOUDPRINT
-SUBDIRS += cloudprint
-endif
-
 if HAVE_CUPS
 SUBDIRS += cups
 endif
@@ -18,7 +14,7 @@ if HAVE_PAPI
 SUBDIRS += papi
 endif
 
-DIST_SUBDIRS = cloudprint cups file lpr test papi
+DIST_SUBDIRS = cups file lpr test papi
 
 EXTRA_DIST += \
 	meson.build
