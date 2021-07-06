@@ -55,8 +55,6 @@ gdk_x11_gl_context_init (GdkX11GLContext *self)
 
 GdkGLContext *
 gdk_x11_surface_create_gl_context (GdkSurface    *surface,
-                                   gboolean       attached,
-                                   GdkGLContext  *share,
                                    GError       **error)
 {
   GdkX11GLContext *context = NULL;
@@ -67,9 +65,9 @@ gdk_x11_surface_create_gl_context (GdkSurface    *surface,
   display_x11 = GDK_X11_DISPLAY (display);
 
   if (display_x11->egl_display)
-    context = gdk_x11_gl_context_egl_new (surface, attached, share, error);
+    context = gdk_x11_gl_context_egl_new (surface, error);
   else if (display_x11->glx_config != NULL)
-    context = gdk_x11_gl_context_glx_new (surface, attached, share, error);
+    context = gdk_x11_gl_context_glx_new (surface, error);
   else
     {
       g_assert (display_x11->gl_error);
@@ -80,8 +78,6 @@ gdk_x11_surface_create_gl_context (GdkSurface    *surface,
 
   if (context == NULL)
     return NULL;
-
-  context->is_attached = attached;
 
   return GDK_GL_CONTEXT (context);
 }

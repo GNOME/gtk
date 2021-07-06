@@ -49,7 +49,6 @@ struct _GdkX11GLContext
   GdkGLContext parent_instance;
 
   guint do_frame_sync : 1;
-  guint is_attached : 1;
 };
 
 struct _GdkX11GLContextClass
@@ -65,8 +64,6 @@ gboolean                gdk_x11_display_init_gl_backend         (GdkX11Display *
                                                                  GError       **error);
 
 GdkGLContext *          gdk_x11_surface_create_gl_context       (GdkSurface    *window,
-                                                                 gboolean       attached,
-                                                                 GdkGLContext  *share,
                                                                  GError       **error);
 gboolean                gdk_x11_display_make_gl_context_current (GdkDisplay    *display,
                                                                  GdkGLContext  *context);
@@ -86,8 +83,6 @@ void                    gdk_x11_surface_destroy_glx_drawable    (GdkX11Surface *
 
 GType                   gdk_x11_gl_context_glx_get_type         (void) G_GNUC_CONST;
 GdkX11GLContext *       gdk_x11_gl_context_glx_new              (GdkSurface    *surface,
-                                                                 gboolean       attached,
-                                                                 GdkGLContext  *share,
                                                                  GError       **error);
 gboolean                gdk_x11_gl_context_glx_make_current     (GdkDisplay    *display,
                                                                  GdkGLContext  *context);
@@ -109,8 +104,6 @@ void                    gdk_x11_surface_destroy_egl_surface     (GdkX11Surface *
 
 GType                   gdk_x11_gl_context_egl_get_type         (void) G_GNUC_CONST;
 GdkX11GLContext *       gdk_x11_gl_context_egl_new              (GdkSurface    *surface,
-                                                                 gboolean       attached,
-                                                                 GdkGLContext  *share,
                                                                  GError       **error);
 gboolean                gdk_x11_gl_context_egl_make_current     (GdkDisplay    *display,
                                                                  GdkGLContext  *context);

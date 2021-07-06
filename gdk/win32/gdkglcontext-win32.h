@@ -45,7 +45,6 @@ struct _GdkWin32GLContext
   guint need_alpha_bits : 1;
 
   /* other items */
-  guint is_attached : 1;
   guint do_frame_sync : 1;
 
 #ifdef GDK_WIN32_ENABLE_EGL
@@ -62,9 +61,7 @@ struct _GdkWin32GLContextClass
 
 GdkGLContext *
 _gdk_win32_surface_create_gl_context (GdkSurface *window,
-                                     gboolean attached,
-                                     GdkGLContext *share,
-                                     GError **error);
+                                      GError **error);
 
 gboolean
 _gdk_win32_display_make_gl_context_current (GdkDisplay *display,

@@ -321,8 +321,6 @@ gdk_x11_gl_context_egl_end_frame (GdkDrawContext *draw_context,
   EGLSurface egl_surface;
 
   GDK_DRAW_CONTEXT_CLASS (gdk_x11_gl_context_egl_parent_class)->end_frame (draw_context, painted);
-  if (gdk_gl_context_get_shared_context (context) != NULL)
-    return;
 
   gdk_gl_context_make_current (context);
 
@@ -371,16 +369,11 @@ gdk_x11_gl_context_egl_get_damage (GdkGLContext *context)
   if (display_x11->has_egl_buffer_age)
     {
       GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
-      GdkGLContext *shared = gdk_gl_context_get_shared_context (context);
       EGLSurface egl_surface;
       int buffer_age = 0;
 
-      shared = gdk_gl_context_get_shared_context (context);
-      if (shared == NULL)
-        shared = context;
-
       egl_surface = gdk_x11_surface_get_egl_surface (surface);
-      gdk_gl_context_make_current (shared);
+      gdk_gl_context_make_current (context);
 
       eglQuerySurface (display_x11->egl_display,
                        egl_surface,
@@ -679,15 +672,12 @@ gdk_x11_display_init_egl (GdkX11Display  *self,
 
 GdkX11GLContext *
 gdk_x11_gl_context_egl_new (GdkSurface    *surface,
-                            gboolean       attached,
-                            GdkGLContext  *share,
                             GError       **error)
 {
   GdkX11GLContextEGL *context;
 
   context = g_object_new (GDK_TYPE_X11_GL_CONTEXT_EGL,
                           "surface", surface,
-                          "shared-context", share,
                           NULL);
 
   return GDK_X11_GL_CONTEXT (context);
@@ -718,7 +708,7 @@ gdk_x11_gl_context_egl_make_current (GdkDisplay   *display,
 
   surface = gdk_gl_context_get_surface (context);
 
-  if (context_x11->is_attached || gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)))
+  if (gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)))
     egl_surface = gdk_x11_surface_get_egl_surface (surface);
   else
     {
@@ -739,7 +729,7 @@ gdk_x11_gl_context_egl_make_current (GdkDisplay   *display,
       return FALSE;
     }
 
-  if (context_x11->is_attached)
+  if (gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)))
     {
       gboolean do_frame_sync = FALSE;
 

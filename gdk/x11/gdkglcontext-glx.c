@@ -131,11 +131,10 @@ maybe_wait_for_vblank (GdkDisplay  *display,
 static GLXDrawable
 gdk_x11_gl_context_glx_get_drawable (GdkX11GLContextGLX *self)
 {
-  GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (self);
   GdkDrawContext *draw_context = GDK_DRAW_CONTEXT (self);
   GdkSurface *surface;
 
-  if (context_x11->is_attached || gdk_draw_context_is_in_frame (draw_context))
+  if (gdk_draw_context_is_in_frame (draw_context))
     surface = gdk_draw_context_get_surface (draw_context);
   else
     surface = GDK_X11_DISPLAY (gdk_draw_context_get_display (draw_context))->leader_gdk_surface;
@@ -158,8 +157,6 @@ gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
   GLXDrawable drawable;
 
   GDK_DRAW_CONTEXT_CLASS (gdk_x11_gl_context_glx_parent_class)->end_frame (draw_context, painted);
-  if (gdk_gl_context_get_shared_context (context) != NULL)
-    return;
 
   gdk_gl_context_make_current (context);
 
@@ -242,17 +239,10 @@ gdk_x11_gl_context_glx_get_damage (GdkGLContext *context)
 
   if (display_x11->has_glx_buffer_age)
     {
-      GdkGLContext *shared;
-      GdkX11GLContextGLX *shared_glx;
+      GdkX11GLContextGLX *self = GDK_X11_GL_CONTEXT_GLX (context);
 
-      shared = gdk_gl_context_get_shared_context (context);
-      if (shared == NULL)
-        shared = context;
-
-      shared_glx = GDK_X11_GL_CONTEXT_GLX (shared);
-
-      gdk_gl_context_make_current (shared);
-      glXQueryDrawable (dpy, gdk_x11_gl_context_glx_get_drawable (shared_glx),
+      gdk_gl_context_make_current (context);
+      glXQueryDrawable (dpy, gdk_x11_gl_context_glx_get_drawable (self),
                         GLX_BACK_BUFFER_AGE_EXT, &buffer_age);
 
       switch (buffer_age)
@@ -412,11 +402,7 @@ on_gl_surface_xevent (GdkGLContext   *context,
                       GdkX11Display  *display_x11)
 {
   GdkX11GLContextGLX *context_glx = GDK_X11_GL_CONTEXT_GLX (context);
-  GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (context);
   XDamageNotifyEvent *damage_xevent;
-
-  if (!context_x11->is_attached)
-    return FALSE;
 
   if (xevent->type != (display_x11->damage_event_base + XDamageNotify))
     return FALSE;
@@ -844,15 +830,12 @@ gdk_x11_display_create_glx_config (GdkX11Display  *self,
 
 GdkX11GLContext *
 gdk_x11_gl_context_glx_new (GdkSurface    *surface,
-                            gboolean       attached,
-                            GdkGLContext  *share,
                             GError       **error)
 {
   GdkX11GLContextGLX *context;
 
   return g_object_new (GDK_TYPE_X11_GL_CONTEXT_GLX,
                        "surface", surface,
-                       "shared-context", share,
                        NULL);
 
   return GDK_X11_GL_CONTEXT (context);
@@ -896,7 +879,8 @@ gdk_x11_gl_context_glx_make_current (GdkDisplay   *display,
       return FALSE;
     }
 
-  if (context_x11->is_attached && GDK_X11_DISPLAY (display)->has_glx_swap_interval)
+  if (gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)) &&
+      GDK_X11_DISPLAY (display)->has_glx_swap_interval)
     {
       /* If the WM is compositing there is no particular need to delay
        * the swap when drawing on the offscreen, rendering to the screen

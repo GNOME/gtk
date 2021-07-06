@@ -1078,15 +1078,8 @@ gdk_surface_get_paint_gl_context (GdkSurface  *surface,
     {
       GdkSurfaceClass *class = GDK_SURFACE_GET_CLASS (surface);
 
-      if (class->create_gl_context == NULL)
-        {
-          g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
-                               _("The current backend does not support OpenGL"));
-          return NULL;
-        }
-
       surface->gl_paint_context =
-        class->create_gl_context (surface, TRUE, NULL, &internal_error);
+        class->create_gl_context (surface, &internal_error);
     }
 
   if (internal_error != NULL)
@@ -1125,18 +1118,13 @@ GdkGLContext *
 gdk_surface_create_gl_context (GdkSurface   *surface,
                                GError      **error)
 {
-  GdkGLContext *paint_context;
-
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  paint_context = gdk_surface_get_paint_gl_context (surface, error);
-  if (paint_context == NULL)
+  if (!gdk_display_prepare_gl (surface->display, error))
     return NULL;
 
   return GDK_SURFACE_GET_CLASS (surface)->create_gl_context (surface,
-                                                             FALSE,
-                                                             paint_context,
                                                              error);
 }
 

@@ -125,8 +125,6 @@ gdk_win32_gl_context_end_frame (GdkDrawContext *draw_context,
   cairo_rectangle_int_t whole_window;
 
   GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_parent_class)->end_frame (draw_context, painted);
-  if (gdk_gl_context_get_shared_context (context))
-    return;
 
   gdk_gl_context_make_current (context);
   whole_window = (GdkRectangle) { 0, 0, gdk_surface_get_width (surface), gdk_surface_get_height (surface) };
@@ -1070,8 +1068,6 @@ gdk_win32_gl_context_init (GdkWin32GLContext *self)
 
 GdkGLContext *
 _gdk_win32_surface_create_gl_context (GdkSurface *surface,
-                                      gboolean attached,
-                                      GdkGLContext *share,
                                       GError **error)
 {
   GdkDisplay *display = gdk_surface_get_display (surface);
@@ -1107,11 +1103,9 @@ _gdk_win32_surface_create_gl_context (GdkSurface *surface,
 
   context = g_object_new (GDK_TYPE_WIN32_GL_CONTEXT,
                           "surface", surface,
-                          "shared-context", share,
                           NULL);
 
   context->gl_hdc = impl->hdc;
-  context->is_attached = attached;
 
 #ifdef GDK_WIN32_ENABLE_EGL
   if (display_win32->have_egl)
@@ -1157,7 +1151,8 @@ _gdk_win32_display_make_gl_context_current (GdkDisplay *display,
           return FALSE;
         }
 
-      if (context_win32->is_attached && display_win32->hasWglEXTSwapControl)
+      if (gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)) &&
+          display_win32->hasWglEXTSwapControl)
         {
           surface = gdk_gl_context_get_surface (context);
 
@@ -1187,7 +1182,7 @@ _gdk_win32_display_make_gl_context_current (GdkDisplay *display,
 
       surface = gdk_gl_context_get_surface (context);
 
-      if (context_win32->is_attached)
+      if (gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)))
         egl_surface = _gdk_win32_surface_get_egl_surface (surface, context_win32->egl_config, FALSE);
       else
         {

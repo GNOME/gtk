@@ -211,14 +211,8 @@ gdk_wayland_gl_context_get_damage (GdkGLContext *context)
 
   if (display_wayland->have_egl_buffer_age)
     {
-      GdkGLContext *shared;
-
-      shared = gdk_gl_context_get_shared_context (context);
-      if (shared == NULL)
-        shared = context;
-
       egl_surface = gdk_wayland_surface_get_egl_surface (surface);
-      gdk_gl_context_make_current (shared);
+      gdk_gl_context_make_current (context);
       eglQuerySurface (display_wayland->egl_display, egl_surface,
                        EGL_BUFFER_AGE_EXT, &buffer_age);
 
@@ -262,8 +256,6 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
   EGLSurface egl_surface;
 
   GDK_DRAW_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->end_frame (draw_context, painted);
-  if (gdk_gl_context_get_shared_context (context))
-    return;
 
   gdk_gl_context_make_current (context);
 
@@ -521,18 +513,13 @@ gdk_wayland_display_init_gl (GdkDisplay  *display,
 
 GdkGLContext *
 gdk_wayland_surface_create_gl_context (GdkSurface    *surface,
-                                       gboolean       attached,
-                                       GdkGLContext  *share,
                                        GError       **error)
 {
   GdkWaylandGLContext *context;
 
   context = g_object_new (GDK_TYPE_WAYLAND_GL_CONTEXT,
                           "surface", surface,
-                          "shared-context", share,
                           NULL);
-
-  context->is_attached = attached;
 
   return GDK_GL_CONTEXT (context);
 }
@@ -582,7 +569,7 @@ gdk_wayland_display_make_gl_context_current (GdkDisplay   *display,
   context_wayland = GDK_WAYLAND_GL_CONTEXT (context);
   surface = gdk_gl_context_get_surface (context);
 
-  if (context_wayland->is_attached || gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)))
+  if (gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)))
     egl_surface = gdk_wayland_surface_get_egl_surface (surface);
   else
     {

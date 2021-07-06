@@ -310,9 +310,7 @@ gdk_macos_gl_context_begin_frame (GdkDrawContext *context,
    * want to replace our damage region for the next frame (to avoid
    * doing it multiple times).
    */
-  if (!self->is_attached &&
-      gdk_gl_context_get_shared_context (GDK_GL_CONTEXT (context)))
-    ensure_gl_view (self);
+  ensure_gl_view (self);
 
   if (self->needs_resize)
     {

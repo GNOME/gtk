@@ -36,7 +36,6 @@ struct _GdkWaylandGLContext
   GdkGLContext parent_instance;
 
   EGLContext egl_context;
-  gboolean is_attached;
 };
 
 struct _GdkWaylandGLContextClass
@@ -47,8 +46,6 @@ struct _GdkWaylandGLContextClass
 GdkGLContext *  gdk_wayland_display_init_gl                         (GdkDisplay        *display,
                                                                      GError           **error);
 GdkGLContext *  gdk_wayland_surface_create_gl_context               (GdkSurface        *surface,
-								     gboolean           attach,
-                                                                     GdkGLContext      *share,
                                                                      GError           **error);
 gboolean        gdk_wayland_display_make_gl_context_current         (GdkDisplay        *display,
                                                                      GdkGLContext      *context);
