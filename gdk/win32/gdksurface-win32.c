@@ -2325,18 +2325,10 @@ snap_up (GdkSurface *window)
   y = 0;
   height = maxysize;
 
-  x = x - impl->shadow.left;
-  y = y - impl->shadow.top;
+  x = surface->x - impl->shadow.left / impl->surface_scale;
+  y = y - impl->shadow.top / impl->surface_scale;
   width += impl->shadow_x;
   height += impl->shadow_y;
-
-  /* XXX: FIXME, AeroSnap snap_up() not really working well,
-   *
-   *    * The snap_up() puts the window at the top left corner.
-   *    * Without the following call, the height maximizes but we see a spew of
-   *      "GdkToplevelSize: geometry size (x,y) exceeds bounds" warnings
-   */
-  compute_toplevel_size (window, TRUE, &width, &height);
 
   gdk_win32_surface_move_resize (window, x, y, width, height);
 }
@@ -2359,8 +2351,8 @@ snap_left (GdkSurface  *window,
 
   rect.width = rect.width / 2;
 
-  rect.x = rect.x - impl->shadow.left;
-  rect.y = rect.y - impl->shadow.top;
+  rect.x = rect.x - impl->shadow.left / impl->surface_scale;
+  rect.y = rect.y - impl->shadow.top / impl->surface_scale;
   rect.width = rect.width + impl->shadow_x;
   rect.height = rect.height + impl->shadow_y;
 
@@ -2388,8 +2380,8 @@ snap_right (GdkSurface  *window,
   rect.width = rect.width / 2;
   rect.x += rect.width;
 
-  rect.x = rect.x - impl->shadow.left;
-  rect.y = rect.y - impl->shadow.top;
+  rect.x = rect.x - impl->shadow.left / impl->surface_scale;
+  rect.y = rect.y - impl->shadow.top / impl->surface_scale;
   rect.width = rect.width + impl->shadow_x;
   rect.height = rect.height + impl->shadow_y;
 
@@ -3024,6 +3016,7 @@ update_fullup_indicator (GdkSurface                   *window,
   to.height = gdk_surface_get_height (window);
 
   to.y = 0;
+  to.x = window->x;
   to.height = maxysize;
   from = context->indicator_target;
 
@@ -3176,6 +3169,7 @@ start_indicator (GdkSurface                   *window,
       end_size.height = workarea.height;
       break;
     case GDK_WIN32_AEROSNAP_STATE_FULLUP:
+      start_size.x = end_size.x = window->x;
       end_size.y = 0;
       end_size.height = maxysize;
       break;
