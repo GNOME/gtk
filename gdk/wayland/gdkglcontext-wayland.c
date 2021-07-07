@@ -245,6 +245,37 @@ gdk_wayland_gl_context_get_damage (GdkGLContext *context)
   return GDK_GL_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->get_damage (context);
 }
 
+static gboolean
+gdk_wayland_gl_context_clear_current (GdkGLContext *context)
+{
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  return eglMakeCurrent (display_wayland->egl_display,
+                         EGL_NO_SURFACE,
+                         EGL_NO_SURFACE,
+                         EGL_NO_CONTEXT);
+}
+
+static gboolean
+gdk_wayland_gl_context_make_current (GdkGLContext *context,
+                                     gboolean      surfaceless)
+{
+  GdkWaylandGLContext *context_wayland = GDK_WAYLAND_GL_CONTEXT (context);
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  EGLSurface egl_surface;
+
+  if (!surfaceless)
+    egl_surface = gdk_wayland_surface_get_egl_surface (gdk_gl_context_get_surface (context));
+  else
+    egl_surface = EGL_NO_SURFACE;
+
+  return eglMakeCurrent (display_wayland->egl_display,
+                         egl_surface,
+                         egl_surface,
+                         context_wayland->egl_context);
+}
 static void
 gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
                                   cairo_region_t *painted)
@@ -309,6 +340,8 @@ gdk_wayland_gl_context_class_init (GdkWaylandGLContextClass *klass)
   draw_context_class->end_frame = gdk_wayland_gl_context_end_frame;
 
   context_class->realize = gdk_wayland_gl_context_realize;
+  context_class->make_current = gdk_wayland_gl_context_make_current;
+  context_class->clear_current = gdk_wayland_gl_context_clear_current;
   context_class->get_damage = gdk_wayland_gl_context_get_damage;
 }
 
@@ -556,36 +589,3 @@ gdk_wayland_gl_context_dispose (GObject *gobject)
   G_OBJECT_CLASS (gdk_wayland_gl_context_parent_class)->dispose (gobject);
 }
 
-gboolean
-gdk_wayland_display_make_gl_context_current (GdkDisplay   *display,
-                                             GdkGLContext *context)
-{
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-  GdkWaylandGLContext *context_wayland;
-  GdkSurface *surface;
-  EGLSurface egl_surface;
-
-  if (context == NULL)
-    {
-      eglMakeCurrent(display_wayland->egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE,
-                     EGL_NO_CONTEXT);
-      return TRUE;
-    }
-
-  context_wayland = GDK_WAYLAND_GL_CONTEXT (context);
-  surface = gdk_gl_context_get_surface (context);
-
-  if (gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)))
-    egl_surface = gdk_wayland_surface_get_egl_surface (surface);
-  else
-    egl_surface = EGL_NO_SURFACE;
-
-  if (!eglMakeCurrent (display_wayland->egl_display, egl_surface,
-                       egl_surface, context_wayland->egl_context))
-    {
-      g_warning ("eglMakeCurrent failed");
-      return FALSE;
-    }
-
-  return TRUE;
-}

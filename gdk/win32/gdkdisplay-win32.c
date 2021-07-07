@@ -1165,7 +1165,6 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->create_surface = _gdk_win32_display_create_surface;
 
   display_class->get_keymap = _gdk_win32_display_get_keymap;
-  display_class->make_gl_context_current = _gdk_win32_display_make_gl_context_current;
 
   display_class->get_monitors = gdk_win32_display_get_monitors;
 

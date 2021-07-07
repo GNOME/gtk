@@ -142,8 +142,6 @@ struct _GdkDisplayClass
 
   GdkGLContext *         (*init_gl)                    (GdkDisplay        *display,
                                                         GError           **error);
-  gboolean               (*make_gl_context_current)    (GdkDisplay        *display,
-                                                        GdkGLContext      *context);
 
   GdkSeat *              (*get_default_seat)           (GdkDisplay     *display);
 
@@ -209,8 +207,6 @@ GdkSurface *        gdk_display_create_surface        (GdkDisplay       *display
                                                        int               height);
 
 GdkGLContext *      gdk_display_get_gl_context        (GdkDisplay       *display);
-gboolean            gdk_display_make_gl_context_current  (GdkDisplay        *display,
-                                                          GdkGLContext      *context);
 
 void                gdk_display_set_rgba              (GdkDisplay       *display,
                                                        gboolean          rgba);

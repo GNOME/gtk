@@ -970,7 +970,6 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   display_class->get_keymap = _gdk_wayland_display_get_keymap;
 
   display_class->init_gl = gdk_wayland_display_init_gl;
-  display_class->make_gl_context_current = gdk_wayland_display_make_gl_context_current;
 
   display_class->get_monitors = gdk_wayland_display_get_monitors;
   display_class->get_monitor_at_surface = gdk_wayland_display_get_monitor_at_surface;

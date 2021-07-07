@@ -1298,21 +1298,6 @@ gdk_display_get_gl_context (GdkDisplay *self)
   return priv->gl_context;
 }
 
-/*< private >
- * gdk_display_make_gl_context_current:
- * @display: a `GdkDisplay`
- * @context: (optional): a `GdkGLContext`
- *
- * Makes the given @context the current GL context, or unsets
- * the current GL context if @context is %NULL.
- */
-gboolean
-gdk_display_make_gl_context_current (GdkDisplay   *display,
-                                     GdkGLContext *context)
-{
-  return GDK_DISPLAY_GET_CLASS (display)->make_gl_context_current (display, context);
-}
-
 GdkDebugFlags
 gdk_display_get_debug_flags (GdkDisplay *display)
 {

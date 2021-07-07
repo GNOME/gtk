@@ -47,8 +47,6 @@ GdkGLContext *  gdk_wayland_display_init_gl                         (GdkDisplay 
                                                                      GError           **error);
 GdkGLContext *  gdk_wayland_surface_create_gl_context               (GdkSurface        *surface,
                                                                      GError           **error);
-gboolean        gdk_wayland_display_make_gl_context_current         (GdkDisplay        *display,
-                                                                     GdkGLContext      *context);
 
 G_END_DECLS
 

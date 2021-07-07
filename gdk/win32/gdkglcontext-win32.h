@@ -63,9 +63,6 @@ GdkGLContext *
 _gdk_win32_surface_create_gl_context (GdkSurface *window,
                                       GError **error);
 
-gboolean
-_gdk_win32_display_make_gl_context_current (GdkDisplay *display,
-                                            GdkGLContext *context);
 void
 _gdk_win32_surface_invalidate_egl_framebuffer (GdkSurface *surface);
 

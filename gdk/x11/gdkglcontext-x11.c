@@ -83,22 +83,6 @@ gdk_x11_surface_create_gl_context (GdkSurface    *surface,
 }
 
 gboolean
-gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
-                                         GdkGLContext *context)
-{
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
-
-  if (display_x11->egl_display)
-    return gdk_x11_gl_context_egl_make_current (display, context);
-  else if (display_x11->glx_config)
-    return gdk_x11_gl_context_glx_make_current (display, context);
-  else
-    g_assert_not_reached ();
-
-  return FALSE;
-}
-
-gboolean
 gdk_x11_display_init_gl_backend (GdkX11Display  *self,
                                  Visual        **out_visual,
                                  int            *out_depth,

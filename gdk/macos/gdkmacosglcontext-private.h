@@ -62,7 +62,6 @@ GdkGLContext *_gdk_macos_gl_context_new          (GdkMacosDisplay    *display,
                                                   gboolean            attached,
                                                   GdkGLContext       *share,
                                                   GError            **error);
-gboolean      _gdk_macos_gl_context_make_current (GdkMacosGLContext  *self);
 
 G_END_DECLS
 

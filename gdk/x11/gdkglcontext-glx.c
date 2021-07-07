@@ -229,6 +229,66 @@ gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
     glXGetVideoSyncSGI (&info->last_frame_counter);
 }
 
+static gboolean
+gdk_x11_gl_context_glx_clear_current (GdkGLContext *context)
+{
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+  Display *dpy = gdk_x11_display_get_xdisplay (display);
+
+  glXMakeContextCurrent (dpy, None, None, NULL);
+  return TRUE;
+}
+
+static gboolean
+gdk_x11_gl_context_glx_make_current (GdkGLContext *context,
+                                     gboolean      surfaceless)
+                                     
+{
+  GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (context);
+  GdkX11GLContextGLX *context_glx = GDK_X11_GL_CONTEXT_GLX (context);
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+  Display *dpy = gdk_x11_display_get_xdisplay (display);
+  gboolean do_frame_sync = FALSE;
+  GdkSurface *surface;
+  GLXWindow drawable;
+
+  drawable = gdk_x11_gl_context_glx_get_drawable (context_glx);
+
+  if (!surfaceless)
+    surface = gdk_gl_context_get_surface (context);
+  else
+    surface = GDK_X11_DISPLAY (display)->leader_gdk_surface;
+  drawable = gdk_x11_surface_get_glx_drawable (surface);
+
+  GDK_DISPLAY_NOTE (display, OPENGL,
+                    g_message ("Making GLX context %p current to drawable %lu",
+                               context, (unsigned long) drawable));
+
+  if (!glXMakeContextCurrent (dpy, drawable, drawable, context_glx->glx_context))
+    return FALSE;
+
+  if (!surfaceless && GDK_X11_DISPLAY (display)->has_glx_swap_interval)
+    {
+      /* If the WM is compositing there is no particular need to delay
+       * the swap when drawing on the offscreen, rendering to the screen
+       * happens later anyway, and its up to the compositor to sync that
+       * to the vblank. */
+      do_frame_sync = ! gdk_display_is_composited (display);
+
+      if (do_frame_sync != context_x11->do_frame_sync)
+        {
+          context_x11->do_frame_sync = do_frame_sync;
+
+          if (do_frame_sync)
+            glXSwapIntervalSGI (1);
+          else
+            glXSwapIntervalSGI (0);
+        }
+    }
+
+  return TRUE;
+}
+
 static cairo_region_t *
 gdk_x11_gl_context_glx_get_damage (GdkGLContext *context)
 {
@@ -675,6 +735,8 @@ gdk_x11_gl_context_glx_class_init (GdkX11GLContextGLXClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   context_class->realize = gdk_x11_gl_context_glx_realize;
+  context_class->make_current = gdk_x11_gl_context_glx_make_current;
+  context_class->clear_current = gdk_x11_gl_context_glx_clear_current;
   context_class->get_damage = gdk_x11_gl_context_glx_get_damage;
 
   draw_context_class->end_frame = gdk_x11_gl_context_glx_end_frame;
@@ -839,67 +901,6 @@ gdk_x11_gl_context_glx_new (GdkSurface    *surface,
                        NULL);
 
   return GDK_X11_GL_CONTEXT (context);
-}
-
-gboolean
-gdk_x11_gl_context_glx_make_current (GdkDisplay   *display,
-                                     GdkGLContext *context)
-{
-  GdkX11GLContextGLX *context_glx;
-  GdkX11GLContext *context_x11;
-  Display *dpy = gdk_x11_display_get_xdisplay (display);
-  gboolean do_frame_sync = FALSE;
-  GLXWindow drawable;
-
-  if (context == NULL)
-    {
-      glXMakeContextCurrent (dpy, None, None, NULL);
-      return TRUE;
-    }
-
-  context_glx = GDK_X11_GL_CONTEXT_GLX (context);
-  if (context_glx->glx_context == NULL)
-    {
-      g_critical ("No GLX context associated to the GdkGLContext; you must "
-                  "call gdk_gl_context_realize() first.");
-      return FALSE;
-    }
-
-  context_x11 = GDK_X11_GL_CONTEXT (context);
-  drawable = gdk_x11_gl_context_glx_get_drawable (context_glx);
-
-  GDK_DISPLAY_NOTE (display, OPENGL,
-                    g_message ("Making GLX context %p current to drawable %lu",
-                               context, (unsigned long) drawable));
-
-  if (!glXMakeContextCurrent (dpy, drawable, drawable, context_glx->glx_context))
-    {
-      GDK_DISPLAY_NOTE (display, OPENGL,
-                        g_message ("Making GLX context current failed"));
-      return FALSE;
-    }
-
-  if (gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)) &&
-      GDK_X11_DISPLAY (display)->has_glx_swap_interval)
-    {
-      /* If the WM is compositing there is no particular need to delay
-       * the swap when drawing on the offscreen, rendering to the screen
-       * happens later anyway, and its up to the compositor to sync that
-       * to the vblank. */
-      do_frame_sync = ! gdk_display_is_composited (display);
-
-      if (do_frame_sync != context_x11->do_frame_sync)
-        {
-          context_x11->do_frame_sync = do_frame_sync;
-
-          if (do_frame_sync)
-            glXSwapIntervalSGI (1);
-          else
-            glXSwapIntervalSGI (0);
-        }
-    }
-
-  return TRUE;
 }
 
 /**

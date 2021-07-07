@@ -2923,7 +2923,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->get_keymap = gdk_x11_display_get_keymap;
 
   display_class->init_gl = gdk_x11_display_init_gl;
-  display_class->make_gl_context_current = gdk_x11_display_make_gl_context_current;
 
   display_class->get_default_seat = gdk_x11_display_get_default_seat;
 

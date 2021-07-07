@@ -644,19 +644,6 @@ gdk_macos_display_init_gl (GdkDisplay  *display,
   return _gdk_macos_gl_context_new (display, NULL, FALSE, NULL, error);
 }
 
-static gboolean
-gdk_macos_display_make_gl_context_current (GdkDisplay   *display,
-                                           GdkGLContext *gl_context)
-{
-  g_assert (GDK_IS_MACOS_DISPLAY (display));
-  g_assert (!gl_context || GDK_IS_MACOS_GL_CONTEXT (gl_context));
-
-  if (gl_context == NULL)
-    return FALSE;
-
-  return _gdk_macos_gl_context_make_current (GDK_MACOS_GL_CONTEXT (gl_context));
-}
-
 static void
 gdk_macos_display_finalize (GObject *object)
 {
@@ -703,7 +690,6 @@ gdk_macos_display_class_init (GdkMacosDisplayClass *klass)
   display_class->get_setting = gdk_macos_display_get_setting;
   display_class->has_pending = gdk_macos_display_has_pending;
   display_class->init_gl = gdk_macos_display_init_gl;
-  display_class->make_gl_context_current = gdk_macos_display_make_gl_context_current;
   display_class->notify_startup_complete = gdk_macos_display_notify_startup_complete;
   display_class->queue_events = gdk_macos_display_queue_events;
   display_class->sync = gdk_macos_display_sync;

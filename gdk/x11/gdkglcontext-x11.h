@@ -65,8 +65,6 @@ gboolean                gdk_x11_display_init_gl_backend         (GdkX11Display *
 
 GdkGLContext *          gdk_x11_surface_create_gl_context       (GdkSurface    *window,
                                                                  GError       **error);
-gboolean                gdk_x11_display_make_gl_context_current (GdkDisplay    *display,
-                                                                 GdkGLContext  *context);
 
 /* GLX */
 #define GDK_TYPE_X11_GL_CONTEXT_GLX     (gdk_x11_gl_context_glx_get_type())
@@ -84,8 +82,6 @@ void                    gdk_x11_surface_destroy_glx_drawable    (GdkX11Surface *
 GType                   gdk_x11_gl_context_glx_get_type         (void) G_GNUC_CONST;
 GdkX11GLContext *       gdk_x11_gl_context_glx_new              (GdkSurface    *surface,
                                                                  GError       **error);
-gboolean                gdk_x11_gl_context_glx_make_current     (GdkDisplay    *display,
-                                                                 GdkGLContext  *context);
 
 
 /* EGL */
@@ -105,8 +101,6 @@ void                    gdk_x11_surface_destroy_egl_surface     (GdkX11Surface *
 GType                   gdk_x11_gl_context_egl_get_type         (void) G_GNUC_CONST;
 GdkX11GLContext *       gdk_x11_gl_context_egl_new              (GdkSurface    *surface,
                                                                  GError       **error);
-gboolean                gdk_x11_gl_context_egl_make_current     (GdkDisplay    *display,
-                                                                 GdkGLContext  *context);
 
 G_END_DECLS
 

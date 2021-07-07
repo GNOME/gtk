@@ -1046,6 +1046,95 @@ gdk_win32_gl_context_realize (GdkGLContext *context,
   return TRUE;
 }
 
+static gboolean
+gdk_win32_gl_context_clear_current (GdkGLContext *context)
+{
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
+
+#ifdef GDK_WIN32_ENABLE_EGL
+  if (display_win32->egl_disp != EGL_NO_DISPLAY)
+    return eglMakeCurrent (display_win32->egl_disp,
+                           EGL_NO_SURFACE, 
+                           EGL_NO_SURFACE, 
+                           EGL_NO_CONTEXT);
+  else
+#endif
+    return wglMakeCurrent (NULL, NULL);
+}
+
+static gboolean
+gdk_win32_gl_context_make_current (GdkGLContext *context,
+                                   gboolean      surfaceless)
+{
+  GdkWin32GLContext *context_win32 = GDK_WIN32_GL_CONTEXT (context);
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
+  GdkSurface *surface;
+
+  gboolean do_frame_sync = FALSE;
+
+  if (!gdk_gl_context_get_use_es (context))
+    {
+      if (!wglMakeCurrent (context_win32->gl_hdc, context_win32->hglrc))
+        return FALSE;
+
+      if (!surfaceless && display_win32->hasWglEXTSwapControl)
+        {
+          surface = gdk_gl_context_get_surface (context);
+
+          /* If there is compositing there is no particular need to delay
+           * the swap when drawing on the offscreen, rendering to the screen
+           * happens later anyway, and its up to the compositor to sync that
+           * to the vblank. */
+          display = gdk_surface_get_display (surface);
+          do_frame_sync = ! gdk_display_is_composited (display);
+
+          if (do_frame_sync != context_win32->do_frame_sync)
+            {
+              context_win32->do_frame_sync = do_frame_sync;
+
+              if (do_frame_sync)
+                wglSwapIntervalEXT (1);
+              else
+                wglSwapIntervalEXT (0);
+            }
+        }
+    }
+
+#ifdef GDK_WIN32_ENABLE_EGL
+  else
+    {
+      EGLSurface egl_surface;
+
+      surface = gdk_gl_context_get_surface (context);
+
+      if (!surfaceless)
+        egl_surface = _gdk_win32_surface_get_egl_surface (surface, context_win32->egl_config, FALSE);
+      else
+        {
+          if (display_win32->hasEglSurfacelessContext)
+            egl_surface = EGL_NO_SURFACE;
+          else
+            egl_surface = _gdk_win32_surface_get_egl_surface (surface, context_win32->egl_config, TRUE);
+        }
+
+      if (!eglMakeCurrent (display_win32->egl_disp,
+                           egl_surface,
+                           egl_surface,
+                           context_win32->egl_context))
+        return FALSE;
+
+      if (display_win32->egl_min_swap_interval == 0)
+        eglSwapInterval (display_win32->egl_disp, 0);
+      else
+        g_debug ("Can't disable GL swap interval");
+    }
+#endif
+
+  return TRUE;
+}
+
 static void
 gdk_win32_gl_context_class_init (GdkWin32GLContextClass *klass)
 {
@@ -1113,102 +1202,6 @@ _gdk_win32_surface_create_gl_context (GdkSurface *surface,
 #endif
 
   return GDK_GL_CONTEXT (context);
-}
-
-gboolean
-_gdk_win32_display_make_gl_context_current (GdkDisplay *display,
-                                            GdkGLContext *context)
-{
-  GdkWin32GLContext *context_win32;
-  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
-  GdkSurface *surface;
-
-  gboolean do_frame_sync = FALSE;
-
-  if (context == NULL)
-    {
-#ifdef GDK_WIN32_ENABLE_EGL
-      if (display_win32->egl_disp != EGL_NO_DISPLAY)
-        eglMakeCurrent(display_win32->egl_disp,
-                       EGL_NO_SURFACE, 
-                       EGL_NO_SURFACE, 
-                       EGL_NO_CONTEXT);
-      else
-#endif
-        wglMakeCurrent(NULL, NULL);
-
-      return TRUE;
-    }
-
-  context_win32 = GDK_WIN32_GL_CONTEXT (context);
-
-  if (!gdk_gl_context_get_use_es (context))
-    {
-      if (!wglMakeCurrent (context_win32->gl_hdc, context_win32->hglrc))
-        {
-          GDK_NOTE (OPENGL,
-                    g_print ("Making WGL context current failed\n"));
-          return FALSE;
-        }
-
-      if (gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)) &&
-          display_win32->hasWglEXTSwapControl)
-        {
-          surface = gdk_gl_context_get_surface (context);
-
-          /* If there is compositing there is no particular need to delay
-           * the swap when drawing on the offscreen, rendering to the screen
-           * happens later anyway, and its up to the compositor to sync that
-           * to the vblank. */
-          display = gdk_surface_get_display (surface);
-          do_frame_sync = ! gdk_display_is_composited (display);
-
-          if (do_frame_sync != context_win32->do_frame_sync)
-            {
-              context_win32->do_frame_sync = do_frame_sync;
-
-              if (do_frame_sync)
-                wglSwapIntervalEXT (1);
-              else
-                wglSwapIntervalEXT (0);
-            }
-        }
-    }
-
-#ifdef GDK_WIN32_ENABLE_EGL
-  else
-    {
-      EGLSurface egl_surface;
-
-      surface = gdk_gl_context_get_surface (context);
-
-      if (gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)))
-        egl_surface = _gdk_win32_surface_get_egl_surface (surface, context_win32->egl_config, FALSE);
-      else
-        {
-          if (display_win32->hasEglSurfacelessContext)
-            egl_surface = EGL_NO_SURFACE;
-          else
-            egl_surface = _gdk_win32_surface_get_egl_surface (surface, context_win32->egl_config, TRUE);
-        }
-
-      if (!eglMakeCurrent (display_win32->egl_disp,
-                           egl_surface,
-                           egl_surface,
-                           context_win32->egl_context))
-        {
-          g_warning ("eglMakeCurrent failed");
-          return FALSE;
-        }
-
-      if (display_win32->egl_min_swap_interval == 0)
-        eglSwapInterval (display_win32->egl_disp, 0);
-      else
-        g_debug ("Can't disable GL swap interval");
-    }
-#endif
-
-  return TRUE;
 }
 
 /**

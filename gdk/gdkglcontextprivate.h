@@ -55,6 +55,9 @@ struct _GdkGLContextClass
   gboolean              (* realize)                             (GdkGLContext          *context,
                                                                  GError               **error);
 
+  gboolean              (* make_current)                        (GdkGLContext          *context,
+                                                                 gboolean               surfaceless);
+  gboolean              (* clear_current)                       (GdkGLContext          *context);
   cairo_region_t *      (* get_damage)                          (GdkGLContext          *context);
 
   gboolean              (* is_shared)                           (GdkGLContext          *self,

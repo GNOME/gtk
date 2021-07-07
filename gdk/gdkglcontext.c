@@ -128,9 +128,10 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkGLContext, gdk_gl_context, GDK_TYPE_DRAW
 typedef struct _MaskedContext MaskedContext;
 
 static inline MaskedContext *
-mask_context (GdkGLContext *context)
+mask_context (GdkGLContext *context,
+              gboolean      surfaceless)
 {
-  return (MaskedContext *) GSIZE_TO_POINTER (GPOINTER_TO_SIZE (context) | (gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)) ? 1 : 0));
+  return (MaskedContext *) GSIZE_TO_POINTER (GPOINTER_TO_SIZE (context) | (surfaceless ? 1 : 0));
 }
 
 static inline GdkGLContext *
@@ -1138,10 +1139,12 @@ gdk_gl_context_make_current (GdkGLContext *context)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   MaskedContext *current, *masked_context;
+  gboolean surfaceless;
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
-  masked_context = mask_context (context);
+  surfaceless = !gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context));
+  masked_context = mask_context (context, surfaceless);
 
   current = g_private_get (&thread_current_context);
   if (current == masked_context)
@@ -1161,12 +1164,15 @@ gdk_gl_context_make_current (GdkGLContext *context)
         }
     }
 
-  if (gdk_display_make_gl_context_current (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), context))
+  if (!GDK_GL_CONTEXT_GET_CLASS (context)->make_current (context, surfaceless))
     {
-      g_object_ref (context);
-      g_private_replace (&thread_current_context, masked_context);
-      gdk_gl_context_check_extensions (context);
+      g_warning ("gdk_gl_context_make_current() failed");
+      return;
     }
+
+  g_object_ref (context);
+  g_private_replace (&thread_current_context, masked_context);
+  gdk_gl_context_check_extensions (context);
 }
 
 /**
@@ -1265,8 +1271,9 @@ gdk_gl_context_clear_current (void)
   current = g_private_get (&thread_current_context);
   if (current != NULL)
     {
-      GdkGLContext *current_context = unmask_context (current);
-      if (gdk_display_make_gl_context_current (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (current_context)), NULL))
+      GdkGLContext *context = unmask_context (current);
+
+      if (GDK_GL_CONTEXT_GET_CLASS (context)->clear_current (context))
         g_private_replace (&thread_current_context, NULL);
     }
 }

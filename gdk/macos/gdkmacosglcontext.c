@@ -403,6 +403,57 @@ gdk_macos_gl_context_surface_resized (GdkDrawContext *draw_context)
   g_clear_pointer (&self->damage, cairo_region_destroy);
 }
 
+static gboolean
+gdk_macos_gl_context_clear_current (GdkGLContext *context)
+{
+  GdkMacosGLContext *self = GDK_MACOS_GL_CONTEXT (context);
+  NSOpenGLContext *current;
+
+  g_return_val_if_fail (GDK_IS_MACOS_GL_CONTEXT (self), FALSE);
+
+  current = [NSOpenGLContext currentContext];
+
+  if (self->gl_context == current)
+    {
+      /* The OpenGL mac programming guide suggests that glFlush() is called
+       * before switching current contexts to ensure that the drawing commands
+       * are submitted.
+       */
+      if (current != NULL)
+        glFlush ();
+
+      [NSOpenGLContext clearCurrentContext];
+    }
+
+  return TRUE;
+}
+
+static gboolean
+gdk_macos_gl_context_make_current (GdkGLContext *context,
+                                   gboolean      surfaceless)
+{
+  GdkMacosGLContext *self = GDK_MACOS_GL_CONTEXT (context);
+  NSOpenGLContext *current;
+
+  g_return_val_if_fail (GDK_IS_MACOS_GL_CONTEXT (self), FALSE);
+
+  current = [NSOpenGLContext currentContext];
+
+  if (self->gl_context != current)
+    {
+      /* The OpenGL mac programming guide suggests that glFlush() is called
+       * before switching current contexts to ensure that the drawing commands
+       * are submitted.
+       */
+      if (current != NULL)
+        glFlush ();
+
+      [self->gl_context makeCurrentContext];
+    }
+
+  return TRUE;
+}
+
 static cairo_region_t *
 gdk_macos_gl_context_get_damage (GdkGLContext *context)
 {
@@ -492,33 +543,6 @@ _gdk_macos_gl_context_new (GdkMacosDisplay  *display,
   context->is_attached = !!attached;
 
   return GDK_GL_CONTEXT (context);
-}
-
-gboolean
-_gdk_macos_gl_context_make_current (GdkMacosGLContext *self)
-{
-  NSOpenGLContext *current;
-
-  g_return_val_if_fail (GDK_IS_MACOS_GL_CONTEXT (self), FALSE);
-
-  if (self->gl_context == NULL)
-    return FALSE;
-
-  current = [NSOpenGLContext currentContext];
-
-  if (self->gl_context != current)
-    {
-      /* The OpenGL mac programming guide suggests that glFlush() is called
-       * before switching current contexts to ensure that the drawing commands
-       * are submitted.
-       */
-      if (current != NULL)
-        glFlush ();
-
-      [self->gl_context makeCurrentContext];
-    }
-
-  return TRUE;
 }
 
 G_GNUC_END_IGNORE_DEPRECATIONS

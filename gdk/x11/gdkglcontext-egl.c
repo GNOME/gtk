@@ -360,6 +360,70 @@ gdk_x11_gl_context_egl_end_frame (GdkDrawContext *draw_context,
     eglSwapBuffers (display_x11->egl_display, egl_surface);
 }
 
+static gboolean
+gdk_x11_gl_context_egl_clear_current (GdkGLContext *context)
+{
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+
+  return eglMakeCurrent (display_x11->egl_display,
+                         EGL_NO_SURFACE,
+                         EGL_NO_SURFACE,
+                         EGL_NO_CONTEXT);
+}
+
+static gboolean
+gdk_x11_gl_context_egl_make_current (GdkGLContext *context,
+                                     gboolean      surfaceless)
+{
+  GdkX11GLContextEGL *context_egl = GDK_X11_GL_CONTEXT_EGL (context);
+  GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (context);
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+  GdkSurface *surface;
+  EGLSurface egl_surface;
+  gboolean do_frame_sync = FALSE;
+
+  if (surfaceless)
+    {
+      return eglMakeCurrent (display_x11->egl_display,
+                             EGL_NO_SURFACE,
+                             EGL_NO_SURFACE,
+                             context_egl->egl_context);
+    }
+
+  surface = gdk_gl_context_get_surface (context);
+  egl_surface = gdk_x11_surface_get_egl_surface (surface);
+
+  GDK_DISPLAY_NOTE (display, OPENGL,
+                    g_message ("Making EGL context %p current to surface %p",
+                               context_egl->egl_context, egl_surface));
+
+  if (!eglMakeCurrent (display_x11->egl_display,
+                       egl_surface,
+                       egl_surface,
+                       context_egl->egl_context))
+    return FALSE;
+
+  /* If the WM is compositing there is no particular need to delay
+   * the swap when drawing on the offscreen, rendering to the screen
+   * happens later anyway, and its up to the compositor to sync that
+   * to the vblank. */
+  do_frame_sync = ! gdk_display_is_composited (display);
+
+  if (do_frame_sync != context_x11->do_frame_sync)
+    {
+      context_x11->do_frame_sync = do_frame_sync;
+
+      if (do_frame_sync)
+        eglSwapInterval (display_x11->egl_display, 1);
+      else
+        eglSwapInterval (display_x11->egl_display, 0);
+    }
+
+  return TRUE;
+}
+
 static cairo_region_t *
 gdk_x11_gl_context_egl_get_damage (GdkGLContext *context)
 {
@@ -569,6 +633,8 @@ gdk_x11_gl_context_egl_class_init (GdkX11GLContextEGLClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   context_class->realize = gdk_x11_gl_context_egl_realize;
+  context_class->make_current = gdk_x11_gl_context_egl_make_current;
+  context_class->clear_current = gdk_x11_gl_context_egl_clear_current;
   context_class->get_damage = gdk_x11_gl_context_egl_get_damage;
 
   draw_context_class->end_frame = gdk_x11_gl_context_egl_end_frame;
@@ -687,71 +753,6 @@ gdk_x11_gl_context_egl_new (GdkSurface    *surface,
                           NULL);
 
   return GDK_X11_GL_CONTEXT (context);
-}
-
-gboolean
-gdk_x11_gl_context_egl_make_current (GdkDisplay   *display,
-                                     GdkGLContext *context)
-{
-  GdkX11GLContextEGL *context_egl = GDK_X11_GL_CONTEXT_EGL (context);
-  GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (context);
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
-  GdkSurface *surface;
-  EGLSurface egl_surface;
-
-  if (context == NULL)
-    {
-      eglMakeCurrent (display_x11->egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-      return TRUE;
-    }
-
-  if (context_egl->egl_context == NULL)
-    {
-      g_critical ("No EGL context associated to the GdkGLContext; you must "
-                  "call gdk_gl_context_realize() first.");
-      return FALSE;
-    }
-
-  surface = gdk_gl_context_get_surface (context);
-
-  if (gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)))
-    egl_surface = gdk_x11_surface_get_egl_surface (surface);
-  else
-    egl_surface = EGL_NO_SURFACE;
-
-  GDK_DISPLAY_NOTE (display, OPENGL,
-                    g_message ("Making EGL context %p current to surface %p",
-                               context_egl->egl_context, egl_surface));
-
-  if (!eglMakeCurrent (display_x11->egl_display, egl_surface, egl_surface, context_egl->egl_context))
-    {
-      GDK_DISPLAY_NOTE (display, OPENGL,
-                        g_message ("Making EGL context current failed"));
-      return FALSE;
-    }
-
-  if (gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)))
-    {
-      gboolean do_frame_sync = FALSE;
-
-      /* If the WM is compositing there is no particular need to delay
-       * the swap when drawing on the offscreen, rendering to the screen
-       * happens later anyway, and its up to the compositor to sync that
-       * to the vblank. */
-      do_frame_sync = ! gdk_display_is_composited (display);
-
-      if (do_frame_sync != context_x11->do_frame_sync)
-        {
-          context_x11->do_frame_sync = do_frame_sync;
-
-          if (do_frame_sync)
-            eglSwapInterval (display_x11->egl_display, 1);
-          else
-            eglSwapInterval (display_x11->egl_display, 0);
-        }
-    }
-
-  return TRUE;
 }
 
 /**
