@@ -117,6 +117,50 @@ compose_table_compare (gconstpointer data)
   g_free (expected);
 }
 
+static void
+compose_table_cycle (void)
+{
+  if (g_test_subprocess ())
+    {
+      char *file;
+      GtkComposeTable *table;
+
+      file = g_build_filename (g_test_get_dir (G_TEST_DIST), "compose", "cycle", NULL);
+
+      table = gtk_compose_table_new_with_file (file);
+      g_assert_nonnull (table);
+      g_free (file);
+
+      return;
+    }
+
+  g_test_trap_subprocess (NULL, 0, 0);
+  g_test_trap_assert_stderr ("*include cycle detected*");
+  g_test_trap_assert_failed ();
+}
+
+static void
+compose_table_nofile (void)
+{
+  if (g_test_subprocess ())
+    {
+      char *file;
+      GtkComposeTable *table;
+
+      file = g_build_filename (g_test_get_dir (G_TEST_DIST), "compose", "nofile", NULL);
+
+      table = gtk_compose_table_new_with_file (file);
+      g_assert_nonnull (table);
+      g_free (file);
+
+      return;
+    }
+
+  g_test_trap_subprocess (NULL, 0, 0);
+  g_test_trap_assert_stderr ("*No such file or directory*");
+  g_test_trap_assert_failed ();
+}
+
 /* Check matching against a small table */
 static void
 compose_table_match (void)
@@ -360,6 +404,9 @@ main (int argc, char *argv[])
   g_test_add_data_func ("/compose-table/codepoint", "codepoint", compose_table_compare);
   g_test_add_data_func ("/compose-table/multi", "multi", compose_table_compare);
   g_test_add_data_func ("/compose-table/strings", "strings", compose_table_compare);
+  g_test_add_data_func ("/compose-table/include", "include", compose_table_compare);
+  g_test_add_func ("/compose-table/include-cycle", compose_table_cycle);
+  g_test_add_func ("/compose-table/include-nofile", compose_table_nofile);
   g_test_add_func ("/compose-table/match", compose_table_match);
   g_test_add_func ("/compose-table/match-compact", compose_table_match_compact);
   g_test_add_func ("/compose-table/match-algorithmic", match_algorithmic);

@@ -49,6 +49,7 @@ gtk_compose_data_free (GtkComposeData *compose_data)
 
 typedef struct {
   GList *sequences;
+  GList *files;
   const char *compose_file;
 } GtkComposeParser;
 
@@ -60,6 +61,7 @@ parser_new (void)
   parser = g_new (GtkComposeParser, 1);
 
   parser->sequences = NULL;
+  parser->files = NULL;
   parser->compose_file = NULL;
 
   return parser;
@@ -69,6 +71,7 @@ static void
 parser_free (GtkComposeParser *parser)
 {
   g_list_free_full (parser->sequences, (GDestroyNotify) gtk_compose_data_free);
+  g_list_free_full (parser->files, g_free);
   g_free (parser);
 }
 
@@ -248,6 +251,57 @@ fail:
   return FALSE;
 }
 
+static void parser_parse_file (GtkComposeParser *parser,
+                               const char       *path);
+
+static void
+parser_handle_include (GtkComposeParser *parser,
+                       const char       *line)
+{
+  const char *p;
+  const char *start, *end;
+  char *path;
+
+  p = line + strlen ("include ");
+
+  while (g_ascii_isspace (*p))
+    p++;
+
+  if (*p != '"')
+    goto error;
+
+  p++;
+
+  start = p;
+
+  while (*p && *p != '"')
+    p++;
+
+  if (*p != '"')
+    goto error;
+
+  end = p;
+
+  p++;
+
+  while (g_ascii_isspace (*p))
+    p++;
+
+  if (*p && *p != '#')
+    goto error;
+
+  path = g_strndup (start, end - start);
+
+  parser_parse_file (parser, path);
+
+  g_free (path);
+
+  return;
+
+error:
+  g_warning ("Could not parse include: %s", line);
+}
+
 static void
 parser_parse_line (GtkComposeParser *parser,
                    const char       *line)
@@ -259,7 +313,10 @@ parser_parse_line (GtkComposeParser *parser,
     return;
 
   if (g_str_has_prefix (line, "include "))
-    return;
+    {
+      parser_handle_include (parser, line);
+      return;
+    }
 
   components = g_strsplit (line, ":", 2);
 
@@ -797,15 +854,44 @@ gtk_compose_table_new_with_list (GList   *compose_list,
   return retval;
 }
 
+static char *
+canonicalize_filename (const char *path)
+{
+  GFile *file;
+  char *retval;
+
+  file = g_file_new_for_path (path);
+  retval = g_file_get_path (file);
+
+  g_object_unref (file);
+
+  return retval;
+}
+
 static void
 parser_parse_file (GtkComposeParser *parser,
                    const char       *compose_file)
 {
+  char *path;
+
   // stash the name for the table hash
   if (parser->compose_file == NULL)
     parser->compose_file = compose_file;
 
-  parser_read_file (parser, compose_file);
+  path = canonicalize_filename (compose_file);
+
+  if (g_list_find_custom (parser->files, path, (GCompareFunc)strcmp))
+    {
+      g_warning ("include cycle detected: %s", compose_file);
+      g_free (path);
+      return;
+    }
+
+  parser->files = g_list_prepend (parser->files, path);
+
+  parser_read_file (parser, path);
+
+  parser->files = g_list_remove (parser->files, path);
 }
 
 static GtkComposeTable *

@@ -1,0 +1,3 @@
+include "testsuite/gtk/compose/included"   # see if this works
+
+<Multi_key> <s> <e> <q> : "!"
