@@ -49,6 +49,7 @@ gtk_compose_data_free (GtkComposeData *compose_data)
 
 typedef struct {
   GList *sequences;
+  const char *compose_file;
 } GtkComposeParser;
 
 static GtkComposeParser *
@@ -59,6 +60,7 @@ parser_new (void)
   parser = g_new (GtkComposeParser, 1);
 
   parser->sequences = NULL;
+  parser->compose_file = NULL;
 
   return parser;
 }
@@ -247,8 +249,8 @@ fail:
 }
 
 static void
-parse_compose_line (GList       **compose_list,
-                    const char   *line)
+parser_parse_line (GtkComposeParser *parser,
+                   const char       *line)
 {
   char **components = NULL;
   GtkComposeData *compose_data = NULL;
@@ -277,7 +279,7 @@ parse_compose_line (GList       **compose_list,
 
   g_strfreev (components);
 
-  *compose_list = g_list_append (*compose_list, compose_data);
+  parser->sequences = g_list_append (parser->sequences, compose_data);
 
   return;
 
@@ -289,30 +291,28 @@ fail:
 
 extern const GtkComposeTableCompact gtk_compose_table_compact;
 
-static GList *
-gtk_compose_list_parse_file (const char *compose_file)
+static void
+parser_read_file (GtkComposeParser *parser,
+                  const char       *compose_file)
 {
   char *contents = NULL;
   char **lines = NULL;
   gsize length = 0;
   GError *error = NULL;
-  GList *compose_list = NULL;
-  int i;
 
   if (!g_file_get_contents (compose_file, &contents, &length, &error))
     {
       g_warning ("%s", error->message);
       g_error_free (error);
-      return NULL;
+      return;
     }
 
   lines = g_strsplit (contents, "\n", -1);
-  g_free (contents);
-  for (i = 0; lines[i] != NULL; i++)
-    parse_compose_line (&compose_list, lines[i]);
-  g_strfreev (lines);
+  for (int i = 0; lines[i] != NULL; i++)
+    parser_parse_line (parser, lines[i]);
 
-  return compose_list;
+  g_strfreev (lines);
+  g_free (contents);
 }
 
 static GList *
@@ -797,27 +797,25 @@ gtk_compose_table_new_with_list (GList   *compose_list,
   return retval;
 }
 
-GtkComposeTable *
-gtk_compose_table_new_with_file (const char *compose_file)
+static void
+parser_parse_file (GtkComposeParser *parser,
+                   const char       *compose_file)
 {
-  GtkComposeParser *parser;
-  GtkComposeTable *compose_table;
+  // stash the name for the table hash
+  if (parser->compose_file == NULL)
+    parser->compose_file = compose_file;
+
+  parser_read_file (parser, compose_file);
+}
+
+static GtkComposeTable *
+parser_get_compose_table (GtkComposeParser *parser)
+{
   int max_compose_len = 0;
   int n_index_stride = 0;
 
-  g_assert (compose_file != NULL);
-
-  compose_table = NULL;
-
-  compose_table = gtk_compose_table_load_cache (compose_file);
-  if (compose_table != NULL)
-    return compose_table;
-
-  parser = parser_new ();
-
-  parser->sequences = gtk_compose_list_parse_file (compose_file);
   if (parser->sequences == NULL)
-    goto out;
+    return NULL;
 
   parser->sequences = gtk_compose_list_check_duplicated (parser->sequences);
   parser->sequences = gtk_compose_list_check_uint16 (parser->sequences);
@@ -829,19 +827,38 @@ gtk_compose_table_new_with_file (const char *compose_file)
                                              GINT_TO_POINTER (max_compose_len));
   if (parser->sequences == NULL)
     {
-      g_warning ("compose file %s does not include any keys besides keys in en-us compose file", compose_file);
-      goto out;
+      g_warning ("compose file %s does not include any keys besides keys in en-us compose file", parser->compose_file);
+      return NULL;
     }
 
-  compose_table = gtk_compose_table_new_with_list (parser->sequences,
-                                                   max_compose_len,
-                                                   n_index_stride,
-                                                   g_str_hash (compose_file));
+  return gtk_compose_table_new_with_list (parser->sequences,
+                                          max_compose_len,
+                                          n_index_stride,
+                                          g_str_hash (parser->compose_file));
+}
 
-  gtk_compose_table_save_cache (compose_table);
+GtkComposeTable *
+gtk_compose_table_new_with_file (const char *compose_file)
+{
+  GtkComposeParser *parser;
+  GtkComposeTable *compose_table;
 
-out:
+  g_assert (compose_file != NULL);
+
+  compose_table = gtk_compose_table_load_cache (compose_file);
+  if (compose_table != NULL)
+    return compose_table;
+
+  parser = parser_new ();
+
+  parser_parse_file (parser, compose_file);
+
+  compose_table = parser_get_compose_table (parser);
+
   parser_free (parser);
+
+  if (compose_table != NULL)
+    gtk_compose_table_save_cache (compose_table);
 
   return compose_table;
 }
