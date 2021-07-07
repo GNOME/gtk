@@ -39,7 +39,6 @@ typedef struct {
   char *value;
 } GtkComposeData;
 
-
 static void
 gtk_compose_data_free (GtkComposeData *compose_data)
 {
@@ -48,10 +47,27 @@ gtk_compose_data_free (GtkComposeData *compose_data)
   g_slice_free (GtkComposeData, compose_data);
 }
 
-static void
-gtk_compose_list_element_free (GtkComposeData *compose_data, gpointer data)
+typedef struct {
+  GList *sequences;
+} GtkComposeParser;
+
+static GtkComposeParser *
+parser_new (void)
 {
-  gtk_compose_data_free (compose_data);
+  GtkComposeParser *parser;
+
+  parser = g_new (GtkComposeParser, 1);
+
+  parser->sequences = NULL;
+
+  return parser;
+}
+
+static void
+parser_free (GtkComposeParser *parser)
+{
+  g_list_free_full (parser->sequences, (GDestroyNotify) gtk_compose_data_free);
+  g_free (parser);
 }
 
 static gboolean
@@ -784,42 +800,48 @@ gtk_compose_table_new_with_list (GList   *compose_list,
 GtkComposeTable *
 gtk_compose_table_new_with_file (const char *compose_file)
 {
-  GList *compose_list = NULL;
+  GtkComposeParser *parser;
   GtkComposeTable *compose_table;
   int max_compose_len = 0;
   int n_index_stride = 0;
 
   g_assert (compose_file != NULL);
 
+  compose_table = NULL;
+
   compose_table = gtk_compose_table_load_cache (compose_file);
   if (compose_table != NULL)
     return compose_table;
 
-  compose_list = gtk_compose_list_parse_file (compose_file);
-  if (compose_list == NULL)
-    return NULL;
-  compose_list = gtk_compose_list_check_duplicated (compose_list);
-  compose_list = gtk_compose_list_check_uint16 (compose_list);
-  compose_list = gtk_compose_list_format_for_gtk (compose_list,
-                                                  &max_compose_len,
-                                                  &n_index_stride);
-  compose_list = g_list_sort_with_data (compose_list,
-                                        (GCompareDataFunc) gtk_compose_data_compare,
-                                        GINT_TO_POINTER (max_compose_len));
-  if (compose_list == NULL)
+  parser = parser_new ();
+
+  parser->sequences = gtk_compose_list_parse_file (compose_file);
+  if (parser->sequences == NULL)
+    goto out;
+
+  parser->sequences = gtk_compose_list_check_duplicated (parser->sequences);
+  parser->sequences = gtk_compose_list_check_uint16 (parser->sequences);
+  parser->sequences = gtk_compose_list_format_for_gtk (parser->sequences,
+                                                       &max_compose_len,
+                                                       &n_index_stride);
+  parser->sequences = g_list_sort_with_data (parser->sequences,
+                                             (GCompareDataFunc) gtk_compose_data_compare,
+                                             GINT_TO_POINTER (max_compose_len));
+  if (parser->sequences == NULL)
     {
       g_warning ("compose file %s does not include any keys besides keys in en-us compose file", compose_file);
-      return NULL;
+      goto out;
     }
 
-  compose_table = gtk_compose_table_new_with_list (compose_list,
+  compose_table = gtk_compose_table_new_with_list (parser->sequences,
                                                    max_compose_len,
                                                    n_index_stride,
                                                    g_str_hash (compose_file));
 
-  g_list_free_full (compose_list, (GDestroyNotify) gtk_compose_list_element_free);
-
   gtk_compose_table_save_cache (compose_table);
+
+out:
+  parser_free (parser);
 
   return compose_table;
 }
