@@ -40,14 +40,14 @@
  *
  * `GtkIMContextSimple` is an input method supporting table-based input methods.
  *
- * `GtkIMContextSimple` has a built-in table of compose sequences that is
- * derived from the X11 Compose files.
- *
- * `GtkIMContextSimple` reads additional compose sequences from the first of the
+ * `GtkIMContextSimple` reads compose sequences from the first of the
  * following files that is found: ~/.config/gtk-4.0/Compose, ~/.XCompose,
  * /usr/share/X11/locale/$locale/Compose (for locales that have a nontrivial
  * Compose file). The syntax of these files is described in the Compose(5)
  * manual page.
+ *
+ * If none of these files is found, `GtkIMContextSimple` uses a built-in table
+ * of compose sequences that is derived from the X11 Compose files.
  *
  * ## Unicode characters
  *
@@ -88,6 +88,7 @@ const GtkComposeTableCompact gtk_compose_table_compact = {
 
 G_LOCK_DEFINE_STATIC (global_tables);
 static GSList *global_tables;
+static gboolean omit_builtin_sequences;
 
 static const guint16 gtk_compose_ignore[] = {
   0, /* Yes, XKB will send us key press events with NoSymbol :( */
@@ -173,7 +174,8 @@ gtk_compose_table_find (gconstpointer data1,
 }
 
 static void
-add_compose_table_from_file (const char *compose_file)
+add_compose_table_from_file (const char *compose_file,
+                             gboolean    replace_builtin)
 {
   guint hash;
 
@@ -187,7 +189,11 @@ add_compose_table_from_file (const char *compose_file)
       table = gtk_compose_table_new_with_file (compose_file);
 
       if (table)
-        global_tables = g_slist_prepend (global_tables, table);
+        {
+          global_tables = g_slist_prepend (global_tables, table);
+          if (replace_builtin)
+            omit_builtin_sequences = TRUE;
+        }
     }
 
   G_UNLOCK (global_tables);
@@ -231,7 +237,7 @@ gtk_im_context_simple_init_compose_table (void)
   path = g_build_filename (g_get_user_config_dir (), "gtk-4.0", "Compose", NULL);
   if (g_file_test (path, G_FILE_TEST_EXISTS))
     {
-      add_compose_table_from_file (path);
+      add_compose_table_from_file (path, TRUE);
       g_free (path);
       return;
     }
@@ -244,7 +250,7 @@ gtk_im_context_simple_init_compose_table (void)
   path = g_build_filename (home, ".XCompose", NULL);
   if (g_file_test (path, G_FILE_TEST_EXISTS))
     {
-      add_compose_table_from_file (path);
+      add_compose_table_from_file (path, TRUE);
       g_free (path);
       return;
     }
@@ -288,7 +294,9 @@ gtk_im_context_simple_init_compose_table (void)
   g_strfreev (langs);
 
   if (path != NULL)
-    add_compose_table_from_file (path);
+    {
+      add_compose_table_from_file (path, TRUE);
+    }
 
   g_free (path);
 }
@@ -1066,7 +1074,10 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       if (success)
         return TRUE;
 
-      if (gtk_compose_table_compact_check (&gtk_compose_table_compact,
+      G_LOCK (global_tables);
+
+      if (!omit_builtin_sequences &&
+          gtk_compose_table_compact_check (&gtk_compose_table_compact,
                                            priv->compose_buffer, n_compose,
                                            &compose_finish, &compose_match,
                                            &output_char))
@@ -1095,6 +1106,8 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 
           return TRUE;
         }
+
+      G_UNLOCK (global_tables);
 
       if (gtk_check_algorithmically (priv->compose_buffer, n_compose, &output_char))
         {
@@ -1255,8 +1268,6 @@ gtk_im_context_simple_add_table (GtkIMContextSimple *context_simple,
 				 int                 max_seq_len,
 				 int                 n_seqs)
 {
-  GtkComposeTable *table;
-
   g_return_if_fail (GTK_IS_IM_CONTEXT_SIMPLE (context_simple));
 
   add_compose_table_from_data (data, max_seq_len, n_seqs);
@@ -1275,5 +1286,5 @@ gtk_im_context_simple_add_compose_file (GtkIMContextSimple *context_simple,
 {
   g_return_if_fail (GTK_IS_IM_CONTEXT_SIMPLE (context_simple));
 
-  add_compose_table_from_file (compose_file);
+  add_compose_table_from_file (compose_file, FALSE);
 }
