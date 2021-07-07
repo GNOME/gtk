@@ -7117,6 +7117,69 @@ gtk_text_get_truncate_multiline (GtkText *self)
   return priv->truncate_multiline;
 }
 
+/**
+ * gtk_text_compute_cursor_extents:
+ * @self: a `GtkText`
+ * @position: the character position
+ * @strong: (out) (optional): location to store the strong cursor position
+ * @weak: (out) (optional): location to store the weak cursor position
+ *
+ * Determine the positions of the strong and weak cursors if the
+ * insertion point in the layout is at @position.
+ *
+ * The position of each cursor is stored as a zero-width rectangle.
+ * The strong cursor location is the location where characters of
+ * the directionality equal to the base direction are inserted.
+ * The weak cursor location is the location where characters of
+ * the directionality opposite to the base direction are inserted.
+ *
+ * The rectangle positions are in widget coordinates.
+ *
+ * Since: 4.4
+ */
+void
+gtk_text_compute_cursor_extents (GtkText         *self,
+                                 gsize            position,
+                                 graphene_rect_t *strong,
+                                 graphene_rect_t *weak)
+{
+  PangoLayout *layout;
+  PangoRectangle pango_strong_pos;
+  PangoRectangle pango_weak_pos;
+  int offset_x, offset_y, index;
+  const char *text;
+
+  g_return_if_fail (GTK_IS_TEXT (self));
+
+  layout = gtk_text_ensure_layout (self, TRUE);
+  text = pango_layout_get_text (layout);
+  position = CLAMP (position, 0, g_utf8_strlen (text, -1));
+  index = g_utf8_offset_to_pointer (text, position) - text;
+
+  pango_layout_get_cursor_pos (layout, index,
+                               strong ? &pango_strong_pos : NULL,
+                               weak ? &pango_weak_pos : NULL);
+  gtk_text_get_layout_offsets (self, &offset_x, &offset_y);
+
+  if (strong)
+    {
+      graphene_rect_init (strong,
+                          offset_x + pango_strong_pos.x / PANGO_SCALE,
+                          offset_y + pango_strong_pos.y / PANGO_SCALE,
+                          0,
+                          pango_strong_pos.height / PANGO_SCALE);
+    }
+
+  if (weak)
+    {
+      graphene_rect_init (weak,
+                          offset_x + pango_weak_pos.x / PANGO_SCALE,
+                          offset_y + pango_weak_pos.y / PANGO_SCALE,
+                          0,
+                          pango_weak_pos.height / PANGO_SCALE);
+    }
+}
+
 static void
 gtk_text_real_undo (GtkWidget  *widget,
                     const char *action_name,

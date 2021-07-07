@@ -159,6 +159,11 @@ void            gtk_text_set_truncate_multiline         (GtkText         *self,
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_text_get_truncate_multiline         (GtkText         *self);
 
+GDK_AVAILABLE_IN_4_4
+void            gtk_text_compute_cursor_extents         (GtkText         *self,
+                                                         gsize            position,
+                                                         graphene_rect_t *strong,
+                                                         graphene_rect_t *weak);
 
 
 G_END_DECLS
