@@ -606,6 +606,8 @@ gtk_file_filter_add_pattern (GtkFileFilter *filter,
  *
  * In contrast to pattern matches, suffix matches
  * are *always* case-insensitive.
+ *
+ * Since: 4.4
  */
 void
 gtk_file_filter_add_suffix (GtkFileFilter *filter,

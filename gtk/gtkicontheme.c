@@ -2623,6 +2623,8 @@ gtk_icon_theme_has_icon (GtkIconTheme *self,
  * for a particular `GIcon`.
  *
  * Returns: %TRUE if @self includes an icon for @gicon
+ *
+ * Since: 4.2
  */
 gboolean
 gtk_icon_theme_has_gicon (GtkIconTheme *self,
