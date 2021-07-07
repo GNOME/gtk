@@ -631,6 +631,16 @@ gdk_x11_display_init_egl (GdkX11Display  *self,
       return FALSE;
     }
 
+  if (!epoxy_has_egl_extension (self->egl_display, "EGL_KHR_surfaceless_context"))
+    {
+      eglTerminate (dpy);
+      self->egl_display = NULL;
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_UNSUPPORTED_PROFILE,
+                           _("Surfaceless contexts are not supported on this EGL implementation"));
+      return FALSE;
+    }
+
   if (!gdk_x11_display_create_egl_config (self, force, out_visual, out_depth, error))
     {
       eglTerminate (self->egl_display);
@@ -646,8 +656,6 @@ gdk_x11_display_init_egl (GdkX11Display  *self,
     epoxy_has_egl_extension (self->egl_display, "EGL_EXT_buffer_age");
   self->has_egl_swap_buffers_with_damage =
     epoxy_has_egl_extension (self->egl_display, "EGL_EXT_swap_buffers_with_damage");
-  self->has_egl_surfaceless_context =
-    epoxy_has_egl_extension (self->egl_display, "EGL_KHR_surfaceless_context");
 
   GDK_DISPLAY_NOTE (display, OPENGL,
                     g_message ("EGL found\n"
@@ -657,15 +665,13 @@ gdk_x11_display_init_egl (GdkX11Display  *self,
                                " - Checked extensions:\n"
                                "\t* EGL_KHR_create_context: %s\n"
                                "\t* EGL_EXT_buffer_age: %s\n"
-                               "\t* EGL_EXT_swap_buffers_with_damage: %s\n"
-                               "\t* EGL_KHR_surfaceless_context: %s\n",
+                               "\t* EGL_EXT_swap_buffers_with_damage: %s\n",
                                eglQueryString (self->egl_display, EGL_VERSION),
                                eglQueryString (self->egl_display, EGL_VENDOR),
                                eglQueryString (self->egl_display, EGL_CLIENT_APIS),
                                self->has_egl_khr_create_context ? "yes" : "no",
                                self->has_egl_buffer_age ? "yes" : "no",
-                               self->has_egl_swap_buffers_with_damage ? "yes" : "no",
-                               self->has_egl_surfaceless_context ? "yes" : "no"));
+                               self->has_egl_swap_buffers_with_damage ? "yes" : "no"));
 
   return TRUE;
 }
@@ -711,12 +717,7 @@ gdk_x11_gl_context_egl_make_current (GdkDisplay   *display,
   if (gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)))
     egl_surface = gdk_x11_surface_get_egl_surface (surface);
   else
-    {
-      if (display_x11->has_egl_surfaceless_context)
-        egl_surface = EGL_NO_SURFACE;
-      else
-        egl_surface = gdk_x11_surface_get_egl_surface (display_x11->leader_gdk_surface);
-    }
+    egl_surface = EGL_NO_SURFACE;
 
   GDK_DISPLAY_NOTE (display, OPENGL,
                     g_message ("Making EGL context %p current to surface %p",

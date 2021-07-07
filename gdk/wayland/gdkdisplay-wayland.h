@@ -159,7 +159,6 @@ struct _GdkWaylandDisplay
 
   guint have_egl_buffer_age : 1;
   guint have_egl_swap_buffers_with_damage : 1;
-  guint have_egl_surfaceless_context : 1;
 };
 
 struct _GdkWaylandDisplayClass

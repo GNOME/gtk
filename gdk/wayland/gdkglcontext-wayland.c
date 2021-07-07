@@ -469,6 +469,15 @@ gdk_wayland_display_init_gl (GdkDisplay  *display,
       return NULL;
     }
 
+  if (!epoxy_has_egl_extension (dpy, "EGL_KHR_surfaceless_context"))
+    {
+      eglTerminate (dpy);
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_UNSUPPORTED_PROFILE,
+                           _("Surfaceless contexts are not supported on this EGL implementation"));
+      return NULL;
+    }
+
   display_wayland->egl_config = get_eglconfig (dpy);
   if (!display_wayland->egl_config)
     {
@@ -488,9 +497,6 @@ gdk_wayland_display_init_gl (GdkDisplay  *display,
 
   display_wayland->have_egl_swap_buffers_with_damage =
     epoxy_has_egl_extension (dpy, "EGL_EXT_swap_buffers_with_damage");
-
-  display_wayland->have_egl_surfaceless_context =
-    epoxy_has_egl_extension (dpy, "EGL_KHR_surfaceless_context");
 
   GDK_DISPLAY_NOTE (display, OPENGL,
             g_message ("EGL API version %d.%d found\n"
@@ -572,13 +578,7 @@ gdk_wayland_display_make_gl_context_current (GdkDisplay   *display,
   if (gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)))
     egl_surface = gdk_wayland_surface_get_egl_surface (surface);
   else
-    {
-      if (display_wayland->have_egl_surfaceless_context)
-        egl_surface = EGL_NO_SURFACE;
-      else
-        egl_surface = gdk_wayland_surface_get_dummy_egl_surface (surface,
-                                                                 display_wayland->egl_config);
-    }
+    egl_surface = EGL_NO_SURFACE;
 
   if (!eglMakeCurrent (display_wayland->egl_display, egl_surface,
                        egl_surface, context_wayland->egl_context))
