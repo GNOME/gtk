@@ -30,6 +30,8 @@
 #define GTK_COMPOSE_TABLE_MAGIC "GtkComposeTable"
 #define GTK_COMPOSE_TABLE_VERSION (2)
 
+extern const GtkComposeTableCompact gtk_compose_table_compact;
+
 /* Maximum length of sequences we parse */
 
 #define MAX_COMPOSE_LEN 20
@@ -299,6 +301,40 @@ handle_substitutions (const char *start,
 }
 
 static void
+parser_add_default_sequences (GtkComposeParser *parser)
+{
+  const GtkComposeTableCompact *table = &gtk_compose_table_compact;
+  GtkComposeData *data;
+
+  for (int idx = 0; idx < table->n_index_size; idx++)
+    {
+      const guint16 *seq_index = table->data + (idx * table->n_index_stride);
+
+      for (int i = 1; i < table->max_seq_len; i++)
+        {
+          int row_stride = i + 1;
+
+          for (int j = seq_index[i]; j < seq_index[i + 1]; j += row_stride)
+            {
+              char buf[8] = { 0, };
+
+              data = g_slice_new0 (GtkComposeData);
+              data->sequence = g_new0 (gunichar, row_stride + 2);
+              data->sequence[0] = seq_index[0];
+              for (int k = 0; k < i; k++)
+                data->sequence[1 + k] = table->data[j + k];
+              data->sequence[1 + i] = 0;
+
+              g_unichar_to_utf8 (table->data[j + i], buf);
+              data->value = g_strdup (buf);
+
+              parser->sequences = g_list_append (parser->sequences, data);
+            }
+        }
+    }
+}
+
+static void
 parser_handle_include (GtkComposeParser *parser,
                        const char       *line)
 {
@@ -334,11 +370,17 @@ parser_handle_include (GtkComposeParser *parser,
   if (*p && *p != '#')
     goto error;
 
-  path = handle_substitutions (start, end - start);
-
-  parser_parse_file (parser, path);
-
-  g_free (path);
+  if (end - start == 2 &&
+      strncmp ("%L", start, end - start) == 0)
+    {
+      parser_add_default_sequences (parser);
+    }
+  else
+    {
+      path = handle_substitutions (start, end - start);
+      parser_parse_file (parser, path);
+      g_free (path);
+    }
 
   return;
 
@@ -390,8 +432,6 @@ fail:
     gtk_compose_data_free (compose_data);
 }
 
-extern const GtkComposeTableCompact gtk_compose_table_compact;
-
 static void
 parser_read_file (GtkComposeParser *parser,
                   const char       *compose_file)
@@ -428,7 +468,6 @@ gtk_compose_list_check_duplicated (GList *compose_list)
       static guint16 keysyms[MAX_COMPOSE_LEN + 1];
       int i;
       int n_compose = 0;
-      gboolean compose_finish;
       gunichar output_char;
       char buf[8] = { 0, };
 
@@ -448,18 +487,7 @@ gtk_compose_list_check_duplicated (GList *compose_list)
           n_compose++;
         }
 
-      if (gtk_compose_table_compact_check (&gtk_compose_table_compact,
-                                           keysyms, n_compose,
-                                           &compose_finish,
-                                           NULL,
-                                           &output_char) &&
-          compose_finish)
-        {
-          g_unichar_to_utf8 (output_char, buf);
-          if (strcmp (compose_data->value, buf) == 0)
-            removed_list = g_list_prepend (removed_list, compose_data);
-        }
-      else if (gtk_check_algorithmically (keysyms, n_compose, &output_char))
+      if (gtk_check_algorithmically (keysyms, n_compose, &output_char))
         {
           g_unichar_to_utf8 (output_char, buf);
           if (strcmp (compose_data->value, buf) == 0)
