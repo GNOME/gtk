@@ -987,11 +987,15 @@ scrolled_window_drag_update_cb (GtkScrolledWindow *scrolled_window,
                                 GtkGesture        *gesture)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
+  GdkEventSequence *sequence;
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
   double dx, dy;
 
-  if (!gtk_drag_check_threshold_double (GTK_WIDGET (scrolled_window),
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+
+  if (gtk_gesture_get_sequence_state (gesture, sequence) != GTK_EVENT_SEQUENCE_CLAIMED &&
+      !gtk_drag_check_threshold_double (GTK_WIDGET (scrolled_window),
                                         0, 0, offset_x, offset_y))
     return;
 
