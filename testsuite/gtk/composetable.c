@@ -77,12 +77,10 @@ gtk_compose_table_print (GtkComposeTable *table)
 static void
 generate_output (const char *file)
 {
-  GSList *tables = NULL;
   GtkComposeTable *table;
   char *output;
 
-  tables = gtk_compose_table_list_add_file (tables, file);
-  table = tables->data;
+  table = gtk_compose_table_new_with_file (file);
   output = gtk_compose_table_print (table);
 
   g_print ("%s", output);
@@ -92,7 +90,6 @@ static void
 compose_table_compare (gconstpointer data)
 {
   const char *basename = data;
-  GSList *tables = NULL;
   GtkComposeTable *table;
   char *file;
   char *expected;
@@ -103,11 +100,7 @@ compose_table_compare (gconstpointer data)
   file = g_build_filename (g_test_get_dir (G_TEST_DIST), "compose", basename, NULL);
   expected = g_strconcat (file, ".expected", NULL);
 
-  tables = gtk_compose_table_list_add_file (tables, file);
-
-  g_assert_true (g_slist_length (tables) == 1);
-
-  table = tables->data;
+  table = gtk_compose_table_new_with_file (file);
 
   output = gtk_compose_table_print (table);
   diff = diff_with_file (expected, output, -1, &error);
@@ -128,7 +121,6 @@ compose_table_compare (gconstpointer data)
 static void
 compose_table_match (void)
 {
-  GSList *tables = NULL;
   GtkComposeTable *table;
   char *file;
   guint16 buffer[8] = { 0, };
@@ -139,11 +131,7 @@ compose_table_match (void)
 
   file = g_build_filename (g_test_get_dir (G_TEST_DIST), "compose", "match", NULL);
 
-  tables = gtk_compose_table_list_add_file (tables, file);
-
-  g_assert_true (g_slist_length (tables) == 1);
-
-  table = tables->data;
+  table = gtk_compose_table_new_with_file (file);
 
   buffer[0] = GDK_KEY_Multi_key;
   buffer[1] = 0;

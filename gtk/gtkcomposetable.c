@@ -458,7 +458,7 @@ gtk_compose_data_compare (gpointer a,
 
 /* Implemented from g_str_hash() */
 static guint32
-gtk_compose_table_data_hash (gconstpointer v, int length)
+data_hash (gconstpointer v, int length)
 {
   const guint16 *p, *head;
   unsigned char c;
@@ -473,6 +473,24 @@ gtk_compose_table_data_hash (gconstpointer v, int length)
     }
 
   return h;
+}
+
+guint32
+gtk_compose_table_data_hash (const guint16 *data,
+                             int            max_seq_len,
+                             int            n_seqs)
+{
+  gsize n_index_stride;
+  gsize length;
+
+  n_index_stride = max_seq_len + 2;
+  if (!g_size_checked_mul (&length, n_index_stride, n_seqs))
+    {
+      g_critical ("Overflow in the compose sequences");
+      return 0;
+    }
+
+  return data_hash (data, length);
 }
 
 static char *
@@ -549,15 +567,6 @@ gtk_compose_table_serialize (GtkComposeTable *compose_table,
 #undef APPEND_GUINT16
 
   return contents;
-}
-
-static int
-gtk_compose_table_find (gconstpointer data1,
-                        gconstpointer data2)
-{
-  const GtkComposeTable *compose_table = (const GtkComposeTable *) data1;
-  guint32 hash = (guint32) GPOINTER_TO_INT (data2);
-  return compose_table->id != hash;
 }
 
 static GtkComposeTable *
@@ -782,6 +791,10 @@ gtk_compose_table_new_with_file (const char *compose_file)
 
   g_assert (compose_file != NULL);
 
+  compose_table = gtk_compose_table_load_cache (compose_file);
+  if (compose_table != NULL)
+    return compose_table;
+
   compose_list = gtk_compose_list_parse_file (compose_file);
   if (compose_list == NULL)
     return NULL;
@@ -803,38 +816,35 @@ gtk_compose_table_new_with_file (const char *compose_file)
                                                    max_compose_len,
                                                    n_index_stride,
                                                    g_str_hash (compose_file));
+
   g_list_free_full (compose_list, (GDestroyNotify) gtk_compose_list_element_free);
+
+  gtk_compose_table_save_cache (compose_table);
+
   return compose_table;
 }
 
-GSList *
-gtk_compose_table_list_add_array (GSList        *compose_tables,
-                                  const guint16 *data,
-                                  int            max_seq_len,
-                                  int            n_seqs)
+GtkComposeTable *
+gtk_compose_table_new_with_data (const guint16 *data,
+                                 int            max_seq_len,
+                                 int            n_seqs)
 {
-  guint32 hash;
   GtkComposeTable *compose_table;
   gsize n_index_stride;
   gsize length;
   int i;
   guint16 *gtk_compose_seqs = NULL;
 
-  g_return_val_if_fail (data != NULL, compose_tables);
-  g_return_val_if_fail (max_seq_len >= 0, compose_tables);
-  g_return_val_if_fail (n_seqs >= 0, compose_tables);
+  g_return_val_if_fail (data != NULL, NULL);
+  g_return_val_if_fail (max_seq_len >= 0, NULL);
+  g_return_val_if_fail (n_seqs >= 0, NULL);
 
   n_index_stride = max_seq_len + 2;
   if (!g_size_checked_mul (&length, n_index_stride, n_seqs))
     {
       g_critical ("Overflow in the compose sequences");
-      return compose_tables;
+      return NULL;
     }
-
-  hash = gtk_compose_table_data_hash (data, length);
-
-  if (g_slist_find_custom (compose_tables, GINT_TO_POINTER (hash), gtk_compose_table_find) != NULL)
-    return compose_tables;
 
   gtk_compose_seqs = g_new0 (guint16, length);
   for (i = 0; i < length; i++)
@@ -844,35 +854,11 @@ gtk_compose_table_list_add_array (GSList        *compose_tables,
   compose_table->data = gtk_compose_seqs;
   compose_table->max_seq_len = max_seq_len;
   compose_table->n_seqs = n_seqs;
-  compose_table->id = hash;
+  compose_table->id = data_hash (data, length);
   compose_table->char_data = NULL;
   compose_table->n_chars = 0;
 
-  return g_slist_prepend (compose_tables, compose_table);
-}
-
-GSList *
-gtk_compose_table_list_add_file (GSList     *compose_tables,
-                                 const char *compose_file)
-{
-  guint32 hash;
-  GtkComposeTable *compose_table;
-
-  g_return_val_if_fail (compose_file != NULL, compose_tables);
-
-  hash = g_str_hash (compose_file);
-  if (g_slist_find_custom (compose_tables, GINT_TO_POINTER (hash), gtk_compose_table_find) != NULL)
-    return compose_tables;
-
-  compose_table = gtk_compose_table_load_cache (compose_file);
-  if (compose_table != NULL)
-    return g_slist_prepend (compose_tables, compose_table);
-
-  if ((compose_table = gtk_compose_table_new_with_file (compose_file)) == NULL)
-    return compose_tables;
-
-  gtk_compose_table_save_cache (compose_table);
-  return g_slist_prepend (compose_tables, compose_table);
+  return compose_table;
 }
 
 static int

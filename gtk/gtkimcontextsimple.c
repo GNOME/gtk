@@ -163,6 +163,59 @@ get_x11_compose_file_dir (void)
   return compose_file_dir;
 }
 
+static int
+gtk_compose_table_find (gconstpointer data1,
+                        gconstpointer data2)
+{
+  const GtkComposeTable *compose_table = (const GtkComposeTable *) data1;
+  guint32 hash = (guint32) GPOINTER_TO_INT (data2);
+  return compose_table->id != hash;
+}
+
+static void
+add_compose_table_from_file (const char *compose_file)
+{
+  guint hash;
+
+  G_LOCK (global_tables);
+
+  hash = g_str_hash (compose_file);
+  if (!g_slist_find_custom (global_tables, GINT_TO_POINTER (hash), gtk_compose_table_find))
+    {
+      GtkComposeTable *table;
+
+      table = gtk_compose_table_new_with_file (compose_file);
+
+      if (table)
+        global_tables = g_slist_prepend (global_tables, table);
+    }
+
+  G_UNLOCK (global_tables);
+}
+
+static void
+add_compose_table_from_data (const guint16 *data,
+                             int            max_seq_len,
+                             int            n_seqs)
+{
+  guint hash;
+
+  G_LOCK (global_tables);
+
+  hash = gtk_compose_table_data_hash (data, max_seq_len, n_seqs);
+  if (!g_slist_find_custom (global_tables, GINT_TO_POINTER (hash), gtk_compose_table_find))
+    {
+      GtkComposeTable *table;
+
+      table = gtk_compose_table_new_with_data (data, max_seq_len, n_seqs);
+
+      if (table)
+        global_tables = g_slist_prepend (global_tables, table);
+    }
+
+  G_UNLOCK (global_tables);
+}
+
 static void
 gtk_im_context_simple_init_compose_table (void)
 {
@@ -178,10 +231,7 @@ gtk_im_context_simple_init_compose_table (void)
   path = g_build_filename (g_get_user_config_dir (), "gtk-4.0", "Compose", NULL);
   if (g_file_test (path, G_FILE_TEST_EXISTS))
     {
-      G_LOCK (global_tables);
-      global_tables = gtk_compose_table_list_add_file (global_tables, path);
-      G_UNLOCK (global_tables);
-
+      add_compose_table_from_file (path);
       g_free (path);
       return;
     }
@@ -194,9 +244,7 @@ gtk_im_context_simple_init_compose_table (void)
   path = g_build_filename (home, ".XCompose", NULL);
   if (g_file_test (path, G_FILE_TEST_EXISTS))
     {
-      G_LOCK (global_tables);
-      global_tables = gtk_compose_table_list_add_file (global_tables, path);
-      G_UNLOCK (global_tables);
+      add_compose_table_from_file (path);
       g_free (path);
       return;
     }
@@ -240,12 +288,9 @@ gtk_im_context_simple_init_compose_table (void)
   g_strfreev (langs);
 
   if (path != NULL)
-    {
-      G_LOCK (global_tables);
-      global_tables = gtk_compose_table_list_add_file (global_tables, path);
-      G_UNLOCK (global_tables);
-    }
-  g_clear_pointer (&path, g_free);
+    add_compose_table_from_file (path);
+
+  g_free (path);
 }
 
 static void
@@ -1210,14 +1255,11 @@ gtk_im_context_simple_add_table (GtkIMContextSimple *context_simple,
 				 int                 max_seq_len,
 				 int                 n_seqs)
 {
+  GtkComposeTable *table;
+
   g_return_if_fail (GTK_IS_IM_CONTEXT_SIMPLE (context_simple));
 
-  G_LOCK (global_tables);
-
-  global_tables = gtk_compose_table_list_add_array (global_tables,
-                                                    data, max_seq_len, n_seqs);
-
-  G_UNLOCK (global_tables);
+  add_compose_table_from_data (data, max_seq_len, n_seqs);
 }
 
 /**
@@ -1233,9 +1275,5 @@ gtk_im_context_simple_add_compose_file (GtkIMContextSimple *context_simple,
 {
   g_return_if_fail (GTK_IS_IM_CONTEXT_SIMPLE (context_simple));
 
-  G_LOCK (global_tables);
-
-  global_tables = gtk_compose_table_list_add_file (global_tables, compose_file);
-
-  G_UNLOCK (global_tables);
+  add_compose_table_from_file (compose_file);
 }
