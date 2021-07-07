@@ -383,6 +383,7 @@ main (int argc, char *argv[])
 {
   char *dir;
 
+  g_setenv ("LC_ALL", "en_US.UTF-8", TRUE);
   dir = g_dir_make_tmp ("composetableXXXXXX", NULL);
   g_setenv ("XDG_CACHE_HOME", dir, TRUE);
   g_free (dir);
@@ -405,6 +406,7 @@ main (int argc, char *argv[])
   g_test_add_data_func ("/compose-table/multi", "multi", compose_table_compare);
   g_test_add_data_func ("/compose-table/strings", "strings", compose_table_compare);
   g_test_add_data_func ("/compose-table/include", "include", compose_table_compare);
+  g_test_add_data_func ("/compose-table/system", "system", compose_table_compare);
   g_test_add_func ("/compose-table/include-cycle", compose_table_cycle);
   g_test_add_func ("/compose-table/include-nofile", compose_table_nofile);
   g_test_add_func ("/compose-table/match", compose_table_match);

@@ -254,6 +254,50 @@ fail:
 static void parser_parse_file (GtkComposeParser *parser,
                                const char       *path);
 
+/* Substitute %H, %L and %S */
+static char *
+handle_substitutions (const char *start,
+                      int         length)
+{
+  GString *s;
+  const char *locale_name;
+   const char *p;
+
+  s = g_string_new ("");
+
+  locale_name = getenv ("LANG");
+
+  for (p = start; *p && p < start + length; p++)
+    {
+      if (*p != '%')
+        {
+          g_string_append_c (s, *p);
+        }
+      else
+        {
+          switch (p[1])
+            {
+            case 'H':
+              p++;
+              g_string_append (s, g_get_home_dir ());
+              break;
+            case 'L':
+              p++;
+              g_string_append_printf (s, "/usr/share/X11/locale/%s/Compose", locale_name);
+              break;
+            case 'S':
+              p++;
+              g_string_append (s, "/usr/share/X11/locale");
+              break;
+            default: ;
+              /* do nothing, next iteration handles p[1] */
+            }
+        }
+    }
+
+  return g_string_free (s, FALSE);
+}
+
 static void
 parser_handle_include (GtkComposeParser *parser,
                        const char       *line)
@@ -290,7 +334,7 @@ parser_handle_include (GtkComposeParser *parser,
   if (*p && *p != '#')
     goto error;
 
-  path = g_strndup (start, end - start);
+  path = handle_substitutions (start, end - start);
 
   parser_parse_file (parser, path);
 
