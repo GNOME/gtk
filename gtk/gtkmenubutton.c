@@ -1302,6 +1302,8 @@ gtk_menu_button_set_primary (GtkMenuButton *menu_button,
  * Returns whether the menu button acts as a primary menu.
  *
  * Returns: %TRUE if the button is a primary menu
+ *
+ * Since: 4.4
  */
 gboolean
 gtk_menu_button_get_primary (GtkMenuButton *menu_button)

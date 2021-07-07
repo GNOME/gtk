@@ -340,6 +340,8 @@ gdk_wayland_gl_context_init (GdkWaylandGLContext *self)
  * Retrieves the EGL display connection object for the given GDK display.
  *
  * Returns: (nullable): the EGL display
+ *
+ * Since: 4.4
  */
 gpointer
 gdk_wayland_display_get_egl_display (GdkDisplay *display)
