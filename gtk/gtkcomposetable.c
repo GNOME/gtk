@@ -481,6 +481,10 @@ parser_read_file (GtkComposeParser *parser,
   g_free (contents);
 }
 
+/* Remove sequences that can be handled algorithmically,
+ * sequences with non-BMP keys, and sequences that produce
+ * empty strings.
+ */
 static void
 parser_remove_duplicates (GtkComposeParser *parser)
 {
@@ -498,6 +502,12 @@ parser_remove_duplicates (GtkComposeParser *parser)
       char buf[8] = { 0, };
       gboolean remove_sequence = FALSE;
 
+      if (value[0] == '\0')
+        {
+          remove_sequence = TRUE;
+          goto next;
+        }
+
       for (i = 0; i < MAX_COMPOSE_LEN + 1; i++)
         keysyms[i] = 0;
 
@@ -510,7 +520,10 @@ parser_remove_duplicates (GtkComposeParser *parser)
             break;
 
           if (codepoint > 0xffff)
-            remove_sequence = TRUE;
+            {
+              remove_sequence = TRUE;
+              goto next;
+            }
 
           n_compose++;
         }
@@ -522,6 +535,7 @@ parser_remove_duplicates (GtkComposeParser *parser)
             remove_sequence = TRUE;
         }
 
+next:
       if (remove_sequence)
         g_hash_table_iter_remove (&iter);
     }
