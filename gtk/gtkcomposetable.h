@@ -26,50 +26,65 @@ G_BEGIN_DECLS
 typedef struct _GtkComposeTable GtkComposeTable;
 typedef struct _GtkComposeTableCompact GtkComposeTableCompact;
 
+/* The layout of the data is as follows:
+ *
+ * The first part of the data contains rows of length max_seq_len + 1,
+ * where the first element is the item of the sequence, and the
+ * following elements are offsets to the data for sequences that
+ * start with the first item of length 2, ..., max_seq_len.
+ *
+ * The second part of the data contains the rest of the sequence
+ * data. It does not have a fixed stride. For each sequence, we
+ * put seq[2], ..., seq[len - 1], followed by the encoded value
+ * for this sequence.
+ *
+ * The values are encoded as follows:
+ *
+ * If the value is a single Unicode character smaler than 0x8000,
+ * then we place it directly. Otherwise, we put the UTF8-encoded
+ * value in the char_data array, and use offset | 0x8000 as the
+ * encoded value.
+ */
 struct _GtkComposeTable
 {
   guint16 *data;
   char *char_data;
   int max_seq_len;
-  int n_seqs;
+  int n_index_size;
+  int data_size;
   int n_chars;
   guint32 id;
 };
 
-struct _GtkComposeTableCompact
-{
-  const guint16 *data;
-  int max_seq_len;
-  int n_index_size;
-  int n_index_stride;
-};
+GtkComposeTable * gtk_compose_table_new_with_file (const char    *compose_file);
+GtkComposeTable * gtk_compose_table_parse         (const char    *compose_file);
+GtkComposeTable * gtk_compose_table_new_with_data (const guint16 *data,
+                                                   int            max_seq_len,
+                                                   int            n_seqs);
 
-GtkComposeTable * gtk_compose_table_new_with_file  (const char      *compose_file);
-GtkComposeTable * gtk_compose_table_new_with_data  (const guint16   *data,
-                                                    int              max_seq_len,
-                                                    int              n_seqs);
+typedef void (* GtkComposeSequenceCallback) (gunichar   *sequence,
+                                             int         len,
+                                             const char *value,
+                                             gpointer    data);
 
-gboolean          gtk_compose_table_check          (const GtkComposeTable *table,
-                                                    const guint16         *compose_buffer,
-                                                    int                    n_compose,
-                                                    gboolean              *compose_finish,
-                                                    gboolean              *compose_match,
-                                                    GString               *output);
+void              gtk_compose_table_foreach (const GtkComposeTable      *table,
+                                             GtkComposeSequenceCallback  callback,
+                                             gpointer                    data);
 
-gboolean          gtk_compose_table_compact_check  (const GtkComposeTableCompact  *table,
-                                                    const guint16                 *compose_buffer,
-                                                    int                            n_compose,
-                                                    gboolean                      *compose_finish,
-                                                    gboolean                      *compose_match,
-                                                    gunichar                      *output_char);
+gboolean          gtk_compose_table_check   (const GtkComposeTable *table,
+                                             const guint16         *compose_buffer,
+                                             int                    n_compose,
+                                             gboolean              *compose_finish,
+                                             gboolean              *compose_match,
+                                             GString               *output);
 
-gboolean          gtk_check_algorithmically        (const guint16                 *compose_buffer,
-                                                    int                            n_compose,
-                                                    gunichar                      *output);
+gboolean          gtk_check_algorithmically (const guint16         *compose_buffer,
+                                             int                    n_compose,
+                                             gunichar              *output);
 
-guint32 gtk_compose_table_data_hash (const guint16 *data,
-                                     int            max_seq_len,
-                                     int            n_seqs);
+guint32           gtk_compose_table_data_hash (const guint16 *data,
+                                               int            max_seq_len,
+                                               int            n_seqs);
 
 G_END_DECLS
 

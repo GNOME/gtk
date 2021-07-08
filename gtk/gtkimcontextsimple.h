@@ -63,11 +63,11 @@ GType         gtk_im_context_simple_get_type  (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkIMContext *gtk_im_context_simple_new       (void);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_4_FOR(gtk_im_context_simple_add_compose_file)
 void          gtk_im_context_simple_add_table (GtkIMContextSimple *context_simple,
-					       guint16            *data,
-					       int                 max_seq_len,
-					       int                 n_seqs);
+                                               guint16            *data,
+                                               int                 max_seq_len,
+                                               int                 n_seqs);
 GDK_AVAILABLE_IN_ALL
 void          gtk_im_context_simple_add_compose_file (GtkIMContextSimple *context_simple,
                                                       const char         *compose_file);

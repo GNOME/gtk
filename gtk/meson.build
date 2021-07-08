@@ -1276,3 +1276,5 @@ libgtk_static_dep = declare_dependency(sources: gtk_dep_sources,
   link_with: [libgtk_static, libgtk_css, libgdk, libgsk ],
   link_args: common_ldflags,
 )
+
+subdir('compose')
