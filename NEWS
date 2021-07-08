@@ -1,3 +1,58 @@
+Overview of Changes in GTK+ 3.24.30
+===================================
+
+* Input:
+ - Ignore NoSymbol key events (happens with some XKB options)
+ - Fix incomplete reset in some cases
+
+* GtkEmojiChooser:
+ - Update data from CLDR 39
+ - Support translated keywords for multiple languages
+ - Allow inserting multiple Emoji with Ctrl
+ - Match keywords for search
+ - Fix a memory leak
+
+* GtkFileChooser:
+ - Accessibility improvements
+
+* GtkTreeView
+ - Fix an accessibility-related memory leak
+ - Fix assertion failures in some cases
+
+* Printing:
+ - Remove the Google Cloud Print backend, since the
+   service was shut down
+
+* Wayland:
+ - Work with pointer-gestures v1 protocol
+
+* Win32:
+ - Fix using GL with Mesa drivers
+ - Add support for Windows Pointer Input stack
+
+* MacOS:
+ - Fix a crash with Drag-and-Drop
+
+* Translation updates:
+ Belarusian
+ Brazilian Portuguese
+ British English
+ Catalan
+ Indonesian
+ Lithuanian
+ Nepali
+ Norwegian Bokmål
+ Occitan
+ Portuguese
+ Romanian
+ Russian
+ Serbian
+ Slovenian
+ Spanish
+ Turkish
+ Ukrainian
+
+
 Overview of Changes in GTK+ 3.24.29
 ===================================
 
