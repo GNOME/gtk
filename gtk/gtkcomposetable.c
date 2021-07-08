@@ -508,6 +508,12 @@ parser_remove_duplicates (GtkComposeParser *parser)
           goto next;
         }
 
+      if (sequence[1] == 0)
+        {
+          remove_sequence = TRUE;
+          goto next;
+        }
+
       for (i = 0; i < MAX_COMPOSE_LEN + 1; i++)
         keysyms[i] = 0;
 
