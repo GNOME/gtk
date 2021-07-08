@@ -114,6 +114,7 @@ gtk_private_sources = files([
   'gtkiconcache.c',
   'gtkiconcachevalidator.c',
   'gtkiconhelper.c',
+  'gtkjoinedmenu.c',
   'gtkkineticscrolling.c',
   'gtkmagnifier.c',
   'gtkmenusectionbox.c',
