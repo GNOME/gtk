@@ -2483,6 +2483,8 @@ _gtk_text_btree_char_is_invisible (const GtkTextIter *iter)
   tagCnts = g_alloca (sizeof (int) * numTags);
   tags = g_alloca (sizeof (GtkTextTag *) * numTags);
 
+  memset (tagCnts, 0, sizeof (int) * numTags);
+
   /*
    * Record tag toggles within the line of indexPtr but preceding
    * indexPtr.
