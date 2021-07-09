@@ -1253,6 +1253,26 @@ synthesize_crossing_events (GdkDisplay                 *display,
     }
 }
 
+static void
+make_crossing_event (GdkDevice *physical_device,
+                     GdkSurface *surface,
+                     POINT *screen_pt,
+                     guint32 time_)
+{
+  GDK_NOTE (EVENTS, g_print (" mouse_window %p -> %p",
+                             mouse_window ? GDK_SURFACE_HWND (mouse_window) : NULL,
+                             surface ? GDK_SURFACE_HWND (surface) : NULL));
+  synthesize_crossing_events (_gdk_display,
+                              physical_device,
+                              mouse_window, surface,
+                              GDK_CROSSING_NORMAL,
+                              screen_pt,
+                              0, /* TODO: Set right mask */
+                              time_,
+                              FALSE);
+  g_set_object (&mouse_window, surface);
+}
+
 /* Acquires actual client area size of the underlying native window.
  * Rectangle is in GDK screen coordinates (_gdk_offset_* is added).
  * Returns FALSE if configure events should be inhibited,
@@ -1770,6 +1790,8 @@ gdk_event_translate (MSG *msg,
   GdkDeviceGrabInfo *keyboard_grab = NULL;
   GdkDeviceGrabInfo *pointer_grab = NULL;
   GdkSurface *grab_window = NULL;
+
+  crossing_cb_t crossing_cb = NULL;
 
   int button;
 
@@ -2434,6 +2456,165 @@ gdk_event_translate (MSG *msg,
       return_val = TRUE;
       break;
 
+    case WM_POINTERDOWN:
+      if (_gdk_win32_tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
+          gdk_winpointer_should_forward_message (msg))
+        {
+          return_val = FALSE;
+          break;
+        }
+
+      if (pointer_grab != NULL &&
+          !pointer_grab->implicit &&
+          !pointer_grab->owner_events)
+        g_set_object (&window, pointer_grab->surface);
+
+      if (IS_POINTER_PRIMARY_WPARAM (msg->wParam) && mouse_window != window)
+        crossing_cb = make_crossing_event;
+
+      gdk_winpointer_input_events (window, crossing_cb, msg);
+
+      *ret_valp = 0;
+      return_val = TRUE;
+      break;
+
+    case WM_POINTERUP:
+      if (_gdk_win32_tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
+          gdk_winpointer_should_forward_message (msg))
+        {
+          return_val = FALSE;
+          break;
+        }
+
+      if (pointer_grab != NULL &&
+          !pointer_grab->implicit &&
+          !pointer_grab->owner_events)
+        g_set_object (&window, pointer_grab->surface);
+
+      gdk_winpointer_input_events (window, NULL, msg);
+
+      impl = GDK_WIN32_SURFACE (window);
+      if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
+        {
+          gdk_win32_surface_end_move_resize_drag (window);
+        }
+
+      *ret_valp = 0;
+      return_val = TRUE;
+      break;
+
+    case WM_POINTERUPDATE:
+      if (_gdk_win32_tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
+          gdk_winpointer_should_forward_message (msg))
+        {
+          return_val = FALSE;
+          break;
+        }
+
+      if (pointer_grab != NULL &&
+          !pointer_grab->implicit &&
+          !pointer_grab->owner_events)
+        g_set_object (&window, pointer_grab->surface);
+
+      if (IS_POINTER_PRIMARY_WPARAM (msg->wParam) && mouse_window != window)
+        crossing_cb = make_crossing_event;
+
+      impl = GDK_WIN32_SURFACE (window);
+
+      if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
+        {
+          gdk_win32_surface_do_move_resize_drag (window, current_root_x, current_root_y);
+        }
+      else
+        {
+          gdk_winpointer_input_events (window, crossing_cb, msg);
+        }
+
+      *ret_valp = 0;
+      return_val = TRUE;
+      break;
+
+    case WM_NCPOINTERUPDATE:
+      if (_gdk_win32_tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
+          gdk_winpointer_should_forward_message (msg))
+        {
+          return_val = FALSE;
+          break;
+        }
+
+      if (IS_POINTER_PRIMARY_WPARAM (msg->wParam) &&
+          !IS_POINTER_INCONTACT_WPARAM (msg->wParam) &&
+          mouse_window != NULL)
+        {
+          GdkDevice *event_device = NULL;
+          guint32 event_time = 0;
+
+          if (gdk_winpointer_get_message_info (msg, &event_device, &event_time))
+            {
+              make_crossing_event(event_device,
+                                  NULL,
+                                  &msg->pt,
+                                  event_time);
+            }
+        }
+
+      return_val = FALSE; /* forward to DefWindowProc */
+      break;
+
+    case WM_POINTERENTER:
+      if (_gdk_win32_tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
+          gdk_winpointer_should_forward_message (msg))
+        {
+          return_val = FALSE;
+          break;
+        }
+
+      if (pointer_grab != NULL &&
+          !pointer_grab->implicit &&
+          !pointer_grab->owner_events)
+        g_set_object (&window, pointer_grab->surface);
+
+      if (IS_POINTER_NEW_WPARAM (msg->wParam))
+        {
+          gdk_winpointer_input_events (window, NULL, msg);
+        }
+
+      *ret_valp = 0;
+      return_val = TRUE;
+      break;
+
+    case WM_POINTERLEAVE:
+      if (_gdk_win32_tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
+          gdk_winpointer_should_forward_message (msg))
+        {
+          return_val = FALSE;
+          break;
+        }
+
+      if (!IS_POINTER_INRANGE_WPARAM (msg->wParam))
+        {
+          gdk_winpointer_input_events (window, NULL, msg);
+        }
+      else if (IS_POINTER_PRIMARY_WPARAM (msg->wParam) && mouse_window != NULL)
+        {
+          GdkDevice *event_device = NULL;
+          guint32 event_time = 0;
+
+          if (gdk_winpointer_get_message_info (msg, &event_device, &event_time))
+            {
+              make_crossing_event(event_device,
+                                  NULL,
+                                  &msg->pt,
+                                  event_time);
+            }
+        }
+
+      gdk_winpointer_interaction_ended (msg);
+
+      *ret_valp = 0;
+      return_val = TRUE;
+      break;
+
     case WM_MOUSEWHEEL:
     case WM_MOUSEHWHEEL:
       GDK_NOTE (EVENTS, g_print (" %d", (short) HIWORD (msg->wParam)));
@@ -2532,44 +2713,6 @@ gdk_event_translate (MSG *msg,
       return_val = TRUE;
       break;
 
-    case WM_HSCROLL:
-      /* Just print more debugging information, don't actually handle it. */
-      GDK_NOTE (EVENTS,
-		(g_print (" %s",
-			  (LOWORD (msg->wParam) == SB_ENDSCROLL ? "ENDSCROLL" :
-			   (LOWORD (msg->wParam) == SB_LEFT ? "LEFT" :
-			    (LOWORD (msg->wParam) == SB_RIGHT ? "RIGHT" :
-			     (LOWORD (msg->wParam) == SB_LINELEFT ? "LINELEFT" :
-			      (LOWORD (msg->wParam) == SB_LINERIGHT ? "LINERIGHT" :
-			       (LOWORD (msg->wParam) == SB_PAGELEFT ? "PAGELEFT" :
-				(LOWORD (msg->wParam) == SB_PAGERIGHT ? "PAGERIGHT" :
-				 (LOWORD (msg->wParam) == SB_THUMBPOSITION ? "THUMBPOSITION" :
-				  (LOWORD (msg->wParam) == SB_THUMBTRACK ? "THUMBTRACK" :
-				   "???")))))))))),
-		 (LOWORD (msg->wParam) == SB_THUMBPOSITION ||
-		  LOWORD (msg->wParam) == SB_THUMBTRACK) ?
-		 (g_print (" %d", HIWORD (msg->wParam)), 0) : 0));
-      break;
-
-    case WM_VSCROLL:
-      /* Just print more debugging information, don't actually handle it. */
-      GDK_NOTE (EVENTS,
-		(g_print (" %s",
-			  (LOWORD (msg->wParam) == SB_ENDSCROLL ? "ENDSCROLL" :
-			   (LOWORD (msg->wParam) == SB_BOTTOM ? "BOTTOM" :
-			    (LOWORD (msg->wParam) == SB_TOP ? "TOP" :
-			     (LOWORD (msg->wParam) == SB_LINEDOWN ? "LINDOWN" :
-			      (LOWORD (msg->wParam) == SB_LINEUP ? "LINEUP" :
-			       (LOWORD (msg->wParam) == SB_PAGEDOWN ? "PAGEDOWN" :
-				(LOWORD (msg->wParam) == SB_PAGEUP ? "PAGEUP" :
-				 (LOWORD (msg->wParam) == SB_THUMBPOSITION ? "THUMBPOSITION" :
-				  (LOWORD (msg->wParam) == SB_THUMBTRACK ? "THUMBTRACK" :
-				   "???")))))))))),
-		 (LOWORD (msg->wParam) == SB_THUMBPOSITION ||
-		  LOWORD (msg->wParam) == SB_THUMBTRACK) ?
-		 (g_print (" %d", HIWORD (msg->wParam)), 0) : 0));
-      break;
-
      case WM_MOUSEACTIVATE:
        {
 	 if (GDK_IS_DRAG_SURFACE (window))
@@ -2586,6 +2729,16 @@ gdk_event_translate (MSG *msg,
        }
 
        break;
+
+    case WM_POINTERACTIVATE:
+      if (GDK_IS_DRAG_SURFACE (window) ||
+          _gdk_modal_blocked (window))
+        {
+          *ret_valp = PA_NOACTIVATE;
+          return_val = TRUE;
+        }
+
+      break;
 
     case WM_KILLFOCUS:
       if (keyboard_grab != NULL &&

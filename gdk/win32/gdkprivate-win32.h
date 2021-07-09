@@ -246,6 +246,8 @@ void    _gdk_other_api_failed        (const char *where,
 #define WIN32_GDI_FAILED(api) WIN32_API_FAILED (api)
 #define OTHER_API_FAILED(api) _gdk_other_api_failed (G_STRLOC, api)
 
+#define WIN32_API_FAILED_LOG_ONCE(api) G_STMT_START { static gboolean logged = 0; if (!logged) { _gdk_win32_api_failed (G_STRLOC , api); logged = 1; }} G_STMT_END
+
 /* These two macros call a GDI or other Win32 API and if the return
  * value is zero or NULL, print a warning message. The majority of GDI
  * calls return zero or NULL on failure. The value of the macros is nonzero
