@@ -83,6 +83,7 @@ libgdk_win32_la_SOURCES = \
 	gdkwindow-win32.c \
 	gdkwindow-win32.h \
 	pktdef.h \
+	winpointer.h \
 	wintab.h \
 	xcursors.h
 
