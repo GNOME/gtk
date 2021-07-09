@@ -56,6 +56,7 @@
 #include "gtkpango.h"
 #include "gtknative.h"
 #include "gtkwidgetprivate.h"
+#include "gtkjoinedmenuprivate.h"
 
 /**
  * GtkTextView:
@@ -8733,8 +8734,11 @@ static GMenuModel *
 gtk_text_view_get_menu_model (GtkTextView *text_view)
 {
   GtkTextViewPrivate *priv = text_view->priv;
+  GtkJoinedMenu *joined;
   GMenu *menu, *section;
   GMenuItem *item;
+
+  joined = gtk_joined_menu_new ();
 
   menu = g_menu_new ();
 
@@ -8785,10 +8789,13 @@ gtk_text_view_get_menu_model (GtkTextView *text_view)
   g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
   g_object_unref (section);
 
-  if (priv->extra_menu)
-    g_menu_append_section (menu, NULL, priv->extra_menu);
+  gtk_joined_menu_append_menu (joined, G_MENU_MODEL (menu));
+  g_object_unref (menu);
 
-  return G_MENU_MODEL (menu);
+  if (priv->extra_menu)
+    gtk_joined_menu_append_menu (joined, priv->extra_menu);
+
+  return G_MENU_MODEL (joined);
 }
 
 static void

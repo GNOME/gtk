@@ -52,6 +52,7 @@
 #include "gtkdragsourceprivate.h"
 #include "gtkdragicon.h"
 #include "gtkcsscolorvalueprivate.h"
+#include "gtkjoinedmenuprivate.h"
 
 #include <math.h>
 #include <string.h>
@@ -5468,9 +5469,11 @@ gtk_label_move_cursor (GtkLabel       *self,
 static GMenuModel *
 gtk_label_get_menu_model (GtkLabel *self)
 {
+  GtkJoinedMenu *joined;
   GMenu *menu, *section;
   GMenuItem *item;
 
+  joined = gtk_joined_menu_new ();
   menu = g_menu_new ();
 
   section = g_menu_new ();
@@ -5498,10 +5501,13 @@ gtk_label_get_menu_model (GtkLabel *self)
   g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
   g_object_unref (section);
 
-  if (self->extra_menu)
-    g_menu_append_section (menu, NULL, self->extra_menu);
+  gtk_joined_menu_append_menu (joined, G_MENU_MODEL (menu));
+  g_object_unref (menu);
 
-  return G_MENU_MODEL (menu);
+  if (self->extra_menu)
+    gtk_joined_menu_append_menu (joined, self->extra_menu);
+
+  return G_MENU_MODEL (joined);
 }
 
 static void
