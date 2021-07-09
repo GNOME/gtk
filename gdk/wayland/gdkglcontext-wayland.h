@@ -45,8 +45,6 @@ struct _GdkWaylandGLContextClass
 
 GdkGLContext *  gdk_wayland_display_init_gl                         (GdkDisplay        *display,
                                                                      GError           **error);
-GdkGLContext *  gdk_wayland_surface_create_gl_context               (GdkSurface        *surface,
-                                                                     GError           **error);
 
 G_END_DECLS
 

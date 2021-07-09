@@ -1155,6 +1155,7 @@ gdk_win32_gl_context_init (GdkWin32GLContext *self)
 {
 }
 
+#if 0
 GdkGLContext *
 _gdk_win32_surface_create_gl_context (GdkSurface *surface,
                                       GError **error)
@@ -1203,6 +1204,7 @@ _gdk_win32_surface_create_gl_context (GdkSurface *surface,
 
   return GDK_GL_CONTEXT (context);
 }
+#endif
 
 /**
  * gdk_win32_display_get_wgl_version:

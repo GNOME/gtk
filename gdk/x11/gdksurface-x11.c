@@ -4810,7 +4810,6 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->drag_begin = _gdk_x11_surface_drag_begin;
   impl_class->get_scale_factor = gdk_x11_surface_get_scale_factor;
   impl_class->set_opaque_region = gdk_x11_surface_set_opaque_region;
-  impl_class->create_gl_context = gdk_x11_surface_create_gl_context;
   impl_class->request_layout = gdk_x11_surface_request_layout;
   impl_class->compute_size = gdk_x11_surface_compute_size;
 }

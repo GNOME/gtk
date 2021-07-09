@@ -59,10 +59,6 @@ struct _GdkWin32GLContextClass
   GdkGLContextClass parent_class;
 };
 
-GdkGLContext *
-_gdk_win32_surface_create_gl_context (GdkSurface *window,
-                                      GError **error);
-
 void
 _gdk_win32_surface_invalidate_egl_framebuffer (GdkSurface *surface);
 

@@ -63,9 +63,6 @@ gboolean                gdk_x11_display_init_gl_backend         (GdkX11Display *
                                                                  int           *out_depth,
                                                                  GError       **error);
 
-GdkGLContext *          gdk_x11_surface_create_gl_context       (GdkSurface    *window,
-                                                                 GError       **error);
-
 /* GLX */
 #define GDK_TYPE_X11_GL_CONTEXT_GLX     (gdk_x11_gl_context_glx_get_type())
 #define GDK_X11_GL_CONTEXT_GLX(obj)     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_X11_GL_CONTEXT_GLX, GdkX11GLContextGLX))
@@ -80,8 +77,6 @@ gboolean                gdk_x11_display_init_glx                (GdkX11Display *
 void                    gdk_x11_surface_destroy_glx_drawable    (GdkX11Surface *self);
 
 GType                   gdk_x11_gl_context_glx_get_type         (void) G_GNUC_CONST;
-GdkX11GLContext *       gdk_x11_gl_context_glx_new              (GdkSurface    *surface,
-                                                                 GError       **error);
 
 
 /* EGL */
@@ -99,8 +94,6 @@ gboolean                gdk_x11_display_init_egl                (GdkX11Display *
 void                    gdk_x11_surface_destroy_egl_surface     (GdkX11Surface *self);
 
 GType                   gdk_x11_gl_context_egl_get_type         (void) G_GNUC_CONST;
-GdkX11GLContext *       gdk_x11_gl_context_egl_new              (GdkSurface    *surface,
-                                                                 GError       **error);
 
 G_END_DECLS
 

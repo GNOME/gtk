@@ -522,27 +522,4 @@ gdk_macos_gl_context_init (GdkMacosGLContext *self)
 {
 }
 
-GdkGLContext *
-_gdk_macos_gl_context_new (GdkMacosDisplay  *display,
-                           GdkMacosSurface  *surface,
-                           gboolean          attached,
-                           GdkGLContext     *share,
-                           GError          **error)
-{
-  GdkMacosGLContext *context;
-
-  g_return_val_if_fail (GDK_IS_MACOS_SURFACE (surface), NULL);
-  g_return_val_if_fail (!share || GDK_IS_MACOS_GL_CONTEXT (share), NULL);
-
-  context = g_object_new (GDK_TYPE_MACOS_GL_CONTEXT,
-                          "display", display,
-                          "surface", surface,
-                          "shared-context", share,
-                          NULL);
-
-  context->is_attached = !!attached;
-
-  return GDK_GL_CONTEXT (context);
-}
-
 G_GNUC_END_IGNORE_DEPRECATIONS

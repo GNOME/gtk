@@ -1069,31 +1069,19 @@ GdkGLContext *
 gdk_surface_get_paint_gl_context (GdkSurface  *surface,
                                   GError     **error)
 {
-  GError *internal_error = NULL;
-
   if (!gdk_display_prepare_gl (surface->display, error))
     return NULL;
 
   if (surface->gl_paint_context == NULL)
     {
-      GdkSurfaceClass *class = GDK_SURFACE_GET_CLASS (surface);
-
-      surface->gl_paint_context =
-        class->create_gl_context (surface, &internal_error);
+      surface->gl_paint_context = gdk_surface_create_gl_context (surface, error);
+      if (surface->gl_paint_context == NULL)
+        return NULL;
     }
 
-  if (internal_error != NULL)
+  if (!gdk_gl_context_realize (surface->gl_paint_context, error))
     {
-      g_propagate_error (error, internal_error);
-      g_clear_object (&(surface->gl_paint_context));
-      return NULL;
-    }
-
-  gdk_gl_context_realize (surface->gl_paint_context, &internal_error);
-  if (internal_error != NULL)
-    {
-      g_propagate_error (error, internal_error);
-      g_clear_object (&(surface->gl_paint_context));
+      g_clear_object (&surface->gl_paint_context);
       return NULL;
     }
 
@@ -1124,8 +1112,7 @@ gdk_surface_create_gl_context (GdkSurface   *surface,
   if (!gdk_display_prepare_gl (surface->display, error))
     return NULL;
 
-  return GDK_SURFACE_GET_CLASS (surface)->create_gl_context (surface,
-                                                             error);
+  return gdk_gl_context_new_for_surface (surface);
 }
 
 /**

@@ -160,8 +160,6 @@ struct _GdkSurfaceClass
 
   void         (* set_opaque_region)      (GdkSurface      *surface,
                                            cairo_region_t *region);
-  GdkGLContext *(*create_gl_context)      (GdkSurface      *surface,
-                                           GError        **error);
   void         (* request_layout)         (GdkSurface     *surface);
   gboolean     (* compute_size)           (GdkSurface     *surface);
 };

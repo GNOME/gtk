@@ -57,11 +57,6 @@ struct _GdkMacosGLContextClass
   GdkGLContextClass parent_class;
 };
 
-GdkGLContext *_gdk_macos_gl_context_new          (GdkMacosDisplay    *display,
-                                                  GdkMacosSurface    *surface,
-                                                  gboolean            attached,
-                                                  GdkGLContext       *share,
-                                                  GError            **error);
 
 G_END_DECLS
 

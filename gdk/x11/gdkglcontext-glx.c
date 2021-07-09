@@ -890,19 +890,6 @@ gdk_x11_display_create_glx_config (GdkX11Display  *self,
 
 #undef MAX_GLX_ATTRS
 
-GdkX11GLContext *
-gdk_x11_gl_context_glx_new (GdkSurface    *surface,
-                            GError       **error)
-{
-  GdkX11GLContextGLX *context;
-
-  return g_object_new (GDK_TYPE_X11_GL_CONTEXT_GLX,
-                       "surface", surface,
-                       NULL);
-
-  return GDK_X11_GL_CONTEXT (context);
-}
-
 /**
  * gdk_x11_display_get_glx_version:
  * @display: (type GdkX11Display): a `GdkDisplay`

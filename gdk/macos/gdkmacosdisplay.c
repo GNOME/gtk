@@ -641,7 +641,9 @@ static GdkGLContext *
 gdk_macos_display_init_gl (GdkDisplay  *display,
                            GError     **error)
 {
-  return _gdk_macos_gl_context_new (display, NULL, FALSE, NULL, error);
+  return g_object_new (GDK_TYPE_MACOS_GL_CONTEXT,
+                       "display", display,
+                       NULL);
 }
 
 static void

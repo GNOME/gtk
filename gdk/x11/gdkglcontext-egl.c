@@ -742,19 +742,6 @@ gdk_x11_display_init_egl (GdkX11Display  *self,
   return TRUE;
 }
 
-GdkX11GLContext *
-gdk_x11_gl_context_egl_new (GdkSurface    *surface,
-                            GError       **error)
-{
-  GdkX11GLContextEGL *context;
-
-  context = g_object_new (GDK_TYPE_X11_GL_CONTEXT_EGL,
-                          "surface", surface,
-                          NULL);
-
-  return GDK_X11_GL_CONTEXT (context);
-}
-
 /**
  * gdk_x11_display_get_egl_version:
  * @display: (type GdkX11Display): a `GdkDisplay`

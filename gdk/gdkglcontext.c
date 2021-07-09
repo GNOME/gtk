@@ -451,6 +451,21 @@ gdk_gl_context_init (GdkGLContext *self)
   priv->use_es = -1;
 }
 
+/* Must have called gdk_display_prepare_gl() before */
+GdkGLContext *
+gdk_gl_context_new_for_surface (GdkSurface *surface)
+{
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkGLContext *shared = gdk_display_get_gl_context (display);
+
+  /* assert gdk_display_prepare_gl() had been called */
+  g_assert (shared);
+
+  return g_object_new (G_OBJECT_TYPE (shared),
+                       "surface", surface,
+                       NULL);
+}
+
 GdkGLContextPaintData *
 gdk_gl_context_get_paint_data (GdkGLContext *context)
 {

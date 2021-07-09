@@ -86,6 +86,8 @@ typedef struct {
   guint use_es : 1;
 } GdkGLContextPaintData;
 
+GdkGLContext *          gdk_gl_context_new_for_surface          (GdkSurface      *surface);
+
 void                    gdk_gl_context_set_is_legacy            (GdkGLContext    *context,
                                                                  gboolean         is_legacy);
 

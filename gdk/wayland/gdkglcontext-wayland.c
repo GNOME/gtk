@@ -550,19 +550,6 @@ gdk_wayland_display_init_gl (GdkDisplay  *display,
                        NULL);
 }
 
-GdkGLContext *
-gdk_wayland_surface_create_gl_context (GdkSurface    *surface,
-                                       GError       **error)
-{
-  GdkWaylandGLContext *context;
-
-  context = g_object_new (GDK_TYPE_WAYLAND_GL_CONTEXT,
-                          "surface", surface,
-                          NULL);
-
-  return GDK_GL_CONTEXT (context);
-}
-
 static void
 gdk_wayland_gl_context_dispose (GObject *gobject)
 {

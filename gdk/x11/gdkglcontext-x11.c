@@ -53,35 +53,6 @@ gdk_x11_gl_context_init (GdkX11GLContext *self)
   self->do_frame_sync = TRUE;
 }
 
-GdkGLContext *
-gdk_x11_surface_create_gl_context (GdkSurface    *surface,
-                                   GError       **error)
-{
-  GdkX11GLContext *context = NULL;
-  GdkX11Display *display_x11;
-  GdkDisplay *display;
-
-  display = gdk_surface_get_display (surface);
-  display_x11 = GDK_X11_DISPLAY (display);
-
-  if (display_x11->egl_display)
-    context = gdk_x11_gl_context_egl_new (surface, error);
-  else if (display_x11->glx_config != NULL)
-    context = gdk_x11_gl_context_glx_new (surface, error);
-  else
-    {
-      g_assert (display_x11->gl_error);
-      if (error)
-        *error = g_error_copy (display_x11->gl_error);
-      return NULL;
-    }
-
-  if (context == NULL)
-    return NULL;
-
-  return GDK_GL_CONTEXT (context);
-}
-
 gboolean
 gdk_x11_display_init_gl_backend (GdkX11Display  *self,
                                  Visual        **out_visual,

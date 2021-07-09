@@ -2889,7 +2889,12 @@ gdk_x11_display_init_gl (GdkDisplay  *display,
   if (!have_gl)
     return NULL;
 
-  return gdk_x11_surface_create_gl_context (display_x11->leader_gdk_surface, error);
+  if (display_x11->egl_display)
+    return g_object_new (GDK_TYPE_X11_GL_CONTEXT_EGL, "surface", display_x11->leader_gdk_surface, NULL);
+  else if (display_x11->glx_config != NULL)
+    return g_object_new (GDK_TYPE_X11_GL_CONTEXT_GLX, "surface", display_x11->leader_gdk_surface, NULL);
+  else
+    g_return_val_if_reached (NULL);
 }
 
 static void
