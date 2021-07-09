@@ -694,6 +694,7 @@ update_keymap (GdkKeymap *gdk_keymap)
   if (hkls_len != keymap->layout_handles->len)
     keymap->keysym_tab = g_renew (guint, keymap->keysym_tab, keysym_tab_size);
 
+  memset (key_state, 0, sizeof(key_state));
   memset (keymap->keysym_tab, 0, keysym_tab_size);
   g_array_set_size (keymap->layout_handles, hkls_len);
   g_array_set_size (keymap->options, hkls_len);
