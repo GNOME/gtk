@@ -49,6 +49,10 @@ typedef BOOL
 typedef BOOL
 (WINAPI *getPointerCursorId_t)(UINT32 pointerId, UINT32 *cursorId);
 typedef BOOL
+(WINAPI *getPointerPenInfo_t)(UINT32 pointerId, POINTER_PEN_INFO *penInfo);
+typedef BOOL
+(WINAPI *getPointerTouchInfo_t)(UINT32 pointerId, POINTER_TOUCH_INFO *touchInfo);
+typedef BOOL
 (WINAPI *getPointerPenInfoHistory_t)(UINT32 pointerId, UINT32 *entriesCount, POINTER_PEN_INFO *penInfo);
 typedef BOOL
 (WINAPI *getPointerTouchInfoHistory_t)(UINT32 pointerId, UINT32 *entriesCount, POINTER_TOUCH_INFO *touchInfo);
@@ -61,12 +65,518 @@ static getPointerDeviceCursors_t getPointerDeviceCursors;
 static getPointerDeviceRects_t getPointerDeviceRects;
 static getPointerType_t getPointerType;
 static getPointerCursorId_t getPointerCursorId;
+static getPointerPenInfo_t getPointerPenInfo;
+static getPointerTouchInfo_t getPointerTouchInfo;
 static getPointerPenInfoHistory_t getPointerPenInfoHistory;
 static getPointerTouchInfoHistory_t getPointerTouchInfoHistory;
 static setGestureConfig_t setGestureConfig;
 
 static ATOM notifications_window_class;
 static HWND notifications_window_handle;
+
+static GPtrArray *ignored_interactions;
+
+static inline void
+winpointer_ignore_interaction (UINT32 pointer_id)
+{
+  g_ptr_array_add (ignored_interactions, GUINT_TO_POINTER (pointer_id));
+}
+
+static inline void
+winpointer_remove_ignored_interaction (UINT32 pointer_id)
+{
+  g_ptr_array_remove_fast (ignored_interactions, GUINT_TO_POINTER (pointer_id));
+}
+
+static inline gboolean
+winpointer_should_ignore_interaction (UINT32 pointer_id)
+{
+  return g_ptr_array_find (ignored_interactions, GUINT_TO_POINTER (pointer_id), NULL);
+}
+
+static inline guint32
+winpointer_get_time (MSG *msg,
+                     POINTER_INFO *info)
+{
+  return info->dwTime != 0 ? info->dwTime : msg->time;
+}
+
+static inline gboolean
+winpointer_is_eraser (POINTER_PEN_INFO *pen_info)
+{
+  return (pen_info->penFlags & (PEN_FLAG_INVERTED | PEN_FLAG_ERASER)) != 0;
+}
+
+static inline gboolean
+winpointer_should_filter_message (MSG *msg,
+                                  POINTER_INPUT_TYPE type)
+{
+  switch (type)
+    {
+    case PT_TOUCH:
+      return msg->message == WM_POINTERENTER ||
+             msg->message == WM_POINTERLEAVE;
+    break;
+    }
+
+  return FALSE;
+}
+
+static GdkDeviceWinpointer*
+winpointer_find_device_with_source (HANDLE device_handle,
+                                    UINT32 cursor_id,
+                                    GdkInputSource input_source)
+{
+  for (GList *l = _gdk_device_manager->winpointer_devices; l != NULL; l = l->next)
+    {
+      GdkDeviceWinpointer *device = (GdkDeviceWinpointer*) l->data;
+
+      if (device->device_handle == device_handle &&
+          device->start_cursor_id <= cursor_id &&
+          device->end_cursor_id >= cursor_id &&
+          gdk_device_get_source ((GdkDevice*) device) == input_source)
+        {
+          return device;
+        }
+    }
+
+  return NULL;
+}
+
+static gboolean
+winpointer_allocate_event (MSG *msg,
+                           POINTER_INFO *info,
+                           GdkEventType *evt_type)
+{
+  switch (info->pointerType)
+    {
+    case PT_PEN:
+      switch (msg->message)
+        {
+        case WM_POINTERENTER:
+          g_return_val_if_fail (IS_POINTER_NEW_WPARAM (msg->wParam), FALSE);
+          *evt_type = GDK_PROXIMITY_IN;
+        return TRUE;
+        case WM_POINTERLEAVE:
+          g_return_val_if_fail (!IS_POINTER_INRANGE_WPARAM (msg->wParam), FALSE);
+          *evt_type = GDK_PROXIMITY_OUT;
+        return TRUE;
+        case WM_POINTERDOWN:
+          *evt_type = GDK_BUTTON_PRESS;
+        return TRUE;
+        case WM_POINTERUP:
+          *evt_type = GDK_BUTTON_RELEASE;
+        return TRUE;
+        case WM_POINTERUPDATE:
+          *evt_type = GDK_MOTION_NOTIFY;
+        return TRUE;
+        }
+    break;
+    case PT_TOUCH:
+      if (IS_POINTER_CANCELED_WPARAM (msg->wParam) ||
+          !HAS_POINTER_CONFIDENCE_WPARAM (msg->wParam))
+        {
+          winpointer_ignore_interaction (GET_POINTERID_WPARAM (msg->wParam));
+
+          if (((info->pointerFlags & POINTER_FLAG_INCONTACT) &&
+               (info->pointerFlags & POINTER_FLAG_UPDATE))
+              || (info->pointerFlags & POINTER_FLAG_UP))
+            {
+              *evt_type = GDK_TOUCH_CANCEL;
+              return TRUE;
+            }
+          else
+            {
+              return FALSE;
+            }
+        }
+
+      g_return_val_if_fail (msg->message != WM_POINTERENTER &&
+                            msg->message != WM_POINTERLEAVE, FALSE);
+
+      switch (msg->message)
+        {
+          case WM_POINTERDOWN:
+            *evt_type = GDK_TOUCH_BEGIN;
+          return TRUE;
+          case WM_POINTERUP:
+            *evt_type = GDK_TOUCH_END;
+          return TRUE;
+          case WM_POINTERUPDATE:
+            if (!IS_POINTER_INCONTACT_WPARAM (msg->wParam))
+              return FALSE;
+            *evt_type = GDK_TOUCH_UPDATE;
+          return TRUE;
+        }
+    break;
+    }
+
+  g_warn_if_reached ();
+
+  return FALSE;
+}
+
+static void
+winpointer_make_event (GdkDeviceWinpointer *device,
+                       GdkSurface *surface,
+                       MSG *msg,
+                       POINTER_INFO *info)
+{
+  guint32 time = 0;
+  double screen_x = 0.0;
+  double screen_y = 0.0;
+  double x = 0.0;
+  double y = 0.0;
+  unsigned int state = 0;
+  unsigned int button = 0;
+  double *axes = NULL;
+  GdkEventSequence *sequence = NULL;
+  gboolean emulating_pointer = FALSE;
+  POINT client_area_coordinates;
+  GdkWin32Surface *impl = NULL;
+  GdkEventType evt_type;
+  GdkEvent *evt = NULL;
+
+  if (!winpointer_get_event_type (msg, info, &evt_type))
+    return;
+
+  time = winpointer_get_time (msg, info);
+
+  screen_x = device->origin_x + info->ptHimetricLocation.x * device->scale_x;
+  screen_y = device->origin_y + info->ptHimetricLocation.y * device->scale_y;
+
+  client_area_coordinates.x = 0;
+  client_area_coordinates.y = 0;
+  ClientToScreen (GDK_SURFACE_HWND (surface), &client_area_coordinates);
+  x = screen_x - client_area_coordinates.x;
+  y = screen_y - client_area_coordinates.y;
+
+  impl = GDK_WIN32_SURFACE (surface);
+  x /= impl->surface_scale;
+  y /= impl->surface_scale;
+
+  state = 0;
+  if (info->dwKeyStates & POINTER_MOD_CTRL)
+    state |= GDK_CONTROL_MASK;
+  if (info->dwKeyStates & POINTER_MOD_SHIFT)
+    state |= GDK_SHIFT_MASK;
+  if (GetKeyState (VK_MENU) < 0)
+    state |= GDK_MOD1_MASK;
+  if (GetKeyState (VK_CAPITAL) & 0x1)
+    state |= GDK_LOCK_MASK;
+
+  device->last_button_mask = 0;
+  if (((info->pointerFlags & POINTER_FLAG_FIRSTBUTTON) &&
+       (info->ButtonChangeType != POINTER_CHANGE_FIRSTBUTTON_DOWN))
+      || info->ButtonChangeType == POINTER_CHANGE_FIRSTBUTTON_UP)
+    device->last_button_mask |= GDK_BUTTON1_MASK;
+  if (((info->pointerFlags & POINTER_FLAG_SECONDBUTTON) &&
+       (info->ButtonChangeType != POINTER_CHANGE_SECONDBUTTON_DOWN))
+      || info->ButtonChangeType == POINTER_CHANGE_SECONDBUTTON_UP)
+    device->last_button_mask |= GDK_BUTTON3_MASK;
+  state |= device->last_button_mask;
+
+  switch (info->pointerType)
+    {
+    case PT_PEN:
+      {
+        POINTER_PEN_INFO *pen_info = (POINTER_PEN_INFO*) info;
+
+        axes = g_new (double, device->num_axes);
+        axes[0] = (pen_info->penMask & PEN_MASK_PRESSURE) ? pen_info->pressure / 1024.0 :
+                  (pen_info->pointerInfo.pointerFlags & POINTER_FLAG_INCONTACT) ? 1.0 : 0.0;
+        axes[1] = (pen_info->penMask & PEN_MASK_TILT_X) ? pen_info->tiltX / 90.0 : 0.0;
+        axes[2] = (pen_info->penMask & PEN_MASK_TILT_Y) ? pen_info->tiltY / 90.0 : 0.0;
+        axes[3] = (pen_info->penMask & PEN_MASK_ROTATION) ? pen_info->rotation / 360.0 : 0.0;
+      }
+    break;
+    case PT_TOUCH:
+      {
+        POINTER_TOUCH_INFO *touch_info = (POINTER_TOUCH_INFO*) info;
+
+        axes = g_new (double, device->num_axes);
+        axes[0] = (touch_info->touchMask & TOUCH_MASK_PRESSURE) ? touch_info->pressure / 1024.0 :
+                  (touch_info->pointerInfo.pointerFlags & POINTER_FLAG_INCONTACT) ? 1.0 : 0.0;
+      }
+    break;
+    }
+
+  if (axes)
+    {
+      memcpy (device->last_axis_data, axes, sizeof (double) * device->num_axes);
+    }
+
+  sequence = (GdkEventSequence*) GUINT_TO_POINTER (info->pointerId);
+  emulating_pointer = (info->pointerFlags & POINTER_FLAG_PRIMARY) != 0;
+  button = (info->pointerFlags & POINTER_FLAG_FIRSTBUTTON) ||
+           (info->ButtonChangeType == POINTER_CHANGE_FIRSTBUTTON_UP) ? 1 : 3;
+
+  switch (evt->any.type)
+    {
+    case GDK_PROXIMITY_IN:
+    case GDK_PROXIMITY_OUT:
+      evt = gdk_proximity_event_new (evt_type,
+                                     surface,
+                                     (GdkDevice*) device,
+                                     tool,
+                                     time);
+    break;
+    case GDK_BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+      evt = gdk_button_event_new (evt_type,
+                                  surface,
+                                  (GdkDevice*) device,
+                                  tool,
+                                  time,
+                                  state,
+                                  button,
+                                  x,
+                                  y,
+                                  axes);
+    break;
+    case GDK_MOTION_NOTIFY:
+      evt = gdk_motion_event_new (surface,
+                                  (GdkDevice*) device,
+                                  tool,
+                                  time,
+                                  state,
+                                  x,
+                                  y,
+                                  axes);
+    break;
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_CANCEL:
+    case GDK_TOUCH_END:
+      evt = gdk_touch_event_new (evt_type,
+                                 sequence,
+                                 surface,
+                                 (GdkDevice*) device,
+                                 time,
+                                 state,
+                                 x,
+                                 y,
+                                 axes,
+                                 emulating_pointer);
+    break;
+    default:
+      g_warn_if_reached ();
+    break;
+    }
+
+  if (G_LIKELY (evt))
+    {
+      _gdk_device_virtual_set_active (_gdk_device_manager->core_pointer, GDK_DEVICE (device));
+      _gdk_win32_append_event (evt);
+    }
+}
+
+void
+gdk_winpointer_input_events (GdkDisplay *display,
+                             GdkSurface *surface,
+                             crossing_cb_t crossing_cb,
+                             MSG *msg)
+{
+  UINT32 pointer_id = GET_POINTERID_WPARAM (msg->wParam);
+  POINTER_INPUT_TYPE type = PT_POINTER;
+  UINT32 cursor_id = 0;
+
+  if (!getPointerType (pointer_id, &type))
+    {
+      WIN32_API_FAILED_LOG_ONCE ("GetPointerType");
+      return;
+    }
+
+  if (!getPointerCursorId (pointer_id, &cursor_id))
+    {
+      WIN32_API_FAILED_LOG_ONCE ("GetPointerCursorId");
+      return;
+    }
+
+  if (winpointer_should_filter_message (msg, type))
+    return;
+
+  if (winpointer_should_ignore_interaction (pointer_id))
+    return;
+
+  switch (type)
+    {
+    case PT_PEN:
+      {
+        POINTER_PEN_INFO *infos = NULL;
+        UINT32 history_count = 0;
+        GdkDeviceWinpointer *device = NULL;
+        UINT32 h = 0;
+
+        do
+          {
+            infos = g_new0 (POINTER_PEN_INFO, history_count);
+            if (!getPointerPenInfoHistory (pointer_id, &history_count, infos))
+              {
+                WIN32_API_FAILED_LOG_ONCE ("GetPointerPenInfoHistory");
+                g_free (infos);
+                return;
+              }
+          }
+        while (!infos && history_count > 0);
+
+        if (G_UNLIKELY (history_count == 0))
+          return;
+
+        device = winpointer_find_device_with_source (infos->pointerInfo.sourceDevice, cursor_id, GDK_SOURCE_PEN);
+        if (G_UNLIKELY (!device))
+          {
+            g_free (infos);
+            return;
+          }
+
+        h = history_count - 1;
+
+        if (crossing_cb)
+          {
+            POINT screen_pt = infos[h].pointerInfo.ptPixelLocation;
+            guint32 event_time = winpointer_get_time (msg, &infos[h].pointerInfo);
+
+            crossing_cb(GDK_DEVICE (device), surface, &screen_pt, event_time);
+          }
+
+        do winpointer_make_event (device, surface, msg, (POINTER_INFO*) &infos[h]);
+        while (h-- > 0);
+
+        g_free (infos);
+      }
+    break;
+    case PT_TOUCH:
+      {
+        POINTER_TOUCH_INFO *infos = NULL;
+        UINT32 history_count = 0;
+        GdkDeviceWinpointer *device = NULL;
+        UINT32 h = 0;
+
+        do
+          {
+            infos = g_new0 (POINTER_TOUCH_INFO, history_count);
+            if (!getPointerTouchInfoHistory (pointer_id, &history_count, infos))
+              {
+                WIN32_API_FAILED_LOG_ONCE ("GetPointerTouchInfoHistory");
+                g_free (infos);
+                return;
+              }
+          }
+        while (!infos && history_count > 0);
+
+        if (G_UNLIKELY (history_count == 0))
+          return;
+
+        device = winpointer_find_device_with_source (infos->pointerInfo.sourceDevice, cursor_id, GDK_SOURCE_TOUCHSCREEN);
+        if (G_UNLIKELY (!device))
+          {
+            g_free (infos);
+            return;
+          }
+
+        h = history_count - 1;
+
+        if (crossing_cb)
+          {
+            POINT screen_pt = infos[h].pointerInfo.ptPixelLocation;
+            guint32 event_time = winpointer_get_time (msg, &infos[h].pointerInfo);
+
+            crossing_cb(GDK_DEVICE (device), surface, &screen_pt, event_time);
+          }
+
+        do winpointer_make_event (device, surface, msg, (POINTER_INFO*) &infos[h]);
+        while (h-- > 0);
+
+        g_free (infos);
+      }
+    break;
+    }
+}
+
+gboolean
+gdk_winpointer_get_message_info (MSG *msg,
+                                 GdkDevice **device,
+                                 guint32 *time)
+{
+  UINT32 pointer_id = GET_POINTERID_WPARAM (msg->wParam);
+  POINTER_INPUT_TYPE type = PT_POINTER;
+  UINT32 cursor_id = 0;
+
+  if (!getPointerType (pointer_id, &type))
+    {
+      WIN32_API_FAILED_LOG_ONCE ("GetPointerType");
+      return FALSE;
+    }
+
+  if (!getPointerCursorId (pointer_id, &cursor_id))
+    {
+      WIN32_API_FAILED_LOG_ONCE ("GetPointerCursorId");
+      return FALSE;
+    }
+
+  switch (type)
+    {
+    case PT_PEN:
+      {
+        POINTER_PEN_INFO pen_info;
+
+        if (!getPointerPenInfo (pointer_id, &pen_info))
+          {
+            WIN32_API_FAILED_LOG_ONCE ("GetPointerPenInfo");
+            return FALSE;
+          }
+
+        *device = (GdkDevice*) winpointer_find_device_with_source (pen_info.pointerInfo.sourceDevice, cursor_id, GDK_SOURCE_PEN);
+        *time = winpointer_get_time (msg, &pen_info.pointerInfo);
+      }
+    break;
+    case PT_TOUCH:
+      {
+        POINTER_TOUCH_INFO touch_info;
+
+        if (!getPointerTouchInfo (pointer_id, &touch_info))
+            {
+              WIN32_API_FAILED_LOG_ONCE ("GetPointerTouchInfo");
+              return FALSE;
+            }
+
+        *device = GDK_DEVICE (winpointer_find_device_with_source (touch_info.pointerInfo.sourceDevice,
+                                                                  cursor_id,
+                                                                  GDK_SOURCE_TOUCHSCREEN));
+
+        *time = winpointer_get_time (msg, &touch_info.pointerInfo);
+      }
+    break;
+    default:
+      g_warn_if_reached ();
+      return FALSE;
+    break;
+    }
+
+  return *device ? TRUE : FALSE;
+}
+
+gboolean
+gdk_winpointer_should_forward_message (MSG *msg)
+{
+  UINT32 pointer_id = GET_POINTERID_WPARAM (msg->wParam);
+  POINTER_INPUT_TYPE type = PT_POINTER;
+
+  if (!getPointerType (pointer_id, &type))
+    {
+      WIN32_API_FAILED_LOG_ONCE ("GetPointerType");
+      return TRUE;
+    }
+
+  return !(type == PT_PEN || type == PT_TOUCH);
+}
+
+void
+gdk_winpointer_interaction_ended (MSG *msg)
+{
+  winpointer_remove_ignored_interaction (GET_POINTERID_WPARAM (msg->wParam));
+}
 
 static inline double
 utils_rect_width (RECT *rect)

@@ -23,4 +23,19 @@ gboolean gdk_winpointer_initialize (void);
 void gdk_winpointer_initialize_surface (GdkSurface *surface);
 void gdk_winpointer_finalize_surface (GdkSurface *surface);
 
+typedef void
+(*crossing_cb_t)(GdkDevice *device,
+                 GdkWindow *window,
+                 POINT *screen_pt,
+                 guint32 time_);
+
+gboolean gdk_winpointer_should_forward_message (MSG *msg);
+void     gdk_winpointer_input_events (GdkWindow *window,
+                                      crossing_cb_t crossing_cb,
+                                      MSG *msg);
+gboolean gdk_winpointer_get_message_info (MSG *msg,
+                                          GdkDevice **device,
+                                          guint32 *time_);
+void     gdk_winpointer_interaction_ended (MSG *msg);
+
 #endif /* __GDK_INPUT_WINPOINTER_H__ */
