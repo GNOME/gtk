@@ -1447,7 +1447,7 @@ gdk_display_emit_opened (GdkDisplay *display)
  * gdk_display_get_setting:
  * @display: a `GdkDisplay`
  * @name: the name of the setting
- * @value: location to store the value of the setting
+ * @value: (out caller-allocates): location to store the value of the setting
  *
  * Retrieves a desktop-wide setting such as double-click time
  * for the @display.

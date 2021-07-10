@@ -220,7 +220,7 @@ gtk_shortcut_trigger_to_string (GtkShortcutTrigger *self)
 /**
  * gtk_shortcut_trigger_print:
  * @self: a `GtkShortcutTrigger`
- * @string: a `GString` to print into
+ * @string: (out caller-allocates): a `GString` to print into
  *
  * Prints the given trigger into a string for the developer.
  * This is meant for debugging and logging.
@@ -276,7 +276,7 @@ gtk_shortcut_trigger_to_label (GtkShortcutTrigger *self,
  * gtk_shortcut_trigger_print_label:
  * @self: a `GtkShortcutTrigger`
  * @display: `GdkDisplay` to print for
- * @string: a `GString` to print into
+ * @string: (out caller-allocates): a `GString` to print into
  *
  * Prints the given trigger into a string.
  *

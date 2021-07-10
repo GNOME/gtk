@@ -116,7 +116,7 @@ gtk_shortcut_action_to_string (GtkShortcutAction *self)
 /**
  * gtk_shortcut_action_print:
  * @self: a `GtkShortcutAction`
- * @string: a `GString` to print into
+ * @string: (out caller-allocates): a `GString` to print into
  *
  * Prints the given action into a string for the developer.
  *

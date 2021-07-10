@@ -879,7 +879,7 @@ gsk_gl_shader_get_arg_bool (GskGLShader *shader,
  * @shader: a `GskGLShader`
  * @args: uniform arguments
  * @idx: index of the uniform
- * @out_value: location to store the uniform value in
+ * @out_value: (out caller-allocates): location to store the uniform value in
  *
  * Gets the value of the uniform @idx in the @args block.
  *
@@ -912,7 +912,7 @@ gsk_gl_shader_get_arg_vec2 (GskGLShader     *shader,
  * @shader: a `GskGLShader`
  * @args: uniform arguments
  * @idx: index of the uniform
- * @out_value: location to store the uniform value in
+ * @out_value: (out caller-allocates): location to store the uniform value in
  *
  * Gets the value of the uniform @idx in the @args block.
  *
@@ -945,7 +945,7 @@ gsk_gl_shader_get_arg_vec3 (GskGLShader     *shader,
  * @shader: a `GskGLShader`
  * @args: uniform arguments
  * @idx: index of the uniform
- * @out_value: location to store set the uniform value in
+ * @out_value: (out caller-allocates): location to store set the uniform value in
  *
  * Gets the value of the uniform @idx in the @args block.
  *

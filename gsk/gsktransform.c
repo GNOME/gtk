@@ -1371,7 +1371,7 @@ gsk_transform_unref (GskTransform *self)
 /**
  * gsk_transform_print:
  * @self: (nullable): a `GskTransform`
- * @string:  The string to print into
+ * @string: (out caller-allocates):  The string to print into
  *
  * Converts @self into a human-readable string representation suitable
  * for printing.

@@ -223,7 +223,7 @@ gdk_content_formats_unref (GdkContentFormats *formats)
 /**
  * gdk_content_formats_print:
  * @formats: a `GdkContentFormats`
- * @string: a `GString` to print into
+ * @string: (out caller-allocates): a `GString` to print into
  *
  * Prints the given @formats into a string for human consumption.
  *
