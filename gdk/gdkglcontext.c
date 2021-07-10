@@ -89,8 +89,6 @@
 #include <epoxy/gl.h>
 
 typedef struct {
-  GdkGLContext *shared_context;
-
   int major;
   int minor;
   int gl_version;
@@ -144,7 +142,6 @@ static void
 gdk_gl_context_dispose (GObject *gobject)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (gobject);
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   GdkGLContext *current;
 
   gdk_gl_context_clear_old_updated_area (context);
@@ -152,8 +149,6 @@ gdk_gl_context_dispose (GObject *gobject)
   current = g_private_get (&thread_current_context);
   if (current == context)
     g_private_replace (&thread_current_context, NULL);
-
-  g_clear_object (&priv->shared_context);
 
   G_OBJECT_CLASS (gdk_gl_context_parent_class)->dispose (gobject);
 }
@@ -174,17 +169,10 @@ gdk_gl_context_set_property (GObject      *gobject,
                              const GValue *value,
                              GParamSpec   *pspec)
 {
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private ((GdkGLContext *) gobject);
-
   switch (prop_id)
     {
     case PROP_SHARED_CONTEXT:
-      {
-        GdkGLContext *context = g_value_get_object (value);
-
-        if (context != NULL)
-          priv->shared_context = g_object_ref (context);
-      }
+      g_assert (g_value_get_object (value) == NULL);
       break;
 
     default:
@@ -198,12 +186,10 @@ gdk_gl_context_get_property (GObject    *gobject,
                              GValue     *value,
                              GParamSpec *pspec)
 {
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private ((GdkGLContext *) gobject);
-
   switch (prop_id)
     {
     case PROP_SHARED_CONTEXT:
-      g_value_set_object (value, priv->shared_context);
+      g_value_set_object (value, NULL);
       break;
 
     default:
@@ -427,7 +413,13 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   /**
    * GdkGLContext:shared-context: (attributes org.gtk.Property.get=gdk_gl_context_get_shared_context)
    *
-   * The `GdkGLContext` that this context is sharing data with, or %NULL
+   * Always %NULL
+   *
+   * As many contexts can share data now and no single shared context exists
+   * anymore, this function has been deprecated and now always returns %NULL.
+   *
+   * Deprecated: 4.4: Use [method@Gdk.GLContext.is_shared] to check if contexts
+   *   can be shared.
    */
   obj_pspecs[PROP_SHARED_CONTEXT] =
     g_param_spec_object ("shared-context",
@@ -436,7 +428,8 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
                          GDK_TYPE_GL_CONTEXT,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS);
+                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_DEPRECATED);
 
   gobject_class->set_property = gdk_gl_context_set_property;
   gobject_class->get_property = gdk_gl_context_get_property;
@@ -1206,18 +1199,22 @@ gdk_gl_context_get_surface (GdkGLContext *context)
  * gdk_gl_context_get_shared_context: (attributes org.gtk.Method.get_property=shared-context)
  * @context: a `GdkGLContext`
  *
- * Retrieves the `GdkGLContext` that this @context share data with.
+ * Used to retrieves the `GdkGLContext` that this @context share data with.
  *
- * Returns: (nullable) (transfer none): a `GdkGLContext`
+ * As many contexts can share data now and no single shared context exists
+ * anymore, this function has been deprecated and now always returns %NULL.
+ *
+ * Returns: (nullable) (transfer none): %NULL
+ *
+ * Deprecated: 4.4: Use [method@Gdk.GLContext.is_shared] to check if contexts
+ *   can be shared.
  */
 GdkGLContext *
 gdk_gl_context_get_shared_context (GdkGLContext *context)
 {
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-
   g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), NULL);
 
-  return priv->shared_context;
+  return NULL;
 }
 
 /**
