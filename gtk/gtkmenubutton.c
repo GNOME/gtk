@@ -131,6 +131,8 @@ struct _GtkMenuButton
 struct _GtkMenuButtonClass
 {
   GtkWidgetClass parent_class;
+
+  void (* activate) (GtkMenuButton *self);
 };
 
 enum
@@ -148,7 +150,13 @@ enum
   LAST_PROP
 };
 
+enum {
+  ACTIVATE,
+  LAST_SIGNAL
+};
+
 static GParamSpec *menu_button_props[LAST_PROP];
+static guint signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (GtkMenuButton, gtk_menu_button, GTK_TYPE_WIDGET)
 
@@ -350,6 +358,12 @@ gtk_menu_button_grab_focus (GtkWidget *widget)
   return gtk_widget_grab_focus (self->button);
 }
 
+static void
+gtk_menu_button_activate (GtkMenuButton *self)
+{
+  gtk_widget_activate (self->button);
+}
+
 static void gtk_menu_button_root (GtkWidget *widget);
 static void gtk_menu_button_unroot (GtkWidget *widget);
 
@@ -371,6 +385,8 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   widget_class->state_flags_changed = gtk_menu_button_state_flags_changed;
   widget_class->focus = gtk_menu_button_focus;
   widget_class->grab_focus = gtk_menu_button_grab_focus;
+
+  klass->activate = gtk_menu_button_activate;
 
   /**
    * GtkMenuButton:menu-model: (attributes org.gtk.Property.get=gtk_menu_button_get_menu_model org.gtk.Property.set=gtk_menu_button_set_menu_model)
@@ -490,6 +506,28 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, menu_button_props);
+
+  /**
+   * GtkMenuButton::activate:
+   * @widget: the object which received the signal.
+   *
+   * Emitted to when the menu button is activated.
+   *
+   * The `::activate` signal on `GtkMenuButton` is an action signal and
+   * emitting it causes the button to pop up its menu.
+   *
+   * Since: 4.4
+   */
+  signals[ACTIVATE] =
+      g_signal_new (I_ ("activate"),
+                    G_OBJECT_CLASS_TYPE (gobject_class),
+                    G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                    G_STRUCT_OFFSET (GtkMenuButtonClass, activate),
+                    NULL, NULL,
+                    NULL,
+                    G_TYPE_NONE, 0);
+
+  gtk_widget_class_set_activate_signal (widget_class, signals[ACTIVATE]);
 
   gtk_widget_class_set_css_name (widget_class, I_("menubutton"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_BUTTON);

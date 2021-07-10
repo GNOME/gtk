@@ -91,6 +91,7 @@ struct _GtkColorButtonClass {
   GtkWidgetClass parent_class;
 
   void (* color_set) (GtkColorButton *cp);
+  void (* activate)  (GtkColorButton *self);
 };
 
 /* Properties */
@@ -108,6 +109,7 @@ enum
 enum
 {
   COLOR_SET,
+  ACTIVATE,
   LAST_SIGNAL
 };
 
@@ -138,6 +140,12 @@ G_DEFINE_TYPE_WITH_CODE (GtkColorButton, gtk_color_button, GTK_TYPE_WIDGET,
                                                 gtk_color_button_iface_init))
 
 static void
+gtk_color_button_activate (GtkColorButton *self)
+{
+  gtk_widget_activate (self->button);
+}
+
+static void
 gtk_color_button_class_init (GtkColorButtonClass *klass)
 {
   GObjectClass *gobject_class;
@@ -155,6 +163,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
   widget_class->root = gtk_color_button_root;
 
   klass->color_set = NULL;
+  klass->activate = gtk_color_button_activate;
 
   g_object_class_override_property (gobject_class, PROP_RGBA, "rgba");
   g_object_class_override_property (gobject_class, PROP_USE_ALPHA, "use-alpha");
@@ -193,6 +202,28 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
                                                   NULL, NULL,
                                                   NULL,
                                                   G_TYPE_NONE, 0);
+
+  /**
+   * GtkColorButton::activate:
+   * @widget: the object which received the signal.
+   *
+   * Emitted to when the color button is activated.
+   *
+   * The `::activate` signal on `GtkMenuButton` is an action signal and
+   * emitting it causes the button to pop up its dialog.
+   *
+   * Since: 4.4
+   */
+  color_button_signals[ACTIVATE] =
+      g_signal_new (I_ ("activate"),
+                    G_OBJECT_CLASS_TYPE (gobject_class),
+                    G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                    G_STRUCT_OFFSET (GtkColorButtonClass, activate),
+                    NULL, NULL,
+                    NULL,
+                    G_TYPE_NONE, 0);
+
+  gtk_widget_class_set_activate_signal (widget_class, color_button_signals[ACTIVATE]);
 
   /**
    * GtkColorButton:show-editor:
