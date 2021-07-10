@@ -276,6 +276,16 @@ gdk_wayland_gl_context_make_current (GdkGLContext *context,
                          egl_surface,
                          context_wayland->egl_context);
 }
+
+static void
+gdk_wayland_gl_context_begin_frame (GdkDrawContext *draw_context,
+                                    cairo_region_t *region)
+{
+  GDK_DRAW_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->begin_frame (draw_context, region);
+
+  glDrawBuffers (1, (GLenum[1]) { GL_BACK });
+}
+
 static void
 gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
                                   cairo_region_t *painted)
@@ -337,6 +347,7 @@ gdk_wayland_gl_context_class_init (GdkWaylandGLContextClass *klass)
 
   gobject_class->dispose = gdk_wayland_gl_context_dispose;
 
+  draw_context_class->begin_frame = gdk_wayland_gl_context_begin_frame;
   draw_context_class->end_frame = gdk_wayland_gl_context_end_frame;
 
   context_class->realize = gdk_wayland_gl_context_realize;

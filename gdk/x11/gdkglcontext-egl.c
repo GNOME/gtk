@@ -313,6 +313,15 @@ gdk_x11_surface_destroy_egl_surface (GdkX11Surface *self)
 }
 
 static void
+gdk_x11_gl_context_egl_begin_frame (GdkDrawContext *draw_context,
+                                    cairo_region_t *region)
+{
+  GDK_DRAW_CONTEXT_CLASS (gdk_x11_gl_context_egl_parent_class)->begin_frame (draw_context, region);
+
+  glDrawBuffers (1, (GLenum[1]) { GL_BACK });
+}
+
+static void
 gdk_x11_gl_context_egl_end_frame (GdkDrawContext *draw_context,
                                   cairo_region_t *painted)
 {
@@ -638,6 +647,7 @@ gdk_x11_gl_context_egl_class_init (GdkX11GLContextEGLClass *klass)
   context_class->clear_current = gdk_x11_gl_context_egl_clear_current;
   context_class->get_damage = gdk_x11_gl_context_egl_get_damage;
 
+  draw_context_class->begin_frame = gdk_x11_gl_context_egl_begin_frame;
   draw_context_class->end_frame = gdk_x11_gl_context_egl_end_frame;
 
   gobject_class->dispose = gdk_x11_gl_context_egl_dispose;
