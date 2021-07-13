@@ -5322,9 +5322,9 @@ gtk_widget_has_visible_focus (GtkWidget *widget)
  * toplevel.
  *
  * This does not mean that the [property@Gtk.Widget:has-focus]
- * property is necessarily set; [property@Gtk,Widget:has-focus]
+ * property is necessarily set; [property@Gtk.Widget:has-focus]
  * will only be set if the toplevel widget additionally has the
- * global input focus.)
+ * global input focus.
  *
  * Returns: %TRUE if the widget is the focus widget.
  */
