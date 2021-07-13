@@ -54,7 +54,7 @@ float_to_half (const float x)
   return (b&0x80000000)>>16 | (e>112)*((((e-112)<<10)&0x7C00)|m>>13) | ((e<113)&(e>101))*((((0x007FF000+m)>>(125-e))+1)>>1) | (e>143)*0x7FFF; // sign : normalized : denormalized : saturate
 }
 
-static void
+void
 float_to_half4_c (const float f[4],
                   guint16     h[4])
 {
@@ -64,7 +64,7 @@ float_to_half4_c (const float f[4],
   h[3] = float_to_half (f[3]);
 }
 
-static void
+void
 half_to_float4_c (const guint16 h[4],
                   float         f[4])
 {
