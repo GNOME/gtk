@@ -41,6 +41,12 @@ void float_to_half4_f16c (const float f[4],
 void half_to_float4_f16c (const guint16 h[4],
                           float         f[4]);
 
+void float_to_half4_c (const float f[4],
+                       guint16     h[4]);
+
+void half_to_float4_c (const guint16 h[4],
+                       float         f[4]);
+
 G_END_DECLS
 
 #endif
