@@ -1335,6 +1335,72 @@ set_sm_client_id (GdkDisplay  *display,
                      gdk_x11_get_xatom_by_name_for_display (display, "SM_CLIENT_ID"));
 }
 
+static void
+gdk_x11_display_query_default_visual (GdkX11Display  *self,
+                                      Visual        **out_visual,
+                                      int            *out_depth)
+{
+  XVisualInfo template, *visinfo;
+  int n_visuals;
+  Display *dpy;
+
+  dpy = gdk_x11_display_get_xdisplay (GDK_DISPLAY (self));
+
+  template.screen = self->screen->screen_num;
+  template.depth = 32;
+  template.red_mask  = 0xff0000;
+  template.green_mask = 0x00ff00;
+  template.blue_mask = 0x0000ff;
+
+  visinfo = XGetVisualInfo (dpy,
+                            VisualScreenMask | VisualDepthMask
+                            | VisualRedMaskMask | VisualGreenMaskMask | VisualBlueMaskMask,
+                            &template,
+                            &n_visuals);
+  if (visinfo != NULL)
+    {
+      *out_visual = visinfo[0].visual;
+      *out_depth = visinfo[0].depth;
+      XFree (visinfo);
+      return;
+    }
+
+  *out_visual = DefaultVisual (dpy, self->screen->screen_num);
+  *out_depth = DefaultDepth (dpy, self->screen->screen_num);
+}
+
+static void
+gdk_x11_display_init_leader_surface (GdkX11Display *self)
+{
+  GdkDisplay *display = GDK_DISPLAY (self);
+  Display *xdisplay = gdk_x11_display_get_xdisplay (display);
+
+  self->window_colormap = XCreateColormap (xdisplay,
+                                           DefaultRootWindow (xdisplay),
+                                           self->window_visual,
+                                           AllocNone);
+  gdk_display_set_rgba (display, self->window_depth == 32);
+
+  /* We need to initialize events after we have the screen
+   * structures in places
+   */
+  _gdk_x11_xsettings_init (GDK_X11_SCREEN (self->screen));
+
+  self->device_manager = _gdk_x11_device_manager_new (display);
+
+  gdk_event_init (display);
+
+  self->leader_gdk_surface =
+      _gdk_x11_display_create_surface (display,
+                                       GDK_SURFACE_TEMP,
+                                       NULL,
+                                       -100, -100, 1, 1);
+
+  (_gdk_x11_surface_get_toplevel (self->leader_gdk_surface))->is_leader = TRUE;
+  self->leader_window = GDK_SURFACE_XID (self->leader_gdk_surface);
+  self->leader_window_title_set = FALSE;
+}
+
 /**
  * gdk_x11_display_open:
  * @display_name: (nullable): name of the X display.
@@ -1409,7 +1475,11 @@ gdk_x11_display_open (const char *display_name)
    * Note that this also sets up the leader surface while creating the inital
    * GL context.
    */
-  gdk_display_prepare_gl (display, NULL);
+  if (!gdk_display_prepare_gl (display, NULL))
+    {
+      gdk_x11_display_query_default_visual (display_x11, &display_x11->window_visual, &display_x11->window_depth);
+      gdk_x11_display_init_leader_surface (display_x11);
+    }
 
 #ifdef HAVE_XFIXES
   if (XFixesQueryExtension (display_x11->xdisplay, 
@@ -2815,84 +2885,56 @@ gdk_boolean_handled_accumulator (GSignalInvocationHint *ihint,
   return continue_emission;
 }
 
-static void
-gdk_x11_display_query_default_visual (GdkX11Display  *self,
-                                      Visual        **out_visual,
-                                      int            *out_depth)
+static gboolean
+gdk_x11_display_init_gl_backend (GdkX11Display  *self,
+                                 Visual        **out_visual,
+                                 int            *out_depth,
+                                 GError        **error)
 {
-  XVisualInfo template, *visinfo;
-  int n_visuals;
-  Display *dpy;
+  GdkDisplay *display G_GNUC_UNUSED = GDK_DISPLAY (self);
 
-  dpy = gdk_x11_display_get_xdisplay (GDK_DISPLAY (self));
+  if (GDK_DISPLAY_DEBUG_CHECK (display, GL_EGL))
+    return gdk_x11_display_init_egl (self, TRUE, out_visual, out_depth, error);
+  if (GDK_DISPLAY_DEBUG_CHECK (display, GL_GLX))
+    return gdk_x11_display_init_glx (self, out_visual, out_depth, error);
 
-  template.screen = self->screen->screen_num;
-  template.depth = 32;
-  template.red_mask  = 0xff0000;
-  template.green_mask = 0x00ff00;
-  template.blue_mask = 0x0000ff;
+  /* No env vars set, do the regular GL initialization.
+   * 
+   * We try EGL first, but are very picky about what we accept.
+   * If that fails, we try to go with GLX instead.
+   * And if that also fails, we try EGL again, but this time accept anything.
+   *
+   * The idea here is that EGL is the preferred method going forward, but GLX is
+   * the tried and tested method that we know works. So if we detect issues with
+   * EGL, we want to avoid using it in favor of GLX.
+   */
 
-  visinfo = XGetVisualInfo (dpy,
-                            VisualScreenMask | VisualDepthMask
-                            | VisualRedMaskMask | VisualGreenMaskMask | VisualBlueMaskMask,
-                            &template,
-                            &n_visuals);
-  if (visinfo != NULL)
-    {
-      *out_visual = visinfo[0].visual;
-      *out_depth = visinfo[0].depth;
-      XFree (visinfo);
-      return;
-    }
+  if (gdk_x11_display_init_egl (self, FALSE, out_visual, out_depth, error))
+    return TRUE;
+  g_clear_error (error);
 
-  *out_visual = DefaultVisual (dpy, self->screen->screen_num);
-  *out_depth = DefaultDepth (dpy, self->screen->screen_num);
+  if (gdk_x11_display_init_glx (self, out_visual, out_depth, error))
+    return TRUE;
+  g_clear_error (error);
+
+  return gdk_x11_display_init_egl (self, TRUE, out_visual, out_depth, error);
 }
 
 static GdkGLContext *
 gdk_x11_display_init_gl (GdkDisplay  *display,
                          GError     **error)
 {
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
-  Display *xdisplay = gdk_x11_display_get_xdisplay (display);
-  gboolean have_gl;
+  GdkX11Display *self = GDK_X11_DISPLAY (display);
 
-  have_gl = gdk_x11_display_init_gl_backend (display_x11, &display_x11->window_visual, &display_x11->window_depth, error);
-  if (!have_gl)
-    gdk_x11_display_query_default_visual (display_x11, &display_x11->window_visual, &display_x11->window_depth);
+  if (!gdk_x11_display_init_gl_backend (self, &self->window_visual, &self->window_depth, error))
+    return FALSE;
 
-  display_x11->window_colormap = XCreateColormap (xdisplay,
-                                                  DefaultRootWindow (xdisplay),
-                                                  display_x11->window_visual,
-                                                  AllocNone);
-  gdk_display_set_rgba (display, display_x11->window_depth == 32);
+  gdk_x11_display_init_leader_surface (self);
 
-  /* We need to initialize events after we have the screen
-   * structures in places
-   */
-  _gdk_x11_xsettings_init (GDK_X11_SCREEN (display_x11->screen));
-
-  display_x11->device_manager = _gdk_x11_device_manager_new (display);
-
-  gdk_event_init (display);
-
-  display_x11->leader_gdk_surface =
-      _gdk_x11_display_create_surface (display,
-                                       GDK_SURFACE_TEMP,
-                                       NULL,
-                                       -100, -100, 1, 1);
-
-  (_gdk_x11_surface_get_toplevel (display_x11->leader_gdk_surface))->is_leader = TRUE;
-  display_x11->leader_window = GDK_SURFACE_XID (display_x11->leader_gdk_surface);
-  display_x11->leader_window_title_set = FALSE;
-
-  if (!have_gl)
-    return NULL;
-
-  if (display_x11->egl_display)
-    return g_object_new (GDK_TYPE_X11_GL_CONTEXT_EGL, "surface", display_x11->leader_gdk_surface, NULL);
-  else if (display_x11->glx_config != NULL)
-    return g_object_new (GDK_TYPE_X11_GL_CONTEXT_GLX, "surface", display_x11->leader_gdk_surface, NULL);
+  if (self->egl_display)
+    return g_object_new (GDK_TYPE_X11_GL_CONTEXT_EGL, "surface", self->leader_gdk_surface, NULL);
+  else if (self->glx_config != NULL)
+    return g_object_new (GDK_TYPE_X11_GL_CONTEXT_GLX, "surface", self->leader_gdk_surface, NULL);
   else
     g_return_val_if_reached (NULL);
 }

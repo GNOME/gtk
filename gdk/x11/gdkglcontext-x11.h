@@ -54,11 +54,6 @@ struct _GdkX11GLContextClass
   GdkGLContextClass parent_class;
 };
 
-gboolean                gdk_x11_display_init_gl_backend         (GdkX11Display *self,
-                                                                 Visual       **out_visual,
-                                                                 int           *out_depth,
-                                                                 GError       **error);
-
 /* GLX */
 #define GDK_TYPE_X11_GL_CONTEXT_GLX     (gdk_x11_gl_context_glx_get_type())
 #define GDK_X11_GL_CONTEXT_GLX(obj)     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_X11_GL_CONTEXT_GLX, GdkX11GLContextGLX))
