@@ -40,6 +40,8 @@ struct _GdkX11GLContextGLX
   GLsync frame_fence;
   Damage xdamage;
 #endif
+
+  guint do_frame_sync : 1;
 };
 
 typedef struct _GdkX11GLContextClass    GdkX11GLContextGLXClass;
@@ -146,9 +148,8 @@ static void
 gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
                                   cairo_region_t *painted)
 {
+  GdkX11GLContextGLX *self = GDK_X11_GL_CONTEXT_GLX (draw_context);
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
-  GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (context);
-  GdkX11GLContextGLX *context_glx = GDK_X11_GL_CONTEXT_GLX (context);
   GdkSurface *surface = gdk_gl_context_get_surface (context);
   GdkDisplay *display = gdk_gl_context_get_display (context);
   Display *dpy = gdk_x11_display_get_xdisplay (display);
@@ -168,7 +169,7 @@ gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
             g_message ("Flushing GLX buffers for drawable %lu (window: %lu), frame sync: %s",
                        (unsigned long) drawable,
                        (unsigned long) gdk_x11_surface_get_xid (surface),
-                       context_x11->do_frame_sync ? "yes" : "no"));
+                       self->do_frame_sync ? "yes" : "no"));
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "x11", "swap buffers");
 
@@ -180,7 +181,7 @@ gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
    * GLX_SGI_swap_control, and we ask the driver to do the right
    * thing.
    */
-  if (context_x11->do_frame_sync)
+  if (self->do_frame_sync)
     {
       guint32 end_frame_counter = 0;
       gboolean has_counter = display_x11->has_glx_video_sync;
@@ -189,7 +190,7 @@ gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
       if (display_x11->has_glx_video_sync)
         glXGetVideoSyncSGI (&end_frame_counter);
 
-      if (context_x11->do_frame_sync && !display_x11->has_glx_swap_interval)
+      if (self->do_frame_sync && !display_x11->has_glx_swap_interval)
         {
           glFinish ();
 
@@ -208,11 +209,11 @@ gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
   gdk_x11_surface_pre_damage (surface);
 
 #ifdef HAVE_XDAMAGE
-  if (context_glx->xdamage != 0 && _gdk_x11_surface_syncs_frames (surface))
+  if (self->xdamage != 0 && _gdk_x11_surface_syncs_frames (surface))
     {
-      g_assert (context_glx->frame_fence == 0);
+      g_assert (self->frame_fence == 0);
 
-      context_glx->frame_fence = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+      self->frame_fence = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 
       /* We consider the frame still getting painted until the GL operation is
        * finished, and the window gets damage reported from the X server.
@@ -225,7 +226,7 @@ gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
 
   glXSwapBuffers (dpy, drawable);
 
-  if (context_x11->do_frame_sync && info != NULL && display_x11->has_glx_video_sync)
+  if (self->do_frame_sync && info != NULL && display_x11->has_glx_video_sync)
     glXGetVideoSyncSGI (&info->last_frame_counter);
 }
 
@@ -244,15 +245,14 @@ gdk_x11_gl_context_glx_make_current (GdkGLContext *context,
                                      gboolean      surfaceless)
                                      
 {
-  GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (context);
-  GdkX11GLContextGLX *context_glx = GDK_X11_GL_CONTEXT_GLX (context);
+  GdkX11GLContextGLX *self = GDK_X11_GL_CONTEXT_GLX (context);
   GdkDisplay *display = gdk_gl_context_get_display (context);
   Display *dpy = gdk_x11_display_get_xdisplay (display);
   gboolean do_frame_sync = FALSE;
   GdkSurface *surface;
   GLXWindow drawable;
 
-  drawable = gdk_x11_gl_context_glx_get_drawable (context_glx);
+  drawable = gdk_x11_gl_context_glx_get_drawable (self);
 
   if (!surfaceless)
     surface = gdk_gl_context_get_surface (context);
@@ -264,7 +264,7 @@ gdk_x11_gl_context_glx_make_current (GdkGLContext *context,
                     g_message ("Making GLX context %p current to drawable %lu",
                                context, (unsigned long) drawable));
 
-  if (!glXMakeContextCurrent (dpy, drawable, drawable, context_glx->glx_context))
+  if (!glXMakeContextCurrent (dpy, drawable, drawable, self->glx_context))
     return FALSE;
 
   if (!surfaceless && GDK_X11_DISPLAY (display)->has_glx_swap_interval)
@@ -275,9 +275,9 @@ gdk_x11_gl_context_glx_make_current (GdkGLContext *context,
        * to the vblank. */
       do_frame_sync = ! gdk_display_is_composited (display);
 
-      if (do_frame_sync != context_x11->do_frame_sync)
+      if (do_frame_sync != self->do_frame_sync)
         {
-          context_x11->do_frame_sync = do_frame_sync;
+          self->do_frame_sync = do_frame_sync;
 
           if (do_frame_sync)
             glXSwapIntervalSGI (1);
@@ -747,6 +747,7 @@ gdk_x11_gl_context_glx_class_init (GdkX11GLContextGLXClass *klass)
 static void
 gdk_x11_gl_context_glx_init (GdkX11GLContextGLX *self)
 {
+  self->do_frame_sync = TRUE;
 }
 
 static gboolean

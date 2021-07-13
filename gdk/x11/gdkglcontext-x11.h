@@ -47,15 +47,11 @@ G_BEGIN_DECLS
 struct _GdkX11GLContext
 {
   GdkGLContext parent_instance;
-
-  guint do_frame_sync : 1;
 };
 
 struct _GdkX11GLContextClass
 {
   GdkGLContextClass parent_class;
-
-  void (* bind_for_frame_fence) (GdkX11GLContext *self);
 };
 
 gboolean                gdk_x11_display_init_gl_backend         (GdkX11Display *self,

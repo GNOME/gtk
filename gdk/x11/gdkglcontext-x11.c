@@ -50,7 +50,6 @@ gdk_x11_gl_context_class_init (GdkX11GLContextClass *klass)
 static void
 gdk_x11_gl_context_init (GdkX11GLContext *self)
 {
-  self->do_frame_sync = TRUE;
 }
 
 gboolean

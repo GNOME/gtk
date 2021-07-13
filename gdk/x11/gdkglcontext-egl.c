@@ -35,6 +35,8 @@ struct _GdkX11GLContextEGL
   GdkX11GLContext parent_instance;
 
   EGLContext egl_context;
+
+  guint do_frame_sync : 1;
 };
 
 typedef struct _GdkX11GLContextClass    GdkX11GLContextEGLClass;
@@ -376,8 +378,7 @@ static gboolean
 gdk_x11_gl_context_egl_make_current (GdkGLContext *context,
                                      gboolean      surfaceless)
 {
-  GdkX11GLContextEGL *context_egl = GDK_X11_GL_CONTEXT_EGL (context);
-  GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (context);
+  GdkX11GLContextEGL *self = GDK_X11_GL_CONTEXT_EGL (context);
   GdkDisplay *display = gdk_gl_context_get_display (context);
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
   GdkSurface *surface;
@@ -389,7 +390,7 @@ gdk_x11_gl_context_egl_make_current (GdkGLContext *context,
       return eglMakeCurrent (display_x11->egl_display,
                              EGL_NO_SURFACE,
                              EGL_NO_SURFACE,
-                             context_egl->egl_context);
+                             self->egl_context);
     }
 
   surface = gdk_gl_context_get_surface (context);
@@ -397,12 +398,12 @@ gdk_x11_gl_context_egl_make_current (GdkGLContext *context,
 
   GDK_DISPLAY_NOTE (display, OPENGL,
                     g_message ("Making EGL context %p current to surface %p",
-                               context_egl->egl_context, egl_surface));
+                               self->egl_context, egl_surface));
 
   if (!eglMakeCurrent (display_x11->egl_display,
                        egl_surface,
                        egl_surface,
-                       context_egl->egl_context))
+                       self->egl_context))
     return FALSE;
 
   /* If the WM is compositing there is no particular need to delay
@@ -411,9 +412,9 @@ gdk_x11_gl_context_egl_make_current (GdkGLContext *context,
    * to the vblank. */
   do_frame_sync = ! gdk_display_is_composited (display);
 
-  if (do_frame_sync != context_x11->do_frame_sync)
+  if (do_frame_sync != self->do_frame_sync)
     {
-      context_x11->do_frame_sync = do_frame_sync;
+      self->do_frame_sync = do_frame_sync;
 
       if (do_frame_sync)
         eglSwapInterval (display_x11->egl_display, 1);
@@ -645,6 +646,7 @@ gdk_x11_gl_context_egl_class_init (GdkX11GLContextEGLClass *klass)
 static void
 gdk_x11_gl_context_egl_init (GdkX11GLContextEGL *self)
 {
+  self->do_frame_sync = TRUE;
 }
 
 gboolean
