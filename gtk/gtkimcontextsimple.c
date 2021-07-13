@@ -102,7 +102,6 @@ init_builtin_table (void)
 
 G_LOCK_DEFINE_STATIC (global_tables);
 static GSList *global_tables;
-static gboolean omit_builtin_sequences;
 
 static const guint16 gtk_compose_ignore[] = {
   0, /* Yes, XKB will send us key press events with NoSymbol :( */
@@ -188,11 +187,11 @@ gtk_compose_table_find (gconstpointer data1,
   return compose_table->id != hash;
 }
 
-static void
-add_compose_table_from_file (const char *compose_file,
-                             gboolean    replace_builtin)
+static gboolean
+add_compose_table_from_file (const char *compose_file)
 {
   guint hash;
+  gboolean ret = FALSE;
 
   G_LOCK (global_tables);
 
@@ -205,11 +204,22 @@ add_compose_table_from_file (const char *compose_file,
 
       if (table)
         {
+          ret = TRUE;
           global_tables = g_slist_prepend (global_tables, table);
-          if (replace_builtin)
-            omit_builtin_sequences = TRUE;
         }
     }
+
+  G_UNLOCK (global_tables);
+
+  return ret;
+}
+
+static void
+add_builtin_compose_table (void)
+{
+  G_LOCK (global_tables);
+
+  global_tables = g_slist_prepend (global_tables, &builtin_compose_table);
 
   G_UNLOCK (global_tables);
 }
@@ -245,6 +255,7 @@ gtk_im_context_simple_init_compose_table (void)
   const char *locale;
   char **langs = NULL;
   char **lang = NULL;
+  gboolean added;
   const char * const sys_langs[] = { "el_gr", "fi_fi", "pt_br", NULL };
   const char * const *sys_lang = NULL;
   char *x11_compose_file_dir = get_x11_compose_file_dir ();
@@ -252,9 +263,10 @@ gtk_im_context_simple_init_compose_table (void)
   path = g_build_filename (g_get_user_config_dir (), "gtk-4.0", "Compose", NULL);
   if (g_file_test (path, G_FILE_TEST_EXISTS))
     {
-      add_compose_table_from_file (path, TRUE);
+      added = add_compose_table_from_file (path);
       g_free (path);
-      return;
+      if (added)
+        return;
     }
   g_clear_pointer (&path, g_free);
 
@@ -265,9 +277,10 @@ gtk_im_context_simple_init_compose_table (void)
   path = g_build_filename (home, ".XCompose", NULL);
   if (g_file_test (path, G_FILE_TEST_EXISTS))
     {
-      add_compose_table_from_file (path, TRUE);
+      added = add_compose_table_from_file (path);
       g_free (path);
-      return;
+      if (added)
+        return;
     }
   g_clear_pointer (&path, g_free);
 
@@ -310,10 +323,13 @@ gtk_im_context_simple_init_compose_table (void)
 
   if (path != NULL)
     {
-      add_compose_table_from_file (path, TRUE);
+      added = add_compose_table_from_file (path);
+      g_free (path);
     }
+  if (added)
+    return;
 
-  g_free (path);
+  add_builtin_compose_table ();
 }
 
 static void
@@ -1084,46 +1100,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 
       G_UNLOCK (global_tables);
 
-      if (success)
-        {
-          g_string_free (output, TRUE);
-          return TRUE;
-        }
-
-      G_LOCK (global_tables);
-
-      if (!omit_builtin_sequences &&
-          gtk_compose_table_check (&builtin_compose_table,
-                                   priv->compose_buffer, n_compose,
-                                   &compose_finish, &compose_match,
-                                   output))
-        {
-          if (!priv->in_compose_sequence)
-            {
-              priv->in_compose_sequence = TRUE;
-              g_signal_emit_by_name (context_simple, "preedit-start");
-            }
-
-          if (compose_finish)
-            {
-              if (compose_match)
-                gtk_im_context_simple_commit_string (context_simple, output->str);
-            }
-          else
-            {
-              if (compose_match)
-                {
-                  g_string_assign (priv->tentative_match, output->str);
-                  priv->tentative_match_len = n_compose;
-                }
-              g_signal_emit_by_name (context_simple, "preedit-changed");
-            }
-
-          success = TRUE;
-        }
-
-      G_UNLOCK (global_tables);
-
       g_string_free (output, TRUE);
 
       if (success)
@@ -1308,5 +1284,5 @@ gtk_im_context_simple_add_compose_file (GtkIMContextSimple *context_simple,
 {
   g_return_if_fail (GTK_IS_IM_CONTEXT_SIMPLE (context_simple));
 
-  add_compose_table_from_file (compose_file, FALSE);
+  add_compose_table_from_file (compose_file);
 }
