@@ -234,7 +234,8 @@ foreach t : tests
 endforeach
 
 internal_tests = [
-  ['diff']
+  [ 'diff' ],
+  [ 'half-float' ],
 ]
 
 foreach t : internal_tests
