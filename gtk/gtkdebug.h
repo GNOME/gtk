@@ -54,7 +54,7 @@ G_BEGIN_DECLS
  * @GTK_DEBUG_CONSTRAINTS: Information from the constraints solver
  * @GTK_DEBUG_BUILDER_OBJECTS: Log unused GtkBuilder objects
  * @GTK_DEBUG_A11Y: Information about accessibility state changes
- * @GTK_DEBUG_ICONFALLBACK: Information about icon fallback
+ * @GTK_DEBUG_ICONFALLBACK: Information about icon fallback. Since: 4.2
  *
  * Flags to use with gtk_set_debug_flags().
  *
