@@ -38,7 +38,7 @@
  *
  * `GtkPasswordEntry` uses a `GtkPasswordEntryBuffer`.
  *
- * Since 4.4.
+ * Since: 4.4
  */
 struct _GtkPasswordEntryBuffer
 {
