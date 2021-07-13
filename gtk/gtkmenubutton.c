@@ -497,6 +497,8 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    * Whether the menu button acts as a primary menu.
    *
    * Primary menus can be opened using the <kbd>F10</kbd> key
+   *
+   * Since: 4.4
    */
   menu_button_props[PROP_PRIMARY] =
     g_param_spec_boolean ("primary",
@@ -1307,6 +1309,8 @@ gtk_menu_button_unroot (GtkWidget *widget)
  * Sets whether menu button acts as a primary menu.
  *
  * Primary menus can be opened with the <kbd>F10</kbd> key.
+ *
+ * Since: 4.4
  */
 void
 gtk_menu_button_set_primary (GtkMenuButton *menu_button,
