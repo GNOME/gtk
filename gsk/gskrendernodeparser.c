@@ -2352,18 +2352,6 @@ gsk_text_node_serialize_glyphs (GskRenderNode *node,
                     }
                   break;
                 }
-              else if (glyphs[i].glyph == ascii->glyphs[j].glyph)
-                {
-                  if (glyphs[i].geometry.width != ascii->glyphs[j].geometry.width)
-                    g_print ("not ascii because of width (%d != %d)\n",
-                             glyphs[i].geometry.width,
-                             ascii->glyphs[j].geometry.width);
-                  if (glyphs[i].geometry.x_offset != 0 ||
-                      glyphs[i].geometry.y_offset != 0)
-                    g_print ("not ascii because of offset\n");
-                  if (!glyphs[i].attr.is_cluster_start)
-                    g_print ("not ascii because of cluster\n");
-                }
             }
           if (j != ascii->num_glyphs)
             continue;
@@ -2375,16 +2363,16 @@ gsk_text_node_serialize_glyphs (GskRenderNode *node,
           g_string_set_size (str, 0);
         }
 
-      g_string_append_printf (p, "%u %g",
-                              glyphs[i].glyph,
-                              (double) glyphs[i].geometry.width / PANGO_SCALE);
+      g_string_append_printf (p, "%u ", glyphs[i].glyph);
+      string_append_double (p, (double) glyphs[i].geometry.width / PANGO_SCALE);
       if (!glyphs[i].attr.is_cluster_start ||
           glyphs[i].geometry.x_offset != 0 ||
           glyphs[i].geometry.y_offset != 0)
         {
-          g_string_append_printf (p, " %g %g",
-                                  (double) glyphs[i].geometry.x_offset / PANGO_SCALE,
-                                  (double) glyphs[i].geometry.y_offset / PANGO_SCALE);
+          g_string_append (p, " ");
+          string_append_double (p, (double) glyphs[i].geometry.x_offset / PANGO_SCALE);
+          g_string_append (p, " ");
+          string_append_double (p, (double) glyphs[i].geometry.y_offset / PANGO_SCALE);
           if (!glyphs[i].attr.is_cluster_start)
             g_string_append (p, " same-cluster");
         }
