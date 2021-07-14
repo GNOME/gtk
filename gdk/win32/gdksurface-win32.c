@@ -5044,9 +5044,9 @@ gdk_win32_drag_surface_iface_init (GdkDragSurfaceInterface *iface)
 
 #ifdef GDK_WIN32_ENABLE_EGL
 EGLSurface
-_gdk_win32_surface_get_egl_surface (GdkSurface *surface,
-                                    EGLConfig   config,
-                                    gboolean    is_dummy)
+gdk_win32_surface_get_egl_surface (GdkSurface *surface,
+                                   EGLConfig   config,
+                                   gboolean    is_dummy)
 {
   GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_surface_get_display (surface));
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);

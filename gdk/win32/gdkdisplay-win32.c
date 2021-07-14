@@ -481,6 +481,7 @@ register_display_change_notification (GdkDisplay *display)
   wclass.lpszClassName = "GdkDisplayChange";
   wclass.lpfnWndProc = display_change_window_procedure;
   wclass.hInstance = _gdk_app_hmodule;
+  wclass.style = CS_OWNDC;
 
   klass = RegisterClass (&wclass);
   if (klass)
@@ -656,6 +657,19 @@ gdk_win32_display_dispose (GObject *object)
 
   if (display_win32->hwnd != NULL)
     {
+      if (display_win32->dummy_context_wgl.hglrc != NULL)
+        {
+          wglMakeCurrent (NULL, NULL);
+          wglDeleteContext (display_win32->dummy_context_wgl.hglrc);
+          display_win32->dummy_context_wgl.hglrc = NULL;
+        }
+
+      if (display_win32->dummy_context_wgl.hdc != NULL)
+        {
+          ReleaseDC (display_win32->hwnd, display_win32->dummy_context_wgl.hdc);
+          display_win32->dummy_context_wgl.hdc = NULL;
+        }
+
       DestroyWindow (display_win32->hwnd);
       display_win32->hwnd = NULL;
     }
@@ -1140,6 +1154,68 @@ gdk_win32_display_get_setting (GdkDisplay  *display,
   return _gdk_win32_get_setting (name, value);
 }
 
+static gboolean
+gdk_win32_display_init_gl_backend (GdkDisplay  *display,
+                                   GError     **error)
+{
+#ifdef GDK_WIN32_ENABLE_EGL
+  if (GDK_DISPLAY_DEBUG_CHECK (display, GL_EGL))
+    return gdk_win32_display_init_egl (display, error);
+#endif
+  if (GDK_DISPLAY_DEBUG_CHECK (display, GL_WGL))
+    return gdk_win32_display_init_wgl (display, error);
+
+  /* No env vars set, do the regular GL initialization.
+   * 
+   * We try EGL first if supported, but are very picky about what we accept.
+   * If that fails, we try to go with WGL instead.
+   * And if that also fails, we try EGL again, but this time accept anything.
+   *
+   * The idea here is that EGL is the preferred method going forward, but WGL is
+   * the tried and tested method that we know works. So if we detect issues with
+   * EGL, we want to avoid using it in favor of WGL.
+   */
+
+#ifdef GDK_WIN32_ENABLE_EGL
+  if (gdk_win32_display_init_egl (display, error))
+    return TRUE;
+#endif
+  g_clear_error (error);
+
+  if (gdk_win32_display_init_wgl (display, error))
+    return TRUE;
+  g_clear_error (error);
+
+#ifdef GDK_WIN32_ENABLE_EGL
+  return gdk_win32_display_init_egl (display, error);
+#else
+  return FALSE;
+#endif
+}
+
+static GdkGLContext *
+gdk_win32_display_init_gl (GdkDisplay  *display,
+                           GError     **error)
+{
+  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
+  GdkGLContext *gl_context = NULL;
+
+  if (!gdk_win32_display_init_gl_backend (display, error))
+    return NULL;
+
+#ifdef GDK_WIN32_ENABLE_EGL
+  if (display_win32->egl_disp)
+    gl_context = g_object_new (GDK_TYPE_WIN32_GL_CONTEXT_EGL, "display", display, NULL);
+  else
+#endif
+  if (display_win32->wgl_pixel_format != 0)
+    gl_context = g_object_new (GDK_TYPE_WIN32_GL_CONTEXT_WGL, "display", display, NULL);
+
+  g_return_val_if_fail (gl_context != NULL, NULL);
+
+  return gl_context;
+}
+
 /**
  * gdk_win32_display_get_egl_display:
  * @display: (type GdkWin32Display): a Win32 display
@@ -1158,7 +1234,7 @@ gdk_win32_display_get_egl_display (GdkDisplay *display)
 #ifdef GDK_WIN32_ENABLE_EGL
   display_win32 = GDK_WIN32_DISPLAY (display);
 
-  if (display_win32->have_wgl)
+  if (display_win32->wgl_pixel_format != 0)
     return NULL;
 
   return display_win32->egl_disp;
@@ -1203,6 +1279,7 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
 
   display_class->get_setting = gdk_win32_display_get_setting;
   display_class->set_cursor_theme = gdk_win32_display_set_cursor_theme;
+  display_class->init_gl = gdk_win32_display_init_gl;
 
   _gdk_win32_surfaceing_init ();
 }

@@ -106,6 +106,12 @@ typedef struct _GdkWin32KernelCPUFuncs
   funcIsWow64Process2 isWow64Process2;
 } GdkWin32KernelCPUFuncs;
 
+typedef struct
+{
+  HDC hdc;
+  HGLRC hglrc;
+} GdkWin32GLDummyContextWGL;
+
 struct _GdkWin32Display
 {
   GdkDisplay display;
@@ -119,14 +125,15 @@ struct _GdkWin32Display
   HWND hwnd;
 
   /* WGL/OpenGL Items */
-  guint have_wgl : 1;
+  GdkWin32GLDummyContextWGL dummy_context_wgl;
+  int wgl_pixel_format;
   guint gl_version;
 
 #ifdef GDK_WIN32_ENABLE_EGL
   /* EGL (Angle) Items */
-  guint have_egl : 1;
   guint egl_version;
   EGLDisplay egl_disp;
+  EGLConfig egl_config;
   HDC hdc_egl_temp;
 #endif
 
