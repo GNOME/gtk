@@ -548,37 +548,6 @@ _gdk_win32_display_init_gl (GdkDisplay *display)
   return TRUE;
 }
 
-/**
- * gdk_win32_display_get_egl_display:
- * @display: (type GdkWin32Display): a Win32 display
- *
- * Retrieves the EGL display connection object for the given GDK display.
- *
- * Returns: (nullable): the EGL display
- */
-gpointer
-gdk_win32_display_get_egl_display (GdkDisplay *display)
-{
-  GdkWin32Display *display_win32;
-
-  g_return_val_if_fail (GDK_IS_WIN32_DISPLAY (display), NULL);
-
-#ifdef GDK_WIN32_ENABLE_EGL
-  if (!_gdk_win32_display_init_gl (display))
-    return NULL;
-
-  display_win32 = GDK_WIN32_DISPLAY (display);
-
-  if (display_win32->have_wgl)
-    return NULL;
-
-  return display_win32->egl_disp;
-#else
-  /* no EGL support */
-  return NULL;
-#endif
-}
-
 /* Setup the legacy context after creating it */
 static gboolean
 _ensure_legacy_gl_context (HDC           hdc,
@@ -1235,21 +1204,4 @@ gdk_win32_display_get_wgl_version (GdkDisplay *display,
     *minor = GDK_WIN32_DISPLAY (display)->gl_version % 10;
 
   return TRUE;
-}
-
-void
-_gdk_win32_surface_invalidate_egl_framebuffer (GdkSurface *surface)
-{
-/* If we are using ANGLE, we need to force redraw of the whole Window and its child windows
- *  as we need to re-acquire the EGL surfaces that we rendered to upload to Cairo explicitly,
- *  using gdk_window_invalidate_rect (), when we maximize or restore or use aerosnap
- */
-#ifdef GDK_WIN32_ENABLE_EGL
-  if (surface->gl_paint_context != NULL && gdk_gl_context_get_use_es (surface->gl_paint_context))
-    {
-      GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
-
-      impl->egl_force_redraw_all = TRUE;
-    }
-#endif
 }

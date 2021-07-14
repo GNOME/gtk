@@ -1140,6 +1140,34 @@ gdk_win32_display_get_setting (GdkDisplay  *display,
   return _gdk_win32_get_setting (name, value);
 }
 
+/**
+ * gdk_win32_display_get_egl_display:
+ * @display: (type GdkWin32Display): a Win32 display
+ *
+ * Retrieves the EGL display connection object for the given GDK display.
+ *
+ * Returns: (nullable): the EGL display
+ */
+gpointer
+gdk_win32_display_get_egl_display (GdkDisplay *display)
+{
+  GdkWin32Display *display_win32;
+
+  g_return_val_if_fail (GDK_IS_WIN32_DISPLAY (display), NULL);
+
+#ifdef GDK_WIN32_ENABLE_EGL
+  display_win32 = GDK_WIN32_DISPLAY (display);
+
+  if (display_win32->have_wgl)
+    return NULL;
+
+  return display_win32->egl_disp;
+#else
+  /* no EGL support */
+  return NULL;
+#endif
+}
+
 static void
 gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
 {

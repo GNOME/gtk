@@ -5151,3 +5151,20 @@ gdk_win32_surface_handle_queued_move_resize (GdkDrawContext *draw_context)
 
   return queued_window_rect;
 }
+
+void
+_gdk_win32_surface_invalidate_egl_framebuffer (GdkSurface *surface)
+{
+/* If we are using ANGLE, we need to force redraw of the whole Window and its child windows
+ *  as we need to re-acquire the EGL surfaces that we rendered to upload to Cairo explicitly,
+ *  using gdk_window_invalidate_rect (), when we maximize or restore or use aerosnap
+ */
+#ifdef GDK_WIN32_ENABLE_EGL
+  if (surface->gl_paint_context != NULL && gdk_gl_context_get_use_es (surface->gl_paint_context))
+    {
+      GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
+
+      impl->egl_force_redraw_all = TRUE;
+    }
+#endif
+}
