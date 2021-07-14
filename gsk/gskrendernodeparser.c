@@ -2352,18 +2352,6 @@ gsk_text_node_serialize_glyphs (GskRenderNode *node,
                     }
                   break;
                 }
-              else if (glyphs[i].glyph == ascii->glyphs[j].glyph)
-                {
-                  if (glyphs[i].geometry.width != ascii->glyphs[j].geometry.width)
-                    g_print ("not ascii because of width (%d != %d)\n",
-                             glyphs[i].geometry.width,
-                             ascii->glyphs[j].geometry.width);
-                  if (glyphs[i].geometry.x_offset != 0 ||
-                      glyphs[i].geometry.y_offset != 0)
-                    g_print ("not ascii because of offset\n");
-                  if (!glyphs[i].attr.is_cluster_start)
-                    g_print ("not ascii because of cluster\n");
-                }
             }
           if (j != ascii->num_glyphs)
             continue;
