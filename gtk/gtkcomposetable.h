@@ -58,7 +58,8 @@ struct _GtkComposeTable
 };
 
 GtkComposeTable * gtk_compose_table_new_with_file (const char    *compose_file);
-GtkComposeTable * gtk_compose_table_parse         (const char    *compose_file);
+GtkComposeTable * gtk_compose_table_parse         (const char    *compose_file,
+                                                   gboolean      *found_include);
 GtkComposeTable * gtk_compose_table_new_with_data (const guint16 *data,
                                                    int            max_seq_len,
                                                    int            n_seqs);

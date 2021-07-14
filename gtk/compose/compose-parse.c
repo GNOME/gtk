@@ -26,7 +26,7 @@ main (int argc, char *argv[])
       exit (1);
     }
 
-  table = gtk_compose_table_parse (argv[1]);
+  table = gtk_compose_table_parse (argv[1], NULL);
   if (!table)
     g_error ("Failed to parse %s", argv[1]);
 

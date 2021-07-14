@@ -84,7 +84,7 @@ generate_output (const char *file)
   GtkComposeTable *table;
   char *output;
 
-  table = gtk_compose_table_parse (file);
+  table = gtk_compose_table_parse (file, NULL);
   output = gtk_compose_table_print (table);
 
   g_print ("%s", output);
@@ -104,7 +104,7 @@ compose_table_compare (gconstpointer data)
   file = g_test_build_filename (G_TEST_DIST, "compose", basename, NULL);
   expected = g_strconcat (file, ".expected", NULL);
 
-  table = gtk_compose_table_parse (file);
+  table = gtk_compose_table_parse (file, NULL);
   output = gtk_compose_table_print (table);
 
   diff = diff_with_file (expected, output, -1, &error);
@@ -131,7 +131,7 @@ compose_table_cycle (void)
 
       file = g_test_build_filename (G_TEST_DIST, "compose", "cycle", NULL);
 
-      table = gtk_compose_table_parse (file);
+      table = gtk_compose_table_parse (file, NULL);
       g_assert_nonnull (table);
       g_free (file);
 
@@ -153,7 +153,7 @@ compose_table_nofile (void)
 
       file = g_build_filename (g_test_get_dir (G_TEST_DIST), "compose", "nofile", NULL);
 
-      table = gtk_compose_table_parse (file);
+      table = gtk_compose_table_parse (file, NULL);
       g_assert_nonnull (table);
       g_free (file);
 
@@ -179,7 +179,7 @@ compose_table_match (void)
 
   file = g_build_filename (g_test_get_dir (G_TEST_DIST), "compose", "match", NULL);
 
-  table = gtk_compose_table_parse (file);
+  table = gtk_compose_table_parse (file, NULL);
 
   buffer[0] = GDK_KEY_Multi_key;
   buffer[1] = 0;

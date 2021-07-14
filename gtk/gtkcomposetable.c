@@ -83,6 +83,7 @@ typedef struct {
   GHashTable *sequences;
   GList *files;
   const char *compose_file;
+  gboolean found_include;
 } GtkComposeParser;
 
 static GtkComposeParser *
@@ -95,6 +96,7 @@ parser_new (void)
   parser->sequences = g_hash_table_new_full (sequence_hash, sequence_equal, g_free, g_free);
   parser->files = NULL;
   parser->compose_file = NULL;
+  parser->found_include = FALSE;
 
   return parser;
 }
@@ -356,6 +358,8 @@ parser_handle_include (GtkComposeParser *parser,
   const char *p;
   const char *start, *end;
   char *path;
+
+  parser->found_include = TRUE;
 
   p = line + strlen ("include ");
 
@@ -719,7 +723,8 @@ gtk_compose_table_serialize (GtkComposeTable *compose_table,
 }
 
 static GtkComposeTable *
-gtk_compose_table_load_cache (const char *compose_file)
+gtk_compose_table_load_cache (const char *compose_file,
+                              gboolean   *found_old_cache)
 {
   guint32 hash;
   char *path = NULL;
@@ -739,6 +744,8 @@ gtk_compose_table_load_cache (const char *compose_file)
   guint16 *data = NULL;
   char *char_data = NULL;
   GtkComposeTable *retval;
+
+  *found_old_cache = FALSE;
 
   hash = g_str_hash (compose_file);
   if ((path = gtk_compose_hash_get_cache_path (hash)) == NULL)
@@ -780,8 +787,8 @@ gtk_compose_table_load_cache (const char *compose_file)
   GET_GUINT16 (version);
   if (version != GTK_COMPOSE_TABLE_VERSION)
     {
-      g_warning ("cache version is different %u != %u",
-                 version, GTK_COMPOSE_TABLE_VERSION);
+      if (version < GTK_COMPOSE_TABLE_VERSION)
+        *found_old_cache = TRUE;
       goto out_load_cache;
     }
 
@@ -993,15 +1000,15 @@ parser_get_compose_table (GtkComposeParser *parser)
 }
 
 static char *
-canonicalize_filename (GtkComposeParser *parser,
-                       const char       *path)
+canonicalize_filename (const char *parent_path,
+                       const char *path)
 {
   GFile *file;
   char *retval;
 
-  if (path[0] != '/' && parser->compose_file)
+  if (path[0] != '/' && parent_path)
     {
-      GFile *orig = g_file_new_for_path (parser->compose_file);
+      GFile *orig = g_file_new_for_path (parent_path);
       GFile *parent = g_file_get_parent (orig);
       file = g_file_resolve_relative_path (parent, path);
       g_object_unref (parent);
@@ -1029,7 +1036,7 @@ parser_parse_file (GtkComposeParser *parser,
   if (parser->compose_file == NULL)
     parser->compose_file = compose_file;
 
-  path = canonicalize_filename (parser, compose_file);
+  path = canonicalize_filename (parser->compose_file, compose_file);
 
   if (g_list_find_custom (parser->files, path, (GCompareFunc)strcmp))
     {
@@ -1046,7 +1053,8 @@ parser_parse_file (GtkComposeParser *parser,
 }
 
 GtkComposeTable *
-gtk_compose_table_parse (const char *compose_file)
+gtk_compose_table_parse (const char *compose_file,
+                         gboolean   *found_include)
 {
   GtkComposeParser *parser;
   GtkComposeTable *compose_table;
@@ -1054,23 +1062,115 @@ gtk_compose_table_parse (const char *compose_file)
   parser = parser_new ();
   parser_parse_file (parser, compose_file);
   compose_table = parser_get_compose_table (parser);
+  if (found_include)
+    *found_include = parser->found_include;
   parser_free (parser);
 
   return compose_table;
+}
+
+static const char *prefix =
+  "# GTK has rewritten this file to add the line:\n"
+  "\n"
+  "include \"%L\"\n"
+  "\n"
+  "# This is necessary to add your own Compose sequences\n"
+  "# in addition to the builtin sequences of GTK. If this\n"
+  "# is not what you want, just remove that line.\n"
+  "#\n"
+  "# A backup of the previous file contents has been made.\n"
+  "\n"
+  "\n";
+
+static gboolean
+rewrite_compose_file (const char *compose_file)
+{
+  char *path = NULL;
+  char *content = NULL;
+  gsize content_len;
+  GFile *file = NULL;
+  GOutputStream *stream = NULL;
+  gboolean ret = FALSE;
+
+  path = canonicalize_filename (NULL, compose_file);
+
+  if (!g_file_get_contents (path, &content, &content_len, NULL))
+    goto out;
+
+  file = g_file_new_for_path (path);
+  stream = G_OUTPUT_STREAM (g_file_replace (file, NULL, TRUE, 0, NULL, NULL));
+
+  if (stream == NULL)
+    goto out;
+
+  if (!g_output_stream_write (stream, prefix, strlen (prefix), NULL, NULL))
+    goto out;
+
+  if (!g_output_stream_write (stream, content, content_len, NULL, NULL))
+    goto out;
+
+  if (!g_output_stream_close (stream, NULL, NULL))
+    goto out;
+
+  ret = TRUE;
+
+out:
+  g_clear_object (&stream);
+  g_clear_object (&file);
+  g_clear_pointer (&path, g_free);
+  g_clear_pointer (&content, g_free);
+
+  return ret;
 }
 
 GtkComposeTable *
 gtk_compose_table_new_with_file (const char *compose_file)
 {
   GtkComposeTable *compose_table;
+  gboolean found_old_cache = FALSE;
+  gboolean found_include = FALSE;
 
   g_assert (compose_file != NULL);
 
-  compose_table = gtk_compose_table_load_cache (compose_file);
+  compose_table = gtk_compose_table_load_cache (compose_file, &found_old_cache);
   if (compose_table != NULL)
     return compose_table;
 
-  compose_table = gtk_compose_table_parse (compose_file);
+parse:
+  compose_table = gtk_compose_table_parse (compose_file, &found_include);
+
+  /* This is where we apply heuristics to avoid breaking users existing configurations
+   * with the change to not always add the default sequences.
+   *
+   * If we find a cache that was generated before 4.4, and the Compose file
+   * does not have an include, and doesn't contain so many sequences that it
+   * is probably a copy of the system one, we take steps to keep things working,
+   * and thell the user about it.
+   */
+  if (found_old_cache && !found_include && compose_table->n_sequences < 100)
+    {
+      if (rewrite_compose_file (compose_file))
+        {
+          g_warning ("\nSince GTK 4.4, Compose files replace the builtin\n"
+                     "compose sequences. To keep them and add your own\n"
+                     "sequences on top, the line:\n"
+                     "\n"
+                     "  include \"%%L\"\n"
+                     "\n"
+                     "has been added to the Compose file\n%s.\n", compose_file);
+          goto parse;
+        }
+      else
+        {
+          g_warning ("\nSince GTK 4.4, Compose files replace the builtin\n"
+                     "compose sequences. To keep them and add your own\n"
+                     "sequences on top, you need to add the line:\n"
+                     "\n"
+                     "  include \"%%L\"\n"
+                     "\n"
+                     "to the Compose file\n%s.\n", compose_file);
+        }
+    }
 
   if (compose_table != NULL)
     gtk_compose_table_save_cache (compose_table);
