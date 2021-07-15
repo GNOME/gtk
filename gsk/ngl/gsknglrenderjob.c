@@ -2850,7 +2850,12 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
    * We tell the shader by setting the color to vec4(-1).
    */
   if (force_color || !gsk_text_node_has_color_glyphs (node))
-    rgba_to_half (color, c);
+    {
+      if (gdk_rgba_is_clear (color))
+        return;
+
+      rgba_to_half (color, c);
+    }
 
   lookup.font = (PangoFont *)font;
   lookup.scale = (guint) (text_scale * 1024);
