@@ -2159,12 +2159,9 @@ gtk_snapshot_append_linear_gradient (GtkSnapshot            *snapshot,
 {
   GskRenderNode *node;
   graphene_rect_t real_bounds;
-  graphene_point_t real_start_point;
-  graphene_point_t real_end_point;
   float scale_x, scale_y, dx, dy;
   const GdkRGBA *first_color;
   gboolean need_gradient = FALSE;
-  int i;
 
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (start_point != NULL);
@@ -2174,13 +2171,9 @@ gtk_snapshot_append_linear_gradient (GtkSnapshot            *snapshot,
 
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
   gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &real_bounds);
-  real_start_point.x = scale_x * start_point->x + dx;
-  real_start_point.y = scale_y * start_point->y + dy;
-  real_end_point.x = scale_x * end_point->x + dx;
-  real_end_point.y = scale_y * end_point->y + dy;
 
   first_color = &stops[0].color;
-  for (i = 0; i < n_stops; i ++)
+  for (gsize i = 0; i < n_stops; i ++)
     {
       if (!gdk_rgba_equal (first_color, &stops[i].color))
         {
@@ -2190,13 +2183,24 @@ gtk_snapshot_append_linear_gradient (GtkSnapshot            *snapshot,
     }
 
   if (need_gradient)
-    node = gsk_linear_gradient_node_new (&real_bounds,
-                                         &real_start_point,
-                                         &real_end_point,
-                                         stops,
-                                         n_stops);
+    {
+      graphene_point_t real_start_point, real_end_point;
+
+      real_start_point.x = scale_x * start_point->x + dx;
+      real_start_point.y = scale_y * start_point->y + dy;
+      real_end_point.x = scale_x * end_point->x + dx;
+      real_end_point.y = scale_y * end_point->y + dy;
+
+      node = gsk_linear_gradient_node_new (&real_bounds,
+                                           &real_start_point,
+                                           &real_end_point,
+                                           stops,
+                                           n_stops);
+    }
   else
-    node = gsk_color_node_new (first_color, &real_bounds);
+    {
+      node = gsk_color_node_new (first_color, &real_bounds);
+    }
 
   gtk_snapshot_append_node_internal (snapshot, node);
 }
