@@ -30,6 +30,8 @@
 #include "gtkstylecontextprivate.h"
 #include "gsktransformprivate.h"
 
+#include "gdk/gdkrgbaprivate.h"
+
 #include "gsk/gskrendernodeprivate.h"
 #include "gsk/gskroundedrectprivate.h"
 
@@ -461,8 +463,12 @@ gtk_snapshot_collect_opacity (GtkSnapshot      *snapshot,
     }
   else if (state->data.opacity.opacity == 0.0)
     {
+      GdkRGBA color = GDK_RGBA ("00000000");
+      graphene_rect_t bounds;
+
+      gsk_render_node_get_bounds (node, &bounds);
+      opacity_node = gsk_color_node_new (&color, &bounds);
       gsk_render_node_unref (node);
-      opacity_node = NULL;
     }
   else
     {
