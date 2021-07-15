@@ -1373,11 +1373,16 @@ static inline void
 gsk_ngl_render_job_visit_color_node (GskNglRenderJob     *job,
                                      const GskRenderNode *node)
 {
+  const GdkRGBA *rgba;
   guint16 color[4];
   GskNglProgram *program;
   GskNglCommandBatch *batch;
 
-  rgba_to_half (gsk_color_node_get_color (node), color);
+  rgba = gsk_color_node_get_color (node);
+  if (gdk_rgba_is_clear (rgba))
+    return;
+
+  rgba_to_half (rgba, color);
 
   /* Avoid switching away from the coloring program for
    * rendering a solid color.
