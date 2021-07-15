@@ -72,21 +72,6 @@ gtk_compose_table_print (GtkComposeTable *table)
                           table->data_size,
                           table->n_chars);
 
-#if 0
-  int index_stride = table->max_seq_len + 1;
-
-  for (int idx = 0; idx < table->n_index_size; idx++)
-    {
-      const guint16 *seq_index = table->data + (idx * index_stride);
-
-      g_print ("<U%x>", seq_index[0]);
-
-      for (int i = 1; i < index_stride; i++)
-        g_print (" %d", seq_index[i]);
-      g_print ("\n");
-    }
-#endif
-
   gtk_compose_table_foreach (table, print_sequence, str);
 
   return g_string_free (str, FALSE);
