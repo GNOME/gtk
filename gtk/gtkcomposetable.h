@@ -53,6 +53,7 @@ struct _GtkComposeTable
   int n_index_size;
   int data_size;
   int n_chars;
+  int n_sequences;
   guint32 id;
 };
 

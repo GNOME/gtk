@@ -66,7 +66,8 @@ gtk_compose_table_print (GtkComposeTable *table)
 
   str = g_string_new ("");
 
-  g_string_append_printf (str, "# max_seq_len: %d\n# n_index_size: %d\n# data_size: %d\n# n_chars: %d\n",
+  g_string_append_printf (str, "# n_sequences: %d\n# max_seq_len: %d\n# n_index_size: %d\n# data_size: %d\n# n_chars: %d\n",
+                          table->n_sequences,
                           table->max_seq_len,
                           table->n_index_size,
                           table->data_size,

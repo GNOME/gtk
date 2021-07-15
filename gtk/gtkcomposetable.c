@@ -879,6 +879,7 @@ parser_get_compose_table (GtkComposeParser *parser)
   int first_pos;
   int rest_pos;
   int index_rowstride;
+  int n_sequences;
   gunichar current_first;
 
   parser_remove_duplicates (parser);
@@ -899,6 +900,7 @@ parser_get_compose_table (GtkComposeParser *parser)
 
   char_data = g_string_new ("");
 
+  n_sequences = 0;
   current_first = 0;
   first_pos = 0;
   rest_pos = n_first * index_rowstride;
@@ -958,6 +960,8 @@ parser_get_compose_table (GtkComposeParser *parser)
       g_assert (encoded_value != 0);
       data[rest_pos + len - 1] = encoded_value;
 
+      n_sequences++;
+
       rest_pos += len;
 
       for (i = len; i <= max_compose_len; i++)
@@ -980,6 +984,7 @@ parser_get_compose_table (GtkComposeParser *parser)
   table->n_index_size = n_first;
   table->n_chars = char_data->len;
   table->char_data = g_string_free (char_data, FALSE);
+  table->n_sequences = n_sequences;
   table->id = g_str_hash (parser->compose_file);
 
   g_list_free (sequences);
