@@ -56,6 +56,7 @@ compare_render_tests = [
   'outset_shadow_rounded_top',
   'outset_shadow_simple',
   'scaled-cairo',
+  'scale-textures-negative-ngl',
   'shadow-in-opacity',
   'texture-url',
   'color-matrix-identity',
