@@ -8,7 +8,7 @@ project('gtk', 'c',
           'c_std=gnu99',
         ],
         meson_version : '>= 0.55',
-        license: 'LGPLv2.1+')
+        license: 'LGPL-2.1-or-later')
 
 glib_req           = '>= 2.66.0'
 pango_req          = '>= 1.47.0' # keep this in sync with .gitlab-ci/test-msys.sh
