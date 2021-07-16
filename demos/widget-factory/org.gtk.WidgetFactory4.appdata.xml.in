@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
-  <id>org.gtk.WidgetFactory4.desktop</id>
+  <id>org.gtk.WidgetFactory4</id>
+  <launchable type="desktop-id">org.gtk.WidgetFactory4.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
-  <project_license>LGPL-2.0+</project_license>
+  <project_license>LGPL-2.1-or-later</project_license>
   <name>GTK Widget Factory</name>
   <summary>Program to demonstrate GTK functions</summary>
   <description>
@@ -31,6 +32,7 @@
   <translation type="gettext">gtk-4.0</translation>
   <update_contact>matthias.clasen_at_gmail.com</update_contact>
   <developer_name>Matthias Clasen and others</developer_name>
+  <content_rating type="oars-1.1"/>
   <releases>
     <release version="@BUILD_VERSION@" date="@BUILD_DATE@">
       <description>
