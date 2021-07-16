@@ -578,6 +578,32 @@ test13 (void)
   run_test (commands, G_N_ELEMENTS (commands), 3);
 }
 
+static void
+test14 (void)
+{
+  char *fill = g_strnfill (1024, 'x');
+  char *fill_after = g_strnfill (1025, 'x');
+  char *fill_after_2 = g_strdup_printf ("%s word", fill_after);
+  const Command commands[] = {
+    { BEGIN_USER, -1, -1, NULL, NULL, UNSET, UNSET, UNSET },
+    { INSERT, 0, -1, fill, fill, UNSET, UNSET, UNSET },
+    { END_USER, -1, -1, NULL, NULL, SET, UNSET, UNSET },
+    { BEGIN_USER, -1, -1, NULL, NULL, UNSET, UNSET, UNSET },
+    { INSERT, 0, -1, "x", fill_after, UNSET, UNSET, UNSET },
+    { END_USER, -1, -1, NULL, NULL, SET, UNSET, UNSET },
+    { BEGIN_USER, -1, -1, NULL, NULL, UNSET, UNSET, UNSET },
+    { INSERT_SEQ, strlen(fill_after), -1, " word", fill_after_2, UNSET, UNSET, UNSET },
+    { END_USER, -1, -1, NULL, NULL, SET, UNSET, UNSET },
+    { UNDO, -1, -1, NULL, fill_after, SET, SET, UNSET },
+    { UNDO, -1, -1, NULL, fill, SET, SET, UNSET },
+    { UNDO, -1, -1, NULL, "", UNSET, SET, UNSET },
+  };
+
+  run_test (commands, G_N_ELEMENTS (commands), 0);
+
+  g_free (fill);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -597,6 +623,7 @@ main (int   argc,
   g_test_add_func ("/Gtk/TextHistory/test11", test11);
   g_test_add_func ("/Gtk/TextHistory/test12", test12);
   g_test_add_func ("/Gtk/TextHistory/test13", test13);
+  g_test_add_func ("/Gtk/TextHistory/test14", test14);
 
   return g_test_run ();
 }
