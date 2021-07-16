@@ -14,14 +14,19 @@ instructions, binary downloads, etc, can be found
 The Win32 GDK backend can be influenced with some additional environment
 variables.
 
-### GDK_IGNORE_WINTAB
+### GDK_WIN32_TABLET_INPUT_API
 
-If this variable is set, GTK doesn't use the Wintab API for tablet support.
+If this variable is set, it determines the API that GTK uses for tablet support.
+The possible values are:
 
-### GDK_USE_WINTAB
+`none`
+: Disables tablet support
 
-If this variable is set, GTK uses the Wintab API for tablet support.
-This is the default.
+`wintab`
+: Use the Wintab API
+
+`winpointer`
+: Use the Windows Pointer Input Stack API. This is the default.
 
 ## Windows-specific handling of cursors
 
