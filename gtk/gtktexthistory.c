@@ -989,6 +989,7 @@ gtk_text_history_text_inserted (GtkTextHistory *self,
                                 int             len)
 {
   Action *action;
+  guint n_chars;
 
   g_return_if_fail (GTK_IS_TEXT_HISTORY (self));
 
@@ -998,14 +999,12 @@ gtk_text_history_text_inserted (GtkTextHistory *self,
 
   if (len < 0)
     len = strlen (text);
+  n_chars = g_utf8_strlen (text, len);
 
   action = action_new (ACTION_KIND_INSERT);
   action->u.insert.begin = position;
-  action->u.insert.end = position + g_utf8_strlen (text, len);
-  istring_set (&action->u.insert.istr,
-               text,
-               len,
-               action->u.insert.end);
+  action->u.insert.end = position + n_chars;
+  istring_set (&action->u.insert.istr, text, len, n_chars);
 
   gtk_text_history_push (self, action);
 }
