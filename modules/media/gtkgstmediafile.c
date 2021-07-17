@@ -22,8 +22,10 @@
 #include "gtkgstmediafileprivate.h"
 #include "gtkgstpaintableprivate.h"
 
+#include <gst/gst.h>
 #include <gst/player/gstplayer.h>
 #include <gst/player/gstplayer-g-main-context-signal-dispatcher.h>
+#include <gst/app/gstappsrc.h>
 
 struct _GtkGstMediaFile
 {
@@ -31,6 +33,11 @@ struct _GtkGstMediaFile
 
   GstPlayer *player;
   GdkPaintable *paintable;
+  GstElement *playbin;
+  GstElement *appsrc;
+  GInputStream *stream;
+  guint64 offset;
+  guint64 length;
 };
 
 struct _GtkGstMediaFileClass
@@ -212,6 +219,81 @@ gtk_gst_media_file_end_of_stream_cb (GstPlayer       *player,
 }
 
 static void
+gtk_gst_media_file_feed_data (GstElement      *appsrc,
+                              guint            size,
+                              GtkGstMediaFile *self)
+{
+  GstBuffer *buffer;
+  GstFlowReturn ret;
+  char *buf;
+  gssize read;
+
+  if (self->offset >= self->length)
+    {
+      /* we are EOS, send end-of-stream */
+      g_signal_emit_by_name (self->appsrc, "end-of-stream", &ret);
+      return;
+    }
+
+  /* read the amount of data, we are allowed to return less if we are EOS */
+  buffer = gst_buffer_new ();
+
+  if (self->offset + size > self->length)
+    size = self->length - self->offset;
+
+  buf = g_malloc (size);
+  read = g_input_stream_read (G_INPUT_STREAM (self->stream), buf, size, NULL, NULL);
+
+  gst_buffer_append_memory (buffer,
+      gst_memory_new_wrapped (GST_MEMORY_FLAG_READONLY,
+                              buf, size, 0, read, NULL, NULL));
+
+  /* we need to set an offset for random access */
+  GST_BUFFER_OFFSET (buffer) = self->offset;
+  GST_BUFFER_OFFSET_END (buffer) = self->offset + size;
+
+  g_signal_emit_by_name (self->appsrc, "push-buffer", buffer, &ret);
+  gst_buffer_unref (buffer);
+
+  self->offset += read;
+}
+
+static gboolean
+gtk_gst_media_file_seek_data (GstElement      *appsrc,
+                              guint64          position,
+                              GtkGstMediaFile *self)
+{
+  if (g_seekable_seek (G_SEEKABLE (self->stream), position, G_SEEK_CUR, NULL, NULL))
+    {
+      self->offset = position;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+gtk_gst_media_file_found_source (GObject         *object,
+                                 GObject         *orig,
+                                 GParamSpec      *pspec,
+                                 GtkGstMediaFile *self)
+{
+  g_object_get (orig, "source", &self->appsrc, NULL);
+
+  g_print ("got appsrc\n");
+
+  g_return_if_fail (GST_IS_APP_SRC (self->appsrc));
+
+  if (G_IS_SEEKABLE (self->stream))
+    gst_app_src_set_stream_type (GST_APP_SRC (self->appsrc), GST_APP_STREAM_TYPE_SEEKABLE);
+  else
+    gst_app_src_set_stream_type (GST_APP_SRC (self->appsrc), GST_APP_STREAM_TYPE_STREAM);
+
+  g_signal_connect (self->appsrc, "need-data", G_CALLBACK (gtk_gst_media_file_feed_data), self);
+  g_signal_connect (self->appsrc, "seek-data", G_CALLBACK (gtk_gst_media_file_seek_data), self);
+}
+
+static void
 gtk_gst_media_file_destroy_player (GtkGstMediaFile *self)
 {
   if (self->player == NULL)
@@ -221,8 +303,10 @@ gtk_gst_media_file_destroy_player (GtkGstMediaFile *self)
   g_signal_handlers_disconnect_by_func (self->player, gtk_gst_media_file_end_of_stream_cb, self);
   g_signal_handlers_disconnect_by_func (self->player, gtk_gst_media_file_seek_done_cb, self);
   g_signal_handlers_disconnect_by_func (self->player, gtk_gst_media_file_error_cb, self);
-  g_object_unref (self->player);
-  self->player = NULL;
+  g_signal_handlers_disconnect_by_func (self->playbin, gtk_gst_media_file_found_source, self);
+  g_clear_object (&self->player);
+  g_clear_object (&self->appsrc);
+  g_clear_object (&self->playbin);
 }
 
 static void
@@ -239,33 +323,48 @@ gtk_gst_media_file_create_player (GtkGstMediaFile *file)
   g_signal_connect (self->player, "end-of-stream", G_CALLBACK (gtk_gst_media_file_end_of_stream_cb), self);
   g_signal_connect (self->player, "seek-done", G_CALLBACK (gtk_gst_media_file_seek_done_cb), self);
   g_signal_connect (self->player, "error", G_CALLBACK (gtk_gst_media_file_error_cb), self);
+
+  self->playbin = gst_player_get_pipeline (self->player);
+  g_signal_connect (self->playbin, "deep-notify::source", G_CALLBACK (gtk_gst_media_file_found_source), self);
 }
 
 static void
 gtk_gst_media_file_open (GtkMediaFile *media_file)
 {
   GtkGstMediaFile *self = GTK_GST_MEDIA_FILE (media_file);
+  GInputStream *stream;
   GFile *file;
+
+  stream = gtk_media_file_get_input_stream (media_file);
+  file = gtk_media_file_get_file (media_file);
+
+  if (stream)
+    self->stream = g_object_ref (stream);
+  else if (file)
+    self->stream = G_INPUT_STREAM (g_file_read (file, NULL, NULL));
+  else
+    self->stream = NULL;
+
+  self->offset = 0;
+  self->length = G_MAXUINT64;
+
+  if (G_IS_FILE_INPUT_STREAM (self->stream))
+    {
+      GFileInfo *info;
+
+      info = g_file_input_stream_query_info (G_FILE_INPUT_STREAM (self->stream),
+                                             G_FILE_ATTRIBUTE_STANDARD_SIZE,
+                                             NULL, NULL);
+      self->length = g_file_info_get_size (info);
+      g_object_unref (info);
+    }
+
+  if (G_IS_SEEKABLE (self->stream))
+    self->offset = g_seekable_tell (G_SEEKABLE (self->stream));
 
   gtk_gst_media_file_create_player (self);
 
-  file = gtk_media_file_get_file (media_file);
-
-  if (file)
-    {
-      /* XXX: This is technically incorrect because GFile uris aren't real uris */
-      char *uri = g_file_get_uri (file);
-
-      gst_player_set_uri (self->player, uri);
-
-      g_free (uri);
-    }
-  else
-    {
-      /* It's an input stream */
-      g_assert_not_reached ();
-    }
-
+  gst_player_set_uri (self->player, "appsrc://");
   gst_player_pause (self->player);
 }
 
@@ -273,6 +372,8 @@ static void
 gtk_gst_media_file_close (GtkMediaFile *file)
 {
   GtkGstMediaFile *self = GTK_GST_MEDIA_FILE (file);
+
+  g_clear_object (&self->stream);
 
   gtk_gst_media_file_destroy_player (self);
 }
