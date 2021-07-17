@@ -69,6 +69,7 @@ if gstplayer_dep.found() and gstgl_dep.found()
       'gtkgstmediafile.c',
       'gtkgstpaintable.c',
       'gtkgstsink.c',
+      'gtkgstbin.c',
     ],
     c_args: extra_c_args + extra_win_cflags,
     dependencies: [ libm, libgtk_dep, gstplayer_dep, gstgl_dep ],
