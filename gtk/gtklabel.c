@@ -4134,12 +4134,12 @@ gtk_label_click_gesture_pressed (GtkGestureClick *gesture,
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
   gtk_label_update_active_link (widget, widget_x, widget_y);
 
-  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
-
   if (info->active_link)
     {
       if (gdk_event_triggers_context_menu (event))
         {
+          gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+
           info->link_clicked = TRUE;
           update_link_state (self);
           gtk_label_do_popup (self, widget_x, widget_y);
@@ -4147,6 +4147,8 @@ gtk_label_click_gesture_pressed (GtkGestureClick *gesture,
         }
       else if (button == GDK_BUTTON_PRIMARY)
         {
+          gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+
           info->link_clicked = TRUE;
           update_link_state (self);
           gtk_widget_queue_draw (widget);
@@ -4165,9 +4167,15 @@ gtk_label_click_gesture_pressed (GtkGestureClick *gesture,
   info->select_words = FALSE;
 
   if (gdk_event_triggers_context_menu (event))
-    gtk_label_do_popup (self, widget_x, widget_y);
+    {
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+
+      gtk_label_do_popup (self, widget_x, widget_y);
+    }
   else if (button == GDK_BUTTON_PRIMARY)
     {
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+
       if (!gtk_widget_has_focus (widget))
         {
           self->in_click = TRUE;
@@ -4176,7 +4184,9 @@ gtk_label_click_gesture_pressed (GtkGestureClick *gesture,
         }
 
       if (n_press == 3)
-        gtk_label_select_region_index (self, 0, strlen (self->text));
+        {
+          gtk_label_select_region_index (self, 0, strlen (self->text));
+        }
       else if (n_press == 2)
         {
           info->select_words = TRUE;
