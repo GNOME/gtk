@@ -3573,19 +3573,23 @@ gsk_ngl_render_job_visit_node_with_offscreen (GskNglRenderJob       *job,
   {
     int max_texture_size = job->command_queue->max_texture_size;
 
-    scaled_width = ceilf (offscreen->bounds->size.width * job->scale_x);
+    scaled_width = ceilf (offscreen->bounds->size.width * fabs (job->scale_x));
     if (scaled_width > max_texture_size)
       {
         downscale_x = (float)max_texture_size / scaled_width;
         scaled_width = max_texture_size;
       }
+    if (job->scale_x < 0)
+      downscale_x = -downscale_x;
 
-    scaled_height = ceilf (offscreen->bounds->size.height * job->scale_y);
+    scaled_height = ceilf (offscreen->bounds->size.height * fabs (job->scale_y));
     if (scaled_height > max_texture_size)
       {
         downscale_y = (float)max_texture_size / scaled_height;
         scaled_height = max_texture_size;
       }
+    if (job->scale_y < 0)
+      downscale_y = -downscale_y;
   }
 
   GskNglRenderTarget *render_target;
