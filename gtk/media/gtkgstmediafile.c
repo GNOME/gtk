@@ -22,6 +22,7 @@
 #include "gtkgstmediafileprivate.h"
 #include "gtkgstpaintableprivate.h"
 #include "gtkmodulesprivate.h"
+#include "gtkgstbinprivate.h"
 
 #include <gst/play/play.h>
 
@@ -32,6 +33,8 @@ struct _GtkGstMediaFile
   GstPlay *play;
   GstPlaySignalAdapter *play_adapter;
   GdkPaintable *paintable;
+  GstElement *playbin;
+  GtkGstBin *src;
 };
 
 struct _GtkGstMediaFileClass
@@ -209,6 +212,35 @@ gtk_gst_media_file_end_of_stream_cb (GstPlaySignalAdapter *adapter,
 }
 
 static void
+gtk_gst_media_file_source_setup_cb (GstElement      *playbin,
+                                    GstElement      *source,
+                                    GtkGstMediaFile *self)
+{
+  GFile *file;
+  GInputStream *stream;
+
+  g_return_if_fail (GTK_IS_GST_BIN (source));
+
+  self->src = GTK_GST_BIN (g_object_ref (source));
+
+  file = gtk_media_file_get_file (GTK_MEDIA_FILE (self));
+  stream = gtk_media_file_get_input_stream (GTK_MEDIA_FILE (self));
+
+  if (stream)
+    g_object_ref (stream);
+  else if (file)
+    stream = G_INPUT_STREAM (g_file_read (file, NULL, NULL));
+  else
+    stream = NULL;
+
+  g_return_if_fail (stream != NULL);
+
+  gtk_gst_bin_set_stream (self->src, stream);
+
+  g_clear_object (&stream);
+}
+
+static void
 gtk_gst_media_file_destroy_play (GtkGstMediaFile *self)
 {
   if (self->play == NULL)
@@ -219,9 +251,12 @@ gtk_gst_media_file_destroy_play (GtkGstMediaFile *self)
   g_signal_handlers_disconnect_by_func (self->play_adapter, gtk_gst_media_file_end_of_stream_cb, self);
   g_signal_handlers_disconnect_by_func (self->play_adapter, gtk_gst_media_file_seek_done_cb, self);
   g_signal_handlers_disconnect_by_func (self->play_adapter, gtk_gst_media_file_error_cb, self);
+  g_signal_handlers_disconnect_by_func (self->playbin, gtk_gst_media_file_source_setup_cb, self);
   g_object_unref (self->play_adapter);
   gst_play_stop (self->play);
   g_object_unref (self->play);
+  g_object_unref (self->playbin);
+  g_object_unref (self->src);
   self->play = NULL;
 }
 
@@ -240,33 +275,19 @@ gtk_gst_media_file_create_play (GtkGstMediaFile *file)
   g_signal_connect (self->play_adapter, "end-of-stream", G_CALLBACK (gtk_gst_media_file_end_of_stream_cb), self);
   g_signal_connect (self->play_adapter, "seek-done", G_CALLBACK (gtk_gst_media_file_seek_done_cb), self);
   g_signal_connect (self->play_adapter, "error", G_CALLBACK (gtk_gst_media_file_error_cb), self);
+
+  g_object_get (self->play, "pipeline", &self->playbin, NULL);
+  g_signal_connect (self->playbin, "source-setup", G_CALLBACK (gtk_gst_media_file_source_setup_cb), self);
 }
 
 static void
 gtk_gst_media_file_open (GtkMediaFile *media_file)
 {
   GtkGstMediaFile *self = GTK_GST_MEDIA_FILE (media_file);
-  GFile *file;
 
   gtk_gst_media_file_create_play (self);
 
-  file = gtk_media_file_get_file (media_file);
-
-  if (file)
-    {
-      /* XXX: This is technically incorrect because GFile uris aren't real uris */
-      char *uri = g_file_get_uri (file);
-
-      gst_play_set_uri (self->play, uri);
-
-      g_free (uri);
-    }
-  else
-    {
-      /* It's an input stream */
-      g_error ("Input Streams are currently not supported. Please pass a File based MediaFile.");
-      g_assert_not_reached ();
-    }
+  gst_play_set_uri (self->play, "gtk-media-stream://");
 
   gst_play_pause (self->play);
 }
@@ -361,6 +382,8 @@ gtk_gst_media_file_class_init (GtkGstMediaFileClass *klass)
   GtkMediaStreamClass *stream_class = GTK_MEDIA_STREAM_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
+  gst_element_register (NULL, "GtkGstBin", GST_RANK_PRIMARY, GTK_TYPE_GST_BIN);
+
   file_class->open = gtk_gst_media_file_open;
   file_class->close = gtk_gst_media_file_close;
 
@@ -381,4 +404,3 @@ gtk_gst_media_file_init (GtkGstMediaFile *self)
   g_signal_connect_swapped (self->paintable, "invalidate-size", G_CALLBACK (gdk_paintable_invalidate_size), self);
   g_signal_connect_swapped (self->paintable, "invalidate-contents", G_CALLBACK (gdk_paintable_invalidate_contents), self);
 }
-

@@ -10,5 +10,6 @@ if gstplay_dep.found() and gstgl_dep.found() and gstallocators_dep.found()
     'gtkgstmediafile.c',
     'gtkgstpaintable.c',
     'gtkgstsink.c',
+    'gtkgstbin.c',
   ])
 endif
