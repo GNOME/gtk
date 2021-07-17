@@ -312,7 +312,13 @@ parse_image (GtkCssParser *parser,
   GtkCssImage **image = option_data;
 
   if (_gtk_css_image_can_parse (parser))
-    *image = _gtk_css_image_new_parse (parser);
+    {
+      *image = _gtk_css_image_new_parse (parser);
+      if (*image == NULL)
+        return FALSE;
+
+      return TRUE;
+    }
   else if (gtk_css_color_value_can_parse (parser))
     {
       GtkCssValue *color;
@@ -322,11 +328,11 @@ parse_image (GtkCssParser *parser,
         return FALSE;
 
       *image = _gtk_css_image_fallback_new_for_color (color);
-    }
-  else
-    return FALSE;
 
-  return TRUE;
+      return TRUE;
+    }
+  
+  return FALSE;
 }
 
 static guint
