@@ -243,6 +243,8 @@ gtk_gst_media_file_source_setup_cb (GstElement      *playbin,
   gtk_gst_bin_set_stream (self->src, stream);
 
   g_clear_object (&stream);
+
+  gst_player_pause (self->player);
 }
 
 static void
@@ -288,8 +290,6 @@ gtk_gst_media_file_open (GtkMediaFile *media_file)
   gtk_gst_media_file_create_player (self);
 
   gst_player_set_uri (self->player, "gtk-media-stream://");
-
-  gst_player_pause (self->player);
 }
 
 static void
