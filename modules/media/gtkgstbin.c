@@ -85,6 +85,10 @@ gtk_gst_bin_init (GtkGstBin *self)
   self->src = gst_element_factory_make ("giostreamsrc", "src");
   g_object_ref_sink (self->src);
   gst_bin_add (GST_BIN (self), self->src);
+
+  gst_element_add_pad (GST_ELEMENT (self),
+                       gst_ghost_pad_new ("src", gst_element_get_static_pad (self->src, "src")));
+
 }
 
 static void
