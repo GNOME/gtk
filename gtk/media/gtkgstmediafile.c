@@ -100,7 +100,8 @@ GTK_DEFINE_BUILTIN_MODULE_TYPE_WITH_CODE (GtkGstMediaFile, gtk_gst_media_file, G
                          g_io_extension_point_implement (GTK_MEDIA_FILE_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
                                                          "gstreamer",
-                                                         20))
+                                                         20);
+                         gst_init (NULL, NULL))
 
 static void
 gtk_gst_media_file_ensure_prepared (GtkGstMediaFile *self)
