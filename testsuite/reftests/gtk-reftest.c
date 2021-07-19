@@ -453,6 +453,37 @@ log_writer (GLogLevelFlags   log_level,
   return g_log_writer_standard_streams (log_level, fields, n_fields, user_data);
 }
 
+static void
+enforce_default_settings (void)
+{
+  GtkSettings *settings;
+  GObjectClass *klass;
+  GParamSpec **pspecs;
+  guint n_pspecs;
+  int i;
+
+  settings = gtk_settings_get_default ();
+
+  klass = g_type_class_ref (G_OBJECT_TYPE (settings));
+
+  pspecs = g_object_class_list_properties (klass, &n_pspecs);
+  for (i = 0; i < n_pspecs; i++)
+    {
+      GParamSpec *pspec = pspecs[i];
+      const GValue *value;
+
+      if ((pspec->flags & G_PARAM_WRITABLE) == 0)
+        continue;
+
+      value = g_param_spec_get_default_value (pspec);
+      g_object_set_property (G_OBJECT (settings), pspec->name, value);
+    }
+
+  g_free (pspecs);
+
+  g_type_class_unref (klass);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -502,6 +533,8 @@ main (int argc, char **argv)
    * "file" property of GtkImage as a relative path in builder files.
    */
   chdir (basedir);
+
+  enforce_default_settings ();
 
   g_log_set_writer_func (log_writer, NULL, NULL);
 
