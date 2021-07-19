@@ -368,6 +368,40 @@ add_test_for_file (GFile *file)
   g_list_free_full (files, g_object_unref);
 }
 
+static void
+enforce_default_settings (void)
+{
+  GtkSettings *settings;
+  GTypeClass *klass;
+  GParamSpec **pspecs;
+  guint n_pspecs;
+  int i;
+
+  settings = gtk_settings_get_default ();
+
+  klass = g_type_class_ref (G_OBJECT_TYPE (settings));
+
+  pspecs = g_object_class_list_properties (klass, &n_pspecs);
+  for (i = 0; i < n_pspecs; i++)
+    {
+      GParamSpec *pspec = pspecs[i];
+      const GValue *value;
+
+      if ((pspec->flags & G_PARAM_WRITABLE) == 0)
+        continue;
+
+      if (pspec->value_type == G_TYPE_HASH_TABLE)
+        continue;
+
+      value = g_param_spec_get_default_value (pspec);
+      g_object_set_property (settings, pspec->name, value);
+    }
+
+  g_free (pspecs);
+
+  g_type_class_unref (klass);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -381,6 +415,8 @@ main (int argc, char **argv)
 
   if (!parse_command_line (&argc, &argv))
     return 1;
+
+  enforce_default_settings ();
 
   if (arg_base_dir)
     basedir = arg_base_dir;
