@@ -1165,16 +1165,13 @@ gdk_win32_display_init_gl_backend (GdkDisplay  *display,
   if (GDK_DISPLAY_DEBUG_CHECK (display, GL_WGL))
     return gdk_win32_display_init_wgl (display, error);
 
-  /* No env vars set, do the regular GL initialization.
-   * 
-   * We try EGL first if supported, but are very picky about what we accept.
-   * If that fails, we try to go with WGL instead.
-   * And if that also fails, we try EGL again, but this time accept anything.
-   *
-   * The idea here is that EGL is the preferred method going forward, but WGL is
-   * the tried and tested method that we know works. So if we detect issues with
-   * EGL, we want to avoid using it in favor of WGL.
+  /* No env vars set, do the regular GL initialization, first WGL and then EGL,
+   * as WGL is the more tried-and-tested configuration.
    */
+
+  if (gdk_win32_display_init_wgl (display, error))
+    return TRUE;
+  g_clear_error (error);
 
 #ifdef GDK_WIN32_ENABLE_EGL
   if (gdk_win32_display_init_egl (display, error))
@@ -1182,15 +1179,7 @@ gdk_win32_display_init_gl_backend (GdkDisplay  *display,
 #endif
   g_clear_error (error);
 
-  if (gdk_win32_display_init_wgl (display, error))
-    return TRUE;
-  g_clear_error (error);
-
-#ifdef GDK_WIN32_ENABLE_EGL
-  return gdk_win32_display_init_egl (display, error);
-#else
-  return FALSE;
-#endif
+  return gdk_win32_display_init_wgl (display, error);
 }
 
 static GdkGLContext *
