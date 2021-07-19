@@ -655,6 +655,7 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
                     impl);
 
   g_object_unref (frame_clock);
+  impl->hdc = GetDC (impl->handle);
 
   return surface;
 }

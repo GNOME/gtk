@@ -46,8 +46,6 @@ struct _GdkWin32GLContextWGL
 {
   GdkWin32GLContext parent_instance;
 
-  HWND wgl_hwnd;
-  HDC wgl_hdc;
   HGLRC wgl_context;
   guint do_frame_sync : 1;
 };
@@ -70,8 +68,6 @@ gdk_win32_gl_context_wgl_dispose (GObject *gobject)
 
       wglDeleteContext (context_wgl->wgl_context);
       context_wgl->wgl_context = NULL;
-
-      ReleaseDC (context_wgl->wgl_hwnd, context_wgl->wgl_hdc);
     }
 
   G_OBJECT_CLASS (gdk_win32_gl_context_wgl_parent_class)->dispose (gobject);
@@ -84,8 +80,10 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkWin32GLContextWGL *context_wgl = GDK_WIN32_GL_CONTEXT_WGL (context);
   GdkSurface *surface = gdk_gl_context_get_surface (context);
-  GdkWin32Display *display = (GDK_WIN32_DISPLAY (gdk_gl_context_get_display (context)));
+  GdkWin32Display *display_win32 = (GDK_WIN32_DISPLAY (gdk_gl_context_get_display (context)));
   cairo_rectangle_int_t whole_window;
+  gboolean can_wait = display_win32->hasWglOMLSyncControl;
+  HDC hdc;
 
   GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->end_frame (draw_context, painted);
 
@@ -94,26 +92,31 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "win32", "swap buffers");
 
-  gboolean can_wait = display->hasWglOMLSyncControl;
+  if (surface != NULL)
+    hdc = GDK_WIN32_SURFACE (surface)->hdc;
+  else
+    hdc = display_win32->dummy_context_wgl.hdc;
 
   if (context_wgl->do_frame_sync)
     {
+
       glFinish ();
 
       if (can_wait)
         {
           gint64 ust, msc, sbc;
 
-          wglGetSyncValuesOML (context_wgl->wgl_hdc, &ust, &msc, &sbc);
-          wglWaitForMscOML (context_wgl->wgl_hdc,
+          wglGetSyncValuesOML (hdc, &ust, &msc, &sbc);
+          wglWaitForMscOML (hdc,
                             0,
                             2,
                             (msc + 1) % 2,
                            &ust, &msc, &sbc);
         }
 
-      SwapBuffers (context_wgl->wgl_hdc);
     }
+
+  SwapBuffers (hdc);
 }
 
 static void
@@ -551,15 +554,9 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
   compat_bit = gdk_gl_context_get_forward_compatible (context);
 
   if (surface != NULL)
-    {
-      hwnd = GDK_SURFACE_HWND (surface);
-      context_wgl->wgl_hdc = hdc = GetDC (hwnd);
-    }
+    hdc = GDK_WIN32_SURFACE (surface)->hdc;
   else
-    {
-      hwnd = display_win32->hwnd;
-      hdc = display_win32->dummy_context_wgl.hdc;
-    }
+    hdc = display_win32->dummy_context_wgl.hdc;
 
   /*
    * A legacy context cannot be shared with core profile ones, so this means we
@@ -642,13 +639,13 @@ gdk_win32_gl_context_wgl_make_current (GdkGLContext *context,
   GdkWin32GLContextWGL *context_wgl = GDK_WIN32_GL_CONTEXT_WGL (context);
   GdkDisplay *display = gdk_gl_context_get_display (context);
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
-  GdkSurface *surface;
+  GdkSurface *surface = gdk_gl_context_get_surface (context);
   HDC hdc;
 
-  if (surfaceless)
+  if (surfaceless || surface == NULL)
     hdc = display_win32->dummy_context_wgl.hdc;
   else
-    hdc = context_wgl->wgl_hdc;
+    hdc = GDK_WIN32_SURFACE (surface)->hdc;
 
   if (!wglMakeCurrent (hdc, context_wgl->wgl_context))
     return FALSE;
@@ -656,7 +653,6 @@ gdk_win32_gl_context_wgl_make_current (GdkGLContext *context,
   if (!surfaceless && display_win32->hasWglEXTSwapControl)
     {
       gboolean do_frame_sync = FALSE;
-      GdkSurface *surface = gdk_gl_context_get_surface (context);
 
       /* If there is compositing there is no particular need to delay
        * the swap when drawing on the offscreen, rendering to the screen
@@ -696,12 +692,6 @@ gdk_win32_gl_context_wgl_init (GdkWin32GLContextWGL *wgl_context)
 {
 }
 
-void gdk_win32_gl_context_wgl_bind_surface (GdkWin32GLContextWGL *wgl_context,
-                                            GdkWin32Surface      *impl)
-{
-  wgl_context->wgl_hwnd = impl->handle;
-  wgl_context->wgl_hdc = GetDC (impl->handle);
-}
 
 /**
  * gdk_win32_display_get_wgl_version:
