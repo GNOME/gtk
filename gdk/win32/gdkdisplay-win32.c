@@ -664,12 +664,6 @@ gdk_win32_display_dispose (GObject *object)
           display_win32->dummy_context_wgl.hglrc = NULL;
         }
 
-      if (display_win32->dummy_context_wgl.hdc != NULL)
-        {
-          ReleaseDC (display_win32->hwnd, display_win32->dummy_context_wgl.hdc);
-          display_win32->dummy_context_wgl.hdc = NULL;
-        }
-
       DestroyWindow (display_win32->hwnd);
       display_win32->hwnd = NULL;
     }
