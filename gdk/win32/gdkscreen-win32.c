@@ -78,8 +78,7 @@ init_root_window (GdkWin32Screen *screen_win32)
   win32_display = GDK_WIN32_DISPLAY (_gdk_display);
 
   if (win32_display->dpi_aware_type != PROCESS_DPI_UNAWARE)
-    screen_win32->surface_scale = _gdk_win32_display_get_monitor_scale_factor (win32_display,
-                                                                              NULL,
+    screen_win32->surface_scale = gdk_win32_display_get_monitor_scale_factor (win32_display,
                                                                               NULL,
                                                                               NULL);
   else

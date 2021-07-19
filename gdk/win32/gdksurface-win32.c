@@ -522,7 +522,7 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
   surface->width = width;
   surface->height = height;
 
-  impl->surface_scale = _gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL, NULL);
+  impl->surface_scale = gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL);
 
   dwExStyle = 0;
   owner = NULL;
@@ -4427,19 +4427,19 @@ gdk_win32_surface_set_shadow_width (GdkSurface *window,
 
 
 int
-_gdk_win32_surface_get_scale_factor (GdkSurface *window)
+_gdk_win32_surface_get_scale_factor (GdkSurface *surface)
 {
   GdkDisplay *display;
   GdkWin32Surface *impl;
   GdkWin32Display *win32_display;
 
-  if (GDK_SURFACE_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (surface))
     return 1;
 
-  g_return_val_if_fail (window != NULL, 1);
+  g_return_val_if_fail (surface != NULL, 1);
 
-  display = gdk_surface_get_display (window);
-  impl = GDK_WIN32_SURFACE (window);
+  display = gdk_surface_get_display (surface);
+  impl = GDK_WIN32_SURFACE (surface);
 
   win32_display = GDK_WIN32_DISPLAY (display);
 
@@ -4448,9 +4448,8 @@ _gdk_win32_surface_get_scale_factor (GdkSurface *window)
       if (win32_display->has_fixed_scale)
         impl->surface_scale = win32_display->surface_scale;
       else
-        impl->surface_scale = _gdk_win32_display_get_monitor_scale_factor (win32_display,
-                                                                          NULL,
-                                                                          GDK_SURFACE_HWND (window),
+        impl->surface_scale = gdk_win32_display_get_monitor_scale_factor (win32_display,
+                                                                          surface,
                                                                           NULL);
 
       return impl->surface_scale;
@@ -5067,7 +5066,10 @@ _gdk_win32_surface_get_egl_surface (GdkSurface *surface,
   else
     {
       if (impl->egl_surface == EGL_NO_SURFACE)
-        impl->egl_surface = eglCreateWindowSurface (display->egl_disp, config, display->gl_hwnd, NULL);
+        impl->egl_surface = eglCreateWindowSurface (display->egl_disp,
+                                                    config,
+                                                    GDK_SURFACE_HWND (surface),
+                                                    NULL);
 
       return impl->egl_surface;
     }

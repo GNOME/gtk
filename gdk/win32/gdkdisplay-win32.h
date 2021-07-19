@@ -121,7 +121,6 @@ struct _GdkWin32Display
   /* WGL/OpenGL Items */
   guint have_wgl : 1;
   guint gl_version;
-  HWND gl_hwnd;
 
 #ifdef GDK_WIN32_ENABLE_EGL
   /* EGL (Angle) Items */
@@ -185,10 +184,9 @@ GPtrArray *_gdk_win32_display_get_monitor_list (GdkWin32Display *display);
 
 void        gdk_win32_display_check_composited (GdkWin32Display *display);
 
-guint      _gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *win32_display,
-                                                        HMONITOR         hmonitor,
-                                                        HWND             hwnd,
-                                                        int              *dpi);
+guint      gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *display_win32,
+                                                       GdkSurface      *surface,
+                                                       HMONITOR         hmonitor);
 
 typedef struct _GdkWin32MessageFilter GdkWin32MessageFilter;
 

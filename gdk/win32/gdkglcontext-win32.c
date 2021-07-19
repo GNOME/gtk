@@ -66,8 +66,6 @@ _gdk_win32_gl_context_dispose (GObject *gobject)
 
           wglDeleteContext (context_win32->hglrc);
           context_win32->hglrc = NULL;
-
-          ReleaseDC (display_win32->gl_hwnd, context_win32->gl_hdc);
         }
  
 #ifdef GDK_WIN32_ENABLE_EGL
@@ -82,8 +80,6 @@ _gdk_win32_gl_context_dispose (GObject *gobject)
           eglDestroyContext (display_win32->egl_disp,
                              context_win32->egl_context);
           context_win32->egl_context = EGL_NO_CONTEXT;
-
-          ReleaseDC (display_win32->gl_hwnd, context_win32->gl_hdc);
         }
 #endif
     }
@@ -1076,29 +1072,25 @@ gdk_win32_gl_context_init (GdkWin32GLContext *self)
 
 GdkGLContext *
 _gdk_win32_surface_create_gl_context (GdkSurface *surface,
-                                     gboolean attached,
-                                     GdkGLContext *share,
-                                     GError **error)
+                                      gboolean attached,
+                                      GdkGLContext *share,
+                                      GError **error)
 {
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
   GdkWin32GLContext *context = NULL;
-
-  /* Acquire and store up the Windows-specific HWND and HDC */
-/*  HWND hwnd;*/
-  HDC hdc;
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
 
 #ifdef GDK_WIN32_ENABLE_EGL
   EGLContext egl_context;
   EGLConfig config;
 #endif
 
-  display_win32->gl_hwnd = GDK_SURFACE_HWND (surface);
-  hdc = GetDC (display_win32->gl_hwnd);
+  impl->hdc = GetDC (GDK_SURFACE_HWND (surface));
 
 #ifdef GDK_WIN32_ENABLE_EGL
   /* display_win32->hdc_egl_temp should *not* be destroyed here!  It is destroyed at dispose()! */
-  display_win32->hdc_egl_temp = hdc;
+  display_win32->hdc_egl_temp = impl->hdc;
 #endif
 
   if (!_gdk_win32_display_init_gl (display))
@@ -1108,16 +1100,6 @@ _gdk_win32_surface_create_gl_context (GdkSurface *surface,
                            _("No GL implementation is available"));
       return NULL;
     }
-
-#if 0
-  if (display_win32->have_wgl)
-    {
-      hwnd = GDK_SURFACE_HWND (surface);
-      hdc = GetDC (hwnd);
-
-      display_win32->gl_hwnd = hwnd;
-    }
-#endif
 
 #ifdef GDK_WIN32_ENABLE_EGL
   if (display_win32->have_egl && !find_eglconfig_for_window (display_win32, &config,
@@ -1130,7 +1112,7 @@ _gdk_win32_surface_create_gl_context (GdkSurface *surface,
                           "shared-context", share,
                           NULL);
 
-  context->gl_hdc = hdc;
+  context->gl_hdc = impl->hdc;
   context->is_attached = attached;
 
 #ifdef GDK_WIN32_ENABLE_EGL

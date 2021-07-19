@@ -681,7 +681,7 @@ enum_monitor (HMONITOR hmonitor,
           else
             {
               /* First acquire the scale using the current screen */
-              scale = _gdk_win32_display_get_monitor_scale_factor (data->display, NULL, NULL, NULL);
+              scale = gdk_win32_display_get_monitor_scale_factor (data->display, NULL, NULL);
 
               /* acquire the scale using the monitor which the window is nearest on Windows 8.1+ */
               if (data->display->have_at_least_win81)
@@ -695,7 +695,7 @@ enum_monitor (HMONITOR hmonitor,
                   pt.x = w32mon->work_rect.x + w32mon->work_rect.width / 2;
                   pt.y = w32mon->work_rect.y + w32mon->work_rect.height / 2;
                   hmonitor = MonitorFromPoint (pt, MONITOR_DEFAULTTONEAREST);
-                  scale = _gdk_win32_display_get_monitor_scale_factor (data->display, hmonitor, NULL, NULL);
+                  scale = gdk_win32_display_get_monitor_scale_factor (data->display, NULL, hmonitor);
                 }
             }
 

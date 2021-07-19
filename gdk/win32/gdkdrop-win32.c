@@ -177,7 +177,7 @@ gdk_drop_new (GdkDisplay        *display,
               GdkDragProtocol    protocol)
 {
   GdkWin32Drop *drop_win32;
-  GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
+  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
 
   drop_win32 = g_object_new (GDK_TYPE_WIN32_DROP,
                              "device", device,
@@ -186,10 +186,10 @@ gdk_drop_new (GdkDisplay        *display,
                              "surface", surface,
                              NULL);
 
-  if (win32_display->has_fixed_scale)
-    drop_win32->scale = win32_display->surface_scale;
+  if (display_win32->has_fixed_scale)
+    drop_win32->scale = display_win32->surface_scale;
   else
-    drop_win32->scale = _gdk_win32_display_get_monitor_scale_factor (win32_display, NULL, NULL, NULL);
+    drop_win32->scale = gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL);
 
   drop_win32->protocol = protocol;
 
