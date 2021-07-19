@@ -397,12 +397,13 @@ RegisterGdkClass (GdkSurfaceType wtype)
   wcl.hbrBackground = NULL; \
   wcl.hCursor = LoadCursor (NULL, IDC_ARROW);
 
+  /* MSDN: CS_OWNDC is needed for OpenGL contexts */
+  wcl.style |= CS_OWNDC;
+
   switch (wtype)
     {
     case GDK_SURFACE_TOPLEVEL:
     case GDK_SURFACE_POPUP:
-      /* MSDN: CS_OWNDC is needed for OpenGL contexts */
-      wcl.style |= CS_OWNDC;
       if (0 == klassTOPLEVEL)
         {
           wcl.lpszClassName = L"gdkSurfaceToplevel";
