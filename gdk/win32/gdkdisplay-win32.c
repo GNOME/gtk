@@ -30,7 +30,6 @@
 #include "gdkdevicemanager-win32.h"
 #include "gdkglcontext-win32.h"
 #include "gdkwin32display.h"
-#include "gdkwin32screen.h"
 #include "gdkwin32surface.h"
 #include "gdkmonitor-win32.h"
 #include "gdkwin32.h"
@@ -190,8 +189,8 @@ _gdk_win32_display_find_matching_monitor (GdkWin32Display *win32_display,
   return NULL;
 }
 
-void
-_gdk_win32_display_init_monitors (GdkWin32Display *win32_display)
+static void
+gdk_win32_display_init_monitors (GdkWin32Display *win32_display)
 {
   GPtrArray *new_monitors;
   int i;
@@ -437,9 +436,9 @@ inner_display_change_window_procedure (HWND   hwnd,
       }
     case WM_DISPLAYCHANGE:
       {
-        GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (GetWindowLongPtr (hwnd, GWLP_USERDATA));
+        GdkWin32Display *self = GDK_WIN32_DISPLAY (GetWindowLongPtr (hwnd, GWLP_USERDATA));
 
-        _gdk_win32_screen_on_displaychange_event (GDK_WIN32_SCREEN (win32_display->screen));
+        gdk_win32_display_init_monitors (self);
         return 0;
       }
     default:
@@ -524,8 +523,8 @@ _gdk_win32_display_open (const char *display_name)
   _gdk_display = g_object_new (GDK_TYPE_WIN32_DISPLAY, NULL);
   win32_display = GDK_WIN32_DISPLAY (_gdk_display);
 
-  win32_display->screen = g_object_new (GDK_TYPE_WIN32_SCREEN, NULL);
-
+  gdk_win32_display_init_monitors (win32_display);
+  
   _gdk_events_init (_gdk_display);
 
   _gdk_input_ignore_core = 0;

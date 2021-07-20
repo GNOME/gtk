@@ -22,7 +22,6 @@
 #ifndef __GDK_DISPLAY__WIN32_H__
 #define __GDK_DISPLAY__WIN32_H__
 
-#include "gdkwin32screen.h"
 #include "gdkwin32cursor.h"
  
 #ifdef GDK_WIN32_ENABLE_EGL
@@ -116,9 +115,7 @@ struct _GdkWin32Display
 {
   GdkDisplay display;
 
-  GdkWin32Screen *screen;
-
-  Win32CursorTheme *cursor_theme;
+    Win32CursorTheme *cursor_theme;
   char *cursor_theme_name;
   int cursor_theme_size;
 
@@ -184,8 +181,6 @@ struct _GdkWin32DisplayClass
 {
   GdkDisplayClass display_class;
 };
-
-void       _gdk_win32_display_init_monitors    (GdkWin32Display *display);
 
 GPtrArray *_gdk_win32_display_get_monitor_list (GdkWin32Display *display);
 
