@@ -164,12 +164,12 @@ visibility_toggled (GObject          *object,
   if (gtk_text_get_visibility (GTK_TEXT (entry->entry)))
     {
       gtk_image_set_from_icon_name (GTK_IMAGE (entry->peek_icon), "eye-open-negative-filled-symbolic");
-      gtk_widget_set_tooltip_text (entry->peek_icon, _("Hide text"));
+      gtk_widget_set_tooltip_text (entry->peek_icon, _("Hide Text"));
     }
   else
     {
       gtk_image_set_from_icon_name (GTK_IMAGE (entry->peek_icon), "eye-not-looking-symbolic");
-      gtk_widget_set_tooltip_text (entry->peek_icon, _("Show text"));
+      gtk_widget_set_tooltip_text (entry->peek_icon, _("Show Text"));
     }
 
   if (entry->keyboard)
@@ -603,7 +603,7 @@ gtk_password_entry_set_show_peek_icon (GtkPasswordEntry *entry,
       GtkGesture *press;
 
       entry->peek_icon = gtk_image_new_from_icon_name ("eye-not-looking-symbolic");
-      gtk_widget_set_tooltip_text (entry->peek_icon, _("Show text"));
+      gtk_widget_set_tooltip_text (entry->peek_icon, _("Show Text"));
       gtk_widget_set_parent (entry->peek_icon, GTK_WIDGET (entry));
 
       press = gtk_gesture_click_new ();
