@@ -437,7 +437,7 @@ inner_display_change_window_procedure (HWND   hwnd,
       }
     case WM_DISPLAYCHANGE:
       {
-        GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (_gdk_display);
+        GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (GetWindowLongPtr (hwnd, GWLP_USERDATA));
 
         _gdk_win32_screen_on_displaychange_event (GDK_WIN32_SCREEN (win32_display->screen));
         return 0;
@@ -472,28 +472,29 @@ display_change_window_procedure (HWND   hwnd,
 
 /* Use a hidden window to be notified about display changes */
 static void
-register_display_change_notification (GdkDisplay *display)
+gdk_win32_display_create_hwnd (GdkWin32Display *self)
 {
-  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
   WNDCLASS wclass = { 0, };
   ATOM klass;
 
   wclass.lpszClassName = "GdkDisplayChange";
   wclass.lpfnWndProc = display_change_window_procedure;
   wclass.hInstance = _gdk_app_hmodule;
-  wclass.style = CS_OWNDC;
+  wclass.style = CS_OWNDC; /* required because WGL uses this Window to initialize */
 
   klass = RegisterClass (&wclass);
   if (klass)
     {
-      display_win32->hwnd = CreateWindow (MAKEINTRESOURCE (klass),
-                                          NULL, WS_POPUP,
-                                          0, 0, 0, 0, NULL, NULL,
-                                          _gdk_app_hmodule, NULL);
-      if (!display_win32->hwnd)
+      self->hwnd = CreateWindow (MAKEINTRESOURCE (klass),
+                                 NULL, WS_POPUP,
+                                 0, 0, 0, 0, NULL, NULL,
+                                 _gdk_app_hmodule, NULL);
+      if (!self->hwnd)
         {
           UnregisterClass (MAKEINTRESOURCE (klass), _gdk_app_hmodule);
+          return;
         }
+      SetWindowLongPtr (self->hwnd, GWLP_USERDATA, (LONG_PTR) self);
     }
 }
 
@@ -543,7 +544,7 @@ _gdk_win32_display_open (const char *display_name)
   /* Precalculate display name */
   (void) gdk_display_get_name (_gdk_display);
 
-  register_display_change_notification (_gdk_display);
+  gdk_win32_display_create_hwnd (win32_display);
 
   g_signal_emit_by_name (_gdk_display, "opened");
 
