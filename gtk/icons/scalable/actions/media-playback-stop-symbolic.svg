@@ -1,3 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-    <path d="M4.002 4h8v8h-8z" style="marker:none" color="#000" overflow="visible" fill="#474747"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
+    <path d="m 2 2 h 12 v 12 h -12 z m 0 0" fill="#2e3436"/>
 </svg>
